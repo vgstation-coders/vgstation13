@@ -582,3 +582,16 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/nuclear_operatives/announce()
 	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
 	..()
+
+//////////////////////BLACK MARKET
+
+/datum/command_alert/ian_sold
+	name = "Ian has been sold - Urgent Alert"
+	alert_title = "Ian Sold"
+	force_report = 1
+
+/datum/command_alert/New(var/mob/killer = null)
+	if(killer)
+		message = "A regular bluespace scan of important lifeforms across the Centcomm sphere of influence has revealed that Ian has been sold to black market dealers. This is greatly worrying, as we are unable to ensure his safety nor retrieve him. Investigation has revealed that [killer.name] is responsible. You monster."
+	else
+		message = "A regular bluespace scan of important lifeforms across the Centcomm sphere of influence has revealed that Ian has been sold to black market dealers. This is greatly worrying, as we are unable to ensure his safety nor retrieve him. Investigation has yielded no information on who is responsible."

@@ -37,6 +37,7 @@ var/list/black_market_sellables = list()
 	var/price_max
 	var/sps_chance = 0
 	var/display_chance = 0   //Base out of 100.
+	var/teleport_modifier = 1 //Multiplier for time it takes to teleport.
 
 	var/round_demand
 	var/round_demand_calculated = 0         
@@ -69,13 +70,19 @@ var/list/black_market_sellables = list()
 		. = 999
 	else
 		. = round_demand
+		
+/datum/black_market_sellable/proc/reduce_demand()
+	if(round_demand != -1 || round_demand != 0)
+		round_demand--
 
 /datum/black_market_sellable/proc/purchase_check(var/obj/input, var/mob/user) //Returns "VALID" if the purchase is valid, otherwise will give an error message with what is returned.
 	return VALID
 	
 /datum/black_market_sellable/proc/determine_payout(var/obj/input, var/mob/user, var/payout) //Override for extra price calculations. Be sure to cast the given var/obj/ into the proper type.
 	return 0
-
+	
+/datum/black_market_sellable/proc/after_sell(var/obj/input, var/mob/user)
+	return
 	
 /datum/black_market_sellable/weapons
 	category = "Firearms and War Implements"
@@ -93,7 +100,7 @@ var/list/black_market_sellables = list()
 	
 /datum/black_market_sellable/weapons/railgun
 	name = "Railgun"
-	item =
+	item = /obj/item/weapon/gun/projectile/railgun
 	no_children = 1
 	desc = "We'll pay triple for a railgun loaded with a capacitor of 1 GW charge or greater."
 	demand_min = 1
@@ -101,30 +108,30 @@ var/list/black_market_sellables = list()
 	price_min = 200
 	price_max = 300
 	sps_chance = 15
-	display_chance = 35
+	display_chance = 100
 	
-/datum/black_market_sellable/weapons/energy_gun/determine_payout(var/obj/input, var/mob/user, var/payout)
-	if(istype(input,))
-		var = input
-		if(gun.power_supply.charge >= gun.power_supply.maxcharge)
-			return payout*2
-	return 0
+/datum/black_market_sellable/weapons/railgun/determine_payout(var/obj/input, var/mob/user, var/payout)
+	if(istype(input,/obj/item/weapon/gun/projectile/railgun))
+		var/obj/item/weapon/gun/projectile/railgun/gun = input
+		if(gun.loadedcapacitor && gun.loadedcapacitor.stored_charge/5000000 >= 200) //1 GW
+			return payout*3
+	return payout
 	
 /datum/black_market_sellable/weapons/transfer_valve
-	name = "Primed Tank Transfer Valve"
+	name = "Tank Transfer Valve"
 	item = /obj/item/device/transfer_valve/
 	no_children = 0
-	desc = "Only accepting bombs of six tiles or greater."
+	desc = "Looking for NT-brand explosive valves. The tanks attached are irrelevant, send it empty if you want."
 	demand_min = 1
 	demand_max = 2
-	price_min = 700
-	price_max = 1200
-	sps_chance = 90
+	price_min = 400
+	price_max = 500
+	sps_chance = 70
 	display_chance = 50
 
 /datum/black_market_sellable/weapons/ied
 	name = "Improvised Explosive Device"
-	item = 
+	item = /obj/item/weapon/grenade/iedcasing/
 	no_children = 1
 	desc = "Looking for cheap explosives made from soda cans or something."
 	demand_min = 3
@@ -134,24 +141,56 @@ var/list/black_market_sellables = list()
 	sps_chance = 5
 	display_chance = 80
 	
-/datum/black_market_sellable/weapons/transfer_valve/purchase_check(var/obj/input, var/mob/user)
-	if(istype(input,/obj/item/device/transfer_valve/))
-		var/obj/item/device/transfer_valve/bomb = input
-		return VALID
-	return "This bomb is not powerful enough. What a disappointment."	
+/datum/black_market_sellable/animals
+	category = "Living Creatures"	
 	
+/datum/black_market_sellable/animals/ian
+	name = "Ian the Corgi"
+	item = /mob/living/simple_animal/corgi/Ian
+	no_children = 1
+	desc = "Ian must be alive. And cute."
+	demand_min = 1
+	demand_max = 1
+	price_min = 700
+	price_max = 800
+	sps_chance = 0
+	display_chance = 100
+	teleport_modifier = 3
 	
+/datum/black_market_sellable/animals/ian/purchase_check(var/obj/input, var/mob/user)
+	if(istype(input,/mob/))
+		var/mob/ian = input
+		if(ian.isDead())
+			return "Ian is dead. This just won't do."
+	return VALID
 	
+/datum/black_market_sellable/animals/ian/after_sell(var/obj/input, var/mob/user)
+	spawn(rand(350,650))
+		command_alert(new /datum/command_alert/ian_sold(user))
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+/datum/black_market_sellable/animals/runtime
+	name = "Runtime the Cat"
+	item = /mob/living/simple_animal/cat/Runtime
+	no_children = 1
+	demand_min = 1
+	demand_max = 1
+	price_min = 150
+	price_max = 200
+	sps_chance = 15
+	display_chance = 100
+	teleport_modifier = 3	
+
+/datum/black_market_sellable/animals/salem
+	name = "Salem the Cat"
+	item = /mob/living/simple_animal/cat/salem
+	no_children = 1
+	demand_min = 1
+	demand_max = 1
+	price_min = 100
+	price_max = 150
+	sps_chance = 15
+	display_chance = 100
+	teleport_modifier = 3		
 	
 	
 	
