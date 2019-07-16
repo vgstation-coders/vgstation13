@@ -79,7 +79,15 @@ var/global/list/battery_online =	list(
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 
 /obj/machinery/power/battery/add_power_node()
-	addNode(/datum/net_node/power/storage)
+	addNode(/datum/net_node/power/storage, charge, capacity, max_input, max_output)
+
+/obj/machinery/power/battery/proc/get_capacity()
+	var/datum/net_node/power/storage/node = getNode(/datum/net_node/power/storage)
+	return node.maxPowerStored
+
+/obj/machinery/power/battery/proc/get_charge()
+	var/datum/net_node/power/storage/node = getNode(/datum/net_node/power/storage)
+	return node.powerStored
 
 /obj/machinery/power/battery/RefreshParts()
 	var/capcount = 0

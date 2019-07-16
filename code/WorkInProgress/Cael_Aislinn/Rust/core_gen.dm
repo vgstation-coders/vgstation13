@@ -88,7 +88,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 		id_tag = uid
 
 /obj/machinery/power/rust_core/process()
-	if(stat & BROKEN || !powernet)
+	if(stat & BROKEN)
 		Shutdown()
 
 /obj/machinery/power/rust_core/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
@@ -97,11 +97,12 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 		return -1
 
 	if(..() == 1)
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
 		switch(state)
 			if(1)
-				disconnect_from_network()
+				node.active = FALSE
 			if(2)
-				connect_to_network()
+				node.active = TRUE
 		return 1
 	return -1
 

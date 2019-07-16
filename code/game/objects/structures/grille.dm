@@ -217,8 +217,8 @@
 		return 0
 	//Process the shocking via powernet, our job is done here
 	var/turf/T = get_turf(src)
-	var/obj/structure/cable/C = T.get_cable_node()
-	if(C)
+	var/obj/structure/cable/C = locate() in T
+	if(istype(C))
 		if(electrocute_mob(user, C, src, siemens_coeff))
 			spark(src)
 			return 1

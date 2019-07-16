@@ -368,7 +368,7 @@ var/area/space_area
 /*
  * Called when power status changes.
  */
-/area/proc/power_change()
+/area/power_change()
 	for(var/obj/machinery/M in src)	// for each machine in the area
 		M.power_change()				// reverify power status (to update icons etc.)
 	if (fire || eject || party)

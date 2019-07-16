@@ -69,16 +69,16 @@
 
 // common helper procs for all power machines
 /obj/machinery/power/proc/add_avail(var/amount)
-	var/datum/net_node/power/machinery/node = get_power_node()
+	var/datum/net_node/power/node = get_power_node()
 	if(istype(node))
 		node.powerNeeded += amount
 
 /obj/machinery/power/proc/add_load(var/amount)
-	var/datum/net_node/power/machinery/node = get_power_node()
+	var/datum/net_node/power/node = get_power_node()
 	if(istype(node))
 		node.powerNeeded -= amount
 
-/obj/machinery/power/proc/surplus()
+/obj/machinery/power/proc/excess()
 	var/datum/net/power/net = get_powernet()
 	if(!istype(net))
 		return 0
@@ -101,13 +101,6 @@
 
 /obj/machinery/power/proc/disconnect_terminal() // machines without a terminal will just return, no harm no fowl.
 	return
-
-/obj/machinery/power/proc/get_powernet()
-	var/datum/net_node/power/machinery/node = get_power_node()
-	if(!istype(node))
-		return 0
-
-	return node.net
 
 // returns true if the area has power on given channel (or doesn't require power)
 // defaults to power_channel
@@ -142,7 +135,7 @@
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag
 // can override if needed
-/obj/machinery/proc/power_change()
+/obj/machinery/power_change()
 	if(powered(power_channel))
 		stat &= ~NOPOWER
 

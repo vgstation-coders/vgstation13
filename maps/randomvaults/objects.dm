@@ -697,10 +697,6 @@
 	active_power_usage = 500
 	density = 1
 
-/obj/machinery/power/magtape_deck/New()
-	..()
-	connect_to_network()
-
 /obj/machinery/power/magtape_deck/process()
 	if(stat & BROKEN)
 		return

@@ -15,18 +15,13 @@
 			Triggered(0, "NOCABLE", 0)
 		return
 
-	var/datum/powernet/PN = cable.get_powernet()
-	if(!PN) //Powernet is dead
-		if(my_effect.activated)
-			Triggered(0, "NOPOWERNET", 0)
-		return
-	else if(PN.avail < power_load) //Cannot drain enough power
+	if(cable.avail() < power_load) //Cannot drain enough power
 		if(my_effect.activated)
 			Triggered(0, "NOTENOUGHELECTRICITY", 0)
 		return
 	else if(!my_effect.activated)
-		PN.load += power_load
+		cable.add_load(power_load)
 		Triggered(0, "ELECTRICITY", 0)
 		return
 	else //makes sure the powernet stays under load if the artifact is moving
-		PN.load += power_load
+		cable.add_load(power_load)

@@ -434,7 +434,6 @@
 #include "code\datums\net\power\net.dm"
 #include "code\datums\net\power\node.dm"
 #include "code\datums\net\power\node_cable.dm"
-#include "code\datums\net\power\node_machinery.dm"
 #include "code\datums\net\power\node_storage.dm"
 #include "code\datums\research\research_tree.dm"
 #include "code\datums\research\unlockable.dm"

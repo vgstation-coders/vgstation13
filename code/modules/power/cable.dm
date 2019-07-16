@@ -305,16 +305,16 @@ By design, d1 is the smallest direction and d2 is the highest
 // Power related
 ///////////////////////////////////////////
 /obj/structure/cable/proc/add_avail(var/amount)
-	var/datum/net_node/power/machinery/node = get_power_node()
+	var/datum/net_node/power/node = get_power_node()
 	if(istype(node))
 		node.powerNeeded += amount
 
 /obj/structure/cable/proc/add_load(var/amount)
-	var/datum/net_node/power/machinery/node = get_power_node()
+	var/datum/net_node/power/node = get_power_node()
 	if(istype(node))
 		node.powerNeeded -= amount
 
-/obj/structure/cable/proc/surplus()
+/obj/structure/cable/proc/excess()
 	var/datum/net/power/net = get_powernet()
 	if(!istype(net))
 		return 0

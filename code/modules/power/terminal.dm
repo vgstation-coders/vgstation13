@@ -78,7 +78,7 @@
 	if (do_after(user, src, 100) && !T.intact && can_attach_terminal(user))
 
 		//Shock chance
-		var/obj/structure/cable/N = T.get_cable_node()
+		var/obj/structure/cable/N = locate() in T
 		if (prob(50) && electrocute_mob(user, N, N))
 			spark(src, 5)
 			return 0

@@ -489,8 +489,6 @@
 					return
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/B = new src.circuit.build_path ( src.loc )
-				if(circuit.powernet)
-					B:powernet = circuit.powernet
 				if(circuit.id_tag)
 					B:id_tag = circuit.id_tag
 				if(circuit.records)

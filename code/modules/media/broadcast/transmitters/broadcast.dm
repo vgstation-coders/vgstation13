@@ -18,7 +18,6 @@
 	var/list/autolink = null
 
 	var/datum/wires/transmitter/wires = null
-	var/datum/power_connection/consumer/cable/power_connection = null
 
 	var/const/RADS_PER_TICK=75
 	var/const/MAX_TEMP=70 // Celsius
@@ -27,21 +26,17 @@
 /obj/machinery/media/transmitter/broadcast/New()
 	..()
 	wires = new(src)
-	power_connection=new(src,LIGHT)
-	power_connection.idle_usage=idle_power_usage
-	power_connection.active_usage=active_power_usage
+	addNode(/datum/net_node/power)
 
 /obj/machinery/media/transmitter/broadcast/Destroy()
 	if(wires)
 		qdel(wires)
 		wires = null
-	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
 	..()
 
-/obj/machinery/media/transmitter/broadcast/proc/cable_power_change(var/list/args)
-	if(power_connection.powered())
+/obj/machinery/media/transmitter/broadcast/power_change(var/list/args)
+	var/datum/net_node/power/node = getNode(/datum/net_node/power)
+	if(istype(node) && node.is_powered())
 		stat &= ~NOPOWER
 	else
 		stat |= NOPOWER
@@ -58,18 +53,17 @@
 		hook_media_sources()
 	if(on)
 		update_on()
-	power_connection.power_changed.Add(src,"cable_power_change")
-	power_connection.connect()
 	update_icon()
 
 /obj/machinery/media/transmitter/broadcast/wrenchAnchor(var/mob/user)
 	. = ..()
 	if(!.)
 		return
+	var/datum/net_node/power/node = getNode(/datum/net_node/power)
 	if(anchored) // We are now anchored
-		power_connection.connect() // Connect to the powernet
+		node.active = TRUE
 	else // We are now NOT anchored
-		power_connection.disconnect() // Ditch powernet.
+		node.active = FALSE
 		on=0
 		update_on()
 
@@ -184,9 +178,13 @@
 		return
 
 	if("power" in href_list)
-		if(!power_connection.powernet)
-			power_connection.connect()
-		if(!power_connection.powered())
+		if(!anchored)
+			to_chat(usr, "<span class='warning'>This machine needs to be secured to the floor in order to work.</span>")
+			return
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
+		if(!node.is_powered() && node.active)
+			node.powered = TRUE
+		if(!node.is_powered())
 			to_chat(usr, "<span class='warning'>This machine needs to be hooked up to a powered cable.</span>")
 			return
 		on = !on

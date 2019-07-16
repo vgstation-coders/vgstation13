@@ -376,13 +376,14 @@ Code:
 			else
 				menu = "<h4><img src=pda_power.png> [powmonitor] </h4><BR>"
 				var/list/L = list()
-				for(var/obj/machinery/power/terminal/term in powmonitor.powernet.nodes)
+				var/datum/net/power/net = powmonitor.get_powernet()
+				for(var/obj/machinery/power/terminal/term in net.getParents(/obj/machinery/power/terminal))
 					if(istype(term.master, /obj/machinery/power/apc))
 						var/obj/machinery/power/apc/A = term.master
 						L += A
 
 
-				menu += {"<PRE>Total power: [powmonitor.powernet.avail] W<BR>Total load:  [num2text(powmonitor.powernet.viewload,10)] W<BR>
+				menu += {"<PRE>Total power: [powmonitor.avail()] W<BR>Total load:  [num2text(powmonitor.load(),10)] W<BR>
 					<FONT SIZE=-1>"}
 				if(L.len > 0)
 					menu += "Area                           Eqp./Lgt./Env.  Load   Cell<HR>"

@@ -492,11 +492,9 @@
 	if(istype(target, /obj/structure/cable))
 		var/obj/structure/cable/C = target
 		if(latched && locked_to && locked_to == C)
-			var/datum/net/power/net = C.get_powernet()
 			if(istype(net) && cell.percent() < 100)
-				var/drained = min(rand(500,1500), PN.excess)
-				var/datum/net_node/power/node = get_power_node()
-				node.powerNeeded += drained
+				var/drained = min(rand(500,1500), C.avail())
+				C.add_load(drained)
 				cell.give(drained/10)
 			else
 				visible_message("<span class = 'notice'>\The [src] detaches from \the [C]</span>")

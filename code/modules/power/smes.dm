@@ -49,7 +49,6 @@ var/list/smes_list = list()
 
 /obj/machinery/power/battery/smes/initialize()
 	..()
-	connect_to_network()
 	spawn(5)
 		if(!terminal)
 			stat |= BROKEN
@@ -107,9 +106,9 @@ var/list/smes_list = list()
 /obj/machinery/power/battery/smes/can_attach_terminal(mob/user)
 	return ..(user) && panel_open
 
-/obj/machinery/power/battery/smes/surplus()
+/obj/machinery/power/battery/smes/excess()
 	if(terminal)
-		return terminal.surplus()
+		return terminal.excess()
 	return 0
 
 /obj/machinery/power/battery/smes/add_load(var/amount)

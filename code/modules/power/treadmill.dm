@@ -29,8 +29,9 @@
 	)
 
 /obj/machinery/power/treadmill/New()
-	if(anchored)
-		connect_to_network()
+	if(!anchored)
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
+		node.active = FALSE
 	RefreshParts()
 	..()
 
@@ -104,10 +105,11 @@
 	. = ..()
 	if(!.)
 		return
+	var/datum/net_node/power/node = getNode(/datum/net_node/power)
 	if(anchored)
-		connect_to_network()
+		node.active = TRUE
 	else
-		disconnect_from_network()
+		node.active = FALSE
 
 /obj/machinery/power/treadmill/emag()
 	..()

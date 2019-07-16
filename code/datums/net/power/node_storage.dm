@@ -16,3 +16,6 @@
     parent.update_icon()
 
     return power
+
+/datum/net_node/power/storage/proc/try_remove_power(var/power)
+    PAULTODO

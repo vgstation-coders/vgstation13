@@ -26,4 +26,9 @@
 
 //called every powertick when this node isn't receiving power
 /datum/net_node/power/proc/power_change()
-    return
+    parent.power_change()
+
+/datum/net_node/power/proc/is_powered()
+    if(!active)
+        return 0
+    return powered

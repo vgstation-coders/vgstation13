@@ -34,8 +34,8 @@ var/global/datum/sun/sun
 	if(angle != lastAngle)
 		var/obj/machinery/power/solar/panel/tracker/T
 		for(T in solars_list)
-			if(!T.powernet)
-				solars_list.Remove(T)
+			var/datum/net_node/power/node = t.getNode(/datum/net_node/power)
+			if(!node.is_powered())
 				continue
 
 			T.set_angle(angle)
@@ -63,9 +63,6 @@ var/global/datum/sun/sun
 	var/obj/machinery/power/solar/panel/S
 
 	for(S in solars_list)
-		if(!S.powernet)
-			solars_list.Remove(S)
-
 		if(S.control)
 			occlusion(S)
 

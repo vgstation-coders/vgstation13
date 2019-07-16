@@ -58,9 +58,9 @@
 	if(connected_to)
 		connected_to.add_load(amount)
 
-/obj/machinery/power/battery/portable/surplus()
+/obj/machinery/power/battery/portable/excess()
 	if(connected_to)
-		return connected_to.surplus()
+		return connected_to.excess()
 	return 0
 
 /obj/machinery/power/battery/portable/wrenchAnchor(var/mob/user)
@@ -85,31 +85,13 @@
 		connected_to.update_icon()
 	return
 
-/obj/machinery/power/battery/portable/restore()
+/obj/machinery/power/battery/portable/power_change()
+	. = ..()
 	if (stat & BROKEN)
 		return
 
-	if(!connected_to)
-		return
-
-	var/_chargedisplay = chargedisplay()
-
-	var/excess = connected_to.powernet.netexcess // This was how much wasn't used on the network last ptick, minus any removed by other SMESes
-
-	excess = min(lastout, excess) // Clamp it to how much was actually output by this SMES last ptick
-
-	excess = min((capacity - charge) / SMESRATE, excess) // For safety, also limit recharge by space capacity of SMES (shouldn't happen)
-
-	// Now recharge this amount
-
-	charge += excess * SMESRATE // Restore unused power
-
-	connected_to.powernet.netexcess -= excess // Remove the excess from the powernet, so later SMESes don't try to use it
-
-	loaddemand = lastout - excess
-
-	if(_chargedisplay != chargedisplay()) // If needed updates the icons overlay
-		update_icon()
+	update_icon()
+		
 
 /obj/machinery/power/battery/portable/get_terminal()
 	if(connected_to)

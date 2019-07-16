@@ -624,7 +624,6 @@ Pressure: [env.pressure]"}
 		qdel(SMES)
 		var/obj/machinery/power/battery/smes/infinite/magic = new(T)
 		// Manually set up our powernets since stupid seems to reign in the powernet code.
-		magic.connect_to_network()
 		magic.output=200000 // AKA rape
 		magic.online=1
 

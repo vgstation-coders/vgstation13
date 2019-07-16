@@ -43,13 +43,13 @@
 
     //a little copy pasta ish but it gets the job done
     if(power > 0) //we got excess, lets store it
-        while(battery_nodes.len)
+        while(battery_nodes.len && power > 0)
             var/datum/net_node/power/storage/S = battery_nodes[battery_nodes.len]
             battery_nodes.len--
 
             power = S.try_add_power(power)
     else if(power < 0) //oh god oh fuck we dont have enough, better hope we can even it out
-        while(battery_nodes.len)
+        while(battery_nodes.len && power < 0)
             var/datum/net_node/power/storage/S = battery_nodes[battery_nodes.len]
             battery_nodes.len--
 

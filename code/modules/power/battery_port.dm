@@ -63,13 +63,13 @@
 
 /obj/machinery/power/battery_port/add_load(var/amount)
 	if(terminal && terminal.get_powernet())
-		terminal.powernet.load += amount
+		terminal.add_load(amount)
 		return 1
 	return 0
 
-/obj/machinery/power/battery_port/surplus()
+/obj/machinery/power/battery_port/excess()
 	if(terminal)
-		return terminal.surplus()
+		return terminal.excess()
 	return 0
 
 /obj/machinery/power/battery_port/crowbarDestroy(mob/user)

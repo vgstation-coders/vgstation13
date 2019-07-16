@@ -46,6 +46,12 @@
 /datum/net/proc/get_size()
     return nodes.len
 
+/datum/net/proc/getParents(var/type)
+    . = list()
+    for(var/datum/net_node/node in nodes)
+        if(istype(node.parent, type))
+            . += node.parent
+
 //returns one net
 /proc/merge_nets(var/datum/net/n1, var/datum/net/n2)
     if(!n1)

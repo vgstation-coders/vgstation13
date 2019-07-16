@@ -26,14 +26,13 @@
 	PAULTODO
 
 //change this to getNode(/datum/net_node/power) (almost) everywhere
-/atom/proc/get_power_node()
-	var/list/nodes = getNode(/datum/net_node/power/machinery)
-	if(!nodes.len)
-		return addNode(/datum/net_node/power/machinery)
-	else
-		return nodes[1]
+//atom/proc/get_power_node()
 	
 /atom/proc/get_powernet()
-	var/datum/net_node/power/machinery/node = get_power_node()
+	var/datum/net_node/power/node = get_power_node()
 	if(!istype(node))
 		return 0
+	if(istype(node.net, /datum/net/power))
+		return node.net
+
+/atom/proc/power_change()

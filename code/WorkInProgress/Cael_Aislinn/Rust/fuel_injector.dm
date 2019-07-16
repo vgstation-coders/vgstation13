@@ -81,11 +81,12 @@
 
 /obj/machinery/power/rust_fuel_injector/weldToFloor(var/obj/item/weapon/weldingtool/WT, var/mob/user)
 	if(..() == 1)
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
 		switch(state)
 			if(1)
-				disconnect_from_network()
+				node.active = FALSE
 			if(2)
-				connect_to_network()
+				node.active = TRUE
 		return 1
 	return -1
 

@@ -65,7 +65,8 @@
 
 	..()
 	if(state == 2 && anchored)
-		connect_to_network()
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)		
+		node.active = TRUE
 		update_icon()
 		update_beam()
 
@@ -200,7 +201,7 @@
 	if(stat & BROKEN)
 		return
 
-	if(state != 2 || (!powernet && active_power_usage)) //Not welded to the floor, or no more wire underneath and requires power
+	if(state != 2 || ((node.active == FALSE) && active_power_usage)) //Not welded to the floor, or no more wire underneath and requires power
 		active = 0
 		update_icon()
 		update_beam()
@@ -258,11 +259,12 @@
 /obj/machinery/power/emitter/weldToFloor()
 
 	if(..() == 1)
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
 		switch(state)
 			if(1)
-				disconnect_from_network()
+				node.active = FALSE
 			if(2)
-				connect_to_network()
+				node.active = FALSE
 		return 1
 	return -1
 

@@ -94,10 +94,11 @@ var/global/list/rad_collectors = list()
 	. = ..()
 	if(!.)
 		return
+	var/datum/net_node/power/node = getNode(/datum/net_node/power)		
 	if(anchored)
-		connect_to_network()
+		node.active = TRUE
 	else
-		disconnect_from_network()
+		node.active = FALSE
 		last_power = 0
 
 /obj/machinery/power/rad_collector/ex_act(severity)

@@ -105,8 +105,9 @@ display round(lastgen) and plasmatank amount
 
 /obj/machinery/power/port_gen/pacman/initialize()
 	..()
-	if(anchored)
-		connect_to_network()
+	if(!anchored)
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)
+		node.active = FALSE
 
 /obj/machinery/power/port_gen/pacman/New()
 	. = ..()
@@ -224,10 +225,11 @@ display round(lastgen) and plasmatank amount
 	. = ..()
 	if(!.)
 		return
+	var/datum/net_node/power/node = getNode(/datum/net_node/power)
 	if(anchored)
-		connect_to_network()
+		node.active = TRUE
 	else
-		disconnect_from_network()
+		node.active = FALSE
 
 /obj/machinery/power/port_gen/pacman/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, sheet_path))

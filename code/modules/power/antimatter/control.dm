@@ -172,6 +172,7 @@
 	if(!istype(W) || !user)
 		return
 	if(iswrench(W))
+		var/datum/net_node/power/node = getNode(/datum/net_node/power)		
 		if(!anchored)
 			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			user.visible_message("[user.name] secures the [src.name] to the floor.", \
@@ -180,14 +181,14 @@
 			src.anchored = 1
 			update_shield_icons = 2
 			check_shield_icons()
-			connect_to_network()
+			node.active = TRUE
 		else if(!linked_shielding.len > 0)
 			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			user.visible_message("[user.name] unsecures the [src.name].", \
 				"You remove the anchor bolts.", \
 				"You hear a ratchet")
 			src.anchored = 0
-			disconnect_from_network()
+			node.active = FALSE
 		else
 			to_chat(user, "<span class='warning'>Once bolted and linked to a shielding unit it the [src.name] is unable to be moved!</span>")
 		return

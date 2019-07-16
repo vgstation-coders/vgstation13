@@ -230,18 +230,15 @@
 
 //Simplified check for power. If we can charge straight out of the grid, do it
 /obj/machinery/singularity_beacon/proc/check_wire_power()
-	if(!attached) //No wire, move straight to battery power
+	if(!istype(attached)) //No wire, move straight to battery power
 		return 0
-	var/datum/powernet/PN = attached.get_powernet()
-	if(!PN) //Powernet is dead
-		return 0
-	if(PN.avail < power_load) //Cannot drain enough power, needs 1500 per tick, move to battery
+	if(attached.excess() < power_load) //Cannot drain enough power, needs 1500 per tick, move to battery
 		return 0
 	else
-		PN.load += power_load
-		if(cell && cell.charge < cell.maxcharge && cell.charge > 0 && PN.netexcess)
-			power_draw = min(cell.maxcharge - cell.charge, PN.netexcess) //Draw power directly from excess power
-			PN.load += power_draw
+		attached.add_load(power_load)
+		if(cell && cell.charge < cell.maxcharge && cell.charge > 0 && attached.excess())
+			power_draw = min(cell.maxcharge - cell.charge, attached.excess()) //Draw power directly from excess power
+			attached.add_load(power_draw)
 			cell.give(power_draw) //We drew power from the grid, charge the cell
 		return 1
 

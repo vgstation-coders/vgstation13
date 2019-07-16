@@ -1051,9 +1051,9 @@
 /obj/machinery/power/apc/can_attach_terminal(mob/user)
 	return user.loc == src.loc && has_electronics != 2 && !terminal
 
-/obj/machinery/power/apc/surplus()
+/obj/machinery/power/apc/excess()
 	if(terminal)
-		return terminal.surplus()
+		return terminal.excess()
 	else
 		return 0
 
