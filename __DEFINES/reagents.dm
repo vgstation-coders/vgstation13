@@ -209,6 +209,7 @@
 #define RUM 			"rum"
 #define VODKA 			"vodka"
 #define SAKE 			"sake"
+#define GLASGOW 			"glasgow"
 #define TEQUILA 			"tequila"
 #define VERMOUTH 			"vermouth"
 #define WINE 			"wine"
