@@ -56,6 +56,8 @@ var/list/event_last_fired = list()
 	if(!spacevines_spawned)
 		possibleEvents[/datum/event/spacevine] = 15
 
+	possibleEvents[/datum/event/powercreeper] = 15
+
 	if(active_with_role["Engineer"] > 1)
 		possibleEvents[/datum/event/meteor_wave] = 15
 		possibleEvents[/datum/event/meteor_shower] = 40
