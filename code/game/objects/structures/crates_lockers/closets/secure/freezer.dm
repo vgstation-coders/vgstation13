@@ -137,7 +137,7 @@
 
 
 /obj/structure/closet/secure_closet/freezer/money/spawn_contents()
-	dispense_cash(6700, src)
+	dispense_cash(2700, src)
 
 
 
