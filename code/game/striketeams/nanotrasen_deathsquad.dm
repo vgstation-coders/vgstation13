@@ -127,7 +127,6 @@
 		W.icon_state = "creed"
 		W.assignment = "Creed Commander"
 	else
-		W.icon_state = "centcom"
 		W.access = get_centcom_access("Death Commando")
 		W.icon_state = "deathsquad"
 		W.assignment = "Death Commando"
