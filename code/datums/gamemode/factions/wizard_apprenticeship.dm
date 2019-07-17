@@ -6,7 +6,7 @@
 	initroletype = /datum/role/wizard_master
 	roletype = /datum/role/wizard_apprentice
 	logo_state = "apprentice-logo"
-	hud_icons = list("apprentice-logo")
+	hud_icons = list("wizard-logo", "apprentice-logo")
 
 /datum/faction/wizard_contract/HandleNewMind(var/datum/mind/M)
 	. = ..()
