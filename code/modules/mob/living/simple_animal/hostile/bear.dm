@@ -169,3 +169,8 @@
 
 /mob/living/simple_animal/hostile/bear/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "bear")
+
+/mob/living/simple_animal/hostile/bear/spare
+	name = "Spare Bear"
+	maxHealth = 100
+	health = 100
