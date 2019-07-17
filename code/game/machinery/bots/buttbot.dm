@@ -20,12 +20,16 @@ Here it is: Buttbot.
 	maxhealth = 25
 	var/buttchance = 80 //Like an 80% chance of it working. It's just a butt with an arm in it.
 	var/sincelastfart = 0
-	var/det_chance = 0
+	var/det_chance
 	flags = HEAR
 
 /obj/machinery/bot/buttbot/New()
 	..()
-	det_chance = rand(1,3)
+	if(isnull(det_chance))
+		det_chance = rand(1,3)
+
+/obj/machinery/bot/buttbot/everbutt
+	det_chance = 0
 
 /obj/machinery/bot/buttbot/attack_hand(mob/living/user as mob)
 	. = ..()
