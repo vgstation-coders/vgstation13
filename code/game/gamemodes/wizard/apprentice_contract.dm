@@ -60,8 +60,8 @@ var/list/wizard_apprentice_setups_by_name = list()
 
 /obj/item/wizard_apprentice_contract
 	name = "contract of apprenticeship"
-	icon = 'icons/obj/cult.dmi'
-	icon_state = "talisman"
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "contract0"
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
 	throwforce = 0
@@ -69,6 +69,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 	w_type = RECYK_WOOD
 	throw_range = 1
 	throw_speed = 1
+	var/consumed = FALSE
 	var/polling_ghosts = FALSE
 	var/datum/mind/owner // The mind of the user, to be used by the recruiter
 	var/datum/recruiter/recruiter
@@ -76,13 +77,19 @@ var/list/wizard_apprentice_setups_by_name = list()
 	var/forced_apprentice_name
 	var/forced_apprentice_gender
 
+/obj/item/wizard_apprentice_contract/update_icon()
+	icon_state = "contract[consumed]"
+
 /obj/item/wizard_apprentice_contract/Destroy()
 	owner = null
 	qdel(recruiter)
 	recruiter = null
 	..()
-	
+
 /obj/item/wizard_apprentice_contract/attack_self(mob/user)
+	if(consumed)
+		to_chat(user, "<span class='warning'>\The [src] has already been consumed.</span>")
+		return
 	ui_interact(user)
 
 /obj/item/wizard_apprentice_contract/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = NANOUI_FOCUS)
@@ -112,6 +119,9 @@ var/list/wizard_apprentice_setups_by_name = list()
 	. = ..()
 	if(.)
 		return
+	if(consumed)
+		nanomanager.close_uis(src)
+		return FALSE
 	if(polling_ghosts)
 		return TRUE
 	if(href_list["unset_gender"])
@@ -195,6 +205,8 @@ var/list/wizard_apprentice_setups_by_name = list()
 	else
 		name_wizard(apprentice, "Wizard's Apprentice")
 	update_faction_icons()
-	visible_message("<span class='notice'>\The [src] turns to ash, leaving [apprentice] in its place!</span>")
-	new /obj/effect/decal/cleanable/ash(this_turf)
-	qdel(src)
+	visible_message("<span class='notice'>\The [src] folds back on itself as the apprentice appears!</span>")
+	set_light(0)
+	consumed = TRUE
+	nanomanager.close_uis(src)
+	update_icon()
