@@ -122,10 +122,15 @@
 
 	var/obj/item/weapon/card/id/W = new(src)
 	W.name = "[real_name]'s ID Card"
-	W.icon_state = "centcom"
-	W.access = get_centcom_access("Death Commando")
-	W.icon_state = "deathsquad"
-	W.assignment = "Death Commando"
+	if(leader)
+		W.access = get_centcom_access("Creed Commander")
+		W.icon_state = "creed"
+		W.assignment = "Creed Commander"
+	else
+		W.icon_state = "centcom"
+		W.access = get_centcom_access("Death Commando")
+		W.icon_state = "deathsquad"
+		W.assignment = "Death Commando"
 	W.registered_name = real_name
 	equip_to_slot_or_del(W, slot_wear_id)
 
