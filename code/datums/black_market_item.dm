@@ -150,7 +150,7 @@ var/locations_calculated = 0
 	var/turf/spawnloc
 	if(!locations_calculated)
 		for(var/area/maintenance/A in areas)
-			if(!istype(A,/area/maintenance/atmos) && A.z == map.zMainStation)
+			if(!istype(A,/area/maintenance/atmos) && A.z == STATION_Z)
 				potential_locations.Add(A)
 		locations_calculated = 1
 	var/area/selected_area 
