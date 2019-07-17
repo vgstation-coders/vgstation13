@@ -125,7 +125,7 @@
 	if(leader)
 		W.access = get_centcom_access("Creed Commander")
 		W.icon_state = "creed"
-		W.assignment = "Creed Commander"
+		W.assignment = "Death Commander"
 	else
 		W.access = get_centcom_access("Death Commando")
 		W.icon_state = "deathsquad"
