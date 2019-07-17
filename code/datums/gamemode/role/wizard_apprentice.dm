@@ -51,25 +51,19 @@
 		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
 			new_character.add_spell(S)
 
-/*
 /datum/role/wizard_apprentice/GetScoreboard()
 	. = ..()
-	if(disallow_job) //Not a survivor wizzie
-		var/mob/living/carbon/human/H = antag.current
-		var/bought_nothing = TRUE
-		if(H.spell_list)
-			bought_nothing = FALSE
-			. += "<BR>The apprentice knew:<BR>"
-			for(var/spell/S in H.spell_list)
-				var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
-				end_icons += tempimage
-				var/tempstate = end_icons.len
-				. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
-		if(artifacts_bought)
-			bought_nothing = FALSE
-			. += "<BR>Additionally, the wizard brought:<BR>"
-			for(var/entry in artifacts_bought)
-				. += "[entry]<BR>"
-		if(bought_nothing)
-			. += "The wizard used only the magic of charisma this round."
-*/
+	var/mob/living/carbon/human/H = antag.current
+
+	if(!length(H.spell_list))
+		. += "The apprentice somehow forgot everything he learned in magic school."
+		return
+
+	. += "<BR>The apprentice knew:<BR>"
+	for(var/spell/S in H.spell_list)
+		if(S.user_type != USER_TYPE_WIZARD)
+			continue
+		var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+		end_icons += tempimage
+		var/tempstate = end_icons.len
+		. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
