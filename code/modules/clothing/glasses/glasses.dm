@@ -115,7 +115,7 @@ var/list/science_goggles_wearers = list()
 		if (H.glasses == src)
 			toggle = 1
 	if (toggle)
-		playsound(M,'sound/weapons/egun_toggle_laser.ogg',70,0,-5)
+		playsound(M,'sound/weapons/egun_toggle_laser.ogg',30,0,-5)
 		science_goggles_wearers.Add(M)
 		for (var/obj/item/I in infected_items)
 			if (I.pathogen)
@@ -131,7 +131,7 @@ var/list/science_goggles_wearers = list()
 				M.client.images |= C.pathogen
 
 /obj/item/clothing/glasses/science/proc/disable(var/mob/M)
-	playsound(M,'sound/weapons/egun_toggle_taser.ogg',70,0,-5)
+	playsound(M,'sound/weapons/egun_toggle_taser.ogg',30,0,-5)
 	science_goggles_wearers.Remove(M)
 	for (var/obj/item/I in infected_items)
 		M.client.images -= I.pathogen
