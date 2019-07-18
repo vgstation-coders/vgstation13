@@ -30,10 +30,11 @@
 		if (user.is_pacified(VIOLENCE_DEFAULT,target))
 			return
 	spawn()
+		var/turf/T = get_turf(user)
 		for(var/i = 0 to spell_levels[Sp_POWER])
 			var/atom/target = pick(targets)
 			var/pie_to_spawn = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/pie))
-			var/obj/pie = new pie_to_spawn(user.loc)
+			var/obj/pie = new pie_to_spawn(T)
 			to_chat(user, "You summon and throw \a [pie].")
 			pie.throw_at(target, range, (spell_levels[Sp_POWER]+1)*20)
 			sleep(5)
