@@ -356,20 +356,20 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 	spawn(1)
 		if(!M || !M.client || M.shakecamera)
 			return
-
+		var/client/C = M.client
 		M.shakecamera = 1
 
 		for (var/x = 1 to duration)
-			if(!M || !M.client)
+			if(!C)
 				M.shakecamera = 0
 				return //somebody disconnected while being shaken
-			M.client.pixel_x = WORLD_ICON_SIZE*rand(-strength, strength)
-			M.client.pixel_y = WORLD_ICON_SIZE*rand(-strength, strength)
+			C.pixel_x = WORLD_ICON_SIZE*rand(-strength, strength)
+			C.pixel_y = WORLD_ICON_SIZE*rand(-strength, strength)
 			sleep(1)
 
 		M.shakecamera = 0
-		M.client.pixel_x = 0
-		M.client.pixel_y = 0
+		C.pixel_x = 0
+		C.pixel_y = 0
 
 
 /proc/findname(msg)
