@@ -37,42 +37,51 @@
 					return
 		var/userloc = H.loc
 
+		
+		var/which = alert("What would you like to change?", "Appearance", "Hair", "Beard", "Undies")
+
+		if((!which) || (userloc != H.loc))
+			return
+		
 		//see code/modules/mob/new_player/preferences.dm at approx line 545 for comments!
 		//this is largely copypasted from there.
 
-		//handle facial hair (if necessary)
-		var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, H.gender, (H.species.name || null))
-		if(species_facial_hair.len)
-			var/new_style = input(user, "Select a facial hair style", "Grooming")  as null|anything in species_facial_hair
-			if(userloc != H.loc)
-				return	//no tele-grooming
-			if(new_style)
-				H.my_appearance.f_style = new_style
-				H.update_hair()
+		//handle facial hair
+		if(which == "Beard")
+			var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, H.gender, (H.species.name || null))
+			if(species_facial_hair.len)
+				var/new_style = input(user, "Select a facial hair style", "Grooming")  as null|anything in species_facial_hair
+				if(userloc != H.loc)
+					return	//no tele-grooming
+				if(new_style)
+					H.my_appearance.f_style = new_style
+					H.update_hair()
 
 		//handle normal hair
-		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null)) //gender intentionally left null so speshul snowflakes can cross-hairdress
-		if(species_hair.len)
-			var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
-			if(userloc != H.loc)
-				return	//no tele-grooming
-			if(new_style)
-				H.my_appearance.h_style = new_style
-				H.update_hair()
+		if(which == "Hair")
+			var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null)) //gender intentionally left null so speshul snowflakes can cross-hairdress
+			if(species_hair.len)
+				var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
+				if(userloc != H.loc)
+					return	//no tele-grooming
+				if(new_style)
+					H.my_appearance.h_style = new_style
+					H.update_hair()
 		
 		//Underwear!
-		var/list/underwear_options
-		if(H.gender == MALE)
-			underwear_options = underwear_m
-		else
-			underwear_options = underwear_f
+		if(which == "Undies")
+			var/list/underwear_options
+			if(H.gender == MALE)
+				underwear_options = underwear_m
+			else
+				underwear_options = underwear_f
 
-		var/new_underwear = input(user, "Select your underwear:", "Undies")  as null|anything in underwear_options
-		if(userloc != H.loc)
-			return
-		if(new_underwear)
-			H.underwear = underwear_options.Find(new_underwear)
-			H.regenerate_icons()
+			var/new_underwear = input(user, "Select your underwear:", "Undies")  as null|anything in underwear_options
+			if(userloc != H.loc)
+				return
+			if(new_underwear)
+				H.underwear = underwear_options.Find(new_underwear)
+				H.regenerate_icons()
 
 /obj/structure/mirror/proc/shatter()
 	if(shattered)
