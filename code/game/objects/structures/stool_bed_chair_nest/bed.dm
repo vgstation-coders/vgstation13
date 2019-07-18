@@ -91,6 +91,9 @@
 	//if(!ismob(M) || (M.loc != src.loc)  || M.locked_to)
 	if(!ismob(M) || M.locked_to)
 		return
+		
+	if(!user.Adjacent(M))
+		return
 
 	for(var/mob/living/L in get_locked(mob_lock_type))
 		to_chat(user, "<span class='warning'>Somebody else is already buckled into \the [src]!</span>")
