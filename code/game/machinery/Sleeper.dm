@@ -473,6 +473,21 @@
 	updateUsrDialog()
 	return
 
+
+/obj/machinery/sleeper/upgraded
+	name = "advanced Sleeper"
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/sleeper,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico
+	)
+
+
+/////////////////////////////////////////
+// MANCROWAVE
+/////////////////////////////////////////
+
 /obj/machinery/sleeper/mancrowave
 	name = "thermal homeostasis regulator"
 	desc = "The new generation 'minicrowave' from Mancrowave Inc. It has the same satisfying ping as the classic."
