@@ -59,7 +59,20 @@
 			if(new_style)
 				H.my_appearance.h_style = new_style
 				H.update_hair()
+		
+		//Underwear!
+		var/list/underwear_options
+		if(H.gender == MALE)
+			underwear_options = underwear_m
+		else
+			underwear_options = underwear_f
 
+		var/new_underwear = input(user, "Select your underwear:", "Undies")  as null|anything in underwear_options
+		if(userloc != H.loc)
+			return
+		if(new_underwear)
+			H.underwear = underwear_options.Find(new_underwear)
+			H.regenerate_icons()
 
 /obj/structure/mirror/proc/shatter()
 	if(shattered)
