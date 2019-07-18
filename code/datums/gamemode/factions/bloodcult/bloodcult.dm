@@ -660,9 +660,15 @@ var/veil_thickness = CULT_PROLOGUE
 					if (BLOODCOST_TARGET_GRAB)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_GRAB]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 					if (BLOODCOST_TARGET_BLEEDER)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_BLEEDER]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 					if (BLOODCOST_TARGET_HELD)
 						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_HELD]
 						blood = locate() in G.reagents.reagent_list
@@ -675,6 +681,9 @@ var/veil_thickness = CULT_PROLOGUE
 					if (BLOODCOST_TARGET_USER)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 			if (!tribute && previous_result != BLOODCOST_TRIBUTE)
 				user.visible_message("<span class='warning'>Drips of blood seem to appear out of thin air around \the [user], and fall onto the floor!</span>",
 									"<span class='rose'>An ally has lent you a drip of their blood for your ritual.</span>",
