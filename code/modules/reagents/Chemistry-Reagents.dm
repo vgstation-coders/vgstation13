@@ -5764,6 +5764,14 @@
 			if(M.confused != 0)
 				M.confused = max(0, M.confused - 5)
 
+/datum/reagent/ethanol/deadrum/glasgow
+	name = "Glasgow Deadrum"
+	id = GLASGOW
+	description = "Makes you feel like you had one hell of a party."
+	color = "#662D1D" //rgb: 101, 44, 29
+	slur_start = 1
+	confused_start = 1
+
 /datum/reagent/ethanol/deadrum/tequila
 	name = "Tequila"
 	id = TEQUILA

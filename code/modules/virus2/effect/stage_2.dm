@@ -182,8 +182,8 @@
 
 /datum/disease2/effect/drunk/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
-	if (mob.reagents.get_reagent_amount(ETHANOL) < 325)
-		mob.reagents.add_reagent(ETHANOL, multiplier)
+	if (mob.reagents.get_reagent_amount(GLASGOW) < 325)
+		mob.reagents.add_reagent(GLASGOW, multiplier*5)
 
 
 /datum/disease2/effect/gaben
