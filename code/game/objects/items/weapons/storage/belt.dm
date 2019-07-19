@@ -300,7 +300,8 @@
 	item_state = "champion"
 	storage_slots = 1
 	can_only_hold = list(
-		"/obj/item/clothing/mask/luchador"
+		"/obj/item/clothing/mask/luchador",
+		"/obj/item/weapon/disk/nuclear"
 		)
 
 
