@@ -157,16 +157,14 @@
 	if (mob.reagents.get_reagent_amount(HONEY) < 10+multiplier*2)
 		mob.reagents.add_reagent(HONEY, multiplier)
 
-	if((mob.reagents.get_reagent_amount(HONEY)> 10) && prob(multiplier*4))
+	if(prob(5))
 		to_chat(mob, "<span class='warning'>You feel a buzzing in your throat</span>")
-
 
 		spawn(5 SECONDS)
 			var/turf/simulated/T = get_turf(mob)
 			if(prob(50))
-				playsound(T, 'sound/effects/splat.ogg', 50, 1)
-				mob.visible_message("<span class='warning'>[mob] spits out a bee!</span>","<span class='danger'>You throw up a bee!</span>")
-				T.add_vomit_floor(mob, 1, 1, 1)
+				mob.audible_cough()
+				mob.visible_message("<span class='warning'>[mob] coughs out a bee!</span>","<span class='danger'>You cough up a bee!</span>")
 			for(var/i = 0 to multiplier)
 				var/bee_type = pick(
 					100;/mob/living/simple_animal/bee/adminSpawned,
@@ -228,7 +226,7 @@
 			continue
 		else
 			nearest_mob = other_mob
-	
+
 	if (!nearest_mob)
 		return 1
 
