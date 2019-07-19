@@ -2,7 +2,7 @@ var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
 
-#define HOLYWATER_DURATION 8 MINUTES 
+#define HOLYWATER_DURATION 8 MINUTES
 
 /atom
 
@@ -805,7 +805,9 @@ its easier to just keep the beam vertical.
 			this = new /obj/effect/decal/cleanable/vomit/active(src)
 		else
 			this = new /obj/effect/decal/cleanable/vomit(src)
-		this.virus2 += virus_copylist(M.virus2)
+
+		if (M)
+			this.virus2 += virus_copylist(M.virus2)
 
 		// Make toxins vomit look different
 		if(toxvomit)

@@ -220,10 +220,12 @@ var/list/infected_items = list()
 
 /obj/item/remove_disease2(var/diseaseID)
 	if (diseaseID)
-		virus2[diseaseID] = null
-		virus2.Remove(diseaseID)
+		if (diseaseID in virus2)
+			virus2[diseaseID] = null
+			virus2.Remove(diseaseID)
 	else
 		virus2 = list()
+
 	if (virus2 && virus2.len <= 0)
 		infected_items -= src
 		if (pathogen)
