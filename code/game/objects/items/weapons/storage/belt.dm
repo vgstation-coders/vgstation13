@@ -301,7 +301,8 @@
 	storage_slots = 1
 	can_only_hold = list(
 		"/obj/item/clothing/mask/luchador",
-		"/obj/item/weapon/disk/nuclear"
+		"/obj/item/weapon/disk/nuclear",
+		"/obj/item/weapon/reagent_containers/food/drinks/golden_cup"
 		)
 
 
