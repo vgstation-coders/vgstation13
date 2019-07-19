@@ -62,7 +62,7 @@
 
 	if(M && !isUnconscious() && M.a_intent == I_HELP && prob(5))
 		master = M
-		to_chat(M, "Ian seems closer to you now. At least until somebody else gives him attention, anyway.")
+		to_chat(M, "[src] seems closer to you now. At least until somebody else gives him attention, anyway.")
 
 /mob/living/simple_animal/corgi/Life()
 	if(timestopped)
