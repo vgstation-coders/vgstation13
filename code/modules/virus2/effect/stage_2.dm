@@ -522,13 +522,13 @@
 
 /datum/disease2/effect/calorieburn/activate(var/mob/living/mob)
 	if(ishuman(mob))
-		var/mob/living/carbon/human/H
+		var/mob/living/carbon/human/H = mob
 		H.calorie_burn_rate *= multiplier
 
 /datum/disease2/effect/calorieburn/deactivate(var/mob/living/mob)
 	if (count)
 		if(ishuman(mob))
-			var/mob/living/carbon/human/H
+			var/mob/living/carbon/human/H = mob
 			H.calorie_burn_rate /= multiplier
 
 /datum/disease2/effect/calorieconserve
@@ -543,13 +543,13 @@
 
 /datum/disease2/effect/calorieconserve/activate(var/mob/living/mob)
 	if(ishuman(mob))
-		var/mob/living/carbon/human/H
+		var/mob/living/carbon/human/H = mob
 		H.calorie_burn_rate /= multiplier
 
 /datum/disease2/effect/calorieconserve/deactivate(var/mob/living/mob)
 	if(count)
 		if(ishuman(mob))
-			var/mob/living/carbon/human/H
+			var/mob/living/carbon/human/H = mob
 			H.calorie_burn_rate *= multiplier
 
 
