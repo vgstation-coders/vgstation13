@@ -765,6 +765,8 @@ var/list/global_singularity_pool
 			
 			
 /obj/machinery/singularity/deadchat_controlled/proc/begin_democracy_loop()
+	if(democracy_cooldown <= 10)
+		democracy_cooldown = 10
 	spawn(democracy_cooldown)
 		if(src)
 			var/result = count_democracy_votes()
