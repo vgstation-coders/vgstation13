@@ -540,7 +540,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/orange
 	name = "orange"
-	desc = "It's an tangy fruit."
+	desc = "It's a tangy fruit."
 	icon_state = "orange"
 	potency = 20
 	filling_color = "#FAAD28"
