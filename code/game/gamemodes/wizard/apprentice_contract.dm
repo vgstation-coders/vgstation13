@@ -200,6 +200,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 
 	var/datum/role/wizard_apprentice/apprentice_role = contract_faction.HandleRecruitedMind(apprentice.mind, override = TRUE)
 	apprentice_role.Greet(GREET_DEFAULT)
+	apprentice_role.AnnounceObjectives()
 	if(forced_apprentice_name)
 		apprentice.fully_replace_character_name(apprentice.real_name, forced_apprentice_name)
 	else

@@ -18,6 +18,6 @@
 	leader = newRole
 
 /datum/faction/wizard_contract/forgeObjectives()
-	var/datum/objective/target/protect/P = new(auto_target = FALSE)
+	var/datum/objective/target/protect/any_target/wizard/P = new(auto_target = FALSE)
 	P.set_target(leader.antag)
 	AppendObjective(P)
