@@ -3,26 +3,12 @@
 	id = WIZAPP_MASTER
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
-	greets = list(GREET_DEFAULT)
-
-/datum/role/wizard_master/Greet(var/greeting, var/custom)
-	if(!greeting)
-		return
-
-	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	switch(greeting)
-		if(GREET_CUSTOM)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
-		if(GREET_DEFAULT)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='info'>You are a Master Wizard!</br></span>")
-			to_chat(antag.current, "<span class='danger'>Lead your apprentices.</span>")
 
 /datum/role/wizard_apprentice
 	name = "wizard's apprentice"
 	id = WIZAPP
 	disallow_job = TRUE
 	logo_state = "apprentice-logo"
-	greets = list(GREET_DEFAULT)
 
 /datum/role/wizard/ForgeObjectives()
 	return
