@@ -113,7 +113,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 	var/new_name = stripped_input(user, "Choose the name of your apprentice. Leave empty or cancel to let them pick.", "Apprentice name", forced_apprentice_name, MAX_NAME_LEN)
 	if(user.incapacitated() || !user.is_holding_item(src) || gcDestroyed || polling_ghosts)
 		return
-	forced_apprentice_name = utf8_sanitize(new_name, user, MAX_NAME_LEN)
+	forced_apprentice_name = new_name
 
 /obj/item/wizard_apprentice_contract/Topic(href, href_list)
 	. = ..()
