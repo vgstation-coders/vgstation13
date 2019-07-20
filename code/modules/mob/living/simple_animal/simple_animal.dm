@@ -377,13 +377,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
 
-/mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
-	if(!Proj)
-		return
-	adjustBruteLoss(Proj.damage)
-	Proj.on_hit(src, 0)
-	return 0
-
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
 	. = ..()
 

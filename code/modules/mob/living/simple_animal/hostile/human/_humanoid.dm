@@ -58,17 +58,18 @@
 	if(corpse)
 		new corpse(loc)
 
+	drop_loot()
+
+	qdel(src)
+
+/mob/living/simple_animal/hostile/humanoid/drop_loot()
 	if(items_to_drop.len)
-
 		for(var/object in items_to_drop)
-
 			if(ispath(object))
 				new object (get_turf(src))
 			else if(istype(object, /atom/movable))
 				var/atom/movable/A = object
 				A.forceMove(get_turf(src))
-
-	qdel(src)
 
 /mob/living/simple_animal/hostile/humanoid/Shoot()
 	if(!needs_to_reload)

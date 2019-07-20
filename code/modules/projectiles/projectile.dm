@@ -96,7 +96,7 @@ var/list/impact_master = list()
 	var/initial_pixel_x = 0
 	var/initial_pixel_y = 0
 
-	animate_movement = 0
+	animate_movement = FORWARD_STEPS
 	var/linear_movement = 1
 
 	var/projectile_speed = 1 //Time in deciseconds between steps. Lower is faster. Bear in mind that this should be divisible by (or close to) the server's tick_lag (at the time of writing this, 0.33)
@@ -111,6 +111,7 @@ var/list/impact_master = list()
 	..()
 	initial_pixel_x = pixel_x
 	initial_pixel_y = pixel_y
+	set_glide_size(DELAY2GLIDESIZE(projectile_speed))
 
 /obj/item/projectile/proc/hit_apply(var/mob/living/X, var/blocked) // this is relevant because of projectile/energy/electrode
 	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
