@@ -86,11 +86,16 @@
 		return TRUE
 
 	var/enemies_count = 0
-	for (var/mob/M in mode.living_players)
-		if (dead_dont_count && M.stat == DEAD)
-			continue//dead players cannot count as opponents
-		if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
-			enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+	if (dead_dont_count)
+		for (var/mob/M in mode.living_players)
+			if (M.stat == DEAD)
+				continue//dead players cannot count as opponents
+			if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+	else
+		for (var/mob/M in mode.candidates)
+			if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
 
 	var/threat = round(mode.threat_level/10)
 	if (enemies_count >= required_enemies[threat])

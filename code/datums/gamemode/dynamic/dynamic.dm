@@ -260,7 +260,7 @@ var/stacking_limit = 90
 	var/i = 0
 	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
 		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
-			i++																			//we check whether we've got elligible players
+			i++																			//we check whether we've got eligible players
 			rule.candidates = candidates.Copy()
 			rule.trim_candidates()
 			if (rule.ready())
@@ -272,7 +272,11 @@ var/stacking_limit = 90
 	if (classic_secret) // Classic secret experience : one & only one roundstart ruleset
 		extra_rulesets_amount = 0
 	else
-		if (player_list.len > high_pop_limit)
+		var/rst_pop = 0
+		for(var/mob/new_player/player in player_list)
+			if(player.ready && player.mind)
+				rst_pop++
+		if (rst_pop > high_pop_limit)
 			if (threat_level > 50)
 				extra_rulesets_amount++
 				if (threat_level > 75)
@@ -283,19 +287,19 @@ var/stacking_limit = 90
 				if (threat_level >= third_rule_req[indice_pop])
 					extra_rulesets_amount++
 
-	message_admins("[i] rulesets qualify for the current pop and threat level, including [drafted_rules.len] with elligible candidates.")
+	message_admins("[i] rulesets qualify for the current pop and threat level, including [drafted_rules.len] with eligible candidates.")
 	if (drafted_rules.len > 0 && picking_roundstart_rule(drafted_rules))
 		if (extra_rulesets_amount > 0)//we've got enough population and threat for a second rulestart rule
 			for (var/datum/dynamic_ruleset/roundstart/rule in drafted_rules)
 				if (rule.cost > threat)
 					drafted_rules -= rule
-			message_admins("The current pop and threat level allow for a second round start ruleset, there remains [candidates.len] elligible candidates and [drafted_rules.len] elligible rulesets")
+			message_admins("The current pop and threat level allow for a second round start ruleset, there remains [candidates.len] eligible candidates and [drafted_rules.len] eligible rulesets")
 			if (drafted_rules.len > 0 && picking_roundstart_rule(drafted_rules))
 				if (extra_rulesets_amount > 1)//we've got enough population and threat for a third rulestart rule
 					for (var/datum/dynamic_ruleset/roundstart/rule in drafted_rules)
 						if (rule.cost > threat)
 							drafted_rules -= rule
-					message_admins("The current pop and threat level allow for a third round start ruleset, there remains [candidates.len] elligible candidates and [drafted_rules.len] elligible rulesets")
+					message_admins("The current pop and threat level allow for a third round start ruleset, there remains [candidates.len] eligible candidates and [drafted_rules.len] eligible rulesets")
 					if (!drafted_rules.len > 0 || !picking_roundstart_rule(drafted_rules))
 						message_admins("The mode failed to pick a third ruleset.")
 			else
@@ -341,7 +345,7 @@ var/stacking_limit = 90
 				for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
 					rule.candidates -= M//removing the assigned players from the candidates for the other rules
 					if (!rule.ready())
-						drafted_rules -= rule//and removing rules that are no longer elligible
+						drafted_rules -= rule//and removing rules that are no longer eligible
 			return 1
 		else
 			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
@@ -431,8 +435,8 @@ var/stacking_limit = 90
 					current_rules += new_rule
 				return 1
 		else if (forced)
-			message_admins("The ruleset couldn't be executed due to lack of elligible players.")
-			log_admin("The ruleset couldn't be executed due to lack of elligible players.")
+			message_admins("The ruleset couldn't be executed due to lack of eligible players.")
+			log_admin("The ruleset couldn't be executed due to lack of eligible players.")
 	return 0
 
 /datum/gamemode/dynamic/process()
@@ -494,12 +498,12 @@ var/stacking_limit = 90
 						drafted_rules[rule] = rule.get_weight()
 
 			if (drafted_rules.len > 0)
-				message_admins("DYNAMIC MODE: [drafted_rules.len] elligible rulesets.")
-				log_admin("DYNAMIC MODE: [drafted_rules.len] elligible rulesets.")
+				message_admins("DYNAMIC MODE: [drafted_rules.len] eligible rulesets.")
+				log_admin("DYNAMIC MODE: [drafted_rules.len] eligible rulesets.")
 				picking_midround_rule(drafted_rules)
 			else
-				message_admins("DYNAMIC MODE: Couldn't ready-up a single ruleset. Lack of elligible candidates, population, or threat.")
-				log_admin("DYNAMIC MODE: Couldn't ready-up a single ruleset. Lack of elligible candidates, population, or threat.")
+				message_admins("DYNAMIC MODE: Couldn't ready-up a single ruleset. Lack of eligible candidates, population, or threat.")
+				log_admin("DYNAMIC MODE: Couldn't ready-up a single ruleset. Lack of eligible candidates, population, or threat.")
 		else
 			midround_injection_cooldown = rand(600,1050)
 
