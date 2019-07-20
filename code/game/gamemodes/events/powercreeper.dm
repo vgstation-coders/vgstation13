@@ -94,7 +94,6 @@
 		if(prob(ATTACK_CHANCE))
 			flick("attacking[add_state]",src)
 			for(var/mob/living/M in range(1, get_turf(src)))
-				visible_message("<span class='danger'>\The [src] zaps [M]</span>")
 				spawn
 					Beam(M, "lightning", 'icons/obj/zap.dmi', 5, 2)
 				try_electrocution(M)
