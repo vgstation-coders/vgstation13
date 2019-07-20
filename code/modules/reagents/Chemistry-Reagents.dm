@@ -1441,9 +1441,6 @@
 			H.emote(pick("stare", "giggle"), null, null, TRUE)
 		if(prob(5))
 			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
-		if(prob(2))
-			to_chat(H, "<span class='notice'>You doze off for a second.</span>")
-			H.sleeping += 1
 		..()
 
 /datum/reagent/sacid
