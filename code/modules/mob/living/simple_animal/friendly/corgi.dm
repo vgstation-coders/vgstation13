@@ -57,13 +57,6 @@
 /mob/living/simple_animal/corgi/has_hand_check()
 	return 1 // can pull things with his mouth
 
-/mob/living/simple_animal/corgi/react_to_touch(mob/M)
-	..()
-
-	if(M && !isUnconscious() && M.a_intent == I_HELP && prob(5))
-		master = M
-		to_chat(M, "[src] seems closer to you now. At least until somebody else gives him attention, anyway.")
-
 /mob/living/simple_animal/corgi/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -675,6 +668,9 @@
 				flick_overlay(heart, list(M.client), 20)
 				emote("me", EMOTE_AUDIBLE, pick("yaps happily.","yips happily.","gives a hearty bark!","yips and cuddles up to you."))
 				playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
+				if(prob(5))
+					master = M
+					to_chat(M, "[src] seems closer to you now. At least until somebody else gives him attention, anyway.")
 			if(I_HURT)
 				playsound(loc, 'sound/voice/corgigrowl.ogg', 80, 1)
 				emote("me", EMOTE_AUDIBLE, "growls.")
