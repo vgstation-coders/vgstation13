@@ -22,7 +22,7 @@
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
-	var/num_traitors = min(round(mode.candidates.len / traitor_scaling_coeff) + 1, candidates.len)
+	var/num_traitors = min(round(mode.roundstart_pop_ready / traitor_scaling_coeff) + 1, candidates.len)
 	for (var/i = 1 to num_traitors)
 		var/mob/M = pick(candidates)
 		assigned += M
@@ -96,7 +96,7 @@
 	high_population_requirement = 30
 
 /datum/dynamic_ruleset/roundstart/vampire/execute()
-	var/num_vampires = min(round(mode.candidates.len / 10) + 1, candidates.len)
+	var/num_vampires = min(round(mode.roundstart_pop_ready / 10) + 1, candidates.len)
 	for (var/i = 1 to num_vampires)
 		var/mob/M = pick(candidates)
 		assigned += M
