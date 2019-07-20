@@ -178,11 +178,11 @@ var/stacking_limit = 90
 	log_admin("Dynamic mode parameters for the round: distrib mode = [distribution_mode], centre = [curve_centre_of_round], width is [curve_width_of_round]. Extended : [forced_extended], no stacking : [no_stacking], classic secret: [classic_secret].")
 
 	generate_threat()
-	
+
 
 	var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
 	latejoin_injection_cooldown = round(Clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
-	
+
 	var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
 	midround_injection_cooldown = round(Clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
 
@@ -192,9 +192,13 @@ var/stacking_limit = 90
 	message_admins("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 	log_admin("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 
-	if (player_list.len >= high_pop_limit)
-		message_admins("High Population Override is in effect! Threat Level will have more impact on which roles will appear, and player population less.")
-		log_admin("High Population Override is in effect! Threat Level will have more impact on which roles will appear, and player population less.")
+	var/rst_pop = 0
+	for(var/mob/new_player/player in player_list)
+		if(player.ready && player.mind)
+			rst_pop++
+	if (rst_pop >= high_pop_limit)
+		message_admins("High Population Override is in effect! ([rst_pop]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
+		log_admin("High Population Override is in effect! ([rst_pop]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
 	dynamic_stats = new
 	dynamic_stats.starting_threat_level = threat_level
 
