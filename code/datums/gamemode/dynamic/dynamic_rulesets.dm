@@ -188,43 +188,26 @@
 //////////////////////////////////////////////Remember that roundstart objectives are automatically forged by /datum/gamemode/proc/PostSetup()
 
 /datum/dynamic_ruleset/roundstart/trim_candidates()
-	//-----------debug info---------------------------will remove once we've fixed that bug
-	var/cand = candidates.len
-	var/a = 0
-	var/b = 0
-	var/c = 0
-	var/c1 = 0
-	var/d = 0
-	var/e = 0
-	//------------------------------------------------
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
 	for(var/mob/new_player/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
-			a++
 			continue
 		if (!P.client.desires_role(role_pref) || jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
-			b++
 			continue
-		if ((protected_from_jobs.len > 0) && P.mind.assigned_role && (P.mind.assigned_role in protected_from_jobs))
+		if (P.mind.assigned_role in protected_from_jobs)
 			var/probability = initial(role_category.protected_traitor_prob)
 			if (prob(probability))
 				candidates.Remove(P)
-				c1++
-			c++
 			continue
-		if ((restricted_from_jobs.len > 0) && P.mind.assigned_role && (P.mind.assigned_role in restricted_from_jobs))//does their job allow for it?
+		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
 			candidates.Remove(P)
-			d++
 			continue
-		if ((exclusive_to_jobs.len > 0) && P.mind.assigned_role && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
+		if ((exclusive_to_jobs.len > 0) && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
 			candidates.Remove(P)
-			e++
 			continue
-	message_admins("Dynamic Mode: Trimming [name]'s candidates: [candidates.len] remaining out of [cand] ([a],[b],[c] ([c1]),[d],[e])")
-	log_admin("Dynamic Mode: Trimming [name]'s candidates: [candidates.len] remaining out of [cand] ([a],[b],[c] ([c1]),[d],[e])")
 
 /datum/dynamic_ruleset/roundstart/delayed/trim_candidates()
 	if (ticker && ticker.current_state <  GAME_STATE_PLAYING)
@@ -240,21 +223,27 @@
 		if (!P.client.desires_role(role_id) || jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
 			continue
-		if ((protected_from_jobs.len > 0) && P.mind.assigned_role && (P.mind.assigned_role in protected_from_jobs))
+		if (P.mind.assigned_role in protected_from_jobs)
 			var/probability = initial(role_category.protected_traitor_prob)
 			if (prob(probability))
 				candidates.Remove(P)
 			continue
-		if ((restricted_from_jobs.len > 0) && P.mind.assigned_role && (P.mind.assigned_role in restricted_from_jobs))//does their job allow for it?
+		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
 			candidates.Remove(P)
 			continue
-		if ((exclusive_to_jobs.len > 0) && P.mind.assigned_role && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
+		if ((exclusive_to_jobs.len > 0) && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
 			candidates.Remove(P)
 			continue
-
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
 	if (!forced)
-		if(!check_enemy_jobs())
+		var/job_check = 0
+		if (enemy_jobs.len > 0)
+			for (var/mob/M in mode.candidates)
+				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+
+		var/threat = round(mode.threat_level/10)
+		if (job_check < required_enemies[threat])
 			return 0
 	return ..()
