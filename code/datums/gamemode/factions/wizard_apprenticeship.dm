@@ -1,6 +1,6 @@
 /datum/faction/wizard_contract
 	name = "Wizard Apprenticeship"
-	ID = WIZAPP
+	ID = WIZARD_CONTRACT
 	initial_role = WIZAPP_MASTER
 	late_role = WIZAPP
 	initroletype = /datum/role/wizard_master
