@@ -173,7 +173,7 @@
 					1;/mob/living/simple_animal/bee/swarm,
 					1;/mob/living/simple_animal/bee/adminSpawned_hornet,
 					)
-				new bee_type(get_turf(mob))
+				new bee_type(T)
 
 
 /datum/disease2/effect/radresist
