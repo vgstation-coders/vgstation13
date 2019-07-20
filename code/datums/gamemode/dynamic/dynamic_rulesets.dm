@@ -81,13 +81,13 @@
 	return 1
 
 // Returns TRUE if there are sufficient enemies to execute this ruleset
-/datum/dynamic_ruleset/proc/check_enemy_jobs()
+/datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE)
 	if (!enemy_jobs.len)
 		return TRUE
 
 	var/enemies_count = 0
 	for (var/mob/M in mode.living_players)
-		if (M.stat == DEAD)
+		if (dead_dont_count && M.stat == DEAD)
 			continue//dead players cannot count as opponents
 		if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
 			enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
@@ -237,6 +237,6 @@
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
 	if (!forced)
-		if(!check_enemy_jobs())
+		if(!check_enemy_jobs(FALSE))
 			return 0
 	return ..()
