@@ -144,6 +144,8 @@ var/global/list/disease2_list = list()
 	//slightly randomized infection chance
 	var/variance = initial(infectionchance)/10
 	infectionchance = rand(initial(infectionchance)-variance,initial(infectionchance)+variance)
+	if (origin == "New Player")
+		infectionchance = min(infectionchance,20)
 	infectionchance_base = infectionchance
 
 	//cosmetic petri dish stuff - if set beforehand, will not be randomized
