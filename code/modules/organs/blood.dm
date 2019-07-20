@@ -79,17 +79,19 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 							break
 
 				B.volume += 0.1 // regenerate blood VERY slowly
+				if(M_REGEN in mutations)
+					B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
 				if (reagents.has_reagent(NUTRIMENT))	//Getting food speeds it up
 					if(M_REGEN in mutations)
 						B.volume += 1.2
-						reagents.remove_reagent(NUTRIMENT, 1.0)
+						reagents.remove_reagent(NUTRIMENT, 0.5)
 					else
 						B.volume += 0.6
 						reagents.remove_reagent(NUTRIMENT, 0.5)
 				if (reagents.has_reagent(IRON))	//Hematogen candy anyone?
 					if(M_REGEN in mutations)
 						B.volume += 2.4
-						reagents.remove_reagent(IRON, 1.0)
+						reagents.remove_reagent(IRON, 0.5)
 					else
 						B.volume += 1.2
 						reagents.remove_reagent(IRON, 0.5)
