@@ -10,9 +10,6 @@
 	disallow_job = TRUE
 	logo_state = "apprentice-logo"
 
-/datum/role/wizard/ForgeObjectives()
-	return
-
 /datum/role/wizard_apprentice/OnPostSetup()
 	. = ..()
 	if(!.)
