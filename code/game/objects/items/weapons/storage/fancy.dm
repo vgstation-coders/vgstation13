@@ -382,7 +382,7 @@
 	overlays.len = 0
 
 	var/i = 0
-	for (var/obj/item/weapon/reagent_containers/glass/beaker/vial in contents)
+	for (var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial in contents)
 		var/image/vial_image = image('icons/obj/vialbox.dmi',src,"vial")
 		if(vial.reagents.total_volume)
 			var/image/filling = image('icons/obj/vialbox.dmi',src, "vial_reagents")
@@ -433,7 +433,7 @@
 		overlays += image('icons/obj/vialbox.dmi',src,"cover_open")
 
 	var/i = 0
-	for (var/obj/item/weapon/reagent_containers/glass/beaker/vial in contents)
+	for (var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial in contents)
 		var/image/vial_image = image('icons/obj/vialbox.dmi',src,"vial")
 		if(vial.reagents.total_volume)
 			var/image/filling = image('icons/obj/vialbox.dmi',src, "vial_reagents")
@@ -665,3 +665,4 @@
 	box_type = "plate"
 	storage_slots = 10
 	can_only_hold = list("/obj/item/weapon/spacecash", "/obj/item/weapon/coin")
+
