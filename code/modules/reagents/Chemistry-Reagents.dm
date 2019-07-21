@@ -3095,10 +3095,43 @@
 	id = ALLICIN
 	description = "A natural antipathogenic."
 	color = "#F1DEB4" //rgb: 241, 222, 180
+	custom_metabolism = 0.2
 	overdose_am = REAGENTS_OVERDOSE//30u
 	data = list(
 		"threshold" = 30,
 		)
+
+/datum/reagent/antipathogenic/allicin/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(STOXINS))
+		holder.remove_reagents(STOXINS, 2 * REM)
+	if(holder.has_reagent(PLASMA))
+		holder.remove_reagent(PLASMA, REM)
+	if(holder.has_any_reagents(SACIDS))
+		holder.remove_reagents(SACIDS, REM)
+	if(holder.has_reagent(POTASSIUM_HYDROXIDE))
+		holder.remove_reagent(POTASSIUM_HYDROXIDE, 2 * REM)
+	if(holder.has_reagent(CYANIDE))
+		holder.remove_reagent(CYANIDE, REM)
+	if(holder.has_reagent(AMATOXIN))
+		holder.remove_reagent(AMATOXIN, 2 * REM)
+	if(holder.has_reagent(CHLORALHYDRATE))
+		holder.remove_reagent(CHLORALHYDRATE, 5 * REM)
+	if(holder.has_reagent(CARPOTOXIN))
+		holder.remove_reagent(CARPOTOXIN, REM)
+	if(holder.has_reagent(ZOMBIEPOWDER))
+		holder.remove_reagent(ZOMBIEPOWDER, 0.5 * REM)
+	if(holder.has_reagent(MINDBREAKER))
+		holder.remove_reagent(MINDBREAKER, 2 * REM)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1 //3x as effective if they're sleeping, 2x if they're lying down
+	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
+	M.adjustToxLoss(-2 * REM)
 
 /datum/reagent/antipathogenic/allicin/on_overdose(var/mob/living/M)
 	if (prob(30))
