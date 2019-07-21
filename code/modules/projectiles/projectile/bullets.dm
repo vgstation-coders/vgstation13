@@ -67,6 +67,31 @@
 		return 1
 	return 0
 
+/obj/item/projectile/bullet/shrapnel
+
+	name = "shrapnel"
+	damage = 45
+	damage_type = BRUTE
+	weaken = 1
+	stun = 3
+
+/obj/item/projectile/bullet/shrapnel/New()
+	..()
+	kill_count = rand(6,10)
+
+/obj/item/projectile/bullet/shrapnel/small
+
+	name = "small shrapnel"
+	damage = 25
+
+/obj/item/projectile/bullet/shrapnel/small/plasma
+
+	name = "small plasma shrapnel"
+	damage_type = TOX
+	color = "#BF5FFF"
+	damage = 35
+
+
 /obj/item/projectile/bullet/midbullet
 	damage = 20
 	stun = 5
@@ -147,6 +172,26 @@
 
 /obj/item/projectile/bullet/a762
 	damage = 25
+
+
+obj/item/projectile/bullet/suffocationbullet
+	name = "CO2 bullet"
+	damage = 20
+	damage_type = OXY
+
+
+/obj/item/projectile/bullet/cyanideround
+	name = "poison bullet"
+	damage = 40
+	damage_type = TOX
+
+
+/obj/item/projectile/bullet/burstbullet
+	name = "exploding bullet"
+
+/obj/item/projectile/bullet/burstbullet/on_hit(var/atom/target, var/blocked = 0)
+	explosion(target, 0,1,1,5)
+	qdel(src)
 
 #define SPUR_FULL_POWER 4
 #define SPUR_HIGH_POWER 3
