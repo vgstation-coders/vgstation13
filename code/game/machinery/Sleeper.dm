@@ -3,7 +3,7 @@
 /////////////////////////////////////////
 
 /obj/machinery/sleeper
-	name = "\improper Sleeper"
+	name = "sleeper"
 	icon = 'icons/obj/cryogenics3.dmi'
 	icon_state = "sleeper_0"
 	density = TRUE
@@ -475,7 +475,7 @@
 
 
 /obj/machinery/sleeper/upgraded
-	name = "advanced Sleeper"
+	name = "advanced sleeper"
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/sleeper,
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
