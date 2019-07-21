@@ -33,33 +33,6 @@
 	kill_count = 1 //Limits the range to one tile
 	embed = 0
 
-/obj/item/projectile/bullet/shrapnel
-
-	name = "shrapnel"
-	damage = 45
-	damage_type = BRUTE
-	weaken = 1
-	stun = 3
-
-/obj/item/projectile/bullet/shrapnel/New()
-	..()
-	kill_count = rand(6,10)
-
-
-
-/obj/item/projectile/bullet/shrapnel/small
-
-	name = "small shrapnel"
-	damage = 25
-
-/obj/item/projectile/bullet/shrapnel/small/plasma
-
-	name = "small plasma shrapnel"
-	damage_type = TOX
-	color = "#BF5FFF"
-	damage = 35
-
-
 /obj/item/projectile/bullet/weakbullet
 	name = "weak bullet"
 	icon_state = "bbshell"
@@ -67,30 +40,32 @@
 	stun = 5
 	weaken = 5
 	embed = 0
+
 /obj/item/projectile/bullet/weakbullet/booze
 	name = "booze bullet"
-	on_hit(var/atom/target, var/blocked = 0)
-		if(..(target, blocked))
-			var/mob/living/M = target
-			M.dizziness += 20
-			M:slurring += 20
-			M.confused += 20
-			M.eye_blurry += 20
-			M.drowsyness += 20
-			if(M.dizziness <= 150)
-				M.Dizzy(150)
-				M.dizziness = 150
-			for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
-				M.paralysis += 2
-				M.dizziness += 10
-				M:slurring += 10
-				M.confused += 10
-				M.eye_blurry += 10
-				M.drowsyness += 10
-				A.volume += 5 //Because we can
-				M.dizziness += 10
-			return 1
-		return 0
+
+/obj/item/projectile/bullet/weakbullet/booze/on_hit(var/atom/target, var/blocked = 0)
+	if(..(target, blocked))
+		var/mob/living/M = target
+		M.dizziness += 20
+		M:slurring += 20
+		M.confused += 20
+		M.eye_blurry += 20
+		M.drowsyness += 20
+		if(M.dizziness <= 150)
+			M.Dizzy(150)
+			M.dizziness = 150
+		for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
+			M.paralysis += 2
+			M.dizziness += 10
+			M:slurring += 10
+			M.confused += 10
+			M.eye_blurry += 10
+			M.drowsyness += 10
+			A.volume += 5 //Because we can
+			M.dizziness += 10
+		return 1
+	return 0
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
@@ -161,23 +136,6 @@
 	weaken = 5
 	embed = 0
 	penetration = 0
-
-/obj/item/projectile/bullet/suffocationbullet//How does this even work?
-	name = "CO2 bullet"
-	damage = 20
-	damage_type = OXY
-
-
-/obj/item/projectile/bullet/cyanideround
-	name = "poison bullet"
-	damage = 40
-	damage_type = TOX
-
-
-/obj/item/projectile/bullet/burstbullet//I think this one needs something for the on hit
-	name = "exploding bullet"
-	damage = 20
-
 
 /obj/item/projectile/bullet/stunshot
 	name = "stunshot"
