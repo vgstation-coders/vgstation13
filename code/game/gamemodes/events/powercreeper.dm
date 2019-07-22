@@ -17,6 +17,7 @@
 	autoignition_temperature = AUTOIGNITION_PAPER
 	var/add_state = "_bare"
 	var/grown = 0
+	var/growdirs = 0
 
 /obj/structure/cable/powercreeper/New(loc, growdir, packet_override)
 	//did we get created by a packet?
@@ -45,23 +46,19 @@
 	//basic cable stuff, this gets done in the cable stack logic, so i needed to copy paste it over, oh well
 	var/datum/powernet/PN = getFromPool(/datum/powernet)
 	PN.add_cable(src)
+	//we are processing
+	processing_objects.Add(src)
+	. = ..()
+	set_light(1, 15, LIGHT_COLOR_RED)
 	for(var/dir in cardinal)
 		mergeConnectedNetworks(dir)   //Merge the powernet with adjacents powernets
 	mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
+	getViableNeighbours() //See where we can grow
+	updateNeighbours() //Tell others where they can't grow
 
-	//we are processing
-	processing_objects += src
-
-	//lighting
-	spawn
-		set_light(1, 15, LIGHT_COLOR_RED)
-
-	. = ..()
 
 /obj/structure/cable/powercreeper/Destroy()
-	//no longer processing
-	processing_objects -= src
-
+	processing_objects.Remove(src)
 	..()
 
 /obj/structure/cable/powercreeper/process()
@@ -78,25 +75,20 @@
 		//add power to powernet
 		add_avail(POWER_PER_FRUIT)
 
-		//spread - copypasta from spreading_growth.dm
-		var/chance = MIN_SPREAD_CHANCE + (powernet.avail / 1000) //two powercreeper plants raise chance by 1
-		chance = chance > MAX_SPREAD_CHANCE ? MAX_SPREAD_CHANCE : chance
-		if(prob(chance))
-			sleep(rand(3,5))
-			if(!gcDestroyed)
-				var/list/neighbours = getViableNeighbours()
-				if(neighbours.len)
-					var/turf/target_turf = pick(neighbours)
-					new /obj/structure/cable/powercreeper(get_turf(target_turf), get_dir(src, target_turf))
+		if(growdirs)
+			var/grow_chance = Clamp(MIN_SPREAD_CHANCE + (powernet.avail / 1000), MIN_SPREAD_CHANCE, MAX_SPREAD_CHANCE)
+			if(prob(grow_chance))
+				var/chosen_dir = pick(cardinal)
+				if(growdirs & chosen_dir)
+					var/turf/target_turf = get_step(src, chosen_dir)
+					if(isViableGrow(target_turf))
+						new /obj/structure/cable/powercreeper(target_turf, get_dir(src, target_turf))
 
-		//if there is a person caught in the vines, burn em a bit
-		//electrocute people who aren't insulated
-		if(prob(ATTACK_CHANCE))
-			flick("attacking[add_state]",src)
-			for(var/mob/living/M in range(1, get_turf(src)))
-				spawn
-					Beam(M, "lightning", 'icons/obj/zap.dmi', 5, 2)
-				try_electrocution(M)
+/obj/structure/cable/powercreeper/Crossed(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+	.=..()
+	if(isliving(mover))
+		try_electrocution(mover)
+
 
 /obj/structure/cable/powercreeper/update_icon()
 	return
@@ -110,28 +102,40 @@
 /obj/structure/cable/powercreeper/proc/die()
 	grown = 0 //we can't attack or spread anymore
 	do_flick(src, "death[add_state]", 13)
+	updateNeighbours(TRUE)
 	qdel(src)
 
 /obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
 	if(!istype(M))
 		return 0
 	playsound(src,'sound/weapons/electriczap.ogg',50, 1) //we still want a sound
-	if(!electrocute_mob(M, powernet, src))
-		M.apply_damage((powernet.avail / 3000), BURN) //one burn damage per 6 plants (keep in mind, this will also take the power from any connected powernet)
+	return electrocute_mob(M, powernet, src)
+
+/obj/structure/cable/powercreeper/proc/getViableNeighbours()
+	for(var/dir in cardinal)
+		var/turf/T = get_step(src, dir)
+		if(isViableGrow(T))
+			growdirs |= dir
+
+/obj/structure/cable/powercreeper/proc/isViableGrow(var/turf/T)
+	if(!T.has_gravity())
+		return 0
+	if(!T.Adjacent(src))
+		return 0
+	if(locate(/obj/structure/cable/powercreeper) in T)
+		return 0
+	if((T.density == 1) || T.has_dense_content())
 		return 0
 	return 1
 
-/obj/structure/cable/powercreeper/proc/getViableNeighbours()
-	. = list()
-	var/turf/T
+/obj/structure/cable/powercreeper/proc/updateNeighbours(var/dying = FALSE)
 	for(var/dir in cardinal)
-		T = get_step(src, dir)
-		if(locate(/obj/structure/cable/powercreeper) in T)
-			continue
-		if((T.density == 1) || T.has_dense_content())
-			continue
-	
-		. += T
+		var/obj/structure/cable/powercreeper/P = locate() in get_step(src, dir)
+		if(P)
+			if(dying)
+				P.growdirs |= get_dir(P, src)
+			else
+				P.growdirs &= ~get_dir(P, src)
 
 /obj/structure/cable/powercreeper/get_connections(powernetless_only = 0)
 	. = list()
@@ -141,6 +145,23 @@
 		T = get_step(src, dir)
 		if(T)
 			. += power_list(T, src, turn(dir, 180), powernetless_only)
+
+/obj/structure/cable/powercreeper/mergeConnectedNetworks(var/direction)
+	var/turf/TB = get_step(src, direction)
+
+	for(var/obj/structure/cable/C in TB)
+		if(!C)
+			continue
+		if(src == C)
+			continue
+		if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
+			var/datum/powernet/newPN = getFromPool(/datum/powernet/)
+			newPN.add_cable(C)
+		if(powernet) // if we already have a powernet, then merge the two powernets
+			merge_powernets(powernet,C.powernet)
+		else
+			C.powernet.add_cable(src) // else, we simply connect to the matching cable powernet
+
 
 /obj/structure/cable/powercreeper/hasDir(var/dir)
 	return (dir in cardinal)
