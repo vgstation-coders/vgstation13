@@ -109,7 +109,7 @@
 
 
 /obj/item/device/illegalradio/proc/generate_main_menu(mob/user)
-	var/welcome = pick("Stop wasting bandwidth, buy something already!","Telecrystals ain't cheap, kid. Pay up.","There ain't nothing better than a good deal.","Back in my day, we didn't have 'teleporters'.","Human and Vox slaves NOT accepted as payment.","Absolutely no affiliation with Discount Dan.","Free from Nanotrasen regulation.","Too shy to come in person?","Unaffiliated with Spessmart(TM) supermarts.","Cluck, cluck. We've got no chickens.","What doth the greytide desire?","Wow, shooting spree? How original.","Uwa~ Senpai! Buy my stuff.","Japanese animes tolerated but condemned.","B-but I d-didn't get to upgrade my uplink yet! Don't make me leave, nooooo!")
+	var/welcome = pick("Stop wasting bandwidth, buy something already!","Telecrystals ain't cheap, kid. Pay up.","There ain't nothing better than a good deal.","Back in my day, we didn't have 'teleporters'.","Human and Vox slaves NOT accepted as payment.","Absolutely no affiliation with Discount Dan.","Free from Nanotrasen regulation.","Too shy to come in person?","Unaffiliated with Spessmart(TM) supermarts.","Cluck, cluck. We've got no chickens.","What doth the greytide desire?","Wow, shooting spree? How original.","Uwa~ Senpai! Buy my stuff.","Japanese animes tolerated but condemned.","Goods from the TG1153 sector are prohibited. Go away.")
 
 	var/dat = list()
 	dat += "<B><font size=5>["The Black Market"]</font></B><BR>"
@@ -164,7 +164,7 @@
 	
 /obj/item/device/illegalradio/proc/generate_delivery_menu(mob/user, var/datum/black_market_item/item)
 	var/dat = list()
-	dat += "<B><font size=5>["The Black Market"]</font></B><BR>"
+	dat += "<B><font size=5>"The Black Market"</font></B><BR>"
 	dat += "<B>Please pay for an available delivery option.</B><BR>"
 	dat += "<B>You are purchasing the [item.name].</B><BR>"
 	dat += "Cash stored: [src.money_stored]<BR><BR>"
