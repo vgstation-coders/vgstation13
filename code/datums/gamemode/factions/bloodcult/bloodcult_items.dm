@@ -1356,3 +1356,110 @@ var/list/arcane_tomes = list()
 					user.equip_to_slot_or_drop(stored_slot,nslot)
 			stored_gear.Remove(slot)
 		qdel(src)
+
+		
+///////////////////////////////////////FRIENDLY CULT////////////////////////////////////////////////
+
+/obj/item/weapon/friendly_pamphlet
+	name = "cult of Nar-Sie pamphlet"
+	desc = "It looks like it was torn from a cultist tome. The title reads:\"Ten reasons why Nar-Sie can improve YOUR life!\""
+	icon = 'icons/obj/cult.dmi'
+	icon_state ="pamphlet"
+	throwforce = 0
+	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+	throw_range = 1
+	throw_speed = 1
+	layer = ABOVE_DOOR_LAYER
+	pressure_resistance = 1
+	attack_verb = list("slaps")
+	autoignition_temperature = AUTOIGNITION_PAPER
+	fire_fuel = 1
+	var/index = 1
+	var/list/reasons = 	list(
+						 "One: You'll never run out of blood! That's right, almost every creature needs blood to survive. Followers of the Geometer of BLOOD always have at least 5 blood bags handy.",
+						 "Two: Unemployment benefits. Send your form 1040 to the nearest Nar-Sie IRS office and you might be liable for a goodie package! Includes blood, skulls, dreary furniture, and comfy robes.",
+						 "Three: Fashion! Speaking of comfy robes, it's a little known fact that Nar-Sie is a fashionista! Our robes are spun from raw hellweave, making them perfect for a cozy night on your holo laptop. If you want something more heavy-duty, check out our amazing spiky armor! It's even space proof!",
+						 "Four: Never clean again. With the cult of Nar-Sie, say goodbye to that rag. When we say you'll never run out of blood, we mean it! Blood all over your floor is great for your feng shui and helps revitalize your senses. There's never a reason to rid of it.",
+						 "Five: Diversity. Nar-Sie accepts all into his cult, as we are a religion of peace. Whether you be Human, Vox, Diona, Monkey, or even Grue, you'll be sure to meet a wide variety of new people!",
+						 "Six: Free phone plan. We're sure you're never going to want to talk to anyone outside your little job hut except other members of the Geometer of Blood. Fortunately for us, Nar-Sie offers an easy telepathic communication line with any other cultist. All you need is blood!",
+						 "Seven: Cool tattoos. Everybody loves a gnarly tattoo - one look at a person with a tatto and you can't help but think, \"Damn. What a badass.\" Of course, the Geometer of Blood takes it one step further. Our tattoos are MAGICAL. Yeah, imagine the look on their faces when it glows.",
+						 "Eight: Scientist connections. For some odd reasons, scientists are always begging to serve our cult. We don't know why, but we aren't complaining! In any given station, it's almost a guarantee that the entire science department is one of us! It might be the perfect chance for you to get that promotion.",
+						 "Nine: An afterlife. Of course, you could just mindlessly waddle around as a ghost. I'm sure watching that human eat that delicious hamburger won't hurt at all... nah, of course it will! If you don't get absorbed into a soul stone to continue living, your spirit will automatically return to Nar-Sie's domain to chill for the rest of eternity. It's a party central!",
+						 "Ten: Succubi! While cultists work hard day and night to help satiate Nar-Sie's hunger for new friends, we know every layman must have their journey come to an end. And at the end of every journey lies a GREAT reward. We've got a LOT of demons to introduce to you."
+						)
+/obj/item/weapon/friendly_pamphlet/attack_self(var/mob/user)
+	if(index == (reasons.len)+1)
+		to_chat(user,"<span class='info'>You go back to the top.</span>")	
+		index = 1
+		return
+	to_chat(user,"<span class='info'>[reasons[index]]</span>")	
+	index++
+
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/cyborg
+	name = "tempting goblet"
+	desc = "A large obsidian cup in the shape of a skull. Supposedly used by followers of Nar-Sie to hold blood from sacrifices, but this version has a label reading \"NO HUMAN HARM\"."
+	icon_state = "cult"
+	item_state = "cult"
+	isGlass = 0
+	amount_per_transfer_from_this = 10
+	volume = 150
+	force = 5
+	throwforce = 7
+
+/obj/item/weapon/reagent_containers/food/snacks/cookiebowl/cult
+	name = "Nar-Sie cookie basket"
+	desc = "Filled with sugar-rich blood. Delicious!"	
+	var/list/possible_messages = list("You get an urge to begin going to Nar-Sie church every sunday.","You think you understand why blood is so cool.","For a second, you think you were able to see through the veil. Woah.","You get an urge to eat more Nar-Sie cookies.","")
+
+/obj/item/weapon/reagent_containers/food/snacks/cookiebowl/cult/after_consume(var/mob/user, var/datum/reagents/reagentreference)
+	..()
+	if(prob(25))
+		var/message = pick(possible_messages)
+		to_chat(user,"<span class='sinister'>[message]</span>")	
+
+/obj/item/weapon/reagent_containers/food/snacks/cookiebowl/New()
+	..()
+	reagents.add_reagent(BLOOD, 5, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"="O-","resistances"=null,"trace_chem"=null, "virus2"=list()))	
+	bitesize = 2
+	
+/obj/item/weapon/reagent_containers/syringe/robot/cultist
+	name = "consensual blood donation syringe"
+	desc = "Remember - if the human doesn't consent, then you're committing human harm!"
+
+/obj/item/weapon/light/tube/cultist
+	name = "cultist light tube"
+	brightness_color = "#C94C4C"
+	brightness_range = 7
+	brightness_power = 2
+
+/obj/item/weapon/light/tube/cultist/update()
+	switch(status)
+		if(LIGHT_OK)
+			icon_state = base_state
+			desc = "A cultist light tube. Seems to emit a crimson light instead of normal light."
+		if(LIGHT_BURNED)
+			icon_state = "[base_state]-burned"
+			desc = "A burnt-out cultist light tube."
+		if(LIGHT_BROKEN)
+			icon_state = "[base_state]-broken"
+			desc = "A broken cultist light tube."
+
+/obj/item/weapon/light/bulb/cultist
+	name = "cultist light bulb"
+	brightness_color = "#C94C4C"
+	brightness_range = 5
+	brightness_power = 2
+
+/obj/item/weapon/light/bulb/cultist/update()
+	switch(status)
+		if(LIGHT_OK)
+			icon_state = base_state
+			desc = "A cultist light bulb. Seems to emit a crimson light instead of normal light."
+		if(LIGHT_BURNED)
+			icon_state = "[base_state]-burned"
+			desc = "A burnt-out cultist light bulb."
+		if(LIGHT_BROKEN)
+			icon_state = "[base_state]-broken"
+			desc = "A broken cultist light bulb." 

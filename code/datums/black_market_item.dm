@@ -168,6 +168,16 @@ for anyone but the person committing mass murder.
 /datum/black_market_item/arcane
 	category = "Supernatural and Arcane Objects" 
 	
+/datum/black_market_item/arcane/friendly_cult
+	name = "Friendly Cultist Cyborg Upgrade"
+	desc = "While mundane, this upgrade can be applied to any service cyborg to allow it to draw a special set of \"Friendly Runes\". Story goes that some kind cultist decided to spread Nar-Sie through love and caring, inevitably resulting in his death. Some say cyborgs with this installed can be converted into a real, deadly cultist... not that we would know."
+	item = /obj/item/borg/upgrade/cult
+	stock_min = 1
+	stock_max = 3
+	cost_min = 400
+	cost_max = 500
+	display_chance = 95
+	
 /datum/black_market_item/arcane/levitation
 	name = "Potion of Levitation"
 	desc = "Potions come in many shapes and sizes, but this one makes you float! Why? Because it looks fucking cool. Maybe you can convince somebody you're the fourth coming of Jesus."
