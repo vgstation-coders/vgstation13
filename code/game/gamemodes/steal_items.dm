@@ -194,7 +194,7 @@
 /datum/theft_objective/traitor/telesci
 	name = "the telescience computer's circuit"
 	typepath = /obj/item/weapon/circuitboard/telesci_computer
-	protected_jobs = list("Research Director", "Scientist", "Roboticist")
+	protected_jobs = list("Research Director", "Scientist", "Roboticist", "Mechanic", "Paramedic")
 
 
 /datum/theft_objective/traitor/lawgiver
