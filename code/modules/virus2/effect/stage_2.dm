@@ -14,7 +14,7 @@
 	desc = "Makes the infected feel more drowsy."
 	encyclopedia = "This may cause the infected to randomly fall asleep at times."
 	stage = 2
-	badness = EFFECT_DANGER_ANNOYING
+	badness = EFFECT_DANGER_HINDRANCE
 	multiplier = 5
 	max_multiplier = 10
 

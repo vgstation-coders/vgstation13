@@ -444,6 +444,12 @@ var/global/list/disease2_list = list()
 			log += "<br />[timestamp()] destroyed enemy [enemy_pathogen.form] #[ID] ([strength] > [enemy_pathogen.strength])"
 			enemy_pathogen.cure(mob)
 
+	if (ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.species && H.species.name == "Tajaran")//Tajaran were born in the disease, molded by it.
+			ticks += speed
+			return
+
 	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
 	if(starved)
 		return
