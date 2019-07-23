@@ -23,6 +23,8 @@
 	var/alert_admins = 0 //1 to alert admins with name and amount, 2 to alert with name and amount of all reagents
 	var/quiet = 0
 
+	var/data = null
+
 
 /datum/chemical_reaction/proc/log_reaction(var/datum/reagents/holder, var/amt)
 	var/datum/log_controller/I = investigations[I_CHEMS]
@@ -449,6 +451,23 @@
 	result = SPACEACILLIN
 	required_reagents = list(CRYPTOBIOLINS = 1, INAPROVALINE = 1)
 	result_amount = 2
+
+/datum/chemical_reaction/nanofloxacin
+	name = "Nanofloxacin"
+	id = NANOFLOXACIN
+	result = NANOFLOXACIN
+	required_reagents = list(NANOBOTS = 1, SPACEACILLIN = 5, FLUORINE = 5)
+	result_amount = 2.5
+
+/datum/chemical_reaction/vaccine
+	name = "Vaccine"
+	id = VACCINE
+	result = VACCINE
+	required_reagents = list(ALUMINUM = 1, SUGAR = 1, WATER = 1)
+	result_amount = 3
+	data = list(
+		"antigen" = list(),
+		)
 
 /datum/chemical_reaction/imidazoline
 	name = IMIDAZOLINE

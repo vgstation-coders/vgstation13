@@ -9,6 +9,7 @@
 	var/list/living_antags = list()
 	var/list/dead_players = list()
 	var/list/list_observers = list()
+	var/max_candidates = 0
 
 /datum/dynamic_ruleset/midround/from_ghosts/
 	weight = 0
@@ -60,7 +61,7 @@
 // (see /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0) for example)
 /datum/dynamic_ruleset/midround/ready(var/forced = 0)
 	if (!forced)
-		if(!check_enemy_jobs())
+		if(!check_enemy_jobs(TRUE))
 			return 0
 	return 1
 
@@ -78,9 +79,12 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/review_applications()
 	message_admins("Applicant list: [english_list(applicants)]")
-	for (var/i = required_candidates, i > 0, i--)
+	var/candidate_checks = required_candidates
+	if (max_candidates)
+		candidate_checks = max_candidates
+	for (var/i = candidate_checks, i > 0, i--)
 		if(applicants.len <= 0)
-			if(i == required_candidates)
+			if(i == candidate_checks)
 				//We have found no candidates so far and we are out of applicants.
 				mode.refund_threat(cost)
 				mode.threat_log += "[worldtime2text()]: Rule [name] refunded [cost] (all applications invalid)"
@@ -102,7 +106,7 @@
 			continue
 		message_admins("DEBUG: Selected [applicant] for rule.")
 
-		var/mob/living/carbon/human/new_character = applicant
+		var/mob/new_character = applicant
 
 		if (makeBody)
 			new_character = generate_ruleset_body(applicant)
@@ -473,9 +477,8 @@
 	if(!mode.executed_rules)
 		return FALSE
 		//We have nothing to investigate!
-	if(population>=20)
-		return FALSE
-		//We don't cotton to freaks in 20+pop
+	weight = Clamp(300/(population^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
+	//We don't cotton to freaks in highpop
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/generate_ruleset_body(mob/applicant)
@@ -543,3 +546,35 @@
 		message_admins("Rejected catbeast ruleset. Not enough threat somehow??")
 		return FALSE
 	return TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//             PLAGUE MICE                  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice
+	name = "Plague Mice Invasion"
+	role_category = /datum/role/plague_mouse
+	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
+	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
+	required_candidates = 1
+	max_candidates = 5
+	weight = 5
+	cost = 25
+	requirements = list(90,70,50,40,30,20,10,10,10,10)
+	high_population_requirement = 40
+	flags = MINOR_RULESET
+	my_fac = /datum/faction/plague_mice
+	logo = "plague-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice/generate_ruleset_body(var/mob/applicant)
+	var/datum/faction/plague_mice/active_fac = find_active_faction_by_type(my_fac)
+	var/mob/living/simple_animal/mouse/plague/new_mouse = new (active_fac.invasion)
+	new_mouse.key = applicant.key
+	return new_mouse
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice/setup_role(var/datum/role/new_role)
+	my_fac.HandleRecruitedRole(new_role)
+	new_role.Greet(GREET_DEFAULT)
+	new_role.AnnounceObjectives()

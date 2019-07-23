@@ -286,6 +286,7 @@
 	name = "meat cleaver"
 	icon_state = "mcleaver"
 	desc = "A huge thing used for chopping and chopping up meat. This includes clowns and clown-by-products."
+	armor_penetration = 50
 	force = 25.0
 	throwforce = 15.0
 

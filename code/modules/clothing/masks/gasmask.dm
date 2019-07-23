@@ -60,6 +60,7 @@
 	species_fit = list(VOX_SHAPED)
 	can_flip = 0
 	canstage = 0
+	sterility = 100
 
 /obj/item/clothing/mask/gas/swat
 	name = "\improper SWAT mask"

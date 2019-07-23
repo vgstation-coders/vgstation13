@@ -80,7 +80,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/manage_religions,
 	/client/proc/set_veil_thickness,
 	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
-	/client/proc/persistence_panel			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
+	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
+	/client/proc/diseases_panel,
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -699,7 +700,7 @@ var/list/admin_verbs_mod = list(
 	if (T.alphas["admin_invis"] == 0)
 		T.forced_density = 0
 		T.alphas -= "admin_invis"
-	else	
+	else
 		T.alphas["admin_invis"] = 0
 		T.density = 0
 		T.forced_density = 1

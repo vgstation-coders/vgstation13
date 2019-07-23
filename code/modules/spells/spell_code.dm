@@ -4,7 +4,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/name = "Spell"
 	var/abbreviation = "" //Used for feedback gathering
 
-	var/desc = "A spell"
+	var/desc = "A spell."
 	parent_type = /datum
 	var/panel = "Spells"//What panel the proc holder needs to go on.
 

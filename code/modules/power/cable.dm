@@ -223,6 +223,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			var/mob/living/simple_animal/mouse/N = M
 			M.delayNextAttack(10)
 			M.visible_message("<span class='danger'>[M] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span>")
+			flick(N.icon_eat, N)
 			shock(M, 50)
 			if(prob(5) && N.can_chew_wires)
 				var/turf/T = src.loc
@@ -508,3 +509,6 @@ By design, d1 is the smallest direction and d2 is the highest
 		return
 
 	rebuild_from()
+
+/obj/structure/cable/proc/hasDir(var/dir)
+	return (d1 == dir || d2 == dir)

@@ -9,6 +9,7 @@
 	charge_max = 10 SECONDS
 	cooldown_min = 2 SECONDS
 	spell_flags = 0
+	invocation = "TARCOL MINTI ZHERI"
 	range = 0
 	cast_sound = null
 

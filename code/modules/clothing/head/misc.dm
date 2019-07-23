@@ -76,6 +76,7 @@
 	flags = FPRINT
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
+	sterility = 100
 
 /obj/item/clothing/head/hasturhood
 	name = "hastur's hood"
@@ -249,8 +250,11 @@
 			to_chat(wearer, "<span class=\"warning\">You feel positively euphoric!</span>")
 
 //TIPS FEDORA
-/obj/item/clothing/head/fedora/proc/tip_fedora()
-	usr.visible_message("[usr] tips \his fedora.", "You tip your fedora.")
+/obj/item/clothing/head/fedora/proc/tip_fedora(mob/user)
+	if(user.attack_delayer.blocked())
+		return
+	user.visible_message("[user] tips \his fedora.", "You tip your fedora.")
+	user.delayNextAttack(1 SECONDS)
 
 /datum/action/item_action/tip_fedora
 	name = "Tip Fedora"
@@ -259,7 +263,7 @@
 	var/obj/item/clothing/head/fedora/T = target
 	if(!istype(T))
 		return
-	T.tip_fedora()
+	T.tip_fedora(usr)
 
 /obj/item/clothing/head/fedora/white
 	name = "white fedora"

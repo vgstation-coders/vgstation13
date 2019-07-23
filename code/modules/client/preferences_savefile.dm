@@ -117,7 +117,7 @@
 	randomslot		= 	sanitize_integer(randomslot, 0, 1, initial(randomslot))
 	volume			= 	sanitize_integer(volume, 0, 100, initial(volume))
 	usewmp			= 	sanitize_integer(usewmp, 0, 1, initial(usewmp))
-	special_popup	= 	sanitize_integer(special_popup, 0, 1, initial(special_popup))
+	special_popup	= 	sanitize_integer(special_popup, 0, 2, initial(special_popup))
 	usenanoui		= 	sanitize_integer(usenanoui, 0, 1, initial(usenanoui))
 	progress_bars	= 	sanitize_integer(progress_bars, 0, 1, initial(progress_bars))
 	space_parallax	=	sanitize_integer(space_parallax, 0, 1, initial(space_parallax))
@@ -194,7 +194,7 @@
 	UI_style_alpha	= sanitize_integer(UI_style_alpha, 0, 255, initial(UI_style_alpha))
 	randomslot		= sanitize_integer(randomslot, 0, 1, initial(randomslot))
 	volume			= sanitize_integer(volume, 0, 100, initial(volume))
-	special_popup	= sanitize_integer(special_popup, 0, 1, initial(special_popup))
+	special_popup	= sanitize_integer(special_popup, 0, 2, initial(special_popup))
 	credits			= 	sanitize_inlist(credits, list(CREDITS_NEVER, CREDITS_ALWAYS, CREDITS_NO_RERUNS), initial(credits))
 	jingle			= 	sanitize_inlist(jingle, list(JINGLE_NEVER, JINGLE_CLASSIC, JINGLE_ALL), initial(jingle))
 
