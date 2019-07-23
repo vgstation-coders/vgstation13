@@ -4,10 +4,9 @@
 	name = "telriis"
 	seed_name = "telriis"
 	display_name = "telriis grass"
+	plant_dmi = 'icons/obj/hydroponics/telriis.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/telriis_clump)
 	mutants = null
-	packet_icon = "seed-telriis"
-	plant_icon = "telriis"
 	harvest_repeat = 1
 	chems = list(DIETHYLAMINE = list(0,10))
 
@@ -25,6 +24,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/telriis_clump
 	name = "telriis grass"
 	desc = "A clump of telriis grass, not recommended for consumption by sentients."
+	icon = 'icons/obj/hydroponics/telriis.dmi'
 	icon_state = "telriisclump"
 	plantname = "telriis"
 	hydroflags = HYDRO_PREHISTORIC
@@ -33,10 +33,9 @@
 	name = "thaadra"
 	seed_name = "thaadra"
 	display_name = "thaa'dra grass"
+	plant_dmi = 'icons/obj/hydroponics/thaadra.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/thaadrabloom)
 	mutants = null
-	packet_icon = "seed-thaadra"
-	plant_icon = "thaadra"
 	harvest_repeat = 1
 	chems = list(FROSTOIL = list(5,30))
 
@@ -56,6 +55,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/thaadrabloom
 	name = "thaa'dra bloom"
 	desc = "Looks chewy, might be good to eat."
+	icon = 'icons/obj/hydroponics/thaadra.dmi'
 	icon_state = "thaadrabloom"
 	plantname = "thaadra"
 	hydroflags = HYDRO_PREHISTORIC
@@ -64,10 +64,9 @@
 	name = "jurlmah"
 	seed_name = "jurlmah"
 	display_name = "jurl'mah tree"
+	plant_dmi = 'icons/obj/hydroponics/jurlmah.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/jurlmah)
 	mutants = null
-	packet_icon = "seed-jurlmah"
-	plant_icon = "jurlmah"
 	chems = list(CLONEXADONE = list(1,10))
 
 	lifespan = 25
@@ -88,6 +87,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/jurlmah
 	name = "jurl'mah pod"
 	desc = "Bulbous and veiny, it appears to pulse slightly as you look at it."
+	icon = 'icons/obj/hydroponics/jurlmah.dmi'
 	icon_state = "jurlmahpod"
 	plantname = "jurlmah"
 	hydroflags = HYDRO_PREHISTORIC
@@ -96,10 +96,9 @@
 	name = "amauri"
 	seed_name = "amauri"
 	display_name = "amauri stalks"
+	plant_dmi = 'icons/obj/hydroponics/amauri.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/amauri)
 	mutants = null
-	packet_icon = "seed-amauri"
-	plant_icon = "amauri"
 	chems = list(POTASSIUM = list(0,10),SUGAR = list(0,10),PHOSPHORUS = list(0,10))
 
 	lifespan = 25
@@ -121,6 +120,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/amauri
 	name = "amauri fruit"
 	desc = "It is small, round and hard. Its skin is a thick dark purple."
+	icon = 'icons/obj/hydroponics/amauri.dmi'
 	icon_state = "amaurifruit"
 	plantname = "amauri"
 	flags = NOREACT
@@ -130,10 +130,9 @@
 	name = "gelthi"
 	seed_name = "gelthi"
 	display_name = "gelthi stem"
+	plant_dmi = 'icons/obj/hydroponics/gelthi.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/gelthi)
 	mutants = null
-	packet_icon = "seed-gelthi"
-	plant_icon = "gelthi"
 	harvest_repeat = 2
 	chems = list(NUTRIMENT = list(1,10))
 
@@ -153,6 +152,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/gelthi
 	name = "gelthi berries"
 	desc = "They feel fluffy and slightly warm to the touch."
+	icon = 'icons/obj/hydroponics/gelthi.dmi'
 	icon_state = "gelthiberries"
 	gender = PLURAL
 	plantname = "gelthi"
@@ -162,10 +162,9 @@
 	name = "vale"
 	seed_name = "vale"
 	display_name = "vale tree"
+	plant_dmi = 'icons/obj/hydroponics/vale.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/vale)
 	mutants = null
-	packet_icon = "seed-vale"
-	plant_icon = "vale"
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),SPORTDRINK = list(0,2),THYMOL = list(0,5))
 
@@ -185,6 +184,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/vale
 	name = "vale leaves"
 	desc = "Small, curly leaves covered in a soft pale fur."
+	icon = 'icons/obj/hydroponics/vale.dmi'
 	icon_state = "valeleaves"
 	plantname = "vale"
 	hydroflags = HYDRO_PREHISTORIC
@@ -194,10 +194,9 @@
 	name = "surik"
 	seed_name = "surik"
 	display_name = "surik stalks"
+	plant_dmi = 'icons/obj/hydroponics/surik.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/surik)
 	mutants = null
-	packet_icon = "seed-surik"
-	plant_icon = "surik"
 	harvest_repeat = 1
 	chems = list(KARMOTRINE = list(2,2))
 
@@ -217,6 +216,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/surik
 	name = "surik fruit"
 	desc = "Multiple layers of blue skin peeling away to reveal a spongey core, vaguely resembling an ear."
+	icon = 'icons/obj/hydroponics/surik.dmi'
 	icon_state = "surikfruit"
 	plantname = "surik"
 	hydroflags = HYDRO_PREHISTORIC

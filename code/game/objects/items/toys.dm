@@ -540,8 +540,8 @@
 /obj/item/toy/waterflower
 	name = "Water Flower"
 	desc = "A seemingly innocent sunflower...with a twist."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "sunflower"
+	icon = 'icons/obj/hydroponics/sunflower.dmi'
+	icon_state = "produce"
 	item_state = "sunflower"
 	var/empty = 0
 	flags = OPENCONTAINER

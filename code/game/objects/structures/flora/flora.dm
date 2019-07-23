@@ -336,7 +336,7 @@
 /obj/structure/flora/pottedplant/claypot
 	name = "clay pot"
 	desc = "Plants placed in those stop aging, but cannot be retrieved either."
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydroponics.dmi'
 	icon_state = "claypot"
 	anchored = 0
 	density = FALSE
