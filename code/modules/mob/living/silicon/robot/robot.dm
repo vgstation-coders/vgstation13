@@ -270,10 +270,6 @@ var/list/cyborg_list = list()
 
 	if(!forced_module)
 		choose_icon()
-		
-	spawn(50)
-		var/obj/item/borg/upgrade/cult/debug = new /obj/item/borg/upgrade/cult
-		debug.attempt_action(src,src)
 
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
 
