@@ -249,7 +249,7 @@
 		qdel(cash)
 		visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
 		interact(usr)
-	else if(istype(A, /obj) && A.Adjacent(user) && !scanning)
+	else if((istype(A, /obj) || istype(A, /mob)) && A.Adjacent(user) && !scanning)
 		scanning = 1
 		attempt_sell(A,usr)
 		scanning = 0
