@@ -101,6 +101,7 @@ var/savefile/panicfile
 
 	initialize_runesets()
 
+	initialize_beespecies()
 
 	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()
