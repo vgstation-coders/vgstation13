@@ -199,7 +199,7 @@
 
 /datum/theft_objective/traitor/lawgiver
 	name = "the lawgiver"
-	typepath/obj/item/weapon/gun/lawgiver
+	typepath = /obj/item/weapon/gun/lawgiver
 	protected_jobs = list("Head of Security")
 
 /datum/theft_objective/number
