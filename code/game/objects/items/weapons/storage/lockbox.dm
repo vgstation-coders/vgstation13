@@ -358,11 +358,23 @@
 	icon_state = "map_diskbox_large_open"
 	locked = FALSE
 
+//---------------------------------PRESETS---------------------------------
+
 /obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk
 	name = "flora diskette box"
 	desc = "A lockable box of flora data disks."
 
 /obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk/New()
+	..()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/weapon/disk/botany(src)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/large/open/botanydisk
+	name = "large flora diskette box"
+	desc = "A large lockable box of flora data disks."
+
+/obj/item/weapon/storage/lockbox/diskettebox/large/open/botanydisk/New()
 	..()
 	for(var/i = 1 to storage_slots)
 		new /obj/item/weapon/disk/botany(src)
@@ -377,6 +389,34 @@
 	for(var/i = 1 to storage_slots)
 		new /obj/item/weapon/disk/data(src)
 	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/open/research
+	name = "research diskette box"
+	desc = "A lockable box of tech data disks."
+
+/obj/item/weapon/storage/lockbox/diskettebox/open/research/New()
+	..()
+	new /obj/item/weapon/disk/tech_disk(src)
+	new /obj/item/weapon/disk/tech_disk(src)
+	new /obj/item/weapon/disk/design_disk(src)
+	new /obj/item/weapon/disk/design_disk(src)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/open/blanks/New()
+	..()
+	var/j = rand(1,round(storage_slots/2))//up to half the slots filled with useless disks
+	for(var/i = 1 to j)
+		new /obj/item/weapon/disk(src)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/large/open/blanks/New()
+	..()
+	var/j = rand(1,round(storage_slots/2))//up to half the slots filled with useless disks
+	for(var/i = 1 to j)
+		new /obj/item/weapon/disk(src)
+	update_icon()
+
+//---------------------------------PRESETS END-----------------------------
 
 /obj/item/weapon/storage/lockbox/diskettebox/update_icon()
 	overlays.len = 0
