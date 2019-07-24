@@ -12,9 +12,7 @@
 
 /datum/net_node/proc/connections_changed()
     net = new netType()
-    var/list/cons = get_connections()
-    message_admins("c_c: length=[cons.len]")
-    for(var/datum/net_node/neighbour in cons)
+    for(var/datum/net_node/neighbour in get_connections())
         net = merge_nets(net, neighbour.net)
 
 //we tell our connected things to propagate new nets
