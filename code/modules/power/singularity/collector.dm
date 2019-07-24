@@ -96,9 +96,9 @@ var/global/list/rad_collectors = list()
 		return
 	var/datum/net_node/power/node = getNode(/datum/net_node/power)		
 	if(anchored)
-		node.active = TRUE
+		node.set_active(TRUE)
 	else
-		node.active = FALSE
+		node.set_active(FALSE)
 		last_power = 0
 
 /obj/machinery/power/rad_collector/ex_act(severity)

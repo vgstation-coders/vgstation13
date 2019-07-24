@@ -61,9 +61,9 @@
 		return
 	var/datum/net_node/power/node = getNode(/datum/net_node/power)
 	if(anchored) // We are now anchored
-		node.active = TRUE
+		node.set_active(TRUE)
 	else // We are now NOT anchored
-		node.active = FALSE
+		node.set_active(FALSE)
 		on=0
 		update_on()
 

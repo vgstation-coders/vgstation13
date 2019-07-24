@@ -31,7 +31,7 @@
 /obj/machinery/power/treadmill/New()
 	if(!anchored)
 		var/datum/net_node/power/node = getNode(/datum/net_node/power)
-		node.active = FALSE
+		node.set_active(FALSE)
 	RefreshParts()
 	..()
 
@@ -107,9 +107,9 @@
 		return
 	var/datum/net_node/power/node = getNode(/datum/net_node/power)
 	if(anchored)
-		node.active = TRUE
+		node.set_active(TRUE)
 	else
-		node.active = FALSE
+		node.set_active(FALSE)
 
 /obj/machinery/power/treadmill/emag()
 	..()

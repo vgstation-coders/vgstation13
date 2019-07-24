@@ -776,7 +776,7 @@
 	..()
 	if(anchored)
 		var/datum/net_node/power/node = getNode(/datum/net_node/power)
-		node.active = TRUE
+		node.set_active(TRUE)
 	RefreshParts()
 
 /obj/machinery/power/conduction_plate/RefreshParts()
@@ -814,7 +814,7 @@
 	attached_tank = null
 	if(anchored)
 		var/datum/net_node/power/node = getNode(/datum/net_node/power)
-		node.active = TRUE
+		node.set_active(TRUE)
 	else
 		var/datum/net_node/power/node = getNode(/datum/net_node/power)
-		node.active = FALSE
+		node.set_active(FALSE)

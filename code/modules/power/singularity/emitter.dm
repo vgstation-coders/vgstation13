@@ -65,7 +65,7 @@
 	..()
 	if(state == 2 && anchored)
 		var/datum/net_node/power/node = getNode(/datum/net_node/power)		
-		node.active = TRUE
+		node.set_active(TRUE)
 		update_icon()
 		update_beam()
 
@@ -259,9 +259,9 @@
 		var/datum/net_node/power/node = getNode(/datum/net_node/power)
 		switch(state)
 			if(1)
-				node.active = FALSE
+				node.set_active(FALSE)
 			if(2)
-				node.active = FALSE
+				node.set_active(FALSE)
 		return 1
 	return -1
 

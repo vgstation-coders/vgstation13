@@ -838,7 +838,7 @@
 
 /obj/machinery/power/secured_capacitor/proc/attempt_connect(mob/user)
 	var/datum/net_node/power/node = getNode(/datum/net_node/power)
-	node.active = TRUE
+	node.set_active(TRUE)
 	if(node.is_powered())
 		if(fully_charged)
 			to_chat(user, "<span class='notice'>\The [src.name] is full.</span>")
@@ -885,7 +885,7 @@
 /obj/machinery/power/secured_capacitor/proc/disconnect_capacitor()
 	power_machines.Remove(src)
 	var/datum/net_node/power/node = getNode(/datum/net_node/power)
-	node.active = FALSE
+	node.set_active(FALSE)
 	charging = 0
 	if(fully_charged)
 		alert_noise("ping")

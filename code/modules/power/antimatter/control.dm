@@ -181,14 +181,14 @@
 			src.anchored = 1
 			update_shield_icons = 2
 			check_shield_icons()
-			node.active = TRUE
+			node.set_active(TRUE)
 		else if(!linked_shielding.len > 0)
 			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			user.visible_message("[user.name] unsecures the [src.name].", \
 				"You remove the anchor bolts.", \
 				"You hear a ratchet")
 			src.anchored = 0
-			node.active = FALSE
+			node.set_active(FALSE)
 		else
 			to_chat(user, "<span class='warning'>Once bolted and linked to a shielding unit it the [src.name] is unable to be moved!</span>")
 		return

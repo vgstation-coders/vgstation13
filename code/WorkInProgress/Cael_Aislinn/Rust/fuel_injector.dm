@@ -84,9 +84,9 @@
 		var/datum/net_node/power/node = getNode(/datum/net_node/power)
 		switch(state)
 			if(1)
-				node.active = FALSE
+				node.set_active(FALSE)
 			if(2)
-				node.active = TRUE
+				node.set_active(TRUE)
 		return 1
 	return -1
 

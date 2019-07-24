@@ -49,10 +49,10 @@ var/list/obj/machinery/power/photocollector/photocollector_list = list()
 		return
 	if(anchored)
 		var/datum/net_node/power/node = getNode(/datum/net_node/power)
-		node.active = TRUE
+		node.set_active(TRUE)
 	else
 		var/datum/net_node/power/node = getNode(/datum/net_node/power)
-		node.active = TRUE
+		node.set_active(TRUE)
 
 /obj/machinery/power/photocollector/attackby(obj/item/W, mob/user)
 	if(..())

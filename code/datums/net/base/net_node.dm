@@ -12,7 +12,9 @@
 
 /datum/net_node/proc/connections_changed()
     net = new netType()
-    for(var/datum/net_node/neighbour in get_connections())
+    var/list/cons = get_connections()
+    message_admins("c_c: length=[cons.len]")
+    for(var/datum/net_node/neighbour in cons)
         net = merge_nets(net, neighbour.net)
 
 //we tell our connected things to propagate new nets
@@ -54,6 +56,10 @@
                 if(new_net.add_node(child_node))
                     worklist |= child_node
         index++
+
+/datum/net_node/proc/set_active(var/bool)
+    active = bool
+    connections_changed()
 
 // ******************
 // PROCS TO OVERRIDE
