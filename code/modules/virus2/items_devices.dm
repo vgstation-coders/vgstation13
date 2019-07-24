@@ -15,6 +15,10 @@
 		//to_chat(user, "<span class='notice'>Incompatible object, scan aborted.</span>")
 		return
 
+	if (issilicon(L))
+		to_chat(user, "<span class='warning'>Incompatible with silicon lifeforms, scan aborted.</span>")
+		return
+
 	playsound(user, 'sound/items/detscan.ogg', 50, 1)
 	var/info = ""
 	var/icon/scan = icon('icons/virology.dmi',"immunitybg")
