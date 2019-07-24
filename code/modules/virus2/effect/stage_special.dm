@@ -60,6 +60,6 @@
 
 
 /datum/disease2/effect/blob_spores/getcopy(var/datum/disease2/disease/disease)
-	var/datum/disease2/effect/monkey/new_e = ..(disease)
+	var/datum/disease2/effect/blob_spores/new_e = ..(disease)
 	new_e.looks = looks
 	return new_e
