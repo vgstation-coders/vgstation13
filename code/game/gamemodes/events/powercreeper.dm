@@ -11,7 +11,6 @@
 	icon = 'icons/obj/structures/powercreeper.dmi'
 	icon_state = "neutral"
 	level = LEVEL_ABOVE_FLOOR
-	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 	slowdown_modifier = 2
 	autoignition_temperature = AUTOIGNITION_PAPER
@@ -78,13 +77,12 @@
 		if(growdirs)
 			var/grow_chance = Clamp(MIN_SPREAD_CHANCE + (powernet.avail / 1000), MIN_SPREAD_CHANCE, MAX_SPREAD_CHANCE)
 			if(prob(grow_chance))
-				for(var/chosen_dir in cardinal)
-					if(growdirs & chosen_dir)
-						var/turf/target_turf = get_step(src, chosen_dir)
-						if(isViableGrow(target_turf))
-							new /obj/structure/cable/powercreeper(target_turf, get_dir(src, target_turf))
-						else
-							growdirs &= ~chosen_dir
+				var/chosen_dir = pick(cardinal)
+				if(growdirs & chosen_dir)
+					var/turf/target_turf = get_step(src, chosen_dir)
+					if(isViableGrow(target_turf))
+						new /obj/structure/cable/powercreeper(target_turf, get_dir(src, target_turf))
+					growdirs &= ~chosen_dir
 
 /obj/structure/cable/powercreeper/Crossed(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	.=..()
@@ -121,17 +119,13 @@
 
 /obj/structure/cable/powercreeper/proc/isViableGrow(var/turf/T)
 	if(!T.has_gravity())
-		to_chat(world, "[src] tried to cross into [T], but has no gravity")
 		return 0
 	if(!T.Adjacent(src))
-		to_chat(world, "[src] tried to cross into [T], but wasn't adjacent")
 		return 0
 	var/obj/structure/cable/powercreeper/PC = locate(/obj/structure/cable/powercreeper) in T
 	if(PC && PC != src)
-		to_chat(world, "[src] tried to cross into [T], but found a powercreeper there already")
 		return 0
 	if((T.density == 1) || T.has_dense_content())
-		to_chat(world, "[src] tried to cross into [T], but T was dense or had dense content [T.density] [T.has_dense_content()]")
 		return 0
 	return 1
 
@@ -154,16 +148,13 @@
 /obj/structure/cable/powercreeper/proc/proxDensityChange(var/list/args)
 	var/atom/A = args["atom"]
 	var/turf/T = get_turf(A)
-
-	if(get_dist(T, src) >= 1)
+	if(get_dist(T, src) <= 1)
 		var/Adir = get_dir(src, T)
 		if(Adir in cardinal)
 			if(!isViableGrow(T))
 				growdirs &= ~Adir
-				to_chat(world, "[Adir] removed from [src]")
 			else
 				growdirs |= Adir
-				to_chat(world, "[Adir] added to [src]")
 
 
 /obj/structure/cable/powercreeper/get_connections(powernetless_only = 0)

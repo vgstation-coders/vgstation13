@@ -67,7 +67,6 @@
 	var/image/viewblock
 
 	var/junction = 0
-
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -119,6 +118,11 @@
 				return 0
 	return 1
 
+/turf/Exited(atom/movable/Obj, atom/newloc)
+	.=..()
+	if(Obj.density)
+		densityChanged()
+
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if (!mover)
 		return 1
@@ -165,7 +169,6 @@
 		inertial_drift(A)
 	else
 		A.inertia_dir = 0
-
 	..()
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
@@ -181,6 +184,8 @@
 		return
 	if (!(src.can_border_transition))
 		return
+	if(A.density)
+		densityChanged()
 	if(ticker && ticker.mode)
 
 		// Okay, so let's make it so that people can travel z levels but not nuke disks!
