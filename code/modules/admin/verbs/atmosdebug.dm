@@ -36,5 +36,4 @@
 
 	for (var/datum/net/power/net in powernets)
 		if (!net.nodes || !net.nodes.len)
-			to_chat(usr, "Powernet with no nodes! Need to add a way to inspect it")
-			PAULTODO
+			to_chat(usr, "Powernet with no nodes! <a href='?_src_=vars;Vars=\ref[net]'>VV</a>")
