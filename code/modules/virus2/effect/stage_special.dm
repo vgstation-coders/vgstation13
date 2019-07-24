@@ -69,3 +69,8 @@
 
 	virus.cure(mob)//finally let's remove the spores now that they've matured
 
+
+/datum/disease2/effect/blob_spores/getcopy(var/datum/disease2/disease/disease)
+	var/datum/disease2/effect/monkey/new_e = ..(disease)
+	new_e.looks = looks
+	return new_e
