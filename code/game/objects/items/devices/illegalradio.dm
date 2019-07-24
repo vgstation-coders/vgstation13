@@ -44,7 +44,7 @@
 	selected_item = null
 	var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
 	dat += src.generate_main_menu(user)
-	var/dat += "</body></font>"
+	dat += "</body></font>"
 	user << browse(dat, "window=hidden")
 	onclose(user, "hidden")
 	return
@@ -90,7 +90,7 @@
 					selected_item = item
 					var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
 					dat += generate_delivery_menu(usr,item)
-					var/dat += "</body></font>"
+					dat += "</body></font>"
 					usr << browse(dat, "window=hidden")
 					onclose(usr, "hidden")
 					return
@@ -98,8 +98,8 @@
 	else if (href_list["open_buyers"])
 		var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
 		dat += src.generate_buyer_menu(usr)
+		dat += "</body></font>"
 		usr << browse(dat, "window=hidden")
-		dat += generate_delivery_menu(usr,item)
 		onclose(usr, "hidden")
 		
 	else if(href_list["open_main"])
