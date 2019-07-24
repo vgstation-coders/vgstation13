@@ -4,6 +4,9 @@
 #define ATTACK_CHANCE 35
 #define LEAVES_CHANCE 20
 
+#define CANGROW 2
+#define CANZAP 4
+
 //the actual powercreeper obj
 /obj/structure/cable/powercreeper
 	name = "powercreeper"
@@ -11,12 +14,14 @@
 	icon = 'icons/obj/structures/powercreeper.dmi'
 	icon_state = "neutral"
 	level = LEVEL_ABOVE_FLOOR
+	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 	slowdown_modifier = 2
 	autoignition_temperature = AUTOIGNITION_PAPER
 	var/add_state = "_bare"
 	var/grown = 0
 	var/growdirs = 0
+	var/zapdirs = 0
 
 /obj/structure/cable/powercreeper/New(loc, growdir, packet_override)
 	//did we get created by a packet?
@@ -80,9 +85,14 @@
 				var/chosen_dir = pick(cardinal)
 				if(growdirs & chosen_dir)
 					var/turf/target_turf = get_step(src, chosen_dir)
-					if(isViableGrow(target_turf))
+					if(isViableGrow(target_turf) & CANGROW)
 						new /obj/structure/cable/powercreeper(target_turf, get_dir(src, target_turf))
 					growdirs &= ~chosen_dir
+		if(zapdirs && prob(ATTACK_CHANCE))
+			for(var/chosen_dir in cardinal)
+				if(zapdirs & chosen_dir)
+					var/turf/T = get_step(src, chosen_dir)
+					try_electrocution_turf(T, chosen_dir)
 
 /obj/structure/cable/powercreeper/Crossed(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	.=..()
@@ -105,29 +115,45 @@
 	updateNeighbours(TRUE)
 	qdel(src)
 
-/obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
-	if(!istype(M))
+/obj/structure/cable/powercreeper/proc/try_electrocution_turf(var/turf/T, var/checkdir)
+	var/success = 0
+	flick("attacking[add_state]",src)
+	for(var/mob/living/M in T)
+		success = 1
+		try_electrocution(M)
+	if(!success)
+		zapdirs &= ~checkdir
 		return 0
+
+/obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
+	if(!istype(M) || M.isDead())
+		return 0
+	Beam(M, "lightning", 'icons/obj/zap.dmi', 5, 2)
 	playsound(src,'sound/weapons/electriczap.ogg',50, 1) //we still want a sound
 	return electrocute_mob(M, powernet, src)
 
 /obj/structure/cable/powercreeper/proc/getViableNeighbours()
 	for(var/dir in cardinal)
 		var/turf/T = get_step(src, dir)
-		if(isViableGrow(T))
+		var/result = isViableGrow(T)
+		if(result & CANGROW)
 			growdirs |= dir
+		if(result & CANZAP)
+			zapdirs |= dir
 
 /obj/structure/cable/powercreeper/proc/isViableGrow(var/turf/T)
 	if(!T.has_gravity())
-		return 0
+		return CANZAP
 	if(!T.Adjacent(src))
 		return 0
 	var/obj/structure/cable/powercreeper/PC = locate(/obj/structure/cable/powercreeper) in T
 	if(PC && PC != src)
+		return CANZAP
+	if(T.density == 1)
 		return 0
-	if((T.density == 1) || T.has_dense_content())
-		return 0
-	return 1
+	if(T.has_dense_content())
+		return CANZAP
+	return CANGROW|CANZAP
 
 /obj/structure/cable/powercreeper/proc/updateNeighbours(var/dying = FALSE)
 	for(var/dir in cardinal)
@@ -151,11 +177,16 @@
 	if(get_dist(T, src) <= 1)
 		var/Adir = get_dir(src, T)
 		if(Adir in cardinal)
-			if(!isViableGrow(T))
-				growdirs &= ~Adir
-			else
+			var/result = isViableGrow(T)
+			if(result & CANGROW)
+				to_chat(world, "cangrow [dir2text(Adir)]")
 				growdirs |= Adir
-
+			if(result & CANZAP)
+				to_chat(world, "canzap [dir2text(Adir)]")
+				zapdirs |= Adir
+			if(!result)
+				growdirs &= ~Adir
+				zapdirs &= ~Adir
 
 /obj/structure/cable/powercreeper/get_connections(powernetless_only = 0)
 	. = list()
