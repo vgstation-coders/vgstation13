@@ -276,6 +276,12 @@
 /obj/item/weapon/reagent_containers/glass/beaker/vial/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
 
+/obj/item/weapon/reagent_containers/glass/beaker/vial/on_reagent_change()
+	..()
+	if (istype(loc,/obj/item/weapon/storage/fancy/vials) || istype(loc,/obj/item/weapon/storage/lockbox/vials))
+		var/obj/item/weapon/storage/S = loc
+		S.update_icon()
+
 /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
 	..()
 	reagents.add_reagent(URANIUM, 25)

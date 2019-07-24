@@ -108,7 +108,7 @@
 	handle_body_temperature()//I bestow upon mice the gift of thermoregulation, so they can handle the fever caused by disease.
 
 	//------------------------DISEASE STUFF--------------------------------------------------------
-	if(!(status_flags & GODMODE))
+	if(!(status_flags & GODMODE) && !isDead())
 		if(!locked_to || !istype(locked_to,/obj/item/critter_cage))//cages isolate from contact and airborne diseases
 			find_nearby_disease()//getting diseases from blood/mucus/vomit splatters and open dishes
 
@@ -381,21 +381,22 @@
 /mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
 	if( ishuman(AM) )
 		var/mob/living/carbon/human/M = AM
-		if(!stat)
-			to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
-			M << 'sound/effects/mousesqueek.ogg'
+		if (M.on_foot())
+			if(!stat)
+				to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
+				M << 'sound/effects/mousesqueek.ogg'
 
-		var/block = 0
-		var/bleeding = 0
-		if (lying)
-			block = M.check_contact_sterility(FULL_TORSO)
-			bleeding = M.check_bodypart_bleeding(FULL_TORSO)
-		else
-			block = M.check_contact_sterility(FEET)
-			bleeding = M.check_bodypart_bleeding(FEET)
+			var/block = 0
+			var/bleeding = 0
+			if (lying)
+				block = M.check_contact_sterility(FULL_TORSO)
+				bleeding = M.check_bodypart_bleeding(FULL_TORSO)
+			else
+				block = M.check_contact_sterility(FEET)
+				bleeding = M.check_bodypart_bleeding(FEET)
 
-		//sharing diseases with people stepping on us
-		share_contact_diseases(M,block,bleeding)
+			//sharing diseases with people stepping on us
+			share_contact_diseases(M,block,bleeding)
 	..()
 
 /mob/living/simple_animal/mouse/death(var/gibbed = FALSE)
