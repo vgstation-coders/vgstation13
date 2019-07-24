@@ -84,74 +84,59 @@
             cable.propagate(new_net)
             new_nets += new_net
 
-PAULTODO
 // determines how strong could be shock, deals damage to mob, uses power.
 // M is a mob who touched wire/whatever
 // power_source is a source of electricity, can be powercell, area, apc, cable, powernet or null
 // source is an object caused electrocuting (airlock, grille, etc)
 // no animations will be performed by this proc.
 /proc/electrocute_mob(mob/living/M, power_source, obj/source, siemens_coeff = 1.0)
+    //insulation
     if(istype(M.loc, /obj/mecha))											// feckin mechs are dumb
         return 0
-
     if(istype(M, /mob/living/carbon/human))
         var/mob/living/carbon/human/H = M
-
         if(H.gloves)
             var/obj/item/clothing/gloves/G = H.gloves
-
             if(G.siemens_coefficient == 0)									// to avoid spamming with insulated glvoes on
                 return 0
 
-    var/area/source_area
-
-    if(isarea(power_source))
-        source_area = power_source
-        power_source = source_area.areaapc
-
-    if(istype(power_source, /obj/structure/cable))
-        var/obj/structure/cable/Cable = power_source
-        var/datum/net_node/power/cable/node = Cable.getNode(/datum/net_node/power/cable)
-        power_source = node.net
-
+    //getting net or cell
     var/datum/net/power/net
     var/obj/item/weapon/cell/cell
-
-    if(istype(power_source, /datum/net/power))
+    if(isarea(power_source))
+        var/area/source_area = power_source
+        var/obj/machinery/power/apc/apc = source_area.areaapc
+        cell = apc.get_cell()
+        if(apc.terminal)
+            net = apc.terminal.get_powernet()
+    else if(istype(power_source, /datum/net/power))
         net = power_source
     else if(istype(power_source, /obj/item/weapon/cell))
         cell = power_source
-    else if(istype(power_source, /obj/machinery/power/apc))
-        var/obj/machinery/power/apc/apc = power_source
-        cell = apc.get_cell()
-
-        if(apc.terminal)
-            net = apc.terminal.get_powernet()
     else if(!power_source)
         return 0
-    else
-        log_admin("ERROR: /proc/electrocute_mob([M], [power_source], [source]): wrong power_source")
+    else if(istype(power_source, /atom))
+        var/atom/A = power_source
+        net = A.get_powernet()
+
+    if(!istype(net) && !istype(cell))
+        log_admin("ERROR: /proc/electrocute_mob([M], [power_source], [source]): wrong power_source, couldn't find cell or net")
         return 0
 
-    if(!cell && !PN)
-        return 0
-
-    var/PN_damage = 0
-    var/cell_damage = 0
-
-    if(PN)
-        PN_damage = PN.get_electrocute_damage()
-
+    //calculating the damage
+    var/net_damage
+    var/cell_damage
+    if(net)
+        net_damage = net.get_electrocute_damage()
     if(cell)
-        if(cell.charge == 0)
-            return 0
         cell_damage = cell.get_electrocute_damage()
 
-    var/shock_damage = 0
-
-    if(PN_damage >= cell_damage)
-        shock_damage = PN_damage
+    //deciding which damage to apply
+    var/shock_damage
+    if(net_damage >= cell_damage)
+        shock_damage = net_damage
     else
         shock_damage = cell_damage
 
+    //zap
     M.electrocute_act(shock_damage, source, siemens_coeff)	//zzzzzzap!
