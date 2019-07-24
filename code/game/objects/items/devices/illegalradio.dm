@@ -44,6 +44,7 @@
 	selected_item = null
 	var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
 	dat += src.generate_main_menu(user)
+	var/dat += "</body></font>"
 	user << browse(dat, "window=hidden")
 	onclose(user, "hidden")
 	return
@@ -59,9 +60,13 @@
 
 	if (href_list["buy_item"])
 		var/delivery_method = href_list["buy_item"]
+		if(!delivery_method)
+			to_chat(usr,"Something went wrong. Please tell a coder. Error code: ohfuck593")
+			return			
 		delivery_method = text2num(delivery_method)
 		
 		if(!selected_item)
+			to_chat(usr,"Something went wrong. Please tell a coder. Error code: ohfuck594")
 			return 0
 
 		selected_item.buy(src, delivery_method, usr)
@@ -85,6 +90,7 @@
 					selected_item = item
 					var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
 					dat += generate_delivery_menu(usr,item)
+					var/dat += "</body></font>"
 					usr << browse(dat, "window=hidden")
 					onclose(usr, "hidden")
 					return
@@ -93,6 +99,7 @@
 		var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
 		dat += src.generate_buyer_menu(usr)
 		usr << browse(dat, "window=hidden")
+		dat += generate_delivery_menu(usr,item)
 		onclose(usr, "hidden")
 		
 	else if(href_list["open_main"])

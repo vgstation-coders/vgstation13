@@ -135,6 +135,11 @@ var/list/black_market_items = list()
 	spawn(rand(15 SECONDS, 45 SECONDS))
 		var/obj/spawned_item = new item(get_turf(user),user)	
 		if(!spawned_item)
+			if(radio)
+				radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
+				radio.money_stored += get_cost()*delivery_fees[CHEAP]
+			if(round_stock != -1)
+				round_stock += 1
 			return 0
 		after_spawn(spawned_item,CHEAP,user)
 		spawned_item.ThrowAtStation(30,0.4,direction)	
@@ -159,10 +164,14 @@ var/locations_calculated = 0
 		selected_area = pick(selection_list)
 		selection_list.Remove(selected_area)
 		for(var/turf/simulated/floor/floor in selected_area.contents)
-			if(!floor.has_dense_content())
+			if(!floor.has_dense_content() && !floor.density)
 				spawnloc = floor
 				break	
 	if(!spawnloc)
+		sleep(2 SECONDS)
+		radio.visible_message("The [radio.name] beeps: <span class='warning'>Unable to find a proper location for teleportation. You've been downgraded to cheap. No refunds.</span>")
+		sleep(2 SECONDS)
+		spawn_cheap(radio, user)
 		return
 		
 	var/time_to_spawn = rand(30 SECONDS, 60 SECONDS)
@@ -182,6 +191,11 @@ var/locations_calculated = 0
 	process_transaction(radio, EXPENSIVE)
 	var/obj/spawned_item = new item(get_turf(user),user)
 	if(!spawned_item)
+		if(radio)
+			radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
+			radio.money_stored += get_cost()*delivery_fees[EXPENSIVE]
+		if(round_stock != -1)
+			round_stock += 1
 		return 0
 	after_spawn(spawned_item,EXPENSIVE,user)
 	if(ishuman(user))
@@ -265,7 +279,7 @@ for anyone but the person committing mass murder.
 	display_chance = 70
 	
 /datum/black_market_item/arcane/health_potion/after_spawn(var/obj/spawned, var/mob/user)
-	if(prob(25))
+	if(prob(40))
 		spawned = /obj/item/potion/healing
 
 #undef CHEAP
