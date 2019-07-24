@@ -90,7 +90,6 @@
 	if(reagents.total_volume <= 0) //Prevents autoinjectors to be refilled after use.
 		flags &= ~OPENCONTAINER
 	update_icon()
-	return
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/update_icon()
 	if(reagents.total_volume > 0)
