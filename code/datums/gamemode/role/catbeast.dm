@@ -50,7 +50,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 		EFFECT_DANGER_ANNOYING	= 4,
 		EFFECT_DANGER_HINDRANCE	= 6,
 		EFFECT_DANGER_HARMFUL	= 6,
-		EFFECT_DANGER_DEADLY	= 0,
+		EFFECT_DANGER_DEADLY	= 1,
 		)
 
 	var/first_virus_choice = pick(subtypesof(/datum/disease2/disease))
