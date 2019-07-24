@@ -8,6 +8,9 @@
     cable_nodes += src
 
 /datum/net_node/power/cable/proc/setDirs(dir1, dir2)
+    dir1 = text2num(dir1)
+    dir2 = text2num(dir2)
+
     if(dir1 > dir2)
         d1 = dir2
         d2 = dir1

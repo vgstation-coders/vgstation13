@@ -68,7 +68,6 @@
 			<table class="table" width="100%; table-layout: fixed;">
 				<colgroup><col style="width: 180px;"/><col/></colgroup>
 				<tr><td><strong>Total power:</strong></td><td id="totPower">X W</td></tr>
-				<tr><td><strong>Total load:</strong></td><td id="totLoad">X W</td></tr>
 				<tr><td><strong>Total demand:</strong></td><td id="totDemand">X W</td></tr>
 			</table>
 
@@ -169,21 +168,18 @@
 
 	demand_hist += load()
 	supply_hist += avail()
-	load_hist += powernet.viewload
 
 	if(demand_hist.len > POWER_MONITOR_HIST_SIZE) //Should always be true but eh.
 		demand_hist.Cut(1, 2)
 		supply_hist.Cut(1, 2)
-		load_hist.Cut(1,2)
 
-	interface.callJavaScript("pushPowerData", list(load(), avail(), powernet.viewload))
+	interface.callJavaScript("pushPowerData", list(load(), avail()))
 
 	// src.next_process == 0 is in place to make it update the first time around, then wait until someone watches
 	if ((!src.next_process || src.interface.isUsed()) && world.time >= src.next_process)
 		src.next_process = world.time + 30
 
 		interface.updateContent("totPower", "[avail()] W")
-		interface.updateContent("totLoad", "[num2text(powernet.viewload,10)] W")
 		interface.updateContent("totDemand", "[load()] W")
 
 		var/tbl = list()
@@ -191,9 +187,9 @@
 		var/list/S = list(" <span class='bad'>Off","<span class='bad'>AOff","  <span class='good'>On", " <span class='good'>AOn")
 		var/list/chg = list(" <span class='bad'>N","<span class='average'>C","<span class='good'>F")
 
-		for(var/obj/machinery/power/terminal/term in powernet.nodes)
+		var/datum/net/power/net = get_powernet()
+		for(var/obj/machinery/power/terminal/term in net.getParents(/obj/machinery/power/terminal))
 			if(istype(term.master, /obj/machinery/power/apc))
-
 
 				var/obj/machinery/power/apc/A = term.master
 				var/area/APC_area = get_area(A)

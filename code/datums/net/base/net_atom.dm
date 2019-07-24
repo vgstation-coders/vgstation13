@@ -22,7 +22,8 @@
 /atom/proc/getNode(var/nodetype)
 	var/list/nodes = getNodes(nodetype)
 	while(nodes.len)
-		var/node = nodes[nodes.len--]
+		var/node = nodes[nodes.len]
+		nodes.len--
 		if(istype(node, nodetype))
 			return node
 	return null

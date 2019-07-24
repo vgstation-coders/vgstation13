@@ -17,13 +17,6 @@ function makeChart()
 				data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]                 
 			},			
 			{
-				label: "power load",
-				fillColor: "rgba(100,100,255,0.2)",
-				strokeColor: "rgba(100,100,255,1)",
-				pointColor: "rgba(0,0,255,1)",
-				data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]                 
-			},			
-			{
 				label: "power usage",
 				fillColor: "rgba(255,100,100,0.2)",
 				strokeColor: "rgba(255,100,100,1)",
@@ -76,12 +69,11 @@ function setEnabled()
 }
 
 
-function pushPowerData(demand, supply, load)
+function pushPowerData(demand, supply)
 {
 	//Thanks BYOND
 	if(typeof(demand) == "string")
 	{
-		load = parseFloat(load);
 		supply = parseFloat(supply);
 		demand = parseFloat(demand);
 	}
@@ -89,7 +81,7 @@ function pushPowerData(demand, supply, load)
 	{
 		powerChart.removeData();
 	}
-	powerChart.addData([supply, load, demand], "");
+	powerChart.addData([supply, demand], "");
 }
 
 var watt_suffixes = ["W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW"];
