@@ -157,8 +157,9 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 			to_chat(user, "<span class='warning'>There already is a cable at that position.</span>")
 			return
 
-	var/obj/structure/cable/C = getFromPool(/obj/structure/cable, F, 0, dirn)
+	var/obj/structure/cable/C = getFromPool(/obj/structure/cable, F)
 	C.cableColor(_color)
+	C.setDirs(0, dirn)
 
 	//Set up the new cable
 	C.add_fingerprint(user)

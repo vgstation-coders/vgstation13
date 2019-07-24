@@ -6,8 +6,9 @@
     var/netType = /datum/net //our nettype, needed for the propagation in Destroy
     var/atom/parent //our parent
 
-/datum/net_node/New(var/atom/papa)
-    parent = papa
+/datum/net_node/New(var/atom/loc)
+    . = ..()
+    parent = loc
     connections_changed()
 
 /datum/net_node/proc/connections_changed()
@@ -17,6 +18,7 @@
 
 //we tell our connected things to propagate new nets
 /datum/net_node/Destroy()
+    . = ..()
     active = FALSE //so we don't get propagated over
     rebuild_connections()
 
@@ -29,6 +31,7 @@
             new_nets += new_net
 
 //propagate to create a new net
+// === DONT OVERRIDE, OVERRIDE GET_CONNECTIONS INSTEAD ===
 /datum/net_node/proc/propagate(var/datum/net/new_net = new netType())
     var/list/worklist = list()
 
@@ -65,3 +68,24 @@
 
 //returns a list of net_nodes this will connect to
 /datum/net_node/proc/get_connections()
+    if(!active)
+        return null
+    return list()
+
+/datum/net_node/proc/connects_to_dir(var/dir)
+    return FALSE
+
+// ******************
+//  DEBUG PROCS
+// ******************
+
+/datum/net_node/proc/print_connections()
+    message_admins("getting connections for \ref[src]")
+    var/list/cons = get_connections()
+    message_admins("length: [cons.len]")
+    if(!cons.len)
+        return
+
+    message_admins("items:")
+    for(var/datum/c in cons)
+        message_admins("[c.type] - [c] - \ref[c]")

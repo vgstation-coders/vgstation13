@@ -2,7 +2,7 @@
     var/d1
     var/d2
 
-/datum/net_node/power/cable/New(dir1, dir2) //dir2 is optional
+/datum/net_node/power/cable/New(loc, dir1, dir2) //dir2 is optional
     . = ..()
     setDirs(dir1, dir2)
     cable_nodes += src
@@ -27,7 +27,9 @@
     cable_nodes -= src
 
 /datum/net_node/power/cable/get_connections()
-    . = list()
+    . = ..()
+    if(!.)
+        return null
     
     //d1
     . += get_connections_in_dir(d1)
@@ -39,25 +41,30 @@
     . = list()
     if(!dir)
         return .
+    var/turf/T
+
     //on our tile
-    . += get_cables_on_turf(get_turf(src), dir)
+    T = get_turf(parent)
+    . += T.get_power_nodes(dir)
 
-    //on the adjacent tile
-    . += get_cables_on_turf(get_step(src, dir), turn(dir, 180))
+    if(dir > 0)
+        //on the adjacent tile
+        T = get_step(T, dir)
+        . += T.get_power_nodes(turn(dir, 180))
 
-/proc/get_cables_on_turf(var/turf/T, var/dir)
+/datum/net_node/power/cable/connects_to_dir(var/dir)
+    return (d1 == dir || d2 == dir)
+
+/turf/proc/get_power_nodes(var/dir)
     . = list()
-    if(!isturf(T) || !isnum(dir))
-        return .
 
-    for(var/atom/A in T)
+    for(var/atom/A in src)
         if(!A.net_nodes)
             continue
-
-        for(var/datum/net_node/node in A.net_nodes)
-            var/datum/net_node/power/cable/C = node
-            if(!istype(C))
+        for(var/datum/net_node/power/node in A.net_nodes)
+            if(!istype(node))
+                continue
+            if(!node.connects_to_dir(dir))
                 continue
 
-            if(C.d1 == dir || C.d2 == dir)
-                . += node
+            . += node

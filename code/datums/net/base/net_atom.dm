@@ -6,7 +6,7 @@
 	for(var/node in net_nodes)
 		qdel(node)
 
-/atom/proc/addNode(var/nodetype, ...) //add any args for new after the first
+/atom/proc/addNode(var/nodetype, ...) //add any args for New after the first
 	if(!ispath(nodetype))
 		world.log << "[src.type] called addNode with invalid nodetype: [nodetype]"
 		return

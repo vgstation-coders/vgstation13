@@ -56,7 +56,7 @@
             power -= S.try_remove_power(power)
 
     for(var/datum/net_node/power/node in nodes)
-        node.reset()
+        node.pre_tick()
         node.powered = (power >= 0)
         node.post_tick()
     

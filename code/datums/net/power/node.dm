@@ -5,8 +5,11 @@
     var/last_powered = FALSE //for post_tick
 
 /datum/net_node/power/get_connections()
-    . = list()
-    for(var/atom/A in get_turf(src))
+    . = ..()
+    if(!.)
+        return null
+
+    for(var/atom/A in get_turf(parent))
         if(!A.net_nodes)
             continue
 
@@ -14,7 +17,7 @@
             if(!istype(node))
                 continue
 
-            if(node.d1 == 0)
+            if(!node.connects_to_dir(0)) //we want a stump
                 continue
 
             . += node
@@ -22,7 +25,7 @@
 //called every powertick
 //this is because of how old powernets worked
 //static power is can be achieved by overriding this
-/datum/net_node/power/proc/reset()
+/datum/net_node/power/proc/pre_tick()
     powerNeeded = 0
 
 /datum/net_node/power/proc/post_tick()
@@ -34,3 +37,6 @@
     if(!active)
         return 0
     return powered
+
+/datum/net_node/power/connects_to_dir(var/dir)
+    return (dir == 0)

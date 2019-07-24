@@ -25,20 +25,20 @@
     nodes |= node
     return 1
 
-//merges with another net
+//merges with another net, but doesn't qdel it
 /datum/net/proc/absorb_net(var/datum/net/other_net)
     if(!istype(other_net, src.type))
         return
 
     if(!other_net)
-        return
+        return src
 
     if(src == other_net)
         return src
 
     for(var/datum/net_node/node in other_net.nodes)
         add_node(node)
-    other_net.nodes = null
+    other_net.nodes = list()
     return src
 
 //used in merge_nets proc to determine which network needs to be absorbed (the smaller one)
@@ -63,9 +63,15 @@
         return n1
 
     if(n1.type != n2.type)
+        message_admins("type mismatch in merge_nets: \ref[n1]([n1.type]) != \ref[n2]([n2.type])")
         return null
 
+    var/datum/net/rnet
     if(n2.get_size() > n1.get_size())
-        return n2.absorb_net(n1)
+        rnet = n2.absorb_net(n1)
+        qdel(n1)
+    else
+        rnet = n1.absorb_net(n2)
+        qdel(n2)
 
-    return n1.absorb_net(n2)
+    return rnet
