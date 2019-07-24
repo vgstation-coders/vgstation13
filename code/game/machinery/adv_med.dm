@@ -575,3 +575,13 @@
 			var/obj/item/weapon/paper/R = new(src.loc)
 			R.name = "paper - 'body scan report'"
 			R.info = format_occupant_data(get_occupant_data(),1)
+
+
+/obj/machinery/bodyscanner/upgraded
+	name = "advanced body scanner"
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/fullbodyscanner,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+	)

@@ -221,7 +221,7 @@ obj/machinery/gibber/New()
 			for (var/ID in occupant.virus2)
 				var/datum/disease2/disease/D = occupant.virus2[ID]
 				if (D.spread & SPREAD_BLOOD)
-					newmeat.infect_disease2(D,1,"(Gibber, from [occupant], and activated by [user])")
+					newmeat.infect_disease2(D,1,"(Gibber, from [occupant], and activated by [user])",0)
 
 		allmeat[i] = newmeat
 

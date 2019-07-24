@@ -1,4 +1,10 @@
 //Corgi
+#define IDLE 0
+#define BEGIN_FOOD_HUNTING 1
+#define FOOD_HUNTING 2
+#define BEGIN_POINTER_FOLLOWING 3
+#define POINTER_FOLLOWING 4
+
 /mob/living/simple_animal/corgi
 	name = "corgi"
 	real_name = "corgi"
@@ -37,6 +43,11 @@
 	var/obj/item/inventory_back
 	var/obj/item/clothing/mask/facehugger/facehugger
 	var/list/spin_emotes = list("dances around","chases its tail")
+	var/corgi_status = IDLE
+	var/obj/movement_target
+	var/mob/pointer_caller
+	var/mob/master //Obtained randomly when petting him. Can be overriden.
+
 //	colourmatrix = list(1,0.0,0.0,0,\
 						0,0.5,0.5,0,\
 						0,0.5,0.5,0,\
@@ -53,6 +64,61 @@
 	. = ..()
 	if(.)
 		regular_hud_updates()
+	if(!stat && !resting && !locked_to && (ckey == null)) //Behavior mechanisms (om nom :3)
+		if(corgi_status == IDLE)
+			get_target()
+			stop_automated_movement = 0
+
+		else if(corgi_status == BEGIN_FOOD_HUNTING)
+			corgi_status = FOOD_HUNTING
+			spawn(0) // Separate process
+				stop_automated_movement = 1
+				var/failedsteps = 0
+				while(failedsteps <= 3)
+					if(!movement_target || src.Adjacent(movement_target) || get_dist(src, movement_target) >= 7)
+						failedsteps = 4
+					if(!step_towards(src,movement_target,1))
+						failedsteps++
+					sleep(6)
+
+				if(movement_target)
+					if(isturf(movement_target.loc) && src.Adjacent(movement_target))
+						movement_target.attack_animal(src)
+					else if(ishuman(movement_target.loc))
+						if(prob(20))
+							emote("me", 1, "stares at [movement_target.loc]'s [movement_target] with a sad puppy-face and whimpers.")
+				corgi_status = IDLE
+				movement_target = null
+
+		else if(corgi_status == BEGIN_POINTER_FOLLOWING)
+			corgi_status = POINTER_FOLLOWING
+			if(prob(35) || (master != null && pointer_caller == master))
+				spawn(0) // Separate process
+					stop_automated_movement = 1
+					var/failedsteps = 0
+					while(failedsteps <= 3)
+						if(!movement_target || src.Adjacent(movement_target) || get_dist(src, movement_target) >= 7)
+							break
+						if(!step_towards(src,movement_target,1))
+							failedsteps++
+						sleep(6)
+
+					if(movement_target)
+						step_towards(src,movement_target,1)
+						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
+						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
+							emote("me", 1, "barks at [movement_target], as if begging it to go into his mouth.")
+							corgi_status = BEGIN_FOOD_HUNTING
+						else if(ishuman(movement_target))
+							emote("me", 1, "barks at [movement_target] and wags his tail.")
+							corgi_status = IDLE
+						else
+							emote("me", 1, "barks with an attitude!")
+							corgi_status = IDLE
+
+			else
+				emote("me", 1, "stares into space with a blank expression.")
+				corgi_status = IDLE
 
 /mob/living/simple_animal/corgi/regular_hud_updates()
 	if(fire)
@@ -464,11 +530,34 @@
 					to_chat(user, "<span class='warning'>There is nothing to remove from its [remove_from].</span>")
 				return
 
-#define IDLE 0
-#define BEGIN_FOOD_HUNTING 1
-#define FOOD_HUNTING 2
-#define BEGIN_POINTER_FOLLOWING 3
-#define POINTER_FOLLOWING 4
+/mob/living/simple_animal/corgi/proc/get_target()
+	var/vision_range = 5
+	var/list/can_see = view(src, vision_range)
+	for(var/obj/item/weapon/reagent_containers/food/snacks/S in can_see)
+		if(isturf(S.loc) || ishuman(S.loc))
+			movement_target = S
+			corgi_status = BEGIN_FOOD_HUNTING
+			return
+	for(var/mob/living/carbon/M in can_see)
+		for(var/obj/item/H in M.held_items)
+			if(istype(H, /obj/item/weapon/reagent_containers/food/snacks))
+				movement_target = H
+				corgi_status = BEGIN_FOOD_HUNTING
+				return
+
+	for(var/obj/effect/decal/point/pointer in can_see)
+		var/atom/pointer_target = pointer.target
+		if(pointer_target == src)
+			return
+		corgi_status = BEGIN_POINTER_FOLLOWING
+		pointer_caller = pointer.pointer
+		movement_target = pointer_target
+		return
+
+/mob/living/simple_animal/corgi/Destroy()
+	..()
+	master = null
+	pointer_caller = null
 
 //IAN! SQUEEEEEEEEE~
 /mob/living/simple_animal/corgi/Ian
@@ -476,10 +565,6 @@
 	real_name = "Ian"	//Intended to hold the name without altering it.
 	gender = MALE
 	desc = "It's a corgi."
-	var/obj/movement_target
-	var/mob/pointer_caller
-	var/mob/master //Obtained randomly when petting him. Can be overriden.
-	var/ian_status = IDLE
 	response_help  = "pets"
 	response_disarm = "bops"
 	response_harm   = "kicks"
@@ -497,99 +582,6 @@
 
 	inventory_head = new/obj/item/clothing/head/christmas/santahat/red(src)
 	regenerate_icons()
-
-/mob/living/simple_animal/corgi/Ian/Destroy()
-	..()
-	master = null
-	pointer_caller = null
-
-/mob/living/simple_animal/corgi/Ian/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-
-	..()
-
-	if(!stat && !resting && !locked_to && (ckey == null)) //Behavior mechanisms (om nom :3)
-		if(ian_status == IDLE)
-			get_target()
-			stop_automated_movement = 0
-
-		else if(ian_status == BEGIN_FOOD_HUNTING)
-			ian_status = FOOD_HUNTING
-			spawn(0) // Separate process
-				stop_automated_movement = 1
-				var/failedsteps = 0
-				while(failedsteps <= 3)
-					if(!movement_target || src.Adjacent(movement_target) || get_dist(src, movement_target) >= 7)
-						failedsteps = 4
-					if(!step_towards(src,movement_target,1))
-						failedsteps++
-					sleep(6)
-
-				if(movement_target)
-					if(isturf(movement_target.loc) && src.Adjacent(movement_target))
-						movement_target.attack_animal(src)
-					else if(ishuman(movement_target.loc))
-						if(prob(20))
-							emote("me", 1, "stares at [movement_target.loc]'s [movement_target] with a sad puppy-face and whimpers.")
-				ian_status = IDLE
-				movement_target = null
-
-		else if(ian_status == BEGIN_POINTER_FOLLOWING)
-			ian_status = POINTER_FOLLOWING
-			if(prob(35) || (master != null && pointer_caller == master))
-				spawn(0) // Separate process
-					stop_automated_movement = 1
-					var/failedsteps = 0
-					while(failedsteps <= 3)
-						if(!movement_target || src.Adjacent(movement_target) || get_dist(src, movement_target) >= 7)
-							break
-						if(!step_towards(src,movement_target,1))
-							failedsteps++
-						sleep(6)
-
-					if(movement_target)
-						step_towards(src,movement_target,1)
-						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
-						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
-							emote("me", 1, "barks at [movement_target], as if begging it to go into his mouth.")
-							ian_status = BEGIN_FOOD_HUNTING
-						else if(ishuman(movement_target))
-							emote("me", 1, "barks at [movement_target] and wags his tail.")
-							ian_status = IDLE
-						else
-							emote("me", 1, "barks with an attitude!")
-							ian_status = IDLE
-
-			else
-				emote("me", 1, "stares into space with a blank expression.")
-				ian_status = IDLE
-
-/mob/living/simple_animal/corgi/Ian/proc/get_target()
-	var/vision_range = 5
-	var/list/can_see = view(src, vision_range)
-	for(var/obj/item/weapon/reagent_containers/food/snacks/S in can_see)
-		if(isturf(S.loc) || ishuman(S.loc))
-			movement_target = S
-			ian_status = BEGIN_FOOD_HUNTING
-			return
-	for(var/mob/living/carbon/M in can_see)
-		for(var/obj/item/H in M.held_items)
-			if(istype(H, /obj/item/weapon/reagent_containers/food/snacks))
-				movement_target = H
-				ian_status = BEGIN_FOOD_HUNTING
-				return
-
-	for(var/obj/effect/decal/point/pointer in can_see)
-		var/atom/pointer_target = pointer.target
-		if(pointer_target == src)
-			return
-		ian_status = BEGIN_POINTER_FOLLOWING
-		pointer_caller = pointer.pointer
-		movement_target = pointer_target
-		return
-
-
 
 /mob/living/simple_animal/corgi/regenerate_icons()
 	overlays = list()
@@ -676,16 +668,12 @@
 				flick_overlay(heart, list(M.client), 20)
 				emote("me", EMOTE_AUDIBLE, pick("yaps happily.","yips happily.","gives a hearty bark!","yips and cuddles up to you."))
 				playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
+				if(prob(5))
+					master = M
+					to_chat(M, "[src] seems closer to you now. At least until somebody else gives him attention, anyway.")
 			if(I_HURT)
 				playsound(loc, 'sound/voice/corgigrowl.ogg', 80, 1)
 				emote("me", EMOTE_AUDIBLE, "growls.")
-
-/mob/living/simple_animal/corgi/Ian/react_to_touch(mob/M)
-	..()
-
-	if(M && !isUnconscious() && M.a_intent == I_HELP && prob(5))
-		master = M
-		to_chat(M, "Ian seems closer to you now. At least until somebody else gives him attention, anyway.")
 
 //Sasha isn't even a corgi you dummy!
 /mob/living/simple_animal/corgi/sasha

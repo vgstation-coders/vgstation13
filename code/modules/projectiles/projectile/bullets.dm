@@ -455,7 +455,7 @@
 
 /obj/item/projectile/bullet/stinger
 	name = "alien stinger"
-	damage = 10
+	damage = 15
 	damage_type = TOX
 	flag = "bio"
 	fire_sound = 'sound/weapons/hivehand.ogg'

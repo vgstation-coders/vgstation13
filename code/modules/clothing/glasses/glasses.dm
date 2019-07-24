@@ -115,7 +115,7 @@ var/list/science_goggles_wearers = list()
 		if (H.glasses == src)
 			toggle = 1
 	if (toggle)
-		playsound(M,'sound/weapons/egun_toggle_laser.ogg',70,0,-5)
+		playsound(M,'sound/weapons/egun_toggle_laser.ogg',30,0,-5)
 		science_goggles_wearers.Add(M)
 		for (var/obj/item/I in infected_items)
 			if (I.pathogen)
@@ -131,7 +131,7 @@ var/list/science_goggles_wearers = list()
 				M.client.images |= C.pathogen
 
 /obj/item/clothing/glasses/science/proc/disable(var/mob/M)
-	playsound(M,'sound/weapons/egun_toggle_taser.ogg',70,0,-5)
+	playsound(M,'sound/weapons/egun_toggle_taser.ogg',30,0,-5)
 	science_goggles_wearers.Remove(M)
 	for (var/obj/item/I in infected_items)
 		M.client.images -= I.pathogen
@@ -146,9 +146,16 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
 	desc = "Yarr."
-	icon_state = "eyepatch"
-	item_state = "eyepatch"
+	icon_state = "eyepatch0"
+	item_state = "eyepatch0"
 	min_harm_label = 0
+	var/flipped = FALSE
+
+/obj/item/clothing/glasses/eyepatch/attack_self(mob/user)
+	flipped = !flipped
+	icon_state = "eyepatch[flipped]"
+	item_state = "eyepatch[flipped]"
+	to_chat(user, "You flip \the [src] to your [flipped ? "left" : "right"] eye.")
 
 /obj/item/clothing/glasses/monocle
 	name = "monocle"

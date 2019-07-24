@@ -73,8 +73,6 @@
 		equip_to_slot_or_del(uni, slot_w_uniform)
 	else
 		equip_to_slot_or_del(new /obj/item/clothing/under/deathsquad(src), slot_w_uniform)
-	equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword(src), slot_l_store)
-	equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/mateba(src), slot_belt)
 
 	//Shoes & gloves
 	equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/deathsquad(src), slot_shoes)
@@ -92,7 +90,7 @@
 	//Backpack
 	equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(src), slot_back)
 	equip_to_slot_or_del(new /obj/item/weapon/storage/box(src), slot_in_backpack)
-	equip_to_slot_or_del(new /obj/item/ammo_storage/box/a357(src), slot_in_backpack)
+	equip_to_slot_or_del(new /obj/item/ammo_storage/speedloader/a357(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/regular(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/weapon/pinpointer(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/weapon/shield/energy(src), slot_in_backpack)
@@ -101,7 +99,10 @@
 	else
 		equip_to_slot_or_del(new /obj/item/weapon/plastique(src), slot_in_backpack)
 
-	put_in_hands(new /obj/item/weapon/gun/energy/pulse_rifle(src))
+	//Other equipment and accessories
+	equip_to_slot_or_del(new /obj/item/weapon/gun/energy/pulse_rifle(src), slot_belt)
+	equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)
+	equip_accessory(src, /obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword, /obj/item/clothing/shoes, 5)
 
 
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(src)//Here you go Deuryn
@@ -121,10 +122,14 @@
 
 	var/obj/item/weapon/card/id/W = new(src)
 	W.name = "[real_name]'s ID Card"
-	W.icon_state = "centcom"
-	W.access = get_centcom_access("Death Commando")
-	W.icon_state = "deathsquad"
-	W.assignment = "Death Commando"
+	if(leader)
+		W.access = get_centcom_access("Creed Commander")
+		W.icon_state = "creed"
+		W.assignment = "Death Commander"
+	else
+		W.access = get_centcom_access("Death Commando")
+		W.icon_state = "deathsquad"
+		W.assignment = "Death Commando"
 	W.registered_name = real_name
 	equip_to_slot_or_del(W, slot_wear_id)
 

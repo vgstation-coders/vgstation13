@@ -1441,9 +1441,6 @@
 			H.emote(pick("stare", "giggle"), null, null, TRUE)
 		if(prob(5))
 			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
-		if(prob(2))
-			to_chat(H, "<span class='notice'>You doze off for a second.</span>")
-			H.sleeping += 1
 		..()
 
 /datum/reagent/sacid
@@ -5763,6 +5760,14 @@
 				M.dizziness = max(0, M.dizziness - 15)
 			if(M.confused != 0)
 				M.confused = max(0, M.confused - 5)
+
+/datum/reagent/ethanol/deadrum/glasgow
+	name = "Glasgow Deadrum"
+	id = GLASGOW
+	description = "Makes you feel like you had one hell of a party."
+	color = "#662D1D" //rgb: 101, 44, 29
+	slur_start = 1
+	confused_start = 1
 
 /datum/reagent/ethanol/deadrum/tequila
 	name = "Tequila"

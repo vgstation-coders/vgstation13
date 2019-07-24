@@ -264,3 +264,6 @@
 					<b>Thrusters:</b> [thrusters?"on":"off"]
 					"}
 	return output
+
+/obj/mecha/combat/marauder/add_cell()
+	..(new /obj/item/weapon/cell/super)

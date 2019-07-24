@@ -345,11 +345,12 @@
 /obj/item/weapon/coin
 	icon = 'icons/obj/items.dmi'
 	name = "coin"
+	desc = "Long phased out in favor of galactic credits."
 	icon_state = "coin"
 	flags = FPRINT
 	siemens_coefficient = 1
-	force = 0.0
-	throwforce = 0.0
+	force = 1
+	throwforce = 1
 	w_class = W_CLASS_TINY
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
@@ -422,55 +423,64 @@
 /obj/item/weapon/coin/gold
 	material=MAT_GOLD
 	name = "gold coin"
+	desc = "Worth its weight in gold!"
 	icon_state = "coin_gold"
-	credits = 5
+	credits = 0.4
 	melt_temperature=1064+T0C
-	siemens_coefficient = 0.95
+	siemens_coefficient = 1.3
 
 /obj/item/weapon/coin/silver
 	material=MAT_SILVER
 	name = "silver coin"
+	desc = "Not worth a lot, but it sure is shiny."
 	icon_state = "coin_silver"
-	credits = 1
+	credits = 0.3
 	melt_temperature=961+T0C
 	siemens_coefficient = 1
 
 /obj/item/weapon/coin/diamond
 	material=MAT_DIAMOND
 	name = "diamond coin"
+	desc = "A girl's second-best friend!"
 	icon_state = "coin_diamond"
-	credits = 25
+	credits = 1
 	siemens_coefficient = 0.1
 
 /obj/item/weapon/coin/iron
 	material=MAT_IRON
 	name = "iron coin"
+	desc = "Practically worthless, even for a coin."
 	icon_state = "coin_iron"
 	credits = 0.01
 	melt_temperature=MELTPOINT_STEEL
-	siemens_coefficient = 0.9
+	siemens_coefficient = 1
 
 /obj/item/weapon/coin/plasma
 	material=MAT_PLASMA
 	name = "solid plasma coin"
+	desc = "Not worth a lot, but safer to handle than raw plasma."
 	icon_state = "coin_plasma"
-	credits = 0.1
+	credits = 0.04
 	melt_temperature=MELTPOINT_STEEL+500
-	siemens_coefficient = 0.7
+	siemens_coefficient = 0.6
 
 /obj/item/weapon/coin/uranium
 	material=MAT_URANIUM
 	name = "uranium coin"
+	desc = "A heavy coin that is always warm to the touch."
 	icon_state = "coin_uranium"
-	credits = 25
+	force = 2
+	throwforce = 2
+	credits = 0.2
 	melt_temperature=1070+T0C
-	siemens_coefficient = 0.9
+	siemens_coefficient = 0.5
 
 /obj/item/weapon/coin/clown
 	material=MAT_CLOWN
 	name = "bananaium coin"
+	desc = "A funny, rare coin minted from pure banana essence. Honk!"
 	icon_state = "coin_clown"
-	credits = 1000
+	credits = 10
 	melt_temperature=MELTPOINT_GLASS
 	siemens_coefficient = 0.5
 
@@ -478,23 +488,29 @@
 	material=MAT_PHAZON
 	name = "phazon coin"
 	icon_state = "coin_phazon"
-	credits = 2000
+	desc = "You're not sure how much this is worth, considering the constantly warping engravings."
 	melt_temperature=MELTPOINT_GLASS
-	siemens_coefficient = 0.5
 	
 /obj/item/weapon/coin/phazon/New()
-	siemens_coefficient = rand(0,100) / 100
+	siemens_coefficient = rand(0,200) / 100
+	credits = rand(1,1000)
 
 /obj/item/weapon/coin/adamantine
 	material="adamantine"
 	name = "adamantine coin"
 	icon_state = "coin_adamantine"
-	siemens_coefficient = 1
+	desc = "An expensive coin minted long ago from extremely rare, hard, super-conductive metal."
+	force = 3
+	throwforce = 3
+	siemens_coefficient = 3
+	credits = 1000
 
 /obj/item/weapon/coin/mythril
 	material="mythril"
 	name = "mythril coin"
+	desc = "An expensive coin minted long ago from extremely rare, light, non-conductive metal."
 	icon_state = "coin_mythril"
+	credits = 1000
 	siemens_coefficient = 0
 
 /obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
