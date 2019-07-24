@@ -166,8 +166,12 @@
 
 	else if(isitem(target))//Check that we're not pocketing a mob.
 		var/obj/item/I = target
-		if(isturf(target.loc) || is_type_in_list(target.loc,valid_containers))//That the item is not in a non-valid container.
-			grip_item(I, user, 1)//And finally.
+		if(isturf(target.loc))
+			grip_item(I, user, 1)
+		else if(is_type_in_list(target.loc,valid_containers))
+			var/obj/O = target.loc
+			grip_item(I, user, 1)
+			O.update_icon()//updating fancy containers
 
 	else if(isrobot(target))//Robots repairing themselves? What can go wrong.
 		var/mob/living/silicon/robot/A = target
