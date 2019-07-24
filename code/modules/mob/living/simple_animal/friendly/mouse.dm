@@ -108,7 +108,7 @@
 	handle_body_temperature()//I bestow upon mice the gift of thermoregulation, so they can handle the fever caused by disease.
 
 	//------------------------DISEASE STUFF--------------------------------------------------------
-	if(!(status_flags & GODMODE))
+	if(!(status_flags & GODMODE) && !isDead())
 		if(!locked_to || !istype(locked_to,/obj/item/critter_cage))//cages isolate from contact and airborne diseases
 			find_nearby_disease()//getting diseases from blood/mucus/vomit splatters and open dishes
 
