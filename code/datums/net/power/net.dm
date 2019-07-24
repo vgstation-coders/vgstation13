@@ -58,9 +58,9 @@
     for(var/datum/net_node/power/node in nodes)
         node.reset()
         node.powered = (power >= 0)
-        node.power_change()
-
-    //excess will show missing power, this could also be in an else to the if above, but i dunno, why make it hard for the guys
+        node.post_tick()
+    
+    //excess can be negative, this could also be in an else to the if above, but i dunno, why make it hard for the guys
     excess = power
 
 /datum/net/power/proc/get_electrocute_damage()

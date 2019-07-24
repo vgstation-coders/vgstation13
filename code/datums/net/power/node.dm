@@ -2,6 +2,7 @@
     netType = /datum/net/power
     var/powerNeeded //positive for production, negative for consumption
     var/powered = FALSE
+    var/last_powered = FALSE //for post_tick
 
 /datum/net_node/power/get_connections()
     . = list()
@@ -24,9 +25,10 @@
 /datum/net_node/power/proc/reset()
     powerNeeded = 0
 
-//called every powertick when this node isn't receiving power
-/datum/net_node/power/proc/power_change()
-    parent.power_change()
+/datum/net_node/power/proc/post_tick()
+    if(powered != last_powered)
+        parent.power_change()
+        last_powered = powered
 
 /datum/net_node/power/proc/is_powered()
     if(!active)
