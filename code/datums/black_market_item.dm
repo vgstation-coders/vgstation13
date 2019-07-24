@@ -1,5 +1,9 @@
 var/list/black_market_items = list()
 
+#define CHEAP 1
+#define NORMAL 2
+#define EXPENSIVE 3
+
 /proc/get_black_market_items()
 	if(!black_market_items.len)
 
@@ -36,8 +40,10 @@ var/list/black_market_items = list()
 	var/stock_max  
 	var/cost_min    //Same as stock
 	var/cost_max
-	var/sps_chance = 30
 	var/display_chance = 0   //Out of 100
+	var/list/sps_chances = list(5, 10, 30) //Chance for SPS alert for each delivery method out of 100. Cheap, Normal, Expensive.
+	var/list/delivery_fees = list(0,0.3,0.6) //Delivery fees are a percentage of the base cost. E.g. expensive will be base + 0.6*base. Cheap, Normal, Expensive.
+	var/list/delivery_available = list(1,1,1) //Disables the given delivery method if it is 0. Cheap, Normal, Expensive
 
 	var/round_stock                         //God I love if statements
 	var/round_stock_calculated = 0          //Allows for round-to-round variance instead of changing every time you open it
@@ -70,64 +76,143 @@ var/list/black_market_items = list()
 		. = 999
 	else
 		. = round_stock
-
 	
-/datum/black_market_item/proc/spawn_item(var/turf/loc, var/obj/item/device/illegalradio/U, mob/user)
-	U.money_stored -= get_cost()
-	feedback_add_details("traitor_black_market_items_bought", name)
-	message_admins("[key_name(user)] just purchased the [src.name] from the black market. ([formatJumpTo(get_turf(U))])")
+/datum/black_market_item/proc/process_transaction(var/obj/item/device/illegalradio/radio, var/delivery_method)
+	radio.money_stored -= get_cost()
+	radio.money_stored -= get_cost()*delivery_fees[delivery_method]
+	if(get_stock() && round_stock != -1)
+		round_stock -= 1
+		
+/datum/black_market_item/proc/log_transaction(var/delivery_method, var/mob/user)
+	feedback_add_details("black_market_items_bought", name)
+	message_admins("[key_name(user)] just purchased the [src.name] from the black market. [delivery_method] ([formatJumpTo(get_turf(user))])")
 	var/text = "[key_name(user)] just purchased the [src.name] from the black market."
 	log_game(text)
 	log_admin(text)
-	return new item(loc,user)
-
-/datum/black_market_item/proc/buy(var/obj/item/device/illegalradio/U, var/mob/user)
+	
+/datum/black_market_item/proc/buy(var/obj/item/device/illegalradio/radio, var/delivery_method, var/mob/user)
 	..()
-	if(!istype(U)) 
-		return 0
-
+	if(!istype(radio)) 
+		return FALSE
 	if(user.stat || user.restrained())
-		return 0
-
+		return FALSE
 	if(!(istype(user,/mob/living/carbon/human)))
-		return 0
-
+		return FALSE
 	if(get_stock() <= 0)
 		to_chat(user, "<span class='warning'>This item is out of stock. Scram.</span>")
-		return 0
+		return FALSE
+	if(!((radio.loc in user.contents) || (in_range(radio.loc, user) && istype(radio.loc.loc, /turf))))
+		return FALSE
+	if(get_cost() > radio.money_stored)
+		return FALSE
 
-	// If the black_market's holder is in the user's content
-	if((U.loc in user.contents) || (in_range(U.loc, user) && istype(U.loc.loc, /turf)))
-		if(get_cost() > U.money_stored)
-			return 0
+	switch(delivery_method)
+		if(CHEAP)
+			spawn_cheap(radio,user)
+		if(NORMAL)
+			spawn_normal(radio,user)
+		if(EXPENSIVE)
+			spawn_expensive(radio,user)
 
-		var/obj/I = spawn_item(get_turf(user), U, user)
-		if(!I)
-			return 0
-		after_spawn(I,user)
-		var/icon/tempimage = icon(I.icon, I.icon_state)
-		end_icons += tempimage
-		var/tempstate = end_icons.len
-
-		if(ishuman(user))
-			var/mob/living/carbon/human/A = user
-
-			if(istype(I, /obj/item))
-				A.put_in_any_hand_if_possible(I)
-
-			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost()]."}
-			//stat_collection.black_market_purchase(src, I, user)
-			if(get_stock() != 0)
-				round_stock -= 1
-
-				
-		user.set_machine(U)
-		U.interact(user)
-
-		return 1
-	return 0
+/datum/black_market_item/proc/spawn_cheap(var/obj/item/device/illegalradio/radio, var/mob/user)
+	var/direction = pick(list(NORTH,EAST,SOUTH,WEST))
+	var/direction_string
+	switch(direction)
+		if(NORTH)
+			direction_string = "north"
+		if(EAST)
+			direction_string = "east"
+		if(SOUTH)
+			direction_string = "south"
+		if(WEST)
+			direction_string = "west"
+			
+	log_transaction("The item was launched at the station from the [direction_string].", user)
+	radio.visible_message("The [radio.name] beeps: <span class='warning'>Your item was launched from the [direction_string]. It will impact the station in less than a minute.</span>")
+	process_transaction(radio, CHEAP)
+	radio.interact(user)
 	
-/datum/black_market_item/proc/after_spawn(var/obj/spawned, var/mob/user) //Called immediately after spawning. Override for post-spawn behavior.
+	spawn(rand(15 SECONDS, 45 SECONDS))
+		var/obj/spawned_item = new item(get_turf(user),user)	
+		if(!spawned_item)
+			if(radio)
+				radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
+				radio.money_stored += get_cost()*delivery_fees[CHEAP]
+			if(round_stock != -1)
+				round_stock += 1
+			return 0
+		after_spawn(spawned_item,CHEAP,user)
+		spawned_item.ThrowAtStation(30,0.4,direction)	
+		spawn(rand(30 SECONDS, 60 SECONDS))
+			if(!radio.nanotrasen_variant && prob(sps_chances[CHEAP]))
+				SPS_black_market_alert("Centcomm has detected a black market purchase of item: [name]. It was launched at the station recently.")
+
+
+var/list/potential_locations = list()
+var/locations_calculated = 0
+				
+/datum/black_market_item/proc/spawn_normal(var/obj/item/device/illegalradio/radio, var/mob/user)
+	var/turf/spawnloc
+	if(!locations_calculated)
+		for(var/area/maintenance/A in areas)
+			if(!istype(A,/area/maintenance/atmos) && A.z == STATION_Z)
+				potential_locations.Add(A)
+		locations_calculated = 1
+	var/area/selected_area
+	var/list/selection_list = potential_locations.Copy()
+	while(selection_list.len)
+		selected_area = pick(selection_list)
+		selection_list.Remove(selected_area)
+		for(var/turf/simulated/floor/floor in selected_area.contents)
+			if(!floor.has_dense_content() && !floor.density)
+				spawnloc = floor
+				break	
+	if(!spawnloc)
+		sleep(2 SECONDS)
+		radio.visible_message("The [radio.name] beeps: <span class='warning'>Unable to find a proper location for teleportation. You've been downgraded to cheap. No refunds.</span>")
+		sleep(2 SECONDS)
+		spawn_cheap(radio, user)
+		return
+		
+	var/time_to_spawn = rand(30 SECONDS, 60 SECONDS)
+	log_transaction("The item was teleported to the [selected_area.name].", user)
+	radio.visible_message("The [radio.name] beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
+	process_transaction(radio, NORMAL)
+	radio.interact(user)
+	
+	spawn(time_to_spawn)
+		var/obj/spawned_item = new item(spawnloc,user)
+		after_spawn(spawned_item,NORMAL,user)
+		spawn(rand(30 SECONDS, 60 SECONDS))
+			if(!radio.nanotrasen_variant && prob(sps_chances[NORMAL]))
+				SPS_black_market_alert("Centcomm has detected a black market purchase of item: [name]. It was teleported to your station's maintenance recently.")
+		
+/datum/black_market_item/proc/spawn_expensive(var/obj/item/device/illegalradio/radio, var/mob/user)
+	process_transaction(radio, EXPENSIVE)
+	var/obj/spawned_item = new item(get_turf(user),user)
+	if(!spawned_item)
+		if(radio)
+			radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
+			radio.money_stored += get_cost()*delivery_fees[EXPENSIVE]
+		if(round_stock != -1)
+			round_stock += 1
+		return 0
+	after_spawn(spawned_item,EXPENSIVE,user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/A = user
+		if(istype(spawned_item, /obj/item))
+			A.put_in_any_hand_if_possible(spawned_item)
+			
+	log_transaction("The item was teleported directly to him.", user)
+	radio.visible_message("The [radio.name] beeps: <span class='warning'>Thank you for your purchase!</span>")	
+	radio.interact(user)
+	
+	spawn(rand(30 SECONDS, 60 SECONDS))
+		if(!radio.nanotrasen_variant && prob(sps_chances[EXPENSIVE]))
+			SPS_black_market_alert("Centcomm has detected a black market purchase of item: [name]. It was teleported directly to the buyer in the past minute.")
+
+	
+/datum/black_market_item/proc/after_spawn(var/obj/spawned, var/delivery_method, var/mob/user) //Called immediately after spawning. Override for post-spawn behavior.
 	return
 
 	
@@ -159,6 +244,7 @@ for anyone but the person committing mass murder.
 	name = "Portal Gun"
 	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare. That's why you're going to pay us a shitload of cash for it."
 	item = /obj/item/weapon/gun/portalgun
+	sps_chances = list(0,20,35)
 	stock_min = 1
 	stock_max = 1
 	cost_min = 1800
@@ -172,16 +258,20 @@ for anyone but the person committing mass murder.
 	name = "Potion of Levitation"
 	desc = "Potions come in many shapes and sizes, but this one makes you float! Why? Because it looks fucking cool. Maybe you can convince somebody you're the fourth coming of Jesus."
 	item = /obj/item/potion/levitation
+	sps_chances = list(0,0,5)
+	delivery_available = list(0, 1, 1)
 	stock_min = 2
 	stock_max = 4
 	cost_min = 400
 	cost_max = 500
-	display_chance = 50
+	display_chance = 70
 	
 /datum/black_market_item/arcane/health_potion
 	name = "Potion of Health? Death?"
 	desc = "Unfortunately, some idiot managed to mix together the shipment of identical-looking health potions and death potions. He's dead now. Test out your luck!"
 	item = /obj/item/potion/deception
+	sps_chances = list(0, 10, 30)
+	delivery_available = list(0, 1, 1) //Would shatter on impact
 	stock_min = 2
 	stock_max = 4
 	cost_min = 600
@@ -189,7 +279,9 @@ for anyone but the person committing mass murder.
 	display_chance = 70
 	
 /datum/black_market_item/arcane/health_potion/after_spawn(var/obj/spawned, var/mob/user)
-	if(prob(25))
+	if(prob(40))
 		spawned = /obj/item/potion/healing
 
-	
+#undef CHEAP
+#undef NORMAL
+#undef EXPENSIVE
