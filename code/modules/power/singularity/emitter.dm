@@ -14,7 +14,6 @@
 	active_power_usage = 300
 
 	var/active = 0
-	var/powered = 0
 	var/fire_delay = 100
 	var/last_shot = 0
 	var/shot_number = 0
@@ -85,7 +84,7 @@
 /obj/machinery/power/emitter/proc/update_beam()
 
 
-	if(active && powered)
+	if(active && (stat & NOPOWER))
 		if(!beam)
 			beam = new (loc)
 			beam.dir = dir
@@ -136,7 +135,7 @@
 
 /obj/machinery/power/emitter/update_icon()
 
-	if(powered && get_powernet() && avail(active_power_usage) && active)
+	if((stat & NOPOWER) && active)
 		icon_state = "emitter_+a"
 	else
 		icon_state = "emitter"
@@ -201,27 +200,16 @@
 	if(stat & BROKEN)
 		return
 
-	if(state != 2 || ((node.active == FALSE) && active_power_usage)) //Not welded to the floor, or no more wire underneath and requires power
+	if(state != 2 || !(stat & NOPOWER)) //Not welded to the floor, or no more wire underneath and requires power
 		active = 0
 		update_icon()
 		update_beam()
 		return
 
 	if(((last_shot + fire_delay) <= world.time) && (active == 1)) //It's currently activated and it hasn't processed in a bit
-		if(!active_power_usage || avail(active_power_usage)) //Doesn't require power or powernet has enough supply
-			add_load(active_power_usage) //Drain it then bitch
-			if(!powered) //Yay its powered
-				powered = 1
-				update_icon()
-				update_beam()
-				investigation_log(I_SINGULO,"regained power and turned <font color='green'>on</font>")
-		else
-			if(powered) //Fuck its not anymore
-				powered = 0 //Whelp time to kill it then
-				update_beam() //Update its beam and icon
-				update_icon()
-				investigation_log(I_SINGULO,"lost power and turned <font color='red'>off</font>")
-			return
+		add_load(active_power_usage)
+		update_icon()
+		update_beam()
 
 		last_shot = world.time
 
@@ -240,6 +228,15 @@
 			spark(src, 5)
 
 		//A.dumbfire()
+
+/obj/machinery/power/emitter/power_change()
+	. = ..()
+	if(stat & NOPOWER)
+		investigation_log(I_SINGULO,"lost power and turned <font color='red'>off</font>")
+	else
+		investigation_log(I_SINGULO,"regained power and turned <font color='green'>on</font>")
+
+	
 
 /obj/machinery/power/emitter/emag(mob/user)
 

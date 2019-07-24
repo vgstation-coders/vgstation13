@@ -69,11 +69,10 @@ display round(lastgen) and plasmatank amount
 	return
 
 /obj/machinery/power/port_gen/process()
-	if(active && HasFuel() && !crit_fail && anchored && powernet)
+	if(active && HasFuel() && !crit_fail && anchored)
 		add_avail(power_gen * power_output)
 		UseFuel()
 		src.updateDialog()
-
 	else
 		active = 0
 		update_icon()

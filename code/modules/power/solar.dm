@@ -18,10 +18,6 @@ var/list/solars_list = list()
 	solars_list -= src
 	..()
 
-/obj/machinery/power/solar/initialize()
-	..()
-	connect_to_network()
-
 // this is here because it is fucking here. If you found this, you're lucky !
 /obj/item/weapon/paper/solar
 	name = "paper - 'Going green with Greencorps! Instrunctions on setting up your own solar array.'"

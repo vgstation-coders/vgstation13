@@ -145,7 +145,7 @@
 	if(stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
-	cable_power_change()
+	power_change()
 	..(severity)
 
 /obj/machinery/media/transmitter/broadcast/update_icon()

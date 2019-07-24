@@ -53,7 +53,7 @@
             var/datum/net_node/power/storage/S = battery_nodes[battery_nodes.len]
             battery_nodes.len--
 
-            power = S.try_remove_power(power)
+            power -= S.try_remove_power(power)
 
     for(var/datum/net_node/power/node in nodes)
         node.reset()

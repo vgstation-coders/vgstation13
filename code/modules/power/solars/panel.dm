@@ -127,8 +127,9 @@
 
 	add_avail(sgen)
 
-	if(powernet && control)
-		if(powernet.nodes.Find(control))
+	if(control)
+		var/datum/net/power/net = get_powernet()
+		if(net.getParents(/obj/machinery/power/solar/control).Find(control))
 			control.gen += sgen
 
 /obj/machinery/power/solar/panel/proc/broken()
@@ -164,9 +165,3 @@
 		solar_assembly = null
 		qdel(assembly)
 	qdel(src)
-
-/obj/machinery/power/solar/panel/disconnect_from_network()
-	. = ..()
-
-	if(.)
-		control = null

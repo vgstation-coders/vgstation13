@@ -19,7 +19,8 @@
 	//Find all solar controls and update them
 	//Currently, just update all controllers in world
 	// ***TODO: better communication system using network
-	for(var/obj/machinery/power/solar/control/C in getPowernetNodes())
+	var/datum/net/power/net = get_powernet()
+	for(var/obj/machinery/power/solar/control/C in net.getParents(/obj/machinery/power/solar/control))
 		if(get_dist(C, src) < SOLAR_MAX_DIST)
 			C.tracker_update(angle)
 

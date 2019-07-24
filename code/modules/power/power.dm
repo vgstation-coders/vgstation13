@@ -54,7 +54,6 @@
 		update_icon()
 
 /obj/machinery/power/Destroy()
-	disconnect_from_network()
 	power_machines -= src
 
 	if (terminal)

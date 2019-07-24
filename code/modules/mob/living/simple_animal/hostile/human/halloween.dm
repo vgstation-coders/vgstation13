@@ -479,11 +479,12 @@
 		cell.forceMove(get_turf(src))
 		cell = null
 	if(istype(the_target, /obj/structure/cable))
+		var/obj/structure/cable/C = the_target
 		if(latched && locked_to && locked_to == C)
 			return 1
 		if(!latched)
 			return 1
-		else if((!C.powernet || C.powernet.avail <= 0) && locked_to == C)
+		else if((C.excess() <= 0) && locked_to == C)
 			unlatch()
 
 	return 0
@@ -492,7 +493,7 @@
 	if(istype(target, /obj/structure/cable))
 		var/obj/structure/cable/C = target
 		if(latched && locked_to && locked_to == C)
-			if(istype(net) && cell.percent() < 100)
+			if(istype(C) && cell.percent() < 100)
 				var/drained = min(rand(500,1500), C.excess())
 				C.add_load(drained)
 				cell.give(drained/10)

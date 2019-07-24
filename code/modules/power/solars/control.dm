@@ -34,7 +34,8 @@
 		set_panels(cdir)
 
 /obj/machinery/power/solar/control/Destroy()
-	for(var/obj/machinery/power/solar/panel/P in getPowernetNodes())
+	var/datum/net/power/net = get_powernet()
+	for(var/obj/machinery/power/solar/panel/P in net.getParents(/obj/machinery/power/solar/panel))
 		if(P.control == src)
 			P.control = null
 
@@ -197,7 +198,8 @@ Manual Tracking Direction:"}
 		track = text2num(href_list["track"])
 
 		if(track == 2)
-			for(var/obj/machinery/power/solar/panel/tracker/T in getPowernetNodes())
+			var/datum/net/power/net = get_powernet()
+			for(var/obj/machinery/power/solar/panel/tracker/T in net.getParents(/obj/machinery/power/solar/panel/tracker))
 				cdir = T.sun_angle
 				break
 
@@ -214,7 +216,8 @@ Manual Tracking Direction:"}
 		nexttime = world.time + 6000 / trackrate
 
 /obj/machinery/power/solar/control/proc/set_panels(var/cdir)
-	for(var/obj/machinery/power/solar/panel/P in getPowernetNodes())
+	var/datum/net/power/net = get_powernet()
+	for(var/obj/machinery/power/solar/panel/P in net.getParents(/obj/machinery/power/solar/panel))
 		if(get_dist(P, src) < SOLAR_MAX_DIST)
 			if(!P.control)
 				P.control = src

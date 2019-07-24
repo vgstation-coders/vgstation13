@@ -160,7 +160,7 @@
 	return
 
 /obj/machinery/power/monitor/process()
-	if(stat & (BROKEN|NOPOWER) || !powernet)
+	if(stat & (BROKEN|NOPOWER))
 		interface.executeJavaScript("setDisabled()")
 		return
 

@@ -13,7 +13,6 @@ var/list/datum/net_node/power/cable/cable_nodes = list() //all /datum/net_node/p
 	wait          = 2 SECONDS
 
 	var/list/currentrun_powerents
-	var/list/currentrun_power_machines
 
 
 /datum/subsystem/power/New()
