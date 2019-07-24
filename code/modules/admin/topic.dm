@@ -467,7 +467,7 @@
 
 
 	else if(href_list["diseasepanel_examine"])
-		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+		if(!check_rights(R_ADMIN))
 			return
 
 		var/datum/disease2/disease/D = locate(href_list["diseasepanel_examine"])
@@ -477,7 +477,7 @@
 		popup.open()
 
 	else if(href_list["diseasepanel_toggledb"])
-		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+		if(!check_rights(R_ADMIN))
 			return
 
 		var/datum/disease2/disease/D = locate(href_list["diseasepanel_toggledb"])
@@ -492,7 +492,7 @@
 			C.holder.diseases_panel()
 
 	else if(href_list["diseasepanel_infectedmobs"])
-		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+		if(!check_rights(R_ADMIN))
 			return
 
 		var/datum/disease2/disease/D = locate(href_list["diseasepanel_infectedmobs"])
@@ -524,7 +524,7 @@
 			C.jumptomob(L)
 
 	else if(href_list["diseasepanel_infecteditems"])
-		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+		if(!check_rights(R_ADMIN))
 			return
 
 		var/datum/disease2/disease/D = locate(href_list["diseasepanel_infecteditems"])
@@ -555,7 +555,7 @@
 		O.forceMove(get_turf(I))
 
 	else if(href_list["diseasepanel_dishes"])
-		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+		if(!check_rights(R_ADMIN))
 			return
 
 		var/datum/disease2/disease/D = locate(href_list["diseasepanel_dishes"])
@@ -4213,7 +4213,7 @@
 				if(!admin_log.len)
 					dat += "No-one has done anything this round!"
 				usr << browse(dat, "window=admin_log")
-		
+
 		if (usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsadmin"]]")
 
