@@ -14,7 +14,7 @@
             if(!istype(node))
                 continue
 
-            if(node.d2 == 0)
+            if(node.d1 == 0)
                 continue
 
             . += node
