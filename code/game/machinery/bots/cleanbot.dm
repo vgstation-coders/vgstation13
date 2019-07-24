@@ -46,6 +46,7 @@
 	var/next_dest_loc
 
 	var/coolingdown = FALSE
+	var/attackcooldown = 1 SECONDS // for admin cancer
 
 	can_take_pai = TRUE
 
@@ -387,8 +388,8 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 
 /obj/machinery/bot/cleanbot/proc/attack_cooldown()
 	coolingdown = TRUE
-	spawn(1 SECONDS)
-	coolingdown = FALSE
+	spawn(attackcooldown)
+		coolingdown = FALSE
 
 /obj/machinery/bot/cleanbot/roomba/proc/annoy(var/mob/living/L)
 	if(coolingdown == FALSE)
