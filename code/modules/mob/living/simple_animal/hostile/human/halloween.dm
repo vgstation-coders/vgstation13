@@ -493,7 +493,7 @@
 		var/obj/structure/cable/C = target
 		if(latched && locked_to && locked_to == C)
 			if(istype(net) && cell.percent() < 100)
-				var/drained = min(rand(500,1500), C.avail())
+				var/drained = min(rand(500,1500), C.excess())
 				C.add_load(drained)
 				cell.give(drained/10)
 			else

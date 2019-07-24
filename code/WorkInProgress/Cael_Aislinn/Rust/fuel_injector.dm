@@ -71,7 +71,7 @@
 		else
 			inject()
 
-	cached_power_avail = avail()
+	cached_power_avail = excess()
 
 /obj/machinery/power/rust_fuel_injector/wrenchAnchor(var/mob/user)
 	if(injecting)

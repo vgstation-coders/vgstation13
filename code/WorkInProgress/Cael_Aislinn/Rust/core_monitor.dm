@@ -27,7 +27,7 @@
 			<b><span style='color: red'>ERROR: Device unresponsive</b><span>
 			"}
 		else
-			var/power_color = (linked_core.avail() < linked_core.active_power_usage ? "orange" : "green")
+			var/power_color = (linked_core.excess() < linked_core.active_power_usage ? "orange" : "green")
 			. += {"
 			<b>Device power status: </b><span style='color: [power_color]'>[linked_core.avail()]/[linked_core.active_power_usage] W</span><br>
 			<b>Device field status: </b><span style='color: [linked_core.owned_field ? "green" : "red"]'>[linked_core.owned_field ? "enabled" : "disabled"]</span><hr>
@@ -74,7 +74,7 @@
 	if(linked_core.stat & BROKEN)
 		return
 
-	if(linked_core.avail() < linked_core.idle_power_usage)
+	if(linked_core.excess() < linked_core.idle_power_usage)
 		return
 
 	. = 1

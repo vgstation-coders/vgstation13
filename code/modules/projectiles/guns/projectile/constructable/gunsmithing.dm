@@ -844,13 +844,13 @@
 			to_chat(user, "<span class='notice'>\The [src.name] is full.</span>")
 			disconnect_capacitor()
 			return
-		if(avail() > 0)
+		if(excess() > 0)
 			power_machines.Add(src)
 			charging = 1
 			src.visible_message("<span class='notice'>\The [src.name] hums quietly.</span>")
 			return 1
 		else
-			src.visible_message("<span class='warning'>\The [src.name] buzzes. There doesn't seem to be any power in the wire.</span>","<span class='warning'>You hear a buzz.</span>")
+			src.visible_message("<span class='warning'>\The [src.name] buzzes. There doesn't seem to be any excess power in the wire.</span>","<span class='warning'>You hear a buzz.</span>")
 			disconnect_capacitor()
 			return 0
 	else
@@ -859,13 +859,13 @@
 		return 0
 
 /obj/machinery/power/secured_capacitor/process()
-	if(avail() <= 0)
+	if(excess() <= 0)
 		power_machines.Remove(src)
 		charging = 0
 		return attempt_connect()
 
 	if(power_states.len < 10)
-		power_states += avail()
+		power_states += excess()
 
 	var/total = 0
 	for(var/i = 1; i <= power_states.len; i++)

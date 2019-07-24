@@ -115,7 +115,7 @@ var/global/list/battery_online =	list(
 	var/_chargedisplay = chargedisplay()
 
 	// Input
-	var/excess = surplus()
+	var/excess = excess()
 
 	if (charging)
 		// Manual charge mode is the 'old' mode, when batteries only charge when available power is higher than set charge level
@@ -189,7 +189,7 @@ var/global/list/battery_online =	list(
 	data["outputMax"] = max_output
 	data["outputLoad"] = round(loaddemand)
 	data["hasInput"] = get_terminal() ? 1 : 0;
-	data["hasOutput"] = powernet ? 1 : 0; PAULTODO
+	data["hasOutput"] = load() ? 1 : 0; //are we supplying anything?
 
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)

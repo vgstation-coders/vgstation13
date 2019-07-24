@@ -72,7 +72,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	if(charge >= 2*GIGAWATT)
 		charge = min(charge, 2*GIGAWATT)
 		return //We can't get more charged than this!
-	if(avail()>consumption)
+	if(excess()>consumption)
 		charged_last_tick = 1
 		charge += consumption
 		add_load(consumption)

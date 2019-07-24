@@ -25,9 +25,7 @@
 
 // make sure we can draw power from the powernet
 /obj/machinery/power/solar/panel/tracker/process()
-	var/avail = surplus()
-
-	if(avail > 500)
+	if(excess() > 500)
 		add_load(500)
 		stat &= ~NOPOWER
 	else

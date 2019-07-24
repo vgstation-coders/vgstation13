@@ -702,7 +702,7 @@
 		return
 	var/powered = 1
 
-	if(surplus() < active_power_usage)
+	if(excess() < active_power_usage)
 		powered = 0
 
 	if(powered && stat & NOPOWER)

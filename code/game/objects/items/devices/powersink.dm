@@ -111,7 +111,7 @@
 
 		// found a powernet, so drain up to max power from it
 
-		var/drained = min ( drain_rate, attached.avail() )
+		var/drained = min ( drain_rate, attached.excess() )
 		attached.add_load(drained)
 		power_drained += drained
 

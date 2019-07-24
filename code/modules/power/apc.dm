@@ -1101,7 +1101,7 @@
 	var/last_en = environ
 	var/last_ch = charging
 
-	var/excess = surplus()
+	var/excess = excess()
 
 	if(!src.avail())
 		main_status = 0

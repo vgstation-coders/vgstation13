@@ -15,7 +15,7 @@
 			Triggered(0, "NOCABLE", 0)
 		return
 
-	if(cable.avail() < power_load) //Cannot drain enough power
+	if(cable.excess() < power_load) //Cannot drain enough power
 		if(my_effect.activated)
 			Triggered(0, "NOTENOUGHELECTRICITY", 0)
 		return
