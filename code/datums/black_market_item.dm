@@ -258,7 +258,7 @@ for anyone but the person committing mass murder.
 	name = "Potion of Levitation"
 	desc = "Potions come in many shapes and sizes, but this one makes you float! Why? Because it looks fucking cool. Maybe you can convince somebody you're the fourth coming of Jesus."
 	item = /obj/item/potion/levitation
-	sps_chances = list(0,0,100)
+	sps_chances = list(0,0,5)
 	delivery_available = list(0, 1, 1)
 	stock_min = 2
 	stock_max = 4
