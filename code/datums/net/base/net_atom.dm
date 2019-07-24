@@ -20,18 +20,23 @@
 	return node
 
 /atom/proc/getNode(var/nodetype)
-	PAULTODO
+	var/list/nodes = getNodes(nodetype)
+	while(nodes.len)
+		var/node = nodes[nodes.len--]
+		if(istype(node, nodetype))
+			return node
+	return null
 
 /atom/proc/getNodes(var/nodetype)
-	PAULTODO
-
-//change this to getNode(/datum/net_node/power) (almost) everywhere
-//atom/proc/get_power_node()
+	. = list()
+	for(var/node in net_nodes)
+		if(istype(node, nodetype))
+			. += node
 	
 /atom/proc/get_powernet()
-	var/datum/net_node/power/node = get_power_node()
+	var/datum/net_node/power/node = getNode(/datum/net_node/power)
 	if(!istype(node))
-		return 0
+		return null
 	if(istype(node.net, /datum/net/power))
 		return node.net
 

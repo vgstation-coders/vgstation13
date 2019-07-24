@@ -344,7 +344,7 @@
 
 	if(!T)
 		return
-	var/datum/net_node/power/node = get_power_node()
+	var/datum/net_node/power/node = getNode(/datum/net_node/power)
 	var/datum/net/power/net = get_powernet()
 	if(!istype(node) ||!istype(net))
 		power = 0

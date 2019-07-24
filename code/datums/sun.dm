@@ -34,7 +34,7 @@ var/global/datum/sun/sun
 	if(angle != lastAngle)
 		var/obj/machinery/power/solar/panel/tracker/T
 		for(T in solars_list)
-			var/datum/net_node/power/node = t.getNode(/datum/net_node/power)
+			var/datum/net_node/power/node = T.getNode(/datum/net_node/power)
 			if(!node.is_powered())
 				continue
 

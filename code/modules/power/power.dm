@@ -69,12 +69,12 @@
 
 // common helper procs for all power machines
 /obj/machinery/power/proc/add_avail(var/amount)
-	var/datum/net_node/power/node = get_power_node()
+	var/datum/net_node/power/node = getNode(/datum/net_node/power)
 	if(istype(node))
 		node.powerNeeded += amount
 
 /obj/machinery/power/proc/add_load(var/amount)
-	var/datum/net_node/power/node = get_power_node()
+	var/datum/net_node/power/node = getNode(/datum/net_node/power)
 	if(istype(node))
 		node.powerNeeded -= amount
 

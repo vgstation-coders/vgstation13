@@ -111,7 +111,7 @@ PAULTODO
 
     if(istype(power_source, /obj/structure/cable))
         var/obj/structure/cable/Cable = power_source
-        var/datum/net_node/power/cable/node = Cable.get_power_node()
+        var/datum/net_node/power/cable/node = Cable.getNode(/datum/net_node/power/cable)
         power_source = node.net
 
     var/datum/net/power/net
