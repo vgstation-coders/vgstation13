@@ -219,11 +219,7 @@
 	var/turf/T = get_turf(src)
 	var/obj/structure/cable/C = locate() in T
 	if(istype(C))
-		if(electrocute_mob(user, C, src, siemens_coeff))
-			spark(src)
-			return 1
-		else
-			return 0
+		return C.shock(user, 100, siemens_coefficient)
 	return 0
 
 /obj/structure/grille/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)

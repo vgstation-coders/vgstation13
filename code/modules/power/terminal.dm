@@ -79,8 +79,7 @@
 
 		//Shock chance
 		var/obj/structure/cable/N = locate() in T
-		if (prob(50) && electrocute_mob(user, N, N))
-			spark(src, 5)
+		if(istype(N) &&	N.shock(user, 50))
 			return 0
 
 		finalise_terminal(get_turf(user))
