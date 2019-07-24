@@ -179,10 +179,8 @@
 		if(Adir in cardinal)
 			var/result = isViableGrow(T)
 			if(result & CANGROW)
-				to_chat(world, "cangrow [dir2text(Adir)]")
 				growdirs |= Adir
 			if(result & CANZAP)
-				to_chat(world, "canzap [dir2text(Adir)]")
 				zapdirs |= Adir
 			if(!result)
 				growdirs &= ~Adir
