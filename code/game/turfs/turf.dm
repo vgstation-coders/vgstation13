@@ -340,6 +340,7 @@
 	var/old_affecting_lights = affecting_lights
 	var/old_lighting_overlay = lighting_overlay
 	var/old_corners = corners
+	var/old_density = density
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -425,6 +426,8 @@
 
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.
+	if(density != old_density)
+		densityChanged()
 
 /turf/proc/AddDecal(const/image/decal)
 	if(!turfdecals)
@@ -477,7 +480,7 @@
 	holy = 1
 	..()
 	new /obj/effect/overlay/holywaterpuddle(src)
-	
+
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs
 // Used for A-star pathfinding

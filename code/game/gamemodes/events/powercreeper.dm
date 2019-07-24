@@ -78,11 +78,13 @@
 		if(growdirs)
 			var/grow_chance = Clamp(MIN_SPREAD_CHANCE + (powernet.avail / 1000), MIN_SPREAD_CHANCE, MAX_SPREAD_CHANCE)
 			if(prob(grow_chance))
-				var/chosen_dir = pick(cardinal)
-				if(growdirs & chosen_dir)
-					var/turf/target_turf = get_step(src, chosen_dir)
-					if(isViableGrow(target_turf))
-						new /obj/structure/cable/powercreeper(target_turf, get_dir(src, target_turf))
+				for(var/chosen_dir in cardinal)
+					if(growdirs & chosen_dir)
+						var/turf/target_turf = get_step(src, chosen_dir)
+						if(isViableGrow(target_turf))
+							new /obj/structure/cable/powercreeper(target_turf, get_dir(src, target_turf))
+						else
+							growdirs &= ~chosen_dir
 
 /obj/structure/cable/powercreeper/Crossed(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	.=..()
@@ -119,23 +121,50 @@
 
 /obj/structure/cable/powercreeper/proc/isViableGrow(var/turf/T)
 	if(!T.has_gravity())
+		to_chat(world, "[src] tried to cross into [T], but has no gravity")
 		return 0
 	if(!T.Adjacent(src))
+		to_chat(world, "[src] tried to cross into [T], but wasn't adjacent")
 		return 0
-	if(locate(/obj/structure/cable/powercreeper) in T)
+	var/obj/structure/cable/powercreeper/PC = locate(/obj/structure/cable/powercreeper) in T
+	if(PC && PC != src)
+		to_chat(world, "[src] tried to cross into [T], but found a powercreeper there already")
 		return 0
 	if((T.density == 1) || T.has_dense_content())
+		to_chat(world, "[src] tried to cross into [T], but T was dense or had dense content [T.density] [T.has_dense_content()]")
 		return 0
 	return 1
 
 /obj/structure/cable/powercreeper/proc/updateNeighbours(var/dying = FALSE)
 	for(var/dir in cardinal)
-		var/obj/structure/cable/powercreeper/P = locate() in get_step(src, dir)
+		var/turf/T = get_step(src, dir)
+		var/obj/structure/cable/powercreeper/P = locate() in T
 		if(P)
 			if(dying)
 				P.growdirs |= get_dir(P, src)
 			else
 				P.growdirs &= ~get_dir(P, src)
+		var/area/A = get_area(T)
+		if(A)
+			if(dying)
+				A.on_turf_density_change.Remove(src)
+			else
+				A.on_turf_density_change.Add(src, "proxDensityChange")
+
+/obj/structure/cable/powercreeper/proc/proxDensityChange(var/list/args)
+	var/atom/A = args["atom"]
+	var/turf/T = get_turf(A)
+
+	if(get_dist(T, src) >= 1)
+		var/Adir = get_dir(src, T)
+		if(Adir in cardinal)
+			if(!isViableGrow(T))
+				growdirs &= ~Adir
+				to_chat(world, "[Adir] removed from [src]")
+			else
+				growdirs |= Adir
+				to_chat(world, "[Adir] added to [src]")
+
 
 /obj/structure/cable/powercreeper/get_connections(powernetless_only = 0)
 	. = list()
