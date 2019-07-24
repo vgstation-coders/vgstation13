@@ -79,7 +79,7 @@
 			if(!vials[i])
 				vials[i] = vial
 				vial_valid[i] = vial_has_antibodies(vial)
-				visible_message("<span class='notice'>\The [user] adds \the [vial] to \the [src].</span>","<span class='notice'>You add \the [vial] to \the [src].</span>")
+				user.visible_message("<span class='notice'>\The [user] adds \the [vial] to \the [src].</span>","<span class='notice'>You add \the [vial] to \the [src].</span>")
 				playsound(loc, 'sound/machines/click.ogg', 50, 1)
 				user.drop_item(vial, loc, 1)
 				vial.forceMove(src)
@@ -339,7 +339,7 @@
 				if (!vials[i])
 					vials[i] = vial
 					vial_valid[i] = vial_has_antibodies(vial)
-					visible_message("<span class='notice'>\The [user] adds \the [vial] to \the [src].</span>","<span class='notice'>You add \the [vial] to \the [src].</span>")
+					user.visible_message("<span class='notice'>\The [user] adds \the [vial] to \the [src].</span>","<span class='notice'>You add \the [vial] to \the [src].</span>")
 					playsound(loc, 'sound/machines/click.ogg', 50, 1)
 					user.drop_item(vial, loc, 1)
 					vial.forceMove(src)

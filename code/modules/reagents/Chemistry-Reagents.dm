@@ -1,13 +1,3 @@
-#define REAGENT_STATE_SOLID 1
-#define REAGENT_STATE_LIQUID 2
-#define REAGENT_STATE_GAS 3
-#define FOOD_METABOLISM 0.4
-#define REAGENTS_OVERDOSE 30
-#define REM REAGENTS_EFFECT_MULTIPLIER
-
-// Use in chem.flags.
-#define CHEMFLAG_DISHONORABLE 1
-
 /*	The reaction procs must ALWAYS set src = null, this detaches the proc from the object (the reagent)
 	so that it can continue working when the reagent is deleted while the proc is still active.
 
@@ -1441,9 +1431,6 @@
 			H.emote(pick("stare", "giggle"), null, null, TRUE)
 		if(prob(5))
 			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
-		if(prob(2))
-			to_chat(H, "<span class='notice'>You doze off for a second.</span>")
-			H.sleeping += 1
 		..()
 
 /datum/reagent/sacid
@@ -3910,6 +3897,7 @@
 	id = BLACKCOLOR
 	description = "A black coloring used to dye food and drinks."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_OBSCURING
 	color = "#000000" //rgb: 0, 0, 0
 
 /datum/reagent/frostoil
@@ -5763,6 +5751,14 @@
 				M.dizziness = max(0, M.dizziness - 15)
 			if(M.confused != 0)
 				M.confused = max(0, M.confused - 5)
+
+/datum/reagent/ethanol/deadrum/glasgow
+	name = "Glasgow Deadrum"
+	id = GLASGOW
+	description = "Makes you feel like you had one hell of a party."
+	color = "#662D1D" //rgb: 101, 44, 29
+	slur_start = 1
+	confused_start = 1
 
 /datum/reagent/ethanol/deadrum/tequila
 	name = "Tequila"

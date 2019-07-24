@@ -15,6 +15,8 @@
 	var/status = 0
 	var/obj/item/weapon/cell/bcell = null
 	var/hitcost = 100 // 10 hits on crap cell
+	var/stunsound = 'sound/weapons/Egloves.ogg'
+	var/swingsound = "swing_hit"
 
 /obj/item/weapon/melee/baton/get_cell()
 	return bcell
@@ -166,7 +168,7 @@
 
 	if(user.a_intent == I_HURT) // Harm intent : possibility to miss (in exchange for doing actual damage)
 		. = ..() // Does the actual damage and missing chance. Returns null on sucess ; 0 on failure (blame oldcoders)
-		playsound(loc, "swing_hit", 50, 1, -1)
+		playsound(loc, swingsound, 50, 1, -1)
 
 	else
 		if(!status) // Help intent + no charge = nothing
@@ -185,7 +187,7 @@
 		L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
 			"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
 			self_drugged_message="<span class='userdanger'>\The [user]'s [src] sucks the life right out of you!</span>")
-		playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+		playsound(loc, stunsound, 50, 1, -1)
 
 		deductcharge(hitcost)
 
@@ -216,7 +218,7 @@
 	L.apply_effect(STUTTER, stunforce)
 
 	L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
-	playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+	playsound(loc, stunsound, 50, 1, -1)
 
 	deductcharge(hitcost)
 

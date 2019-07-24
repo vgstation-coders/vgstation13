@@ -1425,7 +1425,7 @@ Thanks.
 		for (var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]
 			if (D.spread & SPREAD_BLOOD)
-				M.infect_disease2(D,1,"(Butchered, from [src])")
+				M.infect_disease2(D,1,"(Butchered, from [src])",0)
 
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 

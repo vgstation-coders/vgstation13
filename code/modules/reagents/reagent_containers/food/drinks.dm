@@ -33,10 +33,6 @@
 		gulp_size = 5
 	else
 		gulp_size = max(round(reagents.total_volume / 5), 5)
-	if(reagents.has_reagent(BLACKCOLOR))
-		viewcontents = 0
-	else
-		viewcontents = 1
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/try_consume(mob/user)
 	if(!is_open_container())
@@ -218,13 +214,7 @@
 	transfer(target, user, can_send = TRUE, can_receive = FALSE)
 
 /obj/item/weapon/reagent_containers/food/drinks/examine(mob/user)
-
-	if(viewcontents)
-		..()
-	else
-		to_chat(user, "[bicon(src)] That's \a [src].")
-		to_chat(user, desc)
-		to_chat(user, "<span class='info'>You can't quite make out its content!</span>")
+	..()
 
 	if(!reagents || reagents.total_volume == 0)
 		to_chat(user, "<span class='info'>\The [src] is empty!</span>")
