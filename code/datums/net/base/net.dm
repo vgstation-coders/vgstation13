@@ -15,7 +15,12 @@
 
 //adds a node to the net
 /datum/net/proc/add_node(var/datum/net_node/node)
-    if(!is_type_in_list(node, node_types))
+    var/correct_type = 0
+    for(var/type in node_types)
+        if(istype(node, type))
+            correct_type = 1
+            break
+    if(!correct_type)
         return 0
 
     if(!istype(src, node.netType))
@@ -63,7 +68,6 @@
         return n1
 
     if(n1.type != n2.type)
-        message_admins("type mismatch in merge_nets: \ref[n1]([n1.type]) != \ref[n2]([n2.type])")
         return null
 
     var/datum/net/rnet

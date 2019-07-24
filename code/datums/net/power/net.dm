@@ -14,7 +14,8 @@
 
 //merges with another net
 /datum/net/power/absorb_net(var/datum/net/power/other_net)
-    if(!..())
+    . = ..()
+    if(!.)
         return 0
     
     load += other_net.load
@@ -75,6 +76,7 @@
 
 // rebuild all power networks from scratch - only called at world creation or by the admin verb
 /proc/makepowernets()
+    var/start = world.timeofday
     var/list/new_nets = list()
     for(var/datum/net_node/power/cable/cable in cable_nodes)
         if(!istype(cable))
@@ -83,6 +85,7 @@
             var/datum/net/power/new_net = new /datum/net/power()
             cable.propagate(new_net)
             new_nets += new_net
+    world.log << "POWER: Finished making powernets in [altFormatTimeDuration(world.timeofday-start)]"
 
 // determines how strong could be shock, deals damage to mob, uses power.
 // M is a mob who touched wire/whatever
