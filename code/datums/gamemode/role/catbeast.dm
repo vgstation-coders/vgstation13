@@ -146,12 +146,12 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 		to_chat(antag.current,"<span class='notice'>You have defiled [A.name] with your presence.")
 	switch(current_disease_tier)
 		if(2)
-			if((areas_defiled.len >= AREAS_THRESHOLD_TIER3) && ticks_survived > (TICKS_THRESHOLD_TIER3)/2 SECONDS)) // 2 SECONDS is /datum/subsystem/ticker/wait
+			if((areas_defiled.len >= AREAS_THRESHOLD_TIER3) && ticks_survived > (TICKS_THRESHOLD_TIER3/SS_WAIT_TICKER))
 				infect_catbeast_tier3(antag.current)
 				to_chat(antag.current, "<span class='danger'>You feel very sick!</span>")
 				current_disease_tier = 3
 		if(1)
-			if((areas_defiled.len >= AREAS_THRESHOLD_TIER2) && ticks_survived > (TICKS_THRESHOLD_TIER2)/2 SECONDS)) // 2 SECONDS is /datum/subsystem/ticker/wait
+			if((areas_defiled.len >= AREAS_THRESHOLD_TIER2) && ticks_survived > (TICKS_THRESHOLD_TIER2/SS_WAIT_TICKER))
 				infect_catbeast_tier2(antag.current)
 				to_chat(antag.current, "<span class='danger'>You feel sick!</span>")
 				current_disease_tier = 2

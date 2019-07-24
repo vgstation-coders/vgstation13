@@ -4,7 +4,7 @@ var/datum/subsystem/ticker/SSticker
 /datum/subsystem/ticker
 	name          = "Ticker"
 	init_order    = SS_INIT_TICKER
-	wait          = 2 SECONDS
+	wait          = SS_WAIT_TICKER
 	flags         = SS_KEEP_TIMING
 	priority      = SS_PRIORITY_TICKER
 	display_order = SS_DISPLAY_TICKER
