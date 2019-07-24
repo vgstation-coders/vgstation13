@@ -164,7 +164,7 @@
 	
 /obj/item/device/illegalradio/proc/generate_delivery_menu(mob/user, var/datum/black_market_item/item)
 	var/dat = list()
-	dat += "<B><font size=5>"The Black Market"</font></B><BR>"
+	dat += "<B><font size=5>The Black Market</font></B><BR>"
 	dat += "<B>Please pay for an available delivery option.</B><BR>"
 	dat += "<B>You are purchasing the [item.name].</B><BR>"
 	dat += "Cash stored: [src.money_stored]<BR><BR>"
