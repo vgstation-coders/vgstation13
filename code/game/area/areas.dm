@@ -17,7 +17,7 @@ var/area/space_area
 	var/shuttle_can_crush = TRUE
 	var/project_shadows = FALSE
 	var/obj/effect/narration/narrator = null
-	var/event/on_turf_density_change
+
 	flags = 0
 
 /area/New()
@@ -46,8 +46,6 @@ var/area/space_area
 		power_equip = 1
 		power_environ = 1
 
-	on_turf_density_change = new(owner = src)
-
 	..()
 
 //	spawn(15)
@@ -61,8 +59,6 @@ var/area/space_area
 /area/Destroy()
 	..()
 	areaapc = null
-	qdel(on_turf_density_change)
-	on_turf_density_change = null
 
 /*
  * Added to fix mech fabs 05/2013 ~Sayu.

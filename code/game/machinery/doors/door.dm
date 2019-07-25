@@ -250,7 +250,7 @@ var/list/all_doors = list()
 	door_animate("opening")
 	sleep(animation_delay)
 	layer = open_layer
-	setDensity(FALSE)
+	density = 0
 	explosion_resistance = 0
 	update_icon()
 	set_opacity(0)
