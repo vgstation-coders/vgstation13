@@ -67,7 +67,6 @@
 	var/image/viewblock
 
 	var/junction = 0
-
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -119,6 +118,11 @@
 				return 0
 	return 1
 
+/turf/Exited(atom/movable/Obj, atom/newloc)
+	.=..()
+	if(Obj.density)
+		densityChanged()
+
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if (!mover)
 		return 1
@@ -165,7 +169,6 @@
 		inertial_drift(A)
 	else
 		A.inertia_dir = 0
-
 	..()
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
@@ -181,6 +184,8 @@
 		return
 	if (!(src.can_border_transition))
 		return
+	if(A.density)
+		densityChanged()
 	if(ticker && ticker.mode)
 
 		// Okay, so let's make it so that people can travel z levels but not nuke disks!
@@ -340,6 +345,7 @@
 	var/old_affecting_lights = affecting_lights
 	var/old_lighting_overlay = lighting_overlay
 	var/old_corners = corners
+	var/old_density = density
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -425,6 +431,8 @@
 
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.
+	if(density != old_density)
+		densityChanged()
 
 /turf/proc/AddDecal(const/image/decal)
 	if(!turfdecals)
@@ -477,7 +485,7 @@
 	holy = 1
 	..()
 	new /obj/effect/overlay/holywaterpuddle(src)
-	
+
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs
 // Used for A-star pathfinding
