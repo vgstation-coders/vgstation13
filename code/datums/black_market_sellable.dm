@@ -52,7 +52,7 @@ var/list/black_market_sellables = list()
 	
 /datum/black_market_sellable/proc/is_active()
 	if(!active_this_round_calculated)
-		if(prob(display_chance))
+		if(prob(100)) //display_chance
 			active_this_round = 1
 		active_this_round_calculated = 1
 	. = active_this_round
@@ -159,24 +159,68 @@ var/list/black_market_sellables = list()
 	sps_chance = 5
 	display_chance = 80
 	
+/datum/black_market_sellable/weapons/dermal
+	name = "Dermal Armour Patch"
+	item = /obj/item/clothing/head/helmet/tactical/HoS/dermal
+	no_children = 1
+	demand_min = 1
+	demand_max = 1
+	price_min = 300
+	price_max = 350
+	sps_chance = 30
+	display_chance = 40	
 	
 	
 	
 /datum/black_market_sellable/machinery
-	category = "Machinery and Metalworks"
+	category = "Machinery and Technology"
 	
+/datum/black_market_sellable/machinery/janicart
+	name = "Nanotrasen-Brand Janicart"
+	item = /obj/structure/bed/chair/vehicle/janicart
+	no_children = 1
+	desc = "Don't need the key or anything."
+	demand_min = 1
+	demand_max = 1
+	price_min = 300
+	price_max = 350
+	sps_chance = 35
+	display_chance = 35
+
 /datum/black_market_sellable/machinery/plasmaminer
 	name = "Plasma Gas Miner"
 	item = /obj/machinery/atmospherics/miner/toxins
 	no_children = 1
-	desc = "Used to siphon plasma from a gas giant."
 	demand_min = 1
 	demand_max = 1
 	price_min = 250
 	price_max = 300
 	sps_chance = 20
 	display_chance = 30
+	
+/datum/black_market_sellable/machinery/sleepingminer
+	name = "N2O Gas Miner"
+	item = /obj/machinery/atmospherics/miner/sleeping_agent
+	no_children = 1
+	demand_min = 1
+	demand_max = 1
+	price_min = 125
+	price_max = 175
+	sps_chance = 10
+	display_chance = 30
+	
+/datum/black_market_sellable/machinery/planningframe
+	name = "AI Law Module Planning Frame"
+	item = /obj/item/weapon/planning_frame
+	no_children = 1
+	demand_min = 1
+	demand_max = 1
+	price_min = 200
+	price_max = 300
+	sps_chance = 40
+	display_chance = 45	
 
+	
 	
 
 /datum/black_market_sellable/animals
@@ -185,7 +229,7 @@ var/list/black_market_sellables = list()
 /datum/black_market_sellable/animals/slime
 	name = "? Slime"
 	item = /mob/living/carbon/slime/adult
-	no_children = 1
+	no_children = 0
 	desc = "Slime must be an adult."
 	demand_min = 1
 	demand_max = 3
@@ -263,6 +307,18 @@ var/list/black_market_sellables = list()
 	sps_chance = 0
 	display_chance = 35
 	teleport_modifier = 3
+	
+/datum/black_market_sellable/animals/punpun
+	name = "Punpun the Monkey"
+	item = /mob/living/carbon/monkey/punpun
+	no_children = 1
+	demand_min = 1
+	demand_max = 1	
+	price_min = 50
+	price_max = 100
+	sps_chance = 5
+	display_chance = 35
+	teleport_modifier = 2
 
 /datum/black_market_sellable/animals/poly
 	name = "Poly the Parrot"
@@ -274,7 +330,7 @@ var/list/black_market_sellables = list()
 	price_max = 300
 	sps_chance = 15
 	display_chance = 35
-	teleport_modifier = 3
+	teleport_modifier = 2
 		
 /datum/black_market_sellable/animals/corpus
 	name = "Corpus the Snake"
@@ -287,7 +343,7 @@ var/list/black_market_sellables = list()
 	price_max = 200
 	sps_chance = 15
 	display_chance = 35
-	teleport_modifier = 3
+	teleport_modifier = 2
 	
 /datum/black_market_sellable/animals/runtime
 	name = "Runtime the Cat"
@@ -299,7 +355,7 @@ var/list/black_market_sellables = list()
 	price_max = 200
 	sps_chance = 15
 	display_chance = 35
-	teleport_modifier = 3	
+	teleport_modifier = 2	
 
 /datum/black_market_sellable/animals/salem
 	name = "Salem the Neglected Cat"
@@ -311,7 +367,7 @@ var/list/black_market_sellables = list()
 	price_max = 150
 	sps_chance = 15
 	display_chance = 35
-	teleport_modifier = 3		
+	teleport_modifier = 2		
 
 	
 	
@@ -366,33 +422,10 @@ var/list/black_market_sellables = list()
 	item = /obj/structure/poutineocean	
 	no_children = 1
 	demand_min = 1
-<<<<<<< HEAD
 	demand_max = 1
 	price_min = 700
 	price_max = 800
 	sps_chance = 0
 	display_chance = 25
-=======
-	demand_max = 3
-	price_min = 100
-	price_max = 200
-	sps_chance = 100
-	display_chance = 100
-	
-/datum/black_market_sellable/weapons/energy_gun/purchase_check(var/obj/input, var/mob/user)
-	if(istype(input,/obj/item/weapon/gun/energy/))
-		var/obj/item/weapon/gun/energy/gun = input
-		if(gun.power_supply.charge > 0)
-			return VALID
-	return "The energy gun does not have any charge."
-	
-/datum/black_market_sellable/weapons/energy_gun/determine_payout(var/obj/input, var/mob/user)
-	if(istype(input,/obj/item/weapon/gun/energy/))
-		var/obj/item/weapon/gun/energy/gun = input
-		if(gun.power_supply.charge >= gun.power_supply.maxcharge)
-			return get_price()*2
-	return get_price()
-*/
->>>>>>> 8eed5a15e385c6ee488260386c8480d21cb68c65
 
 #undef VALID

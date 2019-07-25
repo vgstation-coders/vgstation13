@@ -222,7 +222,7 @@
 			if(demand > 0)
 				final_text += "[item.name] - [item.get_demand()] wanted for [item.get_price()] credits."
 			else
-				final_text += "<font color='grey'><i>[item.name] - [demand] wanted for [item.get_price()] credits.]</i></font>"
+				final_text += "<font color='grey'><i>[item.name] - [demand] wanted for [item.get_price()] credits.</i></font>"
 			if(item.desc)
 				final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(item.desc)]'><font size=2> \[?\]</font></A>"
 			final_text += "<BR>"
@@ -256,16 +256,10 @@
 		qdel(cash)
 		visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
 		interact(usr)
-<<<<<<< HEAD
-	else
-		if((istype(A, /obj) || istype(A,/mob)))
-			attempt_sell(A,usr)
-=======
 	else if((istype(A, /obj) || istype(A, /mob)) && A.Adjacent(user) && !scanning)
 		scanning = 1
 		attempt_sell(A,usr)
 		scanning = 0
->>>>>>> 8eed5a15e385c6ee488260386c8480d21cb68c65
 			
 /obj/item/device/illegalradio/proc/attempt_sell(var/obj/input, mob/user)	//If statements galore
 	visible_message("The [name] beeps: <span class='warning'>Scanning item...</span>")
@@ -278,21 +272,12 @@
 						continue
 					var/check = sellable.purchase_check(input, user)
 					if(check == "VALID")
-<<<<<<< HEAD
 						visible_message("The uplink beeps: <span class='warning'>Input validated. Please wait for the teleportation process to finish.</warning>")
 						if(do_after(user, input, (nanotrasen_variant ? teleport_time : advanced_teleport_time)*sellable.teleport_modifier))
 							if(sellable.get_demand())
-								var/payout = sellable.get_price()
-								payout += sellable.determine_payout(input, src, payout)
+								var/payout = sellable.determine_payout(input, src, payout)
 								sellable.after_sell(input, user)
 								sellable.reduce_demand()
-=======
-						visible_message("The [name] beeps: <span class='warning'>Input validated. Please wait for the teleportation process to finish.</warning>")
-						if(do_after(user, input, (nanotrasen_variant ? teleport_time : advanced_teleport_time)))
-							if(sellable.get_demand())
-								var/payout = sellable.determine_payout(input, src)
-								sellable.after_sell(input, user)
->>>>>>> 8eed5a15e385c6ee488260386c8480d21cb68c65
 								qdel(input)
 								playsound(src, 'sound/effects/coins.ogg',60, 0)
 								visible_message("The [name] beeps: <span class='warning'> Teleportation successful. A total of [payout] credits has been added to your balance.</span>")
