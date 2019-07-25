@@ -551,6 +551,8 @@
 							origin_text = "Soul captured by [C.conversion[conversion]]"
 						if ("altar")
 							origin_text = "Volunteer shade"
+						if ("sacrifice")
+							origin_text = "Sacrifice"
 						else
 							origin_text = "Founder"
 					var/mob/living/carbon/H = C.antag.current
@@ -696,6 +698,7 @@
 		var/mob/M = usr
 		if(!isobserver(M) || !iscultist(M))
 			return
+		var/mob/dead/observer/O = M
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src
 		if (!istype(blade))
 			to_chat(usr, "<span class='warning'>The blade was removed from \the [src].</span>")
@@ -711,6 +714,9 @@
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
 		M.mind.transfer_to(shadeMob)
+		O.can_reenter_corpse = 1
+		O.reenter_corpse()
+
 		/* Only cultists get brought back this way now, so let's assume they kept their identity.
 		spawn()
 			var/list/shade_names = list("Orenmir","Felthorn","Sparda","Vengeance","Klinge")
@@ -752,6 +758,18 @@
 			new_shade.forceMove(blade)
 			blade.update_icon()
 			blade = null
+
+			if (!iscultist(new_shade))
+				var/datum/role/cultist/newCultist = new
+				newCultist.AssignToRole(new_shade.mind,1)
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				if (!cult)
+					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+				cult.HandleRecruitedRole(newCultist)
+				newCultist.OnPostSetup()
+				newCultist.Greet(GREET_SACRIFICE)
+				newCultist.conversion.Add("sacrifice")
+
 			new_shade.status_flags |= GODMODE
 			new_shade.canmove = 0
 			new_shade.name = "[M.real_name] the Shade"

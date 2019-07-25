@@ -72,6 +72,12 @@ var/list/role_wiki=list(
 	ROLE_MINOR				= "Minor_Roles",
 )
 
+var/list/special_popup_text2num = list(
+	"Only use chat" = SPECIAL_POPUP_DISABLED,
+	"Only use special" = SPECIAL_POPUP_EXCLUSIVE,
+	"Use both chat and special" = SPECIAL_POPUP_USE_BOTH,
+)
+
 var/const/MAX_SAVE_SLOTS = 8
 
 #define POLLED_LIMIT	100
@@ -105,7 +111,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/space_parallax = 1
 	var/space_dust = 1
 	var/parallax_speed = 2
-	var/special_popup = 0
+	var/special_popup = SPECIAL_POPUP_DISABLED
 	var/tooltips = 1
 	var/stumble = 0						//whether the player pauses after their first step
 	var/hear_voicesound = 0				//Whether the player hears noises when somebody speaks.
@@ -389,7 +395,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Show Tooltips:</b>
 	<a href='?_src_=prefs;preference=tooltips'><b>[(tooltips) ? "Yes" : "No"]</b></a><br>
 	<b>Adminhelp Special Tab:</b>
-	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
+	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup_text2num[special_popup+1]]</b></a><br>
 	<b>Attack Animations:<b>
 	<a href='?_src_=prefs;preference=attack_animation'><b>[attack_animation ? (attack_animation == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
 	<b>Show Credits <span title='&#39;No Reruns&#39; will roll credits only if an admin customized something about this round&#39;s credits, or if a rare and exclusive episode name was selected thanks to something uncommon happening that round.'>(?):</span><b>
@@ -1334,7 +1340,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					be_random_body = !be_random_body
 
 				if("special_popup")
-					special_popup = !special_popup
+					var/choice = input(user, "Set your special tab preferences:", "Settings") as null|anything in special_popup_text2num
+					if(!isnull(choice))
+						special_popup = special_popup_text2num[choice]
 
 				if("randomslot")
 					randomslot = !randomslot

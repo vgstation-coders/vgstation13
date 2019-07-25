@@ -133,7 +133,7 @@
 		if(slot_wear_mask)
 			return wear_mask
 		if(slot_handcuffed)
-			return handcuffed
+			return handcuffed || mutual_handcuffs
 		if(slot_legcuffed)
 			return legcuffed
 		if(slot_belt)
@@ -332,6 +332,13 @@
 		success = 1
 		slot = slot_handcuffed
 		update_inv_handcuffed()
+	else if (W == mutual_handcuffs)
+		if(mutual_handcuffs.on_restraint_removal(src)) //If this returns 1, then the unquipping action was interrupted
+			return 0
+		mutual_handcuffs = null
+		success = 1
+		slot = slot_handcuffed
+		update_inv_mutual_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1
@@ -428,8 +435,13 @@
 			src.wear_mask = W
 			update_inv_wear_mask(redraw_mob)
 		if(slot_handcuffed)
-			src.handcuffed = W
-			update_inv_handcuffed(redraw_mob)
+			var/obj/item/weapon/handcuffs/cuffs = W
+			if (istype(cuffs) && cuffs.mutual_handcuffed_mobs.len) //if those are regular cuffs, and there are mobs cuffed to each other, do the mutual handcuff logic
+				src.mutual_handcuffs = cuffs
+				update_inv_mutual_handcuffed(redraw_mob)
+			else 
+				src.handcuffed = cuffs
+				update_inv_handcuffed(redraw_mob)
 		if(slot_legcuffed)
 			src.legcuffed = W
 			update_inv_legcuffed(redraw_mob)

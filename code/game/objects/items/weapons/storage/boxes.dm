@@ -23,8 +23,9 @@
 	name = "box"
 	desc = "It's just an ordinary box."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box"
-	item_state = "syringe_kit"
+	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
@@ -67,6 +68,7 @@
 	name = "survival equipment box"
 	desc = "Makes braving the hazards of space a little bit easier."
 	icon_state = "box_emergency"
+	item_state = "box_emergency"
 
 /obj/item/weapon/storage/box/survival/New()
 	..()
@@ -76,6 +78,7 @@
 
 /obj/item/weapon/storage/box/survival/vox
 	icon_state = "box_vox"
+	item_state = "box_vox"
 
 /obj/item/weapon/storage/box/survival/vox/New()
 	..()
@@ -87,6 +90,7 @@
 
 /obj/item/weapon/storage/box/survival/engineer
 	icon_state = "box_eva"
+	item_state = "box_eva"
 
 /obj/item/weapon/storage/box/survival/engineer/New()
 	..()
@@ -107,10 +111,24 @@
 	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
+/obj/item/weapon/storage/box/survival/nuke
+	icon_state = "box_nuke"
+
+/obj/item/weapon/storage/box/survival/nuke/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	new /obj/item/clothing/mask/gas/syndicate(src)
+	new /obj/item/weapon/tank/emergency_oxygen/double(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	new /obj/item/weapon/reagent_containers/pill/cyanide(src) //For those who hate fun
+	new /obj/item/weapon/reagent_containers/pill/laststand(src) //HOOOOOO HOOHOHOHOHOHO - N3X
+
 /obj/item/weapon/storage/box/priority_care
 	name = "priority care parcel"
 	desc = "A small parcel of miscellaneous junk Nanotrasen hands out to their most requested employees."
 	icon_state = "nt"
+	item_state = "nt"
 
 /obj/item/weapon/storage/box/priority_care/New()
 	..()
@@ -134,6 +152,23 @@
 			25;/obj/item/weapon/reagent_containers/food/drinks/thermos/full
 		)
 		new toSpawn(src)
+
+/obj/item/weapon/storage/box/byond
+	name = "\improper BYOND support package"
+	desc = "A small box containing a branded trinket that the BYOND corporation sends to people that actually send them money."
+	icon_state = "byond"
+	item_state = "byond"
+	storage_slots = 1 //not very useful for storage
+	foldable = /obj/item/trash/byond_box //no free cardboard
+
+/obj/item/weapon/storage/box/byond/New()
+	..()
+	var/obj/item/gibsmedat = pick(
+		/obj/item/weapon/thermometer/byond,
+		/obj/item/clothing/accessory/medal/byond,
+		/obj/item/toy/syndicateballoon/byondballoon,
+	)
+	new gibsmedat(src)
 
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
@@ -180,6 +215,7 @@
 	name = "syringes"
 	desc = "A box containing syringes. A reminder label warns of syringes becoming potential biohazards when not properly sanitized."
 	icon_state = "syringe"
+	item_state = "syringe"
 
 /obj/item/weapon/storage/box/syringes/New()
 	..()
@@ -190,6 +226,7 @@
 /obj/item/weapon/storage/box/beakers
 	name = "beaker box"
 	icon_state = "beaker"
+	item_state = "beaker"
 
 /obj/item/weapon/storage/box/beakers/New()
 	..()
@@ -208,7 +245,6 @@
 	for(var/i = 1 to 3)
 		new /obj/item/weapon/dnainjector/nofail/m2h(src)
 
-
 /obj/item/weapon/storage/box/blanks
 	name = "box of blank shells"
 	desc = "It has a picture of a gun and several warning symbols on the front."
@@ -218,21 +254,41 @@
 	for(var/i = 1 to 7)
 		new /obj/item/ammo_casing/shotgun/blank(src)
 
-
-
 /obj/item/weapon/storage/box/flashbangs
 	name = "box of flashbangs (WARNING)"
-	desc = "<FONT color=red><B>WARNING: Do not use without reading these preautions!</B></FONT>\n<B>These devices are extremely dangerous and can cause blindness or deafness if used incorrectly.</B>\nThe chemicals contained in these devices have been tuned for maximal effectiveness and due to\nextreme safety precuaiotn shave been incased in a tamper-proof pack. DO NOT ATTEMPT TO OPEN\nFLASH WARNING: Do not use continually. Excercise extreme care when detonating in closed spaces.\n\tMake attemtps not to detonate withing range of 2 meters of the intended target. It is imperative\n\tthat the targets visit a medical professional after usage. Damage to eyes increases extremely per\n\tuse and according to range. Glasses with flash resistant filters DO NOT always work on high powered\n\tflash devices such as this. <B>EXERCISE CAUTION REGARDLESS OF CIRCUMSTANCES</B>\nSOUND WARNING: Do not use continually. Visit a medical professional if hearing is lost.\n\tThere is a slight chance per use of complete deafness. Exercise caution and restraint.\nSTUN WARNING: If the intended or unintended target is too close to detonation the resulting sound\n\tand flash have been known to cause extreme sensory overload resulting in temporary\n\tincapacitation.\n<B>DO NOT USE CONTINUALLY</B>\nOperating Directions:\n\t1. Pull detonnation pin. <B>ONCE THE PIN IS PULLED THE GRENADE CAN NOT BE DISARMED!</B>\n\t2. Throw grenade. <B>NEVER HOLD A LIVE FLASHBANG</B>\n\t3. The grenade will detonste 10 seconds hafter being primed. <B>EXCERCISE CAUTION</B>\n\t-<B>Never prime another grenade until after the first is detonated</B>\nNote: Usage of this pyrotechnic device without authorization is an extreme offense and can\nresult in severe punishment upwards of <B>10 years in prison per use</B>.\n\nDefault 3 second wait till from prime to detonation. This can be switched with a screwdriver\nto 10 seconds.\n\nCopyright of Nanotrasen Industries- Military Armnaments Division\nThis device was created by Nanotrasen Labs a member of the Expert Advisor Corporation"
+	desc = "<FONT color=red><B>WARNING: Do not use without reading these precautions!</B></FONT>\n<B>These devices are extremely dangerous and can cause blindness or deafness if used incorrectly.</B>\nThe chemicals contained in these devices have been tuned for maximal effectiveness and due to\nextreme safety precuaiotn shave been incased in a tamper-proof pack. DO NOT ATTEMPT TO OPEN\nFLASH WARNING: Do not use continually. Excercise extreme care when detonating in closed spaces.\n\tMake attemtps not to detonate withing range of 2 meters of the intended target. It is imperative\n\tthat the targets visit a medical professional after usage. Damage to eyes increases extremely per\n\tuse and according to range. Glasses with flash resistant filters DO NOT always work on high powered\n\tflash devices such as this. <B>EXERCISE CAUTION REGARDLESS OF CIRCUMSTANCES</B>\nSOUND WARNING: Do not use continually. Visit a medical professional if hearing is lost.\n\tThere is a slight chance per use of complete deafness. Exercise caution and restraint.\nSTUN WARNING: If the intended or unintended target is too close to detonation the resulting sound\n\tand flash have been known to cause extreme sensory overload resulting in temporary\n\tincapacitation.\n<B>DO NOT USE CONTINUALLY</B>\nOperating Directions:\n\t1. Pull detonnation pin. <B>ONCE THE PIN IS PULLED THE GRENADE CAN NOT BE DISARMED!</B>\n\t2. Throw grenade. <B>NEVER HOLD A LIVE FLASHBANG</B>\n\t3. The grenade will detonste 10 seconds hafter being primed. <B>EXCERCISE CAUTION</B>\n\t-<B>Never prime another grenade until after the first is detonated</B>\nNote: Usage of this pyrotechnic device without authorization is an extreme offense and can\nresult in severe punishment upwards of <B>10 years in prison per use</B>.\n\nDefault 3 second wait till from prime to detonation. This can be switched with a screwdriver\nto 10 seconds.\n\nCopyright of Nanotrasen Industries- Military Armnaments Division\nThis device was created by Nanotrasen Labs a member of the Expert Advisor Corporation"
 	icon_state = "flashbang"
+	item_state = "flashbang"
 
 /obj/item/weapon/storage/box/flashbangs/New()
 	..()
 	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/flashbang(src)
 
+/obj/item/weapon/storage/box/syndigrenades
+	name = "box of C28E pipe bombs (WARNING)"
+	desc = "A box containing the cream of the crop of throwable syndicate explosive devices. There's instructions on the back explaining that you need to pull the pin and throw it, and a warning that forgetting either step could lead to bad results. A good thing to tell to demolition operatives."
+	icon_state = "syndienade"
+
+/obj/item/weapon/storage/box/syndigrenades/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/syndigrenade(src)
+
+/obj/item/weapon/storage/box/syndisyringes
+	name = "syndicate mix syringes (WARNING)"
+	desc = "A box containing syndicate mix syringes. A clear warning label instructs that they should not be used on your teammates. Ranged executions galore."
+	icon_state = "syndisyringe"
+
+/obj/item/weapon/storage/box/syndisyringes/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/reagent_containers/syringe/syndi(src)
+
 /obj/item/weapon/storage/box/smokebombs
 	name = "box of smokebombs"
 	icon_state = "smokebomb"
+	item_state = "flashbang"
 
 /obj/item/weapon/storage/box/smokebombs/New()
 	..()
@@ -347,7 +403,7 @@
 	name = "Death Alarm Kit"
 	desc = "Box of stuff used to implant death alarms."
 	icon_state = "implant"
-	item_state = "syringe_kit"
+	item_state = "beaker"
 
 /obj/item/weapon/storage/box/cdeathalarm_kit/New()
 	..()
@@ -380,6 +436,7 @@
 	name = "box of donk-pockets"
 	desc = "<span class='notice'>Instructions: Heat in microwave. Product will cool if not eaten within seven minutes.</span>"
 	icon_state = "donk_kit"
+	item_state = "donk_kit"
 	var/pocket_amount = 6
 
 /obj/item/weapon/storage/box/donkpockets/New()
@@ -432,6 +489,16 @@
 	..()
 	for(var/i = 1; i <= 5; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube(src)
+
+/obj/item/weapon/storage/box/monkeycubes/mousecubes
+	name = "lab mouse cube box"
+	desc = "Drymate brand laboratory mouse cubes, shipped from Yensid. Just add water!"
+	icon_state = "mousecubebox"
+
+/obj/item/weapon/storage/box/monkeycubes/mousecubes/New()
+	..()
+	for(var/i = 1; i <= 5; i++)
+		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube(src)
 
 /obj/item/weapon/storage/box/ids
 	name = "spare IDs"
@@ -498,6 +565,8 @@
 	var/glasses = pick(/obj/item/clothing/glasses/sunglasses/sechud/prescription, /obj/item/clothing/glasses/sunglasses/sechud)
 	new glasses(src)
 	new /obj/item/clothing/gloves/black(src)
+	new /obj/item/weapon/storage/belt/detective(src)
+	new /obj/item/weapon/switchtool/switchblade(src)
 	new /obj/item/device/gps/secure(src)
 	new /obj/item/ammo_storage/box/c38(src)
 	new /obj/item/ammo_storage/box/c38(src)
@@ -507,6 +576,8 @@
 	new /obj/item/binoculars(src)
 	new /obj/item/weapon/storage/box/surveillance(src)
 	new /obj/item/device/handtv(src)
+	new /obj/item/weapon/reagent_containers/spray/luminol(src)
+	new /obj/item/taperoll/police(src)
 
 /obj/item/weapon/storage/box/mousetraps
 	name = "box of Pest-B-Gon Mousetraps"
@@ -633,6 +704,7 @@
 /obj/item/weapon/storage/box/syndicatefake/space
 	name = "Space Suit and Helmet Replica"
 	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
 
 /obj/item/weapon/storage/box/syndicatefake/space/New()
 	..()
@@ -642,6 +714,7 @@
 /obj/item/weapon/storage/box/syndicatefake/ninja
 	name = "Ninja Suit and Hood Replica"
 	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
 
 /obj/item/weapon/storage/box/syndicatefake/ninja/New()
 	..()
@@ -673,7 +746,7 @@
 	name = "replacement bulbs"
 	icon_state = "light"
 	desc = "This box is shaped on the inside so that only light tubes and bulbs fit."
-	item_state = "syringe_kit"
+	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard //BubbleWrap
 	storage_slots=21
 	can_only_hold = list("/obj/item/weapon/light/tube", "/obj/item/weapon/light/bulb")

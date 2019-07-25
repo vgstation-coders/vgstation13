@@ -360,17 +360,65 @@
 	var/list/data = list("viruses"= list(F))
 	reagents.add_reagent(BLOOD, 20, data)
 
+var/datum/disease2/disease/wizarditis = null
+
 /obj/item/weapon/reagent_containers/glass/bottle/wizarditis
 	name = "Wizarditis culture bottle"
 	desc = "A small bottle. Contains a sample of Rincewindus Vulgaris."
 	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle_alt"
 	//icon_state = "bottle3"
 
 /obj/item/weapon/reagent_containers/glass/bottle/wizarditis/New()
 	..()
-	var/datum/disease/F = new /datum/disease/wizarditis(0)
-	var/list/data = list("viruses"= list(F))
-	reagents.add_reagent(BLOOD, 20, data)
+	if (!wizarditis)
+		wizarditis = new
+		wizarditis.form = "Rincewindus Vulgaris"
+		wizarditis.infectionchance = 30
+		wizarditis.infectionchance_base = 30
+		wizarditis.stageprob = 0//single-stage
+		wizarditis.stage_variance = 0
+		wizarditis.max_stage = 1
+		wizarditis.can_kill = list()
+
+		var/datum/disease2/effect/wizarditis/single/W = new /datum/disease2/effect/wizarditis/single
+		wizarditis.effects += W
+
+		wizarditis.origin = "Wizarditis Bottle"
+
+		wizarditis.antigen = list(pick(antigen_family(pick(ANTIGEN_RARE,ANTIGEN_ALIEN))))
+		wizarditis.antigen |= pick(antigen_family(pick(ANTIGEN_RARE,ANTIGEN_ALIEN)))
+
+
+		wizarditis.spread = SPREAD_BLOOD|SPREAD_AIRBORNE
+		wizarditis.uniqueID = rand(0,9999)
+		wizarditis.subID = rand(0,9999)
+
+		wizarditis.strength = rand(70,100)
+		wizarditis.robustness = 100
+
+		wizarditis.color = "#7295DA"
+		wizarditis.pattern = 5
+		wizarditis.pattern_color = "#EAFC77"
+
+		log_debug("Creating Wizarditis #[wizarditis.uniqueID]-[wizarditis.subID].")
+		wizarditis.log += "<br />[timestamp()] Created<br>"
+
+		wizarditis.mutation_modifier = 0
+
+		wizarditis.update_global_log()
+
+	var/list/blood_data = list(
+		"donor" = null,
+		"viruses" = null,
+		"blood_DNA" = null,
+		"blood_type" = "O-",
+		"resistances" = null,
+		"trace_chem" = null,
+		"virus2" = list()
+	)
+	blood_data["virus2"]["[wizarditis.uniqueID]-[wizarditis.subID]"] = wizarditis.getcopy()
+	reagents.add_reagent(BLOOD, volume, blood_data)
 
 /obj/item/weapon/reagent_containers/glass/bottle/pacid
 	name = "Polytrinic Acid Bottle"

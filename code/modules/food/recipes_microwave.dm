@@ -438,6 +438,10 @@
 	reagents = list(FLOUR = 15)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
 
+/datum/recipe/nova_bread
+	reagents = list(NOVAFLOUR = 15)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
+
 /datum/recipe/syntibread
 	reagents = list(FLOUR = 15)
 	items = list(

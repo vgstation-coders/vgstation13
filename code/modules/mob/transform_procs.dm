@@ -91,6 +91,9 @@
 			Mo.viruses += D
 			D.affected_mob = Mo
 			L.viruses -= D //But why?
+		Mo.virus2 = virus_copylist(L.virus2)
+		if (L.immune_system)
+			L.immune_system.transfer_to(Mo)
 	Mo.delayNextAttack(0)
 	Postmorph(Mo, TRUE, "You have been turned into a monkey! Pick a monkey name for your new monkey self.")
 	return Mo
@@ -288,7 +291,7 @@
 	var/datum/preferences/A = new()	//Randomize appearance for the human
 	A.randomize_appearance_for(new_human)
 	if(!new_species || !(new_species in all_species))
-		var/list/restricted = list("Krampus", "Horror")
+		var/list/restricted = list("Krampus", "Horror", "Manifested")
 		new_species = pick(all_species - restricted)
 	new_human.set_species(new_species)
 	if(isliving(src))

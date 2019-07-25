@@ -28,7 +28,7 @@
 	attack_verb = list("attacks", "stabs", "pokes")
 	shrapnel_amount = 1
 	shrapnel_size = 2
-	shrapnel_type = "/obj/item/projectile/bullet/shrapnel"
+	shrapnel_type = /obj/item/projectile/bullet/shrapnel
 
 /obj/item/weapon/kitchen/utensil/New()
 	. = ..()
@@ -286,6 +286,7 @@
 	name = "meat cleaver"
 	icon_state = "mcleaver"
 	desc = "A huge thing used for chopping and chopping up meat. This includes clowns and clown-by-products."
+	armor_penetration = 50
 	force = 25.0
 	throwforce = 15.0
 

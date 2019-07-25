@@ -33,6 +33,40 @@
 	kill_count = 1 //Limits the range to one tile
 	embed = 0
 
+/obj/item/projectile/bullet/weakbullet
+	name = "weak bullet"
+	icon_state = "bbshell"
+	damage = 10
+	stun = 5
+	weaken = 5
+	embed = 0
+
+/obj/item/projectile/bullet/weakbullet/booze
+	name = "booze bullet"
+
+/obj/item/projectile/bullet/weakbullet/booze/on_hit(var/atom/target, var/blocked = 0)
+	if(..(target, blocked))
+		var/mob/living/M = target
+		M.dizziness += 20
+		M:slurring += 20
+		M.confused += 20
+		M.eye_blurry += 20
+		M.drowsyness += 20
+		if(M.dizziness <= 150)
+			M.Dizzy(150)
+			M.dizziness = 150
+		for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
+			M.paralysis += 2
+			M.dizziness += 10
+			M:slurring += 10
+			M.confused += 10
+			M.eye_blurry += 10
+			M.drowsyness += 10
+			A.volume += 5 //Because we can
+			M.dizziness += 10
+		return 1
+	return 0
+
 /obj/item/projectile/bullet/shrapnel
 
 	name = "shrapnel"
@@ -44,8 +78,6 @@
 /obj/item/projectile/bullet/shrapnel/New()
 	..()
 	kill_count = rand(6,10)
-
-
 
 /obj/item/projectile/bullet/shrapnel/small
 
@@ -59,38 +91,6 @@
 	color = "#BF5FFF"
 	damage = 35
 
-
-/obj/item/projectile/bullet/weakbullet
-	name = "weak bullet"
-	icon_state = "bbshell"
-	damage = 10
-	stun = 5
-	weaken = 5
-	embed = 0
-/obj/item/projectile/bullet/weakbullet/booze
-	name = "booze bullet"
-	on_hit(var/atom/target, var/blocked = 0)
-		if(..(target, blocked))
-			var/mob/living/M = target
-			M.dizziness += 20
-			M:slurring += 20
-			M.confused += 20
-			M.eye_blurry += 20
-			M.drowsyness += 20
-			if(M.dizziness <= 150)
-				M.Dizzy(150)
-				M.dizziness = 150
-			for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
-				M.paralysis += 2
-				M.dizziness += 10
-				M:slurring += 10
-				M.confused += 10
-				M.eye_blurry += 10
-				M.drowsyness += 10
-				A.volume += 5 //Because we can
-				M.dizziness += 10
-			return 1
-		return 0
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
@@ -162,7 +162,19 @@
 	embed = 0
 	penetration = 0
 
-/obj/item/projectile/bullet/suffocationbullet//How does this even work?
+/obj/item/projectile/bullet/stunshot
+	name = "stunshot"
+	icon_state = "sshell"
+	damage = 5
+	stun = 10
+	weaken = 10
+	stutter = 10
+
+/obj/item/projectile/bullet/a762
+	damage = 25
+
+
+obj/item/projectile/bullet/suffocationbullet
 	name = "CO2 bullet"
 	damage = 20
 	damage_type = OXY
@@ -174,21 +186,12 @@
 	damage_type = TOX
 
 
-/obj/item/projectile/bullet/burstbullet//I think this one needs something for the on hit
+/obj/item/projectile/bullet/burstbullet
 	name = "exploding bullet"
-	damage = 20
 
-
-/obj/item/projectile/bullet/stunshot
-	name = "stunshot"
-	icon_state = "sshell"
-	damage = 5
-	stun = 10
-	weaken = 10
-	stutter = 10
-
-/obj/item/projectile/bullet/a762
-	damage = 25
+/obj/item/projectile/bullet/burstbullet/on_hit(var/atom/target, var/blocked = 0)
+	explosion(target, 0,1,1,5)
+	qdel(src)
 
 #define SPUR_FULL_POWER 4
 #define SPUR_HIGH_POWER 3
@@ -289,7 +292,8 @@
 
 	if(istype(A, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+			M.GetDrilled()
 	if(istype(A, /obj/structure/boulder))
 		returnToPool(A)
 
@@ -426,10 +430,10 @@
 	penetration = 0 //By default. Higher-power shots will have penetration.
 
 /obj/item/projectile/bullet/APS/on_hit(var/atom/atarget, var/blocked = 0)
-	if(istype(atarget, /mob/living) && damage == 200)
+	if(istype(atarget, /mob/living) && damage >= 200)
 		var/mob/living/M = atarget
 		M.gib()
-	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage == 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
+	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage >= 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
 		var/obj/machinery/singularity/narsie/N = atarget
 		if(!N.wounded)
 			N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], wounding them. This god can bleed!</span>", range = 20)
@@ -449,19 +453,12 @@
 				if(M_turf && (M_turf.z == starting.z))
 					M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
 
-/obj/item/projectile/bullet/APS/OnDeath()
-	var/turf/T = get_turf(src)
-	if(blessed)
-		new /obj/item/weapon/nullrod(T)
-	else
-		new /obj/item/stack/rods(T)
-
 /obj/item/projectile/bullet/APS/cultify()
 	return
 
 /obj/item/projectile/bullet/stinger
 	name = "alien stinger"
-	damage = 10
+	damage = 15
 	damage_type = TOX
 	flag = "bio"
 	fire_sound = 'sound/weapons/hivehand.ogg'

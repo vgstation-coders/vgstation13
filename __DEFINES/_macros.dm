@@ -154,6 +154,10 @@
 
 #define isbikehorn(A) istype(A, /obj/item/weapon/bikehorn)
 
+#define isbanana(A) istype(A, /obj/item/weapon/reagent_containers/food/snacks/grown/banana)
+
+#define isgun(A) istype(A, /obj/item/weapon/gun)
+
 #define ispowercell(A) istype(A, /obj/item/weapon/cell)
 
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
@@ -280,6 +284,8 @@
 #define isninja(H) (H.mind && H.mind.GetRole(NINJA))
 
 #define isrambler(H) (H.mind && H.mind.GetRole(RAMBLER))
+
+#define isloosecatbeast(H) (H.mind && H.mind.GetRole(CATBEAST))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 

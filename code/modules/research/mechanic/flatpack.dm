@@ -282,3 +282,15 @@
 /obj/structure/closet/crate/flatpack/brewer/New()
 	..()
 	machine = new /obj/machinery/chem_dispenser/brewer(src)
+	
+/obj/structure/closet/crate/flatpack/starscreen_generator/New()
+	..()
+	machine = new /obj/machinery/shield_gen(src)
+	
+/obj/structure/closet/crate/flatpack/starscreen_ex_generator/New()
+	..()
+	machine = new /obj/machinery/shield_gen/external(src)
+	
+/obj/structure/closet/crate/flatpack/starscreen_capacitor/New()
+	..()
+	machine = new /obj/machinery/shield_capacitor(src)

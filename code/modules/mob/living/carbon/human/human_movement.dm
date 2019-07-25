@@ -1,3 +1,7 @@
+/mob/living/carbon/human
+	var/crawlcounter = 1
+	var/max_crawls_before_fatigue = 6
+
 /mob/living/carbon/human/movement_delay()
 	if(isslimeperson(src))
 		if (bodytemperature >= 330.23) // 135 F

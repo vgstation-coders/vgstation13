@@ -1174,7 +1174,7 @@ var/list/cyborg_list = list()
 		station_holomap.update_holomap()
 
 /mob/living/silicon/robot/proc/self_destruct()
-	if(mind && mind.special_role && emagged)
+	if(istraitor(src) && emagged)
 		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE

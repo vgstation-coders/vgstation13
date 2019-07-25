@@ -329,8 +329,10 @@ HOLOMAP PROCS
 		user.client.images -= holomap_images[uid]
 		user.client.screen -= holomap_tooltips[uid]
 
-	holomap_images[uid].len = 0
-	holomap_tooltips[uid].len = 0
+	if(holomap_images[uid])
+		holomap_images[uid].len = 0
+	if(holomap_tooltips[uid])
+		holomap_tooltips[uid].len = 0
 	freeze[uid] = 0
 	holomap[uid] = 0
 

@@ -515,7 +515,6 @@
 		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,
-		/obj/item/weapon/coin/adamantine,
 		/obj/item/weapon/coin/clown,
 		/obj/item/weapon/coin/diamond,
 		/obj/item/weapon/coin/iron,
@@ -877,9 +876,9 @@
 	amount = 2
 	chance = 50
 	to_spawn = list(
-		/mob/living/simple_animal/mouse/brown,
-		/mob/living/simple_animal/mouse/gray,
-		/mob/living/simple_animal/mouse/white,
+		/mob/living/simple_animal/mouse/common/brown,
+		/mob/living/simple_animal/mouse/common/gray,
+		/mob/living/simple_animal/mouse/common/white,
 		)
 
 /obj/abstract/map/spawner/mobs/bear

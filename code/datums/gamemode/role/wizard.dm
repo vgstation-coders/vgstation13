@@ -5,7 +5,6 @@
 	required_pref = WIZARD
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
-	refund_value = BASE_SOLO_REFUND * 2
 	greets = list(GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND)
 
 	var/list/spellbook_purchases = list()
