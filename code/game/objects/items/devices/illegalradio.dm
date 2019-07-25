@@ -275,7 +275,7 @@
 						visible_message("The uplink beeps: <span class='warning'>Input validated. Please wait for the teleportation process to finish.</warning>")
 						if(do_after(user, input, (nanotrasen_variant ? teleport_time : advanced_teleport_time)*sellable.teleport_modifier))
 							if(sellable.get_demand())
-								var/payout = sellable.determine_payout(input, src, payout)
+								var/payout = sellable.determine_payout(input, src, sellable.get_price())
 								sellable.after_sell(input, user)
 								sellable.reduce_demand()
 								qdel(input)
