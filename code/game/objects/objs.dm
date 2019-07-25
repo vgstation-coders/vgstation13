@@ -85,6 +85,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	P.forceMove(src)
 	integratedpai = P
 	verbs += /obj/proc/remove_pai
+	verbs += /obj/proc/configure_pai
 
 /obj/attackby(obj/item/weapon/W, mob/user)
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
@@ -179,6 +180,23 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	to_chat(M, "You eject \the [integratedpai] from \the [src].")
 	M.put_in_hands(eject_integratedpai_if_present())
 	playsound(src, 'sound/misc/cartridge_out.ogg', 25)
+	
+/obj/proc/configure_pai()
+	set name = "Configure pAI"
+	set category = "Object"
+	set src in range(1)
+
+	var/mob/M = usr
+	if(!M.Adjacent(src))
+		return
+	if(!M.dexterity_check())
+		to_chat(usr, "You don't have the dexterity to do this!")
+		return
+	if(M.incapacitated())
+		to_chat(M, "You can't do that while you're incapacitated!")
+		return
+
+	integratedpai.attack_self(M)
 
 /obj/proc/eject_integratedpai_if_present()
 	if(integratedpai)
