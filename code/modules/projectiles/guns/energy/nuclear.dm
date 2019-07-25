@@ -69,13 +69,14 @@
 	if (core_stability < 10)
 		if (prob(core_stability))//the core will slowly stabilize itself over time if it hasn't overloaded yet
 			core_stability++
-	if(power_supply)
+			update_icon()
+	if(power_supply && core_stability > 0)
 		charge_tick++
 		if(charge_tick < 4)
 			return
 		charge_tick = 0
 		if(power_supply.charge < power_supply.maxcharge)
-			power_supply.give(100)
+			power_supply.give(core_stability*10)
 			update_icon()
 
 /obj/item/weapon/gun/energy/gun/nuclear/proc/critfail()
