@@ -101,7 +101,10 @@ var/savefile/panicfile
 
 	initialize_runesets()
 
+	get_black_market_sellables() //Runs the on_setup and pre-generates the list.
+	get_black_market_items()
 
+	
 	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()

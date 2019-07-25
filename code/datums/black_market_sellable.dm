@@ -20,6 +20,7 @@ var/list/black_market_sellables = list()
 				black_market_sellables[I.category] = list()
 
 			black_market_sellables[I.category] += I
+			I.on_setup()
 
 	return black_market_sellables
 
@@ -75,6 +76,9 @@ var/list/black_market_sellables = list()
 	if(round_demand != -1 || round_demand != 0)
 		round_demand--
 
+/datum/black_market_sellable/proc/on_setup()
+	return
+		
 /datum/black_market_sellable/proc/purchase_check(var/obj/input, var/mob/user) //Returns "VALID" if the purchase is valid, otherwise will give an error message with what is returned.
 	return VALID
 	
@@ -83,7 +87,9 @@ var/list/black_market_sellables = list()
 	
 /datum/black_market_sellable/proc/after_sell(var/obj/input, var/mob/user)
 	return
+
 	
+
 /datum/black_market_sellable/weapons
 	category = "Firearms and War Implements"
 	
@@ -98,6 +104,18 @@ var/list/black_market_sellables = list()
 	sps_chance = 10
 	display_chance = 40
 	
+/datum/black_market_sellable/weapons/vector
+	name = "Kriss Vector"
+	item = /obj/item/weapon/gun/projectile/automatic/vector
+	no_children = 1
+	desc = "The submachine gun, silly."
+	demand_min = 1
+	demand_max = 3
+	price_min = 100
+	price_max = 200
+	sps_chance = 10
+	display_chance = 40
+
 /datum/black_market_sellable/weapons/railgun
 	name = "Railgun"
 	item = /obj/item/weapon/gun/projectile/railgun
@@ -141,14 +159,80 @@ var/list/black_market_sellables = list()
 	sps_chance = 5
 	display_chance = 80
 	
+	
+	
+	
+/datum/black_market_sellable/machinery
+	category = "Machinery and Metalworks"
+	
+/datum/black_market_sellable/machinery/plasmaminer
+	name = "Plasma Gas Miner"
+	item = /obj/machinery/atmospherics/miner/toxins
+	no_children = 1
+	desc = "Used to siphon plasma from a gas giant."
+	demand_min = 1
+	demand_max = 1
+	price_min = 250
+	price_max = 300
+	sps_chance = 20
+	display_chance = 30
+
+	
+
 /datum/black_market_sellable/animals
 	category = "Living Creatures"	
+	
+/datum/black_market_sellable/animals/slime
+	name = "? Slime"
+	item = /mob/living/carbon/slime/adult
+	no_children = 1
+	desc = "Slime must be an adult."
+	demand_min = 1
+	demand_max = 3
+	price_min = 200
+	price_max = 400
+	sps_chance = 0
+	display_chance = 60
+	teleport_modifier = 1.5
+	var/list/potential_slimes = list("sepia","adamantine","pyrite","bluespace","cerulean")
+	var/selected_slime
+	
+/datum/black_market_sellable/animals/slime/purchase_check(var/obj/input, var/mob/user)
+	if(istype(input,/mob/living/carbon/slime/adult))
+		var/mob/living/carbon/slime/adult/input_slime = input
+		if(input_slime.colour == selected_slime)
+			return VALID
+	return "Our buyer is looking for a [selected_slime] slime, not whatever the hell that is."
+	
+/datum/black_market_sellable/animals/slime/on_setup()
+	selected_slime = pick(potential_slimes)
+	name = capitalize(selected_slime) + " Slime"
+	
+/datum/black_market_sellable/animals/cockatrice
+	name = "Cockatrice"
+	item = /mob/living/simple_animal/hostile/retaliate/cockatrice
+	no_children = 1
+	desc = "We'll pay quadruple if it's alive."
+	demand_min = 1
+	demand_max = 1
+	price_min = 200
+	price_max = 400
+	sps_chance = 0
+	display_chance = 60
+	teleport_modifier = 2
+	
+/datum/black_market_sellable/animals/cockatrice/determine_payout(var/obj/input, var/mob/user, var/payout)
+	if(istype(input,/mob/))
+		var/mob/cockatrice = input
+		if(!cockatrice.isDead())
+			return payout*4
+	return payout
 	
 /datum/black_market_sellable/animals/ian
 	name = "Ian the Corgi"
 	item = /mob/living/simple_animal/corgi/Ian
 	no_children = 1
-	desc = "Ian must be alive. And cute."
+	desc = "Ian must be alive. Very alive."
 	demand_min = 1
 	demand_max = 1
 	price_min = 700
@@ -156,7 +240,7 @@ var/list/black_market_sellables = list()
 	sps_chance = 0
 	display_chance = 100
 	teleport_modifier = 3
-	
+
 /datum/black_market_sellable/animals/ian/purchase_check(var/obj/input, var/mob/user)
 	if(istype(input,/mob/))
 		var/mob/ian = input
@@ -167,6 +251,43 @@ var/list/black_market_sellables = list()
 /datum/black_market_sellable/animals/ian/after_sell(var/obj/input, var/mob/user)
 	spawn(rand(350,650))
 		command_alert(new /datum/command_alert/ian_sold(user))
+		
+/datum/black_market_sellable/animals/sasha
+	name = "Sasha the Doberman"
+	item = /mob/living/simple_animal/corgi/sasha
+	no_children = 1
+	demand_min = 1
+	demand_max = 1
+	price_min = 300
+	price_max = 400
+	sps_chance = 0
+	display_chance = 35
+	teleport_modifier = 3
+
+/datum/black_market_sellable/animals/poly
+	name = "Poly the Parrot"
+	item = /mob/living/simple_animal/parrot/Poly
+	no_children = 1
+	demand_min = 1
+	demand_max = 1	
+	price_min = 150
+	price_max = 300
+	sps_chance = 15
+	display_chance = 35
+	teleport_modifier = 3
+		
+/datum/black_market_sellable/animals/corpus
+	name = "Corpus the Snake"
+	item = /mob/living/simple_animal/cat/snek/corpus
+	no_children = 1
+	desc = "sssSSSSsss"
+	demand_min = 1
+	demand_max = 1	
+	price_min = 100
+	price_max = 200
+	sps_chance = 15
+	display_chance = 35
+	teleport_modifier = 3
 	
 /datum/black_market_sellable/animals/runtime
 	name = "Runtime the Cat"
@@ -177,11 +298,11 @@ var/list/black_market_sellables = list()
 	price_min = 150
 	price_max = 200
 	sps_chance = 15
-	display_chance = 100
+	display_chance = 35
 	teleport_modifier = 3	
 
 /datum/black_market_sellable/animals/salem
-	name = "Salem the Cat"
+	name = "Salem the Neglected Cat"
 	item = /mob/living/simple_animal/cat/salem
 	no_children = 1
 	demand_min = 1
@@ -189,54 +310,66 @@ var/list/black_market_sellables = list()
 	price_min = 100
 	price_max = 150
 	sps_chance = 15
-	display_chance = 100
+	display_chance = 35
 	teleport_modifier = 3		
+
 	
 	
 	
+/datum/black_market_sellable/misc
+	category = "Miscellaneous Items"
 	
+/datum/black_market_sellable/misc/tome
+	name = "Occult Tome"
+	item = /obj/item/weapon/tome
+	no_children = 1
+	desc = "Looking for the one from the cult of Nar-Sie. Teleporting magical items will likely send an alert to Centcomm."
+	demand_min = 1
+	demand_max = 3
+	price_min = 350
+	price_max = 450
+	sps_chance = 75
+	display_chance = 60
 	
-	
-/* //EXAMPLE
-	
-/datum/black_market_sellable/weapons
-	category = "Firearms and Weaponry"
-	
-/datum/black_market_sellable/weapons/ion_rifle
-	name = "Ion Rifle"
-	item = /obj/item/weapon/gun/energy/ionrifle
+/datum/black_market_sellable/misc/slimeheart
+	name = "Slime Heart"
+	item = /obj/item/slime_heart
 	no_children = 1
 	demand_min = 1
-	demand_max = 3
-	price_min = 100
+	demand_max = 2
+	price_min = 150
 	price_max = 200
-	display_chance = 100
+	sps_chance = 10
+	display_chance = 35
 
-/datum/black_market_sellable/weapons/energy_gun
-	name = "Energy Gun"
-	item = /obj/item/weapon/gun/energy/
-	no_children = 0
-	desc = "Paying double for fully charged weapons, but guns with no charge will be denied."
+/datum/black_market_sellable/misc/deathnettle
+	name = "Deathnettle"
+	item = /obj/item/weapon/grown/deathnettle
+	no_children = 1
+	desc = "Paying 1.5x if the potency is 80 or above."
+	demand_min = 3
+	demand_max = 6
+	price_min = 40
+	price_max = 60
+	sps_chance = 15
+	display_chance = 40
+	
+/datum/black_market_sellable/misc/deathnettle/determine_payout(var/obj/input, var/mob/user, var/payout)
+	if(istype(input,/obj/item/weapon/grown/deathnettle))
+		var/obj/item/weapon/grown/deathnettle/nettle = input
+		if(nettle.potency >= 80)
+			return payout*1.5
+	return payout	
+	
+/datum/black_market_sellable/misc/poutine
+	name = "Poutine Ocean"
+	item = /obj/structure/poutineocean	
+	no_children = 1
 	demand_min = 1
-	demand_max = 3
-	price_min = 100
-	price_max = 200
-	sps_chance = 100
-	display_chance = 100
-	
-/datum/black_market_sellable/weapons/energy_gun/purchase_check(var/obj/input, var/mob/user)
-	if(istype(input,/obj/item/weapon/gun/energy/))
-		var/obj/item/weapon/gun/energy/gun = input
-		if(gun.power_supply.charge > 0)
-			return VALID
-	return "The energy gun does not have any charge."
-	
-/datum/black_market_sellable/weapons/energy_gun/determine_payout(var/obj/input, var/mob/user, var/payout)
-	if(istype(input,/obj/item/weapon/gun/energy/))
-		var/obj/item/weapon/gun/energy/gun = input
-		if(gun.power_supply.charge >= gun.power_supply.maxcharge)
-			return payout //Doubles payout, since return value is added onto current payout
-	return 0
-*/
+	demand_max = 1
+	price_min = 700
+	price_max = 800
+	sps_chance = 0
+	display_chance = 25
 
 #undef VALID
