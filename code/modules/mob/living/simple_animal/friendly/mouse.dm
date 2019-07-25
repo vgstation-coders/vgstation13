@@ -45,6 +45,7 @@
 	var/is_fat = 0
 	var/can_chew_wires = 0
 	var/splat = 0
+	var/infectable = 0
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -59,7 +60,7 @@
 		MaintInfection()
 
 /mob/living/simple_animal/mouse/can_be_infected()
-	return 1
+	return infectable
 
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
@@ -107,8 +108,7 @@
 
 	handle_body_temperature()//I bestow upon mice the gift of thermoregulation, so they can handle the fever caused by disease.
 
-	//------------------------DISEASE STUFF--------------------------------------------------------
-	if(!(status_flags & GODMODE) && !isDead())
+	if(!(status_flags & GODMODE) && can_be_infected() && !isDead())
 		if(!locked_to || !istype(locked_to,/obj/item/critter_cage))//cages isolate from contact and airborne diseases
 			find_nearby_disease()//getting diseases from blood/mucus/vomit splatters and open dishes
 
@@ -120,7 +120,6 @@
 					share_contact_diseases(M)//Mice automatically share contact diseases among themselves
 
 		activate_diseases()//however cages don't prevent diseases from activating
-	//---------------------------------------------------------------------------------------------
 
 	if(!isUnconscious())
 		var/list/can_see = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
@@ -231,6 +230,7 @@
 	icon_eat = "mouse_[_color]_eat"
 
 /mob/living/simple_animal/mouse/proc/MaintInfection()
+	infectable = TRUE
 	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
 	var/datum/disease2/disease/D = new virus_choice
 
@@ -260,6 +260,8 @@
 
 /mob/living/simple_animal/mouse/unarmed_attack_mob(var/mob/living/target)
 	..()
+	if(!can_be_infected())
+		return
 	var/block = 0
 	var/bleeding = 0
 
@@ -373,13 +375,13 @@
 //	return 1
 
 /mob/living/simple_animal/mouse/scoop_up(var/mob/living/M)
-	if (..())
+	if (..() && can_be_infected())
 		var/block = M.check_contact_sterility(HANDS)
 		var/bleeding = M.check_bodypart_bleeding(HANDS)
 		share_contact_diseases(M,block,bleeding)
 
 /mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
-	if( ishuman(AM) )
+	if(ishuman(AM) && can_be_infected())
 		var/mob/living/carbon/human/M = AM
 		if (M.on_foot())
 			if(!stat)
@@ -470,6 +472,7 @@
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "splats"
+	infectable = TRUE
 
 /mob/living/simple_animal/mouse/balbc/New()
 	..()
@@ -489,6 +492,7 @@
 		"Nibbles",
 		"Snuffles",
 		"Sugar",
+		"Jen",
 		)
 	real_name = name
 
@@ -499,6 +503,7 @@
 	_color = "plague"
 	desc = "It's a small, disease-ridden rodent."
 	icon_state = "mouse_plague"
+	infectable = TRUE
 
 //TOM IS ALIVE! SQUEEEEEEEE~K :)
 /mob/living/simple_animal/mouse/Tom
@@ -538,9 +543,6 @@
 	mutations = list(M_NO_SHOCK)
 
 /mob/living/simple_animal/mouse/mouse_op/death(var/gibbed = FALSE)
-	..()
+	..(TRUE)
 	if(gibbed == FALSE)
 		src.gib()
-
-/mob/living/simple_animal/mouse/mouse_op/can_be_infected()
-	return 0
