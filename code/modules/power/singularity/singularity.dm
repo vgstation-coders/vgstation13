@@ -750,7 +750,6 @@ var/list/global_singularity_pool
 		if(direction)
 			set_glide_size(DELAY2GLIDESIZE(0.1 SECONDS))
 			forceMove(get_step(src,direction))
-			var/below_turf = get_turf()
 			eat_no_pull()
 			ckey_to_cooldown[ckey] = 1
 			spawn(input_cooldown)
