@@ -20,9 +20,11 @@
 	force_report = 1
 
 	var/level = 1
+	var/level_max = 7
+	var/level_min = 4
 
 /datum/command_alert/biohazard_alert/announce()
-	level = rand(4,7)
+	level = rand(level_min,level_max)
 	message = "Confirmed outbreak of level [level] biohazard aboard [station_name()]. All personnel must contain the outbreak."
 
 	..()
@@ -35,6 +37,15 @@
 
 	for(var/word in vox_sentence)
 		play_vox_sound(word,STATION_Z,null)
+
+/datum/command_alert/biohazard_alert/minor
+	level_max = 4
+	level_min = 2
+
+/datum/command_alert/biohazard_alert/major
+	level_max = 7
+	level_min = 5
+
 
 ///////BIOHAZARD UPDATED
 

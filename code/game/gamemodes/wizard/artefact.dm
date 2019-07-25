@@ -1,6 +1,3 @@
-
-//Apprenticeship contract - moved to antag_spawner.dm
-
 ///////////////////////////Veil Render//////////////////////
 
 /obj/item/weapon/veilrender

@@ -97,7 +97,11 @@ var/savefile/panicfile
 
 	paperwork_setup()
 
+	global_deadchat_listeners = list()
+
 	initialize_runesets()
+
+	initialize_beespecies()
 
 	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()

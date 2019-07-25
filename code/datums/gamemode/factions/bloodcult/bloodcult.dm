@@ -134,10 +134,10 @@ var/veil_thickness = CULT_PROLOGUE
 	var/warning = FALSE
 
 	var/list/cult_reminders = list()
-	
+
 /datum/faction/bloodcult/check_win()
 	return cult_win
-	
+
 /datum/faction/bloodcult/IsSuccessful()
 	return cult_win
 
@@ -525,7 +525,7 @@ var/veil_thickness = CULT_PROLOGUE
 				data[BLOODCOST_LID_CONTAINER] = 1
 
 	var/mob/living/silicon/robot/robot_user = user
-	if(istype(robot_user)) 
+	if(istype(robot_user))
 		var/module_items = robot_user.get_equipped_items() //This function allows robot modules to be used as blood sources. Somewhat important, considering silicons have no blood.
 		for(var/obj/item/weapon/gripper/G_held in module_items)
 			if (!istype(G_held) || !G_held.wrapped || !istype(G_held.wrapped,/obj/item/weapon/reagent_containers))
@@ -545,11 +545,11 @@ var/veil_thickness = CULT_PROLOGUE
 				if (amount_gathered >= amount_needed)
 					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
 					return data
-				
+
 		for(var/obj/item/weapon/reagent_containers/G_held in module_items)
 			if (!istype(G_held) || !round(G_held.reagents.get_reagent_amount(BLOOD)))
 				continue
-			
+
 			if(istype(G_held, /obj/item/weapon/reagent_containers/blood)) //Bloodbags have their own functionality
 				var/obj/item/weapon/reagent_containers/blood/blood_pack = G_held
 				var/blood_volume = round(blood_pack.reagents.get_reagent_amount(BLOOD))
@@ -579,12 +579,12 @@ var/veil_thickness = CULT_PROLOGUE
 				if (amount_gathered >= amount_needed)
 					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
 					return data
-	
+
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_CONTAINER
 		return data
 
-	//Does the user have blood? (the user can pay in blood without having to bleed first) 
+	//Does the user have blood? (the user can pay in blood without having to bleed first)
 	if(istype(H_user) && !(H_user.species.flags & NO_BLOOD))
 		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
@@ -594,8 +594,8 @@ var/veil_thickness = CULT_PROLOGUE
 
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_USER
-		return data	
-	
+		return data
+
 	data[BLOODCOST_RESULT] = BLOODCOST_FAILURE
 	return data
 
@@ -660,9 +660,15 @@ var/veil_thickness = CULT_PROLOGUE
 					if (BLOODCOST_TARGET_GRAB)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_GRAB]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 					if (BLOODCOST_TARGET_BLEEDER)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_BLEEDER]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 					if (BLOODCOST_TARGET_HELD)
 						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_HELD]
 						blood = locate() in G.reagents.reagent_list
@@ -675,6 +681,9 @@ var/veil_thickness = CULT_PROLOGUE
 					if (BLOODCOST_TARGET_USER)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 			if (!tribute && previous_result != BLOODCOST_TRIBUTE)
 				user.visible_message("<span class='warning'>Drips of blood seem to appear out of thin air around \the [user], and fall onto the floor!</span>",
 									"<span class='rose'>An ally has lent you a drip of their blood for your ritual.</span>",

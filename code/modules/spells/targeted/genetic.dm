@@ -32,6 +32,7 @@ code\game\\dna\genes\goon_powers.dm
 	name = "Blind"
 	desc = "Temporarily blind a single person."
 	abbreviation = "BD"
+	specialization = OFFENSIVE
 	disabilities = 1
 	duration = 300
 
@@ -58,6 +59,7 @@ code\game\\dna\genes\goon_powers.dm
 	name = "Mutate"
 	desc = "This spell causes you to turn into a hulk and gain laser vision for a short while."
 	abbreviation = "MU"
+	specialization = UTILITY
 
 	school = "transmutation"
 	charge_max = 400

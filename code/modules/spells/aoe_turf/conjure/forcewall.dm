@@ -2,12 +2,14 @@
 	name = "Forcewall"
 	desc = "Create a wall of pure energy at your location."
 	user_type = USER_TYPE_WIZARD
+	specialization = DEFENSIVE
 	abbreviation = "FW"
 	summon_type = list(/obj/effect/forcefield/wizard)
 	duration = 300
 	charge_max = 10 SECONDS
 	cooldown_min = 2 SECONDS
 	spell_flags = 0
+	invocation = "TARCOL MINTI ZHERI"
 	range = 0
 	cast_sound = null
 

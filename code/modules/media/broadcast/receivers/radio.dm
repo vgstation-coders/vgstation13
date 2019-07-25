@@ -1,7 +1,7 @@
 /obj/machinery/media/receiver/boombox
 	name = "Boombox"
 	desc = "Tune in and tune out."
-
+	pass_flags = PASSTABLE
 	icon='icons/obj/radio.dmi'
 	icon_state="radio"
 

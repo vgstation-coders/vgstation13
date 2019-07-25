@@ -568,9 +568,8 @@ var/global/list/damage_icon_parts = list()
 			standing = image("icon" = w_uniform.wear_override)
 
 		var/obj/item/clothing/under/under_uniform = w_uniform
-
 		if(species.name in under_uniform.species_fit) //Allows clothes to display differently for multiple species
-			if(species.wear_suit_icons && has_icon(species.wear_suit_icons, w_uniform.icon_state))
+			if(species.uniform_icons && has_icon(species.uniform_icons, "[w_uniform.icon_state]_s"))
 				standing.icon = species.uniform_icons
 
 		if(w_uniform.icon_override)

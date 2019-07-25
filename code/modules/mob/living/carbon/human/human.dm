@@ -907,9 +907,6 @@
 
 	for (var/datum/disease/virus in viruses)
 		virus.cure()
-	for (var/ID in virus2)
-		var/datum/disease2/disease/V = virus2[ID]
-		V.cure(src)
 
 	..()
 
@@ -1831,6 +1828,7 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
 	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+	T.virus2 = virus_copylist(virus2)
 	T.get_clothes(src, T)
 	T.name = real_name
 	T.host = src
@@ -1888,9 +1886,17 @@ mob/living/carbon/human/isincrit()
 		return FALSE
 	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
 		return FALSE
-	var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
+	var/crawldelay = 0.2 SECONDS
+	if (crawlcounter >= max_crawls_before_fatigue)
+		if (prob(10))
+			to_chat(src, "<span class='warning'>You get tired from all this crawling around.</span>")
+		crawldelay = round(1 + base_movement_tally()/10) * 3 SECONDS
+		crawlcounter = 1
+	else
+		crawlcounter++
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
-	delayNextMove(crawldelay, additive=1)
+	delayNextMove(crawldelay, additive = 1)
+
 
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
@@ -1906,3 +1912,6 @@ mob/living/carbon/human/isincrit()
 			confused = max(0,confused-rand(8,10))
 			drowsyness = max(0, drowsyness-rand(8,10))
 			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
+
+/mob/living/carbon/human/can_be_infected()
+	return 1

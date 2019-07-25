@@ -86,6 +86,350 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		-->
 		<div class="commit sansserif">
 
+			<h2 class="date">2019.07.14</h2>
+			<h3 class="author">bathosbathtime updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">reverted "friendly Cultist Cyborgs"</li>
+			</ul>
+
+			<h2 class="date">2019.07.13</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed speech disabilities not working if other genes were activated or the dude was a plasmaman.</li>
+			</ul>
+			<h3 class="author">GlassEclipse updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added friendly cultist cyborg boards to the trader vendor. They can only be used on service borgs.</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Under the hood roid tweaks, but the teleporter looks a bit different...</li>
+			</ul>
+
+			<h2 class="date">2019.07.12</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed Tech Storage on all maps having two Disease Analyser boards instead of one, and missing a Disease Splicer board.</li>
+			</ul>
+			<h3 class="author">GlassEclipse updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Less than legitimate forces in your sector have learned how to build black market uplinks. They don't offer any goods for sale yet.</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Fixed a typo!</li>
+			</ul>
+
+			<h2 class="date">2019.07.11</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed mobs like cockroach being invisible in cages because they appear bellow them. Mobs placed in cages have their plane changed to the default mob plane.</li>
+				<li class="bugfix">Mice can no longer use the Hide verb when in a cage.</li>
+				<li class="rscadd">Added some open growth dishes for mappers, both empty and containing a random disease</li>
+				<li class="rscadd">The round end scoreboard now indicates which disease was spread the most, as well as its symptoms.</li>
+				<li class="rscadd">Ghosts can now use the pathogen HUD</li>
+				<li class="rscadd">Cats no longer chase mice while dead or uncounscious. Let them rest in peace.</li>
+				<li class="rscadd">Mucus or Sputum caused by Coldingtons and Respiratory Putrefaction now only spawn if the mob is on top of a turf (so mice in vents won't spawn any). That should curb the amount of mucus spawning all around the station.</li>
+				<li class="rscadd">Nanomed plus now has 8 vials to dispense. With the 6 in virology and the 6 in Chemistry that's 20 vials in medbay.</li>
+				<li class="bugfix">Fixed blank vaccines sometimes mysteriously already containing antigen brewed in other vaccines someplace else.</li>
+				<li class="bugfix">Fixed Observer Pathogen HUD not properly updating when disease is getting removed from items and mobs.</li>
+				<li class="bugfix">Fixed Plague Mice Invasion ruleset only spawning one mouse instead of up to five.</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Darkholme no longer goes full retard.</li>
+				<li class="rscadd">Corn Oil exists again</li>
+				<li class="rscadd">The Janitor Cargo Crate has mousetraps now.</li>
+			</ul>
+
+			<h2 class="date">2019.07.10</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The round end scoreboard will now add and remove points from the crew score based on how many beneficial or harmful diseases are loose in living mobs.</li>
+				<li class="tweak">Plague Mice Invasion event only considers mobs as "still infected" on the round end scoreboard if they're still alive.</li>
+				<li class="bugfix">maybe fixed a bug that caused medical HUDs to display the ill status even though the disease hasn't been added to the database.</li>
+				<li class="rscadd">humans turning into zombies upon death keep their diseases, which may then transmit to their meat. (zombies themselves can't spread their diseases for now, more to that later)</li>
+				<li class="rscadd">mice in small cages get a similar buff to antipathogenic efficiency that other mobs get when they rest in a bed.</li>
+				<li class="rscadd">Admin Diseases Panel now indicate the disease's nickname if there's one</li>
+				<li class="rscadd">Admin Diseases Panel is now accessible from the Admin tab instead of Debug.</li>
+			</ul>
+			<h3 class="author">PaulRitter updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">reworked the instrument ui a bit more</li>
+			</ul>
+
+			<h2 class="date">2019.07.09</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="experiment">Viro has been completely rewritten! The implications are huge so I'll try to organize the changelog with information relevant to most players at the top.</li>
+				<li class="rscadd">All medbays now feature a bookcase full of medical manuals, including the brand new Virology guide, and an Encyclopedia of all disease symptoms. This Encyclopedia automatically updates itself as new symptoms are added in the code.</li>
+				<li class="rscadd">For the time being Virologists will spawn holding the new Virology guide manual, this manual may also be found in Virology itself. If you play Virologist, give it a read. If you just want to know how to cure diseases in the heat of the moment, the first chapter is a step by step crash course for you.</li>
+				<li class="rscadd">You may now use an Health Analyser on any living being to check whether they are carrying some pathogen.</li>
+				<li class="rscadd">New players have a 10% chance of spawning with a weak and mostly harmless disease. Those can be easily cured with 5u spaceacillin.</li>
+				<li class="rscadd">Mice that spawn in maint have a 20% chance of carrying a disease. Said disease is never airborne, but is notably more dangerous than those that humans can spawn with.</li>
+				<li class="rscadd">Minor and Major viral outbreaks have been reworked. Both will instantly infect 10% of the station's crew with the same pathogen, so if an individual is cure, it'll be relatively easy to cure the rest. Major outbreaks however are likely to carry dangerous pathogen.</li>
+				<li class="rscadd">Poisoned Syndi meat pizza has been "fixed". It previously spawned filled with infected AB+ blood, which means that only crewmembers of AB+ blood type could actually get infected.</li>
+				<li class="rscadd">When getting attacked by blob or blob spores, you may get infected with a new type of pathogen that's single stage and doesn't do anything on its own. If you die while infected, you'll spawn some blob tiles around you. The longer you've been infected, the more tiles you'll spawn, even spawning a node after 5 minutes. Blob spores that die also leave a pathogenic cloud behind them, so be sure to wear a hardsuit or some sterile equipment when fighting the blob up close, and get checked at medbay after the threat has been dealt with. This symptom may be exploited to created blob walls of specific shape.</li>
+				<li class="rscadd">Loose Catbeasts that arrive on the station are carriers of not one but TWO dangerous diseases! Be careful when hunting them down. As the catbeast yourself, you may try to acquire and drink some milk and some water to cause your diseases to progress faster.</li>
+				<li class="rscadd">Added a new midround ruleset that may proc if there are at least two Medical Doctors, or CMO, or Virologist. Plague Mice Invasion. A group of 1 to 5 mice infected with a dangerous Bacteria appear on the station and try to spread their disease to as many mobs as possible while the crew tries to stomp them and cure their disease. Enable Minor Roles to be allowed for candidacy.</li>
+				<li class="rscadd">Urn and Bowls found in Xenoarchaeology now have a chance of containing some blood infected with a disease. Such diseases tend to have generally helpful symptoms.</li>
+				<li class="rscadd">Large Xenoarchaeolgy artifacts have a new potential effect that causes them to release pathogenic clouds carrying a disease of random dangerosity.</li>
+				<li class="rscadd">Given admins some tools to easily create highly customized diseases, essentially letting them control every aspect of the disease and its effects. They may even give the disease up to 100 stages but then setting up each stage might becomes a chore. Said disease may be inoculated inside a mob, or spawned inside a growth dish.</li>
+				<li class="rscadd">Admins also now have a panel that displays every disease currently in the world and where they came from, who's infected by it, what items are infected by it, which growth dish contains them, and whether they're in the database or not (which admins can actually toggle).</li>
+				<li class="rscadd">Growth dishes now have their appearance depend on the disease in them. with a random color and a random pattern of a random color. Major mutations may cause a variation in color.</li>
+				<li class="rscadd">The Pathogen database now lists mutated pathogen as children of the original pathogen, making archiving sensibly easier. Pathogen may also now be given a nickname instead of a name. Said nickname will appear when the disease is analyzed in a mob or on the Medical HUD. You may also change the disease's dangerosity from Undetermined to Safe or Dangerous, which will change the appearance of the Status icon that appears on the Medical HUD.</li>
+				<li class="rscadd">If wearing a Medical PDA with its health scanner activated, the PDA will tell its owner if they suddenly got infected with a disease.</li>
+				<li class="rscadd">Wizarditis has been ported to virus2 at long last, and has been reworked to be more !!fun!!. After being infected for a while, you will start shouting random spells, but unlike the old version, each spell you randomly shout will actually be cast! Thankfully the proc chance is reasonably low.</li>
+				<li class="rscadd">All symptoms now have a Danger value that ranges like so. 0 for helpful. 1 for flavor text. 2 for annoying. 3 for hindrance. 4 for harmful. 5 for deadly.</li>
+				<li class="rscadd">Diseases may incubate inside irradiated mobs, and should they also have mutagen in their system, they may induce an effect mutation. However effects mutating this way will only switch to an effect of similar Danger.</li>
+				<li class="rscadd">Chemistry secure lockers now contain a box of vials, allowing them to preserve blood samples from infected patients and transmit them to Virology.</li>
+				<li class="rscadd">All bio suit lockers now also contain a pair of Science Goggles. These can now be turned on to let their wearer easily find airborne pathogenic clouds, items and mobs infected with contact pathogen, and floor splatters that contain pathogen as well.</li>
+				<li class="rscadd">Tech Storages on all maps have a new rack containing spare circuitboards for all virology machines.</li>
+				<li class="rscadd">Toxin Firstaid Kits have had one of their Anti-Toxin syringes replaced with a Spaceacillin syringe.</li>
+				<li class="rscadd">ERTs now have a box of vials and two pill boxes of nanofloxacin at their HQ, as well as a centrifuge on their shuttle, and two more science goggles in their back room, allowing them to efficiently deal with epidemics.</li>
+				<li class="rscadd">Rewritten the ways diseases can transmit both by contact and through the air. A disease may have one or several spread vectors, allowing it to spread both by contact or through the air. This also opens the door for new exotic spread vectors down the line.</li>
+				<li class="rscadd">Diseases with the contact spread vector may also temporarily contaminate items. Higher infectability means it lingers on the item for a longer time. Infected items can simply be washed at a sink, washing machine, or sprayed with Space Cleaner to remove the pathogen.</li>
+				<li class="rscadd">All items (and most importantly, clothing) have a sterility variable that indicates their chance to not get infected (or protect their wearer from infection).</li>
+				<li class="rscadd">The antibody scanner has been reworked and is now called the immunity scanner. It can be used on any item to get their sterility value, or any living mob to get an analysis of their immune system.</li>
+				<li class="rscadd">When touching or hitting someone, the checks for infection are done depending on which body part enters in contact. (for example, when shaking hands, both hands are checked, but when patting a head, your hands are checked along with the head being patted. Only one side has to succeed in a sterility check to prevent infection).</li>
+				<li class="rscadd">Similar checks are performed when a mob bumps into another mob. When bumping into someone, you hands are checked against the other's torso. However if bumping into a tiny mob, such as a mouse, your feet are the ones checked.</li>
+				<li class="rscadd">Due to how items can get infected if they aren't sterile, keep that in mind when hitting someone or performing surgery. Science goggles can easily reveal infected items.</li>
+				<li class="rscadd">Pathogen that can only spread through blood may still spread through contact if both parts checked are bleeding.</li>
+				<li class="rscadd">Also, blood that's been infected with pathogen that spreads through contact may also infect individuals by being splashed upon them.</li>
+				<li class="rscadd">Sterilizine can now be sprayed over items to increase their sterility permanently by 30 points.</li>
+				<li class="rscadd">Airborne pathogen no longer spread instantly to adjacent mobs. Instead whenever a mob infected with an airborne pathogen breathes with its mouth unobstructed and unfiltered, they release a pathogenic cloud that contains all their airborne diseases, and that moves accross the room, further the higher the pathogen's infectability variable is. Another mob may then get infected if they are close to such a cloud when they breath themselves. Mobs breath every 8 seconds on average, and clouds linger for about 10 seconds. Pathogenic clouds do NOT spread through vents, for now at least.</li>
+				<li class="rscadd">Monkeys now have Status and Health bars displayed on the Medical HUD. Mice have their Status icon displayed as well.</li>
+				<li class="rscadd">The monkey-sized doctor clothing fully protects its wearer from contracting or spreading diseases.</li>
+				<li class="rscadd">All mice may get infected just as easily as human and monkey, and most symptoms will work on them as well.</li>
+				<li class="rscadd">You may now use an empty syringe on a mice to draw 5u of blood, inflicting them 5 oxy damage.</li>
+				<li class="rscadd">Added small critter cages. Can be crafted with a bit of Plasteel, and placed on a table or on the floor. You can pick up mice by drag n dropping them on yourself with Grab intent, and then place them inside those cages. You can then pick up the cage by drag n dropping it onto yourself.</li>
+				<li class="rscadd">Mice in cages may not contract or spread diseases, unless they get pet through the cage.</li>
+				<li class="rscadd">You may add some reagents to the cage, which will cause the mice in them to start gulping them up. You may also add some food on top of the cage to feed the mice in it.</li>
+				<li class="rscadd">Mice now have a chewing animation which they play whenever they eat or they chew cables.</li>
+				<li class="rscadd">Player-controlled mice may click on mobs to nibble their toes, which may cause contact diseases to spread if contact can be made. If the mob is lying down, they may also try to nibble fingers or ear lobes.</li>
+				<li class="rscadd">Virology now features its own pet mice, of the Balb/c strain. Its name is randomized, but it'll keep company to people in Virology. Don't forget to feed them!</li>
+				<li class="rscadd">Oh right and Virology itself works a lot differently, like, just read the in-game Crash Course in Virology manual, Virologists spawn with it and it can be found in both Medbay's bookcase and Virology itself. All machines have been reworked and mutating and curing diseases is also a bit different so just go read that. It'd really be too long for a changelog.</li>
+				<li class="rscadd">If you play Medbay YOU SHOULD READ THAT. Or at least the first chapter.</li>
+				<li class="rscadd">Antigen now have rarity. Weak diseases tend to have more easily aquired antigen, while more dangerous diseases have antigen that are harder to obtain before an outbreak.</li>
+				<li class="rscadd">Medbots now detect diseases that are in the database in individuals, and try to inject them with spaceacillin. They may no longer detect old diseases but they didn't do much to help with those anyway.</li>
+				<li class="rscadd">The green old sadface status icon is still used to indicate individual infected with old diseases, such as appendicitis.</li>
+				<li class="rscadd">Added a Laboratory Mice supply pack to cargo, containing some small cages and also mousecubes. Yeah those are a thing now.</li>
+				<li class="rscadd">All mice now lose half less nutrition by moving and standing, and gain twice more by eating.</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the fat religion.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Soul Ramblers can now show up in any population, but prefer to ramble in lowpop shifts.</li>
+				<li class="rscdel">The Proto-Kinetic Accelerator is no longer purchased at the mining vendor ($300)</li>
+				<li class="rscadd">A PKA warp voucher can be bought at the mining vendor ($25). This turns into a PKA when brought into the mine.</li>
+				<li class="tweak">Sending plasma back to centcomm on the supply shuttle now pays out 5x as much, for a total of 10x (it originally paid 2x value).</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Cyborg chargers now accept anyone that has a cell to them, not just silicons.</li>
+				<li class="tweak">The cyborg charger now draws energy from the grid properly.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Ninjas can now teleport again</li>
+				<li class="tweak">Handgun holsters can now hold bananas.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where calculated armor could reach values below 0, making damage sources deal even more damage than intended, such as a ninja sword that dealt approx. 90 damage per hit on an unarmored target.</li>
+				<li class="soundadd">Geiger counter now plays a sound when it detects radiation.</li>
+			</ul>
+
+			<h2 class="date">2019.07.08</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Freedom implants will always have 5 uses, whereas previously they could have a random amount between 1 and 5.</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Pale beings in crit now have an overlay applied to them, indicating to everyone that they're in crit. As a reminder, even though they don't fall unconscious, they still take periodic oxygen damage.</li>
+				<li class="tweak">Pale beings in crit now take 1 brute damage per second. Unlike oxygen damage, they cannot just heal it through fervor by themselves.</li>
+				<li class="tweak">Pale beings now die at -50 hp instead of -100 hp. This means that a fully charged egun can take an armored pale body down if every shot connects, without having to rely on crit damage over time to finish the job.</li>
+			</ul>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Detectives now have a belt that can carry most of the gear from their locker and other job related items such as fingerprint cards. Also added a spray bottle of luminol, switchblade, and sec tape to their gear box.</li>
+				<li class="tweak">Detective scanners are now small. The mirror in the NT disguise kit are now combs and function the same way.</li>
+			</ul>
+			<h3 class="author">PJB3005 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">PDAs no longer have a special close button and just use the OS close button now.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Scientists spawn with random ties.</li>
+				<li class="tweak">Nanotrasen will notify via the intercept if the station is in the most dangerous area possible.</li>
+				<li class="tweak">Your Dreamseeker window will now flash orange if you are given an admin PM or if a gamemode is looking for candidates.</li>
+			</ul>
+
+			<h2 class="date">2019.07.07</h2>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Cult's weight has been lowered, making it less likely to roll at roundstart.</li>
+			</ul>
+
+			<h2 class="date">2019.07.06</h2>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Throw damage is now applied properly instead of not at all.</li>
+			</ul>
+
+			<h2 class="date">2019.07.05</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Players sacrificed with an empty soul blade are now properly converted.</li>
+				<li class="rscadd">Clicking on an empty soda can with HARM intent on will crush the can in your hand, making a satisfying sound. Crushed cans are considered a trash item so they will persist between rounds. They can no longer be cut with wirecutters or used to hold reagents, however they can still be ground into aluminum using a mortar, or fed to an auto-lathe for a bit of iron.</li>
+				<li class="rscadd">Crushed cans deal 2 brute damage instead of one when thrown, and can be thrown slightly further and faster that regular cans.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">You now get a feedback message when opening / closing airlock panels with a screwdriver</li>
+				<li class="tweak">Starscreens crates from cargo now contain a fully functional shield generator flatpack and shield capacitor flatpack</li>
+			</ul>
+			<h3 class="author">ancientpower updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Refactored mouse code to allow for fuckery</li>
+				<li class="imageadd">Additional mouse op icon states by Deity</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Spellbook looks a bit cooler.</li>
+			</ul>
+
+			<h2 class="date">2019.07.04</h2>
+			<h3 class="author">Arthurdentist updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Re-added the previously removed brain damage spell and made it Bundle exclusive.</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">You can now aim at lying down mobs with a soul blade's projectiles.</li>
+			</ul>
+			<h3 class="author">Emilc4h updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Starscreen Shield Generators can now be built with Micro Manipulators rather than Pico Manipulators, as initially intended.</li>
+			</ul>
+			<h3 class="author">F-OS updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Adds a check to see if someone already has control within Assume Control for borers.</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Plasma Cutter description now says how to load it, and displays remaining ammo</li>
+				<li class="bugfix">Plasma Cutters can now hit people lying down, and the conversion kit will no longer eat multiple accelerators</li>
+				<li class="rscadd">Plasma Cutters can now be loaded with plasma ore</li>
+				<li class="bugfix">Plasma Cutters now go through the normal weapon checks (Looking at you, mommis)</li>
+				<li class="rscadd">Cutting or pulsing an airlocks wires now makes a sound</li>
+				<li class="rscadd">Did metaclub stuff!</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The values of minerals at the smelter have been dramatically reduced. Mining vendor prices have all dropped.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Armor is now a straight divider of damage, rather than the double diceroll it was previously.</li>
+				<li class="tweak">Slime people can no longer be decapitated.</li>
+			</ul>
+			<h3 class="author">Sauberstaub updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Alt clicking a chair/bed now buckles you into it.</li>
+				<li class="tweak">You can now buckle yourself into a chair/bed from an adjacent tile.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">BYOND members now get special privileges. Kudos to Bathos for putting up the coding bounty.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes traitor emagged robots not being selfdestructproof</li>
+			</ul>
+			<h3 class="author">plosky1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Malf AI's weight has been increased, making it more likely to roll at roundstart.</li>
+			</ul>
+
+			<h2 class="date">2019.06.30</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Fax machines, wooden TVs, laptops, library computers and boomboxes can pass over tables.</li>
+			</ul>
+			<h3 class="author">GeneralVeers25 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Box: Xenobio Cage 6 is now wired to the power grid.</li>
+				<li class="rscadd">Roidstation:  The Security Office APC is now wired to the power grid.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The longevity symptom now backlash-ages you according to the multiplier, rather than you gaining an arbitrary 8 years of age. Age currently does not affect anything ingame.</li>
+			</ul>
+			<h3 class="author">ancientpower updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">MOUSE OPS</li>
+			</ul>
+
+			<h2 class="date">2019.06.29</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The security records console can be used to set the High Threat status, whereas previously only the secHUD could do it.</li>
+				<li class="tweak">The detective's wooden TV now has its own circuit board, so it no longer turns into a regular console upon rebuilding.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes robotic heads not looking robotic after defibrilation.</li>
+				<li class="bugfix">Fixes some cases of amputated limbs not maintaining their look properly.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Reduced the delay to rest from 1 second to 0.1 second.</li>
+			</ul>
+
+			<h2 class="date">2019.06.28</h2>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Changes to crawling. You can now crawl fast for a short duration, with a short cooldown if you do it too fast and too often.</li>
+			</ul>
+
+			<h2 class="date">2019.06.26</h2>
+			<h3 class="author">GeneralVeers25 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Roidstation: Did stuff!</li>
+				<li class="rscdel">Roidstation: did other stuff!</li>
+			</ul>
+
+			<h2 class="date">2019.06.25</h2>
+			<h3 class="author">Allspice updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Creeper vines show under things instead of over now.</li>
+			</ul>
+
+			<h2 class="date">2019.06.23</h2>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Makes the clown asteroid into a vault</li>
+				<li class="tweak">Soviet MoMMIs now have a fully scanned material synth</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed greys not getting their species-specific uniform icons.</li>
+				<li class="rscadd">Added a new bartending uniform and purple pumps, inspired by VA-11 HALL-A</li>
+				<li class="imageadd">Sprites by BurntDevil!</li>
+			</ul>
+			<h3 class="author">brndd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Portable air scrubbers now scrub up to 5 times faster than they used to and have a larger tank (2000 litres). They now have a pressure limit of 5066.25 kPa.</li>
+				<li class="rscadd">Portable scrubbers now have a gas selection.</li>
+				<li class="rscadd">The Clarke scrubber now has an accessible interface and can be connected to a connector port to drain its contents.</li>
+			</ul>
+
 			<h2 class="date">2019.06.22</h2>
 			<h3 class="author">Arkatos1 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1895,471 +2239,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Ian the corgi can no longer wear flat pieces of paper as a hat; the paper has to be folded into a hat first.</li>
-			</ul>
-
-			<h2 class="date">2019.02.22</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">you may now use a pen to write labels on syringes.</li>
-				<li class="rscadd">syringes fired from syringe guns get to keep their label. (Unknown is hit by the syringe (Healing)!)</li>
-				<li class="rscadd">if a syringe fired from a syringe gun decays from traveling over 6 tiles, a broken syringe spawns in its place.</li>
-			</ul>
-			<h3 class="author">DrSnips updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Slime related beings now have a proper type of meat in the form of gelatin [slabs]. You can use it as a meat or as a gelatin in cooking but be aware that it contains slime jelly. Throw your local xenobiologist into the gibber today!</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Catbeast scoreboard logo should now be fixed</li>
-				<li class="tweak">In Blob, the AI is only required to enforce quarantine until all overminds are destroyed. The scoreboard will reflect this success or failure.</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Can now delete viruses from the database.</li>
-			</ul>
-			<h3 class="author">Sauberstaub updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Tweaked spread type variance in disease2.dm to yield airborne spread type less often.</li>
-				<li class="rscadd">Added "Prion" disease form. Prion has extreme stage variance and stage probability.</li>
-				<li class="rscadd">Added new Stage 1 effect: "Hyronalinism". Causes infected to produce Hyronalin over time, increasing radiation resistance.</li>
-				<li class="rscadd">Added new Stage 1 effect: "Mygalia Syndrome". [FILLER]Causes the infected to feel minor soreness with no serious effect.</li>
-				<li class="rscadd">Added new Stage 1 effect: "Clashing Syndrome" Causes the infected to randomly and uncontrollably greet everyone they meet, or bid them farewell. Impairs communication.</li>
-				<li class="rscadd">Added new Stage 2 effect: "Plankton's Syndrome" Causes the infected to yell everything they say, greatly increasing vocalization range.</li>
-				<li class="rscadd">Added new Stage 3 effect: "Cattulism Syndrome". Slowly increases the infected's "cat-like" night vision ability.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Full-tile windows and grilles can now be alt-clicked to show the contents of the turf they're standing on.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds the Sith Bundle to the possible traitor bundle list! Contains two e-swords, unique clothing (thanks to RealestEstate), a bind spell, a lightning spell (deals 25 burn damage and requires you to wear the entire clothing set), a telekinesis injector, and a jump mutation injector. Shouldn't mean you should try your luck at it by playing roulette with the bundle though!</li>
-			</ul>
-
-			<h2 class="date">2019.02.21</h2>
-			<h3 class="author">Irradiation updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The wizard zombie potion now has a 100% chance to create a zombie instead of 50% if the target is human.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You can now pry the lid off the cistern of a toilet with a chisel</li>
-				<li class="rscadd">The antaghud now has a catbeast icon</li>
-				<li class="bugfix">Crazed weebs, catbeasts, and wizards all start with sensors turned off now.</li>
-				<li class="bugfix">Fixed an oversight that caused autotraitor to check for new traitors every 30 minutes instead of 15</li>
-				<li class="bugfix">Fixed a bug where station integrity was inverted on the blob score screen (e.g.: it would show 103% instead of 97%)</li>
-				<li class="bugfix">Fixed an oversight where blobs did not burn tiles, therefore scoring no station damage when expanding over floors.</li>
-				<li class="bugfix">Fixed the Blob scoreboard not displaying any data</li>
-				<li class="bugfix">Fixed a bug in which the Invade objective had an inverted check, causing instant victory</li>
-				<li class="bugfix">Fixed a bug where the Blob lacked a required_pref, meaning it could not fire</li>
-				<li class="bugfix">Fixed a bug where the blob was given a role, then recruited to its own faction, causing it to drop and regain its role.</li>
-				<li class="rscadd">Reformed Malf AI candidacy to prioritize the AI, then Cyborgs, but then anyone who has Malf enabled.</li>
-				<li class="rscadd">Malf preferences now actually work, allowing the mode to fire.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added the Prototype Bluespace Rapid Part Exchange Device to the Protolathe. It requires Engineering research of 5, Material research of 6, Data research of 3, and Bluespace research of 5. It can hold twice as much as a regular RPED and does not require a machinery's panel to be open to exchange parts. This one costs slightly more than a regular RPED but with diamond cost thrown into the mix.</li>
-				<li class="rscdel">The scientist screams are ONLY AVAILABLE FOR APRIL FOOLS. Sorry about that!</li>
-			</ul>
-
-			<h2 class="date">2019.02.20</h2>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Nanotrasen now properly faxes reports on Merchants that include mugshots of the trader in question rather than you, the reader.</li>
-				<li class="bugfix">Fixed a detection issue that prevented regaining threat when an antagonist was destroyed. Note that they need to be entirely destroyed, cremate that head!</li>
-				<li class="tweak">The weeaboo sword's examine text is now more clear about what alt clicking does (it toggles your teleport attack on/off)</li>
-				<li class="bugfix">Latejoin weeaboos should no longer get double objectives</li>
-				<li class="bugfix">When a latejoin role that refunds threat joins, it is now properly logged.</li>
-				<li class="tweak">Latejoin roles will not refund threat over the threat_level</li>
-				<li class="rscdel">Traders can no longer quality for the Crazed Weeaboo role, to prevent latejoining in space.</li>
-				<li class="bugfix">Vampires no longer cloak or menace while dead.</li>
-				<li class="rscadd">A mode can refund its threat now if none of the applicants were valid.</li>
-				<li class="bugfix">Fixed a bug where a dead but not ghosted player would be ignored for from_ghosts antag roles even after submitting an application.</li>
-				<li class="bugfix">Fixed a bug where later ragin' mages would not spawn in the wizard den, get a book, robes, name, etc.</li>
-				<li class="bugfix">Fixed a bug where forced ragin' mages would not calculate threat properly.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added tomato soup as premium item for coffee machines</li>
-				<li class="tweak">tomato soup, the food, now contains tomato soup, rather than tomato juice.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Scientists now have Half-Life screams.</li>
-				<li class="bugfix">AI can now ctrl+click the fire alarms.</li>
-			</ul>
-
-			<h2 class="date">2019.02.19</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">The wizard's Feint spell's enchanted sword finally has its own sprites, courtesy of Fury.</li>
-				<li class="bugfix">You can no longer bork your inventory slots by trying to store the enchanted blade.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added a new midround mode, RevSquad.</li>
-				<li class="rscadd">Added a new latejoin mode, Provocateur.</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds a generic casing drop sound, for guns such as the NT Glock</li>
-				<li class="tweak">Lasers going through windows have their damage affected by passing through the window. Should the laser damage reach 1 or below, the laser disperses entirely.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The protolathe and circuit imprinter can now fit 50 objects in their queues instead of 30.</li>
-			</ul>
-
-			<h2 class="date">2019.02.18</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed one of the syndicate bundles not properly spawning TTVs.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Syndicate Infiltrator, Syndicate Sleeper Agent, Ragin' Mages, and Crazed Weeaboo can now occur as repeatable rulesets (but take a penalty to weight each time).</li>
-				<li class="bugfix">Fixed a bug where non-repeatable rulesets would reoccur.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Re-add blob to the rotation.</li>
-			</ul>
-
-			<h2 class="date">2019.02.17</h2>
-			<h3 class="author">Allspice updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Alt-click tome to make a radial of all talismans in that tome; click one of them to put that in your hand.</li>
-			</ul>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Nuclear Assault (mid-round Nuke Ops) no longer have tank transfer valve bombs in their ship, only Nuclear Emergency (roundstart Nuke Ops) do.</li>
-				<li class="imageadd">Added in-hand sprites for all burgers, pizzas (and slices), stacks of pizza boxes, and most importantly, baguettes!</li>
-				<li class="bugfix">Fixed donut and faggot sprites not appearing despite them having been in the code for aeons.</li>
-			</ul>
-			<h3 class="author">DrSnips updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Changed slime split results slightly as follows.</li>
-				<li class="rscdel">Old way was 3 random colors but a slightly higher chance to get same color and 1 different color for sure.</li>
-				<li class="rscadd">New way is 2 random colors with an even chance for all possible mutations, 1 same color(split a blue, get a blue) for sure, and 1 different color for sure.</li>
-			</ul>
-			<h3 class="author">Goldsteel updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Greys now take extra burn damage when swirlied in a toilet. Greys also take burn and not brute damage when dealing with water.</li>
-			</ul>
-			<h3 class="author">MadMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Boulders now inherit the geological data of their mined turf.</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Can no longer hear the safe you're fiddling with while using TK if you are not actually near the safe.</li>
-				<li class="tweak">Evidence bags are now a child of storage.</li>
-				<li class="bugfix">Fixes evidence bags being able to unglue superglued items</li>
-				<li class="bugfix">Fixes evidence bags being able to storage supermatter splints safely</li>
-				<li class="bugfix">Security detectors will now properly scan monkeys.</li>
-				<li class="bugfix">Fixes a bug that would make you fail to soulstone a head.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added canned coffee as premium item for soda machines</li>
-				<li class="imageadd">Mugs now have reagent overlays, like drinking glasses</li>
-				<li class="tweak">Mugs now take the name of their main ingredient, like drinking glasses</li>
-				<li class="tweak">Added a special entry for hot coco in mugs, and a description to the blood reagent.</li>
-			</ul>
-
-			<h2 class="date">2019.02.16</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">There are now in-hand sprites for every bible types.</li>
-				<li class="imageadd">Also added in-hand sprites for Space Law, Barman recipes, and Chef's cookbook.</li>
-			</ul>
-			<h3 class="author">Goldsteel updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Fixes a spelling error with the sweet machine.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Offstation antags (e.g.: nuke ops, wiz) will no longer steal a roundstart job slot.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Ghetto splints now consume the cablecuffs used in their creation.</li>
-			</ul>
-
-			<h2 class="date">2019.02.15</h2>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Lowered catbeast threat generation per room to 0.75 (from 1)</li>
-				<li class="tweak">Catbeasts don't generate threat if they are not on the tile itself. e.g. they can't make threat hiding in lockers, riding disposals, or in a mech</li>
-				<li class="bugfix">Fixed an oversight where a borgified or transplanted catbeast brain would still generate threat.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added 3 new toys, sprites courtesy of otatoh</li>
-			</ul>
-
-			<h2 class="date">2019.02.14</h2>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes inconsistency between what the high tier stock parts were made of, and what they would recycle into</li>
-				<li class="tweak">Cargo shuttle now travels immediately, rather than waiting a second.</li>
-				<li class="bugfix">Fixes the ammolathe spawning an autolathe when deconstructed</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Recent developments in black hole and supermatter research have confirmed the possibility of an even more destructive entity than the fabled 'Super Singularity'. Please keep supermatter crystals and 'Super Singulos' separated at all times.</li>
-			</ul>
-
-			<h2 class="date">2019.02.13</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Cult: You can now discard the altar holomap by clicking the altar again.</li>
-			</ul>
-			<h3 class="author">Goldsteel updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The sound synth can now play SPS noises.</li>
-			</ul>
-			<h3 class="author">I-VAPE-VOX-CLOACA-EVERY-DAY-OF-MY-LIFE updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The Janitor's PDA app that tracks mops, mopbuckets and cleanbots (this is a thing that exists) now also tracks Janicarts and their keys.</li>
-				<li class="bugfix">Fixed the Labor Administration Console allowing you to set the assistant job limit to 0. Also, the Assistant job now will always have a minimum of 2 slots available.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The anime club now deploys 4 new incredibly deadly tools in their arsenal.</li>
-				<li class="bugfix">Fixed an issue with the loose catbeast on the scoreboard.</li>
-				<li class="bugfix">Fixed a bug where an admin-forced gamemode that did not execute due to lack of player apps would still be included on the scoreboard.</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Analysis of the pathogen now yields whether it is a parasite, bacterium, or virus, rather than just stamm then random numbers for its name.</li>
-				<li class="bugfix">Fixes glass tiles being weird.</li>
-			</ul>
-			<h3 class="author">dylanstrategie updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added the first purely Chaplain traitor item, the Feldbischof's Bible. This bible handily disguised AND functioning as your holy book of choice comes with an extra bonus in the form of an authentic (made in China) loaded Luger P08 and an extra magazine. 16 rounds of pure converting power, like back in the day. It costs 14 points to buy, discounted at 10 for practicing people.</li>
-				<li class="rscadd">Manually spawned in Bibles, booze bibles and Traitor bibles will now automatically print for the Chaplain's religion.</li>
-			</ul>
-			<h3 class="author">otatoh updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds three spare trader IDs to the tradevend, purchasable for 100 credits each.</li>
-			</ul>
-
-			<h2 class="date">2019.02.12</h2>
-			<h3 class="author">Allspice updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Halve the cost of the major truesight potion, from 10 points to 5.</li>
-			</ul>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="experiment">The Chaplain Update, Part 1: The "Incense Update"</li>
-				<li class="rscadd">Added incense! Five different fragrances for our (un)friendly chaplains to mess with!</li>
-				<li class="rscadd">Chaplains now spawn holding a thurible, with a box of incense sticks in their backpack, and a null rod in their pocket.</li>
-				<li class="rscadd">Depending on their religion, the sticks in their backpack might have an unusual fragrance.</li>
-				<li class="rscadd">The fragrance of a stick of incense can be changed by using an incense oil container, which can be obtained at the PietyVend along with more boxes of sticks. Adding certain flowers to the oil container let you change the fragrance applied to the incense.</li>
-				<li class="rscadd">Incense sticks can be light up just like a cigarette, however they will retain their remaining combustible when extinguished.</li>
-				<li class="rscadd">Incense sticks can be placed inside a thurible, which gives them a bit of extra duration. The thurible also comes with a built in lighter.</li>
-				<li class="tweak">the vampire smiting abilities of the null rod have been moved over to the thurible (since it's made of silver). Null rods can still disrupt their powers. Thuribles also deal brutal damage to undead simple animals, such as zombies.</li>
-				<li class="bugfix">The character preference preview now properly displays chaplains with laceups shoes.</li>
-				<li class="rscadd">The cult holomap is now accessible from altars, and displays the position of other cult buildings and runes. Path runes are color-coded by word. Of course this same map lets you locate bloodstones during the late-game.</li>
-				<li class="bugfix">Fixed cultist brains put in MMI being able to hear cult chat messages.</li>
-			</ul>
-			<h3 class="author">Gringonius updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added grape juices, white wine, berry wine and plump helmet wine, go get yourself drunk!</li>
-			</ul>
-			<h3 class="author">I-VAPE-VOX-CLOACA-EVERY-DAY-OF-MY-LIFE updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Folded notes now fit in cigarette packs. You can now light matches using other matches again. You can now put coins and burnt matches back into matchboxes (don't try to put a lit match back inside!)</li>
-				<li class="tweak">Syndicate bundles now cost 14 telecrystals, down from 20. This is to make them a little more reliable and less repetitive.</li>
-				<li class="tweak">Wizard spell bundles now cost 80 spellpoints, down from 100. This is to make them a little more reliable.</li>
-				<li class="rscadd">Added mop and mopbucket sounds.</li>
-				<li class="tweak">Mops now clean instantaneously, but have a 1 second cooldown.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Midround ops now properly get objectives forged.</li>
-				<li class="rscadd">Completely annihilating a solo antagonist will now regenerate some of the round's threat.</li>
-				<li class="rscadd">If a mode is rolled by dynamic but no one applies, it will refund the threat.</li>
-				<li class="tweak">All blob costs massively changed to encourage node and shield development over rushing down enemies with expand blob.</li>
-				<li class="tweak">You can now restrain your blobs from melting walls passively by alt clicking your core.</li>
-				<li class="tweak">Objects under blobs (like Phazons) will get hit by blobs.</li>
-				<li class="bugfix">Fixed a bug where someone who was removed as traitor would not have their uplink taken automatically.</li>
-				<li class="rscadd">Mangy catbeasts can now be generated by dynamic! Kill them before they attract other dangerous antagonists!</li>
-				<li class="bugfix">Borgs will now be bound to an AI at roundstart, regardless of which order they are created in.</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">MoMMIs can now retrieve objects from the forge.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Brings back the enemy communication paper from roundstart. It will give a wild estimate of the threat level.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Dynamic Mode: Fixed midround rulesets being unable to trigger unless the latejoin ruleset cooldown was off as well.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Now you can ctrl-click fire alarms to toggle them on or off. You can trigger them from a distance with telekinesis too.</li>
-			</ul>
-
-			<h2 class="date">2019.02.11</h2>
-			<h3 class="author">I-VAPE-VOX-CLOACA-EVERY-DAY-OF-MY-LIFE updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The Janitor's trash bag can now hold up to 21 items, as intended. To prevent it from becoming the ultimate belt slot container, it will slow you down if it's too full and worn on belt slot (won't slow you down if you're just carrying it or if you clip it to your janicart)</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes the ambiencepocalypse.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The lighting now properly changes when you use mesons or night vision goggles in combination with the x-ray superpower</li>
-			</ul>
-
-			<h2 class="date">2019.02.10</h2>
-			<h3 class="author">Goldsteel updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Honk serum now makes you audibly honk. Honk serum can also be made from 1 part banana juice, 1 part inacusiate and 1 part alkysine.</li>
-				<li class="rscadd">Fixes the door bolts sounds for various buttons, such as dorms.</li>
-			</ul>
-			<h3 class="author">Gringonius updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Regular spacesuits now hold bigger tanks.</li>
-				<li class="tweak">Chefs now store the wafer-thin mint in their fridges.</li>
-			</ul>
-			<h3 class="author">I-VAPE-VOX-CLOACA-EVERY-DAY-OF-MY-LIFE updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed a few ancient bugs that made gibs not display their colors properly, and were also making blood extremely laggy. Gone are the days of getting crashbanged because someone butchered 2000 chickens!</li>
-				<li class="bugfix">Fixed proximity sensors not detecting (or detecting in extremely buggy ways) anything that wasn't a mob. This may have slight balance implications since you can chuck a pen towards them to activate them, so do definitely make a bug report if you think this shouldn't be intentional.</li>
-			</ul>
-			<h3 class="author">Irradiation updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Vampire is less likely to roll at roundstart and moreso on lower populations (15 or less).</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes not being able to salvage from mecha wreckage</li>
-				<li class="rscadd">Adds IV drips to all escape shuttles that have bloodbags already available.</li>
-			</ul>
-			<h3 class="author">Repth1 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">In-built welding masks added to plasmaman engineer and atmos tech helmets</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds security belts and bandoliers to the biogenerator</li>
-			</ul>
-			<h3 class="author">dylanstrategie updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Teleport spell cooldowns changed. Starts at 45 seconds (was 1 minute), reduces by 10 seconds per upgrade (was 15 seconds per), minimum time is now 5 seconds (was 20 seconds). A bit faster teleport, maybe -someone- will pick the spell now</li>
-			</ul>
-
-			<h2 class="date">2019.02.09</h2>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes ghosts being able to eject mecha pilots</li>
-			</ul>
-			<h3 class="author">dylanstrategie updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscdel">Blink spell (both Wizard and Vampire) no longer fills the origin and destination point with a huge plume of smoke. Instead, the origin of the warp will be clear of visual effects (pending a kickass animation or such) and the destination will have one-tile smoke to make the Wizard's destination more visible.</li>
-			</ul>
-
-			<h2 class="date">2019.02.08</h2>
-			<h3 class="author">DrSnips updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Ammolathes are now mapped in and can be found in most armories. A design disk has also been added to the warden's room so research can obtain the ammolathe's design. This design is limited to the disk.</li>
-			</ul>
-			<h3 class="author">Goldsteel updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds 20 new pill colours to the chem master. Toggle them on and off at your leisure.</li>
-			</ul>
-			<h3 class="author">I-VAPE-VOX-CLOACA-EVERY-DAY-OF-MY-LIFE updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added Aminocyprinidol, an exciting new chemical made by mixing Aminomicin with large amounts of carp pheromones. Add 10 units nutriment to activate!</li>
-			</ul>
-			<h3 class="author">Repth1 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed some examine and miscellaneous typos.</li>
-				<li class="tweak">You can now shoot over candles with lasers or emitters to light them.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Stunbaton, telescopic baton, and classic batons now stun you for far less time when you hit yourself out of clumsiness or brain damage.</li>
-			</ul>
-
-			<h2 class="date">2019.02.06</h2>
-			<h3 class="author">Emilc4h updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Unathi (lizards) now actually have claws for use in butchering and other horrible things.</li>
-			</ul>
-			<h3 class="author">Goldsteel updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds craftable, wearable warning cones</li>
-			</ul>
-			<h3 class="author">Gringonius updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes excavation suit storages having survivor suits inside.</li>
-			</ul>
-			<h3 class="author">I-VAPE-VOX-CLOACA-EVERY-DAY-OF-MY-LIFE updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added the Labor Administration Console, a computer that allows anyone with HoP access to free up job slots.</li>
-				<li class="rscadd">The Labor Administration Console can also mark jobs as 'Priority', which show up at the top and in red when latejoiners are prompted to select a job. Latejoiners that fill a Priority job will get a box with a little bonus for their efforts.</li>
-				<li class="tweak">Chemmasters have a 1000u buffer now (only ever matters for cauldron memes)</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The chaplain's default religion (Christianity) now has the added perk of having everyone else converted by default, though they may still choose to renounce it.</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Small overhaul to the Dish Incubator.</li>
-				<li class="rscadd">Radiation is now a toggle between off-minor-major</li>
-				<li class="rscadd">Incubator stops consuming food when the pathogen is fully grown.</li>
-				<li class="rscadd">At higher scanning levels, can introduce creatine to strengthen, or spaceacillin to weaken a virus</li>
-				<li class="rscadd">Can now flush the individual reagent components of the incubator, rather than all at once.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">fixes oversight where *dab would cause you minor damage, other minor fixes</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds the brain damage spell for wizards. Allows you to deal brain damage to whoever you target, with a base cooldown of 20 seconds that can be lowered to 8. Can be upgraded to triple the brain damage caused.</li>
-			</ul>
-
-			<h2 class="date">2019.02.05</h2>
-			<h3 class="author">GeneralVeers25 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Defficiency Maintenance should no longer be a total crapshoot on whether or not the radstorm gets ya.</li>
-			</ul>
-			<h3 class="author">Irradiation updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Avocado burgers now accept any types of meat to make them.</li>
-				<li class="rscadd">Lowered the minimum threat required to spawn roundstart traitors for lower population ranges.</li>
-				<li class="rscadd">Did stuff!</li>
-				<li class="rscdel">did other stuff!</li>
-				<li class="rscadd">Added the speedrun religion.</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Can now grind ice crystals in the all in one grinder</li>
-			</ul>
-			<h3 class="author">Repth1 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You can now shoot candles with lasers to light them.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Latejoining as a captain or a security role will increase threat a little.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Strong mutation for Genetics is now considered a beneficial mutation and will activate on BAC</li>
-				<li class="rscadd">Adds the EMP flashlight to the syndicate uplink for 4 TC!</li>
-				<li class="bugfix">You can no longer drag yourself from energy crossbow hits.</li>
 			</ul>
 		</div>
 		<!--

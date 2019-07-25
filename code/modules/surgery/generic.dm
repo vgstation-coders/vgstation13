@@ -418,6 +418,8 @@
 		return 0
 	if (affected.status & ORGAN_DESTROYED)
 		return 0
+	if(isslimeperson(target) && istype(affected, /datum/organ/external/head))
+		return 0
 	return target_zone != LIMB_CHEST && target_zone != LIMB_GROIN && target_zone != LIMB_HEAD
 
 /datum/surgery_step/generic/cut_limb/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

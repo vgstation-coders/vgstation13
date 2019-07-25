@@ -80,6 +80,7 @@
 			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station.</span>")
 			to_chat(antag.current, "<span class='userdanger'>Your suit will lose pressure in approximately two minutes.</span>")
 			to_chat(antag.current, "<span class='danger'>Find a way inside before your suit's life support systems give out!</span>")
+			to_chat(antag.current, "<span class='notice'>Your suit's AI card is searching for a personality. You can manually re-start the search with the \"configure pAI\" verb.</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
@@ -532,12 +533,13 @@ Helpers For Both Variants
 /obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
 	if(active)
 		toggleActive(user,togglestate = "off")
+	..()
 		
 /obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
 	if(!isninja(user) && active)
 		toggleActive(user,togglestate = "off")
 		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
-		return
+	..()
 		
 /*=======
 Suit and assorted
@@ -580,6 +582,25 @@ Suit and assorted
 	species_restricted = list("Human") //only have human sprites :/
 	can_take_pai = 1
 	
+/obj/item/clothing/suit/space/ninja/New()
+	..()
+	
+	var/obj/item/device/paicard/mypai = new /obj/item/device/paicard(src)
+	mypai.name = "SpiderAI device"
+	mypai.overridedownload = TRUE
+	mypai.silent = TRUE
+	mypai.forceMove(src)
+	src.integratedpai = mypai
+	src.verbs += /obj/proc/configure_pai
+	mypai.looking_for_personality = 1
+	paiController.findPAI(mypai)
+	
+/*/obj/item/clothing/suit/space/ninja/Destroy()
+	..()
+	if(integratedpai)
+		remove_pai(integratedpai)
+	integratedpai = null*/
+	
 /obj/item/clothing/suit/space/ninja/apprentice
 	name = "ninja suit"
 	desc = "A rare suit of nano-enhanced armor designed for Spider Clan assassins."
@@ -617,9 +638,10 @@ Suit and assorted
 	
 /obj/item/clothing/shoes/ninja/apprentice
 	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
+	clothing_flags = NOSLIP
 	
-/obj/item/clothing/shoes/ninja/apprentice/New()
-	..()
+/obj/item/clothing/shoes/ninja/apprentice/proc/activateMagnets()
+	togglemagpulse(override = TRUE)
 	spawn(130 SECONDS)
 		togglemagpulse(override = TRUE)
 		visible_message("<span class='danger'>The magnetic charge on \the [src] disappates!</span>")
