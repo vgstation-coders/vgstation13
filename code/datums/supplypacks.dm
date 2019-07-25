@@ -1991,7 +1991,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/analyzer/plant_analyzer,
 					/obj/item/clothing/gloves/botanic_leather,
 					/obj/item/clothing/suit/apron, // Updated with new things
-					/obj/item/weapon/storage/box/botanydisk) //Updated with flora disks
+					/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk) //Updated with flora disks
 	cost = 15
 	containertype = /obj/structure/closet/crate/hydroponics
 	containername = "hydroponics crate"

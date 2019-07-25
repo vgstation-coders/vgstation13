@@ -1,13 +1,3 @@
-#define REAGENT_STATE_SOLID 1
-#define REAGENT_STATE_LIQUID 2
-#define REAGENT_STATE_GAS 3
-#define FOOD_METABOLISM 0.4
-#define REAGENTS_OVERDOSE 30
-#define REM REAGENTS_EFFECT_MULTIPLIER
-
-// Use in chem.flags.
-#define CHEMFLAG_DISHONORABLE 1
-
 /*	The reaction procs must ALWAYS set src = null, this detaches the proc from the object (the reagent)
 	so that it can continue working when the reagent is deleted while the proc is still active.
 
@@ -3907,6 +3897,7 @@
 	id = BLACKCOLOR
 	description = "A black coloring used to dye food and drinks."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_OBSCURING
 	color = "#000000" //rgb: 0, 0, 0
 
 /datum/reagent/frostoil

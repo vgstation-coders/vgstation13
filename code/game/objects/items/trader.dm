@@ -12,6 +12,7 @@
 	name = "box of Marauder circuits"
 	desc = "All in one box!"
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -26,6 +27,7 @@
 	name = "chemist's pallet"
 	desc = "Everything you need to make art."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -39,6 +41,7 @@
 	name = "natural bluespace crystals box"
 	desc = "Hmmm... it smells like tomato."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -511,6 +514,7 @@
 	name = "box of winter"
 	desc = "It has a single red button on top. Probably want to be careful where you open this."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
