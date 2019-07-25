@@ -378,7 +378,6 @@ var/list/available_staff_transforms = list(
 	SOC_MONKEY,SOC_MARTIAN,
 	SOC_CYBORG,
 	SOC_SLIME,
-	SOC_XENO,
 	SOC_HUMAN,
 	SOC_CATBEAST,
 	SOC_FRANKENSTEIN
