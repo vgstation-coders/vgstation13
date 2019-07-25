@@ -696,11 +696,12 @@ var/list/global_singularity_pool
 	var/input_cooldown = 60 //In deca-seconds
 	var/democracy_cooldown = 120 
 	var/list/inputs = list("UP","DOWN","LEFT","RIGHT")
+	var/deadchat_active = 1
 	appearance_flags = 0
 
 /obj/machinery/singularity/deadchat_controlled/Destroy()
 	..()
-	var/message = "<span class='recruit'>The deadchat-played singularity has been destroyed. Good going, Tex."
+	var/message = "<span class='recruit'>The deadchat-played singularity has been destroyed. Good job, retards."
 	for(var/mob/M in player_list)
 		if(istype(M, /mob/new_player) || !M.client)
 			continue
@@ -773,8 +774,8 @@ var/list/global_singularity_pool
 
 /obj/machinery/singularity/deadchat_controlled/proc/begin_democracy_loop()
 	spawn(democracy_cooldown)
-		if(src == NULL)
-			return
+		if(!deadchat_active) //Bit gunky but I'm not entirely certain how src/self works in byond, would if(src == null) work?
+			return 
 		var/result = count_democracy_votes()
 		if(result != 5)
 			set_glide_size(DELAY2GLIDESIZE(0.1 SECONDS))
