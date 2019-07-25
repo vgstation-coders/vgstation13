@@ -25,6 +25,7 @@
 #define CULT "generic cult"
 #define LEGACY_CULT "Ancient Cult of Nar-Sie"
 #define GREYTIDE_FAC "Greytide mindlink"
+#define WIZARD_CONTRACT "wizard contract"
 // Role IDs
 #define TRAITOR "traitor"
 #define ROGUE "rogue agent"//double agents
@@ -38,6 +39,7 @@
 #define NUKE_OP_LEADER "nuclear operative leader"
 #define HEADREV "head revolutionary"
 #define REV "revolutionary"
+#define WIZAPP_MASTER "wizard's master"
 #define WIZAPP "wizard's apprentice"
 #define MADMONKEY "monkey fever infected"
 #define NINJA "Space Ninja"

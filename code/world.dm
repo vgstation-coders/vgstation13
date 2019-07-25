@@ -104,6 +104,7 @@ var/savefile/panicfile
 	get_black_market_sellables() //Runs the on_setup and pre-generates the list.
 	get_black_market_items()
 
+	initialize_beespecies()
 	
 	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()

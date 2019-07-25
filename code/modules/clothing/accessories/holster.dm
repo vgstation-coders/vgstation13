@@ -146,6 +146,18 @@
 	name = "waistband holster"
 	desc = "A handgun holster that clips to a suit. Made of expensive leather."
 	_color = "holster_low"
+	
+/obj/item/clothing/accessory/holster/handgun/preloaded
+	var/gun_type
+
+/obj/item/clothing/accessory/holster/handgun/preloaded/New()
+	..()
+	if(!holstered)
+		holstered = new gun_type(src)
+		update_icon()
+		
+/obj/item/clothing/accessory/holster/handgun/preloaded/mateba
+	gun_type = /obj/item/weapon/gun/projectile/mateba
 
 //
 // Knives
@@ -218,3 +230,6 @@
 
 /obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning
 	knife_type = /obj/item/weapon/kitchen/utensil/knife/skinning
+
+/obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword
+	knife_type = /obj/item/weapon/melee/energy/sword

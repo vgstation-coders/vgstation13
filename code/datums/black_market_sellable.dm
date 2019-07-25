@@ -83,7 +83,7 @@ var/list/black_market_sellables = list()
 	return VALID
 	
 /datum/black_market_sellable/proc/determine_payout(var/obj/input, var/mob/user, var/payout) //Override for extra price calculations. Be sure to cast the given var/obj/ into the proper type.
-	return 0
+	return get_price()
 	
 /datum/black_market_sellable/proc/after_sell(var/obj/input, var/mob/user)
 	return
@@ -366,10 +366,33 @@ var/list/black_market_sellables = list()
 	item = /obj/structure/poutineocean	
 	no_children = 1
 	demand_min = 1
+<<<<<<< HEAD
 	demand_max = 1
 	price_min = 700
 	price_max = 800
 	sps_chance = 0
 	display_chance = 25
+=======
+	demand_max = 3
+	price_min = 100
+	price_max = 200
+	sps_chance = 100
+	display_chance = 100
+	
+/datum/black_market_sellable/weapons/energy_gun/purchase_check(var/obj/input, var/mob/user)
+	if(istype(input,/obj/item/weapon/gun/energy/))
+		var/obj/item/weapon/gun/energy/gun = input
+		if(gun.power_supply.charge > 0)
+			return VALID
+	return "The energy gun does not have any charge."
+	
+/datum/black_market_sellable/weapons/energy_gun/determine_payout(var/obj/input, var/mob/user)
+	if(istype(input,/obj/item/weapon/gun/energy/))
+		var/obj/item/weapon/gun/energy/gun = input
+		if(gun.power_supply.charge >= gun.power_supply.maxcharge)
+			return get_price()*2
+	return get_price()
+*/
+>>>>>>> 8eed5a15e385c6ee488260386c8480d21cb68c65
 
 #undef VALID

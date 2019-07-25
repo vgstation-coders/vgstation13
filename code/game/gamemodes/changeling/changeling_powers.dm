@@ -1181,3 +1181,160 @@ var/list/datum/dna/hivemind_bank = list()
 		changeling.chem_charges -= 20
 		feedback_add_details("changeling_powers","AB")
 		return 1
+
+/obj/item/verbs/changeling/proc/changeling_lsdsting()
+	set category = "Changeling"
+	set name = "Hallucination Sting (15)"
+	set desc = "After roughly 45 seconds, the victim will start hallucinating."
+	set waitfor = 0
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(15, /obj/item/verbs/changeling/proc/changeling_lsdsting)
+	if(!target)
+		return
+
+	feedback_add_details("changeling_powers", "HS")
+
+	sleep(rand(300,600))
+	if(target)
+		target.hallucination += 400
+
+	return 1
+
+/obj/item/verbs/changeling/proc/changeling_silence_sting()
+	set category = "Changeling"
+	set name = "Silence Sting (15)"
+	set desc = "Makes our victim silent and unable to cry for help."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(15, /obj/item/verbs/changeling/proc/changeling_silence_sting)
+	if(!target)
+		return
+
+	feedback_add_details("changeling_powers", "SS")
+	target.silent += 30
+
+	return 1
+
+/obj/item/verbs/changeling/proc/changeling_blind_sting()
+	set category = "Changeling"
+	set name = "Blind Sting (20)"
+	set desc = "Makes our victim blind for 30 seconds."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(20, /obj/item/verbs/changeling/proc/changeling_blind_sting)
+	if(!target)
+		return
+
+	if(target.disabilities & NEARSIGHTED)
+		to_chat(target, "<span class='userdanger'>Your eyes burn terribly!</span>")
+		return
+
+	to_chat(target, "<span class='userdanger'>Your eyes burn terribly and you lose the ability to see!</span>")
+	target.disabilities |= NEARSIGHTED
+	spawn(300)
+		target.disabilities &= ~NEARSIGHTED
+
+	target.eye_blind = 10
+	target.eye_blurry = 20
+	feedback_add_details("changeling_powers", "BS")
+
+	return 1
+
+/obj/item/verbs/changeling/proc/changeling_deaf_sting()
+	set category = "Changeling"
+	set name = "Deaf Sting (5)"
+	set desc = "Makes our victim deaf for 30 seconds."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(5, /obj/item/verbs/changeling/proc/changeling_deaf_sting)
+	if(!target)
+		return
+
+	if(target.disabilities & DEAF)
+		to_chat(target, "<span class='info'>You feel a weird sensation in your ears.</span>")
+		return
+
+	to_chat(target, "<span class='notice'>The world around you suddenly becomes quiet.</span>")
+	target.disabilities |= DEAF
+	spawn(300)
+		target.disabilities &= ~DEAF
+
+	feedback_add_details("changeling_powers", "DS")
+	return 1
+
+/obj/item/verbs/changeling/proc/changeling_paralysis_sting()
+	set category = "Changeling"
+	set name = "Paralysis Sting (30)"
+	set desc = "Makes our victim temporarily paralyzed below the neck. They'll still be able to talk and yell for help."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(30, /obj/item/verbs/changeling/proc/changeling_paralysis_sting)
+	if(!target)
+		return
+
+	to_chat(target, "<span class='userdanger'>Your muscles begin to painfully tighten.</span>")
+	target.Knockdown(20)
+	feedback_add_details("changeling_powers", "PS")
+	return 1
+
+
+/obj/item/verbs/changeling/proc/changeling_unfat_sting()
+	set category = "Changeling"
+	set name = "Unfat Sting"
+	set desc = "A rapid weightloss plan that actually works!"
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(0, /obj/item/verbs/changeling/proc/changeling_unfat_sting, allow_self=TRUE)
+	if(!target)
+		return
+
+	if(target.overeatduration > 100)
+		to_chat(target, "<span class='danger'>You feel a tiny prick as your stomach churns violently. You begin to feel skinnier.</span>")
+		target.overeatduration = 0
+		target.nutrition = max(target.nutrition - 200, 0)
+	else
+		to_chat(target, "<span class='notice'>You feel a tiny prick. Nothing happens.</span>")
+
+	feedback_add_details("changeling_powers", "US")
+	return 1
+
+/obj/item/verbs/changeling/proc/changeling_fat_sting()
+	set category = "Changeling"
+	set name = "Fat Sting"
+	set desc = "Adds fat quickly."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(0, /obj/item/verbs/changeling/proc/changeling_unfat_sting, allow_self=TRUE)
+	if(!target)
+		return
+
+	if(target.overeatduration < 100)
+		to_chat(target, "<span class='danger'>You feel a tiny prick as your stomach churns violently. You begin to feel bloated.</span>")
+		target.overeatduration += 600 // 500 is minimum fat threshold.
+	else
+		to_chat(target, "<span class='notice'>You feel a tiny prick. Nothing happens.</span>")
+
+	feedback_add_details("changeling_powers", "FS")
+	return 1

@@ -8,9 +8,9 @@ var/list/shop_prices = list( //Cost in space credits
 
 /obj/item/weapon/phone = 30,
 /obj/item/weapon/mop = 10,
-/obj/item/weapon/lipstick/random = 30,
-/obj/item/weapon/lazarus_injector = 500,
-/obj/item/weapon/lazarus_injector/advanced = 750,
+/obj/item/weapon/lipstick/random = 20,
+/obj/item/weapon/lazarus_injector = 50,
+/obj/item/weapon/lazarus_injector/advanced = 150,
 /obj/item/weapon/kitchen/rollingpin = 20,
 /obj/item/weapon/hand_labeler = 10,
 
@@ -24,7 +24,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/lighter/zippo = 20,
 /obj/item/weapon/screwdriver = 5,
 /obj/item/weapon/wrench = 5,
-/obj/item/weapon/wrench/socket = 150,
+/obj/item/weapon/wrench/socket = 100,
 /obj/item/queen_bee = 5,
 /obj/item/toy/gooncode = 400, //honk
 /obj/item/mounted/poster = 20,
@@ -33,23 +33,23 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/asteroid/goliath_hide = 50,
 
 /obj/item/weapon/storage/backpack/clown = 20,
-/obj/item/weapon/storage/backpack/captain = 50,
-/obj/item/weapon/storage/briefcase/centcomm = 100,
+/obj/item/weapon/storage/backpack/captain = 40,
+/obj/item/weapon/storage/briefcase/centcomm = 80,
 
 //Medicine and chemistry
-/obj/item/weapon/reagent_containers/pill/cyanide = 400,
+/obj/item/weapon/reagent_containers/pill/cyanide = 300,
 /obj/item/weapon/reagent_containers/pill/happy = 20,
-/obj/item/weapon/reagent_containers/pill/nanobot = 500,
-/obj/item/weapon/reagent_containers/pill/creatine_safe = 700,
-/obj/item/weapon/reagent_containers/chempack = 350,
-/obj/item/clothing/mask/chemmask = 350,
+/obj/item/weapon/reagent_containers/pill/nanobot = 300,
+/obj/item/weapon/reagent_containers/pill/creatine_safe = 400,
+/obj/item/weapon/reagent_containers/chempack = 150,
+/obj/item/clothing/mask/chemmask = 100,
 
 //DNA injectors with powers
 /obj/item/weapon/dnainjector/nofail/elvis = 50,
 /obj/item/weapon/dnainjector/nofail/sweedish = 50,
-/obj/item/weapon/dnainjector/nofail/jumpy = 250,
-/obj/item/weapon/dnainjector/nofail/mattereater = 250,
-/obj/item/weapon/dnainjector/nofail/hulkmut = 500,
+/obj/item/weapon/dnainjector/nofail/jumpy = 200,
+/obj/item/weapon/dnainjector/nofail/mattereater = 200,
+/obj/item/weapon/dnainjector/nofail/hulkmut = 400,
 
 //disk leading to a random vault. If there doesn't exist a valid vault, it shows up as a blank disk
 /obj/item/weapon/disk/shuttle_coords/vault/random = 90,
@@ -64,16 +64,16 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/bonegel = 30,
 /obj/item/weapon/FixOVein = 30,
 
-/obj/item/weapon/switchtool/surgery = 250,
-/obj/item/weapon/switchtool/swiss_army_knife = 500,
+/obj/item/weapon/switchtool/surgery = 100,
+/obj/item/weapon/switchtool/swiss_army_knife = 300,
 /obj/item/weapon/rcl = 50,
-/obj/item/weapon/glue = 500,
+/obj/item/weapon/glue = 400,
 /obj/item/weapon/chisel = 20,
 /obj/item/weapon/scythe = 50,
-/obj/item/bluespace_crystal/flawless = 10000,
-/obj/item/bluespace_crystal/artificial = 500,
-/obj/item/bluespace_crystal = 1000,
-/obj/item/device/assembly_frame = 50,
+/obj/item/bluespace_crystal/flawless = 1800,
+/obj/item/bluespace_crystal/artificial = 100,
+/obj/item/bluespace_crystal = 300,
+/obj/item/device/assembly_frame = 40,
 
 /obj/item/device/camera = 30,
 
@@ -82,11 +82,11 @@ var/list/shop_prices = list( //Cost in space credits
 
 /obj/item/device/robotanalyzer = 5,
 /obj/item/device/soundsynth = 20,
-/obj/item/device/transfer_valve = 500, //What could go wrong
-/obj/item/device/instrument/violin = 80,
+/obj/item/device/transfer_valve = 400, //What could go wrong
+/obj/item/device/instrument/violin = 50,
 /obj/item/device/maracas = 5,
 /obj/item/device/aicard = 50,
-/obj/item/device/soulstone = 400, //What could go wrong
+/obj/item/device/soulstone = 250, //What could go wrong
 /obj/item/device/taperecorder = 30,
 /obj/item/device/rcd/tile_painter = 30,
 /obj/item/device/rcd/matter/engineering = 30,
@@ -106,25 +106,25 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/modkit/aeg_parts = 99,
 /obj/item/device/modkit/gold_rig = 50,
 /obj/item/device/modkit/storm_rig = 50,
-/obj/item/clothing/accessory/medal/gold/captain = 1500,
+/obj/item/clothing/accessory/medal/gold/captain = 500,
 /obj/item/device/radio/headset/headset_earmuffs = 125,
 /obj/item/device/detective_scanner = 200,
-/obj/item/device/reagent_scanner/adv = 150,
-/obj/item/device/reagent_scanner = 100,
+/obj/item/device/reagent_scanner/adv = 75,
+/obj/item/device/reagent_scanner = 50,
 /obj/item/device/mining_scanner = 15,
-/obj/item/device/mobcapsule = 200,
+/obj/item/device/mobcapsule = 25,
 /obj/item/weapon/solder = 10,
-/obj/item/supermatter_shielding = 300,
+/obj/item/supermatter_shielding = 100,
 /obj/item/weapon/cell/hyper = 50,
-/obj/item/weapon/weldingtool/gatling/empty = 150,
+/obj/item/weapon/weldingtool/gatling/empty = 100,
 
 
 //weapons
 /obj/item/weapon/melee/classic_baton = 100,
 /obj/item/weapon/melee/lance = 200,
-/obj/item/weapon/melee/telebaton = 500,
-/obj/item/weapon/claymore = 400,
-/obj/item/weapon/fireaxe  = 200,
+/obj/item/weapon/melee/telebaton = 400,
+/obj/item/weapon/claymore = 300,
+/obj/item/weapon/fireaxe  = 150,
 /obj/item/weapon/spear/wooden = 100,
 /obj/item/weapon/spear = 30,
 /obj/item/weapon/crossbow = 100,
@@ -132,23 +132,23 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/harpoon = 100,
 /obj/item/weapon/boomerang/toy = 5,
 /obj/item/weapon/boomerang = 30,
-/obj/item/weapon/batteringram = 500,
+/obj/item/weapon/batteringram = 400,
 /obj/item/weapon/shield/riot = 150,
 /obj/item/weapon/shield/riot/buckler = 50,
 /obj/item/weapon/shield/riot/roman = 150,
-/obj/item/weapon/shield/energy = 1000,
+/obj/item/weapon/shield/energy = 350,
 /obj/item/weapon/bullwhip = 200,
-/obj/item/weapon/melee/morningstar = 300,
-/obj/item/weapon/subspacetunneler = 500,
-/obj/item/weapon/dualsaber = 3200,
+/obj/item/weapon/melee/morningstar = 250,
+/obj/item/weapon/subspacetunneler = 300,
+/obj/item/weapon/dualsaber = 600,
 
 //mischievous items
-/obj/item/device/powersink = 700,
-/obj/item/weapon/card/emag = 1500,
-/obj/item/weapon/cloakingcloak = 800,
+/obj/item/device/powersink = 500,
+/obj/item/weapon/card/emag = 1000,
+/obj/item/weapon/cloakingcloak = 750,
 /obj/item/weapon/pen/sleepypen = 1200,
-/obj/item/weapon/reagent_containers/spray/chemsprayer = 600,
-/obj/item/device/device_analyser/syndicate = 15000,
+/obj/item/weapon/reagent_containers/spray/chemsprayer = 150,
+/obj/item/device/device_analyser/syndicate = 1800,
 
 //No guns sorry
 )

@@ -28,7 +28,7 @@
 
 /datum/dynamic_ruleset/latejoin/ready(var/forced = 0)
 	if (!forced)
-		if(!check_enemy_jobs())
+		if(!check_enemy_jobs(TRUE))
 			return 0
 	return ..()
 

@@ -515,7 +515,6 @@
 		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,
-		/obj/item/weapon/coin/adamantine,
 		/obj/item/weapon/coin/clown,
 		/obj/item/weapon/coin/diamond,
 		/obj/item/weapon/coin/iron,

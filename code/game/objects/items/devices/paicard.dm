@@ -11,6 +11,8 @@
 	var/mob/living/silicon/pai/pai
 	var/last_ping_time = 0
 	var/ping_cooldown = 5 SECONDS
+	var/overridedownload = FALSE //first-come first-serve cards
+	var/silent = FALSE //doesn't ping for new personalities
 
 /obj/item/device/paicard/New()
 	..()
@@ -176,7 +178,8 @@
 	var/turf/T = get_turf(src.loc)
 	for (var/mob/M in viewers(T))
 		M.show_message("<span class='notice'>[src] flashes a message across its screen, \"Additional personalities available for download.\"</span>", 1, "<span class='notice'>[src] bleeps electronically.</span>", 2)
-		playsound(loc, 'sound/machines/paistartup.ogg', 50, 1)
+		if (!silent)
+			playsound(loc, 'sound/machines/paistartup.ogg', 50, 1)
 		src.overlays += image(icon=icon, icon_state = "pai-off-notify")
 
 /obj/item/device/paicard/proc/removeNotification()

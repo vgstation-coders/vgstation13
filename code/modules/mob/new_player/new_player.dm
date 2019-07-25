@@ -297,8 +297,8 @@
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
 
 /mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)
-	// 10% of players are joining the station with some minor disease
-	if(prob(10))
+	// 5% of players are joining the station with some minor disease
+	if(prob(5))
 		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
 		var/datum/disease2/disease/D = new virus_choice
 

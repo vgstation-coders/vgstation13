@@ -95,7 +95,7 @@ var/list/factions_with_hud_icons = list()
 	if(!newRole.AssignToRole(M))
 		newRole.Drop()
 		return 0
-	return 1
+	return newRole
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
