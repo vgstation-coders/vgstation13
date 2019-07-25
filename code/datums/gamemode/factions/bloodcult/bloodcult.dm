@@ -135,8 +135,6 @@ var/veil_thickness = CULT_PROLOGUE
 
 	var/list/cult_reminders = list()
 
-	stat_datum = /datum/stat/faction/cult
-
 /datum/faction/bloodcult/check_win()
 	return cult_win
 

@@ -47,6 +47,9 @@ var/list/factions_with_hud_icons = list()
 
 	var/minor_victory = FALSE
 
+	// This datum represents all data that is exported to the statistics file at the end of the round.
+	// If you want to store faction-specific data as statistics, you'll need to define your own datum.
+	// See dynamic_stats.dm
 	var/datum/stat/faction/stat_datum = /datum/stat/faction
 
 /datum/faction/New()
