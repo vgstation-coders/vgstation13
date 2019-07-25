@@ -52,7 +52,7 @@ var/list/black_market_sellables = list()
 	
 /datum/black_market_sellable/proc/is_active()
 	if(!active_this_round_calculated)
-		if(prob(100)) //display_chance
+		if(prob(display_chance))
 			active_this_round = 1
 		active_this_round_calculated = 1
 	. = active_this_round
