@@ -55,7 +55,7 @@
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
-		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass, \
+		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(), \
 		new /obj/item/weapon/storage/toolbox(), \
 		new /obj/item/weapon/reagent_containers/glass/jar(), \
 		),
