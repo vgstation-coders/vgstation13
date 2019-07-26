@@ -366,8 +366,9 @@ var/list/virusdishes = list()
 		to_chat(user, "<span class='info'>There is a sticker with some printed information on it. <a href ='?src=\ref[src];examine=1'>(Read it)</a></span>")
 
 /obj/item/weapon/virusdish/Topic(href, href_list)
-	if(..())
-		return TRUE
+	if (!isobserver(usr))
+		if(..())
+			return TRUE
 	if(href_list["examine"])
 		var/datum/browser/popup = new(usr, "\ref[src]", name, 600, 300, src)
 		popup.set_content(info)
