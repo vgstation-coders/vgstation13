@@ -92,29 +92,6 @@ var/list/black_market_sellables = list()
 
 /datum/black_market_sellable/weapons
 	category = "Firearms and War Implements"
-	
-/datum/black_market_sellable/weapons/ion_rifle
-	name = "Ion Rifle"
-	item = /obj/item/weapon/gun/energy/ionrifle
-	no_children = 1
-	demand_min = 1
-	demand_max = 3
-	price_min = 100
-	price_max = 200
-	sps_chance = 10
-	display_chance = 40
-	
-/datum/black_market_sellable/weapons/vector
-	name = "Kriss Vector"
-	item = /obj/item/weapon/gun/projectile/automatic/vector
-	no_children = 1
-	desc = "The submachine gun, silly."
-	demand_min = 1
-	demand_max = 3
-	price_min = 100
-	price_max = 200
-	sps_chance = 10
-	display_chance = 40
 
 /datum/black_market_sellable/weapons/railgun
 	name = "Railgun"
@@ -135,17 +112,27 @@ var/list/black_market_sellables = list()
 			return payout*3
 	return payout
 	
+/*
+//Bombcode too gunked, will figure this out later.
 /datum/black_market_sellable/weapons/transfer_valve
-	name = "Tank Transfer Valve"
+	name = "Primed Tank Transfer Valve"
 	item = /obj/item/device/transfer_valve/
 	no_children = 0
-	desc = "Looking for NT-brand explosive valves. The tanks attached are irrelevant, send it empty if you want."
+	desc = "The explosion must reach at least 6 tiles."
 	demand_min = 1
 	demand_max = 2
 	price_min = 400
 	price_max = 500
 	sps_chance = 70
 	display_chance = 50
+	
+/datum/black_market_sellable/weapons/transfer_valve/purchase_check(var/obj/input, var/mob/user)
+	if(istype(input,/obj/item/device/transfer_valve/))
+		var/obj/item/device/transfer_valve/bomb = input
+		//if(???)
+			//return VALID
+	return "This transfer valve's explosion will not be big enough"
+*/
 
 /datum/black_market_sellable/weapons/ied
 	name = "Improvised Explosive Device"
@@ -154,73 +141,10 @@ var/list/black_market_sellables = list()
 	desc = "Looking for cheap explosives made from soda cans or something."
 	demand_min = 3
 	demand_max = 7
-	price_min = 50
-	price_max = 120
+	price_min = 20
+	price_max = 30
 	sps_chance = 5
-	display_chance = 80
-	
-/datum/black_market_sellable/weapons/dermal
-	name = "Dermal Armour Patch"
-	item = /obj/item/clothing/head/helmet/tactical/HoS/dermal
-	no_children = 1
-	demand_min = 1
-	demand_max = 1
-	price_min = 300
-	price_max = 350
-	sps_chance = 30
-	display_chance = 40	
-	
-	
-	
-/datum/black_market_sellable/machinery
-	category = "Machinery and Technology"
-	
-/datum/black_market_sellable/machinery/janicart
-	name = "Nanotrasen-Brand Janicart"
-	item = /obj/structure/bed/chair/vehicle/janicart
-	no_children = 1
-	desc = "Don't need the key or anything."
-	demand_min = 1
-	demand_max = 1
-	price_min = 300
-	price_max = 350
-	sps_chance = 35
-	display_chance = 35
-
-/datum/black_market_sellable/machinery/plasmaminer
-	name = "Plasma Gas Miner"
-	item = /obj/machinery/atmospherics/miner/toxins
-	no_children = 1
-	demand_min = 1
-	demand_max = 1
-	price_min = 250
-	price_max = 300
-	sps_chance = 20
-	display_chance = 30
-	
-/datum/black_market_sellable/machinery/sleepingminer
-	name = "N2O Gas Miner"
-	item = /obj/machinery/atmospherics/miner/sleeping_agent
-	no_children = 1
-	demand_min = 1
-	demand_max = 1
-	price_min = 125
-	price_max = 175
-	sps_chance = 10
-	display_chance = 30
-	
-/datum/black_market_sellable/machinery/planningframe
-	name = "AI Law Module Planning Frame"
-	item = /obj/item/weapon/planning_frame
-	no_children = 1
-	demand_min = 1
-	demand_max = 1
-	price_min = 200
-	price_max = 300
-	sps_chance = 40
-	display_chance = 45	
-
-	
+	display_chance = 8
 	
 
 /datum/black_market_sellable/animals
@@ -236,7 +160,7 @@ var/list/black_market_sellables = list()
 	price_min = 200
 	price_max = 400
 	sps_chance = 0
-	display_chance = 60
+	display_chance = 80
 	teleport_modifier = 1.5
 	var/list/potential_slimes = list("sepia","adamantine","pyrite","bluespace","cerulean")
 	var/selected_slime
@@ -309,7 +233,7 @@ var/list/black_market_sellables = list()
 	teleport_modifier = 3
 	
 /datum/black_market_sellable/animals/punpun
-	name = "Punpun the Monkey"
+	name = "Pun Pun the Monkey"
 	item = /mob/living/carbon/monkey/punpun
 	no_children = 1
 	demand_min = 1
@@ -379,11 +303,11 @@ var/list/black_market_sellables = list()
 	name = "Occult Tome"
 	item = /obj/item/weapon/tome
 	no_children = 1
-	desc = "Looking for the one from the cult of Nar-Sie. Teleporting magical items will likely send an alert to Centcomm."
+	desc = "Looking for the one from the cult of Nar-Sie. Teleportation of occult artifacts is likely to send an alert to Centcomm."
 	demand_min = 1
 	demand_max = 3
-	price_min = 350
-	price_max = 450
+	price_min = 300
+	price_max = 400
 	sps_chance = 75
 	display_chance = 60
 	
@@ -402,7 +326,7 @@ var/list/black_market_sellables = list()
 	name = "Deathnettle"
 	item = /obj/item/weapon/grown/deathnettle
 	no_children = 1
-	desc = "Paying 1.5x if the potency is 80 or above."
+	desc = "Paying 1.5x if potency is 80 or above."
 	demand_min = 3
 	demand_max = 6
 	price_min = 40

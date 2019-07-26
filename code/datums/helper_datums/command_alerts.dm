@@ -586,12 +586,12 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 //////////////////////BLACK MARKET
 
 /datum/command_alert/ian_sold
-	name = "Ian has been sold - Urgent Alert"
+	name = "Ian has been sold - Alert"
 	alert_title = "Ian Sold"
 	force_report = 1
 
 /datum/command_alert/New(var/mob/killer = null)
 	if(killer)
-		message = "A regular bluespace scan of important lifeforms across the Centcomm sphere of influence has revealed that Ian has been sold to black market dealers. This is greatly worrying, as we are unable to ensure his safety nor retrieve him. Investigation has revealed that [killer.name] is responsible. You monster."
+		message = "Centcomm decryption complexes have isolated an illegal bluespace throughway coming from [station_name()]. Investigation into the signal has revealed that Ian, the corgi, has been sold to black market dealers by the entity known as [killer]. Form F7-A has been filled out to indicate that \"Ian\" is a person of interest, meaning Centcomm is obligated to send this report."
 	else
-		message = "A regular bluespace scan of important lifeforms across the Centcomm sphere of influence has revealed that Ian has been sold to black market dealers. This is greatly worrying, as we are unable to ensure his safety nor retrieve him. Investigation has yielded no information on who is responsible."
+		message = "Centcomm decryption complexes have isolated an illegal bluespace throughway coming from [station_name()]. Investigation into the signal has revealed that Ian, the corgi, has been sold to black market dealers by an unknown entity. Form F7-A has been filled out to indicate that \"Ian\" is a person of interest, meaning Centcomm is obligated to send this report."
