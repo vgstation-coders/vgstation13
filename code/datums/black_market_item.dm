@@ -247,9 +247,31 @@ for anyone but the person committing mass murder.
 	sps_chances = list(0,20,35)
 	stock_min = 1
 	stock_max = 1
-	cost_min = 1800
-	cost_max = 2200
+	cost_min = 1000
+	cost_max = 1250
 	display_chance = 80
+
+/datum/black_market_item/tech/portalgun
+	name = "Lightcycle Key"
+	desc = "This glowstick-looking key summons a motorcycle made of pure light when you snap it. Unsnap it to dismount, but be careful. Running into anything apart from doors will invariably result in death."
+	item = /obj/item/key/lightcycle/black_market
+	sps_chances = list(10,20,30)
+	stock_min = 1
+	stock_max = 2
+	cost_min = 700
+	cost_max = 800
+	display_chance = 90
+
+/datum/black_market_item/tech/chronocarbon
+	name = "Chrono-Carbon Grenade"
+	desc = "This grenade, upon detonation, freezes time in a sphere around it. Carbon lifeforms. are unaffected by this sphere."
+	item = /obj/item/weapon/grenade/chronogrenade/carbon
+	sps_chances = list(5,20,35)
+	stock_min = 2
+	stock_max = 8
+	cost_min = 200
+	cost_max = 300
+	display_chance = 75
 	
 /datum/black_market_item/arcane
 	category = "Supernatural and Arcane Objects" 
