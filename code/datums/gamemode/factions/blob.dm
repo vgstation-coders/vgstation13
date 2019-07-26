@@ -36,7 +36,7 @@
 
 	var/datum/stat/faction_data/blob/structure_counts/built_structure_counts = new
 
-	stat_datum = /datum/stat/faction/blob
+	stat_datum_type = /datum/stat/faction/blob
 
 // -- Victory procs --
 

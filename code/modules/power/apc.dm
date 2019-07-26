@@ -1007,7 +1007,9 @@
 	// record that the malf shunted, for statistics
 	if(istype(malf.mind) && istype(malf.mind.faction, /datum/faction/malf))
 		var/datum/faction/malf/mf = malf.mind.faction
-		mf.shunted = TRUE
+		if(istype(mf.stat_datum, /datum/stat/faction/malf))
+			var/datum/stat/faction/malf/MS = mf.stat_datum
+			MS.shunted = TRUE
 
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)

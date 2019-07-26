@@ -12,10 +12,7 @@
 	var/AI_win_timeleft = 1800
 	playlist = "malfdelta"
 	// for statistics
-	var/list/datum/stat/malf_module_purchase/purchased_modules = list()
-	var/shunted = 0
-
-	stat_datum = /datum/stat/faction/malf
+	stat_datum_type = /datum/stat/faction/malf
 
 /datum/faction/malf/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/screen_spells.dmi', "malf_open")

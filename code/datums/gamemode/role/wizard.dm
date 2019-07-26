@@ -7,9 +7,7 @@
 	logo_state = "wizard-logo"
 	greets = list(GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND)
 
-	var/list/spellbook_purchases = list()
-
-	stat_datum = /datum/stat/role/wizard
+	stat_datum_type = /datum/stat/role/wizard
 
 /datum/role/wizard/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)

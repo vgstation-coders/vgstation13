@@ -108,8 +108,11 @@
 
 	var/wikiroute
 
-	// What stat datum is associated with this role, used in generate_statistics() at round end.
-	var/stat_datum = /datum/stat/role
+	// This datum represents all data that is exported to the statistics file at the end of the round.
+	// If you want to store faction-specific data as statistics, you'll need to define your own datum.
+	// See dynamic_stats.dm
+	var/datum/stat/role/stat_datum = null
+	var/datum/stat/role/stat_datum_type = /datum/stat/role
 
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	// Link faction.
@@ -130,6 +133,7 @@
 		plural_name="[name]s"
 
 	objectives.owner = M
+	stat_datum = new stat_datum_type()
 
 	return 1
 
@@ -495,7 +499,8 @@
 
 
 /datum/role/proc/generate_statistics()
-	return new stat_datum(src)
+	stat_datum.generate_statistics()
+	return stat_datum
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

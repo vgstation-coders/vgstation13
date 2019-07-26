@@ -138,7 +138,7 @@
 		uplink_purchases.Add(PUR)
 
 /datum/stat_collector/proc/add_role(var/datum/role/R, var/victorious)
-	roles.Add(new /datum/stat/role(R, victorious))
+	roles.Add(R.stat_datum)
 
 /datum/stat_collector/proc/add_faction(var/datum/faction/F)
 	factions.Add(F.generate_statistics())

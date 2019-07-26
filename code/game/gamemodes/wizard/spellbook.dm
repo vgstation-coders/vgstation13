@@ -317,9 +317,11 @@
 		user.remove_spell(S)
 		uses += S.refund_price
 
+		//stat collection: spellbook purchases
 		var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
-		if(istype(W))
-			W.spellbook_purchases.Add("REFUND-" + S.name)
+		if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
+			var/datum/stat/role/wizard/WD = W.stat_datum
+			WD.spellbook_purchases.Add("REFUND-" + S.name)
 
 		return 1
 
@@ -356,8 +358,9 @@
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
 					var/datum/role/wizard/W = usr.mind.GetRole(WIZARD)
-					if(istype(W))
-						W.spellbook_purchases.Add(added.name)
+					if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
+						var/datum/stat/role/wizard/WD = W.stat_datum
+						WD.spellbook_purchases.Add(added.name)
 
 		else if(ispath(buy_type, /obj/item/potion))
 			if(buy_type in available_potions)
@@ -365,8 +368,9 @@
 					var/atom/item = new buy_type(get_turf(usr))
 					feedback_add_details("wizard_spell_learned", "PT")
 					var/datum/role/wizard/W = usr.mind.GetRole(WIZARD)
-					if(istype(W))
-						W.spellbook_purchases.Add(item.name)
+					if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
+						var/datum/stat/role/wizard/WD = W.stat_datum
+						WD.spellbook_purchases.Add(item.name)
 
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
@@ -378,8 +382,9 @@
 						available_artifacts.Remove(SA)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 					var/datum/role/wizard/W = usr.mind.GetRole(WIZARD)
-					if(istype(W))
-						W.spellbook_purchases.Add(SA.name)
+					if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
+						var/datum/stat/role/wizard/WD = W.stat_datum
+						WD.spellbook_purchases.Add(SA.name)
 
 		attack_self(usr)
 

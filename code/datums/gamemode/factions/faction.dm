@@ -50,7 +50,8 @@ var/list/factions_with_hud_icons = list()
 	// This datum represents all data that is exported to the statistics file at the end of the round.
 	// If you want to store faction-specific data as statistics, you'll need to define your own datum.
 	// See dynamic_stats.dm
-	var/datum/stat/faction/stat_datum = /datum/stat/faction
+	var/datum/stat/faction/stat_datum = null
+	var/datum/stat/faction/stat_datum_type = /datum/stat/faction
 
 /datum/faction/New()
 	..()
@@ -61,6 +62,8 @@ var/list/factions_with_hud_icons = list()
 
 	for (var/datum/faction/F in factions_with_hud_icons)
 		update_hud_icons()
+
+	stat_datum = new stat_datum_type()
 
 /datum/faction/proc/OnPostSetup()
 	for(var/datum/role/R in members)
@@ -195,7 +198,8 @@ var/list/factions_with_hud_icons = list()
 // For statistics viewer data. Override when necessary.score_results
 
 /datum/faction/proc/generate_statistics()
-	return new stat_datum(src)
+	stat_datum.generate_statistics(src)
+	return stat_datum
 
 /datum/faction/Topic(href, href_list)
 	..()

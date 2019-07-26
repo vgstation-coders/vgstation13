@@ -10,7 +10,7 @@
 	var/threat_level_inflated = 0
 	var/list/areas_defiled = list()
 
-	stat_datum = /datum/stat/role/catbeast
+	stat_datum_type = /datum/stat/role/catbeast
 
 /datum/role/catbeast/Greet()
 	to_chat(antag.current, "<B><span class='warning'>You are a mangy catbeast!</span></B>")

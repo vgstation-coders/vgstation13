@@ -65,7 +65,7 @@
 	var/list/objectives = list()
 	var/victory = FALSE
 
-/datum/stat/role/New(var/datum/role/R, var/victorious)
+/datum/stat/role/proc/generate_statistics(var/datum/role/R, var/victorious)
 	name = R.name
 	faction_name = R.faction.name
 	faction_desc = R.faction.desc
@@ -106,7 +106,7 @@
 	var/minor_victory = FALSE
 	var/data = null
 
-/datum/stat/faction/New(var/datum/faction/F)
+/datum/stat/faction/proc/generate_statistics(var/datum/faction/F)
 	id = F.ID
 	name = F.name
 	desc = F.desc
@@ -119,11 +119,6 @@
 /datum/stat/faction/malf
 	var/list/datum/stat/malf_module_purchase/modules = list()
 	var/shunted = FALSE
-
-/datum/stat/faction/malf/New(var/datum/faction/malf/MF)
-	..(MF)
-	modules = MF.purchased_modules
-	return src
 
 /datum/stat/malf_module_purchase
 	var/typepath = null
@@ -141,12 +136,14 @@
 	// same as above, but only living blob tiles
 	var/blobs_round_end = 0
 	// count of all built structures
-	var/datum/stat/faction_data/blob/structure_counts/built_structures = null
+	var/datum/stat/faction_data/blob/structure_counts/built_structures = new
 
-/datum/stat/faction/blob/New(/var/datum/faction/blob_conglomerate/BF)
+/datum/stat/faction/blob/generate_statistics(/var/datum/faction/blob_conglomerate/BF)
+	..(BF)
+	//we're using global pre-existing global vars here: structure counts are collected
+	//throughout the round elsewhere
 	blobs_grown_total = blob_tiles_grown_total
 	blobs_round_end = blobs.len
-	built_structures = BF.built_structure_counts
 
 /datum/stat/faction_data/blob/structure_counts
 	var/factories = 0
@@ -158,44 +155,27 @@
 /datum/stat/role/wizard
 	var/list/spellbook_purchases = list()
 
-/datum/stat/role/wizard/New(var/datum/role/wizard/W)
-	..(W)
-	spellbook_purchases = W.spellbook_purchases
-
 /datum/stat/role/vampire
 	var/list/powers = list()
 	var/blood_total = 0
 
-/datum/stat/role/vampire/New(var/datum/role/vampire/V)
+/datum/stat/role/vampire/generate_statistics(var/datum/role/vampire/V)
 	..(V)
 	for(var/datum/power/P in V.powers)
 		powers.Add(P.type)
 	blood_total = V.blood_total
 
 /datum/stat/role/revolutionary
-	var/recruits_converted = 0
-
-/datum/stat/role/revolutionary/New(var/datum/role/revolutionary/R)
-	..(R)
-	recruits_converted = R.recruits_converted
+// future proofing don't mind me
 
 /datum/stat/role/revolutionary/leader
+	var/recruits_converted = 0
 	var/flashes_created = 0
-
-/datum/stat/role/revolutionary/leader/New(var/datum/role/revolutionary/leader/R)
-	..(R)
-	flashes_created = R.flashes_created
 
 /datum/stat/role/ninja
 	var/shuriken_thrown = 0
 	var/times_charged_sword = 0
 	var/stealth_posters_posted = 0
-
-/datum/stat/role/ninja/New(var/datum/role/ninja/N)
-	..(N)
-	shuriken_thrown = N.shuriken_thrown
-	times_charged_sword = N.times_charged_sword
-	stealth_posters_posted = N.stealth_posters_posted
 
 /datum/stat/role/catbeast
 	var/ticks_survived = 0
@@ -203,7 +183,7 @@
 	var/threat_level_inflated = 0
 	var/list/areas_defiled = list()
 
-/datum/stat/role/catbeast/New(var/datum/role/catbeast/C)
+/datum/stat/role/catbeast/generate_statistics(var/datum/role/catbeast/C)
 	..(C)
 	ticks_survived = C.ticks_survived
 	threat_generated = C.threat_generated
