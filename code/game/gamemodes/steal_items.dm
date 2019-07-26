@@ -186,11 +186,6 @@
 	typepath = /obj/item/weapon/switchtool/holo
 	protected_jobs = list("Research Director")
 
-/datum/theft_objective/traitor/clownPDA
-	name = "the clown's PDA"
-	typepath = /obj/item/device/pda/clown //A printed PDA painted to look like a clown PDA is just device/pda, so no cheating
-	protected_jobs = list("Clown")
-
 /datum/theft_objective/traitor/telesci
 	name = "the telescience computer's circuit"
 	typepath = /obj/item/weapon/circuitboard/telesci_computer
