@@ -264,7 +264,7 @@ for anyone but the person committing mass murder.
 
 /datum/black_market_item/tech/chronocarbon
 	name = "Chrono-Carbon Grenade"
-	desc = "This grenade, upon detonation, freezes time in a sphere around it. Carbon lifeforms. are unaffected by this sphere."
+	desc = "This grenade, upon detonation, freezes time in a sphere around it. Carbon lifeforms are unaffected by this sphere."
 	item = /obj/item/weapon/grenade/chronogrenade/carbon
 	sps_chances = list(5,20,35)
 	stock_min = 2
