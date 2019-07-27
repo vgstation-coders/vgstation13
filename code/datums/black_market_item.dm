@@ -288,14 +288,14 @@ for anyone but the person committing mass murder.
 /datum/black_market_item/plants/walkingmushroommycelium
 	name = "packet of walking mushroom seeds"
 	desc = "Sentient mushfriends for all your mushy needs"
-	item = /obj/item/potion/deception
+	item = /obj/item/seeds/walkingmushroommycelium
 	sps_chances = list(0, 10, 30)
 	delivery_available = list(0, 1, 1) //Would shatter on impact
 	stock_min = 3
 	stock_max = 3
 	cost_min = 50
 	cost_max = 100
-	display_chance = 100	
+	display_chance = 99	
 
 #undef CHEAP
 #undef NORMAL
