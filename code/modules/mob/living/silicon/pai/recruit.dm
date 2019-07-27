@@ -18,28 +18,6 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 
 	var/askDelay = 10 * 60 * 1	// One minute [ms * sec * min]
 
-/datum/paiController/proc/installpersonality(var/datum/paiCandidate/candidate,var/obj/item/device/paicard/card)
-	if(card.pai)
-		return
-	if(istype(card,/obj/item/device/paicard) && istype(candidate,/datum/paiCandidate))
-		var/mob/living/silicon/pai/pai = new(card)
-		if(!candidate.name)
-			pai.name = pick(ninja_names)
-		else
-			pai.name = candidate.name
-		pai.real_name = pai.name
-		pai.key = candidate.key
-
-		card.setPersonality(pai)
-		card.looking_for_personality = 0
-
-		//RemoveAllFactionIcons(card.pai.mind)
-
-		pai_candidates -= candidate
-		for(var/obj/item/device/paicard/p in paicard_list)
-			if(!p.pai && !pai_candidates.len)
-				p.removeNotification()
-
 /datum/paiController/Topic(href, href_list[])
 	if("signup" in href_list)
 		var/mob/dead/observer/O = usr
@@ -53,8 +31,27 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 	if(href_list["download"])
 		var/datum/paiCandidate/candidate = locate(href_list["candidate"])
 		var/obj/item/device/paicard/card = locate(href_list["device"])
-		installpersonality(candidate,card)
-		usr << browse(null, "window=findPai")
+		if(card.pai)
+			return
+		if(istype(card,/obj/item/device/paicard) && istype(candidate,/datum/paiCandidate))
+			var/mob/living/silicon/pai/pai = new(card)
+			if(!candidate.name)
+				pai.name = pick(ninja_names)
+			else
+				pai.name = candidate.name
+			pai.real_name = pai.name
+			pai.key = candidate.key
+
+			card.setPersonality(pai)
+			card.looking_for_personality = 0
+
+			//RemoveAllFactionIcons(card.pai.mind)
+
+			pai_candidates -= candidate
+			for(var/obj/item/device/paicard/p in paicard_list)
+				if(!p.pai && !pai_candidates.len)
+					p.removeNotification()
+			usr << browse(null, "window=findPai")
 
 	if(href_list["new"])
 		var/datum/paiCandidate/candidate = locate(href_list["candidate"])
@@ -97,11 +94,7 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 					candidate.ready = 1
 					for(var/obj/item/device/paicard/p in paicard_list)
 						if(!p.pai)
-							if(p.overridedownload)
-								installpersonality(candidate,p)
-								p.overridedownload = FALSE
-							else
-								p.alertUpdate()
+							p.alertUpdate()
 				usr << browse(null, "window=paiRecruit")
 				return
 		recruitWindow(usr)
@@ -204,10 +197,7 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 	for(var/mob/dead/observer/O in player_list) // We handle polling ourselves.
 		if(O.client && get_role_desire_str(O.client.prefs.roles[ROLE_PAI]) != "Never")
 			if(check_recruit(O))
-				if(p.overridedownload)
-					to_chat(O, "<span class='recruit'>A special pAI card is looking for an auto-installation personality. (<a href='?src=\ref[src];signup=1'>Claim</a> | <a href='?src=\ref[O];jump=\ref[p]'>Teleport</a>)</span>")
-				else
-					to_chat(O, "<span class='recruit'>A pAI card is looking for personalities. (<a href='?src=\ref[src];signup=1'>Sign Up</a> | <a href='?src=\ref[O];jump=\ref[p]'>Teleport</a>)</span>")
+				to_chat(O, "<span class='recruit'>A pAI card is looking for personalities. (<a href='?src=\ref[src];signup=1'>Sign Up</a> | <a href='?src=\ref[O];jump=\ref[p]'>Teleport</a>)</span>")
 				//question(O.client)
 
 /datum/paiController/proc/check_recruit(var/mob/dead/observer/O)
