@@ -67,10 +67,8 @@
 // ******************
 
 //returns a list of net_nodes this will connect to
+// make sure this does not returns itself
 /datum/net_node/proc/get_connections()
-    if(!active)
-        return null
-    return list()
 
 /datum/net_node/proc/connects_to_dir(var/dir)
     return FALSE

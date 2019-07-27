@@ -30,6 +30,7 @@
     avail = 0
     excess = 0
     for(var/datum/net_node/power/node in nodes)
+        node.pre_tick()
         if(istype(node, /datum/net_node/power/storage))
             battery_nodes += node
             continue
@@ -41,7 +42,8 @@
             avail += node.powerNeeded
         else if(node.powerNeeded < 0)
             load += node.powerNeeded
-
+    if(power)
+        message_admins("\ref[src] - finished powernet tick, power balance: [power]")
     //a little copy pasta ish but it gets the job done
     if(power > 0) //we got excess, lets store it
         while(battery_nodes.len && power > 0)
@@ -57,7 +59,6 @@
             power -= S.try_remove_power(power)
 
     for(var/datum/net_node/power/node in nodes)
-        node.pre_tick()
         node.powered = (power >= 0)
         node.post_tick()
     
@@ -85,7 +86,7 @@
             var/datum/net/power/new_net = new /datum/net/power()
             cable.propagate(new_net)
             new_nets += new_net
-    world.log << "POWER: Finished making powernets in [altFormatTimeDuration(world.timeofday-start)]"
+    world.log << "POWER: Finished making [powernets.len] powernet(s) in [altFormatTimeDuration(world.timeofday-start)]"
 
 // determines how strong could be shock, deals damage to mob, uses power.
 // M is a mob who touched wire/whatever

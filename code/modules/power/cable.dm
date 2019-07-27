@@ -295,7 +295,7 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/proc/setDirs(dir1, dir2)
 	var/datum/net_node/power/cable/node = getNode(/datum/net_node/power/cable)
 	if(!node)
-		node = addNode(/datum/net_node/power/cable, 0, 0)
+		node = addNode(/datum/net_node/power/cable)
 	node.setDirs(dir1, dir2)
 	if(dir1 > dir2)
 		d1 = dir2
