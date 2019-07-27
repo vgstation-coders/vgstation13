@@ -11,7 +11,7 @@
 		world.log << "[src.type] called addNode with invalid nodetype: [nodetype]"
 		return
 	var/list/B = list(src)
-	B += (args - type)
+	B += (args - nodetype)
 
 	var/datum/net_node/node = new nodetype(arglist(B))
 	if(istype(node))
