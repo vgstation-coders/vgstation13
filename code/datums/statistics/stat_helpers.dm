@@ -137,11 +137,13 @@
 		PUR.purchaser_is_traitor = was_traitor
 		uplink_purchases.Add(PUR)
 
-/datum/stat_collector/proc/add_role(var/datum/role/R, var/victorious)
+/datum/stat_collector/proc/add_role(var/datum/role/R)
+	R.stat_datum.generate_statistics(R)
 	roles.Add(R.stat_datum)
 
 /datum/stat_collector/proc/add_faction(var/datum/faction/F)
-	factions.Add(F.generate_statistics())
+	F.stat_datum.generate_statistics(F)
+	factions.Add(F.stat_datum)
 
 /datum/stat_collector/proc/do_post_round_checks()
 	// grab some variables

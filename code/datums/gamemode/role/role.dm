@@ -497,11 +497,6 @@
 /datum/role/proc/can_wear(var/obj/item/clothing/C)
 	return TRUE
 
-
-/datum/role/proc/generate_statistics()
-	stat_datum.generate_statistics()
-	return stat_datum
-
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
 

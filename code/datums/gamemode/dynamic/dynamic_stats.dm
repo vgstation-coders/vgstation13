@@ -57,8 +57,6 @@
 // General role-related stats
 /datum/stat/role
 	var/name = null
-	var/faction_name = null
-	var/faction_desc = null
 	var/faction_id = null
 	var/mind_name = null
 	var/mind_key = null
@@ -67,8 +65,6 @@
 
 /datum/stat/role/proc/generate_statistics(var/datum/role/R, var/victorious)
 	name = R.name
-	faction_name = R.faction.name
-	faction_desc = R.faction.desc
 	faction_id = R.faction.ID
 	mind_name = STRIP_NEWLINE(R.antag.name)
 	mind_key = ckey(R.antag.key)
@@ -104,7 +100,6 @@
 	var/stage = null
 	var/victory = FALSE
 	var/minor_victory = FALSE
-	var/data = null
 
 /datum/stat/faction/proc/generate_statistics(var/datum/faction/F)
 	id = F.ID

@@ -347,7 +347,3 @@ Message ends."}
 	output += (grille / max(start.grille,1))
 	output += (mach / max(start.mach,1))
 	return (output/7)
-
-
-/datum/faction/blob/generate_statistics()
-	..()

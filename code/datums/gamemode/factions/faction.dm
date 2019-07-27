@@ -190,16 +190,9 @@ var/list/factions_with_hud_icons = list()
 				score_results += "<br>"
 		i++
 
-	stat_collection.add_faction(generate_statistics())
+	stat_collection.add_faction(src)
 
 	return score_results
-
-
-// For statistics viewer data. Override when necessary.score_results
-
-/datum/faction/proc/generate_statistics()
-	stat_datum.generate_statistics(src)
-	return stat_datum
 
 /datum/faction/Topic(href, href_list)
 	..()
