@@ -290,7 +290,7 @@ for anyone but the person committing mass murder.
 	desc = "Sentient mushfriends for all your mushy needs"
 	item = /obj/item/seeds/walkingmushroommycelium
 	sps_chances = list(0, 10, 30)
-	delivery_available = list(0, 1, 1) //Would shatter on impact
+	delivery_available = list(0, 1, 1)
 	stock_min = 3
 	stock_max = 3
 	cost_min = 50
