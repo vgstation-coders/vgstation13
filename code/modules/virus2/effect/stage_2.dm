@@ -14,7 +14,7 @@
 	desc = "Makes the infected feel more drowsy."
 	encyclopedia = "This may cause the infected to randomly fall asleep at times."
 	stage = 2
-	badness = EFFECT_DANGER_ANNOYING
+	badness = EFFECT_DANGER_HINDRANCE
 	multiplier = 5
 	max_multiplier = 10
 
@@ -182,7 +182,7 @@
 
 /datum/disease2/effect/drunk/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
-	if (mob.reagents.get_reagent_amount(GLASGOW) < 325)
+	if (mob.reagents.get_reagent_amount(GLASGOW) < multiplier*5)
 		mob.reagents.add_reagent(GLASGOW, multiplier*5)
 
 
