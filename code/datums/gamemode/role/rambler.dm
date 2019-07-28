@@ -102,7 +102,7 @@
 	var/mob/living/carbon/human/frankenstein/F
 	//If we are a Frankenstein, continue. If we're human, frankensteinize. If not human, abort.
 	if(!istype(H))
-		if(ishuman(F))
+		if(ishuman(H))
 			F = H.Frankensteinize()
 		else
 			return 0
