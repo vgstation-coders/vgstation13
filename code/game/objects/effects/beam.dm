@@ -95,7 +95,6 @@
 /obj/effect/beam/proc/turf_density_change(var/list/args)
 	var/turf/T = args["atom"]
 	var/atom/A = T.has_dense_content()
-	to_chat(world, "beam TDC called. [T] [A]")
 	if(A)
 		Crossed(A)
 
