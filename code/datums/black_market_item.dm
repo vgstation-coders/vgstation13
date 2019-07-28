@@ -300,7 +300,7 @@ for anyone but the person committing mass murder.
 	category = "Recreational and Novelty Items"
 
 /datum/black_market_item/toy/dorkcube
-	name = "Dork Cube"
+	name = "Strange Box"
 	desc = "A stolen box filled with unknown loot.  Something is sloshing inside."
 	item = /obj/item/weapon/winter_gift/dorkcube
 	sps_chances = list(0, 10, 30)
