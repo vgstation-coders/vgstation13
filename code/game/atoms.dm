@@ -225,8 +225,6 @@ var/global/list/ghdel_profiling = list()
 	INVOKE_EVENT(on_density_change, list("atom" = src)) // Invoke event for density change
 	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
 		beams.len = 0
-	for (var/obj/effect/beam/B in loc)
-		B.Crossed(src)
 	if(!isturf(src))
 		var/turf/T = get_turf(src)
 		if(T && T.on_density_change)

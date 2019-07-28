@@ -95,7 +95,7 @@
 /obj/effect/beam/proc/turf_density_change(var/list/args)
 	var/turf/T = args["atom"]
 	var/atom/A = T.has_dense_content()
-	if(A)
+	if(A && !(A in sources))
 		Crossed(A)
 
 // Listener for /atom/on_density_change
@@ -143,7 +143,7 @@
 /obj/effect/beam/Bumped(var/atom/movable/AM)
 	if(!master || !AM)
 		return
-	if(istype(AM, /obj/effect/beam) || !AM.density)
+	if(istype(AM, /obj/effect/beam) || !AM.density || Cross(AM))
 		return
 	beam_testing("Bumped by [AM]")
 	am_connector=1
