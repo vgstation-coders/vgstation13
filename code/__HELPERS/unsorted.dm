@@ -1400,7 +1400,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 /turf/proc/has_dense_content()
 	for(var/atom/turf_contents in contents)
 		if(turf_contents.density)
-			return 1
+			return turf_contents
 	return 0
 
 //Checks if there are any atoms in the turf that aren't system-only (currently only lighting overlays count)

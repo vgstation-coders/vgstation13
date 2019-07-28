@@ -159,6 +159,8 @@ var/global/list/ghdel_profiling = list()
 		qdel(reagents)
 		reagents = null
 
+	if(density)
+		densityChanged()
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
 	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
@@ -217,11 +219,18 @@ var/global/list/ghdel_profiling = list()
 	if (density == src.density)
 		return FALSE // No need to invoke the event when we're not doing any actual change
 	src.density = density
+	densityChanged()
+
+/atom/proc/densityChanged()
 	INVOKE_EVENT(on_density_change, list("atom" = src)) // Invoke event for density change
 	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
 		beams.len = 0
 	for (var/obj/effect/beam/B in loc)
 		B.Crossed(src)
+	if(!isturf(src))
+		var/turf/T = get_turf(src)
+		if(T && T.on_density_change)
+			T.densityChanged()
 
 /atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
 	return Bumped(F)

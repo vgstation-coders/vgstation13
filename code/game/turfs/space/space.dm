@@ -16,6 +16,7 @@
 	var/static/list/parallax_appearances
 
 /turf/space/New()
+	..()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
