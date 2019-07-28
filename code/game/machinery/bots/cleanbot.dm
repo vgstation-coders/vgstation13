@@ -46,7 +46,7 @@
 	var/next_dest_loc
 
 	var/coolingdown = FALSE
-	var/attack_cooldown = 30 // set this to 0 to unleash the horror
+	var/attackcooldown = 1 SECONDS // for admin cancer
 
 	can_take_pai = TRUE
 
@@ -381,31 +381,29 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		. = ..()
 
 /obj/machinery/bot/cleanbot/roomba/Crossed(atom/A)
-	if(coolingdown)
-		return
 	if(isliving(A))
 		var/mob/living/L = A
-		if(prob(10))
-			annoy(L)
+		annoy(L)
 		..()
 
 /obj/machinery/bot/cleanbot/proc/attack_cooldown()
 	coolingdown = TRUE
-	spawn(attack_cooldown)
+	spawn(attackcooldown)
 		coolingdown = FALSE
 
 /obj/machinery/bot/cleanbot/roomba/proc/annoy(var/mob/living/L)
-	switch(armed)
-		if(1)
-			L.visible_message("<span class = 'warning'>\The [src] [pick("prongs","pokes","pricks")] \the [L]", "<span class = 'warning'>The little shit, \the [src], stabs you with its attached fork!</span>")
-			var/damage = rand(1,5)
-			L.adjustBruteLoss(damage)
-		if(2)
-			L.visible_message("<span class = 'warning'>\The [src] prongs and singes \the [L]</span>", "<span class = 'warning'>The little shit, \the [src], singes and stabs you with its attached fork and lighter!</span>")
-			var/damage = rand(3,12)
-			L.adjustBruteLoss(damage)
-			L.adjustFireLoss(damage/2)
-	attack_cooldown()
+	if(coolingdown == FALSE)
+		switch(armed)
+			if(1)
+				L.visible_message("<span class = 'warning'>\The [src] [pick("prongs","pokes","pricks")] \the [L]", "<span class = 'warning'>The little shit, \the [src], stabs you with its attached fork!</span>")
+				var/damage = rand(1,5)
+				L.adjustBruteLoss(damage)
+			if(2)
+				L.visible_message("<span class = 'warning'>\The [src] prongs and singes \the [L]</span>", "<span class = 'warning'>The little shit, \the [src], singes and stabs you with its attached fork and lighter!</span>")
+				var/damage = rand(3,12)
+				L.adjustBruteLoss(damage)
+				L.adjustFireLoss(damage/2)
+		attack_cooldown()
 
 /obj/item/weapon/bucket_sensor/attackby(var/obj/item/W, mob/user as mob)
 	..()
