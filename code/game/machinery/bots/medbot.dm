@@ -453,7 +453,9 @@
 	var/virus = 0
 	for(var/ID in C.virus2)
 		if (ID in virusDB)
-			virus = 1
+			var/datum/data/record/v = virusDB[ID]
+			if (v.fields["danger"] != "Safe")
+				virus = 1
 
 	if (!reagent_id && (virus))
 		if(!C.reagents.has_reagent(treatment_virus))
