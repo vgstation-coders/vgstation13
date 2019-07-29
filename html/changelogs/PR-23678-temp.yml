@@ -1,0 +1,6 @@
+---
+author: boy2mantwicethefam
+changes:
+  - tweak: Dionae (the tree people) can now be affected by medical nanobots.
+  - tweak: Medical nanobots now also heal internal organ damage at a small nanobot cost.
+delete-after: true

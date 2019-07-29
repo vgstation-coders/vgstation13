@@ -1,0 +1,6 @@
+---
+author: DeityLink
+changes:
+  - rscdel: "Removed Epiglottis, Flu, Pierrot Throat and Cold culture bottles from high risk spawners, mostly due to old advanced disease being currently phased out, bugged out, and often incurable."
+  - rscadd: "Magnitis added as a new Stage 4 harmful (Danger: 4) symptom. Can be found in culture bottles in high risk spawners."
+delete-after: true

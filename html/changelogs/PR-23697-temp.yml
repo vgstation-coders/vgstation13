@@ -1,0 +1,6 @@
+---
+author: DeityLink
+changes:
+  - bugfix: Fixed players not dropping the emagged Nikita when firing it.
+  - bugfix: Fixed players getting nullspaced when attached to a detonating nikita missile.
+delete-after: true

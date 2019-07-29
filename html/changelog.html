@@ -91,6 +91,12 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixed a bug that prevented crawling in the emergency shuttle brig.</li>
 			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The Advanced Energy Gun gets a brand new look courtesy of otatoh. The old sprite still exists and an "experimental" version using it can be spawned by admins.</li>
+				<li class="bugfix">Fixed the old AEG's in-hand sprite never properly updating as its charge diminishes.</li>
+				<li class="tweak">Changed the way AEGs react to EMPs, they now have 10 points of "core stability". When getting EMP'd, they lose 4 points if the EMP is strong, and 2 if it's weak. This affects their recharge rate (which is 10 times the core stability, so 100 charge by default every 4 seconds.), and creates a radiation burst once it reaches zero. The radiation now always reaches up to 4 tiles away, but the amount received decreases with the distance (300 rad on the same tile and adjacent, then divided by the distance from the gun). Previously a critical AEG would keep producing deadly radiation burst every few seconds. If the AEG lost some stability but it still is over zero, it has a percentage chance equal to its current core stability to recover some of it every second. AEGs no longer have a chance to produce radiation bursts as long as they have some stability left, otherwise the gun becomes unusable.</li>
+			</ul>
 			<h3 class="author">Irradiation updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Allicin now works as botany Anti-Toxin again.</li>
