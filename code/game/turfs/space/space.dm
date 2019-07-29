@@ -15,6 +15,11 @@
 	can_border_transition = 1
 	var/static/list/parallax_appearances
 
+/turf/space/New()
+	if(loc)
+		var/area/A = loc
+		A.area_turfs += src
+
 /turf/space/initialize()
 	if(!parallax_appearances)
 		parallax_appearances = list()
@@ -198,3 +203,10 @@
 
 /turf/space/has_gravity()
 	return 0
+
+/turf/space/densityChanged()
+	..()
+	var/atom/A = has_dense_content()
+	if(A)
+		for(var/obj/effect/beam/B in src)
+			B.Crossed(A)
