@@ -521,6 +521,7 @@
 	find_ID = ARCHAEO_KATANA
 	apply_prefix = FALSE
 	responsive_reagent = IRON
+	anomaly_factor = 0
 
 /datum/find/katana/spawn_item()
 	var/obj/item/weapon/new_item = new /obj/item/weapon/katana
