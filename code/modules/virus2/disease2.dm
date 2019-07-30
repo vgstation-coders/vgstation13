@@ -461,8 +461,8 @@ var/global/list/disease2_list = list()
 	//fever is a reaction of the body's immune system to the infection. The higher the antibody concentration (and the disease still not cured), the higher the fever
 	var/fever = round((robustness / 100) * (immune_data[2] / 10) * (stage / max_stage))
 	var/limit = BODYTEMP_HEAT_DAMAGE_LIMIT
-	if (iscarbon(mob))
-		var/mob/living/carbon/C = mob
+	if (ishuman(mob))
+		var/mob/living/carbon/human/C = mob
 		if (C.species)
 			limit = C.species.heat_level_1
 
