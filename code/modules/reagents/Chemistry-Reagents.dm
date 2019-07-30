@@ -3434,7 +3434,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#593948" //rgb: 89, 57, 72
-	custom_metabolism = 0.005
+	custom_metabolism = 0.005 //One unit every two hundred ticks, or 400-500 seconds.
 	var/spawning_horror = 0
 	var/percent_machine = 0
 	density = 96.64
@@ -3445,80 +3445,57 @@
 	if(..())
 		return 1
 
+	if(ishuman(M)) //Human type mob, so it has a wound system.
+		var/mob/living/carbon/human/H = M
+		for(var/datum/organ/external/E in H.organs)
+			for(var/datum/wound/internal_bleeding/W in E.wounds)
+				W.heal_damage(0.8, TRUE)
+				holder.remove_reagent(MEDNANOBOTS, 0.25)
+		for(var/datum/organ/internal/I in H.organs)
+			if(I.damage)
+				I.damage = max(0, I.damage - 5) //Heals a whooping 5 organ damage.
+				holder.remove_reagent(MEDNANOBOTS, 0.10) //Less so it doesn't vanish the nanobot supply
+			I.status &= ~ORGAN_BROKEN //What do I owe you?
+			I.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
+			I.status &= ~ORGAN_BLEEDING //FOR FREE?!
+	if(M.getOxyLoss() || M.getBruteLoss(TRUE) || M.getToxLoss() || M.getFireLoss(TRUE) || M.getCloneLoss())
+		M.adjustOxyLoss(-5)
+		M.heal_organ_damage(5, 5) //Heals Brute and Burn. It heals the mob, not individual organs.
+		M.adjustToxLoss(-5)
+		M.adjustCloneLoss(-5) //Repairs DNA!
+		holder.remove_reagent(MEDNANOBOTS, 0.25) //Consumes a quarter of an unit every time it heals.
+	if(M.dizziness)
+		M.dizziness = max(0, M.dizziness - 15)
+	if(M.confused)
+		M.confused = max(0, M.confused - 5)
+	for(var/datum/disease/D in M.viruses) //Diseases that work under the second rework of viruses, or "Viro 3"
+		D.spread = "Remissive"
+		D.stage--
+		if(D.stage < 1)
+			D.cure()
+	if(iscarbon(M)) //Can we support "Viro 2" diseases?
+		var/mob/living/carbon/C = M
+		for(var/A in C.virus2)
+			var/datum/disease2/disease/D2 = C.virus2[A]
+			D2.stage--
+			if(D2.stage < 1)
+				D2.cure(M)
 	switch(volume)
 		if(0.1 to 5)
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(H.species.name == "Diona")
-					return
-				for(var/datum/organ/external/E in H.organs)
-					for(var/datum/wound/internal_bleeding/W in E.wounds)
-						W.heal_damage(0.8, TRUE)
-						holder.remove_reagent(MEDNANOBOTS, 1/4)
-			if(M.getOxyLoss()>0 || M.getBruteLoss(ignore_inorganic = TRUE)>0 || M.getToxLoss()>0 || M.getFireLoss(ignore_inorganic = TRUE)>0 || M.getCloneLoss()>0)
-				if(holder.has_reagent("mednanobots"))
-					M.adjustOxyLoss(-5)
-					M.heal_organ_damage(5, 5)
-					M.adjustToxLoss(-5)
-					M.adjustCloneLoss(-5)
-					holder.remove_reagent("mednanobots", 1/4)  //This line of code will remove 1/4 of 1u whenever the nanobots heal any of the 5 different damage types along with internal bleeding. In short whenever you are healed it will remove 0.25u making each unit capable of healing a maximum of 20 per damage type.
-			if(percent_machine>5)
-				if(holder.has_reagent("mednanobots"))
-					percent_machine-=1
-					if(prob(20))
-						to_chat(M, pick("You feel more like yourself again."))
-			if(M.dizziness != 0)
-				M.dizziness = max(0, M.dizziness - 15)
-			if(M.confused != 0)
-				M.confused = max(0, M.confused - 5)
-			for(var/datum/disease/D in M.viruses)
-				D.spread = "Remissive"
-				D.stage--
-				if(D.stage < 1)
-					D.cure()
-			if(iscarbon(M))
-				var/mob/living/carbon/C = M
-				for(var/A in C.virus2)
-					var/datum/disease2/disease/D2 = C.virus2[A]
-					D2.stage--
-					if(D2.stage < 1)
-						D2.cure(M)
-		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(H.species.name == "Diona")
-					return
-			if(M.getOxyLoss()>0 || M.getBruteLoss()>0 || M.getToxLoss()>0 || M.getFireLoss()>0 || M.getCloneLoss()>0)
-				if(holder.has_reagent("mednanobots"))
-					M.adjustOxyLoss(-5)
-					M.heal_organ_damage(5, 5)
-					M.adjustToxLoss(-5)
-					M.adjustCloneLoss(-5)
-					holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
-					percent_machine +=1/2
-					if(prob(20))
-						to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-					else
-			if(M.dizziness != 0)
-				M.dizziness = max(0, M.dizziness - 15)
-			if(M.confused != 0)
-				M.confused = max(0, M.confused - 5)
-			for(var/datum/disease/D in M.viruses)
-				D.spread = "Remissive"
-				D.stage--
-				if(D.stage < 1)
-					D.cure()
-			if(iscarbon(M))
-				var/mob/living/carbon/C = M
-				for(var/A in C.virus2)
-					var/datum/disease2/disease/D2 = C.virus2[A]
-					D2.stage--
-					if(D2.stage < 1)
-						D2.cure(M)
+			if(percent_machine>5) //Slowly lowers the percent machine to a minimum of 5 when you aren't above 5 units.
+				percent_machine -= 1
+				if(prob(20))
+					to_chat(M, pick("You feel more like yourself again."))
+
+		if(5 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
+			percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
+			if(prob(20))
+				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>", 
+								"<span class='warning'>You feel different, somehow...</span>"))
 			if(prob(percent_machine))
 				holder.add_reagent("mednanobots", 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
-		if(20 to INFINITY)
+		if(20 to INFINITY) //Now you've done it.
 			spawning_horror = 1
 			to_chat(M, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
 			spawn(60)
