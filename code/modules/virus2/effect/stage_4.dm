@@ -384,8 +384,15 @@
 /datum/disease2/effect/spawn/activate(var/mob/living/mob)
 	playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
 
-	new spawn_type(get_turf(mob))
-	mob.emote("me",1,"vomits up a live [spawn_name]!")
+	if (ismouse(mob))
+		new spawn_type(get_turf(mob))
+		new spawn_type(get_turf(mob))
+		new spawn_type(get_turf(mob))
+		mob.emote("me",1,"explodes into [spawn_name]s!")
+		mob.gib()
+	else
+		new spawn_type(get_turf(mob))
+		mob.emote("me",1,"vomits up a live [spawn_name]!")
 
 /datum/disease2/effect/spawn/roach
 	name = "Blattogenesis Effect"

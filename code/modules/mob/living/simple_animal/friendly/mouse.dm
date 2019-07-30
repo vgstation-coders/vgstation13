@@ -251,7 +251,7 @@
 	D.origin = "Maintenance Mouse"
 
 	D.spread = SPREAD_BLOOD
-	if (prob(60))
+	if (prob(40))
 		D.spread |= SPREAD_CONTACT
 
 	D.makerandom(list(40,60),list(10,80),anti,bad,null)

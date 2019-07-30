@@ -444,6 +444,10 @@ var/global/list/disease2_list = list()
 			log += "<br />[timestamp()] destroyed enemy [enemy_pathogen.form] #[ID] ([strength] > [enemy_pathogen.strength])"
 			enemy_pathogen.cure(mob)
 
+	if (iscatbeast(mob))//Catbeasts were born in the disease, molded by it.
+		ticks += speed
+		return
+
 	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
 	if(starved)
 		return

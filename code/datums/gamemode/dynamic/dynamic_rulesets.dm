@@ -100,6 +100,9 @@
 	var/threat = round(mode.threat_level/10)
 	if (enemies_count >= required_enemies[threat])
 		return TRUE
+	if (!dead_dont_count)//roundstart check only
+		message_admins("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs ready ([enemies_count] out of [required_enemies[threat]])")
+		log_admin("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs ready ([enemies_count] out of [required_enemies[threat]])")
 	return FALSE
 
 /datum/dynamic_ruleset/proc/get_weight()

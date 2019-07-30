@@ -457,6 +457,9 @@
 
 			var/antibody = antibody_choices[choice]
 
+			if (antibodies[antibody] < 49)
+				to_chat(user,"<span class='warning'>The time it takes to synthesize a vaccine can be drastically reduced if the blood sample is taken from a subject with higher antibody concentration. Try using spaceacillin to raise it to at least 50% before taking a sample.</span>")
+
 			result[1] = "vaccine"
 			result[2] = antibody
 			result[3] = 0
