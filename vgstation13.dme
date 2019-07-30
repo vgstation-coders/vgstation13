@@ -2057,7 +2057,7 @@
 #include "code\modules\projectiles\guns\projectile\flare.dm"
 #include "code\modules\projectiles\guns\projectile\mahoguny.dm"
 #include "code\modules\projectiles\guns\projectile\minigun.dm"
-#include "code\modules\projectiles\guns\projectile\nagant.dm"
+#include "code\modules\projectiles\guns\projectile\mosin.dm"
 #include "code\modules\projectiles\guns\projectile\osipr.dm"
 #include "code\modules\projectiles\guns\projectile\pistol.dm"
 #include "code\modules\projectiles\guns\projectile\pneumatic.dm"

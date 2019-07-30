@@ -749,7 +749,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/randomised/russianguns
 	name = "Russian weapons"
 	num_contained = 3 //number of items picked to be contained in a randomised
-	contains = list(/obj/item/weapon/gun/projectile/nagant,
+	contains = list(/obj/item/weapon/gun/projectile/mosin,
 					/obj/item/ammo_storage/speedloader/a762x55,
 					/obj/item/ammo_storage/speedloader/a762x55,
 					/obj/item/ammo_storage/speedloader/a762x55,
