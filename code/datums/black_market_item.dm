@@ -240,6 +240,21 @@ for anyone but the person committing mass murder.
 /datum/black_market_item/tech
 	category = "Advanced Technology"
 
+/datum/black_market_item/tech/emagged_nikita
+	name = "Emagged Nikita"
+	desc = "A rocket launcher that fires missiles that you can ride. Great for special effects in Live-Action movies and terrorist roleplay."
+	item = /obj/structure/closet/crate/secure/weapon/experimental/nikita
+	sps_chances = list(0, 20, 35)
+	stock_min = 1
+	stock_max = 1
+	cost_min = 1000
+	cost_max = 2000
+	display_chance = 80
+
+/datum/black_market_item/tech/emagged_nikita/after_spawn(var/obj/structure/closet/crate/secure/weapon/experimental/nikita/spawned, var/mob/user)
+	var/obj/item/weapon/gun/projectile/rocketlauncher/nikita/rocket_launcher = locate() in spawned
+	rocket_launcher.emagged = TRUE
+
 /datum/black_market_item/tech/portalgun
 	name = "Portal Gun"
 	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare. That's why you're going to pay us a shitload of cash for it."
