@@ -48,7 +48,7 @@
 
 
 /obj/item/ammo_casing/c762x38r
-	desc = "A neo-russian revolver bullet casing."
+	desc = "A 7.62x38mmR revolver bullet casing."
 	caliber = NAGANTREVOLVER
 	projectile_type = /obj/item/projectile/bullet/midbullet2
 	w_type = RECYK_METAL

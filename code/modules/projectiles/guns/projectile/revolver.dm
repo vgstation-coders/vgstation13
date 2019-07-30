@@ -91,7 +91,7 @@
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	
 	
-/obj/item/weapon/gun/projectile/nagant //revolver that russians use
+/obj/item/weapon/gun/projectile/nagant //revolver that simple mob russians use
 	name = "nagant revolver"
 	desc = "Just like in those neo-russian spy movies! Uses 7.62x38R ammo."
 	icon_state = "nagant"
@@ -101,6 +101,11 @@
 	ammo_type = "/obj/item/ammo_casing/c762x38r"
 	gun_flags = SILENCECOMP
 	fire_sound = 'sound/weapons/nagant.ogg'
+	
+/obj/item/weapon/gun/projectile/nagant/update_icon()
+	..()
+	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""]"
+	return
 
 
 // A gun to play Russian Roulette!
