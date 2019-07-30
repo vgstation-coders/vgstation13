@@ -596,13 +596,15 @@
 	name = "high risk spawner"
 	icon_state = "maint"
 	chance = 20
-	to_spawn = list(
+	/* Removed until they get properly converted to virus2 or something
 		/obj/item/weapon/reagent_containers/glass/bottle/epiglottis_virion,
 		/obj/item/weapon/reagent_containers/glass/bottle/flu_virion,
-		/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
 		/obj/item/weapon/reagent_containers/glass/bottle/pierrot_throat,
-		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/weapon/reagent_containers/glass/bottle/cold,
+	*/
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+		/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
 		/obj/item/device/powersink,
 		/obj/item/device/powersink,
 		/obj/item/weapon/gun/projectile/flamethrower/full,

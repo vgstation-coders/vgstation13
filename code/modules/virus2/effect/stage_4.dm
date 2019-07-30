@@ -857,3 +857,54 @@
 		affected.my_appearance.h_style = old_h_style
 		affected.update_body(0)
 		affected.update_hair()
+
+/datum/disease2/effect/magnitis
+	name = "Magnitis"
+	desc = "This disease disrupts the magnetic field of the body, making it act as if a powerful magnet."
+	encyclopedia = "Injections of iron help temporarily stabilize the magnetic field."
+	stage = 4
+	badness = EFFECT_DANGER_HARMFUL
+
+/datum/disease2/effect/magnitis/activate(var/mob/living/mob)
+	if(mob.reagents.has_reagent(IRON))
+		return
+
+	switch(count)
+		if(0 to 10)
+			if(prob(2))
+				to_chat(mob, "<span class='warning'>You feel a slight shock course through your body.</span>")
+				for(var/obj/M in orange(2,mob))
+					if(!M.anchored && (M.is_conductor()))
+						step_towards(M,mob)
+				for(var/mob/living/silicon/S in orange(2,mob))
+					if(istype(S, /mob/living/silicon/ai))
+						continue
+					step_towards(S,mob)
+		if(11 to 20)
+			if(prob(4))
+				to_chat(mob, "<span class='warning'>You feel a strong shock course through your body.</span>")
+				for(var/obj/M in orange(4,mob))
+					if(!M.anchored && (M.is_conductor()))
+						var/iter = rand(1,2)
+						for(var/i=0,i<iter,i++)
+							step_towards(M,mob)
+				for(var/mob/living/silicon/S in orange(4,mob))
+					if(istype(S, /mob/living/silicon/ai))
+						continue
+					var/iter = rand(1,2)
+					for(var/i=0,i<iter,i++)
+						step_towards(S,mob)
+		if(21 to INFINITY)
+			if(prob(8))
+				to_chat(mob, "<span class='warning'>You feel a powerful shock course through your body.</span>")
+				for(var/obj/M in orange(6,mob))
+					if(!M.anchored && (M.is_conductor()))
+						var/iter = rand(1,3)
+						for(var/i=0,i<iter,i++)
+							step_towards(M,mob)
+				for(var/mob/living/silicon/S in orange(6,mob))
+					if(istype(S, /mob/living/silicon/ai))
+						continue
+					var/iter = rand(1,3)
+					for(var/i=0,i<iter,i++)
+						step_towards(S,mob)

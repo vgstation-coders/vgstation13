@@ -27,6 +27,10 @@
 	stage = 1
 	restricted = 2//symptoms won't randomly mutate into this one & won't appear in the symptom encyclopedia
 
+/datum/disease2/effect/magnitis/single
+	stage = 1
+	restricted = 2//symptoms won't randomly mutate into this one & won't appear in the symptom encyclopedia
+
 /datum/disease2/effect/blob_spores
 	name = "Blob Spores"
 	desc = "They seem inert for the most part, but appear to randomly pulsate once in a while."

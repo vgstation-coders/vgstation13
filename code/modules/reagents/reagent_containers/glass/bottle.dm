@@ -348,17 +348,65 @@
 	var/list/data = list("viruses"= list(F))
 	reagents.add_reagent(BLOOD, 20, data)
 
+var/datum/disease2/disease/magnitis = null
+
 /obj/item/weapon/reagent_containers/glass/bottle/magnitis
 	name = "Magnitis culture bottle"
 	desc = "A small bottle. Contains a small dosage of Fukkos Miracos."
 	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle_alt"
 	//icon_state = "bottle3"
 
 /obj/item/weapon/reagent_containers/glass/bottle/magnitis/New()
 	..()
-	var/datum/disease/F = new /datum/disease/magnitis(0)
-	var/list/data = list("viruses"= list(F))
-	reagents.add_reagent(BLOOD, 20, data)
+	if (!magnitis)
+		magnitis = new
+		magnitis.form = "Fukkos Miracos"
+		magnitis.infectionchance = 30
+		magnitis.infectionchance_base = 30
+		magnitis.stageprob = 0//single-stage
+		magnitis.stage_variance = 0
+		magnitis.max_stage = 1
+		magnitis.can_kill = list()
+
+		var/datum/disease2/effect/magnitis/single/W = new /datum/disease2/effect/magnitis/single
+		magnitis.effects += W
+
+		magnitis.origin = "Magnitis Bottle"
+
+		magnitis.antigen = list(pick(antigen_family(pick(ANTIGEN_RARE,ANTIGEN_ALIEN))))
+		magnitis.antigen |= pick(antigen_family(pick(ANTIGEN_RARE,ANTIGEN_ALIEN)))
+
+
+		magnitis.spread = SPREAD_BLOOD|SPREAD_CONTACT
+		magnitis.uniqueID = rand(0,9999)
+		magnitis.subID = rand(0,9999)
+
+		magnitis.strength = rand(70,100)
+		magnitis.robustness = 100
+
+		magnitis.color = "#777777"
+		magnitis.pattern = 1
+		magnitis.pattern_color = "#FFFFFF"
+
+		log_debug("Creating Magnitis #[magnitis.uniqueID]-[magnitis.subID].")
+		magnitis.log += "<br />[timestamp()] Created<br>"
+
+		magnitis.mutation_modifier = 0
+
+		magnitis.update_global_log()
+
+	var/list/blood_data = list(
+		"donor" = null,
+		"viruses" = null,
+		"blood_DNA" = null,
+		"blood_type" = "O-",
+		"resistances" = null,
+		"trace_chem" = null,
+		"virus2" = list()
+	)
+	blood_data["virus2"]["[magnitis.uniqueID]-[magnitis.subID]"] = magnitis.getcopy()
+	reagents.add_reagent(BLOOD, volume, blood_data)
 
 var/datum/disease2/disease/wizarditis = null
 
