@@ -459,19 +459,19 @@ var/global/list/disease2_list = list()
 			e.run_effect(mob)
 
 	//fever is a reaction of the body's immune system to the infection. The higher the antibody concentration (and the disease still not cured), the higher the fever
-	if (mob.bodytemperature < BODYTEMP_HEAT_DAMAGE_LIMIT)//but we won't go all the way to burning up just because of a fever, probably
+	if (mob.bodytemperature <= BODYTEMP_HEAT_DAMAGE_LIMIT)//but we won't go all the way to burning up just because of a fever, probably
 		var/fever = round((robustness / 100) * (immune_data[2] / 10) * (stage / max_stage))
 		switch (mob.size)
 			if (SIZE_TINY)
-				mob.bodytemperature += fever*0.2
+				fever *= 0.2
 			if (SIZE_SMALL)
-				mob.bodytemperature += fever*0.5
-			if (SIZE_NORMAL)
-				mob.bodytemperature += fever
+				fever *= 0.5
 			if (SIZE_BIG)
-				mob.bodytemperature += fever*1.5
+				fever *=1.5
 			if (SIZE_HUGE)
-				mob.bodytemperature += fever*2
+				fever *=2
+
+		mob.bodytemperature = min(BODYTEMP_HEAT_DAMAGE_LIMIT, mob.bodytemperature+fever)
 
 		if (fever > 0  && prob(3))
 			switch (fever_warning)
