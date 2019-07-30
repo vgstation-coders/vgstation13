@@ -217,7 +217,7 @@
 
 /obj/item/ammo_storage/magazine/m380auto/extended
 	name = "magazine (.380AUTO extended) "
-	desc = "A magazine designed for .380AUTO vectors. Holds 20 rounds. This one is too big to be outfited into glocks."
+	desc = "A magazine designed for .380AUTO vectors. Holds 20 rounds. This one doesn't fit into glocks."
 	icon_state = "m380AUTO-E"
 	max_ammo = 20
 	multiple_sprites = 1
