@@ -32,29 +32,29 @@ var/list/black_market_sellables = list()
 	var/item = null
 	var/no_children = 1 //If 1, will only allow that specific given path
 	var/demand_min	// The demand min and max. Setting demand_min and demand_max to -1 will make it infinite. Demand is how many items are wanted, once it hits 0 you can't sell anymore.
-	var/demand_max  
+	var/demand_max
 	var/price_min
 	var/price_max
 	var/sps_chance = 0
 	var/display_chance = 0   //Base out of 100.
 
 	var/round_demand
-	var/round_demand_calculated = 0         
+	var/round_demand_calculated = 0
 	var/round_price
 	var/round_price_calculated = 0
 	var/active_this_round = 0
 	var/active_this_round_calculated = 0
-	
+
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
-	
+
 /datum/black_market_sellable/proc/is_active()
 	if(!active_this_round_calculated)
 		if(prob(display_chance))
 			active_this_round = 1
 		active_this_round_calculated = 1
 	. = active_this_round
-	
+
 /datum/black_market_sellable/proc/get_price(var/price_modifier = 1)
 	if(!round_price_calculated)
 		round_price = rand(price_min, price_max)
@@ -72,40 +72,40 @@ var/list/black_market_sellables = list()
 
 /datum/black_market_sellable/proc/purchase_check(var/obj/input, var/mob/user) //Returns "VALID" if the purchase is valid, otherwise will give an error message with what is returned.
 	return VALID
-	
+
 /datum/black_market_sellable/proc/determine_payout(var/obj/input, var/mob/user, var/payout) //Override for extra price calculations. Be sure to cast the given var/obj/ into the proper type.
 	return get_price()
 
-/datum/black_market_sellable/proc/after_sell(var/obj/input, var/mob/user) 
+/datum/black_market_sellable/proc/after_sell(var/obj/input, var/mob/user)
 	return
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* //EXAMPLE
-	
+
 /datum/black_market_sellable/weapons
 	category = "Firearms and Weaponry"
-	
+
 /datum/black_market_sellable/weapons/ion_rifle
 	name = "Ion Rifle"
 	item = /obj/item/weapon/gun/energy/ionrifle
@@ -127,14 +127,14 @@ var/list/black_market_sellables = list()
 	price_max = 200
 	sps_chance = 100
 	display_chance = 100
-	
+
 /datum/black_market_sellable/weapons/energy_gun/purchase_check(var/obj/input, var/mob/user)
 	if(istype(input,/obj/item/weapon/gun/energy/))
 		var/obj/item/weapon/gun/energy/gun = input
 		if(gun.power_supply.charge > 0)
 			return VALID
 	return "The energy gun does not have any charge."
-	
+
 /datum/black_market_sellable/weapons/energy_gun/determine_payout(var/obj/input, var/mob/user)
 	if(istype(input,/obj/item/weapon/gun/energy/))
 		var/obj/item/weapon/gun/energy/gun = input
@@ -143,4 +143,41 @@ var/list/black_market_sellables = list()
 	return get_price()
 */
 
+/datum/black_market_sellable/xenoarch
+	name = "Misc Xeno Artifacts"
+	category = "Misc Muses and Artifacts"
+	demand_min = -1
+	demand_max = -1
+	price_min = 50
+	price_max = 120
+	display_chance = 100
+	item = /obj/item
+	no_children = FALSE
+	sps_chance = 10
+
+/datum/black_market_sellable/xenoarch/purchase_check(var/obj/input, var/mob/user)
+	if(isitem(input))
+		var/obj/item/I = input
+		if(!I.origin_tech)
+			return "This isn't a considerable artifact."
+		var/list/temp_list = params2list(I.origin_tech)
+		for(var/O in temp_list)
+			to_chat(world, "[O]")
+			temp_list[O] = text2num(temp_list[O])
+
+		if(temp_list[Tc_ANOMALY] >= 1)
+			return VALID
+	return "Invalid input"
+
+/datum/black_market_sellable/xenoarch/determine_payout(var/obj/input, var/mob/user)
+	if(isitem(input))
+		var/obj/item/I = input
+		var/list/temp_list = params2list(I.origin_tech)
+		for(var/O in temp_list)
+			temp_list[O] = text2num(temp_list[O])
+		var/price = get_price()*temp_list[Tc_ANOMALY]
+		if(istype(I, /obj/item/stack))
+			var/obj/item/stack/S = I
+			price *= S.amount
+		return price
 #undef VALID
