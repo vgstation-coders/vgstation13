@@ -72,25 +72,32 @@
 	name = "crystal necklace"
 	desc = "Your final memento of a lost friend. Use it to decide on the killer."
 	icon_state = "tooth-necklace"
-	var/mob/living/suspect = null
+	var/datum/mind/suspect = null
 
 /obj/item/clothing/mask/necklace/crystal/attack_self(mob/user)
 	if(!isrambler(user))
 		return
-	var/mob/potential = input(user, "Choose your suspect, from those whose voices you've heard before.", "Soul Inspiration") as null|mob in get_list_of_elements(user.mind.heard_before)
-	if(!isliving(potential))
+	var/list/possible_choices = get_list_of_elements(user.mind.heard_before)
+	if(!length(possible_choices))
+		to_chat(user,"<span class='warning'>You haven't heard anyone talk.</span>")
+		return
+	var/mob/chosen_mob = input(user, "Choose your suspect, from those whose voices you've heard before.", "Soul Inspiration") as null|mob in possible_choices
+	if(!chosen_mob)
+		return
+	if(!isliving(chosen_mob))
 		to_chat(user,"<span class='warning'>That is some kind of ghost or something!</span>")
+		return
+	if(chosen_mob == user)
+		to_chat(user,"<span class='warning'>You already know the crime was arson!</span>")
+		return
+	var/datum/mind/potential = chosen_mob.mind
+	if(!potential)
+		to_chat(user,"<span class='warning'>To accuse the mindless? The scrawling of a madman!</span>")
 		return
 	if(potential == suspect)
 		to_chat(user,"<span class='warning'>It is just as you suspected. The suspect is the suspicious suspect you have already suspected!</span>")
 		return
-	if(!potential.mind)
-		to_chat(user,"<span class='warning'>To accuse the mindless? The scrawling of a madman!</span>")
-		return
-	if(potential == user)
-		to_chat(user,"<span class='warning'>You already know the crime was arson!</span>")
-		return
-	to_chat(user,"<span class='info'>Your new suspect is [potential].</span>")
+	to_chat(user,"<span class='info'>Your new suspect is [chosen_mob].</span>")
 	suspect = potential
 
 /obj/item/clothing/mask/necklace/crystal/examine(mob/user)
@@ -102,7 +109,7 @@
 	var/mob/living/carbon/human/frankenstein/F
 	//If we are a Frankenstein, continue. If we're human, frankensteinize. If not human, abort.
 	if(!istype(H))
-		if(ishuman(F))
+		if(ishuman(H))
 			F = H.Frankensteinize()
 		else
 			return 0

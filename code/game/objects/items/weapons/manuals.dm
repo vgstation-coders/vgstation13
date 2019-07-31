@@ -665,7 +665,7 @@
 				  <li><a href="#chapter6">Afterword: On your Purpose as Virologist</a></li>
 				</ul>
 				<h3 id="chapter0">Preamble: Quick, how do I cure a disease?</h3>
-				<p>Because let's be honest, unless you are a diplomed Pathologist, this is most likely the reason why you openned this manual. Now keep calm, put on a sterile mask and some latex gloves, and follow these steps:</p>
+				<p>Because let's be honest, unless you are a diplomed Pathologist, this is most likely the reason why you opened this manual. Now keep calm, put on a sterile mask and some latex gloves, and follow these steps:</p>
 				<dl>
 				  <dt>1- Inject patient with 5u of spaceacillin</dt>
 				  <dd>Easily found in any Nanomed, or at Chemistry. This will slowly reinforce the patient's immune system to help it combat the pathogen, and allow for a vaccine to be isolated afterwards.</dd>

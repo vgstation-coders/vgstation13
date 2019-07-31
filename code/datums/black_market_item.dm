@@ -29,7 +29,7 @@ var/list/black_market_items = list()
 
 	return black_market_items
 
-// You can change the order of the list by putting datums before/after one another 
+// You can change the order of the list by putting datums before/after one another
 
 /datum/black_market_item
 	var/name = "item name"
@@ -37,7 +37,7 @@ var/list/black_market_items = list()
 	var/desc = "item description"
 	var/item = null
 	var/stock_min	// The stock min and max. Setting stock_min and stock_max to -1 will make it infinite.
-	var/stock_max  
+	var/stock_max
 	var/cost_min    //Same as stock
 	var/cost_max
 	var/display_chance = 0   //Out of 100
@@ -50,17 +50,17 @@ var/list/black_market_items = list()
 	var/round_cost_calculated = 0
 	var/active_this_round = 0
 	var/active_this_round_calculated = 0
-	
+
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
-	
+
 /datum/black_market_item/proc/is_active()
 	if(!active_this_round_calculated)
 		if(prob(display_chance))
 			active_this_round = 1
 		active_this_round_calculated = 1
 	. = active_this_round
-	
+
 /datum/black_market_item/proc/get_cost(var/cost_modifier = 1)
 	if(!round_cost_calculated)
 		round_cost = rand(cost_min, cost_max)
@@ -75,23 +75,23 @@ var/list/black_market_items = list()
 		. = 999
 	else
 		. = round_stock
-	
+
 /datum/black_market_item/proc/process_transaction(var/obj/item/device/illegalradio/radio, var/delivery_method)
 	radio.money_stored -= get_cost()
 	radio.money_stored -= get_cost()*delivery_fees[delivery_method]
 	if(get_stock() && round_stock != -1)
 		round_stock -= 1
-		
+
 /datum/black_market_item/proc/log_transaction(var/delivery_method, var/mob/user)
 	feedback_add_details("black_market_items_bought", name)
 	message_admins("[key_name(user)] just purchased the [src.name] from the black market. [delivery_method] ([formatJumpTo(get_turf(user))])")
 	var/text = "[key_name(user)] just purchased the [src.name] from the black market."
 	log_game(text)
 	log_admin(text)
-	
+
 /datum/black_market_item/proc/buy(var/obj/item/device/illegalradio/radio, var/delivery_method, var/mob/user)
 	..()
-	if(!istype(radio)) 
+	if(!istype(radio))
 		return FALSE
 	if(user.stat || user.restrained())
 		return FALSE
@@ -125,14 +125,14 @@ var/list/black_market_items = list()
 			direction_string = "south"
 		if(WEST)
 			direction_string = "west"
-			
+
 	log_transaction("The item was launched at the station from the [direction_string].", user)
 	radio.visible_message("The [radio.name] beeps: <span class='warning'>Your item was launched from the [direction_string]. It will impact the station in less than a minute.</span>")
 	process_transaction(radio, CHEAP)
 	radio.interact(user)
-	
+
 	spawn(rand(15 SECONDS, 45 SECONDS))
-		var/obj/spawned_item = new item(get_turf(user),user)	
+		var/obj/spawned_item = new item(get_turf(user),user)
 		if(!spawned_item)
 			if(radio)
 				radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
@@ -145,7 +145,7 @@ var/list/black_market_items = list()
 
 var/list/potential_locations = list()
 var/locations_calculated = 0
-				
+
 /datum/black_market_item/proc/spawn_normal(var/obj/item/device/illegalradio/radio, var/mob/user)
 	var/turf/spawnloc
 	if(!locations_calculated)
@@ -161,20 +161,20 @@ var/locations_calculated = 0
 		for(var/turf/simulated/floor/floor in selected_area.contents)
 			if(!floor.has_dense_content() && !floor.density)
 				spawnloc = floor
-				break	
+				break
 	if(!spawnloc)
 		sleep(2 SECONDS)
 		radio.visible_message("The [radio.name] beeps: <span class='warning'>Unable to find a proper location for teleportation. You've been downgraded to cheap. No refunds.</span>")
 		sleep(2 SECONDS)
 		spawn_cheap(radio, user)
 		return
-		
+
 	var/time_to_spawn = rand(30 SECONDS, 60 SECONDS)
 	log_transaction("The item was teleported to the [selected_area.name].", user)
 	radio.visible_message("The [radio.name] beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
 	process_transaction(radio, NORMAL)
 	radio.interact(user)
-	
+
 	spawn(time_to_spawn)
 		var/obj/spawned_item = new item(spawnloc,user)
 		after_spawn(spawned_item,NORMAL,user)
@@ -194,25 +194,70 @@ var/locations_calculated = 0
 		var/mob/living/carbon/human/A = user
 		if(istype(spawned_item, /obj/item))
 			A.put_in_any_hand_if_possible(spawned_item)
-			
+
 	log_transaction("The item was teleported directly to him.", user)
-	radio.visible_message("The [radio.name] beeps: <span class='warning'>Thank you for your purchase!</span>")	
+	radio.visible_message("The [radio.name] beeps: <span class='warning'>Thank you for your purchase!</span>")
 	radio.interact(user)
-	
+
 /datum/black_market_item/proc/after_spawn(var/obj/spawned, var/delivery_method, var/mob/user) //Called immediately after spawning. Override for post-spawn behavior.
 	return
 
-
+/*
+//
+//	PLAYER MARKET DATUM
+//
+*/	
+	
 var/list/player_market_items = list()
 
 /datum/black_market_player_item
 	var/atom/item
+	var/obj/item/device/illegalradio/seller_radio
+	var/mob/living/seller
 	var/selected_name = ""
 	var/selected_price = 100
 	var/selected_description = "Enter description here."
+	
+/datum/black_market_player_item/proc/buy(var/obj/item/device/illegalradio/radio, var/mob/user)
+	..()
+	if(!istype(radio))
+		return FALSE
+	if(user.stat || user.restrained())
+		return FALSE
+	if(!(istype(user,/mob/living/carbon/human)))
+		return FALSE
+	if(!((radio.loc in user.contents) || (in_range(radio.loc, user) && istype(radio.loc.loc, /turf))))
+		return FALSE
+	if(selected_price > radio.money_stored)
+		return FALSE
 
+	if(ishuman(user))
+		var/mob/living/carbon/human/A = user
+		if(istype(spawned_item, /obj/item))
+			A.put_in_any_hand_if_possible(spawned_item)
 
-/*  
+	log_transaction(user)
+	
+	radio.visible_message("The [radio.name] beeps: <span class='warning'>Thank you for your purchase!</span>")
+	radio.money_stored -= selected_price
+	radio.interact(user)
+	
+	seller_radio.money_stored += selected_price
+	
+/datum/black_market_player_item/proc/log_transaction(var/mob/user)
+	feedback_add_details("black_market_items_bought", name)
+	message_admins("[key_name(user)] just purchased the [item.name] from the black market from [key_name(seller)]. ([formatJumpTo(get_turf(user))])")
+	var/text = "[key_name(user)] just purchased the [item.name] from the black market from [key_name(seller)]."
+	log_game(text)
+	log_admin(text)
+	
+/*
+//
+//	BLACK MARKET ITEMS
+//
+*/
+
+/*
 Note by GlassEclipse:
 The Black Market is designed to sell contraband. Typically it sells cheap, low-quality junk
 with some potentially dangerous uses. Imagine you go to a dark alley and some guy drags you into a 
@@ -221,6 +266,50 @@ but of course don't let me limit your imagination.
 There will also be some more rare stuff. Sometimes you walk into a store looking for a grenade and come out
 with an atomic bomb. But those are rare and expensive.
 */
+
+/datum/black_market_item/tech
+	category = "Advanced Technology"
+
+/datum/black_market_item/tech/emagged_nikita
+	name = "Emagged Nikita"
+	desc = "A rocket launcher that fires missiles that you can ride. Great for special effects in Live-Action movies and terrorist roleplay."
+	item = /obj/structure/closet/crate/secure/weapon/experimental/nikita
+	stock_min = 1
+	stock_max = 1
+	cost_min = 1000
+	cost_max = 2000
+	display_chance = 80
+
+/datum/black_market_item/tech/emagged_nikita/after_spawn(var/obj/structure/closet/crate/secure/weapon/experimental/nikita/spawned, var/mob/user)
+	var/obj/item/weapon/gun/projectile/rocketlauncher/nikita/rocket_launcher = locate() in spawned
+	rocket_launcher.emagged = TRUE
+
+/datum/black_market_item/agriculture
+	category = "Agriculture and Animals"
+
+/datum/black_market_item/agriculture/carp
+	name = "Space Carp"
+	desc = "One baby space carp.  No refunds."
+	item = /mob/living/simple_animal/hostile/carp/baby
+	stock_min = 1
+	stock_max = 10
+	cost_min = 200
+	cost_max = 600
+	display_chance = 80
+	
+/datum/black_market_item/agriculture/walkingmushroommycelium
+	name = "packet of walking mushroom seeds"
+	desc = "Sentient mushfriends for all your mushy needs."
+	item = /obj/item/seeds/walkingmushroommycelium
+	delivery_available = list(0, 1, 1)
+	stock_min = 3
+	stock_max = 3
+	cost_min = 50
+	cost_max = 100
+	display_chance = 99	
+	
+/datum/black_market_item/arcane
+	category = "Supernatural and Arcane Objects"
 
 /datum/black_market_item/arcane/levitation
 	name = "Potion of Levitation"
@@ -233,7 +322,28 @@ with an atomic bomb. But those are rare and expensive.
 	cost_max = 500
 	display_chance = 70
 
-		
+/datum/black_market_item/toy
+	category = "Recreational and Novelty Items"
+
+/datum/black_market_item/toy/dorkcube
+	name = "Strange Box"
+	desc = "A stolen box filled with unknown loot.  Something is sloshing inside."
+	item = /obj/item/weapon/winter_gift/dorkcube
+	stock_min = 1
+	stock_max = 5
+	cost_min = 25
+	cost_max = 500
+	display_chance = 80
+
+/datum/black_market_item/toy/skub
+	name = "Skub"
+	desc = "Skub."
+	item = /obj/item/toy/gasha/skub
+	stock_min = -1
+	stock_max = -1
+	cost_min = 200
+	cost_max = 500
+	display_chance = 100
 
 
 #undef CHEAP

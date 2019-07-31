@@ -82,7 +82,14 @@
 					open_html(generate_delivery_menu(usr,item))
 					return
 					
-	else if(href_list["open_local_delivery_menu"])
+	else if(href_list["buy_item"])
+		var/delivery_method = href_list["buy_item"]	
+		delivery_method = text2num(delivery_method)
+		selected_item.buy(src, delivery_method, usr)
+		selected_item = null
+		interact(usr)
+
+	else if(href_list["buy_local_item"])
 		var/input = href_list["open_local_delivery_menu"]
 		var/list/split = splittext(input, ":")
 
@@ -93,15 +100,8 @@
 				var/datum/black_market_player_item/item = player_market_items[number]
 				if(item)
 					selected_item = item
-					open_html(generate_delivery_menu(usr,item))
+					//open_html(generate_delivery_menu(usr,item))
 					return
-					
-	else if(href_list["buy_item"])
-		var/delivery_method = href_list["buy_item"]	
-		delivery_method = text2num(delivery_method)
-		selected_item.buy(src, delivery_method, usr)
-		selected_item = null
-		interact(usr)
 		
 	else if(href_list["open_local_market_hub"])
 		open_html(generate_local_market_hub(usr))
@@ -273,6 +273,7 @@
 	new_listing = new /datum/black_market_player_item()
 	new_listing.item = target
 	new_listing.selected_name = "[target]"
+	new_listing.seller_radio = src
 	open_html(generate_local_market_hub(usr))
 		
 /obj/item/device/illegalradio/afterattack(atom/A as mob|obj, mob/user as mob)

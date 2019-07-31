@@ -141,6 +141,8 @@
 			var/datum/control/new_control = new /datum/control/lock_move(mob, src)
 			mob.orient_object.Add(new_control)
 			new_control.take_control()
+			mob.drop_item(nikita)
+			nikita = null
 
 	dir = get_dir_cardinal(starting,original)
 	last_dir = dir
@@ -195,7 +197,7 @@
 			qdel(src)
 		src.Move(step)
 
-	if(mob)
+	if(mob && loc)
 		if(emagged)
 			mob.forceMove(loc)
 			mob.dir = dir
