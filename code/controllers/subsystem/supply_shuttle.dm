@@ -131,7 +131,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	var/datum/money_account/cargo_acct = department_accounts["Cargo"]
 
-	for(var/obj/MA in shuttle)
+	for(var/atom/movable/MA in shuttle)
 		if(MA.anchored)
 			continue
 
