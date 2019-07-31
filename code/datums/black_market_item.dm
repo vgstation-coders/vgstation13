@@ -41,7 +41,6 @@ var/list/black_market_items = list()
 	var/cost_min    //Same as stock
 	var/cost_max
 	var/display_chance = 0   //Out of 100
-	var/list/sps_chances = list(5, 10, 30) //Chance for SPS alert for each delivery method out of 100. Cheap, Normal, Expensive.
 	var/list/delivery_fees = list(0,0.3,0.6) //Delivery fees are a percentage of the base cost. E.g. expensive will be base + 0.6*base. Cheap, Normal, Expensive.
 	var/list/delivery_available = list(1,1,1) //Disables the given delivery method if it is 0. Cheap, Normal, Expensive
 
@@ -143,10 +142,6 @@ var/list/black_market_items = list()
 			return 0
 		after_spawn(spawned_item,CHEAP,user)
 		spawned_item.ThrowAtStation(30,0.4,direction)	
-		spawn(rand(30 SECONDS, 60 SECONDS))
-			if(!radio.nanotrasen_variant && prob(sps_chances[CHEAP]))
-				SPS_black_market_alert("Centcomm has detected a black market purchase of item: [name]. It was launched at the station recently.")
-
 
 var/list/potential_locations = list()
 var/locations_calculated = 0
@@ -183,10 +178,7 @@ var/locations_calculated = 0
 	spawn(time_to_spawn)
 		var/obj/spawned_item = new item(spawnloc,user)
 		after_spawn(spawned_item,NORMAL,user)
-		spawn(rand(30 SECONDS, 60 SECONDS))
-			if(!radio.nanotrasen_variant && prob(sps_chances[NORMAL]))
-				SPS_black_market_alert("Centcomm has detected a black market purchase of item: [name]. It was teleported to your station's maintenance recently.")
-		
+
 /datum/black_market_item/proc/spawn_expensive(var/obj/item/device/illegalradio/radio, var/mob/user)
 	process_transaction(radio, EXPENSIVE)
 	var/obj/spawned_item = new item(get_turf(user),user)
@@ -207,80 +199,42 @@ var/locations_calculated = 0
 	radio.visible_message("The [radio.name] beeps: <span class='warning'>Thank you for your purchase!</span>")	
 	radio.interact(user)
 	
-	spawn(rand(30 SECONDS, 60 SECONDS))
-		if(!radio.nanotrasen_variant && prob(sps_chances[EXPENSIVE]))
-			SPS_black_market_alert("Centcomm has detected a black market purchase of item: [name]. It was teleported directly to the buyer in the past minute.")
-
-	
 /datum/black_market_item/proc/after_spawn(var/obj/spawned, var/delivery_method, var/mob/user) //Called immediately after spawning. Override for post-spawn behavior.
 	return
 
-	
-/*
-//
-//	BLACK MARKET ITEMS
-//
-*/
+
+var/list/player_market_items = list()
+
+/datum/black_market_player_item
+	var/atom/item
+	var/selected_name = ""
+	var/selected_price = 100
+	var/selected_description = "Enter description here."
+
 
 /*  
 Note by GlassEclipse:
-The idea of the black market is to have a place to spend excess cash to get items that are both rare and dangerous.
-Since having the black market radio is contraband (unless you use the captain's legal version), your item should be 
-dangerous or highly unique. It wouldn't be on the illegal market if it wasn't. A good item has the following qualities:
-- Can be used for more than murder. I would grab a toolbox if I wanted to just kill someone.
-- Usable in many situations; flexible. 
-- Fun. A cyborg board that turns them into a peaceful cultist is fun. 
-  A 15dev bombcap-breaking bomb that announces its location and can be defused is "fun", as in, it better have one hell of a drawback and be used once every 30 rounds at best.
-  A rifle that shoots bullets that do an extra 50 damage is not fun.
-Of course, that's not to mean you can't add ANY plain guns. But try to find a good balance. Most items shouldn't be for murderboning, it just isn't fun
-for anyone but the person committing mass murder. 
+The Black Market is designed to sell contraband. Typically it sells cheap, low-quality junk
+with some potentially dangerous uses. Imagine you go to a dark alley and some guy drags you into a 
+boarded, vacant store's backroom and shows you a bunch of dusty goods. Items ought to fit in this store,
+but of course don't let me limit your imagination.
+There will also be some more rare stuff. Sometimes you walk into a store looking for a grenade and come out
+with an atomic bomb. But those are rare and expensive.
 */
 
-
-/datum/black_market_item/tech
-	category = "Advanced Technology" 
-
-/datum/black_market_item/tech/portalgun
-	name = "Portal Gun"
-	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare. That's why you're going to pay us a shitload of cash for it."
-	item = /obj/item/weapon/gun/portalgun
-	sps_chances = list(0,20,35)
-	stock_min = 1
-	stock_max = 1
-	cost_min = 1800
-	cost_max = 2200
-	display_chance = 80
-	
-/datum/black_market_item/arcane
-	category = "Supernatural and Arcane Objects" 
-	
 /datum/black_market_item/arcane/levitation
 	name = "Potion of Levitation"
 	desc = "Potions come in many shapes and sizes, but this one makes you float! Why? Because it looks fucking cool. Maybe you can convince somebody you're the fourth coming of Jesus."
 	item = /obj/item/potion/levitation
-	sps_chances = list(0,0,5)
 	delivery_available = list(0, 1, 1)
 	stock_min = 2
 	stock_max = 4
 	cost_min = 400
 	cost_max = 500
 	display_chance = 70
-	
-/datum/black_market_item/arcane/health_potion
-	name = "Potion of Health? Death?"
-	desc = "Unfortunately, some idiot managed to mix together the shipment of identical-looking health potions and death potions. He's dead now. Test out your luck!"
-	item = /obj/item/potion/deception
-	sps_chances = list(0, 10, 30)
-	delivery_available = list(0, 1, 1) //Would shatter on impact
-	stock_min = 2
-	stock_max = 4
-	cost_min = 600
-	cost_max = 800
-	display_chance = 70
-	
-/datum/black_market_item/arcane/health_potion/after_spawn(var/obj/spawned, var/mob/user)
-	if(prob(40))
-		spawned = /obj/item/potion/healing
+
+		
+
 
 #undef CHEAP
 #undef NORMAL

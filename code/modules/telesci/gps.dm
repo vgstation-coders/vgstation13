@@ -207,21 +207,6 @@ var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'soun
 		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>", MESSAGE_HEAR)
 	else if(isturf(loc))
 		visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>")
-
-/proc/SPS_black_market_alert(var/reason)
-	var/channel_index = 0
-	for(var/E in SPS_list)
-		var/obj/item/device/gps/secure/S = E
-		S.black_market_announce(reason, DEATHSOUND_CHANNEL + channel_index)
-		channel_index++
-		
-/obj/item/device/gps/secure/proc/black_market_announce(var/reason, var/sound_channel) 
-	blackmarket_message(sound_channel)
-	var/mob/living/L = get_holder_of_type(src, /mob/living/)
-	if(L)
-		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! [reason]", MESSAGE_HEAR)
-	else if(isturf(loc))
-		visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! [reason]</span>")
 		
 var/const/DEATHSOUND_CHANNEL = 300
 
