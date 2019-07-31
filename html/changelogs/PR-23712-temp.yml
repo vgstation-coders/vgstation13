@@ -1,5 +1,0 @@
----
-author: DeityLink
-changes:
-  - tweak: "Setting a pathogen's dangerosity to \"Safe\" in the Pathogen database will prevent medbots from trying to inject spaceacillin."
-delete-after: true
