@@ -162,7 +162,6 @@ var/list/black_market_sellables = list()
 			return "This isn't a considerable artifact."
 		var/list/temp_list = params2list(I.origin_tech)
 		for(var/O in temp_list)
-			to_chat(world, "[O]")
 			temp_list[O] = text2num(temp_list[O])
 
 		if(temp_list[Tc_ANOMALY] >= 1)
