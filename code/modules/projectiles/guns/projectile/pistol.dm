@@ -146,7 +146,7 @@
 	icon_state = "secglockfancy"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
-	mag_type_restricted = /obj/item/ammo_storage/magazine/m380auto/extended
+	mag_type_restricted = list(/obj/item/ammo_storage/magazine/m380auto/extended)
 	max_shells = 8
 	caliber = list(POINT380  = 1)
 	origin_tech = Tc_COMBAT + "=3"
