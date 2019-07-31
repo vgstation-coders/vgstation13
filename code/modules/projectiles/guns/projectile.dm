@@ -19,7 +19,7 @@
 	var/obj/item/ammo_storage/magazine/stored_magazine = null
 	var/obj/item/ammo_casing/chambered = null
 	var/mag_type = ""
-	var/obj/item/ammo_storage/magazine/mag_type_restricted = null //better magazine manipulation
+	var/list/mag_type_restricted() = list() //better magazine manipulation
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 	var/automagdrop_delay_time = 5 // delays the automagdrop
 	var/spawn_mag = TRUE
