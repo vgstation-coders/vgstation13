@@ -1697,6 +1697,7 @@
 #include "code\modules\mob\living\carbon\complex\life.dm"
 #include "code\modules\mob\living\carbon\complex\update_icons.dm"
 #include "code\modules\mob\living\carbon\complex\gondola\gondola.dm"
+#include "code\modules\mob\living\carbon\complex\gondola\gondola_receive_music.dm"
 #include "code\modules\mob\living\carbon\complex\martian\combat.dm"
 #include "code\modules\mob\living\carbon\complex\martian\inventory.dm"
 #include "code\modules\mob\living\carbon\complex\martian\life.dm"

@@ -24,6 +24,8 @@
 	icon_state_dead = "[icon_state_dead]_dead"
 	..()
 
-
 /mob/living/carbon/complex/gondola/say()
 	return
+
+/mob/living/carbon/complex/gondola/radio
+	..()
