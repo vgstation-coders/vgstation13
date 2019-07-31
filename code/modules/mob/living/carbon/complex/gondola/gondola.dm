@@ -26,6 +26,3 @@
 
 /mob/living/carbon/complex/gondola/say()
 	return
-
-/mob/living/carbon/complex/gondola/radio
-	..()
