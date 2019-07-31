@@ -19,14 +19,14 @@
 	var/list/purchase_log = list()
 	var/show_description = null
 	var/datum/black_market_item/selected_item = null
-	
+
 	var/money_stored
 	var/nanotrasen_variant = 0
 	var/scan_time = 20
 	var/teleport_time = 200
 	var/advanced_teleport_time = 100
 	var/scanning = 0
-	
+
 
 /obj/item/device/illegalradio/nanotrasen
 	name = "advanced black market uplink"
@@ -34,7 +34,7 @@
 	item_state = "illegalradio_nt"
 	desc = "A highly protected uplink that uses encrypted Centcomm channels to communicate with the black market. It only exists on high-security Nanotrasen records."
 	nanotrasen_variant = 1
-	
+
 /obj/item/device/illegalradio/New()
 	..()
 	money_stored = 0
@@ -53,7 +53,7 @@
 	user.set_machine(src)
 	interact(user)
 
-	
+
 
 /obj/item/device/illegalradio/Topic(href, href_list)
 	..()
@@ -62,9 +62,9 @@
 		var/delivery_method = href_list["buy_item"]
 		if(!delivery_method)
 			to_chat(usr,"Something went wrong. Please tell a coder. Error code: ohfuck593")
-			return			
+			return
 		delivery_method = text2num(delivery_method)
-		
+
 		if(!selected_item)
 			to_chat(usr,"Something went wrong. Please tell a coder. Error code: ohfuck594")
 			return 0
@@ -72,7 +72,7 @@
 		selected_item.buy(src, delivery_method, usr)
 		selected_item = null
 		interact(usr)
-				
+
 	else if(href_list["open_delivery_menu"])
 		var/input = href_list["open_delivery_menu"]
 		var/list/split = splittext(input, ":")
@@ -83,7 +83,7 @@
 
 			var/list/buyable_items = get_black_market_items()
 			var/list/category_items = buyable_items[category]
-			
+
 			if(category_items && category_items.len >= number)
 				var/datum/black_market_item/item = category_items[number]
 				if(item)
@@ -94,24 +94,24 @@
 					usr << browse(dat, "window=hidden")
 					onclose(usr, "hidden")
 					return
-				
+
 	else if (href_list["open_buyers"])
 		var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
 		dat += src.generate_buyer_menu(usr)
 		dat += "</body></font>"
 		usr << browse(dat, "window=hidden")
 		onclose(usr, "hidden")
-		
+
 	else if(href_list["open_main"])
 		interact(usr)
-	
+
 	else if(href_list["show_desc"])
 		show_description = text2num(href_list["show_desc"])
 		interact(usr)
-		
+
 	else if (href_list["dispense_change"])
 		dispense_change()
-		
+
 	..()
 
 
@@ -167,8 +167,8 @@
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 	return dat
 
-	
-	
+
+
 /obj/item/device/illegalradio/proc/generate_delivery_menu(mob/user, var/datum/black_market_item/item)
 	var/dat = list()
 	dat += "<B><font size=5>The Black Market</font></B><BR>"
@@ -187,14 +187,14 @@
 				dat += "<font color='grey'><i>[delivery_titles[i]] : [fee] credits.</A>     [final_cost] total.</i></font>"
 		else
 			dat += "<font color='grey'><i>[delivery_titles[i]] : Not available for this product.</i></font>"
-		dat += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(delivery_description[i])]'><font size=2> \[?\]</font></A><br>"	
+		dat += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(delivery_description[i])]'><font size=2> \[?\]</font></A><br>"
 
 	dat += "<br><HR><font size=3><A href='byond://?src=\ref[src];open_main=1'>Return</a></font>"
-	dat = jointext(dat,"") 
-	return dat	
+	dat = jointext(dat,"")
+	return dat
 
-	
-	
+
+
 /obj/item/device/illegalradio/proc/generate_buyer_menu(mob/user)
 	var/welcome = pick("These payouts are the highest you'll find anywhere!","We do NOT pay in Vox or Human slaves.","Not accepting Nanotrasen requests.","Anonymous has mysterious interests...","Job-bees are not permitted to sell.")
 
@@ -206,7 +206,7 @@
 		<HR>
 		<B>Available Buyers:</B><BR>
 		<I>Following is a list of requests from anonymous buyers. To fulfill an item request, use the uplink on the item that is being requested.</I><br><BR>"}
-		
+
 	var/list/sellable_items = get_black_market_sellables()
 	var/index = 0
 	for(var/category in sellable_items)
@@ -232,17 +232,17 @@
 
 		for(var/text in merchandise_list)
 			dat += text
-			
+
 		if(sellable_items.len != index)
 			dat += "<br>"
 
 	dat += "<HR><font size=3><A href='byond://?src=\ref[src];open_main=1'>Return</a></font>"
-	dat = jointext(dat,"") 
-	return dat	
+	dat = jointext(dat,"")
+	return dat
 
 
-	
-	
+
+
 /obj/item/device/illegalradio/proc/dispense_change()
 	if(money_stored > 0)
 		dispense_cash(money_stored,get_turf(src))
@@ -260,7 +260,7 @@
 		scanning = 1
 		attempt_sell(A,usr)
 		scanning = 0
-			
+
 /obj/item/device/illegalradio/proc/attempt_sell(var/obj/input, mob/user)	//If statements galore
 	visible_message("The [name] beeps: <span class='warning'>Scanning item...</span>")
 	if(do_after(user, input, scan_time))
@@ -289,17 +289,17 @@
 							visible_message("The [name] beeps: <span class='warning'>Teleportation process canceled. Please try again.</span>")
 							return 0
 					else
-						visible_message("The [name] beeps: <span class='warning'>Error! Given reason: [check]</span>")	
-						return 0
+						visible_message("The [name] beeps: <span class='warning'>Error! Given reason: [check]</span>")
+						continue
 		visible_message("The [name] beeps: <span class='warning'>No buyers are currently looking for this item.</span>")
 		return 0
-	
+
 /obj/item/device/illegalradio/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
 		insert_cash(C, user)
 		interact(user)
-	
+
 /obj/item/device/illegalradio/emag_act(mob/user)
 	visible_message("<span class='warning'>[usr] swipes a card through [src], and it explodes!</warning>")
 	explosion(user, -1, 0, 2)
