@@ -1913,8 +1913,7 @@
 	if(href_list["del_all_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
 			return
-		for(var/a in operation_req_access)
-			operation_req_access -= a
+		operation_req_access = list()
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return	
 	if(href_list["finish_req_access"])
