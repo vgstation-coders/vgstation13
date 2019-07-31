@@ -127,7 +127,7 @@ var/list/black_market_items = list()
 			direction_string = "west"
 
 	log_transaction("The item was launched at the station from the [direction_string].", user)
-	radio.visible_message("The [radio.name] beeps: <span class='warning'>Your item was launched from the [direction_string]. It will impact the station in less than a minute.</span>")
+	radio.visible_message("The [radio] beeps: <span class='warning'>Your item was launched from the [direction_string]. It will impact the station in less than a minute.</span>")
 	process_transaction(radio, CHEAP)
 	radio.interact(user)
 
@@ -135,7 +135,7 @@ var/list/black_market_items = list()
 		var/obj/spawned_item = new item(get_turf(user),user)
 		if(!spawned_item)
 			if(radio)
-				radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
+				radio.visible_message("The [radio] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
 				radio.money_stored += get_cost()*delivery_fees[CHEAP]
 			if(round_stock != -1)
 				round_stock += 1
@@ -171,7 +171,7 @@ var/locations_calculated = 0
 
 	var/time_to_spawn = rand(30 SECONDS, 60 SECONDS)
 	log_transaction("The item was teleported to the [selected_area.name].", user)
-	radio.visible_message("The [radio.name] beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
+	radio.visible_message("The [radio] beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
 	process_transaction(radio, NORMAL)
 	radio.interact(user)
 
@@ -184,7 +184,7 @@ var/locations_calculated = 0
 	var/obj/spawned_item = new item(get_turf(user),user)
 	if(!spawned_item)
 		if(radio)
-			radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
+			radio.visible_message("The [radio] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
 			radio.money_stored += get_cost()*delivery_fees[EXPENSIVE]
 		if(round_stock != -1)
 			round_stock += 1
@@ -196,7 +196,7 @@ var/locations_calculated = 0
 			A.put_in_any_hand_if_possible(spawned_item)
 
 	log_transaction("The item was teleported directly to him.", user)
-	radio.visible_message("The [radio.name] beeps: <span class='warning'>Thank you for your purchase!</span>")
+	radio.visible_message("The [radio] beeps: <span class='warning'>Thank you for your purchase!</span>")
 	radio.interact(user)
 
 /datum/black_market_item/proc/after_spawn(var/obj/spawned, var/delivery_method, var/mob/user) //Called immediately after spawning. Override for post-spawn behavior.
@@ -230,11 +230,15 @@ var/list/player_market_items = list()
 		return FALSE
 	if(selected_price > radio.money_stored)
 		return FALSE
+	if(!item)
+		radio.visible_message("The [radio.name] beeps: <span class='warning'>Uh, so it seems your item has been destroyed. No money charged. Sorry.</span>")
+		player_market_items -= src
+		qdel(src)
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/A = user
-		if(istype(spawned_item, /obj/item))
-			A.put_in_any_hand_if_possible(spawned_item)
+		if(istype(item, /obj/item))
+			A.put_in_any_hand_if_possible(item)
 
 	log_transaction(user)
 	
@@ -242,12 +246,16 @@ var/list/player_market_items = list()
 	radio.money_stored -= selected_price
 	radio.interact(user)
 	
-	seller_radio.money_stored += selected_price
+	if(seller_radio)
+		seller_radio.money_stored += selected_price*(1-seller_radio.market_cut)
+		
+	player_market_items -= src
+	qdel(src)
 	
 /datum/black_market_player_item/proc/log_transaction(var/mob/user)
-	feedback_add_details("black_market_items_bought", name)
-	message_admins("[key_name(user)] just purchased the [item.name] from the black market from [key_name(seller)]. ([formatJumpTo(get_turf(user))])")
-	var/text = "[key_name(user)] just purchased the [item.name] from the black market from [key_name(seller)]."
+	feedback_add_details("black_market_items_bought", "[item]")
+	message_admins("[key_name(user)] just purchased the [item] from the black market from [key_name(seller)]. ([formatJumpTo(get_turf(user))])")
+	var/text = "[key_name(user)] just purchased the [item] from the black market from [key_name(seller)]."
 	log_game(text)
 	log_admin(text)
 	
@@ -289,7 +297,7 @@ with an atomic bomb. But those are rare and expensive.
 
 /datum/black_market_item/agriculture/carp
 	name = "Space Carp"
-	desc = "One baby space carp.  No refunds."
+	desc = "One baby space carp. No refunds."
 	item = /mob/living/simple_animal/hostile/carp/baby
 	stock_min = 1
 	stock_max = 10
@@ -298,10 +306,10 @@ with an atomic bomb. But those are rare and expensive.
 	display_chance = 80
 	
 /datum/black_market_item/agriculture/walkingmushroommycelium
-	name = "packet of walking mushroom seeds"
-	desc = "Sentient mushfriends for all your mushy needs."
+	name = "Walking Mushroom Seeds"
+	desc = "Sentient mushfriends for all your mushy needs. Be careful though, they bite."
 	item = /obj/item/seeds/walkingmushroommycelium
-	delivery_available = list(0, 1, 1)
+	delivery_available = list(1, 1, 1)
 	stock_min = 3
 	stock_max = 3
 	cost_min = 50
@@ -327,7 +335,7 @@ with an atomic bomb. But those are rare and expensive.
 
 /datum/black_market_item/toy/dorkcube
 	name = "Strange Box"
-	desc = "A stolen box filled with unknown loot.  Something is sloshing inside."
+	desc = "A stolen box filled with unknown loot. Something is sloshing inside, wonder what it is..."
 	item = /obj/item/weapon/winter_gift/dorkcube
 	stock_min = 1
 	stock_max = 5

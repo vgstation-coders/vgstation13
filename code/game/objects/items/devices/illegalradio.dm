@@ -1,4 +1,6 @@
-
+#define MAIN 1
+#define SELLING 2
+#define DELIVERY 3
 
 /obj/item/device/illegalradio
 	icon = 'icons/obj/radio.dmi'
@@ -22,9 +24,11 @@
 	var/datum/black_market_player_item/new_listing = null
 	
 	var/money_stored
+	var/opened_screen = MAIN
 	var/market_cut = 0.2
+	var/new_item_fee = 35
 	var/advanced_uplink = 0
-	var/scan_time = 20
+	var/scan_time = 100
 	
 	var/scanning = 0
 	
@@ -39,12 +43,16 @@
 	..()
 	money_stored = 0
 
-/obj/item/device/illegalradio/interact(mob/user as mob) //Whenever called, return to main menu.
-	selected_item = null
-	new_listing = null
-	open_html(src.generate_main_menu(user))
-	return
-
+/obj/item/device/illegalradio/interact(mob/user as mob) //Whenever called, update screen.
+	if(opened_screen == MAIN)
+		selected_item = null
+		new_listing = null
+		open_html(generate_main_menu(user))
+	else if(opened_screen == SELLING)
+		open_html(generate_local_market_hub(user))
+	else if(opened_screen == DELIVERY)
+		open_html(generate_delivery_menu(usr,selected_item))
+		
 /obj/item/device/illegalradio/attack_self(mob/user as mob)
 	user.set_machine(src)
 	interact(user)
@@ -55,7 +63,7 @@
 	..()
 	
 	if(href_list["open_main"])
-		interact(usr)
+		open_screen(MAIN)
 		
 	else if(href_list["show_desc"])
 		//show_description = text2num(href_list["show_desc"])
@@ -79,61 +87,61 @@
 				var/datum/black_market_item/item = category_items[number]
 				if(item)
 					selected_item = item
-					open_html(generate_delivery_menu(usr,item))
-					return
+					open_screen(DELIVERY)
 					
 	else if(href_list["buy_item"])
 		var/delivery_method = href_list["buy_item"]	
 		delivery_method = text2num(delivery_method)
 		selected_item.buy(src, delivery_method, usr)
 		selected_item = null
-		interact(usr)
+		
+		open_screen(MAIN)
 
 	else if(href_list["buy_local_item"])
-		var/input = href_list["open_local_delivery_menu"]
-		var/list/split = splittext(input, ":")
-
-		if(split.len == 2)
-			var/category = split[1]
-			var/number = text2num(split[2])
-			if(player_market_items[number])
-				var/datum/black_market_player_item/item = player_market_items[number]
-				if(item)
-					selected_item = item
-					//open_html(generate_delivery_menu(usr,item))
-					return
+		var/number = text2num(href_list["buy_local_item"])
+		var/datum/black_market_player_item/item = player_market_items[number]
+		if(item)
+			item.buy(src,usr)
+		else
+			visible_message("The [src] beeps: <span class='warning'>An unexpected error occurred. Try again later.</span>")	
+		open_screen(MAIN)
 		
 	else if(href_list["open_local_market_hub"])
-		open_html(generate_local_market_hub(usr))
+		open_screen(SELLING)
 
 	else if(href_list["local_market_input_price"])
 		var/price = input("Enter your desired price.", "Price", new_listing ? new_listing.selected_price : 0) as num
 		if(!price || !new_listing)
 			return
 		new_listing.selected_price = price
-		open_html(generate_local_market_hub(usr))
+		interact(usr)
 		
 	else if(href_list["local_market_input_name"])
 		var/name = input("Enter your desired name.", "Name", new_listing ? "[new_listing.selected_name]" : "N/A") as text
 		if(!name || !new_listing)
 			return
 		new_listing.selected_name = name
-		open_html(generate_local_market_hub(usr))
+		interact(usr)
 		
 	else if(href_list["local_market_input_desc"])
 		var/desc = input("Enter your desired description", "Description", new_listing ? "[new_listing.selected_description]" : "N/A") as text
 		if(!desc || !new_listing)
 			return
 		new_listing.selected_description = desc
-		open_html(generate_local_market_hub(usr))	
+		interact(usr)	
 		
 	else if(href_list["local_market_confirm_listing"])
+		if(money_stored < new_item_fee)
+			visible_message("The [src] beeps: <span class='warning'>You actually don't have enough cash to list an item. That's pretty sad.</span>")	
+			return
 		if(new_listing)
+			money_stored -= new_item_fee
 			player_market_items += new_listing
 			new_listing = null
 		else
-			visible_message("The [src] beeps: <span class='warning'>There was an unexpected error! Try again.</span>")	
-		interact(usr)
+			visible_message("The [src] beeps: <span class='warning'>There was an unexpected error! Try again.</span>")
+			return
+		open_screen(MAIN)
 		
 	..()
 
@@ -147,7 +155,7 @@
 	dat += "<B><font size=5>The Black Market</font></B><BR>"
 	dat += "<B>[welcome]</B><BR>"
 	dat += "Cash stored: [src.money_stored]<BR>"
-	dat += "<A href='byond://?src=\ref[src];dispense_change=1'>Eject Cash</a> <A href='byond://?src=\ref[src];open_local_market_hub=1'>Sell Item</a>"
+	dat += "<A href='byond://?src=\ref[src];dispense_change=1'>Eject Cash</a>"
 	dat += "<HR>"
 	dat += "<B>Request item:</B><BR>"
 	dat += "<I>Each item costs the price that follows its name. Cash only.</I><br><BR>"
@@ -156,32 +164,21 @@
 	//Next, create the player market entries at the top.
 	dat += "<b>Locally Sourced Goods</b><br>"
 	if(!player_market_items.len)
-		dat += "<font color='grey'><i>There are no items sourced from your station right now.</i></font>"
+		dat += "<font color='grey'><i>There are no items sourced from your station right now.</i></font><br>"
 	else
 		var/iterator = 0
-		var/merchandise_list = list()
-		for(var/datum/black_market_item/item in player_market_items)
+		for(var/datum/black_market_player_item/product in player_market_items)
 			iterator++
-			var/stock = item.get_stock()
-			var/itemcost = item.get_cost()
-			var/cost_text = ""
-			var/desc = "[item.desc]"
 			var/final_text = ""
-			cost_text = "([itemcost])"
-			if(itemcost <= money_stored && (stock > 0 || stock == -1))
-				final_text += "<A href='byond://?src=\ref[src];open_local_delivery_menu=[iterator];'>[item.name]</A> [cost_text] "
+			if(product.selected_price <= money_stored)
+				final_text += "<A href='byond://?src=\ref[src];buy_local_item=[iterator];'>[product.selected_name]</A> ([product.selected_price])"
 			else
-				final_text += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
-			if(stock != -1)
-				final_text += "<font color='grey'><i>([stock] in stock)</i></font>"
-			if(item.desc)
-				final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A>"
-			final_text += "<BR>"
-			merchandise_list += final_text
-
-			for(var/text in merchandise_list)
-				dat += text
-			
+				final_text += "<font color='grey'><i>[product.selected_name] ([product.selected_price]) </i></font>"
+			var/desc = "Official product name: [product.item.name]. Seller description: " + product.selected_description
+			final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A><br>"
+			dat += final_text
+	dat += "<br><br>"
+	
 	//Then, loop through the round-spawn entries.
 	var/index = 0
 	for(var/category in buyable_items)
@@ -224,13 +221,13 @@
 	var/dat = list()
 	if(!new_listing)
 		dat += "<B><font size=5>The Black Market</font></B><BR>"
-		dat += "<B>Welcome to the Local Market hub.</B><BR>"
+		dat += "Cash stored: [src.money_stored] Listing Fee: [new_item_fee]<BR>"
 		dat += "<B>A [market_cut*100]% fee will be applied to all transactions.</B><BR>"
 		dat += "<A href='byond://?src=\ref[src];open_main=1'>Return</a>"
 		dat = jointext(dat,"")
 	else
 		dat += "<B><font size=5>The Black Market</font></B><BR>"
-		dat += "<B>Item verified. Please complete your listing.</B><BR>"
+		dat += "Cash stored: [src.money_stored] Listing Fee: [new_item_fee]<BR>"
 		dat += "<B>A [market_cut*100]% fee will be applied to all transactions.</B><BR>"
 		dat += "<A href='byond://?src=\ref[src];open_main=1'>Return</a>"
 		dat += "<BR><HR><BR>"
@@ -267,14 +264,17 @@
 
 		
 		
-		
+/obj/item/device/illegalradio/proc/open_screen(var/screen)
+	opened_screen = screen
+	interact(usr)
 		
 /obj/item/device/illegalradio/proc/generate_new_local_listing(atom/target)
 	new_listing = new /datum/black_market_player_item()
 	new_listing.item = target
 	new_listing.selected_name = "[target]"
 	new_listing.seller_radio = src
-	open_html(generate_local_market_hub(usr))
+	new_listing.seller = usr
+	open_screen(SELLING)
 		
 /obj/item/device/illegalradio/afterattack(atom/A as mob|obj, mob/user as mob)
 	if(istype(A, /obj/item/weapon/spacecash) && A.Adjacent(user))
@@ -284,9 +284,10 @@
 		visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
 		interact(usr)
 	else if((istype(A, /obj) || istype(A, /mob)) && A.Adjacent(user) && !scanning)
-		visible_message("The [name] beeps: <span class='warning'>Scanning item...</span>")
+		visible_message("The [name] beeps: <span class='warning'>Scanning item to sell...</span>")
 		scanning = 1
 		if(do_after(user, A, scan_time))
+			visible_message("The [name] beeps: <span class='warning'>Item verified. Please confirm your listing.</span>")
 			generate_new_local_listing(A)
 		scanning = 0				
 
@@ -324,3 +325,5 @@
 	..()
 	money_stored = 0
 	
+#undef MAIN
+#undef SELLING

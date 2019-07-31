@@ -134,10 +134,11 @@
 	icon_broken = "fridgebroken"
 	icon_off = "fridge1"
 	req_access = list(access_heads_vault)
+	anchored = 1
 
 
 /obj/structure/closet/secure_closet/freezer/money/spawn_contents()
-	dispense_cash(6700, src)
+	dispense_cash(rand(1300,2000), src)
 
 
 
