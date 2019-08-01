@@ -7,8 +7,18 @@
 	if(now_pushing)
 		return
 	..()
-	if(can_be_infected(AM) && prob(10))
-		spread_disease_to(src, AM, "Contact")
+	if(isliving(AM))
+		var/mob/living/L = AM
+		var/block = 0
+		var/bleeding = 0
+		var/contact_part = HANDS//when we run into people, let's assume that we touch them hands first
+		if (L.size == SIZE_TINY)
+			contact_part = FEET//unless they're really small, in which case, we touch them feet first.
+		if (check_contact_sterility(contact_part) || L.check_contact_sterility(FULL_TORSO))//only one side has to wear protective clothing to prevent contact infection
+			block = 1
+		if (check_bodypart_bleeding(contact_part) && L.check_bodypart_bleeding(FULL_TORSO))//both sides have to be bleeding to allow for blood infections
+			bleeding = 1
+		share_contact_diseases(L,block,bleeding)
 	handle_symptom_on_touch(src, AM, BUMP)
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
@@ -81,14 +91,6 @@
 		visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
 	. = ..()
 
-/mob/living/carbon/proc/share_contact_diseases(var/mob/M)
-	for(var/datum/disease/D in viruses)
-		if(D.spread_by_touch())
-			M.contract_disease(D, 0, 1, CONTACT_HANDS)
-	for(var/datum/disease/D in M.viruses)
-		if(D.spread_by_touch())
-			contract_disease(D, 0, 1, CONTACT_HANDS)
-
 /mob/living/carbon/attack_hand(mob/M as mob)
 	if(!istype(M, /mob/living/carbon))
 		return
@@ -98,7 +100,6 @@
 		if(temp && !temp.is_usable())
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
-	share_contact_diseases(M)
 	handle_symptom_on_touch(M, src, HAND)
 
 /mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
@@ -299,8 +300,6 @@
 					)
 			reagents.add_reagent(PARACETAMOL, 1)
 
-			share_contact_diseases(M)
-
 // ++++ROCKDTBEN++++ MOB PROCS -- Ask me before touching.
 // Stop! ... Hammertime! ~Carn
 
@@ -341,7 +340,7 @@
 /mob/living/carbon/restrained()
 	if(timestopped)
 		return 1 //under effects of time magick
-	if (handcuffed)
+	if (check_handcuffs())
 		return 1
 	return
 
@@ -454,6 +453,10 @@
 		B.host_brain.name = "host brain"
 		B.host_brain.real_name = "host brain"
 
+	//reset name if the borer changed it
+	if(name != real_name)
+		name = real_name
+
 	verbs -= /mob/living/carbon/proc/release_control
 	verbs -= /mob/living/carbon/proc/punish_host
 
@@ -512,7 +515,7 @@
 /mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
 	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
 	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
-	
+
 /mob/living/carbon/teleport_to(var/atom/A)
 	var/last_slip_value = src.unslippable
 	src.unslippable = 1
@@ -601,12 +604,17 @@
 							return E
 
 /mob/living/carbon/proc/handle_symptom_on_touch(var/toucher, var/touched, var/touch_type)
+	if (toucher == touched)
+		return
 	if(virus2.len)
 		for(var/I in virus2)
 			var/datum/disease2/disease/D = virus2[I]
 			if(D.effects.len)
 				for(var/datum/disease2/effect/E in D.effects)
 					E.on_touch(src, toucher, touched, touch_type)
+
+/mob/living/carbon/proc/check_handcuffs()
+	return handcuffed
 
 /mob/living/carbon/proc/get_lowest_body_alpha()
 	if(!body_alphas.len)

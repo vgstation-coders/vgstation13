@@ -53,6 +53,7 @@
 #define SS_WAIT_MACHINERY           2 SECONDS //TODO move the rest of these to defines
 #define SS_WAIT_FAST_MACHINERY      0.7 SECONDS
 #define SS_WAIT_FAST_OBJECTS        0.5 SECONDS
+#define SS_WAIT_TICKER              2 SECONDS
 
 #define SS_DISPLAY_GARBAGE        -100
 #define SS_DISPLAY_AIR            -90

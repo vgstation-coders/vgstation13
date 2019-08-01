@@ -49,6 +49,9 @@
 	else
 		return ..()
 
+/obj/structure/bed/AltClick(mob/user as mob)
+	buckle_mob(user, user)
+
 /obj/structure/bed/proc/manual_unbuckle(var/mob/user)
 	if(user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
@@ -85,7 +88,11 @@
 	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
 		return
 
-	if(!ismob(M) || (M.loc != src.loc)  || M.locked_to)
+	//if(!ismob(M) || (M.loc != src.loc)  || M.locked_to)
+	if(!ismob(M) || M.locked_to)
+		return
+		
+	if(!user.Adjacent(M))
 		return
 
 	for(var/mob/living/L in get_locked(mob_lock_type))

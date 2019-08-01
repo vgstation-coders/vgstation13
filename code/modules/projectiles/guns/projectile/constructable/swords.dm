@@ -105,7 +105,7 @@
 	if(beaker)
 		to_chat(user, "[bicon(beaker)] There is \a [beaker] in \the [src]'s beaker port.")
 		var/obj/item/weapon/reagent_containers/glass/beaker/B = beaker
-		B.show_list_of_reagents(user)
+		B.reagents.get_examine(user)
 	to_chat(user, "<span class='info'>\The [src] is set to inject [inject_amount] units each hit.</span>")
 
 /obj/item/weapon/sword/venom/Destroy()

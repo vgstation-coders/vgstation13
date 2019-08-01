@@ -3,7 +3,7 @@
 /////////////////////////////////////////
 
 /obj/machinery/sleeper
-	name = "\improper Sleeper"
+	name = "sleeper"
 	icon = 'icons/obj/cryogenics3.dmi'
 	icon_state = "sleeper_0"
 	density = TRUE
@@ -472,6 +472,21 @@
 		return
 	updateUsrDialog()
 	return
+
+
+/obj/machinery/sleeper/upgraded
+	name = "advanced sleeper"
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/sleeper,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico
+	)
+
+
+/////////////////////////////////////////
+// MANCROWAVE
+/////////////////////////////////////////
 
 /obj/machinery/sleeper/mancrowave
 	name = "thermal homeostasis regulator"

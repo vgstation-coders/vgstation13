@@ -22,7 +22,7 @@
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged. This is supposedly infrared brightness. Lower for combat mechs.
 	var/list/hud_list = list()
-	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
+	var/initial_icon
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
 	var/step_in = 10 //make a step in step_in/10 sec.
@@ -117,7 +117,7 @@
 	log_message("[src.name] created.")
 	loc.Entered(src)
 	mechas_list += src //global mech list
-	reset_icon()
+	icon_state = initial_icon
 	icon_state += "-open"
 	return
 
@@ -1201,7 +1201,7 @@
 		src.add_fingerprint(H)
 		src.forceMove(src.loc)
 		src.log_append_to_last("[H] moved in as pilot.")
-		src.icon_state = src.reset_icon()
+		src.icon_state = src.initial_icon
 		dir = dir_in
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
@@ -1213,18 +1213,6 @@
 		//change the cursor
 		if(H.client && cursor_enabled)
 			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-		/* -- Mode/mind specific stuff goes here
-		if(H.mind)
-			if(isrev(H) || isrevhead(H))
-				ticker.mode.update_all_rev_icons()
-			if(isnukeop(H))
-				ticker.mode.update_all_synd_icons()
-			if (iscult(H))
-				ticker.mode.update_all_cult_icons()
-			if(iswizard(H) || isapprentice(H))
-				ticker.mode.update_all_wizard_icons()
-		// -- End mode specific stuff
-		*/
 
 		return 1
 	else
@@ -1276,7 +1264,7 @@
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
-		src.icon_state = src.reset_icon()
+		src.icon_state = src.initial_icon
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)
@@ -1435,21 +1423,8 @@
 		if(src.occupant && src.occupant.client)
 			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
 
-		/* -- Mode/mind specific stuff goes here
-		if(src.occupant.mind)
-			if(isrev(src.occupant) || isrevhead(src.occupant))
-				ticker.mode.update_all_rev_icons()
-			if(isnukeop(src.occupant))
-				ticker.mode.update_all_synd_icons()
-			if (iscult(src.occupant))
-				ticker.mode.update_all_cult_icons()
-			if(iswizard(src.occupant) || isapprentice(src.occupant))
-				ticker.mode.update_all_wizard_icons()
-		// -- End mode specific stuff
-		*/
-
 		src.occupant = null
-		src.icon_state = src.reset_icon()+"-open"
+		src.icon_state = src.initial_icon+"-open"
 		if(!lights) //if the lights are off, turn off the cabin lights
 			set_light(0)
 		src.dir = dir_in
@@ -2118,13 +2093,6 @@
 		return 1
 	return 0
 
-/obj/mecha/proc/reset_icon()
-	if (initial_icon)
-		icon_state = initial_icon
-	else
-		icon_state = initial(icon_state)
-	return icon_state
-
 /obj/mecha/acidable()
 	return 0
 
@@ -2294,5 +2262,6 @@
 	return
 */
 
+#undef STATE_BOLTSHIDDEN
 #undef STATE_BOLTSEXPOSED
 #undef STATE_BOLTSOPENED

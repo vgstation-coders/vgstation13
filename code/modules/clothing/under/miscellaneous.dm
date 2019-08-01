@@ -537,7 +537,7 @@
 	_color = "maid"
 
 /obj/item/clothing/under/darkholme
-	name = "\improper The Darkholme"
+	name = "\improper Darkholme"
 	desc = "Fuck you."
 	icon_state = "darkholme"
 	item_state = "darkholme"
@@ -746,3 +746,18 @@
 	icon_state = "newclothes"
 	_color = "newclothes"
 	item_state = "r_suit"
+
+/obj/item/clothing/under/tourist
+	name = "tourist uniform"
+	desc = "A bright cyan shirt and a pair of brown shorts. Looks old."
+	icon_state = "tourist"
+	item_state = "g_suit"
+	_color = "tourist"
+	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/under/varsity
+	name = "varsity jacket"
+	desc = "A jacket that belongs to either a high school student or an ancient German tyrant."
+	icon_state = "varsity"
+	item_state = "varsity"
+	_color = "varsity"

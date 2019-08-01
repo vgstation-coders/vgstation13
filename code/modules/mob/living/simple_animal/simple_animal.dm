@@ -330,7 +330,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			return "[emote], [text]"
 	return "says, [text]";
 
-/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null)
+/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null, var/ignore_status = FALSE)
 	if(timestopped)
 		return //under effects of time magick
 	if(stat)
@@ -380,12 +380,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return
-	// FUCK mice. - N3X
-	if(ismouse(src) && (Proj.stun+Proj.weaken+Proj.paralyze+Proj.agony)>5)
-		var/mob/living/simple_animal/mouse/M=src
-		to_chat(M, "<span class='warning'>What would probably not kill a human completely overwhelms your tiny body.</span>")
-		M.splat()
-		return 0
 	adjustBruteLoss(Proj.damage)
 	Proj.on_hit(src, 0)
 	return 0

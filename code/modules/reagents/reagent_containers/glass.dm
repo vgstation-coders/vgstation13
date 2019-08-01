@@ -24,7 +24,7 @@
 		/obj/structure/table,
 		/obj/structure/closet,
 		/obj/structure/sink,
-		/obj/structure/centrifuge/,
+		/obj/structure/centrifuge,
 		/obj/item/weapon/storage,
 		/obj/item/weapon/solder,
 		/obj/machinery/atmospherics/unary/cryo_cell,
@@ -32,15 +32,14 @@
 		/obj/item/weapon/grenade/chem_grenade,
 		/obj/item/weapon/electrolyzer,
 		/obj/machinery/bot/medbot,
-		/obj/machinery/computer/pandemic,
 		/obj/item/weapon/storage/secure/safe,
 		/obj/machinery/iv_drip,
 		/obj/machinery/disease2/incubator,
+		/obj/machinery/disease2/centrifuge,
 		/obj/machinery/disposal,
 		/obj/machinery/apiary,
 		/mob/living/simple_animal/cow,
 		/mob/living/simple_animal/hostile/retaliate/goat,
-		/obj/machinery/centrifuge,
 		/obj/machinery/cooking/icemachine,
 		/obj/machinery/sleeper,
 		/obj/machinery/anomaly,
@@ -276,6 +275,12 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/on_reagent_change()
+	..()
+	if (istype(loc,/obj/item/weapon/storage/fancy/vials) || istype(loc,/obj/item/weapon/storage/lockbox/vials))
+		var/obj/item/weapon/storage/S = loc
+		S.update_icon()
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
 	..()

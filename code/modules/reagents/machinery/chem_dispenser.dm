@@ -170,7 +170,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	var containerCurrentVolume = 0
 	if(container && container.reagents && container.reagents.reagent_list.len)
 		for(var/datum/reagent/R in container.reagents.reagent_list)
-			containerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
+			var/reg_name = R.name
+			if (istype(R,/datum/reagent/vaccine))
+				var/datum/reagent/vaccine/vaccine = R
+				var/vaccines = ""
+				for (var/A in vaccine.data["antigen"])
+					vaccines += "[A]"
+				if (vaccines == "")
+					vaccines = "blank"
+				reg_name = "[reg_name] ([vaccines])"
+			containerContents.Add(list(list("name" = reg_name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 			containerCurrentVolume += R.volume
 	data["beakerContents"] = containerContents
 

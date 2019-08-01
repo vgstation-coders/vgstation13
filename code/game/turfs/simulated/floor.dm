@@ -708,6 +708,6 @@ turf/simulated/floor/update_icon()
 /turf/simulated/floor/adjust_slowdown(mob/living/L, current_slowdown)
 	//Phazon floors make movement faster
 	if(floor_tile)
-		return floor_tile.adjust_slowdown(L, current_slowdown)
+		current_slowdown = floor_tile.adjust_slowdown(L, current_slowdown)
 
 	return ..()

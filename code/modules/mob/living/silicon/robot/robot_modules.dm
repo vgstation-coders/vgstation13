@@ -254,6 +254,7 @@
 	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/device/healthanalyzer(src)
+	modules += new /obj/item/device/antibody_scanner(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	modules += new /obj/item/weapon/gripper/chemistry(src)
 	modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
