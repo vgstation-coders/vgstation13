@@ -256,7 +256,18 @@ for anyone but the person committing mass murder.
 	rocket_launcher.emagged = TRUE
 
 /datum/black_market_item/tech/portalgun
-	name = "Portal Gun"
+	name = "Box of Japanese Nanites"
+	desc = "If you're going to actually buy this, you probably don't need to ask what it is."
+	item = /obj/item/weapon/storage/japanese_nanites
+	sps_chances = list(30,60,90)
+	stock_min = 1
+	stock_max = 1
+	cost_min = 600
+	cost_max = 900
+	display_chance = 10
+
+/datum/black_market_item/tech/jap_nanites
+	name = "Box of Japanese Nanites"
 	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare. That's why you're going to pay us a shitload of cash for it."
 	item = /obj/item/weapon/gun/portalgun
 	sps_chances = list(0,20,35)
@@ -265,7 +276,7 @@ for anyone but the person committing mass murder.
 	cost_min = 1800
 	cost_max = 2200
 	display_chance = 80
-
+	
 /datum/black_market_item/animal
 	category = "Living or Once Living Goods."
 
