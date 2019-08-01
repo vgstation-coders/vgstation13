@@ -1051,11 +1051,33 @@
 	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
 	var/turf/startzone = locate(startx, starty, 1)
 	var/turf/endzone = locate(endx, endy, 1)
-
+	if(!isspace(get_area(startzone)))
+		return FALSE
 	forceMove(startzone)
 	throw_at(endzone, null, throwspeed)
+	return TRUE
 
-/mob/living/carbon/human/ThrowAtStation(var/radius = 30, var/throwspeed = null, var/startside = null)
-	var/obj/AB = new /obj/item/airbag(null, TRUE)
+/mob/living/carbon/human/ThrowAtStation(var/radius = 30, var/throwspeed = null, var/startside = null, var/entry_vehicle = /obj/item/airbag)
+	var/turf/prev_turf = get_turf(src)
+	var/obj/AB = new entry_vehicle(null, TRUE)
 	forceMove(AB)
-	AB.ThrowAtStation(radius, throwspeed, startside)
+	if(AB.ThrowAtStation(radius, throwspeed, startside))
+		return TRUE
+	else
+		forceMove(prev_turf)
+		qdel(AB)
+		return FALSE
+
+/atom/movable/proc/spawn_rand_maintenance()
+	var/list/potential_locations = list()
+	for(var/area/maintenance/A in areas)
+		potential_locations.Add(A)
+
+	while(potential_locations.len)
+		var/area/maintenance/A = pick(potential_locations)
+		potential_locations.Remove(A)
+		for(var/turf/simulated/floor/F in A.contents)
+			if(!F.has_dense_content())
+				forceMove(F)
+				return TRUE
+	return FALSE
