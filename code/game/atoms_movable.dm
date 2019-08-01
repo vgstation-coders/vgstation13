@@ -1051,6 +1051,11 @@
 	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
 	var/turf/startzone = locate(startx, starty, 1)
 	var/turf/endzone = locate(endx, endy, 1)
-	
+
 	forceMove(startzone)
 	throw_at(endzone, null, throwspeed)
+
+/mob/living/carbon/human/ThrowAtStation(var/radius = 30, var/throwspeed = null, var/startside = null)
+	var/obj/AB = new /obj/item/airbag(null, TRUE)
+	forceMove(AB)
+	AB.ThrowAtStation(radius, throwspeed, startside)

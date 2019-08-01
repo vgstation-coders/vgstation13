@@ -511,7 +511,7 @@ Helpers For Both Variants
 		return
 	else
 		return ..()
-		
+
 /obj/item/weapon/melee/energy/sword/ninja/examine(mob/user)
 	..()
 	if(!isninja(user))
@@ -528,18 +528,18 @@ Helpers For Both Variants
 		return 1
 	else
 		return ..()
-		
+
 /obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
 	if(active)
 		toggleActive(user,togglestate = "off")
 	..()
-		
+
 /obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
 	if(!isninja(user) && active)
 		toggleActive(user,togglestate = "off")
 		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
 	..()
-		
+
 /*=======
 Suit and assorted
 =======*/
@@ -554,20 +554,22 @@ Suit and assorted
 	species_restricted = list("Human")
 	eyeprot = 3
 	body_parts_covered = FULL_HEAD|BEARD
-	
+
 /obj/item/clothing/head/helmet/space/ninja/apprentice
 	name = "ninja hood"
 	desc = "What may appear to be a simple black garment is in fact a sophisticated nano-weave helmet. Standard issue ninja apprentice gear."
 	eyeprot = 0
 	pressure_resistance = ONE_ATMOSPHERE
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	
+
 /obj/item/clothing/head/helmet/space/ninja/apprentice/New()
 	..()
 	spawn(120 SECONDS)
 		pressure_resistance = 0
-		visible_message("<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
-	
+		if(ishuman(loc))
+			var/mob/living/carbon/human/H = loc
+			to_chat(H, "<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
+
 /obj/item/clothing/suit/space/ninja
 	name = "elite ninja suit"
 	desc = "A unique, vacuum-proof suit of nano-enhanced armor designed specifically for elite Spider Clan assassins."
@@ -580,19 +582,22 @@ Suit and assorted
 	species_fit = list("Human")
 	species_restricted = list("Human") //only have human sprites :/
 	can_take_pai = 1
-	
+
 /obj/item/clothing/suit/space/ninja/apprentice
 	name = "ninja suit"
 	desc = "A rare suit of nano-enhanced armor designed for Spider Clan assassins."
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	pressure_resistance = ONE_ATMOSPHERE
-	
+
 /obj/item/clothing/suit/space/ninja/apprentice/New()
 	..()
 	spawn(150 SECONDS)
 		pressure_resistance = 0
-		visible_message("<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
-	
+		if(ishuman(loc))
+			var/mob/living/carbon/human/H = loc
+			if(H.wear_suit == src)
+				to_chat(H, "<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
+
 /obj/item/clothing/suit/space/ninja/equipped(mob/living/carbon/human/H, equipped_slot)
 	/*if(!isninja(H))
 		if(equipped_slot != slot_wear_suit)
@@ -601,12 +606,12 @@ Suit and assorted
 			src.visible_message("<span class='danger'>\The [src] suddenly explodes as [H] tries to put it on!</span>")
 			explosion(H.loc, 0, 0, 1)
 			H.u_equip(src, 1)
-			qdel(src)*/ 
+			qdel(src)*/
 	//else //Maybe when there's more functionality to warrant the suit exploding.
 	if(equipped_slot == slot_wear_suit)
 		icon_state = H.gender==FEMALE ? "s-ninjaf" : "s-ninja"
 		H.update_inv_wear_suit()
-	
+
 /obj/item/clothing/shoes/ninja
 	name = "ninja shoes"
 	desc = "A pair of ninja shoes, excellent for running and even better for smashing skulls."
@@ -615,17 +620,18 @@ Suit and assorted
 	permeability_coefficient = 0.01
 	mag_slow = NO_SLOWDOWN
 	clothing_flags = NOSLIP | MAGPULSE
-	
+
 /obj/item/clothing/shoes/ninja/apprentice
 	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
 	clothing_flags = NOSLIP
-	
+
 /obj/item/clothing/shoes/ninja/apprentice/proc/activateMagnets()
 	togglemagpulse(override = TRUE)
 	spawn(130 SECONDS)
 		togglemagpulse(override = TRUE)
-		visible_message("<span class='danger'>The magnetic charge on \the [src] disappates!</span>")
-		
+		if(ishuman(loc))
+			var/mob/living/carbon/human/H = loc
+			to_chat(H, "<span class='danger'>The magnetic charge on \the [src] disappates!</span>")
 
 /obj/item/clothing/mask/gas/voice/ninja
 	name = "ninja mask"
@@ -636,7 +642,7 @@ Suit and assorted
 	actions_types = list()
 	species_fit = list("Human")
 	species_restricted = list("Human")
-		
+
 /*******************************************
 ****          WEEABOO VARIANTS          ****
 ********************************************/
@@ -727,7 +733,7 @@ Suit and assorted
 	to_chat(user, "[message]")
 
 /obj/item/weapon/katana/hesfast/suicide_act(mob/user)
-	visible_message("<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
+	visible_message("<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit [pick("seppuku","sudoku","harikari","crossword puzzle")].</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/hesfast/preattack(atom/target, mob/user, proximity_flag, click_parameters)
