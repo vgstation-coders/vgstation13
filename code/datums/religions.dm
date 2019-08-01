@@ -1168,6 +1168,18 @@
 /datum/religion/ancap/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
 
+/datum/religion/ancom
+	name = "Anarcho-Communism"
+	deity_name = "Peter Kropotkin"
+	bible_name = "The Conquest of Bread"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Activist" 
+	female_adept = "Activist"
+	keys = list("anarcho-communism", "communalism", "mutualism")
+	
+/datum/religion/ancom/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/mask/balaclava(H), slot_l_store) // Black Bloc
+
 /datum/religion/samurai
 	name = "Bushido" // The way of the warrior
 	deity_name = "The Way of the Warrior"
