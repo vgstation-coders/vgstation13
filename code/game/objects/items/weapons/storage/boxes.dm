@@ -110,7 +110,9 @@
 	new /obj/item/clothing/mask/gas/ert(src)
 	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
-
+	new /obj/item/ammo_storage/magazine/c45(src)
+	new /obj/item/ammo_storage/magazine/c45/rubber(src)
+	
 /obj/item/weapon/storage/box/survival/nuke
 	icon_state = "box_nuke"
 
