@@ -16,6 +16,13 @@
 		equip_ninja(antag.current)
 		name_ninja(antag.current)
 
+/datum/role/ninja/PostSpawn()
+	if(ishuman(antag.current))
+		if(!antag.current.ThrowAtStation())
+			antag.current.spawn_rand_maintenance()
+		return 1
+	return 0
+
 /datum/role/ninja/ForgeObjectives()
 
 	if(cyborg_list.len)
@@ -230,16 +237,18 @@
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	var/cooldown = 0
-	var/reservoir = 0
 	var/shuriken_icon = "radial_print"
 	actions_types = list(/datum/action/item_action/make_shuriken, /datum/action/item_action/charge_sword)
 
 /obj/item/clothing/gloves/ninja/examine(mob/user)
 	..()
-	if(ishuman(user))
+	if(ishuman(user) && user.is_wearing_item(src))
 		var/mob/living/carbon/human/H = user
 		if(H.mind.GetRole(NINJA))
-			to_chat(H,"<span class='info'>Alt-Click to use drained power. It currently holds [round(reservoir)] energy units.</span>")
+			to_chat(H,"<span class='info'>Alt-Click to use drained power.</span>")
+			var/obj/item/weapon/cell/C = H.get_cell()
+			if(C)
+				to_chat(H, "<span class='notice'>You have [C.charge] charge remaining.</span>")
 			if(cooldown-world.time>0)
 				to_chat(H,"<span class='warning'>It will be ready to drain a cell in [round((cooldown-world.time)/10)] seconds.</span>")
 			else
@@ -252,7 +261,7 @@
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			if(H.mind.GetRole(NINJA) && A.get_cell())
-				if(draincell(A.get_cell()))
+				if(draincell(A.get_cell(), user))
 					if(istype(A,/obj/machinery/power/apc))
 						var/obj/machinery/power/apc/APC = A
 						APC.charging = 0
@@ -272,7 +281,11 @@
 	if(C.charge<100)
 		return FALSE
 	playsound(get_turf(src), pick(lightning_sound), 100, 1, "vary" = 0)
-	reservoir += C.charge
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/obj/item/weapon/cell/CC = H.get_cell()
+		if(CC)
+			CC.give(C.charge)
 	C.use(C.charge)
 	cooldown = world.time + 10 SECONDS
 	return TRUE
@@ -344,7 +357,11 @@
 	..()
 
 /obj/item/clothing/gloves/ninja/proc/make_shuriken(mob/user)
-	if(reservoir>=MAKE_SHURIKEN_COST)
+	var/obj/item/weapon/cell/C = user.get_cell()
+	if(!C)
+		to_chat(user, "<span class='notice'>You do not have a cell to draw power from.</span>")
+		return
+	if(C.use(MAKE_SHURIKEN_COST))
 		var/obj/item/stack/shuriken/S = locate(/obj/item/stack/shuriken) in user.held_items
 		if(S)
 			to_chat(user,"<span class='notice'>Your generated shuriken is added to the stack.</span>")
@@ -353,9 +370,8 @@
 		else
 			to_chat(user,"<span class='good'>Your glove generates a fresh shuriken in your hand!</span>")
 			user.put_in_hands(new /obj/item/stack/shuriken(user))
-		reservoir -= MAKE_SHURIKEN_COST
 	else
-		to_chat(user,"<span class='warning'>You need [MAKE_SHURIKEN_COST] to make that!</span>")
+		to_chat(user,"<span class='warning'>You need [MAKE_SHURIKEN_COST] charge to make that!</span>")
 
 /obj/item/clothing/gloves/ninja/proc/charge_sword(mob/user)
 	var/obj/item/weapon/oursword = GetNinjaWeapon(user)
@@ -370,9 +386,10 @@
 	if(difference<=0)
 		to_chat(user,"<span class='warning'>Your blade is already fully charged!</span>")
 		return
-	var/to_subtract = min(difference,reservoir) //Take the least between: how much we need, how much we have
+	var/obj/item/weapon/cell/C = user.get_cell()
+	var/to_subtract = min(difference,C.get_charge()) //Take the least between: how much we need, how much we have
 	T.cooldown -= to_subtract/CHARGE_COST_MULTIPLIER
-	reservoir -= to_subtract
+	C.use(to_subtract)
 	if(T.cooldown < world.time)
 		to_chat(user,"<span class='good'>The glove's power flows into your weapon. Your blade is ready to be unleashed!</span>")
 	else
@@ -582,6 +599,17 @@ Suit and assorted
 	species_fit = list("Human")
 	species_restricted = list("Human") //only have human sprites :/
 	can_take_pai = 1
+	var/obj/item/weapon/cell/cell
+
+/obj/item/clothing/suit/space/ninja/New()
+	..()
+	equip_cell()
+
+/obj/item/clothing/suit/space/ninja/proc/equip_cell()
+	cell = new /obj/item/weapon/cell/high/empty()
+
+/obj/item/clothing/suit/space/ninja/get_cell()
+	return cell
 
 /obj/item/clothing/suit/space/ninja/apprentice
 	name = "ninja suit"

@@ -287,6 +287,9 @@
 /datum/role/proc/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	return
 
+/datum/role/proc/PostSpawn() //Called by latejoining, if you want to move somebody who was going to arrive at arrivals, use this.
+	return 0
+
 /datum/role/proc/GetFaction()
 	return faction
 

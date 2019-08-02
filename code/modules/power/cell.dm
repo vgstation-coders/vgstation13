@@ -11,6 +11,9 @@
 	spawn(5)
 		updateicon()
 
+/obj/item/weapon/cell/proc/get_charge()
+	return charge
+
 /obj/item/weapon/cell/proc/updateicon()
 	overlays.len = 0
 

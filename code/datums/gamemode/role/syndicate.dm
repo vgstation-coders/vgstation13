@@ -194,6 +194,9 @@
 	disallow_job = TRUE
 	logo_state = "nuke-logo"
 
+/datum/role/nuclear_operative/PostSpawn()
+	return 1
+
 /datum/role/nuclear_operative/leader
 	name = NUKE_OP_LEADER
 	id = NUKE_OP_LEADER
@@ -207,7 +210,7 @@
 		go_loud.linkedfaction = faction
 		go_loud.Grant(antag.current)
 	..()
-	
+
 /datum/action/play_ops_music
 	name = "Go Loud"
 	desc = "For the operative who prefers style over subtlety."

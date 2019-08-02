@@ -326,6 +326,7 @@
 		D.AddToGoggleView(H)
 
 /mob/new_player/proc/AttemptLateSpawn(rank)
+	to_chat(world, "[src] called attemptlatespawn")
 	if (src != usr)
 		return 0
 	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
@@ -344,8 +345,7 @@
 			return 0
 
 	job_master.AssignRole(src, rank, 1)
-
-	ticker.mode.latespawn(src)//can we make them a latejoin antag?
+	ticker.mode.latespawn(src)
 
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
@@ -356,14 +356,16 @@
 
 	job_master.CheckPriorityFulfilled(rank)
 
-	var/turf/T = character.loc
+	var/spawn_handled = FALSE
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
 		R.OnPostSetup()
 		R.ForgeObjectives()
 		R.AnnounceObjectives()
+		if(!spawn_handled)
+			spawn_handled = R.PostSpawn()
 
-	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
+	if(spawn_handled) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
 		//Removal of job slot is in role/role.dm
 		character.store_position()
 		qdel(src)
@@ -373,7 +375,6 @@
 	EquipCustomItems(character)
 
 	var/atom/movable/what_to_move = character.locked_to || character
-
 	var/datum/job/J = job_master.GetJob(rank)
 	if(J.spawns_from_edge)
 		Meteortype_Latejoin(what_to_move, rank)
