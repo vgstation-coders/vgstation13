@@ -1900,7 +1900,9 @@
 	if(href_list["add_all_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
 			return
-		for(var/a in topic_filter.getObj("id_card").access)
+		var/obj/item/weapon/card/id/mycard = topic_filter.getObj("id_card")
+		var/list/myaccess = mycard.access
+		for(var/a in myaccess)
 			operation_req_access += a
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return	
