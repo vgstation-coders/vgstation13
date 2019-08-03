@@ -308,7 +308,7 @@ var/list/global_illegal_radios = list()
 	new_listing.selected_price = minimum_price
 	open_screen(SELLING)
 		
-/obj/item/device/illegalradio/afterattack(atom/A as mob|obj, mob/user as mob)
+/obj/item/device/illegalradio/afterattack(atom/movable/A as mob|obj, mob/user as mob)
 	if(istype(A, /obj/item/weapon/spacecash) && A.Adjacent(user))
 		var/obj/item/weapon/spacecash/cash = A
 		money_stored += cash.get_total()
