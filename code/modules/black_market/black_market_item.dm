@@ -135,13 +135,13 @@ var/list/black_market_items = list()
 		var/obj/spawned_item = new item(get_turf(user),user)
 		if(!spawned_item)
 			if(radio)
-				radio.visible_message("The [radio] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
+				radio.visible_message("\The [radio] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
 				radio.money_stored += get_cost()*delivery_fees[CHEAP]
 			if(round_stock != -1)
 				round_stock += 1
 			return 0
 		after_spawn(spawned_item,CHEAP,user)
-		spawned_item.ThrowAtStation(30,0.4,direction)	
+		spawned_item.ThrowAtStation(30,0.4,direction)
 
 var/list/potential_locations = list()
 var/locations_calculated = 0
@@ -164,14 +164,14 @@ var/locations_calculated = 0
 				break
 	if(!spawnloc)
 		sleep(2 SECONDS)
-		radio.visible_message("The [radio.name] beeps: <span class='warning'>Unable to find a proper location for teleportation. You've been downgraded to cheap. No refunds.</span>")
+		radio.visible_message("\The [radio] beeps: <span class='warning'>Unable to find a proper location for teleportation. You've been downgraded to cheap. No refunds.</span>")
 		sleep(2 SECONDS)
 		spawn_cheap(radio, user)
 		return
 
 	var/time_to_spawn = rand(30 SECONDS, 60 SECONDS)
 	log_transaction("The item was teleported to the [selected_area.name].", user)
-	radio.visible_message("The [radio] beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
+	radio.visible_message("\The [radio] beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
 	process_transaction(radio, NORMAL)
 	radio.interact(user)
 
@@ -184,7 +184,7 @@ var/locations_calculated = 0
 	var/obj/spawned_item = new item(get_turf(user),user)
 	if(!spawned_item)
 		if(radio)
-			radio.visible_message("The [radio] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
+			radio.visible_message("\The [radio] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
 			radio.money_stored += get_cost()*delivery_fees[EXPENSIVE]
 		if(round_stock != -1)
 			round_stock += 1
@@ -196,7 +196,7 @@ var/locations_calculated = 0
 			A.put_in_any_hand_if_possible(spawned_item)
 
 	log_transaction("The item was teleported directly to him.", user)
-	radio.visible_message("The [radio] beeps: <span class='warning'>Thank you for your purchase!</span>")
+	radio.visible_message("\The [radio] beeps: <span class='warning'>Thank you for your purchase!</span>")
 	radio.interact(user)
 
 /datum/black_market_item/proc/after_spawn(var/obj/spawned, var/delivery_method, var/mob/user) //Called immediately after spawning. Override for post-spawn behavior.
@@ -212,11 +212,18 @@ var/list/player_market_items = list()
 
 /datum/black_market_player_item
 	var/atom/item
+	var/obj/item/device/black_market_beacon/attached_beacon
 	var/obj/item/device/illegalradio/seller_radio
 	var/mob/living/seller
 	var/selected_name = ""
 	var/selected_price = 100
 	var/selected_description = "Enter description here."
+
+/datum/black_market_player_item/Destroy()
+	if(attached_beacon)
+		attached_beacon.on_unlist()
+	player_market_items -= src
+	buzz_black_market()
 	
 /datum/black_market_player_item/proc/buy(var/obj/item/device/illegalradio/radio, var/mob/user)
 	..()
@@ -224,21 +231,24 @@ var/list/player_market_items = list()
 		return FALSE
 	if(user.stat || user.restrained())
 		return FALSE
-	if(!(istype(user,/mob/living/carbon/human)))
+	if(!ishuman(user))
 		return FALSE
-	if(!((radio.loc in user.contents) || (in_range(radio.loc, user) && istype(radio.loc.loc, /turf))))
+	if(!user.Adjacent(radio))
+		to_chat(user,"<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
 		return FALSE
 	if(selected_price > radio.money_stored)
 		return FALSE
 	if(!item)
-		radio.visible_message("The [radio.name] beeps: <span class='warning'>Uh, so it seems your item has been destroyed. No money charged. Sorry.</span>")
+		radio.visible_message("\The [radio] beeps: <span class='warning'>Uh, so it seems your item has been destroyed. No money charged. Sorry.</span>")
 		player_market_items -= src
 		qdel(src)
 
+	do_teleport(item, get_turf(user), 0)
 	if(ishuman(user))
 		var/mob/living/carbon/human/A = user
 		if(istype(item, /obj/item))
 			A.put_in_any_hand_if_possible(item)
+	
 
 	log_transaction(user)
 	
@@ -249,7 +259,6 @@ var/list/player_market_items = list()
 	if(seller_radio)
 		seller_radio.money_stored += selected_price*(1-seller_radio.market_cut)
 		
-	player_market_items -= src
 	qdel(src)
 	
 /datum/black_market_player_item/proc/log_transaction(var/mob/user)
@@ -259,6 +268,10 @@ var/list/player_market_items = list()
 	log_game(text)
 	log_admin(text)
 	
+/datum/black_market_player_item/proc/on_beacon_destroy()
+	attached_beacon = null //Prevents infinite loop
+	qdel(src)
+		
 /*
 //
 //	BLACK MARKET ITEMS

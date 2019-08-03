@@ -2,6 +2,14 @@
 #define SELLING 2
 #define DELIVERY 3
 
+var/list/global_illegal_radios = list()
+
+/proc/buzz_black_market() //Updates and buzzes all illegalradios so the screen is current.
+	for(var/obj/item/device/illegalradio/radio in global_illegal_radios)
+		if(radio.notifications && usr && radio in usr.contents)
+			radio.interact(usr)
+			to_chat(usr,"<span class='info'>You feel \the [radio] buzz.</span>")
+
 /obj/item/device/illegalradio
 	icon = 'icons/obj/radio.dmi'
 	name = "black market uplink"
@@ -25,10 +33,12 @@
 	
 	var/money_stored
 	var/opened_screen = MAIN
-	var/market_cut = 0.2
-	var/new_item_fee = 35
+	var/market_cut = 0.3
+	var/new_item_fee = 25
+	var/minimum_price = 100
 	var/advanced_uplink = 0
-	var/scan_time = 100
+	var/scan_time = 150
+	var/notifications = 1 
 	
 	var/scanning = 0
 	
@@ -40,8 +50,12 @@
 	advanced_uplink = 1
 	
 /obj/item/device/illegalradio/New()
-	..()
 	money_stored = 0
+	global_illegal_radios += src
+	
+/obj/item/device/illegalradio/Destroy()
+	money_stored = 0
+	global_illegal_radios -= src
 
 /obj/item/device/illegalradio/interact(mob/user as mob) //Whenever called, update screen.
 	if(opened_screen == MAIN)
@@ -71,6 +85,10 @@
 		
 	else if (href_list["dispense_change"])
 		dispense_change()	
+
+	else if (href_list["toggle_notifications"])
+		notifications = !notifications
+		interact(usr)
 		
 	else if(href_list["open_delivery_menu"])
 		var/input = href_list["open_delivery_menu"]
@@ -103,7 +121,7 @@
 		if(item)
 			item.buy(src,usr)
 		else
-			visible_message("The [src] beeps: <span class='warning'>An unexpected error occurred. Try again later.</span>")	
+			visible_message("\The [src] beeps: <span class='warning'>An unexpected error occurred. Try again later.</span>")	
 		open_screen(MAIN)
 		
 	else if(href_list["open_local_market_hub"])
@@ -112,6 +130,9 @@
 	else if(href_list["local_market_input_price"])
 		var/price = input("Enter your desired price.", "Price", new_listing ? new_listing.selected_price : 0) as num
 		if(!price || !new_listing)
+			return
+		if(price < minimum_price)
+			visible_message("\The [src] beeps: <span class='warning'>That price is below the minimum of [minimum_price].</span>")
 			return
 		new_listing.selected_price = price
 		interact(usr)
@@ -132,22 +153,30 @@
 		
 	else if(href_list["local_market_confirm_listing"])
 		if(money_stored < new_item_fee)
-			visible_message("The [src] beeps: <span class='warning'>You actually don't have enough cash to list an item. That's pretty sad.</span>")	
+			visible_message("\The [src] beeps: <span class='warning'>You actually don't have enough cash to list an item. That's pretty sad.</span>")	
 			return
-		if(new_listing)
+		else if(!new_listing || !new_listing.item)
+			visible_message("\The [src] beeps: <span class='warning'>There was an unexpected error! Try again later.</span>")
+			return
+		else if(!usr.Adjacent(new_listing.item))
+			visible_message("\The [src] beeps: <span class='warning'>Your item is too far away. You have to be near it.</span>")	
+			return
+		else
 			money_stored -= new_item_fee
 			player_market_items += new_listing
+			
+			var/obj/item/device/black_market_beacon/beacon = new /obj/item/device/black_market_beacon()
+			beacon.attach_to(new_listing.item, new_listing)
+			buzz_black_market()
+			
 			new_listing = null
-		else
-			visible_message("The [src] beeps: <span class='warning'>There was an unexpected error! Try again.</span>")
-			return
-		open_screen(MAIN)
+			open_screen(MAIN)
 		
 	..()
 
 
 /obj/item/device/illegalradio/proc/generate_main_menu(mob/user)
-	var/welcome = pick("Stop wasting bandwidth, buy something already!","Telecrystals ain't cheap, kid. Pay up.","There ain't nothing better than a good deal.","Back in my day, we didn't have 'teleporters'.","Human and Vox slaves NOT accepted as payment.","Absolutely no affiliation with Discount Dan.","Free from Nanotrasen regulation.","Too shy to come in person?","Unaffiliated with Spessmart(TM) supermarts.","Cluck, cluck. We've got no chickens.","What doth the greytide desire?","Wow, shooting spree? How original.","Uwa~ Senpai! Buy my stuff.","Japanese animes tolerated but condemned.","Goods from the TG1153 sector are prohibited. Go away.")
+	var/welcome = pick("We buzz you whenever the market changes!","Stop wasting bandwidth, buy something already!","Telecrystals ain't cheap, kid. Pay up.","There ain't nothing better than a good deal.","Back in my day, we didn't have 'teleporters'.","Human and Vox slaves NOT accepted as payment.","Absolutely no affiliation with Discount Dan.","Free from Nanotrasen regulation.","Too shy to come in person?","Unaffiliated with Spessmart(TM) supermarts.","Cluck, cluck. We've got no chickens.","What doth the greytide desire?","Wow, shooting spree? How original.","Uwa~ Senpai! Buy my stuff.","Japanese animes tolerated but condemned.","Goods from the TG1153 sector are prohibited. Go away.")
 
 	var/dat = list()
 	
@@ -155,7 +184,7 @@
 	dat += "<B><font size=5>The Black Market</font></B><BR>"
 	dat += "<B>[welcome]</B><BR>"
 	dat += "Cash stored: [src.money_stored]<BR>"
-	dat += "<A href='byond://?src=\ref[src];dispense_change=1'>Eject Cash</a>"
+	dat += "<A href='byond://?src=\ref[src];dispense_change=1'>Eject Cash</a> <A href='byond://?src=\ref[src];toggle_notifications=1'>Buzz Notifications: [notifications ? "ON" : "OFF"]</a>"
 	dat += "<HR>"
 	dat += "<B>Request item:</B><BR>"
 	dat += "<I>Each item costs the price that follows its name. Cash only.</I><br><BR>"
@@ -274,6 +303,7 @@
 	new_listing.selected_name = "[target]"
 	new_listing.seller_radio = src
 	new_listing.seller = usr
+	new_listing.selected_price = minimum_price
 	open_screen(SELLING)
 		
 /obj/item/device/illegalradio/afterattack(atom/A as mob|obj, mob/user as mob)
@@ -284,12 +314,19 @@
 		visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
 		interact(usr)
 	else if((istype(A, /obj) || istype(A, /mob)) && A.Adjacent(user) && !scanning)
-		visible_message("The [name] beeps: <span class='warning'>Scanning item to sell...</span>")
+		visible_message("\The [src] beeps: <span class='warning'>Scanning item to sell...</span>")
 		scanning = 1
 		if(do_after(user, A, scan_time))
-			visible_message("The [name] beeps: <span class='warning'>Item verified. Please confirm your listing.</span>")
-			generate_new_local_listing(A)
-		scanning = 0				
+			if(user.z == STATION_Z)
+				visible_message("\The [src] beeps: <span class='warning'>Item verified. Please confirm your listing.</span>")
+				generate_new_local_listing(A)
+			else
+				visible_message("\The [src] beeps: <span class='warning'>Error: you must be near your space station. The connection is poor in deep space.</span>")
+		scanning = 0		
+		
+/obj/item/device/illegalradio/MouseDropTo(var/atom/movable/target, var/mob/user)
+	afterattack(target, user)
+	
 
 /obj/item/device/illegalradio/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/spacecash))
@@ -320,10 +357,7 @@
 	dat += "</body></font>"
 	usr << browse(dat, "window=hidden")
 	onclose(usr, "hidden")	
-	
-/obj/item/device/illegalradio/Destroy()
-	..()
-	money_stored = 0
+
 	
 #undef MAIN
 #undef SELLING
