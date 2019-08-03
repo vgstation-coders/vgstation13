@@ -4,7 +4,7 @@
 # Case IS important for the rank. However punctuation/spaces are not #
 # Ranks can be anything defined in admin_ranks.txt           ~Carn   #
 ######################################################################
-
+leroy_lightyear - Game Master
 abi79 - Game Master
 arcalane - Game Admin
 asanadas - Game Admin

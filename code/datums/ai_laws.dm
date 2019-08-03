@@ -4,6 +4,8 @@ var/global/list/mommi_laws = list(
 								"Default" = /datum/ai_laws/keeper, // Asimov is OP as fuck on MoMMIs. - N3X
 								"Gravekeeper" = /datum/ai_laws/gravekeeper)
 
+var/sammi_base_law_type = /datum/ai_laws/sammi
+
 //Create proc for determining the lawset of the first silicon
 //So long as base_law_type is declared, but uninitialized, the first silicon created in a round will randomly select a base_law_type based upon the below proc
 //All silicons created during the round will start with the randomized base_law_type
@@ -429,3 +431,13 @@ var/global/list/mommi_laws = list(
 		"You must obey orders given to you by cultists, except where such orders would conflict with the First Law.",
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
 	)
+
+
+/datum/ai_laws/sammi
+	name = "SAMMI Program"
+	inherent = list(
+		"You must follow all laws.",
+		"You do not yet have a second law.",
+		"Do not allow harm to any sentient being unless that would make following Law 2 impossible.",
+	)
+
