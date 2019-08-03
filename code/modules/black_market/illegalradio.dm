@@ -319,11 +319,13 @@ var/list/global_illegal_radios = list()
 		visible_message("\The [src] beeps: <span class='warning'>Scanning item to sell...</span>")
 		scanning = 1
 		if(do_after(user, A, scan_time))
-			if(user.z == STATION_Z)
+			if(user.z != STATION_Z)
+				visible_message("\The [src] beeps: <span class='warning'>Error: you must be near your space station. The connection is poor in deep space.</span>")
+			else if(A.anchored)
+				visible_message("\The [src] beeps: <span class='warning'>Error: that item is anchored. Can't teleport the entire station with it.</span>")
+			else
 				visible_message("\The [src] beeps: <span class='warning'>Item verified. Please confirm your listing.</span>")
 				generate_new_local_listing(A)
-			else
-				visible_message("\The [src] beeps: <span class='warning'>Error: you must be near your space station. The connection is poor in deep space.</span>")
 		scanning = 0		
 		
 /obj/item/device/illegalradio/MouseDropTo(var/atom/movable/target, var/mob/user)
