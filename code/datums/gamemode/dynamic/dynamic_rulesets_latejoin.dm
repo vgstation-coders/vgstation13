@@ -131,8 +131,9 @@
 	newninja.Greet(GREET_DEFAULT)
 	newninja.OnPostSetup()
 	newninja.AnnounceObjectives()
-	if(!newninja.antag.current.ThrowAtStation())
-		newninja.antag.current.spawn_rand_maintenance()
+	spawn(1) //TODO - FIX THE NEED FOR THIS. CHECK PR, CHECK THE REVERTED COMMIT
+		if(!newninja.antag.current.ThrowAtStation())
+			newninja.antag.current.spawn_rand_maintenance()
 	return 1
 
 
