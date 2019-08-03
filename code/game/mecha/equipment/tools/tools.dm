@@ -56,16 +56,16 @@
 				FD.force_open(chassis.occupant, src)
 			return
 		if(!O.anchored)
-			if(istype(O, /obj/item/weapon/ore) && W.ore_box)
+			if(istype(O, /obj/item/stack/ore) && W.ore_box)
 				var/count = 0
-				for(var/obj/item/weapon/ore/I in get_turf(target))
+				for(var/obj/item/stack/ore/I in get_turf(target))
 					if(I.material)
-						W.ore_box.materials.addAmount(I.material, 1)
+						W.ore_box.materials.addAmount(I.material, I.amount)
 						returnToPool(I)
 						count++
 				if(count)
 					log_message("Loaded [count] ore into compatible ore box.")
-					occupant_message("<font color='blue'>[count] ore successfully loaded into cargo compartment.</font>")
+					occupant_message("<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
 					chassis.visible_message("[chassis] scoops up the ore from the ground and loads it into cargo compartment.")
 			else if(W.cargo.len < W.cargo_capacity)
 				occupant_message("You lift [target] and start to load it into cargo compartment.")
@@ -84,15 +84,15 @@
 						if(!W.ore_box && istype(O, /obj/structure/ore_box))
 							W.ore_box = O
 						O.anchored = 0 //Why?
-						occupant_message("<font color='blue'>[target] successfully loaded.</font>")
+						occupant_message("<span class='notice'>[target] successfully loaded.</span>")
 						log_message("Loaded [O]. Cargo compartment capacity: [W.cargo_capacity - W.cargo.len]")
 					else
-						occupant_message("<font color='red'>You must hold still while handling objects.</font>")
+						occupant_message("<span class='red'>You must hold still while handling objects.</span>")
 						O.anchored = initial(O.anchored) //WHY??
 			else
-				occupant_message("<font color='red'>Not enough room in cargo compartment.</font>")
+				occupant_message("<span class='red'>Not enough room in cargo compartment.</span>")
 		else
-			occupant_message("<font color='red'>[target] is firmly secured.</font>")
+			occupant_message("<span class='red'>[target] is firmly secured.</span>")
 
 	else if(istype(target,/mob/living))
 		var/mob/living/M = target
@@ -137,51 +137,51 @@
 		if(!target.can_mech_drill())
 			return
 	set_ready_state(0)
-	chassis.visible_message("<font color='red'><b>[chassis] starts to drill [target]!</b></font>", "You hear a drill.")
-	occupant_message("<font color='red'><b>You start to drill [target]!</b></font>")
+	chassis.visible_message("<span class='red'><b>[chassis] starts to drill [target]!</b></span>", "You hear a drill.")
+	occupant_message("<span class='red'><b>You start to drill [target]!</b></span>")
 	var/C = chassis.loc
 	var/T = target.loc	//why were these backwards? we may never know -Pete & Bauds, years apart
 
 	if(istype(target, /turf/simulated/wall/invulnerable))
-		occupant_message("<font color='red'>[target] is too durable to drill through.</font>")
+		occupant_message("<span class='red'>[target] is too durable to drill through.</span>")
 
 	else if(istype(target, /turf/simulated/wall))
 		if(dig_walls)
 			var/delay = istype(target, /turf/simulated/wall/r_wall) ? 10 : 2
 			if(do_after_cooldown(target, delay) && C == chassis.loc && src == chassis.selected)
 				log_message("Drilled through [target]")
-				occupant_message("<font color='red'><b>Your powerful drill screeches as it tears through the last of \the [target], leaving nothing but a girder!</b></font>")
-				chassis.visible_message("<font color='red'><b>[chassis] drills through \the [target]!</b></font>", "You hear a drill tearing through plating.")
+				occupant_message("<span class='red'><b>Your powerful drill screeches as it tears through the last of \the [target], leaving nothing but a girder!</b></span>")
+				chassis.visible_message("<span class='red'><b>[chassis] drills through \the [target]!</b></span>", "You hear a drill tearing through plating.")
 				//target.ex_act(3) //Why
 				target.mech_drill_act(3)
 		else
 			if(do_after_cooldown(target, 1) && C == chassis.loc && src == chassis.selected)
-				occupant_message("<font color='red'>[target] is too durable to drill through.</font>")
+				occupant_message("<span class='red'>[target] is too durable to drill through.</span>")
 
 	else if(istype(target, /obj/structure/girder))
 		if(do_after_cooldown(target) && C == chassis.loc && src == chassis.selected)
 			log_message("Drilled through [target]")
-			occupant_message("<font color='red'><b>Your drill destroys \the [target]!</b></font>")
-			chassis.visible_message("<font color='red'><b>[chassis] destroys \the [target]!</b></font>", "You hear a drill breaking something.")
+			occupant_message("<span class='red'><b>Your drill destroys \the [target]!</b></span>")
+			chassis.visible_message("<span class='red'><b>[chassis] destroys \the [target]!</b></span>", "You hear a drill breaking something.")
 			target.mech_drill_act(2)
 
 	else if(istype(target, /turf/unsimulated/mineral))
 		if(do_after_cooldown(target, 1/MECHDRILL_ROCK_SPEED) && C == chassis.loc && src == chassis.selected)
 			for(var/turf/unsimulated/mineral/M in range(chassis,1))
-				if(get_dir(chassis,M)&chassis.dir)
-					M.GetDrilled()
+				if(get_dir(chassis,M)&chassis.dir && M.mining_difficulty < MINE_DIFFICULTY_DENSE)
+					M.GetDrilled(safety_override = TRUE, driller = src)
 			log_message("Drilled through [target]")
 			if(istype(chassis, /obj/mecha/working))
 				var/obj/mecha/working/W = chassis
 				if(W.hydraulic_clamp && W.ore_box)
 					var/count = 0
-					for(var/obj/item/weapon/ore/ore in range(chassis,1))
+					for(var/obj/item/stack/ore/ore in range(chassis,1))
 						if(get_dir(chassis,ore)&chassis.dir && ore.material)
-							W.ore_box.materials.addAmount(ore.material,1)
+							W.ore_box.materials.addAmount(ore.material,ore.amount)
 							returnToPool(ore)
 							count++
 					if(count)
-						occupant_message("<font color='blue'>[count] ore successfully loaded into cargo compartment.</font>")
+						occupant_message("<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
 
 	else if(istype(target, /turf/unsimulated/floor/asteroid)) //Digging for sand
 		if(do_after_cooldown(target, 1/MECHDRILL_SAND_SPEED) && C == chassis.loc && src == chassis.selected)
@@ -196,13 +196,13 @@
 				if(get_dir(chassis,M)&chassis.dir || istype(src, /obj/item/mecha_parts/mecha_equipment/tool/drill/diamonddrill)) //Only dig frontmost 1x3 unless the drill is diamond
 					M.gets_dug()
 					if(hydraulic_clamp && ore_box)
-						for(var/obj/item/weapon/ore/glass/sandore in get_turf(M))
-							ore_box.materials.addAmount(sandore.material,1)
+						for(var/obj/item/stack/ore/glass/sandore in get_turf(M))
+							ore_box.materials.addAmount(sandore.material,sandore.amount)
 							returnToPool(sandore)
 							count++
 			log_message("Drilled through [target]")
 			if(count)
-				occupant_message("<font color='blue'>[count] sand successfully loaded into cargo compartment.</font>")
+				occupant_message("<span class='notice'>[count] sand successfully loaded into cargo compartment.</span>")
 
 	else
 		if(do_after_cooldown(target, 1) && C == chassis.loc && src == chassis.selected && target.loc == T) //also check that our target hasn't moved
@@ -216,8 +216,8 @@
 				else
 					M.LAssailant = chassis.occupant
 			log_message("Drilled through [target]")
-			occupant_message("<font color='red'><b>You drill into \the [target].</b></font>")
-			chassis.visible_message("<font color='red'><b>[chassis] drills into \the [target]!</b></font>", "You hear a drill breaking something.")
+			occupant_message("<span class='red'><b>You drill into \the [target].</b></span>")
+			chassis.visible_message("<span class='red'><b>[chassis] drills into \the [target]!</b></span>", "You hear a drill breaking something.")
 			target.mech_drill_act(2)
 
 	chassis.use_power(energy_drain)
@@ -263,8 +263,8 @@
 	if(istype(target, /obj/machinery/portable_atmospherics/hydroponics))
 		set_ready_state(0)
 		if(do_after_cooldown(target, 1/2))
-			chassis.visible_message("<font color='red'><b>[chassis] smashes apart \the [target]!</b></font>", "You hear a pneumatic screeching and something being smashed apart.")
-			occupant_message("<font color='red'><b>You smash apart \the [target]!</b></font>")
+			chassis.visible_message("<span class='red'><b>[chassis] smashes apart \the [target]!</b></span>", "You hear a pneumatic screeching and something being smashed apart.")
+			occupant_message("<span class='red'><b>You smash apart \the [target]!</b></span>")
 			log_message("Destroyed [target].")
 			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
 			playsound(target, 'sound/mecha/mechsmash.ogg', 50, 1)
@@ -286,7 +286,7 @@
 						eradicated++
 			sleep(3)
 		if(eradicated)
-			occupant_message("<font color='blue'>[eradicated] weeds successfully eradicated.</font>")
+			occupant_message("<span class='notice'>[eradicated] weeds successfully eradicated.</span>")
 			log_message("Culled [eradicated] weeds.")
 		set_ready_state(1)
 	else if(istype(target,/mob/living))
@@ -432,6 +432,16 @@
 	!equip_ready? turn_off() : turn_on()
 	return equip_ready
 
+/obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
+	..()
+	linked_spell = new /spell/mech/jetpack(M, src)
+
+/obj/item/mecha_parts/mecha_equipment/jetpack/activate()
+	toggle()
+
+/spell/mech/jetpack/cast(list/targets, mob/user)
+	linked_equipment.activate()
+
 /obj/item/mecha_parts/mecha_equipment/jetpack/proc/turn_on()
 	set_ready_state(0)
 	chassis.proc_res["dyndomove"] = src
@@ -520,6 +530,7 @@
 	RPD = new(src)
 	RCD = new(src)
 	sock = new(src)
+	red_tool_list += src
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
 	qdel(RPD)
@@ -528,6 +539,7 @@
 	RCD = null
 	qdel(sock)
 	sock = null
+	red_tool_list -= src
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/action(atom/target)
@@ -576,7 +588,9 @@
 	else
 		return "[..()] \[<a href='?src=\ref[src];RCDmenu=0'>Open construction menu</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to piping mode</a>\]"
 
-
+/obj/item/mecha_parts/mecha_equipment/tool/red/alt_action()
+	var/obj/item/device/rcd/activeDevice = device ? RPD : RCD
+	activeDevice.attack_self(chassis.occupant)
 
 /obj/item/mecha_parts/mecha_equipment/teleporter
 	name = "\improper Exosuit-Mounted Teleporter"
@@ -726,6 +740,13 @@
 		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 	return
 
+/obj/item/mecha_parts/mecha_equipment/gravcatapult/alt_action()
+	if(mode == 1)
+		mode = 2
+		to_chat(chassis.occupant, "<span class='notice'>Push mode activated.</span>")
+	else
+		mode = 1
+		to_chat(chassis.occupant, "<span class='notice'>Pull mode activated.</span>")
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster //what is that noise? A BAWWW from TK mutants.
 	name = "\improper Armor Booster Module (Close Combat Weaponry)"
@@ -737,6 +758,7 @@
 	range = 0
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
+	is_activateable = 0
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
@@ -768,8 +790,8 @@
 		to_chat(user, "<span class='warning'>The [W] bounces off [chassis] armor.</span>")
 		chassis.log_append_to_last("Armor saved.")
 	else
-		chassis.occupant_message("<font color='red'><b>[user] hits [chassis] with [W].</b></font>")
-		user.visible_message("<font color='red'><b>[user] hits [chassis] with [W].</b></font>", "<font color='red'><b>You hit [src] with [W].</b></font>")
+		chassis.occupant_message("<span class='red'><b>[user] hits [chassis] with [W].</b></span>")
+		user.visible_message("<span class='red'><b>[user] hits [chassis] with [W].</b></span>", "<span class='red'><b>You hit [src] with [W].</b></span>")
 		chassis.take_damage(round(W.force*damage_coeff),W.damtype)
 		chassis.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 	set_ready_state(0)
@@ -788,6 +810,10 @@
 	range = 0
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
+	is_activateable = 0
+	var/list/never_deflect = list(
+		/obj/item/projectile/ion,
+	)
 
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
@@ -816,9 +842,9 @@
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/proc/dynbulletdamage(var/obj/item/projectile/Proj)
 	if(!action_checks(src))
 		return chassis.dynbulletdamage(Proj)
-	if(prob(chassis.deflect_chance*deflect_coeff))
+	if(prob(chassis.deflect_chance*deflect_coeff) && !is_type_in_list(Proj, never_deflect))
 		chassis.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
-		chassis.visible_message("The [chassis.name] armor deflects the projectile")
+		chassis.visible_message("<span class='warning'>\The [chassis.name] armor deflects the projectile!</span>")
 		chassis.log_append_to_last("Armor saved.")
 	else
 		chassis.take_damage(round(Proj.damage*src.damage_coeff),Proj.flag)
@@ -873,9 +899,10 @@
 	..()
 	droid_overlay = new(src.icon, icon_state = "repair_droid")
 	M.overlays += droid_overlay
+	linked_spell = new /spell/mech/repair(M, src)
 	return
 
-/obj/item/mecha_parts/mecha_equipment/repair_droid/destroy()
+/obj/item/mecha_parts/mecha_equipment/repair_droid/Destroy()
 	chassis.overlays -= droid_overlay
 	qdel(pr_repair_droid)
 	pr_repair_droid = null
@@ -886,6 +913,17 @@
 	pr_repair_droid.stop()
 	..()
 	return
+
+/obj/item/mecha_parts/mecha_equipment/repair_droid/activate()
+	chassis.overlays -= droid_overlay
+	if(pr_repair_droid.toggle())
+		droid_overlay = new(src.icon, icon_state = "repair_droid_a")
+		log_message("Activated.")
+	else
+		droid_overlay = new(src.icon, icon_state = "repair_droid")
+		log_message("Deactivated.")
+		set_ready_state(1)
+	chassis.overlays += droid_overlay
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/get_equip_info()
 	if(!chassis)
@@ -937,6 +975,13 @@
 		RD.set_ready_state(1)
 	return
 
+/spell/mech/repair
+	name = "Repair Droid Module"
+	desc = "Automated repair droid. Scans exosuit for damage and repairs it. Can fix almost all types of external or internal damage."
+
+/spell/mech/repair/cast(list/targets, mob/user)
+	linked_equipment.activate()
+	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay
 	name = "\improper Energy Relay Module"
@@ -972,6 +1017,7 @@
 	..()
 	chassis.proc_res["dyngetcharge"] = src
 //		chassis.proc_res["dynusepower"] = src
+	linked_spell = new /spell/mech/tesla(M, src)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/can_attach(obj/mecha/M)
@@ -1005,12 +1051,7 @@
 	if(..())
 		return TRUE
 	if(href_list["toggle_relay"])
-		if(pr_energy_relay.toggle())
-			set_ready_state(0)
-			log_message("Activated.")
-		else
-			set_ready_state(1)
-			log_message("Deactivated.")
+		activate()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/get_equip_info()
@@ -1018,14 +1059,33 @@
 		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_relay=1'>[pr_energy_relay.active()?"Dea":"A"]ctivate</a>"
 
-/*	proc/dynusepower(amount)
+/*
+/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/proc/dynusepower(amount)
 	if(!equip_ready) //enabled
 		var/area/A = get_area(chassis)
 		var/pow_chan = get_power_channel(A)
 		if(pow_chan)
 			A.master.use_power(amount*coeff, pow_chan)
 			return 1
-	return chassis.dynusepower(amount)*/
+	return chassis.dynusepower(amount)
+*/
+
+/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/activate()
+	if(pr_energy_relay.toggle())
+		set_ready_state(0)
+		log_message("Activated.")
+		to_chat(chassis.occupant, "<span class='notice'>Relay enabled.</span>")
+	else
+		set_ready_state(1)
+		log_message("Deactivated.")
+		to_chat(chassis.occupant, "<span class='notice'>Relay disabled.</span>")
+
+/spell/mech/tesla
+	name = "Tesla Energy Relay"
+	desc = "Wirelessly drains energy from any available power channel in area. The performance index is quite low."
+
+/spell/mech/tesla/cast(list/targets, mob/user)
+	linked_equipment.activate()
 
 /datum/global_iterator/mecha_energy_relay/process(var/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/ER)
 	if(!ER.chassis || ER.chassis.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
@@ -1092,6 +1152,13 @@
 	..()
 	return
 
+/obj/item/mecha_parts/mecha_equipment/generator/alt_action()
+	if(pr_mech_generator.toggle())
+		set_ready_state(0)
+		log_message("Activated.")
+	else
+		set_ready_state(1)
+		log_message("Deactivated.")
 
 /obj/item/mecha_parts/mecha_equipment/generator/Topic(href, href_list)
 	if(..())
@@ -1116,7 +1183,7 @@
 		var/result = load_fuel(target)
 		var/message
 		if(isnull(result))
-			message = "<font color='red'>[fuel] traces in target minimal. [target] cannot be used as fuel.</font>"
+			message = "<span class='red'>[fuel] traces in target minimal. [target] cannot be used as fuel.</span>"
 		else if(!result)
 			message = "Unit is full."
 		else
@@ -1141,7 +1208,7 @@
 /obj/item/mecha_parts/mecha_equipment/generator/attackby(weapon,mob/user)
 	var/result = load_fuel(weapon)
 	if(isnull(result))
-		user.visible_message("[user] tries to shove [weapon] into [src]. What a dumb-ass.","<font color='red'>[fuel] traces minimal. [weapon] cannot be used as fuel.</font>")
+		user.visible_message("[user] tries to shove [weapon] into [src]. What a dumb-ass.","<span class='red'>[fuel] traces minimal. [weapon] cannot be used as fuel.</span>")
 	else if(!result)
 		to_chat(user, "Unit is full.")
 	else
@@ -1155,13 +1222,13 @@
 		return
 	var/datum/gas_mixture/GM = new
 	if(prob(10))
-		GM.toxins += 100
 		GM.temperature = 1500+T0C //should be enough to start a fire
+		GM.adjust_gas(GAS_PLASMA, 100)
 		T.visible_message("The [src] suddenly disgorges a cloud of heated plasma.")
-		destroy()
+		qdel(src)
 	else
-		GM.toxins += 5
 		GM.temperature = istype(T) ? T.air.temperature : T20C
+		GM.adjust_gas(GAS_PLASMA, 5)
 		T.visible_message("The [src] suddenly disgorges a cloud of plasma.")
 	T.assume_air(GM)
 	return
@@ -1195,7 +1262,6 @@
 	EG.update_equip_info()
 	return 1
 
-
 /obj/item/mecha_parts/mecha_equipment/generator/nuclear
 	name = "\improper ExoNuclear Reactor"
 	desc = "Generates power using uranium. Pollutes the environment."
@@ -1224,7 +1290,21 @@
 			M.apply_radiation(EG.rad_per_cycle*3, RAD_EXTERNAL)
 	return 1
 
+/spell/mech/generator
+	name = "\improper Plasma Converter Module"
+	desc = "Generates power using solid plasma as fuel. Pollutes the environment."
 
+/spell/mech/generator/nuclear
+	name = "\improper ExoNuclear Reactor"
+	desc = "Generates power using uranium. Pollutes the environment."
+
+/spell/mech/generator/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/generator/ME)
+	src.linked_mech = M
+	charge_counter = charge_max
+	name = ME.name
+
+/spell/mech/generator/cast(list/targets, mob/user)
+	linked_equipment.activate()
 
 //This is pretty much just for the death-ripley so that it is harmless
 /obj/item/mecha_parts/mecha_equipment/tool/safety_clamp
@@ -1267,15 +1347,15 @@
 						cargo_holder.cargo += O
 						O.forceMove(chassis)
 						O.anchored = 0
-						chassis.occupant_message("<font color='blue'>[target] successfully loaded.</font>")
+						chassis.occupant_message("<span class='notice'>[target] successfully loaded.</span>")
 						chassis.log_message("Loaded [O]. Cargo compartment capacity: [cargo_holder.cargo_capacity - cargo_holder.cargo.len]")
 					else
-						chassis.occupant_message("<font color='red'>You must hold still while handling objects.</font>")
+						chassis.occupant_message("<span class='red'>You must hold still while handling objects.</span>")
 						O.anchored = initial(O.anchored)
 			else
-				chassis.occupant_message("<font color='red'>Not enough room in cargo compartment.</font>")
+				chassis.occupant_message("<span class='red'>Not enough room in cargo compartment.</span>")
 		else
-			chassis.occupant_message("<font color='red'>[target] is firmly secured.</font>")
+			chassis.occupant_message("<span class='red'>[target] is firmly secured.</span>")
 
 	else if(istype(target,/mob/living))
 		var/mob/living/M = target
@@ -1343,6 +1423,9 @@
 		occupant_message("<span class='notice'>Automatic tool refilling activated.</span>")
 	update_equip_info()
 
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/alt_action()
+	switchtool.attack_self(chassis.occupant)
+
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/get_equip_info()
 	return "[..()] Current tool: [switchtool.deployed ? "[switchtool.deployed]" : "None"] \[<a href='?src=\ref[src];change=0'>change</a>\] [pr_switchtool.active() ? "" : "\[<a href='?src=\ref[src];refill=0'>activate refilling</a>\]"]"
 
@@ -1398,6 +1481,16 @@
 		plating_active = !plating_active
 	if(href_list["toggle_tiling"])
 		tiling_active = !tiling_active
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler/alt_action()
+	if(plating_active || tiling_active)
+		plating_active = 0
+		tiling_active = 0
+	else
+		plating_active = 1
+		tiling_active = 1
+	to_chat(chassis.occupant, "Plating and tiling modes [plating_active?"enabled":"disabled"]")
 	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/get_equip_info()
@@ -1473,7 +1566,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/collector/get_equip_info()
 	if(!collector.P)
 		return "[..()] No tank loaded."
-	if(collector.P.air_contents.toxins <= 0)
+	if(collector.P.air_contents[GAS_PLASMA] <= 0)
 		return "[..()] ERROR: Tank empty. \[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[collector.active ? "Deactivate" : "Activate"] radiation collector array</a>\]\[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 

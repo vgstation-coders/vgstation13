@@ -34,13 +34,13 @@
 	if(speak_when_spawned)
 		speak = list("Your souls shall suffer!", "No mortals shall be spared.", "My magic will tear you apart!", "Prepare to face the almighty [name]!")
 
-/mob/living/simple_animal/hostile/humanoid/wizard/Die()
+/mob/living/simple_animal/hostile/humanoid/wizard/death(var/gibbed = FALSE)
 	src.say("SCYAR NILA [pick("AI UPLOAD", "SECURE ARMORY", "BAR", "PRIMARY TOOL STORAGE", "INCINERATOR", "CHAPEL", "FORE STARBOARD MAINTENANCE", "WIZARD FEDERATION")]")
 	var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(get_turf(src))
 	S.time_to_live = 20 //2 seconds instead of full 10
 
-	..()
-	return qdel(src)
+	..(TRUE)
+	qdel(src)
 
 /mob/living/simple_animal/hostile/humanoid/wizard/OpenFire()
 	src.say(incantation)
@@ -59,12 +59,14 @@
 
 /mob/living/simple_animal/hostile/humanoid/wizard/doppelganger/New()
 	..()
-	var/spell/S = new /spell/targeted/projectile/magic_missile
+	var/spell/S = new /spell/targeted/projectile/magic_missile/spare_stunned
 	spell = S
 	add_spell(S, src)
 
 /mob/living/simple_animal/hostile/humanoid/wizard/doppelganger/Destroy()
 	spell = null
+	var/mob/my_wiz = doppelgangers[src]
+	doppelgangers_count_by_wizards[my_wiz]--
 	doppelgangers[src] = null
 	doppelgangers -= src
 	..()

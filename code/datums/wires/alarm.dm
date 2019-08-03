@@ -33,8 +33,9 @@ var/const/AALARM_WIRE_AALARM = 16
 	. += ..()
 	. += text("<br>\n[(A.locked ? "The Air Alarm is locked." : "The Air Alarm is unlocked.")]<br>\n[((A.shorted || (A.stat & (NOPOWER|BROKEN))) ? "The Air Alarm is offline." : "The Air Alarm is working properly!")]<br>\n[(A.aidisabled ? "The 'AI control allowed' light is off." : "The 'AI control allowed' light is on.")]")
 
-/datum/wires/alarm/UpdateCut(var/index, var/mended)
+/datum/wires/alarm/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/alarm/A = holder
+	var/obj/I = user.get_active_hand()
 	switch(index)
 		if(AALARM_WIRE_IDSCAN)
 			if(!mended)
@@ -42,7 +43,7 @@ var/const/AALARM_WIRE_AALARM = 16
 //				to_chat(world, "Idscan wire cut")
 
 		if(AALARM_WIRE_POWER)
-			A.shock(usr, 50)
+			A.shock(user, 50,get_conductivity(I))
 			A.shorted = !mended
 			A.update_icon()
 //			to_chat(world, "Power wire cut")

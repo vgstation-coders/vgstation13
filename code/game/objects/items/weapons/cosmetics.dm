@@ -195,7 +195,7 @@
 	overlays += dye_color
 
 /obj/item/weapon/hair_dye/attack_self(mob/user as mob)
-	var/new_color = input(user, "Choose the dye's color:", "Color Select") as color|null
+	var/new_color = input(user, "Choose the dye's color:", "Color Select", rgb(color_r, color_g, color_b)) as color|null
 	if(new_color)
 		color_r = hex2num(copytext(new_color, 2, 4))
 		color_g = hex2num(copytext(new_color, 4, 6))
@@ -215,11 +215,11 @@
 			if(cover)
 				to_chat(user, "<span class='notice'>You can't color [H == user ? "your" : "\the [H]'s"] facial hair through that [cover.name]!</span>")
 				return
-			if(!H.f_style || H.f_style == "Shaved")	//if they have no facial hair
+			if(!H.my_appearance.f_style || H.my_appearance.f_style == "Shaved")	//if they have no facial hair
 				to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any facial hair!</span>")
 				return
 			else
-				var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
+				var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.my_appearance.f_style]
 				if(!facial_hair_style.do_colouration)
 					to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any colorable facial hair!</span>")
 					return
@@ -229,11 +229,11 @@
 			if(cover)
 				to_chat(user, "<span class='notice'>You can't color [H == user ? "your" : "\the [H]'s"] hair through that [cover.name]!</span>")
 				return
-			if(!H.h_style || H.h_style == "Bald")	//if they have no hair
+			if(!H.my_appearance.h_style || H.my_appearance.h_style == "Bald")	//if they have no hair
 				to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any hair!</span>")
 				return
 			else
-				var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
+				var/datum/sprite_accessory/hair_style = hair_styles_list[H.my_appearance.h_style]
 				if(!hair_style.do_colouration)
 					to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any colorable hair!</span>")
 					return
@@ -261,15 +261,15 @@
 	if(!H)
 		return
 	if(facial)
-		H.r_facial = color_r
-		H.g_facial = color_g
-		H.b_facial = color_b
+		H.my_appearance.r_facial = color_r
+		H.my_appearance.g_facial = color_g
+		H.my_appearance.b_facial = color_b
 	else
-		H.r_hair = color_r
-		H.g_hair = color_g
-		H.b_hair = color_b
+		H.my_appearance.r_hair = color_r
+		H.my_appearance.g_hair = color_g
+		H.my_appearance.b_hair = color_b
 	H.update_hair()
-	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
 /obj/item/weapon/invisible_spray
 	name = "can of invisible spray"
@@ -341,7 +341,7 @@
 		to_chat(user, "You spray yourself with \the [src].")
 	else
 		to_chat(user, "You spray \the [target] with \the [src].")
-	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
 	if(istype(target, /obj/machinery/power/supermatter))
 		return 0
@@ -364,9 +364,9 @@
 
 /obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, location = "mouth")
 	if(location == "mouth")
-		H.f_style = "Shaved"
+		H.my_appearance.f_style = "Shaved"
 	else
-		H.h_style = "Skinhead"
+		H.my_appearance.h_style = "Skinhead"
 
 	H.update_hair()
 	playsound(loc, 'sound/items/Welder2.ogg', 20, 1)
@@ -380,7 +380,7 @@
 			if(H.check_body_part_coverage(MOUTH))
 				to_chat(user,"<span class='warning'>The mask is in the way!</span>")
 				return
-			if(H.f_style == "Shaved")
+			if(H.my_appearance.f_style == "Shaved")
 				to_chat(user,"<span class='warning'>Already clean-shaven!</span>")
 				return
 
@@ -403,7 +403,7 @@
 			if(H.check_body_part_coverage(HEAD))
 				to_chat(user,"<span class='warning'>The headgear is in the way!</span>")
 				return
-			if(H.h_style == "Bald" || H.h_style == "Skinhead")
+			if(H.my_appearance.h_style == "Bald" || H.my_appearance.h_style == "Skinhead")
 				to_chat(user,"<span class='warning'>There is not enough hair left to shave!</span>")
 				return
 
@@ -443,7 +443,8 @@
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if (isvampire(H))
-			if (!(VAMP_MATURE in H.mind.vampire.powers))
+			var/datum/role/vampire/V = H.mind.GetRole(VAMPIRE)
+			if (!(VAMP_MATURE in V.powers))
 				to_chat(H, "<span class='notice'>You don't see anything.</span>")
 				return
 
@@ -452,17 +453,21 @@
 				if (1 to 20)
 					to_chat(H, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
 					H.Knockdown(4)
+					H.Stun(4)
 					return
 				if (21 to 40)
 					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
-					H.emote("scream", auto=1)
+					H.audible_scream()
 					H.dir = turn(H.dir, 180)
 					return
 				if (41 to 50)
 					to_chat(H, "<span class='notice'>You don't see anything.</span>")
 					return
+		handle_hair(H)
 
-		//handle normal hair
+/obj/item/weapon/pocket_mirror/proc/handle_hair(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
 		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null))
 		//gender intentionally left null so speshul snowflakes can cross-hairdress
 		if (species_hair.len)
@@ -470,7 +475,7 @@
 			if (!Adjacent(user) || user.incapacitated())
 				return
 			if (new_style)
-				H.h_style = new_style
+				H.my_appearance.h_style = new_style
 				H.update_hair()
 
 /obj/item/weapon/pocket_mirror/proc/shatter()
@@ -491,3 +496,84 @@
 		return
 	if (prob(25))
 		shatter()
+
+/obj/item/weapon/pocket_mirror/comb
+	name = "hair comb"
+	desc = "Despite the name honey is not included nor recommended for use with this."
+	icon_state = "comb"
+
+/obj/item/weapon/pocket_mirror/comb/shatter()
+	return
+
+/obj/item/weapon/pocket_mirror/comb/attack(mob/M, mob/user)
+	if(M == user)
+		handle_hair(user)
+	else
+		..()
+
+/obj/item/weapon/nanitecontacts
+	name = "nanite contacts"
+	desc = "Deploys nanobots to your eyes to change their color."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "nanite_contact"
+	flags = FPRINT
+	w_class = W_CLASS_TINY
+	var/color_r = 255
+	var/color_g = 255
+	var/color_b = 255
+
+/obj/item/weapon/nanitecontacts/New()
+	..()
+	color_r = rand(0,255)
+	color_g = rand(0,255)
+	color_b = rand(0,255)
+	update_icon()
+
+/obj/item/weapon/nanitecontacts/update_icon()
+	overlays.len = 0
+	var/image/I = image(icon = 'icons/obj/items.dmi', icon_state = "contacts_overlay")
+	I.color = rgb(color_r, color_g, color_b)
+	overlays += I
+
+/obj/item/weapon/nanitecontacts/attack_self(mob/user)
+	var/new_color = input(user, "Choose the contact's color:", "Color Select", rgb(color_r, color_g, color_b)) as color|null
+	if(new_color)
+		color_r = hex2num(copytext(new_color, 2, 4))
+		color_g = hex2num(copytext(new_color, 4, 6))
+		color_b = hex2num(copytext(new_color, 6, 8))
+	update_icon()
+
+/obj/item/weapon/nanitecontacts/attack(mob/M, mob/user)
+	if(!istype(M))
+		return
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/area = user.zone_sel.selecting
+		if(area == "eyes")
+			var/obj/item/clothing/cover = H.get_body_part_coverage(EYES)
+			if(cover)
+				to_chat(user, "<span class='notice'>You can't color [H == user ? "your" : "\the [H]'s"] eyes through that [cover.name]!</span>")
+				return
+		if(H == user)
+			user.visible_message("<span class='notice'>[user] colors their eyes with \the [src].</span>", \
+								 "<span class='notice'>You color your eyes with \the [src].</span>")
+			color_eyes(H)
+		else
+			user.visible_message("<span class='warning'>[user] begins to color \the [H]'s eyes with \the [src].</span>", \
+								 "<span class='notice'>You begin to color \the [H]'s eyes with \the [src].</span>")
+			if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
+				user.visible_message("<span class='notice'>[user] colors [H]'s eyes with \the [src].</span>", \
+									 "<span class='notice'>You color [H]'s eyes with \the [src].</span>")
+				color_eyes(H)
+	else
+		to_chat(user, "<span class='notice'>\The [M]'s eyes don't fit in the contacts!</span>")
+
+/obj/item/weapon/nanitecontacts/proc/color_eyes(mob/living/carbon/human/H)
+	if(!H)
+		return
+	else
+		H.my_appearance.r_eyes = color_r
+		H.my_appearance.g_eyes = color_g
+		H.my_appearance.b_eyes = color_b
+	H.update_body()

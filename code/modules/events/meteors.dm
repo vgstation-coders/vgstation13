@@ -16,7 +16,7 @@
 
 //Two to three waves. So 40 to 120
 /datum/event/meteor_wave/tick()
-	meteor_wave(rand(20, 40), max_size = 2) //Large waves, panic is mandatory
+	meteor_wave(rand(20, 40), max_size = 2, offset_origin = 150, offset_dest = 230) //Large waves, panic is mandatory
 
 /datum/event/meteor_wave/end()
 	command_alert(/datum/command_alert/meteor_wave_end)
@@ -35,7 +35,7 @@
 //Meteor showers are lighter and more common
 //Sometimes a single wave, most likely two, so anywhere from 10 to 30 small meteors
 /datum/event/meteor_shower/tick()
-	meteor_wave(rand(10, 15), max_size = 1) //Much more clement
+	meteor_wave(rand(10, 15), max_size = 1, offset_origin = 150, offset_dest = 230) //Much more clement
 
 /datum/event/meteor_shower/end()
 	command_alert(/datum/command_alert/meteor_wave_end)
@@ -48,7 +48,7 @@
 /datum/event/meteor_shower/meteor_quiet/announce()
 
 /datum/event/meteor_shower/meteor_quiet/tick()
-	meteor_wave(rand(7, 10), max_size = 2) //Good balance of sizes and abundance between shower and storm
+	meteor_wave(rand(7, 10), max_size = 2, offset_origin = 150, offset_dest = 230) //Good balance of sizes and abundance between shower and storm
 
 /datum/event/meteor_shower/meteor_quiet/end()
 
@@ -108,6 +108,27 @@ var/global/list/thing_storm_types = list(
 		/obj/item/projectile/meteor/blob/node,
 		/obj/item/projectile/meteor/blob/node,
 	),
+	"fireworks" = list(
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+	)
 )
 
 /datum/event/thing_storm
@@ -129,7 +150,7 @@ var/global/list/thing_storm_types = list(
 //Meteor showers are lighter and more common
 //Since this isn't rocks of pure pain and explosion, we have more, anywhere from 10 to 40 items
 /datum/event/thing_storm/tick()
-	meteor_wave(rand(10, 20), types = thing_storm_types[storm_name]) //Much more clement
+	meteor_wave(rand(10, 20), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230) //Much more clement
 
 /datum/event/thing_storm/end()
 	command_alert("The station has cleared the [storm_name].", "Meteor Alert")
@@ -141,7 +162,7 @@ var/global/list/thing_storm_types = list(
 	storm_name="meaty gore storm"
 
 /datum/event/thing_storm/meaty_gore/tick()
-	meteor_wave(rand(45, 60), types = thing_storm_types[storm_name])
+	meteor_wave(rand(45, 60), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230)
 
 /datum/event/thing_storm/meaty_gore/announce()
 	command_alert("The station is about to pass through an unknown organic debris field. No hull breaches are likely.", "Organic Debris Field")
@@ -156,7 +177,7 @@ var/global/list/thing_storm_types = list(
 	storm_name="blob shower"
 
 /datum/event/thing_storm/blob_shower/tick()
-	meteor_wave(rand(12, 24), types = thing_storm_types[storm_name])
+	meteor_wave(rand(12, 24), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230)
 
 /datum/event/thing_storm/blob_shower/announce()
 	command_alert(/datum/command_alert/blob_storm)
@@ -166,24 +187,46 @@ var/global/list/thing_storm_types = list(
 
 /datum/event/thing_storm/blob_storm
 	var/cores_spawned = 0
+	var/list/candidates = list()
+	var/started = FALSE
 
 /datum/event/thing_storm/blob_storm/setup()
 	endWhen = rand(60, 90) + 10
 	storm_name="blob storm"
 
 /datum/event/thing_storm/blob_storm/tick()
-	var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types[storm_name])
+	var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230)
 	if(!cores_spawned)
 		var/living = 0
 		for(var/mob/living/M in player_list)
 			if(M.stat == CONSCIOUS)
 				living++
 		cores_spawned = round(living/BLOB_CORE_PROPORTION) //Cores spawned depends on living players
-		for(var/i = 0 to cores_spawned)
-			spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
+
+
+	if (!(candidates.len) && !started)
+		candidates = get_candidates(BLOBOVERMIND)
+
+	for(var/i = 0 to cores_spawned)
+		if (!candidates.len)
+			return
+		var/obj/item/projectile/meteor/blob/core/C = spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
+		var/client/candidate = pick(candidates)
+		candidates =- candidate
+		C.AssignMob(candidate.mob)
 
 /datum/event/thing_storm/blob_storm/announce()
 	command_alert(/datum/command_alert/blob_storm/overminds)
 
 /datum/event/thing_storm/blob_storm/end()
 	command_alert(/datum/command_alert/blob_storm/overminds/end)
+
+/datum/event/thing_storm/fireworks/setup()
+	endWhen = rand(60, 90) + 10
+	storm_name="fireworks"
+
+/datum/event/thing_storm/fireworks/tick()
+	meteor_wave(rand(45, 60), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230)
+
+/datum/event/thing_storm/fireworks/announce()
+	command_alert("The station is about to be bombarded by light-based distraction projectiles. Source unknown. No hull breaches are likely.", "Firework Fiasco")

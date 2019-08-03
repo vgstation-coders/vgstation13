@@ -80,6 +80,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	if(screen == 1)
 
 		dat += {"Select an event to trigger:<ul>
+			<li><A href='?src=\ref[src];triggerevent=Rainbow alert'>Rainbow alert</A></li>
 			<li><A href='?src=\ref[src];triggerevent=Red alert'>Red alert</A></li>"}
 		if((get_security_level() in list("red", "delta")))
 			dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>"
@@ -170,6 +171,9 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 
 /obj/machinery/keycard_auth/proc/trigger_event()
 	switch(event)
+		if("Rainbow alert")
+			set_security_level(SEC_LEVEL_RAINBOW)
+			feedback_inc("alert_keycard_auth_rainbow",1)
 		if("Red alert")
 			set_security_level(SEC_LEVEL_RED)
 			feedback_inc("alert_keycard_auth_red",1)
@@ -190,12 +194,12 @@ var/global/maint_all_access = 0
 /proc/make_maint_all_access()
 	maint_all_access = 1
 	to_chat(world, "<font size=4 color='red'>Attention!</font>")
-	to_chat(world, "<font color='red'>The maintenance access requirement has been revoked on all airlocks.</font>")
+	to_chat(world, "<span class='red'>The maintenance access requirement has been revoked on all airlocks.</span>")
 
 /proc/revoke_maint_all_access()
 	maint_all_access = 0
 	to_chat(world, "<font size=4 color='red'>Attention!</font>")
-	to_chat(world, "<font color='red'>The maintenance access requirement has been readded on all maintenance airlocks.</font>")
+	to_chat(world, "<span class='red'>The maintenance access requirement has been readded on all maintenance airlocks.</span>")
 
 /obj/machinery/door/airlock/allowed(mob/M)
 	if(maint_all_access && src.check_access_list(list(access_maint_tunnels)))

@@ -1,7 +1,5 @@
 /turf/simulated
 	name = "station"
-	var/wet = 0
-	var/image/wet_overlay = null
 
 	var/thermite = 0
 	var/can_thermite = 1
@@ -32,8 +30,8 @@
 
 	if (istype(A,/mob/living/carbon))
 		var/mob/living/carbon/M = A
-		if(M.lying)
-			return
+		if(!M.on_foot())
+			return ..()
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 
@@ -63,67 +61,30 @@
 			bloodDNA = null
 
 			// Floorlength braids?  Enjoy your tripping.
-			if(H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
-				var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
+			if(H.my_appearance.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
+				var/datum/sprite_accessory/hair_style = hair_styles_list[H.my_appearance.h_style]
 				if(hair_style && (hair_style.flags & HAIRSTYLE_CANTRIP))
 					if(H.m_intent == "run" && prob(5))
 						if (H.Slip(4, 5))
 							step(H, H.dir)
 							to_chat(H, "<span class='notice'>You tripped over your hair!</span>")
-
-		//Anything beyond that point will not fire if the mob isn't physically walking here
-		if(!M.on_foot()) //Checks lying, flying and locked.to
-			return ..()
-
-		//And anything beyond that point will not fire for slimes
-		if(isslime(M)) //Slimes just don't slip, end of story
-			return ..()
-
-		switch(src.wet)
-			if(1) //Water
-				if (M.Slip(5, 3))
-					step(M, M.dir)
-					M.visible_message("<span class='warning'>[M] slips on the wet floor!</span>", \
-					"<span class='warning'>You slip on the wet floor!</span>")
-
-			if(2) //Lube
-				M.stop_pulling()
-				step(M, M.dir)
-				spawn(1)
-					step(M, M.dir)
-				spawn(2)
-					step(M, M.dir)
-				spawn(3)
-					step(M, M.dir)
-				spawn(4)
-					step(M, M.dir)
-				M.take_organ_damage(2) // Was 5 -- TLE
-				M.visible_message("<span class='warning'>[M] slips on the floor!</span>", \
-				"<span class='warning'>You slip on the floor!</span>")
-				playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
-				M.Knockdown(10)
-
-			if(3) // Ice
-				if(prob(30) && M.Slip(4, 3))
-					step(M, M.dir)
-					M.visible_message("<span class='warning'>[M] slips on the icy floor!</span>", \
-					"<span class='warning'>You slip on the icy floor!</span>")
 	..()
 
 //returns 1 if made bloody, returns 0 otherwise
 /turf/simulated/add_blood(mob/living/carbon/human/M as mob)
 	if (!..())
-		return 0
+		return FALSE
 
 	for(var/obj/effect/decal/cleanable/blood/B in contents)
 		if(!B.blood_DNA[M.dna.unique_enzymes])
 			B.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 			B.virus2 = virus_copylist(M.virus2)
-		return 1 //we bloodied the floor
+		had_blood = TRUE
+		return TRUE //we bloodied the floor
 
 	blood_splatter(src,M,1)
-	return 1 //we bloodied the floor
-
+	had_blood = TRUE
+	return TRUE //we bloodied the floor
 
 // Only adds blood on the floor -- Skie
 /turf/simulated/proc/add_blood_floor(mob/living/carbon/M as mob)

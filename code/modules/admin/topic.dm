@@ -8,49 +8,54 @@
 
 	var/client/CLIENT = usr.client
 	if(href_list["makeAntag"])
+		if(!ticker.mode)
+			to_chat(usr, "The round has not started yet,")
+			return
+		var/count = input("How many antags would you like to create?","Create Antagonists") as num|null
+		if(!count)
+			return
 		switch(href_list["makeAntag"])
 			if("1")
-				log_admin("[key_name(usr)] has spawned a traitor.")
-				if(!src.makeTraitors())
-					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
+				message_admins("[key_name(usr)] has attempted to spawn [count] traitors.")
+				var/success = makeAntag(/datum/role/traitor, null, count, FROM_PLAYERS)
+				message_admins("[success] number of traitors made.")
+				to_chat(usr, "<span class='notice'>[success] number of traitors made.</span>")
 			if("2")
-				log_admin("[key_name(usr)] has spawned a changeling.")
-				if(!src.makeChanglings())
-					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
+				message_admins("[key_name(usr)] has attempted to spawn [count] changelings.")
+				var/success = makeAntag(/datum/role/changeling, null, count, FROM_PLAYERS)
+				message_admins("[success] number of changelings made.")
+				to_chat(usr, "<span class='notice'>[success] number of changelings made.</span>")
 			if("3")
-				log_admin("[key_name(usr)] has spawned revolutionaries.")
-				if(!src.makeRevs())
-					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
+				message_admins("[key_name(usr)] has attempted to spawn [count] revolutionaries.")
+				var/success = makeAntag(null, /datum/faction/revolution, count, FROM_PLAYERS)
+				message_admins("[success] number of revolutionaries made.")
+				to_chat(usr, "<span class='notice'>[success] number of revolutionaries made.</span>")
 			if("4")
-				log_admin("[key_name(usr)] has spawned a cultists.")
-				if(!src.makeCult())
-					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
+				message_admins("[key_name(usr)] has attempted to spawn [count] cultists.")
+				var/success = makeAntag(null, /datum/faction/bloodcult, count , FROM_PLAYERS)
+				message_admins("[success] number of cultists made.")
+				to_chat(usr, "<span class='notice'>[success] number of cultists made..</span>")
 			if("5")
-				log_admin("[key_name(usr)] has spawned a malf AI.")
-				if(!src.makeMalfAImode())
-					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
+				message_admins("[key_name(usr)] has attempted to spawn [count] malfunctioning AI.")
+				var/success = makeAntag(null, /datum/faction/malf, count, FROM_PLAYERS)
+				message_admins("[success] number of angry computer screens made.")
+				to_chat(usr, "<span class='notice'>[success] number of malf AIs made.</span>")
 			if("6")
-				log_admin("[key_name(usr)] has spawned a wizard.")
-				if(!src.makeWizard())
-					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
+				message_admins("[key_name(usr)] has attempted to spawn [count] wizards.")
+				var/success = makeAntag(null, /datum/faction/wizard, count, FROM_GHOSTS)
+				message_admins("[success] number of wizards made.")
+				to_chat(usr, "<span class='notice'>[success] number of wizards made.</span>")
 			if("7")
-				log_admin("[key_name(usr)] has spawned a nuke team.")
-				if(!src.makeNukeTeam())
-					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
-			if("9")
-				log_admin("[key_name(usr)] has spawned aliens.")
+				message_admins("[key_name(usr)] has attempted to spawn [count] vampires.")
+				var/success = makeAntag(/datum/role/vampire, null, count, FROM_PLAYERS)
+				message_admins("[success] number of vampires made.")
+				to_chat(usr, "<span class='notice'>[success] number of vampires made.</span>")
+			if("8")
+				message_admins("[key_name(usr)] has spawned aliens.")
 				if(!src.makeAliens())
 					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
-			if("10")
-				log_admin("[key_name(usr)] has spawned a death squad.")
-				if(!makeDeathsquad())
-					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
-			if("11")
-				log_admin("[key_name(usr)] has spawned vox raiders.")
-				if(!src.makeVoxRaiders())
-					to_chat(usr, "<span class='warning'>Unfortunately, there weren't enough candidates available.</span>")
 
-	else if("announce_laws" in href_list)
+	if("announce_laws" in href_list)
 		var/mob/living/silicon/S = locate(href_list["mob"])
 
 		log_admin("[key_name(usr)] has notified [key_name(S)] of a change to their laws.")
@@ -58,7 +63,7 @@
 
 		S << sound('sound/machines/lawsync.ogg')
 		to_chat(S, "____________________________________")
-		to_chat(S, "<span style=\"color:red;font-weight:bold;\">LAW CHANGE NOTICE</span>")
+		to_chat(S, "<span class='danger'>LAW CHANGE NOTICE</span>")
 		if(S.laws)
 			to_chat(S, "<b>Your new laws are as follows:</b>")
 			S.laws.show_laws(S)
@@ -81,7 +86,7 @@
 		lawtype=lawtypes[lawtype]
 		if(lawtype == null)
 			return
-		testing("Lawtype: [lawtype]")
+		//testing("Lawtype: [lawtype]")
 		if(lawtype==1)
 			lawtype=text2num(input("Enter desired law priority. (15-50)","Priority", 15) as num)
 			lawtype=Clamp(lawtype,15,50)
@@ -100,18 +105,20 @@
 		var/lawtype = input("Select a lawset.","Law Type",1) as null|anything in lawtypes
 		if(lawtype == null)
 			return
-		testing("Lawtype: [lawtype]")
+		//testing("Lawtype: [lawtype]")
 
-		var/law_zeroth=null
-		var/law_zeroth_borg=null
+		var/law_zeroth = ""
+		var/law_zeroth_borg = ""
 		if(S.laws.zeroth || S.laws.zeroth_borg)
 			if(alert(src,"Do you also wish to clear law zero?","Yes","No") == "No")
-				law_zeroth=S.laws.zeroth
-				law_zeroth_borg=S.laws.zeroth
+				law_zeroth = S.laws.zeroth
+				law_zeroth_borg = S.laws.zeroth
+			else
+				S.laws.zeroth_lock = FALSE
 
 		S.laws = new lawtype
-		S.laws.zeroth=law_zeroth
-		S.laws.zeroth_borg=law_zeroth_borg
+		S.laws.zeroth = law_zeroth
+		S.laws.zeroth_borg = law_zeroth_borg
 
 		log_admin("[key_name(usr)] has reset [key_name(S)]: [lawtype]")
 		message_admins("[usr.key] has reset [key_name(S)]: [lawtype]")
@@ -219,14 +226,14 @@
 			if(!new_ckey)
 				return
 			if(new_ckey in admin_datums)
-				to_chat(usr, "<font color='red'>Error: Topic 'editrights': [new_ckey] is already an admin</font>")
+				to_chat(usr, "<span class='red'>Error: Topic 'editrights': [new_ckey] is already an admin</span>")
 				return
 			adm_ckey = new_ckey
 			task = "rank"
 		else if(task != "show")
 			adm_ckey = ckey(href_list["ckey"])
 			if(!adm_ckey)
-				to_chat(usr, "<font color='red'>Error: Topic 'editrights': No valid ckey</font>")
+				to_chat(usr, "<span class='red'>Error: Topic 'editrights': No valid ckey</span>")
 				return
 
 		var/datum/admins/D = admin_datums[adm_ckey]
@@ -261,7 +268,7 @@
 					if(config.admin_legacy_system)
 						new_rank = ckeyEx(new_rank)
 					if(!new_rank)
-						to_chat(usr, "<font color='red'>Error: Topic 'editrights': Invalid rank</font>")
+						to_chat(usr, "<span class='red'>Error: Topic 'editrights': Invalid rank</span>")
 						return
 					if(config.admin_legacy_system)
 						if(admin_ranks.len)
@@ -321,7 +328,7 @@
 			if("1")
 				if ((!( ticker ) || emergency_shuttle.location))
 					return
-				var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification") as text|null
+				var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification")
 				emergency_shuttle.incall()
 				captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.[justification ? " Justification : '[justification]'" : ""]")
 				log_admin("[key_name(usr)] called the Emergency Shuttle")
@@ -442,24 +449,149 @@
 
 		if (href_list["move_escape_pod"] == "all")
 			for (var/pod in emergency_shuttle.escape_pods)
-				if (emergency_shuttle.escape_pods[pod] == href_list["move_destination"])
-					continue
 				emergency_shuttle.move_pod(pod,href_list["move_destination"])
 			log_admin("[key_name(usr)] moved all escape pods to [href_list["move_destination"]]")
 			message_admins("<span class='notice'>[key_name_admin(usr)] moved all escape pods to [href_list["move_destination"]]</span>", 1)
 		else
-			var/old_loc = emergency_shuttle.escape_pods[href_list["move_escape_pod"]]
-			emergency_shuttle.move_pod(href_list["move_escape_pod"],href_list["move_destination"])
-			var/area/pod_area = locate(text2path("/area/shuttle/escape_pod[href_list["move_escape_pod"]]/[emergency_shuttle.escape_pods[href_list["move_escape_pod"]]]"))
-			var/turf/T = pick(pod_area.area_turfs)
-			log_admin("[key_name(usr)] moved [pod_area.name] from [old_loc] to [href_list["move_destination"]]")
-			message_admins("<span class='notice'>[key_name_admin(usr)] moved <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[pod_area.name]</a> from [old_loc] to [href_list["move_destination"]]</span>", 1)
+			var/datum/shuttle/escape/S = locate(href_list["move_escape_pod"])
+			if(!emergency_shuttle.escape_pods.Find(S))
+				return
+			var/obj/docking_port/destination/D = S.current_port
+			emergency_shuttle.move_pod(S,href_list["move_destination"])
+			var/turf/T = get_turf(D)
+			log_admin("[key_name(usr)] moved [S.name] from [D.areaname] to [href_list["move_destination"]]")
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[S.name]</a> from [D.areaname] to [href_list["move_destination"]]</span>", 1)
 		href_list["secretsadmin"] = "emergency_shuttle_panel"
+
+
+
+
+	else if(href_list["diseasepanel_examine"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/disease2/disease/D = locate(href_list["diseasepanel_examine"])
+
+		var/datum/browser/popup = new(usr, "\ref[D]", "[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)]", 600, 300, src)
+		popup.set_content(D.get_info())
+		popup.open()
+
+	else if(href_list["diseasepanel_toggledb"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/disease2/disease/D = locate(href_list["diseasepanel_toggledb"])
+
+		if ("[D.uniqueID]-[D.subID]" in virusDB)
+			virusDB -= "[D.uniqueID]-[D.subID]"
+		else
+			D.addToDB()
+
+		var/client/C = usr.client
+		if(C.holder)
+			C.holder.diseases_panel()
+
+	else if(href_list["diseasepanel_infectedmobs"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/disease2/disease/D = locate(href_list["diseasepanel_infectedmobs"])
+
+		var/list/infctd_mobs = list()
+		for (var/mob/living/L in mob_list)
+			if ("[D.uniqueID]-[D.subID]" in L.virus2)
+				infctd_mobs.Add(L)
+
+		if (!infctd_mobs)
+			return
+
+		var/mob/living/L = input(usr, "Choose an infected mob to check", "Disease Panel") as null | anything in infctd_mobs
+		if (!L)
+			return
+		if (!L.loc)
+			to_chat(usr,"<span class='warning'>Mob is in nullspace!</span>")
+			return
+		var/client/C = usr.client
+		if(!isobserver(usr))
+			C.admin_ghost()
+		sleep(2)
+		if(!isobserver(C.mob))
+			return
+		var/mob/dead/observer/O = C.mob
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
+		if(C)
+			C.jumptomob(L)
+
+	else if(href_list["diseasepanel_infecteditems"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/disease2/disease/D = locate(href_list["diseasepanel_infecteditems"])
+
+		var/list/infctd_items = list()
+		for (var/obj/item/I in infected_items)
+			if ("[D.uniqueID]-[D.subID]" in I.virus2)
+				infctd_items.Add(I)
+
+		if (!infctd_items)
+			return
+
+		var/obj/item/I = input(usr, "Choose an infected item to check", "Disease Panel") as null | anything in infctd_items
+		if (!I)
+			return
+		if (!I.loc)
+			to_chat(usr,"<span class='warning'>Item is in nullspace!</span>")
+			return
+		var/client/C = usr.client
+		if(!isobserver(usr))
+			C.admin_ghost()
+		sleep(2)
+		if(!isobserver(C.mob))
+			return
+		var/mob/dead/observer/O = C.mob
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
+		O.forceMove(get_turf(I))
+
+	else if(href_list["diseasepanel_dishes"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/disease2/disease/D = locate(href_list["diseasepanel_dishes"])
+
+		var/list/dishes = list()
+		for (var/obj/item/weapon/virusdish/dish in virusdishes)
+			if (dish.contained_virus)
+				if ("[D.uniqueID]-[D.subID]" == "[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]")
+					dishes.Add(dish)
+
+		if (!dishes)
+			return
+
+		var/obj/item/weapon/virusdish/dish = input(usr, "Choose a growth dish to check", "Disease Panel") as null | anything in dishes
+		if (!dish)
+			return
+		if (!dish.loc)
+			to_chat(usr,"<span class='warning'>Dish is in nullspace!</span>")
+			return
+		var/client/C = usr.client
+		if(!isobserver(usr))
+			C.admin_ghost()
+		sleep(2)
+		if(!isobserver(C.mob))
+			return
+		var/mob/dead/observer/O = C.mob
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
+		O.forceMove(get_turf(dish))
 
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
 			return
-
+		var/response = alert("Toggle round end delay? It is currently [ticker.delay_end?"delayed":"not delayed"]","Toggle round end delay","Yes","No")
+		if(response != "Yes")
+			return
 		ticker.delay_end = !ticker.delay_end
 		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
 		message_admins("<span class='notice'>[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].</span>", 1)
@@ -531,6 +663,17 @@
 				new_mob = M.change_mob_type( /mob/living/simple_animal/construct/wraith , null, null, delmob )
 			if("shade")
 				new_mob = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+			if("soulblade")
+				var/mob/living/simple_animal/shade/new_shade = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+				var/obj/item/weapon/melee/soulblade/blade = new(get_turf(M))
+				blade.blood = blade.maxblood
+				new_shade.forceMove(blade)
+				blade.update_icon()
+				new_shade.status_flags |= GODMODE
+				new_shade.canmove = 0
+				new_shade.name = "[M.real_name] the Shade"
+				new_shade.real_name = "[M.real_name]"
+				new_shade.give_blade_powers()
 			if("blob")
 				var/obj/effect/blob/core/core = new(loc = get_turf(M), new_overmind = M.client)
 				new_mob = core.overmind
@@ -968,7 +1111,7 @@
 		jobs += "</tr></table>"
 
 	//Antagonist (Orange)
-		var/isbanned_dept = jobban_isbanned(M, "Syndicate")
+		var/isbanned_dept = isantagbanned(M)
 		jobs += "<table cellpadding='1' cellspacing='0' width='100%'>"
 		jobs += "<tr bgcolor='ffeeaa'><th colspan='10'><a href='?src=\ref[src];jobban3=Syndicate;jobban4=\ref[M]'>Antagonist Positions</a></th></tr><tr align='center'>"
 
@@ -1011,7 +1154,7 @@
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=wizard;jobban4=\ref[M]'>[replacetext("Wizard", " ", "&nbsp")]</a></td>"
 
 		//Strike Team
-		if(jobban_isbanned(M, "Strike Team") || isbanned_dept)
+		if(jobban_isbanned(M, ROLE_STRIKE) || isbanned_dept)
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'><font color=red>Strike Team</font></a></td>"
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'>Strike Team</a></td>"
@@ -1418,9 +1561,6 @@
 	else if(href_list["c_mode"])
 		if(!check_rights(R_ADMIN))
 			return
-
-		if(ticker && ticker.mode)
-			return alert(usr, "The game has already started.", null, null, null, null)
 		var/dat = {"<B>What mode do you wish to play?</B><HR>"}
 		for(var/mode in config.modes)
 			dat += {"<A href='?src=\ref[src];c_mode2=[mode]'>[config.mode_names[mode]]</A><br>"}
@@ -1444,6 +1584,257 @@
 		dat += {"Now: [secret_force_mode]"}
 		usr << browse(dat, "window=f_secret")
 
+	else if(href_list["f_dynamic_roundstart"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		var/roundstart_rules = list()
+		for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
+			var/datum/dynamic_ruleset/roundstart/newrule = new rule()
+			roundstart_rules[newrule.name] = newrule
+		var/added_rule = input(usr,"What ruleset do you want to force? This will bypass threat level and population restrictions.", "Rigging Roundstart", null) as null|anything in roundstart_rules
+		if (added_rule)
+			roundstart_rules[added_rule].calledBy = "[key_name(usr)]"
+			forced_roundstart_ruleset += roundstart_rules[added_rule]
+			log_admin("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.")
+			message_admins("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.", 1)
+			Game()
+
+	else if(href_list["f_dynamic_roundstart_clear"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		forced_roundstart_ruleset = list()
+		Game()
+		log_admin("[key_name(usr)] cleared the rigged roundstart rulesets. The mode will pick them as normal.")
+		message_admins("[key_name(usr)] cleared the rigged roundstart rulesets. The mode will pick them as normal.", 1)
+
+
+	else if(href_list["f_dynamic_roundstart_remove"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/dynamic_ruleset/roundstart/rule = locate(href_list["f_dynamic_roundstart_remove"])
+		forced_roundstart_ruleset -= rule
+		Game()
+		log_admin("[key_name(usr)] removed [rule] from the forced roundstart rulesets.")
+		message_admins("[key_name(usr)] removed [rule] from the forced roundstart rulesets.", 1)
+
+
+	else if(href_list["f_dynamic_latejoin"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(!ticker || !ticker.mode)
+			return alert(usr, "The game must start first.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		var/latejoin_rules = list()
+		for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
+			var/datum/dynamic_ruleset/latejoin/newrule = new rule()
+			latejoin_rules[newrule.name] = newrule
+		var/added_rule = input(usr,"What ruleset do you want to force upon the next latejoiner? This will bypass threat level and population restrictions.", "Rigging Latejoin", null) as null|anything in latejoin_rules
+		if (added_rule)
+			var/datum/gamemode/dynamic/mode = ticker.mode
+			latejoin_rules[added_rule].calledBy = "[key_name(usr)]"
+			mode.forced_latejoin_rule = latejoin_rules[added_rule]
+			log_admin("[key_name(usr)] set [added_rule] to proc on the next latejoin.")
+			message_admins("[key_name(usr)] set [added_rule] to proc on the next latejoin.", 1)
+			Game()
+
+	else if(href_list["f_dynamic_latejoin_clear"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
+			var/datum/gamemode/dynamic/mode = ticker.mode
+			mode.forced_latejoin_rule = null
+			Game()
+			log_admin("[key_name(usr)] cleared the forced latejoin ruleset.")
+			message_admins("[key_name(usr)] cleared the forced latejoin ruleset.", 1)
+
+	else if(href_list["f_dynamic_midround"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(!ticker || !ticker.mode)
+			return alert(usr, "The game must start first.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		var/midround_rules = list()
+		for (var/rule in subtypesof(/datum/dynamic_ruleset/midround))
+			var/datum/dynamic_ruleset/midround/newrule = new rule()
+			midround_rules[newrule.name] = rule
+		var/added_rule = input(usr,"What ruleset do you want to force right now? This will bypass threat level and population restrictions.", "Execute Ruleset", null) as null|anything in midround_rules
+		if (added_rule)
+			var/datum/gamemode/dynamic/mode = ticker.mode
+			log_admin("[key_name(usr)] executed the [added_rule] ruleset.")
+			message_admins("[key_name(usr)] executed the [added_rule] ruleset.", 1)
+			mode.picking_specific_rule(midround_rules[added_rule],1,"[key_name(usr)]")
+
+	// -- Opens up the option window --
+	else if (href_list["f_dynamic_options"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		dynamic_mode_options(usr)
+
+	else if(href_list["f_dynamic_roundstart_centre"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		var/new_centre
+
+		if (dynamic_chosen_mode == DIRAC)
+			new_centre = input(usr,"Change the threat level this round will have.", "Change threat level.", null) as num
+			if (new_centre <= 0 || new_centre >= 100)
+				return alert(usr, "Only values between 0 and 100 are allowed.", null, null, null, null)
+		else if (dynamic_chosen_mode == EXPONENTIAL)
+			new_centre = input(usr,"Change the centre of the dynamic mode threat curve. A lower value will give a more peaceful round ; a higher value, a round with higher threat. Any number between 0 and +5 is allowed.", "Change curve centre", null) as num
+			if (new_centre < 0 || new_centre > 5)
+				return alert(usr, "Only values between 0 and +5 are allowed.", null, null, null, null)
+		else
+			new_centre = input(usr,"Change the centre of the dynamic mode threat curve. A negative value will give a more peaceful round ; a positive value, a round with higher threat. Any number between -5 and +5 is allowed.", "Change curve centre", null) as num
+			if (new_centre < -5 || new_centre > 5)
+				return alert(usr, "Only values between -5 and +5 are allowed.", null, null, null, null)
+
+		log_admin("[key_name(usr)] changed the distribution curve center to [new_centre].")
+		message_admins("[key_name(usr)] changed the distribution curve center to [new_centre]", 1)
+		dynamic_curve_centre = new_centre
+		dynamic_mode_options(usr)
+
+	else if(href_list["f_dynamic_roundstart_width"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		var/new_width = input(usr,"Change the width of the dynamic mode threat curve. A higher value will favour extreme rounds ; a lower value, a round closer to the average. Any Number between 0.5 and 4 are allowed.", "Change curve width", null) as num
+		if (new_width < 0.5 || new_width > 4)
+			return alert(usr, "Only values between 0.5 and +2.5 are allowed.", null, null, null, null)
+
+		log_admin("[key_name(usr)] changed the distribution curve width to [new_width].")
+		message_admins("[key_name(usr)] changed the distribution curve width to [new_width]", 1)
+		dynamic_curve_width = new_width
+		dynamic_mode_options(usr)
+
+	else if(href_list["force_extended"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		dynamic_forced_extended = !dynamic_forced_extended
+		log_admin("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
+		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["no_stacking"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		dynamic_no_stacking = !dynamic_no_stacking
+		log_admin("[key_name(usr)] set 'no_stacking' to [dynamic_no_stacking].")
+		message_admins("[key_name(usr)] set 'no_stacking' to [dynamic_no_stacking].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["classic_secret"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		dynamic_classic_secret = !dynamic_classic_secret
+		log_admin("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
+		message_admins("[key_name(usr)] set 'classic_secret' to [dynamic_classic_secret].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["stacking_limit"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		stacking_limit = input(usr,"Change the threat limit at which round-endings rulesets will start to stack.", "Change stacking limit", null) as num
+		log_admin("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
+		message_admins("[key_name(usr)] set 'stacking_limit' to [stacking_limit].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["high_pop_limit"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		var/new_value = input(usr, "Enter the high-pop override threshold for dynamic mode.", "High pop override") as num
+		if (new_value < 0)
+			return alert(usr, "Only positive values allowed!", null, null, null, null)
+		dynamic_high_pop_limit = new_value
+
+		log_admin("[key_name(usr)] set 'dynamic_high_pop_limit' to [dynamic_high_pop_limit].")
+		message_admins("[key_name(usr)] set 'dynamic_high_pop_limit' to [dynamic_high_pop_limit].")
+		dynamic_mode_options(usr)
+
+	else if(href_list["change_distrib"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		var/list/possible_choices = list(
+			"[LORENTZ]",
+			"[GAUSS]",
+			"[DIRAC]",
+			"[EXPONENTIAL]",
+			"[UNIFORM]",
+		)
+
+		var/new_mode = input("Select a new distribution mode. BE SURE TO READ THE GLOSSARY BEFORE.") as null|anything in possible_choices
+		if (!new_mode)
+			return
+		dynamic_chosen_mode = new_mode
+		if (new_mode == DIRAC) // Rigged threat mode.
+			dynamic_curve_centre = 50
+			to_chat(usr, "<span class='notice'>You've chosen to rig the starting threat level. Remember to set the 'curve center' to the desire threat level. The default value is 50.</span>")
+		else if (new_mode == EXPONENTIAL)
+			dynamic_curve_centre = 1
+		else
+			dynamic_curve_centre = 0
+		log_admin("[key_name(usr)] set the distribution mode to [dynamic_chosen_mode].")
+		message_admins("[key_name(usr)] set the distribution mode to [dynamic_chosen_mode].")
+		dynamic_mode_options(usr)
+
 	else if(href_list["c_mode2"])
 		if(!check_rights(R_ADMIN|R_SERVER))
 			return
@@ -1461,7 +1852,7 @@
 			.(href, list("c_mode"=1))
 		else
 			var/list/possible = list()
-			possible += mixed_allowed
+			possible += mixed_factions_allowed
 			possible += "DONE"
 			possible += "CANCEL"
 			if(possible.len < 3)
@@ -1507,7 +1898,7 @@
 			.(href, list("f_secret"=1))
 		else
 			var/list/possible = list()
-			possible += mixed_allowed
+			possible += mixed_factions_allowed
 			possible += "DONE"
 			possible += "CANCEL"
 			if(possible.len < 3)
@@ -2089,6 +2480,41 @@
 	else if(href_list["check_antagonist"])
 		check_antagonists()
 
+	else if(href_list["adjustthreat"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			return
+		var/threatadd = input("Specify how much threat to add (negative to subtract). This can inflate the threat level.", "Adjust Threat", 0) as null|num
+		if(!threatadd)
+			return
+		if(threatadd>0)
+			D.create_threat(threatadd)
+		else
+			D.spend_threat(-threatadd) //Spend a positive value. Negative the negative.
+		D.threat_log += "[worldtime2text()]: Admin [key_name(usr)] adjusted threat by [threatadd]."
+		message_admins("[key_name(usr)] adjusted threat by [threatadd].")
+		check_antagonists()
+
+	else if(href_list["injectnow"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			return
+		switch(href_list["injectnow"])
+			if("1")
+				D.latejoin_injection_cooldown = 0
+				message_admins("[key_name(usr)] set the latejoin injection timer to 0.")
+			if("2")
+				D.midround_injection_cooldown = 0
+				message_admins("[key_name(usr)] set the midround injection timer to 0.")
+			else
+				message_admins("[key_name(usr)] attempted to set an unknown timer to 0.")
+		check_antagonists()
+
+	/*
 	else if(href_list["cult_nextobj"])
 		if(alert(usr, "Validate the current Cult objective and unlock the next one?", "Cult Cheat Code", "Yes", "No") != "Yes")
 			return
@@ -2133,7 +2559,7 @@
 			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> whispers to [M.real_name], <span class='sinister'>[input]</span></span>")
 
 		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
-
+	*/
 	else if(href_list["adminplayerobservecoodjump"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -2199,12 +2625,12 @@
 			else
 				location_description = "([M.loc == T ? "at coordinates " : "in [M.loc] at coordinates "] [T.x], [T.y], [T.z])"
 
-		//Job + antagonist
+		/*Job + antagonist
 		if(M.mind)
-			special_role_description = "Role: <b>[M.mind.assigned_role]</b>; Antagonist: <font color='red'><b>[M.mind.special_role]</b></font>; Has been rev: [(M.mind.has_been_rev)?"Yes":"No"]"
+			special_role_description = "Role: <b>[M.mind.assigned_role]</b>; Antagonist: <span class='red'><b>[M.mind.special_role]</b></span>; Has been rev: [(M.mind.has_been_rev)?"Yes":"No"]"
 		else
 			special_role_description = "Role: <i>Mind datum missing</i> Antagonist: <i>Mind datum missing</i>; Has been rev: <i>Mind datum missing</i>;"
-
+		*/
 		//Health
 		if(isliving(M))
 			var/mob/living/L = M
@@ -2338,13 +2764,26 @@
 			to_chat(H, "<span class='warning'>Your ass was just blown off by an unknown force!</span>")
 			log_admin("[key_name(H)] was buttblasted by [src.owner]")
 			message_admins("[key_name(H)] was buttblasted by [src.owner]")
-			playsound(get_turf(H), 'sound/effects/superfart.ogg', 50, 1)
+			playsound(H, 'sound/effects/superfart.ogg', 50, 1)
 			H.apply_damage(40, BRUTE, LIMB_GROIN)
 			H.apply_damage(10, BURN, LIMB_GROIN)
 			H.Knockdown(8)
 			H.Stun(8)
 		else
 			to_chat(usr, "This target has already lost their butt in some unfortunate circumstance.")
+
+	else if(href_list["DealBrainDam"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+		var/mob/living/M = locate(href_list["DealBrainDam"])
+		if(!isliving(M))
+			to_chat(usr, "<span class = 'warning'>\The [M] is not of type /mob/living.</span>")
+			return
+		var/choice = input("How much brain damage would you like to deal to the subject?", "Instant Lobotomy", 1) as null|num
+		if(choice)
+			log_admin("[key_name(M)] was dealt [choice] amount of brain damage by [src.owner]")
+			message_admins("[key_name(M)] was dealt [choice] amount of brain damage by [src.owner]")
+			M.adjustBrainLoss(choice)
 
 	else if (href_list["PrayerReply"])
 		if(!check_rights(R_ADMIN))
@@ -2502,7 +2941,21 @@
 		if(!ismob(M))
 			to_chat(usr, "This can only be used on instances of type /mob.")
 			return
-		show_traitor_panel(M)
+		show_role_panel(M)
+
+	else if(href_list["threatlog"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(!ticker || !ticker.mode)
+			alert("The game hasn't started yet!")
+			return
+
+		var/datum/gamemode/dynamic/D = ticker.mode
+		if(!istype(D))
+			alert("It's not dynamic!")
+			return
+		D.show_threatlog(usr)
 
 	// /vg/
 	else if(href_list["set_base_laws"])
@@ -2519,7 +2972,7 @@
 				base_law_type = selected_law
 				subject = "AIs and Cyborgs"
 			if("mommi")
-				mommi_base_law_type = selected_law
+				mommi_laws["Default"] = selected_law
 				subject = "MoMMIs"
 		to_chat(usr, "<span class='notice'>New [subject] will spawn with the [selected_law] lawset.</span>")
 		log_admin("[key_name(src.owner)] set the default laws of [subject] to: [selected_law]")
@@ -2750,6 +3203,7 @@
 				if(alert(usr, "Spawn a blob cluster? (meteor blob, medium intensity, no Overminds)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_shower
 
+			/* Use dyanmic mode instead.
 			if("blobstorm")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Blob Storm")
@@ -2758,21 +3212,7 @@
 
 				if(alert(usr, "Spawn a blob conglomerate? (meteor blob, high intensity, possible Overmind spawn)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_storm
-
-				/*why were there two of those anyway? meteor blobs are an improvement either way.
-			if("goblob")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","Blob")
-				log_admin("[key_name(usr)] spawned a blob", 1)
-				message_admins("<span class='notice'>[key_name_admin(usr)] spawned a blob.</span>", 1)
-				new /datum/event/blob
-
-			if("goblob")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","BL")
-				mini_blob_event()
-				message_admins("[key_name_admin(usr)] has spawned blob", 1)
-				*/
+			*/
 			if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Aliens")
@@ -2817,29 +3257,31 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TA([objective])")
 				for(var/mob/living/carbon/human/H in player_list)
-					if(H.stat == 2 || !H.client || !H.mind)
+					if(H.isDead() || !H.client || !H.mind)
 						continue
 					if(is_special_character(H))
 						continue
 					//traitorize(H, objective, 0)
-					ticker.mode.traitors += H.mind
-					H.mind.special_role = "traitor"
 					var/datum/objective/new_objective = new
-					new_objective.owner = H
 					new_objective.explanation_text = objective
-					H.mind.objectives += new_objective
-					ticker.mode.greet_traitor(H.mind)
-					//ticker.mode.forge_traitor_objectives(H.mind)
-					ticker.mode.finalize_traitor(H.mind)
+					var/datum/role/traitor/T = new(H.mind, override = TRUE)
+					if (T)
+						T.AppendObjective(new_objective)
+						T.Greet(GREET_AUTOTATOR) // Mission specifications etc
+						T.OnPostSetup()
+						T.AnnounceObjectives()
 				for(var/mob/living/silicon/A in player_list)
-					ticker.mode.traitors += A.mind
-					A.mind.special_role = "traitor"
+					if(A.isDead() || !A.client || !A.mind)
+						continue
 					var/datum/objective/new_objective = new
-					new_objective.owner = A
 					new_objective.explanation_text = objective
-					A.mind.objectives += new_objective
-					ticker.mode.greet_traitor(A.mind)
-					ticker.mode.finalize_traitor(A.mind)
+					var/datum/role/traitor/T = new(A.mind, override = TRUE)
+					if (T)
+						T.AppendObjective(new_objective)
+						T.Greet(GREET_AUTOTATOR)
+						T.OnPostSetup()
+						T.AnnounceObjectives()
+
 				message_admins("<span class='notice'>[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
 				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")
 			if("moveadminshuttle")
@@ -3142,10 +3584,10 @@
 				feedback_add_details("admin_secrets_fun_used","V")
 				var/answer = alert("Do you want this to be a greater disease or a lesser one?",,"Greater","Lesser")
 				if(answer=="Lesser")
-					virus2_lesser_infection()
+					//virus2_lesser_infection()
 					message_admins("[key_name_admin(usr)] has triggered a lesser virus outbreak.", 1)
 				else
-					virus2_greater_infection()
+					//virus2_greater_infection()
 					message_admins("[key_name_admin(usr)] has triggered a greater virus outbreak.", 1)
 			if("retardify")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -3249,7 +3691,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","DF")
 				for(var/mob/living/carbon/human/B in mob_list)
-					B.f_style = "Dward Beard"
+					B.my_appearance.f_style = "Dward Beard"
 					B.update_hair()
 				message_admins("[key_name_admin(usr)] activated dorf mode")
 			if("ionstorm")
@@ -3308,8 +3750,19 @@
 				feedback_add_details("admin_secrets_fun_used","HW")
 				var/choice = input("Are you sure you want to wake up the space indian burial ground?. Misuse of this could result in removal of flags or hilarity.") in list("Get our spook on", "Cancel")
 				if(choice != "Cancel")
-					SetUniversalState(/datum/universal_state/halloween, 1, 1)
-					message_admins("[key_name_admin(usr)] has pressed the halloween fun button. Truly [key_name_admin(usr)] is the spookiest.")
+					var/list/given_args = list()
+					var/number = input("How many mobs do you want per area?", 10) as num
+					if(number)
+						given_args["mobs"] = number
+					SetUniversalState(/datum/universal_state/halloween, 1, 1, given_args)
+					message_admins("[key_name_admin(usr)] has pressed the halloween fun button with [number] amount of mobs per area. Truly [key_name_admin(usr)] is the spookiest.")
+			if("christmas_vic")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","XMS")
+				var/choice = input("Are you sure you want to do time-related shenanigans and send the station back to the victorian era?") in list("What's the worst that could happen?", "Cancel")
+				if(choice != "Cancel")
+					SetUniversalState(/datum/universal_state/auldlangsyne, 1, 1)
+					message_admins("[key_name_admin(usr)] has pressed the \"Other\" Christmas button. Go ahead and ask him why the station's got wood.")
 			if("mobswarm")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","MS")
@@ -3319,6 +3772,13 @@
 					var/mobtype = input("What mob would you like?", "Mob Swarm") as null|anything in typesof(/mob/living)
 					message_admins("[key_name_admin(usr)] triggered a mob swarm.")
 					new /datum/event/mob_swarm(mobtype, amt)
+			if("pick_event")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","ALL")
+				var/choice = input("Which event do you want to trigger?") in subtypesof(/datum/event)+"Cancel"
+				if(choice != "Cancel")
+					new choice
+					message_admins("[key_name_admin(usr)] spawned a custom event of type [choice].")
 			if("spawnadminbus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AB")
@@ -3357,50 +3817,64 @@
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEA")
-				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Return")
+				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") as null|anything in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Revs", "Bloodstones raised", "Bloodstones destroyed")
 				//Big fat lists of effects, not very modular but at least there's less buttons
-				if(choice == "Return") //Actually fuck this
-					return //Duh
-				if(choice == "Biohazard") //GUISE WE HAVE A BLOB
-					var/levelchoice = input("Set the level of the biohazard alert, or leave at 0 to have a random level (1 to 7 supported only)", "Space FEMA Readiness Program", 0) as num
-					if(!levelchoice || levelchoice > 7 || levelchoice < 0)
-						to_chat(usr, "<span class='warning'>Invalid input range (0 to 7 only)</span>")
+				switch (choice)
+					if("Biohazard") //GUISE WE HAVE A BLOB
+						var/levelchoice = input("Set the level of the biohazard alert, or leave at 0 to have a random level (1 to 7 supported only)", "Space FEMA Readiness Program", 0) as num
+						if(!levelchoice || levelchoice > 7 || levelchoice < 0)
+							to_chat(usr, "<span class='warning'>Invalid input range (0 to 7 only)</span>")
+							return
+						biohazard_alert(level = levelchoice)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
 						return
-					biohazard_alert(level = levelchoice)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
-					return
-				if(choice == "Lifesigns") //MUH ALIUMS
-					command_alert(/datum/command_alert/xenomorphs)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
-					return
-				if(choice == "Malfunction") //BLOW EVERYTHING
-					var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert ?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
-					if(salertchoice == "Yes")
-						command_alert(/datum/command_alert/malf_announce)
-					to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
+					if("Lifesigns") //MUH ALIUMS
+						command_alert(/datum/command_alert/xenomorphs)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
+						return
+					if("Malfunction") //BLOW EVERYTHING
+						var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert ?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
+						if(salertchoice == "Yes")
+							command_alert(/datum/command_alert/malf_announce)
+						to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
 
-					to_chat(world, "<font color='red'>[config.alert_desc_delta]</font>")
+						to_chat(world, "<span class='red'>[config.alert_desc_delta]</span>")
 
-					message_admins("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
-					return
-				if(choice == "Ion")
-					command_alert(/datum/command_alert/ion_storm)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
-					return
-				if(choice == "Meteor Wave")
-					command_alert(/datum/command_alert/meteor_wave)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
-					return
-				if(choice == "Carp Migration")
-					command_alert(/datum/command_alert/carp)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
-					return
+						message_admins("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
+						return
+					if("Ion")
+						command_alert(/datum/command_alert/ion_storm)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
+						return
+					if("Meteor Wave")
+						command_alert(/datum/command_alert/meteor_wave)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
+						return
+					if("Carp Migration")
+						command_alert(/datum/command_alert/carp)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
+						return
+					if("Revs")
+						command_alert(/datum/command_alert/revolution)
+						message_admins("[key_name_admin(usr)] triggered a FAKE revolution alert.")
+						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
+						return
+					if("Bloodstones raised")
+						command_alert(/datum/command_alert/bloodstones_raised)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
+						return
+					if("Bloodstones destroyed")
+						command_alert(/datum/command_alert/bloodstones_broken)
+						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodsontes Alert (destroyed).")
+						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodsontes Aler (destroyed).")
+						return
 			if("fakebooms") //Micheal Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
@@ -3514,6 +3988,11 @@
 				var/emag = input("Emag the turret?") in list("No", "Yes")
 				if(emag=="Yes")
 					Turret.emag(usr)
+			if("virusdish")
+				virus2_make_custom(usr.client,null)
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","VIR")
+
 			if("hardcore_mode")
 				var/choice = input("Are you sure you want to [ticker.hardcore_mode ? "disable" : "enable"] hardcore mode? Starvation will [ticker.hardcore_mode ? "no longer":""]slowly kill player-controlled humans.", "Admin Abuse") in list("Yes", "No!")
 
@@ -3537,6 +4016,7 @@
 					"incinerator" = LOC_INCIN,
 					"chapel" = LOC_CHAPEL,
 					"library" = LOC_LIBRARY,
+					"hydroponics" = LOC_HYDRO,
 					"vault" = LOC_VAULT,
 					"technical storage" = LOC_TECH,
 					)
@@ -3552,6 +4032,10 @@
 					"roaches" = VERM_ROACHES,
 					"gremlins" = VERM_GREMLINS,
 					"bees" = VERM_BEES,
+					"hornets" = VERM_HORNETS,
+					"syphoners" = VERM_SYPHONER,
+					"greytide gremlins" = VERM_GREMTIDE,
+					"crabs" = VERM_CRABS,
 					)
 				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
 				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
@@ -3562,10 +4046,42 @@
 				infestation_event.override_location = ol
 				infestation_event.override_vermin = ov
 			if("hostile_infestation")
+				var/list/locations = list(
+					"RANDOM" = null,
+					"kitchen" = LOC_KITCHEN,
+					"atmospherics" = LOC_ATMOS,
+					"incinerator" = LOC_INCIN,
+					"chapel" = LOC_CHAPEL,
+					"library" = LOC_LIBRARY,
+					"hydroponics" = LOC_HYDRO,
+					"vault" = LOC_VAULT,
+					"technical storage" = LOC_TECH,
+					)
+				var/list/hostiles = list(
+					"RANDOM" = null,
+					"space bears" = MONSTER_BEAR,
+					"creatures" = MONSTER_CREATURE,
+					"xenos" = MONSTER_XENO,
+					"hivebots" = MONSTER_HIVEBOT,
+					"zombies" = MONSTER_ZOMBIE,
+					"skrites" = MONSTER_SKRITE,
+					"xeno empress" = MONSTER_SQUEEN,
+					"frogs" = MONSTER_FROG,
+					"goliaths" = MONSTER_GOLIATH,
+					"davids" = MONSTER_DAVID,
+					"megamadcrabs" = MONSTER_MADCRAB,
+					"spaghetti monster" = MONSTER_MEATBALLER,
+					"mutated cockroaches" = MONSTER_BIG_ROACH,
+					"cockroach queen" = MONSTER_ROACH_QUEEN,
+					)
+				var/om = hostiles[input("What hostile mob should infest the station?", "Hostile Infestation") in hostiles]
+				var/ol = locations[input("Where should they spawn?", "Hostile Infestation") in locations]
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","HI")
 				message_admins("[key_name_admin(usr)] has triggered an infestation of hostile creatures.", 1)
-				new /datum/event/hostile_infestation
+				var/datum/event/hostile_infestation/hostile_infestation_event = new()
+				hostile_infestation_event.override_location = ol
+				hostile_infestation_event.override_monster = om
 			if("mass_hallucination")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","MH")
@@ -3576,6 +4092,11 @@
 				feedback_add_details("admin_secrets_fun_used","ODF")
 				message_admins("[key_name_admin(usr)] has sent the station careening through a cloud of gore.", 1)
 				new /datum/event/thing_storm/meaty_gore
+			if("fireworks")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","HNY")
+				message_admins("[key_name_admin(usr)] has sent the station some lovely fireworks!. No that's not a euphamism for meteors. Actual Fireworks for a change.",1)
+				new /datum/event/thing_storm/fireworks
 			if("silent_meteors")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SILM")
@@ -3597,13 +4118,9 @@
 				var/datum/job/J = job_master.GetJob("Security Officer")
 				if(!J)
 					return
-				J.total_positions = -1
+				J.set_total_positions(99)
 				J.spawn_positions = -1
 				message_admins("[key_name_admin(usr)] has removed the cap on security officers.")
-			if("virus_custom")
-				if(virus2_make_custom(usr.client))
-					feedback_add_details("admin_secrets_fun_used", "V_C")
-					message_admins("[key_name_admin(usr)] has trigger a custom virus outbreak.", 1)
 		if(usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsfun"]]")
 
@@ -3631,11 +4148,6 @@
 				for(var/l in bombers)
 					dat += text("[l]<BR>")
 				usr << browse(dat, "window=bombers")
-			if("list_signalers")
-				var/dat = "<B>Showing last [length(lastsignalers)] signalers.</B><HR>"
-				for(var/sig in lastsignalers)
-					dat += "[sig]<BR>"
-				usr << browse(dat, "window=lastsignalers;size=800x500")
 			if("list_lawchanges")
 				var/dat = "<B>Showing last [length(lawchanges)] law changes.</B><HR>"
 				for(var/sig in lawchanges)
@@ -3650,7 +4162,7 @@
 					for(var/datum/job/job in job_master.occupations)
 						if(!job)
 							continue
-						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.total_positions] <BR>"
+						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.get_total_positions()] <BR>"
 					usr << browse(dat, "window=jobdebug;size=600x500")
 			if("showailaws")
 				output_ai_laws()
@@ -3669,8 +4181,8 @@
 						dat += text("<tr><td>[]</td><td>[]</td></tr>", H.name, H.get_assignment())
 				dat += "</table>"
 				usr << browse(dat, "window=manifest;size=440x410")
-			if("check_antagonist")
-				check_antagonists()
+			// if("check_antagonist")
+			// 	check_antagonists()
 			if("emergency_shuttle_panel")
 				emergency_shuttle_panel()
 			if("DNA")
@@ -3701,6 +4213,7 @@
 				if(!admin_log.len)
 					dat += "No-one has done anything this round!"
 				usr << browse(dat, "window=admin_log")
+
 		if (usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsadmin"]]")
 
@@ -3709,7 +4222,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_name"])
-		src.admincaster_feed_channel.channel_name = strip_html_simple(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
+		src.admincaster_feed_channel.channel_name = utf8_sanitize(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
 		while (findtext(src.admincaster_feed_channel.channel_name," ") == 1)
 			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,length(src.admincaster_feed_channel.channel_name)+1)
 		src.access_news_network()
@@ -3929,6 +4442,18 @@
 			if(href_list["vsc"] == "default")
 				zas_settings.SetDefault(usr)
 
+	else if(href_list["xgm_panel"])
+		XGM.ui_interact(usr)
+
+	else if(href_list["toggle_light"])
+		if(!SSticker.initialized)
+			to_chat(usr, "<span class = 'notice'>Please wait for initialization to complete.</span>")
+			return
+		SSlighting.flags = SS_FIRE_IN_LOBBY //Purges the treat wait as ticks rather than DC
+		SSlighting.wait = 5
+		Master.make_runtime = TRUE
+
+
 	else if(href_list["toglang"])
 		if(check_rights(R_SPAWN))
 			var/mob/M = locate(href_list["toglang"])
@@ -3951,7 +4476,7 @@
 
 	if(href_list["add_player_info"])
 		var/key = href_list["add_player_info"]
-		var/add = input("Add Player Info") as null|text
+		var/add = input("Add Player Info") as null|message
 		if(!add)
 			return
 
@@ -4061,7 +4586,7 @@
 			options += name
 			options[name] = D
 
-		var/obj/docking_port/destination/choice = options[(input(usr,"Select a docking port to add to [S.name]","Admin abuse") in options)]
+		var/obj/docking_port/destination/choice = options[(input(usr,"Select a docking port to add to [S.name]","Admin abuse") as null|anything in options)]
 		if(!istype(choice))
 			return
 
@@ -4230,8 +4755,6 @@
 						locations += list("Vox home (MOVING TO IT WILL END THE ROUND)" = "dock_home")
 					if(/datum/shuttle/escape)
 						locations += list("Escape shuttle home" = "dock_station","Escape shuttle centcom" = "dock_centcom")
-					if(/datum/shuttle/taxi)
-						locations += list("Taxi medbay silicon" = "dock_medical_silicon","Taxi engineering cargo" = "dock_engineering_cargo","Taxi security science" = "dock_security_science","Taxi abandoned station" = "dock_abandoned")
 					if(/datum/shuttle/supply)
 						locations += list("Centcom loading bay" = "dock_centcom", "Station cargo bay" = "dock_station")
 
@@ -4550,6 +5073,112 @@
 
 	//------------------------------------------------------------------Shuttle stuff end---------------------------------
 
+
+	if (href_list["obj_add"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		var/list/available_objectives = list()
+
+		for(var/objective_type in subtypesof(/datum/objective))
+			var/datum/objective/O = objective_type
+			available_objectives.Add(initial(O.name))
+			available_objectives[initial(O.name)] = O
+
+		var/new_obj = input("Select a new objective", "New Objective", null) as null|anything in available_objectives
+		var/obj_type = available_objectives[new_obj]
+
+		var/datum/objective/new_objective = new obj_type(usr, obj_holder.faction)
+
+		if (new_objective.flags & FACTION_OBJECTIVE)
+			var/datum/faction/fac = input("To which faction shall we give this?", "Faction-wide objective", null) as null|anything in ticker.mode.factions
+			fac.handleNewObjective(new_objective)
+			message_admins("[key_name_admin(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[key_name(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			check_antagonists()
+			return TRUE // It's a faction objective, let's not move any further.
+
+		if (obj_holder.owner)//so objectives won't target their owners.
+			new_objective.owner = obj_holder.owner
+
+		var/setup = TRUE
+		if (istype(new_objective,/datum/objective/target))
+			var/datum/objective/target/new_O = new_objective
+			if (alert("Do you want to specify a target?", "New Objective", "Yes", "No") == "Yes")
+				setup = new_O.select_target()
+				new_O.auto_target = FALSE
+			else
+				setup = TRUE //Let it sort itself out
+
+		if(!setup)
+			alert("Couldn't set-up a proper target.", "New Objective")
+			return
+
+		if (new_objective.faction && istype(new_objective, /datum/objective/custom)) //is it a custom objective with a faction modifier?
+			new_objective.faction.AppendObjective(new_objective)
+			message_admins("[key_name_admin(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[key_name(usr)] gave \the [new_objective.faction.ID] the objective: [new_objective.explanation_text]")
+		else if (obj_holder.faction) //or is it just an explicit faction obj?
+			obj_holder.faction.AppendObjective(new_objective)
+			message_admins("[key_name_admin(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+			log_admin("[key_name(usr)] gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+		check_antagonists()
+
+	if (href_list["obj_delete"])
+		var/datum/objective/objective = locate(href_list["obj_delete"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		ASSERT(istype(objective) && istype(obj_holder))
+		if (obj_holder.faction)
+			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
+			objective.faction.handleRemovedObjective(objective)
+
+		obj_holder.objectives.Remove(objective)
+		check_antagonists()
+
+	if(href_list["obj_completed"])
+		var/datum/objective/objective = locate(href_list["obj_completed"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		ASSERT(istype(objective))
+
+		if (objective.faction)
+			objective.faction.handleForcedCompletedObjective(objective)
+
+		objective.force_success = !objective.force_success
+		check_antagonists()
+		message_admins("[usr.key]/([usr.name]) toggled [obj_holder.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+		log_admin("[usr.key]/([usr.name]) toggled [obj_holder.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+
+	if (href_list["obj_announce"])
+		var/text = ""
+		var/owner = locate(href_list["obj_owner"])
+		if (istype(owner, /datum/faction))
+			var/datum/faction/F = owner
+			for (var/datum/role/member in F.members)
+				to_chat(member.antag.current, "<span class='notice'>Your faction objectives are:</span>")
+				if (length(member.faction.objective_holder.GetObjectives()))
+					var/obj_count = 1
+					for(var/datum/objective/O in member.faction.GetObjectives())
+						text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
+					text += "</ul>"
+				to_chat(member.antag.current, text)
+
+
+	if(href_list["obj_gen"])
+		var/owner = locate(href_list["obj_owner"])
+		var/datum/faction/F = owner
+		var/list/faction_objectives = F.GetObjectives()
+		var/list/prev_objectives = faction_objectives.Copy()
+		F.forgeObjectives()
+		var/list/unique_objectives = find_unique_objectives(F.GetObjectives(), prev_objectives)
+		if (!unique_objectives.len)
+			alert(usr, "No new objectives generated.", "", "OK")
+		else
+			for (var/datum/objective/objective in unique_objectives)
+				message_admins("[key_name_admin(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
+				log_admin("[key_name(usr)] gave \the [F.ID] the objective: [objective.explanation_text]")
+		check_antagonists()
+
 	if(href_list["wages_enabled"])
 		if(check_rights(R_ADMIN))
 			if(ticker.current_state == 1)
@@ -4568,6 +5197,7 @@
 					wages_enabled = 0
 					message_admins("<span class='notice'>[key_name_admin(usr)] has disabled wages!")
 		return
+
 	if(href_list["econ_panel"])
 		var/choice = href_list["econ_panel"]
 		EconomyPanel(choice, href_list)
@@ -4583,3 +5213,296 @@
 			error_viewer.show_to(owner, locate(href_list["viewruntime_backto"]), href_list["viewruntime_linear"])
 		else
 			error_viewer.show_to(owner, null, href_list["viewruntime_linear"])
+
+	else if (href_list["role_panel"])
+		var/mob/M = locate(href_list["role_panel"])
+		if (!istype(M))
+			return
+		var/datum/mind/mind = M.mind
+		if (!istype(mind))
+			return
+		mind.role_panel()
+
+	else if(href_list["credits"])
+		switch(href_list["credits"])
+			if("resetstar")
+				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't
+					end_credits.customized_star = ""
+					log_admin("[key_name(usr)] reset the current round's featured star. A new one will automatically generate later.")
+					message_admins("[key_name_admin(usr)] reset the current round's featured star. A new one will automatically generate later.")
+			if("setstartext")
+				var/newstar = thebigstar(input(usr,"Write the new star. In the final credits, it will be displayed as: 'Starring\[linebreak\]\[whatever you type here\]'. Mind your capitalization! You may also use HTML. Do not include the characters '%<splashbreak>' anywhere unless you know what you're doing, please.","in my dream, i am the star. its me", end_credits.star) as text|null)
+				if(newstar)
+					end_credits.customized_star = newstar
+					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
+					message_admins("[key_name_admin(usr)] forced the current round's featured star to be '[newstar]'")
+			if("setstarmob")
+				var/newstar = thebigstar(input(usr, "Who should be the featured star of this episode? WARNING: Only tested with humans.", "New star from moblist...") as null|anything in sortmobs())
+				if(newstar)
+					end_credits.customized_star = newstar
+					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
+					message_admins("[key_name_admin(usr)] forced the current round's featured star to be '[newstar]'")
+
+			if("resetname")
+				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't
+					end_credits.customized_name = ""
+					log_admin("[key_name(usr)] reset the current round's episode name. A new one will automatically generate later.")
+					message_admins("[key_name_admin(usr)] reset the current round's episode name. A new one will automatically generate later.")
+			if("rerollname")
+				end_credits.customized_name = ""
+				end_credits.finalize_name()
+				log_admin("[key_name(usr)] re-rolled the current round's episode name. New name: '[end_credits.episode_name]'")
+				message_admins("[key_name_admin(usr)] re-rolled the current round's episode name. New name: '[end_credits.episode_name]'")
+			if("setname")
+				var/newname = input(usr,"Write the super original name of this masterpiece...","New Episode Name") as text|null
+				if(newname)
+					end_credits.customized_name = uppertext(newname)
+					log_admin("[key_name(usr)] forced the current round's episode name to '[newname]'")
+					message_admins("[key_name_admin(usr)] forced the current round's episode name to '[newname]'")
+
+			if("namedatumedit")
+				var/datum/episode_name/N = locate(href_list["nameref"])
+				if(N)
+					var/newname = input(usr,"Write a new possible episode name. This is NOT guaranteed to be picked as the final name, unless you modified the weight to 99999% or something.","Edit Name",N.thename) as text|null
+					if(newname)
+						N.thename = newname
+						N.rare = TRUE
+			if("namedatumweight")
+				var/datum/episode_name/N = locate(href_list["nameref"])
+				if(N)
+					var/newweight = input(usr,"Write the new possibility that '[N.thename]' will be selected as the final episode name. Default is 100.","Edit Weight",N.weight) as num|null
+					if(newweight)
+						N.weight = newweight
+			if("namedatumremove")
+				var/datum/episode_name/N = locate(href_list["nameref"])
+				if(N && alert("Are you sure you want to remove the name '[N.thename]' from the possible episode names to be picked?", "Removing possible name", "Yes", "No") == "Yes")
+					end_credits.episode_names -= N
+					qdel(N)
+
+			if("newdisclaimer")
+				var/newdisclaimer = input(usr,"Write a new rolling disclaimer. Probably something stupid like 'Sponsored by Toxins-R-Us'. This will show up at the top, right after the crew names. Add '\<br>' at the end if you want extra spacing.","New Disclaimer") as message|null
+				if(newdisclaimer)
+					newdisclaimer += "<br>"
+					end_credits.disclaimers.Insert(1,newdisclaimer)
+					log_admin("[key_name(usr)] added a new disclaimer to the current round's credits: '[html_encode(newdisclaimer)]'")
+					message_admins("[key_name_admin(usr)] added a new disclaimer to the current round's credits: '[html_encode(newdisclaimer)]'")
+			if("editdisclaimer")
+				var/i = text2num(href_list["disclaimerindex"])
+				var/olddisclaimer = end_credits.disclaimers[i]
+				var/newdisclaimer = input(usr,"Write a new rolling disclaimer.","Edit Disclaimer",olddisclaimer) as message|null
+				if(newdisclaimer)
+					log_admin("[key_name(usr)] edited a rolling credits disclaimer. New disclaimer: '[html_encode(newdisclaimer)]'")
+					message_admins("[key_name_admin(usr)] edited a rolling credits disclaimer. New disclaimer: '[html_encode(newdisclaimer)]'")
+					end_credits.disclaimers[i] = newdisclaimer
+			if("disclaimerup")
+				var/i = text2num(href_list["disclaimerindex"])
+				if(i > 1)
+					end_credits.disclaimers.Swap(i,i-1)
+			if("disclaimerdown")
+				var/i = text2num(href_list["disclaimerindex"])
+				if(i < end_credits.disclaimers.len)
+					end_credits.disclaimers.Swap(i,i+1)
+
+		CreditsPanel() //refresh!
+
+	if(href_list["persistenceaction"])
+		switch(href_list["persistenceaction"])
+			if("qdelall")
+				if(href_list["persistencedatum"])
+					var/datum/map_persistence_type/T = locate(href_list["persistencedatum"])
+					T.qdelAllTrackedItems(usr)
+				else
+					SSpersistence_map.qdelAllFilth(usr)
+			if("togglesaving")
+				SSpersistence_map.setSavingFilth(!SSpersistence_map.savingFilth, usr)
+
+
+		PersistencePanel() //refresh!
+
+
+	// ----- Religion and stuff
+	if (href_list["religions"])
+		#define MAX_MSG_LENGTH 200
+		#define NUMBER_MAX_REL 4
+		if (href_list["display"])
+			updateRelWindow()
+
+		switch (href_list["religions"])
+			if ("global_subtle_pm")
+				if (!href_list["rel"])
+					return FALSE
+
+				var/datum/religion/R = locate(href_list["rel"])
+
+				if (!istype(R, /datum/religion))
+					return FALSE
+
+				var/deity = sanitize(stripped_input(usr, "Which deity addresses this group of believers?", "Deity Name", R.deity_name), 1, MAX_NAME_LEN)
+				var/message = sanitize(stripped_input(usr, "Which message do you want to send?", "Message", ""), 1, MAX_MSG_LENGTH)
+
+				if (!deity || !message)
+					to_chat(usr, "<span class='warning'>Error: no deity or message selected.</span>")
+
+				for (var/datum/mind/M in R.adepts)
+					if (M.current)
+						to_chat(M.current, "You hear [deity]'s voice in your head... <i>[message]</i>")
+
+				var/msg = "[key_name(usr)] sent message [message] to [R.name]'s adepts as [deity]"
+				message_admins(msg)
+
+
+			if ("new") // --- Busing in a new rel ---
+				// This is copypasted from chaplain code, with adaptations
+
+				if (ticker.religions.len >= NUMBER_MAX_REL)
+					to_chat(usr, "<span class='warning'>Maximum number of religions reached.</span>")
+					return FALSE // Just in case a href exploit allows someone to create a gazillion religions with no purpose.
+
+				var/new_religion = sanitize(stripped_input(usr, "Enter the key to the new religion (leave empty to abort)", "New religion", "Adminbus"), 0, MAX_NAME_LEN)
+
+				if (!new_religion)
+					return FALSE
+
+				var/datum/religion/rel_added
+
+				var/choice = FALSE
+				for (var/R in typesof(/datum/religion))
+					rel_added = new R
+					for (var/key in rel_added.keys)
+						if (lowertext(new_religion) == key)
+							rel_added.holy_book = new rel_added.bible_type
+							rel_added.holy_book.name = rel_added.bible_name
+							rel_added.holy_book.my_rel = rel_added
+							choice = TRUE
+							break // Religion found - time to abort
+					if (choice)
+						break
+
+				if (!choice) // No religion found
+					rel_added = new /datum/religion
+					rel_added.name = "[new_religion]"
+					rel_added.deity_name = "[new_religion]"
+					rel_added.bible_name = "The Holy Book of [new_religion]"
+					rel_added.holy_book = new rel_added.bible_type
+					rel_added.holy_book.name = rel_added.bible_name
+					rel_added.holy_book.my_rel = rel_added
+
+				var/new_deity = copytext(sanitize(input(usr, "Would you like to change the deity? The deity currently is [rel_added.deity_name] (Leave empty or unchanged to keep deity name)", "Name of Deity", rel_added.deity_name)), 1, MAX_NAME_LEN)
+				if(length(new_deity))
+					rel_added.deity_name = new_deity
+
+				// Bible chosing - without preview this time
+				chooseBible(rel_added, usr)
+
+				var/msg = "[key_name(usr)] created a religion: [rel_added.name]."
+				message_admins(msg)
+
+				ticker.religions += rel_added
+				updateRelWindow()
+			if ("delete")
+				if (!href_list["rel"])
+					return FALSE
+
+				var/datum/religion/R = locate(href_list["rel"])
+
+				if (!istype(R, /datum/religion))
+					return FALSE
+
+				if (R.adepts.len)
+					to_chat(usr, "<span class='warning'>You can't delete a religion which has adepts.</span>")
+					return FALSE
+
+				var/msg = "[key_name(usr)] deleted a religion: [R.name]."
+				ticker.religions -= R
+				qdel(R.holy_book)
+				qdel(R)
+				message_admins(msg)
+				updateRelWindow()
+
+			if ("activate")
+				if (!href_list["rel"])
+					return FALSE
+
+				var/datum/religion/R = locate(href_list["rel"])
+
+				if (!istype(R, /datum/religion))
+					return FALSE
+
+				if (R.adepts.len)
+					to_chat(usr, "<span class='warning'>The religion already has adepts!</span>")
+					return FALSE
+
+				if (alert("Do you wish to activate this religion? You will have to pick a player as its guide. Make sure the player is aware your plans!", "Activating a religion", "Yes", "No") != "Yes")
+					return FALSE
+
+				var/list/mob/moblist = list()
+
+				for (var/client/c in clients)
+					if (!c.mob.isDead() && !c.mob.mind.faith) // Can't use dead guys, nor people with already a religion
+						moblist += c.mob
+
+				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as null|anything in moblist
+
+				if (alert("Do you want to make \the [preacher] the leader of [R.name] ?", "Activating a religion", "Yes", "No") != "Yes")
+					return FALSE
+
+				if (!preacher)
+					to_chat(usr, "<span class='warning'>No mob selected.</span>")
+					return FALSE
+
+				if (!preacher.mind)
+					to_chat(usr, "<span class='warning'>This mob has no mind.</span>")
+					return FALSE
+
+				if (preacher.mind.faith)
+					to_chat(usr, "<span class='warning'>This person already follows a religion.</span>")
+					return FALSE
+
+				R.activate(preacher)
+				var/msg = "[key_name(usr)] activated religion [R.name], with preacher [key_name(preacher)]."
+				message_admins(msg)
+				updateRelWindow()
+
+			if ("renounce")
+				if (!href_list["mob"])
+					return FALSE
+
+				var/mob/living/M = locate(href_list["mob"])
+
+				if (!isliving(M) || !M.mind.faith)
+					return FALSE
+
+				if (M.mind.faith.religiousLeader == M.mind)
+					var/choice = alert("This mob is the leader of the religion. Are you sure you wish to remove him from his faith?", "Removing religion", "Yes", "No")
+					if (choice != "Yes")
+						return FALSE
+				M.mind.faith.action_renounce.Remove(M)
+				M.mind.faith.renounce(M) // Bypass checks
+
+				var/msg = "[key_name(usr)] removed [key_name(M)] from his religion."
+				message_admins(msg)
+				updateRelWindow()
+
+/datum/admins/proc/updateRelWindow()
+	var/text = list()
+	text += "<h3>Religions in game</h3>"
+	// --- Displaying of all religions ---
+	for (var/datum/religion/R in ticker.religions)
+		text += "<b>Name:</b> [R.name] <br/>"
+		text += "<b>Deity name:</b> [R.deity_name]<br/>"
+		if (!R.adepts.len) // Religion not activated yet
+			text += "No adepts yet. "
+			text += "(<A HREF='?_src_=holder;religions=delete&rel=\ref[R]'>Delete</A>) "
+			text += "(<A HREF='?_src_=holder;religions=activate&rel=\ref[R]'>Activate</A>) <br/>"
+			text += "<br/>"
+		else
+			text += "<b>Leader:</b> \the [R.religiousLeader.current] (<A HREF='?_src_=vars;Vars=\ref[R.religiousLeader.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[R.religiousLeader.current]'>JMP</A>) \
+					 (<A HREF='?_src_=holder;subtlemessage=\ref[R.religiousLeader.current]'>SM</A>)<br/>"
+			text += "<b>Adepts:</b> <ul>"
+			for (var/datum/mind/M in R.adepts)
+				text += "<li>[M.name] (<A HREF='?_src_=vars;Vars=\ref[M.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M.current]&mob=\ref[M.current]'>JMP</A>) \
+					 	  (<A HREF='?_src_=holder;subtlemessage=\ref[M.current]'>SM</A>) (<A HREF='?_src_=holder;religions=renounce&mob=\ref[M.current]'>Deconvert</A>)</li>"
+			text +="</ul>"
+			text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"
+	text += "<A HREF='?src=\ref[src];religions=new'>Bus in a new religion</a> <br/>"
+	usr << browse(jointext(text, ""), "window=admin2;size=300x370")

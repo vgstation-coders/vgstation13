@@ -4,7 +4,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/weapon/reagent_containers/glass
 	name = " "
-	var/base_name = " "
 	desc = " "
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "null"
@@ -14,7 +13,8 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50)
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER
-
+	layer = ABOVE_OBJ_LAYER
+	var/opaque = FALSE //when true no reagent filling overlay is applied to the icon.
 	//This is absolutely terrible
 	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.
 	var/list/can_be_placed_into = list(
@@ -24,7 +24,7 @@
 		/obj/structure/table,
 		/obj/structure/closet,
 		/obj/structure/sink,
-		/obj/structure/centrifuge/,
+		/obj/structure/centrifuge,
 		/obj/item/weapon/storage,
 		/obj/item/weapon/solder,
 		/obj/machinery/atmospherics/unary/cryo_cell,
@@ -32,15 +32,14 @@
 		/obj/item/weapon/grenade/chem_grenade,
 		/obj/item/weapon/electrolyzer,
 		/obj/machinery/bot/medbot,
-		/obj/machinery/computer/pandemic,
 		/obj/item/weapon/storage/secure/safe,
 		/obj/machinery/iv_drip,
 		/obj/machinery/disease2/incubator,
+		/obj/machinery/disease2/centrifuge,
 		/obj/machinery/disposal,
 		/obj/machinery/apiary,
 		/mob/living/simple_animal/cow,
 		/mob/living/simple_animal/hostile/retaliate/goat,
-		/obj/machinery/centrifuge,
 		/obj/machinery/cooking/icemachine,
 		/obj/machinery/sleeper,
 		/obj/machinery/anomaly,
@@ -55,7 +54,6 @@
 
 /obj/item/weapon/reagent_containers/glass/New()
 	..()
-	base_name = name
 	update_icon() //Used by all subtypes for reagent filling, and allows roundstart lids
 
 /obj/item/weapon/reagent_containers/glass/mop_act(obj/item/weapon/mop/M, mob/user)
@@ -89,7 +87,7 @@
 	var/transfer_result = transfer(target, user, splashable_units = -1) // Potentially splash with everything inside
 
 	if((transfer_result > 10) && (isturf(target) || istype(target, /obj/machinery/portable_atmospherics/hydroponics)))	//if we're splashing a decent amount of reagent on the floor
-		playsound(get_turf(target), 'sound/effects/slosh.ogg', 25, 1)													//or in an hydro tray, then we make some noise.
+		playsound(target, 'sound/effects/slosh.ogg', 25, 1)													//or in an hydro tray, then we make some noise.
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
@@ -107,6 +105,7 @@
 	item_state = "beaker"
 	starting_materials = list(MAT_GLASS = 500)
 	origin_tech = Tc_MATERIALS + "=1"
+	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
 
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
 	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
@@ -134,21 +133,21 @@
 						return 1
 					src.reagents.trans_to(M, 1)
 					to_chat(user, "<span class='notice'>You barely manage to wet [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				if(30 to 100)
 					if(M.reagents.total_volume >= 5)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
 					src.reagents.trans_to(M, 2)
 					to_chat(user, "<span class='notice'>You manage to wet [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				if(100 to INFINITY)
 					if(M.reagents.total_volume >= 10)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
 					src.reagents.trans_to(M, 5)
 					to_chat(user, "<span class='notice'>You manage to soak [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				else
 					to_chat(user, "What")
 					return 1
@@ -174,7 +173,7 @@
 /obj/item/weapon/reagent_containers/glass/beaker/update_icon()
 	overlays.len = 0
 
-	if(reagents.total_volume)
+	if(!opaque && reagents && reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]10")
 
 		var/percent = round((reagents.total_volume / volume) * 100)
@@ -203,6 +202,16 @@
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
 		overlays += lid
 
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
+	name = "small erlenmeyer flask"
+	desc = "It's like a cute little snub-nosed beaker. Can hold up to 50 units."
+	icon_state = "erlenmeyersmall"
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer
+	name = "erlenmeyer flask"
+	desc = "Colloquially known as the 'long beaker'. Can hold up to 100 units."
+	icon_state = "erlenmeyerlarge"
+
 /obj/item/weapon/reagent_containers/glass/beaker/large
 	name = "large beaker"
 	desc = "A large beaker. Can hold up to 100 units."
@@ -225,9 +234,7 @@
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
-
-/obj/item/weapon/reagent_containers/glass/beaker/noreact/update_icon()
-	return
+	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
@@ -247,9 +254,7 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
 	flags = FPRINT  | OPENCONTAINER
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MATERIALS + "=3"
-
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace/update_icon()
-	return
+	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
@@ -271,28 +276,47 @@
 /obj/item/weapon/reagent_containers/glass/beaker/vial/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
 
+/obj/item/weapon/reagent_containers/glass/beaker/vial/on_reagent_change()
+	..()
+	if (istype(loc,/obj/item/weapon/storage/fancy/vials) || istype(loc,/obj/item/weapon/storage/lockbox/vials))
+		var/obj/item/weapon/storage/S = loc
+		S.update_icon()
+
 /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
 	..()
-
 	reagents.add_reagent(URANIUM, 25)
 
-/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon/New()
+	..()
+	reagents.add_reagent(CARBON, 10)
 
-	New()
-		..()
-		reagents.add_reagent(CRYOXADONE, 30)
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater/New()
+	..()
+	reagents.add_reagent(WATER, 10)
 
-/obj/item/weapon/reagent_containers/glass/beaker/sulphuric
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox/New()
+	..()
+	reagents.add_reagent(ANTI_TOXIN, 10)
 
-	New()
-		..()
-		reagents.add_reagent(SACID, 50)
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime/New()
+	..()
+	reagents.add_reagent(LEMON_LIME, 30)
 
-/obj/item/weapon/reagent_containers/glass/beaker/slime
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater/New()
+	..()
+	reagents.add_reagent(SODAWATER, 30)
 
-	New()
-		..()
-		reagents.add_reagent(SLIMEJELLY, 50)
+/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone/New()
+	..()
+	reagents.add_reagent(CRYOXADONE, 30)
+
+/obj/item/weapon/reagent_containers/glass/beaker/sulphuric/New()
+	..()
+	reagents.add_reagent(SACID, 50)
+
+/obj/item/weapon/reagent_containers/glass/beaker/slime/New()
+	..()
+	reagents.add_reagent(SLIMEJELLY, 50)
 
 /obj/item/weapon/reagent_containers/glass/beaker/mednanobots
 	name = "beaker 'nanobots'"
@@ -327,21 +351,21 @@
 						return 1
 					src.reagents.trans_to(M, 1)
 					to_chat(user, "<span class='notice'>You barely manage to wet [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				if(30 to 100)
 					if(M.reagents.total_volume >= 5)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
 					src.reagents.trans_to(M, 2)
 					to_chat(user, "<span class='notice'>You manage to wet [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				if(100 to INFINITY)
 					if(M.reagents.total_volume >= 10)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
 					src.reagents.trans_to(M, 5)
 					to_chat(user, "<span class='notice'>You manage to soak [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				else
 					to_chat(user, "What")
 					return 1
@@ -357,11 +381,27 @@
 		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
 		user.drop_from_inventory(src)
 		qdel(src)
+		return
 	attempt_heating(D, user)
+
+/obj/item/weapon/reagent_containers/glass/bucket/on_reagent_change()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/bucket/update_icon()
+	overlays.len = 0
+
+	if(reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]")
+
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+		overlays += filling
 
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
 	reagents.add_reagent(WATER, 150)
+	update_icon()
 
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug
@@ -407,9 +447,9 @@
 	name = "reagent glass (surfactant)"
 	icon_state = "liquid"
 
-	New()
-		..()
-		reagents.add_reagent(FLUOROSURFACTANT, 20)
+/obj/item/weapon/reagent_containers/glass/dispenser/surfactant/New()
+	..()
+	reagents.add_reagent(FLUOROSURFACTANT, 20)
 
 */
 

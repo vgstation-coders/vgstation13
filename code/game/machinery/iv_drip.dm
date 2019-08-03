@@ -1,14 +1,15 @@
+#define IVDRIP_INJECTING 1
+#define IVDRIP_DRAWING 0
+
 /obj/machinery/iv_drip
 	name = "\improper IV drip"
 	icon = 'icons/obj/iv_drip.dmi'
 	icon_state = "unhooked_inject"
 	anchored = 0
 	density = 0 //Tired of these blocking up the station
-
-
-/obj/machinery/iv_drip/var/mob/living/carbon/human/attached = null
-/obj/machinery/iv_drip/var/mode = 1 // 1 is injecting, 0 is taking blood.
-/obj/machinery/iv_drip/var/obj/item/weapon/reagent_containers/beaker = null
+	var/mode = IVDRIP_INJECTING
+	var/obj/item/weapon/reagent_containers/beaker = null
+	var/mob/living/carbon/human/attached = null
 
 /obj/machinery/iv_drip/update_icon()
 	if(src.attached)
@@ -43,21 +44,22 @@
 			filling.icon += mix_color_from_reagents(reagents.reagent_list)
 			overlays += filling
 
-/obj/machinery/iv_drip/MouseDrop(over_object, src_location, over_location)
-	..()
+/obj/machinery/iv_drip/MouseDropFrom(over_object, src_location, over_location)
 	if(isobserver(usr))
-		return
+		return ..()
 	if(usr.incapacitated()) // Stop interacting with shit while dead pls
-		return
+		return ..()
 	if(isanimal(usr))
-		return
+		return ..()
+	if(!usr.Adjacent(src))
+		return ..()
+
 	if(attached)
-		visible_message("[src.attached] is detached from \the [src]")
-		src.attached = null
-		src.update_icon()
+		visible_message("[src.attached] is detached from \the [src].")
+		detach()
 		return
 
-	if(in_range(src, usr) && ishuman(over_object) && get_dist(over_object, src) <= 1)
+	if(ishuman(over_object) && get_dist(over_object, src) <= 1)
 		var/mob/living/carbon/human/H = over_object
 		if(H.species && (H.species.chem_flags & NO_INJECT))
 			H.visible_message("<span class='warning'>[usr] struggles to place the IV into [H] but fails.</span>","<span class='notice'>[usr] tries to place the IV into your arm but is unable to.</span>")
@@ -72,12 +74,11 @@
 	if(user.stat)
 		return
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2
 		if(src.beaker)
-			src.beaker.forceMove(get_turf(src))
-			src.beaker = null
+			src.remove_container()
 		to_chat(user, "<span class='notice'>You dismantle \the [name].</span>")
 		qdel(src)
 	if (istype(W, /obj/item/weapon/reagent_containers))
@@ -100,14 +101,11 @@
 
 
 /obj/machinery/iv_drip/process()
-	//set background = 1
-
 	if(src.attached)
 		if(!(get_dist(src, src.attached) <= 1 && isturf(src.attached.loc)))
 			visible_message("The needle is ripped out of [src.attached], doesn't that hurt?")
 			src.attached:apply_damage(3, BRUTE, pick(LIMB_RIGHT_ARM, LIMB_LEFT_ARM))
-			src.attached = null
-			src.update_icon()
+			src.detach()
 			return
 
 	if(src.attached && src.beaker)
@@ -116,17 +114,21 @@
 			if(beaker.volume > 0)
 				if(beaker.reagents.reagent_list.len == 1 && beaker.reagents.has_reagent(BLOOD))
 					// speed up transfer if the container has ONLY blood
-					beaker.reagents.trans_to(attached, 4)
+					beaker.reagents.trans_to(attached, 12)
 				else
 					// otherwise: transfer a little bit of all reagents to the patient. the reason why we don't transfer a set amount is because 0.2u of 10 different reagents is 0.02u of each, which is entirely too little.
 					for(var/datum/reagent/reagent in beaker.reagents.reagent_list)
 						beaker.reagents.trans_id_to(attached, reagent.id, reagent.custom_metabolism)
 				update_icon()
 
+				if(beaker.is_empty() && beaker.should_qdel_if_empty())
+					qdel(beaker)
+					detach()
+
 		// Take blood
 		else
 			var/amount = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			amount = min(amount, 4)
+			amount = min(amount, 12)
 			// If the beaker is full, ping
 			if(amount == 0)
 				if(prob(5))
@@ -139,7 +141,7 @@
 				return
 			if(!T.dna)
 				return
-			if(M_NOCLONE in T.mutations)
+			if(M_HUSK in T.mutations)
 				return
 
 			// If the human is losing too much blood, beep.
@@ -157,14 +159,22 @@
 		return
 	if(attached)
 		visible_message("[src.attached] is detached from \the [src].")
-		src.attached = null
-		src.update_icon()
+		detach()
 	else if(src.beaker)
-		src.beaker.forceMove(get_turf(src))
-		src.beaker = null
-		update_icon()
+		remove_container()
 	else
 		return ..()
+
+/obj/machinery/iv_drip/proc/remove_container()
+	src.beaker.forceMove(get_turf(src))
+	src.beaker = null
+	update_icon()
+
+/obj/machinery/iv_drip/proc/detach()
+	if(!src.attached)
+		return
+	src.attached = null
+	src.update_icon()
 
 /obj/machinery/iv_drip/attack_ai(mob/living/user)
 	attack_hand(user)
@@ -174,11 +184,15 @@
 	set category = "Object"
 	set src in view(1)
 
+	if(usr.isUnconscious())
+		return
+
 	if(!istype(usr, /mob/living) || istype(usr, /mob/living/simple_animal))
 		to_chat(usr, "<span class='warning'>You can't do that.</span>")
 		return
 
-	if(usr.isUnconscious())
+	if(locked_to) //attached to rollerbed? probably?
+		to_chat(usr, "<span class='warning'>You can't do that while \the [src] is fastened to something.</span>")
 		return
 
 	mode = !mode

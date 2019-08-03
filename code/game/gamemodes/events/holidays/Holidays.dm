@@ -17,147 +17,142 @@ var/global/Holiday = null
 	if(!Holiday)  //  Holiday stuff was not enabled in the config!
 		return
 
+	var/list/current_holidays = list()	//Because it's possible to have multiple holidays on the same day
+
 	Holiday = null // reset our switch now so we can recycle it as our Holiday name
 
 	var/YY = text2num(time2text(world.timeofday, "YY")) 	// get the current year
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 
+	var/list/Easter_date = Computus()
+
 	// Main switch. If any of these are too dumb/inappropriate, or you have better ones, feel free to change whatever
 	switch(MM)
 		if(1) // Jan
 			switch(DD)
 				if(1)
-					Holiday = "New Year's Day"
+					current_holidays += NEW_YEARS_DAY
 
 		if(2) // Feb
 			switch(DD)
 				if(2)
-					Holiday = "Groundhog Day"
+					current_holidays += GROUNDHOG_DAY
 				if(14)
-					Holiday = "Valentine's Day"
+					current_holidays += VALENTINES_DAY
 				if(17)
-					Holiday = "Random Acts of Kindness Day"
+					current_holidays += RANDOM_ACTS_OF_KINDNESS_DAY
 
 		if(3) // Mar
 			switch(DD)
 				if(14)
-					Holiday = "Pi Day"
+					current_holidays += PI_DAY
 				if(17)
-					Holiday = "St. Patrick's Day"
-				if(27)
-					if(YY == 16)
-						Holiday = "Easter"
-				if(31)
-					if(YY == 13)
-						Holiday = "Easter"
+					current_holidays += ST_PATRICKS_DAY
 
 		if(4) // Apr
 			switch(DD)
 				if(1)
-					Holiday = "April Fool's Day"
-					if(YY == 18 && prob(50))
-						Holiday = "Easter"
+					current_holidays += APRIL_FOOLS_DAY
 				if(2)
-					Holiday = "Autism Awareness Day"
-				if(5)
-					if(YY == 15)
-						Holiday = "Easter"
-				if(16)
-					if(YY == 17)
-						Holiday = "Easter"
+					current_holidays += AUTISM_AWARENESS_DAY
 				if(20)
-					Holiday = "Four-Twenty"
-					if(YY == 14 && prob(50))
-						Holiday = "Easter"
+					current_holidays += FOUR_TWENTY
 				if(22)
-					Holiday = "Earth Day"
+					current_holidays += EARTH_DAY
 
 		if(5) // May
 			switch(DD)
 				if(1)
-					Holiday = "Labour Day"
+					current_holidays += LABOUR_DAY
 				if(4)
-					Holiday = "FireFighter's Day"
+					current_holidays += FIREFIGHTERS_DAY
 				if(12)
-					Holiday = "Owl and Pussycat Day" // what a dumb day of observence...but we -do- have costumes already :3
+					current_holidays += OWL_AND_PUSSYCAT_DAY // what a dumb day of observence...but we -do- have costumes already :3
 
 		if(6) // Jun
 			switch(DD)
 				if(18)
-					Holiday = "International Picnic Day"
+					current_holidays += INTERNATIONAL_PICNIC_DAY
 				if(21)
-					Holiday = "Summer Solstice" // its not always the 21 but sue me
+					current_holidays += SUMMER_SOLSTICE // its not always the 21 but sue me
 
 		if(7) // Jul
 			switch(DD)
 				if(1)
-					Holiday = "Doctor's Day"
+					current_holidays += DOCTORS_DAY
 				if(2)
-					Holiday = "UFO Day"
+					current_holidays += UFO_DAY
 				if(8)
-					Holiday = "Writer's Day"
+					current_holidays += WRITERS_DAY
 				if(30)
-					Holiday = "Friendship Day"
+					current_holidays += FRIENDSHIP_DAY
 
 		if(8) // Aug
 			switch(DD)
 				if(5)
-					Holiday = "Beer Day"
+					current_holidays += BEER_DAY
 
 		if(9) // sep
 			switch(DD)
 				if(19)
-					Holiday = "Talk-Like-a-Pirate Day"
+					current_holidays += TALK_LIKE_A_PIRATE_DAY
 				if(28)
-					Holiday = "Stupid-Questions Day"
+					current_holidays += STUPID_QUESTIONS_DAY
 
 		if(10) // Oct
 			switch(DD)
 				if(4)
-					Holiday = "Animal's Day"
+					current_holidays += ANIMALS_DAY
 				if(7)
-					Holiday = "Smiling Day"
+					current_holidays += SMILING_DAY
 				if(16)
-					Holiday = "Boss' Day"
+					current_holidays += BOSS_DAY
 				if(31)
-					Holiday = "Halloween"
+					current_holidays += HALLOWEEN
 
 		if(11) // Nov
 			switch(DD)
 				if(1)
-					Holiday = "Vegan Day"
+					current_holidays += VEGAN_DAY
 				if(13)
-					Holiday = "Kindness Day"
+					current_holidays += KINDNESS_DAY
 				if(19)
-					Holiday = "Flowers Day"
+					current_holidays += FLOWERS_DAY
 				if(21)
-					Holiday = "Saying-'Hello' Day"
+					current_holidays += SAYING_HELLO_DAY
 
 		if(12) // Dec
 			switch(DD)
 				if(10)
-					Holiday = "Human-Rights Day"
+					current_holidays += HUMAN_RIGHTS_DAY
 				if(14)
-					Holiday = "Monkey Day"
+					current_holidays += MONKEY_DAY
 				if(21)
 					if(YY==12)
-						Holiday = "End of the World"
+						current_holidays += END_OF_THE_WORLD
 				if(22)
-					Holiday = "Orgasming Day"		//lol. These all actually exist
+					current_holidays += ORGASMING_DAY	//lol. These all actually exist
 				if(24)
-					Holiday = "Christmas Eve"
+					current_holidays += XMAS_EVE
 				if(25)
-					Holiday = "Christmas"
+					current_holidays += XMAS
 				if(26)
-					Holiday = "Boxing Day"
+					current_holidays += BOXING_DAY
 				if(31)
-					Holiday = "New Year's Eve"
+					current_holidays += NEW_YEARS_EVE
+
+	if(MM == Easter_date["month"] && DD == Easter_date["day"])
+		current_holidays += EASTER
+
+	if(current_holidays.len)
+		Holiday = pick(current_holidays)
+
 	if(!Holiday)
 		// Friday the 13th
 		if(DD == 13)
 			if(time2text(world.timeofday, "DDD") == "Fri")
-				Holiday = "Friday the 13th"
+				Holiday = FRIDAY_THE_13TH
 
 //Allows GA and GM to set the Holiday variable
 /client/proc/Set_Holiday(T as text|null)
@@ -182,18 +177,10 @@ var/global/Holiday = null
 // Run at the  start of a round
 /proc/Holiday_Game_Start()
 	if(Holiday)
-		to_chat(world, "<font color='blue'>and...</font>")
-		if(Holiday == "Autism Awareness Day")
-			to_chat(world, "<h4>Happy <span class='sans'>Autism Awareness Day</span> Everybody!</h4>")// Together we can finish the puzzle.
-
-		else
-			to_chat(world, "<h4>Happy [Holiday] Everybody!</h4>")
-		switch(Holiday) // special holidays
-			if("Easter")
-				//do easter stuff
-			if("Christmas Eve","Christmas")
-				Christmas_Game_Start()
-	return
+		to_chat(world, "<span class='notice'>and...</span>")
+		to_chat(world, "<h4>Happy [Holiday] Everybody!</h4>")
+		if(Holiday == XMAS_EVE || Holiday == XMAS)
+			Christmas_Game_Start()
 
 // Nested in the random events loop. Will be triggered every 2 minutes
 /proc/Holiday_Random_Event()
@@ -201,33 +188,45 @@ var/global/Holiday = null
 		if("",null)	// no Holiday today! Back to work!
 			return
 
-		if("Easter") // I'll make this into some helper procs at some point
-
-/*			var/list/turf/simulated/floor/Floorlist = list()
-			for(var/turf/simulated/floor/T)
-				if(T.contents)
-					Floorlist += T
-			var/turf/simulated/floor/F = Floorlist[rand(1,Floorlist.len)]
-			Floorlist = null
-			var/obj/structure/closet/C = locate(/obj/structure/closet) in F
-			var/obj/item/weapon/reagent_containers/food/snacks/chocolateegg/wrapped/Egg
-			if( C )
-				Egg = new(C)
-			else
-				Egg = new(F)
-
-			var/list/obj/containers = list()
-			for(var/obj/item/weapon/storage/S in world)
-				if(S.z != map.zMainStation)
-					continue
-				containers += S
-
-			message_admins("<span class='notice'>DEBUG: Event: Egg spawned at [Egg.loc] ([Egg.x],[Egg.y],[Egg.z])</span>")*/
-
-		if("End of the World")
+		if(END_OF_THE_WORLD) //2012 is long gone, not clue why this is still a thing.
 			if(prob(eventchance))
 				GameOver()
 
-		if("Christmas","Christmas Eve")
+		if(XMAS_EVE,XMAS)
 			if(prob(eventchance))
 				ChristmasEvent()
+
+/proc/Computus()	//This proc calculates the date that Easter falls on for a given year.
+	var/current_year = text2num(time2text(world.timeofday, "YYYY"))
+	var/M
+	var/N
+	switch(current_year)
+		if(1900 to 2099)
+			M = 24
+			N = 5
+		if(2100 to 2199)
+			M = 24
+			N = 6
+		if(2200 to 2299)
+			M = 25
+			N = 0
+		else
+			return	//Easter machine needs maintenance in 300 years
+	var/a = current_year % 19
+	var/b = current_year % 4
+	var/c = current_year % 7
+	var/d = (19*a + M) % 30
+	var/e = (2*b + 4*c + 6*d + N) % 7
+	var/list/Easter_date = list("month" = 0, "day" = 0)
+	if((d + e) < 10)
+		Easter_date["month"] = 3
+		Easter_date["day"] = (d + e + 22)
+	else if((d + e) > 9)
+		Easter_date["month"] = 4
+		Easter_date["day"] = (d + e - 9)
+	if(Easter_date["month"] == 4 && Easter_date["day"] == 26)
+		Easter_date["day"] = 19
+	if(Easter_date["month"] == 4 && Easter_date["day"] == 25 && d == 28 && e == 6 && a > 10)
+		Easter_date["day"] = 18
+
+	return Easter_date

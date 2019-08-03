@@ -45,7 +45,7 @@
 			F.reagents.remove_reagent(FUEL, 50, 1)//Deleting 50 fuel from the welding fuel tank,
 			assembled = 1
 			to_chat(user, "<span  class='notice'>You've filled the makeshift explosive with welding fuel.</span>")
-			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 			desc = "An improvised explosive assembly. Filled to the brim with 'Explosive flavor'"
 			overlays += image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_filled")
 			return
@@ -102,7 +102,8 @@
 				var/mob/living/carbon/C = user
 				C.throw_mode_on()
 			spawn(det_time)
-				prime()
+				if(!gcDestroyed)
+					prime()
 
 
 /obj/item/weapon/grenade/iedcasing/proc/add_shrapnel(var/obj/item/I, mob/user as mob)
@@ -114,7 +115,7 @@
 				current_shrapnel += I.shrapnel_size
 				if(user && user.drop_item(I, src))
 					to_chat(user, "<span  class='notice'>You add \the [I] to the improvised explosive.</span>")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 				else
 					I.forceMove(src)
 
@@ -124,8 +125,8 @@
 
 /obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
 	update_mob()
-	explosion(get_turf(src.loc),-1,0,2)
 	process_shrapnel()
+	explosion(get_turf(src.loc),-1,0,2)
 
 	if(istype(loc, /obj/item/weapon/legcuffs/beartrap))
 		var/obj/item/weapon/legcuffs/beartrap/boomtrap = loc
@@ -138,6 +139,7 @@
 
 				qdel(H.legcuffed)
 				H.legcuffed = null
+				boomtrap.IED = null
 	qdel(src)
 
 

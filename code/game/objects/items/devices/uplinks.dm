@@ -2,13 +2,13 @@
 
 /*
 
-A list of items and costs is stored under the datum of every game mode, alongside the number of crystals, and the welcoming message.
+A list of items and costs is stored under the datum of every game mode, alongside the number of crystals, and the welcoming message. //WHY
 
 */
 
 /obj/item/device/uplink
 	var/welcome 					// Welcoming menu message
-	var/uses 						// Numbers of crystals
+	var/uses 						// Number of crystals
 	// List of items not to shove in their hands.
 	var/list/purchase_log = list()
 	var/show_description = null
@@ -23,17 +23,36 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink/initialize()
 	if(ticker.mode)
-		welcome = ticker.mode.uplink_welcome
-		uses = ticker.mode.uplink_uses
+		welcome = "Syndicate Uplink Console"
+		uses = 20
 	else
 		welcome = "THANKS FOR MAPPING IN THIS THING AND NOT CHECKING FOR RUNTIMES BUDDY"
 		uses = 90 // Because this is only happening on centcomm's snowflake uplink
+
+/obj/item/device/uplink/proc/refund(mob/user, obj/item/I)
+	if(!user || !I)
+		return
+	if(!uplink_items)
+		get_uplink_items()
+	for(var/category in uplink_items)
+		for(var/item in uplink_items[category])
+			var/datum/uplink_item/UI = item
+			var/path = UI.refund_path || UI.item
+			var/cost = UI.refund_amount || UI.cost
+			if(istype(I, path) && UI.refundable && I.check_uplink_validity())
+				uses += cost
+				to_chat(user, "<span class='notice'>[I] refunded.</span>")
+				qdel(I)
+				return TRUE
+	return FALSE
 
 //Let's build a menu!
 /obj/item/device/uplink/proc/generate_menu(mob/user as mob)
 	if(!job)
 		job = user.mind.assigned_role
-	var/dat = "<B>[src.welcome]</B><BR>"
+
+	var/dat = list()
+	dat += "<B>[src.welcome]</B><BR>"
 
 	dat += {"Tele-Crystals left: [src.uses]<BR>
 		<HR>
@@ -48,38 +67,56 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		index++
 		dat += "<b>[category]</b><br>"
 
-		var/i = 0
+		var/discounted_list = list() //These go on top.
+		var/jobexclusive_list = list()
+		var/nondiscounted_list = list() //These go on the bottom.
 
+		var/i = 0
 		// Loop through items in category
 		for(var/datum/uplink_item/item in buyable_items[category])
 			i++
 
+			if(!item.available_for_job(job))
+				continue
+
+			var/itemcost = item.get_cost(job)
 			var/cost_text = ""
 			var/desc = "[item.desc]"
-			if(item.job && item.job.len)
-				if(!(item.job.Find(job)))
-					//world.log << "Skipping job item that doesn't match"
-					continue
+			var/final_text = ""
+			if(itemcost > 0)
+				if(item.gives_discount(job) || item.jobs_exclusive.len)
+					cost_text = "<span style='color: yellow; font-weight: bold;'>([itemcost]!)</span>"
 				else
-					//world.log << "Found matching job item"
-			if(item.cost > 0)
-				cost_text = "([item.cost])"
-			if(item.cost <= uses)
-				dat += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
+					cost_text = "([itemcost])"
+			if(itemcost <= uses)
+				final_text += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
 			else
-				dat += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
+				final_text += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
+			if(item.refundable)
+				final_text += "<span style='color: yellow;'>\[R\]</span>"
 			if(item.desc)
 				if(show_description == 2)
-					dat += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc]</font>"
+					final_text += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc][item.refundable ? " Use this item on your uplink to refund it for [item.refund_amount || item.cost] TC.":""]</font>"
 				else
-					dat += "<A href='byond://?src=\ref[src];show_desc=2'><font size=2>\[?\]</font></A>"
-			dat += "<BR>"
+					final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A>"
+			final_text += "<BR>"
+
+			if(item.gives_discount(job))
+				discounted_list += final_text
+			else if(item.jobs_exclusive.len) //If we don't match this thing's job, we already exited out, so we don't need to check again
+				jobexclusive_list += final_text
+			else
+				nondiscounted_list += final_text
+
+		for(var/text in discounted_list|jobexclusive_list|nondiscounted_list) //Discounted first, nondiscounted later.
+			dat += text
 
 		// Break up the categories, if it isn't the last.
 		if(buyable_items.len != index)
 			dat += "<br>"
 
 	dat += "<HR>"
+	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 	return dat
 
 // Interaction code. Gathers a list of items purchasable from the paren't uplink and displays it. It also adds a lock button.
@@ -97,6 +134,11 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink/Topic(href, href_list)
 	..()
+
+	if (!is_holder_of(usr, src))
+		message_admins("[key_name(usr)] tried to access [src], an unlocked PDA, despite not being its holder. ([formatJumpTo(get_turf(src))])")
+		return FALSE
+
 	if(!active)
 		return
 
@@ -110,7 +152,9 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			var/category = split[1]
 			var/number = text2num(split[2])
 
-			var/list/buyable_items = get_uplink_items()
+			if(!job) //Should never happen unless the user somehow sends out a Topic() call before opening their uplink, but just in case.
+				job = usr.mind.assigned_role
+			var/list/buyable_items = get_uplink_items(job)
 
 			var/list/uplink = buyable_items[category]
 			if(uplink && uplink.len >= number)
@@ -200,6 +244,16 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/radio/uplink/attack_self(mob/user as mob)
 	if(hidden_uplink)
 		hidden_uplink.trigger(user)
+
+/obj/item/device/radio/uplink/attackby(var/obj/I, var/mob/user)
+	if(hidden_uplink && hidden_uplink.refund(user, I))
+		return
+	..()
+
+/obj/item/device/radio/uplink/nukeops/New()
+	..()
+	hidden_uplink.uses = 80 //haha fuck OOP
+	hidden_uplink.job = "Nuclear Operative"
 
 /obj/item/device/multitool/uplink/New()
 	hidden_uplink = new(src)

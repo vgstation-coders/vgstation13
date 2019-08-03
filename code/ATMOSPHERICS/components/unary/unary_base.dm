@@ -4,7 +4,7 @@
 	layer = UNARY_PIPE_LAYER
 
 	var/datum/gas_mixture/air_contents
-	var/obj/machinery/atmospherics/node
+	var/obj/machinery/atmospherics/node1
 	var/datum/pipe_network/network
 
 /obj/machinery/atmospherics/unary/New()
@@ -24,7 +24,7 @@
 	layer = PIPING_LAYER(layer, piping_layer)
 
 /obj/machinery/atmospherics/unary/update_icon(var/adjacent_procd,node_list)
-	node_list = list(node)
+	node_list = list(node1)
 	..(adjacent_procd,node_list)
 
 
@@ -38,14 +38,27 @@
 	update_planes_and_layers()
 	initialize()
 	build_network()
-	if (node)
-		node.initialize()
-		node.build_network()
+	if (node1)
+		node1.initialize()
+		node1.build_network()
 	return 1
+
+//this is used when a machine_flags = WRENCHMOVE machine gets anchored down
+//we want to check that it doesn't form any connections where there is already a connection
+/obj/machinery/atmospherics/unary/wrenchAnchor(var/mob/user)
+	//this has to be first because ..() already starts the anchoring
+	if(!anchored)
+		for(var/obj/machinery/atmospherics/M in src.loc)
+			if(M == src || M.piping_layer != src.piping_layer && !(M.pipe_flags & ALL_LAYER))
+				continue
+			if(M.has_initialize_direction(dir, PIPE_TYPE_STANDARD))
+				to_chat(user, "<span class='warning'>There is already a pipe connection in that direction.</span>")
+				return FALSE
+	. = ..()
 
 // Housekeeping and pipe network stuff below
 /obj/machinery/atmospherics/unary/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
-	if(reference == node)
+	if(reference == node1)
 		network = new_network
 	if(new_network.normal_members.Find(src))
 		return 0
@@ -53,38 +66,30 @@
 	return null
 
 /obj/machinery/atmospherics/unary/Destroy()
-	if(node)
-		node.disconnect(src)
+	if(node1)
+		node1.disconnect(src)
 		if(network)
 			returnToPool(network)
-	node = null
+	node1 = null
 	..()
 
 /obj/machinery/atmospherics/unary/initialize()
-	if(node)
+	if(node1)
 		return
-	var/node_connect = dir
-	for(var/obj/machinery/atmospherics/target in get_step(src,node_connect))
-		if(target.initialize_directions & get_dir(target,src))
-			if(target.piping_layer == piping_layer || target.pipe_flags & ALL_LAYER)
-				node = target
-				break
+	findAllConnections(initialize_directions)
 	update_icon()
-
-	var/turf/T = loc
-	if (istype(T))
-		T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/unary/build_network()
-	if(!network && node)
+	if(!network && node1)
 		network = getFromPool(/datum/pipe_network)
 		network.normal_members += src
-		network.build_network(node, src)
+		network.build_network(node1, src)
 
 
 /obj/machinery/atmospherics/unary/return_network(obj/machinery/atmospherics/reference)
 	build_network()
-	if(reference == node || reference == src)
+	if(reference == node1 || reference == src)
 		return network
 	return null
 
@@ -100,10 +105,10 @@
 	return results
 
 /obj/machinery/atmospherics/unary/disconnect(obj/machinery/atmospherics/reference)
-	if(reference==node)
+	if(reference==node1)
 		if(network)
 			returnToPool(network)
-		node = null
+		node1 = null
 	return ..()
 
 /obj/machinery/atmospherics/unary/unassign_network(datum/pipe_network/reference)

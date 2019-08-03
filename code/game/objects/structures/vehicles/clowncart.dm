@@ -85,13 +85,14 @@
 		user.visible_message("<span class='notice'>[user] honks at [src].</span>", \
 		"<span class='notice'>You honk at [src].</span>", \
 		"<span class='notice'>You hear honking.</span>")
-		playsound(get_turf(src), W.hitsound, 50, 1)
+		playsound(src, W.hitsound, 50, 1)
 		if(reagents.get_reagent_amount(BANANA) <= 5 && max_health < HEALTH_FOR_FREE_MOVEMENT)
 			if(activated)
 				visible_message("<span class='warning'>[nick] lets out a last honk before running out of fuel and activating its ejection seat.</span>")
 				if(ishigherbeing(user)) //This shouldn't be needed, but fucks sakes
 					user.Knockdown(5)
-				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
+					user.Stun(5)
+				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 				activated = 0
 				reagents.remove_reagent(BANANA, 5)
 			else
@@ -100,7 +101,7 @@
 			spawn(5)
 				activated = 1
 				src.visible_message("<span class='notice'>[nick] honks back happily.</span>")
-				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
+				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 		honk = world.timeofday
 	else if(istype(W, /obj/item/weapon/reagent_containers))
 		if(feed(W,user))
@@ -160,7 +161,7 @@
 		ST.use(1)
 	else if(istype(W, /obj/item/weapon/coin/clown)) //Bananium coin
 		user.visible_message("<span class='warning'>[user] inserts a bananium coin into [src].</span>", "<span class='notice'>You insert a bananium coin into [src].</span>")
-		playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 1)
+		playsound(src, 'sound/machines/ping.ogg', 50, 1)
 		mode += 1
 		if(mode > 2) //only 3 modes, so when it raises above 2 reset to 0
 			mode = 0
@@ -168,7 +169,7 @@
 			if(MODE_NORMAL)
 				spawn(5)
 					visible_message("<span class='warning'>[src]'s SynthPeel Generator turns off with a buzz.</span>")
-					playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+					playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 1)
 			if(MODE_DRAWING)
 				visible_message("<span class='notice'>[src]'s SmartCrayon Mk.II deploys, ready to draw!</span>")
 				to_chat(user, {"<span class='notice'>Use a crayon to decide what you want to draw.<br>
@@ -176,9 +177,9 @@
 			if(MODE_PEELS)
 				visible_message("<span class='warning'>[src]'s SmartCrayon Mk.II disappears in a puff of art!</span>")
 				spawn(5)
-					playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 1)
+					playsound(src, 'sound/machines/ping.ogg', 50, 1)
 					visible_message("<span class='notice'>You hear a ping as [src]'s SynthPeel Generator starts transforming banana juice into slippery peels.</span>")
-					playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 1)
+					playsound(src, 'sound/machines/ping.ogg', 50, 1)
 		qdel(W)
 		W = null
 	else if(istype(W, /obj/item/toy/crayon/)) //Any crayon
@@ -202,7 +203,7 @@
 		if(max_health >= HEALTH_FOR_FLOWER_RECHARGE)
 			if(do_after(user, src, 5))
 				W.reagents.remove_any(10)
-				var/tmp/bananas = reagents.get_reagent_amount(BANANA)
+				var/bananas = reagents.get_reagent_amount(BANANA)
 				reagents.remove_reagent(BANANA, bananas) //removing banan so it doesn't get transferred into the water flower
 				if(reagents.total_volume >= 10)
 					visible_message("<span class='notice'>The HONKTech pump has recharged [W].</span>")
@@ -242,7 +243,11 @@
 				colour1 = "#1CA800"
 				colour2 = "#238E0E"
 				to_chat(user, "Selected color: Green Access")
-			else if(istype(W, /obj/item/weapon/stamp/hos))
+			else if(istype(W, /obj/item/weapon/stamp/iaa))
+				colour1 = "#004DCE"
+				colour2 = "#0BB5FF"
+				to_chat(user, "Selected color: Legal Blue")
+			else if(istype(W, /obj/item/weapon/stamp/hos) || istype(W, /obj/item/weapon/stamp/warden))
 				colour1 = "#7F4D21"
 				colour2 = "#B24611"
 				to_chat(user, "Selected color: Shitcurity Brown")
@@ -250,6 +255,10 @@
 				colour1 = "#D22EF7"
 				colour2 = "#D312E5"
 				to_chat(user, "Selected color: Plasma Purple")
+			else if(istype(W, /obj/item/weapon/stamp/chaplain))
+				colour1 = "#9B1C31"
+				colour2 = "#FFD700"
+				to_chat(user, "Selected color: Reverend Red")
 			else
 				colour1 = "#000000"
 				colour2 = "#6D6D6D"
@@ -259,6 +268,13 @@
 	if(user.incapacitated())
 		unlock_atom(user)
 		return
+	var/turf/T = get_turf(loc)
+	if(!T)
+		return 0
+	if(!T.has_gravity())
+		// Block relaymove() if needed.
+		if(!Process_Spacemove(0))
+			return 0
 	if(empstun > 0)
 		if(user && can_warn())
 			to_chat(user, "<span class='warning'>[src]'s banana essence battery has been shorted out.</span>")
@@ -269,6 +285,7 @@
 			unlock_atom(user)
 			activated = 0
 			user.Knockdown(5) //Only Weaken after unbuckling
+			user.Stun(5)
 		return
 	if(activated)
 		var/old_pos = get_turf(src)
@@ -296,9 +313,9 @@
 			to_chat(user, "<span class='notice'>You have to honk to be able to ride [src].</span>")
 
 /obj/structure/bed/chair/vehicle/clowncart/die()
-	density = 0
+	setDensity(FALSE)
 	visible_message("<span class='warning'>[nick] explodes in a puff of pure potassium!</span>")
-	playsound(get_turf(src), 'sound/items/bikehorn.ogg', 75, 1)
+	playsound(src, 'sound/items/bikehorn.ogg', 75, 1)
 	explosion(src.loc, -1, 0, 3, 7, 10)
 	for(var/a = 0, a < round(reagents.total_volume*0.25), a++) //Spawn banana peels in place of the cart
 		new /obj/item/weapon/bananapeel(get_turf(src)) // WHAT STUPID ASSHOLE MADE THESE TATORPEELS
@@ -317,10 +334,10 @@
 		return
 	reagents.remove_reagent(BANANA, BANANA_FOR_DRAWING)//"graffiti" and "rune" will draw graffiti and runes
 	if(printing_text == "graffiti" || printing_text == "rune") //"paint" will paint floor tiles with selected colour
-		new /obj/effect/decal/cleanable/crayon(pos, colour1, colour2, printing_text)
+		new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = printing_text)
 	else
 		if(printing_text == "paint")
-			var/tmp/turf/T = pos
+			var/turf/T = pos
 			var/ind = "[initial(T.icon)][colour1]"
 			if(!cached_icons[ind]) //shamelessly copied from paint.dm
 				var/icon/overlay = new/icon(initial(T.icon))
@@ -336,7 +353,7 @@
 				if(printing_pos >= 0)
 					printing_pos = -length(printing_text)-1 //indian code magic
 			printing_pos++
-			new /obj/effect/decal/cleanable/crayon(pos, colour1, colour2, copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
+			new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
 			if(printing_pos > length(printing_text) - 1 || printing_pos == - 1)
 				printing_text = ""
 				printing_pos = 0
@@ -359,7 +376,7 @@
 
 		reagents.add_reagent(BANANA, added_banana*modifier)
 		if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/pie))
-			playsound(get_turf(src), 'sound/effects/bubbles.ogg', 50, 1)
+			playsound(src, 'sound/effects/bubbles.ogg', 50, 1)
 			to_chat(user, "<span class='warning'>[W] starts boiling inside \the [src]!</span>")
 			trail+=5
 		return added_banana*modifier

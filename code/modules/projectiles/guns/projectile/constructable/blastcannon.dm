@@ -146,9 +146,9 @@
 				range = min(range, MAX_EXPLOSION_RANGE)
 			var/turf/epicenter = get_turf(loc)
 
-			var/transfer_moles1 = (bomb.tank_one.air_contents.return_pressure() * bomb.tank_one.air_contents.volume)/(bomb.tank_one.air_contents.temperature * R_IDEAL_GAS_EQUATION)
+			var/transfer_moles1 = (bomb.tank_one.air_contents.return_pressure() * bomb.tank_one.air_contents.volume) / (bomb.tank_one.air_contents.temperature * R_IDEAL_GAS_EQUATION)
 			bomb.tank_one.air_contents.remove(transfer_moles1)
-			var/transfer_moles2 = (bomb.tank_two.air_contents.return_pressure() * bomb.tank_two.air_contents.volume)/(bomb.tank_two.air_contents.temperature * R_IDEAL_GAS_EQUATION)
+			var/transfer_moles2 = (bomb.tank_two.air_contents.return_pressure() * bomb.tank_two.air_contents.volume) / (bomb.tank_two.air_contents.temperature * R_IDEAL_GAS_EQUATION)
 			bomb.tank_two.air_contents.remove(transfer_moles2)
 
 			bomb_air_contents_1 = null

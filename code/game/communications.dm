@@ -120,20 +120,20 @@ On the map:
 */
 
 var/list/radiochannels = list(
-	"Common" = 1459,
-	"AI Private" = 1447,
-	"Deathsquad" = 1441,
-	"Security" = 1359,
-	"Engineering" = 1357,
-	"Command" = 1353,
-	"Medical" = 1355,
-	"Science" = 1351,
-	"Service" = 1349,
-	"Supply" = 1347,
-	"Response Team" = 1345,
-	"Raider" = 1215,
-	"Syndicate" = 1213,
-	"DJ" = 1201
+	"Common" = COMMON_FREQ,
+	"AI Private" = AIPRIV_FREQ,
+	"Deathsquad" = DSQUAD_FREQ,
+	"Security" = SEC_FREQ,
+	"Engineering" = ENG_FREQ,
+	"Command" = COMM_FREQ,
+	"Medical" = MED_FREQ,
+	"Science" = SCI_FREQ,
+	"Service" = SERV_FREQ,
+	"Supply" = SUPP_FREQ,
+	"Response Team" = RESTEAM_FREQ,
+	"Raider" = RAID_FREQ,
+	"Syndicate" = SYND_FREQ,
+	"DJ" = DJ_FREQ
 )
 
 var/list/radiochannelsreverse = list(
@@ -153,6 +153,18 @@ var/list/radiochannelsreverse = list(
 	"1459" = "Common"
 )
 
+//Only the channels that someone in the main station should have access to normally.
+var/list/stationchannels = list(
+	"Common" = COMMON_FREQ,
+	"Security" = SEC_FREQ,
+	"Engineering" = ENG_FREQ,
+	"Command" = COMM_FREQ,
+	"Medical" = MED_FREQ,
+	"Science" = SCI_FREQ,
+	"Service" = SERV_FREQ,
+	"Supply" = SUPP_FREQ
+)
+
 
 //depenging helpers
 var/const/SUPP_FREQ = 1347 //supply, coloured light brown in chat window
@@ -167,6 +179,7 @@ var/const/COMMON_FREQ = 1459
 var/list/CENT_FREQS = list(1345, 1441)
 
 var/const/COMM_FREQ = 1353 //command, colored gold in chat window
+var/const/REV_FREQ  = 1211
 var/const/SYND_FREQ = 1213
 var/const/RAID_FREQ = 1215 // for raiders
 
@@ -184,13 +197,13 @@ var/const/SER_FREQ = 1349
 /* filters */
 var/const/RADIO_TO_AIRALARM = "1"
 var/const/RADIO_FROM_AIRALARM = "2"
-var/const/RADIO_CHAT = "3" //deprecated
+var/const/RADIO_CHAT = "3" //deskbells and remote signallers
 var/const/RADIO_ATMOSIA = "4"
 var/const/RADIO_NAVBEACONS = "5"
 var/const/RADIO_AIRLOCK = "6"
 var/const/RADIO_SECBOT = "7"
 var/const/RADIO_MULEBOT = "8"
-var/const/RADIO_MAGNETS = "9"
+var/const/RADIO_MAGNETS = "9" //for the firing range "magnet" target mover
 var/const/RADIO_CONVEYORS = "10"
 
 var/global/datum/controller/radio/radio_controller
@@ -386,4 +399,4 @@ var/list/pointers = list()
 	for(var/d in data)
 		var/val = data[d]
 		if(istext(val))
-			data[d] = strip_html_simple(val)
+			data[d] = utf8_sanitize(val)

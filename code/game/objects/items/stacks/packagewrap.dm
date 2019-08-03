@@ -20,7 +20,7 @@
 		/obj/item/delivery,
 		/obj/item/weapon/gift,
 		/obj/item/weapon/winter_gift,
-		/obj/item/weapon/evidencebag,
+		/obj/item/weapon/storage/evidencebag,
 		/obj/item/weapon/legcuffs/bolas,
 		/obj/item/weapon/storage
 		)
@@ -48,7 +48,7 @@
 	if(!istype(target))
 		return
 
-	user.attack_log += "\[[time_stamp()]\] <font color='blue'>Has used [src.name] on \ref[target]</font>"
+	user.attack_log += "\[[time_stamp()]\] <span class='notice'>Has used [src.name] on \ref[target]</span>"
 	target.add_fingerprint(user)
 	src.add_fingerprint(user)
 
@@ -140,9 +140,8 @@
 
 /obj/item/delivery/attack_self(mob/user as mob)
 	user.drop_item(src, user.loc)
-	if(contents.len)
-		if(ishuman(user))
-			user.put_in_hands(contents[1])
+	for(var/obj/item/I in contents)
+		user.put_in_hands(I) //if it fails, it'll drop on the ground. simple
 	qdel(src)
 
 /obj/item/delivery/attackby(obj/item/W as obj, mob/user as mob)
@@ -156,7 +155,7 @@
 			var/tag = uppertext(O.destinations[O.currTag])
 			to_chat(user, "<span class='notice'>*[tag]*</span>")
 			sortTag = tag
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
 			overlays = 0
 			overlays += image(icon = icon, icon_state = "deliverytag")
 			src.desc = "A small wrapped package. It has a label reading [tag]"
@@ -196,7 +195,8 @@
 	return attack_hand(user)
 
 /obj/item/delivery/large/attack_hand(mob/user as mob)
-	qdel(src)
+	if(!is_holder_of(src, user))
+		qdel(src)
 
 /obj/item/delivery/large/attack_robot(mob/user)
 	if(!Adjacent(user))

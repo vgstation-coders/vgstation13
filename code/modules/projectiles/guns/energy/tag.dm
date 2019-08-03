@@ -26,7 +26,7 @@
 	return TRUE
 
 /obj/item/weapon/gun/energy/tag/proc/score()
-    playsound(get_turf(src), 'sound/weapons/quake.ogg', 60)
+    playsound(src, 'sound/weapons/quake.ogg', 60)
     score++
 
 /obj/item/weapon/gun/energy/tag/examine(mob/user)

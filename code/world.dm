@@ -7,14 +7,11 @@
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
-#define RECOMMENDED_VERSION 511
+#define RECOMMENDED_VERSION 512
 
 
 var/savefile/panicfile
 /world/New()
-	//populate_seed_list()
-	plant_controller = new()
-
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
@@ -63,11 +60,8 @@ var/savefile/panicfile
  * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
  */
 #ifdef BORDER_USE_TURF_EXIT
-	if(byond_version < 510)
-		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 507.1248 or comment BORDER_USE_TURF_EXIT in global.dm")
-#elif
 	if(byond_version < RECOMMENDED_VERSION)
-		world.log << "Your server's byond version does not meet the recommended requirements for this code. Please update BYOND"
+		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 512.1426")
 #endif
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
@@ -103,6 +97,12 @@ var/savefile/panicfile
 
 	paperwork_setup()
 
+	global_deadchat_listeners = list()
+
+	initialize_runesets()
+
+	initialize_beespecies()
+
 	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()
@@ -136,18 +136,12 @@ var/savefile/panicfile
 
 	src.update_status()
 
-	sleep_offline = 1
+	sleep_offline = 0
 
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
-	spawn(10)
-		Master.Setup()
-
-	for(var/plugin_type in typesof(/plugin))
-		var/plugin/P = new plugin_type()
-		plugins[P.name] = P
-		P.on_world_loaded()
+	Master.Setup()
 
 	process_teleport_locs()				//Sets up the wizard teleport locations
 	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
@@ -161,7 +155,6 @@ var/savefile/panicfile
 			KickInactiveClients()*/
 
 #undef RECOMMENDED_VERSION
-
 	return ..()
 
 //world/Topic(href, href_list[])
@@ -233,6 +226,7 @@ var/savefile/panicfile
 
 
 /world/Reboot(reason)
+	testing("[time_stamp()] - World is rebooting. Reason: [reason]")
 	if(reason == REBOOT_HOST)
 		if(usr)
 			if (!check_rights(R_SERVER))
@@ -249,8 +243,6 @@ var/savefile/panicfile
 		..()
 		return
 
-	for(var/datum/html_interface/D in html_interfaces)
-		D.closeAll()
 	if(config.map_voting)
 		//testing("we have done a map vote")
 		if(fexists(vote.chosen_map))
@@ -273,29 +265,26 @@ var/savefile/panicfile
 				fcopy(vote.chosen_map, filename)
 			sleep(60)
 
+	pre_shutdown()
+
+	..()
+
+/world/proc/pre_shutdown()
+	for(var/datum/html_interface/D in html_interfaces)
+		D.closeAll()
+
 	Master.Shutdown()
 	paperwork_stop()
 
-	spawn()
-		world << sound(pick(
-			'sound/AI/newroundsexy.ogg',
-			'sound/misc/RoundEndSounds/apcdestroyed.ogg',
-			'sound/misc/RoundEndSounds/bangindonk.ogg',
-			'sound/misc/RoundEndSounds/slugmissioncomplete.ogg',
-			'sound/misc/RoundEndSounds/bayojingle.ogg',
-			'sound/misc/RoundEndSounds/gameoveryeah.ogg',
-			'sound/misc/RoundEndSounds/rayman.ogg',
-			'sound/misc/RoundEndSounds/marioworld.ogg',
-			'sound/misc/RoundEndSounds/soniclevelcomplete.ogg',
-			'sound/misc/RoundEndSounds/calamitytrigger.ogg',
-			'sound/misc/RoundEndSounds/duckgame.ogg',
-			'sound/misc/RoundEndSounds/FTLvictory.ogg',
-			'sound/misc/RoundEndSounds/tfvictory.ogg',
-			'sound/misc/RoundEndSounds/megamanX.ogg',
-			'sound/misc/RoundEndSounds/castlevania.ogg',
-			)) // random end sounds!! - LastyBatsy
+	stop_all_media()
 
-	sleep(5)//should fix the issue of players not hearing the restart sound.
+	end_credits.on_world_reboot_start()
+	testing("[time_stamp()] - World reboot is now sleeping.")
+
+	sleep(max(10, end_credits.audio_post_delay))
+
+	testing("[time_stamp()] - World reboot is done sleeping.")
+	end_credits.on_world_reboot_end()
 
 	for(var/client/C in clients)
 		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
@@ -303,10 +292,6 @@ var/savefile/panicfile
 
 		else
 			C << link("byond://[world.address]:[world.port]")
-
-
-	..()
-
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()

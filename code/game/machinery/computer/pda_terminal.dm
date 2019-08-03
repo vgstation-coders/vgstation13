@@ -143,7 +143,7 @@
 					return
 
 				if(istype(usr, /mob/living))
-					var/obj/item/weapon/card/card = usr.get_id_card()
+					var/obj/item/weapon/card/card = usr.get_card()
 
 					if(!card && pda_device)
 						card = pda_device.id
@@ -161,7 +161,7 @@
 
 		if ("new_pda")
 			if(istype(usr, /mob/living))
-				var/obj/item/weapon/card/card = usr.get_id_card()
+				var/obj/item/weapon/card/card = usr.get_card()
 
 				if(!card && pda_device)
 					card = pda_device.id
@@ -195,62 +195,11 @@
 			to_chat(user, "[bicon(src)]<span class='warning'>Unable to connect to accounts database.</span>")
 	return	0
 
-/obj/machinery/computer/pda_terminal/scan_card(var/mob/user,var/obj/item/weapon/card/id/C,var/datum/pda_app/appdatum)
+/obj/machinery/computer/pda_terminal/scan_card(var/mob/user,var/obj/item/weapon/card/C,var/datum/pda_app/appdatum)
 	if(istype(C))
-		to_chat(user, "<span class='info'>\the [src] detects and scans the following ID: [C].</span>")
 		if(linked_account)
-			//we start by checking the ID card's virtual wallet
-			var/datum/money_account/D = C.virtual_wallet
-			var/using_account = "Virtual Wallet"
-
-			//if there isn't one for some reason we create it, that should never happen but oh well.
-			if(!D)
-				C.update_virtual_wallet()
-				D = C.virtual_wallet
-
-			var/transaction_amount = (appdatum ? appdatum.price : 100)//if appdatum == 0, that means we're purchasing a new PDA.
-
-			//if there isn't enough money in the virtual wallet, then we check the bank account connected to the ID
-			if(D.money < transaction_amount)
-				D = linked_db.attempt_account_access(C.associated_account_number, 0, 2, 0)
-				using_account = "Bank Account"
-				if(!D)								//first we check if there IS a bank account in the first place
-					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
-					to_chat(usr, "[bicon(src)]<span class='warning'>Unable to access your bank account.</span>")
-					return 0
-				else if(D.security_level > 0)		//next we check if the security is low enough to pay directly from it
-					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
-					to_chat(usr, "[bicon(src)]<span class='warning'>Lower your bank account's security settings if you wish to pay directly from it.</span>")
-					return 0
-				else if(D.money < transaction_amount)//and lastly we check if there's enough money on it, duh
-					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your bank account!</span>")
-					return 0
-
-			//transfer the money
-			D.money -= transaction_amount
-			linked_account.money += transaction_amount
-
-			to_chat(usr, "[bicon(src)]<span class='notice'>Remaining balance ([using_account]): [D.money]$</span>")
-
-			//create an entry on the buy's account's transaction log
-			var/datum/transaction/T = new()
-			T.target_name = "[linked_account.owner_name] (via [src.name])"
-			T.purpose = "Purchase of [appdatum ? "[appdatum.name]" : "a new PDA"]"
-			T.amount = "-[transaction_amount]"
-			T.source_terminal = machine_id
-			T.date = current_date_string
-			T.time = worldtime2text()
-			D.transaction_log.Add(T)
-
-			//and another entry on the vending machine's vendor account's transaction log
-			T = new()
-			T.target_name = D.owner_name
-			T.purpose = "Purchase of [appdatum ? "[appdatum.name]" : "a new PDA"]"
-			T.amount = "[transaction_amount]"
-			T.source_terminal = machine_id
-			T.date = current_date_string
-			T.time = worldtime2text()
-			linked_account.transaction_log.Add(T)
+			if(charge_flow(linked_db, C, user, (appdatum ? appdatum.price : 100) /* New PDA if no appdatum */, linked_account, "Purchase of [appdatum ? "[appdatum.name]" : "a new PDA"]", machine_id) != CARD_CAPTURE_SUCCESS)
+				return 0
 			return 1
 		else
 			to_chat(usr, "[bicon(src)]<span class='warning'>EFTPOS is not connected to an account.</span>")

@@ -1,0 +1,211 @@
+"aa" = (/obj/effect/step_trigger/teleporter/random/shuttle_transit,/turf/space/transit/east,/area)
+"ab" = (/turf/space/transit/east,/area)
+"ac" = (/obj/effect/step_trigger/thrower{tag = "icon-arrows (WEST)"; icon_state = "arrows"; dir = 8},/turf/space/transit/east,/area)
+"ad" = (/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"ae" = (/obj/effect/step_trigger/thrower{tag = "icon-arrows (NORTH)"; icon_state = "arrows"; dir = 1},/turf/space/transit/east,/area)
+"af" = (/obj/structure/sign/chemtable,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"ag" = (/obj/machinery/power/magtape_deck,/obj/structure/cable{icon_state = "0-2"; pixel_y = 1; d2 = 2},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"ah" = (/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"ai" = (/obj/machinery/portable_atmospherics/canister/air,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aj" = (/obj/abstract/map/spawner/engi/machinery,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"ak" = (/obj/machinery/vending/medical,/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"al" = (/obj/structure/bookcase/manuals/medical,/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"am" = (/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"an" = (/obj/structure/table/glass,/obj/item/weapon/gun/syringe/rapidsyringe,/obj/abstract/map/spawner/medical/drugs,/obj/abstract/map/spawner/medical/pills,/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"ao" = (/obj/structure/table/glass,/obj/abstract/map/spawner/medical/drugs,/obj/abstract/map/spawner/medical/pills,/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"ap" = (/obj/structure/table/glass,/obj/item/weapon/storage/firstaid/adv,/obj/item/weapon/reagent_containers/glass/beaker/large,/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"aq" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/machinery/light/small{tag = "icon-lbulb1 (WEST)"; icon_state = "lbulb1"; dir = 8},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"ar" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_x = 0},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"as" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_x = 0},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"at" = (/obj/machinery/door/airlock/vault,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_x = 0},/obj/structure/window/barricade/full/block,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"au" = (/obj/abstract/map/spawner/engi/dispensers,/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"av" = (/obj/machinery/vending/engineering,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aw" = (/obj/structure/table/glass,/obj/abstract/map/spawner/medical/pills,/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"ax" = (/obj/machinery/chem_dispenser,/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"ay" = (/obj/machinery/power/magtape_deck,/obj/structure/cable,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"az" = (/obj/structure/closet/crate/secure/plasma/prefilled,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aA" = (/obj/abstract/map/spawner/robot/floor,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aB" = (/turf/simulated/floor/engine,/area/vault/spy_sat/deployment)
+"aC" = (/obj/machinery/vaporizer,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aD" = (/obj/structure/table/glass,/obj/item/weapon/storage/firstaid/toxin,/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"aE" = (/obj/machinery/chem_master,/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"aF" = (/obj/abstract/map/spawner/engi/dispensers,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aG" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor/engine,/area/vault/spy_sat/deployment)
+"aH" = (/obj/machinery/power/port_gen/pacman,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/engine,/area/vault/spy_sat/deployment)
+"aI" = (/obj/machinery/light{dir = 4},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aJ" = (/obj/structure/sign/nosmoking_2,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"aK" = (/obj/structure/closet/secure_closet/animal,/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"aL" = (/obj/machinery/vending/discount,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aM" = (/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aN" = (/obj/machinery/vending/coffee,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aO" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aP" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor/engine,/area/vault/spy_sat/deployment)
+"aQ" = (/obj/structure/sign/directions/medical{tag = "icon-direction_med (NORTH)"; icon_state = "direction_med"; dir = 1},/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"aR" = (/obj/machinery/door/airlock/glass_medical{id_tag = "MedbayFoyerR"; name = "Medbay"; req_access_txt = "5"},/turf/simulated/floor{icon_state = "white"},/area/vault/spy_sat/deployment)
+"aS" = (/obj/machinery/power/battery/smes/vault_listening,/obj/structure/cable{icon_state = "0-2"; pixel_y = 1; d2 = 2},/obj/structure/cable,/obj/machinery/light{dir = 8},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aT" = (/obj/machinery/power/terminal{dir = 8},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aU" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aV" = (/obj/machinery/vending/tool,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aW" = (/obj/structure/sign/vacuum,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"aX" = (/obj/machinery/door_control/satellite_deployment,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"aY" = (/obj/machinery/light/small{tag = "icon-lbulb1 (WEST)"; icon_state = "lbulb1"; dir = 8},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"aZ" = (/obj/machinery/door/airlock,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"ba" = (/obj/machinery/power/apc{dir = 8; pixel_x = -24},/obj/machinery/power/terminal{dir = 8},/obj/structure/cable,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bb" = (/obj/effect/decal/cleanable/ash,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bc" = (/obj/machinery/door/poddoor/preopen/satellite_deployment,/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
+"bd" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
+"be" = (/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
+"bf" = (/obj/machinery/door/poddoor/satellite_deployment,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bg" = (/obj/structure/sign/directions/engineering{tag = "icon-direction_eng (EAST)"; icon_state = "direction_eng"; dir = 4},/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"bh" = (/obj/machinery/door/airlock/engineering,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bi" = (/obj/structure/table/reinforced,/obj/abstract/map/spawner/engi/materials,/obj/abstract/map/spawner/assistant/tools,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bj" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/toolbox/syndicate,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bk" = (/obj/structure/table/reinforced,/obj/abstract/map/spawner/engi/materials,/obj/item/weapon/storage/box/inflatables,/obj/abstract/map/spawner/assistant/tools,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bl" = (/obj/effect/step_trigger/thrower{tag = "icon-arrows (EAST)"; icon_state = "arrows"; dir = 4},/turf/space/transit/east,/area)
+"bm" = (/obj/item/trash/cigbutt,/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
+"bn" = (/obj/structure/spacepod_frame/unarmored,/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
+"bo" = (/obj/structure/painting/random,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"bp" = (/obj/machinery/light/small{tag = "icon-lbulb1 (EAST)"; icon_state = "lbulb1"; dir = 4},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bq" = (/obj/effect/landmark/corpse/engineer,/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
+"br" = (/obj/effect/step_trigger/thrower,/turf/space/transit/east,/area)
+"bs" = (/obj/item/weapon/storage/fancy/cigarettes,/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
+"bt" = (/obj/structure/punching_bag/captain,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor{icon_state = "dark vault stripe"; dir = 4},/area/vault/spy_sat/deployment)
+"bu" = (/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/spy_sat/deployment)
+"bv" = (/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/vault/spy_sat/deployment)
+"bw" = (/obj/machinery/washing_machine,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/vault/spy_sat/deployment)
+"bx" = (/obj/structure/mopbucket,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"by" = (/obj/machinery/light/small{tag = "icon-lbulb1 (NORTH)"; icon_state = "lbulb1"; dir = 1},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bz" = (/obj/structure/closet/l3closet/janitor,/obj/item/weapon/storage/box/nt_disguise_kit,/obj/item/weapon/storage/box/lights/mixed,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bA" = (/obj/structure/punching_bag/clown,/turf/simulated/floor{icon_state = "dark vault stripe"; dir = 4},/area/vault/spy_sat/deployment)
+"bB" = (/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/spy_sat/deployment)
+"bC" = (/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/vault/spy_sat/deployment)
+"bD" = (/obj/machinery/washing_machine,/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/vault/spy_sat/deployment)
+"bE" = (/obj/machinery/cooking/deepfryer,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"bF" = (/obj/abstract/map/spawner/engi/dispensers,/obj/abstract/map/spawner/engi/materials,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"bG" = (/obj/item/pod_parts/armor/taxi,/obj/structure/table/reinforced,/obj/machinery/light{dir = 8},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bH" = (/mob/living/simple_animal/hostile/humanoid/janitor,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bI" = (/obj/item/weapon/reagent_containers/glass/bucket,/obj/structure/table,/obj/item/weapon/mop,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bJ" = (/obj/item/weapon/reagent_containers/food/snacks/stew,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"bK" = (/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"bL" = (/obj/effect/decal/cleanable/blood{tag = "icon-floor7-old"; icon_state = "floor7-old"},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"bM" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"bN" = (/obj/item/pod_parts/core,/obj/structure/table/reinforced,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bO" = (/obj/structure/reagent_dispensers/watertank,/obj/item/weapon/paper_bin,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bP" = (/turf/simulated/floor/wood,/area/vault/spy_sat/deployment)
+"bQ" = (/obj/item/weapon/gun/projectile/pistol,/turf/simulated/floor/wood,/area/vault/spy_sat/deployment)
+"bR" = (/obj/machinery/vending/autodrobe,/turf/simulated/floor/wood,/area/vault/spy_sat/deployment)
+"bS" = (/obj/effect/decal/cleanable/blood{tag = "icon-floor6-old"; icon_state = "floor6-old"},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"bT" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/soylenviridians,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"bU" = (/obj/structure/table/reinforced,/obj/abstract/map/spawner/engi/materials,/obj/item/weapon/circuitboard/mecha/pod,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bV" = (/obj/machinery/r_n_d/fabricator/pod,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bW" = (/obj/structure/rack,/obj/item/weapon/storage/toolbox/electrical,/obj/item/weapon/storage/toolbox/syndicate,/obj/item/clothing/glasses/welding,/obj/machinery/light,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bX" = (/obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"bY" = (/obj/structure/noticeboard,/obj/item/weapon/paper/satellite_deployment/space_saving,/obj/item/weapon/paper/satellite_deployment/no_smoking,/obj/item/weapon/paper/satellite_deployment/further_complaints,/obj/item/weapon/paper/satellite_deployment/complaints_reply,/obj/item/weapon/paper/satellite_deployment/complaints,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"bZ" = (/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"ca" = (/obj/machinery/door/airlock,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"cb" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/sundae,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"cc" = (/obj/machinery/vending/groans,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cd" = (/obj/machinery/light{dir = 8},/turf/simulated/floor/wood,/area/vault/spy_sat/deployment)
+"ce" = (/obj/structure/bed/chair{tag = "icon-chair (EAST)"; icon_state = "chair"; dir = 4},/mob/living/simple_animal/hostile/humanoid/pilot,/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"cf" = (/obj/structure/table/glass,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/cola,/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"cg" = (/obj/structure/table/glass,/obj/item/weapon/reagent_containers/food/snacks/poissoncru,/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"ch" = (/obj/structure/bed/chair{tag = "icon-chair (WEST)"; icon_state = "chair"; dir = 8},/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"ci" = (/obj/structure/table,/obj/item/weapon/storage/box/donkpockets/random_amount,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"cj" = (/obj/effect/decal/cleanable/blood/stattrack,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"ck" = (/obj/structure/table,/obj/item/weapon/kitchen/utensil/knife/large/butch,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"cl" = (/obj/machinery/chem_dispenser/soda_dispenser/mapping,/obj/structure/table/glass,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cm" = (/obj/structure/bed/chair{tag = "icon-chair (EAST)"; icon_state = "chair"; dir = 4},/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"cn" = (/obj/structure/table/glass,/obj/abstract/map/spawner/space/drinks,/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"co" = (/obj/structure/table/glass,/obj/item/weapon/reagent_containers/food/snacks/syndicake,/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"cp" = (/obj/structure/table,/obj/machinery/microwave,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"cq" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/sliceable/turkey,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"cr" = (/obj/structure/table/glass,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cs" = (/obj/machinery/door/airlock,/turf/simulated/floor/wood,/area/vault/spy_sat/deployment)
+"ct" = (/obj/structure/table/glass,/obj/item/weapon/reagent_containers/food/snacks/risotto,/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"cu" = (/obj/structure/table/glass,/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"cv" = (/obj/structure/table,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"cw" = (/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"cx" = (/obj/machinery/vending/cigarette,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cy" = (/obj/structure/table/glass,/obj/item/ashtray/plastic,/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"cz" = (/obj/structure/bed/chair{tag = "icon-chair (WEST)"; icon_state = "chair"; dir = 8},/mob/living/simple_animal/hostile/humanoid/pilot,/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
+"cA" = (/obj/effect/decal/cleanable/blood{tag = "icon-floor5-old"; icon_state = "floor5-old"},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"cB" = (/obj/machinery/vending/dinnerware,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
+"cC" = (/obj/machinery/light,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cD" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/dispenser/oxygen,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cE" = (/obj/structure/window/reinforced{dir = 4},/obj/machinery/suit_storage_unit,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cF" = (/obj/machinery/door/airlock/freezer,/obj/effect/decal/cleanable/blood/stattrack,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cG" = (/obj/machinery/door/airlock/external,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cH" = (/obj/structure/reagent_dispensers/water_cooler,/turf/simulated/floor/wood,/area/vault/spy_sat/deployment)
+"cI" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cJ" = (/obj/effect/decal/cleanable/blood/stattrack,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cK" = (/obj/structure/closet/secure_closet/freezer/meat,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cL" = (/obj/machinery/shower{dir = 4},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cM" = (/obj/structure/closet/walllocker/emerglocker/east,/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cN" = (/obj/structure/table/holotable/wood,/obj/item/weapon/reagent_containers/glass/kettle/red,/turf/simulated/floor/wood,/area/vault/spy_sat/deployment)
+"cO" = (/obj/structure/table/holotable/wood,/obj/machinery/chem_dispenser/brewer/mapping,/turf/simulated/floor/wood,/area/vault/spy_sat/deployment)
+"cP" = (/obj/structure/table/holotable/wood,/obj/item/weapon/reagent_containers/food/drinks/tea,/obj/item/weapon/storage/box/mugs,/obj/machinery/light,/turf/simulated/floor/wood,/area/vault/spy_sat/deployment)
+"cQ" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake,/obj/machinery/light{dir = 8},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cR" = (/mob/living/simple_animal/hostile/humanoid/chef,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cS" = (/obj/structure/closet/secure_closet/freezer/kitchen/mining,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cT" = (/obj/item/weapon/storage/firstaid/o2,/obj/structure/table/reinforced,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cU" = (/obj/structure/reagent_dispensers/beerkeg,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cV" = (/obj/item/weapon/reagent_containers/food/snacks/sweet/strange,/obj/effect/landmark/corpse/mutilated,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cW" = (/obj/structure/closet/secure_closet/freezer/fridge,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cX" = (/obj/machinery/door/airlock/external,/obj/docking_port/destination/vault/satellite_deployment{tag = "icon-docking_station"; icon_state = "docking_station"; dir = 2},/turf/simulated/floor,/area/vault/spy_sat/deployment)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaabababababababababababababababababababababababababababababababababacacacacacacabababababababababababababaa
+aaababababababababababababababababababababababababababacacacacacacacacadadadadadaeacabababababababababababaa
+aaababababababababababababababababababababababababacacacadadadadadadadadadadadadadaeacababababababababababaa
+aaababababababababababababababababababacacacacacacacadadadadadadadadadadadadadadadadaeacabababababababababaa
+aaabababababababababababababababacacacacadadadadadadadadadadadadadadadadadadadadadadadaeabababababababababaa
+aaababababababababababababababacacadadadadadafadadadadadadagagagagahadadaiaiajajajadadaeabababababababababaa
+aaababababababababababababababacadadadadakalamanaoapadadadaqarararasatauahahahahahavadaeacababababababababaa
+aaabababababababababababababacacadadadawamamamamamamaxadadayayayayahadazahahaAaBahaCadadaeababababababababaa
+aaababababababababababacacacacadadadadaDamamamamamamaEadadadadadadadadaFahahaGaHaBaIadadaeacabababababababaa
+aaabababababababababacacadadadadadadadaJamamamaKamamadadaLaMahaNadadaJaOahahaPaHaBahadadadaeabababababababaa
+aaababababababababacacadadadadadadadadadadadadadaQaRadahahahahahahadadaSaTasaUaBahaVadadadaeabababababababaa
+aaababababababababacadadaWadadadadadadadaXaWadadaYahaZahahahahahahadadbaahahahahahbbadadadaeabababababababaa
+aaababababababababacbcbcbdbebebebebdbebfahaMahaZahadadahahahahahahbgadbhadahbibjbibkadadblaeabababababababaa
+aaababababababababacbcbcbebebebebmbnbebfahahahadadadboahahahahahahbhahbpadadadadadadadadblaeabababababababaa
+aaababababababababacbcbcbebebebebebqbebfadadadadadadadahahahahahaIadadadadadadadadadadadblbrabababababababaa
+aaababababababababacbcbcbebebebsbebebeaJadadadadaJadadadbtbuahbvbwadadadadadadadadadadadblbrabababababababaa
+aaabababababababacacadadbfbfbfbfbfbfbfadadadadbxbybzadadbAbBahbCbDadadadadbEbFadadadadadadbrabababababababaa
+aaabababababababacadadadbGahahahahahahaZaMahaZahbHbIadadadadaZadadaJadadbJbKbLbMadadadadadbrabababababababaa
+aaabababababababacadadadbNahahahahahahadahadadadbOadadadadbPbPbPbPbQbRadbKbSbKbTaJadadadadbrabababababababaa
+aaabababababababacadadadadbUbVbWbVbXadaJaZadadadadadadadbYbPbPbZbZbPbPcabKbKbKcbadadadadadbrabababababababaa
+aaabababababababacadadadadadadadadadadahahahaMahccadadadadcdcecfcgchbPadcibKcjckadadadadadbrabababababababaa
+aaabababababababacadadadadadadadadadclahahahahahahahahahadbPcmcncochbPadcpbLcjcqadadadadadbrabababababababaa
+aaabababababababacadadadadadadadadadcrahahahahahahahahahcsbPcmctcuchbPadcvbKcjcwadadadadadbrabababababababaa
+aaabababababababacacadadadadadadadadcxahahahahahahahahaIadbPcmcucyczbPadcpcAcjcBadadadadadbrabababababababaa
+aaababababababababacadadadadadadadadadahcCcDahcEahahadadadbPbPbZbZbPbPadadadcFadadadadadbracabababababababaa
+aaababababababababacadadadadadadadadadadadadcGadadadadadaJbPbPbPbPbPcHadcIahcJcKadadadadbrababababababababaa
+aaababababababababacadadadadadadadadadadadcLahcMadadadadadadcNcOcPadadadcQahcRcSaJadadbracababababababababaa
+aaababababababababacadadadadadadadadadadadcLahcTadadadadadadadadadadadadcUcVcWadadadbracabababababababababaa
+aaababababababababacacadadadadadadadadadadadcXadadadadadadadadadadadadadadadadadbracacababababababababababaa
+aaabababababababababacadadbracacacacacacacacacacacacacacacacadadadbracacacacacacacababababababababababababaa
+aaabababababababababacadadbrabababababababababababababababacadadbracabababababababababababababababababababaa
+aaabababababababababacacadbrababababababababababababababacacadbracababababababababababababababababababababaa
+aaababababababababababacacacababababababababababababababacadadbrabababababababababababababababababababababaa
+aaabababababababababababababababababababababababababababacadbracabababababababababababababababababababababaa
+aaabababababababababababababababababababababababababababacacacababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaababababababababababababababababababababababababababababababababababababababababababababababababababababaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"}

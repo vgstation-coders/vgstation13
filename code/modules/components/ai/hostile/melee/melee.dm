@@ -1,4 +1,4 @@
-
+/datum/component/ai/melee
 
 /datum/component/ai/melee/RecieveSignal(var/message_type, var/list/args)
 	switch(message_type)

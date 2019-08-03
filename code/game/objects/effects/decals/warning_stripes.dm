@@ -5,6 +5,8 @@
 	. = ..()
 	var/turf/T=get_turf(src)
 	var/image/I=image(icon, icon_state = icon_state, dir = dir)
+	I.pixel_x = pixel_x
+	I.pixel_y = pixel_y
 	I.color=color
 	T.AddDecal(I)
 	qdel(src)

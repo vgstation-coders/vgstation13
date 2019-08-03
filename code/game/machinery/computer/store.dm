@@ -20,11 +20,16 @@
 			),
 		"Electronics" = list(
 			/datum/storeitem/boombox,
+			/datum/storeitem/diskettebox,
+			/datum/storeitem/diskettebox_large,
 			),
 		"Toys" = list(
 			/datum/storeitem/beachball,
 			/datum/storeitem/snap_pops,
 			/datum/storeitem/crayons,
+			///datum/storeitem/dorkcube,
+			/datum/storeitem/unecards,
+			/datum/storeitem/roganbot,
 			),
 		"Clothing" = list(
 			/datum/storeitem/robotnik_labcoat,
@@ -39,7 +44,7 @@
 
 /obj/machinery/computer/merch/New()
 	..()
-	if(time2text(world.realtime, "MM/DD") == "02/14")
+	if(Holiday == VALENTINES_DAY)
 		var/valentines = list("Valentine's Day" = list(/datum/storeitem/valentinechocolatebar,),)
 		categories += valentines
 
@@ -62,9 +67,9 @@
 	src.interface = new/datum/html_interface/nanotrasen(src, src.name, 800, 700, head)
 	html_machines += src
 
-	init_ui()
+	refresh_ui()
 
-/obj/machinery/computer/merch/proc/init_ui()
+/obj/machinery/computer/merch/proc/refresh_ui()
 
 	var/dat = {"<tbody id="StoreTable">"}
 
@@ -75,11 +80,7 @@
 			<th><h2>[category_name]</h2></th>
 			"}
 		for(var/store_item in category_items)
-			var/datum/storeitem/SI = new store_item()
-			dat += {"
-				<tr><td><A href='?src=\ref[src];choice=buy;chosen_item=[store_item]'>[get_display_name(SI)]</A></td></tr>
-				<tr><td><i>[SI.desc]</i></td></tr>
-				"}
+			dat += make_div(store_item)
 
 		dat += "</table>"
 
@@ -107,8 +108,17 @@
 	src.add_hiddenprint(user)
 	return attack_hand(user)
 
-/obj/machinery/computer/merch/proc/get_display_name(var/datum/storeitem/storeitem)
-	return "[storeitem.name] ([!(storeitem.cost) ? "free" : "[storeitem.cost]$"])"
+/obj/machinery/computer/merch/proc/make_div(var/store_ID)
+	var/datum/storeitem/SI = centcomm_store.items["[store_ID]"]
+	if(SI.stock == 0)
+		return "<tr><td><i>[SI.name] (SOLD OUT)</i></td></tr>"
+	else
+		. = "<tr><td><A href='?src=\ref[src];choice=buy;chosen_item=[store_ID]'>[SI.name] ([!(SI.cost) ? "free" : "[SI.cost]$"])"
+		if(SI.stock != -1)
+			. += " ([SI.stock] left!)"
+		. += "</A></td></tr>"
+
+		. += "<tr><td><i>[SI.desc]</i></td></tr>"
 
 /obj/machinery/computer/merch/attack_hand(var/mob/user)
 	. = ..()
@@ -116,6 +126,7 @@
 		interface.hide(user)
 		return
 
+	refresh_ui()
 	interact(user)
 
 /obj/machinery/computer/merch/interact(mob/user)
@@ -140,7 +151,7 @@
 			else
 				to_chat(usr, "[bicon(src)]<span class='notice'>Transaction complete! Enjoy your product.</span>")
 
-	src.updateUsrDialog()
+	src.refresh_ui()
 	return
 
 /obj/machinery/computer/merch/update_icon()

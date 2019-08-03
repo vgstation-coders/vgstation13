@@ -41,7 +41,6 @@ var/CHAVBLOCK = 0
 var/SWEDEBLOCK = 0
 var/SCRAMBLEBLOCK = 0
 var/TOXICFARTBLOCK = 0
-var/STRONGBLOCK = 0
 var/HORNSBLOCK = 0
 var/SMILEBLOCK = 0
 var/ELVISBLOCK = 0
@@ -49,6 +48,7 @@ var/ELVISBLOCK = 0
 // Powers
 var/SOBERBLOCK = 0
 var/PSYRESISTBLOCK = 0
+var/STRONGBLOCK = 0
 //var/SHADOWBLOCK = 0
 var/FARSIGHTBLOCK = 0
 var/CHAMELEONBLOCK = 0
@@ -69,6 +69,9 @@ var/WHISPERBLOCK = 0
 var/DIZZYBLOCK = 0
 var/SANSBLOCK = 0
 var/NOIRBLOCK = 0
+var/VEGANBLOCK = 0
+var/ASTHMABLOCK = 0
+var/LACTOSEBLOCK = 0
 
 
 /proc/getAssignedBlock(var/name,var/list/blocksLeft, var/activity_bounds=DNA_DEFAULT_BOUNDS, var/good=0)
@@ -127,10 +130,10 @@ var/NOIRBLOCK = 0
 	INCREASERUNBLOCK   = getAssignedBlock("INCREASERUN",   numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	REMOTETALKBLOCK    = getAssignedBlock("REMOTETALK",    numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	MORPHBLOCK         = getAssignedBlock("MORPH",         numsToAssign, DNA_HARDER_BOUNDS, good=1)
-	COLDBLOCK          = getAssignedBlock("COLD",          numsToAssign, good=1)
+	COLDBLOCK          = getAssignedBlock("COLD",          numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	HALLUCINATIONBLOCK = getAssignedBlock("HALLUCINATION", numsToAssign)
 	NOPRINTSBLOCK      = getAssignedBlock("NOPRINTS",      numsToAssign, DNA_HARD_BOUNDS, good=1)
-	SHOCKIMMUNITYBLOCK = getAssignedBlock("SHOCKIMMUNITY", numsToAssign, good=1)
+	SHOCKIMMUNITYBLOCK = getAssignedBlock("SHOCKIMMUNITY", numsToAssign, DNA_HARD_BOUNDS, good=1)
 	SMALLSIZEBLOCK     = getAssignedBlock("SMALLSIZE",     numsToAssign, DNA_HARD_BOUNDS, good=1)
 
 	//
@@ -145,14 +148,13 @@ var/NOIRBLOCK = 0
 	CHAVBLOCK      = getAssignedBlock("CHAV",       numsToAssign)
 	SWEDEBLOCK     = getAssignedBlock("SWEDE",      numsToAssign)
 	SCRAMBLEBLOCK  = getAssignedBlock("SCRAMBLE",   numsToAssign)
-	TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign, good=1)
-	STRONGBLOCK    = getAssignedBlock("STRONG",     numsToAssign, good=1)
+	TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign)
 	HORNSBLOCK     = getAssignedBlock("HORNS",      numsToAssign)
 	SMILEBLOCK     = getAssignedBlock("SMILE",      numsToAssign)
 	ELVISBLOCK     = getAssignedBlock("ELVIS",      numsToAssign)
 
 	// Powers
-	SOBERBLOCK     = getAssignedBlock("SOBER",      numsToAssign, good=1)
+	SOBERBLOCK     = getAssignedBlock("SOBER",      numsToAssign, DNA_HARD_BOUNDS, good=1)
 	PSYRESISTBLOCK = getAssignedBlock("PSYRESIST",  numsToAssign, DNA_HARD_BOUNDS, good=1)
 	//SHADOWBLOCK  = getAssignedBlock("SHADOW",     numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	FARSIGHTBLOCK  = getAssignedBlock("FARSIGHT",   numsToAssign, DNA_HARDER_BOUNDS, good=1)
@@ -160,8 +162,9 @@ var/NOIRBLOCK = 0
 	CRYOBLOCK      = getAssignedBlock("CRYO",       numsToAssign, DNA_HARD_BOUNDS, good=1)
 	EATBLOCK       = getAssignedBlock("EAT",        numsToAssign, DNA_HARD_BOUNDS, good=1)
 	JUMPBLOCK      = getAssignedBlock("JUMP",       numsToAssign, DNA_HARD_BOUNDS, good=1)
-	MELTBLOCK      = getAssignedBlock("MELT",       numsToAssign, good=1)
-	IMMOLATEBLOCK  = getAssignedBlock("IMMOLATE",   numsToAssign)
+	STRONGBLOCK    = getAssignedBlock("STRONG",     numsToAssign, DNA_HARD_BOUNDS, good=1)
+	MELTBLOCK      = getAssignedBlock("MELT",       numsToAssign, DNA_HARD_BOUNDS, good=1)
+	IMMOLATEBLOCK  = getAssignedBlock("IMMOLATE",   numsToAssign, DNA_HARD_BOUNDS, good=1)
 	EMPATHBLOCK    = getAssignedBlock("EMPATH",     numsToAssign, DNA_HARD_BOUNDS, good=1)
 	SUPERFARTBLOCK = getAssignedBlock("SUPERFART",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	POLYMORPHBLOCK = getAssignedBlock("POLYMORPH",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
@@ -176,6 +179,9 @@ var/NOIRBLOCK = 0
 	DIZZYBLOCK     = getAssignedBlock("DIZZY",      numsToAssign)
 	SANSBLOCK      = getAssignedBlock("SANS",       numsToAssign)
 	NOIRBLOCK      = getAssignedBlock("NOIR",       numsToAssign)
+	VEGANBLOCK     = getAssignedBlock("VEGAN",      numsToAssign)
+	ASTHMABLOCK    = getAssignedBlock("ASTHMA",     numsToAssign)
+	LACTOSEBLOCK   = getAssignedBlock("LACTOSE",    numsToAssign)
 
 	//
 	// Static Blocks
@@ -208,7 +214,7 @@ var/NOIRBLOCK = 0
 					warning("DNA2: Gene [gene.name] trying to add to already assigned gene block list (used by [english_list(assigned_gene_blocks[block])])")
 				assigned_gene_blocks[block] = gene
 
-	testing("DNA2: [numsToAssign.len] blocks are unused: [english_list(numsToAssign)]")
+	//testing("DNA2: [numsToAssign.len] blocks are unused: [english_list(numsToAssign)]")
 
 // Run AFTER genetics setup and AFTER species setup.
 /proc/setup_species()
@@ -217,31 +223,13 @@ var/NOIRBLOCK = 0
 		// I hate BYOND.  Can't just call while it's in the list.
 		var/datum/species/species = all_species[name]
 		if(species.default_block_names.len>0)
-			testing("Setting up genetics for [species.name] (needs [english_list(species.default_block_names)])")
+//			testing("Setting up genetics for [species.name] (needs [english_list(species.default_block_names)])")
 			species.default_blocks.len = 0
 
 			for(var/block=1;block<DNA_SE_LENGTH;block++)
 				if(assigned_blocks[block] in species.default_block_names)
-					testing("  Found [assigned_blocks[block]] ([block])")
+//					testing("  Found [assigned_blocks[block]] ([block])")
 					species.default_blocks.Add(block)
 
 			if(species.default_blocks.len)
 				all_species[name]=species
-
-	speciesinit = 1
-
-
-/proc/setupfactions()
-	// Populate the factions list:
-	for(var/x in typesof(/datum/faction))
-		var/datum/faction/F = new x
-		if(!F.name)
-			del(F)
-			continue
-		else
-			ticker.factions.Add(F)
-			ticker.availablefactions.Add(F)
-
-	// Populate the syndicate coalition:
-	for(var/datum/faction/syndicate/S in ticker.factions)
-		ticker.syndicate_coalition.Add(S)

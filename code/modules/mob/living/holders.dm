@@ -7,7 +7,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mob_holders.dmi', "right_hand" = 'icons/mob/in-hand/right/mob_holders.dmi')
 
 	var/mob/stored_mob
-	var/update_itemstate_on_twohand = 0 //If there are different item states for holding this with one and two hands, this must be 1
+	var/update_itemstate_on_twohand = FALSE //If there are different item states for holding this with one and two hands, this must be 1
 	var/const/itemstate_twohand_suffix = "_2hand" //The item state
 
 /obj/item/weapon/holder/New(loc, mob/M)
@@ -22,7 +22,7 @@
 	//Hopefully this will stop the icon from remaining on human mobs.
 	if(istype(loc,/mob/living))
 		var/mob/living/A = src.loc
-		A.drop_item(src, force_drop = 1)
+		A.drop_item(src, force_drop = TRUE)
 		A.update_icons()
 
 	for(var/mob/M in contents)
@@ -32,6 +32,13 @@
 
 	processing_objects.Remove(src)
 	..()
+
+/obj/item/weapon/holder/supermatter_act(atom/source)
+	if(stored_mob)
+		stored_mob.supermatter_act(source, SUPERMATTER_DUST)
+		qdel(stored_mob) //better safe than sorry, sorry mice.
+	qdel(src)
+	return TRUE
 
 /obj/item/weapon/holder/process()
 	if(!loc)
@@ -65,7 +72,7 @@
 	if(stored_mob)
 		stored_mob.bite_act(user)
 
-//
+//Nymph holder
 
 /obj/item/weapon/holder/diona
 	name = "diona nymph"
@@ -88,17 +95,18 @@
 	..()
 	if(M)
 		appearance = M.appearance
-		w_class = Clamp((M.size - 1) * 3, 1, 5)
-		//SIZE	| W_CLASS
-		//	1	|	1
-		//	2	|	3
-		//	3	|	5
-		//	4	|	5
-		//	5	|	5
+		w_class = Clamp((M.size - SIZE_TINY) * W_CLASS_MEDIUM, W_CLASS_TINY, W_CLASS_HUGE)
+		//	SIZE		|	W_CLASS
+
+		//	SIZE_TINY	|	W_CLASS_TINY
+		//	SIZE_SMALL	|	W_CLASS_MEDIUM
+		//	SIZE_NORMAL	|	W_CLASS_HUGE
+		//	SIZE_BIG	|	W_CLASS_HUGE
+		//	SIZE_HUGE	|	W_CLASS_HUGE
 
 		throw_range = 6 - w_class
 
-		if(w_class > W_CLASS_TINY)
+		if(w_class > W_CLASS_SMALL)
 			flags |= (TWOHANDABLE | MUSTTWOHAND)
 
 //MICE
@@ -106,6 +114,7 @@
 /obj/item/weapon/holder/animal/mouse
 	name = "mouse holder"
 	desc = "This one has icon states!"
+	slot_flags = SLOT_HEAD
 	item_state = "mouse" //Credit to Hubblenaut for sprites! https://github.com/Baystation12/Baystation12/pull/9416
 
 /obj/item/weapon/holder/animal/mouse/New(loc, mob/M)
@@ -114,7 +123,7 @@
 		var/mob/living/simple_animal/mouse/mouse = M
 
 		item_state = initial(mouse.icon_state) //Initial icon states are "mouse_gray", "mouse_white", etc
-		if(!(item_state in list("mouse_white", "mouse_brown", "mouse_gray")))
+		if(!(item_state in list("mouse_white", "mouse_brown", "mouse_gray", "mouse_black", "mouse_plague", "mouse_balbc", "mouse_operative")))
 			item_state = "mouse_gray"
 
 //CORGI
@@ -124,7 +133,7 @@
 	desc = "Icon states yay!"
 	item_state = "corgi"
 
-	update_itemstate_on_twohand = 1
+	update_itemstate_on_twohand = TRUE
 
 //CARP
 
@@ -132,7 +141,7 @@
 	name = "carp holder"
 	item_state = "carp"
 
-	update_itemstate_on_twohand = 1
+	update_itemstate_on_twohand = TRUE
 
 //COWS
 
@@ -148,7 +157,17 @@
 	desc = "Runtime error"
 	item_state = "cat1"
 
-	update_itemstate_on_twohand = 1
+	update_itemstate_on_twohand = TRUE
+
+//SALEM
+
+/obj/item/weapon/holder/animal/salem
+	name = "salem holder"
+	desc = "Esp!"
+	item_state = "salem"
+
+	update_itemstate_on_twohand = TRUE
+
 
 //SLIMES
 /obj/item/weapon/holder/animal/slime
@@ -157,7 +176,7 @@
 
 /obj/item/weapon/holder/animal/slime/proc/unfreeze()
 	var/mob/living/simple_animal/slime/S = stored_mob
-	S.canmove = 1
+	S.canmove = TRUE
 	S.icon_state = "[S.colour] [istype(S,/mob/living/simple_animal/slime/adult) ? "adult" : "baby"] slime"
 	returnToPool(src)
 
@@ -168,3 +187,10 @@
 /obj/item/weapon/holder/animal/slime/attack_self(mob/user)
 	..()
 	unfreeze()
+
+/obj/item/weapon/holder/animal/pillow
+	name = "pillow holder"
+	desc = "Comforbable"
+	item_state = "pillow"
+	slot_flags = SLOT_HEAD
+	update_itemstate_on_twohand = TRUE

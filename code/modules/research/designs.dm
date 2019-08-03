@@ -52,6 +52,7 @@ The required techs are the following:
 #define PODFAB		32  //Used by the spacepod part fabricator. Same idea as the mechfab
 #define FLATPACKER	64  //This design creates a machine, not an item.
 #define GENFAB		128 //Generic item.
+#define AMMOLATHE	256	//Adding this for ammolathes but its pretty much the same as PROTOLATHE.
 //Note: More then one of these can be added to a design but imprinter and lathe designs are incompatable.
 
 /datum/design							//Datum for object designs, used in construction
@@ -146,17 +147,20 @@ proc/getScanDesign(var/obj/O)
 ////////////////////////////////////////
 
 /obj/item/weapon/disk/design_disk
-	name = "Component Design Disk"
+	name = "component design disk"
 	desc = "A disk for storing device design data for construction in lathes."
-	icon = 'icons/obj/cloning.dmi'
-	icon_state = "datadisk2"
-	item_state = "card-id"
-	w_class = W_CLASS_TINY
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
-	w_type = RECYK_ELECTRONIC
+	icon_state = "disk_design"
 	var/datum/design/blueprint
 
 /obj/item/weapon/disk/design_disk/New()
 	..()
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+
+
+/obj/item/weapon/disk/design_disk/ammolathe
+	name = "component design disk (Ammolathe)"
+
+/obj/item/weapon/disk/design_disk/ammolathe/New()
+	..()
+	blueprint = new/datum/design/ammolathe(src)

@@ -22,7 +22,8 @@ var/const/VENDING_WIRE_IDSCAN = 8
 	var/obj/machinery/vending/V = holder
 	if(!istype(L, /mob/living/silicon))
 		if(V.seconds_electrified)
-			if(V.shock(L, 100))
+			var/obj/I = L.get_active_hand()
+			if(V.shock(L, 100, get_conductivity(I)))
 				return 0
 	if(V.panel_open)
 		return 1
@@ -43,6 +44,8 @@ var/const/VENDING_WIRE_IDSCAN = 8
 
 /datum/wires/vending/UpdatePulsed(var/index)
 	var/obj/machinery/vending/V = holder
+	if(V.unhackable)
+		return
 	switch(index)
 		if(VENDING_WIRE_THROW)
 			V.shoot_inventory = !V.shoot_inventory
@@ -55,6 +58,8 @@ var/const/VENDING_WIRE_IDSCAN = 8
 
 /datum/wires/vending/UpdateCut(var/index, var/mended)
 	var/obj/machinery/vending/V = holder
+	if(V.unhackable)
+		return
 	switch(index)
 		if(VENDING_WIRE_THROW)
 			V.shoot_inventory = !mended

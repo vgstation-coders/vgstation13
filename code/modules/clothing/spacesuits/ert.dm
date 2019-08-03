@@ -14,9 +14,13 @@
 	var/id_suffix = "ERT_empty"
 
 /obj/item/clothing/head/helmet/space/ert/equipped(var/mob/M)
-	var/mob/living/carbon/human/H = M
-	if(!istype(H))
+	if (!isERT(M) || !ishuman(M))
 		return
+	var/mob/living/carbon/human/H = M
+
+	var/datum/role/emergency_responder/R = M.mind.GetRole(RESPONDER)
+	R.logo_state = "[id_suffix]-logo"
+
 	if(H.get_item_by_slot(slot_head) == src)
 		var/obj/item/weapon/card/id/worn_id = H.get_item_by_slot(slot_wear_id)
 		if(istype(worn_id))
@@ -104,3 +108,7 @@
 	name = "emergency response team medical suit"
 	desc = "A suit worn by the medical members of a Nanotrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_medical"
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/crowbar, \
+	/obj/item/weapon/screwdriver, /obj/item/weapon/weldingtool, /obj/item/weapon/wirecutters, /obj/item/weapon/wrench, /obj/item/device/multitool, \
+	/obj/item/device/radio, /obj/item/device/analyzer, /obj/item/weapon/gun/energy/laser, /obj/item/weapon/gun/energy/pulse_rifle, \
+	/obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/gun/energy/gun, /obj/item/roller)

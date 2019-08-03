@@ -98,7 +98,7 @@
 	T.healthcheck(user, FALSE)
 
 	user.visible_message("<span class='notice'>[user] repairs \the [T] with their [name]!</span>", "<span class='notice'>You repair \the [T] with your [name].</span>")
-	playsound(get_turf(T), 'sound/effects/refill.ogg', 10, 1, -6)
+	playsound(T, 'sound/effects/refill.ogg', 10, 1, -6)
 
 	remove_silicate(diff * SILICATE_PER_DAMAGE)
 
@@ -121,7 +121,7 @@
 	W.healthcheck(user, FALSE)
 
 	user.visible_message("<span class='notice'>[user] repairs \the [W] with their [name]!</span>", "<span class='notice'>You repair \the [W] with your [name].</span>")
-	playsound(get_turf(src), 'sound/effects/refill.ogg', 10, 1, -6)
+	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6)
 
 	remove_silicate(diff * SILICATE_PER_DAMAGE)
 
@@ -192,7 +192,7 @@
 	W.healthcheck(user, FALSE)
 
 	user.visible_message("<span class='notice'>[user] reinforced \the [W] with their [name]!</span>", "<span class='notice'>You reinforce \the [W] with your [name].</span>")
-	playsound(get_turf(src), 'sound/effects/refill.ogg', 10, 1, -6)
+	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6)
 
 	remove_silicate(repair_amt * SILICATE_PER_REINFORCE)
 
@@ -221,7 +221,7 @@
 	G.healthcheck(user)
 
 	user.visible_message("<span class='notice'>[user] reinforced \the [G] with their [name]!</span>", "<span class='notice'>You reinforce \the [G] with your [name].</span>")
-	playsound(get_turf(src), 'sound/effects/refill.ogg', 10, 1, -6)
+	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6)
 
 	remove_silicate(repair_amt * SILICATE_PER_REINFORCE)
 

@@ -28,7 +28,7 @@ obj/structure/ex_act(severity)
 		if(O.onBuckledUserKick(H, src))
 			return //don't return 1! we will do the normal "touch" action if so!
 
-	playsound(get_turf(src), 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
+	playsound(src, 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
 
 	H.visible_message("<span class='danger'>[H] kicks \the [src].</span>", "<span class='danger'>You kick \the [src].</span>")
 	if(prob(70))
@@ -48,6 +48,7 @@ obj/structure/ex_act(severity)
 					if(!Move(get_step(loc, kick_dir)))
 						break
 					sleep(3)
-
+	if(material_type)
+		material_type.on_use(H,src,null)
 /obj/structure/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)

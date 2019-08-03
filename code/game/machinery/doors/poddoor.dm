@@ -39,6 +39,14 @@ var/list/poddoors = list()
 	icon_state = "gpdoor0"
 	density = 0
 
+/obj/machinery/door/poddoor/glass/admin
+	name = "Explosion-proof Podlock"
+	desc = "Why it no open!!!"
+	explosion_block = 50
+	penetration_dampening = 200
+
+/obj/machinery/door/poddoor/glass/admin/ex_act(severity)
+
 /obj/machinery/door/poddoor/New()
 	. = ..()
 	if(density)
@@ -58,6 +66,13 @@ var/list/poddoors = list()
 	else
 		return 0
 
+/obj/machinery/door/poddoor/hitby(atom/movable/AM)
+	if(!density)
+		return ..()
+	else
+		denied()
+		return FALSE
+
 /obj/machinery/door/poddoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	src.add_fingerprint(user)
 	if (!( iscrowbar(C) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
@@ -69,10 +84,13 @@ var/list/poddoors = list()
 			src.icon_state = openicon
 			src.set_opacity(0)
 			sleep(animation_delay)
-			src.density = 0
+			setDensity(FALSE)
 			src.operating = 0
 			return
 	return
+
+/obj/machinery/door/poddoor/allowed(mob/M)
+	return 0
 
 /obj/machinery/door/poddoor/open()
 	if (src.operating == 1) //doors can still open when emag-disabled
@@ -86,7 +104,7 @@ var/list/poddoors = list()
 	src.set_opacity(0)
 	sleep(animation_delay)
 	layer = open_layer
-	src.density = 0
+	setDensity(FALSE)
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
@@ -103,7 +121,7 @@ var/list/poddoors = list()
 	layer = closed_layer
 	flick(closingicon, src)
 	src.icon_state = closedicon
-	src.density = 1
+	src.setDensity(TRUE)
 	src.set_opacity(initial(opacity))
 	update_nearby_tiles()
 
@@ -151,9 +169,9 @@ var/list/poddoors = list()
 	f2.SetOpacity(0)
 
 	sleep(10)
-	src.density = 0
-	f1.density = 0
-	f2.density = 0
+	setDensity(FALSE)
+	f1.setDensity(FALSE)
+	f2.setDensity(FALSE)
 
 	update_nearby_tiles()
 
@@ -171,9 +189,9 @@ var/list/poddoors = list()
 	flick("pdoorc1", src)
 	src.icon_state = "pdoor1"
 
-	src.density = 1
-	f1.density = 1
-	f2.density = 1
+	src.setDensity(TRUE)
+	f1.setDensity(TRUE)
+	f2.setDensity(TRUE)
 
 	sleep(10)
 	src.SetOpacity(initial(opacity))
@@ -195,16 +213,16 @@ var/list/poddoors = list()
 	flick("pdoorc0", src)
 	src.icon_state = "pdoor0"
 	sleep(10)
-	src.density = 0
+	setDensity(FALSE)
 	src.sd_SetOpacity(0)
 
-	f1.density = 0
+	f1.setDensity(FALSE)
 	f1.sd_SetOpacity(0)
-	f2.density = 0
+	f2.setDensity(FALSE)
 	f2.sd_SetOpacity(0)
-	f3.density = 0
+	f3.setDensity(FALSE)
 	f3.sd_SetOpacity(0)
-	f4.density = 0
+	f4.setDensity(FALSE)
 	f4.sd_SetOpacity(0)
 
 	update_nearby_tiles()
@@ -222,15 +240,15 @@ var/list/poddoors = list()
 	src.operating = 1
 	flick("pdoorc1", src)
 	src.icon_state = "pdoor1"
-	src.density = 1
+	src.setDensity(TRUE)
 
-	f1.density = 1
+	f1.setDensity(TRUE)
 	f1.sd_SetOpacity(1)
-	f2.density = 1
+	f2.setDensity(TRUE)
 	f2.sd_SetOpacity(1)
-	f3.density = 1
+	f3.setDensity(TRUE)
 	f3.sd_SetOpacity(1)
-	f4.density = 1
+	f4.setDensity(TRUE)
 	f4.sd_SetOpacity(1)
 
 	if (src.visible)
@@ -251,12 +269,12 @@ var/list/poddoors = list()
 	flick("pdoorc0", src)
 	src.icon_state = "pdoor0"
 	sleep(10)
-	src.density = 0
+	src.setDensity(FALSE)
 	src.sd_SetOpacity(0)
 
-	f1.density = 0
+	f1.setDensity(FALSE)
 	f1.sd_SetOpacity(0)
-	f2.density = 0
+	f2.setDensity(FALSE)
 	f2.sd_SetOpacity(0)
 
 	update_nearby_tiles()
@@ -274,11 +292,11 @@ var/list/poddoors = list()
 	src.operating = 1
 	flick("pdoorc1", src)
 	src.icon_state = "pdoor1"
-	src.density = 1
+	src.setDensity(TRUE)
 
-	f1.density = 1
+	f1.setDensity(TRUE)
 	f1.sd_SetOpacity(1)
-	f2.density = 1
+	f2.setDensity(TRUE)
 	f2.sd_SetOpacity(1)
 
 	if (src.visible)
@@ -299,16 +317,16 @@ var/list/poddoors = list()
 	flick("pdoorc0", src)
 	src.icon_state = "pdoor0"
 	sleep(10)
-	src.density = 0
+	setDensity(FALSE)
 	src.sd_SetOpacity(0)
 
-	f1.density = 0
+	f1.setDensity(FALSE)
 	f1.sd_SetOpacity(0)
-	f2.density = 0
+	f2.setDensity(FALSE)
 	f2.sd_SetOpacity(0)
-	f3.density = 0
+	f3.setDensity(FALSE)
 	f3.sd_SetOpacity(0)
-	f4.density = 0
+	f4.setDensity(FALSE)
 	f4.sd_SetOpacity(0)
 
 	update_nearby_tiles()
@@ -326,15 +344,15 @@ var/list/poddoors = list()
 	src.operating = 1
 	flick("pdoorc1", src)
 	src.icon_state = "pdoor1"
-	src.density = 1
+	src.setDensity(TRUE)
 
-	f1.density = 1
+	f1.setDensity(TRUE)
 	f1.sd_SetOpacity(1)
-	f2.density = 1
+	f2.setDensity(TRUE)
 	f2.sd_SetOpacity(1)
-	f3.density = 1
+	f3.setDensity(TRUE)
 	f3.sd_SetOpacity(1)
-	f4.density = 1
+	f4.setDensity(TRUE)
 	f4.sd_SetOpacity(1)
 
 	if (src.visible)
@@ -353,38 +371,38 @@ var/list/poddoors = list()
 	var/obj/machinery/door/poddoor/filler_object/f2
 	icon = 'icons/obj/doors/1x2blast_hor.dmi'
 
-	New()
-		..()
-		f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
-		f2 = new/obj/machinery/door/poddoor/filler_object (get_step(src,EAST))
-		f1.density = density
-		f2.density = density
-		f1.sd_SetOpacity(opacity)
-		f2.sd_SetOpacity(opacity)
+/obj/machinery/door/poddoor/two_tile_hor/New()
+	..()
+	f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
+	f2 = new/obj/machinery/door/poddoor/filler_object (get_step(src,EAST))
+	f1.setDensity(density)
+	f2.setDensity(density)
+	f1.sd_SetOpacity(opacity)
+	f2.sd_SetOpacity(opacity)
 
-	Destroy()
-		del f1
-		del f2
-		..()
+/obj/machinery/door/poddoor/two_tile_hor/Destroy()
+	del f1
+	del f2
+	..()
 
 /obj/machinery/door/poddoor/two_tile_ver
 	var/obj/machinery/door/poddoor/filler_object/f1
 	var/obj/machinery/door/poddoor/filler_object/f2
 	icon = 'icons/obj/doors/1x2blast_vert.dmi'
 
-	New()
-		..()
-		f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
-		f2 = new/obj/machinery/door/poddoor/filler_object (get_step(src,NORTH))
-		f1.density = density
-		f2.density = density
-		f1.sd_SetOpacity(opacity)
-		f2.sd_SetOpacity(opacity)
+/obj/machinery/door/poddoor/two_tile_ver/New()
+	..()
+	f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
+	f2 = new/obj/machinery/door/poddoor/filler_object (get_step(src,NORTH))
+	f1.setDensity(density)
+	f2.setDensity(density)
+	f1.sd_SetOpacity(opacity)
+	f2.sd_SetOpacity(opacity)
 
-	Destroy()
-		del f1
-		del f2
-		..()
+/obj/machinery/door/poddoor/two_tile_ver/Destroy()
+	del f1
+	del f2
+	..()
 
 /obj/machinery/door/poddoor/four_tile_hor
 	var/obj/machinery/door/poddoor/filler_object/f1
@@ -393,27 +411,27 @@ var/list/poddoors = list()
 	var/obj/machinery/door/poddoor/filler_object/f4
 	icon = 'icons/obj/doors/1x4blast_hor.dmi'
 
-	New()
-		..()
-		f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
-		f2 = new/obj/machinery/door/poddoor/filler_object (get_step(f1,EAST))
-		f3 = new/obj/machinery/door/poddoor/filler_object (get_step(f2,EAST))
-		f4 = new/obj/machinery/door/poddoor/filler_object (get_step(f3,EAST))
-		f1.density = density
-		f2.density = density
-		f3.density = density
-		f4.density = density
-		f1.sd_SetOpacity(opacity)
-		f2.sd_SetOpacity(opacity)
-		f4.sd_SetOpacity(opacity)
-		f3.sd_SetOpacity(opacity)
+/obj/machinery/door/poddoor/four_tile_hor/New()
+	..()
+	f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
+	f2 = new/obj/machinery/door/poddoor/filler_object (get_step(f1,EAST))
+	f3 = new/obj/machinery/door/poddoor/filler_object (get_step(f2,EAST))
+	f4 = new/obj/machinery/door/poddoor/filler_object (get_step(f3,EAST))
+	f1.setDensity(density)
+	f2.setDensity(density)
+	f3.setDensity(density)
+	f4.setDensity(density)
+	f1.sd_SetOpacity(opacity)
+	f2.sd_SetOpacity(opacity)
+	f4.sd_SetOpacity(opacity)
+	f3.sd_SetOpacity(opacity)
 
-	Destroy()
-		del f1
-		del f2
-		del f3
-		del f4
-		..()
+/obj/machinery/door/poddoor/four_tile_hor/Destroy()
+	del f1
+	del f2
+	del f3
+	del f4
+	..()
 
 /obj/machinery/door/poddoor/four_tile_ver
 	var/obj/machinery/door/poddoor/filler_object/f1
@@ -422,27 +440,27 @@ var/list/poddoors = list()
 	var/obj/machinery/door/poddoor/filler_object/f4
 	icon = 'icons/obj/doors/1x4blast_vert.dmi'
 
-	New()
-		..()
-		f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
-		f2 = new/obj/machinery/door/poddoor/filler_object (get_step(f1,NORTH))
-		f3 = new/obj/machinery/door/poddoor/filler_object (get_step(f2,NORTH))
-		f4 = new/obj/machinery/door/poddoor/filler_object (get_step(f3,NORTH))
-		f1.density = density
-		f2.density = density
-		f3.density = density
-		f4.density = density
-		f1.sd_SetOpacity(opacity)
-		f2.sd_SetOpacity(opacity)
-		f4.sd_SetOpacity(opacity)
-		f3.sd_SetOpacity(opacity)
+/obj/machinery/door/poddoor/four_tile_ver/New()
+	..()
+	f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
+	f2 = new/obj/machinery/door/poddoor/filler_object (get_step(f1,NORTH))
+	f3 = new/obj/machinery/door/poddoor/filler_object (get_step(f2,NORTH))
+	f4 = new/obj/machinery/door/poddoor/filler_object (get_step(f3,NORTH))
+	f1.setDensity(density)
+	f2.setDensity(density)
+	f3.setDensity(density)
+	f4.setDensity(density)
+	f1.sd_SetOpacity(opacity)
+	f2.sd_SetOpacity(opacity)
+	f4.sd_SetOpacity(opacity)
+	f3.sd_SetOpacity(opacity)
 
-	Destroy()
-		del f1
-		del f2
-		del f3
-		del f4
-		..()
+/obj/machinery/door/poddoor/four_tile_ver/Destroy()
+	del f1
+	del f2
+	del f3
+	del f4
+	..()
 */
 /obj/machinery/door/poddoor/filler_object
 	name = ""

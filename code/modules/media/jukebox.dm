@@ -4,24 +4,13 @@
  * By N3X15
  *******************************/
 
-#define JUKEMODE_SHUFFLE     1 // Default
-#define JUKEMODE_REPEAT_SONG 2
-#define JUKEMODE_PLAY_ONCE   3 // Play, then stop.
-#define JUKEMODE_COUNT       3
-
-#define JUKEBOX_SCREEN_MAIN     1 // Default
-#define JUKEBOX_SCREEN_PAYMENT  2
-#define JUKEBOX_SCREEN_SETTINGS 3
-
-#define JUKEBOX_RELOAD_COOLDOWN 600 // 60s
-
 var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("bar", "jazz", "rock", "muzak", "emagged", "endgame", "clockwork", "vidyaone", "vidyatwo", "vidyathree", "vidyafour"))
+	for(var/playlist_id in list("bar", "bomberman", "depresso", "echoes","electronica", "emagged", "endgame", "filk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
-		testing("Updating playlist from [url]...")
+		//testing("Updating playlist from [url]...")
 
 		//  Media Server 2 requires a secret key in order to tell the jukebox
 		// where the music files are. It's set in config with MEDIA_SECRET_KEY
@@ -57,7 +46,7 @@ var/global/global_playlists = list()
 
 	else
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
-		testing("[src] - Updating playlist from [url]...")
+		//testing("[src] - Updating playlist from [url]...")
 
 		//  Media Server 2 requires a secret key in order to tell the jukebox
 		// where the music files are. It's set in config with MEDIA_SECRET_KEY
@@ -109,37 +98,37 @@ var/global/global_playlists = list()
 
 	var/emagged = 0
 
-	New(var/list/json)
-		title  = json["title"]
-		artist = json["artist"]
-		album  = json["album"]
+/datum/song_info/New(var/list/json)
+	title  = json["title"]
+	artist = json["artist"]
+	album  = json["album"]
 
-		url    = json["url"]
+	url    = json["url"]
 
-		length = text2num(json["length"])
+	length = text2num(json["length"])
 
-	proc/display()
-		var/str="\"[title]\""
-		if(artist!="")
-			str += ", by [artist]"
-		if(album!="")
-			str += ", from '[album]'"
-		return str
+/datum/song_info/proc/display()
+	var/str="\"[title]\""
+	if(artist!="")
+		str += ", by [artist]"
+	if(album!="")
+		str += ", from '[album]'"
+	return str
 
-	proc/displaytitle()
-		if(artist==""&&title=="")
-			return "\[NO TAGS\]"
-		var/str=""
-		if(artist!="")
-			str += artist+" - "
-		if(title!="")
-			str += "\"[title]\""
-		else
-			str += "Untitled"
-		// Only show album if we have to.
-		if(album!="" && artist == "")
-			str += " ([album])"
-		return str
+/datum/song_info/proc/displaytitle()
+	if(artist==""&&title=="")
+		return "\[NO TAGS\]"
+	var/str=""
+	if(artist!="")
+		str += artist+" - "
+	if(title!="")
+		str += "\"[title]\""
+	else
+		str += "Untitled"
+	// Only show album if we have to.
+	if(album!="" && artist == "")
+		str += " ([album])"
+	return str
 
 
 var/global/list/loopModeNames=list(
@@ -351,7 +340,9 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/proc/ScreenSettings(var/mob/user)
 	if(!linked_account)
 		linked_account = station_account
-	var/dat={"<h1>Settings</h1>
+	var/dat
+
+	dat += {"<h1>Settings</h1>
 		<form action="?src=\ref[src]" method="get">
 		<input type="hidden" name="src" value="\ref[src]" />
 		<fieldset>
@@ -382,11 +373,59 @@ var/global/list/loopModeNames=list(
 				<input type="radio" name="lock" id="lock_cap" value="[access_captain]"[change_access == list(access_captain) ? " checked='selected'":""] /> <label for="lock_cap">Captain</label>
 			</div>
 		</fieldset>
-		<input type="submit" name="act" value="Save Settings" />
-		</form>"}
+		<input type="submit" name="act" value="Save Settings" /></form>"}
+
+	dat += "<BR><b>Media</b><BR>"
+	for(var/element in playlists)
+		dat += "[playlists[element]] <a href='?src=\ref[src];eject=[element]'>Eject</a><BR>"
+	dat += "<a href='?src=\ref[src];insert=1'>Insert Vinyl</a><BR>"
 	return dat
 
+/obj/machinery/media/jukebox/proc/generate_name()
+	var/area/this_area = get_area(src)
+	return "[this_area.name] [name]"
 
+/obj/machinery/media/jukebox/scan_card(var/obj/item/weapon/card/C)
+	var/remaining_credits_needed = credits_needed - credits_held
+	var/pos_name = generate_name()
+	var/charge_response = charge_flow(linked_db, C, usr, remaining_credits_needed, linked_account, "Song Selection", pos_name, 0)
+	switch(charge_response)
+		if(CARD_CAPTURE_SUCCESS)
+			visible_message("<span class='notice'>The machine beeps happily.</span>","You hear a beep.")
+			if(credits_held)
+				linked_account.charge(-credits_held, null, "Cash Deposit", pos_name, 0, linked_account.owner_name)
+				credits_held=0
+			credits_needed=0
+			successful_purchase()
+			return
+		if(CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_ACCOUNT_DISABLED)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"ACCOUNT DISABLED\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"MERCHANT ACCOUNT DISABLED\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"BAD ACCOUNT/PIN COMBO\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_SECURITY_LEVEL)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"SECURITY EXCEPTION\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_USER_CANCELED)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"ORDER CANCELED\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_NO_DESTINATION)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_NO_CONNECTION)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"DATABASE UNAVAILABLE\" on the screen.</span>","You hear a buzz.")
+		else
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"CARD CAPTURE ERROR\" on the screen.</span>","You hear a buzz.")
+
+/obj/machinery/media/jukebox/proc/dispense_change(var/amount = 0)
+	if(!amount)
+		amount = credits_held
+		credits_held = 0
+	if(amount > 0)
+		var/obj/item/weapon/storage/box/B = new(loc)
+		dispense_cash(amount,B)
+		B.name="change"
+		B.desc="A box of change."
 
 /obj/machinery/media/jukebox/attackby(obj/item/W, mob/user)
 	. = ..()
@@ -396,27 +435,12 @@ var/global/list/loopModeNames=list(
 		if(panel_open)
 			wires.Interact(user)
 		return
-	if(istype(W,/obj/item/weapon/card/id))
+	if(istype(W,/obj/item/weapon/card))
 		if(!selected_song || screen!=JUKEBOX_SCREEN_PAYMENT)
 			visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 			return
-		var/obj/item/weapon/card/id/I = W
-		if(!linked_account)
-			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
-			return
-		var/datum/money_account/acct = get_card_account(I)
-		if(!acct)
-			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO ACCOUNT\" on the screen.</span>","You hear a buzz.")
-			return
-		if(credits_needed > acct.money)
-			visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
-			return
-		visible_message("<span class='notice'>The machine beeps happily.</span>","You hear a beep.")
-		acct.charge(credits_needed,linked_account,"Song selection at [areaMaster.name]'s [name].")
-		credits_needed = 0
-
-		successful_purchase()
-
+		var/obj/item/weapon/card/I = W
+		connect_account(user, I)
 		attack_hand(user)
 	else if(istype(W,/obj/item/weapon/spacecash))
 		if(!selected_song || screen!=JUKEBOX_SCREEN_PAYMENT)
@@ -426,25 +450,25 @@ var/global/list/loopModeNames=list(
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
 			return
 		var/obj/item/weapon/spacecash/C=W
-		credits_held += C.worth*C.amount
+		credits_held += C.get_total()
+		qdel(C)
 		if(credits_held >= credits_needed)
 			visible_message("<span class='notice'>The machine beeps happily.</span>","You hear a beep.")
+			linked_account.charge(-credits_needed, null, "Song selection at [generate_name()].", dest_name = linked_account.owner_name)
 			credits_held -= credits_needed
 			credits_needed=0
 			screen=JUKEBOX_SCREEN_MAIN
-			if(credits_held)
-				var/obj/item/weapon/storage/box/B = new(loc)
-				dispense_cash(credits_held,B)
-				B.name="change"
-				B.desc="A box of change."
-			credits_held=0
-
+			dispense_change()
 			successful_purchase()
+		else
+			say("Your total is now $[num2septext(credits_needed-credits_held)].  Please insert more credit chips or swipe your ID.")
 		attack_hand(user)
+
 
 /obj/machinery/media/jukebox/emag(mob/user)
 	if(!emagged)
-		user.visible_message("<span class='warning'>[user.name] slides something into the [src.name]'s card-reader.</span>","<span class='warning'>You short out the [src.name].</span>")
+		if(user)
+			user.visible_message("<span class='warning'>[user.name] slides something into the [src.name]'s card-reader.</span>","<span class='warning'>You short out the [src.name].</span>")
 		wires.CutWireIndex(JUKE_CONFIG)
 		short()
 	return
@@ -485,8 +509,8 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/proc/rad_pulse() //Called by pulsing the transmit wire
 	for(var/mob/living/carbon/M in view(src,3))
-		var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful
-		M.apply_radiation((rads*2),RAD_EXTERNAL)
+		var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful.
+		M.apply_radiation(round(rads/2),RAD_EXTERNAL) //Distance/rads: 1 = 18, 2 = 14, 3 = 12
 
 /obj/machinery/media/jukebox/Topic(href, href_list)
 	if(isobserver(usr) && !isAdminGhost(usr))
@@ -588,6 +612,20 @@ var/global/list/loopModeNames=list(
 		update_music()
 		update_icon()
 
+	if (href_list["insert"])
+		if(isobserver(usr) && !canGhostWrite(usr,src,""))
+			to_chat(usr, "<span class='warning'>You can't do that.</span>")
+			return
+		var/obj/item/weapon/vinyl/V = usr.get_active_hand()
+		if(istype(V))
+			insert(V)
+
+	if (href_list["eject"])
+		if(isobserver(usr) && !canGhostWrite(usr,src,""))
+			to_chat(usr, "<span class='warning'>You can't do that.</span>")
+			return
+		eject(href_list["eject"])
+
 	if (href_list["song"])
 		if(wires.IsIndexCut(JUKE_CAPITAL))
 			to_chat(usr, "<span class='warning'>You select a song, but [src] is unresponsive...</span>")
@@ -612,6 +650,7 @@ var/global/list/loopModeNames=list(
 
 	if (href_list["cancelbuy"])
 		selected_song=0
+		dispense_change()
 		screen = JUKEBOX_SCREEN_MAIN
 
 	if (href_list["mode"])
@@ -647,6 +686,26 @@ var/global/list/loopModeNames=list(
 						return
 			update_music()
 
+/obj/machinery/media/jukebox/proc/eject(var/playlist_name)
+	if(playlists.Find(playlist_name))
+		new /obj/item/weapon/vinyl(get_turf(src), playlist_name, playlists[playlist_name])
+		playlists.Remove(playlist_name)
+		if(playlist == playlist_name)
+			stop_playing()
+			playlist = playlists[1]
+	else
+		visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, unable to eject the vinyl.</span>")
+
+/obj/machinery/media/jukebox/proc/insert(var/obj/O)
+	var/obj/item/weapon/vinyl/V = O
+	if(!istype(V))
+		return
+	if(playlists.Find(V.unformatted))
+		visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, rejecting the vinyl.</span>")
+	else
+		playlists[V.unformatted] = V.formatted
+		qdel(V)
+
 /obj/machinery/media/jukebox/update_music()
 	if(!playlist)
 		process()
@@ -670,8 +729,6 @@ var/global/list/loopModeNames=list(
 	//current_song=0
 	playing=0
 	update_music()
-	return
-
 
 /obj/machinery/media/jukebox/npc_tamper_act(mob/living/L)
 	if(!panel_open)
@@ -687,6 +744,20 @@ var/global/list/loopModeNames=list(
 	update_music()
 	update_icon()
 
+/obj/machinery/media/jukebox/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		shake(1, 3)
+		if(stat & NOPOWER || any_power_cut())
+			return
+		playing=!playing
+		update_music()
+		update_icon()
+		return 1
+	return 0
+
 /obj/machinery/media/jukebox/bar
 	department = "Civilian"
 	req_access = list(access_bar)
@@ -695,18 +766,21 @@ var/global/list/loopModeNames=list(
 	// Must be defined on your server.
 	playlists=list(
 		"bar"  = "Bar Mix",
-		"jazz" = "Jazz",
+		"depresso" ="Depresso",
+		"electronica" = "Electronica",
+		"folk" = "Folk",
+		"medbay" = "Medbay",
+		"metal" = "Heavy Metal",
+		"rap" = "Rap",
 		"rock" = "Rock",
-		"vidyaone" = "Vidya Pt.1",
-		"vidyatwo" = "Vidya Pt.2",
-		"vidyathree" = "Vidya Pt.3",
-		"vidyafour" = "Vidya Pt.4",
+		"security" = "Security",
+		"upbeathypedancejam" = "Dance"
 	)
 
 // Relaxing elevator music~
 /obj/machinery/media/jukebox/dj
 
-	playlist_id="muzak"
+	playlist_id="muzakjazz"
 	autoplay = 1
 	change_cost = 0
 
@@ -715,14 +789,18 @@ var/global/list/loopModeNames=list(
 	// Must be defined on your server.
 	playlists=list(
 		"bar"  = "Bar Mix",
-		"jazz" = "Jazz",
+		"depresso" ="Depresso",
+		"electronica" = "Electronica",
+		"filk" = "Filk",
+		"folk" = "Folk",
+		"medbay" = "Medbay",
+		"metal" = "Heavy Metal",
+		"muzakjazz" = "Jazzy Muzak",
+		"rap" = "Rap",
 		"rock" = "Rock",
-		"muzak" = "Muzak",
-		"thunderdome" = "Thunderdome", // For thunderdome I guess
-		"vidyaone" = "Vidya Pt.1",
-		"vidyatwo" = "Vidya Pt.2",
-		"vidyathree" = "Vidya Pt.3",
-		"vidyafour" = "Vidya Pt.4",
+		"security" = "Security",
+		"upbeathypedancejam" = "Dance",
+		"thunderdome" = "Thunderdome"
 	)
 
 // So I don't have to do all this shit manually every time someone sacrifices pun-pun.
@@ -740,22 +818,27 @@ var/global/list/loopModeNames=list(
 	// Must be defined on your server.
 	playlists=list(
 		"bar"  = "Bar Mix",
-		"jazz" = "Jazz",
+		"depresso" ="Depresso",
+		"electronica" = "Electronica",
+		"filk" = "Filk",
+		"folk" = "Folk",
+		"medbay" = "Medbay",
+		"metal" = "Heavy Metal",
+		"muzakjazz" = "Jazzy Muzak",
+		"rap" = "Rap",
 		"rock" = "Rock",
-		"muzak" = "Muzak",
-
-
-		"emagged" = "Syndie Mix",
 		"shuttle" = "Shuttle",
-
+		"security" = "Security",
+		"upbeathypedancejam" = "Dance",
+		"thunderdome" = "Thunderdome",
+		"emagged" ="Syndicate Mix",
 		"endgame" = "Apocalypse",
-		"clockwork" = "Clockwork", // Unfinished new cult stuff
-		"thunderdome" = "Thunderdome", // For thunderdome I guess
-//Vidya musak
-		"vidyaone" = "Vidya Pt.1",
-		"vidyatwo" = "Vidya Pt.2",
-		"vidyathree" = "Vidya Pt.3",
-		"vidyafour" = "Vidya Pt.4",
+		"SCOTLANDFOREVER"= "Highlander",
+		"shuttle"= "Shuttle",
+		"nukesquad" = "Syndicate Assault",
+		"malfdelta"= "Silicon Assault",
+		"bomberman" = "Bomberman",
+		"echoes" = "Echoes"
 	)
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
@@ -852,3 +935,115 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/adminbus/cultify()
 	return
+
+
+/obj/item/weapon/vinyl
+	name = "nanovinyl"
+	desc = "In reality, the bulk of the disc serves only decorative purposes and the many songs are recorded on a very small microchip near the center."
+	icon = 'icons/obj/jukebox.dmi'
+	icon_state = "vinyl"
+	flags = FPRINT
+	siemens_coefficient = 1
+	sharpness = 1
+	force = 7
+	throwforce = 7
+	throw_speed = 7
+	throw_range = 7
+	w_class = W_CLASS_SMALL
+	attack_verb = list("plays out", "records", "frisbees") //Fuck it, we'll do it live. Fucking thing sucks!
+	var/unformatted
+	var/formatted
+
+/obj/item/weapon/vinyl/New(loc,U,F)
+	..(loc)
+	if(U)
+		unformatted = U
+	if(F)
+		formatted = F
+	name = "nanovinyl - [formatted]"
+
+//Premades
+/obj/item/weapon/vinyl/bar
+	name = "nanovinyl - bar"
+	unformatted = "bar"
+	formatted = "Bar"
+/obj/item/weapon/vinyl/bomberman
+	name = "nanovinyl - bomberman"
+	unformatted = "bomberman"
+	formatted = "Bomberman"
+/obj/item/weapon/vinyl/depresso
+	name = "nanovinyl - depresso"
+	unformatted = "depresso"
+	formatted = "Depresso"
+/obj/item/weapon/vinyl/echoes
+	name = "nanovinyl - echoes"
+	unformatted = "echoes"
+	formatted = "Echoes"
+/obj/item/weapon/vinyl/electronica
+	name = "nanovinyl - electronic"
+	unformatted = "electronica"
+	formatted = "Electronic"
+/obj/item/weapon/vinyl/emagged
+	name = "nanovinyl - syndicate"
+	unformatted = "emagged"
+	formatted = "Syndicate Mix"
+/obj/item/weapon/vinyl/endgame
+	name = "nanovinyl - apocalypse"
+	unformatted = "endgame"
+	formatted = "Apocalypse"
+/obj/item/weapon/vinyl/filk
+	name = "nanovinyl - filk"
+	unformatted = "filk"
+	formatted = "Filk"
+/obj/item/weapon/vinyl/folk
+	name = "nanovinyl - folk"
+	unformatted = "folk"
+	formatted = "Folk"
+/obj/item/weapon/vinyl/malf
+	name = "nanovinyl - silicon assault"
+	unformatted = "malfdelta"
+	formatted = "Silicon Assault"
+/obj/item/weapon/vinyl/medbay
+	name = "nanovinyl - medbay"
+	unformatted = "medbay"
+	formatted = "Medbay"
+/obj/item/weapon/vinyl/metal
+	name = "nanovinyl - heavy metal"
+	unformatted = "metal"
+	formatted = "Heavy Metal"
+/obj/item/weapon/vinyl/muzakjazz
+	name = "nanovinyl - jazzy muzak"
+	unformatted = "muzakjazz"
+	formatted = "Jazzy Muzak"
+/obj/item/weapon/vinyl/syndie_assault
+	name = "nanovinyl - syndicate assault"
+	unformatted = "nukesquad"
+	formatted = "Syndicate Assault"
+/obj/item/weapon/vinyl/rap
+	name = "nanovinyl - rap"
+	unformatted = "rap"
+	formatted = "Rap"
+/obj/item/weapon/vinyl/rock
+	name = "nanovinyl - rock"
+	unformatted = "rock"
+	formatted = "Rock"
+	/obj/item/weapon/vinyl/security
+	name = "nanovinyl - security"
+	unformatted = "security"
+	formatted = "Security"
+/obj/item/weapon/vinyl/shuttle
+	name = "nanovinyl - shuttle"
+	unformatted = "shuttle"
+	formatted = "Shuttle"
+	/obj/item/weapon/vinyl/thunderdome
+	name = "nanovinyl - thunderdome"
+	unformatted = "thunderdome"
+	formatted =	"Thunderdome"
+/obj/item/weapon/vinyl/upbeat_dance
+	name = "nanovinyl - dance"
+	unformatted = "upbeathypedancejam"
+	formatted = "Dance"
+/obj/item/weapon/vinyl/scotland
+	name = "nanovinyl - highlander"
+	unformatted = "SCOTLANDFOREVER"
+	formatted = "Highlander"

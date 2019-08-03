@@ -15,6 +15,7 @@
 	meat_type = null
 	see_in_dark = 8 //Needs to see in darkness to snap in darkness
 	mob_property_flags = MOB_SUPERNATURAL|MOB_CONSTRUCT
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|UNPACIFIABLE
 
 	var/response_snap = "snapped the neck of" //Past tense because it "happened before you could see it"
 	var/response_snap_target = "In the blink of an eye, something grabs you and snaps your neck!"
@@ -115,7 +116,7 @@
 	//Send the warning that SPC is homing in
 	target_turf = get_turf(target)
 	if(!scare_played) //Let's minimize the spam
-		playsound(get_turf(src), pick(scare_sound), 100, 1, -1)
+		playsound(src, pick(scare_sound), 100, 1, -1)
 		scare_played = 1
 		spawn(50)
 			scare_played = 0
@@ -215,7 +216,6 @@
 			return
 		visible_message("<span class='danger'>\The [src] starts trying to slide itself into the vent!</span>")
 		sleep(50) //Let's stop SCP-173 for five seconds to do his parking job
-		..()
 		if(entry_vent.network && entry_vent.network.normal_members.len)
 			var/list/vents = list()
 			for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
@@ -252,7 +252,7 @@
 			snap_neck(M)
 			break
 
-/mob/living/simple_animal/scp_173/forceMove(atom/destination, var/no_tp = 0)
+/mob/living/simple_animal/scp_173/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 
 	..()
 	check_snap_neck()

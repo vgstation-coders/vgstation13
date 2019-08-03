@@ -18,8 +18,6 @@
 	var/mob/pulledby = null
 	var/pass_flags = 0
 
-	var/area/areaMaster
-
 	var/sound_override = 0 //Do we make a sound when bumping into something?
 	var/hard_deleted = 0
 	var/pressure_resistance = ONE_ATMOSPHERE
@@ -43,7 +41,7 @@
 	// Can we send relaymove() if gravity is disabled or we are in space? (Should be handled by relaymove, but shitcode abounds)
 	var/internal_gravity = 0
 	var/inertia_dir = null
-
+	var/kinetic_acceleration = 0
 	var/throwpass = 0
 	var/level = 2
 
@@ -53,10 +51,12 @@
 	var/atom/movable/tether_master
 	var/list/tether_slaves
 	var/list/current_tethers
+	var/obj/shadow/shadow
+
+	var/ignore_blocking = 0
 
 /atom/movable/New()
 	. = ..()
-	areaMaster = get_area_master(src)
 	if((flags & HEAR) && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
@@ -73,6 +73,7 @@
 
 	if(materials)
 		returnToPool(materials)
+		materials = null
 
 	if(on_moved)
 		on_moved.holder = null
@@ -104,6 +105,9 @@
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
 				returnToPool(VH)
+
+	for(var/atom/movable/AM in src)
+		qdel(AM)
 
 	..()
 
@@ -141,40 +145,24 @@
 
 	..()
 
-/atom/movable/proc/get_move_delay()
-	// Copied from Move().
-	if(ismob(src))
-		var/mob/M = src
-		if(M.client)
-			return (3+(M.client.move_delayer.next_allowed - world.time))*world.tick_lag
-	return max(5 * world.tick_lag, 1)
+//TODO move this somewhere else
+/atom/movable/proc/set_glide_size(glide_size_override = 0, var/min = 0.9, var/max = WORLD_ICON_SIZE/2)
+	if(!glide_size_override || glide_size_override > max)
+		glide_size = 0
+	else
+		glide_size = max(min, glide_size_override)
 
-// This is designed to only be used occasionally, since procs add overhead.
-/atom/movable/proc/reset_glide_size()
-	glide_size = Ceiling(WORLD_ICON_SIZE / src.get_move_delay() * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
-	//glide_size = WORLD_ICON_SIZE / max(move_delay, world.tick_lag) * world.tick_lag // Updated calc from http://www.byond.com/forum/?post=1573076
-
-/mob/verb/fix_gliding()
-	set category = "OOC"
-	set name = "Fix Movement"
-	set desc = "Fixes jerky movement caused by BYOND being dumb."
-	reset_glide_size()
-
-
-/atom/movable/Move(newLoc,Dir=0,step_x=0,step_y=0)
-	if(!loc || !newLoc)
+/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
+	if(!loc || !NewLoc)
 		return 0
-	//set up glide sizes before the move
-	//ensure this is a step, not a jump
 
-	//. = ..(NewLoc,Dir,step_x,step_y)
 	if(current_tethers && current_tethers.len)
 		for(var/datum/tether/master_slave/T in current_tethers)
 			if(T.effective_slave == src)
 				if(get_exact_dist(T.effective_master, src) > T.tether_distance)
 					T.break_tether()
 					break
-				if(get_exact_dist(T.effective_master, newLoc) > T.tether_distance)
+				if(get_exact_dist(T.effective_master, NewLoc) > T.tether_distance)
 					change_dir(Dir)
 					return 0
 		for(var/datum/tether/equal/restrictive/R in current_tethers)
@@ -186,33 +174,32 @@
 			if(get_exact_dist(AM, src) > R.tether_distance)
 				R.break_tether()
 				break
-			if(get_exact_dist(AM, newLoc) > R.tether_distance)
+			if(get_exact_dist(AM, NewLoc) > R.tether_distance)
 				change_dir(Dir)
 				return 0
 	if(timestopped)
 		if(!pulledby || pulledby.timestopped) //being moved by our wizard maybe?
 			return 0
-	var/move_delay = max(5 * world.tick_lag, 1)
-	if(ismob(src))
-		var/mob/M = src
-		if(M.client)
-			move_delay = (3+(M.client.move_delayer.next_allowed - world.time))*world.tick_lag
 
 	var/can_pull_tether = 0
 	if(tether)
-		if(tether.attempt_to_follow(src,newLoc))
+		if(tether.attempt_to_follow(src,NewLoc))
 			can_pull_tether = 1
 		else
 			return 0
-	glide_size = Ceiling(WORLD_ICON_SIZE / move_delay * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
+
+	if(glide_size_override > 0)
+		set_glide_size(glide_size_override)
+
 	var/atom/oldloc = loc
-	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == newLoc))
+	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == NewLoc))
 		. = ..()
 
 		update_dir()
 		return
 
-	if(loc != newLoc)
+	//We always split up movements into cardinals for issues with diagonal movements.
+	if(loc != NewLoc)
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			. = ..()
 		else //Diagonal move, split it into cardinal moves
@@ -248,7 +235,7 @@
 
 	update_dir()
 
-	if(!loc || (loc == oldloc && oldloc != newLoc))
+	if(!loc || (loc == oldloc && oldloc != NewLoc))
 		last_move = 0
 		return
 
@@ -261,15 +248,20 @@
 			tether_datum.snap = 1
 			tether_datum.Delete_Chain()
 
-	last_move = (Dir || get_dir(oldloc, newLoc)) //If direction isn't specified, calculate it ourselves
+	last_move = (Dir || get_dir(oldloc, NewLoc)) //If direction isn't specified, calculate it ourselves
 	set_inertia(last_move)
 
 	last_moved = world.time
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
 	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=newLoc))
-	return .
+	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+
+/atom/movable/search_contents_for(path,list/filter_path=null) // For vehicles
+	var/list/found = ..()
+	for (var/atom/A in locked_atoms)
+		found += A.search_contents_for(path,filter_path)
+	return found
 
 //The reason behind change_dir()
 /atom/movable/proc/update_dir()
@@ -298,6 +290,12 @@
 	category = get_lock_cat(category)
 	if (!category) // String category which didn't exist.
 		return 0
+
+	if (istype(AM, /mob/living)) //checks if the atom is a mob, and removes any grabs from the mob to prevent !!FUN!!
+		var/mob/living/M = AM
+		for(var/obj/item/weapon/grab/G in M.grabbed_by)
+			if (istype(G, /obj/item/weapon/grab))
+				returnToPool(G)
 
 	AM.locked_to = src
 
@@ -334,6 +332,7 @@
 	C.name = id
 	locking_categories_name[id] = C
 	locking_categories += C
+	return C
 
 /atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
 	locking_init()
@@ -416,7 +415,9 @@
 		Obstacle.Bumped(src)
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
-/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE)
+/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+	if(glide_size_override)
+		glide_size = glide_size_override
 	var/atom/old_loc = loc
 	loc = destination
 	last_moved = world.time
@@ -431,7 +432,7 @@
 
 		loc.Entered(src, old_loc)
 		if(isturf(loc))
-			var/area/A = get_area_master(loc)
+			var/area/A = get_area(loc)
 			A.Entered(src, old_loc)
 
 			for(var/atom/movable/AM in loc)
@@ -446,6 +447,9 @@
 
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=loc))
+	var/turf/T = get_turf(destination)
+	if(old_loc && T && old_loc.z != T.z)
+		INVOKE_EVENT(on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
 	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)
@@ -453,24 +457,28 @@
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
+				C.mob.set_glide_size(glide_size)
+
 
 /mob/update_client_hook(atom/destination)
 	if(locate(/mob) in src)
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
+				C.mob.set_glide_size(glide_size)
 	else if(client && hud_used)
 		var/client/C = client
 		C.update_special_views()
 
 /atom/movable/proc/forceEnter(atom/destination)
+	var/atom/movable/old_loc = loc
 	if(destination)
-		if(loc)
-			loc.Exited(src)
 		loc = destination
+		if(old_loc)
+			old_loc.Exited(src)
 		loc.Entered(src)
 		if(isturf(destination))
-			var/area/A = get_area_master(destination)
+			var/area/A = get_area(destination)
 			A.Entered(src)
 
 		for(var/atom/movable/AM in locked_atoms)
@@ -480,6 +488,11 @@
 		return 1
 	return 0
 
+//Called below in hit_check to see if it can be hit
+//Return TRUE if not hit.
+/atom/proc/PreImpact(atom/movable/A, speed)
+	return TRUE
+
 /atom/movable/proc/hit_check(var/speed, mob/user)
 	. = 1
 
@@ -488,30 +501,20 @@
 			if(A == src)
 				continue
 
-			if(isliving(A))
-				var/mob/living/L = A
-				if(L.lying)
-					continue
-				src.throw_impact(L, speed, user)
-
-				if(src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
-					src.throwing = 0
-					. = 0
-
-			else if(isobj(A))
-				var/obj/O = A
-				if(O.density && !O.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
-					src.throw_impact(O, speed, user)
-					src.throwing = 0
+			if(!A.PreImpact(src,speed))
+				throw_impact(A,speed,user)
+				if(throwing==1)
+					throwing = 0
 					. = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
+	set waitfor = FALSE
 	if(!target || !src)
 		return 0
 	if(override)
 		sound_override = 1
 	//use a modified version of Bresenham's algorithm to get from the atom's current position to that of the target
-
+	var/kinetic_sum = 0
 	throwing = 1
 	if(!speed)
 		speed = throw_speed
@@ -528,6 +531,13 @@
 		var/obj/mecha/M = src
 		M.dash_dir = dir
 		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
+
+	var/afterimage = 0
+	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
+		var/mob/living/simple_animal/construct/armoured/perfect/M = src
+		M.dash_dir = dir
+		src.throwing = 2
+		afterimage = 1
 
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
@@ -564,13 +574,18 @@
 				tS = 1
 			while((loc.timestopped || timestopped) && dist_travelled)
 				sleep(3)
+			if(kinetic_acceleration>kinetic_sum)
+				fly_speed += kinetic_acceleration-kinetic_sum
+				kinetic_sum = kinetic_acceleration
+			if(afterimage)
+				new /obj/effect/red_afterimage(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					. = 0
 					break
 
-				src.Move(step, dy)
+				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error += dist_x
 				dist_travelled++
@@ -584,7 +599,7 @@
 					. = 0
 					break
 
-				src.Move(step, dx)
+				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error -= dist_y
 				dist_travelled++
@@ -600,13 +615,18 @@
 			if(timestopped)
 				sleep(1)
 				continue
+			if(kinetic_acceleration>0)
+				fly_speed += kinetic_acceleration
+				kinetic_acceleration = 0
+			if(afterimage)
+				new /obj/effect/red_afterimage(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					. = 0
 					break
 
-				src.Move(step, dx)
+				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error += dist_y
 				dist_travelled++
@@ -620,7 +640,7 @@
 					. = 0
 					break
 
-				src.Move(step, dy)
+				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error -= dist_x
 				dist_travelled++
@@ -633,12 +653,9 @@
 
 	//done throwing, either because it hit something or it finished moving
 	src.throwing = 0
+	kinetic_acceleration = 0
 	if(isobj(src))
 		src.throw_impact(get_turf(src), speed, user)
-
-/atom/movable/change_area(oldarea, newarea)
-	areaMaster = newarea
-	..()
 
 //Overlays
 /atom/movable/overlay
@@ -706,7 +723,7 @@
 
 /atom/movable/proc/Process_Spacemove(check_drift)
 	var/dense_object = 0
-	for(var/turf/turf in oview(1,src))
+	for(var/turf/turf in orange(1,src))
 		if(!turf.has_gravity(src))
 			continue
 
@@ -760,12 +777,13 @@
 		inertia_dir  = 0
 		return
 
-	sleep(5)
+	sleep(INERTIA_MOVEDELAY)
 
 	if(can_apply_inertia() && (src.loc == start))
 		if(!inertia_dir)
 			return //inertia_dir = last_move
 
+		set_glide_size(DELAY2GLIDESIZE(INERTIA_MOVEDELAY))
 		step(src, inertia_dir)
 
 /atom/movable/proc/reset_inertia()
@@ -791,7 +809,7 @@
 
 	invisibility = INVISIBILITY_MAXIMUM
 	flags |= INVULNERABLE
-	density = 0
+	setDensity(FALSE)
 	anchored = 1
 	flags |= TIMELESS
 	if(!ignoreinvert)
@@ -805,7 +823,7 @@
 	timestopped = 0
 	if(!init_invuln)
 		flags &= ~INVULNERABLE
-	density = init_density
+	setDensity(init_density)
 	anchored = init_anchored
 	if(!init_timeless)
 		flags &= ~TIMELESS
@@ -975,3 +993,64 @@
 
 /atom/movable/proc/on_tether_broken(atom/movable/other_end)	//To allow for code based on when a tether with a specific thing is broken
 	return
+
+/atom/movable/proc/area_entered(var/area/A)
+	return
+
+/atom/movable/proc/can_be_pulled(var/mob/user)
+	return TRUE
+
+/atom/movable/proc/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
+	if(anchored)
+		return 0
+	if(user && (!Adjacent(user) || !src.Adjacent(user) || user.incapacitated() || !src.can_be_pulled(user)))
+		return 0
+	var/list/params_list = params2list(params)
+	if(clamp)
+		pixel_x = Clamp(base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
+		pixel_y = Clamp(base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
+	else
+		pixel_x = base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
+		pixel_y = base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+	return 1
+
+//Overwriting BYOND proc used for simple animal and NPCbot movement, Pomf help me
+/atom/movable/proc/start_walk_to(Trg,Min=0,Lag=0,Speed=0)
+	if(Lag > 0)
+		set_glide_size(DELAY2GLIDESIZE(Lag))
+	walk_to(src,Trg,Min,Lag,Speed)
+
+/atom/movable/proc/can_be_pushed(mob/user)
+	return 1
+
+/atom/movable/proc/ThrowAtStation(var/radius = 30, var/throwspeed = null, var/startside = null) //throws a thing at the station from the edges
+	var/startx = 0
+	var/starty = 0
+	var/endy = 0
+	var/endx = 0
+	if (!startside)
+		startside = pick(cardinal)
+
+	switch(startside)
+		if(NORTH)
+			starty = world.maxy-TRANSITIONEDGE-5
+			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
+		if(EAST)
+			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
+			startx = world.maxx-TRANSITIONEDGE-5
+		if(SOUTH)
+			starty = TRANSITIONEDGE+5
+			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
+		if(WEST)
+			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
+			startx = TRANSITIONEDGE+5
+
+	//grabs a turf in the center of the z-level
+	//range of turfs determined by radius var
+	endx = rand((world.maxx/2)-radius,(world.maxx/2)+radius)
+	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
+	var/turf/startzone = locate(startx, starty, 1)
+	var/turf/endzone = locate(endx, endy, 1)
+	
+	forceMove(startzone)
+	throw_at(endzone, null, throwspeed)

@@ -1,9 +1,17 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-#if DM_VERSION < 511
-#error Your version of byond is too old, you need version 511 or higher
+#if DM_VERSION < 512
+#error Your version of byond is too old, you need version 512 or higher
 #endif
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
+
+// If set to 0, replaces solo antags' objectives with an always-pass freeform
+#define SOLO_ANTAG_OBJECTIVES 1
+
+// Defines for the shuttle
+#define SHUTTLE_ON_STANDBY 0
+#define SHUTTLE_ON_STATION 1
+#define SHUTTLE_ON_CENTCOM 2
 
 #ifndef RUNWARNING
 #warn If you have issues with retrieving logs update byond on the server and client to 507.1277 or greater, or uncomment RUNWARNING
@@ -13,6 +21,7 @@
 #define PROFILE_MACHINES // Disable when not debugging.
 
 #define ARBITRARILY_LARGE_NUMBER 10000 //Used in delays.dm and vehicle.dm. Upper limit on delays
+#define ARBITRARILY_PLANCK_NUMBER 1.417*(10**32) //1.417×10^32. Because ARBITRARILY_LARGE_NUMBER is too small and INF is too large
 #define MAX_VALUE 65535
 
 #ifdef PROFILE_MACHINES
@@ -36,6 +45,8 @@ var/global/disable_vents     = 0
 #define PIPING_LAYER_LCHANGE	0.05 //how much the layer var changes per increment
 
 #define mouse_respawn_time 5 //Amount of time that must pass between a player dying as a mouse and repawning as a mouse. In minutes.
+
+#define DEFAULT_LOBBY_TIME 5 MINUTES
 
 // Pressure limits.
 #define HAZARD_HIGH_PRESSURE 550	//This determins at what pressure the ultra-high pressure red icon is displayed. (This one is set as a constant)
@@ -174,10 +185,10 @@ var/MAX_EXPLOSION_RANGE = 14
 //Item flags!
 #define PROXMOVE	1	// Will the code check us when we move or when something moves near us? Note that if the item doesn't have this flag, HasProximity() will never execute for it.
 #define FPRINT		2	// takes a fingerprint
-#define ON_BORDER	4	// item has priority to check when entering or leaving
 #define INVULNERABLE 8
 #define HEAR		16 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
 #define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
+#define HIDEHAIRCOMPLETELY 64
 
 #define TWOHANDABLE	64
 #define MUSTTWOHAND	128
@@ -194,25 +205,26 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define TIMELESS		32768 // Immune to time manipulation.
 
+#define SILENTCONTAINER	65536 //reactions inside make no noise
+
 #define ALL ~0
 #define NONE 0
 
+//airflow flags!
+
+#define ON_BORDER 1   // item has priority to check when entering or leaving
+#define IMPASSABLE 2  // item will make things auto_fail on prox checks through it
+
 
 //sharpness flags
-#define SHARP_TIP 		1 // Has a pointy-stabby end, such as a syringe or a knife tip.
-#define SHARP_BLADE		2 // Has a blade long and thin enough to slice something with.
-#define SERRATED_BLADE	4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
-#define CHOPWOOD		8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
-#define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
-#define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
-
-//clothing flags
-#define MASKINTERNALS		1 // mask allows internals
-#define NOSLIP				2 //prevents from slipping on wet floors, in space etc
-#define BLOCK_GAS_SMOKE_EFFECT 4 //blocks the effect that chemical clouds would have on a mob
-#define ONESIZEFITSALL		8
-#define PLASMAGUARD 		16 //Does not get contaminated by plasma.
-#define BLOCK_BREATHING 	32 //When worn, prevents breathing!
+#define SHARP_TIP 		 1 // Has a pointy-stabby end, such as a syringe or a knife tip.
+#define SHARP_BLADE		 2 // Has a blade long and thin enough to slice something with.
+#define SERRATED_BLADE	 4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
+#define CHOPWOOD		 8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
+#define INSULATED_EDGE 	 16 // One of the edges of this thing is insulated, even though the rest of it isn't.
+#define HOT_EDGE 		 32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+#define CUT_WALL 64 //Will cut through walls and girders when the item has this flag
+#define CUT_AIRLOCK 128 //Will cut through airlocks when the item has this flag
 
 //flags for pass_flags
 #define PASSTABLE	1
@@ -293,31 +305,31 @@ var/MAX_EXPLOSION_RANGE = 14
 
 // bitflags for clothing parts
 
-#define FULL_TORSO		UPPER_TORSO|LOWER_TORSO
-#define FACE			EYES|MOUTH|BEARD
+#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
+#define FACE			(EYES|MOUTH|BEARD)
 #define BEARD			32768
-#define FULL_HEAD		HEAD|EYES|MOUTH|EARS
-#define LEGS			LEG_LEFT|LEG_RIGHT 		// 24
-#define FEET			FOOT_LEFT|FOOT_RIGHT 	//96
-#define ARMS			ARM_LEFT|ARM_RIGHT		//384
-#define HANDS			HAND_LEFT|HAND_RIGHT //1536
-#define FULL_BODY		FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS
+#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
+#define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
+#define FEET			(FOOT_LEFT|FOOT_RIGHT) 	//96
+#define ARMS			(ARM_LEFT|ARM_RIGHT)		//384
+#define HANDS			(HAND_LEFT|HAND_RIGHT) //1536
+#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS)
 #define IGNORE_INV		16384 // Don't make stuff invisible
 
 
 // bitflags for invisibility
 
-#define HIDEGLOVES		HANDS
-#define HIDEJUMPSUIT	ARMS|LEGS|FULL_TORSO
-#define HIDESHOES		FEET
-#define HIDEMASK		FACE
-#define HIDEEARS		EARS
-#define HIDEEYES		EYES
-#define HIDEFACE		FACE
-#define HIDEHEADHAIR 	EARS|HEAD
-#define HIDEBEARDHAIR	BEARD
-#define HIDEHAIR		HIDEHEADHAIR|HIDEBEARDHAIR
-#define	HIDESUITSTORAGE	LOWER_TORSO
+#define HIDEGLOVES			HANDS
+#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
+#define HIDESHOES			FEET
+#define HIDEMASK			FACE
+#define HIDEEARS			EARS
+#define HIDEEYES			EYES
+#define HIDEFACE			FACE
+#define HIDEHEADHAIR 		EARS|HEAD
+#define HIDEBEARDHAIR		BEARD
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
+#define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
 // Used with human/proc/get_heat_protection() and human/proc/get_cold_protection() as well as calculate_affecting_pressure() now
@@ -369,6 +381,9 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_DEAF        8
 #define DISABILITY_FLAG_BLIND       16
 #define DISABILITY_FLAG_MUTE		32
+#define DISABILITY_FLAG_VEGAN		64
+#define DISABILITY_FLAG_ASTHMA 128
+#define DISABILITY_FLAG_LACTOSE		256
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -405,9 +420,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 //#define SHOCKWAVE		21 	// (Not implemented) attack a nearby tile and cause a massive shockwave, knocking most people on their asses (25%)
 //#define ELECTRICITY	22 	// (Not implemented) ability to shoot electric attacks (15%)
 
-	//2spooky
-#define SKELETON 29
-#define PLANT 30
+//2spooky
+#define M_SKELETON 29
 
 // Other Mutations:
 #define M_NO_BREATH		100 	// no need to breathe
@@ -440,13 +454,15 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
 #define M_FARSIGHT	212		// Increases mob's view range by 2
 #define M_NOIR		213		// aww yis detective noir
+#define M_VEGAN		214
+#define M_ASTHMA	215
+#define M_LACTOSE	216
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\
 								  0.33,0.33,0.33,0,\
 								  0.00,0.00,0.00,1,\
 								  0.00,0.00,0.00,0)
-var/global/list/bad_changing_colour_ckeys = list()
 
 // Bustanuts
 #define M_HARDCORE      300
@@ -457,6 +473,8 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define COUGHING		4
 #define TOURETTES		8
 #define NERVOUS			16
+#define ASTHMA		32
+#define LACTOSE		64
 
 //sdisabilities
 #define BLIND			1
@@ -512,7 +530,7 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define INV_SLOT_SIGHT "sight_slot"
 #define INV_SLOT_TOOL "tool_slot"
 
-#define IS_MODE_COMPILED(MODE) (ispath(text2path("/datum/game_mode/"+(MODE))))
+//#define IS_MODE_COMPILED(MODE) (ispath(text2path("/datum/gamemode/"+(MODE))))
 
 
 var/list/global_mutations = list() // list of hidden mutation things
@@ -539,6 +557,9 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define EYE_BLUR	"eye_blur"
 #define DROWSY		"drowsy"
 
+#define CUT 		"cut"
+#define BRUISE		"bruise"
+#define SLUR 		"slur"
 
 //intent flags yay
 #define I_HELP		"help"
@@ -547,19 +568,20 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define I_HURT		"hurt"
 
 //I hate adding defines like this but I'd much rather deal with bitflags than lists and string searches
-#define BRUTELOSS 1
-#define FIRELOSS 2
-#define TOXLOSS 4
-#define OXYLOSS 8
+#define SUICIDE_ACT_BRUTELOSS 1
+#define SUICIDE_ACT_FIRELOSS 2
+#define SUICIDE_ACT_TOXLOSS 4
+#define SUICIDE_ACT_OXYLOSS 8
+#define SUICIDE_ACT_CUSTOM 16
 
 //Bitflags defining which status effects could be or are inflicted on a mob
 #define CANSTUN		1
 #define CANKNOCKDOWN	2
 #define CANPARALYSE	4
 #define CANPUSH		8
+#define UNPACIFIABLE 16		//Immune to pacify effects.
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
-#define DISFIGURED	16384	//I'll probably move this elsewhere if I ever get wround to writing a bitflag mob-damage system
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
 
 var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons/Taser.ogg','sound/weapons/armbomb.ogg','sound/voice/hiss1.ogg','sound/voice/hiss2.ogg','sound/voice/hiss3.ogg','sound/voice/hiss4.ogg','sound/voice/hiss5.ogg','sound/voice/hiss6.ogg','sound/effects/Glassbr1.ogg','sound/effects/Glassbr2.ogg','sound/effects/Glassbr3.ogg','sound/items/Welder.ogg','sound/items/Welder2.ogg','sound/machines/airlock.ogg','sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
@@ -572,10 +594,11 @@ var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons
 #define GRAB_KILL		5
 
 //Security levels
-#define SEC_LEVEL_GREEN	0
-#define SEC_LEVEL_BLUE	1
-#define SEC_LEVEL_RED	2
-#define SEC_LEVEL_DELTA	3
+#define SEC_LEVEL_RAINBOW	-1
+#define SEC_LEVEL_GREEN		0
+#define SEC_LEVEL_BLUE		1
+#define SEC_LEVEL_RED		2
+#define SEC_LEVEL_DELTA		3
 
 #define TRANSITIONEDGE	7 //Distance from edge to move to another z-level
 /*
@@ -639,6 +662,9 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
 #define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
 
+#define INVISIBILITY_CULTJAUNT 50	//Used by cult
+#define SEE_INVISIBLE_CULTJAUNT 50	//Used by cult
+
 #define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
 #define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.
 
@@ -681,7 +707,9 @@ SEE_PIXELS	256
 #define BEE_OUT_FOR_ENEMIES 2
 #define BEE_HEADING_HOME 3
 #define BEE_SWARM 4
+#define BEE_BUILDING 5
 
+//for infestation events
 #define LOC_KITCHEN 0
 #define LOC_ATMOS 1
 #define LOC_INCIN 2
@@ -701,28 +729,28 @@ SEE_PIXELS	256
 #define VERM_ROACHES 7
 #define VERM_GREMLINS 8
 #define VERM_BEES 9
+#define VERM_HORNETS 10
+#define VERM_SYPHONER 11
+#define VERM_GREMTIDE 12
+#define VERM_CRABS 13
+
+
+#define MONSTER_BEAR    0
+#define MONSTER_CREATURE 1
+#define MONSTER_XENO 2
+#define MONSTER_HIVEBOT  3
+#define MONSTER_ZOMBIE    4
+#define MONSTER_SKRITE  5
+#define MONSTER_SQUEEN  6
+#define MONSTER_FROG 7
+#define MONSTER_GOLIATH 8
+#define MONSTER_DAVID 9
+#define MONSTER_MADCRAB 10
+#define MONSTER_MEATBALLER 11
+#define MONSTER_BIG_ROACH 12
+#define MONSTER_ROACH_QUEEN 13
 
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
-
-//Damage things
-
-#define CUT 		"cut"
-#define BRUISE		"bruise"
-#define BRUTE		"brute"
-#define BURN		"fire"
-#define TOX			"tox"
-#define OXY			"oxy"
-#define CLONE		"clone"
-#define HALLOSS		"halloss"
-
-#define STUN		"stun"
-#define WEAKEN		"weaken"
-#define PARALYZE	"paralize"
-#define IRRADIATE	"irradiate"
-#define STUTTER		"stutter"
-#define SLUR 		"slur"
-#define EYE_BLUR	"eye_blur"
-#define DROWSY		"drowsy"
 
 // Special 'weapons', used in damage procs
 #define WPN_HIGH_BODY_TEMP "High Body Temperature"
@@ -744,6 +772,7 @@ SEE_PIXELS	256
 #define ORGAN_DEAD			1024
 #define ORGAN_MUTATED		2048
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
+#define ORGAN_MALFUNCTIONING 8192
 
 //////////////////MATERIAL DEFINES/////////////////
 
@@ -758,6 +787,12 @@ SEE_PIXELS	256
 #define MAT_CLOWN		"$clown"
 #define MAT_PLASTIC		"$plastic"
 #define MAT_CARDBOARD   "$cardboard"
+#define MAT_WOOD		"$wood"
+#define MAT_BRASS   	"$brass"
+#define MAT_RALLOY   	"$ralloy"
+#define MAT_ICE			"$ice"
+#define MAT_MYTHRIL		"$mythril"
+#define MAT_TELECRYSTAL	"$telecrystal"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -825,24 +860,13 @@ SEE_PIXELS	256
 #define ROLEPREF_VALMASK  3 // 0b00000011 - Used to get ROLEPREF flags without the ROLEPREF_POLLED and ROLEPREF_SAVE bits
 
 // Should correspond to jobbans, too.
-#define ROLE_ALIEN      "alien"
-#define ROLE_BLOB       "blob"      // New!
-#define ROLE_BORER      "borer"     // New!
-#define ROLE_CHANGELING "changeling"
-#define ROLE_COMMANDO   "commando"  // New!
-#define ROLE_CULTIST    "cultist"
-#define ROLE_MALF       "malf AI"
-#define ROLE_NINJA      "ninja"
-#define ROLE_OPERATIVE  "operative" // New!
-#define ROLE_PAI        "pAI"
-#define ROLE_PLANT      "Dionaea"
-#define ROLE_POSIBRAIN  "posibrain"
-#define ROLE_REV        "revolutionary"
-#define ROLE_TRAITOR    "traitor"
-#define ROLE_VAMPIRE    "vampire"
-#define ROLE_VOXRAIDER  "vox raider"
-#define ROLE_WIZARD     "wizard"
-
+#define ROLE_BORER      	"borer"
+#define ROLE_PAI        	"pAI"
+#define ROLE_PLANT      	"Dionaea"
+#define ROLE_POSIBRAIN  	"posibrain"
+#define ROLE_MINOR			"minor roles"
+#define ROLE_ALIEN			"xenomorph"
+#define ROLE_STRIKE			"striketeam"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -862,15 +886,19 @@ SEE_PIXELS	256
 #define RIGHT 2
 
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
-#define HEALTH_HUD          1 // a simple line rounding the mob's number health
-#define STATUS_HUD          2 // alive, dead, diseased, etc.
-#define ID_HUD              3 // the job asigned to your ID
-#define WANTED_HUD          4 // wanted, released, parroled, security status
-#define IMPLOYAL_HUD		5 // loyality implant
-#define IMPCHEM_HUD		    6 // chemical implant
-#define IMPTRACK_HUD		7 // tracking implant
-#define SPECIALROLE_HUD 	8 // AntagHUD image
-#define STATUS_HUD_OOC		9 // STATUS_HUD without virus db check for someone being ill.
+#define HEALTH_HUD          "health" // a simple line rounding the mob's number health
+#define STATUS_HUD          "status" // alive, dead, diseased, etc.
+#define RECORD_HUD			"record" // what medbay has set your records to
+#define ID_HUD              "id" // the job asigned to your ID
+#define WANTED_HUD          "wanted" // wanted, released, parroled, security status
+#define IMPLOYAL_HUD		"imployal" // loyality implant
+#define IMPCHEM_HUD		    "impchem" // chemical implant
+#define IMPTRACK_HUD		"imptrack" // tracking implant
+#define SPECIALROLE_HUD 	"specialrole" // AntagHUD image
+#define STATUS_HUD_OOC		"status_ooc" // STATUS_HUD without virus db check for someone being ill.
+#define DIAG_HEALTH_HUD		"diag_health" // Diagnostic HUD - health bar
+#define DIAG_CELL_HUD		"diag_cell" // Diagnostic HUD - power cell status for cyborgs, mechs
+#define CONSTRUCT_HUD		"const_health" // Artificer HUD
 
 // Hypothermia - using the swiss staging system. - called by the proc undergoing_hypothermia() in handle_hypothermia.dm
 #define NO_HYPOTHERMIA			0	// >35C   - Fine
@@ -912,6 +940,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define PLASMA_IMMUNE 512
 #define RAD_GLOW 1024
 #define ELECTRIC_HEAL 2048
+#define IS_SPECIES_MUTE 4096
+#define REQUIRE_DARK 8192
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -926,6 +956,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define NO_BONES 512
 #define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
 #define MULTICOLOR 2048	//skin color is unique rather than tone variation
+#define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -945,11 +976,45 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define INFECTION_LEVEL_TWO 500
 #define INFECTION_LEVEL_THREE 1000
 
+//Diseases, Virus, Antigens
+#define	SPREAD_BLOOD	1//can be extracted from the carrier's blood, all diseases have this by default.
+#define	SPREAD_CONTACT	2//touching or bumping into someone may transmit the virus, virus can survive on items for a while. gloves lower the chance of transmission.
+#define	SPREAD_AIRBORNE	4//carrier mobs will periodically release invisible clouds that carry the virus to adjacent mobs that can breath it.
 
+#define EFFECT_DANGER_HELPFUL	"0"
+#define EFFECT_DANGER_FLAVOR	"1"
+#define EFFECT_DANGER_ANNOYING	"2"
+#define EFFECT_DANGER_HINDRANCE	"3"
+#define EFFECT_DANGER_HARMFUL	"4"
+#define EFFECT_DANGER_DEADLY	"5"
+
+#define	ANTIGEN_BLOOD	"blood"
+#define	ANTIGEN_COMMON	"common"
+#define	ANTIGEN_RARE	"rare"
+#define	ANTIGEN_ALIEN	"alien"
+
+//blood antigens
+#define	ANTIGEN_O	"O"
+#define	ANTIGEN_A	"A"
+#define	ANTIGEN_B	"B"
+#define	ANTIGEN_RH	"Rh"
+//common antigens
+#define	ANTIGEN_Q	"Q"
+#define	ANTIGEN_U	"U"
+#define	ANTIGEN_V	"V"
+//rare antigens
+#define	ANTIGEN_M	"M"
+#define	ANTIGEN_N	"N"
+#define	ANTIGEN_P	"P"
+//alien antigens
+#define	ANTIGEN_X	"X"
+#define	ANTIGEN_Y	"Y"
+#define	ANTIGEN_Z	"Z"
 
 //Language flags.
 #define WHITELISTED 1  // Language is available if the speaker is whitelisted.
 #define RESTRICTED 2   // Language can only be accquired by spawning or an admin.
+#define CAN_BE_SECONDARY_LANGUAGE 4 // Language is available on character setup as secondary language.
 
 // Hairstyle flags
 #define HAIRSTYLE_CANTRIP 1 // 5% chance of tripping your stupid ass if you're running.
@@ -974,19 +1039,26 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_CLOAK    7
 #define VAMP_BATS     8
 #define VAMP_SCREAM   9
-#define VAMP_JAUNT    10
-#define VAMP_SLAVE    11
-#define VAMP_BLINK    12
-#define VAMP_MATURE   13
-#define VAMP_SHADOW   14
-#define VAMP_CHARISMA 15
-#define VAMP_UNDYING  16
+#define VAMP_HEAL     10
+#define VAMP_JAUNT    11
+#define VAMP_SLAVE    12
+#define VAMP_BLINK    13
+#define VAMP_MATURE   14
+#define VAMP_SHADOW   15
+#define VAMP_CHARISMA 16
+#define VAMP_UNDYING  17
+#define VAMP_CAPE	  18
+#define STARTING_BLOOD 10
+
+#define VAMP_FAILURE -1
 
 // Moved from machine_interactions.dm
 #define STATION_Z  1
 #define CENTCOMM_Z 2
 #define TELECOMM_Z 3
+#define DERELICT_Z 4
 #define ASTEROID_Z 5
+#define SPACEPIRATE_Z 6
 
 // canGhost(Read|Write) flags
 #define PERMIT_ALL 1
@@ -1130,7 +1202,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define DELAY_MOVE    1
 #define DELAY_ATTACK  2
 #define DELAY_SPECIAL 4
-#define DELAY_ALL (DELAY_MOVE|DELAY_ATTACK|DELAY_SPECIAL)
+#define DELAY_THROW 8
+#define DELAY_ALL (DELAY_MOVE|DELAY_ATTACK|DELAY_SPECIAL|DELAY_THROW)
 
 //singularity defines
 #define STAGE_ONE 	1
@@ -1139,6 +1212,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define STAGE_FOUR	7
 #define STAGE_FIVE	9
 #define STAGE_SUPER	11
+#define STAGE_SSGSS	13
 
 //Human Overlays Indexes/////////THIS DEFINES WHAT LAYERS APPEARS ON TOP OF OTHERS
 #define FIRE_LAYER				1		//If you're on fire (/tg/ shit)
@@ -1185,61 +1259,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define PDA_APP_SNAKEII_MAXSPEED		9
 #define PDA_APP_SNAKEII_MAXLABYRINTH	8
 
-
-////////////////////////
-////WIZARD SHIT GO//////
-////////////////////////
-
-/*		WIZARD SPELL FLAGS		*/
-#define GHOSTCAST		1	//can a ghost cast it?
-#define NEEDSCLOTHES	2	//does it need the wizard garb to cast? Nonwizard spells should not have this
-#define NEEDSHUMAN		4	//does it require the caster to be human?
-#define Z2NOCAST		8	//if this is added, the spell can't be cast at centcomm
-#define STATALLOWED		16	//if set, the user doesn't have to be conscious to cast. Required for ghost spells
-#define IGNOREPREV		32	//if set, each new target does not overlap with the previous one
-//The following flags only affect different types of spell, and therefore overlap
-//Targeted spells
-#define INCLUDEUSER		64	//does the spell include the caster in its target selection?
-#define SELECTABLE		128	//can you select each target for the spell?
-//AOE spells
-#define IGNOREDENSE		64	//are dense turfs ignored in selection?
-#define IGNORESPACE		128	//are space turfs ignored in selection?
-#define NODUPLICATE		256 //can we put the same summon type on the same tile?
-//End split flags
-#define CONSTRUCT_CHECK	512	//used by construct spells - checks for nullrods
-#define NO_BUTTON		1024	//spell won't show up in the HUD with this
-#define WAIT_FOR_CLICK	2048//spells wait for you to click on a target to cast
-#define TALKED_BEFORE	4096//spells require you to have heard the person you are casting it upon
-
-//invocation
-#define SpI_SHOUT	"shout"
-#define SpI_WHISPER	"whisper"
-#define SpI_EMOTE	"emote"
-#define SpI_NONE	"none"
-
-//upgrading
-#define Sp_SPEED	"cooldown"
-#define Sp_POWER	"power"
-#define Sp_MOVE		"mobility"
-#define Sp_AMOUNT	"amount"
-
-#define Sp_TOTAL	"total"
-
-//casting costs
-#define Sp_RECHARGE	1
-#define Sp_CHARGES	2
-#define Sp_HOLDVAR	4
-#define Sp_GRADUAL	8
-
-//spell range
-#define SELFCAST -1
-#define GLOBALCAST -2
-
-//buying costs
-#define Sp_BASE_PRICE 20
-
-///////WIZ END/////////
-
 //Some alien checks for reagents for alien races.
 #define IS_DIONA 1
 #define IS_VOX 2
@@ -1280,7 +1299,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
-	#warning SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
+	#warn SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
 	#define say_testing(a,x) to_chat(a, ("([__FILE__]:[__LINE__] say_testing) [x]"))
 #else
 	#define say_testing(a,x)
@@ -1290,7 +1309,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //#define JUSTFUCKMYSHITUP 1
 #ifdef JUSTFUCKMYSHITUP
 #define writepanic(a) if(ticker && ticker.current_state >= 3 && world.cpu > 100) write_panic(a)
-#warning IMA FUCK YOUR SHIT UP
+#warn IMA FUCK YOUR SHIT UP
 var/proccalls = 1
 //keep a list of last 10 proccalls maybe?
 /proc/write_panic(a)
@@ -1301,7 +1320,7 @@ var/proccalls = 1
 
 #else
 	#define writepanic(a) null << a
-#endif*/
+#endif
 
 //Default frequencies of signal based RC stuff, because comic and his magic numbers.
 #define FREQ_DISPOSAL 1367
@@ -1322,8 +1341,9 @@ var/proccalls = 1
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
 #define INCORPOREAL_GHOST		1
-#define INCORPOREAL_NINJA		2
-#define INCORPOREAL_ETHEREAL	3
+#define INCORPOREAL_ETHEREAL	2
+#define GHOST_MOVEDELAY 1
+#define ETHEREAL_MOVEDELAY 2
 
 
 //MALFUNCTION FLAGS
@@ -1349,7 +1369,7 @@ var/proccalls = 1
 #define FOOD_SWEET	4
 #define FOOD_LIQUID	8
 #define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
-
+#define FOOD_LACTOSE 32 //Contains MILK
 /*
  *
  *
@@ -1409,6 +1429,8 @@ var/proccalls = 1
 #define MODE_CHANGELING "changeling"
 #define MODE_CULTCHAT "cultchat"
 #define MODE_ANCIENT "ancientchat"
+#define MODE_MUSHROOM "sporechat"
+#define MODE_BORER "borerchat"
 
 //Hardcore mode stuff
 
@@ -1484,13 +1506,13 @@ var/proccalls = 1
 #define EVENT_OBJECT_INDEX "o"
 #define EVENT_PROC_INDEX "p"
 
-#define HIGHLANDER "highlander"
 #define BOMBERMAN "bomberman"
 
 // /proc/is_honorable() flags.
 #define HONORABLE_BOMBERMAN  1
 #define HONORABLE_HIGHLANDER 2
-#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER
+#define HONORABLE_NINJA      4
+#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 
@@ -1500,8 +1522,6 @@ var/proccalls = 1
 
 #define BLOB_CORE_PROPORTION 20
 
-#define DEFAULT FONT SIZE 4
-
 //Holomap filters
 #define HOLOMAP_FILTER_DEATHSQUAD				1
 #define HOLOMAP_FILTER_ERT						2
@@ -1510,6 +1530,7 @@ var/proccalls = 1
 #define HOLOMAP_FILTER_VOX						16
 #define HOLOMAP_FILTER_STATIONMAP				32
 #define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		64//features markers over the captain's office, the armory, the SMES
+#define HOLOMAP_FILTER_CULT						128//bloodstone locators
 
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
@@ -1528,13 +1549,25 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
+#define HOLOMAP_EXTRA_CULTMAP					"cultmap"
 
 #define HOLOMAP_MARKER_SMES				"smes"
 #define HOLOMAP_MARKER_DISK				"diskspawn"
 #define HOLOMAP_MARKER_SKIPJACK			"skipjack"
 #define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
+#define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
+#define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
+#define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
+#define HOLOMAP_MARKER_CULT_ALTAR		"altar"
+#define HOLOMAP_MARKER_CULT_FORGE		"forge"
+#define HOLOMAP_MARKER_CULT_SPIRE		"spire"
+#define HOLOMAP_MARKER_CULT_ENTRANCE	"path_entrance"
+#define HOLOMAP_MARKER_CULT_EXIT		"path_exit"
+#define HOLOMAP_MARKER_CULT_RUNE		"rune"
+
 
 #define DEFAULT_BLOOD "#A10808"
+#define DEFAULT_FLESH "#FFC896"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
@@ -1545,5 +1578,54 @@ var/proccalls = 1
 #define ITEM_ANIMATION 1
 #define PERSON_ANIMATION 2
 
+//For client preferences.
+#define CREDITS_NEVER "Never"
+#define CREDITS_ALWAYS "Always"
+#define CREDITS_NO_RERUNS "No Reruns"
+#define JINGLE_NEVER "Never"
+#define JINGLE_CLASSIC "Classics"
+#define JINGLE_ALL "All"
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
+
+#define BEESPECIES_NORMAL	"bees"
+#define BEESPECIES_VOX		"chill bugs"
+#define BEESPECIES_HORNET	"hornets"
+#define BEESPECIES_BLOOD	"hell bugs"
+
+//mob/proc/is_pacified()
+#define VIOLENCE_SILENT		0
+#define VIOLENCE_DEFAULT	1
+#define VIOLENCE_GUN		2
+
+// Used to determine which HUD is in use
+#define HUD_NONE 0
+#define HUD_MEDICAL 1
+#define HUD_SECURITY 2
+
+//Cyborg components
+#define COMPONENT_BROKEN -1
+#define COMPONENT_MISSING 0
+#define COMPONENT_INSTALLED 1
+
+//Glidesize
+#define INERTIA_MOVEDELAY 5
+#define FRACTIONAL_GLIDESIZES 1
+#ifdef FRACTIONAL_GLIDESIZES
+#define DELAY2GLIDESIZE(delay) (WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1))
+#else
+#define DELAY2GLIDESIZE(delay) (Ceiling(WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1)))
+#endif
+
+//Custom vending machines
+#define CUSTOM_VENDING_MAX_SLOGAN_LENGTH	50
+#define CUSTOM_VENDING_MAX_NAME_LENGTH	25
+#define CUSTOM_VENDING_MAX_SLOGANS	5
+
+#define MACHINE "machine"
+#define COMPUTER "computer"
+#define EMBEDDED_CONTROLLER "embedded controller"
+#define OTHER "other"
+
+// How many times to retry winset()ing window parameters before giving up
+#define WINSET_MAX_ATTEMPTS 10

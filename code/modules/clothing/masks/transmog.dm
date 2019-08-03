@@ -26,11 +26,23 @@
 	if(cursed)
 		name = "cursed [name]"
 
+/obj/item/clothing/mask/morphing/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	if(!M.client)
+		return CANNOT_EQUIP
+	if(slot == slot_wear_mask)
+		if(!do_after(M, src, 5 SECONDS))
+			return CANNOT_EQUIP
+	return ..()
+
 /obj/item/clothing/mask/morphing/equipped(mob/living/carbon/C, wear_mask)
 	if(target_type && istype(C))
 		if(C.get_item_by_slot(slot_wear_mask) == src)
 			if(target_type != C.type)
 				C.visible_message("<span class='danger'>As [C] puts on \the [src], \his body begins to shift and contort!</span>","<span class='danger'>As you put on \the [src], your body begins to shift and contort!</span>")
+				var/turf/T = get_turf(C)
+				var/location = T ? "[T.x], [T.y], [T.z]" : "nullspace"
+				src.investigation_log(I_ARTIFACT, "|| [key_name(C)] has used a [cursed ? "cursed" : ""] mask of morphing ([src]) to transform into a [target_type]. (@[location])")
+				message_admins("[key_name(C)] has used a[cursed ? " cursed" : ""] mask of morphing ([src]) to transform into a [target_type]. (@[formatJumpTo(C, "JMP")])")
 				if(cursed)
 					C.transmogrify(target_type)
 				else
@@ -101,7 +113,7 @@
 /obj/item/clothing/mask/morphing/lizard
 	name = "mask of the lizard"
 	desc = "It appears to be modeled after a lizard."
-	target_type = /mob/living/simple_animal/lizard
+	target_type = /mob/living/simple_animal/hostile/lizard
 	icon_state = "lizard_mask"
 
 /obj/item/clothing/mask/morphing/xeno
@@ -125,8 +137,7 @@
 	..()
 	color = rgb(rand(0,255),rand(0,255),rand(0,255))
 	//Remove cockatrices because they're somewhat OP when player controlled
-	target_type = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof(/mob/living/simple_animal/hostile/humanoid) - typesof(/mob/living/simple_animal/hostile/retaliate/cockatrice) - typesof(/mob/living/simple_animal/hostile/giant_spider/hunter/dead) - typesof(/mob/living/simple_animal/hostile/asteroid/hivelordbrood))
-
+	target_type = pick(existing_typesof(/mob/living/simple_animal) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)))
 /obj/item/clothing/mask/morphing/ghost
 	name = "mask of the phantom"
 	desc = "It appears to be modeled after a ghost. It looks as though it might disappear at any moment."
@@ -141,6 +152,9 @@
 				C.visible_message("<span class='danger'>As [C] puts on \the [src], \his body begins to shift and contort!</span>","<span class='danger'>As you put on \the [src], your body begins to shift and contort!</span>")
 				var/mob/M
 				var/turf/T = get_turf(C)
+				var/location = T ? "[T.x], [T.y], [T.z]" : "nullspace"
+				src.investigation_log(I_ARTIFACT, "|| [key_name(C)] has used a [cursed ? "cursed" : ""] mask of morphing ([src]) to transform into a [target_type]. (@[location])")
+				message_admins("[key_name(C)] has used a[cursed ? " cursed" : ""] mask of morphing ([src]) to transform into a [target_type]. (@[formatJumpTo(C, "JMP")])")
 				if(cursed)
 					M = C.transmogrify(target_type)
 				else
@@ -148,3 +162,9 @@
 				M.forceMove(T)
 				to_chat(M, "<span class='warning'>\The [src] dissipates into thin air!</span>")
 				qdel(src)
+
+/obj/item/clothing/mask/morphing/skelegiant //potential loot from defeating the skeleton surgeon mini-boss
+	name = "mask of the skeleton"
+	desc = "It appears to be modeled after a large skeleton."
+	target_type = /mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/morph
+	icon_state = "skeleton_mask"

@@ -6,28 +6,33 @@
 	density = 1
 	explosion_block = 2
 	blocks_air = 1
-	canSmoothWith = "/turf/unsimulated/wall=0"
 
 	var/walltype = "riveted"
+/turf/unsimulated/wall/canSmoothWith()
+	var/static/list/smoothables = list(/turf/unsimulated/wall)
+	return smoothables
 
 /turf/unsimulated/wall/fakeglass
 	name = "window"
 	icon_state = "fakewindows"
 	opacity = 0
-	canSmoothWith = null
+/turf/unsimulated/wall/fakeglass/canSmoothWith()
+	return null
 
 /turf/unsimulated/wall/blastdoor
 	name = "Shuttle Bay Blast Door"
 	desc = "Why it no open!"
 	icon = 'icons/obj/doors/rapid_pdoor.dmi'
 	icon_state = "pdoor1"
-	canSmoothWith = null
+/turf/unsimulated/wall/blastdoor/canSmoothWith()
+	return null
 
 /turf/unsimulated/wall/rock
 	name = "unnaturally hard rock wall"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
-	canSmoothWith = null
+/turf/unsimulated/wall/rock/canSmoothWith()
+	return null
 
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
@@ -43,24 +48,29 @@
 		bullet_marks = 0
 		icon = initial(icon)
 
-turf/unsimulated/wall/splashscreen
+/turf/unsimulated/wall/splashscreen
 	name = "Space Station 13"
 	icon = null
 	icon_state = null
 	plane = EFFECTS_PLANE
-	canSmoothWith = null
+/turf/unsimulated/wall/splashscreen/canSmoothWith()
+	return null
 
-	New()
-		var/path = "icons/splashworks/"
-		var/list/filenames = flist(path)
-		for(var/filename in filenames)
-			if(copytext(filename, length(filename)) == "/")
-				filenames -= filename
-		icon = file("[path][pick(filenames)]")
+/turf/unsimulated/wall/splashscreen/New()
+	if(SNOW_THEME)
+		icon = 'icons/snowstation.gif' // not in the splashworks file so it doesn't appear in other cases
+		return
+	var/path = "icons/splashworks/"
+	var/list/filenames = flist(path)
+	for(var/filename in filenames)
+		if(copytext(filename, length(filename)) == "/")
+			filenames -= filename
+	icon = file("[path][pick(filenames)]")
 
 /turf/unsimulated/wall/other
 	icon_state = "r_wall"
-	canSmoothWith = null
+/turf/unsimulated/wall/other/canSmoothWith()
+	return null
 
 /turf/unsimulated/wall/cult
 	name = "wall"
@@ -68,7 +78,8 @@ turf/unsimulated/wall/splashscreen
 	icon_state = "cult0"
 	opacity = 1
 	density = 1
-	canSmoothWith = null
+/turf/unsimulated/wall/cult/canSmoothWith()
+	return null
 
 /turf/unsimulated/wall/cultify()
 	ChangeTurf(/turf/unsimulated/wall/cult)
@@ -84,7 +95,8 @@ turf/unsimulated/wall/splashscreen
 	icon_state = "evilwall_1"
 	opacity = 1
 	density = 1
-	canSmoothWith = null
+/turf/unsimulated/wall/evil/canSmoothWith()
+	return null
 
 /turf/unsimulated/wall/evil/New()
 	..()

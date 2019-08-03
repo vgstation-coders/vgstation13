@@ -27,9 +27,9 @@
 				affected_mob.updatehealth()
 		if(3)
 			if(prob(2))
-				affected_mob.emote("stare")
+				affected_mob.emote("stare", null, null, TRUE)
 			if(prob(2))
-				affected_mob.emote("drool")
+				affected_mob.emote("drool", null, null, TRUE)
 			if(prob(10) && affected_mob.getBrainLoss()<=98)//shouldn't retard you to death now
 				affected_mob.adjustBrainLoss(2)
 				affected_mob.updatehealth()
@@ -42,9 +42,9 @@
 					to_chat(affected_mob, "<span class='warning'>Your head hurts.</span>" ) */
 		if(4)
 			if(prob(2))
-				affected_mob.emote("stare")
+				affected_mob.emote("stare", null, null, TRUE)
 			if(prob(2))
-				affected_mob.emote("drool")
+				affected_mob.emote("drool", null, null, TRUE)
 /*			if(prob(15))
 				affected_mob.adjustToxLoss(4)
 				affected_mob.updatehealth()
@@ -61,7 +61,7 @@
 					O.show_message("[affected_mob] suddenly collapses", 1)
 				affected_mob.Paralyse(rand(5,10))
 				if(prob(1))
-					affected_mob.emote("snore")
+					affected_mob.emote("snore", null, null, TRUE)
 			if(prob(15))
 				affected_mob.stuttering += 3
 	return

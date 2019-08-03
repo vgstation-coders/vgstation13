@@ -2,7 +2,7 @@
 //override procs in children as necessary
 /datum/artifact_effect
 	var/effecttype = "unknown"		//purely used for admin checks ingame, not needed any more
-	var/effect = EFFECT_TOUCH //Define this as a specific value if the effect only supports that one, or a list of the supported values if it supports multiple.
+	var/effect = ARTIFACT_EFFECT_TOUCH //Define this as a specific value if the effect only supports that one, or a list of the supported values if it supports multiple.
 	var/effectrange = 4
 	var/datum/artifact_trigger/trigger
 	var/atom/holder
@@ -91,9 +91,9 @@
 		chargelevel++
 
 	if(activated)
-		if(effect == EFFECT_AURA)
+		if(effect == ARTIFACT_EFFECT_AURA)
 			DoEffectAura()
-		else if(effect == EFFECT_PULSE && chargelevel >= chargelevelmax)
+		else if(effect == ARTIFACT_EFFECT_PULSE && chargelevel >= chargelevelmax)
 			chargelevel = 0
 			DoEffectPulse()
 
@@ -111,9 +111,13 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 		protected += 0.5
 	else if(istype(H.wear_suit,/obj/item/clothing/suit/storage/labcoat/rd))
 		protected += 0.5
+	else if(istype(H.wear_suit,/obj/item/clothing/suit/space/rig/ror))
+		protected += 0.3
 
 	if(istype(H.head,/obj/item/clothing/head/bio_hood/anomaly))
 		protected += 0.3
+	if(istype(H.head,/obj/item/clothing/head/helmet/space/rig/ror))
+		protected += 0.1
 	else if(istype(H.head,/obj/item/clothing/head/helmet/space/anomaly))
 		protected += 0.2
 
@@ -152,7 +156,7 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 	if(trigger)
 		qdel(trigger); trigger = null
 	var/triggertype
-	if(effect == EFFECT_TOUCH)
+	if(effect == ARTIFACT_EFFECT_TOUCH)
 		triggertype = /datum/artifact_trigger/touch
 	else
 		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)

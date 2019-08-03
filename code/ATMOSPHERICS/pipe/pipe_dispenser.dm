@@ -193,7 +193,7 @@ Nah
 */
 
 //Allow you to drag-drop disposal pipes into it
-/obj/machinery/pipedispenser/disposal/MouseDrop_T(var/obj/structure/disposalconstruct/pipe, mob/usr)
+/obj/machinery/pipedispenser/disposal/MouseDropTo(var/obj/structure/disposalconstruct/pipe, mob/usr)
 	if(!usr.canmove || usr.stat || usr.restrained())
 		return
 
@@ -251,17 +251,16 @@ Nah
 					C.ptype = 5
 				if(5)
 					C.ptype = 6
-					C.density = 1
+					C.setDensity(TRUE)
 				if(6)
 					C.ptype = 7
-					C.density = 1
+					C.setDensity(TRUE)
 				if(7)
 					C.ptype = 8
-					C.density = 1
+					C.setDensity(TRUE)
 			C.add_fingerprint(usr)
 			C.update()
 			wait = 1
 			spawn(15)
 				wait = 0
 	return
-

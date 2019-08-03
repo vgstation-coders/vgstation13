@@ -8,7 +8,13 @@
 			return									// seems legit.
 
 	// Things you might plausibly want to follow
-	if((ismob(A) && A != src) || istype(A,/obj/machinery/bot) || istype(A,/obj/machinery/singularity))
+	var/static/list/things_that_can_be_followed = list(
+		/mob,
+		/obj/machinery/bot,
+		/obj/machinery/singularity,
+		/obj/mecha,
+	)
+	if(A != src && is_type_in_list(A, things_that_can_be_followed))
 		manual_follow(A)
 
 	// Otherwise jump
@@ -30,7 +36,7 @@
 		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 			to_chat(usr, "<span class='sinister'>A dark forcefield prevents you from entering the area.<span>")
 		else
-			if(targetloc.holy && ((src.invisibility == 0) || iscult(src)))
+			if(targetloc.holy && ((src.invisibility == 0) || isanycultist(src)))
 				to_chat(usr, "<span class='warning'>These are sacred grounds, you cannot go there!</span>")
 			else
 				forceEnter(targetloc)
@@ -46,6 +52,9 @@
 	//next_move = world.time + 8
 
 	var/list/modifiers = params2list(params)
+	if(modifiers["middle"] && modifiers["shift"])
+		MiddleShiftClickOn(A)
+		return
 	if(modifiers["middle"])
 		MiddleClickOn(A)
 		return
@@ -64,6 +73,9 @@
 
 // We don't need a fucking toggle.
 /mob/dead/observer/ShiftClickOn(var/atom/A)
+	if(isAdminGhost(src))
+		A.ShiftClick(src)
+		return
 	examination(A)
 
 /atom/proc/attack_ghost(mob/user as mob)

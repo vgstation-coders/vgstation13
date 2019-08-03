@@ -1,24 +1,38 @@
 /obj/item/clothing/shoes/syndigaloshes
-	desc = "A pair of brown shoes. They seem to have extra grip." //change line ~346 in code/datums/uplink_item.dm if you remove the second sentence
+	desc = "A pair of brown shoes." // the "extra grip" contraband id text is moved to examine()
 	name = "brown shoes"
 	icon_state = "brown"
 	item_state = "brown"
-	permeability_coefficient = 0.05
+	_color = "brown"
 	clothing_flags = NOSLIP
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/list/clothing_choices = list()
 	actions_types = list(/datum/action/item_action/change_appearance_shoes)
 	siemens_coefficient = 0.8
-	species_fit = list(VOX_SHAPED)
+	permeability_coefficient = 0.90
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, UNDEAD_SHAPED, MUSHROOM_SHAPED)
+
+// desc replacement block
+/obj/item/clothing/shoes/syndigaloshes/examine(mob/user)
+	..()
+	if(is_holder_of(user, src)) // are the noslips on your person or on the floor?
+		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> they are apparently modified with complex electronics and extra-grip soles.</span>") // these are no-slips yes hello sir
+		to_chat(user, "<span class='info'>They are rated to fit all known species able to wear footgear.</span>") // catbeasts/unathi/golems btfo, how will they ever recover
+		return
+	if(isturf(loc) && user.Adjacent(src)) // so there's degrees of identification. above is blatant, this is less so
+		to_chat(user, "Something's a little off...")
 
 /obj/item/clothing/shoes/syndigaloshes/New()
 	..()
+	verbs += /obj/item/clothing/shoes/syndigaloshes/verb/change_appearance_shoes
 	for(var/Type in typesof(/obj/item/clothing/shoes) - list(/obj/item/clothing/shoes, /obj/item/clothing/shoes/syndigaloshes))
 		clothing_choices += new Type
 	return
 
+/*	// the above 5 lines invalidate any purpose this block once had
 /obj/item/clothing/shoes/syndigaloshes/attackby(obj/item/I, mob/user)
 	..()
+
 	if(!istype(I, /obj/item/clothing/shoes) || istype(I, src.type))
 		return 0
 	else
@@ -30,9 +44,11 @@
 		to_chat(user, "<span class='notice'>[S.name]'s pattern absorbed by \the [src].</span>")
 		return 1
 	return 0
+*/
 
 /datum/action/item_action/change_appearance_shoes
-	name = "Change Shoes Appearance"
+	name = "Change Shoe Color"
+	desc = "Swap the appearance of your shoes."
 
 /datum/action/item_action/change_appearance_shoes/Trigger()
 	var/obj/item/clothing/shoes/syndigaloshes/T = target
@@ -40,23 +56,25 @@
 		return
 	T.change()
 
+/obj/item/clothing/shoes/syndigaloshes/verb/change_appearance_shoes()
+	set name = "Change Shoe Color"
+	set category = "Object"
+	set desc = "Swap the appearance of your shoes."
+	src.change()
+
 /obj/item/clothing/shoes/syndigaloshes/proc/change()
 	var/obj/item/clothing/shoes/A
-	A = input("Select Colour to change it to", "BOOYEA", A) as null|anything in clothing_choices
-	if(!A ||(usr.stat))
+	A = input("Pick a color:", "BOOYEA", A) as null|anything in clothing_choices
+	if(!A || usr.incapacitated() || !Adjacent(usr) || isturf(src.loc))
 		return
 
-	desc = null
-	permeability_coefficient = 0.90
-
 	desc = A.desc
-	desc += " They seem to have extra grip."
 	name = A.name
 	icon_state = A.icon_state
 	item_state = A.item_state
 	_color = A._color
 	step_sound = A.step_sound
-	usr.update_inv_w_uniform()	//so our overlays update.
+	usr.update_inv_shoes()
 
 /obj/item/clothing/shoes/mime
 	name = "mime shoes"
@@ -119,12 +137,14 @@
 	slowdown = MISC_SHOE_SLOWDOWN
 	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	sterility = 100
 
 /obj/item/clothing/shoes/galoshes/broken
 	name = "ruined galoshes"
 	desc = "The grip treading is broken off."
 	icon_state = "galoshes_ruined"
 	flags = null
+	sterility = 80
 
 /obj/item/clothing/shoes/clown_shoes
 	desc = "The prankster's standard-issue clowning shoes. Damn they're huge!"
@@ -142,6 +162,16 @@
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/goblin(get_turf(src))
 		qdel(W)
 		qdel(src)
+
+/obj/item/clothing/shoes/clown_shoes/elf
+	desc = "Jolly shoes for a jolly little elf!"
+	name = "elf shoes"
+	icon_state = "elf_shoes"
+	item_state = "elf_shoes"
+	_color = "elf_shoes"
+
+/obj/item/clothing/shoes/clown_shoes/elf/stickymagic
+	canremove = 0
 
 #define CLOWNSHOES_RANDOM_SOUND "random sound"
 
@@ -165,6 +195,7 @@
 		"Taser" = 'sound/weapons/Taser.ogg',
 		"Male scream" = "malescream",
 		"Female scream" = "femalescream",
+		"Vox shriek" = 'sound/misc/shriek1.ogg',
 		"Male cough" = "malecough",
 		"Female cough" = "femalecough",
 		"Sad trombone" = 'sound/misc/sadtrombone.ogg',
@@ -183,8 +214,8 @@
 		"Random" = CLOWNSHOES_RANDOM_SOUND)
 	var/random_sound = 0
 
-/obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/user)
-	if(user.mind && user.mind.assigned_role != "Clown")
+/obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/living/user)
+	if(user.mind && !clumsy_check(user))
 		to_chat(user, "<span class='danger'>These shoes are too powerful for you to handle!</span>")
 		if(prob(25))
 			if(ishuman(user))
@@ -224,7 +255,7 @@
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 
-		if(H.mind && H.mind.assigned_role != "Clown")
+		if(H.mind && !clumsy_check(H))
 			if( ( H.mind.assigned_role == "Mime" ) )
 				H.Slip(3, 2, 1)
 
@@ -284,8 +315,15 @@
 	desc = "Tovarish, no one will realize you stepped on a pile of shit if your pair already looks like shit."
 	icon_state = "nr_boots"
 	item_state = "nr_boots"
+	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 
-/obj/item/clothing/shoes/cult
+obj/item/clothing/shoes/jackboots/cowboy
+	name = "cowboy boots"
+	desc = "No snake in these boots."
+	icon_state = "cowboy"
+	item_state = "cowboy"
+
+/obj/item/clothing/shoes/cult_legacy
 	name = "boots"
 	desc = "A pair of boots worn by the followers of Nar-Sie."
 	icon_state = "cult"
@@ -295,7 +333,7 @@
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 
-/obj/item/clothing/shoes/cult/cultify()
+/obj/item/clothing/shoes/cult_legacy/cultify()
 	return
 
 /obj/item/clothing/shoes/cyborg
@@ -320,6 +358,12 @@
 	desc = "The height of fashion, and they're pre-polished!"
 	icon_state = "laceups"
 	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/shoes/purplepumps
+	name = "purple pumps"
+	desc = "Make you seem slightly taller."
+	icon_state = "purplepumps"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/shoes/roman
 	name = "roman sandals"
@@ -424,3 +468,52 @@
 	desc = "A pair of boots worn by the followers of Ratvar."
 	icon_state = "clockwork"
 	item_state = "clockwork"
+
+/obj/item/clothing/shoes/knifeboot
+	name = "laceup shoes"
+	desc = "The height of fashion, and they're pre-polished!"
+	icon_state = "laceups"
+	item_state = "laceups"
+	species_fit = list(VOX_SHAPED)
+	actions_types = list(/datum/action/item_action/generic_toggle)
+	var/toggle = FALSE
+
+/obj/item/clothing/shoes/knifeboot/attack_self()
+	toggle = !toggle
+	to_chat(usr, "<span class = 'notice'>You toggle \the [src]'s hidden knife [toggle?"out":"in"].</span>")
+	update_icon()
+	..()
+
+/obj/item/clothing/shoes/knifeboot/update_icon()
+	if(toggle)
+		icon_state = "[initial(icon_state)]_1"
+	else
+		icon_state = initial(icon_state)
+	item_state = icon_state
+
+/obj/item/clothing/shoes/knifeboot/on_kick(mob/living/carbon/human/user, mob/living/victim)
+	if(istype(victim) && toggle)
+		var/datum/organ/external/affecting = victim.get_organ(ran_zone(user.zone_sel.selecting))
+		//Sharpness 1.5, force 10, edge = SHARP_TIP | SHARP_BLADE
+		victim.apply_damage(victim.run_armor_absorb(affecting, "melee", 10), BRUTE, affecting, victim.run_armor_check(affecting, "melee"), sharp = 1.5, edge = SHARP_TIP | SHARP_BLADE, used_weapon = src)
+
+/obj/item/clothing/shoes/lich_king
+	name = "old knight greaves"
+	desc = "Battered by time, and questionably comfortable."
+	icon_state = "lichking_boots"
+	item_state = "lichking_boots"
+	wizard_garb = 1
+
+/obj/item/clothing/shoes/jackboots/inquisitor
+	name = "noble boots"
+	desc = "A pair of high quality black leather boots."
+	icon_state = "noble-boots"
+	item_state = "noble-boots"
+	wizard_garb = TRUE
+
+/obj/item/clothing/shoes/jackboots/highlander
+	name = "highlander's boots"
+	desc = "A quality pair of boots, essential for any highlander."
+	icon_state = "highlanderboots"
+	item_state = "highlanderboots"
+	wizard_garb = 1

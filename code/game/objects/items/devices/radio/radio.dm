@@ -4,6 +4,7 @@
 	suffix = "\[3\]"
 	icon_state = "walkietalkie"
 	item_state = "walkietalkie"
+	var/illegalradio_construction = 0
 	var/on = 1 // 0 for off
 	var/last_transmission
 	var/frequency = 1459 //common chat
@@ -78,10 +79,8 @@
 /obj/item/device/radio/AltClick()
 	if(!usr.incapacitated() && is_holder_of(usr, src))
 		attack_self(usr)
-
-/obj/item/device/radio/attack_self(mob/user as mob)
-	user.set_machine(src)
-	interact(user)
+	else
+		return ..()
 
 /obj/item/device/radio/interact(mob/user as mob)
 	if(!on)
@@ -100,7 +99,7 @@
 				Frequency:
 				<A href='byond://?src=\ref[src];freq=-10'>-</A>
 				<A href='byond://?src=\ref[src];freq=-2'>-</A>
-				[format_frequency(frequency)]
+				<A href='byond://?src=\ref[src];set_freq=-1'>[format_frequency(frequency)]</a>
 				<A href='byond://?src=\ref[src];freq=2'>+</A>
 				<A href='byond://?src=\ref[src];freq=10'>+</A><BR>
 				"}
@@ -124,12 +123,17 @@
 			<B>[chan_name]</B>: <A href='byond://?src=\ref[src];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
 			"}
 
+/obj/item/device/radio/proc/check_traitor_uplink(frequency)
+	if(hidden_uplink)
+		if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
+			usr << browse(null, "window=radio")
+			return 1
+
 /obj/item/device/radio/Topic(href, href_list)
-	//..()
-	if (usr.stat || !on)
+	if (!isAdminGhost(usr) && (usr.stat || !on))
 		return
 
-	if (!(issilicon(usr) || (usr.contents.Find(src) || ( in_range(src, usr) && istype(loc, /turf) ))))
+	if(!in_range(src,usr) && !isAdminGhost(usr) && !issilicon(usr)) //Not adjacent/have telekinesis/a silicon/an aghost? Close it.
 		usr << browse(null, "window=radio")
 		return
 	usr.set_machine(src)
@@ -164,15 +168,21 @@
 
 		return
 
-	else if (href_list["freq"])
-		var/new_frequency = (frequency + text2num(href_list["freq"]))
-		if (!freerange || (frequency < 1200 || frequency > 1600))
-			new_frequency = sanitize_frequency(new_frequency, maxf)
+	else if("set_freq" in href_list)
+		var/new_frequency
+		new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
+		new_frequency = sanitize_frequency(new_frequency, maxf)
 		set_frequency(new_frequency)
-		if(hidden_uplink)
-			if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
-				usr << browse(null, "window=radio")
-				return
+		if (check_traitor_uplink(frequency))
+			return
+
+	else if (href_list["freq"])
+		var/new_frequency
+		new_frequency = (frequency + text2num(href_list["freq"]))
+		new_frequency = sanitize_frequency(new_frequency, maxf)
+		set_frequency(new_frequency)
+		if (check_traitor_uplink(frequency))
+			return
 
 	else if (href_list["talk"])
 		broadcasting = text2num(href_list["talk"])
@@ -305,7 +315,7 @@
 		speech.job = "Personal AI"
 
 	// --- Cold, emotionless machines. ---
-	else if(isobj(speech.speaker))
+	else if(isobj(speech.speaker) || istype(speech.speaker, /mob/living/simple_animal/spiderbot))
 		speech.job = "Machine"
 
 	// --- Unidentifiable mob ---
@@ -513,19 +523,81 @@
 	else
 		user.show_message("<span class = 'info'>\The [src] can not be modified or attached!</span>")
 
+		
+/obj/item/device/radio/attack_self(mob/user)
+	if(illegalradio_construction == 0)
+		user.set_machine(src)
+		interact(user)
+	else if(illegalradio_construction == 1)
+		to_chat(user, "You remove the crude ansible from \the [src].")
+		new /obj/item/weapon/ghetto_ansible(get_turf(src.loc))
+		illegalradio_construction = 0
+		updateDialog()
+		update_icon()		
+	else if(illegalradio_construction == 2)
+		to_chat(user, "You need wirecutters to remove the wiring!")
+	
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	user.set_machine(src)
-	if (!( isscrewdriver(W) ))
-		return
-	b_stat = !( b_stat )
-	if (b_stat)
-		user.show_message("<span class = 'notice'>\The [src] can now be attached and modified!</span>")
-	else
-		user.show_message("<span class = 'notice'>\The [src] can no longer be modified or attached!</span>")
+	if(W.is_screwdriver(user))
+		if(illegalradio_construction == 0)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			b_stat = !( b_stat )
+			if (b_stat)
+				user.show_message("<span class = 'notice'>\The [src] can now be attached and modified!</span>")
+			else
+				user.show_message("<span class = 'notice'>\The [src] can no longer be modified or attached!</span>")
+		else if(illegalradio_construction == 2)
+			to_chat(user, "You forcefully tighten the radio's back cover.")
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			if(src.loc == user)
+				user.drop_item(src, force_drop = 1)
+				var/obj/item/device/illegalradio/I = new (get_turf(user))
+				user.put_in_hands(I)
+				message_admins("[key_name(user)] just built a ghetto radio. ([formatJumpTo(get_turf(user))])")
+				var/text = "[key_name(user)] just built a ghetto radio."
+				log_game(text)
+				log_admin(text)
+			else
+				new /obj/item/device/illegalradio(get_turf(src.loc))
+			qdel(src)
+		else
+			to_chat(user, "You can't close the cover with the ansible inside!")
+	else if(istype(W, /obj/item/weapon/ghetto_ansible) && illegalradio_construction == 0 && b_stat)
+		to_chat(user, "You wedge \the [W] in the back of \the [src].")
+		illegalradio_construction = 1
+		qdel(W)
+	else if(istype(W, /obj/item/stack/cable_coil) && illegalradio_construction == 1 && b_stat)
+		var/obj/item/stack/cable_coil/C = W
+		if(C.amount < 3)
+			to_chat(user, "You don't have enough cables to wire the radio!")
+			return
+		to_chat(user, "You add high-voltage wires to the radio.")
+		illegalradio_construction = 2
+		C.use(3)	
+	else if(iswirecutter(W) && illegalradio_construction == 2 && b_stat)
+		to_chat(user, "You cut the extra wires out of the radio.")
+		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+		illegalradio_construction = 1
+		var/obj/item/stack/cable_coil/C = new (get_turf(user))
+		C.amount = 3
 	updateDialog()
+	update_icon()
 	add_fingerprint(user)
-
+	
+/obj/item/device/radio/update_icon()
+	..()
+	if(illegalradio_construction == 0)
+		icon_state = "walkietalkie"
+		item_state = "walkietalkie"
+	else if(illegalradio_construction == 1)
+		icon_state = "radio_build1"
+		item_state = "radio_build1"	
+	else
+		icon_state = "radio_build2"
+		item_state = "radio_build2"	
+	
 /obj/item/device/radio/emp_act(severity)
 	broadcasting = 0
 	listening = 0

@@ -7,11 +7,17 @@ var/global/list/outbreak_level_words=list(
 	/* 6 */ 'sound/vox_fem/six.ogg',
 	/* 7 */ 'sound/vox_fem/seven.ogg',
 )
-/proc/biohazard_alert(var/level=0)
+/proc/biohazard_alert()
 	command_alert(/datum/command_alert/biohazard_alert)
 
+/proc/biohazard_alert_minor()
+	command_alert(/datum/command_alert/biohazard_alert/minor)
+
+/proc/biohazard_alert_major()
+	command_alert(/datum/command_alert/biohazard_alert/major)
+
 /*
-#warning TELL N3X15 TO COMMENT THIS SHIT OUT
+#warn TELL N3X15 TO COMMENT THIS SHIT OUT
 /mob/verb/test_biohazard()
 	biohazard_alert()
 */

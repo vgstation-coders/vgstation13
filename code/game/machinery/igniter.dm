@@ -63,21 +63,18 @@ var/global/list/igniters = list()
 		icon_state = "igniter0"
 
 /obj/machinery/igniter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if(istype(W, /obj/item/weapon/weldingtool) && src.assembly)
+	if(iswelder(W) && src.assembly)
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-			to_chat(user, "<span class='notice'>You begin to cut \the [src] off the floor...</span>")
-			if (do_after(user, src, 40))
-				user.visible_message( \
-					"[user] disassembles \the [src].", \
-					"<span class='notice'>You have disassembled \the [src].</span>", \
-					"You hear welding.")
-				src.assembly.forceMove(src.loc)
-				qdel(src)
-				return
+		to_chat(user, "<span class='notice'>You begin to cut \the [src] off the floor...</span>")
+		if (WT.do_weld(user, src, 40, 0))
+			user.visible_message( \
+				"[user] disassembles \the [src].", \
+				"<span class='notice'>You have disassembled \the [src].</span>", \
+				"You hear welding.")
+			src.assembly.forceMove(src.loc)
+			qdel(src)
+			return
 		else
-			:
 			to_chat(user, "<span class='warning'>You need more welding fuel to do that.</span>")
 			return 1
 
@@ -119,7 +116,7 @@ var/global/list/igniters = list()
 /obj/machinery/sparker/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
-	if (isscrewdriver(W))
+	if (W.is_screwdriver(user))
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)

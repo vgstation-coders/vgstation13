@@ -46,7 +46,7 @@
 	desc = "Blueprints of the station, designed for the passive aggressive spider bots aboard."
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
-	can_delete_areas = list()
+	can_delete_areas = list(AREA_BLUEPRINTS)
 
 	header = "<small>These blueprints are for the creation of new rooms only; you cannot change existing rooms.</small>"
 
@@ -61,7 +61,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	w_class = W_CLASS_TINY
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
-	can_delete_areas = list()
+	can_delete_areas = list(AREA_BLUEPRINTS)
 
 	header = "<small>This permit is for the creation of new rooms only; you cannot change existing rooms.</small>"
 
@@ -84,9 +84,8 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	can_delete_areas = list(AREA_BLUEPRINTS, AREA_STATION)
 
 /obj/item/blueprints/attack_self(mob/living/M)
-	if (!ishuman(M) && !issilicon(M))
+	if (!ishigherbeing(M) && !issilicon(M))
 		to_chat(M, "This stack of blue paper means nothing to you.")//monkeys cannot into projecting
-
 		return
 
 	if(currently_edited)
@@ -119,7 +118,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 			delete_area(usr)
 
 /obj/item/blueprints/interact()
-	var/area/A = get_area()
+	var/area/A = get_area(src)
 	var/text = {"<HTML><head><title>[src]</title></head><BODY>
 <h2>[station_name()] blueprints</h2>
 <hr>
@@ -155,13 +154,9 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	usr << browse(text, "window=blueprints")
 	onclose(usr, "blueprints")
 
-
-/obj/item/blueprints/proc/get_area()
-	var/turf/T = get_turf(usr)
-	var/area/A = get_area_master(T)
-	return A
-
-/obj/item/blueprints/proc/get_area_type(var/area/A = get_area())
+/obj/item/blueprints/proc/get_area_type(var/area/A)
+	if(!A)
+		A = get_area(src)
 	if (isspace(A))
 		return AREA_SPACE
 	else if(istype(A, /area/station/custom))
@@ -188,7 +183,8 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/process()
 	//Blueprints must be in hands to be usable
 	//Editor must be in the edited area
-	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || (!currently_edited.contents.Find(get_turf(editor))) )
+	var/turf/turf_loc = get_turf(editor)
+	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || turf_loc.loc != currently_edited )
 		if(editor)
 			to_chat(editor, "<span class='info'>You finish modifying \the [src].</span>")
 
@@ -324,7 +320,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	editor = user
 
-	currently_edited = get_area()
+	currently_edited = get_area(src)
 	processing_objects.Add(src)
 
 	//Create a visual effect over the edited area
@@ -338,7 +334,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		to_chat(user, "This drawing was already signed, and can't be renamed.")
 		return
 
-	var/area/A = get_area()
+	var/area/A = get_area(src)
 
 	if(!istype(A) || !istype(user))
 		return
@@ -367,7 +363,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		to_chat(user, "This drawing can't be erased.")
 		return
 
-	var/area/areadeleted = get_area()
+	var/area/areadeleted = get_area(src)
 
 	if(area_protection_buffer >= 0)
 		for(var/obj/machinery/alarm/air_alarm in areadeleted)
@@ -383,7 +379,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		return
 	if(!Adjacent(user))
 		return
-	if(!(areadeleted == get_area()))
+	if(!(areadeleted == get_area(src)))
 		return //if the blueprints are no longer in the area, return
 
 	for(var/turf/T in areadeleted)
@@ -458,3 +454,72 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 					return ROOM_ERR_SPACE
 		found+=T
 	return found
+
+
+/**
+	Turns the area the person is currently in into a shuttle if it meets to certian standards
+		- Is a custom area. No players turning the bar into a shuttle
+		- Has enough engines that are active
+			- 2 engines for every 25 tiles of area.
+			- Engines must be of the DIY variety, and have a connected heater.
+		- The point they are facing is outwards on the edge of the area
+*/
+
+/obj/item/shuttle_license
+	name = "shuttle verification license"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "blueprints"
+	desc = "Required for turning a dull room with some engines in the back into something that can move through space!"
+
+/obj/item/shuttle_license/attack_self(mob/user)
+	to_chat(user, "<span class = 'notice'>Checking current area...</span>")
+	var/area/A = get_area(user)
+	if(!istype(A, /area/station/custom))
+		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Custom areas only.</span>")
+		return
+
+	var/datum/shuttle/conflict = A.get_shuttle()
+
+	if(conflict)
+		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: This area is already marked as a shuttle.</span>")
+		return
+
+	var/area_size = A.area_turfs.len
+	var/active_engines = 0
+	for(var/obj/structure/shuttle/engine/propulsion/DIY/D in A)
+		if(D.heater && D.anchored)
+			active_engines++
+
+	if(active_engines < 2 || area_size/active_engines > 12.5) //2 engines per 25 tiles, with a minimum of 2 engines.
+		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Insufficient engine count.</span>")
+		to_chat(user, "<span class = 'notice'> Active engine count: [active_engines]. Area size: [area_size] meters squared.</span>")
+		return
+
+	var/turf/check_turf = get_step(user, user.dir)
+
+	if(get_area(check_turf) == A)
+		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Unable to create docking port at current user location.</span>")
+		return
+
+	to_chat(user, "<span class = 'notice'>Checks complete. Turning area into shuttle.</span>")
+
+	var/name = input(user, "Please name the new shuttle", "Shuttlify", A.name) as text|null
+
+	if(!name)
+		to_chat(user, "Shuttlifying cancelled.")
+		return
+
+	var/obj/docking_port/shuttle/DP = new /obj/docking_port/shuttle(get_turf(src))
+	DP.dir = user.dir
+
+
+	var/datum/shuttle/custom/S = new(starting_area = A)
+	S.initialize()
+	S.name = name
+
+	to_chat(user, "Shuttle created!")
+
+
+	message_admins("<span class='notice'>[key_name_admin(user)] has turned [A.name] into a shuttle named [S.name]. [formatJumpTo(get_turf(user))]</span>")
+	log_admin("[key_name(user)]  has turned [A.name] into a shuttle named [S.name].")
+	qdel(src)

@@ -1,0 +1,32 @@
+"a" = (/turf/unsimulated/wall/other,/area/vault/sokoban/level)
+"b" = (/turf/unsimulated/wall/bomberman{color = "#FFFFCC"},/area/vault/sokoban/level)
+"c" = (/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"d" = (/obj/structure/closet/crate/sokoban,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"e" = (/obj/structure/ladder/sokoban/entrance,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"f" = (/obj/structure/ladder/sokoban/exit,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"g" = (/obj/structure/sokoban_teleporter,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"h" = (/obj/structure/rack,/obj/abstract/map/spawner/security/weapons,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"i" = (/mob/living/simple_animal/hostile/carp{faction = "pirate"},/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"j" = (/mob/living/simple_animal/hostile/humanoid/pirate,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"k" = (/mob/living/simple_animal/hostile/humanoid/pirate/ranged,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"l" = (/obj/structure/table/woodentable,/obj/item/toy/cards,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"m" = (/obj/item/weapon/stool,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"n" = (/obj/machinery/door/airlock/vault{icon_state = "door_locked"; locked = 1; name = "Secure Armory"; req_access_txt = ""},/obj/effect/gibspawner/blood,/obj/effect/gibspawner/blood_drip,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"o" = (/obj/machinery/vending/discount,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+abbbbbbbbbbbbbbbbbbbaaaaaaaaaaaa
+abccccbccccbbbbbbbbbahchchchchaa
+abccddbddccebbbbbbbbacccccccccaa
+abcccccdcccbbbbbbbbbaccjccccikaa
+abccccbccccbbbbbbbbbacmlmjccccaa
+abbcbbbbbbbbbbbbbbbbacjcccckccaa
+abccdcbcccccbbbbbbbbacccccccccaa
+abcddcbdcdcdbbbbbbbbacccccccccaa
+abccdcccccdcbbbbbbbbaoccccccccaa
+abcdddbdccdcbbbbbbbbaaaaaaaaanaa
+abccccbccdcdcggggggggggggggggcfa
+abbbbbbbbbbbbbbbbbbbaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"}

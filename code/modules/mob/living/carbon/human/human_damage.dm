@@ -34,15 +34,19 @@
 	return 0
 
 //These procs fetch a cumulative total damage from all organs
-/mob/living/carbon/human/getBruteLoss()
+/mob/living/carbon/human/getBruteLoss(var/ignore_inorganic = FALSE)
 	var/amount = 0
 	for(var/datum/organ/external/O in organs)
+		if(ignore_inorganic && !O.is_organic())
+			continue
 		amount += O.brute_dam
 	return amount
 
-/mob/living/carbon/human/getFireLoss()
+/mob/living/carbon/human/getFireLoss(var/ignore_inorganic = FALSE)
 	var/amount = 0
 	for(var/datum/organ/external/O in organs)
+		if(ignore_inorganic && !O.is_organic())
+			continue
 		amount += O.burn_dam
 	return amount
 
@@ -68,6 +72,9 @@
 
 	if(amount > 0)
 		take_overall_damage(0, amount)
+		if(config.burn_damage_ash && amount >= config.burn_damage_ash)
+			dust(TRUE)
+			return
 	else
 		heal_overall_damage(0, -amount)
 	hud_updateflag |= 1 << HEALTH_HUD
@@ -170,10 +177,12 @@
 	return parts
 
 //Returns a list of damageable organs
-/mob/living/carbon/human/proc/get_damageable_organs()
+/mob/living/carbon/human/proc/get_damageable_organs(var/ignore_inorganics = FALSE)
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
 		if(!O.is_existing())
+			continue
+		if(ignore_inorganics && !O.is_organic())
 			continue
 		if(O.brute_dam + O.burn_dam < O.max_damage)
 			parts += O
@@ -199,8 +208,8 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 //Damages ONE external organ, organ gets randomly selected from damagable ones.
 //It automatically updates damage overlays if necesary
 //It automatically updates health status
-/mob/living/carbon/human/take_organ_damage(var/brute, var/burn, var/sharp = 0, var/edge = 0)
-	var/list/datum/organ/external/parts = get_damageable_organs()
+/mob/living/carbon/human/take_organ_damage(var/brute, var/burn, var/sharp = 0, var/edge = 0, var/ignore_inorganics = FALSE)
+	var/list/datum/organ/external/parts = get_damageable_organs(ignore_inorganics)
 	if(!parts.len)
 		return
 	var/datum/organ/external/picked = pick(parts)
@@ -242,7 +251,10 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 		brute = brute*species.brute_mod
 
 	if(status_flags & GODMODE)
-		return	//godmode
+		return 0	//godmode
+
+	. = brute + burn
+
 	var/list/datum/organ/external/parts = get_damageable_organs()
 	var/update = 0
 	while(parts.len && (brute>0 || burn>0) )
@@ -260,7 +272,6 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 	hud_updateflag |= 1 << HEALTH_HUD
 	if(update)
 		UpdateDamageIcon()
-
 
 ////////////////////////////////////////////
 
@@ -345,8 +356,7 @@ This function restores all organs.
 	//visible_message("Hit debug. [damage] | [damagetype] | [def_zone] | [blocked] | [sharp] | [used_weapon]")
 	if((damagetype != BRUTE) && (damagetype != BURN))
 		return ..(damage, damagetype, def_zone, blocked, ignore_events = ignore_events)
-
-	if(blocked >= 2)
+	if(blocked >= 100)
 		return 0
 
 	var/datum/organ/external/organ = null
@@ -360,7 +370,7 @@ This function restores all organs.
 		return 0
 
 	if(blocked)
-		damage = (damage/(blocked+1))
+		damage = (damage/100)*(100-blocked)
 
 	if(!ignore_events && INVOKE_EVENT(on_damaged, list("type" = damagetype, "amount" = damage)))
 		return 0
@@ -480,4 +490,4 @@ This function restores all organs.
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))
 			rads = rads/2
-	..()
+	return ..()

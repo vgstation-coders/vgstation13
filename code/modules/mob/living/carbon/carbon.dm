@@ -7,8 +7,18 @@
 	if(now_pushing)
 		return
 	..()
-	if(can_be_infected(AM) && prob(10))
-		spread_disease_to(src, AM, "Contact")
+	if(isliving(AM))
+		var/mob/living/L = AM
+		var/block = 0
+		var/bleeding = 0
+		var/contact_part = HANDS//when we run into people, let's assume that we touch them hands first
+		if (L.size == SIZE_TINY)
+			contact_part = FEET//unless they're really small, in which case, we touch them feet first.
+		if (check_contact_sterility(contact_part) || L.check_contact_sterility(FULL_TORSO))//only one side has to wear protective clothing to prevent contact infection
+			block = 1
+		if (check_bodypart_bleeding(contact_part) && L.check_bodypart_bleeding(FULL_TORSO))//both sides have to be bleeding to allow for blood infections
+			bleeding = 1
+		share_contact_diseases(L,block,bleeding)
 	handle_symptom_on_touch(src, AM, BUMP)
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
@@ -19,7 +29,7 @@
 	if(!istype(AM, /mob/living/carbon))
 		handle_symptom_on_touch(AM, src, BUMP)
 
-/mob/living/carbon/Move(NewLoc,Dir=0,step_x=0,step_y=0)
+/mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
 
 	if(.)
@@ -28,11 +38,14 @@
 
 			if(m_intent == "run")
 				burn_calories(HUNGER_FACTOR / 20)
-		update_minimap()
+		//update_minimap()
+		if (displayed_holomap)
+			displayed_holomap.update_holomap()
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
 	M.unarmed_attack_mob(src)
 
+/* Old Station Map Stuff
 /mob/living/carbon/proc/update_minimap()
 	var/obj/item/device/pda/pda_device = machine
 	if(machine && istype(pda_device))
@@ -44,6 +57,7 @@
 		else
 			unset_machine()
 			src << browse(null, "window=pda")
+*/
 
 /mob/living/carbon/relaymove(var/mob/user, direction)
 	if(user in src.stomach_contents)
@@ -68,7 +82,7 @@
 					if(M.client)
 						M.show_message(text("<span class='warning'><B>[user] attacks [src]'s stomach wall with the [I.name]!</span>"), 2)
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
-				src.delayNextMove(10) //no just holding the key for an instant gib
+				user.delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib()
 	dropBorers(1)
@@ -76,14 +90,6 @@
 		drop_stomach_contents()
 		visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
 	. = ..()
-
-/mob/living/carbon/proc/share_contact_diseases(var/mob/M)
-	for(var/datum/disease/D in viruses)
-		if(D.spread_by_touch())
-			M.contract_disease(D, 0, 1, CONTACT_HANDS)
-	for(var/datum/disease/D in M.viruses)
-		if(D.spread_by_touch())
-			contract_disease(D, 0, 1, CONTACT_HANDS)
 
 /mob/living/carbon/attack_hand(mob/M as mob)
 	if(!istype(M, /mob/living/carbon))
@@ -94,7 +100,6 @@
 		if(temp && !temp.is_usable())
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
-	share_contact_diseases(M)
 	handle_symptom_on_touch(M, src, HAND)
 
 /mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
@@ -163,6 +168,7 @@
 				"<span class='notice'>You check yourself for injuries.</span>" \
 				)
 
+			var/num_injuries = 0
 			for(var/datum/organ/external/org in H.organs)
 				var/status = ""
 				var/brutedamage = org.brute_dam
@@ -176,26 +182,35 @@
 				if(brutedamage > 0)
 					status = "bruised"
 				if(brutedamage > 20)
-					status = "<span class='warning'>bleeding</span>"
+					status = "<span class='warning'>badly wounded</span>"
 				if(brutedamage > 40)
 					status = "<span class='danger'>mangled</span>"
 				if(brutedamage > 0 && burndamage > 0)
 					status += " and "
 				if(burndamage > 40)
 					status += "<span class='orange bold'>peeling away</span>"
-
 				else if(burndamage > 10)
 					status += "<span class='orange italics'>blistered</span>"
 				else if(burndamage > 0)
 					status += "numb"
+				if(org.status & ORGAN_BLEEDING)
+					status = "<span class='danger'>bleeding</span>"
 				if(org.status & ORGAN_DESTROYED)
-					status = "MISSING!"
+					status = "MISSING"
 				if(org.status & ORGAN_MUTATED)
-					status = "weirdly shapen."
-				if(status == "")
-					status = "OK"
-				src.show_message(text("\t []My [] is [].",status=="OK"?"<span class='notice'></span>":"<span class='danger'></span>",org.display_name,status),1)
-			if((SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
+					status = "weirdly shapen"
+
+				if(status != "")
+					to_chat(src, "My [org.display_name] is [status].")
+					num_injuries++
+
+			if(num_injuries == 0)
+				if(hallucinating())
+					to_chat(src, "<span class = 'orange'>My legs are OK.</span>")
+				else
+					to_chat(src, "My limbs are [pick("okay","OK")].")
+
+			if((M_SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
 		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15
 			var/t_him = "it"
@@ -212,7 +227,7 @@
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
 			AdjustKnockdown(-3)
-			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			M.visible_message( \
 				"<span class='notice'>[M] shakes [src] trying to wake [t_him] up!</span>", \
 				"<span class='notice'>You shake [src] trying to wake [t_him] up!</span>", \
@@ -225,12 +240,12 @@
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
-			if(M.zone_sel.selecting == "head" && !(S.status & ORGAN_DESTROYED))
+			if(M.zone_sel.selecting == "head" && !(!S || S.status & ORGAN_DESTROYED))
 				M.visible_message( \
 					"<span class='notice'>[M] pats [src]'s head.</span>", \
 					"<span class='notice'>You pat [src]'s head.</span>", \
 					)
-			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
+			else if((M.zone_sel.selecting == "l_hand" && !(!S || S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(!S || S.status & ORGAN_DESTROYED)))
 				var/shock_damage = 5
 				var/shock_time = 0
 				var/obj/item/clothing/gloves/U = M.get_item_by_slot(slot_gloves)
@@ -252,7 +267,7 @@
 						visible_message("<span class='danger'>\The [H] can't seem to let go from \the [M]'s shocking handshake!</span>")
 						add_logs(H, M, "stungloved", admin = TRUE)
 
-					playsound(H,(H.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
+					H.audible_scream()
 					H.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
 
 					spark(H, 3, FALSE)
@@ -272,20 +287,18 @@
 					if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && T.siemens_coefficient == 0)
 						to_chat(M, "<span class='notice'>\The [src]'s insulated gloves prevent them from being shocked.</span>")
 
-					playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					M.visible_message( \
-						"<span class='notice'>[M] shakes hands with [src].</span>", \
-						"<span class='notice'>You shake hands with [src].</span>", \
+						"<span class='notice'>[M] shakes [ismartian(M) ? "tentacles" : "hands"] with [src].</span>", \
+						"<span class='notice'>You shake [ismartian(M) ? "tentacles" : "hands"] with [src].</span>", \
 						)
 			else
-				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				M.visible_message( \
 					"<span class='notice'>[M] gives [src] a [pick("hug","warm embrace")].</span>", \
 					"<span class='notice'>You hug [src].</span>", \
 					)
 			reagents.add_reagent(PARACETAMOL, 1)
-
-			share_contact_diseases(M)
 
 // ++++ROCKDTBEN++++ MOB PROCS -- Ask me before touching.
 // Stop! ... Hammertime! ~Carn
@@ -327,7 +340,7 @@
 /mob/living/carbon/restrained()
 	if(timestopped)
 		return 1 //under effects of time magick
-	if (handcuffed)
+	if (check_handcuffs())
 		return 1
 	return
 
@@ -388,23 +401,21 @@
 		if(PULSE_NONE)
 			return "0"
 		if(PULSE_2SLOW)
-			temp = rand(20, 40)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 30 + sin(life_tick / 2) * 10
 		if(PULSE_SLOW)
-			temp = rand(40, 60)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 50 + sin(life_tick / 2) * 10
 		if(PULSE_NORM)
-			temp = rand(60, 90)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 75 + sin(life_tick / 2) * 15
 		if(PULSE_FAST)
-			temp = rand(90, 120)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 105 + sin(life_tick / 2) * 15
 		if(PULSE_2FAST)
-			temp = rand(120, 160)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 140 + sin(life_tick / 2) * 20
 		if(PULSE_THREADY)
 			return method ? ">250" : "extremely weak and fast, patient's artery feels like a thread"
 //			output for machines^	^^^^^^^output for people^^^^^^^^^
+	if(method == GETPULSE_HAND)
+		temp += rand(-10, 10)
+	return num2text(round(temp))
 
 /mob/living/carbon/verb/mob_sleep()
 	set name = "Sleep"
@@ -442,6 +453,10 @@
 		B.host_brain.name = "host brain"
 		B.host_brain.real_name = "host brain"
 
+	//reset name if the borer changed it
+	if(name != real_name)
+		name = real_name
+
 	verbs -= /mob/living/carbon/proc/release_control
 	verbs -= /mob/living/carbon/proc/punish_host
 
@@ -472,13 +487,9 @@
 /mob/proc/get_brain_worms()
 	var/list/borers_in_mob = list()
 	for(var/I in contents)
-		if(istype(I,/mob/living/simple_animal/borer))
-			var/mob/living/simple_animal/borer/B = I
-			borers_in_mob.Add(B)
-	if(borers_in_mob.len)
-		return borers_in_mob
-	else
-		return 0
+		if(isborer(I))
+			borers_in_mob.Add(I)
+	return borers_in_mob
 
 /mob/living/carbon/is_muzzled()
 	return(istype(get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/muzzle))
@@ -501,23 +512,23 @@
 				return 1
 	return 0
 
-/mob/living/carbon/CheckSlip()
-	return !locked_to && !lying && !unslippable
+/mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
+	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
 
-/mob/living/carbon/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
-	if(!slip_on_walking && m_intent == "walk")
+/mob/living/carbon/teleport_to(var/atom/A)
+	var/last_slip_value = src.unslippable
+	src.unslippable = 1
+	forceMove(get_turf(A))
+	src.unslippable = last_slip_value
+
+/mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_on_magbooties = 0)
+	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
 		return 0
 
-	if (CheckSlip() < 1 || !on_foot())
-		return 0
-
-	stop_pulling()
-	Stun(stun_amount)
-	Knockdown(weaken_amount)
-
-	playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
-
-	return 1
+	if(..())
+		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+		return 1
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
@@ -593,12 +604,17 @@
 							return E
 
 /mob/living/carbon/proc/handle_symptom_on_touch(var/toucher, var/touched, var/touch_type)
+	if (toucher == touched)
+		return
 	if(virus2.len)
 		for(var/I in virus2)
 			var/datum/disease2/disease/D = virus2[I]
 			if(D.effects.len)
 				for(var/datum/disease2/effect/E in D.effects)
 					E.on_touch(src, toucher, touched, touch_type)
+
+/mob/living/carbon/proc/check_handcuffs()
+	return handcuffed
 
 /mob/living/carbon/proc/get_lowest_body_alpha()
 	if(!body_alphas.len)
@@ -629,8 +645,8 @@
 
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
-	if(!istype(loc, /turf/space) && !reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
-		for(var/obj/item/I in get_clothing_items())
+	if(!istype(loc, /turf/space))
+		for(var/obj/item/I in get_all_slots())
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
 			else
@@ -640,53 +656,22 @@
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
 				. *= I.slowdown
 
+		if(. > 1 && reagents.has_any_reagents(HYPERZINES))
+			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
+
 /mob/living/carbon/base_movement_tally()
 	. = ..()
 	if(flying)
 		return // Calculate none of the following because we're technically on a vehicle
-	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(reagents.has_any_reagents(HYPERZINES))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown
 
 	if(feels_pain() && !has_painkillers())
-		var/health_deficiency = (100 - health - halloss)
-		if(health_deficiency >= 40)
-			. += (health_deficiency / 25)
-
-
-/mob/living/carbon/proc/can_mind_interact(var/mob/M)
-	//	to_chat(world, "Starting can interact on [M]")
-	if(!iscarbon(M))
-		return 0 //Can't see non humans with your fancy human mind.
-//	to_chat(world, "[M] is a human")
-	var/turf/temp_turf = get_turf(M)
-	var/turf/our_turf = get_turf(src)
-	if(!temp_turf)
-//		to_chat(world, "[M] is in null space")
-		return 0
-	if((temp_turf.z != our_turf.z) || M.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
-//		to_chat(world, "[(temp_turf.z != our_turf.z) ? "not on the same zlevel as [M]" : "[M] is not concious"]")
-		if(temp_turf.z != map.zCentcomm)
-			to_chat(src, "The mind of [M] is too faint...")//Prevent "The mind of Admin is too faint..."
-
-		return 0
-	if(M_PSY_RESIST in M.mutations)
-//		to_chat(world, "[M] has psy resist")
-		to_chat(src, "The mind of [M] is resisting!")
-		return 0
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
-			to_chat(src, "Interference is disrupting the connection with the mind of [M].")
-			return 0
-	if(ismartian(M))
-		var/mob/living/carbon/martian/MR = M
-		if(MR.head)
-			if(istype(MR.head, /obj/item/clothing/head/helmet/space/martian) || istype(MR.head,/obj/item/clothing/head/tinfoil))
-				to_chat(src, "Interference is disrupting the connection with the mind of [M].")
-				return 0
-	return 1
+		var/health_deficiency = (maxHealth - health - halloss)
+		if(health_deficiency >= (maxHealth * 0.4))
+			. += (health_deficiency / (maxHealth * 0.25))
 
 /mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing)
 	if(invisibility || alpha <= 1 || !source_define)
@@ -701,3 +686,37 @@
 				body_alphas.Remove(source_define)
 				regenerate_icons()
 
+
+/mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
+	if (!..())
+		return FALSE
+
+	if (unslippable) //if unslippable, don't even bother making checks
+		return FALSE
+
+	switch(P.wet)
+		if(TURF_WET_WATER)
+			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
+				return FALSE
+			step(src, dir)
+			visible_message("<span class='warning'>[src] slips on the wet floor!</span>", \
+			"<span class='warning'>You slip on the wet floor!</span>")
+
+		if(TURF_WET_LUBE)
+			step(src, dir)
+			if (!Slip(stun_amount = 10, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+				return FALSE
+			for (var/i = 1 to 4)
+				spawn(i)
+					if(!locked_to)
+						step(src, dir)
+			take_organ_damage(2) // Was 5 -- TLE
+			visible_message("<span class='warning'>[src] slips on the floor!</span>", \
+			"<span class='warning'>You slip on the floor!</span>")
+
+		if(TURF_WET_ICE)
+			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE))
+				step(src, dir)
+				visible_message("<span class='warning'>[src] slips on the icy floor!</span>", \
+				"<span class='warning'>You slip on the icy floor!</span>")
+	return TRUE

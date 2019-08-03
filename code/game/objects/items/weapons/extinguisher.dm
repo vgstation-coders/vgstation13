@@ -66,12 +66,7 @@
 /obj/item/weapon/extinguisher/examine(mob/user)
 	..()
 	if(!is_open_container())
-		to_chat(user, "It contains:")
-		if(reagents && reagents.reagent_list.len)
-			for(var/datum/reagent/R in reagents.reagent_list)
-				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-		else
-			to_chat(user, "<span class='info'>Nothing</span>")
+		reagents.get_examine(user)
 	for(var/thing in src)
 		to_chat(user, "<span class='warning'>\A [thing] is jammed into the nozzle!</span>")
 
@@ -90,17 +85,17 @@
 			user.visible_message("[user] begins to unwrench the fill cap on \the [src].","<span class='notice'>You begin to unwrench the fill cap on \the [src].</span>")
 			if(do_after(user, src, 25))
 				user.visible_message("[user] removes the fill cap on \the [src].","<span class='notice'>You remove the fill cap on \the [src].</span>")
-				playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
+				playsound(src,'sound/items/Ratchet.ogg', 100, 1)
 				flags |= OPENCONTAINER
 		else
 			user.visible_message("[user] begins to seal the fill cap on \the [src].","<span class='notice'>You begin to seal the fill cap on \the [src].</span>")
 			if(do_after(user, src, 25))
 				user.visible_message("[user] fastens the fill cap on \the [src].","<span class='notice'>You fasten the fill cap on \the [src].</span>")
-				playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
+				playsound(src,'sound/items/Ratchet.ogg', 100, 1)
 				flags &= ~OPENCONTAINER
 		return
 
-	if (istype(W, /obj/item) && !is_open_container() && !istype(src, /obj/item/weapon/extinguisher/foam) && !istype(W, /obj/item/weapon/evidencebag))
+	if (istype(W, /obj/item) && !is_open_container() && !istype(src, /obj/item/weapon/extinguisher/foam) && !istype(W, /obj/item/weapon/storage/evidencebag))
 		if(W.is_open_container())
 			return //We're probably trying to fill it
 		if(W.w_class > W_CLASS_TINY)
@@ -121,7 +116,7 @@
 		if((istype(target, /obj/structure/reagent_dispensers)))
 			target.reagents.trans_to(src, 50, log_transfer = TRUE, whodunnit = user)
 			to_chat(user, "<span class='notice'>\The [src] is now refilled</span>")
-			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 			return
 
 		if(is_open_container() && reagents.total_volume)
@@ -151,7 +146,7 @@
 
 		src.last_use = world.time
 
-		playsound(get_turf(src), 'sound/effects/extinguish.ogg', 75, 1, -3)
+		playsound(src, 'sound/effects/extinguish.ogg', 75, 1, -3)
 
 		var/direction = get_dir(src,target)
 
@@ -160,6 +155,7 @@
 				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
 				for(var/i in list(1,1,1,1,2,2,3,3,3))
+					B.set_glide_size(DELAY2GLIDESIZE(i))
 					if(!step(B, movementdirection))
 						B.change_dir(turn(movementdirection, 180)) //don't turn around when hitting a wall
 						break
@@ -223,7 +219,7 @@
 			var/obj/o = target
 			o.reagents.trans_to(src, 50)
 			to_chat(user, "<span class='notice'>\The [src] is now refilled</span>")
-			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 			return
 
 	if (!safety && !is_open_container())
@@ -240,7 +236,7 @@
 		user.delayNextAttack(5, 1)
 		src.last_use = world.time
 
-		playsound(get_turf(src), 'sound/effects/extinguish.ogg', 75, 1, -3)
+		playsound(src, 'sound/effects/extinguish.ogg', 75, 1, -3)
 
 		var/direction = get_dir(src,target)
 
@@ -249,6 +245,7 @@
 				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
 				for(var/i in list(1,1,1,1,2,2,3,3,3))
+					B.set_glide_size(DELAY2GLIDESIZE(i))
 					if(!step(B, movementdirection))
 						B.change_dir(turn(movementdirection, 180)) //don't turn around when hitting a wall
 						break

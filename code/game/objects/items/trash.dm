@@ -9,11 +9,55 @@
 	w_type=NOT_RECYCLABLE
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
+	var/persistence_type = SS_TRASH
+	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	//var/global/list/trash_items = list()
 
-/obj/item/trash/New()
+/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
+	if(age)
+		setPersistenceAge(age)
+	if(icon_state)
+		src.icon_state = icon_state
+	if(color)
+		src.color = color
+	if(dir)
+		src.dir = dir
+	if(pixel_x)
+		src.pixel_x = pixel_x
+	if(pixel_y)
+		src.pixel_y = pixel_y
+
+	if(ticker)
+		initialize()
+
+	..(loc)
+
+/obj/item/trash/initialize()
 	..()
 	trash_items += src
+	if(persistence_type)
+		SSpersistence_map.track(src, persistence_type)
+
+/obj/item/trash/Destroy()
+	trash_items -= src
+	if(persistence_type)
+		SSpersistence_map.forget(src, persistence_type)
+	..()
+
+/obj/item/trash/getPersistenceAge()
+	return age
+/obj/item/trash/setPersistenceAge(nu)
+	age = nu
+
+/obj/item/trash/post_mapsave2atom(var/list/L)
+	. = ..()
+	if(pixel_x == 0)
+		pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
+	if(pixel_y == 0)
+		pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
+
+/obj/item/trash/attack(mob/M as mob, mob/living/user as mob)
+	return
 
 /obj/item/trash/bustanuts
 	name = "\improper Busta-Nuts"
@@ -124,6 +168,7 @@
 	icon_state = "kfc_bucket"
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
+	slot_flags = SLOT_HEAD
 
 /obj/item/trash/mannequin/cultify()
 	if(icon_state != "mannequin_cult_empty")
@@ -143,9 +188,45 @@
 	name = "cyber mannequin pedestale"
 	icon_state = "mannequin_cyber_empty"
 
-/obj/item/trash/attack(mob/M as mob, mob/living/user as mob)
-	return
+/obj/item/trash/byond_box
+	name = "discarded BYOND support package"
+	icon_state = "byond"
+	starting_materials = list(MAT_CARDBOARD = 370)
+	autoignition_temperature = 522
+	w_type=RECYK_MISC
 
-/obj/item/trash/Destroy()
-	trash_items -= src
+var/list/crushed_cans_cache = list()
+
+/obj/item/trash/soda_cans
+	name = "crushed soda can"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
+	icon = 'icons/obj/drinks.dmi'
+	icon_state = "crushed_can"
+	starting_materials = list(MAT_IRON = 50)
+	w_type=RECYK_METAL
+	force = 0
+	throwforce = 2
+	throw_range = 8
+	throw_speed = 3
+
+/obj/item/trash/soda_cans/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	..()
+	if(icon_state)
+		if (!(icon_state in crushed_cans_cache))
+			var/icon/I = icon('icons/obj/drinks.dmi',"crushed_can")
+			var/icon/J = icon('icons/obj/drinks.dmi',"crushed_can-overlay")
+			var/icon/K = icon('icons/obj/drinks.dmi',icon_state)
+			I.Blend(K,ICON_MULTIPLY)
+			I.Blend(J,ICON_OVERLAY)
+			crushed_cans_cache[icon_state] = I
+		icon = icon(crushed_cans_cache[icon_state])
+		item_state = icon_state
+
+
+/obj/item/trash/soda_cans/atom2mapsave()
+	color = name//a bit hacky but hey
+	. = ..()
+
+/obj/item/trash/soda_cans/post_mapsave2atom(var/list/L)
+	name = color
+	color = null

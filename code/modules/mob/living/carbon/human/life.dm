@@ -105,7 +105,6 @@ var/global/list/organ_damage_overlays = list(
 
 /mob/living/carbon/human/Life()
 
-	set invisibility = 0
 	//set background = 1
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -125,6 +124,8 @@ var/global/list/organ_damage_overlays = list(
 	//TODO: seperate this out
 	//Update the current life tick, can be used to e.g. only do something every 4 ticks
 	life_tick++
+	if (life_tick % 2)
+		crawlcounter = 1
 
 	var/datum/gas_mixture/environment = loc.return_air()
 	in_stasis = istype(loc, /obj/structure/closet/body_bag/cryobag) && loc:opened == 0 //Nice runtime operator
@@ -145,12 +146,12 @@ var/global/list/organ_damage_overlays = list(
 				location_as_object.handle_internal_lifeform(src, 0)
 				last_processed = "Interacted with our container"
 		if(check_mutations)
-			testing("Updating [src.real_name]'s mutations: "+english_list(mutations))
+//			testing("Updating [src.real_name]'s mutations: "+english_list(mutations))
 			domutcheck(src,null,MUTCHK_FORCED)
 			update_mutations()
 			check_mutations = 0
 		//Updates the number of stored chemicals for powers
-		handle_changeling()
+		//handle_changeling()
 		//Mutations and radiation
 		handle_mutations_and_radiation()
 		//Chemicals in the body
@@ -181,14 +182,10 @@ var/global/list/organ_damage_overlays = list(
 	pulse = handle_pulse()
 	for(var/obj/item/weapon/grab/G in src)
 		G.process()
-	if(mind && mind.vampire)
-		handle_vampire()
 	handle_alpha()
 	if(update_overlays)
 		update_overlays = 0
 		UpdateDamageIcon()
-	if(NPC_brain)
-		NPC_brain.SendSignal(COMSIG_LIFE,list())
 	cycle++
 	..()
 

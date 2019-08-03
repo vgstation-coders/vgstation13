@@ -2,6 +2,8 @@
 	name = "Feint"
 	desc = "This spell grants you a magic weapon and causes you to vanish, before reappearing behind the enemy."
 	abbreviation = "FT"
+	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 
 	school = "transmutation"
 	charge_max = 300
@@ -40,7 +42,7 @@
 	L.invisibility = INVISIBILITY_MAXIMUM
 	L.flags |= INVULNERABLE
 	var/old_density = L.density
-	L.density = 0
+	L.setDensity(FALSE)
 	L.candrop = 0
 	L.alphas["etheral_jaunt"] = 125 //Spoopy mode to know you are jaunting
 	L.handle_alpha()
@@ -64,7 +66,7 @@
 	for(var/obj/abstract/screen/movable/spell_master/SM in L.spell_masters)
 		SM.silence_spells(0)
 	L.flags &= ~INVULNERABLE
-	L.density = old_density
+	L.setDensity(old_density)
 	L.candrop = 1
 	L.alphas -= "etheral_jaunt"
 	L.handle_alpha()

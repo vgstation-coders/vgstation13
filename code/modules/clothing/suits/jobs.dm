@@ -8,7 +8,7 @@
 	desc = "A hazard vest used in the recovery of bodies."
 	icon_state = "paramedic-vest"
 	item_state = "paramedic-vest"
-	allowed = list(/obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/flashlight/pen,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/radio,/obj/item/device/gps)
+	allowed = list(/obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/flashlight/pen,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/radio,/obj/item/device/gps, /obj/item/roller)
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 10, rad = 10)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
@@ -20,7 +20,7 @@
 	item_state = "apron"
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
-	allowed = list (/obj/item/weapon/reagent_containers/spray/plantbgone,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass/fertilizer,/obj/item/weapon/wirecutters/clippers,/obj/item/weapon/minihoe)
+	allowed = list (/obj/item/weapon/reagent_containers/spray/plantbgone,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass,/obj/item/weapon/wirecutters/clippers,/obj/item/weapon/minihoe)
 	species_fit = list(VOX_SHAPED)
 
 //Captain
@@ -75,7 +75,7 @@
 
 //Chef
 /obj/item/clothing/suit/chef/classic
-	name = "A classic chef's apron."
+	name = "classic chef's apron"
 	desc = "A basic, dull, white chef's apron."
 	icon_state = "apronchef"
 	item_state = "apronchef"
@@ -126,9 +126,21 @@
 	icon_state = "hazard"
 	item_state = "hazard"
 	blood_overlay_type = "armor"
-	allowed = list (/obj/item/device/analyzer, /obj/item/device/flashlight, /obj/item/device/multitool, /obj/item/device/radio, /obj/item/device/t_scanner, \
-	/obj/item/weapon/crowbar, /obj/item/weapon/screwdriver, /obj/item/weapon/weldingtool, /obj/item/weapon/wirecutters, /obj/item/weapon/wrench, \
-	/obj/item/weapon/tank/emergency_oxygen,  /obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/device_analyser)
+	allowed = list (
+		/obj/item/device/analyzer,
+		/obj/item/device/flashlight,
+		/obj/item/device/multitool,
+		/obj/item/device/radio,
+		/obj/item/device/t_scanner,
+		/obj/item/weapon/crowbar,
+		/obj/item/weapon/screwdriver,
+		/obj/item/weapon/weldingtool,
+		/obj/item/weapon/wirecutters,
+		/obj/item/weapon/wrench,
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/weapon/tank/emergency_nitrogen,
+		/obj/item/device/device_analyser,
+		/obj/item/device/rcd)
 	species_fit = list(VOX_SHAPED)
 
 //Lawyer
@@ -190,7 +202,7 @@
 	item_state = "fr_jacket"
 	blood_overlay_type = "armor"
 	allowed = list(/obj/item/stack/medical, /obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/hypospray, /obj/item/weapon/reagent_containers/syringe, \
-	/obj/item/device/healthanalyzer, /obj/item/device/flashlight, /obj/item/device/radio, /obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	/obj/item/device/healthanalyzer, /obj/item/device/flashlight, /obj/item/device/radio, /obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/roller)
 
 	verb/toggle()
 		set name = "Toggle Jacket Buttons"
@@ -258,4 +270,4 @@
 		else
 			to_chat(usr, "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are.")
 			return
-		usr.update_inv_wear_suit()	//so our overlays update
+	usr.update_inv_wear_suit()	//so our overlays update

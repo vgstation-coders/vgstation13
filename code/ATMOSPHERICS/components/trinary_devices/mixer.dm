@@ -44,52 +44,39 @@ obj/machinery/atmospherics/trinary/mixer/process()
 		return
 
 	var/output_starting_pressure = air3.return_pressure()
-
-	if(output_starting_pressure >= target_pressure)
-		//No need to mix if target is already full!
-		return
-
-	//Calculate necessary moles to transfer using PV=nRT
-
 	var/pressure_delta = target_pressure - output_starting_pressure
-	var/transfer_moles1 = 0
-	var/transfer_moles2 = 0
+	
+	if(pressure_delta > 0.01 && ((air1.temperature > 0 && air2.temperature > 0) || air3.temperature > 0))
+		var/output_volume = air3.volume + (network3 ? network3.volume : 0)
+		//get gas from input #1
+		var/air_temperature1 = (air1.temperature > 0 ) ? air1.temperature : air3.temperature
+		var/transfer_moles1 = ((node1_concentration * pressure_delta) * output_volume) / (air_temperature1 * R_IDEAL_GAS_EQUATION)
+		//get gas from input #2
+		var/air_temperature2 = (air2.temperature > 0 ) ? air2.temperature : air3.temperature
+		var/transfer_moles2 = ((node2_concentration * pressure_delta) * output_volume) / (air_temperature2 * R_IDEAL_GAS_EQUATION)
 
-	if(air1.temperature > 0)
-		transfer_moles1 = (node1_concentration*pressure_delta)*air3.volume/(air1.temperature * R_IDEAL_GAS_EQUATION)
-
-	if(air2.temperature > 0)
-		transfer_moles2 = (node2_concentration*pressure_delta)*air3.volume/(air2.temperature * R_IDEAL_GAS_EQUATION)
-
-	var/air1_moles = air1.total_moles()
-	var/air2_moles = air2.total_moles()
-
-	if((air1_moles < transfer_moles1) || (air2_moles < transfer_moles2))
-		if(!transfer_moles1 || !transfer_moles2)
-			return
-		var/ratio = min(air1_moles/transfer_moles1, air2_moles/transfer_moles2)
-
-		transfer_moles1 *= ratio
-		transfer_moles2 *= ratio
-
-	//Actually transfer the gas
-
-	if(transfer_moles1 > 0)
+		//fix the mix if one of the inputs has insufficient gas
+		var/air1_moles = air1.total_moles()
+		var/air2_moles = air2.total_moles()
+		if((air1_moles < transfer_moles1) || (air2_moles < transfer_moles2))
+			if(!transfer_moles1 || !transfer_moles2)
+				return
+			var/ratio = min(air1_moles/transfer_moles1, air2_moles/transfer_moles2)
+			transfer_moles1 *= ratio
+			transfer_moles2 *= ratio
+		
+		//actually transfer the gas
 		var/datum/gas_mixture/removed1 = air1.remove(transfer_moles1)
-		air3.merge(removed1)
-
-	if(transfer_moles2 > 0)
 		var/datum/gas_mixture/removed2 = air2.remove(transfer_moles2)
+		air3.merge(removed1)
 		air3.merge(removed2)
-
-	if(network1 && transfer_moles1)
-		network1.update = 1
-
-	if(network2 && transfer_moles2)
-		network2.update = 1
-
-	if(network3)
-		network3.update = 1
+		
+		if(network1)
+			network1.update = 1
+		if(network2)
+			network2.update = 1
+		if(network3)
+			network3.update = 1
 
 	return 1
 
@@ -105,14 +92,14 @@ obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 				<b>Desirable output pressure: </b>
 				[target_pressure]kPa | <a href='?src=\ref[src];set_press=1'>Change</a>
 				<br>
-				<b>Node 1 Concentration:</b>
+				<b>Node 1 ([dir2text(pipe_flags & IS_MIRROR ? dir : turn(dir, -180))]) Concentration:</b>
 				<a href='?src=\ref[src];node1_c=-0.1'><b>-</b></a>
 				<a href='?src=\ref[src];node1_c=-0.01'>-</a>
 				[node1_concentration]([node1_concentration*100]%)
 				<a href='?src=\ref[src];node1_c=0.01'><b>+</b></a>
 				<a href='?src=\ref[src];node1_c=0.1'>+</a>
 				<br>
-				<b>Node 2 Concentration:</b>
+				<b>Node 2 ([dir2text(turn(dir, -90))]) Concentration:</b>
 				<a href='?src=\ref[src];node2_c=-0.1'><b>-</b></a>
 				<a href='?src=\ref[src];node2_c=-0.01'>-</a>
 				[node2_concentration]([node2_concentration*100]%)
@@ -120,7 +107,7 @@ obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 				<a href='?src=\ref[src];node2_c=0.1'>+</a>
 				"}
 
-	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_mixer")
+	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_mixer;size=450x110")
 	onclose(user, "atmo_mixer")
 	return
 

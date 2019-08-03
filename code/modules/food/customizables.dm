@@ -82,6 +82,13 @@
 		to_chat(user, "<span class='notice'>You fashion a crude mortar out of the wooden bowl and a metal sheet.</span>")
 		qdel(src)
 		user.put_in_hands(mortimer)
+	if(istype(I,/obj/item/stack/sheet/leather))
+		var/obj/item/stack/sheet/leather/L = I
+		L.use(1)
+		var/obj/item/device/instrument/drum/drum_makeshift/drumbowl = new(get_turf(src))
+		to_chat(user, "<span class='notice'>You fashion a crude drum out of the wooden bowl and a leather sheet.</span>")
+		qdel(src)
+		user.put_in_hands(drumbowl)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
 		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
@@ -91,6 +98,14 @@
 		qdel(src)
 	else
 		return ..()
+
+/obj/item/trash/pietin/attackby(obj/item/W, mob/user,params)
+	..()
+	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/doughslice))
+		if(user.drop_item(W))
+			new/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
+			qdel(W)
+			qdel(src)
 
 // Customizable Foods //////////////////////////////////////////
 
@@ -282,6 +297,8 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie
 	name = "pie"
 	icon_state = "piecustom"
+	trash = /obj/item/trash/pietin
+	ingMax = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/cake
 	name = "cake"

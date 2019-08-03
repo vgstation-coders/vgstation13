@@ -1,14 +1,15 @@
 var/list/forbidden_varedit_object_types = list(
 										/datum/admins,						//Admins editing their own admin-power object? Yup, sounds like a good idea.
-										/obj/machinery/blackbox_recorder,	//Prevents people messing with feedback gathering
+										/datum/blackbox,	//Prevents people messing with feedback gathering
 										/datum/feedback_variable,			//Prevents people messing with feedback gathering
-										/datum/configuration,	//prevents people from fucking with logging.
 									)
 
 //Interface for editing a variable. It returns its new value. If edited_datum, it automatically changes the edited datum's value
 //If called with just [user] argument, it allows you to create a value such as a string, a number, an empty list, a nearby object, etc...
 //If called with [edited_datum] and [edited_variable], you gain the ability to get the variable's initial value.
-/proc/variable_set(mob/user, datum/edited_datum = null, edited_variable = null, autoselect_var_type = FALSE, value_override = null, logging = TRUE)
+
+// acceptsLists : if we're setting a variable in a list
+/proc/variable_set(mob/user, datum/edited_datum = null, edited_variable = null, autoselect_var_type = FALSE, value_override = null, logging = TRUE, var/acceptsLists = TRUE)
 	var/client/C
 
 	if(ismob(user))
@@ -17,6 +18,9 @@ var/list/forbidden_varedit_object_types = list(
 		C = user
 
 	if(!C || !C.holder)
+		return
+
+	if(!C.can_edit_var(edited_variable, edited_datum?.type))
 		return
 
 	//Special case for "appearance", because appearance values can't be stored anywhere.
@@ -47,6 +51,7 @@ var/list/forbidden_varedit_object_types = list(
 	#define V_TEXT "text"
 	#define V_NUM "num"
 	#define V_TYPE "type"
+	#define V_LIST_EMPTY "empty_list"
 	#define V_LIST "list"
 	#define V_OBJECT "object"
 	#define V_ICON "icon"
@@ -106,7 +111,8 @@ var/list/forbidden_varedit_object_types = list(
 		"text" = V_TEXT,
 		"num"  = V_NUM,
 		"type" = V_TYPE,
-		"empty list"      = V_LIST,
+		"empty list"      = V_LIST_EMPTY,
+		"list"  = V_LIST,
 		"object (nearby)" = V_OBJECT,
 		"icon"   = V_ICON,
 		"file"   = V_FILE,
@@ -114,6 +120,10 @@ var/list/forbidden_varedit_object_types = list(
 		"matrix" = V_MATRIX,
 		"null"   = V_NULL,
 		)
+
+		if (!acceptsLists)
+			choices -= V_LIST
+			choices -= V_LIST_EMPTY
 
 		if(C.holder.marked_datum) //Add the marked datum option
 			var/list_item_name
@@ -134,7 +144,7 @@ var/list/forbidden_varedit_object_types = list(
 		choices["CANCEL"] = V_CANCEL
 
 		if(!new_variable_type)
-			new_variable_type = input("What kind of variable?","Variable Type") in choices
+			new_variable_type = input("What kind of variable?","Variable Type") as null|anything in choices
 		var/selected_type = choices[new_variable_type]
 		var/window_title = "Varedit [edited_datum]"
 
@@ -154,8 +164,13 @@ var/list/forbidden_varedit_object_types = list(
 				var/list/matches = get_matching_types(partial_type, /datum)
 				new_value = input("Select type", window_title) as null|anything in matches
 
+			if(V_LIST_EMPTY)
+				if (acceptsLists)
+					new_value = list()
+
 			if(V_LIST)
-				new_value = list()
+				if (acceptsLists)
+					new_value = C.populate_list()
 
 			if(V_OBJECT)
 				new_value = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
@@ -193,14 +208,21 @@ var/list/forbidden_varedit_object_types = list(
 			else
 				to_chat(user, "Unknown type: [selected_type]")
 
+	switch(edited_variable)
+		if("bound_width", "bound_height", "bound_x", "bound_y")
+			if(new_value % world.icon_size) //bound_width/height must be a multiple of 32, otherwise movement breaks - BYOND issue
+				to_chat(usr, "[edited_variable] can only be a multiple of [world.icon_size]!")
+				return
+
 	if(edited_datum && edited_variable)
+		if(isdatum(edited_datum) && edited_datum.variable_edited(edited_variable, old_value, new_value))
+		//variable_edited() can block the edit in case there's special behavior for a variable (for example, updating lights after they're changed)
+			new_value = edited_datum.vars[edited_variable]
+		else
+			edited_datum.vars[edited_variable] = new_value
+
 		if(logging)
-			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [new_value]")
-
-		if(edited_datum.variable_edited(edited_variable, old_value, new_value))
-			new_value = old_value //Return the old value if the variable_edited proc blocked the edit
-
-		edited_datum.vars[edited_variable] = new_value
+			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [html_encode(new_value)]")
 
 	return new_value
 
@@ -209,12 +231,22 @@ var/list/forbidden_varedit_object_types = list(
 	#undef V_TEXT
 	#undef V_NUM
 	#undef V_TYPE
+	#undef V_LIST_EMPTY
 	#undef V_LIST
 	#undef V_OBJECT
 	#undef V_ICON
 	#undef V_FILE
 	#undef V_CLIENT
 	#undef V_NULL
+
+/client/proc/populate_list()
+	var/to_continue = TRUE
+	var/list/things_to_return = list()
+	while (to_continue)
+		things_to_return += variable_set(src, acceptsLists = FALSE)
+		to_continue = (alert("Do you want to add another item to the list? It has currently [things_to_return.len] items.", "Filling a list", "Yes", "No") == "Yes")
+
+	return things_to_return
 
 /client/proc/cmd_modify_ticker_variables()
 	set category = "Debug"
@@ -255,7 +287,7 @@ var/list/forbidden_varedit_object_types = list(
 		mod_list_add(L)
 		return L
 	else
-		L.Remove(variable)
+		L[variable] = variable_set(src, L)
 
 	return L
 
@@ -306,9 +338,17 @@ var/list/forbidden_varedit_object_types = list(
 
 	return M
 
-/client/proc/can_edit_var(var/tocheck)
+/client/proc/can_edit_var(var/tocheck, var/type_to_check)
 	if(tocheck in nevervars)
 		to_chat(usr, "Editing this variable is forbidden.")
+		return FALSE
+
+	if (is_type_in_list(type_to_check, forbidden_varedit_object_types))
+		to_chat(usr, "Editing this variable is forbidden.")
+		return FALSE
+
+	if(tocheck == "bounds")
+		to_chat(usr, "Editing this variable is forbidden. Edit bound_width or bound_height instead.")
 		return FALSE
 
 	if(tocheck in lockedvars)

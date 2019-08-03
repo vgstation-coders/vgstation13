@@ -1,47 +1,54 @@
 
 /*
-	run_armor_check(a,b)
+	run_armor_check(a,b,c,d,e,f,g)
 	args
 	a:def_zone - What part is getting hit, if null will check entire body
 	b:attack_flag - What type of attack, bullet, laser, energy, melee
+	c: What text is to be shown should the blow be fully negated
+	d: What text is to be shown should the blow be partially negated
+	e: Modifier on top of the armor, multiplier
+	f: Whether messages should be shown or not to the user
+	g: Armor penetration - How much armor to be negated.
 
 	Returns
-	0 - no block
-	1 - halfblock
-	2 - fullblock
+	percent damage reduction
 */
-/mob/living/proc/run_armor_check(var/def_zone = null, var/attack_flag = "melee", var/absorb_text = null, var/soften_text = null, modifier = 1, var/quiet = 0)
-	var/armor = getarmor(def_zone, attack_flag)
-	var/absorb = 0
+/mob/living/proc/run_armor_check(var/def_zone = null, var/attack_flag = "melee", var/absorb_text = null, var/soften_text = null, modifier = 1, var/quiet = 0, var/armor_penetration = 0)
+	var/armor = max(0, (getarmor(def_zone, attack_flag)-armor_penetration)*modifier)
 
-	if(prob(armor * modifier))
-		absorb += 1
-	if(prob(armor * modifier))
-		absorb += 1
-
-	if(absorb >= 2)
+	if(armor >= 100) //Absolutely no damage
 		if(!quiet)
 			if(absorb_text)
 				show_message("[absorb_text]")
 			else
-				show_message("<span class='warning'>Your armor absorbs the blow!</span>")
-		return 2
-	if(absorb == 1)
+				show_message("<span class='borange'>Your armor ABSORBS the blow!</span>")
+	else if(armor > 50)
 		if(!quiet)
 			if(absorb_text)
 				show_message("[soften_text]",4)
 			else
-				show_message("<span class='warning'>Your armor softens the blow!</span>")
-		return 1
-	return 0
-
+				show_message("<span class='borange'>Your armor SOFTENS the blow!</span>")
+	return armor
 
 /mob/living/proc/getarmor(var/def_zone, var/type)
 	return 0
 
+/mob/living/proc/getarmorabsorb(var/def_zone, var/type)
+	return 0
+
+/mob/living/proc/run_armor_absorb(var/def_zone = null, var/attack_flag = "melee", var/initial_damage)
+	var/armor = getarmorabsorb(def_zone, attack_flag)
+	var/final_damage = initial_damage
+	if(armor)
+		var/damage_multiplier = final_damage/armor
+		if(damage_multiplier < 1)
+			final_damage *= damage_multiplier
+
+	return final_damage
+
 
 /mob/living/bullet_act(var/obj/item/projectile/P, var/def_zone)
-	var/obj/item/weapon/cloaking_device/C = locate((/obj/item/weapon/cloaking_device) in src)
+	var/obj/item/weapon/cloaking_device/C = locate(/obj/item/weapon/cloaking_device) in src
 	if(C && C.active)
 		C.attack_self(src)//Should shut it off
 		update_icons()
@@ -56,12 +63,13 @@
 			src.visible_message("<span class='warning'>[src] triggers their deadman's switch!</span>")
 			signaler.signal()
 
-	var/absorb = run_armor_check(def_zone, P.flag)
-	if(absorb >= 2)
+	var/absorb = run_armor_check(def_zone, P.flag, armor_penetration = P.armor_penetration)
+	if(absorb >= 100)
 		P.on_hit(src,2)
 		return 2
 	if(!P.nodamage)
-		apply_damage((P.damage/(absorb+1)), P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
+		var/damage = run_armor_absorb(def_zone, P.flag, P.damage)
+		apply_damage(damage, P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
 		regenerate_icons()
 	P.on_hit(src, absorb)
 	if(istype(P, /obj/item/projectile/beam/lightning))
@@ -83,6 +91,8 @@
 			var/obj/item/weapon/W = O
 			dtype = W.damtype
 		src.visible_message("<span class='warning'>[src] has been hit by [O].</span>")
+		if(O.impactsound)
+			playsound(loc, O.impactsound, 80, 1, -1)
 		var/zone_normal_name
 		switch(zone)
 			if(LIMB_LEFT_ARM)
@@ -95,9 +105,10 @@
 				zone_normal_name = "right leg"
 			else
 				zone_normal_name = zone
-		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened hit to your [zone_normal_name].")
-		if(armor < 2)
-			apply_damage(O.throwforce*(speed/5), dtype, zone, armor, O.is_sharp(), O)
+		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened the blow to your [zone_normal_name].", armor_penetration = O.throwforce*(speed/5)*O.sharpness)
+		if(armor < 100) //Stop the damage if the person is immune
+			var/damage = run_armor_absorb(zone, "melee", O.throwforce*(speed/5))
+			apply_damage(damage, dtype, zone, armor, O.is_sharp(), O)
 
 		// Begin BS12 momentum-transfer code.
 
@@ -172,7 +183,7 @@
 
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-		visible_message("<span class='danger'>\The [M] has attempted to bite \the [src]!</span>")
+		visible_message("<span class='borange'>\The [M] has attempted to bite \the [src]!</span>")
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
@@ -190,7 +201,9 @@
 
 	if((M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
 		M.visible_message("<span class='notice'>\The [M] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
-		M.Knockdown(rand(1,10))
+		var/incapacitation_duration = rand(1, 10)
+		M.Knockdown(incapacitation_duration)
+		M.Stun(incapacitation_duration)
 		return
 
 	var/stomping = 0
@@ -210,7 +223,7 @@
 
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-		visible_message("<span class='danger'>\The [M] attempts to kick \the [src]!</span>")
+		visible_message("<span class='borange'>\The [M] attempts to kick \the [src]!</span>")
 		return 0
 
 	//Handle shoes
@@ -282,8 +295,8 @@
 	if(istype(T))
 		var/datum/gas_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
 		if(G)
-			oxy=G.oxygen
-	if(oxy < 1 || fire_stacks <= 0)
+			oxy = G.molar_density(GAS_OXYGEN)
+	if(oxy < (1 / CELL_VOLUME) || fire_stacks <= 0)
 		ExtinguishMob() //If there's no oxygen in the tile we're on, put out the fire
 		return 1
 	var/turf/location = get_turf(src)
@@ -297,3 +310,9 @@
 	IgniteMob()
 
 //Mobs on Fire end
+
+//Return true if thrown object misses
+/mob/living/PreImpact(atom/movable/A, speed)
+	if(lying)
+		return TRUE
+	return FALSE

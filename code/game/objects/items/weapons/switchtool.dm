@@ -58,6 +58,7 @@
 		return
 
 	if(deployed)
+		edit_deploy(0)
 		to_chat(user, "You store \the [deployed].")
 		undeploy()
 	else
@@ -92,14 +93,14 @@
 
 /obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user)
 	if(!used_item || !user)
-		return
+		return FALSE
 
 	for(var/module in stored_modules)
 		var/type_path = text2path(get_module_type(module))
 		if(istype(used_item, type_path))
 			if(stored_modules[module])
 				to_chat(user, "\The [src] already has a [get_module_name(module)].")
-				return
+				return FALSE
 			else
 				if(user.drop_item(used_item, src))
 					stored_modules[module] = used_item
@@ -107,20 +108,20 @@
 					return TRUE
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
-	deployed.cant_drop = 0
+	edit_deploy(0)
 	deployed.forceMove(get_turf(user))
 	for(var/module in stored_modules)
 		if(stored_modules[module] == deployed)
 			stored_modules[module] = null
 			break
 	to_chat(user, "You successfully remove \the [deployed] from \the [src].")
-	playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 	undeploy()
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/undeploy()
-	playsound(get_turf(src), undeploy_sound, 10, 1)
-	deployed.cant_drop = 0
+	playsound(src, undeploy_sound, 10, 1)
+	edit_deploy(0)
 	deployed = null
 	overlays.len = 0
 	w_class = initial(w_class)
@@ -129,46 +130,72 @@
 /obj/item/weapon/switchtool/proc/deploy(var/module)
 	if(!(module in stored_modules))
 		return FALSE
-
 	if(!stored_modules[module])
 		return FALSE
 	if(deployed)
 		return FALSE
 
-	playsound(get_turf(src), deploy_sound, 10, 1)
+	playsound(src, deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	hmodule = get_module_name(module)
-	deployed.cant_drop = 1
-	overlays += get_module_name(module)
+	overlays += hmodule
 	w_class = max(w_class, deployed.w_class)
 	update_icon()
 	return TRUE
+
+/obj/item/weapon/switchtool/proc/edit_deploy(var/doedit)
+	if(doedit) //Makes the deployed item take on the features of the switchtool for attack animations and text. Other bandaid fixes for snowflake issues can go here.
+		sharpness = deployed.sharpness
+		deployed.name = name
+		deployed.icon = icon
+		deployed.icon_state = icon_state
+		deployed.overlays = overlays
+		deployed.cant_drop = TRUE
+	else //Revert the changes to the deployed item.
+		sharpness = initial(sharpness)
+		deployed.name = initial(deployed.name)
+		deployed.icon = initial(deployed.icon)
+		deployed.icon_state = initial(deployed.icon_state)
+		deployed.overlays = initial(deployed.overlays)
+		deployed.cant_drop = FALSE
 
 /obj/item/weapon/switchtool/proc/choose_deploy(mob/user)
 	var/list/potential_modules = list()
 	for(var/module in stored_modules)
 		if(stored_modules[module])
-			potential_modules += get_module_name(module)
+			if(get_module_name(module) == stored_modules[module].name) //same name so listing actually name in parentheses is redundant
+				potential_modules += "[get_module_name(module)]"
+			else
+				potential_modules += "[get_module_name(module)] \[[stored_modules[module].name]\]"
 
 	if(!potential_modules.len)
 		to_chat(user, "No modules to deploy.")
 		return
 
 	else if(potential_modules.len == 1)
-		deploy(potential_modules[1])
-		to_chat(user, "You deploy \the [potential_modules[1]]")
-		return TRUE
+		for(var/m in stored_modules)
+			if(stored_modules[m])
+				deploy(m)
+				edit_deploy(1)
+				return TRUE
+		return
 
 	else
 		var/chosen_module = input(user,"What do you want to deploy?", "[src]", "Cancel") as anything in potential_modules
 		if(chosen_module != "Cancel")
 			var/true_module = ""
 			for(var/checkmodule in stored_modules)
-				if(get_module_name(checkmodule) == chosen_module)
+				if(findtext(chosen_module, " \[") && get_module_name(checkmodule) == copytext(chosen_module, 1, findtext(chosen_module, " \[")))
+					// bracket in name
+					true_module = checkmodule
+					break
+				else if(get_module_name(checkmodule) == chosen_module)
+					// no bracket in name
 					true_module = checkmodule
 					break
 			if(deploy(true_module))
 				to_chat(user, "You deploy \the [deployed].")
+				edit_deploy(1)
 			return TRUE
 		return
 
@@ -185,7 +212,23 @@
 						"/obj/item/weapon/cautery:cautery" = null,
 						"/obj/item/weapon/hemostat:hemostat" = null,
 						"/obj/item/weapon/retractor:retractor" = null,
-						"/obj/item/weapon/bonesetter:bonesetter" = null)
+						"/obj/item/weapon/bonesetter:bone setter" = null,
+						"/obj/item/weapon/FixOVein:fixovein" = null,
+						"/obj/item/weapon/bonegel:bonegel"= null)
+
+/obj/item/weapon/switchtool/surgery/undeploy()
+	playsound(src, undeploy_sound, 10, 1)
+	edit_deploy(0)
+	if(istype(deployed, /obj/item/weapon/scalpel/laser))
+		var/obj/item/weapon/scalpel/laser/L = deployed
+		L.icon_state += (L.cauterymode) ? "_on" : "_off" //since edit_deploy(0) reverts icon_state to its initial value ("scalpel_laser1(or 2)") which doesn't actually exist
+	else if(istype(deployed, /obj/item/weapon/retractor/manager))
+		var/obj/item/weapon/retractor/manager/M = deployed
+		M.icon_state += "_off"
+	deployed = null
+	overlays.len = 0
+	w_class = initial(w_class)
+	update_icon()
 
 /obj/item/weapon/switchtool/swiss_army_knife
 	name = "swiss army knife"
@@ -197,11 +240,11 @@
 						"/obj/item/weapon/wrench:wrench" = null,
 						"/obj/item/weapon/wirecutters:wirecutters" = null,
 						"/obj/item/weapon/crowbar:crowbar" = null,
-						"/obj/item/weapon/kitchen/utensil/knife/large:knife" = null,
+						"/obj/item/weapon/kitchen/utensil/knife/large:kitchen knife" = null,
 						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
 						"/obj/item/weapon/hatchet:hatchet" = null,
-						"/obj/item/weapon/lighter/zippo:zippo lighter" = null,
-						"/obj/item/weapon/match/strike_anywhere:match" = null,
+						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
+						"/obj/item/weapon/match/strike_anywhere:strike-anywhere match" = null,
 						"/obj/item/weapon/pen:pen" = null)
 
 /obj/item/weapon/switchtool/swiss_army_knife/undeploy()
@@ -216,6 +259,13 @@
 		var/obj/item/weapon/lighter/lighter = deployed
 		lighter.lit = 1
 		..()
+
+/obj/item/weapon/switchtool/switchblade
+	name = "switchblade"
+	icon_state = "switchblade"
+	desc = "Half switch. Half blade. Half comb."
+	stored_modules = list("/obj/item/weapon/kitchen/utensil/knife:knife" = null,
+						"/obj/item/weapon/pocket_mirror/comb:comb" = null)
 
 #define BT 1
 #define ENGI 2
@@ -244,8 +294,8 @@
 	starting_materials = null
 
 	stored_modules = list(//scalpel and flashlight are available to start and the scalpel is logically a laser one but the basic kind.
-						"/obj/item/device/flashlight:Light" = null,
-						"/obj/item/weapon/scalpel/laser:Scalpel" = null)
+						"/obj/item/device/flashlight:flashlight" = null,
+						"/obj/item/weapon/scalpel/laser:basic laser scalpel" = null)
 
 //Checks the research type and level for the respective field, then adds them all to the stored modules while also filling the slot with that tool.
 /obj/item/weapon/switchtool/holo/add_module(var/obj/item/D, mob/user)
@@ -255,45 +305,45 @@
 		var/datum/tech/disk_tech = T.stored
 		if(istype(disk_tech, /datum/tech/biotech) && disk_tech.level >= 3)
 			if(!(has_tech & BT))
-				stored_modules["/obj/item/weapon/circular_saw:Circular saw"] = new /obj/item/weapon/circular_saw(src)
-				stored_modules["/obj/item/weapon/surgicaldrill:Surgical drill"] = new /obj/item/weapon/surgicaldrill(src)
-				stored_modules["/obj/item/weapon/cautery/laser:Cautery"] = new /obj/item/weapon/cautery(src)
-				stored_modules["/obj/item/weapon/hemostat:Hemostat"] = new /obj/item/weapon/hemostat(src)
-				stored_modules["/obj/item/weapon/retractor:Retractor"] = new /obj/item/weapon/retractor(src)
-				stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
+				stored_modules["/obj/item/weapon/circular_saw:circular saw"] = new /obj/item/weapon/circular_saw(src)
+				stored_modules["/obj/item/weapon/surgicaldrill:surgical drill"] = new /obj/item/weapon/surgicaldrill(src)
+				stored_modules["/obj/item/weapon/cautery/laser:basic laser cautery"] = new /obj/item/weapon/cautery(src)
+				stored_modules["/obj/item/weapon/hemostat:hemostat"] = new /obj/item/weapon/hemostat(src)
+				stored_modules["/obj/item/weapon/retractor:retractor"] = new /obj/item/weapon/retractor(src)
+				stored_modules["/obj/item/weapon/bonesetter:bone setter"] = new /obj/item/weapon/bonesetter(src)
 				to_chat(user, "The holo switchtool has medical designs now!")
 				has_tech |= BT
 				return TRUE
 			alreadyhas = "Biotech"
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
 			if(!(has_tech & ENGI))
-				stored_modules["/obj/item/weapon/screwdriver:Screwdriver"] = new /obj/item/weapon/screwdriver(src)
-				stored_modules["/obj/item/weapon/wrench:Wrench"] = new /obj/item/weapon/wrench(src)
-				stored_modules["/obj/item/weapon/wirecutters:Wirecutters"] = new /obj/item/weapon/wirecutters(src)
-				stored_modules["/obj/item/weapon/crowbar:Crowbar"] = new /obj/item/weapon/crowbar(src)
-				stored_modules["/obj/item/device/multitool:Multitool"] = new /obj/item/device/multitool(src)
-				stored_modules["/obj/item/weapon/weldingtool/experimental:Weldingtool"] = new /obj/item/weapon/weldingtool/experimental(src)
+				stored_modules["/obj/item/weapon/screwdriver:screwdriver"] = new /obj/item/weapon/screwdriver(src)
+				stored_modules["/obj/item/weapon/wrench:wrench"] = new /obj/item/weapon/wrench(src)
+				stored_modules["/obj/item/weapon/wirecutters:wirecutters"] = new /obj/item/weapon/wirecutters(src)
+				stored_modules["/obj/item/weapon/crowbar:crowbar"] = new /obj/item/weapon/crowbar(src)
+				stored_modules["/obj/item/device/multitool:multitool"] = new /obj/item/device/multitool(src)
+				stored_modules["/obj/item/weapon/weldingtool/experimental:experimental welding tool"] = new /obj/item/weapon/weldingtool/experimental(src)
 				to_chat(user, "The holo switchtool has engineering designs now!")
 				has_tech |= ENGI
 				return TRUE
 			alreadyhas = "Engineering"
 		if(istype(disk_tech, /datum/tech/combat) && disk_tech.level >= 5)
 			if(!(has_tech & CB))
-				stored_modules["/obj/item/weapon/shield/energy:Shield"] = new /obj/item/weapon/shield/energy(src)
+				stored_modules["/obj/item/weapon/shield/energy:energy combat shield"] = new /obj/item/weapon/shield/energy(src)
 				to_chat(user, "The holo switchtool has a defensive design now!")
 				has_tech |= CB
 				return TRUE
 			alreadyhas = "Combat"
 		if(istype(disk_tech, /datum/tech/syndicate) && disk_tech.level >= 3)
 			if(!(has_tech & SYNDI))
-				stored_modules["/obj/item/weapon/melee/energy/sword/activated:Sword"] = new /obj/item/weapon/melee/energy/sword/activated(src)
+				stored_modules["/obj/item/weapon/melee/energy/sword/activated:energy sword"] = new /obj/item/weapon/melee/energy/sword/activated(src)
 				to_chat(user, "The holo switchtool has an offensive design now!")
 				has_tech |= SYNDI
 				return TRUE
 			alreadyhas = "Syndicate"
 		if(istype(disk_tech, /datum/tech/nanotrasen) && disk_tech.level >= 5)
 			if(!(has_tech & NT))
-				stored_modules["/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword"] = new /obj/item/weapon/melee/energy/hfmachete/activated(src)
+				stored_modules["/obj/item/weapon/melee/energy/hfmachete/activated:high-frequency machete"] = new /obj/item/weapon/melee/energy/hfmachete/activated(src)
 				to_chat(user, "The holo switchtool has a secret offensive design now!")
 				has_tech |= NT
 				return TRUE
@@ -363,7 +413,6 @@
 /obj/item/weapon/switchtool/holo/update_icon()
 	if(deployed)
 		item_state = "[hmodule]"
-		deployed.appearance = appearance
 	else
 		item_state = "Hswitchtool"
 
@@ -375,52 +424,54 @@
 	if(istype(deployed, /obj/item/weapon/shield/energy))
 		return TRUE
 	else
-		return 0
+		return FALSE
 
 //All modules make small amounts of light, flashlight making more.
 /obj/item/weapon/switchtool/holo/deploy(var/module)
 	if(!..())
 		return FALSE
 	set_light(brightness_min)
+	hmodule = capitalize(hmodule)
 	overlays += "[hmodule]"
+	edit_deploy(1)
+	update_icon()
 	if(istype(deployed, /obj/item/device/flashlight))
 		set_light(brightness_max)
 
-	//Since you can't turn off the welder inside the tool, I'm using the unused welder that very slowly regens fuel, looks like 1u per 5 byond seconds, thanks byond.
+//Since you can't turn off the welder inside the tool, I'm using the unused welder that very slowly regens fuel, 5 fuel per process().
 //It can be refulled manually, but since it starts active you will blow up welder tanks if deployed and then put to a tank.
 	if(istype(deployed, /obj/item/weapon/weldingtool/experimental))
 		var/obj/item/weapon/weldingtool/experimental/weldingtool = deployed
-		weldingtool.welding = 1
-		weldingtool.status = 1
-		weldingtool.max_fuel = 50
-		weldingtool.start_fueled = 1
+		weldingtool.setWelding(1)
 
 /obj/item/weapon/switchtool/holo/undeploy()
+	if(istype(deployed, /obj/item/weapon/weldingtool/experimental))
+		var/obj/item/weapon/weldingtool/experimental/weldingtool = deployed
+		weldingtool.setWelding(0)
 	..()
 	set_light(0)
-
 
 //switchtools maxed out intended for testing/spawning and maybe as loot. Don't forget to add any more tools added to these lists later
 /obj/item/weapon/switchtool/holo/maxed
 	stored_modules = list(
-						"/obj/item/device/flashlight:Light" = null,
-						"/obj/item/weapon/scalpel/laser:Scalpel" = null,
-						"/obj/item/weapon/circular_saw:Circular saw" = null,
-						"/obj/item/weapon/surgicaldrill:Surgical drill" = null,
-						"/obj/item/weapon/cautery/laser:Cautery" = null,
-						"/obj/item/weapon/hemostat:Hemostat" = null,
-						"/obj/item/weapon/retractor:Retractor" = null,
-						"/obj/item/weapon/bonesetter:Bonesetter" = null,
-						"/obj/item/weapon/screwdriver:Screwdriver" = null,
-						"/obj/item/weapon/wrench:Wrench" = null,
-						"/obj/item/weapon/wirecutters:Wirecutters" = null,
-						"/obj/item/weapon/crowbar:Crowbar" = null,
-						"/obj/item/device/multitool:Multitool" = null,
-						"/obj/item/weapon/weldingtool/experimental:Weldingtool" = null,
+						"/obj/item/device/flashlight:flashlight" = null,
+						"/obj/item/weapon/scalpel/laser:basic laser scalpel" = null,
+						"/obj/item/weapon/circular_saw:circular saw" = null,
+						"/obj/item/weapon/surgicaldrill:surgical drill" = null,
+						"/obj/item/weapon/cautery/laser:basic laser cautery" = null,
+						"/obj/item/weapon/hemostat:hemostat" = null,
+						"/obj/item/weapon/retractor:retractor" = null,
+						"/obj/item/weapon/bonesetter:bone setter" = null,
+						"/obj/item/weapon/screwdriver:screwdriver" = null,
+						"/obj/item/weapon/wrench:wrench" = null,
+						"/obj/item/weapon/wirecutters:wirecutters" = null,
+						"/obj/item/weapon/crowbar:crowbar" = null,
+						"/obj/item/device/multitool:multitool" = null,
+						"/obj/item/weapon/weldingtool/experimental:experimental welding tool" = null,
 						"/obj/item/weapon/soap/holo:UV sterilizer" = null,
-						"/obj/item/weapon/shield/energy:Shield" = null,
-						"/obj/item/weapon/melee/energy/sword/activated:Sword" = null,
-						"/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword" = null
+						"/obj/item/weapon/shield/energy:energy combat shield" = null,
+						"/obj/item/weapon/melee/energy/sword/activated:energy sword" = null,
+						"/obj/item/weapon/melee/energy/hfmachete/activated:high-frequency machete" = null
 						)
 
 /obj/item/weapon/switchtool/holo/maxed/add_module()
@@ -430,12 +481,13 @@
 	stored_modules = list(
 						"/obj/item/weapon/scalpel/laser/tier2:scalpel" = null,
 						"/obj/item/weapon/circular_saw/plasmasaw:circular saw" = null,
-						"/obj/item/weapon/surgicaldrill:surgical drill" = null,
+						"/obj/item/weapon/surgicaldrill/diamond:surgical drill" = null,
 						"/obj/item/weapon/cautery/laser/tier2:cautery" = null,
-						"/obj/item/weapon/hemostat:hemostat" = null,
+						"/obj/item/weapon/hemostat/pico:hemostat" = null,
 						"/obj/item/weapon/retractor/manager:retractor" = null,
-						"/obj/item/weapon/bonesetter/bone_mender:bonesetter" = null
-						)
+						"/obj/item/weapon/bonesetter/bone_mender:bone setter" = null,
+						"/obj/item/weapon/FixOVein/clot:fixovein" = null,
+						"/obj/item/weapon/bonegel:bonegel" = null)
 
 /obj/item/weapon/switchtool/engineering
 	name = "\improper Engineering switchtool"
@@ -447,7 +499,7 @@
 		"/obj/item/weapon/wirecutters:wirecutters" = null,
 		"/obj/item/weapon/wrench:wrench" = null,
 		"/obj/item/device/multitool:multitool" = null,
-		"/obj/item/stack/cable_coil/persistent:cable" = null,
+		"/obj/item/stack/cable_coil/persistent:cable coil" = null,
 		"/obj/item/device/t_scanner:T-ray scanner" = null,
 		"/obj/item/device/analyzer/scope:atmospheric analysis scope" = null,
 		"/obj/item/weapon/solder/pre_fueled:soldering iron" = null,
@@ -457,7 +509,7 @@
 /obj/item/weapon/switchtool/engineering/deploy(var/module)
 	if(!..())
 		return FALSE
-	if(istype(deployed, /obj/item/weapon/weldingtool))
+	if(iswelder(deployed))
 		var/obj/item/weapon/weldingtool/W = deployed
 		W.welding = 1
 		W.status = 1
@@ -479,7 +531,7 @@
 		"/obj/item/weapon/wirecutters:wirecutters" = null,
 		"/obj/item/weapon/wrench:wrench" = null,
 		"/obj/item/device/multitool:multitool" = null,
-		"/obj/item/stack/cable_coil/persistent:cable" = null,
+		"/obj/item/stack/cable_coil/persistent:cable coil" = null,
 		"/obj/item/device/t_scanner:T-ray scanner" = null,
 		"/obj/item/device/analyzer/scope:atmospheric analysis scope" = null,
 		"/obj/item/weapon/solder/pre_fueled:soldering iron" = null,

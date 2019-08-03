@@ -122,11 +122,23 @@
 		var/datum/organ/internal/liver = internal_organs_by_name["liver"]
 		if(!liver || liver.status & ORGAN_CUT_AWAY)
 			reagents.add_reagent(TOXIN, rand(1, 3))
+		else
+			liver.process()
 
 	if(species.has_organ["kidneys"])
 		var/datum/organ/internal/kidney = internal_organs_by_name["kidneys"]
 		if(!kidney || kidney.status & ORGAN_CUT_AWAY)
 			reagents.add_reagent(TOXIN, rand(1, 3))
+
+
+	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
+	if(eyes)
+		eyes.process()
+
+
+	for(var/datum/organ/internal/I in internal_organs)
+		if(!(I.status & ORGAN_CUT_AWAY))
+			I.Life()
 
 	if(!force_process && !bad_external_organs.len) //Nothing to update, just drop it
 		return
@@ -162,7 +174,7 @@
 	//We risk falling because stuff is broken bad
 	if(stand_broken && !paralysis && !(lying || resting) && prob(5))
 		if(feels_pain())
-			emote("scream", , , 1)
+			audible_scream()
 		emote("collapse")
 		Paralyse(10)
 

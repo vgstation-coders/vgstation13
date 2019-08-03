@@ -43,6 +43,8 @@
 		new /obj/item/weapon/wirecutters(), \
 		new /obj/item/weapon/wrench(), \
 		new /obj/item/weapon/solder(),\
+		new /obj/item/weapon/wirecutters/clippers(),\
+		new /obj/item/weapon/minihoe(),\
 		new /obj/item/device/analyzer(), \
 		new /obj/item/weapon/pickaxe/shovel/spade(), \
 		new /obj/item/device/silicate_sprayer/empty(), \
@@ -53,7 +55,9 @@
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
+		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(), \
 		new /obj/item/weapon/storage/toolbox(), \
+		new /obj/item/weapon/reagent_containers/glass/jar(), \
 		),
 		"Assemblies"=list(
 		new /obj/item/device/assembly/igniter(), \
@@ -91,6 +95,7 @@
 		new /obj/item/ammo_casing/shotgun/blank(), \
 		new /obj/item/ammo_casing/shotgun/beanbag(), \
 		new /obj/item/ammo_casing/shotgun/flare(), \
+		new /obj/item/ammo_storage/speedloader/shotgun(),
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/box/c38(), \
 		new /obj/item/toy/ammo/gun(), \
@@ -107,9 +112,10 @@
 		new /obj/item/weapon/razor(), \
 		new /obj/item/device/rcd/tile_painter(), \
 		new /obj/item/device/rcd/matter/rsf(), \
-		new /obj/item/device/destTagger, \
-		new /obj/item/device/priceTagger, \
-
+		new /obj/item/device/destTagger(), \
+		new /obj/item/device/priceTagger(), \
+		new /obj/item/weapon/hand_labeler(), \
+		new /obj/item/device/breathalyzer(), \
 		),
 		"Misc_Other"=list(
 		new /obj/item/weapon/rcd_ammo(), \
@@ -122,6 +128,7 @@
 		new /obj/item/stack/rods(), \
 		new /obj/item/weapon/storage/box/ornaments(), \
 		new /obj/item/weapon/storage/box/ornaments/teardrop_ornaments(), \
+		new /obj/item/weapon/disk/shuttle_coords/station_auxillary(),\
 		),
 		"Hidden_Items" = list(
 		new /obj/item/weapon/gun/projectile/flamethrower/full(), \
@@ -135,6 +142,7 @@
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/dart(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
+		new /obj/item/weapon/legcuffs/beartrap(),\
 		)
 	)
 
@@ -171,7 +179,7 @@
 	if(..())
 		return 1
 
-	else if(I.materials)
+	else if(I.materials && (research_flags & FAB_RECYCLER))
 		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
 			return 1
@@ -187,10 +195,13 @@
 			else
 				to_chat(user, "You cannot recycle your built in tools.")
 				return 1
+		else if(!I.recyclable())
+			to_chat(user, "<span class = 'notice'>You can not recycle /the [I] at this time.</span>")
+			return 1
 
 		if(user.drop_item(I, src))
 			materials.removeFrom(I.materials)
 			user.visible_message("[user] puts \the [I] into \the [src]'s recycling unit.",
-								"You put \the [I] in \the [src]'s reycling unit.")
+								"You put \the [I] in \the [src]'s recycling unit.")
 			qdel(I)
 		return 1

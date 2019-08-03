@@ -45,8 +45,8 @@
 	temp_offset = initial(temp_offset) - 5*lasercount
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/update_icon()
-	if(src.node)
-		if(src.on)
+	if(node1)
+		if(on)
 			icon_state = "freezer_1"
 		else
 			icon_state = "freezer"
@@ -56,7 +56,7 @@
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/crowbarDestroy(mob/user)
 	if(on)
-		to_chat(user, "You have to turn off the \[src]!")
+		to_chat(user, "You have to turn off \the [src]!")
 		return
 	return ..()
 
@@ -78,17 +78,19 @@
 		initialize_directions = dir
 		initialize()
 		build_network()
-		if (node)
-			node.initialize()
-			node.build_network()
+		if (node1)
+			node1.initialize()
+			node1.build_network()
 	else
 		verbs += rotate_verbs
-		if(node)
-			node.disconnect(src)
+		if(node1)
+			node1.disconnect(src)
+			node1 = null
+		if(network)
 			qdel(network)
 			network = null
-			node = null
-		
+		update_icon()
+
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -145,7 +147,7 @@
 	if (src.anchored || usr:stat)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
-	src.dir = turn(src.dir, 270)
+	src.dir = turn(src.dir, -90)
 	return 1
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate_ccw()
@@ -216,8 +218,8 @@
 	temp_offset = initial(temp_offset) + 5*lasercount
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/update_icon()
-	if(src.node)
-		if(src.on)
+	if(node1)
+		if(on)
 			icon_state = "heater_1"
 		else
 			icon_state = "heater"
@@ -228,13 +230,13 @@
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/crowbarDestroy(mob/user)
 	if(on)
-		to_chat(user, "You have to turn off the \[src]!")
+		to_chat(user, "You have to turn off \the [src]!")
 		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(on)
-		to_chat(user, "You have to turn off the \[src]!")
+		to_chat(user, "You have to turn off \the [src]!")
 		return
 	return ..()
 
@@ -250,16 +252,18 @@
 		initialize_directions = dir
 		initialize()
 		build_network()
-		if (node)
-			node.initialize()
-			node.build_network()
-		verbs += rotate_verbs
+		if (node1)
+			node1.initialize()
+			node1.build_network()
 	else
-		node.disconnect(src)
-		qdel(network)
-		network = null
-		node = null
-		
+		verbs += rotate_verbs
+		if(node1)
+			node1.disconnect(src)
+			node1 = null
+		if(network)
+			qdel(network)
+			network = null
+
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -314,7 +318,7 @@
 	if (src.anchored || usr:stat)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
-	src.dir = turn(src.dir, 270)
+	src.dir = turn(src.dir, -90)
 	return 1
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate_ccw()

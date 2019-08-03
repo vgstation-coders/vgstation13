@@ -14,7 +14,7 @@
 	var/cham_proj_scan = 1 //Scanning function starts on
 	var/can_use = 1
 	var/obj/effect/dummy/chameleon/active_dummy = null
-	var/saved_item = /obj/item/weapon/cigbutt
+	var/saved_item = /obj/item/trash/cigbutt
 	var/saved_icon = 'icons/obj/clothing/masks.dmi'
 	var/saved_icon_state = "cigbutt"
 	var/saved_overlays
@@ -46,12 +46,12 @@
 		return
 	if(!active_dummy)
 		if(istype(target, /obj/item) && !istype(target, /obj/item/weapon/disk/nuclear) || istype(target, /mob))
-			playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1, -6)
+			playsound(src, 'sound/weapons/flash.ogg', 100, 1, -6)
 			to_chat(user, "<span class='notice'>Scanned [target].</span>")
 			saved_item = target.type
 			saved_icon = target.icon
 			saved_icon_state = target.icon_state
-			saved_overlays = target.overlays
+			saved_overlays = target.overlays.Copy()
 			return 1
 
 /obj/item/device/chameleon/proc/toggle()
@@ -59,7 +59,7 @@
 		return
 	if(active_dummy)
 		eject_all()
-		//playsound(get_turf(src), 'sound/effects/pop.ogg', 100, 1, -6)
+		//playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
 		qdel(active_dummy)
 		active_dummy = null
 		to_chat(usr, "<span class='notice'>You deactivate [src].</span>")
@@ -72,7 +72,7 @@
 		spawn(20) //Stop spamming this shit
 			can_use = 1
 	else
-		//playsound(get_turf(src), 'sound/effects/pop.ogg', 100, 1, -6)
+		//playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
 		var/obj/O = new saved_item(src)
 		if(!O)
 			return
@@ -104,7 +104,7 @@
 /obj/item/device/chameleon/proc/eject_all()
 	for(var/atom/movable/A in active_dummy)
 		A.forceMove(active_dummy.loc)
-		if(ismob(A))
+		if(isliving(A))
 			var/mob/M = A
 			M.reset_view(null)
 			M.layer = MOB_LAYER //Reset the mob's layer
@@ -143,7 +143,18 @@
 /obj/effect/dummy/chameleon/attack_hand()
 	disrupt()
 
-/obj/effect/dummy/chameleon/ex_act()
+/obj/effect/dummy/chameleon/ex_act(severity)
+	for(var/mob/M in src)
+		M.ex_act(severity)
+	disrupt()
+
+/obj/effect/dummy/chameleon/emp_act(severity)
+	for(var/mob/M in src)
+		M.emp_act(severity)
+	disrupt()
+
+/obj/effect/dummy/chameleon/blob_act()
+	..()
 	disrupt()
 
 /obj/effect/dummy/chameleon/bullet_act()

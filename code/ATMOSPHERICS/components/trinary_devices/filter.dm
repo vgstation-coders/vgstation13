@@ -60,22 +60,15 @@ obj/machinery/atmospherics/trinary/filter/process()
 		return
 
 	var/output_starting_pressure = air3.return_pressure()
-
-	if(output_starting_pressure >= target_pressure || air2.return_pressure() >= target_pressure )
-		//No need to mix if target is already full!
-		return
-
-	//Calculate necessary moles to transfer using PV=nRT
-
 	var/pressure_delta = target_pressure - output_starting_pressure
-	var/transfer_moles
+	var/filtered_pressure_delta = target_pressure - air2.return_pressure()
 
-	if(air1.temperature > 0)
-		transfer_moles = pressure_delta*air3.volume/(air1.temperature * R_IDEAL_GAS_EQUATION)
-
-	//Actually transfer the gas
-
-	if(transfer_moles > 0)
+	if(pressure_delta > 0.01 && filtered_pressure_delta > 0.01 && (air1.temperature > 0 || air3.temperature > 0))
+		//Figure out how much gas to transfer to meet the target pressure.
+		var/air_temperature = (air1.temperature > 0) ? air1.temperature : air3.temperature
+		var/output_volume = air3.volume + (network3 ? network3.volume : 0)
+		//get the number of moles that would have to be transfered to bring sink to the target pressure
+		var/transfer_moles = (pressure_delta * output_volume) / (air_temperature * R_IDEAL_GAS_EQUATION)
 		var/datum/gas_mixture/removed = air1.remove(transfer_moles)
 
 		if(!removed)
@@ -83,51 +76,36 @@ obj/machinery/atmospherics/trinary/filter/process()
 		var/datum/gas_mixture/filtered_out = new
 		filtered_out.temperature = removed.temperature
 
+		#define FILTER(g) filtered_out.adjust_gas((g), removed[g])
 		switch(filter_type)
 			if(0) //removing hydrocarbons
-				filtered_out.toxins = removed.toxins
-				removed.toxins = 0
-
-				if(removed.trace_gases.len>0)
-					for(var/datum/gas/trace_gas in removed.trace_gases)
-						if(istype(trace_gas, /datum/gas/oxygen_agent_b))
-							removed.trace_gases -= trace_gas
-							filtered_out.trace_gases += trace_gas
+				FILTER(GAS_PLASMA)
+				FILTER(GAS_OXAGENT)
 
 			if(1) //removing O2
-				filtered_out.oxygen = removed.oxygen
-				removed.oxygen = 0
+				FILTER(GAS_OXYGEN)
 
 			if(2) //removing N2
-				filtered_out.nitrogen = removed.nitrogen
-				removed.nitrogen = 0
+				FILTER(GAS_NITROGEN)
 
 			if(3) //removing CO2
-				filtered_out.carbon_dioxide = removed.carbon_dioxide
-				removed.carbon_dioxide = 0
+				FILTER(GAS_CARBON)
 
 			if(4)//removing N2O
-				if(removed.trace_gases.len>0)
-					for(var/datum/gas/trace_gas in removed.trace_gases)
-						if(istype(trace_gas, /datum/gas/sleeping_agent))
-							removed.trace_gases -= trace_gas
-							filtered_out.trace_gases += trace_gas
+				FILTER(GAS_SLEEPING)
 
-			else
-				filtered_out = null
-
+		removed.subtract(filtered_out)
+		#undef FILTER
 
 		air2.merge(filtered_out)
 		air3.merge(removed)
 
-	if(network2)
-		network2.update = 1
-
-	if(network3)
-		network3.update = 1
-
-	if(network1)
-		network1.update = 1
+		if(network2)
+			network2.update = 1
+		if(network3)
+			network3.update = 1
+		if(network1)
+			network1.update = 1
 
 	return 1
 

@@ -38,7 +38,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return
 	if(isturf(usr.loc))
 		if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
-			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+			playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		usr.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
 		reagents.reaction(usr.loc)
 		spawn()
@@ -56,7 +56,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(src.is_empty())
 		to_chat(usr, "<span class='warning'>\The [src] is empty.</span>")
 		return
-	playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+	playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 	spawn()
 		src.reagents.clear_reagents()
 	to_chat(user, "<span class='notice'>You flush \the [src] down \the [where].</span>")
@@ -76,6 +76,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/empty_contents
 	if(!possible_transfer_amounts)
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
+
+/obj/item/weapon/reagent_containers/Destroy()
+	if(istype(loc, /obj/machinery/iv_drip))
+		var/obj/machinery/iv_drip/holder = loc
+		holder.remove_container()
+ . = ..()
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
 	return
@@ -97,7 +103,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(user.a_intent != I_HELP)
 		if(src.reagents)
 			transfer(M, user, splashable_units = -1)
-			playsound(get_turf(M), 'sound/effects/slosh.ogg', 25, 1)
+			playsound(M, 'sound/effects/slosh.ogg', 25, 1)
 			return 1
 
 
@@ -244,15 +250,16 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	var/success
 	// Transfer from dispenser
 	if (can_receive && istype(target, /obj/structure/reagent_dispensers))
-		var/tx_amount = transfer_sub(target, src, target:amount_per_transfer_from_this, user)
-		if (tx_amount > 0)
-			to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
-
-		return tx_amount
+		var/obj/structure/reagent_dispensers/S = target
+		if(S.can_transfer(src, user))
+			var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
+			if (tx_amount > 0)
+				to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
+				return tx_amount
 	// Transfer to container
-	else if (can_send /*&& target.reagents**/)
+	if (can_send /*&& target.reagents**/)
 		var/obj/container = target
-		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers))
+		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers) && !istype(container,/obj/item/weapon/reagent_containers/food/snacks))
 			return -1
 
 		if(target.is_open_container())
@@ -263,7 +270,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				to_chat(user, "<span class='notice'>You transfer [success] units of the solution to \the [target].</span>")
 
 			return (success)
-
 	if(!success)
 		// Mob splashing
 		if(splashable_units != 0)
@@ -294,9 +300,13 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return 0
 
 /obj/item/weapon/reagent_containers/proc/is_empty()
+	if(!reagents)
+		return TRUE
 	return reagents.total_volume <= 0
 
 /obj/item/weapon/reagent_containers/proc/is_full()
+	if(!reagents)
+		return FALSE
 	return reagents.total_volume >= reagents.maximum_volume
 
 /obj/item/weapon/reagent_containers/proc/can_transfer_an_APTFT()
@@ -325,17 +335,11 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	else
 		return "No reagents"
 
-/obj/item/weapon/reagent_containers/proc/show_list_of_reagents(mob/user) //Displays a list of the reagents to a mob, formatted for reading
-	to_chat(user, "It contains:")
-	if(!reagents.total_volume)
-		to_chat(user, "<span class='info'>Nothing.</span>")
-	else
-		if(reagents.reagent_list.len)
-			for(var/datum/reagent/R in reagents.reagent_list)
-				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-
 /obj/item/weapon/reagent_containers/proc/fits_in_iv_drip()
-	return 0
+	return FALSE
+
+/obj/item/weapon/reagent_containers/proc/should_qdel_if_empty()
+	return FALSE
 
 /obj/item/weapon/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
 	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")
@@ -343,6 +347,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	if(isrobot(user))
 		reagents.remove_any(amount_per_imbibe)
+		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
 		if(can_drink(user))
@@ -373,9 +378,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	..()
 	attempt_heating(I, user)
 
-/obj/item/weapon/reagent_containers/proc/attempt_heating(obj/item/I, mob/user)
-	var/temperature = I.is_hot()
-	var/thermal_energy = I.thermal_energy_transfer()
+/obj/item/weapon/reagent_containers/attempt_heating(atom/A, mob/user)
+	var/temperature = A.is_hot()
 	if(temperature && reagents)
-		reagents.heating(thermal_energy, temperature)
-		to_chat(user, "<span class='notice'>You heat [src] with [I].</span>")
+		reagents.heating(A.thermal_energy_transfer(), temperature)
+		if(user)
+			to_chat(user, "<span class='notice'>You heat \the [src] with \the [A].</span>")

@@ -1,6 +1,6 @@
 //Refer to life.dm for caller
 
-/mob/living/carbon/human/proc/handle_regular_hud_updates()
+/mob/living/carbon/human/handle_regular_hud_updates()
 	if(!client)
 		return 0
 
@@ -8,7 +8,7 @@
 
 	regular_hud_updates()
 
-	update_action_buttons()
+	update_action_buttons_icon()
 
 	if(stat == UNCONSCIOUS && health <= config.health_threshold_crit)
 		var/severity = 0
@@ -95,16 +95,44 @@
 			healths.icon_state = "health7" //DEAD healthmeter
 		return
 	else
-		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		// Vampire bandaid. I'm sorry.
+		// Rewrite idea : divide life() into organs (Eyes...) and have flags in the roles if they overwrite the functions of those organs.
+		// Basically, the problem here is that abstract things (HUD icons) are handled as the same time as "organs" things (seeing in the dark.)
+		var/datum/role/vampire/V = isvampire(src)
+		if (V)
+			var/i = 1
+			for (var/image/I in V.cached_images)
+				I.loc = null
+				src.client.images -= I
+			for (var/mob/living/carbon/C in view(7,src))
+				var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(C)
+				if (N)
+					if (i > V.cached_images.len)
+						var/image/I = image('icons/mob/mob.dmi', loc = C, icon_state = "vampnullrod")
+						I.plane = VAMP_ANTAG_HUD_PLANE
+						V.cached_images += I
+						src.client.images += I
+					else
+						V.cached_images[i].loc = C
+						src.client.images += V.cached_images[i]
+					i++
 
-		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
-		if(E)
-			see_in_dark = E.see_in_dark //species.darksight
-		else
-			see_in_dark = species.darksight
-			// You should really be blind but w/e.
+		if (!V || (!(VAMP_VISION in V.powers) && !(VAMP_MATURE in V.powers))) // Not a vampire, or a vampire but neither of the spells.
+			change_sight(removing = SEE_MOBS)
+		if (!V || !(VAMP_MATURE in V.powers))
+			change_sight(removing = SEE_TURFS|SEE_OBJS)
+			var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
+			if(E)
+				see_in_dark = E.see_in_dark
 
-		see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
+			see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
+
+		// Moiving this "see invisble" thing here so that it can be overriden by xrays, vampires...
+		if(glasses)
+			handle_glasses_vision_updates(glasses)
+		else if (!V)
+			see_invisible = SEE_INVISIBLE_LIVING
+
 		if(dna)
 			switch(dna.mutantrace)
 				if("slime")
@@ -117,22 +145,21 @@
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8
 			if(!druggy)
-				see_invisible = SEE_INVISIBLE_LEVEL_TWO
-
+				see_invisible = min(SEE_INVISIBLE_LEVEL_TWO, see_invisible)
+    // Legacy Cult
 		if(seer == 1)
-			var/obj/effect/rune/R = locate() in loc
-			if(R && R.word1 == cultwords["see"] && R.word2 == cultwords["hell"] && R.word3 == cultwords["join"])
+			var/obj/effect/rune_legacy/R = locate() in loc
+			var/datum/faction/cult/narsie/blood_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+			var/cultwords
+			if (blood_cult)
+				cultwords = blood_cult.cult_words
+			else
+				cultwords = null
+			if(cultwords && R && R.word1 == cultwords["see"] && R.word2 == cultwords["hell"] && R.word3 == cultwords["join"])
 				see_invisible = SEE_INVISIBLE_OBSERVER
 			else
 				see_invisible = SEE_INVISIBLE_LIVING
 				seer = 0
-
-
-		if(glasses)
-			handle_glasses_vision_updates(glasses)
-
-		else if(!seer)
-			see_invisible = SEE_INVISIBLE_LIVING
 
 		apply_vision_overrides()
 
@@ -286,13 +313,38 @@
 			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 		else
 			clear_fullscreen("high")
+		if(has_reagent_in_blood(INCENSE_MOONFLOWERS))
+			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
+		else
+			clear_fullscreen("high_red")
+		if (istype(glasses, /obj/item/clothing/glasses/science))
+			var/obj/item/clothing/glasses/science/S = glasses
+			if (S.on)
+				overlay_fullscreen("science", /obj/abstract/screen/fullscreen/science)
+			else
+				clear_fullscreen("science",0)
+		else
+			clear_fullscreen("science",0)
 
 		var/masked = 0
-		if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi))
-			var/obj/item/clothing/head/welding/O = head
-			if(!O.up && tinted_weldhelh)
-				overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
-				masked = 1
+
+		if(head)
+			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
+				var/enable_mask = TRUE
+
+				var/datum/action/item_action/toggle_helmet_mask/action = locate(/datum/action/item_action/toggle_helmet_mask) in head.actions
+
+				if(action)
+					enable_mask = !action.up
+				else if(istype(head, /obj/item/clothing/head/welding))
+					var/obj/item/clothing/head/welding/O = head
+					enable_mask = !O.up
+				else if(istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen))
+					var/obj/item/clothing/head/helmet/space/vox/civ/mushmen/O = head
+					enable_mask = !O.up
+				if(enable_mask && tinted_weldhelh)
+					overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
+					masked = 1
 
 		if(!masked && istype(glasses, /obj/item/clothing/glasses/welding) && !istype(glasses, /obj/item/clothing/glasses/welding/superior))
 			var/obj/item/clothing/glasses/welding/O = glasses
@@ -300,7 +352,9 @@
 				overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
 				masked = 1
 
-		if(!masked)
+		var/clear_tint = !masked
+
+		if(clear_tint)
 			clear_fullscreen("tint")
 
 		if(machine)

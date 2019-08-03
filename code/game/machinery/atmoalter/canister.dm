@@ -167,8 +167,8 @@
 		location.assume_air(air_contents)
 
 		src.destroyed = 1
-		playsound(get_turf(src), 'sound/effects/spray.ogg', 10, 1, -3)
-		src.density = 0
+		playsound(src, 'sound/effects/spray.ogg', 10, 1, -3)
+		setDensity(FALSE)
 		update_icon()
 		investigation_log(I_ATMOS, "was destoyed by excessive damage.")
 
@@ -191,10 +191,13 @@
 
 	if(valve_open)
 		var/datum/gas_mixture/environment
+		var/transfer_vol //A band-aid fix for the fact the equation used below doesn't work as intended
 		if(holding)
 			environment = holding.air_contents
+			transfer_vol = holding.volume
 		else
 			environment = loc.return_air()
+			transfer_vol = CELL_VOLUME
 
 		var/env_pressure = environment.return_pressure()
 		var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
@@ -202,7 +205,7 @@
 
 		var/transfer_moles = 0
 		if((air_contents.temperature > 0) && (pressure_delta > 0))
-			transfer_moles = pressure_delta*environment.volume/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
+			transfer_moles = pressure_delta * transfer_vol / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
 			//Actually transfer the gas
 			var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
@@ -262,7 +265,7 @@
 
 	if(!iswrench(W) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
 		visible_message("<span class='warning'>[user] hits the [src] with a [W]!</span>")
-		investigation_log(I_ATMOS, "<span style='danger'>was smacked with \a [W] by [key_name(user)]</span>")
+		investigation_log(I_ATMOS, "<span class='danger'>was smacked with \a [W] by [key_name(user)]</span>")
 		src.health -= W.force
 		src.add_fingerprint(user)
 		healthcheck()
@@ -303,7 +306,7 @@
 						 "<span class='danger'>You slash away at \the [src]!</span>")
 	user.delayNextAttack(10) //Hold on there amigo
 	investigation_log(I_ATMOS, "<span style='danger'>was slashed at by alien [key_name(user)]</span>")
-	playsound(get_turf(src), 'sound/weapons/slice.ogg', 25, 1, -1)
+	playsound(src, 'sound/weapons/slice.ogg', 25, 1, -1)
 	healthcheck()
 
 /obj/machinery/portable_atmospherics/canister/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -410,54 +413,35 @@
 
 /obj/machinery/portable_atmospherics/canister/plasma/New(loc)
 	..(loc)
-	air_contents.adjust(tx = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust_gas(GAS_PLASMA, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/oxygen/New(loc)
 	..(loc)
-	src.air_contents.adjust((maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust_gas(GAS_OXYGEN, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent/New(loc)
 	..(loc)
-	var/datum/gas/sleeping_agent/sleeping_agent = new
-	sleeping_agent.moles = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
-	air_contents.adjust(traces = list(sleeping_agent))
+	air_contents.adjust_gas(GAS_SLEEPING, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
-
-/*
-//Dirty way to fill room with gas. However it is a bit easier to do than creating some floor/engine/n2o -rastaf0
-/obj/machinery/portable_atmospherics/canister/sleeping_agent/roomfiller/New()
-	..()
-	var/datum/gas/sleeping_agent/trace_gas = air_contents.trace_gases[1]
-	trace_gas.moles = 9*4000
-	spawn(10)
-		var/turf/simulated/location = src.loc
-		if (istype(src.loc))
-			while (!location.air)
-				sleep(10)
-			location.assume_air(air_contents)
-			air_contents = new
-	return 1
-*/
 
 /obj/machinery/portable_atmospherics/canister/nitrogen/New(loc)
 	..(loc)
-	air_contents.adjust(n2 = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust_gas(GAS_NITROGEN, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide/New(loc)
 	..(loc)
-	air_contents.adjust(co2 = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust_gas(GAS_CARBON, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/air/New(loc)
 	..(loc)
 
-	air_contents.adjust(\
-		(O2STANDARD * maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),\
-		n2 = (N2STANDARD * maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)\
-	)
+	air_contents.adjust_multi(
+		GAS_OXYGEN, (O2STANDARD * maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
+		GAS_NITROGEN, (N2STANDARD * maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 	update_icon()
 
@@ -466,18 +450,12 @@
 
 	if(busy)
 		return 0
-	if(!WT.isOn())
-		return 0
 
 	// Do after stuff here
 	to_chat(user, "<span class='notice'>You start to slice away at \the [src]...</span>")
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-	WT.eyecheck(user)
 	busy = 1
-	if(do_after(user, src, 50))
+	if(WT.do_weld(user, src, 50,0))
 		busy = 0
-		if(!WT.isOn())
-			return 0
 		return 1
 	busy = 0
 	return 0

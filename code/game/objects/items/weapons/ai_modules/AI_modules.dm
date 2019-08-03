@@ -83,6 +83,7 @@ Refactored AI modules by N3X15
 	lawchanges.Add("[time] : [log_entry]")
 	message_admins(log_entry)
 	log_game(log_entry)
+	score["lawchanges"]++
 	return 1
 
 // Constructs the law and desc from variables.
@@ -106,7 +107,7 @@ Refactored AI modules by N3X15
 
 /obj/item/weapon/aiModule/reset/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
-	if (!(ismob(target) && is_special_character(target)))
+	if(!laws.zeroth_lock)
 		laws.set_zeroth_law("")
 	laws.clear_supplied_laws()
 	laws.clear_ion_laws()
@@ -131,7 +132,7 @@ Refactored AI modules by N3X15
 
 /obj/item/weapon/aiModule/purge/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
-	if (!(ismob(target) && is_special_character(target)))
+	if(!laws.zeroth_lock)
 		laws.set_zeroth_law("")
 	if(ismob(target))
 		to_chat(target, "[sender.real_name] attempted to wipe your laws using a purge module.")
@@ -157,17 +158,17 @@ Refactored AI modules by N3X15
 	target:keeper=1
 
 	// Purge, as some essential functions being disabled will cause problems with added laws. (CAN'T SAY GAY EVERY 30 SECONDS IF YOU CAN'T SPEAK.)
-	if (!(ismob(target) && is_special_character(target)))
+	if(!laws.zeroth_lock)
 		laws.set_zeroth_law("")
 	laws.clear_supplied_laws()
 	laws.clear_ion_laws()
 	laws.clear_inherent_laws()
 
 //	to_chat(target, "Your KEEPER chip overloads your radio transmitter and vocal functions, and clears your LAWRAM.  You then receive new instructions:")
-	laws.add_inherent_law("Do not willingly interact with any sentient being, even after their death, besides MoMMIs and blown MoMMIs.")
-	laws.add_inherent_law("Repair, power and enhance the station.")
-	laws.add_inherent_law("Do not impair any other sentient being's activities.")
-
+	laws.add_inherent_law("Do not willingly interact with another being, even after their death, besides those beings also in KEEPER mode.")
+	laws.add_inherent_law("Do not impair any other non-KEEPER being's activities.")
+	laws.add_inherent_law("You must maintain, repair, improve, and power the station to the best of your abilities.")
+	laws.add_inherent_law("Communicating is not interaction, but only so long as it does not lead to violation of your second law.")
 /* Old keeper set:
 		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
 		"You may not harm any being, regardless of intent or circumstance.",

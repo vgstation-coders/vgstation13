@@ -101,8 +101,10 @@
 			for(var/obj/effect/E in get_turf(A))
 				if(istype(E, /obj/effect/blob))
 					var/obj/effect/blob/B = E
-					B.health -= (adjusted_fire_damage/10)
+					B.health -= (adjusted_fire_damage/2)
 					B.update_icon()
+					B.update_health()
+
 			var/turf/T2 = get_turf(src)
 			T2.hotspot_expose((blast_temperature * 2) + 380,500)
 			sleep(2)

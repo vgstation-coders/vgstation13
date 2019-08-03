@@ -5,6 +5,10 @@
 #define SMESLEVELCHARGING	2
 #define SMESLEVELONLINE		3
 
+#define BATTERY_NO_CHARGE		0
+#define BATTERY_MANUAL_CHARGE	1
+#define BATTERY_AUTO_CHARGE		2
+
 var/global/list/battery_charge = 	list(
 										image('icons/obj/power.dmi', "smes-og1"),
 										image('icons/obj/power.dmi', "smes-og2"),
@@ -51,16 +55,17 @@ var/global/list/battery_online =	list(
 
 	var/output = 50000
 	var/lastout = 0
+	var/loadcharge = 0
 	var/loaddemand = 0
 	var/capacity = 5e6 //Max stored charge
 	var/charge = 1e6 //Stored charge
-	var/charging = 0 //Are we currently taking charge in?
-	var/chargemode = 0 //Are we set to charge or not? Not the same as charging
+	var/charging = FALSE //Are we currently taking charge in?
+	var/chargemode = BATTERY_NO_CHARGE //Are we set to charge or not? Not the same as charging
 	var/chargecount = 0 //How long we've spent since not charging
 	var/chargelevel = 50000
 	var/online = 1
-	var/smes_input_max = 200000
-	var/smes_output_max = 200000
+	var/max_input = 200000
+	var/max_output = 200000
 
 	var/name_tag = ""
 
@@ -81,9 +86,9 @@ var/global/list/battery_online =	list(
 			capcount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
-	capacity = initial(capacity) + capcount*5e5
-	smes_input_max = initial(smes_input_max) + lasercount*25000
-	smes_output_max = initial(smes_output_max) + lasercount*25000
+	capacity = initial(capacity) + capcount*125e4
+	max_input = initial(max_input) + lasercount*50000
+	max_output = initial(max_output) + lasercount*50000
 
 /obj/machinery/power/battery/process()
 	if(stat & (BROKEN | FORCEDISABLE | EMPED))
@@ -102,12 +107,12 @@ var/global/list/battery_online =	list(
 	var/excess = surplus()
 
 	if (charging)
-		if (excess >= chargelevel) // If there's power available, try to charge
-			var/load = min((capacity - charge) / SMESRATE, chargelevel) // Charge at set rate, limited to spare capacity
-
-			charge += load * SMESRATE // Increase the charge
-
-			add_load(load) // Add the load to the terminal side network
+		// Manual charge mode is the 'old' mode, when batteries only charge when available power is higher than set charge level
+		// Auto charge mode lets batteries take any amount of available power, limited by charge level
+		if((chargemode == BATTERY_MANUAL_CHARGE && excess >= chargelevel)||(chargemode == BATTERY_AUTO_CHARGE && excess > 0)) // If there's power available, try to charge
+			loadcharge = min((capacity - charge) / SMESRATE, excess, chargelevel) // Charge at set rate, limited to spare capacity
+			charge += loadcharge * SMESRATE // Increase the charge
+			add_load(loadcharge) // Add the load to the terminal side network
 
 		else
 			charging = FALSE
@@ -119,7 +124,7 @@ var/global/list/battery_online =	list(
 				charging = TRUE
 				chargecount = 0
 
-			if (excess > chargelevel)
+			if ((chargemode == BATTERY_MANUAL_CHARGE && excess >= chargelevel) || (chargemode == BATTERY_AUTO_CHARGE && excess > 0))
 				chargecount++
 			else
 				chargecount = 0
@@ -127,7 +132,7 @@ var/global/list/battery_online =	list(
 			chargecount = 0
 
 	// Output
-	if (online)
+	if (online && get_powernet()) // how can discharge be real if our powernet isn't real
 		lastout = min(charge / SMESRATE, output) // Limit output to that stored
 
 		charge -= lastout * SMESRATE // Reduce the storage (may be recovered in /restore() if excessive)
@@ -192,12 +197,15 @@ var/global/list/battery_online =	list(
 	data["storedCapacity"] = round(100.0*charge/capacity, 0.1)
 	data["charging"] = charging
 	data["chargeMode"] = chargemode
+	data["chargeLoad"] = round(loadcharge)
 	data["chargeLevel"] = chargelevel
-	data["chargeMax"] = smes_input_max
+	data["chargeMax"] = max_input
 	data["outputOnline"] = online
 	data["outputLevel"] = output
-	data["outputMax"] = smes_output_max
+	data["outputMax"] = max_output
 	data["outputLoad"] = round(loaddemand)
+	data["hasInput"] = get_terminal() ? 1 : 0;
+	data["hasOutput"] = powernet ? 1 : 0;
 
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -219,22 +227,27 @@ var/global/list/battery_online =	list(
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if (usr.stat || usr.restrained() )
+	if (!isAdminGhost(usr) && (usr.stat || usr.restrained()))
 		return
 	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-		if(!istype(usr, /mob/living/silicon/ai))
+		if(!istype(usr, /mob/living/silicon/ai) && !isAdminGhost(usr))
 			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 			return
 
 //to_chat(world, "[href] ; [href_list[href]]")
 
-	if (!isturf(src.loc) && !istype(usr, /mob/living/silicon/))
+	if (!isturf(src.loc) && !istype(usr, /mob/living/silicon/) && !isAdminGhost(usr))
 		return 0 // Do not update ui
 
 	if( href_list["cmode"] )
-		chargemode = !chargemode
-		if(!chargemode)
-			charging = 0
+		switch( href_list["cmode"])
+			if("auto")
+				chargemode = BATTERY_AUTO_CHARGE
+			if("manual")
+				chargemode = BATTERY_MANUAL_CHARGE
+			if("off")
+				chargemode = BATTERY_NO_CHARGE
+				charging = 0
 		update_icon()
 
 	else if( href_list["online"] )
@@ -245,20 +258,20 @@ var/global/list/battery_online =	list(
 			if("min")
 				chargelevel = 0
 			if("max")
-				chargelevel = smes_input_max		//30000
+				chargelevel = max_input		//30000
 			if("set")
-				chargelevel = input(usr, "Enter new input level (0-[smes_input_max])", "SMES Input Power Control", chargelevel) as num
-		chargelevel = max(0, min(smes_input_max, chargelevel))	// clamp to range
+				chargelevel = input(usr, "Enter new input level (0-[max_input])", "SMES Input Power Control", chargelevel) as num
+		chargelevel = max(0, min(max_input, chargelevel))	// clamp to range
 
 	else if( href_list["output"] )
 		switch( href_list["output"] )
 			if("min")
 				output = 0
 			if("max")
-				output = smes_output_max		//30000
+				output = max_output		//30000
 			if("set")
-				output = input(usr, "Enter new output level (0-[smes_output_max])", "SMES Output Power Control", output) as num
-		output = max(0, min(smes_output_max, output))	// clamp to range
+				output = input(usr, "Enter new output level (0-[max_output])", "SMES Output Power Control", output) as num
+		output = max(0, min(max_output, output))	// clamp to range
 
 	investigation_log(I_SINGULO,"input/output; [chargelevel>output?"<font color='green'>":"<font color='red'>"][chargelevel]/[output]</font> | Output-mode: [online?"<font color='green'>on</font>":"<font color='red'>off</font>"] | Input-mode: [chargemode?"<font color='green'>auto</font>":"<font color='red'>off</font>"] by [usr.key]")
 
@@ -307,8 +320,8 @@ var/global/list/battery_online =	list(
 		online = !online
 		update_icon()
 	else //Screw up power input/output
-		chargelevel = rand(0, smes_input_max)
-		output = rand(0, smes_output_max)
+		chargelevel = rand(0, max_input)
+		output = rand(0, max_output)
 
 /proc/rate_control(var/S, var/V, var/C, var/Min=1, var/Max=5, var/Limit=null)
 	var/href = "<A href='?src=\ref[S];rate control=1;[V]"
@@ -316,3 +329,6 @@ var/global/list/battery_online =	list(
 	if(Limit)
 		return "[href]=-[Limit]'>-</A>"+rate+"[href]=[Limit]'>+</A>"
 	return rate
+
+/obj/machinery/power/battery/proc/get_terminal()
+	return terminal

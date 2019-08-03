@@ -1,6 +1,6 @@
 /datum/artifact_effect/menagerie
 	effecttype = "menagerie"
-	effect = EFFECT_PULSE
+	effect = ARTIFACT_EFFECT_PULSE
 	effect_type = 5
 	var/static/list/possible_types = list()
 

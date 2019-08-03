@@ -39,22 +39,19 @@
 	hold.emp_act(severity)
 	..()
 
-/obj/item/clothing/suit/storage/MouseDrop(atom/over_object)
-	if(ishuman(usr) || ismonkey(usr))
-		var/mob/M = usr
-		if(istype(over_object, /obj/abstract/screen/inventory)) //was clickdragged to an inventory slot, we want to be able to take our coat off
-			if(!M.incapacitated() && is_holder_of(M, src))
-				playsound(get_turf(src), "rustle", 50, 1, -5)
-				var/obj/abstract/screen/inventory/OI = over_object
+/obj/item/clothing/suit/storage/on_mousedrop_to_inventory_slot()
+	playsound(src, "rustle", 50, 1, -5)
 
-				if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
-					M.u_equip(src, 0)
-					M.put_in_hand(OI.hand_index, src)
-					M.update_inv_wear_suit()
-					src.add_fingerprint(usr)
-				return
-		else if(over_object == usr) //show container to user
-			return hold.MouseDrop(over_object)
-		else if(istype(over_object, /obj/structure/table)) //empty on table
-			return hold.MouseDrop(over_object)
-	return ..() //don't let us move the coat's abstract internal storage!
+/obj/item/clothing/suit/storage/MouseDropFrom(atom/over_object)
+	if(over_object == usr) //show container to user
+		return hold.MouseDropFrom(over_object)
+	else if(istype(over_object, /obj/structure/table)) //empty on table
+		return hold.MouseDropFrom(over_object)
+	return ..()
+
+/obj/item/clothing/suit/storage/AltClick(mob/user as mob)
+	if(user == src.loc)
+		return hold.attack_hand(user)
+	else
+		return ..()
+	

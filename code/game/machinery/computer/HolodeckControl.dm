@@ -12,6 +12,7 @@
 	var/list/holographic_items = list()
 	var/damaged = 0
 	var/last_change = 0
+	var/holopeople_enabled = TRUE //Set this to true to allow observers become holodudes
 	var/list/connected_holopeople = list()
 	var/maximum_holopeople = 4
 
@@ -25,6 +26,8 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/proc/spawn_holoperson(mob/dead/observer/user)
+	if (!istype(user) || user.stat != DEAD )
+		return
 	if(stat & (NOPOWER|BROKEN|MAINT))
 		return
 	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
@@ -37,9 +40,11 @@
 		return
 	var/turf/spawnturf
 	var/list/L = get_area_turfs(linkedholodeck.type)
-	var/turf/T = pick(L)
-	while(is_blocked_turf(T))
-		T = pick(L)
+
+	spawnturf = pick_n_take(L)
+	while(is_blocked_turf(spawnturf) && L.len)
+		spawnturf = pick_n_take(L)
+
 	if(spawnturf)
 		user.forceMove(spawnturf)
 		var/mob/living/simple_animal/hologram/advanced/H = user.transmogrify(/mob/living/simple_animal/hologram/advanced, TRUE)
@@ -59,8 +64,16 @@
 	var/dat
 
 	dat += {"<B>Holodeck Control System</B><BR>"}
-//	if(isobserver(user))
-//		dat += {"<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"}
+	if(isobserver(user))
+		if(holopeople_enabled)
+			dat += "<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"
+		else
+			dat += "<HR>\[Advanced Holograms Unavailable\]</font><BR>"
+	if(isAdminGhost(user))
+		dat += "<BR><b>ADMIN OPTIONS:</b><BR>"
+		dat += "Advanced hologram spawning is: <A href='?src=\ref[src];toggle_holopeople=1'>[holopeople_enabled ? "ENABLED" : "DISABLED"]</A><BR>"
+		dat += "<A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram (Admin)\]</font></A><HR>"
+
 	dat += {"<HR>Current Loaded Programs:<BR>
 		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
 		<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>
@@ -108,6 +121,7 @@
 		if(issilicon(user))
 			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=red>Override Safety Protocols?</font>)</A><BR>"
 
+
 		dat += {"<BR>
 			Safety Protocols are <font color=green> ENABLED </font><BR>"}
 	user << browse(dat, "window=computer;size=400x500")
@@ -118,7 +132,14 @@
 	usr.set_machine(src)
 
 	if(href_list["spawn_holoperson"])
-		spawn_holoperson(usr)
+		if(holopeople_enabled || isAdminGhost(usr))
+			spawn_holoperson(usr)
+	if(href_list["toggle_holopeople"])
+		holopeople_enabled = !holopeople_enabled
+		src.updateUsrDialog()
+
+		message_admins("[key_name(usr)] has [holopeople_enabled ? "enabled" : "disabled"] advanced hologram spawning at [formatJumpTo(src)]")
+		to_chat(usr, "Advanced holograms are now [holopeople_enabled ? "enabled" : "disabled"].")
 
 	if(..())
 		return 1
@@ -281,11 +302,12 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/emag(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 	if(emagged)
 		return //No spamming
 	emagged = 1
-	visible_message("<span class='warning'>[user] swipes a card into the holodeck reader.</span>","<span class='notice'>You swipe the electromagnetic card into the holocard reader.</span>")
+	if(user)
+		visible_message("<span class='warning'>[user] swipes a card into the holodeck reader.</span>","<span class='notice'>You swipe the electromagnetic card into the holocard reader.</span>")
 	visible_message("<span class='warning'>Warning: Power surge detected. Automatic shutoff and derezing protocols have been corrupted. Please contact Nanotrasen maintenance and cease all operation immediately.</span>")
 	log_game("[key_name(usr)] emagged the Holodeck Control Computer")
 	src.updateUsrDialog()
@@ -453,16 +475,16 @@
 	icon_state = "grass1"
 	floor_tile = new/obj/item/stack/tile/grass
 
-	New()
-		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
-		icon_state = "grass[pick("1","2","3","4")]"
-		..()
-		spawn(4)
-			update_icon()
-			for(var/direction in cardinal)
-				if(istype(get_step(src,direction),/turf/simulated/floor))
-					var/turf/simulated/floor/FF = get_step(src,direction)
-					FF.update_icon() //so siding get updated properly
+/turf/simulated/floor/holofloor/grass/New()
+	floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
+	icon_state = "grass[pick("1","2","3","4")]"
+	..()
+	spawn(4)
+		update_icon()
+		for(var/direction in cardinal)
+			if(istype(get_step(src,direction),/turf/simulated/floor))
+				var/turf/simulated/floor/FF = get_step(src,direction)
+				FF.update_icon() //so siding get updated properly
 
 /turf/simulated/floor/holofloor/light
 	name = "light floor"
@@ -496,7 +518,7 @@
 	return
 
 /obj/structure/window/reinforced/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		to_chat(user, "It's a holowindow! It has no frame!")
 		return
 
@@ -509,7 +531,7 @@
 	return
 
 /obj/structure/window/holo/attackby(obj/item/weapon/W, mob/user)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		to_chat(user, "It's a holowindow! It has no frame!")
 		return
 
@@ -540,15 +562,13 @@
 	flags = FPRINT | NOBLOODY
 	var/active = 0
 
-/obj/item/weapon/holo/esword/green
-	New()
-		..()
-		_color = "green"
+/obj/item/weapon/holo/esword/green/New()
+	..()
+	_color = "green"
 
-/obj/item/weapon/holo/esword/red
-	New()
-		..()
-		_color = "red"
+/obj/item/weapon/holo/esword/red/New()
+	..()
+	_color = "red"
 
 /obj/item/weapon/holo/esword/IsShield()
 	if(active)
@@ -604,6 +624,7 @@
 
 		G.affecting.forceMove(src.loc)
 		G.affecting.Knockdown(5)
+		G.affecting.Stun(5)
 		visible_message("<span class='warning'>[G.assailant] dunks [G.affecting] into the [src]!</span>")
 		qdel(W)
 		return
@@ -617,7 +638,8 @@
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
-		if(prob(50))
+		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
+		if(prob(50) || (mob && mob.reagents.get_sportiness()>=5))
 			I.forceMove(src.loc)
 			visible_message("<span class='notice'>Swish! \the [I] lands in \the [src].</span>")
 		else
@@ -651,9 +673,6 @@
 
 /obj/machinery/readybutton/attack_paw(mob/user as mob)
 	to_chat(user, "<span='warning'>You are too primitive to use this device.</span>")
-
-/obj/machinery/readybutton/New()
-	..()
 
 /obj/machinery/readybutton/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	to_chat(user, "<span='warning'>The device is a solid button, there's nothing you can do with it!</span>")

@@ -22,6 +22,7 @@
 	melee_damage_upper = 2
 	size = SIZE_BIG
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES
+	speak_override = TRUE
 
 	var/datum/reagents/udder = null
 
@@ -40,9 +41,7 @@
 			Retaliate()
 
 		if(enemies.len && prob(10))
-			enemies = list()
-			LoseTarget()
-			src.visible_message("<span class='notice'>[src] calms down.</span>")
+			Calm()
 
 		if(stat == CONSCIOUS)
 			if(udder && prob(5))
@@ -61,12 +60,17 @@
 					if(locate(/obj/effect/plantsegment) in step)
 						Move(step)
 
+/mob/living/simple_animal/hostile/retaliate/goat/proc/Calm()
+	enemies.Cut()
+	LoseTarget()
+	src.visible_message("<span class='notice'>[src] calms down.</span>")
+
 /mob/living/simple_animal/hostile/retaliate/goat/Retaliate()
 	if(!stat)
 		..()
 		src.visible_message("<span class='warning'>[src] gets an evil-looking gleam in \his eye.</span>")
 
-/mob/living/simple_animal/hostile/retaliate/goat/Move()
+/mob/living/simple_animal/hostile/retaliate/goat/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(!stat)
 		if(locate(/obj/effect/plantsegment) in loc)
@@ -76,14 +80,25 @@
 				say("Nom")
 
 /mob/living/simple_animal/hostile/retaliate/goat/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
-		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
-		var/obj/item/weapon/reagent_containers/glass/G = O
-		var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
-		if(G.reagents.total_volume >= G.volume)
-			to_chat(user, "<span class='warning'>[O] is full.</span>")
-		if(!transfered)
-			to_chat(user, "<span class='warning'>The udder is dry. Wait a bit longer...</span>")
+	if(stat == CONSCIOUS)
+		if(istype(O, /obj/item/weapon/reagent_containers/glass))
+			user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
+			var/obj/item/weapon/reagent_containers/glass/G = O
+			var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
+			if(G.reagents.total_volume >= G.volume)
+				to_chat(user, "<span class='warning'>[O] is full.</span>")
+			if(!transfered)
+				to_chat(user, "<span class='warning'>The udder is dry. Wait a bit longer...</span>")
+		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage))
+			Calm()
+			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			visible_message("<span class='notice'>[user] feeds \the [O] to [src].</span>")
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+			qdel(O)
+		else
+			..()
 	else
 		..()
 //cow
@@ -106,6 +121,7 @@
 	response_harm   = "kicks"
 	attacktext = "kicks"
 	health = 50
+	speak_override = TRUE
 
 	size = SIZE_BIG
 	holder_type = /obj/item/weapon/holder/animal/cow
@@ -176,6 +192,7 @@
 	var/amount_grown = 0
 	pass_flags = PASSTABLE | PASSGRILLE
 	size = SIZE_TINY
+	speak_override = TRUE
 
 /mob/living/simple_animal/chick/New()
 	..()
@@ -191,8 +208,7 @@
 	if(!stat && !ckey)
 		amount_grown += rand(1,2)
 		if(amount_grown >= 100)
-			new /mob/living/simple_animal/chicken(src.loc)
-			qdel(src)
+			grow_up()
 
 /mob/living/simple_animal/chicken
 	name = "chicken"
@@ -216,6 +232,7 @@
 	var/body_color
 	pass_flags = PASSTABLE
 	size = SIZE_SMALL
+	speak_override = TRUE
 
 /mob/living/simple_animal/chicken/New()
 	if(prob(5))
@@ -292,6 +309,7 @@
 	max_n2 = 0
 	treadmill_speed = 1.5
 	var/fat = 0
+	speak_override = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/box/New()
 	..()
@@ -342,8 +360,8 @@
 	if(fat>BOX_GROWTH_BAR)
 		updatefat()
 
-/mob/living/simple_animal/hostile/retaliate/box/Die()
-	..()
+/mob/living/simple_animal/hostile/retaliate/box/death(var/gibbed = FALSE)
+	..(gibbed)
 	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
 
 /mob/living/simple_animal/hostile/retaliate/box/attackby(var/obj/item/O as obj, var/mob/user as mob)
@@ -372,3 +390,68 @@
 
 /mob/living/simple_animal/hostile/retaliate/box/pig/target_check(atom/A)
 	return TRUE	//Will attack anyone.
+
+//Rabbits
+/mob/living/simple_animal/rabbit
+	name = "rabbit"
+	desc = "Their behavior has attracted the attention of space law enforcement and are considered illegal in many sectors of the galaxy." //"Breed like rabbits" and ERP being illegal joke.
+	icon_state = "rabbit_white"
+	icon_living = "rabbit_white"
+	icon_dead = "rabbit_white_dead"
+	speak = list("...","..!","..?")
+	speak_emote = list("sniffles","grunts")
+	emote_hear = list("sniffles","grunts")
+	emote_see = list("hops","twitches it's ears")
+	speak_chance = 2
+	turns_per_move = 3
+	response_help = "pets"
+	response_disarm = "flips"
+	response_harm = "kicks"
+	attacktext = "kicks"
+	health = 10
+	pass_flags = PASSTABLE
+	size = SIZE_SMALL
+	speak_override = TRUE
+	var/body_type = "rabbit"
+	can_breed = TRUE
+	childtype = /mob/living/simple_animal/rabbit/bunny
+	species_type = /mob/living/simple_animal/rabbit
+
+
+/mob/living/simple_animal/rabbit/New()
+	if(!colour)
+		colour = pick(list("white","grey","brown"))
+	update_icon()
+	if(can_breed)
+		gender = pick(MALE, FEMALE)
+	..()
+
+/mob/living/simple_animal/rabbit/Life()
+	if(timestopped)
+		return FALSE
+	..()
+
+/mob/living/simple_animal/rabbit/update_icon()
+	icon_state = "[body_type]_[colour]"
+	icon_living = "[body_type]_[colour]"
+	icon_dead = "[body_type]_[colour]_dead"
+
+
+/mob/living/simple_animal/rabbit/bunny
+	name = "bunny"
+	desc = "Seeing them makes you feel hoppy on the inside."
+	icon_state = "bunny_white"
+	icon_living = "bunny_white"
+	icon_dead = "bunny_white_dead"
+	health = 5
+	size = SIZE_TINY
+	body_type = "bunny"
+	can_breed = FALSE
+	var/amount_grown = 0
+
+/mob/living/simple_animal/rabbit/bunny/Life()
+	..()
+	if(!stat && !ckey)
+		amount_grown += rand(1,5)
+		if(amount_grown >= 100)
+			grow_up()

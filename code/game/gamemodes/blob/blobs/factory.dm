@@ -15,7 +15,8 @@
 	icon_new = "factory"
 	icon_classic = "blob_factory"
 
-/obj/effect/blob/factory/New(loc,newlook = "new")
+//obj/effect/blob/factory/New(loc,newlook = "new") HALLOWEEN
+/obj/effect/blob/factory/New(loc,newlook = null)
 	..()
 	if(icon_size == 64)
 		flick("morph_factory",src)
@@ -36,14 +37,14 @@
 	else
 		new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
 
-	stat_collection.blobblob.spores_spawned++
+	stat_collection.blob_spores_spawned++
 
 	return 1
 
 /obj/effect/blob/factory/Destroy()
 	if(spores.len)
 		for(var/mob/living/simple_animal/hostile/blobspore/S in spores)
-			S.Die()
+			S.death()
 	if(!manual_remove && overmind)
 		to_chat(overmind,"<span class='warning'>A factory blob that you had created has been destroyed.</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
 		overmind.special_blobs -= src
@@ -92,12 +93,14 @@
 	maxbodytemp = 360
 	plane = BLOB_PLANE
 	layer = BLOB_SPORE_LAYER
+	var/looks = "new"
 
 /mob/living/simple_animal/hostile/blobspore/New(loc, var/obj/effect/blob/factory/linked_node)
 	if(istype(linked_node))
 		factory = linked_node
 		factory.spores += src
 		icon = factory.icon
+		looks = factory.looks
 	..()
 
 /mob/living/simple_animal/hostile/blobspore/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -112,12 +115,33 @@
 		return 1
 	return ..()
 
-/mob/living/simple_animal/hostile/blobspore/Die()
+/mob/living/simple_animal/hostile/blobspore/death(var/gibbed = FALSE)
+	..(TRUE) //Gibs regardless
 	var/sound = pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg')
-	playsound(get_turf(src), sound, 50, 1)
+	playsound(src, sound, 50, 1)
 	qdel(src)
 
 /mob/living/simple_animal/hostile/blobspore/Destroy()
+	//creating a pathogenic cloud upon death
+	anim(target = loc, a_icon = icon, flick_anim = "blob_act", sleeptime = 15, direction = SOUTH, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+	if (!(looks in blob_diseases))
+		CreateBlobDisease(looks)
+	var/datum/disease2/disease/D = blob_diseases[looks]
+	var/list/L = list()
+	L["[D.uniqueID]-[D.subID]"] = D
+	getFromPool(/obj/effect/effect/pathogen_cloud,get_turf(src),null,virus_copylist(L),FALSE)
 	if(factory)
 		factory.spores -= src
 	..()
+
+/mob/living/simple_animal/hostile/blobspore/unarmed_attack_mob(var/mob/living/target)
+	. = ..()
+
+	if (.)
+		//if we damage our target, let's try and infect them
+		if (!(looks in blob_diseases))
+			CreateBlobDisease(looks)
+		var/datum/disease2/disease/D = blob_diseases[looks]
+
+		if (!target.check_contact_sterility(FULL_TORSO))//For simplicity's sake (for once), let's just assume that the blob strikes the torso.
+			target.infect_disease2(D, notes="(Blob, from [src])")

@@ -85,13 +85,13 @@
 		Awaken()
 
 /obj/structure/mannequin/HasProximity(var/atom/movable/AM)
-	if(trapped_prox)
+	if(trapped_prox && isliving(AM))
 		Awaken()
 		return 1
 	return 0
 
 
-/obj/structure/mannequin/MouseDrop(var/atom/over_object)
+/obj/structure/mannequin/MouseDropFrom(var/atom/over_object)
 	..()
 	var/mob/user = usr
 	if(user != over_object)
@@ -242,17 +242,19 @@
 				to_chat(user, "<span class='info'>You pick up \the [I] from \the [src].</span>")
 		else
 			if(get_held_item_by_index(hand_index))
-				user.drop_from_inventory(item_in_hand)
-				item_in_hand.forceMove(src)
-				var/obj/item/I = held_items[hand_index]
-				user.put_in_hands(I)
-				held_items[hand_index] = item_in_hand
-				to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+				if(user.drop_item(item_in_hand,src))
+					var/obj/item/I = held_items[hand_index]
+					user.put_in_hands(I)
+					held_items[hand_index] = item_in_hand
+					to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+				else
+					to_chat(user, "<span class='warning'>You can't drop that!</span>")
 			else
-				user.drop_from_inventory(item_in_hand)
-				item_in_hand.forceMove(src)
-				held_items[hand_index] = item_in_hand
-				to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+				if(user.drop_item(item_in_hand,src))
+					held_items[hand_index] = item_in_hand
+					to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+				else
+					to_chat(user, "<span class='warning'>You can't drop that!</span>")
 
 	else if(href_list["item"])
 		if(trapped_strip)
@@ -271,22 +273,24 @@
 		else
 			if(clothing[item_slot])
 				if(canEquip(user, item_slot,item_in_hand))
-					user.drop_from_inventory(item_in_hand)
-					item_in_hand.forceMove(src)
-					var/obj/item/I = clothing[item_slot]
-					user.put_in_hands(I)
-					clothing[item_slot] = item_in_hand
-					add_fingerprint(user)
-					to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+					if(user.drop_item(item_in_hand,src))
+						var/obj/item/I = clothing[item_slot]
+						user.put_in_hands(I)
+						clothing[item_slot] = item_in_hand
+						add_fingerprint(user)
+						to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+					else
+						to_chat(user, "<span class='warning'>You can't drop that!</span>")
 				else
 					return
 			else
 				if(canEquip(user, item_slot,item_in_hand))
-					user.drop_from_inventory(item_in_hand)
-					item_in_hand.forceMove(src)
-					clothing[item_slot] = item_in_hand
-					add_fingerprint(user)
-					to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+					if(user.drop_item(item_in_hand,src))
+						clothing[item_slot] = item_in_hand
+						add_fingerprint(user)
+						to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+					else
+						to_chat(user, "<span class='warning'>You can't drop that!</span>")
 				else
 					return
 
@@ -871,7 +875,7 @@
 			else
 				destroyed = 1
 				getFromPool(/obj/item/weapon/shard, loc)
-				playsound(get_turf(src), "shatter", 100, 1)
+				playsound(src, "shatter", 100, 1)
 				shield = 0
 				update_icon()
 		if (2)
@@ -906,10 +910,10 @@
 			destroyed = 1
 			locked = 0
 			getFromPool(/obj/item/weapon/shard, loc)
-			playsound(get_turf(src), "shatter", 100, 1)
+			playsound(src, "shatter", 100, 1)
 			update_icon()
 		else
-			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+			playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 
 	if(health <= 0)
 		visible_message("\The [src] collapses.")
@@ -957,7 +961,7 @@
 			new_frame.construct = new /datum/construction/mannequin(new_frame)
 			qdel(src)
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent == I_HELP)
+	else if(iswelder(W) && user.a_intent == I_HELP)
 		if(locked)
 			to_chat(user, "<span class='warning'>You need to open the shield before you can fix the mannequin.</span>")
 		else
@@ -973,7 +977,7 @@
 				to_chat(user, "<span class='warning'>Need more welding fuel!</span>")
 				return
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent == I_HELP)
+	else if(iswelder(W) && user.a_intent == I_HELP)
 		if(locked)
 			to_chat(user, "<span class='warning'>You need to open the shield before you can fix the mannequin.</span>")
 		else
@@ -1038,7 +1042,7 @@
 
 /obj/structure/mannequin/cyber/kick_act(mob/living/carbon/human/H)
 	if(locked)
-		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+		playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 	..()
 
 
@@ -1156,7 +1160,7 @@
 
 /datum/construction/mannequin/spawn_result(mob/user as mob)
 	if(result)
-		testing("[user] finished a [result]!")
+//		testing("[user] finished a [result]!")
 
 		var/obj/structure/mannequin_frame/const_holder = holder
 		var/obj/structure/mannequin/cyber/C = new result(get_turf(holder))

@@ -100,9 +100,9 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 		return
 	user.set_machine(src)
 	var/dat = ""
-	var/isai = 0
-	if(istype(usr,/mob/living/silicon))
-		isai = 1
+	var/isai = FALSE
+	if(isAI(user))
+		isai = TRUE
 	if(temp)
 		dat += "<tt>[temp]</tt><br><br>"
 		if(canclear)
@@ -146,11 +146,10 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 	switch(href_list["operation"])
 		if("login")
 			var/mob/M = usr
-			if(istype(M,/mob/living/silicon))
+			if(issilicon(M))
 				authenticated = 1
 				updateDialog()
-				return
-			if (allowed(M))
+			if(allowed(M))
 				authenticated = 1
 		if("logout")
 			authenticated = 0
@@ -167,14 +166,19 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 			var/mob/M = usr
 			var/obj/item/I = M.get_active_hand()
 			if(I && istype(I))
-				if(istype(I, /obj/item/weapon/evidencebag))
-					scanning = I.contents[1]
-					scanning.forceMove(src)
-					I.overlays.len = 0
-					I.icon_state = "evidenceobj"
+				if(isgripper(I))
+					var/obj/item/weapon/gripper/G = I
+					if(G.wrapped)
+						scanning = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
+						G.drop_item(G.wrapped, src)
 				else
-					if(M.drop_item(I, src))
-						scanning = I
+					if(istype(I, /obj/item/weapon/storage/evidencebag) && I.contents.len)
+						var/obj/item/weapon/storage/evidencebag/EVB = I
+						scanning = EVB.contents[1]
+						EVB.remove_from_storage(scanning, src, TRUE, TRUE)
+					else
+						if(M.drop_item(I, src))
+							scanning = I
 			else
 				to_chat(usr, "Invalid Object Rejected.")
 		if("card")  //Processing a fingerprint card.
@@ -442,7 +446,14 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 						scan_data += "Fibers/Materials Found:<br>"
 						for(var/data in scanning.suit_fibers)
 							scan_data += "- [data]<br>"
-					if(istype(scanning,/obj/item/device/detective_scanner) || (istype(scanning, /obj/item/device/pda) && scanning:cartridge && scanning:cartridge.access_security))
+
+					var/is_scanner = istype(scanning, /obj/item/device/detective_scanner)
+					if(istype(scanning, /obj/item/device/pda))
+						var/obj/item/device/pda/the_pda = scanning
+						if(the_pda.cartridge && the_pda.cartridge.access_security)
+							is_scanner = TRUE
+					
+					if(is_scanner)
 						scan_data += "<br><b>Data transfered from \the [scanning] to Database.</b><br>"
 						add_data_scanner(scanning)
 					else if(!scanning.fingerprints)
@@ -491,12 +502,14 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				var/list/data = D.stored[atom]
 				add_data_master(atom,data[1],data[2],data[3],data[4])
 		D.stored = list()
-	else if(istype(W, /obj/item/device/pda) && W:cartridge && W:cartridge.access_security)
-		if(W:cartridge.stored_data)
-			for(var/atom in W:cartridge.stored_data)
-				var/list/data = W:cartridge.stored_data[atom]
-				add_data_master(atom,data[1],data[2],data[3],data[4])
-		W:cartridge.stored_data = list()
+	else if(istype(W, /obj/item/device/pda))
+		var/obj/item/device/pda/the_pda = W
+		if(the_pda.cartridge && the_pda.cartridge.access_security)
+			if(the_pda.cartridge.stored_data)
+				for(var/atom in the_pda.cartridge.stored_data)
+					var/list/data = the_pda.cartridge.stored_data[atom]
+					add_data_master(atom,data[1],data[2],data[3],data[4])
+			the_pda.cartridge.stored_data = list()
 	return
 
 /obj/machinery/computer/forensic_scanning/proc/add_data(var/atom/scanned_atom)

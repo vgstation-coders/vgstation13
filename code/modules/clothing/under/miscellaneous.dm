@@ -537,7 +537,7 @@
 	_color = "maid"
 
 /obj/item/clothing/under/darkholme
-	name = "\improper The Darkholme"
+	name = "\improper Darkholme"
 	desc = "Fuck you."
 	icon_state = "darkholme"
 	item_state = "darkholme"
@@ -715,3 +715,49 @@
 	icon_state = "franksuit"
 	item_state = "franksuit"
 	_color = "franksuit"
+
+/obj/item/clothing/under/elf
+	name = "elf uniform"
+	desc = "A festive suit for a festive elf!"
+	icon_state = "elf"
+	item_state = "elf"
+	_color = "elf"
+
+/obj/item/clothing/under/elf/stickymagic
+	canremove = 0
+
+/obj/item/clothing/under/police
+	name = "police uniform"
+	desc = "A policeman's lot is not a happy one."
+	icon_state = "britpolice"
+	item_state = "britpolice"
+	_color = "britpolice"
+
+/obj/item/clothing/under/inquisitor
+	name = "inquisitor's suit"
+	desc = "Historically, inquisitors were cathar detectives who investigated crimes both mundane and supernatural. They were known for traveling to remote parishes plagued by unexplained murders, and for exposing the wicked living among normal humans."
+	icon_state = "uni-church"
+	item_state = "uni-church"
+	_color = "uni-church"
+
+/obj/item/clothing/under/newclothes
+	name = "Emperor's new clothes"
+	desc = "The virtuous can see them."
+	icon_state = "newclothes"
+	_color = "newclothes"
+	item_state = "r_suit"
+
+/obj/item/clothing/under/tourist
+	name = "tourist uniform"
+	desc = "A bright cyan shirt and a pair of brown shorts. Looks old."
+	icon_state = "tourist"
+	item_state = "g_suit"
+	_color = "tourist"
+	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/under/varsity
+	name = "varsity jacket"
+	desc = "A jacket that belongs to either a high school student or an ancient German tyrant."
+	icon_state = "varsity"
+	item_state = "varsity"
+	_color = "varsity"

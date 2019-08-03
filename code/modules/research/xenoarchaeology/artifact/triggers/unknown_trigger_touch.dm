@@ -13,7 +13,7 @@
 
 	Triggered(toucher, context, 0)
 
-	if(my_effect.effect == EFFECT_TOUCH)
+	if(my_effect.effect == ARTIFACT_EFFECT_TOUCH)
 		if (my_effect.IsContained())
 			my_effect.Blocked()
 		else if(my_effect.IsPrimary() || prob(25))

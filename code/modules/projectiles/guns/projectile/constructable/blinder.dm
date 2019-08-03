@@ -1,7 +1,7 @@
 /obj/item/device/blinder
 	name = "camera"
 	icon = 'icons/obj/items.dmi'
-	desc = "A polaroid camera. The film chamber is filled with wire for some reason."
+	desc = "A polaroid camera."
 	icon_state = "polaroid"
 	item_state = "polaroid"
 	w_class = W_CLASS_SMALL
@@ -11,44 +11,63 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_ELECTRONIC
-	var/cell = null
-	var/bulb = 1
-	var/burnedout = 0
+	var/obj/item/weapon/cell/cell = null
+	var/obj/item/weapon/light/bulb/flashbulb = null
+	var/start_with_bulb = TRUE
+	var/decon_path = /obj/item/device/camera
 	var/powercost = 10000
+	var/base_desc = ""
+
+/obj/item/device/blinder/get_cell()
+	return cell
 
 /obj/item/device/blinder/Destroy()
 	if(cell)
 		qdel(cell)
 		cell = null
+	if(flashbulb)
+		qdel(flashbulb)
+		flashbulb = null
 	..()
 
-/obj/item/device/blinder/New()
+/obj/item/device/blinder/New(var/empty = FALSE)
 	..()
+	if(empty == TRUE)
+		start_with_bulb = FALSE
+	if(start_with_bulb)
+		flashbulb = new(src)
 	update_verbs()
+	base_desc = desc
+	update_desc()
+
+/obj/item/device/blinder/proc/update_desc()
+	if(cell)
+		desc = "[base_desc] There is a power cell in the film chamber for some reason."
+	else
+		desc = "[base_desc] The film chamber is filled with wire for some reason."
 
 /obj/item/device/blinder/examine(mob/user)
 	..()
-	if(bulb && burnedout)
-		to_chat(user, "<span class='warning'>\The [src]'s flash bulb is broken.</span>")
-	else if (!bulb)
-		to_chat(user, "<span class='info'>\The [src] appears to be missing a flash bulb.</span>")
+	if(flashbulb && flashbulb.status >= LIGHT_BROKEN)
+		to_chat(user, "<span class='warning'>\The [src]'s flashbulb is broken.</span>")
+	else if (!flashbulb)
+		to_chat(user, "<span class='info'>\The [src] appears to be missing a flashbulb.</span>")
 
 /obj/item/device/blinder/attack_self(mob/user as mob)
-	if(!bulb || burnedout || !cell)
+	if(!flashbulb || flashbulb.status >= LIGHT_BROKEN || !cell)
 		if (user)
 			user.visible_message("*click click*", "<span class='danger'>*click*</span>")
 			playsound(user, 'sound/weapons/empty.ogg', 100, 1)
 		else
 			src.visible_message("*click click*")
-			playsound(get_turf(src), 'sound/weapons/empty.ogg', 100, 1)
+			playsound(src, 'sound/weapons/empty.ogg', 100, 1)
 		return
 
 	if(cell)
-		var/obj/item/weapon/cell/C = cell
-		if(C.charge < powercost)
-			user.visible_message("[user] presses the button on \the [src], but the flash bulb merely flickers.","You press the button on \the [src], but the flash bulb merely flickers.")
-			to_chat(user, "<span class='warning'>There's not enough energy in the cell to power the flash bulb!</span>")
-			playsound(get_turf(src), 'sound/weapons/empty.ogg', 100, 1)
+		if(cell.charge < powercost)
+			user.visible_message("[user] presses the button on \the [src], but the flashbulb merely flickers.","You press the button on \the [src], but the flashbulb merely flickers.")
+			to_chat(user, "<span class='warning'>There's not enough energy in the cell to power the flashbulb!</span>")
+			playsound(src, 'sound/weapons/empty.ogg', 100, 1)
 			return
 
 		var/flash_turf = get_turf(src)
@@ -61,15 +80,19 @@
 		user.visible_message("<span class='danger'>[user] overloads \the [src]'s flash bulb!</span>","<span class='danger'>You overload \the [src]'s flash bulb!</span>")
 		to_chat(user, "<span class='warning'>\The [src]'s flash bulb shatters!</span>")
 
-		C.charge -= powercost
+		cell.charge -= powercost
+		cell.updateicon()
 
-		burnedout = 1
+		flashbulb.shatter(verbose = FALSE)
 		update_verbs()
 
 /obj/item/device/blinder/proc/flash(var/turf/T , var/mob/living/M)
-	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
+	playsound(src, 'sound/weapons/flash.ogg', 100, 1)
 
-	M.flash_eyes(visual = 1)
+	if(M.blinded)
+		return
+
+	M.flash_eyes(visual = 1, affect_silicon = 1)
 
 	if(issilicon(M))
 		M.Knockdown(rand(5, 10))
@@ -87,7 +110,7 @@
 		verbs += /obj/item/device/blinder/verb/remove_cell
 	else
 		verbs -= /obj/item/device/blinder/verb/remove_cell
-	if(bulb && burnedout)
+	if(flashbulb && flashbulb.status >= LIGHT_BROKEN)
 		verbs += /obj/item/device/blinder/verb/remove_bulb
 	else
 		verbs -= /obj/item/device/blinder/verb/remove_bulb
@@ -104,12 +127,10 @@
 	if(!cell)
 		return
 	else
-		var/obj/item/weapon/cell/C = cell
-		C.forceMove(usr.loc)
-		usr.put_in_hands(C)
+		to_chat(usr, "You remove \the [cell] from \the [src].")
+		usr.put_in_hands(cell)
 		cell = null
-		desc = "A polaroid camera. The film chamber is filled with wire for some reason."
-		to_chat(usr, "You remove \the [C] from \the [src].")
+		update_desc()
 	update_verbs()
 
 /obj/item/device/blinder/verb/remove_bulb()
@@ -121,16 +142,13 @@
 		to_chat(usr, "You can't do that while unconscious.")
 		return
 
-	if(!bulb)
+	if(!flashbulb)
 		return
 	else
-		var/obj/item/weapon/light/bulb/B = new (get_turf(usr))
-		B.status = LIGHT_BROKEN
-		B.update()
-		usr.put_in_hands(B)
-		bulb = 0
-		burnedout = 0
-		to_chat(usr, "You remove the broken [B.name] from \the [src].")
+		flashbulb.forceMove(get_turf(loc))
+		usr.put_in_hands(flashbulb)
+		to_chat(usr, "You remove the broken [flashbulb.name] from \the [src].")
+		flashbulb = null
 	update_verbs()
 
 /obj/item/device/blinder/attackby(obj/item/weapon/W, mob/user)
@@ -143,12 +161,12 @@
 			return 1
 		cell = W
 		user.visible_message("[user] inserts \the [W] into \the [src].","You insert \the [W] into \the [src].")
-		desc = "A polaroid camera. There is a power cell in the film chamber for some reason."
+		update_desc()
 		update_verbs()
 
 	if(istype(W, /obj/item/weapon/light/bulb))
-		if(bulb)
-			if(burnedout)
+		if(flashbulb)
+			if(flashbulb.status >= LIGHT_BROKEN)
 				to_chat(user, "<span class='warning'>You need to remove the damaged bulb first.</span>")
 				return
 			else
@@ -161,9 +179,11 @@
 		else if(B.status == LIGHT_BURNED)
 			to_chat(user, "<span class='warning'>That [B.name] is burned out, it won't function in \the [src].</span>")
 			return
-		bulb = 1
+		if(!user.drop_item(W, src))
+			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+			return 1
+		flashbulb = B
 		user.visible_message("[user] inserts \the [W] into \the [src].","You insert \the [W] into \the [src].")
-		qdel(W)
 		update_verbs()
 
 	if(istype(W, /obj/item/device/camera_film))
@@ -178,10 +198,18 @@
 		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/camera/I = new (get_turf(user))
+			var/obj/item/device/camera/I = new decon_path(get_turf(user), empty = TRUE)
+			handle_camera(I)
 			user.put_in_hands(I)
 		else
-			new /obj/item/device/camera(get_turf(src.loc))
+			var/obj/item/device/camera/I = new decon_path(get_turf(loc), empty = TRUE)
+			handle_camera(I)
 		var/obj/item/stack/cable_coil/C = new (get_turf(user))
 		C.amount = 5
 		qdel(src)
+
+/obj/item/device/blinder/proc/handle_camera(obj/item/device/camera/camera)
+	if(flashbulb)
+		camera.flashbulb = flashbulb
+		flashbulb.forceMove(camera)
+		flashbulb = null

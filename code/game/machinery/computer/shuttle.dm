@@ -47,6 +47,7 @@
 						to_chat(world, "<span class='notice'><B>Alert: Shuttle launch time shortened to 10 seconds!</B></span>")
 						emergency_shuttle.online = 1
 						emergency_shuttle.settimeleft(10)
+						emergency_shuttle.was_early_launched = TRUE
 						//src.authorized = null
 						del(src.authorized)
 						src.authorized = list(  )
@@ -65,12 +66,17 @@
 	if(!emagged)
 		new/obj/effect/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
-		var/choice = alert(user, "Would you like to launch the shuttle?","Shuttle control", "Launch", "Cancel")
+		var/choice = "Cancel"
+		if(user)
+			choice = alert(user, "Would you like to launch the shuttle?","Shuttle control", "Launch", "Cancel")
+		else
+			choice = "Launch" //What can go wrong?
 		if(emergency_shuttle.location == 1)
 			switch(choice)
 				if("Launch")
 					to_chat(world, "<span class='notice'><B>Alert: Shuttle launch time shortened to 10 seconds!</B></span>")
 					emergency_shuttle.settimeleft( 10 )
+					emergency_shuttle.was_early_launched = TRUE
 					emagged = 1
 					return 1
 				if("Cancel")

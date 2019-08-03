@@ -1,0 +1,18 @@
+[package]
+authors = [
+	"Damian <damian@autistici.org>",
+	"PJB3005 <pieterjan.briers@gmail.com>"
+]
+name = "runtime-condenser"
+version = "0.1.2"
+publish = false
+edition = "2018"
+
+[dependencies]
+clap = "2"
+lazy_static = "1"
+serde = "1"
+serde_derive = "1"
+serde_json = "1"
+regex = "1"
+rayon = "1"

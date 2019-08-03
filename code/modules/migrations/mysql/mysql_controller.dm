@@ -6,14 +6,14 @@ var/global/datum/migration_controller/mysql/migration_controller_mysql = null
 
 /datum/migration_controller/mysql/setup()
 	if(!dbcon || !istype(dbcon) || !dbcon.IsConnected())
-		testing("Something wrong with dbcon.")
+		warning("Something wrong with dbcon.")
 		return FALSE
 	var/DBQuery/Q = dbcon.NewQuery()
 	if(!Q)
-		testing("Something wrong with dbcon.NewQuery()")
+		warning("Something wrong with dbcon.NewQuery()")
 		return FALSE
 	Q.Close()
-	testing("MySQL is okay")
+	//testing("MySQL is okay")
 	db = dbcon
 	return TRUE
 

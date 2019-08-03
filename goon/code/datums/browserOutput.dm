@@ -12,6 +12,7 @@ For the main html chat area
 	"goon/browserassets/css/fonts/fontawesome-webfont.woff",
 	"goon/browserassets/css/font-awesome.css",
 	"goon/browserassets/css/browserOutput.css",
+	"goon/browserassets/css/browserOutput_dark.css",
 	"goon/browserassets/css/browserOutput_colorblindv1.css"
 )
 
@@ -111,8 +112,20 @@ For the main html chat area
 			else if (encoding == "_autodetect")
 				owner.encoding = "1252"
 
+			// This is the result of that Windows 10 beta thing where Microsoft has UTF-8 as a code page.
+			// It doesn't work in BYOND and *seems* to fall back to 1252?
+			else if (encoding == "utf-8")
+				owner.encoding = "1252"
+
 			else
 				stack_trace("Unknown encoding received from client: \"[sanitize(encoding)]\". Please report this as a bug.")
+
+		if("colorPresetPost") //User just swapped color presets in their goonchat preferences. Do we do anything else?
+			switch(href_list["preset"])
+				if("normal","colorblindv1")
+					owner.white_theme()
+				if("dark")
+					owner.dark_theme()
 
 	if(data)
 		ehjax_send(data = data)
@@ -223,7 +236,7 @@ For the main html chat area
 	var/atom/A = obj
 	var/key = ("[A.icon]" || "\ref[A.icon]")+":[A.icon_state]"
 	if (!bicon_cache[key]) // Doesn't exist, make it.
-		var/icon/I = icon(A.icon, A.icon_state, SOUTH, 1)
+		var/icon/I = icon(A.icon, A.icon_state, SOUTH, 1, 0)
 		if (!"[A.icon]") // Shitty workaround for a BYOND issue.
 			var/icon/temp = I
 			I = icon()
@@ -250,14 +263,14 @@ For the main html chat area
 /proc/to_chat(target, message)
 	//Ok so I did my best but I accept that some calls to this will be for shit like sound and images
 	//It stands that we PROBABLY don't want to output those to the browser output so just handle them here
-	if (istype(message, /image) || istype(message, /sound) || istype(target, /savefile) || !(ismob(target) || islist(target) || isclient(target) || istype(target, /datum/log) || target == world))
+	if (istype(target, /datum/zLevel)) //Passing it to an entire z level
+		for(var/mob/M in player_list) //List of all mobs with clients, excluding new_player
+			if(!istype(get_z_level(M),target))
+				continue
+			to_chat(M, message)
+		return
 
-		if (IsInteger(target)) //Passing it to an entire z level
-			for(var/mob/M in player_list) //List of all mobs with clients, excluding new_player
-				if(M.z != target)
-					continue
-				to_chat(M, message)
-			return
+	if (istype(message, /image) || istype(message, /sound) || istype(target, /savefile) || !(ismob(target) || islist(target) || isclient(target) || istype(target, /datum/log) || target == world))
 
 		target << message
 		if (!isatom(target)) // Really easy to mix these up, and not having to make sure things are mobs makes the code cleaner.

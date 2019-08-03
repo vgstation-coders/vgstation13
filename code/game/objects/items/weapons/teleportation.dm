@@ -67,20 +67,19 @@ Frequency:
 						var/turf/tr = get_turf(W)
 						if (tr.z == sr.z && tr)
 							var/direct = max(abs(tr.x - sr.x), abs(tr.y - sr.y))
-							if (direct < 5)
-								direct = "very strong"
-							else
-								if (direct < 10)
+							switch (direct)
+								if (0 to 5)
+									direct = "very strong"
+								if (5 to 10)
 									direct = "strong"
+								if (10 to 20)
+									direct = "weak"
 								else
-									if (direct < 20)
-										direct = "weak"
-									else
-										direct = "very weak"
+									direct = "very weak"
 							src.temp += "[W.code]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
 
 				src.temp += "<B>Extranneous Signals:</B><BR>"
-				for (var/obj/item/weapon/implant/tracking/W in world)
+				for (var/obj/item/weapon/implant/tracking/W in tracking_implants)
 					if (!W.implanted || !(istype(W.loc,/datum/organ/external) || ismob(W.loc)))
 						continue
 					else
@@ -92,15 +91,16 @@ Frequency:
 					var/turf/tr = get_turf(W)
 					if (tr.z == sr.z && tr)
 						var/direct = max(abs(tr.x - sr.x), abs(tr.y - sr.y))
-						if (direct < 20)
-							if (direct < 5)
+						switch (direct)
+							if (0 to 5)
 								direct = "very strong"
+							if (5 to 10)
+								direct = "strong"
+							if (10 to 20)
+								direct = "weak"
 							else
-								if (direct < 10)
-									direct = "strong"
-								else
-									direct = "weak"
-							src.temp += "[W.id]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
+								direct = "very weak"
+						src.temp += "[W.id]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
 
 				src.temp += "<B>You are at \[[sr.x-WORLD_X_OFFSET[sr.z]],[sr.y-WORLD_Y_OFFSET[sr.z]],[sr.z]\]</B> in orbital coordinates.<BR><BR><A href='byond://?src=\ref[src];refresh=1'>Refresh</A><BR>"
 			else
@@ -120,6 +120,27 @@ Frequency:
 					src.attack_self(M)
 	return
 
+/obj/item/weapon/bananapeel/bluespace
+	name = "bluespace banana peel"
+	desc = "A peel from a bluespace banana."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "bluespacebanana_peel"
+	item_state = "bluespacebanana_peel"
+
+/obj/item/weapon/bananapeel/bluespace/Crossed(AM as mob|obj)
+	if (istype(AM, /mob/living/carbon))
+		var/mob/living/carbon/M = AM
+		if (M.Slip(2, 2, 1))
+			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
+				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+			if(istype(AM,/mob/living/carbon/human))
+				var/mob/living/carbon/human/H = AM
+				var/obj/teleported_shoes = H.get_item_by_slot(slot_shoes)
+				var/tele_destination = pick_rand_tele_turf(H, src.potency/15, src.potency/10)
+				if(teleported_shoes && tele_destination)
+					H.drop_from_inventory(teleported_shoes)
+					teleported_shoes.forceMove(tele_destination)
+					spark(H.loc)
 
 /*
  * Hand-tele
@@ -142,48 +163,30 @@ Frequency:
 	var/list/portals = list()
 	var/charge = HANDTELE_MAX_CHARGE//how many pairs of portal can the hand-tele sustain at once. a new charge is added every 30 seconds until the maximum is reached..
 	var/recharging = 0
+	var/destination_id
+	var/destination_name
+
+/obj/item/weapon/hand_tele/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>Alt-Click the hand tele to set portal destination. Defaults to your last choice.</span>")
+	to_chat(user, "<span class='notice'>Charge: [charge]/[HANDTELE_MAX_CHARGE] ([charge/HANDTELE_PORTAL_COST]/[HANDTELE_MAX_CHARGE/HANDTELE_PORTAL_COST])</span>")
 
 /obj/item/weapon/hand_tele/attack_self(mob/user as mob)
 	var/turf/current_location = get_turf(user)//What turf is the user on?
 	if(!current_location||current_location.z==2||current_location.z>=7)//If turf was not found or they're on z level 2 or >7 which does not currently exist.
 		to_chat(user, "<span class='notice'>\The [src] is malfunctioning.</span>")
 		return
-	var/list/L = list(  )
-	for(var/obj/machinery/computer/teleporter/R in machines)
-		for(var/obj/machinery/teleport/hub/com in locate(R.x + 2, R.y, R.z))
-			if(R.locked && !R.one_time_use)
-				if(com.engaged)
-					L["[R.id] (Active)"] = R.locked
-				else
-					L["[R.id] (Inactive)"] = R.locked
 
-	var/list/turfs = new/list()
-
-	for (var/turf/T in trange(10, user))
-		// putting them at the edge is dumb
-		if (T.x > world.maxx - 8 || T.x < 8)
-			continue
-
-		if (T.y > world.maxy - 8 || T.y < 8)
-			continue
-
-		turfs += T
-
-	if (turfs.len)
-		L["None (Dangerous)"] = pick(turfs)
-
-	turfs = null
-
-	var/t1 = input(user, "Please select a teleporter to lock in on.", "Hand Teleporter") in L
-
-	if((user.get_active_hand() != src || user.stat || user.restrained()))
-		return
 	if(charge < HANDTELE_PORTAL_COST)
 		user.show_message("<span class='notice'>\The [src] is recharging!</span>")
 		return
-	var/T = L[t1]
 
-	if((t1 == "None (Dangerous)") && prob(5))
+	if(!destination_id)
+		if(!choose_destination(user))
+			return
+	var/T = destination_id
+
+	if((destination_name == "None (Dangerous)") && prob(5))
 		T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
 
 	var/turf/U = get_turf(src)
@@ -207,6 +210,48 @@ Frequency:
 	if(!recharging)
 		recharging = 1
 		processing_objects.Add(src)
+
+/obj/item/weapon/hand_tele/proc/choose_destination(var/mob/user)
+	var/list/L = list(  )
+	for(var/obj/machinery/computer/teleporter/R in machines)
+		for(var/obj/machinery/teleport/station/S in orange(1,R))
+			for(var/obj/machinery/teleport/hub/com in orange(1,S))
+				if(R.locked && !R.one_time_use)
+					if(com.engaged)
+						L["[R.id] (Active)"] = R.locked
+					else
+						L["[R.id] (Inactive)"] = R.locked
+
+	var/list/turfs = new/list()
+
+	for (var/turf/T in trange(10, user))
+		// putting them at the edge is dumb
+		if (T.x > world.maxx - 8 || T.x < 8)
+			continue
+
+		if (T.y > world.maxy - 8 || T.y < 8)
+			continue
+
+		turfs += T
+
+	if (turfs.len)
+		L["None (Dangerous)"] = pick(turfs)
+
+	turfs = null
+	var/destination_name = input(user, "Please select a teleporter to lock in on.", "Hand Teleporter") in L
+	var/destination_id = L[destination_name]
+
+	if((user.get_active_hand() != src || user.stat || user.restrained()))
+		return 0
+	else
+		src.destination_name = destination_name
+		src.destination_id = destination_id
+		return 1
+
+/obj/item/weapon/hand_tele/AltClick(var/mob/usr)
+	if((usr.incapacitated() || !Adjacent(usr)))
+		return
+	choose_destination(usr)
 
 /obj/item/weapon/hand_tele/process()
 	charge = min(HANDTELE_MAX_CHARGE,charge+1)

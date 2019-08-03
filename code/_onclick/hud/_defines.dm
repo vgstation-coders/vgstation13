@@ -41,6 +41,7 @@
 #define ui_inv3 "CENTER:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"			//borgs
 #define ui_borg_module "CENTER+1:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]" //borgs
 #define ui_borg_store "CENTER+2:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//borgs
+
 #define ui_mommi_store "CENTER+1:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
 #define ui_mommi_module "CENTER:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
 #define ui_mommi_sight "CENTER-2:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
@@ -63,7 +64,6 @@
 #define ui_acti_alt "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]" //alternative intent switcher for when the interface is hidden (F12)
 
 #define ui_borg_pull "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
-//#define ui_borg_module "13:[26*PIXEL_MULTIPLIER],2:[7*PIXEL_MULTIPLIER]"
 #define ui_borg_panel "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
 
 //Gun buttons
@@ -71,6 +71,9 @@
 #define ui_gun2 "EAST-1:28, SOUTH+3:7" //Used as compile time value
 #define ui_gun3 "EAST-2:26,SOUTH+3:7" //Used as compile time value
 #define ui_gun_select "EAST-1:28,SOUTH+2:7" //Used as compile time value
+
+#define ui_borg_album "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+5:[7*PIXEL_MULTIPLIER]"	//borgs
+#define ui_borg_camera "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+4:[7*PIXEL_MULTIPLIER]"	//borgs
 
 //Upper-middle right (damage indicators)
 #define ui_toxin "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-2:[27*PIXEL_MULTIPLIER]"
@@ -204,3 +207,7 @@
 #define ui_blob_ping "EAST-1:[24*PIXEL_MULTIPLIER],CENTER+3:[21*PIXEL_MULTIPLIER]"
 #define ui_blob_rally "EAST-1:[24*PIXEL_MULTIPLIER],CENTER+4:[25*PIXEL_MULTIPLIER]"
 #define ui_blob_taunt "EAST-1:[24*PIXEL_MULTIPLIER],CENTER+5:[29*PIXEL_MULTIPLIER]"
+
+//Cult HUD
+#define ui_cult_Act "WEST+0:[6*PIXEL_MULTIPLIER],SOUTH+5:[15*PIXEL_MULTIPLIER]"
+#define ui_cult_tattoos "WEST+0:[6*PIXEL_MULTIPLIER], SOUTH+4:[13*PIXEL_MULTIPLIER]"

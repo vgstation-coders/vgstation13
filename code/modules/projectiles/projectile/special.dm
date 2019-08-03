@@ -139,6 +139,7 @@
 			if(prob(mutstrength*2))
 				M.apply_radiation((rand(30,80)),RAD_EXTERNAL)
 				M.Knockdown(5)
+				M.Stun(5)
 				for (var/mob/V in viewers(src))
 					V.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
 			if(prob(mutstrength*3))
@@ -218,7 +219,7 @@ obj/item/projectile/kinetic/New()
 	var/pressure = environment.return_pressure()
 	if(pressure < 50)
 		name = "full strength kinetic force"
-		damage = 30
+		damage += 15
 	..()
 
 /* wat - N3X
@@ -236,7 +237,8 @@ obj/item/projectile/kinetic/New()
 	//testing("Hit [target.type], on [target_turf.type].")
 	if(istype(target_turf, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = target_turf
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+			M.GetDrilled()
 	new /obj/item/effect/kinetic_blast(target_turf)
 	..(target,blocked)
 
@@ -254,7 +256,8 @@ obj/item/projectile/kinetic/New()
 			//testing("Bumped [A.type], on [target_turf.type].")
 			if(istype(target_turf, /turf/unsimulated/mineral))
 				var/turf/unsimulated/mineral/M = target_turf
-				M.GetDrilled()
+				if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+					M.GetDrilled()
 			// Now we bump as a bullet, if the atom is a non-turf.
 			if(!isturf(A))
 				..(A)
@@ -277,6 +280,13 @@ obj/item/projectile/kinetic/New()
 	spawn(4)
 		returnToPool(src)
 
+/obj/item/projectile/kinetic/cutter
+
+/obj/item/projectile/kinetic/cutter/to_bump(atom/A)
+	if(istype(A, /mob/living/simple_animal) || istype(A, /mob/living/carbon/alien))
+		damage += 15
+	..()
+
 /obj/item/projectile/stickybomb
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "stickybomb"
@@ -290,7 +300,7 @@ obj/item/projectile/kinetic/New()
 	bumped = 1
 
 	if(A)
-		density = 0
+		setDensity(FALSE)
 		invisibility = 101
 		kill_count = 0
 		if(isliving(A))
@@ -429,7 +439,7 @@ obj/item/projectile/kinetic/New()
 	flag = "bio"
 	fire_sound = 'sound/weapons/rocket.ogg'
 
-	projectile_slowdown = 0.5
+	projectile_speed = 1.33
 
 	var/fire_damage = 5
 	var/pressure = ONE_ATMOSPHERE * 4.5
@@ -438,3 +448,19 @@ obj/item/projectile/kinetic/New()
 
 /obj/item/projectile/napalm_bomb/on_hit(var/atom/target, var/blocked = 0)
 	new /obj/effect/fire_blast/blue(get_turf(target), fire_damage, 0, 1, pressure, temperature, fire_duration)
+
+
+/obj/item/projectile/swap
+	name = "bolt of swapping"
+	icon_state = "sparkblue"
+	damage = 0
+	nodamage = 1
+	fire_sound = 'sound/weapons/osipr_altfire.ogg'
+
+/obj/item/projectile/swap/on_hit(var/atom/target, var/blocked = 0)
+	var/turf/T = get_turf(target)
+	do_teleport(target, firer.loc)
+	do_teleport(firer, T)
+
+/obj/item/projectile/swap/advanced
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE

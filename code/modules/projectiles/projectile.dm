@@ -41,7 +41,6 @@ var/list/impact_master = list()
 	var/damage_type = BRUTE //BRUTE, BURN, TOX, OXY, CLONE are the only things that should be in here
 	var/nodamage = 0 //Determines if the projectile will skip any damage inflictions
 	var/flag = "bullet" //Defines what armor to use when it hits things.  Must be set to bullet, laser, energy,or bomb	//Cael - bio and rad are also valid
-	var/projectile_type = "/obj/item/projectile"
 	var/kill_count = INFINITY //This will de-increment every process(). When 0, it will delete the projectile.
 	var/total_steps = 0
 		//Effects
@@ -68,8 +67,6 @@ var/list/impact_master = list()
 	var/phase_type = null//PHASEHTROUGH_WALLS, PHASEHTROUGH_WINDOWS, PHASEHTROUGH_OBJS, PHASEHTROUGH_MOBS
 	var/penetration = 0	//if set to -1, will always phase through obstacles
 	var/mark_type = "trace"	//what marks will the bullet leave on a wall that it penetrates? from 'icons/effects/96x96.dmi'
-
-	var/step_delay = 0 //how long it goes between moving. You should probably leave this as 0 for a lot of things
 
 	var/inaccurate = 0
 
@@ -101,29 +98,24 @@ var/list/impact_master = list()
 	animate_movement = 0
 	var/linear_movement = 1
 
-	var/projectile_slowdown = 0 //The extra time spent sleeping after each step. Increasing this will make the projectile move more slowly.
+	var/projectile_speed = 1 //Time in deciseconds between steps. Lower is faster. Bear in mind that this should be divisible by (or close to) the server's tick_lag (at the time of writing this, 0.33)
 
 	var/penetration_message = 1 //Message that is shown when a projectile penetrates an object
 	var/fire_sound = 'sound/weapons/Gunshot.ogg' //sound that plays when the projectile is fired
 	var/rotate = 1 //whether the projectile is rotated based on angle or not
-	var/superspeed = 0 //When set to 1, the projectile will travel at twice the normal speed
-	var/super_speed = 0 //This exists just for proper functionality
 	var/travel_range = 0	//if set, the projectile will be deleted when its distance from the firing location exceeds this
+	var/decay_type = null	//if set, along with travel range, will drop a new item of this type when the projectile exceeds its course
 
 /obj/item/projectile/New()
 	..()
 	initial_pixel_x = pixel_x
 	initial_pixel_y = pixel_y
-	if(superspeed)
-		super_speed = 1
 
-/obj/item/projectile/New()
-	..()
-	if(superspeed)
-		super_speed = 1
+/obj/item/projectile/proc/hit_apply(var/mob/living/X, var/blocked) // this is relevant because of projectile/energy/electrode
+	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
-	if(blocked >= 2)
+	if(blocked >= 100)
 		return 0//Full block
 	if(!isliving(atarget))
 		return 0
@@ -138,7 +130,7 @@ var/list/impact_master = list()
 	var/mob/living/L = atarget
 	if(L.flags & INVULNERABLE)
 		return 0
-	L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
+	hit_apply(L)
 	if(jittery)
 		L.Jitter(jittery)
 	if(!isnull(hitsound))
@@ -160,11 +152,8 @@ var/list/impact_master = list()
 	return output //Send it back to the gun!
 
 /obj/item/projectile/resetVariables()
-	if(!istype(permutated,/list))
-		permutated = list()
-	else
-		permutated.len = 0
 	..("permutated")
+	permutated = list()
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)
 	if(istype(firer, /mob))
@@ -181,7 +170,8 @@ var/list/impact_master = list()
 			log_attack("<font color='red'>[key_name(firer)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
-			msg_admin_attack("[key_name(firer)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
+			if(firer.client || M.client)
+				msg_admin_attack("[key_name(firer)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
 			if(!iscarbon(firer))
 				M.LAssailant = null
 			else
@@ -370,8 +360,8 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/OnDeath()	//if assigned, allows for code when the projectile disappears
 	return 1
 
-/obj/item/projectile/proc/OnFired()	//if assigned, allows for code when the projectile gets fired
-	target = get_turf(original)
+/obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
+	target = get_turf(proj_target)
 	dist_x = abs(target.x - starting.x)
 	dist_y = abs(target.y - starting.y)
 
@@ -401,6 +391,10 @@ var/list/impact_master = list()
 	target_angle = round(Get_Angle(starting,target))
 
 	if(linear_movement)
+		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
+		transform = projectile_matrix
+		icon_state = "[initial(icon_state)]_pixel"
+		/*
 		//If the icon has not been added yet
 		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
 			var/icon/I = new(icon,"[icon_state]_pixel") //Generate it.
@@ -408,16 +402,16 @@ var/list/impact_master = list()
 				I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I //And cache it!
 		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
-
+		*/
 	return 1
 
+
 /obj/item/projectile/proc/process_step()
-	var/sleeptime = 1
 	if(src.loc)
 		if(dist_x > dist_y)
-			sleeptime = bresenham_step(dist_x,dist_y,dx,dy)
+			bresenham_step(dist_x,dist_y,dx,dy)
 		else
-			sleeptime = bresenham_step(dist_y,dist_x,dy,dx)
+			bresenham_step(dist_y,dist_x,dy,dx)
 		if(linear_movement)
 			update_pixel()
 			pixel_x = PixelX
@@ -425,33 +419,18 @@ var/list/impact_master = list()
 
 		bumped = 0
 
-		sleeptime += projectile_slowdown
-
-		sleep(sleeptime)
+		sleep(projectile_speed)
 
 
 /obj/item/projectile/proc/bresenham_step(var/distA, var/distB, var/dA, var/dB)
-	if(!superspeed)
-		return make_bresenham_step(distA, distB, dA, dB)
-	else
-		if(make_bresenham_step(distA, distB, dA, dB))
-			if(super_speed)
-				super_speed = 0
-				return 1
-			else
-				super_speed = 1
-				return 0
-		else
-			return 0
-
-/obj/item/projectile/proc/make_bresenham_step(var/distA, var/distB, var/dA, var/dB)
-	if(step_delay)
-		sleep(step_delay)
 	if(kill_count < 1)
 		bullet_die()
 		return 1
 	if(travel_range)
-		if(get_exact_dist(starting, get_turf(src)) > travel_range)
+		var/turf/T = get_turf(src)
+		if(get_exact_dist(starting, T) > travel_range)
+			if (decay_type)
+				new decay_type(T)
 			bullet_die()
 			return 1
 	kill_count--
@@ -507,6 +486,11 @@ var/list/impact_master = list()
 	OnDeath()
 	returnToPool(src)
 
+/obj/item/projectile/beam/lightning/spell/bullet_die()
+        spawn()
+                OnDeath()
+                returnToPool(src)
+
 /obj/item/projectile/proc/bump_original_check()
 	if(!bumped && !isturf(original))
 		if(loc == get_turf(original))
@@ -523,7 +507,7 @@ var/list/impact_master = list()
 			tS = 1
 			timestopped = 0
 		while((loc.timestopped || timestopped) && !first)
-			sleep(3)
+			sleep(projectile_speed)
 		first = 0
 		src.process_step()
 		if(tS)
@@ -566,6 +550,16 @@ var/list/impact_master = list()
 /obj/item/projectile/bullet_act(/obj/item/projectile/bullet)
 	return -1
 
+/obj/item/projectile/proc/reset()
+	starting = get_turf(src)
+	if(isnull(starting))
+		return
+	override_starting_X = starting.x
+	override_starting_Y = starting.y
+	override_target_X = override_starting_X+dist_x
+	override_target_Y = override_starting_Y+dist_y
+	target = locate(override_target_X,override_target_Y,z)
+
 /obj/item/projectile/proc/rebound(var/atom/A)//Projectiles bouncing off walls and obstacles
 	var/turf/T = get_turf(src)
 	var/turf/W = get_turf(A)
@@ -604,6 +598,9 @@ var/list/impact_master = list()
 	override_target_X = W.x + newdiffX
 	override_target_Y = W.y + newdiffY
 
+	if(!rotate)
+		return
+
 	var/disty
 	var/distx
 	var/newangle
@@ -621,18 +618,19 @@ var/list/impact_master = list()
 		else if(distx < 0)
 			newangle += 360
 
-	if(!rotate)
-		return
-
 	target_angle = round(newangle)
 
 	if(linear_movement)
+		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
+		transform = projectile_matrix
+		/*
 		if( !("[icon_state][target_angle]" in bullet_master) )
 			var/icon/I = new(initial(icon),"[icon_state]_pixel")
 			if(!lock_angle)
 				I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I
 		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
+		*/
 
 /obj/item/projectile/test //Used to see if you can hit them.
 	invisibility = 101 //Nope!  Can't see me!
@@ -718,16 +716,20 @@ var/list/impact_master = list()
 /obj/item/projectile/acidable()
 	return 0
 
-/obj/item/projectile/proc/launch_at(var/atom/target,var/tar_zone = "chest",var/atom/curloc = get_turf(src),var/from = null) // doot doot shitcode alert
+/obj/item/projectile/proc/launch_at(var/atom/target,var/tar_zone = "chest",var/atom/curloc = get_turf(src),var/from = null,var/variance_angle = 0) // doot doot shitcode alert
 	original = target
 	starting = curloc
 	shot_from = from
 	current = curloc
-	OnFired()
-	yo = target.loc.y - curloc.y
-	xo = target.loc.x - curloc.x
+	var/angle = rand(-variance_angle/2, variance_angle/2) + get_angle(starting, original)
+	var/launch_at_range = 7 // Increasing this should make the bullet spread smoother or something
+	yo = launch_at_range * cos(angle)
+	xo = launch_at_range * sin(angle)
+	var/trajectory = locate(src.x + xo, src.y + yo, src.z) //Send projectile towards a not-original tile while preserving original for targetting stunned/lying mobs.
+	OnFired(trajectory)
 	def_zone = tar_zone
 	spawn()
 		process()
+
 /obj/item/projectile/proc/apply_projectile_color(var/proj_color)
 	color = proj_color

@@ -1,3 +1,5 @@
+#define ANIM_LENGTH 10
+
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
 var/global/list/rnd_machines = list()
 //All devices that link into the R&D console fall into thise type for easy identification and some shared procs.
@@ -16,6 +18,8 @@ var/global/list/rnd_machines = list()
 	var/stopped		= 0
 	var/base_state	= ""
 	var/build_time	= 0
+	var/auto_make = 0
+	var/default_mat_overlays = FALSE
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
@@ -105,7 +109,7 @@ var/global/list/rnd_machines = list()
 /obj/machinery/r_n_d/proc/update_hacked()
 	return
 
-/obj/machinery/r_n_d/togglePanelOpen(var/item/toggleitem, mob/user)
+/obj/machinery/r_n_d/togglePanelOpen(var/obj/item/toggleitem, mob/user)
 	if(..())
 		if (panel_open && linked_console)
 			linked_console.linked_machines -= src
@@ -124,6 +128,8 @@ var/global/list/rnd_machines = list()
 	if(..() == 1)
 		if (materials)
 			for(var/matID in materials.storage)
+				if (materials.storage[matID] == 0) // No materials of this type
+					continue
 				var/datum/material/M = materials.getMaterial(matID)
 				var/obj/item/stack/sheet/sheet = new M.sheettype(src.loc)
 				if(sheet)
@@ -138,7 +144,7 @@ var/global/list/rnd_machines = list()
 
 /obj/machinery/r_n_d/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (shocked)
-		shock(user,50)
+		shock(user,50, O.siemens_coefficient)
 	if (busy)
 		to_chat(user, "<span class='warning'>The [src.name] is busy. Please wait for completion of previous operation.</span>")
 		return 1
@@ -171,7 +177,6 @@ var/global/list/rnd_machines = list()
 		to_chat(user, "\The [src] must be linked to an R&D console first!")
 		return 1
 	if(istype(O,/obj/item/stack/sheet) && research_flags &TAKESMATIN)
-		busy = 1
 
 		var/found = "" //the matID we're compatible with
 		for(var/matID in materials.storage)
@@ -180,56 +185,63 @@ var/global/list/rnd_machines = list()
 				found = matID
 		if(!found)
 			if(O.materials && research_flags &FAB_RECYCLER)
-				busy = 0
 				return 0 //let the autolathe try to do it's thing
 			to_chat(user, "<span class='warning'>\The [src] rejects \the [O.name].</span>")
-			busy = 0
 			return 1
 		if(allowed_materials && allowed_materials.len)
 			if(!(found in allowed_materials))
 				if(O.materials && research_flags &FAB_RECYCLER)
-					busy = 0
 					return 0 //let the autolathe try to do it's thing
 				to_chat(user, "<span class='warning'>\The [src] rejects \the [O.name].</span>")
-				busy = 0
 				return 1
 
 		var/obj/item/stack/sheet/S = O
 		if (TotalMaterials() + S.perunit > max_material_storage)
 			to_chat(user, "<span class='warning'>\The [src]'s material bin is full. Please remove material before adding more.</span>")
-			busy = 0
 			return 1
 
 		var/obj/item/stack/sheet/stack = O
 		var/amount = round(input("How many sheets do you want to add? (0 - [stack.amount])") as num)//No decimals
-		if(!O || !O.loc || (O.loc != user && !isgripper(O.loc)))
-			busy = 0
-			return
-		if(amount < 0)//No negative numbers
-			amount = 0
-		if(amount == 0)
-			busy = 0
-			return 1	//1 So the autolathe doesn't recycle the stack.
+		if(!user.Adjacent(src) || !O || !O.loc || (O.loc != user && !isgripper(O.loc)))
+			return 1
+		if(!(amount > 0))
+			return 1
+	//1 So the autolathe doesn't recycle the stack.
 		if(amount > stack.amount)
 			amount = stack.amount
 		if(max_material_storage - TotalMaterials() < (amount*stack.perunit))//Can't overfill
 			amount = min(stack.amount, round((max_material_storage-TotalMaterials())/stack.perunit))
 
+		if (!(amount > 0))
+			to_chat(user, "<span class='warning'>\The [src]'s material bin is full. Please remove material before adding more.</span>")
+			return 1
+
+		if (busy)
+			to_chat(user, "<span class='warning'>\The [src] is busy. Please wait for completion of previous operation.</span>")
+			return 1
+
+		busy = TRUE
+
 		if(research_flags & HASMAT_OVER)
 			update_icon()
 			overlays |= image(icon = icon, icon_state = "[base_state]_[stack.name]")
-			spawn(10)
+			if(default_mat_overlays)
+				overlays |= image(icon = icon, icon_state = "autolathe_[stack.name]")
+			spawn(ANIM_LENGTH)
 				overlays -= image(icon = icon, icon_state = "[base_state]_[stack.name]")
+				if(default_mat_overlays)
+					overlays -= image(icon = icon, icon_state = "autolathe_[stack.name]")
 
 		icon_state = "[base_state]"
 		use_power(max(1000, (3750*amount/10)))
 		stack.use(amount)
-		to_chat(user, "<span class='notice'>You add [amount] sheet[amount > 1 ? "s":""] to the [src.].</span>")
+		to_chat(user, "<span class='notice'>You add [amount] sheet[amount > 1 ? "s":""] to the [src].</span>")
 		icon_state = "[base_state]"
 
 		var/datum/material/material = materials.getMaterial(found)
 		materials.addAmount(found, amount * material.cc_per_sheet)
-		busy = 0
+		spawn(ANIM_LENGTH)
+			busy = FALSE
 		return 1
 	src.updateUsrDialog()
 	return 0
@@ -248,3 +260,5 @@ var/global/list/rnd_machines = list()
 	. = get_step(get_turf(src), output_dir)
 	if(!.)
 		return loc // Map edge I guess.
+
+#undef ANIM_LENGTH

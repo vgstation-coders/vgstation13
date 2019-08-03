@@ -13,13 +13,14 @@ var/const/AIRLOCK_WIRE_ELECTRIFY = 256
 var/const/AIRLOCK_WIRE_SAFETY = 512
 var/const/AIRLOCK_WIRE_SPEED = 1024
 var/const/AIRLOCK_WIRE_LIGHT = 2048
+var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 /datum/wires/airlock/secure
 	random = 1
 
 /datum/wires/airlock
 	holder_type = /obj/machinery/door/airlock
-	wire_count = 12
+	wire_count = 13
 	window_y = 570
 
 /datum/wires/airlock/New()
@@ -36,6 +37,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		"[AIRLOCK_WIRE_SAFETY]"        = "Safety",
 		"[AIRLOCK_WIRE_SPEED]"         = "Speed",
 		"[AIRLOCK_WIRE_LIGHT]"         = "Lights",
+		"[AIRLOCK_WIRE_ONOPEN]"        = "On Open"
 	)
 	..()
 
@@ -45,8 +47,8 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 	var/obj/machinery/door/airlock/A = holder
 	if(!istype(L, /mob/living/silicon))
 		if(A.isElectrified())
-			if(A.shock(L, 100))
-				return 0
+			var/obj/I = L.get_active_hand()
+			A.shock(L, 100, get_conductivity(I))
 	if(A.panel_open)
 		return 1
 	return 0
@@ -65,28 +67,29 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 /datum/wires/airlock/UpdateCut(var/index, var/mended, mob/user)
 
 	var/obj/machinery/door/airlock/A = holder
+	var/obj/I = user.get_active_hand()
 	switch(index)
 		if(AIRLOCK_WIRE_MAIN_POWER1, AIRLOCK_WIRE_MAIN_POWER2)
 
 			if(!mended)
 				//Cutting either one disables the main door power, but unless backup power is also cut, the backup power re-powers the door in 10 seconds. While unpowered, the door may be crowbarred open, but bolts-raising will not work. Cutting these wires may electocute the user.
 				A.loseMainPower()
-				A.shock(user, 50)
+				A.shock(user, 50, get_conductivity(I))
 			else
 				if((!IsIndexCut(AIRLOCK_WIRE_MAIN_POWER1)) && (!IsIndexCut(AIRLOCK_WIRE_MAIN_POWER2)))
 					A.regainMainPower()
-					A.shock(user, 50)
+					A.shock(user, 50, get_conductivity(I))
 
 		if(AIRLOCK_WIRE_BACKUP_POWER1, AIRLOCK_WIRE_BACKUP_POWER2)
 
 			if(!mended)
 				//Cutting either one disables the backup door power (allowing it to be crowbarred open, but disabling bolts-raising), but may electocute the user.
 				A.loseBackupPower()
-				A.shock(user, 50)
+				A.shock(user, 50, get_conductivity(I))
 			else
 				if((!IsIndexCut(AIRLOCK_WIRE_BACKUP_POWER1)) && (!IsIndexCut(AIRLOCK_WIRE_BACKUP_POWER2)))
 					A.regainBackupPower()
-					A.shock(user, 50)
+					A.shock(user, 50, get_conductivity(I))
 
 		if(AIRLOCK_WIRE_DOOR_BOLTS)
 
@@ -115,13 +118,10 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 
 			if(!mended)
 				//Cutting this wire electrifies the door, so that the next person to touch the door without insulated gloves gets electrocuted.
-				if(A.secondsElectrified != -1)
-					A.shockedby += text("\[[time_stamp()]\][user](ckey:[user.ckey])")
-					A.secondsElectrified = -1
+				A.shockedby += text("\[[time_stamp()]\][user](ckey:[user.ckey])")
+				A.secondsElectrified = -1
 			else
-				if(A.secondsElectrified == -1)
-					A.secondsElectrified = 0
-			return // Don't update the dialog.
+				A.secondsElectrified = 0
 
 		if (AIRLOCK_WIRE_SAFETY)
 			A.safe = mended
@@ -136,6 +136,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 			A.lights = mended
 			A.update_icon()
 
+	playsound(A, 'sound/items/wirecutter.ogg', 25, 1, -6)
 
 /datum/wires/airlock/UpdatePulsed(var/index, mob/user)
 
@@ -153,13 +154,15 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 			//raises them if they are down (only if power's on)
 			if(!A.locked)
 				A.locked = 1
+				playsound(A, "sound/machines/door_bolt.ogg", 50, 1, -1)
 				for(var/mob/M in range(1, A))
-					to_chat(M, "You hear a click from the bottom of the door.")
+					to_chat(M, "You hear a metallic clunk from the bottom of the door.")
 			else
 				if(A.arePowerSystemsOn()) //only can raise bolts if power's on
 					A.locked = 0
+					playsound(A, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 					for(var/mob/M in range(1, A))
-						to_chat(M, "You hear a click from the bottom of the door.")
+						to_chat(M, "You hear a metallic clunk from the bottom of the door.")
 			A.update_icon()
 
 		if(AIRLOCK_WIRE_BACKUP_POWER1, AIRLOCK_WIRE_BACKUP_POWER2)
@@ -191,10 +194,11 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 							if(A.secondsElectrified<0)
 								A.secondsElectrified = 0
 							sleep(10)
-				return
 		if(AIRLOCK_WIRE_OPEN_DOOR)
 			//tries to open the door without ID
 			//will succeed only if the ID wire is cut or the door requires no access
+			for(var/mob/M in range(1, A))
+				to_chat(M, "<span class = 'notice'>You see \the [holder]'s keypad blink green for a second.</span>")
 			if(!A.requiresID() || A.check_access(null))
 				if(A.density)
 					A.open()
@@ -211,3 +215,9 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		if(AIRLOCK_WIRE_LIGHT)
 			A.lights = !A.lights
 			A.update_icon()
+
+		if(AIRLOCK_WIRE_ONOPEN)
+			A.visible_message("<span class = 'notice'>\The [A]'s motors whirr.</span>")
+
+	playsound(A, 'sound/machines/airlock_beep.ogg', 25, 1, -6)
+

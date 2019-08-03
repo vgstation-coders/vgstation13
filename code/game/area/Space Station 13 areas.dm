@@ -28,7 +28,11 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	mouse_opacity = 0
 	luminosity = 0
 	var/lightswitch = 1
+	var/list/ambient_sounds = list(/datum/ambience/generic1,/datum/ambience/generic2,/datum/ambience/generic3,/datum/ambience/generic4,/datum/ambience/generic5,/datum/ambience/generic6,/datum/ambience/generic7,/datum/ambience/generic8,/datum/ambience/generic9,/datum/ambience/generic10,/datum/ambience/generic11,/datum/ambience/generic12,/datum/ambience/generic13,/datum/ambience/generic14)
+	//note. the above sounds apply to literally every area. if it does not apply. null it out. the old code had this for every other area so I don't think it's an issue
 
+	//space sounds below - Figure this out.
+	//note. the above will cause those ambient sounds to be in EVERY AREA that doesn't have them overridden. put ambient_sounds = null in your area def, or overwrite this.
 	var/eject = null
 
 	var/requires_power = 1
@@ -58,6 +62,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/door_alerts=0
 
 	var/doors_down=0
+	var/doors_overridden=0 //manual override to force firedoors up
 
 	// /vg/: No teleporting for you. 2 = SUPER JAMMED, inaccessible even to telecrystals.
 	var/jammed = 0
@@ -160,6 +165,7 @@ proc/process_adminbus_teleport_locs()
 	dynamic_lighting = 1 //Lighting STILL disabled, even with the new bay engine, because lighting doesn't play nice with our shuttles, might just be our shuttle code, or the small changes in the lighting engine we have from bay.
 	//haha fuck you we dynamic lights now
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/shuttle/holomapAlwaysDraw()
 	return 0
@@ -187,6 +193,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod1
 	name = "\improper Escape Pod One"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -201,6 +208,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod2
 	name = "\improper Escape Pod Two"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -215,6 +223,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod3
 	name = "\improper Escape Pod Three"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -227,8 +236,15 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/escape_pod3/transit
 	icon_state = "shuttle"
 
+/area/shuttle/escape_pod4
+	name = "\improper Escape Pod Four"
+	icon_state = "shuttle2"
+	music = "music/escape.ogg"
+	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
+
 /area/shuttle/escape_pod5 //Pod 4 was lost to meteors
 	name = "\improper Escape Pod Five"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -403,6 +419,7 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/salvage/derelict
 	name = "\improper Derelict Station"
 	icon_state = "yellow"
+	ambient_sounds = list(/datum/ambience/derelict1,/datum/ambience/derelict2,/datum/ambience/derelict3,/datum/ambience/derelict4)
 
 /area/shuttle/salvage/djstation
 	name = "\improper Ruskie DJ Station"
@@ -440,45 +457,6 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Trading Post"
 	icon_state = "yellow"
 
-// Taxi Shuttle
-
-/area/shuttle/taxi_a
-	name = "Taxi A"
-	requires_power = 0
-
-/area/shuttle/taxi_a/medcal_silicon_station
-	icon_state = "bluenew"
-
-/area/shuttle/taxi_a/engineering_cargo_station
-	icon_state = "bluenew"
-
-/area/shuttle/taxi_a/security_science_station
-	icon_state = "bluenew"
-
-/area/shuttle/taxi_a/abandoned_station
-	icon_state = "bluenew"
-
-// B
-
-/area/shuttle/taxi_b
-	name = "Taxi B"
-	requires_power = 0
-
-/area/shuttle/taxi_b/medcal_silicon_station
-	icon_state = "dk_yellow"
-
-/area/shuttle/taxi_b/engineering_cargo_station
-	icon_state = "dk_yellow"
-
-/area/shuttle/taxi_b/security_science_station
-	icon_state = "dk_yellow"
-
-/area/shuttle/taxi_b/abandoned_station
-	icon_state = "dk_yellow"
-
-// End Taxi Shuttle
-
-
 
 /area/airtunnel1/      // referenced in airtunnel.dm:759
 
@@ -490,6 +468,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 0
 	has_gravity = 1
+	flags = NO_PERSISTENCE //hmmm I wonder if someone can fuck with this
 
 // === end remove
 
@@ -506,6 +485,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE //Central Command is always squeaky clean yo
 
 /area/centcom/control
 	name = "\improper Centcom Control"
@@ -516,6 +496,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/centcom/suppy
 	name = "\improper Centcom Supply Shuttle"
+	turret_protected = 1
 
 /area/centcom/ferry
 	name = "\improper Centcom Transport Shuttle"
@@ -632,6 +613,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 1
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/syndicate_station/start
 	icon_state = "yellow"
@@ -826,6 +808,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/maintenance
 	shuttle_can_crush = FALSE
+	ambient_sounds = list(/datum/ambience/maint1,/datum/ambience/maint2)
 
 /area/maintenance/fpmaint
 	name = "Fore Port Maintenance"
@@ -908,6 +891,7 @@ proc/process_adminbus_teleport_locs()
 /area/maintenance/ghettobar
 	name = "Ghetto Bar"
 	icon_state = "ghettobar"
+	ambient_sounds = list(/datum/ambience/ghetto)
 
 /area/maintenance/ghettotheatre
 	name = "Ghetto Theatre"
@@ -992,6 +976,8 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Head of Personnel's Quarters"
 	icon_state = "head_quarters"
 	jammed=1
+	holomap_marker = "hop"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/crew_quarters/heads/rd
 	name = "\improper Research Director's Quarters"
@@ -1017,12 +1003,16 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Courtroom"
 	icon_state = "courtroom"
 	holomap_color = HOLOMAP_AREACOLOR_SECURITY
+	holomap_marker = "courtroom"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/crew_quarters/hop
 	name = "\improper Head of Personnel's Office"
 	icon_state = "head_quarters"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
+	holomap_marker = "hop"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/mint
 	name = "\improper Mint"
@@ -1103,16 +1093,21 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "Theatre"
 
 /area/library
- 	name = "\improper Library"
- 	icon_state = "library"
- 	shuttle_can_crush = FALSE
+	name = "\improper Library"
+	icon_state = "library"
+	shuttle_can_crush = FALSE
+	holomap_marker = "library"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/chapel
 	shuttle_can_crush = FALSE
+	ambient_sounds = list(/datum/ambience/holy1,/datum/ambience/holy2,/datum/ambience/holy3,/datum/ambience/holy4)
 
 /area/chapel/main
 	name = "\improper Chapel"
 	icon_state = "chapel"
+	holomap_marker = "chapel"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/chapel/office
 	name = "\improper Chapel Office"
@@ -1139,6 +1134,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "Holodeck"
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/holodeck/alphadeck
 	name = "\improper Holodeck Alpha"
@@ -1260,6 +1256,7 @@ proc/process_adminbus_teleport_locs()
 /area/engineering/
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 	shuttle_can_crush = FALSE
+	ambient_sounds = list(/datum/ambience/engi1,/datum/ambience/engi2,/datum/ambience/engi3,/datum/ambience/engi4)
 
 /area/engineering/engine_smes
 	name = "\improper Engineering SMES"
@@ -1421,6 +1418,7 @@ proc/process_adminbus_teleport_locs()
 	music = "signal"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
+	ambient_sounds = list(/datum/ambience/AI)
 
 //MedBay
 /area/medical
@@ -1482,6 +1480,12 @@ proc/process_adminbus_teleport_locs()
 /area/medical/morgue
 	name = "\improper Morgue"
 	icon_state = "morgue"
+	ambient_sounds = list(/datum/ambience/ded1,/datum/ambience/ded2,/datum/ambience/mainmusic)
+
+/area/medical/coldstorage
+	name = "Morgue"
+	icon_state = "morgue"
+//for Roidstation - this area is radshielded.
 
 /area/medical/chemistry
 	name = "Chemistry"
@@ -1540,13 +1544,17 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Prison Wing"
 	icon_state = "sec_prison"
 
+/area/security/confession
+	name = "\improper Confession room"
+	icon_state = "sec_conf"
+
 /area/security/perma
 	name = "\improper Permanent Confinement"
 	icon_state = "sec_perma"
 
 /area/security/gas_chamber
 	name = "\improper Execution Chamber"
-	icon_state = "bar" // Because it's all parties from here on.
+	icon_state = "sec_exec" // Because it's all parties from here on.
 	jammed=1
 
 /area/security/medical
@@ -1617,20 +1625,20 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "firingrange"
 
 /*
-	New()
-		..()
+/area/security/range/New()
+	..()
 
-		spawn(10) //let objects set up first
-			for(var/turf/turfToGrayscale in src)
-				if(turfToGrayscale.icon)
-					var/icon/newIcon = icon(turfToGrayscale.icon)
+	spawn(10) //let objects set up first
+		for(var/turf/turfToGrayscale in src)
+			if(turfToGrayscale.icon)
+				var/icon/newIcon = icon(turfToGrayscale.icon)
+				newIcon.GrayScale()
+				turfToGrayscale.icon = newIcon
+			for(var/obj/objectToGrayscale in turfToGrayscale) //1 level deep, means tables, apcs, locker, etc, but not locker contents
+				if(objectToGrayscale.icon)
+					var/icon/newIcon = icon(objectToGrayscale.icon)
 					newIcon.GrayScale()
-					turfToGrayscale.icon = newIcon
-				for(var/obj/objectToGrayscale in turfToGrayscale) //1 level deep, means tables, apcs, locker, etc, but not locker contents
-					if(objectToGrayscale.icon)
-						var/icon/newIcon = icon(objectToGrayscale.icon)
-						newIcon.GrayScale()
-						objectToGrayscale.icon = newIcon
+					objectToGrayscale.icon = newIcon
 */
 
 /area/security/checkpoint
@@ -1811,6 +1819,10 @@ proc/process_adminbus_teleport_locs()
 /area/science/podbay
 	name = "\improper Pod Bay"
 	icon_state = "pod"
+
+/area/science/breakroom
+	name = "\improper Research Break Room"
+	icon_state = "toxmisc"
 
 /area/science/server
 	name = "\improper Server Room"
@@ -2085,10 +2097,12 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper AI Upload Chamber"
 	icon_state = "ai_upload"
 	jammed=1
+	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/ai_upload_foyer
 	name = "AI Upload Access"
 	icon_state = "ai_foyer"
+	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/ai
 	name = "\improper AI Chamber"
@@ -2096,10 +2110,12 @@ proc/process_adminbus_teleport_locs()
 	jammed=1
 	holomap_marker = "ai"
 	holomap_filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
+	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/aisat
 	name = "\improper AI Satellite"
 	icon_state = "ai"
+	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/aisat_interior
 	name = "\improper AI Satellite"
@@ -2259,6 +2275,8 @@ proc/process_adminbus_teleport_locs()
 	general_area_name = "Telecommunications Satellite"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
+	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	flags = NO_PACIFICATION
 
 /area/tcommsat/entrance
 	name = "\improper Satellite Teleporter"
@@ -2290,18 +2308,22 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/tcomsat
 	name = "\improper Satellite Entrance"
 	icon_state = "tcomsatlob"
+	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
 
 /area/turret_protected/tcomfoyer
 	name = "\improper Telecoms Foyer"
 	icon_state = "tcomsatentrance"
+	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
 
 /area/turret_protected/tcomwest
 	name = "\improper Telecommunications Satellite West Wing"
 	icon_state = "tcomsatwest"
+	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
 
 /area/turret_protected/tcomeast
 	name = "\improper Telecommunications Satellite East Wing"
 	icon_state = "tcomsateast"
+	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
 
 /area/tcommsat/computer
 	name = "\improper Satellite Control Room"
@@ -2316,6 +2338,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "ai_upload"
 	jammed=2
 	anti_ethereal=1
+	flags = NO_PACIFICATION
 
 
 
@@ -2324,6 +2347,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Strange Location"
 	icon_state = "away"
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE|NO_PACIFICATION
 
 /area/awaymission/example
 	name = "\improper Strange Station"
@@ -2431,6 +2455,18 @@ proc/process_adminbus_teleport_locs()
 	name = "Leviathan"
 	icon_state = "mining_production"
 
+/area/awaymission/snowplanet
+	name = "snowplanet"
+	icon_state = "mining_production"
+
+/area/awaymission/articwasteland
+	name = "artic wasteland"
+	icon_state = "away"
+
+/area/awaymission/articwasteland/gateway
+	name = "artic wasteland gateway shelter"
+	icon_state = "away2"
+
 /////////////////////////////////////////////////////////////////////
 /*
  Lists of areas to be used with is_type_in_list.
@@ -2507,6 +2543,7 @@ var/list/the_station_areas = list (
 	requires_power = 0
 	var/sound/mysound = null
 	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /* We have a jukebox now, fuck that
 /area/beach/New()
@@ -2546,8 +2583,8 @@ var/list/the_station_areas = list (
 		sound_delay = rand(0, 50)
 
 	for(var/mob/living/carbon/human/H in src)
-//			if(H.s_tone > -55)	//ugh...nice/novel idea but please no.
-//				H.s_tone--
+//			if(H.my_appearance.s_tone > -55)	//ugh...nice/novel idea but please no.
+//				H.my_appearance.s_tone--
 //				H.update_body()
 		if(H.client)
 			mysound.status = SOUND_UPDATE
@@ -2559,3 +2596,111 @@ var/list/the_station_areas = list (
 	spawn(60) .()
 
 */
+
+/* Asteroid station areas */
+/area/crew_quarters/holocontrol
+	name = "Holodeck Control"
+	icon_state = "holocontrol"
+
+/area/maintenance/apmaint2
+	name = "Aft Port Maintenance"
+	icon_state = "apmaint"
+
+/area/maintenance/starboard2
+	name = "Starboard Maintenance"
+	icon_state = "smaint"
+
+/area/engineering/aux_storage
+	name = "Engineering Auxiliary Storage"
+	icon_state = "engine_storage"
+
+/area/engine/magma_engine
+	name = "Magma Engine Room"
+	icon_state = "thermo_engine"
+
+/area/maintenance/prisonsolar
+	name = "Prison Solar Maintenance"
+	icon_state = "SolarcontrolA"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
+
+/area/solar/prison
+	name = "\improper Prison Solar Array"
+	icon_state = "panelsA"
+
+/area/derelict/bar
+	name = "Derelict Bar"
+	icon_state = "bar"
+
+/area/derelict/holodeck
+	name = "Derelict Holodeck"
+	icon_state = "Holodeck"
+
+/area/tcomms/storage2
+	name = "Telecoms Auxiliary Storage"
+	icon_state = "storage"
+
+/area/hallway/primary/central/toilet
+	name = "Central Primary Hallway Toilets"
+	icon_state = "toilet"
+
+/area/hallway/primary/fore/toilet
+	name = "Fore Primary Hallway Toilets"
+	icon_state = "toilet"
+
+/area/hallway/secondary/port
+	name = "\improper Port Secondary Hallway"
+	icon_state = "hallP"
+
+/area/prison/hallway/central
+	name = "\improper Prison Central Hallway"
+	icon_state = "yellow"
+
+/area/prison/cell_block/hydroponics
+	name = "Prison Jail Hydroponics"
+	icon_state = "brig"
+
+/area/prison/lockers
+	name = "\improper Prison Equipment Storage"
+	icon_state = "security"
+
+/area/prison/armory
+	name = "\improper Prison Armory"
+	icon_state = "security"
+
+/area/prison/engineering
+	name = "\improper Prison Engineering"
+	icon_state = "storage"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
+
+/area/prison/tcomms
+	name = "\improper Prison Telecomms"
+	icon_state = "ai"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
+
+/area/science/xenobiology/specimen_0
+	name = "\improper Xenobiology Test Chamber"
+	icon_state = "xenocell1"
+
+/area/turret_protected/ai_integrity
+	name = "AI Integrity Restoration Room"
+	icon_state = "ai_upload"
+
+/area/turret_protected/aisat_tele
+	name = "AI Satellite Teleporter"
+	icon_state = "ai"
+
+/area/turret_protected/aisat_borg
+	name = "Cyborg Station"
+	icon_state = "ai"
+
+/area/research_outpost/lockers
+	name = "Hardsuit Storage"
+	icon_state = "anog"
+
+/area/tcomms/computer
+	name = "\improper Telecomms Control Room"
+	icon_state = "tcomsatcomp"
+
+//for lack of a better spot and I couldn't be assed to find the definition of it.
+/area/mine
+	ambient_sounds = list(/datum/ambience/dorf,/datum/ambience/minecraft,/datum/ambience/torvusmusic)

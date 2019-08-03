@@ -19,7 +19,7 @@
 
 	//Is the plant still a sapling? If so, try to mutate species, otherwise do something bad.
 	if(age < 3)
-		if(seed.mutants. && seed.mutants.len)
+		if(seed.mutants && seed.mutants.len)
 			if(prob(30))
 				mutate_species()
 				return
@@ -122,7 +122,7 @@
 	// We need to make sure we're not modifying one of the global seed datums.
 	// If it's not in the global list, then no products of the line have been
 	// harvested yet and it's safe to assume it's restricted to this tray.
-	if(!isnull(plant_controller.seeds[seed.name]))
+	if(!isnull(SSplant.seeds[seed.name]))
 		seed = seed.diverge(modified)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_ratio(var/severity, var/list/softcaps, var/list/hardcaps, var/input)
@@ -226,7 +226,7 @@
 			hardcap_values = list(5,  3.5, 2,  1,   0.75, 0)
 			deviation = severity * (rand(8, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.maturation)
 			//Deviation per 10u Mutagen before cap: 0.8-1.2
-			seed.maturation = Clamp(seed.maturation - deviation, 1, 30)
+			seed.maturation = Clamp(seed.maturation - deviation, 1.1, 30)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_heat&pressure_tolerance")
@@ -293,12 +293,12 @@
 			generic_mutation_message("shakes!")
 
 		if("breathe_aliengas") //This is honestly awful and pretty unfun. It just guarantees that the user will have to apply a new enviro gene. But for now I'm leaving it in
-			var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
+			var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 			seed.consume_gasses[gas] = rand(3,9)
 			generic_mutation_message("shakes!")
 
 		if("exude_dangerousgas")
-			var/gas = pick("nitrogen","plasma","carbon_dioxide")
+			var/gas = pick(GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 			seed.exude_gasses[gas] = rand(3,9)
 			generic_mutation_message("shakes!")
 
@@ -534,11 +534,9 @@
 	var/previous_plant = seed.display_name
 	var/newseed = seed.get_mutant_variant()
 
-	if(!plant_controller.seeds.Find(newseed))
+	seed = SSplant.seeds[newseed]
+	if(!seed)
 		return
-
-	seed = plant_controller.seeds[newseed]
-
 	dead = 0
 	age = 1
 	health = seed.endurance

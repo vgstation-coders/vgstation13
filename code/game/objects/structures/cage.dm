@@ -91,7 +91,7 @@
 			to_chat(user, "<span class='info'>You start securing \the [src] to \the [loc].</span>")
 
 		spawn()
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 			if(do_after(user, src, 50))
 				anchored = !anchored
 				to_chat(user, "<span class='info'>[anchored ? "You successfully secure \the [src] to \the [loc]." : "You successfully unsecure \the [src] from \the [loc]."]")
@@ -173,6 +173,8 @@
 
 		for(var/mob/living/L in get_locked(/datum/locking_category/cage)) //Move atom locked mobs inside
 			unlock_atom(L)
+			log_admin("[key_name(usr)] has covered \the [L] in their cage at [formatJumpTo(src)]")
+			message_admins("[key_name(usr)] has covered \the [L] in their cage at [formatJumpTo(src)]")
 			L.forceMove(src)
 
 	else
@@ -182,6 +184,8 @@
 
 		for(var/mob/living/L in contents) //Move hidden mobs to the outside
 			L.forceMove(get_turf(src))
+			log_admin("[key_name(usr)] has uncovered \the [L] from their cage at [formatJumpTo(src)]")
+			message_admins("[key_name(usr)] has uncovered \the [L] from their cage at [formatJumpTo(src)]")
 			lock_atom(L, /datum/locking_category/cage)
 
 	update_icon()
@@ -192,11 +196,16 @@
 			if(cover_state == C_OPENED)
 				toggle_cover() //Close the cover, too
 
-			door_state = C_CLOSED
-			density = 1
-
 			for(var/mob/living/L in get_turf(src))
+				if(L.size >= SIZE_HUGE)
+					continue
 				add_mob(L)
+				log_admin("[key_name(usr)] has trapped \the [L] in a cage at [formatJumpTo(src)]")
+				message_admins("[key_name(usr)] has trapped \the [L] in a cage at [formatJumpTo(src)]")
+
+
+			door_state = C_CLOSED
+			setDensity(TRUE)
 
 		if(C_CLOSED) //Open the door
 			if(cover_state == C_CLOSED)
@@ -204,12 +213,14 @@
 
 			for(var/mob/living/L in (contents + get_locked(/datum/locking_category/cage)))
 				unlock_atom(L)
+				log_admin("[key_name(usr)] has released \the [L] from their cage at [formatJumpTo(src)]")
+				message_admins("[key_name(usr)] has released \the [L] from their cage at [formatJumpTo(src)]")
 				L.forceMove(get_turf(src))
 
 			door_state = C_OPENED
-			density = 0
+			setDensity(FALSE)
 
-	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	update_icon()
 
 /obj/structure/cage/proc/add_mob(mob/victim)

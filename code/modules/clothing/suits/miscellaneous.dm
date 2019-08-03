@@ -48,6 +48,14 @@
 		if(isclothing(MO.uniform))
 			for(var/obj/item/clothing/accessory/lasertag/L in MO.uniform.accessories)
 				return L.source_vest
+	if(ishologram(M))
+		var/mob/living/simple_animal/hologram/advanced/AH = M
+		if(istype(AH.wear_suit, /obj/item/clothing/suit/tag))
+			return AH.wear_suit
+		if(isclothing(AH.w_uniform))
+			var/obj/item/clothing/C = AH.w_uniform
+			for(var/obj/item/clothing/accessory/lasertag/L in C.accessories)
+				return L.source_vest
 
 /obj/item/clothing/suit/tag/bluetag
 	name = "blue laser tag armour"
@@ -150,6 +158,25 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
+/obj/item/clothing/suit/spaceninjafake
+	name = "space ninja suit replica"
+	icon_state = "s-ninja-old"
+	item_state = "s-ninja_suit"
+	desc = "A plastic replica of a ninja suit, you'll look just like a real murderous space ninja in this! This is a toy, it is not made for use in space!"
+	w_class = W_CLASS_MEDIUM
+	flags = FPRINT
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+
+/obj/item/clothing/suit/sith
+	name = "Sith Robe"
+	desc = "It's treason then."
+	icon_state = "sith"
+	item_state = "sith"
+	clothing_flags = ONESIZEFITSALL
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
+	wizard_garb = 1 //Allows lightning to be used
+	allowed = list(/obj/item/weapon/melee/energy/sword, /obj/item/weapon/dualsaber) //Fits e-swords
 
 /obj/item/clothing/suit/hastur
 	name = "Hastur's Robes"
@@ -189,6 +216,13 @@
 	icon_state = "holidaypriest"
 	item_state = "holidaypriest"
 
+/obj/item/clothing/suit/highlanderkilt
+	name = "highlander's kilt"
+	desc = "There can be only one."
+	icon_state = "highlanderkilt"
+	item_state = "highlanderkilt"
+	clothing_flags = ONESIZEFITSALL
+	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/suit/cardborg
 	name = "cardborg suit"
@@ -403,6 +437,7 @@
 	icon_state = "raincoat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV //transparent
 	allowed = list (/obj/item/weapon/fireaxe)
+	sterility = 100
 
 /obj/item/clothing/suit/kefkarobe
 	name = "Crazed Jester's Robe"
@@ -552,13 +587,25 @@
 		return
 	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=\ref[M];listitems=\ref[hold]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")
 
-/obj/item/clothing/suit/sakura_kimono
+/obj/item/clothing/suit/kimono
+	name = "kimono"
+	desc = "A traditional Japanese kimono."
+	icon_state = "fancy_kimono"
+	item_state = "fancy_kimono"
+	flags = FPRINT
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+
+/obj/item/clothing/suit/kimono/ronin
+	name = "black kimono"
+	desc = "A black and plain looking kimono."
+	icon_state = "ronin_kimono"
+	item_state = "ronin_kimono"
+
+/obj/item/clothing/suit/kimono/sakura
 	name = "sakura kimono"
 	desc = "A pale-pink, nearly white, kimono with a red and gold obi. There is a embroidered design of cherry blossom flowers covering the kimono."
 	icon_state = "sakura_kimono"
 	item_state = "sakura_kimono"
-	flags = FPRINT
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
 /obj/item/clothing/suit/clockwork_robes
 	name = "clockwork robes"
@@ -568,3 +615,40 @@
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/storage/bible, /obj/item/weapon/nullrod/spear)
+
+
+/obj/item/clothing/suit/inquisitor
+	name = "inquisitor's coat"
+	desc = "This inquisitor attire was made for new recruits, and has excellent straightforward defense. But not nearly enough to allow an ordinary man to stand any real chance against the the wicked."
+	icon_state = "coat-church"
+	item_state = "coat-church"
+	flags = FPRINT
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	allowed = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
+	armor = list(melee = 40, bullet = 25, laser = 5, energy = 0, bomb = 0, bio = 0, rad = 0)
+	wizard_garb = TRUE
+
+
+/obj/item/clothing/suit/leather_apron
+	name = "leather apron"
+	desc = "A rough apron made out of leather. It is commonly used by blacksmiths to shield them from the forge's embers."
+	icon_state = "apronleather"
+	item_state = "apronleather"
+	flags = FPRINT
+	body_parts_covered = FULL_TORSO|IGNORE_INV
+	allowed = list(/obj/item/weapon/hammer)
+	armor = list(melee = 10, bullet = 5, laser = 20, energy = 0, bomb = 10, bio = 0, rad = 0)
+	max_heat_protection_temperature = 800
+
+/obj/item/clothing/suit/red_suit
+	name = "red suit"
+	desc = "A sleazy looking red suit"
+	icon_state = "red_suit"
+	item_state = "red_suit"
+	body_parts_covered = 0
+
+obj/item/clothing/suit/poncho
+	name = "poncho"
+	desc = "A wooly poncho. Smells of beans."
+	icon_state = "poncho"
+	item_state = "poncho"

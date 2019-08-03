@@ -84,15 +84,51 @@ About the Holder:
 			You wont use this much. Mostly in new procs for pre-filled
 			objects.
 
-		remove_reagent(var/reagent, var/amount)
-			The exact opposite of the add_reagent proc.
+		remove_reagent(var/reagent, var/amount, var/safety)
+			The exact opposite of the add_reagent proc. Finds a reagent by ID, and passes it to remove_that_reagent
 			- Modified from original to return the reagent's data, in order to preserve reagent data across reactions (originally for xenoarchaeology)
+
+		remove_reagents(var/list/reagents, var/amount, var/safety)
+			Same as above, but cycles through a list of given IDs
+
+		remove_reagent_by_type(var/reagent_type, var/amount, var/safety) -- EXPENSIVE
+			Much more expensive than the ones above. Finds the first reagent in that holder that is of the given type, and passes it to remove_that_reagent.
+
+		remove_reagents_by_type(var/list/reagent_types, var/amount, var/safety) -- EXPENSIVE
+			Same as above and even more expensive.
+			Itterates through the list of reagent types, finds the first reagent in the holder that is of that type, passes it to remove_that_reagent,
+				continue until all reagent_types are checked
+
+		remove_that_reagent(var/datum/reagent/R, var/amount, var/safety)
+			When given a specific reagent datum, removes the given amount from that reagent.
+				Safety is a boolean, if true it doesn't call handle_reactions after reagent removal.
+
 
 		has_reagent(var/reagent, var/amount)
 			Returns 1 if the holder contains this reagent.
 			Or 0 if not.
 			If you pass it an amount it will additionally check
 			if the amount is matched. This is optional.
+
+		has_reagent_type(var/reagent_type, var/amount) -- EXPENSIVE
+			Same as above, but looks for the first reagent of that type.
+
+		has_any_reagents(var/list/input_reagents, var/amount)
+			Passed a list of IDs, returns 1 if the holder contains a reagent with one of the given IDs
+
+		has_all_reagents(var/list/input_reagents, var/amount)
+			Passed a list of IDs. Loops through each one. If the holder does not have it, return 0, otherwise continue. If it goes through all and finds them all. Returns 1
+
+		get_reagent(var/reagent, var/amount) -- EXPENSIVE
+			Finds a reagent by the given ID, and returns it if has greater than or equal to the given amount.
+
+		get_reagent_by_type(var/reagent_type, var/amount, var/strict)
+			Same as above but it returns the first reagent it finds that has the given type. If strict is true, it looks for specifically that type.
+				Otherwise, it looks for the first one that matches istype()
+
+		is_empty()
+			Returns 1 if holder has a total_volume of 0 or less.
+			Returns 0 otherwise.
 
 		get_reagent_amount(var/reagent)
 			Returns the amount of the matching reagent inside the

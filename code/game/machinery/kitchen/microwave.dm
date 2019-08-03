@@ -3,7 +3,6 @@
 	name = "Microwave"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "mw"
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -30,6 +29,13 @@
 												/obj/item/weapon/reagent_containers/food/condiment,
 												/obj/item/weapon/reagent_containers/dropper)
 
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/microwave,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/console_screen\
+	)
+
 // see code/modules/food/recipes_microwave.dm for recipes
 //Cannot use tools - screwdriver and crowbar for recipes. Or at least fix things before you do
 //TODO - Get a maint panel sprite and J-J-Jam it in.
@@ -44,13 +50,6 @@
 
 /obj/machinery/microwave/New()
 	. = ..()
-
-	component_parts = newlist(\
-		/obj/item/weapon/circuitboard/microwave,\
-		/obj/item/weapon/stock_parts/micro_laser,\
-		/obj/item/weapon/stock_parts/scanning_module,\
-		/obj/item/weapon/stock_parts/console_screen\
-	)
 
 	RefreshParts()
 	create_reagents(100)
@@ -86,7 +85,7 @@
 ********************/
 /obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(src.broken > 0)
-		if(src.broken == 2 && isscrewdriver(O)) // If it's broken and they're using a screwdriver
+		if(src.broken == 2 && O.is_screwdriver(user)) // If it's broken and they're using a screwdriver
 			user.visible_message( \
 				"<span class='notice'>[user] starts to fix part of the microwave.</span>", \
 				"<span class='notice'>You start to fix part of the microwave.</span>" \
@@ -116,23 +115,24 @@
 			return 1
 	else if(src.dirty==100) // The microwave is all dirty so can't be used!
 		var/obj/item/weapon/reagent_containers/R = O
-		if(istype(R)) // If they're trying to clean it then let them
-			if(R.reagents.amount_cache.len == 1 && R.reagents.has_reagent(CLEANER, 5))
-				user.visible_message( \
-					"<span class='notice'>[user] starts to clean the microwave.</span>", \
-					"<span class='notice'>You start to clean the microwave.</span>" \
-				)
-				if (do_after(user, src,20))
+		var/obj/item/weapon/soap/S = O
+		if((istype(R) && (R.reagents.amount_cache.len == 1 && R.reagents.has_reagent(CLEANER, 5))) || istype(S)) // If they're trying to clean it then let them
+			user.visible_message( \
+				"<span class='notice'>[user] starts to clean the microwave.</span>", \
+				"<span class='notice'>You start to clean the microwave.</span>" \
+			)
+			if (do_after(user, src,20))
+				if(istype(R))
 					R.reagents.remove_reagent(CLEANER,5)
-					user.visible_message( \
-						"<span class='notice'>[user]  has cleaned  the microwave.</span>", \
-						"<span class='notice'>You have cleaned the microwave.</span>" \
-					)
-					src.dirty = 0 // It's clean!
-					src.broken = 0 // just to be sure
-					src.icon_state = "mw"
-					src.flags |= OPENCONTAINER
-					return 1
+				user.visible_message( \
+					"<span class='notice'>[user] has cleaned the microwave.</span>", \
+					"<span class='notice'>You have cleaned the microwave.</span>" \
+				)
+				src.dirty = 0 // It's clean!
+				src.broken = 0 // just to be sure
+				src.icon_state = "mw"
+				src.flags |= OPENCONTAINER
+				return 1
 		else //Otherwise bad luck!!
 			to_chat(user, "<span class='warning'>It's too dirty!</span>")
 			return 1
@@ -199,12 +199,15 @@
 /obj/machinery/microwave/attack_ai(mob/user as mob)
 	if(istype(user,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = user
-		if(istype(R.module, /obj/item/weapon/robot_module/butler))
+		if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_FOOD))
 			user.set_machine(src)
 			interact(user)
 			return 1
 		to_chat(user, "<span class='warning'>You aren't equipped to interface with technology this old!</span>")
 		return 0
+	if(isAdminGhost(user))
+		user.set_machine(src)
+		interact(user)
 
 /obj/machinery/microwave/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -244,6 +247,17 @@
 				display_name = "Turnovers"
 				items_measures[display_name] = "turnover"
 				items_measures_p[display_name] = "turnovers"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans))
+				items_measures[display_name] = "soybean"
+				items_measures_p[display_name] = "soybeans"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/grapes))
+				display_name = "Grapes"
+				items_measures[display_name] = "bunch of grapes"
+				items_measures_p[display_name] = "bunches of grapes"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes))
+				display_name = "Green Grapes"
+				items_measures[display_name] = "bunch of green grapes"
+				items_measures_p[display_name] = "bunches of green grapes"
 			items_counts[display_name]++
 		for (var/O in items_counts)
 			var/N = items_counts[O]
@@ -379,12 +393,14 @@
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/stop()
-	playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
+	playsound(src, 'sound/machines/ding.ogg', 50, 1)
 	src.operating = 0 // Turn it off again aferwards
 	src.icon_state = "mw"
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/dispose()
+	if(operating)
+		return
 	for (var/obj/O in contents)
 		O.forceMove(src.loc)
 	if (src.reagents.total_volume)
@@ -398,11 +414,11 @@
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/muck_start()
-	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1) // Play a splat sound
+	playsound(src, 'sound/effects/splat.ogg', 50, 1) // Play a splat sound
 	src.icon_state = "mwbloody1" // Make it look dirty!!
 
 /obj/machinery/microwave/proc/muck_finish()
-	playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
+	playsound(src, 'sound/machines/ding.ogg', 50, 1)
 	src.visible_message("<span class='warning'>The microwave gets covered in muck!</span>")
 	src.dirty = 100 // Make it dirty so it can't be used util cleaned
 	src.flags &= ~OPENCONTAINER //So you can't add condiments
@@ -436,7 +452,7 @@
 	return ffuu
 
 /obj/machinery/microwave/CtrlClick(mob/user)
-	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored)
+	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored))
 		if(issilicon(user) && !attack_ai(user))
 			return ..()
 		cook() //Cook checks for power, brokenness, and contents internally
@@ -444,15 +460,49 @@
 	return ..()
 
 /obj/machinery/microwave/AltClick(mob/user)
-	if(operating)
-		to_chat(user, "<span class='warning'>Too late, the microwave is already turned on!</span>")
-		return
-	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+	if(stat & (NOPOWER|BROKEN))
+		return ..()
+	if(!anchored)
+		return ..()
+	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check()))
 		if(issilicon(user) && !attack_ai(user))
 			return ..()
-		dispose()
+		var/list/choices = list(
+			list("Cook", "radial_cook"),
+			list("Eject Ingredients", "radial_eject"),
+			list("Toggle Reagent Disposal", (reagent_disposal ? "radial_chem_notrash" : "radial_chem_trash")),
+			list("Examine", "radial_examine")
+		)
+		var/event/menu_event = new(owner = usr)
+		menu_event.Add(src, "radial_check_handler")
+
+		var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+		if(!radial_check(usr))
+			return
+
+		switch(task)
+			if("Cook")
+				cook()
+			if("Eject Ingredients")
+				dispose()
+			if("Toggle Reagent Disposal")
+				reagent_disposal = !reagent_disposal
+				updateUsrDialog()
+			if("Examine")
+				usr.examination(src)
 		return
 	return ..()
+
+/obj/machinery/microwave/proc/radial_check_handler(list/arguments)
+	var/event/E = arguments["event"]
+	return radial_check(E.holder)
+
+/obj/machinery/microwave/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/machinery/microwave/Topic(href, href_list)
 	if(..())

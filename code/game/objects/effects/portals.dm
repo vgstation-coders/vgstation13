@@ -20,9 +20,10 @@
 
 	var/list/exit_beams = list()
 
-/obj/effect/portal/attack_hand(var/mob/user)
-	spawn()
-		src.teleport(user)
+/obj/effect/portal/attack_hand(var/mob/user, params, proximity)
+	if(proximity)
+		spawn()
+			src.teleport(user)
 
 /obj/effect/portal/attackby(obj/item/weapon/O as obj, mob/user as mob)
 	if(O == creator)
@@ -65,6 +66,9 @@
 	spawn(5)
 		connect_atmospheres()
 
+	make_lifespan(lifespan)
+
+/obj/effect/portal/proc/make_lifespan(var/lifespan)
 	spawn(lifespan)
 		qdel(src)
 
@@ -146,7 +150,7 @@ var/list/portal_cache = list()
 /obj/effect/portal/proc/teleport(atom/movable/M as mob|obj)
 	if(istype(M, /obj/effect)) //sparks don't teleport
 		return
-	if (M.anchored&&istype(M, /obj/mecha))
+	if (M.anchored && !istype(M, /obj/mecha) && !istype(M, /obj/item/projectile))
 		return
 	if (!target)
 		visible_message("<span class='warning'>The portal fails to find a destination and dissipates into thin air.</span>")
@@ -215,3 +219,13 @@ var/list/portal_cache = list()
 	close_sound = 'sound/weapons/electriczap.ogg'
 	enter_sound = 'sound/effects/fall2.ogg'
 	exit_sound = 'sound/effects/fall2.ogg'
+
+
+/obj/effect/portal/permanent
+	name = "stabilized portal"
+	desc = "The event horizon is held through magnetic forces, and potentially duct tape."
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "tele1"
+
+/obj/effect/portal/permanent/make_lifespan()
+	return

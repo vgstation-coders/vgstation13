@@ -1,0 +1,117 @@
+"aa" = (/turf/simulated/wall/invulnerable/ice,/area)
+"ab" = (/turf/unsimulated/mineral/internal/ice,/area/mine/unexplored)
+"ad" = (/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"af" = (/obj/structure/flora/ausbushes/fullgrass,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"ag" = (/obj/structure/flora/rock,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"ah" = (/obj/structure/flora/rock/pile/snow,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"aj" = (/obj/structure/flora/bush,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"ak" = (/obj/structure/flora/tree/pine,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"al" = (/obj/structure/flora/rock/pile,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"am" = (/obj/structure/flora/tree/dead,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"an" = (/obj/structure/flora/grass/both,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"ao" = (/turf/simulated/wall,/area/awaymission/snowplanet)
+"ap" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/plating,/area/awaymission/snowplanet)
+"aq" = (/turf/simulated/floor{icon_state = "dark"},/area/awaymission/snowplanet)
+"ar" = (/obj/machinery/gateway{dir = 9},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHWEST)"; icon_state = "warning"; dir = 9},/turf/simulated/floor/bluegrid,/area/awaymission/snowplanet)
+"as" = (/obj/machinery/gateway{dir = 1},/turf/simulated/floor/bluegrid,/area/awaymission/snowplanet)
+"at" = (/obj/machinery/gateway{dir = 5},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/turf/simulated/floor/bluegrid,/area/awaymission/snowplanet)
+"au" = (/obj/structure/flora/tree_stump,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"av" = (/obj/machinery/gateway{dir = 8},/turf/simulated/floor/bluegrid,/area/awaymission/snowplanet)
+"aw" = (/obj/machinery/gateway/centeraway,/obj/effect/decal/warning_stripes{dir = 4; icon_state = "unloading"},/turf/simulated/floor/light,/area/awaymission/snowplanet)
+"ax" = (/obj/machinery/gateway{dir = 4},/turf/simulated/floor/bluegrid,/area/awaymission/snowplanet)
+"ay" = (/obj/machinery/gateway{dir = 10},/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHWEST)"; icon_state = "warning"; dir = 10},/turf/simulated/floor/bluegrid,/area/awaymission/snowplanet)
+"az" = (/obj/machinery/gateway,/obj/effect/decal/warning_stripes{tag = "icon-loading_area"; icon_state = "loading_area"; dir = 2},/turf/simulated/floor/bluegrid,/area/awaymission/snowplanet)
+"aA" = (/obj/machinery/gateway{dir = 6},/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHEAST)"; icon_state = "warning"; dir = 6},/turf/simulated/floor/bluegrid,/area/awaymission/snowplanet)
+"aB" = (/mob/living/simple_animal/crab/snowy,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"aC" = (/turf/simulated/wall/mineral/wood,/area/awaymission/snowplanet)
+"aD" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/reinforced/tinted,/turf/simulated/floor/plating,/area/awaymission/snowplanet)
+"aE" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aF" = (/obj/structure/hanging_lantern{dir = 8},/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aG" = (/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aH" = (/obj/machinery/space_heater/campfire/stove/fireplace,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aI" = (/obj/item/stack/sheet/wood,/obj/item/stack/sheet/wood,/obj/item/weapon/lighter/zippo,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aJ" = (/obj/structure/bed/chair/comfy/brown{dir = 4},/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aK" = (/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aL" = (/obj/structure/bed/chair/comfy/brown{dir = 8},/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aM" = (/obj/structure/bed/chair/wood/normal,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aN" = (/obj/structure/bed/chair/wood/normal{dir = 1},/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aO" = (/mob/living/simple_animal/corgi/saint,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aP" = (/obj/structure/hanging_lantern{dir = 4},/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aQ" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/turf/simulated/floor/plating,/area/awaymission/snowplanet)
+"aR" = (/obj/structure/closet/cabinet/snow,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aS" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/grille,/turf/simulated/floor/plating,/area/awaymission/snowplanet)
+"aT" = (/obj/structure/window/barricade/snow,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"aU" = (/obj/structure/flora/ausbushes/sparsegrass,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"aV" = (/obj/structure/flora/tree,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"aW" = (/obj/structure/flora/bush,/obj/structure/hanging_lantern{dir = 4},/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"aX" = (/obj/structure/hanging_lantern,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aY" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"aZ" = (/obj/structure/hanging_lantern{dir = 8},/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"ba" = (/obj/structure/flora/ausbushes/ywflowers,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"bb" = (/obj/structure/flora/ausbushes/sunnybush,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+"bc" = (/obj/item/clothing/shoes/clown_shoes/elf,/obj/item/clothing/under/elf,/obj/item/clothing/head/elfhat,/turf/simulated/floor/plating/snow,/area/awaymission/snowplanet)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaabadadafababadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaafadafadababagadadadahadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadabadafadadadadadadadadadajakadakadadadadadadakadadadadadadadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaafabababafadaladahadadadadadadadadahadadakadadadadahadakadadadadakadadadadakadadadadadamadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadafababadadadadanadadadadahanadadadadadadadadadadadadadadadadadadadadadadadadanadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadadadadadadadadadadadadajadadamadadadadadadadadadadadadadajadadadadahadadadadajadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadamadalanadadadadajadadadadadadadadadadadanadadakadadakadadadadahadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadahadadadakadadadadakadadadadadadadakadadadahadadadadadadadadakadadadakadadanadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadadadadadadadadamadadadadadanadadadadadadadadadakadadadadadadadadadadadakadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadajadakadanadadahadadadanadadadadadadadadadadadadadanadadanadadahadanadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadahadadadadadadadadadadadadadadadadadadakadadadadadadadadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadadahadanadadadadadadadadadahadadadadakadadakadadadadadajadadadadadadadajadahadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadanadadadadadadadadadakadadadadadadadauadadadadadadadadadadadadadadakadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadajadadakadadadadaBadadadadadadajadaTaTaTaTaTaTaTaTaTadadadadadadadadadadadanadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadadadadadadadadadadajadadaTaoaoaoapaoaoaoaTadadadakadadadadadadadadakadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadadadadadadadadadadadadadaTaoaqarasataqaoaTadadadadajadadadamadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadaUadakadadanahadadajadauadaTapaqavawaxaqapaTadauadadadadadahadadadadanadadakadajadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadajadadadadadadadadadadadaTaoaqayazaAaqaoaTadadadadadadadadadanadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadajadadahadadadadadadadadadadanadajadaTapaqaqaqaqaqapaTadadajadadadadadadadadadadadajadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadakadadadadadadadadadadadadajadadaTaTaoaqaqaqaqaqaoaTaTadadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadanadadadaVadadakadahadadadadaTaCaoaDaoaEaoaoaoaCaTagadadakadadadadadadakadanahadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadamadadadadadadadadadadadadadadaTaCaFaGaGaGaGaHaIaCaTadadadadadadakadadanadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadadadadadadadadadauadadaTapaGaGaGaGaGaGaGapaTadadadadadadadadadadadadadadadakadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadahajadadahadadadadanadadadaTaCaGaJaKaLaGaGaMaCaTauadanadadadadadanadadadadanadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadadadadadadadadadadadadaTapaGaGaGaGaGaGaKapaTadadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadakadadadadanadadamadadadahadadagaTaCaGaGaGaGaGaGaNaCaTadadadadadadajadadahadamadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadadadadadadadadadadadadaTapaGaGaGaGaGaGaGapaTauadadadamadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadahadadadadadadadadadadadadadadadaTaCaGaOaGaGaGaGaPaCaTadadadadadadadadadadadadadanadakadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadajadadakadadadadadahadadananadaTaCaCaCaCaEaCaCaCaCaTadadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadahadadadadadadadananadaTaTaTaQaRaGaGaQaTaTaTadadadadanahadadadakadadadadadadadahadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadaladadadadadadadadadadadadadadadauadaTaSaRaGaXaSaTadadadadadadadadadadadadadanadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadajadadadadadadadakadadadadadanadadaWaCaCaYaCaCaZadajadadadadadadadadadadadadadakadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadaladadakadadadadadadadadadadadahadadadbababaadbababaadadadadadadakadadadadanadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadadadadadadadanadadadadadadadadadadanadbababaadbababaadadadadadadadadadadadajadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaabadadabababanadabadabalabababadadabadadadajauadbbahadadadadadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaababadadabadababababagadabababababadadadadadadadadadadadadadadadadadadadahadadanadakadadakadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaabababababababababababababababababadadadadadadadadadadadadadadadadadadadamadadadadanadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaabababababababababababababababababadadadamadadadadadadadadadadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaabababababahanabababababababababadadadaladadadadadadadadanadakadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaababababababadabababababababababadabadadadanadadakadadadaladadakadadadadadadadadadadadakadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaabababababababababababababababadadabadadadadadadadadanadadadanadadadadadadadadakadadadadadanadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaabababababababababababababababadabadadadadadadadadahadadadadadadadakadadadadadadadadahadadahadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaabababababababababababababababanabadadadadadadadakadadadakadananadadadadadanadadanadadadadanadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaababababababababababababadanabahababanadadanadadadadanadanadadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaababababababababababababababababababadadadanadakadadadadbcahadadadakadadahamadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaababababababababababababababababaladadaladadadadadadadadanadadadadadadadadadadadadadadakadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaababababababahababababababababababadahadadadadadadakadadadadadakadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaababababababababababababababababababadanadadadanadadadakadakadadadadadadadadadadadadadadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"}

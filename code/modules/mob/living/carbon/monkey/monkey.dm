@@ -38,6 +38,7 @@
 	var/list/uni_append = list(0x12C,0x4E2)    // Same as above for DNA2.
 	var/update_muts = 1                        // Monkey gene must be set at start.
 	var/alien = 0								//Used for reagent metabolism.
+	var/canPossess = FALSE
 
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
@@ -78,6 +79,9 @@
 
 		add_language(languagetoadd)
 		default_language = all_languages[languagetoadd]
+
+	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
+	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 
 	..()
 	update_icons()
@@ -167,7 +171,7 @@
 
 /mob/living/carbon/monkey/base_movement_tally()
 	. = ..()
-	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(reagents.has_any_reagents(HYPERZINES))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown
@@ -201,7 +205,7 @@
 	if(canWearClothes)
 		dat +=	"<br><b>Uniform:</b> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(uniform)]</A>"
 
-	if(handcuffed)
+	if(handcuffed || mutual_handcuffs)
 		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=[slot_handcuffed]'>Remove</A>"
 
 	dat += {"
@@ -252,7 +256,12 @@
 		damage = (damage/(armor+1))
 	return damage
 
-/mob/living/carbon/monkey/attack_hand(mob/living/carbon/human/M as mob)
+/mob/living/carbon/monkey/attack_hand(var/mob/living/carbon/human/M)
+	var/touch_zone = get_part_from_limb(M.zone_sel.selecting)
+	var/block = 0
+	if (M.check_contact_sterility(HANDS) || check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
+		block = 1
+	share_contact_diseases(M,block,0)//monkeys can't bleed right now
 
 	switch(M.a_intent)
 		if(I_HELP)
@@ -285,17 +294,44 @@
 /mob/living/carbon/monkey/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
 
+/mob/living/carbon/monkey/attack_ghost(var/mob/dead/observer/O)
+	if(canPossess)
+		if(!(src.key))
+			if(O.can_reenter_corpse)
+				var/response = alert(O,"Do you want to take over \the [src]?","Monkey Madness","Yes","No")
+				if(response == "Yes")
+					if(!(src.key))
+						ckey = O.ckey
+						canPossess = FALSE
+						var/newname = input(src,"Enter a name, or leave blank for the default name.", "Name change","") as text
+						newname = copytext(sanitize(newname),1,MAX_NAME_LEN)
+						if (newname != "")
+							fully_replace_character_name(newname = newname)
+					else if(src.key)
+						to_chat(src, "<span class='notice'>Somebody jumped your claim on \the [src] and is already controlling it. Try another </span>")
+			else if(!(O.can_reenter_corpse))
+				to_chat(O,"<span class='notice'>While \the [src] may be mindless, you have recently ghosted and thus are not allowed to take over for now.</span>")
+
+
+
+/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+	if(!..())
+		return
+
+	I.disease_contact(src,get_part_from_limb(def_zone))
+
 /mob/living/carbon/monkey/Stat()
 	..()
 	if(statpanel("Status"))
 		stat(null, text("Intent: []", a_intent))
 		stat(null, text("Move Mode: []", m_intent))
-		if(client && mind)
+		/*if(client && mind)
 			if (client.statpanel == "Status")
 				if(mind.changeling)
 					stat("Chemical Storage", mind.changeling.chem_charges)
 					stat("Genetic Damage Time", mind.changeling.geneticdamage)
 	return
+	*/
 
 
 /mob/living/carbon/monkey/verb/removeinternal()
@@ -361,7 +397,7 @@
 		gib()
 		return
 	if (stat == DEAD && !client)
-		gibs(loc, viruses)
+		gibs(loc, virus2)
 		qdel(src)
 		return
 
@@ -438,3 +474,85 @@
 		"wear_id")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+/mob/living/carbon/monkey/can_wield(obj/item/I)
+	//used for making wield exceptions for 2 handed items
+	if (istype(I,/obj/item/device/instrument/drum/drum_makeshift/bongos))
+		return 1
+
+
+/mob/living/carbon/monkey/mushroom
+	name = "walking mushroom"
+	icon = 'icons/mob/animal.dmi'
+	icon_state = "mushroom"
+	greaterform = "Mushroom"
+	species_type = /mob/living/carbon/monkey/mushroom
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
+	canWearClothes = 0
+	canWearHats = 0
+	canWearGlasses = 0
+	canWearMasks = 0
+	canWearBack = 0
+	held_items = list()
+	flag = NO_BREATHE
+	canPossess = TRUE
+	var/growth = 0
+
+/mob/living/carbon/monkey/mushroom/say()
+	return 0
+
+/mob/living/carbon/monkey/mushroom/put_in_hand_check(var/obj/item/W)
+	return 0
+
+/mob/living/carbon/monkey/mushroom/Life()
+	..()
+	if(!isDead() && !gcDestroyed && client)
+		var/light_amount = 0
+		if(isturf(loc))
+			var/turf/T = loc
+			light_amount = T.get_lumcount() * 10
+
+		growth = Clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
+
+		if(growth >= 100)
+			growth = 0
+			var/mob/living/carbon/human/adult = new()
+			adult.alpha = 0
+			var/matrix/smol = matrix()
+			smol.Scale(0)
+			var/matrix/large = matrix()
+			var/matrix/M = adult.transform
+			M.Scale(0)
+			adult.set_species("Mushroom")
+			for(var/datum/language/L in languages)
+				adult.add_language(L.name)
+
+			adult.regenerate_icons()
+			adult.forceMove(get_turf(src))
+			animate(src, alpha = 0, transform = smol, time = 3 SECONDS, easing = SINE_EASING)
+			animate(adult, alpha = 255, transform = large, time = 3 SECONDS, easing = SINE_EASING)
+			transferImplantsTo(adult)
+			transferBorers(adult)
+
+			if(istype(loc,/obj/item/weapon/holder))
+				var/obj/item/weapon/holder/L = loc
+				src.forceMove(get_turf(L))
+				L = null
+				qdel(L)
+
+			if(mind)
+				src.mind.transfer_to(adult)
+			adult.fully_replace_character_name(newname = src.real_name)
+			src.drop_all()
+			qdel(src)
+
+/mob/living/carbon/monkey/mushroom/Stat()
+	..()
+	if(statpanel("Status"))
+		stat(null, "Growth completing: [growth]%")
+
+/mob/living/carbon/monkey/mushroom/passive_emote()
+	emote(pick("scratch","jump","roll"))
+
+/mob/living/carbon/monkey/can_be_infected()
+	return 1

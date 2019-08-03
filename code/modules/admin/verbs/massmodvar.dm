@@ -44,7 +44,7 @@
 	//Log the action before actually performing it, in case it crashes the server
 	feedback_add_details("admin_verb","MEV")
 	log_admin("[key_name(src)] mass modified [target_type]'s [variable_name] to [reset_to_initial ? "its initial value" : " [new_value] "]")
-	message_admins("[key_name_admin(src)] mass modified [target_type]'s [variable_name] to [reset_to_initial ? "its initial value" : " [new_value] "]", 1)
+	message_admins("[key_name_admin(src)] mass modified [target_type]'s [variable_name] to [reset_to_initial ? "its initial value" : " [html_encode(new_value)] "]", 1)
 
 	mass_modify_variable(target_type, variable_name, new_value, reset_to_initial, include_subtypes)
 
@@ -64,6 +64,15 @@
 	if(!ispath(base_path, /atom))
 		to_chat(usr, "Mass-editing is not supported for objects of type [base_path]")
 		return
+
+	//Safety measures copied from modifyvariables.dm
+	if(!usr.client.can_edit_var(var_name))
+		return
+	switch(var_name)
+		if("bound_width", "bound_height", "bound_x", "bound_y")
+			if(new_value % world.icon_size) //bound_width/height must be a multiple of 32, otherwise movement breaks - BYOND issue
+				to_chat(usr, "[var_name] can only be a multiple of [world.icon_size]!")
+				return
 
 	//BYOND's internal optimisation makes this work better than cycling through every atom
 	#define is_valid_atom(atom) (atom.type == base_path || (include_subtypes && istype(atom, base_path)))
@@ -109,4 +118,3 @@
 			CHECK_TICK
 
 	#undef is_valid_atom
-	#undef perform

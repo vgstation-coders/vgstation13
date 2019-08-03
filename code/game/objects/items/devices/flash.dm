@@ -17,7 +17,6 @@
 	var/times_used = 0 //Number of times it's been used.
 	var/broken = 0     //Is the flash burnt out?
 	var/last_used = 0 //last world.time it was used.
-	var/limited_conversions = 0 // for revsquad
 
 /obj/item/device/flash/proc/clown_check(var/mob/user)
 	if(user && clumsy_check(user) && prob(50))
@@ -37,7 +36,7 @@
 	times_used = max(0,round(times_used)) //sanity
 
 
-/obj/item/device/flash/attack(mob/living/M as mob, mob/user as mob)
+/obj/item/device/flash/attack(mob/living/M as mob, mob/user as mob) //flash_act when?
 	var/length
 	if(!user || !M) //sanity
 		return
@@ -77,7 +76,7 @@
 			to_chat(user, "<span class='warning'>*click* *click*</span>")
 			return
 
-	playsound(get_turf(user), 'sound/weapons/flash.ogg', 100, 1)
+	playsound(user, 'sound/weapons/flash.ogg', 100, 1)
 
 	if(isrobot(user))
 		spawn(0)
@@ -90,64 +89,71 @@
 			sleep(5)
 			qdel(animation)
 
-	var/flashfail = (harm_labeled >= min_harm_label) //Flashfail is always true if the device has been successfully harm-labeled.
+	var/flashfail = (harm_labeled >= min_harm_label) || M.blinded //Flashfail is always true if the device has been successfully harm-labeled.
 
 	if(iscarbon(M))
 		var/mob/living/carbon/Subject = M
 
-		if(Subject.eyecheck() > 0)
+		if(Subject.eyecheck() > 0 || flashfail)
 			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
+			flashfail = TRUE
 		else
 			if(Subject.eyecheck() <= 0)
 				Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
-			if(user.mind && isrevhead(user)) // alien revhead when?
-				if(ishuman(Subject))
-					if(Subject.stat != DEAD)
-						Subject.mind_initialize() // give them a mind datum if they don't have one
+				Subject.Stun(Subject.eyecheck() * 5 * -1 +10)
 
-						var/is_revsquad = istype(ticker.mode, /datum/game_mode/revsquad)
-						if(!is_revsquad || (is_revsquad && limited_conversions))
-							var/result = ticker.mode.add_revolutionary(Subject.mind)
-
-							if(result == 1)
-								log_admin("[key_name(user)] has converted [key_name(Subject)] to the revolution at [formatLocation(Subject.loc)]")
-								Subject.mind.has_been_rev = TRUE
-								if(is_revsquad)
-									limited_conversions--
-									if(limited_conversions <= 0)
-										to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
-										broken = 1
-										icon_state = "flashburnt"
-							else if(result == ADD_REVOLUTIONARY_FAIL_IS_COMMAND || Subject.mind.has_been_rev) // command positions or has been rev before (according to old code you cannot attempt to rev people that has been deconverted, can be remove)
-								to_chat(user, "<span class='warning'>This mind seems resistant to the flash!</span>")
-							else if(result == ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED) // rev jobbanned
-								to_chat(user, "<span class='warning'>This mind seems resistant to the flash! (OOC INFO: REVOLUTIONARY JOBBANNED)</span>")
-							else if(result == ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED) // loyalty implanted
-								to_chat(user, "<span class='warning'>Something seems to be blocking the flash!</span>")
-					else
-						to_chat(user, "<span class='warning'>This mind is so vacant that it is not susceptible to influence!</span>")
 	else if(issilicon(M))
-		var/mob/living/silicon/R = M
+		var/mob/living/silicon/S = M
+		var/mob/living/silicon/robot/R = null //This is stupid and i hate it but i'm not going to fix this whole mess now.
+		if(isrobot(S))
+			R = S
+		if(R && (HAS_MODULE_QUIRK(R, MODULE_IS_FLASHPROOF)))
+			flashfail = TRUE
 		if(flashfail)
-			user.visible_message("<span class='notice'>[user] fails to overload [R]'s sensors with the flash!</span>")
+			user.visible_message("<span class='notice'>[user] fails to overload [S]'s sensors with the flash!</span>")
 		else
 			length = rand(5,10)
-			R.Knockdown(length)
-			R.flashed = 1
-			R.flash_eyes(affect_silicon = 1)
-			user.visible_message("<span class='warning'>[user] overloads [R]'s sensors with the flash!</span>")
+			if(R && (HAS_MODULE_QUIRK(R, MODULE_HAS_FLASH_RES)))
+				length = length/2
+			S.Knockdown(length)
+			S.flashed = 1
+			user.visible_message("<span class='warning'>[user] overloads [S]'s sensors with the flash!</span>")
 			spawn(length SECONDS)
-				if (R.flashed)
-					R.flashed = 0
+				if (S.flashed)
+					S.flashed = 0
 	else //simple_animal maybe?
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
+		return
+	if(!flashfail)
+		M.flash_eyes(affect_silicon = 1)
+
+	return !flashfail
+
+/obj/item/device/flash/proc/make_rev_flash(var/mob/living/carbon/human/user)
+	to_chat(user, "<span class='warning'>You prepare the flash for the brainwashing sequence.</span>")
+	var/obj/item/device/flash/rev/R = new(get_turf(src))
+	qdel(src)
+	user.put_in_hands(R)
+	return 1
+
+/obj/item/device/flash/rev/make_rev_flash()
+	return 0
+
+/obj/item/device/flash/synthetic/make_rev_flash()
+	return 0
 
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	if(!user || !clown_check(user))
 		return
+
 	if(broken)
 		user.show_message("<span class='warning'>The [src.name] is broken</span>", 2)
 		return
+
+	if (isrevhead(user) && istype(ticker.mode, /datum/gamemode/dynamic) && !(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in ticker.mode:executed_rules))
+		if (make_rev_flash(user))
+			return
+
 
 	flash_recharge()
 
@@ -165,7 +171,7 @@
 		else	//can only use it  5 times a minute
 			user.show_message("<span class='warning'>*click* *click*</span>", 2)
 			return
-	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
+	playsound(src, 'sound/weapons/flash.ogg', 100, 1)
 	if(harm_labeled >= min_harm_label)
 		return //Act as if the flash was activated except the useful part.
 	flick("flash2", src)
@@ -195,6 +201,8 @@
 								"<span class='warning'>You see a bright flash of light and are suddenly fully visible again.</span>")
 				spawn(50)
 					M.alpha = oldalpha
+		if(M.blinded)
+			continue
 		var/safety = M:eyecheck()
 		if(!safety)
 			M.flash_eyes(affect_silicon = 1)
@@ -216,8 +224,9 @@
 			if(istype(loc, /mob/living/carbon) && harm_labeled < min_harm_label)
 				var/mob/living/carbon/M = loc
 				var/safety = M.eyecheck()
-				if(safety <= 0)
+				if(safety <= 0 && !M.blinded)
 					M.Knockdown(10)
+					M.Stun(10)
 					M.flash_eyes(visual = 1)
 					for(var/mob/O in viewers(M, null))
 						O.show_message("<span class='disarm'>[M] is blinded by the flash!</span>")
@@ -252,6 +261,43 @@
 		icon_state = "flashburnt"
 		item_state = "flashburnt"
 
-/obj/item/device/flash/revsquad
-	limited_conversions = REVSQUAD_FLASH_USES
+/obj/item/device/flash/rev
 	mech_flags = MECH_SCAN_FAIL
+	var/limited_conversions = -1
+
+/obj/item/device/flash/rev/attack(mob/living/M, mob/user)
+	.=..()
+	if(!.)
+		return
+	if(user.mind && isrevhead(user) && M.eyecheck() <= 0)
+		if(!M.isDead() || !M.mind)
+			if(limited_conversions != 0)
+				var/datum/faction/rev = user.mind.GetFactionFromRole(HEADREV)
+				if(rev)
+					var/result = rev.HandleRecruitedMind(M.mind)
+
+					if(istype(result, /datum/role)) //We got a role, this is considered a success
+						log_admin("[key_name(user)] has converted [key_name(M)] to the revolution at [formatLocation(M.loc)]")
+						limited_conversions--
+						if(limited_conversions == 0)
+							to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
+							broken = 1
+							icon_state = "flashburnt"
+					else if(result == ADD_REVOLUTIONARY_FAIL_IS_COMMAND)
+						to_chat(user, "<span class='warning'>This mind seems resistant to the flash!</span>")
+					else if(result == ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED) // rev jobbanned
+						to_chat(user, "<span class='warning'>This mind seems resistant to the flash! (OOC INFO: REVOLUTIONARY JOBBANNED)</span>")
+					else if(result == ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED) // loyalty implanted
+						to_chat(user, "<span class='warning'>Something seems to be blocking the flash!</span>")
+					else if(result == ADD_REVOLUTIONARY_FAIL_IS_REV)
+						to_chat(user, "<span class='notice'>\The [M] can't become any more revolutionary. Stop flashing them.</span>")
+
+		else
+			to_chat(user, "<span class='warning'>This mind is so vacant that it is not susceptible to influence!</span>")
+
+
+/obj/item/device/flash/rev/revsquad
+	limited_conversions = 1
+
+/obj/item/device/flash/rev/revsquad/emp_act(severity)
+	return

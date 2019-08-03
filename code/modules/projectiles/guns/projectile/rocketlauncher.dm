@@ -16,7 +16,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
-	caliber = list("rpg" = 1)
+	caliber = list(ROCKETGRENADE = 1)
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg"
 	attack_verb = list("strikes", "hits", "bashes")
@@ -43,15 +43,51 @@
 /obj/item/weapon/gun/projectile/rocketlauncher/suicide_act(var/mob/user)
 	if(!src.process_chambered()) //No rocket in the rocket launcher
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
-		return(BRUTELOSS)
+		return(SUICIDE_ACT_BRUTELOSS)
 	else //Needed to get that shitty default suicide_act out of the way
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
 		spawn(10) //RUN YOU IDIOT, RUN
 			explosion(src.loc, -1, 1, 4, 8)
 			if(src) //Is the rocket launcher somehow still here ?
 				qdel(src) //This never happened
-			return(BRUTELOSS)
+			return(SUICIDE_ACT_BRUTELOSS)
 	return
+
+/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen
+	name = "rocket launcher"
+	desc = "Watch the backblast, you idiot."
+	fire_sound = 'sound/weapons/rocket.ogg'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
+	icon_state = "rpg_nt"
+	item_state = "rpg_nt"
+	max_shells = 1
+	w_class = W_CLASS_LARGE
+	starting_materials = list(MAT_IRON = 50000, MAT_GLASS = 50000, MAT_GOLD = 6000)
+	w_type = RECYK_METAL
+	force = 10
+	recoil = 5
+	throw_speed = 4
+	throw_range = 3
+	fire_delay = 5
+	flags = FPRINT
+	siemens_coefficient = 1
+	slot_flags = SLOT_BACK
+	caliber = list(ROCKETGRENADE = 1)
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2;"
+	ammo_type = "/obj/item/ammo_casing/rocket_rpg/blank"
+	attack_verb = list("strikes", "hits", "bashes")
+	gun_flags = 0
+
+/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/update_icon()
+	if(!getAmmo())
+		icon_state = "rpg_nt_e"
+		item_state = "rpg_nt_e"
+	else
+		icon_state = "rpg_nt"
+		item_state = "rpg_nt"
+
+/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox
+	spawn_mag = TRUE
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita
 	name = "\improper Nikita"
@@ -66,7 +102,7 @@
 	slot_flags = SLOT_BACK
 	w_class = W_CLASS_LARGE
 	fire_delay = 2
-	caliber = list("nikita" = 1)
+	caliber = list(GUIDEDROCKET = 1)
 	origin_tech = null
 	fire_sound = 'sound/weapons/rocket.ogg'
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg/nikita"
@@ -78,18 +114,18 @@
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/attack_self(mob/user)
 	if(fired)
-		playsound(get_turf(src), 'sound/weapons/stickybomb_det.ogg', 30, 1)
+		playsound(src, 'sound/weapons/stickybomb_det.ogg', 30, 1)
 		fired.detonate()
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/user)
 	if(!loaded)
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
-		return(BRUTELOSS)
+		return(SUICIDE_ACT_BRUTELOSS)
 	else
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
 		spawn(10) //RUN YOU IDIOT, RUN
-			explosion(src.loc, -1, 1, 4, 8)
-			return(BRUTELOSS)
+			explosion(src.loc, 1, 3, 5, 8) //Using the actual rocket damage, instead of the very old, super nerfed value
+			return(SUICIDE_ACT_BRUTELOSS)
 	return
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/attackby(var/obj/item/A as obj, mob/user as mob)
@@ -111,7 +147,7 @@
 	desc = "A miniature cruise missile"
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "nikita"
-	caliber = "nikita"
+	caliber = GUIDEDROCKET
 	projectile_type = "/obj/item/projectile/nikita"
 
 /obj/item/ammo_casing/rocket_rpg/nikita/New()

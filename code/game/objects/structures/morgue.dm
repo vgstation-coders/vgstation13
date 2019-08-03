@@ -76,6 +76,10 @@
 /obj/structure/morgue/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
+/obj/structure/morgue/attack_robot(mob/living/silicon/robot/user)
+	if(HAS_MODULE_QUIRK(user, MODULE_CAN_HANDLE_MEDICAL))
+		attack_hand(user)
+
 /obj/structure/morgue/attack_hand(mob/user as mob)
 	if (connected)
 		close_up()
@@ -86,9 +90,8 @@
 	return
 
 /obj/structure/morgue/proc/open_up()
-	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	connected = new /obj/structure/m_tray(loc)
-	connected.layer = OBJ_LAYER
 	step(connected, src.dir)
 	var/turf/T = get_step(src, src.dir)
 	if(T.contents.Find(connected))
@@ -123,19 +126,21 @@
 
 /obj/structure/morgue/attackby(P as obj, mob/user as mob)
 	if(iscrowbar(P)&&!contents.len)
+		user.visible_message("<span class='notice'>\The [user] begins dismantling \the [src].</span>", "<span class='notice'>You begin dismantling \the [src].</span>")
 		if(do_after(user, src,50))
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			user.visible_message("<span class='notice'>\The [user] dismantles \the [src].</span>", "<span class='notice'>You dismantle \the [src].</span>")
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			new /obj/structure/closet/body_bag(src.loc)
 			new /obj/item/stack/sheet/metal(src.loc,5)
 			qdel(src)
 	if(iswrench(P))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(dir==4)
 			dir=8
 		else
 			dir=4
 	if (istype(P, /obj/item/weapon/pen))
-		set_tiny_label(user, " - '", "'")
+		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
 
 /obj/structure/morgue/relaymove(mob/user as mob)
@@ -157,9 +162,9 @@
 	update()
 
 /obj/structure/morgue/Destroy()
-	. = ..()
 	if(connected)
-		qdel(connected) //references get cleared in the tray's Destroy()
+		qdel(connected)
+	. = ..()
 
 /*
  * Morgue tray
@@ -172,6 +177,7 @@
 	density = 1
 	var/obj/structure/morgue/connected = null
 	anchored = 1.0
+	layer = TABLE_LAYER
 
 /obj/structure/m_tray/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
@@ -188,8 +194,12 @@
 	else
 		qdel(src) //this should not happen but if it does happen we should not be here
 
-/obj/structure/m_tray/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if (!istype(O) || O.anchored || !Adjacent(user) || !Adjacent(O) || user.contents.Find(O))
+/obj/structure/m_tray/attack_robot(mob/living/silicon/robot/user)
+	if(HAS_MODULE_QUIRK(user, MODULE_CAN_HANDLE_MEDICAL))
+		attack_hand(user)
+
+/obj/structure/m_tray/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if (!istype(O) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src) || user.contents.Find(O))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
@@ -219,6 +229,14 @@
 	var/cremating = 0
 	var/id = 1
 	var/locked = 0
+
+/obj/structure/crematorium/New()
+	..()
+	crematorium_list.Add(src)
+
+/obj/structure/crematorium/Destroy()
+	crematorium_list.Remove(src)
+	..()
 
 /obj/structure/crematorium/proc/update()
 	if (cremating)
@@ -270,14 +288,13 @@
 		for(var/atom/movable/A as mob|obj in src.connected.loc)
 			if (!( A.anchored ))
 				A.forceMove(src)
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		qdel(src.connected)
 		src.connected = null
 	else if (src.locked == 0)
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		src.connected = new /obj/structure/c_tray( src.loc )
 		step(src.connected, SOUTH)
-		src.connected.layer = OBJ_LAYER
 		var/turf/T = get_step(src, SOUTH)
 		if (T.contents.Find(src.connected))
 			src.connected.connected = src
@@ -293,7 +310,7 @@
 
 /obj/structure/crematorium/attackby(P as obj, mob/user as mob)
 	if (istype(P, /obj/item/weapon/pen))
-		set_tiny_label(user, " - '", "'")
+		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
 
 /obj/structure/crematorium/relaymove(mob/user as mob)
@@ -301,7 +318,6 @@
 		return
 	src.connected = new /obj/structure/c_tray( src.loc )
 	step(src.connected, SOUTH)
-	src.connected.layer = OBJ_LAYER
 	var/turf/T = get_step(src, SOUTH)
 	if (T.contents.Find(src.connected))
 		src.connected.connected = src
@@ -348,7 +364,7 @@
 
 		for (var/mob/living/M in inside)
 			if (M.stat!=2)
-				M.emote("scream",,, 1)
+				M.audible_scream()
 			//Logging for this causes runtimes resulting in the cremator locking up. Commenting it out until that's figured out.
 			//M.attack_log += "\[[time_stamp()]\] Has been cremated by <b>[user]/[user.ckey]</b>" //No point in this when the mob's about to be qdeleted
 			//user.attack_log +="\[[time_stamp()]\] Cremated <b>[M]/[M.ckey]</b>"
@@ -368,7 +384,7 @@
 		cremating = 0
 		update()
 		locked = 0
-		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
+		playsound(src, 'sound/machines/ding.ogg', 50, 1)
 
 
 /*
@@ -382,6 +398,7 @@
 	density = 1
 	var/obj/structure/crematorium/connected = null
 	anchored = 1.0
+	layer = TABLE_LAYER
 
 /obj/structure/c_tray/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
@@ -403,8 +420,8 @@
 		//SN src = null
 		qdel(src)
 
-/obj/structure/c_tray/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src) || user.contents.Find(O)))
+/obj/structure/c_tray/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if ((!( istype(O, /atom/movable) ) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src) || user.contents.Find(O)))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
@@ -416,7 +433,7 @@
 
 /obj/machinery/crema_switch/attack_hand(mob/user as mob)
 	if (allowed(user))
-		for (var/obj/structure/crematorium/C in world)
+		for (var/obj/structure/crematorium/C in crematorium_list)
 			if (C.id == id)
 				C.cremate(user)
 	else

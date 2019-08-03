@@ -51,6 +51,9 @@
 	var/dorf = 0
 	var/linked_to_centcomm = 1
 
+	//Disable holominimaps on generation, map-wide. If you're just testing things out, change config.txt instead.
+	var/disable_holominimap_generation = 0
+
 	//If 1, only spawn vaults that are exclusive to this map (other vaults aren't spawned). For more info, see code/modules/randomMaps/vault_definitions.dm
 	var/only_spawn_map_exclusive_vaults = 0
 
@@ -84,10 +87,14 @@
 		DISP_TELESCIENCE
 	)
 
-	var/list/enabled_jobs = list()
+	var/list/enabled_jobs = list() //Jobs that require enabling that are enabled on this map
+	var/list/disabled_jobs = list() //Jobs that are disabled on this map
 
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
+	var/snow_theme = 0
+	var/center_x = 226
+	var/center_y = 254
 
 /datum/map/New()
 	. = ..()
@@ -98,6 +105,9 @@
 	spawn()
 		for(var/T in load_map_elements)
 			load_dungeon(T)
+
+/datum/map/proc/map_ruleset(var/datum/dynamic_ruleset/DR)
+	return TRUE //If false, fails Ready()
 
 /datum/map/proc/loadZLevels(list/levelPaths)
 
@@ -141,12 +151,16 @@ var/global/list/accessable_z_levels = list()
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
 	var/z //Number of the z-level (the z coordinate)
 
+/datum/zLevel/proc/post_mapload()
+	return
+
 ////////////////////////////////
 
 /datum/zLevel/station
 
 	name = "station"
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
+
 
 /datum/zLevel/centcomm
 
@@ -171,6 +185,28 @@ var/global/list/accessable_z_levels = list()
 	teleJammed = 1
 	movementJammed = 1
 	base_turf = /turf/unsimulated/beach/sand
+
+/datum/zLevel/snow
+	name = "snow"
+	base_turf = /turf/unsimulated/floor/snow
+	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
+
+/datum/zLevel/snow/post_mapload()
+	var/lake_density = rand(2,8)
+	for(var/i = 0 to lake_density)
+		var/turf/T = locate(rand(1, world.maxx),rand(1, world.maxy), z)
+		if(!istype(T, base_turf))
+			continue
+		var/generator = pick(typesof(/obj/structure/radial_gen/cellular_automata/ice))
+		new generator(T)
+
+	var/tree_density = rand(25,45)
+	for(var/i = 0 to tree_density)
+		var/turf/T = locate(rand(1,world.maxx),rand(1, world.maxy), z)
+		if(!istype(T, base_turf))
+			continue
+		var/generator = pick(typesof(/obj/structure/radial_gen/movable/snow_nature/snow_forest) + typesof(/obj/structure/radial_gen/movable/snow_nature/snow_grass))
+		new generator(T)
 
 // Debug ///////////////////////////////////////////////////////
 
@@ -202,15 +238,13 @@ proc/get_base_turf(var/z)
 	return L.base_turf
 
 proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
-	if(update_old_base)
-		var/count = 0
-		for(var/turf/T in world)
-			count++
-			if(!(count % 50000))
-				sleep(world.tick_lag)
-			if(T.type == get_base_turf(choice) && T.z == choice)
-				T.ChangeTurf(new_base_path)
 	var/datum/zLevel/L = map.zLevels[choice]
+	if(update_old_base)
+		var/previous_base_turf = L.base_turf
+		for(var/turf/T in world)
+			CHECK_TICK
+			if(T.type == previous_base_turf && T.z == choice)
+				T.ChangeTurf(new_base_path)
 	L.base_turf = new_base_path
 	for(var/obj/docking_port/destination/D in all_docking_ports)
 		if(D.z == choice)

@@ -42,9 +42,8 @@
 			spark(user, 5)
 		if(L.damage <= 0)
 			returnToPool(L)
-			//del(L)
-		if(L)
-			playsound(get_turf(src), 'sound/effects/eleczap.ogg', 75, 1)
+		else
+			playsound(src, 'sound/effects/eleczap.ogg', 75, 1)
 			L.tang = adjustAngle(get_angle(U,T))
 			L.icon = midicon
 			L.icon_state = "[L.tang]"
@@ -148,6 +147,15 @@
 	_color = "purple"
 	species_fit = list(VOX_SHAPED)
 
+//Wizard gloves
+/obj/item/clothing/gloves/purple/wizard //This is basically reskinned combat gloves
+	name = "enchanted purple gloves"
+	desc = "A pair of enchanted gloves. These will protect you from shocking and are quite cozy."
+	siemens_coefficient = 0
+	permeability_coefficient = 0.05
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+
 /obj/item/clothing/gloves/green
 	name = "green gloves"
 	desc = "A pair of gloves, they don't look special in any way."
@@ -163,12 +171,12 @@
 	item_state = "white"
 	_color = "mime"
 	species_fit = list(VOX_SHAPED)
-	
-/obj/item/clothing/gloves/white/advanced //mime traitor gloves, spawn in a silent hand gun with two shots 
+
+/obj/item/clothing/gloves/white/advanced //mime traitor gloves, spawn in a silent hand gun with two shots
 	actions_types = list(/datum/action/item_action/toggle_gun)
 	var/obj/item/weapon/gun/projectile/handgun/current_gun = null
 	var/charging = FALSE
-	
+
 /obj/item/clothing/gloves/white/advanced/attack_self(mob/user)
 	var/mob/living/carbon/human/M = user
 	if(!istype(M))
@@ -185,7 +193,7 @@
 		if(!M.get_active_hand())
 			var/obj/item/weapon/gun/projectile/handgun/G = new
 			current_gun = G
-			if(!M.miming) //nonmimes get a loud version
+			if(!issilent(M)) //nonmimes get a loud version
 				G.silenced = FALSE
 				G.fire_sound = 'sound/weapons/Gunshot.ogg'
 			M.put_in_active_hand(G)
@@ -194,11 +202,11 @@
 			to_chat(M, "<span class = 'warning'> Your hand is full! </span>")
 	else
 		to_chat(M, "<span class ='warning'>You need to regain your focus before channeling another gun!</span>")
-			
-/obj/item/clothing/gloves/white/stunglove // For Clown Planet's mimes. - N3X
-	New()
-		..()
-		cell = new /obj/item/weapon/cell/crap/empty(src)
+
+// For Clown Planet's mimes. - N3X
+/obj/item/clothing/gloves/white/stunglove/New()
+	..()
+	cell = new /obj/item/weapon/cell/crap/empty(src)
 
 /obj/item/clothing/gloves/grey
 	name = "grey gloves"

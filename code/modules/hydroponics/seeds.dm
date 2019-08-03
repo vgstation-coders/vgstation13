@@ -12,17 +12,19 @@
 	var/hydroflags = 0 // HYDRO_*, used for no-fruit exclusion lists, at the moment.
 
 /obj/item/seeds/New()
-	while(!plant_controller)
-		sleep(30)
-	update_seed()
 	..()
 	pixel_x = rand(-3,3) * PIXEL_MULTIPLIER
 	pixel_y = rand(-3,3) * PIXEL_MULTIPLIER
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
+		initialize()
+
+/obj/item/seeds/initialize()
+	update_seed()
 
 //Grabs the appropriate seed datum from the global list.
 /obj/item/seeds/proc/update_seed()
-	if(!seed && seed_type && !isnull(plant_controller.seeds) && plant_controller.seeds[seed_type])
-		seed = plant_controller.seeds[seed_type]
+	if(!seed && seed_type && !isnull(SSplant.seeds) && SSplant.seeds[seed_type])
+		seed = SSplant.seeds[seed_type]
 	update_appearance()
 
 //Updates strings and icon appropriately based on seed datum.
@@ -53,15 +55,20 @@
 	seed_type = null
 
 /obj/item/seeds/random/New()
-	seed = plant_controller.create_random_seed()
+	seed = SSplant.create_random_seed()
 	seed_type = seed.name
-	update_seed()
+	..()
 
 //the vegetable/fruit categories are made from a culinary standpoint. many of the "vegetables" in there are technically fruits. (tomatoes, pumpkins...)
 
 /obj/item/seeds/dionanode
 	name = "packet of diona nodes"
 	seed_type = "diona"
+	vending_cat = "sentient"
+
+/obj/item/seeds/mushroommanspore
+	name = "packet of mushrom spores"
+	seed_type = "moshrum"
 	vending_cat = "sentient"
 
 /obj/item/seeds/poppyseed
@@ -118,6 +125,11 @@
 /obj/item/seeds/bananaseed
 	name = "packet of banana seeds"
 	seed_type = "banana"
+	vending_cat = "fruits"
+
+/obj/item/seeds/bluespacebananaseed
+	name = "packet of bluespace banana seeds"
+	seed_type = "bluespacebanana"
 	vending_cat = "fruits"
 
 /obj/item/seeds/eggplantseed
@@ -454,6 +466,18 @@
 		return
 	icon_state = "avocado_pit"
 
+/obj/item/seeds/pearseed
+	name = "packet of pear seeds"
+	seed_type = "pear"
+	vending_cat = "fruits"
+
+/obj/item/seeds/silverpearseed
+	name = "packet of pear seeds"
+	seed_type = "silverpear"
+	vending_cat = "fruits"
+
+
+
 // Chili plants/variants.
 /datum/seed/chili
 
@@ -477,8 +501,8 @@
 
 /datum/seed/chili/ice
 	name = "icechili"
-	seed_name = "ice pepper"
-	display_name = "ice-pepper plants"
+	seed_name = "chilly pepper"
+	display_name = "chilly pepper plants"
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper)
 	chems = list(FROSTOIL = list(3,5), NUTRIMENT = list(1,50))
@@ -890,11 +914,11 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/angel)
 	packet_icon = "mycelium-angel"
 	plant_icon = "angel"
-	chems = list(NUTRIMENT = list(1,50), AMATOXIN = list(13,3), PSILOCYBIN = list(1,25))
+	chems = list(NUTRIMENT = list(1,50), AMANATIN = list(1,3))
 
 	maturation = 12
 	yield = 2
-	potency = 35
+	potency = 15
 
 /datum/seed/mushroom/towercap
 	name = "towercap"
@@ -1040,6 +1064,7 @@
 	packet_icon = "seed-novaflower"
 	products = list(/obj/item/weapon/grown/novaflower)
 	mutants = null
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "novaflower"
 	chems = list(NUTRIMENT = list(1), CAPSAICIN = list(1,5))
 
@@ -1161,7 +1186,8 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/banana)
 	plant_icon = "banana"
 	harvest_repeat = 1
-	chems = list(BANANA = list(1,10))
+	chems = list(BANANA = list(1,10), POTASSIUMCARBONATE = list(0.1,30))
+	mutants = list("bluespacebanana")
 
 	lifespan = 50
 	maturation = 6
@@ -1170,6 +1196,15 @@
 	ideal_light = 9
 	water_consumption = 6
 	ideal_heat = 298
+
+/datum/seed/banana/bluespace
+	name = "bluespacebanana"
+	seed_name = "bluespacebanana"
+	display_name = "bluespace banana tree"
+	packet_icon = "seed-bluespacebanana"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana)
+	plant_icon = "banana"
+	mutants = null
 
 /datum/seed/corn
 	name = "corn"
@@ -1357,7 +1392,7 @@
 	maturation = 6
 	production = 6
 	yield = 3
-	potency = 1
+	potency = 10
 	water_consumption = 6
 	ideal_heat = 298
 	ideal_light = 8
@@ -1439,7 +1474,7 @@
 	seed_name = "grass"
 	display_name = "grass"
 	packet_icon = "seed-grass"
-	products = list(/obj/item/stack/tile/grass)
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grass)
 	plant_icon = "grass"
 	harvest_repeat = 1
 
@@ -1540,6 +1575,7 @@
 	plant_icon = "dionanode"
 	mob_drop = /obj/item/seeds/dionanode
 	product_requires_player = 1
+	product_kill_inactive = FALSE
 	immutable = 1
 
 	lifespan = 50
@@ -1565,6 +1601,28 @@
 	production = 1
 	yield = 10
 	potency = 30
+
+/datum/seed/moshrum
+	name = "moshrum"
+	seed_name = "moshrum"
+	seed_noun = "nodules"
+	display_name = "moshrum nodes"
+	packet_icon = "mycelium-walkingmushroom"
+	plant_icon = "walkingmushroom"
+	products = list(/mob/living/carbon/monkey/mushroom)
+	mob_drop = /obj/item/seeds/mushroommanspore
+	product_requires_player = TRUE
+	product_kill_inactive = FALSE
+	immutable = TRUE
+
+	lifespan = 50
+	endurance = 35
+	maturation = 5
+	production = 10
+	yield = 2
+	potency = 30
+	ideal_light = 0
+
 
 /datum/seed/test
 	name = "test"
@@ -1625,6 +1683,42 @@
 	ideal_light = 8
 	large = 0
 
+
+/datum/seed/pear
+	name = "pear"
+	seed_name = "pear"
+	display_name = "pear tree"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pear)
+	mutants = list("silverpear")
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	packet_icon = "seed-pear"
+	plant_icon = "pear"
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,10))
+
+	lifespan = 55
+	maturation = 6
+	production = 6
+	yield = 5
+	potency = 10
+	ideal_light = 6
+	large = 0
+
+/datum/seed/pear/silver
+	name = "silverpear"
+	seed_name = "silver pear"
+	display_name = "silver pear tree"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/silverpear)
+	mutants = null
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	packet_icon = "seed-silverpear"
+	plant_icon = "silverpear"
+	chems = list(NUTRIMENT = list(1,10), SILVER = list(1,5))
+
+	maturation = 10
+	production = 10
+	yield = 3
+
 // Vox Food
 
 /datum/seed/mushroom/chicken
@@ -1637,7 +1731,7 @@
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "chickenshroom"
 	chems = list(NUTRIMENT = list(2,10))
-	consume_gasses = list("nitrogen"=20) //Really likes its nitrogen. Planting on main station may mess with room air mix.
+	consume_gasses = list(GAS_NITROGEN = 20) //Really likes its nitrogen. Planting on main station may mess with room air mix.
 
 	lifespan = 30
 	growth_stages = 3

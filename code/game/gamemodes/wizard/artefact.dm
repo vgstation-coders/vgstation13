@@ -1,6 +1,3 @@
-
-//Apprenticeship contract - moved to antag_spawner.dm
-
 ///////////////////////////Veil Render//////////////////////
 
 /obj/item/weapon/veilrender
@@ -14,6 +11,7 @@
 	w_class = W_CLASS_MEDIUM
 	var/charged = 1
 	hitsound = 'sound/weapons/bladeslice.ogg'
+	var/rendtype = /obj/effect/rend
 
 /obj/effect/rend
 	name = "tear in the fabric of reality"
@@ -22,60 +20,55 @@
 	icon_state = "rift"
 	density = 1
 	anchored = 1.0
+	var/mobsleft = 20
+	var/mobtype = /mob/living/simple_animal/hostile/creature
 
 /obj/effect/rend/New()
-	spawn(50)
-		new /obj/machinery/singularity/narsie/wizard(get_turf(src))
+	processing_objects.Add(src)
+
+/obj/effect/rend/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/effect/rend/process()
+	for(var/mob/M in loc)
+		if(M.stat != DEAD)
+			return
+	new mobtype(loc)
+	mobsleft--
+	if(mobsleft <= 0)
+		qdel(src)
+
+/obj/effect/rend/attackby(obj/item/I, mob/user)
+	if(isholyweapon(I))
+		visible_message("<span class='danger'>[I] strikes a blow against \the [src], banishing it!</span>")
 		qdel(src)
 		return
-	return
+	..()
 
-/obj/item/weapon/veilrender/attack_self(mob/user as mob)
-	if(charged == 1)
-		new /obj/effect/rend(get_turf(usr))
-		charged = 0
-		visible_message("<span class='danger'>[src] hums with power as [usr] deals a blow to reality itself!</span>")
+/obj/item/weapon/veilrender/attack_self(mob/user)
+	if(charged > 0)
+		create_rend(user)
+		charged--
 	else
 		to_chat(user, "<span class='warning'>The unearthly energies that powered the blade are now dormant.</span>")
 
-
+/obj/item/weapon/veilrender/proc/create_rend(mob/user)
+	new rendtype(get_turf(user))
+	visible_message("<span class='danger'>[src] hums with power as \the [user] deals a blow to reality itself!</span>")
 
 /obj/item/weapon/veilrender/vealrender
 	name = "veal render"
 	desc = "A wicked curved blade of alien origin, recovered from the ruins of a vast farm."
+	rendtype = /obj/effect/rend/cow
 
-/obj/item/weapon/veilrender/vealrender/attack_self(mob/user as mob)
-	if(charged)
-		new /obj/effect/rend/cow(get_turf(usr))
-		charged = 0
-		visible_message("<span class='danger'>[src] hums with power as [usr] deals a blow to hunger itself!</span>")
-	else
-		to_chat(user, "<span class='warning'>The unearthly energies that powered the blade are now dormant.</span>")
+/obj/item/weapon/veilrender/vealrender/create_rend(mob/user)
+	new rendtype(get_turf(user))
+	visible_message("<span class='danger'>[src] hums with power as \the [user] deals a blow to hunger itself!</span>")
 
 /obj/effect/rend/cow
 	desc = "Reverberates with the sound of ten thousand moos."
-	var/cowsleft = 20
-
-/obj/effect/rend/cow/New()
-	processing_objects.Add(src)
-	return
-
-/obj/effect/rend/cow/process()
-	if(locate(/mob) in loc)
-		return
-	new /mob/living/simple_animal/cow(loc)
-	cowsleft--
-	if(cowsleft <= 0)
-		qdel (src)
-
-/obj/effect/rend/cow/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/nullrod))
-		visible_message("<span class='danger'>[I] strikes a blow against \the [src], banishing it!</span>")
-		spawn(1)
-			qdel (src)
-		return
-	..()
-
+	mobtype = /mob/living/simple_animal/cow
 
 /////////////////////////////////////////Scrying///////////////////
 
@@ -161,20 +154,19 @@
 		to_chat(user, "<span class = 'notice'>You prime the glow-stone, it will transform in [prime_time/10] seconds.</span>")
 		activate()
 		return
+	if (clumsy_check(user) && prob(50))
+		to_chat(user, "<span class = 'notice'>Ooh, shiny!</span>")
+		failure()
+		return
+	if(prob(65))
+		to_chat(user, "<span class = 'notice'>You find what appears to be an on button, and press it.</span>")
+		activate()
 	else
-		if (clumsy_check(user) && prob(50))
-			to_chat(user, "<span class = 'notice'>Ooh, shiny!</span>")
-			failure()
-			return
-		else if(prob(65))
-			to_chat(user, "<span class = 'notice'>You find what appears to be an on button, and press it.</span>")
-			activate()
-		else
-			if(prob(5))
-				visible_message("<span class = 'warning'>\The [src] ticks [pick("ominously","forebodingly", "harshly")].</span>")
-				if(prob(50))
-					failure()
-			to_chat(user, "<span class = 'notice'>You fiddle with \the [src], but find nothing of interest.</span>")
+		if(prob(5))
+			visible_message("<span class = 'warning'>\The [src] ticks [pick("ominously","forebodingly", "harshly")].</span>")
+			if(prob(50))
+				failure()
+		to_chat(user, "<span class = 'notice'>You fiddle with \the [src], but find nothing of interest.</span>")
 
 /obj/item/weapon/glow_orb/proc/activate()
 	activating = 1
@@ -184,7 +176,7 @@
 		if(ismob(loc))
 			var/mob/M = loc
 			M.drop_from_inventory(src)
-		playsound(get_turf(src), 'sound/weapons/orb_activate.ogg', 50,1)
+		playsound(src, 'sound/weapons/orb_activate.ogg', 50,1)
 		flick("glow_stone_activate", src)
 		spawn(10)
 			new/mob/living/simple_animal/hostile/glow_orb(get_turf(src))
@@ -195,7 +187,123 @@
 	crit_failure = 1
 	spawn(1 SECONDS)
 		visible_message("<span class = 'warning>...and vibrate violently!</span>")
-	playsound(get_turf(src),'sound/weapons/inc_tone.ogg', 50, 1)
+	playsound(src,'sound/weapons/inc_tone.ogg', 50, 1)
 	spawn(2 SECONDS)
 		explosion(loc, 0, 1, 2, 3)
 		qdel(src)
+
+/obj/item/phylactery
+	name = "strange stone"
+	desc = "A stone, decorated with masterly crafted silver, adorned with silver in the shape of a human skull. It hums with malignancy."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "phylactery_empty_noglow"
+	var/charges = 0
+	var/soulbound
+	var/z_bound
+	var/mob/bound_soul
+
+/obj/item/phylactery/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/device/soulstone))
+		var/obj/item/device/soulstone/S = I
+		var/mob/living/simple_animal/shade/sacrifice = locate() in S
+		if(sacrifice)
+			visible_message("<span class = 'warning'>The soul within \the [I] is released unto \the [src].</span>")
+			S.name = initial(S.name)
+			charges++
+			update_icon()
+			qdel(sacrifice)
+	else
+		..()
+
+/obj/item/phylactery/Destroy()
+	if(bound_soul.on_death)
+		bound_soul.on_death.Remove(soulbound)
+		bound_soul.on_z_transition.Remove(z_bound)
+	z_bound = null
+	soulbound = null
+	if(bound_soul)
+		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
+		spawn(rand(5 SECONDS, 15 SECONDS))
+			bound_soul.dust()
+			bound_soul = null
+	..()
+
+
+/obj/item/phylactery/update_icon()
+	if(soulbound)
+		if(charges >= 1)
+			icon_state = "phylactery"
+		else
+			icon_state = "phylactery_empty"
+	else
+		icon_state = "phylactery_empty_noglow"
+
+/obj/item/phylactery/attack_self(mob/user)
+	if(!soulbound && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/organ/external/E = H.get_active_hand_organ()
+		if(locate(/datum/wound) in E.wounds)
+			to_chat(user, "<span class = 'warning'>You bind your life essence to \the [src].</span>")
+			bind(user)
+			charges++
+			update_icon()
+	else
+		..()
+
+/obj/item/phylactery/proc/revive_soul(list/arguments)
+	if(charges <= 0)
+		unbind()
+		return
+	var/mob/living/original = arguments["user"]
+	if(original.mind)
+		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(src)
+		H.real_name = original.real_name
+		H.flavor_text = original.flavor_text
+		for(var/spell/S in original.spell_list)
+			original.remove_spell(S)
+			H.add_spell(S)
+		H.Paralyse(30)
+		original.mind.transfer_to(H)
+		unbind()
+		bind(H)
+		if(!arguments["body_destroyed"])
+			original.dust()
+		var/release_time = rand(60 SECONDS, 120 SECONDS)/charges
+		to_chat(H, "<span class = 'notice'>\The [src] will permit you exit in [release_time/10] seconds.</span>")
+		spawn(release_time)
+			to_chat(H, "<span class = 'notice'>\The [src] permits you exit from it.</span>")
+			H.forceMove(get_turf(src))
+	charges--
+	update_icon()
+
+/obj/item/phylactery/proc/unbind()
+	if(bound_soul.on_death)
+		bound_soul.on_death.Remove(soulbound)
+	if(bound_soul.on_z_transition)
+		bound_soul.on_z_transition.Remove(z_bound)
+	z_bound = null
+	soulbound = null
+	bound_soul = null
+	update_icon()
+
+/obj/item/phylactery/proc/bind(var/mob/to_bind)
+	soulbound = to_bind.on_death.Add(src, "revive_soul")
+	z_bound = to_bind.on_z_transition.Add(src, "z_block")
+	bound_soul = to_bind
+
+/obj/item/phylactery/proc/z_block(list/arguments)
+	var/mob/user = arguments["user"]
+	if(user != bound_soul)
+		unbind()
+		return
+	if(is_holder_of(user, src))
+		return //We're in their pocket, you ash-happy bottle of soul!
+	var/turf/T = get_turf(src)
+	if(arguments["to_z"] != T.z)
+		to_chat(user, "<span class = 'warning'><b>As you stray further and further away from \the [src], you feel your form unravel!</b></span>")
+		spawn(rand(5 SECONDS, 15 SECONDS)) //Mr. Wizman, I don't feel so good
+			if(user.gcDestroyed)
+				return
+			T = get_turf(src)
+			if(user.z != T.z || is_holder_of(user, src))
+				user.dust()

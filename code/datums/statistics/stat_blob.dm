@@ -66,7 +66,7 @@
 	var/headcount = 0
 
 /datum/stat_blob/revsquad/doPostRoundChecks()
-	var/list/heads = ticker.mode.get_all_heads()
+	var/list/heads = ticker.get_all_heads()
 	headcount = heads.len
 
 /datum/stat_blob/revsquad/writeStats(file)

@@ -11,7 +11,7 @@
 
 	var/list/datum/design/research_queue = list()//all the designs we are waiting to research
 	var/list/datum/design/ready_queue = list()//all the designs we HAVE researched, and are ready to print
-	var/max_queue_len = 0 as num //maximum number of items in the research queue
+	var/max_queue_len = 0 //maximum number of items in the research queue
 
 	var/scan_rating = 1 //the scanner rating
 	var/cap_rating = 1 //the capacitor rating
@@ -120,7 +120,8 @@
 		//message_admins("We have a techlist and a linked_console")
 		for(var/checktech in techlist)
 			//message_admins("Looking at [checktech] with value of [techlist[checktech]]")
-			for(var/datum/tech/pointed_tech in tech_list) //if we find that technology
+			for(var/ID in tech_list) //if we find that technology
+				var/datum/tech/pointed_tech = tech_list[ID]
 				if(pointed_tech.id == checktech)
 					if(techlist[checktech] > pointed_tech.level) //if the machine board's research level is higher than the one on the console
 						//message_admins("Found a difference of [techlist[checktech] - pointed_tech.level]")

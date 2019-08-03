@@ -7,14 +7,30 @@
 	init_butchering_list()
 
 	clear_fullscreens()
+
+	handle_symptom_on_death()
 	..()
 
+/mob/living/gib()
+	death(1)
+	monkeyizing = 1
+	canmove = 0
+	icon = null
+	invisibility = 101
+
+	gibs(loc, virus2, dna)
+
+	dead_mob_list -= src
+
+	qdel(src)
+
 /mob/living/proc/init_butchering_list()
-	butchering_drops = list()
+	if(butchering_drops && butchering_drops.len) //Already initialized
+		return
+	if(species_type && animal_butchering_products[species_type])
+		if(!butchering_drops)
+			butchering_drops = list()
+		var/list/L = animal_butchering_products[species_type]
 
-	if(species_type && (!src.butchering_drops || !src.butchering_drops.len))
-		if(animal_butchering_products[species_type])
-			var/list/L = animal_butchering_products[species_type]
-
-			for(var/butchering_type in L)
-				src.butchering_drops += new butchering_type
+		for(var/butchering_type in L)
+			src.butchering_drops += new butchering_type

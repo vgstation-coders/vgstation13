@@ -1,19 +1,3 @@
-/obj/item/verbs/borer/attached_chest/verb/borer_speak(var/message as text)
-	set category = "Alien"
-	set name = "Borer Speak"
-	set desc = "Communicate with your brethren."
-
-	if(!message)
-		return
-
-	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
-	message = capitalize(message)
-
-	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
-		return
-	B.borer_speak(message)
-
 /obj/item/verbs/borer/attached_chest/verb/evolve()
 	set category = "Alien"
 	set name = "Evolve"
@@ -81,6 +65,8 @@
 		"health" = H.health,
 		"virus_present" = H.virus2.len,
 		"rads" = H.radiation,
+		"radtick" = H.rad_tick,
+		"radstage" = H.get_rad_stage(),
 		"cloneloss" = H.getCloneLoss(),
 		"brainloss" = H.getBrainLoss(),
 		"paralysis" = H.paralysis,
@@ -109,7 +95,7 @@
 
 
 /mob/living/simple_animal/borer/proc/format_host_data(var/list/occ)
-	var/dat = "<font color='blue'><b>Host Statistics:</b></font><br>"
+	var/dat = "<span class='notice'><b>Host Statistics:</b></span><br>"
 	var/aux
 	switch (occ["stat"])
 		if(0)
@@ -122,6 +108,8 @@
 	if(occ["virus_present"])
 		dat += "<font color='red'>Viral pathogen detected in blood stream.</font><br>"
 	dat += text("[]\tRadiation Level %: []</font><br>", (occ["rads"] < 10 ?"<font color='blue'>" : "<font color='red'>"), occ["rads"])
+	if(occ["radtick"] > 0)
+		dat += text("<font color='red'>Radiation sickness progression: <b>[occ["radtick"]]</b> Stage: <b>[occ["radstage"]]</b></font><br>")
 	dat += text("[]\tGenetic Tissue Damage %: []</font><br>", (occ["cloneloss"] < 1 ?"<font color='blue'>" : "<font color='red'>"), occ["cloneloss"])
 	dat += text("[]\tApprox. Brain Damage %: []</font><br>", (occ["brainloss"] < 1 ?"<font color='blue'>" : "<font color='red'>"), occ["brainloss"])
 	dat += text("Paralysis Summary %: [] ([] seconds left!)<br>", occ["paralysis"], round(occ["paralysis"] / 4))
@@ -148,7 +136,7 @@
 
 	dat += text("[]\tBlood Level %: [] ([] units)</FONT><BR>", (occ["blood_amount"] > 448 ?"<font color='blue'>" : "<font color='red'>"), occ["blood_amount"]*100 / 560, occ["blood_amount"])
 
-	dat += text("<font color='blue'>\tBlood Type: []</FONT><BR>", occ["btype"])
+	dat += text("<span class='notice'>\tBlood Type: []</span><BR>", occ["btype"])
 
 	dat += text("Inaprovaline: [] units<BR>", occ["inaprovaline_amount"])
 	dat += text("Soporific: [] units<BR>", occ["stoxin_amount"])
@@ -160,7 +148,7 @@
 		if(R.id == BLOOD || R.id == INAPROVALINE || R.id == STOXIN || R.id == DERMALINE || R.id == BICARIDINE || R.id == DEXALIN)
 			continue //no repeats
 		else
-			dat += text("<font color='black'>Detected</font> <font color='blue'>[R.volume]</font> <font color='black'>units of</font> <font color='blue'>[R.name]</font><BR>")
+			dat += text("<font color='black'>Detected</font> <span class='notice'>[R.volume]</span> <font color='black'>units of</font> <span class='notice'>[R.name]</span><BR>")
 	for(var/datum/disease/D in occ["tg_diseases_list"])
 		if(!D.hidden[SCANNER])
 			dat += text("<BR><font color='red'><B>Warning: [D.form] Detected</B>\nName: [D.name].\nType: [D.spread].\nStage: [D.stage]/[D.max_stages].\nPossible Cure: [D.cure]</FONT><BR>")

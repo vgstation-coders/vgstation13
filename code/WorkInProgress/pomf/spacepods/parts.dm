@@ -61,6 +61,9 @@
 /obj/item/pod_parts/pod_frame/attackby(var/obj/O, mob/user)
 	if(istype(O, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = O
+		if(R.amount < 10)
+			to_chat(user, "<span class='notice'>You need 10 rods to do this!</span>")
+			return
 		var/list/linkedparts = find_square()
 		if(!linkedparts)
 			to_chat(user, "<span class='rose'>You cannot assemble a pod frame because you do not have the necessary assembly.</span>")
@@ -69,7 +72,7 @@
 		pod.dir = src.dir
 		to_chat(user, "<span class='notice'>You strut the pod frame together.</span>")
 		R.use(10)
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		for(var/obj/item/pod_parts/pod_frame/F in linkedparts)
 			if(1 == turn(F.dir, -F.link_angle)) //if the part links north during construction, as the bottom left part always does
 				//log_admin("Repositioning")
@@ -78,8 +81,8 @@
 	if(iswrench(O))
 		to_chat(user, "<span class='notice'>You [!anchored ? "secure \the [src] in place."  : "remove the securing bolts."]</span>")
 		anchored = !anchored
-		density = anchored
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		setDensity(anchored)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 
 /obj/item/pod_parts/pod_frame/verb/rotate()
 	set name = "Rotate Frame"

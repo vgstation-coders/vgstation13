@@ -52,7 +52,7 @@
 		E.reliability = round(rand(E.reliability/3,E.reliability))
 	else
 		E.forceMove(get_turf(src))
-		E.destroy()
+		qdel(E)
 
 /obj/effect/decal/mecha_wreckage/bullet_act(var/obj/item/projectile/Proj)
 	return
@@ -82,7 +82,7 @@
 	return provided
 
 /obj/effect/decal/mecha_wreckage/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(isemptylist(welder_salvage))
 			to_chat(user, "You don't see anything that can be cut with [W].")

@@ -49,10 +49,10 @@
 	if(prob(75))
 		amount_grown = 1
 
-/mob/living/simple_animal/hostile/giant_spider/spiderling/Die()
+/mob/living/simple_animal/hostile/giant_spider/spiderling/death(var/gibbed = FALSE)
 	visible_message("<span class='alert'>[src] dies!</span>")
 	new /obj/effect/decal/cleanable/spiderling_remains(src.loc)
-	..()
+	..(TRUE)
 	qdel(src)
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/Aggro()
@@ -121,9 +121,8 @@
 	if(isturf(loc) && amount_grown > 0)
 		amount_grown += rand(0,2)
 		if(amount_grown >= 100)
-			var/spawn_type = pick(spider_types)
-			new spawn_type(src.loc)
-			qdel(src)
+			species_type = pick(spider_types)
+			grow_up()
 			return
 
 	..()
@@ -151,4 +150,7 @@
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "jonas"
 	icon_living = "jonas"
-	amount_grown = -INFINITY
+
+/mob/living/simple_animal/hostile/giant_spider/spiderling/salk/New()
+	..()
+	amount_grown = 0

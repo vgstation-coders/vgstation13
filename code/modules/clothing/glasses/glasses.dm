@@ -1,3 +1,44 @@
+//Glasses
+/obj/item/clothing/glasses
+	name = "glasses"
+	icon = 'icons/obj/clothing/glasses.dmi'
+	w_class = W_CLASS_SMALL
+	body_parts_covered = EYES
+	slot_flags = SLOT_EYES
+	var/vision_flags = 0
+	var/darkness_view = 0//Base human is 2
+	var/invisa_view = 0
+	var/cover_hair = 0
+	var/see_invisible = 0
+	var/see_in_dark = 0
+	var/prescription = 0
+	min_harm_label = 12
+	harm_label_examine = list("<span class='info'>A label is covering one lens, but doesn't reach the other.</span>","<span class='warning'>A label covers the lenses!</span>")
+	species_restricted = list("exclude","Muton")
+/*
+SEE_SELF  // can see self, no matter what
+SEE_MOBS  // can see all mobs, no matter what
+SEE_OBJS  // can see all objs, no matter what
+SEE_TURFS // can see all turfs (and areas), no matter what
+SEE_PIXELS// if an object is located on an unlit area, but some of its pixels are
+          // in a lit area (via pixel_x,y or smooth movement), can see those pixels
+BLIND     // can't see anything
+*/
+/obj/item/clothing/glasses/harm_label_update()
+	if(harm_labeled >= min_harm_label)
+		vision_flags |= BLIND
+	else
+		vision_flags &= ~BLIND
+
+/obj/item/clothing/glasses/equipped(mob/M, var/slot)
+	..()
+	if(slot == slot_glasses)
+		M.handle_regular_hud_updates()
+
+/obj/item/clothing/glasses/unequipped(mob/M, var/from_slot = null)
+	..()
+	if(from_slot == slot_glasses)
+		M.handle_regular_hud_updates()
 
 /obj/item/clothing/glasses/scanner/meson/prescription
 	name = "prescription mesons"
@@ -16,19 +57,105 @@
 	desc = "A Security HUD with prescription lenses."
 	prescription = 1
 
+////////////////////////////////////////////////PATHOGEN HUD///////////////////////////////////////////////////
+var/list/science_goggles_wearers = list()
+
 /obj/item/clothing/glasses/science
 	name = "science goggles"
-	desc = "nothing."
+	desc = "almost nothing."
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
+	actions_types = list(/datum/action/item_action/toggle_goggles)
+	var/on = FALSE
+
+/obj/item/clothing/glasses/science/prescription
+	name = "prescription science goggles"
+	prescription = 1
+
+/obj/item/clothing/glasses/science/attack_self(var/mob/user)
+	toggle(user)
+
+/obj/item/clothing/glasses/science/proc/toggle(var/mob/user)
+	if (user.incapacitated())
+		return
+	if (on)
+		on = FALSE
+		to_chat(user, "You turn the pathogen scanner off.")
+		disable(user)
+	else
+		on = TRUE
+		to_chat(user, "You turn the pathogen scanner on.")
+		enable(user)
+	user.handle_regular_hud_updates()
+
+/obj/item/clothing/glasses/science/equipped(var/mob/M, var/slot)
+	..()
+	if (!M.client)
+		return
+	if(slot == slot_glasses)
+		if (on)
+			enable(M)
+
+/obj/item/clothing/glasses/science/unequipped(var/mob/M, var/from_slot)
+	..()
+	if (!M.client)
+		return
+	if(from_slot == slot_glasses)
+		disable(M)
+
+/obj/item/clothing/glasses/science/proc/enable(var/mob/M)
+	var/toggle = 0
+	if (ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if (H.glasses == src)
+			toggle = 1
+	if (ismonkey(M))
+		var/mob/living/carbon/monkey/H = M
+		if (H.glasses == src)
+			toggle = 1
+	if (toggle)
+		playsound(M,'sound/weapons/egun_toggle_laser.ogg',30,0,-5)
+		science_goggles_wearers.Add(M)
+		for (var/obj/item/I in infected_items)
+			if (I.pathogen)
+				M.client.images |= I.pathogen
+		for (var/mob/living/L in infected_contact_mobs)
+			if (L.pathogen)
+				M.client.images |= L.pathogen
+		for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+			if (C.pathogen)
+				M.client.images |= C.pathogen
+		for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+			if (C.pathogen)
+				M.client.images |= C.pathogen
+
+/obj/item/clothing/glasses/science/proc/disable(var/mob/M)
+	playsound(M,'sound/weapons/egun_toggle_taser.ogg',30,0,-5)
+	science_goggles_wearers.Remove(M)
+	for (var/obj/item/I in infected_items)
+		M.client.images -= I.pathogen
+	for (var/mob/living/L in infected_contact_mobs)
+		M.client.images -= L.pathogen
+	for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+		M.client.images -= C.pathogen
+	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+		M.client.images -= C.pathogen
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
 	desc = "Yarr."
-	icon_state = "eyepatch"
-	item_state = "eyepatch"
+	icon_state = "eyepatch0"
+	item_state = "eyepatch0"
 	min_harm_label = 0
+	var/flipped = FALSE
+
+/obj/item/clothing/glasses/eyepatch/attack_self(mob/user)
+	flipped = !flipped
+	icon_state = "eyepatch[flipped]"
+	item_state = "eyepatch[flipped]"
+	to_chat(user, "You flip \the [src] to your [flipped ? "left" : "right"] eye.")
 
 /obj/item/clothing/glasses/monocle
 	name = "monocle"
@@ -50,7 +177,7 @@
 
 /obj/item/clothing/glasses/regular/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
-	playsound(get_turf(src), "shatter", 50, 1)
+	playsound(src, "shatter", 50, 1)
 
 	var/obj/item/weapon/shard/S = new(get_turf(src))
 	S.Crossed()
@@ -93,10 +220,17 @@
 
 /obj/item/clothing/glasses/sunglasses/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
-	playsound(get_turf(src), "shatter", 50, 1)
+	playsound(src, "shatter", 50, 1)
 
 	var/obj/item/weapon/shard/S = new(get_turf(src))
 	S.Crossed()
+
+	qdel(src)
+	return SPECIAL_ATTACK_FAILED
+
+/obj/item/clothing/glasses/sunglasses/holo/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them and making them fade away!</span>", "<span class='danger'>You crush \the [src] under your foot, which takes less effort than you realized as they fade from existence.</span>")
+	playsound(src, "shatter", 50, 1)
 
 	qdel(src)
 	return SPECIAL_ATTACK_FAILED
@@ -115,6 +249,17 @@
 	name = "red star-shaped sunglasses"
 	desc = "Novelty sunglasses with a fancy silver frame and two red-tinted star-shaped lenses. You should probably stomp on them and get a pair of normal ones."
 	icon_state = "sun_star_silver"
+
+/obj/item/clothing/glasses/sunglasses/red
+	name = "red sunglasses"
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in red."
+	icon_state = "sunred"
+	item_state = "sunred"
+
+/obj/item/clothing/glasses/sunglasses/security
+	name = "security sunglasses"
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes. Often worn by budget security officers."
+	icon_state = "sunhud"
 
 /obj/item/clothing/glasses/virussunglasses
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
@@ -149,7 +294,7 @@
 	if(!C.incapacitated())
 		if(src.up)
 			src.up = !src.up
-			eyeprot = 2
+			eyeprot = 3
 			body_parts_covered |= EYES
 			icon_state = initial(icon_state)
 			to_chat(C, "You flip the [src] down to protect your eyes.")
@@ -199,22 +344,22 @@
 	var/obj/item/clothing/glasses/hud/security/hud = null
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
-	New()
-		..()
-		src.hud = new/obj/item/clothing/glasses/hud/security(src)
-		return
+/obj/item/clothing/glasses/sunglasses/sechud/New()
+	..()
+	src.hud = new/obj/item/clothing/glasses/hud/security(src)
+	return
 
 /obj/item/clothing/glasses/sunglasses/sechud/become_defective()
 	if(!defective)
 		..()
 		if(prob(15))
 			new /obj/item/weapon/shard(loc)
-			playsound(get_turf(src), "shatter", 50, 1)
+			playsound(src, "shatter", 50, 1)
 			qdel(src)
 			return
 		if(prob(15))
 			new/obj/item/clothing/glasses/sunglasses(get_turf(src))
-			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
 			qdel(src)
 			return
 		if(prob(55))
@@ -222,6 +367,59 @@
 		if(prob(55))
 			hud = null
 			qdel(hud)
+
+/obj/item/clothing/glasses/sunglasses/sechud/syndishades
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
+	name = "sunglasses"
+	icon_state = "sun"
+	item_state = "sunglasses"
+	darkness_view = 0 //Subtly better than normal shades
+	origin_tech = Tc_SYNDICATE + "=3"
+	actions_types = list(/datum/action/item_action/change_appearance_shades)
+	var/static/list/clothing_choices = null
+	var/full_access = FALSE
+
+/obj/item/clothing/glasses/sunglasses/sechud/syndishades/New()
+	..()
+	if(!clothing_choices)
+		clothing_choices = list()
+		for(var/Type in existing_typesof(/obj/item/clothing/glasses) - /obj/item/clothing/glasses - typesof(/obj/item/clothing/glasses/sunglasses/sechud/syndishades))
+			var/obj/glass = Type
+			clothing_choices[initial(glass.name)] = glass
+
+/obj/item/clothing/glasses/sunglasses/sechud/syndishades/attackby(obj/item/I, mob/user)
+	..()
+	if(istype(I, /obj/item/clothing/glasses/sunglasses/sechud) || istype(I, /obj/item/clothing/glasses/hud/security))
+		var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = I
+		if(istype(S) && !S.full_access)
+			return
+		if(full_access)
+			to_chat(user, "<span class='warning'>\The [src] already has those access codes.</span>")
+			return
+		else
+			to_chat(user, "<span class='notice'>You transfer the security access codes from \the [I] to \the [src].</span>")
+			full_access = TRUE
+
+/datum/action/item_action/change_appearance_shades
+	name = "Change Shades Appearance"
+
+/datum/action/item_action/change_appearance_shades/Trigger()
+	var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/T = target
+	if(!istype(T))
+		return
+	T.change()
+
+/obj/item/clothing/glasses/sunglasses/sechud/syndishades/proc/change()
+	var/choice = input("Select style to change it to", "Style Selector") as null|anything in clothing_choices
+	if(src.gcDestroyed || !choice || usr.incapacitated() || !Adjacent(usr))
+		return
+	var/obj/item/clothing/glasses/glass_type = clothing_choices[choice]
+	desc = initial(glass_type.desc)
+	name = initial(glass_type.name)
+	icon_state = initial(glass_type.icon_state)
+	item_state = initial(glass_type.item_state)
+	_color = initial(glass_type._color)
+	usr.update_inv_glasses()
 
 /obj/item/clothing/glasses/thermal
 	name = "Optical Thermal Scanner"
@@ -251,7 +449,7 @@
 	desc = "Used for seeing walls, floors, and stuff through anything."
 	icon_state = "meson"
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/thermal/monocle
 	name = "Thermonocle"
@@ -307,3 +505,19 @@
 	icon_state = "kaminaglasses"
 	item_state = "kaminaglasses"
 	cover_hair = 1
+
+/obj/item/clothing/glasses/contacts
+	name = "contact lenses"
+	desc = "Only nerds wear glasses."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "contact"
+	prescription = 1
+	body_parts_covered = null
+
+/obj/item/clothing/glasses/contacts/polarized
+	name = "polarized contact lenses"
+	desc = "Protects your eyes from bright flashes of light."
+	icon_state = "polarized_contact"
+	darkness_view = -1
+	prescription = 1
+	eyeprot = 1

@@ -37,7 +37,7 @@
 /obj/machinery/computer/message_monitor/attackby(obj/item/weapon/O as obj, mob/living/user as mob)
 	if(!istype(user))
 		return
-	if(isscrewdriver(O) && emagged)
+	if(O.is_screwdriver(user) && emagged)
 		//Stops people from just unscrewing the monitor and putting it back to get the console working again.
 		to_chat(user, "<span class='warning'>It is too hot to mess with!</span>")
 		return
@@ -60,7 +60,8 @@
 			spawn(100*length(src.linkedServer.decryptkey)) UnmagConsole()
 			message = rebootmsg
 		else
-			to_chat(user, "<span class='notice'>A 'no server' error appears on the screen.</span>")
+			if(user)
+				to_chat(user, "<span class='notice'>A 'no server' error appears on the screen.</span>")
 
 /obj/machinery/computer/message_monitor/update_icon()
 	..()
@@ -81,7 +82,7 @@
 /obj/machinery/computer/message_monitor/attack_hand(var/mob/living/user as mob)
 	if(stat & (NOPOWER|BROKEN))
 		return
-	if(!istype(user))
+	if(!istype(user) && !isAdminGhost(user))
 		return
 	//If the computer is being hacked or is emagged, display the reboot message.
 	if(hacking || emagged)

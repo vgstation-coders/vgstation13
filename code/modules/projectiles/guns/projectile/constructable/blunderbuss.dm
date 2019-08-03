@@ -101,7 +101,7 @@
 		if(istype(W, /obj/item/stack))
 			var/obj/item/stack/S = W
 			S.use(1)
-			var/Y = new W.type(src)
+			var/Y = new W.type(src, 1)
 			loaded_item = Y
 		else
 			if(!user.drop_item(W, src))

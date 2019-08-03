@@ -26,22 +26,20 @@ var/intercom_range_display_status = 0
 	icon = 'icons/480x480.dmi'
 	icon_state = "25percent"
 
-	New()
-		src.pixel_x = -224 * PIXEL_MULTIPLIER
-		src.pixel_y = -224 * PIXEL_MULTIPLIER
+/obj/effect/debugging/camera_range/New()
+	src.pixel_x = -224 * PIXEL_MULTIPLIER
+	src.pixel_y = -224 * PIXEL_MULTIPLIER
 
 /obj/effect/debugging/marker
 	icon = 'icons/turf/areas.dmi'
 	icon_state = "yellow"
 
-/obj/effect/debugging/marker/Move()
+/obj/effect/debugging/marker/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
 /client/proc/do_not_use_these()
 	set category = "Mapping"
 	set name = "-None of these are for ingame use!!"
-
-	..()
 
 /client/proc/camera_view()
 	set category = "Mapping"
@@ -134,7 +132,6 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/camera_view 				//-errorage
 	src.verbs += /client/proc/sec_camera_report 		//-errorage
 	src.verbs += /client/proc/intercom_view 			//-errorage
-	src.verbs += /client/proc/air_status //Air things
 	src.verbs += /client/proc/Cell //More air things
 	src.verbs += /client/proc/pdiff //Antigriff testing - N3X
 	src.verbs += /client/proc/atmosscan //check plumbing
@@ -142,7 +139,6 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/count_objects_on_z_level
 	src.verbs += /client/proc/count_objects_all
 	src.verbs += /client/proc/cmd_assume_direct_control	//-errorage
-	src.verbs += /client/proc/jump_to_dead_group
 	src.verbs += /client/proc/startSinglo
 	src.verbs += /client/proc/cheat_power // Because the above doesn't work off-station.  Or at all, occasionally - N3X
 	src.verbs += /client/proc/setup_atmos // Laziness during atmos testing - N3X
@@ -152,7 +148,7 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/splash
 	src.verbs += /client/proc/cmd_admin_areatest
 	src.verbs += /client/proc/cmd_admin_rejuvenate
-	src.verbs += /datum/admins/proc/show_traitor_panel
+	src.verbs += /datum/admins/proc/show_role_panel
 	src.verbs += /client/proc/print_jobban_old
 	src.verbs += /client/proc/print_jobban_old_filter
 	src.verbs += /client/proc/forceEvent
@@ -169,7 +165,13 @@ var/intercom_range_display_status = 0
 	src.verbs += /proc/generateMiniMaps
 	src.verbs += /client/proc/maprender
 	//src.verbs += /client/proc/cmd_admin_rejuvenate
-
+	src.verbs += /client/proc/start_line_profiling
+	src.verbs += /client/proc/stop_line_profiling
+	src.verbs += /client/proc/show_line_profiling
+	src.verbs += /client/proc/check_wires
+	#if UNIT_TESTS_ENABLED
+	src.verbs += /client/proc/unit_test_panel
+	#endif
 	feedback_add_details("admin_verb","mDV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/count_objects_on_z_level()
@@ -406,3 +408,30 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 	else
 		message_admins("[src.ckey] used 'Disable all movement', restoring all movement.")*/
 */
+
+/client/proc/check_wires()
+	set category = "Mapping"
+	set name = "Check wire connections"
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	if(!mob)
+		to_chat(usr, "<span class = 'warning'>You require a mob for this to work.</span>")
+		return
+
+	var/z = mob.z
+	to_chat(usr, "<span class = 'notice'>Checking wire connections on current Z Level [z]</span>")
+
+	for(var/obj/structure/cable/C in world)
+		if(C.z != z)
+			continue
+		if(!C.d1) //It's a stub
+			continue
+		var/obj/structure/cable/neighbour
+		neighbour = locate() in get_step(get_turf(C),C.d1)
+		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
+			to_chat(usr, "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span>")
+		neighbour = locate() in get_step(get_turf(C),C.d2)
+		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
+			to_chat(usr, "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span>")

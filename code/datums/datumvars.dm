@@ -14,11 +14,12 @@
 		var/reagentDatum = input(usr,"Reagent","Insert Reagent","") as text|null
 		if(reagentDatum)
 			var/reagentAmount = input(usr, "Amount", "Insert Amount", "") as num
-			if(A.reagents.add_reagent(reagentDatum, reagentAmount))
+			var/reagentTemp = input(usr, "Temperature", "Insert Temperature (As Kelvin)", T0C+20) as num
+			if(A.reagents.add_reagent(reagentDatum, reagentAmount, reagtemp = reagentTemp))
 				to_chat(usr, "<span class='warning'>[reagentDatum] doesn't exist.</span>")
 				return
-			log_admin("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] ")
-			message_admins("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] ")
+			log_admin("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
+			message_admins("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
 
 /client/proc/debug_variables(datum/D in world)
 	set category = "Debug"
@@ -45,156 +46,20 @@
 			body += debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir), 0)
 		#endif
 
-	var/icon/sprite
+	var/sprite
 
 	if(istype(D,/atom))
 		var/atom/AT = D
 		if(AT.icon && AT.icon_state)
-			sprite = new /icon(AT.icon, AT.icon_state)
-			usr << browse_rsc(sprite, "view_vars_sprite.png")
+			sprite = 1
 
 	title = "[D] (\ref[D]) = [D.type]"
 
-	body += {"<script type="text/javascript">
-
-				function updateSearch(){
-					var filter_text = document.getElementById('filter');
-					var filter = filter_text.value.toLowerCase();
-
-					if(event.keyCode == 13)
-						{	//Enter / return
-						var vars_ol = document.getElementById('vars');
-						var lis = vars_ol.getElementsByTagName("li");
-						for ( var i = 0; i < lis.length; ++i )
-						{
-							try{
-								var li = lis\[i\];
-								if ( li.style.backgroundColor == "#ffee88" )
-								{
-									alist = lis\[i\].getElementsByTagName("a")
-									if(alist.length > 0)
-										{
-										location.href=alist\[0\].href;
-									}
-								}
-							}catch(err) {   }
-						}
-						return
-					}
-
-					if(event.keyCode == 38)
-						{	//Up arrow
-						var vars_ol = document.getElementById('vars');
-						var lis = vars_ol.getElementsByTagName("li");
-						for ( var i = 0; i < lis.length; ++i )
-						{
-							try{
-								var li = lis\[i\];
-								if ( li.style.backgroundColor == "#ffee88" )
-								{
-									if( (i-1) >= 0)
-										{
-										var li_new = lis\[i-1\];
-										li.style.backgroundColor = "white";
-										li_new.style.backgroundColor = "#ffee88";
-										return
-									}
-								}
-							}catch(err) {  }
-						}
-						return
-					}
-
-					if(event.keyCode == 40)
-						{	//Down arrow
-						var vars_ol = document.getElementById('vars');
-						var lis = vars_ol.getElementsByTagName("li");
-						for ( var i = 0; i < lis.length; ++i )
-						{
-							try{
-								var li = lis\[i\];
-								if ( li.style.backgroundColor == "#ffee88" )
-								{
-									if( (i+1) < lis.length)
-										{
-										var li_new = lis\[i+1\];
-										li.style.backgroundColor = "white";
-										li_new.style.backgroundColor = "#ffee88";
-										return
-									}
-								}
-							}catch(err) {  }
-						}
-						return
-					}
-
-					//This part here resets everything to how it was at the start so the filter is applied to the complete list. Screw efficiency, it's client-side anyway and it only looks through 200 or so variables at maximum anyway (mobs).
-					if(complete_list != null && complete_list != "")
-						{
-						var vars_ol1 = document.getElementById("vars");
-						vars_ol1.innerHTML = complete_list
-					}
-
-					if(filter.value == "")
-						{
-						return;
-					}else{
-						var vars_ol = document.getElementById('vars');
-						var lis = vars_ol.getElementsByTagName("li");
-
-						for ( var i = 0; i < lis.length; ++i )
-						{
-							try{
-								var li = lis\[i\];
-								if ( li.innerText.toLowerCase().indexOf(filter) == -1 )
-								{
-									vars_ol.removeChild(li);
-									i--;
-								}
-							}catch(err) {   }
-						}
-					}
-					var lis_new = vars_ol.getElementsByTagName("li");
-					for ( var j = 0; j < lis_new.length; ++j )
-					{
-						var li1 = lis\[j\];
-						if (j == 0)
-							{
-							li1.style.backgroundColor = "#ffee88";
-						}else{
-							li1.style.backgroundColor = "white";
-						}
-					}
-				}
-
-
-
-				function selectTextField(){
-					var filter_text = document.getElementById('filter');
-					filter_text.focus();
-					filter_text.select();
-
-				}
-
-				function loadPage(list) {
-
-					if(list.options\[list.selectedIndex\].value == "")
-						{
-						return;
-					}
-
-					location.href=list.options\[list.selectedIndex\].value;
-
-				}
-			</script> "}
-
-
 	body += {"<body onload='selectTextField(); updateSearch()' onkeyup='updateSearch()'>
-		<div align='center'><table width='100%'><tr><td width='50%'>"}
+		<div align='center'><table width='100%'><tr><td width='50%'>
+		<table align='center' width='100%'><tr><td>"}
 	if(sprite)
-		body += "<table align='center' width='100%'><tr><td><img src='view_vars_sprite.png'></td><td>"
-	else
-		body += "<table align='center' width='100%'><tr><td>"
+		body += "[bicon(D)]</td><td>"
 
 	body += "<div align='center'>"
 
@@ -272,8 +137,10 @@
 	if(istype(D,/atom))
 		body += "<option value='?_src_=vars;teleport_to=\ref[D]'>Teleport To</option>"
 
-	if (hasvar(D, "transform"))
+	if(hasvar(D, "transform"))
 		body += "<option value='?_src_=vars;edit_transform=\ref[D]'>Edit Transform Matrix</option>"
+	if(hasvar(D, "appearance_flags"))
+		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
 
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
 
@@ -282,7 +149,8 @@
 	if(ismob(D))
 
 		body += {"<option value='?_src_=vars;give_spell=\ref[D]'>Give Spell</option>
-			<option value='?_src_=vars;give_disease=\ref[D]'>Give Disease</option>
+			<option value='?_src_=vars;give_disease=\ref[D]'>Give Old Disease</option>
+			<option value='?_src_=vars;give_disease2=\ref[D]'>Give New Disease</option>
 			<option value='?_src_=vars;addcancer=\ref[D]'>Inflict Cancer</option>
 			<option value='?_src_=vars;godmode=\ref[D]'>Toggle Godmode</option>
 			<option value='?_src_=vars;build_mode=\ref[D]'>Toggle Build Mode</option>
@@ -291,7 +159,8 @@
 			<option value='?_src_=vars;drop_everything=\ref[D]'>Drop Everything</option>
 			<option value='?_src_=vars;regenerateicons=\ref[D]'>Regenerate Icons</option>
 			<option value='?_src_=vars;addlanguage=\ref[D]'>Add Language</option>
-			<option value='?_src_=vars;remlanguage=\ref[D]'>Remove Language</option>"}
+			<option value='?_src_=vars;remlanguage=\ref[D]'>Remove Language</option>
+			<option value='?_src_=vars;make_invisible=\ref[D]'>Make invisible</option>"}
 		if(ishuman(D))
 
 			body += {"<option value>---</option>
@@ -348,8 +217,136 @@ body
 	font-family: "Courier New", monospace;
 	font-size: 8pt;
 }
-</style>"}
-	html += "</head><body>"
+</style>
+<script type="text/javascript">
+function updateSearch(){
+	var filter_text = document.getElementById('filter');
+	var filter = filter_text.value.toLowerCase();
+
+	if(event.keyCode == 13)
+		{	//Enter / return
+		var vars_ol = document.getElementById('vars');
+		var lis = vars_ol.getElementsByTagName("li");
+		for ( var i = 0; i < lis.length; ++i )
+		{
+			try{
+				var li = lis\[i\];
+				if ( li.style.backgroundColor == "#ffee88" )
+				{
+					alist = lis\[i\].getElementsByTagName("a")
+					if(alist.length > 0)
+						{
+						location.href=alist\[0\].href;
+					}
+				}
+			}catch(err) {   }
+		}
+		return
+	}
+
+	if(event.keyCode == 38)
+		{	//Up arrow
+		var vars_ol = document.getElementById('vars');
+		var lis = vars_ol.getElementsByTagName("li");
+		for ( var i = 0; i < lis.length; ++i )
+		{
+			try{
+				var li = lis\[i\];
+				if ( li.style.backgroundColor == "#ffee88" )
+				{
+					if( (i-1) >= 0)
+						{
+						var li_new = lis\[i-1\];
+						li.style.backgroundColor = "white";
+						li_new.style.backgroundColor = "#ffee88";
+						return
+					}
+				}
+			}catch(err) {  }
+		}
+		return
+	}
+
+	if(event.keyCode == 40)
+		{	//Down arrow
+		var vars_ol = document.getElementById('vars');
+		var lis = vars_ol.getElementsByTagName("li");
+		for ( var i = 0; i < lis.length; ++i )
+		{
+			try{
+				var li = lis\[i\];
+				if ( li.style.backgroundColor == "#ffee88" )
+				{
+					if( (i+1) < lis.length)
+						{
+						var li_new = lis\[i+1\];
+						li.style.backgroundColor = "white";
+						li_new.style.backgroundColor = "#ffee88";
+						return
+					}
+				}
+			}catch(err) {  }
+		}
+		return
+	}
+
+	//This part here resets everything to how it was at the start so the filter is applied to the complete list. Screw efficiency, it's client-side anyway and it only looks through 200 or so variables at maximum anyway (mobs).
+	if(complete_list != null && complete_list != "")
+		{
+		var vars_ol1 = document.getElementById("vars");
+		vars_ol1.innerHTML = complete_list
+	}
+
+	if(filter.value == "")
+		{
+		return;
+	}else{
+		var vars_ol = document.getElementById('vars');
+		var lis = vars_ol.getElementsByTagName("li");
+
+		for ( var i = 0; i < lis.length; ++i )
+		{
+			try{
+				var li = lis\[i\];
+				if ( li.innerText.toLowerCase().indexOf(filter) == -1 )
+				{
+					vars_ol.removeChild(li);
+					i--;
+				}
+			}catch(err) {   }
+		}
+	}
+	var lis_new = vars_ol.getElementsByTagName("li");
+	for ( var j = 0; j < lis_new.length; ++j )
+	{
+		var li1 = lis\[j\];
+		if (j == 0)
+			{
+			li1.style.backgroundColor = "#ffee88";
+		}else{
+			li1.style.backgroundColor = "white";
+		}
+	}
+}
+
+function selectTextField(){
+	var filter_text = document.getElementById('filter');
+	filter_text.focus();
+	filter_text.select();
+
+}
+
+function loadPage(list) {
+
+	if(list.options\[list.selectedIndex\].value == "")
+		{
+		return;
+	}
+
+	location.href=list.options\[list.selectedIndex\].value;
+
+}
+</script></head>"}
 	html += body
 
 	html += {"
@@ -359,11 +356,9 @@ body
 		</script>
 	"}
 
-	html += "</body></html>"
+	html += "</html>"
 
 	usr << browse(html, "window=variables\ref[D];size=475x650")
-
-	return
 
 /client/proc/debug_variable(name, value, level, var/datum/DA = null)
 	var/html = ""
@@ -391,26 +386,18 @@ body
 
 	else if (isicon(value))
 		#ifdef VARSICON
-		var/icon/I = new/icon(value)
-		var/rnd = rand(1,10000)
-		var/rname = "tmp\ref[I][rnd].png"
-		usr << browse_rsc(I, rname)
-		html += "[name] = (<span class='value'>[value]</span>) <img class=icon src=\"[rname]\">"
+		html += "[name] = /icon (<span class='value'>[value]</span>) [bicon(value)]"
 		#else
 		html += "[name] = /icon (<span class='value'>[value]</span>)"
 		#endif
 
-/*		else if (istype(value, /image))
+	else if(istype(value, /image))
 		#ifdef VARSICON
-		var/rnd = rand(1, 10000)
-		var/image/I = value
-
-		src << browse_rsc(I.icon, "tmp\ref[value][rnd].png")
-		html += "[name] = <img src=\"tmp\ref[value][rnd].png\">"
+		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>) [bicon(value)]"
 		#else
-		html += "[name] = /image (<span class='value'>[value]</span>)"
+		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>)"
 		#endif
-*/
+
 	else if (isfile(value))
 		html += "[name] = <span class='value'>'[value]'</span>"
 
@@ -441,6 +428,7 @@ body
 					//html += debug_variable("[index]", L[index], level + 1)
 					else
 						html += debug_variable(index, L[index], level + 1)
+					html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a>"
 					index++
 				html += "</ul>"
 
@@ -504,7 +492,7 @@ body
 		var/original_name = "[D]"
 		var/edited_variable = href_list["varnameedit"]
 		var/new_value = variable_set(src, D, edited_variable, TRUE)
-		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [new_value]", 1)
+		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [html_encode(new_value)]", 1)
 		world.log << "### VarEdit by [src]: [D.type] [edited_variable]=[html_encode("[new_value]")]"
 	else if(href_list["togbit"])
 		if(!check_rights(R_VAREDIT))
@@ -533,7 +521,7 @@ body
 		var/original_name = "[D]"
 		var/edited_variable = href_list["varnamechange"]
 		var/new_value = variable_set(src, D, edited_variable)
-		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [new_value]", 1)
+		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [html_encode(new_value)]", 1)
 		world.log << "### VarEdit by [src]: [D.type] [edited_variable]=[html_encode("[new_value]")]"
 	else if(href_list["varnamemass"] && href_list["datummass"])
 		if(!check_rights(R_VAREDIT))
@@ -602,6 +590,18 @@ body
 		src.give_spell(M)
 		href_list["datumrefresh"] = href_list["give_spell"]
 
+	else if(href_list["make_invisible"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+
+		var/mob/M = locate(href_list["make_invisible"])
+		if(!istype(M))
+			to_chat(usr, "This can only be used on instances of type /mob")
+			return
+
+		src.toggle_invisible(M)
+		href_list["datumrefresh"] = href_list["make_invisible"]
+
 	else if(href_list["give_disease"])
 		if(!check_rights(R_ADMIN|R_FUN))
 			return
@@ -612,7 +612,19 @@ body
 			return
 
 		src.give_disease(M)
-		href_list["datumrefresh"] = href_list["give_spell"]
+		href_list["datumrefresh"] = href_list["give_disease"]
+
+	else if(href_list["give_disease2"])
+		if(!check_rights(R_ADMIN|R_FUN|R_DEBUG))
+			return
+
+		var/mob/living/M = locate(href_list["give_disease2"])
+		if(!M.can_be_infected())
+			to_chat(usr, "This mob cannot be infected.")
+			return
+
+		virus2_make_custom(src,M)
+		href_list["datumrefresh"] = href_list["give_disease2"]
 
 	else if(href_list["addcancer"])
 		if(!check_rights(R_FUN))
@@ -774,9 +786,6 @@ body
 			return
 
 		var/datum/D = locate(href_list["mark_object"])
-		if(!istype(D))
-			to_chat(usr, "This can only be done to instances of type /datum")
-			return
 
 		src.holder.marked_datum = D
 		href_list["datumrefresh"] = href_list["mark_object"]
@@ -790,12 +799,15 @@ body
 			to_chat(usr, "This can only be done to instances of movable atoms.")
 			return
 
+		var/turf/origin = get_turf(A)
 		var/turf/T = get_turf(usr)
+
 		if(istype(A,/mob))
 			var/mob/M = A
 			M.teleport_to(T)
 		else
 			A.forceMove(T)
+		log_admin("[key_name(usr)] has teleported [A] from [formatLocation(origin)] to [formatLocation(T)].")
 		switch(teleport_here_pref)
 			if("Flashy")
 				if(flashy_level > 0)
@@ -1080,12 +1092,6 @@ body
 			message_admins("<span class='notice'>[key_name(usr)] dealt [amount] amount of [Text] damage to [L] </span>")
 			href_list["datumrefresh"] = href_list["mobToDamage"]
 
-	else if(href_list["datumrefresh"])
-		var/datum/DAT = locate(href_list["datumrefresh"])
-		if(!istype(DAT, /datum))
-			return
-		src.debug_variables(DAT)
-
 	else if(href_list["proc_call"])
 		if(!check_rights(R_DEBUG))
 			return
@@ -1112,3 +1118,50 @@ body
 			return
 
 		DAT.vars["transform"] = modify_matrix_menu(M)
+
+	else if(href_list["toggle_aliasing"])
+		if(!check_rights(R_DEBUG))
+			return
+
+		var/datum/DAT = locate(href_list["toggle_aliasing"])
+		if(!hasvar(DAT, "appearance_flags"))
+			to_chat(src, "This object does not support appearance flags!")
+			return
+
+		var/aflags = DAT.vars["appearance_flags"]
+		if(aflags & PIXEL_SCALE)
+			to_chat(src, "Enabling aliasing for that astigmatism aesthetic...")
+			aflags &= ~PIXEL_SCALE
+		else
+			to_chat(src, "Disabling aliasing for x-tra crispiness...")
+			aflags |= PIXEL_SCALE
+
+		DAT.vars["appearance_flags"] = aflags
+
+	else if (href_list["delValueFromList"])
+		if (!check_rights(R_DEBUG))
+			return FALSE
+
+		var/list/L = locate(href_list["list"])
+		var/datum/D = locate(href_list["datum"])
+
+		if (!istype(L))
+			return FALSE
+
+		var/index = text2num(href_list["index"])
+
+		if (!isnum(index) || index < 1)
+			return FALSE
+
+		log_admin("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")
+		message_admins("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")
+
+		L -= L[index]
+		href_list["datumrefresh"] = href_list["datum"]
+
+	// No else, as it must be checked separatly, and at the end.
+	if(href_list["datumrefresh"])
+		var/datum/DAT = locate(href_list["datumrefresh"])
+		if(!istype(DAT, /datum))
+			return
+		src.debug_variables(DAT)

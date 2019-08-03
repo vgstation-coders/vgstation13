@@ -43,18 +43,19 @@
 
 	return alpha
 
-/proc/get_reagent_name(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/DG)
+/proc/get_reagent_name(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/DG, var/mug = FALSE)
 	if(!DG)
 		return
-
+	var/glassormug = "glass"
+	if(mug)
+		glassormug = "mug"
 	var/list/reagent_list = DG.reagents.reagent_list
-
 	if(!reagent_list.len)
-		DG.name = "glass of...nothing?"
-		DG.desc = "You can't see anything inside that glass, odd"//this shouldn't ever happen
+		DG.name = "[glassormug] of...nothing?"
+		DG.desc = "You can't see anything inside that [glassormug], odd"//this shouldn't ever happen
 	else if(reagent_list.len > 4)
 		DG.name = "mixture of chemicals"
-		DG.desc = "There's too many different chemicals in the glass, you cannot tell them apart."
+		DG.desc = "There's too many different chemicals in the [glassormug], you cannot tell them apart."
 		DG.viewcontents = 0
 	else
 		var/highest_quantity = 0
@@ -62,5 +63,5 @@
 			var/new_reag = DG.reagents.get_reagent_amount(reagent.id)
 			if(new_reag > highest_quantity)
 				highest_quantity = new_reag
-				DG.name = "glass of [reagent.name]"
+				DG.name = "[glassormug] of [reagent.name]"
 				DG.desc = reagent.description

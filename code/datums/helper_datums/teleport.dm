@@ -124,6 +124,7 @@
 		return FALSE
 
 	playSpecials(curturf,effectin,soundin)
+	teleatom.unlock_from()
 
 	if(istype(teleatom,/obj/item/projectile))
 		var/Xchange = destturf.x - curturf.x
@@ -134,6 +135,11 @@
 		P.override_target_X += Xchange
 		P.override_target_Y += Ychange
 		P.reflected = TRUE//you can now get hit by the projectile you just fired. Careful with portals!
+
+	if(curturf.z != destturf.z)
+		INVOKE_EVENT(teleatom.on_z_transition, list("user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z))
+		for(var/atom/AA in recursive_type_check(teleatom))
+			INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
 
 	if(force_teleport)
 		teleatom.forceMove(destturf,TRUE)
@@ -187,7 +193,7 @@
 
 /datum/teleport/instant/science/teleportChecks(var/ignore_jamming = FALSE)
 	if(istype(teleatom, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
-		teleatom.visible_message("<span class='danger'>The [teleatom] bounces off of the portal!</span>")
+		teleatom.visible_message("<span class='danger'>\The [teleatom] bounces off of the portal!</span>")
 		return FALSE
 	if(teleatom.locked_to)
 		return FALSE
@@ -195,9 +201,9 @@
 	if(!isemptylist(teleatom.search_contents_for(/obj/item/weapon/disk/nuclear)))
 		if(istype(teleatom, /mob/living))
 			var/mob/living/MM = teleatom
-			MM.visible_message("<span class='danger'>The [MM] bounces off of the portal!</span>","<span class='warning'>Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through.</span>")
+			MM.visible_message("<span class='danger'>\The [MM] bounces off of the portal!</span>","<span class='warning'>Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through.</span>")
 		else
-			teleatom.visible_message("<span class='danger'>The [teleatom] bounces off of the portal!</span>")
+			teleatom.visible_message("<span class='danger'>\The [teleatom] bounces off of the portal!</span>")
 		return FALSE
 
 	if(destination.z == map.zCentcomm) //centcomm z-level

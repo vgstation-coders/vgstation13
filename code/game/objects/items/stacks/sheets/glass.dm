@@ -10,9 +10,6 @@
 /obj/item/stack/sheet/glass
 	w_type = RECYK_GLASS
 	melt_temperature = MELTPOINT_GLASS
-	var/created_window = /obj/structure/window
-	var/full_window = /obj/structure/window/full
-	var/windoor = null
 	var/reinforced = 0
 	var/rglass = 0
 	//For solars created from this glass type
@@ -20,11 +17,8 @@
 	var/shealth = 5 //Health of a solar made from this
 	var/sname = "glass"
 	var/shard_type = /obj/item/weapon/shard
-
+	mat_type = MAT_GLASS
 	siemens_coefficient = 0 //does not conduct
-
-/obj/item/stack/sheet/glass/attack_self(mob/user as mob)
-	construct_window(user)
 
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user)
 	if(issolder(W))
@@ -50,154 +44,6 @@
 	else
 		return ..()
 
-/obj/item/stack/sheet/glass/proc/construct_window(mob/user as mob)
-	if(!user || !src)
-		return 0
-	if(!istype(user.loc,/turf))
-		return 0
-	if(!user.IsAdvancedToolUser())
-		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return 0
-	var/title = "[src.name] Sheets"
-	title += " ([src.amount] sheet\s left)"
-	if(windoor) //TODO: Find way to merge this if-else clause and lower duplication
-		switch(input(title, "Would you like full tile glass a one direction glass pane or a windoor?") in list("One Direction", "Full Window", "Windoor", "Cancel"))
-			if("One Direction")
-				if(!src)
-					return 1
-				if(src.loc != user)
-					return 1
-				var/list/directions = new/list(cardinal)
-				var/i = 0
-				for (var/obj/structure/window/win in user.loc)
-					i++
-					if(i >= 4)
-						to_chat(user, "<span class='warning'>There are too many windows in this location.</span>")
-						return 1
-					directions-=win.dir
-					if(win.is_fulltile())
-						to_chat(user, "<span class='warning'>Can't let you do that.</span>")
-						return 1
-				//Determine the direction. It will first check in the direction the person making the window is facing, if it finds an already made window it will try looking at the next cardinal direction, etc.
-				var/dir_to_set = 2
-				for(var/direction in list( user.dir, turn(user.dir,90), turn(user.dir,180), turn(user.dir,270) ))
-					var/found = 0
-					for(var/obj/structure/window/WT in user.loc)
-						if(WT.dir == direction)
-							found = 1
-					if(!found)
-						dir_to_set = direction
-						break
-				var/obj/structure/window/W = new created_window(user.loc, 0)
-				W.d_state = 0
-				W.dir = dir_to_set
-				W.ini_dir = W.dir
-				W.anchored = 0
-				src.use(1)
-			if("Full Window")
-				if(!src)
-					return 1
-				if(src.loc != user)
-					return 1
-				if(src.amount < 2)
-					to_chat(user, "<span class='warning'>You need more glass to do that.</span>")
-					return 1
-				if(locate(/obj/structure/window/full) in user.loc)
-					to_chat(user, "<span class='warning'>There is a window in the way.</span>")
-					return 1
-				var/obj/structure/window/W = new full_window( user.loc, 0 )
-				W.d_state = 0
-				W.dir = user.dir
-				W.ini_dir = user.dir
-				W.anchored = 0
-				src.use(2)
-			if("Windoor")
-				if(!src || src.loc != user)
-					return 1
-				if(isturf(user.loc) && locate(/obj/structure/windoor_assembly/, user.loc))
-					to_chat(user, "<span class='warning'>There is already a windoor assembly in that location.</span>")
-					return 1
-				if(isturf(user.loc) && locate(/obj/machinery/door/window/, user.loc))
-					to_chat(user, "<span class='warning'>There is already a windoor in that location.</span>")
-					return 1
-				if(src.amount < 5)
-					to_chat(user, "<span class='warning'>You need more glass to do that.</span>")
-					return 1
-				var/obj/structure/windoor_assembly/WD = new windoor(user.loc, 0 )
-				WD.state = "01"
-				WD.anchored = 0
-				WD.dir = user.dir
-				WD.ini_dir = WD.dir
-				src.use(5)
-				switch(user.dir)
-					if(SOUTH)
-						WD.dir = SOUTH
-						WD.ini_dir = SOUTH
-					if(EAST)
-						WD.dir = EAST
-						WD.ini_dir = EAST
-					if(WEST)
-						WD.dir = WEST
-						WD.ini_dir = WEST
-					else//If the user is facing northeast. northwest, southeast, southwest or north, default to north
-						WD.dir = NORTH
-						WD.ini_dir = NORTH
-			else
-				return 1
-	else
-		switch(alert(title, "Would you like full tile glass or one direction?", "One Direction", "Full Window", "Cancel", null))
-			if("One Direction")
-				if(!src)
-					return 1
-				if(src.loc != user)
-					return 1
-				var/list/directions = new/list(cardinal)
-				var/i = 0
-				for (var/obj/structure/window/win in user.loc)
-					i++
-					if(i >= 4)
-						to_chat(user, "<span class='warning'>There are too many windows in this location.</span>")
-						return 1
-					directions-=win.dir
-					if(win.is_fulltile())
-						to_chat(user, "<span class='warning'>Can't let you do that.</span>")
-						return 1
-				//Determine the direction. It will first check in the direction the person making the window is facing, if it finds an already made window it will try looking at the next cardinal direction, etc.
-				var/dir_to_set = 2
-				for(var/direction in list( user.dir, turn(user.dir,90), turn(user.dir,180), turn(user.dir,270) ))
-					var/found = 0
-					for(var/obj/structure/window/WT in user.loc)
-						if(WT.dir == direction)
-							found = 1
-					if(!found)
-						dir_to_set = direction
-						break
-				var/obj/structure/window/W = new created_window( user.loc, 0 )
-				W.d_state = 0
-				W.dir = dir_to_set
-				W.ini_dir = W.dir
-				W.anchored = 0
-				src.use(1)
-			if("Full Window")
-				if(!src)
-					return 1
-				if(src.loc != user)
-					return 1
-				if(src.amount < 2)
-					to_chat(user, "<span class='warning'>You need more glass to do that.</span>")
-					return 1
-				if(locate(/obj/structure/window/full) in user.loc)
-					to_chat(user, "<span class='warning'>There is a window in the way.</span>")
-					return 1
-				var/obj/structure/window/W = new full_window( user.loc, 0 )
-				W.d_state = 0
-				W.dir = user.dir
-				W.ini_dir = user.dir
-				W.anchored = 0
-				src.use(2)
-	return 0
-
-
 /*
  * Glass sheets
  */
@@ -210,6 +56,10 @@
 	starting_materials = list(MAT_GLASS = 3750)
 	origin_tech = Tc_MATERIALS + "=1"
 	rglass = /obj/item/stack/sheet/glass/rglass
+
+/obj/item/stack/sheet/glass/glass/New(var/loc, var/amount=null)
+	recipes = glass_recipes
+	..()
 
 /obj/item/stack/sheet/glass/glass/cyborg
 	starting_materials = null
@@ -241,46 +91,15 @@
 	sname = "glass_ref"
 	icon_state = "sheet-rglass"
 	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = 3750)
-	created_window = /obj/structure/window/reinforced
-	full_window = /obj/structure/window/full/reinforced
-	windoor = /obj/structure/windoor_assembly/
 	origin_tech = Tc_MATERIALS + "=2"
 	reinforced = 1
 	glass_quality = 1
 	shealth = 10
 
-// Special snowflake code for building glass floors.
-/obj/item/stack/sheet/glass/rglass/afterattack(atom/Target, mob/user, adjacent, params)
-	var/busy = 0
-	if(adjacent)
-		if(isturf(Target) || istype(Target, /obj/structure/lattice))
-			var/turf/T = get_turf(Target)
-			var/obj/structure/lattice/L = T.canBuildCatwalk(src)
-			if(istype(L))
-				if(amount < 1)
-					to_chat(user, "<span class='warning'>You need at least a single sheet of reinforced glass to build a glass floor!</span>")
-					return
-				if(busy) //We are already building a glass floor, avoids stacking catwalks
-					return
-				to_chat(user, "<span class='notice'>You begin to build a glass floor.</span>")
-				busy = 1
-				if(do_after(user, Target, 30))
-					busy = 0
-					if(amount < 1)
-						to_chat(user, "<span class='warning'>You ran out of reinforced glass!</span>")
-						return
-					if(!istype(L) || L.loc != T)
-						to_chat(user, "<span class='warning'>You need a lattice first!</span>")
-						return
-					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-					to_chat(user, "<span class='notice'>You build a glass floor!</span>")
-					use(1)
-					if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
-						T.ChangeTurf(/turf/simulated/floor/glass/airless)
-					else
-						T.ChangeTurf(/turf/simulated/floor/glass)
-					qdel(L)
-					return
+/obj/item/stack/sheet/glass/rglass/New(var/loc, var/amount=null)
+	recipes = rglass_recipes
+	..()
+
 
 /obj/item/stack/sheet/glass/rglass/cyborg
 	starting_materials = null
@@ -297,14 +116,17 @@
 	sname = "plasma"
 	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_PLASMATECH + "=2"
-	created_window = /obj/structure/window/plasma
-	full_window = /obj/structure/window/full/plasma
 	rglass = /obj/item/stack/sheet/glass/plasmarglass
 	perunit = 2875 //average of plasma and glass
 	melt_temperature = MELTPOINT_STEEL + 500
 	glass_quality = 1.15 //Can you imagine a world in which plasmaglass is worse than rglass
 	shealth = 20
 	shard_type = /obj/item/weapon/shard/plasma
+
+/obj/item/stack/sheet/glass/plasmaglass/New(var/loc, var/amount=null)
+	recipes = plasmaglass_recipes
+	..()
+
 
 /*
  * Reinforced plasma glass sheets
@@ -318,44 +140,36 @@
 	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
 	melt_temperature = MELTPOINT_STEEL+500 // I guess...?
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=2"
-	created_window = /obj/structure/window/reinforced/plasma
-	full_window = /obj/structure/window/full/reinforced/plasma
-	windoor = /obj/structure/windoor_assembly/plasma
 	perunit = 2875
 	reinforced = 1
 	glass_quality = 1.3
 	shealth = 30
 	shard_type = /obj/item/weapon/shard/plasma
 
-// Special snowflake code for building glass floors.
-/obj/item/stack/sheet/glass/plasmarglass/afterattack(atom/Target, mob/user, adjacent, params)
-	var/busy = 0
-	if(adjacent)
-		if(isturf(Target) || istype(Target, /obj/structure/lattice))
-			var/turf/T = get_turf(Target)
-			var/obj/structure/lattice/L = T.canBuildCatwalk(src)
-			if(istype(L))
-				if(amount < 1)
-					to_chat(user, "<span class='warning'>You need at least a single sheet of reinforced plasma glass to build a glass floor!</span>")
-					return
-				if(busy) //We are already building a glass floor, avoids stacking catwalks
-					return
-				to_chat(user, "<span class='notice'>You begin to build a glass floor.</span>")
-				busy = 1
-				if(do_after(user, Target, 30))
-					busy = 0
-					if(amount < 1)
-						to_chat(user, "<span class='warning'>You ran out of reinforced plasma glass!</span>")
-						return
-					if(!istype(L) || L.loc != T)
-						to_chat(user, "<span class='warning'>You need a lattice first!</span>")
-						return
-					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-					to_chat(user, "<span class='notice'>You build a plasma glass floor!</span>")
-					use(1)
-					if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
-						T.ChangeTurf(/turf/simulated/floor/glass/plasma/airless)
-					else
-						T.ChangeTurf(/turf/simulated/floor/glass/plasma)
-					qdel(L)
-					return
+/obj/item/stack/sheet/glass/plasmarglass/New(var/loc, var/amount=null)
+	recipes = plasmarglass_recipes
+	..()
+
+var/list/datum/stack_recipe/glass_recipes = list (
+	new/datum/stack_recipe("window", /obj/structure/window/loose, 1, time = 10, on_floor = TRUE),
+	new/datum/stack_recipe("full window", /obj/structure/window/full/loose, 2, time = 10, on_floor = TRUE),
+	)
+
+var/list/datum/stack_recipe/rglass_recipes = list (
+	new/datum/stack_recipe("window", /obj/structure/window/reinforced/loose, 1, time = 10, on_floor = TRUE),
+	new/datum/stack_recipe("full window", /obj/structure/window/full/reinforced/loose, 2, time = 10, on_floor = TRUE),
+	new/datum/stack_recipe("windoor", /obj/structure/windoor_assembly/, 5, time = 10, start_unanchored = TRUE, on_floor = TRUE),
+	new/datum/stack_recipe("glass tile", /obj/item/stack/glass_tile/rglass, 1, time = 2, on_floor = TRUE),
+	)
+
+var/list/datum/stack_recipe/plasmaglass_recipes = list (
+	new/datum/stack_recipe("window", /obj/structure/window/plasma/loose, 1, time = 10, on_floor = TRUE),
+	new/datum/stack_recipe("full window", /obj/structure/window/full/plasma/loose, 2, time = 10, on_floor = TRUE),
+	)
+
+var/list/datum/stack_recipe/plasmarglass_recipes = list (
+	new/datum/stack_recipe("window", /obj/structure/window/reinforced/plasma/loose, 1, time = 10, on_floor = TRUE),
+	new/datum/stack_recipe("full window", /obj/structure/window/full/reinforced/plasma/loose, 2, time = 10, on_floor = TRUE),
+	new/datum/stack_recipe("windoor", /obj/structure/windoor_assembly/plasma, 5, time = 10, start_unanchored = TRUE, on_floor = TRUE),
+	new/datum/stack_recipe("glass tile", /obj/item/stack/glass_tile/rglass/plasma, 1, time = 2, on_floor = TRUE),
+	)

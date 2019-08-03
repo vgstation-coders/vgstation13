@@ -11,7 +11,7 @@
 	desc = "A low-power device that generates power based on how quickly someone walks."
 	icon_state = "treadmill"
 	density = 1
-	flags = ON_BORDER
+	flow_flags = ON_BORDER
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | EMAGGABLE
 	anchored = 1
 	use_power = 0
@@ -59,11 +59,10 @@
 	var/cached_temp = runner.bodytemperature
 	if(runner.burn_calories(HUNGER_FACTOR*2))
 		flick("treadmill-running", src)
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		playsound(src, 'sound/machines/click.ogg', 50, 1)
 		var/calc = DEFAULT_BUMP_ENERGY * power_efficiency * runner.treadmill_speed
 		if(runner.reagents) //Sanity
-			for(var/datum/reagent/R in runner.reagents.reagent_list)
-				calc *= R.sport
+			calc *= runner.reagents.get_sportiness()
 		if(M_HULK in runner.mutations)
 			calc *= 5
 		count_power += calc
@@ -86,7 +85,7 @@
 /obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if((flags & ON_BORDER) && (mover.dir == dir))
+	if((flow_flags & ON_BORDER) && (mover.dir == dir))
 		powerwalk(mover)
 		return !density
 	return 1
@@ -115,3 +114,24 @@
 	emagged = 1
 	name = "\improper DREADMILL"
 	desc = "FEEL THE BURN"
+
+/obj/machinery/power/treadmill/verb/rotate_clock()
+	set category = "Object"
+	set name = "Rotate Treadmill (Clockwise)"
+	set src in view(1)
+
+	if (usr.isUnconscious() || usr.restrained()  || anchored)
+		return
+
+	src.dir = turn(src.dir, -90)
+
+/obj/machinery/power/treadmill/verb/rotate_anticlock()
+	set category = "Object"
+	set name = "Rotate Treadmill (Counterclockwise)"
+	set src in view(1)
+
+	if (usr.isUnconscious() || usr.restrained()  || anchored)
+		to_chat(usr, "It is fastened to the floor!")
+		return
+
+	src.dir = turn(src.dir, 90)

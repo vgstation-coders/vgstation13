@@ -1,0 +1,56 @@
+"a" = (/turf/unsimulated/wall/other,/area/vault/sokoban/level)
+"b" = (/turf/unsimulated/wall/bomberman{color = "#FFCCCC"},/area/vault/sokoban/level)
+"c" = (/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"d" = (/obj/structure/ladder/sokoban/entrance,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"e" = (/obj/structure/closet/crate/sokoban,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"f" = (/obj/structure/ladder/sokoban/exit,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"g" = (/obj/structure/sokoban_teleporter,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"h" = (/obj/machinery/vending/security,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"i" = (/obj/machinery/vending/robotics,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"j" = (/obj/machinery/vending/offlicence,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"k" = (/obj/machinery/vending/nuka,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"l" = (/obj/machinery/vending/magivend,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"m" = (/obj/machinery/vending/sovietvend,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"n" = (/obj/machinery/vending/voxseeds,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"o" = (/obj/machinery/vending/engivend,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"p" = (/obj/machinery/vending/cola,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"q" = (/obj/machinery/vending/circus,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"r" = (/obj/machinery/vending/discount,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"s" = (/obj/machinery/vending/building,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"t" = (/obj/machinery/vending/boozeomat,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"u" = (/obj/machinery/vending/autodrobe,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"v" = (/obj/machinery/vending/barber,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"w" = (/obj/machinery/vending/makeup,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"x" = (/obj/machinery/vending/medical,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"y" = (/obj/machinery/vending/mining,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"z" = (/obj/machinery/vending/nazivend,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"A" = (/obj/machinery/vending/groans,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"B" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"C" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"D" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"E" = (/obj/structure/table/holotable/wood,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"F" = (/obj/structure/bed/chair/comfy/brown,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"G" = (/obj/structure/bed/chair/comfy/brown{dir = 1},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"H" = (/obj/structure/table/holotable/wood,/obj/item/weapon/coin/silver,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"I" = (/obj/structure/flora/pottedplant,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"J" = (/obj/machinery/door/airlock/diamond{name = "Shopping Area"},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"K" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+abbbbbbbbbbbbbbbahcmctcAKcIa
+abbcdbbbbbbbbbbbacccccccJcFa
+abccccccccccbbbbaicncuczDcEa
+abcebbbbbebcbbbbacccccccBcGa
+abccbcccbcecbbbbajcocrcyBcca
+abcececcccebbbbbacccccccBcFa
+abcecceccbccbbbbakcpcscxBcHa
+abcbbbbecbbcbbbbacccccccBcGa
+abccecccecbcbbbbalcqcvcwCcIa
+abcbbbebcccecbbbaaaaaaaaaJaa
+abcccbccebcecggggggggggggcfa
+abcceccccccbbbbbaaaaaaaaaaaa
+abbbbbccbccbbbbbaaaaaaaaaaaa
+abbbbbbbbbbbbbbbaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"}

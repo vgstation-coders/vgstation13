@@ -52,10 +52,6 @@
 		/obj/structure/closet/secure_closet/brig,				//brig cell closets
 		/obj/machinery/disposal,								//disposal bins
 		/obj/machinery/light,									//light bulbs and tubes
-		/obj/machinery/sleep_console,							//sleeper consoles
-		/obj/machinery/sleeper,									//sleepers
-		/obj/machinery/body_scanconsole,						//body scanner consoles
-		/obj/machinery/bodyscanner,								//body scanners
 		/obj/machinery/hologram/holopad,						//AI holopads
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices
@@ -75,8 +71,10 @@
 		qdel(loaded_matter_bin)
 		loaded_matter_bin = null
 	if(stored_items.len)
-		spawn(0)
-			src.visible_message("<span class='warning'>\The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
+		for(var/atom/movable/AM in stored_items)
+			AM.forceMove(null)
+		src.visible_message("<span class='warning'>\The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
+		spawn()
 			for(var/I in stored_items)
 				var/offset_x = rand(-3,3)
 				var/offset_y = rand(-3,3)
@@ -108,6 +106,8 @@
 		var/image/matter_bin_overlay
 		var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
 		switch(M.type)
+			if(/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace)
+				matter_bin_overlay = image('icons/obj/weaponsmithing.dmi', src, "subspacetunneler_bluespacematterbin_overlay")
 			if(/obj/item/weapon/stock_parts/matter_bin/adv/super)
 				matter_bin_overlay = image('icons/obj/weaponsmithing.dmi', src, "subspacetunneler_supermatterbin_overlay")
 			if(/obj/item/weapon/stock_parts/matter_bin/adv)
@@ -301,6 +301,8 @@
 			mass = 5
 		var/multiplication = 1
 		switch(M.type)
+			if(/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace)
+				multiplication = 4
 			if(/obj/item/weapon/stock_parts/matter_bin/adv/super)
 				multiplication = 3
 			if(/obj/item/weapon/stock_parts/matter_bin/adv)

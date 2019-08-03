@@ -1,7 +1,14 @@
 /atom/movable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return (!density || !height || air_group)
 
+#ifdef DM_BUILD //Checking the actual value of this macro is unnecessary, since the required build is 1438 and the macro was first added in 1443.
+                //This means that the code can't compile in builds 1438-1442, but there's not a way around that.
+                //(Not a good way, at least.)
+/turf/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+#else
 /turf/proc/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+#endif
+
 	if(!target)
 		return 0
 

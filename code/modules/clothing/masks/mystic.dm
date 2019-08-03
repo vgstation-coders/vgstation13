@@ -70,8 +70,8 @@ var/list/has_been_shade = list()
 		has_been_shade.Add(M.mind)
 		var/mob/dead/observer/G = M.ghostize(1)
 		var/mob/living/simple_animal/shade/happiest/S = G.transmogrify(/mob/living/simple_animal/shade/happiest, TRUE)
-		S.name = "Shade of [M.real_name]"
-		S.real_name = "Shade of [M.real_name]"
+		S.name = "[M.real_name] the Shade"
+		S.real_name = "[M.real_name]"
 		S.cancel_camera()
 		flick("happiest_flash", src)
 		to_chat(H, "<span class='sinister'>Oh joy! [M.real_name]'s decided to join the party!</span>")

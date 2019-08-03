@@ -1,6 +1,8 @@
 /spell/targeted/bound_object
 	name = "Bound Object"
 	desc = "This spell allows a wizard to bind an object to themselves, then teleport it to them at will. Middle click the spell icon or use the 'Unbind' spell to select a new object."
+	user_type = USER_TYPE_WIZARD
+	specialization = UTILITY
 	abbreviation = "BO"
 
 	school = "abjuration"
@@ -41,10 +43,6 @@
 		/obj/structure/closet/secure_closet/brig,				//brig cell closets
 		/obj/machinery/disposal,								//disposal bins
 		/obj/machinery/light,									//light bulbs and tubes
-		/obj/machinery/sleep_console,							//sleeper consoles
-		/obj/machinery/sleeper,									//sleepers
-		/obj/machinery/body_scanconsole,						//body scanner consoles
-		/obj/machinery/bodyscanner,								//body scanners
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices
 		)

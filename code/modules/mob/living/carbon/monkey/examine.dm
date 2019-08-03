@@ -2,7 +2,7 @@
 
 	var/msg = "<span class='info'>*---------*\nThis is [bicon(src)] \a <EM>[src]</EM>!\n"
 
-	if (src.handcuffed &&  handcuffed.is_visible())
+	if ((src.handcuffed &&  handcuffed.is_visible()) || (src.mutual_handcuffs && mutual_handcuffs.is_visible()))
 		msg += "It is [bicon(src.handcuffed)] handcuffed!\n"
 	if (src.hat && hat.is_visible())
 		msg += "It is wearing [bicon(src.hat)] \a [src.hat] on its head.\n"
@@ -37,9 +37,6 @@
 		if (src.stat == UNCONSCIOUS)
 			msg += "It isn't responding to anything around it; it seems to be asleep.\n"
 		msg += "</span>"
-
-	if (src.digitalcamo)
-		msg += "It is repulsively uncanny!\n"
 
 	var/butchery = "" //More information about butchering status, check out "code/datums/helper_datums/butchering.dm"
 	if(butchering_drops && butchering_drops.len)

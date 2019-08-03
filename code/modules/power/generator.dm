@@ -15,7 +15,7 @@
 
 	var/tmp/last_gen    = 0
 	var/tmp/lastgenlev  = 0 // Used in update_icon()
-	var/const/max_power = 500000 // Amount of W produced at which point the meter caps.
+	var/const/max_power = 3000000 // Amount of W produced at which point the meter caps.
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
@@ -215,16 +215,16 @@
 		return
 
 	if(src.dir & (EAST|WEST))
-		circ1 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,EAST)
+		circ1 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,WEST)
 		if(circ1 && !circ1.anchored)
 			circ1 = null
 
-		circ2 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,WEST)
+		circ2 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,EAST)
 		if(circ2 && !circ2.anchored)
 			circ2 = null
 
 		if(circ1 && circ2)
-			if(circ1.dir != SOUTH || circ2.dir != NORTH)
+			if(circ1.dir != NORTH || circ2.dir != SOUTH)
 				circ1 = null
 				circ2 = null
 
@@ -266,7 +266,7 @@
 		overlays += image(icon = icon, icon_state = "teg-op[lastgenlev]")
 
 // We actually tick power gen on the pipenet process to make sure we're synced with pipenet updates.
-/obj/machinery/power/generator/proc/pipenet_process(var/list/event_args, var/datum/controller/process/pipenet/owner)
+/obj/machinery/power/generator/proc/pipenet_process(var/list/event_args)
 	if(!operable())
 		return
 
@@ -281,7 +281,13 @@
 		if(delta_temperature > 0 && air1_heat_capacity > 0 && air2_heat_capacity > 0)
 			var/energy_transfer = delta_temperature * air2_heat_capacity * air1_heat_capacity / (air2_heat_capacity + air1_heat_capacity)
 			var/heat = energy_transfer * (1 - thermal_efficiency)
-			last_gen = energy_transfer * thermal_efficiency * 0.05
+			last_gen = energy_transfer * thermal_efficiency * 0.3
+
+			//If our circulators are lubed get extra power
+			if(circ1.reagents.get_reagent_amount(LUBE)>=1)
+				last_gen *= 1 + (circ1.volume_capacity_used/16.5) //Up to x3 if flow capacity is 33%
+			if(circ2.reagents.get_reagent_amount(LUBE)>=1)
+				last_gen *= 1 + (circ2.volume_capacity_used/16.5)
 
 			if(air2.temperature > air1.temperature)
 				air2.temperature = air2.temperature - energy_transfer/air2_heat_capacity
@@ -338,8 +344,8 @@
 	if(dir & (NORTH | SOUTH))
 		vertical = 1
 
-	interface.updateContent("circ1", "Primary circulator ([vertical ? "top"		: "right"])")
-	interface.updateContent("circ2", "Primary circulator ([vertical ? "bottom"	: "left"])")
+	interface.updateContent("circ1", "Primary circulator ([vertical ? "top"		: "left"])")
+	interface.updateContent("circ2", "Primary circulator ([vertical ? "bottom"	: "right"])")
 
 	interface.updateContent("total_out", format_watts(last_gen))
 
@@ -381,7 +387,7 @@
 	if (usr.isUnconscious() || usr.restrained()  || anchored)
 		return
 
-	src.dir = turn(src.dir, 90)
+	src.dir = turn(src.dir, -90)
 
 /obj/machinery/power/generator/verb/rotate_anticlock()
 	set category = "Object"
@@ -391,4 +397,4 @@
 	if (usr.isUnconscious() || usr.restrained()  || anchored)
 		return
 
-	src.dir = turn(src.dir, -90)
+	src.dir = turn(src.dir, 90)

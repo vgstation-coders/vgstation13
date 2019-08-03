@@ -30,7 +30,7 @@ hr {
     height: 1px;
 }
 
-.link, .linkOn, .linkOff, .selected, .disabled {
+.link, .linkOn, .linkOff, .selected, .disabled, .button {
     float: left;
     min-width: 15px;
     height: 16px;
@@ -49,7 +49,7 @@ hr {
     padding: 0px 4px 4px 0px;
 }
 
-a:hover, .zoomLink:hover, .linkActive:hover {
+a:hover, .zoomLink:hover, .linkActive:hover, .buttonActive:hover {
     background: #507aac;
 }
 
@@ -181,6 +181,10 @@ h4 {
     background: #cacc00;
 }
 
+.greenBackground {
+    background: #2f943c;
+}
+
 .highlight {
     color: #8BA5C4;
 }
@@ -301,6 +305,13 @@ div.notice {
     color: #98B0C3;
 }
 
+.statusLabelWide {
+    width: 170px;
+    float: left;
+    overflow: hidden;
+    color: #98B0C3;
+}
+
 .statusValue {
     float: left;
 }
@@ -384,6 +395,13 @@ div.notice {
 .line {
     width: 100%;
     clear: both;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
 }
 
 .inactive, a.inactive:link, a.inactive:visited, a.inactive:active, a.inactive:hover {
@@ -535,32 +553,6 @@ th.misc {
     color: #ffffff;
 }
 
-/* Damage colors for crew monitoring computer */
-
-.burn {
-    color: orange;
-}
-
-.brute {
-    color: red;
-}
-
-.toxin {
-    color: green;
-}
-
-.toxin_light {
-    color: #3ADF00;
-}
-
-.oxyloss {
-    color: blue;
-}
-
-.oxyloss_light {
-    color: #6698FF;
-}
-
 /* Comms console alert colors */
 
 .green {
@@ -573,4 +565,17 @@ th.misc {
 
 .red {
 	color: red;
+}
+
+/* Fabricators */
+
+#cost
+{
+	width:470px;
+	float:left;
+}
+#misc
+{
+	width:350px;
+	float:left;
 }

@@ -14,10 +14,12 @@
 	var/cistern = 0			//if the cistern bit is open
 	var/w_items = 0			//the combined w_class of all the items in the cistern
 	var/mob/living/swirlie = null	//the mob being given a swirlie
+	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
 
 /obj/structure/toilet/New()
 	. = ..()
 	open = round(rand(0, 1))
+	watersource = new /obj/item/weapon/reagent_containers/glass/beaker/water()
 	update_icon()
 
 /obj/structure/toilet/verb/empty_container_into()
@@ -42,8 +44,12 @@
 	return ..()
 /obj/structure/toilet/attack_hand(mob/living/user as mob)
 	if(swirlie)
-		usr.visible_message("<span class='danger'>[user] slams the toilet seat onto [swirlie.name]'s head!</span>", "<span class='notice'>You slam the toilet seat onto [swirlie.name]'s head!</span>", "You hear reverberating porcelain.")
-		swirlie.adjustBruteLoss(8)
+		swirlie.visible_message("<span class='danger'>[user] slams the toilet seat onto [swirlie.name]'s head!</span>", "<span class='userdanger'>[user] slams the toilet seat onto your head!</span>", "You hear reverberating porcelain.")
+		swirlie.apply_damage(8, BRUTE, LIMB_HEAD, used_weapon = name)
+		playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
+		add_attacklogs(user, swirlie, "slammed the toilet seat")
+		add_fingerprint(user)
+		add_fingerprint(swirlie)
 		return
 
 	if(cistern && !open)
@@ -87,7 +93,7 @@
 		qdel(I)
 		qdel(src)
 		return
-	if(iscrowbar(I))
+	if(iscrowbar(I) || istype(I,/obj/item/weapon/chisel))
 		to_chat(user, "<span class='notice'>You start to [cistern ? "replace the lid on the cistern" : "lift the lid off the cistern"].</span>")
 		playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, 1)
 		if(do_after(user, src, 30))
@@ -103,22 +109,37 @@
 			var/mob/living/GM = G.affecting
 
 			if(G.state>1)
-				if(!GM.loc == get_turf(src))
-					to_chat(user, "<span class='notice'>[GM.name] needs to be on the toilet.</span>")
+				if(GM.loc != get_turf(src))
+					to_chat(user, "<span class='warning'>[GM.name] needs to be on the toilet.</span>")
 					return
 				if(open && !swirlie)
-					user.visible_message("<span class='danger'>[user] starts to give [GM.name] a swirlie!</span>", "<span class='notice'>You start to give [GM.name] a swirlie!</span>")
+					GM.visible_message("<span class='danger'>[user] starts to place [GM.name]'s head inside \the [src].</span>", "<span class='userdanger'>[user] is placing your head inside \the [src]!</span>")
 					swirlie = GM
-					if(do_after(user, 30, 5, 0))
-						user.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='notice'>You give [GM.name] a swirlie!</span>", "You hear a toilet flushing.")
-						if(!GM.internal)
-							GM.adjustOxyLoss(5)
+					if(do_after(user, src, 3 SECONDS, needhand = FALSE))
+						GM.forcesay(list("-BLERGH", "-BLURBL", "-HURGBL"))
+						playsound(src, 'sound/misc/toilet_flush.ogg', 50, TRUE)
+						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", "You hear a toilet flushing.")
+						add_fingerprint(user)
+						add_fingerprint(GM)
+						watersource.reagents.reaction(GM, TOUCH)
+
+						if(!GM.internal && GM.losebreath <= 30)
+							GM.losebreath += 5
+							add_attacklogs(user, GM, "gave a swirlie to")
+						else
+							add_attacklogs(user, GM, "gave a swirle with no effect to")
 					swirlie = null
 				else
-					user.visible_message("<span class='danger'>[user] slams [GM.name] into the [src]!</span>", "<span class='notice'>You slam [GM.name] into the [src]!</span>")
+					GM.visible_message("<span class='danger'>[user] slams [GM.name] into \the [src]!</span>", "<span class='userdanger'>[user] slams you into \the [src]!</span>")
 					GM.adjustBruteLoss(8)
+					playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
+					add_attacklogs(user, GM, "slammed into the toilet")
+					add_fingerprint(user)
+					add_fingerprint(GM)
+					return
 			else
-				to_chat(user, "<span class='notice'>You need a tighter grip.</span>")
+				to_chat(user, "<span class='warning'>You need a tighter grip.</span>")
+		return
 
 	if(cistern)
 		if(I.w_class > W_CLASS_MEDIUM)
@@ -246,7 +267,7 @@
 		if(iswrench(I))
 			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
 								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 			if(do_after(user, src, 50))
 				if(anchored == 1)
 					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
@@ -276,6 +297,7 @@
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
 	if(mymist)
 		returnToPool(mymist)
+		mymist = null
 
 	if(on)
 		var/image/water = image('icons/obj/watercloset.dmi', src, "water", BELOW_OBJ_LAYER, dir)
@@ -297,6 +319,7 @@
 		spawn(250)
 			if(src && !on)
 				returnToPool(mymist)
+				mymist = null
 				ismist = 0
 
 /obj/machinery/shower/Crossed(atom/movable/O)
@@ -384,7 +407,7 @@
 	if(prob(CLEAN_PROB))
 		turf.clean_blood()
 		for(var/obj/effect/E in turf)
-			if(istype(E, /obj/effect/rune) || istype(E, /obj/effect/decal/cleanable) || istype(E, /obj/effect/overlay))
+			if(istype(E, /obj/effect/rune_legacy) || istype(E, /obj/effect/decal/cleanable) || istype(E, /obj/effect/overlay))
 				qdel(E)
 
 /obj/machinery/shower/process()
@@ -488,7 +511,7 @@
 	busy = 0
 	M.clean_blood()
 	if(M.reagents.maximum_volume > M.reagents.total_volume)
-		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		M.reagents.add_reagent(WATER, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
 		user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
 	else

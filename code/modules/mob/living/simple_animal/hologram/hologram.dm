@@ -5,11 +5,12 @@
 	icon_state = "holo2"
 	icon_living = "holo2"
 	icon_dead = null
+	mob_property_flags = MOB_HOLOGRAPHIC
 	var/atom/atom_to_mimic
 
 
-/mob/living/simple_animal/hologram/Die()
-	..()
+/mob/living/simple_animal/hologram/death(var/gibbed = FALSE)
+	..(gibbed)
 	visible_message("<span class = 'notice>\The [src] dissipates from view.</span>")
 	qdel(src)
 
@@ -96,6 +97,8 @@
 	head = null
 	w_uniform = null
 	wear_suit = null
+	for (var/obj/item/O in held_items)
+		O.dropped(src)
 	if(connected_holoconsole)
 		connected_holoconsole.connected_holopeople.Remove(src)
 		connected_holoconsole = null
@@ -117,7 +120,6 @@
 		dissipate()
 
 /mob/living/simple_animal/hologram/proc/dissipate()
-	transmogrify()
 	qdel(src)
 
 /mob/living/simple_animal/hologram/advanced/can_wield()
@@ -126,7 +128,7 @@
 /mob/living/simple_animal/hologram/advanced/attack_hand(mob/living/M)
 	switch(M.a_intent)
 		if(I_HELP)
-			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			M.visible_message( \
 				"<span class='notice'>[M] gives [src] a [pick("hug","warm embrace")].</span>", \
 				"<span class='notice'>You hug [src].</span>", \

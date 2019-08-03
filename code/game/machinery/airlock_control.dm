@@ -1,7 +1,12 @@
 #define AIRLOCK_CONTROL_RANGE 8
+#define RADIO_FILTER_EXPLANATION {"Set the radio filter.
+3 is for signalers
+4 is for machinery (emitters, etc)
+6 is for airlocks (default)"}
+
 
 // This code allows for airlocks to be controlled externally by setting an id_tag and comm frequency (disables ID access)
-obj/machinery/door/airlock
+/obj/machinery/door/airlock
 	var/id_tag
 	var/frequency
 	var/shockedby = list()
@@ -9,7 +14,7 @@ obj/machinery/door/airlock
 	explosion_resistance = 15
 
 
-obj/machinery/door/airlock/receive_signal(datum/signal/signal)
+/obj/machinery/door/airlock/receive_signal(datum/signal/signal)
 	if(!signal || signal.encryption)
 		return
 
@@ -25,34 +30,40 @@ obj/machinery/door/airlock/receive_signal(datum/signal/signal)
 
 		if("unlock")
 			locked = 0
+			playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 			update_icon()
 
 		if("lock")
 			locked = 1
+			playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 			update_icon()
 
 		if("toggle_lock")
 			if(!density)
 				close(1)
 				sleep(2)
-			locked = !locked
+			toggle_bolts()
 			update_icon()
 
 		if("secure_open")
 			locked = 0
+			playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 			update_icon()
 
 			sleep(2)
 			open(1)
 
 			locked = 1
+			playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 			update_icon()
 
 		if("secure_close")
 			locked = 0
+			playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 			close(1)
 
 			locked = 1
+			playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 			sleep(2)
 			update_icon()
 
@@ -236,7 +247,7 @@ obj/machinery/airlock_sensor/Topic(href,href_list)
 
 	if(!issilicon(usr))
 		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
-			testing("Not silicon, not using a multitool.")
+//			testing("Not silicon, not using a multitool.")
 			return
 	if("set_freq" in href_list)
 		var/newfreq=frequency
@@ -268,13 +279,18 @@ obj/machinery/access_button
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "access_button_standby"
 	name = "access button"
-
 	anchored = 1
 	power_channel = ENVIRON
 
 	var/master_tag
 	var/frequency = 1449
 	var/command = "cycle"
+	var/customfilter = RADIO_AIRLOCK
+	var/radiofilters = list(
+							RADIO_CHAT,
+							RADIO_ATMOSIA,
+							RADIO_AIRLOCK
+							)
 
 	var/datum/radio_frequency/radio_connection
 
@@ -321,7 +337,7 @@ obj/machinery/access_button/attack_hand(mob/user)
 		signal.data["tag"] = master_tag
 		signal.data["command"] = command
 
-		radio_connection.post_signal(src, signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
+		radio_connection.post_signal(src, signal, range = AIRLOCK_CONTROL_RANGE, filter = customfilter)
 	flick("access_button_cycle", src)
 
 
@@ -339,7 +355,7 @@ obj/machinery/access_button/attackby(var/obj/item/W, var/mob/user)
 obj/machinery/access_button/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
-	radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
+	radio_connection = radio_controller.add_object(src, frequency, customfilter)
 
 
 obj/machinery/access_button/initialize()
@@ -366,8 +382,9 @@ obj/machinery/access_button/multitool_menu(var/mob/user,var/obj/item/device/mult
 	return {"
 		<ul>
 			<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[0]">Reset</a>)</li>
-			[format_tag("Master ID Tag","master_tag")]
-			[format_tag("Command","command")]
+			<li>[format_tag("Master ID Tag","master_tag")]</li>
+			<li>[format_tag("Command","command")]</li>
+			<li><b>Filter:</b> <a href="?src=\ref[src];set_filter=-1">[customfilter]</a></li>
 		</ul>"}
 
 obj/machinery/access_button/Topic(href,href_list)
@@ -376,11 +393,18 @@ obj/machinery/access_button/Topic(href,href_list)
 
 	if(!issilicon(usr))
 		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
-			testing("Not silicon, not using a multitool.")
+//			testing("Not silicon, not using a multitool.")
 			return
 
 	var/obj/item/device/multitool/P = get_multitool(usr)
 	if(P)
+		if("set_filter" in href_list)
+			var/newfilter = input(usr, RADIO_FILTER_EXPLANATION, "Radio Filter", customfilter) as null|anything in radiofilters
+			if (newfilter)
+				if(usr.incapacitated() || (!issilicon(usr) && !Adjacent(usr)))
+					return
+				customfilter = newfilter
+
 		if("set_freq" in href_list)
 			var/newfreq=frequency
 			if(href_list["set_freq"]!="-1")
@@ -395,3 +419,5 @@ obj/machinery/access_button/Topic(href,href_list)
 					initialize()
 
 		update_multitool_menu(usr)
+
+#undef RADIO_FILTER_EXPLANATION

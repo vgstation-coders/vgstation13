@@ -3,7 +3,6 @@
 	desc = "A machine used for recycling dead monkeys into monkey cubes."
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "grinder"
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -13,7 +12,7 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/grinded = 0
 	var/minimum_monkeys = 3 //How many do we need to grind?
-	var/can_recycle_live = 0 //Can we recycle a live monkey?
+	var/can_recycle_live = FALSE //Can we recycle a live monkey?
 
 /obj/machinery/monkey_recycler/New()
 	. = ..()
@@ -38,7 +37,7 @@
 			lasercount += SP.rating
 	minimum_monkeys = 4 - (manipcount/2) //Tier 1 = 3, Tier 2 = 2, Tier 3 = 1
 	if(lasercount == 3)
-		can_recycle_live = 1
+		can_recycle_live = TRUE
 
 /obj/machinery/monkey_recycler/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (..())
@@ -48,16 +47,18 @@
 		var/grabbed = G.affecting
 		if(istype(grabbed, /mob/living/carbon/monkey))
 			var/mob/living/carbon/monkey/target = grabbed
-			if(target.stat == 0 || can_recycle_live)
+			if(target.stat == CONSCIOUS && !can_recycle_live)
 				to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
+				return
 			if(target.abiotic())
 				to_chat(user, "<span class='warning'>The monkey may not have abiotic items on.</span>")
+				return
 			else
 				user.drop_item(G, force_drop = 1)
 				qdel(target)
 				target = null
 				to_chat(user, "<span class='notice'>You stuff the monkey in the machine.")
-				playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
+				playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 				use_power(500)
 				src.grinded++
 				to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
@@ -65,14 +66,16 @@
 			to_chat(user, "<span class='warning'>The machine only accepts monkeys!</span>")
 	else if(istype(O, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/target = O
-		if(target.stat == 0)
+		if(target.stat == CONSCIOUS && !can_recycle_live)
 			to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
+			return
 		if(target.abiotic())
 			to_chat(user, "<span class='warning'>The monkey may not have abiotic items on.</span>")
+			return
 		else
 			qdel(target)
 			to_chat(user, "<span class='notice'>You stuff the monkey in the machine.</span>")
-			playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
+			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 			use_power(500)
 			src.grinded++
 			to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
@@ -83,7 +86,7 @@
 		return 1
 	if(grinded >= minimum_monkeys)
 		to_chat(user, "<span class='notice'>The machine hisses loudly as it condenses the grinded monkey meat. After a moment, it dispenses a brand new monkey cube.</span>")
-		playsound(get_turf(src), 'sound/machines/hiss.ogg', 50, 1)
+		playsound(src, 'sound/machines/hiss.ogg', 50, 1)
 		grinded -= minimum_monkeys
 		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(src.loc)
 		to_chat(user, "<span class='notice'>The machine's display flashes that it has [grinded] monkeys worth of material left.</span>")
@@ -91,15 +94,15 @@
 		to_chat(user, "<span class='warning'>The machine needs at least 3 monkeys worth of material to produce a monkey cube. It only has [grinded].</span>")
 	return
 
-/obj/machinery/monkey_recycler/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob) //copypasted from sleepers
+/obj/machinery/monkey_recycler/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob) //copypasted from sleepers
 	if(!ismob(O))
 		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc))
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O))
 		return
 	if(user.incapacitated() || user.lying)
 		return
 	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src))
 		return
-	if(!ishuman(user) && !isrobot(user))
+	if(!ishigherbeing(user) && !isrobot(user))
 		return
 	attackby(O,user)

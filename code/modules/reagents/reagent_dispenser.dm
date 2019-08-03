@@ -28,12 +28,7 @@
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>It contains:</span>")
-	if(reagents && reagents.reagent_list.len)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-	else
-		to_chat(user, "<span class='info'>Nothing.</span>")
+	reagents.get_examine(user)
 
 /obj/structure/reagent_dispensers/cultify()
 	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))
@@ -79,6 +74,9 @@
 
 /obj/structure/reagent_dispensers/proc/is_empty()
 	return reagents.total_volume <= 0
+
+/obj/structure/reagent_dispensers/proc/can_transfer()
+	return TRUE
 
 //Dispensers
 /obj/structure/reagent_dispensers/watertank
@@ -134,8 +132,11 @@
 			return ..()
 		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src]")
 		if(do_after(user, src, 20))
+			if(rig)
+				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
+				return
 			if(!user.drop_item(W, src))
-				user << "<span class='warning'>Oops! You can't let go of \the [W]!</span>"
+				to_chat(user,"<span class='warning'>Oops! You can't let go of \the [W]!</span>")
 				return
 
 			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src]</span>")
@@ -147,9 +148,7 @@
 
 			rig = W
 
-			var/icon/test = getFlatIcon(W)
-			test.Shift(NORTH,1)
-			test.Shift(EAST,6)
+			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
 			overlays += test
 
 	return ..()
@@ -192,8 +191,8 @@
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
-/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
-	visible_message("<span class='danger'>\the [W] crashes into \the [src]!</span>")
+/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
+	visible_message("<span class='danger'>\the [F] crashes into \the [src]!</span>")
 	explode()
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
@@ -346,5 +345,48 @@
 		reagents.trans_to(S, S.max_silicate)
 		S.update_icon()
 		to_chat(user, "<span class='notice'>Sprayer refilled.</span>")
-		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
+
+/obj/structure/reagent_dispensers/degreaser
+	name = "ethanol tank"
+	desc = "A tank filled with ethanol, used in the degreasing of engines."
+	icon_state = "degreasertank"
+	amount_per_transfer_from_this = 5
+
+/obj/structure/reagent_dispensers/degreaser/New()
+	. = ..()
+	reagents.add_reagent(ETHANOL, 1000)
+
+/obj/structure/reagent_dispensers/cauldron
+	name = "cauldron"
+	icon_state = "cauldron"
+	desc = "Double, double, toil and trouble. Fire burn, and cauldron bubble."
+
+/obj/structure/reagent_dispensers/cauldron/update_icon()
+	overlays.len = 0
+
+	if(reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]")
+
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+		overlays += filling
+
+/obj/structure/reagent_dispensers/cauldron/on_reagent_change()
+	update_icon()
+
+/obj/structure/reagent_dispensers/cauldron/wrenchable()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/is_open_container()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/weapon/reagent_containers/R, var/mob/user)
+	if(user.a_intent != I_HELP)
+		return TRUE
+	return FALSE

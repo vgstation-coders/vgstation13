@@ -41,7 +41,7 @@
 			/mob/living/simple_animal/parrot,
 			/mob/living/simple_animal/slime,
 			/mob/living/simple_animal/crab,
-			/mob/living/simple_animal/mouse,
+			/mob/living/simple_animal/mouse/common,
 			/mob/living/simple_animal/hostile/retaliate/goat,
 			/mob/living/carbon/monkey,
 			)
@@ -69,7 +69,7 @@
 			if(spawn_type)
 				new spawn_type(src.loc)
 				investigation_log(I_ARTIFACT, "|| spawned a [spawn_type].")
-				playsound(get_turf(src), 'sound/machines/heps.ogg', 50, 0)
+				playsound(src, 'sound/machines/heps.ogg', 50, 0)
 
 		//if we're getting close to finished, kick into overdrive power usage
 		if(current_ticks_spawning / ticks_required_to_spawn > 0.75)

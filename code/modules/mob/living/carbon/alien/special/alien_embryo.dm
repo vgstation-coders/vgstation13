@@ -51,7 +51,7 @@
 /obj/item/alien_embryo/proc/check_observer(var/mob/dead/observer/O)
 	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
 		return 0
-	if(jobban_isbanned(O, "Syndicate")) // Antag-banned
+	if(isantagbanned(O))
 		return 0
 	if(!O.client)
 		return 0

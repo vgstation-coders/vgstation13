@@ -85,16 +85,19 @@
 	var/list/tempL = L
 	var/attempt = null
 	var/success = 0
+	var/prev_z = user.z
 	while(tempL.len)
 		attempt = pick(tempL)
 		success = user.Move(attempt)
 		if(!success)
 			tempL.Remove(attempt)
 		else
+			INVOKE_EVENT(user.on_z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
 			break
 
 	if(!success)
 		user.forceMove(pick(L))
+		INVOKE_EVENT(user.on_z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
 
 	smoke.start()
 	src.uses -= 1

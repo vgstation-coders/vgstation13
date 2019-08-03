@@ -15,7 +15,7 @@
 	light_range_on = 3
 
 /obj/machinery/computer/cultify()
-	new /obj/structure/cult/tome(loc)
+	new /obj/structure/cult_legacy/tome(loc)
 	..()
 
 /obj/machinery/computer/New()
@@ -69,12 +69,23 @@
 		set_broken()
 	..()
 
+/obj/machinery/computer/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		if(!(stat & BROKEN))
+			shake(1, 3)
+			playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+			set_broken()
+		return 1
+	return 0
+
 /obj/machinery/computer/blob_act()
 	if (prob(75))
 		for(var/x in verbs)
 			verbs -= x
 		set_broken()
-		density = 0
+		setDensity(FALSE)
 
 /obj/machinery/computer/update_icon()
 	..()
@@ -98,7 +109,7 @@
 /obj/machinery/computer/togglePanelOpen(var/obj/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)
 	if(!circuit) //we can't disassemble with no circuit, so add some fucking circuits if you want disassembly
 		return
-	playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+	playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 	user.visible_message(	"[user] begins to unscrew \the [src]'s monitor.",
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))

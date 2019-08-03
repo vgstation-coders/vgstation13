@@ -32,16 +32,10 @@
 	if(cell && cell.charge <= MOMMI_LOW_POWER)
 		drop_item(W)
 		return 0
-	// Make sure we're not picking up something that's in our factory-supplied toolbox.
-	//if(is_type_in_list(W,src.module.modules))
-	//if(is_in_modules(W))
-//		to_chat(src, "<span class='warning'>Picking up something that's built-in to you seems a bit silly.</span>")
-		//return 0
 	if(W.type == /obj/item/device/material_synth)
 		drop_item(W)
 		return 0
 	if(tool_state)
-		//var/obj/item/found = locate(tool_state) in src.module.modules
 		var/obj/item/TS = tool_state
 		if(!is_in_modules(tool_state))
 			drop_item(TS)
@@ -53,6 +47,7 @@
 	tool_state = W
 	W.hud_layerise()
 	W.forceMove(src)
+	W.equipped(src)
 
 	// Make crap we pick up active so there's less clicking and carpal. - N3X
 	module_active=tool_state
@@ -101,20 +96,14 @@
 	if(!istype(to_drop))
 		to_drop = tool_state
 	if(to_drop)
-		//var/obj/item/found = locate(tool_state) in src.module.modules
 		if(is_in_modules(to_drop))
 			if((to_drop in contents) && (to_drop in src.module.modules))
 				to_chat(src, "<span class='warning'>This item cannot be dropped.</span>")
 				return 0
-		if(client)
-			client.screen -= to_drop
 
-		to_drop.forceMove(Target)
-
-		//this all should be using remove_from_mob() but I couldn't get it to work for some reason so for now it continues to be copypasted ass
+		remove_from_mob(to_drop) //clean out any refs
 		to_drop.dropped(src)
-
-		u_equip(to_drop)
+		to_drop.forceMove(Target)
 		update_items()
 		return 1
 	return 0
@@ -338,3 +327,7 @@
 			update_items()
 		else
 			to_chat(M, "<span class='warning'>You are unable to equip that.</span>")
+
+/mob/living/carbon/can_use_hands()
+	return TRUE
+

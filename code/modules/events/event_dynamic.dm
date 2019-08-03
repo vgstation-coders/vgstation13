@@ -11,11 +11,6 @@ var/list/event_last_fired = list()
 		message_admins("Too early to trigger random event, aborting.")
 		return
 
-	var/living = 0
-	for(var/mob/living/M in player_list)
-		if(M.stat == CONSCIOUS)
-			living++
-
 	if(universe.name != "Normal")
 		message_admins("Universe isn't normal, aborting random event spawn.")
 		return
@@ -50,6 +45,7 @@ var/list/event_last_fired = list()
 	possibleEvents[/datum/event/communications_blackout] = 25
 	possibleEvents[/datum/event/thing_storm/meaty_gore] = 25
 	possibleEvents[/datum/event/unlink_from_centcomm] = 10
+	possibleEvents[/datum/event/centcomm_order] = 25
 
 	if(active_with_role["AI"] > 0 || active_with_role["Cyborg"] > 0)
 		possibleEvents[/datum/event/ionstorm] = 30
@@ -60,20 +56,19 @@ var/list/event_last_fired = list()
 	if(!spacevines_spawned)
 		possibleEvents[/datum/event/spacevine] = 15
 
+	possibleEvents[/datum/event/powercreeper] = 15
+
 	if(active_with_role["Engineer"] > 1)
 		possibleEvents[/datum/event/meteor_wave] = 15
 		possibleEvents[/datum/event/meteor_shower] = 40
 		possibleEvents[/datum/event/immovable_rod] = 15
-		possibleEvents[/datum/event/thing_storm/blob_shower] = 15//Blob Cluster
-
-	if((active_with_role["Engineer"] > 1) && (active_with_role["Security"] > 1) && (living >= BLOB_CORE_PROPORTION))
-		possibleEvents[/datum/event/thing_storm/blob_storm] = 10//Blob Conglomerate
+		possibleEvents[/datum/event/thing_storm/blob_shower] = 15//Blob Cluster - shower has no overminds, storm does
 
 	possibleEvents[/datum/event/radiation_storm] = 50
 	if(active_with_role["Medical"] > 1)
-		possibleEvents[/datum/event/viral_infection] = 30
+		possibleEvents[/datum/event/viral_infection] = 40
 		possibleEvents[/datum/event/spontaneous_appendicitis] = 50
-		possibleEvents[/datum/event/viral_outbreak] = 20
+		possibleEvents[/datum/event/viral_outbreak] = 25
 		possibleEvents[/datum/event/organ_failure] = 30
 
 	possibleEvents[/datum/event/prison_break] = 25
@@ -134,18 +129,23 @@ var/list/event_last_fired = list()
 		if(!M.mind || !M.client || M.client.inactivity > 10 * 10 * 60) // longer than 10 minutes AFK counts them as inactive
 			continue
 
-		if(istype(M, /mob/living/silicon/robot) && M:module && M:module.name == "engineering robot module")
-			active_with_role["Engineer"]++
+		if(isrobot(M))
+			var/mob/living/silicon/robot/tincan = M
+			if(tincan.module)
+				switch(tincan.module.name)
+					if("engineering robot module")
+						active_with_role["Engineer"]++
+					if("medical robot module")
+						active_with_role["Medical"]++
+					if("security robot module")
+						active_with_role["Security"]++
+
 		if(M.mind.assigned_role in engineering_positions)
 			active_with_role["Engineer"]++
 
-		if(istype(M, /mob/living/silicon/robot) && M:module && M:module.name == "medical robot module")
-			active_with_role["Medical"]++
 		if(M.mind.assigned_role in medical_positions)
 			active_with_role["Medical"]++
 
-		if(istype(M, /mob/living/silicon/robot) && M:module && M:module.name == "security robot module")
-			active_with_role["Security"]++
 		if(M.mind.assigned_role in security_positions)
 			active_with_role["Security"]++
 

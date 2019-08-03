@@ -4,6 +4,8 @@
 	var/melee_can_hit = 1
 	var/list/destroyable_obj = list(/obj/mecha, /obj/structure/window, /obj/structure/grille, /turf/simulated/wall)
 	internal_damage_threshold = 50
+	light_range_off = 0 //combat mechs leak no cabin light for stealth operation
+	cursor_enabled = 1 //cursor is enabled by default for combat mechs
 	maint_access = 0
 	//add_req_access = 0
 	//operation_req_access = list(access_hos)
@@ -34,7 +36,7 @@
 			if(M.stat>1)
 				M.gib()
 				melee_can_hit = 0
-				if(do_after(melee_cooldown))
+				spawn(meele_cooldown)
 					melee_can_hit = 1
 				return
 			*/
@@ -80,7 +82,7 @@
 						return
 				M.updatehealth()
 			src.occupant_message("You hit [target].")
-			src.visible_message("<font color='red'><b>[src.name] hits [target].</b></font>")
+			src.visible_message("<span class='red'><b>[src.name] hits [target].</b></span>")
 			message_admins("[key_name_and_info(src.occupant)] mech punched [target] with [src.name] ([formatJumpTo(src)])",0,1)
 			log_attack("[key_name(src.occupant)] mech punched [target] with [src.name] ([formatLocation(src)])")
 		else
@@ -89,7 +91,7 @@
 			src.visible_message("[src] pushes [target] out of the way.")
 
 		melee_can_hit = 0
-		if(do_after(melee_cooldown))
+		spawn(melee_cooldown)
 			melee_can_hit = 1
 		return
 
@@ -98,7 +100,7 @@
 			for(var/target_type in src.destroyable_obj)
 				if(istype(target, target_type) && hascall(target, "attackby"))
 					src.occupant_message("You hit [target].")
-					src.visible_message("<font color='red'><b>[src.name] hits [target]</b></font>")
+					src.visible_message("<span class='red'><b>[src.name] hits [target]</b></span>")
 					if(!istype(target, /turf/simulated/wall))
 						target:attackby(src,src.occupant)
 					else if(prob(5))
@@ -107,7 +109,7 @@
 						src.visible_message("<b>[src.name] smashes through the wall</b>")
 						playsound(src, 'sound/weapons/smash.ogg', 50, 1)
 					melee_can_hit = 0
-					if(do_after(melee_cooldown))
+					spawn(melee_cooldown)
 						melee_can_hit = 1
 					break
 	return
@@ -249,33 +251,11 @@
 		onclose(occupant, "sam", src)
 	return
 */
-/obj/mecha/combat/moved_inside(var/mob/living/carbon/human/H as mob)
-	if(..())
-		if(H.client)
-			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-		return 1
-	else
-		return 0
-
-/obj/mecha/combat/mmi_moved_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
-	if(..())
-		if(occupant.client)
-			occupant.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-		return 1
-	else
-		return 0
-
-
-/obj/mecha/combat/go_out()
-	if(src.occupant && src.occupant.client)
-		src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
-	..()
-	return
 
 /obj/mecha/combat/Topic(href,href_list)
 	..()
-	var/datum/topic_input/filter = new (href,href_list)
-	if(filter.get("close"))
+	var/datum/topic_input/topic_filter = new (href,href_list)
+	if(topic_filter.get("close"))
 		am = null
 		return
 	/*

@@ -92,3 +92,13 @@
 	materials = list(MAT_IRON = 8000, MAT_GLASS = 2000)
 	category = "Robotics"
 	build_path = /obj/item/device/robotanalyzer
+
+/datum/design/diagnostic_hud
+	name = "Diagnostic HUD"
+	desc = "A heads-up display that displays diagnostic information for compatible cyborgs and exosuits."
+	id = "diagnostic_hud"
+	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 100, MAT_GLASS = 100)
+	category = "Robotics"
+	build_path = /obj/item/clothing/glasses/hud/diagnostic

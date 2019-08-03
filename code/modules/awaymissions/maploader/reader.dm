@@ -135,7 +135,7 @@ var/list/map_dimension_cache = list()
 			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
 				xcrd++
 				var/model_key = copytext(grid_line,mpos,mpos+key_len)
-				spawned_atoms += parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
+				spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
 			if(map_element)
 				map_element.width = xcrd - x_offset
 
@@ -152,7 +152,10 @@ var/list/map_dimension_cache = list()
 
 		if(map_element)
 			map_element.height = y_depth
-			map_element.location = locate(x_offset + 1, y_offset + 1, z_offset) //Set location to the upper left corner
+
+			if(!map_element.location)
+				//Set location to the lower left corner, if it hasn't already been set
+				map_element.location = locate(x_offset + 1, y_offset + 1, z_offset)
 
 		//reached End Of File
 		if(findtext(tfile,quote+"}",zpos,0)+2==tfile_len)
@@ -242,7 +245,7 @@ var/list/map_dimension_cache = list()
 
 	if(!isspace(instance)) //Space is the default area and contains every loaded turf by default
 		instance.contents.Add(locate(xcrd,ycrd,zcrd))
-		spawned_atoms |= instance
+		spawned_atoms.Add(instance)
 
 	if(_preloader && instance)
 		_preloader.load(instance)
@@ -286,7 +289,8 @@ var/list/map_dimension_cache = list()
 
 	//finally instance all remainings objects/mobs
 	for(index=1,index < first_turf_index,index++)
-		spawned_atoms.Add(instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd))
+		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd)
+		spawned_atoms.Add(new_atom)
 
 	return spawned_atoms
 
@@ -397,7 +401,7 @@ var/list/map_dimension_cache = list()
 //simulates the DM multiple turfs on one tile underlaying
 /dmm_suite/proc/add_underlying_turf(var/turf/placed,var/turf/underturf, var/list/turfs_underlays)
 	if(underturf.density)
-		placed.density = 1
+		placed.setDensity(TRUE)
 	if(underturf.opacity)
 		placed.opacity = 1
 	placed.underlays += turfs_underlays

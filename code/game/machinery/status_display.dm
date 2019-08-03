@@ -170,12 +170,12 @@ var/global/list/status_displays = list() //This list contains both normal status
 		if(MODE_CARGO_TIMER)				// supply shuttle timer
 			var/line1 = "SUPPLY"
 			var/line2
-			if(supply_shuttle.moving)
+			if(SSsupply_shuttle.moving)
 				line2 = get_supply_shuttle_timer()
 				if(length(line2) > CHARS_PER_LINE)
 					line2 = "Error"
 			else
-				if(supply_shuttle.at_station)
+				if(SSsupply_shuttle.at_station)
 					line2 = "Docked"
 				else
 					line1 = ""
@@ -229,8 +229,8 @@ var/global/list/status_displays = list() //This list contains both normal status
 	return ""
 
 /obj/machinery/status_display/proc/get_supply_shuttle_timer()
-	if(supply_shuttle.moving)
-		var/timeleft = round((supply_shuttle.eta_timeofday - world.timeofday) / 10,1)
+	if(SSsupply_shuttle.moving)
+		var/timeleft = round((SSsupply_shuttle.eta_timeofday - world.timeofday) / 10,1)
 		if(timeleft < 0)
 			return "Late"
 		return "[add_zero(num2text((timeleft / 60) % 60),2)]:[add_zero(num2text(timeleft % 60), 2)]"
@@ -428,7 +428,7 @@ var/global/list/status_display_images = list(
 #undef MODE_BSOD
 
 #undef CHARS_PER_LINE
-#undef FOND_SIZE
+#undef FONT_SIZE
 #undef FONT_COLOR
 #undef FONT_STYLE
 #undef SCROLL_SPEED

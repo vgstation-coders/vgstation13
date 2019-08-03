@@ -39,13 +39,12 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 /obj/item/stack/cable_coil/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
-/obj/item/stack/cable_coil/New(loc, length = MAXCOIL, var/param_color = null, amount = length)
+/obj/item/stack/cable_coil/New(loc, amount, var/param_color = null)
 	..()
 
 	recipes = cable_recipes
-	src.amount = amount
 	if(param_color)
 		_color = param_color
 
@@ -183,6 +182,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 		if(prob(50)) //Fail
 			getFromPool(/obj/item/stack/cable_coil, C.loc, 1)
 			returnToPool(C)
+			return // let's not return the reference to a pooled cable
 
 	return C //What was our last known position?
 
@@ -273,7 +273,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 /obj/item/stack/cable_coil/cut
 	item_state = "coil_red2"
 
-/obj/item/stack/cable_coil/cut/New(loc, length = MAXCOIL, var/param_color = null, amount)
+/obj/item/stack/cable_coil/cut/New(loc, amount, var/param_color = null)
 	..(loc)
 	if(!amount)
 		src.amount = rand(1, 2)
@@ -309,7 +309,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	_color = "white"
 	icon_state = "coil_white"
 
-/obj/item/stack/cable_coil/random/New(loc, length = MAXCOIL, var/param_color = null, amount = length)
+/obj/item/stack/cable_coil/random/New(loc, amount, var/param_color = null)
 	..()
 	_color = pick("red","yellow","green","blue","pink")
 	icon_state = "coil_[_color]"

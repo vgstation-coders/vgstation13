@@ -1,4 +1,4 @@
-
+#ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Bagel
 //**************************************************************
@@ -31,6 +31,8 @@
 	/datum/map_element/dungeon/holodeck
 	)
 
+	center_x = 260
+	center_y = 236
 
 //All security airlocks have randomized wires
 /obj/machinery/door/airlock/glass_security/New()
@@ -41,8 +43,5 @@
 	.=..()
 	wires = new /datum/wires/airlock/secure(src)
 
-////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
-
 #include "bagelstation.dmm"
-
+#endif

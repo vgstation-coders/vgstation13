@@ -9,10 +9,7 @@ var/global/current_centcomm_order_id=124901
 	var/id = 0 // Some bullshit ID we use for fluff.
 	var/name = "CentComm" // Name of the ordering entity. Fluff.
 	var/datum/money_account/acct // account we pay to
-
-	// Amounts centcomm is willing to pay
-	var/credits_min = 0
-	var/credits_max = 0
+	var/acct_by_string = "unknown"
 
 	// Amount decided upon
 	var/worth = 0
@@ -34,12 +31,16 @@ var/global/current_centcomm_order_id=124901
 	if(!O)
 		return 0
 	if(O.type in requested)
+		var/amount = 1
+		if(istype(O, /obj/item/stack))
+			var/obj/item/stack/S = O
+			amount = S.amount
 		if(!(O.type in fulfilled))
 			fulfilled[O.type]=0
 		// Don't claim stuff that other orders may want.
 		if(fulfilled[O.type]==requested[O.type])
 			return 0
-		fulfilled[O.type]=fulfilled[O.type]+1
+		fulfilled[O.type]+=amount
 		qdel(O)
 		return 1
 
@@ -51,6 +52,38 @@ var/global/current_centcomm_order_id=124901
 
 /datum/centcomm_order/proc/Pay()
 	acct.charge(-worth,null,"Payment for order #[id]",dest_name = name)
+
+/datum/centcomm_order/proc/getRequestsByName(var/html_format = 0)
+	var/manifest = ""
+	if(html_format)
+		manifest = "<ul>"
+	for(var/path in requested)
+		if(!path)
+			continue
+		var/atom/movable/AM = path
+		if(html_format)
+			manifest += "<li>[initial(AM.name)], amount: [requested[path]]</li>"
+		else
+			manifest += "[initial(AM.name)], amount: [requested[path]]"
+	if(html_format)
+		manifest += "</ul>"
+	return manifest
+
+/datum/centcomm_order/proc/getFulfilledByName(var/html_format = 0)
+	var/manifest = ""
+	if(html_format)
+		manifest = "<ul>"
+	for(var/path in fulfilled)
+		if(!path)
+			continue
+		var/atom/movable/AM = path
+		if(html_format)
+			manifest += "<li>[initial(AM.name)], amount: [fulfilled[path]]</li>"
+		else
+			manifest += "[initial(AM.name)], amount: [fulfilled[path]]"
+	if(html_format)
+		manifest += "</ul>"
+	return manifest
 
 /datum/centcomm_order/proc/OnPostUnload()
 	return

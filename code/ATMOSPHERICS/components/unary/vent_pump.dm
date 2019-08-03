@@ -10,8 +10,9 @@
 	var/area_uid
 	var/id_tag = null
 
+	var/hibernate = 0 //Optimization
 	var/on = 0
-	var/pump_direction = 1 //0 = siphoning, 1 = releasing
+	var/pump_direction = 1 //0 = siphoning, 1 = blowing
 
 	var/external_pressure_bound = ONE_ATMOSPHERE
 	var/internal_pressure_bound = 0
@@ -52,7 +53,8 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/New()
 	..()
-	area_uid = areaMaster.uid
+	var/area/here = get_area(src)
+	area_uid = here.uid
 	if (!id_tag)
 		assign_uid()
 		id_tag = num2text(uid)
@@ -89,8 +91,12 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/process()
 	. = ..()
+
+	if(hibernate > world.time)
+		return
+
 	CHECK_DISABLED(vents)
-	if (!node)
+	if (!node1)
 		return // Turning off the vent is a PITA. - N3X
 	if(stat & (NOPOWER|BROKEN))
 		return
@@ -108,50 +114,54 @@
 		return
 
 	var/datum/gas_mixture/environment = loc.return_air()
-	var/environment_pressure = environment.return_pressure()
 
-	if(pump_direction) //internal -> external
-		var/pressure_delta = 10000
-
-		if(pressure_checks&1)
-			pressure_delta = min(pressure_delta, (external_pressure_bound - environment_pressure))
-		if(pressure_checks&2)
-			pressure_delta = min(pressure_delta, (air_contents.return_pressure() - internal_pressure_bound))
-
-		if(pressure_delta > 0.1)
-			if(air_contents.temperature > 0)
-				var/transfer_moles = pressure_delta*environment.volume/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
-
-				var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
-
-				loc.assume_air(removed)
-
-				if(network)
-					network.update = 1
-
-	else //external -> internal
-		var/pressure_delta = 10000
-		if(pressure_checks&1)
-			pressure_delta = min(pressure_delta, (environment_pressure - external_pressure_bound))
-		if(pressure_checks&2)
-			pressure_delta = min(pressure_delta, (internal_pressure_bound - air_contents.return_pressure()))
-
-		if(pressure_delta > 0.1)
-			if(environment.temperature > 0)
-				var/transfer_moles = pressure_delta*air_contents.volume/(environment.temperature * R_IDEAL_GAS_EQUATION)
-
-				var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)
-				if (isnull(removed)) //in space
-					return
-
-				air_contents.merge(removed)
-
-				if(network)
-					network.update = 1
+	var/pressure_delta = get_pressure_delta(environment)
+	if((environment.temperature || air_contents.temperature) && pressure_delta > 0.5)
+		if(pump_direction) //internal -> external
+			var/air_temperature = (air_contents.temperature > 0) ? air_contents.temperature : environment.temperature
+			var/transfer_moles = (pressure_delta * environment.volume) / (air_temperature * R_IDEAL_GAS_EQUATION)
+			var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
+			loc.assume_air(removed)
+		
+		else //external -> internal
+			var/air_temperature = (environment.temperature > 0) ? environment.temperature : air_contents.temperature
+			var/output_volume = air_contents.volume + (network ? network.volume : 0)
+			var/transfer_moles = (pressure_delta * output_volume) / (air_temperature * R_IDEAL_GAS_EQUATION)
+			//limit flow rate from turfs
+			transfer_moles = min(transfer_moles, environment.total_moles*air_contents.volume/environment.volume)
+			var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)
+			if(isnull(removed)) //in space
+				return
+			air_contents.merge(removed)
+		
+		if(network)
+			network.update = 1
+	else
+		//Bay optimization
+		if(pump_direction && pressure_checks == 1) //99% of all vents
+			hibernate = world.time + (rand(50, 100)) //hibernate for 5 to 10 seconds randomly
 
 	return 1
 
 	//Radio remote control
+
+
+/obj/machinery/atmospherics/unary/vent_pump/proc/get_pressure_delta(datum/gas_mixture/environment)
+	var/pressure_delta = 10000 //why is this 10000? whatever
+	var/environment_pressure = environment.return_pressure()
+
+	if(pump_direction) //internal -> external
+		if(pressure_checks & 1)
+			pressure_delta = min(pressure_delta, external_pressure_bound - environment_pressure) //increasing the pressure here
+		if(pressure_checks & 2)
+			pressure_delta = min(pressure_delta, air_contents.return_pressure() - internal_pressure_bound) //decreasing the pressure here
+	else //external -> internal
+		if(pressure_checks & 1)
+			pressure_delta = min(pressure_delta, environment_pressure - external_pressure_bound) //decreasing the pressure here
+		if(pressure_checks & 2)
+			pressure_delta = min(pressure_delta, internal_pressure_bound - air_contents.return_pressure()) //increasing the pressure here
+
+	return pressure_delta
 
 /obj/machinery/atmospherics/unary/vent_pump/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
@@ -160,8 +170,9 @@
 		radio_connection = radio_controller.add_object(src, frequency,radio_filter_in)
 
 	if(frequency != 1439)
-		areaMaster.air_vent_info -= id_tag
-		areaMaster.air_vent_names -= id_tag
+		var/area/this_area = get_area(src)
+		this_area.air_vent_info -= id_tag
+		this_area.air_vent_names -= id_tag
 		name = "Vent Pump"
 	else
 		broadcast_status()
@@ -184,7 +195,7 @@
 		"tag" = src.id_tag,
 		"device" = "AVP",
 		"power" = on,
-		"direction" = pump_direction?("release"):("siphon"),
+		"direction" = pump_direction,
 		"checks" = pressure_checks,
 		"internal" = internal_pressure_bound,
 		"external" = external_pressure_bound,
@@ -193,11 +204,12 @@
 	)
 
 	if(frequency == 1439)
-		if(!areaMaster.air_vent_names[id_tag])
-			var/new_name = "[areaMaster.name] Vent Pump #[areaMaster.air_vent_names.len+1]"
-			areaMaster.air_vent_names[id_tag] = new_name
+		var/area/this_area = get_area(src)
+		if(!this_area.air_vent_names[id_tag])
+			var/new_name = "[this_area.name] Vent Pump #[this_area.air_vent_names.len+1]"
+			this_area.air_vent_names[id_tag] = new_name
 			name = new_name
-		areaMaster.air_vent_info[id_tag] = signal.data
+		this_area.air_vent_info[id_tag] = signal.data
 
 	radio_connection.post_signal(src, signal, radio_filter_out)
 
@@ -220,52 +232,32 @@
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command") || (signal.data["type"] && signal.data["type"] != "vent"))
 		return 0
 
-	var/handled=0
-	if("purge" in signal.data)
-		pressure_checks &= ~1
-		pump_direction = 0
-		handled=1
-
-	if("stabilize" in signal.data)
-		pressure_checks |= 1
-		pump_direction = 1
-		handled = 1
-
 	if("power" in signal.data)
 		on = text2num(signal.data["power"])
-		handled = 1
 
 	if("power_toggle" in signal.data)
 		on = !on
-		handled = 1
 
 	if("checks" in signal.data)
 		pressure_checks = text2num(signal.data["checks"])
-		handled = 1
 
 	if("checks_toggle" in signal.data)
 		pressure_checks = (pressure_checks?0:3)
-		handled = 1
 
 	if("direction" in signal.data)
 		pump_direction = text2num(signal.data["direction"])
-		handled = 1
 
 	if("set_internal_pressure" in signal.data)
 		internal_pressure_bound = Clamp(text2num(signal.data["set_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
-		handled =1
 
 	if("set_external_pressure" in signal.data)
 		external_pressure_bound = Clamp(text2num(signal.data["set_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
-		handled = 1
 
 	if("adjust_internal_pressure" in signal.data)
 		internal_pressure_bound = Clamp(internal_pressure_bound + text2num(signal.data["adjust_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
-		handled = 1
 
 	if("adjust_external_pressure" in signal.data)
 		external_pressure_bound = Clamp(external_pressure_bound + text2num(signal.data["adjust_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
-		handled = 1
 
 	if("init" in signal.data)
 		name = signal.data["init"]
@@ -276,8 +268,6 @@
 			broadcast_status()
 		return //do not update_icon
 
-	if(!handled)
-		testing("\[[world.timeofday]\]: vent_pump/receive_signal: unknown command \n[signal.debug_print()]")
 	spawn(2)
 		broadcast_status()
 	update_icon()
@@ -313,29 +303,22 @@
 	return !welded
 
 /obj/machinery/atmospherics/unary/vent_pump/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.remove_fuel(0,user))
-			to_chat(user, "<span class='notice'>Now welding the vent.</span>")
-			if(do_after(user, src, 20))
-				if(!src || !WT.isOn())
-					return
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-				if(!welded)
-					user.visible_message("[user] welds the vent shut.", "You weld the vent shut.", "You hear welding.")
-					investigation_log(I_ATMOS, "has been welded shut by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
-					welded = 1
-					update_icon()
-				else
-					user.visible_message("[user] unwelds the vent.", "You unweld the vent.", "You hear welding.")
-					investigation_log(I_ATMOS, "has been unwelded by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
-					welded = 0
-					update_icon()
+		to_chat(user, "<span class='notice'>Now welding the vent.</span>")
+		if (WT.do_weld(user, src, 20, 1))
+			if(gcDestroyed)
+				return
+			if(!welded)
+				user.visible_message("[user] welds the vent shut.", "You weld the vent shut.", "You hear welding.")
+				investigation_log(I_ATMOS, "has been welded shut by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
+				welded = 1
+				update_icon()
 			else
-				to_chat(user, "<span class='notice'>The welding tool needs to be on to start this task.</span>")
-		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-			return 1
+				user.visible_message("[user] unwelds the vent.", "You unweld the vent.", "You hear welding.")
+				investigation_log(I_ATMOS, "has been unwelded by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
+				welded = 0
+				update_icon()
 	if (!iswrench(W))
 		return ..()
 	if (!(stat & NOPOWER) && on)
@@ -344,8 +327,9 @@
 	return ..()
 
 /obj/machinery/atmospherics/unary/vent_pump/Destroy()
-	areaMaster.air_vent_info.Remove(id_tag)
-	areaMaster.air_vent_names.Remove(id_tag)
+	var/area/this_area = get_area(src)
+	this_area.air_vent_info.Remove(id_tag)
+	this_area.air_vent_names.Remove(id_tag)
 	..()
 
 /obj/machinery/atmospherics/unary/vent_pump/multitool_topic(var/mob/user, var/list/href_list, var/obj/O)
@@ -354,8 +338,9 @@
 		if(!newid)
 			return
 		if(frequency == 1439)
-			areaMaster.air_vent_info -= id_tag
-			areaMaster.air_vent_names -= id_tag
+			var/area/this_area = get_area(src)
+			this_area.air_vent_info -= id_tag
+			this_area.air_vent_names -= id_tag
 
 		id_tag = newid
 		broadcast_status()
@@ -365,10 +350,11 @@
 	return ..()
 
 /obj/machinery/atmospherics/unary/vent_pump/change_area(var/area/oldarea, var/area/newarea)
-	areaMaster.air_vent_info.Remove(id_tag)
-	areaMaster.air_vent_names.Remove(id_tag)
+	var/area/this_area = get_area(src)
+	this_area.air_vent_info.Remove(id_tag)
+	this_area.air_vent_names.Remove(id_tag)
 	..()
-	area_uid = areaMaster.uid
+	area_uid = this_area.uid
 	broadcast_status()
 
 /obj/machinery/atmospherics/unary/vent_pump/canClone(var/obj/O)
@@ -376,8 +362,9 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/clone(var/obj/machinery/atmospherics/unary/vent_pump/O)
 	if(frequency == 1439) // Note: if the frequency stays at 1439 we'll be readded to the area in set_frequency().
-		areaMaster.air_vent_info -= id_tag
-		areaMaster.air_vent_names -= id_tag
+		var/area/this_area = get_area(src)
+		this_area.air_vent_info -= id_tag
+		this_area.air_vent_names -= id_tag
 	id_tag = O.id_tag
 
 	set_frequency(O.frequency)

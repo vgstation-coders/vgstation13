@@ -1,6 +1,8 @@
 /spell/aoe_turf/disable_tech
 	name = "Disable Tech"
 	desc = "This spell disables all weapons, cameras and most other technology in range."
+	user_type = USER_TYPE_WIZARD
+	specialization = UTILITY
 	abbreviation = "DT"
 
 	charge_max = 400

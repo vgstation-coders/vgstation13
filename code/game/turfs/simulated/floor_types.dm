@@ -112,7 +112,7 @@
 		return
 	if(iswrench(C))
 		to_chat(user, "<span class='notice'>Removing rods...</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 80, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 80, 1)
 		if(do_after(user, src, 30) && istype(src, /turf/simulated/floor/engine)) // Somehow changing the turf does NOT kill the current running proc.
 			new /obj/item/stack/rods(src, 2)
 			ChangeTurf(/turf/simulated/floor)
@@ -149,6 +149,9 @@
 /turf/simulated/floor/engine/cult/cultify()
 	return
 
+/turf/simulated/floor/engine/cult/clockworkify()
+	return
+
 /turf/simulated/floor/engine/airless
 	oxygen = 0.01
 	nitrogen = 0.01
@@ -158,11 +161,7 @@
 /turf/simulated/floor/engine/n20/New()
 	..()
 	if(src.air)
-		// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
-		var/datum/gas/sleeping_agent/trace_gas = new
-		air.trace_gases += trace_gas
-		trace_gas.moles = 9*4000
-		air.update_values()
+		air.adjust_gas(GAS_SLEEPING, 9 * 4000) //NO goddamn idea what those numbers mean, but it's what they were before
 
 /turf/simulated/floor/engine/nitrogen
 	name = "nitrogen floor"
@@ -362,6 +361,8 @@
 	name = "Iron Sand"
 	icon_state = "ironsand[rand(1,15)]"
 
+//snow moved to seperate file pending testing
+/*
 /turf/simulated/floor/plating/snow
 	name = "snow"
 	icon = 'icons/turf/snow.dmi'
@@ -381,7 +382,7 @@
 /turf/simulated/floor/plating/snow/ice
 	name = "ice"
 	icon_state = "ice"
-
+*/
 /turf/simulated/floor/plating/airless/damaged
 	icon_state = "platingdmg1"
 

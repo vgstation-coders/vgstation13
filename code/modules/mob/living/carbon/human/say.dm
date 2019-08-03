@@ -22,9 +22,9 @@
 	return "says, [text]";
 
 /mob/living/carbon/human/treat_speech(var/datum/speech/speech, var/genesay=0)
-	if(wear_mask && istype(wear_mask))
-		if(!(copytext(speech.message, 1, 2) == "*" || (mind && mind.changeling && department_radio_keys[copytext(speech.message, 1, 3)] != "changeling")))
-			wear_mask.treat_mask_speech(speech)
+	if(!(copytext(speech.message, 1, 2) == "*"/* || (mind && mind.changeling && department_radio_keys[copytext(speech.message, 1, 3)] != "changeling")*/))
+		for(var/obj/item/I in get_all_slots() + held_items)
+			I.affect_speech(speech, src)
 
 	if ((M_HULK in mutations) && health >= 25 && length(speech.message))
 		speech.message = "[uppertext(replacetext(speech.message, ".", "!"))]!!" //because I don't know how to code properly in getting vars from other files -Bro
@@ -46,6 +46,10 @@
 					temp_message[H] = "HONK"
 					pick_list -= H //Make sure that you dont HONK the same word twice
 				speech.message = jointext(temp_message, " ")
+	if(isanycultist(src))
+		var/obj/effect/cult_ritual/cult_communication/comms = locate() in loc
+		if (comms && comms.caster == src)
+			speech.language = all_languages[LANGUAGE_CULT]
 	if(virus2.len)
 		for(var/ID in virus2)
 			var/datum/disease2/disease/V = virus2[ID]
@@ -55,9 +59,19 @@
 	..(speech)
 	if(dna)
 		species.handle_speech(speech,src)
+	if(config.voice_noises && world.time>time_last_speech+5 SECONDS)
+		time_last_speech = world.time
+		for(var/mob/O in hearers())
+			if(!O.is_deaf() && O.client)
+				O.client.handle_hear_voice(src)
 
 
 /mob/living/carbon/human/GetVoice()
+	if(find_held_item_by_type(/obj/item/device/megaphone))
+		var/obj/item/device/megaphone/M = locate() in held_items
+		if(istype(M) && M.mask_voice)
+			return "Unknown"
+
 	if(istype(wear_mask, /obj/item/clothing/mask/gas/voice))
 		var/obj/item/clothing/mask/gas/voice/V = wear_mask
 		if(V.vchange && V.is_flipped == 1) //the mask works and we are wearing it on the face instead of on the head
@@ -68,15 +82,18 @@
 				return "Unknown"
 		else
 			return real_name
-	if(mind && mind.changeling && mind.changeling.mimicing)
-		return mind.changeling.mimicing
+
+	if(mind) // monkeyhumans exist, don't descriminate
+		var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
+		if(changeling && changeling.mimicing)
+			return changeling.mimicing
 	if(GetSpecialVoice())
 		return GetSpecialVoice()
 	return real_name
 
 /mob/living/carbon/human/IsVocal()
 	if(mind)
-		return !miming
+		return !(issilent(src))
 	return 1
 
 /mob/living/carbon/human/proc/SetSpecialVoice(var/new_voice)
@@ -135,37 +152,6 @@
 	if(name != GetVoice())
 		return get_id_name("Unknown")
 	return null
-
-/mob/living/carbon/human/proc/forcesay(list/append)
-	if(stat == CONSCIOUS)
-		if(client)
-			var/virgin = 1	//has the text been modified yet?
-			var/temp = winget(client, "input", "text")
-			if(findtextEx(temp, "Say \"", 1, 7) && length(temp) > 5)	//case sensitive means
-
-				temp = replacetext(temp, ";", "")	//general radio
-
-				if(findtext(trim_left(temp), ":", 6, 7))	//dept radio
-					temp = copytext(trim_left(temp), 8)
-					virgin = 0
-
-				if(virgin)
-					temp = copytext(trim_left(temp), 6)	//normal speech
-					virgin = 0
-
-				while(findtext(trim_left(temp), ":", 1, 2))	//dept radio again (necessary)
-					temp = copytext(trim_left(temp), 3)
-
-				if(findtext(temp, "*", 1, 2))	//emotes
-					return
-
-				var/trimmed = trim_left(temp)
-				if(length(trimmed))
-					if(append)
-						temp += pick(append)
-
-					say(temp)
-				winset(client, "input", "text=[null]")
 
 /mob/living/carbon/human/say_understands(var/mob/other,var/datum/language/speaking = null)
 	if(other)

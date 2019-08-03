@@ -31,7 +31,6 @@ var/global/list/available_paintings = list(
 	//"justice", spawned in the courtroom/IAA office if there is no courtroom
 	//"blank", crafted with wood, TODO: give a way to players to paint on them
 	//"anatomy", TODO: add one in medbay/surgery.
-	//"carp", TODO: make wall trophies their own items
 	//"daddy", TODO: well it's not a painting...so make it its own item...?
 
 /obj/item/mounted/frame/painting

@@ -13,6 +13,10 @@
 	response_help = "pokes the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
+	melee_damage_lower = 10
+	melee_damage_upper = 12
+	attacktext = "fires point-blank on"
+	melee_damage_type = BURN
 	speak = list("ALERT.","Hostile-ile-ile entities dee-twhoooo-wected.","Threat parameterszzzz- szzet.","Bring sub-sub-sub-systems uuuup to combat alert alpha-a-a.")
 	emote_see = list("beeps menacingly","whirrs threateningly","scans its immediate vicinity")
 	a_intent = I_HURT
@@ -166,9 +170,9 @@
 	hostile_time = 0
 	walk(src,0)
 
-/mob/living/simple_animal/hostile/retaliate/malf_drone/Die()
+/mob/living/simple_animal/hostile/retaliate/malf_drone/death(var/gibbed = FALSE)
 	src.visible_message("<span class='notice'> [bicon(src)] [src] suddenly breaks apart.</span>")
-	..()
+	..(TRUE)
 	qdel(src)
 
 /mob/living/simple_animal/hostile/retaliate/malf_drone/Destroy()

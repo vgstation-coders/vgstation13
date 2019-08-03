@@ -15,7 +15,6 @@
 	var/max_pressure = 10000
 
 	var/target_pressure = 4500	//Output pressure.
-	var/on = 0								//Are we taking in gas?
 
 	var/datum/gas_mixture/air				//Internal tank.
 
@@ -23,6 +22,9 @@
 
 	var/tmp/update_flags
 	var/tmp/last_pressure
+
+/obj/machinery/atmospherics/binary/msgs/unanchored
+	anchored = 0
 
 /obj/machinery/atmospherics/binary/msgs/New()
 	html_machines += src
@@ -109,22 +111,23 @@
 				network2.update = 1
 
 	//Input handling. Literally pump code again with the target pressure being the max pressure of the MSGS
-	var/input_starting_pressure = air1.return_pressure()
+	if(on)
+		var/input_starting_pressure = air1.return_pressure()
 
-	if((max_pressure - input_starting_pressure) > 0.01)
-		//No need to output gas if target is already reached!
+		if((max_pressure - input_starting_pressure) > 0.01)
+			//No need to output gas if target is already reached!
 
-		//Calculate necessary moles to transfer using PV=nRT
-		if((air1.total_moles() > 0) && (air1.temperature > 0))
-			var/pressure_delta = max_pressure - input_starting_pressure
-			var/transfer_moles = pressure_delta * air.volume / (air1.temperature * R_IDEAL_GAS_EQUATION)
+			//Calculate necessary moles to transfer using PV=nRT
+			if((air1.total_moles() > 0) && (air1.temperature > 0))
+				var/pressure_delta = max_pressure - input_starting_pressure
+				var/transfer_moles = pressure_delta * air.volume / (air1.temperature * R_IDEAL_GAS_EQUATION)
 
-			//Actually transfer the gas
-			var/datum/gas_mixture/removed = air1.remove(transfer_moles)
-			air.merge(removed)
+				//Actually transfer the gas
+				var/datum/gas_mixture/removed = air1.remove(transfer_moles)
+				air.merge(removed)
 
-			if(network1)
-				network1.update = 1
+				if(network1)
+					network1.update = 1
 
 	updateUsrDialog()
 	update_icon()
@@ -141,20 +144,13 @@
 	interface.updateContent("pressurereadout", round(air.return_pressure(), 0.01))
 	interface.updateContent("tempreadout", air.return_temperature())
 
-	var/total_moles = air.total_moles()
+	var/total_moles = air.total_moles
 	if(round(total_moles, 0.01))	//Check if there's total moles to avoid divisions by zero.
-		interface.updateContent("oxypercent", Clamp(round(100 * air.oxygen			/ total_moles, 0.1), 0, 100))
-		interface.updateContent("nitpercent", Clamp(round(100 * air.nitrogen		/ total_moles, 0.1), 0, 100))
-		interface.updateContent("co2percent", Clamp(round(100 * air.carbon_dioxide	/ total_moles, 0.1), 0, 100))
-		interface.updateContent("plapercent", Clamp(round(100 * air.toxins			/ total_moles, 0.1), 0, 100))
-
-		//Begin stupid shit to get the N2O amount.
-		var/datum/gas/sleeping_agent/G = locate(/datum/gas/sleeping_agent) in air.trace_gases
-		var/n2o_moles = 0
-		if(G)
-			n2o_moles = G.moles
-
-		interface.updateContent("n2opercent", Clamp(round(100 * n2o_moles			/ total_moles, 0.1), 0, 100))
+		interface.updateContent("oxypercent", Clamp(round(100 * air[GAS_OXYGEN]			/ total_moles, 0.1), 0, 100))
+		interface.updateContent("nitpercent", Clamp(round(100 * air[GAS_NITROGEN]		/ total_moles, 0.1), 0, 100))
+		interface.updateContent("co2percent", Clamp(round(100 * air[GAS_CARBON]			/ total_moles, 0.1), 0, 100))
+		interface.updateContent("plapercent", Clamp(round(100 * air[GAS_PLASMA]			/ total_moles, 0.1), 0, 100))
+		interface.updateContent("n2opercent", Clamp(round(100 * air[GAS_SLEEPING]		/ total_moles, 0.1), 0, 100))
 
 	else
 		interface.updateContent("oxypercent", 0)
@@ -246,7 +242,7 @@
 		if(on)
 			overlays += image(icon = icon, icon_state = "i")
 
-/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(var/mob/user) 
+/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(var/mob/user)
 	. = ..()
 	if(!.)
 		return
@@ -285,7 +281,7 @@
 	if(usr.isUnconscious() || usr.restrained() || anchored)
 		return
 
-	src.dir = turn(src.dir, 90)
+	src.dir = turn(src.dir, -90)
 
 
 /obj/machinery/atmospherics/binary/msgs/verb/rotate_anticlockwise()
@@ -296,7 +292,10 @@
 	if(usr.isUnconscious() || usr.restrained() || anchored)
 		return
 
-	src.dir = turn(src.dir, -90)
+	src.dir = turn(src.dir, 90)
+
+/obj/machinery/atmospherics/binary/msgs/toggle_status(var/mob/user)
+	return FALSE
 
 #undef MSGS_ON
 #undef MSGS_INPUT

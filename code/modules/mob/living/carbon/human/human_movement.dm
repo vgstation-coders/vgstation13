@@ -1,3 +1,7 @@
+/mob/living/carbon/human
+	var/crawlcounter = 1
+	var/max_crawls_before_fatigue = 6
+
 /mob/living/carbon/human/movement_delay()
 	if(isslimeperson(src))
 		if (bodytemperature >= 330.23) // 135 F
@@ -9,10 +13,10 @@
 
 	if(flying)
 		return // Calculate none of the following because we're technically on a vehicle
-	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
-		return // Hyperzine ignores slowdown
+	if(reagents.has_any_reagents(HYPERZINES))
+		return // Hyperzine ignores base slowdown
 	if(istype(loc, /turf/space))
-		return // Space ignores slowdown
+		return // Space ignores
 
 	if (species && species.move_speed_mod)
 		. += species.move_speed_mod
@@ -30,20 +34,33 @@
 	if(feels_pain() && !has_painkillers())
 		if(pain_shock_stage >= 50)
 			. += 3
-
-		for(var/organ_name in list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,LIMB_LEFT_LEG,LIMB_RIGHT_LEG))
-			var/datum/organ/external/E = get_organ(organ_name)
+		var/list/limbs_to_check
+		var/multiplier = 1
+		if(!lying)
+			limbs_to_check = list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,LIMB_LEFT_LEG,LIMB_RIGHT_LEG)
+		else
+			limbs_to_check = grasp_organs
+			multiplier = 2
+		for(var/organ_name in limbs_to_check)
+			var/datum/organ/external/E
+			if(istype(organ_name, /datum/organ/external))
+				E = organ_name
+			else
+				E = get_organ(organ_name)
 			if(!E || (E.status & ORGAN_DESTROYED))
-				. += 4
+				. += 4*multiplier
 			if(E.status & ORGAN_SPLINTED)
-				. += 0.5
+				if(!find_held_item_by_type(/obj/item/weapon/cane))
+					. += 0.5*multiplier
 			else if(E.status & ORGAN_BROKEN)
-				. += 1.5
+				if(!find_held_item_by_type(/obj/item/weapon/cane))
+					. += 1*multiplier
+				. += 0.5*multiplier
+
 
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()
-
-	if(!reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(!reagents.has_any_reagents(HYPERZINES))
 		if(!shoes)
 			. *= NO_SHOES_SLOWDOWN
 	if(M_FAT in mutations) // hyperzine can't save you, fatty!
@@ -57,7 +74,7 @@
 		. *= MAGBOOTS_SLOWDOWN_HIGH //Chemical magboots, imagine.
 
 	if(isslimeperson(src))
-		if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+		if(reagents.has_any_reagents(HYPERZINES))
 			. *= 2
 		if(reagents.has_reagent(FROSTOIL))
 			. *= 5
@@ -98,7 +115,7 @@
 		prob_slip = 0 // Changing this to zero to make it line up with the comment, and also, make more sense.
 
 	//Do we have magboots or such on if so no slip
-	if(CheckSlip() < 0)
+	if(CheckSlip() == SLIP_HAS_MAGBOOTS)
 		prob_slip = 0
 
 	//Check hands and mod slip
@@ -113,19 +130,13 @@
 	prob_slip = round(prob_slip)
 	return(prob_slip)
 
-/mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
-	var/old_z = src.z
-
-	. = ..(NewLoc, Dir, step_x, step_y)
+/mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	. = ..()
 
 	/*if(status_flags & FAKEDEATH)
 		return 0*/
 
 	if(.)
-		if (old_z != src.z)
-			crewmonitor.queueUpdate(old_z)
-		crewmonitor.queueUpdate(src.z)
-
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes
 			S.step_action()
@@ -138,8 +149,21 @@
 			if(dispenser.spam_bomb)
 				dispenser.attack_self(src)
 
-/mob/living/carbon/human/CheckSlip()
+/mob/living/carbon/human/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	var/shoes_slip_factor
+	switch (overlay_type)
+		if (TURF_WET_WATER, TURF_WET_ICE)
+			shoes_slip_factor = shoes && (shoes.clothing_flags & NOSLIP)
+		if (TURF_WET_LUBE)
+			shoes_slip_factor = shoes && (shoes.clothing_flags & IGNORE_LUBE)
+		else
+			shoes_slip_factor = TRUE // Shoes are of no interest for this.
+
+	var/magboots_slip_factor = (!slip_on_magbooties && shoes_slip_factor && (shoes.clothing_flags & MAGPULSE))
 	. = ..()
-	if(. && shoes && shoes.clothing_flags & NOSLIP)
-		. = (istype(shoes, /obj/item/clothing/shoes/magboots) ? -1 : 0)
-	return .
+
+	// We have magboots, and magboots can protect us
+	if (. && magboots_slip_factor)
+		return SLIP_HAS_MAGBOOTS
+	// We don't have magboots, or magboots can't protect us
+	return (. && !shoes_slip_factor)

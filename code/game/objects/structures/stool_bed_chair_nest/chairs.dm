@@ -7,7 +7,7 @@
 	var/image/secondary_buckle_overlay = null // for those really complicated chairs
 	var/noghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
 
-	lock_type = /datum/locking_category/buckle/chair
+	mob_lock_type = /datum/locking_category/buckle/chair
 
 /obj/structure/bed/chair/New()
 	..()
@@ -18,17 +18,38 @@
 	..()
 	handle_layer()
 
+/obj/structure/bed/chair/lock_atom(var/atom/movable/AM)
+	. = ..()
+	update_icon()
+
+/obj/structure/bed/chair/unlock_atom(var/atom/movable/AM)
+	. = ..()
+	update_icon()
+
+/obj/structure/bed/chair/update_icon()
+	..()
+	if(is_locking(mob_lock_type))
+		if (buckle_overlay)
+			overlays += buckle_overlay
+		if (secondary_buckle_overlay)
+			overlays += secondary_buckle_overlay
+	else
+		overlays -= buckle_overlay
+		overlays -= secondary_buckle_overlay
+
+	handle_layer() 				         // part of layer fix
+
 /obj/structure/bed/chair/can_spook()
 	. = ..()
 	if(.)
 		return !noghostspin
 
-/obj/structure/bed/chair/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/bed/chair/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/SK = W
 		if(user.drop_item(W))
 			var/obj/structure/bed/chair/e_chair/E = new /obj/structure/bed/chair/e_chair(src.loc)
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			E.dir = dir
 			E.part = SK
 			SK.forceMove(E)
@@ -37,9 +58,61 @@
 			return
 
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		drop_stack(sheet_type, loc, sheet_amt, user)
 		qdel(src)
+		return
+
+	if(istype(W, /obj/item/stack/sheet/plasteel))
+		if(type in subtypesof(/obj/structure/bed/chair))//only default chairs can be upgraded into seats
+			to_chat(user, "<span class='warning'>You Can only upgrade basic chairs.</span>")
+			return
+		else if (locked_atoms && locked_atoms.len > 0)
+			to_chat(user, "<span class='warning'>You cannot upgrade a chair with someone buckled on it.</span>")
+			return
+		var/obj/item/stack/ST = W
+		if (ST.amount < 5)
+			to_chat(user, "<span class='warning'>You need 5 plasteel sheets to improve this chair.</span>")
+			return
+
+		var/list/ok_types = list(
+			"neutral" = /obj/structure/bed/chair/shuttle,
+			"red" = /obj/structure/bed/chair/shuttle/red,
+			"blue" = /obj/structure/bed/chair/shuttle/blue,
+			"yellow" = /obj/structure/bed/chair/shuttle/yellow,
+			"white" = /obj/structure/bed/chair/shuttle/white,
+			"custom" = /obj/structure/bed/chair/shuttle/white/custom,
+			)
+
+		var/seat_color = null
+		var/seat_type = input(user,"What colour for the seat's cushions?","Upgrading chair to seat") as null|anything in ok_types
+
+
+		if (!seat_type)
+			return
+
+		if (seat_type == "custom")
+			seat_color = input(user, "Please select cushion color.", "Seat color") as color
+
+		var/new_type = ok_types[seat_type]
+
+		user.visible_message("<span class='notice'>\The [user] starts upgrading \the [src] using some plasteel.</span>", \
+		"<span class='notice'>You begin upgrading \the [src].</span>")
+		if(do_after(user, src, 50))
+			if (ST.use(5))
+				if (locked_atoms && locked_atoms.len > 0)
+					to_chat(user, "<span class='warning'>You cannot upgrade a chair with someone buckled on it.</span>")
+					return
+				var/obj/structure/bed/chair/shuttle/S = new new_type(loc,seat_color)
+				S.dir = dir
+				playsound(S, 'sound/items/Deconstruct.ogg', 50, 1)
+				user.visible_message("<span class='notice'>\The [user] upgrades \the [src] into \a [S].</span>", \
+				"<span class='notice'>You finishing upgrading \the [src] into \a [S].</span>")
+				qdel(src)
+				return
+			else
+				to_chat(user, "<span class='warning'>You need 5 plasteel sheets to improve this chair.</span>")
+				return
 		return
 
 	. = ..()
@@ -55,7 +128,7 @@
 	else
 		plane = OBJ_PLANE
 
-/obj/structure/bed/chair/proc/spin()
+/obj/structure/bed/chair/proc/spin(var/mob/M)
 	change_dir(turn(dir, 90))
 
 /obj/structure/bed/chair/verb/rotate()
@@ -76,7 +149,7 @@
 			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 		ghost.lastchairspin = world.time
 
-	spin()
+	spin(usr)
 
 /obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
 	if(!config.ghost_interaction || !can_spook())
@@ -84,33 +157,44 @@
 			return
 	change_dir(direction)
 	return 1
+	
+/obj/structure/bed/chair/AltClick(mob/user as mob)
+	buckle_chair(user,user)	
 
-/obj/structure/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
+/obj/structure/bed/chair/MouseDropTo(mob/M as mob, mob/user as mob)
+	buckle_chair(M,user)
+
+/obj/structure/bed/chair/proc/buckle_chair(mob/M as mob, mob/user as mob)
 	if(!istype(M))
-		return
+		return ..()
+	
+	//if(M == user && M.loc != src.loc)
+		//return
+
 	var/mob/living/carbon/human/target = null
 	if(ishuman(M))
 		target = M
-	if((target) && (target.op_stage.butt == 4)) //Butt surgery is at stage 4
+		
+	if(!user.Adjacent(M))
+		return
+
+	if(target && target.op_stage.butt == 4 && Adjacent(target) && user.Adjacent(src) && !user.incapacitated()) //Butt surgery is at stage 4
 		if(!M.knockdown)	//Spam prevention
-			if(M == usr)
-				M.visible_message(\
-					"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
-					"Having no butt, you slide right out of the [src]",\
-					"You hear metal clanking.")
-
-			else
-				M.visible_message(\
-					"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
-					"Having no butt, you slide right out of the [src]",\
-					"You hear metal clanking.")
-
+			M.visible_message(\
+				"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
+				"Having no butt, you slide right out of the [src]",\
+				"You hear metal clanking.")
+				
 			M.Knockdown(5)
+			M.Stun(5)
 		else
 			to_chat(user, "You can't buckle [M.name] to [src], They just fell out!")
 
 	else
 		buckle_mob(M, user)
+	if(material_type)
+		material_type.on_use(src,M,user)
+
 
 // Chair types
 /obj/structure/bed/chair/wood
@@ -151,6 +235,26 @@
 /obj/structure/bed/chair/wood/wings/cultify()
 	return
 
+/obj/structure/bed/chair/wood/throne
+	icon = 'icons/obj/stationobjs_64x64.dmi'
+	icon_state = "throne"
+	name = "throne"
+	desc = "A throne fitting for a royal behind."
+	sheet_amt = 40
+	anchored = 1
+	pixel_x = -1*WORLD_ICON_SIZE/2
+	pixel_y = -1*WORLD_ICON_SIZE/2
+
+/obj/structure/bed/chair/wood/throne/cultify()
+	icon_state = "skullthrone"
+	name = "skull throne"
+	desc = pick("Put Khorny pun here.","Well, now what?","Now all that is required is a goblet made from your 'other' enemies' skulls.")
+
+/obj/structure/bed/chair/wood/throne/New()
+	..()
+	buckle_overlay = image("icons/obj/stools-chairs-beds.dmi", "[icon_state]_arm", CHAIR_ARMREST_LAYER)
+	buckle_overlay.plane = ABOVE_HUMAN_PLANE
+
 /obj/structure/bed/chair/holowood/normal
 	icon_state = "wooden_chair"
 	name = "wooden chair"
@@ -180,24 +284,6 @@
 	buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]_armrest", CHAIR_ARMREST_LAYER)
 	buckle_overlay.plane = ABOVE_HUMAN_PLANE
 
-/obj/structure/bed/chair/comfy/lock_atom(var/atom/movable/AM)
-	..()
-	update_icon()
-
-/obj/structure/bed/chair/comfy/unlock_atom(var/atom/movable/AM)
-	..()
-	update_icon()
-
-/obj/structure/bed/chair/comfy/update_icon()
-	..()
-	if(is_locking(lock_type))
-		overlays += buckle_overlay
-		if(secondary_buckle_overlay)
-			overlays += secondary_buckle_overlay
-	else
-		overlays -= buckle_overlay
-		if(secondary_buckle_overlay)
-			overlays -= secondary_buckle_overlay
 
 /obj/structure/bed/chair/comfy/attackby(var/obj/item/W, var/mob/user)
 	if (iswrench(W))
@@ -218,13 +304,13 @@
 
 	return ..()
 
-/obj/structure/bed/chair/comfy/attack_hand(var/mob/user)
-	if(is_locking(lock_type))
+/obj/structure/bed/chair/comfy/attack_hand(var/mob/user, params, proximity)
+	if(is_locking(mob_lock_type))
 		return ..()
-
-	for (var/obj/item/I in src)
-		user.put_in_hands(I)
-		to_chat(user, "You pull out \the [I] between \the [src]'s cushions.")
+	if(proximity)
+		for (var/obj/item/I in src)
+			user.put_in_hands(I)
+			to_chat(user, "You pull out \the [I] between \the [src]'s cushions.")
 
 /obj/structure/bed/chair/comfy/brown
 	icon_state = "comfychair_brown"
@@ -254,26 +340,9 @@
 	buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]-overlay", CHAIR_ARMREST_LAYER)
 	buckle_overlay.plane = ABOVE_HUMAN_PLANE
 
-/obj/structure/bed/chair/office/lock_atom(var/atom/movable/AM)
-	. = ..()
-	update_icon()
-
-/obj/structure/bed/chair/office/unlock_atom(var/atom/movable/AM)
-	..()
-	update_icon()
-
-/obj/structure/bed/chair/office/update_icon()
-	..()
-	if(is_locking(lock_type))
-		overlays += buckle_overlay
-	else
-		overlays -= buckle_overlay
-
-	handle_layer() 				         // part of layer fix
-
 
 /obj/structure/bed/chair/office/handle_layer() // Fixes layer problem when and office chair is buckled and facing north
-	if(dir == NORTH && !is_locking(lock_type))
+	if(dir == NORTH && !is_locking(mob_lock_type))
 		layer = CHAIR_ARMREST_LAYER
 		plane = ABOVE_HUMAN_PLANE
 	else
@@ -293,22 +362,28 @@
 			return 0
 	if(last_airflow + 5 SECONDS > world.time) //ugly hack: can't scoot during ZAS
 		return 0
+
 	if(istype(T, /turf/simulated))
-		var/turf/simulated/ST = T
-		if(ST.wet == TURF_WET_LUBE)
+		var/turf/simulated/TS = T
+		var/obj/effect/overlay/puddle/P = TS.is_wet()
+		if(P && P.wet == TURF_WET_LUBE)
 			user.unlock_from(src)
-			ST.Entered(user) //bye bye
+			T.Entered(user) //bye bye
 			return 0
 
 	//forwards, scoot slow
 	if(direction == dir)
+		var/scootdelay = user.movement_delay()*6
+		set_glide_size(DELAY2GLIDESIZE(scootdelay))
 		step(src, direction)
-		user.delayNextMove(user.movement_delay()*6)
+		user.delayNextMove(scootdelay)
 	//backwards, scoot fast
 	else if(direction == turn(dir, 180))
+		var/scootdelay = user.movement_delay()*3
+		set_glide_size(DELAY2GLIDESIZE(scootdelay))
 		step(src, direction)
 		change_dir(turn(direction, 180)) //face away from where we're going
-		user.delayNextMove(user.movement_delay()*3)
+		user.delayNextMove(scootdelay)
 	//sideways, swivel to face
 	else
 		change_dir(direction)
@@ -490,6 +565,7 @@
 	desc = "A collapsed folding chair that can be carried around."
 	icon = 'icons/obj/stools-chairs-beds.dmi'
 	icon_state = "folded_chair"
+	force = 13
 	w_class = W_CLASS_LARGE
 	var/obj/structure/bed/chair/folding/unfolded
 
@@ -515,16 +591,98 @@
 	user.drop_item(src, force_drop = 1)
 	forceMove(unfolded)
 
-/obj/structure/bed/chair/folding/MouseDrop(over_object, src_location, over_location)
+/obj/structure/bed/chair/folding/MouseDropFrom(over_object, src_location, over_location)
 	..()
 	if(over_object == usr && Adjacent(usr))
-		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 
-		if(is_locking(lock_type))
+		if(is_locking(mob_lock_type))
 			return 0
 
 		visible_message("[usr] folds up \the [src].")
 
 		folded.forceMove(get_turf(src))
 		forceMove(folded)
+
+//Shuttle seats
+/obj/structure/bed/chair/shuttle
+	name = "seat"
+	desc = "A reinforced chair that's firmly secured to the ground."
+	icon_state = "shuttleseat_neutral"
+	anchored = 1
+
+/obj/structure/bed/chair/shuttle/attackby(var/obj/item/W, var/mob/user)
+	var/mob/M = locate() in loc//so attacking people isn't made harder by the seats' bulkiness
+	if (M)
+		return M.attackby(W,user)
+	if(istype(W, /obj/item/assembly/shock_kit))
+		to_chat(user,"<span class='warning'>\The [W] cannot be rigged onto \the [src].</span>")
+		return
+	if(iswrench(W))
+		to_chat(user,"<span class='warning'>You cannot find any bolts to unwrench on \the [src].</span>")
+		return
+	if (iswelder(W))
+		if (locked_atoms && locked_atoms.len > 0)
+			to_chat(user,"<span class='warning'>You cannot downgrade a seat with someone buckled on it.</span>")
+			return
+		var/obj/item/weapon/weldingtool/WT = W
+		to_chat(user, "You start welding the plasteel off \the [src]")
+		if (WT.do_weld(user, src, 50, 3))
+			if(gcDestroyed)
+				return
+			if (locked_atoms && locked_atoms.len > 0)
+				to_chat(user,"<span class='warning'>You cannot downgrade a seat with someone buckled on it.</span>")
+				return
+			var/obj/structure/bed/chair/C = new (loc)
+			C.dir = dir
+			drop_stack(/obj/item/stack/sheet/plasteel, loc, 5, user)
+			user.visible_message(\
+				"<span class='warning'>\The [src] has been welded apart, leaving \a [C] behind.</span>",\
+				"You finish removing the seat components from the chair frame.",\
+				"<span class='warning'>You hear welding.</span>")
+			qdel(src)
+		return
+	..()
+
+/obj/structure/bed/chair/shuttle/spin(var/mob/M)
+	to_chat(M,"<span class='warning'>\The [src] is firmly secured to \the [loc], you cannot spin it.</span>")
+
+/obj/structure/bed/chair/shuttle/New()
+	..()
+	buckle_overlay = image("icons/obj/stools-chairs-beds.dmi", "[icon_state]_buckle", CHAIR_ARMREST_LAYER)
+	buckle_overlay.plane = ABOVE_HUMAN_PLANE
+
+/obj/structure/bed/chair/shuttle/red
+	icon_state = "shuttleseat_red"
+
+/obj/structure/bed/chair/shuttle/blue
+	icon_state = "shuttleseat_blue"
+
+/obj/structure/bed/chair/shuttle/yellow
+	icon_state = "shuttleseat_yellow"
+
+/obj/structure/bed/chair/shuttle/white
+	icon_state = "shuttleseat_white"
+
+/obj/structure/bed/chair/shuttle/white/custom
+
+/obj/structure/bed/chair/shuttle/white/custom/New(var/turf/loc, var/seat_color = null)
+	..()
+	if (seat_color)
+		var/image/I1 = image("icons/obj/stools-chairs-beds.dmi", "shuttleseat_color", layer)
+		I1.plane = plane
+		I1.color = seat_color
+		overlays += I1
+
+		var/image/I2 = image("icons/obj/stools-chairs-beds.dmi", "shuttleseat_color_buckle", CHAIR_ARMREST_LAYER)
+		I2.color = seat_color
+		secondary_buckle_overlay = I2
+		secondary_buckle_overlay.plane = ABOVE_HUMAN_PLANE
+
+/obj/structure/bed/chair/shuttle/gamer
+	desc = "Ain't got nothing to compensate."
+	icon_state = "shuttleseat_GAMER"
+
+/obj/structure/bed/chair/shuttle/gamer/spin(var/mob/M)
+	change_dir(turn(dir, 90))

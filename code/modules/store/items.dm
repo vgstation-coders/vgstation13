@@ -6,6 +6,7 @@
 	var/desc="It's a thing."
 	var/typepath=/obj/item/weapon/storage/box
 	var/cost=0
+	var/stock = -1 //-1 = unlimited stock. Any other value means the item will become unavailable at 0.
 	var/category = "misc"
 
 /datum/storeitem/proc/deliver(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
@@ -61,6 +62,18 @@
 	typepath = /obj/machinery/media/receiver/boombox
 	cost = 400
 
+/datum/storeitem/diskettebox
+	name = "Diskette Box"
+	desc = "A lockable box for storing data disks. Comes with a few useless blank disks."
+	typepath = /obj/item/weapon/storage/lockbox/diskettebox/open/blanks
+	cost = 20
+
+/datum/storeitem/diskettebox_large
+	name = "Large Diskette Box"
+	desc = "A larger lockable box for storing data disks. Comes with a few useless blank disks."
+	typepath = /obj/item/weapon/storage/lockbox/diskettebox/large/open/blanks
+	cost = 50
+
 /////////////////////////////
 // Toys
 /////////////////////////////
@@ -81,6 +94,25 @@
 	desc = "Summer up your office with this cheap vinyl beachball made by prisoners!"
 	typepath = /obj/item/weapon/beach_ball
 	cost = 50
+
+/datum/storeitem/dorkcube
+	name = "Loot Box"
+	desc = "A single month subscription to Loot Box!"
+	typepath = /obj/item/weapon/winter_gift/dorkcube
+	cost = 30
+
+/datum/storeitem/unecards
+	name = "Deck of Une Cards"
+	desc = "A deck of une playing cards."
+	typepath = /obj/item/toy/cards/une
+	cost = 35
+
+/datum/storeitem/roganbot
+	name = "ROGANbot"
+	desc = "Your own personalized assistant to speed up your workplace communication skills! Ages 550 and up."
+	typepath = /obj/item/device/roganbot
+	cost = 100
+	stock = 1
 
 /////////////////////////////
 // Clothing
@@ -117,6 +149,12 @@
 	desc = "A random painting from Centcom's museum. For those with good taste in art."
 	typepath = /obj/item/mounted/frame/painting
 	cost = 700
+
+/datum/storeitem/critter_cage
+	name = "small cage"
+	desc = "A cage where to keep tiny animals safe. Fit with a drinking bottle that can be refilled.."
+	typepath = /obj/item/critter_cage
+	cost = 60
 
 /////////////////////////////
 // Holiday Special Items!

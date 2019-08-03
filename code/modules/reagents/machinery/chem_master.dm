@@ -1,7 +1,9 @@
-#define MAX_PILL_SPRITE 20 //Max icon state of the pill sprites
+#define MAX_PILL_SPRITE 40 //Max icon state of the pill sprites
 var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white", "oblong cyan", "oblong darkred", "oblong orange-striped", "oblong lightblue-drab", \
 "oblong white", "oblong white-striped", "oblong purple-yellow", "round white", "round lightblue", "round yellow", "round purple", "round lightgreen", "round red", \
-"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green")
+"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green","oblong green-yellow","oblong grey-purple","oblong black-red", \
+"oblong yellow-grey","oblong green-purple","oblong blue-red","oblong green-brown","oblong yellow-cyan","oblong purple-cyan","oblong yellow-red","round pink", \
+"round purple-red","round black","round green-blue","round orange","round blue-beige","round blue","round beige-yellow","round red-green","round darkpink")
 
 /obj/machinery/chem_master
 	name = "\improper ChemMaster 3000"
@@ -11,9 +13,13 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	icon_state = "mixer"
 	use_power = 1
 	idle_power_usage = 20
-	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	var/obj/item/weapon/reagent_containers/container = null
+	var/list/accepted_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks)
 	var/obj/item/weapon/storage/pill_bottle/loaded_pill_bottle = null
-	var/mode = 1
+	var/mode = 1 //1 = from buffer to container. 0 = from buffer to disposals.
+	var/slurpmode = 0 //1 = from obj to container. 0 = from obj to buffer.
+	var/slurp_types = list(/obj/structure/reagent_dispensers, /obj/item/weapon/reagent_containers/glass/bucket,
+		/obj/item/weapon/reagent_containers/glass/jar, /obj/structure/mopbucket) //types of objects we can slurp from when adjacent
 	var/condi = 0
 	var/windowtype = "chem_master" //For the browser windows
 	var/useramount = 30 // Last used amount
@@ -21,6 +27,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/last_bottle_amt = 3
 	//var/bottlesprite = "1" //yes, strings
 	var/pillsprite = "1"
+	var/tmp/last_sound_time = 0
 
 	var/global/list/pill_icon_cache
 
@@ -28,6 +35,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
 	var/max_pill_size = 50
+	var/pill_display_number = MAX_PILL_SPRITE/2
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
@@ -43,7 +51,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/New()
 	. = ..()
 
-	create_reagents(100)
+	create_reagents(1000)
 
 	component_parts = newlist(
 		/obj/item/weapon/stock_parts/manipulator,
@@ -64,28 +72,16 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		generate_pill_icon_cache()
 
 /obj/machinery/chem_master/RefreshParts()
-	var/scancount = 0
 	var/lasercount = 0
 	var/manipcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
-			scancount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	max_bottle_size = initial(max_bottle_size) + lasercount*5
 	max_pill_count = initial(max_pill_count) + manipcount*5
-	handle_new_reservoir(scancount*25+100)
-	max_pill_size = initial(max_pill_size)+manipcount*25 // i suck at math
-
-
-/obj/machinery/chem_master/proc/handle_new_reservoir(var/newvol)
-	if(reagents.maximum_volume == newvol)
-		return //Volume did not change
-	if(reagents.maximum_volume>newvol)
-		reagents.remove_any(reagents.maximum_volume-newvol) //If we have more than our new max, remove equally until we reach new max
-	reagents.maximum_volume = newvol
+	max_pill_size = initial(max_pill_size) + manipcount*25
 
 /obj/machinery/chem_master/ex_act(severity)
 	switch(severity)
@@ -105,9 +101,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(..())
 		return 1
 
-	else if(istype(B, /obj/item/weapon/reagent_containers/glass))
-		if(src.beaker)
-			to_chat(user, "<span class='warning'>There already is a beaker loaded in the machine.</span>")
+	else if(is_type_in_list(B, accepted_containers))
+		if(src.container)
+			to_chat(user, "<span class='warning'>There already is \a [container] loaded in the machine.</span>")
 			return
 		if(B.w_class > W_CLASS_SMALL)
 			to_chat(user, "<span class='warning'>\The [B] is too big to fit.</span>")
@@ -116,9 +112,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
 			return
 
-		src.beaker = B
+		src.container = B
 
-		to_chat(user, "<span class='notice'>You add the beaker into \the [src]!</span>")
+		to_chat(user, "<span class='notice'>You add \the [container] into \the [src]!</span>")
 
 		src.updateUsrDialog()
 		update_icon()
@@ -143,10 +139,12 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		return 1
 
 	else if(istype(B, /obj/item/weapon/reagent_containers/pill))
-		var/name = reject_bad_text(input(user,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)") as null|text)
+		B.icon_state = "pill"+pillsprite
+		var/name = stripped_input(user,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)")
 		if(name)
 			B.name = "[name] pill"
-		B.icon_state = "pill"+pillsprite
+		else
+			to_chat(user, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 		return 1
 
 /obj/machinery/chem_master/Topic(href, href_list)
@@ -168,31 +166,38 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		usr.unset_machine()
 		return 1
 
-	if(beaker)
-		var/datum/reagents/R = beaker.reagents
+	else if(href_list["pill_sprite"])
+		pillsprite = href_list["pill_sprite"]
+		src.updateUsrDialog()
+		return 1
+
+	else if(href_list["pill_icon_toggle"])
+		if (pill_display_number == MAX_PILL_SPRITE/2)
+			pill_display_number = MAX_PILL_SPRITE
+		else
+			pill_display_number = MAX_PILL_SPRITE/2
+		src.updateUsrDialog()
+		return 1
+
+	if(container)
+		var/datum/reagents/R = container.reagents
 		if(href_list["analyze"])
+			var/datum/reagent/reagent = locate(href_list["analyze"])
 			var/dat = list()
-			if(!condi)
-				if(href_list["name"] == "Blood")
-					var/datum/reagent/blood/G
-					for(var/datum/reagent/F in R.reagent_list)
-						if(F.name == href_list["name"])
-							G = F
-							break
-					var/A = G.name
-					var/B = G.data["blood_type"]
-					var/C = G.data["blood_DNA"]
-					dat += "Chemical infos:<BR><BR>Name:<BR>[A]<BR><BR>Description:<BR>Blood Type: [B]<br>DNA: [C]<BR><BR><BR>Density:<BR>[href_list["density"]]<BR><BR>Specific heat capacity:<BR>[href_list["specheatcap"]]<BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
-				else
-					dat += "Chemical infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR>Density:<BR>[href_list["density"]]<BR><BR>Specific heat capacity:<BR>[href_list["specheatcap"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
+			if(!reagent)
+				dat += "No info. Please contact technical support if you believe this is an error."
 			else
-				dat += "Condiment infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
-			//usr << browse(dat, "window=chem_master;size=575x400")
+				dat += "[condi ? "Condiment" : "Chemical"] information:<BR><BR>Name:<BR>[reagent.name]<BR><BR>Description:<BR>[reagent.description]<BR><BR>"
+				if(!condi)
+					if(istype(reagent, /datum/reagent/blood))
+						dat += "Blood type: [reagent.data["blood_type"] || "Unknown"]<BR>Blood DNA: [reagent.data["blood_DNA"] || "Unable to determine"]<BR><BR>"
+					dat += "Density:<BR>[reagent.density]<BR><BR>Specific heat capacity:<BR>[reagent.specheatcap]<BR><BR><BR>"
+				dat += "<A href='?src=\ref[src];main=1'>(Back)</A>"
+
 			dat = jointext(dat,"")
 			var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 585, 400, src)
 			popup.set_content(dat)
 			popup.open()
-			onclose(usr, "[windowtype]")
 			return 1
 
 		else if(href_list["add"])
@@ -220,17 +225,36 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			src.updateUsrDialog()
 			return 1
 
+		else if(href_list["slurpall"])
+			var/obj/O = locate(href_list["disp"])
+			if(!is_type_in_list(O, slurp_types) || get_dist(src, O) > 1)
+				return
+			var/amount
+			if(href_list["amount"])
+				amount = text2num(href_list["amount"])
+			else if(href_list["percent"])
+				amount = O.reagents.total_volume * text2num(href_list["percent"]) / 100
+			if(isnull(amount) || amount < 0)
+				return
+			if(slurpmode)
+				O.reagents.trans_to(container, amount, log_transfer = TRUE, whodunnit = usr)
+			else
+				O.reagents.trans_to(src, amount, log_transfer = TRUE, whodunnit = usr)
+
+			src.updateUsrDialog()
+			return 1
+
 		else if(href_list["remove"])
 			var/id = href_list["remove"]
 			var/amount
 			if(href_list["amount"])
 				amount = text2num(href_list["amount"])
 			else if(href_list["percent"])
-				amount = R.get_reagent_amount(id) * text2num(href_list["percent"]) / 100
+				amount = reagents.get_reagent_amount(id) * text2num(href_list["percent"]) / 100
 			if(isnull(amount) || amount < 0)
 				return
 			if(mode)
-				reagents.trans_id_to(beaker, id, amount)
+				reagents.trans_id_to(container, id, amount)
 			else
 				reagents.remove_reagent(id, amount)
 			src.updateUsrDialog()
@@ -241,11 +265,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(href_list["amount"])
 				amount = text2num(href_list["amount"])
 			else if(href_list["percent"])
-				amount = R.total_volume * text2num(href_list["percent"]) / 100
+				amount = reagents.total_volume * text2num(href_list["percent"]) / 100
 			if(isnull(amount) || amount < 0)
 				return
 			if(mode)
-				reagents.trans_to(beaker, amount)
+				reagents.trans_to(container, amount)
 			else
 				reagents.remove_all(amount)
 			src.updateUsrDialog()
@@ -253,23 +277,28 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 		else if(href_list["addcustom"])
 			var/id = href_list["addcustom"]
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = input("Select the amount of units to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "add" = "[id]"))
 			return 1
 		else if(href_list["addallcustom"])
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = input("Select the amount of units to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "addall" = "1"))
 			return 1
+		else if(href_list["slurpallcustom"])
+			useramount = input("Select the amount of units to transfer.", 30, useramount) as num
+			useramount = isgoodnumber(useramount)
+			src.Topic(null, list("amount" = "[useramount]", "slurpall" = "1", "disp" = href_list["disp"]))
+			return 1
 		else if(href_list["removecustom"])
 			var/id = href_list["removecustom"]
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = input("Select the amount of units to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "remove" = "[id]"))
 			return 1
 		else if(href_list["removeallcustom"])
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = input("Select the amount of units to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "removeall" = "1"))
 			return 1
@@ -279,18 +308,29 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			src.updateUsrDialog()
 			return 1
 
+		else if(href_list["toggle_disp"])
+			slurpmode = !slurpmode
+			src.updateUsrDialog()
+			return 1
+
 		else if(href_list["main"])
 			attack_hand(usr)
 			src.updateUsrDialog()
 			return 1
 
 		else if(href_list["eject"])
-			if(beaker)
+			if(container)
 				detach()
-			src.updateUsrDialog()
 			return 1
 
 		else if(href_list["createpill"] || href_list["createpill_multiple"])
+			if(reagents.total_volume == 0)
+				to_chat(usr, "<span class='warning'>[bicon(src)] Buffer is empty!</span>")
+				if(last_sound_time + 1 SECONDS < world.time)
+					playsound(src, 'sound/machines/chime.ogg', 50)
+					last_sound_time = world.time
+				return
+
 			var/count = 1
 			if(href_list["createpill_multiple"])
 				count = isgoodnumber(input("Select the number of pills to make.", "Amount:", last_pill_amt) as num)
@@ -302,17 +342,16 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			var/amount_per_pill = reagents.total_volume/count
 			if(amount_per_pill > max_pill_size)
 				amount_per_pill = max_pill_size
-			if(href_list["createempty"])
-				amount_per_pill = 0 //If "createempty" is 1, pills are empty and no reagents are used.
 
-			var/name = reject_bad_text(input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill] units)") as null|text)
+			var/name = stripped_input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill] units)")
 			if(!name)
+				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 				return
 
 			var/logged_message = " - [key_name(usr)] has made [count] pill[count > 1 ? "s, each" : ""] named '[name]' and containing "
 
 			while(count--)
-				if((amount_per_pill == 0 || reagents.total_volume == 0) && !href_list["createempty"]) //Don't create empty pills unless "createempty" is 1!
+				if(amount_per_pill == 0 || reagents.total_volume == 0)
 					break
 
 				var/obj/item/weapon/reagent_containers/pill/P = new/obj/item/weapon/reagent_containers/pill(src.loc)
@@ -335,20 +374,28 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			return 1
 
 		else if (href_list["createbottle"] || href_list["createbottle_multiple"])
+			if(reagents.total_volume == 0)
+				to_chat(usr, "<span class='warning'>[bicon(src)] Buffer is empty!</span>")
+				return
 			if(!condi)
 				var/count = 1
 				if(href_list["createbottle_multiple"])
 					count = isgoodnumber(input("Select the number of bottles to make.", "Amount:", last_bottle_amt) as num)
 				count = Clamp(count, 1, 4)
 				last_bottle_amt = count
+
 				var/amount_per_bottle = reagents.total_volume > 0 ? reagents.total_volume/count : 0
 				amount_per_bottle = min(amount_per_bottle,max_bottle_size)
 
-				var/name = reject_bad_text(input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)") as null|text)
+				var/name = stripped_input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)")
 				if(!name)
+					to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 					return
 
 				while(count--)
+					if(amount_per_bottle == 0 || reagents.total_volume == 0)
+						break
+
 					var/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/(src.loc,max_bottle_size)
 					P.name = "[name] bottle"
 					P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
@@ -363,45 +410,18 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				src.updateUsrDialog()
 				return 1
 
-		/*
-		else if(href_list["change_bottle"])
-			#define MAX_BOTTLE_SPRITE 20 //max icon state of the bottle sprites
-			var/dat = "<table>"
-			for(var/i = 1 to MAX_BOTTLE_SPRITE)
-				if ( i%4==1 )
-					dat += "<tr>"
-
-				dat += "<td><a href=\"?src=\ref[src]&bottle_sprite=[i]\"><img src=\"bottle[i].png\" /></a></td>"
-
-				if ( i%4==0 )
-					dat +="</tr>"
-
-			dat += "</table>"
-			usr << browse(dat, "window=chem_master")
-			return
-		*/
-
-		else if(href_list["pill_sprite"])
-			pillsprite = href_list["pill_sprite"]
-			src.updateUsrDialog()
-			return 1
-
-		/*
-		else if(href_list["bottle_sprite"])
-			bottlesprite = href_list["bottle_sprite"]
-		*/
-
 /obj/machinery/chem_master/proc/detach()
-	if(beaker)
-		beaker.forceMove(src.loc)
-		beaker.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
-		beaker.pixel_y = 0 //We fucked with the beaker for overlays, so reset that
-		beaker = null
+	if(container)
+		container.forceMove(src.loc)
+		container.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
+		container.pixel_y = 0 //We fucked with the beaker for overlays, so reset that
+		container = null
 		reagents.clear_reagents()
 		update_icon()
+		updateUsrDialog()
 
 /obj/machinery/chem_master/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
 		detach()
 		return
 	return ..()
@@ -418,6 +438,23 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	for(var/i = 1 to MAX_PILL_SPRITE)
 		pill_icon_cache += bicon(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))
 
+/obj/machinery/chem_master/proc/generate_pill_icon_div(pill_display_number)
+	var/dat = list()
+	dat += "<HR>"
+	dat += "<a href='?src=\ref[src];pill_icon_toggle=1'>Toggle Additional Pill Icons</a><br>"
+	dat += "<div class='pillIconsContainer'>"
+	for(var/i = 1 to pill_display_number)
+		dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
+					<div class="pillIcon">
+						[pill_icon_cache[i]]
+					</div>
+				</a>"}
+		if (i%10 == 0)
+			dat += "<br>"
+
+	dat += "</div>"
+	return dat
+
 /obj/machinery/chem_master/attack_hand(mob/user as mob)
 	. = ..()
 	if(.)
@@ -426,15 +463,17 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	user.set_machine(src)
 
 	var/dat = list()
-	if(!beaker)
+
+	if(!container)
 		dat += "Please insert a beaker.<BR>"
 		if(!condi)
 			if(src.loaded_pill_bottle)
 				dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
 			else
 				dat += "No pill bottle inserted.<BR><BR>"
+			dat += generate_pill_icon_div(pill_display_number)
 	else
-		var/datum/reagents/R = beaker.reagents
+		var/datum/reagents/R = container.reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
 
 		if(src.loaded_pill_bottle)
@@ -466,9 +505,18 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			dat += "<table>"
 			for(var/datum/reagent/G in R.reagent_list)
 				dat += "<tr>"
+				var/reg_name = G.name
+				if (istype(G,/datum/reagent/vaccine))
+					var/datum/reagent/vaccine/vaccine = G
+					var/vaccines = ""
+					for (var/A in vaccine.data["antigen"])
+						vaccines += "[A]"
+					if (vaccines == "")
+						vaccines = "blank"
+					reg_name = "[reg_name] ([vaccines])"
 				dat += {"
 					<td class="column1">
-						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name];density=[G.density];specheatcap=[G.specheatcap]'>(?)</A>
+						[reg_name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[G]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];add=[G.id];amount=1'>1u</A>
@@ -480,6 +528,34 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				"}
 				dat += "</tr>"
 			dat += "</table>"
+
+		//
+		// NEARBY SLURPABLES
+		//
+		var/found_valid_disp = FALSE
+		for(var/obj/O in orange(1,src))
+			if(!is_type_in_list(O, slurp_types))
+				continue
+			if(!O.reagents.total_volume)
+				continue
+			if(!found_valid_disp)
+				dat += "<HR>"
+				dat += "<table><td class='column1'>Transfer to <A href='?src=\ref[src];toggle_disp=1'>[(!slurpmode ? "buffer" : "container")]:</A></td></table>"
+				found_valid_disp = TRUE
+			dat += {"
+				<table>
+					<td class="column1">
+						\The [O], [O.reagents.total_volume] Units - ([dir2arrow(get_dir(src,O))])
+					</td>
+					<td class="column2">
+						<A href='?src=\ref[src];slurpall=1;disp=\ref[O];amount=10'>10u</A>
+						<A href='?src=\ref[src];slurpall=1;disp=\ref[O];amount=50'>50u</A>
+						<A href='?src=\ref[src];slurpall=1;disp=\ref[O];amount=100'>100u</A>
+						<A href='?src=\ref[src];slurpallcustom=1;disp=\ref[O]'>Custom</A>
+						<A href='?src=\ref[src];slurpall=1;disp=\ref[O];amount=[O.reagents.total_volume]'>All</A>
+					</td>
+				</table>
+			"}
 
 		//
 		// BUFFER
@@ -504,9 +580,18 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			dat += "<table>"
 			for(var/datum/reagent/N in reagents.reagent_list)
 				dat += "<tr>"
+				var/reg_name = N.name
+				if (istype(N,/datum/reagent/vaccine))
+					var/datum/reagent/vaccine/vaccine = N
+					var/vaccines = ""
+					for (var/A in vaccine.data["antigen"])
+						vaccines += "[A]"
+					if (vaccines == "")
+						vaccines = "blank"
+					reg_name = "[reg_name] ([vaccines])"
 				dat += {"
 					<td class="column1">
-						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name];density=[N.density];specheatcap=[N.specheatcap]'>(?)</A>
+						[reg_name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[N]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];remove=[N.id];amount=1'>1u</A>
@@ -527,23 +612,17 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			//
 			// PILL ICONS
 			//
-			dat += "<HR>"
-			dat += "<div class='pillIconsContainer'>"
-			for(var/i = 1 to MAX_PILL_SPRITE)
-				dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
-							<div class="pillIcon">
-								[pill_icon_cache[i]]
-							</div>
-						</a>"}
-				if (i%10 == 0)
-					dat +="<br>"
-			dat += "</div>"
+
+			dat += generate_pill_icon_div(pill_display_number)
+
+
+
+
 			//
 			// BUTTONS
 			//
 			dat += {"<HR><A href='?src=\ref[src];createpill=1'>Create single pill ([max_pill_size] units max)</A><BR>
 					<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills ([max_pill_size] units max each; [max_pill_count] max)</A><BR>
-					<A href='?src=\ref[src];createpill_multiple=1;createempty=1'>Create empty pills</A><BR>
 					<A href='?src=\ref[src];createbottle=1'>Create bottle ([max_bottle_size] units max)</A><BR>
 					<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; 4 max)</A><BR>"}
 
@@ -569,18 +648,18 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 /obj/machinery/chem_master/kick_act(mob/living/H)
 	..()
-	if(beaker)
+	if(container)
 		detach()
 
 /obj/machinery/chem_master/update_icon()
 
 	overlays.len = 0
 
-	if(beaker)
-		beaker.pixel_x = -9 * PIXEL_MULTIPLIER//Move it far to the left
-		beaker.pixel_y = 5 * PIXEL_MULTIPLIER//Move it up
-		beaker.update_icon() //Forcefully update the beaker
-		overlays += beaker //Set it as an overlay
+	if(container)
+		container.pixel_x = -9 * PIXEL_MULTIPLIER//Move it far to the left
+		container.pixel_y = 5 * PIXEL_MULTIPLIER//Move it up
+		container.update_icon() //Forcefully update the beaker
+		overlays += container //Set it as an overlay
 
 	if(reagents.total_volume && !(stat & (BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
 		var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")

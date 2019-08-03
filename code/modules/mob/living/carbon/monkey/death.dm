@@ -6,7 +6,7 @@
 	invisibility = 101
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-m", sleeptime = 15)
-	gibs(loc, viruses, dna)
+	gibs(loc, virus2, dna)
 
 	qdel(src)
 
@@ -30,15 +30,13 @@
 		return
 	if(healths)
 		healths.icon_state = "health5"
-	stat = DEAD
-
 	if(!gibbed)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<b>\The [name]</b> lets out a faint chimper as it collapses and stops moving...", 1) //ded -- Urist
+		emote("deathgasp", message = TRUE)
+	stat = DEAD
 
 	update_canmove()
 	update_icons()
-	if(ticker.mode)
-		ticker.mode.check_win()
+	/*if(ticker.mode) WHY
+		ticker.mode.check_win()*/
 
 	return ..(gibbed)

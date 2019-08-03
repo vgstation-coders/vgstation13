@@ -30,8 +30,6 @@
  * show_inv() -> Topic() -> handle_strip_slot()
  */
 
-#define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
-
 //These procs handle putting stuff in your hand. It's probably best to use these rather than setting l_hand = ...etc
 //as they handle all relevant stuff like adding it to the player's screen and updating their overlays.
 
@@ -72,14 +70,20 @@
 /mob/proc/get_active_hand()
 	return get_held_item_by_index(active_hand)
 
-/mob/proc/get_held_item_ui_location(index)
+/mob/proc/get_held_item_ui_location(index,var/obj/item/W=null)
 	if(!is_valid_hand_index(index))
 		return
 
 	var/x_offset = -(index % 2) //Index is 1 -> one unit to the left
 	var/y_offset = round((index-1) / 2) //Two slots per row, then go higher. Rounded down
 
-	return "CENTER[x_offset ? x_offset : ""]:[WORLD_ICON_SIZE/2],SOUTH[y_offset ? "+[y_offset]" : ""]:[5*PIXEL_MULTIPLIER]"
+	var/x_pixel_offset = 0
+	var/y_pixel_offset = 0
+	if (W)
+		x_pixel_offset = initial(W.pixel_x)
+		y_pixel_offset = initial(W.pixel_y)
+
+	return "CENTER[x_offset ? x_offset : ""]:[WORLD_ICON_SIZE/2+x_pixel_offset],SOUTH[y_offset ? "+[y_offset]" : ""]:[5*PIXEL_MULTIPLIER+y_pixel_offset]"
 
 	/*
 	switch(index)
@@ -183,7 +187,7 @@
 	W.hud_layerise()
 	W.pixel_x = initial(W.pixel_x)
 	W.pixel_y = initial(W.pixel_y)
-	W.equipped(src, null, index)
+	W.equipped(src,null,index)
 
 	if(client)
 		client.screen |= W
@@ -289,11 +293,18 @@
 		//update_icons() // Redundant as u_equip will handle updating the specific overlay
 		return 1
 
+
 // Drops all and only equipped items, including items in hand
 /mob/proc/drop_all()
 	for (var/obj/item/I in get_all_slots())
 		drop_from_inventory(I)
 	drop_hands()
+	
+// deletes all and only equipped items, including items in hand
+/mob/proc/delete_all_equipped_items()
+	for (var/obj/item/I in get_all_slots())
+		qdel(I)
+	delete_held_items()
 
 //Drops the item in our hand - you can specify an item and a location to drop to
 
@@ -335,6 +346,10 @@
 /mob/proc/drop_hands(var/atom/Target, force_drop = 0) //drops both items
 	for(var/obj/item/I in held_items)
 		drop_item(I, Target, force_drop = force_drop)
+		
+/mob/proc/delete_held_items(var/atom/Target) //deletes both items
+	for(var/obj/item/I in held_items)
+		qdel(I)
 
 //TODO: phase out this proc
 /mob/proc/before_take_item(var/obj/item/W)	//TODO: what is this?
@@ -428,6 +443,21 @@
 			return (locate(I) in get_equipped_items())
 		return (I in get_equipped_items())
 
+//Same as above, but checks for any item type in the list. Try to use a slot with large lists or it could end up fairly costly.
+/mob/proc/is_wearing_any(list/item_types, slot = null)
+	if(slot)
+		for(var/element in item_types)
+			if(ispath(element))
+				var/obj/item/item = get_item_by_slot(slot)
+				if(istype(item, element))
+					return item
+	else
+		for(var/element in item_types)
+			if(ispath(element))
+				var/obj/item/I = locate(element) in get_equipped_items()
+				if(I)
+					return I
+
 /mob/living/carbon/human/proc/equip_if_possible(obj/item/W, slot, act_on_fail = EQUIP_FAILACTION_DELETE) // since byond doesn't seem to have pointers, this seems like the best way to do this :/
 	//warning: icky code
 	var/equipped = 0
@@ -443,6 +473,9 @@
 		if(slot_handcuffed)
 			if(!src.handcuffed)
 				src.handcuffed = W
+				equipped = 1
+			if (!src.mutual_handcuffs)
+				src.mutual_handcuffs = W
 				equipped = 1
 		if(slot_belt)
 			if(!src.belt && src.w_uniform)
@@ -513,10 +546,19 @@
 	return equipped
 
 /mob/proc/get_id_card()
-	for(var/obj/item/I in src.get_all_slots())
+	for(var/obj/item/I in src.get_all_slots() + held_items)
 		. = I.GetID()
 		if(.)
 			break
+
+/mob/proc/get_card()
+	// Try to find a debit card first.
+	var/list/all_slots = held_items + src.get_all_slots()
+	var/obj/item/weapon/card/debit/debit_card = locate(/obj/item/weapon/card/debit/) in all_slots
+	if(debit_card)
+		return debit_card
+	else
+		return get_id_card()
 
 /mob/proc/slotID2slotname(slot_id)
 	switch (slot_id)

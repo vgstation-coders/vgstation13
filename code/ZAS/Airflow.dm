@@ -64,13 +64,13 @@ atom/movable/GotoAirflowDest(n)
 /mob/living/carbon/slime/airflow_stun()
 	return
 
-/mob/living/carbon/human/airflow_stun()
+/mob/living/carbon/human/airflow_stun(differential)
 	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
 		return FALSE
 	if(locked_to || (flags & INVULNERABLE))
 		return FALSE
 	if(shoes)
-		if(CheckSlip() < 1)
+		if((CheckSlip()) != TRUE)
 			return FALSE
 	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
@@ -78,7 +78,7 @@ atom/movable/GotoAirflowDest(n)
 
 	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
-	SetKnockdown(rand(1,5))
+	SetKnockdown(rand(differential/20,differential/10))
 	last_airflow_stun = world.time
 
 /atom/movable/proc/check_airflow_movable(n)
@@ -94,7 +94,7 @@ atom/movable/GotoAirflowDest(n)
 		return FALSE
 	if(locked_to)
 		return FALSE
-	if(CheckSlip() < 0)
+	if(CheckSlip() == SLIP_HAS_MAGBOOTS)
 		return FALSE
 
 	if (grabbed_by.len)
@@ -134,7 +134,7 @@ atom/movable/GotoAirflowDest(n)
 /atom/movable/var/tmp/airflow_time = 0
 /atom/movable/var/tmp/last_airflow = 0
 
-/atom/movable/proc/GotoAirflowDest(n)
+/atom/movable/proc/GotoAirflowDest(n) //TODO GLIDESIZE HERE
 	if(!airflow_dest || pulledby)
 		return
 	if(world.time < last_airflow + zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
@@ -164,33 +164,42 @@ atom/movable/GotoAirflowDest(n)
 
 	var/od = FALSE
 	if(!density)
-		density = TRUE
+		setDensity(TRUE)
 		od = TRUE
 
 	last_airflow = world.time
 
 	spawn(0)
+		var/turf/curturf = get_turf(src)
 		while(airflow_speed > 0 && Process_Spacemove(1))
 			airflow_speed = min(airflow_speed,15)
 			airflow_speed -= zas_settings.Get(/datum/ZAS_Setting/airflow_speed_decay)
+			var/sleep_time
 			if(airflow_speed > 7)
 				if(airflow_time++ >= airflow_speed - 7)
 					if(od)
-						density = FALSE
-					sleep(tick_multiplier)
+						setDensity(FALSE)
+					sleep_time = tick_multiplier
 			else
 				if(od)
-					density = FALSE
-				sleep(max(1,10-(airflow_speed+3)) * tick_multiplier)
+					setDensity(FALSE)
+				sleep_time = max(1,10-(airflow_speed+3)) * tick_multiplier
+			sleep(sleep_time)
 			if(od)
-				density = TRUE
+				setDensity(TRUE)
 			if ((!( src.airflow_dest ) || src.loc == src.airflow_dest))
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
 			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
 				break
 			if(!isturf(loc))
 				break
+			if(curturf != get_turf(src)) //We've managed to get to our feet and move away
+				break
+			if(!check_airflow_movable()) //We've turned our magboots on, or become unstunnable, etc.
+				break
+			set_glide_size(DELAY2GLIDESIZE(sleep_time))
 			step_towards(src, src.airflow_dest)
+			curturf = get_turf(src)
 			var/mob/M = src
 			if(istype(M) && M.client)
 				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
@@ -198,7 +207,7 @@ atom/movable/GotoAirflowDest(n)
 		airflow_speed = 0
 		airflow_time = 0
 		if(od)
-			density = FALSE
+			setDensity(FALSE)
 
 /atom/movable/to_bump(atom/Obstacle)
 	if(airflow_speed > 0 && airflow_dest)
@@ -218,7 +227,7 @@ atom/movable/GotoAirflowDest(n)
 		return //Slamming into a mouse/roach doesn't make much sense
 	if(!sound_override)
 		visible_message(message = "<span class='danger'>\The [src] slams into \a [A]!</span>", blind_message = "<span class='danger'>You hear a loud slam!</span>")
-	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
+	//playsound(src, "smash.ogg", 25, 1, -1)
 	if(istype(A,/obj/item))
 		var/obj/item/item = A
 		SetKnockdown(item.w_class)
@@ -229,7 +238,7 @@ atom/movable/GotoAirflowDest(n)
 /obj/airflow_hit(atom/A)
 	if(!sound_override)
 		visible_message(message = "<span class='danger'>\The [src] slams into \a [A]!</span>", blind_message = "<span class='warning'>You hear a loud slam!</span>")
-	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
+	//playsound(src, "smash.ogg", 25, 1, -1)
 	. = ..()
 
 /obj/item/airflow_hit(atom/A)

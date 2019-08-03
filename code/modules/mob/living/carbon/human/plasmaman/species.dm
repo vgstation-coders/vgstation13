@@ -8,16 +8,19 @@
 	flags = IS_WHITELISTED | PLASMA_IMMUNE
 	anatomy_flags = NO_BLOOD
 
-	//default_mutations=list(SKELETON) // This screws things up
+	//default_mutations=list(M_SKELETON) // This screws things up
 	primitive = /mob/living/carbon/monkey/skellington/plasma
 
-	breath_type = "toxins"
+	breath_type = GAS_PLASMA
 
 	heat_level_1 = 350  // Heat damage level 1 above this point.
 	heat_level_2 = 400  // Heat damage level 2 above this point.
 	heat_level_3 = 500  // Heat damage level 3 above this point.
 	burn_mod = 0.5
 	brute_mod = 1.5
+
+	head_icons      = 'icons/mob/species/plasmaman/head.dmi'
+	wear_suit_icons = 'icons/mob/species/plasmaman/suit.dmi'
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
@@ -32,6 +35,7 @@
 /datum/species/plasmaman/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
 	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
+	..()
 
 /datum/species/plasmaman/equip(var/mob/living/carbon/human/H)
 	H.fire_sprite = "Plasmaman"
@@ -64,9 +68,12 @@
 		if("Atmospheric Technician")
 			suit=/obj/item/clothing/suit/space/plasmaman/atmostech
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/atmostech
-		if("Warden","Detective","Security Officer")
+		if("Warden","Security Officer")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/
+		if("Detective")
+			suit=/obj/item/clothing/suit/space/plasmaman/security/detective
+			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/detective
 		if("Head of Security")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/hos
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/hos
@@ -128,3 +135,24 @@
 
 /datum/species/plasmaman/can_artifact_revive()
 	return 0
+
+/datum/species/plasmaman/handle_environment(var/datum/gas_mixture/environment, var/mob/living/carbon/human/host)
+	//For now we just assume suit and head are capable of containing the plasmaman
+	var/flags_found = FALSE
+	if(host.wear_suit && (host.wear_suit.clothing_flags & CONTAINPLASMAMAN) && host.head && (host.head.clothing_flags & CONTAINPLASMAMAN))
+		flags_found = TRUE
+
+	if(!flags_found)
+		if(environment)
+			if(environment.total_moles && ((environment[GAS_OXYGEN] / environment.total_moles) >= OXYCONCEN_PLASMEN_IGNITION)) //How's the concentration doing?
+				if(!host.on_fire)
+					to_chat(host, "<span class='warning'>Your body reacts with the atmosphere and bursts into flame!</span>")
+				host.adjust_fire_stacks(0.5)
+				host.IgniteMob()
+	else
+		var/obj/item/clothing/suit/space/plasmaman/PS=host.wear_suit
+		if(istype(PS))
+			if(host.fire_stacks > 0)
+				PS.Extinguish(host)
+			else
+				PS.regulate_temp_of_wearer(host)

@@ -138,20 +138,20 @@
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //They're like those five-toed shoes except for vox and with only three toes
 
-/obj/item/clothing/shoes/magboots/vox/toggle()
+/obj/item/clothing/shoes/magboots/vox/togglemagpulse()
 	//set name = "Toggle Floor Grip"
 	if(usr.isUnconscious())
 		return
-	if(src.magpulse)
-		src.clothing_flags &= ~NOSLIP
-		src.magpulse = 0
-		src.slowdown = NO_SLOWDOWN
+	if(clothing_flags & MAGPULSE)
+		clothing_flags &= ~(NOSLIP | MAGPULSE)
+		slowdown = NO_SLOWDOWN
 		to_chat(usr, "You retract the razor-sharp talons of your boots.")
+		return 0
 	else
-		src.clothing_flags |= NOSLIP
-		src.magpulse = 1
-		src.slowdown = mag_slow
+		clothing_flags |= (NOSLIP | MAGPULSE)
+		slowdown = mag_slow
 		to_chat(usr, "You extend the razor-sharp talons of your boots.")
+		return 1
 
 
 // Vox Trader -- Same stats as civ gear, but looks like raiders. ///////////////////////////////
@@ -160,14 +160,14 @@
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "A huge, pressurized suit, designed for distinctly nonhuman proportions. It looks unusually cheap, even for Vox."
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader //brownhelmet
 	name = "alien helmet"
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "Hey, wasn't this a prop in \'The Abyss\'?"
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 /obj/item/clothing/suit/space/vox/civ/trader/carapace //carapace
 	name = "alien carapace armor"
@@ -200,11 +200,47 @@
 	item_state = "vox-stealth"
 	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
 
-obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
+/obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "alien stealth helmet"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A smoothly contoured, matte-black alien helmet.?"
+
+// -- Mushroom,traders --
+
+/obj/item/clothing/suit/space/vox/civ/mushmen
+	name = "mushmen pressure suit"
+	icon_state = "mushroom-pressure"
+	item_state = "mushroom-pressure"
+	desc = "It looks like a deformed vox pressure suit, fit for mushroom people."
+	species_restricted = list(MUSHROOM_SHAPED)
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen
+	actions_types = list(/datum/action/item_action/dim_lighting)
+	name = "mushmen helmet"
+	icon_state = "mushroom-pressure"
+	item_state = "mushroom-pressure"
+	desc = "It looks like a deformed vox pressure helmet, fit for mushroom people."
+	species_restricted = list(MUSHROOM_SHAPED)
+	var/up = 0
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/attack_self(var/mob/user)
+	toggle(user)
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/proc/toggle(var/mob/user)
+	if(!user.incapacitated())
+		if(src.up)
+			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incoming light.</span>")
+		else
+			to_chat(user, "<span class='notice'>You disengage \the [src]'s light protection visor.</span>")
+		src.up = !src.up
+
+/obj/item/clothing/head/helmet/space/vox/civ/mushmen/islightshielded()
+	return !up
+
+
+/datum/action/item_action/dim_lighting
+	name = "Dim lighting"
 
 // Vox Casual//////////////////////////////////////////////
 // Civvie
@@ -213,7 +249,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers."
 	icon_state = "vox-civ-assistant"
 	item_state = "vox-pressure-normal"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 
@@ -222,7 +258,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	icon_state = "vox-civ-assistant"
 	item_state = "vox-pressure-normal"
 	desc = "A very alien-looking helmet for vox crewmembers."
-	flags = FPRINT //Flags need updating from inheritance above
+	flags = FPRINT|HIDEHAIRCOMPLETELY //Flags need updating from inheritance above
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	eyeprot = 0
@@ -294,12 +330,12 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 /obj/item/clothing/suit/space/vox/civ/mining
 	name = "vox mining pressure suit"
 	icon_state = "vox-civ-mining"
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 /obj/item/clothing/head/helmet/space/vox/civ/mining
 	name = "vox mining pressure helmet"
 	icon_state = "vox-civ-mining"
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 //Engineering
 /obj/item/clothing/suit/space/vox/civ/engineer
@@ -388,6 +424,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "vox roboticist pressure helmet"
 	icon_state = "vox-civ-roboticist"
 	desc = "A very alien-looking helmet for vox crewmembers. This one is for roboticists."
+	actions_types = list(/datum/action/item_action/toggle_helmet_mask)
 
 
 //Med/Sci
@@ -396,7 +433,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for medical personnel."
 	icon_state = "vox-civ-medical"
 	item_state = "vox-pressure-medical"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical
@@ -441,6 +478,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "vox paramedic pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics."
 	icon_state = "vox-civ-paramedic"
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
 	name = "vox paramedic pressure helmet"
@@ -448,12 +486,13 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for paramedics."
 
 /obj/item/clothing/suit/space/vox/civ/medical/cmo
-	name = "vox cmo pressure suit"
+	name = "vox CMO pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the CMO."
 	icon_state = "vox-civ-cmo"
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
-	name = "vox cmo pressure helmet"
+	name = "vox CMO pressure helmet"
 	icon_state = "vox-civ-cmo"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for the CMO."
 
@@ -464,7 +503,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	icon_state = "vox-civ-security"
 	item_state = "vox-pressure-security"
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/security
@@ -482,7 +521,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	desc = "A modernized pressure suit for Vox who've decided to work for the winning team."
 	icon_state = "vox-pressure-normal"
 	item_state = "vox-pressure-normal"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 10)
 	species_restricted = list(VOX_SHAPED)
 
@@ -523,7 +562,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	desc = "A modernized pressure suit for Vox who've decided to work for the winning team.  This one's for medical personnel."
 	icon_state = "vox-pressure-medical"
 	item_state = "vox-pressure-medical"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
 
 /obj/item/clothing/head/helmet/space/vox/civ/old/medical
 	name = "vox medical pressure helmet"
@@ -537,7 +576,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	icon_state = "vox-pressure-security"
 	item_state = "vox-pressure-security"
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
 
 /obj/item/clothing/head/helmet/space/vox/civ/old/security
 	name = "vox security pressure helmet"

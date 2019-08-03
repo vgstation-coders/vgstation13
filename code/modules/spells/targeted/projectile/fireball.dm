@@ -2,6 +2,8 @@
 	name = "Fireball"
 	abbreviation = "FB"
 	desc = "This spell conjures a fireball that will fly in the direction you're facing and explode on collision with anything, or when it gets close to anyone else."
+	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 
 	proj_type = /obj/item/projectile/spell_projectile/fireball
 
@@ -14,9 +16,9 @@
 	cooldown_min = 20 //10 deciseconds reduction per rank
 
 	spell_flags = 0
-
+	spell_aspect_flags = SPELL_FIRE
 	duration = 20
-	proj_step_delay = 0
+	projectile_speed = 1
 
 	amt_dam_brute = 20
 	amt_dam_fire = 25

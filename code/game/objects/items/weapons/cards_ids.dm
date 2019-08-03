@@ -163,14 +163,22 @@
 	if(recharge_rate && recharge_ticks)
 		to_chat(user, "<span class=\"info\">A small label on a thermocouple notes that it recharges at a rate of [recharge_rate]MJ for every [recharge_ticks<=1?"":"[recharge_ticks] "]oscillator tick[recharge_ticks>1?"s":""].</span>")
 
+//don't perform emag_act() stuff in this method
 /obj/item/weapon/card/emag/attack()
 	return
 
-/obj/item/weapon/card/emag/afterattack(atom/target, mob/user, proximity)
-	var/atom/A = target
+//perform individual emag_act() stuff on children overriding the method here 
+/obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
 	if(!proximity)
 		return
-	A.emag_act(user)
+	if (istype(target, /mob/living/carbon/human)) 
+		var/mob/living/carbon/target_living = target
+		//get target zone with 0% chance of missing
+		var/zone = ran_zone(user.zone_sel.selecting, 100)
+		var/datum/organ/external/organ = target_living.get_organ(zone)
+		target_living.emag_act(user, organ, src)
+		return
+	target.emag_act(user)
 
 /obj/item/weapon/card/id
 	name = "identification card"
@@ -215,11 +223,13 @@
 		user.show_message("The DNA hash on the card is [dna_hash].",1)
 		user.show_message("The fingerprint hash on the card is [fingerprint_hash].",1)
 
-/obj/item/weapon/card/id/attack_self(mob/user as mob)
-	user.visible_message("[user] shows you: [bicon(src)] [src.name]: assignment: [src.assignment]",\
-		"You flash your ID card: [bicon(src)] [src.name]: assignment: [src.assignment]")
-	src.add_fingerprint(user)
-	return
+/obj/item/weapon/card/id/attack_self(var/mob/user)
+	if(user.attack_delayer.blocked())
+		return
+	user.visible_message("[user] shows you: [bicon(src)] [name]: assignment: [assignment]",\
+		"You flash your ID card: [bicon(src)] [name]: assignment: [assignment]")
+	user.delayNextAttack(1 SECONDS)
+	add_fingerprint(user)
 
 /obj/item/weapon/card/id/GetAccess()
 	return (access | base_access)
@@ -619,7 +629,7 @@
 	registered_name = "Cargonian"
 	icon_state = "cargo"
 	desc = "ROH ROH! HEIL THE QUARTERMASTER!"
-	access = list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm, access_taxi)
+	access = list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm)
 
 /obj/item/weapon/card/id/engineering
 	name = "Engineering ID"
@@ -640,7 +650,7 @@
 	registered_name = "CMO"
 	icon_state = "CMO"
 	desc = "It gives off the faint smell of chloral hydrate, mixed with a backdraft of equipment abuse."
-	access = list(access_medical, access_morgue, access_genetics, access_heads, access_chemistry, access_virology, access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_sec_doors, access_paramedic, access_maint_tunnels)
+	access = list(access_medical, access_morgue, access_genetics, access_heads, access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_sec_doors, access_paramedic, access_maint_tunnels)
 
 /obj/item/weapon/card/id/rd
 	name = "Research Director ID"

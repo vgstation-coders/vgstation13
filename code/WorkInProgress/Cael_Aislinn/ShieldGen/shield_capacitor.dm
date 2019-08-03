@@ -18,9 +18,9 @@
 	var/active = TRUE
 	var/stored_charge = 0
 	var/time_since_fail = 100
-	var/max_charge = 1000000
-	var/max_charge_rate = 100000
-	var/min_charge_rate = 0
+	var/max_charge = 10000000
+	var/max_charge_rate = 10000000
+	var/min_charge_rate = 1
 	var/locked = FALSE
 	var/charge_rate = 100
 
@@ -39,6 +39,13 @@
 
 	RefreshParts()
 
+/obj/machinery/shield_capacitor/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/capacitor/Ca in component_parts)
+		T += Ca.rating - 1
+		max_charge = (initial(max_charge)+(T * 10000000))	
+		max_charge_rate = (initial(max_charge_rate)+(T * 10000000))	
+
 /obj/machinery/shield_capacitor/proc/toggle_lock(var/mob/user)
 	locked = !locked
 	if(user)
@@ -51,8 +58,9 @@
 		spark(src, 5)
 		return 1
 	else
-		to_chat(user, "You fail to hack \the [src]'s controls.")
-	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+		if(user)
+			to_chat(user, "You fail to hack \the [src]'s controls.")
+	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 
 /obj/machinery/shield_capacitor/wrenchAnchor(var/mob/user)
 	. = ..()
@@ -86,11 +94,11 @@
 	data["locked"] = locked && !issilicon(user) && !isAdminGhost(user)
 	data["active"] = active
 	data["stability"] = time_since_fail > 2
-	data["charge"] = stored_charge
+	data["charge"] = stored_charge / 1000
 	data["charge_percentage"] = 100 * stored_charge / max_charge
 	data["min_charge"] = 0
-	data["max_charge"] = max_charge
-	data["charge_rate"] = charge_rate
+	data["max_charge"] = max_charge / 1000
+	data["charge_rate"] = charge_rate / 1000
 	data["min_charge_rate"] = min_charge_rate
 	data["max_charge_rate"] = max_charge_rate
 
@@ -126,6 +134,14 @@
 		charge_rate = Clamp(charge_rate + text2num(href_list["adjust_charge_rate"]), min_charge_rate, max_charge_rate)
 	return 1
 
+/obj/machinery/shield_capacitor/kick_act()
+	..()
+	if(stat & (NOPOWER|BROKEN))
+		active = FALSE
+		return
+	if(prob(50))
+		active = !active
+	
 /obj/machinery/shield_capacitor/proc/rotate(var/mob/user, var/degrees)
 	if(anchored)
 		to_chat(user, "\The [src] is fastened to the floor!")

@@ -38,10 +38,12 @@
 /obj/effect/Destroy()
 	if(ticker)
 		cameranet.updateVisibility(src)
+	effects_list -= src
 	..()
 
 /obj/effect/New()
 	..()
+	effects_list += src
 	if(ticker)
 		cameranet.updateVisibility(src)
 
@@ -62,7 +64,7 @@
 // This might be laggy, comment it out if there are problems.
 /mob/living/silicon/robot/var/updating = 0
 
-/mob/living/silicon/robot/Move()
+/mob/living/silicon/robot/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/oldLoc = src.loc
 	var/oldZ = src.loc.z
 	. = ..()
@@ -89,15 +91,5 @@
 	else
 		src.set_light(0)
 		cameranet.removeCamera(src)
-
-/obj/machinery/camera/New()
-	..()
-	cameranet.cameras += src
-	cameranet.addCamera(src)
-
-/obj/machinery/camera/Destroy()
-	cameranet.cameras -= src
-	cameranet.removeCamera(src)
-	..()
 
 #undef BORG_CAMERA_BUFFER

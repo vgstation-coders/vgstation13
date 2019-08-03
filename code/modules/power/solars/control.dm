@@ -81,9 +81,9 @@
 
 	updateDialog()
 
-/obj/machinery/power/solar/control/attackby(I as obj, user as mob)
-	if(isscrewdriver(I))
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+/obj/machinery/power/solar/control/attackby(obj/item/I as obj, mob/user as mob)
+	if(I.is_screwdriver(user))
+		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			if(src.stat & BROKEN)
 				visible_message("<span class='notice'>[user] clears the broken monitor off of [src].</span>", \
@@ -243,7 +243,7 @@ Manual Tracking Direction:"}
 /obj/machinery/power/solar/control/blob_act()
 	if(prob(75))
 		broken()
-		density = 0
+		setDensity(FALSE)
 
 /obj/machinery/power/solar/control/npc_tamper_act(mob/living/L)
 	track = rand(0,TRACK_AUTOMATIC)

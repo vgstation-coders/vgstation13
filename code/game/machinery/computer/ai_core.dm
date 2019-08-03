@@ -14,6 +14,7 @@
 	var/datum/ai_laws/laws
 	var/obj/item/weapon/circuitboard/circuit = null
 	var/obj/item/device/mmi/brain = null
+	sheet_type = /obj/item/stack/sheet/plasteel
 
 /obj/structure/AIcore/New()
 	. = ..()
@@ -39,15 +40,11 @@
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))
 				var/obj/item/weapon/weldingtool/WT = P
-				if(!WT.isOn())
-					to_chat(user, "The welder must be on for this task.")
-					return
-				playsound(loc, 'sound/items/Welder.ogg', 50, 1)
-				if(do_after(user, src, 2 SECONDS))
-					if(!src || state != NOCIRCUITBOARD || !WT.remove_fuel(0, user))
+				if(WT.do_weld(user, src, 2 SECONDS, 0))
+					if(gcDestroyed || state != NOCIRCUITBOARD)
 						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
-					drop_stack(/obj/item/stack/sheet/plasteel, loc, 4, user)
+					drop_stack(sheet_type, loc, 4, user)
 					qdel(src)
 			if(istype(P, /obj/item/weapon/circuitboard/aicore) && !circuit)
 				if(user.drop_item(P, src))
@@ -56,7 +53,7 @@
 					circuit = P
 					state = UNSECURED_CIRCUITBOARD
 		if(UNSECURED_CIRCUITBOARD)
-			if(isscrewdriver(P) && circuit)
+			if(P.is_screwdriver(user) && circuit)
 				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You screw the circuit board into place.</span>")
 				state = SECURED_CIRCUITBOARD
@@ -67,7 +64,7 @@
 				circuit.forceMove(loc)
 				circuit = null
 		if(SECURED_CIRCUITBOARD)
-			if(isscrewdriver(P) && circuit)
+			if(P.is_screwdriver(user) && circuit)
 				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You unfasten the circuit board.</span>")
 				state = UNSECURED_CIRCUITBOARD
@@ -100,24 +97,21 @@
 						state = GLASS_PANELED
 
 			if(istype(P, /obj/item/device/mmi))
-				if(!P:brainmob)
+				var/obj/item/device/mmi/prison = P
+				if(!prison.brainmob)
 					to_chat(user, "<span class='warning'>Sticking an empty [P] into the frame would sort of defeat the purpose.</span>")
 					return
-				if(P:brainmob.stat == 2)
+				if(prison.brainmob.stat == DEAD)
 					to_chat(user, "<span class='warning'>Sticking a dead [P] into the frame would sort of defeat the purpose.</span>")
 					return
 
-				if(jobban_isbanned(P:brainmob, "AI"))
+				if(jobban_isbanned(prison.brainmob, "AI"))
 					to_chat(user, "<span class='warning'>This [P] does not seem to fit.</span>")
 					return
 
 				if(!user.drop_item(P, src))
 					user << "<span class='warning'>You can't let go of \the [P]!</span>"
 					return
-
-				if(P:brainmob.mind)
-					ticker.mode.remove_cultist(P:brainmob.mind, 1)
-					ticker.mode.remove_revolutionary(P:brainmob.mind, 1)
 
 				if (!brain)
 					if (user.drop_item(P, src))
@@ -136,7 +130,7 @@
 				to_chat(user, "<span class='notice'>You remove the glass panel.</span>")
 				state = WIREDFRAME
 				drop_stack(/obj/item/stack/sheet/glass/rglass, loc, 2, user)
-			else if(isscrewdriver(P))
+			else if(P.is_screwdriver(user))
 				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )
@@ -176,13 +170,9 @@ That prevents a few funky behaviors.
 						if(C.contents.len)//If there is an AI on card.
 							to_chat(U, "<span class='danger'>Transfer failed:</span> Existing AI found on this terminal. Remove existing AI to install a new one.")
 						else
-							if (ticker.mode.name == "AI malfunction")
-								var/datum/game_mode/malfunction/malf = ticker.mode
-								for (var/datum/mind/malfai in malf.malf_ai)
-									if (T.mind == malfai && malf.malf_mode_declared)
-										to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
-
-										return
+							if(T.mind.GetRole(MALF))
+								to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
+								return
 							new /obj/structure/AIcore/deactivated(T.loc)//Spawns a deactivated terminal at AI location.
 							//T.aiRestorePowerRoutine = 0//So the AI initially has power.
 							T.control_disabled = 1//Can't control things remotely if you're stuck in a card!
@@ -209,6 +199,7 @@ That prevents a few funky behaviors.
 						if(A)//If AI exists on the card. Else nothing since both are empty.
 							A.control_disabled = 0
 							A.forceMove(T.loc)//To replace the terminal.
+							A.update_icon()
 							C.icon_state = "aicard"
 							C.name = "inteliCard"
 							C.overlays.len = 0

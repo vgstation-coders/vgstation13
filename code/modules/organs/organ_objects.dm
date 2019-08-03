@@ -16,6 +16,7 @@
 	var/prosthetic_icon                       // Icon for robotic organ.
 	var/is_printed = FALSE                    // Used for heist.
 	var/had_mind = FALSE                      // Owner had a mind at some point. (heist)
+	var/stabilized = FALSE
 
 /obj/item/organ/internal/attack_self(mob/user as mob)
 
@@ -47,7 +48,7 @@
 	if(!had_mind)
 		user.simple_message("<span class='warning'>The organ seems limp and lifeless.  Perhaps it never was controlled by an intelligent mind?</span>","<span class='warning'>This thing is bummed.</span>")
 	else
-		user.simple_message("<span class='info'>The organ seems to be full of life!</span>","<span class='info'>It's making happy little cooing noises at you. Aw.</span>")
+		user.simple_message("<span class='info'>The organ seems [health ? "to be full of life!" : "like it was full of life once."]</span>","<span class='info'>It's making [health ? "happy" : "spooky"] little cooing noises at you. Aw.</span>")
 
 /obj/item/organ/internal/process()
 
@@ -58,6 +59,17 @@
 	// Don't process if we're in a freezer, an MMI or a stasis bag. //TODO: ambient temperature?
 	if(istype(loc,/obj/item/device/mmi) || istype(loc,/obj/item/bodybag/cryobag) || istype(loc,/obj/structure/closet/crate/freezer))
 		return
+
+
+	if(istype(loc,/obj/item/weapon/reagent_containers/glass/jar))
+		var/obj/item/weapon/reagent_containers/glass/jar/J = loc
+		if(J.safe_holder())
+			return
+
+	//We're stabilized somehow.
+	if(stabilized)
+		return
+
 
 	if(fresh && prob(40))
 		fresh--
@@ -72,10 +84,19 @@
 	name = "dead [initial(name)]"
 	if(dead_icon)
 		icon_state = dead_icon
+	var/icon/original = icon(icon, icon_state)
+	original.GrayScale()
+	icon = original
 	health = 0
 	processing_objects -= src
-	//TODO: Grey out the icon state.
 	//TODO: Inject an organ with peridaxon to make it alive again.
+
+/obj/item/organ/internal/proc/revive()
+	name = initial(name)
+	icon_state = initial(icon_state)
+	icon = initial(icon)
+	health = 1
+	processing_objects += src
 
 /obj/item/organ/internal/proc/roboticize()
 
@@ -115,6 +136,34 @@
 	fresh = 6 // Juicy.
 	dead_icon = "heart-off"
 	organ_type = /datum/organ/internal/heart
+
+/obj/item/organ/internal/heart/cell
+	name = "biocharger"
+	icon_state = "heart-cell"
+	prosthetic_name = null
+	prosthetic_icon = null
+	organ_type = /datum/organ/internal/heart/cell
+	robotic=2
+
+/obj/item/organ/internal/heart/cell/get_cell()
+	if(organ_data)
+		var/datum/organ/internal/heart/cell/C = organ_data
+		return C.cell
+
+/obj/item/organ/internal/heart/cell/attack_self(mob/user)
+	if(get_cell())
+		var/datum/organ/internal/heart/cell/C = organ_data
+		to_chat(user, "<span class = 'notice'>You remove \the [C.cell] from \the [src].</span>")
+		user.put_in_hands(C.cell)
+		C.cell = null
+
+/obj/item/organ/internal/heart/cell/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/cell) && !get_cell() && organ_data && user.drop_item(I, src))
+		var/datum/organ/internal/heart/cell/C = organ_data
+		to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
+		C.cell = I
+		return
+	..()
 
 /obj/item/organ/internal/lungs
 	name = "human lungs"
@@ -275,15 +324,15 @@
 	var/mob/living/carbon/human/H = target
 	if(istype(H))
 		eye_colour = list(
-			H.r_eyes ? H.r_eyes : 0,
-			H.g_eyes ? H.g_eyes : 0,
-			H.b_eyes ? H.b_eyes : 0
+			H.my_appearance.r_eyes ? H.my_appearance.r_eyes : 0,
+			H.my_appearance.g_eyes ? H.my_appearance.g_eyes : 0,
+			H.my_appearance.b_eyes ? H.my_appearance.b_eyes : 0
 			)
 
 		// Leave bloody red pits behind!
-		H.r_eyes = 128
-		H.g_eyes = 0
-		H.b_eyes = 0
+		H.my_appearance.r_eyes = 128
+		H.my_appearance.g_eyes = 0
+		H.my_appearance.b_eyes = 0
 		H.update_body()
 
 /obj/item/organ/internal/proc/replaced(var/mob/living/target)
@@ -294,9 +343,9 @@
 	// Apply our eye colour to the target.
 	var/mob/living/carbon/human/H = target
 	if(istype(H) && eye_colour)
-		H.r_eyes = eye_colour[1]
-		H.g_eyes = eye_colour[2]
-		H.b_eyes = eye_colour[3]
+		H.my_appearance.r_eyes = eye_colour[1]
+		H.my_appearance.g_eyes = eye_colour[2]
+		H.my_appearance.b_eyes = eye_colour[3]
 		H.update_body()
 
 /obj/item/organ/internal/proc/bitten(mob/user)

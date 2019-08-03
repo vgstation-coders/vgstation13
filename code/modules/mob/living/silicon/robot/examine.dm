@@ -20,14 +20,15 @@
 		msg += "It's using [I.gender==PLURAL?"some":"a"] [bicon(I)] [I.name] as its active module.\n"
 		if(isgripper(I))
 			var/obj/item/weapon/gripper/G = module_active
-			msg += "Its [G.name] is gripping [G.wrapped.gender==PLURAL?"some":"a"] [bicon(G.wrapped)] [G.wrapped.name].\n"
+			if(G.wrapped)
+				msg += "Its [G.name] is gripping [G.wrapped.gender==PLURAL?"some":"a"] [bicon(G.wrapped)] [G.wrapped.name].\n"
 
 	if(opened)
 		msg += "<span class='warning'>Its cover is open and the power cell is [cell ? "installed" : "missing"].</span>\n"
 	else
 		msg += "Its cover is closed.\n"
 
-	if(cell && cell.charge <= 0)
+	if(!cell || (cell && cell.charge <= 0))
 		msg += "<span class='warning'>Its battery indicator is blinking red!</span>\n"
 
 	switch(stat)
@@ -37,7 +38,9 @@
 		if(UNCONSCIOUS)
 			msg += "<span class='warning'>It doesn't seem to be responding.</span>\n"
 		if(DEAD)
-			msg += "<span class='deadsay'>It looks completely unsalvageable.</span>\n"
+			msg += "<span class='warning'>It is broken beyond functioning.</span>\n"
+			if(!client)
+				msg += "<span class='deadsay'>It looks completely unsalvageable.</span>\n" //ghosted
 	msg += "*---------*</span>"
 
 	to_chat(user, msg)

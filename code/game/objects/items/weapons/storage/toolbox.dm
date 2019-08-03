@@ -43,7 +43,7 @@
 
 /obj/item/weapon/storage/toolbox/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is [pick("staving","robusting")] \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 
 /obj/item/weapon/storage/toolbox/emergency
@@ -63,6 +63,8 @@
 	new /obj/item/device/radio(src)
 	if(prob(5))
 		new /obj/item/airbag(src)
+	if(prob(15))
+		new /obj/item/clothing/accessory/rad_patch(src)
 
 /obj/item/weapon/storage/toolbox/mechanical
 	name = "mechanical toolbox"
@@ -114,4 +116,17 @@
 	new /obj/item/stack/cable_coil(src,30,color)
 	new /obj/item/weapon/wirecutters(src)
 	new /obj/item/device/multitool(src)
-	
+
+/obj/item/weapon/storage/toolbox/robotics
+	name = "robotics toolbox"
+
+/obj/item/weapon/storage/toolbox/robotics/New()
+	..()
+	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
+	new /obj/item/device/robotanalyzer(src)
+	new /obj/item/weapon/crowbar(src)
+	new /obj/item/weapon/wrench(src)
+	new /obj/item/weapon/weldingtool(src)
+	new /obj/item/weapon/screwdriver(src)
+	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/stack/cable_coil(src,30,color)

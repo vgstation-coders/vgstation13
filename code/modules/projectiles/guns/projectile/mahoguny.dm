@@ -63,5 +63,5 @@
 			return
 		var/obj/item/stack/sheet/wood/S = W
 		current_ammo++
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 		S.use(1)

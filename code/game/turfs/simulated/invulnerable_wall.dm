@@ -64,3 +64,9 @@
 	desc = "The incredible compressive forces that formed this sturdy ice wall gave it a blue color."
 	icon_state = "ice"
 	walltype = "ice"
+
+/turf/simulated/wall/invulnerable/r_wall
+	name = "reinforced wall"
+	desc = "A huge chunk of reinforced metal and anchored rods used to seperate rooms and keep all but the most equipped crewmen out."
+	icon_state = "r_wall"
+	walltype = "rwall"

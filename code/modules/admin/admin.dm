@@ -59,7 +59,7 @@ var/global/floorIsLava = 0
 	body += {"
 		<br><br>\[
 		<a href='?_src_=vars;Vars=\ref[M]'>VV</a> -
-		<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
+		<a href='?src=\ref[src];traitor=\ref[M]'>RP</a> -
 		<a href='?src=\ref[src];rapsheet=1;rsckey=[M.ckey]'>Bans</a> -
 		<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a> -
 		<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
@@ -92,7 +92,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];getmob=\ref[M]'>Get</A> |
 		<A href='?src=\ref[src];sendmob=\ref[M]'>Send To</A>
 		<br><br>
-		<A href='?src=\ref[src];traitor=\ref[M]'>Traitor panel</A> |
+		<A href='?src=\ref[src];traitor=\ref[M]'>Role panel</A> |
 		<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
 		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
 	"}
@@ -107,6 +107,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];makecatbeast=\ref[M]'>Make Catbeast</A> |
 			<A href='?src=\ref[src];makecluwne=\ref[M]'>Make Cluwne</A> |
 			<A href='?src=\ref[src];Assplode=\ref[M]'>Assplode</A> |
+			<A href='?src=\ref[src];DealBrainDam=\ref[M]'>Deal brain damage</A> |
 		"}
 
 	// Mob-specific controls.
@@ -202,10 +203,11 @@ var/global/floorIsLava = 0
 				<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A> \]
 				<br>\[ Slime: <A href='?src=\ref[src];simplemake=slime;mob=\ref[M]'>Baby</A>,
 				<A href='?src=\ref[src];simplemake=adultslime;mob=\ref[M]'>Adult</A> \]
-				<br>\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A>,
-				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A>,
+				<br>\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Juggernaut</A>,
+				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Artificer</A>,
 				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A>,
-				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A> \]
+				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A>,
+				<A href='?src=\ref[src];simplemake=soulblade;mob=\ref[M]'>Soul Blade</A> \]
 				<br>
 			"}
 
@@ -456,7 +458,7 @@ var/global/floorIsLava = 0
 					if(CHANNEL.is_admin_channel)
 						dat+="<B><FONT style='BACKGROUND-COLOR: LightGreen'><A href='?src=\ref[src];ac_show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A></FONT></B><BR>"
 					else
-						dat+="<B><A href='?src=\ref[src];ac_show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR></B>"
+						dat+="<B><A href='?src=\ref[src];ac_show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR></B>"
 			dat+={"<BR><HR><A href='?src=\ref[src];ac_refresh=1'>Refresh</A>
 				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Back</A>
 			"}
@@ -540,7 +542,7 @@ var/global/floorIsLava = 0
 				dat+="<I>No feed channels found active...</I><BR>"
 			else
 				for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-					dat+="<A href='?src=\ref[src];ac_pick_censor_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
+					dat+="<A href='?src=\ref[src];ac_pick_censor_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR>"
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Cancel</A>"
 		if(11)
 			dat+={"
@@ -553,7 +555,7 @@ var/global/floorIsLava = 0
 				dat+="<I>No feed channels found active...</I><BR>"
 			else
 				for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-					dat+="<A href='?src=\ref[src];ac_pick_d_notice=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
+					dat+="<A href='?src=\ref[src];ac_pick_d_notice=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR>"
 
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Back</A>"
 		if(12)
@@ -678,6 +680,23 @@ var/global/floorIsLava = 0
 		"}
 	if(master_mode == "secret")
 		dat += "<A href='?src=\ref[src];f_secret=1'>(Force Secret Mode)</A><br>"
+	if(master_mode == "Dynamic Mode")
+		if(ticker.current_state == GAME_STATE_PREGAME)
+			dat += "<A href='?src=\ref[src];f_dynamic_roundstart=1'>(Force Roundstart Rulesets)</A><br>"
+			dat += "<A href='?src=\ref[src];f_dynamic_options=1'>(Dynamic mode options)</A><br>"
+			if (forced_roundstart_ruleset.len > 0)
+				for(var/datum/dynamic_ruleset/roundstart/rule in forced_roundstart_ruleset)
+					dat += {"<A href='?src=\ref[src];f_dynamic_roundstart_remove=\ref[rule]'>-> [rule.name] <-</A><br>"}
+				dat += "<A href='?src=\ref[src];f_dynamic_roundstart_clear=1'>(Clear Rulesets)</A><br>"
+			dat += "<A href='?src=\ref[src];f_dynamic_options=1>Dynamic mode options</a><br/>"
+		else
+			dat += "<A href='?src=\ref[src];f_dynamic_latejoin=1'>(Force Next Latejoin Ruleset)</A><br>"
+			if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
+				var/datum/gamemode/dynamic/mode = ticker.mode
+				if (mode.forced_latejoin_rule)
+					dat += {"<A href='?src=\ref[src];f_dynamic_latejoin_clear=1'>-> [mode.forced_latejoin_rule.name] <-</A><br>"}
+			dat += "<A href='?src=\ref[src];f_dynamic_midround=1'>(Execute Midround Ruleset!)</A><br>"
+		dat += "<hr/>"
 
 	dat += {"
 		<hr />
@@ -686,7 +705,7 @@ var/global/floorIsLava = 0
 				<a href="?src=\ref[src];set_base_laws=ai"><b>Default Cyborg/AI Laws:</b>[base_law_type]</a>
 			</li>
 			<li>
-				<a href="?src=\ref[src];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_base_law_type]</a>
+				<a href="?src=\ref[src];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_laws["Default"]]</a>
 			</li>
 		</ul>
 		<hr />
@@ -697,6 +716,9 @@ var/global/floorIsLava = 0
 		<hr />
 		<A href='?src=\ref[src];vsc=airflow'>Edit ZAS Settings</A><br>
 		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
+		<A href='?src=\ref[src];xgm_panel=1'>XGM Panel</A><br>
+		<A href='?src=\ref[src];toggle_light=1'>Slow down lighting (Forces MC to crash, do not panic.)</A><br>
+		<hr />
 		"}
 
 	if(wages_enabled)
@@ -704,9 +726,48 @@ var/global/floorIsLava = 0
 	else
 		dat += "<A href='?src=\ref[src];wages_enabled=enable'>Enable wages</A><br>"
 	dat += "<A href ='?src=\ref[src];econ_panel=open'>Manage accounts database</A><br>"
+	dat += "<A href ='?src=\ref[src];religions=1&display=1'>Manage religions</A><br>"
 
 	usr << browse(dat, "window=admin2;size=280x370")
 	return
+
+/datum/admins/proc/dynamic_mode_options(mob/user)
+	var/dat = {"
+		<center><B><h2>Dynamic Mode Options</h2></B></center><hr>
+		<br/>
+		<h3>Common options</h3>
+		<i>All these options can be changed midround.</i> <br/>
+		<br/>
+		<b>Force extended:</b> - Option is <a href='?src=\ref[src];force_extended=1'> <b>[dynamic_forced_extended ? "ON" : "OFF"]</a></b>.
+		<br/>This will force the round to be extended. No rulesets will be drafted. <br/>
+		<br/>
+		<b>No stacking:</b> - Option is <a href='?src=\ref[src];no_stacking=1'> <b>[dynamic_no_stacking ? "ON" : "OFF"]</b></a>.
+		<br/>Unless the threat goes above [stacking_limit], only one "round-ender" ruleset will be drafted. <br/>
+		<br/>
+		<b>Classic secret mode:</b> - Option is <a href='?src=\ref[src];classic_secret=1'> <b>[dynamic_classic_secret ? "ON" : "OFF"]</b></a>.
+		<br/>Only one roundstart ruleset will be drafted. Only traitors and minor roles will latespawn. <br/>
+		<br/>
+		<b>High population limit:</b> Current value : <a href='?src=\ref[src];high_pop_limit=1'><b>[dynamic_high_pop_limit]</b></a>.
+		<br/>The threshold at which "high population override" will be in effect. <br/>
+		<br/>
+		<b>Stacking threeshold:</b> Current value : <a href='?src=\ref[src];stacking_limit=1'><b>[stacking_limit]</b></a>.
+		<br/>The threshold at which "round-ender" rulesets will stack. A value higher than 100 ensure this never happens. <br/>
+		<h3>Advanced parameters</h3>
+		The distribution mode is currently : <b>[dynamic_chosen_mode]</b> <br/>
+		Glossary : <br/>
+		<ul>
+			<li> <b>Lorentz distribution</b> : default mode. Heavily weighted towards the chosen centre, but still allows extreme to happen. A wider curve means extreme are more likely.</li>
+			<li> <b>Normal distribution</b> : similar to Lorentz, but extremes are much less likely to happen. </li>
+			<li> <b>Rigged threat number</b> : the threat level will be the chosen centre.</li>
+			<li> <b>Peaceful bias</b> : heavily weighted towards more peaceful rounds. </li>
+			<li> <b>Uniform distribution</b> : a random uniformally distributed number between 1 and 100.</li>
+		</ul>
+		<A href='?src=\ref[src];change_distrib=1'>Change distribution mode</a> <br/>
+		Curve centre: <A href='?src=\ref[src];f_dynamic_roundstart_centre=1'>-> [dynamic_curve_centre] <-</A><br>
+		Curve width: <A href='?src=\ref[src];f_dynamic_roundstart_width=1'>-> [dynamic_curve_width] <-</A><br>
+		"}
+
+	user << browse(dat, "window=dyn_mode_options;size=900x650")
 
 /datum/admins/proc/Secrets()
 	if(!check_rights(0))
@@ -743,7 +804,6 @@ var/global/floorIsLava = 0
 			<BR>
 			<A href='?src=\ref[src];secretsadmin=clear_bombs'>Remove all bombs currently in existence</A><BR>
 			<A href='?src=\ref[src];secretsadmin=list_bombers'>Bombing List</A><BR>
-			<A href='?src=\ref[src];secretsadmin=list_signalers'>Show last [length(lastsignalers)] signalers</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsadmin=showailaws'>Show AI Laws</A><BR>
 			<A href='?src=\ref[src];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
@@ -778,9 +838,9 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=immovablebig'>Spawn an Immovable Pillar</A><BR>
 			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
+			<A href='?src=\ref[src];secretsfun=fireworks'>Send some fireworks at the station</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
-			<A href='?src=\ref[src];secretsfun=blobstorm'>Spawn a blob conglomerate</A><BR>
 			<A href='?src=\ref[src];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
 			<A href='?src=\ref[src];secretsfun=alien_silent'>Spawn an Alien silently</A><BR>
 			<A href='?src=\ref[src];secretsfun=spiders'>Trigger a Spider infestation</A><BR>
@@ -799,7 +859,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
-
+			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a random event from all possible random events (WARNING, NOT ALL ARE GUARANTEED TO WORK).</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
@@ -822,6 +882,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
+			<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
 			<A href='?src=\ref[src];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
@@ -842,14 +903,14 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
-			<BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=hellonearth'>Summon Nar-Sie</A><BR>
 			<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
 			<A href='?src=\ref[src];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
-			<A href='?src=\ref[src];secretsfun=halloween'>Awaken the damned for some spooky shenanigans</A><BR>
+			<A href='?src=\ref[src];secretsfun=halloween'>Trigger the blood moon</A><BR>
+			<A href='?src=\ref[src];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
 			"}
 
 	if(check_rights(R_SERVER,0))
@@ -871,7 +932,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=maint_access_engiebrig'>Change all maintenance doors to engie/brig access only</A><BR>
 			<A href='?src=\ref[src];secretsfun=maint_access_brig'>Change all maintenance doors to brig access only</A><BR>
 			<A href='?src=\ref[src];secretsfun=infinite_sec'>Remove cap on security officers</A><BR>
-			<a href='?src=\ref[src];secretsfun=virus_custom'>Custom Virus Outbreak</a><BR>
 			<BR>
 			"}
 	dat +=	{"
@@ -1042,11 +1102,11 @@ var/global/floorIsLava = 0
 	if(ticker.current_state == GAME_STATE_PREGAME)
 		ticker.current_state = GAME_STATE_SETTING_UP
 		log_admin("[usr.key] has started the game.")
-		message_admins("<font color='blue'>[usr.key] has started the game.</font>")
+		message_admins("<span class='notice'>[usr.key] has started the game.</span>")
 		feedback_add_details("admin_verb","SN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		return 1
 	else
-		to_chat(usr, "<font color='red'>Error: Start Now: Game has already started.</font>")
+		to_chat(usr, "<span class='red'>Error: Start Now: Game has already started.</span>")
 		return 0
 
 /datum/admins/proc/toggleenter()
@@ -1113,6 +1173,9 @@ var/global/floorIsLava = 0
 	if(!check_rights(R_ADMIN))
 		return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
+		var/response = alert("Toggle round end delay? It is currently [ticker.delay_end?"delayed":"not delayed"]","Toggle round end delay","Yes","No")
+		if(response != "Yes")
+			return
 		if(ticker.delay_end == 2)
 			to_chat(world, "<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
 			log_admin("<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
@@ -1208,52 +1271,11 @@ var/global/floorIsLava = 0
 
 ////////////////////////////////////////////////////////////////////////////////////////////////ADMIN HELPER PROCS
 
-/proc/is_special_character(mob/M as mob) // returns 1 for specail characters and 2 for heroes of gamemode
-	if(!ticker || !ticker.mode)
-		return 0
-	if (!istype(M))
-		return 0
-	if(isrev(M) || isrevhead(M))
-		if (ticker.mode.config_tag == "revolution")
-			return 2
-		return 1
-	if(iscult(M))
-		if (ticker.mode.config_tag == "cult")
-			return 2
-		return 1
-	if(ismalf(M))
-		if (ticker.mode.config_tag == "malfunction")
-			return 2
-		return 1
-	if(isnukeop(M))
-		if (ticker.mode.config_tag == "nuclear")
-			return 2
-		return 1
-	if(iswizard(M) || isapprentice(M))
-		if (ticker.mode.config_tag == "wizard")
-			return 2
-		return 1
-	if(ischangeling(M))
-		if (ticker.mode.config_tag == "changeling")
-			return 2
-		return 1
-	/*if(isborer(M)) //They ain't antags anymore
-		if (ticker.mode.config_tag == "borer")
-			return 2
-		return 1*/
-	if(isbadmonkey(M))
-		if (ticker.mode.config_tag == "monkey")
-			return 2
-		return 1
-	if(isrobot(M))
-		var/mob/living/silicon/robot/R = M
-		if(R.emagged)
-			return 1
-	if(M.mind&&M.mind.special_role)//If they have a mind and special role, they are some type of traitor or antagonist.
-		return 1
-
-	return 0
-
+/proc/is_special_character(mob/M) // returns 1 for special characters
+	var/mob/living/silicon/robot/R = M
+	if (istype(R) && R.emagged)
+		return TRUE
+	return (M.mind ? M.mind.antag_roles.len : null)
 /*
 /datum/admins/proc/get_sab_desc(var/target)
 	switch(target)
@@ -1309,16 +1331,21 @@ var/global/floorIsLava = 0
 	if(ispath(chosen,/turf))
 		var/turf/T = get_turf(usr.loc)
 		T.ChangeTurf(chosen)
+	else if(ispath(chosen, /area))
+		var/area/A = locate(chosen)
+		var/turf/T = get_turf(usr.loc)
+
+		T.set_area(A)
 	else
 		new chosen(usr.loc)
 
 	log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/datum/admins/proc/show_traitor_panel(var/mob/M in mob_list)
+/datum/admins/proc/show_role_panel(var/mob/M in mob_list)
 	set category = "Admin"
-	set desc = "Edit mobs's memory and role"
-	set name = "Show Traitor Panel"
+	set desc = "Edit mobs's Job, Roles, and Factions"
+	set name = "Show Role Panel"
 
 	if(!istype(M))
 		to_chat(usr, "This can only be used on instances of type /mob")
@@ -1327,7 +1354,7 @@ var/global/floorIsLava = 0
 		to_chat(usr, "This mob has no mind!")
 		return
 
-	M.mind.edit_memory()
+	M.mind.role_panel()
 	feedback_add_details("admin_verb","STP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
@@ -1513,3 +1540,81 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	tomob.ckey = frommob.ckey
 	qdel(frommob)
 	return 1
+
+/datum/admins/proc/CreditsPanel()
+	if(!check_rights(0))
+		return
+
+	var/dat = "<center><B>Credits Panel</B></center><hr>"
+	dat += "<center><B>Star Of The Show:</b></center>"
+	dat += "Chosen Star: [end_credits.customized_star == "" && end_credits.star == "" ? "(Will Select Automatically)" : end_credits.customized_star || end_credits.star] <A href='?src=\ref[src];credits=setstartext'>(Set Plaintext)</A> <A href='?src=\ref[src];credits=setstarmob'>(Set Mob From List)</A> "
+	if(end_credits.customized_star != "" && !end_credits.drafted)
+		dat += "<A href='?src=\ref[src];credits=resetstar'>(Reset)</A> "
+	if(!end_credits.drafted)
+		dat += "<span style='color:red'><br>The round isn't over, so the featured star hasn't been picked yet.<br>You can manually set one now, or whichever human has talked the most this round will automatically be selected as the featured star when the round ends.</span>"
+	dat += "<hr>"
+	dat += "<center><B>Episode Name:</B></center>"
+	dat += "Chosen Name: [end_credits.customized_name == "" && end_credits.episode_name == "" ? "(Will Generate Automatically)" : end_credits.customized_name || end_credits.episode_name] <A href='?src=\ref[src];credits=setname'>(Set)</A> "
+	if(end_credits.customized_name != "" && !end_credits.drafted)
+		dat += "<A href='?src=\ref[src];credits=resetname'>(Reset)</A> "
+	else if(end_credits.drafted)
+		dat += "<A href='?src=\ref[src];credits=rerollname'>(Reroll!)</A> "
+	dat += "<br>"
+	if(!end_credits.drafted)
+		dat += "<span style='color:red'>The round isn't over, so the name possibilities haven't been drafted yet.<br>You can manually write down a set name now, or come back when the round ends.</span>"
+	else
+		dat += "Drafted Name Possibilities: "
+		dat += "<div id='draftednames'>"
+		for(var/datum/episode_name/N in end_credits.episode_names)
+			dat += "[N.make_div(src)]<br>"
+		dat += "</div>"
+	dat += "<hr>"
+	dat += "<center><B>Disclaimers:</B></center>"
+	if(!end_credits.drafted)
+		dat += "<span style='color:red'>The round isn't over, so the disclaimers haven't been generated yet.<br>You can add some now (they will show up at the top), or come back when the round ends.</span>"
+	dat += "<br>Generated Disclaimers: "
+	dat += "<div id='disclaimers'>"
+	dat += "<a href='?src=\ref[src];credits=newdisclaimer'>(Add New)</a></br>"
+	for(var/i = 1; i <= end_credits.disclaimers.len; i++)
+		var/disclaimer = end_credits.disclaimers[i]
+		if(i > 1)
+			dat += "<a href='?src=\ref[src];credits=disclaimerup;disclaimerindex=[i]'>&#8743;</a>"
+		else
+			dat += "&nbsp"
+		if(i < end_credits.disclaimers.len)
+			dat += "<a href='?src=\ref[src];credits=disclaimerdown;disclaimerindex=[i]'>&#8744;</a>"
+		else
+			dat += "&nbsp"
+		dat += "<a href='?src=\ref[src];credits=editdisclaimer;disclaimerindex=[i]'> (Edit) </a>"
+		if(findtext(disclaimer, "<img"))
+			dat += "<span style='background-color: black'>[disclaimer]</span>"
+		else
+			dat += "[html_encode(disclaimer)]"
+		dat += "<br>"
+	dat += "</div>"
+
+	dat += "<hr><br><center>ADVANCED: <a href='?_src_=vars;Vars=\ref[end_credits]'>Debug Credits Datum</A></center>"
+
+	usr << browse(dat, "window=creditspanel;size=600x800")
+
+/datum/admins/proc/PersistencePanel()
+	if(!check_rights(0))
+		return
+
+	var/dat = "<center><B>Persistence Panel</B></center><hr>"
+
+	dat += "Filth Persistence for this round is: "
+	if(SSpersistence_map.savingFilth)
+		dat += "<b>ACTIVE</b> - Next round will have this round's uncleaned filth."
+	else
+		dat += "<b>INACTIVE</b> - Next round will have a clean station."
+	dat += "<br><A href='?src=\ref[src];persistenceaction=togglesaving'>(Toggle Saving)</a> <A href='?src=\ref[src];persistenceaction=qdelall'>(DELETE EVERYTHING)</a><hr>"
+
+	for(var/index in SSpersistence_map.subdatums)
+		var/datum/map_persistence_type/T = SSpersistence_map.subdatums[index]
+		if(!istype(T))
+			continue
+		dat += "<b>[T.name]</b>: [T.tracking.len] entries - <A href='?src=\ref[src];persistencedatum=\ref[T];persistenceaction=qdelall'>(DELETE)</A><br>"
+		dat += "Max [T.max_per_turf] per turf. Lasts up to [T.max_age] rounds.<hr>"
+
+	usr << browse(dat, "window=persistencepanel;size=350x600")

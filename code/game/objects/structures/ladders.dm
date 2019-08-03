@@ -49,9 +49,11 @@ var/list/ladders = list()
 
 		if(L.id == id)
 			if(L.height == (height - 1))
-				down = L
+				src.down = L
+				L.up = src
 			else if(L.height == (height + 1))
-				up = L
+				src.up = L
+				L.down = src
 
 		if(up && down)	//if both our connections are filled
 			break

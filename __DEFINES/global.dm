@@ -1,8 +1,18 @@
-#define DNA_SE_LENGTH 55
+/proc/writeglobal(var/which, var/what)
+	global.vars[which] = what
+
+/proc/readglobal(var/which)
+	return global.vars[which]
+
+#define DNA_SE_LENGTH 58
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 
 #define GREY_SHAPED "Grey"
+
+#define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
+
+#define MUSHROOM_SHAPED "Mushroom"
 
 //Content of the Round End Information window
 var/round_end_info = ""
@@ -14,7 +24,7 @@ var/global/list/deadmins = list()
 var/list/lockedvars = list("vars", "client", "holder")
 
 //List of vars that you can NEVER edit through VV itself
-var/list/nevervars = list("step_x", "step_y")
+var/list/nevervars = list("step_x", "step_y", "step_size")
 
 // List of types and how many instances of each type there are.
 var/global/list/type_instances[0]
@@ -51,9 +61,6 @@ var/list/paper_blacklist = list("java","onblur","onchange","onclick","ondblclick
 	"onkeypress","onkeyup","onload","onmousedown","onmousemove","onmouseout","onmouseover",	\
 	"onmouseup","onreset","onselect","onsubmit","onunload")
 
-
-var/skipupdate = 0
-	///////////////
 var/eventchance = 10 //% per 5 mins
 var/event = 0
 var/hadevent = 0
@@ -65,7 +72,6 @@ var/endicon = null
 var/diary = null
 var/diaryofmeanpeople = null
 var/admin_diary = null
-var/href_logfile = null
 var/station_name = null
 var/game_version = "veegee"
 var/changelog_hash = ""
@@ -81,23 +87,16 @@ var/ooc_allowed = 1
 var/looc_allowed = 1
 var/dooc_allowed = 1
 var/traitor_scaling = 1
-//var/goonsay_allowed = 0
-var/dna_ident = 1
 var/abandon_allowed = 1
 var/enter_allowed = 1
 var/guests_allowed = 1
-var/shuttle_frozen = 0
-var/shuttle_left = 0
 var/tinted_weldhelh = 1
 
-var/list/jobMax = list()
 var/list/bombers = list(  )
 var/list/admin_log = list (  )
-var/list/lastsignalers = list(	)	//keeps last 100 signals here in format: "[src] used \ref[src] @ location [src.loc]: [freq]/[code]"
 var/list/lawchanges = list(  ) //Stores who uploaded laws to which silicon-based lifeform, and what the law was
 var/list/shuttles = list(  )
 var/list/reg_dna = list(  )
-//	list/traitobj = list(  )
 
 var/CELLRATE = 0.002  // multiplier for watts per tick <> cell storage (eg: .002 means if there is a load of 1000 watts, 20 units will be taken from a cell per second)
 var/CHARGELEVEL = 0.001 // Cap for how fast cells charge, as a percentage-per-tick (.001 means cellcharge is capped to 1% per second)
@@ -115,6 +114,7 @@ var/airtunnel_stop = 68 // default
 var/airtunnel_bottom = 72 // default
 var/list/monkeystart = list()
 var/list/wizardstart = list()
+var/list/grinchstart = list()
 var/list/newplayer_start = list()
 var/list/latejoin = list()
 var/list/assistant_latejoin = list()
@@ -141,11 +141,6 @@ var/global/universal_cult_chat = 0 //if set to 1, even human cultists can use cu
 var/datum/station_state/start_state = null
 var/datum/configuration/config = null
 
-var/list/combatlog = list()
-var/list/IClog = list()
-var/list/OOClog = list()
-var/list/adminlog = list()
-
 var/suspend_alert = 0
 
 var/Debug = 0	// global debug switch
@@ -155,13 +150,9 @@ var/datum/debug/debugobj
 
 var/datum/moduletypes/mods = new()
 
-var/wavesecret = 0
 var/gravity_is_on = 1
 
-var/shuttlecoming = 0
-
 var/join_motd = null
-var/forceblob = 0
 
 var/polarstar = 0 //1 means that the polar star has been found, 2 means that the spur modification kit has been found
 
@@ -236,13 +227,17 @@ var/list/score=list(
 	"oremined"       = 0, //How many chunks of ore were smelted
 	"eventsendured"  = 0, //How many random events did the station endure?
 	"powerloss"      = 0, //How many APCs have alarms (under 30 %)?
+	"maxpower"       = 0, //Most watts in grid on any of the world's powergrids.
 	"escapees"       = 0, //How many people got out alive?
 	"deadcrew"       = 0, //Humans who died during the round
 	"deadsilicon"	 = 0, //Silicons who died during the round
 	"mess"           = 0, //How much messes on the floor went uncleaned
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
-	"disease"        = 0, //How many disease vectors in the world (one disease on one person is one)
+	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
+	"disease_bad"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger >= 3
+	"disease_most"        = null, //Most spread disease
+	"disease_most_count"        = 0, //Most spread disease
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
@@ -250,6 +245,15 @@ var/list/score=list(
 	"deadaipenalty" = 0, //AIs who died during the round
 	"foodeaten"     = 0, //How much food was consumed
 	"clownabuse"    = 0, //How many times a clown was punched, struck or otherwise maligned
+	"slips"			= 0, //How many people have slipped during this round
+	"gunsspawned"	= 0, //Guns spawned by the Summon Guns spell. Only guns, not other artifacts.
+	"dimensionalpushes" = 0, //Amount of times a wizard casted Dimensional Push.
+	"assesblasted"  = 0, //Amount of times a wizard casted Buttbot's Revenge.
+	"shoesnatches"  = 0, //Amount of shoes magically snatched.
+	"greasewiz"     = 0, //Amount of times a wizard casted Grease.
+	"lightningwiz"  = 0, //Amount of times a wizard casted Lighting.
+	"random_soc"    = 0, //Staff of Change bolts set to "random" that hit a human.
+	"heartattacks"  = 0, //Amount of times the "Heart Attack" virus reached final stage, unleashing a hostile floating heart.
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
 	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess
 	"richestcash"   = 0,
@@ -259,6 +263,15 @@ var/list/score=list(
 	"dmgestdamage"  = 0,
 	"dmgestkey"     = null,
 	"explosions"	= 0, //How many explosions happened total
+	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
+	"buttbotfarts"  = 0, //Messages mimicked by buttbots.
+	"turfssingulod" = 0, //Amount of turfs eaten by singularities.
+	"shardstouched" = 0, //+1 for each pair of shards that bump into eachother.
+	"kudzugrowth"   = 0, //Amount of kudzu tiles successfully grown, even if they were later eradicated.
+	"nukedefuse"	= 9999, //Seconds the nuke had left when it was defused.
+	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
+	"lawchanges"	 = 0, //Amount of AI modules used.
+
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
@@ -272,9 +285,6 @@ var/list/decals = list()
 var/global/event/on_login
 var/global/event/on_ban
 var/global/event/on_unban
-
-// List of /plugins
-var/global/list/plugins = list()
 
 // Space get this to return for things i guess?
 var/global/datum/gas_mixture/space_gas = new
@@ -318,8 +328,9 @@ var/global/list/minesweeper_best_players = list()
 var/nanocoins_rates = 1
 var/nanocoins_lastchange = 0
 
-var/speciesinit = 0
 var/minimapinit = 0
+
+var/list/bees_species = list()
 
 var/datum/stat_collector/stat_collection = new
 
@@ -341,8 +352,8 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 
 // ECONOMY
 // Account default values
-#define DEPARTMENT_START_FUNDS 5000
-#define DEPARTMENT_START_WAGE 500
+#define DEPARTMENT_START_FUNDS 500
+#define DEPARTMENT_START_WAGE 50
 #define PLAYER_START_WAGE 50
 
 //HUD MINIMAPS
@@ -353,3 +364,114 @@ var/list/extraMiniMaps = list()
 var/list/holomap_markers = list()
 
 var/holomaps_initialized = 0
+
+//Staff of change
+#define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
+#define SOC_MONKEY "Primate"
+#define SOC_MARTIAN "Martian"
+#define SOC_CYBORG "Robot"
+#define SOC_MOMMI "MoMMI"
+#define SOC_SLIME "Slime"
+#define SOC_XENO "Xenomorph"
+#define SOC_HUMAN "Human"
+#define SOC_CATBEAST "Furry"
+#define SOC_FRANKENSTEIN "Frankenstein"
+
+var/list/available_staff_transforms = list(
+	SOC_MONKEY,SOC_MARTIAN,
+	SOC_CYBORG,
+	SOC_SLIME,
+	SOC_XENO,
+	SOC_HUMAN,
+	SOC_CATBEAST,
+	SOC_FRANKENSTEIN
+	)
+
+//Broken mob list
+var/list/blacklisted_mobs = list(
+		/mob/living/simple_animal/space_worm,							// Unfinished. Very buggy, they seem to just spawn additional space worms everywhere and eating your own tail results in new worms spawning.
+		/mob/living/simple_animal/hostile/humanoid,						// JUST DON'T DO IT, OK?
+		/mob/living/simple_animal/hostile/retaliate/cockatrice,			// I'm just copying this from transmog.
+		/mob/living/simple_animal/hostile/giant_spider/hunter/dead,		// They are dead.
+		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// They aren't supposed to be playable.
+		/mob/living/simple_animal/hologram,								// Can't live outside the holodeck.
+		/mob/living/simple_animal/hostile/carp/holocarp,				// These can but they're just a retarded hologram carp reskin for the love of god.
+		/mob/living/slime_pile,											// They are dead.
+		/mob/living/adamantine_dust, 									// Ditto
+		/mob/living/simple_animal/hostile/viscerator,					// Nope.
+		/mob/living/simple_animal/hostile/mining_drone,					// This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
+		/mob/living/simple_animal/bee,									// Aren't set up to be playable
+		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
+		)
+
+//Boss monster list
+var/list/boss_mobs = list(
+	/mob/living/simple_animal/scp_173,								// Just a statue.
+	/mob/living/simple_animal/hostile/hivebot/tele,					// Hivebot spawner WIP thing
+	/mob/living/simple_animal/hostile/wendigo,						// Stupid strong evolving creature things that scream for help
+	/mob/living/simple_animal/hostile/mechahitler,					// Sieg heil!
+	/mob/living/simple_animal/hostile/alien/queen/large,			// The bigger and beefier version of queens.
+	/mob/living/simple_animal/hostile/asteroid/rockernaut/boss, 	// Angie
+	/mob/living/simple_animal/hostile/humanoid/surgeon/boss, 		// First stage of Doctor Placeholder
+	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
+	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
+	)
+
+// Set by traitor item, affects cargo supplies
+var/station_does_not_tip = FALSE
+
+#define CARD_CAPTURE_SUCCESS 0 // Successful charge
+#define CARD_CAPTURE_FAILURE_GENERAL 1 // General error
+#define CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS 2 // Not enough funds in the account.
+#define CARD_CAPTURE_ACCOUNT_DISABLED 3 // Account locked.
+#define CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT 4 // Destination account disabled.
+#define CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO 5 // Bad account/pin combo
+#define CARD_CAPTURE_FAILURE_SECURITY_LEVEL 6 // Security level didn't allow current authorization or another exception occurred
+#define CARD_CAPTURE_FAILURE_USER_CANCELED 7 // The user canceled the transaction
+#define CARD_CAPTURE_FAILURE_NO_DESTINATION 8 // There was no linked account to send funds to.
+#define CARD_CAPTURE_FAILURE_NO_CONNECTION 9 // Account database not available.
+
+#define BANK_SECURITY_EXPLANATION {"Choose your bank account security level.
+Vendors will try to subtract from your virtual wallet if possible.
+If you're too broke, they'll try to access your bank account directly.
+This setting decides how much info you have to enter to allow for that.
+Zero; Only your account number is required to deduct funds.
+One; Your account number and PIN are required.
+Two; Your ID card, account number and PIN are required.
+You can change this mid-game at an ATM."}
+
+proc/bank_security_num2text(var/num)
+	switch(num)
+		if(0)
+			return "Zero"
+		if(1)
+			return "One"
+		if(2)
+			return "Two"
+		else
+			return "OUT OF RANGE"
+
+var/list/bank_security_text2num_associative = list(
+	"Zero" = 0,
+	"One" = 1,
+	"Two" = 2
+) // Can't use a zero. Throws a fit about out of bounds indices if you do.
+// Also if you add more security levels, please also update the above BANK_SECURITY_EXPLANATION
+
+//Radial menus currently existing in the world.
+var/global/list/radial_menus = list()
+
+// Copying atoms is stupid and this is a stupid solution
+var/list/variables_not_to_be_copied = list(
+	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
+	"group","on_login","on_ban","on_unban","on_pipenet_tick","on_item_added",
+	"on_item_removed","on_moved","on_destroyed","on_density_change",
+	"on_z_transition","on_use","on_emote","on_life","on_resist",
+	"on_spellcast","on_uattack","on_ruattack","on_logout","on_damaged",
+	"on_irradiate","on_death","on_clickon","on_attackhand","on_attackby",
+	"on_explode","on_projectile","in_chamber","power_supply","contents",
+	"x","y","z"
+)
+
+//Item lists
+var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible)

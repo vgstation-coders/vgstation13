@@ -9,7 +9,6 @@ var/datum/subsystem/more_init/SSmore_init
 	NEW_SS_GLOBAL(SSmore_init)
 
 /datum/subsystem/more_init/Initialize(timeofday)
-	setupfactions()
 	setup_economy()
 	var/watch=start_watch()
 	log_startup_progress("Caching damage icons...")
@@ -21,10 +20,15 @@ var/datum/subsystem/more_init/SSmore_init
 	create_global_parallax_icons()
 	log_startup_progress("  Finished caching space parallax simulation in [stop_watch(watch)]s.")
 
-	watch=start_watch()
-	log_startup_progress("Generating holominimaps...")
-	generateHoloMinimaps()
-	log_startup_progress("  Finished holominimaps in [stop_watch(watch)]s.")
+	if (!config.skip_minimap_generation)
+		watch=start_watch()
+		log_startup_progress("Generating holominimaps...")
+		generateHoloMinimaps()
+		log_startup_progress("  Finished holominimaps in [stop_watch(watch)]s.")
+	else
+		//holomaps_initialized = 1 //Assume holominimaps were prerendered, the worst thing that happens if they're missing is that the minimap consoles don't show a minimap - NO IT'S NOT YOU DUMBFUCK, THOSE VARS EXIST FOR A REASON
+		log_startup_progress("Not generating holominimaps - SKIP_HOLOMINIMAP_GENERATION found in config/config.txt")
+	..()
 
 	buildcamlist()
 
@@ -35,6 +39,18 @@ var/datum/subsystem/more_init/SSmore_init
 		log_startup_progress("  Finished caching jukebox playlists in [stop_watch(watch)]s.")
 	..()
 
+	camera_sort(cameranet.cameras)
+
+	for (var/obj/machinery/computer/security/S in tv_monitors)
+		S.init_cams()
+	
+	init_wizard_apprentice_setups()
+
+/proc/init_wizard_apprentice_setups()
+	for (var/setup_type in subtypesof(/datum/wizard_apprentice_setup))
+		var/datum/wizard_apprentice_setup/setup_datum = new setup_type
+		wizard_apprentice_setups_nanoui += list(list("name" = setup_datum.name, "desc" = setup_datum.generate_description()))
+		wizard_apprentice_setups_by_name[setup_datum.name] = setup_datum
 
 /datum/subsystem/more_init/proc/buildcamlist()
 	adv_camera.camerasbyzlevel = list()
@@ -61,12 +77,12 @@ var/datum/subsystem/more_init/SSmore_init
 
 /datum/subsystem/more_init/proc/cachedamageicons()
 	var/mob/living/carbon/human/H = new(locate(1,1,2))
-	var/datum/species/list/slist = list(new /datum/species/human, new /datum/species/vox, new /datum/species/diona)
+	var/list/datum/species/slist = list(new /datum/species/human, new /datum/species/vox, new /datum/species/diona)
 	var/icon/DI
 	var/species_blood
 	for(var/datum/species/S in slist)
 		species_blood = (S.blood_color == DEFAULT_BLOOD ? "" : S.blood_color)
-		testing("Generating [S], Blood([species_blood])")
+//		testing("Generating [S], Blood([species_blood])")
 		for(var/datum/organ/external/O in H.organs)
 			//testing("[O] part")
 			for(var/brute = 1 to 3)

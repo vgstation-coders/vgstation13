@@ -1,4 +1,3 @@
-
 #define NITROGEN_RETARDATION_FACTOR 4        //Higher == N2 slows reaction more
 #define THERMAL_RELEASE_MODIFIER 10                //Higher == less heat released during reaction
 #define PLASMA_RELEASE_MODIFIER 1500                //Higher == less plasma released by reaction
@@ -13,12 +12,14 @@
 #define AUDIO_WARNING_DELAY 30
 
 /obj/machinery/power/supermatter
-	name = "Supermatter Crystal"
+	name = "\improper Supermatter Crystal"
 	desc = "A strangely translucent and iridescent crystal. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon = 'icons/obj/engine.dmi'
 	icon_state = "darkmatter"
 	density = 1
 	anchored = 0
+
+	mech_flags = MECH_SCAN_FAIL
 
 	var/max_luminosity = 8 // Now varies based on power.
 
@@ -46,8 +47,10 @@
 	var/lastaudiowarning = 0
 
 	var/power = 0
+	var/power_loss_modifier = 2500 // Higher == less power lost every process(). Was 500. With three emitters and no O2, power should tend towards 13935.5 J.
 	var/max_power = 2000 // Used for lighting scaling.
 
+	var/list/last_data = list("temperature" = 293, "oxygen" = 0.2)
 	var/oxygen = 0				  // Moving this up here for easier debugging.
 
 	//Temporary values so that we can optimize this
@@ -61,16 +64,16 @@
 	var/obj/item/device/radio/radio
 
 	// Monitoring shit
-	var/frequency = 1439
+	var/frequency = 1333
 	var/id_tag
 	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
-	var/list/message_exclusions = list(/obj/effect/effect/sparks)
+	var/list/message_exclusions = list(/obj/effect/effect/sparks,/obj/effect/overlay/hologram)
 	machine_flags = MULTITOOL_MENU
 
 /obj/machinery/power/supermatter/shard //Small subtype, less efficient and more sensitive, but less boom.
-	name = "Supermatter Shard"
+	name = "\improper Supermatter Shard"
 	short_name = "Shard"
 	desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon_state = "darkmatter_shard"
@@ -82,6 +85,7 @@
 	explosion_point = 900
 
 	gasefficency = 0.125
+	power_loss_modifier = 500 // With three emitters and no O2, power should tend towards 2643.1 J
 
 	explosion_power = 8 // WAS 3 - N3X
 
@@ -92,8 +96,10 @@
 /obj/machinery/power/supermatter/New()
 	. = ..()
 	radio = new (src)
-	if(frequency)
-		set_frequency(frequency)
+
+/obj/machinery/power/supermatter/initialize()
+	..()
+	set_frequency(frequency) //also broadcasts
 
 /obj/machinery/power/supermatter/Destroy()
 	qdel(radio)
@@ -140,10 +146,12 @@
 	var/prints = ""
 	if(src.fingerprintshidden)
 		prints = ", all touchers: [list2params(src.fingerprintshidden)]"
-	SetUniversalState(/datum/universal_state/supermatter_cascade)
-	S.expand(STAGE_SUPER, 1)
-	log_admin("New super singularity made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
-	message_admins("New super singularity made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
+	if(current_size == STAGE_SUPER) // and this is to go even further beyond
+		if(!istype(universe,/datum/universal_state/supermatter_cascade))
+			SetUniversalState(/datum/universal_state/supermatter_cascade)
+		S.expand(STAGE_SSGSS, 1)
+	log_admin("New SSGSS made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("New SSGSS made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
 	return 20000
 
@@ -198,7 +206,6 @@
 				play_alert = (damage > audio_warning_point)
 			else
 				warning = "[short_name] hyperstructure returning to safe operating levels. Instability: [stability]%"
-			//radio.say(warning, "Supermatter [short_name] Monitor")
 			var/datum/speech/speech = radio.create_speech(warning, frequency=1459, transmitter=radio)
 			speech.name = "Supermatter [short_name] Monitor"
 			speech.job = "Automated Announcement"
@@ -231,21 +238,18 @@
 	var/datum/gas_mixture/env = L.return_air()
 
 	//Remove gas from surrounding area
-	var/datum/gas_mixture/removed = env.remove(gasefficency * env.total_moles)
+	var/datum/gas_mixture/removed = env.remove_volume(gasefficency * CELL_VOLUME)
 
 	if(!removed || !removed.total_moles)
 		damage += max((power-1600)/10, 0)
 		power = min(power, 1600)
 		return 1
 
-	if (!removed)
-		return 1
-
 	damage_archived = damage
 	damage = max( damage + ( (removed.temperature - 800) / 150 ) , 0 )
 	//Ok, 100% oxygen atmosphere = best reaction
 	//Maxes out at 100% oxygen pressure
-	oxygen = max(min((removed.oxygen - (removed.nitrogen * NITROGEN_RETARDATION_FACTOR)) / MOLES_CELLSTANDARD, 1), 0)
+	oxygen = Clamp((removed[GAS_OXYGEN] - removed[GAS_NITROGEN] * NITROGEN_RETARDATION_FACTOR) / MOLES_CELLSTANDARD, 0, 1) //0 unless O2>80%. At 99%, ~0.6
 
 	var/temp_factor = 100
 
@@ -261,6 +265,8 @@
 
 	//We've generated power, now let's transfer it to the collectors for storing/usage
 	transfer_energy()
+	last_data["temperature"] = removed.temperature
+	last_data["oxygen"] = oxygen
 
 	var/device_energy = power * REACTION_POWER_MODIFIER
 
@@ -276,11 +282,9 @@
 	removed.temperature = max(0, min(removed.temperature, 2500))
 
 	//Calculate how much gas to release
-	removed.toxins += max(device_energy / PLASMA_RELEASE_MODIFIER, 0)
-
-	removed.oxygen += max((device_energy + removed.temperature - T0C) / OXYGEN_RELEASE_MODIFIER, 0)
-
-	removed.update_values()
+	removed.adjust_multi(
+		GAS_PLASMA, max(device_energy / PLASMA_RELEASE_MODIFIER, 0),
+		GAS_OXYGEN, max((device_energy + removed.temperature - T0C) / OXYGEN_RELEASE_MODIFIER, 0))
 
 	env.merge(removed)
 
@@ -289,10 +293,10 @@
 			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
 
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
-		var/rads = (power / 10) * sqrt(1/(max(get_dist(l, src), 1)))
+		var/rads = (power / 50) * sqrt(1/(max(get_dist(l, src), 1)))
 		l.apply_radiation(rads, RAD_EXTERNAL)
 
-	power -= (power/500)**3
+	power -= (power/power_loss_modifier)**3
 
 	var/light_value = Clamp(round(Clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
 
@@ -359,14 +363,12 @@
 		"<span class=\"danger\">You reach out and touch \the [src]. Everything starts burning and all you can hear is ringing. Your last thought is \"That was not a wise decision.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
 
-	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 
 	Consume(user)
 
 /obj/machinery/power/supermatter/proc/transfer_energy()
-	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
-		if(get_dist(R, src) <= 15) // Better than using orange() every process
-			R.receive_pulse(power)
+	emitted_harvestable_radiation(get_turf(src), power, range = 15)
 
 /obj/machinery/power/supermatter/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	. = ..()
@@ -380,23 +382,31 @@
 		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] flashes into dust as you flinch away from \the [src].</span>",\
 		"<span class='warning'>Everything suddenly goes silent.</span>")
 
-	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 
 	user.drop_from_inventory(W)
 	Consume(W)
 
-	user.apply_radiation(150, RAD_EXTERNAL)
+	user.apply_radiation(50, RAD_EXTERNAL)
 
 
 /obj/machinery/power/supermatter/Bumped(atom/AM as mob|obj)
 	if(istype(AM, /obj/machinery/power/supermatter))
 		AM.visible_message("<span class='sinister'>As \the [src] bumps into \the [AM] an otherworldly resonance ringing begins to shake the room, you ponder for a moment all the incorrect choices in your life that led you here, to this very moment, to witness this. You take one final sigh before it all ends.</span>")
 		sleep(10) //Adds to the hilarity
-		playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+		score["shardstouched"]++
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 		explode()
 		return
+	if(istype(AM, /obj/item/supermatter_splinter))
+		AM.visible_message("<span class='sinister'>As \the [AM] collides with \the [src], </span><span class = 'warning'>rather than exploding, \the [AM] fuses to \the [src].</span>")
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+		power_loss_modifier *= 1.5
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+		qdel(AM)
+		return
 	if(istype(AM, /mob/living))
-		AM.visible_message("<span class=\"warning\">\The [AM] slams into \the [src] inducing a resonance... \his body starts to glow and catch flame before flashing into ash.</span>",\
+		AM.visible_message("<span class=\"warning\">\The [src] is slammed into by \the [AM], inducing a resonance... \his body begins to glow and catch aflame before flashing into ash.</span>",\
 		"<span class=\"danger\">You slam into \the [src] as your ears are filled with unearthly ringing. Your last thought is \"Oh, fuck.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
 	else if(!is_type_in_list(AM, message_exclusions))
@@ -405,9 +415,22 @@
 	else
 		return ..()
 
-	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 
 	Consume(AM)
+
+/obj/machinery/power/supermatter/shard/Bumped(atom/AM)
+	..()
+	if(istype(AM, /obj/item/supermatter_splinter))
+		if(power_loss_modifier >= 2500)
+			visible_message("<span class = 'sinister'>As \the [AM] fuses to \the [src], \the [src] begins to glow an overworldly shimmer as it begins to pull additional mass from the environment around itself...</span>")
+			new/obj/effect/overlay/gravitywell(loc)
+			spawn(6 SECONDS)
+				if(gcDestroyed)
+					return //Something went wrong, oh no
+				var/turf/T = get_turf(src)
+				qdel(src)
+				new /obj/machinery/power/supermatter(T)
 
 
 /obj/machinery/power/supermatter/proc/Consume(var/mob/living/user)
@@ -429,7 +452,7 @@
 				"<span class=\"warning\">The unearthly ringing subsides and you notice you have new radiation burns.</span>", 2)
 		else
 			l.show_message("<span class=\"warning\">You hear an uneartly ringing and notice your skin is covered in fresh radiation burns.</span>", 2)
-		var/rads = 500 * sqrt( 1 / (get_dist(l, src) + 1) )
+		var/rads = 75 * sqrt( 1 / (get_dist(l, src) + 1) )
 		l.apply_radiation(rads, RAD_EXTERNAL) // Permit blocking
 
 
@@ -440,8 +463,10 @@
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
-		radio_connection = radio_controller.add_object(src, frequency, filter = RADIO_ATMOSIA)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
+	broadcast_status()
 
+#define SMM_RANGE 26
 /obj/machinery/power/supermatter/proc/broadcast_status()
 	if(!radio_connection)
 		return 0
@@ -458,8 +483,9 @@
 		"power" = power,
 		"sigtype" = "status"
 	)
-	radio_connection.post_signal(src, signal)
+	radio_connection.post_signal(src, signal, RADIO_ATMOSIA, SMM_RANGE)
 	return 1
+#undef SMM_RANGE
 
 /obj/machinery/power/supermatter/canClone(var/obj/O)
 	return istype(O, /obj/machinery/power/supermatter)
@@ -468,3 +494,103 @@
 	id_tag = O.id_tag
 	set_frequency(O.frequency)
 	return 1
+
+/obj/machinery/computer/supermatter
+	name = "supermatter monitoring computer"
+	desc = "Monitors ambient temperature and stability of a linked shard to provide early warning information regarding delamination. Can be linked up to supermatter with a matching frequency and id_tag using a multitool. While using a multitool on supermatter is safe, Nanotrasen accepts no responsibility or liability for sudden rushes of wind or radiation poisoning."
+	icon_state = "sme"
+	circuit = "/obj/item/weapon/circuitboard/supermatter"
+	light_color = LIGHT_COLOR_YELLOW
+	var/frequency = 1333
+	var/id_tag //mappable
+	var/datum/radio_frequency/radio_connection
+	var/obj/machinery/power/supermatter/linked = null //Gets cleared in process if the shard explodes
+	//"LIST" BUTTON
+	var/screen = 0 //0 = Main display, 1 = select target
+	var/list/cached_smlist = list()
+
+/obj/machinery/computer/supermatter/initialize()
+	..()
+	set_frequency(frequency)
+
+/obj/machinery/computer/supermatter/process()
+	if(linked && linked.gcDestroyed)
+		linked = null
+	..()
+
+/obj/machinery/computer/supermatter/receive_signal(datum/signal/signal, var/receive_method as num, var/receive_param)
+	..()
+	//Become unlinked if we receive a new signal from the thing we're linked from.
+	if(linked && signal.source && signal.source == linked)
+		linked = null
+	//Link to broadcasts with our id_tag
+	if(id_tag == signal.data["tag"] && istype(signal.source,/obj/machinery/power/supermatter))
+		linked = signal.source
+
+/obj/machinery/computer/supermatter/proc/set_frequency(new_frequency)
+	radio_controller.remove_object(src, frequency)
+	frequency = new_frequency
+	if(frequency)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
+
+/obj/machinery/computer/supermatter/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	return {"
+	<b>Main</b>
+	<ul>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
+		<li>[format_tag("ID Tag","id_tag")]</li>
+	</ul>"}
+
+/obj/machinery/computer/supermatter/attack_hand(mob/user)
+	if(..())
+		return
+	ui_interact(user)
+
+/obj/machinery/computer/supermatter/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	if (gcDestroyed || !get_turf(src) || !anchored)
+		if(!ui)
+			ui = nanomanager.get_open_ui(user, src, ui_key)
+		if(ui)
+			ui.close()
+		return
+
+	var/data[0]
+	data["screen"] = screen
+	if(linked) //We really want to be linked, but the template can survive even without a link
+		data["id"] = linked.id_tag
+		data["temperature"] = linked.last_data["temperature"]
+		data["stability"] = linked.stability()
+		if(!istype(linked.loc, /turf)||istype(linked.loc, /turf/space))
+			data["dps"] = 0 //If crated or in space, damage is exactly 0
+			data["oxygen"] = 0 //This doesn't really matter because power isn't generated in this state
+		else
+			data["dps"] = (linked.last_data["temperature"]-800)/150
+			data["oxygen"] = linked.last_data["oxygen"]*100
+		var/area/SME_loc = get_area(linked)
+		data["location"] = SME_loc.name
+	else
+		data["id"] = FALSE
+
+	if(screen)
+		cached_smlist = list()
+		for(var/obj/machinery/power/supermatter/SM in radio_connection.devices[RADIO_ATMOSIA])
+			var/area/sm_loc = get_area(SM)
+			if(sm_loc) //Otherwise it's nullspaced or something
+				cached_smlist.Add(list(list("type" =  SM.name, "id" = SM.id_tag, "location" = sm_loc.name)))
+		data["smlist"] = cached_smlist
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+
+	if (!ui)
+		ui = new(user, src, ui_key, "supermatter.tmpl", name, 520, 340)
+		ui.set_initial_data(data)
+		ui.open()
+		ui.set_auto_update()
+
+/obj/machinery/computer/supermatter/Topic(href, href_list)
+	. = ..()
+	if(.)
+		return .
+	if(href_list["list"])
+		screen = !screen
+
+	return TRUE

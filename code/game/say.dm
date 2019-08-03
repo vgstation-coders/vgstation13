@@ -77,8 +77,14 @@ var/list/freqtoname = list(
 	if(isnull(range))
 		range = 7
 	var/rendered = render_speech(speech)
-	for(var/atom/movable/AM in get_hearers_in_view(range, src))
+	var/list/listeners = get_hearers_in_view(range, src)
+	if(speech.speaker.GhostsAlwaysHear())
+		listeners |= observers
+	for(var/atom/movable/AM in listeners)
 		AM.Hear(speech, rendered)
+
+/atom/movable/proc/GhostsAlwaysHear()
+	return FALSE
 
 /atom/movable/proc/create_speech(var/message, var/frequency=0, var/atom/movable/transmitter=null)
 	if(!transmitter)
@@ -102,11 +108,8 @@ var/list/freqtoname = list(
 /atom/movable/proc/render_speech(var/datum/speech/speech)
 	say_testing(src, "render_speech() - Freq: [speech.frequency], radio=\ref[speech.radio]")
 	var/freqpart = ""
-	var/radioicon = ""
 	if(speech.frequency)
-		if(speech.radio)
-			radioicon = "[bicon(speech.radio)]"
-		freqpart = " [radioicon]\[[get_radio_name(speech.frequency)]\]"
+		freqpart = " \[[get_radio_name(speech.frequency)]\]"
 		speech.wrapper_classes.Add(get_radio_span(speech.frequency))
 	var/pooled=0
 	var/datum/speech/filtered_speech

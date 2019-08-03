@@ -1,0 +1,25 @@
+"a" = (/turf/unsimulated/wall/other,/area/vault/sokoban/level)
+"b" = (/turf/unsimulated/wall/bomberman{color = "#FFDDFF"},/area/vault/sokoban/level)
+"c" = (/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"d" = (/obj/structure/closet/crate/sokoban,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"e" = (/obj/structure/ladder/sokoban/entrance,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"f" = (/obj/structure/sokoban_teleporter,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"g" = (/obj/structure/ladder/sokoban/exit,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaa
+abbbbbbbbbbbbbba
+abccccbbbbcccbba
+abcdccbbbbcdcbba
+abcdccccccdccbba
+abccbbbebbbdcbba
+abbbbbbbbbbcbbba
+abccfffgbcccccba
+abccbbbbbdccccba
+abbfbbbbbcdcccba
+abbfbbbbbcdcccba
+abbccffffdcdccba
+abbccbbbbbbbbbba
+abbbbbbbbbbbbbba
+aaaaaaaaaaaaaaaa
+"}

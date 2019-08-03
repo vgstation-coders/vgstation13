@@ -6,15 +6,15 @@
 #define MAX_FLAG 65535
 
 var/list/same_wires = list()
-// 12 colours, if you're adding more than 12 wires then add more colours here
-var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", "gold", "gray", "cyan", "navy", "purple", "pink")
+// 14 colours, if you're adding more than 14 wires then add more colours here
+var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", "gold", "gray", "cyan", "navy", "purple", "pink", "fuchsia", "aqua")
 
 /datum/wires
 
 	var/random = 0 // Will the wires be different for every single instance.
 	var/atom/holder = null // The holder
 	var/holder_type = null // The holder type; used to make sure that the holder is the correct type.
-	var/wire_count = 0 // Max is 16
+	var/wire_count = 0 // Max is 16, but display is limited by the amount of different wire colours
 	var/wires_status = 0 // BITFLAG OF WIRES
 	var/check_wires = 0
 
@@ -111,14 +111,21 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 /datum/wires/Topic(href, href_list)
 	..()
-	if(in_range(holder, usr) && isliving(usr))
-
+	if((in_range(holder, usr) || (istype(usr.loc,/obj/mecha) && in_range(holder,usr.loc))) && isliving(usr))
 		var/mob/living/L = usr
 		if(!CanUse(L))
 			to_chat(usr, "<span class='notice'>You are incapable of this right now.</span>")
 			return
 		if(href_list["action"])
-			var/obj/item/I = L.get_active_hand()
+			var/obj/item/I
+			if(istype(L.loc,/obj/mecha))
+				var/obj/mecha/M = L.loc
+				if(istype(M.selected,/obj/item/mecha_parts/mecha_equipment/tool/switchtool))
+					var/obj/item/mecha_parts/mecha_equipment/tool/switchtool/S = M.selected
+					var/obj/item/weapon/switchtool/SW = S.switchtool
+					I = SW.deployed
+			else
+				I = L.get_active_hand()
 			holder.add_hiddenprint(L)
 			if(href_list["cut"]) // Toggles the cut/mend status
 				if(iswirecutter(I) || isswitchtool(I))
@@ -224,6 +231,12 @@ var/const/POWER = 8
 	else
 		CRASH("[colour] is not a key in wires.")
 
+/datum/wires/proc/GetColour(var/index)
+	for(var/i in wires)
+		if(wires[i] == index)
+			return i
+	CRASH("[index] is not in wires.")
+
 //
 // Is Index/Colour Cut procs
 //
@@ -273,6 +286,13 @@ var/const/POWER = 8
 			PulseColour(colour)
 			holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by \a [S] \ref[S] ([src.type])")
 			break
+
+/datum/wires/proc/SignalIndex(var/index)
+	if(IsIndexCut(index))
+		return
+	var/obj/item/device/assembly/signaler/S = GetAttached(GetColour(index))
+	if(S)
+		S.activate()
 
 
 //

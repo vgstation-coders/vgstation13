@@ -36,7 +36,8 @@
 
 	return ..(P)
 
-/mob/living/simple_animal/hostile/humanoid/kitchen/poutine/Die()
+/mob/living/simple_animal/hostile/humanoid/kitchen/poutine/death(var/gibbed = FALSE)
+	..(TRUE)
 	for(var/i=1 to 3)
 		var/to_spawn = pick(/obj/item/weapon/reagent_containers/food/snacks/poutine, /obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,\
 							/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel)
@@ -97,7 +98,8 @@
 	friendly_fire = 0
 	canmove = 1
 
-/mob/living/simple_animal/hostile/humanoid/kitchen/meatballer/Die()
+/mob/living/simple_animal/hostile/humanoid/kitchen/meatballer/death(var/gibbed = FALSE)
+	..(TRUE)
 	for(var/i=1 to 3)
 		var/to_spawn = pick(/obj/item/weapon/reagent_containers/food/snacks/spaghetti, /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti,\
 							/obj/item/weapon/reagent_containers/food/snacks/copypasta)
@@ -198,12 +200,12 @@
 	var/list/close_mobs = list()
 	var/list/dist_mobs = list()
 	for(var/mob/living/carbon/C in oview(1, src))
-		if(!C.vampire_affected())
+		if(C.vampire_affected() < 0)
 			continue
 		if(istype(C))
 			close_mobs |= C
 	for(var/mob/living/carbon/C in oview(3, src))
-		if(!C.vampire_affected())
+		if(C.vampire_affected() < 0)
 			continue
 		if(istype(C))
 			dist_mobs |= C
@@ -220,6 +222,7 @@
 		C.Stun(distance_value)
 		if(distance_value > 1)
 			C.Knockdown(distance_value)
+			C.Stun(distance_value)
 		C.stuttering += 5+distance_value *2
 		if(!C.blinded)
 			C.blinded = 1
@@ -236,14 +239,15 @@
 	spawn(5 SECONDS)
 		retreating = 0
 
-/mob/living/simple_animal/hostile/humanoid/vampire/Die()
+/mob/living/simple_animal/hostile/humanoid/vampire/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'>\The [src] lets out one last ear piercing shriek, before collapsing into dust!</span>")
 	for(var/mob/living/carbon/C in hearers(4, src))
 		if(ishuman(C))
 			var/mob/living/carbon/human/H = C
 			if(H.earprot())
 				continue
-		if(!C.vampire_affected())
+		if(C.vampire_affected() < 0)
 			continue
 		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
 		C.Knockdown(8)
@@ -277,7 +281,7 @@
 /mob/living/simple_animal/hostile/blood_splot/adjustBruteLoss()
 	return
 
-/mob/living/simple_animal/hostile/blood_splot/Move()
+/mob/living/simple_animal/hostile/blood_splot/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	var/turf/T = get_turf(src)
 	var/blood_found
@@ -314,6 +318,9 @@
 	attacktext = "robusts"
 
 	var/annoyed = 0
+
+/mob/living/simple_animal/hostile/gremlin/greytide/attack_icon()
+	return image(icon = 'icons/obj/storage/storage.dmi', icon_state = "toolbox_blue")
 
 /mob/living/simple_animal/hostile/gremlin/greytide/electrocute_act()
 	return //Gremtide cometh
@@ -368,12 +375,11 @@
 	if(isliving(the_target))
 		var/mob/living/M = the_target
 		M.apply_radiation(rand(melee_damage_lower,melee_damage_upper), RAD_EXTERNAL)
-	..(the_target)
+	return ..(the_target)
 
-/mob/living/simple_animal/hostile/humanoid/supermatter/UnarmedAttack(atom/A)
-	if(isliving(A))
-		visible_message("<span class = 'warning'>\The [src] [attacktext] \the [A]</span>")
-		var/mob/living/M = A
+/mob/living/simple_animal/hostile/humanoid/supermatter/UnarmedAttack(var/atom/the_target)
+	if(isliving(the_target))
+		var/mob/living/M = the_target
 		M.apply_radiation(rand(melee_damage_lower*2,melee_damage_upper*3), RAD_EXTERNAL)
 		switch(M.radiation)
 			if(0 to 90)
@@ -395,6 +401,8 @@
 								empulse(T, 2, 4, 1)
 								new /turf/unsimulated/wall/supermatter/no_spread/lake(T)
 								M.supermatter_act(src, SUPERMATTER_DUST)
+	else
+		..()
 
 
 /mob/living/simple_animal/hostile/humanoid/supermatter/to_bump(atom/Obstacle)
@@ -403,8 +411,9 @@
 
 	return ..()
 
-/mob/living/simple_animal/hostile/humanoid/supermatter/Die()
+/mob/living/simple_animal/hostile/humanoid/supermatter/death(var/gibbed = FALSE)
 	set waitfor = 0
+	..(TRUE)
 	animate(src, alpha = 0, time = 2 SECONDS, easing = SINE_EASING)
 	sleep(3 SECONDS)
 	empulse(get_turf(src), 6, 12, 1)
@@ -432,6 +441,9 @@
 	var/obj/item/weapon/cell/cell = null
 	var/latched = 0
 
+/mob/living/simple_animal/hostile/syphoner/get_cell()
+	return cell
+
 /mob/living/simple_animal/hostile/syphoner/New()
 	..()
 	cell = new /obj/item/weapon/cell/super/empty(src)
@@ -444,7 +456,7 @@
 		icon_living = "syphoner"
 		icon_state = "syphoner"
 
-/mob/living/simple_animal/hostile/syphoner/Move()
+/mob/living/simple_animal/hostile/syphoner/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(prob(30))
 		if(istype(src.loc, /turf/simulated/floor))
@@ -515,7 +527,8 @@
 	A.lock_atom(src, /datum/locking_category/cable_lock)
 	update_icon()
 
-/mob/living/simple_animal/hostile/syphoner/Die()
+/mob/living/simple_animal/hostile/syphoner/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class = 'warning'>\The [src] explodes!</span>")
 	var/turf/T = get_turf(src)
 	new /obj/effect/gibspawner/robot(T)
@@ -561,7 +574,7 @@
 				continue
 			if(S.health < maxHealth)
 				if(prob(10))
-					playsound(get_turf(S), get_sfx("soulstone"), 50,1)
+					playsound(S, get_sfx("soulstone"), 50,1)
 				if(prob(35))
 					make_tracker_effects(src, S)
 				S.health = max(S.maxHealth, S.health+rand(3,6))
@@ -570,7 +583,7 @@
 				visible_message("<span class = 'warning'>\The [src] makes a fist with its skeletal hands, and [S] turns to dust.</span>")
 				health = max(maxHealth, health+S.health)
 				make_tracker_effects(S, src)
-				playsound(get_turf(S), get_sfx("soulstone"), 50,1)
+				playsound(S, get_sfx("soulstone"), 50,1)
 				S.dust()
 
 			if(target && S.target != target)
@@ -578,7 +591,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/skellington/lich/Shoot(atom/a, params)
 	var/spell = rand(1,5)
-	var/diceroll = roll("1d20")
+	var/diceroll = rand(1,20)
 	var/list/victims = list()
 	for(var/mob/living/carbon/human/H in view(src, magic_range))
 		victims.Add(H)
@@ -607,7 +620,9 @@
 					to_chat(H, "<span class = 'warning'>\The [I] is pulled from your grasp!</span>")
 					I.throw_at(get_edge_target_turf(target, pick(alldirs)),15,1)
 				victims.Remove(H)
-		/*if(3) //Soul Swarm
+				if(!victims.len)
+					break
+		if(3) //Soul Swarm
 			visible_message("<span class = 'warning'>\The [src] starts to float above the ground!</span>")
 			animate(src, pixel_y = 8, time = 1 SECONDS, easing = ELASTIC_EASING)
 			animate(pixel_y = rand(8,19), pixel_x = rand(-8,8), time = 3 SECONDS, easing = SINE_EASING, loop = 5)
@@ -616,10 +631,12 @@
 				if(mtarget.isDead())
 					continue
 				to_chat(mtarget, "<span class = 'warning'>\The [src] sets its gaze upon you, and fires a soul swarm at you!</span>")
-				new /obj/item/projectile/soul_swarm(get_turf(src), targetmob = mtarget)
-			animate(src, pixel_y = 0, pixel_x = 0, time = 3 SECONDS, easing = SINE_EASING)*/
+				var/obj/item/projectile/P = new /obj/item/projectile/soul_swarm(get_turf(src), targetmob = mtarget)
+				spawn()
+					P.OnFired()
+					P.process()
+			animate(src, pixel_y = 0, pixel_x = 0, time = 3 SECONDS, easing = SINE_EASING)
 		if(4) //Raise undead
-			visible_message("<span class = 'warning'>\The [src] raises both hands, and clasps them togheter.</span>")
 			var/number_of_raised = round(diceroll/3)
 			for(var/mob/living/carbon/human/H in victims)
 				if(!H.isDead())
@@ -632,20 +649,19 @@
 				if(!isskellington(H))
 					new /obj/effect/gibspawner/generic(get_turf(H))
 				H.drop_all()
+				visible_message("<span class = 'warning'>\The [src] points towards \the [H].</span>")
 				H.visible_message("<span class = 'warning'>\The [H] raises from the dead!</span>")
 				new /mob/living/simple_animal/hostile/humanoid/skellington(H.loc)
 				qdel(H)
 		if(5) //Fall
-			var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
-			fall.spell_flags = 0
-			fall.invocation_type = SpI_NONE
-			fall.the_world_chance = 0
-			fall.range = magic_range
-			fall.sleeptime = 8*diceroll
-			fall.perform(src, skipcharge = 1)
-			qdel(fall)
+			flags |= TIMELESS
+			var/duration = 8*diceroll
+			timestop(src, duration, magic_range, TRUE)
+			spawn(duration)
+				flags &= ~TIMELESS
 
-/*/obj/item/projectile/soul_swarm
+
+/obj/item/projectile/soul_swarm
 	name = "soul swarm"
 	desc = "It flickers with some rudimentary form of intelligence, but conversation doesn't seem to be the strong point of a magical projectile."
 	icon_state = "soul"
@@ -653,6 +669,10 @@
 	travel_range = 30
 
 	var/mob/mobtarget = null
+
+/obj/item/projectile/soul_swarm/Destroy()
+	mobtarget = null
+	..()
 
 /obj/item/projectile/soul_swarm/New(var/mob/targetmob)
 	..()
@@ -665,4 +685,8 @@
 	drowsy = rand(0,25)
 	agony = rand(0,25)
 	jittery = rand(0,25)
-	mobtarget = targetmob*/
+	mobtarget = targetmob
+
+/obj/item/projectile/soul_swarm/process_step()
+	..()
+	original = mobtarget.loc //update the target

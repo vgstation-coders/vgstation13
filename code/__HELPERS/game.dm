@@ -14,17 +14,17 @@
 	if(T)
 		return T.loc
 
-/proc/get_area_master(const/O)
-	var/area/A = get_area(O)
-
-	if(isarea(A))
-		return A
-
-/proc/get_area_name(N) //get area by its name
+/proc/get_area_by_name(N) //get area by its name
 	for(var/area/A in areas)
 		if(A.name == N)
 			return A
 	return 0
+
+/proc/get_area_name(atom/X, format_text = FALSE)
+	var/area/A = isarea(X) ? X : get_area(X)
+	if(!A)
+		return null
+	return format_text ? format_text(A.name) : A.name
 
 /proc/in_range(atom/source, mob/user)
 	if(user.Adjacent(source))
@@ -49,13 +49,13 @@
 
 
 /proc/alone_in_area(var/area/the_area, var/mob/must_be_alone, var/check_type = /mob/living/carbon)
-	var/area/our_area = get_area_master(the_area)
+	var/area/our_area = get_area(the_area)
 	for(var/C in living_mob_list)
 		if(!istype(C, check_type))
 			continue
 		if(C == must_be_alone)
 			continue
-		if(our_area == get_area_master(C))
+		if(our_area == get_area(C))
 			return 0
 	return 1
 
@@ -162,36 +162,35 @@
 
 #define SIGN(X) ((X<0)?-1:1)
 
-proc
-	inLineOfSight(X1,Y1,X2,Y2,Z=1,PX1=16.5,PY1=16.5,PX2=16.5,PY2=16.5)
-		var/turf/T
-		if(X1==X2)
-			if(Y1==Y2)
-				return 1 //Light cannot be blocked on same tile
-			else
-				var/s = SIGN(Y2-Y1)
-				Y1+=s
-				while(Y1!=Y2)
-					T=locate(X1,Y1,Z)
-					if(T.opacity)
-						return 0
-					Y1+=s
+proc/inLineOfSight(X1,Y1,X2,Y2,Z=1,PX1=16.5,PY1=16.5,PX2=16.5,PY2=16.5)
+	var/turf/T
+	if(X1==X2)
+		if(Y1==Y2)
+			return 1 //Light cannot be blocked on same tile
 		else
-			var/m=(32*(Y2-Y1)+(PY2-PY1))/(32*(X2-X1)+(PX2-PX1))
-			var/b=(Y1+PY1/32-0.015625)-m*(X1+PX1/32-0.015625) //In tiles
-			var/signX = SIGN(X2-X1)
-			var/signY = SIGN(Y2-Y1)
-			if(X1<X2)
-				b+=m
-			while(X1!=X2 || Y1!=Y2)
-				if(round(m*X1+b-Y1))
-					Y1+=signY //Line exits tile vertically
-				else
-					X1+=signX //Line exits tile horizontally
+			var/s = SIGN(Y2-Y1)
+			Y1+=s
+			while(Y1!=Y2)
 				T=locate(X1,Y1,Z)
 				if(T.opacity)
 					return 0
-		return 1
+				Y1+=s
+	else
+		var/m=(32*(Y2-Y1)+(PY2-PY1))/(32*(X2-X1)+(PX2-PX1))
+		var/b=(Y1+PY1/32-0.015625)-m*(X1+PX1/32-0.015625) //In tiles
+		var/signX = SIGN(X2-X1)
+		var/signY = SIGN(Y2-Y1)
+		if(X1<X2)
+			b+=m
+		while(X1!=X2 || Y1!=Y2)
+			if(round(m*X1+b-Y1))
+				Y1+=signY //Line exits tile vertically
+			else
+				X1+=signX //Line exits tile horizontally
+			T=locate(X1,Y1,Z)
+			if(T.opacity)
+				return 0
+	return 1
 #undef SIGN
 
 proc/isInSight(var/atom/A, var/atom/B)
@@ -263,7 +262,7 @@ var/list/DummyCache = list()
 
 	//Now, check objects to block exit that are on the border
 	for(var/obj/border_obstacle in srcturf)
-		if(border_obstacle.flags & ON_BORDER)
+		if(border_obstacle.flow_flags & ON_BORDER)
 			if(!border_obstacle.Uncross(D, targetturf))
 				D.forceMove(null)
 				DummyCache.Add(D)
@@ -271,7 +270,7 @@ var/list/DummyCache = list()
 
 	//Next, check objects to block entry that are on the border
 	for(var/obj/border_obstacle in targetturf)
-		if((border_obstacle.flags & ON_BORDER) && (target != border_obstacle))
+		if((border_obstacle.flow_flags & ON_BORDER) && (target != border_obstacle))
 			if(!border_obstacle.Cross(D, srcturf, 1, 0))
 				D.forceMove(null)
 				DummyCache.Add(D)
@@ -285,8 +284,8 @@ var/list/DummyCache = list()
 //#define DEBUG_ROLESELECT
 
 #ifdef DEBUG_ROLESELECT
-# define roleselect_debug(x) testing(x)
-# warning DEBUG_ROLESELECT is defined!
+#define roleselect_debug(x) testing(x)
+#warn DEBUG_ROLESELECT is defined!
 #else
 # define roleselect_debug(x)
 #endif
@@ -408,11 +407,11 @@ var/list/DummyCache = list()
 
 /proc/mobs_in_area(var/area/the_area, var/client_needed=0, var/moblist=mob_list)
 	var/list/mobs_found[0]
-	var/area/our_area = get_area_master(the_area)
+	var/area/our_area = get_area(the_area)
 	for(var/mob/M in moblist)
 		if(client_needed && !M.client)
 			continue
-		if(our_area != get_area_master(M))
+		if(our_area != get_area(M))
 			continue
 		mobs_found += M
 	return mobs_found

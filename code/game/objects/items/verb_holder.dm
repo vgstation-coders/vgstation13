@@ -11,8 +11,10 @@
 	name = "verb holder"
 	desc = "You shouldn't see this."
 
-	density=0
-	abstract=1
+	density = FALSE
+	abstract = TRUE
 
+/obj/item/verbs/dropped()
+	qdel(src)
 // Then you just slap verbs in here and send_verbs(mob).
 // Done.

@@ -1,4 +1,3 @@
-
 /obj/effect/overlay
 	name = "overlay"
 	w_type=NOT_RECYCLABLE
@@ -61,3 +60,60 @@
 	icon = 'icons/turf/space.dmi'
 	icon_state = "bluespacify"
 	layer = LIGHTING_LAYER
+
+/obj/effect/overlay/puddle
+	name = "Puddle"
+	icon = 'icons/effects/water.dmi'
+	icon_state = "wet_floor"
+	anchored = 1
+	var/wet = TURF_WET_LUBE
+	var/lifespan
+	mouse_opacity = 0
+
+/obj/effect/overlay/puddle/New(var/turf/T, var/new_wet, var/new_lifespan)
+	..()
+	wet = new_wet
+	lifespan = world.time + new_lifespan
+	processing_objects.Add(src)
+
+/obj/effect/overlay/puddle/process()
+	if(world.time >= lifespan)
+		qdel(src)
+
+/obj/effect/overlay/puddle/Crossed(atom/movable/AM)
+
+	if (!isliving(AM))
+		return ..()
+	var/mob/living/L = AM
+	if (!L.ApplySlip(src))
+		return ..()
+
+/obj/effect/overlay/holywaterpuddle
+	name = "Puddle"
+	icon = 'icons/effects/water.dmi'
+	icon_state = "holy_floor"
+	anchored = 1
+	mouse_opacity = 0
+	var/lifespan
+
+/obj/effect/overlay/holywaterpuddle/New(var/turf/T)
+	. = ..()
+	lifespan = world.time + HOLYWATER_DURATION
+	processing_objects.Add(src)
+
+/obj/effect/overlay/holywaterpuddle/process()
+	if(world.time >= lifespan)
+		qdel(src)
+
+/obj/effect/overlay/wallrot
+	name = "Wallrot"
+	desc = "Ick..."
+	icon = 'icons/effects/wallrot.dmi'
+	anchored = TRUE
+	density = TRUE
+	mouse_opacity = 0
+
+/obj/effect/overlay/wallrot/New()
+	..()
+	pixel_x += rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y += rand(-10, 10) * PIXEL_MULTIPLIER

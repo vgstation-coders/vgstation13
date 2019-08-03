@@ -6,11 +6,14 @@ sudo: false
 
 env:
   global:
-  - BYOND_MAJOR="511"
-  - BYOND_MINOR="1363"
-  - ALL_MAPS="tgstation metaclub defficiency packedstation test_box test_tiny"
+  - BYOND_MAJOR="512"
+  - BYOND_MINOR="1453"
+  - ALL_MAPS="tgstation metaclub defficiency packedstation roidstation bagelstation test_box test_tiny"
   - RUST_BACKTRACE="1"
   - RUST_TEST_THREADS=1
+  matrix:
+  - DM_UNIT_TESTS="1"
+  - DM_UNIT_TESTS="0"
 
 cache:
   directories:
@@ -25,6 +28,7 @@ addons:
     - libc6-i386
     - libgcc1:i386
     - libstdc++6:i386
+    - moreutils
 
 install:
 - pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
@@ -42,7 +46,9 @@ script:
 # --jobs 1 to prevent threading problems with the BYOND crate.
 - cargo test --jobs 1 --verbose
 - cd -
-- echo ${ALL_MAPS} | xargs tools/travis/build.py vgstation13.dme -M
+- tools/travis/build.py
+- cp tools/travis/config/config.txt config/
+- tools/travis/run_tests.py 2>&1 | tee /dev/stderr | sponge | awk '/UNIT TEST FAIL/ { exit 1 }'
 
 notifications:
   irc:

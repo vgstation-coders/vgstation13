@@ -65,8 +65,8 @@
 		if (2)
 			adjustBruteLoss(10)
 
-/mob/living/simple_animal/hostile/hivebot/Die()
-	..()
+/mob/living/simple_animal/hostile/hivebot/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<b>[src]</b> blows apart!")
 	new /obj/effect/gibspawner/robot(src.loc)
 	qdel(src)
@@ -80,7 +80,7 @@
 	icon_living = "def_radar-off"
 	health = 200
 	maxHealth = 200
-	status_flags = 0
+	status_flags = UNPACIFIABLE
 	anchored = 1
 	stop_automated_movement = 1
 	var/bot_type = "norm"
@@ -96,7 +96,7 @@
 	smoke.set_up(5, 0, src.loc)
 	smoke.start()
 	visible_message("<span class='danger'>The [src] warps in!</span>")
-	playsound(get_turf(src), 'sound/effects/EMPulse.ogg', 25, 1)
+	playsound(src, 'sound/effects/EMPulse.ogg', 25, 1)
 
 /mob/living/simple_animal/hostile/hivebot/tele/proc/warpbots()
 	icon_state = "def_radar"

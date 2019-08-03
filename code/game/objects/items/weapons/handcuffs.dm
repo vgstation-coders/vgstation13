@@ -4,7 +4,7 @@
 /obj/item/weapon/handcuffs
 	name = "handcuffs"
 	desc = "Use this to keep prisoners in line."
-	setGender(PLURAL)
+	gender = PLURAL
 	icon = 'icons/obj/items.dmi'
 	icon_state = "handcuff"
 	flags = FPRINT
@@ -20,7 +20,13 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	restraint_apply_sound = 'sound/weapons/handcuffs.ogg'
 	restraint_resist_time = 2 MINUTES
+	var/list/mutual_handcuffed_mobs = list()
 
+/obj/item/weapon/handcuffs/Destroy()
+	for (var/mob/living/carbon/cuffed_mob in mutual_handcuffed_mobs)
+		src.remove_mutual_cuff_events(cuffed_mob)
+	. = ..()
+	
 /obj/item/weapon/handcuffs/restraint_apply_intent_check(mob/user)
 	return 1
 

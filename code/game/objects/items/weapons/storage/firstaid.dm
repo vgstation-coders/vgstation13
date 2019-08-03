@@ -11,6 +11,7 @@
 /obj/item/weapon/storage/firstaid
 	name = "first-aid kit"
 	desc = "It's an emergency medical kit for those serious boo-boos."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/firstaid-kits.dmi', "right_hand" = 'icons/mob/in-hand/right/firstaid-kits.dmi')
 	icon_state = "firstaid"
 	throw_speed = 2
 	throw_range = 8
@@ -75,7 +76,7 @@
 
 	icon_state = pick("antitoxin","antitoxfirstaid","antitoxfirstaid2","antitoxfirstaid3")
 
-	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
+	new /obj/item/weapon/reagent_containers/syringe/antiviral(src)
 	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
 	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
 	new /obj/item/weapon/reagent_containers/pill/antitox(src)
@@ -158,28 +159,6 @@
 	..()
 	colour_overlay = image('icons/obj/chemical.dmi',"bottle_colour")
 	overlays += colour_overlay
-
-
-/obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
-	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
-		var/mob/M = usr //I don't see how this is necessary
-		if (!( istype(over_object, /obj/abstract/screen/inventory) ))
-			return ..()
-		if (!M.incapacitated() && Adjacent(M))
-			var/obj/abstract/screen/inventory/SI = over_object
-
-			if(SI.hand_index && M.put_in_hand_check(src, SI.hand_index))
-				M.u_equip(src, 0)
-				M.put_in_hand(SI.hand_index, src)
-				src.add_fingerprint(usr)
-
-			return
-		if(over_object == usr && in_range(src, usr) || usr.contents.Find(src))
-			if (usr.s_active)
-				usr.s_active.close(usr)
-			src.show_to(usr)
-			return
-	return
 
 /obj/item/weapon/storage/pill_bottle/AltClick()
 	if(!usr.isUnconscious() && Adjacent(usr))
@@ -331,3 +310,12 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/sweets/strange
 	spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
+
+/obj/item/weapon/storage/pill_bottle/nanofloxacin
+	name = "pill bottle (nanofloxacin)"
+	desc = "Contains pills used to exterminate pathogen. May also exterminate yourself if taken in larger doses."
+
+/obj/item/weapon/storage/pill_bottle/nanofloxacin/New()
+	..()
+	for (var/i = 1 to 12)
+		new /obj/item/weapon/reagent_containers/pill/nanofloxacin(src)

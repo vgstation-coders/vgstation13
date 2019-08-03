@@ -8,7 +8,7 @@
 #define M_L_HAND_LAYER			7
 #define M_R_HAND_LAYER			8
 #define M_FIRE_LAYER			9
-#define TARGETED_LAYER			10
+#define M_TARGETED_LAYER		10
 #define M_TOTAL_LAYERS			10
 /////////////////////////////////
 
@@ -36,6 +36,7 @@
 	update_inv_hat(0)
 	update_inv_hands(0)
 	update_inv_handcuffed(0)
+	update_inv_mutual_handcuffed(0)
 	update_fire()
 	update_icons()
 	//Hud Stuff
@@ -222,7 +223,7 @@
 	var/obj/item/I = get_held_item_by_index(GRASP_LEFT_HAND)
 	if(I && I.is_visible())
 		var/t_state = I.item_state
-		var/t_inhand_states = I.inhand_states["right_hand"]
+		var/t_inhand_states = I.inhand_states["left_hand"]
 		if(!t_state)
 			t_state = I.icon_state
 		var/image/IM = image("icon" = t_inhand_states, "icon_state" = t_state)
@@ -291,6 +292,14 @@
 	if(update_icons)
 		update_icons()
 
+/mob/living/carbon/monkey/update_inv_mutual_handcuffed(var/update_icons = TRUE)
+	if(mutual_handcuffs)
+		stop_pulling()
+		overlays_standing[M_HANDCUFF_LAYER]	= image(icon = 'icons/mob/monkey.dmi', icon_state = "singlecuff1")
+	else
+		overlays_standing[M_HANDCUFF_LAYER]	= null
+	if(update_icons)
+		update_icons()
 
 /mob/living/carbon/monkey/update_hud()
 	if(client)
@@ -300,11 +309,11 @@
 //Call when target overlay should be added/removed
 /mob/living/carbon/monkey/update_targeted(var/update_icons=1)
 	if (targeted_by && target_locked)
-		overlays_standing[TARGETED_LAYER]	= target_locked
+		overlays_standing[M_TARGETED_LAYER]	= target_locked
 	else if (!targeted_by && target_locked)
 		del(target_locked)
 	if (!targeted_by)
-		overlays_standing[TARGETED_LAYER]	= null
+		overlays_standing[M_TARGETED_LAYER]	= null
 	if(update_icons)
 		update_icons()
 
@@ -326,5 +335,5 @@
 #undef M_HANDCUFF_LAYER
 #undef M_L_HAND_LAYER
 #undef M_R_HAND_LAYER
-#undef TARGETED_LAYER
+#undef M_TARGETED_LAYER
 #undef M_TOTAL_LAYERS

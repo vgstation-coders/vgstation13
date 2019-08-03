@@ -5,7 +5,7 @@
 		return
 
 	var/sound/uploaded_sound = sound(S, repeat = 0, wait = 1, channel = CHANNEL_ADMINMUSIC)
-	uploaded_sound.status = SOUND_STREAM | SOUND_UPDATE
+	uploaded_sound.status = SOUND_STREAM
 	uploaded_sound.priority = 250
 
 	var/prompt = alert(src, "Do you want to announce the filename to everyone?","Announce?","Yes","No","Cancel")

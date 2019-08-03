@@ -12,7 +12,7 @@
 		return
 	if(stat & BROKEN)
 		return
-	playsound(get_turf(src),'sound/machines/compactor.ogg', 30, 1) //Placeholder
+	playsound(src,'sound/machines/compactor.ogg', 30, 1) //Placeholder
 	flush = 1
 	flick("compactor_running",src)
 	spawn(41)
@@ -44,6 +44,9 @@
 
 /obj/machinery/disposal/compactor/handle_trunk()
 	return
+
+/obj/machinery/disposal/compactor/can_load_crates()
+	return FALSE
 
 /obj/machinery/disposal/compactor/update_icon()
 	icon_state = "compactor_[stat & NOPOWER ? "off" : "on"]"
@@ -99,13 +102,13 @@
 		power_change()
 		return
 	if(!emagged && istype(I,/obj/item/weapon/card/emag))
-		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		to_chat(user, "<span class='notice'>You you disable the safety features.</span>")
+		to_chat(user, "<span class='notice'>You disable the safety features.</span>")
 		return
 	..()
 
-/obj/machinery/disposal/compactor/Move(atom/newloc, direct)
+/obj/machinery/disposal/compactor/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(prob(2))
 		var/atom/movable/AM = pick(contents)

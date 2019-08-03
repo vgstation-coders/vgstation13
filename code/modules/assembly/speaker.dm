@@ -19,7 +19,7 @@
 
 /obj/item/device/assembly/speaker/attack_self(mob/user as mob)
 	var/new_msg = sanitize(input(user,"Enter new message for the [src]","NanoSpeaker Settings",message))
-	if(!Adjacent(user))
+	if(!Adjacent(user) || user.incapacitated())
 		return
 
 	message = new_msg
@@ -32,7 +32,9 @@
 /obj/item/device/assembly/speaker/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(istype(W,/obj/item/weapon/pen)) //pen
-		var/tmp/new_name = sanitize(input(user,"Enter new name for the [src]","NanoSpeaker Settings",name))
+		var/new_name = sanitize(input(user,"Enter new name for the [src]","NanoSpeaker Settings",name))
+		if(!Adjacent(user) || user.incapacitated())
+			return
 		if(new_name != "")
 			name = "[real_name] ([new_name])"
 		else

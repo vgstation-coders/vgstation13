@@ -1,21 +1,21 @@
-#define AGGNO 0 //won't attack people at random
-#define AGGYES 1 //Hunting for food
-#define AGGALL 2 //May attack friends
+#define WOLF_AGGNO 0 //won't attack people at random
+#define WOLF_AGGYES 1 //Hunting for food
+#define WOLF_AGGALL 2 //May attack friends
 
-#define ALPHANONE 0 //Do nothing, follow roughly
-#define ALPHAFOLLOW 1 //Follow close
-#define ALPHASTAY 2 //Hold
-#define ALPHAATTACK 3 //Attack thing
-#define ALPHAMOVE 4 //Move to location
+#define WOLF_ALPHANONE 0 //Do nothing, follow roughly
+#define WOLF_ALPHAFOLLOW 1 //Follow close
+#define WOLF_ALPHASTAY 2 //Hold
+#define WOLF_ALPHAATTACK 3 //Attack thing
+#define WOLF_ALPHAMOVE 4 //Move to location
 
-#define WELLFED 3
-#define HUNGRY 2
-#define VHUNGRY 1
-#define STARVING 0
+#define WOLF_WELLFED 3
+#define WOLF_HUNGRY 2
+#define WOLF_VHUNGRY 1
+#define WOLF_STARVING 0
 
-#define MOVECOST 0.5
-#define STANDCOST 0.5
-#define REGENCOST 20
+#define WOLF_MOVECOST 0.5
+#define WOLF_STANDCOST 0.5
+#define WOLF_REGENCOST 20
 
 #define MAXALPHADIST 7
 /* TODONE: Pack mentality - Wolves will generally stick around the 'alpha', at least within 6 tiles, unless hunting [x]
@@ -31,6 +31,7 @@
 	icon_living = "wolf"
 	icon_dead = "wolf_dead"
 	speak_chance = 5
+	emote_hear = list("growls", "howls")
 	turns_per_move = 4
 	response_help = "pets"
 	response_disarm = "gently pushes aside"
@@ -54,10 +55,10 @@
 	minbodytemp = 200
 
 	var/alert = 0 //Listening out for pointings from the pack alpha
-	var/aggressive = AGGNO
+	var/aggressive = WOLF_AGGNO
 	var/anger_chance = 30
 	var/mob/living/pack_alpha //Who they will never attack, and if human, will listen to commands
-	var/alpha_stance = ALPHANONE //What the alpha may want them to do
+	var/alpha_stance = WOLF_ALPHANONE //What the alpha may want them to do
 	var/atom/alpha_target //whomever the alpha has specified to attack
 	var/mob/alpha_challenger //Whomever is challenging the alpha
 	var/hunger_status //Scales off nutrition. 400+ = well fed, 300 hungry, 200 vhungry, 100 starving
@@ -92,23 +93,23 @@
 	for(var/obj/machinery/space_heater/campfire/fire in target_prox)
 		var/dist = get_dist(the_target, fire)
 		if(dist < (fire.light_range*2))//Just sitting on the edge of the fire
-			alpha_stance = ALPHANONE
+			alpha_stance = WOLF_ALPHANONE
 			visible_message("<span class = 'notice'>\The [src] whimpers and runs from \the [fire]</span>")
 			return
 	if(the_target.flags & INVULNERABLE)
 		return 0
 	if(istype(the_target, /mob/dead/observer))
 		return 0 //Stop eating ghosts!
-	if((the_target == alpha_target && alpha_stance == ALPHAATTACK) || the_target == alpha_challenger)//Who the alpha has specified
+	if((the_target == alpha_target && alpha_stance == WOLF_ALPHAATTACK) || the_target == alpha_challenger)//Who the alpha has specified
 		return the_target //RIP sanity, but alpha above all
-	if(aggressive == AGGNO)
-		if(the_target == pack_alpha && alpha_stance == ALPHAFOLLOW)
+	if(aggressive == WOLF_AGGNO)
+		if(the_target == pack_alpha && alpha_stance == WOLF_ALPHAFOLLOW)
 			return the_target
 		return 0
 	if(isliving(the_target))
 		var/mob/living/L = the_target
 		if(L == pack_alpha)
-			if(alpha_stance == ALPHAFOLLOW)
+			if(alpha_stance == WOLF_ALPHAFOLLOW)
 				return the_target //Handled more in AttackingTarget
 			else
 				return 0
@@ -116,17 +117,17 @@
 			var/mob/living/simple_animal/hostile/wolf/potential_pack = L
 			if(potential_pack.pack_alpha == pack_alpha) //Never eat a packmate
 				return 0
-			if(aggressive != AGGALL)//Not unless we're hungry
+			if(aggressive != WOLF_AGGALL)//Not unless we're hungry
 				return 0
 			else
 				return the_target
 		if(L.faction == src.faction)
-			if(aggressive != AGGALL)//Not unless we're hungry
+			if(aggressive != WOLF_AGGALL)//Not unless we're hungry
 				return 0
 			else
 				return the_target
 		if(L.isDead())
-			if(hunger_status < WELLFED)
+			if(hunger_status < WOLF_WELLFED)
 				return the_target
 			else
 				return 0
@@ -149,14 +150,14 @@
 	if(isliving(target))
 		var/mob/living/mob_target = target
 		if(mob_target.isDead() && !istype(mob_target, /mob/dead/observer))
-			if(hunger_status < WELLFED)
+			if(hunger_status < WOLF_WELLFED)
 				visible_message("<span class = 'notice'>\The [src] starts to take a bite out of \the [target].</span>")
 				stop_automated_movement = 1
 				var/target_loc = mob_target.loc
 				var/self_loc = src.loc
 				spawn(5 SECONDS)
 					if(mob_target.loc == target_loc && self_loc == src.loc) //Not moved
-						playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
+						playsound(src, 'sound/weapons/bite.ogg', 50, 1)
 						var/damage = rand(melee_damage_lower, melee_damage_upper)
 						mob_target.adjustBruteLoss(damage)
 						nutrition += damage*3
@@ -170,19 +171,16 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/F = W
 
 		if(F.food_flags & FOOD_MEAT) //Any meaty dish goes!
-			playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+			playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
 			nutrition += 15
 			if(prob(25))
 				if(!pack_alpha)
 					pack_alpha = user
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
-					var/n_name = copytext(sanitize(input(user, "What would you like to name your new friend?", "Wolf Name", null) as text|null), 1, MAX_NAME_LEN)
-					if(n_name && !user.incapacitated())
-						name = n_name
-					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-					heart.plane = ABOVE_HUMAN_PLANE
-					flick_overlay(heart, list(user.client), 20)
+					message_admins("[key_name(user)] has tamed a wolf: @[formatJumpTo(user, "JMP")]")
+					log_admin("[key_name(user)] has tamed a wolf:  @([user.x], [user.y], [user.z])")
+					name_mob(user)
 				else
 					if(istype(pack_alpha, /mob/living/simple_animal/hostile/wolf))
 						var/mob/living/simple_animal/hostile/wolf/alpha = pack_alpha
@@ -191,7 +189,7 @@
 
 /mob/living/simple_animal/hostile/wolf/adjustBruteLoss(var/damage)
 	if(!isDead())
-		if(health <= maxHealth/2 || hunger_status < WELLFED)
+		if(health <= maxHealth/2 || hunger_status < WOLF_WELLFED)
 			anger(1)
 		else
 			anger()
@@ -205,20 +203,20 @@
 /mob/living/simple_animal/hostile/wolf/proc/anger(var/anger_override = 0)
 	if(!aggressive)
 		if(prob(anger_chance) || anger_override)
-			aggressive = AGGYES
+			aggressive = WOLF_AGGYES
 			stance = HOSTILE_STANCE_ATTACK
 
 
 /mob/living/simple_animal/hostile/wolf/proc/challenge(mob/challenger)
 	alpha_challenge = 1
 	if(!aggressive)
-		aggressive = AGGYES
+		aggressive = WOLF_AGGYES
 	alpha_challenger = challenger
 	target = challenger
 	stance = HOSTILE_STANCE_ATTACK
 	spawn(150) //15 seconds
 		if(challenger.isDead())//If he's dead, calm down
-			aggressive = AGGNO
+			aggressive = WOLF_AGGNO
 			alpha_challenger = null
 			alpha_challenge = 0
 		else //Pack time!
@@ -229,7 +227,7 @@
 /mob/living/simple_animal/hostile/wolf/Life()
 	..()
 	if(!isUnconscious())
-		nutrition -= STANDCOST
+		nutrition -= WOLF_STANDCOST
 		handle_hunger() //Handle hunger
 		var/list/can_see = view(src, vision_range)
 
@@ -246,34 +244,35 @@
 					//Howl noise?
 					pack_alpha = null
 				else
-					if(alpha_stance == ALPHANONE) //Rough following
+					if(alpha_stance == WOLF_ALPHANONE) //Rough following
 						var/dist = get_dist(src, pack_alpha)
 						if(dist > MAXALPHADIST && (pack_alpha in can_see))
 							Goto(pack_alpha, move_to_delay, MAXALPHADIST)
 
 		//Alpha handling
 		if(alpha_challenger && alpha_challenger.isDead())//If he's dead, calm down
-			aggressive = AGGNO
+			aggressive = WOLF_AGGNO
 			alpha_challenger = null
 		point_listen(can_see)
 
-		if(alpha_stance != ALPHANONE)
+		if(alpha_stance != WOLF_ALPHANONE)
 			switch(alpha_stance)
-				if(ALPHAATTACK) //This should always be used in turn with alpha_target
+				if(WOLF_ALPHAATTACK) //This should always be used in turn with alpha_target
 					if(!alpha_target)
-						alpha_stance = ALPHANONE
+						alpha_stance = WOLF_ALPHANONE
 					else
 						if(ismob(alpha_target))
 							var/mob/living/L = alpha_target
-							if(L.isDead() && hunger_status == WELLFED)
+							if(L.isDead() && hunger_status == WOLF_WELLFED)
 								alpha_target = null
-								alpha_stance = ALPHANONE
+								alpha_stance = WOLF_ALPHANONE
 						/*if(istype (alpha_target, /obj/structure/window) || istype (alpha_target, /obj/structure/grille))
 							var/obj/structure/window/W = alpha_target //They both use the same code anyway
 							if(W.health <= 0)
 								alpha_target = null
-								alpha_stance = ALPHANONE*/
-				if(ALPHAMOVE)
+								alpha_stance = WOLF_ALPHANONE*/
+						log_admin("A wolf is attacking a target, [key_name(alpha_target)], their alpha is: [key_name(pack_alpha)] @([src.x], [src.y], [src.z])")
+				if(WOLF_ALPHAMOVE)
 					var/turf/target = alpha_target
 					var/dist = get_dist(src, alpha_target)
 					if(dist > 1) //Fucking magic numbers
@@ -281,72 +280,72 @@
 					else
 						alpha_target = null
 						visible_message("<span class = 'notice'>\The [src] sits down patiently.</span")
-						alpha_stance = ALPHASTAY
-				if(ALPHASTAY)
+						alpha_stance = WOLF_ALPHASTAY
+				if(WOLF_ALPHASTAY)
 					stop_automated_movement = 1
 		else
 			stop_automated_movement = 0
 
 
-		if((health < (maxHealth/2)) && nutrition >= REGENCOST)
+		if((health < (maxHealth/2)) && nutrition >= WOLF_REGENCOST)
 			health += rand(1,3)
-			nutrition -= REGENCOST
+			nutrition -= WOLF_REGENCOST
 
 /mob/living/simple_animal/hostile/wolf/proc/handle_hunger()
 	switch(nutrition)
 		if(300 to INFINITY)
-			hunger_status = WELLFED
+			hunger_status = WOLF_WELLFED
 			if(stance == HOSTILE_STANCE_IDLE)
-				aggressive = AGGNO
+				aggressive = WOLF_AGGNO
 		if(250 to 300)
-			hunger_status = HUNGRY
+			hunger_status = WOLF_HUNGRY
 		if(150 to 250)
-			hunger_status = VHUNGRY
-			aggressive = AGGYES
+			hunger_status = WOLF_VHUNGRY
+			aggressive = WOLF_AGGYES
 		if(0 to 150)
-			hunger_status = STARVING
-			aggressive = AGGALL
+			hunger_status = WOLF_STARVING
+			aggressive = WOLF_AGGALL
 
 /mob/living/simple_animal/hostile/wolf/examine(mob/user)
 	..()
 	if(!isDead())
 		switch(hunger_status)
-			if(WELLFED)
+			if(WOLF_WELLFED)
 				to_chat(user, "<span class='info'>It seems well fed.</span>")
-			if(HUNGRY)
+			if(WOLF_HUNGRY)
 				to_chat(user, "<span class='info'>It seems hungry.</span>")
-			if(VHUNGRY)
+			if(WOLF_VHUNGRY)
 				to_chat(user, "<span class='info'>It looks incredibly hungry.</span>")
-			if(STARVING)
+			if(WOLF_STARVING)
 				to_chat(user, "<span class='warning'>It looks starving!</span>")
 		if(pack_alpha == user)
 			to_chat(user, "<span class='info'>It seems friendly to you.</span>")
 		var/remaining_health_percent = round((health/maxHealth)*100)
 		switch(remaining_health_percent)
-			if(100 to 60)
+			//if(60 to 100)
 				//Do nuthin
-			if(59 to 30)
+			if(30 to 59)
 				to_chat(user, "<span class='warning'>It seems quite hurt.</span>")
-			if(29 to 5)
+			if(5 to 29)
 				to_chat(user, "<span class='warning'>It seems extremely hurt.</span>")
-			if(5 to 1)
+			if(1 to 5)
 				to_chat(user, "<span class='warning'>It seems close to death!</span>")
-			if(0 to -INFINITY)
+			if(-INFINITY to 0)
 				to_chat(user, "<span class='warning'>It seems, well, dead.</span>")
 		switch(alpha_stance)
-			//if(ALPHANONE)
+			//if(WOLF_ALPHANONE)
 				//Nuthin, was gonna have barking, but PJB got angry
-			if(ALPHAFOLLOW)
+			if(WOLF_ALPHAFOLLOW)
 				to_chat(user, "<span class='info'>They seem to be following someone.</span>")
-			if(ALPHAATTACK)
+			if(WOLF_ALPHAATTACK)
 				to_chat(user, "<span class='warning'>It seems angry at something.</span>")
-			if(ALPHAMOVE)
+			if(WOLF_ALPHAMOVE)
 				to_chat(user, "<span class='info'>It seems to be going somewhere.</span>")
-			if(ALPHASTAY)
+			if(WOLF_ALPHASTAY)
 				to_chat(user, "<span class='info'>It seems to be sitting down, waiting patiently.</span>")
-/mob/living/simple_animal/hostile/wolf/Move()
+/mob/living/simple_animal/hostile/wolf/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
-	nutrition -= MOVECOST
+	nutrition -= WOLF_MOVECOST
 
 /mob/living/simple_animal/hostile/wolf/proc/point_listen(var/list/can_see)
 	if(pack_alpha == src)
@@ -366,12 +365,12 @@
 		//If mob, check if it's self or a pack member, then attack if not
 		//If it's a turf, go to turf and wait
 /*		if(istype (target, /obj/structure/window) || istype (target, /obj/structure/grille))
-			alpha_stance = ALPHAATTACK
+			alpha_stance = WOLF_ALPHAATTACK
 			alpha_target = target*/
 		if(ismob(target))
 			var/mob/living/M = target
 			if(M == pack_alpha)
-				alpha_stance = ALPHAFOLLOW
+				alpha_stance = WOLF_ALPHAFOLLOW
 				return
 			if(M == src)//That's us
 				return //Handled in pointed_at
@@ -380,45 +379,47 @@
 				if(PP.pack_alpha == pack_alpha)//Member of our pack
 					return //Probably doing something in regards to pointed_at
 			if(M.isDead())
-				if(hunger_status == WELLFED)
+				if(hunger_status == WOLF_WELLFED)
 					return
 
 			stance = HOSTILE_STANCE_ATTACK
-			alpha_stance = ALPHAATTACK
+			alpha_stance = WOLF_ALPHAATTACK
 			alpha_target = target
+			add_attacklogs(pack_alpha, target, "ordered a wolf a wolf to attack", src, null, TRUE)
+			log_admin("[key_name(pack_alpha)] has ordered a wolf to attack [key_name(target)] @([src.x], [src.y], [src.z])")
 		if(istype (target, /turf)) //We go!
-			alpha_stance = ALPHAMOVE
+			alpha_stance = WOLF_ALPHAMOVE
 			alpha_target = target
 
 /mob/living/simple_animal/hostile/wolf/pointed_at(mob/pointer)
-	if(!isDead())
+	if(!isDead() && see_invisible >= pointer.invisibility)
 		if(pointer == pack_alpha)
 			switch(alpha_stance)
-				if(ALPHAFOLLOW)
-					alpha_stance = ALPHANONE
+				if(WOLF_ALPHAFOLLOW)
+					alpha_stance = WOLF_ALPHANONE
 					to_chat(pointer, "<span class ='notice'>\The [src] is no longer following, and looks alert.</span>")
-				if(ALPHANONE)
-					alpha_stance = ALPHASTAY
+				if(WOLF_ALPHANONE)
+					alpha_stance = WOLF_ALPHASTAY
 					to_chat(pointer, "<span class='notice'>\The [src] is now staying on location.</span>")
-				if(ALPHASTAY)
-					alpha_stance = ALPHANONE
+				if(WOLF_ALPHASTAY)
+					alpha_stance = WOLF_ALPHANONE
 					stop_automated_movement = 0
 					to_chat(pointer, "<span class='notice'>\The [src] sits up, no longer waiting.</span>")
 		else
 			to_chat(pointer, "<span class='warning'>\The [src] growls.</span>")
 
-#undef AGGNO
-#undef AGGYES
-#undef AGGALL
-#undef ALPHANONE
-#undef ALPHAFOLLOW
-#undef ALPHASTAY
-#undef ALPHAATTACK
-#undef WELLFED
-#undef HUNGRY
-#undef VHUNGRY
-#undef STARVING
+#undef WOLF_AGGNO
+#undef WOLF_AGGYES
+#undef WOLF_AGGALL
+#undef WOLF_ALPHANONE
+#undef WOLF_ALPHAFOLLOW
+#undef WOLF_ALPHASTAY
+#undef WOLF_ALPHAATTACK
+#undef WOLF_WELLFED
+#undef WOLF_HUNGRY
+#undef WOLF_VHUNGRY
+#undef WOLF_STARVING
 #undef MAXALPHADIST
-#undef MOVECOST
-#undef STANDCOST
-#undef REGENCOST
+#undef WOLF_MOVECOST
+#undef WOLF_STANDCOST
+#undef WOLF_REGENCOST

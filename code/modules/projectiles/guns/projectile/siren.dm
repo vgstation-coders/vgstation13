@@ -93,7 +93,31 @@
 /obj/item/weapon/gun/siren/can_discharge()
 	if(reagents.total_volume < 10)
 		return 1
-	
+
+/obj/item/weapon/gun/siren/caduceus
+	name = "Caduceus"
+	desc = "For smiting and revitalizing. A paladin's friend, with handy refilling barrels and an ultra-sharp blade for butchering zombies instantly."
+	icon_state = "caduceus"
+	item_state = "caduceus"
+	var/spawning_ammo = DOCTORSDELIGHT
+	max_reagents = 100
+	sharpness = 25
+	sharpness_flags = SHARP_BLADE
+	attack_verb = list("grinds open", "cleaves apart", "rends", "gelds", "rips and tears", "shreds")
+	force = 10
+	light_power = 1
+	light_range = 6
+	light_color = LIGHT_COLOR_SLIME_LAMP
+
+/obj/item/weapon/gun/siren/caduceus/New()
+	..()
+	processing_objects.Add(src)
+	create_reagents(max_reagents)
+	reagents.add_reagent(spawning_ammo, max_reagents)
+
+/obj/item/weapon/gun/siren/caduceus/process()
+	reagents.add_reagent(spawning_ammo, 10)
+
 /obj/item/weapon/gun/siren/supersoaker
 	name = "super soaker"
 	desc = "For ages 10 and up."

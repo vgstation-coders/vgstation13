@@ -5,14 +5,30 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 
 /mob/living/proc/ventcrawl_carry()
 	for(var/atom/A in src.contents)
-		if(!(isInTypes(A, canEnterVentWith)))
+		if(!(is_type_in_list(A, canEnterVentWith())))
 			to_chat(src, "<span class='warning'>You can't be carrying items or have items equipped when vent crawling!</span>")
 			return FALSE
 	return TRUE
 
 // Vent crawling whitelisted items, whoo
-/mob/living
-	var/canEnterVentWith = "/obj/item/weapon/implant=0&/obj/item/clothing/mask/facehugger=0&/obj/item/device/radio/borg=0&/obj/machinery/camera=0&/mob/living/simple_animal/borer=0&/obj/transmog_body_container=0&/obj/item/verbs=0"
+/mob/living/proc/canEnterVentWith()
+	var/static/list/allowed_items = list(
+		/obj/item/weapon/implant,
+		/obj/item/clothing/mask/facehugger,
+		/obj/item/device/radio/borg,
+		/obj/machinery/camera,
+		/mob/living/simple_animal/borer,
+		/obj/transmog_body_container,
+		/obj/item/verbs,
+		/obj/item/weapon/gun/hookshot/flesh,
+	)
+	return allowed_items
+
+/mob/living/DblClickOn(atom/A, params)
+	if(is_type_in_list(A,ventcrawl_machinery))
+		src.handle_ventcrawl(A)
+		return TRUE
+	return ..()
 
 /mob/living/AltClickOn(var/atom/A)
 	if(is_type_in_list(A,ventcrawl_machinery))
@@ -86,10 +102,19 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 		return FALSE
 	return TRUE
 
+/mob/living/simple_animal/hostile/gremlin/grinch/can_ventcrawl()
+	return TRUE
+
 /mob/living/simple_animal/spiderbot/can_ventcrawl()
 	return TRUE
 
+/mob/living/simple_animal/hostile/lizard/can_ventcrawl()
+	return TRUE
+
 /mob/living/simple_animal/hostile/necromorph/leaper/can_ventcrawl()
+	return TRUE
+
+/mob/living/simple_animal/shade/can_ventcrawl()
 	return TRUE
 
 /mob/living/carbon/alien/can_ventcrawl()
@@ -195,8 +220,8 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	for(var/datum/pipeline/pipeline in network.line_members)
 		for(var/obj/machinery/atmospherics/A in (pipeline.members || pipeline.edges))
 			if(!A.pipe_image)
-				A.pipe_image = image(A, A.loc, layer = BELOW_PROJECTILE_LAYER, dir = A.dir) //the 20 puts it above Byond's darkness (not its opacity view)
-				A.pipe_image.plane = EFFECTS_PLANE
+				A.pipe_image = image(A, A.loc, layer = ABOVE_LIGHTING_LAYER, dir = A.dir)
+				A.pipe_image.plane = LIGHTING_PLANE
 			pipes_shown += A.pipe_image
 			client.images += A.pipe_image
 

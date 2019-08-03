@@ -58,7 +58,7 @@
 	var/pai_safety = TRUE	//To allow the pAI to activate or deactivate firing capability
 
 	// Tells is_honorable() which special_roles to respect.
-	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER
+	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
 
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
@@ -92,13 +92,32 @@
 		return
 	if(istype(target, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))
 		return//Shouldnt flag take care of this?
+
+	if (user.is_pacified(VIOLENCE_GUN,A,src))
+		return
+
 	if(user && user.client && user.client.gun_mode && !(A in target))
 		PreFire(A,user,params, "struggle" = struggle) //They're using the new gun system, locate what they're aiming at.
 	else
 		Fire(A,user,params, "struggle" = struggle) //Otherwise, fire normally.
 
-/obj/item/weapon/gun/proc/isHandgun()
+/obj/item/weapon/proc/isHandgun()
 	return FALSE //Make this proc return TRUE for handgun-shaped weapons (or in general, small enough weapons I guess)
+
+/obj/item/weapon/gun/proc/play_firesound(mob/user, var/reflex)
+	if(silenced)
+		if(fire_sound)
+			playsound(user, fire_sound, fire_volume/5, 1)
+		else if (in_chamber.fire_sound)
+			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
+	else
+		if(fire_sound)
+			playsound(user, fire_sound, fire_volume, 1)
+		else if (in_chamber.fire_sound)
+			playsound(user, in_chamber.fire_sound, fire_volume, 1)
+		user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
+		"<span class='warning'>You fire [src][reflex ? "by reflex":""]!</span>", \
+		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 
 /obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
 	var/firing_dexterity = 1
@@ -204,10 +223,11 @@
 		in_chamber.def_zone = LIMB_CHEST
 
 	if(targloc == curloc)
-		user.bullet_act(in_chamber)
+		target.bullet_act(in_chamber)
 		qdel(in_chamber)
 		in_chamber = null
 		update_icon()
+		play_firesound(user, reflex)
 		return
 
 	if(recoil)
@@ -238,19 +258,7 @@
 
 		user.apply_inertia(get_dir(target, user))
 
-	if(silenced)
-		if(fire_sound)
-			playsound(user, fire_sound, fire_volume/5, 1)
-		else if (in_chamber.fire_sound)
-			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
-	else
-		if(fire_sound)
-			playsound(user, fire_sound, fire_volume, 1)
-		else if (in_chamber.fire_sound)
-			playsound(user, in_chamber.fire_sound, fire_volume, 1)
-		user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
-		"<span class='warning'>You fire [src][reflex ? "by reflex":""]!</span>", \
-		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
+	play_firesound(user, reflex)
 
 	in_chamber.original = target
 	in_chamber.forceMove(get_turf(user))
@@ -291,7 +299,7 @@
 
 	return 1
 
-/obj/item/weapon/gun/proc/can_fire()
+/obj/item/weapon/gun/proc/canbe_fired()
 	return process_chambered()
 
 /obj/item/weapon/gun/proc/can_hit(var/mob/living/target as mob, var/mob/living/user as mob)
@@ -305,9 +313,9 @@
 	else
 		if(empty_sound)
 			src.visible_message("*click click*")
-			playsound(get_turf(src), empty_sound, 100, 1)
+			playsound(src, empty_sound, 100, 1)
 
-/obj/item/weapon/gun/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+/obj/item/weapon/gun/attack(mob/living/M, mob/living/user, def_zone)
 	//Suicide handling.
 	if (M == user && user.zone_sel.selecting == "mouth" && !mouthshoot)
 		if(istype(M.wear_mask, /obj/item/clothing/mask/happy))
@@ -334,10 +342,9 @@
 			in_chamber.on_hit(M)
 			if (!in_chamber.nodamage)
 				user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
-				user.stat=2 // Just to be sure
 				user.death()
 				var/suicidesound = pick('sound/misc/suicide/suicide1.ogg','sound/misc/suicide/suicide2.ogg','sound/misc/suicide/suicide3.ogg','sound/misc/suicide/suicide4.ogg','sound/misc/suicide/suicide5.ogg','sound/misc/suicide/suicide6.ogg')
-				playsound(get_turf(src), pick(suicidesound), 10, channel = 125)
+				playsound(src, pick(suicidesound), 10, channel = 125)
 				log_attack("<font color='red'>[key_name(user)] committed suicide with \the [src].</font>")
 				user.attack_log += "\[[time_stamp()]\] <font color='red'> [user.real_name] committed suicide with \the [src]</font>"
 			else
@@ -355,6 +362,9 @@
 	if (can_discharge()) //Need to have something to fire but not load it up yet
 		//Point blank shooting if on harm intent or target we were targeting.
 		if(user.a_intent == I_HURT)
+			if (user.is_pacified())
+				to_chat(user, "<span class='notice'>[pick("Hey that's dangerous...wouldn't want hurting people.","You don't feel like firing \the [src] at \the [M].","Peace, my [user.gender == FEMALE ? "girl" : "man"]...")]</span>")
+				return
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
 			if (process_chambered()) //Load whatever it is we fire
 				in_chamber.damage *= 1.3 //Some guns don't work with damage / chambers, like dart guns!
@@ -396,3 +406,16 @@
 		return FALSE
 	else
 		return TRUE
+
+/obj/item/weapon/gun/attackby(var/obj/item/A, mob/user)
+	if(istype(A, /obj/item/weapon/gun))
+		var/obj/item/weapon/gun/G = A
+		if(isHandgun() && G.isHandgun())
+			var/obj/item/weapon/gun/akimbo/AA = new /obj/item/weapon/gun/akimbo(get_turf(src),src,G)
+			if(user.drop_item(G, AA) && user.drop_item(src, AA))
+				user.put_in_hands(AA)
+				AA.update_icon(user)
+			else
+				to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")
+				qdel(AA)
+	..()

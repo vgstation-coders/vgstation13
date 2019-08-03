@@ -37,3 +37,13 @@
 	req_tech = list(Tc_ENGINEERING = 1, Tc_MATERIALS = 1)
 	materials = list(MAT_IRON=37500)
 	category = "Misc"
+
+/datum/design/polarized_contacts
+	name = "Polarized Contacts"
+	desc = "Shield your eyes from flashes in style."
+	id = "polarized_contacts"
+	build_type = PROTOLATHE
+	build_path = /obj/item/clothing/glasses/contacts/polarized
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_BIOTECH = 5)
+	materials = list(MAT_GLASS = 2000)
+	category = "Misc"

@@ -2,19 +2,16 @@
 	<h3>Preparing for Dump</h3>
 	<div class="item">
 		<div class="itemLabel">
-			Current Volume:
+			Maintenance:
 		</div>
 		<div class="itemContent">
-			<div class="notice">Please swipe a valid identification card...</div>
-			{{if data.unlocked}}
-				{{:helper.link('Dump', 'trash', {'dump_contents' : 1})}}
-				{{:helper.link('Force Reaction', 'transferthick-e-w', {'force' : 1})}}
-				{{:helper.link('Collapse', 'suitcase', {'collapse' : 1})}}
-			{{/if}}
+			{{:helper.link('Dump', 'trash', {'dump_contents' : 1})}}
+			{{:helper.link('Force Reaction', 'transferthick-e-w', {'force' : 1})}}
 			{{:helper.link('Back', 'eject', {'prepare_dump' : 1})}}
 		</div>
 	</div>
 {{else}}
+	<div class="notice">The vaporizer can be {{:data.unlocked ? "locked" : "unlocked"}} with a valid ID card.</div>
 	<h3>Machinery Status</h3>
 	<div class="item">
 		<div class="itemLabel">
@@ -40,6 +37,7 @@
 		</div>
 		<div class="itemContent">
 			{{:data.tankVolume}} units {{:helper.link('Maintenance', 'key', {'prepare_dump' : 1})}}
+			{{:helper.link('Collapse', 'suitcase', {'collapse' : 1})}}
 		</div>
 	</div>
 
@@ -68,7 +66,7 @@
 		</div>
 		<div class="itemContent">
 			{{:data.valveOpen ? '<span class="good">Open</span>' : '<span class="average">Closed</span>'}}
-			{{:helper.link('Toggle Valve', 'unlocked', {'toggle' : 1})}}
+			{{:helper.link('Toggle Valve', 'valveOpen', {'toggle' : 1})}}
 		</div>
 	</div>
 {{/if}}

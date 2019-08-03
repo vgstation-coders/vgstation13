@@ -3,11 +3,12 @@
 	desc = "A vaporizer which uses power to synthesize liquid oxygen and nitrogen when supplied with vapor salts."
 
 	icon = 'icons/obj/atmos.dmi'
-	icon_state = "vaporizer_big-unsecured"
+	icon_state = "vaporizer_closed_unlocked"
 
+	anchored = 1
 	use_power = 1
 	density = 1
-	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE
+	machine_flags = EMAGGABLE
 	flags = OPENCONTAINER | NOREACT
 	stat = NOPOWER
 	req_access = list(access_atmospherics)
@@ -18,14 +19,15 @@
 	var/mixrate = 0 //Rate at which Vapor Salts are added. Cannot be higher than 50.
 	var/mixratio = 20 //Percent Oxygen to synthesize.
 	var/on = 0
-	var/waiting_for_ID = 0
-	var/unlocked = 0
+	var/screen = 0
+	var/unlocked = 1
 	var/power_use_this_tick = 0
 
 /obj/machinery/vaporizer/New()
 	..()
 	create_reagents(1000)
 	mixing_chamber = new(src)
+	reagents.add_reagent(VAPORSALT, 1000)
 
 /obj/machinery/vaporizer/Destroy()
 	..()
@@ -40,10 +42,10 @@
 	update_icon()
 
 /obj/machinery/vaporizer/update_icon()
-	if(!anchored)
-		icon_state = "vaporizer_big-unsecured"
+	if(stat & NOPOWER)
+		icon_state = "vaporizer_off"
 	else
-		icon_state = "vaporizer_big-[on ? "on" : "off"]"
+		icon_state = "vaporizer_[on ? "open" : "closed"]_[unlocked ? "unlocked" : "locked"]"
 
 /obj/machinery/vaporizer/process()
 	power_use_this_tick = 0
@@ -78,7 +80,7 @@
 		on = 0
 		return
 	mixing_chamber.flags |= NOREACT
-	while(target>0)
+	while(target>0 && !mixing_chamber.is_full())
 		//First, try to pull out from the main tank
 		if(reagents.has_reagent(rid))
 			target -= reagents.trans_id_to(mixing_chamber,rid,min(target,1))
@@ -109,10 +111,12 @@
 	return ui_interact(user)
 
 /obj/machinery/vaporizer/attackby(obj/item/weapon/W, mob/living/user)
-	..()
-	if(waiting_for_ID && istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda) && (emagged || allowed(user)) && !unlocked)
-		unlocked = 1
-		to_chat(user,"<span class='notice'>The interface accepts your verification.</span>")
+	if(isID(W)||isPDA(W) && (emagged || allowed(user)))
+		unlocked = !unlocked
+		to_chat(user,"<span class='notice'>\The [src] is now [unlocked ? "unlocked" : "locked"].</span>")
+		update_icon()
+	else
+		..()
 	nanomanager.update_uis(src)
 
 /obj/machinery/vaporizer/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -131,7 +135,7 @@
 	data["mixrate"] = mixrate
 	data["mixratio"] = mixratio
 	data["valveOpen"] = on
-	data["awaiting_ID"] = waiting_for_ID
+	data["awaiting_ID"] = screen
 	data["unlocked"] = unlocked
 	data["powerConsumption"] = power_use_this_tick
 
@@ -140,7 +144,7 @@
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "vaporizer.tmpl", "Industrial Vaporizer", 500, 350)
+		ui = new(user, src, ui_key, "vaporizer.tmpl", "Industrial Vaporizer", 500, 390)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -151,8 +155,10 @@
 /obj/machinery/vaporizer/Topic(href, href_list)
 	if(..())
 		return
-	if(!allowed(usr) && !emagged)
-		to_chat(usr,"<span class='warning'>Access denied.</span>")
+	if(!isturf(loc))
+		return //We're most likely inside the collapsed vaporizer
+	if(!unlocked && !emagged)
+		to_chat(usr,"<span class='warning'>The interface is locked.</span>")
 		return
 
 	if(href_list["toggle"])
@@ -165,39 +171,48 @@
 		mixratio = input("New mix ratio", "Percentage of oxygen to synthesize: ", mixratio) as num
 		mixratio = round(Clamp(mixratio, 0, 100))
 	if(href_list["prepare_dump"])
-		waiting_for_ID = !waiting_for_ID
+		if(!screen && !allowed(usr)) //This is pretty much only to dump now
+			return
+		screen = !screen //Unauth inviduals can hit back.
 	if(href_list["dump_contents"])
+		if(!screen) //No href exploits
+			return
 		reagents.clear_reagents()
 		mixing_chamber.reagents.clear_reagents()
-		unlocked = 0
-		waiting_for_ID = 0
+		screen = 0
 	if(href_list["force"])
 		force_reaction()
 	if(href_list["collapse"])
-		if(on)
-			to_chat(usr,"<span class='warning'>\The [src] must be off to collapse.</span>")
-		else
-			collapse()
+		screen = 0
+		if(!collapse())
+			to_chat(usr,"<span class='warning'>\The [src] must be off and unlocked to collapse.</span>")
 	add_fingerprint(usr)
 	update_icon()
 	nanomanager.update_uis(src)
 	return 1
 
-/obj/machinery/vaporizer/wrenchAnchor(var/mob/user)
-	. = ..()
-	if(!.)
-		return
-	power_change()
+/obj/machinery/vaporizer/power_change()
+	..()
 	update_icon()
 
+/obj/machinery/vaporizer/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+		if(!collapse())
+			..()
+	else
+		..()
+
 /obj/machinery/vaporizer/proc/collapse()
-	if(on || stat & BROKEN)
-		return
+	if(on || !unlocked)
+		return 0
 	var/obj/item/vaporizer/V = new /obj/item/vaporizer(get_turf(src))
 	forceMove(V)
 	V.folded = src
 	stat |= NOPOWER
-	waiting_for_ID = 0 //Return to main screen
+	power_change()
+	screen = 0 //Return to main screen
+	nanomanager.update_uis(src)
+	return 1
 
 /obj/item/vaporizer
 	name = "collapsed industrial vaporizer"
@@ -210,12 +225,16 @@
 /obj/item/vaporizer/attack_self(mob/user)
 	unfold()
 
-/obj/item/vaporizer/CtrlClick(mob/user)
-	unfold()
+/obj/item/vaporizer/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+		unfold()
+	else
+		..()
 
 /obj/item/vaporizer/proc/unfold()
 	if(!folded)
 		folded = new /obj/machinery/vaporizer(src)
 	folded.forceMove(get_turf(src))
+	folded.power_change()
 	folded = null
 	qdel(src)

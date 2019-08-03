@@ -5,14 +5,14 @@
 	icon_closed = "syndicate"
 	icon_opened = "syndicateopen"
 
-/obj/structure/closet/malf/suits/New()
-	..()
-	sleep(2)
-	new /obj/item/weapon/tank/jetpack/void(src)
-	new /obj/item/clothing/mask/breath(src)
-	new /obj/item/clothing/head/helmet/space/nasavoid(src)
-	new /obj/item/clothing/suit/space/nasavoid(src)
-	new /obj/item/clothing/shoes/magboots/nasavoid(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/cell(src)
-	new /obj/item/device/multitool(src)
+/obj/structure/closet/malf/suits/atoms_to_spawn()
+	return list(
+		/obj/item/weapon/tank/jetpack/void,
+		/obj/item/clothing/mask/breath,
+		/obj/item/clothing/head/helmet/space/nasavoid,
+		/obj/item/clothing/suit/space/nasavoid,
+		/obj/item/clothing/shoes/magboots/nasavoid,
+		/obj/item/weapon/crowbar,
+		/obj/item/weapon/cell,
+		/obj/item/device/multitool,
+	)

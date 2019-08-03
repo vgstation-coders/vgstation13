@@ -4,12 +4,20 @@
 #define COMM_SCREEN_MESSAGES	3
 #define COMM_SCREEN_SECLEVEL	4
 #define COMM_SCREEN_ERT			5
+#define COMM_SCREEN_SHUTTLE_LOG 6
+
+#define UNAUTH 0
+#define AUTH_HEAD 1
+#define AUTH_CAPT 2
 
 var/shuttle_call/shuttle_calls[0]
+var/global/ports_open = TRUE
 
 #define SHUTTLE_RECALL  -1
 #define SHUTTLE_CALL     1
 #define SHUTTLE_TRANSFER 2
+
+var/list/shuttle_log = list()
 
 /shuttle_call
 	var/direction=0
@@ -41,7 +49,7 @@ var/shuttle_call/shuttle_calls[0]
 	req_access = list(access_heads)
 	circuit = "/obj/item/weapon/circuitboard/communications"
 	var/prints_intercept = 1
-	var/authenticated = 0
+	var/authenticated = UNAUTH //1 = normal login, 2 = emagged or had access_captain, 0 = logged out. Gremlins can set to 1 or 0.
 	var/list/messagetitle = list()
 	var/list/messagetext = list()
 	var/currmsg = 0
@@ -90,11 +98,11 @@ var/shuttle_call/shuttle_calls[0]
 				emag(usr)
 			if (I && istype(I))
 				if(src.check_access(I))
-					authenticated = 1
-				if(20 in I.access)
-					authenticated = 2
+					authenticated = AUTH_HEAD
+				if(access_captain in I.access)
+					authenticated = AUTH_CAPT
 		if("logout")
-			authenticated = 0
+			authenticated = UNAUTH
 			setMenuState(usr,COMM_SCREEN_MAIN)
 		// ALART LAVUL
 		if("changeseclevel")
@@ -109,8 +117,8 @@ var/shuttle_call/shuttle_calls[0]
 			if (istype(I, /obj/item/device/pda))
 				var/obj/item/device/pda/pda = I
 				I = pda.id
-			if (I && istype(I))
-				if(access_heads in I.access) //Let heads change the alert level.
+			if (isAdminGhost(usr) || (I && istype(I)))
+				if(isAdminGhost(usr) || (access_heads in I.access)) //Let heads change the alert level.
 					var/old_level = security_level
 					if(!tmp_alertlevel)
 						tmp_alertlevel = SEC_LEVEL_GREEN
@@ -130,7 +138,6 @@ var/shuttle_call/shuttle_calls[0]
 								feedback_inc("alert_comms_blue",1)
 					tmp_alertlevel = 0
 				else
-					:
 					to_chat(usr, "You are not authorized to do this.")
 					tmp_alertlevel = 0
 				setMenuState(usr,COMM_SCREEN_MAIN)
@@ -138,7 +145,7 @@ var/shuttle_call/shuttle_calls[0]
 				to_chat(usr, "You need to swipe your ID.")
 
 		if("announce")
-			if(src.authenticated==2 && !issilicon(usr))
+			if(authenticated==AUTH_CAPT && !issilicon(usr))
 				if(message_cooldown)
 					return
 				var/input = stripped_input(usr, "Please choose a message to announce to the station crew.", "What?")
@@ -153,14 +160,6 @@ var/shuttle_call/shuttle_calls[0]
 					message_cooldown = 0
 
 		if("emergency_screen")
-			var/mob/M = usr
-			var/obj/item/weapon/card/id/I = M.get_active_hand()
-			if (istype(I, /obj/item/device/pda))
-				var/obj/item/device/pda/pda = I
-				I = pda.id
-			//if (I && istype(I))
-			//	if(access_captain in I.access)
-			//		authenticated = 2
 			if(!authenticated)
 				to_chat(usr, "<span class='warning'>You do not have clearance to use this function.</span>")
 				return
@@ -188,13 +187,6 @@ var/shuttle_call/shuttle_calls[0]
 				to_chat(usr, "<span class='notice'>Central Command has already dispatched a Response Team to [station_name()]</span>")
 				return
 
-			//if(world.time < 6000)
-			//	to_chat(usr, "<span class='notice'>The emergency response team is away on another mission, Please wait another [round((6000-world.time)/600)] minute\s before trying again.</span>")
-			//	return
-
-			//if(emergency_shuttle.online)
-			//	to_chat(usr, "The emergency shuttle is already on its way.")
-			//	return
 			if(!(get_security_level() in list("red", "delta")))
 				to_chat(usr, "<span class='notice'>The station must be in an emergency to request a Response Team.</span>")
 				return
@@ -220,8 +212,8 @@ var/shuttle_call/shuttle_calls[0]
 			return
 
 		if("callshuttle")
-			if(src.authenticated)
-				if(!map.linked_to_centcomm)
+			if(authenticated || isAdminGhost(usr))
+				if(!map.linked_to_centcomm && !isAdminGhost(usr)) //We don't need a connection if we're an admin
 					to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 					return
 				var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination.", "Nanotrasen Anti-Comdom Systems")
@@ -229,20 +221,24 @@ var/shuttle_call/shuttle_calls[0]
 					return
 				var/response = alert("Are you sure you wish to call the shuttle?", "Confirm", "Yes", "Cancel")
 				if(response == "Yes")
-					call_shuttle_proc(usr, justification)
+					if(call_shuttle_proc(usr, justification))
+						if(!isobserver(usr))
+							shuttle_log += "\[[worldtime2text()]] Called from [get_area(usr)]."
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
 		if("cancelshuttle")
-			if(!map.linked_to_centcomm)
+			if(!map.linked_to_centcomm && !isAdminGhost(usr))
 				to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 				return
 			if(issilicon(usr))
 				return
-			if(src.authenticated)
+			if(authenticated || isAdminGhost(usr))
 				var/response = alert("Are you sure you wish to recall the shuttle?", "Confirm", "Yes", "No")
 				if(response == "Yes")
 					recall_shuttle(usr)
+					if(!isobserver(usr))
+						shuttle_log += "\[[worldtime2text()]] Recalled from [get_area(usr)]."
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -293,7 +289,7 @@ var/shuttle_call/shuttle_calls[0]
 
 		// OMG CENTCOMM LETTERHEAD
 		if("MessageCentcomm")
-			if(src.authenticated==2)
+			if(authenticated==AUTH_CAPT)
 				if(!map.linked_to_centcomm)
 					to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 					return
@@ -315,7 +311,7 @@ var/shuttle_call/shuttle_calls[0]
 
 		// OMG SYNDICATE ...LETTERHEAD
 		if("MessageSyndicate")
-			if((src.authenticated==2) && (src.emagged))
+			if(src.authenticated==AUTH_CAPT && emagged)
 				if(!map.linked_to_centcomm)
 					to_chat(usr, "<span class='danger'>Error: No connection can be made to \[ABNORMAL ROUTING CORDINATES\] .</span>")
 					return
@@ -340,6 +336,43 @@ var/shuttle_call/shuttle_calls[0]
 			setMenuState(usr,COMM_SCREEN_MAIN)
 			update_icon()
 
+		if("SetPortRestriction")
+			if(issilicon(usr))
+				return
+			var/mob/M = usr
+			var/obj/item/weapon/card/id/I = M.get_id_card()
+			if (I || isAdminGhost(usr))
+				if(isAdminGhost(usr) || (access_hos in I.access) || (access_heads in I.access && security_level >= SEC_LEVEL_RED))
+					if(ports_open)
+						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems")
+						if(!reason || !(usr in view(1,src)))
+							return
+						log_game("[key_name(usr)] closed the port to traders for [reason].")
+						message_admins("[key_name_admin(usr)] closed the port to traders for [reason].")
+						if(trade_shuttle.current_port.areaname == "NanoTrasen Station")
+							var/obj/machinery/computer/shuttle_control/C = trade_shuttle.control_consoles[1] //There should be exactly one
+							if(C)
+								trade_shuttle.travel_to(pick(trade_shuttle.docking_ports - trade_shuttle.current_port),C) //Just send it; this has all relevant checks
+						trade_shuttle.remove_dock(/obj/docking_port/destination/trade/station)
+						trade_shuttle.notify_port_toggled(reason)
+						ports_open = FALSE
+						return
+					if(!ports_open)
+						var/response = alert(usr,"Are you sure you wish to open the station to traders?", "Port Opening", "Yes", "No")
+						if(response != "Yes")
+							return
+						log_game("[key_name(usr)] opened the port to traders.")
+						message_admins("[key_name_admin(usr)] opened the port to traders.")
+						trade_shuttle.add_dock(/obj/docking_port/destination/trade/station)
+						trade_shuttle.notify_port_toggled()
+						ports_open = TRUE
+						return
+				else
+					to_chat(usr, "<span class='warning'>This action requires either a red alert or head of security authorization.</span>")
+			else
+				to_chat(usr, "<span class='warning'>You must wear an ID for this function.</span>")
+		if("ViewShuttleLog")
+			setMenuState(usr, COMM_SCREEN_SHUTTLE_LOG)
 	return 1
 
 /obj/machinery/computer/communications/attack_ai(var/mob/user as mob)
@@ -363,7 +396,7 @@ var/shuttle_call/shuttle_calls[0]
 
 
 /obj/machinery/computer/communications/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(user.stat)
+	if(user.stat && !isAdminGhost(user))
 		return
 
 	// this is the data which will be sent to the ui
@@ -371,8 +404,13 @@ var/shuttle_call/shuttle_calls[0]
 	data["is_ai"] = issilicon(user)
 	data["menu_state"] = data["is_ai"] ? ai_menu_state : menu_state
 	data["emagged"] = emagged
-	data["authenticated"] = authenticated
-	data["screen"] = getMenuState(usr)
+	data["authenticated"] = (isAdminGhost(user) ? AUTH_CAPT : authenticated)
+	var/current_screen = getMenuState(usr)
+	if(current_screen == COMM_SCREEN_SHUTTLE_LOG)
+		data["shuttle_log"] = list()
+		for(var/entry in shuttle_log)
+			data["shuttle_log"] += list(list("text" = entry))
+	data["screen"] = current_screen
 
 	data["stat_display"] = list(
 		"type"=display_type,
@@ -397,6 +435,7 @@ var/shuttle_call/shuttle_calls[0]
 		list("id"=SEC_LEVEL_BLUE,  "name"="Blue"),
 		//SEC_LEVEL_RED = list("name"="Red"),
 	)
+	data["portopen"] = ports_open
 	data["ert_sent"] = sentStrikeTeams(TEAM_ERT)
 
 	var/msg_data[0]
@@ -435,10 +474,11 @@ var/shuttle_call/shuttle_calls[0]
 /obj/machinery/computer/communications/emag(mob/user as mob)
 	if(!emagged)
 		emagged = 1
-		to_chat(user, "Syndicate routing data uploaded!")
+		if(user)
+			to_chat(user, "Syndicate routing data uploaded!")
 		new/obj/effect/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
-		authenticated = 2
+		authenticated = AUTH_CAPT
 		setMenuState(usr,COMM_SCREEN_MAIN)
 		update_icon()
 		return 1
@@ -497,8 +537,12 @@ var/shuttle_call/shuttle_calls[0]
 	//	to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
 	//	return
 
-	if(world.time < 6000) // Ten minute grace period to let the game get going without lolmetagaming. -- TLE
-		to_chat(user, "The emergency shuttle is refueling. Please wait another [round((6000-world.time)/600)] minute\s before trying again.")
+	if(emergency_shuttle.shutdown)
+		to_chat(user, "The emergency shuttle has been disabled.")
+		return
+
+	if(ticker && (world.time / 10 < ticker.gamestart_time + SHUTTLEGRACEPERIOD)) // Five minute grace period to let the game get going without lolmetagaming. -- TLE
+		to_chat(user, "The emergency shuttle is refueling. Please wait another [round((ticker.gamestart_time + SHUTTLEGRACEPERIOD - world.time / 10) / 60, 1)] minute\s before trying again.")
 		return
 
 	if(emergency_shuttle.direction == -1)
@@ -517,11 +561,11 @@ var/shuttle_call/shuttle_calls[0]
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
 	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
-	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'. You are encouraged to act if that justification is shit", 1)
+	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification : '[justification]'")
 	world << sound('sound/AI/shuttlecalled.ogg')
 
-	return
+	return 1
 
 /proc/init_shift_change(var/mob/user, var/force = 0)
 	if ((!( ticker ) || emergency_shuttle.location))
@@ -608,11 +652,11 @@ var/shuttle_call/shuttle_calls[0]
 /obj/machinery/computer/communications/npc_tamper_act(mob/living/user)
 	if(!authenticated)
 		if(prob(20)) //20% chance to log in
-			authenticated = TRUE
+			authenticated = AUTH_HEAD
 
 	else //Already logged in
 		if(prob(50)) //50% chance to log off
-			authenticated = FALSE
+			authenticated = UNAUTH
 		else if(isgremlin(user)) //make a hilarious public message
 			var/mob/living/simple_animal/hostile/gremlin/G = user
 			var/result = G.generate_markov_chain()
@@ -625,49 +669,44 @@ var/shuttle_call/shuttle_calls[0]
 /obj/machinery/computer/communications/Destroy()
 
 	for(var/obj/machinery/computer/communications/commconsole in machines)
-		if(istype(commconsole.loc,/turf) && commconsole != src)
+		if(istype(commconsole.loc,/turf) && commconsole != src && commconsole.z != map.zCentcomm)
 			return ..()
 
-	for(var/obj/item/weapon/circuitboard/communications/commboard in world)
-		if(istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage))
+	for(var/obj/item/weapon/circuitboard/communications/commboard in communications_circuitboards)
+		if((istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage)) && commboard.z != map.zCentcomm)
 			return ..()
 
 	for(var/mob/living/silicon/ai/shuttlecaller in player_list)
-		if(!shuttlecaller.stat && shuttlecaller.client && istype(shuttlecaller.loc,/turf))
+		if(!shuttlecaller.stat && shuttlecaller.client && istype(shuttlecaller.loc,/turf) && shuttlecaller.z != map.zCentcomm)
 			return ..()
 
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
-	emergency_shuttle.incall(2)
-	log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
-	message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-	world << sound('sound/AI/shuttlecalled.ogg')
-
+	shuttle_autocall()
 	..()
 
-/obj/item/weapon/circuitboard/communications/Destroy()
+/obj/item/weapon/circuitboard/communications/New()
+	..()
+	communications_circuitboards.Add(src)
 
+/obj/item/weapon/circuitboard/communications/Destroy()
+	communications_circuitboards.Remove(src)
 	for(var/obj/machinery/computer/communications/commconsole in machines)
-		if(istype(commconsole.loc,/turf))
+		if(istype(commconsole.loc,/turf) && commconsole.z != map.zCentcomm)
 			return ..()
 
-	for(var/obj/item/weapon/circuitboard/communications/commboard in world)
-		if((istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage)) && commboard != src)
+	for(var/obj/item/weapon/circuitboard/communications/commboard in communications_circuitboards)
+		if((istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage)) && commboard != src && commboard.z != map.zCentcomm)
 			return ..()
 
 	for(var/mob/living/silicon/ai/shuttlecaller in player_list)
-		if(!shuttlecaller.stat && shuttlecaller.client && istype(shuttlecaller.loc,/turf))
+		if(!shuttlecaller.stat && shuttlecaller.client && istype(shuttlecaller.loc,/turf) && shuttlecaller.z != map.zCentcomm)
 			return ..()
 
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
-	emergency_shuttle.incall(2)
-	log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
-	message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-	world << sound('sound/AI/shuttlecalled.ogg')
+	shuttle_autocall()
 
 	..()
