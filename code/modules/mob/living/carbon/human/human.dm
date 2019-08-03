@@ -1867,10 +1867,8 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/get_cell()
 	var/datum/organ/internal/heart/cell/C = get_heart()
-	if(istype(C) && C.cell)
+	if(istype(C))
 		return C.cell
-	if(wear_suit && wear_suit.get_cell())
-		return wear_suit.get_cell()
 
 // Returns null on failure, the butt on success.
 /mob/living/carbon/human/proc/remove_butt(var/where = loc)

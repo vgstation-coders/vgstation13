@@ -58,6 +58,7 @@
 	candidates -= M
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
+	newTraitor.Greet(GREET_LATEJOIN)
 	return 1
 
 
@@ -84,6 +85,7 @@
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
+
 	return ..()
 
 /datum/dynamic_ruleset/latejoin/raginmages/execute()
@@ -94,7 +96,9 @@
 	assigned += M
 	candidates -= M
 	var/datum/role/wizard/newWizard = new
-	federation.HandleRecruitedMind(newWizard)
+	newWizard.AssignToRole(M.mind,1)
+	federation.HandleRecruitedRole(newWizard)
+	newWizard.Greet(GREET_LATEJOIN)
 	return 1
 
 
@@ -124,6 +128,11 @@
 	candidates -= M
 	var/datum/role/ninja/newninja = new
 	newninja.AssignToRole(M.mind,1)
+	newninja.Greet(GREET_DEFAULT)
+	newninja.OnPostSetup()
+	newninja.AnnounceObjectives()
+	if(!newninja.antag.current.ThrowAtStation())
+		newninja.antag.current.spawn_rand_maintenance()
 	return 1
 
 
@@ -167,5 +176,9 @@
 	var/antagmind = M.mind
 	var/datum/faction/F = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
 	F.forgeObjectives()
-	F.HandleNewMind(antagmind)
+	spawn(1 SECONDS)
+		var/datum/role/revolutionary/leader/L = new(antagmind,F,HEADREV)
+		L.Greet(GREET_LATEJOIN)
+		L.OnPostSetup()
+		update_faction_icons()
 	return 1

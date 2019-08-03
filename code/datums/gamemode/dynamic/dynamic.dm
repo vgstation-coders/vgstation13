@@ -574,19 +574,18 @@ var/stacking_limit = 90
 
 /datum/gamemode/dynamic/latespawn(var/mob/living/newPlayer)
 	if (forced_extended)
-		return 0
+		return
 	if(emergency_shuttle.departed)//no more rules after the shuttle has left
-		return 0
+		return
 
 	update_playercounts()
-	var/success = FALSE
+
 	if (forced_latejoin_rule)
 		forced_latejoin_rule.candidates = list(newPlayer)
 		forced_latejoin_rule.trim_candidates()
 		message_admins("Forcing ruleset [forced_latejoin_rule]")
 		if (forced_latejoin_rule.ready(1))
 			picking_latejoin_rule(list(forced_latejoin_rule))
-			success = TRUE
 		forced_latejoin_rule = null
 
 	else if (!latejoin_injection_cooldown && injection_attempt())
@@ -613,9 +612,7 @@ var/stacking_limit = 90
 					drafted_rules[rule] = rule.get_weight()
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
-			success = TRUE
 			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls
-	return success
 
 /datum/gamemode/dynamic/mob_destroyed(var/mob/M)
 	for (var/datum/dynamic_ruleset/DR in midround_rules)

@@ -30,12 +30,9 @@
 	. = ..()
 	if(!.)
 		return
+	antag.current.forceMove(pick(wizardstart))
 	equip_wizard(antag.current)
 	name_wizard(antag.current)
-
-/datum/role/wizard/PostSpawn()
-	antag.current.forceMove(pick(wizardstart))
-	return 1
 
 /datum/role/wizard/Greet(var/greeting,var/custom)
 	if(!greeting)

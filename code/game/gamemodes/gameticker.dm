@@ -416,17 +416,7 @@ var/datum/controller/gameticker/ticker
 				captainless=0
 			if(player.mind.assigned_role != "MODE")
 				job_master.EquipRank(player, player.mind.assigned_role, 0)
-		var/datum/mind/M = player.mind
-		var/spawn_handled = FALSE
-		if(M)
-			for(var/datum/role/R in M.antag_roles)
-				if(R.PostSpawn())
-					to_chat(world, "spawn handled by [R]")
-					spawn_handled = TRUE
-		if(!spawn_handled)
-			to_chat(world, "spawn wasn't handled")
-			job_master.MoveRank(player, player.mind.assigned_role)
-			EquipCustomItems(player)
+				EquipCustomItems(player)
 	if(captainless)
 		for(var/mob/M in player_list)
 			if(!istype(M,/mob/new_player))

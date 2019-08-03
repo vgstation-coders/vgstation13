@@ -420,20 +420,6 @@ var/global/datum/controller/occupations/job_master
 			AssignRole(player, job.title)
 			return TRUE
 
-/datum/controller/occupations/proc/MoveRank(var/atom/movable/A, var/rank)
-	var/obj/S = null
-	for(var/obj/effect/landmark/start/sloc in landmarks_list)
-		if(sloc.name != rank)
-			continue
-		if(locate(/mob/living) in sloc.loc)
-			continue
-		S = sloc
-		break
-	if(!S)
-		S = locate("start*[rank]") // use old stype
-	if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
-		A.forceMove(S.loc)
-
 /datum/controller/occupations/proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
 	if(!H)
 		return 0
@@ -444,6 +430,20 @@ var/global/datum/controller/occupations/job_master
 		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
 
 	H.job = rank
+
+	if(!joined_late)
+		var/obj/S = null
+		for(var/obj/effect/landmark/start/sloc in landmarks_list)
+			if(sloc.name != rank)
+				continue
+			if(locate(/mob/living) in sloc.loc)
+				continue
+			S = sloc
+			break
+		if(!S)
+			S = locate("start*[rank]") // use old stype
+		if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
+			H.forceMove(S.loc)
 
 	var/balance_wallet = 0
 	if(job && !job.no_starting_money)
@@ -536,6 +536,31 @@ var/global/datum/controller/occupations/job_master
 	if(!job || !job.no_headset)
 		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
 
+	//Gives glasses to the vision impaired
+	if(H.disabilities & DISABILITY_FLAG_NEARSIGHTED)
+		var/equipped = H.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(H), slot_glasses)
+		if(equipped != 1)
+			var/obj/item/clothing/glasses/G = H.glasses
+			G.prescription = 1
+//		H.update_icons()
+
+	//If a character can't stand because of missing limbs, equip them with a wheelchair
+	if(!H.check_stand_ability())
+		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
+		W.buckle_mob(H,H)
+
+	if(H.disabilities & ASTHMA)
+		if(H.backbag == 1)
+			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
+		else
+			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
+
+	if (H.client.IsByondMember())
+		to_chat(H, "Thank you for supporting BYOND!")
+		if(H.backbag == 1)
+			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/byond(H))
+		else
+			H.equip_or_collect(new /obj/item/weapon/storage/box/byond(H), slot_in_backpack)
 	return 1
 
 

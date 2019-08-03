@@ -9,7 +9,8 @@
     var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = null
 
 // -- Transforms us into the devlish Grinch
-/datum/role/grinch/PostSpawn()
+/datum/role/grinch/OnPostSetup()
+    . = ..()
     var/mob/old_mob = antag.current
     var/mob/living/simple_animal/hostile/gremlin/grinch/G = new
     G.forceMove(pick(grinchstart))
@@ -18,8 +19,8 @@
     src.our_bag = our_bag
     G.equip_to_slot(our_bag, slot_back)
     old_mob.forceMove(null) // Get nullspaced
-    qdel(old_mob)
-    return 1
+    spawn (1) // Destroy must be differed else there are runtimes
+        qdel(old_mob)
 
 // -- Clearing references in case of deletion.
 /datum/role/grinch/Destroy()
