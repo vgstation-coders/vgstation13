@@ -132,6 +132,7 @@
 		/obj/item/weapon/grenade/flashbang,
 		/obj/item/weapon/gun/energy/taser,
 		/obj/item/weapon/card/debit/preferred/department/security,
+		/obj/item/weapon/pinpointer/pinpointerpinpointer
 	)
 
 /obj/structure/closet/secure_closet/warden
