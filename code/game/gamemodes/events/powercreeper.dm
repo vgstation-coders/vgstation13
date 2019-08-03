@@ -81,7 +81,7 @@
 			var/turf/T = loc
 			environment = T.return_air()
 		//add power to powernet through converting atmospheric heat to power
-		add_avail(-(environment.add_thermal_energy(max(environment.get_thermal_energy_change(T0C),-POWER_PER_FRUIT*50)/50)))
+		add_avail(-(environment.add_thermal_energy(max(environment.get_thermal_energy_change(T0C),-POWER_PER_FRUIT*10)/10)))
 		if(growdirs)
 			var/grow_chance = Clamp(MIN_SPREAD_CHANCE + (powernet.avail/1000), MIN_SPREAD_CHANCE, MAX_SPREAD_CHANCE)
 			if(prob(grow_chance))
