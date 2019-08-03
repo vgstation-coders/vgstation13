@@ -10,6 +10,8 @@ var/list/global_illegal_radios = list()
 			radio.interact(usr)
 			to_chat(usr,"<span class='info'>You feel \the [radio] buzz.</span>")
 
+/obj/item/device/illegalradio/nanotrasen
+			
 /obj/item/device/illegalradio
 	icon = 'icons/obj/radio.dmi'
 	name = "black market uplink"

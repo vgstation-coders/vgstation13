@@ -1668,16 +1668,21 @@
 						</head>
 						<body>
 						<h1>Following keycodes are present in this system:</h1>"}
+	
 	for(var/a in operation_req_access)
 		output += "[get_access_desc(a)] - <a href='?src=\ref[src];del_req_access=[a];user=\ref[user];id_card=\ref[id_card]'>Delete</a><br>"
+	
+	output += "<a href='?src=\ref[src];del_all_req_access=1;user=\ref[user];id_card=\ref[id_card]'><br><b>Delete All</b></a><br>"
+	
 	output += "<hr><h1>Following keycodes were detected on portable device:</h1>"
 	for(var/a in id_card.access)
 		if(a in operation_req_access)
 			continue
-		var/a_name = get_access_desc(a)
-		if(!a_name)
+		if(!get_access_desc(a))
 			continue //there's some strange access without a name
-		output += "[a_name] - <a href='?src=\ref[src];add_req_access=[a];user=\ref[user];id_card=\ref[id_card]'>Add</a><br>"
+		output += "[get_access_desc(a)] - <a href='?src=\ref[src];add_req_access=[a];user=\ref[user];id_card=\ref[id_card]'>Add</a><br>"
+	
+	output += "<a href='?src=\ref[src];add_all_req_access=1;user=\ref[user];id_card=\ref[id_card]'><br><b>Add All</b></a><br>"
 
 	output += {"<hr><a href='?src=\ref[src];finish_req_access=1;user=\ref[user]'>Finish</a> <font color='red'>(Warning! The ID upload panel will be locked. It can be unlocked only through Exosuit Interface.)</font>
 		</body></html>"}
@@ -1892,12 +1897,27 @@
 		operation_req_access += topic_filter.getNum("add_req_access")
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
+	if(href_list["add_all_req_access"] && add_req_access && topic_filter.getObj("id_card"))
+		if(!in_range(src, usr))
+			return
+		var/obj/item/weapon/card/id/mycard = topic_filter.getObj("id_card")
+		var/list/myaccess = mycard.access
+		for(var/a in myaccess)
+			operation_req_access += a
+		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
+		return	
 	if(href_list["del_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
 			return
 		operation_req_access -= topic_filter.getNum("del_req_access")
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
+	if(href_list["del_all_req_access"] && add_req_access && topic_filter.getObj("id_card"))
+		if(!in_range(src, usr))
+			return
+		operation_req_access = list()
+		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
+		return	
 	if(href_list["finish_req_access"])
 		if(!in_range(src, usr))
 			return
