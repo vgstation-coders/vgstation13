@@ -2026,6 +2026,16 @@
 		reagents.add_reagent(SUGAR, 1)
 		reagents.add_reagent(SODIUMCHLORIDE, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/crabcake
+	name = "Crab Cake"
+	desc = "A New Space England favorite!"
+	icon_state = "crabcake"
+	food_flags = FOOD_MEAT
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/crabcake/New()
+		..()
+		reagents.add_reagent(NUTRIMENT, 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/sandwich
 	name = "Sandwich"
@@ -2293,6 +2303,18 @@
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/crabspaghetti
+	name = "Crab Spaghetti"
+	desc = "Goes well with Coffee"
+	icon_state = "crabspaghetti"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/crabspaghetti/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
@@ -3870,6 +3892,18 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 20)
 	reagents.add_reagent(CAPSAICIN, 10)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/curry/crab
+	name = "Crab Curry"
+	desc = "An Indian dish with a snappy twist!"
+	icon_state = "curry_crab"
+	item_state = "curry_crab"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/curry/crab/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 20)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/lemon
