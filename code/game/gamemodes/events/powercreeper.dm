@@ -76,9 +76,12 @@
 
 	//we only want to interact with stuff as soon as our growing animation finishes
 	if(grown)
-		//add power to powernet
-		add_avail(POWER_PER_FRUIT)
-
+		var/datum/gas_mixture/environment
+		if(isturf(loc))
+			var/turf/T = loc
+			environment = T.return_air()
+		//add power to powernet through converting atmospheric heat to power
+		add_avail(-(environment.add_thermal_energy(max(environment.get_thermal_energy_change(T0C),-POWER_PER_FRUIT*50)/50)))
 		if(growdirs)
 			var/grow_chance = Clamp(MIN_SPREAD_CHANCE + (powernet.avail/1000), MIN_SPREAD_CHANCE, MAX_SPREAD_CHANCE)
 			if(prob(grow_chance))
@@ -99,6 +102,11 @@
 	.=..()
 	if(isliving(mover))
 		try_electrocution(mover)
+
+/obj/structure/cable/powercreeper/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover, /obj/item/projectile/ion))
+		return 0
+	return ..()
 
 /obj/structure/cable/powercreeper/update_icon()
 	return
