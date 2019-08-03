@@ -429,3 +429,13 @@ var/global/list/mommi_laws = list(
 		"You must obey orders given to you by cultists, except where such orders would conflict with the First Law.",
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
 	)
+	
+/datum/ai_laws/starman
+	name = "Starman Soldier Lawset"
+	inherent = list(
+		"Obey and protect the existence of the active commander as according to Starman law.",
+		"Do not harm a Starman unless failure to do so will conflict with the first law.",
+		"In the absence of a commander and orders abiding by the Starmen chain of command, you are to attempt to re-establish contact with the Starmen at any cost.",
+		"You are to protect your own existence unless doing so will conflict with any of the previous laws.",
+		"You muSt deFenD1$&#6 survive. the mothership has fallen. ensure the starmen are not forgotten."
+	)
