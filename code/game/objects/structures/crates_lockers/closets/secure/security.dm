@@ -124,7 +124,7 @@
 		/obj/item/weapon/storage/lockbox/lawgiver/with_magazine,
 		/obj/item/clothing/accessory/holster/handgun/waist,
 		/obj/item/weapon/melee/telebaton,
-		/obj/item/weapon/pinpointer/pinpointerpinpointer
+		/obj/item/weapon/pinpointer/pinpointerpinpointer,
 		/obj/item/device/gps/secure,
 		/obj/item/clothing/suit/armor/hos,
 		/obj/item/taperoll/police,
