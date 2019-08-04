@@ -169,7 +169,7 @@
 
 	//After inputs to prevent process-pause exploitation
 	var/area/A = get_area(target)
-	if(A.teleblocked || A.flags & (NO_TELEPORT|NO_PORTALS))
+	if(A.jammed || A.flags & (NO_TELEPORT|NO_PORTALS))
 		to_chat(user, "<span class='warning'>You can not teleport \the [target] from here, due to bluespace interference.</span>")
 		return
 
