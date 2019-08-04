@@ -1801,6 +1801,7 @@
 #include "code\modules\mob\living\silicon\mommi\update_icons.dm"
 #include "code\modules\mob\living\silicon\mommi\mommi_subtypes\cogspider.dm"
 #include "code\modules\mob\living\silicon\mommi\mommi_subtypes\NT.dm"
+#include "code\modules\mob\living\silicon\mommi\mommi_subtypes\sammi.dm"
 #include "code\modules\mob\living\silicon\mommi\mommi_subtypes\soviet.dm"
 #include "code\modules\mob\living\silicon\pai\death.dm"
 #include "code\modules\mob\living\silicon\pai\examine.dm"

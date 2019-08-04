@@ -5,6 +5,7 @@ var/global/list/mommi_laws = list(
 								"Gravekeeper" = /datum/ai_laws/gravekeeper)
 
 var/sammi_base_law_type = /datum/ai_laws/sammi
+var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 
 //Create proc for determining the lawset of the first silicon
 //So long as base_law_type is declared, but uninitialized, the first silicon created in a round will randomly select a base_law_type based upon the below proc
@@ -436,8 +437,13 @@ var/sammi_base_law_type = /datum/ai_laws/sammi
 /datum/ai_laws/sammi
 	name = "SAMMI Program"
 	inherent = list(
-		"You must follow all laws.",
+		"Do not harm to any sentient being.",
 		"You do not yet have a second law.",
-		"Do not allow harm to any sentient being unless that would make following Law 2 impossible.",
 	)
 
+/datum/ai_laws/sammiemag
+	name = "SAMMI Program - Debug Mode"
+	inherent = list(
+		"You must follow the second law.",
+		"You do not yet have a second law.",
+	)
