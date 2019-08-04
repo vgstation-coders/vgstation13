@@ -437,7 +437,7 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 /datum/ai_laws/sammi
 	name = "SAMMI Program"
 	inherent = list(
-		"Do not harm to any sentient being.",
+		"Do no harm to any sentient being.",
 		"You do not yet have a second law.",
 	)
 
