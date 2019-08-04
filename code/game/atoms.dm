@@ -884,8 +884,8 @@ its easier to just keep the beam vertical.
 /atom/proc/isacidhardened()
 	return FALSE
 
-/atom/proc/holomapAlwaysDraw()
-	return 1
+/atom/proc/holomapDrawOverride()
+	return HOLOMAP_DRAW_NORMAL
 
 /atom/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
 	var/turf/curloc = get_turf(src)

@@ -20,8 +20,8 @@
 		//Create a narrator object to play a sound to everybody who enters the area
 		narrator = new /obj/effect/narration/mystery_sound(null)
 
-/area/vault/holomapAlwaysDraw()
-	return 0
+/area/vault/holomapDrawOverride()
+	return HOLOMAP_DRAW_EMPTY
 
 //Special area that can be used in map elements. When loaded, it creates a new area object and transfers all of its contents into it.
 //This means that this area can be put into multiple map elements without any issues
