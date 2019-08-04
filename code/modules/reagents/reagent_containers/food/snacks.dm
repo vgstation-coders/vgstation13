@@ -3887,12 +3887,11 @@
 	desc = "Me and me Mum and me Dad and me Nan are off to Waterloo, me and me Mum and me Dad and me Nan and a bucket of Vindaloo!"
 	icon_state = "curry_vindaloo"
 	item_state = "curry_vindaloo"
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/vindaloo/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
 	reagents.add_reagent(CAPSAICIN, 10)
-	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/crab
 	name = "Crab Curry"
@@ -3901,20 +3900,11 @@
 	item_state = "curry_crab"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/curry/crab/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 20)
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/curry/lemon
 	name = "Lemon Curry"
 	desc = "This actually exists?"
 	icon_state = "curry_lemon"
 	item_state = "curry_lemon"
-
-/obj/item/weapon/reagent_containers/food/snacks/curry/lemon/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 20)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/xeno
@@ -3922,11 +3912,6 @@
 	desc = "Waste not want not."
 	icon_state = "curry_xeno"
 	item_state = "curry_xeno"
-
-/obj/item/weapon/reagent_containers/food/snacks/curry/xeno/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 20)
-	bitesize = 3
 
 
 //////////////////CHIPS//////////////////
