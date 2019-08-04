@@ -1565,6 +1565,9 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_CULT_EXIT		"path_exit"
 #define HOLOMAP_MARKER_CULT_RUNE		"rune"
 
+#define HOLOMAP_DRAW_NORMAL	0
+#define HOLOMAP_DRAW_FULL	1
+#define HOLOMAP_DRAW_EMPTY	2
 
 #define DEFAULT_BLOOD "#A10808"
 #define DEFAULT_FLESH "#FFC896"
