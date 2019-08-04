@@ -348,7 +348,7 @@ with an atomic bomb. But those are rare and expensive.
 
 /datum/black_market_item/toy/dorkcube
 	name = "Strange Box"
-	desc = "A stolen box filled with unknown loot. Something is sloshing inside, wonder what it is..."
+	desc = "A stolen box filled with unknown loot. Something is sloshing inside."
 	item = /obj/item/weapon/winter_gift/dorkcube
 	stock_min = 1
 	stock_max = 5
