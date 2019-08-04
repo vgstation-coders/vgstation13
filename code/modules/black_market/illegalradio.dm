@@ -11,6 +11,9 @@ var/list/global_illegal_radios = list()
 			to_chat(usr,"<span class='info'>You feel \the [radio] buzz.</span>")
 
 /obj/item/device/illegalradio/nanotrasen
+
+/obj/item/device/illegalradio/nanotrasen/New()
+	qdel(src) //Removed, but mapping issues so xd
 			
 /obj/item/device/illegalradio
 	icon = 'icons/obj/radio.dmi'
