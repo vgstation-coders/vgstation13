@@ -1321,6 +1321,15 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti
 
+/datum/recipe/crabspaghetti
+	reagents = list(WATER = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/spaghetti,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/crabspaghetti
+
 /datum/recipe/spesslaw
 	reagents = list(WATER = 5)
 	items = list(
@@ -1483,6 +1492,17 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/curry
+
+/datum/recipe/crabcurry
+	reagents = list (WATER = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/curry/crab
 
 /datum/recipe/vindaloo
 	reagents = list (WATER = 10, CAPSAICIN = 5)
@@ -1858,6 +1878,11 @@
 	reagents = list(SODIUMCHLORIDE = 1, SUGAR = 1)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
+
+/datum/recipe/crabcake
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/crabcake
 
 /datum/recipe/honeycitruschicken
 	reagents = list(SOYSAUCE = 5, HONEY = 10)
