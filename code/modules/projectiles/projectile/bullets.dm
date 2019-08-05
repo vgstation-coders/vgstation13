@@ -812,6 +812,26 @@ obj/item/projectile/bullet/suffocationbullet
 			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
 	..()
 
+/obj/item/projectile/bullet/buckshot/admin
+	name = "admin buckshot pellet"
+	icon_state = "buckshot"
+	damage = 101
+	penetration = 20
+	rotate = 0
+	type_to_fire = /obj/item/projectile/bullet/hecate
+
+/obj/item/projectile/bullet/buckshot/admin/New(atom/T, var/C = 0)
+	..(T)
+	is_child = C
+
+/obj/item/projectile/bullet/buckshot/admin/OnFired()
+	if(!is_child)
+		for(var/I = 1; I <=total_amount_to_fire-1; I++)
+			var/obj/item/projectile/bullet/hecate/B = new type_to_fire(src.loc, 1)
+			B.damage = src.damage
+			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
+	..()
+
 /obj/item/projectile/bullet/invisible
 	name = "invisible bullet"
 	icon_state = null
