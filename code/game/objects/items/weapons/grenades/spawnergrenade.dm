@@ -1,11 +1,10 @@
 /obj/item/weapon/grenade/spawnergrenade
-	desc = "Will unleash unleash an unspecified anomaly into the vicinity when triggered."
+	desc = "Will unleash an unspecified anomaly into the vicinity when triggered."
 	name = "delivery grenade"
 	icon = 'icons/obj/grenade.dmi'
 	icon_state = "delivery"
 	item_state = "flashbang"
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4"
-	var/banglet = 0
 	var/spawner_type = null // must be an object path
 	var/deliveryamt = 1 // amount of type to deliver
 	var/mob/living/owner = null
