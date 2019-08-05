@@ -1,5 +1,5 @@
 /obj/item/weapon/grenade/spawnergrenade
-	desc = "It is set to detonate in 5 seconds. It will unleash unleash an unspecified anomaly into the vicinity."
+	desc = "Will unleash unleash an unspecified anomaly into the vicinity when triggered."
 	name = "delivery grenade"
 	icon = 'icons/obj/grenade.dmi'
 	icon_state = "delivery"
@@ -43,6 +43,7 @@
 
 /obj/item/weapon/grenade/spawnergrenade/manhacks
 	name = "manhack delivery grenade"
+	desc = "Will unleash a swarm of hostile viscerators that will hack at any nearby targets indiscriminately."
 	spawner_type = /mob/living/simple_animal/hostile/viscerator
 	deliveryamt = 5
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
@@ -54,8 +55,8 @@
 	spawned.faction = "\ref[L]"
 
 /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
-	desc = "It is set to detonate in 5 seconds. It will unleash a pair of hostile visceratorrs that will hack at any nearby targets indiscriminately."
 	name = "viscerator grenade"
+	desc = "Will unleash a swarm of hostile viscerators that will hack at any nearby targets indiscriminately."
 	spawner_type = /mob/living/simple_animal/hostile/viscerator
 	deliveryamt = 2
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
@@ -70,12 +71,14 @@
 
 /obj/item/weapon/grenade/spawnergrenade/spesscarp
 	name = "carp delivery grenade"
+	desc = "No more need for a space-rod and fish food!"
 	spawner_type = /mob/living/simple_animal/hostile/carp
 	deliveryamt = 5
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
 
 /obj/item/weapon/grenade/spawnergrenade/beenade
 	name = "bee-nade"
+	desc = "Angry bees. When you need them, where you need them.
 	icon_state = "beenade"
 	spawner_type = /mob/living/simple_animal/bee/angry
 	deliveryamt = 15
@@ -87,3 +90,11 @@
 		return
 	playsound(src, 'sound/effects/bees.ogg', 100, 1)
 
+
+/obj/item/weapon/grenade/spawnergrenade/bearnade
+	name = "tactical bearstrike request beacon"
+	desc = "HOO HA, HOO-HA"
+	icon_state = "bearnade"
+	spawner_type = /mob/living/simple_animal/hostile/bear
+	deliveryamt = 5
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=1;" + Tc_SYNDICATE + "=2"
