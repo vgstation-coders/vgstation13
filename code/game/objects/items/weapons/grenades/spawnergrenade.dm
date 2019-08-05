@@ -78,7 +78,7 @@
 
 /obj/item/weapon/grenade/spawnergrenade/beenade
 	name = "bee-nade"
-	desc = "Angry bees. When you need them, where you need them.
+	desc = "Angry bees. When you need them, where you need them."
 	icon_state = "beenade"
 	spawner_type = /mob/living/simple_animal/bee/angry
 	deliveryamt = 15
@@ -92,7 +92,7 @@
 
 
 /obj/item/weapon/grenade/spawnergrenade/bearnade
-	name = "tactical bearstrike request beacon"
+	name = "tactical bearstrike delivery beacon"
 	desc = "HOO HA, HOO-HA"
 	icon_state = "bearnade"
 	spawner_type = /mob/living/simple_animal/hostile/bear
