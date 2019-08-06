@@ -310,21 +310,21 @@ for anyone but the person committing mass murder.
 /datum/black_market_item/arcane/health_potion/after_spawn(var/obj/spawned, var/mob/user)
 	if(prob(40))
 		spawned = /obj/item/potion/healing
-		
-/datum/black_market_item/plants
-	category = "Seeds" 
 
-/datum/black_market_item/plants/walkingmushroommycelium
+/datum/black_market_item/plants
+	category = "Seeds"
+
+/datum/black_market_item/plants/mushroommanspore
 	name = "packet of walking mushroom seeds"
 	desc = "Sentient mushfriends for all your mushy needs"
-	item = /obj/item/seeds/walkingmushroommycelium
+	item = /obj/item/seeds/mushroommanspore
 	sps_chances = list(0, 10, 30)
 	delivery_available = list(0, 1, 1)
 	stock_min = 3
 	stock_max = 3
-	cost_min = 50
-	cost_max = 100
-	display_chance = 99	
+	cost_min = 15
+	cost_max = 30
+	display_chance = 99
 
 /datum/black_market_item/toy
 	category = "Recreational and Novelty Items"
