@@ -322,8 +322,8 @@ for anyone but the person committing mass murder.
 	delivery_available = list(0, 1, 1)
 	stock_min = 3
 	stock_max = 3
-	cost_min = 15
-	cost_max = 30
+	cost_min = 50
+	cost_max = 100
 	display_chance = 99
 
 /datum/black_market_item/toy
