@@ -6,7 +6,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/soap/nanotrasen = 20,
 /obj/item/weapon/soap/deluxe = 30,
 
-/obj/item/voucher/free_item/glowing = 3000,
+/obj/item/voucher/free_item/glowing = 150,
 /obj/item/weapon/phone = 30,
 /obj/item/weapon/mop = 10,
 /obj/item/weapon/lipstick/random = 20,
