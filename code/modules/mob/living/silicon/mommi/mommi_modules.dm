@@ -102,33 +102,21 @@
 
 /obj/item/weapon/robot_module/mommi/sammi/New(var/mob/living/silicon/robot/R)
 	//..()
-	languages = list(	LANGUAGE_GALACTIC_COMMON = 0, LANGUAGE_TRADEBAND = 0, LANGUAGE_VOX = 0,
-						LANGUAGE_ROOTSPEAK = 0, LANGUAGE_GREY = 0, LANGUAGE_CLATTER = 0,
-						LANGUAGE_MONKEY = 0, LANGUAGE_UNATHI = 0, LANGUAGE_SIIK_TAJR = 0,
-						LANGUAGE_SKRELLIAN = 0, LANGUAGE_GUTTER = 0, LANGUAGE_MONKEY = 0,
-						LANGUAGE_MOUSE = 0, LANGUAGE_HUMAN = 0)
-	add_languages(R)
-	src.emag = new /obj/item/borg/stun(src)
-	//src.modules += new /obj/item/weapon/rcd/borg(src)     // Too OP
-	//src.modules += new /obj/item/device/flashlight(src)   // Broken
-	src.modules += new /obj/item/weapon/weldingtool/largetank(src)
-	src.modules += new /obj/item/weapon/screwdriver(src)
-	src.modules += new /obj/item/weapon/wrench(src)
-	src.modules += new /obj/item/weapon/crowbar(src)
-	src.modules += new /obj/item/weapon/wirecutters(src)
-	src.modules += new /obj/item/device/multitool(src)
-	//src.modules += new /obj/item/device/t_scanner(src)
-	//src.modules += new /obj/item/device/analyzer(src)
-	src.modules += new /obj/item/weapon/extinguisher(src) // Aurx sed so
-	src.modules += new /obj/item/weapon/extinguisher/foam(src)
-	//src.modules += new /obj/item/device/rcd/rpd(src)
-	//src.modules += new /obj/item/device/rcd/tile_painter(src)
-	//src.modules += new /obj/item/blueprints/mommiprints(src)
-	src.modules += new /obj/item/device/material_synth/robot/mommi(src)
-	//src.modules += new /obj/item/device/holomap(src)
-	sensor_augs = list("Mesons", "Disable")
+	modules += new /obj/item/weapon/weldingtool/largetank(src)
+	modules += new /obj/item/weapon/screwdriver(src)
+	modules += new /obj/item/weapon/wrench(src)
+	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/wirecutters(src)
+	modules += new /obj/item/device/multitool(src)
+	modules += new /obj/item/device/analyzer(src)
+
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
+	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY | MODULE_IS_DEFINITIVE | MODULE_CAN_HANDLE_FOOD
 	W.amount = 50
-	W.max_amount = 50 // Override MAXCOIL
-	src.modules += W
-	//return
+	W.max_amount = 50
+	modules += W
+	emag = new /obj/item/borg/stun(src)
+
+	sensor_augs = list("Mesons", "Disable")
+
+	fix_modules()
