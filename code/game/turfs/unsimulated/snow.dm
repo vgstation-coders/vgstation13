@@ -14,6 +14,10 @@
 	var/snowballs = TRUE
 	var/global/list/icon_state_to_appearance = list()
 
+/turf/unsimulated/floor/snow/lit
+	dynamic_lighting = TRUE
+	luminosity = 0
+
 /turf/unsimulated/floor/snow/New()
 
 	..()
