@@ -30,7 +30,7 @@
 
 /obj/item/weapon/extinguisher/empty/New()
 	. = ..()
-	reagents.remove_all(max_water)
+	reagents.clear_reagents()
 
 /obj/item/weapon/extinguisher/mini
 	name = "fire extinguisher"
