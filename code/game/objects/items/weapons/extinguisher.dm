@@ -28,6 +28,10 @@
 	create_reagents(max_water)
 	reagents.add_reagent(WATER, max_water)
 
+/obj/item/weapon/extinguisher/empty/New()
+	. = ..()
+	reagents.remove_all(max_water)
+
 /obj/item/weapon/extinguisher/mini
 	name = "fire extinguisher"
 	desc = "A light and compact fibreglass-framed model fire extinguisher."
