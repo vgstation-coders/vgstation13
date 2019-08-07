@@ -13,6 +13,10 @@
 	var/snowballs = 0
 	var/global/list/icon_state_to_appearance = list()
 
+/turf/simulated/floor/plating/snow/nolight
+	dynamic_lighting = 1
+	light_color = ""
+
 /turf/simulated/floor/plating/snow/make_wood_floor()
 	return
 
