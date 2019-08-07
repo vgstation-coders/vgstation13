@@ -153,13 +153,12 @@ obj/item/device/mmi/Destroy()
 
 /obj/item/device/mmi/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
-	if(!brainmob){
+	if(!brainmob)
 		if(try_handling_sammi_construction(O,user))
 			return
-	} else {
+	else
 		if(try_handling_mommi_construction(O,user))
 			return
-	}
 
 	if(istype(O,/obj/item/organ/internal/brain) && !brainmob) //Time to stick a brain in it --NEO
 		// MaMIs inherit from brain, but they shouldn't be insertable into a MMI

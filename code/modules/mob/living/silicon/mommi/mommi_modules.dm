@@ -110,8 +110,8 @@
 	modules += new /obj/item/device/multitool(src)
 	modules += new /obj/item/device/analyzer(src)
 
-	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
 	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY | MODULE_IS_DEFINITIVE | MODULE_CAN_HANDLE_FOOD
+	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
 	W.amount = 50
 	W.max_amount = 50
 	modules += W
