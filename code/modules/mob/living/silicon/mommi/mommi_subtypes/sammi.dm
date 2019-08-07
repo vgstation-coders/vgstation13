@@ -9,6 +9,8 @@
 	keeper=1 // 0 = No, 1 = Yes (Disables speech and common radio.)
 	prefix = "Stationary Assembler MMI"
 	canmove = 0
+	anchored = 0
+	var/cellhold = null
 	//..()
 
 
@@ -82,7 +84,10 @@ mob/living/silicon/robot/mommi/sammi/hide()
 			to_chat(user, "There is a power cell already installed.")
 		else
 			user.drop_item(W, src)
-			cell = W
+			if(anchored)
+				cell = W
+			else
+				cellhold = W
 			to_chat(user, "You insert the power cell.")
 //			chargecount = 0
 		updateicon()
@@ -132,14 +137,27 @@ mob/living/silicon/robot/mommi/sammi/hide()
 
 
 	else if(istype(W, /obj/item/weapon/wrench)) // Need to make this not bludgeon them
+		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(anchored)
 			to_chat(user, "<span class='notice'>You unbolt the SAMMI from the floor.</span>")
 			anchored = 0
+			cellhold = cell
+			cell = null
+			if(icon_state == "sammi_offline_a")
+				icon_state = "sammi_offline"
+			else
+				icon_state = "sammi_online"
 			updateicon()
 
 		else
 			to_chat(user, "<span class='notice'>You anchor the SAMMI to the floor.</span>")
 			anchored = 1
+			cell = cellhold
+			cellhold = null
+			if(icon_state == "sammi_offline")
+				icon_state = "sammi_offline_a"
+			else
+				icon_state = "sammi_online_a"
 			updateicon()
 
 		return 0
@@ -157,10 +175,31 @@ mob/living/silicon/robot/mommi/sammi/hide()
 		spark(src, 5, FALSE)
 		return ..()
 
+/mob/living/silicon/robot/mommi/sammi/attack_hand(mob/user)
+	add_fingerprint(user)
+
+	if(opened && !wiresexposed && (!isMoMMI(user)))
+
+		if(cell || cellhold)
+			if(cellhold)
+				cell = cellhold
+				cellhold = null
+			if(cell)
+				cell.updateicon()
+				cell.add_fingerprint(user)
+				user.put_in_active_hand(cell)
+				to_chat(user, "You remove \the [cell].")
+				cell = null
+				updateicon()
+				return
+
 /mob/living/silicon/robot/mommi/sammi/New(loc)
 	..()
 	laws = new sammi_base_law_type
 	module = new /obj/item/weapon/robot_module/mommi/sammi(src)
+	cellhold = cell
+	cell = null
+
 
 /mob/living/silicon/robot/mommi/sammi/proc/transfer_personality(var/client/candidate)
 
@@ -178,7 +217,10 @@ mob/living/silicon/robot/mommi/sammi/hide()
 		ghostize(1)
 		src.mind.current = src.mind.original
 		src.visible_message("<span class=\"warning\">[src] disconnects from the network...attempting to reconnect!</span>")
-		icon_state = "sammi_offline"
+		if(icon_state == "sammi_online_a")
+			icon_state = "sammi_offline_a"
+		else
+			icon_state = "sammi_offline"
 		updateicon()
 
 /mob/living/silicon/robot/mommi/sammi/attack_ghost(var/mob/dead/observer/O)
@@ -188,7 +230,10 @@ mob/living/silicon/robot/mommi/sammi/hide()
 			if(!(src.key))
 				src.transfer_personality(O.client)
 				src.visible_message("<span class=\"warning\">[src] is connected to the SAMMI network!</span>")
-				icon_state = "sammi_online"
+				if(icon_state == "sammi_offline_a")
+					icon_state = "sammi_online_a"
+				else
+					icon_state = "sammi_online"
 				updateicon()
 			else if(src.key)
 				to_chat(src, "<span class='notice'>Someone has already began controlling this SAMMI. Try another! </span>")
