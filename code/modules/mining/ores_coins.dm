@@ -370,7 +370,7 @@
 
 /obj/item/weapon/coin/is_screwdriver(var/mob/user)
 	if(user.a_intent == I_HURT)
-		to_chat(user, "<span class='warning'>You press the [src] against the screws forcefully!</span>")
+		to_chat(user, "<span class='warning'>You forcefully press with \the [src]!</span>")
 	return user.a_intent == I_HURT
 
 /obj/item/weapon/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
