@@ -102,7 +102,7 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define CYBORG_SERVICE_SPEED_MODIFIER 1
 #define CYBORG_SECURITY_SPEED_MODIFIER 1
 #define CYBORG_TG17355_SPEED_MODIFIER 1
-#define CYBORG_STARMAN_SPEED_MODIFIER 0
+#define CYBORG_STARMAN_SPEED_MODIFIER 1
 
 #define MOMMI_SOVIET_SPEED_MODIFIER 1
 #define MOMMI_NT_SPEED_MODIFIER 1

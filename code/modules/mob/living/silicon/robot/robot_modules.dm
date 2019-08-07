@@ -633,7 +633,7 @@
 	
 /obj/item/weapon/robot_module/starman
 	name = "starman robot module"
-	module_holder = "starmen"
+	module_holder = "starman"
 	quirk_flags = MODULE_IS_DEFINITIVE | MODULE_IS_FLASHPROOF
 	sprites = list(
 		"Basic" = "starman",
@@ -643,13 +643,7 @@
 /obj/item/weapon/robot_module/starman/New()
 	..()
 
-	modules += new /obj/item/weapon/extinguisher/mini(src)
-	modules += new /obj/item/weapon/cookiesynth(src)
-	modules += new /obj/item/device/harmalarm(src)
-	modules += new /obj/item/weapon/reagent_containers/borghypo/peace(src)
-	modules += new /obj/item/weapon/inflatable_dispenser(src)
-	modules += new /obj/item/borg/cyborghug(src)
-	emag = new /obj/item/weapon/reagent_containers/borghypo/peace/hacked(src)
+	
 
 	sensor_augs = list("Thermal", "Disable")
 

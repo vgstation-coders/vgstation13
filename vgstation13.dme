@@ -916,7 +916,6 @@
 #include "code\game\objects\items\robot\robot_items\robot_spawner.dm"
 #include "code\game\objects\items\robot\robot_items\robot_speedloader.dm"
 #include "code\game\objects\items\robot\robot_items\robot_tray.dm"
-#include "code\game\objects\items\robot\robot_items\starman_items.dm"
 #include "code\game\objects\items\stacks\cable.dm"
 #include "code\game\objects\items\stacks\medical.dm"
 #include "code\game\objects\items\stacks\nanopaste.dm"
