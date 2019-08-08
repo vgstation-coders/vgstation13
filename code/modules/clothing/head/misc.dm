@@ -542,7 +542,7 @@
 
 /obj/item/clothing/head/sombrero
 	name = "sombrero"
-	desc = "Meanwhile in Space Mexico"
+	desc = "Meanwhile in Neo Space Mexico"
 	icon_state = "sombrero"
-	item_state = "sombero"
+	item_state = "sombrero"
 
