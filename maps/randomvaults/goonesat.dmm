@@ -1,0 +1,360 @@
+"aa" = (/turf/space,/area)
+"ab" = (/obj/structure/lattice,/obj/structure/grille,/turf/space,/area)
+"ac" = (/obj/structure/lattice,/turf/space,/area)
+"ad" = (/obj/machinery/power/solar/panel/fake,/turf/simulated/floor{icon_state = "solarpanel"},/area)
+"ae" = (/turf/simulated/floor/plating/airless,/area)
+"af" = (/obj/structure/lattice,/obj/structure/grille/broken,/turf/space,/area)
+"ag" = (/obj/item/trash/bustanuts,/turf/space,/area)
+"ah" = (/obj/structure/grille,/turf/simulated/floor/plating/airless,/area)
+"ai" = (/turf/simulated/wall/r_wall,/area)
+"aj" = (/turf/simulated/wall/r_wall,/area/turret_protected/tcomsat)
+"ak" = (/mob/living/simple_animal/hostile/viscerator{harm_intent_damage = 0; health = 1; heat_damage_per_tick = 0; locked_to_z = 1; luminosity = 3; maxHealth = 1; melee_damage_lower = 45; melee_damage_upper = 45; name = "slasher"; wander = 0},/turf/simulated/floor/engine,/area)
+"al" = (/turf/simulated/wall/r_wall,/area/tcommsat/computer)
+"am" = (/mob/living/simple_animal/hostile/viscerator{harm_intent_damage = 0; health = 1; heat_damage_per_tick = 0; locked_to_z = 1; luminosity = 3; maxHealth = 1; melee_damage_lower = 45; melee_damage_upper = 45; name = "slasher"; wander = 0},/turf/simulated/floor/engine,/area/tcommsat/computer)
+"an" = (/obj/structure/lattice,/turf/space,/area/turret_protected/tcomsat)
+"ao" = (/turf/space,/area/turret_protected/tcomsat)
+"ap" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area/turret_protected/tcomsat)
+"aq" = (/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"ar" = (/obj/machinery/power/apc{dir = 1; pixel_y = 24},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 6},/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"as" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"at" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 1},/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"au" = (/obj/machinery/atmospherics/unary/tank/air{dir = 8},/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"av" = (/obj/item/weapon/coin/clown,/obj/item/weapon/winter_gift/special,/obj/item/clothing/head/collectable/petehat,/turf/simulated/floor/engine,/area/tcommsat/computer)
+"aw" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area/turret_protected/tcomsat)
+"ax" = (/obj/machinery/atmospherics/unary/vent_pump{on = 1},/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"ay" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/machinery/meter,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"az" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"aA" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 5},/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"aB" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 8},/turf/space,/area/turret_protected/tcomsat)
+"aC" = (/obj/machinery/power/battery/smes/infinite,/obj/structure/cable{icon_state = "0-2"; pixel_y = 1; d2 = 2},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aD" = (/obj/machinery/power/terminal{dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aE" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 140; on = 1; pressure_checks = 0},/obj/structure/table,/obj/item/weapon/folder/yellow,/obj/item/weapon/folder/yellow,/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aF" = (/obj/structure/table,/obj/item/weapon/pen/blue{pixel_x = -3; pixel_y = 2},/obj/item/weapon/soap/syndie,/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aG" = (/obj/machinery/power/apc{dir = 1; pixel_y = 24},/obj/structure/cable{icon_state = "0-2"; pixel_y = 1; d2 = 2},/obj/structure/table,/obj/item/weapon/paper_bin,/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aH" = (/obj/structure/table,/obj/item/device/flashlight/lamp,/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aI" = (/obj/item/weapon/syntiflesh{name = "Cuban Pete-Meat"},/turf/simulated/floor/engine,/area/tcommsat/computer)
+"aJ" = (/obj/structure/bed,/obj/item/weapon/bedsheet/green,/turf/simulated/floor,/area/tcommsat/computer)
+"aK" = (/obj/machinery/light{dir = 1},/obj/item/weapon/tank/emergency_oxygen/double,/turf/simulated/floor,/area/tcommsat/computer)
+"aL" = (/obj/structure/bed,/obj/item/weapon/bedsheet/brown,/turf/simulated/floor,/area/tcommsat/computer)
+"aM" = (/obj/item/weapon/blunderbuss/flawless,/turf/simulated/floor,/area/tcommsat/computer)
+"aN" = (/obj/structure/bed,/obj/item/weapon/bedsheet/red,/turf/simulated/floor,/area/tcommsat/computer)
+"aO" = (/obj/machinery/teleport/station,/turf/simulated/floor,/area/tcommsat/computer)
+"aP" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = "0"},/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"aQ" = (/obj/machinery/atmospherics/binary/valve/digital{icon_state = "valve1"; name = "Mixed Air Outlet Valve"; open = 1},/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"aR" = (/obj/structure/closet,/obj/item/weapon/sword,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"aS" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/space,/area/turret_protected/tcomsat)
+"aT" = (/obj/item/device/radio/intercom{dir = 8; name = "Station Intercom (General)"; pixel_x = -28},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aU" = (/obj/effect/landmark/corpse/russian/ranged,/mob/living/simple_animal/hostile/humanoid/russian/ranged,/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aV" = (/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aW" = (/obj/structure/bed/chair/office/dark{dir = 1},/mob/living/simple_animal/hostile/humanoid/russian,/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aX" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"aY" = (/obj/structure/bed,/obj/item/weapon/bedsheet/orange,/obj/machinery/light{dir = 8},/turf/simulated/floor,/area/tcommsat/computer)
+"aZ" = (/mob/living/simple_animal/hostile/humanoid/russian/ranged,/turf/simulated/floor,/area/tcommsat/computer)
+"ba" = (/obj/structure/bed/chair,/turf/simulated/floor,/area/tcommsat/computer)
+"bb" = (/obj/machinery/light{dir = 4},/turf/simulated/floor,/area/tcommsat/computer)
+"bc" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 5},/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/turf/space,/area/turret_protected/tcomsat)
+"bd" = (/obj/structure/lattice,/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 4},/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area/turret_protected/tcomsat)
+"be" = (/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma,/turf/space,/area/turret_protected/tcomsat)
+"bf" = (/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/turf/space,/area/turret_protected/tcomsat)
+"bg" = (/obj/structure/window/reinforced/plasma,/turf/space,/area/turret_protected/tcomsat)
+"bh" = (/obj/structure/sign/securearea,/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 6},/turf/simulated/wall/r_wall,/area/tcommsat/computer)
+"bi" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"bj" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"bk" = (/mob/living/simple_animal/hostile/humanoid/russian/ranged,/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"bl" = (/obj/item/device/radio/intercom{freerange = 1; name = "General Listening Channel"; pixel_x = 28},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"bm" = (/obj/item/weapon/syntiflesh{name = "Cuban Pete-Meat"},/obj/item/weapon/spacecash,/turf/simulated/floor/engine,/area/tcommsat/computer)
+"bn" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 4; on = 1},/obj/item/weapon/spacecash/c1000,/turf/simulated/floor,/area/tcommsat/computer)
+"bo" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 10},/obj/item/weapon/spacecash/c1000,/turf/simulated/floor,/area/tcommsat/computer)
+"bp" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor,/area/tcommsat/computer)
+"bq" = (/obj/structure/table,/obj/item/weapon/storage/fancy/cigarettes,/turf/simulated/floor,/area/tcommsat/computer)
+"br" = (/obj/structure/bed/chair{dir = 8},/turf/simulated/floor,/area/tcommsat/computer)
+"bs" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 6},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"bt" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"bu" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"bv" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"bw" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 9},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/door/airlock/hatch{name = "Telecoms Control Room"; req_access_txt = "61"},/turf/simulated/floor,/area/tcommsat/computer)
+"bx" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 6},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"by" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{dir = 1},/mob/living/simple_animal/hostile/humanoid/russian,/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"bz" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"bA" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/obj/effect/landmark/corpse/russian,/mob/living/simple_animal/hostile/humanoid/russian/ranged,/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"bB" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"bC" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 10},/turf/simulated/floor{icon_state = "white"},/area/tcommsat/computer)
+"bD" = (/turf/simulated/wall/r_wall,/area/tcommsat/chamber)
+"bE" = (/obj/machinery/vending/discount,/turf/simulated/floor,/area/tcommsat/computer)
+"bF" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/machinery/vending/groans,/turf/simulated/floor,/area/tcommsat/computer)
+"bG" = (/turf/simulated/floor,/area/tcommsat/computer)
+"bH" = (/obj/item/trash/cigbutt,/obj/machinery/light,/turf/simulated/floor,/area/tcommsat/computer)
+"bI" = (/obj/structure/bed/chair{dir = 1},/turf/simulated/floor,/area/tcommsat/computer)
+"bJ" = (/obj/machinery/disposal,/obj/structure/disposalpipe/trunk{dir = 4},/turf/simulated/floor,/area/tcommsat/computer)
+"bK" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/wall/r_wall,/area/tcommsat/computer)
+"bL" = (/obj/structure/disposalpipe/segment{dir = 4},/mob/living/simple_animal/hostile/viscerator{harm_intent_damage = 0; health = 1; heat_damage_per_tick = 0; locked_to_z = 1; luminosity = 3; maxHealth = 1; melee_damage_lower = 45; melee_damage_upper = 45; name = "slasher"; wander = 0},/turf/simulated/floor/engine,/area)
+"bM" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/wall/r_wall,/area)
+"bN" = (/obj/structure/disposalpipe/segment{dir = 4},/obj/structure/grille,/turf/simulated/floor/plating/airless,/area)
+"bO" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor/plating/airless,/area)
+"bP" = (/obj/structure/disposaloutlet{dir = 4},/obj/structure/disposalpipe/trunk{dir = 8},/turf/simulated/floor/plating/airless,/area)
+"bQ" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"bR" = (/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 1},/turf/space,/area/turret_protected/tcomsat)
+"bS" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 1},/turf/space,/area/turret_protected/tcomsat)
+"bT" = (/obj/structure/window/reinforced/plasma{dir = 1},/turf/space,/area/turret_protected/tcomsat)
+"bU" = (/obj/machinery/light{dir = 8},/obj/structure/table,/obj/item/device/multitool,/obj/structure/sign/electricshock{pixel_x = -32},/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor{icon_state = "warnwhite"},/area/tcommsat/computer)
+"bV" = (/obj/machinery/atmospherics/unary/cold_sink/freezer{current_temperature = 80; dir = 1; on = 1},/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor{icon_state = "warnwhite"},/area/tcommsat/computer)
+"bW" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/computer/general_air_control/large_tank_control{name = "Coldroom Monitoring"; sensors = list("satellite_coldroom" = "Server Room")},/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor{icon_state = "warnwhite"},/area/tcommsat/computer)
+"bX" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor{icon_state = "warnwhite"},/area/tcommsat/computer)
+"bY" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHEAST)"; icon_state = "warning"; dir = 6},/turf/simulated/floor{dir = 6; icon_state = "warnwhite"},/area/tcommsat/computer)
+"bZ" = (/obj/machinery/door/airlock/maintenance_hatch{name = "Telecoms Server Access"; req_access_txt = "61"},/turf/simulated/floor{icon_state = "dark vault full"},/area/tcommsat/chamber)
+"ca" = (/obj/machinery/light/small{dir = 1},/obj/machinery/turretid{ailock = 1; control_area = /area/turret_protected/goonroom; desc = "A firewall prevents AIs from interacting with this device."; icon_state = "motion1"; lethal = 1; name = "Goonecode lethal turret control"; pixel_x = 29; req_access = list(61)},/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/obj/effect/decal/warning_stripes{icon_state = "nitrogen"},/turf/simulated/floor{icon_state = "dark vault full"},/area/tcommsat/chamber)
+"cb" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/wall/r_wall,/area/tcommsat/computer)
+"cc" = (/obj/machinery/door/airlock/hatch{name = "Telecoms Lounge"; req_access_txt = "61"},/turf/simulated/floor{icon_state = "dark vault full"},/area/tcommsat/computer)
+"cd" = (/obj/machinery/turret{lasers = 1; lasertype = 2},/turf/simulated/floor/plating/airless,/area/turret_protected/tcomsat)
+"ce" = (/turf/simulated/wall/r_wall,/area/turret_protected/goonroom)
+"cf" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/structure/window/full/reinforced,/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/turf/simulated/floor/plating,/area/turret_protected/goonroom)
+"cg" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/goonroom)
+"ch" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/cable{icon_state = "0-2"; pixel_y = 1; d2 = 2},/obj/structure/cable,/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/goonroom)
+"ci" = (/obj/structure/grille,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/goonroom)
+"cj" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/window/full/reinforced,/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/turf/simulated/floor/plating,/area/turret_protected/goonroom)
+"ck" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'SERVER ROOM'."; name = "SERVER ROOM"},/turf/simulated/wall/r_wall,/area/turret_protected/goonroom)
+"cl" = (/obj/machinery/door/airlock/maintenance_hatch{name = "Telecoms Server Access"; req_access_txt = "61"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/goonroom)
+"cm" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area/turret_protected/tcomsat)
+"cn" = (/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"co" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 5},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"cp" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 10},/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 8},/turf/space,/area/turret_protected/tcomsat)
+"cq" = (/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cr" = (/obj/machinery/turret{lasers = 1; lasertype = 2},/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cs" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/apc{dir = 1; pixel_y = 24},/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"ct" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cu" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cv" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/light{dir = 1},/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cw" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cx" = (/obj/effect/decal/warning_stripes{tag = "icon-loading_area"; icon_state = "loading_area"; dir = 2},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cy" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 4; on = 1},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"cz" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 4},/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 8},/turf/space,/area/turret_protected/tcomsat)
+"cA" = (/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cB" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner"; icon_state = "warning_corner"; dir = 2},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cC" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cD" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cE" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/air_sensor{id_tag = "satellite_coldroom"; output = 63},/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cF" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (WEST)"; icon_state = "warning_corner"; dir = 8},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cG" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 6},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"cH" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"cI" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 10},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"cJ" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 9},/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 8},/turf/space,/area/turret_protected/tcomsat)
+"cK" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cL" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/structure/table,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/item/ammo_storage/box/a418,/obj/item/ammo_storage/box/a418,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cM" = (/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cN" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/door/window/brigdoor{dir = 1; base_state = "left"; req_access = list(61)},/obj/effect/decal/warning_stripes{tag = "icon-loading_area"; icon_state = "loading_area"; dir = 2},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cO" = (/obj/structure/table,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/item/ammo_storage/box/BMG50,/obj/item/ammo_storage/box/BMG50,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cP" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cQ" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"cR" = (/obj/structure/closet/malf/suits,/turf/simulated/floor,/area/turret_protected/tcomsat)
+"cS" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 101.325; on = 1},/turf/simulated/floor,/area/turret_protected/tcomsat)
+"cT" = (/obj/structure/table,/obj/item/bluespace_crystal/artificial,/obj/item/bluespace_crystal/artificial,/obj/item/bluespace_crystal/artificial,/turf/simulated/floor,/area/turret_protected/tcomsat)
+"cU" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = "0"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"cV" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/structure/table,/obj/structure/window/reinforced{dir = 8},/obj/item/ammo_storage/box/a666,/obj/item/ammo_storage/box/a666,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cW" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cX" = (/obj/structure/table,/obj/structure/window/reinforced{dir = 4},/obj/item/ammo_storage/box/a357,/obj/item/ammo_storage/box/a357,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"cY" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 8},/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area/turret_protected/tcomsat)
+"cZ" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"da" = (/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 8},/turf/space,/area/turret_protected/tcomsat)
+"db" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"dc" = (/turf/simulated/floor,/area/turret_protected/tcomsat)
+"dd" = (/obj/structure/table,/obj/item/clothing/suit/russofurcoat,/obj/item/clothing/head/russofurhat,/turf/simulated/floor,/area/turret_protected/tcomsat)
+"de" = (/turf/simulated/floor/plating,/area)
+"df" = (/obj/structure/sign/nosmoking_2{pixel_x = -32},/obj/machinery/light{dir = 8},/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dg" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/structure/table,/obj/structure/window/reinforced{dir = 8},/obj/item/ammo_storage/box/b762x55,/obj/item/ammo_storage/box/b762x55,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dh" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/displaycase/gooncode,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"di" = (/obj/structure/table,/obj/structure/window/reinforced{dir = 4},/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dj" = (/obj/structure/sign/nosmoking_2{pixel_x = 32},/obj/machinery/light{dir = 4},/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dk" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 5},/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area/turret_protected/tcomsat)
+"dl" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 1},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"dm" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"dn" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 9},/obj/machinery/door/airlock/maintenance_hatch{name = "Telecoms Storage"; req_access_txt = "61"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"do" = (/obj/effect/landmark/corpse/russian,/turf/simulated/floor,/area/turret_protected/tcomsat)
+"dp" = (/obj/structure/table,/obj/item/weapon/gun/projectile/flamethrower/full,/turf/simulated/floor,/area/turret_protected/tcomsat)
+"dq" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/structure/table,/obj/structure/window/reinforced{dir = 8},/obj/item/ammo_storage/box/c45,/obj/item/ammo_storage/box/c45,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dr" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"ds" = (/obj/structure/table,/obj/structure/window/reinforced{dir = 4},/obj/item/weapon/cell/hyper,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dt" = (/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma{dir = 8},/turf/space,/area/turret_protected/tcomsat)
+"du" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"dv" = (/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor,/area/turret_protected/tcomsat)
+"dw" = (/obj/structure/table,/obj/item/weapon/lazarus_injector,/turf/simulated/floor,/area/turret_protected/tcomsat)
+"dx" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = "0"},/obj/effect/landmark/corpse/russian,/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"dy" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/structure/table,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/item/weapon/coin/gold,/obj/item/weapon/coin/gold,/obj/item/weapon/coin/gold,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dz" = (/obj/structure/table,/obj/structure/window/reinforced,/obj/item/weapon/coin/silver,/obj/item/weapon/coin/silver,/obj/item/weapon/coin/silver,/obj/item/weapon/coin/silver,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dA" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/table,/obj/structure/window/reinforced,/obj/item/weapon/coin/gold,/obj/item/weapon/coin/gold,/obj/item/toy/gasha/pomf,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dB" = (/obj/structure/table,/obj/structure/window/reinforced,/obj/item/weapon/coin/silver,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dC" = (/obj/structure/table,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/item/ammo_storage/box/c9mm,/obj/item/ammo_storage/box/c9mm,/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dD" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"dE" = (/obj/structure/table,/obj/item/weapon/spacecash/c1000,/turf/simulated/floor,/area/turret_protected/tcomsat)
+"dF" = (/obj/structure/table,/obj/item/weapon/book/manual/nuclear,/obj/item/weapon/spacecash/c1000,/turf/simulated/floor,/area/turret_protected/tcomsat)
+"dG" = (/obj/structure/table,/obj/item/weapon/storage/lockbox/clusterbang,/turf/simulated/floor,/area/turret_protected/tcomsat)
+"dH" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 6},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (EAST)"; icon_state = "warning_corner"; dir = 4},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dI" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 9},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dJ" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dK" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dL" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (NORTH)"; icon_state = "warning_corner"; dir = 1},/turf/simulated/floor/bluegrid{icon_state = "dark"; name = "Mainframe Floor"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dM" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"dN" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"dO" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/turret_protected/tcomsat)
+"dP" = (/obj/machinery/atmospherics/unary/vent_pump{canSpawnMice = 0; dir = 1; external_pressure_bound = 140; on = 1; pressure_checks = 0},/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dQ" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/light,/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dR" = (/obj/machinery/atmospherics/unary/vent_pump{canSpawnMice = 0; dir = 1; external_pressure_bound = 120; icon_state = "in"; initialize_directions = 1; internal_pressure_bound = 4000; on = 1; pressure_checks = 2; pump_direction = 0},/turf/simulated/floor/bluegrid{name = "Mainframe Base"; nitrogen = 100; oxygen = 0; temperature = 80},/area/turret_protected/goonroom)
+"dS" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/turret_protected/goonroom)
+"dT" = (/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma,/turf/space,/area/turret_protected/tcomsat)
+"dU" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma,/turf/space,/area/turret_protected/tcomsat)
+"dV" = (/turf/simulated/wall/r_wall,/area/turret_protected/tcomfoyer)
+"dW" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'LETHAL TURRETS'. Enter at your own risk!"; name = "LETHAL TURRETS"; pixel_x = -32},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHWEST)"; icon_state = "warning"; dir = 9},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"dX" = (/obj/machinery/power/apc{dir = 1; pixel_y = 24},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (NORTH)"; icon_state = "warning_corner"; dir = 1},/mob/living/simple_animal/hostile/humanoid/russian,/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"dY" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 6},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (EAST)"; icon_state = "warning_corner"; dir = 4},/obj/item/device/radio/intercom{name = "Station Intercom (General)"; pixel_y = 20},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"dZ" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/turretid{ailock = 1; control_area = /area/turret_protected/tcomsat; desc = "A firewall prevents AIs from interacting with this device."; icon_state = "motion1"; lethal = 1; name = "Telecoms lethal turret control"; pixel_y = 29; req_access = list(61)},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"ea" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 1},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (NORTH)"; icon_state = "warning_corner"; dir = 1},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"eb" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 10},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (EAST)"; icon_state = "warning_corner"; dir = 4},/mob/living/simple_animal/hostile/humanoid/russian,/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"ec" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'LETHAL TURRETS'. Enter at your own risk!"; name = "LETHAL TURRETS"; pixel_x = 32},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"ed" = (/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area/turret_protected/tcomsat)
+"ee" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/machinery/door/airlock/hatch{name = "Telecoms West Wing"; req_access_txt = "61"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomfoyer)
+"ef" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"eg" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"eh" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 4},/mob/living/simple_animal/hostile/humanoid/russian,/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"ei" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"ej" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 101.325; on = 1},/mob/living/simple_animal/hostile/humanoid/russian,/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"ek" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 5},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"el" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning (EAST)"; icon_state = "warning"; dir = 4},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"em" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/machinery/door/airlock/hatch{name = "Telecoms East Wing"; req_access_txt = "61"},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomfoyer)
+"en" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 9},/turf/simulated/floor{icon_state = "dark vault full"},/area/turret_protected/tcomsat)
+"eo" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'LETHAL TURRETS'. Enter at your own risk!"; name = "LETHAL TURRETS"; pixel_x = -32},/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHWEST)"; icon_state = "warning"; dir = 10},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"ep" = (/obj/machinery/light/small,/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (WEST)"; icon_state = "warning_corner"; dir = 8},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"eq" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = "0"},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"er" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/mob/living/simple_animal/hostile/humanoid/russian,/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"es" = (/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"et" = (/obj/machinery/light/small,/obj/effect/decal/warning_stripes{tag = "icon-warning_corner"; icon_state = "warning_corner"; dir = 2},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"eu" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'LETHAL TURRETS'. Enter at your own risk!"; name = "LETHAL TURRETS"; pixel_x = 32},/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHEAST)"; icon_state = "warning"; dir = 6},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"ev" = (/turf/simulated/wall/r_wall,/area/tcommsat/entrance)
+"ew" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = "0"},/turf/simulated/wall/r_wall,/area/turret_protected/tcomfoyer)
+"ex" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/door/airlock/hatch{name = "Telecoms Satellite"; req_access_txt = "61"},/turf/simulated/floor,/area/turret_protected/tcomfoyer)
+"ey" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/tcommsat/entrance)
+"ez" = (/obj/structure/cable{icon_state = "0-2"; pixel_y = 1; d2 = 2},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/table,/turf/simulated/floor,/area/tcommsat/entrance)
+"eA" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor,/area/tcommsat/entrance)
+"eB" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/sign/electricshock,/turf/simulated/wall/r_wall,/area/tcommsat/entrance)
+"eC" = (/obj/item/device/radio/intercom{name = "Station Intercom (General)"; pixel_y = 20},/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 8},/turf/simulated/floor,/area/tcommsat/entrance)
+"eD" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/floor,/area/tcommsat/entrance)
+"eE" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/turf/simulated/floor,/area/tcommsat/entrance)
+"eF" = (/obj/structure/sign/electricshock,/turf/simulated/wall/r_wall,/area/tcommsat/entrance)
+"eG" = (/turf/simulated/floor,/area/tcommsat/entrance)
+"eH" = (/obj/structure/cable{icon_state = "0-2"; pixel_y = 1; d2 = 2},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor,/area/tcommsat/entrance)
+"eI" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating,/area/tcommsat/entrance)
+"eJ" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor,/area/tcommsat/entrance)
+"eK" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (NORTH)"; icon_state = "warning_corner"; dir = 1},/turf/simulated/floor,/area/tcommsat/entrance)
+"eL" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/light/small{dir = 1},/mob/living/simple_animal/hostile/humanoid/russian,/turf/simulated/floor,/area/tcommsat/entrance)
+"eM" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = "0"},/turf/simulated/floor,/area/tcommsat/entrance)
+"eN" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/tcommsat/entrance)
+"eO" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/tcommsat/entrance)
+"eP" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor,/area/tcommsat/entrance)
+"eQ" = (/obj/structure/sign/securearea,/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = "0"},/turf/simulated/wall/r_wall,/area/tcommsat/entrance)
+"eR" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/door/airlock/hatch{name = "Telecoms Satellite"; req_access_txt = "61"},/turf/simulated/floor,/area/tcommsat/entrance)
+"eS" = (/obj/structure/sign/securearea,/turf/simulated/wall/r_wall,/area/tcommsat/entrance)
+"eT" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = "0"},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHWEST)"; icon_state = "warning"; dir = 9},/obj/effect/landmark/corpse/russian,/turf/simulated/floor,/area/tcommsat/entrance)
+"eU" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor,/area/tcommsat/entrance)
+"eV" = (/obj/machinery/camera{name = "Entrance North"; network = list("Tcomsat")},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/obj/effect/landmark/corpse/russian,/turf/simulated/floor,/area/tcommsat/entrance)
+"eW" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = "0"},/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (NORTH)"; icon_state = "warning_corner"; dir = 1},/obj/effect/landmark/corpse/russian,/turf/simulated/floor,/area/tcommsat/entrance)
+"eX" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/tcommsat/entrance)
+"eY" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (EAST)"; icon_state = "warning_corner"; dir = 4},/turf/simulated/floor,/area/tcommsat/entrance)
+"eZ" = (/obj/machinery/light{dir = 8},/obj/machinery/atmospherics/unary/vent_pump{dir = 4; on = 1},/turf/simulated/floor,/area/tcommsat/entrance)
+"fa" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 9},/turf/simulated/floor,/area/tcommsat/entrance)
+"fb" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor,/area/tcommsat/entrance)
+"fc" = (/obj/machinery/power/apc{cell_type = 0; dir = 1; icon_state = "apc1"; opened = 1; pixel_y = 24},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor,/area/tcommsat/entrance)
+"fd" = (/obj/structure/sign/vacuum,/turf/simulated/wall/r_wall,/area/tcommsat/entrance)
+"fe" = (/obj/structure/closet/emcloset,/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHWEST)"; icon_state = "warning"; dir = 9},/turf/simulated/floor,/area/tcommsat/entrance)
+"ff" = (/obj/item/weapon/storage/wallet/random,/turf/simulated/floor,/area/tcommsat/entrance)
+"fg" = (/obj/machinery/door/airlock/external{name = "Telecoms External Airlock"; req_access_txt = "13; 17"},/turf/simulated/floor/plating,/area/tcommsat/entrance)
+"fh" = (/turf/simulated/floor/plating,/area/tcommsat/entrance)
+"fi" = (/obj/item/beacon/bluespace_beacon,/turf/simulated/floor,/area/tcommsat/entrance)
+"fj" = (/obj/item/device/radio/intercom{name = "Station Intercom (General)"; pixel_x = 29},/turf/simulated/floor,/area/tcommsat/entrance)
+"fk" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/plating/airless,/area)
+"fl" = (/obj/structure/closet/crate,/obj/item/clothing/glasses/scanner/night,/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHWEST)"; icon_state = "warning"; dir = 10},/turf/simulated/floor,/area/tcommsat/entrance)
+"fm" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (WEST)"; icon_state = "warning_corner"; dir = 8},/turf/simulated/floor,/area/tcommsat/entrance)
+"fn" = (/obj/structure/closet/crate,/obj/item/device/aicard,/obj/item/device/multitool,/obj/machinery/camera{name = "Entrance South"; dir = 1; network = list("Tcomsat")},/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHWEST)"; icon_state = "warning"; dir = 10},/turf/simulated/floor,/area/tcommsat/entrance)
+"fo" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor,/area/tcommsat/entrance)
+"fp" = (/obj/machinery/light{dir = 4},/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHEAST)"; icon_state = "warning"; dir = 6},/turf/simulated/floor,/area/tcommsat/entrance)
+"fq" = (/obj/machinery/computer/teleporter,/turf/simulated/floor/plating,/area/tcommsat/entrance)
+"fr" = (/obj/machinery/teleport/hub,/turf/simulated/floor/plating,/area/tcommsat/entrance)
+"fs" = (/obj/docking_port/destination/salvage/commssat{dir = 2},/turf/space,/area)
+"ft" = (/obj/docking_port/destination/vox/goonsat,/turf/space,/area)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaacaaaaaaaaaaacaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadacacacadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadacacacadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaadaeadaaagaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabacacaeaeaeaeaeaeaeacacabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaacaaaaaeaaaaacaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababababababababababahababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaiaiajajajajajajajajajaiakakakakakakaiaialamamamamamamamakaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaiaiajanaoapaqarasatauajalalalalalalalalavalalalalalalalamakaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaiajanananawaxayazaAauaBalaCaDaEaFaGaHalaIalaJaKaLaMaNaOalakaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaiajaoanaoapaPaQazaqaRaSalaTaUaVaWaXaValaIalaYaZaZaZbabbalakaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaiajaoanaoaobcbdazbebfbgbhbibjbkaVaXblalbmalbnboaZbpbqbralakaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaiajaoanaoapbsbtbubvbvbvbwbxbybzbAbBbCbDbDalbEbFbGbHbIbJbKbLbMbNbObPaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+abababababababababafabababababababababababaiajaoanaoapbQbRbSbTbTbTalbUbVbWbXbXbYbZcaalalcbccalalalalaiaiabababababababababababababababababafabababab
+abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacabaiajancdanawbQaBcecececececfcgchcgcicjckclckcecmcnaBancdanajaiabababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab
+abacadadadadadadadadadadadadadadadadaaaaabaiajaoanaoapcocpcecqcqcrcsctcucvcqcqcwcrcxcqcecmcnaSaoanaoajaiababaaacadadadadadadadadadadadadadadadadaaab
+abaaaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaaabaiajaoanaoapcyczcecqcAcAcBcCcDcEcDcDcFcAcAcqcecmcnaScGcHcIajaiaiabacaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeacab
+abaaadadadadadadadadadadadadadadadadaeaaabaiajaoanaoapbscJcecqcAcAcKcLcMcNcMcOcPcAcAcqcecmcnaScQcRcScTajaiabaaaeadadadadadadadadadadadadadadadadaaab
+abaaaaaaaaaaaaacaaaaaaaaacaaaaaaaaaaaeaaabaiajaoanaoapcUaScecqcAcAcKcVcqcWcqcXcPcAcAcqcecYcZdadbcRdcddajaiabaaaeaaaaaaaaaaacaaaaaaaaacaaaaaaaaaaaaab
+abaaaaaaaaaaaaacaaaaaaaaacaaaaaaaaaaaedeahaiajanananawbQaBcedfcAcAcKdgcqdhcqdicPcAcAdjcedkdldmdndodcdpajaiahdeaeaaaaaaaaaaacaaaaaaaaacaaaaaaaaaaaaab
+abaaaaaaaaaaaaacaaaaaaaaacaaaaaaaaaaaeaaabaiajaoanaoapbQaScecqcAcAcKdqcqdrcqdscPcAcAcqceapcUdtdudcdvdwajaiabaaaeaaaaaaaaaaacaaaaaaaaacaaaaaaaaaaaaab
+abaaadadadadadadadadadadadadadadadadaeaaabaiajaoanaoapdxaScecqcAcAcKdydzdAdBdCcPcAcAcqceapcUaSdDdEdFdGajaiabaaaeadadadadadadadadadadadadadadadadaaab
+abaaaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaaabaiajaoanaoapbQaScecqcAcAdHdIdJdKdJdJdLcAcAcqceapcUaSdMdNdOajaiaiabacaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeacab
+abacadadadadadadadadadadadadadadadadaaaaabaiajaoanaoapbQaScecqcqcrdPcqcqdQcqcqdRcrcqcqceapcUaSaoanaoajaiababaaacadadadadadadadadadadadadadadadadaaab
+abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaiajancdanawcUaBcececececececedScececececececeawcUaBancdanajaiabababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab
+ababababababababababababafababababababababaiajaoanaoapcUdTdUbgbgdVdWdXdYdZeaebecdVbgbgbgedcUaSaoanaoajaiabababababababafababababababababababafababab
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaiajaoanaoapcodmdmdmdmeeefegeheiejekelemdmdmdmdmenaSaoanaoajaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaiajaoanaoaobTbTbSbTbTdVeoepeqereseteudVbTbTbTbTbTaoaoanaoajaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaiajaoanaoaoaoaoanaoevdVdVdVewexdVdVdVdVevaoaoaoaoaoaoanaoajaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaiajananananananananeyezeAeBeCeDeEeFeGeHeIananananananananajaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaiaiajanaoaoaoaoaoajeveJeKeLeMeNeOeLeOePevajaoaoaoaoaoanajaiaiabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaiaiajajajajajajajeveveveveQeReSevevevevajajajajajajajaiaiababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababaiaiaiaiaiaiaiaiaiaiaieveTeUeVevaiaiaiaiaiaiaiaiaiaiaiababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababeveveWeXeYevevabababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaeaeababeveveZfafbeOfcevevababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaeaeeSevfdfeeGeGeGeGeGffevababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaeaefgfhfgeAeGeGfieGeGfjevababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeaefkeSevfdflfmeGeGeGeGeGevababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaeaeababevevfnfofofofpevevababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababevevfqfhfrevevabababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababevevevevevababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafsaaaaaaaaaaaaaaababaaabababahabababaaababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaacaaaaaeaaaaacaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaacaeaeaeaeaeaeaeacaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaadaeadacacacadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaftaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadacacacadaeadaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaadaeadaaaaaaadaeadaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaacaaaaaaaaaaacaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababafabababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"}
