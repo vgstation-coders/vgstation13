@@ -102,7 +102,7 @@
 		),
 		"Misc_Tools"=list(
 		new /obj/item/device/flashlight(), \
-		new /obj/item/weapon/extinguisher(), \
+		new /obj/item/weapon/extinguisher/empty(), \
 		new /obj/item/device/radio/headset(), \
 		new /obj/item/device/radio/off(), \
 		new /obj/item/weapon/kitchen/utensil/knife/large(), \
