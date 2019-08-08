@@ -539,3 +539,10 @@
 	item_state = "pharaoh"
 	wizard_garb = TRUE
 	body_parts_covered = FULL_HEAD|HEAD|EARS
+
+/obj/item/clothing/head/sombrero
+	name = "sombrero"
+	desc = "Meanwhile in Space Mexico"
+	icon_state = "sombrero"
+	item_state = "sombero"
+
