@@ -310,9 +310,9 @@ for anyone but the person committing mass murder.
 /datum/black_market_item/arcane/health_potion/after_spawn(var/obj/spawned, var/mob/user)
 	if(prob(40))
 		spawned = /obj/item/potion/healing
-		
+
 /datum/black_market_item/plants
-	category = "Seeds" 
+	category = "Seeds"
 
 /datum/black_market_item/plants/walkingmushroommycelium
 	name = "packet of walking mushroom seeds"
@@ -324,7 +324,7 @@ for anyone but the person committing mass murder.
 	stock_max = 3
 	cost_min = 50
 	cost_max = 100
-	display_chance = 99	
+	display_chance = 99
 
 /datum/black_market_item/toy
 	category = "Recreational and Novelty Items"
@@ -350,6 +350,19 @@ for anyone but the person committing mass murder.
 	cost_min = 200
 	cost_max = 500
 	display_chance = 100
+
+/datum/black_market_item/engineering
+	category = "Engineering equipment"
+
+/datum/black_market_item/engineering/glubs
+	name = "Insulated Gloves"
+	desc = "First and Second Hand. Worn once. Recovered from electrocution victim."
+	item = /obj/item/clothing/gloves/finyellow
+	stock_min = 1
+	stock_max = 1
+	cost_min = 5
+	cost_max = 15
+	display_chance = 80
 
 
 #undef CHEAP
