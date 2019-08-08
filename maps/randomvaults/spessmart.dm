@@ -2,10 +2,11 @@ var/list/shop_prices = list( //Cost in space credits
 //Misc objects
 
 /obj/item/weapon/soap = 5,
-/obj/item/weapon/soap/syndie = 25,
-/obj/item/weapon/soap/nanotrasen = 25,
+/obj/item/weapon/soap/syndie = 20,
+/obj/item/weapon/soap/nanotrasen = 20,
 /obj/item/weapon/soap/deluxe = 30,
 
+/obj/item/voucher/free_item/glowing = 400,
 /obj/item/weapon/phone = 30,
 /obj/item/weapon/mop = 10,
 /obj/item/weapon/lipstick/random = 20,
@@ -18,12 +19,13 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/extinguisher/mini = 5,
 /obj/item/weapon/extinguisher/foam = 20,
 
+/obj/item/device/multitool = 8,
 /obj/item/weapon/crowbar/red = 5,
 /obj/item/weapon/bikehorn/rubberducky = 5,
 /obj/item/weapon/bikehorn = 5,
 /obj/item/weapon/lighter/zippo = 20,
-/obj/item/weapon/screwdriver = 5,
-/obj/item/weapon/wrench = 5,
+/obj/item/weapon/screwdriver = 3,
+/obj/item/weapon/wrench = 3,
 /obj/item/weapon/wrench/socket = 100,
 /obj/item/queen_bee = 5,
 /obj/item/toy/gooncode = 400, //honk
@@ -37,16 +39,19 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/storage/briefcase/centcomm = 80,
 
 //Medicine and chemistry
-/obj/item/weapon/reagent_containers/pill/cyanide = 300,
 /obj/item/weapon/reagent_containers/pill/happy = 20,
-/obj/item/weapon/reagent_containers/pill/nanobot = 300,
-/obj/item/weapon/reagent_containers/pill/creatine_safe = 400,
+/obj/item/weapon/reagent_containers/pill/stox = 80,
+/obj/item/weapon/reagent_containers/pill/zoom = 160,
+/obj/item/weapon/reagent_containers/pill/cyanide = 240,
+/obj/item/weapon/reagent_containers/pill/nanobot = 240,
+/obj/item/weapon/reagent_containers/pill/creatine_safe = 360,
 /obj/item/weapon/reagent_containers/chempack = 150,
 /obj/item/clothing/mask/chemmask = 100,
 
 //DNA injectors with powers
 /obj/item/weapon/dnainjector/nofail/elvis = 50,
 /obj/item/weapon/dnainjector/nofail/sweedish = 50,
+/obj/item/weapon/dnainjector/nofail/melt = 100,
 /obj/item/weapon/dnainjector/nofail/jumpy = 200,
 /obj/item/weapon/dnainjector/nofail/mattereater = 200,
 /obj/item/weapon/dnainjector/nofail/hulkmut = 400,
@@ -93,9 +98,11 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/paicard = 20,
 /obj/item/device/megaphone = 25,
 /obj/item/device/hailer = 10,
-/obj/item/broken_device = 1,
+/obj/item/device/breathalyzer = 10,
 /obj/item/toy/balloon = 1,
+/obj/item/toy/balloon/decoy = 150,
 /obj/item/toy/syndicateballoon = 300,
+/obj/item/toy/syndicateballoon/ntballoon = 80,
 /obj/item/weapon/am_containment = 10,
 /obj/item/weapon/cane = 5,
 /obj/item/weapon/legcuffs/beartrap = 50,
@@ -140,9 +147,13 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/bullwhip = 200,
 /obj/item/weapon/melee/morningstar = 250,
 /obj/item/weapon/subspacetunneler = 300,
+/obj/item/weapon/melee/energy/sword = 350,
 /obj/item/weapon/dualsaber = 600,
+/obj/item/weapon/gun/siren/supersoaker/pistol = 35,
+/obj/item/weapon/gun/siren/supersoaker = 70,
 
 //mischievous items
+/obj/item/gun_part/silencer = 100,
 /obj/item/device/powersink = 500,
 /obj/item/weapon/card/emag = 1000,
 /obj/item/weapon/cloakingcloak = 750,
