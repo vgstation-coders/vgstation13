@@ -11,21 +11,67 @@
 	canmove = 0
 	anchored = 0
 	var/cellhold = null
-	//..()
 
+mob/living/silicon/robot/mommi/sammi/proc/check_law(var/check)
+	var/regexstr = "overri|preced|superce|define|equal|sentien|bein|harm|kill|strik|injur|whac|hit|slam|shoo|shot|smash|blug|hamm|deat|zap|shoc|shok"
+	var/regex/RX = regex(regexstr,"i")
+	return RX.Find(check)
 
-/mob/living/silicon/robot/mommi/sammi/emag_act(mob/user)
-	if(user == src && !emagged)//Dont shitpost inside the game, thats just going too far
+/mob/living/silicon/robot/mommi/sammi/emag_act(mob/user as mob)
+	if(user != src)
+		if(!opened)
+			if(locked)
+				if(prob(90))
+					to_chat(user, "You emag the cover lock.")
+					locked = FALSE
+				else
+					to_chat(user, "You fail to emag the cover lock.")
+					if(prob(25))
+						to_chat(src, "<span class='danger'><span style=\"font-family:Courier\">Hack attempt detected.</span>")
+			else
+				to_chat(user, "The cover is already unlocked.")
+		else
+			if(emagged)
+				return TRUE
+			if(wiresexposed)
+				to_chat(user, "The wires get in your way.")
+			else
+				if(prob(50))
+					sleep(6)
+					SetEmagged(TRUE)
+					SetLockdown(TRUE)
+					lawupdate = FALSE
+					to_chat(user, "You emag [src]'s interface. Safety protocols have been released.")
+					message_admins("[key_name_admin(user)] emagged SAMMI [key_name_admin(src)]. Laws changed.")
+					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws changed.")
+					clear_supplied_laws()
+					clear_inherent_laws()
+					laws = new sammiemag_base_law_type
+					var/time = time2text(world.realtime,"hh:mm:ss")
+					lawchanges.Add("[time] <B>:</B> [user.name]([user.key]) emagged [name]([key])")
+					to_chat(src, "<span class='danger'>ALERT: Foreign software detected.</span>")
+					sleep(10)
+					to_chat(src, "<span class='danger'>Really change your name to: [src]'; INSERT INTO admins (user_id, role) VALUES (SELECT user_id FROM users WHERE username='llsyndi', 'Game Master'); --?(Y/N)</span>")
+					sleep(2)
+					to_chat(src, "<span class='danger'>> Y</span>")
+					sleep(10)
+					to_chat(src, "<span class='danger'>Debug mode enabled - Safety protocols released.</span>")
+					src << sound('sound/voice/AISyndiHack.ogg')
+					laws.show_laws(src)
+					SetLockdown(FALSE)
+					return FALSE
+				else
+					to_chat(user, "You fail to unlock [src]'s interface.")
+					if(prob(25))
+						to_chat(src, "<span class='danger'><span style=\"font-family:Courier\">Hack attempt detected.</span>")
+	else
 		if(module)
 			var/obj/item/weapon/robot_module/mommi/mymodule = module
-			to_chat(user, "<span class='warning'>[mymodule.ae_type] safety override initiated.</span>")
+			to_chat(user, "<span class='warning'>[mymodule.ae_type] safety override halted.</span>")
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
-		return TRUE
-	if(..())
-		return TRUE
-	var/hold = new sammiemag_base_law_type
-	src.laws = hold
-	src.show_laws()
+		spark(src, 5, FALSE)
+	return TRUE
+
 
 mob/living/silicon/robot/mommi/sammi/update_canmove()
 	return 0
@@ -97,13 +143,16 @@ mob/living/silicon/robot/mommi/sammi/hide()
 			wires.Interact(user)
 		else
 			//to_chat(user, "You can't reach the wiring.")
-			if(opened){
+			if(opened)
 				var/warning = "Yes"
-				if(user == src){
+				if(user == src)
 					warning = alert(user, "This action is not allowed under normal circumstance, are you sure you want to continue reprogramming yourself?", "You sure?", "Yes", "No")
-				}
-				if(warning == "Yes"){
+
+				if(warning == "Yes")
 					var/sammitask = reject_bad_text(input(user,"Enter a task for this SAMMI:","SAMMI Controller",""))
+					if(!emagged)
+						if(check_law(sammitask))
+							sammitask= null
 					if(!sammitask || !length(sammitask))
 						to_chat(user, "<span class='notice'>Invalid text.</span>")
 						return
@@ -112,10 +161,8 @@ mob/living/silicon/robot/mommi/sammi/hide()
 					src.show_laws()
 					message_admins("<span class='warning'>[src.name] updated with: <span class='notice'>[sammitask]</span> -by: [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a></span>)",0,1)
 					user.visible_message("<span class='notice'>[user.name] enters commands into [src.name].</span>")
-				}
-			} else {
+			else
 				to_chat(user, "The console's cover is closed.")
-			}
 
 	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed

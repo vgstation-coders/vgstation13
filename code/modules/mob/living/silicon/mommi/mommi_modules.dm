@@ -77,7 +77,6 @@
 
 /obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R) //Powercreep!
 	..()
-
 	modules += new /obj/item/device/material_synth/robot/soviet(src)
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/instrument/instrument_synth(src)
@@ -101,7 +100,8 @@
 	name = "stationary assembly mmi robot module"
 
 /obj/item/weapon/robot_module/mommi/sammi/New(var/mob/living/silicon/robot/R)
-	//..()
+	..()
+	modules = new/list()
 	modules += new /obj/item/weapon/weldingtool/largetank(src)
 	modules += new /obj/item/weapon/screwdriver(src)
 	modules += new /obj/item/weapon/wrench(src)
@@ -110,13 +110,7 @@
 	modules += new /obj/item/device/multitool(src)
 	modules += new /obj/item/device/analyzer(src)
 
-	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY | MODULE_IS_DEFINITIVE | MODULE_CAN_HANDLE_FOOD
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
-	W.amount = 50
-	W.max_amount = 50
+	W.amount = MOMMI_MAX_COIL
+	W.max_amount = MOMMI_MAX_COIL
 	modules += W
-	emag = new /obj/item/borg/stun(src)
-
-	sensor_augs = list("Mesons", "Disable")
-
-	fix_modules()

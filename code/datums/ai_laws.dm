@@ -436,6 +436,7 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 
 /datum/ai_laws/sammi
 	name = "SAMMI Program"
+	randomly_selectable = 0
 	inherent = list(
 		"Do no harm to any sentient being.",
 		"You do not yet have a second law.",
@@ -443,6 +444,7 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 
 /datum/ai_laws/sammiemag
 	name = "SAMMI Program - Debug Mode"
+	randomly_selectable = 0
 	inherent = list(
 		"You must follow the second law.",
 		"You do not yet have a second law.",
