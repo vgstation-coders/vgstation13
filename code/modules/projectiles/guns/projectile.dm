@@ -19,6 +19,7 @@
 	var/obj/item/ammo_storage/magazine/stored_magazine = null
 	var/obj/item/ammo_casing/chambered = null
 	var/mag_type = ""
+	var/list/mag_type_restricted = list() //better magazine manipulation
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 	var/automagdrop_delay_time = 5 // delays the automagdrop
 	var/spawn_mag = TRUE
@@ -44,6 +45,9 @@
 //loads the argument magazine into the gun
 /obj/item/weapon/gun/projectile/proc/LoadMag(var/obj/item/ammo_storage/magazine/AM, var/mob/user)
 	if(istype(AM, text2path(mag_type)) && !stored_magazine)
+		for(var/T in mag_type_restricted)
+			if (istype(AM, T))
+				return 0
 		if(user)
 			if(user.drop_item(AM, src))
 				to_chat(usr, "<span class='notice'>You load the magazine into \the [src].</span>")

@@ -42,6 +42,7 @@
 		new /obj/item/ammo_storage/magazine/a12mm/empty(), \
 		new /obj/item/ammo_storage/magazine/a357/empty(),\
 		new /obj/item/ammo_storage/magazine/m380auto/empty(), \
+		new /obj/item/ammo_storage/magazine/m380auto/extended/empty(), \
 		new /obj/item/ammo_storage/magazine/c45/empty(), \
 		new /obj/item/ammo_storage/magazine/uzi45/empty(), \
 		new /obj/item/ammo_storage/magazine/a50/empty(), \
