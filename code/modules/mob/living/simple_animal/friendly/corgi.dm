@@ -82,7 +82,9 @@
 					if(!step_towards(src,movement_target,1) && !infinite_chase)
 						failedsteps += 1
 					if(time_between_directed_steps >= 1)
-						sleep(time_between_directed_steps)			
+						sleep(time_between_directed_steps)
+					else
+						sleep(1)
 				if(movement_target)
 					if(isturf(movement_target.loc) && src.Adjacent(movement_target))
 						movement_target.attack_animal(src)
