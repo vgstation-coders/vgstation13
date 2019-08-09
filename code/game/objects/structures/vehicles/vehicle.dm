@@ -285,6 +285,8 @@
 /obj/structure/bed/chair/vehicle/proc/update_mob()
 	if(!occupant)
 		return
+	if(!(dir in cardinal))
+		return
 
 	if(last_dir)
 		occupant.pixel_x -= offsets["[last_dir]"]["x"]

@@ -238,7 +238,7 @@
 		if(!isobserver(user))
 			user.visible_message("[user] opens a book titled \"[src.title]\" and begins reading intently.")
 		onclose(user, "book")
-	if(occult)
+	else if(occult)
 		to_chat(user, "<span class='sinister'>As you read the book, your mind is assaulted by foul, arcane energies!</span>")
 	else
 		to_chat(user, "This book is completely blank!")

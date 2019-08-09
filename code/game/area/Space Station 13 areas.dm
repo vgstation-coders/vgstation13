@@ -167,8 +167,8 @@ proc/process_adminbus_teleport_locs()
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 
-/area/shuttle/holomapAlwaysDraw()
-	return 0
+/area/shuttle/holomapDrawOverride()
+	return HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/arrival
 	name = "\improper Arrival Shuttle"
@@ -563,9 +563,15 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "cave"
 	requires_power = 0
 
+/area/asteroid/cave/holomapDrawOverride()
+	return HOLOMAP_DRAW_FULL
+
 /area/asteroid/artifactroom
 	name = "\improper Asteroid - Artifact"
 	icon_state = "cave"
+
+/area/asteroid/artifactroom/holomapDrawOverride()
+	return HOLOMAP_DRAW_FULL
 
 /area/planet/clown
 	name = "\improper Clown Planet"
@@ -578,8 +584,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "honk"
 	requires_power = 0
 
-/area/asteroid/clown/holomapAlwaysDraw()
-	return 0
+/area/asteroid/clown/holomapDrawOverride()
+	return HOLOMAP_DRAW_EMPTY
 
 /area/tdome
 	name = "\improper Thunderdome"
@@ -1898,8 +1904,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "DJ"
 	shuttle_can_crush = FALSE
 
-/area/djstation/holomapAlwaysDraw()
-	return 0
+/area/djstation/holomapDrawOverride()
+	return HOLOMAP_DRAW_EMPTY
 
 /area/djstation/solars
 	name = "\improper DJ Station Solars"
@@ -1951,8 +1957,8 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Derelict Secret Room"
 	icon_state = "library"
 
-/area/derelict/secret/holomapAlwaysDraw()
-	return 0
+/area/derelict/secret/holomapDrawOverride()
+	return HOLOMAP_DRAW_EMPTY
 
 /area/derelict/bridge/access
 	name = "Derelict Control Room Access"
@@ -2011,8 +2017,8 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Abandoned Ship"
 	icon_state = "yellow"
 
-/area/derelict/ship/holomapAlwaysDraw()
-	return 0
+/area/derelict/ship/holomapDrawOverride()
+	return HOLOMAP_DRAW_EMPTY
 
 /area/solar/derelict_starboard
 	name = "\improper Derelict Starboard Solar Array"
@@ -2309,6 +2315,10 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Satellite Entrance"
 	icon_state = "tcomsatlob"
 	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	jammed=2
+	anti_ethereal=1
+	flags = NO_PACIFICATION
+
 
 /area/turret_protected/tcomfoyer
 	name = "\improper Telecoms Foyer"
@@ -2319,19 +2329,35 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Telecommunications Satellite West Wing"
 	icon_state = "tcomsatwest"
 	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	jammed=2
+	anti_ethereal=1
+	flags = NO_PACIFICATION
+
 
 /area/turret_protected/tcomeast
 	name = "\improper Telecommunications Satellite East Wing"
 	icon_state = "tcomsateast"
 	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	jammed=2
+	anti_ethereal=1
+	flags = NO_PACIFICATION
+
 
 /area/tcommsat/computer
 	name = "\improper Satellite Control Room"
 	icon_state = "tcomsatcomp"
+	jammed=2
+	anti_ethereal=1
+	flags = NO_PACIFICATION
+
 
 /area/tcommsat/lounge
 	name = "\improper Satellite Lounge"
 	icon_state = "tcomsatlounge"
+	jammed=2
+	anti_ethereal=1
+	flags = NO_PACIFICATION
+
 
 /area/turret_protected/goonroom
 	name = "\improper Goonecode Containment"

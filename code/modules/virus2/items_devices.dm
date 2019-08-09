@@ -3,11 +3,20 @@
 /obj/item/device/antibody_scanner
 	name = "immunity scanner"
 	desc = "A hand-held body scanner able to evaluate the immune system of the subject."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	icon_state = "antibody"
-	w_class = W_CLASS_SMALL
-	item_state = "electronic"
+	item_state = "immunity"
 	flags = FPRINT
 	siemens_coefficient = 1
+	slot_flags = SLOT_BELT
+	throwforce = 3
+	w_class = W_CLASS_TINY
+	throw_speed = 5
+	starting_materials = list(MAT_IRON = 200)
+	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_PLASTIC
+	origin_tech = Tc_MAGNETS + "=1;" + Tc_BIOTECH + "=1"
+	attack_delay = 0
 
 
 /obj/item/device/antibody_scanner/attack(var/mob/living/L, var/mob/user)
@@ -114,8 +123,10 @@ var/list/virusdishes = list()
 /obj/item/weapon/virusdish
 	name = "growth dish"
 	desc = "A petri dish fit to contain viral, bacteriologic, parasitic, or any other kind of pathogenic culture."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "virusdish"
+	item_state = "virusdish"
 	w_class = W_CLASS_SMALL
 	sterility = 100//the outside of the dish is sterile.
 	var/growth = 0

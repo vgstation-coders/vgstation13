@@ -87,12 +87,12 @@
 	role_category = /datum/role/vampire
 	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI", "Chaplain")
-	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
-	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain", "Chaplain")
+	required_enemies = list(2,2,2,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 2
 	cost = 15
-	requirements = list(80,60,50,30,20,10,10,10,10,10)
+	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
 
 /datum/dynamic_ruleset/roundstart/vampire/execute()
@@ -415,7 +415,7 @@
 /datum/dynamic_ruleset/roundstart/blob
 	name = "Blob Conglomerate"
 	role_category = /datum/role/blob_overmind/
-	restricted_from_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 1

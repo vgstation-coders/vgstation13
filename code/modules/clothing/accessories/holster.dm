@@ -159,6 +159,12 @@
 /obj/item/clothing/accessory/holster/handgun/preloaded/mateba
 	gun_type = /obj/item/weapon/gun/projectile/mateba
 
+/obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP
+	gun_type = /obj/item/weapon/gun/projectile/NTUSP
+	
+/obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy
+	gun_type = /obj/item/weapon/gun/projectile/NTUSP/fancy
+
 //
 // Knives
 //
