@@ -36,6 +36,8 @@
 
 	var/list/image/cached_images = list()
 
+	stat_datum_type = /datum/stat/role/vampire
+
 /datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
 	var/datum/faction/vampire/vamp_fac
