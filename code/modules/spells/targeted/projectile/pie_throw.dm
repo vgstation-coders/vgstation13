@@ -3,6 +3,7 @@
 	abbreviation = "PP"
 	desc = "This spell summons a random pie, and throws it at the location of your choosing. More power means more pies."
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 
 	school = "evocation"
 	charge_max = 100
@@ -28,11 +29,12 @@
 	for(var/atom/target in targets)
 		if (user.is_pacified(VIOLENCE_DEFAULT,target))
 			return
-
-	for(var/i = 0 to spell_levels[Sp_POWER])
-		var/atom/target = pick(targets)
-		var/pie_to_spawn = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/pie))
-		var/obj/pie = new pie_to_spawn(user.loc)
-		to_chat(user, "You summon and throw \a [pie].")
-		pie.throw_at(target, range, (spell_levels[Sp_POWER]+1)*20)
-		sleep(5)
+	spawn()
+		var/turf/T = get_turf(user)
+		for(var/i = 0 to spell_levels[Sp_POWER])
+			var/atom/target = pick(targets)
+			var/pie_to_spawn = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/pie))
+			var/obj/pie = new pie_to_spawn(T)
+			to_chat(user, "You summon and throw \a [pie].")
+			pie.throw_at(target, range, (spell_levels[Sp_POWER]+1)*20)
+			sleep(5)

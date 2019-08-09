@@ -1,3 +1,15 @@
+/datum/design/kinetic_accelerator
+	name = "Kinetic Accelerator"
+	desc = "A gun that fires projectiles which are deadly in a vacuum. For some reason, this is considered mining equipment."
+	id = "kineticaccelerator"
+	req_tech = list(Tc_COMBAT = 2, Tc_MATERIALS = 6)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 400, MAT_PLASMA = 4000)
+	category = "Weapons"
+	build_path = /obj/item/weapon/gun/energy/kinetic_accelerator
+	locked = TRUE
+	req_lock_access = list(access_mining)
+
 /datum/design/nuclear_gun
 	name = "Advanced Energy Gun Modkit"
 	desc = "Can be used on an energy gun to grant it the ability to recharge itself over time."

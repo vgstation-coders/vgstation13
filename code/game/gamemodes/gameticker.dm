@@ -111,6 +111,14 @@ var/datum/controller/gameticker/ticker
 	while (!setup())
 #undef LOBBY_TICKING
 #undef LOBBY_TICKING_RESTARTED
+
+/datum/controller/gameticker/proc/IsThematic(var/playlist)
+	if(!theme)
+		return 0
+	if(theme.playlist_id == playlist)
+		return 1
+	return 0
+
 /datum/controller/gameticker/proc/StartThematic(var/playlist)
 	if(!theme)
 		theme = new(locate(1,1,CENTCOMM_Z))
@@ -265,8 +273,6 @@ var/datum/controller/gameticker/ticker
 		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
 	stat_collection.round_start_time = world.realtime
-	spawn(5 MINUTES) // poll every 5 minutes
-		population_poll_loop()
 
 	wageSetup()
 	post_roundstart()
@@ -391,6 +397,7 @@ var/datum/controller/gameticker/ticker
 					else
 						data_core.manifest_inject(new_character)
 				player.FuckUpGenes(new_character)
+				player.DiseaseCarrierCheck(new_character)
 				qdel(player)
 
 

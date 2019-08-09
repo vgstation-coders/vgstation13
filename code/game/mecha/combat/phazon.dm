@@ -32,17 +32,22 @@
 
 /obj/mecha/combat/phazon/to_bump(var/atom/obstacle)
 	if(phasing && get_charge()>=phasing_energy_drain)
-		spawn()
-			if(can_move)
-				can_move = 0
-				flick("phazon-phase", src)
-				src.forceMove(get_step(src,src.dir))
-				src.use_power(phasing_energy_drain)
-				sleep(step_in*3)
+		var/turf/new_turf = get_step(src, dir)
+		var/datum/zLevel/L = get_z_level(new_turf)
+		if (L.teleJammed)
+			return
+		var/area/A = get_area(new_turf)
+		if (A.flags & NO_TELEPORT || A.jammed)
+			return
+		if(can_move)
+			can_move = 0
+			flick("phazon-phase", src)
+			src.forceMove(new_turf)
+			src.use_power(phasing_energy_drain)
+			spawn(step_in*3)
 				can_move = 1
 	else
 		. = ..()
-	return
 
 /spell/mech/phazon/phasing
 	name = "Phasing"

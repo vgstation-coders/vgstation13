@@ -195,7 +195,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/dangerous/ammo
 	name = "Ammo-357"
-	desc = "A speedloader and seven additional rounds for the revolver. Extra seven-piece boxes of .357 rounds can be made in a modified protolathe."
+	desc = "A speedloader and seven additional rounds for the revolver. Extra seven-piece boxes of .357 rounds can be made in a modified autolathe."
 	item = /obj/item/weapon/storage/box/syndie_kit/ammo
 	cost = 4
 
@@ -938,3 +938,10 @@ var/list/uplink_items = list()
 	discounted_cost = 2
 	jobs_with_discount = list("Librarian", "Chaplain")
 
+/datum/uplink_item/jobspecific/powercreeper_packet
+	name = "Powercreep Packet"
+	desc = "A packet that creates a dangerous mutated version of kudzu. The vines shock people and connect themselves to any cables near them."
+	item = /obj/item/powercreeper_packet
+	cost = 16
+	discounted_cost = 10
+	jobs_with_discount = list("Botanist", "Station Engineer", "Chief Engineer")

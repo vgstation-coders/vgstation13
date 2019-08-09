@@ -46,6 +46,9 @@
 		animation.master = null
 		qdel(animation)
 
+	for (var/mob/living/simple_animal/borer/borer in Mo)
+		if (borer.controlling)
+			Mo.do_release_control(0)
 
 	var/mob/living/carbon/human/O = new(src)
 	if(Mo.greaterform)
@@ -70,6 +73,9 @@
 		O.viruses += D
 		D.affected_mob = O
 		M.viruses -= D
+	O.virus2 = virus_copylist(M.virus2)
+	if (M.immune_system)
+		M.immune_system.transfer_to(O)
 
 	//for(var/obj/T in M)
 	//	del(T)

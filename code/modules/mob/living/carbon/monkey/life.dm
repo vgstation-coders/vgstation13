@@ -183,53 +183,6 @@
 					emote("gasp")
 				updatehealth()
 
-// separate proc so we can jump out of it when we've succeeded in spreading disease.
-/mob/living/carbon/monkey/proc/findAirborneVirii()
-	if(blood_virus_spreading_disabled)
-		return 0
-	for(var/obj/effect/decal/cleanable/blood/B in get_turf(src))
-		if(B.virus2.len)
-			for (var/ID in B.virus2)
-				var/datum/disease2/disease/V = B.virus2[ID]
-				if (infect_virus2(src,V, notes="(Airborne from blood)"))
-					return 1
-
-	for(var/obj/effect/decal/cleanable/mucus/M in get_turf(src))
-		if(M.virus2.len)
-			for (var/ID in M.virus2)
-				var/datum/disease2/disease/V = M.virus2[ID]
-				if (infect_virus2(src,V, notes="(Airborne from mucus)"))
-					return 1
-	return 0
-
-/mob/living/carbon/monkey/proc/handle_virus_updates()
-	if(status_flags & GODMODE)
-		return 0	//godmode
-	if(bodytemperature > 406)
-		for(var/datum/disease/D in viruses)
-			D.cure()
-		for (var/ID in virus2)
-			var/datum/disease2/disease/V = virus2[ID]
-			V.cure(src)
-
-	src.findAirborneVirii()
-
-	for (var/ID in virus2)
-		var/datum/disease2/disease/V = virus2[ID]
-		if(isnull(V)) // Trying to figure out a runtime error that keeps repeating
-			CRASH("virus2 nulled before calling activate()")
-		else
-			V.activate(src)
-		// activate may have deleted the virus
-		if(!V)
-			continue
-
-		// check if we're immune
-		if(V.antigen & src.antibodies)
-			V.dead = 1
-
-	return
-
 /mob/living/carbon/monkey/proc/breathe()
 	if(flags & INVULNERABLE)
 		return
@@ -402,6 +355,19 @@
 	else
 		fire_alert = 0
 
+	//breathing diseases
+	var/block = 0
+	var/list/blockers = list(wear_mask,glasses,hat)
+	for (var/item in blockers)
+		var/obj/item/I = item
+		if (!istype(I))
+			continue
+		if (I.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+			block = 1
+			break
+
+	if(!block)
+		breath_airborne_diseases()
 
 	//Temporary fixes to the alerts.
 
@@ -731,6 +697,14 @@
 			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 		else
 			clear_fullscreen("high")
+		if (istype(glasses, /obj/item/clothing/glasses/science))
+			var/obj/item/clothing/glasses/science/S = glasses
+			if (S.on)
+				overlay_fullscreen("science", /obj/abstract/screen/fullscreen/science)
+			else
+				clear_fullscreen("science",0)
+		else
+			clear_fullscreen("science",0)
 
 	if (stat != 2)
 		if (machine)

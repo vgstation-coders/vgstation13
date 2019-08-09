@@ -253,29 +253,7 @@
 
 	H.ckey = R.ckey
 	to_chat(H, "<span class='notice'><b>Consciousness slowly creeps over you as your body regenerates.</b><br><i>So this is what cloning feels like?</i></span>")
-	// -- Mode/mind specific stuff goes here
-	/*
-	if(isrev(H) || isrevhead(H))
-		ticker.mode.update_all_rev_icons() //So the icon actually appears
-	if(isnukeop(H))
-		ticker.mode.update_all_synd_icons()
-	if (iscult(H))
-		ticker.mode.add_cultist(occupant.mind)
-		ticker.mode.update_all_cult_icons() //So the icon actually appears
-	if(iswizard(H) || isapprentice(H))
-		ticker.mode.update_all_wizard_icons()
-	if(("\ref[H.mind]" in ticker.mode.necromancer) || (H.mind in ticker.mode.risen))
-		ticker.mode.update_all_necro_icons()
-	if(("\ref[H.mind]" in ticker.mode.implanter) || (H.mind in ticker.mode.implanted))
-		ticker.mode.update_traitor_icons_added(H.mind) //So the icon actually appears
-	if(("\ref[H.mind]" in ticker.mode.thralls) || (H.mind in ticker.mode.enthralled))
-		ticker.mode.update_vampire_icons_added(H.mind)
-	if(H.mind && H.mind.wizard_spells)
-		for(var/spell/spell_to_add in H.mind.wizard_spells)
-			H.add_spell(spell_to_add)
 
-	// -- End mode specific stuff
-	*/
 	if (H.mind.miming)
 		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 		if (H.mind.miming == MIMING_OUT_OF_CHOICE)

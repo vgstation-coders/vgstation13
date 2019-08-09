@@ -551,6 +551,8 @@
 							origin_text = "Soul captured by [C.conversion[conversion]]"
 						if ("altar")
 							origin_text = "Volunteer shade"
+						if ("sacrifice")
+							origin_text = "Sacrifice"
 						else
 							origin_text = "Founder"
 					var/mob/living/carbon/H = C.antag.current
@@ -756,6 +758,18 @@
 			new_shade.forceMove(blade)
 			blade.update_icon()
 			blade = null
+
+			if (!iscultist(new_shade))
+				var/datum/role/cultist/newCultist = new
+				newCultist.AssignToRole(new_shade.mind,1)
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				if (!cult)
+					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+				cult.HandleRecruitedRole(newCultist)
+				newCultist.OnPostSetup()
+				newCultist.Greet(GREET_SACRIFICE)
+				newCultist.conversion.Add("sacrifice")
+
 			new_shade.status_flags |= GODMODE
 			new_shade.canmove = 0
 			new_shade.name = "[M.real_name] the Shade"
@@ -1584,7 +1598,6 @@ var/list/bloodstone_list = list()
 		qdel(TW)
 	if (!gcDestroyed && loc)
 		new /obj/machinery/singularity/narsie/large(src.loc)
-		stat_collection.cult_narsie_summoned = TRUE
 		SSpersistence_map.setSavingFilth(FALSE)
 	return 1
 

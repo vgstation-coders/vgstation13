@@ -28,16 +28,7 @@
 
 /datum/dynamic_ruleset/latejoin/ready(var/forced = 0)
 	if (!forced)
-		var/job_check = 0
-		if (enemy_jobs.len > 0)
-			for (var/mob/M in mode.living_players)
-				if (M.stat == DEAD)
-					continue//dead players cannot count as opponents
-				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
-					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
-
-		var/threat = round(mode.threat_level/10)
-		if (job_check < required_enemies[threat])
+		if(!check_enemy_jobs(TRUE))
 			return 0
 	return ..()
 
@@ -143,7 +134,7 @@
 	spawn(5)
 		newninja.antag.current.ThrowAtStation()
 	return 1
-	
+
 
 
 //////////////////////////////////////////////

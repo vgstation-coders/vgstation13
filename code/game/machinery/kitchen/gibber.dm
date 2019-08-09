@@ -217,6 +217,12 @@ obj/machinery/gibber/New()
 		if(src.occupant.reagents)
 			src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 
+		if (occupant.virus2?.len)
+			for (var/ID in occupant.virus2)
+				var/datum/disease2/disease/D = occupant.virus2[ID]
+				if (D.spread & SPREAD_BLOOD)
+					newmeat.infect_disease2(D,1,"(Gibber, from [occupant], and activated by [user])",0)
+
 		allmeat[i] = newmeat
 
 	src.occupant.attack_log += "\[[time_stamp()]\] Was gibbed by <B>[key_name(user)]</B>" //One shall not simply gib a mob unnoticed!

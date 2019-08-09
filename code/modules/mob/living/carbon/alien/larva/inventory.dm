@@ -12,7 +12,7 @@
 	switch(slot)
 		if(slot_handcuffed)
 			var/obj/item/weapon/handcuffs/cuffs = W
-			if (cuffs.mutual_handcuffed_mobs.len) //if there are mobs cuffed to each other, then do the mutual handcuff logic
+			if (istype(cuffs) && cuffs.mutual_handcuffed_mobs.len) //if those are regular cuffs, and there are mobs cuffed to each other, do the mutual handcuff logic
 				src.mutual_handcuffs = cuffs
 			else 
 				src.handcuffed = W

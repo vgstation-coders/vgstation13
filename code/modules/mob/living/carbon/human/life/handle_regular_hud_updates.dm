@@ -317,6 +317,14 @@
 			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
 		else
 			clear_fullscreen("high_red")
+		if (istype(glasses, /obj/item/clothing/glasses/science))
+			var/obj/item/clothing/glasses/science/S = glasses
+			if (S.on)
+				overlay_fullscreen("science", /obj/abstract/screen/fullscreen/science)
+			else
+				clear_fullscreen("science",0)
+		else
+			clear_fullscreen("science",0)
 
 		var/masked = 0
 

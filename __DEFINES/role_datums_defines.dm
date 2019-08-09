@@ -17,6 +17,7 @@
 #define VOXSHOAL "vox Shoal"
 #define BLOBCONGLOMERATE "blob conglomerate"
 #define CLOCKWORK "clockwork"
+#define PLAGUEMICE "plague mice invasion"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -24,6 +25,7 @@
 #define CULT "generic cult"
 #define LEGACY_CULT "Ancient Cult of Nar-Sie"
 #define GREYTIDE_FAC "Greytide mindlink"
+#define WIZARD_CONTRACT "wizard contract"
 // Role IDs
 #define TRAITOR "traitor"
 #define ROGUE "rogue agent"//double agents
@@ -37,6 +39,7 @@
 #define NUKE_OP_LEADER "nuclear operative leader"
 #define HEADREV "head revolutionary"
 #define REV "revolutionary"
+#define WIZAPP_MASTER "wizard's master"
 #define WIZAPP "wizard's apprentice"
 #define MADMONKEY "monkey fever infected"
 #define NINJA "Space Ninja"
@@ -59,6 +62,7 @@
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
 #define RAMBLER "soul rambler"
+#define PLAGUEMOUSE "plague mouse"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -75,6 +79,7 @@
 #define GREET_SOULSTONE		"soulstone"
 #define GREET_SOULBLADE		"soulblade"
 #define GREET_RESURRECT		"resurrect"
+#define GREET_SACRIFICE		"sacrifice"
 
 #define GREET_REVSQUAD_CONVERTED "revsquad"
 #define GREET_PROVOC_CONVERTED	 "provocateur"

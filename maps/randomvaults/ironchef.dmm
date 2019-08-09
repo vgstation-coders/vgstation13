@@ -71,7 +71,7 @@
 "bs" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/turf/simulated/floor{blocks_air = 0; icon_state = "dark"},/area/vault/ironchef)
 "bt" = (/obj/structure/disposalpipe/segment,/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHWEST)"; icon_state = "warning"; dir = 9},/turf/simulated/floor{blocks_air = 0; icon_state = "dark"},/area/vault/ironchef)
 "bu" = (/obj/machinery/processor,/obj/machinery/light{dir = 4},/turf/simulated/floor{blocks_air = 0; icon_state = "dark"},/area/vault/ironchef)
-"bv" = (/mob/living/simple_animal/mouse,/turf/simulated/floor/plating,/area/vault/ironchef)
+"bv" = (/mob/living/simple_animal/mouse/common,/turf/simulated/floor/plating,/area/vault/ironchef)
 "bw" = (/obj/machinery/cooking/candy,/turf/simulated/floor{blocks_air = 0; icon_state = "dark"},/area/vault/ironchef)
 "bx" = (/obj/item/weapon/reagent_containers/food/condiment/enzyme,/obj/item/weapon/reagent_containers/food/condiment/saltshaker{pixel_x = -3},/obj/item/weapon/reagent_containers/food/condiment/peppermill,/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/glass/beaker{pixel_x = 5},/obj/item/weapon/reagent_containers/dropper/baster,/turf/simulated/floor{blocks_air = 0; icon_state = "dark"},/area/vault/ironchef)
 "by" = (/obj/item/weapon/kitchen/rollingpin,/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver,/obj/structure/table/reinforced,/turf/simulated/floor{blocks_air = 0; icon_state = "dark"},/area/vault/ironchef)

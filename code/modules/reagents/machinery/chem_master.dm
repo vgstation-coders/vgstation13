@@ -505,9 +505,18 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			dat += "<table>"
 			for(var/datum/reagent/G in R.reagent_list)
 				dat += "<tr>"
+				var/reg_name = G.name
+				if (istype(G,/datum/reagent/vaccine))
+					var/datum/reagent/vaccine/vaccine = G
+					var/vaccines = ""
+					for (var/A in vaccine.data["antigen"])
+						vaccines += "[A]"
+					if (vaccines == "")
+						vaccines = "blank"
+					reg_name = "[reg_name] ([vaccines])"
 				dat += {"
 					<td class="column1">
-						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[G]'>(?)</A>
+						[reg_name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[G]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];add=[G.id];amount=1'>1u</A>
@@ -571,9 +580,18 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			dat += "<table>"
 			for(var/datum/reagent/N in reagents.reagent_list)
 				dat += "<tr>"
+				var/reg_name = N.name
+				if (istype(N,/datum/reagent/vaccine))
+					var/datum/reagent/vaccine/vaccine = N
+					var/vaccines = ""
+					for (var/A in vaccine.data["antigen"])
+						vaccines += "[A]"
+					if (vaccines == "")
+						vaccines = "blank"
+					reg_name = "[reg_name] ([vaccines])"
 				dat += {"
 					<td class="column1">
-						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[N]'>(?)</A>
+						[reg_name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[N]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];remove=[N.id];amount=1'>1u</A>

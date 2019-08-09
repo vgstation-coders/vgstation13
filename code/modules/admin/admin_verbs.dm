@@ -80,7 +80,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/manage_religions,
 	/client/proc/set_veil_thickness,
 	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
-	/client/proc/persistence_panel			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
+	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
+	/client/proc/diseases_panel,
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -120,6 +121,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/makepAI,
 	/client/proc/set_blob_looks,
 	/client/proc/set_teleport_pref,
+	/client/proc/deadchat_singularity
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -688,6 +690,26 @@ var/list/admin_verbs_mod = list(
 	feedback_add_details("admin_verb","GS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the spell [S].")
 	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the spell [S].</span>", 1)
+
+
+/client/proc/toggle_invisible(mob/T as mob in mob_list)
+	set category = "Fun"
+	set name = "Toggle invisiblity"
+	set desc = "Make a mob completely invisible."
+
+	if (T.alphas["admin_invis"] == 0)
+		T.forced_density = 0
+		T.alphas -= "admin_invis"
+	else
+		T.alphas["admin_invis"] = 0
+		T.density = 0
+		T.forced_density = 1
+
+	to_chat(T, "<span class='notice'>Admin [key_name_admin(usr)] toggled your invisiblity.</span>")
+
+	feedback_add_details("admin_verb","MI") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	log_admin("[key_name(usr)] toggled [key_name(T)] invisibility.")
+	message_admins("<span class='notice'>[key_name_admin(usr)] toggled [key_name(T)] invisibility.</span>", 1)
 
 /client/proc/give_disease(mob/T as mob in mob_list) // -- Giacom
 	set category = "Fun"

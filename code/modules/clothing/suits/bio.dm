@@ -9,6 +9,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
 	body_parts_covered = HEAD|EARS|EYES|MOUTH
 	siemens_coefficient = 0.9
+	sterility = 100
 
 /obj/item/clothing/suit/bio_suit
 	name = "bio suit"
@@ -25,6 +26,7 @@
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
 	siemens_coefficient = 0.9
+	sterility = 100
 
 
 //Standard biosuit, orange stripe
@@ -80,12 +82,14 @@
 	name = "beekeeping suit"
 	icon_state = "bio_beekeeping"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 70, rad = 0)
+	sterility = 50
 
 /obj/item/clothing/head/bio_hood/beekeeping
 	name = "beekeeping hood"
 	icon_state = "bio_beekeeping"
 
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 30, rad = 0)
+	sterility = 50
 
 
 //Plague Dr mask can be found in clothing/masks/gasmask.dm

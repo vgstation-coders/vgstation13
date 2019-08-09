@@ -509,6 +509,25 @@
 	female_adept = "Godi"
 	keys = list("norse", "german pagan","viking")
 
+/datum/religion/obesity
+	name = "Church of Corpulence"
+	deity_names = list("Fat Albert", "Gaben", "William Howard Taft")
+	bible_names = list("The Menu", "The Larder of Heaven")
+	male_adept = "Fatcolyte"
+	female_adept = "Fatcolyte"
+	keys = list("fat", "obese","absolute unit", "obesity")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/cornoil
+
+/datum/religion/obesity/equip_chaplain(var/mob/living/carbon/human/H)
+	H.reagents.add_reagent(NUTRIMENT, 40)
+	H.overeatduration = 600
+
+/datum/religion/obesity/convert(var/mob/living/preacher, var/mob/living/subject, var/can_renounce = TRUE)
+	. = ..()
+	if (subject)
+		subject.reagents.add_reagent(NUTRIMENT, 40)
+		subject.overeatduration = 600
+
 /datum/religion/celtic
 	name = "Celtic Mythos"
 	deity_names = list("Toutatis", "Belenus", "Britannia") //Hon
@@ -1148,6 +1167,18 @@
 
 /datum/religion/ancap/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
+
+/datum/religion/ancom
+	name = "Anarcho-Communism"
+	deity_name = "Peter Kropotkin"
+	bible_name = "The Conquest of Bread"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Activist" 
+	female_adept = "Activist"
+	keys = list("anarcho-communism", "communalism", "mutualism")
+	
+/datum/religion/ancom/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/mask/balaclava(H), slot_l_store) // Black Bloc
 
 /datum/religion/samurai
 	name = "Bushido" // The way of the warrior
