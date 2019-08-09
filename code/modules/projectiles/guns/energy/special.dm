@@ -23,7 +23,7 @@
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
 	cell_type = "/obj/item/weapon/cell/crap/better"
-	projectile_type = "/obj/item/projectile/ionsmall"
+	projectile_type = "/obj/item/projectile/ion/small"
 
 /obj/item/weapon/gun/energy/ionrifle/ioncarbine/ionpistol
 	name = "ion pistol"

@@ -147,7 +147,7 @@
 	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/elvis/activate(var/mob/living/mob)
-	if(!istype(mob))
+	if(!ishuman(mob))
 		return
 
 	var/mob/living/carbon/human/H = mob

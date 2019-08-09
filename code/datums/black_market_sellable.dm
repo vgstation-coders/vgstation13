@@ -74,9 +74,10 @@ var/list/black_market_sellables = list()
 	return VALID
 	
 /datum/black_market_sellable/proc/determine_payout(var/obj/input, var/mob/user, var/payout) //Override for extra price calculations. Be sure to cast the given var/obj/ into the proper type.
-	return 0
+	return get_price()
 
-	
+/datum/black_market_sellable/proc/after_sell(var/obj/input, var/mob/user) 
+	return
 	
 	
 	
@@ -134,12 +135,12 @@ var/list/black_market_sellables = list()
 			return VALID
 	return "The energy gun does not have any charge."
 	
-/datum/black_market_sellable/weapons/energy_gun/determine_payout(var/obj/input, var/mob/user, var/payout)
+/datum/black_market_sellable/weapons/energy_gun/determine_payout(var/obj/input, var/mob/user)
 	if(istype(input,/obj/item/weapon/gun/energy/))
 		var/obj/item/weapon/gun/energy/gun = input
 		if(gun.power_supply.charge >= gun.power_supply.maxcharge)
-			return payout //Doubles payout, since return value is added onto current payout
-	return 0
+			return get_price()*2
+	return get_price()
 */
 
 #undef VALID

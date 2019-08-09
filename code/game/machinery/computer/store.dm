@@ -20,6 +20,8 @@
 			),
 		"Electronics" = list(
 			/datum/storeitem/boombox,
+			/datum/storeitem/diskettebox,
+			/datum/storeitem/diskettebox_large,
 			),
 		"Toys" = list(
 			/datum/storeitem/beachball,

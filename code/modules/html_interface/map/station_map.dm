@@ -98,8 +98,8 @@
 			for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 				for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 					var/turf/tile = locate(i, r, zLevel)
-					if(tile && tile.loc.holomapAlwaysDraw())
-						if((!istype(tile, get_base_turf(zLevel)) && istype(tile.loc, /area/mine/unexplored)) || istype(tile.loc, /area/asteroid/artifactroom) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile))
+					if(tile && (tile.loc.holomapDrawOverride() != HOLOMAP_DRAW_EMPTY))
+						if((!istype(tile, get_base_turf(zLevel)) && istype(tile.loc, /area/mine/unexplored)) || (tile.loc.holomapDrawOverride() == HOLOMAP_DRAW_FULL) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile))
 							if(map.holomap_offset_x.len >= zLevel)
 								canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 							else

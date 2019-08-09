@@ -499,15 +499,6 @@
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
-
-//________________________________________________
-
-/datum/role/wizard_apprentice
-	name = WIZAPP
-	id = WIZAPP
-	special_role = WIZAPP
-	logo_state = "apprentice-logo"
-
 //________________________________________________
 
 /datum/role/bomberman

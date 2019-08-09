@@ -216,7 +216,7 @@
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
-#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
+#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
 
 #define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
