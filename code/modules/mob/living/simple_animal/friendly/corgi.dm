@@ -79,7 +79,8 @@
 						failedsteps = 4
 					if(!step_towards(src,movement_target,1))
 						failedsteps++
-					sleep(5)			
+					sleep(6)
+
 				if(movement_target)
 					if(isturf(movement_target.loc) && src.Adjacent(movement_target))
 						movement_target.attack_animal(src)
@@ -569,14 +570,6 @@
 	response_harm   = "kicks"
 	spin_emotes = list("dances around.","chases his tail.")
 	is_pet = TRUE
-	
-/mob/living/simple_animal/corgi/Life()
-	..()
-	if(reagents.has_any_reagents(HYPERZINES))
-		treadmill_speed = 8
-		src.Jitter(2 SECONDS)
-	else
-		treadmill_speed = 0.5
 
 /mob/living/simple_animal/corgi/Ian/santa
 	name = "Santa's Corgi Helper"
