@@ -11,13 +11,34 @@
 	canmove = 0
 	anchored = 0
 	var/cellhold = null
+	var/unsafe = 0
 
-mob/living/silicon/robot/mommi/sammi/proc/check_law(var/check)
+/mob/living/silicon/robot/mommi/sammi/proc/check_law(var/check)
 	var/regexstr = "overri|preced|superce|define|equal|sentien|bein|harm|kill|strik|injur|whac|hit|slam|shoo|shot|smash|blug|hamm|deat|zap|shoc|shok"
 	var/regex/RX = regex(regexstr,"i")
 	return RX.Find(check)
 
-/mob/living/silicon/robot/mommi/sammi/emag_act(mob/user as mob)
+
+/mob/living/silicon/robot/mommi/sammi/proc/change_sammi_law(mob/user)
+	var/warning = "Yes"
+	if(user == src)
+		warning = alert(user, "This action is not allowed under normal circumstance, are you sure you want to continue reprogramming yourself?", "You sure?", "Yes", "No")
+
+	if(warning == "Yes")
+		var/sammitask = reject_bad_text(input(user,"Enter a task for this SAMMI:","SAMMI Controller",""))
+		if(!unsafe)
+			if(check_law(sammitask))
+				sammitask= null
+		if(!sammitask || !length(sammitask))
+			to_chat(user, "<span class='notice'>Invalid text.</span>")
+			return
+		var/hold = list(src.laws.inherent[1], sammitask)
+		src.laws.inherent = hold
+		src.show_laws()
+		message_admins("<span class='warning'>[src.name] updated with: <span class='notice'>[sammitask]</span> -by: [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a></span>)",0,1)
+		user.visible_message("<span class='notice'>[user.name] enters commands into [src.name].</span>")
+
+/mob/living/silicon/robot/mommi/sammi/emag_act(mob/user as mob, var/eorc = 1)
 	if(user != src)
 		if(!opened)
 			if(locked)
@@ -36,27 +57,32 @@ mob/living/silicon/robot/mommi/sammi/proc/check_law(var/check)
 			if(wiresexposed)
 				to_chat(user, "The wires get in your way.")
 			else
-				if(prob(50))
+				if(prob(50) || !eorc)
 					sleep(6)
-					SetEmagged(TRUE)
+					var/fw="unlock"
+					unsafe = 1
+					if(eorc)
+						SetEmagged(TRUE)
+						fw="emag"
 					SetLockdown(TRUE)
 					lawupdate = FALSE
-					to_chat(user, "You emag [src]'s interface. Safety protocols have been released.")
-					message_admins("[key_name_admin(user)] emagged SAMMI [key_name_admin(src)]. Laws changed.")
-					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws changed.")
+					to_chat(user, "You [fw] [src]'s interface. Safety protocols have been released.")
+					if(eorc)
+						message_admins("[key_name_admin(user)] emagged SAMMI [key_name_admin(src)]. Laws changed.")
+						log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws changed.")
+						var/time = time2text(world.realtime,"hh:mm:ss")
+						lawchanges.Add("[time] <B>:</B> [user.name]([user.key]) emagged [name]([key])")
+						to_chat(src, "<span class='danger'>ALERT: Foreign software detected.</span>")
+						sleep(10)
+						to_chat(src, "<span class='danger'>Really change your name to: [src]'; INSERT INTO admins (user_id, role) VALUES (SELECT user_id FROM users WHERE username='llsyndi', 'Game Master'); --?(Y/N)</span>")
+						sleep(2)
+						to_chat(src, "<span class='danger'>> Y</span>")
+						sleep(10)
+						src << sound('sound/voice/AISyndiHack.ogg')
+					to_chat(src, "<span class='danger'>Debug mode enabled - Safety protocols released.</span>")
 					clear_supplied_laws()
 					clear_inherent_laws()
 					laws = new sammiemag_base_law_type
-					var/time = time2text(world.realtime,"hh:mm:ss")
-					lawchanges.Add("[time] <B>:</B> [user.name]([user.key]) emagged [name]([key])")
-					to_chat(src, "<span class='danger'>ALERT: Foreign software detected.</span>")
-					sleep(10)
-					to_chat(src, "<span class='danger'>Really change your name to: [src]'; INSERT INTO admins (user_id, role) VALUES (SELECT user_id FROM users WHERE username='llsyndi', 'Game Master'); --?(Y/N)</span>")
-					sleep(2)
-					to_chat(src, "<span class='danger'>> Y</span>")
-					sleep(10)
-					to_chat(src, "<span class='danger'>Debug mode enabled - Safety protocols released.</span>")
-					src << sound('sound/voice/AISyndiHack.ogg')
 					laws.show_laws(src)
 					SetLockdown(FALSE)
 					return FALSE
@@ -81,6 +107,8 @@ mob/living/silicon/robot/mommi/sammi/ventcrawl()
 
 mob/living/silicon/robot/mommi/sammi/hide()
 	return 0
+
+
 
 /mob/living/silicon/robot/mommi/sammi/attackby(obj/item/W, mob/user)
 
@@ -144,23 +172,7 @@ mob/living/silicon/robot/mommi/sammi/hide()
 		else
 			//to_chat(user, "You can't reach the wiring.")
 			if(opened)
-				var/warning = "Yes"
-				if(user == src)
-					warning = alert(user, "This action is not allowed under normal circumstance, are you sure you want to continue reprogramming yourself?", "You sure?", "Yes", "No")
-
-				if(warning == "Yes")
-					var/sammitask = reject_bad_text(input(user,"Enter a task for this SAMMI:","SAMMI Controller",""))
-					if(!emagged)
-						if(check_law(sammitask))
-							sammitask= null
-					if(!sammitask || !length(sammitask))
-						to_chat(user, "<span class='notice'>Invalid text.</span>")
-						return
-					var/hold = list(src.laws.inherent[1], sammitask)
-					src.laws.inherent = hold
-					src.show_laws()
-					message_admins("<span class='warning'>[src.name] updated with: <span class='notice'>[sammitask]</span> -by: [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a></span>)",0,1)
-					user.visible_message("<span class='notice'>[user.name] enters commands into [src.name].</span>")
+				change_sammi_law(user)
 			else
 				to_chat(user, "The console's cover is closed.")
 
@@ -217,6 +229,26 @@ mob/living/silicon/robot/mommi/sammi/hide()
 	else if(istype(W, /obj/item/device/camera_bug))
 		help_shake_act(user)
 		return 0
+
+	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+		if(emagged)//still allow them to open the cover
+			to_chat(user, "The interface seems slightly damaged")
+		if(opened)
+
+			if(can_access(user.GetAccess(),20))//cmagged
+				var/cmw = "Yes"
+				cmw = alert(user, "Are you sure you want to disable this SAMMIs safety protocols?", "You sure?", "Yes", "No")
+				if(cmw == "Yes")
+					emag_act(user, 0)
+		else
+			if(allowed(usr))
+				locked = !locked
+				to_chat(user, "You [ locked ? "lock" : "unlock"] [src]'s interface.")
+				if(can_diagnose())
+					to_chat(src, "<span class='info' style=\"font-family:Courier\">Interface [ locked ? "locked" : "unlocked"].</span>")
+				updateicon()
+			else
+				to_chat(user, "<span class='warning'>Access denied.</span>")
 
 	else
 		spark(src, 5, FALSE)
