@@ -39,6 +39,11 @@
 /datum/zLevel/station
     base_turf = /turf/unsimulated/floor/snow
 
+/datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
+	if(istype(DR.role_category,/datum/role/blob_overmind))
+		return FALSE
+	return TRUE
+
 ////////////////////////////////////////////////////////////////
 #include "snaxi.dmm"
 #endif
