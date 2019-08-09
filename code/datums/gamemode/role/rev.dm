@@ -55,11 +55,6 @@
 	id = HEADREV
 	logo_state = "rev_head-logo"
 
-	//statistics
-	//statistics stuff
-	var/recruits_converted = 0
-	var/flashes_created = 0
-
 	stat_datum_type = /datum/stat/role/revolutionary/leader
 
 /datum/role/revolutionary/leader/OnPostSetup()
