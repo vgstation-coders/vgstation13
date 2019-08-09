@@ -173,9 +173,15 @@
 	if(scrubbing)
 		//if internal pressure limit is enabled and met, we don't do anything
 		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.return_pressure()) < 0.05)
+			if(reducing_pressure)
+				reducing_pressure = 0
+				update_icon()
 			return
 		//if we're at max pressure we also don't do anything
 		if(air_contents.return_pressure() >= MAX_PRESSURE)
+			if(reducing_pressure)
+				reducing_pressure = 0
+				update_icon()
 			return
 
 		//I'm sorry you have to see this
@@ -242,6 +248,9 @@
 				network.update = 1
 
 	else //Just siphoning all air
+		if(reducing_pressure)
+			reducing_pressure = 0
+			update_icon()
 		if (air_contents.return_pressure()>=MAX_PRESSURE)
 			return
 
