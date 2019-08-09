@@ -53,6 +53,7 @@
 						0,0.5,0.5,0,\
 						0,0.0,0.0,1,)
 	held_items = list()
+	var/time_between_directed_steps = 6
 
 /mob/living/simple_animal/corgi/has_hand_check()
 	return 1 // can pull things with his mouth
@@ -74,12 +75,14 @@
 			spawn(0) // Separate process
 				stop_automated_movement = 1
 				var/failedsteps = 0
-				while(failedsteps <= 3)
-					if(!movement_target || src.Adjacent(movement_target) || get_dist(src, movement_target) >= 7)
-						failedsteps = 4
-					if(!step_towards(src,movement_target,1))
-						failedsteps++
-					sleep(5)			
+				var/infinite_chase = loc && locate(/obj/machinery/power/treadmill) in loc
+				while(TRUE)
+					if(!movement_target || src.Adjacent(movement_target) || get_dist(src, movement_target) >= 7 || corgi_status != FOOD_HUNTING || failedsteps > 2)
+						break
+					if(!step_towards(src,movement_target,1) && !infinite_chase)
+						failedsteps += 1
+					if(time_between_directed_steps >= 1)
+						sleep(time_between_directed_steps)			
 				if(movement_target)
 					if(isturf(movement_target.loc) && src.Adjacent(movement_target))
 						movement_target.attack_animal(src)
@@ -100,7 +103,7 @@
 							break
 						if(!step_towards(src,movement_target,1))
 							failedsteps++
-						sleep(6)
+						sleep(time_between_directed_steps)
 
 					if(movement_target)
 						step_towards(src,movement_target,1)
@@ -182,7 +185,7 @@
 		if(!stat)
 			user.visible_message("<span class='notice'>[user] baps [name] on the nose with the rolled up [O]</span>")
 			spawn(0)
-				emote("me", 1, "whines")
+				emote("me", 1, "whines.")
 				for(var/i in list(1,2,4,8,4,2,1,2))
 					dir = i
 					sleep(1)
@@ -198,7 +201,7 @@
 				for (var/mob/M in viewers(src, null))
 					M.show_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 			if(health>0 && prob(15))
-				emote("me", 1, "looks at [user] with [pick("an amused","an annoyed","a confused","a resentful", "a happy", "an excited")] expression")
+				emote("me", 1, "looks at [user] with [pick("an amused","an annoyed","a confused","a resentful", "a happy", "an excited")] expression.")
 			return
 	else
 		var/obj/item/clothing/mask/facehugger/F = O
@@ -569,14 +572,34 @@
 	response_harm   = "kicks"
 	spin_emotes = list("dances around.","chases his tail.")
 	is_pet = TRUE
+	var/creatine_had = 0
 	
-/mob/living/simple_animal/corgi/Life()
+/mob/living/simple_animal/corgi/Ian/Life()
 	..()
-	if(reagents.has_any_reagents(HYPERZINES))
-		treadmill_speed = 8
+	var/creatine = reagents.has_any_reagents(list(CREATINE))
+	var/hyperzine = reagents.has_any_reagents(HYPERZINES)
+	if(creatine && !creatine_had)
+		creatine_had = 1
+		visible_message("<span class='danger'>[src]'s muscles bulge!</span>")
+		desc = "It's a corgi... but his muscles have veins running over them."
+		name = "Ian the Buff"
+	else if(creatine_had)
+		visible_message("<span class='danger'>[src]'s muscles tear themselves apart!</span>")
+		gib()
+		
+	if(creatine && hyperzine)
+		treadmill_speed = 30
+		time_between_directed_steps = 1
+	else if(creatine)
+		treadmill_speed = 10
+		time_between_directed_steps = 3
+	else if(hyperzine)
+		treadmill_speed = 3
 		src.Jitter(2 SECONDS)
+		time_between_directed_steps = 3	
 	else
 		treadmill_speed = 0.5
+		time_between_directed_steps = initial(time_between_directed_steps)
 
 /mob/living/simple_animal/corgi/Ian/santa
 	name = "Santa's Corgi Helper"
