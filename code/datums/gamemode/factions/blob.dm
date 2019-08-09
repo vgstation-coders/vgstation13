@@ -31,11 +31,6 @@
 	var/prelude_announcement
 	var/outbreak_announcement
 
-	// statistics
-	var/remaining_structures_count = list()
-
-	var/datum/stat/faction_data/blob/structure_counts/built_structure_counts = new
-
 	stat_datum_type = /datum/stat/faction/blob
 
 // -- Victory procs --
