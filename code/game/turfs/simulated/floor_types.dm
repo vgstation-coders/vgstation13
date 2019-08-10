@@ -402,8 +402,8 @@
 /turf/simulated/floor/server
 	icon_state = "dark"
 	oxygen = 0
-	temperature = T0C-200 //freezer minimum temperature
-	nitrogen = (ONE_ATMOSPHERE*CELL_VOLUME/((T0C-200)*R_IDEAL_GAS_EQUATION))
+	temperature = 90
+	nitrogen = (ONE_ATMOSPHERE*CELL_VOLUME/(90*R_IDEAL_GAS_EQUATION))
 
 /turf/simulated/floor/server/bluegrid
 	icon_state = "bcircuit"
