@@ -144,7 +144,7 @@
 	pressure = list(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.40, ONE_ATMOSPHERE*1.60)
 	temperature = list(20, 40, 140, 160)
 	target_temperature = 90
-	scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
+	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
 
 /datum/airalarm_preset/plasmaman //HONK
 	name = "Plasmaman"
@@ -244,7 +244,7 @@ var/global/list/airalarm_presets = list(
 	TLV["other"] =			presetdata.other.Copy()
 	TLV["pressure"] =		presetdata.pressure.Copy()
 	TLV["temperature"] =	presetdata.temperature.Copy()
-	target_temperature =	presetdata.target_temperature	
+	target_temperature =	presetdata.target_temperature
 	if(!no_cycle_after)
 		mode = AALARM_MODE_CYCLE
 	// Propagate settings.
@@ -599,7 +599,7 @@ var/global/list/airalarm_presets = list(
 			selected[2] = selected[4]
 		if(selected[3] > selected[4])
 			selected[3] = selected[4]
-	
+
 	//propagate to other air alarms in the area
 	if(propagate)
 		apply_mode()
@@ -966,7 +966,7 @@ var/global/list/airalarm_presets = list(
 			return 1
 		set_alarm(0)
 		return 1
-	
+
 	if(href_list["enable_override"])
 		if(locked && !issilicon(usr))
 			return 1
@@ -975,7 +975,7 @@ var/global/list/airalarm_presets = list(
 		this_area.UpdateFirelocks()
 		update_icon()
 		return 1
-	
+
 	if(href_list["disable_override"])
 		if(locked && !issilicon(usr))
 			return 1
