@@ -85,6 +85,9 @@
 	if (!enemy_jobs.len)
 		return TRUE
 
+	if (threat_level >= 80)
+		return TRUE
+
 	var/enemies_count = 0
 	if (dead_dont_count)
 		for (var/mob/M in mode.living_players)
