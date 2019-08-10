@@ -36,6 +36,8 @@
 	center_x = 226
 	center_y = 254
 
+	snow_theme = 1
+
 /datum/zLevel/station
     base_turf = /turf/unsimulated/floor/snow
 
