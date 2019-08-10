@@ -1,3 +1,10 @@
+var/list/snow_tiles = list()
+var/list/snow_overlay_cache = list()
+
+/proc/begin_blizzard()
+	for(var/turf/simulated/floor/plating/snow/tile in snow_tiles)
+		
+
 /turf/simulated/floor/plating/snow
 	name = "snow"
 	desc = "A layer of frozen water particles, kept solid by temperatures way below freezing. On the plus side, can easily be weaponized."
@@ -6,7 +13,10 @@
 	temperature = T0C
 	oxygen = MOLES_O2STANDARD_ARCTIC
 	nitrogen = MOLES_N2STANDARD_ARCTIC
+	light_color = "#e5ffff"
 	can_border_transition = 1
+	dynamic_lighting = 0
+	luminosity = 1
 	var/snowballs = 0
 	var/global/list/icon_state_to_appearance = list()
 
@@ -31,7 +41,7 @@
 		overlays += snowfx2
 		icon_state_to_appearance[icon_state] = appearance
 	snowballs = rand(5, 10) //Used to be (30, 50). A quick way to overload the server with atom instances.
-
+	
 /turf/simulated/floor/plating/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	..()
