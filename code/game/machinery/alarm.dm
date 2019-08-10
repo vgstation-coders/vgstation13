@@ -141,7 +141,7 @@
 	plasma = list(-1, -1, 0.2, 0.5)
 	n2o = list(-1, -1, 0.5, 1)
 	other = list(-1, -1, 0.5, 1)
-	pressure = list(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.40, ONE_ATMOSPHERE*1.60)
+	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature = list(20, 40, 140, 160)
 	target_temperature = 90
 	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
