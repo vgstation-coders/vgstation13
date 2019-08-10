@@ -119,6 +119,7 @@
 		else if(!src.brainmob.key)
 			to_chat(user, "<span class='warning'>It doesn't seem to be responsive.</span>")//ghosted
 
+	black_market_beacon_check(src, user)
 //	to_chat(user, "<span class='info'>*---------*</span>")
 
 /obj/item/device/mmi/posibrain/emp_act(severity)

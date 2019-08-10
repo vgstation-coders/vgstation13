@@ -10,8 +10,6 @@ var/list/global_illegal_radios = list()
 			radio.interact(usr)
 			to_chat(usr,"<span class='info'>You feel \the [radio] buzz.</span>")
 
-/obj/item/device/illegalradio/nanotrasen
-
 /obj/item/device/illegalradio/nanotrasen/New()
 	qdel(src) //Removed, but mapping issues so xd
 			
@@ -44,6 +42,7 @@ var/list/global_illegal_radios = list()
 	var/advanced_uplink = 0
 	var/scan_time = 150
 	var/notifications = 1 
+	var/list/sell_exceptions = list(/obj/structure/closet, /obj/item/weapon/storage)
 	
 	var/scanning = 0
 	
@@ -66,11 +65,11 @@ var/list/global_illegal_radios = list()
 	if(opened_screen == MAIN)
 		selected_item = null
 		new_listing = null
-		open_html(generate_main_menu(user))
+		open_html(generate_main_menu(user),user)
 	else if(opened_screen == SELLING)
-		open_html(generate_local_market_hub(user))
+		open_html(generate_local_market_hub(user),user)
 	else if(opened_screen == DELIVERY)
-		open_html(generate_delivery_menu(usr,selected_item))
+		open_html(generate_delivery_menu(usr,selected_item),user)
 		
 /obj/item/device/illegalradio/attack_self(mob/user as mob)
 	user.set_machine(src)
@@ -79,7 +78,8 @@ var/list/global_illegal_radios = list()
 	
 
 /obj/item/device/illegalradio/Topic(href, href_list)
-	..()
+	if(..())
+		return
 	
 	if(href_list["open_main"])
 		open_screen(MAIN)
@@ -89,7 +89,7 @@ var/list/global_illegal_radios = list()
 		//interact(usr)	
 		
 	else if (href_list["dispense_change"])
-		dispense_change()	
+		dispense_change(usr)	
 
 	else if (href_list["toggle_notifications"])
 		notifications = !notifications
@@ -181,7 +181,7 @@ var/list/global_illegal_radios = list()
 
 
 /obj/item/device/illegalradio/proc/generate_main_menu(mob/user)
-	var/welcome = pick("We buzz you whenever the market changes!","Stop wasting bandwidth, buy something already!","Telecrystals ain't cheap, kid. Pay up.","There ain't nothing better than a good deal.","Back in my day, we didn't have 'teleporters'.","Human and Vox slaves NOT accepted as payment.","Absolutely no affiliation with Discount Dan.","Free from Nanotrasen regulation.","Too shy to come in person?","Unaffiliated with Spessmart(TM) supermarts.","Cluck, cluck. We've got no chickens.","What doth the greytide desire?","Wow, shooting spree? How original.","Uwa~ Senpai! Buy my stuff.","Japanese animes tolerated but condemned.","Goods from the TG1153 sector are prohibited. Go away.")
+	var/welcome = pick("We buzz you whenever the market changes!","Stop wasting bandwidth, buy something already!","Telecrystals ain't cheap, kid. Pay up.","There ain't nothing better than a good deal.","Back in my day, we didn't have 'teleporters'.","Human and Vox slaves NOT accepted as payment.","Absolutely no affiliation with Discount Dan.","Free from Nanotrasen regulation.","Too shy to come in person?","Unaffiliated with Spessmart(TM) supermarts.","Cluck, cluck. We've got no chickens.","What doth the greytide desire?","Wow, shooting spree? How original.","Uwa~ Senpai! Buy my stuff.","Japanese animes tolerated but condemned.","Goods from the TG1153 sector are prohibited.")
 
 	var/dat = list()
 	
@@ -207,7 +207,7 @@ var/list/global_illegal_radios = list()
 			if(product.selected_price <= money_stored)
 				final_text += "<A href='byond://?src=\ref[src];buy_local_item=[iterator];'>[product.selected_name]</A> ([product.selected_price])"
 			else
-				final_text += "<font color='grey'><i>[product.selected_name] ([product.selected_price]) </i></font>"
+				final_text += "<font color='grey'><i>[product.selected_name] ([product.selected_price])</i></font>"
 			var/desc = "Official product name: [product.item.name]. Seller description: " + product.selected_description
 			final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A><br>"
 			dat += final_text
@@ -236,7 +236,7 @@ var/list/global_illegal_radios = list()
 			else
 				final_text += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
 			if(stock != -1)
-				final_text += "<font color='grey'><i>([stock] in stock)</i></font>"
+				final_text += "<font color='grey'><i>([stock] in stock) </i></font>"
 			if(item.desc)
 				final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A>"
 			final_text += "<BR>"
@@ -310,6 +310,9 @@ var/list/global_illegal_radios = list()
 	new_listing.seller = usr
 	new_listing.selected_price = minimum_price
 	open_screen(SELLING)
+	
+/obj/item/device/illegalradio/attack(mob/living/carbon/T as mob, mob/living/user as mob)
+	return
 		
 /obj/item/device/illegalradio/afterattack(atom/movable/A as mob|obj, mob/user as mob)
 	if(istype(A, /obj/item/weapon/spacecash) && A.Adjacent(user))
@@ -318,6 +321,8 @@ var/list/global_illegal_radios = list()
 		qdel(cash)
 		visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
 		interact(usr)
+	else if(!player_sell_check(A))
+		return
 	else if((istype(A, /obj) || istype(A, /mob)) && A.Adjacent(user) && !scanning)
 		visible_message("\The [src] beeps: <span class='warning'>Scanning item to sell...</span>")
 		scanning = 1
@@ -331,6 +336,12 @@ var/list/global_illegal_radios = list()
 				generate_new_local_listing(A)
 		scanning = 0		
 		
+/obj/item/device/illegalradio/proc/player_sell_check(atom/movable/A)
+	for(var/object_type in sell_exceptions)
+		if(istype(A,object_type))
+			return 0
+	return 1
+		
 /obj/item/device/illegalradio/MouseDropTo(var/atom/movable/target, var/mob/user)
 	afterattack(target, user)
 	
@@ -342,28 +353,28 @@ var/list/global_illegal_radios = list()
 		interact(user)
 	
 /obj/item/device/illegalradio/emag_act(mob/user)
-	visible_message("<span class='warning'>[usr] swipes a card through [src], and it explodes!</warning>")
+	visible_message("<span class='warning'>[user] swipes a card through \the [src], and it explodes!</warning>")
 	explosion(user, -1, 0, 2)
-	to_chat(user, "<span class='notice'>You hear a faint laughter in your head.<span>")
+	to_chat(user, "<span class='danger'>You hear a faint laughter in your head.<span>")
 	qdel(src)
 
-/obj/item/device/illegalradio/proc/insert_cash(var/obj/item/weapon/spacecash/C, mob/user)
-	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
-	money_stored += C.get_total()
-	qdel(C)
+/obj/item/device/illegalradio/proc/insert_cash(var/obj/item/weapon/spacecash/cash, mob/user)
+	visible_message("<span class='info'>[user] inserts a credit chip into \the [src].</span>")
+	money_stored += cash.get_total()
+	qdel(cash)
 
-/obj/item/device/illegalradio/proc/dispense_change()
+/obj/item/device/illegalradio/proc/dispense_change(mob/user)
 	if(money_stored > 0)
 		dispense_cash(money_stored,get_turf(src))
 		money_stored = 0
-	interact(usr)
+	interact(user)
 	
-/obj/item/device/illegalradio/proc/open_html(var/dat_input)
+/obj/item/device/illegalradio/proc/open_html(var/dat_input, var/mob/user)
 	var/dat = "<body link='yellow' alink='white' bgcolor='#331461'><font color='white'>"
 	dat += dat_input
 	dat += "</body></font>"
-	usr << browse(dat, "window=hidden")
-	onclose(usr, "hidden")	
+	user << browse(dat, "window=hidden")
+	onclose(user, "hidden")	
 
 	
 #undef MAIN

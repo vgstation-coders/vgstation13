@@ -47,4 +47,6 @@ proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
 
 			for(var/atom/movable/A in T.contents)
 				A.emp_act(act)
+				for(var/atom/movable/B in A.contents)
+					B.emp_act(act)
 	return

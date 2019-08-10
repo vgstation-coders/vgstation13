@@ -305,6 +305,8 @@ with an atomic bomb. But those are rare and expensive.
 	var/obj/item/weapon/gun/projectile/rocketlauncher/nikita/rocket_launcher = locate() in spawned
 	rocket_launcher.emagged = TRUE
 
+	
+	
 /datum/black_market_item/agriculture
 	category = "Agriculture and Animals"
 
@@ -318,65 +320,33 @@ with an atomic bomb. But those are rare and expensive.
 	cost_max = 600
 	display_chance = 80
 	
-/datum/black_market_item/agriculture/walkingmushroommycelium
+/datum/black_market_item/agriculture/mushroommanspore
 	name = "Walking Mushroom Seeds"
 	desc = "Sentient mushfriends for all your mushy needs. Be careful though, they bite."
-	item = /obj/item/seeds/walkingmushroommycelium
+	item = /obj/item/seeds/mushroommanspore
 	delivery_available = list(1, 1, 1)
 	stock_min = 3
 	stock_max = 3
 	cost_min = 50
 	cost_max = 100
 	display_chance = 99	
-	
-/datum/black_market_item/arcane
-	category = "Supernatural and Arcane Objects"
 
-/datum/black_market_item/arcane/levitation
+	
+	
+/datum/black_market_item/toy
+	category = "Recreational and Novelty Items"
+
+/datum/black_market_item/toy/levitation
 	name = "Potion of Levitation"
-	desc = "Potions come in many shapes and sizes, but this one makes you float! Why? Because it looks fucking cool. Maybe you can convince somebody you're the fourth coming of Jesus."
+	desc = "This potion makes you float! How does it work? We've got no clue whatsoever, you'll have to ask the Wizard Federation."
 	item = /obj/item/potion/levitation
 	delivery_available = list(0, 1, 1)
 	stock_min = 2
 	stock_max = 4
-	cost_min = 400
-	cost_max = 500
+	cost_min = 200
+	cost_max = 300
 	display_chance = 70
-
-/datum/black_market_item/arcane/health_potion
-	name = "Potion of Health? Death?"
-	desc = "Unfortunately, some idiot managed to mix together the shipment of identical-looking health potions and death potions. He's dead now. Test out your luck!"
-	item = /obj/item/potion/deception
-	sps_chances = list(0, 10, 30)
-	delivery_available = list(0, 1, 1) //Would shatter on impact
-	stock_min = 2
-	stock_max = 4
-	cost_min = 600
-	cost_max = 800
-	display_chance = 70
-
-/datum/black_market_item/arcane/health_potion/after_spawn(var/obj/spawned, var/mob/user)
-	if(prob(40))
-		spawned = /obj/item/potion/healing
-
-/datum/black_market_item/plants
-	category = "Seeds"
-
-/datum/black_market_item/plants/mushroommanspore
-	name = "packet of walking mushroom seeds"
-	desc = "Sentient mushfriends for all your mushy needs"
-	item = /obj/item/seeds/mushroommanspore
-	sps_chances = list(0, 10, 30)
-	delivery_available = list(0, 1, 1)
-	stock_min = 3
-	stock_max = 3
-	cost_min = 50
-	cost_max = 100
-	display_chance = 99
-
-/datum/black_market_item/toy
-	category = "Recreational and Novelty Items"
-
+	
 /datum/black_market_item/toy/dorkcube
 	name = "Strange Box"
 	desc = "A stolen box filled with unknown loot. Something is sloshing inside."
@@ -386,14 +356,14 @@ with an atomic bomb. But those are rare and expensive.
 	cost_min = 25
 	cost_max = 500
 	display_chance = 80
-
+	
 /datum/black_market_item/toy/skub
 	name = "Skub"
 	desc = "Skub."
 	item = /obj/item/toy/gasha/skub
 	stock_min = -1
 	stock_max = -1
-	cost_min = 200
+	cost_min = 150
 	cost_max = 500
 	display_chance = 100
 

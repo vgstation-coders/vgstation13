@@ -464,6 +464,8 @@
 	to_chat(user, msg)
 	if(istype(user))
 		user.heard(src)
+		
+	black_market_beacon_check(src, user)
 
 #undef JITTER_MEDIUM
 #undef JITTER_HIGH
