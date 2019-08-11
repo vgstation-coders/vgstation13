@@ -1027,7 +1027,7 @@ var/global/list/airalarm_presets = list(
 			to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
 		else
 			input_temperature = input_temperature + T0C
-			set_temperature(input_temperature)
+		set_temperature(input_temperature)
 		return 1
 
 /obj/machinery/alarm/attackby(obj/item/W as obj, mob/user as mob)
