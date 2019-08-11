@@ -62,7 +62,7 @@
 
 	qdel(src)
 
-/mob/living/simple_animal/hostile/humanoid/drop_loot()
+/mob/living/simple_animal/hostile/humanoid/proc/drop_loot()
 	if(items_to_drop.len)
 		for(var/object in items_to_drop)
 			if(ispath(object))
