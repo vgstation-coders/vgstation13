@@ -332,8 +332,10 @@ var/global/list/airalarm_presets = list(
 	// Handle temperature adjustment here.
 	if(environment.temperature < target_temperature - 2 || environment.temperature > target_temperature + 2 || regulating_temperature)
 		//If it goes too far, we should adjust ourselves back before stopping.
-		if(get_danger_level(target_temperature, TLV["temperature"]))
-			return
+		var/actual_target_temperature = target_temperature
+		if(get_danger_level(actual_target_temperature, TLV["temperature"]))
+			//use the max or min safe temperature
+			actual_target_temperature = Clamp(actual_target_temperature, TLV["temperature"][2], TLV["temperature"][3])
 
 		if(!regulating_temperature)
 			regulating_temperature = 1
@@ -343,22 +345,22 @@ var/global/list/airalarm_presets = list(
 		var/datum/gas_mixture/gas = environment.remove_volume(0.25 * CELL_VOLUME)
 		if(gas)
 			var/heat_capacity = gas.heat_capacity()
-			var/energy_used = min(abs(heat_capacity * (gas.temperature - target_temperature)), MAX_ENERGY_CHANGE)
+			var/energy_used = min(abs(heat_capacity * (gas.temperature - actual_target_temperature)), MAX_ENERGY_CHANGE)
 			var/cooled = 0 //1 means we cooled this tick, 0 means we warmed. Used for the message below.
 
 			// We need to cool ourselves, but only if the gas isn't already colder than what we can do.
-			if (environment.temperature > target_temperature && gas.temperature >= MIN_TEMPERATURE)
+			if (environment.temperature > actual_target_temperature && gas.temperature >= MIN_TEMPERATURE)
 				gas.temperature -= energy_used / heat_capacity
 				use_power(energy_used/3) //these are heat pumps, so they can have a >100% efficiency, typically about 300%
 				cooled = 1
 			// We need to warm ourselves, but only if the gas isn't already hotter than what we can do.
-			else if (environment.temperature < target_temperature && gas.temperature <= MAX_TEMPERATURE)
+			else if (environment.temperature < actual_target_temperature && gas.temperature <= MAX_TEMPERATURE)
 				gas.temperature += energy_used / heat_capacity
 				use_power(energy_used/3)
 
 			environment.merge(gas)
 
-			if (abs(environment.temperature - target_temperature) <= 0.5)
+			if (abs(environment.temperature - actual_target_temperature) <= 0.5)
 				regulating_temperature = 0
 				visible_message("\The [src] clicks quietly as it stops [cooled ? "cooling" : "heating"] the room.",\
 				"You hear a click as a faint electronic humming stops.")
