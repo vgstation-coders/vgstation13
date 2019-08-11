@@ -65,6 +65,13 @@
 	item_state = "sexyclown"
 	_color = "sexyclown"
 
+/obj/item/clothing/under/lola
+	name = "lola's clown suit"
+	desc = "Honk!"
+	icon_state = "lola"
+	item_state = "lola"
+	_color = "lola"
+
 /obj/item/clothing/under/rank/vice
 	name = "vice officer's jumpsuit"
 	desc = "It's the standard issue pretty-boy outfit, as seen on Holo-Vision."
