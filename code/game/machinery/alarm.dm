@@ -349,10 +349,12 @@ var/global/list/airalarm_presets = list(
 			// We need to cool ourselves, but only if the gas isn't already colder than what we can do.
 			if (environment.temperature > target_temperature && gas.temperature >= MIN_TEMPERATURE)
 				gas.temperature -= energy_used / heat_capacity
+				use_power(energy_used/3) //these are heat pumps, so they can have a >100% efficiency, typically about 300%
 				cooled = 1
 			// We need to warm ourselves, but only if the gas isn't already hotter than what we can do.
 			else if (environment.temperature < target_temperature && gas.temperature <= MAX_TEMPERATURE)
 				gas.temperature += energy_used / heat_capacity
+				use_power(energy_used/3)
 
 			environment.merge(gas)
 
