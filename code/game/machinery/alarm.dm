@@ -21,8 +21,10 @@
 #define RCON_YES	2
 #define RCON_AUTO	3 //unused
 
+//10,000 joules equates to about 17,000 Btu/h, which is roughly equivalent to a moderately-sized conventional AC unit
+//it's also conveniently 10 times what this used to be.
 //1000 joules equates to about 1 degree every 2 seconds for a single tile of air.
-#define MAX_ENERGY_CHANGE 1000
+#define MAX_ENERGY_CHANGE 10000
 
 //min and max temperature that we can heat or cool to, does not affect target temperature
 #define MAX_TEMPERATURE 90
@@ -244,7 +246,7 @@ var/global/list/airalarm_presets = list(
 	TLV["other"] =			presetdata.other.Copy()
 	TLV["pressure"] =		presetdata.pressure.Copy()
 	TLV["temperature"] =	presetdata.temperature.Copy()
-	target_temperature =	presetdata.target_temperature	
+	target_temperature =	presetdata.target_temperature
 	if(!no_cycle_after)
 		mode = AALARM_MODE_CYCLE
 	// Propagate settings.
@@ -599,7 +601,7 @@ var/global/list/airalarm_presets = list(
 			selected[2] = selected[4]
 		if(selected[3] > selected[4])
 			selected[3] = selected[4]
-	
+
 	//propagate to other air alarms in the area
 	if(propagate)
 		apply_mode()
@@ -966,7 +968,7 @@ var/global/list/airalarm_presets = list(
 			return 1
 		set_alarm(0)
 		return 1
-	
+
 	if(href_list["enable_override"])
 		if(locked && !issilicon(usr))
 			return 1
@@ -975,7 +977,7 @@ var/global/list/airalarm_presets = list(
 		this_area.UpdateFirelocks()
 		update_icon()
 		return 1
-	
+
 	if(href_list["disable_override"])
 		if(locked && !issilicon(usr))
 			return 1
