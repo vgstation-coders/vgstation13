@@ -156,12 +156,15 @@ var/global/list/all_docking_ports = list()
 	var/base_turf_type			= /turf/space
 	var/base_turf_icon			= null
 	var/base_turf_icon_state	= null
+	var/base_turf_override		= FALSE
 
 /obj/docking_port/destination/New()
 	.=..()
 
 	origin_turf = get_turf(src)
 	//The following few lines exist to make shuttle corners and the syndicate base Less Shit :*
+	if(base_turf_override)
+		return //Allows mappers to manually set base_turf info
 	if(src.z in 1 to map.zLevels.len)
 		base_turf_type = get_base_turf(src.z)
 
@@ -262,7 +265,7 @@ var/global/list/dockinglights = list()
 /obj/machinery/docklight/New()
 	..()
 	dockinglights += src
-	
+
 /obj/machinery/docklight/Destroy()
 	dockinglights -= src
 	..()
