@@ -7,7 +7,7 @@
 	name = "air conditioner"
 	desc = "If you can't take the heat, use one of these."
 	set_temperature = 20		// in celcius, add T0C for kelvin
-	var/cooling_power = 40000
+	var/cooling_power = 10000
 	base_state = "aircond"
 
 	light_color = LIGHT_COLOR_CYAN
@@ -112,7 +112,7 @@
 	if(on)
 		if(cell && cell.charge > 0)
 			if(chill())
-				cell.use(cooling_power/20000)
+				cell.use(cooling_power/5000)
 		else
 			on = 0
 			update_icon()

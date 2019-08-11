@@ -8,7 +8,7 @@
 	var/obj/item/weapon/cell/cell
 	var/on = 0
 	var/set_temperature = 50		// in celcius, add T0C for kelvin
-	var/heating_power = 40000
+	var/heating_power = 10000
 	var/base_state = "sheater"
 	var/nocell = 0
 	light_power_on = 0.75
@@ -298,7 +298,7 @@
 								removed.temperature = min(removed.temperature + heating_power/heat_capacity, 1000) // Added min() check to try and avoid wacky superheating issues in low gas scenarios -- TLE
 							else
 								removed.temperature = max(removed.temperature - heating_power/heat_capacity, TCMB)
-							cell.use(heating_power/20000)
+							cell.use(heating_power/5000)
 
 //						to_chat(world, "now at [removed.temperature]")
 
