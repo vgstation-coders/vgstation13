@@ -27,11 +27,11 @@
 #define MAX_ENERGY_CHANGE 10000
 
 //min and max temperature that we can heat or cool to, does not affect target temperature
-#define MAX_TEMPERATURE 90
-#define MIN_TEMPERATURE -40
+#define MAX_TEMPERATURE T0C+90
+#define MIN_TEMPERATURE T0C-40
 //maximum target temperature, we can't actually heat up/cool down to these but if things go above/below we'll start cooling/heating.
 //copied from the freezer and the heater for now
-#define MAX_TARGET_TEMPERATURE T20C + 280
+#define MAX_TARGET_TEMPERATURE T0C + 300
 #define MIN_TARGET_TEMPERATURE T0C - 200
 
 //All gases that do not fall under "other"
