@@ -140,7 +140,7 @@
 	if(!electrocute_mob(M, powernet, src))
 		var/damage = (10/(-1*(powernet.avail / 5000)))+45
 		if(damage > 0) //dont wanna heal em, damage only starts at around ~1kW
-			M.apply_damage(M.apply_damage(damage, BURN));
+			M.apply_damage(damage, BURN)
 	return 1
 
 /obj/structure/cable/powercreeper/proc/getViableNeighbours()
