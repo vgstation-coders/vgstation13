@@ -247,3 +247,13 @@
 		qdel(src)
 	else
 		parent_borer.chemicals -= 3
+
+/obj/item/weapon/shield/riot/tower
+	name = "tower shield"
+	desc = "A veritable wall of defence."
+	icon_state = "tower_shield"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
+	slowdown = 4
+
+/obj/item/weapon/shield/riot/tower/IsShield()
+	return 2
