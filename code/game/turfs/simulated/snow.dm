@@ -1,10 +1,3 @@
-var/list/snow_tiles = list()
-var/list/snow_overlay_cache = list()
-
-/proc/begin_blizzard()
-	for(var/turf/simulated/floor/plating/snow/tile in snow_tiles)
-		
-
 /turf/simulated/floor/plating/snow
 	name = "snow"
 	desc = "A layer of frozen water particles, kept solid by temperatures way below freezing. On the plus side, can easily be weaponized."

@@ -1,6 +1,49 @@
+#define SNOW_CALM 0
+#define SNOW_AVERAGE 1
+#define SNOW_HARD 2
+#define SNOW_BLIZZARD 3 
+
+//This file includes all associated code with snow tiles, snowprints, and blizzards on them.
+
+var/list/global_snowtiles = list()
+var/list/snow_state_to_texture = list()
+var/snow_intensity = SNOW_CALM
+
+/proc/greaten_snowfall()
+	if(snow_intensity == SNOW_BLIZZARD)
+		return
+	snow_intensity++
+	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
+		tile.snow_state++
+		tile.update_environment()
+		
+/proc/lessen_snowfall()
+	if(snow_intensity == SNOW_CALM)
+		return
+	snow_intensity--
+	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
+		tile.snow_state--
+		tile.update_environment()
+	
+	
+	
+	
+/obj/effect/decal/cleanable/snowprint
+	name = "snowprint"
+	desc = "Brrr."
+	density = 0
+	anchored = 1
+	plane = ABOVE_HUMAN_PLANE
+	icon = 'icons/effects/fluidtracks.dmi'
+	icon_state = ""
+	var/obj/effect/decal/cleanable/blood/tracks/footprints/sprite_source //Apparently all footprints are bloodprints, so we can rip the sprites for each print there.
+	
+
+	
+	
 /turf/unsimulated/floor/snow
 	name = "snow"
-	desc = "A layer of frozen water particles, kept solid by temperatures way below freezing. On the plus side, can easily be weaponized."
+	desc = "A layer of frozen water particles, kept solid by temperatures way below freezing."
 	icon = 'icons/turf/new_snow.dmi'
 	icon_state = "snow0"
 	temperature = T_ARCTIC
@@ -8,26 +51,60 @@
 	nitrogen = MOLES_N2STANDARD_ARCTIC
 	can_border_transition = 1
 	plane = PLATING_PLANE
-	var/snowballs = TRUE
-	var/global/list/icon_state_to_appearance = list()
+	var/snowball_tile = TRUE
+	var/snowballs = 0
+	var/snow_state = SNOW_CALM	
 
+	
 /turf/unsimulated/floor/snow/New()
-
 	..()
-	if(icon_state_to_appearance[icon_state])
-		appearance = icon_state_to_appearance[icon_state]
-	else
-		var/image/snowfx1 = image('icons/turf/snowfx.dmi', "snowlayer1",SNOW_OVERLAY_LAYER)
-		var/image/snowfx2 = image('icons/turf/snowfx.dmi', "snowlayer2",SNOW_OVERLAY_LAYER)
-		snowfx1.plane = EFFECTS_PLANE
-		snowfx2.plane = EFFECTS_PLANE
-		overlays += snowfx1
-		overlays += snowfx2
-		icon_state_to_appearance[icon_state] = appearance
-	if(snowballs)
+	snow_state = snow_intensity
+	if(snowball_tile)
 		icon_state = "snow[rand(0, 6)]"
 		snowballs = rand(5, 10) //Used to be (30, 50). A quick way to overload the server with atom instances.
-
+	update_environment()
+	global_snowtiles += src
+	
+/turf/unsimulated/floor/snow/Destroy()	
+	global_snowtiles -= src
+	
+/turf/unsimulated/floor/snow/proc/update_environment()
+	switch(snow_state)
+		if(SNOW_CALM)
+			temperature = T0C
+		if(SNOW_AVERAGE)
+			temperature = T0C-10
+		if(SNOW_HARD)
+			temperature = T0C-25
+		if(SNOW_BLIZZARD)
+			temperature = T0C-40 //233.15 Kelvin, average temperature during a snowstorm
+	if(!snow_state_to_texture["[icon_state]-[snow_state]"])
+		cache_snowtile()
+	else
+		appearance = snow_state_to_texture["[icon_state]-[snow_state]"]
+		
+/turf/unsimulated/floor/snow/proc/cache_snowtile()
+	overlays.Cut()
+	var/list/snowfall_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
+	var/list/overlay_counts = list(2,1,1,1) 
+	for(var/i = 1 to 1)
+		var/image/snowfx = image('icons/turf/snowfx.dmi', "[snowfall_overlays[snow_state+1]][i]",SNOW_OVERLAY_LAYER)
+		snowfx.plane = EFFECTS_PLANE
+		overlays += snowfx			
+	snow_state_to_texture["[icon_state]-[snow_state]"] = appearance
+	
+/*
+/turf/unsimulated/floor/snow/Entered(atom/A, atom/OL)	
+	if(istype(A,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		AddTracks(H.get_foot print_type(),bloodDNA,0,H.dir,bloodcolor)
+	
+/turf/unsimulated/floor/snow/proc/AddSnowprint(var/footprint_type,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD)
+	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src
+	if(!tracks)
+		tracks = getFromPool(typepath, src)
+	tracks.AddTracks(bloodDNA,comingdir,goingdir,bloodcolor)
+	*/
 /turf/unsimulated/floor/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	..()
@@ -105,11 +182,12 @@
 
 /turf/unsimulated/floor/snow/permafrost
 	icon_state = "permafrost_full"
-	snowballs = FALSE
+	snowball_tile = FALSE
+	name = "permafrost"
+	desc = "Soil that never unfreezes."
 
 /obj/glacier
-	name = "glacier"
-	desc = "A frozen lake, kept solid by temperatures way below freezing."
+	desc = "A frozen lake kept solid by temperatures way below freezing."
 	icon = 'icons/turf/ice.dmi'
 	icon_state = "ice1"
 	anchored = 1
