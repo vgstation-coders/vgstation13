@@ -6,9 +6,11 @@ var/list/global_illegal_radios = list()
 
 /proc/buzz_black_market() //Updates and buzzes all illegalradios so the screen is current.
 	for(var/obj/item/device/illegalradio/radio in global_illegal_radios)
-		if(radio.notifications && usr && radio in usr.contents)
-			radio.interact(usr)
-			to_chat(usr,"<span class='info'>You feel \the [radio] buzz.</span>")
+		if(radio.notifications)
+			var/living/holder = get_holder_of_type(radio, /mob/living)
+			if(holder)
+				radio.interact(holder)
+				to_chat(holder,"<span class='info'>You feel \the [radio] buzz.</span>")
 
 /obj/item/device/illegalradio/nanotrasen/New()
 	qdel(src) //Removed, but mapping issues so xd
