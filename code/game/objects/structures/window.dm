@@ -600,6 +600,8 @@ var/list/one_way_windows
 
 	if(isturf(T))
 		SSair.mark_for_update(T)
+	
+	densityChanged()
 
 	return 1
 
