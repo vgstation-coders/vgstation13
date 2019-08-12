@@ -66,8 +66,8 @@
 	_color = "sexyclown"
 
 /obj/item/clothing/under/lola
-	name = "lola's clown suit"
-	desc = "Honk!"
+	name = "fighting clown suit"
+	desc = "Give 'em the ol' one-two!"
 	icon_state = "lola"
 	item_state = "lola"
 	_color = "lola"

@@ -164,8 +164,8 @@
 		qdel(src)
 
 obj/item/clothing/shoes/clown_shoes/lola
-	desc = "Honk!"
-	name = "lola's clown shoes"
+	name = "fighting clown shoes"
+	desc = "Squeaky when scuffling."
 	icon_state = "lola"
 	item_state = "lola"
 	_color = "lola"

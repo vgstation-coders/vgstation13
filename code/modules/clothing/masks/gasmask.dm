@@ -210,7 +210,7 @@
 	canstage = 0
 
 obj/item/clothing/mask/gas/lola
-	name = "lola's clown mask"
+	name = "fighting clown mask"
 	desc = "Honk!"
 	icon_state = "lola"
 	item_state = "lola"
