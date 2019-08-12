@@ -137,7 +137,11 @@
 		return 0
 	Beam(M, "lighting", 'icons/obj/zap.dmi', 5, 2)
 	playsound(src,'sound/weapons/electriczap.ogg',50, 1) //we still want a sound
-	return electrocute_mob(M, powernet, src)
+	if(!electrocute_mob(M, powernet, src))
+		var/damage = (10/(-1*(powernet.avail / 5000)))+45
+		if(damage > 0) //dont wanna heal em, damage only starts at around ~1kW
+			M.apply_damage(M.apply_damage(damage, BURN));
+	return 1
 
 /obj/structure/cable/powercreeper/proc/getViableNeighbours()
 	for(var/dir in cardinal)
