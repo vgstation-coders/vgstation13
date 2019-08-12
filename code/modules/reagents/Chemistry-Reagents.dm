@@ -6580,7 +6580,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	nutriment_factor = FOOD_METABOLISM
 	description = "This coffee seems uncannily good."
 
-/datum/reagent/tonio/on_mob_life(var/mob/living/M)
+/datum/reagent/drink/coffee/tonio/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
