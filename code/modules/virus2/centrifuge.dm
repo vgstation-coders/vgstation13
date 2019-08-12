@@ -20,7 +20,7 @@
 
 	var/on = FALSE
 
-	// Contains instances of /isolation_centrifuge_vial when initialized.
+	// Contains nullable instances of /isolation_centrifuge_vial.
 	var/list/vial_data = list(null, null, null, null)
 
 	light_color = "#8DC6E9"
@@ -42,9 +42,6 @@
 
 /obj/machinery/disease2/centrifuge/New()
 	. = ..()
-
-	for (var/i = 1 to vial_data.len)
-		vial_data[i] = new /isolation_centrifuge_vial
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/centrifuge,
@@ -82,15 +79,16 @@
 		return TRUE
 
 	var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial = I
-	for (var/isolation_centrifuge_vial/vial_datum in vial_data)
-		if (vial_datum.vial != null)
+	for (var/i = 1 to vial_data.len)
+		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
+		if (vial_datum != null)
 			continue
 
 		if (!user.drop_item(vial, src))
 			// Can't drop due to glue or something.
 			return TRUE
 
-		insert_vial(vial_datum, vial, user)
+		insert_vial(i, vial, user)
 		nanomanager.update_uis(src)
 		return TRUE
 
@@ -158,7 +156,7 @@
 
 	for (var/i = 1 to 4)
 		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
-		if (vial_datum.vial != null)
+		if (vial_datum != null)
 			add_vial_sprite(vial_datum.vial, i)
 
 
@@ -170,44 +168,6 @@
 		filling.alpha = mix_alpha_from_reagents(vial.reagents.reagent_list)
 		overlays += filling
 
-/*
-/obj/machinery/disease2/centrifuge/proc/add_vial_dat(var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial, var/list/vial_task = list(0,0,0,0,0), var/slot = 1)
-	var/dat = ""
-	var/valid = vial_valid[slot]
-
-	var/datum/reagent/blood/blood = locate() in vial.reagents.reagent_list
-	if (!blood)
-		var/datum/reagent/vaccine/vaccine = locate() in vial.reagents.reagent_list
-		if (!vaccine)
-			dat += "<A href='?src=\ref[src];ejectvial=[slot]'>[vial.name] (no blood detected)</a>"
-		else
-			var/vaccines = ""
-			for (var/A in vaccine.data["antigen"])
-				vaccines += "[A]"
-			if (vaccines == "")
-				vaccines = "blank"
-			dat += "<A href='?src=\ref[src];ejectvial=[slot]'>[vial.name] (Vaccine ([vaccines]))</a>"
-	else
-		if (vial_task[1])
-			switch (vial_task[1])
-				if ("dish")
-					var/target = vial_task[2]
-					var/progress = vial_task[3]
-					dat += "<A href='?src=\ref[src];ejectvial=[slot]'>[vial.name] (isolating [target]: [round(progress)]%)</a> <A href='?src=\ref[src];interrupt=[slot]'>X</a>"
-				if ("vaccine")
-					var/target = vial_task[2]
-					var/progress = vial_task[3]
-					dat += "<A href='?src=\ref[src];ejectvial=[slot]'>[vial.name] (synthesizing vaccine ([target]): [round(progress)]%)</a> <A href='?src=\ref[src];interrupt=[slot]'>X</a>"
-
-		else
-			if(blood.data && blood.data["virus2"])
-				var/list/blood_diseases = blood.data["virus2"]
-				if (blood_diseases && blood_diseases.len > 0)
-					dat += "<A href='?src=\ref[src];ejectvial=[slot]'>[vial.name] (pathogen detected)</a> <A href='?src=\ref[src];isolate=[slot]'>ISOLATE TO DISH</a> [valid ? "<A href='?src=\ref[src];synthvaccine=[slot]'>SYNTHESIZE VACCINE</a>" : "(not enough antibodies for a vaccine)"]"
-				else
-					dat += "<A href='?src=\ref[src];ejectvial=[slot]'>[vial.name] (no pathogen detected)</a> [valid ? "<A href='?src=\ref[src];synthvaccine=[slot]'>SYNTHESIZE VACCINE</a>" : "(not enough antibodies for a vaccine)"]"
-	return dat
-*/
 
 /obj/machinery/disease2/centrifuge/attack_hand(var/mob/user)
 	. = ..()
@@ -218,16 +178,15 @@
 
 	if (stat & (NOPOWER))
 		to_chat(user, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
-		for (var/isolation_centrifuge_vial/vial_datum in vial_data)
-			if (vial_datum.vial == null)
+		for (var/i = 1 to vial_data.len)
+			var/isolation_centrifuge_vial/vial_datum = vial_data[i]
+			if (vial_datum == null)
 				continue
 
 			var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial = vial_datum.vial
 			playsound(loc, 'sound/machines/click.ogg', 50, 1)
 			vial.forceMove(loc)
-			vial_datum.vial = null
-			vial_datum.valid_for_antibodies = FALSE
-			vial_datum.current_task = null
+			vial_data[i] = null
 			update_icon()
 			sleep(1)
 
@@ -238,27 +197,6 @@
 
 	ui_interact(user)
 
-/*
-	user.set_machine(src)
-
-	special = CENTRIFUGE_LIGHTSPECIAL_OFF
-
-	var/dat = ""
-	dat += "Power status: <A href='?src=\ref[src];power=1'>[on?"On":"Off"]</a>"
-	dat += "<hr>"
-	for (var/i = 1 to vials.len)
-		if(vials[i])
-			dat += add_vial_dat(vials[i],vial_task[i],i)
-		else
-			dat += "<A href='?src=\ref[src];insertvial=[i]'>Insert a vial</a>"
-		if(i < vials.len)
-			dat += "<BR>"
-	dat += "<hr>"
-
-	popup = new(user, "\ref[src]", "Isolation Centrifuge", 666, 189, src)
-	popup.set_content(dat)
-	popup.open()
-*/
 
 /obj/machinery/disease2/centrifuge/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	// this is the data which will be sent to the ui
@@ -271,12 +209,13 @@
 	var/list/vial_ui_data = list()
 	data["vials"] = vial_ui_data
 
-	for (var/isolation_centrifuge_vial/vial_datum in vial_data)
+	for (var/i = 1 to vial_data.len)
+		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
 		var/list/vial_ui_datum = list()
 		// tfw no linq
 		vial_ui_data[++vial_ui_data.len] = vial_ui_datum
 
-		var/inserted = vial_datum.vial != null
+		var/inserted = vial_datum != null
 		vial_ui_datum["inserted"] = inserted
 		if (!inserted)
 			continue
@@ -313,7 +252,7 @@
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "disease_isolation_centrifuge.tmpl", "Isolation Centrifuge")
+		ui = new(user, src, ui_key, "disease_isolation_centrifuge.tmpl", "Isolation Centrifuge", 700, 500)
 		ui.set_initial_data(data)
 		ui.open()
 
@@ -329,33 +268,26 @@
 		// we're not taking reagent density into account because even my autism has its limits
 		// >his autism doesn't have limits.
 		var/isolation_centrifuge_vial/viald1 = vial_data[1] // left
-		var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial1 = viald1.vial;
 		var/isolation_centrifuge_vial/viald2 = vial_data[2] // up
-		var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial2 = viald2.vial;
 		var/isolation_centrifuge_vial/viald3 = vial_data[3] // right
-		var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial3 = viald3.vial;
 		var/isolation_centrifuge_vial/viald4 = vial_data[4] // down
-		var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial4 = viald4.vial;
 
 		var/vial_unbalance_X = 0
-		if (vial1)
-			vial_unbalance_X += 5 + vial1.reagents.total_volume
-		if (vial3)
-			vial_unbalance_X -= 5 + vial3.reagents.total_volume
+		if (viald1)
+			vial_unbalance_X += 5 + viald1.vial.reagents.total_volume
+		if (viald3)
+			vial_unbalance_X -= 5 + viald3.vial.reagents.total_volume
 		var/vial_unbalance_Y = 0
-		if (vial2)
-			vial_unbalance_Y += 5 + vial2.reagents.total_volume
-		if (vial4)
-			vial_unbalance_Y -= 5 + vial4.reagents.total_volume
+		if (viald2)
+			vial_unbalance_Y += 5 + viald2.vial.reagents.total_volume
+		if (viald4)
+			vial_unbalance_Y -= 5 + viald4.vial.reagents.total_volume
 
 		last_imbalance = abs(vial_unbalance_X) + abs(vial_unbalance_Y) // vials can contain up to 25 units, so maximal unbalance is 60.
 
 		efficiency = base_efficiency / (1 + last_imbalance / 60) // which will at most double the time taken.
 
 		for (var/isolation_centrifuge_vial/vial_datum in vial_data)
-			if (vial_datum.vial == null)
-				continue
-
 			if (vial_datum.current_task)
 				centrifuge_act(vial_datum)
 
@@ -425,18 +357,18 @@
 			return TRUE
 
 		var/i = text2num(href_list["insertvial"])
-		if (i > vial_data.len)
+		if (i < 1 || i > vial_data.len)
 			return TRUE
 
 		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
-		if (vial_datum.vial != null)
+		if (vial_datum != null)
 			to_chat(user,"<span class='warning'>There is already a vial in that slot.</span>")
 			return TRUE
 
 		if (!user.drop_item(vial, src))
 			return TRUE
 
-		insert_vial(vial_datum, vial, user)
+		insert_vial(i, vial, user)
 		return TRUE
 
 	if (href_list["ejectvial"])
@@ -445,11 +377,11 @@
 			return TRUE
 
 		var/i = text2num(href_list["ejectvial"])
-		if (i > vial_data.len)
+		if (i < 1 || i > vial_data.len)
 			return TRUE
 
 		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
-		if (vial_datum.vial == null)
+		if (vial_datum == null)
 			return TRUE
 
 		var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial = vial_datum.vial
@@ -457,47 +389,49 @@
 		if (Adjacent(usr))
 			usr.put_in_hands(vial)
 
-		vial_datum.vial = null
-		vial_datum.valid_for_antibodies = FALSE
-		vial_datum.current_task = null
+		vial_data[i] = null
+
 		update_icon()
 		return TRUE
 
 
 	if (href_list["interrupt"])
 		var/i = text2num(href_list["interrupt"])
-		if (i > vial_data.len)
+		if (i < 1 || i > vial_data.len)
 			return TRUE
 
 		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
-		vial_datum.current_task = null
+		if (vial_datum != null)
+			vial_datum.current_task = null
 		return TRUE
 
 
 	if (href_list["isolate"])
 		var/i = text2num(href_list["isolate"])
-		if (i > vial_data.len)
+		if (i < 1 || i > vial_data.len)
 			return TRUE
 
 		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
-		start_isolate(vial_datum, usr)
+		if (vial_datum != null)
+			start_isolate(vial_datum, usr)
 		return TRUE
 
 
 	if (href_list["synthvaccine"])
 		var/i = text2num(href_list["synthvaccine"])
-		if (i > vial_data.len)
+		if (i < 1 || i > vial_data.len)
 			return TRUE
 
 		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
-		start_cure(vial_datum, usr)
+		if (vial_datum != null)
+			start_cure(vial_datum, usr)
 		return TRUE
 
 	return FALSE
 
 
 /obj/machinery/disease2/centrifuge/proc/start_isolate(var/isolation_centrifuge_vial/vial_datum, var/mob/user)
-	if (vial_datum.vial == null || vial_datum.current_task != null)
+	if (vial_datum.current_task != null)
 		return
 
 	var/datum/reagent/blood/blood = locate() in vial_datum.vial.reagents.reagent_list
@@ -610,18 +544,18 @@
 
 
 /obj/machinery/disease2/centrifuge/breakdown()
-	for (var/isolation_centrifuge_vial/vial_datum in vial_data)
-		if (vial_datum.vial != null)
-			vial_datum.vial.forceMove(loc)
-			vial_datum.vial = null
-			vial_datum.current_task = null
-			vial_datum.valid_for_antibodies = FALSE
+	for (var/i = 1 to vial_data.len)
+		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
+		vial_datum.vial.forceMove(loc)
+		vial_data[i] = null
 
 	special = CENTRIFUGE_LIGHTSPECIAL_OFF
 	..()
 
 
-/obj/machinery/disease2/centrifuge/proc/insert_vial(var/isolation_centrifuge_vial/vial_datum, var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial, var/mob/user)
+/obj/machinery/disease2/centrifuge/proc/insert_vial(var/index, var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial, var/mob/user)
+	var/isolation_centrifuge_vial/vial_datum = new
+	vial_data[index] = vial_datum
 	vial_datum.vial = vial
 	vial_datum.valid_for_antibodies = vial_has_antibodies(vial)
 	visible_message(

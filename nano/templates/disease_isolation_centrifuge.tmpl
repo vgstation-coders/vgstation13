@@ -78,7 +78,7 @@
 					<td>
 						{{:helper.link('Cancel', 'cancel', {'interrupt': index+1}, null, 'wide')}}
 					</td>
-					<td>
+					<td style="min-width: 100px">
 						{{:helper.displayBar(value.task_progress, 0, 100, 'wide', helper.round(value.task_progress) + '%')}}
 					</td>
 				{{/if}}
