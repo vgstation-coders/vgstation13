@@ -6619,6 +6619,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Wake-Up Call"
 	id = SECCOFFEE
 	description = "All the essentials."
+	
+/datum/reagent/drink/coffee/seccoffee/on_mob_life(var/mob/living/M)
+	..()
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
+			H.heal_organ_damage(1, 1) //liquid sprinkles!
 
 /datum/reagent/drink/coffee/medcoffee
 	name = "Lifeline"
