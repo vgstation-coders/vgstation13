@@ -24,7 +24,7 @@
             if(!node.connects_to_dir(0)) //we want a stump
                 continue
 
-            . += node
+            . |= node
 
 //called every powertick
 //this is because of how old powernets worked

@@ -5,7 +5,7 @@
 /datum/net_node/power/cable/New(loc, dir1, dir2) //dir2 is optional
     . = ..()
     setDirs(dir1, dir2)
-    cable_nodes += src
+    cable_nodes |= src
 
 /datum/net_node/power/cable/proc/setDirs(dir1, dir2)
     dir1 = text2num(dir1)
@@ -26,10 +26,10 @@
 
 /datum/net_node/power/cable/get_connections()
     //d1
-    . += get_connections_in_dir(d1)
+    . |= get_connections_in_dir(d1)
     
     //d2
-    . += get_connections_in_dir(d2)
+    . |= get_connections_in_dir(d2)
 
 /datum/net_node/power/cable/proc/get_connections_in_dir(var/dir)
     . = list()
@@ -37,12 +37,12 @@
 
     //on our tile
     T = get_turf(parent)
-    . += T.get_power_nodes(dir, list(src))
+    . |= T.get_power_nodes(dir, list(src))
 
     if(dir > 0)
         //on the adjacent tile
         T = get_step(T, dir)
-        . += T.get_power_nodes(turn(dir, 180), list(src))
+        . |= T.get_power_nodes(turn(dir, 180), list(src))
 
 /datum/net_node/power/cable/connects_to_dir(var/dir)
     return (d1 == dir || d2 == dir)
@@ -61,4 +61,4 @@
             if(!node.connects_to_dir(dir))
                 continue
 
-            . += node
+            . |= node

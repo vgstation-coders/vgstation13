@@ -9,7 +9,6 @@
 	desc = "It's an underfloor wiring terminal for power equipment."
 	level = 1
 	plane = ABOVE_PLATING_PLANE
-	var/obj/machinery/power/master
 	anchored = 1
 	layer = WIRE_TERMINAL_LAYER
 
@@ -27,6 +26,8 @@
 		hide(T.intact)
 	return
 
+/obj/machinery/power/terminal/add_power_node()
+	addNode(/datum/net_node/power/terminal)
 
 /obj/machinery/power/terminal/hide(var/i)
 	if(i)
@@ -50,10 +51,6 @@
 			plane = initial(plane)
 
 /obj/machinery/power/terminal/Destroy()
-	if (master)
-		master:terminal = null
-		master = null
-
 	..()
 
 /obj/machinery/power/terminal/attackby(obj/item/W, mob/user)
