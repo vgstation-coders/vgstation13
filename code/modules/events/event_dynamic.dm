@@ -46,6 +46,7 @@ var/list/event_last_fired = list()
 	possibleEvents[/datum/event/thing_storm/meaty_gore] = 25
 	possibleEvents[/datum/event/unlink_from_centcomm] = 10
 	possibleEvents[/datum/event/centcomm_order] = 25
+	possibleEvents[/datum/event/radiation_storm] = 50
 
 	if(active_with_role["AI"] > 0 || active_with_role["Cyborg"] > 0)
 		possibleEvents[/datum/event/ionstorm] = 30
@@ -57,6 +58,10 @@ var/list/event_last_fired = list()
 		possibleEvents[/datum/event/spacevine] = 15
 
 	possibleEvents[/datum/event/powercreeper] = 15
+	
+	if(map.nameShort == "snaxi") //Blizzard Event, which only really makes sense on Snaxi
+		possibleEvents[/datum/event/blizzard] = 80
+		possibleEvents[/datum/event/omega_blizzard] = 3
 
 	if(active_with_role["Engineer"] > 1)
 		possibleEvents[/datum/event/meteor_wave] = 15
