@@ -282,7 +282,7 @@ for anyone but the person committing mass murder.
 
 /datum/black_market_item/animal/monkeyhide
 	name = "Monkey Hide"
-	desc = "You're own peice of leather, some assembly required."
+	desc = "Your own piece of leather, some assembly required."
 	item = /obj/item/stack/sheet/animalhide/monkey
 	sps_chances = list(0, 5, 10)
 	stock_min = 15
