@@ -1294,7 +1294,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_SLIME "Slime"
 #define LANGUAGE_MARTIAN "Martian"
 
-//#define SAY_DEBUG 1
+#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
 	#warn SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
 	#define say_testing(a,x) to_chat(a, ("([__FILE__]:[__LINE__] say_testing) [x]"))

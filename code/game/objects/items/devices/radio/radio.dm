@@ -7,7 +7,7 @@
 	var/illegalradio_construction = 0
 	var/on = 1 // 0 for off
 	var/last_transmission
-	var/frequency = 1459 //common chat
+	var/frequency = 1459
 	var/traitor_frequency = 0 //tune to frequency to unlock traitor supplies
 	var/canhear_range = 3 // the range which mobs can hear this radio from
 	var/obj/item/device/radio/patch_link = null
@@ -62,7 +62,7 @@
 
 
 /obj/item/device/radio/initialize()
-
+	frequency = COMMON_FREQ //common chat
 	if(freerange)
 		if(frequency < 1200 || frequency > 1600)
 			frequency = sanitize_frequency(frequency, maxf)
@@ -523,7 +523,7 @@
 	else
 		user.show_message("<span class = 'info'>\The [src] can not be modified or attached!</span>")
 
-		
+
 /obj/item/device/radio/attack_self(mob/user)
 	if(illegalradio_construction == 0)
 		user.set_machine(src)
@@ -533,10 +533,10 @@
 		new /obj/item/weapon/ghetto_ansible(get_turf(src.loc))
 		illegalradio_construction = 0
 		updateDialog()
-		update_icon()		
+		update_icon()
 	else if(illegalradio_construction == 2)
 		to_chat(user, "You need wirecutters to remove the wiring!")
-	
+
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	user.set_machine(src)
@@ -575,7 +575,7 @@
 			return
 		to_chat(user, "You add high-voltage wires to the radio.")
 		illegalradio_construction = 2
-		C.use(3)	
+		C.use(3)
 	else if(iswirecutter(W) && illegalradio_construction == 2 && b_stat)
 		to_chat(user, "You cut the extra wires out of the radio.")
 		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
@@ -585,7 +585,7 @@
 	updateDialog()
 	update_icon()
 	add_fingerprint(user)
-	
+
 /obj/item/device/radio/update_icon()
 	..()
 	if(illegalradio_construction == 0)
@@ -593,11 +593,11 @@
 		item_state = "walkietalkie"
 	else if(illegalradio_construction == 1)
 		icon_state = "radio_build1"
-		item_state = "radio_build1"	
+		item_state = "radio_build1"
 	else
 		icon_state = "radio_build2"
-		item_state = "radio_build2"	
-	
+		item_state = "radio_build2"
+
 /obj/item/device/radio/emp_act(severity)
 	broadcasting = 0
 	listening = 0
