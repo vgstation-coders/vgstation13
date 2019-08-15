@@ -3494,18 +3494,20 @@
 		if(5 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
 			percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
 			if(prob(20))
-				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>", 
+				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
 								"<span class='warning'>You feel different, somehow...</span>"))
 			if(prob(percent_machine))
 				holder.add_reagent("mednanobots", 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
 		if(20 to INFINITY) //Now you've done it.
+			if(istype(M, /mob/living/simple_animal/hostile/monster/cyber_horror))
+				return
 			spawning_horror = 1
 			to_chat(M, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
 			spawn(60)
 				if(spawning_horror == 1)
 					to_chat(M, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
-					message_admins("[key_name(M)] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(M)])")
+					message_admins("[key_name(M)] [M] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(M)])")
 					if(ishuman(M))
 						var/mob/living/carbon/human/H = M
 						var/typepath
