@@ -148,6 +148,12 @@
 	agony = 1
 	penetration = 2
 
+/obj/item/projectile/bullet/auto380/OnFired() //vector does more damage with regular ammo
+	..()
+	//ispath() is reversed and cuts offs any subclass, it just works
+	if(ispath(/obj/item/projectile/bullet/auto380, type) && istype(shot_from, /obj/item/weapon/gun/projectile/automatic/vector))
+		damage += 4
+
 /obj/item/projectile/bullet/auto380/practice
 	damage = 2
 	drowsy = 0
