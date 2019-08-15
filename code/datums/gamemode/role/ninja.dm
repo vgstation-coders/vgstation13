@@ -9,6 +9,8 @@
 	restricted_jobs = list()
 	greets = list(GREET_DEFAULT,GREET_WEEB,GREET_CUSTOM)
 
+	stat_datum_type = /datum/stat/role/ninja
+
 /datum/role/ninja/OnPostSetup()
 	. =..()
 	if(ishuman(antag.current))
@@ -110,12 +112,17 @@
 /obj/item/stack/shuriken/throw_at(var/atom/A, throw_range, throw_speed)
 	if(ishuman(usr))
 		var/mob/living/carbon/human/H = usr
-		if(H.mind.GetRole(NINJA))
+		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
+		if(N)
 			if(amount>1)
 				use(1)
 				var/obj/item/stack/shuriken/S = new(loc)
 				S.throw_at(A,throw_range,throw_speed*2)
 				H.put_in_hands(src)
+				//statistics collection: ninja shuriken thrown
+				if(istype(N.stat_datum, /datum/stat/role/ninja))
+					var/datum/stat/role/ninja/ND = N.stat_datum
+					ND.shuriken_thrown++
 			else
 				..(A,throw_range,throw_speed*2)
 		else
@@ -386,6 +393,13 @@
 	else
 		to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((T.cooldown - world.time)/10)] seconds.</span>")
 
+	//statistics collection: ninja times charged sword
+	var/datum/role/ninja/N = user.mind.GetRole(NINJA)
+	if(istype(N.stat_datum, /datum/stat/role/ninja))
+		var/datum/stat/role/ninja/ND = N.stat_datum
+		ND.times_charged_sword++
+
+
 /obj/item/mounted/poster/stealth
 	name = "rolled-up stealth poster"
 	desc = "The nanofilaments can mimic the color of walls and space station infastructure, but the edges remain a giveaway."
@@ -402,9 +416,14 @@
 	var/obj/structure/sign/poster/stealth/P = ..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.mind.GetRole(NINJA) && P)
+		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
+		if(N && P)
 			P.entry_turf = get_turf(user)
 			user.forceMove(P)
+			//statistics collection: ninja stealth posters posted
+			if(istype(N.stat_datum, /datum/stat/role/ninja))
+				var/datum/stat/role/ninja/ND = N.stat_datum
+				ND.stealth_posters_posted++
 	return P
 
 /obj/item/mounted/poster/stealth/poster_animation(obj/D,mob/user)

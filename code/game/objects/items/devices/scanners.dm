@@ -78,8 +78,9 @@ BREATHALYZER
 
 /obj/item/device/healthanalyzer
 	name = "health analyzer"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	icon_state = "health"
-	item_state = "analyzer"
+	item_state = "healthanalyzer"
 	desc = "A hand-held body scanner able to distinguish vital signs of the subject."
 	flags = FPRINT
 	siemens_coefficient = 1

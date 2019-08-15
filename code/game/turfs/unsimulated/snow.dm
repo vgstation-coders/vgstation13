@@ -6,10 +6,7 @@
 	temperature = T_ARCTIC
 	oxygen = MOLES_O2STANDARD_ARCTIC
 	nitrogen = MOLES_N2STANDARD_ARCTIC
-	light_color = "#e5ffff"
 	can_border_transition = 1
-	dynamic_lighting = 0
-	luminosity = 1
 	plane = PLATING_PLANE
 	var/snowballs = TRUE
 	var/global/list/icon_state_to_appearance = list()

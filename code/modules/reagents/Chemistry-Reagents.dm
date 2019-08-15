@@ -2295,6 +2295,10 @@
 		tray.weedlevel -= 3
 		tray.toxins += 15
 		tray.check_level_sanity()
+	else if(istype(O, /obj/structure/cable/powercreeper))
+		var/obj/structure/cable/powercreeper/PC = O
+		if(prob(1*(PC.powernet.avail/1000))) //The less there is, the hardier it gets
+			PC.die()
 
 /datum/reagent/toxin/plantbgone/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -6576,7 +6580,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	nutriment_factor = FOOD_METABOLISM
 	description = "This coffee seems uncannily good."
 
-/datum/reagent/tonio/on_mob_life(var/mob/living/M)
+/datum/reagent/drink/coffee/tonio/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1

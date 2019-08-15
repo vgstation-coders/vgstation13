@@ -19,7 +19,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 {{if !data.logged_in}}
 	<div class="line">
 		{{:helper.link('Log in', 'unlocked', {'login': 1})}}
-	</div>	
+	</div>
 {{else}}
 	<div class="line">
 		Logged in as: <b>{{:data.login_name}}</b> {{:helper.link('Log out', 'locked', {'logout': 1}, (data.emagged) ? 'disabled' : null)}}
@@ -30,7 +30,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 			{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
 			{{:helper.link('Show Detail List', 'script', {'set_screen': 1})}}
 		</div>
-		
+
 		<div class="line">
 			<h3>System Presets</h3>
 		</div>
@@ -364,6 +364,29 @@ Used In File(s): /code/game/machinery/alarm.dm
 								</div>
 							</div>
 							{{/if}}
+							<div class="line">
+								<div class="statusLabelWide">Pressure checks:</div>
+								<div class="statusValue">
+									{{:helper.link('External','power',{'id_tag':value.id_tag,'command':'checks','val':helper.xor(value.checks,1)},null,(value.checks & 1 ?'linkOn':'red'))}}
+									{{:helper.link('Internal','power',{'id_tag':value.id_tag,'command':'checks','val':helper.xor(value.checks,2)},null,(value.checks & 2 ?'linkOn':'red'))}}
+								</div>
+							</div>
+							<div class="line">
+								<div class="statusLabelWide">External pressure target:</div>
+								<div class="statusValue">
+									{{:helper.precisionRound(value.external,4)}} kPa
+								</div>
+								{{:helper.link('Set','gear',{'id_tag':value.id_tag,'command':'set_external_pressure'})}}
+								{{:helper.link('Reset','arrowrefresh-1-n',{'id_tag':value.id_tag,'command':'set_external_pressure','val':101.325},null,'linkOn')}}
+							</div>
+							<div class="line">
+								<div class="statusLabelWide">Internal pressure target:</div>
+								<div class="statusValue">
+									{{:helper.precisionRound(value.internal,4)}} kPa
+								</div>
+								{{:helper.link('Set','gear',{'id_tag':value.id_tag,'command':'set_internal_pressure'})}}
+								{{:helper.link('Reset','arrowrefresh-1-n',{'id_tag':value.id_tag,'command':'set_internal_pressure','val':0},null,'linkOn')}}
+							</div>
 						</div>
 					{{empty}}
 						<i>No scrubbers located in this area.</i>
@@ -383,7 +406,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 					</div>
 					<h3>System Preset</h3>
 					<div class="line">
-						Cycle after changing preset 
+						Cycle after changing preset
 						{{if data.cycle_after_preset}}
 							{{:helper.link('Yes', null, {'toggle_cycle_after_preset':1}, null, 'greenBackground')}}
 						{{else}}

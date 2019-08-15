@@ -2505,7 +2505,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/kimono/sakura = 3,
 		/obj/item/clothing/head/widehat_red = 3,
 		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/head/sombrero = 3,
 		/obj/item/clothing/suit/poncho = 3
+
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/clothing/suit/cardborg = 3,

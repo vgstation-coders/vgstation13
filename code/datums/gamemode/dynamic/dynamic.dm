@@ -211,7 +211,6 @@ var/stacking_limit = 90
 	return 1
 
 /datum/gamemode/dynamic/Setup()
-	dynamic_stats.roundstart_pop = candidates.len
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart) - /datum/dynamic_ruleset/roundstart/delayed/)
 		roundstart_rules += new rule()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
@@ -239,7 +238,8 @@ var/stacking_limit = 90
 	var/starting_rulesets = ""
 	for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
 		starting_rulesets += "[DR.name], "
-	dynamic_stats.roundstart_rulesets = starting_rulesets
+	dynamic_stats.round_start_pop = candidates.len
+	dynamic_stats.round_start_rulesets = starting_rulesets
 	dynamic_stats.measure_threat(threat)
 	return 1
 
@@ -468,7 +468,8 @@ var/stacking_limit = 90
 		update_playercounts()
 
 		if (injection_attempt())
-			midround_injection_cooldown = rand(600,1050)//20 to 35 minutes inbetween midround threat injections attempts
+			var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
+			midround_injection_cooldown = round(Clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
 			var/list/drafted_rules = list()
 			var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
 			current_players[CURRENT_LIVING_PLAYERS] = living_players.Copy()
@@ -612,7 +613,8 @@ var/stacking_limit = 90
 					drafted_rules[rule] = rule.get_weight()
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
-			latejoin_injection_cooldown = rand(330,510)//11 to 17 minutes inbetween antag latejoiner rolls
+			var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
+			latejoin_injection_cooldown = round(Clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
 
 /datum/gamemode/dynamic/mob_destroyed(var/mob/M)
 	for (var/datum/dynamic_ruleset/DR in midround_rules)
