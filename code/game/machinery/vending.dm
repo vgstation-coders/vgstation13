@@ -1578,6 +1578,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/bottle/charcoal = 4,
 		/obj/item/weapon/reagent_containers/syringe/antiviral = 4,
 		/obj/item/weapon/reagent_containers/syringe = 12,
+		/obj/item/weapon/reagent_containers/glass/beaker/vial = 8,
 		/obj/item/device/healthanalyzer = 5,
 		/obj/item/device/antibody_scanner = 5,
 		/obj/item/weapon/reagent_containers/glass/beaker = 4,
@@ -2106,8 +2107,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/wizrobe/magusblue = 5,
 		/obj/item/clothing/head/wizard/amp = 5,
 		/obj/item/clothing/suit/wizrobe/psypurple = 5,
+		/obj/item/clothing/head/pharaoh = 5,
+		/obj/item/clothing/suit/wizrobe/pharaoh = 5,
 		/obj/item/clothing/shoes/sandal/marisa/leather = 5,
-		/obj/item/clothing/shoes/sandal = 5,
+		/obj/item/clothing/shoes/sandal = 10,
 		/obj/item/clothing/shoes/sandal/marisa = 5,
 		/obj/item/weapon/staff = 5,
 		/obj/item/weapon/staff/broom = 5,
@@ -2502,7 +2505,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/kimono/sakura = 3,
 		/obj/item/clothing/head/widehat_red = 3,
 		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/head/sombrero = 3,
 		/obj/item/clothing/suit/poncho = 3
+
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/clothing/suit/cardborg = 3,
@@ -2702,6 +2707,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/officercoat = 10,
 		/obj/item/clothing/under/officeruniform = 10,
 		)
+	premium = list(
+		/obj/item/clothing/under/varsity = 1,
+		)
 
 	pack = /obj/structure/vendomatpack/nazivend
 
@@ -2740,6 +2748,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/helmet/space/rig/nazi = 3,
 		/obj/item/clothing/suit/space/rig/nazi = 3,
 		/obj/item/weapon/gun/energy/plasma/MP40k = 4,
+		)
+	premium = list(
+		/obj/item/clothing/under/varsity = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/nazivend //can be reloaded with the same packs as the regular one

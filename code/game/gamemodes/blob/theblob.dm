@@ -36,6 +36,7 @@ var/list/blob_looks
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
 */
 //Few global vars to track the blob
+var/blob_tiles_grown_total = 0
 var/list/blobs = list()
 var/list/blob_cores = list()
 var/list/blob_nodes = list()
@@ -109,6 +110,8 @@ var/list/blob_overminds = list()
 	..(loc)
 	for(var/atom/A in loc)
 		A.blob_act(0,src)
+
+	blob_tiles_grown_total++
 	return
 
 
@@ -270,6 +273,12 @@ var/list/blob_overminds = list()
 			layer = OBJ_LAYER
 			overlays.len = 0
 
+	blob_looks(looks)
+
+	if(right_now)
+		update_icon()
+
+/atom/proc/blob_looks(var/looks = "new")
 	switch(looks)
 		if("new")
 			icon = 'icons/mob/blob/blob_64x64.dmi'
@@ -293,8 +302,6 @@ var/list/blob_overminds = list()
 			icon = 'icons/mob/blob_machine.dmi'
 		*/
 
-	if(right_now)
-		update_icon()
 
 var/list/blob_looks_admin = list(//Options available to admins
 	"new" = 64,

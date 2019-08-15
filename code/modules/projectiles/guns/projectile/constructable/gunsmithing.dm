@@ -1,5 +1,14 @@
 //This file will contain all the intermediary parts used in the crafting of craftable weapons, before they actually become said weapons.
 
+
+/obj/item/weapon/ghetto_ansible //Currently only used in the black market radio construction
+	name = "crude ansible"
+	desc = "A piece of metal, welded into the shape of an ansible."
+	icon = 'icons/obj/weaponsmithing.dmi'
+	icon_state = "ghetto_ansible"
+	w_class = W_CLASS_TINY
+	
+	
 /obj/item/weapon/aluminum_cylinder
 	name = "aluminum cylinder"
 	desc = "A soda can that has had the top and bottom cut out."
@@ -190,6 +199,7 @@
 		else
 			new /obj/item/stack/medical/splint/ghetto(get_turf(src.loc))
 		qdel(W)
+		qdel(src)
 
 /obj/item/weapon/cylinder
 	name = "beaker"

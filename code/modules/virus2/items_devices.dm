@@ -3,16 +3,29 @@
 /obj/item/device/antibody_scanner
 	name = "immunity scanner"
 	desc = "A hand-held body scanner able to evaluate the immune system of the subject."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	icon_state = "antibody"
-	w_class = W_CLASS_SMALL
-	item_state = "electronic"
+	item_state = "immunity"
 	flags = FPRINT
 	siemens_coefficient = 1
+	slot_flags = SLOT_BELT
+	throwforce = 3
+	w_class = W_CLASS_TINY
+	throw_speed = 5
+	starting_materials = list(MAT_IRON = 200)
+	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_PLASTIC
+	origin_tech = Tc_MAGNETS + "=1;" + Tc_BIOTECH + "=1"
+	attack_delay = 0
 
 
 /obj/item/device/antibody_scanner/attack(var/mob/living/L, var/mob/user)
 	if(!istype(L))
 		//to_chat(user, "<span class='notice'>Incompatible object, scan aborted.</span>")
+		return
+
+	if (issilicon(L))
+		to_chat(user, "<span class='warning'>Incompatible with silicon lifeforms, scan aborted.</span>")
 		return
 
 	playsound(user, 'sound/items/detscan.ogg', 50, 1)
@@ -110,8 +123,10 @@ var/list/virusdishes = list()
 /obj/item/weapon/virusdish
 	name = "growth dish"
 	desc = "A petri dish fit to contain viral, bacteriologic, parasitic, or any other kind of pathogenic culture."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "virusdish"
+	item_state = "virusdish"
 	w_class = W_CLASS_SMALL
 	sterility = 100//the outside of the dish is sterile.
 	var/growth = 0
@@ -265,9 +280,9 @@ var/list/virusdishes = list()
 		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
 		contained_virus = new virus_choice
 		var/list/anti = list(
-			ANTIGEN_BLOOD	= 2,
-			ANTIGEN_COMMON	= 2,
-			ANTIGEN_RARE	= 1,
+			ANTIGEN_BLOOD	= 1,
+			ANTIGEN_COMMON	= 1,
+			ANTIGEN_RARE	= 0,
 			ANTIGEN_ALIEN	= 0,
 			)
 		var/list/bad = list(
@@ -285,6 +300,22 @@ var/list/virusdishes = list()
 	else
 		virusdishes.Remove(src)
 
+/obj/item/weapon/virusdish/open
+	icon_state = "virusdish1"
+
+/obj/item/weapon/virusdish/open/New(loc)
+	..()
+	open = TRUE
+	update_icon()
+
+/obj/item/weapon/virusdish/random/open
+	icon_state = "virusdish1"
+
+/obj/item/weapon/virusdish/random/open/New(loc)
+	..()
+	open = TRUE
+	update_icon()
+	processing_objects.Add(src)
 
 /obj/item/weapon/virusdish/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
@@ -350,8 +381,9 @@ var/list/virusdishes = list()
 		to_chat(user, "<span class='info'>There is a sticker with some printed information on it. <a href ='?src=\ref[src];examine=1'>(Read it)</a></span>")
 
 /obj/item/weapon/virusdish/Topic(href, href_list)
-	if(..())
-		return TRUE
+	if (!isobserver(usr))
+		if(..())
+			return TRUE
 	if(href_list["examine"])
 		var/datum/browser/popup = new(usr, "\ref[src]", name, 600, 300, src)
 		popup.set_content(info)

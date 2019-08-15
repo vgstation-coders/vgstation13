@@ -20,6 +20,14 @@
 	ammo_type = "/obj/item/ammo_casing/c38"
 	max_ammo = 6
 	multiple_sprites = 1
+	
+/obj/item/ammo_storage/box/c762x38r
+	name = "ammo box (7.62x38R)"
+	desc = "A box of neo-russian revolver ammo."
+	icon_state = "bnagant"
+	ammo_type = "/obj/item/ammo_casing/c762x38r"
+	max_ammo = 7
+	multiple_sprites = 1
 
 /obj/item/ammo_storage/box/a418
 	name = "ammo box (.418)"

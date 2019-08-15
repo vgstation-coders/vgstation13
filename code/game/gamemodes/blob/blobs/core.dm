@@ -204,8 +204,6 @@
 			if(O != B)
 				to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
 
-	stat_collection.blob_spawned_blob_players++
-
 	return 1
 
 /obj/effect/blob/core/update_icon(var/spawnend = 0)

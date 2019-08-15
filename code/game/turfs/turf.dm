@@ -85,7 +85,6 @@
 	for(var/atom/movable/AM as mob|obj in src)
 		spawn( 0 )
 			src.Entered(AM)
-			return
 
 /turf/ex_act(severity)
 	return 0
@@ -340,6 +339,7 @@
 	var/old_affecting_lights = affecting_lights
 	var/old_lighting_overlay = lighting_overlay
 	var/old_corners = corners
+	var/old_density = density
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -425,6 +425,8 @@
 
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.
+	if(density != old_density)
+		densityChanged()
 
 /turf/proc/AddDecal(const/image/decal)
 	if(!turfdecals)
@@ -477,7 +479,7 @@
 	holy = 1
 	..()
 	new /obj/effect/overlay/holywaterpuddle(src)
-	
+
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs
 // Used for A-star pathfinding
@@ -673,6 +675,9 @@
 // Return a high number to make the mob move slower.
 // Return a low number to make the mob move superfast.
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
+	for(var/atom/A in src)
+		if(A.slowdown_modifier)
+			base_slowdown *= A.slowdown_modifier
 	return base_slowdown
 
 /turf/proc/has_gravity(mob/M)

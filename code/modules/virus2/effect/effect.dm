@@ -43,13 +43,14 @@
 		// Parent virus. Plans to generalize these are underway.
 
 	var/restricted = 0
-		// If 1, will never appear randomly in a disease, requiring instead to be manually set in the code. If 2, will not either appear in the encyclopedia.
-
+	// If 1, will never appear randomly in a disease, requiring instead to be manually set in the code. If 2, will not either appear in the encyclopedia.
+// The actual guts of the effect. Has a prob(chance)% to get called per tick.
 /datum/disease2/effect/proc/activate(var/mob/living/carbon/mob)
-	// The actual guts of the effect. Has a prob(chance)% to get called per tick.
+
+// If activation makes any permanent changes to the effect, this is where you undo them.
+// Will not get called if the virus has never been activated.
 /datum/disease2/effect/proc/deactivate(var/mob/living/carbon/mob)
-	// If activation makes any permanent changes to the effect, this is where you undo them.
-	// Will not get called if the virus has never been activated.
+
 /datum/disease2/effect/proc/affect_mob_voice(var/datum/speech/speech)
 	// Called by /mob/living/carbon/human/treat_speech
 /datum/disease2/effect/proc/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)

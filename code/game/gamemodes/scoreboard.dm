@@ -64,9 +64,8 @@
 		completions += "<HR>"
 
 	//Score Calculation and Display
-
-
 	for (var/ID in disease2_list)
+		var/disease_spread_count = 0
 		var/datum/disease2/disease/D = disease2_list[ID]
 		var/disease_score = 0
 		for (var/datum/disease2/effect/E in D.effects)
@@ -75,14 +74,20 @@
 		//diseases only count if the mob is still alive
 		if (disease_score <3)
 			for (var/mob/living/L in mob_list)
-				if (L.stat != DEAD)
-					if (ID in L.virus2)
+				if (ID in L.virus2)
+					disease_spread_count++
+					if (L.stat != DEAD)
 						score["disease_good"]++
 		else
 			for (var/mob/living/L in mob_list)
-				if (L.stat != DEAD)
-					if (ID in L.virus2)
+				if (ID in L.virus2)
+					disease_spread_count++
+					if (L.stat != DEAD)
 						score["disease_bad"]++
+
+		if (disease_spread_count > score["disease_most_count"])
+			score["disease_most_count"] = disease_spread_count
+			score["disease_most"] = ID
 
 	//Run through humans for diseases, also the Clown
 	for(var/mob/living/carbon/human/I in mob_list)
@@ -478,7 +483,7 @@
 	<B>Shuttle Escapees:</B> [score["escapees"]] ([score["escapees"] * 100] Points)<BR>
 	<B>Random Events Endured:</B> [score["eventsendured"]] ([score["eventsendured"] * 200] Points)<BR>
 	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
-	<B>Ultra-Clean Station:</B> [score["messbonus"] ? "Yes" : "No"] ([score["messbonus"] * 10000] Points)<BR><BR>
+	<B>Ultra-Clean Station:</B> [score["messbonus"] ? "Yes" : "No"] ([score["messbonus"] * 10000] Points)<BR>
 	<B>Beneficial diseases in living mobs:</B> [score["disease_good"]] ([score["disease_good"] * 20] Points)<BR><BR>
 
 	<U>THE BAD:</U><BR>
@@ -519,6 +524,17 @@
 		dat += "<B>Guns Magically Spawned:</B> [score["gunsspawned"]]<BR>"
 	if(score["nukedefuse"] < 30)
 		dat += "<B>Seconds Left on the Nuke When It Was Defused:</B> [score["nukedefuse"]]<BR>"
+	if(score["disease_most"] != null)
+		var/datum/disease2/disease/D = disease2_list[score["disease_most"]]
+		var/nickname = ""
+		var/dis_name = ""
+		if (score["disease_most"] in virusDB)
+			var/datum/data/record/v = virusDB[score["disease_most"]]
+			nickname = v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""
+			dis_name = v.fields["name"]
+		dat += "<B>Most Spread Disease:</B> [dis_name ? "[dis_name]":"[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)]"][nickname] (Origin: [D.origin], Strength: [D.strength]%, spread among [score["disease_most_count"]] mobs)<BR>"
+		for(var/datum/disease2/effect/e in D.effects)
+			dat += "&#x25CF; Stage [e.stage] - <b>[e.name]</b><BR>"
 
 	//Vault and away mission specific scoreboard elements
 	//The process_scoreboard() proc returns a list of strings associated with their score value (the number that's added to the total score)
@@ -596,7 +612,7 @@
 		round_end_info = dat
 		log_game(dat)
 
-		stat_collection.crewscore = score["crewscore"]
+		stat_collection.crew_score = score["crewscore"]
 
 	var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
 	popup.set_content(dat)

@@ -81,7 +81,7 @@
 /obj/item/Destroy()
 	infected_items -= src
 	if (pathogen)
-		for (var/mob/living/L in science_goggles_wearers)
+		for (var/mob/L in science_goggles_wearers)
 			if (L.client)
 				L.client.images -= pathogen
 		pathogen = null
@@ -1228,6 +1228,7 @@ var/global/list/image/blood_overlays = list()
 		if(bit & slot_flags)
 			if(M.get_item_by_flag(bit) == src)
 				return TRUE
+
 /obj/item/proc/get_shrapnel_projectile()
 	if(shrapnel_type)
 		return new shrapnel_type(src)

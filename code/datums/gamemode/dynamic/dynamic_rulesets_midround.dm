@@ -9,6 +9,7 @@
 	var/list/living_antags = list()
 	var/list/dead_players = list()
 	var/list/list_observers = list()
+	var/max_candidates = 0
 
 /datum/dynamic_ruleset/midround/from_ghosts/
 	weight = 0
@@ -60,7 +61,7 @@
 // (see /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0) for example)
 /datum/dynamic_ruleset/midround/ready(var/forced = 0)
 	if (!forced)
-		if(!check_enemy_jobs())
+		if(!check_enemy_jobs(TRUE))
 			return 0
 	return 1
 
@@ -78,9 +79,12 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/review_applications()
 	message_admins("Applicant list: [english_list(applicants)]")
-	for (var/i = required_candidates, i > 0, i--)
+	var/candidate_checks = required_candidates
+	if (max_candidates)
+		candidate_checks = max_candidates
+	for (var/i = candidate_checks, i > 0, i--)
 		if(applicants.len <= 0)
-			if(i == required_candidates)
+			if(i == candidate_checks)
 				//We have found no candidates so far and we are out of applicants.
 				mode.refund_threat(cost)
 				mode.threat_log += "[worldtime2text()]: Rule [name] refunded [cost] (all applications invalid)"
@@ -555,7 +559,7 @@
 	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
 	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	required_candidates = 1
-	var/max_candidates = 5
+	max_candidates = 5
 	weight = 5
 	cost = 25
 	requirements = list(90,70,50,40,30,20,10,10,10,10)

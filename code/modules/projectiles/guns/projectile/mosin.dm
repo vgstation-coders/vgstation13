@@ -1,8 +1,8 @@
-/obj/item/weapon/gun/projectile/nagant
+/obj/item/weapon/gun/projectile/mosin
 	name = "mosin nagant"
 	desc = "JOY OF HAVING MOSIN NAGANT RIFLE IS JOY THAT MONEY CANNOT AFFORD. "
-	fire_sound = 'sound/weapons/nagant.ogg'
-	icon_state = "nagant"
+	fire_sound = 'sound/weapons/mosin.ogg'
+	icon_state = "mosin"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 5
@@ -21,10 +21,10 @@
 
 	gun_flags = 0
 
-/obj/item/weapon/gun/projectile/nagant/isHandgun()
+/obj/item/weapon/gun/projectile/mosin/isHandgun()
 	return FALSE
 
-/obj/item/weapon/gun/projectile/nagant/attack_self(mob/living/user as mob)
+/obj/item/weapon/gun/projectile/mosin/attack_self(mob/living/user as mob)
 	if(recentpump)
 		return
 	pump(user)
@@ -33,7 +33,7 @@
 		recentpump = 0
 	return
 
-/obj/item/weapon/gun/projectile/nagant/process_chambered()
+/obj/item/weapon/gun/projectile/mosin/process_chambered()
 	if(in_chamber)
 		return 1
 	else if(current_shell && current_shell.BB)
@@ -44,8 +44,8 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/projectile/nagant/proc/pump(mob/M as mob)
-	playsound(M, 'sound/weapons/nagantreload.ogg', 100, 1)
+/obj/item/weapon/gun/projectile/mosin/proc/pump(mob/M as mob)
+	playsound(M, 'sound/weapons/mosinreload.ogg', 100, 1)
 	pumped = 0
 	if(current_shell)//We have a shell in the chamber
 		current_shell.forceMove(get_turf(src))//Eject casing
@@ -60,9 +60,9 @@
 	update_icon()	//I.E. fix the desc
 	return 1
 
-/obj/item/weapon/gun/projectile/nagant/attackby(var/obj/item/A as obj, mob/living/user as mob)
+/obj/item/weapon/gun/projectile/mosin/attackby(var/obj/item/A as obj, mob/living/user as mob)
 	..()
-	if(istype(src, /obj/item/weapon/gun/projectile/nagant/obrez))
+	if(istype(src, /obj/item/weapon/gun/projectile/mosin/obrez))
 		return
 	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
@@ -70,14 +70,14 @@
 			user.visible_message("<span class='danger'>Take the ammo out first.</span>", "<span class='danger'>You need to take the ammo out first.</span>")
 			return
 		if(do_after(user, src, 30))
-			var/obj/item/weapon/gun/projectile/nagant/obrez/newObrez = new /obj/item/weapon/gun/projectile/nagant/obrez(get_turf(src))
+			var/obj/item/weapon/gun/projectile/mosin/obrez/newObrez = new /obj/item/weapon/gun/projectile/mosin/obrez(get_turf(src))
 			for(var/obj/item/ammo_casing/AC in newObrez.loaded)
 				newObrez.loaded -= AC
 			qdel(src)
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
 	return
 
-/obj/item/weapon/gun/projectile/nagant/obrez
+/obj/item/weapon/gun/projectile/mosin/obrez
 	name = "obrez"
 	desc = "WHEN YOU SHOW OBREZ TO ENEMY, HE THINKS YOU ARE CRAZED LUNATIC, LIKE KRUSCHEV POUNDING SHOE ON DESK AND SHOUTING ANGRY PLAN TO BURY NATO IN DEEP GRAVE. YOU FIRE WITH FLAME BURSTING LIKE FIRE OF DRAGON, TWISTING BOLT LIKE MANIAC BETWEEN FIRINGS AND EJECTING EMPTY CASE AS BIG AS BEER CAN FROM ACTION."
 	fire_sound = 'sound/weapons/obrez.ogg'
@@ -87,10 +87,10 @@
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
 
-/obj/item/weapon/gun/projectile/nagant/obrez/isHandgun()
+/obj/item/weapon/gun/projectile/mosin/obrez/isHandgun()
 	return TRUE //WHY NOT
 
-/obj/item/weapon/gun/projectile/nagant/obrez/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/mosin/obrez/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(current_shell && current_shell.BB)
 		//explosion(src.loc,-1,1,2)
 		spark(user, 3, FALSE)
@@ -108,7 +108,7 @@
 				to_chat(user, "<span class='notice'>\The [src] almost flies out of your hands!</span>")
 	..()
 
-/obj/item/weapon/gun/projectile/nagant/obrez/proc/flame_turf(turflist)
+/obj/item/weapon/gun/projectile/mosin/obrez/proc/flame_turf(turflist)
 	var/turf/T = turflist[2]
 	var/turf/previousturf
 

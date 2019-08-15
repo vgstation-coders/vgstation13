@@ -146,11 +146,11 @@
 				tospawn = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - [unit_can_produce])", "Material Synthesizer") as num
 				tospawn = Clamp(round(tospawn), 0, unit_can_produce)
 
-				if (tospawn >= 1)
+				if (tospawn >= 1 && TakeCost(tospawn, modifier, user))
 					var/obj/item/stack/sheet/spawned_sheet = new material_type(get_turf(src))
 					spawned_sheet.amount = tospawn
 
-					TakeCost(tospawn, modifier, user)
+
 			else
 				to_chat(user, "<span class='warning'>\The [src] matter is not enough to create the selected material!</span>")
 				return
@@ -232,8 +232,10 @@
 	create_material(user, active_material)
 
 /obj/item/device/material_synth/proc/TakeCost(var/spawned, var/modifier, mob/user)
-	if(spawned)
+	if(spawned && matter >= round(spawned*modifier))
 		matter -= round(spawned * modifier)
+		return 1
+	return 0
 
 /obj/item/device/material_synth/robot/TakeCost(var/spawned, var/modifier, mob/user)
 	if(isrobot(user))

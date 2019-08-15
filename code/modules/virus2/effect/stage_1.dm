@@ -17,10 +17,10 @@
 	badness = EFFECT_DANGER_ANNOYING
 
 /datum/disease2/effect/sneeze/activate(var/mob/living/mob)
-	mob.say("*sneeze")
-	if (prob(50))
+	mob.emote("sneeze")
+	if (prob(50) && isturf(mob.loc))
 		var/obj/effect/decal/cleanable/mucus/M= locate(/obj/effect/decal/cleanable/mucus) in get_turf(mob)
-		if(M==null)
+		if(!M)
 			M = new(get_turf(mob))
 		else
 			if(M.dry)
@@ -36,7 +36,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/gunck/activate(var/mob/living/mob)
-	to_chat(mob, "<span class = 'notice'> Mucous runs down the back of your throat.</span>")
+	to_chat(mob, "<span class = 'notice'> Mucus runs down the back of your throat.</span>")
 
 
 /datum/disease2/effect/drool
@@ -47,7 +47,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/drool/activate(var/mob/living/mob)
-	mob.say("*drool")
+	mob.emote("drool")
 
 
 /datum/disease2/effect/twitch
@@ -58,7 +58,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/twitch/activate(var/mob/living/mob)
-	mob.say("*twitch")
+	mob.emote("twitch")
 
 
 /datum/disease2/effect/headache
@@ -69,7 +69,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/headache/activate(var/mob/living/mob)
-	to_chat(mob, "<span class = 'notice'>Your head hurts a bit</span>")
+	to_chat(mob, "<span class = 'notice'>Your head hurts a bit.</span>")
 
 
 /datum/disease2/effect/itching
@@ -147,8 +147,8 @@
 
 /datum/disease2/effect/bee_vomit
 	name = "Melisso-Emeto Syndrome"
-	desc = "Converts the lungs of the infected into a bee-hive, giving the infected a steady drip of honey in exchange of vomiting up a bee every so often."
-	encyclopedia = "The higher the symptom strength, the more honey can be accumulated. While Honey is a great healing reagent, it is also high on nutrients. Expect to become fat quickly.."
+	desc = "Converts the lungs of the infected into a bee-hive."
+	encyclopedia = "Giving the infected a steady drip of honey in exchange of coughing up a bee every so often. The higher the symptom strength, the more honey is generated, and the more bees will be coughed up and more often as well. While Honey is a great healing reagent, it is also high on nutrients. Expect to become fat quickly.."
 	stage = 1
 	badness = EFFECT_DANGER_ANNOYING
 	max_multiplier = 10
@@ -157,16 +157,14 @@
 	if (mob.reagents.get_reagent_amount(HONEY) < 10+multiplier*2)
 		mob.reagents.add_reagent(HONEY, multiplier)
 
-	if((mob.reagents.get_reagent_amount(HONEY)> 10) && prob(multiplier*4))
+	if(prob(4*multiplier))
 		to_chat(mob, "<span class='warning'>You feel a buzzing in your throat</span>")
-
 
 		spawn(5 SECONDS)
 			var/turf/simulated/T = get_turf(mob)
 			if(prob(50))
-				playsound(T, 'sound/effects/splat.ogg', 50, 1)
-				mob.visible_message("<span class='warning'>[mob] spits out a bee!</span>","<span class='danger'>You throw up a bee!</span>")
-				T.add_vomit_floor(mob, 1, 1, 1)
+				mob.audible_cough()
+				mob.visible_message("<span class='warning'>[mob] coughs out a bee!</span>","<span class='danger'>You cough up a bee!</span>")
 			for(var/i = 0 to multiplier)
 				var/bee_type = pick(
 					100;/mob/living/simple_animal/bee/adminSpawned,
@@ -175,7 +173,7 @@
 					1;/mob/living/simple_animal/bee/swarm,
 					1;/mob/living/simple_animal/bee/adminSpawned_hornet,
 					)
-				new bee_type(get_turf(mob))
+				new bee_type(T)
 
 
 /datum/disease2/effect/radresist
@@ -228,6 +226,9 @@
 			continue
 		else
 			nearest_mob = other_mob
+
+	if (!nearest_mob)
+		return 1
 
 	var/other_mob_name = get_first_word(nearest_mob.name)
 	var/list/greets_farewells = list("Howdy, [other_mob_name].",

@@ -37,8 +37,6 @@
 	else
 		new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
 
-	stat_collection.blob_spores_spawned++
-
 	return 1
 
 /obj/effect/blob/factory/Destroy()
@@ -143,11 +141,5 @@
 			CreateBlobDisease(looks)
 		var/datum/disease2/disease/D = blob_diseases[looks]
 
-		var/chance_to_infect = 100
-		if (target.check_contact_sterility(FULL_TORSO))//For simplicity's sake (for once), let's just assume that the blob strikes the torso.
-			chance_to_infect = 10//Even with perfect protection, those spores might get to you.
-		if (target.check_bodypart_bleeding(FULL_TORSO))
-			chance_to_infect = min(100, chance_to_infect + 10)
-
-		if (prob(chance_to_infect))
-			target.infect_disease2(D, notes="(Blob, from [src])")//still 5% chance to fail infection
+		if (!target.check_contact_sterility(FULL_TORSO))//For simplicity's sake (for once), let's just assume that the blob strikes the torso.
+			target.infect_disease2(D, notes="(Blob, from [src])")

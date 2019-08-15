@@ -1,13 +1,3 @@
-#define REAGENT_STATE_SOLID 1
-#define REAGENT_STATE_LIQUID 2
-#define REAGENT_STATE_GAS 3
-#define FOOD_METABOLISM 0.4
-#define REAGENTS_OVERDOSE 30
-#define REM REAGENTS_EFFECT_MULTIPLIER
-
-// Use in chem.flags.
-#define CHEMFLAG_DISHONORABLE 1
-
 /*	The reaction procs must ALWAYS set src = null, this detaches the proc from the object (the reagent)
 	so that it can continue working when the reagent is deleted while the proc is still active.
 
@@ -1441,9 +1431,6 @@
 			H.emote(pick("stare", "giggle"), null, null, TRUE)
 		if(prob(5))
 			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
-		if(prob(2))
-			to_chat(H, "<span class='notice'>You doze off for a second.</span>")
-			H.sleeping += 1
 		..()
 
 /datum/reagent/sacid
@@ -2308,6 +2295,10 @@
 		tray.weedlevel -= 3
 		tray.toxins += 15
 		tray.check_level_sanity()
+	else if(istype(O, /obj/structure/cable/powercreeper))
+		var/obj/structure/cable/powercreeper/PC = O
+		if(prob(1*(PC.powernet.avail/1000))) //The less there is, the hardier it gets
+			PC.die()
 
 /datum/reagent/toxin/plantbgone/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -3098,10 +3089,43 @@
 	id = ALLICIN
 	description = "A natural antipathogenic."
 	color = "#F1DEB4" //rgb: 241, 222, 180
+	custom_metabolism = 0.2
 	overdose_am = REAGENTS_OVERDOSE//30u
 	data = list(
 		"threshold" = 30,
 		)
+
+/datum/reagent/antipathogenic/allicin/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(STOXINS))
+		holder.remove_reagents(STOXINS, 2 * REM)
+	if(holder.has_reagent(PLASMA))
+		holder.remove_reagent(PLASMA, REM)
+	if(holder.has_any_reagents(SACIDS))
+		holder.remove_reagents(SACIDS, REM)
+	if(holder.has_reagent(POTASSIUM_HYDROXIDE))
+		holder.remove_reagent(POTASSIUM_HYDROXIDE, 2 * REM)
+	if(holder.has_reagent(CYANIDE))
+		holder.remove_reagent(CYANIDE, REM)
+	if(holder.has_reagent(AMATOXIN))
+		holder.remove_reagent(AMATOXIN, 2 * REM)
+	if(holder.has_reagent(CHLORALHYDRATE))
+		holder.remove_reagent(CHLORALHYDRATE, 5 * REM)
+	if(holder.has_reagent(CARPOTOXIN))
+		holder.remove_reagent(CARPOTOXIN, REM)
+	if(holder.has_reagent(ZOMBIEPOWDER))
+		holder.remove_reagent(ZOMBIEPOWDER, 0.5 * REM)
+	if(holder.has_reagent(MINDBREAKER))
+		holder.remove_reagent(MINDBREAKER, 2 * REM)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1 //3x as effective if they're sleeping, 2x if they're lying down
+	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
+	M.adjustToxLoss(-2 * REM)
 
 /datum/reagent/antipathogenic/allicin/on_overdose(var/mob/living/M)
 	if (prob(30))
@@ -3414,7 +3438,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#593948" //rgb: 89, 57, 72
-	custom_metabolism = 0.005
+	custom_metabolism = 0.005 //One unit every two hundred ticks, or 400-500 seconds.
 	var/spawning_horror = 0
 	var/percent_machine = 0
 	density = 96.64
@@ -3425,80 +3449,57 @@
 	if(..())
 		return 1
 
+	if(ishuman(M)) //Human type mob, so it has a wound system.
+		var/mob/living/carbon/human/H = M
+		for(var/datum/organ/external/E in H.organs)
+			for(var/datum/wound/internal_bleeding/W in E.wounds)
+				W.heal_damage(0.8, TRUE)
+				holder.remove_reagent(MEDNANOBOTS, 0.25)
+		for(var/datum/organ/internal/I in H.organs)
+			if(I.damage)
+				I.damage = max(0, I.damage - 5) //Heals a whooping 5 organ damage.
+				holder.remove_reagent(MEDNANOBOTS, 0.10) //Less so it doesn't vanish the nanobot supply
+			I.status &= ~ORGAN_BROKEN //What do I owe you?
+			I.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
+			I.status &= ~ORGAN_BLEEDING //FOR FREE?!
+	if(M.getOxyLoss() || M.getBruteLoss(TRUE) || M.getToxLoss() || M.getFireLoss(TRUE) || M.getCloneLoss())
+		M.adjustOxyLoss(-5)
+		M.heal_organ_damage(5, 5) //Heals Brute and Burn. It heals the mob, not individual organs.
+		M.adjustToxLoss(-5)
+		M.adjustCloneLoss(-5) //Repairs DNA!
+		holder.remove_reagent(MEDNANOBOTS, 0.25) //Consumes a quarter of an unit every time it heals.
+	if(M.dizziness)
+		M.dizziness = max(0, M.dizziness - 15)
+	if(M.confused)
+		M.confused = max(0, M.confused - 5)
+	for(var/datum/disease/D in M.viruses) //Diseases that work under the second rework of viruses, or "Viro 3"
+		D.spread = "Remissive"
+		D.stage--
+		if(D.stage < 1)
+			D.cure()
+	if(iscarbon(M)) //Can we support "Viro 2" diseases?
+		var/mob/living/carbon/C = M
+		for(var/A in C.virus2)
+			var/datum/disease2/disease/D2 = C.virus2[A]
+			D2.stage--
+			if(D2.stage < 1)
+				D2.cure(M)
 	switch(volume)
 		if(0.1 to 5)
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(H.species.name == "Diona")
-					return
-				for(var/datum/organ/external/E in H.organs)
-					for(var/datum/wound/internal_bleeding/W in E.wounds)
-						W.heal_damage(0.8, TRUE)
-						holder.remove_reagent(MEDNANOBOTS, 1/4)
-			if(M.getOxyLoss()>0 || M.getBruteLoss(ignore_inorganic = TRUE)>0 || M.getToxLoss()>0 || M.getFireLoss(ignore_inorganic = TRUE)>0 || M.getCloneLoss()>0)
-				if(holder.has_reagent("mednanobots"))
-					M.adjustOxyLoss(-5)
-					M.heal_organ_damage(5, 5)
-					M.adjustToxLoss(-5)
-					M.adjustCloneLoss(-5)
-					holder.remove_reagent("mednanobots", 1/4)  //This line of code will remove 1/4 of 1u whenever the nanobots heal any of the 5 different damage types along with internal bleeding. In short whenever you are healed it will remove 0.25u making each unit capable of healing a maximum of 20 per damage type.
-			if(percent_machine>5)
-				if(holder.has_reagent("mednanobots"))
-					percent_machine-=1
-					if(prob(20))
-						to_chat(M, pick("You feel more like yourself again."))
-			if(M.dizziness != 0)
-				M.dizziness = max(0, M.dizziness - 15)
-			if(M.confused != 0)
-				M.confused = max(0, M.confused - 5)
-			for(var/datum/disease/D in M.viruses)
-				D.spread = "Remissive"
-				D.stage--
-				if(D.stage < 1)
-					D.cure()
-			if(iscarbon(M))
-				var/mob/living/carbon/C = M
-				for(var/A in C.virus2)
-					var/datum/disease2/disease/D2 = C.virus2[A]
-					D2.stage--
-					if(D2.stage < 1)
-						D2.cure(M)
-		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(H.species.name == "Diona")
-					return
-			if(M.getOxyLoss()>0 || M.getBruteLoss()>0 || M.getToxLoss()>0 || M.getFireLoss()>0 || M.getCloneLoss()>0)
-				if(holder.has_reagent("mednanobots"))
-					M.adjustOxyLoss(-5)
-					M.heal_organ_damage(5, 5)
-					M.adjustToxLoss(-5)
-					M.adjustCloneLoss(-5)
-					holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
-					percent_machine +=1/2
-					if(prob(20))
-						to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-					else
-			if(M.dizziness != 0)
-				M.dizziness = max(0, M.dizziness - 15)
-			if(M.confused != 0)
-				M.confused = max(0, M.confused - 5)
-			for(var/datum/disease/D in M.viruses)
-				D.spread = "Remissive"
-				D.stage--
-				if(D.stage < 1)
-					D.cure()
-			if(iscarbon(M))
-				var/mob/living/carbon/C = M
-				for(var/A in C.virus2)
-					var/datum/disease2/disease/D2 = C.virus2[A]
-					D2.stage--
-					if(D2.stage < 1)
-						D2.cure(M)
+			if(percent_machine>5) //Slowly lowers the percent machine to a minimum of 5 when you aren't above 5 units.
+				percent_machine -= 1
+				if(prob(20))
+					to_chat(M, pick("You feel more like yourself again."))
+
+		if(5 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
+			percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
+			if(prob(20))
+				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>", 
+								"<span class='warning'>You feel different, somehow...</span>"))
 			if(prob(percent_machine))
 				holder.add_reagent("mednanobots", 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
-		if(20 to INFINITY)
+		if(20 to INFINITY) //Now you've done it.
 			spawning_horror = 1
 			to_chat(M, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
 			spawn(60)
@@ -3910,6 +3911,7 @@
 	id = BLACKCOLOR
 	description = "A black coloring used to dye food and drinks."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_OBSCURING
 	color = "#000000" //rgb: 0, 0, 0
 
 /datum/reagent/frostoil
@@ -4430,6 +4432,17 @@
 
 	if(!(locate(/obj/effect/decal/cleanable/flour) in T))
 		new /obj/effect/decal/cleanable/flour(T)
+
+/datum/reagent/flour/nova_flour
+	name = "nova flour"
+	id = NOVAFLOUR
+	description = "This is what you rub all over yourself to set on fire."
+	color = "#B22222" //rgb: 178, 34, 34
+
+/datum/reagent/flour/nova_flour/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /datum/reagent/rice
 	name = "Rice"
@@ -5753,6 +5766,14 @@
 			if(M.confused != 0)
 				M.confused = max(0, M.confused - 5)
 
+/datum/reagent/ethanol/deadrum/glasgow
+	name = "Glasgow Deadrum"
+	id = GLASGOW
+	description = "Makes you feel like you had one hell of a party."
+	color = "#662D1D" //rgb: 101, 44, 29
+	slur_start = 1
+	confused_start = 1
+
 /datum/reagent/ethanol/deadrum/tequila
 	name = "Tequila"
 	id = TEQUILA
@@ -6559,7 +6580,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	nutriment_factor = FOOD_METABOLISM
 	description = "This coffee seems uncannily good."
 
-/datum/reagent/tonio/on_mob_life(var/mob/living/M)
+/datum/reagent/drink/coffee/tonio/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1

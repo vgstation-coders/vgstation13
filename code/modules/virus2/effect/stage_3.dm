@@ -24,12 +24,14 @@
 	name = "Telepathy Syndrome"
 	desc = "Unlocks a portion of the infected's brain that allows for telepathic communication."
 	stage = 3
+	max_count = 1
 	badness = EFFECT_DANGER_HELPFUL
 
 /datum/disease2/effect/telepathic/activate(var/mob/living/mob)
-	mob.dna.check_integrity()
-	mob.dna.SetSEState(REMOTETALKBLOCK,1)
-	domutcheck(mob, null)
+	if (mob.dna)
+		mob.dna.check_integrity()
+		mob.dna.SetSEState(REMOTETALKBLOCK,1)
+		domutcheck(mob, null)
 
 /datum/disease2/effect/mind
 	name = "Lazy Mind Syndrome"
@@ -74,7 +76,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/giggle/activate(var/mob/living/mob)
-	mob.say("*giggle")
+	mob.emote("giggle")
 
 
 /datum/disease2/effect/chickenpox
@@ -120,7 +122,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/groan/activate(var/mob/living/mob)
-	mob.say("*groan")
+	mob.emote("groan")
 
 
 /datum/disease2/effect/sweat
@@ -145,7 +147,7 @@
 	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/elvis/activate(var/mob/living/mob)
-	if(!istype(mob))
+	if(!ishuman(mob))
 		return
 
 	var/mob/living/carbon/human/H = mob
@@ -157,7 +159,7 @@
 		mob.equip_to_slot(virussunglasses, slot_glasses)
 	mob.confused += 10
 
-	if(pick(0,1))
+	if(prob(50))
 		mob.say(pick("Uh HUH!", "Thank you, Thank you very much...", "I ain't nothin' but a hound dog!", "Swing low, sweet chariot!"))
 	else
 		mob.emote("me",1,pick("curls his lip!", "gyrates his hips!", "thrusts his hips!"))
@@ -199,14 +201,12 @@
 	mob.reagents.add_reagent(PSILOCYBIN, 20)
 	mob.say(pick("HONK!", "Honk!", "Honk.", "Honk?", "Honk!!", "Honk?!", "Honk..."))
 
-
-var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
-
 /datum/disease2/effect/horsethroat
 	name = "Horse Throat"
 	desc = "Inhibits communication from the infected through spontaneous generation of a horse mask."
 	stage = 3
 	badness = EFFECT_DANGER_HINDRANCE
+	var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 /datum/disease2/effect/horsethroat/activate(var/mob/living/mob)
 
@@ -228,7 +228,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	name = "Pro-tagonista Syndrome"
 	desc = "Causes the infected to believe they are the center of the universe. Outcome may vary depending on symptom strength."
 	stage = 3
-	var/triggered = 0
+	max_count = 1
 	var/given_katana = 0
 	affect_voice = 1
 	max_multiplier = 4
@@ -240,37 +240,35 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 /datum/disease2/effect/anime_hair/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
-		if(!triggered)
-			var/list/hair_colors = list("pink","red","green","blue","purple")
-			var/hair_color = pick(hair_colors)
+		var/list/hair_colors = list("pink","red","green","blue","purple")
+		var/hair_color = pick(hair_colors)
 
-			old_r = affected.my_appearance.b_hair
-			old_g = affected.my_appearance.g_hair
-			old_b = affected.my_appearance.r_hair
+		old_r = affected.my_appearance.b_hair
+		old_g = affected.my_appearance.g_hair
+		old_b = affected.my_appearance.r_hair
 
-			switch(hair_color)
-				if("pink")
-					affected.my_appearance.b_hair = 153
-					affected.my_appearance.g_hair = 102
-					affected.my_appearance.r_hair = 255
-				if("red")
-					affected.my_appearance.b_hair = 0
-					affected.my_appearance.g_hair = 0
-					affected.my_appearance.r_hair = 255
-				if("green")
-					affected.my_appearance.b_hair = 0
-					affected.my_appearance.g_hair = 255
-					affected.my_appearance.r_hair = 0
-				if("blue")
-					affected.my_appearance.b_hair = 255
-					affected.my_appearance.g_hair = 0
-					affected.my_appearance.r_hair = 0
-				if("purple")
-					affected.my_appearance.b_hair = 102
-					affected.my_appearance.g_hair = 0
-					affected.my_appearance.r_hair = 102
-			affected.update_hair()
-			triggered = 1
+		switch(hair_color)
+			if("pink")
+				affected.my_appearance.b_hair = 153
+				affected.my_appearance.g_hair = 102
+				affected.my_appearance.r_hair = 255
+			if("red")
+				affected.my_appearance.b_hair = 0
+				affected.my_appearance.g_hair = 0
+				affected.my_appearance.r_hair = 255
+			if("green")
+				affected.my_appearance.b_hair = 0
+				affected.my_appearance.g_hair = 255
+				affected.my_appearance.r_hair = 0
+			if("blue")
+				affected.my_appearance.b_hair = 255
+				affected.my_appearance.g_hair = 0
+				affected.my_appearance.r_hair = 0
+			if("purple")
+				affected.my_appearance.b_hair = 102
+				affected.my_appearance.g_hair = 0
+				affected.my_appearance.r_hair = 102
+		affected.update_hair()
 
 		if(multiplier)
 			if(multiplier >= 1.5)
@@ -350,17 +348,16 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
 	stage = 3
 	max_multiplier = 9.5 //Potential for 95% lube chance per step
 	badness = EFFECT_DANGER_HARMFUL
-	var/triggered
+	max_count = 1
 
 /datum/disease2/effect/lubefoot/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
-		if(multiplier > 1.5 && !triggered)
+		if(multiplier > 1.5 && !count)
 			to_chat(affected, "You feel slightly more inept than usual.")
 			affected.dna.check_integrity()
 			affected.dna.SetSEState(CLUMSYBLOCK,1)
 			domutcheck(mob, null)
-			triggered = 1
 		var/obj/item/clothing/shoes/clown_shoes/slippy/honkers = new /obj/item/clothing/shoes/clown_shoes/slippy
 		if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes))//Clown shoes may save you
 			affected.u_equip(affected.shoes,1)
@@ -474,19 +471,16 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	stage = 3
 	max_multiplier = 3
 	badness = EFFECT_DANGER_HELPFUL
-	var/activated = FALSE
+	max_count = 1
 
 /datum/disease2/effect/multiarm/activate(var/mob/living/mob)
-	if(activated)
-		return
 	var/hand_amount = round(multiplier)
 	mob.visible_message("<span class='warning'>[mob.take_blood(null, rand(4,12)) ? "With a spray of blood, " : ""][hand_amount > 1 ? "[hand_amount] more arms sprout" : "a new arm sprouts"] from \the [mob]!</span>","<span class='notice'>[hand_amount] more arms burst forth from your back!</span>")
 	mob.set_hand_amount(mob.held_items.len + hand_amount)
 	blood_splatter(mob.loc,mob,TRUE)
-	activated = TRUE
 
 /datum/disease2/effect/multiarm/deactivate(var/mob/living/mob)
-	if(!activated)
+	if(!count)
 		return
 	var/hand_amount = round(multiplier)
 	mob.visible_message("<span class='notice'>The arms sticking out of \the [mob]'s back shrivel up and fall off!</span>", "<span class='warning'>Your new arms begin to die off, as the virus can no longer support them.</span>")

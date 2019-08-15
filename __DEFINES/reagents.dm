@@ -1,3 +1,16 @@
+
+#define REAGENT_STATE_SOLID 1
+#define REAGENT_STATE_LIQUID 2
+#define REAGENT_STATE_GAS 3
+#define FOOD_METABOLISM 0.4
+#define REAGENTS_OVERDOSE 30
+#define REM REAGENTS_EFFECT_MULTIPLIER
+
+// Use in chem.flags.
+#define CHEMFLAG_DISHONORABLE 1
+#define CHEMFLAG_OBSCURING 2
+
+
 //Reagents
 
 #define VAPORSALT			"vaporsalt"
@@ -146,6 +159,7 @@
 #define CORNOIL 			"cornoil"
 #define ENZYME 			"enzyme"
 #define FLOUR 			"flour"
+#define NOVAFLOUR		"novaflour"
 #define RICE 			"rice"
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
@@ -209,6 +223,7 @@
 #define RUM 			"rum"
 #define VODKA 			"vodka"
 #define SAKE 			"sake"
+#define GLASGOW 			"glasgow"
 #define TEQUILA 			"tequila"
 #define VERMOUTH 			"vermouth"
 #define WINE 			"wine"
@@ -461,4 +476,4 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_VAPOR		"vaporsacs"
 #define INCENSE_DENSE		"grasses"
 #define INCENSE_CRAVE		"vales"
-#define INCENSE_CORNOIL 	"cornoil"
+#define INCENSE_CORNOIL 	"cornoils"

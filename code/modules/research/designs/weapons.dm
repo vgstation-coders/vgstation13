@@ -400,6 +400,14 @@
 	materials = list(MAT_IRON = 400)
 	build_path = /obj/item/ammo_storage/magazine/m380auto/empty
 
+/datum/design/magazine_380_extended
+	name = "Extended magazine (.380AUTO)"
+	desc = "A magazine designed for .380AUTO vectors."
+	id = "magazine_380_e"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 800)
+	build_path = /obj/item/ammo_storage/magazine/m380auto/extended/empty
+
 /datum/design/magazine_c45
 	name = "Pistol magazine (.45)"
 	desc = "A magazine designed for common .45 pistols."

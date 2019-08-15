@@ -1,5 +1,34 @@
-//Basically walking media receivers
 /mob/living/carbon/complex/gondola
+	name = "gondola"
+	desc = "A calming presence in this strange land."
+	icon = 'icons/mob/gondola.dmi'
+
+	icon_state_standing = "gondola"
+	icon_state_lying = "gondola_lying"
+	icon_state_dead = "gondola_dead"
+
+	maxHealth = 75
+	health = 75
+
+	held_items = list()
+
+	size = SIZE_NORMAL
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
+	mob_bump_flag = HUMAN
+	mob_push_flags = ALLMOBS
+	mob_swap_flags = ALLMOBS
+
+/mob/living/carbon/complex/gondola/New()
+	icon_state_standing = pick("gondola","gondola_2")
+	icon_state_lying = "[icon_state_standing]_lying"
+	icon_state_dead = "[icon_state_dead]_dead"
+	..()
+
+/mob/living/carbon/complex/gondola/say()
+	return
+
+//Basically walking media receivers
+/mob/living/carbon/complex/gondola/radio
 	var/playing=0
 	var/media_url=""
 	var/media_start_time=0
@@ -10,18 +39,18 @@
 	var/list/obj/machinery/media/transmitter/hooked = list()
 	var/exclusive_hook=null // Disables output to the room
 
-/mob/living/carbon/complex/gondola/New()
+/mob/living/carbon/complex/gondola/radio/New()
 	..()
 	connect_frequency()
 
-/mob/living/carbon/complex/gondola/death(var/gibbed = FALSE)
+/mob/living/carbon/complex/gondola/radio/death(var/gibbed = FALSE)
 	disconnect_media_source()
 	..(gibbed)
 
-/mob/living/carbon/complex/gondola/area_entered()
+/mob/living/carbon/complex/gondola/radio/area_entered()
 	update_music()
 
-/mob/living/carbon/complex/gondola/proc/connect_frequency()
+/mob/living/carbon/complex/gondola/radio/proc/connect_frequency()
 	// This is basically media_receivers["[media_frequency]"] += src
 	var/list/receivers=list()
 	var/freq = num2text(media_frequency)
@@ -37,12 +66,12 @@
 		if(B.media_crypto == media_crypto) // Crypto-key check, if needed.
 			receive_broadcast(B.media_url,B.media_start_time)
 
-/mob/living/carbon/complex/gondola/proc/receive_broadcast(var/url="", var/start_time=0)
+/mob/living/carbon/complex/gondola/radio/proc/receive_broadcast(var/url="", var/start_time=0)
 	media_url = url
 	media_start_time = start_time
 	update_music()
 
-/mob/living/carbon/complex/gondola/proc/disconnect_frequency()
+/mob/living/carbon/complex/gondola/radio/proc/disconnect_frequency()
 	var/list/receivers=list()
 	var/freq = num2text(media_frequency)
 	if(freq in media_receivers)
@@ -52,7 +81,7 @@
 
 	receive_broadcast()
 
-/mob/living/carbon/complex/gondola/update_music()
+/mob/living/carbon/complex/gondola/radio/update_music()
 	if(isDead(src))
 		return
 	// Broadcasting shit
@@ -79,7 +108,7 @@
 
 	..()
 
-/mob/living/carbon/complex/gondola/proc/update_media_source()
+/mob/living/carbon/complex/gondola/radio/proc/update_media_source()
 	var/area/A = get_area(src)
 	if(!A)
 		return
@@ -97,7 +126,7 @@
 	master_area=A
 
 
-/mob/living/carbon/complex/gondola/proc/disconnect_media_source()
+/mob/living/carbon/complex/gondola/radio/proc/disconnect_media_source()
 	var/area/A = get_area(src)
 
 	// Sanity

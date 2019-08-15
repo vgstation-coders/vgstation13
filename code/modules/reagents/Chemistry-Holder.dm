@@ -13,6 +13,7 @@ var/const/INGEST = 2
 	var/atom/my_atom = null
 	var/last_ckey_transferred_to_this = ""	//The ckey of the last player who transferred reagents into this reagent datum.
 	var/chem_temp = T20C
+	var/obscured = FALSE
 
 /datum/reagents/New(maximum=100)
 	maximum_volume = maximum
@@ -459,7 +460,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					if(C.result)
 						feedback_add_details("chemical_reaction","[C.result][created_volume]")
 						multiplier = max(multiplier, 1) //this shouldnt happen ...
-						add_reagent(C.result, created_volume, C.data, chem_temp)
+						add_reagent(C.result, created_volume, null, chem_temp)
 						if (preserved_data)
 							set_data(C.result, preserved_data)
 
@@ -528,12 +529,15 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/update_total()
 	total_volume = 0
 	amount_cache.len = 0
+	obscured = FALSE
 	for(var/datum/reagent/R in reagent_list)
 		if(R.volume < R.custom_metabolism/2) //Used to be 0.1, changing this to custom_metabolism/2 to alter balance as little as possible since the default metabolism is 0.2
 			del_reagent(R.id,update_totals=0)
 		else
 			total_volume += R.volume
 			amount_cache += list(R.id = R.volume)
+		if(R.flags & CHEMFLAG_OBSCURING)
+			obscured = TRUE
 	return 0
 
 /datum/reagents/proc/clear_reagents()
@@ -619,8 +623,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.data["virus2"] |= virus_copylist(data["virus2"])
 				if(data["blood_colour"])
 					R.color = data["blood_colour"]
+			else if (reagent == VACCINE)
+				R.data = data.Copy()
 			else
 				R.data = data
+		else if (reagent == VACCINE)
+			R.data = list("antigen" = list())
+
 		R.on_introduced()
 
 		update_total()
@@ -892,6 +901,35 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	else
 		chem_temp = max(chem_temp + temp_change, received_temperature, 0)
 	handle_reactions()
+
+/datum/reagents/proc/get_examine(var/mob/user, var/vis_override, var/blood_type)
+	if(obscured && !vis_override)
+		to_chat(user, "<span class='info'>You can't quite make out the contents.</span>")
+		return
+	to_chat(user, "It contains:")
+	if(!user.hallucinating())
+		if(reagent_list.len)
+			for(var/datum/reagent/R in reagent_list)
+				if(blood_type && R.id == BLOOD)
+					var/type = R.data["blood_type"]
+					to_chat(user, "<span class='info'>[R.volume] units of [R.name], of type [type]</span>")
+				else
+					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+		else
+			to_chat(user, "<span class='info'>Nothing.</span>")
+
+	else //Show stupid things to hallucinating mobs
+		var/list/fake_reagents = list("Water", "Orange juice", "Banana juice", "Tungsten", "Chloral Hydrate", "Helium",\
+			"Sea water", "Energy drink", "Gushin' Granny", "Salt", "Sugar", "something yellow", "something red", "something blue",\
+			"something suspicious", "something smelly", "something sweet", "Soda", "something that reminds you of home",\
+			"Chef's Special")
+		for(var/i, i < rand(1,10), i++)
+			var/fake_amount = rand(1,30)
+			var/fake_reagent = pick(fake_reagents)
+			fake_reagents -= fake_reagent
+
+			to_chat(user, "<span class='info'>[fake_amount] units of [fake_reagent]</span>")
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 

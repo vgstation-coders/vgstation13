@@ -1425,7 +1425,7 @@ Thanks.
 		for (var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]
 			if (D.spread & SPREAD_BLOOD)
-				M.infect_disease2(D,1,"(Butchered, from [src])")
+				M.infect_disease2(D,1,"(Butchered, from [src])",0)
 
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
@@ -1967,13 +1967,14 @@ Thanks.
 //Called in Life() by humans (in handle_breath.dm), monkeys and mice
 /mob/living/proc/breath_airborne_diseases()//only tries to find Airborne spread diseases. Blood and Contact ones are handled by find_nearby_disease()
 	if (!check_airborne_sterility() && isturf(loc))//checking for sterile mouth protections
-		for(var/obj/effect/effect/pathogen_cloud/cloud in view(1, src))
-			if (!cloud.sourceIsCarrier || cloud.source != src)
-				if (Adjacent(cloud))
-					for (var/ID in cloud.viruses)
-						var/datum/disease2/disease/V = cloud.viruses[ID]
-						//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
-						infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
+		for(var/turf/T in range(1, src))
+			for(var/obj/effect/effect/pathogen_cloud/cloud in T.contents)
+				if (!cloud.sourceIsCarrier || cloud.source != src)
+					if (Adjacent(cloud))
+						for (var/ID in cloud.viruses)
+							var/datum/disease2/disease/V = cloud.viruses[ID]
+							//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
+							infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
 
 		var/turf/T = get_turf(src)
 		var/list/breathable_cleanable_types = list(
@@ -2039,14 +2040,8 @@ Thanks.
 			CreateBlobDisease(source.looks)
 		var/datum/disease2/disease/D = blob_diseases[source.looks]
 
-		var/chance_to_infect = 100
-		if (check_contact_sterility(FULL_TORSO))//For simplicity's sake (for once), let's just assume that the blob strikes the torso.
-			chance_to_infect = 10//Even with perfect protection, those spores might get to you.
-		if (check_bodypart_bleeding(FULL_TORSO))
-			chance_to_infect = min(100, chance_to_infect + 10)
-
-		if (prob(chance_to_infect))
-			infect_disease2(D, notes="(Blob, from [source])")//still 5% chance to fail infection
+		if (!check_contact_sterility(FULL_TORSO))//For simplicity's sake (for once), let's just assume that the blob strikes the torso.
+			infect_disease2(D, notes="(Blob, from [source])")
 
 	..()
 

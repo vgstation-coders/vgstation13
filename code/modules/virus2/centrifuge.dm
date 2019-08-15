@@ -516,6 +516,9 @@
 
 	var/antibody = antibody_choices[choice]
 
+	if (antibodies[antibody] < 49)
+		to_chat(user,"<span class='warning'>The time it takes to synthesize a vaccine can be drastically reduced if the blood sample is taken from a subject with higher antibody concentration. Try using spaceacillin to raise it to at least 50% before taking a sample.</span>")
+
 	var/isolation_centrifuge_task/task = new
 	task.task_type = CENTRIFUGE_TASK_TYPE_VACCINE
 	task.target_name = antibody
@@ -558,7 +561,7 @@
 	vial_data[index] = vial_datum
 	vial_datum.vial = vial
 	vial_datum.valid_for_antibodies = vial_has_antibodies(vial)
-	visible_message(
+	user.visible_message(
 		"<span class='notice'>\The [user] adds \the [vial] to \the [src].</span>",
 		"<span class='notice'>You add \the [vial] to \the [src].</span>")
 	playsound(loc, 'sound/machines/click.ogg', 50, 1)
