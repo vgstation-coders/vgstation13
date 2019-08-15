@@ -133,7 +133,7 @@ var/list/black_market_items = list()
 	radio.interact(user)
 
 	spawn(rand(15 SECONDS, 45 SECONDS))
-		var/obj/spawned_item = new item(get_turf(user),user)
+		var/obj/spawned_item = new item(get_turf(user))
 		if(!spawned_item)
 			if(radio)
 				radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
@@ -181,7 +181,7 @@ var/locations_calculated = 0
 	radio.interact(user)
 
 	spawn(time_to_spawn)
-		var/obj/spawned_item = new item(spawnloc,user)
+		var/obj/spawned_item = new item(spawnloc)
 		after_spawn(spawned_item,NORMAL,user)
 		spawn(rand(30 SECONDS, 60 SECONDS))
 			if(!radio.nanotrasen_variant && prob(sps_chances[NORMAL]))
@@ -189,7 +189,7 @@ var/locations_calculated = 0
 
 /datum/black_market_item/proc/spawn_expensive(var/obj/item/device/illegalradio/radio, var/mob/user)
 	process_transaction(radio, EXPENSIVE)
-	var/obj/spawned_item = new item(get_turf(user),user)
+	var/obj/spawned_item = new item(get_turf(user))
 	if(!spawned_item)
 		if(radio)
 			radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
@@ -280,6 +280,39 @@ for anyone but the person committing mass murder.
 	cost_max = 600
 	display_chance = 80
 
+/datum/black_market_item/animal/monkeyhide
+	name = "Monkey Hide"
+	desc = "You're own peice of leather, some assembly required."
+	item = /obj/item/stack/sheet/animalhide/monkey
+	sps_chances = list(0, 5, 10)
+	stock_min = 15
+	stock_max = 20
+	cost_min = 25
+	cost_max = 50
+	display_chance = 80
+
+/datum/black_market_item/animal/lizardskin
+	name = "Lizard Skin"
+	desc = "High quality skins for leather making."
+	item = /obj/item/stack/sheet/animalhide/lizard
+	sps_chances = list(0, 5, 10)
+	stock_min = 10
+	stock_max = 20
+	cost_min = 50
+	cost_max = 100
+	display_chance = 70
+
+/datum/black_market_item/animal/humanskin
+	name = "Human Skin"
+	desc = "Used medical waste."
+	item = /obj/item/stack/sheet/animalhide/human
+	sps_chances = list(5, 10, 15)
+	stock_min = 10
+	stock_max = 20
+	cost_min = 75
+	cost_max = 100
+	display_chance = 70
+
 /datum/black_market_item/arcane
 	category = "Supernatural and Arcane Objects"
 
@@ -325,6 +358,68 @@ for anyone but the person committing mass murder.
 	cost_min = 50
 	cost_max = 100
 	display_chance = 99
+
+/datum/black_market_item/food
+	category = "Cooked Goods and Kitchen Items."
+
+/datum/black_market_item/food/bearmeat
+	name = "Bear Meat"
+	desc = "A slab of bear meat for the manliest men."
+	item = /obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat
+	sps_chances = list(0, 5, 10)
+	stock_min = 3
+	stock_max = 9
+	cost_min = 50
+	cost_max = 75
+	display_chance = 40
+
+/datum/black_market_item/food/xenomeat
+	name = "Strange Meat"
+	desc = "An alien slab of meat."
+	item = /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
+	sps_chances = list(0, 5, 10)
+	stock_min = 3
+	stock_max = 9
+	cost_min = 50
+	cost_max = 75
+	display_chance = 40
+
+/datum/black_market_item/food/human
+	name = "Human Meat"
+	desc = "Don't ask questions."
+	item = /obj/item/weapon/reagent_containers/food/snacks/meat/human
+	sps_chances = list(5, 10, 15)
+	stock_min = 9
+	stock_max = 18
+	cost_min = 100
+	cost_max = 150
+	display_chance = 69
+
+/datum/black_market_item/food/blackfoodcolor
+	name = "Black Food Color."
+	desc = "The namesake for this whole market. You should buy one for that reason alone."
+	item = /obj/item/weapon/reagent_containers/food/drinks/coloring
+	sps_chances = list(5, 25, 30)
+	delivery_available = list(0, 1, 1)
+	stock_min = 1
+	stock_max = 5
+	cost_min = 150
+	cost_max = 225
+	display_chance = 90
+
+/datum/black_market_item/tool
+	category = "Utility Items"
+
+/datum/black_market_item/tool/stethoscope
+	name = "Stethoscope"
+	desc = "For medical use only, honest!"
+	item = /obj/item/clothing/accessory/stethoscope
+	sps_chances = list(5, 25, 30)
+	stock_min = 1
+	stock_max = 50
+	cost_min = 50
+	cost_max = 150
+	display_chance = 90
 
 /datum/black_market_item/toy
 	category = "Recreational and Novelty Items"
