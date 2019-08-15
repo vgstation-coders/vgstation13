@@ -3497,7 +3497,7 @@
 				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
 								"<span class='warning'>You feel different, somehow...</span>"))
 			if(prob(percent_machine))
-				holder.add_reagent("mednanobots", 20)
+				holder.add_reagent(MEDNANOBOTS, 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
 		if(20 to INFINITY) //Now you've done it.
 			if(istype(M, /mob/living/simple_animal/hostile/monster/cyber_horror))
