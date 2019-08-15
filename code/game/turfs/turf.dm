@@ -51,6 +51,8 @@
  	var/under_turf = /turf/space
  */
 
+	var/turf_speed_multiplier = 1
+ 
 	var/explosion_block = 0
 
 	//For shuttles - if 1, the turf's underlay will never be changed when moved
@@ -678,6 +680,7 @@
 	for(var/atom/A in src)
 		if(A.slowdown_modifier)
 			base_slowdown *= A.slowdown_modifier
+	base_slowdown *= turf_speed_multiplier
 	return base_slowdown
 
 /turf/proc/has_gravity(mob/M)
