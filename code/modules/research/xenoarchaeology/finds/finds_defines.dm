@@ -46,3 +46,15 @@ var/list/finds_as_strings = list(
 	CHLORINE = "Metamorphic/igneous rock composite",
 	PHOSPHORUS = "Metamorphic/sedimentary rock composite",
 	PLASMA = "Anomalous material" )
+
+var/list/color_from_find_reagent = list(
+	CARBON = "#008000",
+	POTASSIUM = "#FFC0CB",
+	HYDROGEN = "#FF0000",
+	NITROGEN = "#AFEEEE",
+	MERCURY = "#484848",
+	IRON = "#b7410e",
+	CHLORINE = "#ffff00",
+	PHOSPHORUS = "#00ff00",
+	PLASMA = "#500064",
+	)
