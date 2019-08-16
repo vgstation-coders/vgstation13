@@ -245,7 +245,11 @@ GENERAL PROCS
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
-		var/parea = format_text(get_area(B).name)
+		var/parea = "ERROR"
+		// area can be null in the case of nullspacing
+		var/area/A = get_area(B)
+		if(A)
+			parea = format_text(A.name)
 
 		if(istype(M.loc,/obj/item/weapon/storage/belt/silicon))
 			continue
