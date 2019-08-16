@@ -111,6 +111,10 @@
 	if(!snack || !user || !istype(snack) || !istype(user))
 		return
 
+	if(!snack.edible_by_utensil)
+		to_chat(user, "<span class='notice'>It wouldn't make sense to put \the [snack.name] on a fork.</span>")
+		return
+
 	if(loaded_food)
 		to_chat(user, "<span class='notice'>You already have food on \the [src].</span>")
 		return
