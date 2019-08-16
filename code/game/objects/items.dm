@@ -1228,6 +1228,7 @@ var/global/list/image/blood_overlays = list()
 		if(bit & slot_flags)
 			if(M.get_item_by_flag(bit) == src)
 				return TRUE
+
 /obj/item/proc/get_shrapnel_projectile()
 	if(shrapnel_type)
 		return new shrapnel_type(src)

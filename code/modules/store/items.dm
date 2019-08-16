@@ -62,6 +62,18 @@
 	typepath = /obj/machinery/media/receiver/boombox
 	cost = 400
 
+/datum/storeitem/diskettebox
+	name = "Diskette Box"
+	desc = "A lockable box for storing data disks. Comes with a few useless blank disks."
+	typepath = /obj/item/weapon/storage/lockbox/diskettebox/open/blanks
+	cost = 20
+
+/datum/storeitem/diskettebox_large
+	name = "Large Diskette Box"
+	desc = "A larger lockable box for storing data disks. Comes with a few useless blank disks."
+	typepath = /obj/item/weapon/storage/lockbox/diskettebox/large/open/blanks
+	cost = 50
+
 /////////////////////////////
 // Toys
 /////////////////////////////

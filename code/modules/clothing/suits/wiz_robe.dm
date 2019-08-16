@@ -200,3 +200,9 @@
 	desc = "Boys and girls of every age, wouldn't you like to see something strange?"
 	icon_state = "hallowiz"
 	item_state = "hallowiz"
+
+/obj/item/clothing/suit/wizrobe/pharaoh
+	name = "pharaonic garments"
+	desc = "Ornate garments worn by the ancient rulers of Space Egypt."
+	icon_state = "pharaoh"
+	item_state = "pharaoh"

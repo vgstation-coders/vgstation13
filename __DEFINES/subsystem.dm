@@ -47,12 +47,15 @@
 #define SS_PRIORITY_LIGHTING       20
 #define SS_PRIORITY_AMBIENCE	   19
 #define SS_PRIORITY_SUN            3
+#define SS_PRIORITY_WEATHER        2.5
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
 
+#define SS_WAIT_WEATHER         	2 SECONDS
 #define SS_WAIT_MACHINERY           2 SECONDS //TODO move the rest of these to defines
 #define SS_WAIT_FAST_MACHINERY      0.7 SECONDS
 #define SS_WAIT_FAST_OBJECTS        0.5 SECONDS
+#define SS_WAIT_TICKER              2 SECONDS
 
 #define SS_DISPLAY_GARBAGE        -100
 #define SS_DISPLAY_AIR            -90
@@ -69,6 +72,7 @@
 #define SS_DISPLAY_TICKER         -10
 #define SS_DISPLAY_UNSPECIFIED     0
 #define SS_DISPLAY_SUN             10
+#define SS_DISPLAY_WEATHER         5
 
 #define SS_TRASH                  "trash"
 #define SS_CLEANABLE              "cleanable_decals"

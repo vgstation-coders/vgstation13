@@ -310,15 +310,15 @@
 			)
 		var/list/bad = list(
 			EFFECT_DANGER_HELPFUL	= 1,
-			EFFECT_DANGER_FLAVOR	= 4,
-			EFFECT_DANGER_ANNOYING	= 4,
+			EFFECT_DANGER_FLAVOR	= 8,
+			EFFECT_DANGER_ANNOYING	= 1,
 			EFFECT_DANGER_HINDRANCE	= 0,
 			EFFECT_DANGER_HARMFUL	= 0,
 			EFFECT_DANGER_DEADLY	= 0,
 			)
 		D.origin = "New Player"
 
-		D.makerandom(list(30,55),list(0,50),anti,bad,null)
+		D.makerandom(list(30,50),list(0,50),anti,bad,null)
 
 		D.log += "<br />[timestamp()] Infected [key_name(H)]"
 		H.virus2["[D.uniqueID]-[D.subID]"] = D

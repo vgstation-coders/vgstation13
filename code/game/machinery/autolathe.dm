@@ -55,6 +55,7 @@
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
+		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(), \
 		new /obj/item/weapon/storage/toolbox(), \
 		new /obj/item/weapon/reagent_containers/glass/jar(), \
 		),
@@ -101,7 +102,7 @@
 		),
 		"Misc_Tools"=list(
 		new /obj/item/device/flashlight(), \
-		new /obj/item/weapon/extinguisher(), \
+		new /obj/item/weapon/extinguisher/empty(), \
 		new /obj/item/device/radio/headset(), \
 		new /obj/item/device/radio/off(), \
 		new /obj/item/weapon/kitchen/utensil/knife/large(), \

@@ -216,7 +216,7 @@
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
-#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
+#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
 
 #define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
@@ -385,3 +385,6 @@ proc/get_space_area()
 
 #define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE)
 //Starts 0 credits, not sourced from any database, earns 0 credits, hidden
+
+// strips all newlines from a string, replacing them with null
+#define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)

@@ -155,7 +155,7 @@
 	var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
 	U.sensor_mode = 0
 
-/proc/equip_wizard(mob/living/carbon/human/wizard_mob)
+/proc/equip_wizard(mob/living/carbon/human/wizard_mob, apprentice = FALSE)
 	if (!istype(wizard_mob))
 		return
 
@@ -183,21 +183,24 @@
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(wizard_mob), slot_back)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(wizard_mob), slot_in_backpack)
 //	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
-	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(wizard_mob), slot_r_store)
-	wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
+	var/scroll_type = apprentice ? /obj/item/weapon/teleportation_scroll/apprentice : /obj/item/weapon/teleportation_scroll
+	wizard_mob.equip_to_slot_or_del(new scroll_type(wizard_mob), slot_r_store)
+	if(!apprentice)
+		wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
 
 	wizard_mob.make_all_robot_parts_organic()
 
 	// For Vox and plasmadudes.
 	//wizard_mob.species.handle_post_spawn(wizard_mob)
 
-	to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
-	to_chat(wizard_mob, "In your pockets you will find a teleport scroll. Use it as needed.")
-	wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.")
+	if(!apprentice)
+		to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
+		to_chat(wizard_mob, "In your pockets you will find a teleport scroll. Use it as needed.")
+		wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.")
 	wizard_mob.update_icons()
 	return 1
 
-/proc/name_wizard(mob/living/carbon/human/wizard_mob)
+/proc/name_wizard(mob/living/carbon/human/wizard_mob, role_name = "Space Wizard")
 	//Allows the wizard to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
 	if(wizard_mob.species && wizard_mob.species.name != "Human")
 		wizard_mob.set_species("Human", 1)
@@ -205,7 +208,7 @@
 	var/wizard_name_second = pick(wizard_second)
 	var/randomname = "[wizard_name_first] [wizard_name_second]"
 	spawn(0)
-		var/newname = copytext(sanitize(input(wizard_mob, "You are a Space Wizard. Would you like to change your name to something else?", "Name change", randomname) as null|text),1,MAX_NAME_LEN)
+		var/newname = stripped_input(wizard_mob, "You are a [role_name]. Would you like to change your name to something else?", "Name change", randomname, MAX_NAME_LEN)
 
 		if (!newname)
 			newname = randomname

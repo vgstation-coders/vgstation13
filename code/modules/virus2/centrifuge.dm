@@ -79,7 +79,7 @@
 			if(!vials[i])
 				vials[i] = vial
 				vial_valid[i] = vial_has_antibodies(vial)
-				visible_message("<span class='notice'>\The [user] adds \the [vial] to \the [src].</span>","<span class='notice'>You add \the [vial] to \the [src].</span>")
+				user.visible_message("<span class='notice'>\The [user] adds \the [vial] to \the [src].</span>","<span class='notice'>You add \the [vial] to \the [src].</span>")
 				playsound(loc, 'sound/machines/click.ogg', 50, 1)
 				user.drop_item(vial, loc, 1)
 				vial.forceMove(src)
@@ -339,7 +339,7 @@
 				if (!vials[i])
 					vials[i] = vial
 					vial_valid[i] = vial_has_antibodies(vial)
-					visible_message("<span class='notice'>\The [user] adds \the [vial] to \the [src].</span>","<span class='notice'>You add \the [vial] to \the [src].</span>")
+					user.visible_message("<span class='notice'>\The [user] adds \the [vial] to \the [src].</span>","<span class='notice'>You add \the [vial] to \the [src].</span>")
 					playsound(loc, 'sound/machines/click.ogg', 50, 1)
 					user.drop_item(vial, loc, 1)
 					vial.forceMove(src)
@@ -456,6 +456,9 @@
 				return result
 
 			var/antibody = antibody_choices[choice]
+
+			if (antibodies[antibody] < 49)
+				to_chat(user,"<span class='warning'>The time it takes to synthesize a vaccine can be drastically reduced if the blood sample is taken from a subject with higher antibody concentration. Try using spaceacillin to raise it to at least 50% before taking a sample.</span>")
 
 			result[1] = "vaccine"
 			result[2] = antibody
