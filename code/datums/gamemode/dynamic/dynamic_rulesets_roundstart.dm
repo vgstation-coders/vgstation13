@@ -50,18 +50,21 @@
 //               CHANGELINGS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
-/*
+
+
+//note: this can only fire on snowmap
+
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
 	role_category = CHANGELING
-	protected_from_jobs = list("Security Officer", "Warden", "Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
-	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
-	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
-	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
+	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	restricted_from_jobs = list("AI","Cyborg","Mobile MMI", "Chaplain")
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain", "Chaplain")
+	required_enemies = list(2,2,2,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 30
-	requirements = list(80,60,40,20,20,10,10,10,10,10)
+	cost = 18
+	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
@@ -75,7 +78,7 @@
 		newChangeling.Greet(GREET_ROUNDSTART)
 	return 1
 
-*/
+
 //////////////////////////////////////////////
 //                                          //
 //               VAMPIRES                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
