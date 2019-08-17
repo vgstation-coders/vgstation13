@@ -20,11 +20,10 @@
 
 /obj/structure/lattice/New(loc)
 	..(loc)
-
 	icon = 'icons/obj/smoothlattice.dmi'
 
+/obj/structure/lattice/initialize()
 	relativewall()
-
 	relativewall_neighbours()
 
 /obj/structure/lattice/relativewall()
