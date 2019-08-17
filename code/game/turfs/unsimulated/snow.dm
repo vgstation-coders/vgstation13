@@ -423,6 +423,10 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	name = "permafrost"
 	desc = "Soil that never unfreezes."
 
+/turf/unsimulated/floor/snow/permafrost/New() //Band-aid fix for snow_state out of bounds exception
+	..()
+	snow_state = 0
+	
 /obj/glacier
 	desc = "A frozen lake kept solid by temperatures way below freezing."
 	icon = 'icons/turf/ice.dmi'
