@@ -21,11 +21,11 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		command_alert(/datum/command_alert/blizzard_start)
 		sleep(rand(20 SECONDS, 2 MINUTES))
 		greaten_snowfall()
-		sleep(rand(50 SECONDS, 3 MINUTES))
+		sleep(rand(3 MINUTES, 6 MINUTES))
 		greaten_snowfall()
-		sleep(rand(5 MINUTES, 20 MINUTES))
+		sleep(rand(8 MINUTES, 13 MINUTES))
 		lessen_snowfall()
-		sleep(rand(50 SECONDS, 3 MINUTES))
+		sleep(rand(3 MINUTES, 6 MINUTES))
 		lessen_snowfall()
 		sleep(rand(20 SECONDS, 40 SECONDS))
 		command_alert(/datum/command_alert/blizzard_end)
@@ -161,6 +161,13 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	var/obj/effect/snowprint_holder/snowprint_parent
 	var/obj/effect/blizzard_holder/blizzard_parent
 	turf_speed_multiplier = 1
+	
+/turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	if(snowprint_parent)
+		qdel(snowprint_parent)
+	if(blizzard_parent)
+		qdel(blizzard_parent)	
+	..()
 
 /turf/unsimulated/floor/snow/New()
 	..()
@@ -184,8 +191,10 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 
 /turf/unsimulated/floor/snow/Destroy()
 	global_snowtiles -= src
-	qdel(snowprint_parent)
-	qdel(blizzard_parent)
+	if(snowprint_parent)
+		qdel(snowprint_parent)
+	if(blizzard_parent)
+		qdel(blizzard_parent)
 
 /turf/unsimulated/floor/snow/proc/update_environment()
 	if(real_snow_tile)
@@ -267,9 +276,6 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	mouse_opacity = 0 
 	var/turf/unsimulated/floor/snow/parent
 	
-/obj/effect/blizzard_holder/Destroy()
-	overlays.Cut()
-
 /obj/effect/blizzard_holder/proc/UpdateSnowfall()
 	if(!snow_state_to_texture["[parent.snow_state]"])
 		cache_snowtile()
@@ -296,9 +302,6 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	mouse_opacity = 0 //Unclickable
 	var/snowprint_color = "#BEBEBE"
 	var/list/existing_prints = list()
-
-/obj/effect/snowprint_holder/Destroy()
-	ClearSnowprints()
 	
 /obj/effect/snowprint_holder/proc/AddSnowprintComing(var/obj/effect/decal/cleanable/blood/tracks/footprints/footprint_type, var/dir)
 	if(existing_prints["[initial(footprint_type.coming_state)]-[dir]"])
