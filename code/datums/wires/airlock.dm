@@ -22,6 +22,7 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 	holder_type = /obj/machinery/door/airlock
 	wire_count = 13
 	window_y = 570
+	random = 1
 
 /datum/wires/airlock/New()
 	wire_names=list(
