@@ -3,7 +3,7 @@
 #define AWFUL 1
 #define SHODDY 2
 #define POOR 3
-#define NORMAL 4
+#define AVERAGE 4
 #define GOOD 5
 #define SUPERIOR 6
 #define EXCELLENT 7
@@ -14,7 +14,7 @@ var/list/qualityByString = list(
 		AWFUL = "Awful",
 		SHODDY = "Shoddy",
 		POOR = "Poor",
-		NORMAL = "Normal",
+		AVERAGE = "Average",
 		GOOD = "Good",
 		SUPERIOR = "Superior",
 		EXCELLENT = "Excellent",
