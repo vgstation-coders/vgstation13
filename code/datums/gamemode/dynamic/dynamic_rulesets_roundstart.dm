@@ -56,7 +56,7 @@
 
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
-	role_category = CHANGELING
+	role_category = /datum/role/changeling
 	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
