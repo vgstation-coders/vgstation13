@@ -29,7 +29,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	plane = OBJ_PLANE
 
 	var/defective = 0
-	var/quality = NORMAL //What level of quality this object is.
+	var/quality = AVERAGE //What level of quality this object is.
 	var/datum/material/material_type //What material this thing is made out of
 	var/event/on_use
 	var/sheet_type = /obj/item/stack/sheet/metal
@@ -697,7 +697,7 @@ a {
 	if(quality > SUPERIOR)
 		gen_description()
 	if(!findtext(lowertext(name), lowertext(mat.name)))
-		name = "[quality == NORMAL ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
+		name = "[quality == AVERAGE ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
 
 /obj/proc/check_uplink_validity()
 	return TRUE
