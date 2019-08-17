@@ -1,7 +1,7 @@
 #define SNOW_CALM 0
 #define SNOW_AVERAGE 1
 #define SNOW_HARD 2
-#define SNOW_BLIZZARD 3 
+#define SNOW_BLIZZARD 3
 
 //This file includes all associated code with snow tiles, snowprints, and blizzards on them.
 
@@ -12,9 +12,9 @@ var/snow_intensity = SNOW_CALM
 var/blizzard_ready = 1 //Whether a new blizzard can be started.
 var/list/snowstorm_ambience = list('sound/misc/snowstorm/snowfall_calm.ogg','sound/misc/snowstorm/snowfall_average.ogg','sound/misc/snowstorm/snowfall_hard.ogg','sound/misc/snowstorm/snowfall_blizzard.ogg')
 var/list/snowstorm_ambience_volumes = list(30,40,60,80)
-		
+
 var/blizzard_cooldown = 3000 //5 minutes minimum
-	
+
 /datum/event/blizzard/start() //Fuck using event code, we'll code all of this here
 	if(blizzard_ready)
 		blizzard_ready = 0
@@ -31,7 +31,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		command_alert(/datum/command_alert/blizzard_end)
 		spawn(blizzard_cooldown)
 			blizzard_ready = 1
-	
+
 /datum/event/omega_blizzard
 	oneShot = 1
 
@@ -48,15 +48,15 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 
 /proc/snowfall_force_update_player() //Since the vision blocking UI only updates on Entered, let's call it.
 	for(var/mob/M in player_list)
-		if(M && M.client)	
+		if(M && M.client)
 			var/turf/unsimulated/floor/snow/snow = get_turf(M)
 			if(snow && istype(snow))
 				snow.Entered(M)
 				snow.force_update_music(M)
-				
-				
-				
-				
+
+
+
+
 
 /proc/greaten_snowfall()
 	if(snow_intensity == SNOW_BLIZZARD)
@@ -66,7 +66,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		tile.snow_state = snow_intensity
 		tile.update_environment()
 	snowfall_force_update_player()
-	
+
 /proc/lessen_snowfall()
 	if(snow_intensity == SNOW_CALM)
 		return
@@ -75,7 +75,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		tile.snow_state = snow_intensity
 		tile.update_environment()
 	snowfall_force_update_player()
-	
+
 /proc/snowfall_tick()
 	switch(snow_intensity)
 		if(SNOW_CALM)
@@ -90,7 +90,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 /proc/snowfall_calm_tick()
 	var/tile_interval = 5
 	if(prob(3))
-		var/i = rand(1,tile_interval) //Efficiently selects a set of random tiles to melt snow on. 
+		var/i = rand(1,tile_interval) //Efficiently selects a set of random tiles to melt snow on.
 		for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
 			if(i == tile_interval)
 				tile.change_snowballs(-1,0)
@@ -99,7 +99,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 				i = 1
 			else
 				i++
-/proc/snowfall_average_tick()	
+/proc/snowfall_average_tick()
 	var/tile_interval = 5
 	if(prob(5))
 		var/i = rand(1,tile_interval)
@@ -126,7 +126,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 			else
 				i++
 
-	
+
 /proc/snowfall_blizzard_tick()
 	var/tile_interval = 3
 	if(prob(12))
@@ -140,10 +140,10 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 			else
 				i++
 
-	
-		
-	
-	
+
+
+
+
 /turf/unsimulated/floor/snow
 	name = "snow"
 	desc = "A layer of frozen water particles, kept solid by temperatures way below freezing."
@@ -157,18 +157,18 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	var/real_snow_tile = TRUE //Set this to false if you want snowfall/blizzard overlay but no texture updating and ability to pick up snowballs.
 	var/initial_snowballs = -1 //-1 means random.
 	var/snowballs = 0
-	var/snow_state = SNOW_CALM	
+	var/snow_state = SNOW_CALM
 	var/obj/effect/snowprint_holder/snowprint_parent
 	var/obj/effect/blizzard_holder/blizzard_parent
 	turf_speed_multiplier = 1
-	
+
 /turf/unsimulated/floor/snow/New()
 	..()
 	blizzard_parent = new /obj/effect/blizzard_holder(src)
 	blizzard_parent.parent = src
 	if(!snowtiles_setup)
 		for(var/i = 1 to 4)
-			snow_state = i 
+			snow_state = i
 			blizzard_parent.UpdateSnowfall()
 		snowtiles_setup = 1
 	snow_state = snow_intensity
@@ -181,12 +181,12 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		snowprint_parent = new /obj/effect/snowprint_holder(src)
 	update_environment()
 	global_snowtiles += src
-	
-/turf/unsimulated/floor/snow/Destroy()	
+
+/turf/unsimulated/floor/snow/Destroy()
 	global_snowtiles -= src
 	qdel(snowprint_parent)
 	qdel(blizzard_parent)
-	
+
 /turf/unsimulated/floor/snow/proc/update_environment()
 	if(real_snow_tile)
 		if(snowballs)
@@ -198,19 +198,19 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	blizzard_parent.UpdateSnowfall()
 	switch(snow_state)
 		if(SNOW_CALM)
-			temperature = T0C
+			temperature = T_ARCTIC
 			turf_speed_multiplier = 1
 		if(SNOW_AVERAGE)
-			temperature = T0C-15
+			temperature = T_ARCTIC-15
 			turf_speed_multiplier = 1.15 //For some reason, higher numbers mean slower.
 		if(SNOW_HARD)
-			temperature = T0C-30
+			temperature = T_ARCTIC-30
 			turf_speed_multiplier = 1.6
 		if(SNOW_BLIZZARD)
-			temperature = T0C-50
+			temperature = T_ARCTIC-50
 			turf_speed_multiplier = 2.9
 	turf_speed_multiplier *= 1+(snowballs/10)
-	
+
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
 	..()
 	if(istype(A,/mob/living/carbon/human))
@@ -220,11 +220,11 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		if(!istype(newloc,/turf/unsimulated/floor/snow))
 			H.clear_fullscreen("snowfall_average",0)
 			H.clear_fullscreen("snowfall_hard",0)
-			H.clear_fullscreen("snowfall_blizzard",0)		
+			H.clear_fullscreen("snowfall_blizzard",0)
 			H << sound(null, 0, 0, channel = CHANNEL_WEATHER)
-	
 
-/turf/unsimulated/floor/snow/Entered(atom/A, atom/OL)	
+
+/turf/unsimulated/floor/snow/Entered(atom/A, atom/OL)
 	..()
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
@@ -234,7 +234,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 			if(SNOW_CALM)
 				H.clear_fullscreen("snowfall_average",0)
 				H.clear_fullscreen("snowfall_hard",0)
-				H.clear_fullscreen("snowfall_blizzard",0)			
+				H.clear_fullscreen("snowfall_blizzard",0)
 			if(SNOW_AVERAGE)
 				H.overlay_fullscreen("snowfall_average", /obj/abstract/screen/fullscreen/snowfall_average)
 				H.clear_fullscreen("snowfall_hard",0)
@@ -256,17 +256,17 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 /turf/unsimulated/floor/snow/proc/force_update_music(var/mob/M)
 	if(M.client)
 		M << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
-		
 
-/obj/effect/blizzard_holder //Exists to make it unclickable 
+
+/obj/effect/blizzard_holder //Exists to make it unclickable
 	name = "blizzard"
 	desc = "Brrr."
 	density = 0
 	anchored = 1
-	plane = ABOVE_TURF_PLANE	
-	mouse_opacity = 0 
+	plane = ABOVE_TURF_PLANE
+	mouse_opacity = 0
 	var/turf/unsimulated/floor/snow/parent
-	
+
 /obj/effect/blizzard_holder/proc/UpdateSnowfall()
 	if(!snow_state_to_texture["[parent.snow_state]"])
 		cache_snowtile()
@@ -279,18 +279,18 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	for(var/i = 1 to overlay_counts[parent.snow_state+1])
 		var/image/snowfx = image('icons/turf/snowfx.dmi', "[snowfall_overlays[parent.snow_state+1]][i]",SNOW_OVERLAY_LAYER)
 		snowfx.plane = EFFECTS_PLANE
-		overlays += snowfx			
+		overlays += snowfx
 	snow_state_to_texture["[parent.snow_state]"] = appearance
 
 
 
-		
-/obj/effect/snowprint_holder 
+
+/obj/effect/snowprint_holder
 	name = "snowprint"
 	desc = "Brrr."
 	density = 0
 	anchored = 1
-	plane = ABOVE_TURF_PLANE	
+	plane = ABOVE_TURF_PLANE
 	mouse_opacity = 0 //Unclickable
 	var/snowprint_color = "#BEBEBE"
 	var/list/existing_prints = list()
@@ -300,7 +300,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		return
 	existing_prints["[initial(footprint_type.coming_state)]-[dir]"] = 1
 	var/icon/footprint = icon('icons/effects/fluidtracks.dmi', initial(footprint_type.coming_state), dir)
-	footprint.SwapColor("#FFFFFF",snowprint_color) 
+	footprint.SwapColor("#FFFFFF",snowprint_color)
 	overlays += footprint
 
 /obj/effect/snowprint_holder/proc/AddSnowprintGoing(var/obj/effect/decal/cleanable/blood/tracks/footprints/footprint_type, var/dir)
@@ -308,9 +308,9 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		return
 	existing_prints["[initial(footprint_type.going_state)]-[dir]"] = 1
 	var/icon/footprint = icon('icons/effects/fluidtracks.dmi', initial(footprint_type.going_state), dir)
-	footprint.SwapColor("#FFFFFF",snowprint_color) 
+	footprint.SwapColor("#FFFFFF",snowprint_color)
 	overlays += footprint
-	
+
 /obj/effect/snowprint_holder/proc/ClearSnowprints()
 	overlays.Cut()
 	existing_prints.len = 0
@@ -331,7 +331,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		"<span class='notice'>You reach down and bolster your snowball.</span>")
 		user.delayNextAttack(10)
 		extract_snowballs(1, TRUE, user, W)
-		
+
 
 /turf/unsimulated/floor/snow/attack_hand(mob/user as mob)
 
@@ -343,7 +343,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		extract_snowballs(1, TRUE, user)
 
 	..()
-	
+
 /turf/unsimulated/floor/snow/examine(var/mob/user)
 	..()
 	if(real_snow_tile)
@@ -364,7 +364,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		else if(snowballs < 0)
 			snowballs = 0
 	update_environment()
-	
+
 /turf/unsimulated/floor/snow/proc/extract_snowballs(var/snowball_amount = 0, var/pick_up = FALSE, var/mob/user, var/obj/item/stack/sheet/snow/snowball_stack = null)
 
 	if(!snowball_amount)
@@ -380,7 +380,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(user.loc)
 		snowball.pixel_x = rand(-16, 16) * PIXEL_MULTIPLIER //Would be wise to move this into snowball New() down the line
 		snowball.pixel_y = rand(-16, 16) * PIXEL_MULTIPLIER
-		
+
 		if(pick_up)
 			user.put_in_hands(snowball)
 
