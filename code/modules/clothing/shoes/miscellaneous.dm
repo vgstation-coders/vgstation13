@@ -163,7 +163,7 @@
 		qdel(W)
 		qdel(src)
 
-obj/item/clothing/shoes/clown_shoes/lola
+/obj/item/clothing/shoes/clown_shoes/lola
 	name = "fighting clown shoes"
 	desc = "Squeaky when scuffling."
 	icon_state = "lola"

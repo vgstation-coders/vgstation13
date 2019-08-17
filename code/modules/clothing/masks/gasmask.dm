@@ -209,7 +209,7 @@
 	can_flip = 0
 	canstage = 0
 
-obj/item/clothing/mask/gas/lola
+/obj/item/clothing/mask/gas/lola
 	name = "fighting clown mask"
 	desc = "Honk!"
 	icon_state = "lola"
