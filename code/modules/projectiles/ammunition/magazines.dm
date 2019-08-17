@@ -215,6 +215,17 @@
 /obj/item/ammo_storage/magazine/m380auto/practice/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/m380auto/extended
+	name = "magazine (.380AUTO extended) "
+	desc = "A magazine designed for .380AUTO vectors. Holds 20 rounds. This one doesn't fit into glocks."
+	icon_state = "m380AUTO-E"
+	max_ammo = 20
+	multiple_sprites = 1
+	sprite_modulo = 2
+
+/obj/item/ammo_storage/magazine/m380auto/extended/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/uzi45 //Uzi mag
 	name = "magazine (.45)"
 	icon_state = "uzi45"

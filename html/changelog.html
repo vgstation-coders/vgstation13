@@ -86,7 +86,77 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		-->
 		<div class="commit sansserif">
 
+			<h2 class="date">2019.08.17</h2>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">SCP-173 no longer gets summoned from roid mineomancy.</li>
+			</ul>
+			<h3 class="author">plosky1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Lots of changes for Snowmap. Important to note that miners now need air and suits for mining, and have their own shuttle.</li>
+			</ul>
+
+			<h2 class="date">2019.08.16</h2>
+			<h3 class="author">plosky1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Snowmap v0.1 is here to test and die on!</li>
+			</ul>
+
+			<h2 class="date">2019.08.15</h2>
+			<h3 class="author">bathosbathtime updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds a red message to ghetto screwdrivers for added clarity.</li>
+			</ul>
+			<h3 class="author">brndd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">roidstation atmospherics gas refilling station is now properly piped up at roundstart</li>
+			</ul>
+
+			<h2 class="date">2019.08.14</h2>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">hopefully fixed roid's distro and waste being linked due to a misplaced manifold in science.</li>
+			</ul>
+
+			<h2 class="date">2019.08.13</h2>
+			<h3 class="author">PaulRitter updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Tonio now actually has its special effect.</li>
+			</ul>
+
+			<h2 class="date">2019.08.12</h2>
+			<h3 class="author">brndd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Scrubbers now have external pressure bounds. They will aim to keep the room at or below this pressure, siphoning gas if it is exceeded. It's set to 1 ATM by default.</li>
+				<li class="rscadd">Scrubbers now have internal pressure bounds. They will not exceed this pressure when scrubbing gas into their output. It's disabled by default and is ignored when siphoning all gas.</li>
+			</ul>
+
+			<h2 class="date">2019.08.11</h2>
+			<h3 class="author">Blithering updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="imageadd">Wendigoes still don't exist.</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the bee net to the biogenerator.</li>
+			</ul>
+			<h3 class="author">brndd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">fixed a bug with the temperature setting on locked air alarms</li>
+				<li class="bugfix">fixed air alarms discriminating admin ghosts and maybe AIs</li>
+			</ul>
+
+			<h2 class="date">2019.08.10</h2>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Hookshots no longer have a clumsy check.</li>
+			</ul>
+
 			<h2 class="date">2019.08.09</h2>
+			<h3 class="author">9percents updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds a new .380 magazine, holds 20 bullets, exclusive for vector. Can be made with ammolathe.</li>
+			</ul>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscdel">The ability to dab has been removed</li>
@@ -2165,122 +2235,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="bugfix">Fixed a bug where Provocateur (Latejoin Revs) would not fire.</li>
 				<li class="bugfix">Fixed a bug where latejoin rules would not take the penalty for being a repeated rule.</li>
 				<li class="bugfix">Fixed a bug where a defeated revolution with only one head remaining could spam the station.</li>
-			</ul>
-
-			<h2 class="date">2019.03.19</h2>
-			<h3 class="author">Irradiation updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscdel">The ammolathe can no longer print NT12 and Automag magazines.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Restrain blobs now applies to your nodes' passive spread as well.</li>
-				<li class="bugfix">Cerebrates are now properly known as cerebrates, both in telepathic chat and on the roundend report.</li>
-				<li class="bugfix">Fixes a bug where the station could become permanently locked down if the blob was destroyed before directive 7-10.</li>
-				<li class="tweak">Players can once again select blob looks.</li>
-				<li class="rscadd">For roundstart blob only, Clowns may select Clownscape, Chaplains may select Skellington, and Engineering staff may select AME.</li>
-				<li class="rscadd">Ninja gloves now drain anything with a cell (incl tasers, eguns, cyborgs, mechas). If they are on cooldown or the target has less than 100 charge, you will interact with the target normally. Feel free to headpat that unpowered borg.</li>
-				<li class="rscadd">Wearing ninja gloves renders you untrackable by an AI.</li>
-				<li class="tweak">The ninja katana no longer conducts electricity.</li>
-				<li class="tweak">You may now slice through cables on the ground with any sharpness >=1 item. Hyaa!</li>
-				<li class="bugfix">Objects will no longer slide toward you if you can't pick them up due to their prepickup effect.</li>
-				<li class="bugfix">You can only eat pizza roll shuriken, not 3D printed shuriken</li>
-				<li class="rscadd">You can now smash grilles with throw impacts. No longer will you be able to smash a window but not grilles with shuriken.</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The target stake should no longer cause clients to crash when shot over 50 times</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Latejoin sec now generates way less threat.</li>
-			</ul>
-
-			<h2 class="date">2019.03.18</h2>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds a preference toggle for hearing instruments.</li>
-			</ul>
-
-			<h2 class="date">2019.03.17</h2>
-			<h3 class="author">GeneralVeers25 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Deff Permabrig now has a chicken for eggs.</li>
-				<li class="tweak">The Tomb of Azalin no longer contains a Veil Render. It has been replaced with another eldritch artifact.</li>
-				<li class="tweak">Boxstation's Brig no longer has a strange bottleneck leading to Perma</li>
-				<li class="bugfix">Roidstation, Box, and Deff now have some more firelocks, and some missing/odd tiles were corrected.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">A new mode, Civil War of Casters. Whoever wins, we lose!</li>
-				<li class="tweak">Midround Ragin' Mages will no longer be discounted if Wizard fired at roundstart.</li>
-				<li class="bugfix">Latejoin Ragin' Mages properly reduced down to match Midround levels.</li>
-				<li class="bugfix">Midround Ragin' Mages will not leave you unequipped and unnamed in the arrivals shuttle if there was an earlier wizard.</li>
-				<li class="bugfix">Midround From Ghost rules will no longer fail because of picking someone who is dead but not ghosted.</li>
-				<li class="rscadd">The game will no longer end by killing an antagonist, but if that antagonist faction reached its endgame, it may trigger a shuttle.</li>
-			</ul>
-
-			<h2 class="date">2019.03.16</h2>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">In the event of the crew successfully defeating a blob infestation, the lockdown will ACTUALLY be lifted.</li>
-				<li class="bugfix">Fixes some worn items not appearing on some species. Now it will use the normal human sprites, so there will be irregularities, but it beats the icon not showing at all.</li>
-				<li class="tweak">The method of repairing a broken vending machine has been made more obvious.</li>
-			</ul>
-			<h3 class="author">eplgr updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Body bags now take time to open and close when there's someone inside standing up</li>
-				<li class="rscadd">Added a new sprite for body bags with someone inside standing up</li>
-			</ul>
-
-			<h2 class="date">2019.03.15</h2>
-			<h3 class="author">PJB3005 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Reminded genetics code that ARRAYS START AT ONE. As a result, unstable mutagen will now actually randomize SE blocks properly.</li>
-			</ul>
-
-			<h2 class="date">2019.03.14</h2>
-			<h3 class="author">Intigracy updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The character preference window will now tell you what color your skin tone is instead of just a numerical value</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The Crazed Weeaboo has been replaced with a Space Ninja. This is fluff only.</li>
-				<li class="tweak">The hologram projector/dakimakura now has better shadowstep logic.</li>
-				<li class="tweak">You can no longer pull a hologram/daki (but you can still destroy it!)</li>
-			</ul>
-			<h3 class="author">MadmanMartian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Whenever a human speaks, they'll make a small noise of indeterminable speech.</li>
-				<li class="rscadd">Greys are now properly immune to sulphuric and polyacid</li>
-				<li class="rscadd">Adds descriptions to the symptoms of viruses. These are viewable through analysis of the virus.</li>
-				<li class="rscadd">Recent excavations of the asteroid have yielded findings of an advanced civilization. Xenoarchs are recommended to look for parts that are compatible with current machinery.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Using a communicate rune mid-cast will allow you to write a "Cult reminder", which will be engraved in the memory of all present cultists and all new converts.</li>
-				<li class="tweak">Bloodcult now requires security members to start.</li>
-			</ul>
-
-			<h2 class="date">2019.03.12</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed being unable to perform the sacrifice if the target had been cloned in the meantime.</li>
-				<li class="bugfix">Fixed being unable to draw blood out of perforated blood packs for use in cult rituals.</li>
-				<li class="bugfix">Fixed the red conversion overlay not going away if the rune gets erased mid-conversion.</li>
-			</ul>
-
-			<h2 class="date">2019.03.11</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Roundstart ruleset weights have been adjusted. Overall there will be more traitors, less nuke ops and malf.</li>
-				<li class="tweak">High danger (potentially round ending) roles have had their ruleset costs increased, which lowers the chance of them happening at the same time.</li>
-				<li class="bugfix">Fixed a bug that caused two roundstart rulesets to proc at population levels that should never allow it.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes the Sith bundle Sith Lightning appearing in the wizard's spellbook instead of the normal Lightning. Sith Lightning is weaker than normal Lightning (deals half damage).</li>
 			</ul>
 		</div>
 		<!--

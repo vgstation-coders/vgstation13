@@ -585,13 +585,13 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/blizzard_end
 	alert_title = "Blizzard Status"
-	message = "The blizzard in your station has been confirmed to be no longer active. Thank you for your cooperation with standard safety procedures."
-	
+	message = "Automated meteorological warning alert: the blizzard has been confirmed to be no longer active. Thank you for your cooperation with standard safety procedures."
+
 /datum/command_alert/blizzard_start
 	alert_title = "Blizzard Warning"
-	message = "Centcomm meteorological algorithms have detected the upcoming formation of a blizzard in your station. Crew members are encouraged to wear protective snow gear at all times."
-	
+	message = "Automated meteorological warning alert: formation of a blizzard has been detected near your station. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
+
 /datum/command_alert/omega_blizzard
 	alert_title = "Urgent Warning - Omega Blizzard"
-	message = "Meteorological readings from your station have been processed as to ascertain the rapid formation of a powerful blizzard. The blizzard is projected to last at least four months. Command is encouraged to analyze the situation and determine whether evacuation is necessary."
+	message = "Automated meteorological warning alert: rapid formation of a powerful blizzard has been detected near your station. This formation is projected to last at least four months. Station safety procedures are in full effect, and command should determine whether evacuation is necessary."
 
