@@ -295,6 +295,9 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	var/snowprint_color = "#BEBEBE"
 	var/list/existing_prints = list()
 
+/obj/effect/snowprint_holder/Destroy()
+	ClearSnowprints()
+	
 /obj/effect/snowprint_holder/proc/AddSnowprintComing(var/obj/effect/decal/cleanable/blood/tracks/footprints/footprint_type, var/dir)
 	if(existing_prints["[initial(footprint_type.coming_state)]-[dir]"])
 		return
