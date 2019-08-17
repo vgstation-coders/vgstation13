@@ -60,8 +60,8 @@
 	return
 
 /obj/structure/extinguisher_cabinet/AltClick(var/mob/user)
-	..()
 	if(user.incapacitated() || !Adjacent(user))
+		..()
 		return
 	opened = !opened
 	update_icon()
