@@ -2853,7 +2853,7 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing discount snacks. It is owned by the infamous 'Discount Dan' franchise."
 	product_slogans = list(
 		"Discount Dan, he's the man!",
-		"There 'aint nothing better in this world than a bite of mystery.",
+		"There ain't nothing better in this world than a bite of mystery.",
 		"Don't listen to those other machines, buy my product!",
 		"Quantity over Quality!",
 		"Don't listen to those eggheads at the CDC, buy now!",
