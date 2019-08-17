@@ -267,6 +267,9 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	mouse_opacity = 0 
 	var/turf/unsimulated/floor/snow/parent
 	
+/obj/effect/blizzard_holder/Destroy()
+	overlays.Cut()
+	
 /obj/effect/blizzard_holder/proc/UpdateSnowfall()
 	if(!snow_state_to_texture["[parent.snow_state]"])
 		cache_snowtile()
