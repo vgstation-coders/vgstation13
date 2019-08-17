@@ -1438,10 +1438,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	return B
 
+
+// Spessmen have very thick skulls. Made it solely so that permanent round removal is more difficult.
 /datum/organ/external/head/explode()
-	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
-	.=..()
-	owner.update_hair()
+	return FALSE
 
 /datum/organ/external/head/get_icon(gender = "", isFat = 0)
 	if(!owner)
