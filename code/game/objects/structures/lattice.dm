@@ -21,6 +21,8 @@
 /obj/structure/lattice/New(loc)
 	..(loc)
 	icon = 'icons/obj/smoothlattice.dmi'
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
+		initialize()
 
 /obj/structure/lattice/initialize()
 	relativewall()
