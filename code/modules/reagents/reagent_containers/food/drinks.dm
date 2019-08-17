@@ -1422,13 +1422,15 @@
 		to_chat(user, "<span  class='notice'>You stuff the [I] into the mouth of the [src].</span>")
 		qdel(I)
 		I = null //??
-		var/obj/item/weapon/reagent_containers/food/drinks/dummy = /obj/item/weapon/reagent_containers/food/drinks/molotov
-		molotov = initial(dummy.molotov)
-		flags = initial(dummy.flags)
-		name = initial(dummy.name)
-		smashtext = initial(dummy.smashtext)
-		desc = initial(dummy.desc)
-		slot_flags = initial(dummy.slot_flags)
+		var/obj/item/weapon/reagent_containers/food/drinks/D = /obj/item/weapon/reagent_containers/food/drinks/molotov
+		molotov = initial(D.molotov)
+		flags = initial(D.flags)
+		name = initial(D.name)
+		smashtext = initial(D.smashtext)
+		desc = initial(D.desc)
+		slot_flags = initial(D.slot_flags)
+		reagents.clear_reagents()
+		reagents.add_reagent(FUEL, 100)
 		update_icon()
 		return 1
 	else if(I.is_hot())
