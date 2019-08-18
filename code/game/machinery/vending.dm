@@ -2537,6 +2537,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/that/magic = 3,
 		/obj/item/clothing/suit/kimono = 3,
 		/obj/item/clothing/gloves/white = 3,
+		/obj/item/clothing/mask/gas/lola = 3,
+		/obj/item/clothing/under/lola = 3,
+		/obj/item/clothing/shoes/clown_shoes/lola = 3
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
