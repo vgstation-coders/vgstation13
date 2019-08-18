@@ -224,7 +224,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	..()
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
-		if(snowprint_parent)
+		if(snowprint_parent && snowballs)
 			snowprint_parent.AddSnowprintGoing(H.get_footprint_type(),H.dir)
 		if(!istype(newloc,/turf/unsimulated/floor/snow))
 			H.clear_fullscreen("snowfall_average",0)
@@ -237,7 +237,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	..()
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
-		if(snowprint_parent)
+		if(snowprint_parent && snowballs)
 			snowprint_parent.AddSnowprintComing(H.get_footprint_type(),H.dir)
 		switch(snow_state)
 			if(SNOW_CALM)
