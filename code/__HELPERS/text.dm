@@ -327,7 +327,7 @@ proc/checkhtml(var/t)
 //Adds a dot at the end of the text unless there already is a dot, question mark, or exclamation point
 /proc/add_dot(var/t as text)
 	var/ending = copytext(t, length(t)) //Copies the last letter of the text
-	if((ending == "?") || (ending == "!") || (ending == "."))
+	if((ending == "?") || (ending == "!") || (ending == ".") || (ending == "-") || (ending == ";") || (ending == ","))
 		return t
 	else
 		return t + "."
