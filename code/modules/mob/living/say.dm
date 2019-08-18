@@ -103,6 +103,7 @@ var/list/department_radio_keys = list(
 		return //under the effects of time magick
 	message = trim(copytext(message, 1, MAX_MESSAGE_LEN))
 	message = capitalize(message)
+	message = add_dot(message)
 
 	say_testing(src, "Say start, message=[message]")
 	if(!message)

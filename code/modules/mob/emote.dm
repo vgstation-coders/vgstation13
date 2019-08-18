@@ -58,6 +58,7 @@
 		return
 
 	var/message = params
+	message = add_dot(message)
 
 	if(copytext(message,1,5) == "says")
 		to_chat(user, "<span class='danger'>Invalid emote.</span>")

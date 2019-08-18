@@ -324,6 +324,14 @@ proc/checkhtml(var/t)
 /proc/capitalize(var/t as text)
 	return uppertext(copytext(t, 1, 2)) + copytext(t, 2)
 
+//Adds a dot at the end of the text unless there already is a dot, question mark, or exclamation point
+/proc/add_dot(var/t as text)
+	var/ending = copytext(t, length(t)) //Copies the last letter of the text
+	if((ending == "?") || (ending == "!") || (ending == "."))
+		return t
+	else
+		return t + "."
+
 //Centers text by adding spaces to either side of the string.
 /proc/dd_centertext(message, length)
 	var/new_message = message
