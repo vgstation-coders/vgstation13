@@ -811,7 +811,7 @@ Thanks.
 
 	INVOKE_EVENT(on_resist, list())
 
-	delayNext(DELAY_ALL,20) // Attack, Move, and Special.
+	delayNextSpecial(10) // Special delay, a cooldown to prevent spamming too much.
 
 	var/mob/living/L = usr
 
@@ -819,7 +819,6 @@ Thanks.
 	var/obj/item/weapon/subspacetunneler/inside_tunneler = get_holder_of_type(L, /obj/item/weapon/subspacetunneler)
 	if(inside_tunneler)
 		var/breakout_time = 0.5 //30 seconds by default
-		L.delayNext(DELAY_ALL,100)
 		L.visible_message("<span class='danger'>\The [inside_tunneler]'s storage bin shudders.</span>","<span class='warning'>You wander through subspace, looking for a way out (this will take about [breakout_time * 60] seconds).</span>")
 		spawn(0)
 			if(do_after(usr,src,breakout_time * 60 * 10)) //minutes * 60seconds * 10deciseconds
@@ -937,7 +936,7 @@ Thanks.
 			L.visible_message("<span class='danger'>[L] resists!</span>")
 
 
-	if(L.locked_to && L.special_delayer.blocked())
+	if(L.locked_to)
 		//unbuckling yourself
 		if(istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to
@@ -946,8 +945,6 @@ Thanks.
 				if(G.open)
 					G.manual_unbuckle(L)
 				else
-					L.delayNextAttack(100)
-					L.delayNextSpecial(100)
 					L.visible_message("<span class='warning'>\The [L] attempts to dislodge \the [G]'s stocks!</span>",
 									  "<span class='warning'>You attempt to dislodge \the [G]'s stocks (this will take around thirty seconds).</span>",
 									  self_drugged_message="<span class='warning'>You attempt to chew through the wooden stocks of \the [G] (this will take a while).</span>")
@@ -970,8 +967,6 @@ Thanks.
 			else if(iscarbon(L))
 				var/mob/living/carbon/C = L
 				if(C.handcuffed)
-					C.delayNextAttack(50)
-					C.delayNextSpecial(50)
 					if(isalienadult(C) || (M_HULK in usr.mutations))
 						C.visible_message("<span class='warning'>[C] is trying to forcefully unbuckle!</span>",
 						                   "<span class='warning'>You attempt to forcefully unbuckle (This will take around five seconds).</span>")
@@ -1025,7 +1020,6 @@ Thanks.
 					return //closed but not welded...
 
 		//okay, so the closet is either welded or locked... resist!!!
-		L.delayNext(DELAY_ALL,100)
 		L.visible_message("<span class='danger'>The [C] begins to shake violenty!</span>",
 						  "<span class='warning'>You lean on the back of [C] and start pushing the door open (this will take about [breakout_time] minutes).</span>")
 		spawn(0)
@@ -1078,7 +1072,6 @@ Thanks.
 	if(src.loc && istype(src.loc, /obj/item/mecha_parts/mecha_equipment/tool/jail))
 		var/breakout_time = 30 SECONDS
 		var/obj/item/mecha_parts/mecha_equipment/tool/jail/jailcell = src.loc
-		L.delayNext(DELAY_ALL,100)
 		L.visible_message("<span class='danger'>One of \the [src.loc]'s cells rattles.</span>","<span class='warning'>You press against the lid of \the [src.loc] and attempt to pop it open (this will take about [breakout_time/10] seconds).</span>")
 		spawn(0)
 			if(do_after(usr,src,breakout_time)) //minutes * 60seconds * 10deciseconds
@@ -1116,8 +1109,7 @@ Thanks.
 			return
 
 	//breaking out of handcuffs
-		if(CM.handcuffed && CM.canmove && CM.special_delayer.blocked())
-			CM.delayNext(DELAY_ALL,50)
+		if(CM.handcuffed && CM.canmove)
 			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
 				CM.visible_message("<span class='danger'>[CM] is trying to break the handcuffs!</span>",
 								   "<span class='warning'>You attempt to break your handcuffs. (This will take around five seconds and you will need to stand still).</span>")
@@ -1156,8 +1148,7 @@ Thanks.
 						CM.simple_message("<span class='warning'>Your attempt to remove \the [HC] was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
 
-		else if(CM.legcuffed && CM.canmove && CM.special_delayer.blocked())
-			CM.delayNext(DELAY_ALL,50)
+		else if(CM.legcuffed && CM.canmove)
 			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
 				CM.visible_message("<span class='danger'>[CM] is trying to break the legcuffs!</span>",
 								   "<span class='warning'>You attempt to break your legcuffs. (This will take around five seconds and you need to stand still).</span>")
@@ -1191,8 +1182,7 @@ Thanks.
 						CM.update_inv_legcuffed()
 					else
 						to_chat(CM, "<span class='warning'>Your unlegcuffing attempt was interrupted.</span>")
-		else if(CM.mutual_handcuffs && CM.canmove && CM.special_delayer.blocked())
-			CM.delayNext(DELAY_ALL,50)
+		else if(CM.mutual_handcuffs && CM.canmove)
 			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
 				CM.visible_message("<span class='danger'>[CM] is trying to break the handcuffs!</span>",
 								   "<span class='warning'>You attempt to break your handcuffs. (This will take around five seconds and you will need to stand still).</span>")
