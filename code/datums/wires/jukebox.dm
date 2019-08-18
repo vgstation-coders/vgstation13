@@ -52,6 +52,7 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 	if(interference)
 		return
 	var/obj/machinery/media/jukebox/J = holder
+	playsound(J, 'sound/machines/airlock_beep.ogg', 25, 1, -6)
 	switch(index)
 		if(JUKE_POWER_ONE,JUKE_POWER_TWO,JUKE_POWER_THREE)
 			J.playing=!J.playing
@@ -76,6 +77,7 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 
 /datum/wires/jukebox/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/media/jukebox/J = holder
+	playsound(J, 'sound/items/wirecutter.ogg', 25, 1, -6)
 	var/obj/I = user.get_active_hand()
 	switch(index)
 		if(JUKE_POWER_ONE,JUKE_POWER_TWO,JUKE_POWER_THREE)
