@@ -90,6 +90,7 @@
 		new /obj/item/weapon/retractor(),\
 		new /obj/item/weapon/cautery(),\
 		new /obj/item/weapon/hemostat(),\
+		new /obj/item/clothing/accessory/stethoscope(),\
 		),
 		"Ammunition"=list(
 		new /obj/item/ammo_casing/shotgun/blank(), \
