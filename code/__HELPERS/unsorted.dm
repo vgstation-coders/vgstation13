@@ -845,7 +845,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if(needhand && !user.is_holding_item(holding))	//Sometimes you don't want the user to have to keep their active hand
+		if(needhand && !user.is_holding_item(holding))	//Sometimes you don't want the user to have to use any hands
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
