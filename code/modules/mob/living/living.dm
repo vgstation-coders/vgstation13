@@ -1117,7 +1117,7 @@ Thanks.
 
 	//breaking out of handcuffs
 		if(CM.handcuffed && CM.canmove && CM.special_delayer.blocked())
-			CM.delayNext(DELAY_ALL,100)
+			CM.delayNext(DELAY_ALL,50)
 			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
 				CM.visible_message("<span class='danger'>[CM] is trying to break the handcuffs!</span>",
 								   "<span class='warning'>You attempt to break your handcuffs. (This will take around five seconds and you will need to stand still).</span>")
@@ -1157,7 +1157,7 @@ Thanks.
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
 
 		else if(CM.legcuffed && CM.canmove && CM.special_delayer.blocked())
-			CM.delayNext(DELAY_ALL,100)
+			CM.delayNext(DELAY_ALL,50)
 			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
 				CM.visible_message("<span class='danger'>[CM] is trying to break the legcuffs!</span>",
 								   "<span class='warning'>You attempt to break your legcuffs. (This will take around five seconds and you need to stand still).</span>")
@@ -1192,7 +1192,7 @@ Thanks.
 					else
 						to_chat(CM, "<span class='warning'>Your unlegcuffing attempt was interrupted.</span>")
 		else if(CM.mutual_handcuffs && CM.canmove && CM.special_delayer.blocked())
-			CM.delayNext(DELAY_ALL,100)
+			CM.delayNext(DELAY_ALL,50)
 			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
 				CM.visible_message("<span class='danger'>[CM] is trying to break the handcuffs!</span>",
 								   "<span class='warning'>You attempt to break your handcuffs. (This will take around five seconds and you will need to stand still).</span>")
