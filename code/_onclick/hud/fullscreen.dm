@@ -176,3 +176,15 @@
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "science"
+
+/obj/abstract/screen/fullscreen/snowfall_blizzard
+	icon_state = "oxydamageoverlay7"
+	layer = DAMAGE_HUD_LAYER
+
+/obj/abstract/screen/fullscreen/snowfall_hard
+	icon_state = "oxydamageoverlay5"
+	layer = DAMAGE_HUD_LAYER
+
+/obj/abstract/screen/fullscreen/snowfall_average
+	icon_state = "oxydamageoverlay2"
+	layer = DAMAGE_HUD_LAYER

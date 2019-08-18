@@ -3309,3 +3309,43 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/mining
+
+/obj/machinery/vending/games
+	name = "\improper Al's Fun And Games"
+	desc = "A vending machine that sells various games and toys."
+	product_slogans = list(
+		"It's all fun and games at Al's Fun And Games!",
+		"Roll for initiative!",
+		"It's a full house of fun!",
+		"Caves and Wyverns 3rd edition available now!"
+	)
+	product_ads = list(
+		"Sponsored by Warlocks of the Shore.",
+		"Al's Fun And Games Co. is not liable for friendships damaged by use of the Product."
+	)
+	icon_state = "games"
+	products = list(
+		/obj/item/toy/cards = 5,
+		/obj/item/toy/cards/une = 5,
+		/obj/item/weapon/storage/pill_bottle/dice = 5
+		)
+	contraband = list(
+		/obj/item/weapon/dice/loaded = 3,
+		/obj/item/weapon/dice/loaded/d20 = 3
+		)
+	premium = list(
+		/obj/item/weapon/skull = 1,
+		/obj/item/weapon/storage/bag/wiz_cards/frog = 3
+		)
+	prices = list(
+		/obj/item/toy/cards = 5,
+		/obj/item/toy/cards/une = 10,
+		/obj/item/weapon/storage/pill_bottle/dice = 10,
+		/obj/item/weapon/dice/loaded = 15,
+		/obj/item/weapon/dice/loaded/d20 = 15,
+		/obj/item/weapon/skull = 20,
+		/obj/item/weapon/storage/bag/wiz_cards/frog = 20
+		)
+
+	pack = /obj/structure/vendomatpack/games
+	vend_reply = "Don't have too much fun!"
