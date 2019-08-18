@@ -43,7 +43,6 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/on
 	on					= 1
-	icon_state			= "on"
 
 /obj/machinery/atmospherics/unary/vent_scrubber/on/burn_chamber
 	name				= "\improper Burn Chamber Scrubber"
@@ -52,6 +51,12 @@
 	id_tag				= "inc_out"
 
 	scrub_Toxins		= 0
+
+/obj/machinery/atmospherics/unary/vent_scrubber/vox
+	scrub_O2 = 1
+
+/obj/machinery/atmospherics/unary/vent_scrubber/on/vox
+	scrub_O2 = 1
 
 /obj/machinery/atmospherics/unary/vent_scrubber/New()
 	..()
