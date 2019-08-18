@@ -44,6 +44,9 @@
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(istype(DR.role_category,/datum/role/blob_overmind))
 		return FALSE
+	if(istype(DR.role_category,/datum/role/changeling))
+		return TRUE
+		
 	return TRUE
 
 ////////////////////////////////////////////////////////////////
