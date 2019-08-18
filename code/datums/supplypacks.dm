@@ -2344,4 +2344,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "\improper Mining stack of packs"
 	group = "Vending Machine packs"
 
-
+/datum/supply_packs/gamesmachines
+	name = "Al's Fun And Games stack of packs"
+	contains = list(/obj/structure/vendomatpack/games, /obj/structure/vendomatpack/games)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "Al's Fun And Games stack of packs"
+	group = "Vending Machine Packs"
