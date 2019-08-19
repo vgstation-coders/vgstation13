@@ -42,9 +42,9 @@
     base_turf = /turf/unsimulated/floor/snow
 
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
-	if(istype(DR.role_category,/datum/role/blob_overmind))
+	if(ispath(DR.role_category,/datum/role/blob_overmind))
 		return FALSE
-	if(istype(DR.role_category,/datum/role/changeling))
+	if(ispath(DR.role_category,/datum/role/changeling))
 		return TRUE
 		
 	return TRUE
