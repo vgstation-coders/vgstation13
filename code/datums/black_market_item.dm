@@ -396,7 +396,7 @@ for anyone but the person committing mass murder.
 	display_chance = 69
 
 /datum/black_market_item/food/blackfoodcolor
-	name = "Black Food Color."
+	name = "Black Food Color"
 	desc = "The namesake for this whole market. You should buy one for that reason alone."
 	item = /obj/item/weapon/reagent_containers/food/drinks/coloring
 	sps_chances = list(5, 25, 30)
