@@ -630,3 +630,21 @@
 	sensor_augs = list("Medical", "Disable")
 
 	fix_modules()
+	
+/obj/item/weapon/robot_module/starman
+	name = "starman robot module"
+	module_holder = "starman"
+	quirk_flags = MODULE_IS_DEFINITIVE | MODULE_IS_FLASHPROOF
+	sprites = list(
+		"Basic" = "starman",
+	)
+	speed_modifier = CYBORG_STARMAN_SPEED_MODIFIER
+
+/obj/item/weapon/robot_module/starman/New()
+	..()
+
+	
+
+	sensor_augs = list("Thermal", "Disable")
+
+	fix_modules()
