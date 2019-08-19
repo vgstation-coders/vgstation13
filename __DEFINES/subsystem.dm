@@ -27,7 +27,7 @@
 #define SS_INIT_PERSISTENCE_MAP	  -98
 #define SS_INIT_PERSISTENCE_MISC  -99
 
-
+#define SS_PRIORITY_WEATHER        210
 #define SS_PRIORITY_TICKER         200
 #define SS_PRIORITY_MOB            150
 #define SS_PRIORITY_COMPONENT      125
@@ -47,7 +47,6 @@
 #define SS_PRIORITY_LIGHTING       20
 #define SS_PRIORITY_AMBIENCE	   19
 #define SS_PRIORITY_SUN            3
-#define SS_PRIORITY_WEATHER        2.5
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
 

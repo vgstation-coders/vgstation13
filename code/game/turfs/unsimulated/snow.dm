@@ -261,7 +261,10 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 			if(isliving(H) && !H.locked_to && !H.lying && !H.flying)
 				playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
-
+/turf/unsimulated/floor/snow/cultify()
+	new /obj/item/weapon/storage/backpack/cultpack(loc)
+	..()
+	
 /turf/unsimulated/floor/snow/proc/force_update_music(var/mob/M)
 	if(M.client)
 		M << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
