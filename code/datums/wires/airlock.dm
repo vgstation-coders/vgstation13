@@ -65,9 +65,9 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 
 /datum/wires/airlock/UpdateCut(var/index, var/mended, mob/user)
-
 	var/obj/machinery/door/airlock/A = holder
 	var/obj/I = user.get_active_hand()
+	..()
 	switch(index)
 		if(AIRLOCK_WIRE_MAIN_POWER1, AIRLOCK_WIRE_MAIN_POWER2)
 
@@ -136,11 +136,9 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 			A.lights = mended
 			A.update_icon()
 
-	playsound(A, 'sound/items/wirecutter.ogg', 25, 1, -6)
-
 /datum/wires/airlock/UpdatePulsed(var/index, mob/user)
-
 	var/obj/machinery/door/airlock/A = holder
+	..()
 	switch(index)
 		if(AIRLOCK_WIRE_IDSCAN)
 			//Sending a pulse through this flashes the red light on the door (if the door has power).
@@ -218,6 +216,3 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 		if(AIRLOCK_WIRE_ONOPEN)
 			A.visible_message("<span class = 'notice'>\The [A]'s motors whirr.</span>")
-
-	playsound(A, 'sound/machines/airlock_beep.ogg', 25, 1, -6)
-

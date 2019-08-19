@@ -148,7 +148,7 @@ var/global/mulebot_count = 0
 		if(locked)
 			to_chat(user, "<span class='notice'>The maintenance hatch cannot be opened or closed while the controls are locked.</span>")
 			return
-
+		playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
 		open = !open
 		if(open)
 			src.visible_message("[user] opens the maintenance hatch of [src]", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
