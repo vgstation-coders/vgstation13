@@ -475,6 +475,7 @@
 			if(has_electronics == 2 && !(stat & BROKEN))
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
+				playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
 				update_icon()
 			else
 				to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")
