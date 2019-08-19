@@ -16,7 +16,7 @@
 	one_part_set_only = 0
 	part_sets = list(
 		"Weapons"=list(
-		new /obj/item/weapon/gun/projectile/sec/lockbox(), \
+		new /obj/item/weapon/gun/projectile/glock/lockbox(), \
 		new /obj/item/weapon/gun/projectile/automatic/vector/lockbox(), \
 		new /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox(), \
 		),
