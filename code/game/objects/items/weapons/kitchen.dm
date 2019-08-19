@@ -115,6 +115,10 @@
 		to_chat(user, "<span class='notice'>It wouldn't make sense to put \the [snack.name] on a fork.</span>")
 		return
 
+	if(snack.food_flags & FOOD_LIQUID)
+		to_chat(user, "<span class='notice'>You can't eat that with a fork.</span>")
+		return
+
 	if(loaded_food)
 		to_chat(user, "<span class='notice'>You already have food on \the [src].</span>")
 		return
