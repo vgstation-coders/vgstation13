@@ -211,7 +211,6 @@ var/stacking_limit = 90
 	return 1
 
 /datum/gamemode/dynamic/Setup()
-	dynamic_stats.roundstart_pop = candidates.len
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart) - /datum/dynamic_ruleset/roundstart/delayed/)
 		roundstart_rules += new rule()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
@@ -239,7 +238,8 @@ var/stacking_limit = 90
 	var/starting_rulesets = ""
 	for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
 		starting_rulesets += "[DR.name], "
-	dynamic_stats.roundstart_rulesets = starting_rulesets
+	dynamic_stats.round_start_pop = candidates.len
+	dynamic_stats.round_start_rulesets = starting_rulesets
 	dynamic_stats.measure_threat(threat)
 	return 1
 

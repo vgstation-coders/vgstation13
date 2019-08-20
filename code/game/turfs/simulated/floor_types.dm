@@ -398,6 +398,22 @@
 
 	. = ..()
 
+//Server rooms, supercooled nitrogen atmosphere
+/turf/simulated/floor/server
+	icon_state = "dark"
+	oxygen = 0
+	temperature = 90
+	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD
+
+/turf/simulated/floor/server/bluegrid
+	icon_state = "bcircuit"
+
+/turf/simulated/floor/server/one_atmosphere
+	nitrogen = (ONE_ATMOSPHERE*CELL_VOLUME/(90*R_IDEAL_GAS_EQUATION))
+
+/turf/simulated/floor/server/one_atmosphere/bluegrid
+	icon_state = "bcircuit"
+
 // VOX SHUTTLE SHIT
 /turf/simulated/shuttle/floor/vox
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON

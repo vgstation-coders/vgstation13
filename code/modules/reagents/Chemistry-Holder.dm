@@ -906,6 +906,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(obscured && !vis_override)
 		to_chat(user, "<span class='info'>You can't quite make out the contents.</span>")
 		return
+	if (istype(my_atom,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && reagent_list.len)
+		to_chat(user, "<span class='info'>It contains [total_volume] units of what looks like [get_master_reagent_name()].</span>")
+		return
 	to_chat(user, "It contains:")
 	if(!user.hallucinating())
 		if(reagent_list.len)

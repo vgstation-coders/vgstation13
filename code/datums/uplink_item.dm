@@ -304,9 +304,9 @@ var/list/uplink_items = list()
 	cost = 6
 
 /datum/uplink_item/stealthy_weapons/knuckles
-	name = "Brass Knuckles"
-	desc = "A pair of metal knuckles that can be worn on your hands, increasing damage done by your punches."
-	item = /obj/item/clothing/gloves/knuckles
+	name = "Spiked Knuckles"
+	desc = "A pair of spiked metal knuckles that can be worn on your hands, increasing damage done by your punches."
+	item = /obj/item/clothing/gloves/knuckles/spiked
 	cost = 2
 
 // STEALTHY TOOLS

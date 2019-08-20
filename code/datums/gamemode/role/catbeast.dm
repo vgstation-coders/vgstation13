@@ -11,6 +11,8 @@
 	var/list/areas_defiled = list()
 	var/current_disease_tier = 1
 
+	stat_datum_type = /datum/stat/role/catbeast
+
 /datum/role/catbeast/Greet()
 	to_chat(antag.current, "<B><span class='warning'>You are a mangy catbeast!</span></B>")
 	to_chat(antag.current, "The longer you avoid the crew, the greater danger the station will attract! You will generate threat for each new room you enter and for being alive (up to 5 minutes).")

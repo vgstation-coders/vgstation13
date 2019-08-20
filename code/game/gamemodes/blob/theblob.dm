@@ -36,6 +36,7 @@ var/list/blob_looks
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
 */
 //Few global vars to track the blob
+var/blob_tiles_grown_total = 0
 var/list/blobs = list()
 var/list/blob_cores = list()
 var/list/blob_nodes = list()
@@ -109,6 +110,8 @@ var/list/blob_overminds = list()
 	..(loc)
 	for(var/atom/A in loc)
 		A.blob_act(0,src)
+
+	blob_tiles_grown_total++
 	return
 
 
