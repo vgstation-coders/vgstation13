@@ -353,8 +353,10 @@
 		if(A.reagents.trans_to(src, max_fuel))
 			to_chat(user, "<span class='notice'>Welder refueled.</span>")
 			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+		else if(!A.reagents)
+			to_chat(user, "<span class='notice'>\The [A] is empty.</span>")
 		else
-			to_chat(user, "<span class='notice'>The welder is already full.")
+			to_chat(user, "<span class='notice'>\The [src] is already full.</span>")
 		return
 	else if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && src.welding)
 		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
