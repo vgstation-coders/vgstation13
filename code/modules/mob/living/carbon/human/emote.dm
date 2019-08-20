@@ -181,7 +181,7 @@
 			if(H.mind && H.mind.assigned_role == "Clown")
 				playsound(H, pick('sound/items/bikehorn.ogg','sound/items/AirHorn.ogg'), 50, 1)
 			else
-				playsound(H, 'sound/misc/fart.ogg', 50, 1)
+				playsound(H, pick('sound/misc/fart.ogg', 'sound/misc/fart2.ogg', 'sound/misc/fart3.ogg'), 50, 1)
 		. =..()
 
 
