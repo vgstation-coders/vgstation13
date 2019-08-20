@@ -133,7 +133,7 @@ var/list/black_market_items = list()
 	radio.interact(user)
 
 	spawn(rand(15 SECONDS, 45 SECONDS))
-		var/obj/spawned_item = new item(get_turf(user),user)
+		var/obj/spawned_item = new item(get_turf(user))
 		if(!spawned_item)
 			if(radio)
 				radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
@@ -181,7 +181,7 @@ var/locations_calculated = 0
 	radio.interact(user)
 
 	spawn(time_to_spawn)
-		var/obj/spawned_item = new item(spawnloc,user)
+		var/obj/spawned_item = new item(spawnloc)
 		after_spawn(spawned_item,NORMAL,user)
 		spawn(rand(30 SECONDS, 60 SECONDS))
 			if(!radio.nanotrasen_variant && prob(sps_chances[NORMAL]))
@@ -189,7 +189,7 @@ var/locations_calculated = 0
 
 /datum/black_market_item/proc/spawn_expensive(var/obj/item/device/illegalradio/radio, var/mob/user)
 	process_transaction(radio, EXPENSIVE)
-	var/obj/spawned_item = new item(get_turf(user),user)
+	var/obj/spawned_item = new item(get_turf(user))
 	if(!spawned_item)
 		if(radio)
 			radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
@@ -310,21 +310,21 @@ for anyone but the person committing mass murder.
 /datum/black_market_item/arcane/health_potion/after_spawn(var/obj/spawned, var/mob/user)
 	if(prob(40))
 		spawned = /obj/item/potion/healing
-		
-/datum/black_market_item/plants
-	category = "Seeds" 
 
-/datum/black_market_item/plants/walkingmushroommycelium
-	name = "packet of walking mushroom seeds"
+/datum/black_market_item/plants
+	category = "Seeds"
+
+/datum/black_market_item/plants/mushroommanspore
+	name = "Packet of Walking Mushroom Seeds"
 	desc = "Sentient mushfriends for all your mushy needs"
-	item = /obj/item/seeds/walkingmushroommycelium
+	item = /obj/item/seeds/mushroommanspore
 	sps_chances = list(0, 10, 30)
 	delivery_available = list(0, 1, 1)
 	stock_min = 3
 	stock_max = 3
 	cost_min = 50
 	cost_max = 100
-	display_chance = 99	
+	display_chance = 99
 
 /datum/black_market_item/toy
 	category = "Recreational and Novelty Items"

@@ -29,6 +29,7 @@
 	var/dried_type = null //What can we dry the food into
 	var/deepfried = 0 //Is the food deep-fried ?
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
+	var/edible_by_utensil = TRUE //Can this snack be put on a fork?
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
@@ -2026,6 +2027,16 @@
 		reagents.add_reagent(SUGAR, 1)
 		reagents.add_reagent(SODIUMCHLORIDE, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/crabcake
+	name = "Crab Cake"
+	desc = "A New Space England favorite!"
+	icon_state = "crabcake"
+	food_flags = FOOD_MEAT
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/crabcake/New()
+		..()
+		reagents.add_reagent(NUTRIMENT, 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/sandwich
 	name = "Sandwich"
@@ -2293,6 +2304,18 @@
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/crabspaghetti
+	name = "Crab Spaghetti"
+	desc = "Goes well with Coffee"
+	icon_state = "crabspaghetti"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/crabspaghetti/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
@@ -3865,22 +3888,24 @@
 	desc = "Me and me Mum and me Dad and me Nan are off to Waterloo, me and me Mum and me Dad and me Nan and a bucket of Vindaloo!"
 	icon_state = "curry_vindaloo"
 	item_state = "curry_vindaloo"
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/vindaloo/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
 	reagents.add_reagent(CAPSAICIN, 10)
-	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/curry/crab
+	name = "Crab Curry"
+	desc = "An Indian dish with a snappy twist!"
+	icon_state = "curry_crab"
+	item_state = "curry_crab"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/lemon
 	name = "Lemon Curry"
 	desc = "This actually exists?"
 	icon_state = "curry_lemon"
 	item_state = "curry_lemon"
-
-/obj/item/weapon/reagent_containers/food/snacks/curry/lemon/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 20)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/xeno
@@ -3888,11 +3913,6 @@
 	desc = "Waste not want not."
 	icon_state = "curry_xeno"
 	item_state = "curry_xeno"
-
-/obj/item/weapon/reagent_containers/food/snacks/curry/xeno/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 20)
-	bitesize = 3
 
 
 //////////////////CHIPS//////////////////

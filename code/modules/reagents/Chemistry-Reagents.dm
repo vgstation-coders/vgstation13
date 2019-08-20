@@ -2295,6 +2295,10 @@
 		tray.weedlevel -= 3
 		tray.toxins += 15
 		tray.check_level_sanity()
+	else if(istype(O, /obj/structure/cable/powercreeper))
+		var/obj/structure/cable/powercreeper/PC = O
+		if(prob(1*(PC.powernet.avail/1000))) //The less there is, the hardier it gets
+			PC.die()
 
 /datum/reagent/toxin/plantbgone/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -3490,18 +3494,20 @@
 		if(5 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
 			percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
 			if(prob(20))
-				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>", 
+				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
 								"<span class='warning'>You feel different, somehow...</span>"))
 			if(prob(percent_machine))
-				holder.add_reagent("mednanobots", 20)
+				holder.add_reagent(MEDNANOBOTS, 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
 		if(20 to INFINITY) //Now you've done it.
+			if(istype(M, /mob/living/simple_animal/hostile/monster/cyber_horror))
+				return
 			spawning_horror = 1
 			to_chat(M, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
 			spawn(60)
 				if(spawning_horror == 1)
 					to_chat(M, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
-					message_admins("[key_name(M)] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(M)])")
+					message_admins("[key_name(M)] [M] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(M)])")
 					if(ishuman(M))
 						var/mob/living/carbon/human/H = M
 						var/typepath
@@ -6576,7 +6582,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	nutriment_factor = FOOD_METABOLISM
 	description = "This coffee seems uncannily good."
 
-/datum/reagent/tonio/on_mob_life(var/mob/living/M)
+/datum/reagent/drink/coffee/tonio/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
@@ -6615,6 +6621,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Wake-Up Call"
 	id = SECCOFFEE
 	description = "All the essentials."
+	
+/datum/reagent/drink/coffee/seccoffee/on_mob_life(var/mob/living/M)
+	..()
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
+			H.heal_organ_damage(1, 1) //liquid sprinkles!
 
 /datum/reagent/drink/coffee/medcoffee
 	name = "Lifeline"

@@ -124,6 +124,7 @@
 	if(on && air_contents.return_pressure() < MAX_PRESSURE)
 		var/datum/gas_mixture/environment = get_environment()
 		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles()
+		var/removed_volume = min(volume_rate, environment.volume)
 
 		//Take a gas sample
 		var/datum/gas_mixture/removed = remove_sample(environment, transfer_moles)
@@ -148,7 +149,7 @@
 			#undef FILTER
 			total_to_filter.update_values() //since the FILTER macro doesn't update to save perf, we need to update here
 			//calculate the amount of moles in scrubbing_rate litres of gas in removed and apply the scrubbing rate limit
-			var/filter_moles = min(1, scrubbing_rate / volume_rate) * removed.total_moles()
+			var/filter_moles = min(1, scrubbing_rate / removed_volume) * removed.total_moles()
 			var/datum/gas_mixture/filtered_out = total_to_filter.remove(filter_moles)
 
 			removed.subtract(filtered_out)

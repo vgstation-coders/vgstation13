@@ -749,7 +749,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/randomised/russianguns
 	name = "Russian weapons"
 	num_contained = 3 //number of items picked to be contained in a randomised
-	contains = list(/obj/item/weapon/gun/projectile/nagant,
+	contains = list(/obj/item/weapon/gun/projectile/mosin,
 					/obj/item/ammo_storage/speedloader/a762x55,
 					/obj/item/ammo_storage/speedloader/a762x55,
 					/obj/item/ammo_storage/speedloader/a762x55,
@@ -988,8 +988,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/auto380
 	name = "NT Glock pack"
-	contains = list(/obj/item/weapon/gun/projectile/sec,
-					/obj/item/weapon/gun/projectile/sec,
+	contains = list(/obj/item/weapon/gun/projectile/glock,
+					/obj/item/weapon/gun/projectile/glock,
 					/obj/item/voucher/free_item/glockammo,
 					/obj/item/voucher/free_item/glockammo)
 	cost = 60
@@ -2344,4 +2344,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "\improper Mining stack of packs"
 	group = "Vending Machine packs"
 
-
+/datum/supply_packs/gamesmachines
+	name = "Al's Fun And Games stack of packs"
+	contains = list(/obj/structure/vendomatpack/games, /obj/structure/vendomatpack/games)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "Al's Fun And Games stack of packs"
+	group = "Vending Machine Packs"

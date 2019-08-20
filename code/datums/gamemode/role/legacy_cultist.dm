@@ -57,7 +57,6 @@
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/legacy_cultist/Drop()
-	stat_collection.cult_deconverted++
 	. = ..()
 	if (!antag)
 		return .

@@ -291,7 +291,7 @@
 	id = "glock"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 10000)
-	build_path = /obj/item/weapon/gun/projectile/sec/lockbox
+	build_path = /obj/item/weapon/gun/projectile/glock/lockbox
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -399,6 +399,14 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 400)
 	build_path = /obj/item/ammo_storage/magazine/m380auto/empty
+
+/datum/design/magazine_380_extended
+	name = "Extended magazine (.380AUTO)"
+	desc = "A magazine designed for .380AUTO vectors."
+	id = "magazine_380_e"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 800)
+	build_path = /obj/item/ammo_storage/magazine/m380auto/extended/empty
 
 /datum/design/magazine_c45
 	name = "Pistol magazine (.45)"
