@@ -536,7 +536,7 @@ Class Procs:
 	user.visible_message("[user.name] starts to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 		"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 		"You hear welding.")
-	if (WT.do_weld(user, src,20, 0))
+	if (WT.do_weld(user, src,20, 1))
 		if(gcDestroyed)
 			return -1
 		switch(state)

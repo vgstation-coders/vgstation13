@@ -337,8 +337,6 @@
 			if(prob(5))
 				remove_fuel(1)
 
-	//I'm not sure what this does. I assume it has to do with starting fires...
-	//...but it doesnt check to see if the welder is on or not.
 	var/turf/location = src.loc
 	if(istype(location, /mob/))
 		var/mob/M = location
@@ -352,9 +350,11 @@
 	if(!proximity)
 		return
 	if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && !src.welding)
-		A.reagents.trans_to(src, max_fuel)
-		to_chat(user, "<span class='notice'>Welder refueled</span>")
-		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+		if(A.reagents.trans_to(src, max_fuel))
+			to_chat(user, "<span class='notice'>Welder refueled.</span>")
+			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+		else
+			to_chat(user, "<span class='notice'>The welder is already full.")
 		return
 	else if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && src.welding)
 		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
@@ -364,14 +364,10 @@
 		tank.explode()
 		return
 	if (src.welding)
-		remove_fuel(1)
-		var/turf/location = get_turf(user)
-		if (istype(location, /turf))
-			location.hotspot_expose(source_temperature, 50, 1,surfaces=1)
-			if(isliving(A))
-				var/mob/living/L = A
-				L.IgniteMob()
-
+		if(isliving(A))
+			var/mob/living/L = A
+			L.IgniteMob()
+			remove_fuel(1)
 
 /obj/item/weapon/weldingtool/attack_self(mob/user as mob)
 	toggle(user)

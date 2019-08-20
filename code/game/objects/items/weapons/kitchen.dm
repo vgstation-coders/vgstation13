@@ -233,7 +233,7 @@
 		return
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if(WT.remove_fuel(1, user))
 			to_chat(user, "You slice the handle off of \the [src].")
 			playsound(user, 'sound/items/Welder.ogg', 50, 1)
 			if(src.loc == user)
@@ -243,7 +243,6 @@
 			else
 				new /obj/item/weapon/metal_blade(get_turf(src.loc))
 			qdel(src)
-		else
 			return
 
 /obj/item/weapon/kitchen/utensil/knife/large/suicide_act(mob/user)

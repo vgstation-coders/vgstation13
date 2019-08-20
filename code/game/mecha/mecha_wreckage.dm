@@ -87,7 +87,7 @@
 		if(isemptylist(welder_salvage))
 			to_chat(user, "You don't see anything that can be cut with [W].")
 			return
-		if (WT.remove_fuel(0,user))
+		if (WT.remove_fuel(1,user))
 			var/type = prob(70)?pick(welder_salvage):null
 			if(type)
 				var/N = new type(get_turf(user))

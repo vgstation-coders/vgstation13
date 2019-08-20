@@ -181,7 +181,7 @@
 	//deconstruction
 	if(iswelder(W) && !anchored)
 		var/obj/item/weapon/weldingtool/WT = W
-		if(!WT.remove_fuel(0,user))
+		if(!WT.remove_fuel(1,user))
 			return
 		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 		user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", \

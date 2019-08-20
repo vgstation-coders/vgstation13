@@ -218,7 +218,7 @@
 	//Deconstruction
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if(WT.remove_fuel(1, user))
 			if(engraving)
 				to_chat(user, "<span class='notice'>You deform the wall back into its original shape")
 				engraving = null

@@ -89,7 +89,7 @@
 	else
 		if(iswelder(W))
 			var/obj/item/weapon/weldingtool/WT = W
-			if(!WT.remove_fuel(0,user))
+			if(!WT.remove_fuel(1,user))
 				return
 			src.welded =! src.welded
 			src.update_icon()

@@ -304,7 +304,7 @@
 			else if(iswelder(W))
 
 				var/obj/item/weapon/weldingtool/WT = W
-				if(WT.remove_fuel(0,user))
+				if(WT.remove_fuel(1,user))
 					user.visible_message("<span class='notice'>[user] begins mending \the [src]'s external support rods.</span>", \
 					"<span class='notice'>You begin mending \the [src]'s external support rods.</span>")
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
