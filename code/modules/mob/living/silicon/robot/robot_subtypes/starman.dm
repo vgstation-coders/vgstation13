@@ -1,9 +1,5 @@
 /mob/living/silicon/robot/starman
-<<<<<<< HEAD
 	cell_type = /obj/item/weapon/cell/ultra
-=======
-	cell_type = /obj/item/weapon/cell/super
->>>>>>> 0ea7e80db17af7f2a68fd12a1bce93535387ce02
 	deny_client_move = 1
 	anchored = 1
 	
@@ -15,7 +11,6 @@
 	UnlinkSelf()
 	laws = new /datum/ai_laws/starman()
 	pick_module(STARMAN_MODULE)
-<<<<<<< HEAD
 	src.add_spell(new /spell/aoe_turf/starman_play_music)
 	src.add_spell(new /spell/aoe_turf/starman_brainshock)
 	src.add_spell(new /spell/aoe_turf/starman_starstorm)
@@ -56,25 +51,18 @@
 	else
 		..()	
 	
+	
+	
+	
+	
 /proc/psi_precast(var/mob/user)
 	playsound(user, 'sound/effects/psi/psi_precast.ogg', 30, 0, wait = TRUE)
 	sleep(3)
 		
 
-
-
-
 		
-=======
-	set_module_sprites(list("Basic" = "starman"))
-	src.add_spell(new /spell/aoe_turf/starman_play_music)
-	src.add_spell(new /spell/aoe_turf/starman_brainshock)
-	src.add_spell(new /spell/aoe_turf/starman_starstorm)
-	src.add_spell(new /spell/targeted/starman_shield)
-	src.add_spell(new /spell/targeted/starman_warp)
 
-			
->>>>>>> 0ea7e80db17af7f2a68fd12a1bce93535387ce02
+
 /spell/aoe_turf/starman_play_music
 	name = "Telepathic Binaural Attack"
 	desc = "Forces the menacing tunes of the Starman into the minds of all your enemies. And you."
@@ -95,17 +83,11 @@
 		if(M && M.client)
 			M << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_STARMAN)	
 		
-<<<<<<< HEAD
-		
-		
-		
-		
-=======
 
-	
-	
-	
->>>>>>> 0ea7e80db17af7f2a68fd12a1bce93535387ce02
+		
+		
+		
+		
 /spell/targeted/starman_warp
 	name = "Warp"
 	desc = "Teleport to the targeted location."
@@ -135,7 +117,10 @@
 	playsound(user, 'sound/machines/buzz-sigh.ogg', 25, 0)
 	to_chat(user,"<span class='warning'>*Bzzt* Warp failed.</span>")
 	
-<<<<<<< HEAD
+
+	
+	
+	
 	
 	
 /spell/aoe_turf/starman_heal
@@ -166,9 +151,8 @@
 	playsound(user, 'sound/effects/psi/psi_lifeup_alpha.ogg', 15, 0)
 	user.visible_message("<span class='danger'>\The [user] envelops himself in a bubble of healing magic!</span>","<span class='notice'>*Bzzt* Restoration successful.</span>")
 	
-=======
 
->>>>>>> 0ea7e80db17af7f2a68fd12a1bce93535387ce02
+	
 
 
 	
@@ -186,19 +170,11 @@
 	selection_type = "range"
 	
 /spell/targeted/starman_shield/cast(list/targets, mob/user = user)
-<<<<<<< HEAD
 	psi_precast(user)
 	for(var/atom/target in targets)
 		var/turf/floor = get_turf(target)
 		if(!floor.density)
 			playsound(user, 'sound/effects/psi/psi_shield_alpha.ogg', 35, 0)
-=======
-	..()
-	for(var/atom/target in targets)
-		var/turf/floor = get_turf(target)
-		if(!floor.density)
-			playsound(user, 'sound/effects/psi/psi_shield_beta.ogg', 35, 0)
->>>>>>> 0ea7e80db17af7f2a68fd12a1bce93535387ce02
 			var/obj/effect/forcefield/starman/barrier = new /obj/effect/forcefield/starman(floor)
 			barrier.spread_outward(user)
 			user.visible_message("<span class='danger'>\The [user] projects a psionic forcefield!</span>","<span class='notice'>*Whirrr* Projection successful.</span>")
@@ -250,20 +226,13 @@
 	duration = 100
 	range = 5
 	selection_type = "range"
-<<<<<<< HEAD
 	var/meteor_count = 20
-=======
-	var/meteor_count = 15
->>>>>>> 0ea7e80db17af7f2a68fd12a1bce93535387ce02
 
 /spell/aoe_turf/starman_starstorm/choose_targets(mob/user = usr)
 	return trange(range, get_turf(user)) - trange(2, get_turf(user))
 
 /spell/aoe_turf/starman_starstorm/cast(list/targets, mob/user)
-<<<<<<< HEAD
 	psi_precast(user)
-=======
->>>>>>> 0ea7e80db17af7f2a68fd12a1bce93535387ce02
 	playsound(user, 'sound/effects/psi/psi_starstorm_omega.ogg', 20, 0)
 	var/obj/item/projectile/meteor/new_meteor
 	var/turf/spawn_loc
@@ -313,10 +282,7 @@
 	return range(range, get_turf(user))
 
 /spell/aoe_turf/starman_brainshock/cast(list/targets, mob/user)
-<<<<<<< HEAD
 	psi_precast(user)
-=======
->>>>>>> 0ea7e80db17af7f2a68fd12a1bce93535387ce02
 	playsound(user, 'sound/effects/psi/psi_brainshock_omega.ogg', 10, 0)
 	
 	spawn(6)
@@ -331,7 +297,6 @@
 
 	user.visible_message("<span class='danger'>\The [user] bends reality in impossible ways!</span>","<span class='notice'>*Beep* Hostile consciousnesses twisted.</span>")
 
-<<<<<<< HEAD
 	..()
 	
 	
@@ -370,7 +335,3 @@
 		flick_overlay(image('icons/mob/talk.dmi', user, "hail", MOB_LAYER+1), clients_in_moblist(bystanders), 2 SECONDS)
 		user.visible_message("<span class='danger'>\The [user] [pick("emits","blares","performs")] a [pick("sickly","frightening","spooky","strange")] [pick("sound","tune","theme")]!</span>")
 	nextuse = world.time + cooldown
-	
-=======
-	..()
->>>>>>> 0ea7e80db17af7f2a68fd12a1bce93535387ce02
