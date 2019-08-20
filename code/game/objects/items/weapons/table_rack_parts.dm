@@ -50,7 +50,7 @@
 					new /obj/item/weapon/ghetto_ansible(loc)
 					qdel(src)
 		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			return
 	if (istype(W, /obj/item/stack/rods))
 		var/obj/item/stack/rods/rods = W
 		if (rods.amount >= 4)
@@ -228,7 +228,7 @@
 					new /obj/item/weapon/metal_gun_stock(loc)
 					qdel(src)
 		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			return
 
 /obj/item/weapon/rack_parts/attack_self(mob/user)
 	var/obj/structure/rack/R = new /obj/structure/rack(user.loc)

@@ -552,7 +552,6 @@ Class Procs:
 							)
 		return 1
 	else
-		to_chat(user, "<span class='rose'>You need more welding fuel to complete this task.</span>")
 		return -1
 
 /**

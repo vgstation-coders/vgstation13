@@ -316,8 +316,7 @@
 						user.visible_message("<span class='warning'>[user] mends \the [src]'s external support rods.</span>", \
 						"<span class='notice'>You mend \the [src]'s external support rods.</span>")
 				else
-					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-				return
+					return
 
 //This is where we perform actions that aren't deconstructing, constructing or thermiting the reinforced wall
 

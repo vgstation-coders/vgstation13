@@ -240,7 +240,7 @@
 	origin_tech = Tc_ENGINEERING + "=1"
 
 	//Welding tool specific stuff
-	var/welding = 0 	//Whether or not the welding tool is off(0), on(1) or currently welding(2)
+	var/welding = 0 	//Whether or not the welding tool is off(0) or on(1)
 	var/status = 1 		//Whether the welder is secured or unsecured (able to attach rods to it to make a flamethrower)
 	var/max_fuel = 20 	//The max amount of fuel the welder can hold
 	var/start_fueled = 1 //Explicit, should the welder start with fuel in it ?
@@ -337,13 +337,6 @@
 			if(prob(5))
 				remove_fuel(1)
 
-		//If you're actually actively welding, use fuel faster.
-		//Is this actually used or set anywhere? - Nodrak
-		if(2)
-			if(prob(75))
-				remove_fuel(1)
-
-
 	//I'm not sure what this does. I assume it has to do with starting fires...
 	//...but it doesnt check to see if the welder is on or not.
 	var/turf/location = src.loc
@@ -351,23 +344,23 @@
 		var/mob/M = location
 		if(M.is_holding_item(src))
 			location = get_turf(M)
-	if (istype(location, /turf))
+	if (istype(location, /turf) && welding)
 		location.hotspot_expose(source_temperature, 5,surfaces=istype(loc,/turf))
 
 
-/obj/item/weapon/weldingtool/afterattack(obj/O as obj, mob/user as mob, proximity)
+/obj/item/weapon/weldingtool/afterattack(atom/A, mob/user as mob, proximity)
 	if(!proximity)
 		return
-	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !src.welding)
-		O.reagents.trans_to(src, max_fuel)
+	if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && !src.welding)
+		A.reagents.trans_to(src, max_fuel)
 		to_chat(user, "<span class='notice'>Welder refueled</span>")
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return
-	else if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && src.welding)
+	else if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && src.welding)
 		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
 		log_game("[key_name(user)] triggered a fueltank explosion.")
 		to_chat(user, "<span class='warning'>That was stupid of you.</span>")
-		var/obj/structure/reagent_dispensers/fueltank/tank = O
+		var/obj/structure/reagent_dispensers/fueltank/tank = A
 		tank.explode()
 		return
 	if (src.welding)
@@ -375,8 +368,8 @@
 		var/turf/location = get_turf(user)
 		if (istype(location, /turf))
 			location.hotspot_expose(source_temperature, 50, 1,surfaces=1)
-			if(isliving(O))
-				var/mob/living/L = O
+			if(isliving(A))
+				var/mob/living/L = A
 				L.IgniteMob()
 
 
@@ -390,7 +383,13 @@
 
 //Removes fuel from the welding tool. If a mob is passed, it will perform an eyecheck on the mob. This should probably be renamed to use()
 /obj/item/weapon/weldingtool/proc/remove_fuel(var/amount = 1, var/mob/M = null)
-	if(!welding || !check_fuel())
+	if(!get_fuel())
+		if(M) //First and foremost make sure there is enough fuel
+			to_chat(M, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+		return 0
+	if(!welding)
+		if(M)
+			to_chat(M, "<span class='notice'>Your welding tool has to be lit first.</span>")
 		return 0
 	if(get_fuel() >= amount)
 		reagents.remove_reagent(FUEL, amount)
@@ -398,10 +397,6 @@
 		if(M)
 			eyecheck(M)
 		return 1
-	else
-		if(M)
-			to_chat(M, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-		return 0
 
 //Returns whether or not the welding tool is currently on.
 /obj/item/weapon/weldingtool/proc/isOn()

@@ -634,7 +634,7 @@ turf/simulated/floor/update_icon()
 					burnt = 0
 					broken = 0
 				else
-					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+					return
 
 /turf/simulated/floor/Entered(var/atom/movable/AM)
 	.=..()

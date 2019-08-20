@@ -97,7 +97,6 @@
 			else
 				to_chat(user, "You failed to salvage anything valuable from [src].")
 		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 			return
 	if(iswirecutter(W))
 		if(isemptylist(wirecutters_salvage))

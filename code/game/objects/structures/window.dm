@@ -481,7 +481,6 @@ var/list/one_way_windows
 						qdel(src)
 						return
 					else
-						to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
 						return
 
 	else if(!reinforced) //Normal window steps
