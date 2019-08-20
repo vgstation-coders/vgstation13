@@ -206,7 +206,7 @@
 				play_alert = (damage > audio_warning_point)
 			else
 				warning = "[short_name] hyperstructure returning to safe operating levels. Instability: [stability]%"
-			var/datum/speech/speech = radio.create_speech(warning, frequency=1459, transmitter=radio)
+			var/datum/speech/speech = radio.create_speech(warning, frequency=COMMON_FREQ, transmitter=radio)
 			speech.name = "Supermatter [short_name] Monitor"
 			speech.job = "Automated Announcement"
 			speech.as_name = "Supermatter [short_name] Monitor"

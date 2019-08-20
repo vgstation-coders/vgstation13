@@ -267,7 +267,7 @@
 		else
 			S.memory[address] = value
 
-/datum/signal/proc/signaler(var/freq = 1459, var/code = 30)
+/datum/signal/proc/signaler(var/freq = COMMON_FREQ, var/code = 30)
 	if(isnum(freq) && isnum(code))
 
 		var/obj/machinery/telecomms/server/S = data["server"]
@@ -311,7 +311,7 @@
 		source = "[html_encode(uppertext(S.id))]"
 		hradio = new // sets the hradio as a radio intercom
 	if(!freq || (!isnum(freq) && text2num(freq) == null))
-		freq = 1459
+		freq = COMMON_FREQ
 	if(findtext(num2text(freq), ".")) // if the frequency has been set as a decimal
 		freq *= 10 // shift the decimal one place
 

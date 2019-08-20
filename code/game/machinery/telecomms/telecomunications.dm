@@ -123,7 +123,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 	if(send_count > 0 && is_freq_listening(signal))
 		traffic++
-
+	to_chat(world, "[send_count]")
 	return send_count
 
 /obj/machinery/telecomms/proc/relay_direct_information(datum/signal/signal, obj/machinery/telecomms/machine)
@@ -135,10 +135,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	return
 
 /obj/machinery/telecomms/proc/is_freq_listening(datum/signal/signal)
+	to_chat(world, "[src.type] is freq listening [signal] [signal.frequency] [freq_listening.Find(signal.frequency)]")
 	// return 1 if found, 0 if not found
 	if(!signal)
 		return 0
-	if((signal.frequency in freq_listening) || (!freq_listening.len))
+	if((!freq_listening.len) || (freq_listening.Find(signal.frequency)))
 		return 1
 	else
 		return 0
