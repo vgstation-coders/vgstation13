@@ -639,12 +639,14 @@
 		"Basic" = "starman",
 	)
 	speed_modifier = CYBORG_STARMAN_SPEED_MODIFIER
+	default_modules = 0
 
 /obj/item/weapon/robot_module/starman/New()
 	..()
 
-	
+	modules += new /obj/item/weapon/gun/energy/starman_beam(src)
+	modules += new /obj/item/device/starman_hailer(src)
 
-	sensor_augs = list("Thermal", "Disable")
+	sensor_augs = list("Thermal", "Light Amplification", "Disable")
 
 	fix_modules()
