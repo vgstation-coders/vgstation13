@@ -13,6 +13,8 @@ var/blizzard_ready = 1 //Whether a new blizzard can be started.
 var/list/snowstorm_ambience = list('sound/misc/snowstorm/snowfall_calm.ogg','sound/misc/snowstorm/snowfall_average.ogg','sound/misc/snowstorm/snowfall_hard.ogg','sound/misc/snowstorm/snowfall_blizzard.ogg')
 var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 
+
+
 var/blizzard_cooldown = 3000 //5 minutes minimum
 
 /datum/event/blizzard/start() //Fuck using event code, we'll code all of this here
@@ -46,13 +48,13 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		sleep(rand(3 MINUTES, 5 MINUTES))
 		greaten_snowfall() //Never-ending MISERY
 
-/proc/snowfall_force_update_player() //Since the vision blocking UI only updates on Entered, let's call it.
+/proc/force_update_snowfall_sfx() //Since the vision blocking UI only updates on Entered, let's call it.
 	for(var/mob/M in player_list)
 		if(M && M.client)
 			var/turf/unsimulated/floor/snow/snow = get_turf(M)
 			if(snow && istype(snow))
 				snow.Entered(M)
-				snow.force_update_music(M)
+				M << sound(snowstorm_ambience[snow_intensity+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_intensity+1])
 
 
 
@@ -65,7 +67,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
 		tile.snow_state = snow_intensity
 		tile.update_environment()
-	snowfall_force_update_player()
+	force_update_snowfall_sfx()
 
 /proc/lessen_snowfall()
 	if(snow_intensity == SNOW_CALM)
@@ -74,7 +76,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
 		tile.snow_state = snow_intensity
 		tile.update_environment()
-	snowfall_force_update_player()
+	force_update_snowfall_sfx()
 
 /proc/snowfall_tick()
 	switch(snow_intensity)
@@ -154,13 +156,14 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	nitrogen = MOLES_N2STANDARD_ARCTIC
 	can_border_transition = 1
 	plane = PLATING_PLANE
-	var/real_snow_tile = TRUE //Set this to false if you want snowfall/blizzard overlay but no texture updating and ability to pick up snowballs.
+	var/real_snow_tile = TRUE //Set this to false if you want snowfall/blizzard overlay but no texture updating nor ability to pick up snowballs.
 	var/initial_snowballs = -1 //-1 means random.
 	var/snowballs = 0
 	var/snow_state = SNOW_CALM
 	var/obj/effect/snowprint_holder/snowprint_parent
 	var/obj/effect/blizzard_holder/blizzard_parent
 	turf_speed_multiplier = 1
+	gender = PLURAL
 	
 /turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	if(snowprint_parent)
@@ -174,7 +177,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	blizzard_parent = new /obj/effect/blizzard_holder(src)
 	blizzard_parent.parent = src
 	if(!snowtiles_setup)
-		for(var/i = 1 to 4)
+		for(var/i = 0 to 3)
 			snow_state = i 
 			blizzard_parent.UpdateSnowfall()
 		snowtiles_setup = 1
@@ -262,13 +265,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 				playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 /turf/unsimulated/floor/snow/cultify()
-	new /obj/item/weapon/storage/backpack/cultpack(loc)
-	..()
-	
-/turf/unsimulated/floor/snow/proc/force_update_music(var/mob/M)
-	if(M.client)
-		M << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
-		
+	return //It's already pretty red out in nar-sie universe.
 
 /obj/effect/blizzard_holder //Exists to make it unclickable 
 	name = "blizzard"
@@ -422,15 +419,42 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
 
+	
+	
+	
+/turf/unsimulated/floor/snow/asphalt
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "concrete"
+	real_snow_tile = FALSE
+	name = "asphalt"
+	desc = "Specially treated Centcomm asphalt, designed to disintegrate all snow that touches it."	
+	
 /turf/unsimulated/floor/snow/permafrost
 	icon_state = "permafrost_full"
 	real_snow_tile = FALSE
 	name = "permafrost"
 	desc = "Soil that never unfreezes."
-
-/turf/unsimulated/floor/snow/permafrost/New() //Band-aid fix for snow_state out of bounds exception
-	..()
-	snow_state = 0
+	
+/turf/unsimulated/floor/noblizz_permafrost
+	icon = 'icons/turf/new_snow.dmi'
+	icon_state = "permafrost_full"
+	name = "permafrost"
+	desc = "Soil that never unfreezes."
+	gender = PLURAL
+	temperature = T_ARCTIC
+	oxygen = MOLES_O2STANDARD_ARCTIC
+	nitrogen = MOLES_N2STANDARD_ARCTIC
+	can_border_transition = 1
+	plane = PLATING_PLANE
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 /obj/glacier
 	desc = "A frozen lake kept solid by temperatures way below freezing."
