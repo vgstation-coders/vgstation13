@@ -96,7 +96,7 @@
 			continue
 		var/is_implanted = FALSE
 		for(var/obj/item/weapon/implant/loyalty/loyalty_implant in player)
-			if(loyalty_implant.implanted)
+			if(loyalty_implant.is_implanted())
 				is_implanted = TRUE
 				break
 		if(is_implanted || isReligiousLeader(player) || isantagbanned(player) || jobban_isbanned(player, CULTIST))

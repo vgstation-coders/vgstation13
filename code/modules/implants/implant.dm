@@ -279,6 +279,7 @@
 /obj/item/weapon/implant/loyalty
 	name = "loyalty implant"
 	desc = "Makes the recipient somewhat loyal to Nanotrasen. Mostly used to prevent brainwashing."
+	implant_color = "#21FF55"
 
 /obj/item/weapon/implant/loyalty/get_data()
 		var/dat = {"<b>Implant Specifications:</b><BR>
@@ -320,6 +321,7 @@
 	desc = "Greytide, Station Wide."
 	icon_state = "implant_evil"
 	case_color = "red"
+	implant_color = "#DEDEDE"
 
 /obj/item/weapon/implant/traitor/get_data()
 	var/dat = {"<b>Implant Specifications:</b><BR>
@@ -500,6 +502,7 @@
 	case_color = "red"
 	var/activation_emote = "sigh"
 	var/obj/item/scanned = null
+	implant_color = "#94593A"
 
 /obj/item/weapon/implant/compressed/get_data()
 	var/dat = {"<b>Implant Specifications:</b><BR>

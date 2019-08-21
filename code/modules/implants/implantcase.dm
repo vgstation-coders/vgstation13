@@ -1,5 +1,5 @@
 /obj/item/weapon/implantcase
-	name = "Glass Case"
+	name = "glass case"
 	desc = "A hardened case containing an implant."
 	icon_state = "implantcase-blue"
 	item_state = "implantcase"
@@ -11,7 +11,7 @@
 	
 /obj/item/weapon/implantcase/New()
 	..()
-	src.held_implant = new implant_path(src)
+	held_implant = new implant_path(src)
 	
 /obj/item/weapon/implantcase/update_icon()
 	if(held_implant)
@@ -26,31 +26,31 @@
 	else if(istype(item, /obj/item/weapon/implanter))
 		var/obj/item/weapon/implanter/implanter = item
 		if(implanter.held_implant)
-			if(src.held_implant || implanter.held_implant.implant_status)
+			if(held_implant || implanter.held_implant.implant_status)
 				return
 
 			implanter.held_implant.forceMove(src) //If the implanter is full and the case is empty, put the implant back in the case.
-			src.held_implant = implanter.held_implant
+			held_implant = implanter.held_implant
 			implanter.held_implant = null
 
-			src.update_icon()
+			update_icon()
 			implanter.update_icon()
-		else if(src.held_implant)
-			src.held_implant.forceMove(implanter) //If the implanter is empty and the case is full, put the implant into the implanter.
-			implanter.held_implant = src.held_implant
-			src.held_implant = null
+		else if(held_implant)
+			held_implant.forceMove(implanter) //If the implanter is empty and the case is full, put the implant into the implanter.
+			implanter.held_implant = held_implant
+			held_implant = null
 
-			src.update_icon()
+			update_icon()
 			implanter.update_icon()
 
 /obj/item/weapon/implantcase/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
-	if(!src.held_implant || !src.held_implant.allow_reagents)
+	if(!held_implant || !held_implant.allow_reagents)
 		return INJECTION_RESULT_FAIL
-	if(src.held_implant.reagents.total_volume >= src.held_implant.reagents.maximum_volume)
+	if(held_implant.reagents.total_volume >= held_implant.reagents.maximum_volume)
 		to_chat(user, "<span class='warning'>[src] is full.</span>")
 		return INJECTION_RESULT_FAIL
 	var/tx_amount = min(tool.amount_per_transfer_from_this, tool.reagents.total_volume)
-	tx_amount = tool.reagents.trans_to(src.held_implant, tx_amount, log_transfer = TRUE, whodunnit = user)
+	tx_amount = tool.reagents.trans_to(held_implant, tx_amount, log_transfer = TRUE, whodunnit = user)
 	to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. \The [tool] now contains [tool.reagents.total_volume] units.</span>")
 	return INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER
 
@@ -79,7 +79,7 @@
 	name = "Glass Case- 'Loyalty'"
 	desc = "A case containing a loyalty implant."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "implantcase-red"
+	icon_state = "implantcase-blue"
 	implant_path = /obj/item/weapon/implant/loyalty
 
 /obj/item/weapon/implantcase/death_alarm
