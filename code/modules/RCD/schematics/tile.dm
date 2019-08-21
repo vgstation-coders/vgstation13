@@ -350,6 +350,7 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info/decal(DIR_ORTHO,	"carbon_dioxide"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"nitrous_oxide"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"air"),
+		new /datum/paint_info/decal(DIR_ORTHO,	"mix"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"plasma"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"zoo"),
 
@@ -586,7 +587,8 @@ var/global/list/paint_variants = list(
 	),
 
 	"Chapel" = list(
-		new /datum/paint_info(DIR_ALL,		"chapel")
+		new /datum/paint_info(DIR_ALL,		"chapel"),
+		new /datum/paint_info(DIR_ALL,		"chapeldark")
 	),
 
 	"SS13 logo" = list(

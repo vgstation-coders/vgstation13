@@ -273,8 +273,6 @@ var/datum/controller/gameticker/ticker
 		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
 	stat_collection.round_start_time = world.realtime
-	spawn(5 MINUTES) // poll every 5 minutes
-		population_poll_loop()
 
 	wageSetup()
 	post_roundstart()

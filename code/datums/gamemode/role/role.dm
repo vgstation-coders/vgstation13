@@ -108,6 +108,12 @@
 
 	var/wikiroute
 
+	// This datum represents all data that is exported to the statistics file at the end of the round.
+	// If you want to store faction-specific data as statistics, you'll need to define your own datum.
+	// See dynamic_stats.dm
+	var/datum/stat/role/stat_datum = null
+	var/datum/stat/role/stat_datum_type = /datum/stat/role
+
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	// Link faction.
 	faction=fac
@@ -127,6 +133,7 @@
 		plural_name="[name]s"
 
 	objectives.owner = M
+	stat_datum = new stat_datum_type()
 
 	return 1
 
@@ -348,6 +355,8 @@
 	if(objectives.objectives.len > 0)
 		text += "</ul>"
 
+	stat_collection.add_role(src, win)
+
 	return text
 
 /datum/role/proc/extraPanelButtons()
@@ -489,15 +498,6 @@
 	return TRUE
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
-
-
-//________________________________________________
-
-/datum/role/wizard_apprentice
-	name = WIZAPP
-	id = WIZAPP
-	special_role = WIZAPP
-	logo_state = "apprentice-logo"
 
 //________________________________________________
 

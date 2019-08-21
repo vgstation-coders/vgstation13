@@ -59,12 +59,7 @@
 			to_chat(user, "<span class = 'notice'>\The [src] is on.</span>")
 		if(BUNSEN_OPEN)
 			to_chat(user, "<span class = 'notice'>\The [src]'s fuel port is open.</span>")
-	to_chat(user, "<span class='info'>It contains:</span>")
-	if(reagents && reagents.reagent_list.len)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-	else
-		to_chat(user, "<span class='info'>Nothing.</span>")
+	reagents.get_examine(user)
 	if(held_container)
 		to_chat(user, "<span class='info'>It is holding a:</span>")
 		held_container.examine(user)

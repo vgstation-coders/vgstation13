@@ -28,12 +28,7 @@
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>It contains:</span>")
-	if(reagents && reagents.reagent_list.len)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-	else
-		to_chat(user, "<span class='info'>Nothing.</span>")
+	reagents.get_examine(user)
 
 /obj/structure/reagent_dispensers/cultify()
 	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))

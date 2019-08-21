@@ -582,3 +582,16 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/nuclear_operatives/announce()
 	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
 	..()
+
+/datum/command_alert/blizzard_end
+	alert_title = "Blizzard Status"
+	message = "Automated meteorological warning alert: the blizzard has been confirmed to be no longer active. Thank you for your cooperation with standard safety procedures."
+
+/datum/command_alert/blizzard_start
+	alert_title = "Blizzard Warning"
+	message = "Automated meteorological warning alert: formation of a blizzard has been detected near your station. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
+
+/datum/command_alert/omega_blizzard
+	alert_title = "Urgent Warning - Omega Blizzard"
+	message = "Automated meteorological warning alert: rapid formation of a powerful blizzard has been detected near your station. This formation is projected to last at least four months. Station safety procedures are in full effect, and command should determine whether evacuation is necessary."
+

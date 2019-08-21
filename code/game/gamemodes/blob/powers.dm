@@ -63,9 +63,13 @@
 
 
 	B.change_to(/obj/effect/blob/shield)
+
+	if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
+		var/datum/faction/blob_conglomerate/BC = mind.faction
+		if(istype(BC.stat_datum, /datum/stat/faction/blob))
+			var/datum/stat/faction/blob/BS = BC.stat_datum
+			BS.built_structures.shields++
 	return
-
-
 
 /mob/camera/blob/verb/create_resource()
 	set category = "Blob"
@@ -102,6 +106,11 @@
 		R.overmind = src
 		special_blobs += R
 		update_specialblobs()
+		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
+			var/datum/faction/blob_conglomerate/BC = mind.faction
+			if(istype(BC.stat_datum, /datum/stat/faction/blob))
+				var/datum/stat/faction/blob/BS = BC.stat_datum
+				BS.built_structures.resgens++
 	return
 
 /mob/camera/blob/proc/create_core()
@@ -137,6 +146,12 @@
 
 
 	B.change_to(/obj/effect/blob/core, src, TRUE)
+
+	if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
+		var/datum/faction/blob_conglomerate/BC = mind.faction
+		if(istype(BC.stat_datum, /datum/stat/faction/blob))
+			var/datum/stat/faction/blob/BS = BC.stat_datum
+			BS.built_structures.cores++
 
 	return
 
@@ -176,6 +191,11 @@
 		special_blobs += N
 		update_specialblobs()
 		max_blob_points += BLOBNDPOINTINC
+		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
+			var/datum/faction/blob_conglomerate/BC = mind.faction
+			if(istype(BC.stat_datum, /datum/stat/faction/blob))
+				var/datum/stat/faction/blob/BS = BC.stat_datum
+				BS.built_structures.nodes++
 	return
 
 
@@ -212,6 +232,11 @@
 		F.overmind = src
 		special_blobs += F
 		update_specialblobs()
+		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
+			var/datum/faction/blob_conglomerate/BC = mind.faction
+			if(istype(BC.stat_datum, /datum/stat/faction/blob))
+				var/datum/stat/faction/blob/BS = BC.stat_datum
+				BS.built_structures.factories++
 	return
 
 

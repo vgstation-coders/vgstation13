@@ -1,141 +1,72 @@
-/* THE GREAT BIG STATISTICS COLLECTION project
-	The objective of all this shitcode is to collect important/interesting events in a round
-	and write it to a really dumb text file, which will then be processed by an external server,
-	whichi will generate a pretty, web-viewable version (if I get my shit together)
-	by the public.
+/* Sood's Statistics Collection Project
+	For the web side of this project, go to
+	https://github.com/gbasood/vgstation-statistics-viewer
 
-	Gamemode-specific stat collection is separated off into its own files because why not
+	What this part of the code does is take a bunch of data stored as datums and
+	exports it to a JSON file so the statistics viewer can read it.
+
+	The function that handles the JSONification is datum2json, which live in json_helpers.dm
+
+	File structure:
+		documentation/: Contains Markdown documentation for the code in this directory.
+		statcollection.dm: Data definitions for non-gamemode related data that we collect, as well as core statistics logic.
+		stat_helpers.dm: Contains procs which help with processing game data into statistics data for export.
+		json_helpers.dm: Contains the logic that outputs all our data to valid JSON, since BYOND's built-in JSON methods do not output valid JSON.
 
 
-	stat_collector is the nerve center, everything else is just there to store data until
-	round end.
+	If you feel that there is some data that aught to be collected, feel free to make a PR to change
+	this code. Be aware, however, that if the web server is not updated to handle new data formats,
+	it will not properly use this information, or may cause the data to be discarded as invalid.
+	In short, please ensure the web server is updated before merging changes to these files.
+
+	When making additions, changes or removals to any of the data that is exported here, please change
+	STAT_OUTPUT_VERSION. This allows me to easily handle new versions of data on the web server side.
+
 */
-
-// Important things to store stats on that aren't located here:
-// ticker.mode, actual gamemode
-// master_mode, i.e. secret, mixed
 
 // To ensure that if output file syntax is changed, we will still be able to process
 // new and old files
-#define STAT_OUTPUT_VERSION "1.2"
+// please increment this version whenever making changes
+#define STAT_OUTPUT_VERSION "1.3"
 #define STAT_OUTPUT_DIR "data/statfiles/"
-
-var/list/datum_donotcopy = list("tag", "type", "parent_type", "vars", "gcDestroyed", "being_sent_to_past", "disposed")
-
-// NOTE: datum2list and datum2json are pretty snowflakey and won't recurse properly in some cases
-// specfically it checks for infinite recursion only one level down, so if you have:
-// thing1
-// 		thing2
-//			thing3 referencing thing1
-// you'll end up in an infinite loop
-// don't use it for that that's bad
-proc/datum2list(var/datum/D, var/list/do_not_copy=datum_donotcopy, parent_datum=null)
-	var/list/L = list()
-	for(var/I in D.vars)
-		if(I in do_not_copy)
-			continue
-		L.Add(I)
-		if(istype(D.vars[I], /list))
-			var/list/item = D.vars[I]
-			item = item.Copy() // so we get a copy of the list from vars instead
-
-			var/iter = 0 // i'm running out of variables names
-			// this next loop is gonna assume non-iterative
-			for(var/X in item)
-				iter++
-				if(istype(X, /datum))
-					if(X == parent_datum)
-						item[iter] = "parentRecursionPrevention"
-					else
-						item[iter] = datum2list(X, do_not_copy, parent_datum)
-			L[I] = item
-		else
-			L[I] = D.vars[I]
-	return L
-
-// converts a datum (including atoms!) to a JSON object
-// do_not_copy is a list of vars to not include in the JSON output
-proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
-	ASSERT(istype(D))
-
-	var/list/L = datum2list(D, do_not_copy)
-	for(var/I in L)
-		if(istype(L[I], /datum))
-			L[I] = datum2list(L[I], do_not_copy, D)
-		else
-			L[I] = L[I]
-	return json_encode(L)
 
 /datum/stat_collector
 	var/const/data_revision = STAT_OUTPUT_VERSION
 	// UNUSED
 	// var/enabled = 1
-	var/list/deaths = list()
-	var/list/explosions = list()
+	var/list/datum/stat/death_stat/deaths = list()
+	var/list/datum/stat/explosion_stat/explosions = list()
 	var/list/survivors = list()
 	var/list/uplink_purchases = list()
 	var/list/badass_bundles = list()
 	var/list/antag_objectives = list()
-	var/list/population_polls = list()
+	var/list/manifest_entries = list()
+	var/list/datum/stat/role/roles = list()
+	var/list/datum/stat/faction/factions = list()
+
 	// Blood spilled in c.liters
 	var/blood_spilled = 0
 	var/crates_ordered = 0
 	var/artifacts_discovered = 0
 	var/narsie_corpses_fed = 0
-	var/crewscore = 0
+	var/crew_score = 0
 	var/nuked = FALSE
-	var/borgs_at_roundend = 0
-	var/heads_at_roundend = 0
+	var/borgs_at_round_end = 0
+	var/heads_at_round_end = 0
 
 
 	// GAMEMODE-SPECIFIC STATS START HERE
 	var/datum/stat/dynamic_mode/dynamic_stats = null
 
-	// cult stuff
-	var/cult_runes_written = 0
-	var/cult_runes_nulled = 0
-	var/cult_runes_fumbled = 0
-	var/cult_converted = 0
-	var/cult_tomes_created = 0
-	var/cult_narsie_summoned = FALSE
-	var/cult_narsie_corpses_fed = 0
-	var/cult_surviving_cultists = 0
-	var/cult_deconverted = 0
-
-	// xenos (yes they aren't a gamemode shut up)
-	var/xeno_eggs_laid = 0
-	var/xeno_faces_hugged = 0
-	var/xeno_faces_protected = 0
-
-	// blob
-	var/blob_wins = FALSE
-	var/blob_spawned_blob_players = 0
-	var/blob_spores_spawned = 0
-	var/blob_res_generated = 0
-
-	// malf
-	var/malf_won = FALSE
-	var/malf_shunted = FALSE
-	var/list/malf_modules = list() // TODO change the stats server model for this
-
-	// revsquad
-	var/revsquad_won = FALSE
-	var/list/revsquad_items = list()
-
-
 	// THESE MUST BE SET IN POSTROUNDCHECKS OR SOMEWHERE ELSE BEFORE THAT IS CALLED
 	var/round_start_time = null
 	var/round_end_time = null
-	var/mapname = null
-	var/mastermode = null
-	var/tickermode = null
-	var/list/mixed_gamemodes = list()
+	var/map_name = null
 	var/tech_total = 0
-	var/stationname = null
+	var/station_name = null
 
-/datum/stat/population_stat
-	var/time
-	var/popcount = 0
+/datum/stat
+	// Hello. Nothing to see here.
 
 /datum/stat/death_stat
 	var/mob_typepath = null
@@ -146,8 +77,9 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/special_role = null
 	var/assigned_role = null
 	var/key = null
-	var/realname = null
-	var/list/damagevalues = list(
+	var/mind_name = null
+	var/from_suicide = 0
+	var/list/damage = list(
 		"BRUTE" = 0,
 		"FIRE" = 0,
 		"TOXIN" = 0,
@@ -161,18 +93,21 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/special_role = null
 	var/assigned_role = null
 	var/key = null
-	var/realname = null
+	var/mind_name = null
 	var/escaped = FALSE
-	var/list/damagevalues = list(
+	var/list/damage = list(
 		"BRUTE" = 0,
 		"FIRE" = 0,
 		"TOXIN" = 0,
 		"OXY" = 0,
 		"CLONE" = 0,
 		"BRAIN" = 0)
+	var/loc_x = 0
+	var/loc_y = 0
+	var/loc_z = 0
 
 /datum/stat/antag_objective
-	var/realname = null
+	var/mind_name = null
 	var/key = null
 	var/special_role = null
 	var/objective_type = null
@@ -202,6 +137,17 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/heavy_impact_range = 0
 	var/light_impact_range = 0
 
+/datum/stat/manifest_entry
+	var/key = null
+	var/name = null
+	var/assignment = null
+
+// redo using mind list instead so we can get non-human players in its output
+/datum/stat/manifest_entry/New(/var/mob/living/carbon/human/M)
+	key = ckey(M.mind.key)
+	name = STRIP_NEWLINE(M.mind.name)
+	assignment = STRIP_NEWLINE(M.mind.assigned_job)
+
 /datum/stat_collector/proc/get_valid_file(var/extension = "json")
 	var/filename_date = time2text(round_start_time, "YYYY-MM-DD")
 	var/uniquefilename = time2text(round_start_time, "hhmmss")
@@ -210,22 +156,22 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 		uniquefilename = "[uniquefilename].dupe"
 	return file("[STAT_OUTPUT_DIR]statistics-[filename_date].[uniquefilename].[extension]")
 
-// new shiny JSON export
+
 /datum/stat_collector/proc/Process()
+	var/statfile = get_valid_file("json")
+
 	if (istype(ticker.mode, /datum/gamemode/dynamic))
 		var/datum/gamemode/dynamic/mode = ticker.mode
 		dynamic_stats = mode.dynamic_stats
-	var/statfile = get_valid_file("json")
-	doPostRoundChecks()
+
+	do_post_round_checks()
 
 	to_chat(world, "Writing statistics to file")
 	var/start_time = world.realtime
-
 	var/jsonout = datum2json(src)
 	statfile << jsonout
-	world.log << "Statistics written to file in [(start_time - world.realtime)/10] seconds." // I think that's right?
+	world.log << "Statistics written to file in [(start_time - world.realtime)/10] seconds."
+
 	stats_server_alert_new_file()
 	spawn(10 SECONDS)
 		to_chat(world, "<span class='info center'>Statistics for this round available at http://stats.ss13.moe/match/latest</span>")
-
-// TODO write all living mobs to DB

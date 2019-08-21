@@ -1425,7 +1425,7 @@ Thanks.
 		for (var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]
 			if (D.spread & SPREAD_BLOOD)
-				M.infect_disease2(D,1,"(Butchered, from [src])")
+				M.infect_disease2(D,1,"(Butchered, from [src])",0)
 
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
@@ -2040,14 +2040,8 @@ Thanks.
 			CreateBlobDisease(source.looks)
 		var/datum/disease2/disease/D = blob_diseases[source.looks]
 
-		var/chance_to_infect = 100
-		if (check_contact_sterility(FULL_TORSO))//For simplicity's sake (for once), let's just assume that the blob strikes the torso.
-			chance_to_infect = 10//Even with perfect protection, those spores might get to you.
-		if (check_bodypart_bleeding(FULL_TORSO))
-			chance_to_infect = min(100, chance_to_infect + 10)
-
-		if (prob(chance_to_infect))
-			infect_disease2(D, notes="(Blob, from [source])")//still 5% chance to fail infection
+		if (!check_contact_sterility(FULL_TORSO))//For simplicity's sake (for once), let's just assume that the blob strikes the torso.
+			infect_disease2(D, notes="(Blob, from [source])")
 
 	..()
 

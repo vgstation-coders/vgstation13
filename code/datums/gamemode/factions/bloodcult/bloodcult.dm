@@ -444,7 +444,7 @@ var/veil_thickness = CULT_PROLOGUE
 	if (Grab)
 		if(ishuman(Grab.affecting))
 			var/mob/living/carbon/human/H = Grab.affecting
-			if(!(H.species.flags & NO_BLOOD))
+			if(!(H.species.anatomy_flags & NO_BLOOD))
 				for(var/datum/organ/external/org in H.organs)
 					if(org.status & ORGAN_BLEEDING)
 						var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
@@ -459,7 +459,7 @@ var/veil_thickness = CULT_PROLOGUE
 
 	//Is there a bleeding mob/corpse on the turf that still has blood in it?
 	for (var/mob/living/carbon/human/H in T)
-		if(H.species.flags & NO_BLOOD)
+		if(H.species.anatomy_flags & NO_BLOOD)
 			continue
 		if(user != H)
 			for(var/datum/organ/external/org in H.organs)
@@ -585,7 +585,7 @@ var/veil_thickness = CULT_PROLOGUE
 		return data
 
 	//Does the user have blood? (the user can pay in blood without having to bleed first)
-	if(istype(H_user) && !(H_user.species.flags & NO_BLOOD))
+	if(istype(H_user) && !(H_user.species.anatomy_flags & NO_BLOOD))
 		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
 		data[BLOODCOST_TARGET_USER] = H_user
@@ -660,9 +660,15 @@ var/veil_thickness = CULT_PROLOGUE
 					if (BLOODCOST_TARGET_GRAB)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_GRAB]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 					if (BLOODCOST_TARGET_BLEEDER)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_BLEEDER]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 					if (BLOODCOST_TARGET_HELD)
 						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_HELD]
 						blood = locate() in G.reagents.reagent_list
@@ -675,6 +681,9 @@ var/veil_thickness = CULT_PROLOGUE
 					if (BLOODCOST_TARGET_USER)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 			if (!tribute && previous_result != BLOODCOST_TRIBUTE)
 				user.visible_message("<span class='warning'>Drips of blood seem to appear out of thin air around \the [user], and fall onto the floor!</span>",
 									"<span class='rose'>An ally has lent you a drip of their blood for your ritual.</span>",
