@@ -16,7 +16,7 @@
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
-	species_fit = list(GREY_SHAPED, CATBEAST_SHAPED)
+	species_fit = list(GREY_SHAPED, TAJARAN_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	var/obj/item/clothing/suit/space/rig/rig
 
@@ -91,7 +91,7 @@
 	icon_state = "rig-engineering"
 	item_state = "eng_hardsuit"
 	slowdown = HARDSUIT_SLOWDOWN_LOW
-	species_fit = list(GREY_SHAPED, CATBEAST_SHAPED)
+	species_fit = list(GREY_SHAPED, TAJARAN_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
@@ -218,7 +218,7 @@
 	desc = "An advanced helmet designed for work in special operations. A tag on it says \"Property of Gorlex Marauders\"."
 	icon_state = "rig0-syndi"
 	item_state = "syndie_helm"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, SKRELL_SHAPED, LIGGER_SHAPED, CATBEAST_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED)
 	_color = "syndi"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 60)
 	actions_types = list(/datum/action/item_action/toggle_helmet_camera) //This helmet does not have a light, but we'll do as if
@@ -248,7 +248,7 @@
 	name = "blood-red hardsuit"
 	desc = "An advanced suit that protects against injuries during special operations. A tag on it says \"Property of Gorlex Marauders\"."
 	item_state = "syndie_hardsuit"
-	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, LIGGER_SHAPED, CATBEAST_SHAPED)
+	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED)
 	w_class = W_CLASS_MEDIUM
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)

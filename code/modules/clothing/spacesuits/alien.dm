@@ -2,8 +2,8 @@
 	name = "unathi breacher helmet"
 	desc = "Some sort of ancient Unathi power helmet with ridiculous armor plating."
 	armor = list(melee = 75, bullet = 75, laser = 75,energy = 75, bomb = 75, bio = 100, rad = 90)
-	species_restricted = list(LIGGER_SHAPED)
-	species_fit = list(LIGGER_SHAPED)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
 	icon_state = "unathi_breacher"
 	item_state = "rig_helm"
 	_color = "unathi_breacher"
@@ -16,8 +16,8 @@
 	item_state = "rig_suit"
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	armor = list(melee = 75, bullet = 75, laser = 75,energy = 75, bomb = 75, bio = 100, rad = 90)
-	species_restricted = list(LIGGER_SHAPED)
-	species_fit = list(LIGGER_SHAPED)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
 	allowed = list(
 		/obj/item/weapon/gun,
 		/obj/item/device/flashlight,
@@ -37,8 +37,8 @@
 	name = "unathi battle helmet"
 	desc = "Typical gear for the modern Unathi soldier."
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
-	species_restricted = list(LIGGER_SHAPED)
-	species_fit = list(LIGGER_SHAPED)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
 	icon_state = "unathi_battle"
 	item_state = "syndicate-helm-black"
 	_color = "unathi_battle"
@@ -49,8 +49,8 @@
 	icon_state = "unathi_battle"
 	item_state = "syndicate-black"
 	armor = list(melee = 40, bullet = 30, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 50)
-	species_restricted = list(LIGGER_SHAPED)
-	species_fit = list(LIGGER_SHAPED)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
 	allowed = list(
 		/obj/item/weapon/gun,
 		/obj/item/device/flashlight,
@@ -72,8 +72,8 @@
 	icon_state = "unathi_soghun"
 	item_state = "space_suit_syndicate"
 	armor = list(melee = 40, bullet = 30, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 50)
-	species_restricted = list(LIGGER_SHAPED)
-	species_fit = list(LIGGER_SHAPED)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
 	allowed = list(
 		/obj/item/weapon/gun,
 		/obj/item/device/flashlight,

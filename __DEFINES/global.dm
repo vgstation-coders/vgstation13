@@ -8,10 +8,10 @@
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 #define GREY_SHAPED "Grey"
-#define LIGGER_SHAPED "Unathi"
+#define UNATHI_SHAPED "Unathi"
 #define SKRELL_SHAPED "Skrell"
-#define CATBEAST_SHAPED "Tajaran"
-#define PLASMEME_SHAPED "Plasmaman"
+#define TAJARAN_SHAPED "Tajaran"
+#define PLASMAMAN_SHAPED "Plasmaman"
 #define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
 #define MUSHROOM_SHAPED "Mushroom"
 
