@@ -371,6 +371,9 @@ var/global/list/whitelisted_species = list("Human")
 	default_mutations=list(M_CLAWS)
 
 	flesh_color = "#34AF10"
+	
+	head_icons      = 'icons/mob/species/unathi/head.dmi'
+	wear_suit_icons = 'icons/mob/species/unathi/suit.dmi'
 
 
 /datum/species/unathi/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
@@ -505,6 +508,9 @@ var/global/list/whitelisted_species = list("Human")
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes/tajaran
 	)
+	
+	head_icons      = 'icons/mob/species/tajaran/head.dmi'
+	wear_suit_icons = 'icons/mob/species/tajaran/suit.dmi'
 
 /datum/species/tajaran/New()
 	..()
@@ -571,7 +577,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	max_hurt_damage = 3 // From 5 (for humans)
 
-	primitive = /mob/living/carbon/monkey/grey // TODO
+	primitive = /mob/living/carbon/monkey/grey
 
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | CAN_BE_FAT | HAS_SWEAT_GLANDS | ACID4WATER
@@ -658,6 +664,11 @@ var/global/list/whitelisted_species = list("Human")
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_SWEAT_GLANDS
 
 	flesh_color = "#8CD7A3"
+	
+
+	head_icons      = 'icons/mob/species/skrell/head.dmi'
+	wear_suit_icons = 'icons/mob/species/skrell/suit.dmi'
+
 
 /datum/species/vox
 	name = "Vox"
