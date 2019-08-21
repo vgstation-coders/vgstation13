@@ -1,3 +1,21 @@
+/client/proc/cancel_ai_sounds()
+	set category = "Special Verbs"
+	set name = "Cancel AI sounds"
+	
+	if(!src.holder)
+		to_chat(src, "Only administrators may use this command.")
+		return
+
+	var/sound/null_sound = sound(null, repeat = 0, wait = 0, channel = VOX_CHANNEL)
+
+	log_admin("[key_name(src)] canceled AI sounds.")
+	message_admins("[key_name_admin(src)] canceled AI sounds.", 1)
+	for(var/mob/M in player_list)
+		if(!M.client)
+			continue
+		M << null_sound
+	to_chat(src,"<span class='info'>Stopped all AI sounds.</span>")
+
 /client/proc/play_sound(var/sound/S as sound)
 	set category = "Fun"
 	set name = "Play Global Sound"

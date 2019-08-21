@@ -206,6 +206,56 @@ var/list/ai_list = list()
 			else
 				to_chat(usr, "You must write a name.")
 
+				
+var/ai_sound_ready_time = 0
+var/ai_sound_delay = 2 MINUTES
+/mob/living/silicon/ai/verb/ai_play_sound(var/sound/S as sound)
+	set category = "AI Commands"
+	set name = "Play Sound to Station"
+	
+	if(isUnconscious())
+		return
+		
+	if(ai_sound_ready_time > world.time)
+		to_chat(src, "<span class='notice'>Please wait [round((ai_sound_ready_time - world.time) / 10)] seconds.</span>")
+		return
+	
+	var/sound/uploaded_sound = sound(S, repeat = 0, wait = 1, channel = VOX_CHANNEL, volume = 60)
+	uploaded_sound.status = SOUND_STREAM
+	uploaded_sound.priority = 250
+
+	var/prompt = alert(src, "Are you sure you want to play this sound?","Don't abuse it!","Yes","No")
+	if(prompt == "No")
+		return
+	log_admin("Player [key_name(src)] played sound [S] as an AI.")
+	message_admins("Player [key_name(src)] played sound [S] as an AI.", 1)
+	for(var/mob/M in player_list)
+		if(!M.client)
+			continue
+		if(M.client.prefs.toggles & SOUND_MIDI && M.z == z)
+			M << uploaded_sound	
+
+	ai_sound_ready_time = world.time + ai_sound_delay
+
+/mob/living/silicon/ai/verb/ai_stop_sound()
+	set category = "AI Commands"
+	set name = "Stop Playing Sound to Station"
+	
+	if(isUnconscious())
+		return
+	
+	var/sound/null_sound = sound(null, repeat = 0, wait = 0, channel = VOX_CHANNEL)
+
+	log_admin("[key_name(src)] canceled AI sounds.")
+	message_admins("[key_name_admin(src)] canceled AI sounds.", 1)
+	
+	
+	for(var/mob/M in player_list)
+		if(!M.client)
+			continue
+		M << null_sound
+	to_chat(src,"<span class='info'>Sound playback ceased.</span>")
+	
 /mob/living/silicon/ai/verb/pick_icon()
 	set category = "AI Commands"
 	set name = "Set AI Core Display"

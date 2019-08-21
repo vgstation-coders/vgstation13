@@ -8,7 +8,8 @@ var/list/admin_verbs_default = list(
 	/client/proc/check_antagonists,		/*shows all antags*/
 	/client/proc/advwho,				/*in addition to listing connected ckeys, shows character name and living/dead/antag status for each*/
 	/datum/admins/proc/checkCID,
-	/datum/admins/proc/checkCKEY
+	/datum/admins/proc/checkCKEY,
+	/client/proc/cancel_ai_sounds
 //	/client/proc/deadchat				/*toggles deadchat on/off*/
 	)
 var/list/admin_verbs_admin = list(
