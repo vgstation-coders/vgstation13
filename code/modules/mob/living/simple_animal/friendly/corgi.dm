@@ -578,7 +578,7 @@
 	
 /mob/living/simple_animal/corgi/Ian/Life()
 	..()
-	var/creatine = reagents.has_any_reagents(list(CREATINE))
+	var/creatine =  has_reagent(CREATINE)
 	var/hyperzine = reagents.has_any_reagents(HYPERZINES)
 	if(creatine && !creatine_had)
 		creatine_had = 1
