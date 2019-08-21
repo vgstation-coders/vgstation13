@@ -112,6 +112,7 @@
 					p.scribble = photocopy.scribble
 					p.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 					p.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+					p.photo_size = photocopy.photo_size
 					p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
 					p.info = photocopy.info
 

@@ -76,6 +76,7 @@
 	flags = FPRINT
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
+	sterility = 100
 
 /obj/item/clothing/head/hasturhood
 	name = "hastur's hood"
@@ -100,6 +101,15 @@
 	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 2.0
 
+/obj/item/clothing/head/spaceninjafake
+	name = "ninja hood replica"
+	icon_state = "s-ninja"
+	item_state = "s-ninja"
+	desc = "A plastic replica of a space ninja's hood, you'll look just like a real murderous space ninja in this! This is a toy, it is not made for use in space!"
+	flags = FPRINT
+	body_parts_covered = FULL_HEAD|BEARD
+	siemens_coefficient = 2.0
+
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"
 	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"
@@ -114,6 +124,13 @@
 	icon_state = "greenbandana"
 	item_state = "greenbandana"
 	flags = FPRINT
+
+/obj/item/clothing/head/beret/highlander
+	name = "highlander's beret"
+	desc = "Don't lose your head!"
+	icon_state = "highlanderberet"
+	item_state = "highlanderberet"
+	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/head/cardborg
 	name = "cardborg helmet"
@@ -233,8 +250,11 @@
 			to_chat(wearer, "<span class=\"warning\">You feel positively euphoric!</span>")
 
 //TIPS FEDORA
-/obj/item/clothing/head/fedora/proc/tip_fedora()
-	usr.visible_message("[usr] tips \his fedora.", "You tip your fedora.")
+/obj/item/clothing/head/fedora/proc/tip_fedora(mob/user)
+	if(user.attack_delayer.blocked())
+		return
+	user.visible_message("[user] tips \his fedora.", "You tip your fedora.")
+	user.delayNextAttack(1 SECONDS)
 
 /datum/action/item_action/tip_fedora
 	name = "Tip Fedora"
@@ -243,7 +263,7 @@
 	var/obj/item/clothing/head/fedora/T = target
 	if(!istype(T))
 		return
-	T.tip_fedora()
+	T.tip_fedora(usr)
 
 /obj/item/clothing/head/fedora/white
 	name = "white fedora"
@@ -505,3 +525,24 @@
 	item_state = "brim-hat"
 	wizard_garb = TRUE
 	armor = list(melee = 0, bullet = 0, laser = 15, energy = 15, bomb = 0, bio = 0, rad = 0)
+
+/obj/item/clothing/head/widehat_red
+	name = "red wide-brimmed hat"
+	desc = "A red fancy looking wide-brimmed hat. It's even got a feather in it."
+	icon_state = "widehat_red"
+	item_state = "widehat_red"
+
+/obj/item/clothing/head/pharaoh
+	name = "pharaoh's headpiece"
+	desc = "An ornate golden headpiece worn by the ancient rulers of Space Egypt."
+	icon_state = "pharaoh"
+	item_state = "pharaoh"
+	wizard_garb = TRUE
+	body_parts_covered = FULL_HEAD|HEAD|EARS
+
+/obj/item/clothing/head/sombrero
+	name = "sombrero"
+	desc = "Meanwhile in Neo Space Mexico."
+	icon_state = "sombrero"
+	item_state = "sombrero"
+

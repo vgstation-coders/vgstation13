@@ -130,24 +130,32 @@
 	item_state = "candlebox5"
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
+	w_type = RECYK_MISC
 	storage_slots = 5
 	throwforce = 2
-	flags = 0
+	flags = null
 	slot_flags = SLOT_BELT
+	var/obj/item/candle/waxtype = /obj/item/candle
 
 /obj/item/weapon/storage/fancy/candle_box/empty
-	empty = 1
+	empty = TRUE
 	icon_state = "candlebox0"
 	item_state = "candlebox0" //i don't know what this does but it seems like this should go here
 
 /obj/item/weapon/storage/fancy/candle_box/New()
 	..()
-	if (empty)
+	if(empty)
 		return
 	for(var/i=1; i <= storage_slots; i++)
-		new /obj/item/candle(src)
-	return
+		new waxtype(src)
+
+/obj/item/weapon/storage/fancy/candle_box/holo
+	name = "Holo candle pack"
+	desc = "A pack of holo candles."
+	icon_state = "holocandlebox5"
+	icon_type = "holocandle"
+	//item_state = "candlebox5"
+	waxtype = /obj/item/candle/holo
 
 /*
  * Crayon Box
@@ -285,6 +293,7 @@
 	name = "cigarette packet"
 	desc = "The most popular brand of Space Cigarettes, sponsors of the Space Olympics."
 	icon = 'icons/obj/cigarettes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "cigpacket"
 	item_state = "cigpacket"
 	w_class = W_CLASS_TINY
@@ -350,10 +359,13 @@
  */
 
 /obj/item/weapon/storage/fancy/vials
-	icon = 'icons/obj/vialbox.dmi'
-	icon_state = "vialbox6"
-	icon_type = "vial"
 	name = "vial storage box"
+	desc = "Designed to be used in an isolation centrifuge."
+	icon = 'icons/obj/vialbox.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	icon_state = "vialbox"
+	item_state = "vialbox"
+	icon_type = "vial"
 	storage_slots = 6
 	can_only_hold = list("/obj/item/weapon/reagent_containers/glass/beaker/vial")
 
@@ -364,7 +376,34 @@
 	..()
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(src)
-	return
+	update_icon()
+
+/obj/item/weapon/storage/fancy/vials/update_icon()
+	overlays.len = 0
+
+	var/i = 0
+	for (var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial in contents)
+		var/image/vial_image = image('icons/obj/vialbox.dmi',src,"vial")
+		if(vial.reagents.total_volume)
+			var/image/filling = image('icons/obj/vialbox.dmi',src, "vial_reagents")
+			filling.icon += mix_color_from_reagents(vial.reagents.reagent_list)
+			filling.alpha = mix_alpha_from_reagents(vial.reagents.reagent_list)
+			vial_image.overlays += filling
+		if (i < 6)
+			vial_image.pixel_x += (i % 3) * 4
+			if (i > 2)
+				vial_image.pixel_x -= 2
+				vial_image.pixel_y -= 2
+		else
+			qdel(vial_image)
+			continue
+		overlays += vial_image
+		i++
+
+/obj/item/weapon/storage/fancy/vials/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
+	.=..()
+	if (.)
+		playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
 
 //I know vial storage is just above, but it really shouldn't be there
 //Furthermore, this can lead to confusion with fancy items now having quick gather and quick empty
@@ -372,10 +411,12 @@
 	name = "secure vial storage box"
 	desc = "A locked box for keeping things away from children."
 	icon = 'icons/obj/vialbox.dmi'
-	icon_state = "vialbox0"
-	item_state = "syringe_kit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	icon_state = "vialbox"
+	item_state = "vialbox_secure"
 	can_only_hold = list("/obj/item/weapon/reagent_containers/glass/beaker/vial")
 	fits_max_w_class = 3
+	w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 6
 	req_one_access = list(access_virology) //Obj was inheriting from obj/storage/lockbox which requires armory access.  This behavior is overridden here.
@@ -384,21 +425,49 @@
 	..()
 	update_icon()
 
-/obj/item/weapon/storage/lockbox/vials/update_icon(var/itemremoved = 0)
-	var/total_contents = src.contents.len - itemremoved
-	src.icon_state = "vialbox[total_contents]"
-	src.overlays.len = 0
+/obj/item/weapon/storage/lockbox/vials/update_icon()
+	overlays.len = 0
+	icon_state = "vialbox"
+	item_state = "vialbox"
+	if (!broken && !locked)
+		overlays += image('icons/obj/vialbox.dmi',src,"cover_open")
+
+	var/i = 0
+	for (var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial in contents)
+		var/image/vial_image = image('icons/obj/vialbox.dmi',src,"vial")
+		if(vial.reagents.total_volume)
+			var/image/filling = image('icons/obj/vialbox.dmi',src, "vial_reagents")
+			filling.icon += mix_color_from_reagents(vial.reagents.reagent_list)
+			filling.alpha = mix_alpha_from_reagents(vial.reagents.reagent_list)
+			vial_image.overlays += filling
+		if (i < 6)
+			vial_image.pixel_x += (i % 3) * 4
+			if (i > 2)
+				vial_image.pixel_x -= 2
+				vial_image.pixel_y -= 2
+		else
+			qdel(vial_image)
+			continue
+		overlays += vial_image
+		i++
+
 	if (!broken)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover")
 	else
 		overlays += image(icon, src, "ledb")
-	return
 
 /obj/item/weapon/storage/lockbox/vials/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	. = ..()
+	if (istype(W,/obj/item/weapon/card))
+		playsound(src, get_sfx("card_swipe"), 60, 1, -5)
 	update_icon()
+
+/obj/item/weapon/storage/lockbox/vials/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
+	.=..()
+	if (.)
+		playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
 
 //FLARE BOX
 //Useful for lots of things, this box has 6 flares in it. Only takes unused and unlight flares.
@@ -583,3 +652,17 @@
 		if(reagents.total_volume)
 			G.transfer_some_reagents(src, reagents.total_volume/contents.len)
 	. = ..()
+
+////////////////////
+//COLLECTION PLATE//
+////////////////////
+/obj/item/weapon/storage/fancy/collection_plate
+	icon = 'icons/obj/tithe.dmi'
+	icon_state = "donationbox0"
+	icon_type = "donation"
+	name = "collection plate"
+	foldable = 0
+	box_type = "plate"
+	storage_slots = 10
+	can_only_hold = list("/obj/item/weapon/spacecash", "/obj/item/weapon/coin")
+

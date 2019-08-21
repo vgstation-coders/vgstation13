@@ -40,6 +40,7 @@
 		syndiesquad.HandleRecruitedMind(new_syndicate_commando.mind)
 	else
 		syndiesquad = ticker.mode.CreateFaction(/datum/faction/strike_team/syndiesquad)
+		syndiesquad.forgeObjectives(mission)
 		if(syndiesquad)
 			syndiesquad.HandleNewMind(new_syndicate_commando.mind) //First come, first served
 	new_syndicate_commando.equip_syndicate_commando(syndicate_leader_selected)
@@ -48,7 +49,9 @@
 /datum/striketeam/syndicate/greet_commando(var/mob/living/carbon/human/H)
 	H << 'sound/music/elite_syndie_squad.ogg'
 	to_chat(H, "<span class='notice'>You are [H.real_name], an Elite commando, in the service of the Syndicate.</span>")
-	to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
+	for (var/role in H.mind.antag_roles)
+		var/datum/role/R = H.mind.antag_roles[role]
+		R.AnnounceObjectives()
 
 /mob/living/carbon/human/proc/equip_syndicate_commando(leader = 0)
 	//Special radio setup

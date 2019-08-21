@@ -8,7 +8,8 @@
 	nodamage = 0
 	flag = "bullet"
 	var/embed = 1
-	var/picked_up_speed = 5
+	var/explosive = 1
+	var/picked_up_speed = 0.66 //This is basically projectile speed, so
 	fire_sound = 'sound/weapons/rocket.ogg'
 
 /obj/item/projectile/rocket/process_step()
@@ -26,7 +27,85 @@
 		sleep(picked_up_speed)
 
 /obj/item/projectile/rocket/to_bump(var/atom/A)
-	explosion(A, 1, 3, 5, 8) //RPGs pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
+	if(explosive == 1)
+		explosion(A, 1, 3, 5, 8) //RPGs pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
+		if(!gcDestroyed)
+			qdel(src)
+	else
+		..()
+		if(!gcDestroyed)
+			qdel(src)
+
+/obj/item/projectile/rocket/lowyield
+	name = "low yield rocket"
+	icon_state = "rpground"
+	explosive = 0
+	damage = 45
+	stun = 10
+	weaken = 10
+	damage_type = BRUTE
+	nodamage = 0
+	flag = "bullet"
+
+/obj/item/projectile/rocket/lowyield/to_bump(var/atom/A)
+	explosion(A, -1, 0, 3, 5) //RPGs pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
+	..()
+	if(!gcDestroyed)
+		qdel(src)
+
+/obj/item/projectile/rocket/blank
+	name = "blank rocket"
+	icon_state = "rpground"
+	explosive = 0
+	damage = 5
+	stun = 5
+	weaken = 10
+	agony = 10
+	damage_type = BRUTE
+	nodamage = 0
+	flag = "bullet"
+
+/obj/item/projectile/rocket/blank/to_bump(var/atom/A)
+	explosion(A, -1, 0, 0, 0)
+	..()
+	if(!gcDestroyed)
+		qdel(src)
+
+/obj/item/projectile/rocket/emp
+	name = "EMP rocket"
+	icon_state = "rpground"
+	explosive = 0
+	damage = 10
+	stun = 5
+	weaken = 10
+	agony = 30
+	damage_type = BRUTE
+	nodamage = 0
+	flag = "bullet"
+
+/obj/item/projectile/rocket/emp/to_bump(var/atom/A)
+	explosion(A, -1, 0, 0, 0)
+	empulse(A, 3, 5)
+	..()
+	if(!gcDestroyed)
+		qdel(src)
+
+/obj/item/projectile/rocket/stun
+	name = "stun rocket"
+	icon_state = "rpground"
+	explosive = 0
+	damage = 15
+	stun = 20
+	weaken = 20
+	agony = 30
+	damage_type = BRUTE
+	nodamage = 0
+	flag = "bullet"
+
+/obj/item/projectile/rocket/stun/to_bump(var/atom/A)
+	explosion(A, -1, 0, 0, 0)
+	flashbangprime(TRUE, FALSE, FALSE)
+	..()
 	if(!gcDestroyed)
 		qdel(src)
 
@@ -62,6 +141,8 @@
 			var/datum/control/new_control = new /datum/control/lock_move(mob, src)
 			mob.orient_object.Add(new_control)
 			new_control.take_control()
+			mob.drop_item(nikita)
+			nikita = null
 
 	dir = get_dir_cardinal(starting,original)
 	last_dir = dir
@@ -116,7 +197,7 @@
 			qdel(src)
 		src.Move(step)
 
-	if(mob)
+	if(mob && loc)
 		if(emagged)
 			mob.forceMove(loc)
 			mob.dir = dir

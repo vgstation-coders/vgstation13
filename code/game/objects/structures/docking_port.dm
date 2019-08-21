@@ -156,13 +156,16 @@ var/global/list/all_docking_ports = list()
 	var/base_turf_type			= /turf/space
 	var/base_turf_icon			= null
 	var/base_turf_icon_state	= null
+	var/base_turf_override		= FALSE
 
 /obj/docking_port/destination/New()
 	.=..()
 
 	origin_turf = get_turf(src)
 	//The following few lines exist to make shuttle corners and the syndicate base Less Shit :*
-	if(src.z in (1 to map.zLevels.len))
+	if(base_turf_override)
+		return //Allows mappers to manually set base_turf info
+	if(src.z in 1 to map.zLevels.len)
 		base_turf_type = get_base_turf(src.z)
 
 	var/datum/zLevel/L = get_z_level(src)
@@ -239,7 +242,7 @@ var/global/list/all_docking_ports = list()
 		choices += name
 		choices[name] = D
 
-	var/choice = input(user,message,title) in choices as text|null
+	var/choice = input(user,message,title) as null|anything in choices
 
 	var/obj/docking_port/destination/D = choices[choice]
 	if(istype(D))
@@ -262,7 +265,7 @@ var/global/list/dockinglights = list()
 /obj/machinery/docklight/New()
 	..()
 	dockinglights += src
-	
+
 /obj/machinery/docklight/Destroy()
 	dockinglights -= src
 	..()

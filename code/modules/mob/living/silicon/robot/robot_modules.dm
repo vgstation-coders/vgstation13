@@ -67,7 +67,6 @@
 	if(emag)
 		modules += emag
 	rebuild()
-	..()
 
 /obj/item/weapon/robot_module/emp_act(severity)
 	if(modules)
@@ -255,6 +254,7 @@
 	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/device/healthanalyzer(src)
+	modules += new /obj/item/device/antibody_scanner(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	modules += new /obj/item/weapon/gripper/chemistry(src)
 	modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
@@ -628,5 +628,23 @@
 	emag = new /obj/item/weapon/reagent_containers/borghypo/peace/hacked(src)
 
 	sensor_augs = list("Medical", "Disable")
+
+	fix_modules()
+	
+/obj/item/weapon/robot_module/starman
+	name = "starman robot module"
+	module_holder = "starman"
+	quirk_flags = MODULE_IS_DEFINITIVE | MODULE_IS_FLASHPROOF
+	sprites = list(
+		"Basic" = "starman",
+	)
+	speed_modifier = CYBORG_STARMAN_SPEED_MODIFIER
+
+/obj/item/weapon/robot_module/starman/New()
+	..()
+
+	
+
+	sensor_augs = list("Thermal", "Disable")
 
 	fix_modules()

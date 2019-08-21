@@ -38,6 +38,22 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/asteroid_temple
 	file_path = "maps/randomvaults/asteroid_temple.dmm"
 
+/datum/map_element/vault/asteroid_temple/initialize(list/objects)
+	..(objects)
+
+	var/list/all_spawns = list()
+	for(var/obj/effect/landmark/catechizer_spawn/S in objects)
+		all_spawns.Add(S)
+
+	var/obj/effect/true_spawn = pick(all_spawns)
+	all_spawns.Remove(true_spawn)
+
+	var/obj/item/weapon/melee/morningstar/catechizer/original = new(get_turf(true_spawn))
+	qdel(true_spawn)
+	for(var/obj/effect/S in all_spawns)
+		new /mob/living/simple_animal/hostile/mimic/crate/item(get_turf(S), original) //Make copies
+		qdel(S)
+
 /datum/map_element/vault/tommyboyasteroid
 	file_path = "maps/randomvaults/tommyboyasteroid.dmm"
 
@@ -179,3 +195,8 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/asteroidfield
 	file_path = "maps/randomvaults/asteroidfield.dmm"
 
+/datum/map_element/vault/clownroid
+	file_path = "maps/randomvaults/clownroid.dmm"
+
+/datum/map_element/vault/goonesat
+	file_path = "maps/randomvaults/goonesat.dmm"

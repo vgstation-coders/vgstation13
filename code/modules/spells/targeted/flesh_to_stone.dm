@@ -3,6 +3,7 @@
 	desc = "This spell turns a single person into an inert statue for a long period of time."
 	abbreviation = "FS"
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 
 	school = "transmutation"
 	charge_max = 600

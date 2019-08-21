@@ -5,6 +5,7 @@
 	sharpness_flags = SHARP_BLADE | HOT_EDGE
 	heat_production = 3500
 	source_temperature = TEMPERATURE_PLASMA
+	sterility = 0
 
 /obj/item/weapon/melee/energy/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
@@ -72,6 +73,7 @@
 /obj/item/weapon/melee/energy/sword/activated/New()
 	..()
 	active = 1
+	sterility = 100
 	force = 30
 	w_class = W_CLASS_LARGE
 	sharpness = sharpness_on
@@ -112,6 +114,7 @@
 			active = !active
 	if (active)
 		force = activeforce
+		sterility = 100
 		w_class = W_CLASS_LARGE
 		sharpness = sharpness_on
 		sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK
@@ -122,6 +125,7 @@
 		to_chat(user, "<span class='notice'> [src] is now active.</span>")
 	else
 		force = 3
+		sterility = 0
 		w_class = W_CLASS_SMALL
 		sharpness = 0
 		sharpness_flags = 0
@@ -225,6 +229,7 @@
 			active = !active
 	if(active)
 		force = 25
+		sterility = 100
 		throwforce = 6
 		throw_speed = 3
 		sharpness = 1.7
@@ -235,6 +240,7 @@
 		event_key = user.on_moved.Add(src, "mob_moved")
 	else
 		force = initial(force)
+		sterility = initial(sterility)
 		throwforce = initial(throwforce)
 		throw_speed = initial(throw_speed)
 		sharpness = initial(sharpness)
@@ -296,6 +302,7 @@
 /obj/item/weapon/melee/energy/hfmachete/activated/New()
 	..()
 	active = 1
+	sterility = 100
 	force = 25
 	throwforce = 6
 	throw_speed = 3

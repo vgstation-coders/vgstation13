@@ -441,6 +441,6 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 
 /obj/effect/rust_em_field/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.flag != "bullet")
-		AddEnergy(Proj.damage * 20, 0, 1)
+		AddEnergy(Proj.damage * 100, 0, 1)
 		update_icon()
 	return 0

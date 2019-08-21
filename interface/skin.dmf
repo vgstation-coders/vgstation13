@@ -386,32 +386,32 @@ menu "menu"
 		name = "&Client"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Quick screenshot\tF2"
 		command = ".screenshot auto"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Save screenshot as...\tShift+F2"
 		command = ".screenshot"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Reconnect"
 		command = ".reconnect"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Quit"
 		command = ".quit"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Icons"
 		command = ""
 		saved-params = "is-checked"
@@ -444,7 +444,7 @@ menu "menu"
 		can-check = true
 		group = "size"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "&Icons"
@@ -455,16 +455,16 @@ menu "menu"
 		category = "&Icons"
 		can-check = true
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Help"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Admin help\tF1"
 		command = "adminhelp"
 		category = "&Help"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Hotkeys"
 		command = "hotkeys-help"
 		category = "&Help"
@@ -473,12 +473,12 @@ menu "menu"
 		name = "Settings"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "General Settings"
 		command = "modifypreferences 1"
 		category = "Settings"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Special Roles"
 		command = "modifypreferences 2"
 		category = "Settings"
@@ -487,7 +487,7 @@ menu "menu"
 		name = "Skin"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Swap Sides"
 		command = "swapsides"
 		category = "Skin"
@@ -497,12 +497,12 @@ menu "menu"
 		command = ""
 		is-disabled = true
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Profiler"
 		command = ".profile"
 		category = "Server"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "Server"
@@ -594,109 +594,6 @@ window "Telecomms IDE"
 		command = "cancel"
 		multi-line = true
 		no-command = true
-
-window "chemdispenser"
-	elem "chemdispenser"
-		type = MAIN
-		pos = 281,0
-		size = 625x412
-		anchor1 = none
-		anchor2 = none
-		background-color = #414141
-		is-visible = false
-		saved-params = "pos;size;is-minimized;is-maximized"
-		title = "Chem Dispenser"
-		statusbar = false
-		can-resize = false
-	elem "eject"
-		type = BUTTON
-		pos = 328,373
-		size = 296x39
-		anchor1 = 10,91
-		anchor2 = 100,100
-		font-size = 13
-		text-color = #808080
-		background-color = #414141
-		saved-params = "is-checked"
-		text = "[Insert beaker]"
-		command = "skincmd \"chemdispenser;eject\""
-		is-flat = true
-	elem "amountc"
-		type = BUTTON
-		pos = 0,373
-		size = 280x39
-		anchor1 = 0,91
-		anchor2 = 0,100
-		font-size = 13
-		text-color = #808080
-		background-color = #414141
-		saved-params = "is-checked"
-		text = "Change Amount"
-		command = "skincmd \"chemdispenser;amountc\""
-		is-flat = true
-	elem "energy"
-		type = LABEL
-		pos = 288,0
-		size = 264x32
-		anchor1 = 100,0
-		anchor2 = none
-		font-size = 13
-		text-color = #808080
-		background-color = #414141
-		saved-params = ""
-		text = "Energy: 25"
-	elem "amount"
-		type = LABEL
-		pos = 0,0
-		size = 288x34
-		anchor1 = 0,0
-		anchor2 = 29,7
-		font-size = 13
-		text-color = #808080
-		background-color = #414141
-		saved-params = ""
-		text = "Amount: 30"
-	elem "child1"
-		type = CHILD
-		pos = 0,32
-		size = 624x333
-		anchor1 = 0,8
-		anchor2 = 100,87
-		background-color = #408080
-		saved-params = "splitter"
-		left = "chemdispenser_reagents"
-		is-vert = false
-
-window "chemdispenser_reagents"
-	elem "chemdispenser_reagents"
-		type = MAIN
-		pos = 281,0
-		size = 652x309
-		anchor1 = none
-		anchor2 = none
-		background-color = #414141
-		saved-params = "pos;size;is-minimized;is-maximized"
-		titlebar = false
-		statusbar = false
-		can-close = false
-		can-minimize = false
-		can-resize = false
-		is-pane = true
-		can-scroll = vertical
-	elem "template_name"
-		type = BUTTON
-		pos = 8,8
-		size = 144x32
-		anchor1 = none
-		anchor2 = none
-		font-size = 13
-		background-color = #808080
-		is-visible = false
-		saved-params = "is-checked"
-		text = "Chloral Hydrate"
-		command = ""
-		is-flat = true
-		button-type = pushbox
 
 window "mainwindow"
 	elem "mainwindow"
@@ -909,7 +806,7 @@ window "rpane"
 		command = ".winset \"rpanewindow.left=window1\""
 		group = "rpanemode"
 		button-type = pushbox
-	elem "map"
+	elem "mapb"
 		type = BUTTON
 		pos = 386,0
 		size = 80x16
@@ -924,6 +821,7 @@ window "rpane"
 		size = 1x1
 		anchor1 = none
 		anchor2 = none
+		is-visible = false
 		saved-params = ""
 	elem "rulesb"
 		type = BUTTON
@@ -1074,3 +972,4 @@ window "window1"
 		background-color = #fffdd0
 		border = sunken
 		saved-params = "max-lines"
+

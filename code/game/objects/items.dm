@@ -66,6 +66,10 @@
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
 
+	var/list/datum/disease2/disease/virus2 = list()
+	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
+	var/image/pathogen
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -75,6 +79,13 @@
 		new path(src)
 
 /obj/item/Destroy()
+	infected_items -= src
+	if (pathogen)
+		for (var/mob/L in science_goggles_wearers)
+			if (L.client)
+				L.client.images -= pathogen
+		pathogen = null
+
 	if(istype(loc, /mob))
 		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
@@ -214,7 +225,7 @@
 		R.activate_module(src)
 		R.hud_used.update_robot_modules_display()
 
-/obj/item/attack_hand(mob/user as mob)
+/obj/item/attack_hand(var/mob/user)
 	if (!user)
 		return
 
@@ -244,7 +255,8 @@
 	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
-	return
+	//transfers diseases between the mob and the item
+	disease_contact(user)
 
 /obj/item/requires_dexterity(mob/user)
 	return TRUE
@@ -681,6 +693,8 @@
 			if(slot_handcuffed)
 				if(H.handcuffed)
 					return CANNOT_EQUIP
+				if (H.mutual_handcuffs)
+					return CANNOT_EQUIP
 				if(!istype(src, /obj/item/weapon/handcuffs))
 					return CANNOT_EQUIP
 				return CAN_EQUIP
@@ -928,10 +942,12 @@
 	return FALSE
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
-/obj/item/proc/on_block(damage, atom/blocked)
+/obj/item/proc/on_block(damage, atom/movable/blocked)
 	if(ismob(loc))
-		if(prob(50 - round(damage / 3)))
-			visible_message("<span class='danger'>[loc] blocks \the [blocked] with \the [src]!</span>")
+		if (IsShield() < blocked.ignore_blocking)
+			return FALSE
+		if (prob(50 - round(damage / 3)))
+			visible_message("<span class='borange'>[loc] blocks \the [blocked] with \the [src]!</span>")
 			if(isatommovable(blocked))
 				var/atom/movable/M = blocked
 				M.throwing = FALSE
@@ -1022,14 +1038,17 @@
 
 /obj/item/clean_blood()
 	. = ..()
-	if(blood_overlay)
+	remove_disease2()
+	if (blood_overlay)
 		overlays.Remove(blood_overlay)
-	if(istype(src, /obj/item/clothing/gloves))
+	if (had_blood)
+		clear_luminol()
+	if (istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
 
 
-/obj/item/add_blood(mob/living/carbon/human/M as mob)
+/obj/item/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
 		return FALSE
 	if(istype(src, /obj/item/weapon/melee/energy))
@@ -1047,14 +1066,24 @@
 	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
 	blood_overlay.color = blood_color
 	overlays += blood_overlay
-
 	//if this blood isn't already in the list, add it
-
 	if(!M)
 		return
+
+	if (M.virus2?.len)
+		var/list/blood_diseases = filter_disease_by_spread(M.virus2,required = SPREAD_BLOOD)
+		if (blood_diseases?.len)
+			for (var/ID in blood_diseases)
+				var/datum/disease2/disease/D = blood_diseases[ID]
+				infect_disease2(D, notes="(Blood, coming from [M])")
+				if (isliving(loc))
+					var/mob/living/L = loc
+					infection_attempt(L,D)//Wear gloves when doing surgery or beating that catbeast to death!
+
 	if(blood_DNA[M.dna.unique_enzymes])
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
+	had_blood = TRUE
 	return TRUE //we applied blood to the item
 
 var/global/list/image/blood_overlays = list()
@@ -1068,6 +1097,34 @@ var/global/list/image/blood_overlays = list()
 
 	blood_overlays[type] = image(I)
 
+/obj/item/apply_luminol()
+	if(!..())
+		return FALSE
+	if(!blood_overlays[type]) //Blood overlay generation if it lacks one.
+		generate_blood_overlay()
+	if(blood_overlay)
+		overlays.Remove(blood_overlay)
+	else
+		blood_overlay = blood_overlays[type]
+	var/image/luminol_overlay = blood_overlay
+	luminol_overlay.color = LIGHT_COLOR_CYAN
+	overlays += luminol_overlay
+	var/obj/effect/decal/cleanable/blueglow/BG
+	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
+		BG = had_blood
+		BG.set_light(1,2,LIGHT_COLOR_BLUE)
+	else
+		had_blood = null
+		BG = new /obj/effect/decal/cleanable/blueglow(src)
+		had_blood = BG
+
+/obj/item/clear_luminol()
+	if(!..())
+		return FALSE
+	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
+		var/obj/effect/decal/cleanable/blueglow/BG
+		BG = had_blood
+		BG.set_light(0)
 
 /obj/item/proc/showoff(mob/user)
 	if(abstract)
@@ -1171,6 +1228,7 @@ var/global/list/image/blood_overlays = list()
 		if(bit & slot_flags)
 			if(M.get_item_by_flag(bit) == src)
 				return TRUE
+
 /obj/item/proc/get_shrapnel_projectile()
 	if(shrapnel_type)
 		return new shrapnel_type(src)
@@ -1239,7 +1297,7 @@ var/global/list/image/blood_overlays = list()
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
 	if(do_after(user, C, restraint_apply_time))
-		if(C.handcuffed)
+		if(C.handcuffed || C.mutual_handcuffs)
 			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
 			return FALSE
 		feedback_add_details("handcuffs", "[name]")
@@ -1346,3 +1404,44 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/is_screwdriver(var/mob/user)
 	return FALSE
+
+//This proc will be called when the person holding or equipping it talks.
+/obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	return
+
+/////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
+//Called by attack_hand(), transfers diseases between the mob and the item
+/obj/item/proc/disease_contact(var/mob/living/M,var/bodypart = null)
+	//first let's try to infect them with our viruses
+	for (var/ID in virus2)
+		var/datum/disease2/disease/D = virus2[ID]
+		infection_attempt(M,D,bodypart)
+
+	if (!bodypart)//no bodypart specified? that should mean we're being held.
+		bodypart = HANDS
+	//secondly, do they happen to carry contact-spreading viruses themselves?
+	var/list/contact_diseases = filter_disease_by_spread(M.virus2,required = SPREAD_CONTACT)
+	if (contact_diseases?.len)
+		//if so are their hands protected?
+		if (!M.check_contact_sterility(bodypart))
+			for (var/ID in contact_diseases)
+				var/datum/disease2/disease/D = contact_diseases[ID]
+				infect_disease2(D, notes="(Contact, from being touched by [M])")
+
+
+	//spreading of blood-spreading diseases to items is handled by add_blood()
+
+//Called by disease_contact(), trying to infect people who pick us up
+/obj/item/proc/infection_attempt(var/mob/living/perp,var/datum/disease2/disease/D,var/bodypart = null)
+	if (!istype(D))
+		return
+	if (src in perp.held_items)
+		bodypart = HANDS
+	if (bodypart)
+		var/block = perp.check_contact_sterility(bodypart)
+		var/bleeding = perp.check_bodypart_bleeding(bodypart)
+		if (!block)
+			if (D.spread & SPREAD_CONTACT)
+				perp.infect_disease2(D, notes="(Contact, from picking up \a [src])")
+			else if (bleeding && (D.spread & SPREAD_BLOOD))//if we're covered with a blood-spreading disease, we may infect people with bleeding hands.
+				perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")

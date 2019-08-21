@@ -101,7 +101,7 @@
 	else
 		Fire(A,user,params, "struggle" = struggle) //Otherwise, fire normally.
 
-/obj/item/weapon/gun/proc/isHandgun()
+/obj/item/weapon/proc/isHandgun()
 	return FALSE //Make this proc return TRUE for handgun-shaped weapons (or in general, small enough weapons I guess)
 
 /obj/item/weapon/gun/proc/play_firesound(mob/user, var/reflex)

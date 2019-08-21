@@ -42,10 +42,32 @@
 	desc = "Jeez. I hope that's not for lunch."
 	gender = PLURAL
 	density = 0
-	anchored = 1
-	luminosity = 1
+	anchored = TRUE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "greenglow"
+
+/obj/effect/decal/cleanable/greenglow/New()
+	..()
+	set_light(1,2,LIGHT_COLOR_GREEN)
+
+/obj/effect/decal/cleanable/blueglow
+	name = "glowing luminol"
+	desc = "A smear of activated luminol."
+	gender = PLURAL
+	density = 0
+	anchored = TRUE
+	icon = 'icons/effects/blood.dmi'
+	icon_state = "mfloor1"
+	//icon = 'icons/effects/tomatodecal.dmi'
+	//icon_state = "fruit_smudge1"
+	color = LIGHT_COLOR_CYAN
+
+/obj/effect/decal/cleanable/blueglow/New()
+	..()
+	icon_state = "mfloor[rand(1,7)]"
+	////icon_state = "[pick("m","")]floor[rand(1,3)]"
+	//icon_state = "fruit_smudge[rand(1,3)]"
+	set_light(1,2,LIGHT_COLOR_BLUE)
 
 /obj/effect/decal/cleanable/cobweb
 	name = "cobweb"
@@ -243,3 +265,40 @@
 	desc = "Looks like some one has butter fingers."
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "smashed_butter"
+
+/obj/effect/decal/cleanable/virusdish
+	name = "broken virus containment dish"
+	icon = 'icons/obj/virology.dmi'
+	icon_state = "brokendish-outline"
+	density = 0
+	anchored = 1
+	mouse_opacity = 1
+	layer = OBJ_LAYER
+	plane = OBJ_PLANE
+	var/last_openner
+	var/datum/disease2/disease/contained_virus
+
+/obj/effect/decal/cleanable/virusdish/Crossed(var/mob/living/perp)
+	..()
+	if (istype(perp))
+		FeetStab(perp,damage = 10,knockdown = 0)
+		infection_attempt(perp)
+
+/obj/effect/decal/cleanable/virusdish/proc/infection_attempt(var/mob/living/perp)
+	if (!contained_virus)
+		return
+	//Now if your feet aren't well protected, or are bleeding, you might get infected.
+	var/block = 0
+	var/bleeding = 0
+	if (perp.lying)
+		block = perp.check_contact_sterility(FULL_TORSO)
+		bleeding = perp.check_bodypart_bleeding(FULL_TORSO)
+	else
+		block = perp.check_contact_sterility(FEET)
+		bleeding = perp.check_bodypart_bleeding(FEET)
+
+	if (!block)
+		if (contained_virus.spread & SPREAD_CONTACT)
+			perp.infect_disease2(contained_virus, notes="(Contact, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")
+		else if (bleeding && (contained_virus.spread & SPREAD_BLOOD))
+			perp.infect_disease2(contained_virus, notes="(Blood, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")

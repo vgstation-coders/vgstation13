@@ -3,8 +3,12 @@
 #define FIRE			2
 
 #define SPACEPOD_MOVEDELAY_FAST 0.4
+#define SPACEPOD_MOVEDELAY_MEDIUM 1
 #define SPACEPOD_MOVEDELAY_SLOW 3
 #define SPACEPOD_MOVEDELAY_DEFAULT SPACEPOD_MOVEDELAY_FAST
+#define SPACEPOD_LIGHTS_CONSUMPTION 2 //battery consumption per second with lights on
+#define SPACEPOD_LIGHTS_RANGE_ON 8
+#define SPACEPOD_LIGHTS_RANGE_OFF 3 //one tile beyond the spacepod itself, "cockpit glow"
 
 #define STATUS_REMOVE 1
 #define STATUS_ADD 2
@@ -30,12 +34,16 @@
 	var/use_internal_tank = 0
 	var/datum/global_iterator/pr_int_temp_processor //normalizes internal air mixture temperature
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
+	var/datum/global_iterator/pr_lights_battery_use //passive battery use for the lights
 	var/hatch_open = 0
 	var/locked = FALSE
 	var/next_firetime = 0
 	var/list/pod_overlays
 	var/health = 400
 	var/maxHealth = 400
+	var/lights_enabled = FALSE
+	light_power = 2
+	light_range = SPACEPOD_LIGHTS_RANGE_OFF
 	appearance_flags = LONG_GLIDE
 
 	var/datum/delay_controller/move_delayer = new(0.1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
@@ -45,6 +53,7 @@
 		/datum/action/spacepod/pilot/toggle_passengers,
 		/datum/action/spacepod/pilot/toggle_passenger_weaponry,
 		/datum/action/spacepod/pilot/change_speed,
+		/datum/action/spacepod/pilot/toggle_lights,
 		)
 	var/list/actions_types_pilot = list(/datum/action/spacepod/fire_weapons) //Actions to create when a pilot boards, deleted upon leaving
 	var/list/actions_types_passenger = list(/datum/action/spacepod/fire_weapons) //Actions to create when a passenger boards, deleted upon leaving
@@ -71,6 +80,7 @@
 	src.use_internal_tank = 1
 	pr_int_temp_processor = new /datum/global_iterator/pod_preserve_temp(list(src))
 	pr_give_air = new /datum/global_iterator/pod_tank_give_air(list(src))
+	pr_lights_battery_use = new /datum/global_iterator/pod_lights_use_charge(list(src))
 	ES = new(src)
 	for(var/path in actions_types)
 		var/datum/action/A = new path(src)
@@ -90,6 +100,8 @@
 	pr_int_temp_processor = null
 	qdel(pr_give_air)
 	pr_give_air = null
+	qdel(pr_lights_battery_use)
+	pr_lights_battery_use = null
 	qdel(ES)
 	ES = null
 	qdel(battery)
@@ -128,10 +140,11 @@
 	var/oldhealth = health
 	health = Clamp(health-damage,0, maxHealth)
 	var/percentage = (health / initial(health)) * 100
-	if(get_pilot() && oldhealth > health && percentage <= 25 && percentage > 0)
-		get_pilot().playsound_local(get_pilot(), 'sound/effects/engine_alert2.ogg', 50, 0, 0, 0, 0)
-	if(get_pilot() && oldhealth > health && !health)
-		var/mob/living/L = get_pilot()
+	var/mob/pilot = get_pilot()
+	if(pilot && oldhealth > health && percentage <= 25 && percentage > 0)
+		pilot.playsound_local(pilot, 'sound/effects/engine_alert2.ogg', 50, 0, 0, 0, 0)
+	if(pilot && oldhealth > health && !health)
+		var/mob/living/L = pilot
 		L.playsound_local(L, 'sound/effects/engine_alert1.ogg', 50, 0, 0, 0, 0)
 	if(health <= 0)
 		spawn(0)
@@ -288,7 +301,7 @@
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		*/
 
-/obj/spacepod/emag_act(var/mob/user, var/obj/item/card/emag/E)
+/obj/spacepod/emag_act(var/mob/user, var/obj/item/weapon/card/emag/E)
 	locked = FALSE
 	visible_message("<span class = 'warning'>\The [src] beeps twice.</span>")
 
@@ -393,9 +406,14 @@
 		return
 	if(!Adjacent(usr) || !Adjacent(over))
 		return
-	if(!occupants.Find(usr))
-		return ..() //Handle mousedrop T
 	var/turf/T = get_turf(over)
+	if(!occupants.Find(usr))
+		var/mob/pilot = get_pilot()
+		visible_message("<span class='notice'>[usr] start pulling [pilot.name] out of \the [src].</span>")
+		if(do_after(usr, src, 4 SECONDS))
+			move_outside(pilot, T)
+			add_fingerprint(usr)
+		return
 	if(!Adjacent(T) || T.density)
 		return
 	for(var/atom/movable/A in T.contents)
@@ -437,7 +455,8 @@
 	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 
 	if(do_after(usr, src, 4 SECONDS))
-		if(!get_pilot() || get_passengers().len < passenger_limit)
+		var/list/passengers = get_passengers()
+		if(!get_pilot() || passengers.len < passenger_limit)
 			move_into_pod(usr)
 		else
 			to_chat(usr, "<span class = 'warning'>Not enough room inside \the [src].</span>")
@@ -486,6 +505,26 @@
 		else
 			return stop()
 		return
+
+/datum/global_iterator/pod_lights_use_charge
+	delay = 10
+
+	process(var/obj/spacepod/spacepod)
+		if(spacepod.battery && spacepod.lights_enabled)
+			if(spacepod.battery.charge > 0)
+				spacepod.battery.use(SPACEPOD_LIGHTS_CONSUMPTION)
+			else
+				spacepod.toggle_lights()
+		return
+
+/obj/spacepod/proc/toggle_lights()
+	if(lights_enabled)
+		set_light(SPACEPOD_LIGHTS_RANGE_OFF)
+		to_chat(usr, "<span class='notice'>Lights disabled.</span>")
+	else
+		set_light(SPACEPOD_LIGHTS_RANGE_ON)
+		to_chat(usr, "<span class='notice'>Lights enabled.</span>")
+	lights_enabled = !lights_enabled
 
 /obj/spacepod/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/oldloc = loc
@@ -677,9 +716,12 @@
 	if(movement_delay == SPACEPOD_MOVEDELAY_FAST)
 		movement_delay = SPACEPOD_MOVEDELAY_SLOW
 		to_chat(usr, "<span class='notice'>Thrusters strength: low.</span>")
-	else
+	else if(movement_delay == SPACEPOD_MOVEDELAY_MEDIUM)
 		movement_delay = SPACEPOD_MOVEDELAY_FAST
 		to_chat(usr, "<span class='notice'>Thrusters strength: high.</span>")
+	else
+		movement_delay = SPACEPOD_MOVEDELAY_MEDIUM
+		to_chat(usr, "<span class='notice'>Thrusters strength: medium.</span>")
 
 /obj/spacepod/proc/toggle_passenger_guns()
 	if(usr!=get_pilot())
@@ -693,7 +735,11 @@
 	icon_state = "pod_taxi"
 	desc = "Brightly coloured to attract attention of potential passengers. Has room for multiple passengers at the expense of weapons"
 	passenger_limit = 3
-	actions_types = list(/datum/action/spacepod/pilot/toggle_passengers)
+	actions_types = list( //Actions to create and hold for the pilot
+		/datum/action/spacepod/pilot/toggle_passengers,
+		/datum/action/spacepod/pilot/change_speed,
+		/datum/action/spacepod/pilot/toggle_lights,
+		)
 	actions_types_pilot = list()
 	actions_types_passenger = list()
 
@@ -705,8 +751,12 @@
 #undef FIRE
 
 #undef SPACEPOD_MOVEDELAY_FAST
+#undef SPACEPOD_MOVEDELAY_MEDIUM
 #undef SPACEPOD_MOVEDELAY_SLOW
 #undef SPACEPOD_MOVEDELAY_DEFAULT
+#undef SPACEPOD_LIGHTS_CONSUMPTION
+#undef SPACEPOD_LIGHTS_RANGE_ON
+#undef SPACEPOD_LIGHTS_RANGE_OFF
 
 #undef STATUS_REMOVE
 #undef STATUS_ADD

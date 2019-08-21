@@ -10,7 +10,8 @@
 	var/meatword = "meat"
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
-	New()
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 3)
 		src.bitesize = 3
@@ -100,13 +101,14 @@
 	name = "carp fillet"
 	desc = "A fillet of spess carp meat"
 	icon_state = "fishfillet"
-	New()
-		..()
-		poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
-		eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
-		reagents.add_reagent(NUTRIMENT, 3)
-		reagents.add_reagent(CARPOTOXIN, 3)
-		bitesize = 6
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/New()
+	..()
+	poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
+	eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(CARPOTOXIN, 3)
+	bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation
 	name = "imitation carp fillet"
@@ -116,49 +118,52 @@
 	name = "venomous spines"
 	desc = "The toxin-filled spines of a space carp."
 	icon_state = "toxicspine"
-	New()
-		..()
-		reagents.add_reagent(CARPOTOXIN, 3)
-		bitesize = 3
+/obj/item/weapon/reagent_containers/food/snacks/carppoisongland/New()
+	..()
+	reagents.add_reagent(CARPOTOXIN, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 	name = "xenomeat"
 	desc = "A slab of xeno meat"
 	icon_state = "xenomeat"
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 6
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	src.bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat
 	name = "spider meat"
 	desc = "A slab of spider meat."
 	icon_state = "spidermeat"
-	New()
-		..()
-		poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland
-		reagents.add_reagent(NUTRIMENT, 3)
-		reagents.add_reagent(TOXIN, 3)
-		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat/New()
+	..()
+	poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(TOXIN, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland
 	name = "venomous spittle sac"
 	desc = "The toxin-filled poison sac of a giant spider."
 	icon_state = "toxicsac"
-	New()
-		..()
-		reagents.add_reagent(TOXIN, 3)
-		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland/New()
+	..()
+	reagents.add_reagent(TOXIN, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat
 	name = "bear meat"
 	desc = "A very manly slab of meat."
 	icon_state = "bearmeat"
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 12)
-		reagents.add_reagent(HYPERZINE, 5)
-		src.bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(HYPERZINE, 5)
+	src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach
 	name = "cockroach meat"

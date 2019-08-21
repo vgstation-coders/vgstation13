@@ -147,7 +147,7 @@
 		update_icon()
 		walk(src,0)
 
-/obj/machinery/bot/chefbot/emag_act(var/mob/user, var/obj/item/card/emag/E)
+/obj/machinery/bot/chefbot/emag_act(var/mob/user, var/obj/item/weapon/card/emag/E)
 	if(!src.emagged)
 		spark(src, 1)
 		src.emagged = 1
@@ -193,7 +193,8 @@
 					visible_message("<span class='danger'>[M] has attempted to punch [src]!</span>")
 				if(src.health <= 0)
 					src.explode()
-			M.delayNextAttack(10)
+
+		M.delayNextAttack(10)
 	..()
 
 /obj/machinery/bot/chefbot/kick_act()

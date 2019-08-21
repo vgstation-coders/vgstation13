@@ -63,7 +63,6 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/fireloss_mult = 1
 
-	var/darksight = 2
 	var/throw_mult = 1 // Default mob throw_mult.
 
 	var/hazard_high_pressure = HAZARD_HIGH_PRESSURE   // Dangerously high pressure.
@@ -267,6 +266,10 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/proc/can_artifact_revive()
 	return 1
 
+/datum/species/proc/OnCrit(var/mob/living/carbon/human/H)
+
+/datum/species/proc/OutOfCrit(var/mob/living/carbon/human/H)
+
 /datum/species/proc/equip(var/mob/living/carbon/human/H)
 
 /datum/species/proc/get_inventory_offsets()	//This is what you override if you want to give your species unique inventory offsets.
@@ -304,7 +307,6 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_manifested.dmi'
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
-	darksight = 3
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
@@ -332,6 +334,16 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
 	H.dust()
 
+/datum/species/manifested/OnCrit(var/mob/living/carbon/human/H)
+	H.overlays |= image('icons/mob/human.dmi',src,"CritPale")
+	anim(target = H, a_icon = 'icons/effects/96x96.dmi', flick_anim = "rune_blind", offX = -WORLD_ICON_SIZE)
+	H.take_overall_damage(1, 0)
+	if (H.health < -50)
+		H.dust()
+
+/datum/species/manifested/OutOfCrit(var/mob/living/carbon/human/H)
+	H.overlays -= image('icons/mob/human.dmi',src,"CritPale")
+
 /datum/species/manifested/can_artifact_revive()
 	return 0
 
@@ -344,7 +356,6 @@ var/global/list/whitelisted_species = list("Human")
 	attack_verb = "scratches"
 	punch_damage = 2
 	primitive = /mob/living/carbon/monkey/unathi
-	darksight = 3
 
 	cold_level_1 = 260 //Default 220 - Lower is better
 	cold_level_2 = 220 //Default 200
@@ -463,7 +474,6 @@ var/global/list/whitelisted_species = list("Human")
 	tail = "tajtail"
 	attack_verb = "scratches"
 	punch_damage = 2 //Claws add 3 damage without gloves, so the total is 5
-	darksight = 8
 
 	cold_level_1 = 200 //Default 260
 	cold_level_2 = 140 //Default 200
@@ -557,7 +567,6 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_grey.dmi'
 	deform = 'icons/mob/human_races/r_def_grey.dmi'
 	known_languages = list(LANGUAGE_GREY)
-	darksight = 5 // BOOSTED from 2
 	eyes = "grey_eyes_s"
 
 	max_hurt_damage = 3 // From 5 (for humans)
@@ -605,7 +614,6 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_muton.dmi'
 	deform = 'icons/mob/human_races/r_def_muton.dmi'
 	//known_languages = list("Muton") //this language doesn't even EXIST
-	darksight = 1
 	eyes = "eyes_s"
 
 	max_hurt_damage = 10
@@ -1020,7 +1028,6 @@ var/list/has_died_as_golem = list()
 	flags = NO_PAIN | IS_WHITELISTED | HYPOTHERMIA_IMMUNE
 	anatomy_flags = HAS_LIPS
 	punch_damage = 7
-	darksight = 8
 	default_mutations=list(M_HULK,M_CLAWS,M_TALONS)
 	burn_mod = 2
 	brute_mod = 2
@@ -1188,14 +1195,13 @@ var/list/has_died_as_golem = list()
 	name = "Mushroom"
 	icobase = 'icons/mob/human_races/r_mushman.dmi'
 	deform = 'icons/mob/human_races/r_mushman.dmi'
-	known_languages = list()
+	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
 
 	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | REQUIRE_DARK | IS_SPECIES_MUTE
 
 	gender = NEUTER
 
-	darksight = 8
 	tox_mod = 0.8
 	brute_mod = 1.8
 	burn_mod = 0.6

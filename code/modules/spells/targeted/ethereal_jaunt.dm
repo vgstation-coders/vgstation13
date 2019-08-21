@@ -3,6 +3,7 @@
 	desc = "This spell creates your ethereal form, temporarily making you invisible and able to pass through walls."
 	abbreviation = "EJ"
 	user_type = USER_TYPE_WIZARD
+	specialization = UTILITY
 
 	school = "transmutation"
 	charge_max = 300
@@ -172,6 +173,9 @@
 	. = ..()
 	if (!.) // No need to go further.
 		return FALSE
+	if (user.locked_to)
+		to_chat(user, "<span class='warning'>We are restrained!</span>")
+		return FALSE
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
@@ -180,6 +184,10 @@
 	var/mob/living/simple_animal/hostile/scarybat/SB = new(get_turf(user))
 	SB.vamp_fac = V.faction
 	V.faction.members += SB
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		for (var/datum/organ/external/O in H.organs)
+			O.release_restraints()
 	..()
 	if (!V)
 		return FALSE

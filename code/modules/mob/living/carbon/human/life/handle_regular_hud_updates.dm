@@ -99,16 +99,31 @@
 		// Rewrite idea : divide life() into organs (Eyes...) and have flags in the roles if they overwrite the functions of those organs.
 		// Basically, the problem here is that abstract things (HUD icons) are handled as the same time as "organs" things (seeing in the dark.)
 		var/datum/role/vampire/V = isvampire(src)
+		if (V)
+			var/i = 1
+			for (var/image/I in V.cached_images)
+				I.loc = null
+				src.client.images -= I
+			for (var/mob/living/carbon/C in view(7,src))
+				var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(C)
+				if (N)
+					if (i > V.cached_images.len)
+						var/image/I = image('icons/mob/mob.dmi', loc = C, icon_state = "vampnullrod")
+						I.plane = VAMP_ANTAG_HUD_PLANE
+						V.cached_images += I
+						src.client.images += I
+					else
+						V.cached_images[i].loc = C
+						src.client.images += V.cached_images[i]
+					i++
+
 		if (!V || (!(VAMP_VISION in V.powers) && !(VAMP_MATURE in V.powers))) // Not a vampire, or a vampire but neither of the spells.
 			change_sight(removing = SEE_MOBS)
 		if (!V || !(VAMP_MATURE in V.powers))
 			change_sight(removing = SEE_TURFS|SEE_OBJS)
 			var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 			if(E)
-				see_in_dark = E.see_in_dark //species.darksight
-			else
-				see_in_dark = species.darksight
-			// You should really be blind but w/e.
+				see_in_dark = E.see_in_dark
 
 			see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
 
@@ -302,21 +317,31 @@
 			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
 		else
 			clear_fullscreen("high_red")
+		if (istype(glasses, /obj/item/clothing/glasses/science))
+			var/obj/item/clothing/glasses/science/S = glasses
+			if (S.on)
+				overlay_fullscreen("science", /obj/abstract/screen/fullscreen/science)
+			else
+				clear_fullscreen("science",0)
+		else
+			clear_fullscreen("science",0)
 
 		var/masked = 0
 
 		if(head)
-			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
+			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
 				var/enable_mask = TRUE
 
 				var/datum/action/item_action/toggle_helmet_mask/action = locate(/datum/action/item_action/toggle_helmet_mask) in head.actions
 
 				if(action)
 					enable_mask = !action.up
-				else
+				else if(istype(head, /obj/item/clothing/head/welding))
 					var/obj/item/clothing/head/welding/O = head
 					enable_mask = !O.up
-
+				else if(istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen))
+					var/obj/item/clothing/head/helmet/space/vox/civ/mushmen/O = head
+					enable_mask = !O.up
 				if(enable_mask && tinted_weldhelh)
 					overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
 					masked = 1
@@ -328,9 +353,6 @@
 				masked = 1
 
 		var/clear_tint = !masked
-		if (istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen/))
-			var/obj/item/clothing/head/helmet/space/vox/civ/mushmen/mushhelmet = head
-			clear_tint = !mushhelmet.up
 
 		if(clear_tint)
 			clear_fullscreen("tint")

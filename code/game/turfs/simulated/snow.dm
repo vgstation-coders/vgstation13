@@ -6,10 +6,7 @@
 	temperature = T0C
 	oxygen = MOLES_O2STANDARD_ARCTIC
 	nitrogen = MOLES_N2STANDARD_ARCTIC
-	light_color = "#e5ffff"
 	can_border_transition = 1
-	dynamic_lighting = 0
-	luminosity = 1
 	var/snowballs = 0
 	var/global/list/icon_state_to_appearance = list()
 

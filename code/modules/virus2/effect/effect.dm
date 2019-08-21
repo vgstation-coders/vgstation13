@@ -7,11 +7,18 @@
 		// Try to have a self-descriptive name, eg. "Hearing Loss", "Toxin Sublimation".
 		// Failing that, call it "X syndrome". It's important that effect names are consistent.
 	var/desc = "This symptom is currently undocumented."
+	var/encyclopedia = ""
 	var/stage = -1
 		// Diseases start at stage 1. They slowly and cumulatively proceed their way up.
 		// Try to keep more severe effects in the later stages.
-	var/badness = 1
-		// How damaging the virus is. Higher values are worse.
+	var/badness = EFFECT_DANGER_ANNOYING
+		// How dangerous the symptom is.
+		// EFFECT_DANGER_HELPFUL = generally helpful (ex: full glass syndrome)
+		// EFFECT_DANGER_FLAVOR = neutral, just flavor text (ex: headache)
+		// EFFECT_DANGER_ANNOYING = minor inconvenience (ex: tourettes)
+		// EFFECT_DANGER_HINDRANCE = severe inconvenience (ex: random tripping)
+		// EFFECT_DANGER_HARMFUL = likely to indirectly lead to death (ex: Harlequin Ichthyosis)
+		// EFFECT_DANGER_DEADLY = will definitely kill you (ex: gibbingtons/necrosis)
 
 	var/chance = 3
 		// Under normal conditions, the percentage chance per tick to activate.
@@ -35,15 +42,21 @@
 	var/datum/disease2/disease/virus
 		// Parent virus. Plans to generalize these are underway.
 
-	proc/activate(var/mob/living/carbon/mob)
-		// The actual guts of the effect. Has a prob(chance)% to get called per tick.
-	proc/deactivate(var/mob/living/carbon/mob)
-		// If activation makes any permanent changes to the effect, this is where you undo them.
-		// Will not get called if the virus has never been activated.
-	proc/affect_mob_voice(var/datum/speech/speech)
-		// Called by /mob/living/carbon/human/treat_speech
-	proc/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
-		// Called when the sufferer of the symptom bumps, is bumped, or is touched by hand.
+	var/restricted = 0
+	// If 1, will never appear randomly in a disease, requiring instead to be manually set in the code. If 2, will not either appear in the encyclopedia.
+// The actual guts of the effect. Has a prob(chance)% to get called per tick.
+/datum/disease2/effect/proc/activate(var/mob/living/carbon/mob)
+
+// If activation makes any permanent changes to the effect, this is where you undo them.
+// Will not get called if the virus has never been activated.
+/datum/disease2/effect/proc/deactivate(var/mob/living/carbon/mob)
+
+/datum/disease2/effect/proc/affect_mob_voice(var/datum/speech/speech)
+	// Called by /mob/living/carbon/human/treat_speech
+/datum/disease2/effect/proc/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
+	// Called when the sufferer of the symptom bumps, is bumped, or is touched by hand.
+/datum/disease2/effect/proc/on_death(var/mob/living/carbon/mob)
+	// Called when the sufferer of the symptom dies
 
 // Most of the stuff below shouldn't be changed when you make a new effect.
 /datum/disease2/effect/New(var/datum/disease2/disease/D)
@@ -63,11 +76,8 @@
 		deactivate(mob)
 
 /datum/disease2/effect/proc/minormutate()
-	switch(pick(1,2,3,4,5))
-		if(1)
-			chance = rand(initial(chance), max_chance)
-		if(2)
-			multiplier = rand(1, max_multiplier)
+	if (prob(20))
+		chance = rand(initial(chance), max_chance)
 
 /datum/disease2/effect/proc/multiplier_tweak(var/tweak)
 	multiplier = Clamp(multiplier+tweak,1,max_multiplier)
@@ -76,4 +86,5 @@
 	var/datum/disease2/effect/new_e = new type(disease)
 	new_e.chance = chance
 	new_e.multiplier = multiplier
+	new_e.stage = stage
 	return new_e

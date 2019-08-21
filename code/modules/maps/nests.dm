@@ -42,7 +42,7 @@
 /obj/abstract/map/nest/mouse
 	name = "mouse breeding ground"
 	icon_state = "mouse"
-	mob_type = /mob/living/simple_animal/mouse
+	mob_type = /mob/living/simple_animal/mouse/common
 	breed_time = 1200
 
 /obj/abstract/map/nest/mouse/limited

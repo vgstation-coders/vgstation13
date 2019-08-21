@@ -3,6 +3,7 @@
 	desc = "This curse will silence your target for a very long time."
 	abbreviation = "FC"
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 
 	school = "evocation"
 	charge_max = 300

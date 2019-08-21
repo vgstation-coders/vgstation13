@@ -206,7 +206,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			R.is_empty()
 	else if(istype(W, /obj/item/device/multitool))
 		if((powernet) && (powernet.avail > 0))		// is it powered?
-			to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [powernet.load]W - Available: [powernet.avail]W.</SPAN>")
+			to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.load)] - Available: [format_watts(powernet.avail)].</SPAN>")
 		else
 			to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
 
@@ -223,6 +223,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			var/mob/living/simple_animal/mouse/N = M
 			M.delayNextAttack(10)
 			M.visible_message("<span class='danger'>[M] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span>")
+			flick(N.icon_eat, N)
 			shock(M, 50)
 			if(prob(5) && N.can_chew_wires)
 				var/turf/T = src.loc
@@ -508,3 +509,6 @@ By design, d1 is the smallest direction and d2 is the highest
 		return
 
 	rebuild_from()
+
+/obj/structure/cable/proc/hasDir(var/dir)
+	return (d1 == dir || d2 == dir)

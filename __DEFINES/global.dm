@@ -234,7 +234,10 @@ var/list/score=list(
 	"mess"           = 0, //How much messes on the floor went uncleaned
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
-	"disease"        = 0, //How many disease vectors in the world (one disease on one person is one)
+	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
+	"disease_bad"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger >= 3
+	"disease_most"        = null, //Most spread disease
+	"disease_most_count"        = 0, //Most spread disease
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
@@ -246,7 +249,7 @@ var/list/score=list(
 	"gunsspawned"	= 0, //Guns spawned by the Summon Guns spell. Only guns, not other artifacts.
 	"dimensionalpushes" = 0, //Amount of times a wizard casted Dimensional Push.
 	"assesblasted"  = 0, //Amount of times a wizard casted Buttbot's Revenge.
-	"shoeshatches"  = 0, //Amount of shoes magically snatched.
+	"shoesnatches"  = 0, //Amount of shoes magically snatched.
 	"greasewiz"     = 0, //Amount of times a wizard casted Grease.
 	"lightningwiz"  = 0, //Amount of times a wizard casted Lighting.
 	"random_soc"    = 0, //Staff of Change bolts set to "random" that hit a human.
@@ -327,7 +330,7 @@ var/nanocoins_lastchange = 0
 
 var/minimapinit = 0
 
-var/bees_species = list()
+var/list/bees_species = list()
 
 var/datum/stat_collector/stat_collection = new
 
@@ -469,3 +472,6 @@ var/list/variables_not_to_be_copied = list(
 	"on_explode","on_projectile","in_chamber","power_supply","contents",
 	"x","y","z"
 )
+
+//Item lists
+var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible)

@@ -20,7 +20,16 @@ Here it is: Buttbot.
 	maxhealth = 25
 	var/buttchance = 80 //Like an 80% chance of it working. It's just a butt with an arm in it.
 	var/sincelastfart = 0
+	var/det_chance
 	flags = HEAR
+
+/obj/machinery/bot/buttbot/New()
+	..()
+	if(isnull(det_chance))
+		det_chance = rand(1,3)
+
+/obj/machinery/bot/buttbot/everbutt
+	det_chance = 0
 
 /obj/machinery/bot/buttbot/attack_hand(mob/living/user as mob)
 	. = ..()
@@ -38,12 +47,15 @@ Here it is: Buttbot.
 		return
 	for(var/mob/O in hearers(src, null))
 		O.show_message("<b>[src]</b> beeps, '[message]'")
-	return
 
 /obj/machinery/bot/buttbot/proc/fart()
 	if(can_fart())
 		playsound(src, 'sound/misc/fart.ogg', 50, 1)
 		sincelastfart = world.timeofday
+		if(prob(det_chance))
+			explode()
+			return
+		det_chance*=2
 
 /obj/machinery/bot/buttbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = 0 //Buttbots speaking should be queued after the original speech completes
@@ -51,21 +63,7 @@ Here it is: Buttbot.
 	var/language = speech.language
 	if(prob(buttchance) && !findtext(message,"butt"))
 		sleep(rand(1,3))
-		var/list/split_phrase = splittext(message," ") // Split it up into words.
-
-		var/list/prepared_words = split_phrase.Copy()
-		var/i = rand(1,3)
-		for(,i > 0,i--) //Pick a few words to change.
-
-			if (!prepared_words.len)
-				break
-			var/word = pick(prepared_words)
-			prepared_words -= word //Remove from unstuttered words so we don't stutter it again.
-			var/index = split_phrase.Find(word) //Find the word in the split phrase so we can replace it.
-
-			split_phrase[index] = "butt"
-
-		say(jointext(split_phrase," "), language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
+		say(buttbottify(message), language)
 		fart()
 		score["buttbotfarts"]++
 
@@ -84,6 +82,7 @@ Here it is: Buttbot.
 	spark(src)
 
 	new /obj/effect/decal/cleanable/blood/oil(src.loc)
+	explosion(0,0,0)
 	qdel(src)
 
 

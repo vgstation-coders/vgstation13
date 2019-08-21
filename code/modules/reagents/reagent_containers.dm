@@ -77,6 +77,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(!possible_transfer_amounts)
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
 
+/obj/item/weapon/reagent_containers/Destroy()
+	if(istype(loc, /obj/machinery/iv_drip))
+		var/obj/machinery/iv_drip/holder = loc
+		holder.remove_container()
+ . = ..()
+
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
 	return
 
@@ -294,9 +300,13 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return 0
 
 /obj/item/weapon/reagent_containers/proc/is_empty()
+	if(!reagents)
+		return TRUE
 	return reagents.total_volume <= 0
 
 /obj/item/weapon/reagent_containers/proc/is_full()
+	if(!reagents)
+		return FALSE
 	return reagents.total_volume >= reagents.maximum_volume
 
 /obj/item/weapon/reagent_containers/proc/can_transfer_an_APTFT()
@@ -325,17 +335,11 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	else
 		return "No reagents"
 
-/obj/item/weapon/reagent_containers/proc/show_list_of_reagents(mob/user) //Displays a list of the reagents to a mob, formatted for reading
-	to_chat(user, "It contains:")
-	if(!reagents.total_volume)
-		to_chat(user, "<span class='info'>Nothing.</span>")
-	else
-		if(reagents.reagent_list.len)
-			for(var/datum/reagent/R in reagents.reagent_list)
-				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-
 /obj/item/weapon/reagent_containers/proc/fits_in_iv_drip()
-	return 0
+	return FALSE
+
+/obj/item/weapon/reagent_containers/proc/should_qdel_if_empty()
+	return FALSE
 
 /obj/item/weapon/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
 	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")

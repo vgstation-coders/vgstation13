@@ -61,13 +61,14 @@
 	rockets = image('icons/effects/160x160.dmi', icon_state= initial_icon + "_burst")
 	rockets.pixel_x = -64 * PIXEL_MULTIPLIER
 	rockets.pixel_y = -64 * PIXEL_MULTIPLIER
+	rockets.plane = LIGHTING_PLANE
+	rockets.layer = ABOVE_LIGHTING_LAYER
 	intrinsic_spells = list(
 							new /spell/mech/marauder/thrusters(src),
 							new /spell/mech/marauder/dash(src),
 							new /spell/mech/marauder/smoke(src),
 							new /spell/mech/marauder/zoom(src)
 						)
-	return
 
 /obj/mecha/combat/marauder/series/New()//Manually-built marauders have no equipments
 	..()
@@ -96,6 +97,7 @@
 	return
 
 /obj/mecha/combat/marauder/relaymove(mob/user,direction)
+	stopMechWalking()
 	if(user != src.occupant) //While not "realistic", this piece is player friendly.
 		user.forceMove(get_turf(src))
 		to_chat(user, "You climb out from [src]")
@@ -189,14 +191,14 @@
 /spell/mech/marauder/dash
 	name = "Rocket-Dash"
 	desc = "Activate the mech's thrusters to charge in a line and knock down anything in your way."
-	icon_direction = EAST
-	override_icon = 'icons/mecha/mecha.dmi'
+	hud_state = "mech_dash"
+	override_icon = 'icons/mob/screen_spells.dmi'
 	charge_max = 30
 	charge_counter = 30
 
 /spell/mech/marauder/dash/New()
 	..()
-	hud_state = "[linked_mech.initial_icon]-dash"
+	hud_state = linked_mech.initial_icon + "-dash"
 
 /spell/mech/marauder/dash/cast_check(skipcharge = FALSE, mob/user = usr)
 	if(linked_mech.lock_controls)
@@ -262,3 +264,6 @@
 					<b>Thrusters:</b> [thrusters?"on":"off"]
 					"}
 	return output
+
+/obj/mecha/combat/marauder/add_cell()
+	..(new /obj/item/weapon/cell/super)

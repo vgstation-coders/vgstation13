@@ -2,7 +2,7 @@
 
 /*Composed of 7 parts
 3 Particle emitters
-proc
+procs
 emit_particle()
 
 1 power box
@@ -14,7 +14,7 @@ mix_gas()
 
 1 gas holder WIP
 acts like a tank valve on the ground that you wrench gas tanks onto
-proc
+procs
 extract_gas()
 return_gas()
 attach_tank()
@@ -28,7 +28,7 @@ interface for the pa, acts like a computer with an html menu for diff parts and 
 all other parts contain only a ref to this
 a /machine/, tells the others to do work
 contains ref for all parts
-proc
+procs
 process()
 check_build()
 
@@ -379,11 +379,13 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			else if(O.is_screwdriver(user))
 				user.visible_message("[user.name] closes the [src.name]'s access panel.", \
 					"You close the access panel.")
+				playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
 				temp_state++
 		if(3)
 			if(O.is_screwdriver(user))
 				user.visible_message("[user.name] opens the [src.name]'s access panel.", \
 					"You open the access panel.")
+				playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
 				temp_state--
 				active = 0
 	if(temp_state == src.construction_state)//Nothing changed

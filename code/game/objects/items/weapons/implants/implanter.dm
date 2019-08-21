@@ -25,9 +25,9 @@
 				for (var/mob/O in viewers(M, null))
 					O.show_message("<span class='warning'>[M] has been implanted by [user].</span>", 1)
 
-				M.attack_log += text("\[[time_stamp()]\] <font color='orange'> Implanted with [name] ([imp.name])  by [user.name] ([user.ckey])</font>")
-				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] ([imp.name]) to implant [M.name] ([M.ckey])</font>")
-				msg_admin_attack("[user.name] ([user.ckey]) implanted [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+				M.attack_log += text("\[[time_stamp()]\] <font color='orange'> Implanted with \the [name] ([imp.name]) by [key_name(user)]</font>")
+				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used \the [name] ([imp.name]) to implant [key_name(M)]</font>")
+				msg_admin_attack("[key_name(user)] implanted [key_name(M)] with \the [name] ([imp.name]) (INTENT: [uppertext(user.a_intent)]) at [formatJumpTo(get_turf(user))]")
 
 				user.show_message("<span class='warning'>You implanted the implant into [M].</span>")
 				if(imp.implanted(M, user))

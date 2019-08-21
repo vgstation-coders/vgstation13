@@ -72,9 +72,15 @@ var/list/role_wiki=list(
 	ROLE_MINOR				= "Minor_Roles",
 )
 
+var/list/special_popup_text2num = list(
+	"Only use chat" = SPECIAL_POPUP_DISABLED,
+	"Only use special" = SPECIAL_POPUP_EXCLUSIVE,
+	"Use both chat and special" = SPECIAL_POPUP_USE_BOTH,
+)
+
 var/const/MAX_SAVE_SLOTS = 8
 
-#define POLLED_LIMIT	300
+#define POLLED_LIMIT	100
 
 /datum/preferences
 	var/list/subsections
@@ -105,7 +111,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/space_parallax = 1
 	var/space_dust = 1
 	var/parallax_speed = 2
-	var/special_popup = 0
+	var/special_popup = SPECIAL_POPUP_DISABLED
 	var/tooltips = 1
 	var/stumble = 0						//whether the player pauses after their first step
 	var/hear_voicesound = 0				//Whether the player hears noises when somebody speaks.
@@ -134,6 +140,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/hear_instruments = 1
 	var/ambience_volume = 25
 	var/credits_volume = 75
+	var/window_flashing = 1
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -388,7 +395,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Show Tooltips:</b>
 	<a href='?_src_=prefs;preference=tooltips'><b>[(tooltips) ? "Yes" : "No"]</b></a><br>
 	<b>Adminhelp Special Tab:</b>
-	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
+	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup_text2num[special_popup+1]]</b></a><br>
 	<b>Attack Animations:<b>
 	<a href='?_src_=prefs;preference=attack_animation'><b>[attack_animation ? (attack_animation == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
 	<b>Show Credits <span title='&#39;No Reruns&#39; will roll credits only if an admin customized something about this round&#39;s credits, or if a rare and exclusive episode name was selected thanks to something uncommon happening that round.'>(?):</span><b>
@@ -397,6 +404,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=jingle'><b>[jingle]</b></a><br>
 	<b>Credits/Jingle Volume:</b>
 	<a href='?_src_=prefs;preference=credits_volume'><b>[credits_volume]</b></a><br>
+	<b>Window Flashing</b>
+	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
   </div>
 </div>"}
 
@@ -1096,7 +1105,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(new_name)
 						real_name = new_name
 					else
-						to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
+						to_chat(user, "<span class='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</span>")
 				if("next_hair_style")
 					h_style = next_list_item(h_style, valid_sprite_accessories(hair_styles_list, null, species)) //gender intentionally left null so speshul snowflakes can cross-hairdress
 				if("previous_hair_style")
@@ -1331,7 +1340,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					be_random_body = !be_random_body
 
 				if("special_popup")
-					special_popup = !special_popup
+					var/choice = input(user, "Set your special tab preferences:", "Settings") as null|anything in special_popup_text2num
+					if(!isnull(choice))
+						special_popup = special_popup_text2num[choice]
 
 				if("randomslot")
 					randomslot = !randomslot
@@ -1342,6 +1353,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_ADMINMUSIC)
 
 				if("lobby_music")
+					if(config.no_lobby_music)
+						to_chat(user, "DEBUG: Lobby music is globally disabled via server config.")
 					toggles ^= SOUND_LOBBY
 					if(toggles & SOUND_LOBBY)
 						if(istype(user,/mob/new_player))
@@ -1353,6 +1366,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					user.client.set_new_volume()
 
 				if("ambience")
+					if(config.no_ambience)
+						to_chat(user, "DEBUG: Ambience is globally disabled via server config.")
 					toggles ^= SOUND_AMBIENCE
 					if(!(toggles & SOUND_AMBIENCE))
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_AMBIENCE)
@@ -1406,7 +1421,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					toggles ^= CHAT_LOOC
 
 				if("save")
-					if(world.timeofday >= (lastPolled + POLLED_LIMIT))
+					if(world.timeofday >= (lastPolled + POLLED_LIMIT) || user.client.holder)
 						SetRoles(user,href_list)
 						save_preferences_sqlite(user, user.ckey)
 						save_character_sqlite(user.ckey, user, default_slot)
@@ -1472,6 +1487,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("credits_volume")
 					credits_volume = min(max(input(user, "Enter the new volume you wish to use. (0-100, default is 75)","Credits/Jingle Volume", credits_volume), 0), 100)
+
+				if("window_flashing")
+					window_flashing = !window_flashing
 
 			if(user.client.holder)
 				switch(href_list["preference"])

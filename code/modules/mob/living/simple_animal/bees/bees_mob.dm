@@ -30,29 +30,48 @@
 	mouse_opacity = 1
 	plane = LYING_MOB_PLANE
 
-/obj/effect/decal/cleanable/bee/New()
+/obj/effect/decal/cleanable/bee/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	..()
-	var/image/I = image(icon,icon_state)
-	I.pixel_x = rand(-10,10)
-	I.pixel_y = rand(-4,4)
-	I.dir = pick(cardinal)
-
-	for (var/obj/effect/decal/cleanable/bee/corpse in get_turf(src))
-		if (corpse != src)
-			corpse.overlays += I
-			qdel(src)
-			return
-		else
-			icon_state = "bees0"
+	if (isnum(color) && color > 0)
+		src.icon_state = "bees0"
+		var/failsafe = min(color,30)
+		for (var/i = 1 to failsafe)
+			var/image/I = image(icon,icon_state)
+			I.pixel_x = rand(-10,10)
+			I.pixel_y = rand(-4,4)
+			I.dir = pick(cardinal)
 			overlays += I
+		color = null
+	else
+		var/image/I = image(src.icon,src.icon_state)
+		I.pixel_x = rand(-10,10)
+		I.pixel_y = rand(-4,4)
+		I.dir = pick(cardinal)
+
+		for (var/obj/effect/decal/cleanable/bee/corpse in get_turf(src))
+			if (corpse != src)
+				corpse.overlays += I
+				qdel(src)
+				return
+			else
+				icon_state = "bees0"
+				overlays += I
 
 /obj/effect/decal/cleanable/bee/queen_bee
 	name = "dead queen bee"
 	icon_state = "queen_bee_dead"
 
+/obj/effect/decal/cleanable/bee/atom2mapsave()
+	icon_state = initial(icon_state)
+	if (overlays.len > 0)
+		color = overlays.len//a bit hacky but hey
+	. = ..()
 
 
 //////////////////////BEE MOB///////////////////////////////////////
+
+
+var/bee_mobs_count = 0
 
 /mob/living/simple_animal/bee
 	name = "swarm of bees"
@@ -103,10 +122,12 @@
 
 /mob/living/simple_animal/bee/New(loc, var/obj/machinery/apiary/new_home)
 	..()
+	bee_mobs_count++
 	home = new_home
 
 
 /mob/living/simple_animal/bee/Destroy()
+	bee_mobs_count--
 	if(home)
 		for (var/datum/bee/B in bees)
 			home.bees_outside_hive -= B

@@ -1139,6 +1139,7 @@ About the new airlock wires panel:
 	if(!operating)
 		panel_open = !panel_open
 		playsound(src, 'sound/items/Screwdriver.ogg', 25, 1, -6)
+		to_chat(user, "<span class='notice'>You [panel_open?"open":"close"] the panel.</span>")
 		update_icon()
 		return 1
 	return
@@ -1264,7 +1265,7 @@ About the new airlock wires panel:
 			operating = -1
 	else
 		..(I, user)
-
+	add_fingerprint(user)
 	return
 
 /obj/machinery/door/airlock/proc/bashed_in(var/mob/user)

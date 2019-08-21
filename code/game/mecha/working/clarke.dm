@@ -14,10 +14,11 @@
 	var/image/thruster_overlay
 	var/overlay_applied = FALSE
 	var/obj/machinery/portable_atmospherics/scrubber/mech/scrubber
+	var/obj/machinery/atmospherics/unary/portables_connector/scrubber_port = null
 
 /obj/mecha/working/clarke/New()
 	..()
-	thruster_overlay = image('icons/mecha/mecha.dmi', src, "[initial(icon_state)]-thruster_overlay")
+	thruster_overlay = image('icons/mecha/mecha.dmi', src, "[initial_icon]-thruster_overlay")
 	scrubber = new(src)
 
 /obj/mecha/working/clarke/Destroy()
@@ -27,6 +28,12 @@
 
 /obj/mecha/working/clarke/check_for_support()
 	return 1
+
+/obj/mecha/working/clarke/relaymove()
+	if(scrubber_port)
+		occupant_message("Unable to move while connected to the air system port.", TRUE)
+		return 0
+	..()
 
 /obj/mecha/working/clarke/mechturn(direction)
 	dir = direction
@@ -53,11 +60,44 @@
 /obj/mecha/working/clarke/startMechWalking()
 	icon_state = initial_icon + "-move"
 
+/obj/mecha/working/clarke/connect()
+	if(scrubber_port)
+		return 0
+	return ..()
+
+/obj/mecha/working/clarke/proc/connect_scrubber(obj/machinery/atmospherics/unary/portables_connector/new_port)
+	//Make sure not already connected to something else
+	if(connected_port || scrubber_port || !new_port || new_port.connected_device)
+		return 0
+
+	//Make sure are close enough for a valid connection
+	if(new_port.loc != src.loc)
+		return 0
+
+	//Perform the connection
+	scrubber_port = new_port
+	scrubber.connect(new_port)
+
+	log_message("Connected to gas port.")
+	return 1
+
+/obj/mecha/working/clarke/proc/disconnect_scrubber()
+	if(!scrubber_port)
+		return 0
+
+	scrubber.disconnect()
+
+	scrubber_port = null
+	src.log_message("Disconnected from gas port.")
+	return 1
+
 /obj/mecha/working/clarke/get_commands()
 	var/output = {"<div class='wr'>
 						<div class='header'>Special</div>
 						<div class='links'>
-						<a href='?src=\ref[src];scrubbing=1'><span id="scrubbing_command">[scrubber.on?"Deactivate":"Activate"] scrubber</span></a>
+						<a href='?src=\ref[src];scrubber_interface=1'>Scrubber interface</a>
+						<br>
+						<span id="scrubbing_port">[src.scrubber_port ? "<a href='?src=\ref[src];scrubber_disconnect=1'>Disconnect Scrubber to Port</a>" : "<a href='?src=\ref[src];scrubber_connect=1'>Connect Scrubber to Port</a>"]</span>
 						</div>
 						</div>
 						"}
@@ -65,9 +105,32 @@
 	return output
 
 /obj/mecha/working/clarke/Topic(href, href_list)
-	..()
-	if (href_list["scrubbing"])
-		scrubber.on = !scrubber.on
-		send_byjax(src.occupant,"exosuit.browser","scrubbing_command","[scrubber.on?"Deactivate":"Activate"] scrubber")
-		src.occupant_message("<font color=\"[scrubber.on?"#00f\">Activated":"#f00\">Deactivated"] scrubber.</font>")
+	. = ..()
+	if (href_list["scrubber_interface"])
+		if(usr != src.occupant)
+			return
+		scrubber.ui_interact(occupant)
+		return
+	if (href_list["scrubber_connect"])
+		if(usr != src.occupant)
+			return
+		var/obj/machinery/atmospherics/unary/portables_connector/possible_port = locate(/obj/machinery/atmospherics/unary/portables_connector/) in loc
+		if(possible_port)
+			if(connect_scrubber(possible_port))
+				src.occupant_message("<span class='notice'>[name] connects to the port.</span>")
+				send_byjax(src.occupant, "exosuit.browser", "scrubbing_port", src.scrubber_port ? "<a href='?src=\ref[src];scrubber_disconnect=1'>Disconnect Scrubber from Port</a>" : "<a href='?src=\ref[src];scrubber_connect=1'>Connect Scrubber to Port</a>")
+			else
+				src.occupant_message("<span class='warning'>[name] failed to connect to the port.</span>")
+		else
+			src.occupant_message("Nothing happens")
+		return
+	if (href_list["scrubber_disconnect"])
+		if(usr != src.occupant)
+			return
+		if(disconnect_scrubber())
+			src.occupant_message("<span class='notice'>[name] disconnects from the port.</span>")
+			send_byjax(src.occupant, "exosuit.browser", "scrubbing_port", src.scrubber_port ? "<a href='?src=\ref[src];scrubber_disconnect=1'>Disconnect Scrubber from Port</a>" : "<a href='?src=\ref[src];scrubber_connect=1'>Connect Scrubber to Port</a>")
+		else
+			src.occupant_message("<span class='warning'>[name] is not connected to the port at the moment.</span>")
+		return
 	return

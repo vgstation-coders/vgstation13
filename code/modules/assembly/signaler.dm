@@ -130,9 +130,9 @@
 	if(!radio_connection)
 		return
 
-	if(!(frequency in (MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY)))
+	if(!(frequency in MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY))
 		return
-	if(!(code in (1 to 100)))
+	if(!(code in 1 to 100))
 		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
@@ -220,7 +220,7 @@
 	set name = "Threaten to push the button!"
 	set desc = "BOOOOM!"
 
-	if(usr)
+	if(usr && !usr.incapacitated())
 		var/mob/user = usr
 		deadman = 1
 		processing_objects.Add(src)

@@ -17,7 +17,7 @@
 			            access_teleporter, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva,
 			            access_heads, access_construction, access_sec_doors,
 			            access_ce, access_RC_announce, access_keycard_auth, access_tcomsat, access_ai_upload, access_mechanic)
-	minimal_player_age = 7
+	minimal_player_age = 20
 
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/heads/ce

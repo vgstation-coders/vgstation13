@@ -129,12 +129,35 @@
 
 	return !flashfail
 
+/obj/item/device/flash/proc/make_rev_flash(var/mob/living/carbon/human/user)
+	to_chat(user, "<span class='warning'>You prepare the flash for the brainwashing sequence.</span>")
+	var/obj/item/device/flash/rev/R = new(get_turf(src))
+	qdel(src)
+	user.put_in_hands(R)
+	return 1
+
+/obj/item/device/flash/rev/make_rev_flash()
+	return 0
+
+/obj/item/device/flash/synthetic/make_rev_flash()
+	return 0
+
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	if(!user || !clown_check(user))
 		return
+
 	if(broken)
 		user.show_message("<span class='warning'>The [src.name] is broken</span>", 2)
 		return
+
+	if (isrevhead(user) && istype(ticker.mode, /datum/gamemode/dynamic) && !(locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad) in ticker.mode:executed_rules))
+		if (make_rev_flash(user))
+			var/datum/role/revolutionary/leader/R = user.mind.GetRole(HEADREV)
+			if(istype(R, /datum/stat/role/revolutionary/leader))
+				var/datum/stat/role/revolutionary/leader/RL = R.stat_datum
+				RL.flashes_created++
+			return
+
 
 	flash_recharge()
 
@@ -246,7 +269,7 @@
 	mech_flags = MECH_SCAN_FAIL
 	var/limited_conversions = -1
 
-/obj/item/device/flash/rev/attack(mob/living/M,mob/user)
+/obj/item/device/flash/rev/attack(mob/living/M, mob/user)
 	.=..()
 	if(!.)
 		return
@@ -264,6 +287,12 @@
 							to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 							broken = 1
 							icon_state = "flashburnt"
+
+						// log the recruitment
+						var/datum/role/revolutionary/R = user.mind.GetRoleByType(/datum/role/revolutionary/leader)
+						if(istype(R.stat_datum, /datum/stat/role/revolutionary/leader))
+							var/datum/stat/role/revolutionary/leader/SD = R.stat_datum
+							SD.recruits_converted++
 					else if(result == ADD_REVOLUTIONARY_FAIL_IS_COMMAND)
 						to_chat(user, "<span class='warning'>This mind seems resistant to the flash!</span>")
 					else if(result == ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED) // rev jobbanned

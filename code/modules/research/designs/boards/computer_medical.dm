@@ -20,15 +20,15 @@
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/operating
 
-/datum/design/pandemic
-	name = "Circuit Design (PanD.E.M.I.C. 2200)"
-	desc = "Allows for the construction of circuit boards used to build a PanD.E.M.I.C. 2200 Console."
-	id = "pandemic"
-	req_tech = list(Tc_PROGRAMMING = 2, Tc_BIOTECH = 2)
-	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
-	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/pandemic
+///datum/design/pandemic
+//	name = "Circuit Design (PanD.E.M.I.C. 2200)"
+//	desc = "Allows for the construction of circuit boards used to build a PanD.E.M.I.C. 2200 Console."
+//	id = "pandemic"
+//	req_tech = list(Tc_PROGRAMMING = 2, Tc_BIOTECH = 2)
+//	build_type = IMPRINTER
+//	materials = list(MAT_GLASS = 2000, SACID = 20)
+//	category = "Console Boards"
+//	build_path = /obj/item/weapon/circuitboard/pandemic
 
 /datum/design/crewconsole
 	name = "Circuit Design (Crew monitoring computer)"

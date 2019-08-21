@@ -46,7 +46,7 @@
 	desc = "Blueprints of the station, designed for the passive aggressive spider bots aboard."
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
-	can_delete_areas = list()
+	can_delete_areas = list(AREA_BLUEPRINTS)
 
 	header = "<small>These blueprints are for the creation of new rooms only; you cannot change existing rooms.</small>"
 
@@ -61,7 +61,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	w_class = W_CLASS_TINY
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
-	can_delete_areas = list()
+	can_delete_areas = list(AREA_BLUEPRINTS)
 
 	header = "<small>This permit is for the creation of new rooms only; you cannot change existing rooms.</small>"
 
@@ -183,7 +183,8 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/process()
 	//Blueprints must be in hands to be usable
 	//Editor must be in the edited area
-	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || (!currently_edited.contents.Find(get_turf(editor))) )
+	var/turf/turf_loc = get_turf(editor)
+	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || turf_loc.loc != currently_edited )
 		if(editor)
 			to_chat(editor, "<span class='info'>You finish modifying \the [src].</span>")
 

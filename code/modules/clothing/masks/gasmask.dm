@@ -60,6 +60,7 @@
 	species_fit = list(VOX_SHAPED)
 	can_flip = 0
 	canstage = 0
+	sterility = 100
 
 /obj/item/clothing/mask/gas/swat
 	name = "\improper SWAT mask"
@@ -208,6 +209,14 @@
 	can_flip = 0
 	canstage = 0
 
+/obj/item/clothing/mask/gas/lola
+	name = "fighting clown mask"
+	desc = "Honk!"
+	icon_state = "lola"
+	item_state = "lola"
+	can_flip = 0
+	canstage = 0
+
 /obj/item/clothing/mask/gas/mime
 	name = "mime mask"
 	desc = "The traditional mime's mask. It has an eerie facial posture."
@@ -218,7 +227,7 @@
 	canstage = 0
 	var/muted = 0
 
-/obj/item/clothing/mask/gas/mime/treat_mask_speech(var/datum/speech/speech)
+/obj/item/clothing/mask/gas/mime/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	if(src.muted)
 		speech.message=""
 

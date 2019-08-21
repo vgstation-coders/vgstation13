@@ -84,11 +84,11 @@
 	var/skin = null //Same as medbot, set to tox or ointment for the respective kits.
 	w_class = W_CLASS_MEDIUM
 
-	New()
-		..()
-		spawn(5)
-			if(skin)
-				overlays += image('icons/obj/aibots.dmi', "kit_skin_[skin]")
+/obj/item/weapon/firstaid_arm_assembly/New()
+	..()
+	spawn(5)
+		if(skin)
+			overlays += image('icons/obj/aibots.dmi', "kit_skin_[skin]")
 
 
 /obj/machinery/bot/medbot/New()
@@ -451,8 +451,11 @@
 		reagent_id = TOXIN
 
 	var/virus = 0
-	for(var/datum/disease/D in C.viruses)
-		virus = 1
+	for(var/ID in C.virus2)
+		if (ID in virusDB)
+			var/datum/data/record/v = virusDB[ID]
+			if (v.fields["danger"] != "Safe")
+				virus = 1
 
 	if (!reagent_id && (virus))
 		if(!C.reagents.has_reagent(treatment_virus))

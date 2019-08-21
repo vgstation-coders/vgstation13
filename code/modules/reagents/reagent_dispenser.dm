@@ -28,12 +28,7 @@
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>It contains:</span>")
-	if(reagents && reagents.reagent_list.len)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-	else
-		to_chat(user, "<span class='info'>Nothing.</span>")
+	reagents.get_examine(user)
 
 /obj/structure/reagent_dispensers/cultify()
 	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))
@@ -196,8 +191,8 @@
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
-/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
-	visible_message("<span class='danger'>\the [W] crashes into \the [src]!</span>")
+/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
+	visible_message("<span class='danger'>\the [F] crashes into \the [src]!</span>")
 	explode()
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
@@ -391,7 +386,7 @@
 /obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
 	return TRUE
 
-/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/reagent_containers/R, var/mob/user)
+/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/weapon/reagent_containers/R, var/mob/user)
 	if(user.a_intent != I_HELP)
 		return TRUE
 	return FALSE

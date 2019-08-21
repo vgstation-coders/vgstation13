@@ -10,6 +10,9 @@
 	logo_state = "malf-logo"
 	var/apcs = 0
 	var/AI_win_timeleft = 1800
+	playlist = "malfdelta"
+	// for statistics
+	stat_datum_type = /datum/stat/faction/malf
 
 /datum/faction/malf/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/screen_spells.dmi', "malf_open")
@@ -24,7 +27,7 @@
 		stage = FACTION_ENDGAME
 		command_alert(/datum/command_alert/malf_announce)
 		set_security_level("delta")
-		ticker.StartThematic("endgame")
+		ticker.StartThematic(playlist)
 	else
 		..()
 
@@ -66,8 +69,6 @@
 /datum/faction/malf/proc/capture_the_station()
 	to_chat(world, {"<FONT size = 3><B>The AI has won!</B></FONT><br>
 <B>It has fully taken control of [station_name()]'s systems.</B>"})
-
-	stat_collection.malf_won = 1
 
 	for(var/datum/role/malfAI in members)
 		to_chat(malfAI.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>

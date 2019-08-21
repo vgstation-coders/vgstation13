@@ -475,6 +475,7 @@
 			if(has_electronics == 2 && !(stat & BROKEN))
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
+				playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
 				update_icon()
 			else
 				to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")
@@ -494,6 +495,7 @@
 				locked = !locked
 				to_chat(user, "You [ locked ? "lock" : "unlock"] the APC interface.")
 				update_icon()
+				nanomanager.update_uis(src)
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 	else if (istype(W, /obj/item/weapon/card/emag) && !(emagged || malfhack))		// trying to unlock with an emag card
@@ -511,6 +513,7 @@
 					locked = 0
 					to_chat(user, "You emag the APC interface.")
 					update_icon()
+					nanomanager.update_uis(src)
 				else
 					to_chat(user, "You fail to [ locked ? "unlock" : "lock"] the APC interface.")
 	else if (istype(W, /obj/item/stack/cable_coil) && !terminal && opened && has_electronics != 2)
@@ -912,7 +915,7 @@
 		update()
 
 	else if (href_list["overload"])
-		if(istype(usr, /mob/living/silicon))
+		if(istype(usr, /mob/living/silicon) || isAdminGhost(usr))
 			src.overload_lighting()
 
 	else if (href_list["malfhack"])
@@ -1002,7 +1005,12 @@
 		for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 			point.target = src //the pinpointer will detect the shunted AI
 
-	stat_collection.malf_shunted = TRUE
+	// record that the malf shunted, for statistics
+	if(istype(malf.mind) && istype(malf.mind.faction, /datum/faction/malf))
+		var/datum/faction/malf/mf = malf.mind.faction
+		if(istype(mf.stat_datum, /datum/stat/faction/malf))
+			var/datum/stat/faction/malf/MS = mf.stat_datum
+			MS.shunted = TRUE
 
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)

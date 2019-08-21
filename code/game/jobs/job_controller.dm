@@ -482,9 +482,9 @@ var/global/datum/controller/occupations/job_master
 				H.mind.store_memory(remembered_info)
 
 			spawn()
-				to_chat(H, "<span class='danger'>Your bank account number is: <span style='color: black;'>[M.account_number]</span>, your bank account pin is: <span style='color: black;'>[M.remote_access_pin]</span></span>")
-				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span style='color: black;'>$[balance_wallet]</span>, your bank account funds are: <span style='color: black;'>$[balance_bank]</span></span>")
-				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span style='color: black;'>[bank_pref]</span></span>")
+				to_chat(H, "<span class='danger'>Your bank account number is: <span class='darknotice'>[M.account_number]</span>, your bank account pin is: <span class='darknotice'>[M.remote_access_pin]</span></span>")
+				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span class='darknotice'>$[balance_wallet]</span>, your bank account funds are: <span class='darknotice'>$[balance_bank]</span></span>")
+				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[bank_pref]</span></span>")
 
 	var/alt_title = null
 	if(H.mind)
@@ -555,6 +555,12 @@ var/global/datum/controller/occupations/job_master
 		else
 			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
 
+	if (H.client.IsByondMember())
+		to_chat(H, "Thank you for supporting BYOND!")
+		if(H.backbag == 1)
+			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/byond(H))
+		else
+			H.equip_or_collect(new /obj/item/weapon/storage/box/byond(H), slot_in_backpack)
 	return 1
 
 

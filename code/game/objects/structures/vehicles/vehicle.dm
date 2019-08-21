@@ -45,7 +45,7 @@
 	var/can_have_carts = TRUE
 
 	var/mob/occupant
-	lock_type = /datum/locking_category/buckle/chair/vehicle
+	mob_lock_type = /datum/locking_category/buckle/chair/vehicle
 	var/wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle
 	var/last_warn
 
@@ -284,6 +284,8 @@
 
 /obj/structure/bed/chair/vehicle/proc/update_mob()
 	if(!occupant)
+		return
+	if(!(dir in cardinal))
 		return
 
 	if(last_dir)

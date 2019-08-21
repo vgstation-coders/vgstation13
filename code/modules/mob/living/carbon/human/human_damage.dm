@@ -356,8 +356,7 @@ This function restores all organs.
 	//visible_message("Hit debug. [damage] | [damagetype] | [def_zone] | [blocked] | [sharp] | [used_weapon]")
 	if((damagetype != BRUTE) && (damagetype != BURN))
 		return ..(damage, damagetype, def_zone, blocked, ignore_events = ignore_events)
-
-	if(blocked >= 2)
+	if(blocked >= 100)
 		return 0
 
 	var/datum/organ/external/organ = null
@@ -371,7 +370,7 @@ This function restores all organs.
 		return 0
 
 	if(blocked)
-		damage = (damage/(blocked+1))
+		damage = (damage/100)*(100-blocked)
 
 	if(!ignore_events && INVOKE_EVENT(on_damaged, list("type" = damagetype, "amount" = damage)))
 		return 0
