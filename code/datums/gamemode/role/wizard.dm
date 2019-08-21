@@ -7,6 +7,8 @@
 	logo_state = "wizard-logo"
 	greets = list(GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND)
 
+	stat_datum_type = /datum/stat/role/wizard
+
 /datum/role/wizard/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/wizard)

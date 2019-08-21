@@ -65,6 +65,13 @@
 	item_state = "sexyclown"
 	_color = "sexyclown"
 
+/obj/item/clothing/under/lola
+	name = "fighting clown suit"
+	desc = "Give 'em the ol' one-two!"
+	icon_state = "lola"
+	item_state = "lola"
+	_color = "lola"
+
 /obj/item/clothing/under/rank/vice
 	name = "vice officer's jumpsuit"
 	desc = "It's the standard issue pretty-boy outfit, as seen on Holo-Vision."
@@ -537,7 +544,7 @@
 	_color = "maid"
 
 /obj/item/clothing/under/darkholme
-	name = "\improper The Darkholme"
+	name = "\improper Darkholme"
 	desc = "Fuck you."
 	icon_state = "darkholme"
 	item_state = "darkholme"
@@ -754,3 +761,10 @@
 	item_state = "g_suit"
 	_color = "tourist"
 	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/under/varsity
+	name = "varsity jacket"
+	desc = "A jacket that belongs to either a high school student or an ancient German tyrant."
+	icon_state = "varsity"
+	item_state = "varsity"
+	_color = "varsity"

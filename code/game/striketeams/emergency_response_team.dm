@@ -158,7 +158,7 @@ var/list/response_team_members = list()
 	//Basic Uniform
 	equip_to_slot_or_del(new /obj/item/clothing/under/ert(src), slot_w_uniform)
 	equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_l_store)
-	equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(src), slot_belt)
+	equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun/nuclear(src), slot_belt)
 
 	//Glasses
 	equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses/sechud(src), slot_glasses)
@@ -192,6 +192,11 @@ var/list/response_team_members = list()
 	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.implanted_bodypart = affected
+
+	if(leader_selected)
+		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy, /obj/item/clothing/under, 5)	
+	else
+		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP, /obj/item/clothing/under, 5)
 
 	return 1
 

@@ -28,7 +28,7 @@
 	attack_verb = list("attacks", "stabs", "pokes")
 	shrapnel_amount = 1
 	shrapnel_size = 2
-	shrapnel_type = "/obj/item/projectile/bullet/shrapnel"
+	shrapnel_type = /obj/item/projectile/bullet/shrapnel
 
 /obj/item/weapon/kitchen/utensil/New()
 	. = ..()
@@ -109,6 +109,14 @@
 
 /obj/item/weapon/kitchen/utensil/fork/proc/load_food(obj/item/weapon/reagent_containers/food/snacks/snack, mob/user)
 	if(!snack || !user || !istype(snack) || !istype(user))
+		return
+
+	if(!snack.edible_by_utensil)
+		to_chat(user, "<span class='notice'>It wouldn't make sense to put \the [snack.name] on a fork.</span>")
+		return
+
+	if(snack.food_flags & FOOD_LIQUID)
+		to_chat(user, "<span class='notice'>You can't eat that with a fork.</span>")
 		return
 
 	if(loaded_food)
@@ -286,6 +294,7 @@
 	name = "meat cleaver"
 	icon_state = "mcleaver"
 	desc = "A huge thing used for chopping and chopping up meat. This includes clowns and clown-by-products."
+	armor_penetration = 50
 	force = 25.0
 	throwforce = 15.0
 

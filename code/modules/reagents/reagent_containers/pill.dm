@@ -430,3 +430,13 @@
 /obj/item/weapon/reagent_containers/pill/arithrazine/New()
 	..()
 	reagents.add_reagent(ARITHRAZINE, 10)
+
+
+/obj/item/weapon/reagent_containers/pill/nanofloxacin
+	name = "nanofloxacin pill"
+	desc = "Extremely powerful antipathogenic, one dose is enough to cure almost any diseases."
+	icon_state = "pill30"
+
+/obj/item/weapon/reagent_containers/pill/nanofloxacin/New()
+	..()
+	reagents.add_reagent(NANOFLOXACIN, 1)

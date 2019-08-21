@@ -1,3 +1,5 @@
+#define MAX_PRESSURE 50*ONE_ATMOSPHERE
+
 /obj/machinery/portable_atmospherics/scrubber
 	name = "Portable Air Scrubber"
 
@@ -6,12 +8,16 @@
 	density = 1
 
 	var/on = 0
-	var/volume_rate = 800
+	var/volume_rate = 5000 //litres / tick
+	var/scrubbing_rate = 300 //litres / tick, max amount of gas put in internal tank per tick
 
-	volume = 750
+	var/scrub_o2 = FALSE
+	var/scrub_n2 = FALSE
+	var/scrub_n2o = TRUE
+	var/scrub_co2 = TRUE
+	var/scrub_plasma = TRUE
 
-	var/minrate = 0//probably useless, but whatever
-	var/maxrate = 10 * ONE_ATMOSPHERE
+	volume = 2000
 
 /obj/machinery/portable_atmospherics/scrubber/emp_act(severity)
 	if(stat & (BROKEN|NOPOWER))
@@ -30,7 +36,8 @@
 	icon_state = "scrubber:0"
 	anchored = 1
 	volume = 50000
-	volume_rate = 5000
+	volume_rate = 20000
+	scrubbing_rate = 1200
 
 	var/global/gid = 1
 	var/id = 0
@@ -114,30 +121,41 @@
 /obj/machinery/portable_atmospherics/scrubber/process()
 	..()
 
-	if(on)
+	if(on && air_contents.return_pressure() < MAX_PRESSURE)
 		var/datum/gas_mixture/environment = get_environment()
 		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles()
+		var/removed_volume = min(volume_rate, environment.volume)
 
 		//Take a gas sample
 		var/datum/gas_mixture/removed = remove_sample(environment, transfer_moles)
 
 		//Filter it
+		//copypasted from scrubber code with modifications to add the scrubbing rate limit
 		if (removed)
-			var/datum/gas_mixture/filtered_out = new
+			var/datum/gas_mixture/total_to_filter = new
+			total_to_filter.temperature = removed.temperature
+			#define FILTER(g) total_to_filter.adjust_gas((g), removed[g], FALSE)
+			if(scrub_plasma)
+				FILTER(GAS_PLASMA)
+			if(scrub_co2)
+				FILTER(GAS_CARBON)
+			if(scrub_n2o)
+				FILTER(GAS_SLEEPING)
+			if(scrub_n2)
+				FILTER(GAS_NITROGEN)
+			if(scrub_o2)
+				FILTER(GAS_OXYGEN)
+			FILTER(GAS_OXAGENT)
+			#undef FILTER
+			total_to_filter.update_values() //since the FILTER macro doesn't update to save perf, we need to update here
+			//calculate the amount of moles in scrubbing_rate litres of gas in removed and apply the scrubbing rate limit
+			var/filter_moles = min(1, scrubbing_rate / removed_volume) * removed.total_moles()
+			var/datum/gas_mixture/filtered_out = total_to_filter.remove(filter_moles)
 
-			filtered_out.temperature = removed.temperature
-
-
-			filtered_out.adjust_multi(
-				GAS_PLASMA, removed[GAS_PLASMA],
-				GAS_CARBON, removed[GAS_CARBON],
-				GAS_SLEEPING, removed[GAS_SLEEPING],
-				GAS_OXAGENT, removed[GAS_OXAGENT])
 			removed.subtract(filtered_out)
 
-		//Remix the resulting gases
+			//Remix the resulting gases
 			air_contents.merge(filtered_out)
-
 			return_sample(environment, removed)
 		//src.update_icon()
 		nanomanager.update_uis(src)
@@ -163,9 +181,12 @@
 	data["portConnected"] = connected_port ? 1 : 0
 	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)
 	data["rate"] = round(volume_rate)
-	data["minrate"] = round(minrate)
-	data["maxrate"] = round(maxrate)
 	data["on"] = on ? 1 : 0
+	data["scrub_plasma"] = scrub_plasma
+	data["scrub_co2"] = scrub_co2
+	data["scrub_n2o"] = scrub_n2o
+	data["scrub_n2"] = scrub_n2
+	data["scrub_o2"] = scrub_o2
 
 	data["hasHoldingTank"] = holding ? 1 : 0
 	if (holding)
@@ -197,9 +218,19 @@
 		if(holding)
 			eject_holding()
 
-	if(href_list["volume_adj"])
-		var/diff = text2num(href_list["volume_adj"])
-		volume_rate = Clamp(volume_rate+diff, minrate, maxrate)
+	if(href_list["scrub_toggle"])
+		switch(href_list["scrub_toggle"])
+			if("plasma")
+				scrub_plasma = !scrub_plasma
+			if("co2")
+				scrub_co2 = !scrub_co2
+			if("n2o")
+				scrub_n2o = !scrub_n2o
+			if("n2")
+				scrub_n2 = !scrub_n2
+			if("o2")
+				scrub_o2 = !scrub_o2
+		return 1
 
 	src.add_fingerprint(usr)
 	return 1
@@ -213,6 +244,12 @@
 /obj/machinery/portable_atmospherics/scrubber/mech
 	volume = 50000
 	volume_rate = 20000
+	scrubbing_rate = 1200
+	var/obj/mecha/mech //the mech associated with this scrubber
+
+/obj/machinery/portable_atmospherics/scrubber/mech/New(var/location)
+	..()
+	src.mech = location
 
 /obj/machinery/portable_atmospherics/scrubber/mech/get_environment()
 	var/turf/T = get_turf(src)
@@ -225,3 +262,36 @@
 /obj/machinery/portable_atmospherics/scrubber/mech/return_sample(var/environment, var/removed)
 	var/turf/T = get_turf(src)
 	T.assume_air(removed)
+
+//required to allow the pilot to use the scrubber UI
+/obj/machinery/portable_atmospherics/scrubber/mech/is_on_same_z(var/mob/user)
+	if(user == mech.occupant)
+		return TRUE
+	return FALSE
+
+/obj/machinery/portable_atmospherics/scrubber/mech/is_in_range(var/mob/user)
+	if(user == mech.occupant)
+		return TRUE
+	return FALSE
+
+//Have to override this to let it connect from the mech
+/obj/machinery/portable_atmospherics/connect(obj/machinery/atmospherics/unary/portables_connector/new_port)
+	//Make sure not already connected to something else
+	if(connected_port || !new_port || new_port.connected_device)
+		return 0
+
+	//Perform the connection
+	connected_port = new_port
+	connected_port.connected_device = src
+
+	anchored = 1 //Prevent movement
+
+	//Actually enforce the air sharing
+	var/datum/pipe_network/network = connected_port.return_network(src)
+	if(network && !network.gases.Find(air_contents))
+		network.gases += air_contents
+		network.update = 1
+	update_icon()
+	return 1
+
+#undef MAX_PRESSURE

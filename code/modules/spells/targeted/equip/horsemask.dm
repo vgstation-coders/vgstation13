@@ -3,6 +3,7 @@
 	desc = "This spell triggers a curse on a target, causing them to wield an unremovable horse head mask. They will speak like a horse! Any masks they are wearing will be disintegrated. This spell does not require robes."
 	abbreviation = "HH"
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 
 	school = "transmutation"
 	charge_type = Sp_RECHARGE

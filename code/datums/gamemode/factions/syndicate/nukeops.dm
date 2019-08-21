@@ -269,5 +269,5 @@
 				M = R.antag.current
 				if(M.stat != DEAD)
 					livingmembers++
-		if(ticker.theme.playing && !livingmembers && ticker.theme.playlist_id == "nukesquad")
+		if(!livingmembers && ticker.IsThematic(playlist))
 			ticker.StopThematic()

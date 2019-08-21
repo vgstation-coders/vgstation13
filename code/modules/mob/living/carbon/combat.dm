@@ -1,8 +1,3 @@
-/mob/living/carbon/unarmed_attacked(mob/living/carbon/C)
-	if(istype(C))
-		share_contact_diseases(C)
-
-	return ..()
 
 /mob/living/carbon/hitby(var/obj/item/I, var/speed, var/dir)
 	if(istype(I) && isturf(I.loc) && in_throw_mode) //Only try to catch things while we have throwing mode active (also only items please)
@@ -54,7 +49,7 @@
 	if(affecting)
 		var/hit_area = affecting.display_name
 		armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].", armor_penetration = I.armor_penetration)
-		if(armor >= 2)
+		if(armor >= 100)
 			return TRUE //We still connected
 		if(!I.force)
 			return TRUE

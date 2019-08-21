@@ -34,7 +34,7 @@ var/global/media_transmitters=list()
 			if(R.media_crypto == media_crypto)
 				R.receive_broadcast(media_url,media_start_time)
 				//testing("[src]: Sending music to [R]")
-		for(var/mob/living/carbon/complex/gondola/G in media_receivers[freq])
+		for(var/mob/living/carbon/complex/gondola/radio/G in media_receivers[freq])
 			if(G.media_crypto == media_crypto)
 				G.receive_broadcast(media_url,media_start_time)
 

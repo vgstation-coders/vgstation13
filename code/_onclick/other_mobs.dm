@@ -144,7 +144,7 @@
 		ML.apply_damage(rand(1,3), BRUTE, dam_zone, armor)
 		for(var/mob/O in viewers(ML, null))
 			O.show_message("<span class='danger'>[name] has bit [ML]!</span>", 1)
-		if(armor >= 2)
+		if(armor >= 100)
 			return
 		if(ismonkey(ML))
 			for(var/datum/disease/D in viruses)

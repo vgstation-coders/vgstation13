@@ -137,12 +137,14 @@
 	slowdown = MISC_SHOE_SLOWDOWN
 	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	sterility = 100
 
 /obj/item/clothing/shoes/galoshes/broken
 	name = "ruined galoshes"
 	desc = "The grip treading is broken off."
 	icon_state = "galoshes_ruined"
 	flags = null
+	sterility = 80
 
 /obj/item/clothing/shoes/clown_shoes
 	desc = "The prankster's standard-issue clowning shoes. Damn they're huge!"
@@ -160,6 +162,13 @@
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/goblin(get_turf(src))
 		qdel(W)
 		qdel(src)
+
+/obj/item/clothing/shoes/clown_shoes/lola
+	name = "fighting clown shoes"
+	desc = "Squeaky when scuffling."
+	icon_state = "lola"
+	item_state = "lola"
+	_color = "lola"
 
 /obj/item/clothing/shoes/clown_shoes/elf
 	desc = "Jolly shoes for a jolly little elf!"
@@ -286,6 +295,7 @@
 	canremove = 1
 	..()
 
+
 #undef CLOWNSHOES_RANDOM_SOUND
 
 /obj/item/clothing/shoes/jackboots
@@ -356,6 +366,12 @@ obj/item/clothing/shoes/jackboots/cowboy
 	desc = "The height of fashion, and they're pre-polished!"
 	icon_state = "laceups"
 	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/shoes/purplepumps
+	name = "purple pumps"
+	desc = "Make you seem slightly taller."
+	icon_state = "purplepumps"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/shoes/roman
 	name = "roman sandals"

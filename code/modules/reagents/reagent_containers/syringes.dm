@@ -175,6 +175,15 @@
 			else
 				user.visible_message("<span class='warning'>[user] inserts the syringe into [target], draws back the plunger and gets... nothing?</span>",\
 					"<span class='warning'>You insert the syringe into [target], draw back the plunger and get... nothing?</span>")
+		else if (ismouse(target))
+			var/mob/living/simple_animal/mouse/T = target
+			var/datum/reagent/B = T.take_blood(src, 5)
+			if (B)
+				user.visible_message("<span class='notice'>[user] takes a small blood sample from [target].</span>",
+									 "<span class='notice'>You take a small blood sample from [target].</span>")
+			else
+				user.visible_message("<span class='warning'>[user] inserts the syringe into [target], draws back the plunger and gets... nothing?</span>",\
+					"<span class='warning'>You insert the syringe into [target], draw back the plunger and get... nothing?</span>")
 	// Drawing from objects draws their contents
 	else if (isobj(target))
 		if (!target.is_open_container() && !istype(target, /obj/item/slime_extract) && !istype(target, /obj/item/weapon/reagent_containers/blood))
@@ -353,7 +362,7 @@
 
 /obj/item/weapon/reagent_containers/syringe/antiviral
 	name = "syringe (spaceacillin)"
-	desc = "Contains antiviral agents."
+	desc = "Contains a generic antipathogenic - used to reinforce the immune system and eliminate diseases."
 /obj/item/weapon/reagent_containers/syringe/antiviral/New()
 	..()
 	reagents.add_reagent(SPACEACILLIN, 15)

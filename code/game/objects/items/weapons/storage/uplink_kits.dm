@@ -172,6 +172,7 @@
 	name = "Box"
 	desc = "A sleek, sturdy box."
 	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
 
 /obj/item/weapon/storage/box/syndie_kit/imp_freedom
 	name = "Freedom Implant (with injector)"

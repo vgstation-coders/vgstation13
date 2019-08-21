@@ -266,6 +266,10 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/proc/can_artifact_revive()
 	return 1
 
+/datum/species/proc/OnCrit(var/mob/living/carbon/human/H)
+
+/datum/species/proc/OutOfCrit(var/mob/living/carbon/human/H)
+
 /datum/species/proc/equip(var/mob/living/carbon/human/H)
 
 /datum/species/proc/get_inventory_offsets()	//This is what you override if you want to give your species unique inventory offsets.
@@ -329,6 +333,16 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
 	H.dust()
+
+/datum/species/manifested/OnCrit(var/mob/living/carbon/human/H)
+	H.overlays |= image('icons/mob/human.dmi',src,"CritPale")
+	anim(target = H, a_icon = 'icons/effects/96x96.dmi', flick_anim = "rune_blind", offX = -WORLD_ICON_SIZE)
+	H.take_overall_damage(1, 0)
+	if (H.health < -50)
+		H.dust()
+
+/datum/species/manifested/OutOfCrit(var/mob/living/carbon/human/H)
+	H.overlays -= image('icons/mob/human.dmi',src,"CritPale")
 
 /datum/species/manifested/can_artifact_revive()
 	return 0

@@ -62,6 +62,18 @@
 	typepath = /obj/machinery/media/receiver/boombox
 	cost = 400
 
+/datum/storeitem/diskettebox
+	name = "Diskette Box"
+	desc = "A lockable box for storing data disks. Comes with a few useless blank disks."
+	typepath = /obj/item/weapon/storage/lockbox/diskettebox/open/blanks
+	cost = 20
+
+/datum/storeitem/diskettebox_large
+	name = "Large Diskette Box"
+	desc = "A larger lockable box for storing data disks. Comes with a few useless blank disks."
+	typepath = /obj/item/weapon/storage/lockbox/diskettebox/large/open/blanks
+	cost = 50
+
 /////////////////////////////
 // Toys
 /////////////////////////////
@@ -137,6 +149,12 @@
 	desc = "A random painting from Centcom's museum. For those with good taste in art."
 	typepath = /obj/item/mounted/frame/painting
 	cost = 700
+
+/datum/storeitem/critter_cage
+	name = "small cage"
+	desc = "A cage where to keep tiny animals safe. Fit with a drinking bottle that can be refilled.."
+	typepath = /obj/item/critter_cage
+	cost = 60
 
 /////////////////////////////
 // Holiday Special Items!

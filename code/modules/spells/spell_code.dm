@@ -4,14 +4,16 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/name = "Spell"
 	var/abbreviation = "" //Used for feedback gathering
 
-	var/desc = "A spell"
+	var/desc = "A spell."
 	parent_type = /datum
 	var/panel = "Spells"//What panel the proc holder needs to go on.
 
 	var/school = "evocation" //not relevant at now, but may be important later if there are changes to how spells work. the ones I used for now will probably be changed... maybe spell presets? lacking flexibility but with some other benefit?
 	var/user_type = USER_TYPE_NOUSER // What kind of mob uses this spell
+	var/specialization = SPELL_SPECIALIZATION_DEFAULT //Used for what list they belong to in the spellbook. SPELL_SPECIALIZATION_DEFAULT, OFFENSIVE, DEFENSIVE, UTILITY
 
 	var/charge_type = Sp_RECHARGE //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with Sp_GRADUAL
+	//The following are allowed: Sp_RECHARGE (Recharges), Sp_CHARGE (Limited uses), Sp_GRADUAL (Gradually lose charges), Sp_PASSIVE (Does not cast)
 
 	var/charge_max = 100 //recharge time in deciseconds if charge_type = Sp_RECHARGE or starting charges if charge_type = Sp_CHARGES
 	var/charge_counter = 0 //can only cast spells if it equals recharge, ++ each decisecond if charge_type = Sp_RECHARGE or -- each cast if charge_type = Sp_CHARGES
@@ -225,18 +227,20 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/channeled_spell(var/list/args)
 	var/event/E = args["event"]
+	
 	if(!currently_channeled)
 		E.handlers.Remove("\ref[src]:channeled_spell")
 		return 0
 
 	var/atom/A = args["atom"]
-
+	
 	if(E.holder != holder)
 		E.handlers.Remove("\ref[src]:channeled_spell")
 		return 0
 	var/list/target = list(A)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
+
 	if(cast_check(1, holder) && is_valid_target(A, user))
 		target = before_cast(target, user) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
@@ -349,10 +353,12 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /*Checkers, cost takers, message makers, etc*/
 
 /spell/proc/cast_check(skipcharge = 0,mob/user = usr) //checks if the spell can be cast based on its settings; skipcharge is used when an additional cast_check is called inside the spell
-
-
 	if(!(src in user.spell_list) && holder == user)
 		to_chat(user, "<span class='warning'>You shouldn't have this spell! Something's wrong.</span>")
+		return 0
+
+	if(charge_type == Sp_PASSIVE)
+		to_chat(user, "<span class='notice'>This is a passive spell, you cannot cast it!</span>")
 		return 0
 
 	if(silenced > 0)
@@ -396,7 +402,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				to_chat(user, "Mmmf mrrfff!")
 				return 0
 
-	var/spell/noclothes/spell = locate() in user.spell_list
+	var/spell/passive/noclothes/spell = locate() in user.spell_list
 	if((spell_flags & NEEDSCLOTHES) && !(spell && istype(spell)) && holder == user)//clothes check
 		if(!user.wearing_wiz_garb())
 			return 0
@@ -406,6 +412,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/check_charge(var/skipcharge, mob/user)
 	//Arcane golems have no cooldowns on their spells
 	if(istype(user, /mob/living/simple_animal/hostile/arcane_golem))
+		return 1
+
+	if(charge_type == Sp_PASSIVE)
 		return 1
 
 	if(!skipcharge)
@@ -456,6 +465,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(charge_type & Sp_GRADUAL)
 			gradual_casting = TRUE
 			charge_counter -= 1
+			process()
+		if(charge_type & Sp_PASSIVE)
 			process()
 
 

@@ -40,6 +40,7 @@
 #define Sp_CHARGES	2
 #define Sp_HOLDVAR	4
 #define Sp_GRADUAL	8
+#define Sp_PASSIVE 16
 
 //spell range
 #define SELFCAST -1
@@ -70,3 +71,9 @@
 #define SPELL_AIR 4 //Air based spells
 #define SPELL_GROUND 8 //Earthen based spells
 #define SPELL_NECROTIC 16 //Necromantic spells
+
+//Spell specializations, used for spellbook lists
+#define SPELL_SPECIALIZATION_DEFAULT 1 //So it doesn't gorge on a word that could be used for better things
+#define OFFENSIVE 2
+#define DEFENSIVE 4
+#define UTILITY 8
