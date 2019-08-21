@@ -20,12 +20,17 @@
 		accessories.Remove(A)
 		qdel(A)
 	..()
+	
+/obj/item/clothing/CtrlClick(var/mob/user)
+	if(isliving(user) && !user.incapacitated() && user.Adjacent(src) && accessories.len)
+		remove_accessory(user, pick(accessories))
 
 /obj/item/clothing/examine(mob/user)
 	..()
 	for(var/obj/item/clothing/accessory/A in accessories)
 		to_chat(user, "<span class='info'>\A [A] is clipped to it.</span>")
 
+		
 /obj/item/clothing/emp_act(severity)
 	for(var/obj/item/clothing/accessory/accessory in accessories)
 		accessory.emp_act(severity)
