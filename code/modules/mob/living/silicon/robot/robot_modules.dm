@@ -639,7 +639,7 @@
 		"Basic" = "starman",
 	)
 	speed_modifier = CYBORG_STARMAN_SPEED_MODIFIER
-	default_modules = 0
+	default_modules = FALSE
 
 /obj/item/weapon/robot_module/starman/New()
 
