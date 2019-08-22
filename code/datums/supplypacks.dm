@@ -1648,7 +1648,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/storage/box/syringes,
 					/obj/item/weapon/storage/bag/chem,
 					/obj/item/weapon/storage/box/autoinjectors,
-					/obj/item/clothing/accessory/stethsocope)
+					/obj/item/clothing/accessory/stethoscope)
 	cost = 10
 	containertype = /obj/structure/closet/crate/medical
 	containername = "medical crate"
