@@ -76,9 +76,7 @@
 				stop_automated_movement = 1
 				var/failedsteps = 0
 				var/infinite_chase = loc && locate(/obj/machinery/power/treadmill) in loc
-				while(TRUE)
-					if(!movement_target || src.Adjacent(movement_target) || get_dist(src, movement_target) >= 7 || corgi_status != FOOD_HUNTING || failedsteps > 2)
-						break
+				while(movement_target && !Adjacent(movement_target) && get_dist(src,movement_target)<7 && corgi_status == FOOD_HUNTING && failed_steps <= 2)
 					if(!step_towards(src,movement_target,1) && !infinite_chase)
 						failedsteps += 1
 					if(time_between_directed_steps >= 1)
@@ -578,7 +576,7 @@
 	
 /mob/living/simple_animal/corgi/Ian/Life()
 	..()
-	var/creatine =  has_reagent(CREATINE)
+	var/creatine =  reagents.has_reagent(CREATINE)
 	var/hyperzine = reagents.has_any_reagents(HYPERZINES)
 	if(creatine && !creatine_had)
 		creatine_had = 1
