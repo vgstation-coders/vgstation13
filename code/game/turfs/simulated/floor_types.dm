@@ -361,28 +361,6 @@
 	name = "Iron Sand"
 	icon_state = "ironsand[rand(1,15)]"
 
-//snow moved to seperate file pending testing
-/*
-/turf/simulated/floor/plating/snow
-	name = "snow"
-	icon = 'icons/turf/snow.dmi'
-	icon_state = "snow"
-	gender = PLURAL
-
-/turf/simulated/floor/plating/snow/concrete
-	name = "concrete"
-	icon = 'icons/turf/floors.dmi'
-	icon_state = "concrete"
-
-/turf/simulated/floor/plating/snow/cold
-	temperature = 273
-/turf/simulated/floor/plating/snow/ex_act(severity)
-	return
-
-/turf/simulated/floor/plating/snow/ice
-	name = "ice"
-	icon_state = "ice"
-*/
 /turf/simulated/floor/plating/airless/damaged
 	icon_state = "platingdmg1"
 
