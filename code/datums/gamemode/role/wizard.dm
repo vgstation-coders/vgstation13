@@ -8,10 +8,12 @@
 	greets = list(GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND)
 
 	stat_datum_type = /datum/stat/role/wizard
+	flags = SOLO_ANTAG
 
 /datum/role/wizard/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/wizard)
+		GiveCustomObjective()
 		return
 	switch(rand(1,100))
 		if(1 to 30)

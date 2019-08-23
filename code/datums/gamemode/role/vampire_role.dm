@@ -37,6 +37,7 @@
 	var/list/image/cached_images = list()
 
 	stat_datum_type = /datum/stat/role/vampire
+	flags = SOLO_ANTAG
 
 /datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
@@ -131,6 +132,7 @@
 /datum/role/vampire/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/vampire)
+		GiveCustomObjective()
 		return
 
 	AppendObjective(/datum/objective/acquire_blood)

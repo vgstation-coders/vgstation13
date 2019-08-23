@@ -101,6 +101,7 @@
 
 	// Objectives
 	var/datum/objective_holder/objectives=new
+	var/last_requested_objective_time = -30 MINUTES
 
 	var/icon/logo_state = "synd-logo"
 
@@ -240,6 +241,10 @@
 /datum/role/proc/ForgeObjectives()
 	return
 
+/datum/role/proc/GiveCustomObjective()
+	to_chat(antag.current, "<span class='notice'>You can assign yourself a customised objective if you want. It will not be checked on roundend. To do so, type 'Notes' on your chat bar.</span>")
+	antag.store_memory("<a href='?src=\ref[antag];give_custom_objective=\ref[src]'>Give yourself a custom objective.</a>")
+
 /datum/role/proc/AppendObjective(var/objective_type,var/duplicates=0)
 	if(!duplicates && locate(objective_type) in objectives)
 		return FALSE
@@ -338,7 +343,10 @@
 		text += "<ul>"
 		for(var/datum/objective/objective in objectives.GetObjectives())
 			var/successful = objective.IsFulfilled()
-			text += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
+			var/success = ""
+			if (SOLO_ANTAG_OBJECTIVES && !(objective.flags & DONT_CHECK_OBJ)) // Only display red/green text to objectives that can actually fail.
+				success = successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"
+			text += "<B>Objective #[count]</B>: [objective.explanation_text] [success]"
 			feedback_add_details("[id]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
 			if(!successful) //If one objective fails, then you did not win.
 				win = 0

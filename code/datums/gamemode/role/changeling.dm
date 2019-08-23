@@ -54,6 +54,7 @@
 /datum/role/changeling/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/changeling)
+		GiveCustomObjective()
 		return
 	AppendObjective(/datum/objective/absorb)
 	AppendObjective(/datum/objective/target/assassinate)
