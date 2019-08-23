@@ -291,7 +291,25 @@
 	loadedammo.throw_at(target,distance,speed)
 	loadedammo = null
 
+/obj/item/weapon/gun/projectile/railgun/preloaded
+	var/ammotype = /obj/item/weapon/coin/iron
+	var/capacitortype = /obj/item/weapon/stock_parts/capacitor/adv/super
+	
+/obj/item/weapon/gun/projectile/railgun/preloaded/New()
+	..()
+	loadedassembly = new /obj/item/weapon/rail_assembly
+	rails_secure = 1
+	loadedammo = new ammotype
+	loadedcapacitor = new capacitortype
+	loadedcapacitor.stored_charge = loadedcapacitor.maximum_charge 
+
+/obj/item/weapon/gun/projectile/railgun/preloaded/godslayer
+	ammotype = /obj/item/weapon/nullrod
+	capacitortype = /obj/item/weapon/stock_parts/capacitor/adv/super/ultra
+
 #undef MEGAWATT
 #undef TEN_MEGAWATTS
 #undef HUNDRED_MEGAWATTS
 #undef GIGAWATT
+
+
