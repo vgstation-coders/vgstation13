@@ -4,12 +4,21 @@
 	force_success = TRUE
 
 var/list/predefined_custom_objectives = list(
-	"Go on a date with the station's AI.",
-	"Rename all rooms in the station to something silly.",
-	"Accelerate.",
-	"Steal every last pen on the station. Every single one of them.",
-	"Get your revenge.",
-	"Do as you wish.",
+	// Open ended ; low chance of being picked
+	10;"Go on a date with the station's AI.",
+	10;"Rename all rooms in the station to something silly.",
+	10;"Accelerate.",
+	10;"Steal every last pen on the station. Every single one of them.",
+	10;"Get your revenge.",
+	10;"Do as you wish.",
+
+	// Slightly more directed. Higher chance of being picked.
+	50;"Steal one of the key items to NanoTrasen's organisation. This includes a pinpointer, a nuclear authentification disk, and a hand teleporter.",
+	50;"Disrupt the station's command structure.",
+	50;"Sabotage the station's power net and atmospheric regulation system.",
+	50;"Sabotage the station's medical facilities.",
+	50;"Sabotage the station's research activities.",
+	50;"Cripple the station's mining activities.",
 )
 
 //if user passed - means that this will be called as an explicit custom objective and will require user input
