@@ -18,7 +18,7 @@ var/list/predefined_custom_objectives = list(
 		return
 	if (faction)
 		src.faction = faction
-	var/txt = stripped_input(user, "What should be the text of this objective?","Custom objective", pick(predefined_custom_objectives))
+	var/txt = stripped_input(user, "What should be the text of this objective?","Custom objective", pick(predefined_custom_objectives), MAX_OBJECTIVE_LEN)
 	explanation_text = txt
 
 // Fullfilled as per admin wishes
