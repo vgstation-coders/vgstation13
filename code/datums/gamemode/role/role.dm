@@ -370,22 +370,19 @@
 
 /datum/role/proc/give_rewards()
 	var/mob/M = antag.current
-	to_chat(world, "Give rewards to [M] @ [M.x], [M.y], [M.z]")
 	if (!M || M.stat)
 		return
 	if (!SOLO_ANTAG_OBJECTIVES)
 		to_chat(world, length(objectives.GetObjectives()))
 		for (var/datum/objective/objective in objectives.GetObjectives())
 			if (istype(objective, /datum/objective/freeform) || objective.flags & FACTION_OBJECTIVE)
-				to_chat(world, "Can't spawn it")
 				continue
-			to_chat(world, "Spawning a jectie")
 			if (objective.IsFulfilled())
 				var/obj/item/weapon/reagent_containers/food/snacks/jectie/J = new /obj/item/weapon/reagent_containers/food/snacks/jectie/green(get_turf(M))
-				J.name = "[objective.name]"
+				J.desc += " ([objective.explanation_text])"
 			else
 				var/obj/item/weapon/reagent_containers/food/snacks/jectie/J = new /obj/item/weapon/reagent_containers/food/snacks/jectie/red(get_turf(M))
-				J.name = "[objective.name]"
+				J.name += " ([objective.explanation_text])"
 
 /datum/role/proc/extraPanelButtons()
 	var/dat = ""
