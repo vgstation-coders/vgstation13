@@ -1513,15 +1513,14 @@
 // Sliding from one table to another
 /obj/item/weapon/reagent_containers/food/drinks/MouseDropFrom(atom/over_object,atom/src_location,over_location,src_control,over_control,params)
 	var/mob/user = usr
-	to_chat(world, "[user]")
 	if (!istype(src_location))
 		return
 	if (!user || user.incapacitated())
 		return
 	if (!user.Adjacent(src) || !src_location.Adjacent(over_location))
 		return
-	if (istype(src_location, /obj/structure/table) && istype(over_location, /obj/structure/table))
-		user.visible_message("<span class='notice'>\The [user] slides \the [src] down the tables.</span>", "<span class='notice'>You slide \the [src] down the tables!</span>")
+	if ((locate(/obj/structure/table) in src_location) && (locate(/obj/structure/table) in over_location))
+		user.visible_message("<span class='notice'>\The [user] slides \the [src] down the table.</span>", "<span class='notice'>You slide \the [src] down the table!</span>")
 		forceMove(over_location, glide_size_override = DELAY2GLIDESIZE(2))
 		return
 	return ..()
