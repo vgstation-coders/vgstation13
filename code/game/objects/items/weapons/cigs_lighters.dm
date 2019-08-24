@@ -625,7 +625,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A budget lighter. More likely lit more fingers than it did light smokes."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "lighter"
-	item_state = "lighter"
 	w_class = W_CLASS_TINY
 	throwforce = 4
 	flags = null

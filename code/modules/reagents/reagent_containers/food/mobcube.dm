@@ -4,6 +4,7 @@
 	icon_state = "monkeycube"
 	bitesize = 12
 	food_flags = FOOD_MEAT
+	edible_by_utensil = FALSE
 	var/contained_mob = /mob/living/carbon/monkey
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/New()

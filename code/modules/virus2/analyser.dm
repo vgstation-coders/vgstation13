@@ -134,7 +134,8 @@
 		dish.info = dish.contained_virus.get_info()
 		last_scan_name = dish.contained_virus.name(TRUE)
 		if (v)
-			last_scan_name += "[v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""]"
+			last_scan_name += v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""
+
 		dish.name = "growth dish ([last_scan_name])"
 		last_scan_info = dish.info
 		var/datum/browser/popup = new(user, "\ref[dish]", dish.name, 600, 500, src)

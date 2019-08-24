@@ -16,7 +16,7 @@
 	one_part_set_only = 0
 	part_sets = list(
 		"Weapons"=list(
-		new /obj/item/weapon/gun/projectile/sec/lockbox(), \
+		new /obj/item/weapon/gun/projectile/glock/lockbox(), \
 		new /obj/item/weapon/gun/projectile/automatic/vector/lockbox(), \
 		new /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox(), \
 		),
@@ -42,6 +42,7 @@
 		new /obj/item/ammo_storage/magazine/a12mm/empty(), \
 		new /obj/item/ammo_storage/magazine/a357/empty(),\
 		new /obj/item/ammo_storage/magazine/m380auto/empty(), \
+		new /obj/item/ammo_storage/magazine/m380auto/extended/empty(), \
 		new /obj/item/ammo_storage/magazine/c45/empty(), \
 		new /obj/item/ammo_storage/magazine/uzi45/empty(), \
 		new /obj/item/ammo_storage/magazine/a50/empty(), \

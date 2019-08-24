@@ -169,6 +169,7 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/stop_line_profiling
 	src.verbs += /client/proc/show_line_profiling
 	src.verbs += /client/proc/check_wires
+	src.verbs += /client/proc/check_pipes
 	#if UNIT_TESTS_ENABLED
 	src.verbs += /client/proc/unit_test_panel
 	#endif
@@ -435,3 +436,71 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 		neighbour = locate() in get_step(get_turf(C),C.d2)
 		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
 			to_chat(usr, "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span>")
+
+/client/proc/check_pipes()
+	set category = "Mapping"
+	set name = "Check if Distro and Waste mix"
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	var/bad_pipes = 0
+	var/list/supply_pipes = list(/obj/machinery/atmospherics/pipe/layer_adapter/supply, /obj/machinery/atmospherics/pipe/manifold/supply, /obj/machinery/atmospherics/pipe/manifold4w/supply, /obj/machinery/atmospherics/pipe/simple/supply)
+	var/list/waste_pipes = list(/obj/machinery/atmospherics/pipe/layer_adapter/scrubbers, /obj/machinery/atmospherics/pipe/manifold/scrubbers, /obj/machinery/atmospherics/pipe/manifold4w/scrubbers, /obj/machinery/atmospherics/pipe/simple/scrubbers)
+
+	for(var/datum/pipe_network/PN in pipe_networks)
+		//Forgive me for what I must do
+		for(var/datum/pipeline/P in PN.line_members)
+			for(var/obj/machinery/atmospherics/AM in P.members)
+				if(is_type_in_list(AM, supply_pipes))
+					if(istype(AM, /obj/machinery/atmospherics/pipe/simple))
+						var/obj/machinery/atmospherics/pipe/simple/SP = AM
+						if(is_type_in_list(SP.node1, waste_pipes) || is_type_in_list(SP.node2, waste_pipes))
+							bad_pipes++
+							to_chat(world, "Distro/Waste cross at [formatJumpTo(get_turf(AM))]")
+							continue
+					if(istype(AM, /obj/machinery/atmospherics/pipe/layer_adapter))
+						var/obj/machinery/atmospherics/pipe/layer_adapter/LA = AM
+						if(is_type_in_list(LA.layer_node, waste_pipes) || is_type_in_list(LA.mid_node, waste_pipes))
+							bad_pipes++
+							to_chat(world, "Distro/Waste cross at [formatJumpTo(get_turf(AM))]")
+							continue
+					if(istype(AM, /obj/machinery/atmospherics/pipe/manifold))
+						var/obj/machinery/atmospherics/pipe/manifold/MF = AM
+						if(is_type_in_list(MF.node1, waste_pipes) || is_type_in_list(MF.node2, waste_pipes) || is_type_in_list(MF.node3, waste_pipes))
+							bad_pipes++
+							to_chat(world, "Distro/Waste cross at [formatJumpTo(get_turf(AM))]")
+							continue
+					if(istype(AM, /obj/machinery/atmospherics/pipe/manifold4w))
+						var/obj/machinery/atmospherics/pipe/manifold4w/MF4 = AM
+						if(is_type_in_list(MF4.node1, waste_pipes) || is_type_in_list(MF4.node2, waste_pipes) || is_type_in_list(MF4.node3, waste_pipes)|| is_type_in_list(MF4.node4, waste_pipes))
+							bad_pipes++
+							to_chat(world, "Distro/Waste cross at [formatJumpTo(get_turf(AM))]")
+							continue
+				if(is_type_in_list(AM, waste_pipes))
+					if(istype(AM, /obj/machinery/atmospherics/pipe/simple))
+						var/obj/machinery/atmospherics/pipe/simple/SP = AM
+						if(is_type_in_list(SP.node1, supply_pipes) || is_type_in_list(SP.node2, supply_pipes))
+							bad_pipes++
+							to_chat(world, "Distro/Waste cross at [formatJumpTo(get_turf(AM))]")
+							continue
+					if(istype(AM, /obj/machinery/atmospherics/pipe/layer_adapter))
+						var/obj/machinery/atmospherics/pipe/layer_adapter/LA = AM
+						if(is_type_in_list(LA.layer_node, supply_pipes) || is_type_in_list(LA.mid_node, supply_pipes))
+							bad_pipes++
+							to_chat(world, "Distro/Waste cross at [formatJumpTo(get_turf(AM))]")
+							continue
+					if(istype(AM, /obj/machinery/atmospherics/pipe/manifold))
+						var/obj/machinery/atmospherics/pipe/manifold/MF = AM
+						if(is_type_in_list(MF.node1, supply_pipes) || is_type_in_list(MF.node2, supply_pipes) || is_type_in_list(MF.node3, supply_pipes))
+							bad_pipes++
+							to_chat(world, "Distro/Waste cross at [formatJumpTo(get_turf(AM))]")
+							continue
+					if(istype(AM, /obj/machinery/atmospherics/pipe/manifold4w))
+						var/obj/machinery/atmospherics/pipe/manifold4w/MF4 = AM
+						if(is_type_in_list(MF4.node1, supply_pipes) || is_type_in_list(MF4.node2, supply_pipes) || is_type_in_list(MF4.node3, supply_pipes)|| is_type_in_list(MF4.node4, supply_pipes))
+							bad_pipes++
+							to_chat(world, "Distro/Waste cross at [formatJumpTo(get_turf(AM))]")
+							continue
+
+	to_chat(world, "[bad_pipes] bad pipes detected.")

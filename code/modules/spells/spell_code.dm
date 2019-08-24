@@ -227,18 +227,20 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/channeled_spell(var/list/args)
 	var/event/E = args["event"]
+	
 	if(!currently_channeled)
 		E.handlers.Remove("\ref[src]:channeled_spell")
 		return 0
 
 	var/atom/A = args["atom"]
-
+	
 	if(E.holder != holder)
 		E.handlers.Remove("\ref[src]:channeled_spell")
 		return 0
 	var/list/target = list(A)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
+
 	if(cast_check(1, holder) && is_valid_target(A, user))
 		target = before_cast(target, user) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target

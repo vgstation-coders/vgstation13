@@ -163,6 +163,13 @@
 		qdel(W)
 		qdel(src)
 
+/obj/item/clothing/shoes/clown_shoes/lola
+	name = "fighting clown shoes"
+	desc = "Squeaky when scuffling."
+	icon_state = "lola"
+	item_state = "lola"
+	_color = "lola"
+
 /obj/item/clothing/shoes/clown_shoes/elf
 	desc = "Jolly shoes for a jolly little elf!"
 	name = "elf shoes"
@@ -287,6 +294,7 @@
 /obj/item/clothing/shoes/clown_shoes/slippy/dropped(mob/user as mob)
 	canremove = 1
 	..()
+
 
 #undef CLOWNSHOES_RANDOM_SOUND
 

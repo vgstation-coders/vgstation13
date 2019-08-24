@@ -369,6 +369,8 @@
 	return w_type
 
 /obj/item/weapon/coin/is_screwdriver(var/mob/user)
+	if(user.a_intent == I_HURT)
+		to_chat(user, "<span class='warning'>You forcefully press with \the [src]!</span>")
 	return user.a_intent == I_HURT
 
 /obj/item/weapon/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
@@ -400,19 +402,19 @@
 		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
 							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \
 							 "<span class='notice'>You hear [src] landing.</span>")
-	else 
+	else
 		if(!throwing) //coin was thrown and is coming to rest
 			visible_message("<span class='notice'>[src] stops spinning, landing [sideup]</span>")
-	
+
 /obj/item/weapon/coin/examine(var/mob/user)
 	..()
 	to_chat(user, "<span class='notice'>[src] is [sideup]</span>")
-	
+
 /obj/item/weapon/coin/equipped(var/mob/user)
 	..()
 	sideup = "heads-up."
 	transform = null
-	
+
 /obj/item/weapon/coin/attack_self(var/mob/user)
 	coinflip(user, 0)
 
@@ -490,7 +492,7 @@
 	icon_state = "coin_phazon"
 	desc = "You're not sure how much this is worth, considering the constantly warping engravings."
 	melt_temperature=MELTPOINT_GLASS
-	
+
 /obj/item/weapon/coin/phazon/New()
 	siemens_coefficient = rand(0,200) / 100
 	credits = rand(1,1000)

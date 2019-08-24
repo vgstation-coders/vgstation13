@@ -34,8 +34,21 @@ var/const/TRANS_SETTINGS = 16 //Pulse shows percentage given by environment temp
 	The radiation warning light is [T.count_rad_wires() > 1 ? "brightly" : ""] [T.count_rad_wires() ? "shining" : "off"].<BR>
 	It has a cryptic display [counter ? "reading [counter]" : "that is blank"].<BR>"}
 
+
+/datum/wires/transmitter/UpdateCut(var/index, var/mended, var/mob/user)
+	var/obj/machinery/media/transmitter/broadcast/T = holder
+	..()
+	var/obj/I = user.get_active_hand()
+	switch(index)
+		if(TRANS_POWER)
+			T.power_change()
+			T.shock(user, 50, get_conductivity(I))
+		if(TRANS_LINK)
+			T.shock(user, 50, get_conductivity(I))
+
 /datum/wires/transmitter/UpdatePulsed(var/index)
 	var/obj/machinery/media/transmitter/broadcast/T = holder
+	..()
 	switch(index)
 		if(TRANS_POWER)
 			T.on = !T.on
@@ -45,13 +58,3 @@ var/const/TRANS_SETTINGS = 16 //Pulse shows percentage given by environment temp
 		if(TRANS_SETTINGS)
 			var/datum/gas_mixture/env = T.loc.return_air()
 			counter = 100*(env.temperature / (T20C + 20))
-
-/datum/wires/transmitter/UpdateCut(var/index, var/mended, var/mob/user)
-	var/obj/machinery/media/transmitter/broadcast/T = holder
-	var/obj/I = user.get_active_hand()
-	switch(index)
-		if(TRANS_POWER)
-			T.power_change()
-			T.shock(user, 50, get_conductivity(I))
-		if(TRANS_LINK)
-			T.shock(user, 50, get_conductivity(I))

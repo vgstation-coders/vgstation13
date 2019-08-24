@@ -46,7 +46,10 @@
 		aicamera.toggle_camera_mode(src)
 		aicamera.captureimage(A, src)
 		return
-
+	
+	if(INVOKE_EVENT(on_uattack,list("atom"=A)))
+		return
+		
 	var/obj/item/W = get_active_hand()
 
 	// Cyborgs have no range-checking unless there is item use
