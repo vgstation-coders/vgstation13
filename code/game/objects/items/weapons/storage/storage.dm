@@ -18,7 +18,7 @@
 	var/list/is_seeing = new/list() //List of mobs which are currently seeing the contents of this item's storage
 	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect even if can_only_hold is set)
 	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
-	var/storage_slots = 7 //The number of storage slots in this container.
+	var/storage_slots = 0 //The number of storage slots in this container.
 	var/obj/abstract/screen/storage/boxes = null
 	var/obj/abstract/screen/close/closer = null
 	var/use_to_pickup	//Set this to make it possible to use this item in an inverse way, so you can have the item in your hand and click items on the floor to pick them up.
@@ -195,6 +195,8 @@
 	//var/mob/living/carbon/human/H = user
 	var/row_num = 0
 	var/col_count = min(7,storage_slots) -1
+	if(storage_slots <= 0)
+		col_count = 6
 	if (adjusted_contents > 7)
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
 	src.standard_orient_objs(row_num, col_count, numbered_contents)
@@ -218,7 +220,7 @@
 
 	if(src.loc == W)
 		return 0 //Means the item is already in the storage item
-	if(contents.len >= storage_slots)
+	if(storage_slots && (contents.len >= storage_slots))
 		if(!stop_messages)
 			to_chat(usr, "<span class='notice'>\The [src] is full, make some space.</span>")
 		return 0 //Storage item is full
