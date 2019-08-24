@@ -195,8 +195,8 @@
 	//var/mob/living/carbon/human/H = user
 	var/row_num = 0
 	var/col_count = min(7,storage_slots) -1
-	if(storage_slots <= 0)
-		col_count = 6
+	if(col_count < 0)
+		col_count = 6 //Show 7 inventory slots instead of breaking the inventory
 	if (adjusted_contents > 7)
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
 	src.standard_orient_objs(row_num, col_count, numbered_contents)
