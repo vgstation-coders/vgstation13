@@ -1510,6 +1510,21 @@
 		loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
 	return
 
+// Sliding from one table to another
+/obj/item/weapon/reagent_containers/food/drinks/MouseDropFrom(atom/over_object,atom/src_location,over_location,src_control,over_control,params)
+	var/mob/user = usr
+	to_chat(world, "[user]")
+	if (!istype(src_location))
+		return
+	if (!user || user.incapacitated())
+		return
+	if (!user.Adjacent(src) || !src_location.Adjacent(over_location))
+		return
+	if (istype(src_location, /obj/structure/table) && istype(over_location, /obj/structure/table))
+		user.visible_message("<span class='notice'>\The [user] slides \the [src] down the tables.</span>", "<span class='notice'>You slide \the [src] down the tables!</span>")
+		forceMove(over_location, glide_size_override = DELAY2GLIDESIZE(2))
+		return
+	return ..()
 
 //todo: can light cigarettes with
 //todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now
