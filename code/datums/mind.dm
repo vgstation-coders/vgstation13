@@ -445,11 +445,7 @@
 			to_chat(src, "<span class='warning'>You can only give yourself an objective every 25 minutes.</span>")
 			return
 		// 2. Giving the objective
-		var/objective_type = pick(
-			50;/datum/objective/target/assassinate,
-			50;/datum/objective/target/steal,
-			10;/datum/objective/hijack,
-		)
+		var/objective_type = pickweight(R.get_possible_objective_types())
 		var/datum/objective/O = new objective_type
 		O.flags |= DONT_CHECK_OBJ // don't display a "success" or not
 		R.AppendObjective(O, TRUE) // Allow duplicates

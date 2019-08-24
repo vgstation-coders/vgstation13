@@ -390,6 +390,14 @@
 	//dat = " - <a href='?src=\ref[M];spawnpoint=\ref[src]'>(move to spawn)</a>"
 	return dat
 
+/datum/role/proc/get_possible_objective_types()
+	var/list/possible_objs = list(
+		/datum/objective/target/steal = 50,
+		/datum/objective/target/assassinate = 50,
+		/datum/objective/hijack = 10,
+	)
+	return possible_objs
+
 /datum/role/proc/GetMemory(var/datum/mind/M, var/admin_edit = FALSE)
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	var/text = "<b><img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [name]</b>"

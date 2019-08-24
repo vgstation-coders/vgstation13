@@ -1755,8 +1755,8 @@
 
 // Always red text
 /obj/item/weapon/reagent_containers/food/snacks/jectie/red
-	icon_state = "jectie_green"
-	desc = "<font color='green'><B>The jectie was successful!</B></font color>"
+	icon_state = "jectie_red"
+	desc = "<font color='red'><B>The jectie has failed!</B></font color>"
 
 /obj/item/weapon/reagent_containers/food/snacks/jectie/red/New()
 	..()
