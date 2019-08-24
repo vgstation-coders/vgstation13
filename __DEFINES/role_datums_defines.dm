@@ -175,6 +175,7 @@
 // -- Objectives flags
 
 #define FACTION_OBJECTIVE 1
+#define DONT_CHECK_OBJ 2
 
 // -- Cult 2.0 states
 #define CULT_PRELUDE 		0 // First objective
@@ -230,3 +231,7 @@
 #define DIRAC "Rigged threat number"
 #define EXPONENTIAL "Peaceful bias"
 #define UNIFORM "Uniform distribution"
+
+// -- Roles flags
+
+ #define SOLO_ANTAG 1 

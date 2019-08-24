@@ -6,12 +6,14 @@
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
 	greets = list(GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND)
+	flags = SOLO_ANTAG
 
 	stat_datum_type = /datum/stat/role/wizard
 
 /datum/role/wizard/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/wizard)
+		give_request_jecties()
 		return
 	switch(rand(1,100))
 		if(1 to 30)

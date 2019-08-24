@@ -5,6 +5,8 @@
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")
 	protected_traitor_prob = PROB_PROTECTED_RARE
 	logo_state = "change-logoa"
+	flags = SOLO_ANTAG
+	
 	var/list/absorbed_dna = list()
 	var/list/absorbed_species = list()
 	var/list/absorbed_languages = list()
@@ -54,6 +56,7 @@
 /datum/role/changeling/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/changeling)
+		give_request_jecties()
 		return
 	AppendObjective(/datum/objective/absorb)
 	AppendObjective(/datum/objective/target/assassinate)

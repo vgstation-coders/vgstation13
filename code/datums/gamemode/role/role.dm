@@ -101,6 +101,7 @@
 
 	// Objectives
 	var/datum/objective_holder/objectives=new
+	var/last_requested_objective_time = -30 MINUTES
 
 	var/icon/logo_state = "synd-logo"
 
@@ -240,6 +241,10 @@
 /datum/role/proc/ForgeObjectives()
 	return
 
+/datum/role/proc/give_request_jecties()
+	to_chat(antag.current, "<span class='notice'>You can request an objective (item to steal, person to kill...). To do so, type 'Notes' on your chat bar.</span>")
+	antag.store_memory("<a href='?src=\ref[antag];give_custom_objective=\ref[src]'>Give yourself an objective.</a>")
+
 /datum/role/proc/AppendObjective(var/objective_type,var/duplicates=0)
 	if(!duplicates && locate(objective_type) in objectives)
 		return FALSE
@@ -338,7 +343,10 @@
 		text += "<ul>"
 		for(var/datum/objective/objective in objectives.GetObjectives())
 			var/successful = objective.IsFulfilled()
-			text += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
+			text += "<B>Objective #[count]</B>: [objective.explanation_text]"
+			// Only add green/red text to objectives that are checked.
+			if (!(objective.flags & DONT_CHECK_OBJ))
+				text +=  successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"
 			feedback_add_details("[id]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
 			if(!successful) //If one objective fails, then you did not win.
 				win = 0
@@ -356,8 +364,28 @@
 		text += "</ul>"
 
 	stat_collection.add_role(src, win)
+	give_rewards()
 
 	return text
+
+/datum/role/proc/give_rewards()
+	var/mob/M = antag.current
+	to_chat(world, "Give rewards to [M] @ [M.x], [M.y], [M.z]")
+	if (!M || M.stat)
+		return
+	if (!SOLO_ANTAG_OBJECTIVES)
+		to_chat(world, length(objectives.GetObjectives()))
+		for (var/datum/objective/objective in objectives.GetObjectives())
+			if (istype(objective, /datum/objective/freeform) || objective.flags & FACTION_OBJECTIVE)
+				to_chat(world, "Can't spawn it")
+				continue
+			to_chat(world, "Spawning a jectie")
+			if (objective.IsFulfilled())
+				var/obj/item/weapon/reagent_containers/food/snacks/jectie/J = new /obj/item/weapon/reagent_containers/food/snacks/jectie/green(get_turf(M))
+				J.name = "[objective.name]"
+			else
+				var/obj/item/weapon/reagent_containers/food/snacks/jectie/J = new /obj/item/weapon/reagent_containers/food/snacks/jectie/red(get_turf(M))
+				J.name = "[objective.name]"
 
 /datum/role/proc/extraPanelButtons()
 	var/dat = ""

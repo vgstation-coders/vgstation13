@@ -4,6 +4,7 @@
 	required_pref = TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = TRAITOR
+	flags = SOLO_ANTAG
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 
 /datum/role/traitor/OnPostSetup()
@@ -38,6 +39,7 @@
 /datum/role/traitor/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/syndicate)
+		give_request_jecties()
 		return
 	if(istype(antag.current, /mob/living/silicon))
 		AppendObjective(/datum/objective/target/delayed/assassinate)

@@ -206,7 +206,7 @@
 
 /datum/mind/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
-		return
+		return unsecure_topic(href, href_list, usr)
 	if (href_list["job_edit"])
 		var/new_job = input("Select new job", "Assigned job", assigned_role) as null|anything in get_all_jobs()
 		if (!new_job)
@@ -431,6 +431,33 @@
 			var/datum/role/R = antag_roles[role]
 			R.AnnounceObjectives()
 	role_panel()
+
+/datum/mind/proc/unsecure_topic(var/href, var/list/href_list, var/mob/user)
+	if (href_list["give_custom_objective"])
+		// 1. Sanity
+		var/datum/role/R = locate(href_list["give_custom_objective"])
+		if (!istype(R) || !(R.flags & SOLO_ANTAG) || SOLO_ANTAG_OBJECTIVES)
+			return
+		if (!current || current.stat)
+			to_chat(src, "<span class='warning'>You can't give yourself an objective if you are dead.</span>")
+			return
+		if (world.time < R.last_requested_objective_time + 25 MINUTES)
+			to_chat(src, "<span class='warning'>You can only give yourself an objective every 25 minutes.</span>")
+			return
+		// 2. Giving the objective
+		var/objective_type = pick(
+			50;/datum/objective/target/assassinate,
+			50;/datum/objective/target/steal,
+			10;/datum/objective/hijack,
+		)
+		var/datum/objective/O = new objective_type
+		O.flags |= DONT_CHECK_OBJ // don't display a "success" or not
+		R.AppendObjective(O, TRUE) // Allow duplicates
+		message_admins("[user] ([formatJumpTo(user, "JMP")]) gave themselves the objective: [O.explanation_text].")
+		user << browse(null,"window=memory;size=700x500")
+		show_memory(user)
+		return
+
 
 /datum/mind/proc/make_AI_Malf()
 	if(!isAI(current))
