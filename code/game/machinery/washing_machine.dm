@@ -60,7 +60,7 @@
 	size_coefficient = T
 	//whitelist = whitelist_list[T]
 	whitelist = null
-	whielist.Copy(whitelist_list[T])
+	whitelist.Copy(whitelist_list[T])
 	blacklist = null
 	blacklist.Copy(blacklist_list[T])
 
