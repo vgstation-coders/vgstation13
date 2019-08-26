@@ -202,7 +202,7 @@
 	item_state = "hallowiz"
 
 /obj/item/clothing/suit/wizrobe/pharaoh
-	name = "pharaonic garments"
+	name = "pharaonic robe"
 	desc = "Ornate garments worn by the ancient rulers of Space Egypt."
 	icon_state = "pharaoh"
 	item_state = "pharaoh"
