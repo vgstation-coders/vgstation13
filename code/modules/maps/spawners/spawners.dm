@@ -873,8 +873,7 @@
 		/mob/living/carbon/monkey/rock,
 		/mob/living/carbon/monkey/diona,
 		/mob/living/carbon/monkey/skellington,
-		/mob/living/carbon/monkey/skellington/plasma,
-		/mob/living/carbon/monkey/vox)
+		/mob/living/carbon/monkey/skellington/plasma)
 
 
 /obj/abstract/map/spawner/mobs/carp
