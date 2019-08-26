@@ -314,6 +314,9 @@
 				gibs_ready = 0
 				if(locate(/mob,contents))
 					var/mob/M = locate(/mob,contents)
+					M.attack_log += "\[[time_stamp()]\] was gibbed by <B>[key_name(user)]</B> via washing machine."
+					user.attack_log += "\[[time_stamp()]\] gibbed <B>[key_name(M)]</B> via washing machine."
+					log_attack("<B>[key_name(user)]</B> gibbed <B>[key_name(M)] via washing machine.</B>")
 					M.gib()
 			for(var/atom/movable/O in contents)
 				O.forceMove(src.loc)
