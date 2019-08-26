@@ -71,6 +71,12 @@
 	food_type = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	toxin_type = CHEESYGLOOP
 
+/obj/item/weapon/cookiesynth/proc/Cultize()
+	name = "donut synthesizer"
+	desc = "A self-recharging device used to rapidly deploy an entire bowl of delicious blood cookies."
+	food_type = /obj/item/weapon/reagent_containers/food/snacks/cookiebowl/cult
+	toxin_type = HEMOSCYANINE
+
 /obj/item/weapon/cookiesynth/proc/Noirize()
 	name = "joe synthesizer"
 	desc = "A self-recharging device used to rapidly deploy bitter, black, and tasteless coffee."

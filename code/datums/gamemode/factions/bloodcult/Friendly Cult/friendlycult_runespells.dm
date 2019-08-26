@@ -26,7 +26,7 @@
 	
 /datum/rune_spell/friendly_cult/conjurecookie
 	name = "Conjure Cookie"
-	desc = "This simple rune summons a bowl of cookies filled with O+, Nar-Sie approved cookies."
+	desc = "This simple rune summons a bowl of cookies filled with O-, Nar-Sie approved cookies."
 	invocation = "H'drok v'loso, mir'konos vorbot!"
 	word1 = /datum/runeword/friendly_cult/friend
 	word2 = /datum/runeword/friendly_cult/love

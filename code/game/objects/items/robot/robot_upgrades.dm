@@ -326,19 +326,28 @@
 	name = "service cyborg cultist module"
 	desc = "Used to allow a service cyborg to assist in peaceful following of occult religion. The silicon \"conversion\" ritual affects the controlling mind directly and is non-reversible."
 	icon_state = "cyborg_upgrade2"
-	required_modules = list(SERVICE_MODULE)
+	required_modules = list(SERVICE_MODULE, HUG_MODULE)
 	modules_to_add = list(/obj/item/weapon/reagent_containers/food/drinks/cult/cyborg, /obj/item/weapon/reagent_containers/syringe/robot/cultist)
 
 /obj/item/borg/upgrade/cult/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 	
-	R.cult_permitted = 1
+	R.cult_permitted = TRUE
 	playsound(R, 'sound/effects/convert_success.ogg', 75, 0, -4)
 	R.add_spell(new /spell/cult/trace_rune/friendly_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	R.add_spell(new /spell/cult/erase_rune/friendly_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	R.add_language(LANGUAGE_CULT)
 	R.module.quirk_flags |= MODULE_IS_DEFINITIVE
+	
+	var/list/new_icons = list()
+	new_icons += list("Cult" = "cultborg")
+	R.set_module_sprites(new_icons)
+
+	if(R.modtype == HUG_MODULE)
+		var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R)
+		if(C)
+			C.Cultize()
 	
 //Security Stuff
 /obj/item/borg/upgrade/tasercooler

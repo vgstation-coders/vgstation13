@@ -137,3 +137,13 @@
 	materials = list(MAT_CARDBOARD=5000, MAT_CLOWN=5000)
 	build_path = /obj/item/borg/upgrade/honk
 	category = "Robotic_Upgrade_Modules"
+
+/datum/design/borg_service_upgrade_honk
+	name = "Cultist cyborg upgrade"
+	desc = "Friendly occultists sometimes invent more... amiable mechanisms."
+	id = "borg_module_cultist"
+	req_tech = list(Tc_NANOTRASEN = 1, Tc_MATERIALS = 3)
+	build_type = MECHFAB
+	materials = list(MAT_IRON=40000, MAT_PHAZON=5000)
+	build_path = /obj/item/borg/upgrade/cult
+	category = "Robotic_Upgrade_Modules"	
