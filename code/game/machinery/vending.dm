@@ -3094,6 +3094,15 @@ var/global/num_vending_terminals = 1
 
 	..()
 
+/obj/machinery/vending/trader/throw_item()
+	var/mob/living/target = locate() in view(7, src)
+
+	if (!target)
+		return 0
+	for(var/i = 0 to rand(3,12))
+		var/obj/I = new /obj/item/weapon/reagent_containers/food/snacks/egg(get_turf(src))
+		I.throw_at(target, 16, 3)
+
 /obj/machinery/vending/barber
 	name = "\improper BarberVend"
 	desc = "The ultimate vendor for any aspiring space stylist."

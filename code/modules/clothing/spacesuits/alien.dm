@@ -1,30 +1,93 @@
-/obj/item/clothing/head/helmet/space/unathi
+/obj/item/clothing/head/helmet/space/unathi/breacher
+	name = "unathi breacher helmet"
+	desc = "Some sort of ancient Unathi power helmet with ridiculous armor plating."
+	armor = list(melee = 75, bullet = 75, laser = 75,energy = 75, bomb = 75, bio = 100, rad = 90)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	icon_state = "unathi_breacher"
+	item_state = "rig_helm"
+	_color = "unathi_breacher"
+	clothing_flags = PLASMAGUARD
+	
+/obj/item/clothing/suit/space/unathi/breacher
+	name = "unathi breacher armor"
+	desc = "Some sort of ancient Unathi power suit with ridiculous armor plating."
+	icon_state = "unathi_breacher"
+	item_state = "rig_suit"
+	slowdown = HARDSUIT_SLOWDOWN_BULKY
+	armor = list(melee = 75, bullet = 75, laser = 75,energy = 75, bomb = 75, bio = 100, rad = 90)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+	)
+	clothing_flags = PLASMAGUARD
+
+/obj/item/clothing/head/helmet/space/unathi/battle
+	name = "unathi battle helmet"
+	desc = "Typical gear for the modern Unathi soldier."
+	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	icon_state = "unathi_battle"
+	item_state = "syndicate-helm-black"
+	_color = "unathi_battle"
+
+/obj/item/clothing/suit/space/unathi/battle
+	name = "unathi battle armor"
+	desc = "Typical Unathi battle suit. Looks like a fish, moves like a fish, steers like a cow."
+	icon_state = "unathi_battle"
+	item_state = "syndicate-black"
 	armor = list(melee = 40, bullet = 30, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 50)
-	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	var/up = 0 //So Unathi helmets play nicely with the weldervision check.
-	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	species_restricted = list("Unathi")
-
-/obj/item/clothing/head/helmet/space/unathi/helmet_cheap
-	name = "NT breacher helmet"
-	desc = "Hey! Watch it with that thing! It's a knock-off of a Unathi battle-helm, and that spike could put someone's eye out."
-	icon_state = "unathi_helm_cheap"
-	item_state = "unathi_helm_cheap"
-	_color = "unathi_helm_cheap"
-
-/obj/item/clothing/suit/space/unathi
-	armor = list(melee = 40, bullet = 30, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 50)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd)
-	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_restricted = list("Unathi")
-
-/obj/item/clothing/suit/space/unathi/rig_cheap
-	name = "NT breacher chassis"
-	desc = "A cheap NT knock-off of a Unathi battle-rig. Looks like a fish, moves like a fish, steers like a cow."
-	icon_state = "rig-unathi-cheap"
-	item_state = "rig-unathi-cheap"
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+	)
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 
+/obj/item/clothing/suit/space/unathi/soghun
+	name = "unathi soghun armor"
+	desc = "A Unathi suit designed after ancient soghun outfits."
+	icon_state = "unathi_soghun"
+	item_state = "space_suit_syndicate"
+	armor = list(melee = 40, bullet = 30, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 50)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+	)
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 
 // Vox space gear (vaccuum suit, low pressure armor)
 // Can't be equipped by any other species due to bone structure and vox cybernetics.
@@ -38,10 +101,12 @@
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/vox
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 30, bio = 30, rad = 30)
 	species_restricted = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/vox/pressure
 	name = "alien helmet"
@@ -596,7 +661,8 @@
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	body_parts_covered = FULL_HEAD|IGNORE_INV
-	species_restricted = list("Grey")
+	species_restricted = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/space/grey
 	name = "grey pressure suit"
@@ -604,7 +670,8 @@
 	item_state = "grey-pressure-suit"
 	desc = "A strange suit comprised of a series of tubes. Despite looking like a decent wind could tear it apart, it is surprisingly durable. Too thin for anything but a Grey to wear it."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
-	species_restricted = list("Grey")
+	species_restricted = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED)
 
 
 //Martian Fishbowl
@@ -648,3 +715,58 @@
 	..()
 	if(tank)
 		to_chat(user, "<span class = 'notice'>It has a [bicon(tank)][tank] attached to the back.</span>")
+		
+		
+/obj/item/clothing/head/helmet/space/skrell/black
+	name = "skrell combat helmet"
+	desc = "a military Skrell space helmet."
+	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
+	species_restricted = list(SKRELL_SHAPED)
+	species_fit = list(SKRELL_SHAPED)
+	icon_state = "skrell_black"
+	item_state = "syndicate-helm-black"
+	_color = "skrell_black"
+
+/obj/item/clothing/suit/space/skrell/black
+	name = "skrell combat suit"
+	desc = "a military Skrell space suit."
+	icon_state = "skrell_black"
+	item_state = "syndicate-black"
+	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
+	species_restricted = list(SKRELL_SHAPED)
+	species_fit = list(SKRELL_SHAPED)
+	allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+	)
+	slowdown = HARDSUIT_SLOWDOWN_LOW
+	
+/obj/item/clothing/head/helmet/space/skrell/white
+	name = "skrell space helmet"
+	desc = "a civilian Skrell space helmet."
+	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
+	species_restricted = list(SKRELL_SHAPED)
+	species_fit = list(SKRELL_SHAPED)
+	icon_state = "skrell_white"
+	item_state = "medical_helm"
+	_color = "skrell_white"
+
+/obj/item/clothing/suit/space/skrell/white
+	name = "skrell space suit"
+	desc = "a civilian Skrell space suit."
+	icon_state = "skrell_white"
+	item_state = "medical_hardsuit"
+	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
+	species_restricted = list(SKRELL_SHAPED)
+	species_fit = list(SKRELL_SHAPED)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/)
+	slowdown = HARDSUIT_SLOWDOWN_LOW
