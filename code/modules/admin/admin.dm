@@ -956,7 +956,7 @@ var/global/floorIsLava = 0
 		dat += {"Selected shuttle: <b>[selected_shuttle.name]</b> (<i>[selected_shuttle.type]</i>)<br>
 		<a href='?_src_=vars;Vars=\ref[selected_shuttle]'>view variables</A> | <a href='?src=\ref[src];shuttle_teleport_to=1'>teleport to</a> | <a href='?src=\ref[src];shuttle_select=1'>select another shuttle</a><br>
 		cooldown: [selected_shuttle.cooldown] | pre-flight delay: [selected_shuttle.pre_flight_delay] | transit delay: [selected_shuttle.transit_delay]<br>
-		rotation [selected_shuttle.can_rotate ? "<b>ENABLED</b>" : "<b>DISABLED</b>"] | transit [selected_shuttle.use_transit ? "ENABLED" : "DISABLED"]<hr>
+		rotation [selected_shuttle.can_rotate ? "<b>ENABLED</b>" : "<b>DISABLED</b>"] | transit [selected_shuttle.transit_method ? "ENABLED" : "DISABLED"]<hr>
 
 		<a href='?src=\ref[src];shuttle_create_destination=1'>Create a destination docking port</a><br>
 		<a href='?src=\ref[src];shuttle_modify_destination=1'>Add a destination docking port</a><br>

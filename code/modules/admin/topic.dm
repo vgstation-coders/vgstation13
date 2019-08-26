@@ -2591,7 +2591,7 @@
 				broadcast.announce( "Permission Granted. [reason]" )
 			else if(user)
 				to_chat(user, "Permission Granted. [reason]")
-			shuttle.actually_travel_to(D,broadcast,user)
+			shuttle.begin_travel_routine(D,broadcast,user)
 			log_admin("[key_name_admin(usr)] granted permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
 			message_admins("[key_name_admin(usr)] granted permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
 		else
@@ -4721,9 +4721,9 @@
 				new_value = input(usr,"Input new transit delay for [capitalize(S.name)] (in 1/10s of a second)","Shuttle editing",S.transit_delay) as num
 				S.transit_delay = new_value
 			if("use transit")
-				new_value = input(usr,"[NO_TRANSIT] -  no transit, [TRANSIT_ACROSS_Z_LEVELS] - only across z levels, [TRANSIT_ALWAYS] - always","Shuttle editing ([capitalize(S.name)])",S.use_transit) as num
+				new_value = input(usr,"[NO_TRANSIT] -  no transit, [TRANSIT_ACROSS_Z_LEVELS] - only across z levels, [TRANSIT_ALWAYS] - always","Shuttle editing ([capitalize(S.name)])",S.transit_method) as num
 				if(new_value in list(NO_TRANSIT,TRANSIT_ACROSS_Z_LEVELS,TRANSIT_ALWAYS))
-					S.use_transit = new_value
+					S.transit_method = new_value
 				else
 					to_chat(usr, "Not valid!")
 					return
@@ -4992,7 +4992,7 @@
 		S.innacuracy = initial(S.innacuracy)
 		S.transit_delay = initial(S.transit_delay)
 		S.pre_flight_delay = initial(S.pre_flight_delay)
-		S.use_transit = initial(S.use_transit)
+		S.transit_method = initial(S.transit_method)
 		S.dir = initial(S.dir)
 
 		S.initialize()
@@ -5066,9 +5066,9 @@
 
 		S.transit_port = D
 		to_chat(usr, "<span class='info'>Transit area generated successfully.</span>")
-		if(S.use_transit == NO_TRANSIT)
-			S.use_transit = TRANSIT_ACROSS_Z_LEVELS
-			to_chat(usr, "<span class='info'>The [S.name] will now use the transit area when traveling across z-levels. Set its use_transit to 2 to make it always use transit, or 0 to disable transit.</span>")
+		if(S.transit_method == NO_TRANSIT)
+			S.transit_method = TRANSIT_ACROSS_Z_LEVELS
+			to_chat(usr, "<span class='info'>The [S.name] will now use the transit area when traveling across z-levels. Set its transit_method to 2 to make it always use transit, or 0 to disable transit.</span>")
 
 
 	//------------------------------------------------------------------Shuttle stuff end---------------------------------
