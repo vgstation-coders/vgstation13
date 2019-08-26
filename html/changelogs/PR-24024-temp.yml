@@ -1,0 +1,5 @@
+---
+author: SonixApache
+changes:
+  - bugfix: special roles now get their backpack stuff again
+delete-after: true

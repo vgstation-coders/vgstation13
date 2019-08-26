@@ -1,0 +1,5 @@
+---
+author: GlassEclipse
+changes:
+  - rscadd: Now you can ctrl-click to remove accessories off clothing.
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: GoodG1448
+changes:
+  - tweak: Basic and Advanced xenoarch scanners now fit inside excavation belts.
+delete-after: true

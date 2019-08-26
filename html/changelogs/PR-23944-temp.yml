@@ -1,0 +1,5 @@
+---
+author: MadmanMartian
+changes:
+  - bugfix: "The vox trader vending machine now throws eggs, rather than its contents, when forced to throw contents through a malfunction."
+delete-after: true

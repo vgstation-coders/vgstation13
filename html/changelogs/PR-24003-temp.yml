@@ -1,0 +1,5 @@
+---
+author: ririchiyo
+changes:
+  - tweak: "modified nano template for supply console as it wasn't properly broken up."
+delete-after: true
