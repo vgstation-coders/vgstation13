@@ -661,7 +661,8 @@
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	body_parts_covered = FULL_HEAD|IGNORE_INV
-	species_restricted = list("Grey")
+	species_restricted = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/space/grey
 	name = "grey pressure suit"
@@ -669,7 +670,8 @@
 	item_state = "grey-pressure-suit"
 	desc = "A strange suit comprised of a series of tubes. Despite looking like a decent wind could tear it apart, it is surprisingly durable. Too thin for anything but a Grey to wear it."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
-	species_restricted = list("Grey")
+	species_restricted = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED)
 
 
 //Martian Fishbowl
