@@ -29,14 +29,12 @@
 		list(/obj/item/stack/sheet/hairlesshide, /obj/item/clothing/under, /obj/item/clothing/mask, /obj/item/clothing/head, /obj/item/clothing/gloves, /obj/item/clothing/shoes, /obj/item/clothing/suit, /obj/item/stack/cable_coil, /obj/item/weapon/bedsheet),\
 		list(/obj/item/stack/sheet/hairlesshide, /obj/item/clothing/under, /obj/item/clothing/mask, /obj/item/clothing/head, /obj/item/clothing/gloves, /obj/item/clothing/shoes, /obj/item/clothing/suit, /obj/item/stack/cable_coil, /obj/item/weapon/bedsheet)\
 		)
-	var/list/whitelist
 	var/list/blacklist_list = list(
 		list(/mob/living/carbon, /obj/item/clothing/head/helmet, /obj/item/clothing/suit/space, /obj/item/clothing/head/syndicatefake, /obj/item/clothing/suit/syndicatefake, /obj/item/clothing/suit/cyborg_suit, /obj/item/clothing/head/bomb_hood, /obj/item/clothing/suit/bomb_suit, /obj/item/clothing/suit/armor, /obj/item/clothing/mask/cigarette),\
 		list(/mob/living/carbon, /obj/item/clothing/suit/space, /obj/item/clothing/suit/syndicatefake, /obj/item/clothing/suit/cyborg_suit, /obj/item/clothing/suit/bomb_suit, /obj/item/clothing/suit/armor, /obj/item/clothing/mask/cigarette),\
 		list(/mob/living/carbon/human, /obj/item/clothing/mask/cigarette),\
 		list(/obj/item/clothing/mask/cigarette)\
 		)
-	var/list/blacklist
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE
 
@@ -58,11 +56,6 @@
 	for(var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
 		T += MB.rating
 	size_coefficient = T
-	//whitelist = whitelist_list[T]
-	whitelist = null
-	whitelist.Copy(whitelist_list[T])
-	blacklist = null
-	blacklist.Copy(blacklist_list[T])
 
 
 /obj/machinery/washing_machine/verb/start()
@@ -254,7 +247,7 @@
 	if(..())
 		update_icon()
 		return 1
-	else if(is_type_in_list(W, blacklist))
+	else if(is_type_in_list(W, blacklist_list[size_coefficient]))
 		to_chat(user, "This item does not fit.")
 		return
 	else if(istype(W,/obj/item/toy/crayon) ||istype(W,/obj/item/weapon/stamp))
@@ -266,7 +259,7 @@
 		if(contents.len < (5 * size_coefficient))
 			if((wash_state == 1) && hacked)
 				var/obj/item/weapon/grab/G = W
-				if(ishuman(G.assailant) && isliving(G.affecting) && !is_type_in_list(G.affecting, blacklist))
+				if(ishuman(G.assailant) && isliving(G.affecting) && !is_type_in_list(G.affecting, blacklist_list[size_coefficient]))
 					G.affecting.forceMove(src)
 					qdel(G)
 					G = null
@@ -283,7 +276,7 @@
 					qdel(locate(contents,/obj/item/weapon/holder/animal))
 		else
 			to_chat(user, "<span class='notice'>\The [src] is full.</span>")
-	else if(is_type_in_list(W, whitelist))
+	else if(is_type_in_list(W, whitelist_list[size_coefficient]))
 		if(contents.len < (5 * size_coefficient))
 			if(wash_state in list(1, 3))
 				if(user.drop_item(W, src))
