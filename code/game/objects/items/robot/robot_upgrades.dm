@@ -323,8 +323,8 @@
 	R.module.quirk_flags |= MODULE_IS_A_CLOWN
 	
 /obj/item/borg/upgrade/cult
-	name = "service cyborg cultist module"
-	desc = "Used to allow a service cyborg to assist in peaceful following of occult religion. The silicon \"conversion\" ritual affects the controlling mind directly and is non-reversible."
+	name = "cyborg cultist module"
+	desc = "Used to allow a service cyborg or hugborg to assist in peaceful following of occult religion. The silicon \"conversion\" ritual affects the controlling mind directly and is non-reversible."
 	icon_state = "cyborg_upgrade2"
 	required_modules = list(SERVICE_MODULE, HUG_MODULE)
 	modules_to_add = list(/obj/item/weapon/reagent_containers/food/drinks/cult/cyborg, /obj/item/weapon/reagent_containers/syringe/robot/cultist)
