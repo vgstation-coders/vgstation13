@@ -58,8 +58,12 @@
 	for(var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
 		T += MB.rating
 	size_coefficient = T
-	whitelist = whitelist_list[T]
-	blacklist = blacklist_list[T]
+	//whitelist = whitelist_list[T]
+	whitelist = null
+	whielist.Copy(whitelist_list[T])
+	blacklist = null
+	blacklist.Copy(blacklist_list[T])
+
 
 /obj/machinery/washing_machine/verb/start()
 	set name = "Start Washing"
@@ -263,10 +267,10 @@
 			if((wash_state == 1) && hacked)
 				var/obj/item/weapon/grab/G = W
 				if(ishuman(G.assailant) && isliving(G.affecting) && !is_type_in_list(G.affecting, blacklist))
-						G.affecting.forceMove(src)
-						qdel(G)
-						G = null
-						wash_state = 3
+					G.affecting.forceMove(src)
+					qdel(G)
+					G = null
+					wash_state = 3
 		else
 			to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 	else if(istype(W,/obj/item/weapon/holder/animal))
