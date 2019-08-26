@@ -297,10 +297,10 @@
 	
 /obj/item/weapon/gun/projectile/railgun/preloaded/New()
 	..()
-	loadedassembly = new /obj/item/weapon/rail_assembly
+	loadedassembly = new /obj/item/weapon/rail_assembly(src)
 	rails_secure = 1
-	loadedammo = new ammotype
-	loadedcapacitor = new capacitortype
+	loadedammo = new ammotype(src)
+	loadedcapacitor = new capacitortype(src)
 	loadedcapacitor.stored_charge = loadedcapacitor.maximum_charge 
 
 /obj/item/weapon/gun/projectile/railgun/preloaded/godslayer
@@ -311,5 +311,3 @@
 #undef TEN_MEGAWATTS
 #undef HUNDRED_MEGAWATTS
 #undef GIGAWATT
-
-
