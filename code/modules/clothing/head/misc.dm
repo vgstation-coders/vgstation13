@@ -1,6 +1,8 @@
 
 
 /obj/item/clothing/head/centhat
+
+/obj/item/clothing/head/centhat
 	name = "\improper CentComm. hat"
 	icon_state = "centcom"
 	desc = "It's good to be emperor."
@@ -341,7 +343,7 @@
 
 /obj/item/clothing/head/panzer
 	name = "Panzer Cap"
-	desc = "Ein Hut passen nur fÃ¼r die grÃ¶ÃŸten Tanks."
+	desc = "Ein Hut passen nur für die größten Tanks."
 	icon_state = "panzercap"
 	item_state = "panzercap"
 	flags = FPRINT
@@ -545,3 +547,9 @@
 	if(prob(50))
 		src.icon_state = "pharaoh_alt"
 		src.item_state = "pharaoh_alt"
+
+/obj/item/clothing/head/sombrero
+	name = "sombrero"
+	desc = "Meanwhile in Neo Space Mexico."
+	icon_state = "sombrero"
+	item_state = "sombrero"
