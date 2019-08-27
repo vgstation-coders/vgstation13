@@ -573,10 +573,9 @@ proc/process_adminbus_teleport_locs()
 /area/asteroid/artifactroom/holomapDrawOverride()
 	return HOLOMAP_DRAW_FULL
 
-/area/asteroid/snow
+/area/asteroid/snow_inner
 	name = "\improper Snow Asteroid"
-	icon_state = "blue2"
-	requires_power = 1
+	icon_state = "sno2"
 	shuttle_can_crush = TRUE
 
 /area/asteroid/snow_outer
