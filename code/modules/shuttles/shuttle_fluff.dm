@@ -16,7 +16,7 @@
 	icon_state = "airtunnel01"
 
 	light_color = LIGHT_COLOR_RED
-	deny_type = DENY_TOO_OLD
+	deny_type = 1
 
 /obj/machinery/computer/fluff/starmap
 	name = "\improper Starmap"

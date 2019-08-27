@@ -1,3 +1,5 @@
+//These are defined in __DEFINES, but are copied here for convenience.
+/*
 #define NO_TRANSIT 0 //Don't use transit areas
 #define TRANSIT_ACROSS_Z_LEVELS 1 //Only use transit areas if moving to another z-level
 #define TRANSIT_ALWAYS 2 //Always use transit areas
@@ -16,15 +18,17 @@
 #define INIT_NO_AREA	2 //can't find starting area
 #define INIT_NO_PORT	3 //can't find shuttle's docking port
 #define INIT_NO_START	4 //shuttle's docking port isn't connected to a destination port
+*/
+
 
 /datum/shuttle
 	var/name = "shuttle"
 
 	var/list/docking_ports = list() //All ports the shuttle can move to
 	var/list/docking_ports_aboard = list() //Exists to prevent from moving directly onto an outside docking port then taking it away
-	
+
 	var/area/linked_area //The main, linked area
-	
+
 	var/obj/docking_port/shuttle/linked_port //The main, linked port in the linked_area
 	var/obj/docking_port/destination/current_port //Current port
 	var/obj/docking_port/destination/transit_port //Used for Z2 travel
@@ -45,18 +49,18 @@
 	var/last_moved = 0
 	var/cooldown = 100
 	var/dir = NORTH
-	
+
 	var/innacuracy = 0 //Random offset of range (-inaccuracy,inaccuracy) in x and y
 	var/stable = 0 //Whether all mobs are stunned on movement
 
 	var/collision_type = COLLISION_DESTROY //Alternative: COLLISION_DISPLACE
 	var/destroy_everything = 0
-	
+
 	var/list/control_consoles = list()
 	var/list/req_access = list()
 	var/password = null //Unused
 	var/can_link_to_computer = LINK_FORBIDDEN
-	
+
 	var/lockdown = 0
 
 
@@ -223,7 +227,7 @@
 		shuttle_message("Currently requesting Centcomm permission to reach [destination.areaname]...", broadcast, user)
 		var/reason = input(user, "State your reasons for wanting to dock at [destination.areaname].", "Docking Request", "")
 		message_admins("[key_name(user)] is requesting permission to fly their [name] to [destination.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[destination];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[destination];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
-	
+
 	else
 		begin_travel_routine(destination, broadcast, user)
 
@@ -236,11 +240,11 @@
 	moving = 1
 
 	log_game("[user ? key_name(user) : "Something"] sent [name] ([type]) to [destination_port.areaname]")
-	
+
 	if(current_port)
 		current_port.start_warning_lights()
 	destination_port.start_warning_lights()
-	
+
 	spawn(max(1,get_pre_flight_delay()-5))
 		for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
 			spawn()
@@ -285,7 +289,7 @@
 
 	if(transit_port && get_transit_delay())
 		if(transit_method == TRANSIT_ALWAYS || (transit_method == TRANSIT_ACROSS_Z_LEVELS && (linked_area.z != destination_port.z)))
-			move_to_dock(transit_port)
+			force_move_to_dock(transit_port)
 			spawn(max(1,get_transit_delay()-5))
 				for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
 					spawn()
@@ -293,7 +297,7 @@
 			sleep(get_transit_delay())
 
 	if(destination_port)
-		move_to_dock(destination_port)
+		force_move_to_dock(destination_port)
 		destination_port = null
 
 	moving = 0
@@ -306,104 +310,82 @@
 		if(istype(AM,/mob/living))
 			var/mob/living/M = AM
 
-			if(!M.locked_to)
-				shake_camera(M, 10, 1) // unbuckled, HOLY SHIT SHAKE THE ROOM
-
+			if(!M.locked_to) //Locked_to usually means buckled
+				shake_camera(M, 10, 1)
 				if(!src.stable)
 					if(istype(M, /mob/living/carbon))
 						M.Knockdown(3)
 			else
-				shake_camera(M, 3, 1) // buckled, not a lot of shaking
-				
-				
-				
-/datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0) //A direct proc with no bullshit
-	if(!D)
-		return
+				shake_camera(M, 3, 1)
+
+
+
+/datum/shuttle/proc/force_move_to_dock(var/obj/docking_port/destination, var/ignore_innacuracy = 0)
+	if(!destination)
+		return 0
 	if(!linked_port)
-		return
+		return 0
 
-	//List of all shuttles docked to this shuttle. They will be moved together with their parent.
-	//In the list, shuttles are associated with the docking port they are docked to
-	var/list/docked_shuttles = list()
-
-	//To prevent two shuttles that are docked to each other from potentially breaking everything, all moved shuttles are added to this list
+	var/list/docked_shuttles = list() //All shuttles docked to the mothershuttle
 	var/list/moved_shuttles = list()
 
 	moved_shuttles += src
 
-	//See all destination ports in current area
 	for(var/obj/docking_port/destination/dock in linked_area)
-		//If somebody is docked to it (and it isn't us (that would be weird but better be sure))
 		if(dock.docked_with && !(dock.docked_with == linked_port))
-			//Get the docking port that's docked to it, and then its shuttle
-			var/obj/docking_port/shuttle/S = dock.docked_with
-			if(!S || !S.linked_shuttle)
+			var/obj/docking_port/shuttle/child_shuttle = dock.docked_with
+			if(!child_shuttle || !child_shuttle.linked_shuttle)
 				continue
 
-			docked_shuttles |= S.linked_shuttle
-			docked_shuttles[S.linked_shuttle]=dock
+			docked_shuttles |= child_shuttle.linked_shuttle
+			docked_shuttles[child_shuttle.linked_shuttle]=dock
 
-	//******Handle rotation*********
 	var/rotate = 0
-	if(src.can_rotate)
-
-		if(linked_port.dir != turn(D.dir,180))
-
-			rotate = dir2angle(turn(D.dir,180)) - dir2angle(linked_port.dir)
-
+	if(can_rotate)
+		if(linked_port.dir != turn(destination.dir,180))
+			rotate = dir2angle(turn(destination.dir,180)) - dir2angle(linked_port.dir)
 			if(rotate < 0)
 				rotate += 360
 			else if(rotate >= 360)
 				rotate -= 360
 
-	//******Get the turf to move to**
-	var/turf/target_turf = D.get_docking_turf()
+	var/turf/target_turf = destination.get_docking_turf()
 
-	if(!ignore_innacuracy && innacuracy) //Handle innacuracy
+	if(!ignore_innacuracy && innacuracy)
 		var/list/turf_list = list()
-
-		for(var/turf/T in orange(innacuracy,D.get_docking_turf()))
+		for(var/turf/T in orange(innacuracy,destination.get_docking_turf()))
 			turf_list|=T
-
 		target_turf = pick(turf_list)
 
-	//****Finally, move the area***
 	if(move_area_to(get_turf(linked_port), target_turf, rotate))
-
-		linked_port.dock(D) //Dock our docking port with the destination
-
-		//****Move shuttles docked to us**
+		linked_port.dock(destination) //Dock our docking port with the destination
 		if(docked_shuttles.len)
-			for(var/datum/shuttle/S in docked_shuttles)
-				if(S in moved_shuttles)
+			for(var/datum/shuttle/child_shuttle in docked_shuttles)
+				if(child_shuttle in moved_shuttles)
 					continue
-				var/obj/docking_port/destination/our_moved_dock = docked_shuttles[S]
+				var/obj/docking_port/destination/our_moved_dock = docked_shuttles[child_shuttle]
 				if(!our_moved_dock)
 					continue
 
-				moved_shuttles |= S
-				S.move_to_dock(our_moved_dock, ignore_innacuracy = 1)
+				moved_shuttles |= child_shuttle
+				child_shuttle.force_move_to_dock(our_moved_dock, ignore_innacuracy = 1)
 
-		log_game("[name] ([type]) moved to [D.areaname]")
+		log_game("[name] ([type]) moved to [destination.areaname]")
 
-		current_port = D
+		current_port = destination
 
-		after_flight() //Shake the shuttle, weaken unbuckled mobs, etc.
+		after_flight()
 
 		return 1
 
-	return
 
 /datum/shuttle/proc/close_all_doors()
 	for(var/obj/machinery/door/unpowered/shuttle/D in linked_area)
-		spawn(0)
-			D.close()
+		D.close()
 
 /datum/shuttle/proc/open_all_doors()
 	for(var/obj/machinery/door/unpowered/shuttle/D in linked_area)
-		spawn(0)
-			D.open()
+		D.open()
 
 /datum/shuttle/proc/collide(var/atom/movable/AM as mob|obj)
 	AM.shuttle_act(src)
@@ -463,7 +445,7 @@
 /datum/shuttle/proc/get_occupants(var/find_stowaways)
 	var/list/occupants = list()
 	if(!find_stowaways)
-		for(var/mob/living/L in linked_area) //Yeah they could be hiding in lockers, but that's a stowaway not an occupant
+		for(var/mob/living/L in linked_area)
 			occupants.Add(L)
 	else
 		for(var/mob/living/L in mob_list)
@@ -471,14 +453,14 @@
 				occupants.Add(L)
 	return occupants
 
-//The proc that does most of the work
-//RETURNS: 1 if everything is good, 0 if everything is bad
+
 /datum/shuttle/proc/move_area_to(var/turf/our_center, var/turf/new_center, var/rotate = 0)
 	if(!our_center)
 		return
 	if(!new_center)
 		return
-	if((rotate % 90) != 0) //If not divisible by 90, make it
+
+	if((rotate % 90) != 0)
 		rotate += (rotate % 90)
 
 	var/datum/coords/our_center_coords = new(our_center.x,our_center.y)
@@ -486,14 +468,13 @@
 
 	var/datum/coords/offset = new_center_coords.subtract(our_center_coords)
 
-	//For displacing
 	var/throwy = world.maxy
 
 	var/area/space
 
 	space = get_space_area()
 	if(!space)
-		warning("Unable to find space area for shuttle [src.type]")
+		warning("Unable to find space area for shuttle [src.type].")
 
 	//Make a list of coordinates of turfs to move, and associate the coordinates with the turfs they represent
 	var/list/turfs_to_move = list()
@@ -522,8 +503,6 @@
 		new_turfs[new_coords] = C //Associate the old coordinates with the new ones for an easier time
 
 		if(rotate != 0)
-			//Oh god this works
-
 			var/newX = (cosine	* (new_coords.x_pos - new_center.x))	+ (sine		* (new_coords.y_pos - new_center.y))	+ new_center.x
 			var/newY = -(sine	* (new_coords.x_pos - new_center.x))	+ (cosine	* (new_coords.y_pos - new_center.y))	+ new_center.y
 
@@ -738,7 +717,7 @@
 	else
 		world.log << "Emergency shuttle has been successfully set up."
 
-//Custom shuttles
+
 /datum/shuttle/custom
 	name = "custom shuttle"
 	can_link_to_computer = LINK_FREE

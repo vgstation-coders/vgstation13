@@ -34,3 +34,19 @@
 #define SECURITY_POSITIONS list("Head of Security", "Warden", "Detective", "Security Officer")
 
 #define ALWAYSTRUE 2
+
+#define NO_TRANSIT 0
+#define TRANSIT_ACROSS_Z_LEVELS 1
+#define TRANSIT_ALWAYS 2
+
+#define LINK_FREE 0
+#define LINK_PASSWORD_ONLY 1
+#define LINK_FORBIDDEN 2
+
+#define COLLISION_DESTROY 0
+#define COLLISION_DISPLACE 1
+
+#define INIT_SUCCESS	1 
+#define INIT_NO_AREA	2 
+#define INIT_NO_PORT	3 
+#define INIT_NO_START	4

@@ -14,7 +14,7 @@
 
 /turf/space/transit/update_icon()
 	icon_state = ""
-
+	
 	var/dira=""
 	var/i=0
 	switch(pushdirection)

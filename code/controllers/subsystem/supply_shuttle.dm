@@ -95,7 +95,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			message_admins("WARNING: Cargo shuttle unable to find centcomm!")
 			warning("Cargo shuttle can't find centcomm")
 
-	cargo_shuttle.move_to_dock(destination)
+	cargo_shuttle.force_move_to_dock(destination)
 	moving = 0
 
 	//Check whether the shuttle is allowed to move

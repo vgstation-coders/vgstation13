@@ -4957,7 +4957,7 @@
 			temp.areaname = A.name
 			temp.dir = usr.dir
 
-			S.move_to_dock(temp)
+			S.force_move_to_dock(temp)
 
 			message_admins("[key_name_admin(usr)] has teleported [capitalize(S.name)] to himself ([A.name], [temp.x];[temp.y];[temp.z])!")
 			log_admin("[key_name(usr)] has teleported [capitalize(S.name)] to himself by ([A.name], [temp.x];[temp.y];[temp.z])")
@@ -4969,7 +4969,7 @@
 			if(!D)
 				return
 
-			S.move_to_dock(D)
+			S.force_move_to_dock(D)
 
 			message_admins("<span class='notice'>[key_name_admin(usr)] has teleported [capitalize(S.name)] to [choice] ([D.x];[D.y];[D.z])</span>")
 			log_admin("[key_name(usr)] has teleported [capitalize(S.name)] to [choice] ([D.x];[D.y];[D.z])")

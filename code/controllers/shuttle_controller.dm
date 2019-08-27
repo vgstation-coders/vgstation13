@@ -129,13 +129,13 @@ datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
 	var/datum/shuttle/escape/S = pod
 	switch(destination)
 		if("station")
-			if(!S.move_to_dock(S.dock_station, 0))
+			if(!S.force_move_to_dock(S.dock_station, 0))
 				message_admins("Warning: [S] failed to move to station.")
 		if("centcom")
-			if(!S.move_to_dock(S.dock_centcom, 0))
+			if(!S.force_move_to_dock(S.dock_centcom, 0))
 				message_admins("Warning: [S] failed to move to centcom.")
 		if("transit")
-			if(!S.move_to_dock(S.transit_port, 0))
+			if(!S.force_move_to_dock(S.transit_port, 0))
 				message_admins("Warning: [S] failed to move to transit.")
 	spawn()
 		for(var/obj/machinery/door/D in S.linked_area)
@@ -155,7 +155,7 @@ datum/emergency_shuttle/proc/force_shutdown()
 		if(shuttle && istype(shuttle,/datum/shuttle/escape))
 			var/datum/shuttle/escape/E = shuttle
 			E.open_all_doors()
-			if(!E.move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward
+			if(!E.force_move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward
 				message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND THE STATION! PANIC PANIC PANIC")
 		else
 			message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
@@ -217,7 +217,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle
 				E.open_all_doors()
-				if(!E.move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward, on chance that there's anybody in the shuttle
+				if(!E.force_move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward, on chance that there's anybody in the shuttle
 					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO THE STATION! PANIC PANIC PANIC")
 			else
 				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
@@ -265,7 +265,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 					spawn()
 						P.shoot_exhaust(backward = 3)
 
-				if(!E.move_to_dock(E.transit_port, 0, turn(E.dir,180))) //Throw everything backwards
+				if(!E.force_move_to_dock(E.transit_port, 0, turn(E.dir,180))) //Throw everything backwards
 					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO TRANSIT! PANIC PANIC PANIC")
 			else
 				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
@@ -286,7 +286,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle
 				E.open_all_doors()
-				if(!E.move_to_dock(E.dock_centcom, 0, E.dir)) //Throw everything forward
+				if(!E.force_move_to_dock(E.dock_centcom, 0, E.dir)) //Throw everything forward
 					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO CENTCOMM! PANIC PANIC PANIC")
 			else
 				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
