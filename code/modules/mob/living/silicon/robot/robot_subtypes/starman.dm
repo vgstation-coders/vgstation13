@@ -76,13 +76,16 @@
 	invocation_type = SpI_NONE
 	charge_type = Sp_RECHARGE
 	charge_max = 10
+	var/list/starman_music = list('sound/music/battle_against_a_machine.ogg', 'sound/music/imbossible.ogg')
 
 /spell/aoe_turf/starman_play_music/cast(list/targets, mob/user = user)
 	stop_starman_music()
-	if(prob(50))
-		playsound(get_turf(user), 'sound/music/battle_against_a_machine.ogg', 20, channel = CHANNEL_STARMAN)
-	else
-		playsound(get_turf(user), 'sound/music/imbossible.ogg', 20, channel = CHANNEL_STARMAN)
+	if(user)
+		for(var/mob/M in oviewers(8,user))
+			if(M && M.client)
+				M << sound(pick(starman_music), repeat = 0, wait = 0, volume = 20, channel = CHANNEL_STARMAN)
+		user << sound(pick(starman_music), repeat = 0, wait = 0, volume = 20, channel = CHANNEL_STARMAN)
+		
 		
 /proc/stop_starman_music()
 	for(var/mob/M in mob_list)
@@ -245,12 +248,12 @@
 		playsound(user, 'sound/effects/psi/psi_starstorm_omega.ogg', 20, 0)
 		var/obj/item/projectile/meteor/new_meteor
 		var/turf/spawn_loc
-		spawn(6) //Slight delay
+		spawn(2) //Slight delay
 			for(var/i = 1 to meteor_count)
 				spawn_loc = pick(targets)
 				spawn(rand(0,2 SECONDS))
 					new_meteor = new /obj/item/projectile/meteor/mini(spawn_loc)
-					spawn(rand(1,4))
+					spawn(rand(3,5))
 						new_meteor.to_bump(get_turf(new_meteor))
 
 		user.visible_message("<span class='danger'>\The [user] summons a fearsome starstorm!</span>","<span class='notice'>*Click* Star-matrix realized.</span>")
@@ -327,6 +330,7 @@
 	icon_state = "voice0"
 	item_state = "flashbang"
 	var/list/possible_sounds = list('sound/effects/psi/other/enterbattle_normal.ogg','sound/effects/psi/other/boss_intro.ogg','sound/effects/psi/other/spooky.ogg')
+	var/list/sound_volumes = list(40,40,75)
 	var/nextuse
 	var/cooldown = 6 SECONDS
 	
@@ -340,7 +344,8 @@
 	if(world.time < nextuse)
 		return
 	if(user)
-		playsound(user, pick(possible_sounds), 60, 1, vary = 0)
+		var/index = rand(1,possible_sounds.len)
+		playsound(user, possible_sounds[index], sound_volumes[index], 1, vary = 0)
 		var/list/bystanders = get_hearers_in_view(world.view, user)
 		flick_overlay(image('icons/mob/talk.dmi', user, "hail", MOB_LAYER+1), clients_in_moblist(bystanders), 2 SECONDS)
 		user.visible_message("<span class='danger'>\The [user] [pick("emits","blares","performs")] a [pick("sickly","frightening","spooky","strange")] [pick("sound","tune","theme")]!</span>")
