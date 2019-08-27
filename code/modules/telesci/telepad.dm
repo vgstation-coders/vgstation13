@@ -8,12 +8,17 @@
 	use_power = 1
 	idle_power_usage = 200
 	active_power_usage = 5000
+	machine_flags = MULTITOOL_MENU
+	var/id_tag = "telepad"
 
 	var/obj/machinery/computer/telescience/linked
 
 	// Bluespace crystal!
 	var/obj/item/bluespace_crystal/amplifier=null
 	var/opened=0
+
+/obj/machinery/telepad/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	return ""
 
 /obj/machinery/telepad/Destroy()
 	if (linked)
@@ -22,6 +27,7 @@
 	..()
 
 /obj/machinery/telepad/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	..()
 	if(W.is_screwdriver(user))
 		if(opened)
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
