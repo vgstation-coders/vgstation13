@@ -46,8 +46,6 @@
 	y_off = rand(-10,10)
 	x_player_off = 0
 	y_player_off = 0
-	if (ticker && ticker.mode == GAME_STATE_PLAYING)
-		initialize()
 
 /obj/machinery/computer/telescience/initialize()
 	..()
@@ -55,10 +53,12 @@
 		cell = new/obj/item/weapon/cell(src)
 		cell.charge = 0
 
-	var/obj/machinery/telepad/possible_telepad = locate() in range(src, 7)
-	if (!possible_telepad.linked)
-		telepad = possible_telepad
-		telepad.linked = src
+	for(var/obj/machinery/telepad/possible_telepad in range(src, 7))
+		if(telepad)
+			return //Stop checking if we are linked
+		if (!possible_telepad.linked) //Check if the telepad is linked to something else
+			telepad = possible_telepad
+			telepad.linked = src
 
 /obj/machinery/computer/telescience/Destroy()
 	if (telepad)
