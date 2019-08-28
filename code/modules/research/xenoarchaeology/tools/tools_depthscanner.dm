@@ -171,7 +171,7 @@
 				var/new_color
 				if(adv)
 					new_icon_state = "find_overlay"
-					new_color = color_from_find_reagent[get_responsive_reagent(F.find_ID)]
+					new_color = color_from_find_reagent[F.responsive_reagent]
 				else
 					new_icon_state = pick("archaeo1","archaeo2","archaeo3")
 				var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = new_icon_state, layer = UNDER_HUD_LAYER)
