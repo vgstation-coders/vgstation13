@@ -370,17 +370,6 @@ for anyone but the person committing mass murder.
 /datum/black_market_item/toy
 	category = "Recreational and Novelty Items"
 
-/datum/black_market_item/toy/skub
-	name = "Skub"
-	desc = "Skub."
-	item = /obj/item/toy/gasha/skub
-	sps_chances = list(5, 25, 75)
-	stock_min = -1
-	stock_max = -1
-	cost_min = 200
-	cost_max = 500
-	display_chance = 100
-
 /datum/black_market_item/toy/dorkcube
 	name = "Strange Box"
 	desc = "A stolen box filled with unknown loot.  Something is sloshing inside."
@@ -392,6 +381,16 @@ for anyone but the person committing mass murder.
 	cost_max = 500
 	display_chance = 80
 
+/datum/black_market_item/toy/skub
+	name = "Skub"
+	desc = "Skub."
+	item = /obj/item/toy/gasha/skub
+	sps_chances = list(5, 25, 75)
+	stock_min = -1
+	stock_max = -1
+	cost_min = 200
+	cost_max = 500
+	display_chance = 100
 
 #undef CHEAP
 #undef NORMAL
