@@ -239,7 +239,7 @@ for anyone but the person committing mass murder.
 
 //datum/black_market_item/tech
 	//category = "Advanced Technology"
-  
+
 //datum/black_market_item/arcane
 	//category = "Supernatural and Arcane Objects"
 
@@ -380,6 +380,17 @@ for anyone but the person committing mass murder.
 	cost_min = 200
 	cost_max = 500
 	display_chance = 100
+
+/datum/black_market_item/toy/dorkcube
+	name = "Strange Box"
+	desc = "A stolen box filled with unknown loot.  Something is sloshing inside."
+	item = /obj/item/weapon/winter_gift/dorkcube
+	sps_chances = list(0, 10, 30)
+	stock_min = 1
+	stock_max = 5
+	cost_min = 25
+	cost_max = 500
+	display_chance = 80
 
 
 #undef CHEAP
