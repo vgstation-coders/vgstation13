@@ -511,7 +511,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//many finds are ancient and thus very delicate - luckily there is a specialised energy suspension field which protects them when they're being extracted
 	if(prob(F.prob_delicate))
 		var/obj/effect/suspension_field/S = locate() in src
-		if(!S || S.field_type != get_responsive_reagent(F.find_ID))
+		if(!S || S.field_type != F.responsive_reagent)
 			if(X)
 				visible_message("<span class='danger'>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</span>")
 				qdel(X)

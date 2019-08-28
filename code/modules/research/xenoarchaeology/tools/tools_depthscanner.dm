@@ -42,7 +42,7 @@
 				var/datum/find/F = M.finds[1]
 				D.depth = F.excavation_required * 2		//0-100% and 0-200cm
 				D.clearance = F.clearance_range * 2
-				D.material = get_responsive_reagent(F.find_ID)
+				D.material = F.responsive_reagent
 			/*
 			if(M.excavation_minerals.len)
 				if(M.excavation_minerals[1] < D.depth)
