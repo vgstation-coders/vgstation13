@@ -291,7 +291,7 @@
 	id = "glock"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 10000)
-	build_path = /obj/item/weapon/gun/projectile/sec/lockbox
+	build_path = /obj/item/weapon/gun/projectile/glock/lockbox
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
