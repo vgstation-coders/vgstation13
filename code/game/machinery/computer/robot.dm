@@ -75,7 +75,7 @@
 					dat += " Slaved to [R.connected_ai.name] |"
 				else
 					dat += " Independent from AI |"
-				if(istype(user, /mob/living/silicon) && locate(/datum/role/malfAI) in user.mind.antag_roles && !R.emagged)
+				if(issilicon(user) && ismalf(user) && !R.emagged)
 					dat += "<A href='?src=\ref[src];magbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A> "
 
 				dat += {"<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
