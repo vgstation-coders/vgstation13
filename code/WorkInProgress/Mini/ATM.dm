@@ -562,7 +562,7 @@ log transactions
 	var/turf/our_turf = get_turf(src)
 	var/turf/destination_turf = get_step(our_turf, turn(dir, 180))
 	var/just_throw_it = FALSE
-	if(!destination_turf.Adjacent(src) || destination_turf == our_turf) //Can we get to this turf being where the user is facing?
+	if(!destination_turf.Adjacent(src) || destination_turf == our_turf) //Can we get to this turf being where the ATM is facing?
 		destination_turf = our_turf //We'll handle it another way
 		just_throw_it = TRUE
 	var/list/cash = dispense_cash(arbitrary_sum,destination_turf)
