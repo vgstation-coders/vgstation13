@@ -124,7 +124,7 @@ log transactions
 			T.time = worldtime2text()
 			authenticated_account.transaction_log.Add(T)
 
-			to_chat(user, "<span class='info'>You insert [T.amount] credit/s into \the [src].</span>")
+			to_chat(user, "<span class='info'>You insert [T.amount] credit\s into \the [src].</span>")
 			src.attack_hand(user)
 			qdel(I)
 	else
