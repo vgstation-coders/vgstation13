@@ -1,5 +1,0 @@
----
-author: plosky1
-changes:
-  - rscadd: "Snaxi pipes are less gunk, and interpolation should be fixed. Trees have grown, there's been a disturbance in the force, and strange radio signal are being picked up from somewhere on the station..."
-delete-after: true

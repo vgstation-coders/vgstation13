@@ -1,6 +1,0 @@
----
-author: bathosbathtime
-changes:
-  - rscadd: "Added hides, meats, stethoscopes, and black food dye to the black market"
-  - bugfix: Black market spawns are no longer named based on the person buying them
-delete-after: true
