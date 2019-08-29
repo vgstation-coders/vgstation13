@@ -2339,25 +2339,25 @@ obj/item/device/pda/AltClick()
 			to_chat(user, "[bicon(src)]<span class='warning'>There is no ID in the PDA!</span>")
 			return
 		var/obj/item/weapon/spacecash/dosh = C
-		id.virtual_wallet.money += dosh.worth * dosh.amount
-		if(prob(50))
-			playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
-		else
-			playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
-
-		var/datum/transaction/T = new()
-		T.target_name = user.name
-		T.purpose = "Currency deposit"
-		T.amount = dosh.worth * dosh.amount
-		T.source_terminal = src.name
-		T.date = current_date_string
-		T.time = worldtime2text()
-		id.virtual_wallet.transaction_log.Add(T)
-		to_chat(user, "<span class='info'>You insert [T.amount] credit\s into the PDA.</span>")
+		add_to_virtual_wallet(dosh.worth * dosh.amount, user)
+		to_chat(user, "<span class='info'>You insert [dosh.worth * dosh.amount] credit\s into the PDA.</span>")
 		qdel(dosh)
 		updateDialog()
 
-	return
+/obj/item/device/pda/proc/add_to_virtual_wallet(var/amount, var/mob/user)
+	id.virtual_wallet.money += amount
+	if(prob(50))
+		playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
+	else
+		playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+	var/datum/transaction/T = new()
+	T.target_name = user.name
+	T.purpose = "Currency deposit"
+	T.amount = amount
+	T.source_terminal = src.name
+	T.date = current_date_string
+	T.time = worldtime2text()
+	id.virtual_wallet.transaction_log.Add(T)
 
 /obj/item/device/pda/attack(mob/living/carbon/C, mob/living/user as mob)
 	if(istype(C))
