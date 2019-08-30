@@ -195,46 +195,26 @@
 /datum/surgery_step/cavity/implant_removal/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/chest/affected = target.get_organ(target_zone)
 
-	var/find_prob = 0
-
-	if(istype(tool, /obj/item/weapon/hemostat/pico))
-		find_prob +=100
-
 	if (affected.implants.len)
-
 		var/obj/item/obj = affected.implants[1]
+		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
+		"<span class='notice'>You take [obj] out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
+		affected.implants -= obj
 
+		//Handle possessive brain borers.
+		if(istype(obj,/mob/living/simple_animal/borer))
+			var/mob/living/simple_animal/borer/worm = obj
+			if(worm.controlling)
+				target.release_control()
+			worm.detach()
+
+		obj.forceMove(get_turf(target))
 		if(istype(obj,/obj/item/weapon/implant))
 			var/obj/item/weapon/implant/imp = obj
-			if (imp.islegal())
-				find_prob +=60
-			else
-				find_prob +=40
-		else
-			find_prob +=50
-
-		if (prob(find_prob))
-			user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
-			"<span class='notice'>You take [obj] out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
-			affected.implants -= obj
-
-			//Handle possessive brain borers.
-			if(istype(obj,/mob/living/simple_animal/borer))
-				var/mob/living/simple_animal/borer/worm = obj
-				if(worm.controlling)
-					target.release_control()
-				worm.detach()
-
-			obj.forceMove(get_turf(target))
-			if(istype(obj,/obj/item/weapon/implant))
-				var/obj/item/weapon/implant/imp = obj
-				imp.imp_in = null
-				imp.implanted = 0
-				affected.implants -= imp
-				target.contents -= imp
-		else
-			user.visible_message("<span class='notice'>[user] removes \the [tool] from [target]'s [affected.display_name].</span>", \
-			"<span class='notice'>There's something inside [target]'s [affected.display_name], but you just missed it this time.</span>" )
+			imp.imp_in = null
+			imp.implanted = 0
+			affected.implants -= imp
+			target.contents -= imp
 	else if (affected.hidden)
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )

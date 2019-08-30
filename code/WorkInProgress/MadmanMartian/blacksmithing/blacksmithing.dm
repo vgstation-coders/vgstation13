@@ -81,6 +81,8 @@
 		if(user)
 			to_chat(user, "<span class = 'warning'>\The [A] is not hot enough.</span>")
 		return
+	else if(!user)
+		visible_message("<span class='notice'>\The [src] begins heating up.</span>")
 	if(user)
 		to_chat(user, "<span class = 'notice'>You heat \the [src].</span>")
 	if(iswelder(A) && user)

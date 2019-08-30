@@ -25,6 +25,14 @@
 	var/panic			= 0 //is this scrubber panicked?
 	var/welded			= 0
 
+	var/external_pressure_bound = ONE_ATMOSPHERE
+	var/internal_pressure_bound = 0
+	var/pressure_checks = 1
+	//1: Do not pass external_pressure_bound
+	//2: Do not pass internal_pressure_bound
+	//3: Do not pass either
+	var/reducing_pressure = 0 //1 if external_pressure_bound is exceeded and we're sucking out gas to reduce pressure
+
 	var/area_uid
 	var/radio_filter_out
 	var/radio_filter_in
@@ -35,7 +43,6 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/on
 	on					= 1
-	icon_state			= "on"
 
 /obj/machinery/atmospherics/unary/vent_scrubber/on/burn_chamber
 	name				= "\improper Burn Chamber Scrubber"
@@ -44,6 +51,12 @@
 	id_tag				= "inc_out"
 
 	scrub_Toxins		= 0
+
+/obj/machinery/atmospherics/unary/vent_scrubber/vox
+	scrub_O2 = 1
+
+/obj/machinery/atmospherics/unary/vent_scrubber/on/vox
+	scrub_O2 = 1
 
 /obj/machinery/atmospherics/unary/vent_scrubber/New()
 	..()
@@ -70,6 +83,8 @@
 		if (scrubbing)
 			state = "on"
 			if (scrub_O2)
+				state += "1"
+			else if(reducing_pressure)
 				state += "1"
 		else
 			state = "in"
@@ -116,6 +131,9 @@
 		"filter_n2o" = scrub_N2O,
 		"filter_o2" = scrub_O2,
 		"filter_n2" = scrub_N2,
+		"internal" = internal_pressure_bound,
+		"external" = external_pressure_bound,
+		"checks" = pressure_checks,
 		"sigtype" = "status"
 	)
 	if(frequency == 1439)
@@ -156,16 +174,29 @@
 
 	var/datum/gas_mixture/environment = loc.return_air()
 
+	//scrubbing mode
 	if(scrubbing)
-		// Are we scrubbing gasses that are present?
-		if(\
-			(scrub_Toxins && environment[GAS_PLASMA] > 0) ||\
-			(scrub_CO2 && environment[GAS_CARBON] > 0) ||\
-			(scrub_N2O && environment[GAS_SLEEPING] > 0) ||\
-			(scrub_O2 && environment[GAS_OXYGEN] > 0) ||\
-			(scrub_N2 && environment[GAS_NITROGEN] > 0))
-			if (air_contents.return_pressure()>=MAX_PRESSURE)
-				return
+		//if internal pressure limit is enabled and met, we don't do anything
+		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.return_pressure()) < 0.05)
+			if(reducing_pressure)
+				reducing_pressure = 0
+				update_icon()
+			return
+		//if we're at max pressure we also don't do anything
+		if(air_contents.return_pressure() >= MAX_PRESSURE)
+			if(reducing_pressure)
+				reducing_pressure = 0
+				update_icon()
+			return
+
+		//I'm sorry you have to see this
+		//tl;dr: if we're scrubbing some gas that's in the environment, or if the external pressure bound is exceeded
+		var/external_pressure_delta = environment.return_pressure() - external_pressure_bound
+		if((scrub_Toxins && environment[GAS_PLASMA] > 0) || (scrub_CO2 && environment[GAS_CARBON] > 0) ||\
+			(scrub_N2O && environment[GAS_SLEEPING] > 0) ||	(scrub_O2 && environment[GAS_OXYGEN] > 0) ||\
+			(scrub_N2 && environment[GAS_NITROGEN] > 0) || ((pressure_checks & 1) &&\
+			external_pressure_delta > 0.05))
+
 			var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles
 
 			//Take a gas sample
@@ -175,7 +206,8 @@
 
 			//Filter it
 			var/datum/gas_mixture/filtered_out = new
-			filtered_out.temperature = removed.temperature
+			var/air_temperature = (removed.temperature > 0) ? removed.temperature : air_contents.temperature
+			filtered_out.temperature = air_temperature
 
 			#define FILTER(g) filtered_out.adjust_gas((g), removed[g], FALSE)
 			if(scrub_Toxins)
@@ -199,6 +231,19 @@
 			removed.subtract(filtered_out)
 			#undef FILTER
 
+			//if external pressure bound is exceeded, remove extra gas to bring the external pressure down
+			if((pressure_checks & 1) && external_pressure_delta > 0.05)
+				var/output_volume = air_contents.volume + (network ? network.volume : 0)
+				var/extra_moles = (external_pressure_delta * output_volume) / (air_temperature * R_IDEAL_GAS_EQUATION)
+				var/datum/gas_mixture/extra_removed = removed.remove(extra_moles)
+				filtered_out.merge(extra_removed)
+				if(!reducing_pressure)
+					reducing_pressure = 1
+					update_icon()
+			else if(reducing_pressure)
+				reducing_pressure = 0
+				update_icon()
+
 			//Remix the resulting gases
 			air_contents.merge(filtered_out)
 
@@ -208,6 +253,9 @@
 				network.update = 1
 
 	else //Just siphoning all air
+		if(reducing_pressure)
+			reducing_pressure = 0
+			update_icon()
 		if (air_contents.return_pressure()>=MAX_PRESSURE)
 			return
 
@@ -286,6 +334,24 @@
 		scrub_N2 = text2num(signal.data["n2_scrub"])
 	if(signal.data["toggle_n2_scrub"])
 		scrub_N2 = !scrub_N2
+
+	if("checks" in signal.data)
+		pressure_checks = text2num(signal.data["checks"])
+
+	if("checks_toggle" in signal.data)
+		pressure_checks = (pressure_checks?0:3)
+
+	if("set_internal_pressure" in signal.data)
+		internal_pressure_bound = Clamp(text2num(signal.data["set_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
+
+	if("set_external_pressure" in signal.data)
+		external_pressure_bound = Clamp(text2num(signal.data["set_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
+
+	if("adjust_internal_pressure" in signal.data)
+		internal_pressure_bound = Clamp(internal_pressure_bound + text2num(signal.data["adjust_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
+
+	if("adjust_external_pressure" in signal.data)
+		external_pressure_bound = Clamp(external_pressure_bound + text2num(signal.data["adjust_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if(signal.data["init"] != null)
 		name = signal.data["init"]

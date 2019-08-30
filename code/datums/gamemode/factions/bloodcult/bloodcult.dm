@@ -444,7 +444,7 @@ var/veil_thickness = CULT_PROLOGUE
 	if (Grab)
 		if(ishuman(Grab.affecting))
 			var/mob/living/carbon/human/H = Grab.affecting
-			if(!(H.species.flags & NO_BLOOD))
+			if(!(H.species.anatomy_flags & NO_BLOOD))
 				for(var/datum/organ/external/org in H.organs)
 					if(org.status & ORGAN_BLEEDING)
 						var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
@@ -459,7 +459,7 @@ var/veil_thickness = CULT_PROLOGUE
 
 	//Is there a bleeding mob/corpse on the turf that still has blood in it?
 	for (var/mob/living/carbon/human/H in T)
-		if(H.species.flags & NO_BLOOD)
+		if(H.species.anatomy_flags & NO_BLOOD)
 			continue
 		if(user != H)
 			for(var/datum/organ/external/org in H.organs)
@@ -585,7 +585,7 @@ var/veil_thickness = CULT_PROLOGUE
 		return data
 
 	//Does the user have blood? (the user can pay in blood without having to bleed first)
-	if(istype(H_user) && !(H_user.species.flags & NO_BLOOD))
+	if(istype(H_user) && !(H_user.species.anatomy_flags & NO_BLOOD))
 		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
 		data[BLOODCOST_TARGET_USER] = H_user

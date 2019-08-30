@@ -174,15 +174,17 @@
 			continue
 		var/sanity = 0
 		var/turf/new_spawn_point
-		while(1)
+		do
 			sanity++
-			if(sanity > 100)
-				break
 			new_spawn_point = pick(valid_spawn_points)
 			valid_spawn_points.Remove(new_spawn_point)
 			if(filter_function && !call(filter_function)(ME, new_spawn_point))
+				new_spawn_point = null
 				continue
 			break
+		while(sanity < 100)
+		if(!new_spawn_point)
+			continue
 		var/vault_x = new_spawn_point.x
 		var/vault_y = new_spawn_point.y
 		var/vault_z = new_spawn_point.z

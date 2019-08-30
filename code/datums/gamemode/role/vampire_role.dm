@@ -36,6 +36,8 @@
 
 	var/list/image/cached_images = list()
 
+	stat_datum_type = /datum/stat/role/vampire
+
 /datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
 	var/datum/faction/vampire/vamp_fac
@@ -127,7 +129,7 @@
 	. += ..() // Who he was, his objectives...
 
 /datum/role/vampire/ForgeObjectives()
-	if(!SOLO_ANTAG_OBJECTIVES)
+	if(!antag.current.client.prefs.antag_objectives)
 		AppendObjective(/datum/objective/freeform/vampire)
 		return
 

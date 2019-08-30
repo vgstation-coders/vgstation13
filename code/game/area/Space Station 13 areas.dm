@@ -573,6 +573,15 @@ proc/process_adminbus_teleport_locs()
 /area/asteroid/artifactroom/holomapDrawOverride()
 	return HOLOMAP_DRAW_FULL
 
+/area/asteroid/snow_inner
+	name = "\improper Snow Asteroid"
+	icon_state = "sno2"
+	shuttle_can_crush = TRUE
+
+/area/asteroid/snow_outer
+	name = "\improper Snow Asteroid - Outer Wall"
+	icon_state = "sno"
+
 /area/planet/clown
 	name = "\improper Clown Planet"
 	icon_state = "honk"
@@ -2315,6 +2324,10 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Satellite Entrance"
 	icon_state = "tcomsatlob"
 	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	jammed=2
+	anti_ethereal=1
+	flags = NO_PACIFICATION
+
 
 /area/turret_protected/tcomfoyer
 	name = "\improper Telecoms Foyer"
@@ -2325,19 +2338,35 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Telecommunications Satellite West Wing"
 	icon_state = "tcomsatwest"
 	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	jammed=2
+	anti_ethereal=1
+	flags = NO_PACIFICATION
+
 
 /area/turret_protected/tcomeast
 	name = "\improper Telecommunications Satellite East Wing"
 	icon_state = "tcomsateast"
 	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	jammed=2
+	anti_ethereal=1
+	flags = NO_PACIFICATION
+
 
 /area/tcommsat/computer
 	name = "\improper Satellite Control Room"
 	icon_state = "tcomsatcomp"
+	jammed=2
+	anti_ethereal=1
+	flags = NO_PACIFICATION
+
 
 /area/tcommsat/lounge
 	name = "\improper Satellite Lounge"
 	icon_state = "tcomsatlounge"
+	jammed=2
+	anti_ethereal=1
+	flags = NO_PACIFICATION
+
 
 /area/turret_protected/goonroom
 	name = "\improper Goonecode Containment"

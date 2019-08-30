@@ -29,6 +29,7 @@ var/const/WIRE_TRANSMIT = 4
 
 /datum/wires/radio/UpdatePulsed(var/index)
 	var/obj/item/device/radio/R = holder
+	..()
 	switch(index)
 		if(WIRE_SIGNAL)
 			R.listening = !R.listening
