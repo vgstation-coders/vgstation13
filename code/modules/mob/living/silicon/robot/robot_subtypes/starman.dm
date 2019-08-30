@@ -32,7 +32,8 @@ var/current_starman_song = null
 	src.add_spell(new /spell/targeted/starman_shield)
 	src.add_spell(new /spell/targeted/starman_warp)
 
-/mob/living/silicon/robot/updatename(var/prefix)
+/mob/living/silicon/robot/starman/updatename(var/prefix)
+	
 	var/greek_alphabet = list("Alpha", "Beta", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", \
 						 "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega")
 	name = "[Starman [pick(greek_alphabet)]"

@@ -1,20 +1,7 @@
-#define FED_PING_DELAY 40
-
-#define SCAN_COUNT_MIN_WEAKSTR 3
-#define SCAN_COUNT_MIN_TARGET 4
-
-#define INCUBATOR_DISH1_GROWTH	1
-#define INCUBATOR_DISH1_REAGENT	2
-#define INCUBATOR_DISH1_MAJOR	4
-#define INCUBATOR_DISH1_MINOR	8
-#define INCUBATOR_DISH2_GROWTH	16
-#define INCUBATOR_DISH2_REAGENT	32
-#define INCUBATOR_DISH2_MAJOR	64
-#define INCUBATOR_DISH2_MINOR	128
-#define INCUBATOR_DISH3_GROWTH	256
-#define INCUBATOR_DISH3_REAGENT	512
-#define INCUBATOR_DISH3_MAJOR	1024
-#define INCUBATOR_DISH3_MINOR	2048
+#define INCUBATOR_DISH_GROWTH  (1 << 0)
+#define INCUBATOR_DISH_REAGENT (1 << 1)
+#define INCUBATOR_DISH_MAJOR   (1 << 2)
+#define INCUBATOR_DISH_MINOR   (1 << 3)
 
 /obj/machinery/disease2/incubator
 	name = "pathogenic incubator"
@@ -32,37 +19,14 @@
 	idle_power_usage = 100
 	active_power_usage = 200
 
-	var/obj/item/weapon/virusdish/dish1
-	var/obj/item/weapon/virusdish/dish2
-	var/obj/item/weapon/virusdish/dish3
+	// Contains instances of /dish_incubator_dish.
+	var/list/dish_data = list(null, null, null)
 
-	var/major_dish1 = 0
-	var/major_dish2 = 0
-	var/major_dish3 = 0
-
-	var/minor_dish1 = list(
-		"strength" = 0,
-		"robustness" = 0,
-		"effects" = 0,
-		)
-	var/minor_dish2 = list(
-		"strength" = 0,
-		"robustness" = 0,
-		"effects" = 0,
-		)
-	var/minor_dish3 = list(
-		"strength" = 0,
-		"robustness" = 0,
-		"effects" = 0,
-		)
-
-	var/on = 0
-
-	var/updates = 0
-	var/updates_new = 0
+	var/on = FALSE
 
 	var/mutatechance = 5
 	var/growthrate = 3
+
 
 /obj/machinery/disease2/incubator/New()
 	. = ..()
@@ -78,6 +42,7 @@
 
 	RefreshParts()
 
+
 /obj/machinery/disease2/incubator/RefreshParts()
 	var/scancount = 0
 	var/lasercount = 0
@@ -89,313 +54,229 @@
 	mutatechance = initial(mutatechance) * max(1, scancount)
 	growthrate = initial(growthrate) + lasercount
 
+
 /obj/machinery/disease2/incubator/attackby(var/obj/I, var/mob/user)
 	. = ..()
 
-	if(stat & (BROKEN))
+	if (stat & (BROKEN))
 		to_chat(user, "<span class='warning'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return FALSE
 
-	if(.)
+	if (.)
 		return
 
-	if (istype(I,/obj/item/weapon/virusdish))
-		addDish(I,user)
-		updateUsrDialog()
-		return TRUE
+	if (istype(I, /obj/item/weapon/virusdish))
+		for (var/i in 1 to dish_data.len)
+			if (dish_data[i] == null) // Empty slot
+				addDish(I, user, i)
+				nanomanager.update_uis(src)
+				return TRUE
 
-/obj/machinery/disease2/incubator/proc/addDish(var/obj/item/weapon/virusdish/VD,var/mob/user,var/force_slot = 0)
-	if (VD.open)
-		if (!force_slot)
-			if (!dish1)
-				dish1 = VD
-			else if (!dish2)
-				dish2 = VD
-			else if (!dish3)
-				dish3 = VD
-			else
-				to_chat(user,"<span class='warning'>There is no more room inside \the [src]. Remove a dish first.</span>")
-				return null
-		else
-			switch (force_slot)
-				if (1)
-					if (!dish1)
-						dish1 = VD
-					else
-						to_chat(user,"<span class='warning'>This slot is already occupied. Remove the dish first.</span>")
-						return null
-				if (2)
-					if (!dish2)
-						dish2 = VD
-					else
-						to_chat(user,"<span class='warning'>This slot is already occupied. Remove the dish first.</span>")
-						return null
-				if (3)
-					if (!dish3)
-						dish3 = VD
-					else
-						to_chat(user,"<span class='warning'>This slot is already occupied. Remove the dish first.</span>")
-						return null
-		visible_message("<span class='notice'>\The [user] adds \the [VD] to \the [src].</span>","<span class='notice'>You add \the [VD] to \the [src].</span>")
-		playsound(loc, 'sound/machines/click.ogg', 50, 1)
-		user.drop_item(VD, loc, 1)
-		VD.forceMove(src)
-		update_icon()
-		return VD
-	else
+		to_chat(user, "<span class='warning'>There is no more room inside \the [src]. Remove a dish first.</span>")
+		return FALSE
+
+
+/obj/machinery/disease2/incubator/proc/addDish(var/obj/item/weapon/virusdish/VD, var/mob/user, var/slot)
+	if (!VD.open)
 		to_chat(user, "<span class='warning'>You must open the dish's lid before it can be put inside the incubator. Be sure to wear proper protection first (at least a sterile mask and latex gloves).</span>")
+		return
+
+	if (dish_data[slot] != null)
+		to_chat(user,"<span class='warning'>This slot is already occupied. Remove the dish first.</span>")
+		return
+
+	if (!user.drop_item(VD, src))
+		return
+
+	var/dish_incubator_dish/dish_datum = new
+	dish_datum.dish = VD
+	dish_data[slot] = dish_datum
+
+	visible_message("<span class='notice'>\The [user] adds \the [VD] to \the [src].</span>","<span class='notice'>You add \the [VD] to \the [src].</span>")
+	playsound(loc, 'sound/machines/click.ogg', 50, 1)
+	update_icon()
+
 
 /obj/machinery/disease2/incubator/Topic(href, href_list)
-	if(..())
-		return 1
-
-	if(href_list["close"])
-		usr << browse(null, "\ref[src]")
-		usr.unset_machine()
-		return 1
-
-	usr.set_machine(src)
+	. = ..()
+	if (.)
+		return
 
 	if (href_list["power"])
 		on = !on
+		if (on)
+			for (var/dish_incubator_dish/dish_datum in dish_data)
+				if (dish_datum.dish.contained_virus)
+					dish_datum.dish.contained_virus.log += "<br />[timestamp()] Incubation started by [key_name(usr)]"
+
 		update_icon()
-		if(on)
-			if(dish1 && dish1.contained_virus)
-				dish1.contained_virus.log += "<br />[timestamp()] Incubation started by [key_name(usr)]"
-			if(dish2 && dish2.contained_virus)
-				dish2.contained_virus.log += "<br />[timestamp()] Incubation started by [key_name(usr)]"
-			if(dish3 && dish3.contained_virus)
-				dish3.contained_virus.log += "<br />[timestamp()] Incubation started by [key_name(usr)]"
+		return TRUE
 
-	else if (href_list["ejectdish"])
-		switch (href_list["ejectdish"])
-			if ("1")
-				if(dish1)
-					dish1.forceMove(src.loc)
-					if (Adjacent(usr))
-						dish1.forceMove(usr.loc)
-						usr.put_in_hands(dish1)
-					dish1.update_icon()
-					dish1 = null
-					major_dish1 = 0
-					minor_dish1 = list(
-						"strength" = 0,
-						"robustness" = 0,
-						"effects" = 0,
-						)
-					updates &= ~INCUBATOR_DISH1_GROWTH
-					updates_new &= ~INCUBATOR_DISH1_GROWTH
-					updates &= ~INCUBATOR_DISH1_MAJOR
-					updates_new &= ~INCUBATOR_DISH1_MAJOR
-					updates &= ~INCUBATOR_DISH1_MINOR
-					updates_new &= ~INCUBATOR_DISH1_MINOR
-					update_icon()
-			if ("2")
-				if(dish2)
-					dish2.forceMove(src.loc)
-					if (Adjacent(usr))
-						dish2.forceMove(usr.loc)
-						usr.put_in_hands(dish2)
-					dish2.update_icon()
-					dish2 = null
-					major_dish2 = 0
-					minor_dish2 = list(
-						"strength" = 0,
-						"robustness" = 0,
-						"effects" = 0,
-						)
-					updates &= ~INCUBATOR_DISH2_GROWTH
-					updates_new &= ~INCUBATOR_DISH2_GROWTH
-					updates &= ~INCUBATOR_DISH2_MAJOR
-					updates_new &= ~INCUBATOR_DISH2_MAJOR
-					updates &= ~INCUBATOR_DISH2_MINOR
-					updates_new &= ~INCUBATOR_DISH2_MINOR
-					update_icon()
-			if ("3")
-				if(dish3)
-					dish3.forceMove(src.loc)
-					if (Adjacent(usr))
-						dish3.forceMove(usr.loc)
-						usr.put_in_hands(dish3)
-					dish3.update_icon()
-					dish3 = null
-					major_dish3 = 0
-					minor_dish3 = list(
-						"strength" = 0,
-						"robustness" = 0,
-						"effects" = 0,
-						)
-					updates &= ~INCUBATOR_DISH3_GROWTH
-					updates_new &= ~INCUBATOR_DISH3_GROWTH
-					updates &= ~INCUBATOR_DISH3_MAJOR
-					updates_new &= ~INCUBATOR_DISH3_MAJOR
-					updates &= ~INCUBATOR_DISH3_MINOR
-					updates_new &= ~INCUBATOR_DISH3_MINOR
-					update_icon()
+	if (href_list["ejectdish"])
+		var/slot = text2num(href_list["ejectdish"])
+		if (slot == null || slot < 1 || slot > dish_data.len)
+			return TRUE
 
-	else if (href_list["insertdish"])
-		var/mob/living/M
-		if (isliving(usr))
-			M = usr
-		if (!M)
-			return
-		var/obj/item/weapon/virusdish/VD = M.get_active_hand()
+		var/dish_incubator_dish/dish_datum = dish_data[slot]
+		if (dish_datum == null)
+			return TRUE
+
+		dish_datum.dish.forceMove(loc)
+		if (Adjacent(usr))
+			usr.put_in_hands(dish_datum.dish)
+
+		dish_datum.dish.update_icon()
+		dish_data[slot] = null
+		update_icon()
+		return TRUE
+
+	if (href_list["insertdish"])
+		var/slot = text2num(href_list["insertdish"])
+		if (slot == null || slot < 1 || slot > dish_data.len)
+			return TRUE
+
+		var/mob/living/user = usr
+		if (!isliving(user))
+			return TRUE
+
+		var/obj/item/weapon/virusdish/VD = user.get_active_hand()
 		if (istype(VD))
-			addDish(VD,M,text2num(href_list["insertdish"]))
+			addDish(VD, user, slot)
+
 		update_icon()
+		return TRUE
 
-	else if (href_list["examinedish"])
-		switch (href_list["examinedish"])
-			if ("1")
-				if(dish1)
-					dish1.examine(usr)
-			if ("2")
-				if(dish2)
-					dish2.examine(usr)
-			if ("3")
-				if(dish3)
-					dish3.examine(usr)
+	if (href_list["examinedish"])
+		var/slot = text2num(href_list["examinedish"])
+		if (slot == null || slot < 1 || slot > dish_data.len)
+			return TRUE
 
-	else if (href_list["flushdish"])
-		switch (href_list["flushdish"])
-			if("1")
-				dish1.reagents.clear_reagents()
-			if("2")
-				dish2.reagents.clear_reagents()
-			if("3")
-				dish3.reagents.clear_reagents()
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
+		var/dish_incubator_dish/dish_datum = dish_data[slot]
+		if (dish_datum == null)
+			return TRUE
+
+		dish_datum.dish.examine(usr)
+		return TRUE
+
+	if (href_list["flushdish"])
+		var/slot = text2num(href_list["flushdish"])
+		if (slot == null || slot < 1 || slot > dish_data.len)
+			return TRUE
+
+		var/dish_incubator_dish/dish_datum = dish_data[slot]
+		if (dish_datum == null)
+			return TRUE
+
+		dish_datum.dish.reagents.clear_reagents()
+		return TRUE
+
 
 /obj/machinery/disease2/incubator/attack_hand(var/mob/user)
 	. = ..()
-	if(stat & (BROKEN))
+	if (stat & (BROKEN))
 		to_chat(user, "<span class='notice'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return
 
-	if(stat & (NOPOWER))
+	if (stat & (NOPOWER))
 		to_chat(user, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
-		updates = 0
-		updates_new = 0
-		major_dish1 = 0
-		major_dish2 = 0
-		major_dish3 = 0
-		minor_dish1 = list(
-			"strength" = 0,
-			"robustness" = 0,
-			"effects" = 0,
-			)
-		minor_dish2 = list(
-			"strength" = 0,
-			"robustness" = 0,
-			"effects" = 0,
-			)
-		minor_dish3 = list(
-			"strength" = 0,
-			"robustness" = 0,
-			"effects" = 0,
-			)
-		if (dish1)
+		for (var/i in 1 to dish_data.len)
+			var/dish_incubator_dish/dish_datum = dish_data[i]
+			if (dish_datum == null)
+				continue
+
 			playsound(loc, 'sound/machines/click.ogg', 50, 1)
-			dish1.forceMove(loc)
-			dish1 = null
+			dish_datum.dish.forceMove(loc)
 			update_icon()
-		sleep(1)
-		if (dish2)
-			playsound(loc, 'sound/machines/click.ogg', 50, 1)
-			dish2.forceMove(loc)
-			dish2 = null
-			update_icon()
-		sleep(1)
-		if (dish3)
-			playsound(loc, 'sound/machines/click.ogg', 50, 1)
-			dish3.forceMove(loc)
-			dish3 = null
-			update_icon()
+			dish_data[i] = null
+			sleep(1)
+
 		return
 
-
-	if(.)
+	if (.)
 		return
-	user.set_machine(src)
 
-	var/dat = ""
-	dat += "Power status: <A href='?src=\ref[src];power=1'>[on?"On":"Off"]</a>"
-	dat += "<hr>"
-	if(dish1)
-		dat += "<A href='?src=\ref[src];ejectdish=1'>[dish1.name] (Growth: <b>[dish1.growth]%</b>)</a> <A href='?src=\ref[src];examinedish=1'>(?)</a>[dish1.reagents.is_empty() ? "" : " <A href='?src=\ref[src];flushdish=1'>Flush Reagents ([dish1.reagents.total_volume]u)</a>"][major_dish1 ? " (Major Mutations: [major_dish1])" : ""][((minor_dish1["strength"] != 0) || (minor_dish1["robustness"] != 0) || (minor_dish1["effects"] != 0)) ? " (Minor Mutations: str=[minor_dish1["strength"]]|rob=[minor_dish1["robustness"]]|eff=[minor_dish1["effects"]])" : ""]"
-	else
-		dat += "<A href='?src=\ref[src];insertdish=1'>Insert a dish</a>"
-	dat += "<BR>"
-	if(dish2)
-		dat += "<A href='?src=\ref[src];ejectdish=2'>[dish2.name] (Growth: <b>[dish2.growth]%</b>)</a> <A href='?src=\ref[src];examinedish=2'>(?)</a>[dish2.reagents.is_empty() ? "" : " <A href='?src=\ref[src];flushdish=2'>Flush Reagents ([dish2.reagents.total_volume]u)</a>"][major_dish2 ? " (Major Mutations: [major_dish2])" : ""][((minor_dish2["strength"] != 0) || (minor_dish2["robustness"] != 0) || (minor_dish2["effects"] != 0)) ? " (Minor Mutations: str=[minor_dish2["strength"]]|rob=[minor_dish2["robustness"]]|eff=[minor_dish2["effects"]])" : ""]"
-	else
-		dat += "<A href='?src=\ref[src];insertdish=2'>Insert a dish</a>"
-	dat += "<BR>"
-	if(dish3)
-		dat += "<A href='?src=\ref[src];ejectdish=3'>[dish3.name] (Growth: <b>[dish3.growth]%</b>)</a> <A href='?src=\ref[src];examinedish=3'>(?)</a>[dish3.reagents.is_empty() ? "" : " <A href='?src=\ref[src];flushdish=3'>Flush Reagents ([dish3.reagents.total_volume]u)</a>"][major_dish3 ? " (Major Mutations: [major_dish3])" : ""][((minor_dish3["strength"] != 0) || (minor_dish3["robustness"] != 0) || (minor_dish3["effects"] != 0)) ? " (Minor Mutations: str=[minor_dish3["strength"]]|rob=[minor_dish3["robustness"]]|eff=[minor_dish3["effects"]])" : ""]"
-	else
-		dat += "<A href='?src=\ref[src];insertdish=3'>Insert a dish</a>"
-	dat += "<hr>"
-	var/datum/browser/popup = new(user, "\ref[src]", "Pathogenic Incubator", 980, 200, src)
-	popup.set_content(dat)
-	popup.open()
+	ui_interact(user)
+
+
+/obj/machinery/disease2/incubator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	// this is the data which will be sent to the ui
+	var/list/data = list()
+
+	data["on"] = on
+	var/list/dish_ui_data = list()
+	data["dishes"] = dish_ui_data
+
+	for (var/i = 1 to dish_data.len)
+		var/dish_incubator_dish/dish_datum = dish_data[i]
+		var/list/dish_ui_datum = list()
+		// tfw no linq
+		dish_ui_data[++dish_ui_data.len] = dish_ui_datum
+
+		var/inserted = dish_datum != null
+		dish_ui_datum["inserted"] = inserted
+		if (!inserted)
+			continue
+
+		dish_ui_datum["name"] = dish_datum.dish.name
+		dish_ui_datum["growth"] = dish_datum.dish.growth
+		dish_ui_datum["reagents_volume"] = dish_datum.dish.reagents.total_volume
+		dish_ui_datum["major_mutations"] = dish_datum.major_mutations_count
+		dish_ui_datum["minor_mutations_strength"] = dish_datum.minor_mutation_strength
+		dish_ui_datum["minor_mutations_robustness"] = dish_datum.minor_mutation_robustness
+		dish_ui_datum["minor_mutations_effects"] = dish_datum.minor_mutation_effects
+
+
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	if (!ui)
+		ui = new(user, src, ui_key, "dish_incubator.tmpl", "Pathogenic Incubator", 800, 400)
+		ui.set_initial_data(data)
+		ui.open()
+
 
 /obj/machinery/disease2/incubator/process()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 
-	if(on)
-		use_power = 2
-		if (dish1)
-			dish1.incubate(mutatechance,growthrate)
-		if (dish2)
-			dish2.incubate(mutatechance,growthrate)
-		if (dish3)
-			dish3.incubate(mutatechance,growthrate)
+	if (on)
+		use_power = MACHINE_POWER_USE_ACTIVE
+		for (var/dish_incubator_dish/dish_datum in dish_data)
+			dish_datum.dish.incubate(mutatechance, growthrate)
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 	update_icon()
-	updateUsrDialog()
+	nanomanager.update_uis(src)
+
+
+/obj/machinery/disease2/incubator/proc/find_dish_datum(var/obj/item/weapon/virusdish/dish)
+	for (var/dish_incubator_dish/dish_datum in dish_data)
+		if (dish_datum.dish == dish)
+			return dish_datum
+
+	return null
+
 
 /obj/machinery/disease2/incubator/proc/update_major(var/obj/item/weapon/virusdish/dish)
-	if (!istype(dish))
+	var/dish_incubator_dish/dish_datum = find_dish_datum(dish)
+	if (dish_datum == null)
 		return
-	if (dish == dish1)
-		updates_new |= INCUBATOR_DISH1_MAJOR
-		updates &= ~INCUBATOR_DISH1_MAJOR
-		major_dish1++
-	else if (dish == dish2)
-		updates_new |= INCUBATOR_DISH2_MAJOR
-		updates &= ~INCUBATOR_DISH2_MAJOR
-		major_dish2++
-	else if (dish == dish3)
-		updates_new |= INCUBATOR_DISH3_MAJOR
-		updates &= ~INCUBATOR_DISH3_MAJOR
-		major_dish3++
 
-/obj/machinery/disease2/incubator/proc/update_minor(var/obj/item/weapon/virusdish/dish,var/str=0,var/rob=0,var/eff=0)
-	if (!istype(dish))
+	dish_datum.updates_new |= INCUBATOR_DISH_MAJOR
+	dish_datum.updates &= ~INCUBATOR_DISH_MAJOR
+	dish_datum.major_mutations_count++
+
+
+/obj/machinery/disease2/incubator/proc/update_minor(var/obj/item/weapon/virusdish/dish, var/str=0, var/rob=0, var/eff=0)
+	var/dish_incubator_dish/dish_datum = find_dish_datum(dish)
+	if (dish_datum == null)
 		return
-	if (dish == dish1)
-		updates_new |= INCUBATOR_DISH1_MINOR
-		updates &= ~INCUBATOR_DISH1_MINOR
-		minor_dish1["strength"] += str
-		minor_dish1["robustness"] += rob
-		minor_dish1["effects"] += eff
-	else if (dish == dish2)
-		updates_new |= INCUBATOR_DISH2_MINOR
-		updates &= ~INCUBATOR_DISH2_MINOR
-		minor_dish2["strength"] += str
-		minor_dish2["robustness"] += rob
-		minor_dish2["effects"] += eff
-	else if (dish == dish3)
-		updates_new |= INCUBATOR_DISH3_MINOR
-		updates &= ~INCUBATOR_DISH3_MINOR
-		minor_dish3["strength"] += str
-		minor_dish3["robustness"] += rob
-		minor_dish3["effects"] += eff
+
+	dish_datum.updates_new |= INCUBATOR_DISH_MINOR
+	dish_datum.updates &= ~INCUBATOR_DISH_MINOR
+	dish_datum.minor_mutation_strength += str;
+	dish_datum.minor_mutation_robustness += rob;
+	dish_datum.minor_mutation_effects += eff;
+
 
 /obj/machinery/disease2/incubator/update_icon()
 	overlays.len = 0
@@ -429,14 +310,14 @@
 		else
 			set_light(2,1)
 
-	if (dish1)
-		add_dish_sprite(dish1,1)
-	if (dish2)
-		add_dish_sprite(dish2,2)
-	if (dish3)
-		add_dish_sprite(dish3,3)
+	for (var/i = 1 to dish_data.len)
+		if (dish_data[i] != null)
+			add_dish_sprite(dish_data[i], i)
 
-/obj/machinery/disease2/incubator/proc/add_dish_sprite(var/obj/item/weapon/virusdish/dish, var/slot = 1)
+
+/obj/machinery/disease2/incubator/proc/add_dish_sprite(var/dish_incubator_dish/dish_datum, var/slot)
+	var/obj/item/weapon/virusdish/dish = dish_datum.dish
+
 	slot--
 	var/image/dish_outline = image(icon,"smalldish2-outline")
 	dish_outline.alpha = 128
@@ -460,22 +341,11 @@
 			grown_gauge.icon_state = "incubator_growth[min(6,max(1,round(dish.growth*70/1000)))]"
 		else
 			var/update = FALSE
-			switch(slot)
-				if (0)
-					if (!(updates & INCUBATOR_DISH1_GROWTH))
-						updates += INCUBATOR_DISH1_GROWTH
-						update = TRUE
-						alert_noise("ping")
-				if (1)
-					if (!(updates & INCUBATOR_DISH2_GROWTH))
-						updates += INCUBATOR_DISH2_GROWTH
-						update = TRUE
-						alert_noise("ping")
-				if (2)
-					if (!(updates & INCUBATOR_DISH3_GROWTH))
-						updates += INCUBATOR_DISH3_GROWTH
-						update = TRUE
-						alert_noise("ping")
+			if (!(dish_datum.updates & INCUBATOR_DISH_GROWTH))
+				dish_datum.updates += INCUBATOR_DISH_GROWTH
+				update = TRUE
+				alert_noise("ping")
+
 			if (update)
 				var/image/grown_light = image(icon,"incubator_grown_update")
 				grown_light.pixel_y = -5 * slot
@@ -488,22 +358,14 @@
 				grown_light.plane = LIGHTING_PLANE
 				grown_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += grown_light
+
 		overlays += grown_gauge
 		if (dish.reagents.total_volume < 0.02)
 			var/update = FALSE
-			switch(slot)
-				if (0)
-					if (!(updates & INCUBATOR_DISH1_REAGENT))
-						updates += INCUBATOR_DISH1_REAGENT
-						update = TRUE
-				if (1)
-					if (!(updates & INCUBATOR_DISH2_REAGENT))
-						updates += INCUBATOR_DISH2_REAGENT
-						update = TRUE
-				if (2)
-					if (!(updates & INCUBATOR_DISH3_REAGENT))
-						updates += INCUBATOR_DISH3_REAGENT
-						update = TRUE
+			if (!(dish_datum.updates & INCUBATOR_DISH_REAGENT))
+				dish_datum.updates += INCUBATOR_DISH_REAGENT
+				update = TRUE
+
 			if (update)
 				var/image/reagents_light = image(icon,"incubator_reagents_update")
 				reagents_light.pixel_y = -5 * slot
@@ -516,121 +378,63 @@
 				reagents_light.plane = LIGHTING_PLANE
 				reagents_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += reagents_light
-		switch(slot)
-			if (0)
-				if (updates_new & INCUBATOR_DISH1_MAJOR)
-					if (!(updates & INCUBATOR_DISH1_MAJOR))
-						updates += INCUBATOR_DISH1_MAJOR
-						var/image/effect_light = image(icon,"incubator_major_update")
-						effect_light.pixel_y = -5 * slot
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						overlays += effect_light
-						alert_noise("beep")
-					else
-						var/image/effect_light = image(icon,"incubator_major")
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						effect_light.pixel_y = -5 * slot
-						overlays += effect_light
-				if (updates_new & INCUBATOR_DISH1_MINOR)
-					if (!(updates & INCUBATOR_DISH1_MINOR))
-						updates += INCUBATOR_DISH1_MINOR
-						var/image/effect_light = image(icon,"incubator_minor_update")
-						effect_light.pixel_y = -5 * slot
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						overlays += effect_light
-					else
-						var/image/effect_light = image(icon,"incubator_minor")
-						effect_light.pixel_y = -5 * slot
-						overlays += effect_light
-			if (1)
-				if (updates_new & INCUBATOR_DISH2_MAJOR)
-					if (!(updates & INCUBATOR_DISH2_MAJOR))
-						updates += INCUBATOR_DISH2_MAJOR
-						var/image/effect_light = image(icon,"incubator_major_update")
-						effect_light.pixel_y = -5 * slot
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						overlays += effect_light
-						alert_noise("beep")
-					else
-						var/image/effect_light = image(icon,"incubator_major")
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						effect_light.pixel_y = -5 * slot
-						overlays += effect_light
-				if (updates_new & INCUBATOR_DISH2_MINOR)
-					if (!(updates & INCUBATOR_DISH2_MINOR))
-						updates += INCUBATOR_DISH2_MINOR
-						var/image/effect_light = image(icon,"incubator_minor_update")
-						effect_light.pixel_y = -5 * slot
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						overlays += effect_light
-					else
-						var/image/effect_light = image(icon,"incubator_minor")
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						effect_light.pixel_y = -5 * slot
-						overlays += effect_light
-			if (2)
-				if (updates_new & INCUBATOR_DISH3_MAJOR)
-					if (!(updates & INCUBATOR_DISH3_MAJOR))
-						updates += INCUBATOR_DISH3_MAJOR
-						var/image/effect_light = image(icon,"incubator_major_update")
-						effect_light.pixel_y = -5 * slot
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						overlays += effect_light
-						alert_noise("beep")
-					else
-						var/image/effect_light = image(icon,"incubator_major")
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						effect_light.pixel_y = -5 * slot
-						overlays += effect_light
-				if (updates_new & INCUBATOR_DISH3_MINOR)
-					if (!(updates & INCUBATOR_DISH3_MINOR))
-						updates += INCUBATOR_DISH3_MINOR
-						var/image/effect_light = image(icon,"incubator_minor_update")
-						effect_light.pixel_y = -5 * slot
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						overlays += effect_light
-					else
-						var/image/effect_light = image(icon,"incubator_minor")
-						effect_light.plane = LIGHTING_PLANE
-						effect_light.layer = ABOVE_LIGHTING_LAYER
-						effect_light.pixel_y = -5 * slot
-						overlays += effect_light
 
+		if (dish_datum.updates_new & INCUBATOR_DISH_MAJOR)
+			if (!(dish_datum.updates & INCUBATOR_DISH_MAJOR))
+				dish_datum.updates += INCUBATOR_DISH_MAJOR
+				var/image/effect_light = image(icon,"incubator_major_update")
+				effect_light.pixel_y = -5 * slot
+				effect_light.plane = LIGHTING_PLANE
+				effect_light.layer = ABOVE_LIGHTING_LAYER
+				overlays += effect_light
+				alert_noise("beep")
+			else
+				var/image/effect_light = image(icon,"incubator_major")
+				effect_light.plane = LIGHTING_PLANE
+				effect_light.layer = ABOVE_LIGHTING_LAYER
+				effect_light.pixel_y = -5 * slot
+				overlays += effect_light
+
+		if (dish_datum.updates_new & INCUBATOR_DISH_MINOR)
+			if (!(dish_datum.updates & INCUBATOR_DISH_MINOR))
+				dish_datum.updates += INCUBATOR_DISH_MINOR
+				var/image/effect_light = image(icon,"incubator_minor_update")
+				effect_light.pixel_y = -5 * slot
+				effect_light.plane = LIGHTING_PLANE
+				effect_light.layer = ABOVE_LIGHTING_LAYER
+				overlays += effect_light
+			else
+				var/image/effect_light = image(icon,"incubator_minor")
+				effect_light.pixel_y = -5 * slot
+				overlays += effect_light
 
 
 /obj/machinery/disease2/incubator/breakdown()
-	updates = 0
-	updates_new = 0
-	if (dish1)
-		dish1.forceMove(loc)
-	if (dish2)
-		dish2.forceMove(loc)
-	if (dish3)
-		dish3.forceMove(loc)
-	dish1 = null
-	dish2 = null
-	dish3 = null
+	for (var/i in 1 to dish_data.len)
+		var/dish_incubator_dish/dish_datum = dish_data[i]
+		if (dish_datum == null)
+			continue
+
+		dish_datum.dish.forceMove(loc)
+		dish_data[i] = null
+
 	..()
 
-#undef INCUBATOR_DISH1_GROWTH
-#undef INCUBATOR_DISH1_REAGENT
-#undef INCUBATOR_DISH1_MAJOR
-#undef INCUBATOR_DISH1_MINOR
-#undef INCUBATOR_DISH2_GROWTH
-#undef INCUBATOR_DISH2_REAGENT
-#undef INCUBATOR_DISH2_MAJOR
-#undef INCUBATOR_DISH2_MINOR
-#undef INCUBATOR_DISH3_GROWTH
-#undef INCUBATOR_DISH3_REAGENT
-#undef INCUBATOR_DISH3_MAJOR
-#undef INCUBATOR_DISH3_MINOR
+
+/dish_incubator_dish
+	// The inserted virus dish.
+	var/obj/item/weapon/virusdish/dish
+
+	var/major_mutations_count = 0
+
+	var/minor_mutation_strength = 0
+	var/minor_mutation_robustness = 0
+	var/minor_mutation_effects = 0
+
+	var/updates_new = 0
+	var/updates = 0
+
+#undef INCUBATOR_DISH_GROWTH
+#undef INCUBATOR_DISH_REAGENT
+#undef INCUBATOR_DISH_MAJOR
+#undef INCUBATOR_DISH_MINOR

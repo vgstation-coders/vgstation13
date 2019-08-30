@@ -11,7 +11,7 @@
 									//if excavation hits var/excavation_required exactly, it's contained find is extracted cleanly without the ore
 	var/prob_delicate = 90			//probability it requires an active suspension field to not insta-crumble
 	var/dissonance_spread = 1		//proportion of the tile that is affected by this find
-	var/responsive_reagent
+	var/responsive_reagent = PLASMA
 	var/apply_material_decorations = FALSE
 	var/apply_image_decorations = FALSE
 	var/material_descriptor = ""
@@ -503,6 +503,7 @@
 /datum/find/stock_parts //Tier 4 parts
 	find_ID = ARCHAEO_STOCKPARTS
 	apply_material_decorations = FALSE
+	responsive_reagent = IRON
 	anomaly_factor = 2
 
 /datum/find/stock_parts/spawn_item()
