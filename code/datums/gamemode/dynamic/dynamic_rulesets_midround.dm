@@ -450,8 +450,8 @@
 	newninja.Greet(GREET_MIDROUND)
 	newninja.ForgeObjectives()
 	newninja.AnnounceObjectives()
-	spawn(5)
-		newninja.antag.current.ThrowAtStation()
+	if(!newninja.antag.current.ThrowAtStation())
+		newninja.antag.current.spawn_rand_maintenance()
 	return 1
 
 //////////////////////////////////////////////
