@@ -1,8 +1,9 @@
 var/list/black_market_items = list()
 
-#define CHEAP 1
-#define NORMAL 2
-#define EXPENSIVE 3
+//BM stands for black market
+#define BM_CHEAP 1
+#define BM_NORMAL 2
+#define BM_EXPENSIVE 3
 
 /proc/get_black_market_items()
 	if(!black_market_items.len)
@@ -41,9 +42,9 @@ var/list/black_market_items = list()
 	var/cost_min    //Same as stock
 	var/cost_max
 	var/display_chance = 0   //Out of 100
-	var/list/sps_chances = list(5, 10, 30) //Chance for SPS alert for each delivery method out of 100. Cheap, Normal, Expensive.
-	var/list/delivery_fees = list(0,0.3,0.6) //Delivery fees are a percentage of the base cost. E.g. expensive will be base + 0.6*base. Cheap, Normal, Expensive.
-	var/list/delivery_available = list(1,1,1) //Disables the given delivery method if it is 0. Cheap, Normal, Expensive
+	var/list/sps_chances = list(5, 10, 30) //Chance for SPS alert for each delivery method out of 100. BM_CHEAP, BM_NORMAL, BM_EXPENSIVE.
+	var/list/delivery_fees = list(0,0.3,0.6) //Delivery fees are a percentage of the base cost. E.g. BM_EXPENSIVE will be base + 0.6*base. BM_CHEAP, BM_NORMAL, BM_EXPENSIVE.
+	var/list/delivery_available = list(1,1,1) //Disables the given delivery method if it is 0. BM_CHEAP, BM_NORMAL, BM_EXPENSIVE
 
 	var/round_stock                         //God I love if statements
 	var/round_stock_calculated = 0          //Allows for round-to-round variance instead of changing every time you open it
@@ -107,11 +108,11 @@ var/list/black_market_items = list()
 		return FALSE
 
 	switch(delivery_method)
-		if(CHEAP)
+		if(BM_CHEAP)
 			spawn_cheap(radio,user)
-		if(NORMAL)
+		if(BM_NORMAL)
 			spawn_normal(radio,user)
-		if(EXPENSIVE)
+		if(BM_EXPENSIVE)
 			spawn_expensive(radio,user)
 
 /datum/black_market_item/proc/spawn_cheap(var/obj/item/device/illegalradio/radio, var/mob/user)
@@ -129,7 +130,7 @@ var/list/black_market_items = list()
 
 	log_transaction("The item was launched at the station from the [direction_string].", user)
 	radio.visible_message("The [radio.name] beeps: <span class='warning'>Your item was launched from the [direction_string]. It will impact the station in less than a minute.</span>")
-	process_transaction(radio, CHEAP)
+	process_transaction(radio, BM_CHEAP)
 	radio.interact(user)
 
 	spawn(rand(15 SECONDS, 45 SECONDS))
@@ -137,14 +138,14 @@ var/list/black_market_items = list()
 		if(!spawned_item)
 			if(radio)
 				radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
-				radio.money_stored += get_cost()*delivery_fees[CHEAP]
+				radio.money_stored += get_cost()*delivery_fees[BM_CHEAP]
 			if(round_stock != -1)
 				round_stock += 1
 			return 0
-		after_spawn(spawned_item,CHEAP,user)
+		after_spawn(spawned_item,BM_CHEAP,user)
 		spawned_item.ThrowAtStation(30,0.4,direction)
 		spawn(rand(30 SECONDS, 60 SECONDS))
-			if(!radio.nanotrasen_variant && prob(sps_chances[CHEAP]))
+			if(!radio.nanotrasen_variant && prob(sps_chances[BM_CHEAP]))
 				SPS_black_market_alert("Centcomm has detected a black market purchase of item: [name]. It was launched at the station recently.")
 
 
@@ -177,27 +178,27 @@ var/locations_calculated = 0
 	var/time_to_spawn = rand(30 SECONDS, 60 SECONDS)
 	log_transaction("The item was teleported to the [selected_area.name].", user)
 	radio.visible_message("The [radio.name] beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
-	process_transaction(radio, NORMAL)
+	process_transaction(radio, BM_NORMAL)
 	radio.interact(user)
 
 	spawn(time_to_spawn)
-		var/obj/spawned_item = new item(spawnloc)
-		after_spawn(spawned_item,NORMAL,user)
+		var/obj/spawned_item = new item(spawnloc,user)
+		after_spawn(spawned_item,BM_NORMAL,user)
 		spawn(rand(30 SECONDS, 60 SECONDS))
-			if(!radio.nanotrasen_variant && prob(sps_chances[NORMAL]))
+			if(!radio.nanotrasen_variant && prob(sps_chances[BM_NORMAL]))
 				SPS_black_market_alert("Centcomm has detected a black market purchase of item: [name]. It was teleported to your station's maintenance recently.")
 
 /datum/black_market_item/proc/spawn_expensive(var/obj/item/device/illegalradio/radio, var/mob/user)
-	process_transaction(radio, EXPENSIVE)
-	var/obj/spawned_item = new item(get_turf(user))
+	process_transaction(radio, BM_EXPENSIVE)
+	var/obj/spawned_item = new item(get_turf(user),user)
 	if(!spawned_item)
 		if(radio)
 			radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
-			radio.money_stored += get_cost()*delivery_fees[EXPENSIVE]
+			radio.money_stored += get_cost()*delivery_fees[BM_EXPENSIVE]
 		if(round_stock != -1)
 			round_stock += 1
 		return 0
-	after_spawn(spawned_item,EXPENSIVE,user)
+	after_spawn(spawned_item,BM_EXPENSIVE,user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/A = user
 		if(istype(spawned_item, /obj/item))
@@ -208,7 +209,7 @@ var/locations_calculated = 0
 	radio.interact(user)
 
 	spawn(rand(30 SECONDS, 60 SECONDS))
-		if(!radio.nanotrasen_variant && prob(sps_chances[EXPENSIVE]))
+		if(!radio.nanotrasen_variant && prob(sps_chances[BM_EXPENSIVE]))
 			SPS_black_market_alert("Centcomm has detected a black market purchase of item: [name]. It was teleported directly to the buyer in the past minute.")
 
 
@@ -392,6 +393,6 @@ for anyone but the person committing mass murder.
 	cost_max = 500
 	display_chance = 100
 
-#undef CHEAP
-#undef NORMAL
-#undef EXPENSIVE
+#undef BM_CHEAP
+#undef BM_NORMAL
+#undef BM_EXPENSIVE

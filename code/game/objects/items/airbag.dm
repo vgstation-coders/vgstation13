@@ -13,10 +13,6 @@
 		icon = 'icons/obj/objects.dmi'
 		icon_state = "airbag_deployed"
 		anchored = 1
-		spawn(50)
-			for(var/atom/movable/AM in contents)
-				AM.forceMove(get_turf(src))
-			qdel(src)
 
 /obj/item/airbag/proc/deploy(mob/user)
 	var/obj/item/airbag/deployed_bag = new(get_turf(src), TRUE)
@@ -24,4 +20,9 @@
 		to_chat(user, "<span class='notice'>Your [src.name] deploys!</span>")
 		user.forceMove(deployed_bag)
 	playsound(deployed_bag, 'sound/effects/bamfgas.ogg', 100, 1)
+	qdel(src)
+
+/obj/item/airbag/relaymove(var/mob/user, direction)
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(get_turf(src))
 	qdel(src)
