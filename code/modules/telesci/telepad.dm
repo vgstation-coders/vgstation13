@@ -32,6 +32,13 @@
 		linked.telepad = src
 		return 1
 
+/obj/machinery/telepad/unlinkFrom(mob/user, obj/buffer)
+	if(linked.telepad)
+		linked.telepad = null
+	if(linked)
+		linked = null
+	return 1
+
 /obj/machinery/telepad/canClone(var/obj/machinery/T)
 	return (istype(T, /obj/machinery/computer/telescience) && get_dist(src, T) < 7)
 

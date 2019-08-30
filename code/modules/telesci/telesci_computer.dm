@@ -83,6 +83,13 @@
 		telepad.linked = src
 		return 1
 
+/obj/machinery/computer/telescience/unlinkFrom(mob/user, obj/buffer)
+	if(telepad.linked)
+		telepad.linked = null
+	if(telepad)
+		telepad = null
+	return 1
+
 //Plagiarized conveyor belt multi-tool code
 /obj/machinery/computer/telescience/canClone(var/obj/machinery/T)
 	return (istype(T, /obj/machinery/telepad) && get_dist(src, T) < 7)
