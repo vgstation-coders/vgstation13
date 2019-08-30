@@ -699,9 +699,9 @@ var/list/slot_equipment_priority = list( \
 		slot_r_store\
 	)
 
-/*Equips accessories. 
+/*Equips accessories.
 A is the mob
-B is the accessory. 
+B is the accessory.
 C is what item the accessory will look to be attached to, important.
 D will look how many accessories the item already has, and will move on if its attachment would go above the amount of accessories
 E will stop the proc if a candidate had the accessory attached to it and it is toggled on
@@ -1056,7 +1056,7 @@ Use this proc preferably at the end of an equipment loadout
 //note: ghosts can point, this is intended
 //visible_message will handle invisibility properly
 //overriden here and in /mob/dead/observer for different point span classes and sanity checks
-/mob/verb/pointed(atom/A as turf | obj | mob in view(get_turf(src)))
+/mob/proc/point(atom/A in view(get_turf(src)))
 	set name = "Point To"
 	set category = "Object"
 

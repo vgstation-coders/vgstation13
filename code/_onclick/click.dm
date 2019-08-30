@@ -269,7 +269,7 @@
 */
 
 /mob/proc/MiddleShiftClickOn(var/atom/A)
-	pointed(A)
+	point(A)
 
 /*
 	Shift click
