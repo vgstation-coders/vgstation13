@@ -864,7 +864,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				for(var/matID in linked_destroy.loaded_item.materials.storage)
 					if(linked_destroy.loaded_item.materials.storage[matID])
 						var/datum/material/M = linked_destroy.loaded_item.materials.getMaterial(matID)
-						dat += "<LI>[M.processed_name] : [linked_destroy.loaded_item.materials.storage[matID]]</LI>"
+						dat += "<LI>[M.processed_name]: [linked_destroy.loaded_item.materials.storage[matID]]</LI>"
 				dat += "</UL><BR>"
 			dat += {"<HR><A href='?src=\ref[src];deconstruct=1'>Deconstruct Item</A> ||
 				<A href='?src=\ref[src];eject_item=1'>Eject Item</A> || "}
