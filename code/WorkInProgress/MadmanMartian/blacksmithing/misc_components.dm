@@ -24,7 +24,8 @@
 					return
 			finishing_requirements.Remove(I.type)
 			gen_quality(quality-I.quality, quality, I.material_type)
-			qdel(I)
+			if(!istype(I, /obj/item/stack))
+				qdel(I) //stacks handle themselves if they run out
 
 			if(!finishing_requirements.len) //We're done
 				user.drop_item(src)

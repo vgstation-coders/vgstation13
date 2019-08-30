@@ -250,10 +250,10 @@
 
 /obj/item/weapon/shield/riot/tower
 	name = "tower shield"
-	desc = "A veritable wall of defence."
+	desc = "A veritable wall of defense."
 	icon_state = "tower_shield"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
 	slowdown = 4
 
 /obj/item/weapon/shield/riot/tower/IsShield()
-	return 2
+	return 2 //Considering its size, twice as effective as a normal shield, but difficult to lug around

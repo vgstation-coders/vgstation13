@@ -250,4 +250,4 @@
 	icon_state = "strip-leather"
 	singular_name = "strip of leather"
 	irregular_plural = "strips of leather"
-	max_amount = 10
+	max_amount = 20
