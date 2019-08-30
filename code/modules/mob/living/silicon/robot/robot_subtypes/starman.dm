@@ -1,8 +1,21 @@
+var/list/mobs_hearing_starman_music = list() //Is reset on stop_starman_music(), which means a mob that comes in proximity to a starman after hearing it won't hear it again until he presses the button again.
+var/current_starman_song = null
+
+
+
 /mob/living/silicon/robot/starman
-	cell_type = /obj/item/weapon/cell/ultra
+	cell_type = /obj/item/weapon/cell/infinite //Your cover cannot be opened since we override attackby()
 	deny_client_move = 1
 	anchored = 1
 	namepick_uses = 0
+	
+/mob/living/silicon/robot/starman/Life()
+	.=..()
+	if(current_starman_song)
+		for(var/mob/unit in oviewers(8,user))
+			play_starman_music_towards(unit)
+		play_starman_music_towards(src)
+			
 	
 /mob/living/silicon/robot/starman/wearing_wiz_garb()
 	return 1
@@ -22,13 +35,12 @@
 /mob/living/silicon/robot/updatename(var/prefix)
 	var/greek_alphabet = list("Alpha", "Beta", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", \
 						 "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega")
-	name = "[pick("Starman DX","Starman","Starman Ultra")] [pick(greek_alphabet)]"
+	name = "[Starman [pick(greek_alphabet)]"
 	
 /mob/living/silicon/robot/starman/bullet_act(var/obj/item/projectile/P)
-	if(istype(P, /obj/item/projectile/bullet))
-		var/reflectchance = 70 - round(P.damage/3)
+	if(istype(P, /obj/item/projectile/bullet) || istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
+		var/reflectchance = 80 - round(P.damage/2)
 		if(prob(reflectchance))
-			adjustBruteLoss(P.damage * 0.5)
 			visible_message("<span class='danger'>\The [P.name] gets reflected off \the [src]'s chrome!</span>", \
 							"<span class='userdanger'>\The [P.name] gets reflected off \the [src]'s chrome!</span>")
 
@@ -54,11 +66,20 @@
 	if(O.force && O.force < 11)
 		user.delayNextAttack(8)
 		user.visible_message("<span class='danger'>[O] bounces harmlessly off of \the [src].</span>", "<span class='userdanger'>[O] bounces harmlessly off of \the [src].</span>")
-	else
-		..()	
 	
+/mob/living/silicon/robot/starman/deluxe //Functionally identical but higher in the chain of command, as indicated by gold plating.
+	cell_type = /obj/item/weapon/cell/infinite
+	deny_client_move = 1
+	anchored = 1
+	namepick_uses = 0
 	
+/mob/living/silicon/robot/starman/deluxe/New()
+	..()
 	
+/mob/living/silicon/robot/starman/deluxe/updatename(var/prefix)
+	var/greek_alphabet = list("Alpha", "Beta", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", \
+						 "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega")
+	name = "[Starman [pick(greek_alphabet)]"	
 	
 	
 /proc/psi_precast(var/mob/user)
@@ -71,7 +92,7 @@
 
 /spell/aoe_turf/starman_play_music
 	name = "Telepathic Binaural Attack"
-	desc = "Forces the menacing tunes of the Starman into the minds of all your enemies. And you."
+	desc = "Forces the menacing tunes of the Starman into the minds of all enemies that can see you. Also you and your starmen friends."
 	hud_state = "time_future"
 	invocation_type = SpI_NONE
 	charge_type = Sp_RECHARGE
@@ -80,18 +101,24 @@
 
 /spell/aoe_turf/starman_play_music/cast(list/targets, mob/user = user)
 	stop_starman_music()
-	if(user)
+	if(user && istype(user,/mob/living/silicon/robot/starman))
+		current_starman_song = pick(starman_music)
 		for(var/mob/M in oviewers(8,user))
-			if(M && M.client)
-				M << sound(pick(starman_music), repeat = 0, wait = 0, volume = 20, channel = CHANNEL_STARMAN)
-		user << sound(pick(starman_music), repeat = 0, wait = 0, volume = 20, channel = CHANNEL_STARMAN)
+			play_starman_music_towards(M)
+		play_starman_music_towards(user)
+
+/proc/play_starman_music_towards(var/mob/user)
+	if(user && user.client && current_starman_music && !locate(unit) in mobs_hearing_starman_music)
+		user << sound, current_starman_song, repeat = 0, wait = 0, volume = 20, channel = CHANNEL_STARMAN)
+		mobs_hearing_starman_music += user
 		
 		
 /proc/stop_starman_music()
 	for(var/mob/M in mob_list)
 		if(M && M.client)
 			M << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_STARMAN)	
-		
+	mobs_hearing_starman_music.len = 0
+	current_starman_song = null
 
 		
 		
@@ -103,7 +130,7 @@
 	hud_state = "starman_warp"
 	school = "evocation"
 	charge_type = Sp_RECHARGE
-	charge_max = 60
+	charge_max = 50
 	invocation_type = SpI_NONE
 	range = 8
 	max_targets = 1
@@ -117,7 +144,7 @@
 		if(!floor.density)
 			user.icon_state = "starman_phase"
 			spawn(0.3 SECONDS)
-				do_teleport(user, floor, 0)
+				do_teleport(user, floor, aprecision = 0, aijamming = 0)
 				playsound(user, 'sound/effects/phasein.ogg', 25, 0)
 				user.visible_message("<span class='danger'>\The [user] warps!</span>","<span class='notice'>*Bzzt* Warp successful.</span>")
 				spawn(0.3 SECONDS)
@@ -139,7 +166,7 @@
 	charge_type = Sp_RECHARGE
 	charge_max = 250
 	invocation_type = SpI_NONE
-	var/heal_amount = 30
+	var/heal_amount = 50
 
 /spell/aoe_turf/starman_heal/cast(list/targets, mob/living/user = user)
 	spawn(0)
@@ -147,16 +174,16 @@
 		if(user.getOxyLoss())
 			user.adjustOxyLoss(-heal_amount)
 		if(user.getBruteLoss())
-			user.heal_organ_damage(heal_amount, 0)
+			adjustBruteLoss(-heal_amount)
 		if(user.getFireLoss())
-			user.heal_organ_damage(0, heal_amount)
+			adjustFireLoss(-heal_amount)
 		if(user.getToxLoss())
 			user.adjustToxLoss(-heal_amount)
 		var/mob/living/silicon/robot/robot = user
 		if(istype(robot))
 			for(var/name in robot.components)
 				var/datum/robot_component/component = robot.components[name]
-				component.heal_damage(30,30)
+				component.heal_damage(100,100)
 		user.updatehealth()	
 		playsound(user, 'sound/effects/psi/psi_lifeup_alpha.ogg', 15, 0)
 		user.visible_message("<span class='danger'>\The [user] envelops himself in a bubble of healing magic!</span>","<span class='notice'>*Bzzt* Restoration successful.</span>")
@@ -172,7 +199,7 @@
 	hud_state = "psi_shield_beta"
 	school = "evocation"
 	charge_type = Sp_RECHARGE
-	charge_max = 150
+	charge_max = 120
 	invocation_type = SpI_NONE
 	range = 8
 	max_targets = 1
@@ -203,7 +230,7 @@
 	luminosity = 2
 	invisibility = 0
 	explosion_block = 200
-	var/lifespan = 200
+	var/lifespan = 250
 
 /obj/effect/forcefield/starman/New()
 	..()
@@ -301,11 +328,11 @@
 		spawn(6)
 			for(var/mob/living/carbon/target in targets)
 				target.stuttering += 5
-				target.ear_deaf += 1
+				target.ear_deaf += 2
 				target.dizziness += 5
 				target.confused +=  5
 				target.Jitter(5)		
-				target.Knockdown(1)
+				target.Knockdown(2)
 				target.shakecamera += 1
 
 		user.visible_message("<span class='danger'>\The [user] bends reality in impossible ways!</span>","<span class='notice'>*Beep* Hostile consciousnesses twisted.</span>")
@@ -332,7 +359,7 @@
 	var/list/possible_sounds = list('sound/effects/psi/other/enterbattle_normal.ogg','sound/effects/psi/other/boss_intro.ogg','sound/effects/psi/other/spooky.ogg')
 	var/list/sound_volumes = list(40,40,75)
 	var/nextuse
-	var/cooldown = 6 SECONDS
+	var/cooldown = 5 SECONDS
 	
 /obj/item/device/starman_hailer/attack_self(mob/user)
 	activate(user)
