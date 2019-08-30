@@ -20,6 +20,27 @@
 /obj/machinery/telepad/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return ""
 
+/obj/machinery/telepad/canLink(var/obj/T)
+	return (istype(T,/obj/machinery/computer/telescience) && get_dist(src,T) < 7)
+
+/obj/machinery/telepad/isLinkedWith(var/obj/T)
+	return (linked == T)
+
+/obj/machinery/telepad/linkWith(var/mob/user, var/obj/T, var/list/context)
+	if(istype(T, /obj/machinery/computer/telescience))
+		linked = T
+		linked.telepad = src
+		return 1
+
+/obj/machinery/telepad/canClone(var/obj/machinery/T)
+	return (istype(T, /obj/machinery/computer/telescience) && get_dist(src, T) < 7)
+
+/obj/machinery/telepad/clone(var/obj/machinery/T)
+	if(istype(T, /obj/machinery/computer/telescience))
+		linked = T
+		linked.telepad = src
+		return 1
+
 /obj/machinery/telepad/Destroy()
 	if (linked)
 		linked.telepad = null

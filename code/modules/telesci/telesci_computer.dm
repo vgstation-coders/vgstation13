@@ -75,9 +75,19 @@
 	return (istype(T,/obj/machinery/telepad) && get_dist(src,T) < 7)
 
 /obj/machinery/computer/telescience/isLinkedWith(var/obj/T)
-	return T != null && T == telepad
+	return (telepad == T)
 
 /obj/machinery/computer/telescience/linkWith(var/mob/user, var/obj/T, var/list/context)
+	if(istype(T, /obj/machinery/telepad))
+		telepad = T
+		telepad.linked = src
+		return 1
+
+//Plagiarized conveyor belt multi-tool code
+/obj/machinery/computer/telescience/canClone(var/obj/machinery/T)
+	return (istype(T, /obj/machinery/telepad) && get_dist(src, T) < 7)
+
+/obj/machinery/computer/telescience/clone(var/obj/machinery/T)
 	if(istype(T, /obj/machinery/telepad))
 		telepad = T
 		telepad.linked = src
@@ -325,6 +335,10 @@ var/list/telesci_warnings = list(
 
 	if(cell.charge < teleport_cell_usage)
 		to_chat(user, "<span class='caution'>Error: not enough buffer energy.</span>")
+		return
+
+	if(telepad && (!telepad.linked == src))
+		to_chat(user, "<span class='caution'>Error: No telepad linked.</span>")
 		return
 
 	cell.use(teleport_cell_usage)
