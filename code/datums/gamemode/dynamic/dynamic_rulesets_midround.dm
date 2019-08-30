@@ -223,11 +223,11 @@
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	exclusive_to_jobs = list("AI")
-	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
+	required_enemies = list(3,3,3,2,2,2,1,1,1,1)
 	required_candidates = 1
 	weight = 1
 	cost = 35
-	requirements = list(101,101,80,70,60,60,50,50,40,40)
+	requirements = list(90,80,70,60,50,40,40,30,30,20)
 	high_population_requirement = 65
 	flags = HIGHLANDER_RULESET
 
@@ -450,8 +450,8 @@
 	newninja.Greet(GREET_MIDROUND)
 	newninja.ForgeObjectives()
 	newninja.AnnounceObjectives()
-	spawn(5)
-		newninja.antag.current.ThrowAtStation()
+	if(!newninja.antag.current.ThrowAtStation())
+		newninja.antag.current.spawn_rand_maintenance()
 	return 1
 
 //////////////////////////////////////////////

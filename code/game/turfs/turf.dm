@@ -353,14 +353,14 @@
 		for(var/obj/effect/decal/cleanable/C in src)
 			qdel(C)//enough with footprints floating in space
 
+	//Rebuild turf
+	var/turf/T = src
+	env = T.air //Get the air before the change
 	if(istype(src,/turf/simulated))
-		//Yeah, we're just going to rebuild the whole thing.
-		//Despite this being called a bunch during explosions,
-		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
-		env = S.air //Get the air before the change
 		if(S.zone)
 			S.zone.rebuild()
+			
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)

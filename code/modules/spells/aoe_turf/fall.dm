@@ -13,11 +13,11 @@ var/global/list/falltempoverlays = list()
 
 	selection_type = "range"
 	school = "transmutation"
-	charge_max = 900 // now 2min
+	charge_max = 500 // now 2min
 	invocation = "OMNIA RUINAM"
 	invocation_type = SpI_SHOUT
-	range = 4
-	cooldown_min = 600
+	range = 6
+	cooldown_min = 200
 	cooldown_reduc = 100
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3)
 	hud_state = "wiz_timestop"
@@ -116,8 +116,8 @@ var/global/list/falltempoverlays = list()
 	INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets))
 
 		//animate(aoe_underlay, transform = null, time = 2)
-	var/oursound = (invocation == "ZA WARUDO" ? 'sound/effects/theworld.ogg' :'sound/effects/fall.ogg')
-	playsound(user, oursound, 100, 0, 0, 0, 0)
+	//var/oursound = (invocation == "ZA WARUDO" ? 'sound/effects/theworld.ogg' :'sound/effects/fall.ogg')
+	//playsound(user, oursound, 100, 0, 0, 0, 0)
 
 	sleepfor = world.time + sleeptime
 	for(var/turf/T in targets)
@@ -135,7 +135,7 @@ var/global/list/falltempoverlays = list()
 				affected += L
 				invertcolor(L)
 				spawn() recursive_timestop(L)
-				L.playsound_local(L, invocation == "ZA WARUDO" ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+				L.playsound_local(L, 'sound/effects/theworld2.ogg', 100, 0, 0, 0, 0)
 			else
 				if(ignore_path && istype(everything,ignore_path))
 					continue

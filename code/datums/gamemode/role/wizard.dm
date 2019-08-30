@@ -10,7 +10,7 @@
 	stat_datum_type = /datum/stat/role/wizard
 
 /datum/role/wizard/ForgeObjectives()
-	if(!SOLO_ANTAG_OBJECTIVES)
+	if(!antag.current.client.prefs.antag_objectives)
 		AppendObjective(/datum/objective/freeform/wizard)
 		return
 	switch(rand(1,100))

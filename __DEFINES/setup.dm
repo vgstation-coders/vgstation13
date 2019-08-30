@@ -5,9 +5,6 @@
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
 
-// If set to 0, replaces solo antags' objectives with an always-pass freeform
-#define SOLO_ANTAG_OBJECTIVES 1
-
 // Defines for the shuttle
 #define SHUTTLE_ON_STANDBY 0
 #define SHUTTLE_ON_STATION 1
@@ -1338,6 +1335,7 @@ var/proccalls = 1
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
+#define CHANNEL_STARMAN				1025
 
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0

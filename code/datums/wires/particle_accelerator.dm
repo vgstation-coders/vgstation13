@@ -30,24 +30,10 @@ var/const/PARTICLE_LIMIT_POWER_WIRE = 8 // Determines how strong the PA can be.
 	. += {"<BR>The keyboard light is [IsIndexCut(PARTICLE_INTERFACE_WIRE) ? "flashing" : "on"].<BR>
 	The regulator light is [IsIndexCut(PARTICLE_LIMIT_POWER_WIRE) ? "purple" : "teal"].<BR>"}
 
-/datum/wires/particle_acc/control_box/UpdatePulsed(var/index)
-	var/obj/machinery/particle_accelerator/control_box/C = holder
-	switch(index)
-
-		if(PARTICLE_TOGGLE_WIRE)
-			C.toggle_power()
-
-		if(PARTICLE_STRENGTH_WIRE)
-			C.add_strength()
-
-		if(PARTICLE_INTERFACE_WIRE)
-			C.interface_control = !C.interface_control
-
-		if(PARTICLE_LIMIT_POWER_WIRE)
-			C.visible_message("[bicon(C)]<b>[C]</b> makes a large whirring noise.")
 
 /datum/wires/particle_acc/control_box/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/particle_accelerator/control_box/C = holder
+	..()
 	switch(index)
 
 		if(PARTICLE_TOGGLE_WIRE)
@@ -66,3 +52,20 @@ var/const/PARTICLE_LIMIT_POWER_WIRE = 8 // Determines how strong the PA can be.
 			C.strength_upper_limit = (mended ? 2 : 3)
 			if(C.strength_upper_limit < C.strength)
 				C.remove_strength()
+
+/datum/wires/particle_acc/control_box/UpdatePulsed(var/index)
+	var/obj/machinery/particle_accelerator/control_box/C = holder
+	..()
+	switch(index)
+
+		if(PARTICLE_TOGGLE_WIRE)
+			C.toggle_power()
+
+		if(PARTICLE_STRENGTH_WIRE)
+			C.add_strength()
+
+		if(PARTICLE_INTERFACE_WIRE)
+			C.interface_control = !C.interface_control
+
+		if(PARTICLE_LIMIT_POWER_WIRE)
+			C.visible_message("[bicon(C)]<b>[C]</b> makes a large whirring noise.")

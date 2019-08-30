@@ -587,7 +587,8 @@ var/global/list/paint_variants = list(
 	),
 
 	"Chapel" = list(
-		new /datum/paint_info(DIR_ALL,		"chapel")
+		new /datum/paint_info(DIR_ALL,		"chapel"),
+		new /datum/paint_info(DIR_ALL,		"chapeldark")
 	),
 
 	"SS13 logo" = list(

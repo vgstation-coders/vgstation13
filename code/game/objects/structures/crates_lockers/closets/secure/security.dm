@@ -121,6 +121,7 @@
 		/obj/item/clothing/accessory/holster/handgun/waist,
 		/obj/item/weapon/melee/telebaton,
 		/obj/item/weapon/card/debit/preferred/department/security,
+		/obj/item/weapon/pinpointer,
 		/obj/item/weapon/storage/box/large/securitygear,
 	)
 

@@ -20,7 +20,11 @@
 		accessories.Remove(A)
 		qdel(A)
 	..()
-
+	
+/obj/item/clothing/CtrlClick(var/mob/user)
+	if(isliving(user) && !user.incapacitated() && user.Adjacent(src) && accessories.len)
+		removeaccessory()
+	
 /obj/item/clothing/examine(mob/user)
 	..()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -510,7 +514,7 @@
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
-//      Meaning the the suit is defined directly after the corrisponding helmet. Just like below!
+//      Meaning the the suit is defined directly after the corresponding helmet. Just like below!
 /obj/item/clothing/head/helmet/space
 	name = "Space helmet"
 	icon_state = "space"
