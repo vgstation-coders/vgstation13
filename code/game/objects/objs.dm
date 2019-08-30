@@ -29,7 +29,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	plane = OBJ_PLANE
 
 	var/defective = 0
-	var/quality = AVERAGE //What level of quality this object is.
+	var/quality = B_AVERAGE //What level of quality this object is.
 	var/datum/material/material_type //What material this thing is made out of
 	var/event/on_use
 	var/sheet_type = /obj/item/stack/sheet/metal
@@ -648,10 +648,10 @@ a {
 				surrounding_mod *= I.quality/rand(1,3)
 	*/
 	var/initial_quality = round(((rand(1,3)*surrounding_mod)*material_mod)+modifier)
-	quality = Clamp(initial_quality, AWFUL>min_quality?AWFUL:min_quality, LEGENDARY)
+	quality = Clamp(initial_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
 
 /obj/proc/gen_description(mob/user)
-	var/material_mod = quality-GOOD>1 ? quality-GOOD : 0
+	var/material_mod = quality-B_GOOD>1 ? quality-B_GOOD : 0
 	var/additional_description
 	if(material_mod)
 		additional_description = "On \the [src] is a carving, it depicts:\n"
@@ -694,10 +694,10 @@ a {
 		material_type = mat
 		sheet_type = mat.sheettype
 	gen_quality(additional_quality, min_quality)
-	if(quality > SUPERIOR)
+	if(quality > B_SUPERIOR)
 		gen_description()
 	if(!findtext(lowertext(name), lowertext(mat.name)))
-		name = "[quality == AVERAGE ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
+		name = "[quality == B_AVERAGE ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
 
 /obj/proc/check_uplink_validity()
 	return TRUE
