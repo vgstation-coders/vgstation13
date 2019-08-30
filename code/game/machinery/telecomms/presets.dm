@@ -66,13 +66,9 @@
 
 /obj/machinery/telecomms/receiver/preset_right/initialize()
 	..()
-	freq_listening = list(RESPONSE_FREQ, COMM_FREQ, ENG_FREQ, SEC_FREQ) //ert, command, engineering, security
-
-//Common and other radio frequencies for people to freely use
-/obj/machinery/telecomms/receiver/preset_right/New()
+	freq_listening = list(RESPONSE_FREQ, COMM_FREQ, ENG_FREQ, SEC_FREQ, COMMON_FREQ) //ert, command, engineering, security
 	for(var/i = 1441, i < 1489, i += 2)
 		freq_listening |= i
-	..()
 
 /obj/machinery/telecomms/receiver/preset_complete
 	name = "Receiver"
@@ -115,11 +111,8 @@
 /obj/machinery/telecomms/bus/preset_four/initialize()
 	..()
 	freq_listening = list(ENG_FREQ, COMMON_FREQ)
-
-/obj/machinery/telecomms/bus/preset_four/New()
 	for(var/i = 1441, i < 1489, i += 2)
 		freq_listening |= i
-	..()
 
 /obj/machinery/telecomms/bus/preset_complete
 	id = "Bus Complete"
