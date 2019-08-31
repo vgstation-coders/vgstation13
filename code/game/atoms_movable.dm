@@ -19,7 +19,6 @@
 	var/pass_flags = 0
 
 	var/sound_override = 0 //Do we make a sound when bumping into something?
-	var/hard_deleted = 0
 	var/pressure_resistance = ONE_ATMOSPHERE
 	var/obj/effect/overlay/chain/tether = null
 	var/tether_pull = 0
@@ -68,9 +67,6 @@
 	on_moved = new("owner"=src)
 
 /atom/movable/Destroy()
-	gcDestroyed = "Bye, world!"
-	tag = null
-
 	if(materials)
 		returnToPool(materials)
 		materials = null
@@ -108,40 +104,6 @@
 
 	for(var/atom/movable/AM in src)
 		qdel(AM)
-
-	..()
-
-/proc/delete_profile(var/type, code = 0)
-	if(!ticker || ticker.current_state < 3)
-		return
-	if(code == 0)
-		if (!("[type]" in del_profiling))
-			del_profiling["[type]"] = 0
-
-		del_profiling["[type]"] += 1
-	else if(code == 1)
-		if (!("[type]" in ghdel_profiling))
-			ghdel_profiling["[type]"] = 0
-
-		ghdel_profiling["[type]"] += 1
-	else
-		if (!("[type]" in gdel_profiling))
-			gdel_profiling["[type]"] = 0
-
-		gdel_profiling["[type]"] += 1
-		soft_dels += 1
-
-/atom/movable/Del()
-	if (gcDestroyed)
-
-		if (hard_deleted)
-			delete_profile("[type]", 1)
-		else
-			garbageCollector.dequeue("\ref[src]") // hard deletions have already been handled by the GC queue.
-			delete_profile("[type]", 2)
-	else // direct del calls or nulled explicitly.
-		delete_profile("[type]", 0)
-		Destroy()
 
 	..()
 
