@@ -1,6 +1,11 @@
 
 datum/event/viral_outbreak
 
+/datum/event/viral_outbreak/can_start(var/list/active_with_role)
+	if(active_with_role["Medical"] > 1)
+		return 25
+	return 0
+
 datum/event/viral_outbreak/setup()
 	announceWhen = rand(0, 3000)
 	endWhen = announceWhen + 1

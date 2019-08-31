@@ -90,6 +90,9 @@
 	var/list/enabled_jobs = list() //Jobs that require enabling that are enabled on this map
 	var/list/disabled_jobs = list() //Jobs that are disabled on this map
 
+	var/list/event_blacklist = list(/datum/event/blizzard, /datum/event/omega_blizzard)
+	var/list/event_whitelist = list()
+
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
 	var/snow_theme = 0
@@ -109,7 +112,7 @@
 /datum/map/proc/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category,/datum/role/changeling))
 		return FALSE
-	
+
 	return TRUE //If false, fails Ready()
 
 /datum/map/proc/loadZLevels(list/levelPaths)

@@ -7,6 +7,11 @@
 	var/successSpawn = 0	//So we don't make a command report if nothing gets spawned.
 	var/player_factor = 1
 
+/datum/event/alien_infestation/can_start(var/list/active_with_role)
+	if(aliens_allowed && !sent_aliens_to_station && active_with_role["Security"] > 1)
+		return 10
+	return 0
+
 
 /datum/event/alien_infestation/setup()
 	announceWhen = rand(1500, 3000)
