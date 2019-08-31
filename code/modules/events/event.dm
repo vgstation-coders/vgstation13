@@ -81,7 +81,8 @@
 
 //Adds the event to the global events list, and removes it from the list
 //of potential events.
-/datum/event/New()
-	setup()
-	events.Add(src)
+/datum/event/New(var/start_event = TRUE)
+	if(start_event)
+		setup()
+		events.Add(src)
 	..()

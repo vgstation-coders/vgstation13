@@ -36,7 +36,7 @@ var/list/event_last_fired = list()
 		if((map.event_blacklist.len && map.event_blacklist.Find(type)) || (map.event_whitelist.len && !map.event_whitelist.Find(type)))
 			possibleEvents[type] = 0
 			continue
-		var/datum/event/E = new type()
+		var/datum/event/E = new type(FALSE)
 		possibleEvents[type] = E.can_start(active_with_role)
 		qdel(E)
 
