@@ -220,6 +220,17 @@ var/list/alldepartments = list("Central Command")
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
 	return
 
+/obj/machinery/faxmachine/kick_act()
+	..()
+	if(tofax)
+		tofax.forceMove(loc)
+		tofax = null
+		return
+	if(scan)
+		scan.forceMove(loc)
+		scan = null
+		return
+
 /proc/Centcomm_fax(var/obj/item/weapon/paper/sent, var/sentname, var/mob/Sender)
 
 //why the fuck doesnt the thing show as orange
