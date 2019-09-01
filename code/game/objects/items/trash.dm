@@ -145,7 +145,7 @@
 /obj/item/trash/monkey_bowl
 	name = "monkey bowl"
 	icon_state	= "monkey_bowl"
-	desc = "It was delicia"
+	desc = "It was delicia."
 
 /obj/item/trash/pistachios
 	name = "pistachios pack"
