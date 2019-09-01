@@ -338,5 +338,5 @@
 		var/obj/item/weapon/storage/toolbox/usedlootbox = new /obj/item/weapon/storage/toolbox
 		usedlootbox.add_blood(blooddonor)
 		user.put_in_hands(usedlootbox)
-		regenerate_icons()
+		user.regenerate_icons()
 		qdel(blooddonor)
