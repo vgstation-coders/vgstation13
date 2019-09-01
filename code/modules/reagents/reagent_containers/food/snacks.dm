@@ -1872,7 +1872,7 @@
 	name = "Monkey Soup"
 	desc = "Uma delicia."
 	icon_state = "monkeysoup"
-	trash = /obj/item/trash/snack_bowl
+	trash = /obj/item/trash/monkey_bowl
 	food_flags = FOOD_LIQUID
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeysoup/New()
