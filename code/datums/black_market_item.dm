@@ -238,34 +238,11 @@ for anyone but the person committing mass murder.
 */
 
 
-/datum/black_market_item/tech
-	category = "Advanced Technology"
+//datum/black_market_item/tech
+	//category = "Advanced Technology"
 
-/datum/black_market_item/tech/emagged_nikita
-	name = "Emagged Nikita"
-	desc = "A rocket launcher that fires missiles that you can ride. Great for special effects in Live-Action movies and terrorist roleplay."
-	item = /obj/structure/closet/crate/secure/weapon/experimental/nikita
-	sps_chances = list(0, 20, 35)
-	stock_min = 1
-	stock_max = 1
-	cost_min = 1000
-	cost_max = 2000
-	display_chance = 80
-
-/datum/black_market_item/tech/emagged_nikita/after_spawn(var/obj/structure/closet/crate/secure/weapon/experimental/nikita/spawned, var/mob/user)
-	var/obj/item/weapon/gun/projectile/rocketlauncher/nikita/rocket_launcher = locate() in spawned
-	rocket_launcher.emagged = TRUE
-
-/datum/black_market_item/tech/portalgun
-	name = "Portal Gun"
-	desc = "This \"gun\" has two options: blue and orange. Shoot twice, and you'll have a wormhole connecting the two. Bluespace technology this potent is... rare. Real rare. That's why you're going to pay us a shitload of cash for it."
-	item = /obj/item/weapon/gun/portalgun
-	sps_chances = list(0,20,35)
-	stock_min = 1
-	stock_max = 1
-	cost_min = 1800
-	cost_max = 2200
-	display_chance = 80
+//datum/black_market_item/arcane
+	//category = "Supernatural and Arcane Objects"
 
 /datum/black_market_item/animal
 	category = "Living or Once Living Goods."
@@ -313,37 +290,6 @@ for anyone but the person committing mass murder.
 	cost_min = 75
 	cost_max = 100
 	display_chance = 70
-
-/datum/black_market_item/arcane
-	category = "Supernatural and Arcane Objects"
-
-/datum/black_market_item/arcane/levitation
-	name = "Potion of Levitation"
-	desc = "Potions come in many shapes and sizes, but this one makes you float! Why? Because it looks fucking cool. Maybe you can convince somebody you're the fourth coming of Jesus."
-	item = /obj/item/potion/levitation
-	sps_chances = list(0,0,5)
-	delivery_available = list(0, 1, 1)
-	stock_min = 2
-	stock_max = 4
-	cost_min = 400
-	cost_max = 500
-	display_chance = 70
-
-/datum/black_market_item/arcane/health_potion
-	name = "Potion of Health? Death?"
-	desc = "Unfortunately, some idiot managed to mix together the shipment of identical-looking health potions and death potions. He's dead now. Test out your luck!"
-	item = /obj/item/potion/deception
-	sps_chances = list(0, 10, 30)
-	delivery_available = list(0, 1, 1) //Would shatter on impact
-	stock_min = 2
-	stock_max = 4
-	cost_min = 600
-	cost_max = 800
-	display_chance = 70
-
-/datum/black_market_item/arcane/health_potion/after_spawn(var/obj/spawned, var/mob/user)
-	if(prob(40))
-		spawned = /obj/item/potion/healing
 
 /datum/black_market_item/plants
 	category = "Seeds"
@@ -446,7 +392,6 @@ for anyone but the person committing mass murder.
 	cost_min = 200
 	cost_max = 500
 	display_chance = 100
-
 
 #undef BM_CHEAP
 #undef BM_NORMAL
