@@ -1867,6 +1867,21 @@
 			reagents.add_reagent(IMIDAZOLINE, 5)
 	bitesize = 5
 
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeysoup
+	name = "Monkey Soup"
+	desc = "Uma delicia."
+	icon_state = "monkeysoup"
+	trash = /obj/item/trash/snack_bowl
+	food_flags = FOOD_LIQUID
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeysoup/New()
+	..()
+	reagents.add_reagent(WATER, 5)
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(VINEGAR, 4)
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/wishsoup
 	name = "Wish Soup"
 	desc = "I wish this was soup."

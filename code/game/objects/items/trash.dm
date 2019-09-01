@@ -142,6 +142,11 @@
 	name = "snack bowl"
 	icon_state	= "snack_bowl"
 
+/obj/item/trash/monkey_bowl
+	name = "monkey bowl"
+	icon_state	= "monkey_bowl"
+	desc = "It was delicia"
+
 /obj/item/trash/pistachios
 	name = "pistachios pack"
 	icon_state = "pistachios_pack"
