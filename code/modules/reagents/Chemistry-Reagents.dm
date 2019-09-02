@@ -392,7 +392,8 @@
 					if(method == TOUCH)
 						var/block = L.check_contact_sterility(FULL_TORSO)
 						var/bleeding = L.check_bodypart_bleeding(FULL_TORSO)
-						if (!block)
+						if(attempt_colony(L,D,"splashed with infected blood"))
+						else if (!block)
 							if (D.spread & SPREAD_CONTACT)
 								L.infect_disease2(D, notes="(Contact, splashed with infected blood)")
 							else if (bleeding && (D.spread & SPREAD_BLOOD))
@@ -3494,7 +3495,7 @@
 		if(5 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
 			percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
 			if(prob(20))
-				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>", 
+				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
 								"<span class='warning'>You feel different, somehow...</span>"))
 			if(prob(percent_machine))
 				holder.add_reagent("mednanobots", 20)

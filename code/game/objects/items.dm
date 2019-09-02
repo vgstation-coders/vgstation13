@@ -1410,6 +1410,10 @@ var/global/list/image/blood_overlays = list()
 	return
 
 /////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
+
+/obj/item/clothing/suitable_colony()
+	return pressure_resistance > ONE_ATMOSPHERE
+
 //Called by attack_hand(), transfers diseases between the mob and the item
 /obj/item/proc/disease_contact(var/mob/living/M,var/bodypart = null)
 	//first let's try to infect them with our viruses
@@ -1420,20 +1424,23 @@ var/global/list/image/blood_overlays = list()
 	if (!bodypart)//no bodypart specified? that should mean we're being held.
 		bodypart = HANDS
 	//secondly, do they happen to carry contact-spreading viruses themselves?
-	var/list/contact_diseases = filter_disease_by_spread(M.virus2,required = SPREAD_CONTACT)
+	var/list/contact_diseases = filter_disease_by_spread(M.virus2,required = SPREAD_CONTACT | SPREAD_COLONY)
 	if (contact_diseases?.len)
 		//if so are their hands protected?
-		if (!M.check_contact_sterility(bodypart))
-			for (var/ID in contact_diseases)
-				var/datum/disease2/disease/D = contact_diseases[ID]
+		var/block = M.check_contact_sterility(bodypart)
+		for (var/ID in contact_diseases)
+			var/datum/disease2/disease/D = contact_diseases[ID]
+			if(attempt_colony(src,D,"from being touched by [M]"))
+			else if(!block)
 				infect_disease2(D, notes="(Contact, from being touched by [M])")
-
 
 	//spreading of blood-spreading diseases to items is handled by add_blood()
 
 //Called by disease_contact(), trying to infect people who pick us up
 /obj/item/proc/infection_attempt(var/mob/living/perp,var/datum/disease2/disease/D,var/bodypart = null)
 	if (!istype(D))
+		return
+	if(attempt_colony(perp,D,"from picking up \a [src]"))
 		return
 	if (src in perp.held_items)
 		bodypart = HANDS

@@ -26,6 +26,8 @@ var/global/list/disease2_list = list()
 	var/stageprob = 10
 	//when spreading to another mob, that new carrier has the disease's stage reduced by stage_variance
 	var/stage_variance = -1
+	//bitflag showing which transmission types are allowed for this disease
+	var/allowed_transmission = SPREAD_BLOOD | SPREAD_CONTACT | SPREAD_AIRBORNE
 
 	//the antibody concentration at which the disease will fully exit the body
 	var/strength = 100
@@ -89,6 +91,23 @@ var/global/list/disease2_list = list()
 	stageprob = 80
 	stage_variance = -10
 	can_kill = list()
+
+/datum/disease2/disease/fungus //most infectious, but with a greater stage setback; has special transmission
+	form = "Fungus"
+	infectionchance = 100
+	infectionchance_base = 100
+	stageprob = 15
+	stage_variance = -2
+	allowed_transmission = SPREAD_BLOOD | SPREAD_CONTACT | SPREAD_AIRBORNE | SPREAD_COLONY
+
+/datum/disease2/disease/meme //infectious and fast progressing, but limited stages; has special transmission
+	form = "Meme"
+	max_stage = 2
+	infectionchance = 70
+	infectionchance_base = 70
+	stageprob = 30
+	stage_variance = -1
+	allowed_transmission = SPREAD_BLOOD | SPREAD_MEMETIC
 
 /datum/disease2/disease/proc/update_global_log()
 	if ("[uniqueID]-[subID]" in disease2_list)
@@ -218,6 +237,19 @@ var/global/list/disease2_list = list()
 		spread |= SPREAD_CONTACT
 							//22,8% chance of staying in blood
 
+/datum/disease2/disease/meme/randomize_spread()
+	spread = SPREAD_BLOOD | SPREAD_MEMETIC //not random
+
+/datum/disease2/disease/fungus/randomize_spread()
+	spread = SPREAD_BLOOD
+	if(prob(50)) //50% colonizing
+		spread |= SPREAD_COLONY
+	else if(prob(40)) //20% airborne
+		spread |= SPREAD_AIRBORNE
+	else if(prob(60)) //18% contact
+		spread |= SPREAD_CONTACT
+			//12% blood only
+
 /datum/disease2/disease/proc/get_spread_string()
 	var/dat = ""
 	var/check = 0
@@ -233,9 +265,19 @@ var/global/list/disease2_list = list()
 			dat += ", "
 	if (spread & SPREAD_AIRBORNE)
 		dat += "Airborne"
-		//check += SPREAD_AIRBORNE
-		//if (spread > check)
-		//	dat += ", "
+		check += SPREAD_AIRBORNE
+		if (spread > check)
+			dat += ", "
+	if (spread & SPREAD_COLONY)
+		dat += "Colonizing"
+		check += SPREAD_COLONY
+		if (spread > check)
+			dat += ", "
+	if (spread & SPREAD_MEMETIC)
+		dat += "Memetic"
+		check += SPREAD_MEMETIC
+		if (spread > check)
+			dat += ", "
 
 	return dat
 
@@ -358,10 +400,19 @@ var/global/list/disease2_list = list()
 		D.spread = 0
 		if (alert("Can this virus spread into blood? (warning! if choosing No, this virus will be impossible to sample and analyse!)","Spreading Vectors","Yes","No") == "Yes")
 			D.spread |= SPREAD_BLOOD
-		if (alert("Can this virus spread by contact, and on items?","Spreading Vectors","Yes","No") == "Yes")
-			D.spread |= SPREAD_CONTACT
-		if (alert("Can this virus spread through the air?","Spreading Vectors","Yes","No") == "Yes")
-			D.spread |= SPREAD_AIRBORNE
+		if(D.allowed_transmission & SPREAD_CONTACT)
+			if (alert("Can this virus spread by contact, and on items?","Spreading Vectors","Yes","No") == "Yes")
+				D.spread |= SPREAD_CONTACT
+		if(D.allowed_transmission & SPREAD_AIRBORNE)
+			if (alert("Can this virus spread through the air?","Spreading Vectors","Yes","No") == "Yes")
+				D.spread |= SPREAD_AIRBORNE
+		if(D.allowed_transmission & SPREAD_COLONY)
+			if (alert("Does this fungus prefer suits? Exclusive with contact/air.","Spreading Vectors","Yes","No") == "Yes")
+				D.spread |= SPREAD_COLONY
+				D.spread &= ~(SPREAD_BLOOD|SPREAD_AIRBORNE)
+		if(D.allowed_transmission & SPREAD_MEMETIC)
+			if (alert("Can this virus spread through words?","Spreading Vectors","Yes","No") == "Yes")
+				D.spread |= SPREAD_MEMETIC
 
 		disease2_list -= "[D.uniqueID]-[D.subID]"//little odds of this happening thanks to subID but who knows
 		D.update_global_log()
@@ -391,7 +442,7 @@ var/global/list/disease2_list = list()
 	return 1
 
 /datum/disease2/disease/proc/AddToGoggleView(var/mob/living/infectedMob)
-	if (spread & SPREAD_CONTACT)
+	if (spread & (SPREAD_CONTACT | SPREAD_COLONY))
 		infected_contact_mobs |= infectedMob
 		if (!infectedMob.pathogen)
 			infectedMob.pathogen = image('icons/effects/effects.dmi',infectedMob,"pathogen_contact")
@@ -610,7 +661,7 @@ var/global/list/disease2_list = list()
 	if (plague && ("[uniqueID]-[subID]" == plague.diseaseID))
 		plague.update_hud_icons()
 	//----------------
-	var/list/V = filter_disease_by_spread(mob.virus2, required = SPREAD_CONTACT)
+	var/list/V = filter_disease_by_spread(mob.virus2, required = (SPREAD_CONTACT | SPREAD_COLONY))
 	if (V && V.len <= 0)
 		infected_contact_mobs -= mob
 		if (mob.pathogen)
