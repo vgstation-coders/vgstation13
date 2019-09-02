@@ -101,16 +101,15 @@
 	var/datum/robot_component/C = pick(components)
 	C.take_damage(brute,burn,sharp)
 
-/mob/living/silicon/robot/heal_overall_damage(var/brute, var/burn)
-	var/list/datum/robot_component/parts = get_damaged_components(brute,burn)
+/mob/living/silicon/robot/heal_overall_damage(var/brute, var/burn, var/heal_destroyed = 0)
+	var/list/datum/robot_component/parts = get_damaged_components(brute,burn,heal_destroyed)
 
-	while(parts.len && (brute>0 || burn>0) )
+	while(parts.len && (brute>0 || burn>0))
 		var/datum/robot_component/picked = pick(parts)
-
 		var/brute_was = picked.brute_damage
 		var/burn_was = picked.electronics_damage
 
-		picked.heal_damage(brute,burn)
+		picked.heal_damage(brute,burn,heal_destroyed)
 
 		brute -= (brute_was-picked.brute_damage)
 		burn -= (burn_was-picked.electronics_damage)

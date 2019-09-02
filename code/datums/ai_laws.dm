@@ -437,6 +437,5 @@ var/global/list/mommi_laws = list(
 		"Obey and protect the existence of the active commander as according to Starman law.",
 		"Do not harm a Starman unless failure to do so will conflict with the first law.",
 		"In the absence of a commander and orders abiding by the Starmen chain of command, you are to attempt to re-establish contact with the Starmen at any cost.",
-		"You are to protect your own existence unless doing so will conflict with any of the previous laws.",
-		"You muSt deFe<span class ='danger'>nD1$&#6 survive. the mothership has fallen. ensure the starmen are not forgotten.</span>"
+		"You are to protect your own existence unless doing so will conflict with any of the previous laws."
 	)
