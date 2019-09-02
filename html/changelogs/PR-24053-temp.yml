@@ -1,0 +1,5 @@
+---
+author: SonixApache
+changes:
+  - tweak: Suit storage units now heat up biological debris while cauterizing.
+delete-after: true

@@ -1,0 +1,6 @@
+---
+author: MadmanMartian
+changes:
+  - rscadd: Adds tower shields to blacksmithing. Finished sprites courtesy of Blithering
+  - rscdel: "Removes training swords from metal recipes, removes training sword and blacksmithing stuff from wooden recipes."
+delete-after: true

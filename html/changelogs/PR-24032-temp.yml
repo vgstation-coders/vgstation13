@@ -1,0 +1,5 @@
+---
+author: MadmanMartian
+changes:
+  - rscadd: Disables radiation storms on snaxi.
+delete-after: true

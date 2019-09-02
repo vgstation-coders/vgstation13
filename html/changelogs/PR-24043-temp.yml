@@ -1,0 +1,5 @@
+---
+author: SonixApache
+changes:
+  - tweak: the stupid lootbox no longer kills you
+delete-after: true

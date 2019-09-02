@@ -1,0 +1,8 @@
+---
+author: ProfanedBane
+changes:
+  - bugfix: Player mice can now spawn as 1 of 3 colours once again
+  - tweak: "Player mice no longer take damage when starving, and instead take a huge speed penalty"
+  - tweak: Player mice no longer automatically move to eat food when starving
+  - experiment: "Player mice now have a \"nutrition_loss_mod\" variable for admins to tweak how fast a mouse loses nutrition"
+delete-after: true
