@@ -3,9 +3,9 @@
 /mob/living/simple_animal/hostile/retaliate/malf_drone
 	name = "Combat Drone"
 	desc = "An automated combat drone armed with state of the art weaponry and shielding."
-	icon_state = "drone3"
-	icon_living = "drone3"
-	icon_dead = "drone_dead"
+	icon_state = "NT_drone"
+	icon_living = "NT_drone"
+	icon_dead = "NT_drone"
 	ranged = 1
 	rapid = 1
 	speak_chance = 5
@@ -63,6 +63,8 @@
 	faction = "malf_drone"
 
 	var/datum/event/rogue_drone/from_event = null
+	var/image/shield_overlay
+	var/image/light_overlay
 
 /mob/living/simple_animal/hostile/retaliate/malf_drone/New()
 	..()
@@ -72,6 +74,45 @@
 	ion_trail = new
 	ion_trail.set_up(src)
 	ion_trail.start()
+
+/mob/living/simple_animal/hostile/retaliate/malf_drone/examine(mob/user)
+	..()
+	if(disabled)
+		to_chat(user, "<span class = 'notice'>It seems inactive.</span>")
+	if(exploding)
+		to_chat(user, "<span class = 'warning'>It is sparking and is beginning to glow under its plating.</span>")
+
+/mob/living/simple_animal/hostile/retaliate/malf_drone/update_icon()
+	overlays.Cut()
+	if(disabled > 0)
+		icon_state = icon_dead
+		shield_overlay = null
+		light_overlay = null
+	else
+		icon_state = icon_living
+		switch(health/maxHealth)
+			if(0.9 to INFINITY)
+				shield_overlay = image('icons/mob/mob.dmi', src, "energy_shield_full", ABOVE_LIGHTING_LAYER)
+				light_overlay = image('icons/mob/mob.dmi', src, "[icon_living]_light", ABOVE_LIGHTING_LAYER)
+			if(0.7 to 0.9)
+				shield_overlay = image('icons/mob/mob.dmi', src, "energy_shield_half", ABOVE_LIGHTING_LAYER)
+				light_overlay = image('icons/mob/mob.dmi', src, "[icon_living]_light", ABOVE_LIGHTING_LAYER)
+			if(0.5 to 0.7)
+				shield_overlay = image('icons/mob/mob.dmi', src, "energy_shield_partial", ABOVE_LIGHTING_LAYER)
+				light_overlay = image('icons/mob/mob.dmi', src, "[icon_living]_light", ABOVE_LIGHTING_LAYER)
+			if(0.3 to 0.5)
+				shield_overlay = null
+				light_overlay = image('icons/mob/mob.dmi', src, "[icon_living]_light", ABOVE_LIGHTING_LAYER)
+			else
+				icon_state = icon_dead
+				shield_overlay = null
+				light_overlay = null
+	if(shield_overlay)
+		shield_overlay.plane = LIGHTING_PLANE
+		overlays.Add(shield_overlay)
+	if(light_overlay)
+		light_overlay.plane = LIGHTING_PLANE
+		overlays.Add(light_overlay)
 
 /mob/living/simple_animal/hostile/retaliate/malf_drone/Process_Spacemove(var/check_drift = 0)
 	return 1
@@ -84,14 +125,14 @@
 	//emps and lots of damage can temporarily shut us down
 	if(disabled > 0)
 		stat = UNCONSCIOUS
-		icon_state = "drone_dead"
+		update_icon()
 		disabled--
 		wander = 0
 		speak_chance = 0
 		LoseTarget()
 	else
+		update_icon()
 		stat = CONSCIOUS
-		icon_state = "drone0"
 		wander = 1
 		speak_chance = 5
 
@@ -118,20 +159,14 @@
 			LoseTarget()
 
 	if(health / maxHealth > 0.9)
-		icon_state = "drone3"
 		explode_chance = 0
 	else if(health / maxHealth > 0.7)
-		icon_state = "drone2"
 		explode_chance = 0
 	else if(health / maxHealth > 0.5)
-		icon_state = "drone1"
 		explode_chance = 0.5
 	else if(health / maxHealth > 0.3)
-		icon_state = "drone0"
 		explode_chance = 5
 	else if(health > 0)
-		//if health gets too low, shut down
-		icon_state = "drone_dead"
 		exploding = 0
 		if(!disabled && prob(30))
 			if(prob(50))
