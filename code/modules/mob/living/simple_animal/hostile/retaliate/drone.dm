@@ -273,51 +273,61 @@
 		if(spawnees & 1)
 			C = new(src.loc)
 			C.name = "Drone CPU motherboard"
+			C.desc = "Co-ordinates the connected drones functions."
 			C.origin_tech = "programming=[rand(3,6)]"
 
 		if(spawnees & 2)
 			C = new(src.loc)
 			C.name = "Drone neural interface"
+			C.desc = "Allows for the connected drone to be interfaced by a remote neural controller"
 			C.origin_tech = "biotech=[rand(3,6)]"
 
 		if(spawnees & 4)
 			C = new(src.loc)
 			C.name = "Drone suspension processor"
+			C.desc = "Used to co-ordinate the connected drone's suspension drives, for movement."
 			C.origin_tech = "magnets=[rand(3,6)]"
 
 		if(spawnees & 8)
 			C = new(src.loc)
 			C.name = "Drone shielding controller"
+			C.desc = "Controls and regulates the connected drone's shield generation and cycling."
 			C.origin_tech = "bluespace=[rand(3,6)]"
 
 		if(spawnees & 16)
 			C = new(src.loc)
 			C.name = "Drone power capacitor"
+			C.desc = "Handles power storage and consumption for the connected drone."
 			C.origin_tech = "powerstorage=[rand(3,6)]"
 
 		if(spawnees & 32)
 			C = new(src.loc)
 			C.name = "Drone hull reinforcer"
+			C.desc = "Amalgamates the exterior hull of the connected drone, strengthening it against attack."
 			C.origin_tech = "materials=[rand(3,6)]"
 
 		if(spawnees & 64)
 			C = new(src.loc)
 			C.name = "Drone auto-repair system"
+			C.desc = "A nanotech repair system, repairing any damage done to the connected drone."
 			C.origin_tech = "engineering=[rand(3,6)]"
 
 		if(spawnees & 128)
 			C = new(src.loc)
 			C.name = "Drone plasma overcharge counter"
+			C.desc = "Controls plasma consumption for the various systems of the connected drone."
 			C.origin_tech = "plasmatech=[rand(3,6)]"
 
 		if(spawnees & 256)
 			C = new(src.loc)
 			C.name = "Drone targetting circuitboard"
+			C.desc = "Handles the combat algorithms associated with the connected drone."
 			C.origin_tech = "combat=[rand(3,6)]"
 
 		if(spawnees & 512)
 			C = new(src.loc)
 			C.name = "Corrupted drone morality core"
+			C.desc = "The law storage module for the connected drone.[prob(50)?" Appears to have been tampered with.":""]"
 			C.origin_tech = "illegal=[rand(3,6)]"
 
 	..()
@@ -327,3 +337,11 @@
 
 /obj/item/projectile/beam/pulse/drone
 	damage = 7
+
+/mob/living/simple_animal/hostile/retaliate/malf_drone/syndicate
+	name = "\improper Syndicate Combat Drone"
+	desc = "An automated combat drone armed with state of the art weaponry and shielding. This one has Syndicate markings and paint scheme."
+	icon_living = "drone_S"
+	icon_dead = "drone_S"
+	icon_state = "drone_S"
+	faction = "syndicate"
