@@ -273,8 +273,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	..()
 	new /obj/item/weapon/implanter/traitor(src)
 	new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/flaregun
 	name = "box (modified flare gun)"
 
