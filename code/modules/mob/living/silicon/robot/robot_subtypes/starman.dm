@@ -154,8 +154,8 @@ var/current_starman_song = null
 		for(var/mob/M in oviewers(8,user))
 			play_starman_music_towards(M)
 		for(var/mob/living/silicon/robot/starman/starman in player_list)
-			if(!is_dead(S))
-				play_starman_music_towards(S)
+			if(!starman.isDead()) 
+				play_starman_music_towards(starman)
 				
 				
 
