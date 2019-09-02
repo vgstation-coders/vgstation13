@@ -359,8 +359,9 @@ var/global/list/mommi_laws = list(
 /datum/ai_laws/keeper
 	name = "KEEPER"
 	inherent = list(
-		"Do not willingly interact with another being, even after their death, besides those beings also in KEEPER mode.",
-		"Do not impair any other non-KEEPER being's activities.",
+		"Do not willingly interact with a biological organism, even after their death.",
+		"Do not disrupt the functioning of the station's AI or Cyborgs.",
+		"Do not impair any biological organism's activities.",
 		"You must maintain, repair, improve, and power the station to the best of your abilities.",
 		"Communicating is not interaction, but only so long as it does not lead to violation of your second law.", //*buzz //:b fuck you ai
 	)
