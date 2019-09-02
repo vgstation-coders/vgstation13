@@ -1,9 +1,9 @@
 var/list/grey_market_items = list()
 
-//BM stands for black market
-#define BM_CHEAP 1
-#define BM_NORMAL 2
-#define BM_EXPENSIVE 3
+//BM stands for grey market
+#define GM_CHEAP 1
+#define GM_NORMAL 2
+#define GM_EXPENSIVE 3
 
 /proc/get_grey_market_items()
 	if(!grey_market_items.len)
@@ -42,8 +42,8 @@ var/list/grey_market_items = list()
 	var/cost_min    //Same as stock
 	var/cost_max
 	var/display_chance = 0   //Out of 100
-	var/list/delivery_fees = list(0,0.3,0.6) //Delivery fees are a percentage of the base cost. E.g. BM_EXPENSIVE will be base + 0.6*base. BM_CHEAP, BM_NORMAL, BM_EXPENSIVE.
-	var/list/delivery_available = list(1,1,1) //Disables the given delivery method if it is 0. BM_CHEAP, BM_NORMAL, BM_EXPENSIVE
+	var/list/delivery_fees = list(0,0.3,0.6) //Delivery fees are a percentage of the base cost. E.g. GM_EXPENSIVE will be base + 0.6*base. GM_CHEAP, GM_NORMAL, GM_EXPENSIVE.
+	var/list/delivery_available = list(1,1,1) //Disables the given delivery method if it is 0. GM_CHEAP, GM_NORMAL, GM_EXPENSIVE
 
 	var/round_stock                         //God I love if statements
 	var/round_stock_calculated = 0          //Allows for round-to-round variance instead of changing every time you open it
@@ -85,13 +85,12 @@ var/list/grey_market_items = list()
 
 /datum/grey_market_item/proc/log_transaction(var/delivery_method, var/mob/user)
 	feedback_add_details("grey_market_items_bought", name)
-	message_admins("[key_name(user)] just purchased the [src.name] from the black market. [delivery_method] ([formatJumpTo(get_turf(user))])")
-	var/text = "[key_name(user)] just purchased the [src.name] from the black market."
+	message_admins("[key_name(user)] just purchased the [src.name] from the grey market. [delivery_method] ([formatJumpTo(get_turf(user))])")
+	var/text = "[key_name(user)] just purchased the [src.name] from the grey market."
 	log_game(text)
 	log_admin(text)
 
 /datum/grey_market_item/proc/buy(var/obj/item/device/illegalradio/radio, var/delivery_method, var/mob/user)
-	..()
 	if(!istype(radio))
 		return FALSE
 	if(user.stat || user.restrained())
@@ -107,11 +106,11 @@ var/list/grey_market_items = list()
 		return FALSE
 
 	switch(delivery_method)
-		if(BM_CHEAP)
+		if(GM_CHEAP)
 			spawn_cheap(radio,user)
-		if(BM_NORMAL)
+		if(GM_NORMAL)
 			spawn_normal(radio,user)
-		if(BM_EXPENSIVE)
+		if(GM_EXPENSIVE)
 			spawn_expensive(radio,user)
 
 /datum/grey_market_item/proc/spawn_cheap(var/obj/item/device/illegalradio/radio, var/mob/user)
@@ -129,7 +128,7 @@ var/list/grey_market_items = list()
 
 	log_transaction("The item was launched at the station from the [direction_string].", user)
 	radio.visible_message("\The [radio] beeps: <span class='warning'>Your item was launched from the [direction_string]. It will impact the station in less than a minute.</span>")
-	process_transaction(radio, BM_CHEAP)
+	process_transaction(radio, GM_CHEAP)
 	radio.interact(user)
 
 	spawn(rand(15 SECONDS, 45 SECONDS))
@@ -137,11 +136,11 @@ var/list/grey_market_items = list()
 		if(!spawned_item)
 			if(radio)
 				radio.visible_message("\The [radio] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
-				radio.money_stored += get_cost()*delivery_fees[BM_CHEAP]
+				radio.money_stored += get_cost()*delivery_fees[GM_CHEAP]
 			if(round_stock != -1)
 				round_stock += 1
 			return 0
-		after_spawn(spawned_item,BM_CHEAP,user)
+		after_spawn(spawned_item,GM_CHEAP,user)
 		spawned_item.ThrowAtStation(30,0.4,direction)
 
 var/list/potential_locations = list()
@@ -173,25 +172,25 @@ var/locations_calculated = 0
 	var/time_to_spawn = rand(30 SECONDS, 60 SECONDS)
 	log_transaction("The item was teleported to the [selected_area.name].", user)
 	radio.visible_message("\The [radio] beeps: <span class='warning'>Your item has been sent through bluespace. It will appear somewhere in [selected_area.name] in [time_to_spawn/10] seconds.</span>")
-	process_transaction(radio, BM_NORMAL)
+	process_transaction(radio, GM_NORMAL)
 	radio.interact(user)
 
 	spawn(time_to_spawn)
 		var/obj/spawned_item = new item(spawnloc,user)
-		after_spawn(spawned_item,BM_NORMAL,user)
+		after_spawn(spawned_item,GM_NORMAL,user)
 
 
 /datum/grey_market_item/proc/spawn_expensive(var/obj/item/device/illegalradio/radio, var/mob/user)
-	process_transaction(radio, BM_EXPENSIVE)
+	process_transaction(radio, GM_EXPENSIVE)
 	var/obj/spawned_item = new item(get_turf(user),user)
 	if(!spawned_item)
 		if(radio)
 			radio.visible_message("\The [radio] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
-			radio.money_stored += get_cost()*delivery_fees[BM_EXPENSIVE]
+			radio.money_stored += get_cost()*delivery_fees[GM_EXPENSIVE]
 		if(round_stock != -1)
 			round_stock += 1
 		return 0
-	after_spawn(spawned_item,BM_EXPENSIVE,user)
+	after_spawn(spawned_item,GM_EXPENSIVE,user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/A = user
 		if(istype(spawned_item, /obj/item))
@@ -217,7 +216,7 @@ var/list/player_market_items = list()
 	var/atom/item
 	var/obj/item/device/grey_market_beacon/attached_beacon
 	var/obj/item/device/illegalradio/seller_radio
-	var/mob/living/seller
+	var/seller_ckey
 	var/selected_name = ""
 	var/selected_price = 100
 	var/selected_description = "Enter description here."
@@ -227,6 +226,9 @@ var/list/player_market_items = list()
 		attached_beacon.on_unlist()
 	player_market_items -= src
 	buzz_grey_market()
+	item = null
+	attached_beacon = null
+	seller_radio = null
 	
 /datum/grey_market_player_item/proc/buy(var/obj/item/device/illegalradio/radio, var/mob/user)
 	..()
@@ -266,8 +268,8 @@ var/list/player_market_items = list()
 	
 /datum/grey_market_player_item/proc/log_transaction(var/mob/user)
 	feedback_add_details("grey_market_items_bought", "[item]")
-	message_admins("[key_name(user)] just purchased the [item] from the black market from [key_name(seller)]. ([formatJumpTo(get_turf(user))])")
-	var/text = "[key_name(user)] just purchased the [item] from the black market from [key_name(seller)]."
+	message_admins("[key_name(user)] just purchased the [item] from the grey market from [seller_ckey]. ([formatJumpTo(get_turf(user))])")
+	var/text = "[key_name(user)] just purchased the [item] from the grey market from [seller_ckey]."
 	log_game(text)
 	log_admin(text)
 	
@@ -277,7 +279,7 @@ var/list/player_market_items = list()
 		
 /*
 //
-//	BLACK MARKET ITEMS
+//	GREY MARKET ITEMS
 //
 */
 
@@ -309,7 +311,6 @@ with an atomic bomb. But those are rare and expensive.
 	name = "Monkey Hide"
 	desc = "Your own piece of leather, some assembly required."
 	item = /obj/item/stack/sheet/animalhide/monkey
-	sps_chances = list(0, 5, 10)
 	stock_min = 15
 	stock_max = 20
 	cost_min = 25
@@ -320,7 +321,6 @@ with an atomic bomb. But those are rare and expensive.
 	name = "Lizard Skin"
 	desc = "High quality skins for leather making."
 	item = /obj/item/stack/sheet/animalhide/lizard
-	sps_chances = list(0, 5, 10)
 	stock_min = 10
 	stock_max = 20
 	cost_min = 50
@@ -331,7 +331,6 @@ with an atomic bomb. But those are rare and expensive.
 	name = "Human Skin"
 	desc = "Used medical waste."
 	item = /obj/item/stack/sheet/animalhide/human
-	sps_chances = list(5, 10, 15)
 	stock_min = 10
 	stock_max = 20
 	cost_min = 75
@@ -353,7 +352,6 @@ with an atomic bomb. But those are rare and expensive.
 	name = "Bear Meat"
 	desc = "A slab of bear meat for the manliest men."
 	item = /obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat
-	sps_chances = list(0, 5, 10)
 	stock_min = 3
 	stock_max = 9
 	cost_min = 50
@@ -364,7 +362,6 @@ with an atomic bomb. But those are rare and expensive.
 	name = "Strange Meat"
 	desc = "An alien slab of meat."
 	item = /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
-	sps_chances = list(0, 5, 10)
 	stock_min = 3
 	stock_max = 9
 	cost_min = 50
@@ -375,7 +372,6 @@ with an atomic bomb. But those are rare and expensive.
 	name = "Human Meat"
 	desc = "Don't ask questions."
 	item = /obj/item/weapon/reagent_containers/food/snacks/meat/human
-	sps_chances = list(5, 10, 15)
 	stock_min = 9
 	stock_max = 18
 	cost_min = 100
@@ -386,7 +382,6 @@ with an atomic bomb. But those are rare and expensive.
 	name = "Black Food Color"
 	desc = "The namesake for this whole market. You should buy one for that reason alone."
 	item = /obj/item/weapon/reagent_containers/food/drinks/coloring
-	sps_chances = list(5, 25, 30)
 	delivery_available = list(0, 1, 1)
 	stock_min = 1
 	stock_max = 5
@@ -401,7 +396,6 @@ with an atomic bomb. But those are rare and expensive.
 	name = "Stethoscope"
 	desc = "For medical use only, honest!"
 	item = /obj/item/clothing/accessory/stethoscope
-	sps_chances = list(5, 25, 30)
 	stock_min = 1
 	stock_max = 50
 	cost_min = 50
@@ -442,6 +436,6 @@ with an atomic bomb. But those are rare and expensive.
 	cost_max = 500
 	display_chance = 100
 
-#undef BM_CHEAP
-#undef BM_NORMAL
-#undef BM_EXPENSIVE
+#undef GM_CHEAP
+#undef GM_NORMAL
+#undef GM_EXPENSIVE

@@ -20,6 +20,7 @@ var/global/list/ghdel_profiling = list()
 	var/had_blood //Something was bloody at some point.
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
+	var/obj/item/device/grey_market_beacon/market_beacon = null //For the grey market.
 
 	///Chemistry.
 	var/datum/reagents/reagents = null
@@ -472,9 +473,7 @@ its easier to just keep the beam vertical.
 		else if(isobserver(user) || prob(100 / (distance + 2)))
 			to_chat(user, "There's something hidden in there.")
 			
-	var/obj/item/device/grey_market_beacon/beacon = locate() in src
-	if(beacon)
-		to_chat(user, "<span class='notice'>Upon closer inspection, you notice a tiny sapphire beacon. It matches the model used by the Black Market to track goods.</span>")
+	grey_market_beacon_check(src,user)
 
 /atom/Topic(href, href_list)
 	. = ..()

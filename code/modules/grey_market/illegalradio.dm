@@ -17,11 +17,11 @@ var/list/global_illegal_radios = list()
 			
 /obj/item/device/illegalradio
 	icon = 'icons/obj/radio.dmi'
-	name = "black market uplink"
+	name = "grey market uplink"
 	suffix = "\[3\]"
 	icon_state = "illegalradio"
 	item_state = "illegalradio"
-	desc = "A modified radio with a link to the black market. Use with caution."
+	desc = "A modified radio with a link to the grey market. Use with caution."
 
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -49,7 +49,7 @@ var/list/global_illegal_radios = list()
 	var/scanning = 0
 	
 /obj/item/device/illegalradio/advanced
-	name = "advanced black market uplink"
+	name = "advanced grey market uplink"
 	icon_state = "illegalradio_adv"
 	item_state = "illegalradio_adv"
 	desc = "If there's one thing you can always trust a Vox will do, it's getting his money's worth."
@@ -63,7 +63,7 @@ var/list/global_illegal_radios = list()
 	money_stored = 0
 	global_illegal_radios -= src
 
-/obj/item/device/illegalradio/interact(mob/user as mob) //Whenever called, update screen.
+/obj/item/device/illegalradio/interact(mob/user) //Whenever called, update screen.
 	if(opened_screen == MAIN)
 		selected_item = null
 		new_listing = null
@@ -71,7 +71,7 @@ var/list/global_illegal_radios = list()
 	else if(opened_screen == SELLING)
 		open_html(generate_local_market_hub(user),user)
 	else if(opened_screen == DELIVERY)
-		open_html(generate_delivery_menu(usr,selected_item),user)
+		open_html(generate_delivery_menu(user,selected_item),user)
 		
 /obj/item/device/illegalradio/attack_self(mob/user as mob)
 	user.set_machine(src)
@@ -84,11 +84,7 @@ var/list/global_illegal_radios = list()
 		return
 	
 	if(href_list["open_main"])
-		open_screen(MAIN)
-		
-	else if(href_list["show_desc"])
-		//show_description = text2num(href_list["show_desc"])
-		//interact(usr)	
+		open_screen(MAIN, usr)
 		
 	else if (href_list["dispense_change"])
 		dispense_change(usr)	
@@ -112,7 +108,7 @@ var/list/global_illegal_radios = list()
 				var/datum/grey_market_item/item = category_items[number]
 				if(item)
 					selected_item = item
-					open_screen(DELIVERY)
+					open_screen(DELIVERY, usr)
 					
 	else if(href_list["buy_item"])
 		var/delivery_method = href_list["buy_item"]	
@@ -120,7 +116,7 @@ var/list/global_illegal_radios = list()
 		selected_item.buy(src, delivery_method, usr)
 		selected_item = null
 		
-		open_screen(MAIN)
+		open_screen(MAIN, usr)
 
 	else if(href_list["buy_local_item"])
 		var/number = text2num(href_list["buy_local_item"])
@@ -129,10 +125,10 @@ var/list/global_illegal_radios = list()
 			item.buy(src,usr)
 		else
 			visible_message("\The [src] beeps: <span class='warning'>An unexpected error occurred. Try again later.</span>")	
-		open_screen(MAIN)
+		open_screen(MAIN, usr)
 		
 	else if(href_list["open_local_market_hub"])
-		open_screen(SELLING)
+		open_screen(SELLING, usr)
 
 	else if(href_list["local_market_input_price"])
 		var/price = input("Enter your desired price.", "Price", new_listing ? new_listing.selected_price : 0) as num
@@ -160,7 +156,7 @@ var/list/global_illegal_radios = list()
 		
 	else if(href_list["local_market_confirm_listing"])
 		if(money_stored < new_item_fee)
-			visible_message("\The [src] beeps: <span class='warning'>You actually don't have enough cash to list an item. That's pretty sad.</span>")	
+			visible_message("\The [src] beeps: <span class='warning'>Error. Insufficient funds for listing.</span>")	
 			return
 		else if(!new_listing || !new_listing.item)
 			visible_message("\The [src] beeps: <span class='warning'>There was an unexpected error! Try again later.</span>")
@@ -177,7 +173,7 @@ var/list/global_illegal_radios = list()
 			buzz_grey_market()
 			
 			new_listing = null
-			open_screen(MAIN)
+			open_screen(MAIN, usr)
 		
 	..()
 
@@ -188,7 +184,7 @@ var/list/global_illegal_radios = list()
 	var/dat = list()
 	
 	//First, generate the header.
-	dat += "<B><font size=5>The Black Market</font></B><BR>"
+	dat += "<B><font size=5>The Grey Market</font></B><BR>"
 	dat += "<B>[welcome]</B><BR>"
 	dat += "Cash stored: [src.money_stored]<BR>"
 	dat += "<A href='byond://?src=\ref[src];dispense_change=1'>Eject Cash</a> <A href='byond://?src=\ref[src];toggle_notifications=1'>Buzz Notifications: [notifications ? "ON" : "OFF"]</a>"
@@ -256,13 +252,13 @@ var/list/global_illegal_radios = list()
 /obj/item/device/illegalradio/proc/generate_local_market_hub(mob/user)
 	var/dat = list()
 	if(!new_listing)
-		dat += "<B><font size=5>The Black Market</font></B><BR>"
+		dat += "<B><font size=5>The Grey Market</font></B><BR>"
 		dat += "Cash stored: [src.money_stored] Listing Fee: [new_item_fee]<BR>"
 		dat += "<B>A [market_cut*100]% fee will be applied to all transactions.</B><BR>"
 		dat += "<A href='byond://?src=\ref[src];open_main=1'>Return</a>"
 		dat = jointext(dat,"")
 	else
-		dat += "<B><font size=5>The Black Market</font></B><BR>"
+		dat += "<B><font size=5>The Grey Market</font></B><BR>"
 		dat += "Cash stored: [src.money_stored] Listing Fee: [new_item_fee]<BR>"
 		dat += "<B>A [market_cut*100]% fee will be applied to all transactions.</B><BR>"
 		dat += "<A href='byond://?src=\ref[src];open_main=1'>Return</a>"
@@ -276,7 +272,7 @@ var/list/global_illegal_radios = list()
 	
 /obj/item/device/illegalradio/proc/generate_delivery_menu(mob/user, var/datum/grey_market_item/item)
 	var/dat = list()
-	dat += "<B><font size=5>The Black Market</font></B><BR>"
+	dat += "<B><font size=5>The Grey Market</font></B><BR>"
 	dat += "<B>Please pay for an available delivery option.</B><BR>"
 	dat += "<B>You are purchasing the [item.name].</B><BR>"
 	dat += "Cash stored: [src.money_stored]<BR><BR>"
@@ -300,29 +296,29 @@ var/list/global_illegal_radios = list()
 
 		
 		
-/obj/item/device/illegalradio/proc/open_screen(var/screen)
+/obj/item/device/illegalradio/proc/open_screen(var/screen, var/user)
 	opened_screen = screen
-	interact(usr)
+	interact(user)
 		
-/obj/item/device/illegalradio/proc/generate_new_local_listing(atom/target)
+/obj/item/device/illegalradio/proc/generate_new_local_listing(var/atom/target, var/user)
 	new_listing = new /datum/grey_market_player_item()
 	new_listing.item = target
 	new_listing.selected_name = "[target]"
 	new_listing.seller_radio = src
-	new_listing.seller = usr
+	new_listing.seller_ckey = key_name(user)
 	new_listing.selected_price = minimum_price
-	open_screen(SELLING)
+	open_screen(SELLING, user)
 	
-/obj/item/device/illegalradio/attack(mob/living/carbon/T as mob, mob/living/user as mob)
+/obj/item/device/illegalradio/attack(mob/living/carbon/T, mob/living/user)
 	return
 		
-/obj/item/device/illegalradio/afterattack(atom/movable/A as mob|obj, mob/user as mob)
+/obj/item/device/illegalradio/afterattack(atom/movable/A, mob/user)
 	if(istype(A, /obj/item/weapon/spacecash) && A.Adjacent(user))
 		var/obj/item/weapon/spacecash/cash = A
 		money_stored += cash.get_total()
 		qdel(cash)
-		visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
-		interact(usr)
+		visible_message("<span class='info'>\The [user] inserts a credit chip into [src].</span>")
+		interact(user)
 	else if(!player_sell_check(A))
 		return
 	else if((istype(A, /obj) || istype(A, /mob)) && A.Adjacent(user) && !scanning)
@@ -335,7 +331,7 @@ var/list/global_illegal_radios = list()
 				visible_message("\The [src] beeps: <span class='warning'>Error: that item is anchored. Can't teleport the entire station with it.</span>")
 			else
 				visible_message("\The [src] beeps: <span class='warning'>Item verified. Please confirm your listing.</span>")
-				generate_new_local_listing(A)
+				generate_new_local_listing(A, user)
 		scanning = 0		
 		
 /obj/item/device/illegalradio/proc/player_sell_check(atom/movable/A)
