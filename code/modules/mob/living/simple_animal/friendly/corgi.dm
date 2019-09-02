@@ -583,7 +583,7 @@
 		visible_message("<span class='danger'>[src]'s muscles bulge!</span>")
 		desc = "It's a corgi... but his muscles have veins running over them."
 		name = "Ian the Buff"
-	else if(creatine_had)
+	else if(!creatine && creatine_had)
 		visible_message("<span class='danger'>[src]'s muscles tear themselves apart!</span>")
 		gib()
 		

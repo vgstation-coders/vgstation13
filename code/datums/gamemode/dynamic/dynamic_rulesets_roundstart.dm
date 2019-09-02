@@ -362,11 +362,11 @@
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
 	job_priority = list("AI","Cyborg")
-	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
+	required_enemies = list(3,3,3,2,2,2,1,1,1,1)
 	required_candidates = 1
-	weight = 3
+	weight = 2
 	cost = 40
-	requirements = list(90,90,90,90,80,70,50,30,20,10)
+	requirements = list(90,80,70,60,50,40,40,30,30,20)
 	high_population_requirement = 60
 	flags = HIGHLANDER_RULESET
 
