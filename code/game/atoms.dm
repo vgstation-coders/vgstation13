@@ -472,7 +472,7 @@ its easier to just keep the beam vertical.
 		else if(isobserver(user) || prob(100 / (distance + 2)))
 			to_chat(user, "There's something hidden in there.")
 			
-	var/obj/item/device/black_market_beacon/beacon = locate() in src
+	var/obj/item/device/grey_market_beacon/beacon = locate() in src
 	if(beacon)
 		to_chat(user, "<span class='notice'>Upon closer inspection, you notice a tiny sapphire beacon. It matches the model used by the Black Market to track goods.</span>")
 

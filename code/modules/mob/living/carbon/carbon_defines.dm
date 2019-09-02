@@ -20,7 +20,7 @@
 	var/pulse = PULSE_NORM	//current pulse level
 
 	var/hasmouth = 1 // Used for food, etc.
-
+	var/give_check = FALSE
 	var/event/on_emote = new ()
 	var/base_insulation = 0
 	var/unslippable = 0 //Whether the mob can be slipped
@@ -33,4 +33,3 @@
 	if (mutual_handcuffs && mutual_handcuffed_to)
 		mutual_handcuffs.remove_mutual_cuff_events(mutual_handcuffed_to)
 	. = ..()
-	

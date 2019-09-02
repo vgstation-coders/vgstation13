@@ -119,7 +119,8 @@ CREATE TABLE client (
     hear_voicesound INTEGER,
     hear_instruments INTEGER,
     ambience_volume INTEGER,
-    credits_volume INTEGER
+    credits_volume INTEGER,
+    antag_objectives INTEGER
 );
 
 

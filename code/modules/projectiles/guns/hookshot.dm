@@ -13,6 +13,7 @@
 	w_class = W_CLASS_MEDIUM
 	fire_delay = 0
 	fire_sound = 'sound/weapons/hookshot_fire.ogg'
+	clumsy_check = 0
 	var/maxlength = 14
 	var/obj/item/projectile/hookshot/hook = null
 	var/list/links = list()

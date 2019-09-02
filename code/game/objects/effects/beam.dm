@@ -143,7 +143,7 @@
 /obj/effect/beam/Bumped(var/atom/movable/AM)
 	if(!master || !AM)
 		return
-	if(istype(AM, /obj/effect/beam) || !AM.density || Cross(AM))
+	if(istype(AM, /obj/effect/beam) || !AM.density || AM.Cross(src))
 		return
 	beam_testing("Bumped by [AM]")
 	am_connector=1
@@ -231,7 +231,7 @@
 		beam_testing(" returning (!AM || !master)")
 		return
 
-	if(istype(AM, /obj/effect/beam) || (!AM.density && !istype(AM, /obj/effect/blob)))
+	if(istype(AM, /obj/effect/beam) || (!AM.density && !istype(AM, /obj/effect/blob)) || AM.Cross(src))
 		beam_testing(" returning (is beam or not dense)")
 		return
 

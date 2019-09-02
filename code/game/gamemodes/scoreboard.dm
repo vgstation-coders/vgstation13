@@ -612,7 +612,7 @@
 		round_end_info = dat
 		log_game(dat)
 
-		stat_collection.crewscore = score["crewscore"]
+		stat_collection.crew_score = score["crewscore"]
 
 	var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
 	popup.set_content(dat)

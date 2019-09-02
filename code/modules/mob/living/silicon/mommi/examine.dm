@@ -54,4 +54,4 @@
 		laws.show_laws(fag)
 		investigation_log(I_GHOST, "|| had its laws checked by [key_name(fag)][fag.locked_to ? ", who was haunting [fag.locked_to]" : ""]")
 
-	black_market_beacon_check(src, user)
+	grey_market_beacon_check(src, user)

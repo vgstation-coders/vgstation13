@@ -579,6 +579,7 @@
 	desc = "Engineering Dakka."
 	icon_state = "welder_gatling"
 	max_fuel = 160
+	weld_speed = 2
 	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 18750, MAT_GLASS = 18750)
 	origin_tech = Tc_ENGINEERING + "=4"
@@ -594,6 +595,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
 	origin_tech = Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
 	icon_state = "ewelder"
+	weld_speed = 1.25
 	var/last_gen = 0
 
 /obj/item/weapon/weldingtool/experimental/empty

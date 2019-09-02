@@ -379,11 +379,13 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			else if(O.is_screwdriver(user))
 				user.visible_message("[user.name] closes the [src.name]'s access panel.", \
 					"You close the access panel.")
+				playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
 				temp_state++
 		if(3)
 			if(O.is_screwdriver(user))
 				user.visible_message("[user.name] opens the [src.name]'s access panel.", \
 					"You open the access panel.")
+				playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
 				temp_state--
 				active = 0
 	if(temp_state == src.construction_state)//Nothing changed

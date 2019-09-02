@@ -81,7 +81,7 @@
 	if (is_type_in_list(target, can_be_placed_into))
 		return
 
-	if(ishuman(target)) //Splashing handled in attack now
+	if(ishuman(target) || iscorgi(target)) //Splashing handled in attack now
 		return
 
 	var/transfer_result = transfer(target, user, splashable_units = -1) // Potentially splash with everything inside

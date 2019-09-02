@@ -141,6 +141,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/ambience_volume = 25
 	var/credits_volume = 75
 	var/window_flashing = 1
+	var/antag_objectives = 0 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -374,6 +375,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=stumble'><b>[(stumble) ? "Yes" : "No"]</b></a><br>
 	<b>Pulling action:</b>
 	<a href='?_src_=prefs;preference=pulltoggle'><b>[(pulltoggle) ? "Toggle Pulling" : "Always Pull"]</b></a><br>
+	<b>Solo Antag Objectives:</b>
+	<a href='?_src_=prefs;preference=antag_objectives'><b>[(antag_objectives) ? "Standard" : "Freeform"]</b></a><br>
   </div>
   <div id="rightDiv" style="width:50%;height:100%;float:right;">
 	<b>Randomized Character Slot:</b>
@@ -1490,7 +1493,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("window_flashing")
 					window_flashing = !window_flashing
-
+				
+				if("antag_objectives")
+					antag_objectives = !antag_objectives
+				
 			if(user.client.holder)
 				switch(href_list["preference"])
 					if("hear_ahelp")

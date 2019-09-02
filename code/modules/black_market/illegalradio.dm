@@ -4,7 +4,7 @@
 
 var/list/global_illegal_radios = list()
 
-/proc/buzz_black_market() //Updates and buzzes all illegalradios so the screen is current.
+/proc/buzz_grey_market() //Updates and buzzes all illegalradios so the screen is current.
 	for(var/obj/item/device/illegalradio/radio in global_illegal_radios)
 		if(radio.notifications)
 			var/mob/living/holder = get_holder_of_type(radio, /mob/living)
@@ -33,8 +33,8 @@ var/list/global_illegal_radios = list()
 	melt_temperature = MELTPOINT_PLASTIC
 
 	var/list/purchase_log = list()
-	var/datum/black_market_item/selected_item = null
-	var/datum/black_market_player_item/new_listing = null
+	var/datum/grey_market_item/selected_item = null
+	var/datum/grey_market_player_item/new_listing = null
 	
 	var/money_stored
 	var/opened_screen = MAIN
@@ -105,11 +105,11 @@ var/list/global_illegal_radios = list()
 			var/category = split[1]
 			var/number = text2num(split[2])
 
-			var/list/buyable_items = get_black_market_items()
+			var/list/buyable_items = get_grey_market_items()
 			var/list/category_items = buyable_items[category]
 			
 			if(category_items && category_items.len >= number)
-				var/datum/black_market_item/item = category_items[number]
+				var/datum/grey_market_item/item = category_items[number]
 				if(item)
 					selected_item = item
 					open_screen(DELIVERY)
@@ -124,7 +124,7 @@ var/list/global_illegal_radios = list()
 
 	else if(href_list["buy_local_item"])
 		var/number = text2num(href_list["buy_local_item"])
-		var/datum/black_market_player_item/item = player_market_items[number]
+		var/datum/grey_market_player_item/item = player_market_items[number]
 		if(item)
 			item.buy(src,usr)
 		else
@@ -172,9 +172,9 @@ var/list/global_illegal_radios = list()
 			money_stored -= new_item_fee
 			player_market_items += new_listing
 			
-			var/obj/item/device/black_market_beacon/beacon = new /obj/item/device/black_market_beacon()
+			var/obj/item/device/grey_market_beacon/beacon = new /obj/item/device/grey_market_beacon()
 			beacon.attach_to(new_listing.item, new_listing)
-			buzz_black_market()
+			buzz_grey_market()
 			
 			new_listing = null
 			open_screen(MAIN)
@@ -195,7 +195,7 @@ var/list/global_illegal_radios = list()
 	dat += "<HR>"
 	dat += "<B>Request item:</B><BR>"
 	dat += "<I>Each item costs the price that follows its name. Cash only.</I><br><BR>"
-	var/list/buyable_items = get_black_market_items()
+	var/list/buyable_items = get_grey_market_items()
 	
 	//Next, create the player market entries at the top.
 	dat += "<b>Locally Sourced Goods</b><br>"
@@ -203,7 +203,7 @@ var/list/global_illegal_radios = list()
 		dat += "<font color='grey'><i>There are no items sourced from your station right now.</i></font><br>"
 	else
 		var/iterator = 0
-		for(var/datum/black_market_player_item/product in player_market_items)
+		for(var/datum/grey_market_player_item/product in player_market_items)
 			iterator++
 			var/final_text = ""
 			if(product.selected_price <= money_stored)
@@ -225,7 +225,7 @@ var/list/global_illegal_radios = list()
 		var/merchandise_list = list()
 
 		var/i = 0
-		for(var/datum/black_market_item/item in buyable_items[category])
+		for(var/datum/grey_market_item/item in buyable_items[category])
 			i++
 			var/stock = item.get_stock()
 			var/itemcost = item.get_cost()
@@ -274,7 +274,7 @@ var/list/global_illegal_radios = list()
 		dat = jointext(dat,"")
 	return dat
 	
-/obj/item/device/illegalradio/proc/generate_delivery_menu(mob/user, var/datum/black_market_item/item)
+/obj/item/device/illegalradio/proc/generate_delivery_menu(mob/user, var/datum/grey_market_item/item)
 	var/dat = list()
 	dat += "<B><font size=5>The Black Market</font></B><BR>"
 	dat += "<B>Please pay for an available delivery option.</B><BR>"
@@ -305,7 +305,7 @@ var/list/global_illegal_radios = list()
 	interact(usr)
 		
 /obj/item/device/illegalradio/proc/generate_new_local_listing(atom/target)
-	new_listing = new /datum/black_market_player_item()
+	new_listing = new /datum/grey_market_player_item()
 	new_listing.item = target
 	new_listing.selected_name = "[target]"
 	new_listing.seller_radio = src

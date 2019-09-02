@@ -22,7 +22,7 @@
 			msg += "<span class='deadsay'>[name] E_UNEXPECTED 0x8000FFFF. If you are experiencing difficulty with an A.I. you are installing or running, contact central command with this displaying the error message.</span>\n"
 	msg += "*---------*</span>"
 	
-	black_market_beacon_check(src, user)
+	grey_market_beacon_check(src, user)
 
 	to_chat(user, msg)
 

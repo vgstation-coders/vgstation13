@@ -285,7 +285,7 @@
 	desc = "Awaiting garbage collection."
 
 	
-/obj/item/key/lightcycle/black_market //Less dangerous version for the black market.
+/obj/item/key/lightcycle/grey_market //Less dangerous version for the black market.
 	desc = "A strange-looking glowing rod. According to black market vendors, you're supposed to snap it in half."
 	delete_ribbons_on_dismount = 1
 	

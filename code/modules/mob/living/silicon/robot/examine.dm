@@ -44,5 +44,5 @@
 	msg += "*---------*</span>"
 
 	to_chat(user, msg)
-	black_market_beacon_check(src, user)
+	grey_market_beacon_check(src, user)
 	..()

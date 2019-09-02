@@ -295,7 +295,7 @@ obj/item/device/mmi/Destroy()
 
 		to_chat(user, "<span class='info'>Its interface is [locked ? "locked" : "unlocked"] </span>")
 	to_chat(user, "<span class='info'>*---------*</span>")
-	black_market_beacon_check(src, user)
+	grey_market_beacon_check(src, user)
 
 /obj/item/device/mmi/OnMobDeath(var/mob/living/carbon/brain/B)
 	if(istype(B))
