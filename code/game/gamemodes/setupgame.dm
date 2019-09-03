@@ -1,7 +1,6 @@
 var/BLINDBLOCK = 0
 var/DEAFBLOCK = 0
 var/HULKBLOCK = 0
-var/TELEBLOCK = 0
 var/FIREBLOCK = 0
 var/XRAYBLOCK = 0
 var/CLUMSYBLOCK = 0
@@ -111,7 +110,6 @@ var/LACTOSEBLOCK = 0
 	BLINDBLOCK         = getAssignedBlock("BLIND",         numsToAssign)
 	DEAFBLOCK          = getAssignedBlock("DEAF",          numsToAssign)
 	HULKBLOCK          = getAssignedBlock("HULK",          numsToAssign, DNA_HARD_BOUNDS, good=1)
-	TELEBLOCK          = getAssignedBlock("TELE",          numsToAssign, DNA_HARD_BOUNDS, good=1)
 	FIREBLOCK          = getAssignedBlock("FIRE",          numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	XRAYBLOCK          = getAssignedBlock("XRAY",          numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	CLUMSYBLOCK        = getAssignedBlock("CLUMSY",        numsToAssign)

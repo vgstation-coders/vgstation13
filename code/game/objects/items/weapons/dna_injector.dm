@@ -252,28 +252,6 @@
 	block = FIREBLOCK
 	..()
 
-/obj/item/weapon/dnainjector/nofail/telemut
-	name = "DNA-Injector (Tele.)"
-	desc = "Super brain man!"
-	datatype = DNA2_BUF_SE
-	value = 0xFFF
-	//block = 12
-
-/obj/item/weapon/dnainjector/nofail/telemut/initialize()
-	block = TELEBLOCK
-	..()
-
-/obj/item/weapon/dnainjector/nofail/antitele
-	name = "DNA-Injector (Anti-Tele.)"
-	desc = "Will make you not able to control your mind."
-	datatype = DNA2_BUF_SE
-	value = 0x001
-	//block = 12
-
-/obj/item/weapon/dnainjector/nofail/antitele/initialize()
-	block = TELEBLOCK
-	..()
-
 /obj/item/weapon/dnainjector/nofail/nobreath
 	name = "DNA-Injector (No Breath)"
 	desc = "Hold your breath and count to infinity."
@@ -1353,7 +1331,6 @@
     var/type = pick(/obj/item/weapon/dnainjector/nofail/hulkmut,
         /obj/item/weapon/dnainjector/nofail/xraymut,
         /obj/item/weapon/dnainjector/nofail/firemut,
-        /obj/item/weapon/dnainjector/nofail/telemut,
         /obj/item/weapon/dnainjector/nofail/nobreath,
         /obj/item/weapon/dnainjector/nofail/remoteview,
         /obj/item/weapon/dnainjector/nofail/regenerate,

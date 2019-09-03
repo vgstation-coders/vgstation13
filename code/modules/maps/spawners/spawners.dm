@@ -951,8 +951,6 @@
 	jiggle = 5
 	to_spawn = list(/obj/item/weapon/dnainjector/nofail/polymorph,
 	/obj/item/weapon/dnainjector/nofail/polymorph,
-	/obj/item/weapon/dnainjector/nofail/telemut,
-	/obj/item/weapon/dnainjector/nofail/telemut,
 	/obj/item/weapon/dnainjector/nofail/randompower,
 	/obj/item/weapon/dnainjector/nofail/randompower,
 	/obj/item/weapon/dnainjector/nofail/randompower,

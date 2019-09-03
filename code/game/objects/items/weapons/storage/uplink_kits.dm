@@ -121,7 +121,6 @@
 		if ("palpatine")// It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
 			new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
 			new /obj/item/weapon/melee/energy/sword/red(src) //Combine these into a double e-sword
-			new /obj/item/weapon/dnainjector/nofail/telemut(src)
 			new /obj/item/weapon/dnainjector/nofail/jumpy(src)
 			new /obj/item/weapon/spellbook/oneuse/bound_object(src)
 			new /obj/item/weapon/spellbook/oneuse/lightning/sith(src) //UNLIMITED POWER, requires wizard garb
