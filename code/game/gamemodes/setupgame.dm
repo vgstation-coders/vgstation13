@@ -50,7 +50,6 @@ var/SOBERBLOCK = 0
 var/PSYRESISTBLOCK = 0
 var/STRONGBLOCK = 0
 //var/SHADOWBLOCK = 0
-var/FARSIGHTBLOCK = 0
 var/CHAMELEONBLOCK = 0
 var/CRYOBLOCK = 0
 var/EATBLOCK = 0
@@ -157,7 +156,6 @@ var/LACTOSEBLOCK = 0
 	SOBERBLOCK     = getAssignedBlock("SOBER",      numsToAssign, DNA_HARD_BOUNDS, good=1)
 	PSYRESISTBLOCK = getAssignedBlock("PSYRESIST",  numsToAssign, DNA_HARD_BOUNDS, good=1)
 	//SHADOWBLOCK  = getAssignedBlock("SHADOW",     numsToAssign, DNA_HARDER_BOUNDS, good=1)
-	FARSIGHTBLOCK  = getAssignedBlock("FARSIGHT",   numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	CHAMELEONBLOCK = getAssignedBlock("CHAMELEON",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	CRYOBLOCK      = getAssignedBlock("CRYO",       numsToAssign, DNA_HARD_BOUNDS, good=1)
 	EATBLOCK       = getAssignedBlock("EAT",        numsToAssign, DNA_HARD_BOUNDS, good=1)

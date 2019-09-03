@@ -96,9 +96,6 @@
 	if(client)
 		if(ckey in deadmins)
 			client.verbs += /client/proc/readmin
-
-		if(M_FARSIGHT in mutations)
-			client.changeView(max(client.view, world.view+1))
 	CallHook("Login", list("client" = src.client, "mob" = src))
 
 	if(spell_masters)

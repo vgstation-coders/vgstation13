@@ -1307,28 +1307,6 @@
 	block = SANSBLOCK
 	..()
 
-/obj/item/weapon/dnainjector/nofail/farsightmut
-	name = "DNA-Injector (Farsight)"
-	desc = "This will allow you to focus your eyes better."
-	datatype = DNA2_BUF_SE
-	value = 0xFFF
-	//block = 2
-
-/obj/item/weapon/dnainjector/nofail/farsightmut/initialize()
-	block = FARSIGHTBLOCK
-	..()
-
-/obj/item/weapon/dnainjector/nofail/antifarsight
-	name = "DNA-Injector (Anti-Farsight)"
-	desc = "No fun allowed"
-	datatype = DNA2_BUF_SE
-	value = 0x001
-	//block = 2
-
-/obj/item/weapon/dnainjector/nofail/antifarsight/initialize()
-	block = FARSIGHTBLOCK
-	..()
-
 /obj/item/weapon/dnainjector/nofail/remotesay
 	name = "DNA-Injector (Remote Say)"
 	desc = "Share it with the world."
@@ -1376,7 +1354,6 @@
         /obj/item/weapon/dnainjector/nofail/strong,
         /obj/item/weapon/dnainjector/nofail/immolate,
         /obj/item/weapon/dnainjector/nofail/melt,
-        /obj/item/weapon/dnainjector/nofail/farsightmut,
         /obj/item/weapon/dnainjector/nofail/remotesay)
     new type(loc)
     qdel(src)

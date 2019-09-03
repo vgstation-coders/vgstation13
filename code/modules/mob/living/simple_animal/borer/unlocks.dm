@@ -281,15 +281,6 @@
 				host.update_mutations()
 				break
 
-// Vision tree
-/datum/unlockable/borer/head/gene_unlock/farsight
-	id = "farsight"
-	name = "Telephoto Vision"
-	desc = "Adjusts your host's eyes to see farther."
-	cost = 200
-	time = 1 MINUTES
-	gene_name = "FARSIGHT"
-
 //////////////Chest Unlocks/////////////////
 
 /datum/unlockable/borer/chest/gene_unlock
@@ -512,7 +503,6 @@
 	time = 2 MINUTES
 	verb_type = /obj/item/verbs/borer/attached_head/night_vision
 	give_when_attached=1
-	prerequisites=list("farsight")
 
 //////////Chest Verbs///////////////////
 
