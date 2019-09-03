@@ -21,15 +21,11 @@
 		to_chat(O, "<span class='warning'>Error: printer still recharging. Time left: [round((cooldown_time - world.time + 20)/10)] seconds.</span>")
 		return
 
-	if(O.can_reenter_corpse)
-		if(alert(O,"Do you want to enter a corporeal form?","Inset Disk","Yes","No")== "Yes")
-			if(building)
-				to_chat(O, "<span class='notice'>\The [src] is already processing another. Try again later.</span>")
-				return
-		else
+	if(alert(O,"Do you want to enter a corporeal form?","Inset Disk","Yes","No")== "Yes")
+		if(building)
+			to_chat(O, "<span class='notice'>\The [src] is already processing another. Try again later.</span>")
 			return
-	else if(!(O.can_reenter_corpse))
-		to_chat(O,"<span class='notice'>You have recently ghosted and can not enter right now. Try again later.</span>")
+	else
 		return
 
 	make_mob(O)
