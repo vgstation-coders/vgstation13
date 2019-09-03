@@ -395,14 +395,6 @@
 	else
 		return ..()
 
-/obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
-
-	if(harvest)
-		harvest(user)
-
-	else if(dead)
-		remove_dead(user)
-
 /obj/machinery/portable_atmospherics/hydroponics/attack_ai(mob/user as mob)
 
 	return //Until we find something smart for you to do, please steer clear. Thanks

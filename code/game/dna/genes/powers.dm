@@ -52,12 +52,6 @@
 		user.reset_view(0)
 		return
 
-	if(user.find_held_item_by_type(/obj/item/tk_grab))
-		to_chat(user, "<span class='warning'>Your mind is too busy with that telekinetic grab.</span>")
-		user.remoteview_target = null
-		user.reset_view(0)
-		return
-
 	if(user.client.eye != user.client.mob)
 		user.remoteview_target = null
 		user.reset_view(0)
@@ -282,23 +276,3 @@
 
 /datum/dna/gene/basic/xray/New()
 	block = XRAYBLOCK
-
-/datum/dna/gene/basic/tk
-	name = "Telekinesis"
-	activation_messages = list("You feel smarter.")
-	deactivation_messages = list("You feel less smart.")
-
-	drug_activation_messages = list("You feel like a nerd.")
-	drug_deactivation_messages = list("You feel normal again.")
-
-	mutation = M_TK
-	activation_prob = 15
-
-/datum/dna/gene/basic/tk/New()
-	block = TELEBLOCK
-
-/datum/dna/gene/basic/tk/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	if(isvox(M) || isskelevox(M))
-		return "telekinesisheadvox_s"
-	else
-		return "telekinesishead[fat]_s"

@@ -159,10 +159,7 @@
 	if(!istype(instrumentObj))
 		return 0
 	var/can_interactive = 0
-	if(nano.user.mutations && nano.user.mutations.len)
-		if(M_TK in nano.user.mutations)
-			can_interactive = 1
-	else if(isrobot(nano.user))
+	if(isrobot(nano.user))
 		if(instrumentObj in view(7, nano.user))
 			can_interactive = 1
 	else

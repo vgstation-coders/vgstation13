@@ -444,8 +444,6 @@
 				src.MouseDropTo(G.affecting, user)	//act like they were dragged onto the closet
 			else
 				to_chat(user, "<span class='notice'>The locker is too small to stuff [W] into!</span>")
-		if(istype(W,/obj/item/tk_grab))
-			return 0
 
 		if(iswelder(W) && canweld())
 			var/obj/item/weapon/weldingtool/WT = W
@@ -564,13 +562,6 @@
 			if(C)
 				C.images -= temp_overlay
 			return
-
-	if(!src.toggle(user))
-		to_chat(usr, "<span class='notice'>It won't budge!</span>")
-
-// tk grab then use on self
-/obj/structure/closet/attack_self_tk(mob/user as mob)
-	src.add_fingerprint(user)
 
 	if(!src.toggle(user))
 		to_chat(usr, "<span class='notice'>It won't budge!</span>")

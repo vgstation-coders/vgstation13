@@ -294,9 +294,6 @@
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
 
-/obj/structure/table/attack_tk() // no telehulk sorry
-	return
-
 /obj/structure/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
@@ -810,6 +807,3 @@
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
-
-/obj/structure/rack/attack_tk() // no telehulk sorry
-	return

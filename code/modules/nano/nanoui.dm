@@ -161,10 +161,7 @@ nanoui is used to open and update nano browser uis
    */
 /proc/nanoui_default_status_proc(var/datum/nanoui/nano)
 	var/can_interactive = 0
-	if(nano.user.mutations && nano.user.mutations.len)
-		if(M_TK in nano.user.mutations)
-			can_interactive = 1
-	else if(isrobot(nano.user))
+	if(isrobot(nano.user))
 		if(nano.src_object in view(7, nano.user))
 			can_interactive = 1
 	else

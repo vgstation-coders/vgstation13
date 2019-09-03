@@ -1138,7 +1138,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(c_hand.cant_drop)
 		return
 
-	if(is_organic() && is_broken() && !istype(c_hand,/obj/item/tk_grab))
+	if(is_organic() && is_broken())
 		owner.drop_item(c_hand)
 		var/emote_scream = pick("screams in pain and", "lets out a sharp cry and", "cries out and")
 		owner.emote("me", 1, "[owner.feels_pain() ? emote_scream : ""] drops what they were holding in their [hand_name]!")

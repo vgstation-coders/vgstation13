@@ -276,15 +276,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					src.attack_ai(M)
 
 				else if(!(M in nearby)) // NOT NEARBY
-					// check for TK users
-					if(M.mutations && M.mutations.len)
-						if(M_TK in M.mutations)
-							is_in_use = 1
-							src.attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
-					else
-						// Remove.
-						_using.Remove(M)
-						continue
+					// Remove.
+					_using.Remove(M)
+					continue
 				else // EVERYTHING FROM HERE DOWN MUST BE NEARBY
 					is_in_use = 1
 					attack_hand(M, TRUE)

@@ -38,9 +38,6 @@
 	visible_message("<span class='info'>[user] presses \the [src].</span>")
 	activate()
 
-/obj/structure/button/attack_tk(mob/user)
-	return attack_hand(user)
-
 /obj/structure/button/proc/activate()
 	if(global_search)
 		for(var/obj/effect/hidden_door/hidden_door in hidden_doors)

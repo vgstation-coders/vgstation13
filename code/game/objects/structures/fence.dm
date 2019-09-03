@@ -253,7 +253,7 @@
 
 /obj/structure/fence/door/secure/can_open(mob/user)
 	//User must be standing in the permitted direction from the door, or must have telekinesis
-	if((M_TK in usr.mutations) || (get_dir(src, user) == permitted_direction))
+	if((get_dir(src, user) == permitted_direction))
 		return TRUE
 	else
 		to_chat(user, "<span class='warning'>You can't reach the door latch from here!</span>")

@@ -482,9 +482,8 @@
 					active2.fields[text("com_[]", href_list["del_c"])] = "<B>Deleted</B>"
 
 			if (href_list["search"])
-				var/norange = (usr.mutations && usr.mutations.len && (M_TK in usr.mutations))
 				var/t1 = copytext(sanitize(input("Search String: (Name, DNA, or ID)", "Med. records", null, null)  as text),1,MAX_MESSAGE_LEN)
-				if ((!( t1 ) || usr.stat || !( authenticated ) || usr.restrained() || ((!in_range(src, usr)) && (!istype(usr, /mob/living/silicon)) && !norange)))
+				if ((!( t1 ) || usr.stat || !( authenticated ) || usr.restrained() || ((!in_range(src, usr)) && (!istype(usr, /mob/living/silicon)))))
 					return
 				active1 = null
 				active2 = null

@@ -392,7 +392,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 
 
 // Generic mutations:
-#define	M_TK			1
+//#define	M_TK			1 //Remote manipulation, removed because it was constantly bugged and many things needed many exceptions for TK
 #define M_RESIST_COLD	2
 #define M_XRAY			3
 #define M_HULK			4

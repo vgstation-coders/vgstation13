@@ -85,19 +85,6 @@
 		if((M_LASER in mutations) && a_intent == I_HURT)
 			LaserEyes(A) // moved into a proc below
 
-		else if(M_TK in mutations)
-			/*switch(get_dist(src,A))
-				if(1 to 5) // not adjacent may mean blocked by window
-					Next_move += 2
-				if(5 to 7)
-					Next_move += 5
-				if(8 to 15)
-					Next_move += 10
-				if(16 to 128)
-					return
-			*/
-			A.attack_tk(src)
-
 /*
 	Animals & All Unspecified
 */
@@ -226,9 +213,6 @@
 	if(mutations.len)
 		if((M_LASER in mutations) && a_intent == I_HURT)
 			LaserEyes(A) // moved into a proc below
-
-		else if(M_TK in mutations)
-			A.attack_tk(src)
 
 /atom/proc/attack_martian(mob/user)
 	return attack_hand(user)

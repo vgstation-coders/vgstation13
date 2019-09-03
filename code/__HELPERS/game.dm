@@ -29,9 +29,6 @@
 /proc/in_range(atom/source, mob/user)
 	if(user.Adjacent(source))
 		return 1
-	else if(istype(user) && user.mutations && user.mutations.len)
-		if((M_TK in user.mutations) && (get_dist(user,source) < tk_maxrange))
-			return 1
 
 	return 0 //not in range and not telekinetic
 

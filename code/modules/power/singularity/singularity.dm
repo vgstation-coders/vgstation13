@@ -88,6 +88,7 @@ var/list/global_singularity_pool
 /obj/machinery/singularity/Crossed(atom/movable/A)
 	consume(A)
 
+/* //Telekinesis interaction with an extremely unlikely chance to acquire a Losseta stone, currently disabled
 /obj/machinery/singularity/attack_tk(mob/user)
 	to_chat(user, "<span class = 'notice'>You attempt to comprehend \the [src]...</span>")
 	spawn(rand(50,110))
@@ -119,7 +120,7 @@ var/list/global_singularity_pool
 					L.alpha = 0
 					L.forceMove(get_turf(user))
 					animate(L, alpha = 255, time = 3 SECONDS)
-
+*/
 /obj/machinery/singularity/process()
 	dissipate()
 	check_energy()

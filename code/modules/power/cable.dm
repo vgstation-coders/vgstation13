@@ -178,8 +178,6 @@ By design, d1 is the smallest direction and d2 is the highest
 	return powernet
 
 // telekinesis has no effect on a cable
-/obj/structure/cable/attack_tk(mob/user)
-	return
 
 // Items usable on a cable :
 //   - Wirecutters : cut it duh !

@@ -56,9 +56,6 @@
 			if (!(M_RESIST_HEAT in user.mutations))
 				user.mutations.Add(M_RESIST_HEAT)
 
-			if (!(M_TK in user.mutations))
-				user.mutations.Add(M_TK)
-
 			/* Not used
 			if(!(HEAL in user.mutations))
 				user.mutations.Add(HEAL)

@@ -182,7 +182,7 @@ var/global/ingredientLimit = 10
 
 //Returns "valid" or the reason for denial.
 /obj/machinery/cooking/proc/validateIngredient(var/obj/item/I, var/force_cook)
-	if(istype(I,/obj/item/weapon/grab) || istype(I,/obj/item/tk_grab))
+	if(istype(I,/obj/item/weapon/grab))
 		. = "It won't fit."
 	else if(istype(I,/obj/item/weapon/disk/nuclear))
 		. = "It's the fucking nuke disk!"
