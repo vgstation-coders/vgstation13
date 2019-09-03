@@ -109,7 +109,7 @@ var/list/shuttle_log = list()
 			tmp_alertlevel = text2num(href_list["level"])
 			var/mob/M = usr
 			if (allowed(M) || emagged)
-				if(isAdminGhost(usr) || (access_heads in M.GetAccess()) || emagged) //Let heads change the alert level. Works while emagged
+				if(isAdminGhost(usr) || (access_heads in M.GetAccess())) //Let heads change the alert level. Works while emagged
 					var/old_level = security_level
 					if(!tmp_alertlevel)
 						tmp_alertlevel = SEC_LEVEL_GREEN
