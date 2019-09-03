@@ -1,5 +1,3 @@
-
-
 /datum/event/infestation
 	announceWhen = 15
 	endWhen = 20
@@ -8,6 +6,9 @@
 	var/vermin = VERM_MICE
 	var/override_location = null
 	var/override_vermin = null
+
+/datum/event/infestation/can_start()
+	return 50
 
 /datum/event/infestation/start()
 

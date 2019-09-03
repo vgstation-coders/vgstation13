@@ -32,57 +32,14 @@ var/list/event_last_fired = list()
 
 	//It is this coder's thought that weighting events on job counts is dumb and predictable as hell. 10 Engies ? Hope you like Meteors
 	//Instead, weighting goes from 100 (boring and common) to 10 (exceptional)
+	for(var/type in subtypesof(/datum/event))
+		if((map.event_blacklist.len && map.event_blacklist.Find(type)) || (map.event_whitelist.len && !map.event_whitelist.Find(type)))
+			possibleEvents[type] = 0
+			continue
+		var/datum/event/E = new type(FALSE)
+		possibleEvents[type] = E.can_start(active_with_role)
+		qdel(E)
 
-	possibleEvents[/datum/event/pda_spam] = 50
-	possibleEvents[/datum/event/money_lotto] = 20
-	if(account_hack_attempted)
-		possibleEvents[/datum/event/money_hacker] = 30
-
-	possibleEvents[/datum/event/carp_migration] = 40
-	possibleEvents[/datum/event/brand_intelligence] = 30
-	possibleEvents[/datum/event/rogue_drone] = 25
-	possibleEvents[/datum/event/infestation] = 50
-	possibleEvents[/datum/event/communications_blackout] = 25
-	possibleEvents[/datum/event/thing_storm/meaty_gore] = 25
-	possibleEvents[/datum/event/unlink_from_centcomm] = 10
-	possibleEvents[/datum/event/centcomm_order] = 25
-	possibleEvents[/datum/event/radiation_storm] = 50
-
-	if(active_with_role["AI"] > 0 || active_with_role["Cyborg"] > 0)
-		possibleEvents[/datum/event/ionstorm] = 30
-	possibleEvents[/datum/event/grid_check] = 20 //May cause lag
-	possibleEvents[/datum/event/electrical_storm] = 10
-	possibleEvents[/datum/event/wallrot] = 30
-
-	if(!spacevines_spawned)
-		possibleEvents[/datum/event/spacevine] = 15
-
-	possibleEvents[/datum/event/powercreeper] = 15
-	
-	if(map.nameShort == "snaxi") //Blizzard Event, which only really makes sense on Snaxi
-		possibleEvents[/datum/event/blizzard] = 80
-		possibleEvents[/datum/event/omega_blizzard] = 3
-
-	if(active_with_role["Engineer"] > 1)
-		possibleEvents[/datum/event/meteor_wave] = 15
-		possibleEvents[/datum/event/meteor_shower] = 40
-		possibleEvents[/datum/event/immovable_rod] = 15
-		possibleEvents[/datum/event/thing_storm/blob_shower] = 15//Blob Cluster - shower has no overminds, storm does
-
-	possibleEvents[/datum/event/radiation_storm] = 50
-	if(active_with_role["Medical"] > 1)
-		possibleEvents[/datum/event/viral_infection] = 40
-		possibleEvents[/datum/event/spontaneous_appendicitis] = 50
-		possibleEvents[/datum/event/viral_outbreak] = 25
-		possibleEvents[/datum/event/organ_failure] = 30
-
-	possibleEvents[/datum/event/prison_break] = 25
-	if(active_with_role["Security"] > 1)
-		if(!sent_spiders_to_station)
-			possibleEvents[/datum/event/spider_infestation] = 15
-		if(aliens_allowed && !sent_aliens_to_station)
-			possibleEvents[/datum/event/alien_infestation] = 10
-		possibleEvents[/datum/event/hostile_infestation] = 25
 	for(var/event_type in event_last_fired) if(possibleEvents[event_type])
 		var/time_passed = world.time - event_last_fired[event_type]
 		var/full_recharge_after = 60 * 60 * 10 // Was 3 hours, changed to 1 hour since rounds rarely last that long anyways
