@@ -85,9 +85,6 @@
 		if(istype(M, /mob/living/carbon/human) || istype(M, /mob/living/carbon/monkey))	//robots and aliens are unaffected
 			if(M.stat == DEAD || M.sdisabilities & BLIND)	//mob is dead or fully blind
 				to_chat(user, "<span class='notice'>[M] pupils does not react to the light!</span>")
-			else if(M_XRAY in M.mutations)	//mob has X-RAY vision
-				M.flash_eyes(visual = 1)
-				to_chat(user, "<span class='notice'>[M] pupils give an eerie glow!</span>")
 			else	//they're okay!
 				if(!M.blinded)
 					M.flash_eyes(visual = 1)

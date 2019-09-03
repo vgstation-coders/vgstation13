@@ -208,28 +208,6 @@
 	block = HULKBLOCK
 	..()
 
-/obj/item/weapon/dnainjector/nofail/xraymut
-	name = "DNA-Injector (Xray)"
-	desc = "Finally you can see what the Captain does."
-	datatype = DNA2_BUF_SE
-	value = 0xFFF
-	//block = 8
-
-/obj/item/weapon/dnainjector/nofail/xraymut/initialize()
-	block = XRAYBLOCK
-	..()
-
-/obj/item/weapon/dnainjector/nofail/antixray
-	name = "DNA-Injector (Anti-Xray)"
-	desc = "It will make you see harder."
-	datatype = DNA2_BUF_SE
-	value = 0x001
-	//block = 8
-
-/obj/item/weapon/dnainjector/nofail/antixray/initialize()
-	block = XRAYBLOCK
-	..()
-
 /obj/item/weapon/dnainjector/nofail/firemut
 	name = "DNA-Injector (Fire)"
 	desc = "Gives you fire."
@@ -1351,7 +1329,6 @@
 
 /obj/item/weapon/dnainjector/nofail/randompower/New(newloc)
     var/type = pick(/obj/item/weapon/dnainjector/nofail/hulkmut,
-        /obj/item/weapon/dnainjector/nofail/xraymut,
         /obj/item/weapon/dnainjector/nofail/firemut,
         /obj/item/weapon/dnainjector/nofail/telemut,
         /obj/item/weapon/dnainjector/nofail/nobreath,

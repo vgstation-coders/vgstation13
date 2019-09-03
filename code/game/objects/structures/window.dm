@@ -55,7 +55,7 @@ var/list/one_way_windows
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
-		if(!istype(C.mob, /mob/dead/observer) && !(M_XRAY in C.mob.mutations))
+		if(!istype(C.mob, /mob/dead/observer))
 			if(((x >= (C.mob.x - C.view)) && (x <= (C.mob.x + C.view))) && ((y >= (C.mob.y - C.view)) && (y <= (C.mob.y + C.view))))
 				C.update_one_way_windows(view(C.view,C.mob))
 

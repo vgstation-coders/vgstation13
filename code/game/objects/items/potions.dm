@@ -377,13 +377,6 @@
 	icon_state = "red_smallbottle"
 	time = 3 MINUTES
 
-/obj/item/potion/mutation/truesight
-	name = "potion of trueglimpse"
-	desc = "For ten seconds, nothing will escape your vision."
-	icon_state = "blue_smallbottle"
-	mut = M_XRAY
-	time = 10 SECONDS
-
 /obj/item/potion/mutation/truesight/major
 	name = "potion of truesight"
 	desc = "For five minutes, nothing will escape your vision."

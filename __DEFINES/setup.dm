@@ -394,7 +394,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 // Generic mutations:
 #define	M_TK			1
 #define M_RESIST_COLD	2
-#define M_XRAY			3
+//#define M_XRAY			3 //Let you see through walls, removed because it would remove any form of stealth.
 #define M_HULK			4
 #define M_CLUMSY			5
 #define M_FAT				6

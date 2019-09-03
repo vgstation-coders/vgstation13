@@ -116,16 +116,6 @@
 	abbreviation = "SO"
 	spawned_items = list(/obj/item/weapon/scrying)
 
-/datum/spellbook_artifact/scrying/purchased(mob/living/carbon/human/H)
-	..()
-
-	if(istype(H) && !H.mutations.Find(M_XRAY))
-		H.mutations.Add(M_XRAY)
-		H.change_sight(adding = SEE_MOBS|SEE_OBJS|SEE_TURFS)
-		H.see_in_dark = 8
-		H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-		to_chat(H, "<span class='notice'>The walls suddenly disappear.</span>")
-
 /datum/spellbook_artifact/cloakingcloak
 	name = "Cloak of Cloaking"
 	desc = "A delicate satin sheet that will render you invisible when you cover yourself with it. It is somewhat cumbersome, and running while underneath it is sure to cause you to trip."
