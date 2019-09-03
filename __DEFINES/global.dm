@@ -4,7 +4,7 @@
 /proc/readglobal(var/which)
 	return global.vars[which]
 
-#define DNA_SE_LENGTH 58
+#define DNA_SE_LENGTH 57
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 

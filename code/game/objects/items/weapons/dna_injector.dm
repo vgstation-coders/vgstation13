@@ -296,28 +296,6 @@
 	block = NOBREATHBLOCK
 	..()
 
-/obj/item/weapon/dnainjector/nofail/remoteview
-	name = "DNA-Injector (Remote View)"
-	desc = "Stare into the distance for a reason."
-	datatype = DNA2_BUF_SE
-	value = 0xFFF
-	//block = 2
-
-/obj/item/weapon/dnainjector/nofail/remoteview/initialize()
-	block = REMOTEVIEWBLOCK
-	..()
-
-/obj/item/weapon/dnainjector/nofail/antiremoteview
-	name = "DNA-Injector (Anti-Remote View)"
-	desc = "Quit staring."
-	datatype = DNA2_BUF_SE
-	value = 0x001
-	//block = 2
-
-/obj/item/weapon/dnainjector/nofail/antiremoteview/initialize()
-	block = REMOTEVIEWBLOCK
-	..()
-
 /obj/item/weapon/dnainjector/nofail/regenerate
 	name = "DNA-Injector (Regeneration)"
 	desc = "Healthy but hungry."
@@ -1355,7 +1333,6 @@
         /obj/item/weapon/dnainjector/nofail/firemut,
         /obj/item/weapon/dnainjector/nofail/telemut,
         /obj/item/weapon/dnainjector/nofail/nobreath,
-        /obj/item/weapon/dnainjector/nofail/remoteview,
         /obj/item/weapon/dnainjector/nofail/regenerate,
         /obj/item/weapon/dnainjector/nofail/runfast,
         /obj/item/weapon/dnainjector/nofail/morph,

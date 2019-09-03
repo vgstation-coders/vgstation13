@@ -363,28 +363,4 @@
 			if(iscamera(client.eye))
 				var/obj/machinery/camera/C = client.eye
 				change_sight(copying = C.vision_flags)
-
-		else
-			var/isRemoteObserve = 0
-			if((M_REMOTE_VIEW in mutations) && remoteview_target)
-				isRemoteObserve = 1
-				//Is he unconscious or dead?
-				if(remoteview_target.stat!=CONSCIOUS)
-					to_chat(src, "<span class='warning'>Your psy-connection grows too faint to maintain!</span>")
-					isRemoteObserve = 0
-
-				//Does he have psy resist?
-				if(M_PSY_RESIST in remoteview_target.mutations)
-					to_chat(src, "<span class='warning'>Your mind is shut out!</span>")
-					isRemoteObserve = 0
-
-				//Not on the station or mining?
-				var/turf/temp_turf = get_turf(remoteview_target)
-
-				if(temp_turf && (temp_turf.z != map.zMainStation && temp_turf.z != map.zAsteroid) || remoteview_target.stat!=CONSCIOUS)
-					to_chat(src, "<span class='warning'>Your psy-connection grows too faint to maintain!</span>")
-					isRemoteObserve = 0
-			if(!isRemoteObserve && client && !client.adminobs && !isTeleViewing(client.eye))
-				remoteview_target = null
-				reset_view(null)
 	return 1

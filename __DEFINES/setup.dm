@@ -425,7 +425,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 
 // Other Mutations:
 #define M_NO_BREATH		100 	// no need to breathe
-#define M_REMOTE_VIEW	101 	// remote viewing
+//#define M_REMOTE_VIEW	101 	// remote viewing, removed because it was powerful and because whenever it was available everyone was immune to it anyway
 #define M_REGEN			102 	// health regen
 #define M_RUN			103 	// no slowdown
 #define M_REMOTE_TALK	104 	// remote talking
