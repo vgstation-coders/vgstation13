@@ -171,5 +171,6 @@
 	switch (result)
 		if (ALL_HEADS_DEAD)
 			to_chat(world, "<font size = 3><b>The revolution has won!</b></font><br/><font size = 2>All heads are either dead or have fled the station!</font>")
+			ticker.revolutionaries_won = 1
 		if (ALL_REVS_DEAD)
 			to_chat(world, "<font size = 3><b>The crew has won!</b></h1><br/><font size = 2>All revolutionaries are either dead or have fled the station!</font>")

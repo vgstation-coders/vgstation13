@@ -15,6 +15,13 @@
 /proc/get_maps(root="maps/voting/")
 	var/list/maps = list()
 	var/recursion_limit = 20 //lots of maps waiting to be played, feels like TF2
+	//Check if we can add the special maps
+	var/Lamprey = root + "Lamprey/vgstation13.dmb"
+	if(Lamprey && (score["crewscore"] <= -15000))
+		maps += Lamprey
+	var/Castle = root + "tgstation-sec/vgstation13.dmb"
+	if(ticker.revolutionaries_won)
+		maps += Castle
 	//Get our potential maps
 	testing("starting in [root]")
 	for(var/potential in flist(root))
