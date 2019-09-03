@@ -1544,6 +1544,7 @@
 	var/obj/item/clothing/shoes/S = shoes //Why isn't shoes just typecast in the first place?
 	return ((istype(S) && S.footprint_type) || (species && species.footprint_type) || /obj/effect/decal/cleanable/blood/tracks/footprints) //The shoes' footprint type overrides the mob's, for obvious reasons. Shoes with a falsy footprint_type will let the mob's footprint take over, though.
 
+
 /mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
 	if(..()) // we've been flashed
 		var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
@@ -1767,7 +1768,6 @@ mob/living/carbon/human/isincrit()
 		"meatleft",
 		"check_mutations",
 		"lastFart",
-		"lastDab",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
@@ -1867,8 +1867,10 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/get_cell()
 	var/datum/organ/internal/heart/cell/C = get_heart()
-	if(istype(C))
+	if(istype(C) && C.cell)
 		return C.cell
+	if(wear_suit && wear_suit.get_cell())
+		return wear_suit.get_cell()
 
 // Returns null on failure, the butt on success.
 /mob/living/carbon/human/proc/remove_butt(var/where = loc)

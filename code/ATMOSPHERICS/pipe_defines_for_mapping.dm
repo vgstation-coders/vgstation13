@@ -34,6 +34,14 @@
 	piping_layer=DEF_PIPELAYER_SCRUBBERS
 	pixel_x=DEF_PIXELX_SCRUBBERS
 	pixel_y=DEF_PIXELY_SCRUBBERS
+/obj/machinery/atmospherics/unary/vent_scrubber/on/layered
+	piping_layer=DEF_PIPELAYER_SCRUBBERS
+	pixel_x=DEF_PIXELX_SCRUBBERS
+	pixel_y=DEF_PIXELY_SCRUBBERS
+/obj/machinery/atmospherics/unary/vent_scrubber/on/vox/layered
+	piping_layer=DEF_PIPELAYER_SCRUBBERS
+	pixel_x=DEF_PIXELX_SCRUBBERS
+	pixel_y=DEF_PIXELY_SCRUBBERS
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers
 	piping_layer=DEF_PIPELAYER_SCRUBBERS
 	icon_state="adapter_4"
@@ -66,6 +74,14 @@
 	pixel_x=DEF_PIXELX_SUPPLY
 	pixel_y=DEF_PIXELY_SUPPLY
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layered
+	piping_layer=DEF_PIPELAYER_SUPPLY
+	pixel_x=DEF_PIXELX_SUPPLY
+	pixel_y=DEF_PIXELY_SUPPLY
+/obj/machinery/atmospherics/unary/vent_pump/layered
+	piping_layer=DEF_PIPELAYER_SUPPLY
+	pixel_x=DEF_PIXELX_SUPPLY
+	pixel_y=DEF_PIXELY_SUPPLY
+/obj/machinery/atmospherics/unary/vent_pump/on/layered
 	piping_layer=DEF_PIPELAYER_SUPPLY
 	pixel_x=DEF_PIXELX_SUPPLY
 	pixel_y=DEF_PIXELY_SUPPLY

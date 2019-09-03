@@ -985,6 +985,8 @@ Use this proc preferably at the end of an equipment loadout
 			if(slot_in_backpack)
 				if (H.back && istype(H.back, /obj/item/weapon/storage/backpack))
 					var/obj/item/weapon/storage/backpack/B = H.back
+					if(!B.storage_slots && w_class <= B.fits_max_w_class)
+						return 1
 					if(B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
 						return 1
 				return 0

@@ -167,15 +167,12 @@
 /obj/structure/bed/chair/proc/buckle_chair(mob/M as mob, mob/user as mob)
 	if(!istype(M))
 		return ..()
-	
-	//if(M == user && M.loc != src.loc)
-		//return
 
 	var/mob/living/carbon/human/target = null
 	if(ishuman(M))
 		target = M
 		
-	if(!user.Adjacent(M))
+	if(!user.Adjacent(M) || !user.Adjacent(src))
 		return
 
 	if(target && target.op_stage.butt == 4 && Adjacent(target) && user.Adjacent(src) && !user.incapacitated()) //Butt surgery is at stage 4

@@ -9,9 +9,9 @@
 
 	speak_chance = 50
 	turns_per_move = 5
-	response_help = "pokes the"
-	response_disarm = "gently pushes aside the"
-	response_harm = "hits the"
+	response_help = "pokes"
+	response_disarm = "gently pushes aside"
+	response_harm = "hits"
 	speak_emote = list("acts out a scream", "silently cries","silenty sobs",)
 	emote_hear = list("shuffles silently")
 	speak_chance = 1
@@ -68,5 +68,5 @@
 	if(timestopped)
 		return //under effects of time magick
 
-	var/msg = pick("drools through its stitched mouth","silently cries into its baguette","sloppily mimes tieing an invisible noose around its neck") 
+	var/msg = pick("drools through its stitched mouth","silently cries into its baguette","sloppily mimes tieing an invisible noose around its neck")
 	return ..("me", type, "[msg].")

@@ -24,7 +24,7 @@
 /datum/immune_system/New(var/mob/living/L)
 	..()
 	if (!L)
-		del(src)
+		qdel(src)
 		return
 	body = L
 

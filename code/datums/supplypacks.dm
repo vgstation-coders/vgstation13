@@ -728,6 +728,110 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 150
 	containertype = /obj/structure/closet/crate/basic
 	containername = "contacts crate"
+	group = "Clothing"	
+	
+//Winter Coats//
+	
+/datum/supply_packs/engwinter
+	name = "Engineering Winterwear"
+	contains = list(/obj/item/clothing/suit/storage/wintercoat/engineering,
+					/obj/item/clothing/suit/storage/wintercoat/engineering,
+					/obj/item/clothing/suit/storage/wintercoat/engineering/atmos,
+					/obj/item/clothing/suit/storage/wintercoat/engineering/atmos,
+					/obj/item/clothing/suit/storage/wintercoat/engineering/ce
+					/* mechanics x2 */)
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "engineering winter coats"
+	group = "Clothing"
+	
+/datum/supply_packs/sciwinter
+	name = "Science Winterwear"
+	contains = list(/obj/item/clothing/suit/storage/wintercoat/medical/science,
+					/obj/item/clothing/suit/storage/wintercoat/medical/science,
+					/obj/item/clothing/suit/storage/wintercoat/medical/science,
+					/obj/item/clothing/suit/storage/wintercoat/medical/science
+					/* RD */)
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "science winter coats"
+	group = "Clothing"
+	
+/datum/supply_packs/secwinter
+	name = "Security Winterwear"
+	contains = list(/obj/item/clothing/suit/storage/wintercoat/security,
+					/obj/item/clothing/suit/storage/wintercoat/security,
+					/obj/item/clothing/suit/storage/wintercoat/security,
+					/obj/item/clothing/suit/storage/wintercoat/security,
+					/obj/item/clothing/suit/storage/wintercoat/security/warden,
+					/obj/item/clothing/suit/storage/wintercoat/security/hos)
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "security winter coats"
+	group = "Clothing"
+	
+/datum/supply_packs/medwinter
+	name = "Medical Winterwear"
+	contains = list(/obj/item/clothing/suit/storage/wintercoat/medical,
+					/obj/item/clothing/suit/storage/wintercoat/medical,
+					/obj/item/clothing/suit/storage/wintercoat/medical,
+					/obj/item/clothing/suit/storage/wintercoat/medical,
+					/obj/item/clothing/suit/storage/wintercoat/medical/cmo
+					/* paramed x2 */)
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "medical winter coats"
+	group = "Clothing"
+	
+/datum/supply_packs/svcwinter
+	name = "Service Winterwear"
+	contains = list(/obj/item/clothing/suit/storage/wintercoat/hydro,
+					/obj/item/clothing/suit/storage/wintercoat/hydro,
+					/obj/item/clothing/suit/storage/wintercoat/hydro
+					/* Bartender */
+					/* chef */)
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "service winter coats"
+	group = "Clothing"
+	
+/datum/supply_packs/civwinter
+	name = "Civilian Winterwear"
+	contains = list(/obj/item/clothing/suit/storage/wintercoat/prisoner,
+					/obj/item/clothing/suit/storage/wintercoat,
+					/obj/item/clothing/suit/storage/wintercoat,
+					/obj/item/clothing/suit/storage/wintercoat,
+					/obj/item/clothing/suit/storage/wintercoat)
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "civilian winter coats"
+	group = "Clothing"
+	
+/datum/supply_packs/crgwinter
+	name = "Cargo Winterwear"
+	contains = list(/obj/item/clothing/suit/storage/wintercoat/cargo,
+					/obj/item/clothing/suit/storage/wintercoat/cargo,
+					/obj/item/clothing/suit/storage/wintercoat/cargo,
+					/obj/item/clothing/suit/storage/wintercoat/cargo,
+					/obj/item/clothing/suit/storage/wintercoat/cargo,
+					/obj/item/clothing/suit/storage/wintercoat/miner,
+					/obj/item/clothing/suit/storage/wintercoat/miner,
+					/obj/item/clothing/suit/storage/wintercoat/miner)
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "cargo winter coats"
+	group = "Clothing"
+	
+/datum/supply_packs/mscwinter
+	name = "Misc. Winterwear"
+	contains = list(/obj/item/clothing/suit/storage/wintercoat/security/captain,
+					/obj/item/clothing/suit/storage/wintercoat/hop,
+					/obj/item/clothing/suit/storage/wintercoat/clown,
+					/obj/item/clothing/suit/storage/wintercoat/prisoner
+					/* mime */)
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "miscellaneous winter coats"
 	group = "Clothing"
 
 //////SECURITY//////
@@ -988,8 +1092,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/auto380
 	name = "NT Glock pack"
-	contains = list(/obj/item/weapon/gun/projectile/sec,
-					/obj/item/weapon/gun/projectile/sec,
+	contains = list(/obj/item/weapon/gun/projectile/glock,
+					/obj/item/weapon/gun/projectile/glock,
 					/obj/item/voucher/free_item/glockammo,
 					/obj/item/voucher/free_item/glockammo)
 	cost = 60
@@ -1647,7 +1751,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/glass/bottle/stoxin,
 					/obj/item/weapon/storage/box/syringes,
 					/obj/item/weapon/storage/bag/chem,
-					/obj/item/weapon/storage/box/autoinjectors)
+					/obj/item/weapon/storage/box/autoinjectors,
+					/obj/item/clothing/accessory/stethoscope)
 	cost = 10
 	containertype = /obj/structure/closet/crate/medical
 	containername = "medical crate"
@@ -2344,4 +2449,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "\improper Mining stack of packs"
 	group = "Vending Machine packs"
 
-
+/datum/supply_packs/gamesmachines
+	name = "Al's Fun And Games stack of packs"
+	contains = list(/obj/structure/vendomatpack/games, /obj/structure/vendomatpack/games)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "Al's Fun And Games stack of packs"
+	group = "Vending Machine Packs"

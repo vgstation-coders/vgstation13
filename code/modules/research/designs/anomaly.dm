@@ -38,6 +38,26 @@
 	category = "Anomaly"
 	build_path = /obj/item/device/core_sampler
 
+/datum/design/xenoarch_scanner
+	name = "Xenoarchaeology digsite locator"
+	desc = "Shows digsites in vicinity, whether they're hidden or not."
+	id = "xenoarch_scanner"
+	req_tech  =list(Tc_MAGNETS = 2, Tc_ANOMALY = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_GLASS=1000, MAT_IRON = 1000)
+	category = "Anomaly"
+	build_path = /obj/item/device/xenoarch_scanner
+
+/datum/design/xenoarch_scanner_adv
+	name = "Advanced xenoarchaeology digsite locator"
+	desc = "Shows digsites in vicinity, whether they're hidden or not. Shows you their reagent via highlighting them a specific colour"
+	id = "xenoarch_scanner_adv"
+	req_tech  =list(Tc_MAGNETS = 3, Tc_ANOMALY = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_GLASS=2500, MAT_IRON = 2500, MAT_PLASMA = 300)
+	category = "Anomaly"
+	build_path = /obj/item/device/xenoarch_scanner/adv
+
 /datum/design/phazon_glowstick
 	name = "Phazon Glowstick"
 	desc = "A glowstick filled with phazon material that will change colors upon agitation. It has a string on it so you can wear it."

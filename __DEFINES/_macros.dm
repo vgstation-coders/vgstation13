@@ -385,3 +385,6 @@ proc/get_space_area()
 
 #define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE)
 //Starts 0 credits, not sourced from any database, earns 0 credits, hidden
+
+// strips all newlines from a string, replacing them with null
+#define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)

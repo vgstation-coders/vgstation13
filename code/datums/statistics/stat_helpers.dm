@@ -1,5 +1,6 @@
+// the main file for statistics is statcollection.dm, look there first
+
 // functions related to handling/collecting data, and not writing data specifically
-#define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
 // so I can't get timestamp info so unfortunately I can't do anything like ISO standards
 // at least I can keep the format consistent though
 #define STAT_TIMESTAMP_FORMAT "YYYY-MM-DD hh:mm:ss"
@@ -34,24 +35,28 @@
 	explosions.Add(e)
 
 /datum/stat_collector/proc/add_death_stat(var/mob/living/M)
-	if(!istype(M, /mob/living)) return 0
 	if(M.iscorpse) return 0 // only ever 1 if they are a corpse landmark spawned mob
-	if(ticker.current_state != GAME_STATE_PLAYING)
-		return 0 // We don't care about pre-round or post-round deaths. 3 is TICKERSTATE_PLAYING which is undefined I guess
+	if(ticker.current_state != GAME_STATE_PLAYING) return 0 // We don't care about pre-round or post-round deaths. 3 is TICKERSTATE_PLAYING which is undefined I guess
+	if(!istype(M, /mob/living) || istype(M, /mob/living/carbon/human/manifested)) return 0
+
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
-	d.death_x = M.x
-	d.death_y = M.y
-	d.death_z = M.z
-	d.mob_typepath = M.type
-	d.realname = M.name
 
-	d.damagevalues["BRUTE"] = M.bruteloss
-	d.damagevalues["FIRE"]  = M.fireloss
-	d.damagevalues["TOXIN"] = M.toxloss
-	d.damagevalues["OXY"]   = M.oxyloss
-	d.damagevalues["CLONE"] = M.cloneloss
-	d.damagevalues["BRAIN"] = M.brainloss
+	var/turf/spot = get_turf(M)
+	d.death_x = spot.x
+	d.death_y = spot.y
+	d.death_z = spot.z
+
+	d.mob_typepath = M.type
+	d.mind_name = M.name
+	d.from_suicide = M.suiciding
+
+	d.damage["BRUTE"] = M.bruteloss
+	d.damage["FIRE"]  = M.fireloss
+	d.damage["TOXIN"] = M.toxloss
+	d.damage["OXY"]   = M.oxyloss
+	d.damage["CLONE"] = M.cloneloss
+	d.damage["BRAIN"] = M.brainloss
 
 	if(M.mind)
 		if(M.mind.assigned_role && M.mind.assigned_role != "")
@@ -61,7 +66,7 @@
 		if(M.mind.key)
 			d.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
-			d.realname = M.mind.name
+			d.mind_name = M.mind.name
 	deaths.Add(d)
 
 /datum/stat_collector/proc/add_survivor_stat(var/mob/living/M)
@@ -69,17 +74,22 @@
 
 	var/datum/stat/survivor/s = new
 	s.mob_typepath = M.type
-	s.realname = M.name
+	s.mind_name = M.name
 
-	s.damagevalues["BRUTE"] = M.bruteloss
-	s.damagevalues["FIRE"]  = M.fireloss
-	s.damagevalues["TOXIN"] = M.toxloss
-	s.damagevalues["OXY"]   = M.oxyloss
-	s.damagevalues["CLONE"] = M.cloneloss
-	s.damagevalues["BRAIN"] = M.brainloss
+	var/turf/spot = get_turf(M)
+	s.loc_x = spot.x
+	s.loc_y = spot.y
+	s.loc_z = spot.z
+
+	s.damage["BRUTE"] = M.bruteloss
+	s.damage["FIRE"]  = M.fireloss
+	s.damage["TOXIN"] = M.toxloss
+	s.damage["OXY"]   = M.oxyloss
+	s.damage["CLONE"] = M.cloneloss
+	s.damage["BRAIN"] = M.brainloss
 
 	if(istype(M, /mob/living/silicon/robot))
-		borgs_at_roundend++
+		borgs_at_round_end++
 	// how the scoreboard checked for escape-ness:
 	// if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
 	// luckily this works for us:
@@ -90,13 +100,13 @@
 		if(M.mind.assigned_role && M.mind.assigned_role != "")
 			s.assigned_role = M.mind.assigned_role
 			if(M.mind.assigned_role in command_positions)
-				heads_at_roundend++
+				heads_at_round_end++
 		if(M.mind.special_role && M.mind.special_role != "")
 			s.special_role = M.mind.special_role
 		if(M.mind.key)
 			s.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
-			s.realname = M.mind.name
+			s.mind_name = STRIP_NEWLINE(M.mind.name)
 	survivors.Add(s)
 
 /datum/stat_collector/proc/uplink_purchase(var/datum/uplink_item/bundle, var/obj/resulting_item, var/mob/user )
@@ -127,59 +137,32 @@
 		PUR.purchaser_is_traitor = was_traitor
 		uplink_purchases.Add(PUR)
 
-/datum/stat_collector/proc/add_objectives(var/datum/mind/M)
-	// if(M.objectives.len)
-	// 	for(var/datum/objective/O in M.objectives)
-	// 		var/datum/stat/antag_objective/AO = new
-	// 		AO.key = ckey(M.key)
-	// 		AO.realname = STRIP_NEWLINE(M.name)
-	// 		AO.special_role = M.special_role
-	// 		AO.objective_type = O.type
-	// 		AO.objective_desc = O.explanation_text
-	// 		AO.objective_succeeded = O.check_completion()
-	// 		if(O.target)
-	// 			AO.target_name = STRIP_NEWLINE(O.target.name)
-	// 			AO.target_role = O.target.assigned_role
-    //
-	// 		antag_objectives.Add(AO)
+/datum/stat_collector/proc/add_role(var/datum/role/R)
+	R.stat_datum.generate_statistics(R)
+	roles.Add(R.stat_datum)
 
+/datum/stat_collector/proc/add_faction(var/datum/faction/F)
+	F.stat_datum.generate_statistics(F)
+	factions.Add(F.stat_datum)
 
-/datum/stat/population_stat/New(pop as num)
-	if(ticker.current_state != GAME_STATE_PLAYING) return
-
-	time = time2text(world.realtime, STAT_TIMESTAMP_FORMAT)
-	popcount = pop
-
-/datum/stat_collector/proc/doPostRoundChecks()
+/datum/stat_collector/proc/do_post_round_checks()
+	// grab some variables
 	round_start_time = time2text(round_start_time, STAT_TIMESTAMP_FORMAT)
 	round_end_time   = time2text(world.realtime,   STAT_TIMESTAMP_FORMAT)
-	mapname = map.nameLong
-	mastermode = master_mode // this is stored as a string in game
-	tickermode = ticker.mode.name
+	map_name = map.nameLong
 	nuked = ticker.station_was_nuked
 	tech_total = get_research_score()
-	stationname = station_name()
+	station_name = station_name()
 
+	// check for survivors
 	for(var/datum/mind/M in ticker.minds)
-		add_objectives(M)
+		// add_objectives(M)
+		manifest_entries.Add(new /datum/stat_collector(M))
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
 
 
 /proc/stats_server_alert_new_file()
 	world.Export("http://stats.ss13.moe/alert_new_file")
-
-// Global stuff
-/proc/population_poll()
-	var/playercount = 0
-	for(var/mob/M in player_list)
-		if(M.client)
-			playercount++
-	stat_collection.population_polls.Add(new /datum/stat/population_stat(playercount))
-
-/proc/population_poll_loop()
-	while(1)
-		population_poll()
-		sleep(5 MINUTES) // we're called inside a spawn() so we'll be fine
 
 #undef STAT_TIMESTAMP_FORMAT

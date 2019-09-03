@@ -135,7 +135,7 @@
 		if("usp")
 			new /obj/item/weapon/gun/projectile/NTUSP/fancy(get_turf(src))
 		if("glock")
-			new /obj/item/weapon/gun/projectile/sec/fancy(get_turf(src))
+			new /obj/item/weapon/gun/projectile/glock/fancy(get_turf(src))
 		if("luger")
 			new /obj/item/weapon/gun/projectile/luger(get_turf(src))
 		if("colt")

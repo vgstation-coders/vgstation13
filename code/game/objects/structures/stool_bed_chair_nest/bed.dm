@@ -88,8 +88,7 @@
 	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
 		return
 
-	//if(!ismob(M) || (M.loc != src.loc)  || M.locked_to)
-	if(!ismob(M) || M.locked_to)
+	if(!ismob(M) || (M.loc != src.loc)  || M.locked_to)
 		return
 		
 	if(!user.Adjacent(M))

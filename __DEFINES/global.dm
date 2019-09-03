@@ -7,12 +7,14 @@
 #define DNA_SE_LENGTH 58
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
-
 #define GREY_SHAPED "Grey"
-
+#define UNATHI_SHAPED "Unathi"
+#define SKRELL_SHAPED "Skrell"
+#define TAJARAN_SHAPED "Tajaran"
+#define PLASMAMAN_SHAPED "Plasmaman"
 #define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
-
 #define MUSHROOM_SHAPED "Mushroom"
+
 
 //Content of the Round End Information window
 var/round_end_info = ""

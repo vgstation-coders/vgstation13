@@ -51,6 +51,8 @@
  	var/under_turf = /turf/space
  */
 
+	var/turf_speed_multiplier = 1
+ 
 	var/explosion_block = 0
 
 	//For shuttles - if 1, the turf's underlay will never be changed when moved
@@ -351,14 +353,14 @@
 		for(var/obj/effect/decal/cleanable/C in src)
 			qdel(C)//enough with footprints floating in space
 
+	//Rebuild turf
+	var/turf/T = src
+	env = T.air //Get the air before the change
 	if(istype(src,/turf/simulated))
-		//Yeah, we're just going to rebuild the whole thing.
-		//Despite this being called a bunch during explosions,
-		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
-		env = S.air //Get the air before the change
 		if(S.zone)
 			S.zone.rebuild()
+			
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)
@@ -678,6 +680,7 @@
 	for(var/atom/A in src)
 		if(A.slowdown_modifier)
 			base_slowdown *= A.slowdown_modifier
+	base_slowdown *= turf_speed_multiplier
 	return base_slowdown
 
 /turf/proc/has_gravity(mob/M)

@@ -29,6 +29,7 @@
 	var/dried_type = null //What can we dry the food into
 	var/deepfried = 0 //Is the food deep-fried ?
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
+	var/edible_by_utensil = TRUE //Can this snack be put on a fork?
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
@@ -1864,6 +1865,21 @@
 			reagents.add_reagent(NUTRIMENT, 6)
 			reagents.add_reagent(TOMATOJUICE, 5)
 			reagents.add_reagent(IMIDAZOLINE, 5)
+	bitesize = 5
+
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeysoup
+	name = "Monkey Soup"
+	desc = "Uma delicia."
+	icon_state = "monkeysoup"
+	trash = /obj/item/trash/monkey_bowl
+	food_flags = FOOD_LIQUID
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeysoup/New()
+	..()
+	reagents.add_reagent(WATER, 5)
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(VINEGAR, 4)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/wishsoup
