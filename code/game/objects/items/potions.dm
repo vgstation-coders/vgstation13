@@ -377,12 +377,6 @@
 	icon_state = "red_smallbottle"
 	time = 3 MINUTES
 
-/obj/item/potion/mutation/truesight/major
-	name = "potion of truesight"
-	desc = "For five minutes, nothing will escape your vision."
-	icon_state = "blue_medbottle"
-	time = 5 MINUTES
-
 /obj/item/potion/levitation
 	name = "potion of levitation"
 	desc = "Float above the ground for ten minutes."
