@@ -166,7 +166,6 @@ var/list/infected_cleanables = list()
 //		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
 //
 /obj/effect/decal/cleanable/resetVariables()
-	Destroy()
 	..("viruses","virus2", "blood_DNA", "random_icon_states", args)
 	viruses = list()
 	virus2 = list()
