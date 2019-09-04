@@ -801,6 +801,7 @@
 /mob/living/simple_animal/corgi/cultify()
 	if(prob(5))
 		name = "Corgerus"
+		real_name = "Corgerus"
 		desc = "Guardian of the gates of heck."
 		icon_state = "corgi_3head"
 		icon_living = "corgi_3head"
