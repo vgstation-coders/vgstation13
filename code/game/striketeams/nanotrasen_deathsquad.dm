@@ -12,15 +12,16 @@
 
 /datum/striketeam/deathsquad/create_commando(obj/spawn_location, leader_selected = 0)
 	var/mob/living/carbon/human/new_commando = new(spawn_location.loc)
-	var/commando_leader_rank = "Major"
+	var/commando_leader_rank = pick("Major", "Rescue Team Leader", "Commander")
 	var/commando_rank = pick("Corporal", "Sergeant", "Staff Sergeant", "Sergeant 1st Class", "Master Sergeant", "Sergeant Major")
 	var/commando_name = pick(last_names)
+	var/commando_leader_name = pick("Creed", "Walther Dahl")
 
 	new_commando.gender = pick(MALE, FEMALE)
 
 	new_commando.randomise_appearance_for(new_commando.gender)
 
-	new_commando.real_name = "[!leader_selected ? commando_rank : commando_leader_rank] [!leader_selected ? commando_name : "Creed"]"
+	new_commando.real_name = "[!leader_selected ? commando_rank : commando_leader_rank] [!leader_selected ? commando_name : commando_leader_name]"
 	new_commando.age = !leader_selected ? rand(23,35) : rand(35,45)
 
 	new_commando.dna.ready_dna(new_commando)//Creates DNA.
@@ -40,6 +41,8 @@
 	if (leader_selected)
 		var/datum/role/death_commando/D = new_commando.mind.GetRole(DEATHSQUADIE)
 		D.logo_state = "creed-logo"
+	else
+		leader_name = new_commando.real_name
 	new_commando.equip_death_commando(leader_selected)
 
 	return new_commando
@@ -51,7 +54,7 @@
 	else
 		to_chat(H, "<span class='notice'>You are [H.real_name], a Death Squad commando, in the service of Nanotrasen.</span>")
 		if (leader_key != "")
-			to_chat(H, "<span class='notice'>Follow directions from your superior, Creed.</span>")
+			to_chat(H, "<span class='notice'>Follow directions from your superior, [leader_name].</span>")
 	//to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
 	for (var/role in H.mind.antag_roles)
 		var/datum/role/R = H.mind.antag_roles[role]
