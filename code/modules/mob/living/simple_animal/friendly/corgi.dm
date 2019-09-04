@@ -573,7 +573,7 @@
 	spin_emotes = list("dances around.","chases his tail.")
 	is_pet = TRUE
 	var/creatine_had = 0
-	
+
 /mob/living/simple_animal/corgi/Ian/Life()
 	..()
 	var/creatine =  reagents.has_reagent(CREATINE)
@@ -586,7 +586,7 @@
 	else if(!creatine && creatine_had)
 		visible_message("<span class='danger'>[src]'s muscles tear themselves apart!</span>")
 		gib()
-		
+
 	if(creatine && hyperzine)
 		treadmill_speed = 30
 		time_between_directed_steps = 1
@@ -596,7 +596,7 @@
 	else if(hyperzine)
 		treadmill_speed = 3
 		src.Jitter(2 SECONDS)
-		time_between_directed_steps = 3	
+		time_between_directed_steps = 3
 	else
 		treadmill_speed = 0.5
 		time_between_directed_steps = initial(time_between_directed_steps)
@@ -797,6 +797,16 @@
 			step_towards(src,victim)
 			if(Adjacent(victim) && IsVictim(victim)) //Seriously don't try to rescue the dead.
 				rescue(victim)
+
+/mob/living/simple_animal/corgi/cultify()
+	if(prob(5))
+		name = "Corgerus"
+		desc = "Guardian of the gates of heck."
+		icon_state = "corgi_3head"
+		icon_living = "corgi_3head"
+		icon_dead = "corgi_3head_dead"
+	else
+		.=..()
 
 #undef IDLE
 #undef BEGIN_FOOD_HUNTING

@@ -130,7 +130,7 @@ In short:
 /datum/universal_state/hell/proc/KillMobs()
 	for(var/mob/living/simple_animal/M in mob_list)
 		if(M && !M.client)
-			M.death()
+			M.cultify()
 		CHECK_TICK
 
 /datum/universal_state/hell/proc/convert_all_parallax()
