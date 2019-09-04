@@ -42,7 +42,7 @@
 /obj/abstract/map/nest/mouse
 	name = "mouse breeding ground"
 	icon_state = "mouse"
-	mob_type = /mob/living/simple_animal/mouse/common
+	mob_type = /mob/living/simple_animal/mouse/common/gray //Ideally we'd have a chance for the 3 main common mice but nests don't support lists
 	breed_time = 1200
 
 /obj/abstract/map/nest/mouse/limited
