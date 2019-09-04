@@ -799,7 +799,7 @@
 				rescue(victim)
 
 /mob/living/simple_animal/corgi/cultify()
-	if(prob(5))
+	if(prob(15))
 		name = "Corgerus"
 		real_name = "Corgerus"
 		desc = "Guardian of the gates of heck."
