@@ -511,6 +511,12 @@ var/list/uplink_items = list()
 	item = /obj/item/device/does_not_tip_backdoor
 	num_in_stock = 1
 	cost = 10
+	
+/datum/uplink_item/device_tools/radio_jammer
+	name = "Radio Jammer"
+	desc = "A device that disrupts all radio communication in nearby area. Guaranteed radio silence at point blank range, but effectiveness decreases with range. Requires a power cell for operation. Batteries and screwdriver not included."
+	item = /obj/item/device/radio_jammer
+	cost = 8
 
 // IMPLANTS
 

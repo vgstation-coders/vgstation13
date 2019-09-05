@@ -278,6 +278,16 @@
 	say_testing(loc, "talk_into(): frequency set to [speech.frequency]")
 
 	var/turf/position = get_turf(src)
+	
+	//### Radio jammerer function code ###//
+	var/jamming_severity = radio_jamming_severity(position)
+	
+	// Completely silences the message if jamming effect is too severe.
+	// Otherwise distorts it.
+	if (is_completely_jammed(jamming_severity))
+		return
+	if (jamming_severity > 0)
+		speech.message = Gibberish(speech.message, jamming_severity)
 
 	//#### Tagging the signal with all appropriate identity values ####//
 
