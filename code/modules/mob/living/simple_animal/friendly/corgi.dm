@@ -799,15 +799,26 @@
 				rescue(victim)
 
 /mob/living/simple_animal/corgi/cultify()
-	if(prob(15))
-		name = "Corgerus"
-		real_name = "Corgerus"
-		desc = "Guardian of the gates of heck."
-		icon_state = "corgi_3head"
-		icon_living = "corgi_3head"
-		icon_dead = "corgi_3head_dead"
+	if(prob(15) || mind)
+		var/mob/new_mob = new /mob/living/simple_animal/corgi/three_head(loc)
+		if(mind)
+			mind.transfer_to(new_mob)
+		qdel(src)
 	else
 		.=..()
+
+/mob/living/simple_animal/corgi/three_head
+	name = "Corgerus"
+	real_name = "Corgerus"
+	desc = "Guardian of the gates of heck."
+	icon_state = "corgi_3head"
+	icon_living = "corgi_3head"
+	icon_dead = "corgi_3head_dead"
+	health = 150
+	maxHealth = 150
+
+/mob/living/simple_animal/corgi/three_head/cultify()
+	return
 
 #undef IDLE
 #undef BEGIN_FOOD_HUNTING
