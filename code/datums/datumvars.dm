@@ -415,22 +415,17 @@ function loadPage(list) {
 
 		if (L.len > 0 && !(name == "underlays" || name == "overlays" || name == "vars" || L.len > 500))
 			// not sure if this is completely right...
-			if(0)   //(L.vars.len > 0)
-
-				html += {"<ol>
-					</ol>"}
-			else
-				html += "<ul>"
-				var/index = 1
-				for (var/entry in L)
-					if(istext(entry))
-						html += debug_variable(entry, L[entry], level + 1)
-					//html += debug_variable("[index]", L[index], level + 1)
-					else
-						html += debug_variable(index, L[index], level + 1)
-					html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a>"
-					index++
-				html += "</ul>"
+			html += "<ul>"
+			var/index = 1
+			for (var/entry in L)
+				if(istext(entry))
+					html += debug_variable(entry, L[entry], level + 1)
+				//html += debug_variable("[index]", L[index], level + 1)
+				else
+					html += debug_variable(index, L[index], level + 1)
+				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a>"
+				index++
+			html += "</ul>"
 
 	else
 		html += "[name] = <span class='value'>[value]</span>"
@@ -455,12 +450,20 @@ function loadPage(list) {
 
 	return html
 
+/client/proc/debug_list(var/L)
+	if(!istype(L, /list))
+		return
+
+	usr << browse(debug_variable("LIST", L, 0, L), "window=listedit\ref[L];size=475x650")
+
 /client/proc/view_var_Topic(href, href_list, hsrc)
 	//This should all be moved over to datum/admins/Topic() or something ~Carn
 	if( (usr.client != src) || !src.holder )
 		return
 	if(href_list["Vars"])
 		debug_variables(locate(href_list["Vars"]))
+	else if(href_list["List"])
+		debug_list(locate(href_list["List"]))
 
 	//~CARN: for renaming mobs (updates their name, real_name, mind.name, their ID/PDA and datacore records).
 	else if(href_list["rename"])
