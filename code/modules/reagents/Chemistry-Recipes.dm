@@ -3371,12 +3371,7 @@
 		H.vomit(instant = TRUE) //mouse spawning continues below
 	var/location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		var/mouse_type = pick(list(
-		/mob/living/simple_animal/mouse/common/brown,
-		/mob/living/simple_animal/mouse/common/gray,
-		/mob/living/simple_animal/mouse/common/white
-		))
-		new mouse_type(location)
+		new /mob/living/simple_animal/mouse/common(location)
 
 /datum/chemical_reaction/aminocyprinidol
 	name = "Aminocyprinidol"

@@ -451,12 +451,16 @@
 	_color = "black"
 	icon_state = "mouse_black"
 
+//Selects a 1 of 3 random colours.
+/mob/living/simple_animal/mouse/common
+	_color = null
+
 /mob/living/simple_animal/mouse/common/New()
 	..()
 	// Mice IDs
 	if(namenumbers)
 		name = "[name] ([rand(1, 1000)])"
-	if(!_color) // due to shitcode this never actually happens, but it's best to leave it here just incase we get a mystery uncoloured mouse
+	if(!_color)
 		_color = pick( list("brown","gray","white") )
 		initIcons()
 	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
