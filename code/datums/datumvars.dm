@@ -43,7 +43,7 @@
 
 		#ifdef VARSICON
 		if (A.icon)
-			body += debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir), 0)
+			body += "<li>"+debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir), 0)+"<\li>"
 		#endif
 
 	var/sprite
@@ -198,7 +198,7 @@
 	names = sortList(names)
 
 	for (var/V in names)
-		body += debug_variable(V, D.vars[V], 0, D)
+		body += "<li>"+debug_variable(V, D.vars[V], 0, D)+"</li>"
 
 	body += "</ul>"
 	body = jointext(body,"")
@@ -364,7 +364,6 @@ function loadPage(list) {
 	var/html = ""
 
 	if(DA)
-		html += "<li style='backgroundColor:white'>"
 		if(name == "appearance")
 			html += {"
 			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>save</a> |
@@ -375,8 +374,6 @@ function loadPage(list) {
 			(<a href='?_src_=vars;datumchange=\ref[DA];varnamechange=[name]'>C</a>)
 			(<a href='?_src_=vars;datummass=\ref[DA];varnamemass=[name]'>M</a>)
 			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>S</a>) "}
-	else
-		html += "<li>"
 
 	if (isnull(value))
 		html += "[name] = <span class='value'>null</span>"
@@ -419,11 +416,10 @@ function loadPage(list) {
 			var/index = 1
 			for (var/entry in L)
 				if(istext(entry))
-					html += debug_variable(entry, L[entry], level + 1)
-				//html += debug_variable("[index]", L[index], level + 1)
+					html += "<li>"+debug_variable(entry, L[entry], level + 1)
 				else
-					html += debug_variable(index, L[index], level + 1)
-				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a>"
+					html += "<li>"+debug_variable(index, L[index], level + 1)
+				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a></li>"
 				index++
 			html += "</ul>"
 
@@ -446,15 +442,29 @@ function loadPage(list) {
 				html += "</span>"
 			html += "</div>"
 		*/
-	html += "</li>"
 
 	return html
 
-/client/proc/debug_list(var/L)
-	if(!istype(L, /list))
+/client/proc/debug_list(var/list/L)
+	if(!istype(L))
 		return
 
-	usr << browse(debug_variable("LIST", L, 0, L), "window=listedit\ref[L];size=475x650")
+	var/html = "<h1>List Viewer</h1><i>Length: [L.len]</i>"
+
+	if(L.len)
+		html += "<hr><ul>"
+		var/index = 1
+		for (var/entry in L)
+			if(istext(entry))
+				html += "<li>"+debug_variable(entry, L[entry], 0)
+				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[L[entry]]'>(Delete)</a></li>"
+			else
+				html += "<li>"+debug_variable(index, L[index], 0)
+				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[L[index]]'>(Delete)</a></li>"
+			index++
+		html += "</ul>"
+
+	usr << browse(html, "window=listedit\ref[L];size=475x650")
 
 /client/proc/view_var_Topic(href, href_list, hsrc)
 	//This should all be moved over to datum/admins/Topic() or something ~Carn
@@ -1152,8 +1162,13 @@ function loadPage(list) {
 			return FALSE
 
 		var/index = text2num(href_list["index"])
+		if(!index)
+			if(istext(href_list["index"]))
+				index = href_list["index"]
+			else
+				return FALSE
 
-		if (!isnum(index) || index < 1)
+		if (!(index in L))
 			return FALSE
 
 		log_admin("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")
