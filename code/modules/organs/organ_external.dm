@@ -92,6 +92,8 @@
 
 	if(owner)
 		owner.organs -= src
+		if(grasp_id)
+			owner.grasp_organs -= src
 		for(var/organ_name in owner.organs_by_name) //I hate that this is the only way
 			if(owner.organs_by_name[organ_name] == src)
 				owner.organs_by_name -= src
