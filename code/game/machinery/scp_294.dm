@@ -18,8 +18,7 @@
 	dispensable_reagents = null
 	var/list/prohibited_reagents = list(ADMINORDRAZINE)
 
-	machine_flags = FIXED2WORK
-	mech_flags = MECH_SCAN_FAIL
+	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/chem_dispenser/scp_294/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER))
