@@ -710,7 +710,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if ( user.loc != user_loc || target.loc != target_loc || (!user.is_holding_item(holding) && needs_item) || user.isStunned())
+		if ( user.loc != user_loc || target.loc != target_loc || (needs_item && !user.is_holding_item(holding)) || user.isStunned())
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
