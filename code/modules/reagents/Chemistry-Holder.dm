@@ -836,7 +836,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	reagent_list.Cut()
 
 	if(my_atom)
+		my_atom.reagents = null
 		my_atom = null
+	..()
 
 /**
  * Helper proc to retrieve the 'bad' reagents in the holder. Used for logging.

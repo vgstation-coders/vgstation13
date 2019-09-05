@@ -211,6 +211,7 @@
 	if(istype(holder))
 		holder.reagent_list -= src
 		holder = null
+	..()
 
 /datum/reagent/piccolyn
 	name = "Piccolyn"
@@ -6621,7 +6622,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Wake-Up Call"
 	id = SECCOFFEE
 	description = "All the essentials."
-	
+
 /datum/reagent/drink/coffee/seccoffee/on_mob_life(var/mob/living/M)
 	..()
 	if(ishuman(M))

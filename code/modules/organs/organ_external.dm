@@ -65,6 +65,42 @@
 		parent.children.Add(src)
 	return ..()
 
+/datum/organ/external/Destroy()
+	if(parent?.children)
+		parent.children -= src
+		parent = null
+
+	if(children)
+		for(var/datum/organ/external/O in children)
+			qdel(O)
+		children = null
+
+	if(internal_organs)
+		for(var/datum/organ/internal/O in internal_organs)
+			qdel(O)
+		internal_organs = null
+
+	if(implants)
+		for(var/obj/O in implants)
+			qdel(O)
+		implants = null
+
+	if(wounds)
+		for(var/datum/wound/W in wounds)
+			qdel(W)
+		wounds = null
+
+	if(owner)
+		owner.organs -= src
+		for(var/organ_name in owner.organs_by_name) //I hate that this is the only way
+			if(owner.organs_by_name[organ_name] == src)
+				owner.organs_by_name -= src
+				break //Assume there's only one because if not we have much bigger problems than a hard del
+		owner = null
+
+	organ_item = null //I honestly cannot tell if anything else should be done with this
+	..()
+
 /****************************************************
 			   DAMAGE PROCS
 ****************************************************/

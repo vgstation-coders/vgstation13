@@ -38,6 +38,10 @@
 		qdel(BrainContainer)
 		BrainContainer = null
 
+	if(immune_system)
+		qdel(immune_system)
+		immune_system = null
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
