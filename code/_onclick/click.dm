@@ -143,13 +143,14 @@
 			item_attack_delay = held_item.attack_delay
 			var/resolved = held_item.preattack(A, src, 1, params)
 			if(!resolved)
-				if(ismob(A) && modifiers["def_zone"])
-					var/mob/M = A
-					var/def_zone
-					def_zone = modifiers["def_zone"]
-					resolved = M.attackby(held_item,src,def_zone = def_zone, params)
-				else
-					resolved = A.attackby(held_item, src, params)
+				if(held_item.trigger_target_attackby)
+					if(ismob(A) && modifiers["def_zone"])
+						var/mob/M = A
+						var/def_zone
+						def_zone = modifiers["def_zone"]
+						resolved = M.attackby(held_item,src,def_zone = def_zone, params)
+					else
+						resolved = A.attackby(held_item, src, params)
 				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
 				if(!resolved && A && !A.gcDestroyed && held_item)

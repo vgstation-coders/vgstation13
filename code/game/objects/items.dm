@@ -12,6 +12,7 @@
 
 	var/w_class = W_CLASS_MEDIUM
 	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
+	var/trigger_target_attackby = 1 //Whether you will trigger attackby(this_item) on whatever you attack/interact with. 
 
 	flags = FPRINT
 	var/slot_flags = 0		//This is used to determine on which slots an item can fit.

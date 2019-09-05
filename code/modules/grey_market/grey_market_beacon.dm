@@ -14,7 +14,8 @@ var/list/grey_market_beacons = list()
 
 /obj/item/device/grey_market_beacon/proc/attach_to(var/atom/target, var/datum/grey_market_player_item/listing)
 	src.forceMove(target)
-	target.market_beacon = src
+	if(!target.market_beacon)
+		target.market_beacon = src
 	attached_item = target
 	market_listing = listing
 	listing.attached_beacon = src
@@ -32,7 +33,7 @@ var/list/grey_market_beacons = list()
 	if(market_listing)
 		market_listing.on_beacon_destroy()
 	if(attached_item)
-		attached_item.attached_beacon = null
+		attached_item.market_beacon = null
 	grey_market_beacons -= src
 	return ..()
 	

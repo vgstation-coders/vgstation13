@@ -27,6 +27,7 @@ var/list/grey_market_items = list()
 				grey_market_items[I.category] = list()
 
 			grey_market_items[I.category] += I
+			I.cache_bicon()
 
 	return grey_market_items
 
@@ -36,6 +37,7 @@ var/list/grey_market_items = list()
 	var/name = "item name"
 	var/category = "item category"
 	var/desc = "item description"
+	var/bicon_cache = null
 	var/item = null
 	var/stock_min	// The stock min and max. Setting stock_min and stock_max to -1 will make it infinite.
 	var/stock_max
@@ -76,6 +78,12 @@ var/list/grey_market_items = list()
 		. = 999
 	else
 		. = round_stock
+		
+/datum/grey_market_item/proc/cache_bicon()
+	if(item)
+		var/temp_item = new item()
+		bicon_cache = costly_bicon(temp_item)
+		qdel(item)
 
 /datum/grey_market_item/proc/process_transaction(var/obj/item/device/illegalradio/radio, var/delivery_method)
 	radio.money_stored -= get_cost()
@@ -214,6 +222,7 @@ var/list/player_market_items = list()
 
 /datum/grey_market_player_item
 	var/atom/item
+	var/bicon_cache = null
 	var/obj/item/device/grey_market_beacon/attached_beacon
 	var/obj/item/device/illegalradio/seller_radio
 	var/seller_ckey
@@ -225,6 +234,7 @@ var/list/player_market_items = list()
 	if(attached_beacon)
 		attached_beacon.on_unlist()
 	player_market_items -= src
+	latest_grey_market_change_time = world.time
 	buzz_grey_market()
 	item = null
 	attached_beacon = null
@@ -247,13 +257,19 @@ var/list/player_market_items = list()
 		radio.visible_message("\The [radio] beeps: <span class='warning'>Uh, so it seems your item has been destroyed. No money charged. Sorry.</span>")
 		player_market_items -= src
 		qdel(src)
+	if(istype(item,/atom/movable))
+		var/atom/movable/item_movable = item
+		if(item_movable.anchored)
+			item_movable.anchored = 0
+	if(istype(item.loc, /mob))
+		var/mob/mob = item.loc
+		mob.drop_from_inventory(item)
 
 	do_teleport(item, get_turf(user), 0)
 	if(ishuman(user))
 		var/mob/living/carbon/human/A = user
 		if(istype(item, /obj/item))
 			A.put_in_any_hand_if_possible(item)
-	
 
 	log_transaction(user)
 	
@@ -263,8 +279,9 @@ var/list/player_market_items = list()
 	
 	if(seller_radio)
 		seller_radio.money_stored += selected_price*(1-seller_radio.market_cut)
-		
-	qdel(src)
+	spawn(0)
+		qdel(src)
+	return 1
 	
 /datum/grey_market_player_item/proc/log_transaction(var/mob/user)
 	feedback_add_details("grey_market_items_bought", "[item]")
@@ -405,17 +422,6 @@ with an atomic bomb. But those are rare and expensive.
 /datum/grey_market_item/toy
 	category = "Recreational Goods"
 
-/datum/grey_market_item/toy/levitation
-	name = "Potion of Levitation"
-	desc = "This potion makes you float! How does it work? We've got no clue whatsoever, you'll have to ask the Wizard Federation."
-	item = /obj/item/potion/levitation
-	delivery_available = list(0, 1, 1)
-	stock_min = 2
-	stock_max = 4
-	cost_min = 200
-	cost_max = 300
-	display_chance = 70
-	
 /datum/grey_market_item/toy/dorkcube
 	name = "Strange Box"
 	desc = "A stolen box filled with unknown loot. Something is sloshing inside."

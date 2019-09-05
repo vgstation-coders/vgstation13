@@ -126,6 +126,8 @@ var/savefile/panicfile
 	plmaster.layer = FLY_LAYER
 	plmaster.plane = EFFECTS_PLANE
 	plmaster.mouse_opacity = 0
+	
+	get_grey_market_items() //Loads the list.
 
 	slmaster = new /obj/effect/overlay()
 	slmaster.icon = 'icons/effects/tile_effects.dmi'

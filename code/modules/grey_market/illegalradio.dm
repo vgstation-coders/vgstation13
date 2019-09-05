@@ -3,6 +3,7 @@
 #define DELIVERY 3
 
 var/list/global_illegal_radios = list()
+var/latest_grey_market_change_time = -1
 
 /proc/buzz_grey_market() //Updates and buzzes all illegalradios so the screen is current.
 	for(var/obj/item/device/illegalradio/radio in global_illegal_radios)
@@ -23,6 +24,7 @@ var/list/global_illegal_radios = list()
 	item_state = "illegalradio"
 	desc = "A modified radio with a link to the grey market. Use with caution."
 
+	trigger_target_attackby = 0
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	throw_speed = 2
@@ -35,6 +37,7 @@ var/list/global_illegal_radios = list()
 	var/list/purchase_log = list()
 	var/datum/grey_market_item/selected_item = null
 	var/datum/grey_market_player_item/new_listing = null
+	var/last_update_time = 0 //Used to make sure the user isn't buying from an outdated catalog.
 	
 	var/money_stored
 	var/opened_screen = MAIN
@@ -42,7 +45,7 @@ var/list/global_illegal_radios = list()
 	var/new_item_fee = 25
 	var/minimum_price = 100
 	var/advanced_uplink = 0
-	var/scan_time = 150
+	var/scan_time = 15 SECONDS
 	var/notifications = 1 
 	var/list/sell_exceptions = list(/obj/structure/closet, /obj/item/weapon/storage)
 	
@@ -53,7 +56,9 @@ var/list/global_illegal_radios = list()
 	icon_state = "illegalradio_adv"
 	item_state = "illegalradio_adv"
 	desc = "If there's one thing you can always trust a Vox will do, it's getting his money's worth."
-	advanced_uplink = 1
+	advanced_uplink = 1 //Currently unused
+	scan_time = 2 SECONDS
+
 	
 /obj/item/device/illegalradio/New()
 	money_stored = 0
@@ -72,6 +77,7 @@ var/list/global_illegal_radios = list()
 		open_html(generate_local_market_hub(user),user)
 	else if(opened_screen == DELIVERY)
 		open_html(generate_delivery_menu(user,selected_item),user)
+	last_update_time = world.time
 		
 /obj/item/device/illegalradio/attack_self(mob/user as mob)
 	user.set_machine(src)
@@ -119,12 +125,17 @@ var/list/global_illegal_radios = list()
 		open_screen(MAIN, usr)
 
 	else if(href_list["buy_local_item"])
+		if(last_update_time < latest_grey_market_change_time)
+			visible_message("\The [src] beeps: <span class='warning'>Synchronization error. Please try again.</span>")
+			open_screen(MAIN, usr)
+			return
 		var/number = text2num(href_list["buy_local_item"])
 		var/datum/grey_market_player_item/item = player_market_items[number]
 		if(item)
-			item.buy(src,usr)
-		else
-			visible_message("\The [src] beeps: <span class='warning'>An unexpected error occurred. Try again later.</span>")	
+			if(!item.buy(src,usr))
+				visible_message("\The [src] beeps: <span class='warning'>An unexpected error occurred. Try again later.</span>")
+		else //Should never happen
+			visible_message("\The [src] beeps: <span class='warning'>Your item was destroyed. No money was charged. Hopefully.</span>")	
 		open_screen(MAIN, usr)
 		
 	else if(href_list["open_local_market_hub"])
@@ -167,7 +178,7 @@ var/list/global_illegal_radios = list()
 		else
 			money_stored -= new_item_fee
 			player_market_items += new_listing
-			
+			latest_grey_market_change_time = world.time
 			var/obj/item/device/grey_market_beacon/beacon = new /obj/item/device/grey_market_beacon()
 			beacon.attach_to(new_listing.item, new_listing)
 			buzz_grey_market()
@@ -202,12 +213,13 @@ var/list/global_illegal_radios = list()
 		for(var/datum/grey_market_player_item/product in player_market_items)
 			iterator++
 			var/final_text = ""
+			if(product.bicon_cache)
+				final_text += "<td class='fridgeIcon cropped'>[product.bicon_cache]</td> "
 			if(product.selected_price <= money_stored)
 				final_text += "<A href='byond://?src=\ref[src];buy_local_item=[iterator];'>[product.selected_name]</A> ([product.selected_price])"
 			else
 				final_text += "<font color='grey'><i>[product.selected_name] ([product.selected_price])</i></font>"
-			var/desc = "Official product name: [product.item.name]. Seller description: " + product.selected_description
-			final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A><br>"
+			final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(product.selected_description)]'><font size=2>\[?\]</font></A><br>"
 			dat += final_text
 	dat += "<br><br>"
 	
@@ -224,19 +236,18 @@ var/list/global_illegal_radios = list()
 		for(var/datum/grey_market_item/item in buyable_items[category])
 			i++
 			var/stock = item.get_stock()
-			var/itemcost = item.get_cost()
-			var/cost_text = ""
-			var/desc = "[item.desc]"
+			var/cost_text = "([item.get_cost()])"
 			var/final_text = ""
-			cost_text = "([itemcost])"
-			if(itemcost <= money_stored && (stock > 0 || stock == -1))
+			if(item.bicon_cache)
+				final_text += "<td class='fridgeIcon cropped'>[item.bicon_cache]</td> "
+			if(item.get_cost() <= money_stored && (stock > 0 || stock == -1))
 				final_text += "<A href='byond://?src=\ref[src];open_delivery_menu=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
 			else
 				final_text += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
 			if(stock != -1)
 				final_text += "<font color='grey'><i>([stock] in stock) </i></font>"
 			if(item.desc)
-				final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A>"
+				final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(item.desc)]'><font size=2>\[?\]</font></A>"
 			final_text += "<BR>"
 			merchandise_list += final_text
 
@@ -262,7 +273,9 @@ var/list/global_illegal_radios = list()
 		dat += "Cash stored: [src.money_stored] Listing Fee: [new_item_fee]<BR>"
 		dat += "<B>A [market_cut*100]% fee will be applied to all transactions.</B><BR>"
 		dat += "<A href='byond://?src=\ref[src];open_main=1'>Return</a>"
-		dat += "<BR><HR><BR>"
+		dat += "<BR><HR>"
+		if(new_listing.bicon_cache)
+			dat += "<td class='fridgeIcon cropped'>[new_listing.bicon_cache]</td> "
 		dat += "Display Name: <A href='byond://?src=\ref[src];local_market_input_name=1'>[new_listing.selected_name]</a><br>"
 		dat += "Price: <A href='byond://?src=\ref[src];local_market_input_price=1'>[new_listing.selected_price]</a><br>"
 		dat += "Description: <A href='byond://?src=\ref[src];local_market_input_desc=1'>[new_listing.selected_description]</a><br>"
@@ -274,7 +287,7 @@ var/list/global_illegal_radios = list()
 	var/dat = list()
 	dat += "<B><font size=5>The Grey Market</font></B><BR>"
 	dat += "<B>Please pay for an available delivery option.</B><BR>"
-	dat += "<B>You are purchasing the [item.name].</B><BR>"
+	dat += "<B>You are purchasing \the [item].</B><BR>"
 	dat += "Cash stored: [src.money_stored]<BR><BR>"
 	var/list/delivery_titles = list("Thrifty","Normal","Express")
 	var/list/delivery_description = list("The item is launched at the station from space. We'll give you some clues to where it hit, cheapass.","The item is teleported somewhere in your station's maintenance. You'll get a 60 second headstart and a location.","The item is teleported straight to you via telecrystal.")
@@ -307,8 +320,15 @@ var/list/global_illegal_radios = list()
 	new_listing.seller_radio = src
 	new_listing.seller_ckey = key_name(user)
 	new_listing.selected_price = minimum_price
+	var/icon/image = getFlatIcon(target, SOUTH, 0)
+	image = new(image, dir = SOUTH) //It just works? If there's a better way to make the icon go south then please let me know.
+	new_listing.bicon_cache = "<img src='data:image/png;base64,[icon2base64(image)]'>"
 	open_screen(SELLING, user)
-	
+
+/obj/item/device/illegalradio/preattack(atom/movable/A)
+	trigger_target_attackby = !player_sell_check(A)
+	return
+		
 /obj/item/device/illegalradio/attack(mob/living/carbon/T, mob/living/user)
 	return
 		
@@ -319,7 +339,7 @@ var/list/global_illegal_radios = list()
 		qdel(cash)
 		visible_message("<span class='info'>\The [user] inserts a credit chip into [src].</span>")
 		interact(user)
-	else if(!player_sell_check(A))
+	else if(trigger_target_attackby)
 		return
 	else if((istype(A, /obj) || istype(A, /mob)) && A.Adjacent(user) && !scanning)
 		visible_message("\The [src] beeps: <span class='warning'>Scanning item to sell...</span>")
@@ -329,6 +349,8 @@ var/list/global_illegal_radios = list()
 				visible_message("\The [src] beeps: <span class='warning'>Error: you must be near your space station. The connection is poor in deep space.</span>")
 			else if(A.anchored)
 				visible_message("\The [src] beeps: <span class='warning'>Error: that item is anchored. Can't teleport the entire station with it.</span>")
+			else if(A.market_beacon)
+				visible_message("\The [src] beeps: <span class='warning'>Error: that item is already listed.</span>")
 			else
 				visible_message("\The [src] beeps: <span class='warning'>Item verified. Please confirm your listing.</span>")
 				generate_new_local_listing(A, user)
