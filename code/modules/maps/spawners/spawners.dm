@@ -894,11 +894,7 @@
 	icon_state = "mob_mouse"
 	amount = 2
 	chance = 50
-	to_spawn = list(
-		/mob/living/simple_animal/mouse/common/brown,
-		/mob/living/simple_animal/mouse/common/gray,
-		/mob/living/simple_animal/mouse/common/white,
-		)
+	to_spawn = list(/mob/living/simple_animal/mouse/common)
 
 /obj/abstract/map/spawner/mobs/bear
 	name = "bear spawner"

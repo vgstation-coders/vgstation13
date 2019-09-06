@@ -1,5 +1,5 @@
 #define MOUSETFAT 1000
-#define MOUSEFAT 600
+#define MOUSEFAT 700
 #define MOUSESTARVE 25
 #define MOUSEHUNGRY 100
 #define MOUSEMOVECOST 0.5
@@ -46,6 +46,7 @@
 	var/can_chew_wires = 0
 	var/splat = 0
 	var/infectable = 0
+	var/nutrition_loss_mod = 1
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -98,9 +99,10 @@
 		is_fat = 0
 		speed = initial(speed)
 		meat_amount = size //What it is on living/New(),
-	if(nutrition <= MOUSESTARVE && prob(5) && client)
-		to_chat(src, "<span class = 'warning'>You are starving!</span>")
-		health -= 1
+	if(nutrition <= MOUSESTARVE && client)
+		speed = 10
+		if(prob(1))
+			to_chat(src, "<span class = 'warning'>You are starving!</span>")
 	if(nutrition <= MOUSEHUNGRY && nutrition > MOUSESTARVE)
 		speed = 3
 		if(prob(5))
@@ -140,7 +142,7 @@
 			else if (prob(25))
 				dir = pick(cardinal - dir)
 
-		if(!food_target && (!client || nutrition <= MOUSEHUNGRY)) //Regular mice will be moved towards food, mice with a client won't be moved unless they're desperate
+		if(!food_target && !client) //Regular mice will be moved towards food, mice with a client won't be
 			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
 				food_target = C
 				break
@@ -184,7 +186,7 @@
 					//spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
 
 */
-		nutrition = max(0, nutrition - MOUSESTANDCOST)
+		nutrition = max(0, nutrition - (MOUSESTANDCOST * nutrition_loss_mod))
 
 
 
@@ -218,7 +220,7 @@
 	var/multiplier = 1
 	if(nutrition >= MOUSEFAT) //Fat mice lose nutrition faster through movement
 		multiplier = 2.5
-	nutrition = max(0, nutrition - MOUSEMOVECOST*multiplier)
+	nutrition = max(0, nutrition - (MOUSEMOVECOST*multiplier*nutrition_loss_mod))
 
 
 /mob/living/simple_animal/mouse/proc/initIcons()
@@ -448,6 +450,10 @@
 /mob/living/simple_animal/mouse/common/black
 	_color = "black"
 	icon_state = "mouse_black"
+
+//Selects a 1 of 3 random colours.
+/mob/living/simple_animal/mouse/common
+	_color = null
 
 /mob/living/simple_animal/mouse/common/New()
 	..()
