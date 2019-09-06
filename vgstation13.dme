@@ -1798,6 +1798,7 @@
 #include "code\modules\mob\living\silicon\mommi\laws.dm"
 #include "code\modules\mob\living\silicon\mommi\life.dm"
 #include "code\modules\mob\living\silicon\mommi\login.dm"
+#include "code\modules\mob\living\silicon\mommi\megamommi.dm"
 #include "code\modules\mob\living\silicon\mommi\mommi.dm"
 #include "code\modules\mob\living\silicon\mommi\mommi_modules.dm"
 #include "code\modules\mob\living\silicon\mommi\mommi_verbs.dm"
