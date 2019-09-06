@@ -97,8 +97,7 @@
 	return 25
 
 /mob/living/simple_animal/hostile/bear/spare/GetAccess()
-	var/datum/job/captain/J = new/datum/job/captain
-	return J.get_access()
+	return get_all_accesses()
 
 /mob/living/simple_animal/hostile/bear/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()

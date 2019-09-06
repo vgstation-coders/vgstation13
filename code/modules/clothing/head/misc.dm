@@ -323,8 +323,7 @@
 	slot_flags = SLOT_ID|SLOT_HEAD
 
 /obj/item/clothing/head/bearpelt/real/spare/GetAccess()
-	var/datum/job/J = new /datum/job/captain
-	return J.get_access()
+	return get_all_accesses()
 
 /obj/item/clothing/head/xenos
 	name = "xenos helmet"
