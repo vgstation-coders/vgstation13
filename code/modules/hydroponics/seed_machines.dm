@@ -216,9 +216,18 @@
 		loaded_seed.forceMove(get_turf(src))
 
 		if(loaded_seed.seed.name == "new line" || isnull(SSplant.seeds[loaded_seed.seed.name]))
+			if ( loaded_seed.seed.name == "new line" )
+				var/str = copytext(reject_bad_text(input(usr,"Variety seed name?","Seed Name",loaded_seed.seed.seed_name)),1,MAX_NAME_LEN)
+				if(str && length(str))
+					loaded_seed.seed.seed_name = str
+				str = copytext(reject_bad_text(input(usr,"Variety plant name?","Plant Name",loaded_seed.seed.display_name)),1,MAX_NAME_LEN)
+				if(str && length(str))
+					loaded_seed.seed.display_name = str
+
 			loaded_seed.seed.uid = SSplant.seeds.len + 1
 			loaded_seed.seed.name = "[loaded_seed.seed.uid]"
 			SSplant.seeds[loaded_seed.seed.name] = loaded_seed.seed
+
 
 		loaded_seed.update_seed()
 		visible_message("[bicon(src)] [src] beeps and spits out [loaded_seed].")
