@@ -1,3 +1,7 @@
+/mob/living/carbon/New(var/new_loc)
+	..()
+	hud_list[CULT_HUD]      = image('icons/mob/hud.dmi', src, "cult_hudG")
+
 /mob/living/carbon/Login()
 	..()
 	update_hud()

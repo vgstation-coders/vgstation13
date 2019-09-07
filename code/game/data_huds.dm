@@ -307,3 +307,35 @@ proc/process_construct_hud(var/mob/M, var/mob/eye)
 			else
 				holder.icon_state = "consthealth[10*round((construct.health/construct.maxHealth)*10)]"
 			C.images += holder
+
+//Cult preference HUD
+proc/process_cult_hud(var/mob/M, var/mob/eye)
+	if(!M)
+		return
+	if(!M.client)
+		return
+	var/client/CLI = M.client
+	var/image/holder
+	var/turf/T
+	if(eye)
+		T = get_turf(eye)
+	else
+		T = get_turf(M)
+	for(var/mob/living/carbon/C in range(T))
+		if(!C.client)
+			continue
+		if(!check_HUD_visibility(C, M))
+			continue
+
+		holder = C.hud_list[CULT_HUD]
+		if(holder)
+			switch(C.client.prefs.roles[CULTIST])
+				if(ROLEPREF_ALWAYS, ROLEPREF_YES)
+					holder.icon_state = "cult_hudG"
+				if(ROLEPREF_NO)
+					holder.icon_state = "cult_hudO"
+				if(ROLEPREF_NEVER)
+					holder.icon_state = "cult_hudR"
+				else
+					holder.icon_state = "cult_hudO"
+			CLI.images += holder
