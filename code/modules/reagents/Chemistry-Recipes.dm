@@ -536,14 +536,14 @@
 	id = "flash_powder"
 	result = null
 	required_reagents = list(ALUMINUM = 1, POTASSIUM = 1, SULFUR = 1)
-	result_amount = null
+	result_amount = 1
 
 /datum/chemical_reaction/flash_powder/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
-		var/location = get_turf(holder.my_atom)
-		spark(location, 2)
-
-		holder.my_atom.flashbangprime(FALSE)
+	if(created_volume >= 20)
+		if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
+			var/location = get_turf(holder.my_atom)
+			spark(location, 2)
+			holder.my_atom.flashbangprime(FALSE)
 
 /datum/chemical_reaction/napalm
 	name = "Napalm"
