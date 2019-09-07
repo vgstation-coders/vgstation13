@@ -73,7 +73,7 @@
 		var/flash_turf = get_turf(src)
 		if(!flash_turf)
 			return
-		for(var/mob/living/M in get_hearers_in_view(7, flash_turf))
+		for(var/mob/living/M in get_hearers_in_view(1, flash_turf))
 			flash(get_turf(M), M)
 
 
