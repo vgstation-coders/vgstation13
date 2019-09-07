@@ -543,24 +543,7 @@
 		var/location = get_turf(holder.my_atom)
 		spark(location, 2)
 
-		playsound(src, 'sound/effects/phasein.ogg', 25, 1)
-
-		for(var/mob/living/M in viewers(get_turf(holder.my_atom), null))
-			if(M.blinded)
-				continue
-			var/eye_safety = 0
-			if(iscarbon(M))
-				eye_safety = M.eyecheck()
-
-			if(get_dist(M, location) <= 3)
-				if(eye_safety < 1)
-					M.flash_eyes(visual = 1)
-					M.Knockdown(15)
-					M.Stun(15)
-			else if(get_dist(M, location) <= 5)
-				if(eye_safety < 1)
-					M.flash_eyes(visual = 1)
-					M.Stun(5)
+		holder.my_atom.flashbangprime(FALSE)
 
 /datum/chemical_reaction/napalm
 	name = "Napalm"
