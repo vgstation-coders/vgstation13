@@ -73,9 +73,13 @@
 		var/flash_turf = get_turf(src)
 		if(!flash_turf)
 			return
-		for(var/mob/living/M in get_hearers_in_view(1, flash_turf))
-			flash(get_turf(M), M)
-
+		
+		if (istype(flashbulb, /obj/item/weapon/light/bulb/he))
+			for(var/mob/living/M in get_hearers_in_view(2, flash_turf))
+				flash(get_turf(M), M)
+		else
+			for(var/mob/living/M in get_hearers_in_view(1, flash_turf))
+				flash(get_turf(M), M)
 
 		user.visible_message("<span class='danger'>[user] overloads \the [src]'s flash bulb!</span>","<span class='danger'>You overload \the [src]'s flash bulb!</span>")
 		to_chat(user, "<span class='warning'>\The [src]'s flash bulb shatters!</span>")
@@ -110,7 +114,7 @@
 		verbs += /obj/item/device/blinder/verb/remove_cell
 	else
 		verbs -= /obj/item/device/blinder/verb/remove_cell
-	if(flashbulb && flashbulb.status >= LIGHT_BROKEN)
+	if(flashbulb)
 		verbs += /obj/item/device/blinder/verb/remove_bulb
 	else
 		verbs -= /obj/item/device/blinder/verb/remove_bulb
@@ -134,7 +138,7 @@
 	update_verbs()
 
 /obj/item/device/blinder/verb/remove_bulb()
-	set name = "Remove broken bulb"
+	set name = "Remove bulb"
 	set category = "Object"
 	set src in range(0)
 
@@ -147,7 +151,10 @@
 	else
 		flashbulb.forceMove(get_turf(loc))
 		usr.put_in_hands(flashbulb)
-		to_chat(usr, "You remove the broken [flashbulb.name] from \the [src].")
+		if (flashbulb.status >= LIGHT_BROKEN)
+			to_chat(usr, "You remove the broken [flashbulb.name] from \the [src].")
+		else
+			to_chat(usr, "You remove the [flashbulb.name] from \the [src].")
 		flashbulb = null
 	update_verbs()
 
