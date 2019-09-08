@@ -87,8 +87,6 @@
 		
 /obj/item/projectile/rocket/lowyield/extreme
 	name = "extreme yield rocket"
-	icon_state = "rpground"
-	explosive = 1
 	damage = 200
 	exdev 	= 7
 	exheavy = 14
