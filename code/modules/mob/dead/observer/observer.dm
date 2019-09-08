@@ -495,7 +495,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/mob/M = get_top_transmogrification()
 	if(!M.client)
 		return
-	if(!(mind && mind.current && can_reenter_corpse))
+	if(!(mind && mind.current && can_reenter_corpse) || M == src)
 		to_chat(src, "<span class='warning'>You have no body.</span>")
 		return
 	if(mind.current.key && copytext(mind.current.key,1,2)!="@")	//makes sure we don't accidentally kick any clients
