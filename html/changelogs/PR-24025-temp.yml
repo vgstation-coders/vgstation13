@@ -1,5 +1,0 @@
----
-author: MadmanMartian
-changes:
-  - rscadd: Fax machines no longer claim your ID for themselves should the equipment power be offline.
-delete-after: true

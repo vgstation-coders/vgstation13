@@ -1,5 +1,0 @@
----
-author: MadmanMartian
-changes:
-  - bugfix: Fixes evidence bags not having their description or weight class reset upon an inserted object being removed.
-delete-after: true

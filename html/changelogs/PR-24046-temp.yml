@@ -1,5 +1,0 @@
----
-author: MadmanMartian
-changes:
-  - rscadd: "The R&D console now shows you the total material cost of whatever you're making. If it has enough by itself, the material cost will be shown in green. If it requires the bluespace network to help, it will be shown in blue. If it does not have enough, it will be shown in red."
-delete-after: true
