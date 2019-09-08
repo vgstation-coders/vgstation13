@@ -1,8 +1,3 @@
-/mob/living/silicon/robot/Process_Spaceslipping(var/prob_slip = 5)
-	if(HAS_MODULE_QUIRK(src, MODULE_HAS_MAGPULSE)) //	The magic of magnets.
-		return FALSE
-	..()
-
 /mob/living/silicon/robot/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
 	return ((HAS_MODULE_QUIRK(src, MODULE_HAS_MAGPULSE))? SLIP_HAS_MAGBOOTS : FALSE)
 

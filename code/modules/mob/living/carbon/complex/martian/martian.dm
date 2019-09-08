@@ -95,9 +95,6 @@
 /mob/living/carbon/complex/martian/IsAdvancedToolUser()
 	return TRUE
 
-/mob/living/carbon/complex/martian/Process_Spaceslipping()
-	return 0 //No slipping
-
 /mob/living/carbon/complex/martian/has_eyes()
 	return FALSE
 

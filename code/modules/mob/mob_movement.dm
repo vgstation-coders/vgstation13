@@ -488,22 +488,7 @@
 		return 1
 
 	if(..())
-		//Check to see if we slipped
-		if(!ignore_slip && on_foot() && prob(Process_Spaceslipping(5)))
-			to_chat(src, "<span class='notice'><B>You slipped!</B></span>")
-			src.inertia_dir = src.last_move
-			step(src, src.inertia_dir)
-			return 0
 		return 1
-
-/mob/proc/Process_Spaceslipping(var/prob_slip = 5)
-	//Setup slipage
-	//If knocked out we might just hit it and stop.  This makes it possible to get dead bodies and such.
-	if(stat)
-		prob_slip = 0  // Changing this to zero to make it line up with the comment.
-
-	prob_slip = round(prob_slip)
-	return(prob_slip)
 
 
 /mob/proc/Move_Pulled(var/atom/dest, var/atom/movable/target = pulling)

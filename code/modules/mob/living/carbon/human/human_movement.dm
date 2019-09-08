@@ -109,27 +109,6 @@
 	return ..()
 
 
-/mob/living/carbon/human/Process_Spaceslipping(var/prob_slip = 5)
-	//If knocked out we might just hit it and stop.  This makes it possible to get dead bodies and such.
-	if(stat)
-		prob_slip = 0 // Changing this to zero to make it line up with the comment, and also, make more sense.
-
-	//Do we have magboots or such on if so no slip
-	if(CheckSlip() == SLIP_HAS_MAGBOOTS)
-		prob_slip = 0
-
-	//Check hands and mod slip
-	for(var/i = 1 to held_items.len)
-		var/obj/item/I = held_items[i]
-
-		if(!I)
-			prob_slip -= 2
-		else if(I.w_class <= W_CLASS_SMALL)
-			prob_slip -= 1
-
-	prob_slip = round(prob_slip)
-	return(prob_slip)
-
 /mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
 
