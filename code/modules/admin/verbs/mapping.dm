@@ -145,6 +145,7 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/ticklag	//allows you to set the ticklag.
 	src.verbs += /client/proc/cmd_admin_grantfullaccess
 	src.verbs += /client/proc/kaboom
+	src.verbs += /client/proc/rigvote
 	src.verbs += /client/proc/splash
 	src.verbs += /client/proc/cmd_admin_areatest
 	src.verbs += /client/proc/cmd_admin_rejuvenate

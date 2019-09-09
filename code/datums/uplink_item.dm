@@ -796,11 +796,19 @@ var/list/uplink_items = list()
 	jobs_with_discount = list("Assistant")
 
 /datum/uplink_item/jobspecific/greytide
-	name = "Greytide Implant"
+	name = "Greytide Implants"
 	desc = "A box containing two greytide implanters that when injected into another person makes them loyal to the greytide and your cause, unless they're already implanted by someone else. Loyalty ends if he or she no longer has the implant. CAUTION: WILL NOT WORK ON SUBJECTS WITH NT LOYALTY IMPLANTS. Now with disguised sechud sunglasses. These will have limited access until you can get your hands on some containing security codes."
 	item = /obj/item/weapon/storage/box/syndie_kit/greytide
 	cost = 20
 	discounted_cost = 14
+	jobs_with_discount = list("Assistant")
+
+/datum/uplink_item/jobspecific/cheaptide
+	name = "Cheaptide Implant"
+	desc = "A box containing one greytide implanter that when injected into another person makes them loyal to the greytide and your cause, unless they're already implanted by someone else. Loyalty ends if he or she no longer has the implant. CAUTION: WILL NOT WORK ON SUBJECTS WITH NT LOYALTY IMPLANTS. Now with disguised sechud sunglasses. These will have limited access until you can get your hands on some containing security codes."
+	item = /obj/item/weapon/storage/box/syndie_kit/cheaptide
+	cost = 12
+	discounted_cost = 8
 	jobs_with_discount = list("Assistant")
 
 /datum/uplink_item/jobspecific/drunkbullets

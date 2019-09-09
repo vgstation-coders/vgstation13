@@ -1,6 +1,11 @@
 datum/event/organ_failure
 	var/severity = 1
 
+/datum/event/organ_failure/can_start(var/list/active_with_role)
+	if(active_with_role["Medical"] > 1)
+		return 30
+	return 0
+
 datum/event/organ_failure/setup()
 	announceWhen = rand(0, 150)
 	endWhen = announceWhen + 1

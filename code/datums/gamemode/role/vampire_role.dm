@@ -129,7 +129,7 @@
 	. += ..() // Who he was, his objectives...
 
 /datum/role/vampire/ForgeObjectives()
-	if(!SOLO_ANTAG_OBJECTIVES)
+	if(!antag.current.client.prefs.antag_objectives)
 		AppendObjective(/datum/objective/freeform/vampire)
 		return
 

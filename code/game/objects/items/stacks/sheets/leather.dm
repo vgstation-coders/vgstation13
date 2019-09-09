@@ -241,3 +241,13 @@
 				L.source_string = source_string
 				L.name = source_string ? "[source_string] leather": "leather"
 				use(amount)
+
+
+/obj/item/stack/leather_strip
+	name = "strip of leather"
+	desc = "For more precise leather work."
+	icon = 'icons/obj/butchering_products.dmi'
+	icon_state = "strip-leather"
+	singular_name = "strip of leather"
+	irregular_plural = "strips of leather"
+	max_amount = 20

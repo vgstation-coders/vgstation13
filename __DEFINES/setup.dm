@@ -5,9 +5,6 @@
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
 
-// If set to 0, replaces solo antags' objectives with an always-pass freeform
-#define SOLO_ANTAG_OBJECTIVES 0
-
 // Defines for the shuttle
 #define SHUTTLE_ON_STANDBY 0
 #define SHUTTLE_ON_STATION 1

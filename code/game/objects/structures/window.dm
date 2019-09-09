@@ -109,7 +109,7 @@ var/list/one_way_windows
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				if(M.ckey) //Only send an admin message if it's an actual players, admins don't need to know what the carps are doing
 					message_admins("\The [src] with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
-		Destroy(brokenup = 1)
+		shatter()
 	else
 		if(sound)
 			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
@@ -505,7 +505,7 @@ var/list/one_way_windows
 				user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 				"<span class='notice'>You disassemble \the [src].</span>")
 				drop_stack(sheet_type, get_turf(src), sheetamount, user)
-				Destroy()
+				qdel(src)
 				return
 
 	user.do_attack_animation(src, W)
@@ -562,19 +562,20 @@ var/list/one_way_windows
 	ini_dir = dir
 	return
 
-/obj/structure/window/Destroy(var/brokenup = 0)
-
+/obj/structure/window/Destroy()
 	setDensity(FALSE) //Sanity while we do the rest
 	update_nearby_tiles()
 	update_nearby_icons()
-	if(brokenup) //If the instruction we were sent clearly states we're breaking the window, not deleting it !
-		if(loc)
-			playsound(src, "shatter", 70, 1)
-		spawnBrokenPieces()
 	if(one_way)
 		one_way_windows.Remove(src)
 		update_oneway_nearby_clients()
 	..()
+
+/obj/structure/window/proc/shatter()
+	if(loc)
+		playsound(src, "shatter", 70, 1)
+	spawnBrokenPieces()
+	qdel(src)
 
 /obj/structure/window/proc/spawnBrokenPieces()
 	if(shardtype)

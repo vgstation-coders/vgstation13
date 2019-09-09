@@ -132,7 +132,7 @@
 			A.state = 4
 			A.icon_state = "4"
 		circuit = null // Used by the busy check to avoid multiple 'You disconnect the monitor' messages
-		Destroy(src)
+		qdel(src)
 		return 1
 	else
 		return 1 // Needed, otherwise the computer UI will pop open

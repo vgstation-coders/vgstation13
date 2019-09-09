@@ -106,7 +106,7 @@
 			spark(src, 5)
 			spawn(15)
 				explosion(src.loc, -1, 1, 3, adminlog = 0) //Overload
-				Destroy(src) //It exploded, rip
+				qdel(src) //It exploded, rip
 			return
 		usr.put_in_hands(charging)
 		charging.add_fingerprint(user)

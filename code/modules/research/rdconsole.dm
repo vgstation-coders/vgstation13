@@ -853,11 +853,19 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
 				Deconstruction Menu<HR>
 				Name: [linked_destroy.loaded_item.name]<BR>
-				Origin Tech:<BR>"}
+				Origin Tech:<UL>"}
 			var/list/temp_tech = linked_destroy.ConvertReqString2List(linked_destroy.loaded_item.origin_tech)
 			for(var/T in temp_tech)
-				dat += "* [CallTechName(T)] [temp_tech[T]]<BR>"
-
+				var/datum/tech/TT = files.GetKTechByID(T)
+				dat += "<LI>[CallTechName(T)] [temp_tech[T]] \[Current research level: [TT.level]\]</LI>"
+			dat += "</UL>"
+			if(linked_destroy.loaded_item.materials)
+				dat += "Material Composition:<UL>"
+				for(var/matID in linked_destroy.loaded_item.materials.storage)
+					if(linked_destroy.loaded_item.materials.storage[matID])
+						var/datum/material/M = linked_destroy.loaded_item.materials.getMaterial(matID)
+						dat += "<LI>[M.processed_name]: [linked_destroy.loaded_item.materials.storage[matID]]</LI>"
+				dat += "</UL><BR>"
 			dat += {"<HR><A href='?src=\ref[src];deconstruct=1'>Deconstruct Item</A> ||
 				<A href='?src=\ref[src];eject_item=1'>Eject Item</A> || "}
 		/////////////////////PROTOLATHE SCREENS/////////////////////////
@@ -924,12 +932,28 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 		if(3.4) //Protolathe Queue Management
 			dat += protolathe_header()+"Production Queue<BR><HR><ul>"
+			var/list/required_materials = list()
 			for(var/i=1;i<=linked_lathe.queue.len;i++)
 				var/datum/design/I=linked_lathe.queue[i]
 				dat += "<li>Name: [I.name]"
+				for(var/material in I.materials)
+					required_materials[material] += I.materials[material]*linked_lathe.resource_coeff
 				if(linked_lathe.stopped)
 					dat += "<A href='?src=\ref[src];removeQItem=[i];device=protolathe'>(Remove)</A></li>"
-			dat += "</ul><A href='?src=\ref[src];clearQ=1;device=protolathe'>Remove All Queued Items</A><br />"
+			dat += "</ul>"
+			if(required_materials.len) //Do we have the materials required? Green if so, blue if it requires bluespace, red otherwise.
+				dat += "<BR>Required Materials: "
+				for(var/I in required_materials)
+					var/datum/material/M=linked_lathe.materials.getMaterial(I)
+					var/success = "red"
+					var/success_amount = linked_lathe.check_mats(I)
+					if(linked_lathe.check_mats(I) >= required_materials[I])
+						success = "green"
+					else if(linked_lathe.check_mats_bluespace(I) >= required_materials[I])
+						success_amount = linked_lathe.check_mats_bluespace(I)
+						success = "blue"
+					dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
+			dat += "<br><A href='?src=\ref[src];clearQ=1;device=protolathe'>Remove All Queued Items</A><br />"
 			if(linked_lathe.stopped)
 				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' style='color:green'>Start Production</A>"
 			else
@@ -1022,12 +1046,34 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 		if(4.4) //Imprinter Queue Management
 			dat += CircuitImprinterHeader()+"Production Queue<BR><HR><ul>"
+			var/list/required_materials = list()
 			for(var/i=1;i<=linked_imprinter.queue.len;i++)
 				var/datum/design/I=linked_imprinter.queue[i]
 				dat += "<li>Name: [I.name]"
+				for(var/material in I.materials)
+					required_materials[material] += I.materials[material]*linked_imprinter.resource_coeff
 				if(linked_imprinter.stopped)
 					dat += "<A href='?src=\ref[src];removeQItem=[i];device=imprinter'>(Remove)</A></li>"
-			dat += "</ul><A href='?src=\ref[src];clearQ=1;device=imprinter'>Remove All Queued Items</A><br />"
+			dat += "</ul>"
+			if(required_materials.len) //Do we have the materials required? Green if so, blue if it requires bluespace, red otherwise.
+				dat += "<BR>Required Materials: "
+				for(var/I in required_materials)
+					if(copytext(I,1,2) == "$")
+						var/datum/material/M=linked_imprinter.materials.getMaterial(I)
+						if(M)
+							var/success = "red"
+							var/success_amount = linked_imprinter.check_mats(I)
+							if(linked_imprinter.check_mats(I) >= required_materials[I])
+								success = "green"
+							else if(linked_imprinter.check_mats_bluespace(I) >= required_materials[I])
+								success_amount = linked_imprinter.check_mats_bluespace(I)
+								success = "blue"
+							dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
+					else
+						var/success = linked_imprinter.check_mats(I)
+						dat += "<span style='color:[success?"green":"red"]'>[required_materials[I]] ([success]) [reagent_name(I)]. </span>"
+
+			dat += "<br><A href='?src=\ref[src];clearQ=1;device=imprinter'>Remove All Queued Items</A><br />"
 			if(linked_imprinter.stopped)
 				dat += "<A href='?src=\ref[src];setImprinterStopped=0' style='color:green'>Start Production</A>"
 			else

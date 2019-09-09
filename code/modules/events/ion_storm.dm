@@ -6,6 +6,11 @@
 	var/active = 0
 	var/list/bots = list()
 
+/datum/event/ionstorm/can_start(var/list/active_with_role)
+	if(active_with_role["AI"] > 0 || active_with_role["Cyborg"] > 0)
+		return 30
+	return 0
+
 /datum/event/ionstorm/start()
 	active = 1
 	for(var/obj/machinery/bot/bot in machines)

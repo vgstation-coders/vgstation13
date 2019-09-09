@@ -7,6 +7,11 @@
 /datum/event/immovable_rod
 	announceWhen = 1
 
+/datum/event/immovable_rod/can_start(var/list/active_with_role)
+	if(active_with_role["Engineer"] > 1)
+		return 15
+	return 0
+
 /datum/event/immovable_rod/announce()
 	command_alert(/datum/command_alert/immovable_rod)
 
@@ -26,7 +31,7 @@
 			myrod = new /obj/item/projectile/immovablerod/big(locate(1,1,1))
 		if(2)
 			myrod = new /obj/item/projectile/immovablerod/hyper(locate(1,1,1))
-	
+
 	myrod.starting = myrod.loc
 	myrod.ThrowAtStation()
 
