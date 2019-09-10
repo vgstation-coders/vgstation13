@@ -702,6 +702,7 @@ var/list/global_singularity_pool
 /obj/machinery/singularity/deadchat_controlled/Destroy()
 	..()
 	var/message = "<span class='recruit'>The deadchat-played singularity has been destroyed. Good job, retards."
+	deadchat_active=0
 	for(var/mob/M in player_list)
 		if(istype(M, /mob/new_player) || !M.client)
 			continue
