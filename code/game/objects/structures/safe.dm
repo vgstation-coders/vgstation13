@@ -21,13 +21,14 @@ FLOOR SAFES
 	var/space = 0		//the combined w_class of everything in the safe
 	var/maxspace = 48	//the maximum combined w_class of stuff in the safe
 
-
+//Tumbler opening positions are at a maximum of 70 to prevent a rare bug where the safe couldn't be opened
+//because the tumbler would stop incrementing or decrementing just outside reaching either's opening position
 /obj/structure/safe/New()
 	tumbler_1_pos = rand(0, 71)
-	tumbler_1_open = rand(0, 71)
+	tumbler_1_open = rand(0, 70)
 
 	tumbler_2_pos = rand(0, 71)
-	tumbler_2_open = rand(0, 71)
+	tumbler_2_open = rand(0, 70)
 
 /obj/structure/safe/initialize()
 	for(var/obj/item/I in loc)
@@ -45,9 +46,9 @@ FLOOR SAFES
 /obj/structure/safe/proc/check_unlocked(mob/user as mob, canhear)
 	if(user && canhear)
 		if(tumbler_1_pos == tumbler_1_open)
-			to_chat(user, "<span class='notice'>You hear a [pick("tonk", "krunk", "plunk")] from [src].</span>")
+			to_chat(user, "<span class='good'>You hear a [pick("tonk", "krunk", "plunk")] from [src].</span>")
 		if(tumbler_2_pos == tumbler_2_open)
-			to_chat(user, "<span class='notice'>You hear a [pick("tink", "krink", "plink")] from [src].</span>")
+			to_chat(user, "<span class='good'>You hear a [pick("tink", "krink", "plink")] from [src].</span>")
 	if(tumbler_1_pos == tumbler_1_open && tumbler_2_pos == tumbler_2_open)
 		if(user)
 			visible_message("<b>[pick("Spring", "Sprang", "Sproing", "Clunk", "Krunk")]!</b>")
