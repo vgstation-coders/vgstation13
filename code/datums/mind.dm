@@ -129,6 +129,12 @@
 		update_faction_icons()
 
 /datum/mind/proc/store_memory(new_text)
+	if(lentext(memory) > MAX_PAPER_MESSAGE_LEN)
+		to_chat(current, "<span class = 'warning'>Your memory, however hazy, is full.</span>")
+		return
+	if(lentext(new_text) > MAX_MESSAGE_LEN)
+		to_chat(current, "<span class = 'warning'>That's a lot to memorize at once.</span>")
+		return
 	if(new_text)
 		memory += "[new_text]<BR>"
 
@@ -224,8 +230,8 @@
 
 			if ((chosen_greeting && chosen_greeting != GREET_CUSTOM) || (chosen_greeting == GREET_CUSTOM && custom_greeting))
 				R.Greet(chosen_greeting,custom_greeting)
-			
-			
+
+
 
 	if (href_list["add_role"])
 		var/list/available_roles = list()
