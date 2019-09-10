@@ -96,3 +96,7 @@
 
 /obj/machinery/chem_dispenser/scp_294/update_icon()
 	return
+
+/obj/machinery/chem_dispenser/scp_294/stop_mapping_this_shit
+	machine_flags = WRENCHMOVE | FIXED2WORK
+	mech_flags = MECH_SCAN_FAIL
