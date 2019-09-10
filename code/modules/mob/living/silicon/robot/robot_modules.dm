@@ -347,9 +347,9 @@
 
 	fix_modules()
 
-/obj/item/weapon/robot_module/security
-	name = "security robot module"
-	module_holder = "security"
+/obj/item/weapon/robot_module/peacekeeper
+	name = "peacekeeper robot module"
+	module_holder = "peacekeeper"
 	quirk_flags = MODULE_IS_THE_LAW | MODULE_CAN_LIFT_SECTAPE
 	radio_key = /obj/item/device/encryptionkey/headset_sec
 	sprites = list(
@@ -364,9 +364,9 @@
 		"Noble" = "Noble-SEC",
 		"R34 - SEC10a 'Woody'" = "woody"
 		)
-	speed_modifier = CYBORG_SECURITY_SPEED_MODIFIER
+	speed_modifier = CYBORG_PEACEKEEPER_SPEED_MODIFIER
 
-/obj/item/weapon/robot_module/security/New()
+/obj/item/weapon/robot_module/peacekeeper/New()
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)

@@ -3,10 +3,10 @@
 	icon_state = "id-robot"
 	desc = "A circuit grafted onto the bottom of an ID card."
 
-//Warden upgrade's security barrier ID
-/obj/item/weapon/card/robot/security
+//Warden upgrade's peacekeeper barrier ID
+/obj/item/weapon/card/robot/peacekeeper
 	name = "security code transmission device"
 
-/obj/item/weapon/card/robot/security/New()
+/obj/item/weapon/card/robot/peacekeeper/New()
 	..()
 	desc += " This one is used to transmit security codes into deployable barriers, allowing the user to lock and unlock them."

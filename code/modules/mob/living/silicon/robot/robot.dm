@@ -263,7 +263,7 @@ var/list/cyborg_list = list()
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
 	updatename()
 
-	if(modtype == (SECURITY_MODULE || COMBAT_MODULE))
+	if(modtype == (PEACEKEEPER_MODULE || COMBAT_MODULE))
 		to_chat(src, "<span class='big warning'><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></span>")
 
 	set_module_sprites(module.sprites)

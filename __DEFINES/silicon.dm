@@ -3,7 +3,7 @@
 #define SERVICE_MODULE "Service"
 #define SUPPLY_MODULE "Supply"
 #define MEDICAL_MODULE "Medical"
-#define SECURITY_MODULE "Security"
+#define PEACEKEEPER_MODULE "Peacekeeper"
 #define ENGINEERING_MODULE "Engineering"
 #define JANITOR_MODULE "Janitor"
 #define COMBAT_MODULE "Combat"
@@ -22,7 +22,7 @@ var/global/list/default_nanotrasen_robot_modules = list(
 	SERVICE_MODULE			= /obj/item/weapon/robot_module/butler,
 	SUPPLY_MODULE 			= /obj/item/weapon/robot_module/miner,
 	MEDICAL_MODULE			= /obj/item/weapon/robot_module/medical,
-	SECURITY_MODULE			= /obj/item/weapon/robot_module/security,
+	PEACEKEEPER_MODULE		= /obj/item/weapon/robot_module/peacekeeper,
 	ENGINEERING_MODULE		= /obj/item/weapon/robot_module/engineering,
 	JANITOR_MODULE			= /obj/item/weapon/robot_module/janitor,
     )
@@ -100,7 +100,7 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define CYBORG_COMBAT_SPEED_MODIFIER 1
 #define CYBORG_STANDARD_SPEED_MODIFIER 1
 #define CYBORG_SERVICE_SPEED_MODIFIER 1
-#define CYBORG_SECURITY_SPEED_MODIFIER 1
+#define CYBORG_PEACEKEEPER_SPEED_MODIFIER 1
 #define CYBORG_TG17355_SPEED_MODIFIER 1
 #define CYBORG_STARMAN_SPEED_MODIFIER 1
 

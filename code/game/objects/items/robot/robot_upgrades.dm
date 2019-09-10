@@ -322,12 +322,12 @@
 
 	R.module.quirk_flags |= MODULE_IS_A_CLOWN
 
-//Security Stuff
+//Peacekeeper Stuff
 /obj/item/borg/upgrade/tasercooler
-	name = "security cyborg rapid taser cooling upgrade board"
+	name = "peacekeeper cyborg rapid taser cooling upgrade board"
 	desc = "Used to cool a mounted taser, increasing the potential current in it and thus its recharge rate."
 	icon_state = "cyborg_upgrade3"
-	required_modules = list(SECURITY_MODULE, HUG_MODULE)
+	required_modules = list(PEACEKEEPER_MODULE, HUG_MODULE)
 	multi_upgrades = TRUE
 
 
@@ -349,10 +349,10 @@
 
 
 /obj/item/borg/upgrade/noir
-	name = "security cyborg N.O.I.R. upgrade board"
+	name = "peacekeeper cyborg N.O.I.R. upgrade board"
 	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."
 	icon_state = "mainboard"
-	required_modules = list(SECURITY_MODULE, HUG_MODULE)
+	required_modules = list(PEACEKEEPER_MODULE, HUG_MODULE)
 	modules_to_add = list(/obj/item/weapon/gripper/service/noir, /obj/item/weapon/storage/evidencebag, /obj/item/cyborglens, /obj/item/device/taperecorder, /obj/item/weapon/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
 
 /obj/item/borg/upgrade/noir/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -375,11 +375,11 @@
 			C.Noirize()
 
 /obj/item/borg/upgrade/warden
-	name = "security cyborg W.A.T.C.H. upgrade board"
-	desc = "Used to give a security cyborg supervisory enforcement tools."
+	name = "peacekeeper cyborg W.A.T.C.H. upgrade board"
+	desc = "Used to give a peacekeeper cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
-	required_modules = list(SECURITY_MODULE, HUG_MODULE)
-	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/weapon/wrench, /obj/item/weapon/handcuffs/cyborg) //Secborgs have cuffs, but hugborgs can't do warden job properly without them.
+	required_modules = list(PEACEKEEPER_MODULE, HUG_MODULE)
+	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/peacekeeper, /obj/item/weapon/wrench, /obj/item/weapon/handcuffs/cyborg) //Secborgs have cuffs, but hugborgs can't do warden job properly without them.
 
 /obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -403,10 +403,10 @@
 	R.module.quirk_flags |= MODULE_HAS_FLASH_RES
 
 /obj/item/borg/upgrade/hos
-	name = "security cyborg H.O.S. upgrade board"
-	desc = "A special upgrade used to promote security cyborgs with both N.O.I.R. and W.A.T.C.H. upgrades installed to head of silicons."
+	name = "peacekeeper cyborg H.O.S. upgrade board"
+	desc = "A special upgrade used to promote peacekeeper cyborgs with both N.O.I.R. and W.A.T.C.H. upgrades installed to head of silicons."
 	icon_state = "mcontroller"
-	required_modules = list(SECURITY_MODULE, HUG_MODULE)
+	required_modules = list(PEACEKEEPER_MODULE, HUG_MODULE)
 	required_upgrades = list(/obj/item/borg/upgrade/noir, /obj/item/borg/upgrade/warden)
 	modules_to_add = list(/obj/item/weapon/gun/lawgiver, /obj/item/weapon/gun/grenadelauncher)
 
