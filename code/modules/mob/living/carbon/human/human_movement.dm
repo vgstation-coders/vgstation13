@@ -56,6 +56,7 @@
 				if(!find_held_item_by_type(/obj/item/weapon/cane))
 					. += 1*multiplier
 				. += 0.5*multiplier
+			. += ((E.brute_dam+E.burn_dam)/E.max_damage)*multiplier
 
 
 /mob/living/carbon/human/movement_tally_multiplier()
