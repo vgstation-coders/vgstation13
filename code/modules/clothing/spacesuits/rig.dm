@@ -675,6 +675,7 @@
 	gas_transfer_coefficient = 0.60
 	permeability_coefficient = 0.30
 
+//RoR survivor Rig
 /obj/item/clothing/suit/space/rig/ror
 	name = "survivor's hardsuit"
 	desc = "...and so he left the asteroid, with everything but his humanity."
@@ -694,3 +695,21 @@
 
 /obj/item/clothing/head/helmet/space/rig/ror/update_icon()
 	return
+
+//[Xeno]Archaeologist Rig
+/obj/item/clothing/suit/space/rig/arch
+	name = "archaeology hardsuit"
+	desc = "A hardsuit designed for archaeology expeditions. It's yellow and orange materials provide high visibility and resistance to exotic particles."
+	icon_state = "rig-arch"
+	//item_state = "rorsuit"
+	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+	head_type = /obj/item/clothing/head/helmet/space/rig/arch
+
+/obj/item/clothing/head/helmet/space/rig/arch
+	name = "archaeology hardsuit helmet"
+	desc = "A hardsuit helmet designed for archaeology expeditions. It's orange materials provide high visibility and resistance to exotic particles."
+	icon_state = "rig0-arch"
+	//item_state = "rorhelm"
+	_color = "arch"
+	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+	color_on = "#81F9C6" //Aquamarine. A combination of the colors from the lamp and rail light.

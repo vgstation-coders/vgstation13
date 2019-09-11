@@ -79,8 +79,7 @@
 /obj/machinery/suit_storage_unit/excavation
 	name = "Excavation Suit Storage Unit"
 	department = "sci"
-	suit_type = /obj/item/clothing/suit/space/anomaly
-	helmet_type = /obj/item/clothing/head/helmet/space/anomaly
+	suit_type = /obj/item/clothing/suit/space/rig/arch
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 

@@ -1,4 +1,4 @@
-
+//Xenoarch suits.
 //changes: rad protection up to 100 from 20/50 respectively
 /obj/item/clothing/suit/bio_suit/anomaly
 	name = "Anomaly suit"
@@ -16,10 +16,11 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 100)
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
+//Old xenoarch suit
 /obj/item/clothing/suit/space/anomaly
 	name = "Excavation suit"
-	desc = "A pressure resistant excavation suit partially capable of insulating against exotic alien energies."
-	icon_state = "cespace_suit"
+	desc = "A sealed bio suit capable of insulating against exotic alien energies"
+	icon_state = "anomaly_suit"
 	item_state = "cespace_suit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 100)
@@ -28,9 +29,9 @@
 
 /obj/item/clothing/head/helmet/space/anomaly
 	name = "Excavation hood"
-	desc = "A pressure resistant excavation hood partially capable of insulating against exotic alien energies."
-	icon_state = "cespace_helmet"
-	item_state = "cespace_helmet"
+	desc = "A sealed bio hood capable of insulating against exotic alien energies"
+	icon_state = "anomaly_helmet"
+	item_state = "anomaly_helmet"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 100)
 	body_parts_covered = HEAD|EARS|EYES|MOUTH
