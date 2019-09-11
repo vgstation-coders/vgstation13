@@ -23,7 +23,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/temperature_archived
 	var/mob/living/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
-
+	var/inject_rate = 5 //How many reagents, per 10 seconds, will be moved from the beaker to the cryo cell
+	var/inject_rate_max = 10
 	var/current_heat_capacity = 50
 	var/running_bob_animation = 0 // This is used to prevent threads from building up if update_icons is called multiple times
 
@@ -55,6 +56,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if (node1)
 		node1.initialize()
 		node1.build_network()
+	create_reagents(1000)
 
 /obj/machinery/atmospherics/unary/cryo_cell/initialize()
 	if(node1)
@@ -270,21 +272,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			data["occupantTemperatureStatus"] = "average"
 
 	data["isBeakerLoaded"] = beaker ? 1 : 0
-	/* // Removing beaker contents list from front-end, replacing with a total remaining volume
-	var beakerContents[0]
-	if(beaker && beaker.reagents && beaker.reagents.reagent_list.len)
-		for(var/datum/reagent/R in beaker.reagents.reagent_list)
-			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
-	data["beakerContents"] = beakerContents
-	*/
 	data["beakerLabel"] = null
 	data["beakerVolume"] = 0
 	if(beaker)
 		data["beakerLabel"] = beaker.labeled ? beaker.labeled : null
-		if (beaker.reagents && beaker.reagents.reagent_list.len)
-			for(var/datum/reagent/R in beaker.reagents.reagent_list)
-				data["beakerVolume"] += R.volume
-
+		data["beakerVolume"] = beaker.reagents.total_volume
+	var/list/cryo_contents = list()
+	if(reagents.total_volume)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			cryo_contents.Add(list(list("name" = R.name, "volume" = R.volume))) //UI decomposes the top layer list, so has to be a list in a list
+	data["cryo_contents"] = cryo_contents
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -481,23 +478,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			var/mob/living/carbon/human/guy = occupant //Gotta cast to read this guy's species
 			if(istype(guy) && guy.species && guy.species.breath_type != GAS_OXYGEN)
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
-			if(air_contents[GAS_OXYGEN] > 2)
-				if(occupant.getOxyLoss())
-					occupant.adjustOxyLoss(-1)
-			else
-				occupant.adjustOxyLoss(-1)
-			//severe damage should heal waaay slower without proper chemicals
-			if(occupant.bodytemperature < 225)
-				if (occupant.getToxLoss())
-					occupant.adjustToxLoss(max(-1, -20/occupant.getToxLoss()))
-				var/heal_brute = occupant.getBruteLoss() ? min(1, 20/occupant.getBruteLoss()) : 0
-				var/heal_fire = occupant.getFireLoss() ? min(1, 20/occupant.getFireLoss()) : 0
-				occupant.heal_organ_damage(heal_brute,heal_fire)
-		var/has_cryo = occupant.reagents.get_reagent_amount(CRYOXADONE) >= 1
-		var/has_clonexa = occupant.reagents.get_reagent_amount(CLONEXADONE) >= 1
-		var/has_cryo_medicine = has_cryo || has_clonexa
-		if(beaker && !has_cryo_medicine)
-			beaker.reagents.trans_to(occupant, 1, 1)
+		if(beaker)
 			beaker.reagents.reaction(occupant)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/modify_occupant_bodytemp()

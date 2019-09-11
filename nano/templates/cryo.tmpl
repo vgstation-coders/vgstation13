@@ -102,6 +102,25 @@ Used In File(s): \code\game\machinery\cryo.dm
 	<div class="itemContent" style="width: 26%;">
 		{{:helper.link('Eject Beaker', 'eject', {'ejectBeaker' : 1}, data.isBeakerLoaded ? null : 'disabled')}}
 	</div>
+<div class="item">
+	<div class="itemlabel">
+	 Cell contents:
+  </div>
+	<div class="itemContent" style="width: 40%;">
+		{{for data.cryo_contents}}
+		<div class="item">
+			<div class="itemLabelNarrow">
+				{{value.name}}:{{value.volume}}
+			</div>
+			<div class="itemContent">
+				{{:helper.link('Extract '+value.name, 'shuffle', {'dish_effect_to_buffer': value.stage})}}
+			</div>
+		</div>
+		{{empty}}
+			Cell is empty.
+		{{/for}}
+	</div>
+</div>
 </div>
 {{if data.ejecting}}
 	<div class="mask">

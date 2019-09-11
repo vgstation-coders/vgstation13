@@ -76,6 +76,7 @@
 			if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
+					self.holder.remove_reagent(self.id, self.volume/2) //Hardcoded, removes half of volume
 
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
@@ -6621,7 +6622,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Wake-Up Call"
 	id = SECCOFFEE
 	description = "All the essentials."
-	
+
 /datum/reagent/drink/coffee/seccoffee/on_mob_life(var/mob/living/M)
 	..()
 	if(ishuman(M))
