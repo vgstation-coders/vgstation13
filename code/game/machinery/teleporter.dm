@@ -196,7 +196,7 @@
 	name = "teleporter horizon generator"
 	desc = "This generates the portal through which you step through to teleport elsewhere."
 	icon_state = "tele0"
-	var/accurate = 0
+	var/accurate = 0 //Accuracy is no longer used.
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 2000
@@ -268,10 +268,13 @@
 		to_chat(M, "<span class = 'notice'>The act of teleportation was so smooth, it feels like you didn't move at all.</span>")
 		return 0
 	if (istype(M, /atom/movable))
+		/*
 		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
 			do_teleport(M, locate(rand((2*TRANSITIONEDGE), world.maxx - (2*TRANSITIONEDGE)), rand((2*TRANSITIONEDGE), world.maxy - (2*TRANSITIONEDGE)), 3), 2)
 		else
 			do_teleport(M, com.locked) //dead-on precision
+		*/
+		do_teleport(M, com.locked)
 
 		if(com.one_time_use) //Make one-time-use cards only usable one time!
 			com.one_time_use = 0
@@ -370,6 +373,7 @@
 	src.engaged = 0
 	return
 
+/*
 /obj/machinery/teleport/station/verb/testfire()
 	set name = "Test Fire Teleporter"
 	set category = "Object"
@@ -394,3 +398,4 @@
 
 	src.add_fingerprint(usr)
 	return
+*/
