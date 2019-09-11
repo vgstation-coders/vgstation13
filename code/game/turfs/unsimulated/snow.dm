@@ -287,7 +287,6 @@
 	real_snow_tile = FALSE
 	name = "asphalt"
 	desc = "Specially treated Centcomm asphalt, designed to disintegrate all snow that touches it."
-	turf_speed_multiplier = 1
 
 /turf/unsimulated/floor/snow/permafrost
 	icon_state = "permafrost_full"
