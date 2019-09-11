@@ -88,6 +88,8 @@
 		gib()
 
 	if (src.stat != 2) //Alive.
+		if(confused)
+			confused = max(0, confused - 1)
 		if (src.paralysis || src.stunned || src.knockdown) //Stunned etc.
 			src.stat = 1
 			if (src.stunned > 0)

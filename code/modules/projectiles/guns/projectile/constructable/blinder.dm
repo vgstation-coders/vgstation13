@@ -95,7 +95,7 @@
 	M.flash_eyes(visual = 1, affect_silicon = 1)
 
 	if(issilicon(M))
-		M.Knockdown(rand(5, 10))
+		M.confused = rand(5, 10)
 		M.visible_message("<span class='warning'>[M]'s sensors are overloaded by the flash of light!</span>","<span class='warning'>Your sensors are overloaded by the flash of light!</span>")
 
 	if(ishuman(M))

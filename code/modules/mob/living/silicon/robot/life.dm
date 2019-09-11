@@ -84,6 +84,8 @@
 		death()
 
 	if(!isDead()) //Alive.
+		if(confused)
+			confused = max(0, confused - 1)
 		if(paralysis || stunned || knockdown) //Stunned etc.
 			stat = UNCONSCIOUS
 			if(stunned > 0)

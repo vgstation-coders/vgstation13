@@ -378,7 +378,10 @@
 							return
 
 		else if(mob.confused)
-			step_rand(mob)
+			if(issilicon(mob))
+				step(mob, pick(NORTH,SOUTH,EAST,WEST))
+			else
+				step_rand(mob)
 			mob.last_movement=world.time
 		else
 			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
