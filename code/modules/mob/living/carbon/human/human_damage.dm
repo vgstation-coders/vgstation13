@@ -7,7 +7,7 @@
 	var/total_burn	= 0
 	var/total_brute	= 0
 	for(var/datum/organ/external/O in organs)	//hardcoded to streamline things a bit
-		if(O.is_organic() && O.is_existing())
+		if(O.vital && O.is_organic() && O.is_existing())
 			total_brute	+= O.brute_dam
 			total_burn	+= O.burn_dam
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
