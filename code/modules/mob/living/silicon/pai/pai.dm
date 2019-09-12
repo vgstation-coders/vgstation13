@@ -249,6 +249,9 @@
 /mob/living/silicon/pai/ClickOn(var/atom/A, var/params)
 	if(incapacitated())
 		return
+	if(click_delayer.blocked())
+		return
+	click_delayer.setDelay(1)
 	var/list/modifiers = params2list(params)
 	if(modifiers["middle"])
 		MiddleClickOn(A)
@@ -262,7 +265,8 @@
 	if(modifiers["ctrl"])
 		CtrlClickOn(A)
 		return
-
+	if(attack_delayer.blocked())
+		return
 	if(istype(card.loc, /obj))
 		var/obj/O = card.loc
 		if(O.integratedpai == card)

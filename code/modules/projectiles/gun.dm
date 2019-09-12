@@ -401,6 +401,14 @@
 	if(get_holder_of_type(user, /obj/structure/disposalpipe) || get_holder_of_type(user, /obj/machinery/atmospherics/pipe))	//can't fire the gun from inside pipes or disposal pipes
 		to_chat(user, "<span class='warning'>You can't aim \the [src] properly from this location!</span>")
 		return FALSE
+	if(isliving(loc))
+		var/mob/living/L = loc
+		if(!L.held_items.Find(src))
+			to_chat(user, "<span class='warning'>Safety protocol prevents you from firing while situated upon a person, unless you are being held by said person.</span>")
+			return FALSE
+	else if(!isturf(loc))
+		to_chat(user, "<span class='warning'>Safety protocol prevents you from firing from within the confines of an object.</span>")
+		return FALSE
 	else if(!pai_safety)
 		to_chat(user, "<span class='warning'>You're not connected to \the [src]'s firing mechanism!</span>")
 		return FALSE

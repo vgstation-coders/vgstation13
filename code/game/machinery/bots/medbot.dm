@@ -724,7 +724,7 @@
 		overlays -= image('icons/obj/aibots.dmi', "medibot_pai_overlay")
 
 /obj/machinery/bot/medbot/getpAIMovementDelay()
-	return 1
+	return SS_WAIT_MACHINERY
 
 /obj/machinery/bot/medbot/pAImove(mob/living/silicon/pai/user, dir)
 	if(!on)
