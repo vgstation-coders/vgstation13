@@ -665,15 +665,16 @@
 			if (!src.welding)
 				to_chat(user, "You press \the unlit [src] against [user == M ? "your" : "[M]'s"] [S.display_name], but nothing happens.")
 				return
-			S.heal_damage(15,0,0,1)
-			if(user != M)
-				user.visible_message("<span class='attack'>\The [user] patches some dents on \the [M]'s [S.display_name] with \the [src]</span>",\
-				"<span class='attack'>You patch some dents on \the [M]'s [S.display_name]</span>",\
-				"You hear a welder.")
-			else
-				user.visible_message("<span class='attack'>\The [user] patches some dents on their [S.display_name] with \the [src]</span>",\
-				"<span class='attack'>You patch some dents on your [S.display_name]</span>",\
-				"You hear a welder.")
+			if(remove_fuel(1, user))
+				S.heal_damage(15,0,0,1)
+				if(user != M)
+					user.visible_message("<span class='attack'>\The [user] patches some dents on \the [M]'s [S.display_name] with \the [src]</span>",\
+					"<span class='attack'>You patch some dents on \the [M]'s [S.display_name]</span>",\
+					"You hear a welder.")
+				else
+					user.visible_message("<span class='attack'>\The [user] patches some dents on their [S.display_name] with \the [src]</span>",\
+					"<span class='attack'>You patch some dents on your [S.display_name]</span>",\
+					"You hear a welder.")
 		else
 			to_chat(user, "Nothing to fix!")
 	else
