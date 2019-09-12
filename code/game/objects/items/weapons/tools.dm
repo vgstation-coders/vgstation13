@@ -661,6 +661,9 @@
 			return
 		if(!(S.status & ORGAN_ROBOT) || user.a_intent != I_HELP)
 			return ..()
+		if (!src.welding)
+			to_chat(user, "You press \the unlit [src] against [user == M ? "your" : "[M]'s"] [S.display_name], but nothing happens.")
+			return
 		if(S.brute_dam)
 			S.heal_damage(15,0,0,1)
 			if(user != M)
