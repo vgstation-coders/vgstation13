@@ -663,7 +663,7 @@
 			return ..()
 		if(S.brute_dam)
 			if (!src.welding)
-				to_chat(user, "You press \the unlit [src] against [user == M ? "your" : "[M]'s"] [S.display_name], but nothing happens.")
+				to_chat(user, "<span class='notice'>You press \the unlit [src] against [user == M ? "your" : "[M]'s"] [S.display_name], but nothing happens.</span>")
 				return
 			if(remove_fuel(1, user))
 				S.heal_damage(15,0,0,1)
