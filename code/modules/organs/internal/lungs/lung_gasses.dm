@@ -11,6 +11,15 @@
 /datum/lung_gas/New(var/gas_id) //If you came here looking for what the second arg is, it was removed and no longer matters
 	src.id = gas_id
 
+/datum/lung_gas/Destroy()
+	if(lungs)
+		lungs.gasses -= src
+		lungs = null
+
+	qdel(breath)
+	breath = null
+	..()
+
 /datum/lung_gas/proc/get_pp()
 	return breath.partial_pressure(id)
 
