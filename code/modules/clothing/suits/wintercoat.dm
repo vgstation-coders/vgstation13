@@ -8,7 +8,10 @@
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/weapon/tank/emergency_nitrogen)
 	var/is_hooded = 0
 	var/nohood = 0
 	var/obj/item/clothing/head/winterhood/hood
@@ -129,7 +132,8 @@
 	allowed = list (
 		/obj/item/weapon/reagent_containers/spray/plantbgone,
 		/obj/item/device/analyzer/plant_analyzer,
-		/obj/item/seeds,/obj/item/weapon/reagent_containers/glass,
+		/obj/item/seeds,
+		/obj/item/weapon/reagent_containers/glass,
 		/obj/item/weapon/wirecutters/clippers,
 		/obj/item/weapon/minihoe)
 
@@ -176,7 +180,8 @@
 	icon_state = "coatclown"
 	allowed = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
-		/obj/item/weapon/bananapeel,/obj/item/weapon/soap,
+		/obj/item/weapon/bananapeel,
+		/obj/item/weapon/soap,
 		/obj/item/weapon/reagent_containers/spray,
 		/obj/item/weapon/bikehorn)
 
