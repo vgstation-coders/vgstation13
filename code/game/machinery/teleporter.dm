@@ -196,7 +196,7 @@
 	name = "teleporter horizon generator"
 	desc = "This generates the portal through which you step through to teleport elsewhere."
 	icon_state = "tele0"
-	//var/accurate = 0
+	var/accurate = 0 //Doesn't compile without it due to legacy stuff. Unused otherwise.
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 2000
