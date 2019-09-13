@@ -186,15 +186,25 @@
 	else
 		data["loaded"] = 0
 
+	var/list/chem_list = list()
+	var i
+
 	if(genetics)
 		data["hasGenetics"] = 1
 		data["sourceName"] = genetics.display_name
 		if(!genetics.roundstart)
 			data["sourceName"] += " (variety #[genetics.uid])"
+		if ( !degradation )
+			for ( i = 1, i<= genetics.chems.len, i++ )
+				chem_list += genetics.chems[i]
+			data["show_chems"] = chem_list.len > 0 ? 1 : 0
+		else
+			data["show_chems"] = 0
 	else
 		data["hasGenetics"] = 0
 		data["sourceName"] = 0
-
+	data["chemTags"] = chem_list
+	
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "botany_isolator.tmpl", "Lysis-isolation Centrifuge UI", 470, 450)
@@ -294,6 +304,35 @@
 			failed_task = 1
 			genetics = null
 			degradation = 0
+
+	if(href_list["get_chem"])
+
+		if(!genetics || !loaded_disk)
+			return
+
+		last_action = world.time
+		active = 1
+
+		var/datum/plantgene/P = genetics.get_gene(GENE_PHYTOCHEMISTRY)
+		if(!P)
+			return
+		loaded_disk.genes += P
+
+		var/list/chems = list(href_list["get_chem"] = P.values[1][href_list["get_chem"]])
+		P.values[1] = chems
+		P.values[3] = 0
+
+		loaded_disk.genesource = "[genetics.display_name]"
+		if(!genetics.roundstart)
+			loaded_disk.genesource += " (variety #[genetics.uid])"
+
+		loaded_disk.name += " ([href_list["get_chem"]], #[genetics.uid])"
+		loaded_disk.desc += " The label reads 'gene for [href_list["get_chem"]], sampled from [genetics.display_name]'."
+		eject_disk = 1
+
+		genetics = null
+		degradation = 0
+
 
 	if(href_list["clear_buffer"])
 		if(!genetics)

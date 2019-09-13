@@ -23,18 +23,37 @@ Used In File(s): \code\modules\hydroponics\seed_machines.dm
 			</div>
 		</div>
 		{{if data.disk}}
-			{{for data.geneTags}}
-				<div class="item">
-					<div class="itemLabel">
-						{{:value.tag}}
+			<div class="itemGroup">Genetics<br>
+				{{for data.geneTags}}
+					<div class="item">
+						<div class="itemLabel">
+							{{:value.tag}}
+						</div>
+						<div class="itemContent">
+							{{:helper.link('Extract', 'circle-arrow-s', {'get_gene' : value.tag})}}
+						</div>
 					</div>
-					<div class="itemContent">
-						{{:helper.link('Extract', 'circle-arrow-s', {'get_gene' : value.tag})}}
-					</div>
+				{{empty}}
+					<div class="notice">Data error. Genetic record corrupt.</div>
+				{{/for}}
+				<br>
+			</div>
+			<br>
+			{{if data.show_chems }}
+				<div class="itemGroup">Chemicals Produced<br>
+					{{for data.chemTags}}
+						<div class="item">
+							<div class="itemLabel">
+								{{:value}}
+							</div>
+							<div class="itemContent">
+								{{:helper.link('Isolate', 'circle-arrow-s', {'get_chem' : value})}}
+							</div>
+						</div>
+					{{/for}}
+					<br>
 				</div>
-			{{empty}}
-				<div class="notice">Data error. Genetic record corrupt.</div>
-			{{/for}}
+			{{/if}}
 			<br>
 			<div class="item">
 				{{:helper.link('Eject Loaded Disk', 'circle-arrow-e', {'eject_disk' : 1}, null)}}
