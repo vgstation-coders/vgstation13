@@ -1896,24 +1896,20 @@ mob/living/carbon/human/isincrit()
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
 	delayNextMove(crawldelay, additive = 1)
 
+/mob/living/carbon/human/resist_memes(var/datum/speech/speech)
+	//do not use check_contact_sterility because other things cover ears, like helmets
+	if(ears && prob(ears.sterility))
+		return TRUE //If wearing sterile earpiece, block the meme
+	else
+		return ..()
 
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
-	if(speech.frequency || speech.speaker == src || !ishuman(speech.speaker))
-		return //First, eliminate radio chatter, speech from us, or speech from nonhumans
-	var/mob/living/carbon/human/H = speech.speaker
-	var/list/diseases = H.virus2
-	if(istype(diseases) && diseases.len)
-		//do not use check_contact_sterility because other things cover ears, like helmets
-		if(ears && prob(ears.sterility))
-			return //If wearing sterile earpiece, block the meme
-		for(var/ID in diseases)
-			var/datum/disease2/disease/V = diseases[ID]
-			if(V.spread & SPREAD_MEMETIC)
-				infect_disease2(V, notes="(Memed, from [speech.speaker])")
-
-	if(!mind.faith || length(speech.message) < 20)
+	if(ear_deaf || speech.frequency || speech.speaker == src)
+		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
+	if(!mind || !mind.faith || length(speech.message) < 20)
 		return //If we aren't religious or hearing a long message, don't check further
+	var/mob/living/H = speech.speaker
 	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
 		if(H.mind == mind.faith.religiousLeader)
 			AdjustDizzy(rand(-8,-10))

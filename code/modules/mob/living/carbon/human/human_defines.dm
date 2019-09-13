@@ -12,6 +12,8 @@
 	mob_push_flags = ALLMOBS
 	mob_swap_flags = ALLMOBS
 
+	flags = HEAR_ALWAYS | PROXMOVE
+
 	var/age = 30		//Player's age (pure fluff)
 	//var/b_type = "A+"	//Player's bloodtype //NOW HANDLED IN THEIR DNA
 

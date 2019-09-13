@@ -203,10 +203,26 @@ var/list/department_radio_keys = list(
 	returnToPool(speech)
 	return 1
 
+/mob/living/proc/resist_memes(var/datum/speech/speech)
+	if(ear_deaf || speech.frequency || speech.speaker == src || !isliving(speech.speaker))
+		return TRUE
+	return FALSE
 
 /mob/living/Hear(var/datum/speech/speech, var/rendered_message = null)
 	if(!rendered_message)
 		rendered_message = speech.message
+
+	//Meme disease code. Needs to come before client so that NPCs/catatonic can be infected.
+	//We don't concern ourselves with: radio chatter, our own speech, or if we're deaf.
+	if(!resist_memes(speech))
+		var/mob/living/L = speech.speaker
+		var/list/diseases = L.virus2
+		if(istype(diseases) && diseases.len)
+			for(var/ID in diseases)
+				var/datum/disease2/disease/V = diseases[ID]
+				if(V.spread & SPREAD_MEMETIC)
+					infect_disease2(V, notes="(Memed, from [L])")
+
 	if(!client)
 		return
 	say_testing(src, "[src] ([src.type]) has heard a message (lang=[speech.language ? speech.language.name : "null"])")
@@ -226,7 +242,7 @@ var/list/department_radio_keys = list(
 	var/atom/movable/AM = speech.speaker.GetSource()
 	if(!say_understands((istype(AM) ? AM : speech.speaker),speech.language)|| force_compose) //force_compose is so AIs don't end up without their hrefs.
 		rendered_message = render_speech(speech)
-	
+
 	//checking for syndie codephrases if person is a tator
 	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP))
 		//is tator
@@ -379,7 +395,7 @@ var/list/department_radio_keys = list(
 				var/message = text("<span class='cortical'>Cortical link, <b>[]</b>: []</span>",B.truename, html_encode(speech.message))
 				var/turf/T = get_turf(src)
 				log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Borer chat: [html_encode(speech.message)]")
-				
+
 				for(var/mob/M in mob_list)
 					if(isborer(M) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						if(isborer (M)) //for borers that are IN CONTROL

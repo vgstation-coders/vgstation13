@@ -699,9 +699,9 @@ var/list/slot_equipment_priority = list( \
 		slot_r_store\
 	)
 
-/*Equips accessories. 
+/*Equips accessories.
 A is the mob
-B is the accessory. 
+B is the accessory.
 C is what item the accessory will look to be attached to, important.
 D will look how many accessories the item already has, and will move on if its attachment would go above the amount of accessories
 E will stop the proc if a candidate had the accessory attached to it and it is toggled on
@@ -1987,7 +1987,7 @@ mob/proc/on_foot()
 	return
 
 /mob/living/carbon/heard(var/mob/living/carbon/human/M)
-	if(M == src || !istype(M))
+	if(M == src || !istype(M) || !mind)
 		return
 	if(!ear_deaf && !stat)
 		if(!(mind.heard_before[M.name]))

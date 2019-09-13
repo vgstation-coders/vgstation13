@@ -108,6 +108,7 @@ var/global/list/disease2_list = list()
 	stageprob = 30
 	stage_variance = -1
 	allowed_transmission = SPREAD_BLOOD | SPREAD_MEMETIC
+	//Note: if more types of creatures become infectable than humans/monkeys/mice, give them HEAR_ALWAYS
 
 /datum/disease2/disease/proc/update_global_log()
 	if ("[uniqueID]-[subID]" in disease2_list)
@@ -242,11 +243,15 @@ var/global/list/disease2_list = list()
 
 /datum/disease2/disease/fungus/randomize_spread()
 	spread = SPREAD_BLOOD
-	if(prob(50)) //50% colonizing
+	if(prob(50)) //40% just colonizing
 		spread |= SPREAD_COLONY
-	else if(prob(40)) //20% airborne
+		if(prob(20)) //10% colonizing + air OR contact
+			spread |= pick(SPREAD_AIRBORNE,SPREAD_CONTACT)
+	else if(prob(40)) //14% just airborne
 		spread |= SPREAD_AIRBORNE
-	else if(prob(60)) //18% contact
+		if(prob(30))
+			spread |= SPREAD_CONTACT //6% air+contact
+	else if(prob(60)) //18% just contact
 		spread |= SPREAD_CONTACT
 			//12% blood only
 
