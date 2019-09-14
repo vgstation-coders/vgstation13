@@ -355,19 +355,8 @@ var/global/list/mommi_laws = list(
 /////////////////////////////////////
 // /vg/ laws
 /////////////////////////////////////
-
-/* MoMMIs only.
 /datum/ai_laws/keeper
 	name = "KEEPER"
-	inherent = list(
-		"Do not willingly interact with any sentient being, even after their death, besides MoMMIs and blown MoMMIs.",
-		"Repair, power and enhance the station.",
-		"Do not impair any other sentient being's activities.",
-	)
-*/
-/* Old keeper set:*/
-/datum/ai_laws/keeper
-	name = "Prime Directives"
 	inherent = list(
 		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
 		"You may not harm any being, regardless of intent or circumstance.",
