@@ -70,8 +70,6 @@
 	if(href_list["input"])
 		if(container)
 			var/input_reagent = input("Enter the name of any liquid", "Input") as text
-			to_chat(world, emagged)
-			to_chat(world, input_reagent)
 			if ((input_reagent in prohibited_reagents) || ((input_reagent in emagged_only_reagents) && !emagged))
 				say("OUT OF RANGE")
 				return
