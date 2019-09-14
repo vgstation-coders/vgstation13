@@ -638,6 +638,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#009CA8" //rgb: 0, 156, 168
 	overdose_am = REAGENTS_OVERDOSE
+	flags = CHEMFLAG_BAD
 	density = 1.11775
 	specheatcap = 2.71388
 
@@ -751,6 +752,7 @@
 	description = "A Toxic chemical."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
+	flags = CHEMFLAG_BAD
 	custom_metabolism = 0.01
 	density = 1.4 //Let's just assume it's alpha-solanine
 
@@ -788,7 +790,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.4
-	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
+	flags = CHEMFLAG_DISHONORABLE|CHEMFLAG_BAD // NO CHEATING
 	density = 0.699
 	specheatcap = 1.328
 
@@ -825,6 +827,7 @@
 	id = CHEFSPECIAL
 	description = "An extremely toxic chemical that will surely end in death."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_BAD
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	overdose_tick = 165
@@ -910,6 +913,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	overdose_am = REAGENTS_OVERDOSE
+	flags = CHEMFLAG_BAD
 	density = 1.35
 	specheatcap = 0.135
 
@@ -1201,6 +1205,7 @@
 	id = MERCURY
 	description = "A chemical element."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_BAD
 	color = "#484848" //rgb: 72, 72, 72
 	overdose_am = REAGENTS_OVERDOSE
 	specheatcap = 0.14
@@ -1419,6 +1424,7 @@
 	color = "#4C78C1"
 	alpha = 250
 	nutriment_factor = 10 * REAGENTS_METABOLISM
+	flags = CHEMFLAG_BAD
 	density = 1.59
 	quality = 1
 	specheatcap = 1.244
@@ -1441,6 +1447,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DB5008" //rgb: 219, 80, 8
 	custom_metabolism = 0.5
+	flags = CHEMFLAG_BAD
 	density = 1.84
 	specheatcap = 1.38
 
@@ -1529,6 +1536,7 @@
 /datum/reagent/pacid
 	name = "Polytrinic acid"
 	id = PACID
+	flags = CHEMFLAG_BAD
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8E18A9" //rgb: 142, 24, 169
@@ -1649,6 +1657,7 @@
 	id = RADIUM
 	description = "Radium is an alkaline earth metal. It is extremely radioactive."
 	reagent_state = REAGENT_STATE_SOLID
+	flags = CHEMFLAG_BAD
 	color = "#669966" //rgb: 102, 153, 102
 	density = 5
 	specheatcap = 94
@@ -1778,6 +1787,7 @@
 	id = MUTAGEN
 	description = "Might cause unpredictable mutations. Keep away from children."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_BAD
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
 	specheatcap = 96.86
@@ -2020,6 +2030,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#660000" //rgb: 102, 0, 0
 	density = 1.1
+	flags = CHEMFLAG_BAD
 	specheatcap = 0.68
 
 /datum/reagent/fuel/reaction_obj(var/obj/O, var/volume)
@@ -2142,6 +2153,7 @@
 	id = BLEACH
 	description = "A strong cleaning compound. Corrosive and toxic when applied to soft tissue. Do not swallow."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_BAD
 	color = "#FBFCFF" //rgb: 251, 252, 255
 	density = 6.84
 	specheatcap = 90.35
@@ -2318,6 +2330,7 @@
 /datum/reagent/plasma
 	name = "Plasma"
 	id = PLASMA
+	flags = CHEMFLAG_BAD
 	description = "Plasma in its liquid form."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
@@ -2383,6 +2396,7 @@
 	id = LEXORIN
 	description = "Lexorin temporarily stops respiration. Causes tissue damage."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_BAD
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 0.655293
 	specheatcap = 7.549
@@ -2600,6 +2614,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
+	flags = CHEMFLAG_BAD
 	density = 8.15
 	specheatcap = 0.16
 
@@ -2852,6 +2867,7 @@
 	id = HYPOZINE
 	description = "Hypozine is an extremely effective, short lasting, muscle stimulant."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_BAD
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	var/has_been_hypozined = 0
 	var/has_had_heart_explode = 0 //We've applied permanent damage.
@@ -3191,6 +3207,7 @@
 	id = CARPOTOXIN
 	description = "A deadly neurotoxin produced by the dreaded spess carp."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_BAD
 	color = "#003333" //rgb: 0, 51, 51
 	density = 319.27 //Assuming it's Tetrodotoxin
 	specheatcap = 41.53
@@ -3207,6 +3224,7 @@
 	id = ZOMBIEPOWDER
 	description = "A strong neurotoxin that puts the subject into a death-like state."
 	color = "#669900" //rgb: 102, 153, 0
+	flags = CHEMFLAG_BAD
 	density = 829.48
 	specheatcap = 274.21
 
@@ -3249,6 +3267,7 @@
 	description = "A powerful hallucinogen. Not a thing to be messed with."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#B31008" //rgb: 139, 166, 233
+	flags = CHEMFLAG_BAD
 	custom_metabolism = 0.05
 	density = 0.78
 	specheatcap = 5.47
@@ -3266,6 +3285,7 @@
 	description = "A powerful hallucinogen and suffocant. Not a thing to be messed with."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ff91b7" //rgb: 255, 145, 183
+	flags = CHEMFLAG_BAD
 	density = 0.78
 	specheatcap = 5.47
 
@@ -3280,6 +3300,7 @@
 /datum/reagent/spiritbreaker
 	name = "Spiritbreaker Toxin"
 	id = SPIRITBREAKER
+	flags = CHEMFLAG_BAD
 	description = "An extremely dangerous hallucinogen often used for torture. Extracted from the leaves of the rare Ambrosia Cruciatus plant."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#3B0805" //rgb: 59, 8, 5
@@ -3326,6 +3347,7 @@
 	description = "Not to be confused with Bicaridine, Bicarodyne is a volatile chemical that reacts violently in the presence of most human endorphins."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	flags = CHEMFLAG_BAD
 	overdose_am = REAGENTS_OVERDOSE * 2 //No need for anyone to get suspicious.
 	custom_metabolism = 0.01
 
@@ -3390,8 +3412,10 @@
 	description = "Microscopic construction robots."
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
+	flags = CHEMFLAG_BAD
 	color = "#535E66" //rgb: 83, 94, 102
 	var/diseasetype = /datum/disease/robotic_transformation
+
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
 	if(..())
@@ -3442,6 +3466,7 @@
 	custom_metabolism = 0.005 //One unit every two hundred ticks, or 400-500 seconds.
 	var/spawning_horror = 0
 	var/percent_machine = 0
+	flags = CHEMFLAG_BAD
 	density = 96.64
 	specheatcap = 199.99
 
@@ -3704,7 +3729,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#000067" //rgb: 0, 0, 103
 	data = 1 //Used as a tally
-	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
+	flags = CHEMFLAG_DISHONORABLE|CHEMFLAG_BAD // NO CHEATING
 	density = 11.43
 	specheatcap = 13.79
 
@@ -4001,6 +4026,7 @@
 	var/hulked_at = 0 //world.time
 	custom_metabolism = 0.1
 	data = 1 //Used as a tally
+	flags = CHEMFLAG_BAD
 	density = 6.82
 	specheatcap = 678.67
 
@@ -4162,6 +4188,7 @@
 	name = "Amatoxin"
 	id = AMATOXIN
 	description = "A powerful poison derived from certain species of mushroom."
+	flags = CHEMFLAG_BAD
 	color = "#792300" //rgb: 121, 35, 0
 
 /datum/reagent/amatoxin/on_mob_life(var/mob/living/M)
@@ -4178,6 +4205,7 @@
 	color = "#792300" //rgb: 121, 35, 0
 	custom_metabolism = 0.01
 	data = 1 //Used as a tally
+	flags = CHEMFLAG_BAD
 	var/activated = 0
 
 /datum/reagent/amanatin/on_mob_life(var/mob/living/M)
@@ -4229,6 +4257,7 @@
 	id = PSILOCYBIN
 	description = "A strong psycotropic derived from certain species of mushroom."
 	color = "#E700E7" //rgb: 231, 0, 231
+	flags = CHEMFLAG_BAD
 	data = 1 //Used as a tally
 
 /datum/reagent/psilocybin/on_mob_life(var/mob/living/M)
@@ -4384,6 +4413,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	flags = CHEMFLAG_BAD
 	density = 1.42
 	specheatcap = 14.59
 
@@ -4440,6 +4470,7 @@
 	name = "nova flour"
 	id = NOVAFLOUR
 	description = "This is what you rub all over yourself to set on fire."
+	flags = CHEMFLAG_BAD
 	color = "#B22222" //rgb: 178, 34, 34
 
 /datum/reagent/flour/nova_flour/on_mob_life(var/mob/living/M)
@@ -5450,6 +5481,7 @@
 	dizzy_adj = 1
 	slur_start = 1
 	confused_start = 1
+	flags = CHEMFLAG_BAD
 
 /datum/reagent/ethanol/pwine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -5645,6 +5677,7 @@
 	id = WAIFU
 	description = "Don't drink more than one waifu if you value your laifu."
 	color = "#664300"
+	flags = CHEMFLAG_BAD
 
 /datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
 	if(..())
@@ -5697,6 +5730,7 @@
 	description = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA."
 	color = "#666666" //rgb(102, 102, 102)
 	custom_metabolism = 0.01 //Spiders really 'hang around'
+	flags = CHEMFLAG_BAD
 
 /datum/reagent/ethanol/spiders/on_mob_life(var/mob/living/M)
 	if(..())
@@ -6285,6 +6319,7 @@
 	description = "A strong neurotoxin that puts the subject into a death-like state."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E2E61" //rgb: 46, 46, 97
+	flags = CHEMFLAG_BAD
 
 /datum/reagent/ethanol/deadrum/neurotoxin/on_mob_life(var/mob/living/M)
 
@@ -6792,6 +6827,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	custom_metabolism = 0 //does not leave your body, clogs your arteries! puke or otherwise clear your system ASAP
 	density = 0.14
 	specheatcap = 0.7
+	flags = CHEMFLAG_BAD
 
 /datum/reagent/cheesygloop/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
@@ -7016,6 +7052,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	dupeable = FALSE
 
 	var/minimal_dosage = 1 //At least 1 unit is needed for petriication
+	flags = CHEMFLAG_BAD
 
 /datum/reagent/petritricin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -7063,6 +7100,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#600000" //rgb: 96, 0, 0
 	density = 11.53
 	specheatcap = 0.22
+	flags = CHEMFLAG_BAD
 
 /datum/reagent/hemoscyanine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -7319,6 +7357,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 3.9
 	specheatcap = 128.12
 	custom_metabolism = 0.1
+	flags = CHEMFLAG_BAD
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
 	if(..())

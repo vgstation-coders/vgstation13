@@ -23,9 +23,11 @@ var/const/INGEST = 2
 		//Chemical Reagents - Initialises all /datum/reagent into a list indexed by reagent id
 		chemical_reagents_list = list()
 
-		for (var/path in typesof(/datum/reagent) - /datum/reagent)
+		for (var/path in subtypesof(/datum/reagent))
 			var/datum/reagent/D = new path()
 			chemical_reagents_list[D.id] = D
+			if(D.flags & CHEMFLAG_BAD)
+				reagents_to_log.Add(D.id)
 
 	if (!chemical_reactions_list)
 		//Chemical Reactions - Initialises all /datum/chemical_reaction into a list
@@ -848,7 +850,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	. = list()
 
 	for(var/datum/reagent/R in reagent_list)
-		if(R.id in reagents_to_log) //reagents_to_log being a global list in objs.dm
+		if(R.id in reagents_to_log) //reagents_to_log being a global list in Defines/reagents.dm
 			. += "[R.volume]u of [R.name]"
 
 	return english_list(., nothing_text = "")

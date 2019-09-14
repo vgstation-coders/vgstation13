@@ -1,3 +1,4 @@
+var/global/list/reagents_to_log = list()
 
 #define REAGENT_STATE_SOLID 1
 #define REAGENT_STATE_LIQUID 2
@@ -7,8 +8,9 @@
 #define REM REAGENTS_EFFECT_MULTIPLIER
 
 // Use in chem.flags.
-#define CHEMFLAG_DISHONORABLE 1
-#define CHEMFLAG_OBSCURING 2
+#define CHEMFLAG_DISHONORABLE 1 //Can't be used by an honourable antag (highlander, ninja, etc.)
+#define CHEMFLAG_OBSCURING 2 //Obscures all reagents when examining the reagent holder
+#define CHEMFLAG_BAD 4 //For nasty chems that need logging
 
 
 //Reagents
