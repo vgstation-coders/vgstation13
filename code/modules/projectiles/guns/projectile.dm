@@ -231,14 +231,7 @@
 			update_icon()
 			return
 		if(silenced)
-			if(!user.is_holding_item(src))
-				..()
-				return
-			to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
-			user.put_in_hands(silenced)
-			silenced = 0
-			w_class = W_CLASS_SMALL
-			update_icon()
+			RemoveAttach(usr)
 			return
 	else
 		to_chat(user, "<span class='warning'>Nothing loaded in \the [src]!</span>")
@@ -288,19 +281,13 @@
 	return ..()
 
 /obj/item/weapon/gun/projectile/proc/RemoveAttach(var/mob/user)
-	if(silenced)
-		if(!user.is_holding_item(src))
-			..()
-			return
-		to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
-		user.put_in_hands(silenced)
-		silenced = 0
-		w_class = W_CLASS_SMALL
-		update_icon()
-		return 1
-	return 0
+	to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
+	user.put_in_hands(silenced)
+	silenced = 0
+	w_class = W_CLASS_SMALL
+	update_icon()
 
-/obj/item/weapon/gun/projectile/verb/force_removeAttach()
+/obj/item/weapon/gun/projectile/verb/RemoveAttachments()
 	set name = "Remove Attachments"
 	set category = "Object"
 	set src in range(0)
