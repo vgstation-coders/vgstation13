@@ -304,6 +304,9 @@
 	set name = "Remove Attachments"
 	set category = "Object"
 	set src in range(0)
+	if(!usr.is_holding_item(src))
+		to_chat(usr, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
+		return
 	if(usr.incapacitated())
 		to_chat(usr, "<span class='rose'>You can't do this!</span>")
 		return
