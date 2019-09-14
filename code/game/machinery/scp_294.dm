@@ -19,7 +19,7 @@
 	var/list/prohibited_reagents = list(ADMINORDRAZINE)
 	var/list/emagged_only_reagents = list(XENOMICROBES, MEDNANOBOTS)
 
-	machine_flags = FIXED2WORK | EMAGGABLE
+	machine_flags = FIXED2WORK | EMAGGABLE | WRENCHMOVE
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/machinery/chem_dispenser/scp_294/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
