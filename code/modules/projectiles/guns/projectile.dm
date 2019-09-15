@@ -290,7 +290,7 @@
 /obj/item/weapon/gun/projectile/verb/RemoveAttachments()
 	set name = "Remove Attachments"
 	set category = "Object"
-	set src in range(0)
+	set src in usr
 	if(!usr.is_holding_item(src))
 		to_chat(usr, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 		return
