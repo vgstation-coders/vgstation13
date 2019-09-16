@@ -210,6 +210,12 @@
 		update_equip_info()
 	return
 
+/obj/item/mecha_parts/mecha_equipment/tool/sleeper/relaymove(mob/user)
+	if(user.isStunned())
+		return
+	occupant_message("[occupant] is self ejecting at [(occupant.health/occupant.maxHealth)*100]% health.")
+	go_out()
+
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/update_equip_info()
 	if(..())
 		send_byjax(chassis.occupant,"msleeper.browser","lossinfo",get_occupant_dam())
@@ -226,6 +232,7 @@
 		S.set_ready_state(1)
 		S.log_message("Deactivated.")
 		S.occupant_message("[src] deactivated - no power.")
+		S.go_out()
 		return stop()
 	var/mob/living/carbon/M = S.occupant
 	if(!M)
@@ -235,10 +242,6 @@
 		M.updatehealth()
 	M.AdjustStunned(-4)
 	M.AdjustKnockdown(-4)
-	M.AdjustStunned(-4)
-	M.Paralyse(2)
-	M.Knockdown(2)
-	M.Stun(2)
 	if(M.reagents.get_reagent_amount(INAPROVALINE) < 5)
 		M.reagents.add_reagent(INAPROVALINE, 5)
 	S.chassis.use_power(S.energy_drain)
