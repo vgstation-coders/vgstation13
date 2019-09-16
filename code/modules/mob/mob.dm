@@ -1886,7 +1886,7 @@ mob/proc/on_foot()
 /mob/proc/isTeleViewing(var/client_eye)
 	if(istype(client_eye,/obj/machinery/camera))
 		return 1
-	if(istype(client_eye,/obj/item/projectile/nikita))
+	if(istype(client_eye,/obj/item/projectile/rocket/nikita))
 		return 1
 	return 0
 
