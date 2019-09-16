@@ -1,13 +1,56 @@
 
 #define RUNE_STAND	1
 
+//Returns a rune spell based on the given 3 words.
+/proc/get_rune_spell(var/mob/user, var/obj/spell_holder, var/use = "ritual", var/datum/runeset/word1, var/datum/runeset/word2, var/datum/runeset/word3)
+	if(!word1 || !word2 || !word3)
+		return
+	for(var/runeset in subtypesof(/datum/rune_spell))
+		for(var/runespell in subtypesof(runeset))
+			var/datum/rune_spell/instance = runespell
+			if(word1.type == initial(instance.word1) && word2.type == initial(instance.word2) && word3.type == initial(instance.word3))
+				switch (use)
+					if ("ritual")
+						return new runespell(user, spell_holder, use)
+					if ("examine")
+						return instance
+					if ("walk")
+						if (initial(instance.walk_effect))
+							return new runespell(user, spell_holder, use)
+						else
+							return null
+					if ("imbue")
+						return runespell
+				return new runespell(user, spell_holder, use)
+	return null
+
+/proc/shadow(var/atom/C,var/turf/T,var/sprite="rune_blind")//based on the holopad rays I made a few months ago
+	var/disty = C.y - T.y
+	var/distx = C.x - T.x
+	var/newangle
+	if(!disty)
+		if(distx >= 0)
+			newangle = 90
+		else
+			newangle = 270
+	else
+		newangle = arctan(distx/disty)
+		if(disty < 0)
+			newangle += 180
+		else if(distx < 0)
+			newangle += 360
+	var/matrix/M1 = matrix()
+	var/matrix/M2 = turn(M1.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+	return anim(target = C, a_icon = 'icons/effects/96x96.dmi', flick_anim = sprite, lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE, trans = M2)
+
+
 /datum/rune_spell //Abstract base. Includes channeled and instant use runes.
 	var/name = "Cult Rune"		      //To be used for various purposes, in blood cult for tome entry.
 	var/desc = "Does magical things."   //This one is used by blood cult for the tome as well.
 	var/obj/spell_holder = null				//The rune or talisman calling the spell. If using a talisman calling an attuned rune, the holder is the rune.
 	var/mob/activator = null				//The original mob that cast the spell
 	var/runeset_identifier
-	var/datum/runeword/word1 = null			
+	var/datum/runeword/word1 = null
 	var/datum/runeword/word2 = null
 	var/datum/runeword/word3 = null
 	var/invocation = "Lo'Rem Ip'Sum"		//Spoken whenever cast.
@@ -27,8 +70,8 @@
 	var/list/ingredients_found = list()		//Items that are found on the rune
 
 	var/destroying_self = 0		//Sanity var to prevent abort loops, ignore
-	var/image/progbar = null	//Bar for channeling spells			 
-				 
+	var/image/progbar = null	//Bar for channeling spells
+
 /datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target)
 	spell_holder = holder
 	activator = user
@@ -65,7 +108,7 @@
 		else
 			invoke(activator,invocation)
 			cast()
-	
+
 /datum/rune_spell/proc/pay_blood()
 	var/data = use_available_blood(activator, cost_invoke)
 	if(data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
@@ -80,7 +123,7 @@
 
 /datum/rune_spell/proc/midcast(var/mob/add_cultist)
 	return
-	
+
 /datum/rune_spell/proc/cast() //Override for your spell functionality.
 	spell_holder.visible_message("<span class='warning'>This rune wasn't properly set up, tell a coder.</span>")
 	qdel(src)
@@ -185,43 +228,21 @@
 		progbar.appearance_flags = RESET_COLOR
 	progbar.icon_state = "prog_bar_[round((min(1, accumulated_blood / remaining_cost) * 100), 10)]"
 	return
-	
-//Returns a rune spell based on the given 3 words.
-/proc/get_rune_spell(var/mob/user, var/obj/spell_holder, var/use = "ritual", var/datum/runeset/word1, var/datum/runeset/word2, var/datum/runeset/word3)
-	if(!word1 || !word2 || !word3)
-		return
-	for(var/runeset in subtypesof(/datum/rune_spell))
-		for(var/runespell in subtypesof(runeset))
-			var/datum/rune_spell/instance = runespell
-			if(word1.type == initial(instance.word1) && word2.type == initial(instance.word2) && word3.type == initial(instance.word3))
-				switch (use)
-					if ("ritual")
-						return new runespell(user, spell_holder, use)
-					if ("examine")
-						return instance
-					if ("walk")
-						if (initial(instance.walk_effect))
-							return new runespell(user, spell_holder, use)
-						else
-							return null
-					if ("imbue")
-						return runespell
-				return new runespell(user, spell_holder, use)
-	return null	
-	
+
+
 ////////////////////Blood Cult Runespells
-	
+
 /datum/rune_spell/blood_cult
 	name = "Blood Cult Rune"
 	desc = "Spooky."
 	invocation = "Lo'Rem Ip'Sum"
-	
+
 	runeset_identifier = "blood_cult"
-	
+
 	var/desc_talisman = "It's a talisman."  //Talisman description. Non-cultists don't see this.
 	var/talisman_absorb = RUNE_CAN_IMBUE	//Whether the rune is absorbed into the talisman (and thus deleted), or linked to the talisman (RUNE_CAN_ATTUNE)
 	var/talisman_uses = 1					//How many times can a spell be cast from a single talisman. The talisman disappears upon the last use.
-	
+
 	var/Act_restriction = CULT_PROLOGUE		//locks the rune to the cult's progression
 	var/page = "Lorem ipsum dolor sit amet, consectetur adipiscing elit,\
 			 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\
@@ -230,7 +251,7 @@
 			    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint\
 			     occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." //Arcane tome page description.
 	var/constructs_can_use = 1
-	
+
 /datum/rune_spell/blood_cult/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target)
 	spell_holder = holder
 	activator = user
@@ -239,8 +260,8 @@
 		pre_cast()
 	else if(use == "touch" && target)
 		cast_touch(target) //Skips pre_cast() for talismans
-		
-/datum/rune_spell/blood_cult/pre_cast() 
+
+/datum/rune_spell/blood_cult/pre_cast()
 	if(Act_restriction > veil_thickness)
 		to_chat(activator, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
 		switch(veil_thickness)
@@ -260,16 +281,16 @@
 	else if(istype (spell_holder,/obj/item/weapon/talisman))
 		invoke(activator,invocation,1)//talisman incantations are whispered
 		cast_talisman()
-		
+
 /datum/rune_spell/blood_cult/proc/cast_talisman() //Override for unique talisman behavior.
 	cast()
-	
+
 /datum/rune_spell/blood_cult/proc/cast_touch(var/mob/M) //Behavior on using the talisman on somebody. See - stun talisman.
-	return	
-	
+	return
+
 /datum/rune_spell/blood_cult/proc/midcast_talisman(var/mob/add_cultist)
 	return
-	
+
 
 
 //RUNE I
@@ -310,9 +331,9 @@
 	R.one_pulse()
 
 	var/mob/living/user = activator
-	
+
 	proximity_check() //See above
-		
+
 	if (veil_thickness < CULT_ACT_III && user.z != map.zMainStation)
 		abort(RITUALABORT_OUTPOST)
 		return FALSE
@@ -328,7 +349,7 @@
 		choices[3] = list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience.")
 
 	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
-	
+
 	if(!R.Adjacent(user) || !structure )
 		abort()
 		return
@@ -1401,25 +1422,6 @@ var/list/blind_victims = list()
 							sleep(15)
 							C.clear_fullscreen("blindwhite", animate = 0)
 		qdel(src)
-
-/proc/shadow(var/atom/C,var/turf/T,var/sprite="rune_blind")//based on the holopad rays I made a few months ago
-	var/disty = C.y - T.y
-	var/distx = C.x - T.x
-	var/newangle
-	if(!disty)
-		if(distx >= 0)
-			newangle = 90
-		else
-			newangle = 270
-	else
-		newangle = arctan(distx/disty)
-		if(disty < 0)
-			newangle += 180
-		else if(distx < 0)
-			newangle += 360
-	var/matrix/M1 = matrix()
-	var/matrix/M2 = turn(M1.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
-	return anim(target = C, a_icon = 'icons/effects/96x96.dmi', flick_anim = sprite, lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE, trans = M2)
 
 //RUNE VIII
 /datum/rune_spell/blood_cult/deafmute
@@ -2701,5 +2703,5 @@ var/list/bloodcult_exitportals = list()
 	mouse_opacity = 0
 
 
-	
+
 #undef RUNE_STAND
