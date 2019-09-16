@@ -252,6 +252,16 @@
 			if(istype(d, type))
 				out += d
 
+	else if(ispath(type, /client))
+		for(var/client/d in location)
+			if(istype(d, type))
+				out += d
+
+	else if(location == world) //The parser implicitly sets the location to world if none is specified.
+		for(var/datum/d) //Unlike all other types, looping through world and looping without a location are not equivalent for datums.
+			if(istype(d, type))
+				out += d
+
 	else
 		for(var/datum/d in location)
 			if(istype(d, type))
