@@ -449,8 +449,7 @@
 
 		if(iswelder(W) && canweld())
 			var/obj/item/weapon/weldingtool/WT = W
-			if(!WT.remove_fuel(0,user))
-				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			if(!WT.remove_fuel(1,user))
 				return
 			materials.makeSheets(src)
 			for(var/mob/M in viewers(src))
@@ -466,8 +465,7 @@
 		return
 	else if(iswelder(W) && canweld())
 		var/obj/item/weapon/weldingtool/WT = W
-		if(!WT.remove_fuel(0,user))
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+		if(!WT.remove_fuel(1,user))
 			return
 		src.welded =! src.welded
 		src.update_icon()

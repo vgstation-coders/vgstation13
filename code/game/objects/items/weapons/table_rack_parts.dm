@@ -36,7 +36,7 @@
 		return
 	if (iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if(WT.remove_fuel(1, user))
 			to_chat(user, "You begin the delicate process of heating and moulding \the [src].")
 			playsound(user, 'sound/items/Welder.ogg', 50, 1)
 			if(do_after(user, src, 180))
@@ -49,8 +49,7 @@
 				else
 					new /obj/item/weapon/ghetto_ansible(loc)
 					qdel(src)
-		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			return
 	if (istype(W, /obj/item/stack/rods))
 		var/obj/item/stack/rods/rods = W
 		if (rods.amount >= 4)
@@ -214,7 +213,7 @@
 		return
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if(WT.remove_fuel(1, user))
 			to_chat(user, "You begin slicing through \the [src].")
 			playsound(user, 'sound/items/Welder.ogg', 50, 1)
 			if(do_after(user, src, 60))
@@ -227,8 +226,7 @@
 				else
 					new /obj/item/weapon/metal_gun_stock(loc)
 					qdel(src)
-		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			return
 
 /obj/item/weapon/rack_parts/attack_self(mob/user)
 	var/obj/structure/rack/R = new /obj/structure/rack(user.loc)
