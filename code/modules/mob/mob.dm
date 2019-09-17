@@ -1060,7 +1060,6 @@ Use this proc preferably at the end of an equipment loadout
 	set name = "Point To"
 	set category = "Object"
 
-
 	if((usr.isUnconscious() && !isobserver(src)) || !(get_turf(src))|| attack_delayer.blocked())
 		return 0
 
@@ -1071,7 +1070,9 @@ Use this proc preferably at the end of an equipment loadout
 		I.showoff(src)
 		return 0
 
-	if(!(A in (view(get_turf(src)) + get_all_slots())))
+	if(!(A in (view(get_turf(src)) + get_all_slots())) || (usr.see_invisible < A.invisibility))
+		message_admins("<span class='warning'><B>WARNING: </B><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?</span>", 1)
+		log_admin("[key_name_admin(src)] just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?")
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
