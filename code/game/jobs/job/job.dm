@@ -43,6 +43,9 @@
 	//If you have use_age_restriction_for_jobs config option enabled and the database set up, this option will add a requirement for players to be at least minimal_player_age days old. (meaning they first signed in at least that many days before.)
 	var/minimal_player_age = 0
 
+	//If you have use_age_restriction_for_jobs config option enabled and the database set up, this option will add a requirement for players to have at most maximum_player_age days played. (meaning they first signed in at least that many days before.)
+	var/maximum_player_age = 0
+
 	var/pdatype=/obj/item/device/pda
 	var/pdaslot=slot_belt
 
@@ -96,6 +99,11 @@
 /datum/job/proc/player_old_enough(client/C)
 	if(available_in_days(C) == 0)
 		return 1	//Available in 0 days = available right now = player is old enough to play.
+	return 0
+
+/datum/job/proc/player_too_old(client/C)
+	if(maximum_player_age)
+		return C.player_age > maximum_player_age
 	return 0
 
 

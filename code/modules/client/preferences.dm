@@ -521,6 +521,8 @@ var/const/MAX_SAVE_SLOTS = 8
 			var/available_in_days = job.available_in_days(user.client)
 			HTML += "<font color=red>[rank]</font></td><td><font color=red> \[IN [(available_in_days)] DAYS]</font></td></tr>"
 			continue
+		if(job.player_too_old(user.client))
+			HTML += "<font color=red>[rank]</font></td><td><font color=red> \[UNAVAILABLE: CLIENT TOO OLD]</font></td></tr>"
 		if((rank in command_positions) || (rank == "AI"))//Bold head jobs
 			if(job.alt_titles)
 				HTML += "<b><span class='dark'><a href=\"byond://?src=\ref[user];preference=job;task=alt_title;job=\ref[job]\">[GetPlayerAltTitle(job)]</a></span></b>"
@@ -1493,10 +1495,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("window_flashing")
 					window_flashing = !window_flashing
-				
+
 				if("antag_objectives")
 					antag_objectives = !antag_objectives
-				
+
 			if(user.client.holder)
 				switch(href_list["preference"])
 					if("hear_ahelp")
