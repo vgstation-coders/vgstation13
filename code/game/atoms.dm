@@ -954,6 +954,9 @@ its easier to just keep the beam vertical.
 /atom/proc/thermal_energy_transfer()
 	return
 
+/atom/proc/suitable_colony()
+	return FALSE
+
 //Used for map persistence. Returns an associative list with some of our most pertinent variables. This list will be used ad-hoc by our relevant map_persistence_type datum to reconstruct this atom from scratch.
 /atom/proc/atom2mapsave()
 	. = list()

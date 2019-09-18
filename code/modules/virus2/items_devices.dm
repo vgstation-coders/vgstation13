@@ -393,7 +393,9 @@ var/list/virusdishes = list()
 	if (open)//If the dish is open, we may get infected by the disease inside on top of those that might be stuck on it.
 		var/block = 0
 		var/bleeding = 0
-		if (src in perp.held_items)
+		if(attempt_colony(perp,contained_virus, "from exposure to \a [src]."))
+			//Spacesuits cover feet, torso, and hands, but are ideal for a colony.
+		else if (src in perp.held_items)
 			block = perp.check_contact_sterility(HANDS)
 			bleeding = perp.check_bodypart_bleeding(HANDS)
 			if (!block)

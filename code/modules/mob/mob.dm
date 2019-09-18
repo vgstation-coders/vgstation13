@@ -1991,7 +1991,7 @@ mob/proc/on_foot()
 	return
 
 /mob/living/carbon/heard(var/mob/living/carbon/human/M)
-	if(M == src || !istype(M))
+	if(M == src || !istype(M) || !mind)
 		return
 	if(!ear_deaf && !stat)
 		if(!(mind.heard_before[M.name]))
