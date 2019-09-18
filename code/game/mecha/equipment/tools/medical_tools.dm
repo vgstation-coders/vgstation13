@@ -76,6 +76,7 @@
 		occupant_message("<span class='notice'>[target] successfully loaded into [src]. Life support functions engaged.</span>")
 		chassis.visible_message("[chassis] loads [target] into [src].")
 		log_message("[target] loaded. Life support functions engaged.")
+		msg_admin_attack("[chassis.occupant] has loaded [target] into a mecha-sleeper. ([formatJumpTo(chassis)])")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/proc/go_out()
