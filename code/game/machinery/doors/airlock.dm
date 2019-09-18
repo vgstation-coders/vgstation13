@@ -1368,7 +1368,10 @@ About the new airlock wires panel:
 				return
 
 			if (locate(/mob/living) in T)
-				playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
+				if((Holiday = APRIL_FOOLS_DAY) || prob(1))
+					playsound(src, 'sound/machines/access_denied.ogg', 50, 0)
+				else
+					playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 				if(autoclose  && normalspeed)
 					spawn(150)
 						autoclose()
