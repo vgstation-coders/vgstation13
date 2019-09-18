@@ -167,11 +167,11 @@
 /obj/item/weapon/card/emag/attack()
 	return
 
-//perform individual emag_act() stuff on children overriding the method here 
+//perform individual emag_act() stuff on children overriding the method here
 /obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
 	if(!proximity)
 		return
-	if (istype(target, /mob/living/carbon/human)) 
+	if (istype(target, /mob/living/carbon/human))
 		var/mob/living/carbon/target_living = target
 		//get target zone with 0% chance of missing
 		var/zone = ran_zone(user.zone_sel.selecting, 100)
@@ -571,6 +571,7 @@
 /obj/item/weapon/card/id/captains_spare/New()
 	var/datum/job/captain/J = new/datum/job/captain
 	access = J.get_access()
+	access.Remove(access_change_ids)
 	..()
 
 /obj/item/weapon/card/id/admin
