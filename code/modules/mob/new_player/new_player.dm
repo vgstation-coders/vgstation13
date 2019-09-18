@@ -256,8 +256,9 @@
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
-	. = 1
-	return
+	if(job.player_too_old(client))
+		return 0
+	return 1
 
 /mob/new_player/proc/create_observer()
 	var/mob/dead/observer/observer = new()
