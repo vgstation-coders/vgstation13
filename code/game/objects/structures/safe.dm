@@ -215,3 +215,15 @@ obj/structure/safe/ex_act(severity)
 	..()
 	var/I = pick(loot_list)
 	new I(src)
+
+/obj/structure/safe/captain
+	name = "secure safe"
+	desc = "A wall-mounted secure safe"
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "safe"
+	density = 0
+
+/obj/structure/safe/captain/update_icon()
+	overlays.Cut()
+	if(open)
+		overlays.Add(image(icon = 'icons/obj/storage/storage.dmi', loc = src, icon_state = "safe0", "pixel_x" = pixel_x, "pixel_y" = pixel_y))
