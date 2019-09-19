@@ -115,7 +115,7 @@ var/list/impact_master = list()
 	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
-	if(blocked >= 2)
+	if(blocked >= 100)
 		return 0//Full block
 	if(!isliving(atarget))
 		return 0
