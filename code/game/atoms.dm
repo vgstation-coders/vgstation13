@@ -184,6 +184,7 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
+	..()
 
 /atom/New()
 	on_destroyed = new("owner"=src)
