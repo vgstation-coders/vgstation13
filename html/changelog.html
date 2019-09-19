@@ -87,6 +87,10 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		<div class="commit sansserif">
 
 			<h2 class="date">2019.09.19</h2>
+			<h3 class="author">Exxion updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">The garbage collector queue now actually works for more than a few minutes per round. If you notice more hard dels happening, that's most likely just because the garbage collector is actually noticing when things fail to get cleaned up, and not because more things are failing to get cleaned up.</li>
+			</ul>
 			<h3 class="author">Kurfursten updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">New disease type: Fungus. It can have blood, contact, air, and colony spread types. Fungi have the highest infection chance and slightly faster speed, but revert 2 stages upon spreading.</li>
