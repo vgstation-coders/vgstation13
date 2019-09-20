@@ -148,7 +148,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/melee/morningstar = 250,
 /obj/item/weapon/subspacetunneler = 300,
 /obj/item/weapon/melee/energy/sword = 350,
-/obj/item/weapon/dualsaber = 600,
+/obj/item/weapon/melee/energy/sword/dualsaber = 600,
 /obj/item/weapon/gun/siren/supersoaker/pistol = 35,
 /obj/item/weapon/gun/siren/supersoaker = 70,
 
