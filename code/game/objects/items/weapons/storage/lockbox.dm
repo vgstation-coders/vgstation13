@@ -126,20 +126,7 @@
 	return
 
 /obj/item/weapon/storage/lockbox/ex_act(severity)
-	switch(severity)
-		if(1)
-			qdel(src)
-		if(2)
-			if(prob(80))
-				for(var/atom/movable/A in src)
-					remove_from_storage(A, get_turf(src))
-					A.ex_act(3)
-				qdel(src)
-		if(3)
-			if(prob(50))
-				for(var/atom/movable/A in src)
-					remove_from_storage(A, get_turf(src))
-				qdel(src)
+	return
 
 /obj/item/weapon/storage/lockbox/emp_act(severity)
 	..()
