@@ -168,7 +168,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(air_contents)
 		temperature_archived = air_contents.temperature
 		heat_gas_contents()
-		expel_gas()
 
 	if(abs(temperature_archived-air_contents.temperature) > 1)
 		network.update = 1
@@ -279,7 +278,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/list/cryo_contents = list()
 	if(reagents.total_volume)
 		for(var/datum/reagent/R in reagents.reagent_list)
-			cryo_contents.Add(list(list("name" = R.name, "volume" = R.volume))) //UI decomposes the top layer list, so has to be a list in a list
+			cryo_contents.Add(list(list("name" = R.name, "volume" = R.volume))) //List.Add merges lists, so to have a list in the list, the donor list needs to be list(list)
 	data["cryo_contents"] = cryo_contents
 	data["cryo_volume"] = reagents.total_volume
 	data["injection_rate"] = inject_rate
@@ -508,17 +507,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(combined_heat_capacity > 0)
 		var/combined_energy = T20C*current_heat_capacity + air_heat_capacity*air_contents.temperature
 		air_contents.temperature = combined_energy/combined_heat_capacity
-
-/obj/machinery/atmospherics/unary/cryo_cell/proc/expel_gas()
-	if(air_contents.total_moles() < 1)
-		return
-//	var/datum/gas_mixture/expel_gas = new
-//	var/remove_amount = air_contents.total_moles()/50
-//	expel_gas = air_contents.remove(remove_amount)
-
-	// Just have the gas disappear to nowhere.
-	//expel_gas.temperature = T20C // Lets expel hot gas and see if that helps people not die as they are removed
-	//loc.assume_air(expel_gas)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit = src.loc, var/ejector)
 	if(!occupant || ejecting)

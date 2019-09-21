@@ -109,11 +109,13 @@ Used In File(s): \code\game\machinery\cryo.dm
 		Cell contents:
 	</div>
 	<div class="itemContent" style="width: 40%;">
+		<table width="100%"><tbody>
 		{{for data.cryo_contents}}
-		<span class="highlight">{{value.name}}:{{value.volume}}</span><br>
+			<tr><td><span class="highlight">{{:value.name} - :{{:value.volume}} units</span>
 		{{empty}}
-			<span class="bad">Cell is empty.</span>
+			<span class="bad">Beaker is empty</span>
 		{{/for}}
+		</tbody></table>
 	</div>
 	<div class="itemContent" style="width: auto;">
 		{{:helper.link("injection rate:"+data.injection_rate+" units", 'carat-2-n-s', {'set_inject_rate': 1})}}
