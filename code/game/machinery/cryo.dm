@@ -24,7 +24,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/mob/living/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/inject_rate = 5 //How many reagents, per 10 seconds, will be moved from the beaker to the cryo cell
-	var/inject_rate_max = 10
+	var/inject_rate_max = 10 //The maximum setting for reagent injection
+	var/last_injection
 	var/current_heat_capacity = 50
 	var/running_bob_animation = 0 // This is used to prevent threads from building up if update_icons is called multiple times
 
@@ -179,17 +180,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell/allow_drop()
 	return 0
 
-
 /obj/machinery/atmospherics/unary/cryo_cell/relaymove(mob/user as mob)
 	// Just gonna assume this guy's vent crawling don't mind me.
 	if (user != occupant)
 		return ..()
-
 	if(user.stat)
 		return
-
 	go_out(ejector = usr)
-
 
 /obj/machinery/atmospherics/unary/cryo_cell/examine(mob/user)
 	..()
@@ -211,6 +208,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 				to_chat(user, "A beaker, releasing the following chemicals into the fluids:")
 				for(var/datum/reagent/R in beaker.reagents.reagent_list)
 					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+		if(reagents.total_volume)
+			to_chat(user, "A variety of reagents swirl around the interior of \the [src].")
 		else
 			to_chat(user, "<span class='info'>The chamber appears devoid of anything but its biotic fluids.</span>")
 	else
@@ -282,6 +281,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		for(var/datum/reagent/R in reagents.reagent_list)
 			cryo_contents.Add(list(list("name" = R.name, "volume" = R.volume))) //UI decomposes the top layer list, so has to be a list in a list
 	data["cryo_contents"] = cryo_contents
+	data["cryo_volume"] = reagents.total_volume
+	data["injection_rate"] = inject_rate
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -326,6 +327,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(!occupant || isslime(usr) || ispAI(usr))
 			return 0 // don't update UIs attached to this object
 		go_out(ejector = usr)
+
+	if(href_list["set_inject_rate"])
+		var/newval = input("Enter new injection rate") as num|null
+		if(isnull(newval))
+			return
+		inject_rate = Clamp(newval, 0, inject_rate_max)
+		return 1
 
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
@@ -478,8 +486,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			var/mob/living/carbon/human/guy = occupant //Gotta cast to read this guy's species
 			if(istype(guy) && guy.species && guy.species.breath_type != GAS_OXYGEN)
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
-		if(beaker)
-			beaker.reagents.reaction(occupant)
+		if(beaker && world.time > (last_injection + 10 SECONDS))
+			beaker.reagents.trans_to(src, inject_rate)
+			last_injection = world.time
+		reagents.reaction(occupant, remove_reagents = TRUE)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/modify_occupant_bodytemp()
 	if(!occupant)
@@ -609,11 +619,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return
 	put_mob(usr)
 
-/obj/machinery/atmospherics/unary/cryo_cell/verb/remove_beaker()
+/obj/machinery/atmospherics/unary/cryo_cell/verb/remove_beakerV()
 	set name = "Remove beaker"
 	set category = "Object"
 	set src in oview(1)
-	CtrlClick(usr)
+
+	remove_beaker(usr)
 
 /obj/machinery/atmospherics/unary/cryo_cell/return_air()
 	return air_contents
@@ -652,6 +663,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	add_fingerprint(user)
 
 /obj/machinery/atmospherics/unary/cryo_cell/CtrlClick(mob/user) // CtrlClick = less common action = retrieving the beaker
+	remove_beaker(user)
+
+/obj/machinery/atmospherics/unary/cryo_cell/proc/remove_beaker(mob/user)
 	if(!Adjacent(user) || user.incapacitated() || user.lying || user.locked_to || user == occupant || !(iscarbon(user) || issilicon(user))) //are you cuffed, dying, lying, stunned or other
 		return
 	if(panel_open)

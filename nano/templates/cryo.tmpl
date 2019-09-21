@@ -82,7 +82,7 @@ Used In File(s): \code\game\machinery\cryo.dm
 		{{:helper.link('Eject Occupant', 'arrowreturnthick-1-s', {'ejectOccupant' : 1}, data.hasOccupant ? null : 'disabled')}}
 	</div>
 </div>
-<div class="item">&nbsp;</div>
+<br>
 <div class="item">
 	<div class="itemLabel">
 		Beaker:
@@ -102,25 +102,22 @@ Used In File(s): \code\game\machinery\cryo.dm
 	<div class="itemContent" style="width: 26%;">
 		{{:helper.link('Eject Beaker', 'eject', {'ejectBeaker' : 1}, data.isBeakerLoaded ? null : 'disabled')}}
 	</div>
+</div>
+<br>
 <div class="item">
-	<div class="itemlabel">
-	 Cell contents:
-  </div>
+	<div class="itemLabel">
+		Cell contents:
+	</div>
 	<div class="itemContent" style="width: 40%;">
 		{{for data.cryo_contents}}
-		<div class="item">
-			<div class="itemLabelNarrow">
-				{{value.name}}:{{value.volume}}
-			</div>
-			<div class="itemContent">
-				{{:helper.link('Extract '+value.name, 'shuffle', {'dish_effect_to_buffer': value.stage})}}
-			</div>
-		</div>
+		<span class="highlight">{{value.name}}:{{value.volume}}</span><br>
 		{{empty}}
-			Cell is empty.
+			<span class="bad">Cell is empty.</span>
 		{{/for}}
 	</div>
-</div>
+	<div class="itemContent" style="width: auto;">
+		{{:helper.link("injection rate:"+data.injection_rate+" units", 'carat-2-n-s', {'set_inject_rate': 1})}}
+	</div>
 </div>
 {{if data.ejecting}}
 	<div class="mask">
