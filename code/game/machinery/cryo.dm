@@ -26,19 +26,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/inject_rate = 5 //How many reagents, per 10 seconds, will be moved from the beaker to the cryo cell
 	var/inject_rate_max = 10 //The maximum setting for reagent injection
 	var/last_injection
+	var/injecting = TRUE
 	var/current_heat_capacity = 50
 	var/running_bob_animation = 0 // This is used to prevent threads from building up if update_icons is called multiple times
-
-	machine_flags = SCREWTOGGLE | CROWDESTROY
-
-	light_color = LIGHT_COLOR_HALOGEN
-	light_range_on = 1
-	light_power_on = 2
-	use_auto_lights = 1
-
-/obj/machinery/atmospherics/unary/cryo_cell/New()
-	. = ..()
-
+	var/scan_level
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/cryo,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -48,9 +39,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/console_screen
 	)
+	machine_flags = SCREWTOGGLE | CROWDESTROY
 
+	light_color = LIGHT_COLOR_HALOGEN
+	light_range_on = 1
+	light_power_on = 2
+	use_auto_lights = 1
+
+/obj/machinery/atmospherics/unary/cryo_cell/New()
+	. = ..()
 	RefreshParts()
-
 	initialize_directions = dir
 	initialize()
 	build_network()
@@ -58,6 +56,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		node1.initialize()
 		node1.build_network()
 	create_reagents(1000)
+
+/obj/machinery/atmospherics/unary/cryo_cell/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/MP in component_parts)
+		T += MP.rating-1
+	inject_rate_max = initial(inject_rate_max) + (5*T)
+	T = 0
+	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
+		T += SM.rating-1
+	scan_level = T
 
 /obj/machinery/atmospherics/unary/cryo_cell/initialize()
 	if(node1)
@@ -282,6 +290,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	data["cryo_contents"] = cryo_contents
 	data["cryo_volume"] = reagents.total_volume
 	data["injection_rate"] = inject_rate
+	data["injecting"] = injecting
+	data["scan_level"] = scan_level
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -330,12 +340,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(href_list["set_inject_rate"])
 		var/newval = input("Enter new injection rate") as num|null
 		if(isnull(newval))
-			return
+			return 0
 		inject_rate = Clamp(newval, 0, inject_rate_max)
 		return 1
 
+	if(href_list["toggle_inject"])
+		injecting = !injecting
+
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
+
 /obj/machinery/atmospherics/unary/cryo_cell/proc/detach()
 	if(beaker)
 		beaker.forceMove(get_step(loc, SOUTH))
@@ -485,7 +499,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			var/mob/living/carbon/human/guy = occupant //Gotta cast to read this guy's species
 			if(istype(guy) && guy.species && guy.species.breath_type != GAS_OXYGEN)
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
-		if(beaker && world.time > (last_injection + 10 SECONDS))
+		if(beaker && injecting && world.time > (last_injection + 10 SECONDS))
 			beaker.reagents.trans_to(src, inject_rate)
 			last_injection = world.time
 		reagents.reaction(occupant, remove_reagents = TRUE)
