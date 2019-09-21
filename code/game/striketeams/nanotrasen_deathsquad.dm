@@ -12,7 +12,7 @@
 
 /datum/striketeam/deathsquad/create_commando(obj/spawn_location, leader_selected = 0)
 	var/mob/living/carbon/human/new_commando = new(spawn_location.loc)
-	var/commando_leader_rank = pick("Major", "Rescue Team Leader", "Commander")
+	var/commando_leader_rank = pick("Major", "Rescue Leader", "Commander")
 	var/commando_rank = pick("Corporal", "Sergeant", "Staff Sergeant", "Sergeant 1st Class", "Master Sergeant", "Sergeant Major")
 	var/commando_name = pick(last_names)
 	var/commando_leader_name = pick("Creed", "Dahl")
