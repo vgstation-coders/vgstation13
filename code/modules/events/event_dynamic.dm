@@ -37,15 +37,18 @@ var/list/event_last_fired = list()
 			possibleEvents[type] = 0
 			continue
 		var/datum/event/E = new type(FALSE)
-		possibleEvents[type] = E.can_start(active_with_role)
+		var/value = E.can_start(active_with_role)
+		if(value > 0)
+			possibleEvents[type] = value
 		qdel(E)
 
-	for(var/event_type in event_last_fired) if(possibleEvents[event_type])
-		var/time_passed = world.time - event_last_fired[event_type]
-		var/full_recharge_after = 60 * 60 * 10 // Was 3 hours, changed to 1 hour since rounds rarely last that long anyways
-		var/weight_modifier = max(0, (full_recharge_after - time_passed) / 300)
+	for(var/event_type in event_last_fired)
+		if(possibleEvents[event_type])
+			var/time_passed = world.time - event_last_fired[event_type]
+			var/full_recharge_after = 60 * 60 * 10 // Was 3 hours, changed to 1 hour since rounds rarely last that long anyways
+			var/weight_modifier = max(0, (full_recharge_after - time_passed) / 300)
 
-		possibleEvents[event_type] = max(possibleEvents[event_type] - weight_modifier, 0)
+			possibleEvents[event_type] = max(possibleEvents[event_type] - weight_modifier, 0)
 
 	var/picked_event = pickweight(possibleEvents)
 	event_last_fired[picked_event] = world.time
