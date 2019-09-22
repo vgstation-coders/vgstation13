@@ -2483,13 +2483,13 @@
 	if(..())
 		return 1
 
-	if(M.getOxyLoss() && prob(80))
+	if(M.getOxyLoss())
 		M.adjustOxyLoss(-REM)
-	if(M.getBruteLoss() && prob(80))
+	if(M.getBruteLoss())
 		M.heal_organ_damage(REM, 0)
-	if(M.getFireLoss() && prob(80))
+	if(M.getFireLoss())
 		M.heal_organ_damage(0, REM)
-	if(M.getToxLoss() && prob(80))
+	if(M.getToxLoss())
 		M.adjustToxLoss(-REM)
 
 //An OP chemical for admins and detecting exploits
@@ -6002,13 +6002,13 @@
 		return 1
 
 	M.nutrition += nutriment_factor
-	if(M.getOxyLoss() && prob(50))
+	if(M.getOxyLoss())
 		M.adjustOxyLoss(-2)
-	if(M.getBruteLoss() && prob(60))
+	if(M.getBruteLoss())
 		M.heal_organ_damage(2, 0)
-	if(M.getFireLoss() && prob(50))
+	if(M.getFireLoss())
 		M.heal_organ_damage(0, 2)
-	if(M.getToxLoss() && prob(50))
+	if(M.getToxLoss())
 		M.adjustToxLoss(-2)
 	if(M.dizziness != 0)
 		M.dizziness = max(0, M.dizziness - 15)
