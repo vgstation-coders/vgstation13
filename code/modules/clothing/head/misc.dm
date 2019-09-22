@@ -315,6 +315,16 @@
 	name = "bear pelt hat"
 	desc = "Now that's what I call fuzzy."
 
+/obj/item/clothing/head/bearpelt/real/spare
+	name = "spare bear pelt"
+	desc = "shimmers in the light"
+	icon_state = "sparebearpelt"
+	item_state = "sparebearpelt"
+	slot_flags = SLOT_ID|SLOT_HEAD
+
+/obj/item/clothing/head/bearpelt/real/spare/GetAccess()
+	return get_all_accesses()
+
 /obj/item/clothing/head/xenos
 	name = "xenos helmet"
 	icon_state = "xenos"
