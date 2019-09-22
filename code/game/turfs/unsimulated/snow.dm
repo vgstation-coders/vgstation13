@@ -23,6 +23,7 @@
 	var/obj/effect/blizzard_holder/blizzard_parent
 	turf_speed_multiplier = 1
 	gender = PLURAL
+	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 
 /turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	if(snowprint_parent)
@@ -122,6 +123,7 @@
 				H << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
 			if(isliving(H) && !H.locked_to && !H.lying && !H.flying)
 				playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
+
 
 /turf/unsimulated/floor/snow/cultify()
 	return //It's already pretty red out in nar-sie universe.
@@ -282,6 +284,7 @@
 
 
 /turf/unsimulated/floor/snow/asphalt
+	snowsound = list()
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "concrete"
 	real_snow_tile = FALSE
