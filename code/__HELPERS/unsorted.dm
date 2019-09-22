@@ -676,7 +676,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	else
 		return get_step(ref, base_dir)
 
-/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10) //This is quite an ugly solution but i refuse to use the old request system.
+//if needs_item is 0 it won't need any item that existed in "holding" to finish
+/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1) //This is quite an ugly solution but i refuse to use the old request system.
 	if(!user || !target)
 		return 0
 	var/user_loc = user.loc
@@ -709,7 +710,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || user.isStunned())
+		if ( user.loc != user_loc || target.loc != target_loc || (needs_item && !user.is_holding_item(holding)) || user.isStunned())
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -845,7 +846,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if(needhand && !user.do_after_hand_check(holding))	//Sometimes you don't want the user to have to keep their active hand
+		if(needhand && !user.is_holding_item(holding))	//Sometimes you don't want the user to have to use any hands
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
