@@ -235,7 +235,7 @@ world/loop_checks = 0
 		gdel_profiling["[type]"] += 1
 		soft_dels += 1
 
-/datum/Del()
+/*/datum/Del()
 	if (gcDestroyed)
 		garbageCollector.dequeue("\ref[src]")
 		if (hard_deleted)
@@ -247,7 +247,7 @@ world/loop_checks = 0
 		delete_profile("[type]", 0)
 		Destroy()
 
-	..()
+	..()*/
 
 #ifdef GC_FINDREF
 /datum/garbage_collector/proc/LookForRefs(var/datum/D, var/datum/targ)
