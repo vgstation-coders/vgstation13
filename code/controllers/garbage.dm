@@ -3,10 +3,8 @@
 #define GC_FORCE_DEL_PER_TICK 60
 //#define GC_DEBUG
 //#define GC_FINDREF
-//#define GC_TRACKTYPES
 
 /datum/var/gcDestroyed
-/datum/var/hard_deleted
 
 var/datum/garbage_collector/garbageCollector
 var/soft_dels = 0
@@ -33,10 +31,6 @@ var/soft_dels = 0
 	var/dels_count = 0
 	var/hard_dels = 0
 
-	#ifdef GC_TRACKTYPES
-	var/list/reftypes = list()
-	#endif
-
 /datum/garbage_collector/proc/addTrash(const/datum/D)
 	if(istype(D, /atom) && !istype(D, /atom/movable))
 		return
@@ -48,10 +42,6 @@ var/soft_dels = 0
 		return
 
 	queue["\ref[D]"] = world.timeofday
-
-	#ifdef GC_TRACKTYPES
-	reftypes["\ref[D]"] = D.type
-	#endif
 
 #ifdef GC_FINDREF
 world/loop_checks = 0
@@ -74,9 +64,6 @@ world/loop_checks = 0
 		if(D) // Something's still referring to the qdel'd object. del it.
 			if(isnull(D.gcDestroyed))
 				queue -= refID
-				#ifdef GC_TRACKTYPES
-				reftypes -= refID
-				#endif
 				continue
 			if(remainingForceDelPerTick <= 0)
 				break
@@ -109,9 +96,15 @@ world/loop_checks = 0
 			WARNING("gc process force delete [D.type]")
 			#endif
 
-			D.hard_deleted = 1
+			if(istype(D, /atom/movable))
+				var/atom/movable/AM = D
+				AM.hard_deleted = 1
+			else
+				delete_profile("[D.type]", 1) //This is handled in Del() for movables.
+				//There's not really a way to make the other kinds of delete profiling work for datums without defining /datum/Del(), but this is the most important one.
 
 			del D
+			dequeue(refID)
 
 			hard_dels++
 			remainingForceDelPerTick--
@@ -122,11 +115,6 @@ world/loop_checks = 0
 				sleep(calculateticks(2))
 
 		else
-			#ifdef GC_TRACKTYPES
-			throw EXCEPTION("Ref of type [reftypes[refID]] found in GC queue with no corresponding object!")
-			#else
-			throw EXCEPTION("Ref found in GC queue with no corresponding object! Turn on GC_TRACKTYPES for more info.")
-			#endif
 			dequeue(refID)
 
 #ifdef GC_DEBUG
@@ -141,13 +129,7 @@ world/loop_checks = 0
 	if (queue)
 		queue -= id
 
-	#ifdef GC_TRACKTYPES
-	reftypes -= id
-	#endif
-
 	dels_count++
-
-#undef GC_TRACKTYPES
 
 /*
  * NEVER USE THIS FOR /atom OTHER THAN /atom/movable
@@ -234,20 +216,6 @@ world/loop_checks = 0
 
 		gdel_profiling["[type]"] += 1
 		soft_dels += 1
-
-/*/datum/Del()
-	if (gcDestroyed)
-		garbageCollector.dequeue("\ref[src]")
-		if (hard_deleted)
-			delete_profile("[type]", 1)
-		else
-			delete_profile("[type]", 2)
-
-	else // direct del calls or nulled explicitly.
-		delete_profile("[type]", 0)
-		Destroy()
-
-	..()*/
 
 #ifdef GC_FINDREF
 /datum/garbage_collector/proc/LookForRefs(var/datum/D, var/datum/targ)
