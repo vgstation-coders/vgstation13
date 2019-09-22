@@ -17,7 +17,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	anchored = 1.0
 	layer = ABOVE_WINDOW_LAYER
 	plane = OBJ_PLANE
-
+	active_power_usage = 350
+	idle_power_usage = 0
 	var/on = 0
 	var/ejecting = 0
 	var/temperature_archived
@@ -58,13 +59,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	create_reagents(1000)
 
 /obj/machinery/atmospherics/unary/cryo_cell/RefreshParts()
+	active_power_usage = initial(active_power_usage)
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/MP in component_parts)
 		T += MP.rating-1
+		active_power_usage += 50 * (MP.rating-1)
 	inject_rate_max = initial(inject_rate_max) + (5*T)
 	T = 0
 	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
 		T += SM.rating-1
+		active_power_usage += 100 * (SM.rating-1)
 	scan_level = T
 
 /obj/machinery/atmospherics/unary/cryo_cell/initialize()
@@ -162,7 +166,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 	if(stat & NOPOWER)
 		on = 0
-
+		use_power = 0
 	if(!node1)
 		return
 	if(!on)
@@ -322,10 +326,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			to_chat(usr, "<span class='bnotice'>Close the maintenance panel first.</span>")
 			return
 		on = 1
+		use_power = 2
 		update_icon()
 
 	if(href_list["switchOff"])
 		on = 0
+		use_power = 0
 		update_icon()
 
 	if(href_list["ejectBeaker"])
@@ -640,8 +646,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(prob(50)) //Turn on/off
 		if(on)
 			on = 0
+			use_power = 0
 		else
 			on = 1
+			use_power = 2
 		update_icon()
 
 		message_admins("[key_name(L)] has turned \the [src] [on?"on":"off"]! [formatJumpTo(src)]")

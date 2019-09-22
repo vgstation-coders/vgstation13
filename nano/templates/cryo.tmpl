@@ -111,7 +111,7 @@ Used In File(s): \code\game\machinery\cryo.dm
 	<div class="itemContent" style="width: 40%;">
 		<table width="100%"><tbody>
 		{{for data.cryo_contents}}
-			<tr><td><span class="highlight">{{:value.name}} - {{:value.volume}} units</span>
+			<tr><td><span class="highlight">{{:value.name}}{{if data.scan_level > 1}} - {{:value.volume}} units{{/if}}</span>
 		{{empty}}
 			<span class="bad">Cell is empty</span>
 		{{/for}}
