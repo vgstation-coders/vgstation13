@@ -347,6 +347,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(href_list["toggle_inject"])
 		injecting = !injecting
 
+	if(href_list["dump_reagents"])
+		visible_message("<span class = 'warning'>\The [src] begins venting its chemical contents!</span>")
+		var/turf/T = get_step(loc, SOUTH)
+		splash_sub(reagents, T, reagents.total_volume)
+
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
 

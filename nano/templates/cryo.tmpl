@@ -109,21 +109,13 @@ Used In File(s): \code\game\machinery\cryo.dm
 		Cell contents:
 	</div>
 	<div class="itemContent" style="width: 40%;">
-		{{if data.scan_level > 1}}
-			{{if data.cryo_volume > 0}}
-				<span class="highlight">{{:data.cryo_volume}} units remaining.</span><br>
-			{{else}}
-				<span class="bad">Cell is empty</span>
-			{{/if}}
-		{{else}}
-			<table width="100%"><tbody>
-			{{for data.cryo_contents}}
-				<tr><td><span class="highlight">{{:value.name}} - {{:value.volume}} units</span>
-			{{empty}}
-				<span class="bad">Cell is empty</span>
-			{{/for}}
-			</tbody></table>
-		{{/if}}
+		<table width="100%"><tbody>
+		{{for data.cryo_contents}}
+			<tr><td><span class="highlight">{{:value.name}} - {{:value.volume}} units</span>
+		{{empty}}
+			<span class="bad">Cell is empty</span>
+		{{/for}}
+		</tbody></table>
 	</div>
 </div>
 <br>
@@ -140,6 +132,7 @@ Used In File(s): \code\game\machinery\cryo.dm
 			{{:helper.link(data.injection_rate, 'carat-2-n-s', {'set_inject_rate': 1})}}
 			</div><br>
 		{{/if}}
+		{{:helper.link("Dump cell contents", null, {'dump_reagents': 1}, data.cryo_volume ? null : 'disabled')}}
 	</div>
 {{if data.ejecting}}
 	<div class="mask">
