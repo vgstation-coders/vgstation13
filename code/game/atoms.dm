@@ -15,6 +15,7 @@ var/global/list/ghdel_profiling = list()
 	var/list/fingerprints
 	var/list/fingerprintshidden
 	var/fingerprintslast = null
+	var/fingerprintslastTS = null
 	var/list/blood_DNA
 	var/blood_color
 	var/had_blood //Something was bloody at some point.
@@ -631,31 +632,36 @@ its easier to just keep the beam vertical.
 				to_chat(O, "<span class='danger'>[src] has been hit by [user] with [W]</span>")
 	return
 */
-/atom/proc/add_hiddenprint(mob/living/M as mob)
+/atom/proc/add_hiddenprint(mob/M as mob)
 	if(isnull(M))
 		return
 	if(isnull(M.key))
 		return
-	if (!( src.flags ) & FPRINT)
+	if (!(flags & FPRINT))
+		return
+	if((fingerprintslastTS == time_stamp()) && (fingerprintslast == M.key)) //otherwise holding arrow on airlocks spams fingerprints onto it
 		return
 	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if (!istype(H.dna, /datum/dna))
 			return 0
 		if (H.gloves)
-			if(src.fingerprintslast != H.key)
-				src.fingerprintshidden += text("\[[time_stamp()]\] (Wearing gloves). Real name: [], Key: []",H.real_name, H.key)
-				src.fingerprintslast = H.key
+			fingerprintshidden += text("\[[time_stamp()]\] (Wearing gloves). Real name: [], Key: []",H.real_name, H.key)
+			fingerprintslast = H.key
+			fingerprintslastTS = time_stamp()
 			return 0
 		if (!( src.fingerprints ))
-			if(src.fingerprintslast != H.key)
-				src.fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []",H.real_name, H.key)
-				src.fingerprintslast = H.key
+			fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []",H.real_name, H.key)
+			fingerprintslast = H.key
+			fingerprintslastTS = time_stamp()
 			return 1
 	else
-		if(src.fingerprintslast != M.key)
-			src.fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []",M.real_name, M.key)
-			src.fingerprintslast = M.key
+		var/ghost = ""
+		if (isobserver(M))
+			ghost = isAdminGhost(M) ? "ADMINGHOST" : "GHOST"
+		fingerprintshidden += text("\[[time_stamp()]\] [ghost ? "([ghost])" : ""] Real name: [], Key: []",M.real_name, M.key)
+		fingerprintslast = M.key
+		fingerprintslastTS = time_stamp()
 	return
 
 /atom/proc/add_fingerprint(mob/living/M as mob)
@@ -665,7 +671,9 @@ its easier to just keep the beam vertical.
 		return
 	if(isnull(M.key))
 		return
-	if (!(src.flags & FPRINT))
+	if (!(flags & FPRINT))
+		return
+	if((fingerprintslastTS == time_stamp()) && (fingerprintslast == M.key)) //otherwise holding arrow on airlocks spams fingerprints onto it
 		return
 	if (ishuman(M))
 		//Add the list if it does not exist.
@@ -677,9 +685,9 @@ its easier to just keep the beam vertical.
 
 		//He has no prints!
 		if (M_FINGERPRINTS in M.mutations)
-			if(fingerprintslast != M.key)
-				fingerprintshidden += "(Has no fingerprints) Real name: [M.real_name], Key: [M.key]"
-				fingerprintslast = M.key
+			fingerprintshidden += "\[[time_stamp()]\] (Has no fingerprints) Real name: [M.real_name], Key: [M.key]"
+			fingerprintslast = M.key
+			fingerprintslastTS = time_stamp()
 			return 0		//Now, lets get to the dirty work.
 		//First, make sure their DNA makes sense.
 		var/mob/living/carbon/human/H = M
@@ -692,9 +700,9 @@ its easier to just keep the beam vertical.
 
 		//Now, deal with gloves.
 		if (H.gloves && H.gloves != src)
-			if(fingerprintslast != H.key)
-				fingerprintshidden += text("\[[]\](Wearing gloves). Real name: [], Key: []",time_stamp(), H.real_name, H.key)
-				fingerprintslast = H.key
+			fingerprintshidden += text("\[[time_stamp()]\] (Wearing gloves). Real name: [], Key: []", H.real_name, H.key)
+			fingerprintslast = H.key
+			fingerprintslastTS = time_stamp()
 			H.gloves.add_fingerprint(M)
 
 		//Deal with gloves the pass finger/palm prints.
@@ -705,9 +713,12 @@ its easier to just keep the beam vertical.
 				return 0
 
 		//More adminstuffz
-		if(fingerprintslast != H.key)
-			fingerprintshidden += text("\[[]\]Real name: [], Key: []",time_stamp(), H.real_name, H.key)
-			fingerprintslast = H.key
+		var/ghost = ""
+		if (isobserver(M))
+			ghost = isAdminGhost(M) ? "ADMINGHOST" : "GHOST"
+		fingerprintshidden += text("\[[time_stamp()]\] [ghost ? "([ghost]) " : ""]Real name: [], Key: []", M.real_name, M.key)
+		fingerprintslast = M.key
+		fingerprintslastTS = time_stamp()
 
 		//Make the list if it does not exist.
 		if(!fingerprints)
@@ -723,8 +734,9 @@ its easier to just keep the beam vertical.
 	else
 		//Smudge up dem prints some
 		if(fingerprintslast != M.key)
-			fingerprintshidden += text("\[[]\]Real name: [], Key: []",time_stamp(), M.real_name, M.key)
+			fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []", M.real_name, M.key)
 			fingerprintslast = M.key
+			fingerprintslastTS = time_stamp()
 
 	//Cleaning up shit.
 	if(fingerprints && !fingerprints.len)
