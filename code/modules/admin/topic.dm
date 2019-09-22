@@ -5321,6 +5321,32 @@
 
 
 	// ----- Religion and stuff
+	else if(href_list["ashpaper"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/obj/item/weapon/paper/P = locate(href_list["ashpaper"])
+		if(!istype(P))
+			message_admins("The target doesn't exist.")
+			return
+		if(!is_type_in_list(/obj/item/weapon/stamp/chaplain,P.stamped))
+			message_admins("That reference isn't for a paper with a chaplain stamp.")
+			return
+		var/ash_type = P.ashtype()
+		new ash_type(get_turf(P))
+		if(iscarbon(P.loc))
+			var/mob/living/carbon/C = P.loc
+			C.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
+			P.visible_message("<span class='sinister'>\The [P] catches fire, burning [C]!</span>")
+		else
+			P.visible_message("<span class='sinister'>\The [P] catches fire and smolders into ash!</span>")
+
+		var/obj/item/weapon/storage/bag/clipboard/CB = P.loc
+		if(istype(CB))
+			CB.remove_from_storage(P, get_turf(CB), force = 1, refresh = 1)
+
+		message_admins("Smote [P]!")
+		qdel(P)
+
 	if (href_list["religions"])
 		#define MAX_MSG_LENGTH 200
 		#define NUMBER_MAX_REL 4
