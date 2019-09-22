@@ -1809,3 +1809,81 @@ Game Mode config tags:
     if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
         return
     winset(C, "mainwindow", "flash=5")
+
+
+/proc/generate_radio_frequencies()
+	//1200-1600
+	var/list/taken_freqs = list()
+
+	for(var/i in freq_text)
+		var/freq_found = FALSE
+		while(freq_found != TRUE)
+			var/chosen_freq = rand(1201, 1599)
+			chosen_freq = sanitize_frequency(chosen_freq)
+			if(taken_freqs.Find(chosen_freq))
+				continue
+			taken_freqs.Add(chosen_freq)
+			freqs[i] = chosen_freq
+			world.log << "freq [i] is now [chosen_freq]"
+			freq_found = TRUE
+
+	freqtospan = list(
+		"[COMMON_FREQ]" = "commonradio",
+		"[SCI_FREQ]" = "sciradio",
+		"[MED_FREQ]" = "medradio",
+		"[ENG_FREQ]" = "engradio",
+		"[SUP_FREQ]" = "supradio",
+		"[SER_FREQ]" = "serradio",
+		"[SEC_FREQ]" = "secradio",
+		"[COMM_FREQ]" = "comradio",
+		"[AIPRIV_FREQ]" = "aiprivradio",
+		"[SYND_FREQ]" = "syndradio",
+		"[DSQUAD_FREQ]" = "dsquadradio",
+		"[RESPONSE_FREQ]" = "resteamradio",
+		"[RAID_FREQ]" = "raiderradio",
+	)
+
+	radiochannelsreverse = list(
+		"[DJ_FREQ]" = "DJ",
+		"[SYND_FREQ]" = "Syndicate",
+		"[RAID_FREQ]" = "Raider",
+		"[RESPONSE_FREQ]" = "Response Team",
+		"[SUP_FREQ]" = "Supply",
+		"[SER_FREQ]" = "Service",
+		"[SCI_FREQ]" = "Science",
+		"[MED_FREQ]" = "Medical",
+		"[COMM_FREQ]" = "Command",
+		"[ENG_FREQ]" = "Engineering",
+		"[SEC_FREQ]" = "Security",
+		"[DSQUAD_FREQ]" = "Deathsquad",
+		"[AIPRIV_FREQ]" = "AI Private",
+		"[COMMON_FREQ]" = "Common"
+	)
+
+	radiochannels = list(
+		"Common" = COMMON_FREQ,
+		"AI Private" = AIPRIV_FREQ,
+		"Deathsquad" = DSQUAD_FREQ,
+		"Security" = SEC_FREQ,
+		"Engineering" = ENG_FREQ,
+		"Command" = COMM_FREQ,
+		"Medical" = MED_FREQ,
+		"Science" = SCI_FREQ,
+		"Service" = SER_FREQ,
+		"Supply" = SUP_FREQ,
+		"Response Team" = RESPONSE_FREQ,
+		"Raider" = RAID_FREQ,
+		"Syndicate" = SYND_FREQ,
+		"DJ" = DJ_FREQ
+	)
+
+	stationchannels = list(
+	"Common" = COMMON_FREQ,
+	"Security" = SEC_FREQ,
+	"Engineering" = ENG_FREQ,
+	"Command" = COMM_FREQ,
+	"Medical" = MED_FREQ,
+	"Science" = SCI_FREQ,
+	"Service" = SER_FREQ,
+	"Supply" = SUP_FREQ
+	)

@@ -322,33 +322,32 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		var/blackbox_msg = "[speech.speaker] [enc_message]"
 
 		if(istype(blackbox))
-			switch(speech.frequency)
-				if(1459)
-					blackbox.msg_common += blackbox_msg
-				if(1351)
-					blackbox.msg_science += blackbox_msg
-				if(1353)
-					blackbox.msg_command += blackbox_msg
-				if(1355)
-					blackbox.msg_medical += blackbox_msg
-				if(1357)
-					blackbox.msg_engineering += blackbox_msg
-				if(1359)
-					blackbox.msg_security += blackbox_msg
-				if(1441)
-					blackbox.msg_deathsquad += blackbox_msg
-				if(1345)
-					blackbox.msg_ert += blackbox_msg
-				if(1213)
-					blackbox.msg_syndicate += blackbox_msg
-				if(1215)
-					blackbox.msg_raider += blackbox_msg
-				if(1349)
-					blackbox.msg_service += blackbox_msg
-				if(1347)
-					blackbox.msg_cargo += blackbox_msg
-				else
-					blackbox.messages += blackbox_msg
+			if(speech.frequency == COMMON_FREQ)
+				blackbox.msg_common += blackbox_msg
+			if(speech.frequency == SCI_FREQ)
+				blackbox.msg_science += blackbox_msg
+			if(speech.frequency == COMM_FREQ)
+				blackbox.msg_command += blackbox_msg
+			if(speech.frequency == MED_FREQ)
+				blackbox.msg_medical += blackbox_msg
+			if(speech.frequency == ENG_FREQ)
+				blackbox.msg_engineering += blackbox_msg
+			if(speech.frequency == SEC_FREQ)
+				blackbox.msg_security += blackbox_msg
+			if(speech.frequency ==DSQUAD_FREQ)
+				blackbox.msg_deathsquad += blackbox_msg
+			if(speech.frequency == RESPONSE_FREQ)
+				blackbox.msg_ert += blackbox_msg
+			if(speech.frequency == SYND_FREQ)
+				blackbox.msg_syndicate += blackbox_msg
+			if(speech.frequency == RAID_FREQ)
+				blackbox.msg_raider += blackbox_msg
+			if(speech.frequency == SER_FREQ)
+				blackbox.msg_service += blackbox_msg
+			if(speech.frequency == SUP_FREQ)
+				blackbox.msg_cargo += blackbox_msg
+			else
+				blackbox.messages += blackbox_msg
 #ifdef SAY_DEBUG
 	if(speech.speaker)
 		say_testing(speech.speaker, "Broadcast_Message finished with [listeners ? listeners.len : 0] listener\s getting our message, [speech.message] lang = [speech.language ? speech.language.name : "none"]")
@@ -622,7 +621,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		"done" = 0,
 		"level" = pos.z // The level it is being broadcasted at.
 	)
-	signal.frequency = 1459// Common channel
+	signal.frequency = COMMON_FREQ// Common channel
 
   //#### Sending the signal to all subspace receivers ####//
 	for(var/obj/machinery/telecomms/receiver/R in telecomms_list)

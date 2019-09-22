@@ -24,6 +24,7 @@
 #include "__DEFINES\carbon_defines.dm"
 #include "__DEFINES\clothing.dm"
 #include "__DEFINES\colors.dm"
+#include "__DEFINES\communications.dm"
 #include "__DEFINES\component_desires.dm"
 #include "__DEFINES\component_signals.dm"
 #include "__DEFINES\dates.dm"
