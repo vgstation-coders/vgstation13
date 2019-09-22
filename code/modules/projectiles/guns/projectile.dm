@@ -231,14 +231,7 @@
 			update_icon()
 			return
 		if(silenced)
-			if(!user.is_holding_item(src))
-				..()
-				return
-			to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
-			user.put_in_hands(silenced)
-			silenced = 0
-			w_class = W_CLASS_SMALL
-			update_icon()
+			RemoveAttach(usr)
 			return
 	else
 		to_chat(user, "<span class='warning'>Nothing loaded in \the [src]!</span>")
@@ -286,3 +279,25 @@
 		playsound(M, empty_sound, 100, 1)
 		return 0
 	return ..()
+
+/obj/item/weapon/gun/projectile/proc/RemoveAttach(var/mob/user)
+	to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
+	user.put_in_hands(silenced)
+	silenced = 0
+	w_class = W_CLASS_SMALL
+	update_icon()
+
+/obj/item/weapon/gun/projectile/verb/RemoveAttachments()
+	set name = "Remove Attachments"
+	set category = "Object"
+	set src in usr
+	if(!usr.is_holding_item(src))
+		to_chat(usr, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
+		return
+	if(usr.incapacitated())
+		to_chat(usr, "<span class='rose'>You can't do this!</span>")
+		return
+	if(silenced)
+		RemoveAttach(usr)
+	else
+		to_chat(usr, "<span class='rose'>There are no attachments to remove!</span>")
