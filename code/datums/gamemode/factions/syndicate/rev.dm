@@ -122,7 +122,7 @@
 			if (isrev(L))
 				living_revs++
 			total_valid_living++
-		var/threshold = 40 //the percentage of living revs at which point the announcement is triggered
+		var/threshold = 50 //the percentage of living revs at which point the announcement is triggered
 		if(living_revs > 0 && total_valid_living > 0)
 			var/revs_percentage = round((living_revs * 100)/total_valid_living)
 			if(revs_percentage >= threshold)
