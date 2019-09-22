@@ -19,8 +19,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	plane = OBJ_PLANE
 	active_power_usage = 350
 	idle_power_usage = 0
-	var/on = 0
-	var/ejecting = 0
+	var/on = FALSE
+	var/ejecting = FALSE
 	var/temperature_archived
 	var/mob/living/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
@@ -29,8 +29,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/last_injection
 	var/injecting = TRUE
 	var/current_heat_capacity = 50
-	var/running_bob_animation = 0 // This is used to prevent threads from building up if update_icons is called multiple times
-	var/scan_level
+	var/running_bob_animation = FALSE // This is used to prevent threads from building up if update_icons is called multiple times
+	var/scan_level = 0 //Current scanner level
+	var/auto_eject = FALSE
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/cryo,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -295,6 +296,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	data["cryo_volume"] = reagents.total_volume
 	data["injection_rate"] = inject_rate
 	data["injecting"] = injecting
+	data["auto_eject"] = auto_eject
 	data["scan_level"] = scan_level
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -344,6 +346,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		go_out(ejector = usr)
 
 	if(href_list["set_inject_rate"])
+		if(scan_level < 2)
+			return 0
 		var/newval = input("Enter new injection rate") as num|null
 		if(isnull(newval))
 			return 0
@@ -357,6 +361,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		visible_message("<span class = 'warning'>\The [src] begins venting its chemical contents!</span>")
 		var/turf/T = get_step(loc, SOUTH)
 		splash_sub(reagents, T, reagents.total_volume)
+
+	if(href_list["toggle_autoeject"])
+		if(scan_level < 4)
+			return 0
+		auto_eject = !auto_eject
 
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
@@ -503,13 +512,19 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(occupant.stat == DEAD)
 			return
 		modify_occupant_bodytemp()
-		occupant.stat = 1
 		if(occupant.bodytemperature < T0C)
-			occupant.sleeping = max(5, (1/occupant.bodytemperature)*2000)
-			occupant.Paralyse(max(5, (1/occupant.bodytemperature)*3000))
+			if(scan_level < 6)
+				occupant.sleeping = max(5, (1/occupant.bodytemperature)*2000)
+				occupant.Paralyse(max(5, (1/occupant.bodytemperature)*3000))
+			else
+				occupant.sleeping = 0
+				occupant.Paralyse(0)
 			var/mob/living/carbon/human/guy = occupant //Gotta cast to read this guy's species
 			if(istype(guy) && guy.species && guy.species.breath_type != GAS_OXYGEN)
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
+		if(scan_level >= 4 && auto_eject && occupant.health == occupant.maxHealth)
+			go_out(ejector = occupant)
+			return
 		if(beaker && injecting && world.time > (last_injection + 10 SECONDS))
 			beaker.reagents.trans_to(src, inject_rate)
 			last_injection = world.time

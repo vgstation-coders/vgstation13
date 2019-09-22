@@ -127,12 +127,16 @@ Used In File(s): \code\game\machinery\cryo.dm
 		<div class="statusValue average">Injection status:</div>
 		{{:helper.link(data.injecting==1?"Active":"Inactive", null, {'toggle_inject': 1})}}
 		<br>
-		{{if data.scan_level > 1}}
+		{{if data.scan_level >= 2}}
 			<div class="statusValue average">Injection rate (units):
 			{{:helper.link(data.injection_rate, 'carat-2-n-s', {'set_inject_rate': 1})}}
 			</div><br>
 		{{/if}}
 		{{:helper.link("Dump cell contents", null, {'dump_reagents': 1}, data.cryo_volume ? null : 'disabled')}}
+		{{if data.scan_level >= 4}}
+			<div class="statusValue average">Auto ejection:</div>
+			{{:helper.link(data.auto_eject?"Active":"Inactive", null, {'toggle_autoeject': 1})}}
+		{{/if}}
 	</div>
 {{if data.ejecting}}
 	<div class="mask">
