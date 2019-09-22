@@ -1,6 +1,7 @@
 #define GC_COLLECTIONS_PER_TICK 300 // Was 100.
 #define GC_COLLECTION_TIMEOUT (30 SECONDS)
-#define GC_FORCE_DEL_PER_TICK 60
+#define GC_FORCE_DEL_PER_TICK 5 //Was 60, but even 5 is enough to notice the lag. Holy fuck these are slow.
+
 //#define GC_DEBUG
 //#define GC_FINDREF
 
@@ -41,6 +42,7 @@ var/soft_dels = 0
 		dels_count++
 		return
 
+	dequeue("\ref[D]") //This makes sure the new entry is at the end in the event D is using a recycled ref already in the queue.
 	queue["\ref[D]"] = world.timeofday
 
 #ifdef GC_FINDREF
@@ -63,7 +65,7 @@ world/loop_checks = 0
 		var/datum/D = locate(refID)
 		if(D) // Something's still referring to the qdel'd object. del it.
 			if(isnull(D.gcDestroyed))
-				queue -= refID
+				dequeue(refID)
 				continue
 			if(remainingForceDelPerTick <= 0)
 				break
@@ -126,10 +128,8 @@ world/loop_checks = 0
 #undef GC_COLLECTIONS_PER_TICK
 
 /datum/garbage_collector/proc/dequeue(id)
-	if (queue)
-		queue -= id
-
-	dels_count++
+	if(queue.Remove(id))
+		dels_count++
 
 /*
  * NEVER USE THIS FOR /atom OTHER THAN /atom/movable
