@@ -26,7 +26,7 @@
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 
 /turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
-	global_snowtiles = null
+	global_snowtiles -= src
 	if(snowprint_parent)
 		qdel(snowprint_parent)
 	if(blizzard_parent)
