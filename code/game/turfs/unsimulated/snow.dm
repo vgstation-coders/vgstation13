@@ -122,7 +122,8 @@
 			if(!istype(OL,/turf/unsimulated/floor/snow))
 				H << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
 			if(isliving(H) && !H.locked_to && !H.lying && !H.flying)
-				playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
+				if(snowsound?.len)
+					playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 
 /turf/unsimulated/floor/snow/cultify()
