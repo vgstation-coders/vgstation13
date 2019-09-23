@@ -859,6 +859,23 @@
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
 // Mobs ////////////////////////////////////////////////////////
 
+/obj/abstract/map/spawner/mobs/monkeys
+	name = "monkey spawner"
+	icon_state = "mob_monkey"
+	chance = 50
+	to_spawn = list(
+		/mob/living/carbon/monkey,
+		/mob/living/carbon/monkey/tajara,
+		/mob/living/carbon/monkey/skrell,
+		/mob/living/carbon/monkey/unathi,
+		/mob/living/carbon/monkey/grey,
+		/mob/living/carbon/monkey/mushroom,
+		/mob/living/carbon/monkey/rock,
+		/mob/living/carbon/monkey/diona,
+		/mob/living/carbon/monkey/skellington,
+		/mob/living/carbon/monkey/skellington/plasma)
+
+
 /obj/abstract/map/spawner/mobs/carp
 	name = "carp spawner"
 	icon_state = "mob_carp"
@@ -877,11 +894,7 @@
 	icon_state = "mob_mouse"
 	amount = 2
 	chance = 50
-	to_spawn = list(
-		/mob/living/simple_animal/mouse/common/brown,
-		/mob/living/simple_animal/mouse/common/gray,
-		/mob/living/simple_animal/mouse/common/white,
-		)
+	to_spawn = list(/mob/living/simple_animal/mouse/common)
 
 /obj/abstract/map/spawner/mobs/bear
 	name = "bear spawner"

@@ -42,7 +42,7 @@
 				var/datum/find/F = M.finds[1]
 				D.depth = F.excavation_required * 2		//0-100% and 0-200cm
 				D.clearance = F.clearance_range * 2
-				D.material = get_responsive_reagent(F.find_ID)
+				D.material = F.responsive_reagent
 			/*
 			if(M.excavation_minerals.len)
 				if(M.excavation_minerals[1] < D.depth)
@@ -171,7 +171,7 @@
 				var/new_color
 				if(adv)
 					new_icon_state = "find_overlay"
-					new_color = color_from_find_reagent[get_responsive_reagent(F.find_ID)]
+					new_color = color_from_find_reagent[F.responsive_reagent]
 				else
 					new_icon_state = pick("archaeo1","archaeo2","archaeo3")
 				var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = new_icon_state, layer = UNDER_HUD_LAYER)

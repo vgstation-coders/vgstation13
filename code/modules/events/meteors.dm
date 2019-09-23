@@ -8,6 +8,12 @@
 	startWhen		= 0 //Note : Meteor waves have a delay before striking now
 	endWhen			= 30
 
+/datum/event/meteor_wave/can_start(var/list/active_with_role)
+	if(active_with_role["Engineer"] > 1)
+		return 15
+	return 0
+
+
 /datum/event/meteor_wave/setup()
 	endWhen = rand(45, 90) //More drawn out than the shower, but not too powerful. Supposed to be a devastating event
 
@@ -25,6 +31,11 @@
 /datum/event/meteor_shower
 	startWhen		= 0
 	endWhen 		= 30
+
+/datum/event/meteor_shower/can_start(var/list/active_with_role)
+	if(active_with_role["Engineer"] > 1)
+		return 40
+	return 0
 
 /datum/event/meteor_shower/setup()
 	endWhen	= rand(45, 60) //From thirty seconds to one minute
@@ -157,6 +168,9 @@ var/global/list/thing_storm_types = list(
 
 /datum/event/thing_storm/meaty_gore
 
+/datum/event/thing_storm/meaty_gore/can_start()
+	return 25
+
 /datum/event/thing_storm/meaty_gore/setup()
 	endWhen = rand(30, 60) + 10
 	storm_name="meaty gore storm"
@@ -171,6 +185,11 @@ var/global/list/thing_storm_types = list(
 	command_alert("The station has cleared the organic debris field.", "Organic Debris Field")
 
 /datum/event/thing_storm/blob_shower
+
+/datum/event/thing_storm/blob_shower/can_start(var/list/active_with_role)
+	if(active_with_role["Engineer"] > 1)
+		return 15
+	return 0
 
 /datum/event/thing_storm/blob_shower/setup()
 	endWhen = rand(45, 60) + 10

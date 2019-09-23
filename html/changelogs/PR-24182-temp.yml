@@ -1,0 +1,6 @@
+---
+author: SonixApache
+changes:
+  - tweak: humans are now naked instead of growing with diapers on them
+  - tweak: randombodies can now be naked
+delete-after: true

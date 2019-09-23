@@ -393,6 +393,7 @@
 	icon_state = "simonjacket"
 	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	allowed = list (/obj/item/weapon/pickaxe/drill)
 
 /obj/item/clothing/suit/kaminacape
 	name = "Kamina's Cape"

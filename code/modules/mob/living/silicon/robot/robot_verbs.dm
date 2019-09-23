@@ -3,7 +3,7 @@
 
 	if (appearance_isbanned(src))
 		var/banreason = appearance_isbanned(M)
-		to_chat(src, "<span class='warning'>You have been apperance banned for the reason: [banreason]. You cannot change your name.</span>")
+		to_chat(src, "<span class='warning'>You have been appearance banned for the reason: [banreason]. You cannot change your name.</span>")
 		return
 
 	if(incapacitated())

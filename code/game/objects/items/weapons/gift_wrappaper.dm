@@ -317,14 +317,26 @@
 ///Loot crate///
 /obj/item/weapon/winter_gift/dorkcube
 	name = "loot box"
-	desc = "Don't forget to shout the magic phrase when you open it! It has a tag on it: Made by GIBLOOTPLS."
+	desc = "Don't forget to shout the magic phrase when you open it! It smells faintly of iron."
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "lootbox_purple"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
 	item_state = "lootbox_purple"
 
 /obj/item/weapon/winter_gift/dorkcube/attack_self(mob/user)
-	user.say("Loot get!")
-	playsound(src, 'sound/misc/achievement.ogg', 30, 1)
-	user.gib()
-	qdel(src)
+	to_chat(user, "<span class='notice'>You begin ripping into the wrapper.</span>")
+	playsound(src, 'sound/items/poster_ripped.ogg', 100, 1)
+	if (do_after(user, src, 2 SECONDS))
+		var/turf/T = get_turf(user)
+		var/mob/living/carbon/human/blooddonor = new /mob/living/carbon/human
+		user.say("Loot get!")
+		playsound(src, 'sound/effects/splat.ogg', 30, 1)
+		for(var/atom/A in user.contents)
+			A.add_blood(blooddonor)
+		bloodmess_splatter(T, null, null, null, DEFAULT_BLOOD)
+		qdel(src)
+		var/obj/item/weapon/storage/toolbox/usedlootbox = new /obj/item/weapon/storage/toolbox
+		usedlootbox.add_blood(blooddonor)
+		user.put_in_hands(usedlootbox)
+		user.regenerate_icons()
+		qdel(blooddonor)

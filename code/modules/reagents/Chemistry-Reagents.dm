@@ -211,6 +211,7 @@
 	if(istype(holder))
 		holder.reagent_list -= src
 		holder = null
+	..()
 
 /datum/reagent/piccolyn
 	name = "Piccolyn"
@@ -392,7 +393,8 @@
 					if(method == TOUCH)
 						var/block = L.check_contact_sterility(FULL_TORSO)
 						var/bleeding = L.check_bodypart_bleeding(FULL_TORSO)
-						if (!block)
+						if(attempt_colony(L,D,"splashed with infected blood"))
+						else if (!block)
 							if (D.spread & SPREAD_CONTACT)
 								L.infect_disease2(D, notes="(Contact, splashed with infected blood)")
 							else if (bleeding && (D.spread & SPREAD_BLOOD))
@@ -2481,13 +2483,13 @@
 	if(..())
 		return 1
 
-	if(M.getOxyLoss() && prob(80))
+	if(M.getOxyLoss())
 		M.adjustOxyLoss(-REM)
-	if(M.getBruteLoss() && prob(80))
+	if(M.getBruteLoss())
 		M.heal_organ_damage(REM, 0)
-	if(M.getFireLoss() && prob(80))
+	if(M.getFireLoss())
 		M.heal_organ_damage(0, REM)
-	if(M.getToxLoss() && prob(80))
+	if(M.getToxLoss())
 		M.adjustToxLoss(-REM)
 
 //An OP chemical for admins and detecting exploits
@@ -6000,13 +6002,13 @@
 		return 1
 
 	M.nutrition += nutriment_factor
-	if(M.getOxyLoss() && prob(50))
+	if(M.getOxyLoss())
 		M.adjustOxyLoss(-2)
-	if(M.getBruteLoss() && prob(60))
+	if(M.getBruteLoss())
 		M.heal_organ_damage(2, 0)
-	if(M.getFireLoss() && prob(50))
+	if(M.getFireLoss())
 		M.heal_organ_damage(0, 2)
-	if(M.getToxLoss() && prob(50))
+	if(M.getToxLoss())
 		M.adjustToxLoss(-2)
 	if(M.dizziness != 0)
 		M.dizziness = max(0, M.dizziness - 15)
@@ -6621,7 +6623,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Wake-Up Call"
 	id = SECCOFFEE
 	description = "All the essentials."
-	
+
 /datum/reagent/drink/coffee/seccoffee/on_mob_life(var/mob/living/M)
 	..()
 	if(ishuman(M))

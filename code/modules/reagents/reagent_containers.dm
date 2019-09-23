@@ -88,7 +88,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/attack(mob/M as mob, mob/user as mob, def_zone)
 	//If harm intent, splash it on em, else try to feed em it
-
 	if(!M.reagents)
 		return
 
@@ -111,7 +110,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		imbibe(user)
 		return 1
 
-	else if(ishuman(M))
+	else if(ishuman(M) || iscorgi(M))
 		user.visible_message("<span class='danger'>[user] attempts to feed [M] \the [src].</span>", "<span class='danger'>You attempt to feed [M] \the [src].</span>")
 
 		if(!do_mob(user, M, 30))

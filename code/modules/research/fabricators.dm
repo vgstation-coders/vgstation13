@@ -267,6 +267,27 @@
 						src.materials.addAmount(gib,bluespaceamount)
 	return remove_materials(part)
 
+//Returns however much of that material we have
+/obj/machinery/r_n_d/fabricator/proc/check_mats(var/material)
+	if(copytext(material,1,2) == "$")//It's iron/gold/glass
+		return materials.getAmount(material)
+	else
+		var/reagent_total = 0
+		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+			reagent_total += RC.reagents.get_reagent_amount(material)
+		return reagent_total
+
+//Returns however much of that material is in the bluespace network
+/obj/machinery/r_n_d/fabricator/proc/check_mats_bluespace(var/material)
+	if(!has_bluespace_bin()) //We can't access that
+		return 0
+
+	var/amount
+	for(var/obj/machinery/r_n_d/fabricator/gibmats in machines)
+		if(gibmats.has_bluespace_bin())
+			amount += gibmats.materials.getAmount(material)
+	return amount
+
 
 /obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M)
 	if(copytext(M,1,2) == "$")

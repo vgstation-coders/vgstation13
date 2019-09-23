@@ -51,7 +51,7 @@
 /datum/design/xenoarch_scanner_adv
 	name = "Advanced xenoarchaeology digsite locator"
 	desc = "Shows digsites in vicinity, whether they're hidden or not. Shows you their reagent via highlighting them a specific colour"
-	id = "xenoarch_scanner"
+	id = "xenoarch_scanner_adv"
 	req_tech  =list(Tc_MAGNETS = 3, Tc_ANOMALY = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_GLASS=2500, MAT_IRON = 2500, MAT_PLASMA = 300)

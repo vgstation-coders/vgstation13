@@ -1,0 +1,5 @@
+---
+author: DrSnips
+changes:
+  - rscadd: Washing machine upgrades matter a bit more now. Upgrading the bin now also allows larger items to fit inside. i.e. A tier 3 (super) matter bin allows you to wash hardsuits and armor.
+delete-after: true

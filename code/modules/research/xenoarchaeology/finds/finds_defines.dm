@@ -1,12 +1,5 @@
 var/list/digsite_types = list()
 var/list/archaeo_types = list()
-
-/proc/get_responsive_reagent(var/find_type)
-	var/datum/find/F = archaeo_types[find_type]
-	if(F)
-		return initial(F.responsive_reagent)
-	return PLASMA
-
 /proc/get_random_digsite_type()
 	var/value = pick(100;DIGSITE_GARDEN,95;DIGSITE_ANIMAL,90;DIGSITE_HOUSE,85;DIGSITE_TECHNICAL,80;DIGSITE_TEMPLE,75;DIGSITE_WAR)
 	return digsite_types[value]

@@ -865,6 +865,11 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/applepie
 
+/datum/recipe/xemeatpie
+	reagents = list(FLOUR = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie
+
 /datum/recipe/meatpie
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat)
@@ -874,11 +879,6 @@
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/tofu)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/tofupie
-
-/datum/recipe/xemeatpie
-	reagents = list(FLOUR = 10)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat)
-	result = /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie
 
 /datum/recipe/cherrypie
 	reagents = list(FLOUR = 10)
@@ -1093,6 +1093,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/nettlesoup
+
+/datum/recipe/monkeysoup
+	reagents = list(WATER = 10, VINEGAR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/monkeycube
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/monkeysoup
 
 /datum/recipe/wishsoup
 	reagents = list(WATER = 20)

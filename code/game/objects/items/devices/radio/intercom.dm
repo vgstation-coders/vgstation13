@@ -172,7 +172,10 @@
 
 /obj/item/device/radio/intercom/medbay
 	name = "station intercom (Medbay)"
-	frequency = 1485
+
+/obj/item/device/radio/intercom/medbay/initialize()
+	..()
+	set_frequency(MED_FREQ)
 
 /obj/item/device/radio/intercom/medbay/broadcast_nospeaker
 	broadcasting = 1

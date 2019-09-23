@@ -5,9 +5,6 @@
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
 
-// If set to 0, replaces solo antags' objectives with an always-pass freeform
-#define SOLO_ANTAG_OBJECTIVES 0
-
 // Defines for the shuttle
 #define SHUTTLE_ON_STANDBY 0
 #define SHUTTLE_ON_STATION 1
@@ -980,6 +977,9 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define	SPREAD_BLOOD	1//can be extracted from the carrier's blood, all diseases have this by default.
 #define	SPREAD_CONTACT	2//touching or bumping into someone may transmit the virus, virus can survive on items for a while. gloves lower the chance of transmission.
 #define	SPREAD_AIRBORNE	4//carrier mobs will periodically release invisible clouds that carry the virus to adjacent mobs that can breath it.
+#define SPREAD_COLONY 8 //like contact, but only spreads to suited individuals or pressure-resistant clothing.
+#define SPREAD_MEMETIC 16 //spreads on hearing, doesn't appear on goggles
+
 
 #define EFFECT_DANGER_HELPFUL	"0"
 #define EFFECT_DANGER_FLAVOR	"1"

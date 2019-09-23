@@ -1,5 +1,8 @@
 /datum/event/powercreeper
 
+/datum/event/powercreeper/can_start()
+	return 15
+
 /datum/event/powercreeper/start()
 	spawn()
 		var/list/turf/simulated/floor/turfs = list() //list of all the empty floor turfs in the hallway areas

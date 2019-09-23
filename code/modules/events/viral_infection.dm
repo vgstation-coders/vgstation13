@@ -1,14 +1,18 @@
+/datum/event/viral_infection
 
-datum/event/viral_infection
+/datum/event/viral_infection/can_start(var/list/active_with_role)
+	if(active_with_role["Medical"] > 1)
+		return 40
+	return 0
 
-datum/event/viral_infection/setup()
+/datum/event/viral_infection/setup()
 	announceWhen = rand(0, 300)
 	endWhen = announceWhen + 1
 
-datum/event/viral_infection/announce()
+/datum/event/viral_infection/announce()
 	biohazard_alert_minor()
 
-datum/event/viral_infection/start()
+/datum/event/viral_infection/start()
 	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - /datum/disease2/disease/prion)
 	var/datum/disease2/disease/D = new virus_choice
 

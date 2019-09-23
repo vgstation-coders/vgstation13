@@ -16,7 +16,7 @@
 
 	target_item.add_fingerprint(user) //We don't need to be successful in order to get our prints on the thing
 
-	if(do_mob(user, src, strip_time())) //Fails if the user moves, changes held item, is incapacitated, etc.
+	if(do_mob(user, src, strip_time(), 10, 0)) //Fails if the user moves, changes held item, is incapacitated, etc.
 		if(temp_loc != target_item.loc) //This will also fail if the item to strip went anywhere, necessary because do_mob() doesn't keep track of it.
 			return
 

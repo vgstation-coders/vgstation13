@@ -195,7 +195,7 @@ atom/movable/GotoAirflowDest(n)
 				break
 			if(curturf != get_turf(src)) //We've managed to get to our feet and move away
 				break
-			if(!check_airflow_movable()) //We've turned our magboots on, or become unstunnable, etc.
+			if(!check_airflow_movable(n*10)) //We've turned our magboots on, or become unstunnable, etc.
 				break
 			set_glide_size(DELAY2GLIDESIZE(sleep_time))
 			step_towards(src, src.airflow_dest)

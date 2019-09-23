@@ -26,6 +26,7 @@
 		)
 	enabled_jobs = list(/datum/job/trader)
 
+	event_blacklist = list(/datum/event/radiation_storm)
 	load_map_elements = list(
 	/datum/map_element/dungeon/holodeck
 	)

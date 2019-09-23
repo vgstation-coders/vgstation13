@@ -1,3 +1,6 @@
+//how long we keep proc call results (datums and lists)
+#define PROC_RESULT_KEEP_TIME 5 MINUTES
+
 /client/proc/Debug2()
 	set category = "Debug"
 	set name = "Debug-Game"
@@ -143,9 +146,19 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			returnval = "null"
 		else if(returnval == "")
 			returnval = "\"\" (empty string)"
-		to_chat(usr, "<span class='notice'>[procname] returned: [returnval]</span>")
-		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+		var/returntext = returnval
+		if(istype(returnval, /datum))
+			returntext = "[returnval] <a href='?_src_=vars;Vars=\ref[returnval]'>\[VV\]</A>"
+			spawn(PROC_RESULT_KEEP_TIME)
+				returnval = null
+		else if(istype(returnval, /list))
+			returntext = "<a href='?_src_=vars;List=\ref[returnval]'>\[List\]</A>"
+			spawn(PROC_RESULT_KEEP_TIME)
+				returnval = null
+
+		to_chat(usr, "<span class='notice'>[procname] returned: [returntext]</span>")
+		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/Cell()
 	set category = "Debug"

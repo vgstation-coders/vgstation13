@@ -21,6 +21,8 @@
 		/area/derelictparts,
 	)
 
+/datum/event/radiation_storm/can_start()
+	return 50
 
 /datum/event/radiation_storm/announce()
 	// Don't do anything, we want to pack the announcement with the actual event
