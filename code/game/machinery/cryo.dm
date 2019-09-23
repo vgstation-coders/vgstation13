@@ -32,6 +32,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/running_bob_animation = FALSE // This is used to prevent threads from building up if update_icons is called multiple times
 	var/scan_level = 0 //Current scanner level
 	var/auto_eject = FALSE
+	var/dump_loc = 0 //1 is to the beaker, 0 is to the floor
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/cryo,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -297,6 +298,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	data["injection_rate"] = inject_rate
 	data["injecting"] = injecting
 	data["auto_eject"] = auto_eject
+	data["dump_loc"] = dump_loc
 	data["scan_level"] = scan_level
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -357,10 +359,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(href_list["toggle_inject"])
 		injecting = !injecting
 
+	if(href_list["toggle_dump"])
+		dump_loc = !dump_loc
+
 	if(href_list["dump_reagents"])
-		visible_message("<span class = 'warning'>\The [src] begins venting its chemical contents!</span>")
-		var/turf/T = get_step(loc, SOUTH)
-		splash_sub(reagents, T, reagents.total_volume)
+		if(dump_loc && beaker) //To the beaker
+			reagents.trans_to(beaker, reagents.total_volume)
+		else
+			visible_message("<span class = 'warning'>\The [src] begins venting its chemical contents!</span>")
+			var/turf/T = get_step(loc, SOUTH)
+			splash_sub(reagents, T, reagents.total_volume)
 
 	if(href_list["toggle_autoeject"])
 		if(scan_level < 4)

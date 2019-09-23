@@ -117,6 +117,9 @@ Used In File(s): \code\game\machinery\cryo.dm
 		{{/for}}
 		</tbody></table>
 	</div>
+	<div class="itemContent" style="width: 26%;">
+		{{:helper.link("Dump cell contents", null, {'dump_reagents': 1}, data.cryo_volume ? null : 'disabled')}}
+	</div>
 </div>
 <br>
 <div class="item">
@@ -124,20 +127,34 @@ Used In File(s): \code\game\machinery\cryo.dm
 		Controls:
 	</div>
 	<div class="itemContent" style = "width: 40%;">
-		<div class="statusValue average">Injection status:</div>
-		{{:helper.link(data.injecting==1?"Active":"Inactive", null, {'toggle_inject': 1})}}
+		<div class="statusValue average">
+			Injection status:
+			<div class="floatRight">
+				{{:helper.link(data.injecting==1?"Active":"Inactive", null, {'toggle_inject': 1})}}
+			</div>
 		<br>
 		{{if data.scan_level >= 2}}
-			<div class="statusValue average">Injection rate (units):
-			{{:helper.link(data.injection_rate, 'carat-2-n-s', {'set_inject_rate': 1})}}
-			</div><br>
+					Injection rate (units):
+				<div class="floatRight">
+					{{:helper.link(data.injection_rate, 'carat-2-n-s', {'set_inject_rate': 1})}}
+				</div>
+				<br>
 		{{/if}}
-		{{:helper.link("Dump cell contents", null, {'dump_reagents': 1}, data.cryo_volume ? null : 'disabled')}}
+				Current dump location:
+			<div class="floatRight">
+				{{:helper.link(data.dump_loc==1?"Beaker":"Vicinity", null, {'toggle_dump': 1})}}
+		  </div>
+			<br>
 		{{if data.scan_level >= 4}}
-			<div class="statusValue average">Auto ejection:</div>
-			{{:helper.link(data.auto_eject?"Active":"Inactive", null, {'toggle_autoeject': 1})}}
+					Auto ejection:
+				<div class="floatRight">
+					{{:helper.link(data.auto_eject?"Active":"Inactive", null, {'toggle_autoeject': 1})}}
+				</div>
+			<br>
 		{{/if}}
+		</div>
 	</div>
+</div>
 {{if data.ejecting}}
 	<div class="mask">
 		<div class="maskContent" style="margin: 160px 0">
