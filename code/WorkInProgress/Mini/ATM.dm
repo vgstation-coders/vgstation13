@@ -68,22 +68,6 @@ log transactions
 		if(ticks_left_locked_down <= 0)
 			number_incorrect_tries = 0
 
-	if(CAN_INTERACT_WITH_ACCOUNT)
-		var/turf/T = get_turf(src)
-		if(istype(T) && locate(/obj/item/weapon/spacecash) in T)
-			var/list/cash_found = list()
-			for(var/obj/item/weapon/spacecash/S in T)
-				cash_found+=S
-			if(cash_found.len>0)
-				if(prob(50))
-					playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
-				else
-					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
-				var/amount = count_cash(cash_found)
-				for(var/obj/item/weapon/spacecash/S in cash_found)
-					qdel(S)
-				authenticated_account.charge(-amount,null,"Credit deposit",terminal_id=machine_id,dest_name = "Terminal")
-
 /obj/machinery/atm/attackby(obj/item/I as obj, mob/user as mob)
 	if(iswrench(I))
 		user.visible_message("<span class='notice'>[user] begins to take apart the [src]!</span>", "<span class='notice'>You start to take apart the [src]</span>")
@@ -123,7 +107,7 @@ log transactions
 			T.time = worldtime2text()
 			authenticated_account.transaction_log.Add(T)
 
-			to_chat(user, "<span class='info'>You insert [I] into [src].</span>")
+			to_chat(user, "<span class='info'>You insert [T.amount] credit\s into \the [src].</span>")
 			src.attack_hand(user)
 			qdel(I)
 	else
@@ -161,7 +145,6 @@ log transactions
 			For all your monetary needs!<br>
 			<i>This terminal is</i> [machine_id]. <i>Report this code when contacting Nanotrasen IT Support</i><br/>
 			Card: <a href='?src=\ref[src];choice=insert_card'>[get_card_name_or_account()]</a><br><br><hr>"}
-
 		if(ticks_left_locked_down > 0)
 			dat += "<span class='alert'>Maximum number of pin attempts exceeded! Access to this ATM has been temporarily disabled.</span>"
 		else if(authenticated_account)
@@ -416,7 +399,7 @@ log transactions
 					if(!istype(atm_card, /obj/item/weapon/card/id))
 						to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds to it.</span>")
 						return
-					
+
 					var/obj/item/weapon/card/id/card_id = atm_card
 					if(amount <= 0)
 						alert("That is not a valid amount.")
@@ -538,7 +521,6 @@ log transactions
 			if("logout")
 				authenticated_account = null
 				failsafe = 1
-				//usr << browse(null,"window=atm")
 
 	src.attack_hand(usr,failsafe)
 
@@ -550,7 +532,26 @@ log transactions
 			dispense_cash(arbitrary_sum,H.wear_id)
 			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
 			return
-	dispense_cash(arbitrary_sum,get_step(get_turf(src),turn(dir,180))) // Spawn on the ATM.
+		if(istype(H.wear_id, /obj/item/device/pda))
+			var/obj/item/device/pda/P = H.wear_id
+			if(P.add_to_virtual_wallet(arbitrary_sum, user, src))
+				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
+				return
+		if(istype(H.wear_id, /obj/item/weapon/card/id))
+			var/obj/item/weapon/card/id/ID = H.wear_id
+			if(ID.add_to_virtual_wallet(arbitrary_sum, user, src))
+				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
+				return
+	var/turf/our_turf = get_turf(src)
+	var/turf/destination_turf = get_step(our_turf, turn(dir, 180))
+	var/just_throw_it = FALSE
+	if(!destination_turf.Adjacent(src)) //Can we get to this turf being where the ATM is facing?
+		destination_turf = our_turf //We'll handle it another way
+		just_throw_it = TRUE
+	var/list/cash = dispense_cash(arbitrary_sum,destination_turf)
+	if(just_throw_it) //Just throw it at them
+		for(var/obj/I in cash)
+			I.throw_at(pick(trange(3, src)), rand(2,5), rand(1,4))
 
 //stolen wholesale and then edited a bit from newscasters, which are awesome and by Agouri
 /obj/machinery/atm/proc/scan_user(mob/living/carbon/human/human_user as mob)

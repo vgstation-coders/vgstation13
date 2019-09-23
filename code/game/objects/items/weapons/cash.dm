@@ -163,11 +163,13 @@ var/global/list/moneytypes = list(
 
 // TODO: Allow denominations below $1
 /proc/dispense_cash(var/amount, var/loc)
+	var/list/cash_spawned = list()
 	if(amount > 100000)
 		var/obj/item/weapon/spacecash/SC = new /obj/item/weapon/spacecash/cN(loc, 1)
 		SC.worth = amount
 		SC.name = "[SC.worth] credit chip"
-		return
+		cash_spawned.Add(SC)
+		return cash_spawned
 	for(var/cashtype in moneytypes)
 		var/slice = moneytypes[cashtype]
 		var/dispense_count = Floor(amount/slice)
@@ -175,8 +177,10 @@ var/global/list/moneytypes = list(
 		while(dispense_count>0)
 			var/dispense_this_time = min(dispense_count,10)
 			if(dispense_this_time > 0)
-				new cashtype(loc,dispense_this_time)
+				cash_spawned.Add(new cashtype(loc,dispense_this_time))
 				dispense_count -= dispense_this_time
+
+	return cash_spawned
 
 /proc/count_cash(var/list/cash)
 	. = 0
