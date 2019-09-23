@@ -46,7 +46,9 @@
 		return FALSE
 	if(ispath(DR.role_category,/datum/role/changeling))
 		return TRUE
-		
+	if(ispath(DR.role_category,/datum/role/cultist))
+		return FALSE
+
 	return TRUE
 
 ////////////////////////////////////////////////////////////////
