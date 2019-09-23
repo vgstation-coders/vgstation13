@@ -534,9 +534,14 @@ log transactions
 			return
 		if(istype(H.wear_id, /obj/item/device/pda))
 			var/obj/item/device/pda/P = H.wear_id
-			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
-			P.add_to_virtual_wallet(arbitrary_sum, user)
-			return
+			if(P.add_to_virtual_wallet(arbitrary_sum, user, src))
+				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
+				return
+		if(istype(H.wear_id, /obj/item/weapon/card/id))
+			var/obj/item/weapon/card/id/ID = H.wear_id
+			if(ID.add_to_virtual_wallet(arbitrary_sum, user, src))
+				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
+				return
 	var/turf/our_turf = get_turf(src)
 	var/turf/destination_turf = get_step(our_turf, turn(dir, 180))
 	var/just_throw_it = FALSE
