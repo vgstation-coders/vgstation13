@@ -2058,7 +2058,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			dispense_cash(arbitrary_sum,H.wear_id)
 			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
 			return 1
-	dispense_cash(arbitrary_sum,get_turf(src))
+	var/list/L = dispense_cash(arbitrary_sum,get_turf(src))
+	for(var/obj/I in L)
+		user.put_in_hands(I)
 	return 1
 
 //Receive money transferred from another PDA

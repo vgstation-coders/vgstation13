@@ -32,7 +32,6 @@ log transactions
 	var/machine_id = ""
 	var/view_screen = NO_SCREEN
 	var/lastprint = 0 // Printer needs time to cooldown
-	var/take_from_turf = TRUE
 	var/obj/item/weapon/card/atm_card = null // Since there's debit cards now, scan doesn't work for us.
 
 	machine_flags = PURCHASER //not strictly true, but it connects it to the account
@@ -68,22 +67,6 @@ log transactions
 		ticks_left_locked_down--
 		if(ticks_left_locked_down <= 0)
 			number_incorrect_tries = 0
-
-	if(CAN_INTERACT_WITH_ACCOUNT && take_from_turf)
-		var/turf/T = get_turf(src)
-		if(istype(T) && locate(/obj/item/weapon/spacecash) in T)
-			var/list/cash_found = list()
-			for(var/obj/item/weapon/spacecash/S in T)
-				cash_found+=S
-			if(cash_found.len>0)
-				if(prob(50))
-					playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
-				else
-					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
-				var/amount = count_cash(cash_found)
-				for(var/obj/item/weapon/spacecash/S in cash_found)
-					qdel(S)
-				authenticated_account.charge(-amount,null,"Credit deposit",terminal_id=machine_id,dest_name = "Terminal")
 
 /obj/machinery/atm/attackby(obj/item/I as obj, mob/user as mob)
 	if(iswrench(I))
@@ -161,9 +144,7 @@ log transactions
 		var/dat = {"<h1>Nanotrasen Automatic Teller Machine</h1>
 			For all your monetary needs!<br>
 			<i>This terminal is</i> [machine_id]. <i>Report this code when contacting Nanotrasen IT Support</i><br/>
-			Card: <a href='?src=\ref[src];choice=insert_card'>[get_card_name_or_account()]</a><br>
-			Cash-magnet status: <a href='?src=\ref[src];choice=toggle_take'>[take_from_turf?"active":"inactive"]</a><br><br><hr>"}
-
+			Card: <a href='?src=\ref[src];choice=insert_card'>[get_card_name_or_account()]</a><br><br><hr>"}
 		if(ticks_left_locked_down > 0)
 			dat += "<span class='alert'>Maximum number of pin attempts exceeded! Access to this ATM has been temporarily disabled.</span>"
 		else if(authenticated_account)
@@ -540,9 +521,6 @@ log transactions
 			if("logout")
 				authenticated_account = null
 				failsafe = 1
-			if("toggle_take")
-				take_from_turf = !take_from_turf
-				//usr << browse(null,"window=atm")
 
 	src.attack_hand(usr,failsafe)
 
@@ -562,7 +540,7 @@ log transactions
 	var/turf/our_turf = get_turf(src)
 	var/turf/destination_turf = get_step(our_turf, turn(dir, 180))
 	var/just_throw_it = FALSE
-	if(!destination_turf.Adjacent(src) || destination_turf == our_turf) //Can we get to this turf being where the ATM is facing?
+	if(!destination_turf.Adjacent(src)) //Can we get to this turf being where the ATM is facing?
 		destination_turf = our_turf //We'll handle it another way
 		just_throw_it = TRUE
 	var/list/cash = dispense_cash(arbitrary_sum,destination_turf)
