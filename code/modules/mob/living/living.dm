@@ -38,6 +38,10 @@
 		qdel(BrainContainer)
 		BrainContainer = null
 
+	if(immune_system)
+		qdel(immune_system)
+		immune_system = null
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -1888,16 +1892,17 @@ Thanks.
 
 ///////////////////////DISEASE STUFF///////////////////////////////////////////////////////////////////
 
-//For when we've already gone through clothing protections
-/mob/living/proc/assume_contact_diseases(var/list/disease_list,var/atom/source,var/bleeding=0)
+//Blocked is whether clothing prevented the spread of contact/blood
+/mob/living/proc/assume_contact_diseases(var/list/disease_list,var/atom/source,var/blocked=0,var/bleeding=0)
 	if (istype(disease_list) && disease_list.len > 0)
 		for(var/ID in disease_list)
 			var/datum/disease2/disease/V = disease_list[ID]
-			if (V.spread & SPREAD_CONTACT)
+			if(!blocked && V.spread & SPREAD_CONTACT)
 				infect_disease2(V, notes="(Contact, from [source])")
-			else if (bleeding && (V.spread & SPREAD_BLOOD))
+			else if(suitable_colony() && V.spread & SPREAD_COLONY)
+				infect_disease2(V, notes="(Colonized, from [source])")
+			else if(!blocked && bleeding && (V.spread & SPREAD_BLOOD))
 				infect_disease2(V, notes="(Blood, from [source])")
-
 
 //Called in Life() by humans (in handle_virus_updates.dm), monkeys and mice
 /mob/living/proc/find_nearby_disease()//only tries to find Contact and Blood spread diseases. Airborne ones are handled by breath_airborne_diseases()
@@ -1928,31 +1933,28 @@ Thanks.
 		block = check_contact_sterility(FEET)
 		bleeding = check_bodypart_bleeding(FEET)
 
-	if (!block)
-		var/list/viral_cleanable_types = list(
-			/obj/effect/decal/cleanable/blood,
-			/obj/effect/decal/cleanable/mucus,
-			/obj/effect/decal/cleanable/vomit,
-			)
+	var/list/viral_cleanable_types = list(
+		/obj/effect/decal/cleanable/blood,
+		/obj/effect/decal/cleanable/mucus,
+		/obj/effect/decal/cleanable/vomit,
+		)
 
-		for(var/obj/effect/decal/cleanable/C in T)
-			if (is_type_in_list(C,viral_cleanable_types))
-				assume_contact_diseases(C.virus2,C,bleeding)
+	for(var/obj/effect/decal/cleanable/C in T)
+		if (is_type_in_list(C,viral_cleanable_types))
+			assume_contact_diseases(C.virus2,C,block,bleeding)
 
-		for(var/obj/effect/rune/R in T)
-			assume_contact_diseases(R.virus2,R,bleeding)
+	for(var/obj/effect/rune/R in T)
+		assume_contact_diseases(R.virus2,R,block,bleeding)
 	return 0
 
 //This one is used for one-way infections, such as getting splashed with someone's blood due to clobbering them to death
 /mob/living/proc/oneway_contact_diseases(var/mob/living/L,var/block=0,var/bleeding=0)
-	if (!block)
-		assume_contact_diseases(L.virus2,L,bleeding)
+	assume_contact_diseases(L.virus2,L,block,bleeding)
 
 //This one is used for two-ways infections, such as hand-shakes, hugs, punches, people bumping into each others, etc
 /mob/living/proc/share_contact_diseases(var/mob/living/L,var/block=0,var/bleeding=0)
-	if (!block)
-		L.assume_contact_diseases(virus2,src,bleeding)
-		assume_contact_diseases(L.virus2,L,bleeding)
+	L.assume_contact_diseases(virus2,src,block,bleeding)
+	assume_contact_diseases(L.virus2,L,block,bleeding)
 
 //Called in Life() by humans (in handle_breath.dm), monkeys and mice
 /mob/living/proc/breath_airborne_diseases()//only tries to find Airborne spread diseases. Blood and Contact ones are handled by find_nearby_disease()

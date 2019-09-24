@@ -23,6 +23,8 @@
 	var/footstep=0 // For clownshoe noises
 	//deny_client_move=1 // HONK // Doesn't work right yet
 
+	meat_type = null
+
 	stop_automated_movement_when_pulled = 1
 	maxHealth = 30
 	health = 30

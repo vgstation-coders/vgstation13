@@ -2058,7 +2058,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			dispense_cash(arbitrary_sum,H.wear_id)
 			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
 			return 1
-	dispense_cash(arbitrary_sum,get_turf(src))
+	var/list/L = dispense_cash(arbitrary_sum,get_turf(src))
+	for(var/obj/I in L)
+		user.put_in_hands(I)
 	return 1
 
 //Receive money transferred from another PDA
@@ -2339,25 +2341,21 @@ obj/item/device/pda/AltClick()
 			to_chat(user, "[bicon(src)]<span class='warning'>There is no ID in the PDA!</span>")
 			return
 		var/obj/item/weapon/spacecash/dosh = C
-		id.virtual_wallet.money += dosh.worth * dosh.amount
+		if(add_to_virtual_wallet(dosh.worth * dosh.amount, user))
+			to_chat(user, "<span class='info'>You insert [dosh.worth * dosh.amount] credit\s into the PDA.</span>")
+			qdel(dosh)
+		updateDialog()
+
+/obj/item/device/pda/proc/add_to_virtual_wallet(var/amount, var/mob/user, var/atom/giver)
+	if(!id)
+		return 0
+	if(id.add_to_virtual_wallet(amount, user, giver))
 		if(prob(50))
 			playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
 		else
 			playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
-
-		var/datum/transaction/T = new()
-		T.target_name = user.name
-		T.purpose = "Currency deposit"
-		T.amount = dosh.worth * dosh.amount
-		T.source_terminal = src.name
-		T.date = current_date_string
-		T.time = worldtime2text()
-		id.virtual_wallet.transaction_log.Add(T)
-		to_chat(user, "<span class='info'>You insert [T.amount] credit\s into the PDA.</span>")
-		qdel(dosh)
-		updateDialog()
-
-	return
+		return 1
+	return 0
 
 /obj/item/device/pda/attack(mob/living/carbon/C, mob/living/user as mob)
 	if(istype(C))

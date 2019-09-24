@@ -170,22 +170,19 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/proc/clear_organs(var/mob/living/carbon/human/H)
 	if(H.organs)
+		for(var/datum/organ/I in H.organs)
+			qdel(I)
 		H.organs.len=0
 	if(H.internal_organs)
 		for(var/datum/organ/I in H.internal_organs)
 			qdel(I)
 		H.internal_organs.len=0
+	//The rest SHOULD only refer to organs that were already deleted by the above loops, so we can just clear the lists.
 	if(H.organs_by_name)
-		for(var/datum/organ/I in H.organs_by_name)
-			qdel(I)
 		H.organs_by_name.len=0
 	if(H.internal_organs_by_name)
-		for(var/datum/organ/I in H.internal_organs_by_name)
-			qdel(I)
 		H.internal_organs_by_name.len=0
 	if(H.grasp_organs)
-		for(var/datum/organ/I in H.grasp_organs)
-			qdel(I)
 		H.grasp_organs.len = 0
 
 
@@ -895,7 +892,7 @@ var/global/list/whitelisted_species = list("Human")
 	heat_level_2 = T0C + 75
 	heat_level_3 = T0C + 100
 
-	flags = IS_WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN
+	flags = IS_WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN | HYPOTHERMIA_IMMUNE
 	anatomy_flags = NO_BLOOD | HAS_SWEAT_GLANDS
 
 	blood_color = "#004400"

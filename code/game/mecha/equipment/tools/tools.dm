@@ -269,7 +269,7 @@
 			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
 			playsound(target, 'sound/mecha/mechsmash.ogg', 50, 1)
 			tray.smashDestroy(50) //Just to really drive it home
-	else if(istype(target, /obj/effect/plantsegment) || istype(target, /obj/effect/alien/weeds) || istype(target, /obj/effect/biomass)|| istype(target, /turf/simulated/floor))
+	else if(istype(target, /obj/effect/plantsegment) || istype(target, /obj/effect/alien/weeds) || istype(target, /obj/effect/biomass)|| istype(target, /turf/simulated/floor) || istype(target, /obj/structure/cable/powercreeper))
 		set_ready_state(0)
 		var/olddir = chassis.dir
 		var/eradicated = 0
@@ -283,6 +283,11 @@
 						eradicated++
 					else if(istype(E, /obj/effect/alien/weeds) || istype(E, /obj/effect/biomass))
 						qdel(E)
+						eradicated++
+			for(var/obj/structure/cable/powercreeper/C in range(chassis,i == 4 ? 2 : 1))
+				if(get_dir(chassis,C)&chassis.dir || C.loc == get_turf(chassis))
+					if(istype(C, /obj/structure/cable/powercreeper))
+						C.die()
 						eradicated++
 			sleep(3)
 		if(eradicated)

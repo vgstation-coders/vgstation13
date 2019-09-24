@@ -25,6 +25,11 @@
 	var/inhale_volume = BREATH_VOLUME
 	var/exhale_moles = 0
 
+/datum/organ/internal/lungs/Destroy()
+	for(var/datum/lung_gas/G in gasses)
+		qdel(G)
+	..()
+
 /datum/organ/internal/lungs/proc/gasp()
 	owner.emote("gasp", null, null, TRUE)
 

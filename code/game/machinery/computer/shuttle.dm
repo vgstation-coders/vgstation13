@@ -35,6 +35,8 @@
 				return 0
 			switch(choice)
 				if("Authorize")
+					if(!emergency_shuttle.location == 1)
+						return 
 					src.authorized -= W:registered_name
 					src.authorized += W:registered_name
 					if (src.auth_need - src.authorized.len > 0)

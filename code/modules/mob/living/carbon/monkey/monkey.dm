@@ -19,6 +19,8 @@
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL|ALIEN
 
+	flags = HEAR_ALWAYS | PROXMOVE
+
 	size = SIZE_SMALL
 
 	var/canWearClothes = 1

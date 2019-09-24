@@ -3,8 +3,10 @@
 #define GC_FORCE_DEL_PER_TICK 60
 //#define GC_DEBUG
 //#define GC_FINDREF
+//#define GC_TRACKTYPES
 
 /datum/var/gcDestroyed
+/datum/var/hard_deleted
 
 var/datum/garbage_collector/garbageCollector
 var/soft_dels = 0
@@ -31,6 +33,10 @@ var/soft_dels = 0
 	var/dels_count = 0
 	var/hard_dels = 0
 
+	#ifdef GC_TRACKTYPES
+	var/list/reftypes = list()
+	#endif
+
 /datum/garbage_collector/proc/addTrash(const/datum/D)
 	if(istype(D, /atom) && !istype(D, /atom/movable))
 		return
@@ -42,6 +48,10 @@ var/soft_dels = 0
 		return
 
 	queue["\ref[D]"] = world.timeofday
+
+	#ifdef GC_TRACKTYPES
+	reftypes["\ref[D]"] = D.type
+	#endif
 
 #ifdef GC_FINDREF
 world/loop_checks = 0
@@ -64,12 +74,15 @@ world/loop_checks = 0
 		if(D) // Something's still referring to the qdel'd object. del it.
 			if(isnull(D.gcDestroyed))
 				queue -= refID
+				#ifdef GC_TRACKTYPES
+				reftypes -= refID
+				#endif
 				continue
 			if(remainingForceDelPerTick <= 0)
 				break
 
 			#ifdef GC_FINDREF
-			to_chat(world, "picnic! searching [locate(D)]")
+			to_chat(world, "picnic! searching [D]")
 			if(istype(D, /atom/movable))
 				var/atom/movable/A = D
 				testing("GC: Searching references for [A] | [A.type]")
@@ -84,8 +97,10 @@ world/loop_checks = 0
 				found += LookForRefs(R, D)
 			for(var/datum/R)
 				found += LookForRefs(R, D)
-			for(var/A in global.vars)
-				found += LookForListRefs(global.vars[A], D, null, A)
+			for(var/client/R)
+				found += LookForRefs(R, D)
+			found += LookForRefs(world, D)
+			found += LookForListRefs(global.vars, D, null, "global.vars") //You can't pretend global is a datum like you can with clients and world. It'll compile, but throw completely nonsensical runtimes.
 			to_chat(world, "we found [found]")
 			#endif
 
@@ -94,9 +109,7 @@ world/loop_checks = 0
 			WARNING("gc process force delete [D.type]")
 			#endif
 
-			if(istype(D, /atom/movable))
-				var/atom/movable/AM = D
-				AM.hard_deleted = 1
+			D.hard_deleted = 1
 
 			del D
 
@@ -107,6 +120,14 @@ world/loop_checks = 0
 				WARNING("GC process sleeping due to high CPU usage!")
 				#endif
 				sleep(calculateticks(2))
+
+		else
+			#ifdef GC_TRACKTYPES
+			throw EXCEPTION("Ref of type [reftypes[refID]] found in GC queue with no corresponding object!")
+			#else
+			throw EXCEPTION("Ref found in GC queue with no corresponding object! Turn on GC_TRACKTYPES for more info.")
+			#endif
+			dequeue(refID)
 
 #ifdef GC_DEBUG
 #undef GC_DEBUG
@@ -120,13 +141,19 @@ world/loop_checks = 0
 	if (queue)
 		queue -= id
 
+	#ifdef GC_TRACKTYPES
+	reftypes -= id
+	#endif
+
 	dels_count++
+
+#undef GC_TRACKTYPES
 
 /*
  * NEVER USE THIS FOR /atom OTHER THAN /atom/movable
  * BASE ATOMS CANNOT BE QDEL'D BECAUSE THEIR LOC IS LOCKED.
  */
-/proc/qdel(const/datum/D, ignore_pooling = 0, ignore_destroy = 0)
+/proc/qdel(const/datum/D, ignore_pooling = 0)
 	if(isnull(D))
 		return
 
@@ -151,8 +178,7 @@ world/loop_checks = 0
 
 	if(isnull(D.gcDestroyed))
 		// Let our friend know they're about to get fucked up.
-		if(!ignore_destroy)
-			D.Destroy()
+		D.Destroy()
 
 		garbageCollector.addTrash(D)
 
@@ -186,13 +212,48 @@ world/loop_checks = 0
  * Called BEFORE qdel moves shit.
  */
 /datum/proc/Destroy()
-	qdel(src, 1, 1)
+	gcDestroyed = "Bye, world!"
+	tag = null
+
+/proc/delete_profile(var/type, code = 0)
+	if(!ticker || ticker.current_state < 3)
+		return
+	if(code == 0)
+		if (!("[type]" in del_profiling))
+			del_profiling["[type]"] = 0
+
+		del_profiling["[type]"] += 1
+	else if(code == 1)
+		if (!("[type]" in ghdel_profiling))
+			ghdel_profiling["[type]"] = 0
+
+		ghdel_profiling["[type]"] += 1
+	else
+		if (!("[type]" in gdel_profiling))
+			gdel_profiling["[type]"] = 0
+
+		gdel_profiling["[type]"] += 1
+		soft_dels += 1
+
+/*/datum/Del()
+	if (gcDestroyed)
+		garbageCollector.dequeue("\ref[src]")
+		if (hard_deleted)
+			delete_profile("[type]", 1)
+		else
+			delete_profile("[type]", 2)
+
+	else // direct del calls or nulled explicitly.
+		delete_profile("[type]", 0)
+		Destroy()
+
+	..()*/
 
 #ifdef GC_FINDREF
 /datum/garbage_collector/proc/LookForRefs(var/datum/D, var/datum/targ)
 	. = 0
 	for(var/V in D.vars)
-		if(V == "contents")
+		if(V == "contents" || V == "vars")
 			continue
 		if(istype(D.vars[V], /datum))
 			var/datum/A = D.vars[V]
@@ -202,16 +263,36 @@ world/loop_checks = 0
 		else if(islist(D.vars[V]))
 			. += LookForListRefs(D.vars[V], targ, D, V)
 
-/datum/garbage_collector/proc/LookForListRefs(var/list/L, var/datum/targ, var/datum/D, var/V)
+/datum/garbage_collector/proc/LookForListRefs(var/list/L, var/datum/targ, var/datum/D, var/V, var/list/foundcache = list())
 	. = 0
+	//foundcache makes sure each list in a given call to this is only checked once, to prevent infinite loops if two lists reference each other.
+	//You might think it would be better to keep the cache across all searches for the same datum, but since the in operator takes longer on larger lists, it's much slower.
+	//Thus we only keep it for one top-level call of LookForListRefs, as that's the minimum required to prevent infinite loops.
+	if(L in foundcache)
+		return
+	foundcache += L
+
 	for(var/F in L)
+		var/G
+		try
+			G = L[F] //Some special built-in lists runtime if you try to use them as associative lists.
+		catch
+			G = null //It's probably already null if it gets here, but may as well be safe
+
 		if(istype(F, /datum))
 			var/datum/A = F
 			if(A == targ)
 				testing("GC: [A] | [A.type] referenced by [D? "[D] | [D.type]" : "global list"], list [V]")
 				. += 1
+		if(istype(G, /datum))
+			var/datum/A = G
+			if(A == targ)
+				testing("GC: [A] | [A.type] referenced by [D? "[D] | [D.type]" : "global list"], list [V] at key [F]")
+				. += 1
 		if(islist(F))
-			. += LookForListRefs(F, targ, D, "[F] in list [V]")
+			. += LookForListRefs(F, targ, D, "[F] in list [V]", foundcache)
+		if(islist(G))
+			. += LookForListRefs(G, targ, D, "[G] in list [V] at key [F]", foundcache)
 #endif
 
 #ifdef GC_FINDREF

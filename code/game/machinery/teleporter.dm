@@ -196,7 +196,7 @@
 	name = "teleporter horizon generator"
 	desc = "This generates the portal through which you step through to teleport elsewhere."
 	icon_state = "tele0"
-	var/accurate = 0
+	//var/accurate = 0
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 2000
@@ -268,10 +268,11 @@
 		to_chat(M, "<span class = 'notice'>The act of teleportation was so smooth, it feels like you didn't move at all.</span>")
 		return 0
 	if (istype(M, /atom/movable))
-		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
-			do_teleport(M, locate(rand((2*TRANSITIONEDGE), world.maxx - (2*TRANSITIONEDGE)), rand((2*TRANSITIONEDGE), world.maxy - (2*TRANSITIONEDGE)), 3), 2)
-		else
-			do_teleport(M, com.locked) //dead-on precision
+		//if(prob(5) && !accurate) //oh dear a problem, put em in deep space
+		//	do_teleport(M, locate(rand((2*TRANSITIONEDGE), world.maxx - (2*TRANSITIONEDGE)), rand((2*TRANSITIONEDGE), world.maxy - (2*TRANSITIONEDGE)), 3), 2)
+		//else
+		//	do_teleport(M, com.locked) //dead-on precision
+		do_teleport(M, com.locked)
 
 		if(com.one_time_use) //Make one-time-use cards only usable one time!
 			com.one_time_use = 0
@@ -322,8 +323,6 @@
 	else
 		icon_state = "controller"
 
-
-
 /obj/machinery/teleport/station/attackby(var/obj/item/weapon/W, var/mob/user as mob)
 	if (..())
 		return 1
@@ -370,27 +369,24 @@
 	src.engaged = 0
 	return
 
-/obj/machinery/teleport/station/verb/testfire()
-	set name = "Test Fire Teleporter"
-	set category = "Object"
-	set src in oview(1)
+///obj/machinery/teleport/station/verb/testfire()
+	//set name = "Test Fire Teleporter"
+	//set category = "Object"
+	//set src in oview(1)
 
-	if(stat & (BROKEN|NOPOWER) || !istype(usr,/mob/living))
-		return
-
-
-	for(var/obj/machinery/teleport/hub/hub in orange(1))
-		engaged = 1
-		var/wasaccurate = hub.accurate //let's make sure if you have a mapped in accurate tele that it stays that way
-		hub.accurate = 1
-		hub.engaged = 1
-		hub.update_icon()
-		visible_message("<span class='notice'>Test firing! Teleporter temporarily calibrated to be more accurate.</span>", range = 2)
-		hub.teleport()
-		use_power(teleport_power_usage)
-		spawn(30)
-			hub.accurate = wasaccurate
-			visible_message("<span class='notice'>Test fire completed.</span>", range = 2)
-
-	src.add_fingerprint(usr)
-	return
+	//if(stat & (BROKEN|NOPOWER) || !istype(usr,/mob/living))
+	//	return
+	//for(var/obj/machinery/teleport/hub/hub in orange(1))
+	//	engaged = 1
+	//	var/wasaccurate = hub.accurate //let's make sure if you have a mapped in accurate tele that it stays that way
+	//	hub.accurate = 1
+	//	hub.engaged = 1
+	//	hub.update_icon()
+	//	visible_message("<span class='notice'>Test firing! Teleporter temporarily calibrated to be more accurate.</span>", range = 2)
+	//	hub.teleport()
+	//	use_power(teleport_power_usage)
+	//	spawn(30)
+	//		hub.accurate = wasaccurate
+	//		visible_message("<span class='notice'>Test fire completed.</span>", range = 2)
+	//src.add_fingerprint(usr)
+	//return

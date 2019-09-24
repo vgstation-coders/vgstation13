@@ -33,9 +33,11 @@
 	spawn(1)
 		update()
 
-/obj/item/organ/internal/Del()
+/obj/item/organ/internal/Destroy()
 	if(!robotic)
 		processing_objects -= src
+	qdel(organ_data)
+	organ_data = null
 	..()
 
 /obj/item/organ/internal/examine(var/mob/user, var/size = "")

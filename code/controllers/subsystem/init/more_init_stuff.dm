@@ -31,7 +31,6 @@ var/datum/subsystem/more_init/SSmore_init
 	..()
 
 	buildcamlist()
-
 	if(config.media_base_url)
 		watch = start_watch()
 		log_startup_progress("Caching jukebox playlists...")
@@ -43,7 +42,7 @@ var/datum/subsystem/more_init/SSmore_init
 
 	for (var/obj/machinery/computer/security/S in tv_monitors)
 		S.init_cams()
-	
+
 	init_wizard_apprentice_setups()
 
 /proc/init_wizard_apprentice_setups()

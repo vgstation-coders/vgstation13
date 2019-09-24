@@ -699,9 +699,9 @@ var/list/slot_equipment_priority = list( \
 		slot_r_store\
 	)
 
-/*Equips accessories. 
+/*Equips accessories.
 A is the mob
-B is the accessory. 
+B is the accessory.
 C is what item the accessory will look to be attached to, important.
 D will look how many accessories the item already has, and will move on if its attachment would go above the amount of accessories
 E will stop the proc if a candidate had the accessory attached to it and it is toggled on
@@ -1060,7 +1060,6 @@ Use this proc preferably at the end of an equipment loadout
 	set name = "Point To"
 	set category = "Object"
 
-
 	if((usr.isUnconscious() && !isobserver(src)) || !(get_turf(src))|| attack_delayer.blocked())
 		return 0
 
@@ -1071,7 +1070,9 @@ Use this proc preferably at the end of an equipment loadout
 		I.showoff(src)
 		return 0
 
-	if(!(A in (view(get_turf(src)) + get_all_slots())))
+	if(!(A in (view(get_turf(src)) + get_all_slots())) || (usr.see_invisible < A.invisibility))
+		message_admins("<span class='warning'><B>WARNING: </B><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?</span>", 1)
+		log_admin("[key_name_admin(src)] just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?")
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -1212,7 +1213,8 @@ Use this proc preferably at the end of an equipment loadout
 
 	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
 	msg = sanitize(msg)
-
+	message_admins("[usr.key]/([usr.name]) added the following message to their memory. [msg]")
+	log_admin("[usr.key]/([usr.name]) added the following message to their memory. [msg]")
 	if(mind)
 		mind.store_memory(msg)
 	else
@@ -1885,7 +1887,7 @@ mob/proc/on_foot()
 /mob/proc/isTeleViewing(var/client_eye)
 	if(istype(client_eye,/obj/machinery/camera))
 		return 1
-	if(istype(client_eye,/obj/item/projectile/nikita))
+	if(istype(client_eye,/obj/item/projectile/rocket/nikita))
 		return 1
 	return 0
 
@@ -1989,7 +1991,7 @@ mob/proc/on_foot()
 	return
 
 /mob/living/carbon/heard(var/mob/living/carbon/human/M)
-	if(M == src || !istype(M))
+	if(M == src || !istype(M) || !mind)
 		return
 	if(!ear_deaf && !stat)
 		if(!(mind.heard_before[M.name]))
