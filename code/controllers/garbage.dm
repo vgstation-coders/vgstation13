@@ -1,6 +1,6 @@
 #define GC_COLLECTIONS_PER_TICK 300 // Was 100.
 #define GC_COLLECTION_TIMEOUT (30 SECONDS)
-#define GC_FORCE_DEL_PER_TICK 5 //Was 60, but even 5 is enough to notice the lag. Holy fuck these are slow.
+#define GC_FORCE_DEL_PER_TICK 2 //Was 60, but even 5 is enough to notice the lag. Holy fuck these are slow.
 
 //#define GC_DEBUG
 //#define GC_FINDREF
