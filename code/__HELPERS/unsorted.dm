@@ -778,7 +778,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					var/image/target_progress_bar = targets[target_]
 					stop_progress_bar(user, target_progress_bar)
 				return FALSE
-		if(needhand && holding && !user.do_after_hand_check(holding))
+		if(needhand && ((holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())))
 			for(var/target_ in targets)
 				var/image/target_progress_bar = targets[target_]
 				stop_progress_bar(user, target_progress_bar)
@@ -846,7 +846,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if(needhand && !user.is_holding_item(holding))	//Sometimes you don't want the user to have to use any hands
+		if(needhand && ((holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())))	//Sometimes you don't want the user to have to use any hands
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
