@@ -586,7 +586,7 @@
 		"Marina" = "marinaCB",
 		"#41" = "servbot-combat",
 		"Kodiak - 'Grizzly'" = "kodiak-combat",
-		"Sleek" = "sleekcombat"
+		"Sleek" = "sleekcombat",
 		"R34 - WAR8a 'Chesty'" = "chesty"
 		)
 	speed_modifier = CYBORG_COMBAT_SPEED_MODIFIER
