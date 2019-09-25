@@ -359,7 +359,7 @@ var/global/num_vending_terminals = 1
 		if (R.assignedholiday == Holiday)
 			holiday_records += R
 			R.category=CAT_HOLIDAY
-			R.display_color = pick("orange")
+			R.display_color = pick("orange", "purple", "navy")
 		else
 			R.category = CAT_NORMAL
 			product_records.Add(R)
@@ -799,7 +799,8 @@ var/global/num_vending_terminals = 1
 				categories["default"] += R
 
 		if(Holiday && holiday_records.len)
-			dat += {"<FONT color = "pink"><B>&nbsp;&nbsp;holiday specials</B></font>:<br>"}
+			var/col = pick("orange", "purple", "navy")
+			dat += {"<FONT color = [col]><B>&nbsp;&nbsp;[Holiday] specials</B></font>:<br>"}
 			for (var/datum/data/vending_product/R in holiday_records)
 				dat += GetProductLine(R)
 			dat += "<br>"
@@ -1336,6 +1337,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25,
+		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/ = 25,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/tomatosoup = 3,
@@ -1347,7 +1349,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25,
+		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/ = 40,
 		)
+	specials = list(
+		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/ = ST_PATRICKS_DAY,
+	)
 
 	pack = /obj/structure/vendomatpack/coffee
 
@@ -1386,6 +1392,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 2,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 100,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
 		)
 	contraband = list(
@@ -1405,13 +1412,15 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 75,
 		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 100,
 		)
 	vouched = list(
 		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating = 2
 		)
 	specials = list(
-		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = VALENTINES_DAY
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = ST_PATRICKS_DAY,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = VALENTINES_DAY,
 		)
 
 	pack = /obj/structure/vendomatpack/snack
