@@ -350,7 +350,7 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/cerealmaker/validateIngredient(var/obj/item/I)
 	. = ..()
 	if((. == "valid") && (!foodNesting))
-		if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/cereal))
+		if(findtext(I.name,"cereal"))
 			. = "It's already cereal."
 	return
 
