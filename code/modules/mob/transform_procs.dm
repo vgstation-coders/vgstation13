@@ -326,9 +326,9 @@
 	to_chat(new_mob, "You feel more... animalistic")
 	return new_mob
 
-/mob/living/carbon/human/proc/GALize(var/mob/living/carbon/human/H)
-	if(ishuman(H))
-		var/mob/living/carbon/human/M = H
+/mob/living/carbon/human/proc/GALize()
+	if(ishuman(src))
+		var/mob/living/carbon/human/M = src
 		if(!M.is_wearing_item(/obj/item/clothing/under/galo))
 			var/obj/item/clothing/under/galo/G = new /obj/item/clothing/under/galo(get_turf(M))
 			if(M.w_uniform)

@@ -664,8 +664,8 @@
 						playsound(src, 'sound/effects/pop.ogg', 50, 1)
 						H.my_appearance.h_style = "Popped Hair"
 						H.update_hair()
-				else if(isjusthuman(H) && Holiday == APRIL_FOOLS_DAY)
-					H.GALize(H)
+				else if(isjusthuman(H) && (Holiday == APRIL_FOOLS_DAY || istype(src, /obj/machinery/sleeper/mancrowave/galo)))
+					H.GALize()
 			go_out()
 		update_icon()
 
@@ -677,13 +677,3 @@
 	..()
 	base_icon = "galo"
 	icon_state = "galo_open"
-
-/obj/machinery/sleeper/mancrowave/galo/process()
-	..()
-	if(occupant)
-		if(ishuman(occupant))
-			var/mob/living/carbon/human/H = occupant
-			if(isjusthuman(H) && Holiday != APRIL_FOOLS_DAY)
-				H.GALize(H)
-		go_out()
-	update_icon()
