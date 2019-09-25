@@ -168,6 +168,12 @@
 
 	update_itemstate_on_twohand = TRUE
 
+//SNAKES
+
+/obj/item/weapon/holder/animal/snek
+	name = "snake holder"
+	desc = "Kept you waiting?"
+	item_state = "snek"
 
 //SLIMES
 /obj/item/weapon/holder/animal/slime
