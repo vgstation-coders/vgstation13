@@ -91,13 +91,7 @@
 
 /obj/item/weapon/stamp/clown/try_stamp(mob/user,obj/item/weapon/paper/P)
 	var/clown = FALSE
-	if(clumsy_check(user))
-		clown = TRUE
-	if(isrobot(user))
-		var/mob/living/silicon/robot/R = user
-		if(HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN))
-			clown = TRUE
-	if(!clown)
+	if(!clumsy_check(user))
 		to_chat(user, "<span class='warning'>You are totally unable to use the stamp. HONK!</span>")
 	else
 		..()
