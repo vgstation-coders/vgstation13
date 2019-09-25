@@ -326,7 +326,19 @@
 	to_chat(new_mob, "You feel more... animalistic")
 	return new_mob
 
-/mob/living/carbon/human/proc/GALize()
+/mob/living/carbon/human/proc/GALize(var/mob/living/carbon/human/H)
+	if(ishuman(H))
+		var/mob/living/carbon/human/M = H
+		if(!M.is_wearing_item(/obj/item/clothing/under/galo))
+			var/obj/item/clothing/under/galo/G = new /obj/item/clothing/under/galo(get_turf(M))
+			if(M.w_uniform)
+				M.u_equip(M.w_uniform, 1)
+			M.equip_to_slot(G, slot_w_uniform)
+		if(!M.is_wearing_item(/obj/item/clothing/glasses/sunglasses))
+			var/obj/item/clothing/glasses/sunglasses/S = new /obj/item/clothing/glasses/sunglasses(get_turf(M))
+			if(M.glasses)
+				M.u_equip(M.glasses, 1)
+			M.equip_to_slot(S, slot_glasses)
 	my_appearance.s_tone = -100 //Nichi saro ni itte hada o yaku
 	update_body()
 	if(gender == MALE && my_appearance.h_style != "Toriyama 2")

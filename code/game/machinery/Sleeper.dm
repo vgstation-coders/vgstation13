@@ -665,6 +665,25 @@
 						H.my_appearance.h_style = "Popped Hair"
 						H.update_hair()
 				else if(isjusthuman(H) && Holiday == APRIL_FOOLS_DAY)
-					H.GALize()
+					H.GALize(H)
 			go_out()
 		update_icon()
+
+/obj/machinery/sleeper/mancrowave/galo
+	name = "tanning bed"
+	desc = "An experimental G4L-0 model thermal homeostasis regulator. Just looking at it makes you feel unusually excited."
+
+/obj/machinery/sleeper/mancrowave/galo/New()
+	..()
+	base_icon = "galo"
+	icon_state = "galo_open"
+
+/obj/machinery/sleeper/mancrowave/galo/process()
+	..()
+	if(occupant)
+		if(ishuman(occupant))
+			var/mob/living/carbon/human/H = occupant
+			if(isjusthuman(H) && Holiday != APRIL_FOOLS_DAY)
+				H.GALize(H)
+		go_out()
+	update_icon()
