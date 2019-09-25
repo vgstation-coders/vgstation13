@@ -182,7 +182,7 @@ var/locations_calculated = 0
 	radio.interact(user)
 
 	spawn(time_to_spawn)
-		var/obj/spawned_item = new item(spawnloc,user)
+		var/obj/spawned_item = new item(spawnloc)
 		after_spawn(spawned_item,BM_NORMAL,user)
 		spawn(rand(30 SECONDS, 60 SECONDS))
 			if(!radio.nanotrasen_variant && prob(sps_chances[BM_NORMAL]))
@@ -190,7 +190,7 @@ var/locations_calculated = 0
 
 /datum/black_market_item/proc/spawn_expensive(var/obj/item/device/illegalradio/radio, var/mob/user)
 	process_transaction(radio, BM_EXPENSIVE)
-	var/obj/spawned_item = new item(get_turf(user),user)
+	var/obj/spawned_item = new item(get_turf(user))
 	if(!spawned_item)
 		if(radio)
 			radio.visible_message("The [radio.name] beeps: <span class='warning'>Okay, somehow we lost an item we were going to send to you. You've been refunded. Not really sure how that managed to happen.</span>")
