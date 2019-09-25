@@ -508,7 +508,10 @@
 
 /obj/machinery/sleeper/mancrowave/New()
 	..()
-	if(map.nameShort == "deff")
+	if(Holiday == APRIL_FOOLS_DAY)
+		base_icon = "galo"
+		icon_state = "galo_open"
+	else if(map.nameShort == "deff")
 		icon = 'maps/defficiency/medbay.dmi'
 	update_icon()
 
