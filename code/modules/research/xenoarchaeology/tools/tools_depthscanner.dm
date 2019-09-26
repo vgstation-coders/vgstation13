@@ -141,7 +141,7 @@
 
 
 /obj/item/device/xenoarch_scanner
-	name = "xenoarch digsite locator"
+	name = "Xenoarchaeological digsite locator"
 	desc = "A scanner that checks the surrounding area for potential xenoarch digsites. If it finds any, It will briefly make them visible. Requires mesons for optimal use."
 	icon_state = "forensic0-old" //placeholder
 	item_state  = "analyzer"
@@ -153,10 +153,16 @@
 	var/adv = FALSE
 
 /obj/item/device/xenoarch_scanner/adv
-	name = "advanced xenoarch digsite locator"
-	icon_state = "forensic1-old" //placeholder
-	desc = "A scanner that scans the surrounding area for potential xenoarch digsites, highlighting them temporarily in a colour associated with their responsive reagent. REquires mesons for optimal use."
+	name = "Advanced Xenoarchaeological digsite locator"
+	icon_state = "unknown"
+	desc = "A scanner that scans the surrounding area for potential xenoarch digsites, highlighting them temporarily in a colour associated with their responsive reagent. Requires mesons for optimal use."
 	adv = TRUE
+
+/obj/item/device/xenoarch_scanner/adv/examine(mob/user)
+	..()
+	to_chat(user, "<span class = 'notice'>It has a list of colour codes:</span>")
+	for(var/i in color_from_find_reagent)
+		to_chat(user, "[i] = <span style = 'color:[color_from_find_reagent[i]];'>this colour</span>")
 
 /obj/item/device/xenoarch_scanner/attack_self(mob/user)
 	if(world.time > cooldown + 4 SECONDS)
