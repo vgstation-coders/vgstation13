@@ -168,6 +168,15 @@
 	var/obj/I = O.ashtype()
 	qdel(O)
 	new I(owner.loc)
+
+	var/msg = pick(
+	"\The [owner]'s [display_name] flashes to ash!",\
+	"\The [owner]'s [display_name] [is_robotic() ? "rapidly disassembles" : "falls to a heap of ashes"]!",\
+	"\The [owner]'s [display_name] [is_robotic() ? "melts away rapidly" : "burns to a crisp"]!")
+
+	owner.visible_message("<span class='danger'>[msg]</span>")
+
+
 	droplimb(1, spawn_limb = 0, display_message = FALSE)
 
 /datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
@@ -202,6 +211,7 @@
 					droplimb(1)
 					return
 			else
+				//brute
 				if(sharp || is_peg())
 					if(prob((5 * brute) * sharp)) //sharp things have a greater chance to sever based on how sharp they are
 						droplimb(1)
@@ -212,6 +222,11 @@
 						return
 				else if(brute > 20 && prob(2 * brute)) //non-sharp hits with force greater than 20 can cause limbs to sever, too (smaller chance)
 					droplimb(1)
+					return
+
+				//burn
+				if(burn > 30 && prob(3 * brute))
+					dust()
 					return
 
 		else if((config.limbs_can_break && sharp == 100) || ((sharp >= 2) && (config.limbs_can_break && brute_dam + burn_dam >= (max_damage * config.organ_health_multiplier)/sharp))) //items of exceptional sharpness are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
@@ -283,6 +298,14 @@
 					//And pass the pain around
 					var/datum/organ/external/target = pick(possible_points)
 					target.take_damage(brute, burn, sharp, edge, used_weapon, forbidden_limbs + src)
+
+	//Bone fractures
+	var/datum/species/species = src.species || owner.species
+	if(config.bones_can_break)
+		if(brute_dam > min_broken_damage * config.organ_health_multiplier && is_organic() && !(species.anatomy_flags & NO_BONES))
+			src.fracture()
+		if(burn_dam > (min_broken_damage*1.5) * config.organ_health_multiplier && is_organic() && !vital)
+			src.necrotize()
 
 	//Sync the organ's damage with its wounds
 	src.update_damages()
@@ -445,10 +468,6 @@
 			owner.update_body(1)
 			return
 
-	//Bone fracurtes
-	var/datum/species/species = src.species || owner.species
-	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && is_organic() && !(species.anatomy_flags & NO_BONES))
-		src.fracture()
 	if(!is_broken())
 		perma_injury = 0
 
@@ -979,12 +998,25 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT))
 		if(prob(25))
 			release_restraints(UNCUFF_LEGS)//Legcuffs only.
-
-
 	if(isgolem(owner))
 		droplimb(1)
 
-	return
+/datum/organ/external/proc/necrotize()
+	var/datum/species/species = src.species || owner.species
+	if(species.anatomy_flags & NO_SKIN)
+		return
+	if(status & ORGAN_DEAD)
+		return
+	owner.visible_message("<span class='danger'>You see the skin on \the [owner]'s [display_name] melt away!</span>",\
+	"<span class='danger'>Your [display_name] feels like it's on fire, then suddenly you can't feel it at all.</span>",\
+	"<span class='danger'>You can smell something cooking.</span>")
+
+	if(owner.feels_pain())
+		owner.audible_scream()
+
+	status |= ORGAN_DEAD
+	for(var/datum/organ/external/E in children)
+		E.necrotize()
 
 /datum/organ/external/proc/robotize()
 	src.status &= ~ORGAN_BROKEN
