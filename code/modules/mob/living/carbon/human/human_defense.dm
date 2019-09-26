@@ -363,8 +363,8 @@ emp_act
 		flash_eyes(visual = 1)
 
 	var/shielded = 0
-	var/b_loss = null
-	var/f_loss = null
+	var/b_loss = null //Brute damage
+	var/f_loss = null //Burn damage
 
 	switch (severity)
 		if (BLOB_ACT_STRONG)
@@ -436,8 +436,8 @@ emp_act
 
 	var/update = 0
 
-	// focus most of the blast on one organ
-	var/datum/organ/external/take_blast = pick(organs)
+	// focus most of the blast on one limb
+	var/datum/organ/external/take_blast = get_organ(ran_zone(LIMB_CHEST, 40)) //40% chance to hit the chest, otherwise hit the head, right arm, or left arm, otherwise the chest
 	update |= take_blast.take_damage(b_loss * 0.9, f_loss * 0.9, used_weapon = "Explosive blast")
 
 	// distribute the remaining 10% on all limbs equally
@@ -452,22 +452,11 @@ emp_act
 				update |= temp.take_damage(b_loss * 0.2, f_loss * 0.2, used_weapon = weapon_message)
 			if(LIMB_CHEST)
 				update |= temp.take_damage(b_loss * 0.4, f_loss * 0.4, used_weapon = weapon_message)
-			if(LIMB_LEFT_ARM)
+			if(LIMB_GROIN)
+				update |= temp.take_damage(b_loss * 0.2, f_loss * 0.2, used_weapon = weapon_message)
+			else
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
-			if(LIMB_RIGHT_ARM)
-				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
-			if(LIMB_LEFT_LEG)
-				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
-			if(LIMB_RIGHT_LEG)
-				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
-			if(LIMB_RIGHT_FOOT)
-				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
-			if(LIMB_LEFT_FOOT)
-				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
-			if(LIMB_RIGHT_ARM)
-				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
-			if(LIMB_LEFT_ARM)
-				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
+
 	if(update)
 		UpdateDamageIcon()
 
