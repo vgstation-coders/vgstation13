@@ -151,7 +151,7 @@
 	species_type = /mob/living/simple_animal/cat/snek
 	butchering_drops = null
 	childtype = null
-	holder_type = null
+	holder_type = /obj/item/weapon/holder/animal/snek
 
 /mob/living/simple_animal/cat/snek/corpus
 	name = "Corpus"
