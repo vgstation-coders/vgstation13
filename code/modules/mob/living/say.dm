@@ -204,7 +204,7 @@ var/list/department_radio_keys = list(
 	return 1
 
 /mob/living/proc/resist_memes(var/datum/speech/speech)
-	if(ear_deaf || speech.frequency || speech.speaker == src || !isliving(speech.speaker))
+	if(stat || ear_deaf || speech.frequency || speech.speaker == src || !isliving(speech.speaker))
 		return TRUE
 	return FALSE
 
