@@ -26,10 +26,10 @@
 	clearance_range = rand(2,6)
 	dissonance_spread = rand(1500,2500) / 100
 
-/datum/find/proc/create_find(var/obj/item/weapon/archaeological_find/new_item) //Makes the item. Applies strangeness to it. Returns item
+/datum/find/proc/create_find() //Makes the item. Applies strangeness to it. Returns item
 	if(prob(5))
 		talkative = TRUE
-	var/obj/item/weapon/I = spawn_item(new_item)
+	var/obj/item/weapon/I = spawn_item()
 	if(apply_prefix)
 		apply_prefix(I)
 	if(apply_material_decorations)
@@ -51,7 +51,8 @@
 	return I
 
 
-/datum/find/proc/spawn_item(var/obj/item/weapon/archaeological_find/new_item) //Makes the item. Returns item.
+/datum/find/proc/spawn_item() //Makes the item. Returns item.
+	return new /obj/item/weapon/archaeological_find
 
 /datum/find/proc/apply_prefix(var/obj/item/I)
 	I.name = "[pick("strange","ancient","alien","")] [item_type?"[item_type]":"[initial(I.name)]"]"
@@ -168,7 +169,8 @@
 	additional_desc = TRUE
 	responsive_reagent = MERCURY
 
-/datum/find/statuette/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/statuette/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	new_item.icon_state = "statuette"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	return new_item
@@ -185,7 +187,8 @@
 	additional_desc = TRUE
 	responsive_reagent = MERCURY
 
-/datum/find/instrument/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/instrument/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	new_item.icon_state = "instrument"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	if(prob(30))
@@ -373,7 +376,8 @@
 	anomaly_factor = 3
 	responsive_reagent = NITROGEN
 
-/datum/find/crystal/spawn_item(var/obj/item/weapon/archaeological_find/new_find)
+/datum/find/crystal/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_find = ..()
 	if(prob(25))
 		item_type = "smooth green crystal"
 		new_find.icon_state = "Green lump"
@@ -642,7 +646,8 @@
 	anomaly_factor = 2
 	responsive_reagent = MERCURY
 
-/datum/find/unknown/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/unknown/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	if(prob(50))
 		qdel(new_item)
 		new_item = new /obj/item/weapon/glow_orb
@@ -719,7 +724,8 @@
 	apply_material_decorations = FALSE
 	responsive_reagent = CARBON
 
-/datum/find/remains_human/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/remains_human/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	item_type = "humanoid [pick("remains","skeleton")]"
 	new_item.icon = 'icons/effects/blood.dmi'
 	new_item.icon_state = "remains"
@@ -742,7 +748,8 @@
 	apply_material_decorations = FALSE
 	responsive_reagent = IRON
 
-/datum/find/remains_robot/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/remains_robot/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	item_type = "[pick("mechanical","robotic","cyborg")] [pick("remains","chassis","debris")]"
 	new_item.icon = 'icons/mob/robots.dmi'
 	new_item.icon_state = "remainsrobot"
@@ -766,7 +773,8 @@
 	apply_material_decorations = FALSE
 	responsive_reagent = CARBON
 
-/datum/find/remains_xeno/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/remains_xeno/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	item_type = "alien [pick("remains","skeleton")]"
 	new_item.icon = 'icons/effects/blood.dmi'
 	new_item.icon_state = "remainsxeno"
