@@ -37,7 +37,7 @@
 		if (L.teleJammed)
 			return
 		var/area/A = get_area(new_turf)
-		if (A.flags & NO_TELEPORT || A.jammed)
+		if (A.flags & NO_TELEPORT || (A.jammed == 2))
 			return
 		if(can_move)
 			can_move = 0
