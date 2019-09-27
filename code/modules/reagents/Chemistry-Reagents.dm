@@ -7389,6 +7389,42 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return TRUE
 	O.apply_luminol()
 
+/datum/reagent/ironrot
+	name = "Ironrot"
+	id = IRONROT
+	description = "A mutated fungal compound that causes rapid rotting in iron infrastructures."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#005200" //moldy green
+
+/datum/reagent/ironrot/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 5 && T.can_thermite)
+		T:rot()
+
+/datum/reagent/ironrot/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.adjustToxLoss(2 * REM)
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
+		for(var/datum/organ/internal/I in C.internal_organs)
+			if(I.robotic == 2)
+				I.take_damage(10, 0)//robo organs get damaged by ingested ironrot
+
+/datum/reagent/ironrot/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if(..())
+		return 1
+
+	if(method == TOUCH)
+		if(issilicon(M))//borgs are hurt on touch by this chem
+			M.adjustFireLoss(5*REM)
+			M.adjustBruteLoss(5*REM)
+
 //////////////////////
 //					//
 //      INCENSE		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

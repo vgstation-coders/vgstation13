@@ -3340,6 +3340,13 @@
 	required_temp = T0C + 88 //Mutagen is very hard to heat up, so I don't recommend making more than 10u of this at a time
 	result_amount = 1
 
+/datum/chemical_reaction/ironrot
+	name = "Ironrot"
+	id = IRONROT
+	result = IRONROT
+	required_reagents = list(AMANATIN = 1, RADIUM = 1, IRON = 1)
+	result_amount = 3
+
 /datum/chemical_reaction/aminomicin
 	name = "Aminomicin"
 	id = AMINOMICIN
