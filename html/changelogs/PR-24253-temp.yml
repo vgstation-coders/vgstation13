@@ -1,6 +1,0 @@
----
-author: Kurfursten
-changes:
-  - bugfix: Memes and spooks are now kept separate.
-  - bugfix: "You can no longer benefit from the comforting words of your chaplain if you are unconscious, or dead."
-delete-after: true

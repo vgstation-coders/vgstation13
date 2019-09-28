@@ -1,5 +1,0 @@
----
-author: MadmanMartian
-changes:
-  - bugfix: Fixes xenoarch finds not shattering on an unsuccesful dig.
-delete-after: true

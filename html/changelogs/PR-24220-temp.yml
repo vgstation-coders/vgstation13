@@ -1,5 +1,0 @@
----
-author: SonixApache
-changes:
-  - tweak: re-added recursive cereal
-delete-after: true

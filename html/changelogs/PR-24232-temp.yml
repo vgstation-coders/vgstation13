@@ -1,5 +1,0 @@
----
-author: MadmanMartian
-changes:
-  - bugfix: Fixes packed station communications not working
-delete-after: true

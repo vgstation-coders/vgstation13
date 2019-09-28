@@ -25,7 +25,7 @@
 author: Ghost of N3X15
 
 # Optional: Remove this file after generating master changelog.  Useful for PR changelogs that won't get used again.
-delete-after: True
+delete-after: true
 
 # Any changes you've made.  See valid prefix list above.
 # There needs to be a space after the - and before the prefix. Don't use tabs anywhere in this file.

@@ -1,5 +1,0 @@
----
-author: SonixApache
-changes:
-  - rscadd: Vending machines can now have holiday-specific items in them.
-delete-after: true
