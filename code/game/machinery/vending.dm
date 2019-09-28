@@ -356,10 +356,11 @@ var/global/num_vending_terminals = 1
 		else if (voucher_only)
 			voucher_records += R
 			R.category=CAT_VOUCH
-		if (R.assignedholiday == Holiday)
-			holiday_records += R
+		else if (R.assignedholiday)
 			R.category=CAT_HOLIDAY
 			R.display_color = pick("orange", "purple", "navy")
+			if(R.assignedholiday == Holiday)
+				holiday_records += R //only add it to the lists if today's our day
 		else
 			R.category = CAT_NORMAL
 			product_records.Add(R)
