@@ -53,7 +53,7 @@
 	qdel(src)
 
 
-/mob/proc/monkeyize(var/ignore_primitive = TRUE)
+/mob/proc/monkeyize(var/ignore_primitive = TRUE, var/choose_name = FALSE)
 	if(ismonkey(src)) //What's the point
 		return
 	if(!Premorph())
@@ -95,7 +95,7 @@
 		if (L.immune_system)
 			L.immune_system.transfer_to(Mo)
 	Mo.delayNextAttack(0)
-	Postmorph(Mo, TRUE, "You have been turned into a monkey! Pick a monkey name for your new monkey self.")
+	Postmorph(Mo, choose_name, "You have been turned into a monkey! Pick a monkey name for your new monkey self.")
 	return Mo
 
 /mob/living/carbon/human/monkeyize(ignore_primitive = FALSE)
