@@ -1,0 +1,5 @@
+---
+author: bathosbathtime
+changes:
+  - bugfix: Buying leather from the black market no longer causes a runtime nor gives you an infinite leather stack
+delete-after: true

@@ -1,0 +1,7 @@
+---
+author: MadmanMartian
+changes:
+  - rscadd: "ATMs now check if the user can actually reach the turf they are going to place the money they are removing from their account onto, otherwise it'll just throw the money at them."
+  - rscadd: ATMs no longer steal money from the floor
+  - tweak: "Rather than printing money from your PDA putting the money on the floor, instead it attempts to put the money in your hands whenever possible."
+delete-after: true

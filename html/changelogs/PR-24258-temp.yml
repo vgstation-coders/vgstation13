@@ -1,0 +1,6 @@
+---
+author: otatoh
+changes:
+  - rscadd: You can now pick up snakes.
+  - imageadd: Gives Corpus and other snakes an in-hand sprite.
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: RealestEstate
+changes:
+  - rscadd: "New reagent: Ironrot. Created by mixing iron powder, radium, and alpha amanatin. Rots walls and damages silicon it comes in contact with."
+delete-after: true

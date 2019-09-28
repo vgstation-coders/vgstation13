@@ -1,0 +1,7 @@
+---
+author: Kurfursten
+changes:
+  - tweak: "The clown stamp can now be used by ANYONE clumsy, not just a roundstart/latejoin clown."
+  - rscadd: "When you use the chaplain stamp without being a religious leader, it lets God know..."
+  - rscadd: Traders can now buy a trader stamp pad for 20 credits. You have to have a talon on your active hand to use it.
+delete-after: true
