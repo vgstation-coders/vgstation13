@@ -90,7 +90,6 @@
 	_color = "clown"
 
 /obj/item/weapon/stamp/clown/try_stamp(mob/user,obj/item/weapon/paper/P)
-	var/clown = FALSE
 	if(!clumsy_check(user))
 		to_chat(user, "<span class='warning'>You are totally unable to use the stamp. HONK!</span>")
 	else
