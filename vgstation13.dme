@@ -1135,6 +1135,7 @@
 #include "code\game\objects\structures\vehicles\janicart.dm"
 #include "code\game\objects\structures\vehicles\lightcycle.dm"
 #include "code\game\objects\structures\vehicles\secway.dm"
+#include "code\game\objects\structures\vehicles\snowmobile.dm"
 #include "code\game\objects\structures\vehicles\vehicle.dm"
 #include "code\game\objects\structures\vehicles\wheelchair.dm"
 #include "code\game\objects\structures\vehicles\carts\cargo.dm"
