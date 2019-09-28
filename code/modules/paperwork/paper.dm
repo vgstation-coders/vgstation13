@@ -324,37 +324,8 @@
 		return
 
 	else if(istype(P, /obj/item/weapon/stamp))
-
-		if(istype(P, /obj/item/weapon/stamp/clown))
-			var/clown = FALSE
-			if(user.mind && (user.mind.assigned_role == "Clown"))
-				clown = TRUE
-			if(isrobot(user))
-				var/mob/living/silicon/robot/R = user
-				if(HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN))
-					clown = TRUE
-			if(!clown)
-				to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
-				return
-
-		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
-
-		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-		stampoverlay.pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
-		stampoverlay.pixel_y = rand(-3, 2) * PIXEL_MULTIPLIER
-		stampoverlay.icon_state = "paper_[P.icon_state]"
-
-		if(!stamped)
-			stamped = new
-		stamped += P.type
-		overlays += stampoverlay
-
-		to_chat(user, "<span class='notice'>You stamp [src] with your rubber stamp.</span>")
-
-		if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
-			var/obj/C = loc
-			C.update_icon()
-
+		var/obj/item/weapon/stamp/S = P
+		S.try_stamp(user,src)
 	else if(istype(P, /obj/item/weapon/photo) && !istype(src, /obj/item/weapon/paper/envelope))
 		if(img)
 			to_chat(user, "<span class='notice'>This paper already has a photo attached.</span>")

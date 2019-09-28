@@ -26,6 +26,7 @@
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 
 /turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	global_snowtiles -= src
 	if(snowprint_parent)
 		qdel(snowprint_parent)
 	if(blizzard_parent)
@@ -122,7 +123,8 @@
 			if(!istype(OL,/turf/unsimulated/floor/snow))
 				H << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
 			if(isliving(H) && !H.locked_to && !H.lying && !H.flying)
-				playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
+				if(snowsound?.len)
+					playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 
 /turf/unsimulated/floor/snow/cultify()
@@ -136,6 +138,10 @@
 	plane = ABOVE_TURF_PLANE
 	mouse_opacity = 0
 	var/turf/unsimulated/floor/snow/parent
+
+/obj/effect/blizzard_holder/Destroy()
+	parent = null
+	..()
 
 /obj/effect/blizzard_holder/proc/UpdateSnowfall()
 	if(!snow_state_to_texture["[parent.snow_state]"])

@@ -1908,6 +1908,8 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
+	if(stat)
+		return //Don't bother if we're dead or unconscious
 	if(ear_deaf || speech.frequency || speech.speaker == src)
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
 	if(!mind || !mind.faith || length(speech.message) < 20)

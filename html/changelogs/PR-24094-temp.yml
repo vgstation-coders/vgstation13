@@ -1,0 +1,5 @@
+---
+author: MadmanMartian
+changes:
+  - rscadd: "Adds the spare bear, a space bear that has adapted to scavenging through stations."
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: ShiftyRail
+changes:
+  - rscadd: "You can now drag drinks from one table surface to another, but only up to 1 tile away."
+delete-after: true

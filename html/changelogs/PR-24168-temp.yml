@@ -1,0 +1,5 @@
+---
+author: MadmanMartian
+changes:
+  - bugfix: "Odysseus sleepers now let the occupant out should the mech run out of power, or the occupant move."
+delete-after: true
