@@ -665,6 +665,14 @@
 	..()
 	reagents.add_reagent(TOXINSSPECIAL, 30)
 	on_reagent_change()
+	
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee
+	name = "irish coffee"
+	
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/New()
+	..()
+	reagents.add_reagent(IRISHCOFFEE, 50)
+	on_reagent_change()
 
 // Cafe Stuff. Mugs act the same as drinking glasses, but they don't break when thrown.
 
