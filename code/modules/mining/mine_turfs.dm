@@ -492,7 +492,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//otherwise, they come out inside a chunk of rock
 	var/obj/item/weapon/X
 	if(prob_clean)
-		X = F.create_find()
+		X = F.create_find(src)
 	else
 		X = new /obj/item/weapon/strangerock(src, inside_item_type = F)
 		if(!geologic_data)
@@ -508,7 +508,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				visible_message("<span class='danger'>\The [X] [pick("crumbles away into dust","breaks apart")].</span>")
 				qdel(X)
 				X = null
-
 	finds.Remove(F)
 
 /turf/unsimulated/mineral/proc/artifact_debris(var/severity = 0)
