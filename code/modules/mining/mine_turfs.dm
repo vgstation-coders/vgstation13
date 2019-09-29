@@ -494,7 +494,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(prob_clean)
 		X = F.create_find(src)
 	else
-		X = new /obj/item/weapon/strangerock(src, inside_item_type = F)
+		X = new /obj/item/weapon/strangerock(src, F)
 		if(!geologic_data)
 			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
