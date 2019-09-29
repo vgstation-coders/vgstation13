@@ -11,6 +11,11 @@
 	var/allow_reagents = 0
 	var/malfunction = 0
 
+/obj/item/weapon/implant/verb_pickup(mob/living/user)
+	if (implanted)
+		return 0
+	return ..()
+
 /obj/item/weapon/implant/proc/trigger(emote, source as mob)
 	return
 
