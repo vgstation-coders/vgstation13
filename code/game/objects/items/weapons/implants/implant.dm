@@ -164,7 +164,7 @@ Implant Specifics:<BR>"}
 	usr.mind.store_memory("Explosive implant in [source] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.", 0, 0)
 	to_chat(usr, "The implanted explosive implant in [source] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.")
 	addHear()
-	return 1
+	return ..()
 
 /obj/item/weapon/implant/explosive/emp_act(severity)
 	if(malfunction)
@@ -316,7 +316,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		R.Drop()
 
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
-	return 1
+	return ..()
 
 
 
@@ -378,7 +378,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	F.forgeObjectives()
 	update_faction_icons()
 	log_admin("[ckey(user.key)] has mind-slaved [ckey(H.key)].")
-	return 1
+	return ..()
 
 /obj/item/weapon/implant/adrenalin
 	name = "adrenalin implant"
@@ -413,7 +413,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/adrenalin/implanted(mob/source)
 		source.mind.store_memory("A implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.", 0, 0)
 		to_chat(source, "The implanted freedom implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.")
-		return 1
+		return ..()
 
 
 
@@ -498,7 +498,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/death_alarm/implanted(mob/source as mob)
 	mobname = source.real_name
 	processing_objects.Add(src)
-	return 1
+	return ..()
 
 
 
@@ -543,7 +543,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	if (source.mind)
 		source.mind.store_memory("Compressed matter implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.", 0, 0)
 	to_chat(source, "The implanted compressed matter implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.")
-	return 1
+	return ..()
 
 /obj/item/weapon/implant/compressed/islegal()
 	return 0
@@ -612,7 +612,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	if (!imp_alive && !malfunction)
 		processing_objects.Add(src)
 		to_chat(host, "<span class = 'warning'>You feel your desire to harm anyone slowly drift away...</span>")
-		return 1
+		return ..()
 	else
 		return 0
 
