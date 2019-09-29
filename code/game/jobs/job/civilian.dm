@@ -611,4 +611,5 @@
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 	L.imp_in = H
 	L.implanted = 1
+	L.invisibility = 101
 	return 1

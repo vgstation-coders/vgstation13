@@ -107,6 +107,7 @@
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive/nuclear(src) //no loyalty implant because you're already syndicate scum
 	E.imp_in = src
 	E.implanted = 1
+	E.invisibility = 101
 	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
 	affected.implants += E
 	E.part = affected

@@ -46,6 +46,7 @@
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 	L.imp_in = H
 	L.implanted = 1
+	L.invisibility = 101
 	to_chat(world, "<b>[H.real_name] is the captain!</b>")
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
@@ -115,6 +116,7 @@
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 		L.imp_in = H
 		L.implanted = 1
+		L.invisibility = 101
 		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 		affected.implants += L
 		L.part = affected

@@ -189,6 +189,7 @@ var/list/response_team_members = list()
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(src)
 	L.imp_in = src
 	L.implanted = 1
+	L.invisibility = 101
 	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
