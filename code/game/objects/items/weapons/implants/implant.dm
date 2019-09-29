@@ -27,6 +27,7 @@
 // return 0 if the implant fails (ex. Revhead and loyalty implant.)
 // return 1 if the implant succeeds (ex. Nonrevhead and loyalty implant.)
 /obj/item/weapon/implant/proc/implanted(var/mob/source)
+	invisibility = 101
 	return 1
 
 /obj/item/weapon/implant/proc/get_data()

@@ -197,6 +197,7 @@
 
 	if (affected.implants.len)
 		var/obj/item/obj = affected.implants[1]
+		obj.invisibility = 0 // make it visible to people again.
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take [obj] out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
 		affected.implants -= obj
