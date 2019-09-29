@@ -26,7 +26,7 @@
 	clearance_range = rand(2,6)
 	dissonance_spread = rand(1500,2500) / 100
 
-/datum/find/proc/create_find() //Makes the item. Applies strangeness to it. Returns item
+/datum/find/proc/create_find(var/atom/loc) //Makes the item. Applies strangeness to it. Returns item
 	if(prob(5))
 		talkative = TRUE
 	var/obj/item/weapon/I = spawn_item()
@@ -48,6 +48,7 @@
 				I.heard_words = list()
 			I.speaking_to_players = TRUE
 			processing_objects.Add(I)
+	I.forceMove(loc)
 	return I
 
 
@@ -941,13 +942,11 @@
 	var/datum/geosample/geologic_data
 	origin_tech = Tc_MATERIALS + "=5"
 
-/obj/item/weapon/strangerock/New(loc, var/inside_item_type = 0)
+/obj/item/weapon/strangerock/New(loc, var/datum/find/F)
 	..()
 	//method = rand(0,2)
-	if(inside_item_type)
-		new/obj/item/weapon/archaeological_find(src, new_item_type = inside_item_type)
-		if(!inside)
-			inside = locate() in contents
+	if(F)
+		inside = F.spawn_item(src)
 
 /obj/item/weapon/strangerock/Destroy()
 	..()
