@@ -768,3 +768,10 @@
 	icon_state = "varsity"
 	item_state = "varsity"
 	_color = "varsity"
+
+/obj/item/clothing/under/galo
+	name = "delinquent clothes"
+	desc = "Yeah, Galo Sengen."
+	icon_state = "galo"
+	item_state = "galo"
+	_color = "galo"

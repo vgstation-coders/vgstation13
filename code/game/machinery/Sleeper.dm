@@ -505,10 +505,15 @@
 	automatic = TRUE
 	drag_delay = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE | EJECTNOTDEL
+	var/galize = 0
 
 /obj/machinery/sleeper/mancrowave/New()
 	..()
-	if(map.nameShort == "deff")
+	if(Holiday == APRIL_FOOLS_DAY)
+		base_icon = "galo"
+		icon_state = "galo_open"
+		galize = 1
+	else if(map.nameShort == "deff")
 		icon = 'maps/defficiency/medbay.dmi'
 	update_icon()
 
@@ -661,7 +666,17 @@
 						playsound(src, 'sound/effects/pop.ogg', 50, 1)
 						H.my_appearance.h_style = "Popped Hair"
 						H.update_hair()
-				else if(isjusthuman(H) && Holiday == APRIL_FOOLS_DAY)
+				else if(isjusthuman(H) && galize == 1)
 					H.GALize()
 			go_out()
 		update_icon()
+
+/obj/machinery/sleeper/mancrowave/galo
+	name = "tanning bed"
+	desc = "An experimental G4L-0 model thermal homeostasis regulator. Just looking at it makes you feel unusually excited."
+	galize = 1
+
+/obj/machinery/sleeper/mancrowave/galo/New()
+	..()
+	base_icon = "galo"
+	icon_state = "galo_open"
