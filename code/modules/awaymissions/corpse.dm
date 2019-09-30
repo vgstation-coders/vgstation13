@@ -622,10 +622,10 @@
 	corpseidaccess = "Scientist"
 
 /obj/effect/landmark/corpse/xenoarchaeologist/space
-	corpsesuit = /obj/item/clothing/suit/space/anomaly
+	corpsesuit = /obj/item/clothing/suit/bio_suit/anomaly
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/anomaly
+	corpsehelmet = /obj/item/clothing/head/bio_hood/anomaly
 
 /obj/effect/landmark/corpse/scientist/voxresearch
 	name = "Research Geneticist"
