@@ -124,37 +124,39 @@ Used In File(s): \code\game\machinery\cryo.dm
 <br>
 <div class="item">
 	<div class="itemLabel">
-		Controls:
+		Controls: {{:helper.link(data.controls==1?"Hide":"Show", null, {'toggle_controls': 1})}}
 	</div>
-	<div class="itemContent" style = "width: 40%;">
-		<div class="statusValue average">
-			Injection status:
-			<div class="floatRight">
+{{if data.controls}}
+		<div class="itemContent" style = "width: 40%;">
+			<div class="statusValue average">
+				Injection status:
+				<div class="floatRight">
 				{{:helper.link(data.injecting==1?"Active":"Inactive", null, {'toggle_inject': 1})}}
-			</div>
-		<br>
-		{{if data.scan_level >= 2}}
+				</div>
+			<br>
+			{{if data.scan_level >= 2}}
 					Injection rate (units):
-				<div class="floatRight">
+					<div class="floatRight">
 					{{:helper.link(data.injection_rate, 'carat-2-n-s', {'set_inject_rate': 1})}}
-				</div>
-				<br>
-		{{/if}}
+					</div>
+					<br>
+			{{/if}}
 				Current dump location:
-			<div class="floatRight">
-				{{:helper.link(data.dump_loc==1?"Beaker":"Vicinity", null, {'toggle_dump': 1})}}
-		  </div>
-			<br>
-		{{if data.scan_level >= 4}}
-					Auto ejection:
 				<div class="floatRight">
+				{{:helper.link(data.dump_loc==1?"Beaker":"Vicinity", null, {'toggle_dump': 1})}}
+			  </div>
+				<br>
+			{{if data.scan_level >= 4}}
+					Auto ejection:
+					<div class="floatRight">
 					{{:helper.link(data.auto_eject?"Active":"Inactive", null, {'toggle_autoeject': 1})}}
-				</div>
-			<br>
-		{{/if}}
+					</div>
+				<br>
+			{{/if}}
+			</div>
 		</div>
 	</div>
-</div>
+{{/if}}
 {{if data.ejecting}}
 	<div class="mask">
 		<div class="maskContent" style="margin: 160px 0">

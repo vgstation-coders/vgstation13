@@ -33,6 +33,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/scan_level = 0 //Current scanner level
 	var/auto_eject = FALSE
 	var/dump_loc = 0 //1 is to the beaker, 0 is to the floor
+	var/controls = TRUE
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/cryo,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -298,6 +299,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	data["injection_rate"] = inject_rate
 	data["injecting"] = injecting
 	data["auto_eject"] = auto_eject
+	data["controls"] = controls
 	data["dump_loc"] = dump_loc
 	data["scan_level"] = scan_level
 	// update the ui if it exists, returns null if no ui is passed/found
@@ -374,6 +376,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(scan_level < 4)
 			return 0
 		auto_eject = !auto_eject
+
+	if(href_list["toggle_controls"])
+		controls = !controls
 
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
