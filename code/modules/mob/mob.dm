@@ -1252,14 +1252,22 @@ Use this proc preferably at the end of an equipment loadout
 	A.examine(src)
 
 
-/mob/living/verb/verb_pickup(obj/I in objects_in_view(usr, 1))
+/mob/living/verb/verb_pickup() //Removed the arguments due to macro abuse
 	set name = "Pick up"
 	set category = "Object"
 
+	var/list/L = acquirable_objects_in_view(usr, 1)
+	var/obj/I
+	if(L.len == 1)
+		I = L[1]
+	else
+		I = input("Select an object", null, null, null) as null|anything in L
+		if(!I)
+			return
 	face_atom(I)
 	I.verb_pickup(src)
 
-/proc/objects_in_view(var/mob/living/L, var/range)
+/proc/acquirable_objects_in_view(var/mob/living/L, var/range)
 	var/list/obj_list = list()
 	for(var/turf/T in view(L, range))
 		for(var/obj/I in T)
