@@ -398,6 +398,7 @@
 
 /obj/item/clothing/suit/space/rig/security
 	icon_state = "rig-sec"
+	item_state = "storm_hardsuit"
 	name = "security hardsuit"
 	desc = "A special suit that protects against hazardous low pressure environments. Has an additional layer of armor."
 	item_state = "sec_hardsuit"
