@@ -97,7 +97,7 @@ datum/emergency_shuttle/proc/recall()
 // note if direction = -1, gives a count-up to SHUTTLEARRIVETIME
 datum/emergency_shuttle/proc/timeleft()
 	if(online)
-		var/timeleft = round((endtime - world.timeofday)/10 ,1)
+		var/timeleft = round((endtime - world.time)/10 ,1)
 		if(direction >= 0)
 			return timeleft
 		else
