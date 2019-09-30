@@ -107,7 +107,7 @@ datum/emergency_shuttle/proc/timeleft()
 
 // sets the time left to a given delay (in seconds)
 datum/emergency_shuttle/proc/settimeleft(var/delay)
-	endtime = world.timeofday + delay * 10
+	endtime = world.time + delay * 10
 	timelimit = delay
 
 // sets the shuttle direction
@@ -118,8 +118,8 @@ datum/emergency_shuttle/proc/setdirection(var/dirn)
 		return
 	direction = dirn
 	// if changing direction, flip the timeleft by SHUTTLEARRIVETIME, unless changing from/to 0
-	var/ticksleft = endtime - world.timeofday
-	endtime = world.timeofday + (SHUTTLEARRIVETIME*10 - ticksleft)
+	var/ticksleft = endtime - world.time
+	endtime = world.time + (SHUTTLEARRIVETIME*10 - ticksleft)
 	return
 
 datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
