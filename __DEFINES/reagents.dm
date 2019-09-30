@@ -384,6 +384,7 @@
 #define WWINE			"wwine"
 #define PLUMPHJUICE		"plumphjuice"
 #define PLUMPHWINE		"phwine"
+#define IRONROT			"ironrot"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

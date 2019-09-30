@@ -22,37 +22,6 @@ var/global/lastDecTalkUse = 0
 	This file has the basic atom/movable level speech procs.
 	And the base of the send_speech() proc, which is the core of saycode.
 */
-var/list/freqtospan = list(
-	"1459" = "commonradio",
-	"1351" = "sciradio",
-	"1355" = "medradio",
-	"1357" = "engradio",
-	"1347" = "supradio",
-	"1349" = "serradio",
-	"1359" = "secradio",
-	"1353" = "comradio",
-	"1447" = "aiprivradio",
-	"1213" = "syndradio",
-	"1441" = "dsquadradio",
-	"1345" = "resteamradio",
-	"1215" = "raiderradio",
-	)
-
-var/list/freqtoname = list(
-	"1459" = "Common",
-	"1351" = "Science",
-	"1353" = "Command",
-	"1355" = "Medical",
-	"1357" = "Engineering",
-	"1359" = "Security",
-	"1441" = "Deathsquad",
-	"1213" = "Syndicate",
-	"1347" = "Supply",
-	"1349" = "Service",
-	"1447" = "AI Private",
-	"1345" = "Response Team",
-	"1215" = "Raider",
-)
 
 /atom/movable/proc/say(message, var/datum/language/speaking, var/atom/movable/radio=src, var/class) //so we can force nonmobs to speak a certain language
 	if(!can_speak())

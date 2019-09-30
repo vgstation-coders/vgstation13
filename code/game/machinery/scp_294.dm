@@ -101,4 +101,3 @@
 /obj/machinery/chem_dispenser/scp_294/emag()
 	..()
 	emagged = TRUE
-

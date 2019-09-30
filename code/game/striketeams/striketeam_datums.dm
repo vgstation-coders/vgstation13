@@ -16,6 +16,7 @@ var/list/sent_strike_teams = list()
 	var/searching = FALSE
 
 	var/leader_key = ""
+	var/leader_name = "" //Currently only called by deathsquad striketeam
 	var/list/team_composition = list()
 
 	var/list/datum/objective/objectives = list()

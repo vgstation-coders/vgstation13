@@ -24,7 +24,7 @@ emp_act
 				return -1 // complete projectile permutation
 
 	if(check_shields(P.damage, P))
-		P.on_hit(src, 2)
+		P.on_hit(src, 100)
 		return 2
 	return (..(P , def_zone))
 

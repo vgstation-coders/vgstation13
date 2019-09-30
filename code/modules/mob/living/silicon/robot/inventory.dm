@@ -8,6 +8,9 @@
 /mob/living/silicon/robot/get_inactive_hand()
 	return
 
+/mob/living/silicon/robot/is_holding_item(item)
+	return get_all_slots().Find(item)
+
 /mob/living/silicon/robot/get_all_slots()
 	return list(module_state_1, module_state_2, module_state_3)
 

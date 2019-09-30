@@ -473,7 +473,7 @@ var/list/one_way_windows
 					var/obj/item/weapon/weldingtool/WT = W
 					user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 						"<span class='notice'>You start disassembling \the [src].</span>")
-					if(WT.do_weld(user, src, 40, 0) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
+					if(WT.do_weld(user, src, 40, 1) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
 						playsound(src, 'sound/items/Welder.ogg', 100, 1)
 						user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 						"<span class='notice'>You disassemble \the [src].</span>")
@@ -481,7 +481,6 @@ var/list/one_way_windows
 						qdel(src)
 						return
 					else
-						to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
 						return
 
 	else if(!reinforced) //Normal window steps

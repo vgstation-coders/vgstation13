@@ -21,6 +21,7 @@
 	emote_hear = list("squeeks","squeaks","squiks")
 	emote_see = list("runs in a circle", "shakes", "scritches at something")
 	pass_flags = PASSTABLE
+	flags = HEAR_ALWAYS | PROXMOVE
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6

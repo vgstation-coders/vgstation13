@@ -676,7 +676,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	else
 		return get_step(ref, base_dir)
 
-/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10) //This is quite an ugly solution but i refuse to use the old request system.
+//if needs_item is 0 it won't need any item that existed in "holding" to finish
+/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1) //This is quite an ugly solution but i refuse to use the old request system.
 	if(!user || !target)
 		return 0
 	var/user_loc = user.loc
@@ -709,7 +710,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || user.isStunned())
+		if ( user.loc != user_loc || target.loc != target_loc || (needs_item && (holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())) || user.isStunned())
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -777,7 +778,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					var/image/target_progress_bar = targets[target_]
 					stop_progress_bar(user, target_progress_bar)
 				return FALSE
-		if(needhand && !user.do_after_hand_check(holding))
+		if(needhand && ((holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())))
 			for(var/target_ in targets)
 				var/image/target_progress_bar = targets[target_]
 				stop_progress_bar(user, target_progress_bar)
@@ -845,7 +846,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if(needhand && !user.do_after_hand_check(holding))	//Sometimes you don't want the user to have to keep their active hand
+		if(needhand && ((holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())))	//Sometimes you don't want the user to have to use any hands
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -1808,3 +1809,81 @@ Game Mode config tags:
     if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
         return
     winset(C, "mainwindow", "flash=5")
+
+
+/proc/generate_radio_frequencies()
+	//1200-1600
+	var/list/taken_freqs = list()
+
+	for(var/i in freq_text)
+		var/freq_found = FALSE
+		while(freq_found != TRUE)
+			var/chosen_freq = rand(1201, 1599)
+			chosen_freq = sanitize_frequency(chosen_freq)
+			if(taken_freqs.Find(chosen_freq))
+				continue
+			taken_freqs.Add(chosen_freq)
+			freqs[i] = chosen_freq
+			world.log << "freq [i] is now [chosen_freq]"
+			freq_found = TRUE
+
+	freqtospan = list(
+		"[COMMON_FREQ]" = "commonradio",
+		"[SCI_FREQ]" = "sciradio",
+		"[MED_FREQ]" = "medradio",
+		"[ENG_FREQ]" = "engradio",
+		"[SUP_FREQ]" = "supradio",
+		"[SER_FREQ]" = "serradio",
+		"[SEC_FREQ]" = "secradio",
+		"[COMM_FREQ]" = "comradio",
+		"[AIPRIV_FREQ]" = "aiprivradio",
+		"[SYND_FREQ]" = "syndradio",
+		"[DSQUAD_FREQ]" = "dsquadradio",
+		"[RESPONSE_FREQ]" = "resteamradio",
+		"[RAID_FREQ]" = "raiderradio",
+	)
+
+	radiochannelsreverse = list(
+		"[DJ_FREQ]" = "DJ",
+		"[SYND_FREQ]" = "Syndicate",
+		"[RAID_FREQ]" = "Raider",
+		"[RESPONSE_FREQ]" = "Response Team",
+		"[SUP_FREQ]" = "Supply",
+		"[SER_FREQ]" = "Service",
+		"[SCI_FREQ]" = "Science",
+		"[MED_FREQ]" = "Medical",
+		"[COMM_FREQ]" = "Command",
+		"[ENG_FREQ]" = "Engineering",
+		"[SEC_FREQ]" = "Security",
+		"[DSQUAD_FREQ]" = "Deathsquad",
+		"[AIPRIV_FREQ]" = "AI Private",
+		"[COMMON_FREQ]" = "Common"
+	)
+
+	radiochannels = list(
+		"Common" = COMMON_FREQ,
+		"AI Private" = AIPRIV_FREQ,
+		"Deathsquad" = DSQUAD_FREQ,
+		"Security" = SEC_FREQ,
+		"Engineering" = ENG_FREQ,
+		"Command" = COMM_FREQ,
+		"Medical" = MED_FREQ,
+		"Science" = SCI_FREQ,
+		"Service" = SER_FREQ,
+		"Supply" = SUP_FREQ,
+		"Response Team" = RESPONSE_FREQ,
+		"Raider" = RAID_FREQ,
+		"Syndicate" = SYND_FREQ,
+		"DJ" = DJ_FREQ
+	)
+
+	stationchannels = list(
+	"Common" = COMMON_FREQ,
+	"Security" = SEC_FREQ,
+	"Engineering" = ENG_FREQ,
+	"Command" = COMM_FREQ,
+	"Medical" = MED_FREQ,
+	"Science" = SCI_FREQ,
+	"Service" = SER_FREQ,
+	"Supply" = SUP_FREQ
+	)
