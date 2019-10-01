@@ -19,6 +19,7 @@
 	var/pass_flags = 0
 
 	var/sound_override = 0 //Do we make a sound when bumping into something?
+	var/hard_deleted
 	var/pressure_resistance = ONE_ATMOSPHERE
 	var/obj/effect/overlay/chain/tether = null
 	var/tether_pull = 0
@@ -104,6 +105,19 @@
 
 	for(var/atom/movable/AM in src)
 		qdel(AM)
+
+	..()
+
+/atom/movable/Del()
+	if (gcDestroyed)
+		if (hard_deleted)
+			delete_profile("[type]", 1)
+		else
+			delete_profile("[type]", 2)
+
+	else // direct del calls or nulled explicitly.
+		delete_profile("[type]", 0)
+		Destroy()
 
 	..()
 
