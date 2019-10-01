@@ -1252,18 +1252,10 @@ Use this proc preferably at the end of an equipment loadout
 	A.examine(src)
 
 
-/mob/living/verb/verb_pickup() //Removed the arguments due to macro abuse
+/mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"
 	set category = "Object"
 
-	var/list/L = acquirable_objects_in_view(usr, 1)
-	var/obj/I
-	if(L.len == 1)
-		I = L[1]
-	else
-		I = input("Select an object", null, null, null) as null|anything in L
-		if(!I)
-			return
 	face_atom(I)
 	I.verb_pickup(src)
 
