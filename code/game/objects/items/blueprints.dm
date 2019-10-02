@@ -470,12 +470,12 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	desc = "Required for turning a dull room with some engines in the back into something that can move through space!"
-	var/adminbus = FALSE //VV to 1 for !!FUN!!
+	var/area_requirement_override = FALSE //so admins can allow a licence to turn any area into a shuttle
 
 /obj/item/shuttle_license/attack_self(mob/user)
 	to_chat(user, "<span class = 'notice'>Checking current area...</span>")
 	var/area/A = get_area(user)
-	if(!adminbus && !istype(A, /area/station/custom))
+	if(!area_requirement_override && !istype(A, /area/station/custom))
 		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Custom areas only.</span>")
 		return
 
