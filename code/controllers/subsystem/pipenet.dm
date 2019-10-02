@@ -54,6 +54,9 @@ var/event/on_pipenet_tick = new
 		if (atmosmachinery.process() && MC_TICK_CHECK)
 			return
 
+		if (atmosmachinery.use_power)
+			atmosmachinery.auto_use_power()
+
 	while (currentrun_pipenets.len)
 		var/datum/pipe_network/pipeNetwork = currentrun_pipenets[currentrun_pipenets.len]
 		currentrun_pipenets.len--
