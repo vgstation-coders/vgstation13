@@ -111,22 +111,17 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	if(!mat_id in storage)
 		warning("Transfer(): Unknown material [mat_id]!")
 		return 0
-	to_chat(world, "Transfer called, [mat_id], [amount]")
 	amount = min(getAmount(mat_id), amount)
-	to_chat(world, "post amount check [amount] / [getAmount(mat_id)]")
 	receiver.addAmount(mat_id, amount)
 	removeAmount(mat_id, amount)
 	return amount
 
 //Itterates through every material ID we have, and transfers the percentage of how much we have of that material to the receiver
 /datum/materials/proc/TransferPercent(var/percentage, var/datum/materials/receiver)
-	to_chat(world, "[percentage]")
 	var/amount_transferred = 0
 	for(var/mat_id in storage)
 		var/amount = Transfer(mat_id, getAmount(mat_id) * (percentage/100), receiver)
-		to_chat(world, "[mat_id] [amount]")
 		amount_transferred += amount
-	to_chat(world, "[amount_transferred]")
 	return amount_transferred
 
 /datum/materials/proc/TransferAll(var/datum/materials/receiver)
