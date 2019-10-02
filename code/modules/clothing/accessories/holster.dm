@@ -146,7 +146,7 @@
 	name = "waistband holster"
 	desc = "A handgun holster that clips to a suit. Made of expensive leather."
 	_color = "holster_low"
-	
+
 /obj/item/clothing/accessory/holster/handgun/preloaded
 	var/gun_type
 
@@ -155,13 +155,13 @@
 	if(!holstered)
 		holstered = new gun_type(src)
 		update_icon()
-		
+
 /obj/item/clothing/accessory/holster/handgun/preloaded/mateba
 	gun_type = /obj/item/weapon/gun/projectile/mateba
 
 /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP
 	gun_type = /obj/item/weapon/gun/projectile/NTUSP
-	
+
 /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy
 	gun_type = /obj/item/weapon/gun/projectile/NTUSP/fancy
 
@@ -193,7 +193,8 @@
 		/obj/item/weapon/hatchet, \
 		/obj/item/weapon/pickaxe/shovel/spade, \
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana, \
-		/obj/item/weapon/bikehorn
+		/obj/item/weapon/bikehorn, \
+		/obj/item/weapon/gun/projectile/banana
 		)) //honk
 
 /obj/item/clothing/accessory/holster/knife/unholster_message(mob/user)
