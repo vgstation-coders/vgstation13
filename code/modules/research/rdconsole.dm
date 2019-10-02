@@ -267,6 +267,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						linked_destroy.loaded_item.materials.TransferAll(linked_lathe.materials)
 					qdel(linked_destroy.loaded_item)
 					linked_destroy.loaded_item = null
+			linked_destroy.icon_state = "d_analyzer"
 			use_power(250)
 			screen = 1.0
 			updateUsrDialog()
