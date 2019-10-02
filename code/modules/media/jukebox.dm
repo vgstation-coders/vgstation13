@@ -765,6 +765,7 @@ var/global/list/loopModeNames=list(
 	playlist_id="bar"
 	// Must be defined on your server.
 	playlists=list(
+		"lilslugger" = "Battle of Lil Slugger",
 		"bar"  = "Bar Mix",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
@@ -824,6 +825,7 @@ var/global/list/loopModeNames=list(
 	playlist_id="bar"
 	// Must be defined on your server.
 	playlists=list(
+		"lilslugger" = "Battle of Lil' Slugger",
 		"bar"  = "Bar Mix",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
@@ -1060,3 +1062,7 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - halloween"
 	unformatted = "halloween"
 	formatted = "Halloween"
+/obj/item/weapon/vinyl/slugger
+	name = "nanovynil - slugger"
+	unformatted = "lilslugger"
+	formatted = "Battle of Lil Slugger"
