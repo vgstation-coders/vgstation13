@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "compiled": 1570057157.6699064,
+  "compiled": 1570057674.5423443,
   "voice": "nitech_us_clb_arctic_hts",
   "phoneset": "",
   "words": {
@@ -8194,6 +8194,26 @@
     "texts": {
       "wordlen": 1,
       "filename": "sound/vox_fem/texts.ogg",
+      "flags": []
+    },
+    "thank": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/thank.ogg",
+      "flags": []
+    },
+    "thanked": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/thanked.ogg",
+      "flags": []
+    },
+    "thanking": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/thanking.ogg",
+      "flags": []
+    },
+    "thanks": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/thanks.ogg",
       "flags": []
     },
     "that": {
