@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "compiled": 1570048461.005273,
+  "compiled": 1570050554.7682908,
   "voice": "nitech_us_clb_arctic_hts",
   "phoneset": "",
   "words": {
@@ -3394,6 +3394,16 @@
     "fuel": {
       "wordlen": 1,
       "filename": "sound/vox_fem/fuel.ogg",
+      "flags": []
+    },
+    "fun": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/fun.ogg",
+      "flags": []
+    },
+    "funny": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/funny.ogg",
       "flags": []
     },
     "furries": {
