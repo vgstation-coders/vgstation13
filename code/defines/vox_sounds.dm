@@ -3,7 +3,6 @@
 // Dynamically loading it has bad results with sounds overtaking each other, even with the wait variable.
 
 var/list/vox_sounds = list(
-  
   "," = 'sound/vox/,.wav',
   "." = 'sound/vox/..wav',
   "_airhorn" = 'sound/vox_fem/_airhorn.ogg',
@@ -154,6 +153,12 @@ var/list/vox_sounds = list(
   "bellmont" = 'sound/vox_fem/bellmont.ogg',
   "beware" = 'sound/vox_fem/beware.ogg',
   "beyond" = 'sound/vox_fem/beyond.ogg',
+  "bill" = 'sound/vox_fem/bill.ogg',
+  "billed" = 'sound/vox_fem/billed.ogg',
+  "billing" = 'sound/vox_fem/billing.ogg',
+  "billion" = 'sound/vox_fem/billion.ogg',
+  "billions" = 'sound/vox_fem/billions.ogg',
+  "bills" = 'sound/vox_fem/bills.ogg',
   "biohazard" = 'sound/vox_fem/biohazard.ogg',
   "biohazards" = 'sound/vox_fem/biohazards.ogg',
   "biological" = 'sound/vox_fem/biological.ogg',
@@ -161,10 +166,14 @@ var/list/vox_sounds = list(
   "biomasses" = 'sound/vox_fem/biomasses.ogg',
   "birb" = 'sound/vox_fem/birb.ogg',
   "birbs" = 'sound/vox_fem/birbs.ogg',
+  "bird" = 'sound/vox_fem/bird.ogg',
+  "birds" = 'sound/vox_fem/birds.ogg',
   "bishop" = 'sound/vox_fem/bishop.ogg',
   "bishops" = 'sound/vox_fem/bishops.ogg',
   "bitch" = 'sound/vox_fem/bitch.ogg',
+  "bitched" = 'sound/vox_fem/bitched.ogg',
   "bitches" = 'sound/vox_fem/bitches.ogg',
+  "bitching" = 'sound/vox_fem/bitching.ogg',
   "bizwarn" = 'sound/vox/bizwarn.wav',
   "black" = 'sound/vox_fem/black.ogg',
   "blast" = 'sound/vox_fem/blast.ogg',
@@ -1922,7 +1931,8 @@ var/list/vox_sounds = list(
   "zombies" = 'sound/vox_fem/zombies.ogg',
   "zone" = 'sound/vox_fem/zone.ogg',
   "zones" = 'sound/vox_fem/zones.ogg',
-  "zulu" = 'sound/vox_fem/zulu.ogg',)
+  "zulu" = 'sound/vox_fem/zulu.ogg',
+)
 
 // How long each "word" really is (in words).  Single-word phrases are skipped for brevity.
 var/list/vox_wordlen = list(
@@ -1930,10 +1940,6 @@ var/list/vox_wordlen = list(
   "airalarm" = 2,
   "airalarms" = 2,
   "apc" = 3,
-  "catbeast" = 2,
-  "catbeasted" = 2,
-  "catbeasting" = 2,
-  "catbeasts" = 2,
   "ce" = 2,
   "cmo" = 3,
   "corgi" = 2,
@@ -1965,4 +1971,5 @@ var/list/vox_wordlen = list(
   "voxtest3" = 22,
   "voxtest4" = 19,
   "walkies" = 2,
-  "woody" = 2,)
+  "woody" = 2,
+)

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "compiled": 1570143989.7846434,
+  "compiled": 1570145365.5836713,
   "voice": "nitech_us_clb_arctic_hts",
   "phoneset": "",
   "words": {
@@ -1214,6 +1214,54 @@
         "beyond"
       ]
     },
+    "bill": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/bill.ogg",
+      "flags": [],
+      "phrase": [
+        "bill"
+      ]
+    },
+    "billed": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/billed.ogg",
+      "flags": [],
+      "phrase": [
+        "billed"
+      ]
+    },
+    "billing": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/billing.ogg",
+      "flags": [],
+      "phrase": [
+        "billing"
+      ]
+    },
+    "billion": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/billion.ogg",
+      "flags": [],
+      "phrase": [
+        "billion"
+      ]
+    },
+    "billions": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/billions.ogg",
+      "flags": [],
+      "phrase": [
+        "billions"
+      ]
+    },
+    "bills": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/bills.ogg",
+      "flags": [],
+      "phrase": [
+        "bills"
+      ]
+    },
     "biohazard": {
       "wordlen": 1,
       "filename": "sound/vox_fem/biohazard.ogg",
@@ -1270,6 +1318,22 @@
         "birbs"
       ]
     },
+    "bird": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/bird.ogg",
+      "flags": [],
+      "phrase": [
+        "bird"
+      ]
+    },
+    "birds": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/birds.ogg",
+      "flags": [],
+      "phrase": [
+        "birds"
+      ]
+    },
     "bishop": {
       "wordlen": 1,
       "filename": "sound/vox_fem/bishop.ogg",
@@ -1294,12 +1358,28 @@
         "bitch"
       ]
     },
+    "bitched": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/bitched.ogg",
+      "flags": [],
+      "phrase": [
+        "bitched"
+      ]
+    },
     "bitches": {
       "wordlen": 1,
       "filename": "sound/vox_fem/bitches.ogg",
       "flags": [],
       "phrase": [
         "bitches"
+      ]
+    },
+    "bitching": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/bitching.ogg",
+      "flags": [],
+      "phrase": [
+        "bitching"
       ]
     },
     "bizwarn": {
@@ -1885,39 +1965,35 @@
       ]
     },
     "catbeast": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/catbeast.ogg",
       "flags": [],
       "phrase": [
-        "cat",
-        "beast"
+        "cat-beast"
       ]
     },
     "catbeasted": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/catbeasted.ogg",
       "flags": [],
       "phrase": [
-        "cat",
-        "beasted"
+        "cat-beasted"
       ]
     },
     "catbeasting": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/catbeasting.ogg",
       "flags": [],
       "phrase": [
-        "cat",
-        "beasting"
+        "cat-beasting"
       ]
     },
     "catbeasts": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/catbeasts.ogg",
       "flags": [],
       "phrase": [
-        "cat",
-        "beasts"
+        "cat-beasts"
       ]
     },
     "cats": {
