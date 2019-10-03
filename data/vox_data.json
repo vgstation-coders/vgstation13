@@ -1,9 +1,29 @@
 {
   "version": 1,
-  "compiled": 1570085352.4481165,
+  "compiled": 1570086145.6496136,
   "voice": "nitech_us_clb_arctic_hts",
   "phoneset": "",
   "words": {
+    ",": {
+      "wordlen": 0,
+      "filename": "sound/vox/,.wav",
+      "flags": [
+        "old-vox"
+      ],
+      "phrase": [
+        ","
+      ]
+    },
+    ".": {
+      "wordlen": 0,
+      "filename": "sound/vox/..wav",
+      "flags": [
+        "old-vox"
+      ],
+      "phrase": [
+        "."
+      ]
+    },
     "_airhorn": {
       "wordlen": 0,
       "filename": "sound/vox_fem/_airhorn.ogg",
@@ -1282,6 +1302,16 @@
         "bitches"
       ]
     },
+    "bizwarn": {
+      "wordlen": 0,
+      "filename": "sound/vox/bizwarn.wav",
+      "flags": [
+        "old-vox"
+      ],
+      "phrase": [
+        "bizwarn"
+      ]
+    },
     "black": {
       "wordlen": 0,
       "filename": "sound/vox_fem/black.ogg",
@@ -1368,6 +1398,16 @@
       "flags": [],
       "phrase": [
         "blood"
+      ]
+    },
+    "bloop": {
+      "wordlen": 0,
+      "filename": "sound/vox/bloop.wav",
+      "flags": [
+        "old-vox"
+      ],
+      "phrase": [
+        "bloop"
       ]
     },
     "blue": {
@@ -1600,6 +1640,16 @@
       "flags": [],
       "phrase": [
         "button"
+      ]
+    },
+    "buzwarn": {
+      "wordlen": 0,
+      "filename": "sound/vox/buzwarn.wav",
+      "flags": [
+        "old-vox"
+      ],
+      "phrase": [
+        "buzwarn"
       ]
     },
     "bypass": {
@@ -3046,6 +3096,16 @@
         "D."
       ]
     },
+    "dadeda": {
+      "wordlen": 0,
+      "filename": "sound/vox/dadeda.wav",
+      "flags": [
+        "old-vox"
+      ],
+      "phrase": [
+        "dadeda"
+      ]
+    },
     "damage": {
       "wordlen": 0,
       "filename": "sound/vox_fem/damage.ogg",
@@ -3852,6 +3912,16 @@
       "flags": [],
       "phrase": [
         "doomsday"
+      ]
+    },
+    "doop": {
+      "wordlen": 0,
+      "filename": "sound/vox/doop.wav",
+      "flags": [
+        "old-vox"
+      ],
+      "phrase": [
+        "doop"
       ]
     },
     "door": {
@@ -14829,6 +14899,16 @@
       "phrase": [
         "wood",
         "E."
+      ]
+    },
+    "woop": {
+      "wordlen": 0,
+      "filename": "sound/vox/woop.wav",
+      "flags": [
+        "old-vox"
+      ],
+      "phrase": [
+        "woop"
       ]
     },
     "would": {
