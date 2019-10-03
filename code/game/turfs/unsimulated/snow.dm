@@ -315,14 +315,14 @@
 	can_border_transition = 1
 	plane = PLATING_PLANE
 
-
-
-
-
-
-
-
-
+/turf/unsimulated/floor/noblizz_permafrost/icecore
+	icon = 'icons/turf/snow.dmi'
+	icon_state = "ice"
+	name = "frozen core"
+	desc = "Deep-frozen long chain hydrocarbons with astonishingly high specific heat. More simply, it stays cold in spite of regular heating and shuttle landings on the surface."
+	temperature = TCMB
+	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
+	heat_capacity = 700000
 
 /obj/glacier
 	desc = "A frozen lake kept solid by temperatures way below freezing."
