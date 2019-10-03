@@ -50,8 +50,8 @@
 	background.name = "background"
 	background.assigned_map = newmap
 	background.screen_loc = "[newmap]:1,1 TO [width],[height]"
-	background.icon = 'icons/mob/screen/crusade_hud/screen1.dmi'
-	background.icon_state = null
+	background.icon = 'icons/mob/action.dmi' //change the icon to a proper one. this'll look like SHIT.
+	background.icon_state = "bg_default"
 	background.layer = -1
 	background.plane = -1
 
