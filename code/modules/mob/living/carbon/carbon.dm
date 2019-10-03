@@ -106,7 +106,7 @@
 	var/damage = shock_damage * siemens_coeff
 
 	if(damage <= 0)
-		damage = 0
+		return 0
 
 	var/mob/living/carbon/human/H = src
 	if(istype(H) && H.species && (H.species.flags & ELECTRIC_HEAL))
@@ -114,6 +114,7 @@
 		Jitter(10)
 		Stun(5)
 		Knockdown(5)
+		damage = 0
 		//It would be cool if someone added an animation of some electrical shit going through the body
 	else
 		if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
