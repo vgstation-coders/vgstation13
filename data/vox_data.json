@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "compiled": 1570086477.6133633,
+  "compiled": 1570143989.7846434,
   "voice": "nitech_us_clb_arctic_hts",
   "phoneset": "",
   "words": {
@@ -1642,6 +1642,14 @@
         "button"
       ]
     },
+    "buttons": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/buttons.ogg",
+      "flags": [],
+      "phrase": [
+        "buttons"
+      ]
+    },
     "buzwarn": {
       "wordlen": 1,
       "filename": "sound/vox/buzwarn.wav",
@@ -1658,6 +1666,30 @@
       "flags": [],
       "phrase": [
         "bypass"
+      ]
+    },
+    "bypassed": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/bypassed.ogg",
+      "flags": [],
+      "phrase": [
+        "bypassed"
+      ]
+    },
+    "bypasses": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/bypasses.ogg",
+      "flags": [],
+      "phrase": [
+        "bypasses"
+      ]
+    },
+    "bypassing": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/bypassing.ogg",
+      "flags": [],
+      "phrase": [
+        "bypassing"
       ]
     },
     "c": {
@@ -1682,6 +1714,30 @@
       "flags": [],
       "phrase": [
         "cage"
+      ]
+    },
+    "caged": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/caged.ogg",
+      "flags": [],
+      "phrase": [
+        "caged"
+      ]
+    },
+    "cages": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/cages.ogg",
+      "flags": [],
+      "phrase": [
+        "cages"
+      ]
+    },
+    "caging": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/caging.ogg",
+      "flags": [],
+      "phrase": [
+        "caging"
       ]
     },
     "call": {
@@ -1738,6 +1794,22 @@
       "flags": [],
       "phrase": [
         "canister"
+      ]
+    },
+    "canned": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/canned.ogg",
+      "flags": [],
+      "phrase": [
+        "canned"
+      ]
+    },
+    "canning": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/canning.ogg",
+      "flags": [],
+      "phrase": [
+        "canning"
       ]
     },
     "cans": {
@@ -2395,6 +2467,14 @@
         "colder"
       ]
     },
+    "coldest": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/coldest.ogg",
+      "flags": [],
+      "phrase": [
+        "coldest"
+      ]
+    },
     "collider": {
       "wordlen": 1,
       "filename": "sound/vox_fem/collider.ogg",
@@ -2425,6 +2505,22 @@
       "flags": [],
       "phrase": [
         "come"
+      ]
+    },
+    "comes": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/comes.ogg",
+      "flags": [],
+      "phrase": [
+        "comes"
+      ]
+    },
+    "coming": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/coming.ogg",
+      "flags": [],
+      "phrase": [
+        "coming"
       ]
     },
     "command": {
@@ -2691,6 +2787,22 @@
         "coolant"
       ]
     },
+    "cooler": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/cooler.ogg",
+      "flags": [],
+      "phrase": [
+        "cooler"
+      ]
+    },
+    "coolest": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/coolest.ogg",
+      "flags": [],
+      "phrase": [
+        "coolest"
+      ]
+    },
     "core": {
       "wordlen": 1,
       "filename": "sound/vox_fem/core.ogg",
@@ -2722,6 +2834,14 @@
       "flags": [],
       "phrase": [
         "corporation"
+      ]
+    },
+    "corporations": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/corporations.ogg",
+      "flags": [],
+      "phrase": [
+        "corporations"
       ]
     },
     "correct": {
@@ -2820,12 +2940,28 @@
         "cowards"
       ]
     },
+    "cower": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/cower.ogg",
+      "flags": [],
+      "phrase": [
+        "cower"
+      ]
+    },
     "cowering": {
       "wordlen": 1,
       "filename": "sound/vox_fem/cowering.ogg",
       "flags": [],
       "phrase": [
         "cowering"
+      ]
+    },
+    "cowers": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/cowers.ogg",
+      "flags": [],
+      "phrase": [
+        "cowers"
       ]
     },
     "cows": {
@@ -4324,6 +4460,14 @@
         "enter"
       ]
     },
+    "entered": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/entered.ogg",
+      "flags": [],
+      "phrase": [
+        "entered"
+      ]
+    },
     "entering": {
       "wordlen": 1,
       "filename": "sound/vox_fem/entering.ogg",
@@ -4394,6 +4538,14 @@
       "flags": [],
       "phrase": [
         "epic"
+      ]
+    },
+    "epics": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/epics.ogg",
+      "flags": [],
+      "phrase": [
+        "epics"
       ]
     },
     "equipment": {
@@ -4540,6 +4692,30 @@
       "flags": [],
       "phrase": [
         "exchanging"
+      ]
+    },
+    "executed": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/executed.ogg",
+      "flags": [],
+      "phrase": [
+        "executed"
+      ]
+    },
+    "executes": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/executes.ogg",
+      "flags": [],
+      "phrase": [
+        "executes"
+      ]
+    },
+    "executing": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/executing.ogg",
+      "flags": [],
+      "phrase": [
+        "executing"
       ]
     },
     "execution": {
@@ -4982,6 +5158,14 @@
         "fire"
       ]
     },
+    "fired": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/fired.ogg",
+      "flags": [],
+      "phrase": [
+        "fired"
+      ]
+    },
     "fires": {
       "wordlen": 1,
       "filename": "sound/vox_fem/fires.ogg",
@@ -5124,30 +5308,27 @@
       ]
     },
     "flygirl": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/flygirl.ogg",
       "flags": [],
       "phrase": [
-        "fly",
-        "girl"
+        "fly-girl"
       ]
     },
     "flyman": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/flyman.ogg",
       "flags": [],
       "phrase": [
-        "fly",
-        "man"
+        "fly-man"
       ]
     },
     "flymen": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/flymen.ogg",
       "flags": [],
       "phrase": [
-        "fly",
-        "men"
+        "fly-men"
       ]
     },
     "fool": {
@@ -5555,6 +5736,14 @@
         "now!"
       ]
     },
+    "geese": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/geese.ogg",
+      "flags": [],
+      "phrase": [
+        "geese"
+      ]
+    },
     "gene": {
       "wordlen": 1,
       "filename": "sound/vox_fem/gene.ogg",
@@ -5763,6 +5952,22 @@
       "flags": [],
       "phrase": [
         "goose"
+      ]
+    },
+    "goosed": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/goosed.ogg",
+      "flags": [],
+      "phrase": [
+        "goosed"
+      ]
+    },
+    "goosing": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/goosing.ogg",
+      "flags": [],
+      "phrase": [
+        "goosing"
       ]
     },
     "gordon": {
@@ -6077,12 +6282,36 @@
         "hangar"
       ]
     },
+    "happen": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/happen.ogg",
+      "flags": [],
+      "phrase": [
+        "happen"
+      ]
+    },
+    "happened": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/happened.ogg",
+      "flags": [],
+      "phrase": [
+        "happened"
+      ]
+    },
     "happening": {
       "wordlen": 1,
       "filename": "sound/vox_fem/happening.ogg",
       "flags": [],
       "phrase": [
         "happening"
+      ]
+    },
+    "happens": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/happens.ogg",
+      "flags": [],
+      "phrase": [
+        "happens"
       ]
     },
     "harm": {
@@ -6811,12 +7040,36 @@
         "inspects"
       ]
     },
+    "interchangable": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/interchangable.ogg",
+      "flags": [],
+      "phrase": [
+        "interchangable"
+      ]
+    },
     "interchange": {
       "wordlen": 1,
       "filename": "sound/vox_fem/interchange.ogg",
       "flags": [],
       "phrase": [
         "interchange"
+      ]
+    },
+    "interchanged": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/interchanged.ogg",
+      "flags": [],
+      "phrase": [
+        "interchanged"
+      ]
+    },
+    "interchanging": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/interchanging.ogg",
+      "flags": [],
+      "phrase": [
+        "interchanging"
       ]
     },
     "internal": {
@@ -6833,6 +7086,30 @@
       "flags": [],
       "phrase": [
         "internalize"
+      ]
+    },
+    "internalized": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/internalized.ogg",
+      "flags": [],
+      "phrase": [
+        "internalized"
+      ]
+    },
+    "internalizes": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/internalizes.ogg",
+      "flags": [],
+      "phrase": [
+        "internalizes"
+      ]
+    },
+    "internalizing": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/internalizing.ogg",
+      "flags": [],
+      "phrase": [
+        "internalizing"
       ]
     },
     "internals": {
@@ -8592,21 +8869,19 @@
       ]
     },
     "motherfucker": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/motherfucker.ogg",
       "flags": [],
       "phrase": [
-        "mother",
-        "fucker"
+        "mother-fucker"
       ]
     },
     "motherfuckers": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/motherfuckers.ogg",
       "flags": [],
       "phrase": [
-        "mother",
-        "fuckers"
+        "mother-fuckers"
       ]
     },
     "moths": {
@@ -9786,30 +10061,35 @@
       ]
     },
     "plasmagirl": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/plasmagirl.ogg",
       "flags": [],
       "phrase": [
-        "plasma",
-        "girl"
+        "plasma-girl"
+      ]
+    },
+    "plasmagirls": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/plasmagirls.ogg",
+      "flags": [],
+      "phrase": [
+        "plasma-girls"
       ]
     },
     "plasmaman": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/plasmaman.ogg",
       "flags": [],
       "phrase": [
-        "plasma",
-        "man"
+        "plasma-man"
       ]
     },
     "plasmamen": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/plasmamen.ogg",
       "flags": [],
       "phrase": [
-        "plasma",
-        "men"
+        "plasma-men"
       ]
     },
     "platform": {
@@ -9933,21 +10213,19 @@
       ]
     },
     "pomfcoin": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/pomfcoin.ogg",
       "flags": [],
       "phrase": [
-        "pomf",
-        "coin"
+        "pomf-coin"
       ]
     },
     "pomfcoins": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/pomfcoins.ogg",
       "flags": [],
       "phrase": [
-        "pomf",
-        "coins"
+        "pomf-coins"
       ]
     },
     "port": {
@@ -10311,12 +10589,11 @@
       ]
     },
     "punpun": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/punpun.ogg",
       "flags": [],
       "phrase": [
-        "pun",
-        "pun"
+        "pun-pun"
       ]
     },
     "push": {
@@ -10357,6 +10634,22 @@
       "flags": [],
       "phrase": [
         "put"
+      ]
+    },
+    "puts": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/puts.ogg",
+      "flags": [],
+      "phrase": [
+        "puts"
+      ]
+    },
+    "putting": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/putting.ogg",
+      "flags": [],
+      "phrase": [
+        "putting"
       ]
     },
     "q": {
@@ -11689,12 +11982,11 @@
       ]
     },
     "shitlord": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/shitlord.ogg",
       "flags": [],
       "phrase": [
-        "shit",
-        "lord"
+        "shit-lord"
       ]
     },
     "shits": {
@@ -11759,6 +12051,30 @@
       "flags": [],
       "phrase": [
         "sick"
+      ]
+    },
+    "sickened": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/sickened.ogg",
+      "flags": [],
+      "phrase": [
+        "sickened"
+      ]
+    },
+    "sickening": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/sickening.ogg",
+      "flags": [],
+      "phrase": [
+        "sickening"
+      ]
+    },
+    "sickly": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/sickly.ogg",
+      "flags": [],
+      "phrase": [
+        "sickly"
       ]
     },
     "side": {
@@ -12004,12 +12320,11 @@
       ]
     },
     "sm": {
-      "wordlen": 2,
+      "wordlen": 1,
       "filename": "sound/vox_fem/sm.ogg",
       "flags": [],
       "phrase": [
-        "super",
-        "matter"
+        "super-matter"
       ]
     },
     "small": {
@@ -12188,6 +12503,30 @@
         "space"
       ]
     },
+    "spaced": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/spaced.ogg",
+      "flags": [],
+      "phrase": [
+        "spaced"
+      ]
+    },
+    "spaces": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/spaces.ogg",
+      "flags": [],
+      "phrase": [
+        "spaces"
+      ]
+    },
+    "spacing": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/spacing.ogg",
+      "flags": [],
+      "phrase": [
+        "spacing"
+      ]
+    },
     "squad": {
       "wordlen": 1,
       "filename": "sound/vox_fem/squad.ogg",
@@ -12292,6 +12631,30 @@
       "flags": [],
       "phrase": [
         "stay"
+      ]
+    },
+    "stayed": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/stayed.ogg",
+      "flags": [],
+      "phrase": [
+        "stayed"
+      ]
+    },
+    "staying": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/staying.ogg",
+      "flags": [],
+      "phrase": [
+        "staying"
+      ]
+    },
+    "stays": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/stays.ogg",
+      "flags": [],
+      "phrase": [
+        "stays"
       ]
     },
     "sterile": {
@@ -13396,6 +13759,30 @@
       "flags": [],
       "phrase": [
         "tide"
+      ]
+    },
+    "tided": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/tided.ogg",
+      "flags": [],
+      "phrase": [
+        "tyed-ed"
+      ]
+    },
+    "tides": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/tides.ogg",
+      "flags": [],
+      "phrase": [
+        "tides"
+      ]
+    },
+    "tiding": {
+      "wordlen": 1,
+      "filename": "sound/vox_fem/tiding.ogg",
+      "flags": [],
+      "phrase": [
+        "tiding"
       ]
     },
     "time": {
