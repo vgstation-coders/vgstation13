@@ -13,10 +13,10 @@
 			qdel(searched)
 
 /client/verb/handle_popup_close(window_id as text) //when the popup closes, it calls this.
-	for(var/obj/abstract/screen/screenobj in screen_maps["[window_id]_map")
+	for(var/obj/abstract/screen/screenobj in screen_maps["[window_id]_map"]
 		screen -= screenobj
 		qdel(screenobj)
-		
+
 
 /client/proc/create_popup(var/name = null, var/ratiox = 100, var/ratioy=100) //ratio is how many pixels by how many pixels. keep it simple
 	winclone(src,"popupwindow",name)
@@ -76,7 +76,7 @@
 				else
 					adding.screen_loc = "[data[1]],[data[2]]"
 			if(0) //legacy - screen_loc is already set up. don't add the map here, assumed to be old HUD code, or some custom overwrite (eg, x TO y) so it'd probably break it.
-				
+
 			else
 				error("[adding]'s screen_data has an invalid length. should be either 4,2,0 - it is [len]")
 				continue
