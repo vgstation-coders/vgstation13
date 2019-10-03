@@ -253,27 +253,21 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						files.UpdateTech(T, temp_tech[T])
 				if(linked_destroy.loaded_item.reliability < 100 && linked_destroy.loaded_item.crit_fail)
 					files.UpdateDesign(linked_destroy.loaded_item.type)
-				if(linked_lathe && linked_destroy.loaded_item.materials) //Also sends salvaged materials to a linked protolathe, if any.
-					for(var/matID in linked_destroy.loaded_item.materials.storage) //Transfers by ID
-						linked_lathe.materials.addAmount(matID, linked_destroy.loaded_item.materials.storage[matID])
-				linked_destroy.loaded_item = null
-			for(var/obj/I in linked_destroy.contents)
-				for(var/mob/M in I.contents)
-					M.death()
-				if(istype(I,/obj/item/stack/sheet)) //Only deconstructs one sheet at a time instead of the entire stack
-					var/obj/item/stack/sheet/S = I
-					if(S.amount > 1)
-						S.amount--
-						linked_destroy.loaded_item = S
-					else
+
+				if(istype(linked_destroy.loaded_item, /obj/item/stack))
+					var/obj/item/stack/sheet/S = linked_destroy.loaded_item
+					if(linked_lathe && S.materials)
+						S.materials.TransferPercent((1/S.amount)*100, linked_lathe.materials)
+					S.use(1)
+					if(!S.amount)
 						qdel(S)
-						S = null
-						linked_destroy.icon_state = "d_analyzer"
+						linked_destroy.loaded_item = null
 				else
-					if(!(I in linked_destroy.component_parts))
-						qdel(I)
-						I = null
-						linked_destroy.icon_state = "d_analyzer"
+					if(linked_lathe && linked_destroy.loaded_item.materials)
+						linked_destroy.loaded_item.materials.TransferAll(linked_lathe.materials)
+					qdel(linked_destroy.loaded_item)
+					linked_destroy.loaded_item = null
+			linked_destroy.icon_state = "d_analyzer"
 			use_power(250)
 			screen = 1.0
 			updateUsrDialog()
