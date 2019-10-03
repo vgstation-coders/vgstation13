@@ -850,6 +850,7 @@ window "popupwindow"
 		anchor1 = none
 		anchor2 = none
 		background-color = none
+		is-visible = false
 		saved-params = "pos;size;is-minimized;is-maximized"
 		statusbar = false
 

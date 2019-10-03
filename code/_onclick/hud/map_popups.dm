@@ -13,6 +13,7 @@
 			qdel(searched)
 
 /client/verb/handle_popup_close(window_id as text) //when the popup closes, it calls this.
+	set hidden = 1
 	for(var/obj/abstract/screen/screenobj in screen_maps["[window_id]_map"])
 		screen -= screenobj
 		qdel(screenobj)
