@@ -102,7 +102,7 @@
 			return
 	handle_symptom_on_touch(M, src, HAND)
 
-/mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
+/mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, var/def_zone = null)
 	var/damage = shock_damage * siemens_coeff
 
 	if(damage <= 0)
@@ -117,7 +117,11 @@
 		damage = 0
 		//It would be cool if someone added an animation of some electrical shit going through the body
 	else
-		if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
+		if(!def_zone)
+			damage = take_overall_damage(0, damage, used_weapon = source)
+		else
+			damage = apply_damage(damage, BURN, def_zone, used_weapon = source)
+		if(damage <= 0)
 			return 0
 		Jitter(20)
 		Stun(10)

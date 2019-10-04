@@ -106,13 +106,11 @@
 
 /obj/item/weapon/melee/defibrillator/proc/shockAttack(mob/living/carbon/human/target,mob/user)
 	var/damage = rand(30, 60)
-	if !(target.electrocute_act(damage, src)
+	if (!target.electrocute_act(damage, src, def_zone = LIMB_CHEST))
 		return
 	var/datum/organ/internal/heart/heart = target.get_heart()
 	if(heart)
 		heart.damage += rand(5,60)
-	target.visible_message("<span class='danger'>[target] has been shocked in the chest with the [src] by [user]!</span>") //TODO: duped visible message
-	target.apply_damage(rand(30,60),BURN,LIMB_CHEST)
 	target.audible_scream() //If we're going this route, it kinda hurts
 	spawn() //Logging
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>"
