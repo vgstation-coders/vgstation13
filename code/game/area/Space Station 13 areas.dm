@@ -582,6 +582,10 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Snow Asteroid - Outer Wall"
 	icon_state = "sno"
 
+/area/asteroid/icecore
+	name = "\improper Snow Asteroid - Frozen Core"
+	icon_state = "icecore"
+
 /area/planet/clown
 	name = "\improper Clown Planet"
 	icon_state = "honk"
