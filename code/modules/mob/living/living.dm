@@ -940,7 +940,7 @@ Thanks.
 			L.visible_message("<span class='danger'>[L] resists!</span>")
 
 
-	if(L.locked_to)
+	if(L.locked_to && !L.isUnconscious())
 		//unbuckling yourself
 		if(istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to
