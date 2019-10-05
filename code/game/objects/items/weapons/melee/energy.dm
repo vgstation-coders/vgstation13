@@ -5,6 +5,7 @@
 	sharpness_flags = SHARP_BLADE | HOT_EDGE
 	heat_production = 3500
 	source_temperature = TEMPERATURE_PLASMA
+	sterility = 0
 
 /obj/item/weapon/melee/energy/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
@@ -67,11 +68,12 @@
 	flags = FPRINT
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-
+	var/dualsaber_type = /obj/item/weapon/melee/energy/sword/dualsaber
 
 /obj/item/weapon/melee/energy/sword/activated/New()
 	..()
 	active = 1
+	sterility = 100
 	force = 30
 	w_class = W_CLASS_LARGE
 	sharpness = sharpness_on
@@ -94,13 +96,16 @@
 	update_icon()
 
 /obj/item/weapon/melee/energy/sword/attack_self(mob/living/user as mob)
-	if (clumsy_check(user) && prob(50) && active) //only an on blade can cut
-		to_chat(user, "<span class='danger'>You accidentally cut yourself with [src]!</span>")
-		user.take_organ_damage(5,5)
+	if(!(flags & TWOHANDABLE))
+		if (clumsy_check(user) && prob(50) && active) //only an on blade can cut
+			to_chat(user, "<span class='danger'>You accidentally cut yourself with [src]!</span>")
+			user.take_organ_damage(5,5)
+			return
+		toggleActive(user)
+		add_fingerprint(user)
 		return
-	toggleActive(user)
-	add_fingerprint(user)
-	return
+	..()
+
 
 /obj/item/weapon/melee/energy/sword/proc/toggleActive(mob/user, var/togglestate = "") //you can use togglestate to manually set the sword on or off
 	switch(togglestate)
@@ -112,6 +117,7 @@
 			active = !active
 	if (active)
 		force = activeforce
+		sterility = 100
 		w_class = W_CLASS_LARGE
 		sharpness = sharpness_on
 		sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK
@@ -122,6 +128,7 @@
 		to_chat(user, "<span class='notice'> [src] is now active.</span>")
 	else
 		force = 3
+		sterility = 0
 		w_class = W_CLASS_SMALL
 		sharpness = 0
 		sharpness_flags = 0
@@ -139,15 +146,26 @@
 		icon_state = "[base_state][active]"
 
 /obj/item/weapon/melee/energy/sword/attackby(obj/item/weapon/W, mob/living/user)
+	if(combine(W, user))
+		return
 	..()
-	if(istype(W, /obj/item/weapon/melee/energy/sword))
-		to_chat(user, "<span class='notice'>You attach the ends of the two energy swords, making a single double-bladed weapon! You're cool.</span>")
-		var/obj/item/weapon/dualsaber/saber = new /obj/item/weapon/dualsaber(user.loc)
-		saber.colorset = W._color + src._color
-		qdel(W)
-		W = null
-		qdel(src)
 
+/obj/item/weapon/melee/energy/sword/proc/combine(obj/item/W, mob/living/user)
+	if(can_combine_with(W))
+		to_chat(user, "<span class='notice'>You attach the ends of the two energy swords, making a single double-bladed weapon! You're cool.</span>")
+		var/obj/item/weapon/melee/energy/sword/dualsaber/saber = new dualsaber_type(user.loc)
+		saber.colorset = W._color + src._color
+		saber.swords.Add(W, src)
+		user.drop_item(W)
+		W.forceMove(saber)
+		user.drop_item(src)
+		forceMove(saber)
+		user.put_in_hands(saber)
+		return 1
+	return 0
+
+/obj/item/weapon/melee/energy/sword/proc/can_combine_with(obj/item/W)
+	return istype(W, /obj/item/weapon/melee/energy/sword) && !is_type_in_list(W, list(/obj/item/weapon/melee/energy/sword/bsword, /obj/item/weapon/melee/energy/sword/pirate, /obj/item/weapon/melee/energy/sword/dualsaber))
 
 /obj/item/weapon/melee/energy/sword/bsword
 	name = "banana"
@@ -155,6 +173,7 @@
 	base_state = "bsword0"
 	active_state = "bsword1"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	dualsaber_type = /obj/item/weapon/melee/energy/sword/dualsaber/bananabunch
 
 /obj/item/weapon/melee/energy/sword/bsword/update_icon()
 	if(active)
@@ -166,15 +185,11 @@
 		name = "banana"
 		desc = "It's yellow."
 
-/obj/item/weapon/melee/energy/sword/bsword/attackby(obj/item/weapon/W, mob/living/user)
-	if(istype(W, /obj/item/weapon/melee/energy/sword/bsword))
-		to_chat(user, "<span class='notice'>You attach the ends of the two energized bananium swords, making a bushel bruiser! That's dangerous.</span>")
-		new /obj/item/weapon/dualsaber/bananabunch(user.loc)
-		qdel(W)
-		qdel(src)
-
 /obj/item/weapon/melee/energy/sword/bsword/clumsy_check(mob/living/user)
 	return 0
+
+/obj/item/weapon/melee/energy/sword/bsword/can_combine_with(obj/item/W)
+	return istype(W, /obj/item/weapon/melee/energy/sword/bsword)
 
 /obj/item/weapon/melee/energy/sword/pirate
 	name = "energy cutlass"
@@ -188,6 +203,128 @@
 	_color = "red"
 	update_icon()
 
+/obj/item/weapon/melee/energy/sword/pirate/can_combine_with(obj/item/W)
+	return 0
+
+/*
+ * Double-Bladed Energy Swords
+ */
+
+/obj/item/weapon/melee/energy/sword/dualsaber
+	icon_state = "dualsaber0"
+	name = "double-bladed energy sword"
+	desc = "Handle with care."
+	var/colorset = ""
+	force = 3
+	throwforce = 5.0
+	throw_speed = 1
+	throw_range = 5
+	w_class = W_CLASS_SMALL
+	flags = FPRINT | TWOHANDABLE
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	var/list/swords = list()
+
+/obj/item/weapon/melee/energy/sword/dualsaber/can_combine_with(obj/item/W)
+	return 0
+
+/obj/item/weapon/melee/energy/sword/dualsaber/Destroy()
+	for(var/obj/item/I in swords)
+		qdel(I)
+	swords.Cut()
+	..()
+
+/obj/item/weapon/melee/energy/sword/dualsaber/toggleActive(mob/user)
+	update_wield(user)
+
+/obj/item/weapon/melee/energy/sword/dualsaber/update_wield(mob/user)
+	..()
+	force = wielded ? 30 : 3
+	w_class = wielded ? 5 : 2
+	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK : 0
+	sharpness = wielded ? 1.5 : 0
+	armor_penetration = wielded ? 100 : 0
+	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
+	if(user)
+		user.update_inv_hands()
+	playsound(src, wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
+	update_icon()
+
+/obj/item/weapon/melee/energy/sword/dualsaber/update_icon()
+	icon_state = "dualsaber[wielded ? colorset : 0]"
+	item_state = "dualsaber[wielded ? colorset : 0]"
+
+/obj/item/weapon/melee/energy/sword/dualsaber/attack(target as mob, mob/living/user as mob)
+	..()
+	if(clumsy_check(user) && (wielded) &&prob(40))
+		to_chat(user, "<span class='warning'>You twirl around a bit before losing your balance and impaling yourself on the [src].</span>")
+		user.take_organ_damage(20,25)
+		return
+	if((wielded) && prob(50))
+		spawn for(var/i=1, i<=8, i++)
+			user.dir = turn(user.dir, 45)
+			sleep(1)
+
+/obj/item/weapon/melee/energy/sword/dualsaber/attackby(obj/item/I, mob/user)
+	if(I.is_screwdriver(user) && do_after(src, user, 1 SECONDS))
+		to_chat(user, "<span class = 'notice'>You deconstruct \the [src] into its components.</span>")
+		for(var/obj/item/II in swords)
+			II.forceMove(get_turf(src))
+			swords.Remove(II)
+			user.put_in_hands(src)
+		qdel(src)
+		return
+	..()
+
+/obj/item/weapon/melee/energy/sword/dualsaber/IsShield()
+	if(wielded)
+		return 1
+	else
+		return 0
+
+/obj/item/weapon/melee/energy/sword/dualsaber/New()
+	..()
+	if(!colorset)
+		colorset = pick("redred","blueblue","greengreen","purplepurple")
+	update_icon()
+
+/*
+ * Banana Bunch
+ */
+/obj/item/weapon/melee/energy/sword/dualsaber/bananabunch
+	icon_state = "bananabunch0"
+	name = "banana bunch"
+	desc = "Potential for some serious chaos."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+
+/obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/update_icon()
+	icon_state = "bananabunch[wielded ? 1 : 0]"
+	item_state = "bananabunch[wielded ? 1 : 0]"
+
+/obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/attack(target as mob, mob/living/user as mob)
+	if(user.mind && !(user.mind.assigned_role == "Clown"))
+		to_chat(user, "<span class='warning'>Your clumsy hands fumble and you slice yourself open with [src].</span>")
+		user.take_organ_damage(40,50)
+		return
+	if((wielded) && (user.mind.assigned_role == "Clown"))
+		..()
+		spawn for(var/i=1, i<=8, i++)
+			user.dir = turn(user.dir, 45)
+			sleep(1)
+
+/obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/Crossed(AM as mob|obj)
+	if (istype(AM, /mob/living/carbon))
+		var/mob/living/carbon/M = AM
+		if (M.Slip(2, 2, 1))
+			M.simple_message("<span class='notice'>You slipped on [src]!</span>",
+				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+
+/obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/clumsy_check(mob/living/user)
+	return 0
+/*
+ * High frequency Machete
+ */
 /obj/item/weapon/melee/energy/hfmachete
 	name = "high-frequency machete"
 	desc = "A high-frequency broad blade used either as an implement or in combat like a short sword."
@@ -225,6 +362,7 @@
 			active = !active
 	if(active)
 		force = 25
+		sterility = 100
 		throwforce = 6
 		throw_speed = 3
 		sharpness = 1.7
@@ -235,6 +373,7 @@
 		event_key = user.on_moved.Add(src, "mob_moved")
 	else
 		force = initial(force)
+		sterility = initial(sterility)
 		throwforce = initial(throwforce)
 		throw_speed = initial(throw_speed)
 		sharpness = initial(sharpness)
@@ -296,6 +435,7 @@
 /obj/item/weapon/melee/energy/hfmachete/activated/New()
 	..()
 	active = 1
+	sterility = 100
 	force = 25
 	throwforce = 6
 	throw_speed = 3

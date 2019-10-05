@@ -10,9 +10,8 @@
 	possible_transfer_amounts = null
 	volume = 100
 	starting_materials = null
-//	starting_materials = list(MAT_IRON = 5) //What?
 	w_type = RECYK_METAL
-	attack_delay = 0
+	attack_delay = 0 //so you don't get a delay after pilling someone. as of the time of writing, this only applies to mobs, remove if in the future this allows you to kenshiro windows
 
 /obj/item/weapon/reagent_containers/pill/New()
 	..()
@@ -27,18 +26,29 @@
 
 // Handles pill dissolving in containers
 /obj/item/weapon/reagent_containers/pill/afterattack(var/obj/item/weapon/reagent_containers/target, var/mob/user, var/adjacency_flag, var/click_params)
-	if (!adjacency_flag || !istype(target) || !target.is_open_container())
+	if(!adjacency_flag || !istype(target) || !target.is_open_container())
 		return
 
-	var/target_was_empty = (target.reagents.total_volume == 0)
-	var/tx_amount = reagents.trans_to(target, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+	if(src.is_empty())
+		to_chat(user, "<span class='notice'>\The [src] seems to be empty, somehow. It dissolves away.</span>")
+		qdel(src)
 
-	// Show messages
-	if (tx_amount > 0)
-		user.visible_message("<span class='warning'>[user] puts something into \the [target], filling it.</span>")
-		to_chat(user, "<span class='notice'>You [target_was_empty ? "crush" : "dissolve"] the pill into \the [target], filling it.</span>")
-	else
+	if(target.is_full())
 		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
+		return
+
+	var/tx_amount = reagents.trans_to(target, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+	if(tx_amount <= 0)
+		to_chat(user, "<span class='warning'>You can't seem to be able to crush \the [src] into \the [target]. Make a bug report!</span>")
+		return
+
+	if(src.is_empty())
+		user.visible_message("<span class='warning'>[user] crushes a pill into \the [target].</span>", \
+			self_message = "<span class='notice'>You crush \the [src] into \the [target].[target.is_full()? " It is now full." : ""]</span>", range = 2)
+		qdel(src)
+	else
+		user.visible_message("<span class='warning'>[user] crushes a pill into \the [target].</span>", \
+			self_message = "<span class='notice'>You partially crush \the [src] into \the [target].[target.is_full()? " It is now full." : ""]</span>", range = 2)
 
 /obj/item/weapon/reagent_containers/pill/proc/try_feed(mob/target, mob/user)
 	// Feeding others needs time to succeed
@@ -73,7 +83,7 @@
 		return
 	if(!M)
 		return
-	if (!src.is_empty())
+	if(!src.is_empty())
 		reagents.reaction(M, INGEST)
 		reagents.trans_to(M, reagents.total_volume)
 	qdel(src)
@@ -81,9 +91,8 @@
 /obj/item/weapon/reagent_containers/pill/fits_in_iv_drip()
 	return 1
 
-/obj/item/weapon/reagent_containers/pill/on_reagent_change()
-	if(src.is_empty())
-		qdel(src)
+/obj/item/weapon/reagent_containers/pill/should_qdel_if_empty() //If you remove the reagents from this thing via smoke or IV drip or something, it shouldn't like it.
+	return 1													//This isn't an on_reagent_change() because so many things runtime if it is.
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Pills. END
@@ -421,3 +430,13 @@
 /obj/item/weapon/reagent_containers/pill/arithrazine/New()
 	..()
 	reagents.add_reagent(ARITHRAZINE, 10)
+
+
+/obj/item/weapon/reagent_containers/pill/nanofloxacin
+	name = "nanofloxacin pill"
+	desc = "Extremely powerful antipathogenic, one dose is enough to cure almost any diseases."
+	icon_state = "pill30"
+
+/obj/item/weapon/reagent_containers/pill/nanofloxacin/New()
+	..()
+	reagents.add_reagent(NANOFLOXACIN, 1)

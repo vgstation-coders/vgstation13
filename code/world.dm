@@ -97,12 +97,12 @@ var/savefile/panicfile
 
 	paperwork_setup()
 
-	initialize_cultwords()
+	global_deadchat_listeners = list()
 
-	for(var/x in typesof(/datum/bee_species))
-		var/datum/bee_species/species = new x
-		bees_species[species.common_name] = species
+	initialize_runesets()
 
+	initialize_beespecies()
+	generate_radio_frequencies()
 	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()

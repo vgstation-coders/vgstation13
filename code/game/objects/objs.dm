@@ -29,7 +29,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	plane = OBJ_PLANE
 
 	var/defective = 0
-	var/quality = NORMAL //What level of quality this object is.
+	var/quality = B_AVERAGE //What level of quality this object is.
 	var/datum/material/material_type //What material this thing is made out of
 	var/event/on_use
 	var/sheet_type = /obj/item/stack/sheet/metal
@@ -333,13 +333,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
 
-/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/link/context)
+/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/list/context)
 	return 0
 
 /obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
 	return 0
 
-/obj/proc/canLink(var/obj/O, var/link/context)
+/obj/proc/canLink(var/obj/O, var/list/context)
 	return 0
 
 /obj/proc/isLinkedWith(var/obj/O)
@@ -648,10 +648,10 @@ a {
 				surrounding_mod *= I.quality/rand(1,3)
 	*/
 	var/initial_quality = round(((rand(1,3)*surrounding_mod)*material_mod)+modifier)
-	quality = Clamp(initial_quality, AWFUL>min_quality?AWFUL:min_quality, LEGENDARY)
+	quality = Clamp(initial_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
 
 /obj/proc/gen_description(mob/user)
-	var/material_mod = quality-GOOD>1 ? quality-GOOD : 0
+	var/material_mod = quality-B_GOOD>1 ? quality-B_GOOD : 0
 	var/additional_description
 	if(material_mod)
 		additional_description = "On \the [src] is a carving, it depicts:\n"
@@ -694,10 +694,10 @@ a {
 		material_type = mat
 		sheet_type = mat.sheettype
 	gen_quality(additional_quality, min_quality)
-	if(quality > SUPERIOR)
+	if(quality > B_SUPERIOR)
 		gen_description()
 	if(!findtext(lowertext(name), lowertext(mat.name)))
-		name = "[quality == NORMAL ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
+		name = "[quality == B_AVERAGE ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
 
 /obj/proc/check_uplink_validity()
 	return TRUE
@@ -707,3 +707,30 @@ a {
 	if(density && !throwpass)
 		return FALSE
 	return TRUE
+
+/obj/proc/FeetStab(mob/living/AM,var/soundplay = 'sound/effects/glass_step.ogg',var/damage = 5,var/knockdown = 3)
+	if(istype(AM))
+		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
+			playsound(src, soundplay, 50, 1)
+			return
+		if(AM.flying)
+			return
+		else //Stepping on the glass
+			playsound(src, soundplay, 50, 1)
+			if(ishuman(AM))
+				var/mob/living/carbon/human/H = AM
+				var/danger = FALSE
+
+				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
+				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+					if(foot.is_organic())
+						danger = TRUE
+
+						if(!H.lying && H.feels_pain())
+							H.Knockdown(knockdown)
+							H.Stun(knockdown)
+						if(foot.take_damage(damage, 0))
+							H.UpdateDamageIcon()
+						H.updatehealth()
+
+				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")

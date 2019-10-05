@@ -16,15 +16,13 @@
 
 	..()
 
-/datum/pipeline/Del()
-	pipe_networks -= src
-	..()
-
 /datum/pipe_network/Destroy()
 	for(var/datum/pipeline/pipeline in line_members) //This will remove the pipeline references for us
 		pipeline.network = null
 	for(var/obj/machinery/atmospherics/objects in normal_members) //Procs for the different bases will remove the references
 		objects.unassign_network(src)
+	pipe_networks -= src
+	..()
 
 /datum/pipe_network/resetVariables()
 	..("gases", "normal_members", "line_members")
@@ -122,7 +120,7 @@
 
 	return 1
 
-/proc/equalize_gases(datum/gas_mixture/list/gases)
+/proc/equalize_gases(list/datum/gas_mixture/gases)
 	//Perfectly equalize all gases members instantly
 
 	var/datum/gas_mixture/temp = new()

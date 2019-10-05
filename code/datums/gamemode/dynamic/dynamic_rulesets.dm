@@ -15,6 +15,7 @@
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
 	var/cost = 0//threat cost for this rule.
 	var/logo = ""//any state from /icons/logos.dmi
+	var/calledBy //who dunnit, for round end scoreboard
 
 	var/flags = 0
 
@@ -79,6 +80,31 @@
 		return 0
 	return 1
 
+// Returns TRUE if there are sufficient enemies to execute this ruleset
+/datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE)
+	if (!enemy_jobs.len)
+		return TRUE
+
+	var/enemies_count = 0
+	if (dead_dont_count)
+		for (var/mob/M in mode.living_players)
+			if (M.stat == DEAD)
+				continue//dead players cannot count as opponents
+			if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+	else
+		for (var/mob/M in mode.candidates)
+			if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+
+	var/threat = round(mode.threat_level/10)
+	if (enemies_count >= required_enemies[threat])
+		return TRUE
+	if (!dead_dont_count)//roundstart check only
+		message_admins("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs ready ([enemies_count] out of [required_enemies[threat]])")
+		log_admin("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs ready ([enemies_count] out of [required_enemies[threat]])")
+	return FALSE
+
 /datum/dynamic_ruleset/proc/get_weight()
 	if(repeatable && weight > 1)
 		for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
@@ -106,6 +132,7 @@
 			continue
 
 		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>The mode is looking for volunteers to become [initial(role_category.id)]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
+		window_flash(M.client)
 
 	spawn(1 MINUTES)
 		searching = 0
@@ -169,26 +196,43 @@
 //////////////////////////////////////////////Remember that roundstart objectives are automatically forged by /datum/gamemode/proc/PostSetup()
 
 /datum/dynamic_ruleset/roundstart/trim_candidates()
+	//-----------debug info---------------------------will remove once we've fixed that bug
+	var/cand = candidates.len
+	var/a = 0
+	var/b = 0
+	var/c = 0
+	var/c1 = 0
+	var/d = 0
+	var/e = 0
+	//------------------------------------------------
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
 	for(var/mob/new_player/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
+			a++
 			continue
 		if (!P.client.desires_role(role_pref) || jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
+			b++
 			continue
-		if (P.mind.assigned_role in protected_from_jobs)
+		if ((protected_from_jobs.len > 0) && P.mind.assigned_role && (P.mind.assigned_role in protected_from_jobs))
 			var/probability = initial(role_category.protected_traitor_prob)
 			if (prob(probability))
 				candidates.Remove(P)
+				c1++
+			c++
 			continue
-		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
+		if ((restricted_from_jobs.len > 0) && P.mind.assigned_role && (P.mind.assigned_role in restricted_from_jobs))//does their job allow for it?
 			candidates.Remove(P)
+			d++
 			continue
-		if ((exclusive_to_jobs.len > 0) && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
+		if ((exclusive_to_jobs.len > 0) && P.mind.assigned_role && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
 			candidates.Remove(P)
+			e++
 			continue
+	message_admins("Dynamic Mode: Trimming [name]'s candidates: [candidates.len] remaining out of [cand] ([a],[b],[c] ([c1]),[d],[e])")
+	log_admin("Dynamic Mode: Trimming [name]'s candidates: [candidates.len] remaining out of [cand] ([a],[b],[c] ([c1]),[d],[e])")
 
 /datum/dynamic_ruleset/roundstart/delayed/trim_candidates()
 	if (ticker && ticker.current_state <  GAME_STATE_PLAYING)
@@ -218,13 +262,6 @@
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
 	if (!forced)
-		var/job_check = 0
-		if (enemy_jobs.len > 0)
-			for (var/mob/M in mode.candidates)
-				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
-					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
-
-		var/threat = round(mode.threat_level/10)
-		if (job_check < required_enemies[threat])
+		if(!check_enemy_jobs(FALSE))
 			return 0
 	return ..()

@@ -159,5 +159,7 @@ obj/item/stack/tile/slime
 
 /obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
 	if(isslimeperson(L) || isslime(L))
-		return -1
-	return current_slowdown+5
+		current_slowdown *= 5
+	else
+		current_slowdown *= 0.01
+	..()

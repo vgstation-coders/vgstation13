@@ -55,9 +55,8 @@
 		return ..()
 
 	if(attached)
-		visible_message("[src.attached] is detached from \the [src]")
-		src.attached = null
-		src.update_icon()
+		visible_message("[src.attached] is detached from \the [src].")
+		detach()
 		return
 
 	if(ishuman(over_object) && get_dist(over_object, src) <= 1)
@@ -102,14 +101,11 @@
 
 
 /obj/machinery/iv_drip/process()
-	//set background = 1
-
 	if(src.attached)
 		if(!(get_dist(src, src.attached) <= 1 && isturf(src.attached.loc)))
 			visible_message("The needle is ripped out of [src.attached], doesn't that hurt?")
 			src.attached:apply_damage(3, BRUTE, pick(LIMB_RIGHT_ARM, LIMB_LEFT_ARM))
-			src.attached = null
-			src.update_icon()
+			src.detach()
 			return
 
 	if(src.attached && src.beaker)
@@ -124,6 +120,10 @@
 					for(var/datum/reagent/reagent in beaker.reagents.reagent_list)
 						beaker.reagents.trans_id_to(attached, reagent.id, reagent.custom_metabolism)
 				update_icon()
+
+				if(beaker.is_empty() && beaker.should_qdel_if_empty())
+					qdel(beaker)
+					detach()
 
 		// Take blood
 		else
@@ -159,8 +159,7 @@
 		return
 	if(attached)
 		visible_message("[src.attached] is detached from \the [src].")
-		src.attached = null
-		src.update_icon()
+		detach()
 	else if(src.beaker)
 		remove_container()
 	else
@@ -170,6 +169,12 @@
 	src.beaker.forceMove(get_turf(src))
 	src.beaker = null
 	update_icon()
+
+/obj/machinery/iv_drip/proc/detach()
+	if(!src.attached)
+		return
+	src.attached = null
+	src.update_icon()
 
 /obj/machinery/iv_drip/attack_ai(mob/living/user)
 	attack_hand(user)

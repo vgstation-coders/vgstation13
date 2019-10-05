@@ -16,7 +16,7 @@
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, TAJARAN_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	var/obj/item/clothing/suit/space/rig/rig
 
@@ -91,7 +91,7 @@
 	icon_state = "rig-engineering"
 	item_state = "eng_hardsuit"
 	slowdown = HARDSUIT_SLOWDOWN_LOW
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, TAJARAN_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
@@ -143,7 +143,7 @@
 	else
 		if(user.head && istype(user.head, head_type))
 			var/obj/I = user.head
-			to_chat(user, "<span class = 'notice'\The [I] retracts into \the [src].</span>")
+			to_chat(user, "<span class = 'notice'>\The [I] retracts into \the [src].</span>")
 			user.u_equip(I,0)
 			I.forceMove(src)
 			H = I
@@ -218,7 +218,7 @@
 	desc = "An advanced helmet designed for work in special operations. A tag on it says \"Property of Gorlex Marauders\"."
 	icon_state = "rig0-syndi"
 	item_state = "syndie_helm"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED)
 	_color = "syndi"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 60)
 	actions_types = list(/datum/action/item_action/toggle_helmet_camera) //This helmet does not have a light, but we'll do as if
@@ -248,8 +248,7 @@
 	name = "blood-red hardsuit"
 	desc = "An advanced suit that protects against injuries during special operations. A tag on it says \"Property of Gorlex Marauders\"."
 	item_state = "syndie_hardsuit"
-	species_fit = list(GREY_SHAPED)
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED)
 	w_class = W_CLASS_MEDIUM
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
@@ -259,6 +258,23 @@
 	species_restricted = null
 	head_type = /obj/item/clothing/head/helmet/space/rig/syndi
 
+/obj/item/clothing/head/helmet/space/rig/syndi/commander
+	name = "large blood-red hardsuit helmet"
+	desc = "An advanced helmet designed for work in special operations. Slightly bulkier than usual. A tag on it says \"Property of Gorlex Marauders\"."
+	armor = list(melee = 65, bullet = 55, laser = 35, energy = 20, bomb = 40, bio = 100, rad = 60)
+	icon_state = "rig0-syndi-commander"
+	item_state = "syndie_helm_commander"
+	_color = "syndi-commander"
+	species_fit = list()
+
+/obj/item/clothing/suit/space/rig/syndi/commander
+	name = "large blood-red hardsuit"
+	desc = "An advanced suit that protects against injuries during special operations. Slightly bulkier than usual. A tag on it says \"Property of Gorlex Marauders\"."
+	icon_state = "rig-syndi-commander"
+	armor = list(melee = 65, bullet = 55, laser = 35, energy = 20, bomb = 40, bio = 100, rad = 60)
+	head_type = /obj/item/clothing/head/helmet/space/rig/syndi/commander
+	species_fit = list()
+
 //Elite Strike Team rig
 /obj/item/clothing/head/helmet/space/rig/syndicate_elite
 	name = "syndicate elite hardsuit helmet"
@@ -266,7 +282,7 @@
 	icon_state = "rig0-syndicate_elite"
 	item_state = "syndicate-helm-black"
 	_color = "syndicate_elite"
-	armor = list(melee = 62, bullet = 52, laser = 32,energy = 17, bomb = 37, bio = 100, rad = 60)
+	armor = list(melee = 65, bullet = 55, laser = 35,energy = 20, bomb = 40, bio = 100, rad = 60)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.4
 	clothing_flags = PLASMAGUARD
@@ -279,8 +295,8 @@
 	desc = "The result of reverse-engineered deathsquad technology combined with nuclear operative hardsuit."
 	item_state = "syndicate-black"
 	w_class = W_CLASS_MEDIUM
-	armor = list(melee = 70, bullet = 55, laser = 40, energy = 20, bomb = 47, bio = 100, rad = 60)
-	allowed = list(/obj/item/weapon/gun/osipr,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
+	armor = list(melee = 70, bullet = 60, laser = 40, energy = 25, bomb = 50, bio = 100, rad = 60)
+	allowed = list(/obj/item/weapon/gun/osipr, /obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/weapon/gun, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/weapon/melee/baton, /obj/item/weapon/melee/energy/sword, /obj/item/weapon/handcuffs)
 	siemens_coefficient = 0.5
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
@@ -659,6 +675,7 @@
 	gas_transfer_coefficient = 0.60
 	permeability_coefficient = 0.30
 
+//RoR survivor Rig
 /obj/item/clothing/suit/space/rig/ror
 	name = "survivor's hardsuit"
 	desc = "...and so he left the asteroid, with everything but his humanity."
@@ -678,3 +695,21 @@
 
 /obj/item/clothing/head/helmet/space/rig/ror/update_icon()
 	return
+
+//[Xeno]Archaeologist Rig
+/obj/item/clothing/suit/space/rig/arch
+	name = "archaeology hardsuit"
+	desc = "A hardsuit designed for archaeology expeditions. It's yellow and orange materials provide high visibility and resistance to exotic particles."
+	icon_state = "rig-arch"
+	item_state = "arch_hardsuit"
+	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+	head_type = /obj/item/clothing/head/helmet/space/rig/arch
+
+/obj/item/clothing/head/helmet/space/rig/arch
+	name = "archaeology hardsuit helmet"
+	desc = "A hardsuit helmet designed for archaeology expeditions. It's orange materials provide high visibility and resistance to exotic particles."
+	icon_state = "rig0-arch"
+	item_state = "arch_helm"
+	_color = "arch"
+	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+	color_on = "#81F9C6" //Aquamarine. A combination of the colors from the lamp and rail light.

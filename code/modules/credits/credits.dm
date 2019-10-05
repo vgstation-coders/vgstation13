@@ -187,7 +187,8 @@ var/global/datum/credits/end_credits = new
 
 /datum/credits/proc/finalize_episodestring()
 	var/season = time2text(world.realtime,"YY")
-	var/episodenum = SSpersistence_misc.round_count_list[season]
+	var/episode_count_data = SSpersistence_misc.read_data(/datum/persistence_task/round_count)
+	var/episodenum = episode_count_data[season]
 	episode_string = "<h1><span id='episodenumber'>SEASON [season] EPISODE [episodenum]</span><br><span id='episodename'>[episode_name]</span></h1><br><div style='padding-bottom: 75px;'></div>"
 	log_game("So ends [is_rerun() ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name]")
 

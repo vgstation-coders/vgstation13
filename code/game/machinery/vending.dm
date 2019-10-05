@@ -1,7 +1,8 @@
-#define CAT_NORMAL 1
-#define CAT_HIDDEN 2
-#define CAT_COIN   3
-#define CAT_VOUCH  4
+#define CAT_NORMAL 	1
+#define CAT_HIDDEN 	2
+#define CAT_COIN   	3
+#define CAT_VOUCH  	4
+#define CAT_HOLIDAY	5
 
 //Maximum price you can assign to an item
 #define MAX_ITEM_PRICE 1000000000
@@ -34,7 +35,8 @@ var/global/num_vending_terminals = 1
 	var/list/contraband	= list()	// list(/type/path = amount,/type/path2 = amount2)
 	var/list/premium 	= list()	// No specified amount = only one in stock
 	var/list/prices     = list()	// Prices for each item, list(/type/path = price), items not in the list don't have a price.
-	var/list/vouched     = list()	//For voucher-only items. These aren't available in any way without the appropriate voucher.
+	var/list/vouched    = list()	//For voucher-only items. These aren't available in any way without the appropriate voucher.
+	var/list/specials    = list()	//Allows you to lock items to certain holidays, otherwise they don't show up
 
 	var/list/custom_stock = list() 	//Custom items are stored inside our contents, but we keep track of them here so we don't vend our component parts or anything.
 
@@ -44,6 +46,7 @@ var/global/num_vending_terminals = 1
 	var/list/hidden_records = list()
 	var/list/coin_records = list()
 	var/list/voucher_records = list()
+	var/list/holiday_records = list()
 	var/vend_reply				//Thank you for shopping!
 	var/last_reply = 0
 	var/last_slogan = 0			//When did we last pitch?
@@ -89,10 +92,11 @@ var/global/num_vending_terminals = 1
 	var/original_amount = 0 //NON-CUSTOM ONLY - How many items of this product the recharge pack starts with
 	var/amount = 0
 	var/price = 0
-	var/display_color = "blue"
-	var/category = CAT_NORMAL //available by default, contraband, or premium (requires a coin)
+	var/display_color = null //string, "red", "green", "blue", etc
+	var/category = CAT_NORMAL //available on holidays, by default, contraband, or premium (requires a coin)
 	var/subcategory = null
 	var/mini_icon = null
+	var/assignedholiday = null //Add an item to the 'specials' list to make it only show up on a certain holiday
 
 /* TODO: Add this to deconstruction for vending machines
 /obj/item/compressed_vend
@@ -330,6 +334,7 @@ var/global/num_vending_terminals = 1
 	for(var/typepath in productlist)
 		var/amount = productlist[typepath]
 		var/price = prices[typepath]
+		var/special = specials[typepath]
 
 		if (isnull(amount))
 			amount = 1
@@ -339,7 +344,9 @@ var/global/num_vending_terminals = 1
 		R.amount = amount
 		R.original_amount = amount
 		R.price = price
-		R.display_color = pick("red", "blue", "green")
+		R.assignedholiday = special
+		if (!R.display_color)
+			R.display_color = pick("red", "blue", "green")
 		if (hidden)
 			R.category=CAT_HIDDEN
 			hidden_records  += R
@@ -349,6 +356,11 @@ var/global/num_vending_terminals = 1
 		else if (voucher_only)
 			voucher_records += R
 			R.category=CAT_VOUCH
+		else if (R.assignedholiday)
+			R.category=CAT_HOLIDAY
+			R.display_color = pick("orange", "purple", "navy")
+			if(R.assignedholiday == Holiday)
+				holiday_records += R //only add it to the lists if today's our day
 		else
 			R.category = CAT_NORMAL
 			product_records.Add(R)
@@ -363,6 +375,7 @@ var/global/num_vending_terminals = 1
 	datum_products |= hidden_records
 	datum_products |= coin_records
 	datum_products |= voucher_records
+	datum_products |= holiday_records
 	datum_products |= product_records
 	for(var/datum/data/vending_product/product in datum_products)
 		if(product.product_path == this_type)
@@ -635,6 +648,8 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/GetProductIndex(var/datum/data/vending_product/P)
 	var/list/plist
 	switch(P.category)
+		if(CAT_HOLIDAY)
+			plist=holiday_records
 		if(CAT_NORMAL)
 			plist=product_records
 		if(CAT_HIDDEN)
@@ -647,6 +662,8 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/GetProductByID(var/pid, var/category)
 	switch(category)
+		if(CAT_HOLIDAY)
+			return holiday_records[pid]
 		if(CAT_NORMAL)
 			return product_records[pid]
 		if(CAT_HIDDEN)
@@ -761,6 +778,8 @@ var/global/num_vending_terminals = 1
 	else
 		var/list/display_records = src.product_records.Copy()
 
+		if(Holiday)
+			display_records += src.holiday_records
 		if(src.extended_inventory)
 			display_records += src.hidden_records
 		if(src.coin)
@@ -779,6 +798,13 @@ var/global/num_vending_terminals = 1
 				categories[R.subcategory] += R
 			else
 				categories["default"] += R
+
+		if(Holiday && holiday_records.len)
+			var/col = pick("orange", "purple", "navy")
+			dat += {"<FONT color = [col]><B>&nbsp;&nbsp;[Holiday] specials</B></font>:<br>"}
+			for (var/datum/data/vending_product/R in holiday_records)
+				dat += GetProductLine(R)
+			dat += "<br>"
 
 		if(is_custom_machine)
 			for(var/datum/data/vending_product/VP in product_records)
@@ -1312,6 +1338,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25,
+		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/ = 25,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/tomatosoup = 3,
@@ -1323,7 +1350,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25,
+		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/ = 40,
 		)
+	specials = list(
+		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/ = ST_PATRICKS_DAY,
+	)
 
 	pack = /obj/structure/vendomatpack/coffee
 
@@ -1362,6 +1393,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 2,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 100,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 4,
@@ -1380,9 +1413,15 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 75,
 		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 100,
 		)
 	vouched = list(
 		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating = 2
+		)
+	specials = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = ST_PATRICKS_DAY,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = VALENTINES_DAY,
 		)
 
 	pack = /obj/structure/vendomatpack/snack
@@ -1457,6 +1496,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear = 6,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka = 2,
@@ -1469,6 +1509,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear = 20,
 		)
 
 	pack = /obj/structure/vendomatpack/offlicence
@@ -1576,7 +1617,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/bottle/charcoal = 4,
 		/obj/item/weapon/reagent_containers/syringe/antiviral = 4,
 		/obj/item/weapon/reagent_containers/syringe = 12,
+		/obj/item/weapon/reagent_containers/glass/beaker/vial = 8,
 		/obj/item/device/healthanalyzer = 5,
+		/obj/item/device/antibody_scanner = 5,
 		/obj/item/weapon/reagent_containers/glass/beaker = 4,
 		/obj/item/weapon/reagent_containers/dropper = 2,
 		/obj/item/stack/medical/splint = 4,
@@ -1640,6 +1683,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/stack/medical/ointment = 2,
 		/obj/item/weapon/reagent_containers/syringe/inaprovaline = 4,
 		/obj/item/device/healthanalyzer = 1,
+		/obj/item/device/antibody_scanner = 1,
 		/obj/item/stack/medical/splint = 1,
 		)
 	contraband = list(
@@ -1664,6 +1708,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/stack/medical/bruise_pack = 3,
 		/obj/item/stack/medical/ointment =3,
 		/obj/item/device/healthanalyzer = 3,
+		/obj/item/device/antibody_scanner = 3,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/pill/tox = 3,
@@ -2101,14 +2146,18 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/wizrobe/magusblue = 5,
 		/obj/item/clothing/head/wizard/amp = 5,
 		/obj/item/clothing/suit/wizrobe/psypurple = 5,
+		/obj/item/clothing/head/pharaoh = 5,
+		/obj/item/clothing/suit/wizrobe/pharaoh = 5,
 		/obj/item/clothing/shoes/sandal/marisa/leather = 5,
-		/obj/item/clothing/shoes/sandal = 5,
+		/obj/item/clothing/shoes/sandal = 10,
 		/obj/item/clothing/shoes/sandal/marisa = 5,
 		/obj/item/weapon/staff = 5,
 		/obj/item/weapon/staff/broom = 5,
 		/obj/item/clothing/glasses/monocle = 5,
 		/obj/item/weapon/storage/bag/wiz_cards/full = 1,
-		/obj/item/weapon/storage/bag/potion = 5
+		/obj/item/weapon/storage/bag/potion = 5,
+		/obj/item/clothing/suit/wizrobe/hallowiz = 5,
+		/obj/item/clothing/head/wizard/hallowiz = 5,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1,
@@ -2116,8 +2165,13 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/clothing/back/magiccape = 1,
 		)
+	specials = list(
+		/obj/item/clothing/suit/wizrobe/hallowiz = HALLOWEEN,
+		/obj/item/clothing/head/wizard/hallowiz = HALLOWEEN,
+		)
 
-	pack = /obj/structure/vendomatpack/magivend	//Who's laughing now? wizarditis doesn't do shit anyway. - Deity Link
+	pack = /obj/structure/vendomatpack/magivend	//Who's laughing now? wizarditis doesn't do shit anyway. - Deity Link of 2014
+												//How about I make a foul of myself 5 years later? Wizarditis is now a proper symptom. - Deity Link of 2019
 
 /obj/machinery/vending/dinnerware
 	name = "\improper Dinnerware"
@@ -2496,7 +2550,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/kimono/sakura = 3,
 		/obj/item/clothing/head/widehat_red = 3,
 		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/head/sombrero = 3,
 		/obj/item/clothing/suit/poncho = 3
+
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/clothing/suit/cardborg = 3,
@@ -2526,6 +2582,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/that/magic = 3,
 		/obj/item/clothing/suit/kimono = 3,
 		/obj/item/clothing/gloves/white = 3,
+		/obj/item/clothing/mask/gas/lola = 3,
+		/obj/item/clothing/under/lola = 3,
+		/obj/item/clothing/shoes/clown_shoes/lola = 3
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
@@ -2696,6 +2755,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/officercoat = 10,
 		/obj/item/clothing/under/officeruniform = 10,
 		)
+	premium = list(
+		/obj/item/clothing/under/varsity = 1,
+		)
 
 	pack = /obj/structure/vendomatpack/nazivend
 
@@ -2734,6 +2796,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/helmet/space/rig/nazi = 3,
 		/obj/item/clothing/suit/space/rig/nazi = 3,
 		/obj/item/weapon/gun/energy/plasma/MP40k = 4,
+		)
+	premium = list(
+		/obj/item/clothing/under/varsity = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/nazivend //can be reloaded with the same packs as the regular one
@@ -2838,7 +2903,7 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing discount snacks. It is owned by the infamous 'Discount Dan' franchise."
 	product_slogans = list(
 		"Discount Dan, he's the man!",
-		"There 'aint nothing better in this world than a bite of mystery.",
+		"There ain't nothing better in this world than a bite of mystery.",
 		"Don't listen to those other machines, buy my product!",
 		"Quantity over Quality!",
 		"Don't listen to those eggheads at the CDC, buy now!",
@@ -3009,6 +3074,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/storage/trader = 3,
 		/obj/item/device/pda/trader = 3,
 		/obj/item/weapon/card/id/vox/extra = 3,
+		/obj/item/weapon/stamp/trader = 3,
 		/obj/item/weapon/capsule = 60,
 		/obj/item/weapon/implantcase/peace = 5,
 		/obj/item/vaporizer = 1,
@@ -3039,6 +3105,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/storage/trader = 100,
 		/obj/item/device/pda/trader = 100,
 		/obj/item/weapon/card/id/vox/extra = 100,
+		/obj/item/weapon/stamp/trader = 20,
 		/obj/item/weapon/capsule = 10,
 		/obj/item/weapon/implantcase/peace = 100,
 		/obj/item/vaporizer = 100,
@@ -3073,6 +3140,15 @@ var/global/num_vending_terminals = 1
 		premium.Add(pick_n_take(upgrades))
 
 	..()
+
+/obj/machinery/vending/trader/throw_item()
+	var/mob/living/target = locate() in view(7, src)
+
+	if (!target)
+		return 0
+	for(var/i = 0 to rand(3,12))
+		var/obj/I = new /obj/item/weapon/reagent_containers/food/snacks/egg(get_turf(src))
+		I.throw_at(target, 16, 3)
 
 /obj/machinery/vending/barber
 	name = "\improper BarberVend"
@@ -3251,7 +3327,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/mining_drone_cube = 5,
 		/obj/item/device/wormhole_jaunter = 10,
 		/obj/item/weapon/resonator = 5,
-		/obj/item/weapon/gun/energy/kinetic_accelerator = 10,
+		/obj/item/voucher/warp/kinetic_accelerator = 10,
 		/obj/item/weapon/tank/jetpack/carbondioxide = 3,
 		/obj/item/weapon/gun/hookshot = 3,
 		/obj/item/weapon/lazarus_injector/advanced = 4,
@@ -3266,29 +3342,69 @@ var/global/num_vending_terminals = 1
 		/obj/item/borg/upgrade/hook = 1,
 		)
 	prices = list(
-		/obj/item/toy/canary = 100,
-		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 100,
-		/obj/item/clothing/mask/cigarette/cigar/havana = 100,
-		/obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning = 150,
-		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 150,
-		/obj/item/weapon/soap/nanotrasen = 150,
-		/obj/item/clothing/mask/facehugger/toy = 250,
-		/obj/item/weapon/storage/belt/lazarus = 500,
-		/obj/item/device/mobcapsule = 250,
-		/obj/item/weapon/lazarus_injector = 1000,
-		/obj/item/weapon/pickaxe/jackhammer = 500,
-		/obj/item/weapon/mining_drone_cube = 500,
-		/obj/item/device/wormhole_jaunter = 250,
-		/obj/item/weapon/resonator = 750,
-		/obj/item/weapon/storage/bag/money = 1000,
-		/obj/item/weapon/gun/energy/kinetic_accelerator = 1000,
-		/obj/item/weapon/pickaxe/silver = 1000,
-		/obj/item/weapon/pickaxe/gold = 2000,
-		/obj/item/weapon/tank/jetpack/carbondioxide = 2000,
-		/obj/item/weapon/gun/hookshot = 3000,
-		/obj/item/weapon/lazarus_injector/advanced = 3000,
-		/obj/item/weapon/pickaxe/diamond = 3000,
-		/obj/item/borg/upgrade/hook = 3000,
+		/obj/item/toy/canary = 20,
+		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 20,
+		/obj/item/clothing/mask/cigarette/cigar/havana = 20,
+		/obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 15,
+		/obj/item/weapon/soap/nanotrasen = 15,
+		/obj/item/clothing/mask/facehugger/toy = 25,
+		/obj/item/weapon/storage/belt/lazarus = 50,
+		/obj/item/device/mobcapsule = 25,
+		/obj/item/weapon/lazarus_injector = 50,
+		/obj/item/weapon/pickaxe/jackhammer = 50,
+		/obj/item/weapon/mining_drone_cube = 50,
+		/obj/item/device/wormhole_jaunter = 25,
+		/obj/item/weapon/resonator = 75,
+		/obj/item/weapon/storage/bag/money = 10,
+		/obj/item/voucher/warp/kinetic_accelerator = 25,
+		/obj/item/weapon/pickaxe/silver = 100,
+		/obj/item/weapon/pickaxe/gold = 200,
+		/obj/item/weapon/tank/jetpack/carbondioxide = 300,
+		/obj/item/weapon/gun/hookshot = 300,
+		/obj/item/weapon/lazarus_injector/advanced = 150,
+		/obj/item/weapon/pickaxe/diamond = 300,
+		/obj/item/borg/upgrade/hook = 300,
 		)
 
 	pack = /obj/structure/vendomatpack/mining
+
+/obj/machinery/vending/games
+	name = "\improper Al's Fun And Games"
+	desc = "A vending machine that sells various games and toys."
+	product_slogans = list(
+		"It's all fun and games at Al's Fun And Games!",
+		"Roll for initiative!",
+		"It's a full house of fun!",
+		"Caves and Wyverns 3rd edition available now!"
+	)
+	product_ads = list(
+		"Sponsored by Warlocks of the Shore.",
+		"Al's Fun And Games Co. is not liable for friendships damaged by use of the Product."
+	)
+	icon_state = "games"
+	products = list(
+		/obj/item/toy/cards = 5,
+		/obj/item/toy/cards/une = 5,
+		/obj/item/weapon/storage/pill_bottle/dice = 5
+		)
+	contraband = list(
+		/obj/item/weapon/dice/loaded = 3,
+		/obj/item/weapon/dice/loaded/d20 = 3
+		)
+	premium = list(
+		/obj/item/weapon/skull = 1,
+		/obj/item/weapon/storage/bag/wiz_cards/frog = 3
+		)
+	prices = list(
+		/obj/item/toy/cards = 5,
+		/obj/item/toy/cards/une = 10,
+		/obj/item/weapon/storage/pill_bottle/dice = 10,
+		/obj/item/weapon/dice/loaded = 15,
+		/obj/item/weapon/dice/loaded/d20 = 15,
+		/obj/item/weapon/skull = 20,
+		/obj/item/weapon/storage/bag/wiz_cards/frog = 20
+		)
+
+	pack = /obj/structure/vendomatpack/games
+	vend_reply = "Don't have too much fun!"

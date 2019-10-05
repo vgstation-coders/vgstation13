@@ -50,6 +50,7 @@ var/list/potential_bonus_items = list(
 		security_positions,
 	)
 	var/dept = "None"
+	// I wish I could use a switch here, but byond won't let me.
 	if (dept_of_choice == engineering_positions)
 		dept = "Engineering"
 	else if (dept_of_choice == medical_positions)
@@ -83,6 +84,8 @@ var/list/potential_bonus_items = list(
 		. += "<br/> <span class='danger'>The raid took too long.</span>"
 	. += "<br/> The raiders took <b>[got_personnel]</b> people to the Shoal."
 	. += "<br/> The raiders secured <b>[got_items]</b> priority items."
+	. += "<br/> Total points: <b>[total_points]</b>. <br/>"
+	. += results
 
 /datum/faction/vox_shoal/AdminPanelEntry()
 	. = ..()
@@ -178,8 +181,16 @@ var/list/potential_bonus_items = list(
 			for (var/obj/O in L)
 				count_score(O)
 
-		// -- Thirdly : announce and save score.
-		// To finish...
+		// -- Thirdly, let's compare the score.
+		var/vox_raider_data = SSpersistence_misc.read_data(/datum/persistence_task/vox_raiders)
+		var/score_to_beat = text2num(vox_raider_data["best_score"])
+
+		if (total_points > score_to_beat)
+			for (var/datum/role/R in members)
+				to_chat(R.antag.current, "<span class='notice'><b>You have beaten the /vg/station heist record.</b> Congratulations!</span>")
+				results = "The vox raiders were <b>better</b> than the previous record of [score_to_beat], which was on [vox_raider_data["DD"]]/[vox_raider_data["MM"]]/[vox_raider_data["YY"]]."
+		else
+			results = "The vox raiders didn't beat the previous record of [score_to_beat]."
 
 
 /datum/faction/vox_shoal/proc/count_score(var/atom/O)
@@ -192,7 +203,6 @@ var/list/potential_bonus_items = list(
 			total_points += 200
 		if (is_type_in_list(O, high_score_items))
 			total_points += 400
-		
 		if (is_type_in_list(O, bonus_items_of_the_day))
 			total_points += 100
 			got_items++
@@ -204,6 +214,12 @@ var/list/potential_bonus_items = list(
 	if (H.mind.assigned_role in dept_objective)
 		total_points += 200
 		got_personnel++
+
+/datum/faction/vox_shoal/proc/generate_string()
+	var/list/our_stars = list()
+	for (var/datum/role/lad in members)
+		our_stars += "[lad.antag.key] as [lad.antag.name]"
+	return english_list(our_stars)
 
 // -- Mobs procs --
 			
@@ -297,3 +313,15 @@ var/list/potential_bonus_items = list(
 	equip_to_slot_or_del(W, slot_wear_id)
 
 	return 1
+
+/obj/item/weapon/paper/vox_paper
+	name = "Shoal objectives"
+
+/obj/item/weapon/paper/vox_paper/initialize()
+	var/vox_raider_data = SSpersistence_misc.read_data(/datum/persistence_task/vox_raiders)
+	var/score_to_beat = vox_raider_data["best_score"]
+	var/best_team = vox_raider_data["winning_team"]
+	info = {"<h4>The shoal needs us to gather ressources. </h4>
+	<br/>
+	Our best agents of all time were able to gather an estimate of [score_to_beat] voxcoins in assets. <br/>
+	Their names are as follows: [best_team]."}

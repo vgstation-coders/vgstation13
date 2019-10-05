@@ -1139,6 +1139,7 @@ About the new airlock wires panel:
 	if(!operating)
 		panel_open = !panel_open
 		playsound(src, 'sound/items/Screwdriver.ogg', 25, 1, -6)
+		to_chat(user, "<span class='notice'>You [panel_open?"open":"close"] the panel.</span>")
 		update_icon()
 		return 1
 	return
@@ -1397,7 +1398,7 @@ About the new airlock wires panel:
 	for(var/turf/T in loc)
 		var/obj/structure/window/W = locate(/obj/structure/window) in T
 		if (W)
-			W.Destroy(brokenup = 1)
+			W.shatter()
 
 	..()
 	return

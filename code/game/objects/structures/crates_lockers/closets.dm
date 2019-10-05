@@ -95,6 +95,11 @@
 	for(var/obj/structure/closet/closet in get_turf(src))
 		if(closet != src && !closet.wall_mounted)
 			return 0
+	
+	for(var/mob/living/carbon/carbon in src.loc)
+		if (carbon.mutual_handcuffs)
+			if (carbon.mutual_handcuffed_to.loc == src.loc || carbon.loc == src.loc)
+				return 0
 	return 1
 
 /obj/structure/closet/proc/dump_contents()
@@ -444,8 +449,7 @@
 
 		if(iswelder(W) && canweld())
 			var/obj/item/weapon/weldingtool/WT = W
-			if(!WT.remove_fuel(0,user))
-				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			if(!WT.remove_fuel(1,user))
 				return
 			materials.makeSheets(src)
 			for(var/mob/M in viewers(src))
@@ -461,8 +465,7 @@
 		return
 	else if(iswelder(W) && canweld())
 		var/obj/item/weapon/weldingtool/WT = W
-		if(!WT.remove_fuel(0,user))
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+		if(!WT.remove_fuel(1,user))
 			return
 		src.welded =! src.welded
 		src.update_icon()
@@ -649,6 +652,8 @@
 				return
 		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+
+// -- Vox raiders.
 
 /obj/structure/closet/loot
 

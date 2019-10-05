@@ -85,15 +85,6 @@
 /datum/dna/gene/basic/regenerate/New()
 	block=REGENERATEBLOCK
 
-/datum/dna/gene/basic/regenerate/activate(var/mob/living/carbon/human/H)
-	..()
-	H.calorie_burn_rate *= 2
-
-/datum/dna/gene/basic/regenerate/deactivate(var/mob/living/carbon/human/H)
-	if(..())
-		H.calorie_burn_rate /= 2
-
-
 /datum/dna/gene/basic/increaserun
 	name = "Super Speed"
 	activation_messages = list("Your leg muscles pulsate.")
@@ -141,6 +132,10 @@
 
 /spell/targeted/remotesay/cast(var/list/targets, mob/living/carbon/human/user)
 	if(!user || !istype(user))
+		return
+
+	if(user.mind.miming)
+		to_chat(user, "<span class = 'warning'>You find yourself unable to convey your thoughts outside of gestures.</span>")
 		return
 
 	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
@@ -206,9 +201,9 @@
 		return 1
 
 /datum/dna/gene/basic/heat_resist/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	if(isvox(M) || isskelevox(M))	
+	if(isvox(M) || isskelevox(M))
 		return "coldvox_s"
-	else	
+	else
 		return "cold[fat]_s"
 
 /datum/dna/gene/basic/cold_resist
@@ -303,7 +298,7 @@
 	block = TELEBLOCK
 
 /datum/dna/gene/basic/tk/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	if(isvox(M) || isskelevox(M))	
+	if(isvox(M) || isskelevox(M))
 		return "telekinesisheadvox_s"
-	else	
+	else
 		return "telekinesishead[fat]_s"

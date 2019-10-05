@@ -66,19 +66,18 @@
 							rupture_lung()
 
 				//Handle filtering
+
 				var/block = 0
-				if(wear_mask)
-					if(wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+				var/list/blockers = list(wear_mask,glasses,head)
+				for (var/item in blockers)
+					var/obj/item/I = item
+					if (!istype(I))
+						continue
+					if (I.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 						block = 1
-				if(glasses)
-					if(glasses.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
-						block = 1
-				if(head)
-					if(head.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
-						block = 1
+						break
 
 				if(!block)
-
 					for(var/obj/effect/effect/smoke/chem/smoke in view(1, src)) //If there is smoke within one tile
 						if(smoke.reagents.total_volume)
 							smoke.reagents.reaction(src, INGEST)
@@ -86,6 +85,9 @@
 								if(smoke)
 									smoke.reagents.copy_to(src, 10) //I dunno, maybe the reagents enter the blood stream through the lungs?
 							break //If they breathe in the nasty stuff once, no need to continue checking
+
+					//airborne viral spread/breathing
+					breath_airborne_diseases()
 
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))
@@ -101,15 +103,14 @@
 
 	if(breath)
 		loc.assume_air(breath)
-
+/*
 		//Spread some viruses while we are at it
 		if(virus2 && virus2.len > 0)
-			if(prob(10) && get_infection_chance(src))
-//					log_debug("[src] : Exhaling some viruses")
-				for(var/mob/living/M in range(1,src))
-					if(can_be_infected(M))
-						spread_disease_to(src,M)
-
+			//if(get_infection_chance(src))//checking our own infection protections, so we don't spread an airborne virus if we're wearing internals
+			//	for(var/mob/living/M in range(1,src))
+			//		if(can_be_infected(M))
+			//			spread_disease_to(src,M)
+*/
 /mob/living/carbon/human/proc/get_breath_from_internal(volume_needed)
 	if(internal)
 		if(!contents.Find(internal))

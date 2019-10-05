@@ -12,6 +12,8 @@
 	mob_push_flags = ALLMOBS
 	mob_swap_flags = ALLMOBS
 
+	flags = HEAR_ALWAYS | PROXMOVE
+
 	var/age = 30		//Player's age (pure fluff)
 	//var/b_type = "A+"	//Player's bloodtype //NOW HANDLED IN THEIR DNA
 
@@ -63,7 +65,6 @@
 
 	var/last_shush = 0 // disarm intent shushing cooldown
 	var/lastFart = 0 // Toxic fart cooldown.
-	var/lastDab = 0 //Dab cooldown.
 	var/last_emote_sound = 0 // Prevent scream spam in some situations
 
 	var/obj/item/organ/external/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes

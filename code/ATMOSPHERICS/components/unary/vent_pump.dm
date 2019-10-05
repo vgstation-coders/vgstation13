@@ -41,15 +41,12 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/on
 	on = 1
-	icon_state = "hout"
 
 /obj/machinery/atmospherics/unary/vent_pump/siphon
 	pump_direction = 0
-	icon_state = "hoff"
 
 /obj/machinery/atmospherics/unary/vent_pump/siphon/on
 	on = 1
-	icon_state = "hin"
 
 /obj/machinery/atmospherics/unary/vent_pump/New()
 	..()

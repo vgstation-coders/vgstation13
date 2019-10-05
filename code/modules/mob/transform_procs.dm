@@ -53,7 +53,7 @@
 	qdel(src)
 
 
-/mob/proc/monkeyize(var/ignore_primitive = TRUE)
+/mob/proc/monkeyize(var/ignore_primitive = TRUE, var/choose_name = FALSE)
 	if(ismonkey(src)) //What's the point
 		return
 	if(!Premorph())
@@ -91,8 +91,11 @@
 			Mo.viruses += D
 			D.affected_mob = Mo
 			L.viruses -= D //But why?
+		Mo.virus2 = virus_copylist(L.virus2)
+		if (L.immune_system)
+			L.immune_system.transfer_to(Mo)
 	Mo.delayNextAttack(0)
-	Postmorph(Mo, TRUE, "You have been turned into a monkey! Pick a monkey name for your new monkey self.")
+	Postmorph(Mo, choose_name, "You have been turned into a monkey! Pick a monkey name for your new monkey self.")
 	return Mo
 
 /mob/living/carbon/human/monkeyize(ignore_primitive = FALSE)
@@ -288,7 +291,7 @@
 	var/datum/preferences/A = new()	//Randomize appearance for the human
 	A.randomize_appearance_for(new_human)
 	if(!new_species || !(new_species in all_species))
-		var/list/restricted = list("Krampus", "Horror")
+		var/list/restricted = list("Krampus", "Horror", "Manifested")
 		new_species = pick(all_species - restricted)
 	new_human.set_species(new_species)
 	if(isliving(src))
@@ -324,6 +327,18 @@
 	return new_mob
 
 /mob/living/carbon/human/proc/GALize()
+	if(ishuman(src))
+		var/mob/living/carbon/human/M = src
+		if(!M.is_wearing_item(/obj/item/clothing/under/galo))
+			var/obj/item/clothing/under/galo/G = new /obj/item/clothing/under/galo(get_turf(M))
+			if(M.w_uniform)
+				M.u_equip(M.w_uniform, 1)
+			M.equip_to_slot(G, slot_w_uniform)
+		if(!M.is_wearing_item(/obj/item/clothing/glasses/sunglasses))
+			var/obj/item/clothing/glasses/sunglasses/S = new /obj/item/clothing/glasses/sunglasses(get_turf(M))
+			if(M.glasses)
+				M.u_equip(M.glasses, 1)
+			M.equip_to_slot(S, slot_glasses)
 	my_appearance.s_tone = -100 //Nichi saro ni itte hada o yaku
 	update_body()
 	if(gender == MALE && my_appearance.h_style != "Toriyama 2")

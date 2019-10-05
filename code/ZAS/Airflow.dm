@@ -64,7 +64,7 @@ atom/movable/GotoAirflowDest(n)
 /mob/living/carbon/slime/airflow_stun()
 	return
 
-/mob/living/carbon/human/airflow_stun()
+/mob/living/carbon/human/airflow_stun(differential)
 	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
 		return FALSE
 	if(locked_to || (flags & INVULNERABLE))
@@ -78,7 +78,7 @@ atom/movable/GotoAirflowDest(n)
 
 	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
-	SetKnockdown(rand(1,5))
+	SetKnockdown(rand(differential/20,differential/10))
 	last_airflow_stun = world.time
 
 /atom/movable/proc/check_airflow_movable(n)
@@ -170,6 +170,7 @@ atom/movable/GotoAirflowDest(n)
 	last_airflow = world.time
 
 	spawn(0)
+		var/turf/curturf = get_turf(src)
 		while(airflow_speed > 0 && Process_Spacemove(1))
 			airflow_speed = min(airflow_speed,15)
 			airflow_speed -= zas_settings.Get(/datum/ZAS_Setting/airflow_speed_decay)
@@ -192,8 +193,13 @@ atom/movable/GotoAirflowDest(n)
 				break
 			if(!isturf(loc))
 				break
+			if(curturf != get_turf(src)) //We've managed to get to our feet and move away
+				break
+			if(!check_airflow_movable(n*10)) //We've turned our magboots on, or become unstunnable, etc.
+				break
 			set_glide_size(DELAY2GLIDESIZE(sleep_time))
 			step_towards(src, src.airflow_dest)
+			curturf = get_turf(src)
 			var/mob/M = src
 			if(istype(M) && M.client)
 				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))

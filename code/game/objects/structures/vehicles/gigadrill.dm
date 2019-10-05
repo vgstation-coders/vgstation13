@@ -62,6 +62,8 @@
 
 	if(istype(target, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = target
+		if(M.mining_difficulty > MINE_DIFFICULTY_TOUGH)
+			return
 		if(M.finds && M.finds.len) //Shameless copypaste. TODO: Make an actual proc for this then apply it to mechs as well.
 			if(prob(5))
 				M.excavate_find(5, M.finds[1])

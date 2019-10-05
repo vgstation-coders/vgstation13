@@ -515,7 +515,6 @@
 		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,
-		/obj/item/weapon/coin/adamantine,
 		/obj/item/weapon/coin/clown,
 		/obj/item/weapon/coin/diamond,
 		/obj/item/weapon/coin/iron,
@@ -597,13 +596,15 @@
 	name = "high risk spawner"
 	icon_state = "maint"
 	chance = 20
-	to_spawn = list(
+	/* Removed until they get properly converted to virus2 or something
 		/obj/item/weapon/reagent_containers/glass/bottle/epiglottis_virion,
 		/obj/item/weapon/reagent_containers/glass/bottle/flu_virion,
-		/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
 		/obj/item/weapon/reagent_containers/glass/bottle/pierrot_throat,
-		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/weapon/reagent_containers/glass/bottle/cold,
+	*/
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+		/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
 		/obj/item/device/powersink,
 		/obj/item/device/powersink,
 		/obj/item/weapon/gun/projectile/flamethrower/full,
@@ -858,6 +859,23 @@
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
 // Mobs ////////////////////////////////////////////////////////
 
+/obj/abstract/map/spawner/mobs/monkeys
+	name = "monkey spawner"
+	icon_state = "mob_monkey"
+	chance = 50
+	to_spawn = list(
+		/mob/living/carbon/monkey,
+		/mob/living/carbon/monkey/tajara,
+		/mob/living/carbon/monkey/skrell,
+		/mob/living/carbon/monkey/unathi,
+		/mob/living/carbon/monkey/grey,
+		/mob/living/carbon/monkey/mushroom,
+		/mob/living/carbon/monkey/rock,
+		/mob/living/carbon/monkey/diona,
+		/mob/living/carbon/monkey/skellington,
+		/mob/living/carbon/monkey/skellington/plasma)
+
+
 /obj/abstract/map/spawner/mobs/carp
 	name = "carp spawner"
 	icon_state = "mob_carp"
@@ -876,11 +894,7 @@
 	icon_state = "mob_mouse"
 	amount = 2
 	chance = 50
-	to_spawn = list(
-		/mob/living/simple_animal/mouse/brown,
-		/mob/living/simple_animal/mouse/gray,
-		/mob/living/simple_animal/mouse/white,
-		)
+	to_spawn = list(/mob/living/simple_animal/mouse/common)
 
 /obj/abstract/map/spawner/mobs/bear
 	name = "bear spawner"
@@ -1142,7 +1156,7 @@
 		/obj/item/clothing/accessory/medal/gold/heroism,
 		/obj/item/clothing/accessory/storage/webbing,
 		/obj/item/clothing/suit/armor/laserproof,
-		/obj/item/clothing/accessory/holster,
+		/obj/item/clothing/accessory/holster/handgun,
 		/obj/item/clothing/glasses/scanner/night,
 		/obj/item/clothing/head/collectable/petehat,
 		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
@@ -1217,7 +1231,7 @@
 	/obj/item/clothing/accessory/storage/webbing,
 	/obj/item/clothing/under/sexyclown,
 	/obj/item/clothing/suit/armor/laserproof,
-	/obj/item/clothing/accessory/holster,
+	/obj/item/clothing/accessory/holster/handgun,
 	/obj/item/clothing/head/helmet/siren,
 	/obj/item/clothing/glasses/scanner/night,
 	/obj/item/clothing/head/collectable/petehat,

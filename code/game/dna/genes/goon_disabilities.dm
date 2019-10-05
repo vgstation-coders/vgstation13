@@ -390,14 +390,14 @@
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()
-				gibs(H.loc, H.viruses, H.dna)
+				gibs(H.loc, H.virus2, H.dna)
 				return
 
 			if(H.set_species("Skellington"))
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()
-				gibs(H.loc, H.viruses, H.dna)
+				gibs(H.loc, H.virus2, H.dna)
 		else
 			M.visible_message("<span class='danger'>[usr.name] melts into a pile of bloody viscera!</span>")
 			M.drop_all()

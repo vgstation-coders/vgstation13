@@ -183,7 +183,8 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/process()
 	//Blueprints must be in hands to be usable
 	//Editor must be in the edited area
-	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || (!currently_edited.contents.Find(get_turf(editor))) )
+	var/turf/turf_loc = get_turf(editor)
+	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || turf_loc.loc != currently_edited )
 		if(editor)
 			to_chat(editor, "<span class='info'>You finish modifying \the [src].</span>")
 
@@ -469,11 +470,12 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	desc = "Required for turning a dull room with some engines in the back into something that can move through space!"
+	var/area_requirement_override = FALSE //so admins can allow a licence to turn any area into a shuttle
 
 /obj/item/shuttle_license/attack_self(mob/user)
 	to_chat(user, "<span class = 'notice'>Checking current area...</span>")
 	var/area/A = get_area(user)
-	if(!istype(A, /area/station/custom))
+	if(!area_requirement_override && !istype(A, /area/station/custom))
 		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Custom areas only.</span>")
 		return
 
@@ -489,7 +491,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		if(D.heater && D.anchored)
 			active_engines++
 
-	if(active_engines < 2 || area_size/active_engines > 12.5) //2 engines per 25 tiles, with a minimum of 2 engines.
+	if(active_engines < 2 || area_size/active_engines > 15) //2 engines per 30 tiles, with a minimum of 2 engines.
 		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Insufficient engine count.</span>")
 		to_chat(user, "<span class = 'notice'> Active engine count: [active_engines]. Area size: [area_size] meters squared.</span>")
 		return

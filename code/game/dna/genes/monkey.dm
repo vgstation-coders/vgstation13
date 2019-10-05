@@ -73,12 +73,15 @@
 		O.viruses += D
 		D.affected_mob = O
 		M.viruses -= D
+	O.virus2 = virus_copylist(M.virus2)
+	if (M.immune_system)
+		M.immune_system.transfer_to(O)
 
 	//for(var/obj/T in M)
 	//	del(T)
 
 	O.forceMove(M.loc)
-	Mo.transferBorers(O)
+	Mo.dropBorers() //safer to just drop these like I originally did
 	if(M.mind)
 		M.mind.transfer_to(O)	//transfer our mind to the human
 

@@ -22,7 +22,7 @@
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged. This is supposedly infrared brightness. Lower for combat mechs.
 	var/list/hud_list = list()
-	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
+	var/initial_icon
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
 	var/step_in = 10 //make a step in step_in/10 sec.
@@ -117,7 +117,7 @@
 	log_message("[src.name] created.")
 	loc.Entered(src)
 	mechas_list += src //global mech list
-	reset_icon()
+	icon_state = initial_icon
 	icon_state += "-open"
 	return
 
@@ -446,7 +446,8 @@
 	if(src.throwing)//high velocity mechas in your face!
 		var/breakthrough = 0
 		if(istype(obstacle, /obj/structure/window/))
-			obstacle.Destroy(brokenup = 1)
+			var/obj/structure/window/W = obstacle
+			W.shatter()
 			breakthrough = 1
 
 		else if(istype(obstacle, /obj/structure/grille/))
@@ -471,10 +472,12 @@
 		else if(istype(obstacle, /mob/living))
 			var/mob/living/L = obstacle
 			if (L.flags & INVULNERABLE)
+				stopMechWalking()
 				src.throwing = 0
 				src.crashing = null
 			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
 				//can't be knocked down? you'll still take the damage.
+				stopMechWalking()
 				src.throwing = 0
 				src.crashing = null
 				L.take_overall_damage(5,0)
@@ -491,6 +494,7 @@
 				playsound(src, pick(hit_sound), 50, 0, 0)
 				breakthrough = 1
 		else
+			stopMechWalking()
 			src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
 			src.crashing = null
 
@@ -1198,7 +1202,7 @@
 		src.add_fingerprint(H)
 		src.forceMove(src.loc)
 		src.log_append_to_last("[H] moved in as pilot.")
-		src.icon_state = src.reset_icon()
+		src.icon_state = src.initial_icon
 		dir = dir_in
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
@@ -1210,18 +1214,6 @@
 		//change the cursor
 		if(H.client && cursor_enabled)
 			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-		/* -- Mode/mind specific stuff goes here
-		if(H.mind)
-			if(isrev(H) || isrevhead(H))
-				ticker.mode.update_all_rev_icons()
-			if(isnukeop(H))
-				ticker.mode.update_all_synd_icons()
-			if (iscult(H))
-				ticker.mode.update_all_cult_icons()
-			if(iswizard(H) || isapprentice(H))
-				ticker.mode.update_all_wizard_icons()
-		// -- End mode specific stuff
-		*/
 
 		return 1
 	else
@@ -1273,7 +1265,7 @@
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
-		src.icon_state = src.reset_icon()
+		src.icon_state = src.initial_icon
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)
@@ -1432,21 +1424,8 @@
 		if(src.occupant && src.occupant.client)
 			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
 
-		/* -- Mode/mind specific stuff goes here
-		if(src.occupant.mind)
-			if(isrev(src.occupant) || isrevhead(src.occupant))
-				ticker.mode.update_all_rev_icons()
-			if(isnukeop(src.occupant))
-				ticker.mode.update_all_synd_icons()
-			if (iscult(src.occupant))
-				ticker.mode.update_all_cult_icons()
-			if(iswizard(src.occupant) || isapprentice(src.occupant))
-				ticker.mode.update_all_wizard_icons()
-		// -- End mode specific stuff
-		*/
-
 		src.occupant = null
-		src.icon_state = src.reset_icon()+"-open"
+		src.icon_state = src.initial_icon+"-open"
 		if(!lights) //if the lights are off, turn off the cabin lights
 			set_light(0)
 		src.dir = dir_in
@@ -1690,16 +1669,21 @@
 						</head>
 						<body>
 						<h1>Following keycodes are present in this system:</h1>"}
+
 	for(var/a in operation_req_access)
 		output += "[get_access_desc(a)] - <a href='?src=\ref[src];del_req_access=[a];user=\ref[user];id_card=\ref[id_card]'>Delete</a><br>"
+
+	output += "<a href='?src=\ref[src];del_all_req_access=1;user=\ref[user];id_card=\ref[id_card]'><br><b>Delete All</b></a><br>"
+
 	output += "<hr><h1>Following keycodes were detected on portable device:</h1>"
 	for(var/a in id_card.access)
 		if(a in operation_req_access)
 			continue
-		var/a_name = get_access_desc(a)
-		if(!a_name)
+		if(!get_access_desc(a))
 			continue //there's some strange access without a name
-		output += "[a_name] - <a href='?src=\ref[src];add_req_access=[a];user=\ref[user];id_card=\ref[id_card]'>Add</a><br>"
+		output += "[get_access_desc(a)] - <a href='?src=\ref[src];add_req_access=[a];user=\ref[user];id_card=\ref[id_card]'>Add</a><br>"
+
+	output += "<a href='?src=\ref[src];add_all_req_access=1;user=\ref[user];id_card=\ref[id_card]'><br><b>Add All</b></a><br>"
 
 	output += {"<hr><a href='?src=\ref[src];finish_req_access=1;user=\ref[user]'>Finish</a> <font color='red'>(Warning! The ID upload panel will be locked. It can be unlocked only through Exosuit Interface.)</font>
 		</body></html>"}
@@ -1914,10 +1898,25 @@
 		operation_req_access += topic_filter.getNum("add_req_access")
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
+	if(href_list["add_all_req_access"] && add_req_access && topic_filter.getObj("id_card"))
+		if(!in_range(src, usr))
+			return
+		var/obj/item/weapon/card/id/mycard = topic_filter.getObj("id_card")
+		var/list/myaccess = mycard.access
+		for(var/a in myaccess)
+			operation_req_access += a
+		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
+		return
 	if(href_list["del_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
 			return
 		operation_req_access -= topic_filter.getNum("del_req_access")
+		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
+		return
+	if(href_list["del_all_req_access"] && add_req_access && topic_filter.getObj("id_card"))
+		if(!in_range(src, usr))
+			return
+		operation_req_access = list()
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
 	if(href_list["finish_req_access"])
@@ -2115,13 +2114,6 @@
 		return 1
 	return 0
 
-/obj/mecha/proc/reset_icon()
-	if (initial_icon)
-		icon_state = initial_icon
-	else
-		icon_state = initial(icon_state)
-	return icon_state
-
 /obj/mecha/acidable()
 	return 0
 
@@ -2291,5 +2283,6 @@
 	return
 */
 
+#undef STATE_BOLTSHIDDEN
 #undef STATE_BOLTSEXPOSED
 #undef STATE_BOLTSOPENED

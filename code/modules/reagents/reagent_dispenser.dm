@@ -28,12 +28,7 @@
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>It contains:</span>")
-	if(reagents && reagents.reagent_list.len)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-	else
-		to_chat(user, "<span class='info'>Nothing.</span>")
+	reagents.get_examine(user)
 
 /obj/structure/reagent_dispensers/cultify()
 	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))
@@ -308,7 +303,8 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "virusfoodtank"
 	amount_per_transfer_from_this = 10
-	anchored = 1
+	anchored = TRUE
+	density = FALSE
 
 /obj/structure/reagent_dispensers/virusfood/New()
 	. = ..()
@@ -391,7 +387,7 @@
 /obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
 	return TRUE
 
-/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/reagent_containers/R, var/mob/user)
+/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/weapon/reagent_containers/R, var/mob/user)
 	if(user.a_intent != I_HELP)
 		return TRUE
 	return FALSE

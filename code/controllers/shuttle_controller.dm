@@ -38,6 +38,8 @@ datum/emergency_shuttle
 
 	var/warmup_sound = 0
 
+	var/was_early_launched = FALSE //had timer shortened to 10 seconds
+
 	// call the shuttle
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming
@@ -95,7 +97,7 @@ datum/emergency_shuttle/proc/recall()
 // note if direction = -1, gives a count-up to SHUTTLEARRIVETIME
 datum/emergency_shuttle/proc/timeleft()
 	if(online)
-		var/timeleft = round((endtime - world.timeofday)/10 ,1)
+		var/timeleft = round((endtime - world.time)/10 ,1)
 		if(direction >= 0)
 			return timeleft
 		else
@@ -105,7 +107,7 @@ datum/emergency_shuttle/proc/timeleft()
 
 // sets the time left to a given delay (in seconds)
 datum/emergency_shuttle/proc/settimeleft(var/delay)
-	endtime = world.timeofday + delay * 10
+	endtime = world.time + delay * 10
 	timelimit = delay
 
 // sets the shuttle direction
@@ -116,8 +118,8 @@ datum/emergency_shuttle/proc/setdirection(var/dirn)
 		return
 	direction = dirn
 	// if changing direction, flip the timeleft by SHUTTLEARRIVETIME, unless changing from/to 0
-	var/ticksleft = endtime - world.timeofday
-	endtime = world.timeofday + (SHUTTLEARRIVETIME*10 - ticksleft)
+	var/ticksleft = endtime - world.time
+	endtime = world.time + (SHUTTLEARRIVETIME*10 - ticksleft)
 	return
 
 datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)

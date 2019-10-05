@@ -22,7 +22,7 @@
 /obj/structure/closet/secure_closet/can_open()
 	if(!..())
 		return 0
-	if(src.locked)
+	if(src.locked)	
 		return 0
 	return 1
 
@@ -89,8 +89,7 @@
 	else
 		if(iswelder(W))
 			var/obj/item/weapon/weldingtool/WT = W
-			if(!WT.remove_fuel(0,user))
-				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			if(!WT.remove_fuel(1,user))
 				return
 			src.welded =! src.welded
 			src.update_icon()

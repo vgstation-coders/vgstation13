@@ -71,7 +71,6 @@ var/list/uplink_items = list()
 	return new item(loc,user)
 
 /datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
-	..()
 	if(!istype(U))
 		return 0
 
@@ -196,7 +195,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/dangerous/ammo
 	name = "Ammo-357"
-	desc = "A speedloader and seven additional rounds for the revolver. Extra seven-piece boxes of .357 rounds can be made in a modified protolathe."
+	desc = "A speedloader and seven additional rounds for the revolver. Extra seven-piece boxes of .357 rounds can be made in a modified autolathe."
 	item = /obj/item/weapon/storage/box/syndie_kit/ammo
 	cost = 4
 
@@ -240,7 +239,21 @@ var/list/uplink_items = list()
 /datum/uplink_item/dangerous/gatling
 	name = "Gatling Gun"
 	desc = "A huge minigun. Makes up for its lack of mobility and discretion with sheer firepower. Has 200 bullets."
-	item = /obj/item/weapon/gun/gatling
+	item = /obj/structure/closet/crate/secure/weapon/experimental/gatling
+	cost = 40
+	jobs_exclusive = list("Nuclear Operative")
+
+/datum/uplink_item/dangerous/nikita
+	name = "Nikita RC Missile Launcher"
+	desc = "A remote-controlled missile launcher, trades in raw explosive power for extreme steering precision, this one might actually not blow up in your face. Comes with four rockets"
+	item = /obj/structure/closet/crate/secure/weapon/experimental/nikita
+	cost = 40
+	jobs_exclusive = list("Nuclear Operative")
+
+/datum/uplink_item/dangerous/hecate
+	name = "PMG Hecate II Anti-Material Rifle"
+	desc = "A .50 BMG anti-material sniper rifle. Anything between the barrel and the next three solid walls should be tenderized in short order. Comes with eight individual rounds, thermals and earmuffs."
+	item = /obj/structure/closet/crate/secure/weapon/experimental/hecate
 	cost = 40
 	jobs_exclusive = list("Nuclear Operative")
 
@@ -248,9 +261,7 @@ var/list/uplink_items = list()
 	name = "Modified Tank Transfer Valve"
 	desc = "A small, expensive and powerful plasma-oxygen explosive. Handle very carefully."
 	item = /obj/effect/spawner/newbomb
-	refund_path = /obj/item/device/transfer_valve/mediumsize
-	cost = 100
-	refund_amount = 15
+	cost = 25
 	jobs_exclusive = list("Nuclear Operative")
 	refundable = TRUE
 
@@ -258,7 +269,7 @@ var/list/uplink_items = list()
 	name = "Syndicate-modded Combat Robot Teleporter"
 	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT silicons these don't have access to most of the station's machinery."
 	item = /obj/item/weapon/robot_spawner/syndicate
-	cost = 100
+	cost = 60
 	jobs_exclusive = list("Nuclear Operative")
 	refundable = TRUE
 
@@ -266,7 +277,7 @@ var/list/uplink_items = list()
 	name = "Syndicate Mass-Produced Assault Mecha - 'Mauler'"
 	desc = "A Heavy-duty combat unit. Not usually used by nuclear operatives, for its ridiculous pricetag and lack of stealth. Yet, against heavily-guarded stations, it might be just the thing." //Implying bombs aren't better.
 	item = /obj/effect/spawner/mecha/mauler
-	cost = 140
+	cost = 80
 	jobs_exclusive = list("Nuclear Operative")
 
 // STEALTHY WEAPONS
@@ -293,9 +304,9 @@ var/list/uplink_items = list()
 	cost = 6
 
 /datum/uplink_item/stealthy_weapons/knuckles
-	name = "Brass Knuckles"
-	desc = "A pair of metal knuckles that can be worn on your hands, increasing damage done by your punches."
-	item = /obj/item/clothing/gloves/knuckles
+	name = "Spiked Knuckles"
+	desc = "A pair of spiked metal knuckles that can be worn on your hands, increasing damage done by your punches."
+	item = /obj/item/clothing/gloves/knuckles/spiked
 	cost = 2
 
 // STEALTHY TOOLS
@@ -485,6 +496,14 @@ var/list/uplink_items = list()
 	cost = 1
 	discounted_cost = 0
 	jobs_with_discount = SCIENCE_POSITIONS
+
+/datum/uplink_item/device_tools/reportintercom
+	name = "NTT Report Falsifier"
+	desc = "An intercom stolen from Nanotrasen Command that allows a single fake Galactic Update to be sent. Single-Use only. Let the crew know about the upcoming disk inspection."
+	item = /obj/item/device/reportintercom
+	cost = 6
+	discounted_cost = 4
+	jobs_with_discount = list("Nuclear Operative")
 
 /datum/uplink_item/device_tools/does_not_tip_note
 	name = "\"Does Not Tip\" database backdoor"
@@ -777,11 +796,19 @@ var/list/uplink_items = list()
 	jobs_with_discount = list("Assistant")
 
 /datum/uplink_item/jobspecific/greytide
-	name = "Greytide Implant"
+	name = "Greytide Implants"
 	desc = "A box containing two greytide implanters that when injected into another person makes them loyal to the greytide and your cause, unless they're already implanted by someone else. Loyalty ends if he or she no longer has the implant. CAUTION: WILL NOT WORK ON SUBJECTS WITH NT LOYALTY IMPLANTS. Now with disguised sechud sunglasses. These will have limited access until you can get your hands on some containing security codes."
 	item = /obj/item/weapon/storage/box/syndie_kit/greytide
 	cost = 20
 	discounted_cost = 14
+	jobs_with_discount = list("Assistant")
+
+/datum/uplink_item/jobspecific/cheaptide
+	name = "Cheaptide Implant"
+	desc = "A box containing one greytide implanter that when injected into another person makes them loyal to the greytide and your cause, unless they're already implanted by someone else. Loyalty ends if he or she no longer has the implant. CAUTION: WILL NOT WORK ON SUBJECTS WITH NT LOYALTY IMPLANTS. Now with disguised sechud sunglasses. These will have limited access until you can get your hands on some containing security codes."
+	item = /obj/item/weapon/storage/box/syndie_kit/cheaptide
+	cost = 12
+	discounted_cost = 8
 	jobs_with_discount = list("Assistant")
 
 /datum/uplink_item/jobspecific/drunkbullets
@@ -918,3 +945,11 @@ var/list/uplink_items = list()
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Librarian", "Chaplain")
+
+/datum/uplink_item/jobspecific/powercreeper_packet
+	name = "Powercreep Packet"
+	desc = "A packet that creates a dangerous mutated version of kudzu. The vines shock people and connect themselves to any cables near them."
+	item = /obj/item/powercreeper_packet
+	cost = 16
+	discounted_cost = 10
+	jobs_with_discount = list("Botanist", "Station Engineer", "Chief Engineer")

@@ -256,7 +256,7 @@
 		C.Stun(8)
 		C.Jitter(150)
 	for(var/obj/structure/window/W in view(4, src))
-		W.Destroy(brokenup = 1)
+		W.shatter()
 	playsound(src.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)

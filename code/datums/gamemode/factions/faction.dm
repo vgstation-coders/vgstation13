@@ -47,6 +47,12 @@ var/list/factions_with_hud_icons = list()
 
 	var/minor_victory = FALSE
 
+	// This datum represents all data that is exported to the statistics file at the end of the round.
+	// If you want to store faction-specific data as statistics, you'll need to define your own datum.
+	// See dynamic_stats.dm
+	var/datum/stat/faction/stat_datum = null
+	var/datum/stat/faction/stat_datum_type = /datum/stat/faction
+
 /datum/faction/New()
 	..()
 	objective_holder = new
@@ -56,6 +62,8 @@ var/list/factions_with_hud_icons = list()
 
 	for (var/datum/faction/F in factions_with_hud_icons)
 		update_hud_icons()
+
+	stat_datum = new stat_datum_type()
 
 /datum/faction/proc/OnPostSetup()
 	for(var/datum/role/R in members)
@@ -95,15 +103,15 @@ var/list/factions_with_hud_icons = list()
 	if(!newRole.AssignToRole(M))
 		newRole.Drop()
 		return 0
-	return 1
+	return newRole
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			return 0
+			return R
 	if(M.GetRole(late_role))
 		WARNING("Mind already had a role of [late_role]!")
-		return 0
+		return (M.GetRole(late_role))
 	var/datum/role/R = new roletype(null,src,late_role) // Add him to our roles
 	if(!R.AssignToRole(M, override))
 		R.Drop()
@@ -181,6 +189,9 @@ var/list/factions_with_hud_icons = list()
 			if (i < members.len)
 				score_results += "<br>"
 		i++
+
+	stat_collection.add_faction(src)
+
 	return score_results
 
 /datum/faction/Topic(href, href_list)

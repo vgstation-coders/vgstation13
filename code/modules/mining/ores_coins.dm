@@ -75,8 +75,8 @@
 /obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
 	var/location = get_turf(user)
 	for(var/obj/item/stack/ore/glass/sandToConvert in location)
-		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-		sandToConvert.use(1)
+		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, sandToConvert.amount, user)
+		sandToConvert.use(sandToConvert.amount)
 
 	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
 	use(1)
@@ -344,16 +344,18 @@
 
 /obj/item/weapon/coin
 	icon = 'icons/obj/items.dmi'
-	name = "Coin"
+	name = "coin"
+	desc = "Long phased out in favor of galactic credits."
 	icon_state = "coin"
 	flags = FPRINT
 	siemens_coefficient = 1
-	force = 0.0
-	throwforce = 0.0
+	force = 1
+	throwforce = 1
 	w_class = W_CLASS_TINY
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
+	var/sideup = "heads." //heads, tails or on its side?
 
 /obj/item/weapon/coin/New()
 	. = ..()
@@ -367,72 +369,151 @@
 	return w_type
 
 /obj/item/weapon/coin/is_screwdriver(var/mob/user)
+	if(user.a_intent == I_HURT)
+		to_chat(user, "<span class='warning'>You forcefully press with \the [src]!</span>")
 	return user.a_intent == I_HURT
+
+/obj/item/weapon/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
+	var/matrix/flipit = matrix()
+	flipit.Scale(0.2,1)
+	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	flipit.Scale(5,1)
+	flipit.Invert()
+	flipit.Turn(rand(1,359))
+	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	flipit.Scale(0.2,1)
+	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	if (pick(0,1))
+		sideup = "heads-up."
+		flipit.Scale(5,1)
+		flipit.Turn(rand(1,359))
+		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	else
+		sideup = "tails-up."
+		flipit.Scale(5,1)
+		flipit.Invert()
+		flipit.Turn(rand(1,359))
+		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	if (prob(0.1) || rigged)
+		flipit.Scale(0.2,1)
+		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+		sideup = "on the side!"
+	if(!thrown)
+		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
+							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \
+							 "<span class='notice'>You hear [src] landing.</span>")
+	else
+		if(!throwing) //coin was thrown and is coming to rest
+			visible_message("<span class='notice'>[src] stops spinning, landing [sideup]</span>")
+
+/obj/item/weapon/coin/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>[src] is [sideup]</span>")
+
+/obj/item/weapon/coin/equipped(var/mob/user)
+	..()
+	sideup = "heads-up."
+	transform = null
+
+/obj/item/weapon/coin/attack_self(var/mob/user)
+	coinflip(user, 0)
+
+/obj/item/weapon/coin/throw_impact(atom/hit_atom, speed, user)
+	..()
+	coinflip(user, 1)
 
 /obj/item/weapon/coin/gold
 	material=MAT_GOLD
-	name = "Gold coin"
+	name = "gold coin"
+	desc = "Worth its weight in gold!"
 	icon_state = "coin_gold"
-	credits = 5
+	credits = 0.4
 	melt_temperature=1064+T0C
+	siemens_coefficient = 1.3
 
 /obj/item/weapon/coin/silver
 	material=MAT_SILVER
-	name = "Silver coin"
+	name = "silver coin"
+	desc = "Not worth a lot, but it sure is shiny."
 	icon_state = "coin_silver"
-	credits = 1
+	credits = 0.3
 	melt_temperature=961+T0C
+	siemens_coefficient = 1
 
 /obj/item/weapon/coin/diamond
 	material=MAT_DIAMOND
-	name = "Diamond coin"
+	name = "diamond coin"
+	desc = "A girl's second-best friend!"
 	icon_state = "coin_diamond"
-	credits = 25
+	credits = 1
+	siemens_coefficient = 0.1
 
 /obj/item/weapon/coin/iron
 	material=MAT_IRON
-	name = "Iron coin"
+	name = "iron coin"
+	desc = "Practically worthless, even for a coin."
 	icon_state = "coin_iron"
 	credits = 0.01
 	melt_temperature=MELTPOINT_STEEL
+	siemens_coefficient = 1
 
 /obj/item/weapon/coin/plasma
 	material=MAT_PLASMA
-	name = "Solid plasma coin"
+	name = "solid plasma coin"
+	desc = "Not worth a lot, but safer to handle than raw plasma."
 	icon_state = "coin_plasma"
-	credits = 0.1
+	credits = 0.04
 	melt_temperature=MELTPOINT_STEEL+500
+	siemens_coefficient = 0.6
 
 /obj/item/weapon/coin/uranium
 	material=MAT_URANIUM
-	name = "Uranium coin"
+	name = "uranium coin"
+	desc = "A heavy coin that is always warm to the touch."
 	icon_state = "coin_uranium"
-	credits = 25
+	force = 2
+	throwforce = 2
+	credits = 0.2
 	melt_temperature=1070+T0C
+	siemens_coefficient = 0.5
 
 /obj/item/weapon/coin/clown
 	material=MAT_CLOWN
-	name = "Bananaium coin"
+	name = "bananaium coin"
+	desc = "A funny, rare coin minted from pure banana essence. Honk!"
 	icon_state = "coin_clown"
-	credits = 1000
+	credits = 10
 	melt_temperature=MELTPOINT_GLASS
+	siemens_coefficient = 0.5
 
 /obj/item/weapon/coin/phazon
 	material=MAT_PHAZON
-	name = "Phazon coin"
+	name = "phazon coin"
 	icon_state = "coin_phazon"
-	credits = 2000
+	desc = "You're not sure how much this is worth, considering the constantly warping engravings."
 	melt_temperature=MELTPOINT_GLASS
+
+/obj/item/weapon/coin/phazon/New()
+	siemens_coefficient = rand(0,200) / 100
+	credits = rand(1,1000)
 
 /obj/item/weapon/coin/adamantine
 	material="adamantine"
-	name = "Adamantine coin"
+	name = "adamantine coin"
 	icon_state = "coin_adamantine"
+	desc = "An expensive coin minted long ago from extremely rare, hard, super-conductive metal."
+	force = 3
+	throwforce = 3
+	siemens_coefficient = 3
+	credits = 1000
 
 /obj/item/weapon/coin/mythril
 	material="mythril"
-	name = "Mythril coin"
+	name = "mythril coin"
+	desc = "An expensive coin minted long ago from extremely rare, light, non-conductive metal."
 	icon_state = "coin_mythril"
+	credits = 1000
+	siemens_coefficient = 0
 
 /obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/cable_coil) )

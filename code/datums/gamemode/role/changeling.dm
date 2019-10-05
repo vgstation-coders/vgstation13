@@ -52,7 +52,7 @@
 	antag.current << sound('sound/effects/ling_intro.ogg')
 
 /datum/role/changeling/ForgeObjectives()
-	if(!SOLO_ANTAG_OBJECTIVES)
+	if(!antag.current.client.prefs.antag_objectives)
 		AppendObjective(/datum/objective/freeform/changeling)
 		return
 	AppendObjective(/datum/objective/absorb)
@@ -166,6 +166,28 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	genomecost = 15
 	verbpath = /obj/item/verbs/changeling/proc/changeling_horror_form
 
+/datum/power/changeling/deaf_sting
+	name = "Deaf Sting"
+	desc = "We silently sting a human, completely deafening them for a short time."
+	genomecost = 1
+	allowduringlesserform = 1
+	verbpath = /obj/item/verbs/changeling/proc/changeling_deaf_sting
+
+/datum/power/changeling/blind_sting
+	name = "Blind Sting"
+	desc = "We silently sting a human, completely blinding them for a short time."
+	genomecost = 2
+	allowduringlesserform = 1
+	verbpath = /obj/item/verbs/changeling/proc/changeling_blind_sting
+
+/datum/power/changeling/silence_sting
+	name = "Silence Sting"
+	desc = "We silently sting a human, completely silencing them for a short time."
+	helptext = "Does not provide a warning to a victim that they have been stung, until they try to speak and cannot."
+	genomecost = 2
+	allowduringlesserform = 1
+	verbpath = /obj/item/verbs/changeling/proc/changeling_silence_sting
+
 /datum/power/changeling/mimicvoice
 	name = "Mimic Voice"
 	desc = "We shape our vocal glands to sound like a desired voice."
@@ -188,6 +210,33 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	genomecost = 3
 	verbpath = /obj/item/verbs/changeling/proc/changeling_transformation_sting
 
+/datum/power/changeling/paralysis_sting
+	name = "Paralysis Sting"
+	desc = "We silently sting a human, paralyzing them for a short time."
+	genomecost = 4
+	verbpath = /obj/item/verbs/changeling/proc/changeling_paralysis_sting
+
+/datum/power/changeling/LSDSting
+	name = "Hallucination Sting"
+	desc = "We evolve the ability to sting a target with a powerful hallunicationary chemical."
+	helptext = "The target does not notice they have been stung.  The effect occurs after 30 to 60 seconds."
+	genomecost = 3
+	verbpath = /obj/item/verbs/changeling/proc/changeling_lsdsting
+
+/datum/power/changeling/unfat_sting
+	name = "Unfat Sting"
+	desc = "We silently sting a human or ourselves, forcing them to rapidly metabolize their fat."
+	helptext = "Caution: This can also target you!"
+	genomecost = 0
+	verbpath = /obj/item/verbs/changeling/proc/changeling_unfat_sting
+
+/datum/power/changeling/fat_sting
+	name = "Fat Sting"
+	desc = "We silently sting a human or ourselves, forcing them to rapidly accumulate fat."
+	helptext = "Caution: This can also target you!"
+	genomecost = 0
+	verbpath = /obj/item/verbs/changeling/proc/changeling_fat_sting
+
 /datum/power/changeling/boost_range
 	name = "Boost Range"
 	desc = "We evolve the ability to shoot our stingers at humans, with some preperation."
@@ -209,7 +258,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	genomecost = 4
 	isVerb = 0
 	verbpath = /mob/proc/changeling_fastchemical
-/*
+
 /datum/power/changeling/AdvChemicalSynth
 	name = "Advanced Chemical-Synthesis"
 	desc = "We evolve new pathways for producing our necessary chemicals, permitting us to naturally create them faster."
@@ -217,7 +266,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	genomecost = 8
 	isVerb = 0
 	verbpath = /mob/proc/changeling_fastchemical
-*/
+
 /datum/power/changeling/EngorgedGlands
 	name = "Engorged Chemical Glands"
 	desc = "Our chemical glands swell, permitting us to store more chemicals inside of them."
@@ -248,21 +297,21 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	genomecost = 5
 	verbpath = /obj/item/verbs/changeling/proc/changeling_armblade
 
-/datum/power/changeling/chemsting
-	name = "Chemical Sting"
-	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to inject into another lifeform or ourselves if needs be."
-	helptext = "This can be used to hinder others, or help ourselves, through the application of medicines or poisons."
-	genomecost = 1
-	verbpath = /obj/item/verbs/changeling/proc/changeling_chemsting
+// /datum/power/changeling/chemsting
+// 	name = "Chemical Sting"
+// 	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to inject into another lifeform or ourselves if needs be."
+// 	helptext = "This can be used to hinder others, or help ourselves, through the application of medicines or poisons."
+// 	genomecost = 1
+// 	verbpath = /obj/item/verbs/changeling/proc/changeling_chemsting
 
-/datum/power/changeling/chemspit
-	name = "Chemical Spit"
-	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to fire like projectile venom in our facing direction."
-	helptext = "Handy for firing acid at enemies, providing we have learned such chemicals."
-	genomecost = 1
-	allowduringlesserform = 1
-	verbpath = /obj/item/verbs/changeling/proc/changeling_chemspit
-
+// /datum/power/changeling/chemspit
+// 	name = "Chemical Spit"
+// 	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to fire like projectile venom in our facing direction."
+// 	helptext = "Handy for firing acid at enemies, providing we have learned such chemicals."
+// 	genomecost = 1
+// 	allowduringlesserform = 1
+// 	verbpath = /obj/item/verbs/changeling/proc/changeling_chemspit
+	
 /datum/power_holder
 	var/datum/role/R
 	var/list/purchasedpowers = list()

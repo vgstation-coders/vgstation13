@@ -52,27 +52,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 	storage = initial_materials.Copy()
 
-/datum/materials/proc/addAmount(var/mat_id,var/amount)
-	if(!(mat_id in storage))
-		warning("addAmount(): Unknown material [mat_id]!")
-		return
-	// I HATE BYOND
-	// storage[mat_id].stored++
-	storage[mat_id] = max(0, storage[mat_id] + amount)
-
-
-/datum/materials/proc/removeFrom(var/datum/materials/mats)
-	src.addFrom(mats,zero_after=1)
-
-/datum/materials/proc/addFrom(var/datum/materials/mats, var/zero_after=0)
-	if(mats == null)
-		return
-	for(var/mat_id in storage)
-		if(mats.storage[mat_id]>0)
-			storage[mat_id] += mats.storage[mat_id]
-			if(zero_after)
-				mats.storage[mat_id] = 0
-
 /datum/materials/proc/getVolume()
 	var/volume=0
 	for(var/mat_id in storage)
@@ -87,12 +66,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 		value += mat.value * storage[mat_id]
 	return value
 
-/datum/materials/proc/removeAmount(var/mat_id,var/amount)
-	if(!(mat_id in storage))
-		warning("removeAmount(): Unknown material [mat_id]!")
-		return
-	addAmount(mat_id,-amount)
-
+//Returns however much we have of that material
 /datum/materials/proc/getAmount(var/mat_id)
 	if(!(mat_id in storage))
 		warning("getAmount(): Unknown material [mat_id]!")
@@ -100,12 +74,65 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 	return storage[mat_id]
 
+//Returns the material datum according to the given ID
 /datum/materials/proc/getMaterial(var/mat_id)
 	if(!(mat_id in material_list))
 		warning("getMaterial(): Unknown material [mat_id]!")
 		return 0
 
 	return material_list[mat_id]
+
+//Adds the given amount of the given mat_ID to our storage
+/datum/materials/proc/addAmount(var/mat_id,var/amount)
+	if(!(mat_id in storage))
+		warning("addAmount(): Unknown material [mat_id]!")
+		return
+	// I HATE BYOND
+	// storage[mat_id].stored++
+	storage[mat_id] = max(0, storage[mat_id] + amount)
+
+//Adds all of the given materials datum's resources to ours. If zero_after, we set their storage amounts to 0
+/datum/materials/proc/addFrom(var/datum/materials/mats, var/zero_after=0)
+	if(mats == null)
+		return
+	for(var/mat_id in storage)
+		if(mats.storage[mat_id]>0)
+			storage[mat_id] += mats.storage[mat_id]
+			if(zero_after)
+				mats.storage[mat_id] = 0
+
+//Used to remove all materials from a given materials datum, and transfer it to ours
+/datum/materials/proc/removeFrom(var/datum/materials/mats)
+	src.addFrom(mats,zero_after=1)
+
+//Sanely removes an amount from us, of a given material ID, and transfers it to somebody else. Returns the given amount
+/datum/materials/proc/Transfer(var/mat_id, var/amount, var/datum/materials/receiver)
+	ASSERT(receiver)
+	if(!mat_id in storage)
+		warning("Transfer(): Unknown material [mat_id]!")
+		return 0
+	amount = min(getAmount(mat_id), amount)
+	receiver.addAmount(mat_id, amount)
+	removeAmount(mat_id, amount)
+	return amount
+
+//Itterates through every material ID we have, and transfers the percentage of how much we have of that material to the receiver
+/datum/materials/proc/TransferPercent(var/percentage, var/datum/materials/receiver)
+	var/amount_transferred = 0
+	for(var/mat_id in storage)
+		var/amount = Transfer(mat_id, getAmount(mat_id) * (percentage/100), receiver)
+		amount_transferred += amount
+	return amount_transferred
+
+/datum/materials/proc/TransferAll(var/datum/materials/receiver)
+	return TransferPercent(100, receiver)
+
+/datum/materials/proc/removeAmount(var/mat_id,var/amount)
+	if(!(mat_id in storage))
+		warning("removeAmount(): Unknown material [mat_id]!")
+		return
+	addAmount(mat_id,-amount)
+
 
 /datum/materials/proc/makeSheets(var/atom/loc)
 	for (var/id in storage)
@@ -165,7 +192,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/iron
 	name="Iron"
 	id=MAT_IRON
-	value=1
+	value=0.2
 	cc_per_sheet=CC_PER_SHEET_METAL
 	oretype=/obj/item/stack/ore/iron
 	sheettype=/obj/item/stack/sheet/metal
@@ -180,7 +207,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Sand"
 	processed_name="Glass"
 	id=MAT_GLASS
-	value=1
+	value=0.2
 	cc_per_sheet=CC_PER_SHEET_GLASS
 	oretype=/obj/item/stack/ore/glass
 	sheettype=/obj/item/stack/sheet/glass/glass
@@ -202,7 +229,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/diamond
 	name="Diamond"
 	id=MAT_DIAMOND
-	value=40
+	value=4
 	cc_per_sheet = 1750
 	oretype=/obj/item/stack/ore/diamond
 	sheettype=/obj/item/stack/sheet/mineral/diamond
@@ -217,7 +244,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/plasma
 	name="Plasma"
 	id=MAT_PLASMA
-	value=40
+	value=0.2
 	oretype=/obj/item/stack/ore/plasma
 	sheettype=/obj/item/stack/sheet/mineral/plasma
 	cointype=/obj/item/weapon/coin/plasma
@@ -236,7 +263,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/gold
 	name="Gold"
 	id=MAT_GOLD
-	value=20
+	value=1
 	oretype=/obj/item/stack/ore/gold
 	sheettype=/obj/item/stack/sheet/mineral/gold
 	cointype=/obj/item/weapon/coin/gold
@@ -249,7 +276,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/silver
 	name="Silver"
 	id=MAT_SILVER
-	value=20
+	value=1
 	oretype=/obj/item/stack/ore/silver
 	sheettype=/obj/item/stack/sheet/mineral/silver
 	cointype=/obj/item/weapon/coin/silver
@@ -263,7 +290,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/uranium
 	name="Uranium"
 	id=MAT_URANIUM
-	value=20
+	value=1
 	oretype=/obj/item/stack/ore/uranium
 	sheettype=/obj/item/stack/sheet/mineral/uranium
 	cointype=/obj/item/weapon/coin/uranium
@@ -284,7 +311,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/clown
 	name="Bananium"
 	id=MAT_CLOWN
-	value=100
+	value=1
 	oretype=/obj/item/stack/ore/clown
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
@@ -312,7 +339,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/phazon
 	name="Phazon"
 	id=MAT_PHAZON
-	value=200
+	value=1
 	cc_per_sheet = 1500
 	oretype=/obj/item/stack/ore/phazon
 	sheettype=/obj/item/stack/sheet/mineral/phazon
@@ -341,7 +368,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/plastic
 	name="Plastic"
 	id=MAT_PLASTIC
-	value=1
+	value=0
 	oretype=null
 	sheettype=/obj/item/stack/sheet/mineral/plastic
 	cointype=null
@@ -350,7 +377,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/cardboard
 	name="Cardboard"
 	id=MAT_CARDBOARD
-	value=1
+	value=0
 	oretype=null
 	sheettype=/obj/item/stack/sheet/cardboard
 	cointype=null
@@ -359,7 +386,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/wood
 	name="Wood"
 	id=MAT_WOOD
-	value=1
+	value=0
 	oretype=null
 	sheettype=/obj/item/stack/sheet/wood
 	cointype=null
@@ -396,7 +423,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/mythril
 	name="mythril"
 	id=MAT_MYTHRIL
-	value=50
+	value=1
 	oretype=/obj/item/stack/ore/mythril
 	sheettype=/obj/item/stack/sheet/mineral/mythril
 	cointype=/obj/item/weapon/coin/mythril
@@ -409,7 +436,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/telecrystal
 	name="telecrystal"
 	id=MAT_TELECRYSTAL
-	value=200
+	value=1
 	oretype=/obj/item/stack/ore/telecrystal
 	sheettype=/obj/item/bluespace_crystal
 	cointype=null

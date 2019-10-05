@@ -115,23 +115,24 @@
 			return 1
 	else if(src.dirty==100) // The microwave is all dirty so can't be used!
 		var/obj/item/weapon/reagent_containers/R = O
-		if(istype(R)) // If they're trying to clean it then let them
-			if(R.reagents.amount_cache.len == 1 && R.reagents.has_reagent(CLEANER, 5))
-				user.visible_message( \
-					"<span class='notice'>[user] starts to clean the microwave.</span>", \
-					"<span class='notice'>You start to clean the microwave.</span>" \
-				)
-				if (do_after(user, src,20))
+		var/obj/item/weapon/soap/S = O
+		if((istype(R) && (R.reagents.amount_cache.len == 1 && R.reagents.has_reagent(CLEANER, 5))) || istype(S)) // If they're trying to clean it then let them
+			user.visible_message( \
+				"<span class='notice'>[user] starts to clean the microwave.</span>", \
+				"<span class='notice'>You start to clean the microwave.</span>" \
+			)
+			if (do_after(user, src,20))
+				if(istype(R))
 					R.reagents.remove_reagent(CLEANER,5)
-					user.visible_message( \
-						"<span class='notice'>[user]  has cleaned  the microwave.</span>", \
-						"<span class='notice'>You have cleaned the microwave.</span>" \
-					)
-					src.dirty = 0 // It's clean!
-					src.broken = 0 // just to be sure
-					src.icon_state = "mw"
-					src.flags |= OPENCONTAINER
-					return 1
+				user.visible_message( \
+					"<span class='notice'>[user] has cleaned the microwave.</span>", \
+					"<span class='notice'>You have cleaned the microwave.</span>" \
+				)
+				src.dirty = 0 // It's clean!
+				src.broken = 0 // just to be sure
+				src.icon_state = "mw"
+				src.flags |= OPENCONTAINER
+				return 1
 		else //Otherwise bad luck!!
 			to_chat(user, "<span class='warning'>It's too dirty!</span>")
 			return 1
@@ -225,60 +226,10 @@
 	else if(src.dirty==100)
 		dat = {"<TT>This microwave is dirty!<BR>Please clean it before use!</TT>"}
 	else
-		var/list/items_counts = new
-		var/list/items_measures = new
-		var/list/items_measures_p = new
-		for (var/obj/O in contents)
-			var/display_name = O.name
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat)) //any meat
-				items_measures[display_name] = "slab of meat"
-				items_measures_p[display_name] = "slabs of meat"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat))
-				items_measures[display_name] = "fillet of meat"
-				items_measures_p[display_name] = "fillets of meat"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/egg))
-				items_measures[display_name] = "egg"
-				items_measures_p[display_name] = "eggs"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/tofu))
-				items_measures[display_name] = "tofu chunk"
-				items_measures_p[display_name] = "tofu chunks"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/donkpocket))
-				display_name = "Turnovers"
-				items_measures[display_name] = "turnover"
-				items_measures_p[display_name] = "turnovers"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans))
-				items_measures[display_name] = "soybean"
-				items_measures_p[display_name] = "soybeans"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/grapes))
-				display_name = "Grapes"
-				items_measures[display_name] = "bunch of grapes"
-				items_measures_p[display_name] = "bunches of grapes"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes))
-				display_name = "Green Grapes"
-				items_measures[display_name] = "bunch of green grapes"
-				items_measures_p[display_name] = "bunches of green grapes"
-			items_counts[display_name]++
-		for (var/O in items_counts)
-			var/N = items_counts[O]
-			if (!(O in items_measures))
-				dat += {"<B>[capitalize(O)]:</B> [N] [lowertext(O)]\s<BR>"}
-			else
-				if (N==1)
-					dat += {"<B>[capitalize(O)]:</B> [N] [items_measures[O]]<BR>"}
-				else
-					dat += {"<B>[capitalize(O)]:</B> [N] [items_measures_p[O]]<BR>"}
-
-		for (var/datum/reagent/R in reagents.reagent_list)
-			var/display_name = R.name
-			if (R.id == CAPSAICIN)
-				display_name = "Hotsauce"
-			if (R.id == FROSTOIL)
-				display_name = "Coldsauce"
-			dat += {"<B>[display_name]:</B> [R.volume] unit\s<BR>"}
-
-		if (items_counts.len==0 && reagents.reagent_list.len==0)
+		if (contents.len==0 && reagents.reagent_list.len==0)
 			dat = {"<B>The microwave is empty</B><BR>"}
 		else
+			dat = src.build_list_of_contents()
 			dat = {"<b>Ingredients:</b><br>[dat]<HR><BR>"}
 			if (scanning_power >= 2 )
 				var/datum/recipe/recipe = select_recipe(available_recipes,src)
@@ -298,6 +249,77 @@
 	onclose(user, "microwave")
 	return
 
+
+/obj/machinery/microwave/proc/build_list_of_contents()
+	var/dat = ""
+	var/list/items_counts = new
+	var/list/items_measures = new
+	var/list/items_measures_p = new
+	for (var/obj/O in contents)
+		var/display_name = O.name
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat)) //any meat
+			items_measures[display_name] = "slab of meat"
+			items_measures_p[display_name] = "slabs of meat"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat))
+			items_measures[display_name] = "fillet of meat"
+			items_measures_p[display_name] = "fillets of meat"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/egg))
+			items_measures[display_name] = "egg"
+			items_measures_p[display_name] = "eggs"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/tofu))
+			items_measures[display_name] = "tofu chunk"
+			items_measures_p[display_name] = "tofu chunks"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/donkpocket))
+			display_name = "Turnovers"
+			items_measures[display_name] = "turnover"
+			items_measures_p[display_name] = "turnovers"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans))
+			items_measures[display_name] = "soybean"
+			items_measures_p[display_name] = "soybeans"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/grapes))
+			display_name = "Grapes"
+			items_measures[display_name] = "bunch of grapes"
+			items_measures_p[display_name] = "bunches of grapes"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes))
+			display_name = "Green Grapes"
+			items_measures[display_name] = "bunch of green grapes"
+			items_measures_p[display_name] = "bunches of green grapes"
+		items_counts[display_name]++
+	for (var/O in items_counts)
+		var/N = items_counts[O]
+		if (!(O in items_measures))
+			dat += {"<B>[capitalize(O)]:</B> [N] [lowertext(O)]\s<BR>"}
+		else
+			if (N==1)
+				dat += {"<B>[capitalize(O)]:</B> [N] [items_measures[O]]<BR>"}
+			else
+				dat += {"<B>[capitalize(O)]:</B> [N] [items_measures_p[O]]<BR>"}
+
+	for (var/datum/reagent/R in reagents.reagent_list)
+		var/display_name = R.name
+		if (R.id == CAPSAICIN)
+			display_name = "Hotsauce"
+		if (R.id == FROSTOIL)
+			display_name = "Coldsauce"
+		dat += {"<B>[display_name]:</B> [R.volume] unit\s<BR>"}
+	return dat
+
+/obj/machinery/microwave/examine(mob/user)
+	to_chat(user, "[bicon(src)] That's a [name].")
+	if(desc)
+		to_chat(user, desc)
+
+	if(get_dist(user, src) > 3)
+		to_chat(user, "<span class='info'>You can't make out the contents.</span>")
+	else
+		if(contents.len==0 && reagents.reagent_list.len==0)
+			to_chat(user, "It's empty.")
+		else
+			var/list_of_contents = "It contains:<br>" + src.build_list_of_contents()
+			to_chat(user, list_of_contents)
+
+	if(panel_open)
+		to_chat(user, "<span class='info'>Its maintenance panel is open.</span>")
 
 
 /***********************************

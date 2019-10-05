@@ -270,52 +270,52 @@ proc/move_mining_shuttle()
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator
 	name = "plasma cutter"
-	desc = "A rock cutter that fires bolts of hot plasma. You could use it to cut limbs off of xenos! Or, you know, mine stuff."
+	desc = "A rock cutter that's powerful enough to cut through rocks and xenos with ease. Ingeniously, it's powered by putting solid plasma directly into it - even plasma ore, for those miners on the go."
 	digspeed = 5
 	diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS
 	var/max_ammo = 15
 	var/current_ammo = 15
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator/afterattack(var/atom/A, var/mob/living/user, var/proximity_flag, var/click_parameters)
+	if (!user.IsAdvancedToolUser() || isMoMMI(user) || istype(user, /mob/living/carbon/monkey/diona))
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
 	if(proximity_flag)
 		return
 	if(user.is_pacified(VIOLENCE_SILENT,A,src))
 		return
 	if(current_ammo >0)
 		current_ammo--
-		var/turf/starting = get_turf(user)
-		var/turf/target = get_turf(A)
-		var/obj/item/projectile/kinetic/cutter/BS = new (starting)
-		BS.firer = user
-		BS.original = target
-		BS.target = target
-		BS.current = starting
-		BS.starting = starting
-		BS.yo = target.y - starting.y
-		BS.xo = target.x - starting.x
+		generic_projectile_fire(A, src, /obj/item/projectile/kinetic/cutter/, 'sound/weapons/Taser.ogg')
 		user.delayNextAttack(4)
-		if(user.zone_sel)
-			BS.def_zone = user.zone_sel.selecting
-		else
-			BS.def_zone = LIMB_CHEST
-		BS.OnFired()
-		playsound(starting, 'sound/weapons/Taser.ogg', 50, 1)
-		BS.process()
 	else
 		src.visible_message("*click click*")
 		playsound(src, 'sound/weapons/empty.ogg', 100, 1)
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator/attackby(atom/target, mob/user, proximity_flag)
-	if(proximity_flag && istype(target, /obj/item/stack/sheet))
-		var/obj/item/stack/sheet/A = target
-		if(A.mat_type == MAT_PLASMA)
-			if(current_ammo < max_ammo)
-				var/loading_ammo = max_ammo - current_ammo
-				A.amount -= loading_ammo
-				current_ammo += loading_ammo
-				to_chat(user, "<span class='notice'>You load [src].</span>")
-			else
-				to_chat(user, "<span class='notice'>[src] is already loaded.</span>")
+	if(proximity_flag && istype(target, /obj/item/stack/ore/plasma))
+		var/obj/item/stack/ore/plasma/A = target
+		if(current_ammo < max_ammo)
+			var/loading_ammo = min(max_ammo - current_ammo, A.amount)
+			A.use(loading_ammo)
+			current_ammo += loading_ammo
+			to_chat(user, "<span class='notice'>You load \the [src].</span>")
+		else
+			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
+
+	if(proximity_flag && istype(target, /obj/item/stack/sheet/mineral/plasma))
+		var/obj/item/stack/sheet/mineral/plasma/A = target
+		if(current_ammo < max_ammo)
+			var/loading_ammo = min(max_ammo - current_ammo, A.amount)
+			A.use(loading_ammo)
+			current_ammo += loading_ammo
+			to_chat(user, "<span class='notice'>You load \the [src].</span>")
+		else
+			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
+
+/obj/item/weapon/pickaxe/plasmacutter/accelerator/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>Has [current_ammo] round\s remaining.</span>")
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
@@ -535,7 +535,8 @@ proc/move_mining_shuttle()
 	if(istype(proj_turf, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = proj_turf
 		playsound(src, 'sound/effects/sparks4.ogg',50,1)
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_DENSE)
+			M.GetDrilled()
 		spawn(5)
 			qdel(src)
 	else

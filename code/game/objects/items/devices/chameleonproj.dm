@@ -104,7 +104,7 @@
 /obj/item/device/chameleon/proc/eject_all()
 	for(var/atom/movable/A in active_dummy)
 		A.forceMove(active_dummy.loc)
-		if(ismob(A))
+		if(isliving(A))
 			var/mob/M = A
 			M.reset_view(null)
 			M.layer = MOB_LAYER //Reset the mob's layer
@@ -145,12 +145,12 @@
 
 /obj/effect/dummy/chameleon/ex_act(severity)
 	for(var/mob/M in src)
-		ex_act(severity)
+		M.ex_act(severity)
 	disrupt()
 
 /obj/effect/dummy/chameleon/emp_act(severity)
 	for(var/mob/M in src)
-		emp_act(severity)
+		M.emp_act(severity)
 	disrupt()
 
 /obj/effect/dummy/chameleon/blob_act()

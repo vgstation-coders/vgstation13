@@ -14,7 +14,7 @@ var/list/alldepartments = list("Central Command")
 	idle_power_usage = 30
 	active_power_usage = 200
 	power_channel = EQUIP
-
+	pass_flags = PASSTABLE
 	var/authenticated = 0
 
 	var/obj/item/weapon/paper/tofax = null // what we're sending
@@ -56,6 +56,20 @@ var/list/alldepartments = list("Central Command")
 /obj/machinery/faxmachine/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
+/obj/machinery/faxmachine/verb/remove_id()
+	set name = "Remove ID from the fax machine"
+	set src in view(1)
+	if(scan && ishuman(usr))
+		usr.put_in_hands(scan)
+		scan = null
+
+/obj/machinery/faxmachine/verb/remove_paper()
+	set name = "Remove fax material from the fax machine"
+	set src in view(1)
+	if(tofax && ishuman(usr))
+		usr.put_in_hands(tofax)
+		tofax = null
+
 /obj/machinery/faxmachine/attack_hand(mob/user as mob)
 	user.set_machine(src)
 
@@ -82,8 +96,8 @@ var/list/alldepartments = list("Central Command")
 		if(tofax)
 			dat += "<a href='byond://?src=\ref[src];remove=1'>Remove Paper</a><br><br>"
 
-			if(faxtime>world.timeofday)
-				dat += "<b>Transmitter arrays realigning. Please stand by for [(faxtime - world.timeofday) / 10] second\s.</b><br>"
+			if(faxtime>world.time)
+				dat += "<b>Transmitter arrays realigning. Please stand by for [(faxtime - world.time) / 10] second\s.</b><br>"
 
 			else
 				dat += "<a href='byond://?src=\ref[src];send=1'>Send</a><br>"
@@ -94,9 +108,9 @@ var/list/alldepartments = list("Central Command")
 				dat += "<b>Sending to:</b> <a href='byond://?src=\ref[src];dept=1'>[dpt]</a><br>"
 
 		else
-			if(faxtime>world.timeofday)
+			if(faxtime>world.time)
 				dat += "Please insert paper to send via secure connection.<br><br>"
-				dat += "<b>Transmitter arrays realigning. Please stand by for [(faxtime - world.timeofday) / 10] second\s.</b><br>"
+				dat += "<b>Transmitter arrays realigning. Please stand by for [(faxtime - world.time) / 10] second\s.</b><br>"
 			else
 				dat += "Please insert paper to send via secure connection.<br><br>"
 
@@ -132,7 +146,7 @@ var/list/alldepartments = list("Central Command")
 				SendFax(tofax.info, tofax.name, usr, dpt, 0, tofax.display_x, tofax.display_y)
 			log_game("([usr]/([usr.ckey]) sent a fax titled [tofax] to [dpt] - contents: [tofax.info]")
 			to_chat(usr, "Message transmitted successfully.")
-			faxtime = world.timeofday + cooldown_time
+			faxtime = world.time + cooldown_time
 
 	if(href_list["remove"])
 		if(tofax)
@@ -177,7 +191,12 @@ var/list/alldepartments = list("Central Command")
 	updateUsrDialog()
 
 /obj/machinery/faxmachine/attackby(obj/item/O as obj, mob/user as mob)
-
+	if(stat & NOPOWER)
+		to_chat(user, "<span class = 'warning'>\The [src] has no power.</span>")
+		return
+	if(stat & BROKEN)
+		to_chat(user, "<span class = 'warning'>\The [src] is broken!</span>")
+		return
 	if(istype(O, /obj/item/weapon/paper))
 		if(!tofax)
 			if(user.drop_item(O, src))
@@ -201,15 +220,23 @@ var/list/alldepartments = list("Central Command")
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
 	return
 
+/obj/machinery/faxmachine/kick_act()
+	..()
+	if(tofax)
+		tofax.forceMove(loc)
+		tofax = null
+		return
+	if(scan)
+		scan.forceMove(loc)
+		scan = null
+		return
+
 /proc/Centcomm_fax(var/obj/item/weapon/paper/sent, var/sentname, var/mob/Sender)
 
 //why the fuck doesnt the thing show as orange
 	var/msg = "<span class='notice'><b>  CENTCOMM FAX: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<a href='?_src_=holder;role_panel=\ref[Sender]'>RP</a>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
 	for (var/client/C in admins)
-		if(C.prefs.special_popup)
-			C << output(msg, "window1.msay_output")//if i get told to make this a proc imma be fuckin mad
-		else
-			to_chat(C, msg)
+		C.output_to_special_tab(msg)
 		C << 'sound/effects/fax.ogg'
 
 proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/xdim, var/ydim)

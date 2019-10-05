@@ -19,7 +19,7 @@
 	var/pass_flags = 0
 
 	var/sound_override = 0 //Do we make a sound when bumping into something?
-	var/hard_deleted = 0
+	var/hard_deleted
 	var/pressure_resistance = ONE_ATMOSPHERE
 	var/obj/effect/overlay/chain/tether = null
 	var/tether_pull = 0
@@ -68,9 +68,6 @@
 	on_moved = new("owner"=src)
 
 /atom/movable/Destroy()
-	gcDestroyed = "Bye, world!"
-	tag = null
-
 	if(materials)
 		returnToPool(materials)
 		materials = null
@@ -111,34 +108,13 @@
 
 	..()
 
-/proc/delete_profile(var/type, code = 0)
-	if(!ticker || ticker.current_state < 3)
-		return
-	if(code == 0)
-		if (!("[type]" in del_profiling))
-			del_profiling["[type]"] = 0
-
-		del_profiling["[type]"] += 1
-	else if(code == 1)
-		if (!("[type]" in ghdel_profiling))
-			ghdel_profiling["[type]"] = 0
-
-		ghdel_profiling["[type]"] += 1
-	else
-		if (!("[type]" in gdel_profiling))
-			gdel_profiling["[type]"] = 0
-
-		gdel_profiling["[type]"] += 1
-		soft_dels += 1
-
 /atom/movable/Del()
 	if (gcDestroyed)
-
 		if (hard_deleted)
 			delete_profile("[type]", 1)
 		else
-			garbageCollector.dequeue("\ref[src]") // hard deletions have already been handled by the GC queue.
 			delete_profile("[type]", 2)
+
 	else // direct del calls or nulled explicitly.
 		delete_profile("[type]", 0)
 		Destroy()
@@ -1002,9 +978,9 @@
 
 /atom/movable/proc/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
 	if(anchored)
-		return
+		return 0
 	if(user && (!Adjacent(user) || !src.Adjacent(user) || user.incapacitated() || !src.can_be_pulled(user)))
-		return
+		return 0
 	var/list/params_list = params2list(params)
 	if(clamp)
 		pixel_x = Clamp(base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
@@ -1012,6 +988,7 @@
 	else
 		pixel_x = base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
 		pixel_y = base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+	return 1
 
 //Overwriting BYOND proc used for simple animal and NPCbot movement, Pomf help me
 /atom/movable/proc/start_walk_to(Trg,Min=0,Lag=0,Speed=0)
@@ -1050,6 +1027,33 @@
 	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
 	var/turf/startzone = locate(startx, starty, 1)
 	var/turf/endzone = locate(endx, endy, 1)
-	
+	if(!isspace(get_area(startzone)))
+		return FALSE
 	forceMove(startzone)
 	throw_at(endzone, null, throwspeed)
+	return TRUE
+
+/mob/living/carbon/human/ThrowAtStation(var/radius = 30, var/throwspeed = null, var/startside = null, var/entry_vehicle = /obj/item/airbag)
+	var/turf/prev_turf = get_turf(src)
+	var/obj/AB = new entry_vehicle(null, TRUE)
+	forceMove(AB)
+	if(AB.ThrowAtStation(radius, throwspeed, startside))
+		return TRUE
+	else
+		forceMove(prev_turf)
+		qdel(AB)
+		return FALSE
+
+/atom/movable/proc/spawn_rand_maintenance()
+	var/list/potential_locations = list()
+	for(var/area/maintenance/A in areas)
+		potential_locations.Add(A)
+
+	while(potential_locations.len)
+		var/area/maintenance/A = pick(potential_locations)
+		potential_locations.Remove(A)
+		for(var/turf/simulated/floor/F in A.contents)
+			if(!F.has_dense_content())
+				forceMove(F)
+				return TRUE
+	return FALSE

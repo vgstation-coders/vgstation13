@@ -265,3 +265,42 @@
 	desc = "Looks like some one has butter fingers."
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "smashed_butter"
+
+/obj/effect/decal/cleanable/virusdish
+	name = "broken virus containment dish"
+	icon = 'icons/obj/virology.dmi'
+	icon_state = "brokendish-outline"
+	density = 0
+	anchored = 1
+	mouse_opacity = 1
+	layer = OBJ_LAYER
+	plane = OBJ_PLANE
+	var/last_openner
+	var/datum/disease2/disease/contained_virus
+
+/obj/effect/decal/cleanable/virusdish/Crossed(var/mob/living/perp)
+	..()
+	if (istype(perp))
+		FeetStab(perp,damage = 10,knockdown = 0)
+		infection_attempt(perp)
+
+/obj/effect/decal/cleanable/virusdish/proc/infection_attempt(var/mob/living/perp)
+	if (!contained_virus)
+		return
+	//Now if your feet aren't well protected, or are bleeding, you might get infected.
+	var/block = 0
+	var/bleeding = 0
+	if(attempt_colony(perp,contained_virus,"from exposure to a broken virus dish."))
+		return
+	if (perp.lying)
+		block = perp.check_contact_sterility(FULL_TORSO)
+		bleeding = perp.check_bodypart_bleeding(FULL_TORSO)
+	else
+		block = perp.check_contact_sterility(FEET)
+		bleeding = perp.check_bodypart_bleeding(FEET)
+
+	if (!block)
+		if (contained_virus.spread & SPREAD_CONTACT)
+			perp.infect_disease2(contained_virus, notes="(Contact, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")
+		else if (bleeding && (contained_virus.spread & SPREAD_BLOOD))
+			perp.infect_disease2(contained_virus, notes="(Blood, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")

@@ -131,7 +131,7 @@
 			if(!next_turf.Cross(src, next_turf)) //We can't pass through our planned path
 				break
 			for(var/obj/structure/window/W in next_turf)
-				W.Destroy(brokenup = 1)
+				W.shatter()
 				sleep(5)
 			for(var/obj/structure/table/O in next_turf)
 				O.ex_act(1)
@@ -182,7 +182,7 @@
 				if(!next_turf.Cross(src, next_turf)) //We can't pass through our planned path
 					break
 				for(var/obj/structure/window/W in next_turf)
-					W.Destroy(brokenup = 1)
+					W.shatter()
 					sleep(5)
 				for(var/obj/structure/table/O in next_turf)
 					O.ex_act(1)
@@ -216,7 +216,6 @@
 			return
 		visible_message("<span class='danger'>\The [src] starts trying to slide itself into the vent!</span>")
 		sleep(50) //Let's stop SCP-173 for five seconds to do his parking job
-		..()
 		if(entry_vent.network && entry_vent.network.normal_members.len)
 			var/list/vents = list()
 			for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)

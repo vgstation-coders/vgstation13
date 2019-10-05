@@ -362,6 +362,17 @@ Class Procs:
 			update_multitool_menu(usr)
 			return 1
 
+/obj/machinery/proc/is_on_same_z(var/mob/user)
+	var/turf/T = get_turf(user)
+	if(!isAI(user) && T.z != z && user.z != map.zCentcomm)
+		return FALSE
+	return TRUE
+
+/obj/machinery/proc/is_in_range(var/mob/user)
+	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		return FALSE
+	return TRUE
+
 /obj/machinery/Topic(href, href_list)
 	..()
 	if(stat & (NOPOWER|BROKEN))
@@ -377,12 +388,10 @@ Class Procs:
 		if (!usr.dexterity_check())
 			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 			return 1
-		var/turf/T = get_turf(usr)
-		if(!isAI(usr) && T.z != z)
-			if(usr.z != map.zCentcomm)
-				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
-				return 1
-		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		if(!is_on_same_z(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
+			return 1
+		if(!is_in_range(usr))
 			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
 			return 1
 	else if(!custom_aghost_alerts)
@@ -461,7 +470,7 @@ Class Procs:
 		if(prob(destroy_chance))
 			qdel(I)
 		else
-			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src:reagents && src:reagents.total_volume)
+			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src.reagents && src.reagents.total_volume)
 				reagents.trans_to(I, reagents.total_volume)
 			if(I.reliability != 100 && crit_fail)
 				I.crit_fail = 1
@@ -527,7 +536,7 @@ Class Procs:
 	user.visible_message("[user.name] starts to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 		"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 		"You hear welding.")
-	if (WT.do_weld(user, src,20, 0))
+	if (WT.do_weld(user, src,20, 1))
 		if(gcDestroyed)
 			return -1
 		switch(state)
@@ -543,7 +552,6 @@ Class Procs:
 							)
 		return 1
 	else
-		to_chat(user, "<span class='rose'>You need more welding fuel to complete this task.</span>")
 		return -1
 
 /**
@@ -709,7 +717,7 @@ Class Procs:
 			W.play_rped_sound()
 		else
 			to_chat(user, "<span class='notice'>Following parts detected in the machine:</span>")
-			for(var/var/obj/item/C in component_parts)
+			for(var/obj/item/C in component_parts)
 				to_chat(user, "<span class='notice'>    [C.name]</span>")
 		return 1
 	return 0

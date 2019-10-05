@@ -79,8 +79,7 @@
 /obj/machinery/suit_storage_unit/excavation
 	name = "Excavation Suit Storage Unit"
 	department = "sci"
-	suit_type = /obj/item/clothing/suit/space/anomaly
-	helmet_type = /obj/item/clothing/head/helmet/space/anomaly
+	suit_type = /obj/item/clothing/suit/space/rig/arch
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
@@ -453,10 +452,12 @@
 			if(src.issuperUV)
 				var/burndamage = rand(28,35)
 				occupant.take_organ_damage(0,burndamage)
+				M.bodytemperature += burndamage * TEMPERATURE_DAMAGE_COEFFICIENT
 				occupant.audible_scream()
 			else
 				var/burndamage = rand(6,10)
 				occupant.take_organ_damage(0,burndamage)
+				M.bodytemperature += burndamage * TEMPERATURE_DAMAGE_COEFFICIENT
 				occupant.audible_scream()
 		if(i==3) //End of the cycle
 			if(!src.issuperUV)

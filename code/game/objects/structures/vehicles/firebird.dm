@@ -86,7 +86,7 @@
 */
 
 /obj/structure/bed/chair/vehicle/firebird/santa
-	name = "snowmobile"
+	name = "magic snowmobile"
 	desc = "After a complaint from space PETA, santa's been forced to take a less elegant ride."
 	icon_state = "snowmobile"
 

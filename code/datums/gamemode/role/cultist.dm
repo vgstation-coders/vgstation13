@@ -23,7 +23,7 @@
 	antag.current.add_language(LANGUAGE_CULT)
 
 	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
-		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 	antag.store_memory("A couple of runes appear clearly in your mind:")
@@ -47,7 +47,7 @@
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
-		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /datum/mind/proc/decult()
@@ -133,6 +133,8 @@
 			to_chat(antag.current, "<span class='sinister'>Your soul has made its way into the blade's soul gem! The dark energies of the altar forge your mind into an instrument of the cult of Nar-Sie, be of assistance to your fellow cultists.</span>")
 		if (GREET_RESURRECT)
 			to_chat(antag.current, "<span class='sinister'>You were resurrected from beyond the veil by the followers of Nar-Sie, and are already familiar with their rituals! You have now joined their ranks as a cultist.</span>")
+		if (GREET_SACRIFICE)
+			to_chat(antag.current, "<span class='sinister'>The cult has spared your soul following the sacrifice of your body. You are now living as a shade inside the Soul Blade that nailed your body to the altar. You are to help the cult in their endeavours to repay their graciousness.</span>")
 		else
 			if (faction && faction.ID == BLOODCULT)
 				to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>You are cultist, from the cult of Nar-Sie, the Geometer of Blood.</span>")

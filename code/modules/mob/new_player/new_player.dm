@@ -285,8 +285,7 @@
 	observer.name = observer.real_name
 	if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
 		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
-	observer.key = key
-	mob_list -= src
+	mind.transfer_to(observer)
 	qdel(src)
 
 /mob/new_player/proc/FuckUpGenes(var/mob/living/carbon/human/H)
@@ -295,6 +294,35 @@
 		H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD)
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
+
+/mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)
+	// 5% of players are joining the station with some minor disease
+	if(prob(5))
+		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+		var/datum/disease2/disease/D = new virus_choice
+
+		var/list/anti = list(
+			ANTIGEN_BLOOD	= 1,
+			ANTIGEN_COMMON	= 1,
+			ANTIGEN_RARE	= 0,
+			ANTIGEN_ALIEN	= 0,
+			)
+		var/list/bad = list(
+			EFFECT_DANGER_HELPFUL	= 1,
+			EFFECT_DANGER_FLAVOR	= 8,
+			EFFECT_DANGER_ANNOYING	= 1,
+			EFFECT_DANGER_HINDRANCE	= 0,
+			EFFECT_DANGER_HARMFUL	= 0,
+			EFFECT_DANGER_DEADLY	= 0,
+			)
+		D.origin = "New Player"
+
+		D.makerandom(list(30,50),list(0,50),anti,bad,null)
+
+		D.log += "<br />[timestamp()] Infected [key_name(H)]"
+		H.virus2["[D.uniqueID]-[D.subID]"] = D
+
+		D.AddToGoggleView(H)
 
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
@@ -393,6 +421,7 @@
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
 			FuckUpGenes(character)
+			DiseaseCarrierCheck(character)
 		else
 			character.Robotize()
 	qdel(src)
@@ -421,7 +450,7 @@
 		speech.name = "Arrivals Announcement Computer"
 		speech.job = "Automated Announcement"
 		speech.as_name = "Arrivals Announcement Computer"
-		speech.frequency = 1459
+		speech.frequency = COMMON_FREQ
 
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
 		returnToPool(speech)

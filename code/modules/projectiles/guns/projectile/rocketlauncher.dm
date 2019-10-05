@@ -106,7 +106,7 @@
 	origin_tech = null
 	fire_sound = 'sound/weapons/rocket.ogg'
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg/nikita"
-	var/obj/item/projectile/nikita/fired = null
+	var/obj/item/projectile/rocket/nikita/fired = null
 	var/emagged = 0
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/update_icon()
@@ -124,7 +124,7 @@
 	else
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
 		spawn(10) //RUN YOU IDIOT, RUN
-			explosion(src.loc, -1, 1, 4, 8)
+			explosion(src.loc, 1, 3, 5, 8) //Using the actual rocket damage, instead of the very old, super nerfed value
 			return(SUICIDE_ACT_BRUTELOSS)
 	return
 
@@ -148,7 +148,7 @@
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "nikita"
 	caliber = GUIDEDROCKET
-	projectile_type = "/obj/item/projectile/nikita"
+	projectile_type = "/obj/item/projectile/rocket/nikita"
 
 /obj/item/ammo_casing/rocket_rpg/nikita/New()
 	..()

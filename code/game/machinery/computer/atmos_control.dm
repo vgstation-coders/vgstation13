@@ -142,7 +142,7 @@ var/global/list/atmos_controllers = list()
 /obj/machinery/computer/atmoscontrol/proc/switch_preset(var/oldpreset, var/newpreset, var/no_cycle_after=1)
 	if(!(newpreset in airalarm_presets))
 		return
-	
+
 	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
 	for(var/obj/machinery/alarm/alarm in machines)
 		if(alarm.preset != oldpreset)
@@ -177,7 +177,7 @@ var/global/list/atmos_controllers = list()
 		data["logged_in"] = TRUE
 	else
 		data["logged_in"] = FALSE
-	
+
 	if(emagged)
 		data["logged_in"] = TRUE
 		data["login_name"] = "Robert');DROP TABLE users;" //honk
@@ -211,20 +211,21 @@ var/global/list/atmos_controllers = list()
 
 	var/list/tmplist = list()
 	for(var/preset in airalarm_presets) //this is a global list defined in alarm.dm
+		var/datum/airalarm_preset/preset_datum = airalarm_presets[preset]
 		tmplist[++tmplist.len] = list(
-			"name" = airalarm_presets[preset].name,
-			"desc" = airalarm_presets[preset].desc,
-			"core" = airalarm_presets[preset].core,
-			"oxygen" = airalarm_presets[preset].oxygen,
-			"nitrogen" = airalarm_presets[preset].nitrogen,
-			"carbon_dioxide" = airalarm_presets[preset].carbon_dioxide,
-			"plasma" = airalarm_presets[preset].plasma,
-			"n2o" = airalarm_presets[preset].n2o,
-			"other" = airalarm_presets[preset].other,
-			"pressure" = airalarm_presets[preset].pressure,
-			"temperature" = airalarm_presets[preset].temperature,
-			"target_temperature" = airalarm_presets[preset].target_temperature,
-			"scrubbers_gases" = airalarm_presets[preset].scrubbers_gases
+			"name" = preset_datum.name,
+			"desc" = preset_datum.desc,
+			"core" = preset_datum.core,
+			"oxygen" = preset_datum.oxygen,
+			"nitrogen" = preset_datum.nitrogen,
+			"carbon_dioxide" = preset_datum.carbon_dioxide,
+			"plasma" = preset_datum.plasma,
+			"n2o" = preset_datum.n2o,
+			"other" = preset_datum.other,
+			"pressure" = preset_datum.pressure,
+			"temperature" = preset_datum.temperature,
+			"target_temperature" = preset_datum.target_temperature,
+			"scrubbers_gases" = preset_datum.scrubbers_gases
 		)
 	data["presets"] = tmplist
 
@@ -248,7 +249,7 @@ var/global/list/atmos_controllers = list()
 	else
 		data["selected_preset"] = null
 		data["selected_preset_name"] = null
-	
+
 	if(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || user.hasFullAccess())
 		data["admin_access"] = TRUE
 	else
@@ -314,7 +315,7 @@ var/global/list/atmos_controllers = list()
 			return 1
 		selected_preset = new(airalarm_presets[href_list["select_preset"]]) //copy the existing preset for editing
 		return 1
-	
+
 	if(href_list["add_preset"])
 		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
 			return 1
@@ -333,7 +334,7 @@ var/global/list/atmos_controllers = list()
 		selected_preset = new(selected_preset, name, desc, FALSE)
 		airalarm_presets[name] = new /datum/airalarm_preset(selected_preset) //we'll put a copy of 'er in instead of the real deal
 		return 1
-		
+
 	if(href_list["save_preset_setting"])
 		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
 			return 1
@@ -343,7 +344,7 @@ var/global/list/atmos_controllers = list()
 		apply_preset(name)
 		to_chat(usr, "<span class='notice'>Preset saved and reapplied to alarms.</span>")
 		return 1
-	
+
 	if(href_list["rename_preset"])
 		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
 			return 1
@@ -368,7 +369,7 @@ var/global/list/atmos_controllers = list()
 		selected_preset = new /datum/airalarm_preset(selected_preset, newname, newdesc)
 		airalarm_presets.Remove(oldname)
 		return 1
-	
+
 	if(href_list["delete_preset"])
 		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
 			return 1
@@ -382,7 +383,7 @@ var/global/list/atmos_controllers = list()
 		selected_preset = new /datum/airalarm_preset(airalarm_presets["Human"]) //set the current Human preset as active
 		airalarm_presets.Remove(oldname)
 		return 1
-	
+
 	if(href_list["reset_preset"])
 		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
 			return 1
@@ -402,7 +403,7 @@ var/global/list/atmos_controllers = list()
 			if("Plasmaman")
 				selected_preset = new /datum/airalarm_preset/plasmaman
 		return 1
-	
+
 	if(href_list["apply_preset_batch"])
 		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
 			return 1
@@ -581,7 +582,7 @@ var/global/list/atmos_controllers = list()
 				to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
 			else
 				input_temperature = input_temperature + T0C
-			current.set_temperature(input_temperature)
+				current.set_temperature(input_temperature)
 			return 1
 
 #undef ACA_SCREEN_DETAILSVIEW

@@ -68,13 +68,8 @@
 	..()
 	if(beaker)
 		to_chat(user, "[bicon(beaker)] There is \a [beaker] in \the [src]'s auxiliary chamber.")
-		to_chat(user, "It contains:")
 		var/obj/item/weapon/reagent_containers/glass/B = beaker
-		if(B.reagents.reagent_list.len)
-			for(var/datum/reagent/R in B.reagents.reagent_list)
-				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-		else
-			to_chat(user, "<span class='info'>Nothing.</span>")
+		B.reagents.get_examine(user)
 
 /obj/item/weapon/reagent_containers/chempack/on_reagent_change()
 	update_icon()

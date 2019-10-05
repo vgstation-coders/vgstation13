@@ -2,6 +2,8 @@
 
 /datum/event/centcomm_order
 
+/datum/event/centcomm_order/can_start()
+	return 25
 
 /datum/event/centcomm_order/start()
 	var/datum/centcomm_order/C = new

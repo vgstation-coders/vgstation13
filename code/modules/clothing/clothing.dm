@@ -1,5 +1,6 @@
 /obj/item/clothing
 	name = "clothing"
+	sterility = 5
 	var/list/species_restricted = null //Only these species can wear this kit.
 	var/wizard_garb = 0 // Wearing this empowers a wizard.
 	var/eyeprot = 0 //for head and eyewear
@@ -19,7 +20,11 @@
 		accessories.Remove(A)
 		qdel(A)
 	..()
-
+	
+/obj/item/clothing/CtrlClick(var/mob/user)
+	if(isliving(user) && !user.incapacitated() && user.Adjacent(src) && accessories.len)
+		removeaccessory()
+	
 /obj/item/clothing/examine(mob/user)
 	..()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -314,6 +319,7 @@
 	icon = 'icons/obj/clothing/gloves.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/gloves.dmi', "right_hand" = 'icons/mob/in-hand/right/gloves.dmi')
 	siemens_coefficient = 0.50
+	sterility = 50
 	var/wired = 0
 	var/obj/item/weapon/cell/cell = 0
 	var/clipped = 0
@@ -452,6 +458,7 @@
 	slot_flags = SLOT_FEET
 	heat_conductivity = SHOE_HEAT_CONDUCTIVITY
 	permeability_coefficient = 0.50
+	sterility = 50
 
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/step_sound = ""
@@ -503,10 +510,11 @@
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
 	clothing_flags = CANEXTINGUISH
+	sterility = 30
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
-//      Meaning the the suit is defined directly after the corrisponding helmet. Just like below!
+//      Meaning the the suit is defined directly after the corresponding helmet. Just like below!
 /obj/item/clothing/head/helmet/space
 	name = "Space helmet"
 	icon_state = "space"
@@ -523,6 +531,7 @@
 	species_restricted = list("exclude","Diona","Muton")
 	eyeprot = 1
 	cold_breath_protection = 230
+	sterility = 100
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
@@ -543,6 +552,7 @@
 	species_restricted = list("exclude","Diona","Muton")
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	clothing_flags = CANEXTINGUISH
+	sterility = 100
 
 //Under clothing
 /obj/item/clothing/under
@@ -629,7 +639,6 @@
 	set category = "Object"
 	set src in usr
 	set_sensors(usr)
-	..()
 
 /obj/item/clothing/under/AltClick()
 	if(is_holder_of(usr, src))

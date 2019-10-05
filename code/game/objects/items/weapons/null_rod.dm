@@ -267,9 +267,9 @@
 	name = "mosin nagant"
 	desc = "Many centuries later, it's still drenched in cosmoline, just like the Murdercube intended. This one cannot be fired."
 	icon = 'icons/obj/gun.dmi'
-	icon_override = "nagant"
-	icon_state = "nagant"
-	item_state = "nagant"
+	icon_override = "mosin"
+	icon_state = "mosin"
+	item_state = "mosin"
 	slot_flags = SLOT_BELT | SLOT_BACK
 	w_class = W_CLASS_LARGE
 	attack_verb = list("bashes", "smashes", "buttstrokes")

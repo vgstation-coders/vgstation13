@@ -172,6 +172,7 @@
 	name = "Box"
 	desc = "A sleek, sturdy box."
 	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
 
 /obj/item/weapon/storage/box/syndie_kit/imp_freedom
 	name = "Freedom Implant (with injector)"
@@ -265,6 +266,14 @@
 	new /obj/item/ammo_storage/speedloader/a357(src)
 	return
 
+obj/item/weapon/storage/box/syndie_kit/cheaptide
+	name = "box (CT)"
+
+/obj/item/weapon/storage/box/syndie_kit/cheaptide/New()
+	..()
+	new /obj/item/weapon/implanter/traitor(src)
+	new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
+	
 /obj/item/weapon/storage/box/syndie_kit/flaregun
 	name = "box (modified flare gun)"
 

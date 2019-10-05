@@ -33,6 +33,8 @@
 	var/obj/item/weapon/cell/cell
 	var/teleport_cell_usage=1000 // 100% of a standard cell
 	processing=1
+	var/id_tag = "teleconsole"
+
 
 	light_color = LIGHT_COLOR_BLUE
 
@@ -46,19 +48,16 @@
 	y_off = rand(-10,10)
 	x_player_off = 0
 	y_player_off = 0
-	if (ticker && ticker.mode == GAME_STATE_PLAYING)
-		initialize()
+	cell = new/obj/item/weapon/cell(src)
 
 /obj/machinery/computer/telescience/initialize()
 	..()
-	if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
-		cell = new/obj/item/weapon/cell(src)
-		cell.charge = 0
-
-	var/obj/machinery/telepad/possible_telepad = locate() in range(src, 7)
-	if (!possible_telepad.linked)
-		telepad = possible_telepad
-		telepad.linked = src
+	for(var/obj/machinery/telepad/possible_telepad in range(src, 7))
+		if(telepad)
+			return //Stop checking if we are linked
+		if (!possible_telepad.linked) //Check if the telepad is linked to something else
+			telepad = possible_telepad
+			telepad.linked = src
 
 /obj/machinery/computer/telescience/Destroy()
 	if (telepad)
@@ -66,6 +65,40 @@
 		telepad = null
 
 	..()
+
+
+//Plagiarized cloning console multi-tool code
+/obj/machinery/computer/telescience/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	return ""
+
+/obj/machinery/computer/telescience/canLink(var/obj/T)
+	return (istype(T,/obj/machinery/telepad) && get_dist(src,T) < 7)
+
+/obj/machinery/computer/telescience/isLinkedWith(var/obj/T)
+	return (telepad == T)
+
+/obj/machinery/computer/telescience/linkWith(var/mob/user, var/obj/T, var/list/context)
+	if(istype(T, /obj/machinery/telepad))
+		telepad = T
+		telepad.linked = src
+		return 1
+
+/obj/machinery/computer/telescience/unlinkFrom(mob/user, obj/buffer)
+	if(telepad.linked)
+		telepad.linked = null
+	if(telepad)
+		telepad = null
+	return 1
+
+//Plagiarized conveyor belt multi-tool code
+/obj/machinery/computer/telescience/canClone(var/obj/machinery/T)
+	return (istype(T, /obj/machinery/telepad) && get_dist(src, T) < 7)
+
+/obj/machinery/computer/telescience/clone(var/obj/machinery/T)
+	if(istype(T, /obj/machinery/telepad))
+		telepad = T
+		telepad.linked = src
+		return 1
 
 /obj/machinery/computer/telescience/process()
 	if(!cell || (stat & (BROKEN|NOPOWER)) || !anchored)
@@ -309,6 +342,10 @@ var/list/telesci_warnings = list(
 
 	if(cell.charge < teleport_cell_usage)
 		to_chat(user, "<span class='caution'>Error: not enough buffer energy.</span>")
+		return
+
+	if(telepad && (!telepad.linked == src))
+		to_chat(user, "<span class='caution'>Error: No telepad linked.</span>")
 		return
 
 	cell.use(teleport_cell_usage)

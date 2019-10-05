@@ -163,6 +163,10 @@
 	finished[1] = /obj/item/weapon/pickaxe/plasmacutter/accelerator
 
 /obj/item/device/modkit/plasmacutter/attackby(atom/target, mob/user, proximity_flag)
-	if(proximity_flag && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
+	if(proximity_flag && parts[1] == 1 && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
+		to_chat(user, "<span class='warning'>\The [src] is already loaded!</span>")
+		return
+
+	else if(proximity_flag && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
 		parts[1] = 1
 		qdel(target)

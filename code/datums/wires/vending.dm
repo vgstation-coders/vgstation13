@@ -42,24 +42,11 @@ var/const/VENDING_WIRE_IDSCAN = 8
 	. += "The green light is [V.extended_inventory ? "on" : "off"].<BR>"
 	. += "A [V.scan_id ? "purple" : "yellow"] light is on.<BR>"
 
-/datum/wires/vending/UpdatePulsed(var/index)
-	var/obj/machinery/vending/V = holder
-	if(V.unhackable)
-		return
-	switch(index)
-		if(VENDING_WIRE_THROW)
-			V.shoot_inventory = !V.shoot_inventory
-		if(VENDING_WIRE_CONTRABAND)
-			V.extended_inventory = !V.extended_inventory
-		if(VENDING_WIRE_ELECTRIFY)
-			V.seconds_electrified = 30
-		if(VENDING_WIRE_IDSCAN)
-			V.scan_id = !V.scan_id
-
 /datum/wires/vending/UpdateCut(var/index, var/mended)
 	var/obj/machinery/vending/V = holder
 	if(V.unhackable)
 		return
+	..()
 	switch(index)
 		if(VENDING_WIRE_THROW)
 			V.shoot_inventory = !mended
@@ -72,3 +59,19 @@ var/const/VENDING_WIRE_IDSCAN = 8
 				V.seconds_electrified = -1
 		if(VENDING_WIRE_IDSCAN)
 			V.scan_id = 1
+
+
+/datum/wires/vending/UpdatePulsed(var/index)
+	var/obj/machinery/vending/V = holder
+	if(V.unhackable)
+		return
+	..()
+	switch(index)
+		if(VENDING_WIRE_THROW)
+			V.shoot_inventory = !V.shoot_inventory
+		if(VENDING_WIRE_CONTRABAND)
+			V.extended_inventory = !V.extended_inventory
+		if(VENDING_WIRE_ELECTRIFY)
+			V.seconds_electrified = 30
+		if(VENDING_WIRE_IDSCAN)
+			V.scan_id = !V.scan_id

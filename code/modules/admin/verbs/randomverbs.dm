@@ -294,7 +294,7 @@ Ccomp's first proc.
 	var/list/mobs = list()
 	var/list/ghosts = list()
 	var/list/sortmob = sortNames(mob_list)                           // get the mob list.
-	/var/any=0
+	var/any=0
 	for(var/mob/dead/observer/M in sortmob)
 		mobs.Add(M)                                             //filter it where it's only ghosts
 		any = 1                                                 //if no ghosts show up, any will just be 0
@@ -785,10 +785,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	log_admin("[key_name(usr)] has gibbed [key_name(M)]")
 	message_admins("[key_name_admin(usr)] has gibbed [key_name_admin(M)]", 1)
 
-	if(istype(M, /mob/dead/observer))
-		gibs(M.loc, M.viruses)
-		return
-
 	M.gib()
 	feedback_add_details("admin_verb","GIB") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -802,8 +798,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		message_admins("<span class='notice'>[key_name_admin(usr)] used gibself.</span>", 1)
 		if(!istype(mob, /mob/dead/observer))
 			mob.gib()
-		else
-			gibs(mob.loc, mob.viruses)
 		feedback_add_details("admin_verb","GIBS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 /*
 /client/proc/cmd_manual_ban()
@@ -912,7 +906,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		else
 			return
 
-	var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification") as text|null
+	var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification")
 	var/confirm = alert(src, "Are you sure you want to call the shuttle?", "Confirm", "Yes", "Cancel")
 	if(confirm != "Yes")
 		return

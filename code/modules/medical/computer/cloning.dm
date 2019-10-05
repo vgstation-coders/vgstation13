@@ -62,7 +62,7 @@
 ///obj/machinery/computer/cloning/getLink(var/idx) - abandoned orphan code that never worked anyway
 //	return (idx >= 1 && idx <= links.len) ? links[idx] : null
 
-/obj/machinery/computer/cloning/linkWith(var/mob/user, var/obj/O, var/link/context)
+/obj/machinery/computer/cloning/linkWith(var/mob/user, var/obj/O, var/list/context)
 	if(istype(O, /obj/machinery/cloning/clonepod))
 		pod1 = O
 		pod1.connected = src

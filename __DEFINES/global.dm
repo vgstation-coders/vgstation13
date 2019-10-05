@@ -7,12 +7,14 @@
 #define DNA_SE_LENGTH 58
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
-
 #define GREY_SHAPED "Grey"
-
+#define UNATHI_SHAPED "Unathi"
+#define SKRELL_SHAPED "Skrell"
+#define TAJARAN_SHAPED "Tajaran"
+#define PLASMAMAN_SHAPED "Plasmaman"
 #define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
-
 #define MUSHROOM_SHAPED "Mushroom"
+
 
 //Content of the Round End Information window
 var/round_end_info = ""
@@ -234,7 +236,10 @@ var/list/score=list(
 	"mess"           = 0, //How much messes on the floor went uncleaned
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
-	"disease"        = 0, //How many disease vectors in the world (one disease on one person is one)
+	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
+	"disease_bad"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger >= 3
+	"disease_most"        = null, //Most spread disease
+	"disease_most_count"        = 0, //Most spread disease
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
@@ -327,7 +332,7 @@ var/nanocoins_lastchange = 0
 
 var/minimapinit = 0
 
-var/bees_species = list()
+var/list/bees_species = list()
 
 var/datum/stat_collector/stat_collection = new
 
@@ -412,6 +417,7 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/humanoid/surgeon/boss, 		// First stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
+	/mob/living/simple_animal/hostile/bear/spare,					// Captain bear
 	)
 
 // Set by traitor item, affects cargo supplies
@@ -469,3 +475,6 @@ var/list/variables_not_to_be_copied = list(
 	"on_explode","on_projectile","in_chamber","power_supply","contents",
 	"x","y","z"
 )
+
+//Item lists
+var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible)
