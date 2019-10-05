@@ -102,7 +102,10 @@
 			return
 	handle_symptom_on_touch(M, src, HAND)
 
-/mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, var/def_zone = null)
+/mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration = 20 SECONDS)
+	if(incapacitation_duration <= 0)
+		return 0
+	incapacitation_duration = max(incapacitation_duration / (2 SECONDS), 1) // life ticks are 2 seconds, we simply make a conversion from seconds to life ticks
 	var/damage = shock_damage * siemens_coeff
 
 	if(damage <= 0)
@@ -111,9 +114,9 @@
 	var/mob/living/carbon/human/H = src
 	if(istype(H) && H.species && (H.species.flags & ELECTRIC_HEAL))
 		heal_overall_damage(damage/2, damage/2)
-		Jitter(10)
-		Stun(5)
-		Knockdown(5)
+		Jitter(incapacitation_duration)
+		Stun(incapacitation_duration / 2)
+		Knockdown(incapacitation_duration / 2)
 		damage = 0
 		//It would be cool if someone added an animation of some electrical shit going through the body
 	else
@@ -123,9 +126,9 @@
 			damage = apply_damage(damage, BURN, def_zone, used_weapon = source)
 		if(damage <= 0)
 			return 0
-		Jitter(20)
-		Stun(10)
-		Knockdown(10)
+		Jitter(incapacitation_duration * 2)
+		Stun(incapacitation_duration)
+		Knockdown(incapacitation_duration)
 
 	visible_message( \
 		"<span class='warning'>[src] was shocked by the [source]!</span>", \
