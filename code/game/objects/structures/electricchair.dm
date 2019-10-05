@@ -61,17 +61,13 @@
 		A.use_power(EQUIP, 5000)
 		var/light = A.power_light
 		A.updateicon()
-
 		flick("echair1", src)
-
-		var/mob/living/M = get_locked(/datum/locking_category/buckle, subtypes=TRUE)[1]
-		M.Stun(60)
-		M.Jitter(60)
+		var/mob/living/carbon/human/target = get_locked(/datum/locking_category/buckle, subtypes=TRUE)[1]
 		visible_message("<span class='danger'>The electric chair went off!</span>", "<span class='danger'>You hear a deep sharp shock!</span>")
 		for(var/i=1;i<=5;i++)
-			if(M && M.locked_to == src)
-				M.burn_skin(34)
-				to_chat(M, "<span class='danger'>You feel a deep shock course through your body!</span>")
+			if(istype(target) && target.locked_to == src)
+				target.electrocute_act(34, src, incapacitation_duration = 24 SECONDS)
+				to_chat(target, "<span class='danger'>You feel a deep shock course through your body!</span>")
 			spark(src, 12, FALSE)
 			sleep(10)
 
