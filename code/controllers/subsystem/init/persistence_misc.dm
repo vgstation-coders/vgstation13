@@ -83,17 +83,15 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	data[itsthecurrentyear] = num2text(text2num(data[itsthecurrentyear]) + 1)
 	write_file(data)
 
-// -- Round count
+// -- Vox raiders
 /datum/persistence_task/vox_raiders
 	execute = TRUE
 	name = "Vox raiders best team"
 	file_path = "data/persistence/vox_raiders_best_team.json"
 
-// We just get the data from the file.
 /datum/persistence_task/vox_raiders/on_init()
 	data = read_file()
 
-// We bump the round round and write it to file.
 /datum/persistence_task/vox_raiders/on_shutdown()
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 	if (!istype(dynamic_mode))
