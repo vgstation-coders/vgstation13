@@ -41,7 +41,7 @@
 		if((stat & (BROKEN|NOPOWER)))
 			to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
 			return
-		if(istype(K, /obj/item/key))
+		if(istype(K, /obj/item/key/snowmobile/universal)) //FUTURE FEATURE? Change this to /obj/item/key and play with line 82 to allow all kinds of keys to be created. Would require redoing keys slightly to use VIN as a unique ID and having keys match that VIN.
 			if(storedkey)
 				to_chat(user, "<span class='notice'>\The [src] has a key inside of it already. You need to remove it before you can create another key.</span>")
 				return
@@ -79,7 +79,7 @@
 	sleep(build_time)
 	if(K)
 		storedkey = new K.type(src)
-		storedkey.paired_to = K.paired_to
+		storedkey.paired_to = K.paired_to //Doesn't even work properly due to how vehicles currently work with direct refs to their key.
 	else
 		storedkey = new /obj/item/key/snowmobile/universal(src)
 	busy = 2
