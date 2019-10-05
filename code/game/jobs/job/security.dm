@@ -57,6 +57,7 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ]<br/> <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 /datum/job/hos/reject_new_slots()
@@ -116,6 +117,7 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 
@@ -196,6 +198,7 @@
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	H.check_mutations = 1
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 
@@ -249,6 +252,7 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 /datum/job/officer/get_total_positions()

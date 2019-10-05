@@ -50,6 +50,7 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/>")
 	return 1
 
 /datum/job/captain/get_access()
@@ -118,4 +119,5 @@
 		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 		affected.implants += L
 		L.part = affected
+		H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/>")
 		return 1

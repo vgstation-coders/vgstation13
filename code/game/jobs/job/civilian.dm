@@ -51,6 +51,7 @@
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	H.check_mutations = 1
+	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 
 	return 1
 
@@ -99,6 +100,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 	return 1
 
 /datum/job/chef/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -157,6 +159,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 	return 1
 
 /datum/job/hydro/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -205,6 +208,7 @@
 		H.put_in_hands(new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
 	return 1
 
 
@@ -247,6 +251,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
 	return 1
 
 
@@ -292,6 +297,7 @@
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/crowbar(H), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/storage/bag/ore(H), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/> <b>Science:</b> [SCI_FREQ] <br/>")
 	return 1
 
 /datum/job/mining/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -611,4 +617,5 @@
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 	L.imp_in = H
 	L.implanted = 1
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/>")
 	return 1

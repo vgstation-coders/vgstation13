@@ -41,6 +41,7 @@
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/device/healthanalyzer(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/>")
 	return 1
 
 /datum/job/paramedic/priority_reward_equip(var/mob/living/carbon/human/H)
