@@ -243,7 +243,7 @@ var/list/vox_units=list(
 	null, // Don't yell units
 	'sound/vox_fem/thousand.ogg',
 	'sound/vox_fem/million.ogg',
-	//'sound/vox_fem/billion.ogg'
+	'sound/vox_fem/billion.ogg' // Yell at N3X15 if you somehow get to the point where you suddenly need "trillion"
 )
 
 /proc/vox_num2list(var/number)
