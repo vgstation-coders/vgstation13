@@ -307,6 +307,9 @@ var/list/potential_bonus_items = list(
 			put_in_hands(new /obj/item/weapon/storage/box/emps(src))
 			put_in_hands(new /obj/item/device/multitool(src))
 
+			var/obj/item/weapon/paper/vox_paper/VP = new(src)
+			VP.initialize()
+			put_in_hands(VP)
 
 		if(3) // Vox saboteur!
 			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/carapace(src), slot_wear_suit)
