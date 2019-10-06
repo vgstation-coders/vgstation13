@@ -5,8 +5,8 @@
 
 /datum/objective/steal_priority/PostAppend()
 	. = ..()
-	num = rand(2, 5)
-	explanation_text = "Abduct [num] priority items."
+	num = rand(1, 3)
+	explanation_text = "Acquire [num] priority items."
 
 /datum/objective/steal_priority/IsFulfilled()
 	var/datum/faction/vox_shoal/VS = faction

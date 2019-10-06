@@ -656,6 +656,8 @@
 // -- Vox raiders.
 
 /obj/structure/closet/loot
+	name = "Loot closet"
+	desc = "Store the valuables here for a direct transfer to the shoal. We make much bluespace."
 
 /obj/structure/closet/loot/Destroy()
 	for (var/datum/faction/vox_shoal/VS in ticker.mode.factions)

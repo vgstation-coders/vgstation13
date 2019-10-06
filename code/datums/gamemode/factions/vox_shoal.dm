@@ -10,7 +10,7 @@
 	logo_state = "vox-logo"
 	hud_icons = list("vox-logo")
 
-	var/time_left = 30 MINUTES
+	var/time_left = (30 MINUTES)/10
 	var/completed = FALSE
 
 	var/results = "The Shoal didn't return yet."
@@ -110,7 +110,7 @@ var/list/potential_bonus_items = list(
 
 /datum/faction/vox_shoal/GetScoreboard()
 	. = ..()
-	. += "<br/> Time left: <b>[(time_left / 2*60) % 60]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
+	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
 	if (time_left < 0)
 		. += "<br/> <span class='danger'>The raid took too long.</span>"
 	. += "<br/> The raiders took <b>[got_personnel]</b> people to the Shoal."
@@ -120,7 +120,7 @@ var/list/potential_bonus_items = list(
 
 /datum/faction/vox_shoal/AdminPanelEntry()
 	. = ..()
-	. += "<br/> Time left: <b>[(time_left / 2*60) % 60]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
+	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
 
 /datum/faction/vox_shoal/OnPostSetup()
 	..()
@@ -202,7 +202,6 @@ var/list/potential_bonus_items = list(
 				else
 					to_chat(H, "<span class='notice'>The raid has been concluded, and you returned safe. This will greatly helps us.</span>")
 					total_points += 500
-				qdel(H) // They get deleted and go back as ghosts.
 			else
 				count_score(H)
 				to_chat(H, "<span class='warning'>You can't really remember the details, but somehow, you managed to escape. Your situation is still far from ideal, however.")
@@ -223,6 +222,10 @@ var/list/potential_bonus_items = list(
 		else
 			results = "The vox raiders didn't beat the previous record of [score_to_beat]."
 
+		for (var/datum/role/R in members)
+			to_chat(R.antag.current, "<span class='notice'>The raid is over. You'll go back to the shoal in a few minutes...</span>")
+			spawn (1 MINUTES)
+				qdel(R.antag.current)
 
 /datum/faction/vox_shoal/proc/count_score(var/atom/O)
 	if (ishuman(O))
