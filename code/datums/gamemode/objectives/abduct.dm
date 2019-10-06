@@ -5,7 +5,7 @@
 
 /datum/objective/abduct/New(var/dept)
 	. = ..()
-	num = rand(2, 5)
+	num = rand(1, 3)
 	explanation_text = "Abduct [num] qualified personnel from the [dept] departement."
 
 /datum/objective/abduct/IsFulfilled()
