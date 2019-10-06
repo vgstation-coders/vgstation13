@@ -227,16 +227,17 @@ var/list/potential_bonus_items = list(
 /datum/faction/vox_shoal/proc/count_score(var/atom/O)
 	if (ishuman(O))
 		count_human_score(O)
-	else
-		if (is_type_in_list(O, low_score_items))
-			total_points += 50
-		if (is_type_in_list(O, medium_score_items))
-			total_points += 200
-		if (is_type_in_list(O, high_score_items))
-			total_points += 400
-		if (is_type_in_list(O, bonus_items_of_the_day))
-			total_points += 100
-			got_items++
+		return
+	// Items
+	if (is_type_in_list(O, high_score_items))
+		total_points += 400
+	else if (is_type_in_list(O, medium_score_items))
+		total_points += 200
+	else if (is_type_in_list(O, low_score_items))
+		total_points += 50
+	if (is_type_in_list(O, bonus_items_of_the_day))
+		total_points += 500
+		got_items++
 
 
 /datum/faction/vox_shoal/proc/count_human_score(var/mob/living/carbon/human/H)
