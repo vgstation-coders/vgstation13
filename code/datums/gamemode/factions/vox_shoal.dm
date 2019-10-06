@@ -219,7 +219,7 @@ var/list/potential_bonus_items = list(
 		if (total_points > score_to_beat)
 			for (var/datum/role/R in members)
 				to_chat(R.antag.current, "<span class='notice'><b>You have beaten the /vg/station heist record.</b> Congratulations!</span>")
-				results = "The vox raiders were <b>better</b> than the previous record of [score_to_beat], which was on [vox_raider_data["DD"]]/[vox_raider_data["MM"]]/[vox_raider_data["YY"]]."
+				results = "The vox raiders were <b>better</b> than the previous record of [score_to_beat], which was on [vox_raider_data["MM"]]/[vox_raider_data["DD"]]/[vox_raider_data["YY"]]."
 		else
 			results = "The vox raiders didn't beat the previous record of [score_to_beat]."
 
@@ -358,5 +358,5 @@ var/list/potential_bonus_items = list(
 	var/best_team = vox_raider_data["winning_team"]
 	info = {"<h4>The shoal needs us to gather ressources. </h4>
 	<br/>
-	Our best agents of all time were able to gather an estimate of [score_to_beat] voxcoins in assets. <br/>
+	Our best agents of all time were able to gather an estimate of [score_to_beat] voxcoins in assets, on [vox_raider_data["MM"]]/[vox_raider_data["DD"]]/[vox_raider_data["YY"]]. <br/>
 	Their names are as follows: [best_team]."}
