@@ -17,8 +17,9 @@
 	amount = 10
 	dispensable_reagents = null
 	var/list/prohibited_reagents = list(ADMINORDRAZINE)
+	var/list/emagged_only_reagents = list(XENOMICROBES, MEDNANOBOTS)
 
-	machine_flags = FIXED2WORK
+	machine_flags = FIXED2WORK | EMAGGABLE | WRENCHMOVE
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/machinery/chem_dispenser/scp_294/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -69,7 +70,7 @@
 	if(href_list["input"])
 		if(container)
 			var/input_reagent = input("Enter the name of any liquid", "Input") as text
-			if (input_reagent in prohibited_reagents)
+			if ((input_reagent in prohibited_reagents) || ((input_reagent in emagged_only_reagents) && !emagged))
 				say("OUT OF RANGE")
 				return
 			else
@@ -97,5 +98,6 @@
 /obj/machinery/chem_dispenser/scp_294/update_icon()
 	return
 
-/obj/machinery/chem_dispenser/scp_294/stop_mapping_this_shit
-	machine_flags = WRENCHMOVE | FIXED2WORK
+/obj/machinery/chem_dispenser/scp_294/emag()
+	..()
+	emagged = TRUE
