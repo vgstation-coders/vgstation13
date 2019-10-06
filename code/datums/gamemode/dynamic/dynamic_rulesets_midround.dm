@@ -549,48 +549,6 @@
 
 //////////////////////////////////////////////
 //                                          //
-//          Vox Hesit			 (MIDROUND) ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                          //
-//////////////////////////////////////////////
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/hesit
-	name = "Vox Heist"
-	role_category = /datum/role/vox_raider
-	my_fac = /datum/faction/vox_shoal
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(2,2,2,1,1,1,1,1,0,0)
-	required_candidates = 5
-	weight = 5
-	cost = 30
-	requirements = list(50,50,50,40,40,30,30,20,10,10)
-	high_population_requirement = 35
-	var/vox_cap = list(2,2,3,3,4,5,5,5,5,5)
-	logo = "vox-logo"
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/hesit/acceptable(var/population=0,var/threat=0)
-	var/indice_pop = min(10,round(living_players.len/5)+1)
-	required_candidates = vox_cap[indice_pop]
-	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/hesit/ready(var/forced = 0)
-	if (forced)
-		required_candidates = 1
-	if (required_candidates > (dead_players.len + list_observers.len))
-		return 0
-	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/hesit/finish_setup(var/mob/new_character, var/index)
-	var/datum/faction/vox_shoal/shoal = find_active_faction_by_type(/datum/faction/vox_shoal)
-	shoal.forgeObjectives()
-	if (index == 1) // Our first guy is the leader
-		var/datum/role/vox_raider/chief_vox/new_role = new
-		new_role.AssignToRole(new_character.mind,1)
-		setup_role(new_role)
-	else
-		return ..()
-
-//////////////////////////////////////////////
-//                                          //
 //             PLAGUE MICE                  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////

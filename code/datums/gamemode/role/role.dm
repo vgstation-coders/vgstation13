@@ -497,10 +497,6 @@
 /datum/role/proc/can_wear(var/obj/item/clothing/C)
 	return TRUE
 
-// What do they display on the player StatPanel ?
-/datum/role/proc/StatPanel()
-	return ""
-
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
 //________________________________________________
@@ -535,6 +531,14 @@
 	id = RESPONDER
 	special_role = RESPONDER
 	logo_state = "ERT_empty-logo"
+
+//________________________________________________
+
+/datum/role/vox_raider
+	name = VOXRAIDER
+	id = VOXRAIDER
+	special_role = VOXRAIDER
+	logo_state = "vox-logo"
 
 //________________________________________________
 
