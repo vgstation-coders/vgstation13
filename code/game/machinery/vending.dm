@@ -2584,8 +2584,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/gloves/white = 3,
 		/obj/item/clothing/mask/gas/lola = 3,
 		/obj/item/clothing/under/lola = 3,
-		/obj/item/clothing/shoes/clown_shoes/lola = 3
-		/obj/item/clothing/under/clownsuit = 3
+		/obj/item/clothing/shoes/clown_shoes/lola = 3,
+		/obj/item/clothing/under/clownsuit = 3,
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
