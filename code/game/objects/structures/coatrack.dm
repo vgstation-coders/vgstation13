@@ -16,6 +16,10 @@
 		/obj/item/clothing/suit/storage/det_suit,
 		/obj/item/clothing/suit/storage/forensics,
 		/obj/item/clothing/suit/storage/labcoat,
+		/obj/item/clothing/suit/storage/wintercoat,
+		/obj/item/clothing/suit/armor/hos,
+		/obj/item/clothing/suit/storage/draculacoat,
+		/obj/item/clothing/suit/raincoat
 		)
 	var/list/allowed_hats = list(
 		/obj/item/clothing/head/det_hat,
