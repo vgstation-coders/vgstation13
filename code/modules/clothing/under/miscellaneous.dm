@@ -775,3 +775,10 @@
 	icon_state = "galo"
 	item_state = "galo"
 	_color = "galo"
+
+/obj/item/clothing/under/clownsuit
+	name = "formal clown outfit"
+	desc = "for clowns living in a society"
+	icon_state = "clownsuit"
+	item_state = "clownsuit"
+	_color = "clownsuit"
