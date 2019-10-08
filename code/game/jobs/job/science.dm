@@ -44,6 +44,7 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Science:</b> [SCI_FREQ]<br/>")
 	return 1
 
 /datum/job/scientist
@@ -101,6 +102,7 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")
 	return 1
 
 /datum/job/roboticist
@@ -149,6 +151,7 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")
 	return 1
 
 /datum/job/roboticist/priority_reward_equip(var/mob/living/carbon/human/H)
