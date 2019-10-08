@@ -398,7 +398,6 @@
 
 /obj/item/clothing/suit/space/rig/security
 	icon_state = "rig-sec"
-	item_state = "storm_hardsuit"
 	name = "security hardsuit"
 	desc = "A special suit that protects against hazardous low pressure environments. Has an additional layer of armor."
 	item_state = "sec_hardsuit"
@@ -425,17 +424,38 @@
 	// stormtroopers
 
 /obj/item/clothing/head/helmet/space/rig/security/stormtrooper
-	icon_state = "rig0-storm"
-	_color = "storm"
 	name = "stormtrooper helmet"
+	icon_state = "rig0-storm"
+	item_state = "storm_helmet"
+	_color = "storm"
 	desc = "Even with the finest vision enhancement tech, you still can't hit shit."
 	no_light = 1
 
 /obj/item/clothing/suit/space/rig/security/stormtrooper
 	icon_state = "rig-storm"
+	item_state = "storm_hardsuit"
 	name = "stormtrooper hardsuit"
 	desc = "Now even more vulnerable to teddy bears!"
 	head_type = /obj/item/clothing/head/helmet/space/rig/security/stormtrooper
+
+
+/obj/item/clothing/head/helmet/space/rig/security/scouttrooper
+	name = "stormtrooper scout helmet"
+	icon_state = "rig0-scout"
+	item_state = "scout_helmet"
+	_color = "scout"
+	desc = "Even with the finest vision enhancement tech, you still can't hit shit."
+	no_light = 1
+
+
+/obj/item/clothing/suit/space/rig/security/scouttrooper
+	name = "stormtrooper scout hardsuit"
+	icon_state = "rig-scout"
+	item_state = "scout_hardsuit"
+	desc = "Now even more vulnerable to teddy bears!"
+	head_type = /obj/item/clothing/head/helmet/space/rig/security/scouttrooper
+
+
 
 //Atmospherics Rig (BS12)
 /obj/item/clothing/head/helmet/space/rig/atmos
