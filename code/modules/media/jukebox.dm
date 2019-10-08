@@ -782,7 +782,7 @@ var/global/list/loopModeNames=list(
 	..()
 	var/MM = text2num(time2text(world.timeofday, "MM"))
 	if(MM == 10)
-		playlists.Add("halloween" = "Halloween")
+		playlists["halloween"] = "Halloween"
 
 
 // Relaxing elevator music~
