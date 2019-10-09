@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "compiled": 1570494065.5781367,
+  "compiled": 1570588981.5143893,
   "voices": {
     "fem": {
       "id": "us-clb",
@@ -102,6 +102,28 @@
         "sfx"
       ],
       "input-filename": "samples/bikehorn.ogg"
+    },
+    "_scream": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_sfx/_scream.ogg",
+        "mas": "sound/vox_sfx/_scream.ogg"
+      },
+      "flags": [
+        "sfx"
+      ],
+      "input-filename": "samples/wilhelm.ogg"
+    },
+    "_woopwoop": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_sfx/_woopwoop.ogg",
+        "mas": "sound/vox_sfx/_woopwoop.ogg"
+      },
+      "flags": [
+        "sfx"
+      ],
+      "input-filename": "samples/woopwoop.ogg"
     },
     "a": {
       "wordlen": 1,
