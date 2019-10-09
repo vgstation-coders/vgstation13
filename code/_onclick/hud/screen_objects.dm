@@ -490,7 +490,7 @@
 		if("Announcement")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.announcement()
+				AI.make_announcement()
 
 		if("Call Emergency Shuttle")
 			if(isAI(usr))
