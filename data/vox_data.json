@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "compiled": 1570588981.5143893,
+  "compiled": 1570590098.2731476,
   "voices": {
     "fem": {
       "id": "us-clb",
@@ -822,6 +822,28 @@
         "and"
       ]
     },
+    "android": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/android.ogg",
+        "mas": "sound/vox_mas/android.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "android"
+      ]
+    },
+    "androids": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/androids.ogg",
+        "mas": "sound/vox_mas/androids.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "androids"
+      ]
+    },
     "andy": {
       "wordlen": 1,
       "files": {
@@ -952,6 +974,17 @@
       "flags": [],
       "phrase": [
         "antennae"
+      ]
+    },
+    "antimatter": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/antimatter.ogg",
+        "mas": "sound/vox_mas/antimatter.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "antimatter"
       ]
     },
     "antimov": {
@@ -1251,6 +1284,28 @@
       "flags": [],
       "phrase": [
         "assists"
+      ]
+    },
+    "asteroid": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/asteroid.ogg",
+        "mas": "sound/vox_mas/asteroid.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "asteroid"
+      ]
+    },
+    "asteroids": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/asteroids.ogg",
+        "mas": "sound/vox_mas/asteroids.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "asteroids"
       ]
     },
     "at": {
@@ -2362,6 +2417,17 @@
         "bottom"
       ]
     },
+    "bought": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/bought.ogg",
+        "mas": "sound/vox_mas/bought.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "bought"
+      ]
+    },
     "bounce": {
       "wordlen": 1,
       "files": {
@@ -2615,6 +2681,28 @@
         "break"
       ]
     },
+    "breaking": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/breaking.ogg",
+        "mas": "sound/vox_mas/breaking.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "breaking"
+      ]
+    },
+    "breaks": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/breaks.ogg",
+        "mas": "sound/vox_mas/breaks.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "breaks"
+      ]
+    },
     "bridge": {
       "wordlen": 1,
       "files": {
@@ -2635,6 +2723,17 @@
       "flags": [],
       "phrase": [
         "brig"
+      ]
+    },
+    "broke": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/broke.ogg",
+        "mas": "sound/vox_mas/broke.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "broke"
       ]
     },
     "build": {
@@ -2690,6 +2789,39 @@
       "flags": [],
       "phrase": [
         "buttons"
+      ]
+    },
+    "buy": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/buy.ogg",
+        "mas": "sound/vox_mas/buy.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "buy"
+      ]
+    },
+    "buying": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/buying.ogg",
+        "mas": "sound/vox_mas/buying.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "buying"
+      ]
+    },
+    "buys": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/buys.ogg",
+        "mas": "sound/vox_mas/buys.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "buys"
       ]
     },
     "buzwarn": {
@@ -3019,6 +3151,17 @@
       "flags": [],
       "phrase": [
         "cargo"
+      ]
+    },
+    "carp": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/carp.ogg",
+        "mas": "sound/vox_mas/carp.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "carp"
       ]
     },
     "cat": {
@@ -3605,6 +3748,28 @@
         "chief"
       ]
     },
+    "chopper": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/chopper.ogg",
+        "mas": "sound/vox_mas/chopper.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "chopper"
+      ]
+    },
+    "choppers": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/choppers.ogg",
+        "mas": "sound/vox_mas/choppers.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "choppers"
+      ]
+    },
     "christ": {
       "wordlen": 1,
       "files": {
@@ -4166,6 +4331,50 @@
       "flags": [],
       "phrase": [
         "constructs"
+      ]
+    },
+    "consume": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/consume.ogg",
+        "mas": "sound/vox_mas/consume.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "consume"
+      ]
+    },
+    "consumed": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/consumed.ogg",
+        "mas": "sound/vox_mas/consumed.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "consumed"
+      ]
+    },
+    "consumes": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/consumes.ogg",
+        "mas": "sound/vox_mas/consumes.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "consumes"
+      ]
+    },
+    "consuming": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/consuming.ogg",
+        "mas": "sound/vox_mas/consuming.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "consuming"
       ]
     },
     "containment": {
@@ -4921,6 +5130,17 @@
         "D."
       ]
     },
+    "daddy": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/daddy.ogg",
+        "mas": "sound/vox_mas/daddy.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "daddy"
+      ]
+    },
     "dadeda": {
       "wordlen": 1,
       "files": {},
@@ -4986,6 +5206,17 @@
         "damn"
       ]
     },
+    "dan": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/dan.ogg",
+        "mas": "sound/vox_mas/dan.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "dan"
+      ]
+    },
     "danger": {
       "wordlen": 1,
       "files": {
@@ -5017,6 +5248,17 @@
       "flags": [],
       "phrase": [
         "dangers"
+      ]
+    },
+    "dans": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/dans.ogg",
+        "mas": "sound/vox_mas/dans.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "dans"
       ]
     },
     "dat": {
@@ -5094,6 +5336,17 @@
       "flags": [],
       "phrase": [
         "death"
+      ]
+    },
+    "deceased": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/deceased.ogg",
+        "mas": "sound/vox_mas/deceased.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "deceased"
       ]
     },
     "decompression": {
@@ -5701,6 +5954,50 @@
         "differ"
       ]
     },
+    "difference": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/difference.ogg",
+        "mas": "sound/vox_mas/difference.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "difference"
+      ]
+    },
+    "differences": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/differences.ogg",
+        "mas": "sound/vox_mas/differences.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "differences"
+      ]
+    },
+    "different": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/different.ogg",
+        "mas": "sound/vox_mas/different.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "different"
+      ]
+    },
+    "dimension": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/dimension.ogg",
+        "mas": "sound/vox_mas/dimension.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "dimension"
+      ]
+    },
     "dimensional": {
       "wordlen": 1,
       "files": {
@@ -5710,6 +6007,28 @@
       "flags": [],
       "phrase": [
         "dimensional"
+      ]
+    },
+    "dimensioned": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/dimensioned.ogg",
+        "mas": "sound/vox_mas/dimensioned.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "dimensioned"
+      ]
+    },
+    "dimensions": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/dimensions.ogg",
+        "mas": "sound/vox_mas/dimensions.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "dimensions"
       ]
     },
     "dioxide": {
@@ -5809,6 +6128,50 @@
       "flags": [],
       "phrase": [
         "disabling"
+      ]
+    },
+    "discount": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/discount.ogg",
+        "mas": "sound/vox_mas/discount.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "discount"
+      ]
+    },
+    "discounted": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/discounted.ogg",
+        "mas": "sound/vox_mas/discounted.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "discounted"
+      ]
+    },
+    "discounting": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/discounting.ogg",
+        "mas": "sound/vox_mas/discounting.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "discounting"
+      ]
+    },
+    "discounts": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/discounts.ogg",
+        "mas": "sound/vox_mas/discounts.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "discounts"
       ]
     },
     "disease": {
@@ -6989,6 +7352,61 @@
         "everywhere"
       ]
     },
+    "evolute": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/evolute.ogg",
+        "mas": "sound/vox_mas/evolute.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "evolute"
+      ]
+    },
+    "evolution": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/evolution.ogg",
+        "mas": "sound/vox_mas/evolution.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "evolution"
+      ]
+    },
+    "evolve": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/evolve.ogg",
+        "mas": "sound/vox_mas/evolve.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "evolve"
+      ]
+    },
+    "evolves": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/evolves.ogg",
+        "mas": "sound/vox_mas/evolves.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "evolves"
+      ]
+    },
+    "evolving": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/evolving.ogg",
+        "mas": "sound/vox_mas/evolving.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "evolving"
+      ]
+    },
     "excellent": {
       "wordlen": 1,
       "files": {
@@ -7768,6 +8186,39 @@
       "flags": [],
       "phrase": [
         "first"
+      ]
+    },
+    "fish": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/fish.ogg",
+        "mas": "sound/vox_mas/fish.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "fish"
+      ]
+    },
+    "fished": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/fished.ogg",
+        "mas": "sound/vox_mas/fished.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "fished"
+      ]
+    },
+    "fishing": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/fishing.ogg",
+        "mas": "sound/vox_mas/fishing.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "fishing"
       ]
     },
     "five": {
@@ -8735,6 +9186,50 @@
       "flags": [],
       "phrase": [
         "get"
+      ]
+    },
+    "ghost": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/ghost.ogg",
+        "mas": "sound/vox_mas/ghost.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "ghost"
+      ]
+    },
+    "ghosted": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/ghosted.ogg",
+        "mas": "sound/vox_mas/ghosted.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "ghosted"
+      ]
+    },
+    "ghosting": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/ghosting.ogg",
+        "mas": "sound/vox_mas/ghosting.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "ghosting"
+      ]
+    },
+    "ghosts": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/ghosts.ogg",
+        "mas": "sound/vox_mas/ghosts.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "ghosts"
       ]
     },
     "gibbed": {
@@ -10351,6 +10846,28 @@
         "illegals"
       ]
     },
+    "imam": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/imam.ogg",
+        "mas": "sound/vox_mas/imam.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "imam"
+      ]
+    },
+    "imams": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/imams.ogg",
+        "mas": "sound/vox_mas/imams.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "imams"
+      ]
+    },
     "immediate": {
       "wordlen": 1,
       "files": {
@@ -10646,6 +11163,17 @@
       "flags": [],
       "phrase": [
         "internals"
+      ]
+    },
+    "into": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/into.ogg",
+        "mas": "sound/vox_mas/into.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "into"
       ]
     },
     "intrude": {
@@ -11297,6 +11825,61 @@
       "flags": [],
       "phrase": [
         "last"
+      ]
+    },
+    "laugh": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/laugh.ogg",
+        "mas": "sound/vox_mas/laugh.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "laugh"
+      ]
+    },
+    "laughed": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/laughed.ogg",
+        "mas": "sound/vox_mas/laughed.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "laughed"
+      ]
+    },
+    "laughing": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/laughing.ogg",
+        "mas": "sound/vox_mas/laughing.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "laughing"
+      ]
+    },
+    "laughs": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/laughs.ogg",
+        "mas": "sound/vox_mas/laughs.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "laughs"
+      ]
+    },
+    "laughter": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/laughter.ogg",
+        "mas": "sound/vox_mas/laughter.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "laughter"
       ]
     },
     "launch": {
@@ -12533,6 +13116,39 @@
         "many"
       ]
     },
+    "mash": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/mash.ogg",
+        "mas": "sound/vox_mas/mash.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "mash"
+      ]
+    },
+    "mashed": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/mashed.ogg",
+        "mas": "sound/vox_mas/mashed.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "mashed"
+      ]
+    },
+    "mashing": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/mashing.ogg",
+        "mas": "sound/vox_mas/mashing.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "mashing"
+      ]
+    },
     "mass": {
       "wordlen": 1,
       "files": {
@@ -13248,6 +13864,17 @@
         "mommy"
       ]
     },
+    "mommy": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/mommy.ogg",
+        "mas": "sound/vox_mas/mommy.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "mommy"
+      ]
+    },
     "money": {
       "wordlen": 1,
       "files": {
@@ -13279,6 +13906,94 @@
       "flags": [],
       "phrase": [
         "monkeys"
+      ]
+    },
+    "monolith": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/monolith.ogg",
+        "mas": "sound/vox_mas/monolith.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "monolith"
+      ]
+    },
+    "monoliths": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/monoliths.ogg",
+        "mas": "sound/vox_mas/monoliths.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "monoliths"
+      ]
+    },
+    "monster": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/monster.ogg",
+        "mas": "sound/vox_mas/monster.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "monster"
+      ]
+    },
+    "monsters": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/monsters.ogg",
+        "mas": "sound/vox_mas/monsters.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "monsters"
+      ]
+    },
+    "moon": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/moon.ogg",
+        "mas": "sound/vox_mas/moon.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "moon"
+      ]
+    },
+    "mooned": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/mooned.ogg",
+        "mas": "sound/vox_mas/mooned.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "mooned"
+      ]
+    },
+    "mooning": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/mooning.ogg",
+        "mas": "sound/vox_mas/mooning.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "mooning"
+      ]
+    },
+    "moons": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/moons.ogg",
+        "mas": "sound/vox_mas/moons.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "moons"
       ]
     },
     "more": {
@@ -13621,6 +14336,17 @@
       "flags": [],
       "phrase": [
         "murdering"
+      ]
+    },
+    "music": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/music.ogg",
+        "mas": "sound/vox_mas/music.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "music"
       ]
     },
     "must": {
@@ -14066,6 +14792,39 @@
         "n",
         "t",
         "coins"
+      ]
+    },
+    "nude": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/nude.ogg",
+        "mas": "sound/vox_mas/nude.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "nude"
+      ]
+    },
+    "nudes": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/nudes.ogg",
+        "mas": "sound/vox_mas/nudes.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "nudes"
+      ]
+    },
+    "nudity": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/nudity.ogg",
+        "mas": "sound/vox_mas/nudity.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "nudity"
       ]
     },
     "nuke": {
@@ -15148,6 +15907,28 @@
         "picturing"
       ]
     },
+    "pillar": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/pillar.ogg",
+        "mas": "sound/vox_mas/pillar.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "pillar"
+      ]
+    },
+    "pillars": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/pillars.ogg",
+        "mas": "sound/vox_mas/pillars.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "pillars"
+      ]
+    },
     "pink": {
       "wordlen": 1,
       "files": {
@@ -15786,6 +16567,28 @@
         "pressures"
       ]
     },
+    "priest": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/priest.ogg",
+        "mas": "sound/vox_mas/priest.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "priest"
+      ]
+    },
+    "priests": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/priests.ogg",
+        "mas": "sound/vox_mas/priests.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "priests"
+      ]
+    },
     "primaries": {
       "wordlen": 1,
       "files": {
@@ -16092,6 +16895,50 @@
       "flags": [],
       "phrase": [
         "pun-pun"
+      ]
+    },
+    "purchase": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/purchase.ogg",
+        "mas": "sound/vox_mas/purchase.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "purchase"
+      ]
+    },
+    "purchased": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/purchased.ogg",
+        "mas": "sound/vox_mas/purchased.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "purchased"
+      ]
+    },
+    "purchases": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/purchases.ogg",
+        "mas": "sound/vox_mas/purchases.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "purchases"
+      ]
+    },
+    "purchasing": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/purchasing.ogg",
+        "mas": "sound/vox_mas/purchasing.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "purchasing"
       ]
     },
     "push": {
@@ -16402,6 +17249,28 @@
         "R."
       ]
     },
+    "rabbi": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/rabbi.ogg",
+        "mas": "sound/vox_mas/rabbi.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "rabbi"
+      ]
+    },
+    "rabbis": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/rabbis.ogg",
+        "mas": "sound/vox_mas/rabbis.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "rabbis"
+      ]
+    },
     "radiation": {
       "wordlen": 1,
       "files": {
@@ -16665,6 +17534,72 @@
       "flags": [],
       "phrase": [
         "remaining"
+      ]
+    },
+    "remind": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/remind.ogg",
+        "mas": "sound/vox_mas/remind.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "remind"
+      ]
+    },
+    "reminded": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/reminded.ogg",
+        "mas": "sound/vox_mas/reminded.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "reminded"
+      ]
+    },
+    "reminder": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/reminder.ogg",
+        "mas": "sound/vox_mas/reminder.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "reminder"
+      ]
+    },
+    "reminders": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/reminders.ogg",
+        "mas": "sound/vox_mas/reminders.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "reminders"
+      ]
+    },
+    "reminding": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/reminding.ogg",
+        "mas": "sound/vox_mas/reminding.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "reminding"
+      ]
+    },
+    "reminds": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/reminds.ogg",
+        "mas": "sound/vox_mas/reminds.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "reminds"
       ]
     },
     "removal": {
@@ -17162,6 +18097,28 @@
         "rocket"
       ]
     },
+    "rod": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/rod.ogg",
+        "mas": "sound/vox_mas/rod.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "rod"
+      ]
+    },
+    "rods": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/rods.ogg",
+        "mas": "sound/vox_mas/rods.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "rods"
+      ]
+    },
     "roger": {
       "wordlen": 1,
       "files": {
@@ -17424,6 +18381,28 @@
       "flags": [],
       "phrase": [
         "sasha"
+      ]
+    },
+    "satan": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/satan.ogg",
+        "mas": "sound/vox_mas/satan.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "satan"
+      ]
+    },
+    "satans": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/satans.ogg",
+        "mas": "sound/vox_mas/satans.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "satans"
       ]
     },
     "satellite": {
@@ -17943,6 +18922,39 @@
         "sells"
       ]
     },
+    "send": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/send.ogg",
+        "mas": "sound/vox_mas/send.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "send"
+      ]
+    },
+    "sending": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/sending.ogg",
+        "mas": "sound/vox_mas/sending.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "sending"
+      ]
+    },
+    "sends": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/sends.ogg",
+        "mas": "sound/vox_mas/sends.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "sends"
+      ]
+    },
     "sensors": {
       "wordlen": 1,
       "files": {
@@ -17952,6 +18964,17 @@
       "flags": [],
       "phrase": [
         "sensors"
+      ]
+    },
+    "sent": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/sent.ogg",
+        "mas": "sound/vox_mas/sent.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "sent"
       ]
     },
     "sentence": {
@@ -19142,6 +20165,17 @@
       "flags": [],
       "phrase": [
         "spelt"
+      ]
+    },
+    "spooky": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/spooky.ogg",
+        "mas": "sound/vox_mas/spooky.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "spooky"
       ]
     },
     "squad": {
@@ -22424,6 +23458,28 @@
         "victor"
       ]
     },
+    "vine": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/vine.ogg",
+        "mas": "sound/vox_mas/vine.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "vine"
+      ]
+    },
+    "vines": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/vines.ogg",
+        "mas": "sound/vox_mas/vines.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "vines"
+      ]
+    },
     "violate": {
       "wordlen": 1,
       "files": {
@@ -22477,6 +23533,28 @@
       "flags": [],
       "phrase": [
         "violation"
+      ]
+    },
+    "violence": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/violence.ogg",
+        "mas": "sound/vox_mas/violence.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "violence"
+      ]
+    },
+    "violent": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/violent.ogg",
+        "mas": "sound/vox_mas/violent.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "violent"
       ]
     },
     "virgin": {
@@ -22565,6 +23643,50 @@
       "flags": [],
       "phrase": [
         "vitals"
+      ]
+    },
+    "void": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/void.ogg",
+        "mas": "sound/vox_mas/void.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "void"
+      ]
+    },
+    "voided": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/voided.ogg",
+        "mas": "sound/vox_mas/voided.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "voided"
+      ]
+    },
+    "voiding": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/voiding.ogg",
+        "mas": "sound/vox_mas/voiding.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "voiding"
+      ]
+    },
+    "voids": {
+      "wordlen": 1,
+      "files": {
+        "fem": "sound/vox_fem/voids.ogg",
+        "mas": "sound/vox_mas/voids.ogg"
+      },
+      "flags": [],
+      "phrase": [
+        "voids"
       ]
     },
     "volt": {
