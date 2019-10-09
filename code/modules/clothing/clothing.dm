@@ -20,11 +20,7 @@
 		accessories.Remove(A)
 		qdel(A)
 	..()
-	
-/obj/item/clothing/CtrlClick(var/mob/user)
-	if(isliving(user) && !user.incapacitated() && user.Adjacent(src) && accessories.len)
-		removeaccessory()
-	
+
 /obj/item/clothing/examine(mob/user)
 	..()
 	for(var/obj/item/clothing/accessory/A in accessories)
