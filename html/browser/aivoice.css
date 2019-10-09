@@ -41,7 +41,11 @@
 	border-bottom: 1px solid #000;
 }
 
-#errors li {
+ul#errors {
+	min-height: 300px;
+}
+
+ul#errors li {
 	color: white;
 	background: red;
 	padding: 0.25em;
@@ -58,7 +62,11 @@ button#submit, button#reset {
 	margin: 0 2px 0 0;
 	cursor:default;
 }
-
+button#submit:disabled, button#reset:disabled {
+	color: #ffffff;
+	background: #999999;
+	border-color: #666666;
+}
 /* TODO: Move these to common.css? These elements look like ass without this. */
 hr {
 	border: 1px solid #666
