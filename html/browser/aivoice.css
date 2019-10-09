@@ -48,3 +48,29 @@
 	margin: 0.1em;
 	list-style: none;
 }
+
+button#submit, button#reset {
+	color: #ffffff;
+	text-decoration: none;
+	background: #40628a;
+	border: 1px solid #161616;
+	padding: 1px 4px 1px 4px;
+	margin: 0 2px 0 0;
+	cursor:default;
+}
+
+/* TODO: Move these to common.css? These elements look like ass without this. */
+hr {
+	border: 1px solid #666
+}
+fieldset {
+	border: 1px solid #666;
+}
+div.formline {
+	padding: 0.25em;
+}
+input[type=text] {
+	background: #fff;
+	border: 1px solid #333;
+	padding: 0.2em;
+}

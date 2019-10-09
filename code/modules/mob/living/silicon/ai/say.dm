@@ -142,7 +142,7 @@ var/VOX_AVAILABLE_VOICES = list(
 			dat += "</strong>"
 		dat += "</li>"
 	dat += "</ul><p><strong>NOTE:</strong> Each voice has its own unique quirks. Don't expect the same outcomes!</p></fieldset>"
-	dat += "<div><input type='text' name='words' id='words' placeholder='Words go here' /> <span id='wordcount'>0</span> <button id='reset' type='button'>Clear</button><button id='submit' type='button'>Announce</button></div>"
+	dat += "<div class='formline'><input type='text' name='words' id='words' placeholder='Words go here' /> <span id='wordcount'>0</span> <button id='reset' type='button'>Clear</button><button id='submit' type='button'>Announce</button></div>"
 	dat += "<ul id='errors'></div>"
 
 	//var/index = 0
