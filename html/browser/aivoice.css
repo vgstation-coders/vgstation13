@@ -9,6 +9,7 @@
 	-webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
 	-moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
 	box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+	font-family: sans-serif;
 }
 
 .autocomplete-suggestion {
