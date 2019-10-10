@@ -38,6 +38,9 @@ var/list/ai_list = list()
 	var/busy = FALSE //Toggle Floor Bolt busy var.
 	var/chosen_core_icon_state = "ai"
 
+	// See VOX_AVAILABLE_VOICES for available values
+	var/vox_voice = "fem";
+
 //Hud stuff
 
 	//MALFUNCTION
@@ -455,7 +458,7 @@ var/list/ai_list = list()
 				to_chat(src, "<span class='notice'>Unable to locate the holopad.</span>")
 
 	if(href_list["say_word"])
-		play_vox_word(href_list["say_word"], null, src)
+		play_vox_word(href_list["say_word"], vox_voice, null, src)
 		return
 
 	if(href_list["track"])
@@ -487,6 +490,25 @@ var/list/ai_list = list()
 		var/mob/living/silicon/ai/A = locate(href_list["open2"])
 		if(A && target)
 			A.open_nearest_door(target)
+		return
+
+	// set_voice=(fem|mas) - Sets VOX voicepack.
+	if(href_list["set_voice"])
+		// Never trust the client.
+		if(!(href_list["set_voice"] in VOX_AVAILABLE_VOICES))
+			to_chat(usr, "<span class='notice'>You chose a voice that is not available to AIs on this station. Command ignored.</span>")
+			return
+
+		vox_voice = href_list["set_voice"]
+		to_chat(usr, "VOX voice set to [vox_voice].")
+		make_announcement()
+		return
+
+	// play_announcement=word1+word2... - Plays an announcement to the station.
+	if(href_list["play_announcement"])
+		//to_chat(usr, "Received play_announcement=[href_list["play_announcement"]]")
+		if(announcement_checks())
+			play_announcement(href_list["play_announcement"])
 		return
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)

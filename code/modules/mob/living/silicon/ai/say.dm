@@ -113,9 +113,14 @@
 var/announcing_vox = 0 // Stores the time of the last announcement
 var/const/VOX_CHANNEL = 200
 var/const/VOX_DELAY = 600
+var/VOX_AVAILABLE_VOICES = list(
+	"fem" = "Feminine",
+	"mas" = "Masculine"
+);
 
-/mob/living/silicon/ai/verb/announcement_help()
-	set name = "Announcement Help"
+// N3X TODO: Make a JS clientside validation and autosuggest thing.
+/mob/living/silicon/ai/verb/make_announcement()
+	set name = "Make Announcement"
 	set desc = "Display a list of vocal words to announce to the crew."
 	set category = "AI Commands"
 
@@ -123,47 +128,68 @@ var/const/VOX_DELAY = 600
 	var/dat = list("Here is a list of words you can type into the 'Announcement' button to create sentences to vocally announce to everyone on the same level at you.<BR> \
 	<UL><LI>You can also click on the word to preview it.</LI>\
 	<LI>You can only say 30 words for every announcement.</LI>\
-	<LI>Do not use punctuation as you would normally, if you want a pause you can use the full stop and comma characters by separating them with spaces, like so: 'Alpha . Test , Bravo'.</LI></UL>\
+	<LI>Do not use punctuation as you would normally: if you want a pause you can use the full stop and comma characters by separating them with spaces, like so: 'Alpha . Test , Bravo'.</LI>\
+	<LI>Special sound effects are available, and start with a &quot;_&quot; prefix. e.g. _honk</LI></UL>\
 	<font class='bad'>WARNING:</font><BR>Misuse of the announcement system will get you job banned.<HR>")
 
-	var/index = 0
-	for(var/word in vox_sounds)
-		index++
-		dat += "<A href='?src=\ref[src];say_word=[word]'>[capitalize(word)]</A>"
-		if(index != vox_sounds.len)
-			dat += " / "
+	dat += "<fieldset><legend>Voice</legend><ul>"
+	for(var/voice_id in VOX_AVAILABLE_VOICES)
+		dat += "<li>"
+		if (voice_id == src.vox_voice)
+			dat += "<strong>"
+		dat += "<a href=;?src=\ref[src];set_voice=[voice_id]>[VOX_AVAILABLE_VOICES[voice_id]]</a>"
+		if (voice_id == src.vox_voice)
+			dat += "</strong>"
+		dat += "</li>"
+	dat += "</ul><p><strong>NOTE:</strong> Each voice has its own unique quirks. Don't expect the same outcomes!</p></fieldset>"
+	dat += "<div class='formline'><input type='text' name='words' id='words' placeholder='Words go here' /> <span id='wordcount'>0</span> <button id='reset' type='button'>Clear</button><button id='submit' type='button'>Announce</button></div>"
+	dat += "<ul id='errors'></div>"
 
+	//var/index = 0
+	var/list/wordlist = list()
+	for(var/word in vox_sounds[vox_voice])
+		//index++
+		wordlist += word
+		//dat += "<A href='?src=\ref[src];say_word=[word]'>[capitalize(word)]</A>"
+		//if(index != vox_sounds[vox_voice].len)
+		//	dat += " / "
+
+	dat += "<script type='text/javascript'>window.airef=\"\ref[src]\";window.availableWords = "
+	dat += json_encode(wordlist)
+	dat += ";</script>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(src, "announce_help", "Announcement Help", 500, 400)
+	var/datum/browser/popup = new(src, "announce", "Make Announcement", 500, 400)
+	popup.add_script("jquery", 'code/modules/html_interface/jquery.min.js')
+	popup.add_script("jquery.autocomplete", 'code/modules/html_interface/jquery.autocomplete.min.js')
+	popup.add_script("aivoice", 'html/aivoice.js')
+	popup.add_stylesheet("aivoice", 'html/browser/aivoice.css')
 	popup.set_content(dat)
+	//text2file(popup.get_content(), "AISAYTEST.htm")
 	popup.open()
 
-
-/mob/living/silicon/ai/verb/announcement()
-	set name = "Announcement"
-	set desc = "Send an announcement to the crew"
-	set category = "AI Commands"
-
+/mob/living/silicon/ai/proc/announcement_checks()
 	//I am kill but here
 	if(isUnconscious())
-		return
+		return FALSE
 
 	// If we're in an APC, and APC is ded, ABORT
 	if(parent && istype(parent) && parent.stat)
-		return
+		to_chat(usr, "You're in a dead APC, no")
+		return FALSE
 
 	if(istype(usr,/mob/living/silicon/ai))
 		var/mob/living/silicon/ai/AI = usr
 		if(AI.control_disabled)
 			to_chat(usr, "Wireless control is disabled!")
-			return
+			return FALSE
 
 	if(announcing_vox > world.time)
 		to_chat(src, "<span class='notice'>Please wait [round((announcing_vox - world.time) / 10)] seconds.</span>")
-		return
+		return FALSE
 
-	var/message = input(src, "WARNING: Misuse of this verb can result in you being job banned. More help is available in 'Announcement Help'", "Announcement", src.last_announcement) as text
+	return TRUE
 
+/mob/living/silicon/ai/proc/play_announcement(var/message)
 	last_announcement = message
 
 	if(!message || announcing_vox > world.time)
@@ -181,7 +207,7 @@ var/const/VOX_DELAY = 600
 		if(!word)
 			words -= word
 			continue
-		if(!vox_sounds[word])
+		if(!vox_sounds[vox_voice][word])
 			incorrect_words += word
 		// Thank Rippetoe for this!
 		var/wordlen = 1
@@ -201,8 +227,20 @@ var/const/VOX_DELAY = 600
 	log_game("[key_name_admin(src)] made a vocal announcement with the following message: [message].")
 
 	for(var/word in words)
-		play_vox_word(word, src.z, null)
+		play_vox_word(word, vox_voice, src.z, null)
+/*
+/mob/living/silicon/ai/verb/announcement()
+	set name = "Announcement"
+	set desc = "Send an announcement to the crew"
+	set category = "AI Commands"
 
+	if(!announcement_checks())
+		return
+
+	var/message = input(src, "WARNING: Misuse of this verb can result in you being job banned. More help is available in 'Announcement Help'", "Announcement", src.last_announcement) as text
+
+	play_announcement(message)
+*/
 
 var/list/vox_digits=list(
 	'sound/vox_fem/one.ogg',
@@ -249,10 +287,10 @@ var/list/vox_units=list(
 /proc/vox_num2list(var/number)
 	return num2words(number, zero='sound/vox_fem/zero.ogg', minus='sound/vox_fem/minus.ogg', hundred='sound/vox_fem/hundred.ogg', digits=vox_digits, tens=vox_tens, units=vox_units)
 
-/proc/play_vox_word(var/word, var/z_level, var/mob/only_listener)
+/proc/play_vox_word(var/word, var/voice, var/z_level, var/mob/only_listener)
 	word = lowertext(word)
-	if(vox_sounds[word])
-		return play_vox_sound(vox_sounds[word],z_level,only_listener)
+	if(vox_sounds[voice][word])
+		return play_vox_sound(vox_sounds[voice][word],z_level,only_listener)
 	return 0
 
 
