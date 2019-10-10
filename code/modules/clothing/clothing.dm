@@ -22,7 +22,7 @@
 	..()
 	
 /obj/item/clothing/CtrlClick(var/mob/user)
-	if(istype(loc,/turf))
+	if(isturf(loc))
 		return ..()
 	if(isliving(user) && !user.incapacitated() && user.Adjacent(src) && accessories.len)
 		removeaccessory()
