@@ -62,7 +62,7 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,2,1,1,1,1,0,0,0)
 	required_candidates = 1
-	weight = 3
+	weight = 2
 	cost = 18
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 	high_population_requirement = 30
