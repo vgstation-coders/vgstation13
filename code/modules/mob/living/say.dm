@@ -199,7 +199,7 @@ var/list/department_radio_keys = list(
 		send_speech(speech, message_range, bubble_type)
 	radio(speech, message_mode) //Sends the radio signal
 	var/turf/T = get_turf(src)
-	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message] [forced ? "(F)" : ""] [(message != speech.message) ? "(Rendred as : [speech.message])" : ""]")
+	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message] [forced ? "(F)" : ""] [(message != speech.message) ? "(Rendered as : [speech.message])" : ""]")
 	returnToPool(speech)
 	return 1
 
