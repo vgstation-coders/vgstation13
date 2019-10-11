@@ -135,7 +135,7 @@ var/list/science_goggles_wearers = list()
 				M.client.images |= C.pathogen
 
 /obj/item/clothing/glasses/science/proc/disable(var/mob/M)
-	playsound(M,'sound/weapons/egun_toggle_taser.ogg',30,0,-5)
+	playsound(M,'sound/misc/click.ogg',30,0,-5)
 	science_goggles_wearers.Remove(M)
 	for (var/obj/item/I in infected_items)
 		M.client.images -= I.pathogen
