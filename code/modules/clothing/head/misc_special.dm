@@ -8,6 +8,7 @@
  *		Butt
  *		Tinfoil Hat
  *		Celtic Crown
+ *		Energy Dome
  */
 
 /*
@@ -250,3 +251,9 @@
 	if(wearer.get_item_by_slot(slot_head) == src)
 		if(prob(5))
 			wearer.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))
+
+/obj/item/clothing/head/energy_dome
+	name = "energy dome"
+	desc = "According to the manufacturer it was designed according to ancient ziggurat mound proportions used in votive worship. Like the mounds it collects energy and recirculates it. In this case the Dome collects energy that escapes from the crown of the human head and pushes it back into the medulla oblongata for increased mental energy."
+	icon_state = "energy_dome"
+	item_state = "energy_dome"
