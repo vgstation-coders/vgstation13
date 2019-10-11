@@ -98,7 +98,6 @@ var/list/department_radio_keys = list(
 
 // /vg/edit: Added forced_by for handling braindamage messages and meme stuff
 /mob/living/say(var/message, bubble_type, forced = TRUE)
-	var/original_message = message
 	say_testing(src, "/mob/living/say(\"[message]\", [bubble_type]")
 	if(timestopped)
 		return //under the effects of time magick
@@ -200,7 +199,7 @@ var/list/department_radio_keys = list(
 		send_speech(speech, message_range, bubble_type)
 	radio(speech, message_mode) //Sends the radio signal
 	var/turf/T = get_turf(src)
-	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message] [forced ? "(F)" : ""] [(original_message =! message) ? "(Original message: [original_message]" : ""]")
+	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message] [forced ? "(F)" : ""] [(message != speech.message) ? "(Rendred as : [speech.message])" : ""]")
 	returnToPool(speech)
 	return 1
 
