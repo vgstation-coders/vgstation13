@@ -1,2 +1,3 @@
 author: Pomf123
-changes: []
+changes:
+- tweak: Made it so being drunk doesn't completely fuck up your movement and instead you stumble about in the general direction you desire.

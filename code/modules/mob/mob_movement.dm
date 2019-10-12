@@ -377,8 +377,26 @@
 							M.animate_movement = 2
 							return
 
-		else if(mob.confused)
-			step_rand(mob)
+		else if(mob.confused && prob(10))
+			//step_rand(mob)
+			switch(Dir)
+				if(NORTH)
+					step(mob, pick(NORTHEAST, NORTHWEST))
+				if(SOUTH)
+					step(mob, pick(SOUTHEAST, SOUTHWEST))
+				if(EAST)
+					step(mob, pick(NORTHEAST, SOUTHEAST))
+				if(WEST)
+					step(mob, pick(NORTHWEST, SOUTHWEST))
+				if(NORTHEAST)
+					step(mob, pick(NORTH, EAST))
+				if(NORTHWEST)
+					step(mob, pick(NORTH, WEST))
+				if(SOUTHEAST)
+					step(mob, pick(SOUTH, EAST))
+				if(SOUTHWEST)
+					step(mob, pick(SOUTH, WEST))
+				
 			mob.last_movement=world.time
 		else
 			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
