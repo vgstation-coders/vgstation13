@@ -82,7 +82,7 @@
 
 	to_chat(src.brainmob, "<b>You are \a [src], brought into existence on [station_name()].</b>")
 	to_chat(src.brainmob, "<b>As a synthetic intelligence, you answer to all crewmembers, as well as the AI.</b>")
-	to_chat(src.brainmob, "<b>Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm to the station or its crew.</b>")
+	to_chat(src.brainmob, "<b>Remember, the purpose of your existence is to serve the crew and the station. <br/> <span class='userdanger'> Above all else, do no harm to the station or its crew.</span></b>")
 	src.brainmob.mind.assigned_role = "Positronic Brain"
 
 	var/turf/T = get_turf(src.loc)
