@@ -488,7 +488,7 @@ var/stacking_limit = 90
 				if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
 					// Classic secret : only autotraitor/minor roles
 					/*if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))*/
-					if (classic_secret && !((rule.flags & TRAITOR_RULESET)) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
+					if (classic_secret && !((rule.flags & TRAITOR_RULESET))) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
 						message_admins("[rule] was refused because we're on classic secret mode.")
 						continue
 					// No stacking : only one round-enter, unless > stacking_limit threat.
@@ -604,7 +604,7 @@ var/stacking_limit = 90
 			if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
 				// Classic secret : only autotraitor/minor roles
 				/*if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))*/
-				if (classic_secret && !((rule.flags & TRAITOR_RULESET)) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
+				if (classic_secret && !((rule.flags & TRAITOR_RULESET))) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
 					message_admins("[rule] was refused because we're on classic secret mode.")
 					continue
 				// No stacking : only one round-enter, unless > stacking_limit threat.
@@ -703,7 +703,7 @@ var/stacking_limit = 90
 	// Concrete testing
 
 	/*if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))*/
-	if (classic_secret && !((rule.flags & TRAITOR_RULESET)) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
+	if (classic_secret && !((to_test.flags & TRAITOR_RULESET))) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
 		message_admins("[to_test] was refused because we're on classic secret mode.")
 		return
 	// No stacking : only one round-enter, unless > stacking_limit threat.
@@ -747,7 +747,7 @@ var/stacking_limit = 90
 	// Concrete testing
 
 	/*if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))*/
-	if (classic_secret && !((rule.flags & TRAITOR_RULESET)) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
+	if (classic_secret && !((to_test.flags & TRAITOR_RULESET))) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
 		message_admins("[to_test] was refused because we're on classic secret mode.")
 		return
 	// No stacking : only one round-enter, unless > stacking_limit threat.
