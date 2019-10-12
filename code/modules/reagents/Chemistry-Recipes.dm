@@ -2226,8 +2226,8 @@
 
 /datum/chemical_reaction/hot_coco_subhuman
 	name = "Hot Coco"
-	id = HOT_COCO
-	result = HOT_COCO
+	id = HOT_COCO_SUBHUMAN
+	result = HOT_COCO_SUBHUMAN
 	required_reagents = list(WATER = 2, COCO = 1)
 	required_temp = T0C + 80
 	result_amount = 2
@@ -3455,14 +3455,6 @@
 	var/location = get_turf(holder.my_atom)
 	new /mob/living/simple_animal/parrot(location)
 	qdel(holder.my_atom)
-
-/datum/chemical_reaction/hot_coco
-	name = "Hot Coco"
-	id = HOT_COCO
-	result = HOT_COCO
-	required_reagents = list(WATER = 5, COCO = 1)
-	required_temp = T0C + 60
-	result_amount = 5
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
