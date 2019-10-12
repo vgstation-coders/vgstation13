@@ -393,9 +393,7 @@
 					Export("##action=preload_rsc", vox_sounds[voice][word])
 					n++
 					// This may make it too slow.
-					stoplag()
-		if(src)
-			to_chat(src, "<span class='notice'>[n] VOX words received!</span>")
+					//stoplag()
 
 
 /client/proc/send_html_resources()
