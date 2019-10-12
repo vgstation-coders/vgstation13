@@ -2220,8 +2220,17 @@
 	name = "Hot Coco"
 	id = HOT_COCO
 	result = HOT_COCO
-	required_reagents = list(WATER = 5, COCO = 1)
+	required_reagents = list(MILK = 5, COCO = 1)
+	required_temp = T0C + 60
 	result_amount = 5
+
+/datum/chemical_reaction/hot_coco_subhuman
+	name = "Hot Coco"
+	id = HOT_COCO
+	result = HOT_COCO
+	required_reagents = list(WATER = 2, COCO = 1)
+	required_temp = T0C + 80
+	result_amount = 2
 
 /*
 /datum/chemical_reaction/coffee
