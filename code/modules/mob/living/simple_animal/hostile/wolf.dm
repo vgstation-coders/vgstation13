@@ -91,7 +91,7 @@
 	//WE DON'T ATTACK INVULNERABLE MOBS (such as etheral jaunting mobs, or passengers of the adminbus)
 	var/list/target_prox = view(the_target, vision_range)
 	for(var/obj/machinery/space_heater/campfire/fire in target_prox)
-		var/dist = get_dist(the_target, fire)
+		var/dist = get_dist(src, fire)
 		if(dist < (fire.light_range*2))//Just sitting on the edge of the fire
 			alpha_stance = WOLF_ALPHANONE
 			visible_message("<span class = 'notice'>\The [src] whimpers and runs from \the [fire]</span>")
