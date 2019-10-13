@@ -2,34 +2,30 @@
 	var/list/screens = list()
 
 /mob/proc/overlay_fullscreen(category, type, severity)
-	var/obj/abstract/screen/fullscreen/screen
-	if(screens[category])
-		screen = screens[category]
-		if(screen.type != type)
-			clear_fullscreen(category, FALSE)
-			return
-		else if(screen.clear_after_length)
-			screen = getFromPool(type)
-		else if(!severity || severity == screen.severity)
-			return null
-	else
+	var/obj/abstract/screen/fullscreen/screen = screens[category]
+	if(!screen || screen.type != type)
+		clear_fullscreen(category, FALSE)
 		screen = getFromPool(type)
+	else if(screen.clear_after_length)
+		screen = getFromPool(type)
+	else if(!severity || severity == screen.severity)
+		return null
 
 	screen.severity = severity
-	if(screen.anim_state)
-		flick("[screen.anim_state][severity]",screen)
-		if(client)
-			client.screen += screen
+	screens[category] = screen
+	screen.icon_state = "[initial(screen.icon_state)][severity]"
+
+	if(client)
+		if(screen.anim_state)
+			flick("[screen.anim_state][severity]",screen)
+		client.screen += screen
+		if (screen.screen_loc == "CENTER-7,CENTER-7" && screen.view != client.view)
+			var/scale = (1 + 2 * client.view) / 15
+			screen.view = client.view
+			screen.transform = matrix(scale, 0, 0, 0, scale, 0)
 		if(screen.clear_after_length)
 			spawn(screen.clear_after_length)
 				clear_fullscreen(category, animate = 0)
-	else
-		screen.icon_state = "[initial(screen.icon_state)][severity]"
-	if(screen.clear_after_length)
-		return 1
-	screens[category] = screen
-	if(client)
-		client.screen += screen
 	return screen
 
 /mob/proc/update_fullscreen_alpha(category, a = 255, t = 10)
@@ -87,6 +83,7 @@
 	layer = FULLSCREEN_LAYER
 	plane = FULLSCREEN_PLANE
 	mouse_opacity = 0
+	var/view = 7
 	var/severity = 0
 	var/anim_state
 	var/clear_after_length // also doubles as the length of the animation
