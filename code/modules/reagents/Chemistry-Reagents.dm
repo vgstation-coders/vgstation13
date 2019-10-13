@@ -4159,6 +4159,16 @@
 
 	M.nutrition += nutriment_factor
 
+/datum/reagent/hot_coco/subhuman
+	id = HOT_COCO_SUBHUMAN
+	description = "Made with hate! And coco beans."
+	data = 0
+
+/datum/reagent/hot_coco_subhuman/on_mob_life(var/mob/living/M)
+	..()
+	if(prob(1))
+		to_chat(M, "<span class='notice'>You are suddenly reminded that you are subhuman.</span>")
+
 /datum/reagent/amatoxin
 	name = "Amatoxin"
 	id = AMATOXIN
@@ -7603,4 +7613,3 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(prob(5))
 		to_chat(M,"<span class='warning'>[pick("You feel fuller.", "You no longer feel snackish.")]</span>")
 		M.reagents.add_reagent(NUTRIMENT, 2)
-

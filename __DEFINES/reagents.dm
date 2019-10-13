@@ -325,6 +325,7 @@
 #define FOAMING_AGENT	"foaming_agent"
 #define BEER2			"beer2"
 #define HOT_COCO		"hot_coco"
+#define HOT_COCO_SUBHUMAN		"hot_coco_subhuman"
 #define DRY_RAMEN		"dry_ramen"
 #define HOT_RAMEN		"hot_ramen"
 #define HELL_RAMEN		"hell_ramen"
