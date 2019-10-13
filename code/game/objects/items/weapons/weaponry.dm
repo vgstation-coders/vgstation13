@@ -303,7 +303,6 @@ obj/item/weapon/banhammer/admin
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	force = 15
-	var/force_original = 15
 	var/whipitgood_bonus = 5 //energy dome bonus
 	throwforce = 0
 	w_class = W_CLASS_MEDIUM
@@ -319,12 +318,13 @@ obj/item/weapon/banhammer/admin
 		targeting = user.zone_sel.selecting
 	projectile.launch_at(A,tar_zone = targeting,from = user)
 
-/obj/item/weapon/bullwhip/attack(mob/M, mob/user)
+/obj/item/weapon/bullwhip/attack(mob/M, mob/user)//mob/living/carbon/human/user
+	var/force_original = 15
 	sharpness = 1.2 //a whip can only cut things when it is actually whipping
-	if(user.is_wearing_item(/obj/item/clothing/head/energy_dome))
-		force = force +  whipitgood_bonus
-		if(prob(20))
-			playsound(src,pick('sound/misc/devo_crack_that_whip.ogg','sound/misc/devo_whip_it_good.ogg','sound/misc/devo_you_must_whip_it.ogg'),30)
+	var/obj/item/clothing/head/energy_dome/ED
+	if(user.is_wearing_item(ED))
+		force += whipitgood_bonus
+		visible_message("<span class='warning'>[user] whips it good!</span>")
 	..()
 	sharpness = 0
 	force = force_original//return force back to normal
