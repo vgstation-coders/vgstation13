@@ -5,7 +5,7 @@
 	if(say_disabled)
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
-	usr.say(to_utf8(message, usr), forced = FALSE)
+	usr.say(to_utf8(message, usr))
 
 /mob/verb/whisper(message as text)
 	set name = "Whisper"
