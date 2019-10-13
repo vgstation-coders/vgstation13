@@ -402,7 +402,7 @@ var/global/list/whitelisted_species = list("Human")
 	species_intro = "You are a Skellington<br>\
 					You have no skin, no blood, no lips, and only just enough brain to function.<br>\
 					You can not eat normally, as your necrotic state only permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe.<br>\
-					You are also incredibly weak to brute damage and are rather slow, but you don't need to breathe, so that's going for you."
+					You are also incredibly weak to brute damage, but you're fast and don't need to breathe, so that's going for you."
 
 /datum/species/skellington/conditional_whitelist()
 	var/MM = text2num(time2text(world.timeofday, "MM"))
