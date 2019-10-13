@@ -55,6 +55,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/title3.ogg",
 		"sound/music/clown.ogg",
 		"sound/music/robocop.ogg",
+		"sound/music/street_cleaner_robocop.ogg",
 		"sound/music/gaytony.ogg",
 		"sound/music/rocketman.ogg",
 		"sound/music/2525.ogg",
