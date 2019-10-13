@@ -61,8 +61,6 @@
 			warning("Skipping map [potential] due to [skipping == 1 ? "not enough players." : "too many players."] Players min = [min] || max = [max]")
 			binary = null
 			continue
-		if(!binary)
-			warning("Map folder [path] does not contain a valid byond binary, skipping.")
 		if(potential == "Snow Taxi/")
 			var/list/http[] = world.Export("http://api.openweathermap.org/data/2.5/weather?id=5128581&APPID=449d31cebb806dfdb8c3d0a682591983&units=imperial")
 			var/temperature = 90
@@ -75,7 +73,8 @@
 				warning("Skipping map [potential] due to  it being too hot outside. Ideal temp is below 40F, found [temperature].")
 				binary = null
 				continue
-				
+		if(!binary)
+			warning("Map folder [path] does not contain a valid byond binary, skipping.")
 		else
 			maps[potential] = path + binary
 			binary = null
