@@ -1,0 +1,5 @@
+---
+author: GeneralVeers25
+changes:
+  - rscadd: Two new vaults may appear when mining on the Asteroid.
+delete-after: true

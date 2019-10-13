@@ -1,0 +1,5 @@
+---
+author: Intigracy
+changes:
+  - rscadd: Badmins can now once again gibself while a ghost to easily spawn gibs.
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: Zth--
+changes:
+  - bugfix: Biomass now spreads randomly instead of south-only
+delete-after: true

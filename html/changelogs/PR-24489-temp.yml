@@ -1,0 +1,6 @@
+---
+author: Dacendeth
+changes:
+  - tweak: pill bottle color change shortcut is now ctrl click.
+  - tweak: alt clicking now will open pill bottles like all other containers.
+delete-after: true

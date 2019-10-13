@@ -1,0 +1,5 @@
+---
+author: Intigracy
+changes:
+  - tweak: Opening or closing the trading port now announces that it was done to the crew as well as still sending the message to the vox shuttle.
+delete-after: true
