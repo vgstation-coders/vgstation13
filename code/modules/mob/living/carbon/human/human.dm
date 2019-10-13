@@ -1191,6 +1191,7 @@
 		src.do_deferred_species_setup = 1
 	meat_type = species.meat_type
 	spawn()
+		src.movement_speed_modifier = species.move_speed_multiplier
 		src.dna.species = new_species_name
 		src.species.handle_post_spawn(src)
 		src.update_icons()
