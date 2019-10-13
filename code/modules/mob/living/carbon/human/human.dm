@@ -1921,7 +1921,7 @@ mob/living/carbon/human/isincrit()
 		return //If we aren't religious or hearing a long message, don't check further
 	var/mob/living/H = speech.speaker
 	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
-		if(H.mind == mind.faith.religiousLeader)
+		if(isliving(H) && H.mind == mind.faith.religiousLeader)
 			AdjustDizzy(rand(-8,-10))
 			stuttering = max(0,stuttering-rand(8,10))
 			jitteriness = max(0,jitteriness-rand(8,10))
