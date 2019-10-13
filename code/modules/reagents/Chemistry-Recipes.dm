@@ -2224,8 +2224,7 @@
 	required_temp = T0C + 60
 	result_amount = 5
 
-/datum/chemical_reaction/hot_coco_subhuman
-	name = "Hot Coco"
+/datum/chemical_reaction/hot_coco/subhuman
 	id = HOT_COCO_SUBHUMAN
 	result = HOT_COCO_SUBHUMAN
 	required_reagents = list(WATER = 2, COCO = 1)

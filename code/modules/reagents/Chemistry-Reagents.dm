@@ -4159,24 +4159,13 @@
 
 	M.nutrition += nutriment_factor
 
-/datum/reagent/hot_coco_subhuman
-	name = "Hot Chocolate"
+/datum/reagent/hot_coco/subhuman
 	id = HOT_COCO_SUBHUMAN
 	description = "Made with hate! And coco beans."
-	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 2 * REAGENTS_METABOLISM
-	color = "#403010" //rgb: 64, 48, 16
 	data = 0
 
 /datum/reagent/hot_coco_subhuman/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
-
-	M.nutrition += nutriment_factor
+	..()
 	if(prob(1))
 		to_chat(M, "<span class='notice'>You are suddenly reminded that you are subhuman.</span>")
 
