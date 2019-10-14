@@ -361,7 +361,6 @@
 			return
 
 		if( alert("Do you want this to be announced?",,"Yes","No" ) == "Yes" )
-			to_chat(world, "[new_timeleft] and [emergency_shuttle.timeleft()]")
 			if(new_timeleft < emergency_shuttle.timeleft())
 				captain_announce("The emergency shuttle found a shortcut. It will arrive in [round(new_timeleft/60)] minutes.")
 			else
