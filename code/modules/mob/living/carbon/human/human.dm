@@ -710,7 +710,6 @@
 			var/turf/location = loc
 			var/spawn_vomit_on_floor = 0
 
-
 			if(hairball)
 				src.visible_message("<span class='warning'>[src] hacks up a hairball!</span>","<span class='danger'>You hack up a hairball!</span>")
 
