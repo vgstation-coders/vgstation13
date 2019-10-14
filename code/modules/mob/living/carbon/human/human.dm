@@ -702,13 +702,14 @@
 
 			sleep((instant ? 0 : 100))	//And you have 10 more seconds to move it to the bathrooms
 
+			if(gcDestroyed)
+				return
+
 			Stun(5)
 
 			var/turf/location = loc
 			var/spawn_vomit_on_floor = 0
 
-			if(!loc)
-				return
 
 			if(hairball)
 				src.visible_message("<span class='warning'>[src] hacks up a hairball!</span>","<span class='danger'>You hack up a hairball!</span>")

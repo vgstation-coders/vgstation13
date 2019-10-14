@@ -27,7 +27,7 @@ mob/living/carbon/proc/handle_hallucinations()
 	while(hallucination > 20)
 		sleep(max(MIN_HAL_SLEEP,(rand(200,500)/(hallucination/25))))
 
-		if(!loc || !reagents)
+		if(gcDestroyed)
 			return
 
 		if((src.reagents.has_reagent(CITALOPRAM) && prob(30)) || src.reagents.has_reagent(PAROXETINE))
