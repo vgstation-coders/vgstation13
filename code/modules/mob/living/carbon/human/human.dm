@@ -702,6 +702,9 @@
 
 			sleep((instant ? 0 : 100))	//And you have 10 more seconds to move it to the bathrooms
 
+			if(gcDestroyed)
+				return
+
 			Stun(5)
 
 			var/turf/location = loc
