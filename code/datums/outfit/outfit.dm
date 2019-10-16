@@ -39,10 +39,16 @@
 
 	var/list/items_to_collect = list()
 
+	var/list/implant_types = list()
+
 /datum/outfit/New()
 	return
 
+/datum/outfit/proc/pre_equip(var/mob/living/carbon/human/H)
+	return
+
 /datum/outfit/proc/equip(var/mob/living/carbon/human/H)
+	pre_equip(H)
 	var/species = H.species.type
 	var/list/L = items_to_spawn[species]
 	if (!L) // Couldn't find the particular species
@@ -57,6 +63,15 @@
 		H.equip_to_slot_or_del(new obj_type(H), slot, TRUE)
 
 	equip_backbag(H)
+
+	for (var/imp_type in implant_types)
+		var/obj/item/weapon/implant/I = new imp_type
+		I.imp_in = H
+		I.implanted = 1
+		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD) // By default, all implants go to the head.
+		affected.implants += I
+		I.part = affected
+
 	species_final_equip(H)
 
 /datum/outfit/proc/equip_backbag(var/mob/living/carbon/human/H)

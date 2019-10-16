@@ -10,6 +10,8 @@
 	can_customize = FALSE
 	logo = "death-logo"
 
+	outfit_datum = /datum/outfit/death_commando
+
 /datum/striketeam/deathsquad/create_commando(obj/spawn_location, leader_selected = 0)
 	var/mob/living/carbon/human/new_commando = new(spawn_location.loc)
 	var/commando_leader_rank = pick("Major", "Rescue Leader", "Commander")
@@ -43,7 +45,9 @@
 		D.logo_state = "creed-logo"
 	else
 		leader_name = new_commando.real_name
-	new_commando.equip_death_commando(leader_selected)
+
+	var/datum/outfit/concrete_outfit = new outfit_datum
+	concrete_outfit.equip(new_commando)
 
 	return new_commando
 

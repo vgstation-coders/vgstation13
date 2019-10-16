@@ -2,6 +2,9 @@
 // -- Assistants
 
 /datum/outfit/assistant
+
+    outfit_name = "Assistant"
+
     backpack_types = list(
 		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,

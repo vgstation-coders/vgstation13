@@ -499,6 +499,7 @@ var/global/datum/controller/occupations/job_master
 				if(rank=="Clown") // Clowns DO need to breathe, though - N3X
 					H.species.equip(H)
 			else
+				// This is deprecated and should be removed after outfit datums are finished.
 				switch(H.backbag) //BS12 EDIT
 					if(1)
 						if(H.species.survival_gear)
