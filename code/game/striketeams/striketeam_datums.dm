@@ -206,7 +206,7 @@ var/list/sent_strike_teams = list()
 	var/can_customize_appearance = 0
 	var/defaultname = "Commando"
 
-	outfit_datum = /datum/outfit/death_commando
+	outfit_datum = /datum/outfit/striketeam/death_commando
 
 /datum/striketeam/custom/trigger_strike(var/mob/user)
 	custom = 1

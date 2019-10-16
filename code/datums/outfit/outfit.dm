@@ -73,6 +73,7 @@
 		I.part = affected
 
 	species_final_equip(H)
+	misc_stuff(H) // Accessories, IDs, etc.
 
 /datum/outfit/proc/equip_backbag(var/mob/living/carbon/human/H)
 	// -- Backbag
@@ -124,3 +125,6 @@
 
 /datum/outfit/proc/misc_stuff(var/mob/living/carbon/human/H)
 	return // Empty
+
+/datum/outfit/striketeam/
+	var/is_leader = FALSE
