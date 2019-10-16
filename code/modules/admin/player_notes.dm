@@ -120,7 +120,7 @@ datum/admins/proc/notes_gethtml(var/ckey)
 
 	var/datum/player_info/P = new
 	if (usr)
-		P.author = usr.key
+		P.author = usr.ckey
 		P.rank = usr.client.holder.rank
 	else
 		P.author = "Adminbot"
