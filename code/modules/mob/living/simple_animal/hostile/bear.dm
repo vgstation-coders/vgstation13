@@ -76,6 +76,29 @@
 	melee_damage_lower=10
 	melee_damage_upper=40
 
+/mob/living/simple_animal/hostile/bear/spare
+	name = "spare bear"
+	desc = "This bear has adapted a form of camouflage from generations of natural selection in which the omnivores scavenge from space stations and their dumpsters. Its golden skin fools card scanners into opening the door."
+	health = 300
+	maxHealth = 300
+	melee_damage_lower = 15
+	melee_damage_upper = 35
+	icon_state = "sparebear"
+	icon_dead = "sparebear_dead"
+	default_icon_floor = "sparebear"
+	default_icon_space = "sparebear"
+
+/mob/living/simple_animal/hostile/bear/spare/getarmor(var/def_zone, var/type)
+	if(type == "laser")
+		return 80
+	return 10
+
+/mob/living/simple_animal/hostile/bear/spare/getarmorabsorb()
+	return 25
+
+/mob/living/simple_animal/hostile/bear/spare/GetAccess()
+	return get_all_accesses()
+
 /mob/living/simple_animal/hostile/bear/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(stat != DEAD)

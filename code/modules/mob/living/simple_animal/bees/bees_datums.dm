@@ -1,4 +1,6 @@
 
+var/bees_count = 0
+
 /datum/bee
 	var/mob/living/simple_animal/bee/mob = null
 	var/obj/machinery/apiary/home = null
@@ -18,6 +20,9 @@
 //When a bee leaves the hive, it takes on the hive's damage and toxic values
 /datum/bee/New(var/obj/machinery/apiary/spawner = null)
 	..()
+	if(!bees_species[BEESPECIES_NORMAL])
+		initialize_beespecies()
+	bees_count++
 	species = bees_species[BEESPECIES_NORMAL]
 	if (spawner)
 		home = spawner
@@ -42,6 +47,11 @@
 	if (home)
 		state = BEE_HEADING_HOME
 		mob.updateState = 1
+	else
+		fatigue = 0
+		bored = 0
+		state = BEE_ROAMING
+		mob.updateState = 1
 
 /datum/bee/proc/death(var/gibbed = FALSE)
 	if (mob)
@@ -49,6 +59,7 @@
 	qdel(src)
 
 /datum/bee/Destroy()
+	bees_count--
 	if (mob)
 		mob.bees.Remove(src)
 		mob = null
@@ -70,3 +81,8 @@
 	colonizing = 1
 	mob.destination = A
 	mob.updateState = 1
+
+/proc/initialize_beespecies()
+	for(var/x in typesof(/datum/bee_species))
+		var/datum/bee_species/species = new x
+		bees_species[species.common_name] = species

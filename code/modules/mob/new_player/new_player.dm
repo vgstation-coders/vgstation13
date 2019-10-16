@@ -136,35 +136,7 @@
 			if(!client)
 				return 1
 			sleep(1)
-			var/mob/dead/observer/observer = new()
-
-			spawning = 1
-			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY) // MAD JAMS cant last forever yo
-
-
-			observer.started_as_observer = 1
-			close_spawn_windows()
-			var/obj/O = locate("landmark*Observer-Start")
-			to_chat(src, "<span class='notice'>Now teleporting.</span>")
-			observer.forceMove(O.loc)
-			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
-
-			// Has to be done here so we can get our random icon.
-			if(client.prefs.be_random_body)
-				client.prefs.randomize_appearance_for() // No argument means just the prefs are randomized.
-			client.prefs.update_preview_icon(1)
-			observer.icon = client.prefs.preview_icon
-			observer.alpha = 127
-
-			if(client.prefs.be_random_name)
-				client.prefs.real_name = random_name(client.prefs.gender,client.prefs.species)
-			observer.real_name = client.prefs.real_name
-			observer.name = observer.real_name
-			if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
-				observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
-			observer.key = key
-			mob_list -= src
-			qdel(src)
+			create_observer()
 
 			return 1
 
@@ -287,12 +259,70 @@
 	. = 1
 	return
 
+/mob/new_player/proc/create_observer()
+	var/mob/dead/observer/observer = new()
+	spawning = 1
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY) // MAD JAMS cant last forever yo
+
+
+	observer.started_as_observer = 1
+	close_spawn_windows()
+	var/obj/O = locate("landmark*Observer-Start")
+	to_chat(src, "<span class='notice'>Now teleporting.</span>")
+	observer.forceMove(O.loc)
+	observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
+
+	// Has to be done here so we can get our random icon.
+	if(client.prefs.be_random_body)
+		client.prefs.randomize_appearance_for() // No argument means just the prefs are randomized.
+	client.prefs.update_preview_icon(1)
+	observer.icon = client.prefs.preview_icon
+	observer.alpha = 127
+
+	if(client.prefs.be_random_name)
+		client.prefs.real_name = random_name(client.prefs.gender,client.prefs.species)
+	observer.real_name = client.prefs.real_name
+	observer.name = observer.real_name
+	if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
+		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
+	mind.transfer_to(observer)
+	qdel(src)
+
 /mob/new_player/proc/FuckUpGenes(var/mob/living/carbon/human/H)
 	// 20% of players have bad genetic mutations.
 	if(prob(20))
 		H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD)
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
+
+/mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)
+	// 5% of players are joining the station with some minor disease
+	if(prob(5))
+		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+		var/datum/disease2/disease/D = new virus_choice
+
+		var/list/anti = list(
+			ANTIGEN_BLOOD	= 1,
+			ANTIGEN_COMMON	= 1,
+			ANTIGEN_RARE	= 0,
+			ANTIGEN_ALIEN	= 0,
+			)
+		var/list/bad = list(
+			EFFECT_DANGER_HELPFUL	= 1,
+			EFFECT_DANGER_FLAVOR	= 8,
+			EFFECT_DANGER_ANNOYING	= 1,
+			EFFECT_DANGER_HINDRANCE	= 0,
+			EFFECT_DANGER_HARMFUL	= 0,
+			EFFECT_DANGER_DEADLY	= 0,
+			)
+		D.origin = "New Player"
+
+		D.makerandom(list(30,50),list(0,50),anti,bad,null)
+
+		D.log += "<br />[timestamp()] Infected [key_name(H)]"
+		H.virus2["[D.uniqueID]-[D.subID]"] = D
+
+		D.AddToGoggleView(H)
 
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
@@ -391,6 +421,7 @@
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
 			FuckUpGenes(character)
+			DiseaseCarrierCheck(character)
 		else
 			character.Robotize()
 	qdel(src)
@@ -419,7 +450,7 @@
 		speech.name = "Arrivals Announcement Computer"
 		speech.job = "Automated Announcement"
 		speech.as_name = "Arrivals Announcement Computer"
-		speech.frequency = 1459
+		speech.frequency = COMMON_FREQ
 
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
 		returnToPool(speech)
@@ -538,9 +569,10 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	new_character.key = key		//Manually transfer the key to log them in
 
-	var/datum/religion/R = ticker.chap_rel
-	if(R && R.converts_everyone && !R.isReligiousLeader(new_character))
-		R.convert(new_character,null,TRUE,TRUE)
+	for(var/datum/religion/R in ticker.religions)
+		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")
+			R.convert(new_character,null,TRUE,TRUE)
+			break //Only autoconvert them once, and only if they aren't leading their own faith.
 
 	return new_character
 

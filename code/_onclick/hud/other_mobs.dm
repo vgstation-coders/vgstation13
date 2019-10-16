@@ -217,13 +217,13 @@
 	mymob.client.screen += list(vampire_blood_display)
 
 
-/datum/hud/proc/blob_infected_hud()
-	blob_countdown_display = getFromPool(/obj/abstract/screen)
-	blob_countdown_display.name = "Burst Countdown"
-	blob_countdown_display.icon_state = "template"
-	blob_countdown_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[15*PIXEL_MULTIPLIER]"
+/datum/hud/proc/countdown_hud()
+	countdown_display = getFromPool(/obj/abstract/screen)
+	countdown_display.name = "Burst Countdown"
+	countdown_display.icon_state = "template"
+	countdown_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[15*PIXEL_MULTIPLIER]"
 
-	mymob.client.screen += list(blob_countdown_display)
+	mymob.client.screen += list(countdown_display)
 
 
 /datum/hud/proc/cult_hud(ui_style = 'icons/mob/screen1_cult.dmi')

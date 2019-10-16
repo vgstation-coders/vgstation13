@@ -32,6 +32,7 @@
 	H.equip_or_collect(new /obj/item/clothing/under/rank/bartender(H), slot_w_uniform)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	//H.equip_or_collect(new /obj/item/device/pda/bar(H), slot_belt)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/shaker(H), slot_l_store)//each bartender brings their own
 
 	if(H.backbag == 1)
 		var/obj/item/weapon/storage/box/survival/Barpack = new H.species.survival_gear(H)
@@ -50,6 +51,7 @@
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	H.check_mutations = 1
+	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 
 	return 1
 
@@ -98,6 +100,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 	return 1
 
 /datum/job/chef/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -156,6 +159,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 	return 1
 
 /datum/job/hydro/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -204,6 +208,7 @@
 		H.put_in_hands(new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
 	return 1
 
 
@@ -246,6 +251,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
 	return 1
 
 
@@ -291,6 +297,7 @@
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/crowbar(H), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/storage/bag/ore(H), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/> <b>Science:</b> [SCI_FREQ] <br/>")
 	return 1
 
 /datum/job/mining/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -347,6 +354,23 @@
 	. = ..()
 	H.equip_or_collect(new /obj/item/weapon/coin/clown(H.back), slot_in_backpack)
 
+/datum/job/clown/reject_new_slots()
+	if(Holiday == APRIL_FOOLS_DAY)
+		return FALSE
+	if(!xtra_positions)
+		return FALSE
+	if(security_level == SEC_LEVEL_RAINBOW)
+		return FALSE
+	else
+		return "Rainbow Alert"
+
+/datum/job/clown/get_total_positions()
+	if(Holiday == APRIL_FOOLS_DAY)
+		spawn_positions = -1
+		return 99
+	else
+		return ..()
+
 /datum/job/mime
 	title = "Mime"
 	flag = MIME
@@ -399,6 +423,14 @@
 /datum/job/mime/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/baguette(H.back), slot_in_backpack)
+
+/datum/job/mime/reject_new_slots()
+	if(!xtra_positions)
+		return FALSE
+	if(security_level == SEC_LEVEL_RAINBOW)
+		return FALSE
+	else
+		return "Rainbow Alert"
 
 //Mime's break vow spell, couldn't think of anywhere else to put this
 
@@ -465,6 +497,10 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	// Now spawns on the janikart.  H.equip_or_collect(new /obj/item/key(H), slot_l_store)
+
+	H.add_language(LANGUAGE_MOUSE)
+	to_chat(H, "<span class = 'notice'>Decades of roaming maintenance tunnels and interacting with its denizens have granted you the ability to understand the speech of mice and rats.</span>")
+
 	return 1
 
 /datum/job/janitor/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -581,4 +617,5 @@
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 	L.imp_in = H
 	L.implanted = 1
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/>")
 	return 1

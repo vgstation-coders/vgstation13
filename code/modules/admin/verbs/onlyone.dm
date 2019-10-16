@@ -11,7 +11,7 @@
 			pickfrom += name
 			pickfrom[name] = D
 
-	var/event_type_name = input(user, "Select an event.", "THERE CAN BE ONLY ONE", null) in pickfrom as text|null
+	var/event_type_name = input(user, "Select an event.", "THERE CAN BE ONLY ONE", null) as null|anything in pickfrom
 	if(!event_type_name)
 		return
 	var/event_type = pickfrom[event_type_name]
@@ -67,8 +67,7 @@
 		var/mob/living/silicon/S = M
 		var/mob/living/carbon/human/new_human = new /mob/living/carbon/human(S.loc, delay_ready_dna=1)
 		new_human.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
-		var/datum/preferences/A = new()	//Randomize appearance for the human
-		A.randomize_appearance_for(new_human)
+		new_human.randomise_appearance_for(new_human.gender)
 		new_human.generate_name()
 		new_human.languages |= S.languages
 		if(S.default_language)

@@ -22,7 +22,7 @@
 	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
 	var/table_type = /obj/structure/table
 	sheet_type = /obj/item/stack/sheet/metal
-	var/sheet_amount = 1
+	var/sheet_amount = 2
 
 /obj/item/weapon/table_parts/cultify()
 	new /obj/item/weapon/table_parts/wood(loc)
@@ -34,6 +34,22 @@
 		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		qdel(src)
 		return
+	if (iswelder(W))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(1, user))
+			to_chat(user, "You begin the delicate process of heating and moulding \the [src].")
+			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			if(do_after(user, src, 180))
+				to_chat(user, "You finish bending the metal into the shape of an ansible.")
+				if(src.loc == user)
+					user.drop_item(src, force_drop = 1)
+					var/obj/item/weapon/ghetto_ansible/I = new (user.loc)
+					user.put_in_hands(I)
+					qdel(src)
+				else
+					new /obj/item/weapon/ghetto_ansible(loc)
+					qdel(src)
+			return
 	if (istype(W, /obj/item/stack/rods))
 		var/obj/item/stack/rods/rods = W
 		if (rods.amount >= 4)
@@ -50,6 +66,13 @@
 			new /obj/item/weapon/table_parts/glass(user.loc)
 			to_chat(user, "<span class='notice'>You add glass panes to \the [name].</span>")
 			glass.use(1)
+			qdel(src)
+	if (istype(W, /obj/item/stack/sheet/glass/plasmaglass))
+		var/obj/item/stack/sheet/glass/plasma = W
+		if (plasma.amount >= 1)
+			new /obj/item/weapon/table_parts/glass/plasma(user.loc)
+			to_chat(user, "<span class='notice'>You add plasma glass panes to \the [name].</span>")
+			plasma.use(1)
 			qdel(src)
 /obj/item/weapon/table_parts/attack_self(mob/user)
 	if(locate(/obj/structure/table) in get_turf(user))
@@ -137,6 +160,24 @@
 		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
 
+/obj/item/weapon/table_parts/glass/plasma
+	name = "glass table parts"
+	desc = "Glass table parts in solid plasma. As stylish as they are sturdy."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "plasma_tableparts"
+	starting_materials = list(MAT_PLASMA = 3750)
+	w_type = RECYK_GLASS
+	melt_temperature=MELTPOINT_PLASMA
+	flags = FPRINT
+	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
+	table_type = /obj/structure/table/glass/plasma
+
+/obj/item/weapon/table_parts/glass/attackby(obj/item/weapon/W, mob/user)
+	if (iswrench(W))
+		drop_stack(/obj/item/stack/sheet/glass/plasmaglass, loc, 1, user)
+		drop_stack(sheet_type, loc, 1, user)
+		qdel(src)
+
 /obj/item/weapon/table_parts/clockwork
 	name = "brass table parts"
 	desc = "Parts of a slightly beveled brass table."
@@ -172,7 +213,7 @@
 		return
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if(WT.remove_fuel(1, user))
 			to_chat(user, "You begin slicing through \the [src].")
 			playsound(user, 'sound/items/Welder.ogg', 50, 1)
 			if(do_after(user, src, 60))
@@ -185,8 +226,7 @@
 				else
 					new /obj/item/weapon/metal_gun_stock(loc)
 					qdel(src)
-		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			return
 
 /obj/item/weapon/rack_parts/attack_self(mob/user)
 	var/obj/structure/rack/R = new /obj/structure/rack(user.loc)

@@ -47,7 +47,7 @@
 /obj/item/weapon/shield/riot/buckler/IsShield()
 	return prob(33) //Only attempt to block 1/3 of attacks
 
-/obj/item/weapon/shield/riot/buckler/on_block(damage, attack_text = "the_attack")
+/obj/item/weapon/shield/riot/buckler/on_block(damage, atom/blocked)
 	if(damage > 10)
 		if(prob(min(10*(damage-10), 75))) //Bucklers are prone to breaking apart
 			var/turf/T = get_turf(src)
@@ -247,3 +247,13 @@
 		qdel(src)
 	else
 		parent_borer.chemicals -= 3
+
+/obj/item/weapon/shield/riot/tower
+	name = "tower shield"
+	desc = "A veritable wall of defense."
+	icon_state = "tower_shield"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
+	slowdown = 4
+
+/obj/item/weapon/shield/riot/tower/IsShield()
+	return 2 //Considering its size, twice as effective as a normal shield, but difficult to lug around

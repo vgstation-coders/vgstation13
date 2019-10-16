@@ -1,18 +1,25 @@
 /obj/machinery/disease2/diseaseanalyser
 	name = "disease analyser"
-	desc = "For analysing and storing viral samples."
+	desc = "For analysing pathogenic dishes of sufficient growth."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "analyser"
 	anchored = TRUE
 	density = TRUE
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
+	light_color = "#6496FA"
+	light_range = 2
+	light_power = 1
 
-	var/scanning = 0
-	var/pause = 0
+	idle_power_usage = 100
+	active_power_usage = 100//1000 extra power once per analysis
+
 	var/process_time = 5
-	var/minimum_growth = 50
-	var/list/toscan = new //List of samples to analyse
-	var/obj/item/weapon/virusdish/dish = null //Repurposed to mean 'dish currently being analysed'
+	var/minimum_growth = 100
+	var/obj/item/weapon/virusdish/dish = null
+	var/last_scan_name = ""
+	var/last_scan_info = ""
+
+	var/mob/scanner = null
 
 /obj/machinery/disease2/diseaseanalyser/New()
 	. = ..()
@@ -29,140 +36,271 @@
 
 /obj/machinery/disease2/diseaseanalyser/RefreshParts()
 	var/scancount = 0
-	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
 			scancount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
-			lasercount += SP.rating-1
-	minimum_growth = round((initial(minimum_growth) - (scancount * 3)))
-	process_time = round((initial(process_time) - lasercount))
+	minimum_growth = round((initial(minimum_growth) - (scancount * 6)))
 
-/obj/machinery/disease2/diseaseanalyser/attackby(var/obj/I as obj, var/mob/user as mob)
+/obj/machinery/disease2/diseaseanalyser/attackby(var/obj/I, var/mob/user)
 	. = ..()
+
+	if(stat & (BROKEN))
+		to_chat(user, "<span class='warning'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
+		return
+
+	if (scanner)
+		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyser.</span>")
+		return
+
 	if(.)
 		return
-	if(istype(I,/obj/item/weapon/virusdish))
-		var/mob/living/carbon/c = user
-		var/obj/item/weapon/virusdish/D = I
 
-		if(!c.drop_item(D, src))
-			return 1
-
-		if(!D.analysed)
-			if(!dish)
-				dish = D
+	if (dish)
+		if (istype(I,/obj/item/weapon/virusdish))
+			to_chat(user, "<span class='warning'>There is already a dish in there. Alt+Click or perform the analysis to retrieve it first.</span>")
+		else if (istype(I,/obj/item/weapon/reagent_containers))
+			dish.attackby(I,user)
+	else
+		if (istype(I,/obj/item/weapon/virusdish))
+			var/obj/item/weapon/virusdish/D = I
+			if (D.open)
+				visible_message("<span class='notice'>\The [user] inserts \the [I] in \the [src].</span>","<span class='notice'>You insert \the [I] in \the [src].</span>")
+				playsound(loc, 'sound/machines/click.ogg', 50, 1)
+				user.drop_item(I, loc, 1)
+				I.forceMove(src)
+				dish = I
+				update_icon()
 			else
-				toscan += D
+				to_chat(user, "<span class='warning'>You must open the dish's lid before it can be analysed. Be sure to wear proper protection first (at least a sterile mask and latex gloves).</span>")
 
-		visible_message("<span class='notice'>[user.name] inserts the [D.name] in the [src.name].</span>")
-		src.updateUsrDialog()
+/obj/machinery/disease2/diseaseanalyser/attack_hand(var/mob/user)
+	. = ..()
+	if(stat & (BROKEN))
+		to_chat(user, "<span class='notice'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
+		return
 
-/obj/machinery/disease2/diseaseanalyser/proc/PrintPaper(var/obj/item/weapon/virusdish/D)
-	var/obj/item/weapon/paper/P = new(src.loc)
-	P.info = D.virus2.get_info()
-	P.name = "[D.virus2.form] #[D.virus2.uniqueID]"
-	visible_message("\The [src.name] prints a sheet of paper.")
+	if(stat & (NOPOWER))
+		to_chat(user, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
+		if (dish)
+			playsound(loc, 'sound/machines/click.ogg', 50, 1)
+			dish.forceMove(loc)
+			dish = null
+			update_icon()
+		return
 
-/obj/machinery/disease2/diseaseanalyser/proc/Analyse(var/obj/item/weapon/virusdish/D)
-	dish.info = D.virus2.get_info()
-	dish.analysed = 1
-	if (D.virus2.addToDB())
-		say("Added new pathogen to database.")
-	dish.forceMove(src.loc)
-	dish = null
+	if(.)
+		return
+
+	if (scanner)
+		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyser.</span>")
+		return
+
+	if (!dish)
+		to_chat(user, "<span class='notice'>Place an open growth dish first to analyse its pathogen.</span>")
+		return
+
+	if (dish.growth < minimum_growth)
+		alert_noise("buzz")
+		say("Pathogen growth insufficient. Minimal required growth: [minimum_growth]%.")
+		to_chat(user,"<span class='notice'>Add some virus food to the dish and incubate.</span>")
+		if (minimum_growth == 100)
+			to_chat(user,"<span class='notice'>Replacing the machine's scanning modules with better parts will lower the growth requirement.</span>")
+		dish.forceMove(loc)
+		dish = null
+		update_icon()
+		return
+
+	scanner = user
+	icon_state = "analyser_processing"
+	flick("analyser_turnon",src)
+
+	spawn (1)
+		var/image/I = image(icon,"analyser_light")
+		I.plane = LIGHTING_PLANE
+		I.layer = ABOVE_LIGHTING_LAYER
+		overlays += I
+
+	use_power(1000)
+	set_light(2,2)
+	playsound(loc, "sound/machines/heps.ogg", 50, 1)
+
+	if(do_after(user, src, 5 SECONDS))
+		if(stat & (BROKEN|NOPOWER))
+			return
+		alert_noise()
+		if (dish.contained_virus.addToDB())
+			say("Added new pathogen to database.")
+		var/datum/data/record/v = virusDB["[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]"]
+		dish.info = dish.contained_virus.get_info()
+		last_scan_name = dish.contained_virus.name(TRUE)
+		if (v)
+			last_scan_name += v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""
+
+		dish.name = "growth dish ([last_scan_name])"
+		last_scan_info = dish.info
+		var/datum/browser/popup = new(user, "\ref[dish]", dish.name, 600, 500, src)
+		popup.set_content(dish.info)
+		popup.open()
+		dish.analysed = TRUE
+		dish.update_icon()
+		dish.forceMove(loc)
+		dish = null
+	else
+		alert_noise("buzz")
+
+	update_icon()
+	flick("analyser_turnoff",src)
+	scanner = null
+
+/obj/machinery/disease2/diseaseanalyser/update_icon()
+	overlays.len = 0
 	icon_state = "analyser"
-	src.updateUsrDialog()
+
+	if (stat & (NOPOWER))
+		icon_state = "analyser0"
+
+	if (stat & (BROKEN))
+		icon_state = "analyserb"
+
+	if(stat & (BROKEN|NOPOWER))
+		set_light(0)
+	else
+		set_light(2,1)
+
+	if (dish)
+		overlays += "smalldish-outline"
+		if (dish.contained_virus)
+			var/image/I = image(icon,"smalldish-color")
+			I.color = dish.contained_virus.color
+			overlays += I
+		else
+			overlays += "smalldish-empty"
+
+/obj/machinery/disease2/diseaseanalyser/verb/PrintPaper()
+	set name = "Print last analysis"
+	set category = "Object"
+	set src in oview(1)
+
+	if(!usr || !isturf(usr.loc))
+		return
+
+	if(usr.isUnconscious() || usr.restrained())
+		return
+
+	if(stat & (BROKEN))
+		to_chat(usr, "<span class='notice'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
+		return
+
+	if(stat & (NOPOWER))
+		to_chat(usr, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
+		return
+
+	var/turf/T = get_turf(src)
+	playsound(T, "sound/effects/fax.ogg", 50, 1)
+	anim(target = src, a_icon = icon, flick_anim = "analyser-paper", sleeptime = 30)
+	visible_message("\The [src] prints a sheet of paper.")
+	spawn(10)
+		var/obj/item/weapon/paper/P = new(T)
+		P.name = last_scan_name
+		P.info = last_scan_info
+		P.pixel_x = 8
+		P.pixel_y = -8
+		P.update_icon()
 
 /obj/machinery/disease2/diseaseanalyser/process()
 	if(stat & (NOPOWER|BROKEN))
-		icon_state = "analyser"
+		scanner = null
 		return
-	use_power(500)
 
-	if(scanning)
-		scanning -= 1
-		if(scanning == 0)
-			Analyse(dish)
-	else if((dish || toscan.len > 0) && !scanning && !pause)
-		if(!dish)
-			dish = toscan[1] //Load next dish to analyse
-			toscan -= dish //Remove from scanlist
-		if(dish.virus2 && dish.growth > minimum_growth)
-			dish.growth -= 10
-			scanning = process_time
-			icon_state = "analyser_processing"
-		else
-			pause = 1
-			spawn(25)
-				dish.forceMove(src.loc)
-				dish = null
-				alert_noise("buzz")
-				pause = 0
+	if (scanner && !(scanner in range(src,1)))
+		alert_noise("buzz")
+		update_icon()
+		flick("analyser_turnoff",src)
+		scanner = null
 
-/obj/machinery/disease2/diseaseanalyser/Topic(href, href_list)
-	if(..())
-		return 1
-	if(href_list["close"])
-		usr << browse(null, "\ref[src]")
-		usr.unset_machine()
-		return 1
 
-	usr.set_machine(src)
-	if(href_list["eject"])
-		var/obj/item/weapon/virusdish/O = locate(href_list["dishI"])
-		if(O && O in contents)
-			O.forceMove(loc)
-			if(O in toscan)
-				toscan -= O
-		src.updateUsrDialog()
-	else if(href_list["print"])
-		var/obj/item/weapon/virusdish/O = locate(href_list["dishI"])
-		if(O && O in contents)
-			PrintPaper(O)
+/obj/machinery/disease2/diseaseanalyser/AltClick()
+	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
+		return ..()
 
-/obj/machinery/disease2/diseaseanalyser/attack_hand(var/mob/user as mob)
-	. = ..()
-	if(.)
+	if (dish && !scanner)
+		playsound(loc, 'sound/machines/click.ogg', 50, 1)
+		dish.forceMove(loc)
+		dish = null
+		update_icon()
+
+/obj/machinery/disease2/diseaseanalyser/breakdown()
+	if (dish)
+		dish.forceMove(loc)
+	dish = null
+	scanner = null
+	..()
+
+
+//////////////////////////////////////////////////////GENERAL DISEASE2 MACHINE PROCS/////////////////////////////////
+
+/obj/machinery/disease2/power_change()
+	..()
+	update_icon()
+
+/obj/machinery/disease2/proc/breakdown()
+	stat |= BROKEN
+	update_icon()
+
+/obj/machinery/disease2/ex_act(var/severity)
+	switch(severity)
+		if(1)
+			qdel(src)
+		if(2)
+			if (prob(50))
+				qdel(src)
+			else
+				breakdown()
+		if(3)
+			if(prob(35))
+				breakdown()
+
+/obj/machinery/disease2/emp_act(var/severity)
+	if(stat & (BROKEN))
 		return
-	user.set_machine(src)
-	var/dat = list()
-	dat += "Currently stored samples: [src.contents.len]<br><hr>"
-	if (src.contents.len > 0)
-		dat += {"
-<table cellpadding='1' style='width: 100%;text-align:center; white-space: nowrap;'>
-	<td>Name</td>
-	<td>Details</td>
-	<td>Symptoms</td>
-	<td>Antibodies</td>
-	<td>Transmission</td>
-	<td>Options</td>
-"}
-		for(var/obj/item/weapon/virusdish/B in src.contents)
-			var/ID = B.virus2.uniqueID
-			if("[ID]" in virusDB) //If it's in the DB they might have given it a name
-				var/datum/data/record/v = virusDB["[ID]"]
-				dat += "<tr><td>[v.fields["name"]]</td>"
-			else //Use ID instead
-				dat += "<tr><td>[B.virus2.name()]</td>"
-			dat += "<td>Infection rate: [B.virus2.infectionchance]<br>Progress speed: [B.virus2.stageprob]</td>"
-			dat+="<td>"
-			if(!B.analysed)
-				dat += "Awaiting analysis.</td><td></td><td></td>"
-			else
-				for(var/datum/disease2/effect/e in B.virus2.effects)
-					dat += "<br>[e.name] (Strength: [e.multiplier] | Verosity: [e.chance])"
-				dat +="</td>"
-				dat += "<td>[antigens2string(B.virus2.antigen)]</td>"
-				dat += "<td>[(B.virus2.spreadtype)]</td>"
-			if(B == dish)
-				dat += "<td></td>"
-			else
-				dat += "<td><A href='?src=\ref[src];eject=1;dishI=\ref[B];'>Eject</a>"
-				dat += "<br>[B.analysed ? "<A href='?src=\ref[src];print=1;dishI=\ref[B];'>Print</a>" : ""]</td>"
-			dat += "</tr>"
-		dat += "</table>"
-	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "\ref[src]", "Viral Storage & Analysis Unit", 800, 350, src)
-	popup.set_content(dat)
-	popup.open()
+	switch(severity)
+		if(1)
+			if(prob(75))
+				breakdown()
+		if(2)
+			if(prob(35))
+				breakdown()
+
+/obj/machinery/disease2/attack_construct(var/mob/user)
+	if(stat & (BROKEN))
+		return
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		shake(1, 3)
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		add_hiddenprint(user)
+		breakdown()
+		return 1
+	return 0
+
+/obj/machinery/disease2/kick_act(var/mob/living/carbon/human/user)
+	..()
+	if(stat & (BROKEN))
+		return
+	if (prob(5))
+		breakdown()
+
+/obj/machinery/disease2/attack_paw(var/mob/user)
+	if(istype(user,/mob/living/carbon/alien/humanoid))
+		if(stat & (BROKEN))
+			return
+		breakdown()
+		user.do_attack_animation(src, user)
+		visible_message("<span class='warning'>\The [user] slashes at \the [src]!</span>")
+		playsound(src, 'sound/weapons/slash.ogg', 100, 1)
+		add_hiddenprint(user)
+	else if (!usr.dexterity_check())
+		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+	else
+		attack_hand(user)

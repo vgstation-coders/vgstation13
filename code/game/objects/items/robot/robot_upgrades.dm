@@ -9,19 +9,21 @@
 	icon = 'icons/obj/module.dmi'
 	var/locked = FALSE
 	var/list/required_modules = list()
+	var/list/required_upgrades = list()
 	var/list/modules_to_add = list()
 	var/multi_upgrades = FALSE
 	w_type = RECYK_ELECTRONIC
 
 
 /obj/item/borg/upgrade/proc/locate_component(var/obj/item/C, var/mob/living/silicon/robot/R, var/mob/living/user)
-	if(!C || !R || !user)
+	if(!C || !R)
 		return null
 
 	var/obj/item/I = R.installed_module(C)
 
 	if(!I)
-		to_chat(user, "\The [R] is missing one of the needed components!")
+		if(user)
+			to_chat(user, "\The [R] is missing one of the needed components!")
 		return null
 
 	return I
@@ -35,6 +37,12 @@
 		if(!(R.modtype in required_modules))
 			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
 			return FAILED_TO_ADD
+	
+	if(required_upgrades.len)
+		for(var/U in required_upgrades)
+			if(!U in R.module.upgrades)
+				to_chat(user, "<span class='warning'>\The [R] is missing a required upgrade to install [src].</span>")
+				return FAILED_TO_ADD
 
 	if(R.isDead())
 		to_chat(user, "<span class='warning'>\The [src] will not function on a broken robot.</span>")
@@ -52,7 +60,8 @@
 
 	if(modules_to_add.len)
 		for(var/module_to_add in modules_to_add)
-			R.module.modules += new module_to_add(R.module)
+			if(!locate_component(module_to_add, R))
+				R.module.modules += new module_to_add(R.module)
 
 	to_chat(user, "<span class='notice'>You successfully apply \the [src] to \the [R].</span>")
 	user.drop_item(src, R)
@@ -69,6 +78,14 @@
 
 	if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW)) //Make them able to *law and *halt
 		R.module.quirk_flags |= MODULE_IS_THE_LAW
+	
+	if(R.modtype == HUG_MODULE)
+		var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R)
+		if(C)
+			C.Lawize()
+		var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R)
+		if(H)
+			H.Lawize()
 
 /obj/item/borg/upgrade/reset
 	name = "cyborg reset board"
@@ -293,12 +310,13 @@
 	if(has_icon(R.icon, "[R.base_icon]-clown")) //Honk!
 		R.set_module_sprites(list("Honk" = "[R.base_icon]-clown"))
 
-	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
-	if(H)
-		H.Honkize()
-	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
-	if(C)
-		C.Honkize()
+	if(R.modtype == HUG_MODULE)
+		var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R)
+		if(H)
+			H.Honkize()
+		var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R)
+		if(C)
+			C.Honkize()
 
 	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
 
@@ -309,11 +327,14 @@
 	name = "security cyborg rapid taser cooling upgrade board"
 	desc = "Used to cool a mounted taser, increasing the potential current in it and thus its recharge rate."
 	icon_state = "cyborg_upgrade3"
-	required_modules = list(SECURITY_MODULE)
+	required_modules = list(SECURITY_MODULE, HUG_MODULE)
 	multi_upgrades = TRUE
 
 
 /obj/item/borg/upgrade/tasercooler/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
 	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R, user)
 	if(!T)
 		return FAILED_TO_ADD
@@ -324,10 +345,8 @@
 		to_chat(user, "There's no room for another cooling unit!")
 		return FAILED_TO_ADD
 
-	if(..())
-		return FAILED_TO_ADD
-	else
-		T.recharge_time = max(2 , T.recharge_time - 4)
+	T.recharge_time = max(2 , T.recharge_time - 4)
+
 
 /obj/item/borg/upgrade/noir
 	name = "security cyborg N.O.I.R. upgrade board"
@@ -348,18 +367,19 @@
 	if(new_icons.len > 0)
 		R.set_module_sprites(new_icons)
 
-	securify_module(R)
+	if(R.modtype == HUG_MODULE)
+		securify_module(R)
 
-	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
-	if(C)
-		C.Noirize()
+		var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R)
+		if(C)
+			C.Noirize()
 
 /obj/item/borg/upgrade/warden
 	name = "security cyborg W.A.T.C.H. upgrade board"
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
 	required_modules = list(SECURITY_MODULE, HUG_MODULE)
-	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/weapon/wrench)
+	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/weapon/wrench, /obj/item/weapon/handcuffs/cyborg) //Secborgs have cuffs, but hugborgs can't do warden job properly without them.
 
 /obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -376,12 +396,59 @@
 		new_icons += list("Heavy" = "[R.base_icon]-H")
 	if(new_icons.len > 0)
 		R.set_module_sprites(new_icons)
+	
+	if(R.modtype == HUG_MODULE)
+		securify_module(R)
+	
+	R.module.quirk_flags |= MODULE_HAS_FLASH_RES
 
-	securify_module(R)
+/obj/item/borg/upgrade/hos
+	name = "security cyborg H.O.S. upgrade board"
+	desc = "A special upgrade used to promote security cyborgs with both N.O.I.R. and W.A.T.C.H. upgrades installed to head of silicons."
+	icon_state = "mcontroller"
+	required_modules = list(SECURITY_MODULE, HUG_MODULE)
+	required_upgrades = list(/obj/item/borg/upgrade/noir, /obj/item/borg/upgrade/warden)
+	modules_to_add = list(/obj/item/weapon/gun/lawgiver, /obj/item/weapon/gun/grenadelauncher)
 
-	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
-	if(C)
-		C.Lawize()
+/obj/item/borg/upgrade/hos/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	var/obj/item/weapon/gripper/service/noir/G = locate_component(/obj/item/weapon/gripper/service/noir, R, user)
+	if(!G)
+		return FAILED_TO_ADD
+	
+	var/obj/item/weapon/gun/projectile/detective/PG = locate_component(/obj/item/weapon/gun/projectile/detective, R, user)
+	if(!PG)
+		return FAILED_TO_ADD
+	
+	var/obj/item/ammo_storage/speedloader/c38/cyborg/SL = locate_component(/obj/item/ammo_storage/speedloader/c38/cyborg, R, user)
+	if(!SL)
+		return FAILED_TO_ADD
+	
+	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R)
+
+	if(T) //Since having a taser isn't necessary for this upgrade, this is fine.
+		R.module.modules -= T
+		qdel(T)
+	R.module.modules -= PG
+	qdel(PG)
+	R.module.modules -= SL
+	qdel(SL)
+
+
+	G.can_hold.Add(/obj/item/ammo_storage/magazine/lawgiver, /obj/item/weapon/grenade, /obj/item/weapon/reagent_containers/food/snacks/donut)
+	G.desc += "This one was also tweaked to be able to hold lawgiver magazines, grenades and... DONUTS!"
+
+	if(!R.dna) //Time to get ready to use that lawgiver.
+		R.dna = new /datum/dna(null)
+		R.dna.real_name = R.real_name
+		R.dna.unique_enzymes = md5(R.dna.real_name)
+
+	if(R.modtype == HUG_MODULE)
+		R.set_module_sprites(list("Head of Silicons" = "peaceborg-hos"))
+	
+	R.module.quirk_flags |= MODULE_IS_FLASHPROOF | MODULE_IS_DEFINITIVE
 
 //Supply Stuff
 /obj/item/borg/upgrade/hook

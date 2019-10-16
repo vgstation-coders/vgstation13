@@ -59,7 +59,12 @@
 
 /obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user)
 	if(issilicon(user))
-		return 1
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW))
+				return 1
+		else
+			return 1
 	. = ..()
 	if(.)
 		return
@@ -70,6 +75,9 @@
 		to_chat(user, "You can't insert anything into \the [src] while the maintenance panel is open.</span>")
 		return 1
 	if(charging)
+		if(isgripper(G) && isrobot(user))
+			attack_hand(user)
+			return 1
 		to_chat(user, "<span class='warning'>There's \a [charging] already charging inside!</span>")
 		return 1
 	if(!anchored)
@@ -115,7 +123,14 @@
 	update_icon()
 
 /obj/machinery/recharger/attack_hand(mob/user)
-	if(issilicon(user) || ..())
+	if(issilicon(user))
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW))
+				return 1
+		else
+			return 1
+	if(..())
 		return 1
 
 	add_fingerprint(user)

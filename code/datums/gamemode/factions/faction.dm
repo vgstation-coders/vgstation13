@@ -42,6 +42,16 @@ var/list/factions_with_hud_icons = list()
 	var/list/hud_icons = list()
 	var/datum/role/leader
 	var/list/faction_scoreboard_data = list()
+	var/stage = FACTION_DORMANT //role_datums_defines.dm
+	var/playlist
+
+	var/minor_victory = FALSE
+
+	// This datum represents all data that is exported to the statistics file at the end of the round.
+	// If you want to store faction-specific data as statistics, you'll need to define your own datum.
+	// See dynamic_stats.dm
+	var/datum/stat/faction/stat_datum = null
+	var/datum/stat/faction/stat_datum_type = /datum/stat/faction
 
 /datum/faction/New()
 	..()
@@ -53,9 +63,21 @@ var/list/factions_with_hud_icons = list()
 	for (var/datum/faction/F in factions_with_hud_icons)
 		update_hud_icons()
 
+	stat_datum = new stat_datum_type()
+
 /datum/faction/proc/OnPostSetup()
 	for(var/datum/role/R in members)
 		R.OnPostSetup()
+
+/datum/faction/proc/Dismantle()
+	for(var/datum/role/R in members)
+		var/datum/gamemode/G = ticker.mode
+		G.orphaned_roles += R
+		members -= R
+	qdel(objective_holder)
+	var/datum/gamemode/dynamic/D = ticker.mode
+	D.factions -= src
+	qdel(src)
 
 //Initialization proc, checks if the faction can be made given the current amount of players and/or other possibilites
 /datum/faction/proc/can_setup()
@@ -68,10 +90,11 @@ var/list/factions_with_hud_icons = list()
 	for(var/datum/role/R in members)
 		R.AnnounceObjectives()
 
+/datum/faction/proc/ShuttleDocked(state)
+
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			WARNING("Mind was already a role in this faction")
 			return 0
 	if(M.GetRole(initial_role))
 		WARNING("Mind already had a role of [initial_role]!")
@@ -80,16 +103,15 @@ var/list/factions_with_hud_icons = list()
 	if(!newRole.AssignToRole(M))
 		newRole.Drop()
 		return 0
-	return 1
+	return newRole
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			WARNING("Mind was already a role in this faction")
-			return 0
+			return R
 	if(M.GetRole(late_role))
 		WARNING("Mind already had a role of [late_role]!")
-		return 0
+		return (M.GetRole(late_role))
 	var/datum/role/R = new roletype(null,src,late_role) // Add him to our roles
 	if(!R.AssignToRole(M, override))
 		R.Drop()
@@ -131,26 +153,27 @@ var/list/factions_with_hud_icons = list()
 	return objective_holder.GetObjectiveString(check_success = TRUE)
 
 /datum/faction/proc/GetScoreboard()
-	var/win = 1
 	var/count = 1
 	var/score_results = ""
 	if(objective_holder.objectives.len > 0)
 		score_results += "<ul>"
 		for (var/datum/objective/objective in objective_holder.GetObjectives())
 			var/successful = objective.IsFulfilled()
-			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
+			objective.extraInfo()
+			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<span class='red'>Fail.</span>"]"
 			feedback_add_details("[ID]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
-			if(!successful) //If one objective fails, then you did not win.
-				win = 0
 			count++
 			if (count <= objective_holder.objectives.len)
 				score_results += "<br>"
 	if (count>1)
-		if (win)
+		if (IsSuccessful())
 			score_results += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 			feedback_add_details("[ID]_success","SUCCESS")
+		else if (minor_victory)
+			score_results += "<br><font color='green'><B>\The [name] has achieved a minor victory.</B> [minorVictoryText()]</font>"
+			feedback_add_details("[ID]_success","MINOR_VICTORY")
 		else
-			score_results += "<br><font color='red'><B>\The [name] has failed.</B></font>"
+			score_results += "<br><span class='red'><B>\The [name] has failed.</B></span>"
 			feedback_add_details("[ID]_success","FAIL")
 
 	if(objective_holder.objectives.len > 0)
@@ -166,7 +189,29 @@ var/list/factions_with_hud_icons = list()
 			if (i < members.len)
 				score_results += "<br>"
 		i++
+
+	stat_collection.add_faction(src)
+
 	return score_results
+
+/datum/faction/Topic(href, href_list)
+	..()
+	if(href_list["destroyfac"])
+		if(!usr.check_rights(R_ADMIN))
+			message_admins("[usr] tried to destroy a faction without permissions.")
+			return
+		if(alert(usr, "Are you sure you want to destroy [name]?",  "Destroy Faction" , "Yes" , "No") != "Yes")
+			return
+		message_admins("[key_name(usr)] destroyed faction [name].")
+		Dismantle()
+
+/datum/faction/proc/IsSuccessful()
+	var/win = TRUE
+	if(objective_holder.objectives.len > 0)
+		for (var/datum/objective/objective in objective_holder.GetObjectives())
+			if(!objective.IsFulfilled())
+				win = FALSE
+	return win
 
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
@@ -176,6 +221,7 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)
 	var/dat = "<br>"
 	dat += GetObjectivesMenuHeader()
+	dat += " <a href='?src=\ref[src];destroyfac=1'>\[Destroy\]</A><br>"
 	dat += "<br><b>Faction objectives</b><br>"
 	dat += objective_holder.GetObjectiveString(0,1,A)
 	dat += "<br> - <b>Members</b> - <br>"
@@ -191,8 +237,35 @@ var/list/factions_with_hud_icons = list()
 	for (var/datum/role/R in members)
 		R.process()
 
+/datum/faction/proc/stage(var/value)
+	stage = value
+	switch(value)
+		if(FACTION_DEFEATED) //Faction was close to victory, but then lost. Send shuttle and end theme.
+			sleep(5 SECONDS)
+			emergency_shuttle.shutdown = 0
+			emergency_shuttle.online = 1
+			OnPostDefeat()
+			set_security_level("blue")
+			ticker.StopThematic()
+		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
+			if(playlist)
+				ticker.StartThematic(playlist)
+			else
+				ticker.StartThematic("endgame")
+			sleep(2 SECONDS)
+			set_security_level("red")
+
+/datum/faction/proc/OnPostDefeat()
+	if(emergency_shuttle.location || emergency_shuttle.direction) //If traveling or docked somewhere other than idle at command, don't call.
+		return
+	emergency_shuttle.incall()
+	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification: Recovery of assets.")
+
 /datum/faction/proc/check_win()
 	return
+
+/datum/faction/proc/minorVictoryText()
+	return ""
 
 //updating every icons at the same time allows their animate() to be sync'd, so we can alternate the one on top without any additional proc calls.
 /proc/update_faction_icons()
@@ -325,7 +398,7 @@ var/list/factions_with_hud_icons = list()
 	ID = HIVEMIND
 	initial_role = CHANGELING
 	late_role = CHANGELING
-	required_pref = ROLE_CHANGELING
+	required_pref = CHANGELING
 	desc = "An almost parasitic, shapeshifting entity that assumes the identity of its victims. Commonly used as smart bioweapons by the syndicate,\
 	or simply wandering malignant vagrants happening upon a meal of identity that can carry them to further feeding grounds."
 	roletype = /datum/role/changeling
@@ -339,54 +412,16 @@ var/list/factions_with_hud_icons = list()
 
 //________________________________________________
 
-/datum/faction/wizard
-	name = "Wizard Federation"
-	ID = WIZFEDERATION
-	initial_role = WIZARD
-	late_role = WIZARD
-	required_pref = ROLE_WIZARD
-	desc = "A conglomeration of magically adept individuals, with no obvious heirachy, instead acting as equal individuals in the pursuit of magic-oriented endeavours.\
-	Their motivations for attacking seemingly peaceful enclaves or operations are as yet unknown, but they do so without respite or remorse.\
-	This has led to them being identified as enemies of humanity, and should be treated as such."
-	initroletype = /datum/role/wizard
-	roletype = /datum/role/wizard
-	logo_state = "wizard-logo"
-	hud_icons = list("wizard-logo","apprentice-logo")
-
-/datum/faction/wizard/HandleNewMind(var/datum/mind/M)
-	..()
-	M.special_role = "Wizard"
-	M.original = M.current
-
-/datum/faction/wizard/OnPostSetup()
-	if(wizardstart.len == 0)
-		for(var/datum/role/wizard in members)
-			to_chat(wizard.antag.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
-		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
-		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
-		return 0 //Critical failure.
-	..()
-
-/datum/faction/wizard/forgeObjectives()
-	for(var/datum/role/R in members)
-		R.ForgeObjectives()
-		R.AnnounceObjectives()
-
-/datum/faction/wizard/ragin
-	accept_latejoiners = TRUE
-	var/max_wizards
-
-/datum/faction/wizard/ragin/check_win()
-	if(members.len == max_roles)
-		return 1
-
-//________________________________________________
 
 /datum/faction/strike_team
 	name = "Custom Strike Team"//obviously this name is a placeholder getting replaced by the admin setting up the squad
-	required_pref = ROLE_STRIKE
 	ID = CUSTOMSQUAD
 	logo_state = "nano-logo"
+
+/datum/faction/strike_team/forgeObjectives(var/mission)
+	var/datum/objective/custom/c = new /datum/objective/custom
+	c.explanation_text = mission
+	AppendObjective(c)
 
 //________________________________________________
 
@@ -416,6 +451,8 @@ var/list/factions_with_hud_icons = list()
 	initroletype = /datum/role/syndicate_elite_commando
 	roletype = /datum/role/syndicate_elite_commando
 	logo_state = "elite-logo"
+
+//________________________________________________
 
 /datum/faction/strike_team/custom
 	name = "Custom Strike Team"

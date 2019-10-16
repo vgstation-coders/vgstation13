@@ -2,6 +2,7 @@
 	name = "Break Lightbulbs"
 	desc = "This spell breaks lightbulbs within 7 tiles of you."
 	user_type = USER_TYPE_WIZARD
+	specialization = UTILITY
 	abbreviation = "LB"
 
 	charge_max = 150
@@ -24,4 +25,3 @@
 		for(var/obj/machinery/light/L in T)
 			L.broken()
 			sleep(1)
-

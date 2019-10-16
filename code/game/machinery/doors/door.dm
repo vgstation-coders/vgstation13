@@ -60,6 +60,23 @@ var/list/all_doors = list()
 	else
 		return PROJREACT_WINDOWS
 
+/obj/machinery/door/hitby(atom/movable/AM)
+	. = ..()
+	if(.)
+		return
+	var/obj/item/thing = AM
+	if(!istype(thing))
+		return FALSE
+	if(operating || !density)
+		return FALSE
+	if(!length(thing.GetAccess()))
+		return FALSE
+	if(!check_access(thing))
+		denied()
+		return FALSE
+	open()
+	return TRUE
+
 /obj/machinery/door/Bumped(atom/AM)
 	if (ismob(AM))
 		var/mob/M = AM
@@ -91,14 +108,30 @@ var/list/all_doors = list()
 
 		if (density)
 			if (vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
-				if(istype(vehicle, /obj/structure/bed/chair/vehicle/wizmobile))
+				if(istype(vehicle, /obj/structure/bed/chair/vehicle/firebird))
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()
 			else if(!operating)
 				denied()
 
+/obj/machinery/door/proc/headbutt_check(mob/user, var/stun_time = 0, var/knockdown_time = 0, var/damage = 0) //This is going to be an airlock proc until someone makes headbutting a more official thing
+	if(prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
+			playsound(src, 'sound/effects/bang.ogg', 25, 1)
+			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
+			if(!istype(H.head, /obj/item/clothing/head/helmet))
+				H.Stun(stun_time)
+				H.Knockdown(knockdown_time)
+				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
+				if(O)
+					O.take_damage(damage) //Brute damage only
+			return
+
 /obj/machinery/door/proc/bump_open(mob/user as mob)
 	// TODO: analyze this
+	headbutt_check(user, 8, 5, 10)
+
 	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
 		return
 
@@ -122,19 +155,7 @@ var/list/all_doors = list()
 	attack_hand(user)
 
 /obj/machinery/door/attack_hand(mob/user as mob)
-	if (prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
-		var/mob/living/carbon/human/H = user
-
-		if (H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
-			playsound(src, 'sound/effects/bang.ogg', 25, 1)
-			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
-			if (!istype(H.head, /obj/item/clothing/head/helmet))
-				H.Stun(8)
-				H.Knockdown(5)
-				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
-				O.take_damage(10, 0)
-			return
-
+	headbutt_check(user, 8, 5, 10)
 
 	if(isobserver(user)) //Adminghosts don't want to toggle the door open, they want to see the AI interface
 		return
@@ -229,7 +250,7 @@ var/list/all_doors = list()
 	door_animate("opening")
 	sleep(animation_delay)
 	layer = open_layer
-	density = 0
+	setDensity(FALSE)
 	explosion_resistance = 0
 	update_icon()
 	set_opacity(0)
@@ -324,7 +345,7 @@ var/list/all_doors = list()
 	return !density
 
 /obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
-	if(istype(AM, /obj/structure/bed/chair/vehicle/wizmobile)) //Which is not 100% correct for things like windoors but it's close enough.
+	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
 	return ..()
 

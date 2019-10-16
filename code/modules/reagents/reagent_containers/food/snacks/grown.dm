@@ -13,13 +13,15 @@ var/list/special_fruits = list()
 	var/potency = -1
 	var/hydroflags = 0
 	var/datum/seed/seed
+	var/fragrance
 	icon = 'icons/obj/harvest.dmi'
-	New(newloc, newpotency)
-		if(!isnull(newpotency))
-			potency = newpotency
-		..()
-		src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
-		src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/New(newloc, newpotency)
+	if(!isnull(newpotency))
+		potency = newpotency
+	..()
+	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /proc/get_special_fruits(var/filter=HYDRO_PREHISTORIC|HYDRO_VOX)
 	. = list()
@@ -136,6 +138,7 @@ var/list/special_fruits = list()
 						to_chat(H, "<span class='danger'>You step on \the [src]'s sharp thorns!</span>")
 						if(H.feels_pain())
 							H.Knockdown(3)
+							H.Stun(3)
 					if(stinging_apply_reagents(M))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s stingers!</span>")
 						potency -= rand(1,(potency/3)+1)
@@ -267,6 +270,7 @@ var/list/special_fruits = list()
 	potency = 40
 	filling_color = "#FFEE00"
 	trash = /obj/item/weapon/corncob
+	fragrance = INCENSE_CORNOIL
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cherries
 	name = "cherries"
@@ -292,6 +296,7 @@ var/list/special_fruits = list()
 	potency = 30
 	filling_color = "#CC6464"
 	plantname = "poppies"
+	fragrance = INCENSE_POPPIES
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/harebell
 	name = "harebell"
@@ -300,6 +305,7 @@ var/list/special_fruits = list()
 	potency = 1
 	filling_color = "#D4B2C9"
 	plantname = "harebells"
+	fragrance = INCENSE_HAREBELLS
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
@@ -308,6 +314,7 @@ var/list/special_fruits = list()
 	potency = 25
 	filling_color = "#E6E6FA"
 	plantname = "moonflowers"
+	fragrance = INCENSE_MOONFLOWERS
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	name = "potato"
@@ -361,6 +368,7 @@ var/list/special_fruits = list()
 	potency = 25
 	filling_color = "#A2B5A1"
 	plantname = "cabbage"
+	fragrance = INCENSE_LEAFY
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries
 	name = "bunch of berries"
@@ -532,7 +540,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/orange
 	name = "orange"
-	desc = "It's an tangy fruit."
+	desc = "It's a tangy fruit."
 	icon_state = "orange"
 	potency = 20
 	filling_color = "#FAAD28"
@@ -555,6 +563,10 @@ var/list/special_fruits = list()
 	filling_color = "#FCF695"
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
+	fragrance = INCENSE_BANANA
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/banana/isHandgun()
+	return TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana
 	name = "bluespace banana"
@@ -564,6 +576,9 @@ var/list/special_fruits = list()
 	item_state = "bluespacebanana"
 	filling_color = "#FCF695"
 	plantname = "bluespacebanana"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/isHandgun()
+	return TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	var/obj/item/weapon/bananapeel/bluespace/peel = new
@@ -677,8 +692,8 @@ var/list/special_fruits = list()
 	plantname = "kudzu"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/icepepper
-	name = "ice-pepper"
-	desc = "It's a mutant strain of chili"
+	name = "chilly pepper"
+	desc = "It's a mutant strain of chili pepper, now cold rather than hot."
 	icon_state = "icepepper"
 	potency = 20
 	filling_color = "#66CEED"
@@ -686,7 +701,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper
 	name = "ghost pepper"
-	desc = "This pepper is hainted. And pretty spicy, too."
+	desc = "This pepper is haunted. And pretty spicy, too."
 	icon_state = "ghostpepper"
 	potency = 20
 	filling_color = "#66CEED"
@@ -746,6 +761,7 @@ var/list/special_fruits = list()
 	icon_state = "plumphelmet"
 	filling_color = "#F714BE"
 	plantname = "plumphelmet"
+	fragrance = INCENSE_BOOZE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/walkingmushroom
 	name = "walking mushroom"
@@ -797,6 +813,7 @@ var/list/special_fruits = list()
 	icon_state = "grassclump"
 	filling_color = "#32CD32"
 	plantname = "grass"
+	fragrance = INCENSE_DENSE
 	var/stacktype = /obj/item/stack/tile/grass
 	var/tile_coefficient = 0.02 // 1/50
 
@@ -874,6 +891,7 @@ var/list/special_fruits = list()
 	desc = "A thin organic film bearing seeds, held slightly aloft by internal gasses and a reservoir of chemicals."
 	icon_state = "vaporsac"
 	filling_color = "#FFFFFF"
+	fragrance = INCENSE_VAPOR
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/vaporsac/attack(mob/living/M, mob/user, def_zone, eat_override = 0)
 	pop(user)
@@ -893,6 +911,7 @@ var/list/special_fruits = list()
 		if(C.CheckSlip() != TRUE)
 			continue
 		C.Knockdown(5)
+		C.Stun(5)
 	playsound(src, 'sound/effects/bang.ogg', 10, 1)
 	qdel(src)
 

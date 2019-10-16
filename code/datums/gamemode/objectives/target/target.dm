@@ -5,6 +5,15 @@
 	var/auto_target = TRUE //Whether we pick a target automatically on PostAppend()
 	name = ""
 
+/datum/objective/target/delayed
+	var/delay = 10 MINUTES
+
+/datum/objective/target/delayed/proc/PostDelay()
+
+/datum/objective/target/delayed/ShuttleDocked(state)
+	if(state == 1)
+		PostDelay()
+
 /datum/objective/target/New(var/text,var/auto_target = TRUE, var/mob/user = null)
 	src.auto_target = auto_target
 	if(text)
@@ -13,6 +22,14 @@
 /datum/objective/target/PostAppend()
 	if(auto_target)
 		return find_target()
+	return TRUE
+
+/datum/objective/target/delayed/PostAppend()
+	if(emergency_shuttle.location || emergency_shuttle.direction == 2)
+		PostDelay() //If the shuttle is docked or en route to centcomm, no delay
+		return TRUE
+	spawn(delay)
+		PostDelay()
 	return TRUE
 
 /datum/objective/target/proc/find_target()
@@ -37,8 +54,13 @@
 			break
 	return FALSE
 
-/datum/objective/target/proc/set_target(var/datum/mind/possible_target)
+/datum/objective/target/proc/is_valid_target(var/datum/mind/possible_target)
 	if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && (possible_target.current.stat != DEAD) && !(possible_target.assigned_role in bad_assassinate_targets))
+		return TRUE
+	return FALSE
+
+/datum/objective/target/proc/set_target(var/datum/mind/possible_target)
+	if(is_valid_target(possible_target))
 		target = possible_target
 		explanation_text = format_explanation()
 		return TRUE

@@ -1,7 +1,7 @@
 /datum/role/revolutionary
 	name = REV
 	id = REV
-	required_pref = ROLE_REV
+	required_pref = REV
 	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
 	logo_state = "rev-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND,GREET_LATEJOIN,GREET_CONVERTED,GREET_PROVOC_CONVERTED,GREET_REVSQUAD_CONVERTED,GREET_ADMINTOGGLE)
@@ -48,12 +48,14 @@
 
 /datum/role/revolutionary/New()
 	..()
-	wikiroute = role_wiki[ROLE_REV]
+	wikiroute = role_wiki[REV]
 
 /datum/role/revolutionary/leader
 	name = HEADREV
 	id = HEADREV
 	logo_state = "rev_head-logo"
+
+	stat_datum_type = /datum/stat/role/revolutionary/leader
 
 /datum/role/revolutionary/leader/OnPostSetup()
 	.=..()

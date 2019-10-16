@@ -3,7 +3,7 @@
 /datum/faction/revolution
 	name = "Revolutionaries"
 	ID = REVOLUTION
-	required_pref = ROLE_REV
+	required_pref = REV
 	initial_role = HEADREV
 	late_role = REV
 	desc = "Viva!"
@@ -11,7 +11,7 @@
 	hud_icons = list("rev-logo", "rev_head-logo")
 	initroletype = /datum/role/revolutionary/leader
 	roletype = /datum/role/revolutionary
-	var/win_shuttle = FALSE
+	playlist = "nukesquad"
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)
@@ -45,7 +45,7 @@
 /datum/faction/revolution/forgeObjectives()
 	var/list/heads = get_living_heads()
 	for(var/datum/mind/head_mind in heads)
-		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
+		var/datum/objective/target/assassinate/orexile/A = new(auto_target = FALSE)
 		if(A.set_target(head_mind))
 			AppendObjective(A, TRUE) // We will have more than one kill objective
 
@@ -84,17 +84,17 @@
 	for(var/datum/mind/head_mind in heads)
 		var/mob/M = head_mind.current
 		if (M)
-			return {"[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
+			dat += {"[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
 				 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
 				 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
 		else
-			return {"[name] [head_mind.name]/[M.key]<b><font color=red> - (DESTROYED)</font></b>
+			dat += {"[name] [head_mind.name]/[M.key]<b><font color=red> - (DESTROYED)</font></b>
 				 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
 				 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
+	return dat
 
 #define ALL_HEADS_DEAD 1
 #define ALL_REVS_DEAD 2
-#define SHUTTLE_LEFT 3
 
 /datum/faction/revolution/check_win()
 	var/gameactivetime = world.time - ticker.gamestart_time*10 //gamestart_time is expressed in seconds, not deciseconds
@@ -102,40 +102,56 @@
 		if(!(gameactivetime % 60))
 			message_admins("The revolution faction exists. [round(((5 MINUTES) - gameactivetime)/60)] minutes until win conditions begin checking.")
 		return //Don't bother checking for win before 5min
-
-	// -- 1. Did the shuttle leave ?
-	if (win_shuttle)
-		return end(SHUTTLE_LEFT)
+	if(stage <= FACTION_DEFEATED)
+		return
 
 	// -- 2. Are all the heads dead ?
-	var/list/total_heads = get_living_heads()
-	var/incapacitated_heads = 0
+	var/remaining_targets = objective_holder.objectives.len
+	for(var/datum/objective/objective in objective_holder.GetObjectives())
+		if(objective.IsFulfilled())
+			remaining_targets--
 
-	for (var/datum/mind/M in total_heads)
-		if (M.current.isDead() || M.current.z != map.zMainStation)
-			incapacitated_heads++
+	if(stage < FACTION_ENDGAME)
+		var/living_revs = 0
+		var/total_valid_living = 0
+		for (var/mob/living/L in player_list)
+			if (issilicon(L)||isborer(L))
+				continue
+			if (L.stat == DEAD)
+				continue
+			if (isrev(L))
+				living_revs++
+			total_valid_living++
+		var/threshold = 50 //the percentage of living revs at which point the announcement is triggered
+		if(living_revs > 0 && total_valid_living > 0)
+			var/revs_percentage = round((living_revs * 100)/total_valid_living)
+			if(revs_percentage >= threshold)
+				stage(FACTION_ENDGAME)
+				command_alert(/datum/command_alert/revolution)
 
-	if (incapacitated_heads >= total_heads.len)
-		return end(ALL_HEADS_DEAD)
+	switch(remaining_targets)
+		if(0)
+			if(stage < FACTION_VICTORY)
+				stage(FACTION_VICTORY)
+				return end(ALL_HEADS_DEAD)
+		if(1)
+			if(stage < FACTION_ENDGAME)
+				stage(FACTION_ENDGAME)
+				command_alert(/datum/command_alert/revolution)
 
+/datum/faction/revolution/process()
+	..()
+	if(stage >= FACTION_ENDGAME)
+		var/anyone = FALSE
+		for(var/datum/role/R in members)
+			if(!R.antag.current.stat)
+				anyone = TRUE //If one rev is still not incapacitated
+		if(!anyone)
+			stage(FACTION_DEFEATED)
+			command_alert(/datum/command_alert/revolutiontoppled)
 
 // Called on arrivals and emergency shuttle departure.
 /hook_handler/revs
-
-/hook_handler/revs/proc/OnEmergencyShuttleDeparture(var/list/args)
-	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
-	if (!istype(R))
-		return FALSE
-	for(var/datum/mind/M in get_living_heads())
-		var/mob/living/L = M.current
-		var/turf/T = get_turf(L)
-		if(istype(T.loc, /area/shuttle/escape/centcom))
-			R.win_shuttle = TRUE
-			return TRUE
-		else if(istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
-			R.win_shuttle = TRUE
-			return TRUE
-	return FALSE
 
 /hook_handler/revs/proc/OnArrival(var/list/args)
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
@@ -145,7 +161,7 @@
 	ASSERT(args["rank"])
 	var/mob/living/L = args["character"]
 	if (args["rank"] in command_positions)
-		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
+		var/datum/objective/target/assassinate/orexile/A = new(auto_target = FALSE)
 		if(A.set_target(L.mind))
 			R.AppendObjective(A, TRUE) // We will have more than one kill objective
 
@@ -157,5 +173,3 @@
 			to_chat(world, "<font size = 3><b>The revolution has won!</b></font><br/><font size = 2>All heads are either dead or have fled the station!</font>")
 		if (ALL_REVS_DEAD)
 			to_chat(world, "<font size = 3><b>The crew has won!</b></h1><br/><font size = 2>All revolutionaries are either dead or have fled the station!</font>")
-		if (SHUTTLE_LEFT)
-			to_chat(world, "<font size = 3><b>Revolution minor victory!</b></font><br/><font size = 2>The heads called the shuttle to leave the station!</font>")

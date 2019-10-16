@@ -2,6 +2,7 @@
 	name = "Fire Breath"
 	desc = "This spell allows you to spew a plume of fire."
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 
 	proj_type = /obj/item/projectile/fire_breath
 

@@ -54,6 +54,13 @@
 	var/obj/item/device/station_map/holomap_device = null // Our holomap device.
 	var/holo_target = "show_map" // Our holomap target.
 
+	var/list/synthable_chems = list(
+		"Tricordrazine" = TRICORDRAZINE,
+		"Coffee" = COFFEE,
+		"Salt" = SODIUMCHLORIDE,
+		"Smoke" = PAISMOKE,
+	)
+
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
 	change_sight(removing = BLIND)
 	canmove = FALSE
@@ -75,6 +82,7 @@
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_GUTTER, 1)
 
+	src.verbs.Remove(/mob/living/silicon/verb/state_laws)
 	..()
 
 /mob/living/silicon/pai/Login()
@@ -331,12 +339,16 @@
 		var/obj/O = card.loc
 		if(O.integratedpai == card)
 			O.pAImove(src, dir)
+	if (holomap_device)
+		holomap_device.update_holomap()
 
 /atom/proc/attack_pai(mob/user as mob)
 	return
 
 /mob/living/silicon/pai/teleport_to(var/atom/A)
 	card.forceMove(get_turf(A))
+	if (holomap_device)
+		holomap_device.update_holomap()
 
 /mob/living/silicon/pai/hasHUD(var/hud_kind)
 	switch(hud_kind)

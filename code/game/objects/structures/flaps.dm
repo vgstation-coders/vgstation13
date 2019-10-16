@@ -45,7 +45,7 @@
 		return prob(60)
 
 	var/obj/structure/bed/B = mover
-	if (istype(mover, /obj/structure/bed) && B.is_locking(B.lock_type))//if it's a bed/chair and someone is buckled, it will not pass
+	if (istype(mover, /obj/structure/bed) && B.is_locking(B.mob_lock_type))//if it's a bed/chair and someone is buckled, it will not pass
 		return 0
 
 	else if(isliving(mover)) // You Shall Not Pass!

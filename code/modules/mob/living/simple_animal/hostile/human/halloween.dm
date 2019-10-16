@@ -200,12 +200,12 @@
 	var/list/close_mobs = list()
 	var/list/dist_mobs = list()
 	for(var/mob/living/carbon/C in oview(1, src))
-		if(!C.vampire_affected())
+		if(C.vampire_affected() < 0)
 			continue
 		if(istype(C))
 			close_mobs |= C
 	for(var/mob/living/carbon/C in oview(3, src))
-		if(!C.vampire_affected())
+		if(C.vampire_affected() < 0)
 			continue
 		if(istype(C))
 			dist_mobs |= C
@@ -222,6 +222,7 @@
 		C.Stun(distance_value)
 		if(distance_value > 1)
 			C.Knockdown(distance_value)
+			C.Stun(distance_value)
 		C.stuttering += 5+distance_value *2
 		if(!C.blinded)
 			C.blinded = 1
@@ -246,7 +247,7 @@
 			var/mob/living/carbon/human/H = C
 			if(H.earprot())
 				continue
-		if(!C.vampire_affected())
+		if(C.vampire_affected() < 0)
 			continue
 		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
 		C.Knockdown(8)
@@ -255,7 +256,7 @@
 		C.Stun(8)
 		C.Jitter(150)
 	for(var/obj/structure/window/W in view(4, src))
-		W.Destroy(brokenup = 1)
+		W.shatter()
 	playsound(src.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)

@@ -116,7 +116,7 @@
 
 
 /mob/living/silicon/pai/Topic(href, href_list)
-	..()
+	. = ..()
 
 	if(href_list["priv_msg"])	// Admin-PMs were triggering the interface popup. Hopefully this will stop it.
 		return
@@ -599,11 +599,12 @@ Target Machine: "}
 /mob/living/silicon/pai/proc/softwareChem()
 	var/dat = "<h3>Chemical Synthesizer</h3>"
 	if(!charge)
-		dat += {"Available Chemicals:<br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=tricordrazine'>Tricordrazine</a> <br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=coffee'>Coffee</a> <br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=sodiumchloride'>Salt</a> <br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=paismoke'>Smoke</a> <br>"}
+		dat += "Default Chemicals:<br>"
+		for(var/chem in synthable_chems)
+			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=[synthable_chems[chem]]'>[chem]</a> <br>"
+		if(SOFT_MS in software)
+			dat += "<br>Medical Supplement Chemicals:<br>"
+			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=[SPACEACILLIN]'>Spaceacilin</a> <br>"
 	else
 		dat += "Charging... [charge]u ready.<br><br>Deploying at 15u."
 	return dat

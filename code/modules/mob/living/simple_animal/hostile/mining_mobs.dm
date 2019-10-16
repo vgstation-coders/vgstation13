@@ -16,13 +16,12 @@
 	response_help = "pokes"
 	response_disarm = "shoves"
 	response_harm = "strikes"
-	status_flags = 0
 	size = SIZE_BIG
 	a_intent = I_HURT
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
 	held_items = list()
-	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|PACIFIABLE
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 
 /mob/living/simple_animal/hostile/asteroid/Aggro()
 	..()
@@ -471,7 +470,8 @@ obj/item/asteroid/basilisk_hide/New()
 	var/turftype = get_turf(src)
 	if(istype(turftype, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = turftype
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+			M.GetDrilled()
 	spawn(20)
 		Trip()
 
@@ -491,6 +491,7 @@ obj/item/asteroid/basilisk_hide/New()
 /obj/effect/goliath_tentacle/proc/Trip()
 	for(var/mob/living/M in src.loc)
 		M.Knockdown(5)
+		M.Stun(5)
 		visible_message("<span class='warning'>\The [src] knocks \the [M] down!</span>")
 	qdel(src)
 
@@ -516,8 +517,8 @@ obj/item/asteroid/basilisk_hide/New()
 			return
 		if(C.clothing_flags & GOLIATHREINFORCE)
 			C.hidecount ++
-			if(current_armor.["melee"] < 90)
-				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
+			if(current_armor["melee"] < 90)
+				current_armor["melee"] = min(current_armor["melee"] + 10, 90)
 				to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>")
 				qdel(src)
 			else
@@ -771,7 +772,7 @@ obj/item/asteroid/basilisk_hide/New()
 	melee_damage_lower = 35
 	melee_damage_upper = 50
 	ranged = 1
-	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|UNPACIFIABLE
 	var/charging = 0
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/New()
@@ -786,7 +787,7 @@ obj/item/asteroid/basilisk_hide/New()
 		for(var/i = 0 to rand(24,46))
 			new possessed_ore(src.loc)
 
-	new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
+	new /obj/item/weapon/vinyl/filk(src.loc) //The music of the asteroid~
 
 	for(var/i = 0 to rand(5,13))
 		new /obj/item/weapon/strangerock(src.loc, get_random_find())

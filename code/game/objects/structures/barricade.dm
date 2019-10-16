@@ -39,7 +39,7 @@
 /obj/structure/window/barricade/healthcheck(var/mob/M, var/sound = 1)
 
 	if(health <= 0)
-		Destroy()
+		qdel(src)
 
 //Note : We don't want glass knocking sounds to play
 /obj/structure/window/barricade/attack_hand(mob/user as mob)
@@ -104,7 +104,7 @@
 		return !density
 	return 1
 
-/obj/structure/window/barricade/Destroy()
+/obj/structure/window/barricade/Destroy(var/brokenup)
 
 	setDensity(FALSE) //Sanity while we do the rest
 	getFromPool(materialtype, loc, sheetamount)

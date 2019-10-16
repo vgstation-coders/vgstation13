@@ -81,16 +81,22 @@
 		if(user)
 			to_chat(user, "<span class = 'warning'>\The [A] is not hot enough.</span>")
 		return
+	else if(!user)
+		visible_message("<span class='notice'>\The [src] begins heating up.</span>")
 	if(user)
 		to_chat(user, "<span class = 'notice'>You heat \the [src].</span>")
-	if(user && !do_after(user, A, 4 SECONDS/(temperature/material_type.melt_temperature)))
+	if(iswelder(A) && user)
+		var/obj/item/weapon/weldingtool/W = A
+		if(!W.do_weld(user, src, 4 SECONDS/(temperature/material_type.melt_temperature), 5))
+			return
+	else if(user && !do_after(user, A, 4 SECONDS/(temperature/material_type.melt_temperature)))
 		return
 	malleable = TRUE
 	spawn(2 MINUTES)
 		malleable = FALSE
 
 
-/obj/item/smithing_placeholder/proc/strike(atom/A, mob/user)
+/obj/item/smithing_placeholder/proc/strike(var/obj/A, mob/user)
 	if(!malleable)
 		to_chat(user, "<span class = 'warning'>\The [src] has gone cool. It can not be manipulated in this state.</span>")
 		return
@@ -99,7 +105,7 @@
 		return
 	playsound(loc, 'sound/items/hammer_strike.ogg', 50, 1)
 	if(istype(A,/obj/item/weapon/hammer))
-		strikes++
+		strikes+=max(1, round(A.quality/2))
 	else if(istype(A,/obj/item/weapon/storage/toolbox))
 		strikes+=0.25
 	if(strikes == strikes_required)

@@ -37,6 +37,7 @@ var/global/list/pda_app_menus = list(
 	desc = "Set the frequency to that of a desk bell to be notified anytime someone presses it."
 	price = 10
 	menu = PDA_APP_RINGER
+	icon = "pda_bell"
 	var/frequency = 1457	//	1200 < frequency < 1600 , always end with an odd number.
 	var/status = 1			//	0=off 1=on
 
@@ -45,6 +46,7 @@ var/global/list/pda_app_menus = list(
 	name = "PDA Flashlight Enhancer"
 	desc = "Slightly increases the luminosity of your PDA's flashlight."
 	price = 60
+	icon = "pda_flashlight"
 
 /datum/pda_app/light_upgrade/onInstall()
 	..()
@@ -57,8 +59,8 @@ var/global/list/pda_app_menus = list(
 	desc = "Spam messages won't ring your PDA anymore. Enjoy the quiet."
 	price = 30
 	menu = PDA_APP_SPAMFILTER
+	icon = "pda_mail"
 	var/function = 1	//0=do nothing 1=conceal the spam 2=block the spam
-
 
 /datum/pda_app/balance_check
 	name = "Virtual Wallet and Balance Check"
@@ -85,6 +87,26 @@ var/global/list/pda_app_menus = list(
 	..()
 
 /datum/pda_app/station_map
+	name = "Station Holo-Map ver. 2.0"
+	desc = "Displays a holo-map of the station. Useful for finding your way."
+	price = 50
+	menu = PDA_APP_STATIONMAP
+	icon = "pda_map"
+	var/obj/item/device/station_map/holomap = null
+
+/datum/pda_app/station_map/onInstall(var/obj/item/device/pda/device)
+	..()
+	if (istype(device))
+		holomap = new(device)
+
+/datum/pda_app/station_map/Destroy()
+	if (holomap)
+		qdel(holomap)
+		holomap = null
+	..()
+
+/* Old Station Map Stuff
+/datum/pda_app/station_map
 	name = "Station Map"
 	desc = "Displays a minimap of the station. You'll find a marker at your location. Place more markers using coordinates."
 	price = 50
@@ -102,6 +124,7 @@ var/global/list/pda_app_menus = list(
 	var/x = 1
 	var/y = 1
 	var/num = 0
+*/
 
 ///////////SNAKEII//////////////////////////////////////////////////////////////
 

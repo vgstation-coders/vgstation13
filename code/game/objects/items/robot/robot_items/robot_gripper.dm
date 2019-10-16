@@ -4,6 +4,7 @@
 	var/obj/item/wrapped = null // Item currently being held.
 	var/list/can_hold = list() //Has a list of items that it can hold.
 	var/list/blacklist = list() //This is a list of items that can't be held even if their parent is whitelisted.
+	var/list/valid_containers = list()
 	var/force_holder = null
 
 /obj/item/weapon/gripper/proc/grip_item(obj/item/I as obj, mob/user, var/feedback = TRUE)
@@ -165,9 +166,12 @@
 
 	else if(isitem(target))//Check that we're not pocketing a mob.
 		var/obj/item/I = target
-		if(!isturf(target.loc))//That the item is not in a container.
-			return
-		grip_item(I, user, 1)//And finally.
+		if(isturf(target.loc))
+			grip_item(I, user, 1)
+		else if(is_type_in_list(target.loc,valid_containers))
+			var/obj/O = target.loc
+			grip_item(I, user, 1)
+			O.update_icon()//updating fancy containers
 
 	else if(isrobot(target))//Robots repairing themselves? What can go wrong.
 		var/mob/living/silicon/robot/A = target
@@ -189,6 +193,11 @@
 		/obj/item/weapon/reagent_containers/blood,
 		)
 
+	valid_containers = list(
+		/obj/item/weapon/storage/fancy/vials,
+		/obj/item/weapon/storage/lockbox/vials,
+		)
+
 /obj/item/weapon/gripper/organ //Used to handle organs.
 	name = "organ gripper"
 	icon_state = "gripper-medical"
@@ -208,6 +217,7 @@
 	can_hold = list(
 		/obj/item/weapon/reagent_containers/food/drinks,
 		/obj/item/clothing/head/fedora,
+		/obj/item/weapon/broken_bottle,
 		/obj/item/trash
 		)
 

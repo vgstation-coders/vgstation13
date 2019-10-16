@@ -95,8 +95,14 @@
 		ini_dir = dir
 
 /obj/structure/window/full/AltClick(var/mob/user)
-	var/turf/T = get_turf(src)
-	T.AltClick(user)
+	. = ..()
+	var/turf/T = loc
+	if (istype(T))
+		if (user.listed_turf == T)
+			user.listed_turf = null
+		else
+			user.listed_turf = T
+			user.client.statpanel = T.name
 
 /obj/structure/window/full/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/full/reinforced/clockwork, BRASS_FULL_WINDOW_GLOW)
@@ -107,7 +113,7 @@
 
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
-	desc = "A window with a rod matrice. It looks more solid than the average window."
+	desc = "A window with a rod matrix. It looks more solid than the average window."
 	icon_state = "rwindow0"
 	base_state = "rwindow"
 	sheet_type = /obj/item/stack/sheet/glass/rglass
@@ -141,7 +147,7 @@
 
 /obj/structure/window/full/reinforced/plasma
 	name = "reinforced plasma window"
-	desc = "A window made out of a plasma-silicate alloy and a rod matrice. It looks hopelessly tough to break and is most likely nigh fireproof."
+	desc = "A window made out of a plasma-silicate alloy and a rod matrix. It looks hopelessly tough to break and is most likely nigh fireproof."
 	icon_state = "plasmarwindow0"
 	base_state = "plasmarwindow"
 	shardtype = /obj/item/weapon/shard/plasma
@@ -160,7 +166,7 @@
 /obj/structure/window/full/reinforced/tinted
 
 	name = "tinted window"
-	desc = "A window with a rod matrice. Its surface is completely tinted, making it opaque. Why not a wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
 	icon_state = "twindow0"
 	base_state = "twindow"
 	opacity = 1
@@ -169,7 +175,7 @@
 /obj/structure/window/full/reinforced/tinted/frosted
 
 	name = "frosted window"
-	desc = "A window with a rod matrice. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
 	icon_state = "fwindow0"
 	base_state = "fwindow"
 	health = 30

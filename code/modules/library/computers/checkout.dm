@@ -19,8 +19,8 @@
 
 	var/bibledelay = 0 // LOL NO SPAM (1 minute delay) -- Doohl
 	var/booklist
-
-	machine_flags = EMAGGABLE
+	pass_flags = PASSTABLE
+	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/computer/library/checkout/attack_hand(var/mob/user as mob)
 	if(..())
@@ -330,12 +330,14 @@
 						B.name = R.bible_name
 						B.my_rel = R
 
-					else if (ticker && (ticker.Bible_icon_state && ticker.Bible_item_state)) // No faith
-						B.icon_state = ticker.Bible_icon_state
-						B.item_state = ticker.Bible_item_state
-						B.name = ticker.Bible_name
-						B.my_rel = ticker.chap_rel
-
+					else if (ticker.religions.len) // No faith
+						var/datum/religion/R = input(usr, "Which holy book?") as anything in ticker.religions
+						if(!R.holy_book)
+							return
+						B.icon_state = R.holy_book.icon_state
+						B.item_state = R.holy_book.item_state
+						B.name = R.bible_name
+						B.my_rel = R
 					B.forceMove(src.loc)
 
 					spawn(60)

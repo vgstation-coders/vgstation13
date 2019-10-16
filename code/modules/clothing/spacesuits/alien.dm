@@ -1,30 +1,93 @@
-/obj/item/clothing/head/helmet/space/unathi
+/obj/item/clothing/head/helmet/space/unathi/breacher
+	name = "unathi breacher helmet"
+	desc = "Some sort of ancient Unathi power helmet with ridiculous armor plating."
+	armor = list(melee = 75, bullet = 75, laser = 75,energy = 75, bomb = 75, bio = 100, rad = 90)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	icon_state = "unathi_breacher"
+	item_state = "rig_helm"
+	_color = "unathi_breacher"
+	clothing_flags = PLASMAGUARD
+	
+/obj/item/clothing/suit/space/unathi/breacher
+	name = "unathi breacher armor"
+	desc = "Some sort of ancient Unathi power suit with ridiculous armor plating."
+	icon_state = "unathi_breacher"
+	item_state = "rig_suit"
+	slowdown = HARDSUIT_SLOWDOWN_BULKY
+	armor = list(melee = 75, bullet = 75, laser = 75,energy = 75, bomb = 75, bio = 100, rad = 90)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+	)
+	clothing_flags = PLASMAGUARD
+
+/obj/item/clothing/head/helmet/space/unathi/battle
+	name = "unathi battle helmet"
+	desc = "Typical gear for the modern Unathi soldier."
+	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	icon_state = "unathi_battle"
+	item_state = "syndicate-helm-black"
+	_color = "unathi_battle"
+
+/obj/item/clothing/suit/space/unathi/battle
+	name = "unathi battle armor"
+	desc = "Typical Unathi battle suit. Looks like a fish, moves like a fish, steers like a cow."
+	icon_state = "unathi_battle"
+	item_state = "syndicate-black"
 	armor = list(melee = 40, bullet = 30, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 50)
-	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	var/up = 0 //So Unathi helmets play nicely with the weldervision check.
-	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	species_restricted = list("Unathi")
-
-/obj/item/clothing/head/helmet/space/unathi/helmet_cheap
-	name = "NT breacher helmet"
-	desc = "Hey! Watch it with that thing! It's a knock-off of a Unathi battle-helm, and that spike could put someone's eye out."
-	icon_state = "unathi_helm_cheap"
-	item_state = "unathi_helm_cheap"
-	_color = "unathi_helm_cheap"
-
-/obj/item/clothing/suit/space/unathi
-	armor = list(melee = 40, bullet = 30, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 50)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd)
-	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_restricted = list("Unathi")
-
-/obj/item/clothing/suit/space/unathi/rig_cheap
-	name = "NT breacher chassis"
-	desc = "A cheap NT knock-off of a Unathi battle-rig. Looks like a fish, moves like a fish, steers like a cow."
-	icon_state = "rig-unathi-cheap"
-	item_state = "rig-unathi-cheap"
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+	)
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 
+/obj/item/clothing/suit/space/unathi/soghun
+	name = "unathi soghun armor"
+	desc = "A Unathi suit designed after ancient soghun outfits."
+	icon_state = "unathi_soghun"
+	item_state = "space_suit_syndicate"
+	armor = list(melee = 40, bullet = 30, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 50)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+	)
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 
 // Vox space gear (vaccuum suit, low pressure armor)
 // Can't be equipped by any other species due to bone structure and vox cybernetics.
@@ -38,10 +101,12 @@
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/vox
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 30, bio = 30, rad = 30)
 	species_restricted = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/vox/pressure
 	name = "alien helmet"
@@ -138,20 +203,20 @@
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //They're like those five-toed shoes except for vox and with only three toes
 
-/obj/item/clothing/shoes/magboots/vox/toggle()
+/obj/item/clothing/shoes/magboots/vox/togglemagpulse()
 	//set name = "Toggle Floor Grip"
 	if(usr.isUnconscious())
 		return
-	if(src.magpulse)
-		src.clothing_flags &= ~NOSLIP
-		src.magpulse = 0
-		src.slowdown = NO_SLOWDOWN
+	if(clothing_flags & MAGPULSE)
+		clothing_flags &= ~(NOSLIP | MAGPULSE)
+		slowdown = NO_SLOWDOWN
 		to_chat(usr, "You retract the razor-sharp talons of your boots.")
+		return 0
 	else
-		src.clothing_flags |= NOSLIP
-		src.magpulse = 1
-		src.slowdown = mag_slow
+		clothing_flags |= (NOSLIP | MAGPULSE)
+		slowdown = mag_slow
 		to_chat(usr, "You extend the razor-sharp talons of your boots.")
+		return 1
 
 
 // Vox Trader -- Same stats as civ gear, but looks like raiders. ///////////////////////////////
@@ -209,7 +274,7 @@
 // -- Mushroom,traders --
 
 /obj/item/clothing/suit/space/vox/civ/mushmen
-	name = "mushmen helmet"
+	name = "mushmen pressure suit"
 	icon_state = "mushroom-pressure"
 	item_state = "mushroom-pressure"
 	desc = "It looks like a deformed vox pressure suit, fit for mushroom people."
@@ -222,22 +287,21 @@
 	item_state = "mushroom-pressure"
 	desc = "It looks like a deformed vox pressure helmet, fit for mushroom people."
 	species_restricted = list(MUSHROOM_SHAPED)
-	var/up = FALSE
+	var/up = 0
 
 /obj/item/clothing/head/helmet/space/vox/civ/mushmen/attack_self(var/mob/user)
 	toggle(user)
 
 /obj/item/clothing/head/helmet/space/vox/civ/mushmen/proc/toggle(var/mob/user)
 	if(!user.incapacitated())
-		if(!src.up)
-			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incomming light.</span>")
-			user.overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
+		if(src.up)
+			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incoming light.</span>")
 		else
-			to_chat(user, "<span class='notice'>You disengage \the [src] light protection visor.</span>")
+			to_chat(user, "<span class='notice'>You disengage \the [src]'s light protection visor.</span>")
 		src.up = !src.up
 
 /obj/item/clothing/head/helmet/space/vox/civ/mushmen/islightshielded()
-	return up
+	return !up
 
 
 /datum/action/item_action/dim_lighting
@@ -250,7 +314,7 @@
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers."
 	icon_state = "vox-civ-assistant"
 	item_state = "vox-pressure-normal"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 
@@ -434,7 +498,7 @@
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for medical personnel."
 	icon_state = "vox-civ-medical"
 	item_state = "vox-pressure-medical"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical
@@ -479,7 +543,7 @@
 	name = "vox paramedic pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics."
 	icon_state = "vox-civ-paramedic"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
 	name = "vox paramedic pressure helmet"
@@ -487,13 +551,13 @@
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for paramedics."
 
 /obj/item/clothing/suit/space/vox/civ/medical/cmo
-	name = "vox cmo pressure suit"
+	name = "vox CMO pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the CMO."
 	icon_state = "vox-civ-cmo"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
-	name = "vox cmo pressure helmet"
+	name = "vox CMO pressure helmet"
 	icon_state = "vox-civ-cmo"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for the CMO."
 
@@ -504,7 +568,7 @@
 	icon_state = "vox-civ-security"
 	item_state = "vox-pressure-security"
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/security
@@ -522,7 +586,7 @@
 	desc = "A modernized pressure suit for Vox who've decided to work for the winning team."
 	icon_state = "vox-pressure-normal"
 	item_state = "vox-pressure-normal"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 10)
 	species_restricted = list(VOX_SHAPED)
 
@@ -563,7 +627,7 @@
 	desc = "A modernized pressure suit for Vox who've decided to work for the winning team.  This one's for medical personnel."
 	icon_state = "vox-pressure-medical"
 	item_state = "vox-pressure-medical"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
 
 /obj/item/clothing/head/helmet/space/vox/civ/old/medical
 	name = "vox medical pressure helmet"
@@ -577,7 +641,7 @@
 	icon_state = "vox-pressure-security"
 	item_state = "vox-pressure-security"
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
+	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
 
 /obj/item/clothing/head/helmet/space/vox/civ/old/security
 	name = "vox security pressure helmet"
@@ -597,7 +661,8 @@
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	body_parts_covered = FULL_HEAD|IGNORE_INV
-	species_restricted = list("Grey")
+	species_restricted = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/space/grey
 	name = "grey pressure suit"
@@ -605,7 +670,8 @@
 	item_state = "grey-pressure-suit"
 	desc = "A strange suit comprised of a series of tubes. Despite looking like a decent wind could tear it apart, it is surprisingly durable. Too thin for anything but a Grey to wear it."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
-	species_restricted = list("Grey")
+	species_restricted = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED)
 
 
 //Martian Fishbowl
@@ -649,3 +715,58 @@
 	..()
 	if(tank)
 		to_chat(user, "<span class = 'notice'>It has a [bicon(tank)][tank] attached to the back.</span>")
+		
+		
+/obj/item/clothing/head/helmet/space/skrell/black
+	name = "skrell combat helmet"
+	desc = "a military Skrell space helmet."
+	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
+	species_restricted = list(SKRELL_SHAPED)
+	species_fit = list(SKRELL_SHAPED)
+	icon_state = "skrell_black"
+	item_state = "syndicate-helm-black"
+	_color = "skrell_black"
+
+/obj/item/clothing/suit/space/skrell/black
+	name = "skrell combat suit"
+	desc = "a military Skrell space suit."
+	icon_state = "skrell_black"
+	item_state = "syndicate-black"
+	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
+	species_restricted = list(SKRELL_SHAPED)
+	species_fit = list(SKRELL_SHAPED)
+	allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+	)
+	slowdown = HARDSUIT_SLOWDOWN_LOW
+	
+/obj/item/clothing/head/helmet/space/skrell/white
+	name = "skrell space helmet"
+	desc = "a civilian Skrell space helmet."
+	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
+	species_restricted = list(SKRELL_SHAPED)
+	species_fit = list(SKRELL_SHAPED)
+	icon_state = "skrell_white"
+	item_state = "medical_helm"
+	_color = "skrell_white"
+
+/obj/item/clothing/suit/space/skrell/white
+	name = "skrell space suit"
+	desc = "a civilian Skrell space suit."
+	icon_state = "skrell_white"
+	item_state = "medical_hardsuit"
+	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
+	species_restricted = list(SKRELL_SHAPED)
+	species_fit = list(SKRELL_SHAPED)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/)
+	slowdown = HARDSUIT_SLOWDOWN_LOW

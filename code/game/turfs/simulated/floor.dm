@@ -69,7 +69,7 @@ var/list/wood_icons = list("wood","wood-broken")
 		if(1.0)
 			src.ChangeTurf(get_underlying_turf())
 		if(2.0)
-			switch(pick(1,2;75,3))
+			switch(pick(1,75;2,3))
 				if (1)
 					src.ReplaceWithLattice()
 					if(prob(33))
@@ -540,7 +540,7 @@ turf/simulated/floor/update_icon()
 		playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
 
 		return
-	else if(isscrewdriver(C))
+	else if(C.is_screwdriver(user))
 		if(is_wood_floor())
 			if(broken || burnt)
 				return
@@ -627,14 +627,14 @@ turf/simulated/floor/update_icon()
 		var/obj/item/weapon/weldingtool/welder = C
 		if(welder.isOn() && (is_plating()))
 			if(broken || burnt)
-				if(welder.remove_fuel(0,user))
+				if(welder.remove_fuel(1,user))
 					to_chat(user, "<span class='warning'>You fix some dents on the broken plating.</span>")
 					playsound(src, 'sound/items/Welder.ogg', 80, 1)
 					icon_state = "plating"
 					burnt = 0
 					broken = 0
 				else
-					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+					return
 
 /turf/simulated/floor/Entered(var/atom/movable/AM)
 	.=..()
@@ -676,9 +676,10 @@ turf/simulated/floor/update_icon()
 
 /turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
 	var/obj/effect/overlay/puddle/P = is_wet()
-	if(P.wet > slipperiness)
-		return
-	qdel(P)
+	if(P)
+		if(P.wet > slipperiness)
+			return
+		qdel(P)
 
 
 /turf/simulated/floor/attack_construct(mob/user as mob)
@@ -707,6 +708,6 @@ turf/simulated/floor/update_icon()
 /turf/simulated/floor/adjust_slowdown(mob/living/L, current_slowdown)
 	//Phazon floors make movement faster
 	if(floor_tile)
-		return floor_tile.adjust_slowdown(L, current_slowdown)
+		current_slowdown = floor_tile.adjust_slowdown(L, current_slowdown)
 
 	return ..()

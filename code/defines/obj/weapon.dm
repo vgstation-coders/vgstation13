@@ -130,8 +130,14 @@
 	attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
 
 /obj/item/weapon/disk
-	name = "disk"
-	icon = 'icons/obj/items.dmi'
+	name = "Corrupted Data Disk"
+	desc = "The data on this disk has decayed, and cannot be read by any computer anymore."
+	icon = 'icons/obj/datadisks.dmi'
+	icon_state = "disk"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/datadisks.dmi', "right_hand" = 'icons/mob/in-hand/right/datadisks.dmi')
+	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
+	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy
@@ -194,6 +200,7 @@
 	var/dispenser = 0
 	var/throw_sound = 'sound/weapons/whip.ogg'
 	var/trip_prob = 90
+	ignore_blocking = IGNORE_SOME_SHIELDS
 
 /obj/item/weapon/legcuffs/bolas/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	user.throw_item(target)
@@ -394,6 +401,12 @@
 	w_type = RECYK_METAL
 	var/armed = 0
 	var/obj/item/weapon/grenade/iedcasing/IED = null
+	var/image/ied_overlay
+
+/obj/item/weapon/legcuffs/beartrap/New()
+	..()
+	ied_overlay = image('icons/obj/items.dmi')
+	ied_overlay.icon_state = "beartrap_ied"
 
 /obj/item/weapon/legcuffs/beartrap/armed
 	armed = 1
@@ -440,15 +453,17 @@
 					log_game(log_str)
 					to_chat(user, "<span class='notice'>You sneak the [IED] underneath the pressure plate and connect the trigger wire.</span>")
 					desc = "A trap used to catch bears and other legged creatures. <span class='warning'>There is an IED hooked up to it.</span>"
+					overlays.Add(ied_overlay)
 			else
 				to_chat(user, "<span class='danger'>You shouldn't be reading this message! Contact a coder or someone, something broke!</span>")
 				IED = null
 				return
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		if(IED)
 			IED.forceMove(get_turf(src.loc))
 			IED = null
 			to_chat(user, "<span class='notice'>You remove the IED from the [src].</span>")
+			overlays.Remove(ied_overlay)
 			return
 	..()
 
@@ -493,6 +508,7 @@
 				var/mob/living/simple_animal/SA = AM
 				SA.health -= 20
 
+			overlays.Remove(ied_overlay)
 			update_icon()
 	..()
 
@@ -857,35 +873,34 @@
 //	to_chat(world, "[angle] [(get_dist(user, A) - 1)]")
 	user.Beam(A, "lightning", 'icons/obj/zap.dmi', 50, 15)
 /*Testing
-proc
     //  creates an /icon object with 360 states of rotation
-    rotate_icon(file, state, step = 1, aa = FALSE)
-        var icon/base = icon(file, state)
+proc/rotate_icon(file, state, step = 1, aa = FALSE)
+	var icon/base = icon(file, state)
 
-        var w, h, w2, h2
-        if(aa)
-            aa ++
-            w = base.Width()
-            w2 = w * aa
-            h = base.Height()
-            h2 = h * aa
+	var w, h, w2, h2
+	if(aa)
+		aa ++
+		w = base.Width()
+		w2 = w * aa
+		h = base.Height()
+		h2 = h * aa
 
-        var icon{result = icon(base); temp}
+	var icon{result = icon(base); temp}
 
-        for(var/angle in 0 to 360 step step)
-            if(angle == 0  )
-            	continue
-            if(angle == 360)
-            	continue
+	for(var/angle in 0 to 360 step step)
+		if(angle == 0  )
+			continue
+		if(angle == 360)
+			continue
 
-            temp = icon(base)
+		temp = icon(base)
 
-            if(aa)
-            	temp.Scale(w2, h2)
-            temp.Turn(angle)
-            if(aa)
-            	temp.Scale(w,   h)
+		if(aa)
+			temp.Scale(w2, h2)
+		temp.Turn(angle)
+		if(aa)
+			temp.Scale(w,   h)
 
-            result.Insert(temp, "[angle]")
+		result.Insert(temp, "[angle]")
 
-        return result*/
+	return result*/

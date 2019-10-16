@@ -52,7 +52,7 @@ var/global/ZAS_Settings/zas_settings = new
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/fire_fuel_energy_release
-	value = 550000
+	value = 2000000
 	name = "Fire - Fuel energy release"
 	desc = "The energy in joule released when burning one mol of a burnable substance"
 	valtype=ZAS_TYPE_NUMERIC

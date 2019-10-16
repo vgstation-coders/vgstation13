@@ -28,12 +28,7 @@
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>It contains:</span>")
-	if(reagents && reagents.reagent_list.len)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-	else
-		to_chat(user, "<span class='info'>Nothing.</span>")
+	reagents.get_examine(user)
 
 /obj/structure/reagent_dispensers/cultify()
 	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))
@@ -137,8 +132,11 @@
 			return ..()
 		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src]")
 		if(do_after(user, src, 20))
+			if(rig)
+				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
+				return
 			if(!user.drop_item(W, src))
-				user << "<span class='warning'>Oops! You can't let go of \the [W]!</span>"
+				to_chat(user,"<span class='warning'>Oops! You can't let go of \the [W]!</span>")
 				return
 
 			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src]</span>")
@@ -150,9 +148,7 @@
 
 			rig = W
 
-			var/icon/test = getFlatIcon(W)
-			test.Shift(NORTH,1)
-			test.Shift(EAST,6)
+			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
 			overlays += test
 
 	return ..()
@@ -195,8 +191,8 @@
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
-/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
-	visible_message("<span class='danger'>\the [W] crashes into \the [src]!</span>")
+/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
+	visible_message("<span class='danger'>\the [F] crashes into \the [src]!</span>")
 	explode()
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
@@ -307,7 +303,8 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "virusfoodtank"
 	amount_per_transfer_from_this = 10
-	anchored = 1
+	anchored = TRUE
+	density = FALSE
 
 /obj/structure/reagent_dispensers/virusfood/New()
 	. = ..()
@@ -390,7 +387,7 @@
 /obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
 	return TRUE
 
-/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/reagent_containers/R, var/mob/user)
+/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/weapon/reagent_containers/R, var/mob/user)
 	if(user.a_intent != I_HELP)
 		return TRUE
 	return FALSE

@@ -1139,6 +1139,7 @@ About the new airlock wires panel:
 	if(!operating)
 		panel_open = !panel_open
 		playsound(src, 'sound/items/Screwdriver.ogg', 25, 1, -6)
+		to_chat(user, "<span class='notice'>You [panel_open?"open":"close"] the panel.</span>")
 		update_icon()
 		return 1
 	return
@@ -1152,6 +1153,23 @@ About the new airlock wires panel:
 			// TODO: analyze the called proc
 			if (shock(user, 75, I.siemens_coefficient))
 				user.delayNextAttack(10)
+
+	if((I.sharpness_flags & (CUT_AIRLOCK)) && user.a_intent == I_HURT && density)
+		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \
+		"<span class='notice'>You begin slicing through \the [src].</span>", \
+		"<span class='warning'>You hear slicing noises.</span>")
+		playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+
+		if(do_after(user, src, 200))
+			if(!istype(src))
+				return
+			user.visible_message("<span class='warning'>[user] slices through \the [src]!</span>", \
+			"<span class='notice'>You slice through \the [src].</span>", \
+			"<span class='warning'>You hear slicing noises.</span>")
+			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+			locked = 0
+			open()
+			operating = -1
 
 	if(istype(I, /obj/item/weapon/batteringram))
 		var/obj/item/weapon/batteringram/B = I
@@ -1247,7 +1265,7 @@ About the new airlock wires panel:
 			operating = -1
 	else
 		..(I, user)
-
+	add_fingerprint(user)
 	return
 
 /obj/machinery/door/airlock/proc/bashed_in(var/mob/user)
@@ -1380,7 +1398,7 @@ About the new airlock wires panel:
 	for(var/turf/T in loc)
 		var/obj/structure/window/W = locate(/obj/structure/window) in T
 		if (W)
-			W.Destroy(brokenup = 1)
+			W.shatter()
 
 	..()
 	return

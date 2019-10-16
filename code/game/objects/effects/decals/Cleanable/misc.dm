@@ -42,10 +42,32 @@
 	desc = "Jeez. I hope that's not for lunch."
 	gender = PLURAL
 	density = 0
-	anchored = 1
-	luminosity = 1
+	anchored = TRUE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "greenglow"
+
+/obj/effect/decal/cleanable/greenglow/New()
+	..()
+	set_light(1,2,LIGHT_COLOR_GREEN)
+
+/obj/effect/decal/cleanable/blueglow
+	name = "glowing luminol"
+	desc = "A smear of activated luminol."
+	gender = PLURAL
+	density = 0
+	anchored = TRUE
+	icon = 'icons/effects/blood.dmi'
+	icon_state = "mfloor1"
+	//icon = 'icons/effects/tomatodecal.dmi'
+	//icon_state = "fruit_smudge1"
+	color = LIGHT_COLOR_CYAN
+
+/obj/effect/decal/cleanable/blueglow/New()
+	..()
+	icon_state = "mfloor[rand(1,7)]"
+	////icon_state = "[pick("m","")]floor[rand(1,3)]"
+	//icon_state = "fruit_smudge[rand(1,3)]"
+	set_light(1,2,LIGHT_COLOR_BLUE)
 
 /obj/effect/decal/cleanable/cobweb
 	name = "cobweb"
@@ -65,6 +87,7 @@
 	plane = OBJ_PLANE
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "molten"
+	persistence_type = null //Can get out of hand, description doesn't persist, makes you go hmmm if there's one piece of goo perfectly under each of your roundstart items
 
 /obj/effect/decal/cleanable/cobweb2
 	name = "cobweb"
@@ -90,6 +113,15 @@
 	random_icon_states = list("vomit_1", "vomit_2", "vomit_3", "vomit_4")
 	transfers_dna = 1
 
+	persistent_type_replacement = /obj/effect/decal/cleanable/vomit/pre_dry
+
+/obj/effect/decal/cleanable/vomit/pre_dry
+	name = "dry vomit"
+	mouse_opacity = 0
+	amount = 0
+	icon_state = "vomit_1_dry"
+	random_icon_states = list("vomit_1_dry", "vomit_2_dry", "vomit_3_dry", "vomit_4_dry")
+
 /obj/effect/decal/cleanable/vomit/active
 	desc = "A small pool of vomit. Gosh, how unpleasant."
 	mouse_opacity = 1
@@ -112,15 +144,17 @@
 
 /obj/effect/decal/cleanable/vomit/active/process()
 	if(--dry_state <= 0) //Decrease dry_state by 1. Check if it's equal to zero
-		processing_objects.Remove(src)
+		dry()
 
-		qdel(reagents)
-		reagents = null
-		name = "dry vomit"
-		desc = "Gosh, how unpleasant."
-		mouse_opacity = 0
-		icon_state = "vomit_[rand(1,4)]_dry"
-		amount = 0
+/obj/effect/decal/cleanable/vomit/dry(var/drying_age)
+	processing_objects.Remove(src)
+
+	name = "dry [src.name]"
+	icon_state = "vomit_[rand(1,4)]_dry"
+	mouse_opacity = 0
+	amount = 0
+	qdel(reagents)
+	reagents = null
 
 /obj/effect/decal/cleanable/tomato_smudge
 	name = "tomato smudge"
@@ -195,6 +229,7 @@
 	anchored = 1
 	mouse_opacity = 0
 
+	persistence_type = null //Okay, this one is probably too much. A shitton of these get made every plasmaflood and it's not very interesting to clean up.
 
 
 /obj/effect/decal/cleanable/soot/New()
@@ -224,9 +259,48 @@
 	desc = "Looks unfinished."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "wizrune"
-	
-/obj/effect/decal/cleanable/smashed_butter 
+
+/obj/effect/decal/cleanable/smashed_butter
 	name = "smashed butter"
 	desc = "Looks like some one has butter fingers."
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "smashed_butter"
+
+/obj/effect/decal/cleanable/virusdish
+	name = "broken virus containment dish"
+	icon = 'icons/obj/virology.dmi'
+	icon_state = "brokendish-outline"
+	density = 0
+	anchored = 1
+	mouse_opacity = 1
+	layer = OBJ_LAYER
+	plane = OBJ_PLANE
+	var/last_openner
+	var/datum/disease2/disease/contained_virus
+
+/obj/effect/decal/cleanable/virusdish/Crossed(var/mob/living/perp)
+	..()
+	if (istype(perp))
+		FeetStab(perp,damage = 10,knockdown = 0)
+		infection_attempt(perp)
+
+/obj/effect/decal/cleanable/virusdish/proc/infection_attempt(var/mob/living/perp)
+	if (!contained_virus)
+		return
+	//Now if your feet aren't well protected, or are bleeding, you might get infected.
+	var/block = 0
+	var/bleeding = 0
+	if(attempt_colony(perp,contained_virus,"from exposure to a broken virus dish."))
+		return
+	if (perp.lying)
+		block = perp.check_contact_sterility(FULL_TORSO)
+		bleeding = perp.check_bodypart_bleeding(FULL_TORSO)
+	else
+		block = perp.check_contact_sterility(FEET)
+		bleeding = perp.check_bodypart_bleeding(FEET)
+
+	if (!block)
+		if (contained_virus.spread & SPREAD_CONTACT)
+			perp.infect_disease2(contained_virus, notes="(Contact, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")
+		else if (bleeding && (contained_virus.spread & SPREAD_BLOOD))
+			perp.infect_disease2(contained_virus, notes="(Blood, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")

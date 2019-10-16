@@ -51,6 +51,8 @@
  	var/under_turf = /turf/space
  */
 
+	var/turf_speed_multiplier = 1
+ 
 	var/explosion_block = 0
 
 	//For shuttles - if 1, the turf's underlay will never be changed when moved
@@ -85,7 +87,6 @@
 	for(var/atom/movable/AM as mob|obj in src)
 		spawn( 0 )
 			src.Entered(AM)
-			return
 
 /turf/ex_act(severity)
 	return 0
@@ -194,7 +195,7 @@
 
 			if(istype(A, /obj/structure/bed/chair/vehicle))
 				var/obj/structure/bed/chair/vehicle/B = A
-				if(B.is_locking(B.lock_type))
+				if(B.is_locking(B.mob_lock_type))
 					contents_brought += recursive_type_check(B)
 
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
@@ -340,6 +341,7 @@
 	var/old_affecting_lights = affecting_lights
 	var/old_lighting_overlay = lighting_overlay
 	var/old_corners = corners
+	var/old_density = density
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -351,14 +353,14 @@
 		for(var/obj/effect/decal/cleanable/C in src)
 			qdel(C)//enough with footprints floating in space
 
+	//Rebuild turf
+	var/turf/T = src
+	env = T.air //Get the air before the change
 	if(istype(src,/turf/simulated))
-		//Yeah, we're just going to rebuild the whole thing.
-		//Despite this being called a bunch during explosions,
-		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
-		env = S.air //Get the air before the change
 		if(S.zone)
 			S.zone.rebuild()
+			
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)
@@ -425,6 +427,8 @@
 
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.
+	if(density != old_density)
+		densityChanged()
 
 /turf/proc/AddDecal(const/image/decal)
 	if(!turfdecals)
@@ -441,6 +445,12 @@
 		overlays -= decal
 
 	turfdecals.len = 0
+
+/turf/apply_luminol()
+	if(!..())
+		return FALSE
+	if(!(locate(/obj/effect/decal/cleanable/blueglow) in src))
+		new /obj/effect/decal/cleanable/blueglow(src)
 
 /turf/proc/get_underlying_turf()
 	var/area/A = loc
@@ -466,8 +476,11 @@
 			M.take_damage(100, "brute")
 
 /turf/bless()
+	if (holy)
+		return
 	holy = 1
 	..()
+	new /obj/effect/overlay/holywaterpuddle(src)
 
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs
@@ -664,6 +677,10 @@
 // Return a high number to make the mob move slower.
 // Return a low number to make the mob move superfast.
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
+	for(var/atom/A in src)
+		if(A.slowdown_modifier)
+			base_slowdown *= A.slowdown_modifier
+	base_slowdown *= turf_speed_multiplier
 	return base_slowdown
 
 /turf/proc/has_gravity(mob/M)

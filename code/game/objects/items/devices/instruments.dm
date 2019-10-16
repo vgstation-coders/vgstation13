@@ -41,6 +41,9 @@
 	user.set_machine(src)
 	song.interact(user)
 
+/obj/item/device/instrument/proc/OnPlayed(mob/user,mob/M)
+	return
+
 /obj/item/device/instrument/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] begins trying to play Faerie's Aire and Death Waltz with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	playsound(loc, 'sound/effects/applause.ogg', 50, 1, -1)

@@ -164,12 +164,12 @@
 
 // Not really sure where to put this. This is a verb that lets you add a tiny label to the item without consuming label rolls or anything.
 // Used for pen-labeling pill bottles, beakers and whatnot.
-/atom/proc/set_tiny_label(var/mob/user, var/start_text = " (", var/end_text = ")")
+/atom/proc/set_tiny_label(var/mob/user, var/start_text = " (", var/end_text = ")", var/maxlength=16)
 	var/tmp_label = sanitize(input(user, "Enter a label for \the [src]","Label",copytext(labeled, length(start_text)+1, length(labeled)-length(end_text)+1)) as text|null)
 	if (!Adjacent(user) || user.incapacitated() || !tmp_label || !length(tmp_label))
 		return FALSE
-	if(length(tmp_label) > 16)
-		to_chat(user, "<span class='warning'>The label can be at most 16 characters long.</span>")
+	if(length(tmp_label) > maxlength)
+		to_chat(user, "<span class='warning'>The label can be at most [maxlength] characters long.</span>")
 		return FALSE
 	to_chat(user, "<span class='notice'>You set the label to \"[tmp_label]\".</span>")
 	set_labeled(tmp_label, start_text, end_text)

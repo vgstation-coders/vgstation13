@@ -57,6 +57,15 @@
 	icon_state = "d20"
 	sides = 20
 
+/obj/item/weapon/dice/loaded
+	desc = "A die with six even sides. Basic and servicable."
+
+/obj/item/weapon/dice/loaded/d20
+	name = "d20"
+	desc = "A die with twenty even sides. The prefered die to throw at the GM."
+	icon_state = "d20"
+	sides = 20
+
 /obj/item/weapon/dice/d20/e20
 	var/triggered = 0
 
@@ -67,8 +76,7 @@
 	..()
 	diceroll(user, 1)
 
-/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
-	result = rand(minsides, sides)
+/obj/item/weapon/dice/proc/show_roll(mob/user as mob, thrown, result)
 	var/comment = ""
 	if(sides == 20)
 		if(result == 20)
@@ -85,11 +93,21 @@
 	else if(src.throwing == 0) //Dice was thrown and is coming to rest
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result]. [comment]</span>")
 
+/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
+	result = rand(minsides, sides)
+	show_roll(user, thrown, result)
+
+/obj/item/weapon/dice/loaded/diceroll(mob/user as mob, thrown)
+	result = rand(minsides, sides * 1.5)
+	result = min(result, sides)
+	show_roll(user, thrown, result)
+
 /obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
 	if(istype(H) && !H.shoes)
 		to_chat(H, "<span class='danger'>You step on the D4!</span>")
 		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))
 		H.Knockdown(3)
+		H.Stun(3)
 
 /obj/item/weapon/dice/update_icon()
 	overlays.len = 0

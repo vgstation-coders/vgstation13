@@ -40,6 +40,7 @@
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
 	var/lastchairspin
+	var/pathogenHUD = FALSE
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
@@ -224,7 +225,7 @@ Works together with spawning an observer, noted above.
 	if(antagHUD)
 		var/list/target_list = list()
 		for(var/mob/living/target in oview(src))
-			if( target.mind&&(target.mind.antag_roles.len > 0 || issilicon(target)) )
+			if( target.mind&&(target.mind.antag_roles.len > 0 || issilicon(target) || target.hud_list[SPECIALROLE_HUD]) )
 				target_list += target
 		if(target_list.len)
 			assess_targets(target_list, src)
@@ -270,17 +271,14 @@ Works together with spawning an observer, noted above.
 /mob/dead/proc/process_medHUD(var/mob/M)
 	var/client/C = M.client
 	var/image/holder
-	for(var/mob/living/carbon/human/patient in oview(M))
-		var/foundVirus = 0
-		if(patient && patient.virus2 && patient.virus2.len)
-			foundVirus = 1
-		else if (patient && patient.viruses && patient.viruses.len)
-			foundVirus = 1
+	for(var/mob/living/carbon/patient in oview(M))
+		if(!check_HUD_visibility(patient, M))
+			continue
 		if(!C)
 			return
 		holder = patient.hud_list[HEALTH_HUD]
 		if(holder)
-			if(patient.stat == 2)
+			if(patient.isDead())
 				holder.icon_state = "hudhealth-100"
 			else
 				holder.icon_state = "hud[RoundHealth(patient.health)]"
@@ -288,12 +286,24 @@ Works together with spawning an observer, noted above.
 
 		holder = patient.hud_list[STATUS_HUD]
 		if(holder)
-			if(patient.stat == 2)
+			if(patient.isDead())
 				holder.icon_state = "huddead"
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
-			else if(foundVirus)
-				holder.icon_state = "hudill"
+			else if(has_recorded_disease(patient))
+				holder.icon_state = "hudill_old"
+			else
+				var/dangerosity = has_recorded_virus2(patient)
+				switch (dangerosity)
+					if (1)
+						holder.icon_state = "hudill"
+					if (2)
+						holder.icon_state = "hudill_safe"
+					if (3)
+						holder.icon_state = "hudill_danger"
+					else
+						holder.icon_state = "hudhealthy"
+			/*
 			else if(patient.has_brain_worms())
 				var/mob/living/simple_animal/borer/B = patient.has_brain_worms()
 				if(B.controlling)
@@ -302,27 +312,67 @@ Works together with spawning an observer, noted above.
 					holder.icon_state = "hudhealthy"
 			else
 				holder.icon_state = "hudhealthy"
+			*/
 
 			C.images += holder
 
+	for(var/mob/living/simple_animal/mouse/patient in oview(M))
+		if(!check_HUD_visibility(patient, M))
+			continue
+		if(!C)
+			continue
+		holder = patient.hud_list[STATUS_HUD]
+		if(holder)
+			if(patient.isDead())
+				holder.icon_state = "huddead"
+			else if(patient.status_flags & XENO_HOST)
+				holder.icon_state = "hudxeno"
+			else if(has_recorded_disease(patient))
+				holder.icon_state = "hudill_old"
+			else
+				var/dangerosity = has_recorded_virus2(patient)
+				switch (dangerosity)
+					if (1)
+						holder.icon_state = "hudill"
+					if (2)
+						holder.icon_state = "hudill_safe"
+					if (3)
+						holder.icon_state = "hudill_danger"
+					else
+						holder.icon_state = "hudhealthy"
+			C.images += holder
+
 /mob/dead/proc/assess_targets(list/target_list, mob/dead/observer/U)
-	var/icon/tempHud = 'icons/mob/hud.dmi'
 	for(var/mob/living/target in target_list)
-		if(iscarbon(target))
-			for (var/R in target.mind.antag_roles)
-				var/datum/role/role = target.mind.antag_roles[R]
-				var/image/I = image('icons/role_HUD_icons.dmi', target, role.logo_state)
+		if(target.mind)
+			var/image/I
+			U.client.images -= target.hud_list[SPECIALROLE_HUD]
+			switch(target.mind.antag_roles.len)
+				if(0)
+					I = null
+				if(1)
+					for(var/R in target.mind.antag_roles)
+						var/datum/role/role = target.mind.antag_roles[R]
+						I = image('icons/role_HUD_icons.dmi', target, role.logo_state)
+				else
+					I = image('icons/role_HUD_icons.dmi', target, "multi-logo")
+			if(I)
 				I.pixel_x = 20 * PIXEL_MULTIPLIER
 				I.pixel_y = 20 * PIXEL_MULTIPLIER
 				I.plane = ANTAG_HUD_PLANE
+				target.hud_list[SPECIALROLE_HUD] = I
 				U.client.images += I
-		else if(issilicon(target))//If the silicon mob has no law datum, no inherent laws, or a law zero, add them to the hud.
+			else
+				target.hud_list[SPECIALROLE_HUD] = null
+
+
+		if(issilicon(target))//If the silicon mob has no law datum, no inherent laws, or a law zero, add them to the hud.
 			var/mob/living/silicon/silicon_target = target
 			if(!silicon_target.laws||(silicon_target.laws&&(silicon_target.laws.zeroth||!silicon_target.laws.inherent.len))||silicon_target.mind.special_role=="traitor")
 				if(isrobot(silicon_target))//Different icons for robutts and AI.
-					U.client.images += image(tempHud,silicon_target,"hudmalborg")
+					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalborg")
 				else
-					U.client.images += image(tempHud,silicon_target,"hudmalai")
+					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalai")
 	return 1
 
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
@@ -331,6 +381,7 @@ Works together with spawning an observer, noted above.
 		if (deafmute)
 			ghostype = /mob/dead/observer/deafmute
 		var/mob/dead/observer/ghost = new ghostype(src, flags)	//Transfer safety to observer spawning proc.
+		ghost.attack_log += src.attack_log // Keep our attack logs.
 		ghost.timeofdeath = src.timeofdeath //BS12 EDIT
 		ghost.key = key
 		if(ghost.client && !ghost.client.holder && !config.antag_hud_allowed)		// For new ghosts we remove the verb from even showing up if it's not allowed.
@@ -527,6 +578,46 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	else
 		M.antagHUD = 1
 		to_chat(src, "<span class='notice'><B>AntagHUD Enabled</B></span>")
+
+
+
+/mob/dead/observer/verb/toggle_pathogenHUD()
+	set category = "Ghost"
+	set name = "Toggle PathogenHUD"
+	set desc = "Toggles Pathogen HUD allowing you to see airborne pathogenic clouds, and infected items and splatters"
+	if(!client)
+		return
+	if(pathogenHUD)
+		pathogenHUD = FALSE
+		to_chat(src, "<span class='notice'><B>Pathogen HUD disabled.</B></span>")
+		science_goggles_wearers.Remove(src)
+		if (client)
+			for (var/obj/item/I in infected_items)
+				client.images -= I.pathogen
+			for (var/mob/living/L in infected_contact_mobs)
+				client.images -= L.pathogen
+			for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+				client.images -= C.pathogen
+			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+				client.images -= C.pathogen
+	else
+		pathogenHUD = TRUE
+		to_chat(src, "<span class='notice'><B>Pathogen HUD enabled.</B></span>")
+		science_goggles_wearers.Add(src)
+		if (client)
+			for (var/obj/item/I in infected_items)
+				if (I.pathogen)
+					client.images |= I.pathogen
+			for (var/mob/living/L in infected_contact_mobs)
+				if (L.pathogen)
+					client.images |= L.pathogen
+			for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+				if (C.pathogen)
+					client.images |= C.pathogen
+			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+				if (C.pathogen)
+					client.images |= C.pathogen
+
 
 /mob/dead/observer/proc/dead_tele()
 	set category = "Ghost"
@@ -740,7 +831,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 
 	//find a viable mouse candidate
-	var/mob/living/simple_animal/mouse/host
+	var/mob/living/simple_animal/mouse/common/host
 	var/obj/machinery/atmospherics/unary/vent_pump/vent_found
 	var/list/found_vents = list()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/v in atmos_machines)
@@ -748,7 +839,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			found_vents.Add(v)
 	if(found_vents.len)
 		vent_found = pick(found_vents)
-		host = new /mob/living/simple_animal/mouse(vent_found.loc)
+		host = new /mob/living/simple_animal/mouse/common(vent_found.loc)
 	else
 		to_chat(src, "<span class='warning'>Unable to find any unwelded vents to spawn mice at.</span>")
 
@@ -1069,3 +1160,30 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 
 	paiController.recruitWindow(src)
+
+// -- Require at least 2 players to start.
+
+// Global variable on whether an arena is being created or not
+var/creating_arena = FALSE
+
+/mob/dead/observer/verb/request_bomberman()
+	set name = "Request a bomberman arena"
+	set category = "Ghost"
+	set desc = "Create a bomberman arena for other observers and dead players."
+
+	if (ticker && ticker.current_state != GAME_STATE_PLAYING)
+		to_chat(src, "<span class ='notice'>You can't use this verb before the game has started.</span>")
+		return
+
+	if (arenas.len)
+		to_chat(src, "<span class ='notice'>There are already bomberman arenas! Use the Find Arenas verb to jump to them.</span>")
+		return
+
+	to_chat(src, "<span class='notice'>Pooling other ghosts for a bomberman arena...</span>")
+	if (!creating_arena)
+		creating_arena = TRUE
+		new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"), src)
+		if (!arenas.len) // Someone hit the cancel option
+			creating_arena = FALSE
+		return
+	to_chat(src, "<span class='notice'>There were unfortunatly no available arenas.</span>")

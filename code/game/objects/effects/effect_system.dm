@@ -66,18 +66,18 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	var/atom/holder
 	var/setup = 0
 
-	proc/set_up(n = 3, c = 0, turf/loc)
-		if(n > 10)
-			n = 10
-		number = n
-		cardinals = c
-		location = loc
-		setup = 1
+/datum/effect/effect/system/proc/set_up(n = 3, c = 0, turf/loc)
+	if(n > 10)
+		n = 10
+	number = n
+	cardinals = c
+	location = loc
+	setup = 1
 
-	proc/attach(atom/atom)
-		holder = atom
+/datum/effect/effect/system/proc/attach(atom/atom)
+	holder = atom
 
-	proc/start()
+/datum/effect/effect/system/proc/start() //why is this here? it neither overrides nor does anything else
 
 /obj/effect/canSingulothPull(var/obj/machinery/singularity/singulo)
 	return 0
@@ -105,33 +105,31 @@ steam.start() -- spawns the effect
 	icon_state = "extinguish"
 	density = 0
 
-/datum/effect/effect/system/steam_spread
+/datum/effect/effect/system/steam_spread/set_up(n = 3, c = 0, turf/loc)
+	if(n > 10)
+		n = 10
+	number = n
+	cardinals = c
+	location = loc
 
-	set_up(n = 3, c = 0, turf/loc)
-		if(n > 10)
-			n = 10
-		number = n
-		cardinals = c
-		location = loc
-
-	start()
-		var/i = 0
-		for(i=0, i<src.number, i++)
-			spawn(0)
-				if(holder)
-					src.location = get_turf(holder)
-				var/obj/effect/effect/steam/steam = new /obj/effect/effect/steam(src.location)
-				var/direction
-				if(src.cardinals)
-					direction = pick(cardinal)
-				else
-					direction = pick(alldirs)
-				for(i=0, i<pick(1,2,3), i++)
-					sleep(5)
-					step(steam,direction)
-				spawn(20)
-					if(steam)
-						qdel(steam)
+/datum/effect/effect/system/steam_spread/start()
+	var/i = 0
+	for(i=0, i<src.number, i++)
+		spawn(0)
+			if(holder)
+				src.location = get_turf(holder)
+			var/obj/effect/effect/steam/steam = new /obj/effect/effect/steam(src.location)
+			var/direction
+			if(src.cardinals)
+				direction = pick(cardinal)
+			else
+				direction = pick(alldirs)
+			for(i=0, i<pick(1,2,3), i++)
+				sleep(5)
+				step(steam,direction)
+			spawn(20)
+				if(steam)
+					qdel(steam)
 
 /////////////////////////////////////////////
 //SPARK SYSTEM (like steam system)
@@ -434,94 +432,93 @@ steam.start() -- spawns the effect
 	smoke_type = /obj/effect/effect/smoke/chem
 	var/obj/chemholder
 
-	New()
-		..()
-		chemholder = new/obj()
-		var/datum/reagents/R = new/datum/reagents(500)
-		chemholder.reagents = R
-		R.my_atom = chemholder
+/datum/effect/effect/system/smoke_spread/chem/New()
+	..()
+	chemholder = new/obj()
+	var/datum/reagents/R = new/datum/reagents(500)
+	chemholder.reagents = R
+	R.my_atom = chemholder
 
-	set_up(var/datum/reagents/carry = null, n = 5, c = 0, loca, direct)
-		if(n > 20)
-			n = 20
-		number = n
-		cardinals = c
-		if(carry)
-			carry.copy_to(chemholder, carry.total_volume)
+/datum/effect/effect/system/smoke_spread/chem/set_up(var/datum/reagents/carry = null, n = 5, c = 0, loca, direct)
+	if(n > 20)
+		n = 20
+	number = n
+	cardinals = c
+	if(carry)
+		carry.copy_to(chemholder, carry.total_volume)
 
 
-		if(istype(loca, /turf/))
-			location = loca
-		else
-			location = get_turf(loca)
-		if(direct)
-			direction = direct
+	if(istype(loca, /turf/))
+		location = loca
+	else
+		location = get_turf(loca)
+	if(direct)
+		direction = direct
 
-	start()
-		var/i = 0
+/datum/effect/effect/system/smoke_spread/chem/start()
+	var/i = 0
 
-		var/color = mix_color_from_reagents(chemholder.reagents.reagent_list)
+	var/color = mix_color_from_reagents(chemholder.reagents.reagent_list)
 
-		for(i=0, i<src.number, i++)
-			if(src.total_smoke > 20)
-				return
-			spawn(0)
-				if(holder)
-					src.location = get_turf(holder)
-				var/obj/effect/effect/smoke/chem/smoke = new /obj/effect/effect/smoke/chem(src.location)
-				src.total_smoke++
-				var/direction = src.direction
-				if(!direction)
-					if(src.cardinals)
-						direction = pick(cardinal)
-					else
-						direction = pick(alldirs)
-
-				if(chemholder.reagents.total_volume != 1) // can't split 1 very well
-					chemholder.reagents.copy_to(smoke, chemholder.reagents.total_volume / number) // copy reagents to each smoke, divide evenly
-
-				if(color)
-					smoke.icon += color // give the smoke color, if it has any to begin with
+	for(i=0, i<src.number, i++)
+		if(src.total_smoke > 20)
+			return
+		spawn(0)
+			if(holder)
+				src.location = get_turf(holder)
+			var/obj/effect/effect/smoke/chem/smoke = new /obj/effect/effect/smoke/chem(src.location)
+			src.total_smoke++
+			var/direction = src.direction
+			if(!direction)
+				if(src.cardinals)
+					direction = pick(cardinal)
 				else
-					// if no color, just use the old smoke icon
-					smoke.icon = 'icons/effects/96x96.dmi'
-					smoke.icon_state = "smoke"
+					direction = pick(alldirs)
 
-				for(i=0, i<pick(0,1,1,1,2,2,2,3), i++)
-					sleep(10)
-					step(smoke,direction)
-				spawn(150+rand(10,30))
-					if(smoke)
-						qdel(smoke)
-						smoke = null
-					src.total_smoke--
+			if(chemholder.reagents.total_volume != 1) // can't split 1 very well
+				chemholder.reagents.copy_to(smoke, chemholder.reagents.total_volume / number) // copy reagents to each smoke, divide evenly
+
+			if(color)
+				smoke.icon += color // give the smoke color, if it has any to begin with
+			else
+				// if no color, just use the old smoke icon
+				smoke.icon = 'icons/effects/96x96.dmi'
+				smoke.icon_state = "smoke"
+
+			for(i=0, i<pick(0,1,1,1,2,2,2,3), i++)
+				sleep(10)
+				step(smoke,direction)
+			spawn(150+rand(10,30))
+				if(smoke)
+					qdel(smoke)
+					smoke = null
+				src.total_smoke--
 
 // Goon compat.
-/datum/effect/effect/system/smoke_spread/chem/fart
-	set_up(var/mob/M, n = 5, c = 0, loca, direct)
-		if(n > 20)
-			n = 20
-		number = n
-		cardinals = c
+/datum/effect/effect/system/smoke_spread/chem/fart/set_up(var/mob/M, n = 5, c = 0, loca, direct)
+	if(n > 20)
+		n = 20
+	number = n
+	cardinals = c
 
-		chemholder.reagents.add_reagent(SPACE_DRUGS, rand(1,10))
+	chemholder.reagents.add_reagent(SPACE_DRUGS, rand(1,10))
 
-		if(istype(loca, /turf/))
-			location = loca
-		else
-			location = get_turf(loca)
-		if(direct)
-			direction = direct
+	if(istype(loca, /turf/))
+		location = loca
+	else
+		location = get_turf(loca)
+	if(direct)
+		direction = direct
 
-		var/contained = "\[[chemholder.reagents.get_reagent_ids()]\]"
-		var/area/A = get_area(location)
+	var/contained = "\[[chemholder.reagents.get_reagent_ids()]\]"
+	var/area/A = get_area(location)
 
-		var/where = "[A.name] | [location.x], [location.y]"
-		var/whereLink=formatJumpTo(location,where)
+	var/where = "[A.name] | [location.x], [location.y]"
+	var/whereLink=formatJumpTo(location,where)
 
-		var/more = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</a>)"
-		message_admins("[M][more] produced a toxic fart in ([whereLink])[contained].", 0, 1)
-		log_game("[M][more] produced a toxic fart in ([where])[contained].")
+	var/more = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</a>)"
+	message_admins("[M][more] produced a toxic fart in ([whereLink])[contained].", 0, 1)
+	log_game("[M][more] produced a toxic fart in ([where])[contained].")
 
 
 /////////////////////////////////////////////
@@ -560,32 +557,32 @@ steam.start() -- spawns the effect
 
 	var/trail_type=/obj/effect/effect/trails/ion
 
-	set_up(atom/atom)
-		attach(atom)
-		oldposition = get_turf(atom)
+/datum/effect/effect/system/trail/set_up(atom/atom)
+	attach(atom)
+	oldposition = get_turf(atom)
 
-	start()
-		if(!src.on)
-			src.on = 1
-			src.processing = 1
-		if(src.processing)
-			src.processing = 0
-			spawn(0)
-				var/turf/T = get_turf(src.holder)
-				if(T != src.oldposition)
-					if(istype(T, /turf/space))
-						var/obj/effect/effect/trails/I = getFromPool(trail_type,src.oldposition)
-						src.oldposition = T
-						I.dir = src.holder.dir
-						I.Play()
-				spawn(2)
-					if(src.on)
-						src.processing = 1
-						src.start()
-
-	proc/stop()
+/datum/effect/effect/system/trail/start()
+	if(!src.on)
+		src.on = 1
+		src.processing = 1
+	if(src.processing)
 		src.processing = 0
-		src.on = 0
+		spawn(0)
+			var/turf/T = get_turf(src.holder)
+			if(T != src.oldposition)
+				if(istype(T, /turf/space))
+					var/obj/effect/effect/trails/I = getFromPool(trail_type,src.oldposition)
+					src.oldposition = T
+					I.dir = src.holder.dir
+					I.Play()
+			spawn(2)
+				if(src.on)
+					src.processing = 1
+					src.start()
+
+/datum/effect/effect/system/trail/proc/stop()
+	src.processing = 0
+	src.on = 0
 
 /datum/effect/effect/system/trail/space_trail
 	var/turf/oldloc // secondary ion trail loc
@@ -654,39 +651,39 @@ steam.start() -- spawns the effect
 	var/processing = 1
 	var/on = 1
 
-	set_up(atom/atom)
-		attach(atom)
-		oldposition = get_turf(atom)
+/datum/effect/effect/system/steam_trail_follow/set_up(atom/atom)
+	attach(atom)
+	oldposition = get_turf(atom)
 
-	start()
-		if(!src.on)
-			src.on = 1
-			src.processing = 1
-		if(src.processing)
-			src.processing = 0
-			spawn(0)
-				if(src.number < 3)
-					var/obj/effect/effect/steam/I = new /obj/effect/effect/steam(src.oldposition)
-					src.number++
-					src.oldposition = get_turf(holder)
-					I.dir = src.holder.dir
-					spawn(10)
-						if(I)
-							qdel(I)
-						src.number--
-					spawn(2)
-						if(src.on)
-							src.processing = 1
-							src.start()
-				else
-					spawn(2)
-						if(src.on)
-							src.processing = 1
-							src.start()
-
-	proc/stop()
+/datum/effect/effect/system/steam_trail_follow/start()
+	if(!src.on)
+		src.on = 1
+		src.processing = 1
+	if(src.processing)
 		src.processing = 0
-		src.on = 0
+		spawn(0)
+			if(src.number < 3)
+				var/obj/effect/effect/steam/I = new /obj/effect/effect/steam(src.oldposition)
+				src.number++
+				src.oldposition = get_turf(holder)
+				I.dir = src.holder.dir
+				spawn(10)
+					if(I)
+						qdel(I)
+					src.number--
+				spawn(2)
+					if(src.on)
+						src.processing = 1
+						src.start()
+			else
+				spawn(2)
+					if(src.on)
+						src.processing = 1
+						src.start()
+
+/datum/effect/effect/system/steam_trail_follow/proc/stop()
+	src.processing = 0
+	src.on = 0
 
 
 
@@ -839,47 +836,44 @@ steam.start() -- spawns the effect
 	var/list/carried_reagents	// the IDs of reagents present when the foam was mixed
 	var/metal = 0				// 0=foam, 1=metalfoam, 2=ironfoam
 
+/datum/effect/effect/system/foam_spread/set_up(amt=5, loca, var/datum/reagents/carry = null, var/metalfoam = 0)
+	amount = round(sqrt(amt / 3), 1)
+	if(istype(loca, /turf/))
+		location = loca
+	else
+		location = get_turf(loca)
+
+	carried_reagents = list()
+	metal = metalfoam
 
 
-
-	set_up(amt=5, loca, var/datum/reagents/carry = null, var/metalfoam = 0)
-		amount = round(sqrt(amt / 3), 1)
-		if(istype(loca, /turf/))
-			location = loca
-		else
-			location = get_turf(loca)
-
-		carried_reagents = list()
-		metal = metalfoam
+	// bit of a hack here. Foam carries along any reagent also present in the glass it is mixed
+	// with (defaults to water if none is present). Rather than actually transfer the reagents,
+	// this makes a list of the reagent ids and spawns 1 unit of that reagent when the foam disolves.
 
 
-		// bit of a hack here. Foam carries along any reagent also present in the glass it is mixed
-		// with (defaults to water if none is present). Rather than actually transfer the reagents,
-		// this makes a list of the reagent ids and spawns 1 unit of that reagent when the foam disolves.
+	if(carry && !metal)
+		for(var/datum/reagent/R in carry.reagent_list)
+			carried_reagents += R.id
 
+/datum/effect/effect/system/foam_spread/start()
+	spawn(0)
+		var/obj/effect/effect/foam/F = locate() in location
+		if(F)
+			F.amount += amount
+			return
 
-		if(carry && !metal)
-			for(var/datum/reagent/R in carry.reagent_list)
-				carried_reagents += R.id
+		F = new(src.location, metal)
+		F.amount = amount
 
-	start()
-		spawn(0)
-			var/obj/effect/effect/foam/F = locate() in location
-			if(F)
-				F.amount += amount
-				return
+		if(!metal)			// don't carry other chemicals if a metal foam
+			F.create_reagents(10)
 
-			F = new(src.location, metal)
-			F.amount = amount
-
-			if(!metal)			// don't carry other chemicals if a metal foam
-				F.create_reagents(10)
-
-				if(carried_reagents)
-					for(var/id in carried_reagents)
-						F.reagents.add_reagent(id,1)
-				else
-					F.reagents.add_reagent(WATER, 1)
+			if(carried_reagents)
+				for(var/id in carried_reagents)
+					F.reagents.add_reagent(id,1)
+			else
+				F.reagents.add_reagent(WATER, 1)
 
 // wall formed by metal foams
 // dense and opaque, but easy to break
@@ -1042,70 +1036,72 @@ steam.start() -- spawns the effect
 	var/flashing = 0			// does explosion creates flash effect?
 	var/flashing_factor = 0		// factor of how powerful the flash effect relatively to the explosion
 
-	set_up (amt, loc, flash = 0, flash_fact = 0)
-		amount = amt
-		if(istype(loc, /turf/))
-			location = loc
-		else
-			location = get_turf(loc)
+/datum/effect/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0)
+	amount = amt
+	if(istype(loc, /turf/))
+		location = loc
+	else
+		location = get_turf(loc)
 
-		flashing = flash
-		flashing_factor = flash_fact
+	flashing = flash
+	flashing_factor = flash_fact
 
+	return
+
+/datum/effect/effect/system/reagents_explosion/start()
+	if (amount <= 2)
+		spark(location, 2)
+
+		for(var/mob/M in viewers(5, location))
+			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
+		for(var/mob/M in viewers(1, location))
+			if (prob (50 * amount))
+				to_chat(M, "<span class='warning'>The explosion knocks you down.</span>")
+				var/incapacitation_duration = rand(1,5)
+				M.Knockdown(incapacitation_duration)
+				M.Stun(incapacitation_duration)
 		return
+	else
+		var/devastation = -1
+		var/heavy = -1
+		var/light = -1
+		var/flash = -1
+		var/range = 0
+		// Clamp all values to MAX_EXPLOSION_RANGE
+		range = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
+		devastation = round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
+		heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
+		light = min(7, range) // clamps to 7 light range for grenades
+		flash = range * 1.5
+		/*
+		if (round(amount/12) > 0)
+			devastation = min (MAX_EXPLOSION_RANGE, devastation + round(amount/12))
 
-	start()
-		if (amount <= 2)
-			spark(location, 2)
+		if (round(amount/6) > 0)
+			heavy = min (MAX_EXPLOSION_RANGE, heavy + round(amount/6))
 
-			for(var/mob/M in viewers(5, location))
-				to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
-			for(var/mob/M in viewers(1, location))
-				if (prob (50 * amount))
-					to_chat(M, "<span class='warning'>The explosion knocks you down.</span>")
-					M.Knockdown(rand(1,5))
-			return
-		else
-			var/devastation = -1
-			var/heavy = -1
-			var/light = -1
-			var/flash = -1
-			var/range = 0
-			// Clamp all values to MAX_EXPLOSION_RANGE
-			range = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
-			devastation = round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
-			heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
-			light = min(7, range) // clamps to 7 light range for grenades
-			flash = range * 1.5
-			/*
-			if (round(amount/12) > 0)
-				devastation = min (MAX_EXPLOSION_RANGE, devastation + round(amount/12))
+		if (round(amount/3) > 0)
+			light = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
 
-			if (round(amount/6) > 0)
-				heavy = min (MAX_EXPLOSION_RANGE, heavy + round(amount/6))
+		if (flash && flashing_factor)
+			flash += (round(amount/4) * flashing_factor)
+		*/
 
-			if (round(amount/3) > 0)
-				light = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
+		for(var/mob/M in viewers(8, location))
+			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
 
-			if (flash && flashing_factor)
-				flash += (round(amount/4) * flashing_factor)
-			*/
+		explosion(location, devastation, heavy, light, flash)
 
-			for(var/mob/M in viewers(8, location))
-				to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
+/datum/effect/effect/system/reagents_explosion/proc/holder_damage(var/atom/holder)
+	if(holder)
+		var/dmglevel = 4
 
-			explosion(location, devastation, heavy, light, flash)
+		if (round(amount/8) > 0)
+			dmglevel = 1
+		else if (round(amount/4) > 0)
+			dmglevel = 2
+		else if (round(amount/2) > 0)
+			dmglevel = 3
 
-	proc/holder_damage(var/atom/holder)
-		if(holder)
-			var/dmglevel = 4
-
-			if (round(amount/8) > 0)
-				dmglevel = 1
-			else if (round(amount/4) > 0)
-				dmglevel = 2
-			else if (round(amount/2) > 0)
-				dmglevel = 3
-
-			if(dmglevel<4)
-				holder.ex_act(dmglevel)
+		if(dmglevel<4)
+			holder.ex_act(dmglevel)

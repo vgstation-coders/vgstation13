@@ -450,7 +450,7 @@
 					"You insert the power cell.")
 				chargecount = 0
 				update_icon()
-	else if	(isscrewdriver(W))	// haxing
+	else if	(W.is_screwdriver(user))	// haxing
 		if(opened)
 			if (cell)
 				to_chat(user, "<span class='warning'>Close the APC first.</span>")//Less hints more mystery!
@@ -475,6 +475,7 @@
 			if(has_electronics == 2 && !(stat & BROKEN))
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
+				playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
 				update_icon()
 			else
 				to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")
@@ -494,6 +495,7 @@
 				locked = !locked
 				to_chat(user, "You [ locked ? "lock" : "unlock"] the APC interface.")
 				update_icon()
+				nanomanager.update_uis(src)
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 	else if (istype(W, /obj/item/weapon/card/emag) && !(emagged || malfhack))		// trying to unlock with an emag card
@@ -511,6 +513,7 @@
 					locked = 0
 					to_chat(user, "You emag the APC interface.")
 					update_icon()
+					nanomanager.update_uis(src)
 				else
 					to_chat(user, "You fail to [ locked ? "unlock" : "lock"] the APC interface.")
 	else if (istype(W, /obj/item/stack/cable_coil) && !terminal && opened && has_electronics != 2)
@@ -912,12 +915,12 @@
 		update()
 
 	else if (href_list["overload"])
-		if(istype(usr, /mob/living/silicon))
+		if(istype(usr, /mob/living/silicon) || isAdminGhost(usr))
 			src.overload_lighting()
 
 	else if (href_list["malfhack"])
 		var/mob/living/silicon/ai/malfai = usr
-		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 		if(get_malf_status(malfai)==1)
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
@@ -965,7 +968,7 @@
 /obj/machinery/power/apc/proc/toggle_breaker()
 	operating = !operating
 	if(malfai)
-		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 		if(M && STATION_Z == z)
 			operating ? M.apcs++ : M.apcs--
 
@@ -1002,7 +1005,12 @@
 		for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 			point.target = src //the pinpointer will detect the shunted AI
 
-	stat_collection.malf_shunted = TRUE
+	// record that the malf shunted, for statistics
+	if(istype(malf.mind) && istype(malf.mind.faction, /datum/faction/malf))
+		var/datum/faction/malf/mf = malf.mind.faction
+		if(istype(mf.stat_datum, /datum/stat/faction/malf))
+			var/datum/stat/faction/malf/MS = mf.stat_datum
+			MS.shunted = TRUE
 
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)
@@ -1295,7 +1303,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
-		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 		if(M && STATION_Z == z)
 			M.apcs--
 	stat |= BROKEN
@@ -1326,7 +1334,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(this_area.areaapc == src)
 		this_area.remove_apc(src)
 		if(malfai && operating)
-			var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+			var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 			if (M && STATION_Z == z)
 				M.apcs--
 		this_area.power_light = 0

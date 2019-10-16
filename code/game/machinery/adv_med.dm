@@ -15,6 +15,7 @@
 		/obj/item/weapon/stock_parts/scanning_module
 	)
 	var/mob/living/carbon/occupant
+	var/obj/item/device/antibody_scanner/immune
 
 	light_color = LIGHT_COLOR_GREEN
 	light_range_on = 3
@@ -26,12 +27,16 @@
 
 /obj/machinery/bodyscanner/New()
 	..()
+	immune = new
 	if(map.nameShort == "deff")
 		icon = 'maps/defficiency/medbay.dmi'
 	RefreshParts()
 
 /obj/machinery/bodyscanner/Destroy()
 	go_out() //Eject everything
+	if (immune)
+		qdel(immune)
+		immune = null
 	..()
 
 /obj/machinery/bodyscanner/update_icon()
@@ -313,7 +318,13 @@
 			return
 		var/obj/item/weapon/paper/R = new(loc)
 		R.name = "paper - 'body scan report'"
-		R.info = format_occupant_data(get_occupant_data())
+		R.info = format_occupant_data(get_occupant_data(),1)
+
+	else if(href_list["immunity"])
+		if(!immune)
+			immune = new
+		if (occupant)
+			immune.attack(occupant,usr)
 
 
 /obj/machinery/bodyscanner/proc/get_occupant_data()
@@ -359,7 +370,7 @@
 	return occupant_data
 
 
-/obj/machinery/bodyscanner/proc/format_occupant_data(var/list/occ)
+/obj/machinery/bodyscanner/proc/format_occupant_data(var/list/occ,var/print_exceptions=0)
 	var/dat = "<font color='blue'><b>Scan performed at [occ["stationtime"]]</b></font><br>"
 	dat += "<font color='blue'><b>Occupant Statistics:</b></font><br>"
 	var/aux
@@ -371,8 +382,10 @@
 		else
 			aux = "Dead"
 	dat += text("[]\tHealth %: [] ([])</font><br>", (occ["health"] > 50 ? "<font color='blue'>" : "<font color='red'>"), occ["health"], aux)
+	if (!print_exceptions)
+		dat += "<a href='?src=\ref[src];immunity=1'>View Immune System scan</a><br>"
 	if(occ["virus_present"])
-		dat += "<font color='red'>Viral pathogen detected in blood stream.</font><br>"
+		dat += "<font color='red'>Pathogen detected in blood stream.</font><br>"
 	dat += text("[]\t-Brute Damage %: []</font><br>", (occ["bruteloss"] < 60 ? "<font color='blue'>" : "<font color='red'>"), occ["bruteloss"])
 	dat += text("[]\t-Respiratory Damage %: []</font><br>", (occ["oxyloss"] < 60 ? "<font color='blue'>" : "<font color='red'>"), occ["oxyloss"])
 	dat += text("[]\t-Toxin Content %: []</font><br>", (occ["toxloss"] < 60 ? "<font color='blue'>" : "<font color='red'>"), occ["toxloss"])
@@ -561,4 +574,14 @@
 			say("Now outputting diagnostic.")
 			var/obj/item/weapon/paper/R = new(src.loc)
 			R.name = "paper - 'body scan report'"
-			R.info = format_occupant_data(get_occupant_data())
+			R.info = format_occupant_data(get_occupant_data(),1)
+
+
+/obj/machinery/bodyscanner/upgraded
+	name = "advanced body scanner"
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/fullbodyscanner,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+	)

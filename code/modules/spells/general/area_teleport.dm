@@ -3,6 +3,7 @@
 	desc = "This spell teleports you to a type of area of your selection."
 	abbreviation = "TP"
 	user_type = USER_TYPE_WIZARD
+	specialization = UTILITY
 
 	school = "abjuration"
 	spell_flags = NEEDSCLOTHES

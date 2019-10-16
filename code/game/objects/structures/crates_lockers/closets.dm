@@ -95,6 +95,11 @@
 	for(var/obj/structure/closet/closet in get_turf(src))
 		if(closet != src && !closet.wall_mounted)
 			return 0
+	
+	for(var/mob/living/carbon/carbon in src.loc)
+		if (carbon.mutual_handcuffs)
+			if (carbon.mutual_handcuffed_to.loc == src.loc || carbon.loc == src.loc)
+				return 0
 	return 1
 
 /obj/structure/closet/proc/dump_contents()
@@ -126,7 +131,7 @@
 			break
 		INVOKE_EVENT(AM.on_moved,list("loc"=src))
 
-/obj/structure/closet/proc/open()
+/obj/structure/closet/proc/open(mob/user)
 	if(src.opened)
 		return 0
 
@@ -165,7 +170,7 @@
 	AM.forceMove(src)
 	return 1
 
-/obj/structure/closet/proc/close()
+/obj/structure/closet/proc/close(mob/user)
 	if(!src.opened)
 		return 0
 	if(!src.can_close())
@@ -211,10 +216,10 @@
 	playsound(src, sound_file, 15, 1, -3)
 	return 1
 
-/obj/structure/closet/proc/toggle()
+/obj/structure/closet/proc/toggle(mob/user)
 	if(src.opened)
-		return src.close()
-	return src.open()
+		return src.close(user)
+	return src.open(user)
 
 /obj/structure/closet/proc/add_lock(var/obj/item/weapon/circuitboard/airlock/E, var/mob/user)
 	if(has_lock_type && !electronics && E && E.icon_state != "door_electronics_smoked")
@@ -444,8 +449,7 @@
 
 		if(iswelder(W) && canweld())
 			var/obj/item/weapon/weldingtool/WT = W
-			if(!WT.remove_fuel(0,user))
-				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			if(!WT.remove_fuel(1,user))
 				return
 			materials.makeSheets(src)
 			for(var/mob/M in viewers(src))
@@ -461,8 +465,7 @@
 		return
 	else if(iswelder(W) && canweld())
 		var/obj/item/weapon/weldingtool/WT = W
-		if(!WT.remove_fuel(0,user))
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+		if(!WT.remove_fuel(1,user))
 			return
 		src.welded =! src.welded
 		src.update_icon()
@@ -502,7 +505,7 @@
 	if(user.stat || !isturf(src.loc))
 		return
 
-	if(!src.open())
+	if(!src.open(user))
 		if(!lastbang)
 			to_chat(user, "<span class='notice'>It won't budge!</span>")
 			lastbang = 1
@@ -552,6 +555,7 @@
 			L << sound('sound/machines/click.ogg')
 			L << sound('sound/hallucinations/scary.ogg')
 			L.Knockdown(5)
+			L.Stun(5)
 
 			sleep(50)
 
@@ -559,14 +563,14 @@
 				C.images -= temp_overlay
 			return
 
-	if(!src.toggle())
+	if(!src.toggle(user))
 		to_chat(usr, "<span class='notice'>It won't budge!</span>")
 
 // tk grab then use on self
 /obj/structure/closet/attack_self_tk(mob/user as mob)
 	src.add_fingerprint(user)
 
-	if(!src.toggle())
+	if(!src.toggle(user))
 		to_chat(usr, "<span class='notice'>It won't budge!</span>")
 
 /obj/structure/closet/verb/verb_toggleopen()
@@ -598,13 +602,12 @@
 // and due to an oversight in turf/Enter() were going through walls.  That
 // should be independently resolved, but this is also an interesting twist.
 /obj/structure/closet/Exit(atom/movable/AM)
-	open()
+	open(AM)
 	if(AM.loc == src)
 		return 0
 	return 1
 
-/obj/structure/closet/container_resist()
-	var/mob/user = usr
+/obj/structure/closet/container_resist(mob/user)
 	var/breakout_time = 2 //2 minutes by default
 
 	if(opened || (!welded && !locked))
@@ -627,7 +630,7 @@
 		broken = 1 //applies to secure lockers only
 		visible_message("<span class='danger'>[user] successfully broke out of [src]!</span>")
 		to_chat(user, "<span class='notice'>You successfully break out of [src]!</span>")
-		open()
+		open(user)
 
 /obj/structure/closet/send_to_past(var/duration)
 	..()
@@ -649,3 +652,14 @@
 				return
 		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+
+// -- Vox raiders.
+
+/obj/structure/closet/loot
+	name = "Loot closet"
+	desc = "Store the valuables here for a direct transfer to the shoal. We make much bluespace."
+
+/obj/structure/closet/loot/Destroy()
+	for (var/datum/faction/vox_shoal/VS in ticker.mode.factions)
+		VS.our_bounty_lockers -= src
+	return ..()

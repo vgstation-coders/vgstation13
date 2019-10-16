@@ -46,13 +46,23 @@
 
 /datum/design/cell_charger
 	name = "Circuit Design (Cell Charger)"
-	desc = "Allows for the construction of circuit boards used to build a cell charger"
+	desc = "Allows for the construction of circuit boards used to build a Cell Charger."
 	id = "cellcharger"
 	req_tech = list(Tc_MATERIALS = 2, Tc_ENGINEERING = 2, Tc_POWERSTORAGE = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/cell_charger
+
+/datum/design/tracker_electronics
+	name = "Circuit Design (Tracker Electronics)"
+	desc = "Allows for the construction of circuit boards used to build a Solar Tracker."
+	id = "trackerelectronics"
+	req_tech = list(Tc_ENGINEERING = 2, Tc_POWERSTORAGE = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/tracker_electronics
 
 //
 //P.A.C.M.A.N

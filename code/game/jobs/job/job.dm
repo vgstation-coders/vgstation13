@@ -74,6 +74,9 @@
 /datum/job/proc/bump_position_limit()
 	xtra_positions++
 
+/datum/job/proc/reject_new_slots()
+	return FALSE
+	
 // -- If there's an outfit datum, let's use it.
 /datum/job/proc/equip(var/mob/living/carbon/human/H)
 	if (outfit_datum)

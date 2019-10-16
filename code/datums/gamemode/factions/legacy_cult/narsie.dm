@@ -17,6 +17,7 @@ var/global/list/narsie_list = list()
 	dissipate = 0 // Do we lose energy over time?
 	grav_pull = 10 //How many tiles out do we pull?
 	consume_range = 3 //How many tiles out do we eat
+	var/wounded = FALSE
 
 
 /obj/machinery/singularity/narsie/New()
@@ -54,7 +55,7 @@ var/global/list/narsie_list = list()
 			narsie_spawn_animation()
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (cult)
-		cult.progress(CULT_EPILOGUE)
+		cult.stage(CULT_EPILOGUE)
 	if(!narsie_cometh)//so we don't initiate Hell more than one time.
 
 		if (emergency_shuttle && !cult)//in case of Cult 3.0, the round will end after about 5 minutes
@@ -194,7 +195,6 @@ var/global/list/narsie_list = list()
 				return 0
 
 			M.cultify()
-			stat_collection.cult_narsie_corpses_fed++
 
 	//ITEM PROCESSING
 		else if (istype(A, /obj/))

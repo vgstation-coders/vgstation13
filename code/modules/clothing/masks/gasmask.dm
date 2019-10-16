@@ -35,7 +35,7 @@
 		stage = 2
 	if(istype(W,/obj/item/clothing/head/hardhat/red) && stage == 2)
 		to_chat(user,"<span class='notice'>You finish the ghetto helmet.</span>")
-		var/obj/ghetto = new /obj/item/clothing/head/helmet/space/rig/ghettorig (src.loc)
+		var/obj/ghetto = new /obj/item/clothing/head/helmet/space/ghetto (src.loc)
 		qdel(src)
 		qdel(W)
 		user.put_in_hands(ghetto)
@@ -57,9 +57,11 @@
 	icon_state = "plaguedoctor"
 	item_state = "gas_mask"
 	armor = list(melee = 0, bullet = 0, laser = 2,energy = 2, bomb = 0, bio = 75, rad = 0)
+	body_parts_covered = FULL_HEAD | BEARD
 	species_fit = list(VOX_SHAPED)
 	can_flip = 0
 	canstage = 0
+	sterility = 100
 
 /obj/item/clothing/mask/gas/swat
 	name = "\improper SWAT mask"
@@ -208,6 +210,14 @@
 	can_flip = 0
 	canstage = 0
 
+/obj/item/clothing/mask/gas/lola
+	name = "fighting clown mask"
+	desc = "Honk!"
+	icon_state = "lola"
+	item_state = "lola"
+	can_flip = 0
+	canstage = 0
+
 /obj/item/clothing/mask/gas/mime
 	name = "mime mask"
 	desc = "The traditional mime's mask. It has an eerie facial posture."
@@ -218,7 +228,7 @@
 	canstage = 0
 	var/muted = 0
 
-/obj/item/clothing/mask/gas/mime/treat_mask_speech(var/datum/speech/speech)
+/obj/item/clothing/mask/gas/mime/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	if(src.muted)
 		speech.message=""
 

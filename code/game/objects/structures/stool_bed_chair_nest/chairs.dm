@@ -7,7 +7,7 @@
 	var/image/secondary_buckle_overlay = null // for those really complicated chairs
 	var/noghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
 
-	lock_type = /datum/locking_category/buckle/chair
+	mob_lock_type = /datum/locking_category/buckle/chair
 
 /obj/structure/bed/chair/New()
 	..()
@@ -28,7 +28,7 @@
 
 /obj/structure/bed/chair/update_icon()
 	..()
-	if(is_locking(lock_type))
+	if(is_locking(mob_lock_type))
 		if (buckle_overlay)
 			overlays += buckle_overlay
 		if (secondary_buckle_overlay)
@@ -157,28 +157,33 @@
 			return
 	change_dir(direction)
 	return 1
+	
+/obj/structure/bed/chair/AltClick(mob/user as mob)
+	buckle_chair(user,user)	
 
 /obj/structure/bed/chair/MouseDropTo(mob/M as mob, mob/user as mob)
+	buckle_chair(M,user)
+
+/obj/structure/bed/chair/proc/buckle_chair(mob/M as mob, mob/user as mob)
 	if(!istype(M))
 		return ..()
+
 	var/mob/living/carbon/human/target = null
 	if(ishuman(M))
 		target = M
+		
+	if(!user.Adjacent(M) || !user.Adjacent(src))
+		return
+
 	if(target && target.op_stage.butt == 4 && Adjacent(target) && user.Adjacent(src) && !user.incapacitated()) //Butt surgery is at stage 4
 		if(!M.knockdown)	//Spam prevention
-			if(M == usr)
-				M.visible_message(\
-					"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
-					"Having no butt, you slide right out of the [src]",\
-					"You hear metal clanking.")
-
-			else
-				M.visible_message(\
-					"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
-					"Having no butt, you slide right out of the [src]",\
-					"You hear metal clanking.")
-
+			M.visible_message(\
+				"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
+				"Having no butt, you slide right out of the [src]",\
+				"You hear metal clanking.")
+				
 			M.Knockdown(5)
+			M.Stun(5)
 		else
 			to_chat(user, "You can't buckle [M.name] to [src], They just fell out!")
 
@@ -186,6 +191,7 @@
 		buckle_mob(M, user)
 	if(material_type)
 		material_type.on_use(src,M,user)
+
 
 // Chair types
 /obj/structure/bed/chair/wood
@@ -296,7 +302,7 @@
 	return ..()
 
 /obj/structure/bed/chair/comfy/attack_hand(var/mob/user, params, proximity)
-	if(is_locking(lock_type))
+	if(is_locking(mob_lock_type))
 		return ..()
 	if(proximity)
 		for (var/obj/item/I in src)
@@ -333,7 +339,7 @@
 
 
 /obj/structure/bed/chair/office/handle_layer() // Fixes layer problem when and office chair is buckled and facing north
-	if(dir == NORTH && !is_locking(lock_type))
+	if(dir == NORTH && !is_locking(mob_lock_type))
 		layer = CHAIR_ARMREST_LAYER
 		plane = ABOVE_HUMAN_PLANE
 	else
@@ -556,6 +562,7 @@
 	desc = "A collapsed folding chair that can be carried around."
 	icon = 'icons/obj/stools-chairs-beds.dmi'
 	icon_state = "folded_chair"
+	force = 13
 	w_class = W_CLASS_LARGE
 	var/obj/structure/bed/chair/folding/unfolded
 
@@ -587,7 +594,7 @@
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 
-		if(is_locking(lock_type))
+		if(is_locking(mob_lock_type))
 			return 0
 
 		visible_message("[usr] folds up \the [src].")

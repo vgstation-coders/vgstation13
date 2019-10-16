@@ -30,29 +30,48 @@
 	mouse_opacity = 1
 	plane = LYING_MOB_PLANE
 
-/obj/effect/decal/cleanable/bee/New()
+/obj/effect/decal/cleanable/bee/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	..()
-	var/image/I = image(icon,icon_state)
-	I.pixel_x = rand(-10,10)
-	I.pixel_y = rand(-4,4)
-	I.dir = pick(cardinal)
-
-	for (var/obj/effect/decal/cleanable/bee/corpse in get_turf(src))
-		if (corpse != src)
-			corpse.overlays += I
-			qdel(src)
-			return
-		else
-			icon_state = "bees0"
+	if (isnum(color) && color > 0)
+		src.icon_state = "bees0"
+		var/failsafe = min(color,30)
+		for (var/i = 1 to failsafe)
+			var/image/I = image(icon,icon_state)
+			I.pixel_x = rand(-10,10)
+			I.pixel_y = rand(-4,4)
+			I.dir = pick(cardinal)
 			overlays += I
+		color = null
+	else
+		var/image/I = image(src.icon,src.icon_state)
+		I.pixel_x = rand(-10,10)
+		I.pixel_y = rand(-4,4)
+		I.dir = pick(cardinal)
+
+		for (var/obj/effect/decal/cleanable/bee/corpse in get_turf(src))
+			if (corpse != src)
+				corpse.overlays += I
+				qdel(src)
+				return
+			else
+				icon_state = "bees0"
+				overlays += I
 
 /obj/effect/decal/cleanable/bee/queen_bee
 	name = "dead queen bee"
 	icon_state = "queen_bee_dead"
 
+/obj/effect/decal/cleanable/bee/atom2mapsave()
+	icon_state = initial(icon_state)
+	if (overlays.len > 0)
+		color = overlays.len//a bit hacky but hey
+	. = ..()
 
 
 //////////////////////BEE MOB///////////////////////////////////////
+
+
+var/bee_mobs_count = 0
 
 /mob/living/simple_animal/bee
 	name = "swarm of bees"
@@ -103,10 +122,12 @@
 
 /mob/living/simple_animal/bee/New(loc, var/obj/machinery/apiary/new_home)
 	..()
+	bee_mobs_count++
 	home = new_home
 
 
 /mob/living/simple_animal/bee/Destroy()
+	bee_mobs_count--
 	if(home)
 		for (var/datum/bee/B in bees)
 			home.bees_outside_hive -= B
@@ -563,7 +584,13 @@
 
 			if(target_turf)//got a target? let's move toward them now.
 				if (bee_species.slow)
+					var/turf/loc_old = loc
 					step_to(src, target_turf)//1 step per Life()
+					if (loc == loc_old)//our path is blocked for whatever reason
+						for (var/datum/bee/B in bees)
+							B.bored++
+							if (B.bored > BOREDOM_TO_RETURN)
+								B.homeCall()
 				else
 					start_walk_to(target, 0, 2)
 
@@ -591,8 +618,13 @@
 							B.homeCall()
 			if(target_turf)
 				if (calmed <= 0)
+					var/turf/loc_old = loc
 					step_to(src, target_turf)
-
+					if (loc == loc_old)//our path is blocked for whatever reason
+						for (var/datum/bee/B in bees)
+							B.fatigue++
+							if (B.fatigue > FATIGUE_TO_RETURN)
+								B.homeCall()
 				if(src.loc == target_turf)
 					visited_plants.Add(target_plant)
 					pollinating = TIME_TO_POLLINATE
@@ -666,7 +698,7 @@
 
 					for (var/datum/bee/queen_bee/QB in queen_list)
 						QB.searching++
-						if (QB.searching>20)
+						if (QB.searching>60)
 							//and if there isn't any decent home nearby (after searching for a while)...let's build one!
 							var/list/available_turfs = list()
 							for (var/turf/simulated/floor/T in range(src,2))

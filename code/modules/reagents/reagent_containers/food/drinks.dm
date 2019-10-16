@@ -33,15 +33,10 @@
 		gulp_size = 5
 	else
 		gulp_size = max(round(reagents.total_volume / 5), 5)
-	if(reagents.has_reagent(BLACKCOLOR))
-		viewcontents = 0
-	else
-		viewcontents = 1
 
-/obj/item/weapon/reagent_containers/food/drinks/attack_self(mob/user as mob)
+/obj/item/weapon/reagent_containers/food/drinks/proc/try_consume(mob/user)
 	if(!is_open_container())
 		to_chat(user, "<span class='warning'>You can't, \the [src] is closed.</span>")//Added this here and elsewhere to prevent drinking, etc. from closed drink containers. - Hinaichigo
-
 		return 0
 
 	else if(!src.reagents.total_volume || !src)
@@ -51,6 +46,12 @@
 	else
 		imbibe(user)
 		return 0
+
+/obj/item/weapon/reagent_containers/food/drinks/attack_self(mob/user)
+	try_consume(user)
+
+/obj/item/weapon/reagent_containers/food/drinks/bite_act(mob/user)
+	return try_consume(user)
 
 /obj/item/weapon/reagent_containers/food/drinks/attack(mob/living/M as mob, mob/user as mob, def_zone)
 	var/datum/reagents/R = src.reagents
@@ -77,7 +78,7 @@
 			armor_block = H.run_armor_check(affecting, "melee") // For normal attack damage
 
 			//If they have a hat/helmet and the user is targeting their head.
-			if(istype(H.head, /obj/item/clothing/head) && affecting == LIMB_HEAD)
+			if(istype(H.head, /obj/item) && affecting == LIMB_HEAD)
 
 				// If their head has an armour value, assign headarmor to it, else give it 0.
 				if(H.head.armor["melee"])
@@ -120,7 +121,7 @@
 				if(M != user)
 					O.show_message(text("<span class='danger'>[M] has been attacked with a [smashtext][src.name], by [user]!</span>"), 1)
 				else
-					O.show_message(text("<span class='danger'>[M] has attacked himself with a [smashtext][src.name]!</span>"), 1)
+					O.show_message(text("<span class='danger'>[M] has attacked \himself with a [smashtext][src.name]!</span>"), 1)
 
 		//Attack logs
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has attacked [M.name] ([M.ckey]) with a bottle!</font>")
@@ -213,13 +214,7 @@
 	transfer(target, user, can_send = TRUE, can_receive = FALSE)
 
 /obj/item/weapon/reagent_containers/food/drinks/examine(mob/user)
-
-	if(viewcontents)
-		..()
-	else
-		to_chat(user, "[bicon(src)] That's \a [src].")
-		to_chat(user, desc)
-		to_chat(user, "<span class='info'>You can't quite make out its content!</span>")
+	..()
 
 	if(!reagents || reagents.total_volume == 0)
 		to_chat(user, "<span class='info'>\The [src] is empty!</span>")
@@ -355,7 +350,7 @@
 	reagents.add_reagent(TOMATO_SOUP, 30, reagtemp = T0C + 80)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate
 	name = "Dutch Hot Coco"
 	desc = "Made in Space South America."
@@ -614,7 +609,7 @@
 	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
 
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(mob/user as mob)
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
 		to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
 		flags |= OPENCONTAINER
@@ -622,7 +617,17 @@
 		playsound(user, pick(open_sounds), 50, 1)
 		overlays += image(icon = icon, icon_state = "soda_open")
 		return
-	return ..()
+	if (reagents.total_volume > 0)
+		return ..()
+	else if (user.a_intent == I_HURT)
+		var/turf/T = get_turf(user)
+		user.drop_item(src, T, 1)
+		var/obj/item/trash/soda_cans/crushed_can = new (T, icon_state = icon_state)
+		crushed_can.name = "crushed [name]"
+		user.put_in_active_hand(crushed_can)
+		playsound(user, 'sound/items/can_crushed.ogg', 75, 1)
+		qdel(src)
+
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -759,6 +764,20 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola
+	name = "Gunka-Cola Family Sized"
+	desc = "An unnaturally-sized can for unnaturally-sized men. Taste the Consumerism!"
+	icon_state = "gunka_cola"
+	volume = 100
+	possible_transfer_amounts = list(5,10,15,25,30,50,100)
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola/New()
+	..()
+	reagents.add_reagent(COLA, 60)
+	reagents.add_reagent(SUGAR, 20)
+	reagents.add_reagent(SODIUM, 10)
+	reagents.add_reagent(COCAINE, 5)
+	reagents.add_reagent(BLACKCOLOR, 5)
+
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "Vial of Food Coloring"
 	icon = 'icons/obj/chemical.dmi'
@@ -874,8 +893,16 @@
 	icon_state = "cannedcoffee"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee/New()
 	..()
-	reagents.add_reagent(CAFE_LATTE, 50)	
-	
+	reagents.add_reagent(CAFE_LATTE, 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear
+	name = "bear arms beer"
+	desc = "Crack open a bear at the end of a long shift."
+	icon_state = "bearbeer"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear/New()
+	..()
+	reagents.add_reagent(BEER, 30)
+	reagents.add_reagent(HYPERZINE, rand(3,5))
 
 //////////////////////////drinkingglass and shaker//
 //Note by Darem: This code handles the mixing of drinks. New drinks go in three places: In Chemistry-Reagents.dm (for the drink
@@ -889,6 +916,53 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
+	flags = FPRINT  | OPENCONTAINER | NOREACT | SILENTCONTAINER
+	var/shaking = FALSE
+	var/obj/item/weapon/reagent_containers/food/drinks/shaker/reaction/reaction = null
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/New()
+	..()
+	if (flags & NOREACT)
+		reaction = new(src)
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/Destroy()
+	if (reaction)
+		qdel(reaction)
+	..()
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/attack_self(var/mob/user)
+	if (reagents.is_empty())
+		to_chat(user, "<span class='warning'>You won't shake an empty shaker now, will you?</span>")
+		return
+	if (!shaking)
+		shaking = TRUE
+		var/adjective = pick("furiously","passionately","with vigor","with determination","like a devil","with care and love","like there is no tomorrow")
+		user.visible_message("<span class='notice'>\The [user] shakes \the [src] [adjective]!</span>","<span class='notice'>You shake \the [src] [adjective]!</span>")
+		icon_state = "shaker-shake"
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
+		playsound(user, 'sound/items/boston_shaker.ogg', 80, 1)
+		if(do_after(user, src, 30))
+			reagents.trans_to(reaction,volume)
+			reaction.reagents.trans_to(reagents,volume)
+		icon_state = "shaker"
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
+		shaking = FALSE
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/reaction
+	flags = FPRINT  | OPENCONTAINER | SILENTCONTAINER
+
+/obj/item/weapon/reagent_containers/food/drinks/discount_shaker
+	name = "\improper discount shaker"
+	desc = "A metal shaker to mix drinks in."
+	icon_state = "shaker"
+	origin_tech = Tc_MATERIALS + "=1"
+	amount_per_transfer_from_this = 10
+	volume = 100
+	flags = FPRINT  | OPENCONTAINER
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos
 	name = "\improper Thermos"
@@ -1179,6 +1253,17 @@
 	..()
 	reagents.add_reagent(ABSINTHE, 100)
 
+/obj/item/weapon/reagent_containers/food/drinks/bottle/sake
+	name = "Uchuujin Junmai Ginjo Sake"
+	desc = "An exotic rice wine from the land of the space ninjas."
+	icon_state = "sakebottle"
+	vending_cat = "fermented"
+	isGlass = 1
+	molotov = -1
+/obj/item/weapon/reagent_containers/food/drinks/bottle/sake/New()
+	..()
+	reagents.add_reagent(SAKE, 100)
+
 //////////////////////////JUICES AND STUFF ///////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/orangejuice
@@ -1425,6 +1510,20 @@
 		loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
 	return
 
+// Sliding from one table to another
+/obj/item/weapon/reagent_containers/food/drinks/MouseDropFrom(atom/over_object,atom/src_location,over_location,src_control,over_control,params)
+	var/mob/user = usr
+	if (!istype(src_location))
+		return
+	if (!user || user.incapacitated())
+		return
+	if (!user.Adjacent(src) || !src_location.Adjacent(over_location))
+		return
+	if ((locate(/obj/structure/table) in src_location) && (locate(/obj/structure/table) in over_location))
+		user.visible_message("<span class='notice'>\The [user] slides \the [src] down the table.</span>", "<span class='notice'>You slide \the [src] down the table!</span>")
+		forceMove(over_location, glide_size_override = DELAY2GLIDESIZE(2))
+		return
+	return ..()
 
 //todo: can light cigarettes with
 //todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now

@@ -81,7 +81,7 @@
 					build_state--
 					icon_state = "box_glass"
 					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
-				if(isscrewdriver(P) && C)
+				if(P.is_screwdriver(user) && C)
 					var/obj/structure/displaycase/new_display_case = new(get_turf(src))
 					new_display_case.circuit = C
 					C.forceMove(new_display_case)
@@ -171,7 +171,7 @@
 					req_components = null
 					components = null
 				else
-					if(isscrewdriver(P))
+					if(P.is_screwdriver(user))
 						if(istype(get_turf(src), /turf/simulated/shuttle))
 							to_chat(user, "<span class='warning'>You must move \the [src] to a more stable location, such as a space station, before you can finish constructing it.</span>")
 							return
@@ -388,7 +388,8 @@ to destroy them and players will be able to make replacements.
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 2,
-							/obj/item/weapon/stock_parts/manipulator = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2)
 
 /obj/item/weapon/circuitboard/circuit_imprinter
 	name = "Circuit board (Circuit Imprinter)"
@@ -955,8 +956,8 @@ obj/item/weapon/circuitboard/rdserver
 
 //Teleporter
 /obj/item/weapon/circuitboard/telehub
-	name = "Circuit Board (Teleporter Hub)"
-	desc = "A circuit board used to run a machine that works as the base for a teleporter."
+	name = "Circuit Board (Teleporter Generator)"
+	desc = "A circuit board used to run a machine that generates a teleporter horizon."
 	build_path = /obj/machinery/teleport/hub
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
@@ -970,8 +971,8 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/subspace/transmitter = 4)
 
 /obj/item/weapon/circuitboard/telestation
-	name = "Circuit Board (Teleporter Station)"
-	desc = "A circuit board used to run a machine that generates an active teleportation field."
+	name = "Circuit Board (Teleporter Controller)"
+	desc = "A circuit board used to co-ordinate teleporter generators."
 	build_path = /obj/machinery/teleport/station
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
@@ -1179,7 +1180,7 @@ obj/item/weapon/circuitboard/rdserver
 /obj/item/weapon/circuitboard/centrifuge
 	name = "Circuit Board (Isolation Centrifuge)"
 	desc = "A circuit board used to run a machine that isolates pathogens and antibodies."
-	build_path = /obj/machinery/centrifuge
+	build_path = /obj/machinery/disease2/centrifuge
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=3"
 	req_components = list(

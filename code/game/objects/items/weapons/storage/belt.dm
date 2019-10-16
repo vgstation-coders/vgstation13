@@ -204,14 +204,10 @@
 		"/obj/item/clothing/glasses",
 		"/obj/item/ammo_casing/shotgun",
 		"/obj/item/ammo_storage",
-		"/obj/item/weapon/reagent_containers/food/snacks/donut/normal",
-		"/obj/item/weapon/reagent_containers/food/snacks/donut/jelly",
+		"/obj/item/weapon/reagent_containers/food/snacks/donut",
 		"/obj/item/weapon/storage/fancy/cigarettes",
-		"/obj/item/weapon/melee/baton",
-		"/obj/item/weapon/gun/energy/taser",
-		"/obj/item/weapon/lighter/zippo",
+		"/obj/item/weapon/lighter",
 		"/obj/item/weapon/cigpacket",
-		"/obj/item/clothing/glasses/hud/security",
 		"/obj/item/device/flashlight",
 		"/obj/item/device/pda",
 		"/obj/item/device/radio/headset",
@@ -220,15 +216,53 @@
 		"/obj/item/taperoll/syndie/police",
 		"/obj/item/weapon/gun/energy/taser",
 		"/obj/item/weapon/gun/energy/stunrevolver",
-		"/obj/item/weapon/gun/projectile/sec",
+		"/obj/item/weapon/gun/projectile/glock",
 		"/obj/item/weapon/legcuffs/bolas",
 		"/obj/item/device/hailer",
-		"obj/item/weapon/melee/telebaton",
+		"/obj/item/weapon/melee/telebaton",
 		"/obj/item/device/gps/secure",
 		"/obj/item/clothing/accessory/holobadge",
 		"/obj/item/weapon/autocuffer",
 		"/obj/item/weapon/depocket_wand",
 		)
+
+/obj/item/weapon/storage/belt/detective
+	name = "hard-worn belt"
+	desc = "There's a lot you can tell about a man from his clothes - sometimes it's all he can afford, or maybe he chooses to wear something as a message... this belt, then, is a statement. Classy, but not too drab. Fashionable, but still useful. People look at this belt and think, 'My god. That belt is frighteningly well placed. The shades of beige that seem to flood over themselves, splayed across every notch... I fear many things, but I fear most the man who possesses such an incredible belt.'"
+	max_combined_w_class = 200 //Some of their stuff is pretty large and they have a lot of crap so lets just be safe.
+	can_only_hold = list(
+		"/obj/item/clothing/glasses",
+		"/obj/item/ammo_storage",
+		"/obj/item/weapon/reagent_containers/food/snacks/donut",
+		"/obj/item/weapon/storage/fancy/cigarettes",
+		"/obj/item/weapon/lighter",
+		"/obj/item/weapon/cigpacket",
+		"/obj/item/device/flashlight",
+		"/obj/item/device/pda",
+		"/obj/item/device/radio/headset",
+		"/obj/item/weapon/handcuffs",
+		"/obj/item/device/flash",
+		"/obj/item/taperoll/police",
+		"/obj/item/taperoll/syndie/police",
+		"/obj/item/device/hailer",
+		"/obj/item/device/gps/secure",
+		"/obj/item/clothing/accessory/holobadge",
+		"/obj/item/weapon/reagent_containers/spray",
+		"/obj/item/weapon/storage/evidencebag",
+		"/obj/item/device/detective_scanner",
+		"/obj/item/binoculars",
+		"/obj/item/weapon/storage/box/surveillance",
+		"/obj/item/device/handtv",
+		"/obj/item/device/camera_film",
+		"/obj/item/weapon/photo",
+		"/obj/item/weapon/storage/photo_album",
+		"/obj/item/device/camera",
+		"/obj/item/weapon/folder",
+		"/obj/item/weapon/f_card",
+		"/obj/item/device/vampirehead",
+		"/obj/item/weapon/switchtool/switchblade",
+		)
+
 /obj/item/weapon/storage/belt/security/batmanbelt
 	name = "batbelt"
 	desc = "For all your crime-fighting bat needs."
@@ -266,7 +300,9 @@
 	item_state = "champion"
 	storage_slots = 1
 	can_only_hold = list(
-		"/obj/item/clothing/mask/luchador"
+		"/obj/item/clothing/mask/luchador",
+		"/obj/item/weapon/disk/nuclear",
+		"/obj/item/weapon/reagent_containers/food/drinks/golden_cup"
 		)
 
 
@@ -281,6 +317,44 @@
  		"/obj/item/organ/external/head"
  	)
 
+/obj/item/weapon/storage/belt/silicon
+	name = "cyber trophy belt"
+	desc = "Contains intellicards, posibrains, and MMIs. Those contained within can only speak to the wearer."
+	icon_state = "securitybelt"
+	item_state = "security"
+	fits_max_w_class = 4
+	max_combined_w_class = 28
+	can_only_hold = list(
+ 		"/obj/item/device/aicard",
+ 		"/obj/item/device/mmi",
+		"/obj/item/organ/external/head"
+ 	)
+
+/obj/item/weapon/storage/belt/silicon/New()
+	..()
+	new /obj/item/device/aicard(src) //One freebie card
+
+/obj/item/weapon/storage/belt/silicon/proc/GetCyberbeltMobs()
+	var/list/mobs = list()
+	for(var/obj/item/device/mmi/M in contents)
+		if(M.brainmob)
+			mobs += M.brainmob
+	for(var/obj/item/device/aicard/A in contents)
+		for(var/mob/living/silicon/ai/AI in A)
+			mobs += AI
+	return mobs
+
+/proc/RenderBeltChat(var/obj/item/weapon/storage/belt/silicon/B,var/mob/living/C,var/message)
+	var/list/listeners = observers
+	if(istype(B.loc,/mob))
+		var/mob/M = B.loc
+		listeners += M
+	listeners += B.GetCyberbeltMobs()
+	listeners = uniquelist(listeners)
+	var/turf/T = get_turf(B)
+	log_say("[key_name(C)] (@[T.x],[T.y],[T.z]) Trophy Belt: [message]")
+	for(var/mob/L in listeners)
+		to_chat(L,"<span class='binaryradio'>[C], Cyber Trophy Belt: [message]</span>")
 
 /obj/item/weapon/storage/belt/mining
 	name = "mining gear belt"

@@ -91,8 +91,14 @@ var/list/obj/machinery/flasher/flashers = list()
 			continue
 		if(O.blinded)
 			continue
-		if (istype(O, /mob/living/carbon/alien))//So aliens don't get flashed (they have no external eyes)/N
+		if(istype(O, /mob/living/carbon/alien))//So aliens don't get flashed (they have no external eyes)/N
 			continue
+		if(isrobot(O)) //SOMEDAY WE WILL GIVE MOBS A FLASH_ACT OR EVEN FIX THE DAMN EYE/EAR CHECK MADNESS, BUT THAT DAY IS NOT TODAY
+			var/mob/living/silicon/robot/R = O
+			if(HAS_MODULE_QUIRK(R, MODULE_IS_FLASHPROOF))
+				continue
+			if(HAS_MODULE_QUIRK(R, MODULE_HAS_FLASH_RES))
+				strength = strength/2
 		if(istype(O, /mob/living))
 			var/mob/living/L = O
 			L.flash_eyes(affect_silicon = 1)

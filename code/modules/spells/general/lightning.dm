@@ -3,6 +3,7 @@
 	abbreviation = "LS"
 	desc = "Strike an enemy with a bolt of lightning."
 	user_type = USER_TYPE_WIZARD
+	specialization = OFFENSIVE
 	charge_max = 100
 	cooldown_min = 40
 	cooldown_reduc = 30
@@ -206,3 +207,8 @@
 					return "Allow the spell to arc up to 5 targets."
 		else
 			return ..()
+
+/spell/lightning/sith
+	basedamage = 25
+	invocation = "UNLIMITED POWER!"
+	user_type = USER_TYPE_OTHER

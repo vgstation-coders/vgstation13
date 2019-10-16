@@ -13,8 +13,8 @@
  * Banhammer
  */
 /obj/item/weapon/banhammer/attack(mob/M as mob, mob/user as mob)
-	to_chat(M, "<font color='red'><b>You have been banned FOR NO REISIN by [user]<b></font>")
-	to_chat(user, "<font color='red'>You have <b>BANNED</b> [M]</font>")
+	to_chat(M, "<span class='red'><b>You have been banned FOR NO REISIN by [user]<b></span>")
+	to_chat(user, "<span class='red'>You have <b>BANNED</b> [M]</span>")
 
 /*
  * Classic Baton
@@ -36,6 +36,7 @@
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You club yourself over the head.</span>")
 		user.Knockdown(8)
+		user.Stun(8)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			H.apply_damage(2*force, BRUTE, LIMB_HEAD)
@@ -146,6 +147,7 @@
 				"<span class='danger'>The fishing rod goes mad!</span>")
 
 			user.Knockdown(4)
+			user.Stun(4)
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
 				H.apply_damage(2*force, BRUTE, LIMB_HEAD)
@@ -162,6 +164,7 @@
 		else
 			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1, -1)
 			target.Knockdown(2)
+			target.Stun(2)
 			target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [target.name] ([target.ckey])</font>")
 			log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [target.name] ([target.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
@@ -207,6 +210,7 @@
 		src.w_class = W_CLASS_HUGE
 		src.sharpness = 1.5
 		src.sharpness_flags = SHARP_BLADE | HOT_EDGE
+		src.armor_penetration = 100
 	else
 		to_chat(user, "<span class='notice'>\The [src] can now be concealed.</span>")
 		src.force = initial(src.force)
@@ -214,6 +218,7 @@
 		src.w_class = initial(src.w_class)
 		src.sharpness = initial(src.sharpness)
 		src.sharpness_flags = initial(src.sharpness_flags)
+		src.armor_penetration = initial(armor_penetration)
 	src.add_fingerprint(user)
 	return
 

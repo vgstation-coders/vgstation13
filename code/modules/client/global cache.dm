@@ -310,31 +310,47 @@
 
 /datum/asset/simple/pda_spesspets
 	assets = list(
-		"spesspets_bg.png"		= 'icons/pda_icons/spesspets_icons/spesspets_bg.png',
-		"spesspets_egg0.png"	= 'icons/pda_icons/spesspets_icons/spesspets_egg0.png',
-		"spesspets_egg1.png"	= 'icons/pda_icons/spesspets_icons/spesspets_egg1.png',
-		"spesspets_egg2.png"	= 'icons/pda_icons/spesspets_icons/spesspets_egg2.png',
-		"spesspets_egg3.png"	= 'icons/pda_icons/spesspets_icons/spesspets_egg3.png',
-		"spesspets_hatch.png"	= 'icons/pda_icons/spesspets_icons/spesspets_hatch.png',
-		"spesspets_talk.png"		= 'icons/pda_icons/spesspets_icons/spesspets_talk.png',
-		"spesspets_walk.png"		= 'icons/pda_icons/spesspets_icons/spesspets_walk.png',
-		"spesspets_feed.png"		= 'icons/pda_icons/spesspets_icons/spesspets_feed.png',
-		"spesspets_clean.png"	= 'icons/pda_icons/spesspets_icons/spesspets_clean.png',
-		"spesspets_heal.png"		= 'icons/pda_icons/spesspets_icons/spesspets_heal.png',
-		"spesspets_fight.png"		= 'icons/pda_icons/spesspets_icons/spesspets_fight.png',
-		"spesspets_visit.png"		= 'icons/pda_icons/spesspets_icons/spesspets_visit.png',
-		"spesspets_work.png"	= 'icons/pda_icons/spesspets_icons/spesspets_work.png',
-		"spesspets_cash.png"		= 'icons/pda_icons/spesspets_icons/spesspets_cash.png',
-		"spesspets_rate.png"		= 'icons/pda_icons/spesspets_icons/spesspets_rate.png',
-		"spesspets_Corgegg.png"	= 'icons/pda_icons/spesspets_icons/spesspets_Corgegg.png',
-		"spesspets_Chimpegg.png"	= 'icons/pda_icons/spesspets_icons/spesspets_Chimpegg.png',
-		"spesspets_Borgegg.png"	= 'icons/pda_icons/spesspets_icons/spesspets_Borgegg.png',
-		"spesspets_Syndegg.png"	= 'icons/pda_icons/spesspets_icons/spesspets_Syndegg.png',
-		"spesspets_hunger.png"		= 'icons/pda_icons/spesspets_icons/spesspets_hunger.png',
-		"spesspets_dirty.png"			= 'icons/pda_icons/spesspets_icons/spesspets_dirty.png',
-		"spesspets_hurt.png"			= 'icons/pda_icons/spesspets_icons/spesspets_hurt.png',
-		"spesspets_mine.png"		= 'icons/pda_icons/spesspets_icons/spesspets_mine.png',
-		"spesspets_sleep.png"		= 'icons/pda_icons/spesspets_icons/spesspets_sleep.png'
+		"spesspets_bg.png"			=	'icons/pda_icons/spesspets_icons/spesspets_bg.png',
+		"spesspets_egg0.png"		=	'icons/pda_icons/spesspets_icons/spesspets_egg0.png',
+		"spesspets_egg1.png"		=	'icons/pda_icons/spesspets_icons/spesspets_egg1.png',
+		"spesspets_egg2.png"		=	'icons/pda_icons/spesspets_icons/spesspets_egg2.png',
+		"spesspets_egg3.png"		=	'icons/pda_icons/spesspets_icons/spesspets_egg3.png',
+		"spesspets_hatch.png"		=	'icons/pda_icons/spesspets_icons/spesspets_hatch.png',
+		"spesspets_talk.png"		=	'icons/pda_icons/spesspets_icons/spesspets_talk.png',
+		"spesspets_walk.png"		=	'icons/pda_icons/spesspets_icons/spesspets_walk.png',
+		"spesspets_feed.png"		=	'icons/pda_icons/spesspets_icons/spesspets_feed.png',
+		"spesspets_clean.png"		=	'icons/pda_icons/spesspets_icons/spesspets_clean.png',
+		"spesspets_heal.png"		=	'icons/pda_icons/spesspets_icons/spesspets_heal.png',
+		"spesspets_fight.png"		=	'icons/pda_icons/spesspets_icons/spesspets_fight.png',
+		"spesspets_visit.png"		=	'icons/pda_icons/spesspets_icons/spesspets_visit.png',
+		"spesspets_work.png"		=	'icons/pda_icons/spesspets_icons/spesspets_work.png',
+		"spesspets_cash.png"		=	'icons/pda_icons/spesspets_icons/spesspets_cash.png',
+		"spesspets_rate.png"		=	'icons/pda_icons/spesspets_icons/spesspets_rate.png',
+		"spesspets_Corgegg.png"		=	'icons/pda_icons/spesspets_icons/spesspets_Corgegg.png',
+		"spesspets_Chimpegg.png"	=	'icons/pda_icons/spesspets_icons/spesspets_Chimpegg.png',
+		"spesspets_Borgegg.png"		=	'icons/pda_icons/spesspets_icons/spesspets_Borgegg.png',
+		"spesspets_Syndegg.png"		=	'icons/pda_icons/spesspets_icons/spesspets_Syndegg.png',
+		"spesspets_hunger.png"		=	'icons/pda_icons/spesspets_icons/spesspets_hunger.png',
+		"spesspets_dirty.png"		=	'icons/pda_icons/spesspets_icons/spesspets_dirty.png',
+		"spesspets_hurt.png"		=	'icons/pda_icons/spesspets_icons/spesspets_hurt.png',
+		"spesspets_mine.png"		=	'icons/pda_icons/spesspets_icons/spesspets_mine.png',
+		"spesspets_sleep.png"		=	'icons/pda_icons/spesspets_icons/spesspets_sleep.png',
+		"spesspets_arrow_right.png"	=	'icons/pda_icons/spesspets_icons/spesspets_arrow_right.png',
+		"spesspets_arrow_left.png"	=	'icons/pda_icons/spesspets_icons/spesspets_arrow_left.png'
+	)
+
+/datum/asset/simple/cmc_css_icons
+	assets = list(
+		//"cmc.css" = 'html/browser/cmc.css',
+		"cmc_background.png" = 'icons/cmc/css_icons/background.png',
+		"cmc_0.png" = 'icons/cmc/css_icons/0.png',
+		"cmc_1.png" = 'icons/cmc/css_icons/1.png',
+		"cmc_2.png" = 'icons/cmc/css_icons/2.png',
+		"cmc_3.png" = 'icons/cmc/css_icons/3.png',
+		"cmc_4.png" = 'icons/cmc/css_icons/4.png',
+		"cmc_5.png" = 'icons/cmc/css_icons/5.png',
+		"cmc_6.png" = 'icons/cmc/css_icons/6.png',
+		"cmc_7.png" = 'icons/cmc/css_icons/7.png'
 	)
 
 /datum/asset/simple/nanoui_maps/New()

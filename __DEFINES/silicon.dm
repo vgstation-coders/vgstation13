@@ -10,6 +10,7 @@
 #define SYNDIE_BLITZ_MODULE "Syndicate Blitzkrieg"
 #define SYNDIE_CRISIS_MODULE "Syndicate Crisis"
 #define HUG_MODULE "TG17355"
+#define STARMAN_MODULE "Starman"
 
 //MoMMI modules
 #define NANOTRASEN_MOMMI "Nanotrasen"
@@ -36,7 +37,8 @@ var/global/list/syndicate_robot_modules = list(
     )
 
 var/global/list/special_robot_modules = list(
-	HUG_MODULE				= /obj/item/weapon/robot_module/tg17355
+	HUG_MODULE				= /obj/item/weapon/robot_module/tg17355,
+	STARMAN_MODULE			= /obj/item/weapon/robot_module/starman
     )
 
 var/global/list/mommi_modules = list(
@@ -69,6 +71,8 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define MODULE_IS_A_CLOWN 1024			//Can handle clown-only items/machinery
 #define MODULE_IS_DEFINITIVE 2048		//Can't get a module reset
 #define MODULE_HAS_PROJ_RES 4096		//Doesn't slow down from being hit by boolets
+#define MODULE_HAS_FLASH_RES 8192		//Recovers from being flashed twice as fast.
+#define MODULE_IS_FLASHPROOF 16384		//Flashes do nothing.
 
 #define HAS_MODULE_QUIRK(R, Q) (R.module && (R.module.quirk_flags & Q))
 
@@ -98,6 +102,7 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define CYBORG_SERVICE_SPEED_MODIFIER 1
 #define CYBORG_SECURITY_SPEED_MODIFIER 1
 #define CYBORG_TG17355_SPEED_MODIFIER 1
+#define CYBORG_STARMAN_SPEED_MODIFIER 1
 
 #define MOMMI_SOVIET_SPEED_MODIFIER 1
 #define MOMMI_NT_SPEED_MODIFIER 1

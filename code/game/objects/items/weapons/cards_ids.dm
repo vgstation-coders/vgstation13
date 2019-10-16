@@ -163,14 +163,22 @@
 	if(recharge_rate && recharge_ticks)
 		to_chat(user, "<span class=\"info\">A small label on a thermocouple notes that it recharges at a rate of [recharge_rate]MJ for every [recharge_ticks<=1?"":"[recharge_ticks] "]oscillator tick[recharge_ticks>1?"s":""].</span>")
 
+//don't perform emag_act() stuff in this method
 /obj/item/weapon/card/emag/attack()
 	return
 
-/obj/item/weapon/card/emag/afterattack(atom/target, mob/user, proximity)
-	var/atom/A = target
+//perform individual emag_act() stuff on children overriding the method here
+/obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
 	if(!proximity)
 		return
-	A.emag_act(user)
+	if (istype(target, /mob/living/carbon/human))
+		var/mob/living/carbon/target_living = target
+		//get target zone with 0% chance of missing
+		var/zone = ran_zone(user.zone_sel.selecting, 100)
+		var/datum/organ/external/organ = target_living.get_organ(zone)
+		target_living.emag_act(user, organ, src)
+		return
+	target.emag_act(user)
 
 /obj/item/weapon/card/id
 	name = "identification card"
@@ -248,6 +256,22 @@
 	if(!virtual_wallet.account_number)
 		virtual_wallet.account_number = next_account_number
 		next_account_number += rand(1,25)
+
+/obj/item/weapon/card/id/proc/add_to_virtual_wallet(var/added_funds=0, var/mob/user, var/atom/source)
+	if(!virtual_wallet)
+		return 0
+	virtual_wallet.money += added_funds
+	var/datum/transaction/T = new()
+	if(user)
+		T.target_name = user.name
+	T.purpose = "Currency deposit"
+	T.amount = added_funds
+	if(source)
+		T.source_terminal = source.name
+	T.date = current_date_string
+	T.time = worldtime2text()
+	virtual_wallet.transaction_log.Add(T)
+	return 1
 
 /obj/item/weapon/card/id/proc/UpdateName()
 	name = "[src.registered_name]'s ID Card ([src.assignment])"

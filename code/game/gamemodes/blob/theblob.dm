@@ -36,6 +36,7 @@ var/list/blob_looks
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
 */
 //Few global vars to track the blob
+var/blob_tiles_grown_total = 0
 var/list/blobs = list()
 var/list/blob_cores = list()
 var/list/blob_nodes = list()
@@ -67,7 +68,6 @@ var/list/blob_overminds = list()
 	var/mob/camera/blob/overmind = null
 	var/destroy_sound = "sound/effects/blobsplat.ogg"
 
-	//var/looks = "new" HALLOWEEN
 	var/looks = "new"
 
 	// A note to the beam processing shit.
@@ -110,6 +110,8 @@ var/list/blob_overminds = list()
 	..(loc)
 	for(var/atom/A in loc)
 		A.blob_act(0,src)
+
+	blob_tiles_grown_total++
 	return
 
 
@@ -271,6 +273,12 @@ var/list/blob_overminds = list()
 			layer = OBJ_LAYER
 			overlays.len = 0
 
+	blob_looks(looks)
+
+	if(right_now)
+		update_icon()
+
+/atom/proc/blob_looks(var/looks = "new")
 	switch(looks)
 		if("new")
 			icon = 'icons/mob/blob/blob_64x64.dmi'
@@ -294,8 +302,6 @@ var/list/blob_overminds = list()
 			icon = 'icons/mob/blob_machine.dmi'
 		*/
 
-	if(right_now)
-		update_icon()
 
 var/list/blob_looks_admin = list(//Options available to admins
 	"new" = 64,
@@ -326,11 +332,8 @@ var/list/blob_looks_player = list(//Options available to players
 	for(var/obj/effect/blob/B in orange(src,1))
 		B.update_icon()
 
-/obj/effect/blob/proc/Pulse(var/pulse = 0, var/origin_dir = 0, var/mob/camera/blob/source = null)//Todo: Fix spaceblob expand
-	/*
-	if(time_since_last_pulse >= world.time)
-		return
-	*/
+/obj/effect/blob/proc/Pulse(var/pulse = 0, var/origin_dir = 0, var/mob/camera/blob/source = null)
+
 	time_since_last_pulse = world.time
 
 	//set background = 1
@@ -402,8 +405,14 @@ var/list/blob_looks_player = list(//Options available to players
 				B.aftermove()
 				if(B.spawning > 1)
 					B.spawning = 1
+				if(istype(T,/turf/simulated/floor))
+					var/turf/simulated/floor/F = T
+					F.burn_tile()
 		else
 			B.forceMove(T)
+			if(istype(T,/turf/simulated/floor))
+				var/turf/simulated/floor/F = T
+				F.burn_tile()
 	else //If we cant move in hit the turf
 		if(!source || !source.restrain_blob)
 			T.blob_act(0,src) //Don't attack the turf if our source mind has that turned off.
@@ -415,10 +424,10 @@ var/list/blob_looks_player = list(//Options available to players
 	return 1
 
 
-/obj/effect/blob/proc/change_to(var/type, var/mob/camera/blob/M = null)
+/obj/effect/blob/proc/change_to(var/type, var/mob/camera/blob/M = null, var/special = FALSE)
 	if(!ispath(type))
 		error("[type] is an invalid type for the blob.")
-	if("[type]" == "/obj/effect/blob/core")
+	if(special) //Send additional information to the New()
 		new type(src.loc, 200, null, 1, M, newlook = looks)
 	else
 		var/obj/effect/blob/B = new type(src.loc, newlook = looks)
@@ -483,3 +492,47 @@ var/list/blob_looks_player = list(//Options available to players
 	else
 		if(health <= 15)
 			icon_state = "blob_damaged"
+
+///////////////////////BLOB SPORE DISEASE//////////////////////////////////
+var/list/blob_diseases = list()
+
+/proc/CreateBlobDisease(var/looks)
+	var/datum/disease2/disease/S = new
+	S.form = "Spores"
+	S.infectionchance = 95
+	S.infectionchance_base = 95
+	S.stageprob = 0//single-stage
+	S.stage_variance = 0
+	S.max_stage = 1
+	S.can_kill = list()
+
+	var/datum/disease2/effect/blob_spores/E = new /datum/disease2/effect/blob_spores
+	E.looks = looks
+	S.effects += E
+
+	S.antigen = list(pick(antigen_family(pick(ANTIGEN_RARE,ANTIGEN_ALIEN))))
+	S.antigen |= pick(antigen_family(pick(ANTIGEN_RARE,ANTIGEN_ALIEN)))
+
+	S.spread = SPREAD_BLOOD
+	S.uniqueID = rand(0,9999)
+	S.subID = rand(0,9999)
+
+	S.strength = rand(70,100)
+	S.robustness = 100
+
+	S.color = "#99CB99"
+	S.pattern = 2
+	S.pattern_color = "#FFC977"
+
+	log_debug("Creating Spores #[S.uniqueID]-[S.subID].")
+	S.log += "<br />[timestamp()] Created<br>"
+
+	S.origin = "Blob ([looks])"
+
+	S.mutation_modifier = 0
+
+	S.update_global_log()
+
+	blob_diseases[looks] = S
+
+///////////////////////////////////////////////////////////////////////////

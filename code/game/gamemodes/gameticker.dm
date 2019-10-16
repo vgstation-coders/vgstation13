@@ -52,6 +52,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/space_oddity.ogg",
 		"sound/music/title1.ogg",
 		"sound/music/title2.ogg",
+		"sound/music/title3.ogg",
 		"sound/music/clown.ogg",
 		"sound/music/robocop.ogg",
 		"sound/music/gaytony.ogg",
@@ -63,6 +64,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/starman.ogg",
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
+		"sound/music/twilight.ogg",
 		))
 
 	if(SNOW_THEME)
@@ -84,7 +86,7 @@ var/datum/controller/gameticker/ticker
 		var/delay_timetotal = DEFAULT_LOBBY_TIME
 #endif
 		pregame_timeleft = world.timeofday + delay_timetotal
-		to_chat(world, "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>")
+		to_chat(world, "<B><span class='notice'>Welcome to the pre-game lobby!</span></B>")
 		to_chat(world, "Please, setup your character and select ready. Game will start in [(pregame_timeleft - world.timeofday) / 10] seconds.")
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
@@ -109,6 +111,14 @@ var/datum/controller/gameticker/ticker
 	while (!setup())
 #undef LOBBY_TICKING
 #undef LOBBY_TICKING_RESTARTED
+
+/datum/controller/gameticker/proc/IsThematic(var/playlist)
+	if(!theme)
+		return 0
+	if(theme.playlist_id == playlist)
+		return 1
+	return 0
+
 /datum/controller/gameticker/proc/StartThematic(var/playlist)
 	if(!theme)
 		theme = new(locate(1,1,CENTCOMM_Z))
@@ -219,7 +229,7 @@ var/datum/controller/gameticker/ticker
 				if(istype(obj, /obj/effect/landmark/spacepod/random))
 					qdel(obj)
 
-		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
+		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
 
 		send2maindiscord("**The game has started**")
 
@@ -263,8 +273,6 @@ var/datum/controller/gameticker/ticker
 		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
 	stat_collection.round_start_time = world.realtime
-	spawn(5 MINUTES) // poll every 5 minutes
-		population_poll_loop()
 
 	wageSetup()
 	post_roundstart()
@@ -389,6 +397,7 @@ var/datum/controller/gameticker/ticker
 					else
 						data_core.manifest_inject(new_character)
 				player.FuckUpGenes(new_character)
+				player.DiseaseCarrierCheck(new_character)
 				qdel(player)
 
 
@@ -530,6 +539,9 @@ var/datum/controller/gameticker/ticker
 	minesweeper_best_players["expert"] = "none"
 
 /datum/controller/gameticker/proc/declare_completion()
+	if(!ooc_allowed)
+		to_chat(world, "<B>The OOC channel has been automatically re-enabled!</B>")
+		ooc_allowed = TRUE
 	scoreboard()
 	return 1
 

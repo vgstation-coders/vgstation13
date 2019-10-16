@@ -12,6 +12,7 @@
 	name = "box of Marauder circuits"
 	desc = "All in one box!"
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -26,6 +27,7 @@
 	name = "chemist's pallet"
 	desc = "Everything you need to make art."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -37,8 +39,9 @@
 
 /obj/item/weapon/storage/bluespace_crystal
 	name = "natural bluespace crystals box"
-	desc = "Hmmm... it smells like tomato"
+	desc = "Hmmm... it smells like tomato."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -70,11 +73,12 @@
 	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
 	/obj/item/clothing/under/skelevoxsuit,
 	list(/obj/item/clothing/suit/storage/wintercoat/engineering/ce, /obj/item/clothing/suit/storage/wintercoat/medical/cmo, /obj/item/clothing/suit/storage/wintercoat/security/hos, /obj/item/clothing/suit/storage/wintercoat/hop, /obj/item/clothing/suit/storage/wintercoat/security/captain, /obj/item/clothing/suit/storage/wintercoat/clown, /obj/item/clothing/suit/storage/wintercoat/slimecoat),
-	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple, /obj/item/clothing/shoes/sandal),
+	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
 	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
 	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
-	/obj/item/clothing/mask/necklace/xeno_claw
+	/obj/item/clothing/mask/necklace/xeno_claw,
+	/obj/item/clothing/under/newclothes
 	)
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
@@ -226,7 +230,7 @@
 
 /obj/item/clothing/head/helmet/donutgiver
 	name = "donutgiver"
-	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections."
+	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE, JELLY, CHAOS and FAVORITE etched onto its sides."
 	icon_state = "helmet_sec"
 	item_state = "helmet"
 	flags = HEAR | FPRINT
@@ -251,6 +255,8 @@
 		to_chat(usr, "<span class='warning'>Your DNA does not match the stored DNA sample.</span>")
 		return CANNOT_EQUIP
 	else
+		if(!H.head)
+			return CAN_EQUIP
 		if(H.head.canremove)
 			return CAN_EQUIP_BUT_SLOT_TAKEN
 		return CAN_EQUIP
@@ -508,6 +514,7 @@
 	name = "box of winter"
 	desc = "It has a single red button on top. Probably want to be careful where you open this."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 

@@ -71,7 +71,7 @@
 		return buf.dna.SetUIValue(real_block,val)
 
 /obj/item/weapon/dnainjector/proc/inject(mob/M as mob, mob/user as mob)
-	if(istype(M,/mob/living/carbon/human/manifested))
+	if(ismanifested(M))
 		to_chat(M, "<span class='warning'> Apparently it didn't work.</span>")
 		if(M != user)
 			to_chat(user, "<span class='warning'> Apparently it didn't work.</span>")
@@ -523,9 +523,9 @@
 	datatype = DNA2_BUF_SE
 	value = 0xFFF
 	//block = 2
-	New()
-		block = SHADOWBLOCK
-		..()
+/obj/item/weapon/dnainjector/nofail/darkcloak/New()
+	block = SHADOWBLOCK
+	..()
 
 /obj/item/weapon/dnainjector/nofail/antidarkcloak
 	name = "DNA-Injector (Anti-Dark Cloak)"
@@ -533,9 +533,10 @@
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 2
-	New()
-		block = SHADOWBLOCK
-		..()
+
+/obj/item/weapon/dnainjector/nofail/antidarkcloak/New()
+	block = SHADOWBLOCK
+	..()
 */
 /obj/item/weapon/dnainjector/nofail/chameleon
 	name = "DNA-Injector (Chameleon)"

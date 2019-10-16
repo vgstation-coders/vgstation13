@@ -219,7 +219,7 @@ var/global/powernets_broke = 0
 		else if(istype(AM,/obj/structure/cable))
 			var/obj/structure/cable/C = AM
 			if(!unmarked || !C.powernet)
-				if(C.d1 == d || C.d2 == d)
+				if(C.hasDir(d))
 					. += C
 
 // rebuild all power networks from scratch - only called at world creation or by the admin verb

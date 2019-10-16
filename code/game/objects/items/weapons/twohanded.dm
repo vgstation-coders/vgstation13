@@ -94,124 +94,10 @@
 				message_admins("[A] with pdiff [pdiff] fire-axed by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(A.loc)]!")
 				log_admin("[A] with pdiff [pdiff] fire-axed by [user.real_name] ([user.ckey]) at [A.loc]!")
 			var/obj/structure/window/W = A
-			W.Destroy(brokenup = 1)
+			W.shatter()
 		else
 			qdel(A)
 			A = null
-
-
-/*
- * Double-Bladed Energy Swords - Cheridan
- */
-/obj/item/weapon/dualsaber
-	icon_state = "dualsaber0"
-	name = "double-bladed energy sword"
-	desc = "Handle with care."
-	var/colorset = ""
-	force = 3
-	throwforce = 5.0
-	throw_speed = 1
-	throw_range = 5
-	w_class = W_CLASS_SMALL
-	flags = FPRINT | TWOHANDABLE
-	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
-	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-
-/obj/item/weapon/dualsaber/update_wield(mob/user)
-	..()
-	icon_state = "dualsaber[wielded ? colorset : 0]"
-	item_state = "dualsaber[wielded ? colorset : 0]"
-	force = wielded ? 30 : 3
-	w_class = wielded ? 5 : 2
-	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
-	sharpness = wielded ? 1.5 : 0
-	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
-	if(user)
-		user.update_inv_hands()
-	playsound(src, wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
-	return
-
-/obj/item/weapon/dualsaber/attack(target as mob, mob/living/user as mob)
-	..()
-	if(clumsy_check(user) && (wielded) &&prob(40))
-		to_chat(user, "<span class='warning'>You twirl around a bit before losing your balance and impaling yourself on the [src].</span>")
-		user.take_organ_damage(20,25)
-		return
-	if((wielded) && prob(50))
-		spawn for(var/i=1, i<=8, i++)
-			user.dir = turn(user.dir, 45)
-			sleep(1)
-
-/obj/item/weapon/dualsaber/IsShield()
-	if(wielded)
-		return 1
-	else
-		return 0
-
-/obj/item/weapon/dualsaber/New()
-	..()
-	if(!colorset)
-		colorset = pick("redred","blueblue","greengreen","purplepurple")
-	update_icon()
-
-/*
- * Banana Bunch
- */
-/obj/item/weapon/dualsaber/bananabunch
-	icon_state = "bananabunch0"
-	name = "banana bunch"
-	desc = "Potential for some serious chaos."
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	force = 3
-	throwforce = 5.0
-	throw_speed = 1
-	throw_range = 5
-	w_class = W_CLASS_SMALL
-	flags = FPRINT | TWOHANDABLE
-	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
-	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-
-/obj/item/weapon/dualsaber/bananabunch/update_wield(mob/user)
-	..()
-	icon_state = "bananabunch[wielded ? 1 : 0]"
-	item_state = "bananabunch[wielded ? 1 : 0]"
-	force = wielded ? 30 : 3
-	w_class = wielded ? 5 : 2
-	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
-	sharpness = wielded ? 1.5 : 0
-	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
-	if(user)
-		user.update_inv_hands()
-	playsound(src, wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
-	return
-
-/obj/item/weapon/dualsaber/bananabunch/attack(target as mob, mob/living/user as mob)
-	if(user.mind && !(user.mind.assigned_role == "Clown"))
-		to_chat(user, "<span class='warning'>Your clumsy hands fumble and you slice yourself open with [src].</span>")
-		user.take_organ_damage(40,50)
-		return
-	if((wielded) && (user.mind.assigned_role == "Clown"))
-		..()
-		spawn for(var/i=1, i<=8, i++)
-			user.dir = turn(user.dir, 45)
-			sleep(1)
-
-/obj/item/weapon/dualsaber/bananabunch/IsShield()
-	if(wielded)
-		return 1
-	else
-		return 0
-
-/obj/item/weapon/dualsaber/bananabunch/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
-		var/mob/living/carbon/M = AM
-		if (M.Slip(2, 2, 1))
-			M.simple_message("<span class='notice'>You slipped on [src]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
-
-/obj/item/weapon/dualsaber/bananabunch/clumsy_check(mob/living/user)
-	return 0
 
 /*
  * High-Frequency Blade
@@ -226,7 +112,7 @@
 	throw_speed = 5
 	throw_range = 10
 	sharpness = 2
-	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK //it's a really sharp blade m'kay
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
 	mech_flags = MECH_SCAN_FAIL
@@ -237,6 +123,7 @@
 	item_state = "hfrequency[wielded ? 1 : 0]"
 	force = wielded ? 200 : 50
 	sharpness = wielded ? 100 : 2
+	armor_penetration = wielded ? 100 : 50
 	if(user)
 		user.update_inv_hands()
 	return
@@ -342,7 +229,7 @@
 	throwforce = 3
 	throw_speed = 1
 	throw_range = 5
-	attack_delay = 25 // Heavy.
+	attack_delay = 15 // Heavy.//Come on man that makes it useless (reduced it)
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
 	mech_flags = MECH_SCAN_ILLEGAL
@@ -356,8 +243,9 @@
 	icon_state = "bloodlust[wielded ? 1 : 0]"
 	item_state = icon_state
 	force = wielded ? 34 : initial(force)
-	sharpness_flags = wielded ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE : initial(sharpness_flags)
+	sharpness_flags = wielded ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE | CUT_WALL | CUT_AIRLOCK : initial(sharpness_flags)
 	sharpness = wielded ? 2 : initial(sharpness)
+	armor_penetration = wielded ? 100 : 50
 	to_chat(user, wielded ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
 	playsound(user, wielded ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0 )
 	if(user)

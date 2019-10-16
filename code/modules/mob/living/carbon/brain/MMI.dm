@@ -151,7 +151,7 @@ obj/item/device/mmi/Destroy()
 		icon_state = "mmi_full"
 
 		if (isrev(brainmob))
-			var/datum/role/revolutionary/R = brainmob.mind.GetRole(ROLE_REV)
+			var/datum/role/revolutionary/R = brainmob.mind.GetRole(REV)
 			R.Drop(TRUE)
 
 		locked = 1

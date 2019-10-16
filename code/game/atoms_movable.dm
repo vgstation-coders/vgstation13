@@ -19,7 +19,7 @@
 	var/pass_flags = 0
 
 	var/sound_override = 0 //Do we make a sound when bumping into something?
-	var/hard_deleted = 0
+	var/hard_deleted
 	var/pressure_resistance = ONE_ATMOSPHERE
 	var/obj/effect/overlay/chain/tether = null
 	var/tether_pull = 0
@@ -53,6 +53,8 @@
 	var/list/current_tethers
 	var/obj/shadow/shadow
 
+	var/ignore_blocking = 0
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -66,9 +68,6 @@
 	on_moved = new("owner"=src)
 
 /atom/movable/Destroy()
-	gcDestroyed = "Bye, world!"
-	tag = null
-
 	if(materials)
 		returnToPool(materials)
 		materials = null
@@ -109,34 +108,13 @@
 
 	..()
 
-/proc/delete_profile(var/type, code = 0)
-	if(!ticker || ticker.current_state < 3)
-		return
-	if(code == 0)
-		if (!("[type]" in del_profiling))
-			del_profiling["[type]"] = 0
-
-		del_profiling["[type]"] += 1
-	else if(code == 1)
-		if (!("[type]" in ghdel_profiling))
-			ghdel_profiling["[type]"] = 0
-
-		ghdel_profiling["[type]"] += 1
-	else
-		if (!("[type]" in gdel_profiling))
-			gdel_profiling["[type]"] = 0
-
-		gdel_profiling["[type]"] += 1
-		soft_dels += 1
-
 /atom/movable/Del()
 	if (gcDestroyed)
-
 		if (hard_deleted)
 			delete_profile("[type]", 1)
 		else
-			garbageCollector.dequeue("\ref[src]") // hard deletions have already been handled by the GC queue.
 			delete_profile("[type]", 2)
+
 	else // direct del calls or nulled explicitly.
 		delete_profile("[type]", 0)
 		Destroy()
@@ -149,8 +127,6 @@
 		glide_size = 0
 	else
 		glide_size = max(min, glide_size_override)
-	for(var/atom/movable/AM in contents)
-		AM.set_glide_size(glide_size, min, max)
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
@@ -457,12 +433,15 @@
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
+				C.mob.set_glide_size(glide_size)
+
 
 /mob/update_client_hook(atom/destination)
 	if(locate(/mob) in src)
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
+				C.mob.set_glide_size(glide_size)
 	else if(client && hud_used)
 		var/client/C = client
 		C.update_special_views()
@@ -485,6 +464,11 @@
 		return 1
 	return 0
 
+//Called below in hit_check to see if it can be hit
+//Return TRUE if not hit.
+/atom/proc/PreImpact(atom/movable/A, speed)
+	return TRUE
+
 /atom/movable/proc/hit_check(var/speed, mob/user)
 	. = 1
 
@@ -493,21 +477,10 @@
 			if(A == src)
 				continue
 
-			if(isliving(A))
-				var/mob/living/L = A
-				if(L.lying)
-					continue
-				src.throw_impact(L, speed, user)
-
-				if(src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
-					src.throwing = 0
-					. = 0
-
-			else if(isobj(A))
-				var/obj/O = A
-				if(O.density && !O.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
-					src.throw_impact(O, speed, user)
-					src.throwing = 0
+			if(!A.PreImpact(src,speed))
+				throw_impact(A,speed,user)
+				if(throwing==1)
+					throwing = 0
 					. = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
@@ -1005,9 +978,9 @@
 
 /atom/movable/proc/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
 	if(anchored)
-		return
+		return 0
 	if(user && (!Adjacent(user) || !src.Adjacent(user) || user.incapacitated() || !src.can_be_pulled(user)))
-		return
+		return 0
 	var/list/params_list = params2list(params)
 	if(clamp)
 		pixel_x = Clamp(base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
@@ -1015,6 +988,7 @@
 	else
 		pixel_x = base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
 		pixel_y = base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+	return 1
 
 //Overwriting BYOND proc used for simple animal and NPCbot movement, Pomf help me
 /atom/movable/proc/start_walk_to(Trg,Min=0,Lag=0,Speed=0)
@@ -1024,3 +998,62 @@
 
 /atom/movable/proc/can_be_pushed(mob/user)
 	return 1
+
+/atom/movable/proc/ThrowAtStation(var/radius = 30, var/throwspeed = null, var/startside = null) //throws a thing at the station from the edges
+	var/startx = 0
+	var/starty = 0
+	var/endy = 0
+	var/endx = 0
+	if (!startside)
+		startside = pick(cardinal)
+
+	switch(startside)
+		if(NORTH)
+			starty = world.maxy-TRANSITIONEDGE-5
+			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
+		if(EAST)
+			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
+			startx = world.maxx-TRANSITIONEDGE-5
+		if(SOUTH)
+			starty = TRANSITIONEDGE+5
+			startx = rand(TRANSITIONEDGE+5,world.maxx-TRANSITIONEDGE-5)
+		if(WEST)
+			starty = rand(TRANSITIONEDGE+5,world.maxy-TRANSITIONEDGE-5)
+			startx = TRANSITIONEDGE+5
+
+	//grabs a turf in the center of the z-level
+	//range of turfs determined by radius var
+	endx = rand((world.maxx/2)-radius,(world.maxx/2)+radius)
+	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
+	var/turf/startzone = locate(startx, starty, 1)
+	var/turf/endzone = locate(endx, endy, 1)
+	if(!isspace(get_area(startzone)))
+		return FALSE
+	forceMove(startzone)
+	throw_at(endzone, null, throwspeed)
+	return TRUE
+
+/mob/living/carbon/human/ThrowAtStation(var/radius = 30, var/throwspeed = null, var/startside = null, var/entry_vehicle = /obj/item/airbag)
+	var/turf/prev_turf = get_turf(src)
+	var/obj/AB = new entry_vehicle(null, TRUE)
+	forceMove(AB)
+	if(AB.ThrowAtStation(radius, throwspeed, startside))
+		return TRUE
+	else
+		forceMove(prev_turf)
+		qdel(AB)
+		return FALSE
+
+/atom/movable/proc/spawn_rand_maintenance()
+	var/list/potential_locations = list()
+	for(var/area/maintenance/A in areas)
+		potential_locations.Add(A)
+
+	while(potential_locations.len)
+		var/area/maintenance/A = pick(potential_locations)
+		potential_locations.Remove(A)
+		for(var/turf/simulated/floor/F in A.contents)
+			if(!F.has_dense_content())
+				forceMove(F)
+				return TRUE
+	return FALSE

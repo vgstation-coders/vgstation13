@@ -60,22 +60,15 @@ obj/machinery/atmospherics/trinary/filter/process()
 		return
 
 	var/output_starting_pressure = air3.return_pressure()
-
-	if(output_starting_pressure >= target_pressure || air2.return_pressure() >= target_pressure )
-		//No need to mix if target is already full!
-		return
-
-	//Calculate necessary moles to transfer using PV=nRT
-
 	var/pressure_delta = target_pressure - output_starting_pressure
-	var/transfer_moles
+	var/filtered_pressure_delta = target_pressure - air2.return_pressure()
 
-	if(air1.temperature > 0)
-		transfer_moles = pressure_delta * air3.volume / (air1.temperature * R_IDEAL_GAS_EQUATION)
-
-	//Actually transfer the gas
-
-	if(transfer_moles > 0)
+	if(pressure_delta > 0.01 && filtered_pressure_delta > 0.01 && (air1.temperature > 0 || air3.temperature > 0))
+		//Figure out how much gas to transfer to meet the target pressure.
+		var/air_temperature = (air1.temperature > 0) ? air1.temperature : air3.temperature
+		var/output_volume = air3.volume + (network3 ? network3.volume : 0)
+		//get the number of moles that would have to be transfered to bring sink to the target pressure
+		var/transfer_moles = (pressure_delta * output_volume) / (air_temperature * R_IDEAL_GAS_EQUATION)
 		var/datum/gas_mixture/removed = air1.remove(transfer_moles)
 
 		if(!removed)
@@ -107,14 +100,12 @@ obj/machinery/atmospherics/trinary/filter/process()
 		air2.merge(filtered_out)
 		air3.merge(removed)
 
-	if(network2)
-		network2.update = 1
-
-	if(network3)
-		network3.update = 1
-
-	if(network1)
-		network1.update = 1
+		if(network2)
+			network2.update = 1
+		if(network3)
+			network3.update = 1
+		if(network1)
+			network1.update = 1
 
 	return 1
 

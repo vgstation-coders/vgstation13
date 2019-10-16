@@ -95,7 +95,7 @@
 			else
 				return ..()
 		if(2)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 10))
 					update_icon()
@@ -172,7 +172,10 @@
 
 /obj/item/device/radio/intercom/medbay
 	name = "station intercom (Medbay)"
-	frequency = 1485
+
+/obj/item/device/radio/intercom/medbay/initialize()
+	..()
+	set_frequency(MED_FREQ)
 
 /obj/item/device/radio/intercom/medbay/broadcast_nospeaker
 	broadcasting = 1

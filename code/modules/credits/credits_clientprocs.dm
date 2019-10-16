@@ -40,6 +40,7 @@
 			src << output("", "[end_credits.control]:startAudio") //Execute the playAudio() function in credits.html with no parameters.
 		else
 			src << output(list2params(list(end_credits.audio_link, TRUE)), "[end_credits.control]:setAudio")
+		src << output(list2params(list(prefs.credits_volume)), "[end_credits.control]:setVolume")
 
 
 /client/proc/jingle_audio(var/preload_only = FALSE)
@@ -67,6 +68,7 @@
 			src << output("", "[end_credits.control]:startAudio") //Execute the playAudio() function in credits.html with no parameters.
 		else
 			src << output(list2params(list(link, TRUE)), "[end_credits.control]:setAudio")
+		src << output(list2params(list(prefs.credits_volume)), "[end_credits.control]:setVolume")
 
 /*
 /client/verb/credits_debug()

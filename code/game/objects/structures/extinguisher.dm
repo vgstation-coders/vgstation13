@@ -59,6 +59,13 @@
 	attack_hand(user)
 	return
 
+/obj/structure/extinguisher_cabinet/AltClick(var/mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		..()
+		return
+	opened = !opened
+	update_icon()
+
 
 /obj/structure/extinguisher_cabinet/update_icon()
 	if(!opened)

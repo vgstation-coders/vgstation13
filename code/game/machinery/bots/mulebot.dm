@@ -15,6 +15,8 @@ var/global/mulebot_count = 0
 #define MODE_WAITING 6
 #define MODE_NOROUTE 7
 
+/datum/locking_category/mulebot
+
 /obj/machinery/bot/mulebot
 	name = "\improper MULEbot"
 	desc = "A Multiple Utility Load Effector bot."
@@ -28,7 +30,6 @@ var/global/mulebot_count = 0
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	can_take_pai = TRUE
-	var/atom/movable/load = null		// the loaded crate (usually)
 	var/beacon_freq = 1400
 	var/control_freq = 1447
 
@@ -147,7 +148,7 @@ var/global/mulebot_count = 0
 		if(locked)
 			to_chat(user, "<span class='notice'>The maintenance hatch cannot be opened or closed while the controls are locked.</span>")
 			return
-
+		playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
 		open = !open
 		if(open)
 			src.visible_message("[user] opens the maintenance hatch of [src]", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
@@ -167,15 +168,15 @@ var/global/mulebot_count = 0
 			)
 		else
 			to_chat(user, "<span class='notice'>[src] does not need a repair!</span>")
-	else if(load && ismob(load))  // chance to knock off rider
-		if(prob(1+I.force * 2))
+	else
+		var/atom/movable/load = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1]
+		if(ismob(load) && prob(1+I.force * 2)) // chance to knock off rider
 			unload(0)
 			var/mob/living/rider = load
 			rider.Knockdown(2)
+			rider.Stun(2)
 			playsound(rider, "sound/effects/bodyfall.ogg", 50, 1)
 			user.visible_message("<span class='warning'>[user] knocks [load] off [src] with \the [I]!</span>", "<span class='warning'>You knock [load] off [src] with \the [I]!</span>")
-		. = ..()
-	else
 		. = ..()
 
 
@@ -191,7 +192,7 @@ var/global/mulebot_count = 0
 	return
 
 /obj/machinery/bot/mulebot/bullet_act()
-	if(prob(50) && !isnull(load))
+	if(prob(50) && is_locking(/datum/locking_category/mulebot))
 		unload(0)
 	if(prob(25))
 		src.visible_message("<span class='warning'>Something shorts out inside [src]!</span>")
@@ -236,7 +237,7 @@ var/global/mulebot_count = 0
 			if(7)
 				dat += "Unable to reach destination"
 
-
+		var/atom/movable/load = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1]
 		dat += "<BR>Current Load: [load ? load.name : "<i>none</i>"]<BR>"
 		dat += "Destination: [!destination ? "<i>none</i>" : destination]<BR>"
 		dat += "Power level: [cell ? cell.percent() : 0]%<BR>"
@@ -370,6 +371,7 @@ var/global/mulebot_count = 0
 					updateDialog()
 
 			if("unload")
+				var/atom/movable/load = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1]
 				if(load && mode !=1)
 					if(loc == target)
 						unload(loaddir)
@@ -419,11 +421,25 @@ var/global/mulebot_count = 0
 	if (!on || !istype(C)|| C.anchored || get_dist(user, src) > 1 || get_dist(src,C) > 1 )
 		return
 
-	if(load)
+	if(is_locking(/datum/locking_category/mulebot))
 		return
 
 	load(C)
 
+/obj/machinery/bot/mulebot/lock_atom(var/atom/movable/AM)
+	. = ..()
+	if(!.)
+		return
+	AM.layer = layer + 0.1
+	AM.plane = plane
+	AM.pixel_y += 9 * PIXEL_MULTIPLIER
+
+/obj/machinery/bot/mulebot/unlock_atom(var/atom/movable/AM)
+	. = ..()
+	if(!.)
+		return
+	AM.reset_plane_and_layer()
+	AM.pixel_y = initial(AM.pixel_y)
 
 // called to load a crate
 /obj/machinery/bot/mulebot/proc/load(var/atom/movable/C)
@@ -438,8 +454,9 @@ var/global/mulebot_count = 0
 		return
 	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
 		return
-
-	if(get_dist(C, src) > 1 || load || !on)
+	if(C.locked_to || C.is_locking())
+		return
+	if(get_dist(C, src) > 1 || is_locking(/datum/locking_category/mulebot) || !on)
 		return
 	for(var/obj/structure/plasticflaps/P in src.loc)//Takes flaps into account
 		if(!Cross(C,P))
@@ -451,18 +468,7 @@ var/global/mulebot_count = 0
 	if(istype(crate))
 		crate.close()
 
-	C.forceMove(src.loc)
-	sleep(2)
-	if(C.loc != src.loc) //To prevent you from going onto more than one bot.
-		return
-	C.forceMove(src)
-	load = C
-
-	C.pixel_y += 9 * PIXEL_MULTIPLIER
-	if(C.layer < layer)
-		C.layer = layer + 0.1
-	C.plane = plane
-	overlays += C
+	lock_atom(C, /datum/locking_category/mulebot)
 
 	mode = 0
 	send_status()
@@ -471,18 +477,15 @@ var/global/mulebot_count = 0
 // argument is optional direction to unload
 // if zero, unload at bot's location
 /obj/machinery/bot/mulebot/proc/unload(var/dirn = 0)
-	if(!load)
+	if(!is_locking(/datum/locking_category/mulebot))
 		return
 
 	mode = 1
 	overlays.len = 0
 	if(integratedpai)
 		overlays += image('icons/obj/aibots.dmi', "mulebot1_pai")
-
-	load.forceMove(src.loc)
-	load.pixel_y -= 9 * PIXEL_MULTIPLIER
-	load.reset_plane_and_layer()
-
+	var/atom/movable/load = get_locked(/datum/locking_category/mulebot)[1]
+	unlock_atom(load)
 
 	if(dirn)
 		var/turf/T = src.loc
@@ -491,8 +494,6 @@ var/global/mulebot_count = 0
 			step(load, dirn)
 		else
 			load.forceMove(src.loc)//Drops you right there, so you shouldn't be able to get yourself stuck
-
-	load = null
 
 	// in case non-load items end up in contents, dump every else too
 	// this seems to happen sometimes due to race conditions //There are no race conditions in BYOND. It's single-threaded.
@@ -503,8 +504,6 @@ var/global/mulebot_count = 0
 			continue
 
 		AM.forceMove(src.loc)
-		AM.reset_plane_and_layer()
-		AM.pixel_y = initial(AM.pixel_y)
 	mode = 0
 
 
@@ -700,7 +699,7 @@ var/global/mulebot_count = 0
 		playsound(src, 'sound/machines/chime.ogg', 50, 0)
 		reached_target = 1
 
-		if(load)		// if loaded, unload at target
+		if(is_locking(/datum/locking_category/mulebot))		// if loaded, unload at target
 			unload(loaddir)
 		else
 			// not loaded
@@ -780,13 +779,9 @@ var/global/mulebot_count = 0
 	spawn(run_over_cooldown)
 		coolingdown = FALSE
 
-// player on mulebot attempted to move
+// player INSIDE mulebot attempted to move
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)
-	if(user.stat)
-		return
-	if(load == user)
-		unload(0)
-	return
+	unload()
 
 // receive a radio signal
 // used for control and beacon reception
@@ -906,7 +901,7 @@ var/global/mulebot_count = 0
 		"powr" = (cell ? cell.percent() : 0),
 		"dest" = destination,
 		"home" = home_destination,
-		"load" = load,
+		"load" = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1],
 		"retn" = auto_return,
 		"pick" = auto_pickup,
 	)
@@ -915,8 +910,6 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/emp_act(severity)
 	if (cell)
 		cell.emp_act(severity)
-	if(load)
-		load.emp_act(severity)
 	..()
 
 
@@ -969,10 +962,11 @@ var/global/mulebot_count = 0
 	if(!istype(A) || !Adjacent(A) || A.anchored)
 		return
 	load(A)
-	if(load)
+	if(is_locking(/datum/locking_category/mulebot))
 		to_chat(user, "You load \the [A] onto \the [src].")
 
 /obj/machinery/bot/mulebot/attack_integrated_pai(mob/living/silicon/pai/user)
+	var/atom/movable/load = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1]
 	if(load)
 		to_chat(user, "You unload \the [load].")
 		unload()

@@ -17,8 +17,14 @@
 	Return: TRUE if succesful, FALSE otherwise
 */
 
+/datum/objective/proc/extraInfo()
+	return
+
 /datum/objective/proc/PostAppend()
 	return TRUE
+
+//1 is station, 2 is centcom
+/datum/objective/proc/ShuttleDocked(state)
 
 /datum/objective/proc/IsFulfilled()
 	if(force_success)
@@ -59,7 +65,7 @@
 		for(var/datum/objective/O in objectives)
 			var/current_completion = O.IsFulfilled()
 			dat += {"<b>Objective #[obj_count++]</b>: [O.explanation_text]
-				[admin_edit ? " - <a href='?src=\ref[M];obj_delete=\ref[O];obj_holder=\ref[src]'>(remove)</a> - <a href='?src=\ref[M];obj_completed=\ref[O];obj_holder=\ref[src]'>(toggle:[current_completion ? "<font color='green'>SUCCESS" : "<font color='red'>FAILURE" ]</font>)</a>" : ""]
+				[admin_edit ? " - <a href='?src=\ref[M];obj_delete=\ref[O];obj_holder=\ref[src]'>(remove)</a> - <a href='?src=\ref[M];obj_completed=\ref[O];obj_holder=\ref[src]'>(toggle:[current_completion ? "<font color='green'>SUCCESS" : "<span class='red'>FAILURE" ]</span>)</a>" : ""]
 				<br>"}
 			if(check_success)
 				dat += {"<BR>[current_completion ? "Success" : "Failed"]"}
@@ -67,7 +73,8 @@
 		if (owner)
 			dat += "<a href='?src=\ref[M];obj_add=1;obj_holder=\ref[src]'>(add personal objective)</a> <br/>"
 		else if (faction)
+			dat += "<b> Manage faction: </b> <br/>"
 			dat += "<a href='?src=\ref[M];obj_add=1;obj_holder=\ref[src]'>(add faction objective)</a> <br/>"
-		dat += "<a href='?src=\ref[M];obj_gen=1;obj_holder=\ref[src];[faction?"obj_owner=\ref[faction]":"obj_owner=\ref[R]"]'>(generate objectives)</a> <br/>"
-		dat += "<a href='?src=\ref[M];obj_announce=1'>(annouce objectives)</a><br/>"
+		dat += "<a href='?src=\ref[M];obj_gen=1;obj_holder=\ref[src];obj_owner=[faction?"\ref[faction]":"\ref[R]"]'>(generate objectives)</a> <br/>"
+		dat += "<a href='?src=\ref[M];obj_announce=1;obj_owner=[faction?"\ref[faction]":"\ref[R]"]'>(annouce objectives)</a><br/>"
 	return dat

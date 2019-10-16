@@ -24,6 +24,8 @@
 	if(active && !drilling_turf)
 		if(istype(A,/turf/unsimulated/mineral))
 			var/turf/unsimulated/mineral/M = A
+			if(M.mining_difficulty >= MINE_DIFFICULTY_DENSE)
+				return
 			drilling_turf = get_turf(src)
 			src.visible_message("<span class='danger'>[src] begins to drill into [M]!</span>")
 			anchored = 1

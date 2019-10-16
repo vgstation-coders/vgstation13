@@ -15,7 +15,7 @@
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_heads,
 			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
 			access_keycard_auth, access_sec_doors, access_paramedic)
-	minimal_player_age = 7
+	minimal_player_age = 20
 
 
 	pdaslot=slot_belt
@@ -45,6 +45,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <b>Medical:</b> [MED_FREQ]")
 	return 1
 
 /datum/job/cmo/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -117,6 +118,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/>")
 	return 1
 
 /datum/job/doctor/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -168,6 +170,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/>")
 	return 1
 
 /datum/job/chemist/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -213,6 +216,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/>")
 	return 1
 
 /datum/job/geneticist/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -258,6 +262,8 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.put_in_hands(new /obj/item/weapon/book/manual/virology_guide(H))
+	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/>")
 	return 1
 
 /datum/job/virologist/priority_reward_equip(var/mob/living/carbon/human/H)

@@ -202,6 +202,10 @@
 				icon_state = CINNAMON
 			if(GRAVY)
 				icon_state = GRAVY
+			if(COCO)
+				name = "cocoa powder"
+				desc = "A vital component for making chocolate."
+				icon_state = COCO
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."

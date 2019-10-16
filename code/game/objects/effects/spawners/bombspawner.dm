@@ -30,7 +30,7 @@ var/list/syndicate_bomb_spawners = list()
 
 /obj/effect/spawner/newbomb/New()
 	..()
-	if (delayedspawn)
+	if(delayedspawn)
 		return
 
 	spawnbomb()
@@ -43,33 +43,29 @@ var/list/syndicate_bomb_spawners = list()
 	V.tank_one = PT
 	V.tank_two = OT
 
-	PT.master = V
-	OT.master = V
+	//This is just an arbitrary mix that works fairly well.
+	PT.air_contents.temperature = T0C + 170
+	OT.air_contents.temperature = T0C - 100
 
-	PT.air_contents.temperature = PLASMA_FLASHPOINT
-	PT.air_contents.adjust_multi(
-		GAS_PLASMA, 15,
-		GAS_CARBON, 33)
-
-	OT.air_contents.temperature = PLASMA_FLASHPOINT
-	OT.air_contents.adjust_gas(GAS_OXYGEN, 48)
+	for(var/obj/item/weapon/tank/T in list(PT, OT))
+		T.master = V
+		var/datum/gas_mixture/G = T.air_contents
+		G.update_values()
+		G.multiply(20 * ONE_ATMOSPHERE / G.pressure) //Sets each tank's pressure to twenty atmospheres, generates a 3, 7, 14 explosion (used to be 10 times for 1, 3, 7)
 
 	var/obj/item/device/assembly/S
 
-	switch (src.btype)
-		// radio
-		if (0)
-
+	switch(btype)
+		//Radio
+		if(0)
 			S = new/obj/item/device/assembly/signaler(V)
 
-		// proximity
+		//Proximity
 		if (1)
-
 			S = new/obj/item/device/assembly/prox_sensor(V)
 
-		// timer
+		//Timer
 		if (2)
-
 			S = new/obj/item/device/assembly/timer(V)
 
 

@@ -143,6 +143,15 @@
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/cherry
 
+/datum/recipe/gelatinburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/slime)
+	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/gelatin
+
+/datum/recipe/gelatinburger/alt
+//Uses gelatin from cooking.
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/gelatin)
+
 /datum/recipe/veggieburger
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/diona)
@@ -428,6 +437,10 @@
 /datum/recipe/bread
 	reagents = list(FLOUR = 15)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
+
+/datum/recipe/nova_bread
+	reagents = list(NOVAFLOUR = 15)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
 
 /datum/recipe/syntibread
 	reagents = list(FLOUR = 15)
@@ -852,6 +865,11 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/applepie
 
+/datum/recipe/xemeatpie
+	reagents = list(FLOUR = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie
+
 /datum/recipe/meatpie
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat)
@@ -861,11 +879,6 @@
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/tofu)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/tofupie
-
-/datum/recipe/xemeatpie
-	reagents = list(FLOUR = 10)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat)
-	result = /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie
 
 /datum/recipe/cherrypie
 	reagents = list(FLOUR = 10)
@@ -1080,6 +1093,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/nettlesoup
+
+/datum/recipe/monkeysoup
+	reagents = list(WATER = 10, VINEGAR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/monkeycube
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/monkeysoup
 
 /datum/recipe/wishsoup
 	reagents = list(WATER = 20)
@@ -1308,6 +1328,15 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti
 
+/datum/recipe/crabspaghetti
+	reagents = list(WATER = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/spaghetti,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/crabspaghetti
+
 /datum/recipe/spesslaw
 	reagents = list(WATER = 5)
 	items = list(
@@ -1470,6 +1499,17 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/curry
+
+/datum/recipe/crabcurry
+	reagents = list (WATER = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/curry/crab
 
 /datum/recipe/vindaloo
 	reagents = list (WATER = 10, CAPSAICIN = 5)
@@ -1642,6 +1682,13 @@
 				/obj/item/weapon/reagent_containers/food/snacks/yogurt
 				)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pannacotta
+
+/datum/recipe/pannacotta/alt
+//Uses gelatin from butchered slime people
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+				/obj/item/weapon/reagent_containers/food/snacks/meat/slime,
+				/obj/item/weapon/reagent_containers/food/snacks/yogurt
+				)
 
 /datum/recipe/yogurt
 	reagents = list(CREAM = 10, VIRUSFOOD = 5)
@@ -1838,6 +1885,11 @@
 	reagents = list(SODIUMCHLORIDE = 1, SUGAR = 1)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
+
+/datum/recipe/crabcake
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/crabcake
 
 /datum/recipe/honeycitruschicken
 	reagents = list(SOYSAUCE = 5, HONEY = 10)

@@ -1,5 +1,4 @@
 /**********************Mineral deposits**************************/
-
 /turf/unsimulated/mineral //wall piece
 	name = "Rock"
 	icon = 'icons/turf/walls.dmi'
@@ -12,7 +11,6 @@
 	blocks_air = 1
 	//temperature = TCMB
 	var/mineral/mineral
-	var/mined_ore = 0
 	var/last_act = 0
 	var/datum/geosample/geologic_data
 	var/excavation_level = 0
@@ -29,7 +27,7 @@
 	var/no_finds = 0 //whether or not we want xenoarchaeology stuff here
 	var/rockernaut = NONE
 	var/minimum_mine_time = 0
-	var/mining_difficulty = 1
+	var/mining_difficulty = MINE_DIFFICULTY_NORM
 
 
 /turf/unsimulated/mineral/snow
@@ -150,17 +148,34 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 
 /turf/unsimulated/mineral/ex_act(severity)
-	if(prob(100/mining_difficulty))
-		switch(severity)
-			if(3.0)
-				if (prob(75))
-					GetDrilled()
-			if(2.0)
-				if (prob(90))
-					GetDrilled()
-			if(1.0)
+	if(mining_difficulty > MINE_DIFFICULTY_TOUGH)
+		return
+	switch(severity)
+		if(3.0)
+			if (prob(75))
 				GetDrilled()
+		if(2.0)
+			if (prob(90))
+				GetDrilled()
+		if(1.0)
+			GetDrilled()
 
+/turf/unsimulated/mineral/blob_act()
+	if(mining_difficulty > MINE_DIFFICULTY_DENSE)
+		if(prob(10))
+			GetDrilled()
+		return
+
+	switch(mining_difficulty)
+		if(MINE_DIFFICULTY_NORM)
+			if(prob(90))
+				GetDrilled()
+		if(MINE_DIFFICULTY_TOUGH)
+			if(prob(60))
+				GetDrilled()
+		if(MINE_DIFFICULTY_DENSE)
+			if(prob(30))
+				GetDrilled()
 
 /turf/unsimulated/mineral/Bumped(AM)
 	. = ..()
@@ -416,8 +431,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 */
 /turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
 	if (mineral && mineral.result_amount)
-		for (var/i = 1 to mineral.result_amount - mined_ore)
-			DropMineral()
+		DropMineral()
 	switch(rockernaut)
 		if(TURF_CONTAINS_REGULAR_ROCKERNAUT)
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/R = new(src)
@@ -432,7 +446,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(artifact_find && artifact_fail)
 		investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] destroyed by [key_name(usr)].")
 		for(var/mob/living/M in range(src, 200))
-			to_chat(M, "<font color='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></font>")
+			to_chat(M, "<span class='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></span>")
 			if(prob(50)) //pain
 				flick("pain",M.pain)
 				if(prob(50))
@@ -478,31 +492,22 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//otherwise, they come out inside a chunk of rock
 	var/obj/item/weapon/X
 	if(prob_clean)
-		X = new /obj/item/weapon/archaeological_find(src, new_item_type = F)
+		X = F.create_find(src)
 	else
-		X = new /obj/item/weapon/strangerock(src, inside_item_type = F)
+		X = new /obj/item/weapon/strangerock(src, F)
 		if(!geologic_data)
 			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		X:geologic_data = geologic_data
 
-	//some find types delete the /obj/item/weapon/archaeological_find and replace it with something else, this handles when that happens
-	//yuck
-	var/display_name = "something"
-	if(!X)
-		X = last_find
-	if(X)
-		display_name = X.name
-
 	//many finds are ancient and thus very delicate - luckily there is a specialised energy suspension field which protects them when they're being extracted
 	if(prob(F.prob_delicate))
 		var/obj/effect/suspension_field/S = locate() in src
-		if(!S || S.field_type != get_responsive_reagent(F.find_ID))
+		if(!S || S.field_type != F.responsive_reagent)
 			if(X)
-				visible_message("<span class='danger'>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</span>")
+				visible_message("<span class='danger'>\The [X] [pick("crumbles away into dust","breaks apart")].</span>")
 				qdel(X)
 				X = null
-
 	finds.Remove(F)
 
 /turf/unsimulated/mineral/proc/artifact_debris(var/severity = 0)
@@ -539,12 +544,12 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/dense
 	name = "dense rock"
-	mining_difficulty = 5
+	mining_difficulty = MINE_DIFFICULTY_DENSE
 	minimum_mine_time = 5 SECONDS
 
 /turf/unsimulated/mineral/hyperdense
 	name = "hyperdense rock"
-	mining_difficulty = 5
+	mining_difficulty = MINE_DIFFICULTY_DENSE
 	minimum_mine_time = 99 SECONDS //GL HF
 
 /**********************Asteroid**************************/

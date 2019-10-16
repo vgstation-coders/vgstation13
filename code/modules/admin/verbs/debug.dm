@@ -1,3 +1,6 @@
+//how long we keep proc call results (datums and lists)
+#define PROC_RESULT_KEEP_TIME 5 MINUTES
+
 /client/proc/Debug2()
 	set category = "Debug"
 	set name = "Debug-Game"
@@ -68,7 +71,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			return
 
 		if(target && !hascall(target, procname))
-			to_chat(usr, "<span style='color: red;'>Error: callproc(): target has no such call [procname].</span>")
+			to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
 			return
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
@@ -86,7 +89,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		if(targetselected)
 			if(!target)
-				to_chat(usr, "<font color='red'>Error: callproc(): owner of proc no longer exists.</font>")
+				to_chat(usr, "<span class='red'>Error: callproc(): owner of proc no longer exists.</span>")
 				return
 
 			log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
@@ -100,7 +103,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			returnval = "null"
 		else if(returnval == "")
 			returnval = "\"\" (empty string)"
-		to_chat(usr, "<font color='blue'>[procname] returned: [returnval]</font>")
+		to_chat(usr, "<span class='notice'>[procname] returned: [returnval]</span>")
 		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/callatomproc(var/datum/target as anything)
@@ -120,7 +123,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			return
 
 		if(!hascall(target, procname))
-			to_chat(usr, "<span style='color: red;'>Error: callatomproc(): target has no such call [procname].</span>")
+			to_chat(usr, "<span class='red'>Error: callatomproc(): target has no such call [procname].</span>")
 			return
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
@@ -143,9 +146,19 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			returnval = "null"
 		else if(returnval == "")
 			returnval = "\"\" (empty string)"
-		to_chat(usr, "<font color='blue'>[procname] returned: [returnval]</font>")
-		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+		var/returntext = returnval
+		if(istype(returnval, /datum))
+			returntext = "[returnval] <a href='?_src_=vars;Vars=\ref[returnval]'>\[VV\]</A>"
+			spawn(PROC_RESULT_KEEP_TIME)
+				returnval = null
+		else if(istype(returnval, /list))
+			returntext = "<a href='?_src_=vars;List=\ref[returnval]'>\[List\]</A>"
+			spawn(PROC_RESULT_KEEP_TIME)
+				returnval = null
+
+		to_chat(usr, "<span class='notice'>[procname] returned: [returntext]</span>")
+		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/Cell()
 	set category = "Debug"
@@ -1138,9 +1151,9 @@ client/proc/check_bomb()
 
 /client/proc/set_teleport_pref()
 	set name = "Set Teleport-Here Preferences"
-	set category = "Debug"
+	set category = "Fun"
 
-	teleport_here_pref = alert("Do you want to teleport atoms in a flashy way or a discret way?","Teleport-Here Preferences", "Flashy","Stealthy")
+	teleport_here_pref = alert("Do you want to teleport atoms in a flashy way or a discreet way?","Teleport-Here Preferences", "Flashy","Stealthy")
 
 	switch(teleport_here_pref)
 		if("Flashy")
@@ -1244,7 +1257,17 @@ client/proc/check_convertables()
 		if(!chosen)
 			return
 
-	holder.marked_datum = new chosen
+	var/list/lst = list()
+	var/argnum = input("Number of arguments","Number:",0) as num|null
+	if(!argnum && (argnum!=0))
+		return
+
+	lst.len = argnum // Expand to right length
+
+	for(var/i = 1 to argnum) // Lists indexed from 1 forwards in byond
+		lst[i] = variable_set(src)
+
+	holder.marked_datum = new chosen(arglist(lst))
 
 	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum. <a href='?_src_=vars;Vars=\ref[holder.marked_datum]'>Click here to access it</a></span>")
 	log_admin("[key_name(usr)] spawned the datum [chosen] to his marked datum.")
@@ -1310,6 +1333,27 @@ client/proc/check_convertables()
 		holder.emergency_shuttle_panel()
 		log_admin("[key_name(usr)] checked the Emergency Shuttle Panel.")
 	feedback_add_details("admin_verb","ESP")
+
+/client/proc/bee_count()
+	set category = "Debug"
+	set name = "Check Bee Count"
+	set desc = "Check how many bee datums or mobs currently exist in the world."
+
+	var/contained_bees = 0
+	for (var/obj/machinery/apiary/A in apiaries_list)
+		contained_bees += A.worker_bees_inside
+		contained_bees += A.queen_bees_inside
+	to_chat(usr, "<span class='notice'>There are currently [bees_count] bee datums, spread between [bee_mobs_count] swarms (or possibly held in bug nets).</span>")
+	to_chat(usr, "<span class='notice'>Additionally, there are [contained_bees] bees currently contained within apiaries.</span>")
+
+
+/client/proc/diseases_panel()
+	set name = "Diseases Panel"
+	set category = "Admin"
+	if(holder)
+		holder.diseases_panel()
+		log_admin("[key_name(usr)] checked the Diseases Panel.")
+	feedback_add_details("admin_verb","DIS")
 	return
 
 /client/proc/start_line_profiling()

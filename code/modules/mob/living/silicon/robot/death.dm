@@ -6,7 +6,7 @@
 	invisibility = 101
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-r", sleeptime = 15)
-	robogibs(loc, viruses)
+	robogibs(loc, virus2)
 
 	if(mind) //To make sure we're gibbing a player, who knows
 		if(!suiciding) //I don't know how that could happen, but you can't be too sure
@@ -42,7 +42,9 @@
 	update_canmove()
 	if(!gibbed)
 		updateicon() //Don't call updateicon if you're already null.
-		locked = FALSE //Cover unlocks.
+		if (locked)
+			locked = FALSE //Cover unlocks.
+			visible_message("A click sounds from <span class='name'>[src]</span>, indicating the automatic cover release failsafe.")
 	if(camera)
 		camera.status = FALSE
 	if(station_holomap)
@@ -76,6 +78,9 @@
 			mmi.forceMove(T)
 		if(mmi.brainmob)
 			if(mind)
+				var/datum/role/malfbot/MB = mind.GetRole(MALFBOT)
+				if(MB)
+					MB.Drop()
 				mind.transfer_to(mmi.brainmob)
 			mmi.brainmob.locked_to_z = locked_to_z
 		else

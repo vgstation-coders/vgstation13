@@ -1,5 +1,3 @@
-
-
 /datum/event/infestation
 	announceWhen = 15
 	endWhen = 20
@@ -8,6 +6,9 @@
 	var/vermin = VERM_MICE
 	var/override_location = null
 	var/override_vermin = null
+
+/datum/event/infestation/can_start()
+	return 50
 
 /datum/event/infestation/start()
 
@@ -56,7 +57,7 @@
 
 	switch(vermin)
 		if(VERM_MICE)
-			spawn_types = list(/mob/living/simple_animal/mouse/gray, /mob/living/simple_animal/mouse/brown, /mob/living/simple_animal/mouse/white)
+			spawn_types = list(/mob/living/simple_animal/mouse/common/gray, /mob/living/simple_animal/mouse/common/brown, /mob/living/simple_animal/mouse/common/white)
 			max_number = 12
 			vermstring = "mice"
 		if(VERM_LIZARDS)

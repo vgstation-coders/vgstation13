@@ -315,34 +315,31 @@
 			return 1
 	return 0
 
-/obj/structure/table/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+/obj/structure/table/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
 	destroy()
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
-	var/turf/cover = flipped ? get_turf(src) : get_step(loc, get_dir(from, loc))
-	if (get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
-		return 1
-	if (get_turf(P.original) == cover)
-		var/chance = 20
-		if (ismob(P.original))
+	var/shooting_at_the_table_directly = P.original == src
+	var/chance = 60
+	if(!shooting_at_the_table_directly)
+		if(!flipped || get_dir(loc, from) != dir) // It needs to be flipped and the direction needs to be right
+			return 1
+		if(get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
+			return 1
+		if(ismob(P.original))
 			var/mob/M = P.original
-			if (M.lying)
-				chance += 20				//Lying down lets you catch less bullets
-		if(flipped)
-			if(get_dir(loc, from) == dir)	//Flipped tables catch mroe bullets
-				chance += 20
-			else
-				return 1					//But only from one side
-		if(prob(chance))
-			health -= P.damage/2
-			if (health > 0)
-				visible_message("<span class='warning'>[P] hits \the [src]!</span>")
-				return 0
-			else
-				visible_message("<span class='warning'>[src] breaks down!</span>")
-				destroy()
-				return 1
+			if(M.lying)
+				chance += 20 //Lying down lets you catch less bullets
+	if(shooting_at_the_table_directly || prob(chance))
+		health -= P.damage/2
+		if (health > 0)
+			visible_message("<span class='warning'>[P] hits \the [src]!</span>")
+			return 0
+		else
+			visible_message("<span class='warning'>[src] breaks down!</span>")
+			destroy()
+			return 1
 	return 1
 
 /obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
@@ -366,6 +363,7 @@
 		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
 		M.adjustBrainLoss(5)
 		M.Knockdown(1)
+		M.Stun(1)
 		if (prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
 		else
@@ -387,6 +385,7 @@
 					G.affecting.forceMove(loc)
 					if (prob(15))
 						M.Knockdown(5)
+						M.Stun(5)
 					M.apply_damage(8,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
@@ -396,6 +395,7 @@
 			else
 				G.affecting.forceMove(loc)
 				G.affecting.Knockdown(5)
+				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
 			return
@@ -635,6 +635,7 @@
 					user.do_attack_animation(src, W)
 					if (prob(15))
 						M.Knockdown(5)
+						M.Stun(5)
 					M.apply_damage(15,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
@@ -648,6 +649,7 @@
 			else
 				G.affecting.forceMove(loc)
 				G.affecting.Knockdown(5)
+				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
 
@@ -663,6 +665,12 @@
 	else
 		..()
 
+/obj/structure/table/glass/plasma
+	name = "plasma glass table"
+	desc = "A standard table with a reinforced plasma glass finish."
+	icon_state = "plasma_table"
+	parts = /obj/item/weapon/table_parts/glass/plasma
+	health = 150
 
 /*
  * Brass
@@ -753,7 +761,7 @@
 		return 1
 	return !density
 
-/obj/structure/rack/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+/obj/structure/rack/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
 	destroy()
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)

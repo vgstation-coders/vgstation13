@@ -55,6 +55,7 @@
 			M.stuttering += 30
 			M.ear_deaf += 10
 			M.Knockdown(7) // CAN'T WAKE UP
+			M.Stun(7)
 			M.Jitter(30)
 			add_gamelogs(user, "knocked out [key_name(M)] with an emagged [name]", admin = FALSE, tp_link = FALSE)
 		cooldown = world.time + 1 MINUTES

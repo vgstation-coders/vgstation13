@@ -17,6 +17,7 @@
 #define VOXSHOAL "vox Shoal"
 #define BLOBCONGLOMERATE "blob conglomerate"
 #define CLOCKWORK "clockwork"
+#define PLAGUEMICE "plague mice invasion"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -24,20 +25,24 @@
 #define CULT "generic cult"
 #define LEGACY_CULT "Ancient Cult of Nar-Sie"
 #define GREYTIDE_FAC "Greytide mindlink"
+#define WIZARD_CONTRACT "wizard contract"
 // Role IDs
 #define TRAITOR "traitor"
 #define ROGUE "rogue agent"//double agents
 #define CHANGELING "changeling"
 #define VAMPIRE "vampire"
+#define THRALL "thrall"
 #define WIZARD "wizard"
 #define CULTIST "cultist"
 #define LEGACY_CULTIST "legacy cultist"
 #define NUKE_OP "nuclear operative"
+#define NUKE_OP_LEADER "nuclear operative leader"
 #define HEADREV "head revolutionary"
 #define REV "revolutionary"
+#define WIZAPP_MASTER "wizard's master"
 #define WIZAPP "wizard's apprentice"
 #define MADMONKEY "monkey fever infected"
-#define WEEABOO "crazed weeaboo"
+#define NINJA "Space Ninja"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
 #define HIGHLANDER "highlander"
 #define DEATHSQUADIE "death commando"
@@ -47,6 +52,7 @@
 #define MALFBOT "malfunctioning-slaved cyborg"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
+#define BLOBCEREBRATE "blob cerebrate"
 #define IMPLANTSLAVE "Greytider"
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
@@ -55,6 +61,8 @@
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
+#define RAMBLER "soul rambler"
+#define PLAGUEMOUSE "plague mouse"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -71,12 +79,21 @@
 #define GREET_SOULSTONE		"soulstone"
 #define GREET_SOULBLADE		"soulblade"
 #define GREET_RESURRECT		"resurrect"
+#define GREET_SACRIFICE		"sacrifice"
 
 #define GREET_REVSQUAD_CONVERTED "revsquad"
 #define GREET_PROVOC_CONVERTED	 "provocateur"
 
 
-//////////////////////////////////CULT STUFF////////////////////////////////////
+///////////////// FACTION STAGES //////////////////////
+#define FACTION_DEFEATED	-1
+#define FACTION_DORMANT		0
+#define FACTION_ACTIVE		1
+#define FACTION_ENDGAME		3
+#define FACTION_VICTORY		5
+
+#define MALF_CHOOSING_NUKE	4
+
 #define CULT_MENDED		-1
 #define CULT_PROLOGUE	0
 #define CULT_ACT_I		1
@@ -84,6 +101,9 @@
 #define CULT_ACT_III	3
 #define CULT_ACT_IV		4
 #define CULT_EPILOGUE	5
+
+
+//////////////////////////////////CULT STUFF////////////////////////////////////
 
 #define BLOODCOST_TARGET_BLEEDER	"bleeder"
 #define BLOODCOST_AMOUNT_BLEEDER	"bleeder_amount"
@@ -107,6 +127,8 @@
 #define BLOODCOST_TOTAL		"total"
 #define BLOODCOST_RESULT	"result"
 #define BLOODCOST_FAILURE	"failure"
+#define BLOODCOST_TRIBUTE	"tribute"
+#define BLOODCOST_USER	"user"
 
 #define RITUALABORT_ERASED	"erased"
 #define RITUALABORT_STAND	"too far"
@@ -130,7 +152,7 @@
 #define TATTOO_FAST		"Rapid Tracing"
 #define TATTOO_CHAT		"Dark Communication"
 #define TATTOO_MANIFEST	"Pale Body"
-#define TATTOO_MEMORIZE	"Arcane Knowledge"
+#define TATTOO_MEMORIZE	"Arcane Dimension"
 #define TATTOO_SHORTCUT	"Shortcut Tracer"
 
 #define	TOME_CLOSED	1
@@ -184,5 +206,27 @@
 
 // -- The paper
 
-#define INTERCEPT_TIME_LOW 60 SECONDS
-#define INTERCEPT_TIME_HIGH 180 SECONDS
+#define INTERCEPT_TIME_LOW 10 MINUTES
+#define INTERCEPT_TIME_HIGH 18 MINUTES
+
+// -- Injection delays (in ticks, ie, you need the /20 to get the real result)
+
+#define LATEJOIN_DELAY_MIN (5 MINUTES)/20
+#define LATEJOIN_DELAY_MAX (30 MINUTES)/20
+
+#define MIDROUND_DELAY_MIN (15 MINUTES)/20
+#define MIDROUND_DELAY_MAX (50 MINUTES)/20
+
+// -- Rulesets flags
+
+#define HIGHLANDER_RULESET 1
+#define TRAITOR_RULESET 2
+#define MINOR_RULESET 4
+
+// -- Distribution "modes"
+
+#define LORENTZ "Lorentz distribution"
+#define GAUSS "Normal distribution"
+#define DIRAC "Rigged threat number"
+#define EXPONENTIAL "Peaceful bias"
+#define UNIFORM "Uniform distribution"

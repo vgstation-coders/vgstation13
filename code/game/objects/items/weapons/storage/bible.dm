@@ -1,5 +1,3 @@
-#define isChaplain(user) (user.mind && user.mind.assigned_role == "Chaplain")
-
 /obj/item/weapon/storage/bible
 	name = "bible"
 	desc = "Apply to head repeatedly."
@@ -16,17 +14,10 @@
 	var/mob/affecting = null
 	var/datum/religion/my_rel = new /datum/religion
 	actions_types = list(/datum/action/item_action/convert)
+	rustle_sound = "pageturn"
 
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
-
-/obj/item/weapon/storage/bible/New()
-	. = ..()
-	if(ticker && (ticker.Bible_icon_state && ticker.Bible_item_state && ticker.Bible_name && ticker.chap_rel))
-		icon_state = ticker.Bible_icon_state
-		item_state = ticker.Bible_item_state
-		name = ticker.Bible_name
-		my_rel = ticker.chap_rel
 
 /obj/item/weapon/storage/bible/suicide_act(mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
@@ -77,7 +68,7 @@
 
 	var/datum/role/vampire/V = isvampire(user)
 
-	if (!isChaplain(user) && !isReligiousLeader(user)) //The user is not a Chaplain, nor the leader of this religon. BLASPHEMY !
+	if (!my_rel.leadsThisReligion(user)) //The user is not the leader of this religon. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
 		if(V) //Vampire trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
@@ -92,7 +83,7 @@
 			user.audible_scream()
 		else //Literally anyone else than a Cultist using it, at this point it's just a big book
 			..() //WHACK
-		return 1 //Non-chaplains can't use the holy book, at least not properly
+		return 1 //Non-religious leaders can't use the holy book, at least not properly
 
 	if(clumsy_check(user) && prob(50)) //Using it while clumsy, let's have some fun
 		user.visible_message("<span class='warning'>\The [src] slips out of [user]'s hands and hits \his head.</span>",
@@ -102,7 +93,7 @@
 		return 1
 
 	//From this point onwards we are done with the user, let's check whoever is on the receiving end
-	//Let us also note that if we made it this far, the user IS a Chaplain. No need to check
+	//Let us also note that if we made it this far, the user IS a religious leader. No need to check
 	//Worthy of note, blessings are done on craniums. I guess this is the best way to send the message across
 
 	if(M == user) //We are trying to smack ourselves
@@ -128,17 +119,17 @@
 	"<span class='warning'>You bless [M]'s head with \the [src]. In the name of [my_rel.deity_name], bless thee!</span>")
 	playsound(src, "punch", 25, 1, -1)
 
-	if(ishuman(M)) //Only humans can be vampires or cultists. isChaplain() checks are here to ensure only the proper chaplain has the gameplay-related interactions.
+	if(ishuman(M)) //Only humans can be vampires or cultists.
 		var/mob/living/carbon/human/H = M
 		V = isvampire(M)
-		if(V && (VAMP_MATURE in V.powers) && isChaplain(user)) //The user is a "mature" Vampire, fuck up his vampiric powers and hurt his head
+		if(V && (VAMP_MATURE in V.powers) && my_rel.leadsThisReligion(user)) //The user is a "mature" Vampire, fuck up his vampiric powers and hurt his head
 			to_chat(H, "<span class='warning'>[my_rel.deity_name]'s power nullifies your own!</span>")
 			if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
-				V.nullified = max(5, V.nullified + 2)
+				V.nullified = min(5, V.nullified + 2)
 			V.smitecounter += 10 //Better get out of here quickly before the problem shows. Ten hits and you are literal toast
 			return 1 //Don't heal the mob
 		var/datum/role/thrall/T = isthrall(H)
-		if(T && isChaplain(user))
+		if(T && my_rel.leadsThisReligion(user))
 			T.Drop(TRUE) // Remove the thrall using the Drop() function to leave the role.
 			return 1 //That's it, game over
 
@@ -164,7 +155,7 @@
 	if(!proximity_flag)
 		return
 	user.delayNextAttack(5)
-	if(isChaplain(user) || isReligiousLeader(user)) //Make sure we still are a Chaplain, just in case - or a religious leader of our religion
+	if(my_rel.leadsThisReligion(user)) //Make sure we still are a religious leader, just in case
 		if(A.reagents && A.reagents.has_reagent(WATER)) //Blesses all the water in the holder
 			user.visible_message("<span class='notice'>[user] blesses \the [A].</span>",
 			"<span class='notice'>You bless \the [A].</span>")
@@ -178,7 +169,7 @@
 	. = ..()
 
 /obj/item/weapon/storage/bible/pickup(mob/living/user as mob)
-	if(isChaplain(user) || isReligiousLeader(user)) //We are the Chaplain, yes we are
+	if(my_rel.leadsThisReligion(user)) //We are the religious leader, yes we are
 		to_chat(user, "<span class ='notice'>You feel [my_rel.deity_name]'s holy presence as you pick up \the [src].</span>")
 	if(ishuman(user)) //We are checking for antagonists, only humans can be antagonists
 		var/mob/living/carbon/human/H = user
@@ -189,9 +180,6 @@
 			V.smitecounter += 10
 		if(C) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us
 			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but Nar-Sie protects you from its influence!</span>")
-
-/obj/item/weapon/storage/bible/proc/isReligiousLeader(var/mob/living/user)
-	return (user.mind && user.mind == my_rel.religiousLeader)
 
 // Action : convert people
 

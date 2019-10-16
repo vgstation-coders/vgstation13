@@ -42,7 +42,7 @@
 
 	attackby(var/obj/item/A as obj, mob/user as mob)
 		..()
-		if(isscrewdriver(A) || istype(A, /obj/item/weapon/conversion_kit))
+		if(A.is_screwdriver(user) || istype(A, /obj/item/weapon/conversion_kit))
 			var/obj/item/weapon/conversion_kit/CK
 			if(istype(A, /obj/item/weapon/conversion_kit))
 				CK = A
@@ -89,6 +89,23 @@
 	desc = "When you absolutely, positively need a 10mm hole in the other guy. Uses .357 ammo."	//>10mm hole >.357
 	icon_state = "mateba"
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
+	
+	
+/obj/item/weapon/gun/projectile/nagant //revolver that simple mob russians use
+	name = "nagant revolver"
+	desc = "Just like in those neo-russian spy movies! Uses 7.62x38R ammo."
+	icon_state = "nagant"
+	max_shells = 7
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
+	caliber = list(NAGANTREVOLVER = 1)
+	ammo_type = "/obj/item/ammo_casing/c762x38r"
+	gun_flags = SILENCECOMP
+	fire_sound = 'sound/weapons/nagant.ogg'
+	
+/obj/item/weapon/gun/projectile/nagant/update_icon()
+	..()
+	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""]"
+	return
 
 
 // A gun to play Russian Roulette!

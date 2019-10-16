@@ -14,6 +14,7 @@
 	equip(var/mob/living/carbon/human/H)
 		if(!H)
 			return 0
+		H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
 		return 1
 
 /datum/job/cyborg
@@ -24,13 +25,15 @@
 	faction = "Station"
 	total_positions = 0
 	spawn_positions = 2
-	supervisors = "your laws and the AI"	//Nodrak
+	supervisors = "your laws and the AI"
 	selection_color = "#ddffdd"
 	no_id = 1
+	minimal_player_age = 10
 
 	equip(var/mob/living/carbon/human/H)
 		if(!H)
 			return 0
+		H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/><b>AI private:</b> [AIPRIV_FREQ]<br/>")
 		return 1
 
 /datum/job/mommi
@@ -41,7 +44,7 @@
 	faction = "Station"
 	total_positions = 0
 	spawn_positions = 2
-	supervisors = "your laws and the AI"	//Nodrak
+	supervisors = "your laws and the AI"
 	selection_color = "#ddffdd"
 	no_id = 1
 

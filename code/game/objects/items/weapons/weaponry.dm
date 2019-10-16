@@ -91,59 +91,7 @@
 /obj/item/weapon/katana/IsShield()
 	return 1
 
-/obj/item/weapon/katana/hesfast //it's a normal katana, except alt clicking lets you teleport behind someone for epic slice and dice time
-	var/teleportcooldown = 600 //one minute cooldown
-	var/active = FALSE
-
-/obj/item/weapon/katana/hesfast/IsShield()
-	return TRUE
-
-/obj/item/weapon/katana/hesfast/examine(mob/user)
-	..()
-	if(!isweeaboo(user))
-		return
-	to_chat(user, "<span class='notice'>This katana has an ancient power dwelling inside of it!</span>")
-	var/message = "<span class='notice'>"
-	if(teleportcooldown < world.time)
-		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
-	else
-		var/cooldowncalculated = round((teleportcooldown - world.time)/10)
-		message += "Your steel has unleashed it's dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
-	if(active)
-		message += " Alt-click it to disable your teleport power!</span>"
-	else
-		message += " Alt-click it to teleport behind those who wish to Kill la Kill you!</span>"
-	to_chat(user, "[message]")
-
-/obj/item/weapon/katana/hesfast/AltClick(mob/user)
-	if(!isweeaboo(user))
-		return
-	if(!active)
-		active = TRUE
-		to_chat(user, "<span class='notice'>You will teleport on attacks if you can.</span>")
-	else//i could return on the above but this is much more readable or something
-		to_chat(user, "<span class='notice'>You will not teleport for now. \"Not today, katana-san.\"</span>")
-		active = FALSE
-
-/obj/item/weapon/katana/hesfast/afterattack(var/atom/A, mob/user)
-	if(!active || !isweeaboo(user) || !ismob(A) || (A == user)) //sanity
-		return
-	if(teleportcooldown > world.time)//you're trying to teleport when it's on cooldown.
-		return
-	var/mob/living/L = A
-	var/turf/SHHHHIIIING = get_step(L.loc, turn(L.dir, 180))
-	if(!SHHHHIIIING) //sanity for avoiding banishing our weebs into the shadow realm
-		return
-	teleportcooldown = initial(teleportcooldown) + world.time
-	playsound(src, "sound/weapons/shing.ogg",50,1)
-	user.forceMove(SHHHHIIIING)
-	user.dir = L.dir
-	user.say("Pshh... nothing personnel... kid...")
-	..()
-
-/obj/item/weapon/katana/hesfast/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
+//Special weeb katana in ninja.dm
 
 /obj/item/weapon/katana/magic
 	name = "moonlight-enchanted sword"
@@ -355,6 +303,7 @@ obj/item/weapon/banhammer/admin
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	force = 15
+	var/whipitgood_bonus = 5 //energy dome bonus
 	throwforce = 0
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("whips", "lashes", "thrashes", "flagellates", "flogs")
@@ -369,10 +318,16 @@ obj/item/weapon/banhammer/admin
 		targeting = user.zone_sel.selecting
 	projectile.launch_at(A,tar_zone = targeting,from = user)
 
-/obj/item/weapon/bullwhip/attack(mob/M, mob/user)
-	sharpness = 1.2	//a whip can only cut things when it is actually whipping
+/obj/item/weapon/bullwhip/attack(mob/M, mob/user)//mob/living/carbon/human/user
+	var/force_original = 15
+	sharpness = 1.2 //a whip can only cut things when it is actually whipping
+	var/obj/item/clothing/head/energy_dome/ED
+	if(user.is_wearing_item(ED))
+		force += whipitgood_bonus
+		visible_message("<span class='warning'>[user] whips it good!</span>")
 	..()
 	sharpness = 0
+	force = force_original//return force back to normal
 
 /obj/item/weapon/macuahuitl
 	name = "wooden paddle"

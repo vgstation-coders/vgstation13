@@ -13,7 +13,7 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 
 	//handle muting and automuting
 	if(prefs.muted & MUTE_ADMINHELP)
-		to_chat(src, "<font color='red'>Error: Admin-PM: You cannot send adminhelps (Muted).</font>")
+		to_chat(src, "<span class='red'>Error: Admin-PM: You cannot send adminhelps (Muted).</span>")
 		return
 	if(src.handle_spam_prevention(msg,MUTE_ADMINHELP))
 		return
@@ -91,7 +91,7 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 		return						//this doesn't happen
 
 	var/ref_mob = "\ref[mob]"
-	msg = "\[[time_stamp()]] <span class='notice'><b><font color=red>HELP: </font>[key_name(src, 1)] (<A HREF='?_src_=holder;adminmoreinfo=[ref_mob]'>?</A>) (<A HREF='?_src_=holder;adminplayeropts=[ref_mob]'>PP</A>) (<a href='?_src_=holder;role_panel=[ref_mob]'>RP</a>) (<A HREF='?_src_=vars;Vars=[ref_mob]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=[ref_mob]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=[ref_mob]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) [ai_found ? " (<A HREF='?_src_=holder;adminchecklaws=[ref_mob]'>CL</A>)" : ""]:</b> [strict_ascii(msg)]</span>"
+	msg = "<span class='notice'><b><font color=red>HELP: </font>[key_name(src, 1)] (<A HREF='?_src_=holder;adminmoreinfo=[ref_mob]'>?</A>) (<A HREF='?_src_=holder;adminplayeropts=[ref_mob]'>PP</A>) (<a href='?_src_=holder;role_panel=[ref_mob]'>RP</a>) (<A HREF='?_src_=vars;Vars=[ref_mob]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=[ref_mob]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=[ref_mob]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) [ai_found ? " (<A HREF='?_src_=holder;adminchecklaws=[ref_mob]'>CL</A>)" : ""]:</b> [strict_ascii(msg)]</span>"
 
 	//send this msg to all admins
 	var/admin_number_afk = 0
@@ -101,16 +101,10 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 				admin_number_afk++
 			if(X.prefs.toggles & SOUND_ADMINHELP)
 				X << 'sound/effects/adminhelp.ogg'
-			if(X.prefs.special_popup)
-				X << output(msg, "window1.msay_output")
-			else
-				to_chat(X, msg)
+			X.output_to_special_tab(msg)
 
 	//show it to the person adminhelping too
-	if(src.prefs.special_popup)
-		src << output("\[[time_stamp()]] <span class='info'>PM to - <b>Admins</b>: [original_msg]</span>", "window1.msay_output")
-	else
-		to_chat(src, "<font color='blue'>PM to-<b>Admins</b>: [original_msg]</font>")
+	output_to_special_tab("<span class='notice'>PM to-<b>Admins</b>: [original_msg]</span>")
 
 	var/admin_number_present = admins.len - admin_number_afk
 	log_admin("HELP: [key_name(src)]: [original_msg] - heard by [admin_number_present] non-AFK admins.")

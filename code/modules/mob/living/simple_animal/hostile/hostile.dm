@@ -36,6 +36,12 @@
 	..()
 	initialize_rules()
 
+/mob/living/simple_animal/hostile/Destroy()
+	for(var/datum/fuzzy_ruling/D in target_rules)
+		qdel(D)
+	target_rules = null
+	..()
+
 /mob/living/simple_animal/hostile/proc/initialize_rules()
 	target_rules.Add(new /datum/fuzzy_ruling/is_mob)
 	target_rules.Add(new /datum/fuzzy_ruling/is_obj{weighting = 0.5})
@@ -224,7 +230,7 @@
 			if(canmove && space_check())
 				Goto(A,move_to_delay,minimum_distance)
 			if(A.Adjacent(src))
-				UnarmedAttack(A)
+				UnarmedAttack(A, Adjacent(A))
 			return
 		else
 			LostTarget()
@@ -265,7 +271,7 @@
 		return 1
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
-	UnarmedAttack(target)
+	UnarmedAttack(target, Adjacent(target))
 
 /mob/living/simple_animal/hostile/proc/Aggro()
 	vision_range = aggro_vision_range
@@ -392,7 +398,7 @@
 		for(var/dir in smash_dirs)
 			var/turf/T = get_step(src, dir)
 			if(istype(T, /turf/simulated/wall) && Adjacent(T))
-				UnarmedAttack(T)
+				UnarmedAttack(T, Adjacent(T))
 			for(var/atom/A in T)
 				var/static/list/destructible_objects = list(/obj/structure/window,
 					 /obj/structure/closet,
@@ -408,15 +414,15 @@
 						var/obj/machinery/door/airlock/AIR = A
 						if(!AIR.density || AIR.locked || AIR.welded || AIR.operating)
 							continue
-					UnarmedAttack(A)
+					UnarmedAttack(A, Adjacent(A))
 	return
 
 /mob/living/simple_animal/hostile/proc/EscapeConfinement()
 	if(locked_to)
-		UnarmedAttack(locked_to)
+		UnarmedAttack(locked_to, Adjacent(locked_to))
 	if(!isturf(src.loc) && src.loc != null)//Did someone put us in something?
 		var/atom/A = src.loc
-		UnarmedAttack(A) //Bang on it till we get out
+		UnarmedAttack(A, Adjacent(A)) //Bang on it till we get out
 	if(environment_smash_flags & SMASH_ASTEROID)
 		for(var/turf/unsimulated/mineral/M in range(src, 1))
 			UnarmedAttack(M, Adjacent(M))

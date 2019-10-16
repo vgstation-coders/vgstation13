@@ -155,7 +155,10 @@ For vending packs, see vending_packs.dm*/
 		if(3)
 			result = pin_query(user)
 	if(!result) //This saves a lot of pasted to_chat everywhere else
-		to_chat(user, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
+		if(can_order_contraband)
+			result = TRUE
+		else
+			to_chat(user, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
 	return result
 
 /obj/machinery/computer/supplycomp/proc/pin_query(mob/user)
@@ -184,12 +187,12 @@ For vending packs, see vending_packs.dm*/
 
 	onclose(user, "computer")
 
-/obj/machinery/computer/supplycomp/attackby(I as obj, user as mob)
+/obj/machinery/computer/supplycomp/attackby(obj/item/I as obj, user as mob)
 	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
 		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
 		hacked = 1
 		return
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			if (stat & BROKEN)
@@ -210,6 +213,7 @@ For vending packs, see vending_packs.dm*/
 				var/obj/item/weapon/circuitboard/supplycomp/M = new /obj/item/weapon/circuitboard/supplycomp( A )
 				if(can_order_contraband)
 					M.contraband_enabled = 1
+					req_access = list()
 				for (var/obj/C in src)
 					C.forceMove(loc)
 				A.circuit = M
@@ -265,9 +269,10 @@ For vending packs, see vending_packs.dm*/
 		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = O.worth, "to" = O.acct_by_string)))
 	data["centcomm_orders"] = centcomm_list
 
-	data["name_of_source_account"] = current_acct["account"].owner_name
+	var/datum/money_account/account = current_acct["account"]
+	data["name_of_source_account"] = account.owner_name
 	data["authorized_name"] = current_acct["authorized_name"]
-	data["money"] = current_acct["account"].fmtBalance()
+	data["money"] = account.fmtBalance()
 	data["send"] = list("send" = 1)
 	data["moving"] = SSsupply_shuttle.moving
 	data["at_station"] = SSsupply_shuttle.at_station
@@ -275,6 +280,7 @@ For vending packs, see vending_packs.dm*/
 	data["restriction"] = SSsupply_shuttle.restriction
 	data["requisition"] = SSsupply_shuttle.requisition
 
+	data["hacked"] = can_order_contraband
 	data["screen"] = screen
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -521,9 +527,10 @@ For vending packs, see vending_packs.dm*/
 			if(I && SO.orderedby == I.registered_name)
 				orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name)))
 	data["orders"] = orders_list
-	data["name_of_source_account"] = current_acct["account"].owner_name
+	var/datum/money_account/account = current_acct["account"]
+	data["name_of_source_account"] = account.owner_name
 	data["authorized_name"] = current_acct["authorized_name"]
-	data["money"] = current_acct["account"].fmtBalance()
+	data["money"] = account.fmtBalance()
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)

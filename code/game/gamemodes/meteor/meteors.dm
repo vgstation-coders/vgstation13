@@ -107,7 +107,7 @@
 		if(max_i <= 0)
 			return
 	while(!istype(pickedstart, /turf/space))
-	
+
 	if(meteorpath)
 		return new meteorpath(pickedstart, pickedgoal)
 	else
@@ -220,52 +220,7 @@
 	if(loc == null)
 		return
 
-	//Adjusted from flashbangs, should be its own global proc
-	visible_message("<span class='danger'>BANG</span>")
-	playsound(src, 'sound/effects/bang.ogg', 25, 1)
-
-	for(var/mob/living/M in viewers(src, null))
-
-		//Checking for protections
-		var/eye_safety = 0
-		var/ear_safety = 0
-		if(iscarbon(M))
-			var/mob/living/carbon/C = M
-			eye_safety = C.eyecheck()
-			if(ishuman(C))
-				var/mob/living/carbon/human/H = C
-				if(H.earprot())
-					ear_safety += 2
-				if(M_HULK in H.mutations)
-					ear_safety += 1
-				if(istype(H.head, /obj/item/clothing/head/helmet))
-					ear_safety += 1
-
-		//Flashing everyone
-		if(eye_safety < 2)
-			M.flash_eyes(visual = 1)
-			switch(eye_safety)
-				if(1)
-					M.Stun(2)
-				if(0)
-					M.Stun(4)
-					M.Knockdown(10)
-				if(-1)
-					M.Stun(7)
-					M.Knockdown(15)
-
-		if(ear_safety < 2)
-			switch(ear_safety)
-				if(1)
-					M.ear_damage += rand(0, 3)
-				if(0)
-					M.ear_damage += rand(5, 15)
-					M.ear_deaf = max(M.ear_deaf, 10)
-			//Shouldn't have to do this here, this is what life.dm and organ checks are for
-			//Not even going to bother with eye damage
-			if(prob(M.ear_damage - 10 + 5))
-				to_chat(M, "<span class='warning'>You can't hear anything!</span>")
-				M.sdisabilities |= DEAF
+	flashbangprime(TRUE, FALSE, FALSE)
 
 	explosion(get_turf(src), -1, 1, 3, 4, 0, 1, 0) //Tiny meteor doesn't cause too much damage
 	qdel(src)
@@ -408,6 +363,7 @@ var/list/blob_candidates = list()
 	icon = 'icons/obj/meteor_64x64.dmi'
 	icon_state = "meteorcore"
 	var/client/blob_candidate = null
+	var/could_reenter_corpse = FALSE
 
 /obj/item/projectile/meteor/blob/core/proc/AssignMob(var/mob/M)
 	blob_candidate = M.client
@@ -415,6 +371,11 @@ var/list/blob_candidates = list()
 		blob_candidate.perspective = EYE_PERSPECTIVE
 		blob_candidate.eye = src
 		blob_candidate.mob.see_invisible = SEE_INVISIBLE_MINIMUM
+		if(isobserver(M))
+			var/mob/dead/observer/O = M
+			if(O.can_reenter_corpse)
+				O.can_reenter_corpse = FALSE
+				could_reenter_corpse = TRUE
 
 /obj/item/projectile/meteor/blob/core/Destroy()
 	if(blob_candidate)
@@ -422,6 +383,9 @@ var/list/blob_candidates = list()
 		blob_candidate.eye = blob_candidate.mob
 		blob_candidates -= blob_candidate
 		blob_candidate = null
+		if(isobserver(blob_candidate.mob))
+			var/mob/dead/observer/O = blob_candidate.mob
+			O.can_reenter_corpse = could_reenter_corpse
 	..()
 
 /obj/item/projectile/meteor/blob/core/do_blob_stuff(var/turf/T)

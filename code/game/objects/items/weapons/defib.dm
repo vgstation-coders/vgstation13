@@ -50,6 +50,7 @@
 			spark(src, 5)
 			playsound(src,'sound/items/defib.ogg',50,1)
 			user.Knockdown(5)
+			user.Stun(5)
 			var/mob/living/carbon/human/H = user
 			if(ishuman(user))
 				H.apply_damage(20, BURN)
@@ -104,14 +105,13 @@
 	return
 
 /obj/item/weapon/melee/defibrillator/proc/shockAttack(mob/living/carbon/human/target,mob/user)
+	var/damage = rand(30, 60)
+	if (!target.electrocute_act(damage, src, def_zone = LIMB_CHEST))
+		return
 	var/datum/organ/internal/heart/heart = target.get_heart()
 	if(heart)
 		heart.damage += rand(5,60)
-	target.visible_message("<span class='danger'>[target] has been shocked in the chest with the [src] by [user]!</span>")
-	target.Knockdown(rand(6,12))
-	target.apply_damage(rand(30,60),BURN,LIMB_CHEST)
 	target.audible_scream() //If we're going this route, it kinda hurts
-	target.updatehealth()
 	spawn() //Logging
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>"
 		target.attack_log += "\[[time_stamp()]\]<font color='orange'> Shocked by [user.name] ([user.ckey]) with an emagged [src.name]</font>"
@@ -120,7 +120,6 @@
 			target.LAssailant = null
 		else
 			target.LAssailant = user
-	spark(src, 5, FALSE)
 	playsound(src,'sound/items/defib.ogg',50,1)
 	charges--
 	update_icon()

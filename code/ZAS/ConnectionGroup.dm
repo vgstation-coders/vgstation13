@@ -79,7 +79,7 @@ Class Procs:
 		//Check for knocking people over
 		if(ismob(AM) && differential > zas_settings.Get(/datum/ZAS_Setting/airflow_stun_pressure))
 			var/mob/M = AM
-			M.airflow_stun()
+			M.airflow_stun(differential)
 
 		if(AM.check_airflow_movable(differential))
 			//Check for things that are in range of the midpoint turfs.

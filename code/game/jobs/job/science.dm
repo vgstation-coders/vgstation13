@@ -17,7 +17,7 @@
 			            access_tox_storage, access_teleporter, access_sec_doors,
 			            access_science, access_robotics, access_xenobiology, access_ai_upload,
 			            access_RC_announce, access_keycard_auth, access_tcomsat, access_gateway, access_mechanic)
-	minimal_player_age = 7
+	minimal_player_age = 20
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/heads/rd
@@ -43,6 +43,8 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Science:</b> [SCI_FREQ]<br/>")
 	return 1
 
 /datum/job/scientist
@@ -99,6 +101,8 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")
 	return 1
 
 /datum/job/roboticist
@@ -146,6 +150,8 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")
 	return 1
 
 /datum/job/roboticist/priority_reward_equip(var/mob/living/carbon/human/H)

@@ -85,6 +85,8 @@
 	)
 
 
+//The securitygear box can be found at 'code/game/objects/items/weapons/storage/boxes' and it contains one of each:
+//sec belt, sec headset, sps, flash, flashbang, boot knife holster, tactical flashlight, sechud, black gloves, stunbaton, taser, pepperspray, sec tape, and hailer.
 /obj/structure/closet/secure_closet/hos
 	name = "Head of Security's Locker"
 	req_access = list(access_hos)
@@ -103,35 +105,24 @@
 			/obj/item/weapon/storage/backpack/messenger/sec,
 		),
 		/obj/item/clothing/head/helmet/tactical/HoS,
-		/obj/item/device/flashlight/tactical,
-		/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
-		/obj/item/clothing/suit/armor/vest,
 		/obj/item/clothing/under/rank/head_of_security/jensen,
 		pick(
 			/obj/item/clothing/suit/armor/hos/jensen,
 			/obj/item/clothing/suit/armor/hos/sundowner),
+		/obj/item/clothing/suit/armor/hos,
 		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 		/obj/item/weapon/cartridge/hos,
 		/obj/item/device/detective_scanner,
 		/obj/item/device/radio/headset/heads/hos,
-		/obj/item/clothing/glasses/sunglasses/sechud,
 		/obj/item/weapon/shield/riot,
 		/obj/item/weapon/storage/lockbox/loyalty,
 		/obj/item/weapon/storage/box/flashbangs,
-		/obj/item/weapon/storage/belt/security,
-		/obj/item/device/flash,
-		/obj/item/weapon/melee/baton/loaded,
 		/obj/item/weapon/storage/lockbox/lawgiver/with_magazine,
 		/obj/item/clothing/accessory/holster/handgun/waist,
 		/obj/item/weapon/melee/telebaton,
-		/obj/item/device/gps/secure,
-		/obj/item/clothing/suit/armor/hos,
-		/obj/item/taperoll/police,
-		/obj/item/device/hailer,
-		/obj/item/weapon/reagent_containers/spray/pepper,
-		/obj/item/weapon/grenade/flashbang,
-		/obj/item/weapon/gun/energy/taser,
 		/obj/item/weapon/card/debit/preferred/department/security,
+		/obj/item/weapon/pinpointer,
+		/obj/item/weapon/storage/box/large/securitygear,
 	)
 
 /obj/structure/closet/secure_closet/warden
@@ -152,27 +143,13 @@
 			/obj/item/weapon/storage/backpack/satchel_sec,
 			/obj/item/weapon/storage/backpack/messenger/sec,
 			),
-		/obj/item/clothing/suit/armor/vest/security,
 		/obj/item/clothing/under/rank/warden,
 		/obj/item/clothing/suit/armor/vest/warden,
 		/obj/item/clothing/head/helmet/tactical/warden,
-		/obj/item/device/flashlight/tactical,
-		/obj/item/device/radio/headset/headset_sec,
-		/obj/item/clothing/glasses/sunglasses/sechud,
 		/obj/item/weapon/storage/box/flashbangs,
-		/obj/item/weapon/storage/belt/security,
-		/obj/item/weapon/reagent_containers/spray/pepper,
-		/obj/item/weapon/melee/baton/loaded,
-		/obj/item/weapon/gun/energy/taser,
 		/obj/item/weapon/storage/box/bolas,
 		/obj/item/weapon/batteringram,
-		/obj/item/device/gps/secure,
-		/obj/item/taperoll/police,
-		/obj/item/device/hailer,
-		/obj/item/weapon/reagent_containers/spray/pepper,
-		/obj/item/weapon/grenade/flashbang,
-		/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
-		/obj/item/weapon/gun/energy/taser,
+		/obj/item/weapon/storage/box/large/securitygear,
 	)
 
 /obj/structure/closet/secure_closet/security
@@ -194,21 +171,7 @@
 			),
 		/obj/item/clothing/suit/armor/vest/security,
 		/obj/item/clothing/head/helmet/tactical/sec/preattached,
-		/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
-		/obj/item/device/radio/headset/headset_sec,
-		/obj/item/weapon/storage/belt/security,
-		/obj/item/device/flash,
-		/obj/item/weapon/reagent_containers/spray/pepper,
-		/obj/item/weapon/grenade/flashbang,
-		/obj/item/weapon/melee/baton/loaded,
-		/obj/item/weapon/gun/energy/taser,
-		pick(
-			/obj/item/clothing/glasses/sunglasses/sechud/prescription,
-			/obj/item/clothing/glasses/sunglasses/sechud),
-		/obj/item/taperoll/police,
-		/obj/item/device/hailer,
-		/obj/item/clothing/gloves/black,
-		/obj/item/device/gps/secure,
+		/obj/item/weapon/storage/box/large/securitygear,
 	)
 
 
@@ -245,6 +208,8 @@
 	)
 
 
+//The detectivegear box can be found at at the same location as the securitygear box and it contains:
+//sec headset, sec hud, black gloves, sps, 2x .38 ammoboxes, speedloader, evidence bag box, scanner, binoculars, and a hand TV set.
 /obj/structure/closet/secure_closet/detective
 	name = "Detective's Cabinet"
 	req_access = list(access_forensics_lockers)
@@ -263,24 +228,14 @@
 		/obj/item/clothing/suit/storage/det_suit/noir,
 		/obj/item/clothing/suit/storage/forensics/blue,
 		/obj/item/clothing/suit/storage/forensics/red,
-		/obj/item/clothing/gloves/black,
 		/obj/item/clothing/head/det_hat,
 		/obj/item/clothing/head/det_hat/noir,
 		/obj/item/clothing/shoes/brown,
 		/obj/item/clothing/shoes/laceup,
-		/obj/item/weapon/storage/box/evidence,
-		/obj/item/device/radio/headset/headset_sec,
-		/obj/item/device/detective_scanner,
 		/obj/item/clothing/suit/armor/det_suit,
-		/obj/item/ammo_storage/speedloader/c38,
-		/obj/item/ammo_storage/box/c38,
-		/obj/item/ammo_storage/box/c38,
-		/obj/item/weapon/gun/projectile/detective,
 		/obj/item/clothing/accessory/holster/handgun/wornout,
-		/obj/item/device/gps/secure,
-		/obj/item/binoculars,
-		/obj/item/weapon/storage/box/surveillance,
-		/obj/item/device/handtv,
+		/obj/item/weapon/gun/projectile/detective,
+		/obj/item/weapon/storage/box/large/detectivegear,
 	)
 
 /obj/structure/closet/secure_closet/detective/update_icon()

@@ -18,7 +18,7 @@
 	var/list/is_seeing = new/list() //List of mobs which are currently seeing the contents of this item's storage
 	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect even if can_only_hold is set)
 	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
-	var/storage_slots = 7 //The number of storage slots in this container.
+	var/storage_slots = 0 //The number of storage slots in this container.
 	var/obj/abstract/screen/storage/boxes = null
 	var/obj/abstract/screen/close/closer = null
 	var/use_to_pickup	//Set this to make it possible to use this item in an inverse way, so you can have the item in your hand and click items on the floor to pick them up.
@@ -30,12 +30,13 @@
 	var/foldable_amount = 1 // Number of foldables to produce, if any - N3X
 	var/internal_store = 0
 	var/list/no_storage_slot = new/list()//if the item is equipped in a slot that is contained in this list, the item will act purely as a clothing item and not a storage item (ie plastic bags over head)
+	var/rustle_sound = "rustle"
 
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
 
 /obj/item/weapon/storage/on_mousedrop_to_inventory_slot()
-	playsound(src, "rustle", 50, 1, -5)
+	playsound(src, rustle_sound, 50, 1, -5)
 
 /obj/item/weapon/storage/MouseDropFrom(obj/over_object as obj)
 	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
@@ -164,12 +165,12 @@
 	var/obj/item/sample_object
 	var/number
 
-	New(obj/item/sample as obj)
-		if(!istype(sample))
-			qdel(src)
-			return
-		sample_object = sample
-		number = 1
+/datum/numbered_display/New(obj/item/sample as obj)
+	if(!istype(sample))
+		qdel(src)
+		return
+	sample_object = sample
+	number = 1
 
 //This proc determines the size of the inventory to be displayed. Please touch it only if you know what you're doing.
 /obj/item/weapon/storage/proc/orient2hud()
@@ -194,6 +195,8 @@
 	//var/mob/living/carbon/human/H = user
 	var/row_num = 0
 	var/col_count = min(7,storage_slots) -1
+	if(col_count < 0)
+		col_count = 6 //Show 7 inventory slots instead of breaking the inventory
 	if (adjusted_contents > 7)
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
 	src.standard_orient_objs(row_num, col_count, numbered_contents)
@@ -217,7 +220,7 @@
 
 	if(src.loc == W)
 		return 0 //Means the item is already in the storage item
-	if(contents.len >= storage_slots)
+	if(storage_slots && (contents.len >= storage_slots))
 		if(!stop_messages)
 			to_chat(usr, "<span class='notice'>\The [src] is full, make some space.</span>")
 		return 0 //Storage item is full
@@ -438,7 +441,7 @@
 	..()
 
 /obj/item/weapon/storage/attack_hand(mob/user as mob)
-	playsound(src, "rustle", 50, 1, -5)
+	playsound(src, rustle_sound, 50, 1, -5)
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user

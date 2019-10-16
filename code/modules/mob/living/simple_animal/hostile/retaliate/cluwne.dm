@@ -12,9 +12,9 @@
 	icon_gib = "clown_gib"
 	speak_chance = 50
 	turns_per_move = 5
-	response_help = "pokes the"
-	response_disarm = "gently pushes aside the"
-	response_harm = "hits the"
+	response_help = "pokes"
+	response_disarm = "gently pushes aside"
+	response_harm = "hits"
 	speak = list("HONK", "Honk!", "PLEASE KILL ME")
 	speak_emote = list("squeals", "cries","sobs")
 	emote_hear = list("honks sadly")
@@ -22,6 +22,8 @@
 	a_intent = I_HELP
 	var/footstep=0 // For clownshoe noises
 	//deny_client_move=1 // HONK // Doesn't work right yet
+
+	meat_type = null
 
 	stop_automated_movement_when_pulled = 1
 	maxHealth = 30
@@ -246,6 +248,7 @@
 		var/mob/living/L = target
 		if(prob(10))
 			L.Knockdown(5)
+			L.Stun(5)
 			L.visible_message("<span class='danger'>\The [src.name] slips \the [L.name]!</span>")
 			return
 	return ..()

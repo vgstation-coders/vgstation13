@@ -37,8 +37,6 @@
 	else
 		new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
 
-	stat_collection.blob_spores_spawned++
-
 	return 1
 
 /obj/effect/blob/factory/Destroy()
@@ -93,12 +91,14 @@
 	maxbodytemp = 360
 	plane = BLOB_PLANE
 	layer = BLOB_SPORE_LAYER
+	var/looks = "new"
 
 /mob/living/simple_animal/hostile/blobspore/New(loc, var/obj/effect/blob/factory/linked_node)
 	if(istype(linked_node))
 		factory = linked_node
 		factory.spores += src
 		icon = factory.icon
+		looks = factory.looks
 	..()
 
 /mob/living/simple_animal/hostile/blobspore/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -120,6 +120,26 @@
 	qdel(src)
 
 /mob/living/simple_animal/hostile/blobspore/Destroy()
+	//creating a pathogenic cloud upon death
+	anim(target = loc, a_icon = icon, flick_anim = "blob_act", sleeptime = 15, direction = SOUTH, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+	if (!(looks in blob_diseases))
+		CreateBlobDisease(looks)
+	var/datum/disease2/disease/D = blob_diseases[looks]
+	var/list/L = list()
+	L["[D.uniqueID]-[D.subID]"] = D
+	getFromPool(/obj/effect/effect/pathogen_cloud,get_turf(src),null,virus_copylist(L),FALSE)
 	if(factory)
 		factory.spores -= src
 	..()
+
+/mob/living/simple_animal/hostile/blobspore/unarmed_attack_mob(var/mob/living/target)
+	. = ..()
+
+	if (.)
+		//if we damage our target, let's try and infect them
+		if (!(looks in blob_diseases))
+			CreateBlobDisease(looks)
+		var/datum/disease2/disease/D = blob_diseases[looks]
+
+		if (!target.check_contact_sterility(FULL_TORSO))//For simplicity's sake (for once), let's just assume that the blob strikes the torso.
+			target.infect_disease2(D, notes="(Blob, from [src])")

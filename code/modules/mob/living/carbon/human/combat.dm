@@ -158,6 +158,7 @@
 /mob/living/carbon/human/proc/get_knockout_chance(mob/living/victim)
 	var/base_chance = 8
 
+	base_chance += min(reagents.get_sportiness(),5)
 	if(mutations.Find(M_HULK))
 		base_chance += 12
 	if(istype(gloves))
@@ -203,6 +204,9 @@
 			chance += 50
 		if(prob(chance))
 			knock_out_teeth(attacker)
+
+	if(isrambler(src) && !(attacker == src)) //Redundant check for punching a soul rambler. Kicking is in carbon/human/human_attackhand.dm
+		attacker.say(pick("Take that!", "Taste the pain!"))
 
 	..()
 

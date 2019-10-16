@@ -126,10 +126,10 @@
 
 /obj/item/weapon/fossil/egg/New()
 	..()
-	create_reagents(5)
+	create_reagents(1)
 
 /obj/item/weapon/fossil/egg/on_reagent_change()
-	if(reagents.has_reagent(REZADONE, 5))
+	if(reagents.has_reagent(REZADONE, 1))
 		visible_message("<span class = 'notice'>\The [src] revitalizes!</span>")
 		var/possibility = pick(
 			50; /obj/item/weapon/reagent_containers/food/snacks/borer_egg,

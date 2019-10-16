@@ -252,7 +252,7 @@ proc/move_mining_shuttle()
 	desc = "This makes no metallurgic sense."
 
 /obj/item/weapon/pickaxe/plasmacutter
-	name = "plasma cutter"
+	name = "plasma torch"
 	icon_state = "plasmacutter"
 	item_state = "gun"
 	w_class = W_CLASS_MEDIUM //it is smaller than the pickaxe
@@ -263,10 +263,59 @@ proc/move_mining_shuttle()
 	sharpness = 1.0
 	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
-	desc = "A rock cutter that uses bursts of hot plasma. You could use it to cut limbs off of xenos! Or, you know, mine stuff."
+	desc = "A rock cutter that uses bursts of hot plasma"
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	drill_sound = 'sound/items/Welder.ogg'
+
+/obj/item/weapon/pickaxe/plasmacutter/accelerator
+	name = "plasma cutter"
+	desc = "A rock cutter that's powerful enough to cut through rocks and xenos with ease. Ingeniously, it's powered by putting solid plasma directly into it - even plasma ore, for those miners on the go."
+	digspeed = 5
+	diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS
+	var/max_ammo = 15
+	var/current_ammo = 15
+
+/obj/item/weapon/pickaxe/plasmacutter/accelerator/afterattack(var/atom/A, var/mob/living/user, var/proximity_flag, var/click_parameters)
+	if (!user.IsAdvancedToolUser() || isMoMMI(user) || istype(user, /mob/living/carbon/monkey/diona))
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+	if(proximity_flag)
+		return
+	if(user.is_pacified(VIOLENCE_SILENT,A,src))
+		return
+	if(current_ammo >0)
+		current_ammo--
+		generic_projectile_fire(A, src, /obj/item/projectile/kinetic/cutter/, 'sound/weapons/Taser.ogg')
+		user.delayNextAttack(4)
+	else
+		src.visible_message("*click click*")
+		playsound(src, 'sound/weapons/empty.ogg', 100, 1)
+
+/obj/item/weapon/pickaxe/plasmacutter/accelerator/attackby(atom/target, mob/user, proximity_flag)
+	if(proximity_flag && istype(target, /obj/item/stack/ore/plasma))
+		var/obj/item/stack/ore/plasma/A = target
+		if(current_ammo < max_ammo)
+			var/loading_ammo = min(max_ammo - current_ammo, A.amount)
+			A.use(loading_ammo)
+			current_ammo += loading_ammo
+			to_chat(user, "<span class='notice'>You load \the [src].</span>")
+		else
+			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
+
+	if(proximity_flag && istype(target, /obj/item/stack/sheet/mineral/plasma))
+		var/obj/item/stack/sheet/mineral/plasma/A = target
+		if(current_ammo < max_ammo)
+			var/loading_ammo = min(max_ammo - current_ammo, A.amount)
+			A.use(loading_ammo)
+			current_ammo += loading_ammo
+			to_chat(user, "<span class='notice'>You load \the [src].</span>")
+		else
+			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
+
+/obj/item/weapon/pickaxe/plasmacutter/accelerator/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>Has [current_ammo] round\s remaining.</span>")
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
@@ -422,6 +471,7 @@ proc/move_mining_shuttle()
 	if(isliving(M))
 		var/mob/living/L = M
 		L.Knockdown(3)
+		L.Stun(3)
 		if(ishuman(L))
 			shake_camera(L, 20, 1)
 			spawn(20)
@@ -485,7 +535,8 @@ proc/move_mining_shuttle()
 	if(istype(proj_turf, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = proj_turf
 		playsound(src, 'sound/effects/sparks4.ogg',50,1)
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_DENSE)
+			M.GetDrilled()
 		spawn(5)
 			qdel(src)
 	else

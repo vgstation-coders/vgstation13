@@ -215,11 +215,11 @@
 			if(cover)
 				to_chat(user, "<span class='notice'>You can't color [H == user ? "your" : "\the [H]'s"] facial hair through that [cover.name]!</span>")
 				return
-			if(!H.f_style || H.f_style == "Shaved")	//if they have no facial hair
+			if(!H.my_appearance.f_style || H.my_appearance.f_style == "Shaved")	//if they have no facial hair
 				to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any facial hair!</span>")
 				return
 			else
-				var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
+				var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.my_appearance.f_style]
 				if(!facial_hair_style.do_colouration)
 					to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any colorable facial hair!</span>")
 					return
@@ -229,11 +229,11 @@
 			if(cover)
 				to_chat(user, "<span class='notice'>You can't color [H == user ? "your" : "\the [H]'s"] hair through that [cover.name]!</span>")
 				return
-			if(!H.h_style || H.h_style == "Bald")	//if they have no hair
+			if(!H.my_appearance.h_style || H.my_appearance.h_style == "Bald")	//if they have no hair
 				to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any hair!</span>")
 				return
 			else
-				var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
+				var/datum/sprite_accessory/hair_style = hair_styles_list[H.my_appearance.h_style]
 				if(!hair_style.do_colouration)
 					to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any colorable hair!</span>")
 					return
@@ -261,13 +261,13 @@
 	if(!H)
 		return
 	if(facial)
-		H.r_facial = color_r
-		H.g_facial = color_g
-		H.b_facial = color_b
+		H.my_appearance.r_facial = color_r
+		H.my_appearance.g_facial = color_g
+		H.my_appearance.b_facial = color_b
 	else
-		H.r_hair = color_r
-		H.g_hair = color_g
-		H.b_hair = color_b
+		H.my_appearance.r_hair = color_r
+		H.my_appearance.g_hair = color_g
+		H.my_appearance.b_hair = color_b
 	H.update_hair()
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
@@ -364,9 +364,9 @@
 
 /obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, location = "mouth")
 	if(location == "mouth")
-		H.f_style = "Shaved"
+		H.my_appearance.f_style = "Shaved"
 	else
-		H.h_style = "Skinhead"
+		H.my_appearance.h_style = "Skinhead"
 
 	H.update_hair()
 	playsound(loc, 'sound/items/Welder2.ogg', 20, 1)
@@ -380,7 +380,7 @@
 			if(H.check_body_part_coverage(MOUTH))
 				to_chat(user,"<span class='warning'>The mask is in the way!</span>")
 				return
-			if(H.f_style == "Shaved")
+			if(H.my_appearance.f_style == "Shaved")
 				to_chat(user,"<span class='warning'>Already clean-shaven!</span>")
 				return
 
@@ -403,7 +403,7 @@
 			if(H.check_body_part_coverage(HEAD))
 				to_chat(user,"<span class='warning'>The headgear is in the way!</span>")
 				return
-			if(H.h_style == "Bald" || H.h_style == "Skinhead")
+			if(H.my_appearance.h_style == "Bald" || H.my_appearance.h_style == "Skinhead")
 				to_chat(user,"<span class='warning'>There is not enough hair left to shave!</span>")
 				return
 
@@ -453,6 +453,7 @@
 				if (1 to 20)
 					to_chat(H, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
 					H.Knockdown(4)
+					H.Stun(4)
 					return
 				if (21 to 40)
 					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
@@ -462,8 +463,11 @@
 				if (41 to 50)
 					to_chat(H, "<span class='notice'>You don't see anything.</span>")
 					return
+		handle_hair(H)
 
-		//handle normal hair
+/obj/item/weapon/pocket_mirror/proc/handle_hair(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
 		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null))
 		//gender intentionally left null so speshul snowflakes can cross-hairdress
 		if (species_hair.len)
@@ -471,7 +475,7 @@
 			if (!Adjacent(user) || user.incapacitated())
 				return
 			if (new_style)
-				H.h_style = new_style
+				H.my_appearance.h_style = new_style
 				H.update_hair()
 
 /obj/item/weapon/pocket_mirror/proc/shatter()
@@ -492,6 +496,20 @@
 		return
 	if (prob(25))
 		shatter()
+
+/obj/item/weapon/pocket_mirror/comb
+	name = "hair comb"
+	desc = "Despite the name honey is not included nor recommended for use with this."
+	icon_state = "comb"
+
+/obj/item/weapon/pocket_mirror/comb/shatter()
+	return
+
+/obj/item/weapon/pocket_mirror/comb/attack(mob/M, mob/user)
+	if(M == user)
+		handle_hair(user)
+	else
+		..()
 
 /obj/item/weapon/nanitecontacts
 	name = "nanite contacts"
@@ -555,7 +573,7 @@
 	if(!H)
 		return
 	else
-		H.r_eyes = color_r
-		H.g_eyes = color_g
-		H.b_eyes = color_b
+		H.my_appearance.r_eyes = color_r
+		H.my_appearance.g_eyes = color_g
+		H.my_appearance.b_eyes = color_b
 	H.update_body()

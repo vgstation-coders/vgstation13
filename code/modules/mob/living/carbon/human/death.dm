@@ -18,10 +18,10 @@
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
-	hgibs(loc, viruses, dna, species.flesh_color, species.blood_color, gib_radius)
+	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
 	qdel(src)
 
-/mob/living/carbon/human/dust()
+/mob/living/carbon/human/dust(var/drop_everything = FALSE)
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -40,13 +40,23 @@
 		new /obj/effect/decal/remains/human/noskull(loc)
 	else
 		new /obj/effect/decal/remains/human(loc)
+	if(drop_everything)
+		drop_all()
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
+	infected_contact_mobs -= src
+	if (pathogen)
+		for (var/mob/L in science_goggles_wearers)
+			if (L.client)
+				L.client.images -= pathogen
+		pathogen = null
+
 	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
 		var/turf/T = get_turf(src)
 		if (T)
 			var/mob/living/simple_animal/shade/shade = new (T)
+			playsound(T, 'sound/hallucinations/growl1.ogg', 50, 1)
 			shade.name = "[real_name] the Shade"
 			shade.real_name = "[real_name]"
 			mind.transfer_to(shade)
@@ -65,6 +75,7 @@
 		qdel(vessel)
 		vessel = null
 
+	my_appearance = null
 
 	..()
 
@@ -125,10 +136,10 @@
 	if(M_SKELETON in src.mutations)
 		return
 
-	if(f_style)
-		f_style = "Shaved"
-	if(h_style)
-		h_style = "Bald"
+	if(my_appearance.f_style)
+		my_appearance.f_style = "Shaved"
+	if(my_appearance.h_style)
+		my_appearance.h_style = "Bald"
 	update_hair(0)
 
 	mutations.Add(M_SKELETON)
@@ -141,10 +152,10 @@
 /mob/living/carbon/human/proc/ChangeToHusk()
 	if(M_HUSK in mutations)
 		return
-	if(f_style)
-		f_style = "Shaved" //We only change the icon_state of the hair datum, so it doesn't mess up their UI/UE
-	if(h_style)
-		h_style = "Bald"
+	if(my_appearance.f_style)
+		my_appearance.f_style = "Shaved" //We only change the icon_state of the hair datum, so it doesn't mess up their UI/UE
+	if(my_appearance.h_style)
+		my_appearance.h_style = "Bald"
 	update_hair(0)
 
 	mutations.Add(M_HUSK)

@@ -72,13 +72,13 @@
 		</ul>
 	"}
 
-/obj/machinery/rust/gyrotron/canLink(var/obj/machinery/computer/rust_gyrotron_controller/object, var/link/context)
+/obj/machinery/rust/gyrotron/canLink(var/obj/machinery/computer/rust_gyrotron_controller/object, var/list/context)
 	return istype(object) && get_dist(src, object) < RUST_GYROTRON_RANGE
 
 /obj/machinery/rust/gyrotron/isLinkedWith(var/obj/machinery/computer/rust_gyrotron_controller/object)
 	return istype(object) && (src in object.linked_gyrotrons)
 
-/obj/machinery/rust/gyrotron/linkWith(var/mob/user, var/obj/machinery/computer/rust_gyrotron_controller/buffered, var/link/context)
+/obj/machinery/rust/gyrotron/linkWith(var/mob/user, var/obj/machinery/computer/rust_gyrotron_controller/buffered, var/list/context)
 	buffered.linked_gyrotrons += src
 	return 1
 

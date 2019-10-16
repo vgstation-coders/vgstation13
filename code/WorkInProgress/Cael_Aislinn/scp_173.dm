@@ -15,6 +15,7 @@
 	meat_type = null
 	see_in_dark = 8 //Needs to see in darkness to snap in darkness
 	mob_property_flags = MOB_SUPERNATURAL|MOB_CONSTRUCT
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|UNPACIFIABLE
 
 	var/response_snap = "snapped the neck of" //Past tense because it "happened before you could see it"
 	var/response_snap_target = "In the blink of an eye, something grabs you and snaps your neck!"
@@ -130,7 +131,7 @@
 			if(!next_turf.Cross(src, next_turf)) //We can't pass through our planned path
 				break
 			for(var/obj/structure/window/W in next_turf)
-				W.Destroy(brokenup = 1)
+				W.shatter()
 				sleep(5)
 			for(var/obj/structure/table/O in next_turf)
 				O.ex_act(1)
@@ -181,7 +182,7 @@
 				if(!next_turf.Cross(src, next_turf)) //We can't pass through our planned path
 					break
 				for(var/obj/structure/window/W in next_turf)
-					W.Destroy(brokenup = 1)
+					W.shatter()
 					sleep(5)
 				for(var/obj/structure/table/O in next_turf)
 					O.ex_act(1)
@@ -215,7 +216,6 @@
 			return
 		visible_message("<span class='danger'>\The [src] starts trying to slide itself into the vent!</span>")
 		sleep(50) //Let's stop SCP-173 for five seconds to do his parking job
-		..()
 		if(entry_vent.network && entry_vent.network.normal_members.len)
 			var/list/vents = list()
 			for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)

@@ -40,7 +40,7 @@
 	var/emagged = 0               //IS WE EXPLODEN?
 	var/syndie = 0                //IS WE SYNDICAT? (currently unused)
 	speed = 1                    //Spiderbots gotta go fast.
-	//pass_flags = PASSTABLE      //Maybe griefy?
+	pass_flags = PASSTABLE
 	speak_emote = list("beeps","clicks","chirps")
 	size = SIZE_SMALL
 	meat_type = null
@@ -200,7 +200,7 @@
 		held_item.forceMove(src.loc)
 		held_item = null
 
-	robogibs(src.loc, viruses)
+	robogibs(src.loc, virus2)
 	qdel(src)
 
 /mob/living/simple_animal/spiderbot/emp_act(severity)

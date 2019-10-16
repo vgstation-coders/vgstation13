@@ -17,7 +17,7 @@
 			            access_teleporter, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva,
 			            access_heads, access_construction, access_sec_doors,
 			            access_ce, access_RC_announce, access_keycard_auth, access_tcomsat, access_ai_upload, access_mechanic)
-	minimal_player_age = 7
+	minimal_player_age = 20
 
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/heads/ce
@@ -46,6 +46,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/>")
 	return 1
 
 /datum/job/chief_engineer/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -104,6 +105,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Engineering:</b> [ENG_FREQ] <br/>")
 	return 1
 
 /datum/job/engineer/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -149,6 +151,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Engineering:</b> [ENG_FREQ]<br/>")
 	return 1
 
 /datum/job/atmos/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -203,4 +206,5 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ]<br/>")
 	return 1

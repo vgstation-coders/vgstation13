@@ -11,21 +11,15 @@
 /obj/item/projectile/ion/to_bump(atom/A as mob|obj|turf|area)
 	if(!bumped && ((A != firer) || reflected))
 		empulse(get_turf(A), 1, 1)
+		qdel(src)
+		return
 	..()
 
-/obj/item/projectile/ionsmall
-	name = "ion bolt"
-	icon_state = "ion"
-	damage = 0
-	damage_type = BURN
-	nodamage = 1
-	layer = PROJECTILE_LAYER
-	flag = "energy"
-	fire_sound = 'sound/weapons/ion.ogg'
-
-/obj/item/projectile/ionsmall/to_bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/ion/small/to_bump(atom/A as mob|obj|turf|area)
 	if(!bumped && ((A != firer) || reflected))
-		empulse(src, 0, 1)
+		empulse(get_turf(A), 0, 1)
+		qdel(src)
+		return
 	..()
 
 /obj/item/projectile/bullet/gyro
@@ -139,6 +133,7 @@
 			if(prob(mutstrength*2))
 				M.apply_radiation((rand(30,80)),RAD_EXTERNAL)
 				M.Knockdown(5)
+				M.Stun(5)
 				for (var/mob/V in viewers(src))
 					V.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
 			if(prob(mutstrength*3))
@@ -218,7 +213,7 @@ obj/item/projectile/kinetic/New()
 	var/pressure = environment.return_pressure()
 	if(pressure < 50)
 		name = "full strength kinetic force"
-		damage = 30
+		damage += 15
 	..()
 
 /* wat - N3X
@@ -236,7 +231,8 @@ obj/item/projectile/kinetic/New()
 	//testing("Hit [target.type], on [target_turf.type].")
 	if(istype(target_turf, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = target_turf
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+			M.GetDrilled()
 	new /obj/item/effect/kinetic_blast(target_turf)
 	..(target,blocked)
 
@@ -254,7 +250,8 @@ obj/item/projectile/kinetic/New()
 			//testing("Bumped [A.type], on [target_turf.type].")
 			if(istype(target_turf, /turf/unsimulated/mineral))
 				var/turf/unsimulated/mineral/M = target_turf
-				M.GetDrilled()
+				if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+					M.GetDrilled()
 			// Now we bump as a bullet, if the atom is a non-turf.
 			if(!isturf(A))
 				..(A)
@@ -276,6 +273,13 @@ obj/item/projectile/kinetic/New()
 	..()
 	spawn(4)
 		returnToPool(src)
+
+/obj/item/projectile/kinetic/cutter
+
+/obj/item/projectile/kinetic/cutter/to_bump(atom/A)
+	if(istype(A, /mob/living/simple_animal) || istype(A, /mob/living/carbon/alien))
+		damage += 15
+	..()
 
 /obj/item/projectile/stickybomb
 	icon = 'icons/obj/projectiles_experimental.dmi'

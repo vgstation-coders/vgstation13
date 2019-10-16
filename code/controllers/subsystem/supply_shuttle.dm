@@ -139,24 +139,47 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			var/obj/item/stack/sheet/mineral/plasma/P = MA
 			if(P.redeemed)
 				continue
-			var/datum/material/mat = materials_list.getMaterial(P.recyck_mat)
-			cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
+			var/datum/material/mat = materials_list.getMaterial(P.mat_type)
+			var/amount = (mat.value * 10) * P.amount
+			cargo_acct.money += amount
+			var/datum/transaction/T = new()
+			T.target_name = cargo_acct.owner_name
+			T.purpose = "Central Command Plasma sale"
+			T.amount = amount
+			T.date = current_date_string
+			T.time = worldtime2text()
+			cargo_acct.transaction_log.Add(T)
 		// Must be in a crate!
 		else if(istype(MA,/obj/structure/closet/crate))
 			cargo_acct.money += credits_per_crate
 			var/find_slip = 1
 
-			for(var/atom/A in MA)
+			for(var/obj/A in MA)
 				if(istype(A, /obj/item/stack/sheet/mineral/plasma))
 					var/obj/item/stack/sheet/mineral/plasma/P = A
 					if(P.redeemed)
 						continue
-					var/datum/material/mat = materials_list.getMaterial(P.sheettype)
-					cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
+					var/datum/material/mat = materials_list.getMaterial(P.mat_type)
+					var/amount = (mat.value * 10) * P.amount
+					cargo_acct.money += amount
+					var/datum/transaction/T = new()
+					T.target_name = cargo_acct.owner_name
+					T.purpose = "Central Command Plasma sale"
+					T.amount = amount
+					T.date = current_date_string
+					T.time = worldtime2text()
+					cargo_acct.transaction_log.Add(T)
 					continue
 				if(find_slip && istype(A,/obj/item/weapon/paper/manifest))
 					var/obj/item/weapon/paper/slip = A
 					if(slip.stamped && slip.stamped.len) //yes, the clown stamp will work. clown is the highest authority on the station, it makes sense
+						var/datum/transaction/T = new()
+						T.target_name = cargo_acct.owner_name
+						T.purpose = "Central Command purchase confirmation (Stamped Slip) [A]"
+						T.amount = credits_per_slip
+						T.date = current_date_string
+						T.time = worldtime2text()
+						cargo_acct.transaction_log.Add(T)
 						cargo_acct.money += credits_per_slip
 						find_slip = 0
 					qdel(A)
@@ -229,10 +252,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			[shoppinglist.len] PACKAGES IN THIS SHIPMENT<br>
 			CONTENTS:<br><ul>"}
 		//spawn the stuff, finish generating the manifest while you're at it
-		if(SP.access)
+		if(SP.access && istype(A, /obj/structure/closet))
 			A:req_access = SP.access
 
-		if(SP.one_access)
+		if(SP.one_access && istype(A, /obj/structure/closet))
 			A:req_one_access = SP.one_access
 
 		var/list/contains

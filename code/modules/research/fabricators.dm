@@ -12,8 +12,8 @@
 	idle_power_usage = 20
 	active_power_usage = 5000
 
-	var/time_coeff = 1.5 //can be upgraded with research
-	var/resource_coeff = 1.5 //can be upgraded with research
+	var/time_coeff = 1 //can be upgraded with research
+	var/resource_coeff = 1 //can be upgraded with research
 	max_material_storage = 562500 //All this could probably be done better with a list but meh.
 
 	var/datum/research/files
@@ -31,6 +31,8 @@
 	var/list/part_sets = list()
 	var/datum/design/last_made
 	var/start_end_anims = 0
+	var/min_cap_C = 0.1 //The minimum cap used to how much cost coeff can be improved
+	var/min_cap_T = 0.1 //The minimum cap used to how much time coeff can be improved
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	research_flags = TAKESMATIN | HASOUTPUT | HASMAT_OVER | NANOTOUCH
@@ -65,13 +67,13 @@
 	var/datum/tech/Tech = files.known_tech["materials"]
 	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
 		T += Ma.rating - 1
-	resource_coeff = round(initial(resource_coeff) - (initial(resource_coeff)*(Tech.level+(T * 3)))/25,0.01)
+	resource_coeff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((Tech.level - 1)+(T * 2)))/25,0.01), min_cap_C)
 
 	T = 0
 	Tech = files.known_tech["programming"]
 	for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
 		T += Ml.rating - 1
-	time_coeff = round(initial(time_coeff) - (initial(time_coeff)*(Tech.level+(T * 5)))/25,0.01)
+	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*((Tech.level - 1)+(T * 3)))/25,0.01), min_cap_T)
 
 /obj/machinery/r_n_d/fabricator/emag()
 	sleep()
@@ -265,6 +267,27 @@
 						src.materials.addAmount(gib,bluespaceamount)
 	return remove_materials(part)
 
+//Returns however much of that material we have
+/obj/machinery/r_n_d/fabricator/proc/check_mats(var/material)
+	if(copytext(material,1,2) == "$")//It's iron/gold/glass
+		return materials.getAmount(material)
+	else
+		var/reagent_total = 0
+		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+			reagent_total += RC.reagents.get_reagent_amount(material)
+		return reagent_total
+
+//Returns however much of that material is in the bluespace network
+/obj/machinery/r_n_d/fabricator/proc/check_mats_bluespace(var/material)
+	if(!has_bluespace_bin()) //We can't access that
+		return 0
+
+	var/amount
+	for(var/obj/machinery/r_n_d/fabricator/gibmats in machines)
+		if(gibmats.has_bluespace_bin())
+			amount += gibmats.materials.getAmount(material)
+	return amount
+
 
 /obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M)
 	if(copytext(M,1,2) == "$")
@@ -289,12 +312,12 @@
 		return
 	if(is_contraband(part) && !src.hacked)
 		stopped = 1
-		src.visible_message("<font color='blue'>The [src.name] buzzes, \"Safety procedures prevent current queued item from being built.\"</font>")
+		src.visible_message("<span class='notice'>The [src.name] buzzes, \"Safety procedures prevent current queued item from being built.\"</span>")
 		return
 
 	if(!remove_materials(part) && !bluespace_materials(part))
 		stopped = 1
-		src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
+		src.visible_message("<span class='notice'>The [src.name] beeps, \"Not enough materials to complete item.\"</span>")
 		return
 
 	src.being_built = new part.build_path(src)
@@ -363,7 +386,7 @@
 		//src.visible_message("[bicon(src)] <b>[src]</b> beeps: [part.name] was added to the queue\".")
 		//queue[++queue.len] = part
 		if(is_contraband(part) && !src.hacked)
-			src.visible_message("<font color='blue'>The [src.name] buzzes, \"Safety procedures prevent that item from being queued.\"</font>")
+			src.visible_message("<span class='notice'>The [src.name] buzzes, \"Safety procedures prevent that item from being queued.\"</span>")
 			return
 		queue.Add(part)
 	return queue.len
@@ -431,7 +454,7 @@
 		var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
 		for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
 			pmat += Ma.rating - 1
-		diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T.level+(pmat*3)))/25,0.01)
+		diff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((T.level - 1)+(pmat*2)))/25,0.01), min_cap_C)
 		if(resource_coeff!=diff)
 			resource_coeff = diff
 			output+="Production efficiency increased.<br>"
@@ -440,7 +463,7 @@
 		var/ptime = 0
 		for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
 			ptime += Ml.rating - 1
-		diff = round(initial(time_coeff) - (initial(time_coeff)*(T.level+(ptime*5)))/25,0.1)
+		diff = max(round(initial(time_coeff) - (initial(time_coeff)*((T.level - 1)+(ptime*3)))/25,0.1), min_cap_T)
 		if(time_coeff!=diff)
 			time_coeff = diff
 			output+="Production routines updated.<br>"

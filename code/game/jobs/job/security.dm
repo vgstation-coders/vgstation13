@@ -17,7 +17,7 @@
 			            access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers,
 			            access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting,
 			            access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
-	minimal_player_age = 14
+	minimal_player_age = 30
 
 	species_whitelist = list("Human")
 
@@ -57,8 +57,14 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ]<br/> <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
+/datum/job/hos/reject_new_slots()
+	if(security_level == SEC_LEVEL_RED)
+		return FALSE
+	else
+		return "Red Alert"
 
 
 /datum/job/warden
@@ -98,6 +104,7 @@
 	H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses/sechud(H), slot_glasses)
 //		H.equip_or_collect(new /obj/item/clothing/mask/gas(H), slot_wear_mask) //Grab one from the armory you donk
 	H.equip_or_collect(new /obj/item/device/flash(H), slot_l_store)
+	H.equip_or_collect(new /obj/item/weapon/gun/energy/taser(H), slot_in_backpack)
 	if(H.backbag == 1)
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/weapon/handcuffs(H))
@@ -110,6 +117,7 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 
@@ -190,6 +198,7 @@
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	H.check_mutations = 1
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 
@@ -243,6 +252,7 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 /datum/job/officer/get_total_positions()

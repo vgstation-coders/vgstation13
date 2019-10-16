@@ -31,24 +31,24 @@ var/global/datum/credits/end_credits = new
 	var/finalized = FALSE
 	var/js_args = list()
 
-	var/audio_link = "http://ss13.moe/media/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
+	var/audio_link = "http://ss13.moe/media/m2/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
 	var/list/classic_roundend_jingles = list(
-		"http://ss13.moe/media/source/roundend/jingleclassic/bangindonk.mp3",
-		"http://ss13.moe/media/source/roundend/jingleclassic/apcdestroyed.mp3"
+		"http://ss13.moe/media/m2/source/roundend/jingleclassic/bangindonk.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jingleclassic/apcdestroyed.mp3"
 		)
 	var/list/new_roundend_jingles = list(
-		"http://ss13.moe/media/source/roundend/jinglenew/FTLvictory.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/bayojingle.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/calamitytrigger.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/castlevania.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/duckgame.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/gameoveryeah.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/marioworld.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/megamanX.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/rayman.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/slugmissioncomplete.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/soniclevelcomplete.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/tfvictory.mp3"
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/FTLvictory.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/bayojingle.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/calamitytrigger.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/castlevania.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/duckgame.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/gameoveryeah.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/marioworld.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/megamanX.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/rayman.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/slugmissioncomplete.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/soniclevelcomplete.mp3",
+		"http://ss13.moe/media/m2/source/roundend/jinglenew/tfvictory.mp3"
 		)
 
 /datum/credits/proc/is_rerun()
@@ -187,7 +187,8 @@ var/global/datum/credits/end_credits = new
 
 /datum/credits/proc/finalize_episodestring()
 	var/season = time2text(world.realtime,"YY")
-	var/episodenum = SSpersistence_misc.round_count_list[season]
+	var/episode_count_data = SSpersistence_misc.read_data(/datum/persistence_task/round_count)
+	var/episodenum = episode_count_data[season]
 	episode_string = "<h1><span id='episodenumber'>SEASON [season] EPISODE [episodenum]</span><br><span id='episodename'>[episode_name]</span></h1><br><div style='padding-bottom: 75px;'></div>"
 	log_game("So ends [is_rerun() ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name]")
 

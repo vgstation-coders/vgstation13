@@ -134,63 +134,63 @@
 					if(!R.module_state_3)
 						return
 					else
-						R:inv1.icon_state = "inv1"
-						R:inv2.icon_state = "inv2"
-						R:inv3.icon_state = "inv3 +a"
-						R:module_active = R:module_state_3
+						R.inv1.icon_state = "inv1"
+						R.inv2.icon_state = "inv2"
+						R.inv3.icon_state = "inv3 +a"
+						R.module_active = R.module_state_3
 				else
-					R:inv1.icon_state = "inv1"
-					R:inv2.icon_state = "inv2 +a"
-					R:inv3.icon_state = "inv3"
-					R:module_active = R:module_state_2
+					R.inv1.icon_state = "inv1"
+					R.inv2.icon_state = "inv2 +a"
+					R.inv3.icon_state = "inv3"
+					R.module_active = R.module_state_2
 			else
-				R:inv1.icon_state = "inv1 +a"
-				R:inv2.icon_state = "inv2"
-				R:inv3.icon_state = "inv3"
-				R:module_active = R:module_state_1
+				R.inv1.icon_state = "inv1 +a"
+				R.inv2.icon_state = "inv2"
+				R.inv3.icon_state = "inv3"
+				R.module_active = R.module_state_1
 		else
 			if(R.module_active == R.module_state_1)
 				if(!R.module_state_2)
 					if(!R.module_state_3)
 						return
 					else
-						R:inv1.icon_state = "inv1"
-						R:inv2.icon_state = "inv2"
-						R:inv3.icon_state = "inv3 +a"
-						R:module_active = R:module_state_3
+						R.inv1.icon_state = "inv1"
+						R.inv2.icon_state = "inv2"
+						R.inv3.icon_state = "inv3 +a"
+						R.module_active = R.module_state_3
 				else
-					R:inv1.icon_state = "inv1"
-					R:inv2.icon_state = "inv2 +a"
-					R:inv3.icon_state = "inv3"
-					R:module_active = R:module_state_2
+					R.inv1.icon_state = "inv1"
+					R.inv2.icon_state = "inv2 +a"
+					R.inv3.icon_state = "inv3"
+					R.module_active = R.module_state_2
 			else if(R.module_active == R.module_state_2)
 				if(!R.module_state_3)
 					if(!R.module_state_1)
 						return
 					else
-						R:inv1.icon_state = "inv1 +a"
-						R:inv2.icon_state = "inv2"
-						R:inv3.icon_state = "inv3"
-						R:module_active = R:module_state_1
+						R.inv1.icon_state = "inv1 +a"
+						R.inv2.icon_state = "inv2"
+						R.inv3.icon_state = "inv3"
+						R.module_active = R.module_state_1
 				else
-					R:inv1.icon_state = "inv1"
-					R:inv2.icon_state = "inv2"
-					R:inv3.icon_state = "inv3 +a"
-					R:module_active = R:module_state_3
+					R.inv1.icon_state = "inv1"
+					R.inv2.icon_state = "inv2"
+					R.inv3.icon_state = "inv3 +a"
+					R.module_active = R.module_state_3
 			else if(R.module_active == R.module_state_3)
 				if(!R.module_state_1)
 					if(!R.module_state_2)
 						return
 					else
-						R:inv1.icon_state = "inv1"
-						R:inv2.icon_state = "inv2 +a"
-						R:inv3.icon_state = "inv3"
-						R:module_active = R:module_state_2
+						R.inv1.icon_state = "inv1"
+						R.inv2.icon_state = "inv2 +a"
+						R.inv3.icon_state = "inv3"
+						R.module_active = R.module_state_2
 				else
-					R:inv1.icon_state = "inv1 +a"
-					R:inv2.icon_state = "inv2"
-					R:inv3.icon_state = "inv3"
-					R:module_active = R:module_state_1
+					R.inv1.icon_state = "inv1 +a"
+					R.inv2.icon_state = "inv2"
+					R.inv3.icon_state = "inv3"
+					R.module_active = R.module_state_1
 			else
 				return
 	mob.swap_hand()
@@ -377,8 +377,26 @@
 							M.animate_movement = 2
 							return
 
-		else if(mob.confused)
-			step_rand(mob)
+		else if(mob.confused && prob(10))
+			//step_rand(mob)
+			switch(Dir)
+				if(NORTH)
+					step(mob, pick(NORTHEAST, NORTHWEST))
+				if(SOUTH)
+					step(mob, pick(SOUTHEAST, SOUTHWEST))
+				if(EAST)
+					step(mob, pick(NORTHEAST, SOUTHEAST))
+				if(WEST)
+					step(mob, pick(NORTHWEST, SOUTHWEST))
+				if(NORTHEAST)
+					step(mob, pick(NORTH, EAST))
+				if(NORTHWEST)
+					step(mob, pick(NORTH, WEST))
+				if(SOUTHEAST)
+					step(mob, pick(SOUTH, EAST))
+				if(SOUTHWEST)
+					step(mob, pick(SOUTH, WEST))
+				
 			mob.last_movement=world.time
 		else
 			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
@@ -431,6 +449,9 @@
 				var/mob/dead/observer/observer = mob
 				if(observer.locked_to) //Ghosts can move at any time to unlock themselves (in theory from following a mob)
 					observer.manual_stop_follow(observer.locked_to)
+
+				if (observer.station_holomap)
+					observer.station_holomap.update_holomap()
 			var/movedelay = GHOST_MOVEDELAY
 			if(isobserver(mob))
 				var/mob/dead/observer/observer = mob

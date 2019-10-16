@@ -53,7 +53,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts making some space inside [target]'s [get_cavity(affected)] cavity with \the [tool].",
 	"You start making some space inside [target]'s [get_cavity(affected)] cavity with \the [tool]." )
-	target.custom_pain("The pain in your chest is living hell!",1)
+	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)
 	affected.cavity = 1
 	..()
 
@@ -98,7 +98,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts mending [target]'s [get_cavity(affected)] cavity wall with \the [tool].",
 	"You start mending [target]'s [get_cavity(affected)] cavity wall with \the [tool]." )
-	target.custom_pain("The pain in your chest is living hell!",1)
+	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)
 	affected.cavity = 0
 	..()
 
@@ -137,7 +137,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts putting \the [tool] inside [target]'s [get_cavity(affected)] cavity.",
 	"You start putting \the [tool] inside [target]'s [get_cavity(affected)] cavity." )
-	target.custom_pain("The pain in your chest is living hell!",1)
+	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/cavity/place_item/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -149,7 +149,7 @@
 		to_chat(user, "<span class='warning'>You tear some vessels trying to fit such big object in this cavity.")
 		var/datum/wound/internal_bleeding/I = new (15)
 		affected.wounds += I
-		affected.owner.custom_pain("You feel something rip in your [affected.display_name]!", 1)
+		affected.owner.custom_pain("You feel something rip in your [affected.display_name]!", 1, scream=TRUE)
 	user.drop_item()
 	affected.hidden = tool
 	tool.forceMove(target)
@@ -189,52 +189,32 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts poking around inside the incision on [target]'s [affected.display_name] with \the [tool].",
 	"You start poking around inside the incision on [target]'s [affected.display_name] with \the [tool]." )
-	target.custom_pain("The pain in your chest is living hell!",1)
+	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/cavity/implant_removal/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/chest/affected = target.get_organ(target_zone)
 
-	var/find_prob = 0
-
-	if(istype(tool, /obj/item/weapon/hemostat/pico))
-		find_prob +=100
-
 	if (affected.implants.len)
-
 		var/obj/item/obj = affected.implants[1]
+		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
+		"<span class='notice'>You take [obj] out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
+		affected.implants -= obj
 
+		//Handle possessive brain borers.
+		if(istype(obj,/mob/living/simple_animal/borer))
+			var/mob/living/simple_animal/borer/worm = obj
+			if(worm.controlling)
+				target.release_control()
+			worm.detach()
+
+		obj.forceMove(get_turf(target))
 		if(istype(obj,/obj/item/weapon/implant))
 			var/obj/item/weapon/implant/imp = obj
-			if (imp.islegal())
-				find_prob +=60
-			else
-				find_prob +=40
-		else
-			find_prob +=50
-
-		if (prob(find_prob))
-			user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
-			"<span class='notice'>You take [obj] out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
-			affected.implants -= obj
-
-			//Handle possessive brain borers.
-			if(istype(obj,/mob/living/simple_animal/borer))
-				var/mob/living/simple_animal/borer/worm = obj
-				if(worm.controlling)
-					target.release_control()
-				worm.detach()
-
-			obj.forceMove(get_turf(target))
-			if(istype(obj,/obj/item/weapon/implant))
-				var/obj/item/weapon/implant/imp = obj
-				imp.imp_in = null
-				imp.implanted = 0
-				affected.implants -= imp
-				target.contents -= imp
-		else
-			user.visible_message("<span class='notice'>[user] removes \the [tool] from [target]'s [affected.display_name].</span>", \
-			"<span class='notice'>There's something inside [target]'s [affected.display_name], but you just missed it this time.</span>" )
+			imp.imp_in = null
+			imp.implanted = 0
+			affected.implants -= imp
+			target.contents -= imp
 	else if (affected.hidden)
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )

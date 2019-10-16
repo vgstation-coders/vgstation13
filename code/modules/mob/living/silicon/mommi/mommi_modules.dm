@@ -1,7 +1,7 @@
 
 /obj/item/weapon/robot_module/mommi
 	name = "mobile mmi robot module"
-	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY
+	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY | MODULE_IS_DEFINITIVE | MODULE_CAN_HANDLE_FOOD
 	languages = list()
 	sprites = list("Basic" = "mommi")
 	respawnables = list (/obj/item/stack/cable_coil)
@@ -26,7 +26,6 @@
 	modules += new /obj/item/device/rcd/rpd(src)
 	modules += new /obj/item/device/rcd/tile_painter(src)
 	modules += new /obj/item/blueprints/mommiprints(src)
-	modules += new /obj/item/device/material_synth/robot/mommi(src)
 	modules += new /obj/item/device/holomap(src)
 	modules += new /obj/item/device/station_map(src)
 	modules += new /obj/item/device/silicate_sprayer(src)
@@ -55,9 +54,17 @@
 		"Prime Alt" = "mommiprime-alt",
 		"Replicator" = "replicator",
 		"RepairBot" = "repairbot",
-		"Hover" = "hovermommi"
+		"Hover" = "hovermommi",
+		"Junkheap" = "junkmommi"
 		)
 	speed_modifier = MOMMI_NT_SPEED_MODIFIER
+
+/obj/item/weapon/robot_module/mommi/nt/New(var/mob/living/silicon/robot/R)
+	..()
+
+	modules += new /obj/item/device/material_synth/robot/mommi(src)
+
+	fix_modules()
 
 //Derelict MoMMI
 /obj/item/weapon/robot_module/mommi/soviet
@@ -71,14 +78,15 @@
 /obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R) //Powercreep!
 	..()
 
-	quirk_flags |= MODULE_CAN_HANDLE_FOOD //Let them be able to handle bartending machinery.
-
+	modules += new /obj/item/device/material_synth/robot/soviet(src)
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/instrument/instrument_synth(src)
 	modules += new /obj/item/device/rcd/borg/rsf/soviet(src)
 	modules += new /obj/item/weapon/soap/syndie(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
 	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
+
+	fix_modules()
 
 /obj/item/weapon/robot_module/mommi/cogspider
 	name = "Gravekeeper belt of holding."

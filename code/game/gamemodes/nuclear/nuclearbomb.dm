@@ -296,6 +296,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 	ticker.station_was_nuked = (off_station<2)	//offstation==1 is a draw. the station becomes irradiated and needs to be evacuated.
 													//kinda shit but I couldn't  get permission to do what I wanted to do.
+	SSpersistence_map.setSavingFilth(FALSE)
 	stat_collection.nuked++
 
 /obj/machinery/nuclearbomb/send_to_past(var/duration)
@@ -314,10 +315,8 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."
-	icon_state = "nucleardisk"
-	item_state = "card-id"
+	icon_state = "disk_nuke"
 	flags = FPRINT | TIMELESS
-	w_class = W_CLASS_TINY
 	var/respawned = 0
 
 /obj/item/weapon/disk/nuclear/New()

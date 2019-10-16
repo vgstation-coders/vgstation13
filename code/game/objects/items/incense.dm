@@ -28,34 +28,78 @@
 	var/lit = FALSE
 	var/flammable = TRUE
 
-	var/fragrance = INCENSE_HAREBELLS
-	var/adjective = "holy"
+	var/fragrance = null
+	var/adjective = null
 	var/list/breathed_at_least_once = list()
+
+/obj/item/incense_stick/New()
+	..()
+	create_reagents(1)
 
 /obj/item/incense_stick/harebells
 	fragrance = INCENSE_HAREBELLS
 	adjective = "holy"
+	color = "#ffffff"
 
 /obj/item/incense_stick/poppies
 	fragrance = INCENSE_POPPIES
 	adjective = "calming"
+	color = "#660000"
 
 /obj/item/incense_stick/sunflowers
 	fragrance = INCENSE_SUNFLOWERS
 	adjective = "pleasant"
+	color = "#ffff99"
 
 /obj/item/incense_stick/moonflowers
 	fragrance = INCENSE_MOONFLOWERS
 	adjective = "disturbing"
+	color = "#6f20b5"
 
 /obj/item/incense_stick/novaflowers
 	fragrance = INCENSE_NOVAFLOWERS
 	adjective = "stimulating"
+	color = "#ffa500"
+
+/obj/item/incense_stick/banana
+	fragrance = INCENSE_BANANA
+	adjective = "slippery"
+	color = "#ffff00"
+
+/obj/item/incense_stick/cabbage
+	fragrance = INCENSE_LEAFY
+	adjective = "fresh"
+	color = "#33cc33"
+
+/obj/item/incense_stick/booze
+	fragrance = INCENSE_BOOZE
+	adjective = "alcoholic"
+	color = "#b35900"
+
+/obj/item/incense_stick/vapor
+	fragrance = INCENSE_VAPOR
+	adjective = "clean"
+	color = "#3399ff"
+
+/obj/item/incense_stick/dense
+	fragrance = INCENSE_DENSE
+	adjective = "foul"
+	color = "#333333"
+
+/obj/item/incense_stick/vale
+	fragrance = INCENSE_CRAVE
+	adjective = "craving-inducing"
+	color = "#ffccff"
+
+/obj/item/incense_stick/cornoil
+	fragrance = INCENSE_CORNOIL
+	adjective = "hunger-inducing"
+	color = "#361b11"
 
 /obj/item/incense_stick/examine(mob/user)
-
 	..()
 	to_chat(user, "\The [src] is [lit ? "":"un"]lit.")
+	to_chat(user,"<span class='info'>This one [adjective ? "smells [adjective]" : "is unscented"].</span>")
 
 /obj/item/incense_stick/attack_self(var/mob/user)
 	if(lit)
@@ -99,6 +143,7 @@
 /obj/item/incense_stick/proc/exting()
 	lit = FALSE
 	damtype = BRUTE
+	breathed_at_least_once.Cut()
 	attack_verb = unlit_attack_verb
 	update_icon()
 	set_light(0)
@@ -131,9 +176,12 @@
 				location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 				anim(target = location, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
 				if (location.zone)//is there a simulated atmosphere where we are?
+
 					var/list/potential_breathers = list()
 					for(var/turf/simulated/T in location.zone.contents)//are they in that same atmospheric zone?
-						for (var/mob/living/carbon/C in T)
+						for (var/mob/living/C in T)
+							if(!iscarbon(C) && !isanimal(C))
+								continue
 							if (get_dist(location, C) <= 7)//are they relatively close?
 								if (!ishuman(C))
 									potential_breathers += C
@@ -141,12 +189,23 @@
 									var/mob/living/carbon/human/H = C
 									if(H.species && H.species.flags & NO_BREATHE)//can they breath?
 										continue
+									if(H.wear_mask && H.wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+										continue
+									if(H.glasses && H.glasses.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+										continue
+									if(H.head && H.head.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+										continue
 									if(H.internal)//are their internals off?
 										continue
 									potential_breathers += C
 
-					for (var/mob/living/carbon/C in potential_breathers)
-						C.reagents.add_reagent(fragrance,0.5)
+					var/datum/reagent/incense/D = chemical_reagents_list[fragrance]
+					if(D)
+						D.OnDisperse(location)
+					for (var/mob/living/C in potential_breathers)
+						reagents.clear_reagents()
+						reagents.add_reagent(fragrance,0.5) //Create a new fragrance inside, then move it to the target.
+						reagents.trans_to(C,0.5)
 						if (!(C in breathed_at_least_once))
 							breathed_at_least_once += C
 							to_chat(C,"\A [adjective] fragrance fills the air.[((fragrance == INCENSE_HAREBELLS)&&(iscultist(C)||isvampire(C))) ? "..<span class='danger'>and gives you a splitting headache!</span>" : ""]")
@@ -176,6 +235,16 @@
 		var/mob/M = loc
 		M.update_inv_hands()
 
+/obj/item/incense_stick/proc/set_fragrance(var/newfrag)
+	if(fragrance == newfrag)
+		return FALSE
+	fragrance = newfrag
+	for(var/path in typesof(/obj/item/incense_stick))
+		var/obj/item/incense_stick/IS = new path
+		if(fragrance == IS.fragrance)
+			adjective = IS.adjective
+			color = IS.color
+	return TRUE
 
 
 /obj/item/weapon/storage/fancy/incensebox
@@ -196,6 +265,7 @@
 	w_type=RECYK_WOOD
 	siemens_coefficient = 0
 	vending_cat = "incense material"
+	var/fragrance = null
 
 /obj/item/weapon/storage/fancy/incensebox/fire_act(var/datum/gas_mixture/air, var/exposed_temperature, var/exposed_volume)
 	for (var/obj/item/incense_stick/S in contents)
@@ -213,38 +283,66 @@
 	empty = 1
 	icon_state = "incensebox_0"
 
-/obj/item/weapon/storage/fancy/incensebox/harebells/New()
-	..()
-	for(var/obj/item/incense_stick/S in contents)
-		S.fragrance = INCENSE_HAREBELLS
+/obj/item/weapon/storage/fancy/incensebox/harebells
+	fragrance = INCENSE_HAREBELLS
 
-/obj/item/weapon/storage/fancy/incensebox/poppies/New()
-	..()
-	for(var/obj/item/incense_stick/S in contents)
-		S.fragrance = INCENSE_POPPIES
+/obj/item/weapon/storage/fancy/incensebox/poppies
+	fragrance = INCENSE_POPPIES
 
-/obj/item/weapon/storage/fancy/incensebox/sunflowers/New()
-	..()
-	for(var/obj/item/incense_stick/S in contents)
-		S.fragrance = INCENSE_SUNFLOWERS
+/obj/item/weapon/storage/fancy/incensebox/sunflowers
+	fragrance = INCENSE_SUNFLOWERS
 
-/obj/item/weapon/storage/fancy/incensebox/moonflowers/New()
-	..()
-	for(var/obj/item/incense_stick/S in contents)
-		S.fragrance = INCENSE_MOONFLOWERS
+/obj/item/weapon/storage/fancy/incensebox/moonflowers
+	fragrance = INCENSE_MOONFLOWERS
 
-/obj/item/weapon/storage/fancy/incensebox/novaflowers/New()
-	..()
-	for(var/obj/item/incense_stick/S in contents)
-		S.fragrance = INCENSE_NOVAFLOWERS
+/obj/item/weapon/storage/fancy/incensebox/novaflowers
+	fragrance = INCENSE_NOVAFLOWERS
+
+/obj/item/weapon/storage/fancy/incensebox/banana
+	fragrance = INCENSE_BANANA
+
+/obj/item/weapon/storage/fancy/incensebox/leafy
+	fragrance = INCENSE_LEAFY
+
+/obj/item/weapon/storage/fancy/incensebox/booze
+	fragrance = INCENSE_BOOZE
+
+/obj/item/weapon/storage/fancy/incensebox/vapor
+	fragrance = INCENSE_VAPOR
+
+/obj/item/weapon/storage/fancy/incensebox/dense
+	fragrance = INCENSE_DENSE
+
+/obj/item/weapon/storage/fancy/incensebox/vale
+	fragrance = INCENSE_CRAVE
+
+/obj/item/weapon/storage/fancy/incensebox/cornoil
+	fragrance = INCENSE_CORNOIL
+
 
 /obj/item/weapon/storage/fancy/incensebox/New()
 	..()
 	if (empty)
 		return
-	for(var/i=1; i <= storage_slots; i++)
-		new /obj/item/incense_stick(src)
+	if(fragrance)
+		for(var/i=1; i <= storage_slots; i++)
+			var/obj/item/incense_stick/IS = new(src)
+			IS.set_fragrance(fragrance)
 
+/obj/item/weapon/storage/fancy/incensebox/variety/New()
+	..()
+	new /obj/item/incense_stick/harebells(src)
+	new /obj/item/incense_stick/poppies(src)
+	new /obj/item/incense_stick/sunflowers(src)
+	new /obj/item/incense_stick/novaflowers(src)
+	new /obj/item/incense_stick/moonflowers(src)
+	new /obj/item/incense_stick/dense(src)
+	new /obj/item/incense_stick/vapor(src)
+	new /obj/item/incense_stick/booze(src)
+	new /obj/item/incense_stick/banana(src)
+	new /obj/item/incense_stick/cabbage(src)
+	new /obj/item/incense_stick/vale(src)
+	new /obj/item/incense_stick/cornoil(src)
 
 /obj/item/incense_oilbox
 	name = "incense oil container"
@@ -259,8 +357,12 @@
 	force = 2.5
 	flags = FPRINT
 	vending_cat = "incense material"
-	var/fragrance = INCENSE_HAREBELLS
-	var/adjective = "holy"
+	var/fragrance = null
+	var/adjective = null
+
+/obj/item/incense_oilbox/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>It [adjective ? "smells [adjective]" : "is unscented"].</span>")
 
 /obj/item/incense_oilbox/harebells
 	fragrance = INCENSE_HAREBELLS
@@ -282,48 +384,55 @@
 	fragrance = INCENSE_NOVAFLOWERS
 	adjective = "stimulating"
 
+/obj/item/incense_oilbox/banana
+	fragrance = INCENSE_BANANA
+	adjective = "slippery"
+
+/obj/item/incense_oilbox/cabbage
+	fragrance = INCENSE_LEAFY
+	adjective = "fresh"
+
+/obj/item/incense_oilbox/booze
+	fragrance = INCENSE_BOOZE
+	adjective = "alcoholic"
+
+/obj/item/incense_oilbox/vapor
+	fragrance = INCENSE_VAPOR
+	adjective = "clean"
+
+/obj/item/incense_oilbox/dense
+	fragrance = INCENSE_DENSE
+	adjective = "foul"
+
+/obj/item/incense_oilbox/vale
+	fragrance = INCENSE_CRAVE
+	adjective = "craving-inducing"
+
+/obj/item/incense_oilbox/cornoil
+	fragrance = INCENSE_CORNOIL
+	adjective = "hunger-inducing"
+
 /obj/item/incense_oilbox/attackby(var/obj/item/weapon/W, var/mob/user)
 	if (istype (W, /obj/item/incense_stick))
+		if(!fragrance)
+			to_chat(user, "<span class='warning'>A floral product must be blended inside first!</span>")
+			return
 		var/obj/item/incense_stick/S = W
-		S.fragrance = fragrance
-		S.adjective = adjective
-		to_chat(user, "<span class='notice'>You dip the stick in the container, carefully applying the oils on it.</span>")
+		if(S.set_fragrance(fragrance))
+			to_chat(user, "<span class='notice'>You dip the stick in the container, carefully applying the [adjective] oils on it.</span>")
 		return
-	if (istype (W,/obj/item/weapon/reagent_containers/food/snacks/grown/harebell))
-		user.drop_item(W, force_drop = 1)
-		qdel(W)
-		fragrance = INCENSE_HAREBELLS
-		to_chat(user, "<span class='notice'>The oils in the box are now blended with harebell petals, producing an holy fragrance.</span>")
-		adjective = "holy"
-		return
-	if (istype (W,/obj/item/weapon/reagent_containers/food/snacks/grown/poppy))
-		user.drop_item(W, force_drop = 1)
-		qdel(W)
-		fragrance = INCENSE_POPPIES
-		to_chat(user, "<span class='notice'>The oils in the box are now blended with poppy petals, producing a calming fragrance.</span>")
-		adjective = "calming"
-		return
-	if (istype (W,/obj/item/weapon/grown/sunflower))
-		user.drop_item(W, force_drop = 1)
-		qdel(W)
-		fragrance = INCENSE_SUNFLOWERS
-		to_chat(user, "<span class='notice'>The oils in the box are now blended with sunflower petals, producing a pleasant fragrance.</span>")
-		adjective = "pleasant"
-		return
-	if (istype (W,/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower))
-		user.drop_item(W, force_drop = 1)
-		qdel(W)
-		fragrance = INCENSE_MOONFLOWERS
-		to_chat(user, "<span class='notice'>The oils in the box are now blended with moonflower petals, producing a disturbing fragrance.</span>")
-		adjective = "disturbing"
-		return
-	if (istype (W,/obj/item/weapon/grown/novaflower))
-		user.drop_item(W, force_drop = 1)
-		qdel(W)
-		fragrance = INCENSE_NOVAFLOWERS
-		to_chat(user, "<span class='notice'>The oils in the box are now blended with novaflower petals, producing a stimulating fragrance.</span>")
-		adjective = "stimulating"
-		return
+	if (istype (W,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(W,/obj/item/weapon/grown))
+		if(W:fragrance) //for both types this is null by default, so it's "safe" to use the trusted operator
+			user.drop_item(W, force_drop = 1)
+			qdel(W)
+			fragrance = W:fragrance
+			for(var/path in typesof(/obj/item/incense_oilbox))
+				var/obj/item/incense_oilbox/IO = new path
+				if(fragrance == IO.fragrance)
+					adjective = IO.adjective
+					break
+			to_chat(user, "<span class='notice'>The oils in the box are now blended with \the [W]... it smells [adjective]!</span>")
+			return
 	..()
 
 
@@ -353,6 +462,10 @@
 		incense = null
 	..()
 
+/obj/item/weapon/thurible/examine(mob/user)
+	..()
+	if(incense && incense.lit)
+		to_chat(user,"<span class='info'>A [incense.adjective] fragrance wafts from within!</span>")
 
 /obj/item/weapon/thurible/update_icon()
 	if (incense && incense.lit)
@@ -402,8 +515,8 @@
 			to_chat(user,"<span class='warning'>The incense was recently put out, you must wait a few seconds before lighting it up again.</span>")
 			return
 		else
-			incense.burn()
 			to_chat(user,"<span class='warning'>You flick the built-in lighter, and the small flame lights up \the [incense].</span>")
+			incense.burn()
 	else
 		to_chat(user,"<span class='warning'>Put some incense in there first.</span>")
 

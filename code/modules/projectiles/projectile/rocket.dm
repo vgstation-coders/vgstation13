@@ -8,8 +8,15 @@
 	nodamage = 0
 	flag = "bullet"
 	var/embed = 1
-	var/picked_up_speed = 5
+	var/explosive = 1
+	var/picked_up_speed = 0.66 //This is basically projectile speed, so
 	fire_sound = 'sound/weapons/rocket.ogg'
+	var/exdev 	= 1 //RPGs pack a serious punch and will cause massive structural damage in your average room, 
+	var/exheavy = 3 //but won't punch through reinforced walls
+	var/exlight = 5
+	var/exflash = 8
+	var/emheavy = -1
+	var/emlight = -1
 
 /obj/item/projectile/rocket/process_step()
 	if(src.loc)
@@ -26,11 +33,67 @@
 		sleep(picked_up_speed)
 
 /obj/item/projectile/rocket/to_bump(var/atom/A)
-	explosion(A, 1, 3, 5, 8) //RPGs pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
-	if(!gcDestroyed)
-		qdel(src)
+	if(explosive == 1)
+		explosion(A, exdev, exheavy, exlight, exflash) 
+		if(!gcDestroyed)
+			qdel(src)
+	else
+		..()
+		if(!gcDestroyed)
+			qdel(src)
 
-/obj/item/projectile/nikita
+/obj/item/projectile/rocket/lowyield
+	name = "low yield rocket"
+	icon_state = "rpground"
+	damage = 45
+	stun = 10
+	weaken = 10
+	exdev 	= -1
+	exheavy = 0
+	exlight = 3
+	exflash = 5
+
+/obj/item/projectile/rocket/blank
+	name = "blank rocket"
+	damage = 5
+	weaken = 10
+	agony = 10
+	exdev 	= -1
+	exheavy = 0
+	exlight = 0
+	exflash = 0
+
+/obj/item/projectile/rocket/blank/emp
+	name = "EMP rocket"
+	damage = 10
+	agony = 30
+	emheavy = 3
+	emlight = 5
+
+/obj/item/projectile/rocket/emp/to_bump(var/atom/A)
+	empulse(A, 3, 5)
+	..()
+	
+/obj/item/projectile/rocket/blank/stun
+	name = "stun rocket"
+	damage = 15
+	stun = 20
+	weaken = 20
+	agony = 30
+
+/obj/item/projectile/rocket/stun/to_bump(var/atom/A)
+	flashbangprime(TRUE, FALSE, FALSE)
+	..()
+		
+/obj/item/projectile/rocket/lowyield/extreme
+	name = "extreme yield rocket"
+	damage = 200
+	exdev 	= 7
+	exheavy = 14
+	exlight = 28
+	exflash = 32
+
+/obj/item/projectile/rocket/nikita
 	name = "\improper Nikita missile"
 	desc = "One does not simply dodge a nikita missile."
 	icon = 'icons/obj/projectiles_experimental.dmi'
@@ -51,7 +114,7 @@
 	var/last_dir = null
 	var/emagged = 0//the value is set by the Nikita when it fires it
 
-/obj/item/projectile/nikita/OnFired()
+/obj/item/projectile/rocket/nikita/OnFired()
 	nikita = shot_from
 	emagged = nikita.emagged
 
@@ -62,6 +125,8 @@
 			var/datum/control/new_control = new /datum/control/lock_move(mob, src)
 			mob.orient_object.Add(new_control)
 			new_control.take_control()
+			mob.drop_item(nikita)
+			nikita = null
 
 	dir = get_dir_cardinal(starting,original)
 	last_dir = dir
@@ -70,24 +135,24 @@
 		for(var/obj/item/W in mob.get_all_slots())
 			mob.drop_from_inventory(W)//were you're going you won't need those!
 
-/obj/item/projectile/nikita/emp_act(severity)
+/obj/item/projectile/rocket/nikita/emp_act(severity)
 	new/obj/item/ammo_casing/rocket_rpg/nikita(get_turf(src))
 	if(nikita)
 		nikita.fired = null
 	qdel(src)
 
-/obj/item/projectile/nikita/bullet_act(var/obj/item/projectile/Proj)
+/obj/item/projectile/rocket/nikita/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			detonate()
 
-/obj/item/projectile/nikita/Destroy()
+/obj/item/projectile/rocket/nikita/Destroy()
 	reset_view()
 	if(nikita)
 		nikita.fired = null
 	..()
 
-/obj/item/projectile/nikita/to_bump(var/atom/A)
+/obj/item/projectile/rocket/nikita/to_bump(var/atom/A)
 	if(bumped)
 		return
 	if(emagged && (A == mob))
@@ -95,12 +160,12 @@
 	bumped = 1
 	detonate(get_turf(A))
 
-/obj/item/projectile/nikita/Bumped(var/atom/A)
+/obj/item/projectile/rocket/nikita/Bumped(var/atom/A)
 	if(emagged && (A == mob))
 		return
 	detonate(A)
 
-/obj/item/projectile/nikita/process_step()
+/obj/item/projectile/rocket/nikita/process_step()
 	if(!emagged && !check_user())//if the original user dropped the Nikita and the missile is still in the air, we check if someone picked it up.
 		if(nikita && istype(nikita.loc,/mob/living/carbon))
 			var/mob/living/carbon/C = nikita.loc
@@ -116,7 +181,7 @@
 			qdel(src)
 		src.Move(step)
 
-	if(mob)
+	if(mob && loc)
 		if(emagged)
 			mob.forceMove(loc)
 			mob.dir = dir
@@ -141,10 +206,10 @@
 
 	sleep(sleeptime)
 
-/obj/item/projectile/nikita/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/item/projectile/rocket/nikita/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return (!density || !height || air_group)
 
-/obj/item/projectile/nikita/proc/check_user()
+/obj/item/projectile/rocket/nikita/proc/check_user()
 	if(!mob || !mob.client)
 		return 0
 	if(mob.stat || (mob.get_active_hand() != nikita))
@@ -152,12 +217,12 @@
 		return 0
 	return 1
 
-/obj/item/projectile/nikita/proc/detonate(var/atom/A)
-	explosion(A, 1, 3, 5, 8) //Nikita rockets pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
+/obj/item/projectile/rocket/nikita/proc/detonate(var/atom/A)
+	explosion(A, exdev, exheavy, exlight, exflash)
 	if(!gcDestroyed)
 		qdel(src)
 
-/obj/item/projectile/nikita/proc/reset_view()
+/obj/item/projectile/rocket/nikita/proc/reset_view()
 	var/datum/control/C = mob.orient_object[src]
 	if(C)
 		C.break_control()

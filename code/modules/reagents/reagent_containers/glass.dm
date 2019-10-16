@@ -4,7 +4,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/weapon/reagent_containers/glass
 	name = " "
-	var/base_name = " "
 	desc = " "
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "null"
@@ -25,7 +24,7 @@
 		/obj/structure/table,
 		/obj/structure/closet,
 		/obj/structure/sink,
-		/obj/structure/centrifuge/,
+		/obj/structure/centrifuge,
 		/obj/item/weapon/storage,
 		/obj/item/weapon/solder,
 		/obj/machinery/atmospherics/unary/cryo_cell,
@@ -33,15 +32,14 @@
 		/obj/item/weapon/grenade/chem_grenade,
 		/obj/item/weapon/electrolyzer,
 		/obj/machinery/bot/medbot,
-		/obj/machinery/computer/pandemic,
 		/obj/item/weapon/storage/secure/safe,
 		/obj/machinery/iv_drip,
 		/obj/machinery/disease2/incubator,
+		/obj/machinery/disease2/centrifuge,
 		/obj/machinery/disposal,
 		/obj/machinery/apiary,
 		/mob/living/simple_animal/cow,
 		/mob/living/simple_animal/hostile/retaliate/goat,
-		/obj/machinery/centrifuge,
 		/obj/machinery/cooking/icemachine,
 		/obj/machinery/sleeper,
 		/obj/machinery/anomaly,
@@ -56,7 +54,6 @@
 
 /obj/item/weapon/reagent_containers/glass/New()
 	..()
-	base_name = name
 	update_icon() //Used by all subtypes for reagent filling, and allows roundstart lids
 
 /obj/item/weapon/reagent_containers/glass/mop_act(obj/item/weapon/mop/M, mob/user)
@@ -84,7 +81,7 @@
 	if (is_type_in_list(target, can_be_placed_into))
 		return
 
-	if(ishuman(target)) //Splashing handled in attack now
+	if(ishuman(target) || iscorgi(target)) //Splashing handled in attack now
 		return
 
 	var/transfer_result = transfer(target, user, splashable_units = -1) // Potentially splash with everything inside
@@ -205,6 +202,16 @@
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
 		overlays += lid
 
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
+	name = "small erlenmeyer flask"
+	desc = "It's like a cute little snub-nosed beaker. Can hold up to 50 units."
+	icon_state = "erlenmeyersmall"
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer
+	name = "erlenmeyer flask"
+	desc = "Colloquially known as the 'long beaker'. Can hold up to 100 units."
+	icon_state = "erlenmeyerlarge"
+
 /obj/item/weapon/reagent_containers/glass/beaker/large
 	name = "large beaker"
 	desc = "A large beaker. Can hold up to 100 units."
@@ -269,28 +276,47 @@
 /obj/item/weapon/reagent_containers/glass/beaker/vial/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
 
+/obj/item/weapon/reagent_containers/glass/beaker/vial/on_reagent_change()
+	..()
+	if (istype(loc,/obj/item/weapon/storage/fancy/vials) || istype(loc,/obj/item/weapon/storage/lockbox/vials))
+		var/obj/item/weapon/storage/S = loc
+		S.update_icon()
+
 /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
 	..()
-
 	reagents.add_reagent(URANIUM, 25)
 
-/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon/New()
+	..()
+	reagents.add_reagent(CARBON, 10)
 
-	New()
-		..()
-		reagents.add_reagent(CRYOXADONE, 30)
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater/New()
+	..()
+	reagents.add_reagent(WATER, 10)
 
-/obj/item/weapon/reagent_containers/glass/beaker/sulphuric
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox/New()
+	..()
+	reagents.add_reagent(ANTI_TOXIN, 10)
 
-	New()
-		..()
-		reagents.add_reagent(SACID, 50)
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime/New()
+	..()
+	reagents.add_reagent(LEMON_LIME, 30)
 
-/obj/item/weapon/reagent_containers/glass/beaker/slime
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater/New()
+	..()
+	reagents.add_reagent(SODAWATER, 30)
 
-	New()
-		..()
-		reagents.add_reagent(SLIMEJELLY, 50)
+/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone/New()
+	..()
+	reagents.add_reagent(CRYOXADONE, 30)
+
+/obj/item/weapon/reagent_containers/glass/beaker/sulphuric/New()
+	..()
+	reagents.add_reagent(SACID, 50)
+
+/obj/item/weapon/reagent_containers/glass/beaker/slime/New()
+	..()
+	reagents.add_reagent(SLIMEJELLY, 50)
 
 /obj/item/weapon/reagent_containers/glass/beaker/mednanobots
 	name = "beaker 'nanobots'"
@@ -421,9 +447,9 @@
 	name = "reagent glass (surfactant)"
 	icon_state = "liquid"
 
-	New()
-		..()
-		reagents.add_reagent(FLUOROSURFACTANT, 20)
+/obj/item/weapon/reagent_containers/glass/dispenser/surfactant/New()
+	..()
+	reagents.add_reagent(FLUOROSURFACTANT, 20)
 
 */
 

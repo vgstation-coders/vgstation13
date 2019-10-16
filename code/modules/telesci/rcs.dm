@@ -25,7 +25,7 @@
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
 		to_chat(user, "<span class='caution'>\the [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(stage == 0)
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "<span class = 'caution'>You unscrew the telepad's tracking beacon.</span>")
@@ -167,8 +167,14 @@
 			P.name = "letter from [user]"
 			P.info = note
 
+	//After inputs to prevent process-pause exploitation
+	var/area/A = get_area(target)
+	if(A.jammed || A.flags & (NO_TELEPORT|NO_PORTALS))
+		to_chat(user, "<span class='warning'>You can not teleport \the [target] from here, due to bluespace interference.</span>")
+		return
+
 	playsound(src, 'sound/machines/click.ogg', 50, 1)
-	to_chat(user, "<span class='notic'>Teleporting \the [target]...</span>")
+	to_chat(user, "<span class='notice'>Teleporting \the [target]...</span>")
 	teleporting = TRUE
 	if (!do_after(user, target, 50))
 		teleporting = FALSE

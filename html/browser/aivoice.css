@@ -1,0 +1,84 @@
+.autocomplete-suggestions {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	border: 1px solid #000;
+	background: #383838;
+	cursor: default;
+	overflow: auto;
+	-webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+	-moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+	box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+	font-family: sans-serif;
+}
+
+.autocomplete-suggestion {
+	padding: 2px 5px;
+	white-space: nowrap;
+	overflow: hidden;
+	color: #ccc;
+}
+
+.autocomplete-no-suggestion {
+	padding: 2px 5px;
+}
+
+.autocomplete-selected {
+	background: #F0F0F0;
+}
+
+.autocomplete-suggestions strong {
+	font-weight: bold;
+	color: #fff;
+}
+
+.autocomplete-group {
+	padding: 2px 5px;
+	font-weight: bold;
+	font-size: 16px;
+	color: #000;
+	display: block;
+	border-bottom: 1px solid #000;
+}
+
+ul#errors {
+	min-height: 300px;
+}
+
+ul#errors li {
+	color: white;
+	background: red;
+	padding: 0.25em;
+	margin: 0.1em;
+	list-style: none;
+}
+
+button#submit, button#reset {
+	color: #ffffff;
+	text-decoration: none;
+	background: #40628a;
+	border: 1px solid #161616;
+	padding: 1px 4px 1px 4px;
+	margin: 0 2px 0 0;
+	cursor:default;
+}
+button#submit:disabled, button#reset:disabled {
+	color: #ffffff;
+	background: #999999;
+	border-color: #666666;
+}
+/* TODO: Move these to common.css? These elements look like ass without this. */
+hr {
+	border: 1px solid #666
+}
+fieldset {
+	border: 1px solid #666;
+}
+div.formline {
+	padding: 0.25em;
+}
+input[type=text] {
+	background: #fff;
+	border: 1px solid #333;
+	padding: 0.2em;
+}

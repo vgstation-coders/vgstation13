@@ -54,9 +54,10 @@
 	abbreviation = "HS"
 	spawned_items = list(
 	/obj/item/clothing/shoes/sandal,\
-	/obj/item/clothing/gloves/purple,\
+	/obj/item/clothing/gloves/purple/wizard,\
 	/obj/item/clothing/suit/space/rig/wizard,\
-	/obj/item/clothing/head/helmet/space/rig/wizard)
+	/obj/item/clothing/head/helmet/space/rig/wizard,\
+	/obj/item/weapon/tank/emergency_oxygen/double/wizard)
 
 /datum/spellbook_artifact/staff_of_animation
 	name = "Staff of Animation"
@@ -69,15 +70,12 @@
 	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
 	abbreviation = "SN"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
-/*
-#define APPRENTICE_PRICE Sp_BASE_PRICE
+
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
-	desc = "A magical contract binding an apprentice wizard to your service, using it will summon them to your side."
+	desc = "A magical contract binding an apprentice wizard to your service. Using it will summon them to your side."
 	abbreviation = "CT"
-	spawned_items = list(/obj/item/weapon/antag_spawner/contract)
-	price = APPRENTICE_PRICE
-*/
+	spawned_items = list(/obj/item/wizard_apprentice_contract)
 
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
@@ -253,7 +251,7 @@
 	H.real_name = pick("Santa Claus","Jolly St. Nick","Sandy Claws","Sinterklaas","Father Christmas","Kris Kringle")
 	H.nutrition += 1000
 
-	H.add_spell(new/spell/noclothes)
+	H.add_spell(new/spell/passive/noclothes)
 	H.add_spell(new/spell/aoe_turf/conjure/snowmobile)
 	H.add_spell(new/spell/targeted/wrapping_paper)
 	H.add_spell(new/spell/aoe_turf/conjure/gingerbreadman)

@@ -81,7 +81,9 @@
 
 	if((src == M) || (M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
 		M.visible_message("<span class='notice'>\The [M] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
-		M.Knockdown(rand(1,10))
+		var/incapacitation_duration = rand(1,10)
+		M.Knockdown(incapacitation_duration)
+		M.Stun(incapacitation_duration)
 		return
 
 	var/stomping = 0
@@ -130,15 +132,14 @@
 	var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 
 	var/armorblock = run_armor_check(affecting, modifier = armor_modifier) //Bites are easy to stop, hence the modifier value
-	switch(armorblock)
-		if(1) //Partial block
-			damage = max(0, damage - rand(1,5))
-		if(2) //Full block
-			damage = max(0, damage - rand(1,10))
+	damage = max(0, (damage/100)*(100-armorblock))
 	damage = run_armor_absorb(affecting, "melee", damage)
 	if(knockout >= 7 && prob(33))
 		visible_message("<span class='danger'>[M] weakens [src]!</span>")
 		apply_effect(3, WEAKEN, armorblock)
+
+	if(isrambler(src) && !(M == src)) //Redundant check for kicking a soul rambler. Punching is in carbon/human/combat.dm
+		M.say(pick("Take that!", "Taste the pain!"))
 
 	apply_damage(damage, BRUTE, affecting)
 
@@ -164,7 +165,7 @@
 		LAssailant = M
 	log_attack("[M.name] ([M.ckey]) kicked by [src.name] ([src.ckey])")
 
-/mob/living/carbon/human/attack_hand(mob/living/carbon/human/M)
+/mob/living/carbon/human/attack_hand(var/mob/living/carbon/human/M)
 	//M.delayNextAttack(10)
 	if (istype(loc, /turf) && istype(loc.loc, /area/start))
 		to_chat(M, "No attacking people at spawn, you jackass.")
@@ -177,14 +178,20 @@
 
 	..()
 
-	if((M != src) && check_shields(0, M.name))
-		visible_message("<span class='danger'>[M] attempts to touch [src]!</span>")
+	if((M != src) && check_shields(0, M))
+		visible_message("<span class='borange'>[M] attempts to touch [src]!</span>")
 		return 0
 
-
-	if(istype(M,/mob/living/carbon))
-//		log_debug("No gloves, [M] is truing to infect [src]")
-		spread_disease_to(M, src, "Contact")
+	var/datum/organ/external/S = src.get_organ(M.zone_sel.selecting)
+	if (!(!S || S.status & ORGAN_DESTROYED))
+		var/touch_zone = get_part_from_limb(M.zone_sel.selecting)
+		var/block = 0
+		var/bleeding = 0
+		if (M.check_contact_sterility(HANDS) || check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
+			block = 1
+		if (M.check_bodypart_bleeding(HANDS) && check_bodypart_bleeding(touch_zone))//both sides have to be bleeding to allow for blood infections
+			bleeding = 1
+		share_contact_diseases(M,block,bleeding)
 
 	// CHEATER CHECKS
 	if(M.mind)

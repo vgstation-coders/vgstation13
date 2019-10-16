@@ -23,7 +23,9 @@ var/list/response_team_members = list()
 		to_chat(H, "<span class='notice'>You are [H.real_name], the Commander of the Emergency Response Team, in the service of Nanotrasen.</span>")
 	else
 		to_chat(H, "<span class='notice'>You are [H.real_name], an Emergency Responder, in the service of Nanotrasen.</span>")
-	to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
+	for (var/role in H.mind.antag_roles)
+		var/datum/role/R = H.mind.antag_roles[role]
+		R.AnnounceObjectives()
 
 /datum/striketeam/ert/create_commando(obj/spawn_location, leader_selected = 0, key = "")
 	var/mob/living/carbon/human/M = new(spawn_location)
@@ -50,33 +52,33 @@ var/list/response_team_members = list()
 	to_chat(user, "<span class='notice'>Congratulations, you've been selected to be part of an ERT. You can customize your character, but don't take too long, time is of the essence!</span>")
 	user << 'sound/music/ERT.ogg'
 
-	var/commando_name = copytext(sanitize(input(user, "Pick a name","Name") as null|text), 1, MAX_MESSAGE_LEN)
+	var/commando_name = copytext(sanitize(input(user, "Pick a name","Name") as null|text), 1, 2*MAX_NAME_LEN)
 
 	//todo: make it a panel, like in character creation
 	var/new_facial = input(user, "Please select facial hair color.", "Character Generation") as color
 	if(new_facial)
-		M.r_facial = hex2num(copytext(new_facial, 2, 4))
-		M.g_facial = hex2num(copytext(new_facial, 4, 6))
-		M.b_facial = hex2num(copytext(new_facial, 6, 8))
+		M.my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
+		M.my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
+		M.my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
 
 	var/new_hair = input(user, "Please select hair color.", "Character Generation") as color
 	if(new_facial)
-		M.r_hair = hex2num(copytext(new_hair, 2, 4))
-		M.g_hair = hex2num(copytext(new_hair, 4, 6))
-		M.b_hair = hex2num(copytext(new_hair, 6, 8))
+		M.my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
+		M.my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
+		M.my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
 
 	var/new_eyes = input(user, "Please select eye color.", "Character Generation") as color
 	if(new_eyes)
-		M.r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		M.g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		M.b_eyes = hex2num(copytext(new_eyes, 6, 8))
+		M.my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
+		M.my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
+		M.my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
 
 	var/new_tone = input(user, "Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
 
 	if (!new_tone)
 		new_tone = 35
-	M.s_tone = max(min(round(text2num(new_tone)), 220), 1)
-	M.s_tone =  -M.s_tone + 35
+	M.my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
+	M.my_appearance.s_tone =  -M.my_appearance.s_tone + 35
 
 	// hair
 	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
@@ -92,12 +94,12 @@ var/list/response_team_members = list()
 	//hair
 	var/new_hstyle = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
 	if(new_hstyle)
-		M.h_style = new_hstyle
+		M.my_appearance.h_style = new_hstyle
 
 	// facial hair
 	var/new_fstyle = input(user, "Select a facial hair style", "Grooming")  as null|anything in facial_hair_styles_list
 	if(new_fstyle)
-		M.f_style = new_fstyle
+		M.my_appearance.f_style = new_fstyle
 
 	var/new_gender = alert(user, "Please select gender.", "Character Generation", "Male", "Female")
 	if (new_gender)
@@ -131,6 +133,7 @@ var/list/response_team_members = list()
 		ert.HandleRecruitedMind(M.mind)
 	else
 		ert = ticker.mode.CreateFaction(/datum/faction/strike_team/ert)
+		ert.forgeObjectives(mission)
 		if(ert)
 			ert.HandleNewMind(M.mind) //First come, first served
 	M.equip_response_team(leader_selected)
@@ -155,7 +158,7 @@ var/list/response_team_members = list()
 	//Basic Uniform
 	equip_to_slot_or_del(new /obj/item/clothing/under/ert(src), slot_w_uniform)
 	equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_l_store)
-	equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun(src), slot_belt)
+	equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun/nuclear(src), slot_belt)
 
 	//Glasses
 	equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses/sechud(src), slot_glasses)
@@ -189,6 +192,11 @@ var/list/response_team_members = list()
 	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	
+	if(leader_selected)
+		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy, /obj/item/clothing/under, 5)	
+	else
+		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP, /obj/item/clothing/under, 5)
 
 	return 1
 

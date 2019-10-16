@@ -7,10 +7,10 @@
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 1000
-	var/mob/occupant = null
+	var/mob/living/occupant = null
 	var/list/acceptable_upgradeables = list(/obj/item/weapon/cell) // battery for now
 	var/list/upgrade_holder = list()
-	var/upgrading = 0 // are we upgrading a nigga?
+	var/obj/upgrading = 0 // are we upgrading a nigga?
 	var/upgrade_finished = -1 // time the upgrade should finish
 	var/manipulator_coeff = 1 // better manipulator swaps parts faster
 	var/transfer_rate_coeff = 1 // transfer rate bonuses
@@ -77,6 +77,9 @@
 		process_occupant()
 	else
 		process_capacitors()
+	if(upgrade_holder.len)
+		var/obj/item/weapon/cell/C = locate() in upgrade_holder
+		charge_cell(C)
 	return 1
 
 /obj/machinery/recharge_station/proc/process_upgrade()
@@ -86,23 +89,23 @@
 		upgrading = 0
 		upgrade_finished = -1
 		return
+	var/mob/living/silicon/robot/R = occupant
 	if(stat & (NOPOWER|BROKEN) || !anchored)
-		to_chat(occupant, "<span class='warning'>Upgrade interrupted due to power failure, movement lock is released.</span>")
+		to_chat(R, "<span class='warning'>Upgrade interrupted due to power failure, movement lock is released.</span>")
 		upgrading = 0
 		upgrade_finished = -1
 		return
 	if(world.timeofday >= upgrade_finished && upgrade_finished != -1)
 		if(istype(upgrading, /obj/item/weapon/cell))
-			if(occupant:cell)
-				occupant:cell.updateicon()
-				occupant:cell.forceMove(get_turf(src))
+			if(R.cell)
+				R.cell.updateicon()
+				R.cell.forceMove(get_turf(src))
 			upgrade_holder -= upgrading
-			upgrading:forceMove(occupant)
-			occupant:cell = upgrading
-			occupant:cell:charge = occupant:cell.maxcharge // its been in a recharger so it makes sense
+			upgrading.forceMove(R)
+			R.cell = upgrading
 			upgrading = 0
 			upgrade_finished = -1
-			to_chat(occupant, "<span class='notice'>Upgrade completed.</span>")
+			to_chat(R, "<span class='notice'>Upgrade completed.</span>")
 			playsound(src, 'sound/machines/ping.ogg', 50, 0)
 
 /obj/machinery/recharge_station/attackby(var/obj/item/W, var/mob/living/user)
@@ -202,28 +205,21 @@
 
 /obj/machinery/recharge_station/proc/process_occupant()
 	if(src.occupant)
-		if (istype(occupant, /mob/living/silicon/robot))
+		if(isrobot(occupant))
 			var/mob/living/silicon/robot/R = occupant
 			if((R.stat) || (!R.client))//no more borgs suiciding in recharge stations to ruin them.
 				go_out()
 				return
 			restock_modules()
-			if(!R.cell)
-				return
-			else if(R.cell.charge >= R.cell.maxcharge)
-				R.cell.charge = R.cell.maxcharge
-				return
-			else
-				if (capacitor_stored)
-					var/juicetofill = R.cell.maxcharge-R.cell.charge
-					if(capacitor_stored > juicetofill)
-						capacitor_stored -= juicetofill
-						R.cell.charge = R.cell.maxcharge
-					else
-						R.cell.charge = R.cell.charge + capacitor_stored
-						capacitor_stored = 0
-				R.cell.charge = min(R.cell.charge + 200 * transfer_rate_coeff + (isMoMMI(occupant) ? 100 * transfer_rate_coeff : 0), R.cell.maxcharge)
-				return
+		charge_cell(occupant.get_cell())
+
+/obj/machinery/recharge_station/proc/charge_cell(var/obj/item/weapon/cell/C)
+	if(!istype(C))
+		return
+	if (capacitor_stored > 0)
+		capacitor_stored -= C.give(capacitor_stored)
+	use_power(200*transfer_rate_coeff)
+	C.give(200 * transfer_rate_coeff + (isMoMMI(occupant) ? 100 * transfer_rate_coeff : 0))
 
 /obj/machinery/recharge_station/proc/process_capacitors()
 	if (capacitor_stored >= capacitor_max)
@@ -257,18 +253,15 @@
 	return
 
 /obj/machinery/recharge_station/proc/restock_modules()
-	if(src.occupant)
-		if(istype(occupant, /mob/living/silicon/robot))
-			var/mob/living/silicon/robot/R = occupant
-			if(R.module && R.module.modules)
-				var/list/um = R.contents|R.module.modules
-				// ^ makes single list of active (R.contents) and inactive modules (R.module.modules)
-				for(var/obj/item/I in um)
-					I.restock()
-				if(R)
-					if(R.module)
-						R.module.respawn_consumable(R)
-						R.module.fix_modules()
+	if(isrobot(occupant))
+		var/mob/living/silicon/robot/R = occupant
+		if(R.module && R.module.modules)
+			var/list/um = R.contents|R.module.modules
+			// ^ makes single list of active (R.contents) and inactive modules (R.module.modules)
+			for(var/obj/item/I in um)
+				I.restock()
+			R.module.respawn_consumable(R)
+			R.module.fix_modules()
 
 /obj/machinery/recharge_station/verb/move_eject()
 	set category = "Object"
@@ -286,14 +279,11 @@
 	mob_enter(usr)
 	return
 
-/obj/machinery/recharge_station/proc/mob_enter(mob/living/silicon/robot/R)
+/obj/machinery/recharge_station/proc/mob_enter(mob/living/R)
 	if(stat & (NOPOWER|BROKEN) || !anchored)
 		return
 	if (R.stat == 2 || !R.canmove)
 		//Whoever had it so that a borg with a dead cell can't enter this thing should be shot. --NEO
-		return
-	if (!(istype(R, /mob/living/silicon/)))
-		to_chat(R, "<span class='notice'><B>Only non-organics may enter the recharger!</B></span>")
 		return
 	if (src.occupant)
 		to_chat(R, "<span class='notice'><B>The cell is already occupied!</B></span>")
@@ -307,13 +297,16 @@
 	src.add_fingerprint(R)
 	build_icon()
 	src.use_power = 2
-	for(var/obj/O in upgrade_holder)
-		if(istype(O, /obj/item/weapon/cell))
-			if(!R.cell)
-				to_chat(usr, "<big><span class='notice'>Power Cell replacement available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
-			else
-				if(O:maxcharge > R.cell.maxcharge)
-					to_chat(usr, "<span class='notice'>Power Cell upgrade available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
+	if(isrobot(R))
+		var/mob/living/silicon/robot/RR = R
+		for(var/obj/O in upgrade_holder)
+			if(istype(O, /obj/item/weapon/cell))
+				var/obj/item/weapon/cell/some_cell = O
+				if(!RR.cell)
+					to_chat(usr, "<big><span class='notice'>Power Cell replacement available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
+				else
+					if(some_cell.maxcharge > RR.cell.maxcharge)
+						to_chat(usr, "<span class='notice'>Power Cell upgrade available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
 
 /obj/machinery/recharge_station/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(occupant)
@@ -328,12 +321,11 @@
 	return ..()
 
 /obj/machinery/recharge_station/Bumped(atom/AM as mob|obj)
-	if(!issilicon(AM) || isAI(AM))
+	if(!isliving(AM) || isAI(AM) || !AM.get_cell())
 		return
-	var/mob/living/silicon/robot/R = AM
-	mob_enter(R)
-	return
+	mob_enter(AM)
 
 /obj/machinery/recharge_station/get_cell()
 	if(occupant)
 		return occupant.get_cell()
+	return locate(/obj/item/weapon/cell) in upgrade_holder

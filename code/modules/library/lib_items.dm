@@ -45,13 +45,13 @@
 		getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 3)
 		qdel(src)
 
-/obj/structure/bookcase/attackby(obj/O as obj, mob/user as mob)
+/obj/structure/bookcase/attackby(obj/item/O as obj, mob/user as mob)
 	if(busy) //So that you can't mess with it while deconstructing
 		return
 	if(is_type_in_list(O, valid_types))
 		user.drop_item(O, src)
 		update_icon()
-	else if(isscrewdriver(O) && user.a_intent == I_HELP) //They're probably trying to open the "maintenance panel" to deconstruct it. Let them know what's wrong.
+	else if(O.is_screwdriver(user) && user.a_intent == I_HELP) //They're probably trying to open the "maintenance panel" to deconstruct it. Let them know what's wrong.
 		to_chat(user, "<span class='notice'>There are no screws on \the [src], it appears to be nailed together. You could probably disassemble it with just a crowbar.</span>")
 		return
 	else if(iscrowbar(O) && user.a_intent == I_HELP) //Only way to deconstruct, needs help intent
@@ -148,32 +148,35 @@
 /obj/structure/bookcase/manuals/medical
 	name = "Medical Manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/weapon/book/manual/medical_cloning(src)
-		update_icon()
+/obj/structure/bookcase/manuals/medical/New()
+	..()
+	new /obj/item/weapon/book/manual/medical_cloning(src)
+	new /obj/item/weapon/book/manual/chemistry_manual(src)
+	new /obj/item/weapon/book/manual/virology_guide(src)
+	new /obj/item/weapon/book/manual/virology_encyclopedia(src)
+	update_icon()
 
 
 /obj/structure/bookcase/manuals/engineering
 	name = "Engineering Manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/weapon/book/manual/engineering_construction(src)
-		new /obj/item/weapon/book/manual/engineering_particle_accelerator(src)
-		new /obj/item/weapon/book/manual/engineering_hacking(src)
-		new /obj/item/weapon/book/manual/engineering_guide(src)
-		new /obj/item/weapon/book/manual/engineering_singularity_safety(src)
-		new /obj/item/weapon/book/manual/robotics_cyborgs(src)
-		update_icon()
+/obj/structure/bookcase/manuals/engineering/New()
+	..()
+	new /obj/item/weapon/book/manual/engineering_construction(src)
+	new /obj/item/weapon/book/manual/engineering_particle_accelerator(src)
+	new /obj/item/weapon/book/manual/engineering_hacking(src)
+	new /obj/item/weapon/book/manual/engineering_guide(src)
+	new /obj/item/weapon/book/manual/engineering_singularity_safety(src)
+	new /obj/item/weapon/book/manual/robotics_cyborgs(src)
+	update_icon()
 
 /obj/structure/bookcase/manuals/research_and_development
 	name = "R&D Manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/weapon/book/manual/research_and_development(src)
-		update_icon()
+/obj/structure/bookcase/manuals/research_and_development/New()
+	..()
+	new /obj/item/weapon/book/manual/research_and_development(src)
+	update_icon()
 
 
 /*
@@ -204,6 +207,10 @@
 	var/forbidden = 0     // Prevent ordering of this book. (0=no, 1=yes, 2=emag only)
 	var/obj/item/store	// What's in the book?
 	var/runestun = 0	//Does it have a stun talisman in it?
+	var/occult = 0 //Does this book contain forbidden and occult writings?
+
+	var/book_width = 400
+	var/book_height = 400
 
 /obj/item/weapon/book/New()
 	..()
@@ -224,11 +231,15 @@
 	if(carved)
 		to_chat(user, "<span class='notice'>The pages of [title] have been cut out!</span>")
 		return
+	if (!isobserver(user))
+		playsound(user, "pageturn", 50, 1, -5)
 	if(src.dat)
-		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=book")
+		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=[name];size=[book_width]x[book_height]")
 		if(!isobserver(user))
 			user.visible_message("[user] opens a book titled \"[src.title]\" and begins reading intently.")
 		onclose(user, "book")
+	else if(occult)
+		to_chat(user, "<span class='sinister'>As you read the book, your mind is assaulted by foul, arcane energies!</span>")
 	else
 		to_chat(user, "This book is completely blank!")
 
@@ -246,10 +257,19 @@
 		M.Knockdown(25)
 		M.Stun(25)
 		runestun = 0
+	if(occult)
+		var/mob/living/carbon/human/M = user
+		M.flash_eyes(visual = 1)
+		M.Knockdown(15)
+		M.Stun(15)
+		var/datum/organ/internal/eyes/eyes = M.internal_organs_by_name["eyes"]
+		eyes.damage += rand(30,60)
+		M.adjustBrainLoss(rand(50,100))
+		M.hallucination = max(0, M.hallucination + rand(60,90))
 	read_a_motherfucking_book(user)
 
 /obj/item/weapon/book/examine(mob/user)
-	if(isobserver(user) && in_range(src,user))
+	if(isobserver(user) && in_range(src,user) && occult == 0)
 		read_a_motherfucking_book(user)
 	else
 		..()
@@ -260,6 +280,7 @@
 		if(do_after(user, src, 30 / W.sharpness))
 			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
 			carved = 1
+			occult = 0 //A book cannot be an occult book if it has no pages
 			return
 	if(carved)
 		if(!store)
@@ -338,7 +359,10 @@
 		var/obj/item/weapon/paper/talisman/talisman = W
 		if(runestun)
 			to_chat(user, "<span class='notice'>There is already a talisman between the pages.</span>")
-			return()
+			return
+		if(occult)
+			to_chat(user, "<span class='sinister'>You feel as if it would be a bad idea to add a talisman to this particular book.</span>")
+			return
 		if(talisman.imbue == "runestun")
 			to_chat(user, "<span class='notice'>You slide the talisman between the pages.</span>")
 			qdel(talisman)
@@ -349,6 +373,25 @@
 	else
 		..()
 
+/*
+ * Traitor Ooccult Books
+ */
+
+
+/obj/item/weapon/book/occult
+	name = "The King in Yellow"
+	title = "The King in Yellow"
+	occult = 1
+	var/possible_names = list("The King in Yellow", "The Locksmith's Dream", "The Tantra of Worms", "Infinite Jest", "The Legacy of Totalitarianism in a Tundra", "The Rose of Hypatia",
+	"Gravity's Rainbow", "Aristotle's Poetics", "The Geminiad", "My Diary", "The War of the Roads", "The Courier's Tragedy", "The Burning of the Unburnt God", "Love's Labour's Won",
+	"The Necronomicon", "The Funniest Joke in the World", "Woody Got Wood", "Peggy's Revenge", "House of Leaves", "A True and Accurate History of the Shadowless Kings", "The Book of Nod",
+	"Atlas Shrugged", "The Serenity of the Black Wood", "The World Does Not Weep")
+
+/obj/item/weapon/book/occult/New()
+	..()
+	name = pick(possible_names)
+	title = name
+	icon_state = "book[rand(1, 9)]"
 
 /*
  * Barcode Scanner
