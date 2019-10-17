@@ -1085,7 +1085,7 @@ var/list/has_died_as_golem = list()
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 	attack_verb = "glomps"
 
-	flags = IS_WHITELISTED | NO_BREATHE
+	flags = IS_WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
 	anatomy_flags = NO_SKIN | NO_BLOOD | NO_BONES | NO_STRUCTURE | MULTICOLOR
 
 	spells = list(/spell/regen_limbs)
@@ -1112,10 +1112,6 @@ var/list/has_died_as_golem = list()
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain/slime_core,
 		)
-
-/datum/species/slime/xenobio
-	name = "Evolved Slime"
-	flags = IS_WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
 
 /datum/species/slime/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
 	for(var/atom/movable/I in H.contents)
