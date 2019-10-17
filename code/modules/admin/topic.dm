@@ -361,16 +361,20 @@
 			return
 
 		var/reason
-		if( alert("Do you want this to be announced?",,"Yes","No" ) == "Yes" )
-			if(new_timeleft < emergency_shuttle.timeleft())
-				reason = pick("is arriving ahead of schedule", \
-							  "hit the turbo", \
-							  "has engaged nitro afterburners")
-				captain_announce("The emergency shuttle [reason]. It will arrive in [round(new_timeleft/60)] minutes.")
-			else
-				reason = pick("has been delayed", \
-							  "decided to stop for pizza")
-				captain_announce("The emergency shuttle [reason]. It will arrive in [round(new_timeleft/60)] minutes.")
+		var/should_announce = alert("Do you want this to be announced?",,"Yes","No","Cancel" )
+		switch(should_announce)
+			if("Yes")
+				if(new_timeleft < emergency_shuttle.timeleft())
+					reason = pick("is arriving ahead of schedule", \
+								"hit the turbo", \
+								"has engaged nitro afterburners")
+					captain_announce("The emergency shuttle [reason]. It will arrive in [round(new_timeleft/60)] minutes.")
+				else
+					reason = pick("has been delayed", \
+								"decided to stop for pizza")
+					captain_announce("The emergency shuttle [reason]. It will arrive in [round(new_timeleft/60)] minutes.")
+			if("Cancel")
+				return
 
 		emergency_shuttle.settimeleft( new_timeleft )
 		log_admin("[key_name(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]")
