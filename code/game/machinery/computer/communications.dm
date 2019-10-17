@@ -341,7 +341,7 @@ var/list/shuttle_log = list()
 							return
 						if(!(usr in view(1,src)))
 							return
-						command_alert("The trading port is now on lockdown. Third party traders are no longer free to dock their shuttles with the station. Reason given:\n\n[reason]", "External Merchants Expelled!", 1)
+						command_alert("The trading port is now on lockdown. Third party traders are no longer free to dock their shuttles with the station. Reason given:\n\n[reason]", "Trading Port - Now on Lockdown", 1)
 						log_game("[key_name(usr)] closed the port to traders for reason: [reason].")
 						message_admins("[key_name_admin(usr)] closed the port to traders for reason: [reason].")
 						if(trade_shuttle.current_port.areaname == "NanoTrasen Station")
@@ -356,7 +356,7 @@ var/list/shuttle_log = list()
 						var/response = alert(usr,"Are you sure you wish to re-open the station to traders?", "Port Opening", "Yes", "No")
 						if(response != "Yes")
 							return
-						command_alert("The trading port lockdown is hereby lifted. Third party traders are now free to dock their shuttles with the station.", "Happy Merchants Welcome!", 1)
+						command_alert("The trading port lockdown is hereby lifted. Third party traders are now free to dock their shuttles with the station.", "Trading Port - Open for Business", 1)
 						log_game("[key_name(usr)] opened the port to traders.")
 						message_admins("[key_name_admin(usr)] opened the port to traders.")
 						trade_shuttle.add_dock(/obj/docking_port/destination/trade/station)
