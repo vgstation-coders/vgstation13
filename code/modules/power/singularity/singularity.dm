@@ -774,6 +774,8 @@ var/list/global_singularity_pool
 		consume(X)
 
 /obj/machinery/singularity/deadchat_controlled/proc/begin_democracy_loop()
+	if(democracy_cooldown < 1)
+		democracy_cooldown = 1 //setting it to 0 kills the serb so let's not ever let that happen again
 	spawn(democracy_cooldown)
 		if(!deadchat_active) //Bit gunky but I'm not entirely certain how src/self works in byond, would if(src == null) work?
 			return 
