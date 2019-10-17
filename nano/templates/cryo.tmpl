@@ -82,7 +82,7 @@ Used In File(s): \code\game\machinery\cryo.dm
 		{{:helper.link('Eject Occupant', 'arrowreturnthick-1-s', {'ejectOccupant' : 1}, data.hasOccupant ? null : 'disabled')}}
 	</div>
 </div>
-<div class="item">&nbsp;</div>
+<br>
 <div class="item">
 	<div class="itemLabel">
 		Beaker:
@@ -103,6 +103,60 @@ Used In File(s): \code\game\machinery\cryo.dm
 		{{:helper.link('Eject Beaker', 'eject', {'ejectBeaker' : 1}, data.isBeakerLoaded ? null : 'disabled')}}
 	</div>
 </div>
+<br>
+<div class="item">
+	<div class="itemLabel">
+		Cell contents:
+	</div>
+	<div class="itemContent" style="width: 40%;">
+		<table width="100%"><tbody>
+		{{for data.cryo_contents}}
+			<tr><td><span class="highlight">{{:value.name}}{{if data.scan_level > 1}} - {{:value.volume}} units{{/if}}</span>
+		{{empty}}
+			<span class="bad">Cell is empty</span>
+		{{/for}}
+		</tbody></table>
+	</div>
+	<div class="itemContent" style="width: 26%;">
+		{{:helper.link("Dump cell contents", null, {'dump_reagents': 1}, data.cryo_volume ? null : 'disabled')}}
+	</div>
+</div>
+<br>
+<div class="item">
+	<div class="itemLabel">
+		Controls: {{:helper.link(data.controls==1?"Hide":"Show", null, {'toggle_controls': 1})}}
+	</div>
+{{if data.controls}}
+		<div class="itemContent" style = "width: 40%;">
+			<div class="statusValue average">
+				Injection status:
+				<div class="floatRight">
+				{{:helper.link(data.injecting==1?"Active":"Inactive", null, {'toggle_inject': 1})}}
+				</div>
+			<br>
+			{{if data.scan_level >= 2}}
+					Injection rate (units):
+					<div class="floatRight">
+					{{:helper.link(data.injection_rate, 'carat-2-n-s', {'set_inject_rate': 1})}}
+					</div>
+					<br>
+			{{/if}}
+				Current dump location:
+				<div class="floatRight">
+				{{:helper.link(data.dump_loc==1?"Beaker":"Vicinity", null, {'toggle_dump': 1})}}
+			  </div>
+				<br>
+			{{if data.scan_level >= 4}}
+					Auto ejection:
+					<div class="floatRight">
+					{{:helper.link(data.auto_eject?"Active":"Inactive", null, {'toggle_autoeject': 1})}}
+					</div>
+				<br>
+			{{/if}}
+			</div>
+		</div>
+	</div>
+{{/if}}
 {{if data.ejecting}}
 	<div class="mask">
 		<div class="maskContent" style="margin: 160px 0">

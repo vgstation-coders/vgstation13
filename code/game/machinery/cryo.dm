@@ -17,26 +17,23 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	anchored = 1.0
 	layer = ABOVE_WINDOW_LAYER
 	plane = OBJ_PLANE
-
-	var/on = 0
-	var/ejecting = 0
+	active_power_usage = 350
+	idle_power_usage = 0
+	var/on = FALSE
+	var/ejecting = FALSE
 	var/temperature_archived
 	var/mob/living/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
-
+	var/inject_rate = 5 //How many reagents, per 10 seconds, will be moved from the beaker to the cryo cell
+	var/inject_rate_max = 10 //The maximum setting for reagent injection
+	var/last_injection
+	var/injecting = TRUE
 	var/current_heat_capacity = 50
-	var/running_bob_animation = 0 // This is used to prevent threads from building up if update_icons is called multiple times
-
-	machine_flags = SCREWTOGGLE | CROWDESTROY
-
-	light_color = LIGHT_COLOR_HALOGEN
-	light_range_on = 1
-	light_power_on = 2
-	use_auto_lights = 1
-
-/obj/machinery/atmospherics/unary/cryo_cell/New()
-	. = ..()
-
+	var/running_bob_animation = FALSE // This is used to prevent threads from building up if update_icons is called multiple times
+	var/scan_level = 0 //Current scanner level
+	var/auto_eject = FALSE
+	var/dump_loc = 0 //1 is to the beaker, 0 is to the floor
+	var/controls = TRUE
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/cryo,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -46,15 +43,36 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/console_screen
 	)
+	machine_flags = SCREWTOGGLE | CROWDESTROY
 
+	light_color = LIGHT_COLOR_HALOGEN
+	light_range_on = 1
+	light_power_on = 2
+	use_auto_lights = 1
+
+/obj/machinery/atmospherics/unary/cryo_cell/New()
+	. = ..()
 	RefreshParts()
-
 	initialize_directions = dir
 	initialize()
 	build_network()
 	if (node1)
 		node1.initialize()
 		node1.build_network()
+	create_reagents(1000)
+
+/obj/machinery/atmospherics/unary/cryo_cell/RefreshParts()
+	active_power_usage = initial(active_power_usage)
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/MP in component_parts)
+		T += MP.rating-1
+		active_power_usage += 50 * (MP.rating-1)
+	inject_rate_max = initial(inject_rate_max) + (5*T)
+	T = 0
+	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
+		T += SM.rating-1
+		active_power_usage += 100 * (SM.rating-1)
+	scan_level = T
 
 /obj/machinery/atmospherics/unary/cryo_cell/initialize()
 	if(node1)
@@ -151,7 +169,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 	if(stat & NOPOWER)
 		on = 0
-
+		use_power = 0
 	if(!node1)
 		return
 	if(!on)
@@ -165,7 +183,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(air_contents)
 		temperature_archived = air_contents.temperature
 		heat_gas_contents()
-		expel_gas()
 
 	if(abs(temperature_archived-air_contents.temperature) > 1)
 		network.update = 1
@@ -177,17 +194,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell/allow_drop()
 	return 0
 
-
 /obj/machinery/atmospherics/unary/cryo_cell/relaymove(mob/user as mob)
 	// Just gonna assume this guy's vent crawling don't mind me.
 	if (user != occupant)
 		return ..()
-
 	if(user.stat)
 		return
-
 	go_out(ejector = usr)
-
 
 /obj/machinery/atmospherics/unary/cryo_cell/examine(mob/user)
 	..()
@@ -209,6 +222,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 				to_chat(user, "A beaker, releasing the following chemicals into the fluids:")
 				for(var/datum/reagent/R in beaker.reagents.reagent_list)
 					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+		if(reagents.total_volume)
+			to_chat(user, "A variety of reagents swirl around the interior of \the [src].")
 		else
 			to_chat(user, "<span class='info'>The chamber appears devoid of anything but its biotic fluids.</span>")
 	else
@@ -270,21 +285,23 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			data["occupantTemperatureStatus"] = "average"
 
 	data["isBeakerLoaded"] = beaker ? 1 : 0
-	/* // Removing beaker contents list from front-end, replacing with a total remaining volume
-	var beakerContents[0]
-	if(beaker && beaker.reagents && beaker.reagents.reagent_list.len)
-		for(var/datum/reagent/R in beaker.reagents.reagent_list)
-			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
-	data["beakerContents"] = beakerContents
-	*/
 	data["beakerLabel"] = null
 	data["beakerVolume"] = 0
 	if(beaker)
 		data["beakerLabel"] = beaker.labeled ? beaker.labeled : null
-		if (beaker.reagents && beaker.reagents.reagent_list.len)
-			for(var/datum/reagent/R in beaker.reagents.reagent_list)
-				data["beakerVolume"] += R.volume
-
+		data["beakerVolume"] = beaker.reagents.total_volume
+	var/list/cryo_contents = list()
+	if(reagents.total_volume)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			cryo_contents.Add(list(list("name" = R.name, "volume" = R.volume))) //List.Add merges lists, so to have a list in the list, the donor list needs to be list(list)
+	data["cryo_contents"] = cryo_contents
+	data["cryo_volume"] = reagents.total_volume
+	data["injection_rate"] = inject_rate
+	data["injecting"] = injecting
+	data["auto_eject"] = auto_eject
+	data["controls"] = controls
+	data["dump_loc"] = dump_loc
+	data["scan_level"] = scan_level
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -315,10 +332,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			to_chat(usr, "<span class='bnotice'>Close the maintenance panel first.</span>")
 			return
 		on = 1
+		use_power = 2
 		update_icon()
 
 	if(href_list["switchOff"])
 		on = 0
+		use_power = 0
 		update_icon()
 
 	if(href_list["ejectBeaker"])
@@ -330,8 +349,40 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			return 0 // don't update UIs attached to this object
 		go_out(ejector = usr)
 
+	if(href_list["set_inject_rate"])
+		if(scan_level < 2)
+			return 0
+		var/newval = input("Enter new injection rate") as num|null
+		if(isnull(newval))
+			return 0
+		inject_rate = Clamp(newval, 0, inject_rate_max)
+		return 1
+
+	if(href_list["toggle_inject"])
+		injecting = !injecting
+
+	if(href_list["toggle_dump"])
+		dump_loc = !dump_loc
+
+	if(href_list["dump_reagents"])
+		if(dump_loc && beaker) //To the beaker
+			reagents.trans_to(beaker, reagents.total_volume)
+		else
+			visible_message("<span class = 'warning'>\The [src] begins venting its chemical contents!</span>")
+			var/turf/T = get_step(loc, SOUTH)
+			splash_sub(reagents, T, reagents.total_volume)
+
+	if(href_list["toggle_autoeject"])
+		if(scan_level < 4)
+			return 0
+		auto_eject = !auto_eject
+
+	if(href_list["toggle_controls"])
+		controls = !controls
+
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
+
 /obj/machinery/atmospherics/unary/cryo_cell/proc/detach()
 	if(beaker)
 		beaker.forceMove(get_step(loc, SOUTH))
@@ -474,31 +525,23 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(occupant.stat == DEAD)
 			return
 		modify_occupant_bodytemp()
-		occupant.stat = 1
 		if(occupant.bodytemperature < T0C)
-			occupant.sleeping = max(5, (1/occupant.bodytemperature)*2000)
-			occupant.Paralyse(max(5, (1/occupant.bodytemperature)*3000))
+			if(scan_level < 6)
+				occupant.sleeping = max(5, (1/occupant.bodytemperature)*2000)
+				occupant.Paralyse(max(5, (1/occupant.bodytemperature)*3000))
+			else
+				occupant.sleeping = 0
+				occupant.Paralyse(0)
 			var/mob/living/carbon/human/guy = occupant //Gotta cast to read this guy's species
 			if(istype(guy) && guy.species && guy.species.breath_type != GAS_OXYGEN)
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
-			if(air_contents[GAS_OXYGEN] > 2)
-				if(occupant.getOxyLoss())
-					occupant.adjustOxyLoss(-1)
-			else
-				occupant.adjustOxyLoss(-1)
-			//severe damage should heal waaay slower without proper chemicals
-			if(occupant.bodytemperature < 225)
-				if (occupant.getToxLoss())
-					occupant.adjustToxLoss(max(-1, -20/occupant.getToxLoss()))
-				var/heal_brute = occupant.getBruteLoss() ? min(1, 20/occupant.getBruteLoss()) : 0
-				var/heal_fire = occupant.getFireLoss() ? min(1, 20/occupant.getFireLoss()) : 0
-				occupant.heal_organ_damage(heal_brute,heal_fire)
-		var/has_cryo = occupant.reagents.get_reagent_amount(CRYOXADONE) >= 1
-		var/has_clonexa = occupant.reagents.get_reagent_amount(CLONEXADONE) >= 1
-		var/has_cryo_medicine = has_cryo || has_clonexa
-		if(beaker && !has_cryo_medicine)
-			beaker.reagents.trans_to(occupant, 1, 1)
-			beaker.reagents.reaction(occupant)
+		if(scan_level >= 4 && auto_eject && occupant.health == occupant.maxHealth)
+			go_out(ejector = occupant)
+			return
+		if(beaker && injecting && world.time > (last_injection + 10 SECONDS))
+			beaker.reagents.trans_to(src, inject_rate)
+			last_injection = world.time
+		reagents.reaction(occupant, remove_reagents = TRUE)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/modify_occupant_bodytemp()
 	if(!occupant)
@@ -517,17 +560,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(combined_heat_capacity > 0)
 		var/combined_energy = T20C*current_heat_capacity + air_heat_capacity*air_contents.temperature
 		air_contents.temperature = combined_energy/combined_heat_capacity
-
-/obj/machinery/atmospherics/unary/cryo_cell/proc/expel_gas()
-	if(air_contents.total_moles() < 1)
-		return
-//	var/datum/gas_mixture/expel_gas = new
-//	var/remove_amount = air_contents.total_moles()/50
-//	expel_gas = air_contents.remove(remove_amount)
-
-	// Just have the gas disappear to nowhere.
-	//expel_gas.temperature = T20C // Lets expel hot gas and see if that helps people not die as they are removed
-	//loc.assume_air(expel_gas)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit = src.loc, var/ejector)
 	if(!occupant || ejecting)
@@ -628,11 +660,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return
 	put_mob(usr)
 
-/obj/machinery/atmospherics/unary/cryo_cell/verb/remove_beaker()
+/obj/machinery/atmospherics/unary/cryo_cell/verb/remove_beakerV()
 	set name = "Remove beaker"
 	set category = "Object"
 	set src in oview(1)
-	CtrlClick(usr)
+
+	remove_beaker(usr)
 
 /obj/machinery/atmospherics/unary/cryo_cell/return_air()
 	return air_contents
@@ -641,8 +674,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(prob(50)) //Turn on/off
 		if(on)
 			on = 0
+			use_power = 0
 		else
 			on = 1
+			use_power = 2
 		update_icon()
 
 		message_admins("[key_name(L)] has turned \the [src] [on?"on":"off"]! [formatJumpTo(src)]")
@@ -671,6 +706,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	add_fingerprint(user)
 
 /obj/machinery/atmospherics/unary/cryo_cell/CtrlClick(mob/user) // CtrlClick = less common action = retrieving the beaker
+	remove_beaker(user)
+
+/obj/machinery/atmospherics/unary/cryo_cell/proc/remove_beaker(mob/user)
 	if(!Adjacent(user) || user.incapacitated() || user.lying || user.locked_to || user == occupant || !(iscarbon(user) || issilicon(user))) //are you cuffed, dying, lying, stunned or other
 		return
 	if(panel_open)
