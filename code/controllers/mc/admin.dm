@@ -127,3 +127,4 @@
 			to_chat(usr,"<span class='info'>Set path as [path]. Hope that's right...</span>")
 		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
 	message_admins("Admin [key_name_admin(usr)] rigged the vote for [winner].")
+	log_admin("Admin [key_name(usr)] rigged the vote for [winner]. Choices were [vote.choices.Join(", ")]")
