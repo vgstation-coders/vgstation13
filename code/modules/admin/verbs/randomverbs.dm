@@ -655,11 +655,21 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if(confirmation == "No")
 			return
 	var/input = input(usr, "Please enter anything you want. Anything. Serious.", "What?", "") as message|null
-	var/customname = input(usr, "Pick a title for the report.", "Title") as text|null
 	if(!input)
 		return
+
+	var/customname = input(usr, "Pick a title for the report, or just leave it as Nanotrasen Update. \nLeaving this blank will cancel the command report.", "Choose a title", "Nanotrasen Update") as text|null
 	if(!customname)
-		customname = "Nanotrasen Update"
+		return
+
+	switch(alert("\t[customname] \n\n[input] \n---------- \nShould this be announced to the general population?", "Please verify your message", "Yes", "No", "Cancel"))
+		if("Yes")
+			command_alert(input, customname,1);
+		if("No")
+			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
+		else
+			return
+
 	for (var/obj/machinery/computer/communications/C in machines)
 		if(! (C.stat & (BROKEN|NOPOWER) ) )
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
@@ -668,12 +678,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			P.update_icon()
 			C.messagetitle.Add("[command_name()] Update")
 			C.messagetext.Add(P.info)
-
-	switch(alert("Should this be announced to the general population?",,"Yes","No"))
-		if("Yes")
-			command_alert(input, customname,1);
-		if("No")
-			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
 
 	world << sound('sound/AI/commandreport.ogg', volume = 60)
 	log_admin("[key_name(src)] has created a command report: [input]")
