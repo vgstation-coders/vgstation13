@@ -385,13 +385,11 @@
 	spawn()
 		if(src)
 			to_chat(src, "<span class='notice'>Receiving VOX words.  This will take time, and until it is complete, you may receive words out of order.</span>")
-		var/n = 0
 		if(src in clients)
 			for(var/voice in vox_sounds)
 				for(var/word in vox_sounds[voice])
 					// Yay for undocumented BYOND things.
 					Export("##action=preload_rsc", vox_sounds[voice][word])
-					n++
 					// This may make it too slow.
 					//stoplag()
 
