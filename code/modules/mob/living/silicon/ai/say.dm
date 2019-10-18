@@ -125,12 +125,13 @@ var/VOX_AVAILABLE_VOICES = list(
 	set category = "AI Commands"
 
 
-	var/dat = list("Here is a list of words you can type into the 'Announcement' button to create sentences to vocally announce to everyone on the same level at you.<BR> \
-	<UL><LI>You can also click on the word to preview it.</LI>\
-	<LI>You can only say 30 words for every announcement.</LI>\
-	<LI>Do not use punctuation as you would normally: if you want a pause you can use the full stop and comma characters by separating them with spaces, like so: 'Alpha . Test , Bravo'.</LI>\
-	<LI>Special sound effects are available, and start with a &quot;_&quot; prefix. e.g. _honk</LI></UL>\
-	<font class='bad'>WARNING:</font><BR>Misuse of the announcement system will get you job banned.<HR>")
+	var/dat = list("Here, you can type a message that will be played to the entire z-level.<br> \
+	<fieldset><legend>Rules</legend><ul>\
+	<li>You can only say 30 words for every announcement.</li>\
+	<li>Do not use punctuation as you would normally: if you want a pause you can use the full stop and comma characters by separating them with spaces, like so: 'Alpha . Test , Bravo'.</li>\
+	<li>Special sound effects are available, and start with a &quot;_&quot; prefix. e.g. _honk</li></ul>\
+	<span class='bad'><strong>WARNING:</strong> Misuse of the announcement system <em>will</em> get you job banned.</span>\
+	</fieldset>")
 
 	dat += "<fieldset><legend>Voice</legend><ul>"
 	for(var/voice_id in VOX_AVAILABLE_VOICES)
@@ -195,8 +196,6 @@ var/VOX_AVAILABLE_VOICES = list(
 	if(!message || announcing_vox > world.time)
 		return
 
-	to_chat(src, "<span class='notice'>VOX DEBUG: Received message as \"[message]\". Please file a bug report if this is incorrect.</span>")
-
 	var/list/words = splittext(trim(message), " ")
 	var/list/incorrect_words = list()
 
@@ -227,6 +226,13 @@ var/VOX_AVAILABLE_VOICES = list(
 	announcing_vox = world.time + VOX_DELAY
 
 	log_game("[key_name_admin(src)] made a vocal announcement with the following message: [message].")
+
+	// Same logic as play_vox_sound, so everyone that can hear the sound sees this.
+	for(var/mob/M in player_list)
+		if(M.client)
+			var/turf/T = get_turf(M)
+			if(T.z == src.z)
+				to_chat(M, "<span class='notice'>[src] announces: <span class='big'>\"[message]\"</span>.</span>")
 
 	for(var/word in words)
 		play_vox_word(word, vox_voice, src.z, null)
