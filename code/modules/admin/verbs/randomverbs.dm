@@ -662,7 +662,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!customname)
 		return
 
-	switch(alert("\t[customname] \n\n[input] \n---------- \nShould this be announced to the general population?", "Please verify your message", "Yes", "No", "Cancel"))
+	switch(alert("\t[customname] \n\n[input] \n---------- \nIf this message is correct, who is it intended for?", "Please verify your message", "All Crew", "Heads Only", "Cancel"))
 		if("Yes")
 			command_alert(input, customname,1);
 		if("No")
