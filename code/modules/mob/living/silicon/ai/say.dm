@@ -195,6 +195,8 @@ var/VOX_AVAILABLE_VOICES = list(
 	if(!message || announcing_vox > world.time)
 		return
 
+	to_chat(src, "<span class='notice'>VOX DEBUG: Received message as \"[message]\". Please file a bug report if this is incorrect.</span>")
+
 	var/list/words = splittext(trim(message), " ")
 	var/list/incorrect_words = list()
 
