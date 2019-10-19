@@ -480,6 +480,10 @@
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
 
+/obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
+	..()
+	user.equip_to_slot_if_possible(src)
+
 /obj/item/clothing/shoes/clean_blood()
 	. = ..()
 	track_blood = 0
