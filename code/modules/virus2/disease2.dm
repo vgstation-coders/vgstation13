@@ -554,7 +554,7 @@ var/global/list/disease2_list = list()
 
 	ticks += speed
 
-
+//This proc is what governs how a disease mutates when it's in a pathogenic incubator (or with a lower chance inside an irradiated individual)
 /datum/disease2/disease/proc/incubate(var/atom/incubator,var/mutatechance=1)
 	mutatechance *= mutation_modifier
 
@@ -570,29 +570,34 @@ var/global/list/disease2_list = list()
 			machine = dish.loc
 
 	if (mutatechance > 0 && (body || dish) && incubator.reagents)
+		//MUTAGEN + CREATINE = Robustness Up, Effect Strength Up, Effect Chance randomized
 		if (incubator.reagents.has_reagent(MUTAGEN,0.5) && incubator.reagents.has_reagent(CREATINE,0.5))
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.5) && !incubator.reagents.remove_reagent(CREATINE,0.5))
 				log += "<br />[timestamp()] Robustness Strengthening (Mutagen and Creatine in [incubator])"
 				var/change = rand(1,5)
 				robustness = min(100,robustness + change)
 				for(var/datum/disease2/effect/e in effects)
-					e.multiplier_tweak(0.1)
-					minormutate()
+					e.multiplier_tweak(0.1)//all effects get their strength increased
+					minormutate()// a random effect has a 20% chance of getting its chance re-rolled between its initial value and max chance.
+							// and the disease's infection chance is rerolled to more or less 10% of the base infection chance for that disease type.
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,0,change,0.1)
+		//MUTAGEN + SPACEACILLIN = Robustness Down, Effect Strength Down, Effect Chance randomized
 		else if (incubator.reagents.has_reagent(MUTAGEN,0.5) && incubator.reagents.has_reagent(SPACEACILLIN,0.5))
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.5) && !incubator.reagents.remove_reagent(SPACEACILLIN,0.5))
 				log += "<br />[timestamp()] Robustness Weakening (Mutagen and Spaceacillin in [incubator])"
 				var/change = rand(1,5)
 				robustness = max(0,robustness - change)
 				for(var/datum/disease2/effect/e in effects)
-					e.multiplier_tweak(-0.1)
-					minormutate()
+					e.multiplier_tweak(-0.1)//all effects get their strength reduced
+					minormutate()// a random effect has a 20% chance of getting its chance re-rolled between its initial value and max chance.
+							// and the disease's infection chance is rerolled to more or less 10% of the base infection chance for that disease type.
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,0,-change,-0.1)
 		else
+			//MUTAGEN (with no creatine or spaceacillin) = New Effect
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Effect Mutation (Mutagen in [incubator])"
 				effectmutate(body != null)
@@ -603,6 +608,7 @@ var/global/list/disease2_list = list()
 					dish.update_icon()
 					if (machine)
 						machine.update_major(dish)
+			//CREATINE (with no mutagen) = Strength Up
 			if(!incubator.reagents.remove_reagent(CREATINE,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Strengthening (Creatine in [incubator])"
 				var/change = rand(1,5)
@@ -610,6 +616,7 @@ var/global/list/disease2_list = list()
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,change)
+			//SPACEACILLIN (with no mutagen) = Strength Down
 			if(!incubator.reagents.remove_reagent(SPACEACILLIN,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Weakening (Spaceacillin in [incubator])"
 				var/change = rand(1,5)
@@ -617,6 +624,7 @@ var/global/list/disease2_list = list()
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,-change)
+		//RADIUM = New Antigen
 		if(!incubator.reagents.remove_reagent(RADIUM,0.02) && prob(mutatechance/8))
 			log += "<br />[timestamp()] Antigen Mutation (Radium in [incubator])"
 			antigenmutate()
@@ -742,7 +750,8 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease/proc/minormutate(var/index)
 	var/datum/disease2/effect/e = get_effect(index)
 	e.minormutate()
-	infectionchance = min(50,infectionchance + rand(0,10))
+	infectionchance = Clamp(infectionchance_base + rand(-10,10),0,100)
+	//infectionchance = min(50,infectionchance + rand(0,10))
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/minorstrength(var/index)
