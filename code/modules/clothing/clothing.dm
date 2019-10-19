@@ -483,6 +483,7 @@
 /obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
 	if(prob(15))
 		user.equip_to_slot_if_possible(src, slot_shoes)
+		to_chat(user,"<span class='notice'>You kick the [src] and they slip on.</span>")
 	else
 		..()	
 
