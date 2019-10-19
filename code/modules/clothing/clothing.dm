@@ -481,8 +481,10 @@
 	return
 
 /obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
-	..()
-	user.equip_to_slot_if_possible(src)
+	if(prob(15))
+		user.equip_to_slot_if_possible(src, slot_shoes)
+	else
+		..()	
 
 /obj/item/clothing/shoes/clean_blood()
 	. = ..()
