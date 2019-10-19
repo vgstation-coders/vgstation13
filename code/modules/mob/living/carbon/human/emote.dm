@@ -78,6 +78,9 @@
 	var/mob/living/carbon/human/H = user
 	if(H.has_organ(LIMB_LEFT_ARM) && H.has_organ(LIMB_RIGHT_ARM) && H.has_organ(LIMB_LEFT_LEG) && H.has_organ(LIMB_RIGHT_LEG)) //this dance requires these.
 		return TRUE
+	else
+		to_chat(user,"<span class='notice'>You need both your arms & legs to do the poison. No hitting the quan either.</span>")
+		return FALSE
 	
 /datum/emote/living/carbon/human/default_dance/run_emote(mob/user, params, type_override, ignore_status = FALSE)
 	var/mob/living/carbon/human/H = user
@@ -86,6 +89,8 @@
 			return FALSE
 		..()
 		H.last_default_dance = world.time
+	else
+		to_chat(user,"<span class='notice'>You feel too tired from poisoning so hard before to do it again right now.</span>")
 
 // Effin /vg/ fart Fetishists
 /datum/emote/living/carbon/human/fart
