@@ -325,7 +325,7 @@ var/global/list/damage_icon_parts = list()
 			face_standing.Blend(facial_s, ICON_OVERLAY)
 //		else
 			//warning("Invalid my_appearance.f_style for [species.name]: [my_appearance.f_style]")
-//true
+
 	if(my_appearance.h_style && !(src.head && ( src.head.flags & HIDEHAIRCOMPLETELY ) || \
 								  src.wear_mask && (src.wear_mask.body_parts_covered & HIDEHEADHAIR) ||\
 								  src.w_uniform && (src.w_uniform.body_parts_covered & HIDEHEADHAIR)) ) //ditto the comment above
