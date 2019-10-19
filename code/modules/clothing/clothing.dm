@@ -481,7 +481,7 @@
 	return
 
 /obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
-	if(prob(15) && (user.equip_to_slot_if_possible(src, slot_shoes) == 1))
+	if(user.equip_to_slot_if_possible(src, slot_shoes))
 		user.visible_message("<span class='notice'>[user] kicks \the [src] and slips them on!</span>", "<span class='notice'>You kick \the [src] and slip them on!</span>")
 	else
 		..()	
