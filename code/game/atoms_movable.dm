@@ -54,6 +54,8 @@
 	var/obj/shadow/shadow
 
 	var/ignore_blocking = 0
+	
+	var/last_explosion_push = 0
 
 /atom/movable/New()
 	. = ..()

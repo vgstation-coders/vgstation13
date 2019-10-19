@@ -30,6 +30,7 @@ var/explosion_shake_message_cooldown = 0
 
 /proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1)
 	src = null	//so we don't abort once src is deleted
+	var/explosion_time = world.time
 
 	spawn()
 		if(config.use_recursive_explosions)
@@ -149,7 +150,8 @@ var/explosion_shake_message_cooldown = 0
 				continue
 
 			for(var/atom/movable/A in T.contents)
-				if(T != epicenter && !A.anchored)
+				if(T != epicenter && !A.anchored && A.last_explosion_push != explosion_time)
+					A.last_explosion_push = explosion_time
 					//world.log << "FOUND [A] NOT ANCHORED AT [T] ([T.x],[T.y])"
 					var/max_dist = _dist+(pushback)
 					var/max_count = pushback
