@@ -67,6 +67,26 @@
 	key_third_person = "shrugs"
 	message = "shrugs."
 
+/datum/emote/living/carbon/human/default_dance
+	key = "poison"
+	key_third_person = "poisons"
+	message = "pulls both arms outwards in front of them and pumps them behind their back, repeats this motion in a smaller range of motion down to their hips two times once more all while sliding their legs in a faux walking motion, claps their hands together, pumps their arms downward, pronating their wrists and abducting their fingers outwards while crossing their legs back and forth, repeats this motion again two times while keeping their shoulders low and hunching over, does a finger gun with their left hand bent on their hip while looking directly forward and putting their left leg forward and then crossing their arms and leaning back a little while bending their knees at an angle."
+
+
+/datum/emote/living/carbon/human/default_dance/can_run_emote(mob/user, status_check)
+	..()
+	var/mob/living/carbon/human/H = user
+	if(H.has_organ(LIMB_LEFT_ARM) && H.has_organ(LIMB_RIGHT_ARM) && H.has_organ(LIMB_LEFT_LEG) && H.has_organ(LIMB_RIGHT_LEG)) //this dance requires these.
+		return TRUE
+	
+/datum/emote/living/carbon/human/default_dance/run_emote(mob/user, params, type_override, ignore_status = FALSE)
+	var/mob/living/carbon/human/H = user
+	if(world.time - H.last_default_dance >= 3 MINUTES)//appease the no-fun-police (i can't blame them). also has to be 3 minutes into round first :).
+		if(!(type_override) && !(can_run_emote(user, !ignore_status)))
+			return FALSE
+		..()
+		H.last_default_dance = world.time
+
 // Effin /vg/ fart Fetishists
 /datum/emote/living/carbon/human/fart
 	key = "fart"
