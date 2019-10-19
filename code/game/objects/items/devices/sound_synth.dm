@@ -40,7 +40,7 @@
 	"Time Stop" = "selected_sound=sound/effects/theworld3.ogg&shiftpitch=0&volume=80",
 	"Click" = "selected_sound=sound/effects/kirakrik.ogg&shiftpitch=0&volume=80",
 	"SPS" = "selected_sound=sound/items/fake_SPS.ogg&shiftpitch=0&volume=100",
-	"Default Dance" = "selected_sound=sound/misc/default_dance.ogg&shiftpitch=0&volume=100"
+	"Default Dance" = "selected_sound=sound/misc/default_dance.ogg&shiftpitch=1&volume=100"
 	)
 
 /obj/item/device/soundsynth/verb/pick_sound()
