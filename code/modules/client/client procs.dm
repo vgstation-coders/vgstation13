@@ -381,17 +381,10 @@
 	spawn()
 		if(src in clients) //Did we log out before we reached this part of the function?
 			nanomanager.send_resources(src)
-	// Hahaha your suffering is not yet over, as we still must waterboard you with ten thousand oggs! (4500 at last count)
-	spawn()
-		if(src)
-			to_chat(src, "<span class='notice'>Receiving VOX words.  This will take time, and until it is complete, you may receive words out of order.</span>")
-		if(src in clients)
-			for(var/voice in vox_sounds)
-				for(var/word in vox_sounds[voice])
-					// Yay for undocumented BYOND things.
-					Export("##action=preload_rsc", vox_sounds[voice][word])
-					// This may make it too slow.
-					//stoplag()
+
+// Sends resources to the client asynchronously.
+/client/proc/preload_resource(var/rsc)
+	Export("##action=preload_rsc", rsc)
 
 
 /client/proc/send_html_resources()
