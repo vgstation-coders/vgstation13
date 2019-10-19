@@ -149,7 +149,7 @@ var/explosion_shake_message_cooldown = 0
 				continue
 
 			for(var/atom/movable/A in T.contents)
-				if(!A.anchored)
+				if(T != epicenter && !A.anchored)
 					//world.log << "FOUND [A] NOT ANCHORED AT [T] ([T.x],[T.y])"
 					var/max_dist = _dist+(pushback)
 					var/max_count = pushback
