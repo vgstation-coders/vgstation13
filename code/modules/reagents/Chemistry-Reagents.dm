@@ -3868,6 +3868,7 @@
 	color = "#B31008" //rgb: 179, 16, 8
 	density = 0.9
 	specheatcap = 8.59
+	data = 1
 
 /datum/reagent/condensedcapsaicin/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -3903,12 +3904,35 @@
 				H.drop_item()
 
 /datum/reagent/condensedcapsaicin/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 
 	if(prob(5))
 		M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+
+	//let's just copy capsaicin/on_mob_life does, but make it worse.
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
+	switch(data)
+		if(1 to 15)
+			M.bodytemperature += 0.9 * TEMPERATURE_DAMAGE_COEFFICIENT
+			if(holder.has_reagent("frostoil"))
+				holder.remove_reagent("frostoil", 5)
+			if(isslime(M))
+				M.bodytemperature += rand(10,20)
+			if(isslimeperson(H))
+				M.bodytemperature += rand(10,20)
+		if(15 to 25)
+			M.bodytemperature += 1.1 * TEMPERATURE_DAMAGE_COEFFICIENT
+			if(isslime(M))
+				M.bodytemperature += rand(20,25)
+			if(isslimeperson(H))
+				M.bodytemperature += rand(20,25)
+		if(25 to 30)//whatever
+			H.vomit()
+	data++
+
 
 /datum/reagent/blackcolor
 	name = "Black Food Coloring"
