@@ -268,7 +268,7 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/
 					CentcommStamp(P)
 					var/list/valid_carts = list(/obj/item/weapon/cartridge/lawyer,/obj/item/weapon/cartridge/hop)
 					for(var/obj/item/device/pda/pingme in PDAs)
-						if(is_type_in_list(pingme.cartridge,valid_carts))
+						if(pingme.cartridge.fax_pings)
 							playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
 							pingme.visible_message("[bicon(pingme)] *Fax Received*")
 
