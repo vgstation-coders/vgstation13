@@ -106,6 +106,9 @@
 	else if(istype(W, /obj/item/key))
 		if(!heldkey)
 			if(keytype)
+				if(!istype(W, keytype))
+					to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
+					return
 				if(mykey && mykey != W)
 					to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
 					return
@@ -120,10 +123,7 @@
 				else //In case the key is unable to leave the user's hand. IE glue.
 					to_chat(user, "<span class='notice'>You fail to put \the [W] into \the [src]'s ignition and turn it.</span>")
 			else
-				if(keytype)
-					to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
-				else
-					to_chat(user, "<span class='notice'>You don't need a key.</span>")
+				to_chat(user, "<span class='notice'>You don't need a key.</span>")
 		else
 			to_chat(user, "<span class='notice'>\The [src] already has \the [heldkey] in it.</span>")
 	else if(W.is_screwdriver(user) && !heldkey)

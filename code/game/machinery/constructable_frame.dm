@@ -1154,6 +1154,15 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/scanning_module = 2,
 							/obj/item/weapon/stock_parts/console_screen = 1)
 
+/obj/item/weapon/circuitboard/keyfab
+	name = "Circuit Board (Key Fabricator)"
+	desc = "A circuit board used to run a machine that fabricates keys."
+	build_path = /obj/machinery/keyfab
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ENGINEERING + "=2"
+	req_components = list(
+							/obj/item/weapon/stock_parts/micro_laser = 1)
+
 /obj/item/weapon/circuitboard/incubator
 	name = "Circuit Board (Pathogenic Incubator)"
 	desc = "A circuit board used to run a machine that incubates viruses."
