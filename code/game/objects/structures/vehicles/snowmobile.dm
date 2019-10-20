@@ -21,7 +21,7 @@
 
 //Universal key snowmobiles
 /obj/item/key/snowmobile/universal
-	name = "universal Snowmobile key"
+	name = "universal snowmobile key"
 	desc = "Someone has to do it. This key has a universal bitting."
 
 /obj/item/key/snowmobile/universal/initialize()

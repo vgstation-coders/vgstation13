@@ -1,3 +1,7 @@
+#define NOTBUSY 0
+#define BUSY 1
+#define KEYDONE 2
+
 /obj/machinery/keyfab
 	name = "key fabricator"
 	desc = "A machine that can print keys"
@@ -5,7 +9,7 @@
 	icon_state = "old_recharger"
 	density = 0
 	anchored = 1
-	var/busy = 0
+	var/busy = NOTBUSY
 	var/obj/item/key/storedkey
 	var/build_time = 20 SECONDS
 
@@ -41,15 +45,15 @@
 		if((stat & (BROKEN|NOPOWER)))
 			to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
 			return
-		if(istype(K, /obj/item/key/snowmobile/universal)) //FUTURE FEATURE? Change this to /obj/item/key and play with line 82 to allow all kinds of keys to be created. Would require redoing keys slightly to use VIN as a unique ID and having keys match that VIN.
+		if(istype(K, /obj/item/key/snowmobile/universal)) //FUTURE FEATURE? Change this to /obj/item/key and play with line 90 to allow all kinds of keys to be created. Would require redoing keys slightly to use VIN as a unique ID and having keys match that VIN.
 			if(storedkey)
 				to_chat(user, "<span class='notice'>\The [src] has a key inside of it already. You need to remove it before you can create another key.</span>")
 				return
 			switch(busy)
-				if(0)
+				if(NOTBUSY)
 					to_chat(user, "<span class='notice'>You scan \the [K] and \the [src] begins to copy it.</span>")
 					make_key(K)
-				if(1)
+				if(BUSY)
 					to_chat(user, "<span class='notice'>\The [src] is busy right now.</span>")
 
 /obj/machinery/keyfab/attack_hand(mob/user)
@@ -60,27 +64,35 @@
 			to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
 			return
 		switch(busy)
-			if(0)
+			if(NOTBUSY)
 				to_chat(user, "<span class='notice'>You start \the [src].</span>")
 				make_key()
-			if(1)
+			if(BUSY)
 				to_chat(user, "<span class='notice'>\The [src] is busy right now.</span>")
-			if(2)
+			if(KEYDONE)
 				to_chat(user, "<span class='notice'>You remove the finished key from \the [src].</span>")
 				storedkey.forceMove(loc)
 				user.put_in_hands(storedkey)
 				storedkey = null
-				busy = 0
+				busy = NOTBUSY
 				update_icon()
 
 /obj/machinery/keyfab/proc/make_key(var/obj/item/key/K)
-	busy = 1
+	busy = BUSY
 	update_icon()
 	sleep(build_time)
+	if((stat & (BROKEN|NOPOWER)))
+		update_icon()
+		busy = NOTBUSY
+		return
 	if(K)
 		storedkey = new K.type(src)
-		storedkey.paired_to = K.paired_to //Doesn't even work properly due to how vehicles currently work with direct refs to their key.
+		storedkey.paired_to = K.paired_to //Doesn't work properly due to how vehicles currently work with direct refs to their key. See line 48.
 	else
 		storedkey = new /obj/item/key/snowmobile/universal(src)
-	busy = 2
+	busy = KEYDONE
 	update_icon()
+
+#undef NOTBUSY
+#undef BUSY
+#undef KEYDONE
