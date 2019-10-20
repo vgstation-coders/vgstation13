@@ -285,3 +285,20 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	item_state = "grey_sword"
 	force = 4
+
+/obj/item/weapon/melee/rsscimmy
+	name = "rune scimitar"
+	desc = "A vicious, curved sword."
+	icon_state = "rsscimmy"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	hitsound = 'sound/weapons/runescapeslash.ogg'
+	flags = FPRINT
+	siemens_coefficient = 1
+	sharpness = 1.5
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD
+	force = 25.0
+	w_class = W_CLASS_MEDIUM
+	throwforce = 20.0
+	throw_speed = 3
+	throw_range = 9
+	attack_verb = list("attacks", "slashes", "slices", "tears", "rips", "dices", "cuts")
