@@ -241,6 +241,7 @@
 	access_reagent_scanner = 1
 	access_status_display = 1
 	access_atmos = 1
+	fax_pings = TRUE
 
 /obj/item/weapon/cartridge/syndicate
 	name = "\improper Detomatix Cartridge"

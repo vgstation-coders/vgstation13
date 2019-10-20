@@ -266,7 +266,6 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/
 
 				if(centcomm)
 					CentcommStamp(P)
-					var/list/valid_carts = list(/obj/item/weapon/cartridge/lawyer,/obj/item/weapon/cartridge/hop)
 					for(var/obj/item/device/pda/pingme in PDAs)
 						if(pingme.cartridge.fax_pings)
 							playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
