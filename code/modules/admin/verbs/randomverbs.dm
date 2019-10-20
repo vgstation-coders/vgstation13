@@ -655,11 +655,24 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if(confirmation == "No")
 			return
 	var/input = input(usr, "Please enter anything you want. Anything. Serious.", "What?", "") as message|null
-	var/customname = input(usr, "Pick a title for the report.", "Title") as text|null
 	if(!input)
 		return
+
+	var/customname = input(usr, "Pick a title for the report, or just leave it as Nanotrasen Update. \nLeaving this blank will cancel the command report.", "Choose a title", "Nanotrasen Update") as text|null
 	if(!customname)
-		customname = "Nanotrasen Update"
+		return
+
+	var/headsonly = FALSE
+
+	switch(alert("\t[customname] \n\n[input] \n---------- \nIf this message is correct, who is it intended for?", "Please verify your message", "All Crew", "Heads Only", "Cancel"))
+		if("All Crew")
+			command_alert(input, customname,1);
+		if("Heads Only")
+			headsonly = TRUE
+			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
+		else
+			return
+
 	for (var/obj/machinery/computer/communications/C in machines)
 		if(! (C.stat & (BROKEN|NOPOWER) ) )
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
@@ -669,14 +682,8 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			C.messagetitle.Add("[command_name()] Update")
 			C.messagetext.Add(P.info)
 
-	switch(alert("Should this be announced to the general population?",,"Yes","No"))
-		if("Yes")
-			command_alert(input, customname,1);
-		if("No")
-			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
-
 	world << sound('sound/AI/commandreport.ogg', volume = 60)
-	log_admin("[key_name(src)] has created a command report: [input]")
+	log_admin("[key_name(src)] has created a [headsonly ? "heads only" : "publicly announced"] command report titled [customname]: [input]")
 	message_admins("[key_name_admin(src)] has created a command report", 1)
 	feedback_add_details("admin_verb","CCR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
