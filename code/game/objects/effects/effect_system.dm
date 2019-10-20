@@ -352,6 +352,7 @@ steam.start() -- spawns the effect
 	var/total_smoke = 0 // To stop it being spammed and lagging!
 	var/direction
 	var/smoke_type = /obj/effect/effect/smoke
+	var/time_to_live = 10 SECONDS
 
 /datum/effect/effect/system/smoke_spread/set_up(n = 5, c = 0, loca, direct)
 	if(n > 10)
@@ -374,7 +375,8 @@ steam.start() -- spawns the effect
 			if(holder)
 				src.location = get_turf(holder)
 			var/obj/effect/effect/smoke/smoke = new smoke_type(src.location)
-			src.total_smoke++
+			smoke.time_to_live = time_to_live
+			total_smoke++
 			var/direction = src.direction
 			if(!direction)
 				if(src.cardinals)

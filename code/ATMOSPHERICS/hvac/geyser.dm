@@ -14,7 +14,7 @@
 /obj/structure/geyser/process()
 	if(prob(40))
 		var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
-		smoke.set_up(2, 0, location) //Make 2 drifting clouds of smoke, direction
+		smoke.set_up(2, 0, get_turf(src)) //Make 2 drifting clouds of smoke, direction
 		smoke.time_to_live = 2 SECONDS //unusually short smoke
 		smoke.start()
 	var/turf/T = loc
@@ -24,7 +24,7 @@
 	if(istype(T,/turf/simulated))
 		var/turf/simulated/L
 		var/datum/gas_mixture/env = L.return_air()
-		if(env.temperature != set_temperature + T0C)
+		if(env.temperature != GEYSER_TEMP + T0C)
 			var/datum/gas_mixture/removed = env.remove_volume(0.25 * CELL_VOLUME)
 			if(removed)
 				var/heat_capacity = removed.heat_capacity()
@@ -42,5 +42,5 @@
 			//2 range: to 20C
 			//3 range: to 15C
 			//Ignore this if they have heat protection above this grade
-			if(M.get_thermal_protection(get_heat_protection_flags(adj_temp)))
+			if(M.get_thermal_protection(M.get_heat_protection_flags(adj_temp)))
 				M.bodytemperature = min(adj_temp, M.bodytemperature + (GEYSER_WARM_RATE * TEMPERATURE_DAMAGE_COEFFICIENT))
