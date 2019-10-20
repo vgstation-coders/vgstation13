@@ -698,7 +698,7 @@
 	icon_state = "nr_uniform"
 	item_state = "nr_uniform"
 	_color = "nr_uniform"
-
+/*
 /obj/item/clothing/under/skelevoxsuit
 	name = "skelevox suit"
 	desc = "Feels like wearing literally nothing at all!"
@@ -707,7 +707,7 @@
 	_color = "vox-skelesuit"
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
-
+*/
 /obj/item/clothing/under/rottensuit
 	name = "rotten suit"
 	desc = "This suit seems perfect for wearing underneath a disguise."
@@ -782,3 +782,14 @@
 	icon_state = "clownsuit"
 	item_state = "clownsuit"
 	_color = "clownsuit"
+
+/obj/item/clothing/under/skelesuit
+	name = "skeleton suit"
+	desc = "Inside of everyone there is a spooky skinman waiting to escape"
+	icon_state = "skelesuit"
+	item_state = "skelesuit"
+	_color = "skelesuit"
+	species_fit = list(VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
+	flags = HIDEHAIRCOMPLETELY | HIDEBEARDHAIR
+	body_parts_covered = FULL_HEAD|BEARD

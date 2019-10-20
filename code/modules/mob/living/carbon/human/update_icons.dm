@@ -315,7 +315,8 @@ var/global/list/damage_icon_parts = list()
 	var/icon/face_standing	= new /icon('icons/mob/human_face.dmi',"bald_s")
 	var/hair_suffix = check_hidden_head_flags(HIDEHEADHAIR) ? "s2" : "s" // s2 = cropped icon
 
-	if(my_appearance.f_style && !check_hidden_head_flags(HIDEBEARDHAIR))
+	if(my_appearance.f_style && !(check_hidden_head_flags(HIDEBEARDHAIR)||\
+		src.w_uniform && (src.w_uniform.body_parts_covered & HIDEBEARDHAIR)) )//you may be wondering why a uniform check. this exist for body suits like the skelesuit
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[my_appearance.f_style]
 		if((facial_hair_style) && (src.species.name in facial_hair_style.species_allowed))
 			var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
@@ -326,7 +327,8 @@ var/global/list/damage_icon_parts = list()
 			//warning("Invalid my_appearance.f_style for [species.name]: [my_appearance.f_style]")
 
 	if(my_appearance.h_style && !(src.head && ( src.head.flags & HIDEHAIRCOMPLETELY ) || \
-								  src.wear_mask && (src.wear_mask.body_parts_covered & HIDEHEADHAIR) ) )
+								  src.wear_mask && (src.wear_mask.body_parts_covered & HIDEHEADHAIR) ||\
+								  src.w_uniform && (src.w_uniform.body_parts_covered & HIDEHEADHAIR)) ) //ditto the comment above
 		var/datum/sprite_accessory/hair_style = hair_styles_list[my_appearance.h_style]
 		if((hair_style) && (src.species.name in hair_style.species_allowed))
 			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_suffix]")
@@ -394,14 +396,14 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += image(icon = O.icon, icon_state = "lasereyes_s")
 				add_image = 1
 	if((M_RESIST_COLD in mutations) && (M_RESIST_HEAT in mutations))
-		if(!(src.species.name == "Vox") && !(src.species.name == "Skeletal Vox"))	
+		if(!(src.species.name == "Vox") && !(src.species.name == "Skeletal Vox"))
 			//standing.underlays	-= "cold[fat]_s"
 			//standing.underlays	-= "fire[fat]_s"
 			//standing.underlays	+= "coldfire[fat]_s"
 			O.underlays	-= "cold[fat]_s"
 			O.underlays	-= "fire[fat]_s"
 			O.underlays	+= "coldfire[fat]_s"
-		else if((src.species.name == "Vox") || (src.species.name == "Skeletal Vox"))	
+		else if((src.species.name == "Vox") || (src.species.name == "Skeletal Vox"))
 			O.underlays -= "coldvox_s"
 			O.underlays	-= "firevox_s"
 			O.underlays	+= "coldfirevox_s"
@@ -1129,7 +1131,7 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_x = species.inventory_offsets["[slot_handcuffed]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_handcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,HANDCUFF_LAYER)
-		
+
 	if(update_icons)
 		update_icons()
 
