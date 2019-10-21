@@ -63,6 +63,8 @@
 		icon_state = "[modifystate][ratio]"
 	else if(charge_states)
 		icon_state = "[initial(icon_state)][ratio]"
+	if(clowned == CLOWNED)
+		icon_state += "c"
 
 /obj/item/weapon/gun/energy/New()
 	. = ..()

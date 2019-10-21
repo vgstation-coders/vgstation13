@@ -1,8 +1,12 @@
+#define UNCLOWN 1
+#define CLOWNABLE 2
+#define CLOWNED 3
 /obj/item/weapon/gun
 	name = "gun"
 	desc = "Its a gun. It's pretty terrible, though."
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "detective"
+	var/clowned = UNCLOWN //UNCLOWN, CLOWNABLE, or CLOWNED
 	item_state = "gun"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -418,4 +422,19 @@
 			else
 				to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")
 				qdel(AA)
+	if(clowned == CLOWNABLE && istype(A,/obj/item/toy/crayon/rainbow))
+		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
+		if(do_after(user, src, 4 SECONDS))
+			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
+			clowned = CLOWNED
+			update_icon()
 	..()
+
+/obj/item/weapon/gun/decontaminate()
+	..()
+	if(clowned == CLOWNED)
+		clowned = CLOWNABLE
+		update_icon()
+
+/obj/item/weapon/gun/update_icon()
+	icon_state = initial(icon_state) + "[clowned == CLOWNED ? "c" : ""]"
