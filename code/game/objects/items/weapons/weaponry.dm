@@ -319,10 +319,9 @@ obj/item/weapon/banhammer/admin
 	projectile.launch_at(A,tar_zone = targeting,from = user)
 
 /obj/item/weapon/bullwhip/attack(mob/M, mob/user)//mob/living/carbon/human/user
-	var/force_original = 15
+	var/force_original = force
 	sharpness = 1.2 //a whip can only cut things when it is actually whipping
-	var/obj/item/clothing/head/energy_dome/ED
-	if(user.is_wearing_item(ED))
+	if(user.is_wearing_item(/obj/item/clothing/head/energy_dome))
 		force += whipitgood_bonus
 		visible_message("<span class='warning'>[user] whips it good!</span>")
 	..()
