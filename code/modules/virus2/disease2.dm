@@ -1,7 +1,7 @@
 
 var/global/list/disease2_list = list()
 /datum/disease2/disease
-	var/form = "Virus"	//Virus, Bacteria, Parasite, Prion
+	var/form = "Virus"	//Virus, Bacteria, Parasite, Prion, Fungus, Meme
 	var/spread = 0 //if it remains at 0, the virus can never be transmitted or extracted from the carrier, therefore it cannot either be cured.
 	var/uniqueID = 0// 0000 to 9999, set when the pathogen gets initially created
 	var/subID = 0// 000 to 9999, set if the pathogen underwent effect or antigen mutation
@@ -58,6 +58,8 @@ var/global/list/disease2_list = list()
 	//pathogenic warfare
 	var/list/can_kill = list("Bacteria")
 
+	var/list/type_weight = list(0,0,0) //weight that it will appear in dish, new player, mouse; 4 is base
+
 /datum/disease2/disease/virus
 	form = "Virus"
 	max_stage = 4
@@ -66,6 +68,7 @@ var/global/list/disease2_list = list()
 	stageprob = 10
 	stage_variance = -1
 	can_kill = list("Bacteria")
+	type_weight = list(4,5,2) //more common in humans, less in mice
 
 /datum/disease2/disease/bacteria//faster spread and progression, but only 3 stages max, and reset to stage 1 on every spread
 	form = "Bacteria"
@@ -75,6 +78,7 @@ var/global/list/disease2_list = list()
 	stageprob = 30
 	stage_variance = -4
 	can_kill = list("Parasite")
+	type_weight = list(2,4,4) //reduced appearance in dishes
 
 /datum/disease2/disease/parasite//slower spread. stage preserved on spread
 	form = "Parasite"
@@ -83,6 +87,7 @@ var/global/list/disease2_list = list()
 	stageprob = 10
 	stage_variance = 0
 	can_kill = list("Virus")
+	type_weight = list(4,2,5) //less common in people, more common in mice
 
 /datum/disease2/disease/prion//very fast progression, but very slow spread and resets to stage 1.
 	form = "Prion"
@@ -91,6 +96,7 @@ var/global/list/disease2_list = list()
 	stageprob = 80
 	stage_variance = -10
 	can_kill = list()
+	type_weight = list(4,4,1) //rare in mice
 
 /datum/disease2/disease/fungus //most infectious, but with a greater stage setback; has special transmission
 	form = "Fungus"
@@ -99,6 +105,7 @@ var/global/list/disease2_list = list()
 	stageprob = 15
 	stage_variance = -2
 	allowed_transmission = SPREAD_BLOOD | SPREAD_CONTACT | SPREAD_AIRBORNE | SPREAD_COLONY
+	type_weight = list(4,5,2)
 
 /datum/disease2/disease/meme //infectious and fast progressing, but limited stages; has special transmission
 	form = "Meme"
@@ -108,6 +115,7 @@ var/global/list/disease2_list = list()
 	stageprob = 30
 	stage_variance = -1
 	allowed_transmission = SPREAD_BLOOD | SPREAD_MEMETIC
+	type_weight = list(1,6,0) //rare in dishes and never in mice, very common in people
 	//Note: if more types of creatures become infectable than humans/monkeys/mice, give them HEAR_ALWAYS
 
 /datum/disease2/disease/proc/update_global_log()
