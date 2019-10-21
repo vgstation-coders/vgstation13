@@ -52,6 +52,10 @@
 /obj/structure/bed/chair/vehicle/wheelchair/can_buckle(mob/M, mob/user)
 	if(!Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
 		return 0
+	if(M_HULK in M.mutations)
+		if(M == user)
+			to_chat(M, "<span class='warning'>You are too muscular to fit in the wheelchair!</span>")
+		return 0
 	return 1
 
 /obj/structure/bed/chair/vehicle/wheelchair/proc/check_hands(var/mob/user)
@@ -134,6 +138,9 @@
 	if(!check_key(user))
 		if(can_warn())
 			to_chat(user, "<span class='warning'>You need at least one hand to use [src]!</span>")
+		return 0
+	if(M_HULK in user.mutations)
+		to_chat(user, "<span class='warning'>\The [src] won't budge under your hulking weight!</span>")
 		return 0
 	return ..()
 
@@ -256,9 +263,6 @@
 	icon_state = "wheelchair-syndie"
 	desc = "A high-riding wheelchair fitted with a powerful cell and blades under the carriage. Better get a table between you and it."
 	var/attack_cooldown = 0
-
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/getMovementDelay()
-	return (..() + 1) //Somewhat slower
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/to_bump(var/atom/A)
 	if(isliving(A) && !attack_cooldown)
