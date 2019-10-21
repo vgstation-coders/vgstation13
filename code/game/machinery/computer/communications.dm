@@ -333,7 +333,7 @@ var/list/shuttle_log = list()
 			var/mob/M = usr
 			var/obj/item/weapon/card/id/I = M.get_id_card()
 			if (I || isAdminGhost(usr))
-				if(isAdminGhost(usr) || (access_hos in I.access) || (access_heads in I.access && security_level >= SEC_LEVEL_RED))
+				if(isAdminGhost(usr) || (access_hos in I.access) || ((access_heads in I.access) && security_level >= SEC_LEVEL_RED))
 					if(ports_open)
 						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be announced to the crew, as well as transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems")
 						if(!reason)
