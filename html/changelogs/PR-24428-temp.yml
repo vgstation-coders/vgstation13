@@ -1,6 +1,0 @@
----
-author: N3X15
-changes:
-  - bugfix: "Try to fix VOX announcements by preloading sounds.  If they load out of order, players receive jumbled announcements."
-  - wip: Added debugging information that pops up a notice telling the AI the words it received in the announcement.
-delete-after: true

@@ -1,5 +1,0 @@
----
-author: Zth--
-changes:
-  - bugfix: Fullscreen overlays now resize.
-delete-after: true

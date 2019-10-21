@@ -1,5 +1,0 @@
----
-author: N3X15
-changes:
-  - rscdel: "Removed VOX preloader, since it didn't work and caused lag."
-delete-after: true

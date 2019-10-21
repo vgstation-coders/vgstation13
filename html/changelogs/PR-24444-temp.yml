@@ -1,5 +1,0 @@
----
-author: Zth--
-changes:
-  - bugfix: Roundstart skeles are no longer slow until cloned
-delete-after: true

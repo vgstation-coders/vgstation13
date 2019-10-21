@@ -1,5 +1,0 @@
----
-author: brndd
-changes:
-  - bugfix: "chapel tiles in tile painter don't try to display extradimensional directions anymore"
-delete-after: true

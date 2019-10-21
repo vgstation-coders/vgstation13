@@ -1,6 +1,0 @@
----
-author: N3X15
-changes:
-  - rscadd: Added a text representation of announcements for those of us with screwy headphone ports or bad hearing.
-  - bugfix: Fixes some inconsistencies in the VOX announcements UI.
-delete-after: true
