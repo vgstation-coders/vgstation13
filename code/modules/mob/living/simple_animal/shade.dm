@@ -186,6 +186,20 @@
 	if(!gcDestroyed)
 		qdel(src)
 
+/mob/living/simple_animal/shade/gondola
+	name = "Gondola Shade"
+	real_name = "Gondola Shade"
+	desc = "A wandering spirit"
+	icon = 'icons/mob/gondola.dmi'
+	icon_state = "gondola_shade"
+	icon_living = "gondola_shade"
+	icon_dead = "gondola_skull"
+
+/mob/living/simple_animal/shade/gondola/say()
+	return
+
+
+
 ///////////////////////////////CHAOS SWORD STUFF///////////////////////////////////////////////////
 
 /mob/living/simple_animal/shade/sword/attempt_suicide(forced = FALSE, suicide_set = TRUE)

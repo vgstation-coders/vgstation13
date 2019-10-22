@@ -27,6 +27,13 @@
 /mob/living/carbon/complex/gondola/say()
 	return
 
+/mob/living/carbon/complex/gondola/cult/New() //fug.....
+	..()
+	icon_state_standing = pick("gondola_c","gondola_c_tome")
+	icon_state_lying = "[icon_state_standing]_lying"
+	icon_state_dead = "gondola_skull"
+
+
 //Basically walking media receivers
 /mob/living/carbon/complex/gondola/radio
 	var/playing=0
