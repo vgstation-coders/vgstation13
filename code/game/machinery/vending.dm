@@ -3344,7 +3344,7 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/weapon/dice/loaded = 3,
 		/obj/item/weapon/dice/loaded/d20 = 3,
-		/obj/item/weapon/melee/rsscimmy = 3
+		/obj/item/weapon/melee/rsscimmy = 1
 		)
 	premium = list(
 		/obj/item/weapon/skull = 1,

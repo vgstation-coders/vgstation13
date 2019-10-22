@@ -635,10 +635,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/suit/armor/knight/red,
 					/obj/item/clothing/suit/armor/knight/yellow,
 					/obj/item/clothing/suit/armor/knight/blue,
+					/obj/item/clothing/suit/armor/knight/rune,
 					/obj/item/clothing/head/helmet/knight,
 					/obj/item/clothing/head/helmet/knight/red,
 					/obj/item/clothing/head/helmet/knight/yellow,
-					/obj/item/clothing/head/helmet/knight/blue)
+					/obj/item/clothing/head/helmet/knight/blue,
+					/obj/item/clothing/head/helmet/knight/rune,
+					/obj/item/weapon/shield/riot/rune)
 	cost = 35
 	containertype = /obj/structure/closet/crate/basic
 	containername = "knight armor crate"
@@ -728,10 +731,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 150
 	containertype = /obj/structure/closet/crate/basic
 	containername = "contacts crate"
-	group = "Clothing"	
-	
+	group = "Clothing"
+
 //Winter Coats//
-	
+
 /datum/supply_packs/engwinter
 	name = "Engineering Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/engineering,
@@ -744,7 +747,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "engineering winter coats"
 	group = "Clothing"
-	
+
 /datum/supply_packs/sciwinter
 	name = "Science Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/medical/science,
@@ -756,7 +759,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "science winter coats"
 	group = "Clothing"
-	
+
 /datum/supply_packs/secwinter
 	name = "Security Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/security,
@@ -769,7 +772,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "security winter coats"
 	group = "Clothing"
-	
+
 /datum/supply_packs/medwinter
 	name = "Medical Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/medical,
@@ -782,7 +785,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "medical winter coats"
 	group = "Clothing"
-	
+
 /datum/supply_packs/svcwinter
 	name = "Service Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/hydro,
@@ -794,7 +797,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "service winter coats"
 	group = "Clothing"
-	
+
 /datum/supply_packs/civwinter
 	name = "Civilian Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/prisoner,
@@ -806,7 +809,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "civilian winter coats"
 	group = "Clothing"
-	
+
 /datum/supply_packs/crgwinter
 	name = "Cargo Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/cargo,
@@ -821,7 +824,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "cargo winter coats"
 	group = "Clothing"
-	
+
 /datum/supply_packs/mscwinter
 	name = "Misc. Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/security/captain,

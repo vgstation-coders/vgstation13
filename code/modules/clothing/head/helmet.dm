@@ -245,6 +245,12 @@
 	icon_state = "knight_red"
 	item_state = "knight_red"
 
+/obj/item/clothing/head/helmet/knight/rune
+	name = "rune full helm"
+	desc = "A full face helmet."
+	icon_state = "knight_rune"
+	item_state = "knight_rune"
+
 /obj/item/clothing/head/helmet/knight/templar
 	name = "crusader helmet"
 	desc = "Deus Vult."
