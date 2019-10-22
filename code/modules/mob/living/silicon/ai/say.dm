@@ -236,8 +236,8 @@ var/VOX_AVAILABLE_VOICES = list(
 				to_chat(M, "<span class='notice'>[src] announces: <span class='big'>\"[message]\"</span>.</span>")
 
 	for(var/word in words)
-		play_vox_word(word, vox_voice, src.z, null)
-		sleep(1)
+		play_vox_word(word, vox_voice, src.z, null, TRUE)
+
 /*
 /mob/living/silicon/ai/verb/announcement()
 	set name = "Announcement"
@@ -297,12 +297,15 @@ var/list/vox_units=list(
 /proc/vox_num2list(var/number)
 	return num2words(number, zero='sound/vox_fem/zero.ogg', minus='sound/vox_fem/minus.ogg', hundred='sound/vox_fem/hundred.ogg', digits=vox_digits, tens=vox_tens, units=vox_units)
 
-/proc/play_vox_word(var/word, var/voice, var/z_level, var/mob/only_listener)
-	word = lowertext(word)
-	if(vox_sounds[voice][word])
-		return play_vox_sound(vox_sounds[voice][word],z_level,only_listener)
-	return 0
+/proc/play_vox_word(var/word, var/voice, var/z_level, var/mob/only_listener, var/do_sleep=FALSE)
+	. = TRUE
 
+	word = lowertext(word)
+	var/soundFile = vox_sounds[voice][word]
+	if(soundFile)
+		. = play_vox_sound(soundFile,z_level,only_listener)
+		if (do_sleep)
+			sleep(vox_sound_lengths[soundFile] SECONDS)
 
 /proc/play_vox_sound(var/sound_file, var/z_level, var/mob/only_listener)
 	var/sound/voice = sound(sound_file, wait = 1, channel = VOX_CHANNEL)
@@ -318,4 +321,5 @@ var/list/vox_units=list(
 					M << voice
 	else
 		only_listener << voice
-	return 1
+
+	return TRUE
