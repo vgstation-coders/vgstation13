@@ -255,5 +255,19 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
 	slowdown = 4
 
+/obj/item/weapon/shield/riot/rune
+	name = "rune kiteshield"
+	desc = "A large metal shield."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "runeshield"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
+	siemens_coefficient = 1
+	slot_flags = SLOT_BACK
+	force = 10
+	throwforce = 3
+	throw_speed = 1
+	throw_range = 6
+	w_class = W_CLASS_LARGE
+
 /obj/item/weapon/shield/riot/tower/IsShield()
 	return 2 //Considering its size, twice as effective as a normal shield, but difficult to lug around

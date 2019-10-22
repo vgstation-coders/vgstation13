@@ -98,6 +98,12 @@
 	icon_state = "knight_red"
 	item_state = "knight_red"
 
+/obj/item/clothing/suit/armor/knight/rune
+	name = "rune platebody"
+	desc = "Provides excellent protection."
+	icon_state = "knight_rune"
+	item_state = "knight_rune"
+
 /obj/item/clothing/suit/armor/knight/templar
 	name = "crusader armour"
 	desc = "God wills it!"

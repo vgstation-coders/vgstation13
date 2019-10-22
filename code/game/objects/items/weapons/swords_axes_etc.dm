@@ -296,7 +296,7 @@
 	siemens_coefficient = 1
 	sharpness = 1.5
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD
-	force = 25.0
+	force = 20.0
 	w_class = W_CLASS_MEDIUM
 	throwforce = 20.0
 	throw_speed = 3
