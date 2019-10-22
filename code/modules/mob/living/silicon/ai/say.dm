@@ -191,6 +191,7 @@ var/VOX_AVAILABLE_VOICES = list(
 	return TRUE
 
 /mob/living/silicon/ai/proc/play_announcement(var/message)
+	set waitfor = FALSE
 	last_announcement = message
 
 	if(!message || announcing_vox > world.time)
@@ -236,6 +237,7 @@ var/VOX_AVAILABLE_VOICES = list(
 
 	for(var/word in words)
 		play_vox_word(word, vox_voice, src.z, null)
+		sleep(1)
 /*
 /mob/living/silicon/ai/verb/announcement()
 	set name = "Announcement"
