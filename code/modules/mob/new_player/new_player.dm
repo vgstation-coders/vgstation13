@@ -177,7 +177,7 @@
 		return
 
 	if(href_list["RequestPrio"])
-		if(world.time <= pinghop_cd + 10 SECONDS)
+		if(world.time <= pinghop_cd + 60 SECONDS)
 			to_chat(src, "<span class='warning'>You have recently requested for heads of staff to open priority roles.</span>")
 			return
 		var/count_pings = 0
