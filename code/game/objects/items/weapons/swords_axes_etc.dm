@@ -295,7 +295,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
-	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	force = 20.0
 	w_class = W_CLASS_MEDIUM
 	throwforce = 10.0
