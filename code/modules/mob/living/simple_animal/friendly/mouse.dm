@@ -234,8 +234,7 @@
 
 /mob/living/simple_animal/mouse/proc/MaintInfection()
 	infectable = TRUE
-	var/virus_choice = get_random_disease_type(WMOUSE)
-	var/datum/disease2/disease/D = new virus_choice
+	var/datum/disease2/disease/D = get_random_weighted_disease(WMOUSE)
 
 	var/list/anti = list(
 		ANTIGEN_BLOOD	= 1,

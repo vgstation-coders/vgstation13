@@ -298,8 +298,7 @@
 /mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)
 	// 5% of players are joining the station with some minor disease
 	if(prob(5))
-		var/virus_choice = get_random_disease_type(WLATEJOIN)
-		var/datum/disease2/disease/D = new virus_choice
+		var/datum/disease2/disease/D = get_random_weighted_disease(WLATEJOIN)
 
 		var/list/anti = list(
 			ANTIGEN_BLOOD	= 1,

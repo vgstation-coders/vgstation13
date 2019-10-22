@@ -277,8 +277,7 @@ var/list/virusdishes = list()
 /obj/item/weapon/virusdish/random/New(loc)
 	..(loc)
 	if (loc)//because fuck you /datum/subsystem/supply_shuttle/Initialize()
-		var/virus_choice = get_random_disease_type(WDISH)
-		contained_virus = new virus_choice
+		contained_virus = get_random_weighted_disease(WDISH)
 		var/list/anti = list(
 			ANTIGEN_BLOOD	= 1,
 			ANTIGEN_COMMON	= 1,

@@ -1,10 +1,10 @@
 //Build random disease type
-proc/get_random_disease_type(var/operation = WDISH)
+proc/get_random_weighted_disease(var/operation = WDISH)
 	var/list/possibles = subtypesof(/datum/disease2/disease)
 	var/list/weighted_list = list()
 	for(var/P in possibles)
 		var/datum/disease2/disease/D = new P
-		weighted_list[D.type] = D.type_weight[operation]
+		weighted_list[D] = D.type_weight[operation]
 	return pickweight(weighted_list)
 
 ////////////////////////////////////////////////////
