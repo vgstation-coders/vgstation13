@@ -5,11 +5,14 @@
 
 /obj/structure/bed/chair/vehicle/snowmobile
 	name = "snowmobile"
-	desc = "There's something out there, and now you can catch it."
+	desc = "A vehicle designed for outdoor use in snowy environments. It's also equipped to handle frozen terrain and road surfaces - but not indoor plating."
 	icon_state = "snowmobile"
 	keytype = /obj/item/key/snowmobile
 	can_have_carts = FALSE
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/snowmobile
+	var/list/approved_terrain = list(/turf/unsimulated/floor/engine/cement,/turf/unsimulated/floor/snow,
+									/turf/unsimulated/floor/noblizz_permafrost,/obj/glacier,
+									/turf/simulated/floor/plating/snow)
 
 /obj/effect/decal/mecha_wreckage/vehicle/snowmobile
 	// TODO: SPRITE PLS
@@ -17,7 +20,6 @@
 	//icon_state = "gokart_wreck"
 	name = "snowmobile wreckage"
 	desc = "Avalanche!"
-
 
 //Universal key snowmobiles
 /obj/item/key/snowmobile/universal
@@ -34,3 +36,12 @@
 /obj/structure/bed/chair/vehicle/snowmobile/universal/set_keys()
 	if(keytype && !vin)
 		new keytype(loc)
+
+/obj/structure/bed/chair/vehicle/snowmobile/getMovementDelay()
+	var/turf/T = loc
+	if(is_type_in_list(T,approved_terrain))
+		return 1
+	else
+		var/list/dragsounds = list('sound/misc/metal_drag1.ogg','sound/misc/metal_drag2.ogg','sound/misc/metal_drag3.ogg')
+		playsound(src, pick(dragsounds), 50, 1)
+		return (..() * 4) //It's not designed to move this way!
