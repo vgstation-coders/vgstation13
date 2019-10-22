@@ -294,11 +294,11 @@
 	hitsound = 'sound/weapons/runescapeslash.ogg'
 	flags = FPRINT
 	siemens_coefficient = 1
-	sharpness = 1.5
+	sharpness = 1
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	force = 20.0
 	w_class = W_CLASS_MEDIUM
-	throwforce = 20.0
+	throwforce = 10.0
 	throw_speed = 3
 	throw_range = 9
 	attack_verb = list("attacks", "slashes", "slices", "tears", "rips", "dices", "cuts")
