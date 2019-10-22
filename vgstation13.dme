@@ -465,6 +465,7 @@
 #include "code\defines\byondtools.dm"
 #include "code\defines\obj.dm"
 #include "code\defines\vox_sounds.dm"
+#include "code\defines\vox_sound_lengths.dm"
 #include "code\defines\obj\weapon.dm"
 #include "code\defines\procs\AStar.dm"
 #include "code\defines\procs\biohazard_alert.dm"
