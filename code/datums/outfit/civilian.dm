@@ -33,6 +33,7 @@
             ),
             slot_shoes_str = /obj/item/clothing/shoes/black,
             slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/assistant,
+            slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
             slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/assistant,
         ),
         /datum/species/vox/ = list(
@@ -45,9 +46,10 @@
             ),
             slot_shoes_str = /obj/item/clothing/shoes/black,
             slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ,
+            slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
             slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ,
         ),
     )
 
-/datum/outfit/assistant/misc_stuff(var/mob/living/carbon/human/H)
+/datum/outfit/assistant/post_equip(var/mob/living/carbon/human/H)
     H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))

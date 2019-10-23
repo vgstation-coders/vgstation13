@@ -1,5 +1,7 @@
 /datum/outfit/striketeam/death_commando
 
+	outfit_name = "Death Commando"
+
 	backpack_types = list(
 		BACKPACK_STRING = /obj/item/weapon/storage/backpack/security,
 	)
@@ -41,7 +43,7 @@
 		items_to_collect += /obj/item/weapon/plastique
 
 // Custom ID card.
-/datum/outfit/striketeam/death_commando/misc_stuff(var/mob/living/carbon/human/H)
+/datum/outfit/striketeam/death_commando/post_equip(var/mob/living/carbon/human/H)
 	// Accesories.
 	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword, /obj/item/clothing/shoes, 5)

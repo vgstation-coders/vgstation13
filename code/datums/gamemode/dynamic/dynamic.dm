@@ -250,6 +250,7 @@ var/stacking_limit = 90
 		rule.candidates = candidates.Copy()
 		rule.trim_candidates()
 		if (rule.ready(1))//ignoring enemy job requirements
+			to_chat(world, "Roundstart rule being picked")
 			picking_roundstart_rule(list(rule))
 
 /datum/gamemode/dynamic/proc/roundstart()

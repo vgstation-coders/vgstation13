@@ -73,7 +73,8 @@
 		I.part = affected
 
 	species_final_equip(H)
-	misc_stuff(H) // Accessories, IDs, etc.
+	post_equip(H) // Accessories, IDs, etc.
+	H.update_icons()
 
 /datum/outfit/proc/equip_backbag(var/mob/living/carbon/human/H)
 	// -- Backbag
@@ -123,8 +124,46 @@
 	if (H.species)
 		H.species.final_equip(H)
 
-/datum/outfit/proc/misc_stuff(var/mob/living/carbon/human/H)
+/datum/outfit/proc/post_equip(var/mob/living/carbon/human/H)
 	return // Empty
+
+// Strike teams have 2 particularities : a leader, and several specialised roles.
+// Give the concrete (instancied) outfit datum the right "specialisation" after the player made his choice.
+// Then, call "equip_special_items(player)" to give him the items associated.
 
 /datum/outfit/striketeam/
 	var/is_leader = FALSE
+
+	var/list/specs = list()
+
+	var/chosen_spec = null
+
+/datum/outfit/striketeam/proc/equip_special_items(var/mob/living/carbon/human/H)
+	if (!chosen_spec)
+		return
+
+	if (!(chosen_spec in specs))
+		CRASH("Trying to give [chosen_spec] to [H], but cannot find this spec in [src.type].")
+
+	var/list/to_equip = specs[chosen_spec]
+
+	for (var/slot_str in to_equip)
+		var/equipement = to_equip[slot_str]
+
+		switch (slot_str)
+			if (ACCESSORY_ITEM) // It's an accesory. We put it in their hands if possible.
+				H.put_in_hands(new equipement(H))
+
+			else // It's a concrete item.
+				var/slot = text2num(slot_str) // slots stored are STRINGS.
+
+				if (islist(equipement)) // List of things to equip
+					for (var/item in equipement)
+						for (var/i = 1 to equipement[item]) // Give them this much of that item
+							var/concrete_item = new item(H)
+							if (!H.equip_to_slot_or_drop(concrete_item, slot)) // Can't put them in the designate slot ? Put it in their hands.
+								H.put_in_hands(concrete_item)
+				else
+					var/concrete_item = new equipement(H)
+					if (!H.equip_to_slot_or_drop(concrete_item, slot))
+						H.put_in_hands(concrete_item)

@@ -297,6 +297,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_legcuffed_str "17"
 #define slot_legs_str "18"
 
+#define ACCESSORY_ITEM "accessory item"
+
 
 #define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
 
