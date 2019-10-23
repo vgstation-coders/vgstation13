@@ -6619,6 +6619,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = CAPPUCCINO
 	description = "Espresso with milk."
 
+/datum/reagent/drink/coffee/cappuccino/on_mob_life	
+	..()
+	if(M.getBruteLoss() && prob(20))
+		M.heal_organ_damage(1, 0) //milk doing its work
+
 /datum/reagent/drink/coffee/doppio
 	name = "Doppio"
 	id = DOPPIO
@@ -6628,6 +6633,24 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Passione"
 	id = PASSIONE
 	description = "Rejuvenating!"
+	nutriment_factor = 3 * REAGENTS_METABOLISM //because honey
+	
+/datum/reagent/drink/coffee/passione/on_mob_life(var/mob/living/M)
+	..()
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!holder)
+			return
+		H.sleeping = 0
+		H.nutrition += nutriment_factor //honey doing it's work
+		if(H.getBruteLoss() && prob(60))
+			H.heal_organ_damage(1, 0)
+		if(H.getFireLoss() && prob(50))
+			H.heal_organ_damage(0, 1)
+		if(H.getToxLoss() && prob(50))
+			H.adjustToxLoss(-1)
+		..()
 
 /datum/reagent/drink/coffee/seccoffee
 	name = "Wake-Up Call"
