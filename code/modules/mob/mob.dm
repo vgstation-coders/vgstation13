@@ -971,7 +971,7 @@ Use this proc preferably at the end of an equipment loadout
 						return 1
 				return 0
 			if(slot_handcuffed)
-				if(H.handcuffed || H.mutual_handcuffs)
+				if(H.handcuffed)
 					return 0
 				if(!istype(src, /obj/item/weapon/handcuffs))
 					return 0

@@ -207,7 +207,7 @@
 	if(canWearClothes)
 		dat +=	"<br><b>Uniform:</b> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(uniform)]</A>"
 
-	if(handcuffed || mutual_handcuffs)
+	if(handcuffed)
 		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=[slot_handcuffed]'>Remove</A>"
 
 	dat += {"

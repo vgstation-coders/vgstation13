@@ -46,7 +46,6 @@
 	update_inv_hands(FALSE)
 	update_inv_pockets(FALSE)
 	update_inv_handcuffed(FALSE)
-	update_inv_mutual_handcuffed(FALSE)
 	update_hud()
 	update_icons()
 	update_fire()
@@ -113,15 +112,6 @@
 		drop_hands()
 		stop_pulling()	//TODO: should be handled elsewhere
 		overlays_standing[X_HANDCUFF_LAYER]	= image(icon = 'icons/mob/mob.dmi', icon_state = "handcuff1")
-	else
-		overlays_standing[X_HANDCUFF_LAYER]	= null
-	if(update_icons)
-		update_icons()
-
-/mob/living/carbon/alien/humanoid/update_inv_mutual_handcuffed(var/update_icons = TRUE)
-	if(mutual_handcuffs)
-		stop_pulling()
-		overlays_standing[X_HANDCUFF_LAYER]	= image(icon = 'icons/mob/mob.dmi', icon_state = "singlecuff1")
 	else
 		overlays_standing[X_HANDCUFF_LAYER]	= null
 	if(update_icons)
