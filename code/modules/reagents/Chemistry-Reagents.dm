@@ -6619,7 +6619,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = CAPPUCCINO
 	description = "Espresso with milk."
 
-/datum/reagent/drink/coffee/cappuccino/on_mob_life	
+/datum/reagent/drink/coffee/cappuccino/on_mob_life(var/mob/living/M)
 	..()
 	if(M.getBruteLoss() && prob(20))
 		M.heal_organ_damage(1, 0) //milk doing its work
@@ -6650,7 +6650,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			H.heal_organ_damage(0, 1)
 		if(H.getToxLoss() && prob(50))
 			H.adjustToxLoss(-1)
-		..()
 
 /datum/reagent/drink/coffee/seccoffee
 	name = "Wake-Up Call"
