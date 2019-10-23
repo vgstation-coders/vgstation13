@@ -2158,6 +2158,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/bag/potion = 5,
 		/obj/item/clothing/suit/wizrobe/hallowiz = 5,
 		/obj/item/clothing/head/wizard/hallowiz = 5,
+		/obj/item/clothing/head/wizard/mystic = 5,
+		/obj/item/clothing/suit/wizrobe/mystic = 5,
+		/obj/item/clothing/head/wizard/winter = 5,
+		/obj/item/clothing/suit/wizrobe/winter = 5,
+		/obj/item/clothing/suit/storage/wintercoat/druid = 5
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1,
