@@ -802,7 +802,8 @@
 	icon_state = "inf_box"
 	can_only_hold = list(
 		"/obj/item/inflatable/door",
-		"/obj/item/inflatable/wall")
+		"/obj/item/inflatable/wall",
+		"/obj/item/inflatable/shelter")
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 21
 
