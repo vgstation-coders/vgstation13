@@ -157,7 +157,8 @@
 
 /mob/living/carbon/complex/gondola/cultify()
 	var/mob/living/carbon/complex/gondola/cult/fug = new (get_turf(src))
-	mind.transfer_to(fug)
+	if(mind)
+		mind.transfer_to(fug)
 	qdel(src)
 
 /mob/living/carbon/complex/gondola/cult/cultify()
