@@ -45,10 +45,8 @@
 			update_icon()
 
 		if("toggle_lock")
-			if(!density)
-				close(1)
-				sleep(2)
 			toggle_bolts()
+			sleep(2)
 			update_icon()
 			
 		if("secure_cycle")
