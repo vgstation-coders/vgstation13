@@ -700,7 +700,7 @@
 				playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 				if(prob(5))
 					master = M
-					to_chat(M, "[src] seems closer to you now. At least until somebody else gives him attention, anyway.")
+					to_chat(M, "[src] seems closer to you now. At least until somebody else gives [src.gender == MALE ? "him" : "her"] attention, anyway.")
 			if(I_HURT)
 				playsound(loc, 'sound/voice/corgigrowl.ogg', 80, 1)
 				emote("me", EMOTE_AUDIBLE, "growls.")
