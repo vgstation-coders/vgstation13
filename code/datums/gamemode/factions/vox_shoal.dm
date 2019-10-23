@@ -175,9 +175,15 @@ var/list/potential_bonus_items = list(
 	vox.my_appearance.f_style = "Shaved"
 	for(var/datum/organ/external/limb in vox.organs)
 		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
-	vox.equip_vox_raider(index)
+	var/datum/outfit/striketeam/voxraider/concrete_outfit = new
+	concrete_outfit.equip(vox)
 	vox.regenerate_icons()
 	vox.store_memory("The priority items for the day are: [english_list(bonus_items_of_the_day)]")
+
+	spawn()
+		var/chosen_loadout = input(vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
+		concrete_outfit.chosen_spec = chosen_loadout
+		concrete_outfit.equip_special_items(vox)
 
 /datum/faction/vox_shoal/process()
 	if (completed)
@@ -257,7 +263,7 @@ var/list/potential_bonus_items = list(
 	return english_list(our_stars)
 
 // -- Mobs procs --
-			
+
 /mob/living/proc/send_back_to_main_station()
 	delete_all_equipped_items()
 	if (ishuman(src))
@@ -270,8 +276,8 @@ var/list/potential_bonus_items = list(
 	var/obj/structure/inflatable/shelter/S = new(src)
 	forceMove(S)
 	S.ThrowAtStation()
-	
-		
+
+
 /mob/living/carbon/human/proc/equip_vox_raider(var/index)
 	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
 	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
@@ -293,15 +299,6 @@ var/list/potential_bonus_items = list(
 			equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/monocle(src), slot_glasses) // REPLACE WITH CODED VOX ALTERNATIVE.
 			equip_to_slot_or_del(new /obj/item/device/chameleon(src), slot_l_store)
 
-			var/obj/item/weapon/crossbow/W = new(src)
-			W.cell = new /obj/item/weapon/cell/crap(W)
-			W.cell.charge = 500
-			put_in_hands(W)
-
-			var/obj/item/stack/rods/A = new(src)
-			A.amount = 20
-			put_in_hands(A)
-
 		if(2) // Vox engineer!
 			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/pressure(src), slot_wear_suit)
 			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/pressure(src), slot_head)
@@ -310,9 +307,6 @@ var/list/potential_bonus_items = list(
 			put_in_hands(new /obj/item/weapon/storage/box/emps(src))
 			put_in_hands(new /obj/item/device/multitool(src))
 
-			var/obj/item/weapon/paper/vox_paper/VP = new(src)
-			VP.initialize()
-			put_in_hands(VP)
 
 		if(3) // Vox saboteur!
 			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/carapace(src), slot_wear_suit)

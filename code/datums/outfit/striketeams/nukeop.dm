@@ -1,7 +1,6 @@
 /datum/outfit/striketeam/nukeops
 
     outfit_name = "Nuclear Operative"
-    // With the original comments on what each spec does for authencity.
 
     backpack_types = list(
 		BACKPACK_STRING = /obj/item/weapon/storage/backpack/security,
@@ -9,6 +8,8 @@
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel_sec,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/sec,
 	)
+
+    // With the original comments on what each spec does for authencity.
     specs = list(
         // Classic Ballistics setup. C20R rifle with ammo, and Beretta handgun also with ammo as a backup
         "Ballistics" = list(
