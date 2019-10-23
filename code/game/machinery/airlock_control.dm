@@ -22,6 +22,12 @@
 		return
 
 	switch(signal.data["command"])
+		if("cycle")
+			if(density)
+				open(1)
+			else
+				close(1)
+		
 		if("open")
 			open(1)
 
@@ -44,13 +50,36 @@
 				sleep(2)
 			toggle_bolts()
 			update_icon()
+			
+		if("secure_cycle")
+			if(density)
+				if(locked)
+					locked = 0
+					playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
+					update_icon()
+					sleep(2)
+				open(1)
+
+				locked = 1
+				playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
+				update_icon()
+			else
+				if(locked)
+					locked = 0
+					playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
+				close(1)
+
+				locked = 1
+				playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
+				sleep(2)
+				update_icon()
 
 		if("secure_open")
-			locked = 0
-			playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
-			update_icon()
-
-			sleep(2)
+			if(locked)
+				locked = 0
+				playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
+				update_icon()
+				sleep(2)
 			open(1)
 
 			locked = 1
@@ -58,8 +87,9 @@
 			update_icon()
 
 		if("secure_close")
-			locked = 0
-			playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
+			if(locked)
+				locked = 0
+				playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 			close(1)
 
 			locked = 1
