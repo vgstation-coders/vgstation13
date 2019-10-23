@@ -154,3 +154,11 @@
 		if(M && M.client)
 			M.update_music()
 	master_area=null
+
+/mob/living/carbon/complex/gondola/cultify()
+	var/mob/living/carbon/complex/gondola/cult/fug = new (get_turf(src))
+	mind.transfer_to(fug)
+	qdel(src)
+
+/mob/living/carbon/complex/gondola/cult/cultify()
+	return
