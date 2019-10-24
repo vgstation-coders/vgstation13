@@ -48,19 +48,21 @@
 
 	return "[name]_map"
 
-/client/proc/setup_popup(var/popup_name,var/width = 9,var/height = 9,var/tilesize = 2) //create the popup, and get it ready for generic use by giving it a background. width/height are multiplied by 64 by degfault.
+/client/proc/setup_popup(var/popup_name,var/width = 9,var/height = 9,var/tilesize = 2, var/background_state = "scanline") //create the popup, and get it ready for generic use by giving it a background. width/height are multiplied by 64 by degfault.
 	if(!popup_name)
 		return
 	clear_map("[popup_name]_map")
 	var/x_value = world.icon_size*tilesize*width
 	var/y_value = world.icon_size*tilesize*height
 	var/newmap = create_popup(popup_name,x_value,y_value)
+	if(!background)
+		background = "clear"
 	var/obj/abstract/screen/background = new
 	background.name = "background"
 	background.assigned_map = newmap
 	background.screen_loc = "[newmap]:1,1 TO [width],[height]"
-	background.icon = 'icons/mob/actions.dmi' //change the icon to a proper one. this'll look like SHIT.
-	background.icon_state = "bg_default"
+	background.icon = 'icons/mob/map_backgrounds.dmi'
+	background.icon_state = background_state
 	background.layer = -1
 	background.plane = -1
 
