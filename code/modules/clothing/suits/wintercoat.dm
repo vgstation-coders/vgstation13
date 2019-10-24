@@ -211,6 +211,11 @@
 		/obj/item/weapon/reagent_containers/food/drinks/shaker,
 		/obj/item/weapon/reagent_containers/food/drinks/discount_shaker)
 
+/obj/item/clothing/suit/storage/wintercoat/druid
+	name = "druid winter robes"
+	icon_state = "druid_snow"
+	wizard_garb = 1
+
 
 #define HAS_HOOD 1
 #define NO_HOOD 0
