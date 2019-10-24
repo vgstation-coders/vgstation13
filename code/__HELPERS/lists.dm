@@ -40,10 +40,12 @@
 			return L[index]
 	return
 
+#if DM_VERSION < 513
 /proc/islist(list/L)
 	if(istype(L))
 		return 1
 	return 0
+#endif
 
 //Return either pick(list) or null if list is not of type /list or is empty
 /proc/safepick(list/L)

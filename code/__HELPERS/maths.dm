@@ -25,9 +25,11 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 	var/invcos = arccos(x / sqrt(x * x + y * y))
 	return y >= 0 ? invcos : -invcos
 
+#if DM_VERSION < 513
 proc/arctan(x)
 	var/y=arcsin(x/sqrt(1+x*x))
 	return y
+#endif
 
 /proc/Ceiling(x, y = 1)
 	. = -round(-x / y) * y
@@ -66,7 +68,7 @@ proc/arctan(x)
 		x = rand()
 	var/y = -(1/lambda)*log(1-x)
 	return y
-	
+
 // -- Returns the Lorentz cummulative distribution of the real x, with mean lambda
 
 /proc/exp_cummulative_distribution(var/x, var/lambda)
@@ -227,7 +229,7 @@ proc/arctan(x)
 /*
  * Tangent.
  */
-/proc/Tan(const/x) 
+/proc/Tan(const/x)
 	return sin(x) / cos(x)
 
 /proc/tan_rad(const/x) // This one assumes that x is in radians.

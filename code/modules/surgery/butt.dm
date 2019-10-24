@@ -339,7 +339,7 @@
 	"<span class='notice'>You have cauterized [target]'s ass with \the [tool].</span>")
 	target.op_stage.butt_replace = SURGERY_HAS_A_BUTT
 	affected.open = 0
-	affected.clamp()
+	affected.clamp_wounds()
 
 /datum/surgery_step/butt_replace/cauterize/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='warning'>[user]'s hand slips, burning the flesh around [target]'s butt with /the [tool]!</span>" , \
