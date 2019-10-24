@@ -499,6 +499,7 @@ var/global/datum/controller/occupations/job_master
 				if(rank=="Clown") // Clowns DO need to breathe, though - N3X
 					H.species.equip(H)
 			else
+				// This is deprecated and should be removed after outfit datums are finished.
 				switch(H.backbag) //BS12 EDIT
 					if(1)
 						if(H.species.survival_gear)
@@ -518,7 +519,10 @@ var/global/datum/controller/occupations/job_master
 						if(H.species.survival_gear)
 							new H.species.survival_gear(BPK)
 						H.equip_to_slot_or_del(BPK, slot_back,1)
-				H.species.equip(H)
+
+				// -- OUTFIT DATUM BANDAID -- To be removed when outfit datums are finished...
+				if (!job.outfit_datum)
+					H.species.equip(H)
 
 	if(job)
 		job.introduce(H, (alt_title ? alt_title : rank))
