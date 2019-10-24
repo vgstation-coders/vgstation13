@@ -287,7 +287,14 @@
 	return BUILD_FAILURE
 
 
+/turf/unsimulated/floor/engine/cement
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "cement"
+	name = "cement"
+	desc = "Cement is a substantially stronger, more resistant vehicle surface than asphalt, though it grips somewhat less making it better suited for short, low-speed drives."
 
+/turf/unsimulated/floor/engine/cement/attackby(obj/item/weapon/C, mob/user)
+	return //no deconstruct
 
 /turf/unsimulated/floor/snow/asphalt
 	snowsound = list()
