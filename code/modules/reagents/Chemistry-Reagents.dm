@@ -3833,6 +3833,9 @@
 
 	if(..())
 		return 1
+	
+	if(prob(5))
+		to_chat(M,"<span class='notice'>Your face feels a little hot!</span>")
 
 	var/mob/living/carbon/human/H
 	if(ishuman(M))
@@ -3908,6 +3911,7 @@
 		return 1
 
 	if(prob(5))
+		to_chat(M,"<span class='notice'>Your face feels like it's on fire!</span>")
 		M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
 
 	//let's just copy capsaicin/on_mob_life does, but make it worse.
@@ -3916,21 +3920,24 @@
 		H = M
 	switch(data)
 		if(1 to 15)
-			M.bodytemperature += 0.9 * TEMPERATURE_DAMAGE_COEFFICIENT
+			M.bodytemperature += 0.9 * TEMPERATURE_DAMAGE_COEFFICIENT		
 			if(holder.has_reagent("frostoil"))
 				holder.remove_reagent("frostoil", 5)
 			if(isslime(M))
 				M.bodytemperature += rand(10,20)
 			if(isslimeperson(H))
 				M.bodytemperature += rand(10,20)
-		if(15 to 25)
+		if(15 to 30)
 			M.bodytemperature += 1.1 * TEMPERATURE_DAMAGE_COEFFICIENT
+			if(prob(6))//Start vomiting 
+				H.vomit(0,1)
 			if(isslime(M))
 				M.bodytemperature += rand(20,25)
 			if(isslimeperson(H))
 				M.bodytemperature += rand(20,25)
-		if(25 to 30)//whatever
-			H.vomit()
+		if(30 to 45)//Reagent dies out at about 50. Set up the vomiting to "fade out".
+			if(prob(9))
+				H.vomit()
 	data++
 
 
