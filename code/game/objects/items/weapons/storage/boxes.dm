@@ -29,7 +29,7 @@
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
-
+	storage_slots = 7
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
 
@@ -112,7 +112,7 @@
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 	new /obj/item/ammo_storage/magazine/c45(src)
 	new /obj/item/ammo_storage/magazine/c45/rubber(src)
-	
+
 /obj/item/weapon/storage/box/survival/nuke
 	icon_state = "box_nuke"
 
@@ -649,16 +649,6 @@
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/buckshot(src)
-
-/obj/item/weapon/storage/box/labels
-	name = "label roll box"
-	desc = "A box of refill rolls for a hand labeler."
-	icon_state = "labels"
-
-/obj/item/weapon/storage/box/labels/New()
-	..()
-	for(var/i=1; i <= storage_slots; i++)
-		new /obj/item/device/label_roll(src)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
