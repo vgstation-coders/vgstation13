@@ -296,9 +296,9 @@
 	siemens_coefficient = 1
 	sharpness = 1
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
-	force = 20.0
+	force = 25.0
 	w_class = W_CLASS_MEDIUM
-	throwforce = 10.0
+	throwforce = 15.0
 	throw_speed = 3
 	throw_range = 9
 	attack_verb = list("attacks", "slashes", "slices", "tears", "rips", "dices", "cuts")

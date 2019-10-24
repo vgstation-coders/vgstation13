@@ -223,6 +223,15 @@
 	armor = list(melee = 50, bullet = 40, laser = 40,energy = 40, bomb = 5, bio = 0, rad = 0)
 	siemens_coefficient = 1
 
+/obj/item/clothing/head/helmet/rune
+	name = "rune full helm"
+	desc = "A full face helmet."
+	icon_state = "knight_rune"
+	item_state = "knight_rune"
+	flags = FPRINT
+	body_parts_covered = FULL_HEAD|BEARD
+	armor = list(melee = 80, bullet = 80, laser = 50, energy = 30, bomb = 80, bio = 10, rad = 10)
+
 /obj/item/clothing/head/helmet/knight
 	name = "medieval helmet"
 	desc = "A classic metal helmet."
@@ -244,12 +253,6 @@
 /obj/item/clothing/head/helmet/knight/red
 	icon_state = "knight_red"
 	item_state = "knight_red"
-
-/obj/item/clothing/head/helmet/knight/rune
-	name = "rune full helm"
-	desc = "A full face helmet."
-	icon_state = "knight_rune"
-	item_state = "knight_rune"
 
 /obj/item/clothing/head/helmet/knight/templar
 	name = "crusader helmet"

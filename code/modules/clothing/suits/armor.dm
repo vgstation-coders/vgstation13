@@ -74,6 +74,15 @@
 	armor = list(melee = 80, bullet = 10, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.5
 
+/obj/item/clothing/suit/armor/rune
+	name = "rune platebody"
+	desc = "Provides excellent protection."
+	icon_state = "knight_rune"
+	item_state = "knight_rune"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	slowdown = HARDSUIT_SLOWDOWN_LOW
+	armor = list(melee = 80, bullet = 80, laser = 50, energy = 30, bomb = 80, bio = 10, rad = 10)
+
 
 /obj/item/clothing/suit/armor/knight
 	name = "plate armour"
@@ -97,12 +106,6 @@
 /obj/item/clothing/suit/armor/knight/red
 	icon_state = "knight_red"
 	item_state = "knight_red"
-
-/obj/item/clothing/suit/armor/knight/rune
-	name = "rune platebody"
-	desc = "Provides excellent protection."
-	icon_state = "knight_rune"
-	item_state = "knight_rune"
 
 /obj/item/clothing/suit/armor/knight/templar
 	name = "crusader armour"

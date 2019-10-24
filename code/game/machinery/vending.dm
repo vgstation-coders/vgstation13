@@ -3391,8 +3391,7 @@ var/global/num_vending_terminals = 1
 		)
 	contraband = list(
 		/obj/item/weapon/dice/loaded = 3,
-		/obj/item/weapon/dice/loaded/d20 = 3,
-		/obj/item/weapon/rsscimmy = 1
+		/obj/item/weapon/dice/loaded/d20 = 3
 		)
 	premium = list(
 		/obj/item/weapon/skull = 1,
@@ -3405,8 +3404,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/dice/loaded = 15,
 		/obj/item/weapon/dice/loaded/d20 = 15,
 		/obj/item/weapon/skull = 20,
-		/obj/item/weapon/storage/bag/wiz_cards/frog = 20,
-		/obj/item/weapon/rsscimmy = 25000
+		/obj/item/weapon/storage/bag/wiz_cards/frog = 20
 		)
 
 	pack = /obj/structure/vendomatpack/games

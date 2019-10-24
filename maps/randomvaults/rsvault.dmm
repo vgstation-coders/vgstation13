@@ -1,0 +1,100 @@
+"aa" = (/obj/structure/softwall,/obj/structure/softwall,/turf/unsimulated/floor/asteroid,/area)
+"ab" = (/obj/structure/softwall,/turf/unsimulated/floor/asteroid,/area)
+"ac" = (/turf/unsimulated/floor/asteroid,/area)
+"ad" = (/turf/unsimulated/mineral/iron,/area)
+"ae" = (/turf/simulated/floor/wood/floor_tile,/area)
+"af" = (/obj/structure/wizard/altar,/turf/simulated/floor/wood/floor_tile,/area)
+"ag" = (/obj/structure/wizard/scrying,/turf/simulated/floor/wood/floor_tile,/area)
+"ah" = (/obj/structure/softwall,/turf/simulated/floor/wood/floor_tile,/area)
+"ai" = (/mob/living/simple_animal/hostile/humanoid/wizard,/turf/simulated/floor/wood/floor_tile,/area)
+"aj" = (/obj/item/clothing/head/wizard,/turf/simulated/floor/wood/floor_tile,/area)
+"ak" = (/obj/item/clothing/suit/wizrobe,/turf/simulated/floor/wood/floor_tile,/area)
+"al" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/wood/floor_tile,/area)
+"am" = (/obj/structure/closet/coffin,/turf/simulated/floor/wood/floor_tile,/area)
+"an" = (/obj/item/weapon/storage/fancy/candle_box,/turf/simulated/floor/wood/floor_tile,/area)
+"ao" = (/obj/item/clothing/head/helmet/rune,/turf/simulated/floor/wood/floor_tile,/area)
+"ap" = (/mob/living/simple_animal/hostile/mimic/crate/chest,/turf/simulated/floor/wood/floor_tile,/area)
+"aq" = (/mob/living/simple_animal/hostile/humanoid/vampire,/turf/simulated/floor/wood/floor_tile,/area)
+"ar" = (/obj/structure/coatrack,/turf/simulated/floor/wood/floor_tile,/area)
+"as" = (/turf/simulated/floor/plating/snow,/area)
+"at" = (/mob/living/simple_animal/hostile/humanoid/frostgolem/knight,/turf/simulated/floor/plating/snow,/area)
+"au" = (/mob/living/simple_animal/hostile/tree,/turf/simulated/floor/plating/snow,/area)
+"av" = (/obj/item/weapon/rsscimmy,/turf/simulated/floor/plating/snow,/area)
+"aw" = (/obj/item/weapon/shield/riot/rune,/turf/simulated/floor/plating/snow,/area)
+"ax" = (/turf/unsimulated/floor/evil,/area)
+"ay" = (/obj/machinery/door/mineral/transparent/plasma,/turf/unsimulated/floor/evil,/area)
+"az" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor,/area)
+"aA" = (/obj/machinery/door/mineral/transparent/diamond,/turf/simulated/floor/plating/snow,/area)
+"aB" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/cake,/turf/simulated/floor,/area)
+"aC" = (/turf/simulated/floor,/area)
+"aD" = (/mob/living/simple_animal/hostile/humanoid/chef,/turf/simulated/floor,/area)
+"aE" = (/obj/machinery/door/mineral/wood,/turf/unsimulated/floor/asteroid,/area)
+"aF" = (/obj/machinery/cooking/grill,/turf/simulated/floor,/area)
+"aG" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/tea,/turf/simulated/floor,/area)
+"aH" = (/obj/item/weapon/storage/box,/obj/item/weapon/kitchen/utensil/knife,/turf/simulated/floor,/area)
+"aI" = (/obj/structure/rack,/obj/item/weapon/kitchen/utensil/knife/large/butch,/turf/simulated/floor,/area)
+"aJ" = (/obj/item/weapon/stool/piano,/turf/simulated/floor,/area)
+"aK" = (/obj/structure/table/woodentable,/obj/structure/flora/pottedplant/claypot,/turf/simulated/floor,/area)
+"aL" = (/obj/structure/table/woodentable,/obj/item/trash/bowl,/turf/simulated/floor,/area)
+"aM" = (/obj/structure/sink/kitchen{dir = 8},/turf/simulated/floor,/area)
+"aN" = (/obj/item/weapon/storage/box,/turf/simulated/floor,/area)
+"aO" = (/turf/unsimulated/mineral/mythril,/area)
+"aP" = (/obj/effect/decal/remains/human,/turf/unsimulated/floor/asteroid,/area)
+"aQ" = (/obj/item/weapon/pickaxe,/turf/unsimulated/floor/asteroid,/area)
+"aR" = (/obj/item/clothing/suit/armor/rune,/turf/unsimulated/floor/asteroid,/area)
+"aS" = (/obj/effect/spider/stickyweb,/turf/unsimulated/floor/asteroid,/area)
+"aT" = (/turf/unsimulated/mineral/gold,/area)
+"aU" = (/turf/simulated/floor/grass,/area)
+"aV" = (/mob/living/simple_animal/hostile/giant_spider,/turf/unsimulated/floor/asteroid,/area)
+"aW" = (/mob/living/simple_animal/hostile/giant_spider/hunter,/turf/unsimulated/floor/asteroid,/area)
+"aX" = (/obj/effect/decal/remains/human/noskull,/turf/simulated/floor/wood/floor_tile,/area)
+"aY" = (/mob/living/simple_animal/hostile/giant_spider/nurse,/turf/unsimulated/floor/asteroid,/area)
+"aZ" = (/mob/living/simple_animal/cow,/turf/simulated/floor/grass,/area)
+"ba" = (/obj/structure/signpost,/turf/simulated/floor/grass,/area)
+"bb" = (/obj/effect/decal/remains/human/noskull,/turf/simulated/floor/plating/snow,/area)
+"bc" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/grass,/area)
+"bd" = (/obj/machinery/media/jukebox/superjuke,/turf/simulated/floor,/area)
+"be" = (/obj/item/clothing/head/helmet/rune,/obj/item/clothing/suit/armor/rune,/obj/item/weapon/shield/riot/rune,/obj/item/weapon/rsscimmy,/mob/living/simple_animal/hostile/mimic/crate/chest,/turf/unsimulated/floor/evil,/area)
+"bf" = (/obj/effect/decal/remains/human,/turf/unsimulated/floor/evil,/area)
+"bg" = (/obj/structure/closet/coffin,/turf/unsimulated/floor/evil,/area)
+"bh" = (/mob/living/simple_animal/hostile/necro/zombie/putrid,/turf/unsimulated/floor/evil,/area)
+"bi" = (/mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one,/turf/unsimulated/floor/evil,/area)
+"bj" = (/mob/living/simple_animal/hostile/necro/skeleton,/turf/unsimulated/floor/evil,/area)
+"bk" = (/obj/effect/spider/stickyweb,/obj/item/weapon/hammer,/turf/unsimulated/floor/asteroid,/area)
+"bl" = (/obj/item/anvil,/turf/unsimulated/floor/asteroid,/area)
+"bm" = (/obj/structure/flora/ausbushes/ywflowers,/turf/simulated/floor/grass,/area)
+"bn" = (/obj/item/stack/sheet/wood/bigstack,/turf/simulated/floor/grass,/area)
+"bo" = (/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,/turf/simulated/floor/grass,/area)
+"bp" = (/obj/structure/flora/ausbushes/pointybush,/turf/simulated/floor/grass,/area)
+"bq" = (/obj/structure/flora/ausbushes/ywflowers,/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,/turf/simulated/floor/grass,/area)
+"br" = (/obj/structure/flora/ausbushes/lavendergrass,/mob/living/simple_animal/cow,/turf/simulated/floor/grass,/area)
+"bs" = (/obj/structure/flora/ausbushes/lavendergrass,/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries,/turf/simulated/floor/grass,/area)
+"bt" = (/obj/structure/flora/ausbushes/lavendergrass,/turf/simulated/floor/grass,/area)
+"bu" = (/obj/item/weapon/storage/fancy/matchbox,/turf/simulated/floor/grass,/area)
+"bv" = (/obj/structure/flora/tree/pine,/turf/simulated/floor/plating/snow,/area)
+"bw" = (/turf/unsimulated/mineral/air,/area)
+
+(1,1,1) = {"
+bwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbw
+bwaaababababababababababababababababababaabw
+bwababadadaOaOabbebfbgbhbibeabafagaeaeahabbw
+bwabaOaPaQaRaOabaxbjbhbibfaxabaiaeaeaeajabbw
+bwabaOaOaSadaOabbfbiaxbhbjaxabaeaeaeaeakabbw
+bwabaOaOaSadaTabababayayabababahalahahahabbw
+bwabaOaOacadaTaTaTabaUaUabamanahaeahaoapabbw
+bwabaVbkacacaWaTaTabaUaUabamaqahaeahaXaeabbw
+bwabadaYacacblaTaTabaUbmabaraealaealaeaeabbw
+bwababababaEababababaUaUababababalababababbw
+bwabbnaUaUaUbobpbqaUbaaUaUbrbsbtaUaUaUaUabbw
+bwabbuabaUaUbmboaZaUaUaUaUbtbtbtaUaUabaUabbw
+bwababababazababababaUaZababababaAababababbw
+bwabaBaGaCaCaCaCaHabbmaUabatasasasasasasabbw
+bwabaCaCaDaCaCaCaCabaUaUabasasatasasasasabbw
+bwabaIaJaKaLaCaCaCaEaUaUabasbvasasasasatabbw
+bwabaFaCaCaCaCaJaMabaUbmabasasasasauasasabbw
+bwabaCaCaeaCaCaCaMabaUaUabasasasasbbatasabbw
+bwabaCaNaCaCaCaCaCabbmaUabatasbvasavawasabbw
+bwababaCaCaCaCaCbdabaUaUabasasasatasasababbw
+bwabababababababababbcbcabababababababababbw
+bwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbw
+"}

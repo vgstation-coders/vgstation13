@@ -635,13 +635,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/suit/armor/knight/red,
 					/obj/item/clothing/suit/armor/knight/yellow,
 					/obj/item/clothing/suit/armor/knight/blue,
-					/obj/item/clothing/suit/armor/knight/rune,
 					/obj/item/clothing/head/helmet/knight,
 					/obj/item/clothing/head/helmet/knight/red,
 					/obj/item/clothing/head/helmet/knight/yellow,
-					/obj/item/clothing/head/helmet/knight/blue,
-					/obj/item/clothing/head/helmet/knight/rune,
-					/obj/item/weapon/shield/riot/rune)
+					/obj/item/clothing/head/helmet/knight/blue)
 	cost = 35
 	containertype = /obj/structure/closet/crate/basic
 	containername = "knight armor crate"
