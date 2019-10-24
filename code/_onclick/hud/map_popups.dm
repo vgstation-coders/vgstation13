@@ -55,8 +55,8 @@
 	var/x_value = world.icon_size*tilesize*width
 	var/y_value = world.icon_size*tilesize*height
 	var/newmap = create_popup(popup_name,x_value,y_value)
-	if(!background)
-		background = "clear"
+	if(!background_state)
+		background_state = "clear"
 	var/obj/abstract/screen/background = new
 	background.name = "background"
 	background.assigned_map = newmap
