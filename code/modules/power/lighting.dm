@@ -157,6 +157,10 @@ var/global/list/obj/machinery/light/alllights = list()
 	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
 	return SPECIAL_ATTACK_FAILED
 
+/obj/machinery/light/broken
+	icon_state = "ltube_broken" //for the mapper
+	spawn_with_bulb = /obj/item/weapon/light/tube/broken
+
 /obj/machinery/light/small
 	icon_state = "lbulb1"
 	fitting = "bulb"
@@ -164,6 +168,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	spawn_with_bulb = /obj/item/weapon/light/bulb
 
 /obj/machinery/light/small/broken
+	icon_state = "lbulb_broken" //for the mapper
 	spawn_with_bulb = /obj/item/weapon/light/bulb/broken
 
 /obj/machinery/light/spot
@@ -172,9 +177,11 @@ var/global/list/obj/machinery/light/alllights = list()
 	spawn_with_bulb = /obj/item/weapon/light/tube/large
 
 /obj/machinery/light/built
+	icon_state = "ltube-empty" //for the mapper
 	spawn_with_bulb = null
 
 /obj/machinery/light/small/built
+	icon_state = "lbulb_empty" //for the mapper
 	spawn_with_bulb = null
 
 /obj/machinery/light/initialize()
@@ -597,6 +604,9 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_range = 8
 	brightness_power = 3
 	cost = 8
+
+/obj/item/weapon/light/tube/broken
+	status = LIGHT_BROKEN
 
 /obj/item/weapon/light/tube/he
 	name = "high efficiency light tube"
