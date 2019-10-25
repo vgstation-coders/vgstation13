@@ -37,8 +37,9 @@ var/area/space_area
 		space_area = src
 		for(var/datum/d in ambient_sounds)//can't think of a better way to do this.
 			qdel(d)
-		ambient_sounds = list(/datum/ambience/spaced1,/datum/ambience/spaced2,/datum/ambience/spaced3,/datum/ambience/spacemusic,/datum/ambience/mainmusic,/datum/ambience/traitormusic)
-//		lighting_state = 4
+		//ambient_sounds = list(/datum/ambience/spaced1,/datum/ambience/spaced2,/datum/ambience/spaced3,/datum/ambience/spacemusic,/datum/ambience/mainmusic,/datum/ambience/traitormusic)
+		ambient_sounds = list()
+		//lighting_state = 4
 		//has_gravity = 0    // Space has gravity.  Because.. because.
 
 	if(!requires_power)
@@ -321,6 +322,19 @@ var/area/space_area
 		mouse_opacity = 0
 		updateicon()
 	return
+
+/area/proc/get_ambience_list()
+	//Check if the area has an AI and add the appropriate ambience
+	var/list/ambience_list = list()
+	ambience_list.Add(ambient_sounds)
+	for(var/mob/living/silicon/ai/AI in player_list)
+		if(get_area(AI) == src)
+			ambience_list.Add(/datum/ambience/AI, /datum/ambience/AI/safe, /datum/ambience/AI/back)
+			if(AI?.laws.name == "Asimov's Three Laws of Robotics")
+				ambience_list.Add(/datum/ambience/AI/harmonica)
+			break
+	if(ambience_list.len > 0)
+		return ambience_list
 
 /area/proc/updateicon()
 	if ((fire || eject || party || radalert) && ((!requires_power)?(!requires_power):power_environ))//If it doesn't require power, can still activate this proc.

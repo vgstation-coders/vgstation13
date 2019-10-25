@@ -419,7 +419,11 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/salvage/derelict
 	name = "\improper Derelict Station"
 	icon_state = "yellow"
-	ambient_sounds = list(/datum/ambience/derelict1,/datum/ambience/derelict2,/datum/ambience/derelict3,/datum/ambience/derelict4)
+	ambient_sounds = list(
+		/datum/ambience/derelict1,
+		/datum/ambience/derelict2,
+		/datum/ambience/derelict3,
+		/datum/ambience/derelict4)
 
 /area/shuttle/salvage/djstation
 	name = "\improper Ruskie DJ Station"
@@ -1418,6 +1422,7 @@ proc/process_adminbus_teleport_locs()
 	power_light = 0
 	power_environ = 0
 
+
 //Teleporter
 
 /area/teleporter
@@ -1441,9 +1446,10 @@ proc/process_adminbus_teleport_locs()
 	music = "signal"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
-	ambient_sounds = list(/datum/ambience/AI)
 
-//MedBay
+
+//Medbay
+
 /area/medical
 	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
 	shuttle_can_crush = FALSE
@@ -1454,6 +1460,7 @@ proc/process_adminbus_teleport_locs()
 	music = 'sound/ambience/signal.ogg'
 
 //Medbay is a large area, these additional areas help level out APC load.
+
 /area/medical/medbay2
 	name = "Medbay"
 	icon_state = "medbay2"
@@ -2120,12 +2127,10 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper AI Upload Chamber"
 	icon_state = "ai_upload"
 	jammed=1
-	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/ai_upload_foyer
 	name = "AI Upload Access"
 	icon_state = "ai_foyer"
-	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/ai
 	name = "\improper AI Chamber"
@@ -2133,12 +2138,11 @@ proc/process_adminbus_teleport_locs()
 	jammed=1
 	holomap_marker = "ai"
 	holomap_filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
-	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/aisat
 	name = "\improper AI Satellite"
 	icon_state = "ai"
-	ambient_sounds = list(/datum/ambience/AI)
+
 
 /area/turret_protected/aisat_interior
 	name = "\improper AI Satellite"
@@ -2167,7 +2171,6 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/NewAIMain
 	name = "\improper AI Main New"
 	icon_state = "storage"
-
 
 
 //Misc
