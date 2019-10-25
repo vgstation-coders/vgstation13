@@ -158,7 +158,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	return SPECIAL_ATTACK_FAILED
 
 /obj/machinery/light/broken
-	icon_state = "ltube_broken" //for the mapper
+	icon_state = "ltube-broken" //for the mapper
 	spawn_with_bulb = /obj/item/weapon/light/tube/broken
 
 /obj/machinery/light/he
