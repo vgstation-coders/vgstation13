@@ -58,8 +58,6 @@
 "bf" = (/obj/effect/decal/remains/human,/turf/unsimulated/floor/evil,/area)
 "bg" = (/obj/structure/closet/coffin,/turf/unsimulated/floor/evil,/area)
 "bh" = (/mob/living/simple_animal/hostile/necro/zombie/putrid,/turf/unsimulated/floor/evil,/area)
-"bi" = (/mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one,/turf/unsimulated/floor/evil,/area)
-"bj" = (/mob/living/simple_animal/hostile/necro/skeleton,/turf/unsimulated/floor/evil,/area)
 "bk" = (/obj/effect/spider/stickyweb,/obj/item/weapon/hammer,/turf/unsimulated/floor/asteroid,/area)
 "bl" = (/obj/item/anvil,/turf/unsimulated/floor/asteroid,/area)
 "bm" = (/obj/structure/flora/ausbushes/ywflowers,/turf/simulated/floor/grass,/area)
@@ -72,29 +70,26 @@
 "bt" = (/obj/structure/flora/ausbushes/lavendergrass,/turf/simulated/floor/grass,/area)
 "bu" = (/obj/item/weapon/storage/fancy/matchbox,/turf/simulated/floor/grass,/area)
 "bv" = (/obj/structure/flora/tree/pine,/turf/simulated/floor/plating/snow,/area)
-"bw" = (/turf/unsimulated/mineral/air,/area)
 
 (1,1,1) = {"
-bwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbw
-bwaaababababababababababababababababababaabw
-bwababadadaOaOabbebfbgbhbibeabafagaeaeahabbw
-bwabaOaPaQaRaOabaxbjbhbibfaxabaiaeaeaeajabbw
-bwabaOaOaSadaOabbfbiaxbhbjaxabaeaeaeaeakabbw
-bwabaOaOaSadaTabababayayabababahalahahahabbw
-bwabaOaOacadaTaTaTabaUaUabamanahaeahaoapabbw
-bwabaVbkacacaWaTaTabaUaUabamaqahaeahaXaeabbw
-bwabadaYacacblaTaTabaUbmabaraealaealaeaeabbw
-bwababababaEababababaUaUababababalababababbw
-bwabbnaUaUaUbobpbqaUbaaUaUbrbsbtaUaUaUaUabbw
-bwabbuabaUaUbmboaZaUaUaUaUbtbtbtaUaUabaUabbw
-bwababababazababababaUaZababababaAababababbw
-bwabaBaGaCaCaCaCaHabbmaUabatasasasasasasabbw
-bwabaCaCaDaCaCaCaCabaUaUabasasatasasasasabbw
-bwabaIaJaKaLaCaCaCaEaUaUabasbvasasasasatabbw
-bwabaFaCaCaCaCaJaMabaUbmabasasasasauasasabbw
-bwabaCaCaeaCaCaCaMabaUaUabasasasasbbatasabbw
-bwabaCaNaCaCaCaCaCabbmaUabatasbvasavawasabbw
-bwababaCaCaCaCaCbdabaUaUabasasasatasasababbw
-bwabababababababababbcbcabababababababababbw
-bwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbwbw
+aaababababababababababababababababababaa
+ababadadaOaOabbebfbgbhaxbeabafagaeaeahab
+abaOaPaQaRaOabaxaxbhaxbfaxabaiaeaeaeajab
+abaOaOaSadaOabbfaxaxbhaxaxabaeaeaeaeakab
+abaOaOaSadaTabababayayabababahalahahahab
+abaOaOacadaTaTaTabaUaUabamanahaeahaoapab
+abaVbkacacaWaTaTabaUaUabamaqahaeahaXaeab
+abadaYacacblaTaTabaUbmabaraealaealaeaeab
+ababababaEababababaUaUababababalabababab
+abbnaUaUaUbobpbqaUbaaUaUbrbsbtaUaUaUaUab
+abbuabaUaUbmboaZaUaUaUaUbtbtbtaUaUabaUab
+ababababazababababaUaZababababaAabababab
+abaBaGaCaCaCaCaHabbmaUabatasasasasasasab
+abaCaCaDaCaCaCaCabaUaUabasasasasasasasab
+abaIaJaKaLaCaCaCaEaUaUabasbvasasasasasab
+abaFaCaCaCaCaJaMabaUbmabasasasasauasasab
+abaCaCaeaCaCaCaMabaUaUabasasasasbbatasab
+abaCaNaCaCaCaCaCabbmaUabasasbvasavawasab
+ababaCaCaCaCaCbdabaUaUabasasasatasasabab
+abababababababababbcbcababababababababab
 "}
