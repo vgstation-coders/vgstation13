@@ -10,7 +10,6 @@
 #define DEBUG
 // END_PREFERENCES
 // BEGIN_INCLUDE
-#include "rsvault.dmm"
 #include "__DEFINES\__compile_options.dm"
 #include "__DEFINES\_macros.dm"
 #include "__DEFINES\accessories.dm"
