@@ -14,7 +14,6 @@
 "an" = (/obj/effect/decal/remains/human,/turf/unsimulated/floor/asteroid,/area)
 "ao" = (/obj/item/weapon/pickaxe,/turf/unsimulated/floor/asteroid,/area)
 "ap" = (/obj/item/clothing/suit/armor/rune,/turf/unsimulated/floor/asteroid,/area)
-"aq" = (/mob/living/simple_animal/hostile/necro/skeleton,/turf/unsimulated/floor/evil,/area)
 "ar" = (/mob/living/simple_animal/hostile/humanoid/wizard,/turf/simulated/floor/wood/floor_tile,/area)
 "as" = (/obj/item/clothing/head/wizard,/turf/simulated/floor/wood/floor_tile,/area)
 "at" = (/obj/effect/spider/stickyweb,/turf/unsimulated/floor/asteroid,/area)
@@ -75,8 +74,8 @@
 (1,1,1) = {"
 aaababababababababababababababababababaa
 ababacacadadabaeafagahaiaeabajakalalamab
-abadanaoapadabaiaqahaiafaiabaralalalasab
-abadadatacadabafaiaiahaqaiabalalalalauab
+abadanaoapadabaiaiahaiafaiabaralalalasab
+abadadatacadabafaiaiahaiaiabalalalalauab
 abadadatacavabababawawabababamaxamamamab
 abadadayacavavavabazazabaAaBamalamaCaDab
 abaEaFayayaGavavabazazabaAaHamalamaIalab
