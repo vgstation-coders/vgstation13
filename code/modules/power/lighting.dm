@@ -161,6 +161,18 @@ var/global/list/obj/machinery/light/alllights = list()
 	icon_state = "ltube_broken" //for the mapper
 	spawn_with_bulb = /obj/item/weapon/light/tube/broken
 
+/obj/machinery/light/he
+	icon_state = "lhetube1"
+	spawn_with_bulb = /obj/item/weapon/light/he
+
+/obj/machinery/light/he/broken
+	icon_state = "lhetube-broken"
+	spawn_with_bulb = /obj/item/weapon/light/he/broken
+
+/obj/machinery/light/he/burned
+	icon_state = "lhetube-burned"
+	spawn_with_bulb = /obj/item/weapon/light/he/burned
+
 /obj/machinery/light/small
 	icon_state = "lbulb1"
 	fitting = "bulb"
@@ -605,9 +617,6 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_power = 3
 	cost = 8
 
-/obj/item/weapon/light/tube/broken
-	status = LIGHT_BROKEN
-
 /obj/item/weapon/light/tube/he
 	name = "high efficiency light tube"
 	desc = "An efficient light used to reduce strain on the station's power grid."
@@ -615,8 +624,19 @@ var/global/list/obj/machinery/light/alllights = list()
 	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
 	cost = 2
 
+/obj/item/weapon/light/tube/broken
+	status = LIGHT_BROKEN
+
 /obj/item/weapon/light/tube/burned
 	status = LIGHT_BURNED
+
+/obj/item/weapon/light/tube/he/broken
+	status = LIGHT_BROKEN
+
+/obj/item/weapon/light/tube/he/burned
+	status = LIGHT_BURNED
+
+
 
 /obj/item/weapon/light/tube/large
 	w_class = W_CLASS_SMALL
