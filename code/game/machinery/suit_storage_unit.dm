@@ -100,28 +100,11 @@
 /obj/machinery/suit_storage_unit/captain
 	name = "Command Suit Storage Unit"
 	department = "sec"
-	suit_type = /obj/item/clothing/suit/armor/captain
+	suit_type = /obj/item/clothing/suit/space/rig/captain
 	helmet_type = /obj/item/clothing/head/helmet/space/capspace
 	mask_type = /obj/item/clothing/mask/gas
 	boot_type = /obj/item/clothing/shoes/magboots/captain
-
-/obj/machinery/suit_storage_unit/captain/attackby(obj/item/I as obj, mob/user as mob)
-	. = ..()
-	//Special snowflake for the captains "armor spacesuit".
-	if( istype(I,/obj/item/clothing/suit/armor/captain))
-		if(!src.isopen)
-			return
-		var/obj/item/clothing/suit/armor/S = I
-		if(src.suit)
-			to_chat(user, "<span class='notice'>The unit already contains a suit.</span>")
-			return
-		if(user.drop_item(S, src))
-			to_chat(user, "You load the [S.name] into the storage compartment.")
-			src.suit = S
-			src.update_icon()
-			src.updateUsrDialog()
-	return
-
+	
 /obj/machinery/suit_storage_unit/medical
 	name = "Medical Suit Storage Unit"
 	department = "med"

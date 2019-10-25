@@ -263,7 +263,7 @@
 
 /obj/effect/landmark/corpse/assistant/robust
 	corpseuniform = list(/obj/item/clothing/under/syndicate, /obj/item/clothing/under/rank/captain, /obj/item/clothing/under/rank/head_of_personnel, /obj/item/clothing/under/rank/head_of_security, /obj/item/clothing/under/rank/chief_medical_officer, /obj/item/clothing/under/rank/chief_engineer)
-	corpsesuit = list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/rig/ror, /obj/item/clothing/suit/space/rig/syndi, /obj/item/clothing/suit/space/rig/atmos/, /obj/item/clothing/suit/armor/captain, /obj/item/clothing/suit/armor/vest, /obj/item/clothing/suit/armor/riot, /obj/item/clothing/suit/armor/laserproof, /obj/item/clothing/suit/armor/hos, /obj/item/clothing/suit/fire/firefighter, /obj/item/clothing/suit/space/rig/security, /obj/item/clothing/suit/space/rig/mining)
+	corpsesuit = list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/rig/ror, /obj/item/clothing/suit/space/rig/syndi, /obj/item/clothing/suit/space/rig/atmos/, /obj/item/clothing/suit/space/rig/captain, /obj/item/clothing/suit/armor/vest, /obj/item/clothing/suit/armor/riot, /obj/item/clothing/suit/armor/laserproof, /obj/item/clothing/suit/armor/hos, /obj/item/clothing/suit/fire/firefighter, /obj/item/clothing/suit/space/rig/security, /obj/item/clothing/suit/space/rig/mining)
 	corpseshoes = list(/obj/item/clothing/shoes/magboots, /obj/item/clothing/shoes/magboots/atmos, /obj/item/clothing/shoes/magboots/captain, /obj/item/clothing/shoes/jackboots/knifeholster, /obj/item/clothing/shoes/galoshes)
 	corpsegloves = list(/obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/black, /obj/item/clothing/gloves/captain)
 	corpseradio = list(/obj/item/device/radio/headset/headset_sec, /obj/item/device/radio/headset/heads/captain, /obj/item/device/radio/headset/heads/hos, /obj/item/device/radio/headset/heads/hop)
@@ -732,7 +732,7 @@
 /obj/effect/landmark/corpse/captain
 	name = "Captain"
 	corpseuniform = /obj/item/clothing/under/rank/captain
-	corpsesuit = /obj/item/clothing/suit/armor/captain
+	corpsesuit = /obj/item/clothing/suit/space/rig/captain
 	corpseback = /obj/item/weapon/storage/backpack/captain
 	corpseradio = /obj/item/device/radio/headset/heads/captain
 	corpseglasses = /obj/item/clothing/glasses/sunglasses

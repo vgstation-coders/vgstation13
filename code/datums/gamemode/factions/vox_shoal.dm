@@ -53,7 +53,7 @@ var/list/high_score_items = list(
 	/obj/item/weapon/pinpointer,
 	/obj/item/weapon/disk/nuclear,
 	/obj/item/weapon/hand_tele,
-	/obj/item/clothing/suit/armor/captain,
+	/obj/item/clothing/suit/space/rig/captain,
 	/obj/item/clothing/shoes/magboots/elite,
 	/obj/item/weapon/planning_frame,
 	/obj/item/weapon/storage/belt/utility/chief,
