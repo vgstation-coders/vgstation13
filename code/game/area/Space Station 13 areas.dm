@@ -2322,7 +2322,7 @@ proc/process_adminbus_teleport_locs()
 	shuttle_can_crush = FALSE
 	ambient_sounds = list(
 		/datum/ambience/tcomms1,
-		datum/ambience/tcomms2,
+		/datum/ambience/tcomms2,
 		/datum/ambience/tcomms3)
 	flags = NO_PACIFICATION
 
