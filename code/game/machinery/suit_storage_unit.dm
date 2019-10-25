@@ -99,12 +99,12 @@
 
 /obj/machinery/suit_storage_unit/captain
 	name = "Command Suit Storage Unit"
-	department = "sec"
+	department = "cap"
 	suit_type = /obj/item/clothing/suit/space/rig/captain
 	helmet_type = /obj/item/clothing/head/helmet/space/capspace
 	mask_type = /obj/item/clothing/mask/gas
 	boot_type = /obj/item/clothing/shoes/magboots/captain
-	
+
 /obj/machinery/suit_storage_unit/medical
 	name = "Medical Suit Storage Unit"
 	department = "med"
