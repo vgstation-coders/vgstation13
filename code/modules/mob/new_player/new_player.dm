@@ -104,7 +104,7 @@
 	if(!client)
 		return 0
 
-	if(secret_check_one(src))
+	if(secret_check_one(src,href_list))
 		return 0
 
 	if(href_list["show_preferences"])
