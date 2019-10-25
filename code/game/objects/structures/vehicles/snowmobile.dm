@@ -10,7 +10,7 @@
 	keytype = /obj/item/key/snowmobile
 	can_have_carts = FALSE
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/snowmobile
-	var/list/approved_terrain = list(/turf/unsimulated/floor/engine/cement,/turf/unsimulated/floor/snow,
+	var/list/approved_terrain = list(/turf/simulated/floor/engine/concrete,/turf/unsimulated/floor/snow,
 									/turf/unsimulated/floor/noblizz_permafrost,/obj/glacier,
 									/turf/simulated/floor/plating/snow)
 
@@ -44,4 +44,4 @@
 	else
 		var/list/dragsounds = list('sound/misc/metal_drag1.ogg','sound/misc/metal_drag2.ogg','sound/misc/metal_drag3.ogg')
 		playsound(src, pick(dragsounds), 50, 1)
-		return (..() * 4) //It's not designed to move this way!
+		return 5 //It's not designed to move this way!

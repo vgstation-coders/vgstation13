@@ -124,7 +124,11 @@
 	name = "ice"
 	icon_state = "ice"
 
-/turf/simulated/floor/plating/snow/concrete
-	name = "concrete"
+/turf/simulated/floor/engine/concrete
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "concrete"
+	name = "concrete"
+	desc = "Concrete is a substantially stronger, more resistant vehicle surface than asphalt, though it grips somewhat less making it better suited for short, low-speed drives."
+
+/turf/simulated/floor/engine/cement/attackby(obj/item/weapon/C, mob/user)
+	return //no deconstruct
