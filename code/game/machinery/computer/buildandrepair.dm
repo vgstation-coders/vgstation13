@@ -218,6 +218,10 @@
 	name = "Circuit Board (Pod Bay R&D Console)"
 	desc = "A circuit board for running a R&D console for the Pod Bay."
 	build_path = /obj/machinery/computer/rdconsole/pod
+/obj/item/weapon/circuitboard/rdconsole/pod
+	name = "Circuit Board (Derelict R&D Console)"
+	desc = "A circuit board for running a R&D console for the Derelict."
+	build_path = /obj/machinery/computer/rdconsole/derelict
 
 /obj/item/weapon/circuitboard/mecha_control
 	name = "Circuit Board (Exosuit Control Console)"
