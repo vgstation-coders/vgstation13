@@ -180,7 +180,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	spawn_with_bulb = /obj/item/weapon/light/bulb
 
 /obj/machinery/light/small/broken
-	icon_state = "lbulb_broken" //for the mapper
+	icon_state = "lbulb-broken" //for the mapper
 	spawn_with_bulb = /obj/item/weapon/light/bulb/broken
 
 /obj/machinery/light/spot
@@ -193,7 +193,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	spawn_with_bulb = null
 
 /obj/machinery/light/small/built
-	icon_state = "lbulb_empty" //for the mapper
+	icon_state = "lbulb-empty" //for the mapper
 	spawn_with_bulb = null
 
 /obj/machinery/light/initialize()
