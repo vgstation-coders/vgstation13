@@ -104,7 +104,7 @@
 
 		if(clicked_index == 0) //clicked the bottom pack? Too bad, nothing happens
 			return
-		clicked_index = Clamp(clicked_index, 1, stacked.len)
+		clicked_index = clamp(clicked_index, 1, stacked.len)
 
 		var/obj/structure/closet/crate/flatpack/bottom_pack = locate(stacked[clicked_index]) //so the very bottom pack is selected
 
@@ -270,11 +270,11 @@
 	..()
 	machine = new /obj/machinery/suit_modifier(src)
 	new /obj/item/rig_module/health_readout(src)
-	
+
 /obj/structure/closet/crate/flatpack/soda_dispenser/New()
 	..()
 	machine = new /obj/machinery/chem_dispenser/soda_dispenser(src)
-	
+
 /obj/structure/closet/crate/flatpack/booze_dispenser/New()
 	..()
 	machine = new /obj/machinery/chem_dispenser/booze_dispenser(src)
@@ -282,15 +282,15 @@
 /obj/structure/closet/crate/flatpack/brewer/New()
 	..()
 	machine = new /obj/machinery/chem_dispenser/brewer(src)
-	
+
 /obj/structure/closet/crate/flatpack/starscreen_generator/New()
 	..()
 	machine = new /obj/machinery/shield_gen(src)
-	
+
 /obj/structure/closet/crate/flatpack/starscreen_ex_generator/New()
 	..()
 	machine = new /obj/machinery/shield_gen/external(src)
-	
+
 /obj/structure/closet/crate/flatpack/starscreen_capacitor/New()
 	..()
 	machine = new /obj/machinery/shield_capacitor(src)

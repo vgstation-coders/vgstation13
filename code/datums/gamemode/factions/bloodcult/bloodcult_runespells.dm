@@ -954,7 +954,7 @@
 						progress = progress/4
 
 				if (delay)
-					progress = Clamp(progress,1,10)
+					progress = clamp(progress,1,10)
 				remaining -= progress
 				update_progbar()
 				victim.update_fullscreen_alpha("conversionred", 164-remaining, 8)

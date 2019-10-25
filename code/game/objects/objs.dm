@@ -648,7 +648,7 @@ a {
 				surrounding_mod *= I.quality/rand(1,3)
 	*/
 	var/initial_quality = round(((rand(1,3)*surrounding_mod)*material_mod)+modifier)
-	quality = Clamp(initial_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
+	quality = clamp(initial_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
 
 /obj/proc/gen_description(mob/user)
 	var/material_mod = quality-B_GOOD>1 ? quality-B_GOOD : 0

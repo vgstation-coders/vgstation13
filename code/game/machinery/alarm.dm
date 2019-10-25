@@ -335,7 +335,7 @@ var/global/list/airalarm_presets = list(
 		var/actual_target_temperature = target_temperature
 		if(get_danger_level(actual_target_temperature, TLV["temperature"]))
 			//use the max or min safe temperature
-			actual_target_temperature = Clamp(actual_target_temperature, TLV["temperature"][2], TLV["temperature"][3])
+			actual_target_temperature = clamp(actual_target_temperature, TLV["temperature"][2], TLV["temperature"][3])
 
 		if(!regulating_temperature)
 			regulating_temperature = 1

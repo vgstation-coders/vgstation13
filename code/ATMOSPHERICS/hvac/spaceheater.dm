@@ -161,7 +161,7 @@
 		return
 	if(istype(I, /obj/item/stack/sheet/wood) && ((on)||(nocell == 2)))
 		var/woodnumber = input(user, "You may insert a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
-		woodnumber = Clamp(woodnumber,0,4)
+		woodnumber = clamp(woodnumber,0,4)
 		var/obj/item/stack/sheet/wood/woody = I
 		woody.use(woodnumber)
 		user.visible_message("<span class='notice'>[user] adds some wood to \the [src].</span>", "<span class='notice'>You add some wood to \the [src].</span>")
@@ -249,7 +249,7 @@
 				var/value = text2num(href_list["val"])
 
 				// limit to 20-90 degC
-				set_temperature = Clamp(set_temperature + value, 20, 90)
+				set_temperature = clamp(set_temperature + value, 20, 90)
 
 			if("cellremove")
 				if(panel_open && cell && !usr.get_active_hand())

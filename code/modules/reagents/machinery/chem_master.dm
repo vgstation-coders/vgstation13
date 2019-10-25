@@ -381,7 +381,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				var/count = 1
 				if(href_list["createbottle_multiple"])
 					count = isgoodnumber(input("Select the number of bottles to make.", "Amount:", last_bottle_amt) as num)
-				count = Clamp(count, 1, 4)
+				count = clamp(count, 1, 4)
 				last_bottle_amt = count
 
 				var/amount_per_bottle = reagents.total_volume > 0 ? reagents.total_volume/count : 0

@@ -327,7 +327,7 @@
 		return 1
 
 	if(href_list["set_layer"] && layer) //Only handle this is layer is nonzero.
-		var/n_layer = Clamp(round(text2num(href_list["set_layer"])), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
+		var/n_layer = clamp(round(text2num(href_list["set_layer"])), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 		if(layer == n_layer) //No point doing anything.
 			return 1
 

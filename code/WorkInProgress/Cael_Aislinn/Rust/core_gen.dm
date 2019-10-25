@@ -158,14 +158,14 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	"}
 
 /obj/machinery/power/rust_core/proc/set_strength(var/value)
-	value = Clamp(value, MIN_FIELD_STR, MAX_FIELD_STR)
+	value = clamp(value, MIN_FIELD_STR, MAX_FIELD_STR)
 	field_strength = value
 	active_power_usage = RUST_CORE_STR_COST * value
 	if(owned_field)
 		owned_field.ChangeFieldStrength(value)
 
 /obj/machinery/power/rust_core/proc/set_frequency(var/value)
-	value = Clamp(value, MIN_FIELD_FREQ, MAX_FIELD_FREQ)
+	value = clamp(value, MIN_FIELD_FREQ, MAX_FIELD_FREQ)
 	field_frequency = value
 	if(owned_field)
 		owned_field.ChangeFieldFrequency(value)

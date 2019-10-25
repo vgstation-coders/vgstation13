@@ -45,11 +45,11 @@
 			// Most categories have an integer deducted from severity, this means that the chance for that mutation
 			// is 0 below said severity (e.g. you won't get dangerous shit if you use less than 14u mutagen).
 			15;								MUTCAT_GOOD, \
-			Clamp(0.4*severity, 	0, 7);	MUTCAT_BAD, \
-			Clamp(0.7*(severity-5), 0, 8); 	MUTCAT_WEIRD, \
-			Clamp(severity-12, 		0, 7); 	MUTCAT_WEIRD2, \
-			Clamp(severity-12, 		0, 14); MUTCAT_BAD2, \
-			Clamp(severity-14,		0, 20); MUTCAT_DANGEROUS \
+			clamp(0.4*severity, 	0, 7);	MUTCAT_BAD, \
+			clamp(0.7*(severity-5), 0, 8); 	MUTCAT_WEIRD, \
+			clamp(severity-12, 		0, 7); 	MUTCAT_WEIRD2, \
+			clamp(severity-12, 		0, 14); MUTCAT_BAD2, \
+			clamp(severity-14,		0, 20); MUTCAT_DANGEROUS \
 			)
 	var/mutation_type
 	//Now we'll pick a certain type of mutation from that category, special considerations in mind.
@@ -140,7 +140,7 @@
 
 	check_for_divergence()
 
-	//testing("Mutation Category: [mutation_category] - Mutation Type: [mutation_type]. Severity: [severity]. All category weights at this sev: GOOD=15/BAD=[Clamp(0.4*severity,0, 7)]/WEIRD=[Clamp(0.7*(severity-5),0,8)]/BIZZARE=[Clamp(severity-12,0,7)]/AWFUL=[Clamp(severity-12,0,14)]/DANGEROUS=[Clamp(severity-14,0,20)]")
+	//testing("Mutation Category: [mutation_category] - Mutation Type: [mutation_type]. Severity: [severity]. All category weights at this sev: GOOD=15/BAD=[clamp(0.4*severity,0, 7)]/WEIRD=[clamp(0.7*(severity-5),0,8)]/BIZZARE=[clamp(severity-12,0,7)]/AWFUL=[clamp(severity-12,0,14)]/DANGEROUS=[clamp(severity-14,0,20)]")
 	switch(mutation_type)
 		if("code_explanation")
 			// DEARIE ME, WHAT IS GOING ON HERE?
@@ -165,7 +165,7 @@
 			// Now that we have all the final modifiers, we can calculate the mutation's final strength.
 			var/deviation = severity * (rand(50, 125)/100) * cap_ratio
 			//Deviation per 10u Mutagen before cap: 5-12.5
-			seed.potency = Clamp(seed.potency + deviation, 0, 200)
+			seed.potency = clamp(seed.potency + deviation, 0, 200)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_potency")
@@ -173,7 +173,7 @@
 			var/list/hardcap_values = list(35, 45, 100, 180, 250, 300)
 			var/deviation = severity * (rand(50, 125)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.potency)
 			//Deviation per 10u Mutagen before cap: 5-12.5
-			seed.potency = Clamp(seed.potency + deviation, 0, 200)
+			seed.potency = clamp(seed.potency + deviation, 0, 200)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_yield")
@@ -184,7 +184,7 @@
 			var/list/hardcap_values = list(4, 5, 10, 15, 17, 20)
 			var/deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.yield)
 			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.yield = Clamp(seed.yield + deviation, 0, 16)
+			seed.yield = clamp(seed.yield + deviation, 0, 16)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_weed&toxins_tolerance")
@@ -192,13 +192,13 @@
 			var/list/hardcap_values = list(4, 5, 10, 12, 12, 12)
 			var/deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.weed_tolerance)
 			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.weed_tolerance = Clamp(seed.weed_tolerance + deviation, 0, 11)
+			seed.weed_tolerance = clamp(seed.weed_tolerance + deviation, 0, 11)
 
 			softcap_values = list(2, 3, 6,  9,  11, 11)
 			hardcap_values = list(4, 5, 10, 12, 12, 12)
 			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.toxins_tolerance)
 			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.toxins_tolerance = Clamp(seed.toxins_tolerance + deviation, 0, 11)
+			seed.toxins_tolerance = clamp(seed.toxins_tolerance + deviation, 0, 11)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_lifespan&endurance")
@@ -206,13 +206,13 @@
 			var/list/hardcap_values = list(4, 75, 100, 125, 150, 150)
 			var/deviation = severity * (rand(50, 80)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.lifespan)
 			//Deviation per 10u Mutagen before cap: 5-8
-			seed.lifespan = Clamp(seed.lifespan + deviation, 10, 125)
+			seed.lifespan = clamp(seed.lifespan + deviation, 10, 125)
 
 			softcap_values = list(2, 65, 80,  95,  110, 125)
 			hardcap_values = list(4, 75, 100, 125, 150, 150)
 			deviation = severity * (rand(30, 50)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.endurance)
 			//Deviation per 10u Mutagen before cap: 3-5
-			seed.endurance = Clamp(seed.endurance + deviation, 10, 125)
+			seed.endurance = clamp(seed.endurance + deviation, 10, 125)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_production&maturation")
@@ -220,13 +220,13 @@
 			var/list/hardcap_values = list(5,  3.5, 2,  1,    0.75, 0)
 			var/deviation = severity * (rand(4, 8)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.production)
 			//Deviation per 10u Mutagen before cap: 0.4-0.8
-			seed.production = Clamp(seed.production - deviation, 1, 10)
+			seed.production = clamp(seed.production - deviation, 1, 10)
 
 			softcap_values = list(10, 7.5, 5,  2.5, 2,    1)
 			hardcap_values = list(5,  3.5, 2,  1,   0.75, 0)
 			deviation = severity * (rand(8, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.maturation)
 			//Deviation per 10u Mutagen before cap: 0.8-1.2
-			seed.maturation = Clamp(seed.maturation - deviation, 1.1, 30)
+			seed.maturation = clamp(seed.maturation - deviation, 1.1, 30)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_heat&pressure_tolerance")
@@ -234,19 +234,19 @@
 			var/list/hardcap_values = list(200, 300, 600, 900,    1200, 1200)
 			var/deviation = severity * (rand(100, 250)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.heat_tolerance)
 			//Deviation per 10u Mutagen before cap: 10-25
-			seed.heat_tolerance = Clamp(seed.heat_tolerance + deviation, 1, 800)
+			seed.heat_tolerance = clamp(seed.heat_tolerance + deviation, 1, 800)
 
 			softcap_values = list(20, 12.5, 5, 0, 0, 0)
 			hardcap_values = list(15, 5,    0, 0, 0, 0)
 			deviation = severity * (rand(20, 50)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.lowkpa_tolerance)
 			//Deviation per 10u Mutagen before cap: 2-5
-			seed.lowkpa_tolerance = Clamp(seed.lowkpa_tolerance - deviation, 0, 80)
+			seed.lowkpa_tolerance = clamp(seed.lowkpa_tolerance - deviation, 0, 80)
 
 			softcap_values = list(20, 275, 350, 450, 500, 500)
 			hardcap_values = list(15, 325, 450, 575, 575, 575)
 			deviation = severity * (rand(200, 300)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.highkpa_tolerance)
 			//Deviation per 10u Mutagen before cap: 20-30
-			seed.highkpa_tolerance = Clamp(seed.highkpa_tolerance + deviation, 110, 500)
+			seed.highkpa_tolerance = clamp(seed.highkpa_tolerance + deviation, 110, 500)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_light_tolerance")
@@ -254,7 +254,7 @@
 			var/list/hardcap_values = list(4, 7, 10, 12, 12, 12)
 			var/deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.light_tolerance)
 			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.light_tolerance = Clamp(seed.light_tolerance + deviation, 0, 10)
+			seed.light_tolerance = clamp(seed.light_tolerance + deviation, 0, 10)
 			generic_mutation_message("quivers!")
 
 		if("plusstat_nutrient&water_consumption")
@@ -262,13 +262,13 @@
 			var/list/hardcap_values = list(0.15, 0.10, 0.05, 0,    0, 0)
 			var/deviation = severity * (rand(3, 7)/1000) * get_ratio(severity, softcap_values, hardcap_values, seed.nutrient_consumption)
 			//Deviation per 10u Mutagen before cap: 0.03-0.07
-			seed.nutrient_consumption = Clamp(seed.nutrient_consumption - deviation, 0, 1)
+			seed.nutrient_consumption = clamp(seed.nutrient_consumption - deviation, 0, 1)
 
 			softcap_values = list(4, 3,   1.5, 0.5, 0, 0)
 			hardcap_values = list(2, 1.5, 0.5, 0,   0, 0)
 			deviation = severity * (rand(6, 12)/100) * get_ratio(severity, softcap_values, hardcap_values, seed.water_consumption)
 			//Deviation per 10u Mutagen before cap: 0.6-1.2
-			seed.water_consumption = Clamp(seed.water_consumption - deviation, 0, 10)
+			seed.water_consumption = clamp(seed.water_consumption - deviation, 0, 10)
 			generic_mutation_message("quivers!")
 
 		if("tox_increase")
@@ -306,7 +306,7 @@
 			if(!seed.alter_temp)
 				seed.alter_temp = 1
 				var/deviation = rand(severity*0.5,severity)*(prob(50) ? 3 : -3)
-				seed.heat_tolerance = Clamp(seed.heat_tolerance + (deviation*0.8), 1, 800)
+				seed.heat_tolerance = clamp(seed.heat_tolerance + (deviation*0.8), 1, 800)
 				seed.ideal_heat += deviation
 			else
 				seed.alter_temp = 0

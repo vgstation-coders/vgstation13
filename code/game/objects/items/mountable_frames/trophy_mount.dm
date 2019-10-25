@@ -38,8 +38,8 @@
 		if(params_list && params_list.len)
 			var/clamp_x = clicked.Width() / 2
 			var/clamp_y = clicked.Height() / 2
-			temp.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
-			temp.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
+			temp.pixel_x = clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
+			temp.pixel_y = clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
 
 		overlays += temp
 

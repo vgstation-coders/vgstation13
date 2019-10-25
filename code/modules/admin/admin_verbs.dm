@@ -1138,8 +1138,8 @@ var/list/admin_verbs_mod = list(
 			if(z_coord == null)
 				return
 
-			x_coord = Clamp(x_coord, 1, world.maxx)
-			y_coord = Clamp(y_coord, 1, world.maxy)
+			x_coord = clamp(x_coord, 1, world.maxx)
+			y_coord = clamp(y_coord, 1, world.maxy)
 
 		if(ML_LOAD_TO_Z2)
 			if(!dungeon_area)

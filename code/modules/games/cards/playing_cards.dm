@@ -19,7 +19,7 @@
 /datum/context_click/cardhand/action(obj/item/used_item, mob/user, params)
 	var/obj/item/toy/cardhand/hand = holder
 	if(!used_item)
-		var/index = Clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
+		var/index = clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
 		var/obj/item/toy/singlecard/card = hand.currenthand[index]
 		hand.currenthand.Remove(card)
 		user.put_in_hands(card)
@@ -29,7 +29,7 @@
 			qdel(hand)
 			user.put_in_inactive_hand(C)
 	else if(istype(used_item, /obj/item/toy/singlecard))
-		var/index = Clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
+		var/index = clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
 		hand.currenthand.Insert(index, used_item) //We put it where we specified
 		hand.update_icon()
 

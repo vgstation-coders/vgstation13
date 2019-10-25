@@ -643,7 +643,7 @@
 	if(E)
 		. += E.eyeprot
 
-	return Clamp(., -2, 2)
+	return clamp(., -2, 2)
 
 
 /mob/living/carbon/human/IsAdvancedToolUser()

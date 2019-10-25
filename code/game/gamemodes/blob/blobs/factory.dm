@@ -103,7 +103,7 @@
 
 /mob/living/simple_animal/hostile/blobspore/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	..()
-	adjustBruteLoss(Clamp(0.01 * exposed_temperature, 1, 5))
+	adjustBruteLoss(clamp(0.01 * exposed_temperature, 1, 5))
 
 /mob/living/simple_animal/hostile/blobspore/blob_act()
 	return

@@ -70,7 +70,7 @@
 		return
 	var/changes = FALSE
 	var/changeby = chem_charges
-	chem_charges = Clamp(chem_charges + chem_recharge_rate, 0, chem_storage)
+	chem_charges = clamp(chem_charges + chem_recharge_rate, 0, chem_storage)
 	if(chem_charges != changeby)
 		changes = TRUE
 	changeby = geneticdamage
@@ -311,7 +311,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 // 	genomecost = 1
 // 	allowduringlesserform = 1
 // 	verbpath = /obj/item/verbs/changeling/proc/changeling_chemspit
-	
+
 /datum/power_holder
 	var/datum/role/R
 	var/list/purchasedpowers = list()

@@ -136,7 +136,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 		toggle_power()
 	if(href_list["set_draw"])
 		consumption = input("Megajoules to draw per tick: ", "1MW = 1000kW = 1000000W", consumption/MEGAWATT) as num
-		consumption = round(Clamp(consumption*MEGAWATT, 0, 2*GIGAWATT)) //we're storing the actual number of watts but only displaying the users the mw conversion
+		consumption = round(clamp(consumption*MEGAWATT, 0, 2*GIGAWATT)) //we're storing the actual number of watts but only displaying the users the mw conversion
 	if(href_list["synth"])
 		locate_data(href_list["synth"]) //Even though the list contains a path, hrefs only pass text so let's use name here instead of path
 	if(href_list["category"])
