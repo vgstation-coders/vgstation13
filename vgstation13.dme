@@ -133,6 +133,7 @@
 #include "code\_onclick\hud\hologram.dm"
 #include "code\_onclick\hud\hud.dm"
 #include "code\_onclick\hud\human.dm"
+#include "code\_onclick\hud\map_popups.dm"
 #include "code\_onclick\hud\martian.dm"
 #include "code\_onclick\hud\mommi.dm"
 #include "code\_onclick\hud\monkey.dm"
