@@ -22,7 +22,7 @@ DBConnection/New(dbi_handler,username,password_handler,cursor_handler)
 
 DBConnection/proc/Connect(dbi_handler=src.dbi,user_handler=src.user,password_handler=src.password,cursor_handler)
 	//if(!src) return 0
-	if(!sqllogging || !src)
+	if(!src)
 		return 0
 	cursor_handler = src.default_cursor
 	if(!cursor_handler)
@@ -32,7 +32,7 @@ DBConnection/proc/Connect(dbi_handler=src.dbi,user_handler=src.user,password_han
 DBConnection/proc/Disconnect() return _dm_db_close(_db_con)
 
 //IsConnected() return _dm_db_is_connected(_db_con)
-DBConnection/proc/IsConnected() return !sqllogging ? 0 : _dm_db_is_connected(_db_con)
+DBConnection/proc/IsConnected() return _dm_db_is_connected(_db_con)
 
 DBConnection/proc/Quote(str) return _dm_db_quote(_db_con,str)
 
@@ -86,7 +86,7 @@ DBQuery/proc/NextRow()
 DBQuery/proc/RowsAffected()
 	return _dm_db_rows_affected(_db_query)
 
-DBQuery/proc/RowCount() 
+DBQuery/proc/RowCount()
 	return _dm_db_row_count(_db_query)
 
 DBQuery/proc/ErrorMsg()
