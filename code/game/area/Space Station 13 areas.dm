@@ -28,7 +28,21 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	mouse_opacity = 0
 	luminosity = 0
 	var/lightswitch = 1
-	var/list/ambient_sounds = list(/datum/ambience/generic1,/datum/ambience/generic2,/datum/ambience/generic3,/datum/ambience/generic4,/datum/ambience/generic5,/datum/ambience/generic6,/datum/ambience/generic7,/datum/ambience/generic8,/datum/ambience/generic9,/datum/ambience/generic10,/datum/ambience/generic11,/datum/ambience/generic12,/datum/ambience/generic13,/datum/ambience/generic14)
+	var/list/ambient_sounds = list(
+		/datum/ambience/generic1,
+		/datum/ambience/generic2,
+		/datum/ambience/generic3,
+		/datum/ambience/generic4,
+		/datum/ambience/generic5,
+		/datum/ambience/generic6,
+		/datum/ambience/generic7,
+		/datum/ambience/generic8,
+		/datum/ambience/generic9,
+		/datum/ambience/generic10,
+		/datum/ambience/generic11,
+		/datum/ambience/generic12,
+		/datum/ambience/generic13,
+		/datum/ambience/generic14)
 	//note. the above sounds apply to literally every area. if it does not apply. null it out. the old code had this for every other area so I don't think it's an issue
 
 	//space sounds below - Figure this out.
@@ -835,7 +849,9 @@ proc/process_adminbus_teleport_locs()
 
 /area/maintenance
 	shuttle_can_crush = FALSE
-	ambient_sounds = list(/datum/ambience/maint1,/datum/ambience/maint2)
+	ambient_sounds = list(
+		/datum/ambience/maint1,
+		/datum/ambience/maint2)
 
 /area/maintenance/fpmaint
 	name = "Fore Port Maintenance"
@@ -1510,7 +1526,10 @@ proc/process_adminbus_teleport_locs()
 /area/medical/morgue
 	name = "\improper Morgue"
 	icon_state = "morgue"
-	ambient_sounds = list(/datum/ambience/ded1,/datum/ambience/ded2,/datum/ambience/mainmusic)
+	ambient_sounds = list(
+		/datum/ambience/ded1,
+		/datum/ambience/ded2,
+		/datum/ambience/mainmusic)
 
 /area/medical/coldstorage
 	name = "Morgue"
@@ -2301,7 +2320,10 @@ proc/process_adminbus_teleport_locs()
 	general_area_name = "Telecommunications Satellite"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
-	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 	flags = NO_PACIFICATION
 
 /area/tcommsat/entrance
@@ -2334,7 +2356,10 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/tcomsat
 	name = "\improper Satellite Entrance"
 	icon_state = "tcomsatlob"
-	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 	jammed=2
 	anti_ethereal=1
 	flags = NO_PACIFICATION
@@ -2343,12 +2368,18 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/tcomfoyer
 	name = "\improper Telecoms Foyer"
 	icon_state = "tcomsatentrance"
-	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 
 /area/turret_protected/tcomwest
 	name = "\improper Telecommunications Satellite West Wing"
 	icon_state = "tcomsatwest"
-	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 	jammed=2
 	anti_ethereal=1
 	flags = NO_PACIFICATION
@@ -2357,7 +2388,10 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/tcomeast
 	name = "\improper Telecommunications Satellite East Wing"
 	icon_state = "tcomsateast"
-	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 	jammed=2
 	anti_ethereal=1
 	flags = NO_PACIFICATION
@@ -2749,4 +2783,7 @@ var/list/the_station_areas = list (
 
 //for lack of a better spot and I couldn't be assed to find the definition of it.
 /area/mine
-	ambient_sounds = list(/datum/ambience/dorf,/datum/ambience/minecraft,/datum/ambience/torvusmusic)
+	ambient_sounds = list(
+		/datum/ambience/dorf,
+		/datum/ambience/minecraft,
+		/datum/ambience/torvusmusic)
