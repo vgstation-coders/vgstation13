@@ -138,9 +138,8 @@ var/const/SURROUND_CAP = 7
 		S.falloff = (falloff ? falloff : FALLOFF_SOUNDS)
 
 	src << S
-	if(stat == UNCONSCIOUS || sleeping > 0)
-		sleeping = max(0,sleeping - vol*0.05)
-		drowsyness = max(0,drowsyness - vol*0.1)
+	sleeping = max(0,sleeping - vol*0.05)
+	drowsyness = max(0,drowsyness - vol*0.05)
 
 /client/proc/playtitlemusic()
 	if(!ticker || !ticker.login_music || config.no_lobby_music)
