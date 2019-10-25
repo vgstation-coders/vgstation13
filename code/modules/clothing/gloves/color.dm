@@ -5,6 +5,7 @@
 	item_state = "yellow"
 	siemens_coefficient = 0
 	permeability_coefficient = 0.05
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	_color = "yellow"
 	species_fit = list(VOX_SHAPED)
 
