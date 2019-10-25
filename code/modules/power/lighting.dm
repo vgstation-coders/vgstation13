@@ -166,11 +166,11 @@ var/global/list/obj/machinery/light/alllights = list()
 	spawn_with_bulb = /obj/item/weapon/light/he
 
 /obj/machinery/light/he/broken
-	icon_state = "lhetube-broken"
+	icon_state = "lhetube-broken" //for the mapper
 	spawn_with_bulb = /obj/item/weapon/light/he/broken
 
 /obj/machinery/light/he/burned
-	icon_state = "lhetube-burned"
+	icon_state = "lhetube-burned" //for the mapper
 	spawn_with_bulb = /obj/item/weapon/light/he/burned
 
 /obj/machinery/light/small
@@ -635,8 +635,6 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/item/weapon/light/tube/he/burned
 	status = LIGHT_BURNED
-
-
 
 /obj/item/weapon/light/tube/large
 	w_class = W_CLASS_SMALL
