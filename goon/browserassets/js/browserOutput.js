@@ -210,10 +210,11 @@ function output(message, flag) {
 		}
 	}
 
-	//Url stuff
+/* 	//Url stuff
 	if (message.length && flag != 'preventLink') {
 		message = linkify(message);
-	}
+	} 
+*/
 
 	opts.messageCount++;
 
