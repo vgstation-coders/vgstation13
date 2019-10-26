@@ -748,7 +748,7 @@
 /obj/effect/landmark/corpse/captain/rig
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/capspace
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/capspace
 
 /obj/effect/landmark/corpse/waifu
 	name = "Waifu"

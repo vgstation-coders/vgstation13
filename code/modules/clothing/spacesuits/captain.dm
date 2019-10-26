@@ -1,30 +1,24 @@
 //Captain's Spacesuit
-/obj/item/clothing/head/helmet/space/capspace
+/obj/item/clothing/head/helmet/space/rig/capspace
 	name = "space helmet"
 	icon_state = "capspace_0"
 	item_state = "capspacehelmet"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment. Only for the most fashionable of military figureheads."
 	body_parts_covered = HEAD|EARS|EYES
 	permeability_coefficient = 0.01
-	pressure_resistance = 200 * ONE_ATMOSPHERE
 	armor = list(melee = 65, bullet = 50, laser = 50,energy = 25, bomb = 50, bio = 100, rad = 50)
 	allowed = list(/obj/item/device/flashlight)
 	light_power = 1.7
-	var/brightness_on = 4
-	var/on = 0
-	var/no_light = 0
-	actions_types = list(/datum/action/item_action/toggle_light)
+	brightness_on = 4
+	on = 0
+	no_light = 0
 	species_fit = list(VOX_SHAPED)
+	species_restricted = null
 
-/obj/item/clothing/head/helmet/space/capspace/attack_self(mob/user)
-	on = !on
+
+/obj/item/clothing/head/helmet/space/rig/capspace/update_icon()
 	icon_state = "capspace_[on]"
-	user.update_inv_head()
-
-	if(on)
-		set_light(brightness_on)
-	else
-		set_light(0)
+	return
 
 /obj/item/clothing/suit/space/rig/captain
 	name = "Captain's rig armor"
@@ -44,6 +38,7 @@
 	armor = list(melee = 65, bullet = 50, laser = 50, energy = 25, bomb = 50, bio = 100, rad = 50)
 	siemens_coefficient = 0.7
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	head_type = /obj/item/clothing/head/helmet/space/rig/capspace
 
 /obj/item/clothing/suit/armor/captain/old
 	icon_state = "oldcaparmor"
