@@ -123,6 +123,11 @@
 	desc = "A warning sign which reads 'SECURE AREA'."
 	icon_state = "securearea"
 
+/obj/structure/sign/parking
+	name = "PARKING AREA"
+	desc = "A sign which indicates that this is a designated area for parking vehicles."
+	icon_state = "parking"
+
 /obj/structure/sign/biohazard
 	name = "BIOHAZARD"
 	desc = "A warning sign which reads 'BIOHAZARD'."
