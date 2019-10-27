@@ -336,13 +336,17 @@
 	src.updateUsrDialog()
 	return
 
+/obj/machinery/r_n_d/server/derelict
+	name = "Derelict R&D Server"
+	id_with_upload_string = "6"
+	id_with_download_string = "6"
+	server_id = 3
 
 /obj/machinery/r_n_d/server/robotics
 	name = "Robotics R&D Server"
 	id_with_upload_string = "1;2"
 	id_with_download_string = "1;2;3;4;5"
 	server_id = 2
-
 
 /obj/machinery/r_n_d/server/core
 	name = "Core R&D Server"

@@ -1115,3 +1115,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	id = 5
 	req_access=list()
 	circuit = "/obj/item/weapon/circuitboard/rdconsole/pod"
+
+/obj/machinery/computer/rdconsole/derelict
+	name = "Derelict R&D Console"
+	id = 6
+	req_access=list()
+	circuit = "/obj/item/weapon/circuitboard/rdconsole/derelict"
