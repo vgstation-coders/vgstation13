@@ -86,25 +86,25 @@
 			if("where" in query_tree)
 				var/objs_temp = objs
 				objs = list()
-				for(var/datum/d in objs_temp)
+				for(var/d in objs_temp)
 					if(SDQL_expression(d, query_tree["where"]))
 						objs += d
 					CHECK_TICK
 
 			switch(query_tree[1])
 				if("call")
-					for(var/datum/d in objs)
+					for(var/d in objs)
 						SDQL_var(d, query_tree["call"][1], source = d)
 						CHECK_TICK
 
 				if("delete")
-					for(var/datum/d in objs)
+					for(var/d in objs)
 						qdel(d)
 						CHECK_TICK
 
 				if("select")
 					var/text = ""
-					for(var/datum/t in objs)
+					for(var/t in objs)
 						text += "<A HREF='?_src_=vars;Vars=\ref[t]'>\ref[t]</A>"
 						if(istype(t, /atom))
 							var/atom/a = t
@@ -121,12 +121,14 @@
 						else
 							text += ": [t]<br>"
 						CHECK_TICK
+					if(!text)
+						text = "None found."
 					usr << browse(text, "window=SDQL-result")
 
 				if("update")
 					if("set" in query_tree)
 						var/list/set_list = query_tree["set"]
-						for(var/datum/d in objs)
+						for(var/d in objs)
 							for(var/list/sets in set_list)
 								var/datum/temp = d
 								var/i = 0
@@ -252,13 +254,20 @@
 			if(istype(d, type))
 				out += d
 
+	//For non-atomic types, looping through world is not the same as looping without specifying a location.
+	//The only non-atoms one would often want to look at with SDQL are datums and clients, so those are handled here.
+	else if(location == world) //The parser implicitly sets the location to world if none is specified.
+		if(ispath(type, /datum))
+			for(var/datum/d)
+				if(istype(d, type))
+					out += d
+		else if(ispath(type, /client))
+			for(var/client/d)
+				if(istype(d, type))
+					out += d
+
 	else if(ispath(type, /client))
 		for(var/client/d in location)
-			if(istype(d, type))
-				out += d
-
-	else if(location == world) //The parser implicitly sets the location to world if none is specified.
-		for(var/datum/d) //Unlike all other types, looping through world and looping without a location are not equivalent for datums.
 			if(istype(d, type))
 				out += d
 
