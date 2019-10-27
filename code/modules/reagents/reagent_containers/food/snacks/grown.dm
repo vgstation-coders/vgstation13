@@ -224,7 +224,7 @@ var/list/special_fruits = list()
 		return 0
 
 	var/list/thingsweinjected = list()
-	var/injecting = Clamp(1, 3, potency/10)
+	var/injecting = clamp(1, 3, potency/10)
 
 	for(var/rid in seed.chems) //Only transfer reagents that the plant naturally produces, no injecting chloral into your nettles.
 		reagents.trans_id_to(H,rid,injecting)

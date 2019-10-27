@@ -477,7 +477,7 @@
 	if(!mode.executed_rules)
 		return FALSE
 		//We have nothing to investigate!
-	weight = Clamp(300/(population^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
+	weight = clamp(300/(population^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
 	//We don't cotton to freaks in highpop
 	return ..()
 

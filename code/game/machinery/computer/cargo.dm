@@ -349,7 +349,7 @@ For vending packs, see vending_packs.dm*/
 		var/crates = 1
 		if(multi)
 			var/tempcount = input(usr, "Amount:", "How many crates?", "") as num
-			crates = Clamp(round(text2num(tempcount)), 1, 20)
+			crates = clamp(round(text2num(tempcount)), 1, 20)
 
 		// Calculate money tied up in requests
 		var/total_money_req = 0
@@ -575,7 +575,7 @@ For vending packs, see vending_packs.dm*/
 		if(multi)
 			var/num_input = input(usr, "Amount:", "How many crates?", "") as num
 			// Maximum 20 crates ordered at a time
-			crates = Clamp(round(text2num(num_input)), 1, 20)
+			crates = clamp(round(text2num(num_input)), 1, 20)
 
 		// Calculate money tied up in usr's requests
 		var/total_money_req = 0

@@ -284,7 +284,7 @@
 		freq = sanitize_frequency(freq)
 
 		code = round(code)
-		code = Clamp(code, 0, 100)
+		code = clamp(code, 0, 100)
 
 		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.source = S

@@ -172,7 +172,7 @@ var/list/infected_contact_mobs = list()
 		var/datum/disease2/disease/D = disease.getcopy()
 		if (D.infectionchance > 10)
 			D.infectionchance = max(10, D.infectionchance - 10)//The virus gets weaker as it jumps from people to people
-		D.stage = Clamp(D.stage+D.stage_variance, 1, D.max_stage)
+		D.stage = clamp(D.stage+D.stage_variance, 1, D.max_stage)
 		D.log += "<br />[timestamp()] Infected [key_name(src)] [notes]. Infection chance now [D.infectionchance]%"
 		virus2["[D.uniqueID]-[D.subID]"] = D
 

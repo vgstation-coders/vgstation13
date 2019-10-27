@@ -181,10 +181,10 @@ var/stacking_limit = 90
 
 
 	var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
-	latejoin_injection_cooldown = round(Clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
+	latejoin_injection_cooldown = round(clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
 
 	var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
-	midround_injection_cooldown = round(Clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
+	midround_injection_cooldown = round(clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
 
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
 	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
@@ -477,7 +477,7 @@ var/stacking_limit = 90
 
 		if (injection_attempt())
 			var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
-			midround_injection_cooldown = round(Clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
+			midround_injection_cooldown = round(clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
 			var/list/drafted_rules = list()
 			var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
 			current_players[CURRENT_LIVING_PLAYERS] = living_players.Copy()
@@ -624,7 +624,7 @@ var/stacking_limit = 90
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
-			latejoin_injection_cooldown = round(Clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
+			latejoin_injection_cooldown = round(clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
 
 /datum/gamemode/dynamic/mob_destroyed(var/mob/M)
 	for (var/datum/dynamic_ruleset/DR in midround_rules)

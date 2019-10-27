@@ -100,7 +100,7 @@
 	if(!href_list["gyro"])
 		return
 
-	var/idx = Clamp(text2num(href_list["gyro"]), 1, linked_gyrotrons.len)
+	var/idx = clamp(text2num(href_list["gyro"]), 1, linked_gyrotrons.len)
 	var/obj/machinery/rust/gyrotron/gyro = linked_gyrotrons[idx]
 
 	if(!gyro || gyro.stat & (NOPOWER | BROKEN))
@@ -112,7 +112,7 @@
 			to_chat(usr, "<span class='warning'>That's not a valid number.</span>")
 			return 1
 
-		gyro.mega_energy = Clamp(new_val, 0.001, 0.01)
+		gyro.mega_energy = clamp(new_val, 0.001, 0.01)
 		gyro.active_power_usage = gyro.mega_energy * 100000000 //1 MW for 0.01 TJ, 100 KW for 0.001 TJ.
 
 		updateUsrDialog()
@@ -124,7 +124,7 @@
 			to_chat(usr, "<span class='warning'>That's not a valid number.</span>")
 			return 1
 
-		gyro.rate = Clamp(new_val, 10, 100)
+		gyro.rate = clamp(new_val, 10, 100)
 
 		updateUsrDialog()
 		return 1
@@ -135,7 +135,7 @@
 			to_chat(usr, "<span class='warning'>That's not a valid number.</span>")
 			return 1
 
-		gyro.frequency = Clamp(new_val, 1, 50000)
+		gyro.frequency = clamp(new_val, 1, 50000)
 
 		updateUsrDialog()
 		return 1

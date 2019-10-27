@@ -83,7 +83,7 @@
 		else if(M.held_items[i])
 			available_hands -= 1
 
-	available_hands = Clamp(available_hands, 0, 4)
+	available_hands = clamp(available_hands, 0, 4)
 
 	return available_hands
 

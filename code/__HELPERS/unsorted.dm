@@ -157,7 +157,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //Ensure the frequency is within bounds of what it should be sending/recieving at
 /proc/sanitize_frequency(var/f)
-	f = Clamp(round(f), 1201, 1599) // 120.1, 159.9
+	f = clamp(round(f), 1201, 1599) // 120.1, 159.9
 
 	if ((f % 2) == 0) //Ensure the last digit is an odd number
 		f += 1
@@ -598,8 +598,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // returns turf relative to A offset in dx and dy tiles
 // bound to map limits
 /proc/get_offset_target_turf(atom/A, dx, dy)
-	var/x = Clamp(A.x + dx, 1, world.maxx)
-	var/y = Clamp(A.y + dy, 1, world.maxy)
+	var/x = clamp(A.x + dx, 1, world.maxx)
+	var/y = clamp(A.y + dy, 1, world.maxy)
 
 	return locate(x, y, A.z)
 

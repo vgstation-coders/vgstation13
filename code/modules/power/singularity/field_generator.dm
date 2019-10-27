@@ -45,7 +45,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 	// Scale % power to % num_power_levels and truncate value
 	var/p_level = round(num_power_levels * power / field_generator_max_power, 1)
 	// Clamp between 0 and num_power_levels for out of range power values
-	p_level = Clamp(p_level, 0, num_power_levels)
+	p_level = clamp(p_level, 0, num_power_levels)
 	if(p_level)
 		overlays += image(icon = icon, icon_state = "+p[p_level]")
 

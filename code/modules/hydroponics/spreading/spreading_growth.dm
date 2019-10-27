@@ -99,7 +99,7 @@
 
 	if(is_mature() && neighbors.len && prob(spread_chance))
 		//spread to 1-3 adjacent turfs depending on yield trait.
-		var/max_spread = Clamp(round(seed.yield*3/14), 1, 3) // 3/14? Why?
+		var/max_spread = clamp(round(seed.yield*3/14), 1, 3) // 3/14? Why?
 
 		for(var/i in 1 to max_spread)
 			if(prob(spread_chance))

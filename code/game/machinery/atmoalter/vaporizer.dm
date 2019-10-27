@@ -166,10 +166,10 @@
 		investigation_log(I_ATMOS, "had its valve [on ? "opened" : "closed"] by [key_name(usr)].")
 	if(href_list["set_mixrate"])
 		mixrate = input("New mix rate", "Units of vapor salts per tick: ", mixrate) as num
-		mixrate = round(Clamp(mixrate, 0, 50))
+		mixrate = round(clamp(mixrate, 0, 50))
 	if(href_list["set_mixratio"])
 		mixratio = input("New mix ratio", "Percentage of oxygen to synthesize: ", mixratio) as num
-		mixratio = round(Clamp(mixratio, 0, 100))
+		mixratio = round(clamp(mixratio, 0, 100))
 	if(href_list["prepare_dump"])
 		if(!screen && !allowed(usr)) //This is pretty much only to dump now
 			return

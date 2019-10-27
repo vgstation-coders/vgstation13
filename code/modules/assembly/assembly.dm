@@ -137,7 +137,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 			return
 
 		if(L.len >= VALUE_VARIABLE_MAX)
-			new_value = Clamp(new_value, text2num(L[VALUE_VARIABLE_MIN]), text2num(L[VALUE_VARIABLE_MAX]))
+			new_value = clamp(new_value, text2num(L[VALUE_VARIABLE_MIN]), text2num(L[VALUE_VARIABLE_MAX]))
 
 	else if(L[VALUE_VARIABLE_TYPE] == VT_POINTER)
 		//When importing assembly frames, assemblies can't connect to stuff with a higher index (because it's not loaded yet)

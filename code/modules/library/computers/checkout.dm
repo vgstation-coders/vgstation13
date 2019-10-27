@@ -228,13 +228,13 @@
 		else
 			var/pn = text2num(href_list["pagenum"])
 			if(!isnull(pn))
-				page_num = Clamp(pn, 0, num_pages)
+				page_num = clamp(pn, 0, num_pages)
 
 	if(href_list["page"])
 		if(num_pages == 0)
 			page_num = 0
 		else
-			page_num = Clamp(text2num(href_list["page"]), 0, num_pages)
+			page_num = clamp(text2num(href_list["page"]), 0, num_pages)
 	if(href_list["settitle"])
 		var/newtitle = input("Enter a title to search for:") as text|null
 		if(newtitle)

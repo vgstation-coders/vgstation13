@@ -330,15 +330,17 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#define Clamp(x, y, z) 	min(max(x, y), z)
+#if DM_VERSION < 513
+#define clamp(x, y, z) 	min(max(x, y), z)
 //x is the number you want to clamp
 //y is the minimum
 //z is the maximum
+#endif
 
 //Returns 1 if the variable contains a protected list that can't be edited
 #define variable_contains_protected_list(var_name) (((var_name) == "contents") || ((var_name) == "locs") || ((var_name) == "vars"))
 
-#define CLAMP01(x) 		(Clamp(x, 0, 1))
+#define CLAMP01(x) 		(clamp(x, 0, 1))
 
 //CPU lag shit
 #define calculateticks(x)	x * world.tick_lag // Converts your ticks to proper tenths.

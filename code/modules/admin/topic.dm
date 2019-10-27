@@ -89,7 +89,7 @@
 		//testing("Lawtype: [lawtype]")
 		if(lawtype==1)
 			lawtype=text2num(input("Enter desired law priority. (15-50)","Priority", 15) as num)
-			lawtype=Clamp(lawtype,15,50)
+			lawtype=clamp(lawtype,15,50)
 		var/newlaw = copytext(sanitize(input(usr, "Please enter a new law for the AI.", "Freeform Law Entry", "")),1,MAX_MESSAGE_LEN)
 		if(newlaw=="")
 			return
@@ -2416,7 +2416,7 @@
 		if(new_amount == null)
 			return
 
-		new_amount = Clamp(new_amount, 0, max_hands)
+		new_amount = clamp(new_amount, 0, max_hands)
 
 		M.set_hand_amount(new_amount)
 		to_chat(usr, "<span class='info'>Changed [M]'s amount of hands to [new_amount].</span>")
@@ -3068,7 +3068,7 @@
 			alert("Removed:\n" + jointext(removed_paths, "\n"))
 
 		var/list/offset = splittext(href_list["offset"],",")
-		var/number = Clamp(text2num(href_list["object_count"]), 1, 100)
+		var/number = clamp(text2num(href_list["object_count"]), 1, 100)
 		var/X = offset.len > 0 ? text2num(offset[1]) : 0
 		var/Y = offset.len > 1 ? text2num(offset[2]) : 0
 		var/Z = offset.len > 2 ? text2num(offset[3]) : 0

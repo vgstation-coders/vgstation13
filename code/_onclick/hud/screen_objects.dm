@@ -73,7 +73,7 @@
 	if (!G) return
 	var/list/params_list = params2list(params)
 	if (params_list.len)
-		var/new_aim = Clamp(text2num(params_list["icon-y"]), 0, 480)
+		var/new_aim = clamp(text2num(params_list["icon-y"]), 0, 480)
 		if (new_aim>6)
 			G.aim = new_aim
 			G.update_aim()
@@ -296,8 +296,8 @@
 	var/view = world.view
 	if(user && user.client)
 		view = user.client.view
-	X = Clamp((origin.x + text2num(X) - (view + 1)), 1, world.maxx)
-	Y = Clamp((origin.y + text2num(Y) - (view + 1)), 1, world.maxy)
+	X = clamp((origin.x + text2num(X) - (view + 1)), 1, world.maxx)
+	Y = clamp((origin.y + text2num(Y) - (view + 1)), 1, world.maxy)
 	return locate(X, Y, origin.z)
 
 /obj/abstract/screen/Click(location, control, params)

@@ -78,7 +78,7 @@ proc/arctan(x)
 
 //Moved to macros.dm to reduce pure calling overhead, this was being called shitloads, like, most calls of all procs.
 /*
-/proc/Clamp(const/val, const/min, const/max)
+/proc/clamp(const/val, const/min, const/max)
 	if (val <= min)
 		return min
 
@@ -188,7 +188,7 @@ proc/arctan(x)
 /proc/unmix(x, a, b, min = 0, max = 1)
 	if(a==b)
 		return 1
-	return Clamp( (b - x)/(b - a), min, max )
+	return clamp( (b - x)/(b - a), min, max )
 
 /proc/Mean(...)
 	var/values 	= 0

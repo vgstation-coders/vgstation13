@@ -14,13 +14,13 @@
 /obj/item/clothing/suit/armor/plate_carrier/get_armor(var/type)
 	var/armor_value = armor[type]
 	if(P)
-		armor_value = armor[type] <= 0 ? P.armor[type] : Clamp((armor[type]+P.armor[type])/2, armor[type], 100)
+		armor_value = armor[type] <= 0 ? P.armor[type] : clamp((armor[type]+P.armor[type])/2, armor[type], 100)
 	return armor_value
 
 /obj/item/clothing/suit/armor/plate_carrier/get_armor_absorb(var/type)
 	var/armor_value = armor_absorb[type]
 	if(P)
-		armor_value = armor_absorb[type] <= 0 ? P.armor_absorb[type] : Clamp((armor_absorb[type]+P.armor_absorb[type])/2, armor_absorb[type], 100)
+		armor_value = armor_absorb[type] <= 0 ? P.armor_absorb[type] : clamp((armor_absorb[type]+P.armor_absorb[type])/2, armor_absorb[type], 100)
 	return armor_value
 
 /obj/item/clothing/suit/armor/plate_carrier/equipped(var/mob/user, var/slot)

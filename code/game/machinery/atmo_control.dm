@@ -517,7 +517,7 @@ font-weight:bold;
 		var/response=input(usr,"Set new pressure, in kPa. \[0-[50*ONE_ATMOSPHERE]\]") as num
 		var/oldpressure = pressure_setting
 		pressure_setting = text2num(response)
-		pressure_setting = Clamp(pressure_setting, 0, 50*ONE_ATMOSPHERE)
+		pressure_setting = clamp(pressure_setting, 0, 50*ONE_ATMOSPHERE)
 		investigation_log(I_ATMOS,"'s output pressure set to [pressure_setting] from [oldpressure] by [key_name(usr)]")
 
 	if(!radio_connection)
@@ -537,7 +537,7 @@ font-weight:bold;
 		input_info = null
 		var/new_rate=input("Enter the new volume rate of the injector:","Injector Rate") as num
 		new_rate = text2num(new_rate)
-		new_rate = Clamp(new_rate, 0, new_rate)
+		new_rate = clamp(new_rate, 0, new_rate)
 		signal.data = list ("tag" = input_tag, "set_volume_rate"=new_rate)
 
 	else if(href_list["out_refresh_status"])

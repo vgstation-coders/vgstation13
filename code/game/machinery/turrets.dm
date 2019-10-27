@@ -569,7 +569,7 @@
 				if(src)
 					src.process()
 	if(href_list["scan_range"])
-		src.scan_range = Clamp(src.scan_range + text2num(href_list["scan_range"]), 1, 8)
+		src.scan_range = clamp(src.scan_range + text2num(href_list["scan_range"]), 1, 8)
 	if(href_list["scan_for"])
 		if(href_list["scan_for"] in scan_for)
 			scan_for[href_list["scan_for"]] = !scan_for[href_list["scan_for"]]

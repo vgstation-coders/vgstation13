@@ -550,7 +550,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		//Having an infection raises your body temperature
 		var/fever_temperature = (owner.species.heat_level_1 - owner.species.body_temperature - 5)* min(germ_level/INFECTION_LEVEL_TWO, 1) + owner.species.body_temperature
 		//Need to make sure we raise temperature fast enough to get around environmental cooling preventing us from reaching fever_temperature
-		owner.bodytemperature += Clamp((fever_temperature - T20C) / BODYTEMP_COLD_DIVISOR + 1, 0, fever_temperature - owner.bodytemperature)
+		owner.bodytemperature += clamp((fever_temperature - T20C) / BODYTEMP_COLD_DIVISOR + 1, 0, fever_temperature - owner.bodytemperature)
 
 		if(prob(round(germ_level/10)))
 			if(antibiotics < 5)

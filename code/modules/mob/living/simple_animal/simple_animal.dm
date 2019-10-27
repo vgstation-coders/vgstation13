@@ -567,7 +567,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(purge)
 		damage = damage * 2
 
-	health = Clamp(health - damage, 0, maxHealth)
+	health = clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		death()
 
@@ -582,7 +582,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-	health = Clamp(health - damage, 0, maxHealth)
+	health = clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		death()
 

@@ -4098,7 +4098,7 @@
 
 	data++
 
-	var/stench_radius = Clamp(data * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 life ticks
+	var/stench_radius = clamp(data * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 life ticks
 
 	if(prob(5)) //5% chance of stinking per life()
 		for(var/mob/living/carbon/C in oview(stench_radius, M)) //All other carbons in 4 tile radius (excluding our mob)
@@ -6634,7 +6634,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = PASSIONE
 	description = "Rejuvenating!"
 	nutriment_factor = 3 * REAGENTS_METABOLISM //because honey
-	
+
 /datum/reagent/drink/coffee/passione/on_mob_life(var/mob/living/M)
 	..()
 

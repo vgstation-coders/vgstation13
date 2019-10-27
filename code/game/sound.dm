@@ -127,10 +127,10 @@ var/const/SURROUND_CAP = 7
 		var/turf/T = get_turf(src)
 
 		var/dx = turf_source.x - T.x // Hearing from the right/left
-		S.x = round(Clamp(dx, -SURROUND_CAP, SURROUND_CAP), 1)
+		S.x = round(clamp(dx, -SURROUND_CAP, SURROUND_CAP), 1)
 
 		var/dz = turf_source.y - T.y // Hearing from infront/behind
-		S.z = round(Clamp(dz, -SURROUND_CAP, SURROUND_CAP), 1)
+		S.z = round(clamp(dz, -SURROUND_CAP, SURROUND_CAP), 1)
 
 		// The y value is for above your head, but there is no ceiling in 2d spessmens.
 		S.y = 1

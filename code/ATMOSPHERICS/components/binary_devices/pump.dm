@@ -126,7 +126,7 @@ air2.volume
 		if("power")
 			on = text2num(signal.data["value"])
 		if("set_target_pressure")
-			target_pressure = Clamp(text2num(signal.data["value"]), 0, MAX_PRESSURE)
+			target_pressure = clamp(text2num(signal.data["value"]), 0, MAX_PRESSURE)
 			investigation_log(I_ATMOS, "was set to [target_pressure] kPa by a remote signal.")
 	if("status" in signal.data)
 		spawn(2)

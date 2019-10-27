@@ -17,7 +17,7 @@
 	var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
 	if (!istype(C))
 		return
-	C.integrity = Clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
+	C.integrity = clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
 
 /obj/item/weapon/circuitboard/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
 	if(issolder(W))
@@ -70,7 +70,7 @@
 	dat = {"
 		<p>[temp]</p>
 		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[toggled ? "On" : "Off"]</a></p>
-		<p><b>Integrity:</b> [Clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
+		<p><b>Integrity:</b> [clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
 	"}
 	if(on && toggled)
 		dat += {"
