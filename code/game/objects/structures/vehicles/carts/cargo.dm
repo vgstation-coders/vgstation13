@@ -4,6 +4,13 @@
 /obj/machinery/cart/cargo
 	name = "cargo cart"
 
+/obj/machinery/cart/cargo/relaymove(mob/user)
+	unload()
+	user.visible_message("<span class='warning'>[user] stumbles while trying to get off \the [src]</span>", \
+						 "<span class='warning'>You stumble while trying to get off \the [src]. Be more careful next time.</span>")
+	user.Knockdown(4)
+	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+	
 /obj/machinery/cart/cargo/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
 	if(user.incapacitated() || user.lying)
