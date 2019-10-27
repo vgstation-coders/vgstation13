@@ -18,6 +18,9 @@
 
 	immune_system = new (src)
 
+	on_resist = new(owner = src)
+	on_life = new(owner = src)
+
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
 		for(var/image/I in static_overlays)
@@ -801,11 +804,6 @@ Thanks.
 
 /mob/living
 	var/event/on_resist
-
-/mob/living/New()
-	. = ..()
-	on_resist = new(owner = src)
-	on_life = new(owner = src)
 
 /mob/living/verb/resist()
 	set name = "Resist"
