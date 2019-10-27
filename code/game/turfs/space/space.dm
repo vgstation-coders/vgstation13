@@ -190,7 +190,7 @@
 	return
 
 /turf/space/void
-	name = "the void"
+	name = "\proper the void"
 	icon_state = "void"
 	desc = "The final final frontier."
 	plane = ABOVE_PARALLAX_PLANE
