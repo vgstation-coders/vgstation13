@@ -355,7 +355,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		var/newval = input("Enter new injection rate") as num|null
 		if(isnull(newval))
 			return 0
-		inject_rate = Clamp(newval, 0, inject_rate_max)
+		inject_rate = clamp(newval, 0, inject_rate_max)
 		return 1
 
 	if(href_list["toggle_inject"])
