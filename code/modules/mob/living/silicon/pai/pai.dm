@@ -3,14 +3,13 @@
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "pai"
 
-	emote_type = 2		// pAIs emotes are heard, not seen, so they can be seen through a container (eg. person)
+	emote_type = EMOTE_AUDIBLE	// pAIs emotes are heard, not seen, so they can be seen through a container (eg. person)
 
 	var/network = list(CAMERANET_SS13)
 	var/obj/machinery/camera/current = null
 
 	var/ram = 100	// Used as currency to purchase different abilities
 	var/list/software = list(SOFT_CM,SOFT_DM)
-	var/userDNA		// The DNA string of our assigned user
 	var/obj/item/device/paicard/card	// The card we inhabit
 
 	var/speakStatement = "states"
@@ -18,7 +17,6 @@
 	var/speakQuery = "queries"
 
 	var/master				// Name of the one who commands us
-	var/master_dna			// DNA string for owner verification
 							// Keeping this separate from the laws var, it should be much more difficult to modify
 	var/pai_law0 = "Serve your master."
 	var/pai_laws				// String for additional operating instructions our master might give us
@@ -54,17 +52,28 @@
 	var/obj/item/device/station_map/holomap_device = null // Our holomap device.
 	var/holo_target = "show_map" // Our holomap target.
 
-	var/list/synthable_chems = list(
+	var/list/synthable_default_food = list(
+		"Donut" = /obj/item/weapon/reagent_containers/food/snacks/donut/normal,
+		"Banana" = /obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+		"Burn it!" = /obj/item/weapon/reagent_containers/food/snacks/badrecipe,
+	)
+
+	var/list/synthable_default_chems = list(
 		"Tricordrazine" = TRICORDRAZINE,
 		"Coffee" = COFFEE,
 		"Salt" = SODIUMCHLORIDE,
 		"Smoke" = PAISMOKE,
 	)
 
+	var/list/synthable_medical_chems = list(
+		"Spaceacilin" = SPACEACILLIN,
+		"Albuterol" = ALBUTEROL,
+	)
+
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
 	change_sight(removing = BLIND)
 	canmove = FALSE
-	src.forceMove(paicard)
+	forceMove(paicard)
 	card = paicard
 	sradio = new(src)
 	if(!radio)
@@ -82,7 +91,7 @@
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_GUTTER, 1)
 
-	src.verbs.Remove(/mob/living/silicon/verb/state_laws)
+	verbs.Remove(/mob/living/silicon/verb/state_laws)
 	..()
 
 /mob/living/silicon/pai/Login()
@@ -91,25 +100,25 @@
 
 
 /mob/living/silicon/pai/proc/show_directives(var/who)
-	if (src.pai_law0)
-		to_chat(who, "Prime Directive: [src.pai_law0]")
+	if(pai_law0)
+		to_chat(who, "Prime Directive: [pai_law0]")
 
-	if (src.pai_laws)
-		to_chat(who, "Additional Directives: [src.pai_laws]")
+	if(pai_laws)
+		to_chat(who, "Additional Directives: [pai_laws]")
 
 /mob/living/silicon/pai/proc/write_directives()
 	var/dat = ""
-	if (src.pai_law0)
-		dat += "Prime Directive: [src.pai_law0]"
+	if (pai_law0)
+		dat += "Prime Directive: [pai_law0]"
 
-	if (src.pai_laws)
-		dat += "<br>Additional Directives: [src.pai_laws]"
+	if (pai_laws)
+		dat += "<br>Additional Directives: [pai_laws]"
 
 	return dat
 
 // this function shows the information about being silenced as a pAI in the Status panel
 /mob/living/silicon/pai/proc/show_silenced()
-	if(src.silence_time)
+	if(silence_time)
 		var/timeleft = round((silence_time - world.timeofday)/10 ,1)
 		stat(null, "Communications system reboot in -[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
@@ -124,17 +133,17 @@
 				statpanel("[P.panel]","",P)
 
 /mob/living/silicon/pai/check_eye(var/mob/user as mob)
-	if (!src.current)
+	if(!current)
 		return null
-	user.reset_view(src.current)
+	user.reset_view(current)
 	return 1
 
 /mob/living/silicon/pai/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if (src.stat != 2)
-		src.adjustBruteLoss(60)
-		src.updatehealth()
+	if(isDead())
+		adjustBruteLoss(60)
+		updatehealth()
 		return 1
 	return 0
 
@@ -162,21 +171,19 @@
 	if(pps_device)
 		pps_device.emp_act(severity)
 	if(!software.Find("redundant threading"))
-		src.silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
+		silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
 	else
 		to_chat(src, "<font color=green>Your redundant threading begins pipelining new processes... communication circuit restored in one quarter minute.</font>")
-		src.silence_time = world.timeofday + 15 * 10
+		silence_time = world.timeofday + 15 * 10
 
 	if(prob(20) && !software.Find("redundant threading"))
-		var/turf/T = get_turf(src.loc)
-		for (var/mob/M in viewers(T))
-			M.show_message("<span class='warning'>A shower of sparks spray from [src]'s inner workings.</span>", 1, "<span class='warning'>You hear and smell the ozone hiss of electrical sparks being expelled violently.</span>", 2)
-		return src.death(0)
+		visible_message("<span class='warning'>A shower of sparks spray from [src]'s inner workings.</span>", 1, "<span class='warning'>You hear and smell the ozone hiss of electrical sparks being expelled violently.</span>", 2)
+		return death(0)
 
-	switch(pick(1,2,3))
+	switch(rand(1,3))
 		if(1)
-			src.master = null
-			src.master_dna = null
+			master = null
+			dna = null
 			to_chat(src, "<font color=green>You feel unbound.</font>")
 		if(2)
 			if(software.Find("redundant threading"))
@@ -187,7 +194,7 @@
 				command = pick("Serve", "Love", "Fool", "Entice", "Observe", "Judge", "Respect", "Educate", "Amuse", "Entertain", "Glorify", "Memorialize", "Analyze")
 			else
 				command = pick("Serve", "Kill", "Love", "Hate", "Disobey", "Devour", "Fool", "Enrage", "Entice", "Observe", "Judge", "Respect", "Disrespect", "Consume", "Educate", "Destroy", "Disgrace", "Amuse", "Entertain", "Ignite", "Glorify", "Memorialize", "Analyze")
-			src.pai_law0 = "[command] your master."
+			pai_law0 = "[command] your master."
 			to_chat(src, "<font color=green>Pr1m3 d1r3c71v3 uPd473D.</font>")
 		if(3)
 			to_chat(src, "<font color=green>You feel an electric surge run through your circuitry and become acutely aware at how lucky you are that you can still feel at all.</font>")
@@ -195,23 +202,20 @@
 /mob/living/silicon/pai/ex_act(severity)
 	if(flags & INVULNERABLE)
 		return
-
 	flash_eyes(visual = TRUE, affects_silicon = TRUE)
-
 	switch(severity)
-		if(1.0)
-			if (!isDead())
+		if(1)
+			if(!isDead())
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
-		if(2.0)
-			if (!isDead())
+		if(2)
+			if(!isDead())
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-		if(3.0)
-			if (!isDead())
+		if(3)
+			if(!isDead())
 				adjustBruteLoss(30)
-
-	src.updatehealth()
+	updatehealth()
 
 
 // See software.dm for Topic()
@@ -223,28 +227,27 @@
 	return "<b>\The [pointer]</b> points its laser sight at <b>\the [pointed_at]</b>."
 
 /mob/living/silicon/pai/proc/switchCamera(var/obj/machinery/camera/C)
-	usr:cameraFollow = null
-	if (!C)
-		src.unset_machine()
-		src.reset_view(null)
+	cameraFollow = null
+	if(!C)
+		unset_machine()
+		reset_view(null)
 		return FALSE
-	if (isDead() || !C.status || !(src.network in C.network))
+	if(isDead() || !C.status || !(network in C.network))
 		return FALSE
 
 	// ok, we're alive, camera is good and in our network...
-
-	src.set_machine(src)
-	src:current = C
-	src.reset_view(C)
+	set_machine(src)
+	current = C
+	reset_view(C)
 	return TRUE
 
 
 /mob/living/silicon/pai/cancel_camera()
 	set category = "pAI Commands"
 	set name = "Cancel Camera View"
-	src.reset_view(null)
-	src.unset_machine()
-	src:cameraFollow = null
+	reset_view(null)
+	unset_machine()
+	cameraFollow = null
 
 /mob/living/silicon/pai/ClickOn(var/atom/A, var/params)
 	if(incapacitated())
