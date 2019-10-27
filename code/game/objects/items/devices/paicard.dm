@@ -7,7 +7,7 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_PROGRAMMING + "=2"
-	var/looking_for_personality = 0
+	var/looking_for_personality = FALSE
 	var/mob/living/silicon/pai/pai
 	var/last_ping_time = 0
 	var/ping_cooldown = 5 SECONDS
