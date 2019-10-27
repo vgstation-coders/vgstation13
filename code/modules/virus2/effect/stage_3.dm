@@ -520,3 +520,13 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		else
 			to_chat(mob, "<span class = 'notice'>Your pupils dilate further.</span>")
 
+/datum/disease2/effect/colorsmoke
+	name = "Colorful Smoke"
+	desc = "Causes the infected to synthesize smoke & rainbow colourant."
+	stage = 3
+	badness = EFFECT_DANGER_HARMFUL
+
+/datum/disease2/effect/colorsmoke/activate(var/mob/living/mob)
+	to_chat(mob, "<span class='notice'>You feel colorful!</span>")
+	mob.reagents.add_reagent(COLORFUL_REAGENT, 5)
+	mob.reagents.add_reagent(PAISMOKE, 5)
