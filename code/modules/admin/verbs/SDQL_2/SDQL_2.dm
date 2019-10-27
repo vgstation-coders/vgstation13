@@ -255,7 +255,7 @@
 				out += d
 
 	//For non-atomic types, looping through world is not the same as looping without specifying a location.
-	//The only non-atoms one would often want to look at with SDQL are datums and clients, so those are handled here.
+	//The only non-atoms one would often want to use with SDQL are datums and clients, so those are handled here.
 	else if(location == world) //The parser implicitly sets the location to world if none is specified.
 		if(ispath(type, /datum))
 			for(var/datum/d)
