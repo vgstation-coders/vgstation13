@@ -42,6 +42,14 @@
 		qdel(immune_system)
 		immune_system = null
 
+	if(on_resist)
+		qdel(on_resist)
+		on_resist = null
+
+	if(on_life)
+		qdel(on_life)
+		on_life = null
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -798,13 +806,6 @@ Thanks.
 	. = ..()
 	on_resist = new(owner = src)
 	on_life = new(owner = src)
-
-/mob/living/Destroy()
-	. = ..()
-	qdel(on_resist)
-	on_resist = null
-	qdel(on_life)
-	on_life = null
 
 /mob/living/verb/resist()
 	set name = "Resist"
