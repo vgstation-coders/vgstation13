@@ -328,7 +328,7 @@ var/area/space_area
 	var/list/ambience_list = list()
 	ambience_list.Add(ambient_sounds)
 	for(var/mob/living/silicon/ai/AI in player_list)
-		if(get_area(AI) == src)
+		if(get_area(AI) == src && !find_active_faction_by_type(/datum/faction/malf))
 			ambience_list.Add(/datum/ambience/AI, /datum/ambience/AI/safe, /datum/ambience/AI/back)
 			if(AI?.laws.name == "Asimov's Three Laws of Robotics")
 				ambience_list.Add(/datum/ambience/AI/harmonica)

@@ -145,7 +145,7 @@
 /datum/ambience/AI/harmonica
 	sound = 'sound/ambience/ambimalf4.ogg'
 	length = 14 SECONDS + 5 MINUTES
-	prob_fire = 50
+	prob_fire = 10
 
 
 //engineering ambience
