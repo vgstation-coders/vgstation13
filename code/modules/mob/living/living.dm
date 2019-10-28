@@ -18,6 +18,9 @@
 
 	immune_system = new (src)
 
+	on_resist = new(owner = src)
+	on_life = new(owner = src)
+
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
 		for(var/image/I in static_overlays)
@@ -41,6 +44,14 @@
 	if(immune_system)
 		qdel(immune_system)
 		immune_system = null
+
+	if(on_resist)
+		qdel(on_resist)
+		on_resist = null
+
+	if(on_life)
+		qdel(on_life)
+		on_life = null
 
 	. = ..()
 
@@ -793,18 +804,6 @@ Thanks.
 
 /mob/living
 	var/event/on_resist
-
-/mob/living/New()
-	. = ..()
-	on_resist = new(owner = src)
-	on_life = new(owner = src)
-
-/mob/living/Destroy()
-	. = ..()
-	qdel(on_resist)
-	on_resist = null
-	qdel(on_life)
-	on_life = null
 
 /mob/living/verb/resist()
 	set name = "Resist"
