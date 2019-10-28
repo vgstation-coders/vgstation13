@@ -341,6 +341,7 @@ var/global/list/status_display_images = list(
 	name = "AI display"
 	anchored = 1
 	density = 0
+	layer = ABOVE_WINDOW_LAYER
 
 	var/spookymode=0 // Ghosts
 
