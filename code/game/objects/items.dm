@@ -517,7 +517,7 @@
 						return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_belt)
-				if(!H.w_uniform)
+				if(!H.w_uniform && !istype(src, /obj/item/weapon/storage/belt))
 					if(!disable_warning)
 						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return CANNOT_EQUIP
