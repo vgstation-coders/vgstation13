@@ -981,3 +981,21 @@
 	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater(src)
 	new /obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer(src)
 	new /obj/item/weapon/paper/diy_soda(src)
+
+/obj/item/weapon/storage/box/corgi_hats
+	name = "corgi hat kit"
+	desc = "A set of hats compatible with corgis."
+
+/obj/item/weapon/storage/box/corgi_hats/New()
+	..()
+	var/list/corgi_hats = list(/obj/item/clothing/head/helmet/tactical/sec,/obj/item/clothing/head/collectable/chef,
+					/obj/item/clothing/head/collectable/captain,/obj/item/clothing/head/kitty/collectable,
+					/obj/item/clothing/head/collectable/rabbitears,/obj/item/clothing/head/collectable/beret,
+					/obj/item/clothing/head/collectable/pirate,/obj/item/clothing/head/det_hat,
+					/obj/item/clothing/head/nursehat,/obj/item/clothing/head/ushanka,/obj/item/clothing/head/collectable/police,
+					/obj/item/clothing/head/collectable/wizard,/obj/item/clothing/head/cardborg,/obj/item/weapon/bedsheet,
+					/obj/item/clothing/head/christmas/santahat/red,/obj/item/clothing/head/soft,/obj/item/clothing/head/fedora,
+					/obj/item/clothing/head/fez,/obj/item/clothing/head/alien_antenna,/obj/item/clothing/head/franken_bolt)
+	for(var/i = 1 to BOX_SPACE)
+		var/path = pick_n_take(corgi_hats)
+		new path(src)

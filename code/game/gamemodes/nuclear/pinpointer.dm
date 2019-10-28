@@ -23,6 +23,7 @@ var/list/pinpointerpinpointer_list = list()
 	pinpointer_list.Add(src)
 	if (pinpointable == TRUE)
 		pinpointerpinpointer_list.Add(src)
+	critical_captaincy_equipment += src
 
 /obj/item/weapon/pinpointer/Destroy()
 	fast_objects -= src

@@ -142,6 +142,7 @@
 /obj/item/weapon/gun/energy/laser/captain/New()
 	..()
 	processing_objects.Add(src)
+	critical_captaincy_equipment += src
 
 
 /obj/item/weapon/gun/energy/laser/captain/Destroy()

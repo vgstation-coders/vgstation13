@@ -45,6 +45,10 @@
 	siemens_coefficient = 0.7
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
+/obj/item/clothing/suit/armor/captain/New()
+	..()
+	critical_captaincy_equipment += src
+
 /obj/item/clothing/suit/armor/captain/old
 	icon_state = "oldcaparmor"
 

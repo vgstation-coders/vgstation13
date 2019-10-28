@@ -62,6 +62,28 @@
 	else
 		return "Red Alert"
 
+var/list/captains_list = list(/obj/item/weapon/hand_tele,/obj/item/weapon/pinpointer,
+							/obj/item/weapon/gun/energy/laser/captain,/obj/item/clothing/suit/armor/captain)
+var/list/critical_captaincy_equipment = list() //This will populate with each of those items.
+/datum/job/captain/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	for(var/path in captains_list)
+		for(var/obj/item/I in critical_captaincy_equipment)
+			if(istype(I,path))
+				var/area/A = get_area(I)
+				if(istype(A,/area/crew_quarters/captain))
+					//Found a critical piece of gear in cap's office!
+					captains_list -= path
+					continue //move on to next item
+				//it wasn't here, continue checking
+		//after looping through every critical gear, check next item on list
+	for(var/path in captains_list)
+		//for each item still in the list, give one to the captain
+		H.equip_or_collect(new path(H.back), slot_in_backpack)
+	for(var/obj/machinery/computer/cloning/C in machines)
+		C.scan_mob(H)
+	to_chat(H,"<span class='danger'>Your DNA scan has been remotely transmitted ahead of you to genetics, assuming the department is functional.</span>")
+
 /datum/job/hop
 	title = "Head of Personnel"
 	flag = HOP
@@ -121,3 +143,8 @@
 		L.part = affected
 		H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/>")
 		return 1
+
+/datum/job/hop/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/weapon/storage/box/corgi_hats(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/lazarus_injector(H.back), slot_in_backpack)
