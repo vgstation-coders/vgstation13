@@ -68,9 +68,6 @@
 		if("Atmospheric Technician")
 			suit=/obj/item/clothing/suit/space/plasmaman/atmostech
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/atmostech
-		if("Warden","Security Officer")
-			suit=/obj/item/clothing/suit/space/plasmaman/security/
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/
 		if("Detective")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/detective
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/detective
