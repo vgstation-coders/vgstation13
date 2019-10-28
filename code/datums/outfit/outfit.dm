@@ -37,7 +37,7 @@
 	)
 
 	var/use_pref_bag = TRUE
-	var/give_disabilities_equipement = TRUE
+	var/give_disabilities_equipment = TRUE
 	var/equip_survival_gear = SURVIVAL_NORMAL
 
 	var/list/items_to_collect = list()
@@ -87,7 +87,7 @@
 	species_final_equip(H)
 	spawn_id(H)
 	post_equip(H) // Accessories, IDs, etc.
-	give_disabilities_equipement(H)
+	give_disabilities_equipment(H)
 	H.update_icons()
 
 /datum/outfit/proc/equip_backbag(var/mob/living/carbon/human/H)
@@ -166,8 +166,8 @@
 	return // Empty
 
 // -- Work in progress !!
-/datum/outfit/proc/give_disabilities_equipement(var/mob/living/carbon/human/H)
-	if (!give_disabilities_equipement)
+/datum/outfit/proc/give_disabilities_equipment(var/mob/living/carbon/human/H)
+	if (!give_disabilities_equipment)
 		return
 	
 	return 1
@@ -177,7 +177,7 @@
 // Then, call "equip_special_items(player)" to give him the items associated.
 
 /datum/outfit/striketeam/
-	give_disabilities_equipement = FALSE
+	give_disabilities_equipment = FALSE
 	var/is_leader = FALSE
 
 	var/list/specs = list()
@@ -194,22 +194,22 @@
 	var/list/to_equip = specs[chosen_spec]
 
 	for (var/slot_str in to_equip)
-		var/equipement = to_equip[slot_str]
+		var/equipment = to_equip[slot_str]
 
 		switch (slot_str)
 			if (ACCESSORY_ITEM) // It's an accesory. We put it in their hands if possible.
-				H.put_in_hands(new equipement(H))
+				H.put_in_hands(new equipment(H))
 
 			else // It's a concrete item.
 				var/slot = text2num(slot_str) // slots stored are STRINGS.
 
-				if (islist(equipement)) // List of things to equip
-					for (var/item in equipement)
-						for (var/i = 1 to equipement[item]) // Give them this much of that item
+				if (islist(equipment)) // List of things to equip
+					for (var/item in equipment)
+						for (var/i = 1 to equipment[item]) // Give them this much of that item
 							var/concrete_item = new item(H)
 							if (!H.equip_to_slot_or_drop(concrete_item, slot)) // Can't put them in the designate slot ? Put it in their hands.
 								H.put_in_hands(concrete_item)
 				else
-					var/concrete_item = new equipement(H)
+					var/concrete_item = new equipment(H)
 					if (!H.equip_to_slot_or_drop(concrete_item, slot))
 						H.put_in_hands(concrete_item)
