@@ -51,6 +51,8 @@
 /datum/job/cmo/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.equip_or_collect(new /obj/item/weapon/storage/belt/medical(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/switchtool/surgery(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/clothing/suit/straight_jacket(H.back), slot_in_backpack)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -124,7 +126,7 @@
 /datum/job/doctor/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.equip_or_collect(new /obj/item/weapon/storage/belt/medical(H.back), slot_in_backpack)
-
+	H.equip_or_collect(new /obj/item/weapon/switchtool/surgery(H.back), slot_in_backpack)
 
 //Chemist is a medical job damnit	//YEAH FUCK YOU SCIENCE	-Pete	//Guys, behave -Erro //No, fuck science
 /datum/job/chemist
@@ -176,6 +178,7 @@
 /datum/job/chemist/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.equip_or_collect(new /obj/item/weapon/storage/bag/chem(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/storage/box/chemistry_kit(H.back), slot_in_backpack)
 
 /datum/job/geneticist
 	title = "Geneticist"
@@ -222,6 +225,7 @@
 /datum/job/geneticist/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.equip_or_collect(new /obj/item/weapon/storage/belt/medical(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/dnainjector/nofail/remotesay(H.back), slot_in_backpack)
 
 /datum/job/virologist
 	title = "Virologist"

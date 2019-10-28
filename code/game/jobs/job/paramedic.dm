@@ -47,3 +47,7 @@
 /datum/job/paramedic/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.equip_or_collect(new /obj/item/weapon/storage/belt/medical(H.back), slot_in_backpack)
+	for(var/obj/item/weapon/card/id/ID in H.get_body_slots())
+		ID.access += list(access_morgue,access_surgery)
+	to_chat(H,"<span class='danger'>As a special incentive for your arrival, you have been granted morgue and surgery access.</span>")
+	//danger class to help this stand out from all the mass of blue and green text someone receives on arrival
