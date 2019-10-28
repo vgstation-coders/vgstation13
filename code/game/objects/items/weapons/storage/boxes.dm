@@ -18,6 +18,7 @@
  *
  *		For syndicate call-ins see uplink_kits.dm
  */
+ #define BOX_SPACE 7
 
 /obj/item/weapon/storage/box
 	name = "box"
@@ -29,7 +30,6 @@
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
-	storage_slots = 7
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
 
@@ -456,7 +456,6 @@
 	desc = "Drymate brand monkey cubes. Just add water!"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "monkeycubebox"
-	storage_slots = 7
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/monkeycube")
 
 /obj/item/weapon/storage/box/monkeycubes/New()
@@ -657,7 +656,7 @@
 
 /obj/item/weapon/storage/box/labels/New()
 	..()
-	for(var/i=1; i <= storage_slots; i++)
+	for(var/i=1; i <= BOX_SPACE; i++)
 		new /obj/item/device/label_roll(src)
 
 /obj/item/weapon/storage/box/wreath/wreath_bow
@@ -667,7 +666,7 @@
 
 /obj/item/weapon/storage/box/wreath/wreath_bow/New()
 	..()
-	for(var/i=1; i <= storage_slots; i++)
+	for(var/i=1; i <= BOX_SPACE; i++)
 		new /obj/item/mounted/frame/wreath/wreath_bow(src)
 
 /obj/item/weapon/storage/box/wreath/wreath_nobow
@@ -677,7 +676,7 @@
 
 /obj/item/weapon/storage/box/wreath/wreath_nobow/New()
 	..()
-	for(var/i=1; i <= storage_slots; i++)
+	for(var/i=1; i <= BOX_SPACE; i++)
 		new /obj/item/mounted/frame/wreath/wreath_nobow(src)
 
 /obj/item/weapon/storage/box/snappops
@@ -690,7 +689,7 @@
 
 /obj/item/weapon/storage/box/snappops/New()
 	..()
-	for(var/i=1; i <= storage_slots; i++)
+	for(var/i=1; i <= BOX_SPACE+1; i++)
 		new /obj/item/toy/snappop(src)
 
 /obj/item/weapon/storage/box/syndicatefake/space
@@ -720,7 +719,7 @@
 
 /obj/item/weapon/storage/box/autoinjectors/New()
 	..()
-	for (var/i; i < storage_slots; i++)
+	for (var/i; i < BOX_SPACE; i++)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 
 /obj/item/weapon/storage/box/mugs
