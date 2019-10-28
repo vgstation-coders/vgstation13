@@ -73,6 +73,10 @@
 				if("select", "delete", "update")
 					select_types = query_tree[query_tree[1]]
 
+			if("/datum" in select_types)
+				to_chat(usr, "<span class='danger'>Querying /datum is not supported. Please use a more specific type.</span>")
+				return
+
 
 			from_objs = SDQL_from_objs(query_tree["from"])
 			CHECK_TICK
