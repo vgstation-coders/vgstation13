@@ -640,6 +640,9 @@ var/list/one_way_windows
 /obj/structure/window/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/reinforced/clockwork, BRASS_WINDOW_GLOW)
 
+/obj/structure/window/oneway
+	one_way = 1
+
 /obj/structure/window/loose
 	anchored = 0
 	d_state = 0
@@ -654,6 +657,9 @@ var/list/one_way_windows
 	reinforced = 1
 	penetration_dampening = 3
 	disperse_coeff = 0.8
+
+/obj/structure/window/reinforced/oneway
+	one_way = 1
 
 /obj/structure/window/reinforced/loose
 	anchored = 0
@@ -673,6 +679,9 @@ var/list/one_way_windows
 	fire_volume_mod = 1000
 	disperse_coeff = 0.75
 
+/obj/structure/window/plasma/oneway
+	one_way = 1
+
 /obj/structure/window/plasma/loose
 	anchored = 0
 	d_state = 0
@@ -687,6 +696,9 @@ var/list/one_way_windows
 	health = 160
 	penetration_dampening = 7
 	disperse_coeff = 0.6
+
+/obj/structure/window/reinforced/plasma/oneway
+	one_way = 1
 
 /obj/structure/window/reinforced/plasma/loose
 	anchored = 0
