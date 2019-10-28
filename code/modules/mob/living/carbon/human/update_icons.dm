@@ -537,8 +537,8 @@ var/global/list/damage_icon_parts = list()
 
 	overlays -= obj_overlays[UNIFORM_LAYER]
 	if(!w_uniform)
-		// Automatically drop anything in store / id / belt if you're not wearing a uniform.	//CHECK IF NECESARRY
-		for( var/obj/item/thing in list(r_store, l_store, wear_id, belt) )						//
+		// Automatically drop anything in store / id if you're not wearing a uniform.	//CHECK IF NECESARRY
+		for( var/obj/item/thing in list(r_store, l_store, wear_id) )						//
 			if(thing)																			//
 				u_equip(thing,1)																//
 				if (client)																		//
