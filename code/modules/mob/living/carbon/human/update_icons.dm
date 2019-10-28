@@ -538,7 +538,7 @@ var/global/list/damage_icon_parts = list()
 	overlays -= obj_overlays[UNIFORM_LAYER]
 	if(!w_uniform)
 		var/list/drop_items = list(r_store, l_store, wear_id)
-		if(!istype(belt, /obj/item/weapon/storage/belt))
+		if(!isbelt(belt))
 			drop_items.Add(belt)
 		// Automatically drop anything in store / id if you're not wearing a uniform.	//CHECK IF NECESARRY
 		for( var/obj/item/thing in drop_items)						//

@@ -46,6 +46,8 @@
 	icon_state = "red_ribbon_arm"
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
+	canremove = 0
+	cant_remove_msg = " is fused to your body!"
 
 /obj/item/red_ribbon_arm/equipped(mob/living/carbon/human/H, equipped_slot)
 	..()
