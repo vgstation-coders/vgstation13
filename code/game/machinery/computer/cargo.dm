@@ -155,7 +155,7 @@ For vending packs, see vending_packs.dm*/
 		if(3)
 			result = pin_query(user)
 	if(!result) //This saves a lot of pasted to_chat everywhere else
-		if(can_order_contraband)
+		if(can_order_contraband || hacked)
 			result = TRUE
 		else
 			to_chat(user, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
@@ -191,6 +191,9 @@ For vending packs, see vending_packs.dm*/
 	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
 		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
 		hacked = 1
+		can_order_contraband = 1
+		var/obj/item/weapon/circuitboard/supplycomp/C = circuit
+		C.contraband_enabled = 1
 		return
 	if(I.is_screwdriver(user))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
