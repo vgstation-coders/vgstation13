@@ -53,11 +53,7 @@
 /datum/outfit/striketeam/voxraider/species_final_equip(var/mob/living/carbon/human/H)
     return FALSE
 
-/datum/outfit/striketeam/voxraider/post_equip(var/mob/living/carbon/human/H)
-	// Accesories.
-	equip_accessory(H, /obj/item/clothing/accessory/holomap_chip/raider, /obj/item/clothing/under, 5)
-
-	// Id card
+/datum/outfit/striketeam/voxraider/spawn_id(var/mob/living/carbon/human/H)
 	var/obj/item/weapon/card/id/syndicate/C = new(H)
 	C.registered_name = H.real_name
 	C.assignment = "Trader"
@@ -69,6 +65,11 @@
 	var/obj/item/weapon/storage/wallet/Wal = new(H)
 	Wal.handle_item_insertion(C)
 	H.equip_to_slot_or_del(Wal, slot_wear_id)
+
+/datum/outfit/striketeam/voxraider/post_equip(var/mob/living/carbon/human/H)
+	// Accesories.
+	equip_accessory(H, /obj/item/clothing/accessory/holomap_chip/raider, /obj/item/clothing/under, 5)
+
 
 	if (chosen_spec == "Raider")
 		var/obj/item/weapon/crossbow/W = new(H)

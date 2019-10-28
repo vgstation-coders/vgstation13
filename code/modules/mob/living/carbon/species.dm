@@ -808,7 +808,7 @@ var/global/list/whitelisted_species = list("Human")
 			suit=/obj/item/clothing/suit/space/vox/civ/medical/cmo
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
 
-		if("Head of Security","Warden","Detective","Security Officer")
+		if("Warden","Detective","Security Officer")
 			suit=/obj/item/clothing/suit/space/vox/civ/security
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/security
 
