@@ -155,7 +155,7 @@ For vending packs, see vending_packs.dm*/
 		if(3)
 			result = pin_query(user)
 	if(!result) //This saves a lot of pasted to_chat everywhere else
-		if(can_order_contraband || hacked)
+		if(can_order_contraband)
 			result = TRUE
 		else
 			to_chat(user, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
