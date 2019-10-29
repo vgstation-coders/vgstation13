@@ -17,7 +17,7 @@
 /obj/item/weapon/implant/proc/activate()
 	return
 
-// What do the implant does when it's removed?
+// What does the implant do when it's removed?
 /obj/item/weapon/implant/proc/handle_removal(var/mob/remover)
 	return
 
