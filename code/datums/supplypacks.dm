@@ -738,8 +738,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/suit/storage/wintercoat/engineering,
 					/obj/item/clothing/suit/storage/wintercoat/engineering/atmos,
 					/obj/item/clothing/suit/storage/wintercoat/engineering/atmos,
-					/obj/item/clothing/suit/storage/wintercoat/engineering/ce
-					/* mechanics x2 */)
+					/obj/item/clothing/suit/storage/wintercoat/engineering/mechanic,
+					/obj/item/clothing/suit/storage/wintercoat/engineering/mechanic,
+					/obj/item/clothing/suit/storage/wintercoat/engineering/ce)
 	cost = 50
 	containertype = /obj/structure/closet/crate/basic
 	containername = "engineering winter coats"
@@ -776,8 +777,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/suit/storage/wintercoat/medical,
 					/obj/item/clothing/suit/storage/wintercoat/medical,
 					/obj/item/clothing/suit/storage/wintercoat/medical,
-					/obj/item/clothing/suit/storage/wintercoat/medical/cmo
-					/* paramed x2 */)
+					/obj/item/clothing/suit/storage/wintercoat/medical/paramedic,
+					/obj/item/clothing/suit/storage/wintercoat/medical/paramedic,
+					/obj/item/clothing/suit/storage/wintercoat/medical/cmo)
 	cost = 50
 	containertype = /obj/structure/closet/crate/basic
 	containername = "medical winter coats"
@@ -787,8 +789,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Service Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/hydro,
 					/obj/item/clothing/suit/storage/wintercoat/hydro,
-					/obj/item/clothing/suit/storage/wintercoat/hydro
-					/* Bartender */
+					/obj/item/clothing/suit/storage/wintercoat/hydro,
+					/obj/item/clothing/suit/storage/wintercoat/bartender
 					/* chef */)
 	cost = 50
 	containertype = /obj/structure/closet/crate/basic
