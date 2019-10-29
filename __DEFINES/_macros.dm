@@ -226,6 +226,8 @@
 
 #define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
 
+#define isbelt(O) (istype(O, /obj/item/weapon/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
+
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
 
 //Macros for roles/antags
