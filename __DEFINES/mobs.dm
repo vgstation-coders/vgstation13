@@ -32,3 +32,5 @@
 
 #define CATBEASTBROWN 1
 #define CATBEASTBLACK 2
+
+#define CONFUSED_MAGIC 1

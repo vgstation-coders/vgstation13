@@ -208,7 +208,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else if(ear_damage < 25)	//ear damage heals slowly under this threshold.
 		ear_damage = max(ear_damage-0.05, 0)
 
-	confused = max(0, confused - 1)
+	remove_confused(1)
 
 	if(say_mute)
 		say_mute = max(say_mute-1, 0)
