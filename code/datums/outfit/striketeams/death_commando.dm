@@ -42,13 +42,7 @@
 	else
 		items_to_collect += /obj/item/weapon/plastique
 
-// Custom ID card.
-/datum/outfit/striketeam/death_commando/post_equip(var/mob/living/carbon/human/H)
-	// Accesories.
-	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)
-	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword, /obj/item/clothing/shoes, 5)
-
-	// Id card
+/datum/outfit/striketeam/death_commando/spawn_id(var/mob/living/carbon/human/H)
 	var/obj/item/weapon/card/id/W = new(get_turf(H))
 	W.name = "[H.real_name]'s ID Card"
 	if(is_leader)
@@ -61,3 +55,9 @@
 		W.assignment = "Death Commando"
 	W.registered_name = H.real_name
 	H.equip_to_slot_or_drop(W, slot_wear_id)
+
+// Custom ID card.
+/datum/outfit/striketeam/death_commando/post_equip(var/mob/living/carbon/human/H)
+	// Accesories.
+	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)
+	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword, /obj/item/clothing/shoes, 5)

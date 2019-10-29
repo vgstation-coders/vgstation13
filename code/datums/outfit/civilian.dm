@@ -4,6 +4,7 @@
 /datum/outfit/assistant
 
     outfit_name = "Assistant"
+    associated_job = /datum/job/assistant
 
     backpack_types = list(
 		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
@@ -50,6 +51,10 @@
             slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ,
         ),
     )
+
+    pda_type = /obj/item/device/pda
+    pda_slot = slot_belt
+    id_type = /obj/item/weapon/card/id
 
 /datum/outfit/assistant/post_equip(var/mob/living/carbon/human/H)
     H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
