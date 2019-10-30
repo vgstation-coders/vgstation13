@@ -36,27 +36,17 @@
 		)
 	)
 
+	id_type_leader = /obj/item/weapon/card/id/death_commando_leader
+	id_type = /obj/item/weapon/card/id/death_commando
+	assignment_leader = "Death Commander"
+	assignment_member = "Death Commando"
+
 /datum/outfit/striketeam/death_commando/pre_equip(var/mob/living/carbon/human/H)
 	if (is_leader)
 		items_to_collect += /obj/item/weapon/disk/nuclear
 	else
 		items_to_collect += /obj/item/weapon/plastique
 
-/datum/outfit/striketeam/death_commando/spawn_id(var/mob/living/carbon/human/H)
-	var/obj/item/weapon/card/id/W = new(get_turf(H))
-	W.name = "[H.real_name]'s ID Card"
-	if(is_leader)
-		W.access = get_centcom_access("Creed Commander")
-		W.icon_state = "creed"
-		W.assignment = "Death Commander"
-	else
-		W.access = get_centcom_access("Death Commando")
-		W.icon_state = "deathsquad"
-		W.assignment = "Death Commando"
-	W.registered_name = H.real_name
-	H.equip_to_slot_or_drop(W, slot_wear_id)
-
-// Custom ID card.
 /datum/outfit/striketeam/death_commando/post_equip(var/mob/living/carbon/human/H)
 	// Accesories.
 	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)

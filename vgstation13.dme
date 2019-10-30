@@ -443,6 +443,7 @@
 #include "code\datums\inventory\inventory.dm"
 #include "code\datums\inventory\slot.dm"
 #include "code\datums\outfit\civilian.dm"
+#include "code\datums\outfit\medical.dm"
 #include "code\datums\outfit\outfit.dm"
 #include "code\datums\outfit\security.dm"
 #include "code\datums\outfit\striketeams\death_commando.dm"

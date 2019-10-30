@@ -8,16 +8,26 @@
 	  "Default" is the list of items for humans.
 	- use_pref_bag: if we use the backpack he has in prefs, or if we give him a standard backpack.
 	- equip_survival_gear: if we give him the basic survival gear.
-	- items_to_collect: item to put in the backbag
+	- items_to_collect: items to put in the backbag
 		The associative key is for when to put it if we have no backbag.
+	- implant_types: the implants we give to the mob.
+	- special_snowflakes: for the edge cases where you need a manual proc.
+	- pda_slot/pda_type/id_type: for the ID and PDA of the mob.
+	- give_disabilities_equipment: if we give equipment for disabilities or not.
 
 	PROCS :
 	-- "Static" procs
-		- equip(var/mob/living/carbon/human/H) : tries to equip everything on the list to the relevant slots
+		- equip(var/mob/living/carbon/human/H): tries to equip everything on the list to the relevant slots. This is the "master proc".
+		- equip_backbag(var/mob/living/carbon/human/H): equip the backbag with the correct pref, and tries to put items in it if possible.
+		- give_disabilities_equipment(var/mob/living/carbon/human/H): give the correct equipement for the disabilities the mob has, in the correct slots.
 
 	-- Procs you can override
-		- misc_stuff(var/mob/living/carbon/human/H) : for things like implants.
+		- pre_equip(var/mob/living/carbon/human/H): altering the mob or the list of items before the mob is dressed.
+		- post_equip(var/mob/living/carbon/human/H): after the mob is fully dressed.
+		- spawn_id(var/mob/living/carbon/human/H, rank): give an ID to the mob. Overriden by striketeams.
+		- species_final_equip(var/mob/living/carbon/human/H): give internals/a tank to species as needed.
 
+		- special_equip(var/title, var/slot, var/mob/living/carbon/human/H): for the more exotic item slots.
 */
 
 /datum/outfit/
@@ -38,7 +48,7 @@
 
 	var/use_pref_bag = TRUE
 	var/give_disabilities_equipment = TRUE
-	var/equip_survival_gear = SURVIVAL_NORMAL
+	var/list/equip_survival_gear = list()
 
 	var/list/items_to_collect = list()
 
@@ -47,6 +57,20 @@
 	var/pda_slot 
 	var/pda_type = null
 	var/id_type = null
+
+	// For job-slot combinations that require a bit more work than just equipping a string
+	// Formatting  : 
+	/*
+		special_snowflakes = list(
+			"Default" = list(
+				JOB_TITLE1 = list(slot1, slot2, ...),
+				JOB_TITLE2 = list(slot1, ...),
+				...
+			),
+			...,
+		)
+	*/
+	var/list/special_snowflakes = list()
 
 /datum/outfit/New()
 	return
@@ -62,11 +86,19 @@
 	var/species = H.species.type
 	var/list/L = items_to_spawn[species]
 	if (!L) // Couldn't find the particular species
+		species = "Default"
 		L = items_to_spawn["Default"]
 
 	for (var/slot in L)
+
+		var/list/snowflake_items = special_snowflakes[species]
+
+		if (snowflake_items && (slot in snowflake_items[H.mind.role_alt_title])) // ex: special_snowflakes["Vox"]["Emergency responder"].
+			special_equip(H.mind.role_alt_title, slot, 	H)
+			continue
+
 		var/obj_type = L[slot]
-		if (islist(obj_type))
+		if (islist(obj_type)) // Special objects for alt-titles.
 			var/list/L2 = obj_type
 			obj_type = L2[H.mind.role_alt_title]
 		if (!obj_type)
@@ -74,7 +106,7 @@
 		slot = text2num(slot)
 		H.equip_to_slot_or_del(new obj_type(H), slot, TRUE)
 
-	equip_backbag(H)
+	equip_backbag(H, species)
 
 	for (var/imp_type in implant_types)
 		var/obj/item/weapon/implant/I = new imp_type(H)
@@ -90,7 +122,7 @@
 	give_disabilities_equipment(H)
 	H.update_icons()
 
-/datum/outfit/proc/equip_backbag(var/mob/living/carbon/human/H)
+/datum/outfit/proc/equip_backbag(var/mob/living/carbon/human/H, var/species)
 	// -- Backbag
 	var/obj/item/chosen_backpack = null
 	if (use_pref_bag)
@@ -108,23 +140,23 @@
 			if (islist(item)) // For alt-titles.
 				item_type = item[H.mind.role_alt_title]
 			H.equip_or_collect(new item_type(H.back), slot_in_backpack)
-		if (equip_survival_gear)
-			if (ispath(equip_survival_gear))
+		if (equip_survival_gear.len)
+			if (ispath(equip_survival_gear[species]))
 				H.equip_or_collect(new equip_survival_gear(H.back), slot_in_backpack)
-			else
-				H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+		else
+			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 
 	// -- No backbag, let's improvise
 	
 	else
 		var/obj/item/weapon/storage/box/survival/pack
-		if (equip_survival_gear)
-			if (ispath(equip_survival_gear))
+		if (equip_survival_gear.len)
+			if (ispath(equip_survival_gear[species]))
 				pack = new equip_survival_gear(H)
 				H.put_in_hand(GRASP_RIGHT_HAND, pack)
-			else
-				pack = new H.species.survival_gear(H)
-				H.put_in_hand(GRASP_RIGHT_HAND, pack)
+		else
+			pack = new H.species.survival_gear(H)
+			H.put_in_hand(GRASP_RIGHT_HAND, pack)
 		for (var/item in items_to_collect)
 			if (items_to_collect[item] == "Surival Box" && pack)
 				new item(pack)
@@ -165,6 +197,9 @@
 /datum/outfit/proc/post_equip(var/mob/living/carbon/human/H)
 	return // Empty
 
+/datum/outfit/proc/special_equip(var/title, var/slot, var/mob/living/carbon/human/H)
+	return
+
 // -- Work in progress !!
 /datum/outfit/proc/give_disabilities_equipment(var/mob/living/carbon/human/H)
 	if (!give_disabilities_equipment)
@@ -183,6 +218,26 @@
 	var/list/specs = list()
 
 	var/chosen_spec = null
+
+	var/assignment_leader = "Striketeam Leader"
+	var/assignment_member = "Striketeam Member"
+
+	var/id_type_leader = null
+
+/datum/outfit/striketeam/spawn_id(var/mob/living/carbon/human/H, rank)
+	var/obj/item/weapon/card/id/W
+	if(is_leader)
+		W = new id_type_leader(get_turf(H))
+		W.assignment = assignment_leader
+	else
+		W = new id_type(get_turf(H))
+		W.assignment = assignment_member
+	W.name = "[H.real_name]'s ID Card"
+	W.registered_name = H.real_name
+	W.UpdateName()
+	W.SetOwnerInfo(H)
+	H.equip_to_slot_or_drop(W, slot_wear_id)
+	return W
 
 /datum/outfit/striketeam/proc/equip_special_items(var/mob/living/carbon/human/H)
 	if (!chosen_spec)

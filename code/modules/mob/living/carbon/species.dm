@@ -778,7 +778,6 @@ var/global/list/whitelisted_species = list("Human")
 		if("Atmospheric Technician")
 			suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
-
 		if("Scientist")
 			suit=/obj/item/clothing/suit/space/vox/civ/science
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
@@ -788,26 +787,6 @@ var/global/list/whitelisted_species = list("Human")
 		if("Roboticist")
 			suit=/obj/item/clothing/suit/space/vox/civ/science/roboticist
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/roboticist
-
-		if("Medical Doctor")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical
-		if("Paramedic")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/paramedic
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
-		if("Geneticist")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/geneticist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist
-		if("Virologist")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/virologist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/virologist
-		if("Chemist")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/chemist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/chemist
-		if("Chief Medical Officer")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/cmo
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
-
 //		if("Clown","Mime")
 //			tank_slot=null
 //			tank_slot_name = "hand"

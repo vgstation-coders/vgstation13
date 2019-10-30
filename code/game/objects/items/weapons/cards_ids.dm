@@ -567,6 +567,10 @@
 	else
 		..()
 
+/obj/item/weapon/card/id/syndicate/raider
+	access = list(access_syndicate, access_trade)
+	assignment = "Trader"
+
 /obj/item/weapon/card/id/syndicate_command
 	name = "syndicate ID card"
 	desc = "An ID straight from the Syndicate."
@@ -741,8 +745,17 @@
 	icon_state = "deathsquad"
 
 /obj/item/weapon/card/id/death_commando/New()
-	..()
+	. = ..()
 	access = get_centcom_access("Death Commando")
+
+/obj/item/weapon/card/id/death_commando_leader
+	name = "Sgt.Reaper ID card"
+	assignment = "Death Commander"
+	icon_state = "creed"
+
+/obj/item/weapon/card/id/death_commando_leader/New()
+	. = ..()
+	access = get_centcom_access("Creed Commander")
 
 /obj/item/weapon/card/id/syndicate/commando
 	name = "Syndicate Commando ID card"
@@ -820,3 +833,5 @@
 	..()
 	access = get_all_accesses()
 	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/death_commando_

@@ -77,18 +77,6 @@
 		if("Head of Personnel")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/hop
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/hop
-		if("Medical Doctor")
-			suit=/obj/item/clothing/suit/space/plasmaman/medical
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/medical
-		if("Paramedic")
-			suit=/obj/item/clothing/suit/space/plasmaman/medical/paramedic
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic
-		if("Chemist")
-			suit=/obj/item/clothing/suit/space/plasmaman/medical/chemist
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/medical/chemist
-		if("Chief Medical Officer")
-			suit=/obj/item/clothing/suit/space/plasmaman/medical/cmo
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/medical/cmo
 		if("Bartender", "Chef")
 			suit=/obj/item/clothing/suit/space/plasmaman/service
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/service
