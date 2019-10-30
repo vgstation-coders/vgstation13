@@ -64,6 +64,7 @@ var/global/lastDecTalkUse = 0
 			atmos = 0 //no air
 
 		range = min(round(range * sqrt(atmos)), range) //Range technically falls off with the root of pressure (see Newtonian sound)
+		range = max(range, 1) //If you get right next to someone you can read their lips, or something.
 		/*Rough range breakpoints for default 7-range speech
 		10kpa: 0 (round 0.09 down to 0 for atmos value)
 		11kpa: 2
