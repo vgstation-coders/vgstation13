@@ -200,7 +200,9 @@
 
 #define isatom(A) (istype(A, /atom))
 
-#define isatommovable(A) (istype(A, /atom/movable))
+#if DM_VERSION < 513
+#define ismovable(A) (istype(A, /atom/movable))
+#endif
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
