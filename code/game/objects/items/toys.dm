@@ -105,7 +105,7 @@
     icon_state = "ntballoon"
     item_state = "ntballoon"
     inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
-	
+
 /obj/item/toy/syndicateballoon/byondballoon
     name = "\improper BYOND balloon"
     desc = "There is a tag on the back that reads \"LUMMOX <3!\"."
@@ -1051,13 +1051,13 @@
 
 /obj/item/toy/gasha/AI/attack_self(mob/user as mob)
 	if(cooldown < world.time - 8)
-		playsound(user, 'sound/vox/doop.wav', 20, 1)
+		playsound(user, 'sound/vox/_doop.wav', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/AI/attack_hand(mob/user as mob)
 	if(loc == user)
 		if(cooldown < world.time - 8)
-			playsound(user, 'sound/vox/doop.wav', 20, 1)
+			playsound(user, 'sound/vox/_doop.wav', 20, 1)
 			cooldown = world.time
 			return
 	..()
