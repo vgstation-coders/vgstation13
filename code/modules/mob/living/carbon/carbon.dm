@@ -704,7 +704,7 @@
 
 	switch(P.wet)
 		if(TURF_WET_WATER)
-			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
+			if (!Slip(stun_amount = 3, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
 				return FALSE
 			step(src, dir)
 			visible_message("<span class='warning'>[src] slips on the wet floor!</span>", \
