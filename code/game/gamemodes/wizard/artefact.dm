@@ -320,15 +320,11 @@
 	..()
 	if(istype(H) && H.get_item_by_slot(slot_shoes) == src && equipped_slot != null && equipped_slot == slot_shoes)
 		H.movement_speed_modifier *= speed_modifier
-		//H.change_sight(adding = BLIND)
 
 
 /obj/item/clothing/shoes/blindingspeed/step_action()
 	var/mob/living/carbon/human/H = loc
 	H.change_sight(adding = BLIND)
-	spawn(3)
-		if((world.time - H.last_movement) > 3)
-			H.change_sight(removing = BLIND)
 
 /obj/item/clothing/shoes/blindingspeed/unequipped(mob/living/carbon/human/H, var/from_slot = null)
 	..()
