@@ -296,7 +296,7 @@
 	// Updates the plant overlay.
 	if(!isnull(seed))
 		if(draw_warnings && health <= (seed.endurance / 2))
-			overlays += image('icons/obj/hydroponics/hydroponics.dmi',"over_lowhealth3")
+			overlays += image('icons/obj/hydroponics/hydro_tools.dmi',"over_lowhealth3")
 
 		if(dead)
 			overlays += image(seed.plant_dmi,"dead")
