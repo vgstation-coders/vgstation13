@@ -21,6 +21,8 @@ var/list/sent_strike_teams = list()
 
 	var/list/datum/objective/objectives = list()
 
+	var/datum/outfit/outfit_datum
+
 /datum/striketeam/proc/trigger_strike(var/mob/user)
 	//Is the game started
 	if(!ticker)
@@ -204,6 +206,8 @@ var/list/sent_strike_teams = list()
 	var/can_customize_appearance = 0
 	var/defaultname = "Commando"
 
+	outfit_datum = /datum/outfit/striketeam/death_commando
+
 /datum/striketeam/custom/trigger_strike(var/mob/user)
 	custom = 1
 	var/turf/T = null
@@ -349,5 +353,8 @@ var/list/sent_strike_teams = list()
 		customsquad.forgeObjectives(mission)
 		if(customsquad)
 			customsquad.HandleNewMind(new_commando.mind) //First come, first served
+
+	var/datum/outfit/concrete_outfit = new outfit_datum
+	concrete_outfit.equip(new_commando)
 
 	return new_commando

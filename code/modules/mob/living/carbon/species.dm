@@ -269,6 +269,9 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/proc/equip(var/mob/living/carbon/human/H)
 
+// -- Outfit datums --
+/datum/species/proc/final_equip(var/mob/living/carbon/human/H)
+
 /datum/species/proc/get_inventory_offsets()	//This is what you override if you want to give your species unique inventory offsets.
 	var/static/list/offsets = list(
 		"[slot_back]"		=	list("pixel_x" = 0, "pixel_y" = 0),
@@ -805,10 +808,6 @@ var/global/list/whitelisted_species = list("Human")
 			suit=/obj/item/clothing/suit/space/vox/civ/medical/cmo
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
 
-		if("Head of Security","Warden","Detective","Security Officer")
-			suit=/obj/item/clothing/suit/space/vox/civ/security
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/security
-
 //		if("Clown","Mime")
 //			tank_slot=null
 //			tank_slot_name = "hand"
@@ -827,6 +826,19 @@ var/global/list/whitelisted_species = list("Human")
 		H.equip_or_collect(new suit(H), slot_wear_suit)
 	if(helm)
 		H.equip_or_collect(new helm(H), slot_head)
+	if(tank_slot)
+		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
+	else
+		H.put_in_hands(new/obj/item/weapon/tank/nitrogen(H))
+	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name].</span>")
+	H.internal = H.get_item_by_slot(tank_slot)
+	if (H.internals)
+		H.internals.icon_state = "internal1"
+
+// -- Outfit datums --
+/datum/species/vox/final_equip(var/mob/living/carbon/human/H)
+	var/tank_slot = slot_s_store
+	var/tank_slot_name = "suit storage"
 	if(tank_slot)
 		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
 	else

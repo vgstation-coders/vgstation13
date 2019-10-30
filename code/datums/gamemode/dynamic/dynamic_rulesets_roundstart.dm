@@ -318,6 +318,8 @@
 /datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
 	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
 	required_candidates = operative_cap[indice_pop]
+	if (forced)
+		required_candidates = 1
 	. = ..()
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()

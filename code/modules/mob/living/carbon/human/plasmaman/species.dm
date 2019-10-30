@@ -68,15 +68,9 @@
 		if("Atmospheric Technician")
 			suit=/obj/item/clothing/suit/space/plasmaman/atmostech
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/atmostech
-		if("Warden","Security Officer")
-			suit=/obj/item/clothing/suit/space/plasmaman/security/
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/
 		if("Detective")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/detective
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/detective
-		if("Head of Security")
-			suit=/obj/item/clothing/suit/space/plasmaman/security/hos
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/hos
 		if("Captain")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/captain
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/captain
@@ -113,9 +107,6 @@
 		if("Janitor")
 			suit=/obj/item/clothing/suit/space/plasmaman/janitor
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/janitor
-		if("Assistant")
-			suit=/obj/item/clothing/suit/space/plasmaman/assistant
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/assistant
 		if("Clown")
 			suit=/obj/item/clothing/suit/space/plasmaman/clown
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/clown
@@ -127,6 +118,16 @@
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/lawyer
 	H.equip_or_collect(new suit(H), slot_wear_suit)
 	H.equip_or_collect(new helm(H), slot_head)
+	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.
+	to_chat(H, "<span class='notice'>You are now running on plasma internals from the [H.s_store] in your [tank_slot_name].  You must breathe plasma in order to survive, and are extremely flammable.</span>")
+	H.internal = H.get_item_by_slot(tank_slot)
+	if (H.internals)
+		H.internals.icon_state = "internal1"
+
+// -- Outfit datums --
+/datum/species/plasmaman/final_equip(var/mob/living/carbon/human/H)
+	var/tank_slot = slot_s_store
+	var/tank_slot_name = "suit storage"
 	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.
 	to_chat(H, "<span class='notice'>You are now running on plasma internals from the [H.s_store] in your [tank_slot_name].  You must breathe plasma in order to survive, and are extremely flammable.</span>")
 	H.internal = H.get_item_by_slot(tank_slot)

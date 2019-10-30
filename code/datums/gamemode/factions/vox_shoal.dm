@@ -175,9 +175,15 @@ var/list/potential_bonus_items = list(
 	vox.my_appearance.f_style = "Shaved"
 	for(var/datum/organ/external/limb in vox.organs)
 		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
-	vox.equip_vox_raider(index)
+	var/datum/outfit/striketeam/voxraider/concrete_outfit = new
+	concrete_outfit.equip(vox)
 	vox.regenerate_icons()
 	vox.store_memory("The priority items for the day are: [english_list(bonus_items_of_the_day)]")
+
+	spawn()
+		var/chosen_loadout = input(vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
+		concrete_outfit.chosen_spec = chosen_loadout
+		concrete_outfit.equip_special_items(vox)
 
 /datum/faction/vox_shoal/process()
 	if (completed)
@@ -257,7 +263,7 @@ var/list/potential_bonus_items = list(
 	return english_list(our_stars)
 
 // -- Mobs procs --
-			
+
 /mob/living/proc/send_back_to_main_station()
 	delete_all_equipped_items()
 	if (ishuman(src))
@@ -270,87 +276,6 @@ var/list/potential_bonus_items = list(
 	var/obj/structure/inflatable/shelter/S = new(src)
 	forceMove(S)
 	S.ThrowAtStation()
-	
-		
-/mob/living/carbon/human/proc/equip_vox_raider(var/index)
-	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
-	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
-	equip_to_slot_or_del(R, slot_ears)
-
-	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes(src)
-	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider(src))
-	equip_to_slot_or_del(uni, slot_w_uniform)
-
-	equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox(src), slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
-	equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox(src), slot_gloves) // AS ABOVE.
-
-
-	switch(index)
-		if(1) // Vox raider!
-			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/carapace(src), slot_wear_suit)
-			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/carapace(src), slot_head)
-			equip_to_slot_or_del(new /obj/item/weapon/melee/telebaton(src), slot_belt)
-			equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/monocle(src), slot_glasses) // REPLACE WITH CODED VOX ALTERNATIVE.
-			equip_to_slot_or_del(new /obj/item/device/chameleon(src), slot_l_store)
-
-			var/obj/item/weapon/crossbow/W = new(src)
-			W.cell = new /obj/item/weapon/cell/crap(W)
-			W.cell.charge = 500
-			put_in_hands(W)
-
-			var/obj/item/stack/rods/A = new(src)
-			A.amount = 20
-			put_in_hands(A)
-
-		if(2) // Vox engineer!
-			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/pressure(src), slot_wear_suit)
-			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/pressure(src), slot_head)
-			equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(src), slot_belt)
-			equip_to_slot_or_del(new /obj/item/clothing/glasses/scanner/meson(src), slot_glasses) // REPLACE WITH CODED VOX ALTERNATIVE.
-			put_in_hands(new /obj/item/weapon/storage/box/emps(src))
-			put_in_hands(new /obj/item/device/multitool(src))
-
-			var/obj/item/weapon/paper/vox_paper/VP = new(src)
-			VP.initialize()
-			put_in_hands(VP)
-
-		if(3) // Vox saboteur!
-			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/carapace(src), slot_wear_suit)
-			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/carapace(src), slot_head)
-			equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(src), slot_belt)
-			equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/monocle(src), slot_glasses) // REPLACE WITH CODED VOX ALTERNATIVE.
-			equip_to_slot_or_del(new /obj/item/weapon/card/emag(src), slot_l_store)
-			put_in_hands(new /obj/item/weapon/gun/dartgun/vox/raider(src))
-			put_in_hands(new /obj/item/device/multitool(src))
-
-		if(4) // Vox medic!
-			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/pressure(src), slot_wear_suit)
-			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/pressure(src), slot_head)
-			equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(src), slot_belt) // Who needs actual surgical tools?
-			equip_to_slot_or_del(new /obj/item/clothing/glasses/hud/health(src), slot_glasses) // REPLACE WITH CODED VOX ALTERNATIVE.
-			equip_to_slot_or_del(new /obj/item/weapon/circular_saw(src), slot_l_store)
-			put_in_hands(new /obj/item/weapon/gun/dartgun/vox/medical)
-
-	equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox(src), slot_wear_mask)
-	equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen(src), slot_back)
-	equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_r_store)
-
-	var/obj/item/weapon/card/id/syndicate/C = new(src)
-	//C.name = "[real_name]'s Legitimate Human ID Card"
-	C.registered_name = real_name
-	C.assignment = "Trader"
-	C.UpdateName()
-	C.SetOwnerInfo(src)
-
-	C.icon_state = "trader"
-	C.access = list(access_syndicate, access_trade)
-	//C.registered_user = src
-	var/obj/item/weapon/storage/wallet/W = new(src)
-	W.handle_item_insertion(C)
-	// NO. /vg/ spawn_money(rand(50,150)*10,W)
-	equip_to_slot_or_del(W, slot_wear_id)
-
-	return 1
 
 /obj/item/weapon/paper/vox_paper
 	name = "Shoal objectives"

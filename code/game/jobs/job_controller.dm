@@ -424,13 +424,6 @@ var/global/datum/controller/occupations/job_master
 	if(!H)
 		return 0
 	var/datum/job/job = GetJob(rank)
-	if(job)
-		job.equip(H)
-	else
-		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
-
-	H.job = rank
-
 	if(!joined_late)
 		var/obj/S = null
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -487,6 +480,15 @@ var/global/datum/controller/occupations/job_master
 				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[bank_pref]</span></span>")
 
 	var/alt_title = null
+
+	if(job)
+		job.equip(H)
+	else
+		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
+
+	H.job = rank
+
+
 	if(H.mind)
 		H.mind.assigned_role = rank
 		alt_title = H.mind.role_alt_title
@@ -499,6 +501,7 @@ var/global/datum/controller/occupations/job_master
 				if(rank=="Clown") // Clowns DO need to breathe, though - N3X
 					H.species.equip(H)
 			else
+				// This is deprecated and should be removed after outfit datums are finished.
 				switch(H.backbag) //BS12 EDIT
 					if(1)
 						if(H.species.survival_gear)
@@ -518,7 +521,10 @@ var/global/datum/controller/occupations/job_master
 						if(H.species.survival_gear)
 							new H.species.survival_gear(BPK)
 						H.equip_to_slot_or_del(BPK, slot_back,1)
-				H.species.equip(H)
+
+				// -- OUTFIT DATUM BANDAID -- To be removed when outfit datums are finished...
+				if (!job.outfit_datum)
+					H.species.equip(H)
 
 	if(job)
 		job.introduce(H, (alt_title ? alt_title : rank))
@@ -528,13 +534,15 @@ var/global/datum/controller/occupations/job_master
 		if(job.req_admin_notify)
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
-	spawnId(H, rank, alt_title, balance_wallet)
+	spawnId(H, balance_wallet, rank, alt_title, job)
 
 	if(job && job.priority)
 		job.priority_reward_equip(H)
 
 	if(!job || !job.no_headset)
 		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
+
+	// -- TO REMOVE AFTER OUTFIT DATUMS --
 
 	//Gives glasses to the vision impaired
 	if(H.disabilities & DISABILITY_FLAG_NEARSIGHTED)
@@ -564,10 +572,16 @@ var/global/datum/controller/occupations/job_master
 	return 1
 
 
-/datum/controller/occupations/proc/spawnId(var/mob/living/carbon/human/H, rank, title, wallet_funds=0)
+/datum/controller/occupations/proc/spawnId(var/mob/living/carbon/human/H, wallet_funds=0, rank, title, var/datum/job/J2)
 	if(!H)
 		return 0
 	var/obj/item/weapon/card/id/C = null
+
+	if (J2.outfit_datum)
+		message_admins("Associated job [rank] has an outfit datum and was given his ID through this mean.")
+		return
+
+	// TO REMOVE AFTER OUTFIT DATUMS
 
 	var/datum/job/job = null
 	for(var/datum/job/J in occupations)
