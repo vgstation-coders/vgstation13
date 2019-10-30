@@ -198,7 +198,7 @@
 
 #define isclient(A) (istype(A, /client))
 
-#define isatom(A) (istype(A, /atom))
+#define isatom(A) isloc(A)
 
 #define isatommovable(A) (istype(A, /atom/movable))
 
