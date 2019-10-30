@@ -104,8 +104,7 @@ var/global/list/organ_damage_overlays = list(
 		update_mutations()
 
 /mob/living/carbon/human/Life()
-	if(!key)
-		say("FUCK")
+
 	//set background = 1
 	if(timestopped)
 		return 0 //under effects of time magick
