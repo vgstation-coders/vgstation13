@@ -263,6 +263,8 @@ var/list/department_radio_keys = list(
 	if(isnull(message_range))
 		message_range = 7
 
+	message_range = atmospheric_speech(speech,message_range)
+
 	var/list/listeners = get_hearers_in_view(message_range, speech.speaker) | observers
 
 	var/rendered = render_speech(speech)
