@@ -62,11 +62,14 @@
 	robot_compatibility = MODULE_CAN_LIFT_ENGITAPE
 
 /obj/item/taperoll/attack_self(mob/user as mob)
+	lay_tape(user)
+
+/obj/item/taperoll/proc/lay_tape(mob/user as mob)
 	if(icon_state == "[icon_base]_start")
 		start = get_turf(src)
 		if(istype(start,/turf/space))
 			to_chat(usr, "<span class='warning'>You can't place [src] in space</span>")
-			return
+			return 0
 		to_chat(usr, "<span class='notice'>You place the first end of [src].</span>")
 		icon_state = "[icon_base]_stop"
 	else
@@ -74,10 +77,10 @@
 		end = get_turf(src)
 		if(istype(end,/turf/space))
 			to_chat(usr, "<span class='warning'>You can't place [src] in space</span>")
-			return
+			return 0
 		if(start.y != end.y && start.x != end.x || start.z != end.z)
 			to_chat(usr, "<span class='notice'>[src] can only be laid in a straight line.</span>")
-			return
+			return 0
 
 		var/turf/cur = start
 		var/dir
@@ -106,7 +109,7 @@
 			cur = get_step_towards(cur,end)
 		if (!can_place)
 			to_chat(usr, "<span class='warning'>You can't run [src] through that!</span>")
-			return
+			return 0
 
 		cur = start
 		var/tapetest = 0
@@ -121,10 +124,11 @@
 	//is_blocked_turf(var/turf/T)
 		to_chat(usr, "<span class='notice'>You finish placing [src].</span>")
 		user.visible_message("<span class='warning'>[user] finishes placing [src].</span>") //Now you know who to whack with a stun baton
+		return 1
 
 /obj/item/taperoll/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
-		return
+		return 0
 
 	if(istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor))
 		var/turf = get_turf(target)
@@ -268,24 +272,23 @@
 	tape_type = /obj/item/tape/engineering/syndie
 
 /obj/item/taperoll/syndie/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if (charges_left & (istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor)))
-		charges_left--
+	if (charges_left && (istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor)))
+		if(..())
+			charges_left--
 		if (!(charges_left))
 			to_chat(user, "<span class = 'warning'>There is no tape left.</span>")
 			qdel(src)
 			return TRUE
 		to_chat(user, "<span class = 'notice'>There [charges_left > 1 ? "are" : "is"] [charges_left] roll[charges_left > 1 ? "s" : ""] of tape left.</span>")
-	. = ..()
 
 /obj/item/taperoll/syndie/afterattack(var/atom/A, mob/user, proximity_flag)
 	if (!charges_left)
 		to_chat(user, "<span class = 'warning'>There is no tape left.</span>")
 		qdel(src)
 
-/obj/item/taperoll/syndie/attack_self(var/mob/user)
+/obj/item/taperoll/syndie/lay_tape(mob/user as mob)
 	if (charges_left)
-		..()
-		if (icon_state == "[icon_base]_start")
+		if (..() && icon_state == "[icon_base]_start")
 			charges_left--
 			if (!charges_left)
 				to_chat(user, "<span class = 'warning'>There is no tape left.</span>")
