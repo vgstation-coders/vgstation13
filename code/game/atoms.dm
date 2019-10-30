@@ -558,14 +558,6 @@ its easier to just keep the beam vertical.
 /atom/proc/hitby(var/atom/movable/AM)
 	. = isobserver(AM)
 
-/*
-/atom/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (!(istype(W, /obj/item/weapon/grab) ) && !(istype(W, /obj/item/weapon/plastique)) && !(istype(W, /obj/item/weapon/reagent_containers/spray)) && !(istype(W, /obj/item/weapon/packageWrap)) && !istype(W, /obj/item/device/detective_scanner))
-		for(var/mob/O in viewers(src, null))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, "<span class='danger'>[src] has been hit by [user] with [W]</span>")
-	return
-*/
 /atom/proc/add_hiddenprint(mob/M as mob)
 	if(isnull(M))
 		return
