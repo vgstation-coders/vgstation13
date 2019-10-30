@@ -606,8 +606,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	item_state = "c_tube"
 	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 60)
 	w_type = RECYK_GLASS
-	brightness_range = 5.2
-	brightness_power = 1.8
+	brightness_range = 6
+	brightness_power = 1.5
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	cost = 8
 
@@ -649,7 +649,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	item_state = "contvapour"
 	fitting = "bulb"
 	brightness_range = 3.5
-	brightness_power = 1.8
+	brightness_power = 2
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 30)
 	cost = 5
