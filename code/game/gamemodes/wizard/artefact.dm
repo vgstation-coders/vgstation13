@@ -307,3 +307,30 @@
 			T = get_turf(src)
 			if(user.z != T.z || is_holder_of(user, src))
 				user.dust()
+
+/obj/item/clothing/shoes/blindingspeed
+	name = "boots of blinding speed"
+	desc = "Blinds you while moving."
+	icon_state = "blindingspeed"
+	item_state = "blindingspeed"
+	wizard_garb = 1
+	var/speed_modifier = 4
+
+/obj/item/clothing/shoes/blindingspeed/equipped(mob/living/carbon/human/H, equipped_slot)
+	..()
+	if(istype(H) && H.get_item_by_slot(slot_shoes) == src && equipped_slot != null && equipped_slot == slot_shoes)
+		H.movement_speed_modifier *= speed_modifier
+		//H.change_sight(adding = BLIND)
+
+
+/obj/item/clothing/shoes/blindingspeed/step_action()
+	var/mob/living/carbon/human/H = loc
+	H.change_sight(adding = BLIND)
+	spawn(3)
+		if((world.time - H.last_movement) > 3)
+			H.change_sight(removing = BLIND)
+
+/obj/item/clothing/shoes/blindingspeed/unequipped(mob/living/carbon/human/H, var/from_slot = null)
+	..()
+	if(from_slot == slot_shoes && istype(H))
+		H.movement_speed_modifier /= speed_modifier
