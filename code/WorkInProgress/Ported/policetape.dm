@@ -159,7 +159,7 @@
 			var/atom/tape = new tape_type(turf)
 			tape.icon_state = "[icon_base]_door"
 			tape.layer = ABOVE_DOOR_LAYER
-			to_chat(user, "<span class='notice'>You placed [src].</span>")
+			to_chat(user, "<span class='notice'>You placed \the [src].</span>")
 			return 1
 	
 /obj/item/tape/Bumped(M as mob)
