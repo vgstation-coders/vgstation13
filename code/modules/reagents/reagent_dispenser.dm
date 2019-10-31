@@ -410,12 +410,6 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	return
 
-/obj/structure/reagent_dispensers/cauldron/barrel/can_pickup(mob/living/M)
-	if(!..())
-		return FALSE
-	if(M.get_strength() > 2)
-		return TRUE
-
 /obj/structure/reagent_dispensers/cauldron/barrel/kick_act(mob/living/carbon/human/H)
 	..()
 	if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
