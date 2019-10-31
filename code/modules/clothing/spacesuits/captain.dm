@@ -1,6 +1,6 @@
 //Captain's Spacesuit
 /obj/item/clothing/head/helmet/space/rig/capspace
-	name = "space helmet"
+	name = "Captain's space helmet"
 	icon_state = "capspace_0"
 	item_state = "capspacehelmet"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment. Only for the most fashionable of military figureheads."
@@ -40,11 +40,11 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	head_type = /obj/item/clothing/head/helmet/space/rig/capspace
 
-/obj/item/clothing/suit/armor/captain/old
+/obj/item/clothing/suit/space/rig/captain/old
 	icon_state = "oldcaparmor"
 
-/obj/item/clothing/suit/armor/centcomm
-	name = "Cent. Com. armor"
+/obj/item/clothing/suit/space/rig/centcomm
+	name = "Centcomm rig armor"
 	desc = "This bulky armor is the property of Nanotrasen's supreme leader. Witness and behold!"
 	icon_state = "centcom"
 	item_state = "centcom"
@@ -53,11 +53,11 @@
 	permeability_coefficient = 0.02
 	clothing_flags = ONESIZEFITSALL | PLASMAGUARD
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
-	allowed = list(/obj/item/weapon/tank/emergency_oxygen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy, /obj/item/weapon/gun/projectile, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/tank/emergency_oxygen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy, /obj/item/weapon/gun/projectile, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_nitrogen)
 	armor = list(melee = 65, bullet = 55, laser = 50, energy = 25, bomb = 50, bio = 100, rad = 60)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	siemens_coefficient = 0
 
-/obj/item/clothing/suit/armor/centcomm/old
+/obj/item/clothing/suit/space/rig/centcomm/old
 	icon_state = "oldcentcom"
