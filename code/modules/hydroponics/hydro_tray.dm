@@ -575,7 +575,9 @@
 
 	..()
 
-/obj/machinery/portable_atmospherics/hydroponics/AltClick()
+/obj/machinery/portable_atmospherics/hydroponics/AltClick(/var/mob/usr)
+	if((usr.incapacitated() || !Adjacent(usr)))
+		return
 	close_lid()
 
 /datum/locking_category/hydro_tray
