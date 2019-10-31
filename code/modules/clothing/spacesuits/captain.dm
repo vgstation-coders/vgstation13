@@ -58,6 +58,7 @@
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	siemens_coefficient = 0
+	head_type = /obj/item/clothing/head/helmet/space/rig/capspace
 
 /obj/item/clothing/suit/space/rig/centcomm/old
 	icon_state = "oldcentcom"
