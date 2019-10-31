@@ -423,7 +423,6 @@
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
 
-
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswrench(W))
 		return
@@ -438,7 +437,6 @@
 	return ..()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/W, mob/user, params)
-
 
 /obj/structure/reagent_dispensers/cauldron/barrel/proc/enter_barrel(mob/user)
 	user.forceMove(src)
@@ -495,10 +493,3 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/Destroy()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
-
-/obj/structure/reagent_dispensers/cauldron/barrel/New()
-	. = ..()
-	create_reagents(1000)
-	if (!possible_transfer_amounts) // Very possibly superfluous
-		verbs -= /obj/structure/reagent_dispensers/verb/set_APTFT
-	..()
