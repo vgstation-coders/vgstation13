@@ -249,7 +249,7 @@
 	damage = max( damage + ( (removed.temperature - 800) / 150 ) , 0 )
 	//Ok, 100% oxygen atmosphere = best reaction
 	//Maxes out at 100% oxygen pressure
-	oxygen = Clamp((removed[GAS_OXYGEN] - removed[GAS_NITROGEN] * NITROGEN_RETARDATION_FACTOR) / MOLES_CELLSTANDARD, 0, 1) //0 unless O2>80%. At 99%, ~0.6
+	oxygen = clamp((removed[GAS_OXYGEN] - removed[GAS_NITROGEN] * NITROGEN_RETARDATION_FACTOR) / MOLES_CELLSTANDARD, 0, 1) //0 unless O2>80%. At 99%, ~0.6
 
 	var/temp_factor = 100
 
@@ -298,7 +298,7 @@
 
 	power -= (power/power_loss_modifier)**3
 
-	var/light_value = Clamp(round(Clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
+	var/light_value = clamp(round(clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
 
 	// Lighting based on power output.
 	set_light(light_value, light_value / 2)

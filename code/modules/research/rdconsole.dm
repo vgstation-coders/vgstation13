@@ -444,7 +444,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						return //in case the 'lathe gets unlinked or destroyed or someshit while the popup is open
 				else
 					n = text2num(href_list["n"])
-				n = Clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_lathe.queue.len)
+				n = clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_lathe.queue.len)
 				for(var/i=1;i<=n;i++)
 					use_power(power)
 					linked_lathe.queue += being_built
@@ -477,7 +477,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						return //in case the imprinter gets unlinked or destroyed or someshit while the popup is open
 				else
 					n = text2num(href_list["n"])
-				n = Clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_imprinter.queue.len)
+				n = clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_imprinter.queue.len)
 				for(var/i=1;i<=n;i++)
 					linked_imprinter.queue += being_built
 					use_power(power)
@@ -763,7 +763,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			else
 
 				dat += {"Name: [d_disk.blueprint.name]<BR>
-					Level: [Clamp(d_disk.blueprint.reliability + rand(-15,15), 0, 100)]<BR>"}
+					Level: [clamp(d_disk.blueprint.reliability + rand(-15,15), 0, 100)]<BR>"}
 				switch(d_disk.blueprint.build_type)
 					if(IMPRINTER)
 						dat += "Lathe Type: Circuit Imprinter<BR>"
@@ -1115,3 +1115,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	id = 5
 	req_access=list()
 	circuit = "/obj/item/weapon/circuitboard/rdconsole/pod"
+
+/obj/machinery/computer/rdconsole/derelict
+	name = "Derelict R&D Console"
+	id = 6
+	req_access=list()
+	circuit = "/obj/item/weapon/circuitboard/rdconsole/derelict"

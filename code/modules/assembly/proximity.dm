@@ -173,7 +173,7 @@
 	if(href_list["range"])
 		var/r = text2num(href_list["range"])
 		range += r
-		range = Clamp(range, 1, 5)
+		range = clamp(range, 1, 5)
 
 	if(href_list["set_default_time"])
 		default_time = time

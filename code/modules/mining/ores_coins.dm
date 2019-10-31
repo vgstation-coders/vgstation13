@@ -479,7 +479,7 @@
 
 /obj/item/weapon/coin/clown
 	material=MAT_CLOWN
-	name = "bananaium coin"
+	name = "bananium coin"
 	desc = "A funny, rare coin minted from pure banana essence. Honk!"
 	icon_state = "coin_clown"
 	credits = 10

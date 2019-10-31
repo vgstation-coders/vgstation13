@@ -427,10 +427,10 @@
 	set category = "Object"
 	if(mode == 2)
 		mutstrength = input(usr, "Enter new mutation strength level (15-25):", "Somatoray Gamma Ray Threshold", mutstrength) as num
-		mutstrength = Clamp(round(mutstrength), 15, 25)
+		mutstrength = clamp(round(mutstrength), 15, 25)
 	else
 		mutstrength = input(usr, "Enter new mutation strength level (1-15):", "Somatoray Alpha Ray Threshold", mutstrength) as num
-		mutstrength = Clamp(round(mutstrength), 1, 15)
+		mutstrength = clamp(round(mutstrength), 1, 15)
 
 /obj/item/weapon/gun/energy/floragun/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isEmag(W) || issolder(W))

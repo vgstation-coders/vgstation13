@@ -121,7 +121,7 @@ var/list/one_way_windows
 		overlays -= damage_overlay
 
 		if(health < initial(health))
-			var/damage_fraction = Clamp(round((initial(health) - health) / initial(health) * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
+			var/damage_fraction = clamp(round((initial(health) - health) / initial(health) * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
 			damage_overlay.icon_state = "[cracked_base][damage_fraction]"
 			overlays += damage_overlay
 

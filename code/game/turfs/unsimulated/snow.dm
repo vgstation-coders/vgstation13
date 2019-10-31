@@ -286,13 +286,10 @@
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
 
-
-
-
 /turf/unsimulated/floor/snow/asphalt
 	snowsound = list()
 	icon = 'icons/turf/floors.dmi'
-	icon_state = "concrete"
+	icon_state = "asphalt"
 	real_snow_tile = FALSE
 	name = "asphalt"
 	desc = "Specially treated Centcomm asphalt, designed to disintegrate all snow that touches it."

@@ -304,7 +304,7 @@
 		var/mob/living/carbon/human/H = wielder
 		for(var/datum/organ/external/temp in H.organs)
 			if(temp.status & ORGAN_BLEEDING)
-				temp.clamp()
+				temp.clamp_wounds()
 
 	playsound(wielder.loc, 'sound/effects/mend.ogg', 50, 0, -2)
 	wielder.heal_organ_damage(10, 0)

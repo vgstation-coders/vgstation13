@@ -95,7 +95,7 @@
 	..()
 	if(M)
 		appearance = M.appearance
-		w_class = Clamp((M.size - SIZE_TINY) * W_CLASS_MEDIUM, W_CLASS_TINY, W_CLASS_HUGE)
+		w_class = clamp((M.size - SIZE_TINY) * W_CLASS_MEDIUM, W_CLASS_TINY, W_CLASS_HUGE)
 		//	SIZE		|	W_CLASS
 
 		//	SIZE_TINY	|	W_CLASS_TINY

@@ -520,8 +520,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		emote("deathgasp", message = TRUE)
 
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
-	living_mob_list -= src
-	dead_mob_list += src
 	stat = DEAD
 	if(icon_dying && !gibbed)
 		do_flick(src, icon_dying, icon_dying_time)
@@ -535,8 +533,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 		for(var/butchering_type in L)
 			src.butchering_drops += new butchering_type
-
-	verbs += /mob/living/proc/butcher
 
 	..(gibbed)
 
@@ -567,7 +563,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(purge)
 		damage = damage * 2
 
-	health = Clamp(health - damage, 0, maxHealth)
+	health = clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		death()
 
@@ -582,7 +578,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-	health = Clamp(health - damage, 0, maxHealth)
+	health = clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		death()
 

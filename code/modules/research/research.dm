@@ -141,7 +141,7 @@ var/global/list/hidden_tech = list(
 			AddDesign2Known(PD)
 	for(var/ID in known_tech)
 		var/datum/tech/T = known_tech[ID]
-		T.level = Clamp(T.level, 1, 20)
+		T.level = clamp(T.level, 1, 20)
 	for(var/datum/design/D in known_designs)
 		D.CalcReliability(known_tech)
 	return

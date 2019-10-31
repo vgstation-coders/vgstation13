@@ -53,7 +53,7 @@
 		return
 
 	if(copy)
-		copies = Clamp(copies, 0, 10)
+		copies = clamp(copies, 0, 10)
 		spawn()
 			copying = 1
 			for(var/i = 0, i < copies, i++)
@@ -82,7 +82,7 @@
 			copying = 0
 		updateUsrDialog()
 	else if(photocopy)
-		copies = Clamp(copies, 0, 10)
+		copies = clamp(copies, 0, 10)
 		spawn()
 			copying = 1
 			for(var/i = 0, i < copies, i++)
@@ -121,7 +121,7 @@
 					break
 			copying = 0
 	else if(ass) //ASS COPY. By Miauw
-		copies = Clamp(copies, 0, 10)
+		copies = clamp(copies, 0, 10)
 		spawn()
 			copying = 1
 			for(var/i = 0, i < copies, i++)
@@ -281,11 +281,11 @@
 		var/xdim = input(usr, "Default paper width", "Formatting", 400) as num|null
 		if(!xdim)
 			return
-		xdim = Clamp(xdim,100,800)
+		xdim = clamp(xdim,100,800)
 		var/ydim = input(usr, "Default paper height", "Formatting", 400) as num|null
 		if(!ydim)
 			return
-		ydim = Clamp(ydim,100,900)
+		ydim = clamp(ydim,100,900)
 		copy.display_x = xdim
 		copy.display_y = ydim
 		to_chat(usr, "<span class='notice'>The machine hums a moment as it configures your document.</span>")

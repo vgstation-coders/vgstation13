@@ -242,6 +242,7 @@ var/list/ai_list = list()
 		"Girl Malf" = "ai-girl-malf",
 		"Girl" = "ai-girl",
 		"Glitchman" = "ai-glitchman",
+		"Gondola" = "ai-gondola",
 		"Goon" = "ai-goon",
 		"Green" = "ai-wierd",
 		"Hades" = "ai-hades",
@@ -274,6 +275,7 @@ var/list/ai_list = list()
 		"Triumvirate Static" = "ai-triumvirate-malf",
 		"Triumvirate" = "ai-triumvirate",
 		"Wasp" = "ai-wasp",
+		"Xerxes" = "ai-xerxes",
 		"Yes Man" = "yes-man",
 	)
 	var/selected = input("Select an icon!", "AI", null, null) as null|anything in possible_icon_states

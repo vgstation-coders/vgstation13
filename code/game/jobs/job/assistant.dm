@@ -63,4 +63,4 @@
 	if(sec_jobs > 5)
 		return 99
 
-	return Clamp(sec_jobs * config.assistantratio + xtra_positions, total_positions, 99)
+	return clamp(sec_jobs * config.assistantratio + xtra_positions, total_positions, 99)

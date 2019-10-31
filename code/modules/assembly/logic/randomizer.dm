@@ -38,7 +38,7 @@
 	if(!Adjacent(user) || user.isUnconscious()) //sanity 101
 		return
 
-	output_number = Clamp(new_output_num, 1, 512)
+	output_number = clamp(new_output_num, 1, 512)
 	to_chat(user, "<span class='info'>Number of outputs set to [output_number].</span>")
 
 /obj/item/device/assembly/randomizer/send_pulses_to_list(var/list/L) //The assembly frame will give us a list of devices to forward a pulse to.

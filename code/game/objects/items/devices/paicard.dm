@@ -7,19 +7,18 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_PROGRAMMING + "=2"
-	var/looking_for_personality = 0
+	var/looking_for_personality = FALSE
 	var/mob/living/silicon/pai/pai
 	var/last_ping_time = 0
 	var/ping_cooldown = 5 SECONDS
 
 /obj/item/device/paicard/New()
 	..()
-	overlays += image(icon=icon, icon_state = "pai-off")
 	paicard_list.Add(src)
 
 #ifdef DEBUG_ROLESELECT
 /obj/item/device/paicard/test/New()
-	src.looking_for_personality = 1
+	looking_for_personality = TRUE
 	paiController.findPAI(src, usr)
 #endif
 
@@ -31,14 +30,13 @@
 	..()
 
 /obj/item/device/paicard/attack_self(mob/user)
-	if (!in_range(src, user))
+	if(!in_range(src, user))
 		return
 	user.set_machine(src)
 	var/dat = "<TT><B>Personal AI Device</B><BR>"
-	if(pai && (!pai.master_dna || !pai.master))
+	if(pai && (!pai.dna || !pai.master))
 		dat += "<a href='byond://?src=\ref[src];setdna=1'>Imprint Master DNA</a><br>"
 	if(pai)
-
 		dat += {"Installed Personality: [pai.name]<br>
 			Prime directive: <br>[pai.pai_law0]<br>
 			Additional directives: <br>[pai.pai_laws]<br>
@@ -50,23 +48,19 @@
 			dat += "Transmit: <A href='byond://?src=\ref[src];wires=[WIRE_TRANSMIT]'>[(pai.radio.wires.IsIndexCut(WIRE_TRANSMIT)) ? "Disabled" : "Enabled"]</A><br>"
 			dat += "Receive: <A href='byond://?src=\ref[src];wires=[WIRE_RECEIVE]'>[(pai.radio.wires.IsIndexCut(WIRE_RECEIVE)) ? "Disabled" : "Enabled"]</A><br>"
 		else
-
 			dat += {"<b>Radio Uplink</b><br>
 				<font color=red><i>Radio firmware not loaded. Please install a pAI personality to load firmware.</i></font><br>"}
 		dat += "<A href='byond://?src=\ref[src];wipe=1'>\[Wipe current pAI personality\]</a><br>"
 	else
 		if(looking_for_personality)
-
 			dat += {"Searching for a personality...
 				<A href='byond://?src=\ref[src];request=1'>\[View available personalities\]</a><br>"}
 		else
-
 			dat += {"No personality is installed.<br>
 				<A href='byond://?src=\ref[src];request=1'>\[Request personal AI personality\]</a><br>
 				Each time this button is pressed, a request will be sent out to any available personalities. Check back often and alot time for personalities to respond. This process could take anywhere from 15 seconds to several minutes, depending on the available personalities' timeliness."}
 	user << browse(dat, "window=paicard")
 	onclose(user, "paicard")
-	return
 
 /obj/item/device/paicard/attack_ghost(var/mob/dead/observer/O)
 	if(looking_for_personality&&paiController.check_recruit(O))
@@ -79,35 +73,32 @@
 			to_chat(O, "[src] is recharging. Try again in a few moments.")
 
 /obj/item/device/paicard/Topic(href, href_list)
-
-	if(!usr || usr.stat || !in_range(src, usr))
+	if(!usr || usr.incapacitated() || !in_range(src, usr))
 		return
 
 	if(href_list["setdna"])
-		if(pai.master_dna)
+		if(pai.dna)
 			return
-		var/mob/M = usr
-		if(!istype(M, /mob/living/carbon))
-			to_chat(usr, "<font color=blue>You don't have any DNA, or your DNA is incompatible with this device.</font>")
+		var/mob/NewMaster = usr
+		if(!iscarbon(NewMaster))
+			to_chat(NewMaster, "<font color=blue>You don't have any DNA, or your DNA is incompatible with this device.</font>")
 		else
-			var/datum/dna/dna = usr.dna
-			pai.master = M.real_name
-			pai.master_dna = dna.unique_enzymes
+			pai.master = NewMaster.real_name
+			pai.dna = NewMaster.dna
 			to_chat(pai, "<font color = red><h3>You have been bound to a new master: [pai.master].</h3></font>")
 		attack_self(usr)
 	if(href_list["request"])
 		usr << browse(null, "window=paicard")
-		src.looking_for_personality = 1
+		looking_for_personality = TRUE
 		paiController.findPAI(src, usr)
 	if(href_list["wipe"])
 		var/confirm = input("Are you CERTAIN you wish to delete the current personality? This action cannot be undone.", "Personality Wipe") in list("Yes", "No")
 		if(confirm == "Yes")
-			for(var/mob/M in src)
-				to_chat(M, "<font color = #ff0000><h2>You feel yourself slipping away from reality.</h2></font>")
-				to_chat(M, "<font color = #ff4d4d><h3>Byte by byte you lose your sense of self.</h3></font>")
-				to_chat(M, "<font color = #ff8787><h4>Your mental faculties leave you.</h4></font>")
-				to_chat(M, "<font color = #ffc4c4><h5>oblivion... </h5></font>")
-				M.death(0)
+			to_chat(pai, "<font color = #ff0000><h2>You feel yourself slipping away from reality.</h2></font>")
+			to_chat(pai, "<font color = #ff4d4d><h3>Byte by byte you lose your sense of self.</h3></font>")
+			to_chat(pai, "<font color = #ff8787><h4>Your mental faculties leave you.</h4></font>")
+			to_chat(pai, "<font color = #ffc4c4><h5>oblivion... </h5></font>")
+			pai.death(0)
 			removePersonality()
 		attack_self(usr)
 	if(href_list["wires"])
@@ -129,16 +120,16 @@
 //		WIRE_TRANSMIT = 4
 
 /obj/item/device/paicard/proc/setPersonality(mob/living/silicon/pai/personality)
-	src.pai = personality
-	src.overlays.len = 0
-	src.overlays += image(icon=icon, icon_state = "pai-happy")
+	pai = personality
+	overlays.Cut()
+	overlays += image(icon=icon, icon_state = "pai-happy")
 
 /obj/item/device/paicard/proc/removePersonality()
-	src.pai = null
-	src.overlays.len = 0
-	src.overlays += image(icon=icon, icon_state = "pai-off")
+	pai = null
+	overlays.Cut()
 
 /obj/item/device/paicard/proc/setEmotion(var/emotion)
+
 	var/static/list/possible_choices = list(
 		"Happy" = "pai-happy",
 		"Cat" = "pai-cat",
@@ -159,6 +150,7 @@
 		"Cry" = "pai-cry",
 		"Thinking" = "pai-thinking",
 	)
+
 	var/selected = input(pai, "Select your new display image:", "Display image", "Happy") in null|possible_choices
 	if(!selected)
 		return
@@ -166,25 +158,20 @@
 	ASSERT(chosen_icon_state)
 
 	var/image/new_overlay = image(icon = icon, icon_state = chosen_icon_state)
-	src.overlays.len = 0
-	src.overlays += new_overlay
-	//we also update the mob's overlay so it appears properly on the scoreboard.
-	pai.overlays.len = 0
-	pai.overlays += new_overlay
+	overlays.Cut()
+	overlays += new_overlay
+	pai.appearance = appearance //we also update the mob's appearance so it appears properly on the scoreboard.
 
 /obj/item/device/paicard/proc/alertUpdate()
-	var/turf/T = get_turf(src.loc)
-	for (var/mob/M in viewers(T))
-		M.show_message("<span class='notice'>[src] flashes a message across its screen, \"Additional personalities available for download.\"</span>", 1, "<span class='notice'>[src] bleeps electronically.</span>", 2)
-		playsound(loc, 'sound/machines/paistartup.ogg', 50, 1)
-		src.overlays += image(icon=icon, icon_state = "pai-off-notify")
+	visible_message("<span class='notice'>[src] flashes a message across its screen, \"Additional personalities available for download.\"</span>", 1, "<span class='notice'>[src] bleeps electronically.</span>", 2)
+	playsound(loc, 'sound/machines/paistartup.ogg', 50, 1)
+	overlays += image(icon=icon, icon_state = "pai-off-notify")
 
 /obj/item/device/paicard/proc/removeNotification()
-	src.overlays.len = 0
+	overlays.Cut()
 
 /obj/item/device/paicard/emp_act(severity)
-	for(var/mob/M in src)
-		M.emp_act(severity)
+	pai.emp_act(severity)
 	..()
 
 /obj/item/device/paicard/dropped(mob/user)

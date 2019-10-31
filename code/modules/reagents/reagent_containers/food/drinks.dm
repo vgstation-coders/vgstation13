@@ -894,6 +894,16 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee/New()
 	..()
 	reagents.add_reagent(CAFE_LATTE, 50)
+	
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee
+	name = "HOSS Rainbow Donut Blend"
+	desc = "All the essentials, for on the go."
+	icon_state = "cannedcopcoffee"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee/New()
+	..()
+	reagents.add_reagent(SECCOFFEE, 50)
+
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear
 	name = "bear arms beer"

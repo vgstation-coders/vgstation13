@@ -22,6 +22,7 @@
 	max_shells = 4
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
+	clowned = CLOWNABLE
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
@@ -48,7 +49,10 @@
 	return 0
 
 /obj/item/weapon/gun/projectile/shotgun/pump/proc/pump(mob/M as mob)
-	playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
+	if(clowned == CLOWNED)
+		playsound(M, 'sound/items/quack.ogg', 60, 1)
+	else
+		playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
 	pumped = 0
 	if(current_shell)//We have a shell in the chamber
 		current_shell.forceMove(get_turf(src))//Eject casing
@@ -67,6 +71,7 @@
 /obj/item/weapon/gun/projectile/shotgun/pump/combat
 	name = "combat shotgun"
 	icon_state = "cshotgun"
+	clowned = UNCLOWN
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 8

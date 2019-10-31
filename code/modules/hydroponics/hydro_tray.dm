@@ -568,14 +568,16 @@
 				return
 	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
 		if(seed && !dead)
-			yield_mod = Clamp(yield_mod + (rand(3,5)/10), 1, 2)
+			yield_mod = clamp(yield_mod + (rand(3,5)/10), 1, 2)
 			if(yield_mod >= 2)
 				visible_message("<span class='notice'>\The [seed.display_name] looks lush and healthy.</span>")
 			return
 
 	..()
 
-/obj/machinery/portable_atmospherics/hydroponics/AltClick()
+/obj/machinery/portable_atmospherics/hydroponics/AltClick(/var/mob/usr)
+	if((usr.incapacitated() || !Adjacent(usr)))
+		return
 	close_lid()
 
 /datum/locking_category/hydro_tray

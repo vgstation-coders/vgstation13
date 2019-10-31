@@ -229,73 +229,61 @@ var/VOX_AVAILABLE_VOICES = list(
 	log_game("[key_name_admin(src)] made a vocal announcement with the following message: [message].")
 
 	// Same logic as play_vox_sound, so everyone that can hear the sound sees this.
+	/* Widely disliked. Uncomment if you want it back.
 	for(var/mob/M in player_list)
 		if(M.client)
 			var/turf/T = get_turf(M)
 			if(T.z == src.z)
 				to_chat(M, "<span class='notice'>[src] announces: <span class='big'>\"[message]\"</span>.</span>")
+	*/
 
 	for(var/word in words)
 		play_vox_word(word, vox_voice, src.z, null, TRUE)
 
-/*
-/mob/living/silicon/ai/verb/announcement()
-	set name = "Announcement"
-	set desc = "Send an announcement to the crew"
-	set category = "AI Commands"
-
-	if(!announcement_checks())
-		return
-
-	var/message = input(src, "WARNING: Misuse of this verb can result in you being job banned. More help is available in 'Announcement Help'", "Announcement", src.last_announcement) as text
-
-	play_announcement(message)
-*/
-
 var/list/vox_digits=list(
-	'sound/vox_fem/one.ogg',
-	'sound/vox_fem/two.ogg',
-	'sound/vox_fem/three.ogg',
-	'sound/vox_fem/four.ogg',
-	'sound/vox_fem/five.ogg',
-	'sound/vox_fem/six.ogg',
-	'sound/vox_fem/seven.ogg',
-	'sound/vox_fem/eight.ogg',
-	'sound/vox_fem/nine.ogg',
-	'sound/vox_fem/ten.ogg',
-	'sound/vox_fem/eleven.ogg',
-	'sound/vox_fem/twelve.ogg',
-	'sound/vox_fem/thirteen.ogg',
-	'sound/vox_fem/fourteen.ogg',
-	'sound/vox_fem/fifteen.ogg',
-	'sound/vox_fem/sixteen.ogg',
-	'sound/vox_fem/seventeen.ogg',
-	'sound/vox_fem/eighteen.ogg',
-	'sound/vox_fem/nineteen.ogg'
+	'sound/AI/one.ogg',
+	'sound/AI/two.ogg',
+	'sound/AI/three.ogg',
+	'sound/AI/four.ogg',
+	'sound/AI/five.ogg',
+	'sound/AI/six.ogg',
+	'sound/AI/seven.ogg',
+	'sound/AI/eight.ogg',
+	'sound/AI/nine.ogg',
+	'sound/AI/ten.ogg',
+	'sound/AI/eleven.ogg',
+	'sound/AI/twelve.ogg',
+	'sound/AI/thirteen.ogg',
+	'sound/AI/fourteen.ogg',
+	'sound/AI/fifteen.ogg',
+	'sound/AI/sixteen.ogg',
+	'sound/AI/seventeen.ogg',
+	'sound/AI/eighteen.ogg',
+	'sound/AI/nineteen.ogg'
 )
 
 var/list/vox_tens=list(
 	null,
 	null,
-	'sound/vox_fem/twenty.ogg',
-	'sound/vox_fem/thirty.ogg',
-	'sound/vox_fem/fourty.ogg',
-	'sound/vox_fem/fifty.ogg',
-	'sound/vox_fem/sixty.ogg',
-	'sound/vox_fem/seventy.ogg',
-	'sound/vox_fem/eighty.ogg',
-	'sound/vox_fem/ninety.ogg'
+	'sound/AI/twenty.ogg',
+	'sound/AI/thirty.ogg',
+	'sound/AI/fourty.ogg',
+	'sound/AI/fifty.ogg',
+	'sound/AI/sixty.ogg',
+	'sound/AI/seventy.ogg',
+	'sound/AI/eighty.ogg',
+	'sound/AI/ninety.ogg'
 )
 
 var/list/vox_units=list(
 	null, // Don't yell units
-	'sound/vox_fem/thousand.ogg',
-	'sound/vox_fem/million.ogg',
-	'sound/vox_fem/billion.ogg' // Yell at N3X15 if you somehow get to the point where you suddenly need "trillion"
+	'sound/AI/thousand.ogg',
+	'sound/AI/million.ogg',
+	'sound/AI/billion.ogg' // Yell at N3X15 if you somehow get to the point where you suddenly need "trillion"
 )
 
 /proc/vox_num2list(var/number)
-	return num2words(number, zero='sound/vox_fem/zero.ogg', minus='sound/vox_fem/minus.ogg', hundred='sound/vox_fem/hundred.ogg', digits=vox_digits, tens=vox_tens, units=vox_units)
+	return num2words(number, zero='sound/AI/zero.ogg', minus='sound/AI/minus.ogg', hundred='sound/AI/hundred.ogg', digits=vox_digits, tens=vox_tens, units=vox_units)
 
 /proc/play_vox_word(var/word, var/voice, var/z_level, var/mob/only_listener, var/do_sleep=FALSE)
 	. = TRUE
@@ -305,7 +293,8 @@ var/list/vox_units=list(
 	if(soundFile)
 		. = play_vox_sound(soundFile,z_level,only_listener)
 		if (do_sleep)
-			sleep(vox_sound_lengths[soundFile] SECONDS)
+			//sleep(vox_sound_lengths[soundFile] SECONDS)
+			sleep(vox_sound_lengths[soundFile])
 
 /proc/play_vox_sound(var/sound_file, var/z_level, var/mob/only_listener)
 	var/sound/voice = sound(sound_file, wait = 1, channel = VOX_CHANNEL)

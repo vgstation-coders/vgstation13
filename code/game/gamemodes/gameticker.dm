@@ -63,6 +63,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/whatisthissong.ogg",
 		"sound/music/space_asshole.ogg",
 		"sound/music/starman.ogg",
+		"sound/music/Lou_Reed_-_Satellite_of_Love.ogg",
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
 		"sound/music/twilight.ogg",

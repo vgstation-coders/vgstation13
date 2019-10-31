@@ -83,7 +83,6 @@
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 80, bullet = 80, laser = 50, energy = 30, bomb = 80, bio = 10, rad = 10)
 
-
 /obj/item/clothing/suit/armor/knight
 	name = "plate armour"
 	desc = "A classic suit of plate armour, highly effective at stopping melee attacks."

@@ -514,7 +514,7 @@
 			var/turf/T = loc
 			light_amount = T.get_lumcount() * 10
 
-		growth = Clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
+		growth = clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
 
 		if(growth >= 100)
 			growth = 0

@@ -322,7 +322,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "hoe"
 	item_state = "hoe"
-	flags = FPRINT  | NO_ATTACK_MSG
+	flags = FPRINT
 	siemens_coefficient = 1
 	force = 5.0
 	throwforce = 7.0

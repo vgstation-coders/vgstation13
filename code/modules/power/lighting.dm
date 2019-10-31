@@ -157,6 +157,22 @@ var/global/list/obj/machinery/light/alllights = list()
 	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
 	return SPECIAL_ATTACK_FAILED
 
+/obj/machinery/light/broken
+	icon_state = "ltube-broken" //for the mapper
+	spawn_with_bulb = /obj/item/weapon/light/tube/broken
+
+/obj/machinery/light/he
+	icon_state = "lhetube1"
+	spawn_with_bulb = /obj/item/weapon/light/tube/he
+
+/obj/machinery/light/he/broken
+	icon_state = "lhetube-broken" //for the mapper
+	spawn_with_bulb = /obj/item/weapon/light/tube/he/broken
+
+/obj/machinery/light/he/burned
+	icon_state = "lhetube-burned" //for the mapper
+	spawn_with_bulb = /obj/item/weapon/light/tube/he/burned
+
 /obj/machinery/light/small
 	icon_state = "lbulb1"
 	fitting = "bulb"
@@ -164,6 +180,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	spawn_with_bulb = /obj/item/weapon/light/bulb
 
 /obj/machinery/light/small/broken
+	icon_state = "lbulb-broken" //for the mapper
 	spawn_with_bulb = /obj/item/weapon/light/bulb/broken
 
 /obj/machinery/light/spot
@@ -172,9 +189,11 @@ var/global/list/obj/machinery/light/alllights = list()
 	spawn_with_bulb = /obj/item/weapon/light/tube/large
 
 /obj/machinery/light/built
+	icon_state = "ltube-empty" //for the mapper
 	spawn_with_bulb = null
 
 /obj/machinery/light/small/built
+	icon_state = "lbulb-empty" //for the mapper
 	spawn_with_bulb = null
 
 /obj/machinery/light/initialize()
@@ -484,7 +503,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		else
 			prot = 1
 
-		if(prot > 0 || (M_RESIST_HEAT in user.mutations))
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || (user.get_active_hand_organ()).is_robotic())
 			to_chat(user, "You remove the light [fitting]")
 		else
 			to_chat(user, "You try to remove the light [fitting], but it's too hot and you don't want to burn your hand.")
@@ -605,7 +624,16 @@ var/global/list/obj/machinery/light/alllights = list()
 	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
 	cost = 2
 
+/obj/item/weapon/light/tube/broken
+	status = LIGHT_BROKEN
+
 /obj/item/weapon/light/tube/burned
+	status = LIGHT_BURNED
+
+/obj/item/weapon/light/tube/he/broken
+	status = LIGHT_BROKEN
+
+/obj/item/weapon/light/tube/he/burned
 	status = LIGHT_BURNED
 
 /obj/item/weapon/light/tube/large

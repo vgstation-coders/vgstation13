@@ -107,7 +107,7 @@
 
 /mob/camera/blob/proc/add_points(var/points)
 	if(points != 0)
-		blob_points = Clamp(blob_points + points, 0, max_blob_points)
+		blob_points = clamp(blob_points + points, 0, max_blob_points)
 	var/number_of_cores = blob_cores.len
 	//Updating the HUD
 	if(hud_used)

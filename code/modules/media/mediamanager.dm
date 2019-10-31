@@ -119,9 +119,9 @@ function SetMusic(url, time, volume) {
 	set name = "Stop Admin Music"
 	set desc = "Stops all playing admin sounds."
 	set category = "OOC"
-	
+
 	src << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_ADMINMUSIC)
-			
+
 /mob/proc/force_music(var/url,var/start,var/volume=1)
 	if (client && client.media)
 		client.media.forced=(url!="")
@@ -186,7 +186,7 @@ to_chat(#define MP_DEBUG(x) owner, x)
 	if (url != targetURL || abs(targetStartTime - start_time) > 1 || abs(targetVolume - source_volume) > 0.1 /* 10% */)
 		url = targetURL
 		start_time = targetStartTime
-		source_volume = Clamp(targetVolume, 0, 1)
+		source_volume = clamp(targetVolume, 0, 1)
 		send_update()
 
 /datum/media_manager/proc/stop_music()

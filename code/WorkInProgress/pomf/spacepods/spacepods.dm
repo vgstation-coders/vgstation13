@@ -138,7 +138,7 @@
 
 /obj/spacepod/proc/adjust_health(var/damage)
 	var/oldhealth = health
-	health = Clamp(health-damage,0, maxHealth)
+	health = clamp(health-damage,0, maxHealth)
 	var/percentage = (health / initial(health)) * 100
 	var/mob/pilot = get_pilot()
 	if(pilot && oldhealth > health && percentage <= 25 && percentage > 0)

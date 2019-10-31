@@ -1124,7 +1124,7 @@
 			else
 				layer_mod = -1
 
-		user.ventcrawl_layer = Clamp(user.ventcrawl_layer + layer_mod, PIPING_LAYER_MIN, PIPING_LAYER_MAX)
+		user.ventcrawl_layer = clamp(user.ventcrawl_layer + layer_mod, PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 		to_chat(user, "You align yourself with the [user.ventcrawl_layer]\th output.")
 		return 1
 	else

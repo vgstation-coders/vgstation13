@@ -622,7 +622,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 						if(stinging)
 							if(chems && chems.len)
 								for(var/rid in chems)
-									H.reagents.add_reagent(rid, Clamp(1, 5, potency/10))
+									H.reagents.add_reagent(rid, clamp(1, 5, potency/10))
 								to_chat(H, "<span class='danger'>You are stung by \the [seed_name]!</span>")
 								if(hematophage)
 									if(tray && H.species && !(H.species.anatomy_flags & NO_BLOOD)) //the indentation gap doesn't stop from getting wider

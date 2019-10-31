@@ -478,11 +478,11 @@
 			credits = 0
 
 	if(signal.data["inc_priority"])
-		var/idx = Clamp(signal.data["inc_priority"], 2, recipes.len)
+		var/idx = clamp(signal.data["inc_priority"], 2, recipes.len)
 		recipes.Swap(idx, idx - 1)
 
 	if(signal.data["dec_priority"])
-		var/idx = Clamp(signal.data["dec_priority"], 1, recipes.len - 1)
+		var/idx = clamp(signal.data["dec_priority"], 1, recipes.len - 1)
 		recipes.Swap(idx, idx + 1)
 
 /obj/machinery/mineral/processing_unit/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
@@ -500,7 +500,7 @@
 /obj/machinery/mineral/processing_unit/multitool_topic(mob/user, list/href_list, obj/item/device/multitool/P)
 	if("changedir" in href_list)
 		var/changingdir = text2num(href_list["changedir"])
-		changingdir = Clamp(changingdir, 1, 2)//No runtimes from HREF exploits.
+		changingdir = clamp(changingdir, 1, 2)//No runtimes from HREF exploits.
 
 		var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
 		if(!newdir)

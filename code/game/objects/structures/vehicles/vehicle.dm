@@ -405,6 +405,7 @@
 	if (loc == oldloc)
 		return
 	if(next_cart)
+		sleep(0)
 		next_cart.Move(oldloc, glide_size_override = src.glide_size)
 
 /obj/structure/bed/chair/vehicle/proc/disconnected() //proc that carts call, we have no use for it

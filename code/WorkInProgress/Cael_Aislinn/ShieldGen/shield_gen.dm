@@ -189,11 +189,11 @@
 	if(href_list["toggle_active"])
 		toggle()
 	else if(href_list["adjust_field_radius"])
-		field_radius = Clamp(field_radius + text2num(href_list["adjust_field_radius"]), MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
+		field_radius = clamp(field_radius + text2num(href_list["adjust_field_radius"]), MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
 	else if(href_list["adjust_strengthen_rate"])
-		strengthen_rate = Clamp(strengthen_rate + text2num(href_list["adjust_strengthen_rate"]), MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)
+		strengthen_rate = clamp(strengthen_rate + text2num(href_list["adjust_strengthen_rate"]), MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)
 	else if(href_list["adjust_field_strength_cap"])
-		field_strength_cap = Clamp(field_strength_cap + text2num(href_list["adjust_field_strength_cap"]), MIN_FIELD_STRENGTH_CAP, MAX_FIELD_STRENGTH_CAP)
+		field_strength_cap = clamp(field_strength_cap + text2num(href_list["adjust_field_strength_cap"]), MIN_FIELD_STRENGTH_CAP, MAX_FIELD_STRENGTH_CAP)
 	return 1
 
 /obj/machinery/shield_gen/update_icon()

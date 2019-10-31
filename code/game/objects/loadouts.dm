@@ -376,7 +376,7 @@
 						/obj/item/clothing/gloves/centcom,
 						/obj/item/device/radio/headset/heads/captain,
 						/obj/item/clothing/head/centhat,
-						/obj/item/clothing/suit/armor/centcomm,
+						/obj/item/clothing/suit/space/rig/centcomm,
 						/obj/item/clothing/glasses/sunglasses,
 						/obj/item/weapon/gun/energy/laser/captain,
 						/obj/item/device/pda/heads/nt_supreme,

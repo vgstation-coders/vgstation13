@@ -324,14 +324,14 @@ var/global/list/disease2_list = list()
 				return
 			D.form = form_name
 			D.max_stage = input(C, "How many stages will your pathogen have?", "Custom Pathogen", D.max_stage) as num
-			D.max_stage = Clamp(D.max_stage,1,99)
+			D.max_stage = clamp(D.max_stage,1,99)
 			D.infectionchance = input(C, "What will be your pathogen's infection chance?", "Custom Pathogen", D.infectionchance) as num
-			D.infectionchance = Clamp(D.infectionchance,0,100)
+			D.infectionchance = clamp(D.infectionchance,0,100)
 			D.infectionchance_base = D.infectionchance
 			D.stageprob = input(C, "What will be your pathogen's progression speed?", "Custom Pathogen", D.stageprob) as num
-			D.stageprob = Clamp(D.stageprob,0,100)
+			D.stageprob = clamp(D.stageprob,0,100)
 			D.stage_variance = input(C, "What will be your pathogen's stage variance?", "Custom Pathogen", D.stage_variance) as num
-			D.stageprob = Clamp(D.stageprob,-1*D.max_stage,0)
+			D.stageprob = clamp(D.stageprob,-1*D.max_stage,0)
 			//D.can_kill = something something a while loop but probably not worth the effort. If you need it for your bus code it yourself.
 		else
 			var/d_type = known_forms[chosen_form]
@@ -345,10 +345,10 @@ var/global/list/disease2_list = list()
 			qdel(d_inst)
 
 		D.strength = input(C, "What will be your pathogen's strength? (1-50 is trivial to cure. 50-100 requires a bit more effort)", "Pathogen Strength", D.infectionchance) as num
-		D.strength = Clamp(D.strength,0,100)
+		D.strength = clamp(D.strength,0,100)
 
 		D.robustness = input(C, "What will be your pathogen's robustness? (1-100) Lower values mean that infected can carry the pathogen without getting affected by its symptoms.", "Pathogen Robustness", D.infectionchance) as num
-		D.robustness = Clamp(D.strength,0,100)
+		D.robustness = clamp(D.strength,0,100)
 
 		var/new_id = copytext(sanitize(input(C, "You can pick a 4 number ID for your Pathogen. Otherwise a random ID will be generated.", "Pick a unique ID", rand(0,9999)) as null | num),1,4)
 		if (!new_id)
@@ -367,13 +367,13 @@ var/global/list/disease2_list = list()
 			var/datum/disease2/effect/e = new symptom(D)
 			e.stage = i
 			e.chance = input(C, "Choose the default chance for this effect to activate", "Effect", e.chance) as null | num
-			e.chance = Clamp(e.chance,0,100)
+			e.chance = clamp(e.chance,0,100)
 			e.max_chance = input(C, "Choose the maximum chance for this effect to activate", "Effect", e.max_chance) as null | num
-			e.max_chance = Clamp(e.max_chance,0,100)
+			e.max_chance = clamp(e.max_chance,0,100)
 			e.multiplier = input(C, "Choose the default strength for this effect", "Effect", e.multiplier) as null | num
-			e.multiplier = Clamp(e.multiplier,0,100)
+			e.multiplier = clamp(e.multiplier,0,100)
 			e.max_multiplier = input(C, "Choose the maximum strength for this effect", "Effect", e.max_multiplier) as null | num
-			e.max_multiplier = Clamp(e.max_multiplier,0,100)
+			e.max_multiplier = clamp(e.max_multiplier,0,100)
 
 			D.log += "Added [e.name] at [e.chance]% chance and [e.multiplier] strength<br>"
 			D.effects += e
@@ -399,7 +399,7 @@ var/global/list/disease2_list = list()
 		if (alert("Do you want to specify the appearance of your pathogen in a petri dish?","Choose your appearance","Yes","No") == "Yes")
 			D.color = input(C, "Choose the color of the dish", "Cosmetic") as color
 			D.pattern = input(C, "Choose the shape of the pattern inside the dish (1 to 6)", "Cosmetic",rand(1,6)) as num
-			D.pattern = Clamp(D.pattern,1,6)
+			D.pattern = clamp(D.pattern,1,6)
 			D.pattern_color = input(C, "Choose the color of the pattern", "Cosmetic") as color
 
 		D.spread = 0
@@ -554,7 +554,7 @@ var/global/list/disease2_list = list()
 
 	ticks += speed
 
-
+//This proc is what governs how a disease mutates when it's in a pathogenic incubator (or with a lower chance inside an irradiated individual)
 /datum/disease2/disease/proc/incubate(var/atom/incubator,var/mutatechance=1)
 	mutatechance *= mutation_modifier
 
@@ -570,29 +570,34 @@ var/global/list/disease2_list = list()
 			machine = dish.loc
 
 	if (mutatechance > 0 && (body || dish) && incubator.reagents)
+		//MUTAGEN + CREATINE = Robustness Up, Effect Strength Up, Effect Chance randomized
 		if (incubator.reagents.has_reagent(MUTAGEN,0.5) && incubator.reagents.has_reagent(CREATINE,0.5))
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.5) && !incubator.reagents.remove_reagent(CREATINE,0.5))
 				log += "<br />[timestamp()] Robustness Strengthening (Mutagen and Creatine in [incubator])"
 				var/change = rand(1,5)
 				robustness = min(100,robustness + change)
 				for(var/datum/disease2/effect/e in effects)
-					e.multiplier_tweak(0.1)
-					minormutate()
+					e.multiplier_tweak(0.1)//all effects get their strength increased
+					minormutate()// a random effect has a 20% chance of getting its chance re-rolled between its initial value and max chance.
+							// and the disease's infection chance is rerolled to more or less 10% of the base infection chance for that disease type.
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,0,change,0.1)
+		//MUTAGEN + SPACEACILLIN = Robustness Down, Effect Strength Down, Effect Chance randomized
 		else if (incubator.reagents.has_reagent(MUTAGEN,0.5) && incubator.reagents.has_reagent(SPACEACILLIN,0.5))
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.5) && !incubator.reagents.remove_reagent(SPACEACILLIN,0.5))
 				log += "<br />[timestamp()] Robustness Weakening (Mutagen and Spaceacillin in [incubator])"
 				var/change = rand(1,5)
 				robustness = max(0,robustness - change)
 				for(var/datum/disease2/effect/e in effects)
-					e.multiplier_tweak(-0.1)
-					minormutate()
+					e.multiplier_tweak(-0.1)//all effects get their strength reduced
+					minormutate()// a random effect has a 20% chance of getting its chance re-rolled between its initial value and max chance.
+							// and the disease's infection chance is rerolled to more or less 10% of the base infection chance for that disease type.
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,0,-change,-0.1)
 		else
+			//MUTAGEN (with no creatine or spaceacillin) = New Effect
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Effect Mutation (Mutagen in [incubator])"
 				effectmutate(body != null)
@@ -603,6 +608,7 @@ var/global/list/disease2_list = list()
 					dish.update_icon()
 					if (machine)
 						machine.update_major(dish)
+			//CREATINE (with no mutagen) = Strength Up
 			if(!incubator.reagents.remove_reagent(CREATINE,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Strengthening (Creatine in [incubator])"
 				var/change = rand(1,5)
@@ -610,6 +616,7 @@ var/global/list/disease2_list = list()
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,change)
+			//SPACEACILLIN (with no mutagen) = Strength Down
 			if(!incubator.reagents.remove_reagent(SPACEACILLIN,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Weakening (Spaceacillin in [incubator])"
 				var/change = rand(1,5)
@@ -617,6 +624,7 @@ var/global/list/disease2_list = list()
 				if (dish)
 					if (machine)
 						machine.update_minor(dish,-change)
+		//RADIUM = New Antigen
 		if(!incubator.reagents.remove_reagent(RADIUM,0.02) && prob(mutatechance/8))
 			log += "<br />[timestamp()] Antigen Mutation (Radium in [incubator])"
 			antigenmutate()
@@ -677,7 +685,7 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease/proc/get_effect(var/index)
 	if(!index)
 		return pick(effects)
-	return effects[Clamp(index,0,effects.len)]
+	return effects[clamp(index,0,effects.len)]
 
 /datum/disease2/disease/proc/roll_antigen(var/list/factors = list())
 	if (factors.len <= 0)
@@ -742,7 +750,8 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease/proc/minormutate(var/index)
 	var/datum/disease2/effect/e = get_effect(index)
 	e.minormutate()
-	infectionchance = min(50,infectionchance + rand(0,10))
+	infectionchance = clamp(infectionchance_base + rand(-10,10),0,100)
+	//infectionchance = min(50,infectionchance + rand(0,10))
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/minorstrength(var/index)

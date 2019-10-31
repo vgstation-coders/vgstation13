@@ -40,7 +40,7 @@
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
 	var/specheatcap = 1 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
 
-/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/remove_reagents = FALSE)
 	set waitfor = 0
 
 	if(!holder)
@@ -76,7 +76,8 @@
 			if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
-
+					if(remove_reagents)
+						self.holder.remove_reagent(self.id, self.volume/2)
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
@@ -3347,7 +3348,7 @@
 		var/mob/living/carbon/human/H = M
 		for(var/datum/organ/external/temp in H.organs)
 			if(temp.status & ORGAN_BLEEDING)
-				temp.clamp()
+				temp.clamp_wounds()
 
 	if(M.losebreath >= 10)
 		M.losebreath = max(10, M.losebreath - 5)
@@ -3833,6 +3834,9 @@
 
 	if(..())
 		return 1
+	
+	if(prob(5))
+		to_chat(M,"<span class='notice'>Your face feels a little hot!</span>")
 
 	var/mob/living/carbon/human/H
 	if(ishuman(M))
@@ -3868,6 +3872,7 @@
 	color = "#B31008" //rgb: 179, 16, 8
 	density = 0.9
 	specheatcap = 8.59
+	data = 1
 
 /datum/reagent/condensedcapsaicin/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -3903,12 +3908,39 @@
 				H.drop_item()
 
 /datum/reagent/condensedcapsaicin/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 
 	if(prob(5))
+		to_chat(M,"<span class='notice'>Your face feels like it's on fire!</span>")
 		M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+
+	//let's just copy capsaicin/on_mob_life does, but make it worse.
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
+	switch(data)
+		if(1 to 15)
+			M.bodytemperature += 0.9 * TEMPERATURE_DAMAGE_COEFFICIENT		
+			if(holder.has_reagent("frostoil"))
+				holder.remove_reagent("frostoil", 5)
+			if(isslime(M))
+				M.bodytemperature += rand(10,20)
+			if(isslimeperson(H))
+				M.bodytemperature += rand(10,20)
+		if(15 to 30)
+			M.bodytemperature += 1.1 * TEMPERATURE_DAMAGE_COEFFICIENT
+			if(prob(6))//Start vomiting 
+				H.vomit(0,1)
+			if(isslime(M))
+				M.bodytemperature += rand(20,25)
+			if(isslimeperson(H))
+				M.bodytemperature += rand(20,25)
+		if(30 to 45)//Reagent dies out at about 50. Set up the vomiting to "fade out".
+			if(prob(9))
+				H.vomit()
+	data++
+
 
 /datum/reagent/blackcolor
 	name = "Black Food Coloring"
@@ -4098,7 +4130,7 @@
 
 	data++
 
-	var/stench_radius = Clamp(data * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 life ticks
+	var/stench_radius = clamp(data * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 life ticks
 
 	if(prob(5)) //5% chance of stinking per life()
 		for(var/mob/living/carbon/C in oview(stench_radius, M)) //All other carbons in 4 tile radius (excluding our mob)
@@ -6619,6 +6651,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = CAPPUCCINO
 	description = "Espresso with milk."
 
+/datum/reagent/drink/coffee/cappuccino/on_mob_life(var/mob/living/M)
+	..()
+	if(M.getBruteLoss() && prob(20))
+		M.heal_organ_damage(1, 0) //milk doing its work
+
 /datum/reagent/drink/coffee/doppio
 	name = "Doppio"
 	id = DOPPIO
@@ -6628,6 +6665,23 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Passione"
 	id = PASSIONE
 	description = "Rejuvenating!"
+	nutriment_factor = 3 * REAGENTS_METABOLISM //because honey
+
+/datum/reagent/drink/coffee/passione/on_mob_life(var/mob/living/M)
+	..()
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!holder)
+			return
+		H.sleeping = 0
+		H.nutrition += nutriment_factor //honey doing it's work
+		if(H.getBruteLoss() && prob(60))
+			H.heal_organ_damage(1, 0)
+		if(H.getFireLoss() && prob(50))
+			H.heal_organ_damage(0, 1)
+		if(H.getToxLoss() && prob(50))
+			H.adjustToxLoss(-1)
 
 /datum/reagent/drink/coffee/seccoffee
 	name = "Wake-Up Call"

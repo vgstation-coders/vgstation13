@@ -2,6 +2,7 @@
 
 //Menu values
 var/global/list/pda_app_menus = list(
+	PDA_APP_ALARM,
 	PDA_APP_RINGER,
 	PDA_APP_SPAMFILTER,
 	PDA_APP_BALANCECHECK,
@@ -41,6 +42,29 @@ var/global/list/pda_app_menus = list(
 	var/frequency = 1457	//	1200 < frequency < 1600 , always end with an odd number.
 	var/status = 1			//	0=off 1=on
 
+/datum/pda_app/alarm
+	name = "Alarm"
+	desc = "Set a time for a personal alarm to trigger."
+	price = 0
+	//menu = PDA_APP_ALARM Don't uncomment, it's listed elsewhere by the clock
+	icon = "pda_clock"
+	var/target = 0
+	var/status = 1			//	0=off 1=on
+
+/datum/pda_app/alarm/proc/set_alarm(var/await)
+	if(await<=0)
+		return FALSE
+	target = world.time + (await MINUTES)
+	spawn((await MINUTES) + 1 SECONDS)
+		alarm()
+	return TRUE
+
+/datum/pda_app/alarm/proc/alarm()
+	if(!status || world.time < target)
+		return //End the loop if if was disabled or if the target isn't here yet. e.g.: target changed
+	playsound(pda_device, 'sound/machines/chime.ogg', 200, FALSE)
+	sleep(1 SECONDS)
+	alarm()
 
 /datum/pda_app/light_upgrade
 	name = "PDA Flashlight Enhancer"

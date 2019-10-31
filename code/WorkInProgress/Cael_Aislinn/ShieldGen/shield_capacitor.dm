@@ -43,8 +43,8 @@
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/capacitor/Ca in component_parts)
 		T += Ca.rating - 1
-		max_charge = (initial(max_charge)+(T * 10000000))	
-		max_charge_rate = (initial(max_charge_rate)+(T * 10000000))	
+		max_charge = (initial(max_charge)+(T * 10000000))
+		max_charge_rate = (initial(max_charge_rate)+(T * 10000000))
 
 /obj/machinery/shield_capacitor/proc/toggle_lock(var/mob/user)
 	locked = !locked
@@ -131,7 +131,7 @@
 		active = !active
 		use_power = active ? 2 : 1
 	if(href_list["adjust_charge_rate"])
-		charge_rate = Clamp(charge_rate + text2num(href_list["adjust_charge_rate"]), min_charge_rate, max_charge_rate)
+		charge_rate = clamp(charge_rate + text2num(href_list["adjust_charge_rate"]), min_charge_rate, max_charge_rate)
 	return 1
 
 /obj/machinery/shield_capacitor/kick_act()
@@ -141,7 +141,7 @@
 		return
 	if(prob(50))
 		active = !active
-	
+
 /obj/machinery/shield_capacitor/proc/rotate(var/mob/user, var/degrees)
 	if(anchored)
 		to_chat(user, "\The [src] is fastened to the floor!")
