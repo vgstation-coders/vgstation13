@@ -112,11 +112,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 		return
 
-/obj/item/weapon/match/is_hot()
-	if(lit == 1)
-		return source_temperature
-	return 0
-
 /obj/item/weapon/match/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(istype(M.wear_mask, /obj/item/clothing/mask/cigarette) && user.zone_sel.selecting == "mouth" && lit == 1)
 		var/obj/item/clothing/mask/cigarette/cig = M.wear_mask

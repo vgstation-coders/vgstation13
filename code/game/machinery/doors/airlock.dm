@@ -393,9 +393,6 @@ About the new airlock wires panel:
 
 	return
 
-/obj/machinery/door/airlock/bump_open(mob/living/simple_animal/user as mob)
-	..(user)
-
 /obj/machinery/door/airlock/proc/isElectrified()
 	if(src.secondsElectrified != 0)
 		return 1

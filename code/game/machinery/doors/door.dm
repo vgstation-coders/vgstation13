@@ -78,6 +78,9 @@ var/list/all_doors = list()
 	return TRUE
 
 /obj/machinery/door/Bumped(atom/AM)
+	if (panel_open)
+		return
+		
 	if (ismob(AM))
 		var/mob/M = AM
 
