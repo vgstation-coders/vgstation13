@@ -31,6 +31,7 @@
 	name = "unnaturally hard rock wall"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
+
 /turf/unsimulated/wall/rock/canSmoothWith()
 	return null
 
@@ -38,7 +39,8 @@
 	name = "unnaturally hard ice wall"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "snow_rock"
-/turf/unsimulated/wall/rock/canSmoothWith()
+
+/turf/unsimulated/wall/rock/ice/canSmoothWith()
 	return null
 
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
