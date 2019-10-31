@@ -138,8 +138,8 @@
 			return 1
 
 		to_chat(user, "<span class='notice'>You start placing [src].</span>")
-		if(!do_mob(user, target, 3 SECONDS))
-			return 1
+		if(!do_after(user, target, 3 SECONDS))
+			return 0
 
 		if(locate(tape_type) in turf)
 			to_chat(user, "<span class='warning'>There's some tape already!</span>")
@@ -272,9 +272,9 @@
 	tape_type = /obj/item/tape/engineering/syndie
 
 /obj/item/taperoll/syndie/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if (charges_left && (istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor)))
-		if(..())
-			charges_left--
+	. = ..()
+	if (charges_left && . && (istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor)))
+		charges_left--
 		if (!(charges_left))
 			to_chat(user, "<span class = 'warning'>There is no tape left.</span>")
 			qdel(src)
