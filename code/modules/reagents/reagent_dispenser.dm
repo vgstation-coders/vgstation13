@@ -464,7 +464,7 @@
 		return
 	for(var/mob/living/carbon/slime/M in range(1,target))
 		if(M.Victim == target)
-			to_chat(usr, "[target.name] will not fit into the [src] because they have a slime latched onto their head.")
+			to_chat(user, "[target.name] will not fit into \the [src] because they have a slime latched onto their head.")
 			return
 
 	if(target == user)
