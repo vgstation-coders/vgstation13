@@ -28,6 +28,8 @@
 //#define MAP_OVERRIDE 6
 // tgstation.dm:
 //#define MAP_OVERRIDE 7
+// weheelstation.dm
+//#define MAP_OVERRIDE 8
 
 
 // Toggles several features, explained in their respective comments.
