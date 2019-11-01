@@ -168,6 +168,12 @@
 						/obj/item/clothing/glasses/eyepatch,
 						/obj/item/weapon/melee/energy/sword/pirate)
 
+/obj/abstract/loadout/rune_knight
+	items_to_spawn = list(/obj/item/clothing/head/helmet/rune,
+						/obj/item/clothing/suit/armor/rune,
+						/obj/item/weapon/rsscimmy,
+						/obj/item/weapon/shield/riot/rune)
+
 /obj/abstract/loadout/space_pirate
 	items_to_spawn = list(/obj/item/clothing/under/pirate,
 						/obj/item/clothing/shoes/brown,
