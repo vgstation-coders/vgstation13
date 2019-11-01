@@ -66,32 +66,6 @@
 	center_x = 226
 	center_y = 254
 
-//Randomized wires on select airlocks
-//fuck greyshirts and fuck powergamers
-/obj/machinery/door/airlock/glass_security/New()
-	.=..()
-	wires = new /datum/wires/airlock/secure(src)
-
-/obj/machinery/door/airlock/security/New()
-	.=..()
-	wires = new /datum/wires/airlock/secure(src)
-
-/obj/machinery/door/airlock/highsecurity/New()
-	.=..()
-	wires = new /datum/wires/airlock/secure(src)
-
-/obj/machinery/door/airlock/command/New()
-	.=..()
-	wires = new /datum/wires/airlock/secure(src)
-
-/obj/machinery/door/airlock/glass_command/New()
-	.=..()
-	wires = new /datum/wires/airlock/secure(src)
-
-/obj/machinery/door/airlock/maintenance/secure/New()
-	.=..()
-	wires = new /datum/wires/airlock/secure(src)
-
 ////////////////////////////////////////////////////////////////
 #include "wheelstation/areas.dm"
 #include "wheelstation.dmm"
