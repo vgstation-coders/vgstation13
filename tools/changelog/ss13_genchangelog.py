@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 '''
 Dependencies:
     Beautiful Soup 4 (for now)
