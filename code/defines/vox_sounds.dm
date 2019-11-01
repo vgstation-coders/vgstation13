@@ -3,6 +3,9 @@
 // Dynamically loading it has bad results with sounds overtaking each other, even with the wait variable.
 // If you need to modify this for whatever reason, please modify the template at https://github.com/N3X15/ss13-vox/blob/master/templates/vglist.jinja
 
+// DEFINES
+// * DISABLE_VOX - When defined, VOX sounds will not be loaded.  Useful for events like Lamprey where memory is scarce.
+
 // A list of sounds
 // Structure: vox_sound["(fem|mas|default)"]["soundid"] = 'sound/vox_sex/soundid.ogg'
 var/list/vox_sounds = list()
@@ -18,6 +21,7 @@ var/list/vox_sound_lengths = list()
 // STATS:
 //  10690 instructions spread over 11 procs.
 //
+#ifndef DISABLE_VOX
 /__vox_sound_meta_init/New()
   src.__init_0()
   src.__init_1()
@@ -10733,3 +10737,4 @@ var/list/vox_sound_lengths = list()
   vox_wordlen["woody"] = 2
 
 /var/__vox_sound_meta_init/__vox_sound_meta_instance = new
+#endif
