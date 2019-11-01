@@ -489,6 +489,6 @@
 			to_chat(user,"<span class='notice'>You climb free of the barrel.</span>")
 
 /obj/structure/reagent_dispensers/cauldron/barrel/Destroy()
-	..()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
+	..()
