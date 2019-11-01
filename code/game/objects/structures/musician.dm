@@ -113,7 +113,7 @@
 								cur_acc[cur_note] = "#" // so shift is never required
 						else
 							cur_oct[cur_note] = text2num(ni)
-					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)		
+					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)
 				var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
 				if (ui)
 					ui.send_message("activeChord", list2params(list(lineCount, chordCount)))
@@ -123,7 +123,7 @@
 				else
 					sleep(tempo)
 				chordCount++
-				
+
 			lineCount++
 		repeat--
 	playing = 0
@@ -229,6 +229,10 @@
 		//split into lines
 		spawn()
 			lines = splittext(t, "\n")
+			//if the user didn't paste in a song, we have nothing to do here
+			if(lines.len == 0)
+				alert("You can't import an empty song!")
+				return
 			if(copytext(lines[1],1,6) == "BPM: ")
 				tempo = sanitize_tempo(600 / text2num(copytext(lines[1],6)))
 				lines.Cut(1,2)
@@ -307,7 +311,7 @@
 
 		lines.Swap(index, index+dir)
 	interact(usr)
-	
+
 	return
 /datum/song/proc/sanitize_tempo(new_tempo)
 	new_tempo = abs(new_tempo)
