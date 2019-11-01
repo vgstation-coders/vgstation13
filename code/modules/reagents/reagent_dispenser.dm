@@ -416,10 +416,10 @@
 		return 1
 	if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-	usr.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
+	H.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
 	reagents.reaction(usr.loc)
 	src.reagents.clear_reagents()
-	usr.visible_message("<span class='warning'>[usr] kicks \the [src]!</span>", "<span class='notice'>You kick \the [src].</span>")
+	H.visible_message("<span class='warning'>[usr] kicks \the [src]!</span>", "<span class='notice'>You kick \the [src].</span>")
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
 
@@ -477,16 +477,14 @@
 			enter_barrel(target)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/container_resist(mob/user)
-	if(exiting.Find(user))
-		exiting -= user
+	if (exiting.Remove(user)) 
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
 		return
 	visible_message("<span class='warning'>[user] begins to climb free of the \the [src]!</span>")
 	exiting += user
 	spawn(3 SECONDS)
-		if(loc && exiting.Find(user))
+		if(loc && exiting.Remove(user))
 			user.forceMove(loc)
-			exiting -= user
 			update_icon()
 			to_chat(user,"<span class='notice'>You climb free of the barrel.</span>")
 
