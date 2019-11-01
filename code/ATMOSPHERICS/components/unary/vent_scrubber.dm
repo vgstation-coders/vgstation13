@@ -252,6 +252,11 @@
 			if(network)
 				network.update = 1
 
+		//turn off pressure reduction flag if we were within the margin on the "I'm sorry you had to see this" check.
+		else if(reducing_pressure)
+			reducing_pressure = 0
+			update_icon()
+
 	else //Just siphoning all air
 		if(reducing_pressure)
 			reducing_pressure = 0
