@@ -538,3 +538,8 @@ proc/is_blind(A)
 
 /mob/proc/can_be_infected()
 	return 0
+
+/mob/proc/remove_confused(var/amt)
+	confused = max(0, confused - amt)
+	if (confused <= 0)
+		confused_intensity = 0
