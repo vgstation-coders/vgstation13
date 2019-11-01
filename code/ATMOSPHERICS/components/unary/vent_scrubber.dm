@@ -177,7 +177,7 @@
 	//scrubbing mode
 	if(scrubbing)
 		//if internal pressure limit is enabled and met, we don't do anything
-		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.return_pressure()) < 0.05)
+		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.return_pressure()) =< 0.05)
 			if(reducing_pressure)
 				reducing_pressure = 0
 				update_icon()
