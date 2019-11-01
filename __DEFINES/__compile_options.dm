@@ -28,7 +28,7 @@
 //#define MAP_OVERRIDE 6
 // tgstation.dm:
 //#define MAP_OVERRIDE 7
-// weheelstation.dm
+// wheelstation.dm
 //#define MAP_OVERRIDE 8
 
 
