@@ -412,7 +412,7 @@
 
 /obj/structure/reagent_dispensers/cauldron/barrel/kick_act(mob/living/carbon/human/H)
 	..()
-	if reagents == null)
+	if (reagents == null)
 		return 1
 	if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
