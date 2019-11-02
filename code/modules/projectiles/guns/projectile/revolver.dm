@@ -294,8 +294,8 @@
 /obj/item/weapon/gun/projectile/banana
 	name = "banana"
 	desc = "It's an excellent prop for a comedy."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "banana"
+	icon = 'icons/obj/hydroponics/banana.dmi'
+	icon_state = "produce"
 	item_state = "banana"
 	max_shells = 1
 	gun_flags = 0
