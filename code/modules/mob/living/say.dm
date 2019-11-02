@@ -269,7 +269,7 @@ var/list/department_radio_keys = list(
 	var/list/total_listeners = get_hearers_in_view(visual_range, speech.speaker)
 	var/list/actual_listeners = observers.Copy()
 	for(var/atom/A in total_listeners)
-		if((A in range(message_range,src)) && !(A in actual_listeners))
+		if(get_dist(src, A) <= message_range)
 			actual_listeners.Add(A)
 		else
 			to_chat(A, "\The [speech.speaker] appears to say something, but you can't make it out from here.")
