@@ -208,7 +208,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else if(ear_damage < 25)	//ear damage heals slowly under this threshold.
 		ear_damage = max(ear_damage-0.05, 0)
 
-	confused = max(0, confused - 1)
+	remove_confused(1)
 
 	if(say_mute)
 		say_mute = max(say_mute-1, 0)
@@ -238,51 +238,49 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/atom/A = loc
 
-	if(isturf(A))
-		var/turf/T = A
-		var/datum/gas_mixture/Environment = T.return_air()
+	var/datum/gas_mixture/Environment = A.return_air()
 
-		if(Environment)
-			if(abs(Environment.temperature - bodytemperature) > 40)
-				bodytemperature += ((Environment.temperature - bodytemperature) / 5)
+	if(Environment)
+		if(abs(Environment.temperature - bodytemperature) > 40)
+			bodytemperature += ((Environment.temperature - bodytemperature) / 5)
 
-			if(min_oxy)
-				if(Environment.molar_density(GAS_OXYGEN) < min_oxy / CELL_VOLUME)
-					atmos_suitable = 0
-					oxygen_alert = 1
-				else
-					oxygen_alert = 0
+		if(min_oxy)
+			if(Environment.molar_density(GAS_OXYGEN) < min_oxy / CELL_VOLUME)
+				atmos_suitable = 0
+				oxygen_alert = 1
+			else
+				oxygen_alert = 0
 
-			if(max_oxy)
-				if(Environment.molar_density(GAS_OXYGEN) > max_oxy / CELL_VOLUME)
-					atmos_suitable = 0
+		if(max_oxy)
+			if(Environment.molar_density(GAS_OXYGEN) > max_oxy / CELL_VOLUME)
+				atmos_suitable = 0
 
-			if(min_tox)
-				if(Environment.molar_density(GAS_PLASMA) < min_tox / CELL_VOLUME)
-					atmos_suitable = 0
+		if(min_tox)
+			if(Environment.molar_density(GAS_PLASMA) < min_tox / CELL_VOLUME)
+				atmos_suitable = 0
 
-			if(max_tox)
-				if(Environment.molar_density(GAS_PLASMA) > max_tox / CELL_VOLUME)
-					atmos_suitable = 0
-					toxins_alert = 1
-				else
-					toxins_alert = 0
+		if(max_tox)
+			if(Environment.molar_density(GAS_PLASMA) > max_tox / CELL_VOLUME)
+				atmos_suitable = 0
+				toxins_alert = 1
+			else
+				toxins_alert = 0
 
-			if(min_n2)
-				if(Environment.molar_density(GAS_NITROGEN) < min_n2 / CELL_VOLUME)
-					atmos_suitable = 0
+		if(min_n2)
+			if(Environment.molar_density(GAS_NITROGEN) < min_n2 / CELL_VOLUME)
+				atmos_suitable = 0
 
-			if(max_n2)
-				if(Environment.molar_density(GAS_NITROGEN) > max_n2 / CELL_VOLUME)
-					atmos_suitable = 0
+		if(max_n2)
+			if(Environment.molar_density(GAS_NITROGEN) > max_n2 / CELL_VOLUME)
+				atmos_suitable = 0
 
-			if(min_co2)
-				if(Environment.molar_density(GAS_CARBON) < min_co2 / CELL_VOLUME)
-					atmos_suitable = 0
+		if(min_co2)
+			if(Environment.molar_density(GAS_CARBON) < min_co2 / CELL_VOLUME)
+				atmos_suitable = 0
 
-			if(max_co2)
-				if(Environment.molar_density(GAS_CARBON) > max_co2 / CELL_VOLUME)
-					atmos_suitable = 0
+		if(max_co2)
+			if(Environment.molar_density(GAS_CARBON) > max_co2 / CELL_VOLUME)
+				atmos_suitable = 0
 
 	//Atmos effect
 	if(bodytemperature < minbodytemp)

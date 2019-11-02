@@ -259,20 +259,29 @@ var/list/department_radio_keys = list(
 	return 0
 
 /mob/living/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type) // what is bubble type?
+	var/visual_range = message_range //the range of hearers who can see that something was said, but not hear the message
 	say_testing(src, "/mob/living/send_speech() start, msg = [speech.message]; message_range = [message_range]; language = [speech.language ? speech.language.name : "None"]; speaker = [speech.speaker];")
 	if(isnull(message_range))
 		message_range = 7
 
-	var/list/listeners = get_hearers_in_view(message_range, speech.speaker) | observers
+	message_range = atmospheric_speech(speech,message_range)
+
+	var/list/total_listeners = get_hearers_in_view(visual_range, speech.speaker)
+	var/list/actual_listeners = observers.Copy()
+	for(var/atom/A in total_listeners)
+		if((A in range(message_range,src)) && !(A in actual_listeners))
+			actual_listeners.Add(A)
+		else
+			to_chat(A, "\The [speech.speaker] appears to say something, but you can't make it out from here.")
 
 	var/rendered = render_speech(speech)
 
-	var/list/listening_nonmobs = listeners.Copy()
-	for(var/mob/M in listeners)
+	var/list/listening_nonmobs = actual_listeners.Copy()
+	for(var/mob/M in actual_listeners)
 		listening_nonmobs -= M
 		M.Hear(speech, rendered)
 
-	send_speech_bubble(speech.message, bubble_type, listeners)
+	send_speech_bubble(speech.message, bubble_type, total_listeners)
 
 	for (var/atom/movable/listener in listening_nonmobs)
 		listener.Hear(speech, rendered)

@@ -582,7 +582,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/soulblade
 	name = "soul blade"
-	desc = "An obsidian blade fitted with a soul gem, giving it soul catching propertiess."
+	desc = "An obsidian blade fitted with a soul gem, giving it soul catching properties."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon = 'icons/obj/cult_64x64.dmi'
 	pixel_x = -16 * PIXEL_MULTIPLIER
@@ -1157,7 +1157,7 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
-	
+
 ///////////////////////////////////////DEBUG ITEMS////////////////////////////////////////////////
 //Pamphlet: turns you into a cultist
 /obj/item/weapon/bloodcult_pamphlet
@@ -1233,7 +1233,7 @@ var/list/arcane_tomes = list()
 	volume = 60
 	force = 5
 	throwforce = 7
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/cult/examine(var/mob/user)
 	..()
 	if (iscultist(user))

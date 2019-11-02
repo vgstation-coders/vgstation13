@@ -3474,7 +3474,7 @@
 	if(M.dizziness)
 		M.dizziness = max(0, M.dizziness - 15)
 	if(M.confused)
-		M.confused = max(0, M.confused - 5)
+		M.remove_confused(5)
 	for(var/datum/disease/D in M.viruses) //Diseases that work under the second rework of viruses, or "Viro 3"
 		D.spread = "Remissive"
 		D.stage--
@@ -5810,7 +5810,7 @@
 			if(M.dizziness != 0)
 				M.dizziness = max(0, M.dizziness - 15)
 			if(M.confused != 0)
-				M.confused = max(0, M.confused - 5)
+				M.remove_confused(5)
 
 /datum/reagent/ethanol/deadrum/glasgow
 	name = "Glasgow Deadrum"
@@ -6055,7 +6055,7 @@
 	if(M.dizziness != 0)
 		M.dizziness = max(0, M.dizziness - 15)
 	if(M.confused != 0)
-		M.confused = max(0, M.confused - 5)
+		M.remove_confused(5)
 
 /datum/reagent/ethanol/deadrum/changelingsting
 	name = "Changeling Sting"
@@ -6717,7 +6717,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(M.dizziness != 0)
 		M.dizziness = max(0, M.dizziness - 15)
 	if(M.confused != 0)
-		M.confused = max(0, M.confused - 5)
+		M.remove_confused(5)
 	M.reagents.add_reagent (IRON, 0.1)
 
 /datum/reagent/drink/coffee/detcoffee

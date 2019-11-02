@@ -377,28 +377,9 @@
 							M.animate_movement = 2
 							return
 
-		else if(mob.confused && prob(10))
-			//step_rand(mob)
-			switch(Dir)
-				if(NORTH)
-					step(mob, pick(NORTHEAST, NORTHWEST))
-				if(SOUTH)
-					step(mob, pick(SOUTHEAST, SOUTHWEST))
-				if(EAST)
-					step(mob, pick(NORTHEAST, SOUTHEAST))
-				if(WEST)
-					step(mob, pick(NORTHWEST, SOUTHWEST))
-				if(NORTHEAST)
-					step(mob, pick(NORTH, EAST))
-				if(NORTHWEST)
-					step(mob, pick(NORTH, WEST))
-				if(SOUTHEAST)
-					step(mob, pick(SOUTH, EAST))
-				if(SOUTHWEST)
-					step(mob, pick(SOUTH, WEST))
-				
-			mob.last_movement=world.time
 		else
+			if (mob.process_confused(Dir))
+				return
 			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
 				mob.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			//	to_chat(src, "<span class='notice'>First Step</span>")
@@ -407,6 +388,37 @@
 
 		if(mob.dir != old_dir)
 			mob.Facing()
+
+/mob/proc/process_confused(var/Dir)
+	if (confused <= 0)
+		return FALSE
+	. = TRUE
+	var/old_dir = dir
+	if (confused_intensity == CONFUSED_MAGIC)
+		step_rand(src)
+		return
+
+	switch(Dir)
+		if(NORTH)
+			step(src, pick(NORTHEAST, NORTHWEST))
+		if(SOUTH)
+			step(src, pick(SOUTHEAST, SOUTHWEST))
+		if(EAST)
+			step(src, pick(NORTHEAST, SOUTHEAST))
+		if(WEST)
+			step(src, pick(NORTHWEST, SOUTHWEST))
+		if(NORTHEAST)
+			step(src, pick(NORTH, EAST))
+		if(NORTHWEST)
+			step(src, pick(NORTH, WEST))
+		if(SOUTHEAST)
+			step(src, pick(SOUTH, EAST))
+		if(SOUTHWEST)
+			step(src, pick(SOUTH, WEST))
+				
+	last_movement=world.time
+	if(dir != old_dir)
+		Facing()
 
 ///Process_Grab()
 ///Called by client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)

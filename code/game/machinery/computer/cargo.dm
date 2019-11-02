@@ -191,6 +191,9 @@ For vending packs, see vending_packs.dm*/
 	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
 		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
 		hacked = 1
+		can_order_contraband = 1
+		var/obj/item/weapon/circuitboard/supplycomp/C = circuit
+		C.contraband_enabled = 1
 		return
 	if(I.is_screwdriver(user))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
