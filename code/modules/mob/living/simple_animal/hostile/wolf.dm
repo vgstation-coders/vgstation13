@@ -287,7 +287,7 @@
 			stop_automated_movement = 0
 
 
-		if((health < maxHealth/2)
+		if(health < maxHealth/2)
 			if(nutrition >= WOLF_REGENCOST)
 				health += rand(1,3)
 				nutrition -= WOLF_REGENCOST
