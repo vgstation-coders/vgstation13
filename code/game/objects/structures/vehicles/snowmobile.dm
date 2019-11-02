@@ -47,9 +47,9 @@
 	set category = "Object"
 	set src in view(1)
 
-	if(!usr.stat)
+	if(!usr.incapacitated())
 		if(!isturf(usr.loc))
-			to_chat(usr, "You cannot turn the light on while in this [usr.loc].")//To prevent some lighting anomalities.
+			to_chat(usr, "You cannot turn the light on while in \the [usr.loc].")//To prevent some lighting anomalities.
 
 			return 0
 		on = !on
