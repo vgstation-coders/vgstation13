@@ -96,7 +96,6 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	network = list(CAMERANET_THUNDER)
 	density = 0
 	circuit = null
-	layer = ABOVE_WINDOW_LAYER
 
 	light_color = null
 
