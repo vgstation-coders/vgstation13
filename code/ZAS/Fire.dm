@@ -36,12 +36,10 @@ Attach to transfer valve and open. BOOM.
 
 /atom/proc/burnItselfUp()
 	while(on_fire)
-		var/turf/T = get_turf(src)
 		var/in_fire = FALSE
-		for(var/A in T.contents)
-			if(istype(A, /obj/effect/fire))
-				in_fire = TRUE
-				break
+		for(var/obj/effect/fire/F in loc)
+			in_fire = TRUE
+			break
 		if(!in_fire)
 			fire_fuel -= 0.2
 			if(fire_fuel<=0.1)
