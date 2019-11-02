@@ -1,5 +1,5 @@
 /obj/item/key/snowmobile
-	name = "\improper snowmobile key"
+	name = "snowmobile key"
 	desc = "An ignition key for use with Nanotrasen's snowmobile brand."
 	icon_state = "keys"
 
