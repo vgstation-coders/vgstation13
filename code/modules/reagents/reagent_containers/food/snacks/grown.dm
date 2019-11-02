@@ -14,7 +14,8 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
-	icon = 'icons/obj/harvest.dmi'
+	icon = 'icons/obj/hydroponics/apple.dmi'
+	icon_state = "produce"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New(newloc, newpotency)
 	if(!isnull(newpotency))
@@ -25,6 +26,7 @@ var/list/special_fruits = list()
 
 /proc/get_special_fruits(var/filter=HYDRO_PREHISTORIC|HYDRO_VOX)
 	. = list()
+	. += /obj/item/weapon/reagent_containers/food/snacks/grown
 	for(var/T in existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
 		var/obj/item/weapon/reagent_containers/food/snacks/grown/G = T
 		if(initial(G.hydroflags) & filter)
@@ -34,13 +36,13 @@ var/list/special_fruits = list()
 	..()
 
 	//Handle some post-spawn var stuff.
-	spawn(1)
+	spawn()
 		//Fill the object up with the appropriate reagents.
 		if(!isnull(plantname))
 			seed = SSplant.seeds[plantname]
 			if(!seed)
 				return
-
+			icon = seed.plant_dmi
 			potency = round(seed.potency)
 			force = seed.thorny ? 5+seed.carnivorous*3 : 0
 
@@ -266,7 +268,6 @@ var/list/special_fruits = list()
 	name = "ear of corn"
 	desc = "Needs some butter!"
 	plantname = "corn"
-	icon_state = "corn"
 	potency = 40
 	filling_color = "#FFEE00"
 	trash = /obj/item/weapon/corncob
@@ -275,7 +276,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/cherries
 	name = "cherries"
 	desc = "Great for toppings!"
-	icon_state = "cherry"
 	filling_color = "#FF0000"
 	gender = PLURAL
 	plantname = "cherry"
@@ -284,7 +284,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/cinnamon
 	name = "cinnamon sticks"
 	desc = "Straight from the bark!"
-	icon_state = "cinnamon"
 	filling_color = "#D2691E"
 	gender = PLURAL
 	plantname = "cinnamomum"
@@ -292,7 +291,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/poppy
 	name = "poppy"
 	desc = "Long-used as a symbol of rest, peace, and death."
-	icon_state = "poppy"
 	potency = 30
 	filling_color = "#CC6464"
 	plantname = "poppies"
@@ -301,7 +299,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/harebell
 	name = "harebell"
 	desc = "\"I'll sweeten thy sad grave: thou shalt not lack the flower that's like thy face, pale primrose, nor the azured hare-bell, like thy veins; no, nor the leaf of eglantine, whom not to slander, out-sweeten’d not thy breath.\""
-	icon_state = "harebell"
 	potency = 1
 	filling_color = "#D4B2C9"
 	plantname = "harebells"
@@ -310,7 +307,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
 	desc = "Store in a location at least 50 yards away from werewolves."
-	icon_state = "moonflower"
 	potency = 25
 	filling_color = "#E6E6FA"
 	plantname = "moonflowers"
@@ -319,7 +315,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	name = "potato"
 	desc = "The space Irish starved to death after their potato crops died. Sadly they were unable to fish for space carp due to it being the queen's space. Bringing this up to any space IRA member will drive them insane with anger."
-	icon_state = "potato"
 	potency = 25
 	filling_color = "#E6E8DA"
 	plantname = "potato"
@@ -341,14 +336,12 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/grapes
 	name = "bunch of grapes"
 	desc = "Nutritious!"
-	icon_state = "grapes"
 	filling_color = "#A332AD"
 	plantname = "grapes"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes
 	name = "bunch of green grapes"
 	desc = "Nutritious!"
-	icon_state = "greengrapes"
 	potency = 25
 	filling_color = "#A6FFA3"
 	plantname = "greengrapes"
@@ -356,7 +349,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/peanut
 	name = "peanut"
 	desc = "Nuts!"
-	icon_state = "peanut"
 	filling_color = "857e27"
 	potency = 25
 	plantname = "peanut"
@@ -364,7 +356,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 	name = "cabbage"
 	desc = "Ewwwwwwwwww. Cabbage."
-	icon_state = "cabbage"
 	potency = 25
 	filling_color = "#A2B5A1"
 	plantname = "cabbage"
@@ -373,14 +364,12 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries
 	name = "bunch of berries"
 	desc = "Nutritious!"
-	icon_state = "berrypile"
 	filling_color = "#C2C9FF"
 	plantname = "berries"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/plastellium
 	name = "clump of plastellium"
 	desc = "Hmm, needs some processing"
-	icon_state = "plastellium"
 	filling_color = "#C4C4C4"
 	plantname = "plastic"
 
@@ -388,13 +377,11 @@ var/list/special_fruits = list()
 	name = "bunch of glow-berries"
 	desc = "Nutritious!"
 	filling_color = "#D3FF9E"
-	icon_state = "glowberrypile"
 	plantname = "glowberries"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cocoapod
 	name = "cocoa pod"
 	desc = "Can be ground into cocoa powder."
-	icon_state = "cocoapod"
 	potency = 50
 	filling_color = "#9C8E54"
 	plantname = "cocoa"
@@ -402,7 +389,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane
 	name = "sugarcane"
 	desc = "Sickly sweet."
-	icon_state = "sugarcane"
 	potency = 50
 	filling_color = "#C0C9AD"
 	plantname = "sugarcane"
@@ -410,7 +396,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries
 	name = "bunch of poison-berries"
 	desc = "Taste so good, you could die!"
-	icon_state = "poisonberrypile"
 	gender = PLURAL
 	potency = 15
 	filling_color = "#B422C7"
@@ -419,7 +404,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/deathberries
 	name = "bunch of death-berries"
 	desc = "Taste so good, you could die!"
-	icon_state = "deathberrypile"
 	gender = PLURAL
 	potency = 50
 	filling_color = "#4E0957"
@@ -428,17 +412,15 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris
 	name = "ambrosia vulgaris branch"
 	desc = "This is a plant containing various healing chemicals."
-	icon_state = "ambrosiavulgaris"
 	potency = 10
 	filling_color = "#125709"
 	plantname = "ambrosia"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/cruciatus
-	plantname = "ambrosiacruciatus"
 	name = "ambrosia vulgaris branch"
 	desc = "This is a plant containing various healing chemicals."
-	icon_state = "ambrosiavulgaris"
 	potency = 10
+	plantname = "ambrosiacruciatus"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/paper))
@@ -457,7 +439,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus
 	name = "ambrosia deus branch"
 	desc = "Eating this makes you feel immortal!"
-	icon_state = "ambrosiadeus"
 	potency = 10
 	filling_color = "#229E11"
 	plantname = "ambrosiadeus"
@@ -478,7 +459,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/apple
 	name = "apple"
 	desc = "It's a little piece of Eden."
-	icon_state = "apple"
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "apple"
@@ -490,7 +470,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/goldapple
 	name = "golden apple"
 	desc = "Emblazoned upon the apple is the word 'Kallisti'."
-	icon_state = "goldapple"
 	potency = 15
 	filling_color = "#F5CB42"
 	plantname = "goldapple"
@@ -498,7 +477,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/watermelon
 	name = "watermelon"
 	desc = "It's full of watery goodness."
-	icon_state = "watermelon"
 	potency = 10
 	filling_color = "#FA2863"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
@@ -509,7 +487,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
 	name = "pumpkin"
 	desc = "It's large and scary."
-	icon_state = "pumpkin"
 	potency = 10
 	filling_color = "#FAB728"
 	plantname = "pumpkin"
@@ -525,7 +502,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/lime
 	name = "lime"
 	desc = "It's so sour, your face will twist."
-	icon_state = "lime"
 	potency = 20
 	filling_color = "#28FA59"
 	plantname = "lime"
@@ -533,7 +509,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/lemon
 	name = "lemon"
 	desc = "When life gives you lemons, be grateful they aren't limes."
-	icon_state = "lemon"
 	potency = 20
 	filling_color = "#FAF328"
 	plantname = "lemon"
@@ -541,7 +516,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/orange
 	name = "orange"
 	desc = "It's a tangy fruit."
-	icon_state = "orange"
 	potency = 20
 	filling_color = "#FAAD28"
 	plantname = "orange"
@@ -549,7 +523,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
 	name = "white-beet"
 	desc = "You can't beat white-beet."
-	icon_state = "whitebeet"
 	potency = 15
 	filling_color = "#FFFCCC"
 	plantname = "whitebeet"
@@ -557,9 +530,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana
 	name = "banana"
 	desc = "It's an excellent prop for a comedy."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "banana"
-	item_state = "banana"
 	filling_color = "#FCF695"
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
@@ -571,9 +541,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana
 	name = "bluespace banana"
 	desc = "It's an excellent prop for a comedy."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "bluespacebanana"
-	item_state = "bluespacebanana"
 	filling_color = "#FCF695"
 	plantname = "bluespacebanana"
 
@@ -589,14 +556,12 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/chili
 	name = "chili"
 	desc = "It's spicy! Wait... IT'S BURNING ME!!"
-	icon_state = "chilipepper"
 	filling_color = "#FF0000"
 	plantname = "chili"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/eggplant
 	name = "eggplant"
 	desc = "Maybe there's a chicken inside?"
-	icon_state = "eggplant"
 	filling_color = "#550F5C"
 	plantname = "eggplant"
 
@@ -605,21 +570,18 @@ var/list/special_fruits = list()
 	desc = "It's pretty bland, but oh the possibilities..."
 	gender = PLURAL
 	filling_color = "#E6E8B7"
-	icon_state = "soybeans"
 	plantname = "soybean"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/koibeans
 	name = "koibean"
 	desc = "Something about these seems fishy."
 	gender = PLURAL
-	icon_state = "koibeans"
 	filling_color = "#F0E68C"
 	plantname = "koibean"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/tomato
 	name = "tomato"
 	desc = "I say to-mah-to, you say tom-mae-to."
-	icon_state = "tomato"
 	filling_color = "#FF0000"
 	potency = 10
 	plantname = "tomato"
@@ -627,7 +589,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato
 	name = "tomato" //"blue-space" is applied on new(), provided it's teleporting trait hasn't been removed
 	desc = "Its juices lubricate so well, you might slip through space-time."
-	icon_state = "bluespacetomato"
 	potency = 20
 	origin_tech = Tc_BLUESPACE + "=3"
 	filling_color = "#91F8FF"
@@ -639,7 +600,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/killertomato
 	name = "killer-tomato"
 	desc = "I say to-mah-to, you say tom-mae-to... OH GOD IT'S EATING MY LEGS!!"
-	icon_state = "killertomato"
 	potency = 10
 	filling_color = "#FF0000"
 	plantname = "killertomato"
@@ -655,7 +615,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato
 	name = "blood-tomato"
 	desc = "So bloody...so...very...bloody....AHHHH!!!!"
-	icon_state = "bloodtomato"
 	potency = 10
 	filling_color = "#FF0000"
 	plantname = "bloodtomato"
@@ -663,7 +622,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato
 	name = "blue-tomato"
 	desc = "I say blue-mah-to, you say blue-mae-to."
-	icon_state = "bluetomato"
 	potency = 10
 	filling_color = "#586CFC"
 	plantname = "bluetomato"
@@ -672,7 +630,6 @@ var/list/special_fruits = list()
 	name = "wheat"
 	desc = "Sigh... wheat... a-grain?"
 	gender = PLURAL
-	icon_state = "wheat"
 	filling_color = "#F7E186"
 	plantname = "wheat"
 
@@ -680,21 +637,18 @@ var/list/special_fruits = list()
 	name = "rice stalk"
 	desc = "Rice to see you."
 	gender = PLURAL
-	icon_state = "rice"
 	filling_color = "#FFF8DB"
 	plantname = "rice"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod
 	name = "kudzu pod"
 	desc = "<I>Pueraria Virallis</I>: An invasive species with vines that rapidly creep and wrap around whatever they contact."
-	icon_state = "kudzupod"
 	filling_color = "#59691B"
 	plantname = "kudzu"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/icepepper
 	name = "chilly pepper"
 	desc = "It's a mutant strain of chili pepper, now cold rather than hot."
-	icon_state = "icepepper"
 	potency = 20
 	filling_color = "#66CEED"
 	plantname = "icechili"
@@ -702,7 +656,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper
 	name = "ghost pepper"
 	desc = "This pepper is haunted. And pretty spicy, too."
-	icon_state = "ghostpepper"
 	potency = 20
 	filling_color = "#66CEED"
 	plantname = "ghostpepper"
@@ -718,7 +671,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot
 	name = "carrot"
 	desc = "It's good for the eyes!"
-	icon_state = "carrot"
 	potency = 10
 	filling_color = "#FFC400"
 	plantname = "carrot"
@@ -726,7 +678,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/reishi
 	name = "reishi"
 	desc = "<I>Ganoderma lucidum</I>: A special fungus believed to help relieve stress."
-	icon_state = "reishi"
 	potency = 10
 	filling_color = "#FF4800"
 	plantname = "reishi"
@@ -734,7 +685,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/amanita
 	name = "fly amanita"
 	desc = "<I>Amanita Muscaria</I>: Learn poisonous mushrooms by heart. Only pick mushrooms you know."
-	icon_state = "amanita"
 	potency = 10
 	filling_color = "#FF0000"
 	plantname = "amanita"
@@ -742,7 +692,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/angel
 	name = "destroying angel"
 	desc = "<I>Amanita Virosa</I>: Deadly poisonous basidiomycete fungus filled with alpha amatoxins."
-	icon_state = "angel"
 	potency = 35
 	filling_color = "#FFDEDE"
 	plantname = "destroyingangel"
@@ -750,7 +699,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/libertycap
 	name = "liberty-cap"
 	desc = "<I>Psilocybe Semilanceata</I>: Liberate yourself!"
-	icon_state = "libertycap"
 	potency = 15
 	filling_color = "#F714BE"
 	plantname = "libertycap"
@@ -758,7 +706,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet
 	name = "plump-helmet"
 	desc = "<I>Plumus Hellmus</I>: Plump, soft and s-so inviting~"
-	icon_state = "plumphelmet"
 	filling_color = "#F714BE"
 	plantname = "plumphelmet"
 	fragrance = INCENSE_BOOZE
@@ -766,7 +713,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/walkingmushroom
 	name = "walking mushroom"
 	desc = "<I>Plumus Locomotus</I>: The beginning of the great walk."
-	icon_state = "walkingmushroom"
 	filling_color = "#FFBFEF"
 	potency = 30
 	plantname = "walkingmushroom"
@@ -782,14 +728,12 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chanterelle
 	name = "chanterelle cluster"
 	desc = "<I>Cantharellus Cibarius</I>: These jolly yellow little shrooms sure look tasty!"
-	icon_state = "chanterelle"
 	filling_color = "#FFE991"
 	plantname = "mushrooms"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom
 	name = "glowshroom cluster"
 	desc = "<I>Mycena Bregprox</I>: This species of mushroom glows in the dark. Or does it?"
-	icon_state = "glowshroom"
 	filling_color = "#DAFF91"
 	potency = 30
 	plantname = "glowshroom"
@@ -810,7 +754,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/grass
 	name = "grass"
 	desc = "Green and lush."
-	icon_state = "grassclump"
 	filling_color = "#32CD32"
 	plantname = "grass"
 	fragrance = INCENSE_DENSE
@@ -832,7 +775,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
 	name = "chicken-of-the-stars"
 	desc = "A variant of the Earth-native Laetiporus sulphureus, adapted by Vox traders for space. Everything tastes like chicken."
-	icon_state = "chickenshroom"
 	filling_color = "F2E33A"
 	plantname = "chickenshroom"
 	hydroflags = HYDRO_VOX
@@ -840,7 +782,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/garlic
 	name = "garlic"
 	desc = "Warning: Garlic may send vampires straight to the Dead Zone."
-	icon_state = "garlic"
 	filling_color = "EDEDE1"
 	plantname = "garlic"
 	hydroflags = HYDRO_VOX
@@ -848,7 +789,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/breadfruit
 	name = "breadfruit"
 	desc = "Starchy. Tastes about the same as biting into a sack of flour."
-	icon_state = "breadfruit"
 	filling_color = "EDEDE1"
 	plantname = "breadfruit"
 	hydroflags = HYDRO_VOX
@@ -859,7 +799,6 @@ var/list/special_fruits = list()
 	slice_path = /obj/item/stack/sheet/wood
 	slices_num = 1
 	storage_slots = 1 //seems less intended and more like an artifact of old code where if something was sliceable, it should also hold items inside, but keeping consistency
-	icon_state = "woodapple"
 	filling_color = "857663"
 	plantname = "woodapple"
 	hydroflags = HYDRO_VOX
@@ -867,7 +806,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/pitcher
 	name = "pitcher plant" //results in "slippery pitcher plant"
 	desc = "A fragile, but slippery exotic plant from tropical climates. Powerful digestive acid contained within dissolves prey."
-	icon_state = "pitcher"
 	filling_color = "7E8507"
 	plantname = "pitcher"
 	hydroflags = HYDRO_VOX
@@ -875,7 +813,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/aloe
 	name = "aloe vera"
 	desc = "A thorny, broad-leaf plant believed to be useful for first aid."
-	icon_state = "aloe"
 	filling_color = "77BA9F"
 	plantname = "aloe"
 	hydroflags = HYDRO_VOX
@@ -889,7 +826,6 @@ var/list/special_fruits = list()
 	plantname = "vaporsac"
 	name = "vapor sac fruit"
 	desc = "A thin organic film bearing seeds, held slightly aloft by internal gasses and a reservoir of chemicals."
-	icon_state = "vaporsac"
 	filling_color = "#FFFFFF"
 	fragrance = INCENSE_VAPOR
 
@@ -918,7 +854,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
 	name = "no-fruit"
 	desc = "Any plant you want, at your fingertips."
-	icon_state = "nofruit"
 	potency = 15
 	filling_color = "#FFFCCC"
 	plantname = "nofruit"
@@ -962,7 +897,8 @@ var/list/special_fruits = list()
 		while(switching)
 			current_path = available_fruits[counter]
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/G = current_path
-			icon_state = initial(G.icon_state)
+			if(SSplant.seeds[initial(G.plantname)])
+				icon = SSplant.seeds[initial(G.plantname)].plant_dmi
 			sleep(4)
 			if(counter == available_fruits.len)
 				counter = 0
@@ -998,7 +934,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado
 	name = "avocado"
 	desc = "An unusually fatty fruit containing a single large seed."
-	icon_state = "avocado"
 	filling_color = "#EAE791"
 	plantname = "avocado"
 	var/cant_eat_msg = "'s skin is much too tough to chew."
@@ -1039,20 +974,19 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut
 	name = "avocado half"
 	desc = "This half still has the seed embedded in it."
-	icon_state = "avocado_cut"
+	icon_state = "cut"
 	cant_eat_msg = "'s seed is too large to eat."
 	cut = TRUE
 	plantname = null	//So people can't use the pit as a seed AND feed each half to the seed extractor
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted
 	desc = "An unusually fatty fruit, it can be used in both savory and sweet dishes."
-	icon_state = "avocado_pitted"
+	icon_state = "pitted"
 	cant_eat_msg = null
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pear
 	name = "pear"
 	desc = "The inferior alternative to apples."
-	icon_state = "pear"
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "pear"
@@ -1060,7 +994,6 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/silverpear
 	name = "silver pear"
 	desc = "Silver will always be the inferior alternative to gold."
-	icon_state = "silverpear"
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "silverpear"

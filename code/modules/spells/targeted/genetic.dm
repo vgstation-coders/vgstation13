@@ -94,8 +94,8 @@ code\game\\dna\genes\goon_powers.dm
 	duration = 0
 	max_targets = 1
 	//mutations = list(M_EATWEEDS) - Some day, maybe, if this is ported to Diona nymphs instead of a verb
-	hud_state = "ambrosiavulgaris"
-	override_icon = 'icons/obj/harvest.dmi'
+	hud_state = "produce"
+	override_icon = 'icons/obj/hydroponics/ambrosiavulgaris.dmi'
 
 /spell/targeted/genetic/eat_weed/cast(list/targets, var/mob/user)
 	..()

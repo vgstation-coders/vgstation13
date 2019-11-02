@@ -147,7 +147,7 @@
 /obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie
 	name = "Plant-B-Gone"
 	desc = "Kills those pesky weeds!"
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
 	volume = 100
@@ -159,7 +159,7 @@
 /obj/item/weapon/reagent_containers/spray/bugzapper
 	name = "Bug Zapper"
 	desc = "Kills those pesky bugs!"
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
 	volume = 100

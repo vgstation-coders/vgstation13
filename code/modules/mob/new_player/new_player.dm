@@ -104,6 +104,9 @@
 	if(!client)
 		return 0
 
+	if(secret_check_one(src,href_list))
+		return 0
+
 	if(href_list["show_preferences"])
 		if(!client.prefs.saveloaded)
 			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
