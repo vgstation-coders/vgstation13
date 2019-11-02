@@ -268,12 +268,17 @@ var/list/department_radio_keys = list(
 
 	var/list/total_listeners = get_hearers_in_view(visual_range, speech.speaker)
 	var/list/actual_listeners = observers.Copy()
+	var/outside_range_message = "<span class='name'>[speech.speaker]</span> appears to say something, but you can't make it out from here."
 	for(var/atom/A in total_listeners)
 		if(!(A in actual_listeners))
 			if(get_dist(src, A) <= message_range)
 				actual_listeners.Add(A)
+			else if(ismob(A))
+				var/mob/M = A
+				if(!M.is_blind())
+					M.show_message(outside_range_message,MESSAGE_SEE,speaker = src)
 			else
-				to_chat(A, "\The [speech.speaker] appears to say something, but you can't make it out from here.")
+				to_chat(A, outside_range_message)
 
 	var/rendered = render_speech(speech)
 
