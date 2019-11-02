@@ -8,7 +8,7 @@
 	desc = "A vehicle designed for outdoor use in snowy environments. It's also equipped to handle frozen terrain and road surfaces - but not indoor plating."
 	icon_state = "snowmobile"
 	keytype = /obj/item/key/snowmobile
-	can_have_carts = FALSE
+	can_have_carts = TRUE
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/snowmobile
 	var/list/approved_terrain = list(/turf/simulated/floor/engine/concrete,/turf/unsimulated/floor/snow,
 									/turf/unsimulated/floor/noblizz_permafrost,/obj/glacier,
