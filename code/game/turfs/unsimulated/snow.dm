@@ -88,8 +88,12 @@
 	..()
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
-		if(snowprint_parent && snowballs)
-			snowprint_parent.AddSnowprintGoing(H.get_footprint_type(),H.dir)
+		if(snowprint_parent && snowballs && !H.flying)
+			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
+				snowprint_parent.AddSnowprintGoing(H.get_footprint_type(), H.dir)
+			else //Our human is down on his ass or in a vehicle, create tracks
+				snowprint_parent.AddSnowprintGoing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+
 		if(!istype(newloc,/turf/unsimulated/floor/snow))
 			H.clear_fullscreen("snowfall_average",0)
 			H.clear_fullscreen("snowfall_hard",0)
@@ -101,8 +105,11 @@
 	..()
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
-		if(snowprint_parent && snowballs)
-			snowprint_parent.AddSnowprintComing(H.get_footprint_type(),H.dir)
+		if(snowprint_parent && snowballs && !H.flying)
+			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
+				snowprint_parent.AddSnowprintComing(H.get_footprint_type(), H.dir)
+			else //Our human is down on his ass or in a vehicle, create tracks
+				snowprint_parent.AddSnowprintComing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
 		switch(snow_state)
 			if(SNOW_CALM)
 				H.clear_fullscreen("snowfall_average",0)
