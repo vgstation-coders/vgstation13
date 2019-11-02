@@ -35,7 +35,7 @@
 
 /obj/structure/bed/chair/vehicle/snowmobile/universal/set_keys()
 	if(keytype && !vin)
-		new keytype(loc)
+		heldkey = new keytype(src)
 
 /obj/structure/bed/chair/vehicle/snowmobile/getMovementDelay()
 	var/turf/T = loc
