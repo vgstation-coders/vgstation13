@@ -119,6 +119,26 @@
 				icon_state = "sakeglass"
 				name = "glass of sake"
 				desc = "A glass of sake."
+			if(BLUECURACAO)
+				icon_state = "curacaoglass"
+				name = "glass of blue curacao"
+				desc = "Why's it blue if it tastes like an orange?"
+			if(BITTERS)
+				icon_state = "bittersglass"
+				name = "glass of bitters"
+				desc = "A glass of dark and, well, bitter, bitters."
+			if(TRIPLESEC)
+				icon_state = "triplesecglass"
+				name = "glass of triple sec"
+				desc = "Triple Sec, a clear orange liquor with a syrupy texture. Maybe mix it with something, you weirdo."
+			if(SCHNAPPS)
+				icon_state = "schnappsglass"
+				name = "glass of schnapps"
+				desc = "A glass of indescernibly fruity schnapps."
+			if(CHAMPAGNE)
+				icon_state = "champagneglass"
+				name = "glass of champagne"
+				desc = "A fancy, bubbly glass of sparkling yellow champagne!"
 			if(GOLDSCHLAGER)
 				icon_state = "ginvodkaglass"
 				name = "glass of Goldschlager"
@@ -515,8 +535,8 @@
 				name = "\improper Brown Star"
 				desc = "It's not what it sounds like..."
 			if(ICETEA)
-				icon_state = "icetea"
-				item_state = "icetea"
+				icon_state = "icedteaglass"
+				item_state = "icedteaglass"
 				name = "iced tea"
 				desc = "Like tea, but refreshes rather than relaxes."
 			if(ARNOLDPALMER)
@@ -620,6 +640,107 @@
 				icon_state = "suicide"
 				name = "\improper Suicide"
 				desc = "It's only tolerable because of the added alcohol."
+			if(MOSCOWMULE)
+				icon_state = "moscowmule"
+				name = "\improper Moscow Mule"
+				desc = "Wait, this isn't ginger beer..."
+			if(MIDNIGHTKISS)
+				icon_state = "midnightkiss"
+				name = "\improper Midnight Kiss"
+				desc = "Vodka mixed with Blue Curacao and topped with champagne. Bubbly!"
+			if(COSMOPOLITAN)
+				icon_state = "cosmopolitan"
+				name = "cosmopolitan"
+				desc = "A Cosmopolitan, the poster child of fruity cocktails."
+			if(CORPSEREVIVER)
+				icon_state = "corpsereviver"
+				name = "\improper Corpse Reviver No. 2"
+				desc = "Hair of the dog taken to one of its most logical extremes."
+			if(BLUELAGOON)
+				icon_state = "bluelagoon"
+				name = "\improper Blue Lagoon"
+				desc = "Goes best with swim trunks, a sea breeze, and a nice big beach."
+			if(SEXONTHEBEACH)
+				icon_state = "sexonthebeach"
+				name = "\improper Sex On The Beach"
+				desc = "Did you hear a bear just now?"
+			if(AMERICANO)
+				icon_state = "americano"
+				name = "americano"
+				desc = "Expensive soda water - the best way to improve a poor drink."
+			if(SIDECAR)
+				icon_state = "sidecar"
+				name = "sidecar"
+				desc = "The odd child out of classic 20th Century cocktails - nigh upon impossible to find a good one in the wild."
+			if(BETWEENTHESHEETS)
+				icon_state = "betweenthesheets"
+				name = "\improper Between The Sheets"
+				desc = "This is basically just a sidecar with rum in it."
+			if(CHAMPAGNECOCKTAIL)
+				icon_state = "champagnecocktail"
+				name = "Champagne cocktail"
+				desc = "Champagne, bitters, and cognac, garnished with a cherry. Very classy."
+			if(ESPRESSOMARTINI)
+				icon_state = "espressomartini"
+				name = "espresso martini"
+				desc = "Two of any self respecting substance abuser's fixes in one drink!"
+			if(KAMIKAZE)
+				icon_state = "kamikaze"
+				name = "kamikaze"
+				desc = "Banzai!"
+			if(MOJITO)
+				icon_state ="mojito"
+				name = "mojito"
+				desc = "Minty fresh and a pain in the rear to make at the best of times.."
+			if(WHISKEYTONIC)
+				icon_state = "whiskeytonic"
+				name = "\improper Whiskey Tonic"
+				desc = "Quinine makes everything taste better."
+			if(CINNAMONWHISKY)
+				icon_state= "fireballglass"
+				name = "glass of cinnamon whisky"
+				desc = "Red-hot cinnamon whisky in a shot glass."
+			if(C4COCKTAIL)
+				icon_state= "c4cocktail"
+				name = "\improper C-4 Cocktail"
+				desc = "Kahlua and Cinnamon Whisky, a burning explosion of cinnamon flavor."
+			if(DRAGONSBLOOD)
+				icon_state= "dragonsblood"
+				name = "\improper Dragon's Blood"
+				desc = "Burning hot and dark red, just like its mythical namesake."
+				light_color = "#540303"
+				if(!lit)
+					flammable = 1
+			if(DRAGONSSPIT)
+				icon_state= "dragonsspit"
+				name = "\improper Dragon's Spit"
+				desc = "Sometimes the best solution is the simplest - two really really hot things in one glass."
+				light_color = "#ff7003"
+				if(!lit)
+					flammable = 1
+			if(FIREBALLCIDER)
+				icon_state= "fireballcider"
+				name = "\improper Fireball Cider"
+				desc = "A toasty hot glass of apple cider and cinnamon whisky - makes you feel warm and fuzzy inside."
+			if(CINNAMONTOASTCOCKTAIL)
+				icon_state= "cinnamontoastcocktail"
+				name = "\improper Cinnamon Toast Cocktail"
+				desc = "Kind of like drinking left-over cereal milk, but for people with a drinking problem."
+			if(MANHATTANFIREBALL)
+				icon_state= "manhattanfireball"
+				name = "\improper Manhattan Fireball"
+				desc = "A timeless classic remixed with hot cinnamon whisky."
+				light_color = "#540303"
+				if(!lit)
+					flammable = 1
+			if(FIREBALLCOLA)
+				icon_state= "fireballcola"
+				name = "\improper Fireball Cola"
+				desc = "Cinnamon whisky and cola - like a regular whiskey cola, but with more burning."
+			if(FIRERITA)
+				icon_state= "firerita"
+				name = "firerita"
+				desc = "Looks pretty, offends a sane person's taste buds. Then again, anyone who orders this probably lacks one of those two traits."
 
 			else
 				icon_state ="glass_colour"
@@ -665,10 +786,10 @@
 	..()
 	reagents.add_reagent(TOXINSSPECIAL, 30)
 	on_reagent_change()
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee
 	name = "irish coffee"
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/New()
 	..()
 	reagents.add_reagent(IRISHCOFFEE, 50)
@@ -811,7 +932,7 @@
 			if(HOT_COCO)
 				make_reagent_overlay()
 				name = "hot chocolate"
-				desc = "A delicious warm brew of milk and chocolate."						
+				desc = "A delicious warm brew of milk and chocolate."
 			else
 				make_reagent_overlay()
 				get_reagent_name(src, TRUE)
@@ -821,7 +942,7 @@
 		name = "mug"
 		desc = "A simple mug."
 		return
-			
+
 /obj/item/weapon/reagent_containers/food/drinks/mug/proc/make_reagent_overlay()
 	overlays.len = 0
 	icon_state ="mug_empty"
