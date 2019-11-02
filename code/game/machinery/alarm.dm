@@ -184,6 +184,7 @@ var/global/list/airalarm_presets = list(
 	"Vox" = new /datum/airalarm_preset/vox,
 	"Coldroom" = new /datum/airalarm_preset/coldroom,
 	"Plasmaman" = new /datum/airalarm_preset/plasmaman,
+	"Vacuum" = new /datum/airalarm_preset/vacuum,
 )
 
 /obj/machinery/alarm
