@@ -86,4 +86,4 @@
 	else
 		var/list/dragsounds = list('sound/misc/metal_drag1.ogg', 'sound/misc/metal_drag2.ogg', 'sound/misc/metal_drag3.ogg')
 		playsound(src, pick(dragsounds), 10, 1) //The scratching sound is VERY loud, obnoxious and repeats often, so make sure the volume is low
-		return 7 //It's not designed to move this way!
+		return 5 //It's not designed to move this way!
