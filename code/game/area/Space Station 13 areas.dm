@@ -592,16 +592,16 @@ proc/process_adminbus_teleport_locs()
 	return HOLOMAP_DRAW_FULL
 
 /area/asteroid/snow_inner
-	name = "\improper Snow Asteroid"
+	name = "\improper Planet Surface"
 	icon_state = "sno2"
 	shuttle_can_crush = TRUE
 
 /area/asteroid/snow_outer
-	name = "\improper Snow Asteroid - Outer Wall"
+	name = "\improper The Blizzard"
 	icon_state = "sno"
 
 /area/asteroid/icecore
-	name = "\improper Snow Asteroid - Frozen Core"
+	name = "\improper Frozen Core"
 	icon_state = "icecore"
 
 /area/asteroid/garage

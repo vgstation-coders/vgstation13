@@ -39,6 +39,11 @@
 
 	snow_theme = 1
 
+/datum/map/active/New()
+	.=..()
+	research_shuttle.name = "Research and Mining Shuttle"
+	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
+
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category,/datum/role/blob_overmind))
 		return FALSE
