@@ -333,7 +333,7 @@ For vending packs, see vending_packs.dm*/
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
 			return
 
-		var/pack_name = copytext(href_list["doorder"], 1, lentext(href_list["doorder"]))
+		var/pack_name = copytext(href_list["doorder"], 1, -1)
 		var/multi = text2num(copytext(href_list["doorder"], -1))
 		if(!isnum(multi))
 			return
@@ -559,7 +559,7 @@ For vending packs, see vending_packs.dm*/
 
 		var/timeout = world.time + 600
 		// Get ordered pack name and multi crate order boolean
-		var/pack_name = copytext(href_list["doorder"], 1, lentext(href_list["doorder"]))
+		var/pack_name = copytext(href_list["doorder"], 1, -1)
 		var/multi = text2num(copytext(href_list["doorder"], -1))
 		if(!isnum(multi))
 			return
