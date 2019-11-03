@@ -434,7 +434,6 @@
 			enter_barrel(target)
 	else
 		..()
-	return ..()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/W, mob/user, params)
 
