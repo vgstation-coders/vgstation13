@@ -292,7 +292,7 @@
 				health += rand(1,3)
 				nutrition -= WOLF_REGENCOST
 		else
-			if(nutrition >= WOLF_REGENCOST*2)
+			if(hunger_status >= WOLF_WELLFED)
 				health += 1
 				nutrition -= WOLF_REGENCOST
 
