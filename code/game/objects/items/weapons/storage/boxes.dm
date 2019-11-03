@@ -1018,9 +1018,13 @@
 
 //Every clothing box will base its label overlay off of the first object in its contents. Keep that in mind when making a new clothing box.
 /obj/item/weapon/storage/box/smartbox/clothing_box/New()
-	..()
-	if(contents)	
-		overlays += contents[1]
+    ..()
+    if(contents.len)
+        var/mutable_appearance/M = new(contents[1])
+        M.layer = FLOAT_LAYER
+        M.plane = FLOAT_PLANE
+        M.transform *= 0.5
+        overlays += M
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/chickensuit
 	name = "Chicken suit box"
