@@ -994,15 +994,15 @@
 
 /obj/item/weapon/storage/box/smartbox/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
-	if(contents.len <= 0)
-		to_chat(new_location,"<span class='notice'>The [src] fizzles away into a glittering dust.</span>")
+	if(contents.len <= 0) //If this is the last item, kill the box.
+		to_chat(new_location,"<span class='notice'>The [src] fizzles away into a glittering dust.</span>") //Should probably typecheck new_location as a mob?
 		qdel(src)
 		return
-	return .//remove_from_storage returns 1 or 0 :) smile!
+	return . //remove_from_storage returns 1 or 0 :)
 
 /obj/item/weapon/storage/box/smartbox/attackby(obj/item/W, mob/user)
 	if(one_way)
-		to_chat(user, "<span class='notice'>The [src] only permits one way interaction!</span>")
+		to_chat(user, "<span class='warning'>\the [src] only lets items leave it!</span>") //Couldn't think of something better to explain the oneway interaction in-game.
 		return
 	else
 		..()
@@ -1015,19 +1015,12 @@
 	foldable = null
 	storage_slots = BOX_SPACE
 	one_way = 1
-	var/icon_to_build
 
-//Every clothing box will base its overlay off of the first object in its contents. Keep that in mind when making a new clothing box.
+//Every clothing box will base its label overlay off of the first object in its contents. Keep that in mind when making a new clothing box.
 /obj/item/weapon/storage/box/smartbox/clothing_box/New()
 	..()
-	if(contents)
+	if(contents)	
 		overlays += contents[1]
-
-//Helper proc to build the overlay for a clothing box.
-// /obj/item/weapon/storage/box/smartbox/clothing_box/proc/buildicon(obj/item/I)
-// 	var/mutable_appearance/box_icon_overlay = I.appearance
-// 	box_icon_overlay.plane = FLOAT_PLANE
-// 	return box_icon_overlay
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/chickensuit
 	name = "Chicken suit box"
@@ -1081,14 +1074,14 @@
 	new /obj/item/clothing/under/blackskirt(src)
 	..()
 
-/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfix
+/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit
 	name = "Pirate outfit box"
 
-/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfix/New()
+/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit/New()
+	new /obj/item/clothing/glasses/eyepatch(src)
 	new /obj/item/clothing/head/pirate(src)
 	new /obj/item/clothing/suit/pirate(src)
 	new /obj/item/clothing/head/bandana(src)
-	new /obj/item/clothing/glasses/eyepatch(src)
 	new /obj/item/clothing/under/pirate(src)
 	..()
 
@@ -1179,7 +1172,7 @@
 	..()
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/liberty
-	name = "Liberty outfit box"
+	name = "Patriot outfit box"
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/liberty/New()
 	new /obj/item/clothing/head/libertyhat(src)
@@ -1189,7 +1182,7 @@
 	..()
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/mega
-	name = "Mega outfit box"
+	name = "Megaman outfit box"
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/mega/New()
 	new /obj/item/clothing/head/helmet/megahelmet(src)
