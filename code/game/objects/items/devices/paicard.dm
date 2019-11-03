@@ -160,7 +160,9 @@
 	var/image/new_overlay = image(icon = icon, icon_state = chosen_icon_state)
 	overlays.Cut()
 	overlays += new_overlay
-	pai.appearance = appearance //we also update the mob's appearance so it appears properly on the scoreboard.
+	var/mutable_appearance/pai_icon = new(src) //we also update the mob's appearance so it appears properly on the scoreboard.
+	pai_icon.name = pai.name //But don't override their name
+	pai.appearance = pai_icon 
 
 /obj/item/device/paicard/proc/alertUpdate()
 	visible_message("<span class='notice'>[src] flashes a message across its screen, \"Additional personalities available for download.\"</span>", 1, "<span class='notice'>[src] bleeps electronically.</span>", 2)

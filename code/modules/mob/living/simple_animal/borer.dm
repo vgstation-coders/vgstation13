@@ -43,6 +43,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	wander = 0
 	pass_flags = PASSTABLE
 	universal_understand=1
+	heat_damage_per_tick = 1
+	cold_damage_per_tick = 1
 
 	var/busy = 0 // So we aren't trying to lay many eggs at once.
 
@@ -170,6 +172,12 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		regular_hud_updates()
 
 /mob/living/simple_animal/borer/regular_hud_updates()
+	if(fire)
+		if(fire_alert)
+			fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for heat and 2 for cold.
+		else
+			fire.icon_state = "fire0"
+
 	var/severity = 0
 
 	var/healthpercent = (health/maxHealth)*100
@@ -381,7 +389,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(hostlimb != LIMB_HEAD)
 		to_chat(src, "You are not attached to your host's brain.")
 		return
-	
+
 	if(host.ckey || !istype(host, /mob/living/carbon/monkey))
 		to_chat(src, "<span class='danger'>The host consciousness resists your attempts to overwhelm it!</span>")
 		return
@@ -398,7 +406,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/proc/do_bonding(var/rptext=0)
 	if(!host || host.stat==DEAD || !src || research.unlocking)
 		return
-	
+
 	if(host.ckey || !istype(host, /mob/living/carbon/monkey)) //check again just to be sure
 		to_chat(src, "<span class='danger'>You attempt to interface with the host's nervous system, but their consciousness resists!</span>")
 		return

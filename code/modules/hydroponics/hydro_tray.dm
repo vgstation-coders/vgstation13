@@ -1,6 +1,6 @@
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "hydrotray3"
 	anchored = 1
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
@@ -195,6 +195,8 @@
 
 	if(O.is_open_container())
 		return 0
+
+	add_fingerprint(user)
 
 	if (istype(O, /obj/item/seeds))
 
@@ -500,6 +502,7 @@
 		flags |= OPENCONTAINER
 
 	update_icon()
+	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/light_toggle()
 	set name = "Toggle Light"
@@ -509,6 +512,7 @@
 		return
 	light_on = !light_on
 	calculate_light()
+	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/set_label()
 	set name = "Set Tray Label"
@@ -575,7 +579,9 @@
 
 	..()
 
-/obj/machinery/portable_atmospherics/hydroponics/AltClick()
+/obj/machinery/portable_atmospherics/hydroponics/AltClick(/var/mob/usr)
+	if((usr.incapacitated() || !Adjacent(usr)))
+		return
 	close_lid()
 
 /datum/locking_category/hydro_tray

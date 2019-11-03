@@ -127,7 +127,7 @@
 	user.make_invisible(INVISIBLEPOTION, time, include_clothes)
 
 /obj/item/potion/invisibility/impact_atom(atom/target)
-	if(isatommovable(target))
+	if(ismovable(target))
 		var/atom/movable/AM = target
 		AM.make_invisible(INVISIBLEPOTION, time)
 
@@ -273,7 +273,7 @@
 		user.alphas -= TRANSPARENCYPOTION
 
 /obj/item/potion/transparency/impact_atom(atom/target)
-	if(!isatommovable(target))
+	if(!ismovable(target))
 		return
 	target.alpha = 125
 	spawn(10 MINUTES)

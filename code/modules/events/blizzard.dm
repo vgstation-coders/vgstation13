@@ -61,6 +61,8 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		return
 	snow_intensity++
 	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
+		if(tile.ignore_blizzard_updates)
+			continue
 		tile.snow_state = snow_intensity
 		tile.update_environment()
 	force_update_snowfall_sfx()
@@ -70,6 +72,8 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		return
 	snow_intensity--
 	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
+		if(tile.ignore_blizzard_updates)
+			continue
 		tile.snow_state = snow_intensity
 		tile.update_environment()
 	force_update_snowfall_sfx()

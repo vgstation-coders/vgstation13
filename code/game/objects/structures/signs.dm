@@ -297,3 +297,17 @@
 
 /obj/structure/sign/russian/staff_only
 	icon_state = "RU_staff_only"
+
+/obj/structure/sign/shard
+	icon_state = "shard_b"
+	name = "SUPERMATTER SHARD"
+	desc = "A sign which reads 'SUPERMATTER SHARD'."
+
+/obj/structure/sign/shard/red
+	icon_state = "shard_r"
+
+/obj/structure/sign/shard/yellow
+	icon_state = "shard_y"
+
+/obj/structure/sign/shard/circle
+	icon_state = "shard_circle"

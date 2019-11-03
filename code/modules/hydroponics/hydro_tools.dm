@@ -258,7 +258,7 @@
 // *************************************
 
 /obj/item/weapon/plantspray
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	item_state = "spray"
 	flags = FPRINT | NO_ATTACK_MSG
 	slot_flags = SLOT_BELT
@@ -445,7 +445,7 @@
 /obj/item/claypot
 	name = "clay pot"
 	desc = "Plants placed in those stop aging, but cannot be retrieved either."
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "claypot-item"
 	item_state = "claypot"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')

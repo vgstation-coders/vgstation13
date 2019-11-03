@@ -118,7 +118,7 @@ var/VOX_AVAILABLE_VOICES = list(
 	"mas" = "Masculine"
 );
 
-// N3X TODO: Make a JS clientside validation and autosuggest thing.
+#ifndef DISABLE_VOX
 /mob/living/silicon/ai/verb/make_announcement()
 	set name = "Make Announcement"
 	set desc = "Display a list of vocal words to announce to the crew."
@@ -239,6 +239,7 @@ var/VOX_AVAILABLE_VOICES = list(
 
 	for(var/word in words)
 		play_vox_word(word, vox_voice, src.z, null, TRUE)
+#endif // DISABLE_VOX
 
 var/list/vox_digits=list(
 	'sound/AI/one.ogg',

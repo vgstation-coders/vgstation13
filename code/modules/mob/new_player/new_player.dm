@@ -104,6 +104,9 @@
 	if(!client)
 		return 0
 
+	if(secret_check_one(src,href_list))
+		return 0
+
 	if(href_list["show_preferences"])
 		if(!client.prefs.saveloaded)
 			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
@@ -318,8 +321,7 @@
 /mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)
 	// 5% of players are joining the station with some minor disease
 	if(prob(5))
-		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
-		var/datum/disease2/disease/D = new virus_choice
+		var/datum/disease2/disease/D = get_random_weighted_disease(WLATEJOIN)
 
 		var/list/anti = list(
 			ANTIGEN_BLOOD	= 1,
