@@ -40,9 +40,6 @@
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "snow_rock"
 
-/turf/unsimulated/wall/rock/ice/canSmoothWith()
-	return null
-
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if (!user.dexterity_check())
