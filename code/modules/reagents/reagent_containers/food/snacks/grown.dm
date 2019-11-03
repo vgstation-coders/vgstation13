@@ -17,13 +17,6 @@ var/list/special_fruits = list()
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/New(newloc, newpotency)
-	if(!isnull(newpotency))
-		potency = newpotency
-	..()
-	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
-	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
-
 /proc/get_special_fruits(var/filter=HYDRO_PREHISTORIC|HYDRO_VOX)
 	. = list()
 	. += /obj/item/weapon/reagent_containers/food/snacks/grown
@@ -76,6 +69,8 @@ var/list/special_fruits = list()
 
 		if(reagents.total_volume > 0)
 			bitesize = 1 + round(reagents.total_volume/2, 1)
+	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom)
 	..()
@@ -934,6 +929,7 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado
 	name = "avocado"
 	desc = "An unusually fatty fruit containing a single large seed."
+	icon = 'icons/obj/hydroponics/avocado.dmi'
 	filling_color = "#EAE791"
 	plantname = "avocado"
 	var/cant_eat_msg = "'s skin is much too tough to chew."
