@@ -78,7 +78,7 @@
 		timer_override = FALSE
 	else
 		var/new_time = input(user, "Fired grenades will now be prime using \the [src]'s timer rather than their own. What would you like the timer to be set to, in seconds?","Time",timer_override_value/10) as num
-		if(new_time < 1)//no instants
+		if(new_time < 3)
 			to_chat(user, "<span class = 'warning'>\The [src] beeps. The given time cannot be below 1 second.</span>")
 			return
 		if(!Adjacent(user, MAX_ITEM_DEPTH))
@@ -97,8 +97,6 @@
 	for(var/obj/item/weapon/grenade/G in grenades)
 		grenades -= G
 		G.forceMove(user.loc)
-
-
 
 /obj/item/weapon/gun/grenadelauncher/syndicate
 	name = "C32R multiple grenade launcher"
