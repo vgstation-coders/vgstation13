@@ -425,7 +425,7 @@
 
 /obj/item/weapon/revivalprod/attack(mob/target,mob/user)
 	if(target.lying)
-		target.sleeping = max(0,target.sleeping-5)
+		target.sleeping = max(0,target.sleeping-10)
 		if(target.sleeping == 0)
 			target.resting = 0
 		target.AdjustParalysis(-3)
