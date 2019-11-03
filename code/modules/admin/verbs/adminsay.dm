@@ -47,3 +47,4 @@
 	for(var/client/C in admins)
 		if((R_ADMIN|R_MOD) & C.holder.rights)
 			C.output_to_special_tab("<span class='prefix'>MOD: </span><span class='[color]'><EM>[key_name(src,1)]</EM> (<A HREF='?src=\ref[C.holder];adminplayerobservejump=\ref[mob]'>JMP</A>): <span class='modooc'>[msg]</span></span>")
+			C << 'sound/effects/msaysound.ogg'
