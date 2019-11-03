@@ -220,6 +220,7 @@
 	name = "tree stump"
 	icon = 'icons/obj/flora/pinetrees.dmi'
 	icon_state = "pine_stump"
+	shovelaway = TRUE
 
 //grass
 /obj/structure/flora/grass
