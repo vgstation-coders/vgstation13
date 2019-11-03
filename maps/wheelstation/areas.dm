@@ -68,6 +68,14 @@
 	name = "Eastern Fore Maintenance"
 	icon_state = "fmaint"
 
+/area/maintenance/eastern/evamaint
+	name = "EVA Maintenance"
+	icon_state = "green"
+
+/area/maintenance/eastern/escapemaint
+	name = "Escape Maintenance"
+	icon_state = "green"
+
 /area/maintenance/eastern/starboardquartersolar
 	name = "Starboard Quarter Solar Control"
 	icon_state = "SolarcontrolS"
