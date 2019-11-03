@@ -393,7 +393,7 @@
 			else
 				msg = alt
 				type = alt_type
-				if((type & MESSAGE_SEE) && (sdisabilities & BLIND || blinded || paralysis)) //Since the alternative is sight-related, make sure we can see
+				if((type & MESSAGE_SEE) && is_blind()) //Since the alternative is sight-related, make sure we can see
 					return
 	//Added voice muffling for Issue 41.
 	//This has been changed to only work with audible messages, because you can't hear a frown
@@ -1912,7 +1912,7 @@ mob/proc/on_foot()
 	return 1
 
 /mob/proc/is_blind()
-	if(sdisabilities & BLIND || blinded || paralysis)
+	if((sdisabilities & BLIND) || (sight & BLIND) || blinded || paralysis)
 		return 1
 	return 0
 
