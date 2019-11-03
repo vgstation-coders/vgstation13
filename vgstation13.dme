@@ -355,7 +355,6 @@
 #include "code\datums\gamemode\factions\legacy_cult\runes.dm"
 #include "code\datums\gamemode\factions\legacy_cult\soulstone.dm"
 #include "code\datums\gamemode\factions\legacy_cult\talisman.dm"
-#include "code\datums\gamemode\factions\legacy_cult\trash_machinery.dm"
 #include "code\datums\gamemode\factions\syndicate\nukeops.dm"
 #include "code\datums\gamemode\factions\syndicate\rev.dm"
 #include "code\datums\gamemode\factions\syndicate\traitor.dm"
