@@ -1387,7 +1387,7 @@
 	if(desc)
 		to_chat(user, desc)
 
-/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+/obj/item/toy/balloon/inflated/decoy/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(!src.gcDestroyed)
 		attack_hand(user)

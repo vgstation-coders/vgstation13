@@ -769,11 +769,6 @@
 	for(var/i = 0; i < 7; i++)
 		new /obj/item/weapon/light/bulb(src)
 
-/obj/item/weapon/storage/box/lights/tubes/New()
-	..()
-	for(var/i = 0; i < 21; i++)
-		new /obj/item/weapon/light/tube(src)
-
 /obj/item/weapon/storage/box/lights/he
 	name = "high efficiency lights"
 	icon_state = "lightmixed"

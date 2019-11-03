@@ -62,7 +62,7 @@
 /obj/machinery/computer/teleporter/attack_paw(var/mob/user)
 	src.attack_hand(user)
 
-/obj/machinery/teleport/station/attack_ai(var/mob/user)
+/obj/machinery/teleport/teleporter/attack_ai(var/mob/user)
 	src.attack_hand(user)
 
 /obj/machinery/computer/teleporter/attack_hand(var/mob/user)
