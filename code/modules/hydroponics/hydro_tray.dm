@@ -196,6 +196,8 @@
 	if(O.is_open_container())
 		return 0
 
+	add_fingerprint(user)
+
 	if (istype(O, /obj/item/seeds))
 
 		if(!seed)
@@ -500,6 +502,7 @@
 		flags |= OPENCONTAINER
 
 	update_icon()
+	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/light_toggle()
 	set name = "Toggle Light"
@@ -509,6 +512,7 @@
 		return
 	light_on = !light_on
 	calculate_light()
+	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/set_label()
 	set name = "Set Tray Label"
