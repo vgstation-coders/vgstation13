@@ -19,7 +19,9 @@
 	var/initial_snowballs = -1 //-1 means random.
 	var/snowballs = 0
 	var/snow_state = SNOW_CALM
+	var/snowprints = TRUE //if false, do not set up a snowprint parent, do not make snowprints
 	var/obj/effect/snowprint_holder/snowprint_parent
+	var/ignore_blizzard_updates = FALSE //if true, don't worry about global blizzard events
 	var/obj/effect/blizzard_holder/blizzard_parent
 	turf_speed_multiplier = 1
 	gender = PLURAL
@@ -49,7 +51,8 @@
 		else
 			snowballs = initial_snowballs
 		icon_state = "snow[rand(0, 6)]"
-		snowprint_parent = new /obj/effect/snowprint_holder(src)
+		if(snowprints)
+			snowprint_parent = new /obj/effect/snowprint_holder(src)
 	update_environment()
 	global_snowtiles += src
 
@@ -306,6 +309,17 @@
 	real_snow_tile = FALSE
 	name = "permafrost"
 	desc = "Soil that never unfreezes."
+
+/turf/unsimulated/floor/snow/heavy_blizzard
+	name = "heavy blizzard"
+	desc = "Without cover or landmarks, dense blizzards are easy to get lost in."
+	snowprints = FALSE
+	ignore_blizzard_updates = TRUE
+	icon_state = "blizz_placeholder" //this allows it to be distinguished for mapping, but it gets updated in new() anyway
+
+/turf/unsimulated/floor/snow/heavy_blizzard/update_environment()
+	snow_state = SNOW_BLIZZARD //forces this to always be blizzarding regardless of blizzard rules
+	..()
 
 /turf/unsimulated/floor/noblizz_permafrost
 	icon = 'icons/turf/new_snow.dmi'

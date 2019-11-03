@@ -152,6 +152,7 @@ var/global/list/accessable_z_levels = list()
 	var/name = ""
 	var/teleJammed = 0
 	var/movementJammed = 0 //Prevents you from accessing the zlevel by drifting
+	var/transitionLoops = FALSE //if true, transition sends you back to the same Z-level (see turfs/turf.dm)
 	var/bluespace_jammed = 0
 	var/movementChance = ZLEVEL_BASE_CHANCE
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
@@ -184,6 +185,13 @@ var/global/list/accessable_z_levels = list()
 
 	name = "mining"
 
+//for snowmap
+/datum/zLevel/snowsurface
+	name = "snowy surface"
+	base_turf = /turf/unsimulated/floor/snow
+	movementJammed = TRUE
+	transitionLoops = TRUE
+
 //Currently experimental, contains nothing worthy of interest
 /datum/zLevel/desert
 
@@ -191,6 +199,8 @@ var/global/list/accessable_z_levels = list()
 	teleJammed = 1
 	movementJammed = 1
 	base_turf = /turf/unsimulated/beach/sand
+
+
 
 /datum/zLevel/snow
 	name = "snow"
