@@ -50,6 +50,7 @@
 
 /obj/item/seeds/cutting/update_appearance()
 	..()
+	icon = seed.plant_dmi
 	src.name = "packet of [seed.seed_name] cuttings"
 
 /obj/item/seeds/random
@@ -465,6 +466,7 @@
 /obj/item/seeds/avocadoseed/whole/update_appearance()
 	if(!seed)
 		return
+	icon = seed.plant_dmi
 	icon_state = "pit"
 
 /obj/item/seeds/pearseed
