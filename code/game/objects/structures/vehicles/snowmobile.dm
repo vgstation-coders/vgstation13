@@ -14,47 +14,17 @@
 									 /turf/unsimulated/floor/noblizz_permafrost,
 									 /obj/glacier,
 									 /turf/simulated/floor/plating/snow)
-	var/on = 0
-	var/brightness_on = 6 //luminosity when on
-	var/has_sound = 1 //The CLICK sound when turning on/off
-	var/sound_on = 'sound/items/flashlight_on.ogg'
-	var/sound_off = 'sound/items/flashlight_off.ogg'
 
-/obj/structure/bed/chair/vehicle/snowmobile/initialize()
+/obj/structure/bed/chair/vehicle/snowmobile/New()
 	..()
-	if(on)
-		icon_state = "[initial(icon_state)]-on"
-		set_light(brightness_on)
-	else
-		icon_state = initial(icon_state)
-		set_light(0)
+	new /datum/action/vehicle/toggle_headlights(src)
 
-/obj/structure/bed/chair/vehicle/snowmobile/proc/update_brightness(var/mob/user = null, var/playsound = 1)
-	if(on)
-		icon_state = "[initial(icon_state)]-on"
-		set_light(brightness_on)
-		if(playsound && has_sound)
-			if(get_turf(src))
-				playsound(src, sound_on, 50, 1)
-	else
-		icon_state = initial(icon_state)
-		set_light(0)
-		if(playsound && has_sound)
-			playsound(src, sound_off, 50, 1)
-
-/obj/structure/bed/chair/vehicle/snowmobile/verb/toggle_light()
-	set name = "Toggle headlights"
-	set category = "Object"
-	set src in view(1)
-
-	if(!usr.incapacitated())
-		if(!isturf(usr.loc))
-			to_chat(usr, "You cannot turn the light on while in \the [usr.loc].")//To prevent some lighting anomalities.
-
-			return 0
-		on = !on
-		update_brightness(usr)
-		return 1
+/obj/structure/bed/chair/vehicle/snowmobile/update_icon()
+	for(var/datum/action/vehicle/toggle_headlights/TH in vehicle_actions)
+		if(TH.on)
+			icon_state = "[initial(icon_state)]-on"
+			return
+	icon_state = "[initial(icon_state)]"
 
 /obj/effect/decal/mecha_wreckage/vehicle/snowmobile
 	// TODO: SPRITE PLS
