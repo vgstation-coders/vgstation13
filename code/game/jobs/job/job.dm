@@ -63,6 +63,8 @@
 
 	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority_reward_equip on spawn.
 
+	var/outfit_datum = null
+
 /datum/job/proc/get_total_positions()
 	return clamp(total_positions + xtra_positions, 0, 99)
 
@@ -74,9 +76,14 @@
 
 /datum/job/proc/reject_new_slots()
 	return FALSE
-
+	
+// -- If there's an outfit datum, let's use it.
 /datum/job/proc/equip(var/mob/living/carbon/human/H)
-	return 1
+	if (outfit_datum)
+		var/datum/outfit/concrete_outfit = new outfit_datum
+		concrete_outfit.equip(H)
+	else
+		CRASH("[type] has no outfit datum, and the proc is not overriden.")
 
 /datum/job/proc/priority_reward_equip(var/mob/living/carbon/human/H)
 	to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")

@@ -259,6 +259,7 @@ client/proc/one_click_antag()
 /datum/admins/proc/makeVoxRaiders()
 
 
+// To fix... 
 
 /datum/admins/proc/create_vox_raider(obj/spawn_location, leader_chosen = 0)
 	var/mob/living/carbon/human/new_vox = new(spawn_location.loc)
@@ -279,6 +280,14 @@ client/proc/one_click_antag()
 	new_vox.mind.special_role = "Vox Raider"
 	new_vox.mutations |= M_NOCLONE //Stops the station crew from messing around with their DNA.
 
-	new_vox.equip_vox_raider()
+	var/datum/outfit/striketeam/voxraider/v = new
+	v.equip(new_vox)
+	
+	spawn()
+		var/chosen_loadout = input(new_vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
+		v.chosen_spec = chosen_loadout
+		v.equip_special_items(new_vox)
+
+	v.post_equip(new_vox)
 
 	return new_vox
