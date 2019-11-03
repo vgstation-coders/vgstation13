@@ -3014,8 +3014,8 @@
 	name = "Cosmopolitan"
 	id = COSMOPOLITAN
 	result = COSMOPOLITAN
-	required_reagents = list(LIMEJUICE = 1, BERRYJUICE = 1, TRIPLESEC = 1, VODKA = 2)
-	result_amount = 5
+	required_reagents = list(BERRYJUICE = 1, KAMIKAZE = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/corpsereviver
 	name = "Corpse Reviver No. 2"
