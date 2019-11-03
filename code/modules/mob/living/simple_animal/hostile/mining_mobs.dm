@@ -81,6 +81,24 @@
 	aggro_vision_range = 9
 	idle_vision_range = 2
 
+/mob/living/simple_animal/hostile/asteroid/basilisk/gorgon
+	name = "gorgon"
+	desc = "Looking at this one doesn't seen to turn the beholder into stone."
+	icon_state = "gorgon"
+	icon_living = "gorgon"
+	icon_aggro = "gorgon_alert"
+	icon_dead = "gorgon_dead"
+	move_to_delay = 10
+	ranged = FALSE
+	speed = 2
+	maxHealth = 80
+	health = 80
+	harm_intent_damage = 2
+	melee_damage_lower = 7
+	melee_damage_upper = 7
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
+	size = SIZE_SMALL
+
 /obj/item/projectile/temp/basilisk
 	name = "freezing blast"
 	icon_state = "ice_2"
