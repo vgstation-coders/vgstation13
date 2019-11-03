@@ -49,9 +49,6 @@
 	new /obj/item/weapon/storage/backpack/cultpack(loc)
 	..()
 
-/obj/item/weapon/storage/backpack/cultpack/cultify()
-	return
-
 /obj/item/weapon/storage/backpack/clown
 	name = "Giggles Von Honkerton"
 	desc = "It's a backpack made by Honk! Co."

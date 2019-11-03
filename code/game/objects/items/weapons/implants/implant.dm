@@ -228,6 +228,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 /obj/item/weapon/implant/chem/New()
 	..()
+	create_reagents(50)
 	chemical_implants.Add(src)
 
 /obj/item/weapon/implant/chem/Destroy()
@@ -267,10 +268,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 	spawn(20)
 		malfunction--
-
-/obj/item/weapon/implant/chem/New()
-	. = ..()
-	create_reagents(50)
 
 /obj/item/weapon/implant/loyalty
 	name = "loyalty implant"

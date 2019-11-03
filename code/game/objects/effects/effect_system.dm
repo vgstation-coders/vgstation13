@@ -260,6 +260,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/smoke/Destroy()
 	if(reagents)
 		reagents.my_atom = null
+		qdel(reagents)
 		reagents = null
 	..()
 
@@ -405,11 +406,6 @@ steam.start() -- spawns the effect
 /obj/effect/effect/smoke/chem
 	icon = 'icons/effects/chemsmoke.dmi'
 
-/obj/effect/effect/smoke/Destroy()
-	if(reagents)
-		qdel(reagents)
-		reagents = null
-	..()
 /obj/effect/effect/smoke/chem/New()
 	. = ..()
 	create_reagents(500)

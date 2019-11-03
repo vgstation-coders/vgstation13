@@ -726,22 +726,15 @@
 			S_OLD.zone.remove(S_OLD)
 
 		//*****Move objects and mobs*****
+		for(var/mob/M in old_turf)	//mobs first
+			if(!M.can_shuttle_move(src))
+				continue
+			move_atom(M, new_turf, rotate)
 		for(var/atom/movable/AM in old_turf)
 			if(!AM.can_shuttle_move(src))
 				continue
+			move_atom(AM, new_turf, rotate)
 
-			if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
-				AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
-
-				spawn()
-					AM.forceMove(new_turf)
-
-				//TODO: Make this compactible with bound_x and bound_y.
-			else
-				AM.forceMove(new_turf)
-
-			if(rotate)
-				AM.shuttle_rotate(rotate)
 
 		//Move landmarks - for moving the arrivals shuttle
 		for(var/list/L in moved_landmarks) //moved_landmarks: code/game/area/areas.dm, 527 (above the move_contents_to proc)
@@ -777,6 +770,20 @@
 				D2.update_nearby_tiles()
 
 	return 1
+
+/datum/shuttle/proc/move_atom(var/atom/movable/AM, var/new_turf, var/rotate)
+	if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
+		AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
+
+		spawn()
+			AM.forceMove(new_turf)
+
+		//TODO: Make this compactible with bound_x and bound_y.
+	else
+		AM.forceMove(new_turf)
+
+	if(rotate)
+		AM.shuttle_rotate(rotate)
 
 /proc/setup_shuttles()
 	world.log << "Setting up all shuttles..."
