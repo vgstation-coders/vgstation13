@@ -333,6 +333,7 @@
 	can_border_transition = 1
 	plane = PLATING_PLANE
 
+#define MOLES_ICECORE 11100
 /turf/unsimulated/floor/noblizz_permafrost/icecore
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "ice"
@@ -341,6 +342,8 @@
 	temperature = TCMB
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
 	heat_capacity = 700000
+	oxygen = MOLES_ICECORE * 0.2
+	nitrogen = MOLES_ICECORE * 0.8
 
 /obj/glacier
 	desc = "A frozen lake kept solid by temperatures way below freezing."
