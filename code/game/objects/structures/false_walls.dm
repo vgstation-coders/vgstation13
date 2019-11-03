@@ -111,6 +111,7 @@
 
 /obj/structure/falsewall/closed
 	density = 1
+	opacity = 1
 
 /obj/structure/falsewall/New()
 	..()
