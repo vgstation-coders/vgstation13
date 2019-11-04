@@ -2996,6 +2996,167 @@
 	required_reagents = list(SPACEMOUNTAINWIND = 1, COFFEE = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/moscowmule
+	name = "Moscow Mule"
+	id = MOSCOWMULE
+	result = MOSCOWMULE
+	required_reagents = list(BEER = 3, VODKA = 1, LIMEJUICE=1)
+	result_amount = 5
+
+/datum/chemical_reaction/midnightkiss
+	name = "Midnight Kiss"
+	id = MIDNIGHTKISS
+	result = MIDNIGHTKISS
+	required_reagents = list(VODKA = 1, BLUECURACAO = 1, CHAMPAGNE = 3)
+	result_amount = 5
+
+/datum/chemical_reaction/cosmopolitan
+	name = "Cosmopolitan"
+	id = COSMOPOLITAN
+	result = COSMOPOLITAN
+	required_reagents = list(BERRYJUICE = 1, KAMIKAZE = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/corpsereviver
+	name = "Corpse Reviver No. 2"
+	id = CORPSEREVIVER
+	result = CORPSEREVIVER
+	required_reagents = list(GIN = 1, LEMONJUICE = 1, TRIPLESEC = 1, WINE = 1, ABSINTHE = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/bluelagoon
+	name = "Blue Lagoon"
+	id = BLUELAGOON
+	result = BLUELAGOON
+	required_reagents = list(LEMON_LIME = 3, VODKA = 1, BLUECURACAO = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/sexonthebeach
+	name = "Sex on The Beach"
+	id = SEXONTHEBEACH
+	result = SEXONTHEBEACH
+	required_reagents = list(SCREWDRIVERCOCKTAIL = 1, SCHNAPPS = 1, BERRYJUICE = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/americano
+	name = "Americano"
+	id = AMERICANO
+	result = AMERICANO
+	required_reagents = list(SODAWATER = 1, WINE = 1, BITTERS = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/sidecar
+	name = "Sidecar"
+	id = SIDECAR
+	result = SIDECAR
+	required_reagents = list(COGNAC = 1, TRIPLESEC = 1, LEMONJUICE = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/betweenthesheets
+	name = "Between The Sheets"
+	id = BETWEENTHESHEETS
+	result = BETWEENTHESHEETS
+	required_reagents = list(SIDECAR = 1, RUM = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/champagnecocktail
+	name = "Champagne Cocktail"
+	id = CHAMPAGNECOCKTAIL
+	result = CHAMPAGNECOCKTAIL
+	required_reagents = list(CHAMPAGNE = 2, COGNAC = 1, BITTERS = 1, SUGAR = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/espressomartini
+	name = "Espresso Martini"
+	id = ESPRESSOMARTINI
+	result = ESPRESSOMARTINI
+	required_reagents = list(VODKA = 1, ESPRESSO = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/kamikaze
+	name = "Kamikaze"
+	id = KAMIKAZE
+	result = KAMIKAZE
+	required_reagents = list(VODKA = 1, TRIPLESEC = 1, LIMEJUICE = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/mojito
+	name = "Mojito"
+	id = MOJITO
+	result = MOJITO
+	required_reagents = list(RUM = 2, SUGAR = 1, SODAWATER = 1, LIMEJUICE = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/whiskeytonic
+	name = "Whiskey Tonic"
+	id = WHISKEYTONIC
+	result = WHISKEYTONIC
+	required_reagents = list(WHISKEY = 1, TONIC = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/cinnamonwhisky
+	name = "Cinnamon Whisky"
+	id = CINNAMONWHISKY
+	result = CINNAMONWHISKY
+	required_reagents = list(WHISKEY = 5, CINNAMON = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/c4cocktail
+	name = "C-4 Cocktail"
+	id = C4COCKTAIL
+	result = C4COCKTAIL
+	required_reagents = list(KAHLUA = 2, CINNAMONWHISKY = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/dragonsblood
+	name = "Dragon's Blood"
+	id = DRAGONSBLOOD
+	result = DRAGONSBLOOD
+	required_reagents = list(CINNAMONWHISKY = 2, BERRYJUICE = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/dragonsspit
+	name = "Dragon's Spit"
+	id = DRAGONSSPIT
+	result = DRAGONSSPIT
+	required_reagents = list(CINNAMONWHISKY = 2, CAPSAICIN = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/cinnamontoastcocktail
+	name = "Cinnamon Toast Cocktail"
+	id = CINNAMONTOASTCOCKTAIL
+	result = CINNAMONTOASTCOCKTAIL
+	required_reagents = list(RUM = 1, CINNAMONWHISKY = 1, CREAM = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/fireballcider
+	name = "Fireball Cider"
+	id = FIREBALLCIDER
+	result = FIREBALLCIDER
+	required_reagents = list(APPLEJUICE = 2, CINNAMONWHISKY = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/manhattanfireball
+	name = "Manhattan Fireball"
+	id = MANHATTANFIREBALL
+	result = MANHATTANFIREBALL
+	required_reagents = list(CINNAMONWHISKY = 2, VERMOUTH = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/fireballcola
+	name = "Fireball Cola"
+	id = FIREBALLCOLA
+	result = FIREBALLCOLA
+	required_reagents = list(CINNAMONWHISKY = 2, COLA = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/firerita
+	name = "Fire-rita"
+	id = FIRERITA
+	result = FIRERITA
+	required_reagents = list(CINNAMONWHISKY = 1, TRIPLESEC = 1, TEQUILA = 3)
+	result_amount = 5
+
 //Cafe stuff!
 /datum/chemical_reaction/acidtea
 	name = "Earl's Grey Tea"
