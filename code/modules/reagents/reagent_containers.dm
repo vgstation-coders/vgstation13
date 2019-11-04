@@ -204,6 +204,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
  * Helper proc to handle reagent splashes. A negative `amount` will splash all the reagents.
  */
 /proc/splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
+	if(user.a_intent != I_HURT)//Should stop splashing when you dont want it to happen.
+		return
+	
 	if (amount == 0 || reagents.is_empty())
 		if(user)
 			to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
@@ -269,7 +272,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				to_chat(user, "<span class='notice'>You transfer [success] units of the solution to \the [target].</span>")
 
 			return (success)
-	if(!success)
+	if(!success && user.a_intent == I_HURT)
 		// Mob splashing
 		if(splashable_units != 0)
 			var/to_splash = reagents.total_volume
