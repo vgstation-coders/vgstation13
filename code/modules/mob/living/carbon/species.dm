@@ -436,7 +436,16 @@ var/global/list/whitelisted_species = list("Human")
 	return 0
 
 /datum/species/skellington/gib(mob/living/carbon/human/H as mob)
-	H.dust()
+	..()
+	var/datum/organ/external/head_organ = H.get_organ(LIMB_HEAD)	
+	if(head_organ.status & ORGAN_DESTROYED)
+		new /obj/effect/decal/remains/human/noskull(H.loc)
+	else
+		new /obj/effect/decal/remains/human(H.loc)
+		head_organ.droplimb(1,1)
+
+	H.drop_all()	
+	qdel(src)
 	
 
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative
