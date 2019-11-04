@@ -51,8 +51,8 @@
 /obj/item/weapon/bananapeel
 	name = "banana peel"
 	desc = "A peel from a banana."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "banana_peel"
+	icon = 'icons/obj/hydroponics/banana.dmi'
+	icon_state = "peel"
 	item_state = "banana_peel"
 	w_class = W_CLASS_TINY
 	throwforce = 0
@@ -67,8 +67,8 @@
 /obj/item/weapon/corncob
 	name = "corn cob"
 	desc = "A reminder of meals gone by."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "corncob"
+	icon = 'icons/obj/hydroponics/corn.dmi'
+	icon_state = "cob"
 	item_state = "corncob"
 	w_class = W_CLASS_TINY
 	throwforce = 0

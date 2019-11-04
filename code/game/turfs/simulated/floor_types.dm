@@ -33,7 +33,6 @@
 	name = "floor"
 
 /turf/simulated/floor/vox/wood
-	name = "floor"
 	icon_state = "wood"
 	floor_tile
 

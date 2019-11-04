@@ -52,6 +52,8 @@
 	var/list/offsets = list()
 	var/last_dir
 
+	var/list/datum/action/vehicle_actions = list()
+
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
 
@@ -235,6 +237,16 @@
 
 	add_fingerprint(user)
 
+	for (var/datum/action/action in vehicle_actions)
+		if (action.owner && action.owner != user)
+			action.Remove(action.owner)
+		action.Grant(user)
+
+/obj/structure/bed/chair/vehicle/manual_unbuckle(user)
+	..()
+	for (var/datum/action/action in vehicle_actions)
+		action.Remove(user)
+
 /obj/structure/bed/chair/vehicle/handle_layer()
 	if(dir == SOUTH)
 		plane = ABOVE_HUMAN_PLANE
@@ -412,3 +424,32 @@
 	return
 
 /datum/locking_category/buckle/chair/vehicle
+
+
+/////////////////////////////////////
+//           VEHICLE ACTIONS
+////////////////////////////////////
+
+/datum/action/vehicle/toggle_headlights
+	name = "toggle headlights"
+	desc = "Turn the headlights on or off."
+	var/on = FALSE
+	var/brightness = 6
+
+/datum/action/vehicle/toggle_headlights/New(var/obj/structure/bed/chair/vehicle/Target)
+	..()
+	icon_icon = Target.icon
+	button_icon_state = Target.icon_state
+	Target.vehicle_actions += src
+
+/datum/action/vehicle/toggle_headlights/Trigger()
+	if(!..())
+		return FALSE
+	on = !on
+	if(on)
+		target.set_light(brightness)
+		playsound(target, 'sound/items/flashlight_on.ogg', 50, 1)
+	else
+		target.set_light(0)
+		playsound(target, 'sound/items/flashlight_off.ogg', 50, 1)
+	target.update_icon()

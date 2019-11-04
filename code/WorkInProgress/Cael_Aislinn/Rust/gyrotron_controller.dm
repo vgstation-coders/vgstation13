@@ -20,11 +20,6 @@
 	if(ticker)
 		initialize()
 
-/obj/machinery/computer/rust_gyrotron_controller/Topic(href, href_list)
-	. =..()
-	if(.)
-		return
-
 /obj/machinery/computer/rust_gyrotron_controller/attack_ai(var/mob/user)
 	. = attack_hand(user)
 

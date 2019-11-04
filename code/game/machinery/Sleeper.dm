@@ -240,11 +240,6 @@
 /obj/machinery/sleeper/allow_drop()
 	return FALSE
 
-/obj/machinery/sleeper/process()
-	updateDialog()
-	return
-
-
 /obj/machinery/sleeper/blob_act()
 	if(prob(75))
 		for(var/atom/movable/A as mob|obj in src)

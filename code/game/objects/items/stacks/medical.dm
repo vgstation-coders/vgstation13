@@ -138,16 +138,16 @@
 	name = "\improper S'rendarr's Hand leaf"
 	singular_name = "S'rendarr's Hand leaf"
 	desc = "A poultice made of soft leaves that is rubbed on bruises."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "cabbage"
+	icon = 'icons/obj/hydroponics/shand.dmi'
+	icon_state = "pack"
 	heal_brute = 5
 
 /obj/item/stack/medical/ointment/tajaran
 	name = "\improper Messa's Tear petals"
 	singular_name = "Messa's Tear petals"
 	desc = "A poultice made of cold, blue petals that is rubbed on burns."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "ambrosiavulgaris"
+	icon = 'icons/obj/hydroponics/mtear.dmi'
+	icon_state = "pack"
 	heal_burn = 5
 
 

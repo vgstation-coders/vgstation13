@@ -1829,7 +1829,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 					var/log = replacetext(n, "\n", "(new line)")//no intentionally spamming admins with 100 lines, nice try
 					log_say("[src] notes - [U] changed the text to: [log]")
-					message_admins("[src] notes - [U] changed the text to: [log]", 1)
 					for(var/mob/dead/observer/M in player_list)
 						if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA))
 							M.show_message("<span class='game say'>[src] notes - <span class = 'name'>[U]</span> changed the text to:</span> [log]")

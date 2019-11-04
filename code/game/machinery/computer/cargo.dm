@@ -191,6 +191,9 @@ For vending packs, see vending_packs.dm*/
 	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
 		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
 		hacked = 1
+		can_order_contraband = 1
+		var/obj/item/weapon/circuitboard/supplycomp/C = circuit
+		C.contraband_enabled = 1
 		return
 	if(I.is_screwdriver(user))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
@@ -333,7 +336,7 @@ For vending packs, see vending_packs.dm*/
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
 			return
 
-		var/pack_name = copytext(href_list["doorder"], 1, lentext(href_list["doorder"]))
+		var/pack_name = copytext(href_list["doorder"], 1, -1)
 		var/multi = text2num(copytext(href_list["doorder"], -1))
 		if(!isnum(multi))
 			return
@@ -559,7 +562,7 @@ For vending packs, see vending_packs.dm*/
 
 		var/timeout = world.time + 600
 		// Get ordered pack name and multi crate order boolean
-		var/pack_name = copytext(href_list["doorder"], 1, lentext(href_list["doorder"]))
+		var/pack_name = copytext(href_list["doorder"], 1, -1)
 		var/multi = text2num(copytext(href_list["doorder"], -1))
 		if(!isnum(multi))
 			return

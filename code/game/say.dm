@@ -45,12 +45,37 @@ var/global/lastDecTalkUse = 0
 	say_testing(src, "/atom/movable/proc/send_speech() start, msg = [speech.message]; message_range = [range]; language = [speech.language ? speech.language.name : "None"];")
 	if(isnull(range))
 		range = 7
+	range = atmospheric_speech(speech,range)
 	var/rendered = render_speech(speech)
 	var/list/listeners = get_hearers_in_view(range, src)
 	if(speech.speaker.GhostsAlwaysHear())
 		listeners |= observers
 	for(var/atom/movable/AM in listeners)
 		AM.Hear(speech, rendered)
+
+/atom/movable/proc/atmospheric_speech(var/datum/speech/speech, var/range=7)
+	var/turf/T = get_turf(speech.speaker)
+	if(T && !T.c_airblock(T)) //we are on an airflowing tile
+		var/atmos = 0
+		var/datum/gas_mixture/current_air = T.return_air()
+		if(current_air)
+			atmos = round(current_air.return_pressure()/ONE_ATMOSPHERE, 0.1)
+		else
+			atmos = 0 //no air
+
+		range = min(round(range * sqrt(atmos)), range) //Range technically falls off with the root of pressure (see Newtonian sound)
+		range = max(range, 1) //If you get right next to someone you can read their lips, or something.
+		/*Rough range breakpoints for default 7-range speech
+		10kpa: 0 (round 0.09 down to 0 for atmos value)
+		11kpa: 2
+		21kpa: 3
+		51kpa: 4
+		61kpa: 5
+		81kpa: 6
+		101kpa: 7 (normal)
+		*/
+
+	return range
 
 /atom/movable/proc/GhostsAlwaysHear()
 	return FALSE

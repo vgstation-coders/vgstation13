@@ -154,7 +154,6 @@
 
 /obj/structure/trophy_mount/Destroy()
 	if(held_item)
-		to_chat(world, "held item destroyed.")
 		qdel(held_item)
 		held_item = null
 	..()
