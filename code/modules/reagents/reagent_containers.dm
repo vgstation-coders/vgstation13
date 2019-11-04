@@ -269,7 +269,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				to_chat(user, "<span class='notice'>You transfer [success] units of the solution to \the [target].</span>")
 
 			return (success)
-	if(!success && user.a_intent == I_HURT)
+	if(!success)
 		// Mob splashing
 		if(splashable_units != 0)
 			var/to_splash = reagents.total_volume
@@ -288,7 +288,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				return (to_splash)
 			// Non-mob splashing
 			else
-				if(!src.is_empty())
+				if(!src.is_empty() && user.a_intent == I_HURT)
 					for (var/reagent_id in LOGGED_SPLASH_REAGENTS)
 						if (reagents.has_reagent(reagent_id))
 							add_gamelogs(user, "poured '[reagent_id]' onto \the [target]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
