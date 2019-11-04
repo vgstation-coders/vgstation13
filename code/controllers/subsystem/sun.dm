@@ -1,4 +1,5 @@
 var/datum/subsystem/sun/SSsun
+var/obj/sun_object/sun_obj
 
 
 /datum/subsystem/sun
@@ -16,6 +17,7 @@ var/datum/subsystem/sun/SSsun
 
 /datum/subsystem/sun/Initialize(timeofday)
 	sun = new
+	sun_obj = new
 
 	..()
 

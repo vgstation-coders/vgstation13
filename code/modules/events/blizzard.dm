@@ -66,6 +66,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		tile.snow_state = snow_intensity
 		tile.update_environment()
 	force_update_snowfall_sfx()
+	adjust_sun()
 
 /proc/lessen_snowfall()
 	if(snow_intensity == SNOW_CALM)
@@ -77,6 +78,7 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 		tile.snow_state = snow_intensity
 		tile.update_environment()
 	force_update_snowfall_sfx()
+	adjust_sun()
 
 /proc/snowfall_tick()
 	switch(snow_intensity)
@@ -88,6 +90,18 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 			snowfall_hard_tick()
 		if(SNOW_BLIZZARD)
 			snowfall_blizzard_tick()
+
+/proc/adjust_sun()
+	if(sun_obj)
+		switch(snow_intensity)
+			if(SNOW_CALM)
+				sun_obj.set_light(l_power = SUNLIGHT_STRONG)
+			if(SNOW_AVERAGE)
+				sun_obj.set_light(l_power = SUNLIGHT_MEDIUM)
+			if(SNOW_HARD)
+				sun_obj.set_light(l_power = SUNLIGHT_WEAK)
+			if(SNOW_BLIZZARD)
+				sun_obj.set_light(l_power = SUNLIGHT_NONE)
 
 /proc/snowfall_calm_tick()
 	var/tile_interval = 5

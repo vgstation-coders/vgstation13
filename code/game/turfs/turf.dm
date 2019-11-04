@@ -159,6 +159,7 @@
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
+
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
 
@@ -166,8 +167,9 @@
 		inertial_drift(A)
 	else
 		A.inertia_dir = 0
-
 	..()
+	if(A.never_transition_z)
+		return
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj in range(1, src))

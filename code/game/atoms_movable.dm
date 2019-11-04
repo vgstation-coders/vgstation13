@@ -57,6 +57,8 @@
 
 	var/last_explosion_push = 0
 
+	var/never_transition_z = FALSE //totally ignore z transitions, don't loop at all at edge
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))

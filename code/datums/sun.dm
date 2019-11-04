@@ -1,4 +1,9 @@
 var/global/datum/sun/sun
+#define SUNLIGHT_STRONG 3
+#define SUNLIGHT_MEDIUM 2
+#define SUNLIGHT_WEAK 1
+#define SUNLIGHT_NONE 0
+#define SUNLIGHT_RANGE 2500
 
 /datum/sun
 	var/angle
@@ -23,6 +28,14 @@ var/global/datum/sun/sun
 	rotationRate = rand(850, 1150) / 1000 //Slight deviation, no more than 15 %, budget orbital stabilization system
 	if(prob(50))
 		rotationRate = -rotationRate
+
+/obj/sun_object
+	name = "sun"
+	desc = "source of light"
+	never_transition_z = TRUE
+
+/obj/sun_object/New()
+	set_light(SUNLIGHT_RANGE, SUNLIGHT_STRONG, "#FFFFFF")
 
 /*
  * Calculate the sun's position given the time of day.
@@ -62,12 +75,29 @@ var/global/datum/sun/sun
 
 	var/obj/machinery/power/solar/panel/S
 
+	if(sun_obj)
+		sun_obj.forceMove(get_position())
+
 	for(S in solars_list)
 		if(!S.powernet)
 			solars_list.Remove(S)
 
 		if(S.control)
 			occlusion(S)
+
+/datum/sun/proc/get_position()
+	var/ax = map.center_x
+	var/ay = map.center_y
+	for(var/i = 1 to 256)
+		ax += dx //Do step
+		ay += dy
+
+		if(ax == world.maxx || ay == world.maxy)
+			break
+
+	var/turf/T = locate(round(ax, 0.5), round(ay, 0.5), STATION_Z)
+
+	return T
 
 //For a solar panel, trace towards sun to see if we're in shadow.
 
