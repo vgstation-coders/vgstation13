@@ -313,6 +313,7 @@
 /turf/unsimulated/floor/snow/dirt
 	name = "snowy dirt"
 	desc = "Dirty."
+	real_snow_tile = FALSE
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "asteroid"
 
