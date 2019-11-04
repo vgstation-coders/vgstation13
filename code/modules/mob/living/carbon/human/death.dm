@@ -1,13 +1,14 @@
 /mob/living/carbon/human/gib()
 	if(species)
 		species.gib(src)
-	else
-		death(1)
-		monkeyizing = 1
-		canmove = 0
-		icon = null
-		invisibility = 101
-		default_gib()
+		return
+	
+	death(1)
+	monkeyizing = 1
+	canmove = 0
+	icon = null
+	invisibility = 101
+	default_gib()
 
 //This will get called often at first until custom gibbing events get made up for each species.
 /mob/living/carbon/human/proc/default_gib()
