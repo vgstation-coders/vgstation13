@@ -995,10 +995,8 @@
 /obj/item/weapon/storage/box/smartbox/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
 	if(contents.len <= 0) //If this is the last item, kill the box.
-		to_chat(new_location,"<span class='notice'>The [src] fizzles away into a glittering dust.</span>") //Should probably typecheck new_location as a mob?
+		new_location.visible_message("<span class='notice'>The [src] fizzles away into a glittering dust.</span>")
 		qdel(src)
-		return
-	return . //remove_from_storage returns 1 or 0 :)
 
 /obj/item/weapon/storage/box/smartbox/attackby(obj/item/W, mob/user)
 	if(one_way)
@@ -1215,10 +1213,10 @@
 	..()
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/hastur
-	name = "Hastur outfiit box"
+	name = "Hastur outfit box"
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/hastur/New()
-	new /obj/item/clothing/head/hasturhood(src)
+	new	/obj/item/clothing/head/hasturhood(src)
 	new /obj/item/clothing/suit/hastur(src)
 	..()
 
