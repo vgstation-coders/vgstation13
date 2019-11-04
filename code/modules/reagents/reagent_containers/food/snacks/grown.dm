@@ -27,6 +27,11 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New()
 	..()
+	if(ticker)
+		initialize()
+
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/initialize()
 
 	//Handle some post-spawn var stuff.
 	spawn()
@@ -71,6 +76,7 @@ var/list/special_fruits = list()
 			bitesize = 1 + round(reagents.total_volume/2, 1)
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+	
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom)
 	..()
