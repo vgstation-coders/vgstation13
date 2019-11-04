@@ -41,6 +41,7 @@
 	var/nymph_check = 1					//Whether the gun disallows diona nymphs from firing it.
 	var/hulk_check = 1					//Whether the gun disallows hulks from firing it.
 	var/golem_check = 1					//Whether the gun disallows golems from firing it.
+	var/manifested_check = 1			//Whether the gun disallows manifested ghosts from firing it.
 
 	var/tmp/list/mob/living/target //List of who yer targeting.
 	var/tmp/lock_time = -100
@@ -152,6 +153,11 @@
 			if(isgolem(H))
 				if(display_message)
 					to_chat(user, "<span class='warning'>Your fat fingers don't fit in the trigger guard!</span>")
+				return 0
+		if(manifested_check)
+			if(ismanifested(H))
+				if(display_message)
+					to_chat(user, "<span class='warning'>It would dishonor the master to use anything but his unholy blade!</span>")
 				return 0
 		var/datum/organ/external/a_hand = H.get_active_hand_organ()
 		if(!a_hand.can_use_advanced_tools())
