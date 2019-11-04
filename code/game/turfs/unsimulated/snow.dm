@@ -317,6 +317,12 @@
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "asteroid"
 
+/turf/unsimulated/floor/pit
+	name = "pit"
+	desc = "A dark pit drilled deep into the planetary core for the purposes of gas disposal. A near vacuum."
+	icon = 'icons/turf/new_snow.dmi'
+	icon_state = "pit"
+
 /turf/unsimulated/floor/snow/cave
 	name = "snowy cave floor"
 	desc = "Sheltered from blizzards outside, but still cold."
