@@ -189,6 +189,9 @@
 		if(isAI(player) || isMoMMI(player))
 			living_players -= player //Your assigned role doesn't change when you are turned into a MoMMI or AI
 			continue
+		if(isanimal(player) && !isborer(player))
+			living_players -= player //No animal traitors except borers.
+			continue
 		if(player.z == map.zCentcomm)
 			living_players -= player//we don't autotator people on Z=2
 			continue

@@ -55,8 +55,8 @@
 /obj/item/weapon/bananapeel/traitorpeel
 	name = "banana peel"
 	desc = "A peel from a banana."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "banana_peel"
+	icon = 'icons/obj/hydroponics/banana.dmi'
+	icon_state = "peel"
 	item_state = "banana_peel"
 	w_class = W_CLASS_TINY
 	throwforce = 0

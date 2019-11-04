@@ -15,22 +15,6 @@
 // each contiguous network of cables & nodes
 ////////////////////////////////////////////
 
-/*
-Powernet procs :
-/datum/powernet/New()
-/datum/powernet/Del()
-/datum/powernet/Destroy()
-/datum/powernet/resetVariables()
-/datum/powernet/proc/remove_cable(var/obj/structure/cable/C)
-/datum/powernet/proc/add_cable(var/obj/structure/cable/C)
-/datum/powernet/proc/remove_machine(var/obj/machinery/power/M)
-/datum/powernet/proc/add_machine(var/obj/machinery/power/M)
-/datum/powernet/proc/reset()
-/datum/powernet/proc/get_electrocute_damage()
-/datum/powernet/proc/set_to_build()
-/obj/structure/cable/proc/rebuild_from()
-*/
-
 /datum/powernet/New()
 	powernets |= src
 

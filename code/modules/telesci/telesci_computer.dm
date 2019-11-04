@@ -38,6 +38,10 @@
 
 	light_color = LIGHT_COLOR_BLUE
 
+/obj/machinery/computer/telescience/broken
+	icon_state = "teleportb"
+	stat = BROKEN
+
 /obj/machinery/computer/telescience/get_cell()
 	return cell
 

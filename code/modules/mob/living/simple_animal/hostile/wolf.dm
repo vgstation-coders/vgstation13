@@ -287,9 +287,14 @@
 			stop_automated_movement = 0
 
 
-		if((health < (maxHealth/2)) && nutrition >= WOLF_REGENCOST)
-			health += rand(1,3)
-			nutrition -= WOLF_REGENCOST
+		if(health < maxHealth/2)
+			if(nutrition >= WOLF_REGENCOST)
+				health += rand(1,3)
+				nutrition -= WOLF_REGENCOST
+		else
+			if(hunger_status >= WOLF_WELLFED)
+				health += 1
+				nutrition -= WOLF_REGENCOST
 
 /mob/living/simple_animal/hostile/wolf/proc/handle_hunger()
 	switch(nutrition)

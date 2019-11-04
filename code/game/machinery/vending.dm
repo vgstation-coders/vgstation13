@@ -1226,6 +1226,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/cognac = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/kahlua = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/sake = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/triplesec = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/bluecuracao = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/bitters = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/schnapps = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/fireballwhisky = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/beer = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/ale = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/orangejuice = 4,
@@ -1246,7 +1251,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/mug = 10
 		)
 	premium = list(
-		/obj/item/weapon/reagent_containers/food/drinks/bottle/pwine = 1
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/pwine = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/champagne = 1
 	)
 	product_slogans = list(
 		"I hope nobody asks me for a bloody cup o' tea...",

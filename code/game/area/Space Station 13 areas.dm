@@ -591,23 +591,6 @@ proc/process_adminbus_teleport_locs()
 /area/asteroid/artifactroom/holomapDrawOverride()
 	return HOLOMAP_DRAW_FULL
 
-/area/asteroid/snow_inner
-	name = "\improper Snow Asteroid"
-	icon_state = "sno2"
-	shuttle_can_crush = TRUE
-
-/area/asteroid/snow_outer
-	name = "\improper Snow Asteroid - Outer Wall"
-	icon_state = "sno"
-
-/area/asteroid/icecore
-	name = "\improper Snow Asteroid - Frozen Core"
-	icon_state = "icecore"
-
-/area/asteroid/garage
-	name = "\improper Public Garage"
-	icon_state = "yellow"
-
 /area/planet/clown
 	name = "\improper Clown Planet"
 	icon_state = "honk"
@@ -1939,6 +1922,28 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	name = "\improper Test Room"
 	icon_state = "storage"
+
+//SNOWMAP
+/area/surface/snow
+	name = "\improper Planet Surface"
+	icon_state = "sno2"
+	shuttle_can_crush = TRUE
+
+/area/surface/blizzard
+	name = "\improper The Blizzard"
+	icon_state = "sno"
+
+/area/surface/icecore
+	name = "\improper Frozen Core"
+	icon_state = "icecore"
+
+/area/surface/garage
+	name = "\improper Public Garage"
+	icon_state = "yellow"
+
+/area/surface/junkyard
+	name = "\improper Junk Yard"
+	icon_state = "disposal"
 
 //DJSTATION
 

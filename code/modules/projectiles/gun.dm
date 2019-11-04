@@ -41,6 +41,7 @@
 	var/nymph_check = 1					//Whether the gun disallows diona nymphs from firing it.
 	var/hulk_check = 1					//Whether the gun disallows hulks from firing it.
 	var/golem_check = 1					//Whether the gun disallows golems from firing it.
+	var/manifested_check = 1			//Whether the gun disallows manifested ghosts from firing it.
 
 	var/tmp/list/mob/living/target //List of who yer targeting.
 	var/tmp/lock_time = -100
@@ -152,6 +153,11 @@
 			if(isgolem(H))
 				if(display_message)
 					to_chat(user, "<span class='warning'>Your fat fingers don't fit in the trigger guard!</span>")
+				return 0
+		if(manifested_check)
+			if(ismanifested(H))
+				if(display_message)
+					to_chat(user, "<span class='warning'>It would dishonor the master to use anything but his unholy blade!</span>")
 				return 0
 		var/datum/organ/external/a_hand = H.get_active_hand_organ()
 		if(!a_hand.can_use_advanced_tools())
@@ -348,7 +354,7 @@
 				user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
 				user.death()
 				var/suicidesound = pick('sound/misc/suicide/suicide1.ogg','sound/misc/suicide/suicide2.ogg','sound/misc/suicide/suicide3.ogg','sound/misc/suicide/suicide4.ogg','sound/misc/suicide/suicide5.ogg','sound/misc/suicide/suicide6.ogg')
-				playsound(src, pick(suicidesound), 10, channel = 125)
+				playsound(src, pick(suicidesound), 30, channel = 125)
 				log_attack("<font color='red'>[key_name(user)] committed suicide with \the [src].</font>")
 				user.attack_log += "\[[time_stamp()]\] <font color='red'> [user.real_name] committed suicide with \the [src]</font>"
 			else

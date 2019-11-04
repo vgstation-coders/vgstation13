@@ -220,6 +220,7 @@
 	name = "tree stump"
 	icon = 'icons/obj/flora/pinetrees.dmi'
 	icon_state = "pine_stump"
+	shovelaway = TRUE
 
 //grass
 /obj/structure/flora/grass
@@ -336,7 +337,7 @@
 /obj/structure/flora/pottedplant/claypot
 	name = "clay pot"
 	desc = "Plants placed in those stop aging, but cannot be retrieved either."
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "claypot"
 	anchored = 0
 	density = FALSE

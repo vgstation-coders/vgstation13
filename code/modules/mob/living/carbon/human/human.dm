@@ -1929,7 +1929,7 @@ mob/living/carbon/human/isincrit()
 			stuttering = max(0,stuttering-rand(8,10))
 			jitteriness = max(0,jitteriness-rand(8,10))
 			hallucination = max(0,hallucination-rand(8,10))
-			confused = max(0,confused-rand(8,10))
+			remove_confused(rand(8, 10))
 			drowsyness = max(0, drowsyness-rand(8,10))
 			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
 
