@@ -310,12 +310,25 @@
 	name = "permafrost"
 	desc = "Soil that never unfreezes."
 
+/turf/unsimulated/floor/snow/dirt
+	name = "snowy dirt"
+	desc = "Dirty."
+	real_snow_tile = FALSE
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "asteroid"
+
+/turf/unsimulated/floor/snow/cave
+	name = "snowy cave floor"
+	desc = "Sheltered from blizzards outside, but still cold."
+	ignore_blizzard_updates = TRUE
+	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
+
 /turf/unsimulated/floor/snow/heavy_blizzard
 	name = "heavy blizzard"
 	desc = "Without cover or landmarks, dense blizzards are easy to get lost in."
 	snowprints = FALSE
 	ignore_blizzard_updates = TRUE
-	icon_state = "blizz_placeholder" //this allows it to be distinguished for mapping, but it gets updated in new() anyway
+	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
 
 /turf/unsimulated/floor/snow/heavy_blizzard/update_environment()
 	snow_state = SNOW_BLIZZARD //forces this to always be blizzarding regardless of blizzard rules

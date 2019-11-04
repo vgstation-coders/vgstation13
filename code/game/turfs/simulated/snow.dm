@@ -117,9 +117,6 @@
 /turf/simulated/floor/plating/snow/cold
 	temperature = T_ARCTIC
 
-/turf/simulated/floor/plating/snow/permafrost
-	icon_state = "permafrost_full"
-
 /turf/simulated/floor/plating/snow/ice
 	name = "ice"
 	icon_state = "ice"

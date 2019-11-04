@@ -240,13 +240,16 @@
 
 	//Check how many uncleaned mess are on the station. We can't run through cleanable for reasons, so yeah, long
 	for(var/obj/effect/decal/cleanable/M in decals)
-		if(M.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
+		if(M.z != STATION_Z) //Won't work on multi-Z stations, but will do for now
 			continue
 		if(M.messcheck())
 			score["mess"]++
 
 	for(var/obj/item/trash/T in trash_items)
-		if(T.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
+		if(T.z != STATION_Z) //Won't work on multi-Z stations, but will do for now
+			continue
+		var/area/A = get_area(T)
+		if(istype(A,/area/surface/junkyard))
 			continue
 		score["litter"]++
 
