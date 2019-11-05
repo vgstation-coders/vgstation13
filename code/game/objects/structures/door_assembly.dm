@@ -121,7 +121,7 @@
 /obj/structure/door_assembly/clockwork/clockworkify()
 	return
 
-/obj/structure/door_assembly/multi_tile/
+/obj/structure/door_assembly/multi_tile
 	icon = 'icons/obj/doors/door_assembly2x1.dmi'
 	dir = EAST
 	var/width = 1
