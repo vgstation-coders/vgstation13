@@ -1,0 +1,7 @@
+author: N3X15
+changes:
+  - tweak: Changelog tool reworked to be slightly less shit, use python 3.6 and proper logging.
+  - tweak: Changelog tool now uses Jinja2 to render actual, whole-assed templates.
+  - tweak: Changelog templates coalesced. Still use XHTML 4.01 Transitional because BYOND is shit.
+  - bugfix: Fixed some minor low-threat XSS vulnerabilities in changelogs that caused occasional formatting issues.
+  - rscadd: Validation schemas added for changelogs, for the poor tortured souls that desire them for whatever godforsaken reason.
