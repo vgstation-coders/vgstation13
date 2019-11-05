@@ -1000,7 +1000,7 @@
 
 /obj/item/weapon/storage/box/smartbox/attackby(obj/item/W, mob/user)
 	if(one_way)
-		to_chat(user, "<span class='warning'>\the [src] only lets items leave it!</span>") //Couldn't think of something better to explain the oneway interaction in-game.
+		to_chat(user, "<span class='warning'>\The [src] only lets items leave it!</span>") //Couldn't think of something better to explain the oneway interaction in-game.
 		return
 	else
 		..()
