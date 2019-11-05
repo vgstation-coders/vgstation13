@@ -583,11 +583,52 @@
 	item_state = "gold_id"
 	registered_name = "Captain"
 	assignment = "Captain"
+	var/list/locked_access
+	var/fLocked = TRUE
 
 /obj/item/weapon/card/id/captains_spare/New()
 	var/datum/job/captain/J = new/datum/job/captain
-	access = J.get_access()
+	locked_access = J.get_access()
+	access = list(access_maint_tunnels, access_heads)
 	..()
+
+/obj/item/weapon/card/id/captains_spare/proc/toggle_access_lock(mob/user, var/datum/data/record/R, var/own_hand = TRUE)
+	if(!R)
+		to_chat(user, "<span class = 'warning'>\The [src] makes a soft buzzing noise as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] is rejected</span>")
+		return
+	if(R.fields["rank"] == "Captain" || R.fields["rank"] == "Head of Security" || R.fields["rank"] == "Research Director" || R.fields["rank"] == "Chief Medical Officer" || R.fields["rank"] == "Head of Personnel" || R.fields["rank"] == "Chief Engineer")
+		if(fLocked)
+			to_chat(user, "<span class = 'warning'>\The [src] makes a soft beep as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] unlocks the ID's full access.</span>")
+			fLocked = FALSE
+			access = locked_access.Copy()
+		else
+			to_chat(user, "<span class = 'warning'>\The [src] makes a soft beep as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] locks the ID's full access.</span>")
+			fLocked = TRUE
+			access = list(access_maint_tunnels, access_heads)
+	else
+		to_chat(user, "<span class = 'warning'>\The [src] makes a soft buzzing noise as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] is rejected</span>")
+		return
+
+/obj/item/weapon/card/id/captains_spare/attack_self(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/data/record/R = find_record("fingerprint", md5(H.dna.uni_identity), data_core.general)
+		toggle_access_lock(user, R, TRUE)
+	else
+		..()
+/obj/item/weapon/card/id/captains_spare/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/organ/external/r_arm) || istype(W, /obj/item/organ/external/l_arm))
+		var/obj/item/organ/external/arm = W
+		for(var/obj/obj in arm.children)
+			if(istype(obj, /obj/item/organ/external/r_hand) || istype(obj, /obj/item/organ/external/l_hand))
+				W = obj
+				break
+	if(istype(W, /obj/item/organ/external/r_hand) || istype(W, /obj/item/organ/external/l_hand))
+		var/obj/item/organ/external/O = W
+		var/datum/data/record/R = find_record("fingerprint", md5(O.owner_dna.uni_identity), data_core.general)
+		toggle_access_lock(user, R, FALSE)
+	else
+		..()
 
 /obj/item/weapon/card/id/admin
 	name = "Admin ID"
