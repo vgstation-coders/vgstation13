@@ -29,12 +29,9 @@ addons:
     - libgcc1:i386
     - libstdc++6:i386
     - moreutils
-    - python3 # RIP Python 2.7
-    - python3-pip
 
 install:
 - pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
-- pip3 install --user PyYaml beautifulsoup4 -q
 
 before_script:
 - tools/travis/install-byond.sh
@@ -43,7 +40,7 @@ script:
 # Has to use Python 2 instead of 3 because else it won't find colorama.
 - python tools/travis/check_map_files.py maps/
 - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
-- python3 tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
+- python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
 - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
 - cd libvg
 # --jobs 1 to prevent threading problems with the BYOND crate.
