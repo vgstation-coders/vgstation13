@@ -65,7 +65,10 @@
 
 /datum/stat/role/proc/generate_statistics(var/datum/role/R, var/victorious)
 	name = R.name
-	faction_id = R.faction.ID
+	if(R.faction)
+		faction_id = R.faction.ID
+	else
+		faction_id = 0
 	mind_name = STRIP_NEWLINE(R.antag.name)
 	mind_key = ckey(R.antag.key)
 	victory = victorious
