@@ -3,6 +3,8 @@ language: rust
 rust:
 - stable
 sudo: false
+# Otherwise we get xenial,. which has some stupid packaging issues with Python.
+dist: bionic
 
 env:
   global:
