@@ -32,6 +32,7 @@
 #define Sp_POWER	"power"
 #define Sp_MOVE		"mobility"
 #define Sp_AMOUNT	"amount"
+#define Sp_RANGE	"range"
 
 #define Sp_TOTAL	"total"
 
