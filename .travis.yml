@@ -32,11 +32,14 @@ addons:
     - libstdc++6:i386
     - moreutils
     - python3.7 # RIP Python 2.7
+    - python3.7-dev
     - python3-pip
+    - python3-setuptools
+    - python3-wheel
 
 install:
 - pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
-- python3.7 -m pip install --user PyYaml beautifulsoup4 -q
+- pip3 install --user setuptools PyYaml beautifulsoup4 -q
 
 before_script:
 - tools/travis/install-byond.sh
