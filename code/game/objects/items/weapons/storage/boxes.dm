@@ -992,7 +992,7 @@
 	var/one_way = 0 //For one way boxes, you can take out but not put in. Could be moved to /box.
 
 
-/obj/item/weapon/storage/box/smartbox/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
+/obj/item/weapon/storage/box/smartbox/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
 	if(contents.len <= 0) //If this is the last item, kill the box.
 		new_location.visible_message("<span class='notice'>The [src] fizzles away into a glittering dust.</span>")
