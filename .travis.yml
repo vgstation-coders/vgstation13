@@ -30,6 +30,7 @@ addons:
     - libstdc++6:i386
     - moreutils
     - python3 # RIP Python 2.7
+    - python3-pip
 
 install:
 - pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
