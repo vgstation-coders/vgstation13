@@ -1203,7 +1203,7 @@
 	..()
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/proto
-	name = "Prototype outfit box"
+	name = "Protoman outfit box"
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/proto/New()
 	new /obj/item/clothing/head/helmet/protohelmet(src)
