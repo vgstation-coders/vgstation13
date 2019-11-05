@@ -36,7 +36,7 @@ addons:
 
 install:
 - pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
-- pip3 install --user PyYaml beautifulsoup4 -q
+- python3.5 -m pip install --user PyYaml beautifulsoup4 -q
 
 before_script:
 - tools/travis/install-byond.sh
