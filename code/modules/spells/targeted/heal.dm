@@ -1,5 +1,5 @@
 /spell/targeted/heal
-	name = "Heal"
+	name = "Heal Other"
 	desc = "Mends basic wounds in the target."
 	abbreviation = "HL"
 	user_type = USER_TYPE_WIZARD
@@ -17,14 +17,14 @@
 
 	max_targets = 1
 
-	amt_dam_fire = -20
-	amt_dam_brute = -20
-	amt_dam_oxy = -20
-	amt_dam_tox = -20
+	amt_dam_fire = -15
+	amt_dam_brute = -15
+	amt_dam_oxy = -15
+	amt_dam_tox = -15
 
 	spell_flags = WAIT_FOR_CLICK
 
-	hud_state = "wiz_disorient"
+	hud_state = "wiz_heal"
 
 /spell/targeted/heal/cast(var/list/targets, mob/user)
 	for(var/mob/living/T in targets)
