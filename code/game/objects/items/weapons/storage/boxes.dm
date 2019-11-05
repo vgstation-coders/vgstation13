@@ -995,7 +995,7 @@
 /obj/item/weapon/storage/box/smartbox/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()
 	if(contents.len <= 0) //If this is the last item, kill the box.
-		new_location.visible_message("<span class='notice'>The [src] fizzles away into a glittering dust.</span>")
+		new_location.visible_message("<span class='notice'>\The [src] fizzles away into a glittering dust.</span>")
 		qdel(src)
 
 /obj/item/weapon/storage/box/smartbox/attackby(obj/item/W, mob/user)
