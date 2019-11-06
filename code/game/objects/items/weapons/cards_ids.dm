@@ -592,6 +592,8 @@
 	var/fLocked = TRUE
 
 /obj/item/weapon/card/id/captains_spare/summoned
+	desc = "This one is imbued with the hopes and dreams of Clowns and Greyshirts galaxy wide"
+
 /obj/item/weapon/card/id/captains_spare/summoned/New()
 	..()
 	access = locked_access.Copy()
