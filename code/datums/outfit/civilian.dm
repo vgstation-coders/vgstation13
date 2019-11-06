@@ -14,6 +14,7 @@
 	)
     items_to_spawn = list(
 		"Default" = list(
+            slot_ears_str = /obj/item/device/radio/headset,
             slot_w_uniform_str = list(
                 "Assistant" = /obj/item/clothing/under/color/grey,
                 "Technical Assistant" = /obj/item/clothing/under/color/yellow,
@@ -25,6 +26,7 @@
         ),
         // Same as above, plus some
         /datum/species/plasmaman/ = list(
+            slot_ears_str = /obj/item/device/radio/headset,
             slot_w_uniform_str = list(
                 "Assistant" = /obj/item/clothing/under/color/grey,
                 "Technical Assistant" = /obj/item/clothing/under/color/yellow,
@@ -38,6 +40,7 @@
             slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/assistant,
         ),
         /datum/species/vox/ = list(
+            slot_ears_str = /obj/item/device/radio/headset,
             slot_w_uniform_str = list(
                 "Assistant" = /obj/item/clothing/under/color/grey,
                 "Technical Assistant" = /obj/item/clothing/under/color/yellow,
