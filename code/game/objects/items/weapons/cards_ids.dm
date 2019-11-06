@@ -185,6 +185,7 @@
 	desc = "A card used to provide ID and determine access across the station. Features a virtual wallet accessible by PDA."
 	icon_state = "id"
 	item_state = "card-id"
+	var/emagged = 0
 
 	var/list/access = list()
 	var/list/base_access = list() //Access that can't be overwritten by ID computers
@@ -420,7 +421,11 @@
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
 		to_chat(user, "<span class='notice'>The [src]'s microscanners activate as you pass it over \the [I], copying its access.</span>")
-		access |= I.access
+		if(istype(O, /obj/item/weapon/card/id/captains_spare))
+			var/obj/item/weapon/card/id/captains_spare/CS = I
+			access |= CS.locked_access
+		else
+			access |= I.access
 
 /obj/item/weapon/card/id/syndicate/attack_self(mob/user as mob)
 	if(!src.registered_name)
@@ -583,11 +588,79 @@
 	item_state = "gold_id"
 	registered_name = "Captain"
 	assignment = "Captain"
+	var/list/locked_access
+	var/fLocked = TRUE
 
+/obj/item/weapon/card/id/captains_spare/summoned
+	desc = "This one is imbued with the hopes and dreams of Clowns and Greyshirts galaxy wide"
+
+/obj/item/weapon/card/id/captains_spare/summoned/New()
+	..()
+	access = locked_access.Copy()
+	
 /obj/item/weapon/card/id/captains_spare/New()
 	var/datum/job/captain/J = new/datum/job/captain
-	access = J.get_access()
+	locked_access = J.get_access()
+	access = list(access_maint_tunnels, access_heads)
+	desc = initial(desc) + " An indicator light on \the [src] shows that it is [!fLocked ? "un" : ""]locked."
 	..()
+
+/obj/item/weapon/card/id/captains_spare/proc/toggle_access_lock(mob/user, var/datum/data/record/R, var/own_hand = TRUE, var/emagged = FALSE)
+	if(emagged)
+		access = locked_access.Copy()
+		fLocked = FALSE
+		to_chat(user, "<span class = 'warning'>\The [src] makes a staticy warble as \the [src]'s security is disabled!</span>")
+		desc = initial(desc) + " An indicator light on \the [src] shows that it is [!fLocked ? "un" : ""]locked."
+		return
+	if(fLocked)
+		var/list/L = data_core.get_manifest_json()
+		if(L && L.len)
+			L = L["heads"]
+			if(!L.len)
+				fLocked = FALSE
+				access = locked_access.Copy()
+				to_chat(user, "<span class = 'warning'>\The [src] makes a soft chime as the failsafe override kicks in unlocking the ID's full access.</span>")
+				desc = initial(desc) + " An indicator light on \the [src] shows that it is [!fLocked ? "un" : ""]locked."
+				return
+	if(!R)
+		to_chat(user, "<span class = 'warning'>\The [src] makes a soft buzzing noise as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] is rejected.</span>")
+		return
+	if(command_positions.Find(R.fields["rank"]))
+		fLocked = !fLocked
+		to_chat(user, "<span class = 'warning'>\The [src] makes a soft beep as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] [!fLocked ? "un" : ""]locks the ID's full access.</span>")
+		desc = initial(desc) + " An indicator light on \the [src] shows that it is [!fLocked ? "un" : ""]locked."
+		if(fLocked)
+			access = list(access_maint_tunnels, access_heads)
+		else
+			access = locked_access.Copy()		
+	else
+		to_chat(user, "<span class = 'warning'>\The [src] makes a soft buzzing noise as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] is rejected.</span>")
+		return
+
+/obj/item/weapon/card/id/captains_spare/emag_act(mob/user)
+	if(!emagged)
+		emagged = 1
+		toggle_access_lock(user, emagged = TRUE)
+/obj/item/weapon/card/id/captains_spare/attack_self(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/data/record/R = find_record("fingerprint", md5(H.dna.uni_identity), data_core.general)
+		toggle_access_lock(user, R, TRUE)
+	else
+		..()
+/obj/item/weapon/card/id/captains_spare/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/organ/external/r_arm) || istype(W, /obj/item/organ/external/l_arm))
+		var/obj/item/organ/external/arm = W
+		for(var/obj/obj in arm.children)
+			if(istype(obj, /obj/item/organ/external/r_hand) || istype(obj, /obj/item/organ/external/l_hand))
+				W = obj
+				break
+	if(istype(W, /obj/item/organ/external/r_hand) || istype(W, /obj/item/organ/external/l_hand))
+		var/obj/item/organ/external/O = W
+		var/datum/data/record/R = find_record("fingerprint", md5(O.owner_dna.uni_identity), data_core.general)
+		toggle_access_lock(user, R, FALSE)
+	else
+		..()
 
 /obj/item/weapon/card/id/admin
 	name = "Admin ID"
