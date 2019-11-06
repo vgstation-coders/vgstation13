@@ -37,4 +37,3 @@ with open(file_path) as f:
             print(line)
             print("Change the first line into the second one.\n")
 
-f.close()
