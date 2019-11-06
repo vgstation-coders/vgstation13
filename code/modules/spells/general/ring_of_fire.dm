@@ -10,7 +10,7 @@
 	spell_levels = list(Sp_SPEED = 0, Sp_MOVE = 0)
 	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 3, Sp_MOVE = 1)
 
-	spell_flags = NEEDSCLOTHES
+	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	spell_aspect_flags = SPELL_FIRE
 	charge_type = Sp_RECHARGE
 	invocation = "E ROHA"

@@ -13,7 +13,7 @@
 	range = 20
 
 	spell_aspect_flags = SPELL_FIRE
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	duration = 20
 	projectile_speed = 1
 
