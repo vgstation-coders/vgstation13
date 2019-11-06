@@ -586,6 +586,11 @@
 	var/list/locked_access
 	var/fLocked = TRUE
 
+/obj/item/weapon/card/id/captains_spare/summoned
+/obj/item/weapon/card/id/captains_spare/summoned/New()
+	..()
+	access = locked_access.Copy()
+	
 /obj/item/weapon/card/id/captains_spare/New()
 	var/datum/job/captain/J = new/datum/job/captain
 	locked_access = J.get_access()
@@ -593,10 +598,19 @@
 	..()
 
 /obj/item/weapon/card/id/captains_spare/proc/toggle_access_lock(mob/user, var/datum/data/record/R, var/own_hand = TRUE)
+	if(fLocked)
+		var/list/L = data_core.get_manifest_json()
+		if(L && L.len)
+			L = L["heads"]
+			if(!L.len)
+				fLocked = FALSE
+				access = locked_access.Copy()
+				to_chat(user, "<span class = 'warning'>\The [src] makes a soft chime as the failsafe override kicks in unlocking the ID's full access.</span>")
+				return
 	if(!R)
 		to_chat(user, "<span class = 'warning'>\The [src] makes a soft buzzing noise as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] is rejected</span>")
 		return
-	if(R.fields["rank"] == "Captain" || R.fields["rank"] == "Head of Security" || R.fields["rank"] == "Research Director" || R.fields["rank"] == "Chief Medical Officer" || R.fields["rank"] == "Head of Personnel" || R.fields["rank"] == "Chief Engineer")
+	if(command_positions.Find(R.fields["rank"]))
 		if(fLocked)
 			to_chat(user, "<span class = 'warning'>\The [src] makes a soft beep as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] unlocks the ID's full access.</span>")
 			fLocked = FALSE
