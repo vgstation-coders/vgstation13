@@ -115,7 +115,7 @@
 	desc = "Perfect for winter in Siberia, da?"
 	icon_state = "ushanka"
 	item_state = "ushanka"
-	flags = HIDEHAIRCOMPLETELY
+	flags = HIDEHAIR
 	body_parts_covered = EARS|HEAD
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 
