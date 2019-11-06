@@ -18,7 +18,7 @@
 
 	max_targets = 1
 
-	hud_state = "wiz_disorient"
+	hud_state = "wiz_pacify"
 	var/power = 1
 	var/size = 1
 
@@ -26,7 +26,7 @@
 	..()
 	if(targets)
 		if(user.reagents)
-			user.reagents.add_reagent(CHILLWAX, 4)
+			user.reagents.add_reagent(CHILLWAX, 4 + 4 * (power/2))
 		if(isturf(targets[1]))
 			targets[1].vis_contents += new /obj/effect/overlay/pacify_aoe(targets[1], power, size)
 
@@ -72,8 +72,8 @@
 	src.transform *= size
 	for(var/mob/living/M in range(size, src))
 		if(M.reagents)
-			M.reagents.add_reagent(CHILLWAX, 4 * power)
-			M.reagents.add_reagent(OXYCODONE, 1 * power)
+			M.reagents.add_reagent(CHILLWAX, 4 + 4 * (power / 2))
+			M.reagents.add_reagent(OXYCODONE, 1 + 1 * (power / 2))
 	animate(src, alpha = 0, time = 2 SECONDS)
 	spawn(2 SECONDS)
 		T.vis_contents -= src
