@@ -59,18 +59,6 @@
 		if("Research Director")
 			suit=/obj/item/clothing/suit/space/plasmaman/science/rd
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/science/rd
-		if("Station Engineer", "Mechanic")
-			suit=/obj/item/clothing/suit/space/plasmaman/engineer/
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/engineer/
-		if("Chief Engineer")
-			suit=/obj/item/clothing/suit/space/plasmaman/engineer/ce
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/engineer/ce
-		if("Atmospheric Technician")
-			suit=/obj/item/clothing/suit/space/plasmaman/atmostech
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/atmostech
-		if("Detective")
-			suit=/obj/item/clothing/suit/space/plasmaman/security/detective
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/detective
 		if("Captain")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/captain
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/captain

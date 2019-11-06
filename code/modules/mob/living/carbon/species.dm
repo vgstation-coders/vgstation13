@@ -759,25 +759,12 @@ var/global/list/whitelisted_species = list("Human")
 		if("Shaft Miner")
 			suit=/obj/item/clothing/suit/space/vox/civ/mining
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/mining
-		if("Mechanic")
-			suit=/obj/item/clothing/suit/space/vox/civ/mechanic
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/mechanic
 		if("Chaplain")
 			suit=/obj/item/clothing/suit/space/vox/civ/chaplain
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
 		if("Librarian")
 			suit=/obj/item/clothing/suit/space/vox/civ/librarian
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/librarian
-
-		if("Chief Engineer")
-			suit=/obj/item/clothing/suit/space/vox/civ/engineer/ce
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
-		if("Station Engineer")
-			suit=/obj/item/clothing/suit/space/vox/civ/engineer
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer
-		if("Atmospheric Technician")
-			suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 		if("Scientist")
 			suit=/obj/item/clothing/suit/space/vox/civ/science
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
