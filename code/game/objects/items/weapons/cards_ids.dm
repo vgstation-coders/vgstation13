@@ -602,6 +602,7 @@
 	var/datum/job/captain/J = new/datum/job/captain
 	locked_access = J.get_access()
 	access = list(access_maint_tunnels, access_heads)
+	desc = initial(desc) + " An indicator light on \the [src] shows that it is [!fLocked ? "un" : ""]locked."
 	..()
 
 /obj/item/weapon/card/id/captains_spare/proc/toggle_access_lock(mob/user, var/datum/data/record/R, var/own_hand = TRUE, var/emagged = FALSE)
@@ -609,6 +610,7 @@
 		access = locked_access.Copy()
 		fLocked = FALSE
 		to_chat(user, "<span class = 'warning'>\The [src] makes a staticy warble as \the [src]'s security is disabled!</span>")
+		desc = initial(desc) + " An indicator light on \the [src] shows that it is [!fLocked ? "un" : ""]locked."
 		return
 	if(fLocked)
 		var/list/L = data_core.get_manifest_json()
@@ -618,6 +620,7 @@
 				fLocked = FALSE
 				access = locked_access.Copy()
 				to_chat(user, "<span class = 'warning'>\The [src] makes a soft chime as the failsafe override kicks in unlocking the ID's full access.</span>")
+				desc = initial(desc) + " An indicator light on \the [src] shows that it is [!fLocked ? "un" : ""]locked."
 				return
 	if(!R)
 		to_chat(user, "<span class = 'warning'>\The [src] makes a soft buzzing noise as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] is rejected.</span>")
@@ -625,7 +628,7 @@
 	if(command_positions.Find(R.fields["rank"]))
 		fLocked = !fLocked
 		to_chat(user, "<span class = 'warning'>\The [src] makes a soft beep as [own_hand ? "your fingerprint" : "the severed hand's fingerprint"] [!fLocked ? "un" : ""]locks the ID's full access.</span>")
-			
+		desc = initial(desc) + " An indicator light on \the [src] shows that it is [!fLocked ? "un" : ""]locked."
 		if(fLocked)
 			access = list(access_maint_tunnels, access_heads)
 		else
