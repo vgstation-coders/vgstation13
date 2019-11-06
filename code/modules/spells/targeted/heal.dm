@@ -12,7 +12,7 @@
 	cooldown_min = 150
 	invocation = "DI TIUB SEEL IM"
 	invocation_type = SpI_SHOUT
-	message = "<span class='danger'>You feel refreshed.<span>"
+	message = "<span class='sinister'>You feel refreshed.<span>"
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1, Sp_RANGE = 1)
 
 	max_targets = 1
@@ -30,7 +30,7 @@
 	for(var/mob/living/T in targets)
 		if(spell_levels[Sp_RANGE])
 			for(var/mob/living/M in range(1, T))
-				if(M == user)
+				if(M == user || M == T)
 					continue
 				M.vis_contents += new /obj/effect/overlay/heal(M)
 				apply_spell_damage(M)
