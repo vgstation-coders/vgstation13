@@ -28,7 +28,7 @@
 		if(user.reagents)
 			user.reagents.add_reagent(CHILLWAX, 4 + 4 * (power/2))
 		if(isturf(targets[1]))
-			targets[1].vis_contents += new /obj/effect/overlay/pacify_aoe(targets[1], power, size)
+			targets[1].vis_contents += new /obj/effect/overlay/pacify_aoe(targets[1], spell_levels[Sp_POWER], spell_levels[Sp_RANGE])
 
 /spell/targeted/pacify/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
@@ -70,10 +70,10 @@
 /obj/effect/overlay/pacify_aoe/New(var/turf/T, var/power, var/size)
 	..()
 	src.transform *= size
-	for(var/mob/living/M in range(size, src))
+	for(var/mob/living/M in range(size + 1, src))
 		if(M.reagents)
-			M.reagents.add_reagent(CHILLWAX, 4 + 4 * (power / 2))
-			M.reagents.add_reagent(OXYCODONE, 1 + 1 * (power / 2))
+			M.reagents.add_reagent(CHILLWAX, 4 + 4 * (power + 1 / 2))
+			M.reagents.add_reagent(OXYCODONE, 1 + 1 * (power + 1/ 2))
 	animate(src, alpha = 0, time = 2 SECONDS)
 	spawn(2 SECONDS)
 		T.vis_contents -= src
