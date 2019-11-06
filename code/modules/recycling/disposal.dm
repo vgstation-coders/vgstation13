@@ -730,7 +730,7 @@
 	dir = 0				// dir will contain dominant direction for junction pipes
 	var/health = 10 	// health points 0-10
 	layer = DISPOSALS_PIPE_LAYER
-	plane = ABOVE_PLATING_PLANE
+	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in New()
 	var/base_icon_state	// initial icon state on map
 	var/deconstructable = TRUE
 
@@ -744,6 +744,7 @@
 // new pipe, set the icon_state as on map
 /obj/structure/disposalpipe/New()
 	..()
+	plane = ABOVE_PLATING_PLANE //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
 	base_icon_state = icon_state
 
 
