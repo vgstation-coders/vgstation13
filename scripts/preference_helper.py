@@ -1,6 +1,6 @@
-# Adds the default boilerplate code to the preference file.
-
 #!/usr/bin/env python3
+
+# Adds the default boilerplate code to the preference file.
 
 import re
 
