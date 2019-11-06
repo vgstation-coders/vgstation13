@@ -18,23 +18,23 @@ with open(file_path) as f:
             line = re.sub("[^\?]\)", new_string, line) # No "?" and a closing parenthesis ; replace ")" by ", var_name)"
             line = re.sub("\?\)", "?,?)", line) # replace "?)" by "?, ?)"
             print(line)
-            print("Change the first line into the second one.")
-            line = f.readline()
+            print("Change the first line into the second one.\n")
+        if "ckey, ooccolor" in line:
             print(line)
             line = re.sub("[^\?]\)", new_string, line) # No "?" and a closing parenthesis ; replace ")" by ", var_name)"
             print(line)
-            print("Change the first line into the second one.")
+            print("Change the first line into the second one.\n")
         if "UPDATE client SET ooc" in line:
             new_string = ", "+var_name+"=? WHERE"
             print(line)
             line = re.sub("WHERE", new_string, line) # replace "WHERE" by "var_name=?, WHERE"
             print(line)
-            print("Change the first line into the second one.")
-            line = f.readline()
-            new_string = ","+var_name+", ckey)"
+            print("Change the first line into the second one.\n")
+        if "\tooccolor, lastchangelog" in line:
+            new_string = ", "+var_name+", ckey)"
             print(line)
             line = re.sub(", ckey\)", new_string, line) # replace ",ckey)" by "var_name, ckey)"
             print(line)
-            print("Change the first line into the second one.")
+            print("Change the first line into the second one.\n")
 
 f.close()
