@@ -960,7 +960,6 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/diona/gib(mob/living/carbon/human/H as mob)
 	..()
-	return
 
 /datum/species/golem
 	name = "Golem"
