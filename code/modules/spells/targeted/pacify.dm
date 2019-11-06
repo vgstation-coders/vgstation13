@@ -19,8 +19,6 @@
 	max_targets = 1
 
 	hud_state = "wiz_pacify"
-	var/power = 1
-	var/size = 1
 
 /spell/targeted/pacify/cast(list/targets, mob/user)
 	..()
@@ -36,10 +34,8 @@
 			return quicken_spell()
 		if(Sp_POWER)
 			spell_levels[Sp_POWER]++
-			power++
 		if(Sp_RANGE)
 			spell_levels[Sp_RANGE]++
-			size++
 
 /spell/targeted/pacify/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
