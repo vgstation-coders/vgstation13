@@ -305,7 +305,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
 
-/datum/species/human/gib(mob/living/carbon/human/H as mob)
+/datum/species/human/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 
@@ -355,7 +355,7 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/manifested/can_artifact_revive()
 	return 0
 
-/datum/species/manifested/gib(mob/living/carbon/human/H as mob)
+/datum/species/manifested/gib(mob/living/carbon/human/H)
 	handle_death(H)
 	
 /datum/species/unathi
@@ -391,7 +391,7 @@ var/global/list/whitelisted_species = list("Human")
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
 	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
 
-/datum/species/unathi/gib(mob/living/carbon/human/H as mob)
+/datum/species/unathi/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 
@@ -435,7 +435,7 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/skellington/can_artifact_revive()
 	return 0
 
-/datum/species/skellington/gib(mob/living/carbon/human/H as mob)
+/datum/species/skellington/gib(mob/living/carbon/human/H)
 	..()
 	var/datum/organ/external/head_organ = H.get_organ(LIMB_HEAD)	
 	if(head_organ.status & ORGAN_DESTROYED)
@@ -595,7 +595,7 @@ var/global/list/whitelisted_species = list("Human")
 	speech.message = speech_filter.FilterSpeech(speech.message)
 	return ..()
 
-/datum/species/tajaran/gib(mob/living/carbon/human/H as mob)
+/datum/species/tajaran/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 	
@@ -646,7 +646,7 @@ var/global/list/whitelisted_species = list("Human")
 					You are particularly allergic to water, which acts like acid to you, but the inverse is so for acid, so you're fun at parties.<br>\
 					You're not as good in a fist fight as a regular baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
 
-/datum/species/grey/gib(mob/living/carbon/human/H as mob)
+/datum/species/grey/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 	
@@ -688,7 +688,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	move_speed_mod = 1
 
-/datum/species/muton/gib(mob/living/carbon/human/H as mob)
+/datum/species/muton/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 
@@ -708,7 +708,7 @@ var/global/list/whitelisted_species = list("Human")
 	head_icons      = 'icons/mob/species/skrell/head.dmi'
 	wear_suit_icons = 'icons/mob/species/skrell/suit.dmi'
 
-/datum/species/skrell/gib(mob/living/carbon/human/H as mob)
+/datum/species/skrell/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 	
@@ -916,7 +916,7 @@ var/global/list/whitelisted_species = list("Human")
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 
-/datum/species/vox/gib(mob/living/carbon/human/H as mob)
+/datum/species/vox/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 
@@ -958,8 +958,9 @@ var/global/list/whitelisted_species = list("Human")
 					You do not need to breathe, do not feel pain,  you are incredibly resistant to cold and low pressure, and have no blood to bleed.<br>\
 					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally."
 
-/datum/species/diona/gib(mob/living/carbon/human/H as mob)
+/datum/species/diona/gib(mob/living/carbon/human/H)
 	..()
+	H.default_gib()
 
 /datum/species/golem
 	name = "Golem"
@@ -1035,7 +1036,7 @@ var/list/has_died_as_golem = list()
 /datum/species/golem/can_artifact_revive()
 	return 0
 
-/datum/species/golem/gib(mob/living/carbon/human/H as mob)
+/datum/species/golem/gib(mob/living/carbon/human/H)
 	handle_death()
 
 /mob/living/adamantine_dust //serves as the corpse of adamantine golems
@@ -1114,7 +1115,7 @@ var/list/has_died_as_golem = list()
 /datum/species/grue/makeName()
 	return "grue"
 
-/datum/species/grue/gib(mob/living/carbon/human/H as mob)
+/datum/species/grue/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 	
@@ -1135,7 +1136,7 @@ var/list/has_died_as_golem = list()
 
 	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
 
-/datum/species/ghoul/gib(mob/living/carbon/human/H as mob)
+/datum/species/ghoul/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 
@@ -1186,8 +1187,9 @@ var/list/has_died_as_golem = list()
 	S.slime_person = H
 	H.forceMove(S)
 
-/datum/species/slime/gib(mob/living/carbon/human/H as mob)
+/datum/species/slime/gib(mob/living/carbon/human/H)
 	..()
+	H.default_gib()
 
 /mob/living/slime_pile //serves as the corpse of slime people
 	name = "puddle of slime"
@@ -1306,9 +1308,9 @@ var/list/has_died_as_golem = list()
 					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
 
-/datum/species/mushroom/gib(mob/living/carbon/human/H as mob)
+/datum/species/mushroom/gib(mob/living/carbon/human/H)
 	..()
-
+	H.default_gib()
 
 /datum/species/lich
 	name = "Undead"
@@ -1335,5 +1337,14 @@ var/list/has_died_as_golem = list()
 					You have no skin, no blood, and only a brain to guide you.<br>\
 					You can not eat normally, as your necrotic state permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe."
 
-/datum/species/lich/gib(mob/living/carbon/human/H as mob)
+/datum/species/lich/gib(mob/living/carbon/human/H)
 	..()
+	var/datum/organ/external/head_organ = H.get_organ(LIMB_HEAD)	
+	if(head_organ.status & ORGAN_DESTROYED)
+		new /obj/effect/decal/remains/human/noskull(H.loc)
+	else
+		new /obj/effect/decal/remains/human(H.loc)
+		head_organ.droplimb(1,1)
+
+	H.drop_all()	
+	qdel(src)
