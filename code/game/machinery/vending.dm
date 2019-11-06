@@ -2134,41 +2134,30 @@ var/global/num_vending_terminals = 1
 		"Space-time bending hardware!"
 	)
 	products = list(
-		/obj/item/clothing/head/wizard = 5,
-		/obj/item/clothing/suit/wizrobe = 5,
-		/obj/item/clothing/head/wizard/red = 5,
-		/obj/item/clothing/suit/wizrobe/red = 5,
-		/obj/item/clothing/head/wizard/clown = 5,
-		/obj/item/clothing/suit/wizrobe/clown = 5,
-		/obj/item/clothing/mask/gas/clown_hat/wiz = 5,
-		/obj/item/clothing/head/wizard/marisa = 5,
-		/obj/item/clothing/suit/wizrobe/marisa = 5,
-		/obj/item/clothing/suit/wizrobe/magician = 5,
-		/obj/item/clothing/head/that/magic = 5,
-		/obj/item/clothing/head/wizard/necro = 5,
-		/obj/item/clothing/suit/wizrobe/necro = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/wizard_robes = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/red_wizrobes = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/clown_wizrobes = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/marisa_wiz = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/magician = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/jevil_wiz = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/goat_child = 5,
+		/obj/item/clothing/suit/storage/wintercoat/druid = 5,
 		/obj/item/clothing/head/wizard/magus = 5,
 		/obj/item/clothing/suit/wizrobe/magusred = 5,
 		/obj/item/clothing/suit/wizrobe/magusblue = 5,
 		/obj/item/clothing/head/wizard/amp = 5,
 		/obj/item/clothing/suit/wizrobe/psypurple = 5,
-		/obj/item/clothing/head/pharaoh = 5,
-		/obj/item/clothing/suit/wizrobe/pharaoh = 5,
+		/obj/item/clothing/shoes/sandal = 5,
 		/obj/item/clothing/shoes/sandal/marisa/leather = 5,
-		/obj/item/clothing/shoes/sandal = 10,
 		/obj/item/clothing/shoes/sandal/marisa = 5,
 		/obj/item/weapon/staff = 5,
 		/obj/item/weapon/staff/broom = 5,
 		/obj/item/clothing/glasses/monocle = 5,
 		/obj/item/weapon/storage/bag/wiz_cards/full = 1,
-		/obj/item/weapon/storage/bag/potion = 5,
-		/obj/item/clothing/suit/wizrobe/hallowiz = 5,
-		/obj/item/clothing/head/wizard/hallowiz = 5,
-		/obj/item/clothing/head/wizard/mystic = 5,
-		/obj/item/clothing/suit/wizrobe/mystic = 5,
-		/obj/item/clothing/head/wizard/winter = 5,
-		/obj/item/clothing/suit/wizrobe/winter = 5,
-		/obj/item/clothing/suit/storage/wintercoat/druid = 5
+		/obj/item/weapon/storage/bag/potion = 5
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1,
@@ -2444,6 +2433,8 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/undefined
 
 #define AUTO_DROBE_DEFAULT_STOCK 3
+#define AUTO_DROBE_ROTTEN_STOCK 4
+
 /obj/machinery/vending/autodrobe
 	name = "\improper AutoDrobe"
 	desc = "A vending machine containing costumes."
@@ -2474,6 +2465,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/sexymime = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/clownpiece = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/jester = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/jevil = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/maid = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/liberty = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/aviator = AUTO_DROBE_DEFAULT_STOCK,
@@ -2483,9 +2475,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/lordadmiral = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/plaguedoctor = AUTO_DROBE_DEFAULT_STOCK,
-		/obj/item/weapon/storage/box/smartbox/clothing_box/rotten = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/rotten = AUTO_DROBE_ROTTEN_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/frank = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/mexican = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/jevil = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/clothing/head/beret = 3,
 		/obj/item/clothing/suit/wcoat = 3,
 		/obj/item/clothing/under/suit_jacket = 3,
@@ -2515,7 +2508,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/cowboy = 3,
 		/obj/item/clothing/suit/kimono/sakura = 3,
 		/obj/item/clothing/head/widehat_red = 3,
-		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/suit/red_suit = 3
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/clothing/suit/cardborg = 3,

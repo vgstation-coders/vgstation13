@@ -358,3 +358,9 @@
 
 /obj/item/clothing/gloves/mining/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")
+
+/obj/item/clothing/gloves/jevil
+	desc = "When you put these on, it feels as if you can do anything."
+	name = "chaos jester gloves"
+	icon_state = "jevil"
+	item_state = "jevil"

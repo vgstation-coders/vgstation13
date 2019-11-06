@@ -556,3 +556,8 @@
 	icon_state = "sombrero"
 	item_state = "sombrero"
 
+/obj/item/clothing/head/jevil
+	name = "chaos jester hat"
+	desc = "The bells on this hat only jingle when the wearer is fervently spinning."
+	icon_state = "jevil"
+	item_state = "jevil"

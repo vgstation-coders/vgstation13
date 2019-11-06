@@ -281,3 +281,57 @@
 	species_fit = list(VOX_SHAPED)
 	can_flip = 0
 	canstage = 0
+
+/obj/item/clothing/mask/gas/jevil
+	name = "chaos jester mask"
+	desc = "A jester mask which sometimes causes the wearer's field of vision to chaotically spin and tilt."
+	icon_state = "jevil"
+	item_state = "jevil"
+	can_flip = 0
+	canstage = 0
+	flags = FPRINT|HIDEHAIRCOMPLETELY
+	var/angle = 0
+
+/obj/item/clothing/mask/gas/jevil/equipped(mob/M, slot)
+	..()
+	if(clumsy_check(M) || iswizard(M))
+		return
+	if(slot == slot_wear_mask)
+		var/client/C = M.client
+		if(C)
+			angle = rand(1,3)*90
+			C.dir = turn(C.dir, angle)
+			to_chat(M, "<span class='danger'>[pick("Shall we play the ring-around?", "The world is revolving!", "Let's ride the carousel game!")]</span>")
+
+/obj/item/clothing/mask/gas/jevil/unequipped(mob/M, from_slot)
+	..()
+	if(from_slot == slot_wear_mask && angle)
+		var/client/C = M.client
+		if(C)
+			to_chat(M, "Your vision is suddenly corrected as you remove the mask.")
+			C.dir = turn(C.dir, -angle)
+			angle = 0
+
+/obj/item/clothing/mask/gas/goat_child
+	name = "dark prince mask"
+	desc = "A pitch black mask with horns and ears reminiscent of a goat's."
+	icon_state = "goat_child"
+	item_state = "goat_child"
+	can_flip = 0
+	canstage = 0
+	flags = FPRINT|HIDEHAIRCOMPLETELY
+	var/has_glasses = null
+
+/obj/item/clothing/mask/gas/goat_child/attackby(var/obj/item/I, var/mob/M)
+	if(istype(I, /obj/item/clothing/glasses/goat_child))
+		if(istype(loc, /mob))
+			to_chat(M, "You have to put down the mask before the glasses can be attached.")
+			return
+		if(!has_glasses && M.drop_item(I, src.loc))
+			qdel(I)
+			to_chat(M, "You attach the glasses to the mask.")
+			desc = "A pitch black mask with horns and ears reminiscent of a goat's. Has a pair of glasses attached."
+			icon_state = "goat_child_g"
+			item_state = "goat_child_g"
+			has_glasses = 1
+	..()

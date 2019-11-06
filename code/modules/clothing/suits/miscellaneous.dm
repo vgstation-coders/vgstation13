@@ -648,8 +648,14 @@
 	item_state = "red_suit"
 	body_parts_covered = 0
 
-obj/item/clothing/suit/poncho
+/obj/item/clothing/suit/poncho
 	name = "poncho"
 	desc = "A wooly poncho. Smells of beans."
 	icon_state = "poncho"
 	item_state = "poncho"
+
+/obj/item/clothing/suit/jevil
+	name = "chaos jester suit"
+	desc = "A jester suit in rather gloomy colors. Smells faintly of chaos."
+	icon_state = "jevil"
+	item_state = "jevil"

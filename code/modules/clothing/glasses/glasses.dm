@@ -542,3 +542,10 @@ var/list/science_goggles_wearers = list()
 	darkness_view = -1
 	prescription = 1
 	eyeprot = 1
+
+/obj/item/clothing/glasses/goat_child
+	name = "dark prince glasses"
+	desc = "Remember to check the manual if you ever find yourself in trouble."
+	icon_state = "goat_child"
+	item_state = "goat_child"
+	prescription = 1

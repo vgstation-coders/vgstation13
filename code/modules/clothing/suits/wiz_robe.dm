@@ -1,3 +1,6 @@
+////////////////////////////////////////////////////////////////////////
+//Wizard hats
+////////////////////////////////////////////////////////////////////////
 /obj/item/clothing/head/wizard
 	name = "wizard hat"
 	desc = "Strange-looking hat-wear that most certainly belongs to a real magic user."
@@ -63,16 +66,6 @@
 	desc = "An elegant hood woven with child labor somewhere in Space China."
 	wizard_garb = 0
 
-/*
-//No longer required due to /obj/item/clothing/head/that/magic
-/obj/item/clothing/head/wizard/magician
-	name = "Magical Tophat"
-	desc = "A magical tophat perfect for any magical performance."
-	icon_state = "tophat"
-	item_state = "tophat"
-	siemens_coefficient = 0.8
-*/
-
 /obj/item/clothing/head/wizard/lich
 	name = "crown of the Lich"
 	desc = "Get the Lich a crown, Liches love crowns."
@@ -93,6 +86,16 @@
 	icon_state = "hallowiz"
 	item_state = "hallowiz"
 
+/obj/item/clothing/head/wizard/jevil
+	name = "chaos jester hat"
+	desc = "A jester suit in rather gloomy colors. This one seems to emanate a powerful aura of chaos."
+	icon_state = "jevil"
+	item_state = "jevil"
+
+////////////////////////////////////////////////////////////////////////
+//Cold-resistant wizard hats
+////////////////////////////////////////////////////////////////////////
+
 /obj/item/clothing/head/wizard/mystic
 	name = "mystic hat"
 	desc = "A strange pointed hat imbued with runic energies."
@@ -106,6 +109,19 @@
 	icon_state = "wizard_snow"
 	item_state = "wizard_snow"
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+
+/obj/item/clothing/head/wizard/goat_child
+	name = "dark prince hat"
+	desc = "A green witch hat with two smaller crowns, perhaps meant for wearers with horns."
+	icon_state = "goat_child"
+	item_state = "goat_child"
+	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+
+
+
+////////////////////////////////////////////////////////////////////////
+//Wizard suits
+////////////////////////////////////////////////////////////////////////
 
 /obj/item/clothing/suit/wizrobe
 	name = "wizard robe"
@@ -223,6 +239,17 @@
 	icon_state = "pharaoh"
 	item_state = "pharaoh"
 
+/obj/item/clothing/suit/wizrobe/jevil
+	name = "chaos jester suit"
+	desc = "A jester suit in rather gloomy colors. Smells faintly of chaos."
+	icon_state = "jevil"
+	item_state = "jevil"
+
+
+////////////////////////////////////////////////////////////////////////
+//Cold-resistant wizard suits
+////////////////////////////////////////////////////////////////////////
+
 /obj/item/clothing/suit/wizrobe/mystic
 	name = "mystic robes"
 	desc = "A set of thick robes made from fabric imbued with runic energies."
@@ -235,4 +262,11 @@
 	desc = "A clever enchantment on these robes keeps you nice and toasty in harsh winter weather."
 	icon_state = "wizard_snow"
 	item_state = "wizard_snow"
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+
+/obj/item/clothing/suit/wizrobe/goat_child
+	name = "dark prince robes"
+	desc = "A set of warm robes and matching scarf. They look like they're hand-knit."
+	icon_state = "goat_child"
+	item_state = "goat_child"
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY

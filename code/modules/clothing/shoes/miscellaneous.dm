@@ -525,3 +525,12 @@ obj/item/clothing/shoes/jackboots/cowboy
 	icon_state = "highlanderboots"
 	item_state = "highlanderboots"
 	wizard_garb = 1
+
+/obj/item/clothing/shoes/clown_shoes/jevil
+	name = "chaos jester shoes"
+	desc = "Pointed jester shoes designed to be comfortable for both running and dancing."
+	icon_state = "jevil"
+	item_state = "jevil"
+
+/obj/item/clothing/shoes/clown_shoes/jevil/magic
+	wizard_garb = 1
