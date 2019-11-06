@@ -65,7 +65,7 @@
 
 /obj/effect/overlay/pacify_aoe/New(var/turf/T, var/power, var/size)
 	..()
-	src.transform *= size
+	src.transform *= (size + 1)
 	for(var/mob/living/M in range(size + 1, src))
 		if(M.reagents)
 			M.reagents.add_reagent(CHILLWAX, 4 + 4 * (power + 1 / 2))
