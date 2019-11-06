@@ -24,7 +24,7 @@
 	..()
 	if(targets)
 		if(user.reagents)
-			user.reagents.add_reagent(CHILLWAX, 4 + 4 * (power/2))
+			user.reagents.add_reagent(CHILLWAX, 4 + 4 * (spell_levels[Sp_POWER]/2))
 		if(isturf(targets[1]))
 			targets[1].vis_contents += new /obj/effect/overlay/pacify_aoe(targets[1], spell_levels[Sp_POWER], spell_levels[Sp_RANGE])
 
