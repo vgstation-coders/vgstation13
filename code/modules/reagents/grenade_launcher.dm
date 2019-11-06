@@ -54,8 +54,7 @@
 		to_chat(usr, "<span class='warning'>The [src.name] is empty.</span>")
 
 /obj/item/weapon/gun/grenadelauncher/proc/fire_grenade(atom/target, mob/user)
-	for(var/mob/O in viewers(world.view, user))
-		O.show_message(text("<span class='warning'>[] fired a grenade!</span>", user), 1)
+	user.visible_message("<span class='warning'>[] fired a grenade!</span>")
 	to_chat(user, "<span class='warning'>You fire the grenade launcher!</span>")
 	var/obj/item/weapon/grenade/F = grenades[1] //Now with less copypasta!
 	grenades -= F
