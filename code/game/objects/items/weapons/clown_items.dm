@@ -203,6 +203,7 @@
 
 	w_class = W_CLASS_TINY
 	var/spent = 0
+	var/uses = -1 //As opposed to reworking the spent var, just avoiding confusion. Set to -1 for superglue.
 	var/glue_duration = -1 //-1 For infinite.
 	var/list/allowed_glue_types = list(
 		/obj/item,
@@ -215,7 +216,7 @@
 		if(glue_duration < 0) //We assume we're dealing with superglue, its not really badcode.
 			user.show_message("<span class='info'>The label reads:</span><br><span class='notice'>1) Apply glue to the surface of an object<br>2) Apply object to human flesh</span>", MESSAGE_SEE)
 		else
-			to_chat(user,"<span class='info'>Glue for making things temporarily stick together. <b>Non-toxic.</b></span>")
+			to_chat(user,"<span class='info'>It looks [uses ? "like it has about [uses] use(s) left" : "empty"].</span>")
 
 /obj/item/weapon/glue/update_icon()
 	..()
@@ -225,10 +226,9 @@
 	if(!proximity_flag)
 		return
 
-	if(spent)
+	if(spent || !uses)
 		to_chat(user,"<span class='warning'>There's no glue left in the bottle.</span>")
 		return
-
 
 	if(!is_type_in_list(target, allowed_glue_types))
 		to_chat(user,"<span class='warning'>That would be such a waste of glue.</span>")
@@ -240,23 +240,29 @@
 
 	if(isitem(target))
 		var/obj/item/target_item = target
+		if(target_item.current_glue_state != GLUE_STATE_NONE) //Check to see if its glued first.
+			to_chat(user,"<span class='warning'>Its already got glue on it!</span>")
+			return
 		if(target_item.abstract) //Can't glue TK grabs, grabs, offhands!
 			return
 
-	to_chat(user,"<span class='info'>You gently apply the whole [src] to \the [target].</span>")
-	spent = 1
+	to_chat(user,"<span class='info'>You put some glue on \the [target].</span>")
+	if(uses < 0) //For superglue
+		spent = 1
+	uses--
 	update_icon()
 	apply_glue(target)
 
 
 /obj/item/weapon/glue/temp_glue
 	name = "bottle of school glue"
-	desc = "An ordinary bottle of glue. Stickiness lasts for 3 minutes."
+	desc = "An ordinary bottle of glue. Stickiness lasts for 3 minutes. <b>Non-toxic.</b>"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "glue_safe"
 	w_class = W_CLASS_TINY
 	glue_duration = 3 MINUTES
-	var/uses = 4 //As opposed to reworking the spent var, just avoiding confusion.
+	uses = 4
+
 
 /obj/item/weapon/glue/temp_glue/update_icon()
 	if(uses)
@@ -264,55 +270,36 @@
 	name = "empty school glue bottle"
 	icon_state = "glue_safe0"
 
-/obj/item/weapon/glue/temp_glue/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
-	if(!proximity_flag)
-		return
-	if(!uses)
-		to_chat(user, "<span class='warning'>There's no glue left!</span>")
-		return
-	if(!is_type_in_list(target, allowed_glue_types))
-		to_chat(user,"<span class='warning'>\The [src] doesn't seem rated for \the [target].</span>")
-		return
-	if(istype(target, /obj/item/stack)) //The whole cant_drop thing is EXTREMELY fucky with stacks and can be bypassed easily
-		to_chat(user,"<span class='warning'>There's not enough glue in \the [src] to cover the whole [target]!</span>")
-		return
-	if(isitem(target))
-		var/obj/item/target_item = target
-		if(target_item.abstract) //Can't glue TK grabs, grabs, offhands!
-			return
-			
-	to_chat(user,"<span class='info'>You put some glue on \the [target].</span>")	
-	uses--
-	update_icon()
-	apply_glue(target)
-	
-
 /obj/proc/glue_act(var/stick_time = 1 SECONDS) //proc for when glue is used on something
 	return
 
 /obj/item/proc/unglue()
-	if(is_temp_glued)
+	if(current_glue_state == GLUE_STATE_TEMP)
 		cant_drop--
-		is_temp_glued = FALSE
+		current_glue_state = GLUE_STATE_NONE
 
 /obj/item/clothing/unglue()
-	if(is_temp_glued)
+	if(current_glue_state == GLUE_STATE_TEMP)
 		canremove++
-		is_temp_glued = FALSE
+		current_glue_state = GLUE_STATE_NONE
 
 /obj/item/glue_act(stick_time)
 	cant_drop++
 	if(stick_time > 0)
-		is_temp_glued = TRUE
+		current_glue_state = GLUE_STATE_TEMP
 		spawn(stick_time)
 			unglue()
+	else
+		current_glue_state = GLUE_STATE_PERMA
 
 /obj/item/clothing/glue_act(stick_time)
 	canremove--
 	if(stick_time > 0)
-		is_temp_glued = TRUE
+		current_glue_state = GLUE_STATE_TEMP
 		spawn(stick_time)
 			unglue()
+	else
+		current_glue_state = GLUE_STATE_PERMA
 
 /obj/structure/bed/glue_act(stick_time)
 	glued = TRUE
