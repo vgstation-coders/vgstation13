@@ -122,7 +122,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	attached = null
 	..()								// then go ahead and delete the cable
 
-/obj/structure/cable/reset_plane()
+/obj/structure/cable/proc/reset_plane()
 	if(plane == ABOVE_TURF_PLANE)
 		plane = ABOVE_PLATING_PLANE //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
 
