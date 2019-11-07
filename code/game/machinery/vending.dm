@@ -2522,7 +2522,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/cardborg = 3,
 		/obj/item/clothing/suit/judgerobe = 3,
 		/obj/item/clothing/head/powdered_wig = 3,
-		/obj/item/toy/gun = 3
+		/obj/item/toy/gun = 3,
+		/obj/item/weapon/glue/temp_glue = 1
 		)
 	premium = list(
 		/obj/item/clothing/suit/hgpirate = 3,
