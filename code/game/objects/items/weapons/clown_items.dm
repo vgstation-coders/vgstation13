@@ -212,7 +212,10 @@
 /obj/item/weapon/glue/examine(mob/user)
 	..()
 	if(Adjacent(user))
-		user.show_message("<span class='info'>The label reads:</span><br><span class='notice'>1) Apply glue to the surface of an object<br>2) Apply object to human flesh</span>", MESSAGE_SEE)
+		if(glue_duration < 0) //We assume we're dealing with superglue, its not really badcode.
+			user.show_message("<span class='info'>The label reads:</span><br><span class='notice'>1) Apply glue to the surface of an object<br>2) Apply object to human flesh</span>", MESSAGE_SEE)
+		else
+			to_chat(user,"<span class='info'>Glue for making things temporarily stick together. <b>Non-toxic.</b></span>")
 
 /obj/item/weapon/glue/update_icon()
 	..()
@@ -254,10 +257,6 @@
 	w_class = W_CLASS_TINY
 	glue_duration = 3 MINUTES
 	var/uses = 4 //As opposed to reworking the spent var, just avoiding confusion.
-
-/obj/item/weapon/glue/temp_glue/examine(mob/user)
-	if(Adjacent(user))
-		to_chat(user,"<span class='info'>Glue for making things temporarily stick together. <b>Non-toxic.</b></span>")
 
 /obj/item/weapon/glue/temp_glue/update_icon()
 	if(uses)
