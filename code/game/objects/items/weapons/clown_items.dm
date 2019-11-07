@@ -255,7 +255,7 @@
 	glue_duration = 3 MINUTES
 	var/uses = 4 //As opposed to reworking the spent var, just avoiding confusion.
 
-/obj/item/weapon/glue/examine(mob/user)
+/obj/item/weapon/glue/temp_glue/examine(mob/user)
 	if(Adjacent(user))
 		to_chat(user,"<span class='info'>Glue for making things temporarily stick together. <b>Non-toxic.</b></span>")
 
