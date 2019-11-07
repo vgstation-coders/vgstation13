@@ -162,6 +162,7 @@
 	overlays += new_overlay
 	var/mutable_appearance/pai_icon = new(src) //we also update the mob's appearance so it appears properly on the scoreboard.
 	pai_icon.name = pai.name //But don't override their name
+	pai_icon.verbs = pai.verbs //THANKS, LUMMOX
 	pai.appearance = pai_icon 
 
 /obj/item/device/paicard/proc/alertUpdate()
