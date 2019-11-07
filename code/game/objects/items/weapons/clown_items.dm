@@ -302,10 +302,11 @@
 		current_glue_state = GLUE_STATE_PERMA
 
 /obj/structure/bed/glue_act(stick_time)
-	glued = TRUE
 	if(stick_time > 0)
 		spawn(stick_time)
-			glued = FALSE
+			current_glue_state = GLUE_STATE_TEMP
+	else
+		current_glue_state = GLUE_STATE_PERMA
 
 /obj/item/weapon/glue/proc/apply_glue(obj/item/target)
 	target.glue_act(glue_duration)
