@@ -83,8 +83,7 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/New(loc)
 	..(loc)
 
-	plane = ABOVE_PLATING_PLANE //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
-
+	reset_plane()
 	cableColor(_color)
 
 	// ensure d1 & d2 reflect the icon_state for entering and exiting cable
@@ -122,6 +121,9 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	attached = null
 	..()								// then go ahead and delete the cable
+
+/obj/structure/cable/proc/reset_plane() //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
+	plane = ABOVE_PLATING_PLANE
 
 /obj/structure/cable/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	.=..()

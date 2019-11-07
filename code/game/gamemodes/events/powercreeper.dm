@@ -60,6 +60,9 @@
 	processing_objects.Add(src)
 	set_light(1, 15, LIGHT_COLOR_RED)
 
+/obj/structure/cable/powercreeper/reset_plane()
+	return
+
 /obj/structure/cable/powercreeper/Destroy()
 	processing_objects.Remove(src)
 	updateNeighbours(TRUE)
