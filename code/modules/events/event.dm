@@ -9,7 +9,7 @@
 //Called by event dynamic, returns the percent chance to fire if successful, 0 otherwise.
 // Args: list: active_with_role. The number of jobs that have active members. Used as active_with_role["AI"] = number of active.
 /datum/event/proc/can_start(var/list/active_with_role)
-	return 0
+	return 15
 
 //Called first before processing.
 //Allows you to setup your event, such as randomly
