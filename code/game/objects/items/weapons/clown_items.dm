@@ -280,7 +280,8 @@
 		var/obj/item/target_item = target
 		if(target_item.abstract) //Can't glue TK grabs, grabs, offhands!
 			return
-		to_chat(user,"<span class='info'>You put some glue on \the [target].</span>")	
+			
+	to_chat(user,"<span class='info'>You put some glue on \the [target].</span>")	
 	uses--
 	update_icon()
 	apply_glue(target)
