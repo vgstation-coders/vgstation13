@@ -571,6 +571,8 @@
 
 		if (do_after(user,src, 40))
 			O.clean_blood()
+			if(O.is_temp_glued)
+				O.unglue() 
 			user.visible_message( \
 				"<span class='notice'>[user] washes \a [O] using \the [src].</span>", \
 				"<span class='notice'>You wash \a [O] using \the [src].</span>")

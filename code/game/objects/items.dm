@@ -70,6 +70,7 @@
 	var/list/datum/disease2/disease/virus2 = list()
 	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
 	var/image/pathogen
+	var/is_temp_glued = FALSE //Specifically for temporary glue that can be dissolved with water. Wouldn't want to mix up and give superglue a nerf.
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)

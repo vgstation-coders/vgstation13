@@ -289,17 +289,29 @@
 /obj/proc/glue_act(var/stick_time = 1 SECONDS) //proc for when glue is used on something
 	return
 
+/obj/item/proc/unglue()
+	if(is_temp_glued)
+		cant_drop--
+		is_temp_glued = FALSE
+
+/obj/item/clothing/unglue()
+	if(is_temp_glued)
+		canremove++
+		is_temp_glued = FALSE
+
 /obj/item/glue_act(stick_time)
 	cant_drop++
 	if(stick_time > 0)
+		is_temp_glued = TRUE
 		spawn(stick_time)
-			cant_drop--
+			unglue()
 
 /obj/item/clothing/glue_act(stick_time)
 	canremove--
 	if(stick_time > 0)
+		is_temp_glued = TRUE
 		spawn(stick_time)
-			canremove++
+			unglue()
 
 /obj/structure/bed/glue_act(stick_time)
 	glued = TRUE
