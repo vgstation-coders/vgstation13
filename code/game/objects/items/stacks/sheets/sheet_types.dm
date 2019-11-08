@@ -129,7 +129,7 @@
 /*
  * Cardboard
  */
-/obj/item/stack/sheet/cardboard	//BubbleWrap
+/obj/item/stack/sheet/cardboard	//BubbleWrap //what???
 	name = "cardboard"
 	desc = "Large sheets of card, like boxes folded flat."
 	singular_name = "cardboard sheet"
