@@ -241,7 +241,7 @@
 	if(isitem(target))
 		var/obj/item/target_item = target
 		if(target_item.current_glue_state != GLUE_STATE_NONE) //Check to see if its glued first.
-			to_chat(user,"<span class='warning'>Its already got glue on it!</span>")
+			to_chat(user,"<span class='warning'>It already has glue on it!</span>")
 			return
 		if(target_item.abstract) //Can't glue TK grabs, grabs, offhands!
 			return
