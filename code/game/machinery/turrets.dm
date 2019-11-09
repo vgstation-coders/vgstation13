@@ -288,7 +288,7 @@
 		src.die()
 	return
 
-/obj/machinery/turret/attack_animal(mob/living/simple_animal/M as mob)
+/obj/machinery/turret/attack_animal(mob/living/simple_animal/M)
 	if(M.melee_damage_upper == 0)
 		return
 	if(!(stat & BROKEN))
@@ -302,11 +302,11 @@
 	else
 		to_chat(M, "<span class='warning'>That object is useless to you.</span>")
 
-/obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
+/obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M)
 	if(!(stat & BROKEN))
 		M.do_attack_animation(src, M)
 		playsound(src, 'sound/weapons/slash.ogg', 25, 1, -1)
-		visible_message("<span class='danger'>[] has slashed at []!</span>", M, src)
+		visible_message("<span class='danger'>[M] has slashed at [src]!</span>")
 		src.health -= 15
 		if (src.health <= 0)
 			src.die()
@@ -397,7 +397,8 @@
 				return
 
 			locked = !locked
-			to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] the switchboard panel.</span>")
+			user.visible_message("<span class='notice'>[user] [locked ? "locks" : "unlocks"] the switchboard panel.</span>",
+			"<span class='notice'>You [locked ? "lock" : "unlock"] the switchboard panel.</span>")
 			if(locked)
 				if (user.machine == src)
 					user.unset_machine()
@@ -429,7 +430,7 @@
 	if(istype(loc, /turf))
 		loc = loc:loc
 	if(!istype(loc, /area))
-		to_chat(user, "Turret control badly positioned - loc.loc is [loc].") //Debug message
+		to_chat(user, "<span class='warning'>The turret control switchboard flashes a network disconnection error. The area plan might not be registering properly.</span>") //Debug message
 		return
 	var/area/area = loc
 	var/t = "<TT><B>Turret Control Panel</B> ([area.name])<HR>"
@@ -452,17 +453,49 @@
 	if(..())
 		return 1
 	if(locked)
-		if (!issilicon(usr) && !isAdminGhost(usr))
-			to_chat(usr, "Control panel is locked!")
+		if(!issilicon(usr) && !isAdminGhost(usr))
+			to_chat(usr, "<span class='warning'>Control panel is locked!</span>")
 			return
 	if(usr.Adjacent(src) || issilicon(usr) || isAdminGhost(usr))
 		if(href_list["toggleOn"])
-			enabled = !src.enabled
+			enabled = !enabled
+			usr.visible_message("<span class='warning'>[usr] [enabled ? "enables":"disables"] the turrets.</span>",
+			"<span class='notice'>You [enabled ? "enable":"disable"] the turrets.</span>")
 			updateTurrets()
 		else if(href_list["toggleLethal"])
-			lethal = !src.lethal
+			lethal = !lethal
+			usr.visible_message("<span class='warning'>[usr] switches the turrets to [lethal ? "lethal":"stun"].</span>",
+			"<span class='notice'>You switch the turrets to [lethal ? "lethal":"stun"].</span>")
 			updateTurrets()
 	attack_hand(usr)
+
+//Regular Alt Click (not AI) allows users to immediately turn the turrets on or off, assuming the rest of the steps are done (notably interface unlocked)
+/obj/machinery/turretid/AltClick(mob/user)
+	if(!usr.incapacitated() && Adjacent(user) && usr.dexterity_check() && !locked)
+		enabled = !enabled
+		usr.visible_message("<span class='warning'>[usr] [enabled ? "enables":"disables"] the turrets.</span>",
+		"<span class='notice'>You [enabled ? "enable":"disable"] the turrets.</span>")
+		updateTurrets()
+		return
+	return ..()
+
+//All AI shortcuts. Basing this on what airlocks do, so slight clash with user (Alt is dangerous so toggle stun/lethal, Ctrl is bolts so lock, Shift is 'open' so toggle turrets)
+/obj/machinery/turretid/AIAltClick() //Stun/lethal toggle
+	if(!ailock)
+		lethal = !lethal
+		to_chat(usr, "<span class='notice'>You switch the turrets to [lethal ? "lethal":"stun"].</span>")
+		updateTurrets()
+
+/obj/machinery/turretid/AICtrlClick() //Lock the device
+	if(!ailock)
+		locked = !locked
+		to_chat(usr, "<span class='notice'>You [locked ? "lock" : "unlock"] the switchboard panel.</span>")
+
+/obj/machinery/turretid/AIShiftClick()  //Toggle the turrets on/off
+	if(!ailock)
+		enabled = !enabled
+		to_chat(usr, "<span class='notice'>You [enabled ? "enable":"disable"] the turrets.</span>")
+		updateTurrets()
 
 /obj/machinery/turretid/proc/updateTurrets()
 	if(control_area)
