@@ -157,7 +157,7 @@ var/global/list/whitelisted_species = list("Human")
 		myhuman = null
 	..()
 
-/datum/species/proc/gib(var/mob/living/carbon/human/H as mob)
+/datum/species/proc/gib(var/mob/living/carbon/human/H)
 	H.death(1)
 	H.monkeyizing = 1
 	H.canmove = 0
