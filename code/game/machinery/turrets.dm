@@ -342,7 +342,7 @@
 	name = "turret control switchboard"
 	desc = "A card reader attached to a small switchboard with a big status light. The button labelled 'lethal' has a post-it note under it, showing a skull and crossbones."
 	icon = 'icons/obj/device.dmi'
-	icon_state = "turretid1"
+	icon_state = "turretid_stun"
 	anchored = 1
 	density = 0
 	var/enabled = 1
