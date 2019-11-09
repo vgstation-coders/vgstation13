@@ -414,14 +414,14 @@ proc/move_mining_shuttle()
 
 /obj/item/device/wormhole_jaunter/attack_self(mob/user as mob)
 	var/turf/device_turf = get_turf(user)
-	if(!device_turf||device_turf.z==CENTCOMM_Z||device_turf.z>=map.zLevels.len)
-		to_chat(user, "<span class='notice'>You're having difficulties getting the [src.name] to work.</span>")
+	if(!device_turf || device_turf.z == CENTCOMM_Z || device_turf.z > map.zLevels.len)
+		to_chat(user, "<span class='notice'>You're having difficulties getting [src] to work.</span>")
 		return
 	else
-		user.visible_message("<span class='notice'>[user.name] activates the [src.name]!</span>")
+		user.visible_message("<span class='notice'>[user] activates [src]!</span>")
 		var/list/L = new()
 
-		for (var/obj/item/beacon/B in beacons)
+		for(var/obj/item/beacon/B in beacons)
 			var/turf/T = get_turf(B)
 
 			if (!isnull(T))
@@ -429,7 +429,7 @@ proc/move_mining_shuttle()
 					L.Add(B)
 
 		if(!L.len)
-			to_chat(user, "<span class='notice'>The [src.name] failed to create a wormhole.</span>")
+			to_chat(user, "<span class='notice'>[src] failed to create a wormhole.</span>")
 			return
 		var/chosen_beacon = pick(L)
 		var/obj/effect/portal/jaunt_tunnel/J = new /obj/effect/portal/jaunt_tunnel(get_turf(src))
