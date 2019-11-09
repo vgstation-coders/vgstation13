@@ -368,6 +368,18 @@
 
 	ticker.mode.latespawn(src)//can we make them a latejoin antag?
 
+	//Do this immediately so this works properly
+	if(rank == "AI")
+		close_spawn_windows()
+		AIize()
+		return
+	if(rank == "Cyborg")
+		create_roundstart_cyborg()
+		return
+	if(rank == "Mobile MMI")
+		MoMMIfy()
+		return
+
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
