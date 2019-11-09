@@ -1611,13 +1611,13 @@
 			if (!user.Adjacent(src))
 				return
 			var/distance = manhattan_distance(over_location, src)
-			if (distance > 3) // More than 3 tiles to go
+			if (distance >= 3) // More than 3 tiles to go
 				return ..()
 		
 			// Geometrically checking if we're on a straight line.
-			var/vector/V = atmos2vector(src, over_location)
+			var/vector/V = atoms2vector(src, over_location)
 			var/vector/V_norm = V.duplicate()
-			V_norm.noramlise()
+			V_norm.noramlize()
 			if (!V_norm.is_integer())
 				return ..() // Only a cardinal vector (north, south, east, west) can pass this test
 			

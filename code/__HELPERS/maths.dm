@@ -346,7 +346,7 @@ proc/arctan(x)
 /vector/proc/squared_norm()
 	return x*x + y*y
 
-/vector/proc/noramlise()
+/vector/proc/noramlize()
 	var/norm = euclidian_norm()
 	x = x/norm
 	y = y/norm
@@ -355,7 +355,7 @@ proc/arctan(x)
 /vector/proc/chebyshev_norm()
 	return max(abs(x), abs(y))
 
-/vector/proc/chebyshev_normalise()
+/vector/proc/chebyshev_normalize()
 	var/norm = chebyshev_norm()
 	x = x/norm
 	y = y/norm
@@ -368,7 +368,7 @@ proc/arctan(x)
 	var/turf/T = get_turf(src)
 	var/turf/destination = locate(T.x + V.x, T.y + V.y, z)
 	var/vector/V_norm = V.duplicate()
-	V_norm.chebyshev_normalise()
+	V_norm.chebyshev_normalize()
 	if (!V_norm.is_integer())
 		return
 	var/turf/destination_temp
@@ -382,5 +382,5 @@ proc/arctan(x)
 	var/turf/T = get_turf(src)
 	return locate(T.x + V.x, T.y + V.y, z)
 
-/proc/atmos2vector(var/atom/A, var/atom/B)
+/proc/atoms2vector(var/atom/A, var/atom/B)
 	return new /vector((B.x - A.x), (B.y - A.y)) // Vector from A -> B
