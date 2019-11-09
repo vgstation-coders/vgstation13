@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 75
 	selection_color = "#ffdddd"
 	idtype = /obj/item/weapon/card/id/hos
 	req_admin_notify = 1
@@ -75,6 +76,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of security"
+	wage_payout = 60
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court, access_maint_tunnels, access_morgue, access_eva)
@@ -130,6 +132,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of security"
+	wage_payout = 50
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 
@@ -211,6 +214,7 @@
 	total_positions = 5
 	spawn_positions = 5
 	supervisors = "the head of security"
+	wage_payout = 50
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels, access_morgue, access_eva)

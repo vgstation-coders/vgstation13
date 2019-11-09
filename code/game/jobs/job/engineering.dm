@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 75
 	selection_color = "#ffeeaa"
 	idtype = /obj/item/weapon/card/id/ce
 	req_admin_notify = 1
@@ -64,6 +65,7 @@
 	total_positions = 5
 	spawn_positions = 5
 	supervisors = "the chief engineer"
+	wage_payout = 60
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
@@ -121,6 +123,7 @@
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the chief engineer"
+	wage_payout = 60
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
@@ -167,6 +170,7 @@
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the research director and the chief engineer"
+	wage_payout = 40
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_mechanic, access_tcomsat, access_science)

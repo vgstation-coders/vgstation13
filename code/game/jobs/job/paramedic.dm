@@ -6,6 +6,7 @@
 	total_positions = 4
 	spawn_positions = 2
 	supervisors = "the chief medical officer"
+	wage_payout = 50
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva, access_morgue)

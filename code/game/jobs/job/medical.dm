@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 75
 	selection_color = "#ffddf0"
 	idtype = /obj/item/weapon/card/id/cmo
 	req_admin_notify = 1
@@ -62,6 +63,7 @@
 	total_positions = 5
 	spawn_positions = 3
 	supervisors = "the chief medical officer"
+	wage_payout = 60
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
@@ -135,6 +137,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the chief medical officer"
+	wage_payout = 60
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
@@ -185,6 +188,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the chief medical officer and research director"
+	wage_payout = 50
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_science, access_eva)
@@ -231,6 +235,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the chief medical officer"
+	wage_payout = 40
 	selection_color = "#ffeef0"
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_virology, access_biohazard)
