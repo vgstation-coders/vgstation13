@@ -1477,8 +1477,8 @@
 	Q.SwapColor(rgb(255, 0, 220, 255), rgb(0, 0, 0, 0))
 	B.icon = Q
 	src.transfer_fingerprints_to(B)
-	spawn(50)
-		qdel(src)
+	playsound(src, "shatter", 70, 1)
+	qdel(src)
 
 //////////////////////
 // molotov cocktail //
@@ -1606,12 +1606,12 @@
 	if (!user || user.incapacitated())
 		return
 	// Attempted drink sliding
-	if ((locate(/obj/structure/table) in src_location) && (locate(/obj/structure/table) in over_location))
+	if (locate(/obj/structure/table) in src_location)
 		if (M_SOBER in user.mutations)
 			if (!user.Adjacent(src))
 				return
 			var/distance = manhattan_distance(over_location, src)
-			if (distance >= 3) // More than 3 tiles to go
+			if (distance >= 8) // More than a full screen to go
 				return ..()
 		
 			// Geometrically checking if we're on a straight line.
@@ -1623,19 +1623,27 @@
 			
 			// Checks if there's tables on the path.
 			var/turf/dest = get_translated_turf(V)
-			var/turf/temp_turf = get_translated_turf(V_norm)
-			while (temp_turf != dest)
-				if (!locate(/obj/structure/table) in temp_turf)
-					return ..()
+			var/turf/temp_turf = src_location
+
+			do
 				temp_turf = temp_turf.get_translated_turf(V_norm)
-			
-			vector_translate(V, 0.2 SECONDS)
+				if (!locate(/obj/structure/table) in temp_turf)
+					var/vector/V2 = atoms2vector(src, temp_turf)
+					vector_translate(V2, 0.1 SECONDS)
+					user.visible_message("<span class='warning'>\The [user] slides \the [src] down the table... and straight into the ground!</span>", "<span class='warning'>You slide \the [src] down the table, and straight into the ground!</span>")
+					create_broken_bottle()
+					return
+			while (temp_turf != dest)
+
+			vector_translate(V, 0.1 SECONDS)
 			user.visible_message("<span class='notice'>\The [user] expertly slides \the [src] down the table.</span>", "<span class='notice'>You slide \the [src] down the table. What a pro.</span>")
 			return
 		else
+			if (!(locate(/obj/structure/table) in over_location))
+				return ..()
 			if (!user.Adjacent(src) || !src_location.Adjacent(over_location)) // Regular users can only do short slides.
 				return ..()
-			if (M_CLUMSY in user.mutations && prob(10))
+			if ((M_CLUMSY in user.mutations) && prob(10))
 				user.visible_message("<span class='warning'>\The [user] tries to slide \the [src] down the table, but fails miserably.</span>", "<span class='notice'>You <b>fail</b> to slide \the [src] down the table!</span>")
 				create_broken_bottle()
 				return
