@@ -346,7 +346,7 @@ proc/arctan(x)
 /vector/proc/squared_norm()
 	return x*x + y*y
 
-/vector/proc/noramlize()
+/vector/proc/normalize()
 	var/norm = euclidian_norm()
 	x = x/norm
 	y = y/norm
