@@ -22,7 +22,7 @@ var/list/camera_names=list()
 	anchored = 1.0
 	var/invuln = null
 	var/bugged = 0
-	var/failure_chance = 10
+	var/failure_chance = 0
 	var/obj/item/weapon/camera_assembly/assembly = null
 	var/light_on = 0
 
