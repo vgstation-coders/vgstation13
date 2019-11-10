@@ -227,7 +227,7 @@
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/engineering
 
-/datum/outfit/atmos/post_equip(var/mob/living/carbon/human/H)
+/datum/outfit/mechanic/post_equip(var/mob/living/carbon/human/H)
 	H.mind.store_memory("Frequencies list: <br/><b>Engineering:</b> [ENG_FREQ]<br/> <b>Science:</b> [SCI_FREQ] ")
 	if(!(H.flags&DISABILITY_FLAG_NEARSIGHTED))
 		var/obj/item/clothing/glasses/welding/W = new (H)

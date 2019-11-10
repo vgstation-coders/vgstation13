@@ -62,18 +62,9 @@
 		if("Captain")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/captain
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/captain
-		if("Head of Personnel")
-			suit=/obj/item/clothing/suit/space/plasmaman/security/hop
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/hop
 		if("Bartender", "Chef")
 			suit=/obj/item/clothing/suit/space/plasmaman/service
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/service
-		if("Cargo Technician", "Quartermaster")
-			suit=/obj/item/clothing/suit/space/plasmaman/cargo
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/cargo
-		if("Shaft Miner")
-			suit=/obj/item/clothing/suit/space/plasmaman/miner
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/miner
 		if("Botanist")
 			suit=/obj/item/clothing/suit/space/plasmaman/botanist
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/botanist
