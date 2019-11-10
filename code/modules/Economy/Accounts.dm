@@ -389,7 +389,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 				var/datum/money_account/acc = get_money_account_global(acc_num)
 				if(acc)
 					var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
-					if(new_payout && new_payout >= 0)
+					if(new_payout >= 0 && new_payout != null)
 						acc.wage_gain = new_payout
 					detailed_account_view = acc
 
