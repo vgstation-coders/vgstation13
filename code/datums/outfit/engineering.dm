@@ -184,7 +184,7 @@
 
 /datum/outfit/mechanic
 
-	outfit_name = "Atmospheric technician"
+	outfit_name = "Mechanic"
 	associated_job = /datum/job/mechanic
 
 	backpack_types = list(
