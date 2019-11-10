@@ -10,7 +10,7 @@
 		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack,
+		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
 	)
 
 	items_to_spawn = list(
