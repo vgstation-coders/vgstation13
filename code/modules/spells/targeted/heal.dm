@@ -27,31 +27,18 @@
 	hud_state = "wiz_heal"
 
 /spell/targeted/heal/cast(var/list/targets, mob/user)
-	for(var/mob/living/T in targets)
+	for(var/atom/T in targets)
 		if(spell_levels[Sp_RANGE])
-			for(var/mob/living/M in range(1, T))
-				if(M == user || M == T)
-					continue
-				M.vis_contents += new /obj/effect/overlay/heal(M)
-				apply_spell_damage(M)
-		T.vis_contents += new /obj/effect/overlay/heal(T)
-		apply_spell_damage(T)
-		playsound(T, 'sound/effects/aoeheal.ogg', 50, 100, extrarange = 3, gas_modified = 0)
-	if(spell_levels[Sp_POWER])
-		for(var/mob/living/carbon/human/H in targets)
-			for(var/datum/organ/internal/I in H.internal_organs)
-				if(prob(50))
-					if(I && I.damage > 0)
-						I.damage = max(0, I.damage - 4)
-					if(I)
-						I.status &= ~ORGAN_BROKEN
-						I.status &= ~ORGAN_SPLINTED
-						I.status &= ~ORGAN_BLEEDING
-			for(var/datum/organ/external/O in H.organs)
-				if(prob(50))
-					O.status &= ~ORGAN_BROKEN
-					O.status &= ~ORGAN_SPLINTED
-					O.status &= ~ORGAN_BLEEDING
+			if(T != user)
+				aoe_heal(T)
+		if(istype(T, /mob/living) && T != user)
+			var/mob/living/L = T
+			L.vis_contents += new /obj/effect/overlay/heal(L)
+			apply_spell_damage(L)
+			if(spell_levels[Sp_POWER] && istype(L, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = L
+				strong_heal(H)
+	playsound(user, 'sound/effects/aoeheal.ogg', 50, 100, extrarange = 3, gas_modified = 0)
 
 /spell/targeted/heal/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
@@ -74,6 +61,30 @@
 			return "Grants the spell a chance of mending internal injuries in the primary target."
 		if(Sp_RANGE)
 			return "Expands the spell's effects to a small area around the target."
+
+
+//50% chance per organ/limb of healing all its internal injuries
+/spell/targeted/heal/proc/strong_heal(var/mob/living/carbon/human/H)
+	for(var/datum/organ/internal/I in H.internal_organs)
+		if(prob(50))
+			if(I && I.damage > 0)
+				I.damage = max(0, I.damage - 4)
+			if(I)
+				I.status &= ~ORGAN_BROKEN
+				I.status &= ~ORGAN_SPLINTED
+				I.status &= ~ORGAN_BLEEDING
+	for(var/datum/organ/external/O in H.organs)
+		if(prob(50))
+			O.status &= ~ORGAN_BROKEN
+			O.status &= ~ORGAN_SPLINTED
+			O.status &= ~ORGAN_BLEEDING
+
+/spell/targeted/heal/proc/aoe_heal(var/target)
+	for(var/mob/living/M in range(1, target))
+		if(M == target)
+			continue
+		M.vis_contents += new /obj/effect/overlay/heal(M)
+		apply_spell_damage(M)
 
 /obj/effect/overlay/heal
 	name = "sparkles"
