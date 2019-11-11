@@ -11,7 +11,7 @@ var/global/obj/machinery/account_database/centcomm_account_db
 var/global/datum/money_account/vendor_account
 var/global/list/all_money_accounts = list()
 var/global/datum/money_account/trader_account
-var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command, engineering, medidcal, security, science, cargo, and civilian
+var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command, engineering, medical, security, science, cargo, and civilian
 
 /proc/create_station_account()
 	if(!station_account)
@@ -390,7 +390,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 				if(acc)
 					var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
 					if(new_payout >= 0 && new_payout != null)
-						acc.wage_gain = new_payout
+						acc.wage_gain = round(new_payout)
 					detailed_account_view = acc
 
 	src.attack_hand(usr)
