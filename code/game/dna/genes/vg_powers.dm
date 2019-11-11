@@ -145,7 +145,7 @@ Obviously, requires DNA2.
 	desc = "In recent years there's been a real push towards 'Detective Noir' movies, but since the last black and white camera was lost many centuries ago, scientists had to develop a way to turn any movie noir."
 	activation_messages = list("The vibrant colors of the station hit your eyes for the last time before fading into a more appropriate tone. Something's off about this place, but you can't quite put your finger on it. You're compelled to check out the bar, maybe get to the bottom of what's going on in this godforsaken place.")
 	deactivation_messages = list("You now feel soft-boiled.")
-
+	activation_prob = 100
 	mutation = M_NOIR
 
 /datum/dna/gene/basic/noir/New()
