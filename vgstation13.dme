@@ -2406,6 +2406,7 @@
 #include "code\modules\spells\targeted\genetic.dm"
 #include "code\modules\spells\targeted\grease.dm"
 #include "code\modules\spells\targeted\harvest.dm"
+#include "code\modules\spells\targeted\heal.dm"
 #include "code\modules\spells\targeted\hypnotise.dm"
 #include "code\modules\spells\targeted\ice_barrage.dm"
 #include "code\modules\spells\targeted\mind_transfer.dm"
