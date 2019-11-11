@@ -65,6 +65,9 @@
 				adjustToxLoss(-10+light_amount)
 				adjustOxyLoss(-10+light_amount)
 
+	if(isslimeperson(src) && reagents.total_volume > 10)
+		blend_multicolor_skin(get_weighted_reagent_color(reagents), min(0.5, (reagents.total_volume / 1000)), 1)
+
 	if(dna && dna.mutantrace == "shadow")
 		var/light_amount = 0
 		if(isturf(loc))
@@ -143,3 +146,16 @@
 	handle_trace_chems()
 
 	updatehealth()
+
+//Color as text in hex, weight for the color we're adding should be < 1
+/mob/living/carbon/human/proc/blend_multicolor_skin(var/color, var/weight = 0.5, var/updatehair = 0)
+	var/list/colors = GetHexColors(color)
+	multicolor_skin_r = round((1 - weight) * multicolor_skin_r + weight * colors[1])
+	multicolor_skin_g = round((1 - weight) * multicolor_skin_g + weight * colors[2])
+	multicolor_skin_b = round((1 - weight) * multicolor_skin_b + weight * colors[3])
+	update_body()
+	if(updatehair)
+		my_appearance.r_hair = round(multicolor_skin_r * 0.8)
+		my_appearance.g_hair = round(multicolor_skin_g * 0.8)
+		my_appearance.b_hair = round(multicolor_skin_b * 0.8)
+		update_hair()
