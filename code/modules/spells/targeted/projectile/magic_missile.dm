@@ -7,7 +7,7 @@
 
 	school = "evocation"
 	charge_max = 150
-	spell_flags = NEEDSCLOTHES
+	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	invocation = "FORTI GY AMA"
 	invocation_type = SpI_SHOUT
 	range = 7

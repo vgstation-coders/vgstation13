@@ -2409,6 +2409,7 @@
 #include "code\modules\spells\targeted\hypnotise.dm"
 #include "code\modules\spells\targeted\ice_barrage.dm"
 #include "code\modules\spells\targeted\mind_transfer.dm"
+#include "code\modules\spells\targeted\pacify.dm"
 #include "code\modules\spells\targeted\parrotmorph.dm"
 #include "code\modules\spells\targeted\prestidigitation.dm"
 #include "code\modules\spells\targeted\pumpkinhead.dm"

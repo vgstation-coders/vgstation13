@@ -7,7 +7,7 @@
 
 	school = "transmutation"
 	charge_max = 600
-	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
+	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	range = 1
 	max_targets = 1
 	invocation = "STAUN EI"

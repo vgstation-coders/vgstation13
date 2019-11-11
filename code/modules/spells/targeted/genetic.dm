@@ -8,6 +8,7 @@ code\game\\dna\genes\goon_powers.dm
 	name = "Genetic modifier"
 	desc = "This spell inflicts a set of mutations and disabilities upon the target."
 	user_type = USER_TYPE_GENETIC
+	spell_flags = IS_HARMFUL
 
 	var/disabilities = 0 //bits
 	var/list/mutations = list() //mutation strings
@@ -38,7 +39,7 @@ code\game\\dna\genes\goon_powers.dm
 
 	charge_max = 300
 
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "STI KALY"
 	invocation_type = SpI_WHISPER
 	message = "<span class='danger'>Your eyes cry out in pain!</span>"
