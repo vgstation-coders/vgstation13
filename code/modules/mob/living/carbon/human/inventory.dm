@@ -255,7 +255,7 @@
 			u_equip(l_store, 1)
 		if (wear_id)
 			u_equip(wear_id, 1)
-		if (belt)
+		if (belt && !isbelt(belt))
 			u_equip(belt, 1)
 		w_uniform = null
 		success = 1

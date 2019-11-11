@@ -514,9 +514,6 @@
 	icon_state = "boxingred"
 	item_state = "boxingred"
 
-/obj/structure/window/reinforced/holo/spawnBrokenPieces()
-	return
-
 /obj/structure/window/reinforced/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.is_screwdriver(user))
 		to_chat(user, "It's a holowindow! It has no frame!")
@@ -525,9 +522,6 @@
 	return ..()
 
 /obj/structure/window/reinforced/holo/spawnBrokenPieces()
-	return
-
-/obj/structure/window/holo/spawnBrokenPieces()
 	return
 
 /obj/structure/window/holo/attackby(obj/item/weapon/W, mob/user)

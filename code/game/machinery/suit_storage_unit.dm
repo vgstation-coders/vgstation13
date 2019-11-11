@@ -99,9 +99,9 @@
 
 /obj/machinery/suit_storage_unit/captain
 	name = "Command Suit Storage Unit"
-	department = "sec"
-	suit_type = /obj/item/clothing/suit/armor/captain
-	helmet_type = /obj/item/clothing/head/helmet/space/capspace
+	department = "cap"
+	suit_type = /obj/item/clothing/suit/space/rig/captain
+	helmet_type = null
 	mask_type = /obj/item/clothing/mask/gas
 	boot_type = /obj/item/clothing/shoes/magboots/captain
 

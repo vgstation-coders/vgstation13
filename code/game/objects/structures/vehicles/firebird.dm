@@ -67,24 +67,6 @@
 	else
 		return obstacle.bumped_by_firebird(src) //Yep
 
-/* Server vote on 16-12-2014 to disable wallmoving (10-7 Y)
-/obj/structure/bed/chair/vehicle/firebird/to_bump(var/atom/obstacle)
-	if(can_move)
-		can_move = 0
-		alpha=128
-		forceMove(get_step(src,src.dir))
-		if(locked_to_mob)
-			if(locked_to_mob.loc != loc)
-				locked_to_mob.locked_to = null //Temporary, so Move() succeeds.
-				locked_to_mob.locked_to = src //Restoring
-		sleep(10) // 1s
-		alpha=255
-		can_move = 1
-	else
-		. = ..()
-	return
-*/
-
 /obj/structure/bed/chair/vehicle/firebird/santa
 	name = "magic snowmobile"
 	desc = "After a complaint from space PETA, santa's been forced to take a less elegant ride."

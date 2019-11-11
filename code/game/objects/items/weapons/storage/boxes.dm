@@ -769,11 +769,6 @@
 	for(var/i = 0; i < 7; i++)
 		new /obj/item/weapon/light/bulb(src)
 
-/obj/item/weapon/storage/box/lights/tubes/New()
-	..()
-	for(var/i = 0; i < 21; i++)
-		new /obj/item/weapon/light/tube(src)
-
 /obj/item/weapon/storage/box/lights/he
 	name = "high efficiency lights"
 	icon_state = "lightmixed"
@@ -981,3 +976,392 @@
 	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater(src)
 	new /obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer(src)
 	new /obj/item/weapon/paper/diy_soda(src)
+
+
+//Smart boxes.
+/obj/item/weapon/storage/box/smartbox
+	name = "Smart-box"
+	desc = "A one-use box that leaves no trash or cardboard behind."
+	foldable = null
+	storage_slots = BOX_SPACE
+	var/one_way = 0 //For one way boxes, you can take out but not put in. Could be moved to /box.
+
+
+/obj/item/weapon/storage/box/smartbox/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
+	. = ..()
+	if(contents.len <= 0) //If this is the last item, kill the box.
+		new_location.visible_message("<span class='notice'>\The [src] fizzles away into a glittering dust.</span>")
+		qdel(src)
+
+/obj/item/weapon/storage/box/smartbox/attackby(obj/item/W, mob/user)
+	if(one_way)
+		to_chat(user, "<span class='warning'>\The [src] only lets items leave it!</span>") //Couldn't think of something better to explain the oneway interaction in-game.
+		return
+	else
+		..()
+
+//Clothing-boxes.
+/obj/item/weapon/storage/box/smartbox/clothing_box
+	name = "box"
+	desc = "A smart-box style box for clothing, convenient for distributing clothes."
+	icon_state = "clothing_box"
+	foldable = null
+	storage_slots = BOX_SPACE
+	one_way = 1
+
+//Every clothing box will base its label overlay off of the first object in its contents. Keep that in mind when making a new clothing box.
+/obj/item/weapon/storage/box/smartbox/clothing_box/New()
+    ..()
+    if(contents.len)
+        var/mutable_appearance/M = new(contents[1])
+        M.layer = FLOAT_LAYER
+        M.plane = FLOAT_PLANE
+        M.transform *= 0.5
+        overlays += M
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuit
+	name = "Chicken suit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuit/New()
+	new	/obj/item/clothing/head/chicken(src)
+	new /obj/item/clothing/suit/chickensuit(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/monkeysuit
+	name = "Monkey suit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/monkeysuit/New()
+	new	/obj/item/clothing/mask/gas/monkeymask(src)
+	new /obj/item/clothing/suit/monkeysuit(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/xenosuit
+	name = "Xeno suit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/xenosuit/New()
+	new /obj/item/clothing/head/xenos(src)
+	new /obj/item/clothing/suit/xenos(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gladiatorsuit
+	name = "Gladiator suit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gladiatorsuit/New()
+	new /obj/item/clothing/head/helmet/gladiator(src)
+	new /obj/item/clothing/under/gladiator(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/captaincasualoutfit
+	name = "Captain's casual box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/captaincasualoutfit/New()
+	new /obj/item/clothing/head/flatcap(src)
+	new /obj/item/clothing/under/gimmick/rank/captain/suit(src)
+	new /obj/item/clothing/glasses/gglasses(src)
+	new /obj/item/clothing/shoes/jackboots(src)
+	..()
+	
+/obj/item/weapon/storage/box/smartbox/clothing_box/schoolgirloutfit
+	name = "School girl outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/schoolgirloutfit/New()
+	new /obj/item/clothing/head/kitty(src)
+	new /obj/item/clothing/under/schoolgirl(src)
+	new /obj/item/clothing/shoes/kneesocks(src)
+	new /obj/item/clothing/under/blackskirt(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit
+	name = "Pirate outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit/New()
+	new /obj/item/clothing/glasses/eyepatch(src)
+	new /obj/item/clothing/head/pirate(src)
+	new /obj/item/clothing/suit/pirate(src)
+	new /obj/item/clothing/head/bandana(src)
+	new /obj/item/clothing/under/pirate(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sovietoutfit
+	name = "Soviet outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sovietoutfit/New()
+	new /obj/item/clothing/head/ushanka(src)
+	new /obj/item/clothing/under/soviet(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/fakewizard
+	name = "Wizard outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/fakewizard/New()
+	new /obj/item/clothing/head/wizard/fake(src)
+	new /obj/item/clothing/suit/wizrobe/fake(src)
+	new /obj/item/weapon/staff(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/witch
+	name = "Witch outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/witch/New()
+	new /obj/item/clothing/head/witchwig(src)
+	new /obj/item/weapon/staff/broom(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/marisa
+	name = "Marisa outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/marisa/New()
+	new /obj/item/clothing/head/wizard/marisa/fake(src)
+	new /obj/item/clothing/suit/wizrobe/marisa/fake(src)
+	new /obj/item/weapon/staff/broom(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sexyclown
+	name = "Sexy clown outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sexyclown/New()
+	new /obj/item/clothing/mask/gas/sexyclown(src)
+	new /obj/item/clothing/under/sexyclown(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sexymime
+	name = "Sexy mime outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sexymime/New()
+	new /obj/item/clothing/mask/gas/sexymime(src)
+	new /obj/item/clothing/under/sexymime(src)
+	..()
+	
+/obj/item/weapon/storage/box/smartbox/clothing_box/jester
+	name = "Jester outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/jester/New()
+	new /obj/item/clothing/head/jesterhat(src)
+	new /obj/item/clothing/under/jester(src)
+	new /obj/item/clothing/shoes/jestershoes(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clownpiece
+	name = "Clownpiece outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clownpiece/New()
+	new /obj/item/clothing/head/clownpiece(src)
+	new /obj/item/clothing/suit/clownpiece(src)
+	new /obj/item/clothing/under/clownpiece(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/plaguedoctor
+	name = "Plague doctor outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/plaguedoctor/New()
+	new /obj/item/clothing/mask/gas/plaguedoctor(src)
+	new /obj/item/clothing/head/plaguedoctorhat(src)
+	new /obj/item/clothing/suit/bio_suit/plaguedoctorsuit(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/maid
+	name = "Maid outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/maid/New()
+	new /obj/item/clothing/suit/maidapron(src)
+	new /obj/item/clothing/head/maidhat(src)
+	new /obj/item/clothing/under/maid(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/liberty
+	name = "Patriot outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/liberty/New()
+	new /obj/item/clothing/head/libertyhat(src)
+	new /obj/item/clothing/suit/libertycoat(src)
+	new /obj/item/clothing/under/libertyshirt(src)
+	new /obj/item/clothing/shoes/libertyshoes(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mega
+	name = "Megaman outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mega/New()
+	new /obj/item/clothing/head/helmet/megahelmet(src)
+	new /obj/item/clothing/under/mega(src)
+	new /obj/item/clothing/gloves/megagloves(src)
+	new /obj/item/clothing/shoes/megaboots(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/aviator
+	name = "Aviator outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/aviator/New()
+	new /obj/item/clothing/head/helmet/aviatorhelmet(src)
+	new /obj/item/clothing/under/aviatoruniform(src)
+	new /obj/item/clothing/shoes/aviatorboots(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/proto
+	name = "Protoman outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/proto/New()
+	new /obj/item/clothing/head/helmet/protohelmet(src)
+	new /obj/item/clothing/under/proto(src)
+	new /obj/item/clothing/gloves/protogloves(src)
+	new /obj/item/clothing/shoes/protoboots(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/hastur
+	name = "Hastur outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/hastur/New()
+	new	/obj/item/clothing/head/hasturhood(src)
+	new /obj/item/clothing/suit/hastur(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/owl
+	name = "Owl outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/owl/New()
+	new /obj/item/clothing/mask/gas/owl_mask(src)
+	new /obj/item/clothing/under/owl(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lordadmiral
+	name = "Lord admiral outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lordadmiral/New()
+	new /obj/item/clothing/head/lordadmiralhat(src)
+	new /obj/item/clothing/suit/lordadmiral(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/rotten
+	name = "Rotten outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/rotten/New()
+	new /obj/item/clothing/under/rottensuit(src)
+	new /obj/item/clothing/shoes/rottenshoes(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/frank
+	name = "Frankenstein outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/frank/New()
+	new /obj/item/clothing/under/franksuit(src)
+	new /obj/item/clothing/gloves/frankgloves(src)
+	new /obj/item/clothing/shoes/frankshoes(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mexican //is this offensive?
+	name = "Mexican outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mexican/New()
+	new /obj/item/clothing/head/sombrero(src)
+	new /obj/item/clothing/suit/poncho(src)
+	..()
+
+//Premium boxes, no different than clothing_box, just sorting for clarity.
+/obj/item/weapon/storage/box/smartbox/clothing_box/joe
+	name = "Sniper outfit box"
+	
+/obj/item/weapon/storage/box/smartbox/clothing_box/joe/New()
+	new /obj/item/clothing/head/helmet/joehelmet(src)
+	new /obj/item/clothing/under/joe(src)
+	new /obj/item/clothing/gloves/joegloves(src)
+	new /obj/item/clothing/shoes/joeboots(src)
+	..()
+	
+/obj/item/weapon/storage/box/smartbox/clothing_box/lola
+	name = "Fighting clown outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lola/New()
+	new /obj/item/clothing/mask/gas/lola(src)
+	new /obj/item/clothing/under/lola(src)
+	new /obj/item/clothing/shoes/clown_shoes/lola(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/wizard_robes
+	name = "Wizard robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/wizard_robes/New()
+	new /obj/item/clothing/head/wizard(src)
+	new /obj/item/clothing/suit/wizrobe(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/red_wizrobes
+	name = "Red wizard robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/red_wizrobes/New()
+	new /obj/item/clothing/head/wizard/red(src)
+	new /obj/item/clothing/suit/wizrobe/red(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clown_wizrobes
+	name = "Clown wizard outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clown_wizrobes/New()
+	new /obj/item/clothing/head/wizard/clown(src)
+	new /obj/item/clothing/suit/wizrobe/clown(src)
+	new /obj/item/clothing/mask/gas/clown_hat/wiz(src)
+	new /obj/item/clothing/shoes/sandal/slippers(src)
+	..()
+	
+/obj/item/weapon/storage/box/smartbox/clothing_box/marisa_wiz
+	name = "Ordinary witch robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/marisa_wiz/New()
+	new /obj/item/clothing/head/wizard/marisa(src)
+	new /obj/item/clothing/suit/wizrobe/marisa(src)
+	new /obj/item/clothing/shoes/sandal/marisa/leather(src)
+	new /obj/item/weapon/staff/broom(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz
+	name = "Halloween robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz/New()
+	new /obj/item/clothing/head/wizard/hallowiz(src)
+	new /obj/item/clothing/suit/wizrobe/hallowiz(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mystic_robes
+	name = "Mystic robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mystic_robes/New()
+	new /obj/item/clothing/head/wizard/mystic(src)
+	new /obj/item/clothing/suit/wizrobe/mystic(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/winter_wiz
+	name = "\"Winter robes\" box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/winter_wiz/New()
+	new /obj/item/clothing/head/wizard/winter(src)
+	new /obj/item/clothing/suit/wizrobe/winter(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/magician
+	name = "Magician outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/magician/New()
+	new /obj/item/clothing/head/that/magic(src)
+	new /obj/item/clothing/suit/wizrobe/magician(src)
+	new /obj/item/clothing/shoes/sandal/marisa/leather(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer
+	name = "Necromancer robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer/New()
+	new /obj/item/clothing/head/wizard/necro(src)
+	new /obj/item/clothing/suit/wizrobe/necro(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh
+	name = "Pharaoh robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh/New()
+	new /obj/item/clothing/head/pharaoh(src)
+	new /obj/item/clothing/suit/wizrobe/pharaoh(src)
+	..()

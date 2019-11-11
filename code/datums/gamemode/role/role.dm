@@ -623,6 +623,19 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	id = IMPLANTSLAVE
 	logo_state = "greytide-logo"
 
+/datum/role/greytide/Drop(silent = TRUE)
+	if (!silent)
+		antag.current.visible_message("<span class='userdanger'>[antag.current] briefly convulses!</span>" ,"<span class='userdanger'>Your loyalty to the greytide fades and vanishes. You are free of your actions again.</span>")
+	return ..()
+
+/datum/role/greytide/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
+	for(var/obj/item/weapon/implant/I in new_character)
+		if(istype(I, /obj/item/weapon/implant/traitor))
+			return
+	Drop()
+	return ..()
+
+
 /datum/role/greytide_leader
 	name = IMPLANTLEADER
 	id = IMPLANTLEADER

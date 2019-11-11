@@ -109,10 +109,10 @@
 						step_towards(src,movement_target,1)
 						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
-							emote("me", 1, "barks at [movement_target], as if begging it to go into his mouth.")
+							emote("me", 1, "barks at [movement_target], as if begging it to go into \his mouth.")
 							corgi_status = BEGIN_FOOD_HUNTING
 						else if(ishuman(movement_target))
-							emote("me", 1, "barks at [movement_target] and wags his tail.")
+							emote("me", 1, "barks at [movement_target] and wags \his tail.")
 							corgi_status = IDLE
 						else
 							emote("me", 1, "barks with an attitude!")

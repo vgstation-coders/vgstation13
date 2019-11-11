@@ -4,22 +4,12 @@ HEY, YOU.
 
 ADDING A CHANGELOG ENTRY? MAKE changelog/USERNAME.yml.  READ example.yml SO YOU DON'T SCREW UP.
 
-ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old teams)
+ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 --->
 <html>
 	<head>
 		<title>/vg/station Changelog</title>
 		<link rel="stylesheet" type="text/css" href="changelog.css">
-		<script type='text/javascript'>
-            function changeText(tagID, newText, linkTagID) {
-                var tag = document.getElementById(tagID);
-                tag.innerHTML = newText;
-                var linkTag = document.getElementById(linkTagID);
-                linkTag.removeAttribute("href");
-                linkTag.removeAttribute("onclick");
-            }
-
-		</script>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	</head>
 	<body>
@@ -78,14 +68,231 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		</div>
 
 		<!--
-
 		AGAIN, TO ADD SHIT, ADD AND MAINTAIN YOUR OWN changelog/USERNAME.yml FILE.
 
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
-
 		-->
 		<div class="commit sansserif">
-
+			<h2 class="date">2019.11.11</h2>
+			<h3 class="author">Shadowmech88 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Flammable items removed from burning rooms will now continue burning to ash instead of being on fire forever. Better grab those extinguishers if you want to save them.</li>
+			</ul>
+			<h3 class="author">ancientpower updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Slime people now change color based on their reagents under certain conditions.</li>
+				<li class="rscadd">Wizard outfits now come in smartboxes like with the autodrobe.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Powercreeper won&#39;t spawn randomly anymore</li>
+			</ul>
+			<h2 class="date">2019.11.10</h2>
+			<h3 class="author">Allspice updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Boots of blinding speed added to wiz spellbook, 4x movespeed but you&#39;re blinded while you move.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">You are now free from a greytide implant as soon as the greytide implant is removed, or if you get cloned.</li>
+			</ul>
+			<h2 class="date">2019.11.09</h2>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="imageadd">smokebombs (smoke grenades) now have a unique icon</li>
+				<li class="imageadd">buckshot shells now have a unique icon</li>
+			</ul>
+			<h3 class="author">dylanstrategie updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fix wormhole jaunters not working on the last Z-level of the map due to an incorrect equivalency sign</li>
+			</ul>
+			<h2 class="date">2019.11.07</h2>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes pAIs BSODing after they change their wallpapers</li>
+				<li class="bugfix">Powercreeper will not hide under floor tiles anymore.</li>
+			</ul>
+			<h2 class="date">2019.11.06</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Holomaps on Snaxi are now properly aligned.</li>
+			</ul>
+			<h3 class="author">dylanstrategie updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Map Editor should now display pipes, cables and disposals as expected (above floor tiles). This should have NO effect on gameplay, report any unexpected behavior with pipes showing/not showing properly</li>
+			</ul>
+			<h2 class="date">2019.11.05</h2>
+			<h3 class="author">Allspice updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Makes hydro trays unable to be opened at a distance with alt-click.</li>
+			</ul>
+			<h3 class="author">Dacendeth updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Shaking people awake who are asleep is now twice as effective.</li>
+			</ul>
+			<h3 class="author">Ephememory updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added &#34;clothing boxes&#34;, a one-way, one-use, and convenient storage device to distribute clothes more easily.</li>
+				<li class="tweak">Replaced most of the Autodrobe&#39;s product list with relevant clothing boxes.</li>
+				<li class="bugfix">Fixed a bug where syndie taperoll would deduct a roll when trying to place diagonally or the placement failed.</li>
+				<li class="bugfix">Fixed a bug where you could place syndie tape on airlocks infinitely without deducting any rolls.</li>
+				<li class="bugfix">Double airlock no longer vanishes in self-defense when you crowbar its panel out.</li>
+				<li class="bugfix">Ushanka no longer shaves your head with Russian space magic.</li>
+				<li class="tweak">Captain&#39;s armor is now an armored rigsuit.</li>
+				<li class="tweak">Captain&#39;s SSU now has the right department colors.</li>
+				<li class="bugfix">Fixed bug where Captain&#39;s armor could not be placed back into a SSU.</li>
+				<li class="bugfix">Fixed bolted airlocks still opening when clicked on.</li>
+			</ul>
+			<h3 class="author">Exxion updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Atmospheres will no longer fail to mix if the pressure and temperature are close together but gas composition is not.</li>
+			</ul>
+			<h3 class="author">FreakinABonk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds new booze to the boozeomat/booze dispenser and new cocktails to accompany them.</li>
+				<li class="rscadd">Gave iced tea a newer sprite that isn&#39;t ass.</li>
+			</ul>
+			<h3 class="author">GeneralVeers25 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Roid: The Captain has been advised to be more careful about locking up his office before the start of each new shift.</li>
+			</ul>
+			<h3 class="author">Irradiation updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added Barrels. They require either 20 sheets of metal or 20 wooden planks to craft.</li>
+				<li class="rscadd">Barrels can contain up to 1000 units of reagents and work like cauldrons. Barrels can&#39;t be bolted.</li>
+				<li class="rscadd">You can hide in barrels by click-dragging your sprite or somebody&#39;s else sprite onto them.</li>
+				<li class="rscadd">Kicking barrels will flush all the chemicals inside them, along with knocking everybody out of them, if they were hiding inside them.</li>
+				<li class="rscadd">Adds the color-smoke virus symptom (Stage 3). Let&#39;s make the station a bit more colorful, shall we?</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Manifested Ghosts can no longer used range weaponry. Rev up those soul blades and toolboxes!</li>
+				<li class="rscadd">Snaxis is now slightly cleaner.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Snowmobiles may now pull cargo carts. Transport your crates or dead bodies in style!</li>
+				<li class="tweak">Snaxi asteroid has crash-landed on the surface of a snowy planet. Miraculously, no equipment was damaged in the landing.</li>
+				<li class="tweak">The icecore on Snaxi is now a safe pressure, but remains super-cold</li>
+				<li class="tweak">Butterfly knives now can only pick up a viscerator or crystal butterfly if they are open.</li>
+				<li class="tweak">Butterfly knives now display an effect and play a unique (spooky) sound when they deploy a viscerator or crystal butterfly.</li>
+				<li class="tweak">Toggling your snowmobile headlights is now done by action button instead of verb.</li>
+				<li class="bugfix">Fixed a bug where the snowmobile facing west had no headlights.</li>
+				<li class="tweak">Snaxi now has a media server for DJ broadcasts, located in engineering near storage.</li>
+				<li class="tweak">Public snowmobiles now spawn with the key in their ignition instead of on the ground.</li>
+				<li class="rscadd">Disease type is now based on vector. In general, expect no memes from mice, and less memes or bacteria in crates.</li>
+				<li class="rscadd">Snaxi now has a junkyard. Any trash located in the junkyard will not count against the janitor at round end.</li>
+				<li class="rscadd">If your wolf has over 300 nutrition, it can now heal past half health at a slower rate.</li>
+			</ul>
+			<h3 class="author">N3X15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Maps can request that VOX announcements be disabled for performance reasons.</li>
+				<li class="tweak">Changelog tool reworked to be slightly less shit, use python 3.6 and proper logging.</li>
+				<li class="tweak">Changelog tool now uses Jinja2 to render actual, whole-assed templates.</li>
+				<li class="tweak">Changelog templates coalesced. Still use XHTML 4.01 Transitional because BYOND is shit.</li>
+				<li class="bugfix">Fixed some minor low-threat XSS vulnerabilities in changelogs that caused occasional formatting issues.</li>
+				<li class="rscadd">Validation schemas added for changelogs, for the poor tortured souls that desire them for whatever godforsaken reason.</li>
+				<li class="bugfix">Silences (, and .) no longer have crackling artifacts.  They also actually work now, under both voicepacks.</li>
+				<li class="bugfix">Return of the old HL VOX sound effects.  Will be re-recorded in the future so they sound more consistent.</li>
+				<li class="bugfix">Broke up lists into chunks so they stopped crashing the compiler.</li>
+				<li class="soundadd">Added bunch of new words, including pretty much every important chemistry reagent.</li>
+				<li class="sounddel">Removed a couple of broken phrases and orphaned/broken files.</li>
+				<li class="rscdel">Removed text announcement due to feedback. Can be re-added after poll or whatever fairly easily.</li>
+				<li class="rscadd">VOX sound lengths automatically generated by the standard SS13-VOX toolkit, eliminating the need for vox_sound_lengths.py.</li>
+				<li class="rscadd">Duration and size added to vox_data.json for third-party tool usage.</li>
+				<li class="tweak">Some pronunciation fixes.</li>
+				<li class="tweak">The HL sound effects have now been prefixed with _ so they&#39;re easier to find (bloop is now _bloop, etc).</li>
+				<li class="tweak">Words used by non-AI announcements are all standardized under a special announcer voice now.  Currently set to the default feminine voice, but may be changed in the future.</li>
+			</ul>
+			<h3 class="author">Shadowmech88 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">In space, no one can hear you talk. Unless you use the radio or stand right next to them, that is. The distance which speech travels now scales with atmospheric pressure.</li>
+				<li class="bugfix">Simple animals can no longer be autotraitored, except for borers.</li>
+				<li class="bugfix">Blindfolds will no longer prevent you from seeing messages about hearing things that you can&#39;t see.</li>
+				<li class="tweak">Gun-based suicide music is now louder.</li>
+				<li class="rscadd">Borers now have a HUD icon for when their bodies are too hot or too cold.</li>
+				<li class="tweak">Borers are now more resistant to damage from environment temperature, although their low health still makes it a large threat.</li>
+				<li class="bugfix">Simple animals will now equalize their body heat with the air inside a pipe when they ventcrawl.</li>
+				<li class="bugfix">You can no longer punch nearby xenos while stuck inside a resin nest.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The disorient spell is as powerful as it was before.</li>
+			</ul>
+			<h3 class="author">Wew-Laddie updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fix runtime error that occurred when importing an empty song into an instrument</li>
+			</ul>
+			<h3 class="author">ancientpower updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed more plant sprite issues.</li>
+				<li class="bugfix">Fixed standard lightbulbs/tubes having their light values overwritten on spawn.</li>
+				<li class="tweak">Increased atmosphere from slightly toning down standard light brightness.</li>
+				<li class="tweak">Replaced all botany lights with HE tubes to make up for overall lower light levels.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">emagging cargo console also unlocks contraband</li>
+				<li class="tweak">Slipping on lube stuns you for half the time it used to.</li>
+			</ul>
+			<h3 class="author">brndd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Air alarms now have a vacuum preset.</li>
+				<li class="bugfix">Changed the IV drip distance disconnect message to be more descriptive</li>
+				<li class="bugfix">Scrubbers should no longer get stuck on the green mode.</li>
+				<li class="rscadd">Added a new map: Wheelstation.</li>
+			</ul>
+			<h3 class="author">bthomas2 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Meta: changed AI satellite areas with anti_ethereal 1 to correct areas</li>
+				<li class="bugfix">Deff: Changed telecomms area to correct area</li>
+				<li class="bugfix">Box: Changed Derelict RnD machines to correct type</li>
+				<li class="bugfix">changes mob_type of bear breeding ground from /mob/living/simple_animal/hostile/carp to correct type.</li>
+			</ul>
+			<h3 class="author">dylanstrategie updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Dragging bodies in snow or driving a snowmobile now leaves tracks instead of footprints. Flying over snow no longer generates any footprints</li>
+				<li class="tweak">Made the snowmobile wrong floor sound a lot less obnoxious</li>
+				<li class="rscadd">Snowmobiles now have headlights, you can turn them on to see a lot better in the darkness of winter</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">ROGANbots no longer reply to machine generated speech</li>
+				<li class="bugfix">Fixes pAIs losing their name after changing their screen&#39;s appearance</li>
+				<li class="rscadd">You can now remove tree stumps using a shovel</li>
+			</ul>
+			<h2 class="date">2019.10.29</h2>
+			<h3 class="author">Ephememory updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Pepperspray(condensedcapsaicin) now has a more brutal effect on its victims.</li>
+				<li class="tweak">Ghost Peppers got buffed. You will vomit a few times if you eat 1 (One).</li>
+			</ul>
+			<h3 class="author">Exxion updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">SDQL can now search for datums without having to be provided with a list, like it already could for atoms. For obvious reasons, you still aren&#39;t allowed to query the type /datum without specifying a list to search, though.</li>
+				<li class="rscadd">SDQL is no longer completely incapable of doing anything with clients whatsoever.</li>
+				<li class="tweak">SDQL&#39;s SELECT query now returns a message when nothing is found instead of failing silently.</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="soundadd">Adds Satellite of Love to lobby.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Your PDA now has an alarm function. It can be somewhat annoying, so you have my permission to relocate the PDAs of abusive spacemen into Evidence Storage.</li>
+			</ul>
+			<h3 class="author">ancientpower updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">You can now wear belts without a uniform.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">pAIs with both Medical Supplement and Chem Synth apps now have access to Albuterol</li>
+			</ul>
+			<h3 class="author">robosperg updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Recently added winter coats have been put in cargo packs</li>
+			</ul>
 			<h2 class="date">2019.10.28</h2>
 			<h3 class="author">Kurfursten updated:</h3>
 			<ul class="changes bgimages16">
@@ -95,11 +302,10 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="bugfix">AI status displays draw on top of windows now, like regular status displays.</li>
 			</ul>
-
 			<h2 class="date">2019.10.27</h2>
 			<h3 class="author">Ephememory updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="spellcheck">Fixed the grammar of the void's examine text.</li>
+				<li class="spellcheck">Fixed the grammar of the void&#39;s examine text.</li>
 			</ul>
 			<h3 class="author">Fikou updated:</h3>
 			<ul class="changes bgimages16">
@@ -144,13 +350,11 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="soundadd">Added a few new AI ambience effects.</li>
 			</ul>
-
 			<h2 class="date">2019.10.26</h2>
 			<h3 class="author">otatoh updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Powered lightbulbs can now be removed by people wearing insulated gloves, or who's active hand is robotic.</li>
+				<li class="tweak">Powered lightbulbs can now be removed by people wearing insulated gloves, or who&#39;s active hand is robotic.</li>
 			</ul>
-
 			<h2 class="date">2019.10.25</h2>
 			<h3 class="author">Kurfursten updated:</h3>
 			<ul class="changes bgimages16">
@@ -160,32 +364,30 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">packed now has a second microwave in the kitchen and a toys vending machine in the library</li>
 			</ul>
-
 			<h2 class="date">2019.10.24</h2>
 			<h3 class="author">GeneralVeers25 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Nanotrasen's latest space station is under construction. Sign up now - STRIKE THE EARTH!</li>
+				<li class="rscadd">Nanotrasen&#39;s latest space station is under construction. Sign up now - STRIKE THE EARTH!</li>
 			</ul>
 			<h3 class="author">Kurfursten updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Snaxi has a new public garage with snowmobiles. We hid the keys under the snowmobiles instead of under the mat.</li>
 				<li class="rscadd">Snowmobiles now move 4x slower if not traveling on favored terrain - this includes all stuff you find outside (permafrost, glacier, frozen core, asphalt, cement, snow, snow caves, etc.).</li>
-				<li class="rscadd">New material for mappers: cement. It's tough like engine floor.</li>
+				<li class="rscadd">New material for mappers: cement. It&#39;s tough like engine floor.</li>
 				<li class="rscadd">You can clownify the pump shotgun, NT glock, or egun with a rainbow crayon. Bleach cleans them back to normal.</li>
 			</ul>
 			<h3 class="author">Sauberstaub updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="spellcheck">Dog's gender is now taken into account in the "new master" message.</li>
+				<li class="spellcheck">Dog&#39;s gender is now taken into account in the &#34;new master&#34; message.</li>
 			</ul>
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">cappuccino now heals like milk does & passione now heals like low grade honey does</li>
+				<li class="tweak">cappuccino now heals like milk does &amp; passione now heals like low grade honey does</li>
 			</ul>
 			<h3 class="author">ancientpower updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Adds three new sets of wizard robes with cold weather protection.</li>
 			</ul>
-
 			<h2 class="date">2019.10.23</h2>
 			<h3 class="author">Dacendeth updated:</h3>
 			<ul class="changes bgimages16">
@@ -193,17 +395,16 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Changed the way minor mutations affect a disease's infection chance.</li>
-				<li class="rscdel">Before, the disease's infection chance is increased by 10%, but is then capped at 50%</li>
-				<li class="rscadd">After, the disease's infection chance is changed to more or less 10% of its base value for that disease type (so the infection chance of a Prion can vary between 0% and 20%, and a Virus' between 60% and 80%)</li>
+				<li class="tweak">Changed the way minor mutations affect a disease&#39;s infection chance.</li>
+				<li class="rscdel">Before, the disease&#39;s infection chance is increased by 10%, but is then capped at 50%</li>
+				<li class="rscadd">After, the disease&#39;s infection chance is changed to more or less 10% of its base value for that disease type (so the infection chance of a Prion can vary between 0% and 20%, and a Virus&#39; between 60% and 80%)</li>
 			</ul>
 			<h3 class="author">Kurfursten updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">The CMO headset is now always sterilized against memes.</li>
-				<li class="rscadd">Players may now press the "request high priority jobs" button at the bottom of the latejoin menu to ping admins + captain/HoP PDA. The ping appears in red to admins if the captain/HoP are braindead/not carrying their PDA.</li>
+				<li class="rscadd">Players may now press the &#34;request high priority jobs&#34; button at the bottom of the latejoin menu to ping admins + captain/HoP PDA. The ping appears in red to admins if the captain/HoP are braindead/not carrying their PDA.</li>
 				<li class="bugfix">Fixed a bug where the HoP/IAA/Captain would be pinged once for each fax machine when receiving a fax.</li>
 			</ul>
-
 			<h2 class="date">2019.10.22</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -213,7 +414,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixed a bug in which Red Alert would not let heads of staff close the port.</li>
 			</ul>
-
 			<h2 class="date">2019.10.21</h2>
 			<h3 class="author">Dacendeth updated:</h3>
 			<ul class="changes bgimages16">
@@ -247,7 +447,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">Added a text representation of announcements for those of us with screwy headphone ports or bad hearing.</li>
 				<li class="bugfix">Fixes some inconsistencies in the VOX announcements UI.</li>
-				<li class="rscdel">Removed VOX preloader, since it didn't work and caused lag.</li>
+				<li class="rscdel">Removed VOX preloader, since it didn&#39;t work and caused lag.</li>
 				<li class="bugfix">Try to fix VOX announcements by preloading sounds.  If they load out of order, players receive jumbled announcements.</li>
 				<li class="wip">Added debugging information that pops up a notice telling the AI the words it received in the announcement.</li>
 			</ul>
@@ -282,19 +482,17 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">brndd updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">chapel tiles in tile painter don't try to display extradimensional directions anymore</li>
+				<li class="bugfix">chapel tiles in tile painter don&#39;t try to display extradimensional directions anymore</li>
 			</ul>
-
 			<h2 class="date">2019.10.13</h2>
 			<h3 class="author">Pomf123 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Made it so snaxi is only playable when it's cold outside.</li>
+				<li class="tweak">Made it so snaxi is only playable when it&#39;s cold outside.</li>
 			</ul>
 			<h3 class="author">RealestEstate updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Energy Domes available as contraband from the hatvendor.</li>
 			</ul>
-
 			<h2 class="date">2019.10.12</h2>
 			<h3 class="author">PJB3005 updated:</h3>
 			<ul class="changes bgimages16">
@@ -302,27 +500,24 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">Pomf123 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Made it so being drunk doesn't completely fuck up your movement and instead you stumble about in the general direction you desire.</li>
+				<li class="tweak">Made it so being drunk doesn&#39;t completely fuck up your movement and instead you stumble about in the general direction you desire.</li>
 			</ul>
-
 			<h2 class="date">2019.10.11</h2>
 			<h3 class="author">Dacendeth updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">You can once again ctrl click clothes on the ground to drag them.</li>
 			</ul>
-
 			<h2 class="date">2019.10.10</h2>
 			<h3 class="author">N3X15 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="soundadd">Added more sounds to VOX, including a new masculine voicepack.</li>
 				<li class="bugfix">Fixed sound effects being distorted.</li>
 			</ul>
-
 			<h2 class="date">2019.10.08</h2>
 			<h3 class="author">RealestEstate updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">There is now a specific condiment bottle icon for cocoa powder.</li>
-				<li class="tweak">Space pharaoh's robes are now slightly gaudier</li>
+				<li class="tweak">Space pharaoh&#39;s robes are now slightly gaudier</li>
 			</ul>
 			<h3 class="author">ShiftyRail updated:</h3>
 			<ul class="changes bgimages16">
@@ -332,7 +527,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">Winter coats, as well as various other coats now fit on coat racks.</li>
 			</ul>
-
 			<h2 class="date">2019.10.07</h2>
 			<h3 class="author">Arthurdentist updated:</h3>
 			<ul class="changes bgimages16">
@@ -351,7 +545,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="bugfix">The bartender winter coat now has a working sprite on mobs.</li>
 			</ul>
-
 			<h2 class="date">2019.10.06</h2>
 			<h3 class="author">DrSnips updated:</h3>
 			<ul class="changes bgimages16">
@@ -368,11 +561,10 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="tweak">SCP-294 is now emaggable. Super powerful chems are emag-only.</li>
 				<li class="tweak">SCP-294 is now wrenchable.</li>
 			</ul>
-
 			<h2 class="date">2019.10.05</h2>
 			<h3 class="author">Kurfursten updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Janitor's shortcut into the mailroom on Snaxi now actually has his access.</li>
+				<li class="tweak">Janitor&#39;s shortcut into the mailroom on Snaxi now actually has his access.</li>
 				<li class="tweak">Improved lighting on Snaxi.</li>
 			</ul>
 			<h3 class="author">SonixApache updated:</h3>
@@ -384,28 +576,26 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="bugfix">Emagged defibs and electric chairs no longer electrocutes slime people</li>
 				<li class="bugfix">Fixed pill eating restriction logic with skellingtons.</li>
 			</ul>
-
 			<h2 class="date">2019.10.04</h2>
 			<h3 class="author">Probe1 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Snaxi - Expands the playable asteroid area</li>
-				<li class="tweak">Snaxi - Adds a new 'frozen core' around engineering which is as cold as space but not space.</li>
+				<li class="tweak">Snaxi - Adds a new &#39;frozen core&#39; around engineering which is as cold as space but not space.</li>
 				<li class="tweak">Snaxi - Eliminates maintenance on EngCargo station in favor of large, public hallways</li>
 				<li class="tweak">Snaxi - Reshuffled cargo/janitor a bit. Janitor now has mail room access [as on Box], and cargo gets a snazzy new MULE room + cargo tractor storage warehouse. [MULE destinations coming in a future update]</li>
-				<li class="bugfix">Fixes about 25 things reported about Snaxi.  APCs no longer powering multiple sub-stations entrances, disposals working properly in MedSci, 200% more pajama lockers in dorms, 100% less APCs mounted in the floor instead of the wall, and a heap of other fixes.  Check github for the full list.  Please keep reporting issue and I'll keep knocking them out.</li>
+				<li class="bugfix">Fixes about 25 things reported about Snaxi.  APCs no longer powering multiple sub-stations entrances, disposals working properly in MedSci, 200% more pajama lockers in dorms, 100% less APCs mounted in the floor instead of the wall, and a heap of other fixes.  Check github for the full list.  Please keep reporting issue and I&#39;ll keep knocking them out.</li>
 				<li class="bugfix">Oh and about 30 new fire alarms on Snaxi.</li>
 				<li class="imageadd">Two new lobby screens for /vg/ courtesy of our based players</li>
 			</ul>
-
 			<h2 class="date">2019.10.03</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">The Jukebox has successfully been haunted.</li>
-				<li class="rscadd">Battle of Lil' Slugger has returned from the void it was in for about 3 hours, preparing its dark work.</li>
+				<li class="rscadd">Battle of Lil&#39; Slugger has returned from the void it was in for about 3 hours, preparing its dark work.</li>
 			</ul>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes a material dupe with R&D</li>
+				<li class="bugfix">Fixes a material dupe with R&amp;D</li>
 			</ul>
 			<h3 class="author">Probe1 updated:</h3>
 			<ul class="changes bgimages16">
@@ -415,13 +605,12 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">Shuttle engines now support 15 tiles per engine.</li>
 			</ul>
-
 			<h2 class="date">2019.10.02</h2>
 			<h3 class="author">DrSnips updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Xenoarch excavation suits have been brought to the hard suit age and are named "archaeology hard suit" appropriately. They match the survivor suits stat wise but cannot use Goliath plates.</li>
+				<li class="tweak">Xenoarch excavation suits have been brought to the hard suit age and are named &#34;archaeology hard suit&#34; appropriately. They match the survivor suits stat wise but cannot use Goliath plates.</li>
 				<li class="imageadd">Xenoarch excavation suits have a new sprite to fit in with the other hard suits due to the above. The gen 2 sprite is now an anomaly suit which ARE NOT SPACE PROOF.</li>
-				<li class="rscadd">The older gen 1 xenoarch suits have been added to potassium "tech" dig sites.</li>
+				<li class="rscadd">The older gen 1 xenoarch suits have been added to potassium &#34;tech&#34; dig sites.</li>
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -435,30 +624,27 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">Can now deconstruct dual sabers into its composite sabers. This requires a screwdriver.</li>
 				<li class="tweak">Dualblade saber construction logic changed. Can now only use energy swords to make a dualblade, or two banana blades to make a bunch blade.</li>
 				<li class="tweak">Constructing a dualblade now puts it in your hands. Same goes for deconstructing the dualblade and putting the composite swords in your hand.</li>
-				<li class="rscadd">Atmospherics machinery should now actually consume power. Not many atmospheric machines have power consumption enabled individually, so this shouldn't affect anything right now.</li>
+				<li class="rscadd">Atmospherics machinery should now actually consume power. Not many atmospheric machines have power consumption enabled individually, so this shouldn&#39;t affect anything right now.</li>
 			</ul>
 			<h3 class="author">Zth-- updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Microwaves can now be examined to check out its contents</li>
 			</ul>
-
 			<h2 class="date">2019.09.30</h2>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Service comms on most maps should be working now.</li>
-				<li class="bugfix">Fixes the emergency shuttle taking an hour to arrive when the server's timezone rolls over into a new day</li>
+				<li class="bugfix">Fixes the emergency shuttle taking an hour to arrive when the server&#39;s timezone rolls over into a new day</li>
 			</ul>
 			<h3 class="author">ancientpower updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="imageadd">Enhances the mancrowave's functionality on April Fools', with new sprites by Blithering.</li>
+				<li class="imageadd">Enhances the mancrowave&#39;s functionality on April Fools&#39;, with new sprites by Blithering.</li>
 			</ul>
-
 			<h2 class="date">2019.09.29</h2>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Changelings are no longer prompted to choose a name for their lesser form when they monkeyize</li>
 			</ul>
-
 			<h2 class="date">2019.09.28</h2>
 			<h3 class="author">DrSnips updated:</h3>
 			<ul class="changes bgimages16">
@@ -472,14 +658,14 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">Traders can now buy a trader stamp pad for 20 credits. You have to have a talon on your active hand to use it.</li>
 				<li class="bugfix">Memes and spooks are now kept separate.</li>
 				<li class="bugfix">You can no longer benefit from the comforting words of your chaplain if you are unconscious, or dead.</li>
-				<li class="tweak">The virus food wall dispenser doesn't take up floor space anymore.</li>
+				<li class="tweak">The virus food wall dispenser doesn&#39;t take up floor space anymore.</li>
 			</ul>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Odysseus sleepers now let the occupant out should the mech run out of power, or the occupant move.</li>
 				<li class="bugfix">Fixes packed station communications not working</li>
 				<li class="rscadd">Adds the spare bear, a space bear that has adapted to scavenging through stations.</li>
-				<li class="rscadd">ATMs now check if the user can actually reach the turf they are going to place the money they are removing from their account onto, otherwise it'll just throw the money at them.</li>
+				<li class="rscadd">ATMs now check if the user can actually reach the turf they are going to place the money they are removing from their account onto, otherwise it&#39;ll just throw the money at them.</li>
 				<li class="rscadd">ATMs no longer steal money from the floor</li>
 				<li class="tweak">Rather than printing money from your PDA putting the money on the floor, instead it attempts to put the money in your hands whenever possible.</li>
 				<li class="rscadd">Radio frequencies are now randomized. AIs get the frequencies in their notes, DJs and librarians get an updated paper.</li>
@@ -517,7 +703,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">You can now swap hands while doing things such as welding walls without interrupting the process.</li>
 				<li class="tweak">Medical and weapon spawners for the vault safe no longer have a lower chance of appearing.</li>
-				<li class="tweak">The healing rate of tricordrazine and doctor's delight have been increased by making their healing per tick guaranteed.</li>
+				<li class="tweak">The healing rate of tricordrazine and doctor&#39;s delight have been increased by making their healing per tick guaranteed.</li>
 			</ul>
 			<h3 class="author">otatoh updated:</h3>
 			<ul class="changes bgimages16">
@@ -526,10 +712,9 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">plosky1 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Snowmap: Armory has had a Nanotrasen officer go through it and add and remove unnecessary items. He's also fixed some of the jailcells. The workout room has had workout machines added to get SICK GAINS.</li>
+				<li class="rscadd">Snowmap: Armory has had a Nanotrasen officer go through it and add and remove unnecessary items. He&#39;s also fixed some of the jailcells. The workout room has had workout machines added to get SICK GAINS.</li>
 				<li class="rscadd">Minor fixes to snow map, bar has a backroom, ghetto bar has been moved closer and changed.</li>
 			</ul>
-
 			<h2 class="date">2019.09.22</h2>
 			<h3 class="author">9percents updated:</h3>
 			<ul class="changes bgimages16">
@@ -537,7 +722,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">DrSnips updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscdel">The 3 part teleporter no longer has a test fire and accuracy requirement that sends you to deep space by chance if you didn't do so.</li>
+				<li class="rscdel">The 3 part teleporter no longer has a test fire and accuracy requirement that sends you to deep space by chance if you didn&#39;t do so.</li>
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -563,39 +748,35 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">plosky1 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">The snowmap engineers Nanotrasen sent have been hard at work, they've braved the icy snow and added concrete paths! Mechanics office has it's own disposals now, and we've updated all the firelocks. We also noticed a lot of you running into clearly marked shuttle areas. These areas now have fences.</li>
+				<li class="rscadd">The snowmap engineers Nanotrasen sent have been hard at work, they&#39;ve braved the icy snow and added concrete paths! Mechanics office has it&#39;s own disposals now, and we&#39;ve updated all the firelocks. We also noticed a lot of you running into clearly marked shuttle areas. These areas now have fences.</li>
 			</ul>
-
 			<h2 class="date">2019.09.21</h2>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Added new deathsquad commander name and titles.</li>
 			</ul>
-
 			<h2 class="date">2019.09.19</h2>
 			<h3 class="author">Exxion updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">The garbage collector queue now actually works for more than a few minutes per round. If you notice more hard dels happening, that's most likely just because the garbage collector is actually noticing when things fail to get cleaned up, and not because more things are failing to get cleaned up.</li>
+				<li class="bugfix">The garbage collector queue now actually works for more than a few minutes per round. If you notice more hard dels happening, that&#39;s most likely just because the garbage collector is actually noticing when things fail to get cleaned up, and not because more things are failing to get cleaned up.</li>
 			</ul>
 			<h3 class="author">Kurfursten updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">New disease type: Fungus. It can have blood, contact, air, and colony spread types. Fungi have the highest infection chance and slightly faster speed, but revert 2 stages upon spreading.</li>
 				<li class="rscadd">New disease type: Meme. It can have blood and memetic spread types. Memes have a very high infection rate and a fast progression rate, but can only have 2 symptoms.</li>
-				<li class="rscadd">New spread type: Colony. It works like contact, but only likes to spread to spacesuits and those wearing them. Ignores the suit's normal blocks.</li>
+				<li class="rscadd">New spread type: Colony. It works like contact, but only likes to spread to spacesuits and those wearing them. Ignores the suit&#39;s normal blocks.</li>
 				<li class="rscadd">New spread type: Memetic. Spread when you hear someone infected speak in person, unless you are wearing a sterile earpiece.</li>
 			</ul>
-
 			<h2 class="date">2019.09.17</h2>
 			<h3 class="author">robosperg updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Winter coats for the bartender, paramedics, and mechanics. Sprites by Otatoh</li>
 			</ul>
-
 			<h2 class="date">2019.09.16</h2>
 			<h3 class="author">Shaska- updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Welding tools now have to be turned on to fix robotic limbs</li>
-				<li class="bugfix">Clicking a piece of sand now converts all the sand on the tile you're standing on to sandstone.</li>
+				<li class="bugfix">Clicking a piece of sand now converts all the sand on the tile you&#39;re standing on to sandstone.</li>
 			</ul>
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
@@ -607,22 +788,19 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="tweak">Emagged communication consoles can now log back in without needing any access, as well as change alerts.</li>
 				<li class="tweak">You are now able to link telescience consoles and telepads between each other.</li>
 				<li class="bugfix">Fixed a bug where the game would crash if multiple telescience consoles or telepads were added to the game before the start of the round.</li>
-				<li class="tweak">Welders will now tell you when they have to be lit instead of saying "you require more fuel" when you use the welder and it isn't lit.</li>
+				<li class="tweak">Welders will now tell you when they have to be lit instead of saying &#34;you require more fuel&#34; when you use the welder and it isn&#39;t lit.</li>
 				<li class="tweak">Welders will no longer refill themselves if they are already full, and welding tanks will tell you if they are empty.</li>
 			</ul>
-
 			<h2 class="date">2019.09.14</h2>
 			<h3 class="author">Intigracy updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Reverted the change to the KEEPER lawset.</li>
 			</ul>
-
 			<h2 class="date">2019.09.12</h2>
 			<h3 class="author">Shaska- updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">You can no longer shorten emergency shuttle travel time to 10 seconds</li>
 			</ul>
-
 			<h2 class="date">2019.09.10</h2>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
@@ -632,7 +810,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="bugfix">Scythes now work properly against powercreep vines</li>
 			</ul>
-
 			<h2 class="date">2019.09.08</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -646,14 +823,14 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">Disables radiation storms on snaxi.</li>
 				<li class="rscadd">Fax machines no longer claim your ID for themselves should the equipment power be offline.</li>
 				<li class="bugfix">Fixes evidence bags not having their description or weight class reset upon an inserted object being removed.</li>
-				<li class="rscadd">The R&D console now shows you the total material cost of whatever you're making. If it has enough by itself, the material cost will be shown in green. If it requires the bluespace network to help, it will be shown in blue. If it does not have enough, it will be shown in red.</li>
+				<li class="rscadd">The R&amp;D console now shows you the total material cost of whatever you&#39;re making. If it has enough by itself, the material cost will be shown in green. If it requires the bluespace network to help, it will be shown in blue. If it does not have enough, it will be shown in red.</li>
 			</ul>
 			<h3 class="author">ProfanedBane updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Player mice can now spawn as 1 of 3 colours once again</li>
 				<li class="tweak">Player mice no longer take damage when starving, and instead take a huge speed penalty</li>
 				<li class="tweak">Player mice no longer automatically move to eat food when starving</li>
-				<li class="experiment">Player mice now have a "nutrition_loss_mod" variable for admins to tweak how fast a mouse loses nutrition</li>
+				<li class="experiment">Player mice now have a &#34;nutrition_loss_mod&#34; variable for admins to tweak how fast a mouse loses nutrition</li>
 			</ul>
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
@@ -668,30 +845,26 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="bugfix">You can now fall into the pits of Hell and become a lawyer again!</li>
 			</ul>
-
 			<h2 class="date">2019.09.02</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Simon's Jacket can now hold drills as god intended.</li>
+				<li class="rscadd">Simon&#39;s Jacket can now hold drills as god intended.</li>
 			</ul>
-
 			<h2 class="date">2019.09.01</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Gondolas seem more attentive.</li>
-				<li class="rscadd">In honor of all the DDOSing, we have added Brazil's signature dish.</li>
+				<li class="rscadd">In honor of all the DDOSing, we have added Brazil&#39;s signature dish.</li>
 			</ul>
 			<h3 class="author">bathosbathtime updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscdel">Removes the portal gun, emagged nikita, levitation potion, and health/death potion from the black market</li>
 			</ul>
-
 			<h2 class="date">2019.08.31</h2>
 			<h3 class="author">robosperg updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Winter coats are now available at cargo, expect more in the future</li>
 			</ul>
-
 			<h2 class="date">2019.08.30</h2>
 			<h3 class="author">GlassEclipse updated:</h3>
 			<ul class="changes bgimages16">
@@ -727,7 +900,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">Snowmap xenobio now has 6 chambers! Also other minor fixes.</li>
 			</ul>
-
 			<h2 class="date">2019.08.29</h2>
 			<h3 class="author">GlassEclipse updated:</h3>
 			<ul class="changes bgimages16">
@@ -755,13 +927,12 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">plosky1 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Snaxi pipes are less gunk, and interpolation should be fixed. Trees have grown, there's been a disturbance in the force, and strange radio signal are being picked up from somewhere on the station...</li>
+				<li class="rscadd">Snaxi pipes are less gunk, and interpolation should be fixed. Trees have grown, there&#39;s been a disturbance in the force, and strange radio signal are being picked up from somewhere on the station...</li>
 			</ul>
 			<h3 class="author">ririchiyo updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">modified nano template for supply console as it wasn't properly broken up.</li>
+				<li class="tweak">modified nano template for supply console as it wasn&#39;t properly broken up.</li>
 			</ul>
-
 			<h2 class="date">2019.08.26</h2>
 			<h3 class="author">GlassEclipse updated:</h3>
 			<ul class="changes bgimages16">
@@ -770,10 +941,9 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Implemented some species-specific icons we had laying around. Syndi suits for catbeasts, skrell and lizards, engineering suit for catbeasts, two 'new' skrell spacesuits, three 'new' lizard suits and a syndie commander suit.</li>
+				<li class="rscadd">Implemented some species-specific icons we had laying around. Syndi suits for catbeasts, skrell and lizards, engineering suit for catbeasts, two &#39;new&#39; skrell spacesuits, three &#39;new&#39; lizard suits and a syndie commander suit.</li>
 				<li class="experiment">Vox and Plasmaman icons were shuffled around - if you notice any missing or broken icons, please report them.</li>
 			</ul>
-
 			<h2 class="date">2019.08.25</h2>
 			<h3 class="author">GoodG1448 updated:</h3>
 			<ul class="changes bgimages16">
@@ -783,7 +953,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">Storage items can now fit more items (for real this time)</li>
 			</ul>
-
 			<h2 class="date">2019.08.24</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -794,13 +963,11 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">Your backpacks and boxes can now fit more items.</li>
 			</ul>
-
 			<h2 class="date">2019.08.23</h2>
 			<h3 class="author">ShiftyRail updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Solo antags no longer have defined objectives, and instead are just told to do what they want.</li>
 			</ul>
-
 			<h2 class="date">2019.08.22</h2>
 			<h3 class="author">ComradeDispenser updated:</h3>
 			<ul class="changes bgimages16">
@@ -831,23 +998,20 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">Extinguisher cabinets can now be alt-clicked to open or close them.</li>
 			</ul>
-
 			<h2 class="date">2019.08.21</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Oh the weather outside is frightful~</li>
 			</ul>
-
 			<h2 class="date">2019.08.20</h2>
 			<h3 class="author">ComradeDispenser updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">Literally just moved one part of the Grey's sprites a single pixel up</li>
+				<li class="bugfix">Literally just moved one part of the Grey&#39;s sprites a single pixel up</li>
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Laser Rifles should now start with the correct sprite.</li>
 			</ul>
-
 			<h2 class="date">2019.08.19</h2>
 			<h3 class="author">Dacendeth updated:</h3>
 			<ul class="changes bgimages16">
@@ -855,7 +1019,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">When examining a drinking glass (and only drinking glasses specifically), you no longer get the list of every reagent in it. Instead you get the total volume, as well as the identity of the reagent that's with the largest quantity.</li>
+				<li class="tweak">When examining a drinking glass (and only drinking glasses specifically), you no longer get the list of every reagent in it. Instead you get the total volume, as well as the identity of the reagent that&#39;s with the largest quantity.</li>
 			</ul>
 			<h3 class="author">GlassEclipse updated:</h3>
 			<ul class="changes bgimages16">
@@ -863,7 +1027,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Adds Lola's Clown Set to the Autovend!</li>
+				<li class="rscadd">Adds Lola&#39;s Clown Set to the Autovend!</li>
 				<li class="soundadd">Now hacking anything makes a sound.</li>
 			</ul>
 			<h3 class="author">Sauberstaub updated:</h3>
@@ -883,11 +1047,10 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">Server rooms now siphon out oxygen and maintain a 1 ATM pressure.</li>
 			</ul>
-
 			<h2 class="date">2019.08.18</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed Plasmamen being able to use their own blood for cult rituals, when they're supposed to be a NO_BLOOD race</li>
+				<li class="bugfix">Fixed Plasmamen being able to use their own blood for cult rituals, when they&#39;re supposed to be a NO_BLOOD race</li>
 			</ul>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
@@ -901,7 +1064,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="experiment">Somebody in this snowmap ain't what he appears to be.</li>
+				<li class="experiment">Somebody in this snowmap ain&#39;t what he appears to be.</li>
 				<li class="rscadd">Wake-up Call is now beneficial to security officers, just like donuts.</li>
 			</ul>
 			<h3 class="author">brndd updated:</h3>
@@ -909,7 +1072,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="bugfix">lattices now smooth properly with catwalks to their north</li>
 				<li class="rscadd">Added a games vending machine that sells playing cards and dice and some other junk.</li>
 			</ul>
-
 			<h2 class="date">2019.08.17</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -919,13 +1081,11 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">Lots of changes for Snowmap. Important to note that miners now need air and suits for mining, and have their own shuttle.</li>
 			</ul>
-
 			<h2 class="date">2019.08.16</h2>
 			<h3 class="author">plosky1 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Snowmap v0.1 is here to test and die on!</li>
 			</ul>
-
 			<h2 class="date">2019.08.15</h2>
 			<h3 class="author">bathosbathtime updated:</h3>
 			<ul class="changes bgimages16">
@@ -935,30 +1095,26 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">roidstation atmospherics gas refilling station is now properly piped up at roundstart</li>
 			</ul>
-
 			<h2 class="date">2019.08.14</h2>
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">hopefully fixed roid's distro and waste being linked due to a misplaced manifold in science.</li>
+				<li class="bugfix">hopefully fixed roid&#39;s distro and waste being linked due to a misplaced manifold in science.</li>
 			</ul>
-
 			<h2 class="date">2019.08.13</h2>
 			<h3 class="author">PaulRitter updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Tonio now actually has its special effect.</li>
 			</ul>
-
 			<h2 class="date">2019.08.12</h2>
 			<h3 class="author">brndd updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Scrubbers now have external pressure bounds. They will aim to keep the room at or below this pressure, siphoning gas if it is exceeded. It's set to 1 ATM by default.</li>
-				<li class="rscadd">Scrubbers now have internal pressure bounds. They will not exceed this pressure when scrubbing gas into their output. It's disabled by default and is ignored when siphoning all gas.</li>
+				<li class="rscadd">Scrubbers now have external pressure bounds. They will aim to keep the room at or below this pressure, siphoning gas if it is exceeded. It&#39;s set to 1 ATM by default.</li>
+				<li class="rscadd">Scrubbers now have internal pressure bounds. They will not exceed this pressure when scrubbing gas into their output. It&#39;s disabled by default and is ignored when siphoning all gas.</li>
 			</ul>
-
 			<h2 class="date">2019.08.11</h2>
 			<h3 class="author">Blithering updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="imageadd">Wendigoes still don't exist.</li>
+				<li class="imageadd">Wendigoes still don&#39;t exist.</li>
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -969,13 +1125,11 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="bugfix">fixed a bug with the temperature setting on locked air alarms</li>
 				<li class="bugfix">fixed air alarms discriminating admin ghosts and maybe AIs</li>
 			</ul>
-
 			<h2 class="date">2019.08.10</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscdel">Hookshots no longer have a clumsy check.</li>
 			</ul>
-
 			<h2 class="date">2019.08.09</h2>
 			<h3 class="author">9percents updated:</h3>
 			<ul class="changes bgimages16">
@@ -985,7 +1139,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscdel">The ability to dab has been removed</li>
 			</ul>
-
 			<h2 class="date">2019.08.08</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1012,34 +1165,31 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">Raised some limits for threat levels required and enemies required in order for vampires to appear. However, wardens and chaplains are now considered enemies of vampires, and eligible to allow them to spawn.</li>
 			</ul>
-
 			<h2 class="date">2019.08.06</h2>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Vampires will now also restore broken bones and stop bleeding when resting in coffins.</li>
 			</ul>
-
 			<h2 class="date">2019.08.05</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="imageadd">Added in-hand icons for growth dishes.</li>
 				<li class="imageadd">Added in-hand and belt icons for the health analyzer and the immunity scanner.</li>
-				<li class="tweak">Tweaked the immunity scanner's properties so they align with health analyzers' (now a tiny item instead of small, can now be worn on belts, can be recycled at an autolathe and deconstructed at R&D, etc...)</li>
+				<li class="tweak">Tweaked the immunity scanner&#39;s properties so they align with health analyzers&#39; (now a tiny item instead of small, can now be worn on belts, can be recycled at an autolathe and deconstructed at R&amp;D, etc...)</li>
 			</ul>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Powercreeper spread logic tweaked, so it isn't as laggy as before</li>
+				<li class="tweak">Powercreeper spread logic tweaked, so it isn&#39;t as laggy as before</li>
 				<li class="tweak">Powercreepers no longer zap the dead</li>
 				<li class="tweak">Powercreepers are now affected by plantbgone, the more power in the grid, the more likely they are to die from it</li>
 				<li class="tweak">Powercreepers now draw their energy from the environment, so any area with powercreepers in will tend towards 0 celsius</li>
-				<li class="tweak">Powercreepers now don't shock you through gloves</li>
-				<li class="tweak">For those of you who can't aim, powercreepers now intercept ion bolts</li>
+				<li class="tweak">Powercreepers now don&#39;t shock you through gloves</li>
+				<li class="tweak">For those of you who can&#39;t aim, powercreepers now intercept ion bolts</li>
 			</ul>
-
 			<h2 class="date">2019.08.04</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed books from telling you that they are completely blank when they clearly aren't.</li>
+				<li class="bugfix">Fixed books from telling you that they are completely blank when they clearly aren&#39;t.</li>
 				<li class="bugfix">The asteroid lair no longer appears on holomaps.</li>
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
@@ -1054,7 +1204,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">russians now get nagant revolvers which are way weaker than matebas</li>
 			</ul>
-
 			<h2 class="date">2019.08.03</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1062,7 +1211,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">MoMMIs can't be blobs anymore.</li>
+				<li class="bugfix">MoMMIs can&#39;t be blobs anymore.</li>
 			</ul>
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
@@ -1072,7 +1221,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="bugfix">portable air scrubbers now scrub tanks at the intended rate of 300 litres per tick.</li>
 			</ul>
-
 			<h2 class="date">2019.08.02</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1095,13 +1243,11 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="bugfix">Bear meat now gives hyperzine and more nutriment</li>
 				<li class="bugfix">spider poison sacs no longer gives hyperzine and nutriment</li>
 			</ul>
-
 			<h2 class="date">2019.08.01</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">The grinch can now spawn on deff.</li>
 			</ul>
-
 			<h2 class="date">2019.07.31</h2>
 			<h3 class="author">DamianX updated:</h3>
 			<ul class="changes bgimages16">
@@ -1113,7 +1259,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">Magnitis added as a new Stage 4 harmful (Danger: 4) symptom. Can be found in culture bottles in high risk spawners.</li>
 				<li class="bugfix">Fixed players not dropping the emagged Nikita when firing it.</li>
 				<li class="bugfix">Fixed players getting nullspaced when attached to a detonating nikita missile.</li>
-				<li class="tweak">Setting a pathogen's dangerosity to "Safe" in the Pathogen database will prevent medbots from trying to inject spaceacillin.</li>
+				<li class="tweak">Setting a pathogen&#39;s dangerosity to &#34;Safe&#34; in the Pathogen database will prevent medbots from trying to inject spaceacillin.</li>
 			</ul>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
@@ -1137,7 +1283,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="tweak">Dionae (the tree people) can now be affected by medical nanobots.</li>
 				<li class="tweak">Medical nanobots now also heal internal organ damage at a small nanobot cost.</li>
 			</ul>
-
 			<h2 class="date">2019.07.29</h2>
 			<h3 class="author">DamianX updated:</h3>
 			<ul class="changes bgimages16">
@@ -1145,9 +1290,9 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">The Advanced Energy Gun gets a brand new look courtesy of otatoh. The old sprite still exists and an "experimental" version using it can be spawned by admins.</li>
-				<li class="bugfix">Fixed the old AEG's in-hand sprite never properly updating as its charge diminishes.</li>
-				<li class="tweak">Changed the way AEGs react to EMPs, they now have 10 points of "core stability". When getting EMP'd, they lose 4 points if the EMP is strong, and 2 if it's weak. This affects their recharge rate (which is 10 times the core stability, so 100 charge by default every 4 seconds.), and creates a radiation burst once it reaches zero. The radiation now always reaches up to 4 tiles away, but the amount received decreases with the distance (300 rad on the same tile and adjacent, then divided by the distance from the gun). Previously a critical AEG would keep producing deadly radiation burst every few seconds. If the AEG lost some stability but it still is over zero, it has a percentage chance equal to its current core stability to recover some of it every second. AEGs no longer have a chance to produce radiation bursts as long as they have some stability left, otherwise the gun becomes unusable.</li>
+				<li class="rscadd">The Advanced Energy Gun gets a brand new look courtesy of otatoh. The old sprite still exists and an &#34;experimental&#34; version using it can be spawned by admins.</li>
+				<li class="bugfix">Fixed the old AEG&#39;s in-hand sprite never properly updating as its charge diminishes.</li>
+				<li class="tweak">Changed the way AEGs react to EMPs, they now have 10 points of &#34;core stability&#34;. When getting EMP&#39;d, they lose 4 points if the EMP is strong, and 2 if it&#39;s weak. This affects their recharge rate (which is 10 times the core stability, so 100 charge by default every 4 seconds.), and creates a radiation burst once it reaches zero. The radiation now always reaches up to 4 tiles away, but the amount received decreases with the distance (300 rad on the same tile and adjacent, then divided by the distance from the gun). Previously a critical AEG would keep producing deadly radiation burst every few seconds. If the AEG lost some stability but it still is over zero, it has a percentage chance equal to its current core stability to recover some of it every second. AEGs no longer have a chance to produce radiation bursts as long as they have some stability left, otherwise the gun becomes unusable.</li>
 			</ul>
 			<h3 class="author">Irradiation updated:</h3>
 			<ul class="changes bgimages16">
@@ -1161,7 +1306,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">Phazon phasing now respects bluespace locked areas.</li>
 			</ul>
-
 			<h2 class="date">2019.07.28</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1173,7 +1317,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscdel">Roombas now have a flat one second attack cooldown</li>
 			</ul>
-
 			<h2 class="date">2019.07.27</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1181,19 +1324,18 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="bugfix">Ghosts can now read the labels on analyzed growth dishes.</li>
 				<li class="tweak">Roundstart diseases are now flavor text only 80% of the time, with 10% chance of having a beneficial symptom, and 10% (down from 50%) chance of having a lesser annoying symptom (such as Loudness syndrome)</li>
 				<li class="tweak">Automated Sleeping Syndrome danger rating increased from annoying to hindrance, so it can no longer be a roundstart symptom.</li>
-				<li class="tweak">Catbeasts no longer suffer from their own disease's symptoms.</li>
+				<li class="tweak">Catbeasts no longer suffer from their own disease&#39;s symptoms.</li>
 				<li class="tweak">Infected blood found in Urns or Bowls in Xenoarch now always contains beneficial symptoms.</li>
 				<li class="tweak">Pathogenic Clouds-emitting large artifacts now always contain deadly symptoms (accounting for the fact that those are pretty damn rare)</li>
 				<li class="tweak">Reduced the chance for infected maint mice to have the Contact spread vector from 60% to 40%. Mice without this vector can not spread their disease, but may still provide a virologist with some rare antigen and an extra sample.</li>
 				<li class="tweak">The isolation centrifuge now sends you a warning if you try to synthesize a vaccine with a duration longer than a minute or two.</li>
-				<li class="tweak">Glasgow syndrome can no longer load you with up to 325 units of alcohol, instead capping at the disease's strength times five, so up to 35.</li>
+				<li class="tweak">Glasgow syndrome can no longer load you with up to 325 units of alcohol, instead capping at the disease&#39;s strength times five, so up to 35.</li>
 				<li class="tweak">Mice infected with arachnogenesis now explode into 3 spiderlings, instead of vomitting too many of them over time.</li>
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">New possible traitor objectives!</li>
 			</ul>
-
 			<h2 class="date">2019.07.25</h2>
 			<h3 class="author">Arthurdentist updated:</h3>
 			<ul class="changes bgimages16">
@@ -1204,14 +1346,14 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="tweak">Cultists will have to sacrifice an implanted crew member. Only if there is no implanted personnel on the station they will be able to sacrifice a non-implanted crew member.</li>
 				<li class="rscadd">Added an option to show admin messages in both the special tab and chat.</li>
 				<li class="tweak">Loose catbeasts only have mildly annoying diseases when they arrive. As they survive longer and defile more areas they get up to two more (increasingly deadly) diseases.</li>
-				<li class="rscadd">Re-added wizard's apprenticeship contracts to the spellbook.</li>
+				<li class="rscadd">Re-added wizard&#39;s apprenticeship contracts to the spellbook.</li>
 				<li class="tweak">Added a short cooldown to fedora tipping.</li>
 			</ul>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Removed the need for the +Debug flag to fully use the Diseases Panel</li>
-				<li class="tweak">Lowered the volume of the science goggles's pathogen scanner being toggled</li>
-				<li class="tweak">Melisso-Emeto Syndrome's chance of making you cough up bees no longer depends of how much honey you have in you. As it stood, the formula combined with the speed at which honey metabolizes made it so you never cough up any bees at all.</li>
+				<li class="tweak">Lowered the volume of the science goggles&#39;s pathogen scanner being toggled</li>
+				<li class="tweak">Melisso-Emeto Syndrome&#39;s chance of making you cough up bees no longer depends of how much honey you have in you. As it stood, the formula combined with the speed at which honey metabolizes made it so you never cough up any bees at all.</li>
 				<li class="bugfix">Fixed meat butchered from infected mobs magically curing itself after a few minutes</li>
 				<li class="bugfix">Fixed bees never coming out of their apiary on some maps.</li>
 				<li class="bugfix">Dynamic Mode: fixed High Population Override counting non-ready players toward its trigger.</li>
@@ -1219,7 +1361,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">Medical Borg grippers can now pick up vials from vial storage boxes, you can open the container by drag and dropping it onto yourself while adjacent.</li>
 				<li class="rscadd">Medical Borgs now have an immunity scanner among their modules.</li>
 				<li class="bugfix">You may no longer use immunity scanners on silicons, DUH.</li>
-				<li class="tweak">Toxin Sublimation, the disease symptom that causes you to emit plasma, has had its danger rating upped from 4 to 5, due to its high station-ruining potential. This makes it much less likely to appear in loose catbeasts, and won't let it appear at all in maintenance mice.</li>
+				<li class="tweak">Toxin Sublimation, the disease symptom that causes you to emit plasma, has had its danger rating upped from 4 to 5, due to its high station-ruining potential. This makes it much less likely to appear in loose catbeasts, and won&#39;t let it appear at all in maintenance mice.</li>
 				<li class="bugfix">Fixed both Caloric Expenditure syndromes basically not working at all.</li>
 				<li class="bugfix">Fixed Arachnogenesis Effect being rated as Danger 3 instead of 4. This change means it can never appear in maintenance mice again.</li>
 				<li class="tweak">Made Glasgow Syndrome actually work I guess.</li>
@@ -1231,11 +1373,11 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="imageadd">Added missing in-hand sprites for lab mice, plague mice, and mouse ops.</li>
 				<li class="rscadd">Rewrote the vial storage box icon code, and that of its secure version, which now features the reagents contained in the vials.</li>
 				<li class="bugfix">Fixed cult runes not containing pathogen when drawn with pathogen-infected blood.</li>
-				<li class="tweak">Janitor's galoshes are now fully sterile.</li>
+				<li class="tweak">Janitor&#39;s galoshes are now fully sterile.</li>
 				<li class="tweak">You can no longer get infected from passing over a mice while aboard a vehicle.</li>
 				<li class="tweak">Loose Catbeasts are now half as likely to carry a deadly disease (from 10% to 5%). Depending on feedback the chance may be fully removed later.</li>
 				<li class="tweak">Growth dishes from Virology or Cargo can now only spawn with the blood (OABRh) and common (QUV) antibodies.</li>
-				<li class="tweak">When mutating a disease's antigen by incubating it with radium, the new antigen will be picked among a weighted list that no longer includes the X, Y and Z antigen.</li>
+				<li class="tweak">When mutating a disease&#39;s antigen by incubating it with radium, the new antigen will be picked among a weighted list that no longer includes the X, Y and Z antigen.</li>
 				<li class="bugfix">ACTUALLY Fixed dynamic mode roundstart. I swear.</li>
 				<li class="bugfix">Fixed Laboratory Mice not being numbered.</li>
 				<li class="bugfix">Fixed spiky skin syndrome causing infected people to get hurt when checking themselves for injuries.</li>
@@ -1243,7 +1385,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<h3 class="author">GlassEclipse updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Added the black market, for real this time. Barebones for now. Items will be added.</li>
-				<li class="rscadd">To use the black market, obtain an uplink and put money in it. An official one spawns on the bridge, but you can also make a worse ghetto one: (Weld table parts -> Ghetto Ansible) -> (Station bounced radio -> Screwdriver -> Ghetto Ansible -> Wire -> Screwdriver)</li>
+				<li class="rscadd">To use the black market, obtain an uplink and put money in it. An official one spawns on the bridge, but you can also make a worse ghetto one: (Weld table parts -&gt; Ghetto Ansible) -&gt; (Station bounced radio -&gt; Screwdriver -&gt; Ghetto Ansible -&gt; Wire -&gt; Screwdriver)</li>
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1255,7 +1397,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="bugfix">Various Meta Fixes</li>
 				<li class="bugfix">Various Roid Fixes</li>
 				<li class="rscadd">Now EVERY corgi and corgi subtype is a very good boy.</li>
-				<li class="rscadd">Meta Tweaks you probably won't even notice!</li>
+				<li class="rscadd">Meta Tweaks you probably won&#39;t even notice!</li>
 			</ul>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
@@ -1265,13 +1407,13 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">PaulRitter updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Powercreeper, a kudzu-like plant that generates power. I wouldn't go near it though, seems deadly. It is incredibly weak to EMPs, but can withstand the worst of your plantkillers</li>
+				<li class="rscadd">Powercreeper, a kudzu-like plant that generates power. I wouldn&#39;t go near it though, seems deadly. It is incredibly weak to EMPs, but can withstand the worst of your plantkillers</li>
 				<li class="rscadd">Adds a powercreeper packet which creates a powercreep vine. Obtainable over the traitor uplink and discounted for Botanists, Engis and the CE.</li>
 				<li class="rscadd">Adds a random event with the same chance as kudzu that spawns the powercreeper somewhere. But be careful, it will not be announced!</li>
 			</ul>
 			<h3 class="author">SirSkeleto updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Hivehand stingers from 10 -> 15 toxin damage</li>
+				<li class="tweak">Hivehand stingers from 10 -&gt; 15 toxin damage</li>
 			</ul>
 			<h3 class="author">Sjhonkster updated:</h3>
 			<ul class="changes bgimages16">
@@ -1292,12 +1434,12 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">ancientpower updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">Admins can no longer crash the server by setting a controlled singulo's vote cooldown to 0.</li>
+				<li class="bugfix">Admins can no longer crash the server by setting a controlled singulo&#39;s vote cooldown to 0.</li>
 			</ul>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Box was slightly changed, you might notice a difference.</li>
-				<li class="tweak">Regeneration superpower no longer makes you hungry faster, and now it gives a bit more blood by default when you don't have enough. It also no longer consumes more iron and nutriment, meaning you get more bang for your buck. You also start regenerating at a higher threshold (50 damage).</li>
+				<li class="tweak">Regeneration superpower no longer makes you hungry faster, and now it gives a bit more blood by default when you don&#39;t have enough. It also no longer consumes more iron and nutriment, meaning you get more bang for your buck. You also start regenerating at a higher threshold (50 damage).</li>
 				<li class="tweak">Meat cleaver ignores 50 armor</li>
 			</ul>
 			<h3 class="author">jknpj updated:</h3>
@@ -1308,7 +1450,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">Using an eyepatch in-hand will switch the side it is worn on.</li>
 			</ul>
-
 			<h2 class="date">2019.07.14</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1317,9 +1458,8 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">bathosbathtime updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscdel">reverted "friendly Cultist Cyborgs"</li>
+				<li class="rscdel">reverted &#34;friendly Cultist Cyborgs&#34;</li>
 			</ul>
-
 			<h2 class="date">2019.07.13</h2>
 			<h3 class="author">DamianX updated:</h3>
 			<ul class="changes bgimages16">
@@ -1333,7 +1473,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">Under the hood roid tweaks, but the teleporter looks a bit different...</li>
 			</ul>
-
 			<h2 class="date">2019.07.12</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1341,13 +1480,12 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">GlassEclipse updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Less than legitimate forces in your sector have learned how to build black market uplinks. They don't offer any goods for sale yet.</li>
+				<li class="rscadd">Less than legitimate forces in your sector have learned how to build black market uplinks. They don&#39;t offer any goods for sale yet.</li>
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Fixed a typo!</li>
 			</ul>
-
 			<h2 class="date">2019.07.11</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1357,8 +1495,8 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">The round end scoreboard now indicates which disease was spread the most, as well as its symptoms.</li>
 				<li class="rscadd">Ghosts can now use the pathogen HUD</li>
 				<li class="rscadd">Cats no longer chase mice while dead or uncounscious. Let them rest in peace.</li>
-				<li class="rscadd">Mucus or Sputum caused by Coldingtons and Respiratory Putrefaction now only spawn if the mob is on top of a turf (so mice in vents won't spawn any). That should curb the amount of mucus spawning all around the station.</li>
-				<li class="rscadd">Nanomed plus now has 8 vials to dispense. With the 6 in virology and the 6 in Chemistry that's 20 vials in medbay.</li>
+				<li class="rscadd">Mucus or Sputum caused by Coldingtons and Respiratory Putrefaction now only spawn if the mob is on top of a turf (so mice in vents won&#39;t spawn any). That should curb the amount of mucus spawning all around the station.</li>
+				<li class="rscadd">Nanomed plus now has 8 vials to dispense. With the 6 in virology and the 6 in Chemistry that&#39;s 20 vials in medbay.</li>
 				<li class="bugfix">Fixed blank vaccines sometimes mysteriously already containing antigen brewed in other vaccines someplace else.</li>
 				<li class="bugfix">Fixed Observer Pathogen HUD not properly updating when disease is getting removed from items and mobs.</li>
 				<li class="bugfix">Fixed Plague Mice Invasion ruleset only spawning one mouse instead of up to five.</li>
@@ -1369,43 +1507,41 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">Corn Oil exists again</li>
 				<li class="rscadd">The Janitor Cargo Crate has mousetraps now.</li>
 			</ul>
-
 			<h2 class="date">2019.07.10</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">The round end scoreboard will now add and remove points from the crew score based on how many beneficial or harmful diseases are loose in living mobs.</li>
-				<li class="tweak">Plague Mice Invasion event only considers mobs as "still infected" on the round end scoreboard if they're still alive.</li>
-				<li class="bugfix">maybe fixed a bug that caused medical HUDs to display the ill status even though the disease hasn't been added to the database.</li>
-				<li class="rscadd">humans turning into zombies upon death keep their diseases, which may then transmit to their meat. (zombies themselves can't spread their diseases for now, more to that later)</li>
+				<li class="tweak">Plague Mice Invasion event only considers mobs as &#34;still infected&#34; on the round end scoreboard if they&#39;re still alive.</li>
+				<li class="bugfix">maybe fixed a bug that caused medical HUDs to display the ill status even though the disease hasn&#39;t been added to the database.</li>
+				<li class="rscadd">humans turning into zombies upon death keep their diseases, which may then transmit to their meat. (zombies themselves can&#39;t spread their diseases for now, more to that later)</li>
 				<li class="rscadd">mice in small cages get a similar buff to antipathogenic efficiency that other mobs get when they rest in a bed.</li>
-				<li class="rscadd">Admin Diseases Panel now indicate the disease's nickname if there's one</li>
+				<li class="rscadd">Admin Diseases Panel now indicate the disease&#39;s nickname if there&#39;s one</li>
 				<li class="rscadd">Admin Diseases Panel is now accessible from the Admin tab instead of Debug.</li>
 			</ul>
 			<h3 class="author">PaulRitter updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">reworked the instrument ui a bit more</li>
 			</ul>
-
 			<h2 class="date">2019.07.09</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="experiment">Viro has been completely rewritten! The implications are huge so I'll try to organize the changelog with information relevant to most players at the top.</li>
+				<li class="experiment">Viro has been completely rewritten! The implications are huge so I&#39;ll try to organize the changelog with information relevant to most players at the top.</li>
 				<li class="rscadd">All medbays now feature a bookcase full of medical manuals, including the brand new Virology guide, and an Encyclopedia of all disease symptoms. This Encyclopedia automatically updates itself as new symptoms are added in the code.</li>
 				<li class="rscadd">For the time being Virologists will spawn holding the new Virology guide manual, this manual may also be found in Virology itself. If you play Virologist, give it a read. If you just want to know how to cure diseases in the heat of the moment, the first chapter is a step by step crash course for you.</li>
 				<li class="rscadd">You may now use an Health Analyser on any living being to check whether they are carrying some pathogen.</li>
 				<li class="rscadd">New players have a 10% chance of spawning with a weak and mostly harmless disease. Those can be easily cured with 5u spaceacillin.</li>
 				<li class="rscadd">Mice that spawn in maint have a 20% chance of carrying a disease. Said disease is never airborne, but is notably more dangerous than those that humans can spawn with.</li>
-				<li class="rscadd">Minor and Major viral outbreaks have been reworked. Both will instantly infect 10% of the station's crew with the same pathogen, so if an individual is cure, it'll be relatively easy to cure the rest. Major outbreaks however are likely to carry dangerous pathogen.</li>
-				<li class="rscadd">Poisoned Syndi meat pizza has been "fixed". It previously spawned filled with infected AB+ blood, which means that only crewmembers of AB+ blood type could actually get infected.</li>
-				<li class="rscadd">When getting attacked by blob or blob spores, you may get infected with a new type of pathogen that's single stage and doesn't do anything on its own. If you die while infected, you'll spawn some blob tiles around you. The longer you've been infected, the more tiles you'll spawn, even spawning a node after 5 minutes. Blob spores that die also leave a pathogenic cloud behind them, so be sure to wear a hardsuit or some sterile equipment when fighting the blob up close, and get checked at medbay after the threat has been dealt with. This symptom may be exploited to created blob walls of specific shape.</li>
+				<li class="rscadd">Minor and Major viral outbreaks have been reworked. Both will instantly infect 10% of the station&#39;s crew with the same pathogen, so if an individual is cure, it&#39;ll be relatively easy to cure the rest. Major outbreaks however are likely to carry dangerous pathogen.</li>
+				<li class="rscadd">Poisoned Syndi meat pizza has been &#34;fixed&#34;. It previously spawned filled with infected AB+ blood, which means that only crewmembers of AB+ blood type could actually get infected.</li>
+				<li class="rscadd">When getting attacked by blob or blob spores, you may get infected with a new type of pathogen that&#39;s single stage and doesn&#39;t do anything on its own. If you die while infected, you&#39;ll spawn some blob tiles around you. The longer you&#39;ve been infected, the more tiles you&#39;ll spawn, even spawning a node after 5 minutes. Blob spores that die also leave a pathogenic cloud behind them, so be sure to wear a hardsuit or some sterile equipment when fighting the blob up close, and get checked at medbay after the threat has been dealt with. This symptom may be exploited to created blob walls of specific shape.</li>
 				<li class="rscadd">Loose Catbeasts that arrive on the station are carriers of not one but TWO dangerous diseases! Be careful when hunting them down. As the catbeast yourself, you may try to acquire and drink some milk and some water to cause your diseases to progress faster.</li>
 				<li class="rscadd">Added a new midround ruleset that may proc if there are at least two Medical Doctors, or CMO, or Virologist. Plague Mice Invasion. A group of 1 to 5 mice infected with a dangerous Bacteria appear on the station and try to spread their disease to as many mobs as possible while the crew tries to stomp them and cure their disease. Enable Minor Roles to be allowed for candidacy.</li>
 				<li class="rscadd">Urn and Bowls found in Xenoarchaeology now have a chance of containing some blood infected with a disease. Such diseases tend to have generally helpful symptoms.</li>
 				<li class="rscadd">Large Xenoarchaeolgy artifacts have a new potential effect that causes them to release pathogenic clouds carrying a disease of random dangerosity.</li>
 				<li class="rscadd">Given admins some tools to easily create highly customized diseases, essentially letting them control every aspect of the disease and its effects. They may even give the disease up to 100 stages but then setting up each stage might becomes a chore. Said disease may be inoculated inside a mob, or spawned inside a growth dish.</li>
-				<li class="rscadd">Admins also now have a panel that displays every disease currently in the world and where they came from, who's infected by it, what items are infected by it, which growth dish contains them, and whether they're in the database or not (which admins can actually toggle).</li>
+				<li class="rscadd">Admins also now have a panel that displays every disease currently in the world and where they came from, who&#39;s infected by it, what items are infected by it, which growth dish contains them, and whether they&#39;re in the database or not (which admins can actually toggle).</li>
 				<li class="rscadd">Growth dishes now have their appearance depend on the disease in them. with a random color and a random pattern of a random color. Major mutations may cause a variation in color.</li>
-				<li class="rscadd">The Pathogen database now lists mutated pathogen as children of the original pathogen, making archiving sensibly easier. Pathogen may also now be given a nickname instead of a name. Said nickname will appear when the disease is analyzed in a mob or on the Medical HUD. You may also change the disease's dangerosity from Undetermined to Safe or Dangerous, which will change the appearance of the Status icon that appears on the Medical HUD.</li>
+				<li class="rscadd">The Pathogen database now lists mutated pathogen as children of the original pathogen, making archiving sensibly easier. Pathogen may also now be given a nickname instead of a name. Said nickname will appear when the disease is analyzed in a mob or on the Medical HUD. You may also change the disease&#39;s dangerosity from Undetermined to Safe or Dangerous, which will change the appearance of the Status icon that appears on the Medical HUD.</li>
 				<li class="rscadd">If wearing a Medical PDA with its health scanner activated, the PDA will tell its owner if they suddenly got infected with a disease.</li>
 				<li class="rscadd">Wizarditis has been ported to virus2 at long last, and has been reworked to be more !!fun!!. After being infected for a while, you will start shouting random spells, but unlike the old version, each spell you randomly shout will actually be cast! Thankfully the proc chance is reasonably low.</li>
 				<li class="rscadd">All symptoms now have a Danger value that ranges like so. 0 for helpful. 1 for flavor text. 2 for annoying. 3 for hindrance. 4 for harmful. 5 for deadly.</li>
@@ -1420,12 +1556,12 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">All items (and most importantly, clothing) have a sterility variable that indicates their chance to not get infected (or protect their wearer from infection).</li>
 				<li class="rscadd">The antibody scanner has been reworked and is now called the immunity scanner. It can be used on any item to get their sterility value, or any living mob to get an analysis of their immune system.</li>
 				<li class="rscadd">When touching or hitting someone, the checks for infection are done depending on which body part enters in contact. (for example, when shaking hands, both hands are checked, but when patting a head, your hands are checked along with the head being patted. Only one side has to succeed in a sterility check to prevent infection).</li>
-				<li class="rscadd">Similar checks are performed when a mob bumps into another mob. When bumping into someone, you hands are checked against the other's torso. However if bumping into a tiny mob, such as a mouse, your feet are the ones checked.</li>
-				<li class="rscadd">Due to how items can get infected if they aren't sterile, keep that in mind when hitting someone or performing surgery. Science goggles can easily reveal infected items.</li>
+				<li class="rscadd">Similar checks are performed when a mob bumps into another mob. When bumping into someone, you hands are checked against the other&#39;s torso. However if bumping into a tiny mob, such as a mouse, your feet are the ones checked.</li>
+				<li class="rscadd">Due to how items can get infected if they aren&#39;t sterile, keep that in mind when hitting someone or performing surgery. Science goggles can easily reveal infected items.</li>
 				<li class="rscadd">Pathogen that can only spread through blood may still spread through contact if both parts checked are bleeding.</li>
-				<li class="rscadd">Also, blood that's been infected with pathogen that spreads through contact may also infect individuals by being splashed upon them.</li>
+				<li class="rscadd">Also, blood that&#39;s been infected with pathogen that spreads through contact may also infect individuals by being splashed upon them.</li>
 				<li class="rscadd">Sterilizine can now be sprayed over items to increase their sterility permanently by 30 points.</li>
-				<li class="rscadd">Airborne pathogen no longer spread instantly to adjacent mobs. Instead whenever a mob infected with an airborne pathogen breathes with its mouth unobstructed and unfiltered, they release a pathogenic cloud that contains all their airborne diseases, and that moves accross the room, further the higher the pathogen's infectability variable is. Another mob may then get infected if they are close to such a cloud when they breath themselves. Mobs breath every 8 seconds on average, and clouds linger for about 10 seconds. Pathogenic clouds do NOT spread through vents, for now at least.</li>
+				<li class="rscadd">Airborne pathogen no longer spread instantly to adjacent mobs. Instead whenever a mob infected with an airborne pathogen breathes with its mouth unobstructed and unfiltered, they release a pathogenic cloud that contains all their airborne diseases, and that moves accross the room, further the higher the pathogen&#39;s infectability variable is. Another mob may then get infected if they are close to such a cloud when they breath themselves. Mobs breath every 8 seconds on average, and clouds linger for about 10 seconds. Pathogenic clouds do NOT spread through vents, for now at least.</li>
 				<li class="rscadd">Monkeys now have Status and Health bars displayed on the Medical HUD. Mice have their Status icon displayed as well.</li>
 				<li class="rscadd">The monkey-sized doctor clothing fully protects its wearer from contracting or spreading diseases.</li>
 				<li class="rscadd">All mice may get infected just as easily as human and monkey, and most symptoms will work on them as well.</li>
@@ -1435,11 +1571,11 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">You may add some reagents to the cage, which will cause the mice in them to start gulping them up. You may also add some food on top of the cage to feed the mice in it.</li>
 				<li class="rscadd">Mice now have a chewing animation which they play whenever they eat or they chew cables.</li>
 				<li class="rscadd">Player-controlled mice may click on mobs to nibble their toes, which may cause contact diseases to spread if contact can be made. If the mob is lying down, they may also try to nibble fingers or ear lobes.</li>
-				<li class="rscadd">Virology now features its own pet mice, of the Balb/c strain. Its name is randomized, but it'll keep company to people in Virology. Don't forget to feed them!</li>
-				<li class="rscadd">Oh right and Virology itself works a lot differently, like, just read the in-game Crash Course in Virology manual, Virologists spawn with it and it can be found in both Medbay's bookcase and Virology itself. All machines have been reworked and mutating and curing diseases is also a bit different so just go read that. It'd really be too long for a changelog.</li>
+				<li class="rscadd">Virology now features its own pet mice, of the Balb/c strain. Its name is randomized, but it&#39;ll keep company to people in Virology. Don&#39;t forget to feed them!</li>
+				<li class="rscadd">Oh right and Virology itself works a lot differently, like, just read the in-game Crash Course in Virology manual, Virologists spawn with it and it can be found in both Medbay&#39;s bookcase and Virology itself. All machines have been reworked and mutating and curing diseases is also a bit different so just go read that. It&#39;d really be too long for a changelog.</li>
 				<li class="rscadd">If you play Medbay YOU SHOULD READ THAT. Or at least the first chapter.</li>
 				<li class="rscadd">Antigen now have rarity. Weak diseases tend to have more easily aquired antigen, while more dangerous diseases have antigen that are harder to obtain before an outbreak.</li>
-				<li class="rscadd">Medbots now detect diseases that are in the database in individuals, and try to inject them with spaceacillin. They may no longer detect old diseases but they didn't do much to help with those anyway.</li>
+				<li class="rscadd">Medbots now detect diseases that are in the database in individuals, and try to inject them with spaceacillin. They may no longer detect old diseases but they didn&#39;t do much to help with those anyway.</li>
 				<li class="rscadd">The green old sadface status icon is still used to indicate individual infected with old diseases, such as appendicitis.</li>
 				<li class="rscadd">Added a Laboratory Mice supply pack to cargo, containing some small cages and also mousecubes. Yeah those are a thing now.</li>
 				<li class="rscadd">All mice now lose half less nutrition by moving and standing, and gain twice more by eating.</li>
@@ -1470,7 +1606,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="bugfix">Fixed a bug where calculated armor could reach values below 0, making damage sources deal even more damage than intended, such as a ninja sword that dealt approx. 90 damage per hit on an unarmored target.</li>
 				<li class="soundadd">Geiger counter now plays a sound when it detects radiation.</li>
 			</ul>
-
 			<h2 class="date">2019.07.08</h2>
 			<h3 class="author">DamianX updated:</h3>
 			<ul class="changes bgimages16">
@@ -1478,7 +1613,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Pale beings in crit now have an overlay applied to them, indicating to everyone that they're in crit. As a reminder, even though they don't fall unconscious, they still take periodic oxygen damage.</li>
+				<li class="tweak">Pale beings in crit now have an overlay applied to them, indicating to everyone that they&#39;re in crit. As a reminder, even though they don&#39;t fall unconscious, they still take periodic oxygen damage.</li>
 				<li class="tweak">Pale beings in crit now take 1 brute damage per second. Unlike oxygen damage, they cannot just heal it through fervor by themselves.</li>
 				<li class="tweak">Pale beings now die at -50 hp instead of -100 hp. This means that a fully charged egun can take an armored pale body down if every shot connects, without having to rely on crit damage over time to finish the job.</li>
 			</ul>
@@ -1497,19 +1632,16 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="tweak">Nanotrasen will notify via the intercept if the station is in the most dangerous area possible.</li>
 				<li class="tweak">Your Dreamseeker window will now flash orange if you are given an admin PM or if a gamemode is looking for candidates.</li>
 			</ul>
-
 			<h2 class="date">2019.07.07</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Cult's weight has been lowered, making it less likely to roll at roundstart.</li>
+				<li class="tweak">Cult&#39;s weight has been lowered, making it less likely to roll at roundstart.</li>
 			</ul>
-
 			<h2 class="date">2019.07.06</h2>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Throw damage is now applied properly instead of not at all.</li>
 			</ul>
-
 			<h2 class="date">2019.07.05</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1531,7 +1663,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">Spellbook looks a bit cooler.</li>
 			</ul>
-
 			<h2 class="date">2019.07.04</h2>
 			<h3 class="author">Arthurdentist updated:</h3>
 			<ul class="changes bgimages16">
@@ -1539,7 +1670,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">You can now aim at lying down mobs with a soul blade's projectiles.</li>
+				<li class="bugfix">You can now aim at lying down mobs with a soul blade&#39;s projectiles.</li>
 			</ul>
 			<h3 class="author">Emilc4h updated:</h3>
 			<ul class="changes bgimages16">
@@ -1582,9 +1713,8 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">plosky1 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Malf AI's weight has been increased, making it more likely to roll at roundstart.</li>
+				<li class="tweak">Malf AI&#39;s weight has been increased, making it more likely to roll at roundstart.</li>
 			</ul>
-
 			<h2 class="date">2019.06.30</h2>
 			<h3 class="author">DamianX updated:</h3>
 			<ul class="changes bgimages16">
@@ -1603,12 +1733,11 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">MOUSE OPS</li>
 			</ul>
-
 			<h2 class="date">2019.06.29</h2>
 			<h3 class="author">DamianX updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">The security records console can be used to set the High Threat status, whereas previously only the secHUD could do it.</li>
-				<li class="tweak">The detective's wooden TV now has its own circuit board, so it no longer turns into a regular console upon rebuilding.</li>
+				<li class="tweak">The detective&#39;s wooden TV now has its own circuit board, so it no longer turns into a regular console upon rebuilding.</li>
 			</ul>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
@@ -1619,26 +1748,22 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">Reduced the delay to rest from 1 second to 0.1 second.</li>
 			</ul>
-
 			<h2 class="date">2019.06.28</h2>
 			<h3 class="author">ShiftyRail updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Changes to crawling. You can now crawl fast for a short duration, with a short cooldown if you do it too fast and too often.</li>
 			</ul>
-
 			<h2 class="date">2019.06.26</h2>
 			<h3 class="author">GeneralVeers25 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Roidstation: Did stuff!</li>
 				<li class="rscdel">Roidstation: did other stuff!</li>
 			</ul>
-
 			<h2 class="date">2019.06.25</h2>
 			<h3 class="author">Allspice updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Creeper vines show under things instead of over now.</li>
 			</ul>
-
 			<h2 class="date">2019.06.23</h2>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
@@ -1657,7 +1782,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">Portable scrubbers now have a gas selection.</li>
 				<li class="rscadd">The Clarke scrubber now has an accessible interface and can be connected to a connector port to drain its contents.</li>
 			</ul>
-
 			<h2 class="date">2019.06.22</h2>
 			<h3 class="author">Arkatos1 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1671,7 +1795,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">Adds cancel button to the first crayon menu.</li>
 			</ul>
-
 			<h2 class="date">2019.06.21</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1683,12 +1806,11 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">dylanstrategie updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Massive increased RPG projectile speed because it's a rocket, you know</li>
+				<li class="rscadd">Massive increased RPG projectile speed because it&#39;s a rocket, you know</li>
 				<li class="rscadd">Meteors will now head for the general center of the station, instead of some random location which previously meant that a good half to two thirds will miss wide. You can thank me later for the Meteors rounds.</li>
 				<li class="tweak">Boxstation map changes. Heavily reworked the new Arrivals northern maintenance. E.V.A maintenance access was worked back in between Solars and Ghetto Bar. Most of the lights were removed to stay in tune with other maintenances. A lot of clutter that got in the way of actually moving down maintenance was moved or culled (both this one and others). The ragecage no longer has 20 blockers including multiple view occluders inside it. Access to Security Hallway was removed in favor of re-adding the window bay</li>
-				<li class="tweak">Slight tweak to other maintenances on Boxstation to streamline movement, align some doors and generally make it -feel- nice. Also the Auxilliary Cyborg Charger window is now shocked, so, you know, don't space it hoping to get free insulated gloves, learn how to hack a fucking door</li>
+				<li class="tweak">Slight tweak to other maintenances on Boxstation to streamline movement, align some doors and generally make it -feel- nice. Also the Auxilliary Cyborg Charger window is now shocked, so, you know, don&#39;t space it hoping to get free insulated gloves, learn how to hack a fucking door</li>
 			</ul>
-
 			<h2 class="date">2019.06.20</h2>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
@@ -1705,10 +1827,9 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">You can now load coins into railguns! Their siemens coefficients matter.</li>
-				<li class="tweak">Railgun power calculations are now linear - you'll need stronger capacitors for actual effects</li>
+				<li class="tweak">Railgun power calculations are now linear - you&#39;ll need stronger capacitors for actual effects</li>
 				<li class="bugfix">you can now actually properly charge and use ultra (T4) capacitors</li>
 			</ul>
-
 			<h2 class="date">2019.06.18</h2>
 			<h3 class="author">I-VAPE-VOX-CLOACA-EVERY-DAY-OF-MY-LIFE updated:</h3>
 			<ul class="changes bgimages16">
@@ -1716,7 +1837,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">ILoveYouuuu updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Adds new "NTT Report Falsifier" traitor item that allows sending a fake Centcomm report.</li>
+				<li class="rscadd">Adds new &#34;NTT Report Falsifier&#34; traitor item that allows sending a fake Centcomm report.</li>
 			</ul>
 			<h3 class="author">MadmanMartian updated:</h3>
 			<ul class="changes bgimages16">
@@ -1729,7 +1850,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">Teleporter generators and teleporter controllers can now be wrenched to move them around.</li>
 				<li class="bugfix">Fixes an unreported bug where tracking implants would not show up as a potential teleport location on teleporters.</li>
 			</ul>
-
 			<h2 class="date">2019.06.17</h2>
 			<h3 class="author">Cisrox updated:</h3>
 			<ul class="changes bgimages16">
@@ -1754,9 +1874,8 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Several stuns have been reduced. Electrode, ebow, shotgun electrode bolt, lube, and clown PDA last 10 seconds, weapons that use "weak bullets" like the mech AC, certain shotguns, and water slips last 6 seconds. Plasma guns had their stun chance removed, and they can no longer stun.</li>
+				<li class="tweak">Several stuns have been reduced. Electrode, ebow, shotgun electrode bolt, lube, and clown PDA last 10 seconds, weapons that use &#34;weak bullets&#34; like the mech AC, certain shotguns, and water slips last 6 seconds. Plasma guns had their stun chance removed, and they can no longer stun.</li>
 			</ul>
-
 			<h2 class="date">2019.06.16</h2>
 			<h3 class="author">BurntDevil updated:</h3>
 			<ul class="changes bgimages16">
@@ -1785,7 +1904,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">brndd updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">borers can now namepick when controlling monkeys, and use borerchat while in control. Borerchat has been moved to :&. Borers no longer brain damage hosts they control.</li>
+				<li class="tweak">borers can now namepick when controlling monkeys, and use borerchat while in control. Borerchat has been moved to :&amp;. Borers no longer brain damage hosts they control.</li>
 				<li class="bugfix">borers can no longer brainjack player-controlled diona nymphs and monkeys</li>
 			</ul>
 			<h3 class="author">dylanstrategie updated:</h3>
@@ -1797,19 +1916,18 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">Added the C28E pipe bomb. A 0, 2, 4 grenade that is sure to get bang for the buck. Comes in boxes of 7 for bulk purchases. Nuclear Operatives exclusive (Demolitions class)</li>
 				<li class="rscadd">Added the Syndicate Mix Syringe. 5 Cyanide, 5 Chloral Hydrate, 5 Lexorin. Deadly, simple, perfect for syringe gun lovers. Comes in boxes of 7 for bulk purchases. Nuclear Operatives exclusive (Medical class)</li>
 				<li class="rscadd">Added the Nikita RC Missile Launcher and PGM Hecate II Anti Material Sniper Rifle kits for Nuclear Operatives. They bost cost 40 points, the former comes with 4 rockets (including the loaded one), the second comes with 8 rounds (plus one loaded) and earmuffs + thermals</li>
-				<li class="tweak">Family name has been updated so you can leave it blank to allow your teammates to random name instead of fixing a name if you don't have a good imagination or don't care to pull a family gimmick. You can also set your own title instead of having one picked for you (literally anything you can type within the normal character limit, or none for STELT)</li>
+				<li class="tweak">Family name has been updated so you can leave it blank to allow your teammates to random name instead of fixing a name if you don&#39;t have a good imagination or don&#39;t care to pull a family gimmick. You can also set your own title instead of having one picked for you (literally anything you can type within the normal character limit, or none for STELT)</li>
 				<li class="tweak">Nuclear Operatives Cyborg cost reduced from 100 to 60. Syndicate Mech cost reduced from 140 to 80. Syndicate Bomb cost reduced from 100 to 25. As a reminder, the Nuclear Ops radio has 80 TC.</li>
-				<li class="tweak">Syndicate Bombs brought from 1, 3, 7 back to their 3, 7, 14 glory. You have to spend TCs to get them now, so it's better they don't explode like a wet fart</li>
+				<li class="tweak">Syndicate Bombs brought from 1, 3, 7 back to their 3, 7, 14 glory. You have to spend TCs to get them now, so it&#39;s better they don&#39;t explode like a wet fart</li>
 				<li class="tweak">Changed grenade launcher code to actually prime the grenade properly and respect the inbuilt timer instead of a fixed 1.5 seconds timer. Also solves insivible grenades issue</li>
-				<li class="rscdel">The three default bombs on the Syndicate Ship have been removed. If you want explosive goodness, you'll have to buy it for 25 a piece</li>
+				<li class="rscdel">The three default bombs on the Syndicate Ship have been removed. If you want explosive goodness, you&#39;ll have to buy it for 25 a piece</li>
 				<li class="soundadd">Syndicate intro will now play if you spawn in as a Nuclear Operative to wake you up</li>
-				<li class="tweak">Touched up the ion storm laws a little bit, should also fix one or two typos for AI's sanities</li>
+				<li class="tweak">Touched up the ion storm laws a little bit, should also fix one or two typos for AI&#39;s sanities</li>
 			</ul>
 			<h3 class="author">unid15 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Blueprints should no longer lag the server when used on large areas (e.g. asteroid)</li>
 			</ul>
-
 			<h2 class="date">2019.06.12</h2>
 			<h3 class="author">DamianX updated:</h3>
 			<ul class="changes bgimages16">
@@ -1821,7 +1939,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">Cult: A bloodstone won't burst in place of the sacrificial altar if the ritual was performed aboard a shuttle.</li>
+				<li class="bugfix">Cult: A bloodstone won&#39;t burst in place of the sacrificial altar if the ritual was performed aboard a shuttle.</li>
 				<li class="bugfix">Cult: The other bloodstones no longer have a chance to spawn on solars.</li>
 				<li class="bugfix">Ok this time I swear the Altar shades should no longer be braindead.</li>
 				<li class="bugfix">Marauders no longer loop the rocket dash animation forever.</li>
@@ -1833,8 +1951,8 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">GlassEclipse updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">Ian's AI has been improved. You can now command him to walk somewhere or follow places (if he feels like it). Pet him enough times and he'll listen to you ALL the time until someone else does the same.</li>
-				<li class="tweak">Ian's costume emotes and barks have been improved.</li>
+				<li class="tweak">Ian&#39;s AI has been improved. You can now command him to walk somewhere or follow places (if he feels like it). Pet him enough times and he&#39;ll listen to you ALL the time until someone else does the same.</li>
+				<li class="tweak">Ian&#39;s costume emotes and barks have been improved.</li>
 			</ul>
 			<h3 class="author">I-SNORT-XENOMORPH-ACID-OCCASIONALLY updated:</h3>
 			<ul class="changes bgimages16">
@@ -1844,8 +1962,8 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="tweak">All non-vault, non-awaymission mobs can now be pacified (with a few exceptions like mechahitler and aliens).</li>
 				<li class="bugfix">Fixed pill crushing and pill IV drips.</li>
-				<li class="tweak">People will now only see you crush pills into drink glasses etc. if they're within 2 tiles, rather than anywhere on screen.</li>
-				<li class="rscdel">Removed the 'make empty pills' button from chemmasters, since it was buggy and taking up space and let's be honest you can just make 0.1u water pills for the same effect.</li>
+				<li class="tweak">People will now only see you crush pills into drink glasses etc. if they&#39;re within 2 tiles, rather than anywhere on screen.</li>
+				<li class="rscdel">Removed the &#39;make empty pills&#39; button from chemmasters, since it was buggy and taking up space and let&#39;s be honest you can just make 0.1u water pills for the same effect.</li>
 				<li class="rscadd">Added the Mad Scientist Megaphone, purchasable for 1 TC. It can mask your voice and transmit (but not receive) into any radio channel, so you can let your demands be known.</li>
 				<li class="tweak">Megaphones now work passively as you speak rather than have a textbox.</li>
 			</ul>
@@ -1865,11 +1983,11 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<h3 class="author">Kurfursten updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixed a bug where any blast door could be opened by throwing any item at it (including, for example, the borer pen with borer eggs)</li>
-				<li class="bugfix">Ian will no longer B or C in the presence of food. We don't know what that emote means either.</li>
+				<li class="bugfix">Ian will no longer B or C in the presence of food. We don&#39;t know what that emote means either.</li>
 			</ul>
 			<h3 class="author">Lokiamis updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Added a collection plate to the chaplain's PietyVend</li>
+				<li class="rscadd">Added a collection plate to the chaplain&#39;s PietyVend</li>
 			</ul>
 			<h3 class="author">Pomf123 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1878,20 +1996,20 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<h3 class="author">Sauberstaub updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Cyber Trophy Belt can now hold severed heads.</li>
-				<li class="bugfix">Fixed Uzi turning "invisible" (missing sprites) when loaded with the extended mag.</li>
+				<li class="bugfix">Fixed Uzi turning &#34;invisible&#34; (missing sprites) when loaded with the extended mag.</li>
 				<li class="bugfix">Fixed Mini-Uzi missing sprites.</li>
 				<li class="rscadd">Alt-clicking the Sound Synth now opens the sound selection menu.</li>
 			</ul>
 			<h3 class="author">ShiftyRail updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">Head revolutionaries can again convert through normal flashes. They "activate" the flash by clicking on it while it is in their hand. Only the user can see the change.</li>
+				<li class="bugfix">Head revolutionaries can again convert through normal flashes. They &#34;activate&#34; the flash by clicking on it while it is in their hand. Only the user can see the change.</li>
 				<li class="tweak">Cult now requires at least two enemies to fire.</li>
 				<li class="rscadd">Added plasma glass tables!</li>
-				<li class="tweak">You can now resist to unbuckle, even if you're not cuffed.</li>
+				<li class="tweak">You can now resist to unbuckle, even if you&#39;re not cuffed.</li>
 			</ul>
 			<h3 class="author">SirSkeleto updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">makes "no beaker loaded" red instead of orange on the cryo UI</li>
+				<li class="tweak">makes &#34;no beaker loaded&#34; red instead of orange on the cryo UI</li>
 			</ul>
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
@@ -1906,9 +2024,9 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">ancientpower updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Slime Humans can now choose (facial) "hair" styles.</li>
-				<li class="imageadd">Four unique "hair" styles for slime people.</li>
-				<li class="tweak">"Evolved Slime" race added to whitelist for Bald and Shaved styles.</li>
+				<li class="rscadd">Slime Humans can now choose (facial) &#34;hair&#34; styles.</li>
+				<li class="imageadd">Four unique &#34;hair&#34; styles for slime people.</li>
+				<li class="tweak">&#34;Evolved Slime&#34; race added to whitelist for Bald and Shaved styles.</li>
 				<li class="tweak">Fixed a few oddities with the body icons for slime humans.</li>
 				<li class="rscadd">Nuclear Assault team leaders can now choose to declare their presence and trigger the nukesquad playlist.</li>
 				<li class="bugfix">The nuke ops sound button now actually works.</li>
@@ -1933,22 +2051,19 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixed implanters not working</li>
 			</ul>
-
 			<h2 class="date">2019.06.01</h2>
 			<h3 class="author">SonixApache updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Space ninjas now get about two minutes of space protection.</li>
 			</ul>
-
 			<h2 class="date">2019.05.30</h2>
 			<h3 class="author">ShiftyRail updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Blessed turfs now have a short looping animation to indicate that they're blessed. Blessing a turf lasts 8 minutes, and you can use the mop to "un-bless" the turf.</li>
+				<li class="rscadd">Blessed turfs now have a short looping animation to indicate that they&#39;re blessed. Blessing a turf lasts 8 minutes, and you can use the mop to &#34;un-bless&#34; the turf.</li>
 				<li class="tweak">Low blood vampires will no longer be impeded by holy artifacts, mature vamps will have their powers countered by holy artifacts, and powerful vampires will have their spells thrown back at them.</li>
 				<li class="tweak">Vampires can see who is wielding a null rod from a distance.</li>
 				<li class="tweak">Powerful vampires will have their powers nullified on blessed grounds, even if the ground is on the dark.</li>
 			</ul>
-
 			<h2 class="date">2019.05.28</h2>
 			<h3 class="author">DDihanov updated:</h3>
 			<ul class="changes bgimages16">
@@ -1967,7 +2082,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<h3 class="author">I-VAPE-VOX-CLOACA-EVERY-DAY-OF-MY-LIFE updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Soldering the Cargo Supply Console board will remove the access requirement to approve/deny orders and to call/return the supply shuttle.</li>
-				<li class="tweak">ROGANbot now has a 0.6 second cooldown. Please stop abusing it to destroy people's eardrums, this is why we can't have nice things.</li>
+				<li class="tweak">ROGANbot now has a 0.6 second cooldown. Please stop abusing it to destroy people&#39;s eardrums, this is why we can&#39;t have nice things.</li>
 			</ul>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1977,7 +2092,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">Pomf123 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="bugfix">Admin's stop all media verb now properly stops admin music from the local or global sound verb.</li>
+				<li class="bugfix">Admin&#39;s stop all media verb now properly stops admin music from the local or global sound verb.</li>
 				<li class="rscadd">Players now have again the verb in OOC tab Stop Admin Music to stop any admin music playing.</li>
 			</ul>
 			<h3 class="author">SonixApache updated:</h3>
@@ -1991,13 +2106,12 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="spellcheck">Changed every instance of "wizmobile" in the code to "firebird". This will not impact gameplay.</li>
+				<li class="spellcheck">Changed every instance of &#34;wizmobile&#34; in the code to &#34;firebird&#34;. This will not impact gameplay.</li>
 			</ul>
 			<h3 class="author">dylanstrategie updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Added the full Inquisitor set to the premium items in the Chaplain's PietyVend vending machine.</li>
+				<li class="rscadd">Added the full Inquisitor set to the premium items in the Chaplain&#39;s PietyVend vending machine.</li>
 			</ul>
-
 			<h2 class="date">2019.05.21</h2>
 			<h3 class="author">Allspice updated:</h3>
 			<ul class="changes bgimages16">
@@ -2018,7 +2132,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="tweak">The Disorient spell now has an empowered variant that flips the target's view of reality for 30 seconds, for further debilitation.</li>
+				<li class="tweak">The Disorient spell now has an empowered variant that flips the target&#39;s view of reality for 30 seconds, for further debilitation.</li>
 			</ul>
 			<h3 class="author">brndd updated:</h3>
 			<ul class="changes bgimages16">
@@ -2033,123 +2147,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			</ul>
 			<h3 class="author">plosky1 updated:</h3>
 			<ul class="changes bgimages16">
-				<li class="rscadd">Added two missing distro pipes to make vent work in maint above detective's office.</li>
-			</ul>
-
-			<h2 class="date">2019.05.20</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Hopefully Actually Finally fixed the mindless shade bug for good.</li>
-			</ul>
-			<h3 class="author">Kharkov72 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Removes camera in deff ghetto bar.</li>
-			</ul>
-			<h3 class="author">brndd updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">gas mixers and filters now have properly have a 100 l/s throughput like gas pumps and volume pumps do.</li>
-			</ul>
-
-			<h2 class="date">2019.05.19</h2>
-			<h3 class="author">Kharkov72 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Deff Maint has expanded, and now has a connection to the bar.</li>
-			</ul>
-
-			<h2 class="date">2019.05.18</h2>
-			<h3 class="author">DDihanov updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">'Make everyone traitors' now properly announces their objectives, PDA code and gives them notes.</li>
-			</ul>
-			<h3 class="author">Kharkov72 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Deff bridge now has floors under all windows.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">If someone uses a camera console you're currently sitting at, you will no longer have your view cancelled.</li>
-			</ul>
-			<h3 class="author">otatoh updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The cameras in the AI core, AI upload, bridge, captain's office, and armory are now unable to be broken at roundstart.</li>
-			</ul>
-
-			<h2 class="date">2019.05.17</h2>
-			<h3 class="author">DDihanov updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Can now vent crawl with double click as well as alt click</li>
-			</ul>
-			<h3 class="author">Kharkov72 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Updates castle to modern box standards.</li>
-			</ul>
-			<h3 class="author">brndd updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">MoMMI blueprints and construction permits can now delete the areas they create (but not any pre-existing areas on the station)</li>
-			</ul>
-
-			<h2 class="date">2019.05.16</h2>
-			<h3 class="author">Allspice updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Hopefully no more multicultist suicide parties around Summon Building runes.</li>
-			</ul>
-			<h3 class="author">DrSnips updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added holocandles to the pietyvend. You need a coin to buy them.</li>
-			</ul>
-			<h3 class="author">I-VAPE-VOX-CLOACA-EVERY-DAY-OF-MY-LIFE updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Discount Dan choco has 8 uranium, up from 4</li>
-			</ul>
-			<h3 class="author">RealestEstate updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Autodrobe now dispenses a red suit and hat</li>
-				<li class="rscadd">Autodrobe also now dispenses a poncho</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Shields, reactive teleport armor, and eswords, will no longer protect you from thrown bolas.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscdel">Non-ninjas can no longer use energy katanas.</li>
-			</ul>
-			<h3 class="author">aceedex updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">A new version of the plasma cutter has been added. You'll need a modkit from research to make it</li>
-				<li class="tweak">The old plasma cutter has been renamed to a plasma torch</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The reactive armor from R&D no longer slows you down when worn.</li>
-			</ul>
-			<h3 class="author">brndd updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Scrubbers now respect their pressure limit when scrubbing.</li>
-				<li class="bugfix">Vents can no longer drain the entire station of all its air in less than ten seconds.</li>
-				<li class="bugfix">Passive vents now function like one would expect them to, balancing the external and internal pressure.</li>
-				<li class="tweak">Gas pump formula was fixed, making them about 3 orders of magnitude better under the conditions where they used to be garbage (such as the distro gas pump in atmospherics). This basically gives them parity with volume pumps under optimal conditions.</li>
-				<li class="tweak">Passive gates now function like one-way check valves, letting gas pass from input to output if input is higher pressure, but never from output to input. In practice you can no longer define their output pressure, but they also have no upper output pressure bound.</li>
-				<li class="bugfix">valves now play their animation when alt-clicked, borgs can no longer use manual valves by alt-clicking them, valves now get fingerprints when alt-clicked.</li>
-				<li class="tweak">The big (usually red) air tanks found eg. outside the ghetto bar on box can now be unanchored with a wrench, deconstructed with a welder (when unanchored), and constructed using 5 metal plates. They now also have slightly more volume and almost twice the pressure (4500 kPa, up from 2500).</li>
-			</ul>
-
-			<h2 class="date">2019.05.15</h2>
-			<h3 class="author">GeneralVeers25 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Defficiency now has an art room and a new, remodeled theater.</li>
-				<li class="rscadd">Deff Theater Storage now has proper lighting.</li>
-			</ul>
-
-			<h2 class="date">2019.05.14</h2>
-			<h3 class="author">Kharkov72 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Box Server Room is now equipped to actually function.</li>
-			</ul>
-			<h3 class="author">brndd updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Silicons can now use air alarms again</li>
-				<li class="bugfix">cyborgs and MoMMIs can now use air alarms through the Central Atmospherics Computer again</li>
+				<li class="rscadd">Added two missing distro pipes to make vent work in maint above detective&#39;s office.</li>
 			</ul>
 		</div>
 		<!--

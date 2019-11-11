@@ -464,9 +464,11 @@ var/list/ai_list = list()
 			else
 				to_chat(src, "<span class='notice'>Unable to locate the holopad.</span>")
 
+	#ifndef DISABLE_VOX
 	if(href_list["say_word"])
 		play_vox_word(href_list["say_word"], vox_voice, null, src)
 		return
+	#endif
 
 	if(href_list["track"])
 		var/mob/target = locate(href_list["track"]) in mob_list
@@ -499,6 +501,7 @@ var/list/ai_list = list()
 			A.open_nearest_door(target)
 		return
 
+	#ifndef DISABLE_VOX
 	// set_voice=(fem|mas) - Sets VOX voicepack.
 	if(href_list["set_voice"])
 		// Never trust the client.
@@ -517,6 +520,7 @@ var/list/ai_list = list()
 		if(announcement_checks())
 			play_announcement(href_list["play_announcement"])
 		return
+	#endif
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)

@@ -24,6 +24,10 @@
 /obj/machinery/door/unpowered/attack_hand(mob/user as mob)
 	if(istype(user,/mob/dead/observer))
 		return
+
+	if(locked)
+		return
+		
 	..()
 
 /obj/machinery/door/unpowered/shuttle

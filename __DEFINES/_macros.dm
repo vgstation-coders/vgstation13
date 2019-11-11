@@ -198,9 +198,11 @@
 
 #define isclient(A) (istype(A, /client))
 
-#define isatom(A) (istype(A, /atom))
+#define isatom(A) isloc(A)
 
-#define isatommovable(A) (istype(A, /atom/movable))
+#if DM_VERSION < 513
+#define ismovable(A) (istype(A, /atom/movable))
+#endif
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
@@ -225,6 +227,8 @@
 #define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
 
 #define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
+
+#define isbelt(O) (istype(O, /obj/item/weapon/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
 
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
 

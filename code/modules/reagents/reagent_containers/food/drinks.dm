@@ -895,6 +895,16 @@
 	..()
 	reagents.add_reagent(CAFE_LATTE, 50)
 
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee
+	name = "HOSS Rainbow Donut Blend"
+	desc = "All the essentials, for on the go."
+	icon_state = "cannedcopcoffee"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee/New()
+	..()
+	reagents.add_reagent(SECCOFFEE, 50)
+
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear
 	name = "bear arms beer"
 	desc = "Crack open a bear at the end of a long shift."
@@ -1134,6 +1144,72 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle/tequila/New()
 	..()
 	reagents.add_reagent(TEQUILA, 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/bluecuracao
+	name = "Bluespace Curacao"
+	desc = "This is either Blue Curacao, or window cleaner. Take a sip and find out."
+	icon_state = "bluecuracaobottle"
+	vending_cat = "spirits"
+	isGlass = 1
+	molotov = -1
+/obj/item/weapon/reagent_containers/food/drinks/bottle/bluecuracao/New()
+	..()
+	reagents.add_reagent(BLUECURACAO, 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/bitters
+	name = "Wizard's Bitters"
+	desc = "Named for it's seemingly magical ability to take the place of any variety of bitters. Abracadabra, Angostura!"
+	icon_state = "bittersbottle"
+	vending_cat = "spirits"
+	isGlass = 1
+	molotov = -1
+/obj/item/weapon/reagent_containers/food/drinks/bottle/bitters/New()
+	..()
+	reagents.add_reagent(BITTERS, 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/triplesec
+	name = "Cufftreau Triple Sec"
+	desc = "Named for what'll be wrapped around your wrists by the end of the night if you keep drinking like this."
+	icon_state = "triplesecbottle"
+	vending_cat = "spirits"
+	isGlass = 1
+	molotov = -1
+/obj/item/weapon/reagent_containers/food/drinks/bottle/triplesec/New()
+	..()
+	reagents.add_reagent(TRIPLESEC, 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/schnapps
+	name = "All-in-One Fancy Space Schnapps"
+	desc = "For when you can't be bothered to stock a dozen varieties of Schnapps - just don't complain when it doesn't taste quite right."
+	icon_state = "schnappsbottle"
+	vending_cat = "spirits"
+	isGlass = 1
+	molotov = -1
+/obj/item/weapon/reagent_containers/food/drinks/bottle/schnapps/New()
+	..()
+	reagents.add_reagent(SCHNAPPS, 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/champagne
+	name = "Captain's Finest Champagne"
+	desc = "A premium brand of champagne, intended for only the most discerning of tastes - for Captains, by Captains."
+	icon_state = "champagnebottle"
+	vending_cat = "fermented"
+	isGlass = 1
+	molotov = -1
+/obj/item/weapon/reagent_containers/food/drinks/bottle/champagne/New()
+	..()
+	reagents.add_reagent(CHAMPAGNE, 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/fireballwhisky
+	name = "Oni Soma's Fireball Whisky"
+	desc = "A cinnamon flavored Whisky - without the E - favored by cheap drunks with no taste buds."
+	icon_state = "fireballwhiskybottle"
+	vending_cat = "spirits"
+	isGlass = 1
+	molotov = -1
+/obj/item/weapon/reagent_containers/food/drinks/bottle/fireballwhisky/New()
+	..()
+	reagents.add_reagent(CINNAMONWHISKY, 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing
 	name = "Bottle of Nothing"

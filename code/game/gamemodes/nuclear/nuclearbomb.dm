@@ -7,14 +7,14 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "nuclearbomb0"
 	density = 1
-	var/deployable = 0.0
-	var/extended = 0.0
-	var/timeleft = 60.0
-	var/timing = 0.0
+	var/deployable = 0
+	var/extended = 0
+	var/timeleft = 60 //This is a value in seconds, deciseconds will be deducted
+	var/timing = 0
 	var/r_code = "ADMIN"
 	var/code = ""
-	var/yes_code = 0.0
-	var/safety = 1.0
+	var/yes_code = 0
+	var/safety = 1
 	var/obj/item/weapon/disk/nuclear/auth = null
 	var/removal_stage = 0 // 0 is no removal, 1 is covers removed, 2 is covers open,
 	                      // 3 is sealant open, 4 is unwrenched, 5 is removed from bolts.
@@ -23,18 +23,17 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb/New()
 	..()
-	r_code = "[rand(10000, 99999.0)]"//Creates a random code upon object spawn.
+	r_code = "[rand(10000, 99999)]"//Creates a random code upon object spawn.
 
 /obj/machinery/nuclearbomb/process()
-	if (src.timing)
+	if(timing)
 		bomb_set = 1 //So long as there is one nuke timing, it means one nuke is armed.
-		src.timeleft--
-		if (src.timeleft <= 0)
+		timeleft -= SS_WAIT_MACHINERY / (1 SECONDS) //Machinery does NOT tick every 10 ms. Divided by ten to convert into seconds
+		if(timeleft <= 0)
 			explode()
 		for(var/mob/M in viewers(1, src))
-			if ((M.client && M.machine == src))
-				src.attack_hand(M)
-	return
+			if((M.client && M.machine == src))
+				attack_hand(M)
 
 /obj/machinery/nuclearbomb/attackby(obj/item/weapon/O as obj, mob/user as mob)
 	if (src.extended)

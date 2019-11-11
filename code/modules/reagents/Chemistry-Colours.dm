@@ -65,3 +65,12 @@
 				highest_quantity = new_reag
 				DG.name = "[glassormug] of [reagent.name]"
 				DG.desc = reagent.description
+
+/proc/get_weighted_reagent_color(var/datum/reagents/V)
+	var/list/colors = list(0,0,0)
+	var/totalvolume = V.total_volume
+	for(var/datum/reagent/R in V.reagent_list)
+		colors[1] += (GetRedPart(R.color) * (R.volume / totalvolume))
+		colors[2] += (GetGreenPart(R.color) * (R.volume / totalvolume))
+		colors[3] += (GetBluePart(R.color) * (R.volume / totalvolume))
+	return rgb(colors[1], colors[2], colors[3])
