@@ -29,58 +29,72 @@
 
 /obj/item/toy/waterballoon
 	name = "water balloon"
-	desc = "A translucent balloon. There's nothing in it."
+	desc = "A translucent plastic balloon. Fun for the whole family."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "waterballoon-e"
 	item_state = "balloon-empty"
+	var/max_liquid = 10 //In case of admin fuckery or "fun" balloon subtypes
 
 /obj/item/toy/waterballoon/New()
 	. = ..()
-	create_reagents(10)
+	create_reagents(max_liquid)
+
+/obj/item/toy/waterballoon/examine(mob/user)
+	..()
+	reagents.get_examine(user)
 
 /obj/item/toy/waterballoon/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
 
-/obj/item/toy/waterballoon/afterattack(atom/A as mob|obj, mob/user as mob)
-	if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
-		A.reagents.trans_to(src, 10)
-		to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
-		src.desc = "A translucent balloon with some form of liquid sloshing around in it."
-		src.update_icon()
-	return
+/obj/item/toy/waterballoon/afterattack(atom/A, mob/user, proximity_flag, click_parameters)
+	if(proximity_flag)
+		if(istype(A, /obj/structure/reagent_dispensers/watertank))
+			A.reagents.trans_to(src, max_liquid)
+			user.visible_message("<span class='notice'>[user] fills [src] using [A]</span>",
+			"<span class='notice'>You fill [src] using [A]</span>")
+			update_icon()
+			return
+
+		if(istype(A, /obj/structure/sink))
+			reagents.add_reagent(WATER, max_liquid)
+			user.visible_message("<span class='notice'>[user] fills [src] using [A]</span>",
+			"<span class='notice'>You fill [src] using [A]</span>")
+			update_icon()
+			return
 
 /obj/item/toy/waterballoon/attackby(obj/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/glass))
 		if(O.reagents)
 			if(O.reagents.total_volume < 1)
-				to_chat(user, "The [O] is empty.")
+				to_chat(user, "<span class='warning'>[O] is empty.</span>")
 			else if(O.reagents.total_volume >= 1)
 				if(O.reagents.has_reagent(PACID, 1))
-					to_chat(user, "The acid chews through the balloon!")
+					to_chat(user, "<span class='danger'>The acid chews through the balloon!</span>")
 					O.reagents.reaction(user)
 					qdel(src)
 					return
 				else
-					src.desc = "A translucent balloon with some form of liquid sloshing around in it."
-					to_chat(user, "<span class = 'info'>You fill the balloon with the contents of \the [O].</span>")
-					O.reagents.trans_to(src, 10)
-	src.update_icon()
+					user.visible_message("<span class='notice'>[user] fills [src] using [O]</span>",
+					"<span class='notice'>You fill [src] using [O]</span>")
+					O.reagents.trans_to(src, max_liquid)
+	update_icon()
 	return
 
 /obj/item/toy/waterballoon/throw_impact(atom/hit_atom)
-	if(src.reagents.total_volume >= 1)
-		src.visible_message("<span class = 'danger'>\The [src] bursts!</span>","You hear a pop and a splash.")
-		src.reagents.reaction(get_turf(hit_atom))
+	if(reagents.total_volume >= 1)
+		visible_message("<span class='danger'>[src] bursts and releases a splash of liquid!</span>",,
+		"You hear a pop and a splash.")
+		playsound(src, 'sound/effects/bang.ogg', 25, 1) //A bit brutal for a balloon, but hey
+		reagents.reaction(get_turf(hit_atom))
 		for(var/atom/A in get_turf(hit_atom))
-			src.reagents.reaction(A)
-		src.icon_state = "burst"
+			reagents.reaction(A)
+		icon_state = "burst"
 		spawn(5)
 			if(src)
 				qdel(src)
-	return
 
 /obj/item/toy/waterballoon/update_icon()
-	if(src.reagents.total_volume >= 1)
+	if(reagents.total_volume >= 1)
 		icon_state = "waterballoon"
 		item_state = "balloon"
 	else

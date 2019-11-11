@@ -529,7 +529,8 @@
 	if(anchored == 0)
 		return
 
-	if(istype(O, /obj/item/weapon/mop))
+	//List of items that shouldn't be washed but sink code is dumb dumb aaaaaa
+	if(istype(O, /obj/item/weapon/mop) || istype(O, /obj/item/weapon/extinguisher) || istype(O, /obj/item/toy/waterballoon))
 		return
 
 	if (istype(O, /obj/item/weapon/reagent_containers))
