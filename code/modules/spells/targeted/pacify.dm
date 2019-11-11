@@ -68,8 +68,8 @@
 	src.transform *= (size + 1)
 	for(var/mob/living/M in range(size + 1, src))
 		if(M.reagents)
-			M.reagents.add_reagent(CHILLWAX, 4 + (power + 1 / 2))
-			M.reagents.add_reagent(OXYCODONE, 1 + (power + 1/ 2))
+			M.reagents.add_reagent(CHILLWAX, 4 + (power + 4)/ 2)
+			M.reagents.add_reagent(OXYCODONE, 1 + (power + 1)/ 2)
 	animate(src, alpha = 0, time = 2 SECONDS)
 	spawn(2 SECONDS)
 		T.vis_contents -= src
