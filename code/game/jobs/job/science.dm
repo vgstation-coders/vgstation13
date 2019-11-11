@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 80
 	selection_color = "#ffddff"
 	idtype = /obj/item/weapon/card/id/rd
 	req_admin_notify = 1
@@ -55,6 +56,7 @@
 	total_positions = 5
 	spawn_positions = 3
 	supervisors = "the research director"
+	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
 	access = list(access_robotics, access_rnd, access_tox_storage, access_science, access_xenobiology)
@@ -113,6 +115,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "research director"
+	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
 	access = list(access_robotics, access_tech_storage, access_morgue, access_science, access_rnd) //As a job that handles so many corpses, it makes sense for them to have morgue access.
