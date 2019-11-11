@@ -28,7 +28,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 /obj/machinery/nuclearbomb/process()
 	if(timing)
 		bomb_set = 1 //So long as there is one nuke timing, it means one nuke is armed.
-		timeleft -= SS_WAIT_MACHINERY / 1 SECONDS //Machinery does NOT tick every 10 ms. Divided by ten to convert into seconds
+		timeleft -= SS_WAIT_MACHINERY / (1 SECONDS) //Machinery does NOT tick every 10 ms. Divided by ten to convert into seconds
 		if(timeleft <= 0)
 			explode()
 		for(var/mob/M in viewers(1, src))
