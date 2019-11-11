@@ -126,19 +126,19 @@
 
 /obj/item/weapon/extinguisher/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag)
-		if(istype(target, /obj/structure/reagent_dispensers/watertank))
+		if(istype(target, /obj/structure/reagent_dispensers))
 			var/obj/structure/reagent_dispensers/watertank/tank = target
 			tank.reagents.trans_to(src, max_water)
-			user.visible_message("<span class='notice'>[user] refills [src] using [tank]</span>",
-			"<span class='notice'>You refill [src] using [tank]</span>")
+			user.visible_message("<span class='notice'>[user] refills [src] using [tank].</span>",
+			"<span class='notice'>You refill [src] using [tank].</span>")
 			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 			return
 
 		if(istype(target, /obj/structure/sink))
 			var/obj/structure/sink/sink = target
 			reagents.add_reagent(WATER, max_water)
-			user.visible_message("<span class='notice'>[user] refills [src] using [sink]</span>",
-			"<span class='notice'>You refill [src] using [sink]</span>")
+			user.visible_message("<span class='notice'>[user] refills [src] using [sink].</span>",
+			"<span class='notice'>You refill [src] using [sink].</span>")
 			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 			return
 

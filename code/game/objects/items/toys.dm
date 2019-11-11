@@ -74,8 +74,8 @@
 					qdel(src)
 					return
 				else
-					user.visible_message("<span class='notice'>[user] fills [src] using [O]</span>",
-					"<span class='notice'>You fill [src] using [O]</span>")
+					user.visible_message("<span class='notice'>[user] fills [src] using [O].</span>",
+					"<span class='notice'>You fill [src] using [O].</span>")
 					O.reagents.trans_to(src, max_liquid)
 	update_icon()
 	return
