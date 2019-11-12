@@ -44,6 +44,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/has_been_invisible_sprayed = FALSE
 	var/impactsound
+	var/current_glue_state = GLUE_STATE_NONE
 
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
