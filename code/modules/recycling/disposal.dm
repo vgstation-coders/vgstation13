@@ -62,6 +62,7 @@
 	update_icon()
 
 /obj/machinery/disposal/Destroy()
+	eject()
 	if(trunk)
 		if(trunk.disposal)
 			trunk.disposal = null
@@ -535,10 +536,6 @@
 	add_fingerprint(user)
 	target.forceMove(src)
 	update_icon()
-
-/obj/machinery/disposal/Destroy()
-	eject()
-	..()
 
 // virtual disposal object
 // travels through pipes in lieu of actual items
