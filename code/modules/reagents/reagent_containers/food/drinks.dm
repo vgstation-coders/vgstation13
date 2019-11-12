@@ -1644,7 +1644,7 @@
 			if (!user.Adjacent(src) || !src_location.Adjacent(over_location)) // Regular users can only do short slides.
 				return ..()
 			if ((M_CLUMSY in user.mutations) && prob(10))
-				user.visible_message("<span class='warning'>\The [user] tries to slide \the [src] down the table, but fails miserably.</span>", "<span class='notice'>You <b>fail</b> to slide \the [src] down the table!</span>")
+				user.visible_message("<span class='warning'>\The [user] tries to slide \the [src] down the table, but fails miserably.</span>", "<span class='warning'>You <b>fail</b> to slide \the [src] down the table!</span>")
 				create_broken_bottle()
 				return
 			user.visible_message("<span class='notice'>\The [user] slides \the [src] down the table.</span>", "<span class='notice'>You slide \the [src] down the table!</span>")
