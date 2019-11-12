@@ -55,7 +55,7 @@
 
 /obj/item/weapon/gun/grenadelauncher/proc/fire_grenade(atom/target, mob/user)
 	user.visible_message("<span class='warning'>[user] fired a grenade!</span>")
-	to_chat(user, "<span class='warning'>You fire the grenade launcher!</span>")
+	to_chat(user, "<span class='danger'>You fire the grenade launcher!</span>")
 	var/obj/item/weapon/grenade/F = grenades[1] //Now with less copypasta!
 	grenades -= F
 	F.forceMove(user.loc)
@@ -67,7 +67,7 @@
 		F.det_time = timer_override_value
 	F.activate()
 
-/obj/item/weapon/gun/grenadelauncher/verb/TimerOverrideMode(mob/user as mob)
+/obj/item/weapon/gun/grenadelauncher/verb/TimerOverrideMode(mob/user)
 	set name = "Toggle Timer Override Mode"
 	set category = "Object"
 	set src in usr
@@ -88,11 +88,13 @@
 		timer_override = TRUE
 	return
 
-
 /obj/item/weapon/gun/grenadelauncher/verb/Unload(mob/user )
 	set name = "Unload Grenades"
 	set category = "Object"
 	set src in usr
+	if(!istype(user.loc, /turf))
+		to_chat(user, "<span class = 'notice'>You cannot unload \the [src] in here.</span>")
+		return
 	for(var/obj/item/weapon/grenade/G in grenades)
 		grenades -= G
 		G.forceMove(user.loc)
