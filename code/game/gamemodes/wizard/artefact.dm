@@ -330,3 +330,32 @@
 	..()
 	if(from_slot == slot_shoes && istype(H))
 		H.movement_speed_modifier /= speed_modifier
+
+/obj/item/clothing/shoes/fuckup
+	name = "Fuckup Boots"
+	desc = "Breaches as you walk."
+	icon_state = "fuckup"
+	item_state = "fuckup"
+	wizard_garb = 1
+	w_class = W_CLASS_LARGE
+	step_sound = "fuckupstep"
+
+// /obj/item/clothing/shoes/fuckup/equipped(mob/living/carbon/human/H, equipped_slot)
+// 	..()
+// 	if(istype(H) && H.get_item_by_slot(slot_shoes) == src && equipped_slot != null && equipped_slot == slot_shoes)
+// 		H.movement_speed_modifier *= speed_modifier
+// 
+// /obj/item/clothing/shoes/fuckup/unequipped(mob/living/carbon/human/H, var/from_slot = null)
+// 	..()
+// 	if(from_slot == slot_shoes && istype(H))
+// 		H.movement_speed_modifier /= speed_modifier
+
+/obj/item/clothing/shoes/fuckup/step_action()
+	var/mob/living/carbon/human/H = loc
+	H.delayNextMove(15)
+	playsound(H, step_sound, 50, 1)
+	if(istype(H.loc,/turf/simulated))
+		var/turf/simulated/T = H.loc
+		T.ex_act(1)
+	for (var/turf/simulated/T in orange(1,get_turf(H)))
+		T.ex_act(3)
