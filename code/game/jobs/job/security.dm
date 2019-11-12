@@ -138,7 +138,7 @@
 
 	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court, access_eva)
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court)
-	alt_titles = list("Forensic Technician","Gumshoe")
+	alt_titles = list("Forensic Technician","Gumshoe", "Private Eye")
 
 	minimal_player_age = 7
 
@@ -182,6 +182,13 @@
 				H.equip_or_collect(new /obj/item/clothing/suit/storage/det_suit(H), slot_wear_suit)
 				H.equip_or_collect(new /obj/item/clothing/head/det_hat(H), slot_head)
 				H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+			if("Private Eye")
+				H.mutations += M_NOIR
+				H.dna.SetSEState(NOIRBLOCK,1)
+				H.equip_or_collect(new /obj/item/clothing/under/det/noir(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/det_suit/noir(H), slot_wear_suit)
+				H.equip_or_collect(new /obj/item/clothing/head/det_hat/noir(H), slot_head)
+				H.equip_or_collect(new /obj/item/clothing/shoes/laceup(H), slot_shoes)
 	H.equip_or_collect(new /obj/item/weapon/lighter/zippo(H), slot_l_store)
 
 	if(H.backbag == 1)//Why cant some of these things spawn in his office?
