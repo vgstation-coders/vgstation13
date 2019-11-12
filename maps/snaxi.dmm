@@ -403,7 +403,7 @@
 "ahM" = (/obj/effect/decal/cleanable/blood/gibs{icon_state = "gibhead"},/turf/unsimulated/floor/snow/cave,/area/surface/snow)
 "ahN" = (/obj/machinery/atmospherics/pipe/simple/yellow/visible{dir = 5},/obj/machinery/meter,/turf/simulated/floor,/area/engineering/atmos)
 "ahO" = (/obj/machinery/sorting_machine/recycling,/turf/simulated/floor/plating,/area/maintenance/disposal{name = "Disposals Engineering"})
-"ahP" = (/obj/machinery/door/airlock/external{req_access_txt = "13"},/obj/docking_port/destination/pod5/station{base_turf_override = 1; base_turf_type = /turf/unsimulated/floor/snow; dir = 8; icon_state = "docking_station"},/turf/simulated/floor/plating,/area/crew_quarters/sleep)
+"ahP" = (/obj/machinery/door/airlock/external{req_access_txt = null},/obj/docking_port/destination/pod5/station{base_turf_override = 1; base_turf_type = /turf/unsimulated/floor/snow; dir = 8; icon_state = "docking_station"},/turf/simulated/floor/plating,/area/crew_quarters/sleep)
 "ahQ" = (/obj/machinery/meter,/obj/machinery/atmospherics/pipe/simple/yellow/visible{dir = 10},/turf/simulated/floor,/area/engineering/atmos)
 "ahR" = (/obj/effect/decal/warning_stripes/pathmarkers/yellow{tag = "icon-pathmarker (NORTH)"; icon_state = "pathmarker"; dir = 1},/turf/unsimulated/floor/noblizz_permafrost/icecore,/area/surface/icecore)
 "ahS" = (/obj/structure/fence/corner{dir = 1},/turf/unsimulated/floor/snow,/area/surface/junkyard)
