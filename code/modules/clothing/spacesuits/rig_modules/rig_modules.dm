@@ -127,10 +127,11 @@
 
 /obj/item/rig_module/muscle_tissue/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
 	..()
-	if(R.cell.use(5000))
+	if(R.cell.use(1000))
 		user.mutations.Add(M_HULK) //I'M FUCKING INVINCIBLE!
 		user.update_mutations()
 		say_to_wearer("Reactive sensors online.")
+		processing_objects.Add(src)
 		R.cant_drop = TRUE
 		if(R.H)
 			R.H.cant_drop = TRUE
@@ -143,7 +144,27 @@
 	user.mutations.Remove(M_HULK)
 	user.update_mutations()
 	say_to_wearer("Reactive sensors offline.")
+	if(processing_objects.Find(src))
+		processing_objects.Remove(src)
 	R.cant_drop = FALSE
 	if(R.H)
 		R.H.cant_drop = FALSE
 	say_to_wearer("Safety lock disabled.")
+
+/obj/item/rig_module/muscle_tissue/Destroy()
+	if(processing_objects.Find(src))
+		processing_objects.Remove(src)
+	..()
+
+/obj/item/rig_module/muscle_tissue/process()
+	if(gcDestroyed)
+		return
+	if(!wearer || !ishuman(wearer))
+		processing_objects.Remove(src)
+		return
+	if(wearer.timestopped)
+		return
+	if(!rig.cell.use(50))
+		say_to_wearer("<span class='warning'>Not enough power available in [rig]!</span>")
+		deactivate(wearer,rig)
+		processing_objects.Remove(src)
