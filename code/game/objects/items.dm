@@ -70,7 +70,6 @@
 	var/list/datum/disease2/disease/virus2 = list()
 	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
 	var/image/pathogen
-	var/current_glue_state = GLUE_STATE_NONE
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)

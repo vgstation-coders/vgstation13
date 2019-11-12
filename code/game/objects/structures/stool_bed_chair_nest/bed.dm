@@ -9,7 +9,6 @@
 	anchored = 1
 	sheet_type = /obj/item/stack/sheet/metal
 	sheet_amt = 1
-	var/current_glue_state = GLUE_STATE_NONE
 	var/mob_lock_type = /datum/locking_category/buckle/bed
 
 /obj/structure/bed/New()

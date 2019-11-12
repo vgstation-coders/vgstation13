@@ -202,9 +202,9 @@
 	icon_state = "glue0"
 
 	w_class = W_CLASS_TINY
-	var/spent = 0
-	var/uses = -1 //As opposed to reworking the spent var, just avoiding confusion. Set to -1 for superglue.
+	var/uses = 1 //How many uses the glue has.
 	var/glue_duration = -1 //-1 For infinite.
+	var/glue_state_to_set = GLUE_STATE_PERMA //This is the glue state we set to the item the user puts glue on.
 	var/list/allowed_glue_types = list(
 		/obj/item,
 		/obj/structure/bed,
@@ -213,20 +213,17 @@
 /obj/item/weapon/glue/examine(mob/user)
 	..()
 	if(Adjacent(user))
-		if(glue_duration < 0) //We assume we're dealing with superglue, its not really badcode.
-			user.show_message("<span class='info'>The label reads:</span><br><span class='notice'>1) Apply glue to the surface of an object<br>2) Apply object to human flesh</span>", MESSAGE_SEE)
-		else
-			to_chat(user,"<span class='info'>It looks [uses ? "like it has about [uses] use(s) left" : "empty"].</span>")
+		user.show_message("<span class='info'>The label reads:</span><br><span class='notice'>1) Apply glue to the surface of an object<br>2) Apply object to human flesh</span>", MESSAGE_SEE)
 
 /obj/item/weapon/glue/update_icon()
 	..()
-	icon_state = "glue[spent]"
+	icon_state = "glue[uses]"
 
 /obj/item/weapon/glue/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return
 
-	if(spent || !uses)
+	if(!uses)
 		to_chat(user,"<span class='warning'>There's no glue left in the bottle.</span>")
 		return
 
@@ -247,8 +244,6 @@
 			return
 
 	to_chat(user,"<span class='info'>You put some glue on \the [target].</span>")
-	if(uses < 0) //For superglue
-		spent = 1
 	uses--
 	update_icon()
 	apply_glue(target)
@@ -261,59 +256,62 @@
 	icon_state = "glue_safe"
 	w_class = W_CLASS_TINY
 	glue_duration = 3 MINUTES
+	glue_state_to_set = GLUE_STATE_TEMP
 	uses = 4
 
+/obj/item/weapon/glue/temp_glue/examine(mob/user)
+	..()
+	if(Adjacent(user))
+		to_chat(user,"<span class='info'>It looks [uses ? "like it has about [uses] use(s) left" : "empty"].</span>")
 
 /obj/item/weapon/glue/temp_glue/update_icon()
 	if(uses)
+		icon_state = "glue_safe"
 		return
 	name = "empty school glue bottle"
 	icon_state = "glue_safe0"
 
-/obj/proc/glue_act(var/stick_time = 1 SECONDS) //proc for when glue is used on something
+/obj/proc/glue_act(var/stick_time = 1 SECONDS, var/glue_state = GLUE_STATE_NONE) //proc for when glue is used on something
+	switch(glue_state)
+		if(GLUE_STATE_TEMP)
+			current_glue_state = GLUE_STATE_TEMP
+			spawn(stick_time)
+				unglue()
+		else
+			current_glue_state = GLUE_STATE_PERMA
 	return
 
-/obj/item/proc/unglue()
+/obj/proc/unglue()
 	if(current_glue_state == GLUE_STATE_TEMP)
-		cant_drop--
 		current_glue_state = GLUE_STATE_NONE
+		return 1
+	else
+		return 0
+
+/obj/item/unglue()
+	if(..())
+		cant_drop--
 
 /obj/item/clothing/unglue()
-	if(current_glue_state == GLUE_STATE_TEMP)
+	if(..())
 		canremove++
-		current_glue_state = GLUE_STATE_NONE
 
 /obj/item/glue_act(stick_time)
 	cant_drop++
-	if(stick_time > 0)
-		current_glue_state = GLUE_STATE_TEMP
-		spawn(stick_time)
-			unglue()
-	else
-		current_glue_state = GLUE_STATE_PERMA
+	..()
 
 /obj/item/clothing/glue_act(stick_time)
 	canremove--
-	if(stick_time > 0)
-		current_glue_state = GLUE_STATE_TEMP
-		spawn(stick_time)
-			unglue()
-	else
-		current_glue_state = GLUE_STATE_PERMA
+	..()
 
 /obj/structure/bed/glue_act(stick_time)
-	if(stick_time > 0)
-		spawn(stick_time)
-			current_glue_state = GLUE_STATE_TEMP
-	else
-		current_glue_state = GLUE_STATE_PERMA
+	..()
 
 /obj/item/weapon/glue/proc/apply_glue(obj/item/target)
-	target.glue_act(glue_duration)
+	target.glue_act(glue_duration, glue_state_to_set)
 
 /obj/item/weapon/glue/infinite/afterattack()
 	.=..()
-
-	spent = 0
+	uses = 1
 	update_icon()
 
