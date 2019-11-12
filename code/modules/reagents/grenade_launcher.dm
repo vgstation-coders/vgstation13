@@ -88,7 +88,7 @@
 		timer_override = TRUE
 	return
 
-/obj/item/weapon/gun/grenadelauncher/verb/Unload(mob/user )
+/obj/item/weapon/gun/grenadelauncher/verb/Unload(mob/user)
 	set name = "Unload Grenades"
 	set category = "Object"
 	set src in usr
