@@ -339,42 +339,9 @@
 	if (plane != HIDING_MOB_PLANE)
 		plane = HIDING_MOB_PLANE
 		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))
-		/*
-		for(var/mob/O in oviewers(src, null))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, text("<B>[] scurries to the ground!</B>", src))
-		*/
 	else
 		plane = MOB_PLANE
 		to_chat(src, text("<span class='notice'>You have stopped hiding.</span>"))
-		/*
-		for(var/mob/O in oviewers(src, null))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, text("[] slowly peaks up from the ground...", src))
-		*/
-
-//make mice fit under tables etc? this was hacky, and not working
-/*
-/mob/living/simple_animal/mouse/Move(var/dir)
-
-	var/turf/target_turf = get_step(src,dir)
-	//CanReachThrough(src.loc, target_turf, src)
-	var/can_fit_under = 0
-	if(target_turf.ZCross(get_turf(src),1))
-		can_fit_under = 1
-
-	..(dir)
-	if(can_fit_under)
-		src.forceMove(target_turf)
-	for(var/d in cardinal)
-		var/turf/O = get_step(T,d)
-		//Simple pass check.
-		if(O.ZCross(T, 1) && !(O in open) && !(O in closed) && O in possibles)
-			open += O
-			*/
-
-///mob/living/simple_animal/mouse/restrained() //Hotfix to stop mice from doing things with MouseDrop
-//	return 1
 
 /mob/living/simple_animal/mouse/scoop_up(var/mob/living/M)
 	if (..() && can_be_infected())
