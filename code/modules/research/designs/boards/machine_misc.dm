@@ -145,7 +145,7 @@
 	name = "Circuit Design (Ammolathe)"
 	desc = "Allows for the construction of circuit boards used to build ammolathes."
 	id = "ammolathe"
-	req_tech = list(Tc_PROGRAMMING = 2, Tc_ENGINEERING = 2, Tc_COMBAT = 4, Tc_NANOTRASEN = 1)
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_ENGINEERING = 2, Tc_COMBAT = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
