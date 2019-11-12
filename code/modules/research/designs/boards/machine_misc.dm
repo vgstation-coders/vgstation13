@@ -150,6 +150,8 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/ammolathe
+	locked = TRUE
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/chem_dispenser/brewer
 	name = "Circuit Design (Brewer)"
