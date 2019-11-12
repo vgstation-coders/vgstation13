@@ -1667,7 +1667,6 @@
 #include "code\modules\mob\living\carbon\alien\alien.dm"
 #include "code\modules\mob\living\carbon\alien\death.dm"
 #include "code\modules\mob\living\carbon\alien\emote.dm"
-#include "code\modules\mob\living\carbon\alien\login.dm"
 #include "code\modules\mob\living\carbon\alien\logout.dm"
 #include "code\modules\mob\living\carbon\alien\powers.dm"
 #include "code\modules\mob\living\carbon\alien\say.dm"
