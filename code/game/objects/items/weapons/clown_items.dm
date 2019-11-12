@@ -217,7 +217,7 @@
 
 /obj/item/weapon/glue/update_icon()
 	..()
-	icon_state = "glue[uses]"
+	icon_state = "glue[uses ? "1" : "0"]"
 
 /obj/item/weapon/glue/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
@@ -238,7 +238,7 @@
 	if(isitem(target))
 		var/obj/item/target_item = target
 		if(target_item.current_glue_state != GLUE_STATE_NONE) //Check to see if its glued first.
-			to_chat(user,"<span class='warning'>Its already got glue on it!</span>")
+			to_chat(user,"<span class='warning'>It already has glue on it!</span>")
 			return
 		if(target_item.abstract) //Can't glue TK grabs, grabs, offhands!
 			return
@@ -279,7 +279,6 @@
 				unglue()
 		else
 			current_glue_state = GLUE_STATE_PERMA
-	return
 
 /obj/proc/unglue()
 	if(current_glue_state == GLUE_STATE_TEMP)
