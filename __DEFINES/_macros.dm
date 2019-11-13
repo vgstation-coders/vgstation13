@@ -230,7 +230,7 @@
 
 #define isbelt(O) (istype(O, /obj/item/weapon/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
 
-#define isrig(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
+#define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
 
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
 
