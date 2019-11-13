@@ -11,9 +11,9 @@
 		return
 
 	return text
-	
+
 /proc/get_maps(root="maps/voting/")
-	var/list/maps = list()
+	var/list/maps = list() //an associative list to be returned, associates title with path+binary
 	var/recursion_limit = 20 //lots of maps waiting to be played, feels like TF2
 	//Get our potential maps
 	testing("starting in [root]")
@@ -79,6 +79,9 @@
 			maps[potential] = path + binary
 			binary = null
 		recursion_limit--
+	var/list/maplist = get_list_of_keys(maps)
+	send2maindiscord("A map vote was initiated with these options: [english_list(maplist)].")
+	send2mainirc("A map vote was initiated with these options: [english_list(maplist)].")
 	return maps
 
 //Sends resource files to client cache
