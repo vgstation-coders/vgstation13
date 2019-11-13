@@ -178,40 +178,9 @@
 	spawn_positions = 1
 	supervisors = "the head of personnel"
 	selection_color = "#dddddd"
-	idtype = /obj/item/weapon/card/id/supply
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
-
-	pdaslot=slot_belt
-	pdatype=/obj/item/device/pda/quartermaster
-
-/datum/job/qm/equip(var/mob/living/carbon/human/H)
-	if(!H)
-		return 0
-	switch(H.backbag)
-		if(2)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-		if(3)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-		if(4)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		if(5)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
-	H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo(H), slot_ears)
-	H.equip_or_collect(new /obj/item/clothing/under/rank/cargo(H), slot_w_uniform)
-	H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
-	//H.equip_or_collect(new /obj/item/device/pda/quartermaster(H), slot_belt)
-//		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
-	H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
-	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
-	if(H.backbag == 1)
-		H.put_in_hands(new H.species.survival_gear(H))
-	else
-		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
-	return 1
-
-
+	outfit_datum = /datum/outfit/qm
 
 /datum/job/cargo_tech
 	title = "Cargo Technician"
@@ -222,39 +191,9 @@
 	spawn_positions = 2
 	supervisors = "the quartermaster and the head of personnel"
 	selection_color = "#dddddd"
-	idtype = /obj/item/weapon/card/id/supply
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
-
-	pdaslot=slot_belt
-	pdatype=/obj/item/device/pda/cargo
-
-/datum/job/cargo_tech/equip(var/mob/living/carbon/human/H)
-	if(!H)
-		return 0
-	switch(H.backbag)
-		if(2)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-		if(3)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-		if(4)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		if(5)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
-	H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo(H), slot_ears)
-	H.equip_or_collect(new /obj/item/clothing/under/rank/cargotech(H), slot_w_uniform)
-	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
-	//H.equip_or_collect(new /obj/item/device/pda/cargo(H), slot_belt)
-//		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
-	if(H.backbag == 1)
-		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-	else
-		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
-	return 1
-
-
+	outfit_datum = /datum/outfit/cargo_tech
 
 /datum/job/mining
 	title = "Shaft Miner"
@@ -265,40 +204,9 @@
 	spawn_positions = 3
 	supervisors = "the quartermaster and the head of personnel"
 	selection_color = "#dddddd"
-	idtype = /obj/item/weapon/card/id/supply
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_mining, access_mint, access_mining_station, access_mailsorting)
-
-	pdaslot=slot_belt
-	pdatype=/obj/item/device/pda/shaftminer
-
-/datum/job/mining/equip(var/mob/living/carbon/human/H)
-	if(!H)
-		return 0
-	H.equip_or_collect(new /obj/item/device/radio/headset/headset_mining(H), slot_ears)
-	switch(H.backbag)
-		if(2)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
-		if(3)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
-		if(4)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		if(5)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
-	H.equip_or_collect(new /obj/item/clothing/under/rank/miner(H), slot_w_uniform)
-	//H.equip_or_collect(new /obj/item/device/pda/shaftminer(H), slot_belt)
-	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
-//		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
-	if(H.backbag == 1)
-		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
-		H.put_in_hands(new /obj/item/weapon/crowbar(H))
-		H.equip_or_collect(new /obj/item/weapon/storage/bag/ore(H), slot_l_store)
-	else
-		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
-		H.equip_or_collect(new /obj/item/weapon/crowbar(H), slot_in_backpack)
-		H.equip_or_collect(new /obj/item/weapon/storage/bag/ore(H), slot_in_backpack)
-	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/> <b>Science:</b> [SCI_FREQ] <br/>")
-	return 1
+	outfit_datum = /datum/outfit/mining
 
 /datum/job/mining/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()

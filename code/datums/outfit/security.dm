@@ -48,7 +48,7 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/handcuffs = GRASP_RIGHT_HAND_STR,
+		/obj/item/weapon/handcuffs = slot_r_store_str,
 	)
 
 	implant_types = list(
@@ -111,8 +111,8 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/handcuffs = GRASP_RIGHT_HAND_STR,
-		/obj/item/weapon/gun/energy/taser = GRASP_LEFT_HAND_STR,
+		/obj/item/weapon/handcuffs = slot_r_store_str,
+		/obj/item/weapon/gun/energy/taser = GRASP_LEFT_HAND,
 	)
 
 	implant_types = list(
@@ -207,8 +207,8 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/storage/box/evidence = GRASP_RIGHT_HAND_STR,
-		/obj/item/device/detective_scanner = GRASP_RIGHT_HAND_STR,
+		/obj/item/weapon/storage/box/evidence = GRASP_LEFT_HAND,
+		/obj/item/device/detective_scanner =  slot_belt_str,
 	)
 
 	implant_types = list(
@@ -216,7 +216,7 @@
 	)
 
 	pda_type = /obj/item/device/pda/detective
-	pda_slot = slot_belt
+	pda_slot = slot_r_store
 	id_type = /obj/item/weapon/card/id/security
 
 /datum/outfit/detective/post_equip(var/mob/living/carbon/human/H)
@@ -250,7 +250,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/hos/jensen,
 			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
-			slot_l_store_str = /obj/item/device/flash
+			slot_l_store_str = /obj/item/device/flash,
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_sec,
@@ -262,7 +262,7 @@
 			slot_helmet_str = /obj/item/clothing/head/helmet/space/plasmaman/security,
 			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
-			slot_l_store_str = /obj/item/device/flash
+			slot_l_store_str = /obj/item/device/flash,
 		),
 		/datum/species/vox = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_sec,
@@ -274,12 +274,12 @@
 			slot_helmet_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
 			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
-			slot_l_store_str = /obj/item/device/flash
+			slot_l_store_str = /obj/item/device/flash,
 		),
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/handcuffs = GRASP_RIGHT_HAND_STR,
+		/obj/item/weapon/handcuffs = slot_r_store_str,
 	)
 
 	implant_types = list(

@@ -10,6 +10,7 @@
 	- equip_survival_gear: if we give him the basic survival gear.
 	- items_to_collect: items to put in the backbag
 		The associative key is for when to put it if we have no backbag.
+		Use GRASP_LEFT_HAND and GRASP_RIGHT_HAND if it goes to the hands, but slot_x_str if it goes to a slot on the person.
 	- implant_types: the implants we give to the mob.
 	- special_snowflakes: for the edge cases where you need a manual proc.
 	- pda_slot/pda_type/id_type: for the ID and PDA of the mob.
@@ -161,11 +162,16 @@
 			if (items_to_collect[item] == "Surival Box" && pack)
 				new item(pack)
 			else
-				var/hand_slot = text2num(items_to_collect[item])
-				if (hand_slot) // ie, if it's an actual number
-					H.put_in_hand(hand_slot, new item)
-				else // It's supposed to be in the survival box or something
-					new item(H)
+				if (!isnum(items_to_collect[item])) // Not a number : it's a slot
+					var/item_slot = text2num(items_to_collect[item])
+					if (item_slot)
+						H.equip_or_collect(new item(get_turf(H)), item_slot)
+					else
+						new item(get_turf(H))
+				else
+					var/hand_slot = items_to_collect[item]
+					if (hand_slot) // ie, if it's an actual number
+						H.put_in_hand(hand_slot, new item)
 
 /datum/outfit/proc/species_final_equip(var/mob/living/carbon/human/H)
 	if (H.species)
