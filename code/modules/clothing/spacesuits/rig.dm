@@ -62,6 +62,8 @@
 		update_brightness()
 		if(user)
 			user.update_inv_head()
+	else
+		to_chat(user, "<span class = 'warning'>\The [src] has no linked suit!</span>")
 
 /obj/item/clothing/head/helmet/space/rig/proc/update_brightness()
 	if(on)
