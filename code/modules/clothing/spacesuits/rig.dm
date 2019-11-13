@@ -215,16 +215,16 @@
 	activated = FALSE
 
 /obj/item/clothing/suit/space/rig/attackby(obj/W, mob/user)
-	if(!H && istype(W, head_type) && user.drop_item(W, src, force_drop = TRUE))
+	if(head_type && !H && istype(W, head_type) && user.drop_item(W, src, force_drop = TRUE))
 		to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src].</span>")
 		H = W
 		H.rig = src
 		return
-	if(!G && istype(W, gloves_type) && user.drop_item(W, src, force_drop = TRUE))
+	if(gloves_type && !G && istype(W, gloves_type) && user.drop_item(W, src, force_drop = TRUE))
 		to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src].</span>")
 		G = W
 		return
-	if(!MB && istype(W, boots_type) && user.drop_item(W, src, force_drop = TRUE))
+	if(boots_type && !MB && istype(W, boots_type) && user.drop_item(W, src, force_drop = TRUE))
 		to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src].</span>")
 		MB = W
 		return
