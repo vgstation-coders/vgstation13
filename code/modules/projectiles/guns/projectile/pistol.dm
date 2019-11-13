@@ -167,7 +167,7 @@
 
 /obj/item/weapon/gun/projectile/glock/fancy/New()
 	. = ..()
-	desc += "<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maint crawling!</span>"
+	desc += "<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maintenance crawling!</span>"
 
 /obj/item/weapon/gun/projectile/glock/fancy/update_icon()
 	..()
