@@ -76,6 +76,9 @@
 
 /obj/item/New()
 	..()
+	initialize_action_buttons()
+
+/obj/item/proc/initialize_action_buttons()
 	for(var/path in actions_types)
 		new path(src)
 
