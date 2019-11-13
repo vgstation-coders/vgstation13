@@ -1240,7 +1240,7 @@
 	..()
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/frank
-	name = "Frankenstein outfit box"
+	name = "Dr. Frank outfit box"
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/frank/New()
 	new /obj/item/clothing/under/franksuit(src)
