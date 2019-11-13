@@ -367,10 +367,6 @@
 	visible_message("<span class='danger'>\The [src] spontaenously combusts!.</span>") //!!OH SHIT!!
 	return
 
-/turf/simulated/wall/Destroy()
-	remove_rot()
-	..()
-
 /turf/simulated/wall/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	remove_rot()
 	for(var/obj/effect/E in src)

@@ -70,6 +70,10 @@
 	on_moved = new("owner"=src)
 
 /atom/movable/Destroy()
+	var/turf/T = loc
+	if (opacity && istype(T))
+		T.reconsider_lights()
+		
 	if(materials)
 		returnToPool(materials)
 		materials = null

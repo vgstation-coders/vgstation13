@@ -34,6 +34,3 @@
 	if (..())
 		return TRUE
 	return (faction.members.len >= cultists_target)
-
-/datum/objective/summon_narsie/feedbackText()
-	return "<span class = 'sinister'>You succesfully converted enough people to server the Geometer of Blood. The veil between this world and Nar'Sie grows thinner.</span>"

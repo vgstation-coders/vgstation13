@@ -81,11 +81,6 @@
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
-/obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0 || wall_mounted))
-		return 1
-	return (!density)
-
 /obj/structure/closet/proc/can_open()
 	if(src.welded)
 		return 0
