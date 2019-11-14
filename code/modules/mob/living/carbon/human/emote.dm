@@ -122,7 +122,7 @@
 			else
 				// Was /turf/, now /mob/
 				for(var/mob/living/M in view(location,aoe_range))
-					if (M.internal != null && M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS))
+					if (M.internal != null && ((M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS)) || M.is_wearing_item(/obj/item/clothing/head/helmet/space/rig)))
 						continue
 					if(!airborne_can_reach(location,get_turf(M),aoe_range))
 						continue

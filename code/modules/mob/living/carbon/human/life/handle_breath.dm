@@ -115,7 +115,7 @@
 	if(internal)
 		if(!contents.Find(internal))
 			internal = null
-		if(!wear_mask || !(wear_mask.clothing_flags & MASKINTERNALS))
+		if((!wear_mask || !(wear_mask.clothing_flags & MASKINTERNALS)) || !is_wearing_item(/obj/item/clothing/head/helmet/space/rig))
 			internal = null
 		if(internal)
 			return internal.remove_air_volume(volume_needed)
