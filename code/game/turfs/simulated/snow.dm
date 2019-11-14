@@ -49,7 +49,7 @@
 			"<span class='notice'>You dig out some snow with \the [W].</span>")
 			extract_snowballs(5, FALSE, user)
 
-/turf/simulated/floor/plating/snow/attack_hand(mob/user as mob)
+/turf/simulated/floor/plating/snow/CtrlClick(mob/user)
 
 	//Reach down and make a snowball
 	if(!snowballs)
