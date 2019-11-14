@@ -210,6 +210,10 @@
 	name = "Outpost Toxins Test Area"
 	icon_state = "toxtest"
 
+/area/maintenance/ghettokitchen
+	name = "Abandoned Kitchen"
+	icon_state = "kitchen"
+
 
 //**************Renamed areas**************
 /area/crew_quarters/locker/locker_toilet
