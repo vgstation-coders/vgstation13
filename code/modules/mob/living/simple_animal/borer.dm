@@ -96,6 +96,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/name_prefix_index = 1
 	held_items = list()
 
+/mob/living/simple_animal/borer/check_environment_susceptibility()
+	return !host
+
 /mob/living/simple_animal/borer/whisper()
 	return FALSE
 
