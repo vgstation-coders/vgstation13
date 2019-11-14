@@ -597,6 +597,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	var/brightness_color = null
 	var/cost = 2 //How much power does it consume in an idle state?
 	var/fitting = "tube"
+	var/frequency = 1500 //for smart lights
 
 /obj/item/weapon/light/tube
 	name = "light tube"
@@ -619,6 +620,16 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_range = 8
 	brightness_power = 4
 	brightness_color = LIGHT_COLOR_HALOGEN
+	cost = 2
+
+/obj/item/weapon/light/tube/smart
+	name = "smart light tube"
+	desc = "An LED light tube with built-in electronics to control various properties."
+	base_state = "hetube"
+	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 60)
+	brightness_range = 8
+	brightness_power = 4
+	brightness_color = "#FFFFFF"
 	cost = 2
 
 /obj/item/weapon/light/tube/broken
@@ -667,7 +678,23 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_color = LIGHT_COLOR_HALOGEN
 	cost = 1
 	starting_materials = list(MAT_GLASS = 150, MAT_IRON = 30)
-	brightness_color = null//These should be white
+
+/obj/item/weapon/light/bulb/smart
+	name = "smart light bulb"
+	desc = "An LED light bulb with built-in electronics to control various properties."
+	base_state = "hebulb"
+	brightness_range = 6
+	brightness_power = 3
+	brightness_color = "#FFFFFF"
+	cost = 1
+	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 30)
+
+/obj/item/weapon/light/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/device/lightreplacer))
+		var/obj/item/device/lightreplacer/LR = W
+		if(LR.insert_if_possible(src))
+			to_chat(user, "<span class='notice'>\the [LR] picks up \the [src].</span>")
+	..()
 
 /obj/item/weapon/light/throw_impact(atom/hit_atom)
 	..()
