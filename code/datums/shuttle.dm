@@ -654,6 +654,11 @@
 		if(!old_area)
 			old_area = space
 
+		for(var/O in old_turf.overlays)
+			var/image/I = O
+			if(I.icon == 'icons/obj/projectiles.dmi')
+				old_turf.overlays.Remove(I)		//remove beam overlays so they don't stay on the new turfs forever
+
 		//Get the turf's image before it's gone!
 		var/image/undlay
 		if(add_underlay)
