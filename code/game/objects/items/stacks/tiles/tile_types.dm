@@ -75,10 +75,13 @@
 	material = "wood"
 
 /obj/item/stack/tile/wood/proc/build(turf/S as turf)
-	if(istype(S,/turf/unsimulated/floor/asteroid))
-		S.ChangeTurf(/turf/simulated/floor/plating/deck/airless)
-	else
-		S.ChangeTurf(/turf/simulated/floor/plating/deck)
+	if(S.air)
+		var/datum/gas_mixture/GM = S.air
+		if(GM.pressure > HALF_ATM)
+			S.ChangeTurf(/turf/simulated/floor/plating/deck)
+			return
+	S.ChangeTurf(/turf/simulated/floor/plating/deck/airless)
+
 
 /obj/item/stack/tile/wood/afterattack(atom/target, mob/user, adjacent, params)
 	if(adjacent)
