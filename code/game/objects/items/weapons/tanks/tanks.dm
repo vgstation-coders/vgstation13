@@ -144,7 +144,7 @@
 	data["maskConnected"] = 0
 	if(iscarbon(loc))
 		var/mob/living/carbon/location = loc
-		if(location.internal == src || ((location.wear_mask && (location.wear_mask.clothing_flags & MASKINTERNALS))) || location.is_wearing_item(/obj/item/clothing/head/helmet/space/rig))
+		if(location.internal == src || ((location?.wear_mask.clothing_flags & MASKINTERNALS) || location.is_wearing_item(/obj/item/clothing/head/helmet/space/rig, slot_head)))
 			data["maskConnected"] = 1
 
 	// update the ui if it exists, returns null if no ui is passed/found
@@ -190,7 +190,7 @@
 				if (location.internals)
 					location.internals.icon_state = "internal0"
 			else
-				if((location.wear_mask && (location.wear_mask.clothing_flags & MASKINTERNALS)) || location.is_wearing_item(/obj/item/clothing/head/helmet/space/rig))
+				if((location?.wear_mask.clothing_flags & MASKINTERNALS) || location.is_wearing_item(/obj/item/clothing/head/helmet/space/rig, slot_head))
 					location.internal = src
 					to_chat(usr, "<span class='notice'>You open \the [src] valve.</span>")
 					if (location.internals)
