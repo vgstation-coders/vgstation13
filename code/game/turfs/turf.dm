@@ -91,16 +91,11 @@
 /turf/ex_act(severity)
 	return 0
 
-
-/turf/bullet_act(var/obj/item/projectile/Proj)
-	if(Proj.destroy)
-		src.ex_act(2)
-	..()
-	return 0
-
 /turf/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/bullet/gyro))
 		explosion(src, -1, 0, 2)
+	if(Proj.destroy)
+		src.ex_act(2)
 	..()
 	return 0
 

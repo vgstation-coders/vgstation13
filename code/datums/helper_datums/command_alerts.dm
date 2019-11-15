@@ -277,16 +277,6 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 	..()
 
-/datum/command_alert/power_restored
-	name = "Power Outage - End"
-	alert_title = "Power Systems Nominal"
-	alert = 'sound/AI/poweron.ogg'
-
-/datum/command_alert/power_restored/announce()
-	message = "Power has been restored to [station_name()]. We apologize for the inconvenience."
-
-	..()
-
 /datum/command_alert/smes_charged
 	name = "SMES Recharged"
 	alert_title = "Power Systems Nominal"

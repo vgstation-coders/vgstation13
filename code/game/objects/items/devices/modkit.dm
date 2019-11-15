@@ -98,6 +98,19 @@
 	original[2] = /obj/item/clothing/suit/space/rig/atmos
 	finished[2] = /obj/item/clothing/suit/space/rig/atmos/gold
 
+/obj/item/device/modkit/fatsec_rig
+	name = "gut expansion hardsuit modification kit"
+
+/obj/item/device/modkit/fatsec_rig/New()
+	..()
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	1
+	original[1] = /obj/item/clothing/suit/space/rig/security
+	finished[1] = /obj/item/clothing/suit/space/rig/security/fat
+
 
 /* /vg/ - Not needed
 /obj/item/device/modkit/tajaran

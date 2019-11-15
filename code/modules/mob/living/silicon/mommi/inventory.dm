@@ -330,7 +330,3 @@
 			update_items()
 		else
 			to_chat(M, "<span class='warning'>You are unable to equip that.</span>")
-
-/mob/living/carbon/can_use_hands()
-	return TRUE
-

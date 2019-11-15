@@ -218,7 +218,7 @@
 		extract_snowballs(1, TRUE, user, W)
 
 
-/turf/unsimulated/floor/snow/attack_hand(mob/user as mob)
+/turf/unsimulated/floor/snow/CtrlClick(mob/user)
 
 	if(snowballs)
 		//Reach down and make a snowball

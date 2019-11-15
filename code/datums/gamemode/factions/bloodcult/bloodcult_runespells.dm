@@ -1973,6 +1973,8 @@ var/list/blind_victims = list()
 
 
 /datum/rune_spell/blood_cult/summoncultist/abort()
+	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
+	spell_holder.overlays -= image('icons/effects/effects.dmi',"rune_summon")
 	for (var/guy in feet_portals)
 		var/obj/O = feet_portals[guy]
 		qdel(O)
@@ -2045,11 +2047,6 @@ var/list/blind_victims = list()
 		feet_portals.Add(add_cultist)
 		var/obj/effect/cult_ritual/feet_portal/P = new (add_cultist.loc, add_cultist, src)
 		feet_portals[add_cultist] = P
-
-/datum/rune_spell/blood_cult/summoncultist/abort(var/cause)
-	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
-	spell_holder.overlays -= image('icons/effects/effects.dmi',"rune_summon")
-	..()
 
 /datum/rune_spell/blood_cult/summoncultist/proc/payment()//an extra payment is spent at the end of the channeling, and shared between contributors
 	var/failsafe = 0

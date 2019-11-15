@@ -7,15 +7,15 @@
 	w_type=RECYK_METAL
 	mount_reqs = list("simfloor", "nospace")
 	var/datum/construction/construct
-	
+
 /obj/item/mounted/frame/apc_frame/New()
 	..()
 	construct = new /datum/construction/reversible/crank_charger(src)
-	
+
 /obj/item/mounted/frame/apc_frame/attackby(var/obj/item/W, var/mob/user)
 	if(!construct || !construct.action(W, user))
 		..()
-		
+
 /obj/item/mounted/frame/apc_frame/try_build(turf/on_wall, mob/user)
 	if(..())
 		var/turf/turf_loc = get_turf(user)
@@ -24,6 +24,9 @@
 		if (area_loc.areaapc)
 			to_chat(user, "<span class='rose'>This area already has an APC.</span>")
 			return //only one APC per area
+		if(area_loc.forbid_apc)
+			to_chat(user, "<span class='rose'>You cannot build an APC in this area.</span>")
+			return
 		for(var/obj/machinery/power/terminal/T in turf_loc)
 			if (T.master)
 				to_chat(user, "<span class='rose'>There is another network terminal here.</span>")

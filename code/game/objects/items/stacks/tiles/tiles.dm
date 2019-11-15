@@ -66,11 +66,12 @@
 		active = null
 
 /obj/item/stack/tile/plasteel/proc/build(turf/S as turf)
-	if(istype(S,/turf/space) || istype(S,/turf/unsimulated))
-		S.ChangeTurf(/turf/simulated/floor/plating/airless)
-	else
-		S.ChangeTurf(/turf/simulated/floor/plating)
-	return
+	if(S.air)
+		var/datum/gas_mixture/GM = S.air
+		if(GM.pressure > HALF_ATM)
+			S.ChangeTurf(/turf/simulated/floor/plating)
+			return
+	S.ChangeTurf(/turf/simulated/floor/plating/airless)
 
 /obj/item/stack/tile/plasteel/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
@@ -139,11 +140,15 @@
 	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
 	if(istype(L))
 		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-		if(istype(S,/turf/space) || istype(S,/turf/unsimulated))
-			S.ChangeTurf(/turf/simulated/floor/glass/airless)
-		else
-			S.ChangeTurf(/turf/simulated/floor/glass)
 		qdel(L)
+		if(S.air)
+			var/datum/gas_mixture/GM = S.air
+			if(GM.pressure > HALF_ATM)
+				S.ChangeTurf(/turf/simulated/floor/glass)
+				return
+		S.ChangeTurf(/turf/simulated/floor/glass/airless)
+
+
 
 /obj/item/stack/glass_tile/rglass/plasma
 	name = "plasma glass tile"
@@ -154,8 +159,12 @@
 	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
 	if(istype(L))
 		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-		if(istype(S,/turf/space) || istype(S,/turf/unsimulated))
-			S.ChangeTurf(/turf/simulated/floor/glass/plasma/airless)
-		else
-			S.ChangeTurf(/turf/simulated/floor/glass/plasma)
 		qdel(L)
+		if(S.air)
+			var/datum/gas_mixture/GM = S.air
+			if(GM.pressure > HALF_ATM)
+				S.ChangeTurf(/turf/simulated/floor/glass/plasma)
+				return
+		S.ChangeTurf(/turf/simulated/floor/glass/plasma/airless)
+
+
