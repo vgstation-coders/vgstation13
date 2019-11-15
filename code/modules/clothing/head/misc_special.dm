@@ -137,6 +137,14 @@
 	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
 	icon_state = "ushankared"
 	item_state = "ushankared"
+
+/obj/item/clothing/head/ushanka/hos
+	name = "head of security ushanka"
+	desc = "The armored ushanka of the head of security. You cannot bribe an officer of Nanotrasen."
+	icon_state = "ushankablack"
+	item_state = "ushankablack"
+	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
+
 /*
  * Pumpkin head
  */
