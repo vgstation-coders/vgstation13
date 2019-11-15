@@ -19,6 +19,7 @@
 	mob_swap_flags = ALLMOBS
 
 /mob/living/carbon/complex/gondola/New()
+	add_language(LANGUAGE_GALACTIC_COMMON)
 	icon_state_standing = pick("gondola","gondola_2")
 	icon_state_lying = "[icon_state_standing]_lying"
 	icon_state_dead = "[icon_state_dead]_dead"
