@@ -600,7 +600,7 @@
 		new /obj/item/weapon/storage/pill_bottle(src)
 
 /obj/item/weapon/storage/box/lethalshells
-	name = "lethal shells"
+	name = "12-gauge slugs"
 	icon_state = "lethal shells"
 	storage_slots = 16
 
@@ -610,7 +610,7 @@
 		new /obj/item/ammo_casing/shotgun(src)
 
 /obj/item/weapon/storage/box/beanbagshells
-	name = "bean bag shells"
+	name = "12-gauge beanbag shells"
 	icon_state = "bean bag shells"
 	storage_slots = 16
 
@@ -620,7 +620,7 @@
 		new /obj/item/ammo_casing/shotgun/beanbag(src)
 
 /obj/item/weapon/storage/box/stunshells
-	name = "stun shells"
+	name = "12-gauge stun shells"
 	icon_state = "stun shells"
 	storage_slots = 16
 
@@ -630,7 +630,7 @@
 		new /obj/item/ammo_casing/shotgun/stunshell(src)
 
 /obj/item/weapon/storage/box/dartshells
-	name = "shotgun darts"
+	name = "12-gauge darts"
 	icon_state = "dart shells"
 	storage_slots = 16
 
@@ -640,7 +640,7 @@
 		new /obj/item/ammo_casing/shotgun/dart(src)
 
 /obj/item/weapon/storage/box/buckshotshells
-	name = "buckshot shells"
+	name = "12-gauge 00 buckshot shells"
 	icon_state = "lethal shells"
 	storage_slots = 16
 
@@ -1060,7 +1060,7 @@
 	new /obj/item/clothing/glasses/gglasses(src)
 	new /obj/item/clothing/shoes/jackboots(src)
 	..()
-	
+
 /obj/item/weapon/storage/box/smartbox/clothing_box/schoolgirloutfit
 	name = "School girl outfit box"
 
@@ -1131,7 +1131,7 @@
 	new /obj/item/clothing/mask/gas/sexymime(src)
 	new /obj/item/clothing/under/sexymime(src)
 	..()
-	
+
 /obj/item/weapon/storage/box/smartbox/clothing_box/jester
 	name = "Jester outfit box"
 
@@ -1259,14 +1259,14 @@
 //Premium boxes, no different than clothing_box, just sorting for clarity.
 /obj/item/weapon/storage/box/smartbox/clothing_box/joe
 	name = "Sniper outfit box"
-	
+
 /obj/item/weapon/storage/box/smartbox/clothing_box/joe/New()
 	new /obj/item/clothing/head/helmet/joehelmet(src)
 	new /obj/item/clothing/under/joe(src)
 	new /obj/item/clothing/gloves/joegloves(src)
 	new /obj/item/clothing/shoes/joeboots(src)
 	..()
-	
+
 /obj/item/weapon/storage/box/smartbox/clothing_box/lola
 	name = "Fighting clown outfit box"
 

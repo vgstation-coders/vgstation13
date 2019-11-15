@@ -130,26 +130,6 @@
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
-/datum/design/ammo_12mm
-	name = "Ammunition Box (12mm)"
-	desc = "A box of 12mm ammunition."
-	id = "ammo_12mm"
-	req_tech = list(Tc_COMBAT = 3, Tc_MATERIALS = 2)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 4250, MAT_SILVER = 250)
-	category = "Weapons"
-	build_path = /obj/item/ammo_storage/box/c12mm/assault
-
-/datum/design/magazine_12mm
-	name = "Magazine (12mm)"
-	desc = "A magazine that holds 12mm ammunition."
-	id = "magazine_12mm"
-	req_tech = list(Tc_COMBAT = 2)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 400)
-	category = "Weapons"
-	build_path = /obj/item/ammo_storage/magazine/a12mm/empty
-
 /datum/design/decloner
 	name = "Decloner"
 	desc = "Your opponent will bubble into a messy pile of goop."
@@ -242,36 +222,6 @@
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
-/datum/design/ammo_9mm
-	name = "Ammunition Box (9mm)"
-	desc = "A box of prototype 9mm ammunition."
-	id = "ammo_9mm"
-	req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 3)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 3750, MAT_SILVER = 100)
-	category = "Weapons"
-	build_path = /obj/item/ammo_storage/box/c9mm
-
-/datum/design/magazine_9mm
-	name = "Magazine (9mm SMG)"
-	desc = "A SMG magazine that holds 9mm ammunition."
-	id = "magazine_9mm"
-	req_tech = list(Tc_COMBAT = 2)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 300)
-	category = "Weapons"
-	build_path = /obj/item/ammo_storage/magazine/smg9mm/empty
-
-/datum/design/stunshell
-	name = "Stun Shell"
-	desc = "A stunning shell for a shotgun."
-	id = "stunshell"
-	req_tech = list(Tc_COMBAT = 3, Tc_MATERIALS = 3)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 4000)
-	category = "Weapons"
-	build_path = /obj/item/ammo_casing/shotgun/stunshell
-
 /datum/design/pneumatic
 	name = "Pneumatic Cannon"
 	desc = "A launcher powered by compressed air."
@@ -349,30 +299,159 @@
 	materials = list(MAT_IRON = 20000, MAT_SILVER = 1000)
 	build_path = /obj/item/ammo_casing/rocket_rpg/stun
 
+//Shotgun single ammunition (mostly) isn't printable, but is defined here to keep the material cost consistent
+/datum/design/shotgun_shell/slug
+	name = "12ga. slug"
+	desc = "A 12-gauge slug for a shotgun."
+	id = "slugshell"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 500)
+	build_path = /obj/item/ammo_casing/shotgun
+
+/datum/design/shotgun_shell/buckshot
+	name = "12ga. buckshot"
+	desc = "A 12-gauge, 00 buckshot shell for a shotgun."
+	id = "buckshotshell"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 500)
+	build_path = /obj/item/ammo_casing/shotgun/buckshot
+
+/datum/design/shotgun_shell/beanbag
+	name = "12ga. beanbag"
+	desc = "A non-lethal 12-gauge beanbag shell for a shotgun."
+	id = "beanbagshell"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 500)
+	build_path = /obj/item/ammo_casing/shotgun/beanbag
+
+/datum/design/shotgun_shell/stun
+	name = "12ga. stun shell"
+	desc = "A stunning shell for a shotgun."
+	id = "stunshell"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 500)
+	build_path = /obj/item/ammo_casing/shotgun/stunshell
+
+/datum/design/shotgun_shell/flare
+	name = "12ga. flare shell"
+	desc = "A flare shell for a shotgun."
+	id = "flareshell"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 500)
+	build_path = /obj/item/ammo_casing/shotgun/flare
+
+/datum/design/shotgun_shell/dart
+	name = "12ga. dart shell"
+	desc = "A shotgun shell with a dart inside."
+	id = "dartshell"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 500)
+	build_path = /obj/item/ammo_casing/shotgun/dart
+
+/datum/design/shotgun_shell/blank
+	name = "12ga. blank shell"
+	desc = "A blank 12-gauge shotgun shell that contains no projectile material."
+	id = "dartshell"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 250)
+	build_path = /obj/item/ammo_casing/shotgun/blank
+
 //Box ammunition
 /datum/design/ammo_b380auto
 	name = "Ammunition Box (.380AUTO)"
-	desc = "A box of .380AUTO bullets."
+	desc = "A box of .380AUTO cartridges."
 	id = "ammo_380auto"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 3750, MAT_SILVER = 100)
+	materials = list(MAT_IRON = 4000)
 	build_path = /obj/item/ammo_storage/box/b380auto
 
 /datum/design/ammo_b380auto/practice
 	name = "Ammunition Box (.380AUTO practice)"
-	desc = "A box of .380AUTO practice bullets."
+	desc = "A box of .380AUTO practice cartridges."
 	id = "ammo_380auto_P"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 3750, MAT_SILVER = 100)
+	materials = list(MAT_IRON = 4000)
 	build_path = /obj/item/ammo_storage/box/b380auto/practice
 
 /datum/design/ammo_b380auto/rubber
 	name = "Ammunition Box (.380AUTO rubber)"
-	desc = "A box of .380AUTO rubber bullets."
+	desc = "A box of .380AUTO rubber cartridges."
 	id = "ammo_380auto_R"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 3750, MAT_SILVER = 100)
+	materials = list(MAT_IRON = 4000)
 	build_path = /obj/item/ammo_storage/box/b380auto/rubber
+
+/datum/design/ammo_38rubber
+	name = "Ammunition Box (.38 rubber)"
+	desc = "A box of nonlethal .38 special cartridges."
+	id = "ammo_38_R"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 4000)
+	build_path = /obj/item/ammo_storage/box/c38
+
+/datum/design/ammo_357
+	name = "Ammunition Box (.357)"
+	desc = "A box of .357 magnum cartridges."
+	id = "ammo_357"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 4000)
+	build_path = /obj/item/ammo_storage/box/a357
+
+/datum/design/ammo_9mm
+	name = "Ammunition Box (9mm)"
+	desc = "A box of 9mm cartridges."
+	id = "ammo_9mm"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 4000)
+	build_path = /obj/item/ammo_storage/box/c9mm
+
+/datum/design/ammo_shotgun/slug
+	name = "Ammunition Box (12ga. slug)"
+	desc = "A box of 12-gauge slugs."
+	id = "ammo_12ga_slug"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 8000)
+	build_path = /obj/item/weapon/storage/box/lethalshells
+
+/datum/design/ammo_shotgun/buckshot
+	name = "Ammunition Box (12ga. 00 buckshot)"
+	desc = "A box of 12-gauge 00 buckshot shells."
+	id = "ammo_12ga_buckshot"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 8000)
+	build_path = /obj/item/weapon/storage/box/buckshotshells
+
+/datum/design/ammo_shotgun/beanbag
+	name = "Ammunition Box (12ga. beanbag)"
+	desc = "A box of non-lethal 12-gauge beanbag shells."
+	id = "ammo_12ga_beanbag"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 8000)
+	build_path = /obj/item/weapon/storage/box/beanbagshells
+
+/datum/design/ammo_shotgun/stun
+	name = "Ammunition Box (12ga. stun shell)"
+	desc = "A box of 12-gauge stun shells."
+	id = "ammo_12ga_stun"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 8000)
+	build_path = /obj/item/weapon/storage/box/stunshells
+
+/datum/design/ammo_shotgun/dart
+	name = "Ammunition Box (12ga. dart)"
+	desc = "A box of 12-gauge dart shells."
+	id = "ammo_12ga_dart"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 8000)
+	build_path = /obj/item/weapon/storage/box/dartshells
+
+/datum/design/ammo_12mm
+	name = "Ammunition Box (12mm)"
+	desc = "A box of 12mm ammunition."
+	id = "ammo_12mm"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 5000)
+	build_path = /obj/item/ammo_storage/box/c12mm/assault
 
 //Magazines
 //Normal 9mm and 12mm already have a designs above.
@@ -383,6 +462,14 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 400)
 	build_path = /obj/item/ammo_storage/magazine/beretta/empty
+
+/datum/design/magazine_9mm
+	name = "Magazine (9mm SMG)"
+	desc = "A SMG magazine that holds 9mm ammunition."
+	id = "magazine_9mm"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	build_path = /obj/item/ammo_storage/magazine/smg9mm/empty
 
 /datum/design/magazine_357
 	name = "Automag magazine (.357)"
@@ -455,6 +542,14 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 400)
 	build_path = /obj/item/ammo_storage/magazine/a12ga/empty
+
+/datum/design/magazine_12mm
+	name = "Magazine (12mm)"
+	desc = "A magazine that holds 12mm ammunition."
+	id = "magazine_12mm"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	build_path = /obj/item/ammo_storage/magazine/a12mm/empty
 
 //Misc
 /datum/design/vectorreceiver

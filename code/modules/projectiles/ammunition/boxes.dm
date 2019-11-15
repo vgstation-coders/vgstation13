@@ -20,7 +20,7 @@
 	ammo_type = "/obj/item/ammo_casing/c38"
 	max_ammo = 6
 	multiple_sprites = 1
-	
+
 /obj/item/ammo_storage/box/c762x38r
 	name = "ammo box (7.62x38R)"
 	desc = "A box of neo-russian revolver ammo."
@@ -125,3 +125,4 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun/flare"
 	max_ammo = 7
 	multiple_sprites = 1
+	starting_materials = list(MAT_IRON = 8000)
