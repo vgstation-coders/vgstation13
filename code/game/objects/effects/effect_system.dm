@@ -345,6 +345,18 @@ steam.start() -- spawns the effect
 	R.updatehealth()
 	return
 
+/obj/effect/effect/smoke/heat
+	name = "geyser smoke"
+
+/obj/effect/effect/smoke/heat/affect(var/mob/living/carbon/human/R)
+	if (!..())
+		return 0
+	if (R.wear_suit)
+		return 0
+
+	R.burn_skin(2)
+	M.bodytemperature = min(60, M.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
+
 /////////////////////////////////////////////
 // Smoke spread
 /////////////////////////////////////////////
@@ -399,9 +411,12 @@ steam.start() -- spawns the effect
 /datum/effect/effect/system/smoke_spread/sleepy
 	smoke_type = /obj/effect/effect/smoke/sleepy
 
-
 /datum/effect/effect/system/smoke_spread/mustard
 	smoke_type = /obj/effect/effect/smoke/mustard
+
+/datum/effect/effect/system/smoke_spread/heat
+	smoke_type = /obj/effect/effect/smoke/heat
+
 /////////////////////////////////////////////
 // Chem smoke
 /////////////////////////////////////////////

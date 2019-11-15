@@ -30,6 +30,8 @@
 //#define MAP_OVERRIDE 7
 // wheelstation.dm
 //#define MAP_OVERRIDE 8
+// snaxi.dm
+#define MAP_OVERRIDE 9
 
 
 // Toggles several features, explained in their respective comments.
