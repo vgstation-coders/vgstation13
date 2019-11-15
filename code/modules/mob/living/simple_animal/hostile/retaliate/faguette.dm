@@ -102,6 +102,7 @@
 	turns_per_move = 1
 
 	melee_damage_type = "BRAIN"
+
 /mob/living/simple_animal/hostile/retaliate/faguette/goblin/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/weapon/pen)) //Renaming
 		var/n_name = copytext(sanitize(input(user, "What would you like to name this mime goblin?", "Mime Goblin Name", null) as text|null), 1, MAX_NAME_LEN*3)
@@ -110,7 +111,14 @@
 		return
 	..()
 
-
+/mob/living/simple_animal/hostile/retaliate/faguette/AttackingTarget()
+	if(isliving(target))
+		if(prob(10))
+			var/obj/effect/forcefield/mime/wall = new(get_turf(src))
+			spawn(300)
+			if(wall)
+				qdel(wall)
+	return ..()
 /mob/living/simple_animal/hostile/retaliate/faguette/goblin/say()
 	return
 
