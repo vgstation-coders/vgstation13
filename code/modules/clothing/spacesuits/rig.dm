@@ -177,6 +177,8 @@
 				user.remove_from_mob(user.head)
 			to_chat(user, "<span class = 'notice'>\The [H] extends from \the [src].</span>")
 			user.equip_to_slot(H, slot_head)
+			if(!user.internal) //Let's see if they have a tank.
+				user.toggle_internals(user)
 			H = null
 		if(G)
 			if(user.gloves)
@@ -189,7 +191,8 @@
 				user.remove_from_mob(user.s_store)
 			to_chat(user, "<span class = 'notice'>\The [T] extends from \the [src].</span>")
 			user.equip_to_slot(T, slot_s_store)
-			user.toggle_internals(user, T)
+			if(user.has_breathing_mask && !user.internal) //They didn't have a tank, but do they have a helmet/mask?
+				user.toggle_internals(user, T)
 			T = null
 		if(MB)
 			if(user.shoes)
