@@ -1948,6 +1948,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/helmet/siren = 2,
 		/obj/item/clothing/head/helmet/police = 2,
 		/obj/item/clothing/under/police = 2,
+		/obj/item/device/modkit/fatsec_rig = 2
 		)
 	vouched = list(
 		/obj/item/ammo_storage/magazine/m380auto = 10,

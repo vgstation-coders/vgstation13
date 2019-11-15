@@ -421,6 +421,26 @@
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/security
 
+/obj/item/clothing/suit/space/rig/security/fat
+	name = "expanded security hardsuit"
+	desc = "An armored suit that has been expanded to accomodate a donut gut."
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/space/rig/security/fat/step_action()
+	if(!ishuman(loc))
+		return
+	var/mob/living/carbon/human/H = loc
+	if(!(M_FAT in H.mutations))
+		if(!heat_conductivity) //Not fat and not yet broken
+			sterility = 50
+			heat_conductivity = 0.5
+			to_chat(H,"<span class='danger'>\The [src] is too loose and can't form a perfect seal around your gaunt body!</span>")
+	else
+		if(heat_conductivity) //Fat, but not yet restored
+			sterility = 100
+			heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY //0
+			to_chat(H,"<span class='good'>\The [src] forms a robust seal around your girth!</span>")
+
 	// stormtroopers
 
 /obj/item/clothing/head/helmet/space/rig/security/stormtrooper
