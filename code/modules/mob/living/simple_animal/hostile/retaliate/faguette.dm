@@ -29,6 +29,7 @@
 	melee_damage_upper = 0.1
 	attacktext = "attacks"
 	attack_sound = 'sound/weapons/genhit1.ogg'
+	meat_type = null
 
 	min_oxy = 5
 	max_oxy = 0
@@ -61,7 +62,6 @@
 /mob/living/simple_animal/hostile/retaliate/faguette/attackby(obj/item/weapon/O, mob/user)
 	if(istype(O,/obj/item/weapon/book))
 		gib()
-		return
 
 /mob/living/simple_animal/hostile/retaliate/faguette/proc/handle_disabilities()
 	if ((prob(5) && paralysis < 10))
@@ -72,7 +72,7 @@
 	if(timestopped)
 		return //under effects of time magick
 
-	var/msg = pick("drools slightly","mimes crying into a tissue","sloppily mimes tieing an invisible noose")
+	var/msg = pick("drools slightly","mimes crying into a tissue","sloppily mimes tying an invisible noose")
 	return ..("me", type, "[msg].")
 
 
@@ -88,7 +88,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/faguette/goblin
 	name = "mime goblin"
-	desc = "A tiny talking beret and gloves. Is it miming for a baguette?"
+	desc = "A tiny walking beret and gloves. Is it miming for a baguette?"
 	icon_state = "MimeGoblin"
 	icon_living = "MimeGoblin"
 	icon_dead = null
