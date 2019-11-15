@@ -46,7 +46,7 @@
 						if(alert(new_mob,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
 							break
 				if(newname)
-					new_mob.name = new_mob.real_name = newname
+					new_mob.fully_replace_character_name(null, newname)
 	else
 		new_mob.key = key
 	new_mob.a_intent = a_intent
