@@ -191,7 +191,7 @@
 				user.remove_from_mob(user.s_store)
 			to_chat(user, "<span class = 'notice'>\The [T] extends from \the [src].</span>")
 			user.equip_to_slot(T, slot_s_store)
-			if(user.has_breathing_mask && !user.internal) //They didn't have a tank, but do they have a helmet/mask?
+			if(user.has_breathing_mask() && !user.internal) //They didn't have a tank, but do they have a helmet/mask?
 				user.toggle_internals(user, T)
 			T = null
 		if(MB)
