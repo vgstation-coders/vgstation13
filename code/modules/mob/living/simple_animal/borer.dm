@@ -53,6 +53,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/hostlimb = null						// Which limb of the host is inhabited by the borer.
 	var/truename                            // Name used for brainworm-speak.
 	var/mob/living/captive_brain/host_brain // Used for swapping control of the body back and forth.
+	var/host_name 							// Stores the old name of the host to revert to after namepick
 	var/controlling                         // Used in human death check.
 	var/list/avail_chems=list()
 	var/list/unlocked_chems_head=list()
@@ -425,15 +426,16 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		controlling = 1
 	var/newname
 	for(var/i = 1 to 3)
-		newname = reject_bad_name(stripped_input(src,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
+		newname = reject_bad_name(stripped_input(host,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
 		if(!newname || newname == "")
-			if(alert(src,"Are you sure you want to keep your host's original name?",,"Yes","No") == "Yes")
+			if(alert(host,"Are you sure you want to keep your host's original name?",,"Yes","No") == "Yes")
 				break
 		else
-			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
+			if(alert(host,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
 				break
 	if(newname)
-		host.name = newname
+		host_name = host.real_name //store the old host name in the borer
+		host.fully_replace_character_name(null, newname)
 	host.verbs += /mob/living/carbon/proc/release_control
 	/* Broken
 	host.verbs += /mob/living/carbon/proc/punish_host
