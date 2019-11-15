@@ -1,0 +1,5 @@
+---
+author: brndd
+changes:
+  - tweak: "fixed the perspective on the Al's Fun and Games vending machine sprite"
+delete-after: true

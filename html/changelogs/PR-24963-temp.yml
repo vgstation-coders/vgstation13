@@ -1,0 +1,5 @@
+---
+author: dylanstrategie
+changes:
+  - tweak: "Added a message for new players to tell them that pressing the \"prioritize button\" message does have an effect and they need to wait."
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: brndd
+changes:
+  - bugfix: Sol Common on darkmode should be easier to read now
+delete-after: true

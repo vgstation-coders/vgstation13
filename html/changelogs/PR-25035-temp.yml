@@ -1,0 +1,5 @@
+---
+author: bthomas2
+changes:
+  - rscadd: "Box: Put firelock on cargo lobby vendor"
+delete-after: true
