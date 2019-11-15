@@ -66,6 +66,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/static_light = 0
 	var/static_environ
 
+	var/forbid_apc = FALSE //never build an APC here?
+
 	var/has_gravity = 1
 
 	var/no_air = null
@@ -1924,6 +1926,9 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "storage"
 
 //SNOWMAP
+/area/surface
+	forbid_apc = TRUE
+
 /area/surface/snow
 	name = "\improper Planet Surface"
 	icon_state = "sno2"
@@ -1944,6 +1949,42 @@ proc/process_adminbus_teleport_locs()
 /area/surface/junkyard
 	name = "\improper Junk Yard"
 	icon_state = "disposal"
+
+/area/surface/forest/deer
+	name = "\improper Enclosed Forest"
+	icon_state = "forest1"
+
+/area/surface/forest/north
+	name = "\improper Northern Forest"
+	icon_state = "forest2"
+
+/area/surface/forest/south
+	name = "\improper Southern Forest"
+	icon_state = "forest3"
+
+/area/surface/cave
+	name = "\improper Snow Cave"
+	icon_state = "cave"
+
+/area/surface/mine
+	name = "\improper Surface Mine"
+	icon_state = "mine"
+
+/area/surface/outer/nw
+	name = "\improper Northwest Reaches"
+	icon_state = "tundra1"
+
+/area/surface/outer/ne
+	name = "\improper Northeast Reaches"
+	icon_state = "tundra2"
+
+/area/surface/outer/sw
+	name = "\improper Southwest Reaches"
+	icon_state = "tundra3"
+
+/area/surface/outer/se
+	name = "\improper Southeast Reaches"
+	icon_state = "tundra4"
 
 //DJSTATION
 
