@@ -544,7 +544,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	var/mob/living/carbon/human/H = mob
 	var/list/valid_species = (all_species - list("Krampus", "Horror", H.species.name))
 
-	if(prob(67)) //2/3rds of the time we'll replace limbs
+	if(prob(80)) //most of the time we'll replace limbs
 		var/list/valid_organs = new()
 		for(var/datum/organ/external/E in H.organs)
 			if(!E.species || E.species == H.species)
