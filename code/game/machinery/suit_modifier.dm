@@ -74,7 +74,7 @@
 	suit_overlay.icon_state = "suitmodifier_working"
 	overlays.Add(suit_overlay)
 	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
-	R.deactivate_suit(H)
+	R.deactivate_suit(H, unequipall = FALSE)
 	var/list/modules_to_activate = list()
 	for(var/obj/item/rig_module/RM in modules_to_install)
 		if(locate(RM.type) in R.modules) //One already installed
@@ -103,7 +103,7 @@
 	unlock_atom(H)
 	overlays.Remove(suit_overlay)
 	suit_overlay.icon_state = null
-	R.initialize_suit(H)
+	R.initialize_suit(H, equipall = FALSE)
 	use_power = 1
 
 /obj/machinery/suit_modifier/get_cell()
