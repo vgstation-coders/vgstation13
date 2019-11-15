@@ -530,3 +530,58 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You feel colorful!</span>")
 	mob.reagents.add_reagent(COLORFUL_REAGENT, 5)
 	mob.reagents.add_reagent(PAISMOKE, 5)
+
+/datum/disease2/effect/chimera
+	name = "Chimeral Xenosis"
+	desc = "Causes the infected's body to gradually mutate into a chimera of different alien species."
+	stage = 3
+	badness = EFFECT_DANGER_HARMFUL
+	chance = 1
+
+/datum/disease2/effect/chimera/activate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+	var/mob/living/carbon/human/H = mob
+	var/list/valid_species = (all_species - list("Krampus", "Horror", H.species.name))
+
+	if(prob(67)) //2/3rds of the time we'll replace limbs
+		var/list/valid_organs = new()
+		for(var/datum/organ/external/E in H.organs)
+			if(!E.species || E.species == H.species)
+				valid_organs |= E
+		if(!valid_organs.len)
+			return //all our organs are already replaced
+		var/datum/organ/external/E = pick(valid_organs)
+		E.species = all_species[pick(valid_species)]
+		H.update_body()
+		//to_chat(mob, "<span class='notice'>Your [E.display_name] feels foreign.</span>")
+	else //the rest of the time we replace internal organs
+		var/list/valid_organs = new()
+		for(var/datum/organ/internal/I in H.internal_organs)
+			if(I.name != "brain" && !I.robotic && ispath(H.species.has_organ[I.name], I))
+				valid_organs |= I
+		if(!valid_organs.len)
+			return //all our organs are already replaced
+
+		var/datum/organ/internal/old_organ = pick(valid_organs)
+		var/list/valid_replacement_organs = new()
+		for(var/I_type in existing_typesof(/datum/organ/internal))
+			var/datum/organ/internal/I = new I_type()
+			if(istype(I, old_organ) && I.type != old_organ.type && !I.robotic)
+				valid_replacement_organs |= I
+		if(!valid_replacement_organs.len)
+			return //nothing interesting to replace with
+
+		var/datum/organ/internal/new_organ = pick(valid_replacement_organs)
+
+		//remove the old organ
+		var/obj/item/organ/internal/old_organ_item = H.remove_internal_organ(H, old_organ, H.organs_by_name[old_organ.parent_organ])
+		old_organ_item.loc = null
+		qdel(old_organ_item)
+
+		//insert the new organ
+		H.internal_organs_by_name[new_organ.name] = new_organ
+		H.internal_organs |= new_organ
+		new_organ.Insert(H)
+
+		mob.visible_message("<span class='warning'>You feel a foreign sensation in your [new_organ.parent_organ].")
