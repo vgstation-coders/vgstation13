@@ -63,6 +63,13 @@
 	flags = FPRINT
 	siemens_coefficient = 0.9
 
+/obj/item/clothing/head/beret/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/gloves/white))
+		new /mob/living/simple_animal/hostile/retaliate/faguette/goblin(get_turf(src))
+		qdel(W)
+		qdel(src)
+
 //Security
 /obj/item/clothing/head/beret/sec
 	name = "security beret"

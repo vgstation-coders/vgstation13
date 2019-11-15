@@ -2,7 +2,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/faguette
 	name = "faguette"
-	desc = "This sad, pitiful creature is all that remains of what used to be a human, cursed by the Gods to aimlessly roam with its mouth and fingers sewn shut, and it’s left arm transformed into a perfectly baked baguette."
+	desc = "This sad, pitiful creature is all that remains of what used to be a human, cursed by the Gods to aimlessly roam with its mouth and fingers sewn shut, and it's left arm transformed into a perfectly baked baguette."
 	icon_state = "faguette"
 	icon_living = "faguette"
 	icon_dead = "faguette_dead"
@@ -58,6 +58,10 @@
 		return
 	..()
 
+/mob/living/simple_animal/hostile/retaliate/faguette/attackby(obj/item/weapon/O, mob/user)
+	if(istype(O,/obj/item/weapon/book))
+		gib()
+		return
 
 /mob/living/simple_animal/hostile/retaliate/faguette/proc/handle_disabilities()
 	if ((prob(5) && paralysis < 10))
@@ -68,5 +72,50 @@
 	if(timestopped)
 		return //under effects of time magick
 
-	var/msg = pick("drools through its stitched mouth","silently cries into its baguette","sloppily mimes tieing an invisible noose around its neck")
+	var/msg = pick("drools slightly","mimes crying into a tissue","sloppily mimes tieing an invisible noose")
 	return ..("me", type, "[msg].")
+
+
+/mob/living/simple_animal/hostile/retaliate/faguette/AttackingTarget()
+	if(isliving(target))
+		var/mob/living/L = target
+		if(prob(10))
+			L.silent += 3
+			L.visible_message("<span class='danger'>\The [src.name] silences \the [L.name]!</span>")
+			return
+	return ..()
+
+
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin
+	name = "mime goblin"
+	desc = "A tiny talking beret and gloves. Is it miming for a baguette?"
+	icon_state = "MimeGoblin"
+	icon_living = "MimeGoblin"
+	icon_dead = null
+	response_help = "pats the"
+	maxHealth = 100
+	health = 100
+	size = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES
+
+	speed = 1
+	turns_per_move = 1
+
+	melee_damage_type = "BRAIN"
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W,/obj/item/weapon/pen)) //Renaming
+		var/n_name = copytext(sanitize(input(user, "What would you like to name this mime goblin?", "Mime Goblin Name", null) as text|null), 1, MAX_NAME_LEN*3)
+		if(n_name && Adjacent(user) && !user.stat)
+			name = "[n_name]"
+		return
+	..()
+
+
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin/say()
+	return
+
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin/death(var/gibbed = FALSE)
+	..(TRUE)
+	new /obj/item/clothing/head/beret(src.loc)
+	new /obj/item/clothing/gloves/white(src.loc)
+	qdel(src)
