@@ -124,7 +124,8 @@
 		if(L)
 			L.metabolize_reagent(src.id, custom_metabolism)
 			return
-	holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
+	if(holder)
+		holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
 
 /datum/reagent/proc/on_mob_life(var/mob/living/M, var/alien)
 	set waitfor = 0
