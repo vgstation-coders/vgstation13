@@ -547,8 +547,8 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	if(prob(80)) //most of the time we'll replace limbs
 		var/list/valid_organs = new()
 		for(var/datum/organ/external/E in H.organs)
-			if(!E.species || E.species == H.species)
-				valid_organs |= E
+			if((!E.species || E.species == H.species) && !E.is_robotic())
+				valid_organs += E
 		if(!valid_organs.len)
 			return //all our organs are already replaced
 		var/datum/organ/external/E = pick(valid_organs)
@@ -558,17 +558,18 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	else //the rest of the time we replace internal organs
 		var/list/valid_organs = new()
 		for(var/datum/organ/internal/I in H.internal_organs)
-			if(I.name != "brain" && !I.robotic && ispath(H.species.has_organ[I.name], I))
-				valid_organs |= I
+			if(I.name != "brain" && !I.robotic && ispath(H.species.has_organ[I.organ_type], I))
+				valid_organs += I
 		if(!valid_organs.len)
 			return //all our organs are already replaced
 
 		var/datum/organ/internal/old_organ = pick(valid_organs)
 		var/list/valid_replacement_organs = new()
-		for(var/I_type in existing_typesof(/datum/organ/internal))
+		for(var/I_type in subtypesof(/datum/organ/internal))
 			var/datum/organ/internal/I = new I_type()
-			if(istype(I, old_organ) && I.type != old_organ.type && !I.robotic)
-				valid_replacement_organs |= I
+			to_chat(mob, "I.organ_type = [I.organ_type] | old_organ.organ_type = [old_organ.organ_type] | I.type = [I.type] | old_organ.type = [old_organ.type]")
+			if((I.organ_type == old_organ.organ_type) && (I.type != old_organ.type) && !I.robotic)
+				valid_replacement_organs += I
 		if(!valid_replacement_organs.len)
 			return //nothing interesting to replace with
 
@@ -576,12 +577,17 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 
 		//remove the old organ
 		var/obj/item/organ/internal/old_organ_item = H.remove_internal_organ(H, old_organ, H.organs_by_name[old_organ.parent_organ])
-		old_organ_item.loc = null
 		qdel(old_organ_item)
 
 		//insert the new organ
-		H.internal_organs_by_name[new_organ.name] = new_organ
+		new_organ.transplant_data = list()
+		new_organ.transplant_data["species"] =    H.species.name
+		new_organ.transplant_data["blood_type"] = H.dna.b_type
+		new_organ.transplant_data["blood_DNA"] =  H.dna.unique_enzymes
+		new_organ.owner = H
+		H.internal_organs_by_name[new_organ.organ_type] = new_organ
 		H.internal_organs |= new_organ
+		H.organs_by_name[new_organ.parent_organ].internal_organs |= new_organ
 		new_organ.Insert(H)
 
-		mob.visible_message("<span class='warning'>You feel a foreign sensation in your [new_organ.parent_organ].")
+		to_chat(mob, "<span class='warning'>You feel a foreign sensation in your [new_organ.parent_organ].")
