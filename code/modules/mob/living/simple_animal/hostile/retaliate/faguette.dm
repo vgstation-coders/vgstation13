@@ -75,7 +75,6 @@
 	var/msg = pick("drools slightly","mimes crying into a tissue","sloppily mimes tying an invisible noose")
 	return ..("me", type, "[msg].")
 
-
 /mob/living/simple_animal/hostile/retaliate/faguette/AttackingTarget()
 	if(isliving(target))
 		var/mob/living/L = target
