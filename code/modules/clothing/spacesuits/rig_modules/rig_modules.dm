@@ -140,9 +140,9 @@
 	user.mutations.Add(M_HULK) //I'M FUCKING INVINCIBLE!
 	user.update_mutations()
 	say_to_wearer("Reactive sensors online.")
-	R.cant_remove = TRUE
+	R.canremove = FALSE
 	if(R.H)
-		R.H.cant_remove = TRUE
+		R.H.canremove = FALSE
 	say_to_wearer("Safety lock enabled.")
 	activated = TRUE
 	
@@ -151,9 +151,9 @@
 	user.mutations.Remove(M_HULK)
 	user.update_mutations()
 	say_to_wearer("Reactive sensors offline.")
-	R.cant_remove = FALSE
+	R.canremove = TRUE
 	if(R.H)
-		R.H.cant_remove = FALSE
+		R.H.canremove = TRUE
 	say_to_wearer("Safety lock disabled.")
 	..()
 
