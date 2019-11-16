@@ -45,6 +45,7 @@
 /datum/job/assistant/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
 	H.put_in_hands(new /obj/item/weapon/storage/toolbox/mechanical(get_turf(H)))
+	H.put_in_hands(new /obj/item/weapon/card/id/captains_spare(get_turf(H)))
 
 /datum/job/assistant/get_access()
 	if(config.assistant_maint)
