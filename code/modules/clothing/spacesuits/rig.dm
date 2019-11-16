@@ -199,12 +199,18 @@
 		for(var/obj/item/rig_module/priority_module in modules)
 			if(priority_module.requires_component)
 				priority_module.activate(user,src)
+		if(T)
+			if(user.s_store)
+				user.remove_from_mob(user.s_store)
+			to_chat(user, "<span class = 'notice'>\The [T] extends from \the [src].</span>")
+			user.equip_to_slot(T, slot_s_store)
+			T = null
 		if(H)
 			if(user.head)
 				user.remove_from_mob(user.head)
 			to_chat(user, "<span class = 'notice'>\The [H] extends from \the [src].</span>")
 			user.equip_to_slot(H, slot_head)
-			if(!user.internal) //Let's see if they have a tank.
+			if(!user.internal)
 				user.toggle_internals(user)
 			H = null
 		if(G)
@@ -213,14 +219,6 @@
 			to_chat(user, "<span class = 'notice'>\The [G] extends from \the [src].</span>")
 			user.equip_to_slot(G, slot_gloves)
 			G = null
-		if(T)
-			if(user.s_store)
-				user.remove_from_mob(user.s_store)
-			to_chat(user, "<span class = 'notice'>\The [T] extends from \the [src].</span>")
-			user.equip_to_slot(T, slot_s_store)
-			if(user.has_breathing_mask() && !user.internal) //They didn't have a tank, but do they have a helmet/mask?
-				user.toggle_internals(user, T)
-			T = null
 		if(MB)
 			if(user.shoes)
 				user.remove_from_mob(user.shoes)
