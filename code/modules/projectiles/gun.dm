@@ -240,6 +240,9 @@
 		play_firesound(user, reflex)
 		return
 
+	if(recoil)
+		spawn()
+			shake_camera(user, recoil + 1, recoil)
 		if(user.locked_to && isobj(user.locked_to) && !user.locked_to.anchored )
 			var/direction = get_dir(user,target)
 			spawn()
