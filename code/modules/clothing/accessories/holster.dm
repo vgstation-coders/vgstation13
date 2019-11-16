@@ -164,6 +164,12 @@
 
 /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy
 	gun_type = /obj/item/weapon/gun/projectile/NTUSP/fancy
+	
+/obj/item/clothing/accessory/holster/handgun/preloaded/glock
+	gun_type = /obj/item/weapon/gun/projectile/glock
+	
+/obj/item/clothing/accessory/holster/handgun/preloaded/glock/fancy
+	gun_type = /obj/item/weapon/gun/projectile/glock/fancy
 
 //
 // Knives
