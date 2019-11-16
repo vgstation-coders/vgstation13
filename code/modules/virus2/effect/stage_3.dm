@@ -567,7 +567,6 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		var/list/valid_replacement_organs = new()
 		for(var/I_type in subtypesof(/datum/organ/internal))
 			var/datum/organ/internal/I = new I_type()
-			to_chat(mob, "I.organ_type = [I.organ_type] | old_organ.organ_type = [old_organ.organ_type] | I.type = [I.type] | old_organ.type = [old_organ.type]")
 			if((I.organ_type == old_organ.organ_type) && (I.type != old_organ.type) && !I.robotic)
 				valid_replacement_organs += I
 		if(!valid_replacement_organs.len)
