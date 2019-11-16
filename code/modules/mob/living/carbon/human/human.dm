@@ -283,6 +283,13 @@
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
 
+		if(is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit))
+			var/obj/item/clothing/suit/space/rig/R = wear_suit
+			if(R.cell)
+				stat("RIG Charge:", R.cell.charge)
+			if(R.activated)
+				stat("RIG Activated Modules:",english_list(R.modules))
+
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
 		if(istype(L, /obj/item/weapon/implant/loyalty))

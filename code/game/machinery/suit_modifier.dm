@@ -49,6 +49,8 @@
 	.=..()
 
 /obj/machinery/suit_modifier/attack_hand(mob/user)
+	if(!isliving(user))
+		return
 	if(is_locking(/mob/living/carbon/human))
 		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 		say("Unit Occupied.", class = "binaryradio")

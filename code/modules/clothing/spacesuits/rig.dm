@@ -137,6 +137,8 @@
 		T = new tank_type(src)
 
 /obj/item/clothing/suit/space/rig/Destroy()
+	if(processing_objects.Find(src))
+		processing_objects.Remove(src)
 	for(var/obj/item/I in list(H,G,T,MB))
 		if(I && (I.loc == src || !I.loc))
 			qdel(I)
@@ -165,6 +167,28 @@
 	if(from_slot == slot_wear_suit && istype(user))
 		deactivate_suit(user)
 
+/obj/item/clothing/suit/space/rig/process()
+	if(gcDestroyed)
+		return
+	if(!activated)
+		processing_objects.Remove(src)
+		return
+	if(!ishuman(loc))
+		activated = FALSE
+		return
+	var/mob/living/carbon/human/wearer = loc
+	if(!wearer.is_wearing_item(src, slot_wear_suit))
+		return
+	if(wearer.timestopped)
+		return
+	for(var/obj/item/rig_module/R in modules)
+		if(R.activated && R.active_power_usage)
+			if(!cell.use(R.active_power_usage))
+				R.say_to_wearer("Not enough power available in [src]!")
+				R.deactivate(R.wearer,src)	
+				continue
+			R.do_process()
+
 /obj/item/clothing/suit/space/rig/proc/toggle_suit(mob/living/carbon/human/user)
 	if(!user.is_wearing_item(src, slot_wear_suit))
 		return
@@ -172,6 +196,9 @@
 
 /obj/item/clothing/suit/space/rig/proc/initialize_suit(mob/living/carbon/human/user, var/equipall = TRUE)
 	if(equipall)
+		for(var/obj/item/rig_module/priority_module in modules)
+			if(priority_module.requires_component)
+				priority_module.activate(user,src)
 		if(H)
 			if(user.head)
 				user.remove_from_mob(user.head)
@@ -200,9 +227,11 @@
 			to_chat(user, "<span class = 'notice'>\The [MB] extends from \the [src].</span>")
 			user.equip_to_slot(MB, slot_shoes)
 			MB = null
-	for(var/obj/item/rig_module/R in modules)
-		R.activate(user,src)
+	for(var/obj/item/rig_module/module in modules)
+		if(!module.activated) //Skip what is already activated.
+			module.activate(user,src)
 	activated = TRUE
+	processing_objects.Add(src)
 
 /obj/item/clothing/suit/space/rig/proc/deactivate_suit(mob/living/carbon/human/user, var/unequipall = TRUE)
 	if(unequipall)
@@ -249,6 +278,8 @@
 	for(var/obj/item/rig_module/R in modules)
 		R.deactivate(user,src)
 	activated = FALSE
+	if(processing_objects.Find(src))
+		processing_objects.Remove(src)
 
 /obj/item/clothing/suit/space/rig/attackby(obj/W, mob/user)
 	if(head_type && !H && istype(W, head_type) && user.drop_item(W, src, force_drop = TRUE))
