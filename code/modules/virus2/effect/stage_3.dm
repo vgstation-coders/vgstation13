@@ -537,14 +537,24 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	stage = 3
 	badness = EFFECT_DANGER_HARMFUL
 	chance = 1
+	max_multiplier = 3
 
 /datum/disease2/effect/chimera/activate(var/mob/living/mob)
 	if(!ishuman(mob))
 		return
 	var/mob/living/carbon/human/H = mob
-	var/list/valid_species = (all_species - list("Krampus", "Horror", H.species.name))
 
-	if(prob(80)) //most of the time we'll replace limbs
+	var/list/valid_species = list("Human", "Unathi", "Tajaran", "Grey", "Skrell", "Vox", "Diona", "Slime", "Mushroom")
+	var/list/species_rare = list("Manifested", "Skellington", "Skeletal Vox", "Muton", "Golem", "Grue", "Ghoul", "Lich")
+	var/species_mult = clamp(multiplier - 1, 0, 1)
+	for(var/S in species_rare)
+		if(prob(100*species_mult))
+			valid_species += S
+	valid_species.Remove(H.species.name)
+
+	var/limb_probability = min(100, 160 - (30*multiplier))
+
+	if(prob(limb_probability)) //most of the time, depending on the multiplier, we'll replace limbs
 		var/list/valid_organs = new()
 		for(var/datum/organ/external/E in H.organs)
 			if((!E.species || E.species == H.species) && !E.is_robotic())
