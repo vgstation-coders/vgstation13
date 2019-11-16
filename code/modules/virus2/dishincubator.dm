@@ -25,7 +25,7 @@
 	var/on = FALSE
 
 	var/mutatechance = 5
-	var/growthrate = 3
+	var/growthrate = 4
 
 
 /obj/machinery/disease2/incubator/New()
