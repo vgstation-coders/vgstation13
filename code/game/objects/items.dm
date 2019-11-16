@@ -1343,6 +1343,9 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/on_mousedrop_to_inventory_slot()
 	return
 
+/obj/item/proc/stealthy(var/mob/living/carbon/human/H)
+	return H.isGoodPickpocket()
+
 /obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
 	return TRUE
 

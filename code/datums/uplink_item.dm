@@ -791,8 +791,16 @@ var/list/uplink_items = list()
 	name = "Pickpocket's Gloves"
 	desc = "A pair of sleek gloves to aid in pickpocketing, while wearing these you can sneakily strip any item without the other person being alerted. Pickpocketed items will also be put into your hand rather than fall to the ground."
 	item = /obj/item/clothing/gloves/black/thief
-	cost = 8
-	discounted_cost = 6
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Assistant")
+
+/datum/uplink_item/jobspecific/pickpocketglovestorage
+	name = "Pickpocket's Gloves with Storage"
+	desc = "A pair of sleek gloves to aid in pickpocketing, these come with their own small storage where pickpocketed items will automatically be placed in if there is room"
+	item = /obj/item/clothing/gloves/black/thief/storage
+	cost = 7
+	discounted_cost = 4
 	jobs_with_discount = list("Assistant")
 
 /datum/uplink_item/jobspecific/greytide

@@ -25,8 +25,11 @@
 
 		drop_from_inventory(target_item)
 		target_item.stripped(src, user)
-		if(pickpocket)
-			user.put_in_hands(target_item)
+		var/mob/living/carbon/human/H = user
+		if(pickpocket == 2) //Search for the glove's storage suits and see if they are full as only the thief storage gloves use this
+			H.place_in_glove_storage(target_item) //Defined in human.dm
+		else if(pickpocket)
+			H.put_in_hands(target_item)
 
 		return TRUE
 
