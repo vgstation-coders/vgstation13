@@ -299,3 +299,15 @@
 	H.add_spell(new/spell/targeted/create_trinket)
 	H.add_spell(new/spell/targeted/cool_object)
 	H.add_spell(new/spell/targeted/warm_object)
+
+/datum/spellbook_artifact/blindingspeed
+	name = "Boots of Blinding Speed"
+	abbreviation = "BS"
+	desc = "Makes you much faster, but blinds you while you move."
+	spawned_items = list(/obj/item/clothing/shoes/blindingspeed)
+
+/datum/spellbook_artifact/fuckup
+	name = "Fuckup Boots"
+	abbreviation = "FU"
+	desc = "Makes you much slower, but breaches as you walk."
+	spawned_items = list(/obj/item/clothing/shoes/fuckup)

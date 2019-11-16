@@ -95,6 +95,7 @@
 	relativewall_neighbours()
 
 /turf/simulated/wall/Destroy()
+	remove_rot()
 	var/temploc = src.loc
 
 	if(!del_suppress_resmoothing)

@@ -36,7 +36,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	icon_state = "0-1"
 	var/d1 = 0								// cable direction 1 (see above)
 	var/d2 = 1								// cable direction 2 (see above)
-	plane = ABOVE_PLATING_PLANE
+	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in New()
 	layer = WIRE_LAYER
 	var/obj/item/device/powersink/attached	// holding this here for qdel
 	var/_color = "red"
@@ -83,6 +83,7 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/New(loc)
 	..(loc)
 
+	reset_plane()
 	cableColor(_color)
 
 	// ensure d1 & d2 reflect the icon_state for entering and exiting cable
@@ -120,6 +121,9 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	attached = null
 	..()								// then go ahead and delete the cable
+
+/obj/structure/cable/proc/reset_plane() //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
+	plane = ABOVE_PLATING_PLANE
 
 /obj/structure/cable/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	.=..()

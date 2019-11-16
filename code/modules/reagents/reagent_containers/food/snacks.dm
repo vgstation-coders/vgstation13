@@ -3878,7 +3878,7 @@
 	icon_state = "tendies"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/New()
+/obj/item/weapon/reagent_containers/food/snacks/chicken_fillet/New()
 	..()
 	reagents.add_reagent(CORNOIL, 3)
 	bitesize = 2

@@ -12,6 +12,14 @@
 		return 15
 	return 0
 
+/datum/event/immovable_rod/big/can_start(var/list/active_with_role)
+	if(active_with_role["Engineer"] > 2)
+		return 15
+	return 0
+
+/datum/event/immovable_rod/hyper/can_start(var/list/active_with_role)
+	return 0
+
 /datum/event/immovable_rod/announce()
 	command_alert(/datum/command_alert/immovable_rod)
 

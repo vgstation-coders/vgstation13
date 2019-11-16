@@ -129,10 +129,10 @@
 		update_faction_icons()
 
 /datum/mind/proc/store_memory(new_text)
-	if(lentext(memory) > MAX_PAPER_MESSAGE_LEN)
+	if(length(memory) > MAX_PAPER_MESSAGE_LEN)
 		to_chat(current, "<span class = 'warning'>Your memory, however hazy, is full.</span>")
 		return
-	if(lentext(new_text) > MAX_MESSAGE_LEN)
+	if(length(new_text) > MAX_MESSAGE_LEN)
 		to_chat(current, "<span class = 'warning'>That's a lot to memorize at once.</span>")
 		return
 	if(new_text)

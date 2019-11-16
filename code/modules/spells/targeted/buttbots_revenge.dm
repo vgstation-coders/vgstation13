@@ -7,7 +7,7 @@
 
 	school = "evocation"
 	charge_max = 500
-	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
+	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "ARSE NATH"
 	invocation_type = SpI_SHOUT
 	range = 1

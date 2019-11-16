@@ -303,6 +303,9 @@
 		else
 			temp = "<font color = #666633>-% Unable to locate machine to unlink from, try again. %-</font color>"
 
+	for(var/obj/machinery/computer/telecomms/monitor/M in range(25,src))
+		M.notify_unlinked()
+
 /obj/machinery/telecomms/linkWith(var/mob/user, var/mob/O)
 	if(O && O != src && istype(O, /obj/machinery/telecomms))
 		var/obj/machinery/telecomms/T=O

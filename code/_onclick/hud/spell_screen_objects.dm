@@ -324,6 +324,10 @@
 		returnToPool(src)
 		return
 
+	if(usr.is_pacified() && (spell.spell_flags & IS_HARMFUL))
+		to_chat(usr, "<span class='notice'>You really don't feel like casting that spell right now...</span>")
+		return
+
 	var/list/param_list = params2list(params)
 	if(param_list["middle"])
 		if(spell.on_right_click(usr))

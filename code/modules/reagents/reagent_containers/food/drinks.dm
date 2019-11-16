@@ -628,21 +628,6 @@
 		playsound(user, 'sound/items/can_crushed.ogg', 75, 1)
 		qdel(src)
 
-
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(iswirecutter(W))
-		to_chat(user, "You cut out the top and bottom of \the [src] with \the [W].")
-		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/aluminum_cylinder/I = new (get_turf(user))
-			user.put_in_hands(I)
-			qdel(src)
-		else
-			new /obj/item/weapon/aluminum_cylinder(get_turf(src.loc))
-			qdel(src)
-
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola
 	name = "Space Cola"
 	desc = "Cola. in space."
@@ -1400,13 +1385,7 @@
 	..()
 	reagents.add_reagent(GREYVODKA, 100)
 
-
-
-
-
 /obj/item/weapon/reagent_containers/food/drinks/proc/smash(mob/living/M as mob, mob/living/user as mob)
-
-
 	if(molotov == 1) //for molotovs
 		if(lit)
 			new /obj/effect/decal/cleanable/ash(get_turf(src))
@@ -1463,30 +1442,28 @@
 					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
 			else
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
+		
+		create_broken_bottle()
 
+/obj/item/weapon/reagent_containers/food/drinks/proc/create_broken_bottle()
+	//create new broken bottle
+	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(loc)
+	B.name = src.smashname
+	B.icon_state = src.icon_state
 
-		//create new broken bottle
-		var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(loc)
-		B.name = src.smashname
-		B.icon_state = src.icon_state
+	if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
+		B.icon_state = "glass_empty"
 
-		if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
-			B.icon_state = "glass_empty"
+	if(prob(33))
+		getFromPool(/obj/item/weapon/shard, get_turf(src)) // Create a glass shard at the hit location!
 
-		if(prob(33))
-			getFromPool(/obj/item/weapon/shard, get_turf(src)) // Create a glass shard at the hit location!
-
-		var/icon/Q = new('icons/obj/drinks.dmi', B.icon_state)
-		Q.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
-		Q.SwapColor(rgb(255, 0, 220, 255), rgb(0, 0, 0, 0))
-		B.icon = Q
-		src.transfer_fingerprints_to(B)
-
-
-		spawn(50)
-			qdel(src)
-
-
+	var/icon/Q = new('icons/obj/drinks.dmi', B.icon_state)
+	Q.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
+	Q.SwapColor(rgb(255, 0, 220, 255), rgb(0, 0, 0, 0))
+	B.icon = Q
+	src.transfer_fingerprints_to(B)
+	playsound(src, "shatter", 70, 1)
+	qdel(src)
 
 //////////////////////
 // molotov cocktail //
@@ -1559,6 +1536,26 @@
 	else
 		set_light(0)
 
+//todo: can light cigarettes with
+//todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now
+
+////////  Could be expanded upon:
+//  make it work with more chemicals and reagents, more like a chem grenade
+//  only allow the bottle to be stuffed if there are certain reagents inside, like fuel
+//  different flavor text for different means of lighting
+//  new fire overlay - current is edited version of the IED one
+//  a chance to not break, if desired
+//  fingerprints appearing on the object, which might already happen, and the shard
+//  belt sprite and new hand sprite
+//	ability to put out with water or otherwise
+//	burn out after a time causing the contents to ignite
+//	make into its own item type so they could be spawned full of fuel with New()
+//  colored light instead of white light
+//	the rag can store chemicals as well so maybe the rag's chemicals could react with the bottle's chemicals before or upon breaking
+//  somehow make it possible to wipe down the bottles instead of exclusively stuffing rags into them
+//  make rag retain chemical properties or color (if implemented) after smashing
+////////
+
 /obj/item/weapon/reagent_containers/food/drinks/update_icon()
 	src.overlays.len = 0
 	var/image/Im
@@ -1587,36 +1584,55 @@
 	return
 
 // Sliding from one table to another
-/obj/item/weapon/reagent_containers/food/drinks/MouseDropFrom(atom/over_object,atom/src_location,over_location,src_control,over_control,params)
+/obj/item/weapon/reagent_containers/food/drinks/MouseDropFrom(atom/over_object,atom/src_location,atom/over_location,src_control,over_control,params)
 	var/mob/user = usr
 	if (!istype(src_location))
 		return
 	if (!user || user.incapacitated())
 		return
-	if (!user.Adjacent(src) || !src_location.Adjacent(over_location))
-		return
-	if ((locate(/obj/structure/table) in src_location) && (locate(/obj/structure/table) in over_location))
-		user.visible_message("<span class='notice'>\The [user] slides \the [src] down the table.</span>", "<span class='notice'>You slide \the [src] down the table!</span>")
-		forceMove(over_location, glide_size_override = DELAY2GLIDESIZE(2))
-		return
+	// Attempted drink sliding
+	if (locate(/obj/structure/table) in src_location)
+		if (M_SOBER in user.mutations)
+			if (!user.Adjacent(src))
+				return
+			var/distance = manhattan_distance(over_location, src)
+			if (distance >= 8) // More than a full screen to go
+				return ..()
+		
+			// Geometrically checking if we're on a straight line.
+			var/vector/V = atoms2vector(src, over_location)
+			var/vector/V_norm = V.duplicate()
+			V_norm.normalize()
+			if (!V_norm.is_integer())
+				return ..() // Only a cardinal vector (north, south, east, west) can pass this test
+			
+			// Checks if there's tables on the path.
+			var/turf/dest = get_translated_turf(V)
+			var/turf/temp_turf = src_location
+
+			do
+				temp_turf = temp_turf.get_translated_turf(V_norm)
+				if (!locate(/obj/structure/table) in temp_turf)
+					var/vector/V2 = atoms2vector(src, temp_turf)
+					vector_translate(V2, 0.1 SECONDS)
+					user.visible_message("<span class='warning'>\The [user] slides \the [src] down the table... and straight into the ground!</span>", "<span class='warning'>You slide \the [src] down the table, and straight into the ground!</span>")
+					create_broken_bottle()
+					return
+			while (temp_turf != dest)
+
+			vector_translate(V, 0.1 SECONDS)
+			user.visible_message("<span class='notice'>\The [user] expertly slides \the [src] down the table.</span>", "<span class='notice'>You slide \the [src] down the table. What a pro.</span>")
+			return
+		else
+			if (!(locate(/obj/structure/table) in over_location))
+				return ..()
+			if (!user.Adjacent(src) || !src_location.Adjacent(over_location)) // Regular users can only do short slides.
+				return ..()
+			if ((M_CLUMSY in user.mutations) && prob(10))
+				user.visible_message("<span class='warning'>\The [user] tries to slide \the [src] down the table, but fails miserably.</span>", "<span class='warning'>You <b>fail</b> to slide \the [src] down the table!</span>")
+				create_broken_bottle()
+				return
+			user.visible_message("<span class='notice'>\The [user] slides \the [src] down the table.</span>", "<span class='notice'>You slide \the [src] down the table!</span>")
+			forceMove(over_location, glide_size_override = DELAY2GLIDESIZE(0.4 SECONDS))
+			return
 	return ..()
-
-//todo: can light cigarettes with
-//todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now
-
-////////  Could be expanded upon:
-//  make it work with more chemicals and reagents, more like a chem grenade
-//  only allow the bottle to be stuffed if there are certain reagents inside, like fuel
-//  different flavor text for different means of lighting
-//  new fire overlay - current is edited version of the IED one
-//  a chance to not break, if desired
-//  fingerprints appearing on the object, which might already happen, and the shard
-//  belt sprite and new hand sprite
-//	ability to put out with water or otherwise
-//	burn out after a time causing the contents to ignite
-//	make into its own item type so they could be spawned full of fuel with New()
-//  colored light instead of white light
-//	the rag can store chemicals as well so maybe the rag's chemicals could react with the bottle's chemicals before or upon breaking
-//  somehow make it possible to wipe down the bottles instead of exclusively stuffing rags into them
-//  make rag retain chemical properties or color (if implemented) after smashing
-////////

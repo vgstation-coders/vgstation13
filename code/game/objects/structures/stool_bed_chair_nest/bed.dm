@@ -9,9 +9,7 @@
 	anchored = 1
 	sheet_type = /obj/item/stack/sheet/metal
 	sheet_amt = 1
-
 	var/mob_lock_type = /datum/locking_category/buckle/bed
-	var/glued = FALSE
 
 /obj/structure/bed/New()
 	..()
@@ -131,13 +129,13 @@
 		M.pulledby.start_pulling(src)
 
 /obj/structure/bed/unlock_atom(var/atom/movable/AM)
-	if(glued && ismob(AM))
+	if(current_glue_state != GLUE_STATE_NONE && ismob(AM))
 		return FALSE
 	return ..()
 
 /obj/structure/bed/Destroy()
-	if(glued && is_locking(mob_lock_type))
-		glued = FALSE // So that unlock_atom called in /atom/movable/Destroy can succeed
+	if(current_glue_state == GLUE_STATE_PERMA && is_locking(mob_lock_type))//Don't de-ass someone if it was temporary glue.
+		current_glue_state = GLUE_STATE_NONE
 		var/mob/living/carbon/human/locked = get_locked(mob_lock_type)[1]
 		if(istype(locked) && locked.remove_butt())
 			playsound(src, 'sound/items/poster_ripped.ogg', 100, TRUE)

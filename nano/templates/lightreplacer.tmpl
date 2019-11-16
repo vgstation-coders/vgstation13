@@ -1,0 +1,77 @@
+<!-- 
+Title: Light Replacer UI
+Used In File(s): /code/game/obj/item/device/lightreplacer.dm
+-->
+
+<!--resource bars-->
+<div class="statusDisplay">
+	<div class="line">
+		<div class="statusLabel">
+			Glass ({{:data.resources.glass}}/{{:data.resources.glass_max}})
+		</div>  
+		{{:helper.displayBar(data.resources.glass, 0, data.resources.glass_max)}}
+	</div>
+	{{if !data.settings.borg}}
+	<div class="line">
+		<div class="statusLabel">
+			Cardboard ({{:data.resources.cardboard}}/{{:data.resources.cardboard_max}})
+		</div>  
+		{{:helper.displayBar(data.resources.cardboard, 0, data.resources.cardboard_max)}}
+	</div>
+	{{/if}}
+</div>
+
+<!--light options-->
+<div class="line">
+	<div class="itemLabel">
+		Options
+	</div>
+</div>
+<div class="line">
+	{{:helper.link('Shape: ' + data.settings.shape, 'lightbulb', {'settings' : 'shape'})}}
+	{{:helper.link('Type: ' + data.settings.type, 'sync', {'settings' : 'type'})}}
+</div>
+<div class ="line">
+	{{:helper.link('Build light', 'hammer', {'build' : 'single'})}}
+	{{:helper.link('Recycle waste', 'lightbulb', {'recycle' : 'recycle'})}}
+	{{if data.settings.borg}}
+		{{:helper.link('Recharge glass', 'lightbulb', {'recharge' : 'recharge'})}}
+		{{:helper.link('Dump supply', 'lightbulb', {'dump' : 'dump'})}}
+	{{/if}}
+</div>
+
+<!--adv light options-->
+{{if data.settings.type == "Smart"}}
+<div class="line">
+	<div class="itemLabel">
+		Advanced Options
+	</div>
+</div>
+<div class="line">
+	{{:helper.link('Color: ' + '<span style="font-weight:bolder;color:' + data.settings.color + '">' + data.settings.color + '</span></b>', 'palette', {'settings' : 'color'})}}
+	{{:helper.link('Brightness: ' + data.settings.brightness, 'sun', {'settings' : 'brightness'})}}
+	{{:helper.link('Frequency: ' + data.settings.frequency, 'square-wave', {'settings' : 'frequency'})}}
+</div>
+{{/if}}
+<div class="line">
+	<div class="statusDisplay">
+		<div class="line">
+			<div class="statusLabel">
+				Supply ({{:data.supply.amount}}/21)
+			</div>
+			{{if !data.settings.borg}}
+			{{:helper.link('Fold', 'box-open', {'fold' : 'supply'}, data.supply.notexists)}}
+			{{:helper.link('Eject', 'eject', {'eject' : 'supply'}, data.supply.exists)}}
+			{{/if}}
+		</div>
+		<div class="line">
+			<div class="statusLabel">
+				Waste ({{:data.waste.amount}}/21)
+			</div>
+			{{if !data.settings.borg}}
+			{{:helper.link('Fold', 'box-open', {'fold' : 'waste'}, data.waste.notexists)}}
+			{{:helper.link('Eject', 'eject', {'eject' : 'waste'}, data.waste.exists)}}
+			{{/if}}
+		</div>
+	</div>
+</div

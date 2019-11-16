@@ -7,6 +7,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 20
 	selection_color = "#dddddd"
 	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons)
 	minimal_access = list(access_bar,access_weapons)
@@ -69,6 +70,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 20
 	selection_color = "#dddddd"
 	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue)
 	minimal_access = list(access_kitchen, access_morgue, access_bar)
@@ -117,6 +119,7 @@
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the head of personnel"
+	wage_payout = 20
 	selection_color = "#dddddd"
 	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
 	minimal_access = list(access_hydroponics, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
@@ -177,6 +180,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 65
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/supply
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
@@ -221,6 +225,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the quartermaster and the head of personnel"
+	wage_payout = 20
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/supply
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
@@ -264,6 +269,7 @@
 	total_positions = 3
 	spawn_positions = 3
 	supervisors = "the quartermaster and the head of personnel"
+	wage_payout = 30
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/supply
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
@@ -313,6 +319,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 15
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/clown
 	access = list(access_clown, access_theatre, access_maint_tunnels)
@@ -379,6 +386,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 15
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/mime
 	access = list(access_mime, access_theatre, access_maint_tunnels)
@@ -469,6 +477,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 20
 	selection_color = "#dddddd"
 	access = list(access_janitor, access_maint_tunnels)
 	minimal_access = list(access_janitor, access_maint_tunnels)
@@ -518,6 +527,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 25
 	selection_color = "#dddddd"
 	access = list(access_library, access_maint_tunnels)
 	minimal_access = list(access_library)
@@ -571,6 +581,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "Nanotrasen Law, CentComm Officals, and the station's captain."
+	wage_payout = 55
 	selection_color = "#dddddd"
 	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo, access_medical, access_bar, access_kitchen, access_hydroponics)
 	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,  access_bar, access_kitchen)

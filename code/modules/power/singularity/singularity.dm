@@ -713,23 +713,19 @@ var/list/global_singularity_pool
 		else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
 			var/mob/living/carbon/brain/B = M
 			if(B.brain_dead_chat())
-				to_chat(M, message)		
-	
+				to_chat(M, message)
+	global_deadchat_listeners -= listener	
+	global_singularity_pool -= src
+	qdel(listener)
+
 /obj/machinery/singularity/deadchat_controlled/New(loc, var/starting_energy = 50, var/temp = 0)
 	..()
 	listener = new /datum/deadchat_listener/singulo_listener
 	listener.parent = src
 	global_deadchat_listeners += listener
 	global_singularity_pool -= src
-	
-/obj/machinery/singularity/deadchat_controlled/Destroy()
-	..()
-	global_deadchat_listeners -= listener	
-	global_singularity_pool -= src
-	qdel(listener)
-	
-	
-	
+
+
 /obj/machinery/singularity/deadchat_controlled/proc/process_deadchat(var/ckey, var/message)
 	if(deadchat_mode == "Anarchy")
 		var/cooldown = ckey_to_cooldown[ckey]

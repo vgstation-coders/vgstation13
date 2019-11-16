@@ -12,7 +12,7 @@
 	spell_levels = list(Sp_SPEED = 0, Sp_AMOUNT = 0)
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 1, Sp_AMOUNT = 2) //each level of power grants 1 additional target.
 
-	spell_flags = NEEDSCLOTHES | Z2NOCAST
+	spell_flags = NEEDSCLOTHES | Z2NOCAST | IS_HARMFUL
 	invocation = "ARCANUM VIRIUM CONGREGABO"
 	invocation_type = SpI_SHOUT
 	range = 0

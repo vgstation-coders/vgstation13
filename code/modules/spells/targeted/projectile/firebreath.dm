@@ -10,7 +10,7 @@
 	school = "evocation"
 	invocation = "SPY'SI MEAT'A'BAL"
 
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	spell_aspect_flags = SPELL_FIRE
 	dumbfire = 0
 

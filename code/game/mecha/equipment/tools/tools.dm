@@ -1512,10 +1512,13 @@
 		return
 
 	playsound(T, 'sound/weapons/Genhit.ogg', 50, 1)
-	if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
-		T.ChangeTurf(/turf/simulated/floor/plating/airless)
-	else
-		T.ChangeTurf(/turf/simulated/floor/plating)
+	if(T.air)
+		var/datum/gas_mixture/GM = T.air
+		if(GM.pressure > HALF_ATM)
+			T.ChangeTurf(/turf/simulated/floor/plating)
+			return
+	T.ChangeTurf(/turf/simulated/floor/plating/airless)
+
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector
 	name = "\improper Exosuit-Mounted Radiation Collector Array"

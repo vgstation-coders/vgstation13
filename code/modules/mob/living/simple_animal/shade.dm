@@ -73,6 +73,7 @@
 	if(timestopped)
 		return FALSE //under effects of time magick
 	..()
+	regular_hud_updates()
 	if(isDead())
 		for(var/i=0;i<3;i++)
 			new /obj/item/weapon/ectoplasm (src.loc)
@@ -127,13 +128,6 @@
 		to_chat(user, "<span class='warning'>It appears to be dormant.</span>")
 
 ////////////////HUD//////////////////////
-
-/mob/living/simple_animal/shade/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	. = ..()
-
-	regular_hud_updates()
 
 /mob/living/simple_animal/shade/regular_hud_updates()
 	update_pull_icon() //why is this here?

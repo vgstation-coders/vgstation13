@@ -6,6 +6,7 @@
 	total_positions = 2
 	spawn_positions = -1
 	supervisors = "absolutely everyone"
+	wage_payout = 10
 	selection_color = "#dddddd"
 	access = list()			//See /datum/job/assistant/get_access()
 	minimal_access = list()	//See /datum/job/assistant/get_access()

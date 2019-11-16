@@ -17,6 +17,9 @@
 /obj/item/weapon/implant/proc/activate()
 	return
 
+// What does the implant do when it's removed?
+/obj/item/weapon/implant/proc/handle_removal(var/mob/remover)
+	return
 
 // What does the implant do upon injection?
 // return 0 if the implant fails (ex. Revhead and loyalty implant.)
@@ -302,9 +305,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	if(isrevnothead(H))
 		var/datum/role/R = H.mind.GetRole(REV)
 		R.Drop()
-	if(H.mind && H.mind.GetRole(IMPLANTSLAVE))
-		var/datum/role/R = H.mind.GetRole(IMPLANTSLAVE)
-		R.Drop()
 
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
 	return 1
@@ -370,6 +370,15 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	update_faction_icons()
 	log_admin("[ckey(user.key)] has mind-slaved [ckey(H.key)].")
 	return 1
+
+/obj/item/weapon/implant/traitor/handle_removal(var/mob/remover)
+	if (!imp_in.mind)
+		return
+	var/datum/role/R = imp_in.mind.GetRole(IMPLANTSLAVE)
+	if (!R)
+		return
+	log_admin("[key_name(remover)] has removed a greytide implant from [key_name(imp_in)].")
+	R.Drop(FALSE)
 
 /obj/item/weapon/implant/adrenalin
 	name = "adrenalin implant"

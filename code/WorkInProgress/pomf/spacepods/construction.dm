@@ -24,11 +24,6 @@
 	construct = null
 	..()
 
-/obj/structure/spacepod_frame/attackby(obj/item/W as obj, mob/user as mob)
-	if(!construct || !construct.action(W, user))
-		return ..()
-	return 1
-
 /obj/structure/spacepod_frame/attack_hand()
 	return
 

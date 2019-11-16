@@ -20,6 +20,8 @@
 /obj/item/clothing/suit/storage/wintercoat/New()
 	if(!nohood)
 		hood = new(src)
+		if(wizard_garb)
+			hood.wizard_garb = 1
 	else
 		actions_types = null
 

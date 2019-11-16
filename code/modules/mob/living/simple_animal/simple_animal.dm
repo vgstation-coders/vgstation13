@@ -157,6 +157,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			set_glide_size(DELAY2GLIDESIZE(0.5 SECONDS))
 		Move(dest)
 
+/mob/living/simple_animal/proc/check_environment_susceptibility()
+	return TRUE
+
 /mob/living/simple_animal/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -240,7 +243,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/datum/gas_mixture/Environment = A.return_air()
 
-	if(Environment)
+	if(Environment && check_environment_susceptibility())
 		if(abs(Environment.temperature - bodytemperature) > 40)
 			bodytemperature += ((Environment.temperature - bodytemperature) / 5)
 

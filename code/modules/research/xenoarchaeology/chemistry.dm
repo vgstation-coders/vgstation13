@@ -150,16 +150,6 @@ obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/
 	reagents.add_reagent(WATER,50)
 	update_icon()
 
-
-/obj/item/weapon/reagent_containers/glass/beaker/water
-	name = "beaker 'water'"
-
-/obj/item/weapon/reagent_containers/glass/beaker/water/New()
-	..()
-	reagents.add_reagent(WATER,50)
-	update_icon()
-
-
 /obj/item/weapon/reagent_containers/glass/beaker/fuel
 	name = "beaker 'fuel'"
 

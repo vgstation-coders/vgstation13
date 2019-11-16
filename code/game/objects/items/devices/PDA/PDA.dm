@@ -198,6 +198,18 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	app2.onInstall(src)
 	reply = src
 
+	PDAs += src
+	if(default_cartridge)
+		cartridge = new default_cartridge(src)
+	new /obj/item/weapon/pen(src)
+	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
+	currentevent1 = pick(currentevents1)
+	currentevent2 = pick(currentevents2)
+	currentevent3 = pick(currentevents3)
+	onthisday = pick(history)
+	didyouknow = pick(facts)
+
 /obj/item/device/pda/medical
 	name = "Medical PDA"
 	default_cartridge = /obj/item/weapon/cartridge/medical
@@ -613,20 +625,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /*
  *	The Actual PDA
  */
-
-/obj/item/device/pda/New()
-	..()
-	PDAs += src
-	if(default_cartridge)
-		cartridge = new default_cartridge(src)
-	new /obj/item/weapon/pen(src)
-	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
-	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
-	currentevent1 = pick(currentevents1)
-	currentevent2 = pick(currentevents2)
-	currentevent3 = pick(currentevents3)
-	onthisday = pick(history)
-	didyouknow = pick(facts)
 
 /obj/item/device/pda/proc/can_use(mob/user)
 	if(user && ismob(user))

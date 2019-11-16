@@ -207,6 +207,8 @@
 /obj/effect/alien/weeds/node/New()
 	connected_weeds = new()
 	..(src.loc, src)
+	spawn(HEARTBEAT_RATE)
+		heartbeat()
 
 /obj/effect/alien/weeds/node/Destroy()
 	for(var/obj/effect/alien/weeds/W in connected_weeds)
@@ -240,11 +242,6 @@
 	spawn(rand(100, 250))
 		if(src)
 			Life()
-
-/obj/effect/alien/weeds/node/New()
-	..()
-	spawn(HEARTBEAT_RATE)
-		heartbeat()
 
 /obj/effect/alien/weeds/node/proc/heartbeat()
 	flick("weednode-heartbeat",src)

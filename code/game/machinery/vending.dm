@@ -1948,6 +1948,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/helmet/siren = 2,
 		/obj/item/clothing/head/helmet/police = 2,
 		/obj/item/clothing/under/police = 2,
+		/obj/item/device/modkit/fatsec_rig = 2
 		)
 	vouched = list(
 		/obj/item/ammo_storage/magazine/m380auto = 10,
@@ -2134,41 +2135,28 @@ var/global/num_vending_terminals = 1
 		"Space-time bending hardware!"
 	)
 	products = list(
-		/obj/item/clothing/head/wizard = 5,
-		/obj/item/clothing/suit/wizrobe = 5,
-		/obj/item/clothing/head/wizard/red = 5,
-		/obj/item/clothing/suit/wizrobe/red = 5,
-		/obj/item/clothing/head/wizard/clown = 5,
-		/obj/item/clothing/suit/wizrobe/clown = 5,
-		/obj/item/clothing/mask/gas/clown_hat/wiz = 5,
-		/obj/item/clothing/head/wizard/marisa = 5,
-		/obj/item/clothing/suit/wizrobe/marisa = 5,
-		/obj/item/clothing/suit/wizrobe/magician = 5,
-		/obj/item/clothing/head/that/magic = 5,
-		/obj/item/clothing/head/wizard/necro = 5,
-		/obj/item/clothing/suit/wizrobe/necro = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/wizard_robes = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/red_wizrobes = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/clown_wizrobes = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/marisa_wiz = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/magician = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh = 5,
+		/obj/item/clothing/suit/storage/wintercoat/druid = 5,
 		/obj/item/clothing/head/wizard/magus = 5,
 		/obj/item/clothing/suit/wizrobe/magusred = 5,
 		/obj/item/clothing/suit/wizrobe/magusblue = 5,
 		/obj/item/clothing/head/wizard/amp = 5,
 		/obj/item/clothing/suit/wizrobe/psypurple = 5,
-		/obj/item/clothing/head/pharaoh = 5,
-		/obj/item/clothing/suit/wizrobe/pharaoh = 5,
+		/obj/item/clothing/shoes/sandal = 5,
 		/obj/item/clothing/shoes/sandal/marisa/leather = 5,
-		/obj/item/clothing/shoes/sandal = 10,
 		/obj/item/clothing/shoes/sandal/marisa = 5,
 		/obj/item/weapon/staff = 5,
 		/obj/item/weapon/staff/broom = 5,
 		/obj/item/clothing/glasses/monocle = 5,
 		/obj/item/weapon/storage/bag/wiz_cards/full = 1,
-		/obj/item/weapon/storage/bag/potion = 5,
-		/obj/item/clothing/suit/wizrobe/hallowiz = 5,
-		/obj/item/clothing/head/wizard/hallowiz = 5,
-		/obj/item/clothing/head/wizard/mystic = 5,
-		/obj/item/clothing/suit/wizrobe/mystic = 5,
-		/obj/item/clothing/head/wizard/winter = 5,
-		/obj/item/clothing/suit/wizrobe/winter = 5,
-		/obj/item/clothing/suit/storage/wintercoat/druid = 5
+		/obj/item/weapon/storage/bag/potion = 5
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1,
@@ -2443,7 +2431,8 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/undefined
 
-#define AUTO_DROBE_DEFAULT_STOCK 3
+#define AUTO_DROBE_DEFAULT_STOCK 5
+
 /obj/machinery/vending/autodrobe
 	name = "\improper AutoDrobe"
 	desc = "A vending machine containing costumes."
@@ -2483,7 +2472,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/lordadmiral = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/plaguedoctor = AUTO_DROBE_DEFAULT_STOCK,
-		/obj/item/weapon/storage/box/smartbox/clothing_box/rotten = 5,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/rotten = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/frank = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/mexican = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/clothing/head/beret = 3,
@@ -2515,14 +2504,15 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/cowboy = 3,
 		/obj/item/clothing/suit/kimono/sakura = 3,
 		/obj/item/clothing/head/widehat_red = 3,
-		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/suit/red_suit = 3
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/clothing/suit/cardborg = 3,
 		/obj/item/clothing/head/cardborg = 3,
 		/obj/item/clothing/suit/judgerobe = 3,
 		/obj/item/clothing/head/powdered_wig = 3,
-		/obj/item/toy/gun = 3
+		/obj/item/toy/gun = 3,
+		/obj/item/weapon/glue/temp_glue = 1
 		)
 	premium = list(
 		/obj/item/clothing/suit/hgpirate = 3,
@@ -3067,18 +3057,18 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/card/id/vox/extra = 100,
 		/obj/item/weapon/stamp/trader = 20,
 		/obj/item/weapon/capsule = 10,
-		/obj/item/weapon/implantcase/peace = 100,
-		/obj/item/vaporizer = 100,
-		/obj/item/weapon/storage/trader_chemistry = 200,
-		/obj/structure/closet/secure_closet/wonderful = 350,
+		/obj/item/weapon/implantcase/peace = 10,
+		/obj/item/vaporizer = 10,
+		/obj/item/weapon/storage/trader_chemistry = 50,
+		/obj/structure/closet/secure_closet/wonderful = 150,
 		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 100,
-		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 100,
+		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 50,
 		/obj/item/weapon/storage/bluespace_crystal = 150,
-		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 100,
+		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 50,
 		/obj/item/clothing/shoes/clown_shoes/advanced = 50,
-		/obj/item/fish_eggs/seadevil = 50,
-		/obj/machinery/power/antiquesynth = 350,
-		/obj/structure/closet/crate/chest/alcatraz = 300,
+		/obj/item/fish_eggs/seadevil = 10,
+		/obj/machinery/power/antiquesynth = 150,
+		/obj/structure/closet/crate/chest/alcatraz = 150,
 		/obj/structure/largecrate/secure = 100,
 		/obj/structure/largecrate/secure/magmaw = 100,
 		/obj/structure/largecrate/secure/frankenstein = 100,
@@ -3088,9 +3078,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/stack/sheet/brass/bigstack = 50,
 		/obj/item/stack/sheet/ralloy/bigstack = 50,
 		/obj/item/device/vampirehead = 150,
-		/obj/item/key/security/spare = 50,
-		/obj/item/weapon/depocket_wand = 100,
-		/obj/item/weapon/ram_kit = 200,
+		/obj/item/key/security/spare = 10,
+		/obj/item/weapon/depocket_wand = 50,
+		/obj/item/weapon/ram_kit = 100,
 		)
 
 /obj/machinery/vending/trader/New()
