@@ -61,10 +61,10 @@
 		),
 		"Misc_Other"=list(
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
-		new /obj/item/ammo_storage/speedloader/a357/empty(), \
 		new /obj/item/ammo_storage/speedloader/shotgun(), \
 		),
 		"Hidden_Items" = list(
+		new /obj/item/ammo_storage/speedloader/a357/empty(), \
 		new /obj/item/ammo_storage/speedloader/a762x55/empty(), \
 		new /obj/item/ammo_storage/box/b762x55(), \
 		new /obj/item/ammo_storage/box/c762x38r(), \
