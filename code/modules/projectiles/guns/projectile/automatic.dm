@@ -256,7 +256,6 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = "vector"
 	w_class = W_CLASS_MEDIUM
-	recoil = 0 //Super V tech.
 	/*max_shells = 25  I'm sure someone will put a mag larger than 25 in here some day so lets leave this open ended.*/
 	caliber = POINT380 //Its not a list but IT WORKS ON MY MACHINE.
 	ammo_type = "/obj/item/ammo_casing/c380auto"

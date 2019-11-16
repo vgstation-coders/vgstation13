@@ -22,7 +22,6 @@
 	fire_sound = null
 	conventional_firearm = 0
 	silenced = 1
-	recoil = 0
 	var/status = 0
 	var/throw_percent = 20
 	var/lit = 0	//on or off

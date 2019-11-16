@@ -6,7 +6,6 @@
 	item_state = "minigun0"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_COMBAT + "=6"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
-	recoil = 1
 	slot_flags = null
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
 	slowdown = MINIGUN_SLOWDOWN_NONWIELDED
@@ -107,7 +106,6 @@
 	icon_state = "beegun"
 	item_state = "beegun0"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_COMBAT + "=6;" + Tc_BIOTECH + "=5"
-	recoil = 0
 	var/base_icon_state = "beegun"
 	var/bug_ammo = /obj/item/projectile/bullet/beegun
 

@@ -8,7 +8,6 @@
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2"
 	mech_flags = null // So it can be scanned by the Device Analyser
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
-	recoil = 0
 	flags = FPRINT
 	w_class = W_CLASS_MEDIUM
 	fire_delay = 0

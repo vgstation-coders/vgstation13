@@ -6,7 +6,6 @@
 	item_state = "mahoguny"
 	origin_tech = Tc_COMBAT + "=5;" + Tc_BIOTECH + "=6"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	recoil = 1
 	slot_flags = SLOT_BELT
 	flags = FPRINT
 	w_class = W_CLASS_MEDIUM

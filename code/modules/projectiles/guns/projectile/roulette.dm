@@ -13,7 +13,6 @@
 	caliber = null
 	ammo_type = null
 	fire_sound = null
-	recoil = 1
 	conventional_firearm = 0
 	var/shots_left = 6
 	var/infinite = 0
@@ -83,11 +82,6 @@
 	if(!in_chamber || shots_left < 1)
 		click_empty(user)
 		return
-
-	if(istype(in_chamber, /obj/item/projectile/bullet))
-		recoil = 1
-	else
-		recoil = 0
 
 	if(user && user.client && user.client.gun_mode && !(A in target))
 		PreFire(A,user,params, "struggle" = struggle) //They're using the new gun system, locate what they're aiming at.

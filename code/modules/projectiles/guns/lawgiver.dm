@@ -45,7 +45,6 @@
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	projectile_type = /obj/item/projectile/bullet/midbullet/lawgiver
 	fire_delay = 0
-	recoil = TRUE
 	activation_message = "RAPID FIRE."
 	ammo_casing_type = /obj/item/ammo_casing/a12mm
 
@@ -57,7 +56,6 @@
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	projectile_type = /obj/item/projectile/flare
 	fire_delay = 5
-	recoil = TRUE
 	activation_message = "FLARE."
 	ammo_casing_type = /obj/item/ammo_casing/shotgun/flare
 
@@ -69,7 +67,6 @@
 	fire_sound = 'sound/weapons/elecfire.ogg'
 	projectile_type = /obj/item/projectile/bullet/gyro
 	fire_delay = 5
-	recoil = TRUE
 	activation_message = "HIGH EXPLOSIVE."
 	ammo_casing_type = /obj/item/ammo_casing/a75
 
@@ -81,7 +78,6 @@
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
 	projectile_type = /obj/item/projectile/bullet/midbullet/bouncebullet/lawgiver
 	fire_delay = 5
-	recoil = TRUE
 	activation_message = "RICOCHET."
 	ammo_casing_type = /obj/item/ammo_casing/a12mm/bounce
 
@@ -300,15 +296,12 @@ var/list/lawgiver_modes = list(
 
 /obj/item/weapon/gun/lawgiver/proc/rapidFire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0) //Burst fires don't work well except by calling Fire() multiple times
 	rapidFirecheck = 1
-	recoil = 1
 	for (var/i = 1; i <= 3; i++)
 		if(i>1 && !in_chamber)
 			in_chamber = new projectile_type(src)
 		Fire(target, user, params, struggle)
-		recoil = 0
 		silenced = 1
 		fire_volume *= 5
-	recoil = 1
 	silenced = 0
 	fire_volume /= 5
 	rapidFirecheck = 0

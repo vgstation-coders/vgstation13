@@ -13,7 +13,6 @@
 	starting_materials = list(MAT_IRON = 15000, MAT_GLASS = 7500)
 	w_type = RECYK_METAL
 	force = 4
-	recoil = 1
 	fire_delay = 10
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -24,7 +23,6 @@
 
 /obj/item/weapon/gun/projectile/flare/syndicate
 	desc = "An illegal flare gun with a modified hammer, allowing it to fire shotgun shells and flares at dangerous velocities."
-	recoil = 3
 	fire_delay = 5 //faster, because it's also meant to be a weapon
 	caliber = list(GAUGEFLARE = 1, GAUGE12 = 1)
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"

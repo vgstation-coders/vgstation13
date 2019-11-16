@@ -715,7 +715,6 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 	charge_cost = 100
 	cell_type = "/obj/item/weapon/cell"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
-	recoil = 1
 	var/firelevel = SPUR_FULL_POWER
 
 /obj/item/weapon/gun/energy/polarstar/isHandgun()
@@ -773,13 +772,10 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 	switch(firelevel)
 		if(SPUR_HIGH_POWER,SPUR_FULL_POWER)
 			fire_sound = 'sound/weapons/spur_high.ogg'
-			recoil = 1
 		if(SPUR_MEDIUM_POWER)
 			fire_sound = 'sound/weapons/spur_medium.ogg'
-			recoil = 0
 		if(SPUR_LOW_POWER,SPUR_NO_POWER)
 			fire_sound = 'sound/weapons/spur_low.ogg'
-			recoil = 0
 	return
 
 /obj/item/weapon/gun/energy/polarstar/update_icon()

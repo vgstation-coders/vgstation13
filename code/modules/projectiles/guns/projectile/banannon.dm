@@ -5,7 +5,6 @@
 	icon_state = "banannon"
 	item_state = "banannon"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	recoil = 0
 	slot_flags = SLOT_BELT
 	flags = FPRINT
 	w_class = W_CLASS_MEDIUM

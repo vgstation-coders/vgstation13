@@ -11,7 +11,7 @@
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL
-	recoil = 1
+	recoil = 0
 	var/ammo_type = "/obj/item/ammo_casing/a357"
 	var/list/loaded = list()
 	var/max_shells = 7 //only used by guns with no magazine

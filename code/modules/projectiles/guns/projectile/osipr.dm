@@ -11,7 +11,6 @@
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_COMBAT + "=5;" + Tc_MAGNETS + "=4;" + Tc_POWERSTORAGE + "=3"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
-	recoil = 1
 	fire_delay = 0
 	w_class = W_CLASS_MEDIUM
 	fire_sound = 'sound/weapons/osipr_fire.ogg'
