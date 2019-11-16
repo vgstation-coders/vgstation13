@@ -535,7 +535,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	name = "Chimeral Xenosis"
 	desc = "Causes the infected's body to gradually mutate into a chimera of different alien species."
 	stage = 3
-	badness = EFFECT_DANGER_HARMFUL
+	badness = EFFECT_DANGER_HINDRANCE
 	chance = 1
 	max_multiplier = 3
 
