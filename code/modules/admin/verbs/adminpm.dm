@@ -107,7 +107,6 @@
 			else
 				recieve_color = "red"
 			if(holder.fakekey)
-				send_pm_type = " "
 				recieve_pm_type = "Admin"
 			else
 				send_pm_type = holder.rank + " "
