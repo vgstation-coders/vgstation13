@@ -315,8 +315,7 @@ var/global/list/damage_icon_parts = list()
 	var/icon/face_standing	= new /icon('icons/mob/human_face.dmi',"bald_s")
 	var/hair_suffix = check_hidden_head_flags(HIDEHEADHAIR) ? "s2" : "s" // s2 = cropped icon
 
-	if(my_appearance.f_style && !(check_hidden_head_flags(HIDEBEARDHAIR)||\
-		src.w_uniform && (src.w_uniform.body_parts_covered & HIDEBEARDHAIR)) )//you may be wondering why a uniform check. this exist for body suits like the skelesuit
+	if(my_appearance.f_style && !(check_hidden_flags(get_clothing_items(),HIDEBEARDHAIR)))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[my_appearance.f_style]
 		if((facial_hair_style) && (src.species.name in facial_hair_style.species_allowed))
 			var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
@@ -326,9 +325,7 @@ var/global/list/damage_icon_parts = list()
 //		else
 			//warning("Invalid my_appearance.f_style for [species.name]: [my_appearance.f_style]")
 
-	if(my_appearance.h_style && !(src.head && ( src.head.flags & HIDEHAIRCOMPLETELY ) || \
-								  src.wear_mask && (src.wear_mask.body_parts_covered & HIDEHEADHAIR) ||\
-								  src.w_uniform && (src.w_uniform.body_parts_covered & HIDEHEADHAIR)) ) //ditto the comment above
+	if(my_appearance.h_style && !(check_hidden_flags(get_clothing_items(),HIDEHEADHAIR)))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[my_appearance.h_style]
 		if((hair_style) && (src.species.name in hair_style.species_allowed))
 			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_suffix]")
@@ -336,7 +333,6 @@ var/global/list/damage_icon_parts = list()
 				hair_s.Blend(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair), ICON_ADD)
 			if(hair_style.additional_accessories)
 				hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
-
 			face_standing.Blend(hair_s, ICON_OVERLAY)
 //		else
 			//warning("Invalid my_appearance.h_style for [species.name]: [my_appearance.h_style]")
