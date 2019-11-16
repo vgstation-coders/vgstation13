@@ -86,6 +86,9 @@
 /obj/item/ammo_storage/magazine/a12mm/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/a12mm/ops/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/smg9mm
 	name = "magazine (9mm)"
 	icon_state = "smg9mm"
@@ -114,7 +117,7 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a50
-	name = "magazine (.50)"
+	name = "magazine (.50AE)"
 	icon_state = "50ae"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a50"
@@ -126,7 +129,7 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a75
-	name = "magazine (.75)"
+	name = "magazine (.75 gyrojet)"
 	icon_state = "75"
 	ammo_type = "/obj/item/ammo_casing/a75"
 	multiple_sprites = 1
@@ -137,7 +140,7 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a762
-	name = "magazine (a762)"
+	name = "magazine (7.62x51mm)"
 	icon_state = "a762"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a762"

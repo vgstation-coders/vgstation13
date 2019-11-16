@@ -18,6 +18,7 @@
 		"Weapons"=list(
 		new /obj/item/weapon/gun/projectile/glock/lockbox(), \
 		new /obj/item/weapon/gun/projectile/automatic/vector/lockbox(), \
+		new /obj/item/weapon/gun/projectile/shotgun/pump(), \
 		new /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox(), \
 		),
 		"Single_ammunition"=list(
@@ -35,6 +36,10 @@
 		new /obj/item/ammo_storage/box/c38(), \
 		new /obj/item/ammo_storage/box/a357(), \
 		new /obj/item/ammo_storage/box/c12mm/assault(), \
+		new /obj/item/ammo_storage/box/c45(), \
+		new /obj/item/ammo_storage/box/c45/practice(), \
+		new /obj/item/ammo_storage/box/c45/rubber(), \
+		new /obj/item/ammo_storage/box/a50(), \
 		new /obj/item/weapon/storage/box/lethalshells(), \
 		new /obj/item/weapon/storage/box/buckshotshells(), \
 		new /obj/item/weapon/storage/box/beanbagshells(), \
@@ -52,21 +57,23 @@
 		new /obj/item/ammo_storage/magazine/c45/empty(), \
 		new /obj/item/ammo_storage/magazine/uzi45/empty(), \
 		new /obj/item/ammo_storage/magazine/a50/empty(), \
-		new /obj/item/ammo_storage/magazine/a75/empty(), \
-		new /obj/item/ammo_storage/magazine/a762/empty(), \
 		new /obj/item/ammo_storage/magazine/a12ga/empty(), \
-		new /obj/item/ammo_storage/magazine/a12mm/empty(), \
 		),
 		"Misc_Other"=list(
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/speedloader/a357/empty(), \
-		new /obj/item/ammo_storage/speedloader/a762x55/empty(), \
 		new /obj/item/ammo_storage/speedloader/shotgun(), \
 		),
 		"Hidden_Items" = list(
-		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
-		new /obj/item/weapon/reagent_containers/syringe(), \
-		) //Syringes and vials are technically an ammo.
+		new /obj/item/ammo_storage/speedloader/a762x55/empty(), \
+		new /obj/item/ammo_storage/box/b762x55(), \
+		new /obj/item/ammo_storage/box/c762x38r(), \
+		new /obj/item/ammo_storage/magazine/a762/empty(), \
+		new /obj/item/ammo_storage/box/a762(), \
+		new /obj/item/ammo_storage/magazine/a12mm/ops/empty(), \
+		new /obj/item/ammo_storage/magazine/a75/empty(), \
+		new /obj/item/ammo_storage/box/a75(), \
+		)
 	)
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe/New()
