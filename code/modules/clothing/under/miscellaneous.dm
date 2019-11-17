@@ -796,7 +796,7 @@
 	body_parts_covered = FULL_HEAD|BEARD
 
 /obj/item/clothing/under/clownpsyche
-	name = "Informal clown outfit"
+	name = "Psychedelic clown outfit"
 	desc = "Do you know the definition of insanity?"
 	icon_state = "clownpsyche"
 	item_state = "clownpsyche"
