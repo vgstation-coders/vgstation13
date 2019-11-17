@@ -52,7 +52,8 @@
 	y_off = rand(-10,10)
 	x_player_off = 0
 	y_player_off = 0
-	cell = new/obj/item/weapon/cell(src)
+	//cell = new/obj/item/weapon/cell(src) // Exploitable: Spawns many cells that can be recycled.
+	//This means new telescience computers won't have a cell, but most maps provide easy cell access.
 
 /obj/machinery/computer/telescience/initialize()
 	..()
