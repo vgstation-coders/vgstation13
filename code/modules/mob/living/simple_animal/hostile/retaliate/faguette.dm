@@ -96,7 +96,7 @@
 	health = 100
 	size = 1
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES
-
+	var/footstep = 0 //for slapping
 	speed = 1
 	turns_per_move = 1
 
@@ -128,3 +128,16 @@
 	new /obj/item/clothing/head/beret(src.loc)
 	new /obj/item/clothing/gloves/white(src.loc)
 	qdel(src)
+
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	. = ..()
+
+	if(.)
+		if(m_intent == "run")
+			if(footstep > 1)
+				footstep = 0
+				playsound(src, "slap", 50, 1)
+			else
+				footstep++
+		else
+			playsound(src, "slap", 20, 1)
