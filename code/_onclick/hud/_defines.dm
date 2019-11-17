@@ -66,6 +66,13 @@
 #define ui_borg_pull "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
 #define ui_borg_panel "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
 
+//Screen Alerts
+#define ui_alert1 "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+5:[27*PIXEL_MULTIPLIER]"
+#define ui_alert2 "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+4:[25*PIXEL_MULTIPLIER]"
+#define ui_alert3 "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+3:[23*PIXEL_MULTIPLIER]"
+#define ui_alert4 "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[21*PIXEL_MULTIPLIER]"
+#define ui_alert5 "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+1:[19*PIXEL_MULTIPLIER]"
+
 //Gun buttons
 #define ui_gun1 "EAST-2:26,SOUTH+2:7" //Used as compile time value
 #define ui_gun2 "EAST-1:28, SOUTH+3:7" //Used as compile time value

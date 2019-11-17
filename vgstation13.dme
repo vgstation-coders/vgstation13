@@ -143,6 +143,7 @@
 #include "code\_onclick\hud\parallax.dm"
 #include "code\_onclick\hud\radial.dm"
 #include "code\_onclick\hud\robot.dm"
+#include "code\_onclick\hud\screen_alarms.dm"
 #include "code\_onclick\hud\screen_objects.dm"
 #include "code\_onclick\hud\spell_screen_objects.dm"
 #include "code\ATMOSPHERICS\atmospherics.dm"

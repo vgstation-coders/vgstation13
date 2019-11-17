@@ -80,6 +80,7 @@
 				"You unbuckle yourself from \the [src].",
 				"You hear metal clanking.")
 		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
+		M.clear_alert(SCREEN_ALARM_BUCKLE)
 		return TRUE
 
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
@@ -124,6 +125,7 @@
 	add_fingerprint(user)
 
 	lock_atom(M, mob_lock_type)
+	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/buckled, new_master = src)
 
 	if(M.pulledby)
 		M.pulledby.start_pulling(src)
