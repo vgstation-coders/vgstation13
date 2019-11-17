@@ -92,7 +92,7 @@
 	set name = "Unload Grenades"
 	set category = "Object"
 	set src in usr
-	if(!istype(user.loc, /turf))
+	if(!isturf(user.loc))
 		to_chat(user, "<span class = 'notice'>You cannot unload \the [src] in here.</span>")
 		return
 	for(var/obj/item/weapon/grenade/G in grenades)
