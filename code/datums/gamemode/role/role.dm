@@ -612,6 +612,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	var/datum/ai_laws/laws = bot.laws
 	laws.malfunction()
 	bot.show_laws()
+	bot.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 	return TRUE
 
 /datum/role/malfbot/Greet()

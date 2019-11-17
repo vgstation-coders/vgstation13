@@ -227,6 +227,21 @@
 	if(album_icon)
 		album_icon.icon_state = "album[connected_ai ? "1":""]"
 
+	if(on_fire && !(locate(/obj/item/borg/fire_shield, module.modules)))
+		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/robot/fire)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
+
+	if(modulelock || lockcharge)
+		throw_alert(SCREEN_ALARM_ROBOT_LOCK, /obj/abstract/screen/alert/robot/locked)
+	else
+		clear_alert(SCREEN_ALARM_ROBOT_LOCK)
+
+	if(emagged || illegal_weapons)
+		throw_alert(SCREEN_ALARM_ROBOT_HACK, /obj/abstract/screen/alert/robot/hacked)
+	else
+		clear_alert(SCREEN_ALARM_ROBOT_HACK)
+
 	update_pull_icon()
 
 	if(eye_blind || blinded)

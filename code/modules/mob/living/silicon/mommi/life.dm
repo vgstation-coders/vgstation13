@@ -189,10 +189,12 @@
 	else
 		throw_alert(SCREEN_ALARM_ROBOT_CELL, /obj/abstract/screen/alert/robot/cell)
 
+	if(emagged || illegal_weapons)
+		throw_alert(SCREEN_ALARM_ROBOT_HACK, /obj/abstract/screen/alert/robot/hacked)
+	else
+		clear_alert(SCREEN_ALARM_ROBOT_HACK)
+
 	update_pull_icon()
-//Oxygen and fire does nothing yet!!
-//	if (src.oxygen) src.oxygen.icon_state = "oxy[src.oxygen_alert ? 1 : 0]"
-//	if (src.fire) src.fire.icon_state = "fire[src.fire_alert ? 1 : 0]"
 
 	if(src.eye_blind || blinded)
 		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)

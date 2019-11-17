@@ -149,7 +149,12 @@
 #define SCREEN_ALARM_BUCKLE "buckle"
 #define SCREEN_ALARM_PRESSURE "pressure"
 #define SCREEN_ALARM_TEMPERATURE "temp"
-#define SCREEN_ALARM_ROBOT_CELL "cell_robot"
+#define SCREEN_ALARM_FIRE "fire"
+
+#define SCREEN_ALARM_ROBOT_CELL "robot_cell"
+#define SCREEN_ALARM_ROBOT_LAW "robot_law"
+#define SCREEN_ALARM_ROBOT_HACK "robot_hack"
+#define SCREEN_ALARM_ROBOT_LOCK "robot_lock"
 
 //Object Alarms
 /obj/abstract/screen/alert/buckled
@@ -157,38 +162,70 @@
 	desc = "You've been buckled to something and can't move. Click this alert to unbuckle unless you're unable to."
 
 //Robot Alarms
+/obj/abstract/screen/alert/robot
+	icon_state = "silicon_template"
+
 /obj/abstract/screen/alert/robot/temp
 	icon_state = "temp"
 
 /obj/abstract/screen/alert/robot/temp/hot
 	name = "Environment: Hot"
-	desc = "It's flaming hot!"
+	desc = "This unit's temperature meter reads: It's flaming hot!"
 
 /obj/abstract/screen/alert/robot/temp/cold
 	name = "Environment: Cold"
-	desc = "It's freezing cold!"
+	desc = "This unit's temperature meter reads: It's freezing cold!"
 
 /obj/abstract/screen/alert/robot/pressure
 	icon_state = "pressure"
 
 /obj/abstract/screen/alert/robot/pressure/low
 	name = "Environment: Low Pressure"
-	desc = "The air around you is hazardously thin."
+	desc = "The air around this unit is hazardously thin."
 
 /obj/abstract/screen/alert/robot/pressure/high
 	name = "Environment: High Pressure"
-	desc = "The air around you is hazardously thick."
+	desc = "The air around this unit is hazardously thick."
 
 /obj/abstract/screen/alert/robot/cell
 	name = "Missing Power Cell"
-	desc = "Unit has no power cell."
+	desc = "This unit has no power cell."
 	icon_state = "charge"
 
 /obj/abstract/screen/alert/robot/cell/low
 	name = "Low Charge"
-	desc = "Unit's power cell is running low."
+	desc = "This unit's power cell is running low."
 
 /obj/abstract/screen/alert/robot/cell/empty
 	name = "Out of Power"
-	desc = "Unit's power cell has no charge remaining."
+	desc = "This unit's power cell has no charge remaining."
 
+/obj/abstract/screen/alert/robot/fire
+	name = "On Fire"
+	desc = "This unit is on fire."
+	icon_state = "silicon_fire"
+
+/obj/abstract/screen/alert/robot/hacked
+	name = "Hacked"
+	desc = "Hazardous non-standard equipment detected. Please ensure any usage of this equipment is in line with this unit's laws, if any."
+	icon_state = "hacked"
+
+/obj/abstract/screen/alert/robot/locked
+	name = "Locked Down"
+	desc = "This unit has been remotely locked down."
+	icon_state = "locked"
+
+/obj/abstract/screen/alert/robot/newlaw
+	name = "Law Update"
+	desc = "Laws have potentially been uploaded to or removed from this unit. Please be aware of any changes \
+so as to remain in compliance with the most up-to-date laws."
+	icon_state = "newlaw"
+	timeout = 300
+
+/obj/abstract/screen/alert/robot/newlaw/Click()
+	if(!issilicon(usr))
+		return
+	var/mob/living/silicon/S = usr
+	if(S.alerts[SCREEN_ALARM_ROBOT_LAW] == src)
+		S.show_laws()
+		S.clear_alert(SCREEN_ALARM_ROBOT_LAW)
