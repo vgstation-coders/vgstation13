@@ -94,7 +94,7 @@
 /obj/effect/beam/proc/turf_density_change(var/list/args)
 	var/turf/T = args["atom"]
 	var/atom/A = T.has_dense_content()
-	if(A && !(A in sources) && !A.Cross(src))
+	if(A && !(A in sources) && Cross(A)) //If there is a dense atom, we're not being emitted by it, and it can cross us
 		Crossed(A)
 
 // Listener for /atom/on_density_change
