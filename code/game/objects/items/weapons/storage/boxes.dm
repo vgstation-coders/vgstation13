@@ -1303,7 +1303,7 @@
 	new /obj/item/clothing/mask/gas/clown_hat/wiz(src)
 	new /obj/item/clothing/shoes/sandal/slippers(src)
 	..()
-	
+
 /obj/item/weapon/storage/box/smartbox/clothing_box/marisa_wiz
 	name = "Ordinary witch robe box"
 
@@ -1364,4 +1364,14 @@
 /obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh/New()
 	new /obj/item/clothing/head/pharaoh(src)
 	new /obj/item/clothing/suit/wizrobe/pharaoh(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche
+	name = "Clown psychedelic outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche/New()
+	new /obj/item/clothing/mask/gas/clownmaskpsyche(src)
+	new /obj/item/weapon/storage/backpack/clownpackpsyche(src)
+	new /obj/item/clothing/under/clownpsyche(src)
+	new /obj/item/clothing/shoes/clownshoespsyche(src)
 	..()

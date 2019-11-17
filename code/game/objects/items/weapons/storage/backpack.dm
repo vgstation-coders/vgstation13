@@ -199,3 +199,9 @@
 	name = "black messenger bag"
 	desc = "For the freerunning pizza delivery hacker on the go."
 	icon_state = "courierbagblack"
+
+/obj/item/weapon/storage/backpack/clownpackpsyche
+	name = "Giggles Neon Honkerton"
+	desc = "It's a backpack made by Honk! Co."
+	icon_state = "clownpackpsyche"
+	item_state = "clownpackpsyche"
