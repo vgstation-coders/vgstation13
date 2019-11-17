@@ -622,7 +622,6 @@
 
 	species_fit = list(VOX_SHAPED)
 
-	flags = HIDEHAIRCOMPLETELY
 	body_parts_covered = FULL_HEAD
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_HEAD
