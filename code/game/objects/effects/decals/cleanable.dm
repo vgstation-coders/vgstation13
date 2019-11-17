@@ -87,11 +87,6 @@ var/list/infected_cleanables = list()
 	if(persistence_type)
 		SSpersistence_map.track(src, persistence_type)
 
-/obj/effect/decal/cleanable/Destroy()
-	if(persistence_type)
-		SSpersistence_map.forget(src, persistence_type)
-	..()
-
 /obj/effect/decal/cleanable/getPersistenceAge()
 	return age
 /obj/effect/decal/cleanable/setPersistenceAge(nu)
@@ -126,6 +121,8 @@ var/list/infected_cleanables = list()
 	if(counts_as_blood)
 		bloodspill_remove()
 
+	if(persistence_type)
+		SSpersistence_map.forget(src, persistence_type)
 	..()
 
 /obj/effect/decal/cleanable/proc/dry(var/drying_age)

@@ -374,7 +374,7 @@ to destroy them and players will be able to make replacements.
 	desc = "A circuit board used to run a machine that fabricates guns, ammunition, and firearm accessories."
 	build_path = /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe
 	board_type = MACHINE
-	//origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_COMBAT + "=4"
+	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_COMBAT + "=4"
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 3,
 							/obj/item/weapon/stock_parts/manipulator = 1,
@@ -1153,6 +1153,15 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/micro_laser = 2,
 							/obj/item/weapon/stock_parts/scanning_module = 2,
 							/obj/item/weapon/stock_parts/console_screen = 1)
+
+/obj/item/weapon/circuitboard/keyfab
+	name = "Circuit Board (Key Fabricator)"
+	desc = "A circuit board used to run a machine that fabricates keys."
+	build_path = /obj/machinery/keyfab
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ENGINEERING + "=2"
+	req_components = list(
+							/obj/item/weapon/stock_parts/micro_laser = 1)
 
 /obj/item/weapon/circuitboard/incubator
 	name = "Circuit Board (Pathogenic Incubator)"

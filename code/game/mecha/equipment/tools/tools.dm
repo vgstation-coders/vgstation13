@@ -392,12 +392,6 @@
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/on_reagent_change()
 	return
 
-/obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M as obj)
-	if(..())
-		if(istype(M))
-			return 1
-	return 0
-
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/New()
 	. = ..()
 	create_reagents(200)
@@ -429,6 +423,7 @@
 	if(!ion_trail)
 		ion_trail = new /datum/effect/effect/system/trail()
 	ion_trail.set_up(chassis)
+	linked_spell = new /spell/mech/jetpack(M, src)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/proc/toggle()
@@ -436,10 +431,6 @@
 		return
 	!equip_ready? turn_off() : turn_on()
 	return equip_ready
-
-/obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
-	..()
-	linked_spell = new /spell/mech/jetpack(M, src)
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/activate()
 	toggle()
@@ -1521,10 +1512,13 @@
 		return
 
 	playsound(T, 'sound/weapons/Genhit.ogg', 50, 1)
-	if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
-		T.ChangeTurf(/turf/simulated/floor/plating/airless)
-	else
-		T.ChangeTurf(/turf/simulated/floor/plating)
+	if(T.air)
+		var/datum/gas_mixture/GM = T.air
+		if(GM.pressure > HALF_ATM)
+			T.ChangeTurf(/turf/simulated/floor/plating)
+			return
+	T.ChangeTurf(/turf/simulated/floor/plating/airless)
+
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector
 	name = "\improper Exosuit-Mounted Radiation Collector Array"

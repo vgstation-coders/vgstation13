@@ -20,6 +20,7 @@
 #define TALKED_BEFORE	4096//spells require you to have heard the person you are casting it upon
 #define CAN_CHANNEL_RESTRAINED 8192 //channeled spells that you can cast despite having handcuffs on
 #define LOSE_IN_TRANSFER 16384 //If your mind is transferred, you'll lose this spell.
+#define IS_HARMFUL 32768	//For pacify checks to determine whether the spell can be cast
 
 //invocation
 #define SpI_SHOUT	"shout"
@@ -32,6 +33,7 @@
 #define Sp_POWER	"power"
 #define Sp_MOVE		"mobility"
 #define Sp_AMOUNT	"amount"
+#define Sp_RANGE	"range"
 
 #define Sp_TOTAL	"total"
 

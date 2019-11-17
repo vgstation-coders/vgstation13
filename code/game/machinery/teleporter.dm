@@ -62,7 +62,7 @@
 /obj/machinery/computer/teleporter/attack_paw(var/mob/user)
 	src.attack_hand(user)
 
-/obj/machinery/teleport/station/attack_ai(var/mob/user)
+/obj/machinery/teleport/teleporter/attack_ai(var/mob/user)
 	src.attack_hand(user)
 
 /obj/machinery/computer/teleporter/attack_hand(var/mob/user)
@@ -124,7 +124,7 @@
 
 	if(href_list["dest"])
 		var/list/dests = get_avail_dests()
-		var/idx = Clamp(text2num(href_list["dest"]), 1, dests.len)
+		var/idx = clamp(text2num(href_list["dest"]), 1, dests.len)
 		locked = dests[dests[idx]]
 		say("Locked in")
 		updateUsrDialog()

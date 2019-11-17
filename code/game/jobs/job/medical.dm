@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 80
 	selection_color = "#ffddf0"
 	idtype = /obj/item/weapon/card/id/cmo
 	req_admin_notify = 1
@@ -45,6 +46,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <b>Medical:</b> [MED_FREQ]")
 	return 1
 
 /datum/job/cmo/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -61,6 +63,7 @@
 	total_positions = 5
 	spawn_positions = 3
 	supervisors = "the chief medical officer"
+	wage_payout = 65
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
@@ -117,6 +120,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/>")
 	return 1
 
 /datum/job/doctor/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -133,6 +137,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the chief medical officer"
+	wage_payout = 65
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
@@ -168,6 +173,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/>")
 	return 1
 
 /datum/job/chemist/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -182,6 +188,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the chief medical officer and research director"
+	wage_payout = 55
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_science, access_eva)
@@ -213,6 +220,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/>")
 	return 1
 
 /datum/job/geneticist/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -227,6 +235,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the chief medical officer"
+	wage_payout = 45
 	selection_color = "#ffeef0"
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_virology, access_biohazard)
@@ -259,6 +268,7 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	H.put_in_hands(new /obj/item/weapon/book/manual/virology_guide(H))
+	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/>")
 	return 1
 
 /datum/job/virologist/priority_reward_equip(var/mob/living/carbon/human/H)

@@ -13,7 +13,7 @@
 	cooldown_min = 100
 	invocation = "MY O'N CLO'N"
 	invocation_type = SpI_SHOUT
-	spell_flags = NEEDSCLOTHES
+	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	hud_state = "wiz_doppelganger"
 	var/spell_duration = 8 MINUTES
 

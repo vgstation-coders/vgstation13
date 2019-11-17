@@ -22,6 +22,8 @@
 	..()
 	
 /obj/item/clothing/CtrlClick(var/mob/user)
+	if(isturf(loc))
+		return ..()
 	if(isliving(user) && !user.incapacitated() && user.Adjacent(src) && accessories.len)
 		removeaccessory()
 	
@@ -477,6 +479,12 @@
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
+
+/obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
+	if(user.equip_to_slot_if_possible(src, slot_shoes))
+		user.visible_message("<span class='notice'>[user] kicks \the [src] and slips them on!</span>", "<span class='notice'>You kick \the [src] and slip them on!</span>")
+	else
+		..()	
 
 /obj/item/clothing/shoes/clean_blood()
 	. = ..()

@@ -5,6 +5,7 @@
 	var/spawning = 0//Referenced when you want to delete the new_player later on in the code.
 	var/totalPlayers = 0		 //Player counts for the Lobby tab
 	var/totalPlayersReady = 0
+	var/pinghop_cd = 0 //last pinged HOP
 
 	flags = NONE
 
@@ -103,6 +104,9 @@
 	if(!client)
 		return 0
 
+	if(secret_check_one(src,href_list))
+		return 0
+
 	if(href_list["show_preferences"])
 		if(!client.prefs.saveloaded)
 			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
@@ -173,6 +177,25 @@
 			return 0
 
 		AttemptLateSpawn(href_list["SelectedJob"])
+		return
+
+	if(href_list["RequestPrio"])
+		if(world.time <= pinghop_cd + 60 SECONDS)
+			to_chat(src, "<span class='warning'>You have recently requested for heads of staff to open priority roles.</span>")
+			return
+		var/count_pings = 0
+		for(var/obj/item/device/pda/pingme in PDAs)
+			if(pingme.cartridge && pingme.cartridge.fax_pings && pingme.cartridge.access_status_display)
+				//This may seem like a strange check, but it's excluding the IAA for only HOP/Cap
+				playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
+				var/mob/living/L = get_holder_of_type(pingme,/mob/living)
+				if(L && L.key && L.client)
+					to_chat(L,"[bicon(pingme)] <span class='info'><B>Central Command is requesting guidance on job applications.</B> Please update high priority jobs at labor console.</span>")
+					count_pings++
+				else
+					pingme.visible_message("[bicon(pingme)] *Labor Request*")
+				pinghop_cd = world.time
+		message_admins("[src] ([src.key]) requested high priority jobs. [count_pings ? "[count_pings]" : "<span class='danger'>No</span>"] players heard the request.")
 		return
 
 	if(!ready && href_list["preference"])
@@ -298,8 +321,7 @@
 /mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)
 	// 5% of players are joining the station with some minor disease
 	if(prob(5))
-		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
-		var/datum/disease2/disease/D = new virus_choice
+		var/datum/disease2/disease/D = get_random_weighted_disease(WLATEJOIN)
 
 		var/list/anti = list(
 			ANTIGEN_BLOOD	= 1,
@@ -473,6 +495,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 			dat += "<font color='red'>The station is currently undergoing crew transfer procedures.</font><br>"
 
 	dat += "Choose from the following open positions:<br>"
+	var/countprio = 0
 	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
 		if(job && IsJobAvailable(job.title))
 			var/active = 0
@@ -485,10 +508,12 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 					continue
 
 			if(job.priority)
+				countprio++
 				dat += "<a style='color:red' href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active]) (Requested!)</a><br>"
 			else
 				dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
-
+	if(!countprio)
+		dat += "<a style='color:red' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a><br>"
 	dat += "</center>"
 	src << browse(dat, "window=latechoices;size=350x640;can_close=1")
 

@@ -385,17 +385,6 @@ About the new airlock wires panel:
 			user.stunned += 10
 	..(user)
 
-/obj/machinery/door/Bumped(atom/AM)
-	if (panel_open)
-		return
-
-	..(AM)
-
-	return
-
-/obj/machinery/door/airlock/bump_open(mob/living/simple_animal/user as mob)
-	..(user)
-
 /obj/machinery/door/airlock/proc/isElectrified()
 	if(src.secondsElectrified != 0)
 		return 1

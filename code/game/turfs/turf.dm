@@ -52,7 +52,7 @@
  */
 
 	var/turf_speed_multiplier = 1
- 
+
 	var/explosion_block = 0
 
 	//For shuttles - if 1, the turf's underlay will never be changed when moved
@@ -91,16 +91,11 @@
 /turf/ex_act(severity)
 	return 0
 
-
-/turf/bullet_act(var/obj/item/projectile/Proj)
-	if(Proj.destroy)
-		src.ex_act(2)
-	..()
-	return 0
-
 /turf/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/bullet/gyro))
 		explosion(src, -1, 0, 2)
+	if(Proj.destroy)
+		src.ex_act(2)
 	..()
 	return 0
 
@@ -188,7 +183,7 @@
 		// if(ticker.mode.name == "nuclear emergency")	return
 		if(A.z > 6)
 			return
-		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE - 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE - 1))
+		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE + 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE + 1))
 
 			var/list/contents_brought = list()
 			contents_brought += recursive_type_check(A)
@@ -199,6 +194,10 @@
 					contents_brought += recursive_type_check(B)
 
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
+
+			var/datum/zLevel/ZL = map.zLevels[z]
+			if(ZL.transitionLoops)
+				locked_to_current_z = z
 
 			for(var/obj/item/weapon/disk/nuclear/nuclear in contents_brought)
 				locked_to_current_z = map.zMainStation
@@ -360,7 +359,7 @@
 		var/turf/simulated/S = src
 		if(S.zone)
 			S.zone.rebuild()
-			
+
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)

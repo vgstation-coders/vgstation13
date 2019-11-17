@@ -8,6 +8,7 @@
  *		Butt
  *		Tinfoil Hat
  *		Celtic Crown
+ *		Energy Dome
  */
 
 /*
@@ -114,7 +115,7 @@
 	desc = "Perfect for winter in Siberia, da?"
 	icon_state = "ushanka"
 	item_state = "ushanka"
-	flags = HIDEHAIRCOMPLETELY
+	flags = HIDEHAIR
 	body_parts_covered = EARS|HEAD
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 
@@ -136,6 +137,14 @@
 	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
 	icon_state = "ushankared"
 	item_state = "ushankared"
+
+/obj/item/clothing/head/ushanka/hos
+	name = "head of security ushanka"
+	desc = "The armored ushanka of the head of security. You cannot bribe an officer of Nanotrasen."
+	icon_state = "ushankablack"
+	item_state = "ushankablack"
+	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
+
 /*
  * Pumpkin head
  */
@@ -250,3 +259,9 @@
 	if(wearer.get_item_by_slot(slot_head) == src)
 		if(prob(5))
 			wearer.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))
+
+/obj/item/clothing/head/energy_dome
+	name = "energy dome"
+	desc = "According to the manufacturer it was designed according to ancient ziggurat mound proportions used in votive worship. Like the mounds it collects energy and recirculates it. In this case the Dome collects energy that escapes from the crown of the human head and pushes it back into the medulla oblongata for increased mental energy."
+	icon_state = "energy_dome"
+	item_state = "energy_dome"

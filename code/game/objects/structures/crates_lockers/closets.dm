@@ -81,11 +81,6 @@
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
-/obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0 || wall_mounted))
-		return 1
-	return (!density)
-
 /obj/structure/closet/proc/can_open()
 	if(src.welded)
 		return 0
@@ -652,3 +647,14 @@
 				return
 		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+
+// -- Vox raiders.
+
+/obj/structure/closet/loot
+	name = "Loot closet"
+	desc = "Store the valuables here for a direct transfer to the shoal. We make much bluespace."
+
+/obj/structure/closet/loot/Destroy()
+	for (var/datum/faction/vox_shoal/VS in ticker.mode.factions)
+		VS.our_bounty_lockers -= src
+	return ..()

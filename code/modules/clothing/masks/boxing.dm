@@ -4,7 +4,7 @@
 	icon_state = "luchag"
 	item_state = "luchag"
 	clothing_flags = MASKINTERNALS
-	body_parts_covered = HEAD|EARS|EYES
+	body_parts_covered = HEAD|EARS
 	w_class = W_CLASS_SMALL
 	siemens_coefficient = 3.0
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)

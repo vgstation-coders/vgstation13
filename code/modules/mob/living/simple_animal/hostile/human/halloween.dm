@@ -495,7 +495,7 @@
 		var/obj/structure/cable/C = target
 		if(latched && locked_to && locked_to == C)
 			var/datum/powernet/PN = C.get_powernet()
-			if(PN && PN.avail > 0 && cell.percent() < 100)
+			if(cell && PN && PN.avail > 0 && cell.percent() < 100)
 				var/drained = min (rand(500,1500), PN.avail )
 				PN.load += drained
 				cell.give(drained/10)

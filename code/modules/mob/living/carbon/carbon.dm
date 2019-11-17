@@ -102,25 +102,33 @@
 			return
 	handle_symptom_on_touch(M, src, HAND)
 
-/mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
+/mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration = 20 SECONDS)
+	if(incapacitation_duration <= 0)
+		return 0
+	incapacitation_duration = max(incapacitation_duration / (2 SECONDS), 1) // life ticks are 2 seconds, we simply make a conversion from seconds to life ticks
 	var/damage = shock_damage * siemens_coeff
 
 	if(damage <= 0)
-		damage = 0
+		return 0
 
 	var/mob/living/carbon/human/H = src
 	if(istype(H) && H.species && (H.species.flags & ELECTRIC_HEAL))
 		heal_overall_damage(damage/2, damage/2)
-		Jitter(10)
-		Stun(5)
-		Knockdown(5)
+		Jitter(incapacitation_duration)
+		Stun(incapacitation_duration / 2)
+		Knockdown(incapacitation_duration / 2)
+		damage = 0
 		//It would be cool if someone added an animation of some electrical shit going through the body
 	else
-		if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
+		if(!def_zone)
+			damage = take_overall_damage(0, damage, used_weapon = source)
+		else
+			damage = apply_damage(damage, BURN, def_zone, used_weapon = source)
+		if(damage <= 0)
 			return 0
-		Jitter(20)
-		Stun(10)
-		Knockdown(10)
+		Jitter(incapacitation_duration * 2)
+		Stun(incapacitation_duration)
+		Knockdown(incapacitation_duration)
 
 	visible_message( \
 		"<span class='warning'>[src] was shocked by the [source]!</span>", \
@@ -221,7 +229,7 @@
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
-			src.sleeping = max(0,src.sleeping-5)
+			src.sleeping = max(0,src.sleeping-10)
 			if(src.sleeping == 0)
 				src.resting = 0
 			AdjustParalysis(-3)
@@ -454,8 +462,7 @@
 		B.host_brain.real_name = "host brain"
 
 	//reset name if the borer changed it
-	if(name != real_name)
-		name = real_name
+	fully_replace_character_name(null, B.host_name)
 
 	verbs -= /mob/living/carbon/proc/release_control
 	verbs -= /mob/living/carbon/proc/punish_host
@@ -614,7 +621,7 @@
 					E.on_touch(src, toucher, touched, touch_type)
 
 /mob/living/carbon/proc/check_handcuffs()
-	return handcuffed
+	return handcuffed || istype(locked_to, /obj/structure/bed/nest)
 
 /mob/living/carbon/proc/get_lowest_body_alpha()
 	if(!body_alphas.len)
@@ -704,7 +711,7 @@
 
 		if(TURF_WET_LUBE)
 			step(src, dir)
-			if (!Slip(stun_amount = 10, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
 				return FALSE
 			for (var/i = 1 to 4)
 				spawn(i)

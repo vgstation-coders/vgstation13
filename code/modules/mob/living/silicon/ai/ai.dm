@@ -38,6 +38,9 @@ var/list/ai_list = list()
 	var/busy = FALSE //Toggle Floor Bolt busy var.
 	var/chosen_core_icon_state = "ai"
 
+	// See VOX_AVAILABLE_VOICES for available values
+	var/vox_voice = "fem";
+
 //Hud stuff
 
 	//MALFUNCTION
@@ -141,6 +144,11 @@ var/list/ai_list = list()
 			show_laws()
 			if (!ismalf(src))
 				to_chat(src, "<b>These laws may be changed by other players, or by you being the traitor.</b>")
+			if (mind && !stored_freqs)
+				to_chat(src, "The various frequencies used by the crew to communicate have been stored in your mind. Use the verb <i>Notes</i> to access them.")
+				spawn(1)
+					mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
+				stored_freqs = 1
 
 			job = "AI"
 	ai_list += src
@@ -234,6 +242,7 @@ var/list/ai_list = list()
 		"Girl Malf" = "ai-girl-malf",
 		"Girl" = "ai-girl",
 		"Glitchman" = "ai-glitchman",
+		"Gondola" = "ai-gondola",
 		"Goon" = "ai-goon",
 		"Green" = "ai-wierd",
 		"Hades" = "ai-hades",
@@ -266,6 +275,7 @@ var/list/ai_list = list()
 		"Triumvirate Static" = "ai-triumvirate-malf",
 		"Triumvirate" = "ai-triumvirate",
 		"Wasp" = "ai-wasp",
+		"Xerxes" = "ai-xerxes",
 		"Yes Man" = "yes-man",
 	)
 	var/selected = input("Select an icon!", "AI", null, null) as null|anything in possible_icon_states
@@ -454,9 +464,11 @@ var/list/ai_list = list()
 			else
 				to_chat(src, "<span class='notice'>Unable to locate the holopad.</span>")
 
+	#ifndef DISABLE_VOX
 	if(href_list["say_word"])
-		play_vox_word(href_list["say_word"], null, src)
+		play_vox_word(href_list["say_word"], vox_voice, null, src)
 		return
+	#endif
 
 	if(href_list["track"])
 		var/mob/target = locate(href_list["track"]) in mob_list
@@ -488,6 +500,27 @@ var/list/ai_list = list()
 		if(A && target)
 			A.open_nearest_door(target)
 		return
+
+	#ifndef DISABLE_VOX
+	// set_voice=(fem|mas) - Sets VOX voicepack.
+	if(href_list["set_voice"])
+		// Never trust the client.
+		if(!(href_list["set_voice"] in VOX_AVAILABLE_VOICES))
+			to_chat(usr, "<span class='notice'>You chose a voice that is not available to AIs on this station. Command ignored.</span>")
+			return
+
+		vox_voice = href_list["set_voice"]
+		to_chat(usr, "VOX voice set to [vox_voice].")
+		make_announcement()
+		return
+
+	// play_announcement=word1+word2... - Plays an announcement to the station.
+	if(href_list["play_announcement"])
+		//to_chat(usr, "Received play_announcement=[href_list["play_announcement"]]")
+		if(announcement_checks())
+			play_announcement(href_list["play_announcement"])
+		return
+	#endif
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)

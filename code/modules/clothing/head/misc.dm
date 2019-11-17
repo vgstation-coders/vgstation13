@@ -298,7 +298,7 @@
 	desc = "Bkaw!"
 	icon_state = "chickenhead"
 	item_state = "chickensuit"
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	body_parts_covered = FULL_HEAD|BEARD
 	siemens_coefficient = 2.0
 
@@ -330,7 +330,7 @@
 	icon_state = "xenos"
 	item_state = "xenos_helm"
 	desc = "A helmet made out of chitinous alien hide."
-	flags = FPRINT
+	flags = FPRINT|HIDEHAIRCOMPLETELY
 	body_parts_covered = FULL_HEAD|BEARD
 	siemens_coefficient = 2.0
 

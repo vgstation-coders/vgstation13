@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "Nanotrasen officials and Space law"
+	wage_payout = 105
 	selection_color = "#ccccff"
 	idtype = /obj/item/weapon/card/id/gold
 	req_admin_notify = 1
@@ -50,6 +51,7 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/>")
 	return 1
 
 /datum/job/captain/get_access()
@@ -69,6 +71,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 80
 	selection_color = "#ddddff"
 	idtype = /obj/item/weapon/card/id/silver
 	req_admin_notify = 1
@@ -118,4 +121,5 @@
 		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 		affected.implants += L
 		L.part = affected
+		H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/>")
 		return 1

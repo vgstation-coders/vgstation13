@@ -55,7 +55,7 @@
 		command_alert(/datum/command_alert/power_restored)
 	for(var/obj/machinery/power/apc/C in power_machines)
 		if(C.cell && C.z == map.zMainStation)
-			C.cell.charge = Clamp(C.cell.charge, C.old_charge, C.cell.maxcharge)
+			C.cell.charge = clamp(C.cell.charge, C.old_charge, C.cell.maxcharge)
 			C.chargemode = 1
 	for(var/obj/machinery/power/battery/smes/S in power_machines)
 		if(S.z != map.zMainStation)

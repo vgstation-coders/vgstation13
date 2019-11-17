@@ -249,7 +249,7 @@
 /obj/item/weapon/storage/box/syndie_kit/boolets
 	name = "Shotgun shells"
 
-/obj/item/weapon/storage/box/syndie_kit/greytide/New()
+/obj/item/weapon/storage/box/syndie_kit/boolets/New()
 	..()
 	new /obj/item/ammo_casing/shotgun/fakebeanbag(src)
 	new /obj/item/ammo_casing/shotgun/fakebeanbag(src)

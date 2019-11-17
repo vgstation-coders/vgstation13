@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 80
 	selection_color = "#ffdddd"
 	idtype = /obj/item/weapon/card/id/hos
 	req_admin_notify = 1
@@ -57,6 +58,7 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ]<br/> <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 /datum/job/hos/reject_new_slots()
@@ -74,6 +76,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of security"
+	wage_payout = 65
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court, access_maint_tunnels, access_morgue, access_eva)
@@ -116,6 +119,7 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 
@@ -128,12 +132,13 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of security"
+	wage_payout = 55
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 
 	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court, access_eva)
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court)
-	alt_titles = list("Forensic Technician","Gumshoe")
+	alt_titles = list("Forensic Technician","Gumshoe", "Private Eye")
 
 	minimal_player_age = 7
 
@@ -165,7 +170,7 @@
 				H.equip_or_collect(new /obj/item/clothing/under/det(H), slot_w_uniform)
 				H.equip_or_collect(new /obj/item/clothing/suit/storage/forensics/blue(H), slot_wear_suit)
 				H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
-			if("Gumshoe")
+			if("Gumshoe","Private Eye")
 				H.mutations += M_NOIR
 				H.dna.SetSEState(NOIRBLOCK,1)
 				H.equip_or_collect(new /obj/item/clothing/under/det/noir(H), slot_w_uniform)
@@ -177,8 +182,7 @@
 				H.equip_or_collect(new /obj/item/clothing/suit/storage/det_suit(H), slot_wear_suit)
 				H.equip_or_collect(new /obj/item/clothing/head/det_hat(H), slot_head)
 				H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
-	H.equip_or_collect(new /obj/item/weapon/lighter/zippo(H), slot_l_store)
-
+		H.equip_or_collect(new /obj/item/weapon/lighter/zippo(H), slot_l_store)
 	if(H.backbag == 1)//Why cant some of these things spawn in his office?
 		H.put_in_r_hand(new H.species.survival_gear(H))
 		H.put_in_l_hand(new /obj/item/weapon/storage/box/evidence(H))
@@ -196,6 +200,7 @@
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	H.check_mutations = 1
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 
@@ -208,6 +213,7 @@
 	total_positions = 5
 	spawn_positions = 5
 	supervisors = "the head of security"
+	wage_payout = 55
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels, access_morgue, access_eva)
@@ -249,6 +255,7 @@
 	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
 /datum/job/officer/get_total_positions()
@@ -256,4 +263,4 @@
 
 	var/datum/job/assistant = job_master.GetJob("Assistant")
 	if(assistant.current_positions > 5)
-		. = Clamp(. + assistant.current_positions - 5, 0, 99)
+		. = clamp(. + assistant.current_positions - 5, 0, 99)

@@ -98,13 +98,13 @@
 					if(!playing || shouldStopPlaying(user))//If the instrument is playing, or special case
 						playing = 0
 						return
-					if(lentext(note) == 0)
+					if(length(note) == 0)
 						continue
 					//world << "Parse: [copytext(note,1,2)]"
 					var/cur_note = text2ascii(note) - 96
 					if(cur_note < 1 || cur_note > 7)
 						continue
-					for(var/i=2 to lentext(note))
+					for(var/i=2 to length(note))
 						var/ni = copytext(note,i,i+1)
 						if(!text2num(ni))
 							if(ni == "#" || ni == "b" || ni == "n")
@@ -113,7 +113,7 @@
 								cur_acc[cur_note] = "#" // so shift is never required
 						else
 							cur_oct[cur_note] = text2num(ni)
-					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)		
+					playnote(cur_note, cur_acc[cur_note], cur_oct[cur_note],user)
 				var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
 				if (ui)
 					ui.send_message("activeChord", list2params(list(lineCount, chordCount)))
@@ -123,7 +123,7 @@
 				else
 					sleep(tempo)
 				chordCount++
-				
+
 			lineCount++
 		repeat--
 	playing = 0
@@ -221,14 +221,18 @@
 			t = html_encode(input(usr, "Please paste the entire song, formatted:", text("[]", name), t)  as message)
 			if(!in_range(instrumentObj, usr))
 				return
-			if(lentext(t) >= INSTRUMENT_MAX_LINE_LENGTH*INSTRUMENT_MAX_LINE_NUMBER)
+			if(length(t) >= INSTRUMENT_MAX_LINE_LENGTH*INSTRUMENT_MAX_LINE_NUMBER)
 				var/cont = input(usr, "Your message is too long! Would you like to continue editing it?", "", "yes") in list("yes", "no")
 				if(cont == "no")
 					break
-		while(lentext(t) > INSTRUMENT_MAX_LINE_LENGTH*INSTRUMENT_MAX_LINE_NUMBER)
+		while(length(t) > INSTRUMENT_MAX_LINE_LENGTH*INSTRUMENT_MAX_LINE_NUMBER)
 		//split into lines
 		spawn()
 			lines = splittext(t, "\n")
+			//if the user didn't paste in a song, we have nothing to do here
+			if(lines.len == 0)
+				alert("You can't import an empty song!")
+				return
 			if(copytext(lines[1],1,6) == "BPM: ")
 				tempo = sanitize_tempo(600 / text2num(copytext(lines[1],6)))
 				lines.Cut(1,2)
@@ -239,7 +243,7 @@
 				lines.Cut(INSTRUMENT_MAX_LINE_NUMBER+1)
 			var/linenum = 1
 			for(var/l in lines)
-				if(lentext(l) > INSTRUMENT_MAX_LINE_LENGTH)
+				if(length(l) > INSTRUMENT_MAX_LINE_LENGTH)
 					alert(usr, "Line [linenum] too long! Removing...")
 					lines.Remove(l)
 				else
@@ -266,7 +270,7 @@
 			return
 		if(lines.len > INSTRUMENT_MAX_LINE_NUMBER)
 			return
-		if(lentext(newline) > INSTRUMENT_MAX_LINE_LENGTH)
+		if(length(newline) > INSTRUMENT_MAX_LINE_LENGTH)
 			newline = copytext(newline, 1, INSTRUMENT_MAX_LINE_LENGTH)
 		lines.Add(newline)
 	else if(href_list["deleteline"])
@@ -281,7 +285,7 @@
 		var/content = html_encode(input("Enter your line: ", instrumentObj.name, lines[num]) as text|null)
 		if(!content || !in_range(instrumentObj, usr))
 			return
-		if(lentext(content) > INSTRUMENT_MAX_LINE_LENGTH)
+		if(length(content) > INSTRUMENT_MAX_LINE_LENGTH)
 			content = copytext(content, 1, INSTRUMENT_MAX_LINE_LENGTH)
 		if(num > lines.len || num < 1)
 			return
@@ -307,7 +311,7 @@
 
 		lines.Swap(index, index+dir)
 	interact(usr)
-	
+
 	return
 /datum/song/proc/sanitize_tempo(new_tempo)
 	new_tempo = abs(new_tempo)

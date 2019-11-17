@@ -303,6 +303,7 @@ obj/item/weapon/banhammer/admin
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	force = 15
+	var/whipitgood_bonus = 5 //energy dome bonus
 	throwforce = 0
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("whips", "lashes", "thrashes", "flagellates", "flogs")
@@ -317,10 +318,15 @@ obj/item/weapon/banhammer/admin
 		targeting = user.zone_sel.selecting
 	projectile.launch_at(A,tar_zone = targeting,from = user)
 
-/obj/item/weapon/bullwhip/attack(mob/M, mob/user)
-	sharpness = 1.2	//a whip can only cut things when it is actually whipping
+/obj/item/weapon/bullwhip/attack(mob/M, mob/user)//mob/living/carbon/human/user
+	var/force_original = force
+	sharpness = 1.2 //a whip can only cut things when it is actually whipping
+	if(user.is_wearing_item(/obj/item/clothing/head/energy_dome))
+		force += whipitgood_bonus
+		visible_message("<span class='warning'>[user] whips it good!</span>")
 	..()
 	sharpness = 0
+	force = force_original//return force back to normal
 
 /obj/item/weapon/macuahuitl
 	name = "wooden paddle"

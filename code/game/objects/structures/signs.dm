@@ -123,6 +123,11 @@
 	desc = "A warning sign which reads 'SECURE AREA'."
 	icon_state = "securearea"
 
+/obj/structure/sign/parking
+	name = "PARKING AREA"
+	desc = "A sign which indicates that this is a designated area for parking vehicles."
+	icon_state = "parking"
+
 /obj/structure/sign/biohazard
 	name = "BIOHAZARD"
 	desc = "A warning sign which reads 'BIOHAZARD'."
@@ -292,3 +297,37 @@
 
 /obj/structure/sign/russian/staff_only
 	icon_state = "RU_staff_only"
+
+/obj/structure/sign/shard
+	icon_state = "shard_b"
+	name = "SUPERMATTER SHARD"
+	desc = "A sign which reads 'SUPERMATTER SHARD'."
+
+/obj/structure/sign/shard/red
+	icon_state = "shard_r"
+
+/obj/structure/sign/shard/yellow
+	icon_state = "shard_y"
+
+/obj/structure/sign/shard/circle
+	icon_state = "shard_circle"
+
+/obj/structure/sign/pox
+	name = "NO VOX ALLOWED"
+	icon_state = "novox1-b"
+	desc = "A sign which reads 'NO VOX ALLOWED'."
+
+/obj/structure/sign/pox/no_cross
+	icon_state = "novox2-b"
+
+/obj/structure/sign/pox/red
+	icon_state = "novox1-r"
+
+/obj/structure/sign/pox/red/no_cross
+	icon_state = "novox2-r"
+
+/obj/structure/sign/pox/red/cicle
+	icon_state = "novox_circle1"
+
+/obj/structure/sign/pox/red/cicle/no_cross
+	icon_state = "novox_circle2"

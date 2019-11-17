@@ -141,8 +141,10 @@
 
 /obj/item/weapon/gun/projectile/glock
 	name = "\improper NT Glock"
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds."
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket."
 	icon = 'icons/obj/biggun.dmi'
+	w_class = W_CLASS_SMALL
+	clowned = CLOWNABLE
 	icon_state = "secglockfancy"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
@@ -156,12 +158,16 @@
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
-	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
+	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
 
 /obj/item/weapon/gun/projectile/glock/fancy
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds.<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maint crawling!</span>"
 	name = "\improper NT Glock Custom"
 	icon_state = "secgunfancy"
+	clowned = UNCLOWN
+
+/obj/item/weapon/gun/projectile/glock/fancy/New()
+	. = ..()
+	desc += "<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maintenance crawling!</span>"
 
 /obj/item/weapon/gun/projectile/glock/fancy/update_icon()
 	..()

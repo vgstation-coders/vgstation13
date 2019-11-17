@@ -38,6 +38,10 @@
 
 	light_color = LIGHT_COLOR_BLUE
 
+/obj/machinery/computer/telescience/broken
+	icon_state = "teleportb"
+	stat = BROKEN
+
 /obj/machinery/computer/telescience/get_cell()
 	return cell
 
@@ -290,8 +294,8 @@ var/list/telesci_warnings = list(
 
 	var/trueX = x_co + x_off - x_player_off + WORLD_X_OFFSET[z_co]
 	var/trueY = y_co + y_off - y_player_off + WORLD_Y_OFFSET[z_co]
-	trueX = Clamp(trueX, 1, world.maxx)
-	trueY = Clamp(trueY, 1, world.maxy)
+	trueX = clamp(trueX, 1, world.maxx)
+	trueY = clamp(trueY, 1, world.maxy)
 
 	var/turf/target = locate(trueX, trueY, z_co)
 	var/area/A=target.loc
@@ -432,7 +436,7 @@ var/list/telesci_warnings = list(
 		if(cell)
 			if (usr.put_in_hands(cell))
 				usr.visible_message("<span class='notice'>[usr] removes the cell from \the [src].</span>", "<span class='notice'>You remove the cell from \the [src].</span>")
-			else 
+			else
 				visible_message("<span class='notice'>\The [src] beeps as its cell is removed.</span>")
 				cell.forceMove(get_turf(src))
 			cell.add_fingerprint(usr)

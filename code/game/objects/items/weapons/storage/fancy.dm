@@ -188,7 +188,7 @@
 	new /obj/item/toy/crayon/yellow(src)
 	new /obj/item/toy/crayon/green(src)
 	new /obj/item/toy/crayon/blue(src)
-	new /obj/item/toy/crayon/purple(src)
+	new /obj/item/toy/crayon/violet(src)
 	new /obj/item/toy/crayon/black(src)
 	update_icon()
 

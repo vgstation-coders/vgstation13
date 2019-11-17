@@ -40,10 +40,12 @@
 			return L[index]
 	return
 
+#if DM_VERSION < 513
 /proc/islist(list/L)
 	if(istype(L))
 		return 1
 	return 0
+#endif
 
 //Return either pick(list) or null if list is not of type /list or is empty
 /proc/safepick(list/L)
@@ -135,7 +137,7 @@
 	var/total = 0
 	var/item
 	for (item in L)
-		if (!L[item])
+		if (isnull(L[item]))
 			L[item] = 1
 		total += L[item]
 
@@ -296,6 +298,13 @@
 	for(var/key in L)
 		elements += L[key]
 	return elements
+
+//In an associative list, get only the keys and not the elements.
+/proc/get_list_of_keys(var/list/L)
+	var/list/keys = list()
+	for(var/key in L)
+		keys += key
+	return keys
 
 /proc/count_by_type(var/list/L, type)
 	var/i = 0

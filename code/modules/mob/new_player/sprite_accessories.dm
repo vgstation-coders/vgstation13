@@ -62,7 +62,7 @@
 	name = "Bald"
 	icon_state = "bald"
 	gender = MALE
-	species_allowed = list("Human","Manifested","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom","Evolved Slime")
+	species_allowed = list("Human","Manifested","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
 
 /datum/sprite_accessory/hair/short
 	name = "Short Hair"	  // try to capatilize the names please~
@@ -394,6 +394,11 @@
 	icon_state = "hair_twincurl"
 	gender = FEMALE
 
+/datum/sprite_accessory/hair/minidrills
+	name = "Twincurls 2"
+	icon_state = "hair_twincurl2"
+	gender = FEMALE
+
 /datum/sprite_accessory/hair/twintails
 	name = "Twintails"
 	icon_state = "hair_twintail"
@@ -523,7 +528,7 @@
 	name = "Shaved"
 	icon_state = "bald"
 	gender = NEUTER
-	species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom", "Evolved Slime")
+	species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
 
 /datum/sprite_accessory/facial_hair/watson
 	name = "Watson Mustache"
@@ -815,22 +820,22 @@
 /datum/sprite_accessory/hair/slime_tendrils
 	name = "Long Tendrils"
 	icon_state = "slime_tendrils"
-	species_allowed = list("Evolved Slime")
+	species_allowed = list("Slime")
 
 /datum/sprite_accessory/hair/slime_spikes
 	name = "Spikes"
 	icon_state = "slime_spikes"
-	species_allowed = list("Evolved Slime")
+	species_allowed = list("Slime")
 
 /datum/sprite_accessory/hair/slime_droplet
 	name = "Droplet"
 	icon_state = "slime_droplet"
-	species_allowed = list("Evolved Slime")
+	species_allowed = list("Slime")
 
 /datum/sprite_accessory/hair/slime_suu
 	name = "Wiggly"
 	icon_state = "slime_suu"
-	species_allowed = list("Evolved Slime")
+	species_allowed = list("Slime")
 	do_colouration = 0
 
 /datum/sprite_accessory/facial_hair/taj_sideburns

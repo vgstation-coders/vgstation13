@@ -11,7 +11,7 @@
 	invocation = "I CAST FIST"
 	invocation_type = SpI_SHOUT
 	max_targets = 3
-	spell_flags = NEEDSCLOTHES|LOSE_IN_TRANSFER
+	spell_flags = NEEDSCLOTHES | LOSE_IN_TRANSFER | IS_HARMFUL
 
 	compatible_mobs = list(/mob/living)
 

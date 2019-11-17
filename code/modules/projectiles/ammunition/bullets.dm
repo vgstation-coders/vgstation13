@@ -164,6 +164,7 @@
 /obj/item/ammo_casing/shotgun/buckshot
 	name = "buckshot shell"
 	desc = "A 12 gauge shell filled with standard double-aught buckshot."
+	icon_state = "bsshell"
 	projectile_type = /obj/item/projectile/bullet/buckshot
 	starting_materials = list(MAT_IRON = 12500)
 	w_type = RECYK_METAL

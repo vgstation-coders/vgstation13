@@ -160,7 +160,7 @@
 				return 1
 			var/obj/item/stack/sheet/out = new mat.sheettype(output.loc)
 			out.redeemed = 1 //Central command will not pay for this mineral stack.
-			out.amount = Clamp(desired, 0, min(materials.storage[release], out.max_amount))
+			out.amount = clamp(desired, 0, min(materials.storage[release], out.max_amount))
 			materials.removeAmount(release, out.amount)
 	updateUsrDialog()
 	return

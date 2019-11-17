@@ -323,7 +323,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEEARS			EARS
 #define HIDEEYES			EYES
 #define HIDEFACE			FACE
-#define HIDEHEADHAIR 		EARS|HEAD
+#define HIDEHEADHAIR 		(EARS|HEAD)
 #define HIDEBEARDHAIR		BEARD
 #define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
 #define	HIDESUITSTORAGE		LOWER_TORSO
@@ -1248,6 +1248,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 ////////////////////////
 ////PDA APPS DEFINES////
 ////////////////////////
+#define PDA_APP_ALARM			100
 #define PDA_APP_RINGER			101
 #define PDA_APP_SPAMFILTER		102
 #define PDA_APP_BALANCECHECK	103

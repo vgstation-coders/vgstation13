@@ -18,6 +18,9 @@
 
 	immune_system = new (src)
 
+	on_resist = new(owner = src)
+	on_life = new(owner = src)
+
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
 		for(var/image/I in static_overlays)
@@ -41,6 +44,14 @@
 	if(immune_system)
 		qdel(immune_system)
 		immune_system = null
+
+	if(on_resist)
+		qdel(on_resist)
+		on_resist = null
+
+	if(on_life)
+		qdel(on_life)
+		on_life = null
 
 	. = ..()
 
@@ -794,18 +805,6 @@ Thanks.
 /mob/living
 	var/event/on_resist
 
-/mob/living/New()
-	. = ..()
-	on_resist = new(owner = src)
-	on_life = new(owner = src)
-
-/mob/living/Destroy()
-	. = ..()
-	qdel(on_resist)
-	on_resist = null
-	qdel(on_life)
-	on_life = null
-
 /mob/living/verb/resist()
 	set name = "Resist"
 	set category = "IC"
@@ -940,7 +939,7 @@ Thanks.
 			L.visible_message("<span class='danger'>[L] resists!</span>")
 
 
-	if(L.locked_to)
+	if(L.locked_to && !L.isUnconscious())
 		//unbuckling yourself
 		if(istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to
@@ -1086,7 +1085,7 @@ Thanks.
 				jailcell.break_out(L)
 		return
 
-	if(L.loc && istype(L.loc, /obj/structure/inflatable/shelter))
+	if((L.loc && istype(L.loc, /obj/structure/inflatable/shelter)) || (L.loc && istype(L.loc, /obj/structure/reagent_dispensers/cauldron/barrel)))
 		var/obj/O = L.loc
 		O.container_resist(L)
 
@@ -1763,8 +1762,7 @@ Thanks.
 		if(istype(src,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H=src
 			throw_mult = H.species.throw_mult
-			if((M_HULK in H.mutations) || (M_STRONG in H.mutations))
-				throw_mult+=0.5
+			throw_mult += (H.get_strength()-1)/2 //For each level of strength above 1, add 0.5
 		item.throw_at(target, item.throw_range*throw_mult, item.throw_speed*throw_mult)
 		return THREW_SOMETHING
 

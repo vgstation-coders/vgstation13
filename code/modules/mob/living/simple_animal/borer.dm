@@ -43,6 +43,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	wander = 0
 	pass_flags = PASSTABLE
 	universal_understand=1
+	heat_damage_per_tick = 1
+	cold_damage_per_tick = 1
 
 	var/busy = 0 // So we aren't trying to lay many eggs at once.
 
@@ -51,6 +53,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/hostlimb = null						// Which limb of the host is inhabited by the borer.
 	var/truename                            // Name used for brainworm-speak.
 	var/mob/living/captive_brain/host_brain // Used for swapping control of the body back and forth.
+	var/host_name 							// Stores the old name of the host to revert to after namepick
 	var/controlling                         // Used in human death check.
 	var/list/avail_chems=list()
 	var/list/unlocked_chems_head=list()
@@ -93,6 +96,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/static/list/name_prefixes = list("Primary","Secondary","Tertiary","Quaternary","Quinary","Senary","Septenary","Octonary","Nonary","Denary")
 	var/name_prefix_index = 1
 	held_items = list()
+
+/mob/living/simple_animal/borer/check_environment_susceptibility()
+	return !host
 
 /mob/living/simple_animal/borer/whisper()
 	return FALSE
@@ -170,6 +176,12 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		regular_hud_updates()
 
 /mob/living/simple_animal/borer/regular_hud_updates()
+	if(fire)
+		if(fire_alert)
+			fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for heat and 2 for cold.
+		else
+			fire.icon_state = "fire0"
+
 	var/severity = 0
 
 	var/healthpercent = (health/maxHealth)*100
@@ -381,7 +393,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(hostlimb != LIMB_HEAD)
 		to_chat(src, "You are not attached to your host's brain.")
 		return
-	
+
 	if(host.ckey || !istype(host, /mob/living/carbon/monkey))
 		to_chat(src, "<span class='danger'>The host consciousness resists your attempts to overwhelm it!</span>")
 		return
@@ -398,7 +410,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/proc/do_bonding(var/rptext=0)
 	if(!host || host.stat==DEAD || !src || research.unlocking)
 		return
-	
+
 	if(host.ckey || !istype(host, /mob/living/carbon/monkey)) //check again just to be sure
 		to_chat(src, "<span class='danger'>You attempt to interface with the host's nervous system, but their consciousness resists!</span>")
 		return
@@ -414,15 +426,16 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		controlling = 1
 	var/newname
 	for(var/i = 1 to 3)
-		newname = reject_bad_name(stripped_input(src,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
+		newname = reject_bad_name(stripped_input(host,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
 		if(!newname || newname == "")
-			if(alert(src,"Are you sure you want to keep your host's original name?",,"Yes","No") == "Yes")
+			if(alert(host,"Are you sure you want to keep your host's original name?",,"Yes","No") == "Yes")
 				break
 		else
-			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
+			if(alert(host,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
 				break
 	if(newname)
-		host.name = newname
+		host_name = host.real_name //store the old host name in the borer
+		host.fully_replace_character_name(null, newname)
 	host.verbs += /mob/living/carbon/proc/release_control
 	/* Broken
 	host.verbs += /mob/living/carbon/proc/punish_host

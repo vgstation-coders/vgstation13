@@ -393,7 +393,7 @@
 			else
 				msg = alt
 				type = alt_type
-				if((type & MESSAGE_SEE) && (sdisabilities & BLIND || blinded || paralysis)) //Since the alternative is sight-related, make sure we can see
+				if((type & MESSAGE_SEE) && is_blind()) //Since the alternative is sight-related, make sure we can see
 					return
 	//Added voice muffling for Issue 41.
 	//This has been changed to only work with audible messages, because you can't hear a frown
@@ -1252,12 +1252,20 @@ Use this proc preferably at the end of an equipment loadout
 	A.examine(src)
 
 
-/mob/living/verb/verb_pickup(obj/I in view(1))
+/mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"
 	set category = "Object"
 
 	face_atom(I)
 	I.verb_pickup(src)
+
+/proc/acquirable_objects_in_view(var/mob/living/L, var/range)
+	var/list/obj_list = list()
+	for(var/turf/T in view(L, range))
+		for(var/obj/I in T)
+			if(I.can_pickup(L, FALSE, TRUE))
+				obj_list.Add(I)
+	return obj_list
 
 // See carbon/human
 /mob/proc/can_show_flavor_text()
@@ -1520,7 +1528,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/Stat()
 	..()
 
-	if(client && client.holder && (world.timeofday - client.connection_timeofday > 5 SECONDS) && client.inactivity < 1200)
+	if(client && client.holder && client.inactivity < 1200)
 		if(statpanel("MC"))
 			stat("Location:", "([x], [y], [z])")
 			stat("CPU:", "[world.cpu]")
@@ -1904,7 +1912,7 @@ mob/proc/on_foot()
 	return 1
 
 /mob/proc/is_blind()
-	if(sdisabilities & BLIND || blinded || paralysis)
+	if((sdisabilities & BLIND) || (sight & BLIND) || blinded || paralysis)
 		return 1
 	return 0
 

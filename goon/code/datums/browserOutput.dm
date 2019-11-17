@@ -181,7 +181,7 @@ For the main html chat area
 				var/list/row = src.connectionHistory[i]
 				if (!row || row.len < 3 || (!row["ckey"] && !row["compid"] && !row["ip"])) //Passed malformed history object
 					return
-				if (world.IsBanned(row["ckey"], row["compid"], row["ip"]))
+				if (world.IsBanned(row["ckey"], row["ip"], row["compid"], "goonchat"))
 					found = row
 					break
 
@@ -263,6 +263,8 @@ For the main html chat area
 /proc/to_chat(target, message)
 	//Ok so I did my best but I accept that some calls to this will be for shit like sound and images
 	//It stands that we PROBABLY don't want to output those to the browser output so just handle them here
+	if(!target)
+		return
 	if (istype(target, /datum/zLevel)) //Passing it to an entire z level
 		for(var/mob/M in player_list) //List of all mobs with clients, excluding new_player
 			if(!istype(get_z_level(M),target))

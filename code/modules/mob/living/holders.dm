@@ -95,7 +95,7 @@
 	..()
 	if(M)
 		appearance = M.appearance
-		w_class = Clamp((M.size - SIZE_TINY) * W_CLASS_MEDIUM, W_CLASS_TINY, W_CLASS_HUGE)
+		w_class = clamp((M.size - SIZE_TINY) * W_CLASS_MEDIUM, W_CLASS_TINY, W_CLASS_HUGE)
 		//	SIZE		|	W_CLASS
 
 		//	SIZE_TINY	|	W_CLASS_TINY
@@ -168,6 +168,12 @@
 
 	update_itemstate_on_twohand = TRUE
 
+//SNAKES
+
+/obj/item/weapon/holder/animal/snek
+	name = "snake holder"
+	desc = "Kept you waiting?"
+	item_state = "snek"
 
 //SLIMES
 /obj/item/weapon/holder/animal/slime

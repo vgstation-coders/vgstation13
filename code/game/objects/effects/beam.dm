@@ -213,7 +213,7 @@
 /obj/effect/beam/proc/disconnect(var/re_emit=1)
 	var/obj/effect/beam/_master=get_master()
 	if(_master.target)
-		if(isatommovable(_master.target) && _master.target.on_moved)
+		if(ismovable(_master.target) && _master.target.on_moved)
 			_master.target.on_moved.Remove(_master.targetMoveKey)
 		_master.target.on_destroyed.Remove(_master.targetDestroyKey)
 		_master.target.beam_disconnect(_master)

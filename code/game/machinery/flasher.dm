@@ -38,11 +38,6 @@ var/list/obj/machinery/flasher/flashers = list()
 	density = 1
 	min_harm_label = 35 //A lot. Has to wrap around the bulb, after all.
 
-/*
-/obj/machinery/flasher/New()
-	sleep(4)					//<--- What the fuck are you doing? D=
-	src.sd_SetLuminosity(2)
-*/
 /obj/machinery/flasher/power_change()
 	if ( powered() )
 		stat &= ~NOPOWER

@@ -54,14 +54,6 @@
 
 	return 1
 
-/obj/machinery/atmospherics/unary/thermal_plate/hide(var/i) //to make the little pipe section invisible, the icon changes.
-	var/prefix=""
-	if(i == 1 && istype(loc, /turf/simulated))
-		prefix="h"
-	icon_state = "[prefix]off"
-	update_icon()
-	return ..()
-
 /obj/machinery/atmospherics/unary/thermal_plate/proc/radiate()
 	if(network && network.radiate) //Since each member of a network has the same gases each tick
 		air_contents.copy_from(network.radiate) //We can cut down on processing time by only calculating radiate() once and then applying the result

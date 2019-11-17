@@ -786,7 +786,7 @@
 			offset_step++
 			return 1
 
-/obj/structure/table/attack_hand(mob/living/user)
+/obj/structure/rack/attack_hand(mob/living/user)
 	if(M_HULK in user.mutations)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")

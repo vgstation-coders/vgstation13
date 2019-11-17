@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 80
 	selection_color = "#ffeeaa"
 	idtype = /obj/item/weapon/card/id/ce
 	req_admin_notify = 1
@@ -46,6 +47,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/>")
 	return 1
 
 /datum/job/chief_engineer/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -63,6 +65,7 @@
 	total_positions = 5
 	spawn_positions = 5
 	supervisors = "the chief engineer"
+	wage_payout = 65
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
@@ -104,6 +107,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Engineering:</b> [ENG_FREQ] <br/>")
 	return 1
 
 /datum/job/engineer/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -119,6 +123,7 @@
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the chief engineer"
+	wage_payout = 65
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
@@ -149,6 +154,7 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/> <b>Engineering:</b> [ENG_FREQ]<br/>")
 	return 1
 
 /datum/job/atmos/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -164,6 +170,7 @@
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the research director and the chief engineer"
+	wage_payout = 45
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_mechanic, access_tcomsat, access_science)
@@ -203,4 +210,5 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ]<br/>")
 	return 1

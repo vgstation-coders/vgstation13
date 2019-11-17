@@ -1,4 +1,4 @@
-/world/IsBanned(key, address, computer_id)
+/world/IsBanned(key, address, computer_id, type)
 
 	if (!key || !address || !computer_id)
 		log_access("Failed Login (invalid data): [key] [address]-[computer_id]")
@@ -7,7 +7,7 @@
 		log_access("Failed Login (invalid cid): [key] [address]-[computer_id]")
 		return list("reason"="invalid login data", "desc"="Error: Could not check ban status, Please try again. Error message: Your computer provided an invalid Computer ID.)")
 
-	log_access("IsBanned: Checking [ckey(key)], [address], [computer_id]")
+	log_access("IsBanned: Checking [ckey(key)], [address], [computer_id], [type]")
 	//Guest Checking
 	if(!guests_allowed && IsGuestKey(key))
 		log_access("Failed Login: [key] - Guests not allowed")

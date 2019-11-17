@@ -146,11 +146,11 @@
 
 	var/total_moles = air.total_moles
 	if(round(total_moles, 0.01))	//Check if there's total moles to avoid divisions by zero.
-		interface.updateContent("oxypercent", Clamp(round(100 * air[GAS_OXYGEN]			/ total_moles, 0.1), 0, 100))
-		interface.updateContent("nitpercent", Clamp(round(100 * air[GAS_NITROGEN]		/ total_moles, 0.1), 0, 100))
-		interface.updateContent("co2percent", Clamp(round(100 * air[GAS_CARBON]			/ total_moles, 0.1), 0, 100))
-		interface.updateContent("plapercent", Clamp(round(100 * air[GAS_PLASMA]			/ total_moles, 0.1), 0, 100))
-		interface.updateContent("n2opercent", Clamp(round(100 * air[GAS_SLEEPING]		/ total_moles, 0.1), 0, 100))
+		interface.updateContent("oxypercent", clamp(round(100 * air[GAS_OXYGEN]			/ total_moles, 0.1), 0, 100))
+		interface.updateContent("nitpercent", clamp(round(100 * air[GAS_NITROGEN]		/ total_moles, 0.1), 0, 100))
+		interface.updateContent("co2percent", clamp(round(100 * air[GAS_CARBON]			/ total_moles, 0.1), 0, 100))
+		interface.updateContent("plapercent", clamp(round(100 * air[GAS_PLASMA]			/ total_moles, 0.1), 0, 100))
+		interface.updateContent("n2opercent", clamp(round(100 * air[GAS_SLEEPING]		/ total_moles, 0.1), 0, 100))
 
 	else
 		interface.updateContent("oxypercent", 0)
@@ -172,13 +172,13 @@
 		return
 
 	if(href_list["power"])
-		on = round(Clamp(text2num(href_list["power"]), 0, 1))
+		on = round(clamp(text2num(href_list["power"]), 0, 1))
 		updateUsrDialog()
 		update_icon()
 		return 1
 
 	if(href_list["set_pressure"])
-		target_pressure = round(Clamp(text2num(href_list["set_pressure"]), 0, 4500))
+		target_pressure = round(clamp(text2num(href_list["set_pressure"]), 0, 4500))
 		update_icon()
 		updateUsrDialog()
 		return 1
@@ -219,7 +219,7 @@
 		update = 1
 
 	var/pressure = air.return_pressure() // null ref error here.
-	var/i = Clamp(round(pressure / (max_pressure / 5)), 0, 5)
+	var/i = clamp(round(pressure / (max_pressure / 5)), 0, 5)
 	if(i != last_pressure)
 		update = 1
 

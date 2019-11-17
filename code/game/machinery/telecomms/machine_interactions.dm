@@ -17,7 +17,7 @@
 	var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
 	if (!istype(C))
 		return
-	C.integrity = Clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
+	C.integrity = clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
 
 /obj/item/weapon/circuitboard/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
 	if(issolder(W))
@@ -70,7 +70,7 @@
 	dat = {"
 		<p>[temp]</p>
 		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[toggled ? "On" : "Off"]</a></p>
-		<p><b>Integrity:</b> [Clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
+		<p><b>Integrity:</b> [clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
 	"}
 	if(on && toggled)
 		dat += {"
@@ -302,6 +302,9 @@
 			temp = "<font color = #666633>-% Removed \ref[T] [T.name] from linked entities. %-</font color>"
 		else
 			temp = "<font color = #666633>-% Unable to locate machine to unlink from, try again. %-</font color>"
+
+	for(var/obj/machinery/computer/telecomms/monitor/M in range(25,src))
+		M.notify_unlinked()
 
 /obj/machinery/telecomms/linkWith(var/mob/user, var/mob/O)
 	if(O && O != src && istype(O, /obj/machinery/telecomms))

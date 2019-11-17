@@ -90,9 +90,9 @@ proc/adjust_brightness(var/color, var/value)
 		return color
 
 	var/list/RGB = ReadRGB(color)
-	RGB[1] = Clamp(RGB[1]+value,0,255)
-	RGB[2] = Clamp(RGB[2]+value,0,255)
-	RGB[3] = Clamp(RGB[3]+value,0,255)
+	RGB[1] = clamp(RGB[1]+value,0,255)
+	RGB[2] = clamp(RGB[2]+value,0,255)
+	RGB[3] = clamp(RGB[3]+value,0,255)
 	return rgb(RGB[1],RGB[2],RGB[3])
 
 proc/adjust_RGB(var/color, var/red, var/green, var/blue)
@@ -102,9 +102,9 @@ proc/adjust_RGB(var/color, var/red, var/green, var/blue)
 		return color
 
 	var/list/RGB = ReadRGB(color)
-	RGB[1] = Clamp(RGB[1]+red,0,255)
-	RGB[2] = Clamp(RGB[2]+green,0,255)
-	RGB[3] = Clamp(RGB[3]+blue,0,255)
+	RGB[1] = clamp(RGB[1]+red,0,255)
+	RGB[2] = clamp(RGB[2]+green,0,255)
+	RGB[3] = clamp(RGB[3]+blue,0,255)
 	return rgb(RGB[1],RGB[2],RGB[3])
 
 /proc/ListColors(var/icon/I, var/ignoreGreyscale = 0)

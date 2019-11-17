@@ -142,10 +142,10 @@ Obviously, requires DNA2.
 
 /datum/dna/gene/basic/noir
 	name = "Noir"
-	desc = "In recent years, there's been a real push towards 'Detective Noir' movies, but since the last black and white camera was lost many centuries ago, Scientists had to develop a way to turn any movie noir."
-	activation_messages = list("The Station's bright coloured light hits your eyes for the last time, and fades into a more appropriate tone, something's different about this place, but you can't put your finger on it. You feel a need to check out the bar, maybe get to the bottom of what's going on in this godforsaken place.")
-	deactivation_messages = list("You now feel soft boiled.")
-
+	desc = "In recent years there's been a real push towards 'Detective Noir' movies, but since the last black and white camera was lost many centuries ago, scientists had to develop a way to turn any movie noir."
+	activation_messages = list("The vibrant colors of the station hit your eyes for the last time before fading into a more appropriate tone. Something's off about this place, but you can't quite put your finger on it. You're compelled to check out the bar, maybe get to the bottom of what's going on in this godforsaken place.")
+	deactivation_messages = list("You now feel soft-boiled.")
+	activation_prob = 100
 	mutation = M_NOIR
 
 /datum/dna/gene/basic/noir/New()

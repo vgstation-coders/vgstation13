@@ -36,7 +36,7 @@
 
 /obj/item/weapon/storage/backpack/santabag/attack_hand(user)
 	if(contents.len < storage_slots)
-		var/empty_slots = Clamp((storage_slots - contents.len),0,storage_slots)
+		var/empty_slots = clamp((storage_slots - contents.len),0,storage_slots)
 		to_chat(user,"<span class='notice'>You look into the bag, and find it filled with [empty_slots] new presents!</span>")
 		for(var/i = 1,i <= empty_slots,i++)
 			var/gift = pick(/obj/item/weapon/winter_gift/cloth,/obj/item/weapon/winter_gift/regular,/obj/item/weapon/winter_gift/food)
@@ -48,9 +48,6 @@
 /obj/item/weapon/storage/backpack/cultify()
 	new /obj/item/weapon/storage/backpack/cultpack(loc)
 	..()
-
-/obj/item/weapon/storage/backpack/cultpack/cultify()
-	return
 
 /obj/item/weapon/storage/backpack/clown
 	name = "Giggles Von Honkerton"

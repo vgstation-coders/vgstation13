@@ -172,7 +172,7 @@
 	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
 	table_type = /obj/structure/table/glass/plasma
 
-/obj/item/weapon/table_parts/glass/attackby(obj/item/weapon/W, mob/user)
+/obj/item/weapon/table_parts/glass/plasma/attackby(obj/item/weapon/W, mob/user)
 	if (iswrench(W))
 		drop_stack(/obj/item/stack/sheet/glass/plasmaglass, loc, 1, user)
 		drop_stack(sheet_type, loc, 1, user)

@@ -278,6 +278,11 @@
 			stat("Spacepod Charge", "[istype(S.battery) ? "[S.battery.charge] / [S.battery.maxcharge]" : "No cell detected"]")
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
 
+		if (mind)
+			for (var/role in mind.antag_roles)
+				var/datum/role/R = mind.antag_roles[role]
+				stat(R.StatPanel())
+
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
 		if(istype(L, /obj/item/weapon/implant/loyalty))
@@ -395,7 +400,7 @@
 
 //Removed the horrible safety parameter. It was only being used by ninja code anyways.
 //Now checks siemens_coefficient of the affected area by default
-/mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/base_siemens_coeff = 1.0, var/def_zone = null)
+/mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/base_siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration)
 	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)
 		return 0	//godmode
 
@@ -405,7 +410,7 @@
 	var/datum/organ/external/affected_organ = get_organ(check_zone(def_zone))
 	var/siemens_coeff = base_siemens_coeff * get_siemens_coefficient_organ(affected_organ)
 
-	return ..(shock_damage, source, siemens_coeff, def_zone)
+	return ..(shock_damage, source, siemens_coeff, def_zone, incapacitation_duration)
 
 /mob/living/carbon/human/hear_radio_only()
 	if(!ears)
@@ -454,11 +459,10 @@
 	if(slot_w_uniform in obscured)
 		dat += "<BR><font color=grey><B>Uniform:</B> Obscured by [wear_suit]</font>"
 	else
+		dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
 		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(w_uniform)]</A>"
 		if(w_uniform)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Suit Sensors:</B> <A href='?src=\ref[src];sensors=1'>Set</A>"
-	if(w_uniform)
-		dat += "<BR>[HTMLTAB]&#8627;<B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
 		if(pickpocket)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
 			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? r_store : "<font color=grey>Right (Empty)</font>"]</A>"
@@ -638,7 +642,7 @@
 	if(E)
 		. += E.eyeprot
 
-	return Clamp(., -2, 2)
+	return clamp(., -2, 2)
 
 
 /mob/living/carbon/human/IsAdvancedToolUser()
@@ -696,6 +700,9 @@
 			to_chat(src, "<spawn class='danger'>You feel like you are about to throw up!</span>")
 
 			sleep((instant ? 0 : 100))	//And you have 10 more seconds to move it to the bathrooms
+
+			if(gcDestroyed)
+				return
 
 			Stun(5)
 
@@ -1186,6 +1193,7 @@
 		src.do_deferred_species_setup = 1
 	meat_type = species.meat_type
 	spawn()
+		src.movement_speed_modifier = species.move_speed_multiplier
 		src.dna.species = new_species_name
 		src.species.handle_post_spawn(src)
 		src.update_icons()
@@ -1908,18 +1916,20 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
+	if(stat)
+		return //Don't bother if we're dead or unconscious
 	if(ear_deaf || speech.frequency || speech.speaker == src)
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
 	if(!mind || !mind.faith || length(speech.message) < 20)
 		return //If we aren't religious or hearing a long message, don't check further
 	var/mob/living/H = speech.speaker
 	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
-		if(H.mind == mind.faith.religiousLeader)
+		if(isliving(H) && H.mind == mind.faith.religiousLeader)
 			AdjustDizzy(rand(-8,-10))
 			stuttering = max(0,stuttering-rand(8,10))
 			jitteriness = max(0,jitteriness-rand(8,10))
 			hallucination = max(0,hallucination-rand(8,10))
-			confused = max(0,confused-rand(8,10))
+			remove_confused(rand(8, 10))
 			drowsyness = max(0, drowsyness-rand(8,10))
 			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
 

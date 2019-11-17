@@ -168,6 +168,12 @@
 						/obj/item/clothing/glasses/eyepatch,
 						/obj/item/weapon/melee/energy/sword/pirate)
 
+/obj/abstract/loadout/rune_knight
+	items_to_spawn = list(/obj/item/clothing/head/helmet/rune,
+						/obj/item/clothing/suit/armor/rune,
+						/obj/item/weapon/rsscimmy,
+						/obj/item/weapon/shield/riot/rune)
+
 /obj/abstract/loadout/space_pirate
 	items_to_spawn = list(/obj/item/clothing/under/pirate,
 						/obj/item/clothing/shoes/brown,
@@ -376,7 +382,7 @@
 						/obj/item/clothing/gloves/centcom,
 						/obj/item/device/radio/headset/heads/captain,
 						/obj/item/clothing/head/centhat,
-						/obj/item/clothing/suit/armor/centcomm,
+						/obj/item/clothing/suit/space/rig/centcomm,
 						/obj/item/clothing/glasses/sunglasses,
 						/obj/item/weapon/gun/energy/laser/captain,
 						/obj/item/device/pda/heads/nt_supreme,

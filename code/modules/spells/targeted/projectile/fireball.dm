@@ -9,7 +9,7 @@
 
 	school = "evocation"
 	charge_max = 100
-	spell_flags = 0
+	spell_flags = IS_HARMFUL
 	invocation = "ONI SOMA"
 	invocation_type = SpI_SHOUT
 	range = 20

@@ -58,17 +58,6 @@
 /datum/disease2/effect/hallucinations/activate(var/mob/living/mob)
 	mob.hallucination += 25
 
-
-/datum/disease2/effect/deaf
-	name = "Hard of Hearing Syndrome"
-	desc = "Attacks the infected's aural senses."
-	stage = 3
-	badness = EFFECT_DANGER_HINDRANCE
-
-/datum/disease2/effect/deaf/activate(var/mob/living/mob)
-	mob.ear_deaf = 5
-
-
 /datum/disease2/effect/giggle
 	name = "Uncontrolled Laughter Effect"
 	desc = "Gives the infected a sense of humor."
@@ -520,3 +509,13 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		else
 			to_chat(mob, "<span class = 'notice'>Your pupils dilate further.</span>")
 
+/datum/disease2/effect/colorsmoke
+	name = "Colorful Syndrome"
+	desc = "Causes the infected to synthesize smoke & rainbow colourant."
+	stage = 3
+	badness = EFFECT_DANGER_HINDRANCE
+
+/datum/disease2/effect/colorsmoke/activate(var/mob/living/mob)
+	to_chat(mob, "<span class='notice'>You feel colorful!</span>")
+	mob.reagents.add_reagent(COLORFUL_REAGENT, 5)
+	mob.reagents.add_reagent(PAISMOKE, 5)

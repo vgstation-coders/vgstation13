@@ -183,7 +183,7 @@ Manual Tracking Direction:"}
 
 	if(href_list["rate control"])
 		if(href_list["cdir"])
-			cdir = Clamp((360 + cdir + text2num(href_list["cdir"])) % 360, 0, 359)
+			cdir = clamp((360 + cdir + text2num(href_list["cdir"])) % 360, 0, 359)
 			spawn(1)
 				set_panels(cdir)
 				update_icon()
@@ -209,7 +209,7 @@ Manual Tracking Direction:"}
 	updateUsrDialog()
 
 /obj/machinery/power/solar/control/proc/set_trackrate(new_value)
-	trackrate = Clamp(new_value, 0, 360)
+	trackrate = clamp(new_value, 0, 360)
 	if(trackrate > 0)
 		nexttime = world.time + 6000 / trackrate
 

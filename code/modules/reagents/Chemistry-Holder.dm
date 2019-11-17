@@ -345,7 +345,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = A
 		if(M && R)
 			R.on_mob_life(M, alien)
-			R.metabolize(M)
+			if(R)
+				R.metabolize(M)
 	update_total()
 
 /datum/reagents/proc/update_aerosol(var/mob/M)
@@ -550,7 +551,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return 0
 
-/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0)
+/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/remove_reagents = FALSE)
 
 	switch(method)
 		if(TOUCH)
@@ -559,7 +560,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					if(isanimal(A))
 						R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
 					else
-						R.reaction_mob(A, TOUCH, R.volume+volume_modifier)
+						R.reaction_mob(A, TOUCH, R.volume+volume_modifier, remove_reagents)
 				if(isturf(A))
 					R.reaction_turf(A, R.volume+volume_modifier)
 				if(istype(A, /obj))

@@ -160,7 +160,7 @@
 	if(seed.alter_temp)
 		if((environment.temperature < seed.ideal_heat - seed.heat_tolerance) || (environment.temperature > seed.ideal_heat + seed.heat_tolerance))
 			var/energy_cap = seed.potency * 60 * MOLES_CELLSTANDARD //This is totally arbitrary. It just serves to approximate the behavior from when this modified temperature rather than thermal energy.
-			var/energy_change = Clamp(environment.get_thermal_energy_change(seed.ideal_heat), -energy_cap, energy_cap)
+			var/energy_change = clamp(environment.get_thermal_energy_change(seed.ideal_heat), -energy_cap, energy_cap)
 			environment.add_thermal_energy(energy_change)
 
 	// If we're attached to a pipenet, then we should let the pipenet know we might have modified some gasses
@@ -296,18 +296,18 @@
 	// Updates the plant overlay.
 	if(!isnull(seed))
 		if(draw_warnings && health <= (seed.endurance / 2))
-			overlays += image(seed.plant_dmi,"over_lowhealth3")
+			overlays += image('icons/obj/hydroponics/hydro_tools.dmi',"over_lowhealth3")
 
 		if(dead)
-			overlays += image(seed.plant_dmi,"[seed.plant_icon]-dead")
+			overlays += image(seed.plant_dmi,"dead")
 		else if(harvest)
-			overlays += image(seed.plant_dmi,"[seed.plant_icon]-harvest")
+			overlays += image(seed.plant_dmi,"harvest")
 		else if(age < seed.maturation)
 			var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-			overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[t_growthstate]")
+			overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
 			lastproduce = age
 		else
-			overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[seed.growth_stages]")
+			overlays += image(seed.plant_dmi,"stage-[seed.growth_stages]")
 
 	//Draw the cover.
 	if(closed_system)
@@ -342,16 +342,16 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_level_sanity()
 	//Make sure various values are sane.
 	if(seed)
-		health = Clamp(health, 0, seed.endurance)
+		health = clamp(health, 0, seed.endurance)
 	else
 		health = 0
 		dead = 0
 
-	mutation_level = Clamp(mutation_level, 0, 100)
-	nutrilevel =     Clamp(nutrilevel, 0, 10)
-	waterlevel =     Clamp(waterlevel, 0, 100)
-	pestlevel =      Clamp(pestlevel, 0, 10)
-	weedlevel =      Clamp(weedlevel, 0, 10)
-	toxins =         Clamp(toxins, 0, 100)
-	yield_mod = 	 Clamp(yield_mod, 0, 2)
-	mutation_mod = 	 Clamp(mutation_mod, 0, 3)
+	mutation_level = clamp(mutation_level, 0, 100)
+	nutrilevel =     clamp(nutrilevel, 0, 10)
+	waterlevel =     clamp(waterlevel, 0, 100)
+	pestlevel =      clamp(pestlevel, 0, 10)
+	weedlevel =      clamp(weedlevel, 0, 10)
+	toxins =         clamp(toxins, 0, 100)
+	yield_mod = 	 clamp(yield_mod, 0, 2)
+	mutation_mod = 	 clamp(mutation_mod, 0, 3)

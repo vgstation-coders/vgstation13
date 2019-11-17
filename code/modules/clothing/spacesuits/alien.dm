@@ -66,6 +66,16 @@
 	)
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 
+/obj/item/clothing/head/helmet/space/unathi/soghun
+	name = "unathi soghun helmet"
+	desc = "A Unathi helmet designed after ancient soghun outfits."
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)	
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	icon_state = "unathi_soghun"
+	item_state = "engspace_helmet"
+	_color = "unathi_soghun"
+
 /obj/item/clothing/suit/space/unathi/soghun
 	name = "unathi soghun armor"
 	desc = "A Unathi suit designed after ancient soghun outfits."

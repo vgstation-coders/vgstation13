@@ -197,7 +197,7 @@
 		if("Melee") //Really powerful melee weapons and energy shield, along with random extra goods and eviscerator nades. A dream come true
 			synd_mob.equip_to_slot_or_drop(new /obj/item/clothing/glasses/sunglasses/prescription(synd_mob), slot_glasses) //Changed to prescription sunglasses for near-sighted players
 			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/grenade/spawnergrenade/manhacks(synd_mob), slot_belt) //The non-Syndicate version to have enough manhacks
-			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/dualsaber(synd_mob), slot_in_backpack)
+			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/melee/energy/sword/dualsaber(synd_mob), slot_in_backpack)
 			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/melee/energy/hfmachete(synd_mob), slot_in_backpack)
 			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/shield/energy(synd_mob), slot_l_store)
 		if("Medical") //The good guy who just wants to help their dumb fucking teammates not die horribly. Has some fancy gear like the mobile surgery table. Main gun is a VERY lethal syringe gun

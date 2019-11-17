@@ -515,7 +515,7 @@
 	desc = "A book of festive knowledge"
 	spellname = "winter"
 
-/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
+/obj/item/weapon/spellbook/oneuse/ancient/winter/recoil(mob/living/carbon/user)
 	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from santa!</span>")
 	user.gib()
 	qdel(src)

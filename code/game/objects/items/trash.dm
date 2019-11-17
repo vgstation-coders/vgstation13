@@ -137,6 +137,11 @@
 		qdel(W)
 		qdel(src)
 		user.put_in_hands(I)
+	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/doughslice))
+		if(user.drop_item(W))
+			new/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
+			qdel(W)
+			qdel(src)
 
 /obj/item/trash/snack_bowl
 	name = "snack bowl"

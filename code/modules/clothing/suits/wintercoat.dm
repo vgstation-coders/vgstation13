@@ -20,6 +20,8 @@
 /obj/item/clothing/suit/storage/wintercoat/New()
 	if(!nohood)
 		hood = new(src)
+		if(wizard_garb)
+			hood.wizard_garb = 1
 	else
 		actions_types = null
 
@@ -210,6 +212,11 @@
 		/obj/item/weapon/gun/projectile/shotgun/doublebarrel,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker,
 		/obj/item/weapon/reagent_containers/food/drinks/discount_shaker)
+
+/obj/item/clothing/suit/storage/wintercoat/druid
+	name = "druid winter robes"
+	icon_state = "druid_snow"
+	wizard_garb = 1
 
 
 #define HAS_HOOD 1

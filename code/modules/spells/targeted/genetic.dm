@@ -8,6 +8,7 @@ code\game\\dna\genes\goon_powers.dm
 	name = "Genetic modifier"
 	desc = "This spell inflicts a set of mutations and disabilities upon the target."
 	user_type = USER_TYPE_GENETIC
+	spell_flags = IS_HARMFUL
 
 	var/disabilities = 0 //bits
 	var/list/mutations = list() //mutation strings
@@ -38,7 +39,7 @@ code\game\\dna\genes\goon_powers.dm
 
 	charge_max = 300
 
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "STI KALY"
 	invocation_type = SpI_WHISPER
 	message = "<span class='danger'>Your eyes cry out in pain!</span>"
@@ -94,8 +95,8 @@ code\game\\dna\genes\goon_powers.dm
 	duration = 0
 	max_targets = 1
 	//mutations = list(M_EATWEEDS) - Some day, maybe, if this is ported to Diona nymphs instead of a verb
-	hud_state = "ambrosiavulgaris"
-	override_icon = 'icons/obj/harvest.dmi'
+	hud_state = "produce"
+	override_icon = 'icons/obj/hydroponics/ambrosiavulgaris.dmi'
 
 /spell/targeted/genetic/eat_weed/cast(list/targets, var/mob/user)
 	..()

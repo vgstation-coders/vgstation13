@@ -40,7 +40,7 @@
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
 	var/specheatcap = 1 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
 
-/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/remove_reagents = FALSE)
 	set waitfor = 0
 
 	if(!holder)
@@ -76,7 +76,8 @@
 			if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
-
+					if(remove_reagents)
+						self.holder.remove_reagent(self.id, self.volume/2)
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
@@ -878,7 +879,7 @@
 		if(!isslimeperson(human))
 
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
-			human.set_species("Evolved Slime")
+			human.set_species("Slime")
 
 			human.regenerate_icons()
 
@@ -3347,7 +3348,7 @@
 		var/mob/living/carbon/human/H = M
 		for(var/datum/organ/external/temp in H.organs)
 			if(temp.status & ORGAN_BLEEDING)
-				temp.clamp()
+				temp.clamp_wounds()
 
 	if(M.losebreath >= 10)
 		M.losebreath = max(10, M.losebreath - 5)
@@ -3473,7 +3474,7 @@
 	if(M.dizziness)
 		M.dizziness = max(0, M.dizziness - 15)
 	if(M.confused)
-		M.confused = max(0, M.confused - 5)
+		M.remove_confused(5)
 	for(var/datum/disease/D in M.viruses) //Diseases that work under the second rework of viruses, or "Viro 3"
 		D.spread = "Remissive"
 		D.stage--
@@ -3834,6 +3835,9 @@
 	if(..())
 		return 1
 
+	if(prob(5))
+		to_chat(M,"<span class='notice'>Your face feels a little hot!</span>")
+
 	var/mob/living/carbon/human/H
 	if(ishuman(M))
 		H = M
@@ -3868,6 +3872,7 @@
 	color = "#B31008" //rgb: 179, 16, 8
 	density = 0.9
 	specheatcap = 8.59
+	data = 1
 
 /datum/reagent/condensedcapsaicin/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -3903,12 +3908,39 @@
 				H.drop_item()
 
 /datum/reagent/condensedcapsaicin/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 
 	if(prob(5))
+		to_chat(M,"<span class='notice'>Your face feels like it's on fire!</span>")
 		M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+
+	//let's just copy capsaicin/on_mob_life does, but make it worse.
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
+	switch(data)
+		if(1 to 15)
+			M.bodytemperature += 0.9 * TEMPERATURE_DAMAGE_COEFFICIENT
+			if(holder.has_reagent("frostoil"))
+				holder.remove_reagent("frostoil", 5)
+			if(isslime(M))
+				M.bodytemperature += rand(10,20)
+			if(isslimeperson(H))
+				M.bodytemperature += rand(10,20)
+		if(15 to 30)
+			M.bodytemperature += 1.1 * TEMPERATURE_DAMAGE_COEFFICIENT
+			if(prob(6))//Start vomiting
+				H.vomit(0,1)
+			if(isslime(M))
+				M.bodytemperature += rand(20,25)
+			if(isslimeperson(H))
+				M.bodytemperature += rand(20,25)
+		if(30 to 45)//Reagent dies out at about 50. Set up the vomiting to "fade out".
+			if(prob(9))
+				H.vomit()
+	data++
+
 
 /datum/reagent/blackcolor
 	name = "Black Food Coloring"
@@ -4098,7 +4130,7 @@
 
 	data++
 
-	var/stench_radius = Clamp(data * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 life ticks
+	var/stench_radius = clamp(data * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 life ticks
 
 	if(prob(5)) //5% chance of stinking per life()
 		for(var/mob/living/carbon/C in oview(stench_radius, M)) //All other carbons in 4 tile radius (excluding our mob)
@@ -4158,6 +4190,16 @@
 		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 	M.nutrition += nutriment_factor
+
+/datum/reagent/hot_coco/subhuman
+	id = HOT_COCO_SUBHUMAN
+	description = "Made with hate! And coco beans."
+	data = 0
+
+/datum/reagent/hot_coco_subhuman/on_mob_life(var/mob/living/M)
+	..()
+	if(prob(1))
+		to_chat(M, "<span class='notice'>You are suddenly reminded that you are subhuman.</span>")
 
 /datum/reagent/amatoxin
 	name = "Amatoxin"
@@ -5768,7 +5810,7 @@
 			if(M.dizziness != 0)
 				M.dizziness = max(0, M.dizziness - 15)
 			if(M.confused != 0)
-				M.confused = max(0, M.confused - 5)
+				M.remove_confused(5)
 
 /datum/reagent/ethanol/deadrum/glasgow
 	name = "Glasgow Deadrum"
@@ -5817,6 +5859,36 @@
 	slur_start = 35
 	confused_start = 90
 	pass_out = 250
+
+/datum/reagent/ethanol/deadrum/triplesec
+	name = "Triple Sec"
+	id = TRIPLESEC
+	description = "Clear, dry, tastes like oranges. A necessity in any bartender's shelves."
+	color = "#D1D1D1" //rgb: 209, 209, 209
+
+/datum/reagent/ethanol/deadrum/schnapps
+	name = "Schnapps"
+	id = SCHNAPPS
+	description = "Tastes like all the fruits in the galaxy."
+	color = "#FFAC38" //rgb: 255, 172, 56
+
+/datum/reagent/ethanol/deadrum/bitters
+	name = "Bitters"
+	id = BITTERS
+	description = "Dark, bitter alcohol. Who in their right mind drinks this straight?"
+	color = "#361412" //rgb: 54, 20, 18
+
+/datum/reagent/ethanol/deadrum/champagne
+	name = "Champagne"
+	id = CHAMPAGNE
+	description = "Often found sprayed all over sports victors or at New Years parties."
+	color = "#FAD6A5" //rgb: 250, 214, 165
+
+/datum/reagent/ethanol/deadrum/bluecuracao
+	name = "Blue Curacao"
+	id = BLUECURACAO
+	description = "Essentially a sweeter, bluer form of Triple Sec."
+	color = "#3AD1F0" //rgb: 58, 209, 240
 
 /datum/reagent/ethanol/deadrum/ale
 	name = "Ale"
@@ -6013,7 +6085,7 @@
 	if(M.dizziness != 0)
 		M.dizziness = max(0, M.dizziness - 15)
 	if(M.confused != 0)
-		M.confused = max(0, M.confused - 5)
+		M.remove_confused(5)
 
 /datum/reagent/ethanol/deadrum/changelingsting
 	name = "Changeling Sting"
@@ -6049,6 +6121,167 @@
 	description = "You've really hit rock bottom now... your liver packed its bags and left last night."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+
+/datum/reagent/ethanol/deadrum/midnightkiss
+	name = "Midnight Kiss"
+	id = MIDNIGHTKISS
+	description = "Vodka mixed with Blue Curacao and topped with champagne. Bubbly!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#82f0ff" //rgb: 130, 240, 255
+
+/datum/reagent/ethanol/deadrum/cosmopolitan
+	name = "Cosmopolitan"
+	id = COSMOPOLITAN
+	description = "A Cosmopolitan, the poster child of fruity cocktails."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#d64054" //rgb: 214, 64, 84
+
+/datum/reagent/ethanol/deadrum/corpsereviver
+	name = "Corpse Reviver No. 2"
+	id = CORPSEREVIVER
+	description = "Hair of the dog taken to one of its most logical extremes."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+
+/datum/reagent/ethanol/deadrum/bluelagoon
+	name = "Blue Lagoon"
+	id = BLUELAGOON
+	description = "Goes best with swim trunks, a sea breeze, and a nice big beach."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#82f0ff" //rgb: 130, 240, 255
+
+/datum/reagent/ethanol/deadrum/sexonthebeach
+	name = "Sex On The Beach"
+	id = SEXONTHEBEACH
+	description = "Did you hear a bear just now?"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#fca668" //rgb: 252, 166, 104
+
+/datum/reagent/ethanol/deadrum/americano
+	name = "Americano"
+	id = AMERICANO
+	description = "Expensive soda water - the best way to improve a poor drink."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#872d12" //rgb: 135, 45, 18
+
+/datum/reagent/ethanol/deadrum/betweenthesheets
+	name = "Between The Sheets"
+	id = BETWEENTHESHEETS
+	description = "This is basically just a sidecar with rum in it."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f0d695" //rgb: 240, 214, 149
+
+/datum/reagent/ethanol/deadrum/sidecar
+	name = "Sidecar"
+	id = SIDECAR
+	description = "For those who still want a fruity cocktail, without the effeminate connotations of a Cosmo."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#99593c" //rgb: 153, 89, 60
+
+/datum/reagent/ethanol/deadrum/champagnecocktail
+	name = "Champagne Cocktail"
+	id = CHAMPAGNECOCKTAIL
+	description = "Champagne, bitters, and cognac, garnished with a cherry. Very classy."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#fcdf95" //rgb: 252, 223, 149
+
+/datum/reagent/ethanol/deadrum/espressomartini
+	name = "Espresso Martini"
+	id = ESPRESSOMARTINI
+	description = "Two of any self respecting substance abuser's fixes in one drink!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#120705" //rgb: 18, 7, 5
+
+/datum/reagent/ethanol/deadrum/kamikaze
+	name = "Kamikaze"
+	id = KAMIKAZE
+	description = "Banzai!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+
+/datum/reagent/ethanol/deadrum/mojito
+	name = "Mojito"
+	id = MOJITO
+	description = "A giant pain in the ass to make on the best of days."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#c3f08d" //rgb: 195, 240, 141
+
+/datum/reagent/ethanol/deadrum/whiskeytonic
+	name = "Whiskey Tonic"
+	id = WHISKEYTONIC
+	description = "Quinine makes everything taste better."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#fff9cf" //rgb: 255, 249, 207
+
+/datum/reagent/ethanol/deadrum/moscowmule
+	name = "Moscow Mule"
+	id = MOSCOWMULE
+	description = "Wait a minute, this isn't ginger beer..."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#6e573f" //rgb: 110, 87, 63
+
+/datum/reagent/ethanol/deadrum/cinnamonwhisky
+	name = "Cinnamon Whisky"
+	id = CINNAMONWHISKY
+	description = "Cinnamon whisky. Feel the burn."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f29224" //rgb: 242, 146, 36
+
+/datum/reagent/ethanol/deadrum/c4cocktail
+	name = "C-4 Cocktail"
+	id = C4COCKTAIL
+	description = "Kahlua and Cinnamon Whisky, a burning explosion of flavor - tastes like pain. And cinnamon."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#1f0802" //31, 8, 2
+
+/datum/reagent/ethanol/deadrum/dragonsblood
+	name = "Dragon's Blood"
+	id = DRAGONSBLOOD
+	description = "Burning hot and bright red, just like the mythical namesake."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#b01522" //176, 21, 34
+
+/datum/reagent/ethanol/deadrum/dragonspit
+	name = "Dragon's Spit"
+	id = DRAGONSSPIT
+	description = "The simplest idea possible; take something hot, and make it hotter."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f29224" // 242, 146, 36
+
+/datum/reagent/ethanol/deadrum/firecider
+	name = "Fire Cider"
+	id = FIREBALLCIDER
+	description = "Apples, alcohol, and cinnamon, a match made in heaven."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f29224" // 242, 146, 36
+
+/datum/reagent/ethanol/deadrum/cinnamontoastcocktail
+	name = "Cinnamon Toast"
+	id = CINNAMONTOASTCOCKTAIL
+	description = "Rum, cream, and cinnamon whisky. Tastes a little like the milk you get out of a sugary cereal."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f29224" // 242, 146, 36
+
+/datum/reagent/ethanol/deadrum/manhattanfireball
+	name = "Manhattan Fireball"
+	id = MANHATTANFIREBALL
+	description = "A timeless classic made with a burning hot twist."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f29224" // 242, 146, 36
+
+/datum/reagent/ethanol/deadrum/fireballcola
+	name = "Fireball Cola"
+	id = FIREBALLCOLA
+	description = "Like a Whiskey Cola, but with added painful burning sensation."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f20224" //242, 146, 36
+
+/datum/reagent/ethanol/deadrum/firerita
+	name = "Fire-rita"
+	id = FIRERITA
+	description = "Triple sec, Cinnamon Whisky, and Tequila, eugh. Less a cocktail more than throwing whatever's on the shelf in a glass."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#f0133c" //rgb: 240, 19, 60
 
 /datum/reagent/ethanol/deadrum/b52
 	name = "B-52"
@@ -6609,6 +6842,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = CAPPUCCINO
 	description = "Espresso with milk."
 
+/datum/reagent/drink/coffee/cappuccino/on_mob_life(var/mob/living/M)
+	..()
+	if(M.getBruteLoss() && prob(20))
+		M.heal_organ_damage(1, 0) //milk doing its work
+
 /datum/reagent/drink/coffee/doppio
 	name = "Doppio"
 	id = DOPPIO
@@ -6618,6 +6856,23 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Passione"
 	id = PASSIONE
 	description = "Rejuvenating!"
+	nutriment_factor = 3 * REAGENTS_METABOLISM //because honey
+
+/datum/reagent/drink/coffee/passione/on_mob_life(var/mob/living/M)
+	..()
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!holder)
+			return
+		H.sleeping = 0
+		H.nutrition += nutriment_factor //honey doing it's work
+		if(H.getBruteLoss() && prob(60))
+			H.heal_organ_damage(1, 0)
+		if(H.getFireLoss() && prob(50))
+			H.heal_organ_damage(0, 1)
+		if(H.getToxLoss() && prob(50))
+			H.adjustToxLoss(-1)
 
 /datum/reagent/drink/coffee/seccoffee
 	name = "Wake-Up Call"
@@ -6653,7 +6908,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(M.dizziness != 0)
 		M.dizziness = max(0, M.dizziness - 15)
 	if(M.confused != 0)
-		M.confused = max(0, M.confused - 5)
+		M.remove_confused(5)
 	M.reagents.add_reagent (IRON, 0.1)
 
 /datum/reagent/drink/coffee/detcoffee
@@ -7389,6 +7644,42 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return TRUE
 	O.apply_luminol()
 
+/datum/reagent/ironrot
+	name = "Ironrot"
+	id = IRONROT
+	description = "A mutated fungal compound that causes rapid rotting in iron infrastructures."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#005200" //moldy green
+
+/datum/reagent/ironrot/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 5 && T.can_thermite)
+		T:rot()
+
+/datum/reagent/ironrot/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.adjustToxLoss(2 * REM)
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
+		for(var/datum/organ/internal/I in C.internal_organs)
+			if(I.robotic == 2)
+				I.take_damage(10, 0)//robo organs get damaged by ingested ironrot
+
+/datum/reagent/ironrot/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if(..())
+		return 1
+
+	if(method == TOUCH)
+		if(issilicon(M))//borgs are hurt on touch by this chem
+			M.adjustFireLoss(5*REM)
+			M.adjustBruteLoss(5*REM)
+
 //////////////////////
 //					//
 //      INCENSE		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7567,4 +7858,3 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(prob(5))
 		to_chat(M,"<span class='warning'>[pick("You feel fuller.", "You no longer feel snackish.")]</span>")
 		M.reagents.add_reagent(NUTRIMENT, 2)
-

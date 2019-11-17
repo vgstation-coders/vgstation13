@@ -21,11 +21,7 @@
 		new /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox(), \
 		),
 		"Single_ammunition"=list(
-		new /obj/item/ammo_casing/shotgun/flare(), \
-		new /obj/item/ammo_casing/shotgun/beanbag(), \
-		new /obj/item/ammo_casing/shotgun/stunshell(), \
-		new /obj/item/ammo_casing/shotgun(), \
-		new /obj/item/ammo_casing/shotgun/buckshot(),\
+		new /obj/item/ammo_casing/shotgun/blank(), \
 		new /obj/item/ammo_casing/rocket_rpg/lowyield(),\
 		new /obj/item/ammo_casing/rocket_rpg/blank(),\
 		new /obj/item/ammo_casing/rocket_rpg/emp(),\
@@ -35,6 +31,16 @@
 		new /obj/item/ammo_storage/box/b380auto(), \
 		new /obj/item/ammo_storage/box/b380auto/practice(), \
 		new /obj/item/ammo_storage/box/b380auto/rubber(), \
+		new /obj/item/ammo_storage/box/c9mm(), \
+		new /obj/item/ammo_storage/box/c38(), \
+		new /obj/item/ammo_storage/box/a357(), \
+		new /obj/item/ammo_storage/box/c12mm/assault(), \
+		new /obj/item/weapon/storage/box/lethalshells(), \
+		new /obj/item/weapon/storage/box/buckshotshells(), \
+		new /obj/item/weapon/storage/box/beanbagshells(), \
+		new /obj/item/weapon/storage/box/stunshells(), \
+		new /obj/item/weapon/storage/box/dartshells(), \
+		new /obj/item/ammo_storage/box/flare(), \
 		),
 		"Magazines"=list(
 		new /obj/item/ammo_storage/magazine/smg9mm/empty(), \
@@ -49,6 +55,7 @@
 		new /obj/item/ammo_storage/magazine/a75/empty(), \
 		new /obj/item/ammo_storage/magazine/a762/empty(), \
 		new /obj/item/ammo_storage/magazine/a12ga/empty(), \
+		new /obj/item/ammo_storage/magazine/a12mm/empty(), \
 		),
 		"Misc_Other"=list(
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \

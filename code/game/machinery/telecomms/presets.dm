@@ -92,7 +92,7 @@
 
 /obj/machinery/telecomms/bus/preset_two/initialize()
 	..()
-	freq_listening = list(SUP_FREQ, SCI_FREQ)
+	freq_listening = list(SUP_FREQ, SER_FREQ)
 
 /obj/machinery/telecomms/bus/preset_three
 	id = "Bus 3"

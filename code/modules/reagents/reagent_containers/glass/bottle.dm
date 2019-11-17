@@ -35,14 +35,6 @@
 			to_chat(user, "<span class='notice'>Nothing left to wet [M] with!</span>")
 		return 1
 
-/*
- * Hard to have colored bottles work with dynamic reagent filling
-/obj/item/weapon/reagent_containers/glass/bottle/New()
-	..()
-	if(!icon_state)
-		icon_state = "bottle[rand(1,20)]"
-*/
-
 /obj/item/weapon/reagent_containers/glass/bottle/on_reagent_change()
 	update_icon()
 

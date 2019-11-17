@@ -97,7 +97,7 @@
 	if (N)
 		if(usr.incapacitated() || !(usr in range(src,0)))
 			return
-		inject_amount = Clamp(N, min_inject_amount, max_inject_amount)
+		inject_amount = clamp(N, min_inject_amount, max_inject_amount)
 		to_chat(usr, "<span class='notice'>\The [src] will now inject [inject_amount] units each hit.</span>")
 
 /obj/item/weapon/sword/venom/examine(mob/user)

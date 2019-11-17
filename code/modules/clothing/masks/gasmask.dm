@@ -57,6 +57,7 @@
 	icon_state = "plaguedoctor"
 	item_state = "gas_mask"
 	armor = list(melee = 0, bullet = 0, laser = 2,energy = 2, bomb = 0, bio = 75, rad = 0)
+	body_parts_covered = FULL_HEAD | BEARD
 	species_fit = list(VOX_SHAPED)
 	can_flip = 0
 	canstage = 0

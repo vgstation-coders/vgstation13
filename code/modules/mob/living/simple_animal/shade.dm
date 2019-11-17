@@ -73,6 +73,7 @@
 	if(timestopped)
 		return FALSE //under effects of time magick
 	..()
+	regular_hud_updates()
 	if(isDead())
 		for(var/i=0;i<3;i++)
 			new /obj/item/weapon/ectoplasm (src.loc)
@@ -128,13 +129,6 @@
 
 ////////////////HUD//////////////////////
 
-/mob/living/simple_animal/shade/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	. = ..()
-
-	regular_hud_updates()
-
 /mob/living/simple_animal/shade/regular_hud_updates()
 	update_pull_icon() //why is this here?
 
@@ -185,6 +179,20 @@
 	transmogrify()
 	if(!gcDestroyed)
 		qdel(src)
+
+/mob/living/simple_animal/shade/gondola
+	name = "Gondola Shade"
+	real_name = "Gondola Shade"
+	desc = "A wandering spirit"
+	icon = 'icons/mob/gondola.dmi'
+	icon_state = "gondola_shade"
+	icon_living = "gondola_shade"
+	icon_dead = "gondola_skull"
+
+/mob/living/simple_animal/shade/gondola/say()
+	return
+
+
 
 ///////////////////////////////CHAOS SWORD STUFF///////////////////////////////////////////////////
 

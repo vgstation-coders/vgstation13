@@ -230,8 +230,6 @@
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
 
-	connection_timeofday = world.timeofday
-
 	//////////////
 	//DISCONNECT//
 	//////////////
@@ -383,6 +381,10 @@
 	spawn()
 		if(src in clients) //Did we log out before we reached this part of the function?
 			nanomanager.send_resources(src)
+
+// Sends resources to the client asynchronously.
+/client/proc/preload_resource(var/rsc)
+	Export("##action=preload_rsc", rsc)
 
 
 /client/proc/send_html_resources()

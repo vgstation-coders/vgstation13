@@ -135,3 +135,6 @@
 
 /obj/effect/landmark/xtra_cleanergrenades
 	name = "xtra_cleanergrenades"
+
+/obj/effect/landmark/vox_locker
+	name = "vox_locker"

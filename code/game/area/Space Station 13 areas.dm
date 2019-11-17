@@ -28,7 +28,21 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	mouse_opacity = 0
 	luminosity = 0
 	var/lightswitch = 1
-	var/list/ambient_sounds = list(/datum/ambience/generic1,/datum/ambience/generic2,/datum/ambience/generic3,/datum/ambience/generic4,/datum/ambience/generic5,/datum/ambience/generic6,/datum/ambience/generic7,/datum/ambience/generic8,/datum/ambience/generic9,/datum/ambience/generic10,/datum/ambience/generic11,/datum/ambience/generic12,/datum/ambience/generic13,/datum/ambience/generic14)
+	var/list/ambient_sounds = list(
+		/datum/ambience/generic1,
+		/datum/ambience/generic2,
+		/datum/ambience/generic3,
+		/datum/ambience/generic4,
+		/datum/ambience/generic5,
+		/datum/ambience/generic6,
+		/datum/ambience/generic7,
+		/datum/ambience/generic8,
+		/datum/ambience/generic9,
+		/datum/ambience/generic10,
+		/datum/ambience/generic11,
+		/datum/ambience/generic12,
+		/datum/ambience/generic13,
+		/datum/ambience/generic14)
 	//note. the above sounds apply to literally every area. if it does not apply. null it out. the old code had this for every other area so I don't think it's an issue
 
 	//space sounds below - Figure this out.
@@ -51,6 +65,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/static_equip
 	var/static_light = 0
 	var/static_environ
+
+	var/forbid_apc = FALSE //never build an APC here?
 
 	var/has_gravity = 1
 
@@ -419,7 +435,11 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/salvage/derelict
 	name = "\improper Derelict Station"
 	icon_state = "yellow"
-	ambient_sounds = list(/datum/ambience/derelict1,/datum/ambience/derelict2,/datum/ambience/derelict3,/datum/ambience/derelict4)
+	ambient_sounds = list(
+		/datum/ambience/derelict1,
+		/datum/ambience/derelict2,
+		/datum/ambience/derelict3,
+		/datum/ambience/derelict4)
 
 /area/shuttle/salvage/djstation
 	name = "\improper Ruskie DJ Station"
@@ -572,15 +592,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/asteroid/artifactroom/holomapDrawOverride()
 	return HOLOMAP_DRAW_FULL
-
-/area/asteroid/snow_inner
-	name = "\improper Snow Asteroid"
-	icon_state = "sno2"
-	shuttle_can_crush = TRUE
-
-/area/asteroid/snow_outer
-	name = "\improper Snow Asteroid - Outer Wall"
-	icon_state = "sno"
 
 /area/planet/clown
 	name = "\improper Clown Planet"
@@ -823,7 +834,9 @@ proc/process_adminbus_teleport_locs()
 
 /area/maintenance
 	shuttle_can_crush = FALSE
-	ambient_sounds = list(/datum/ambience/maint1,/datum/ambience/maint2)
+	ambient_sounds = list(
+		/datum/ambience/maint1,
+		/datum/ambience/maint2)
 
 /area/maintenance/fpmaint
 	name = "Fore Port Maintenance"
@@ -1410,6 +1423,7 @@ proc/process_adminbus_teleport_locs()
 	power_light = 0
 	power_environ = 0
 
+
 //Teleporter
 
 /area/teleporter
@@ -1433,9 +1447,10 @@ proc/process_adminbus_teleport_locs()
 	music = "signal"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
-	ambient_sounds = list(/datum/ambience/AI)
 
-//MedBay
+
+//Medbay
+
 /area/medical
 	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
 	shuttle_can_crush = FALSE
@@ -1446,6 +1461,7 @@ proc/process_adminbus_teleport_locs()
 	music = 'sound/ambience/signal.ogg'
 
 //Medbay is a large area, these additional areas help level out APC load.
+
 /area/medical/medbay2
 	name = "Medbay"
 	icon_state = "medbay2"
@@ -1495,7 +1511,10 @@ proc/process_adminbus_teleport_locs()
 /area/medical/morgue
 	name = "\improper Morgue"
 	icon_state = "morgue"
-	ambient_sounds = list(/datum/ambience/ded1,/datum/ambience/ded2,/datum/ambience/mainmusic)
+	ambient_sounds = list(
+		/datum/ambience/ded1,
+		/datum/ambience/ded2,
+		/datum/ambience/mainmusic)
 
 /area/medical/coldstorage
 	name = "Morgue"
@@ -1906,6 +1925,67 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Test Room"
 	icon_state = "storage"
 
+//SNOWMAP
+/area/surface
+	forbid_apc = TRUE
+
+/area/surface/snow
+	name = "\improper Planet Surface"
+	icon_state = "sno2"
+	shuttle_can_crush = TRUE
+
+/area/surface/blizzard
+	name = "\improper The Blizzard"
+	icon_state = "sno"
+
+/area/surface/icecore
+	name = "\improper Frozen Core"
+	icon_state = "icecore"
+
+/area/surface/garage
+	name = "\improper Public Garage"
+	icon_state = "yellow"
+
+/area/surface/junkyard
+	name = "\improper Junk Yard"
+	icon_state = "disposal"
+
+/area/surface/forest/deer
+	name = "\improper Enclosed Forest"
+	icon_state = "forest1"
+
+/area/surface/forest/north
+	name = "\improper Northern Forest"
+	icon_state = "forest2"
+
+/area/surface/forest/south
+	name = "\improper Southern Forest"
+	icon_state = "forest3"
+
+/area/surface/cave
+	name = "\improper Snow Cave"
+	icon_state = "cave"
+
+/area/surface/mine
+	name = "\improper Surface Mine"
+	icon_state = "mine"
+
+/area/surface/outer/nw
+	name = "\improper Northwest Reaches"
+	icon_state = "tundra1"
+
+/area/surface/outer/ne
+	name = "\improper Northeast Reaches"
+	icon_state = "tundra2"
+
+/area/surface/outer/sw
+	name = "\improper Southwest Reaches"
+	icon_state = "tundra3"
+
+/area/surface/outer/se
+	name = "\improper Southeast Reaches"
+	icon_state = "tundra4"
+
 //DJSTATION
 
 /area/djstation
@@ -2112,12 +2192,10 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper AI Upload Chamber"
 	icon_state = "ai_upload"
 	jammed=1
-	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/ai_upload_foyer
 	name = "AI Upload Access"
 	icon_state = "ai_foyer"
-	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/ai
 	name = "\improper AI Chamber"
@@ -2125,12 +2203,11 @@ proc/process_adminbus_teleport_locs()
 	jammed=1
 	holomap_marker = "ai"
 	holomap_filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
-	ambient_sounds = list(/datum/ambience/AI)
 
 /area/turret_protected/aisat
 	name = "\improper AI Satellite"
 	icon_state = "ai"
-	ambient_sounds = list(/datum/ambience/AI)
+
 
 /area/turret_protected/aisat_interior
 	name = "\improper AI Satellite"
@@ -2159,7 +2236,6 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/NewAIMain
 	name = "\improper AI Main New"
 	icon_state = "storage"
-
 
 
 //Misc
@@ -2290,7 +2366,10 @@ proc/process_adminbus_teleport_locs()
 	general_area_name = "Telecommunications Satellite"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
-	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 	flags = NO_PACIFICATION
 
 /area/tcommsat/entrance
@@ -2323,7 +2402,10 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/tcomsat
 	name = "\improper Satellite Entrance"
 	icon_state = "tcomsatlob"
-	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 	jammed=2
 	anti_ethereal=1
 	flags = NO_PACIFICATION
@@ -2332,12 +2414,18 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/tcomfoyer
 	name = "\improper Telecoms Foyer"
 	icon_state = "tcomsatentrance"
-	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 
 /area/turret_protected/tcomwest
 	name = "\improper Telecommunications Satellite West Wing"
 	icon_state = "tcomsatwest"
-	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 	jammed=2
 	anti_ethereal=1
 	flags = NO_PACIFICATION
@@ -2346,7 +2434,10 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/tcomeast
 	name = "\improper Telecommunications Satellite East Wing"
 	icon_state = "tcomsateast"
-	ambient_sounds = list(/datum/ambience/tcomms1,/datum/ambience/tcomms2,/datum/ambience/tcomms3)
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 	jammed=2
 	anti_ethereal=1
 	flags = NO_PACIFICATION
@@ -2738,4 +2829,7 @@ var/list/the_station_areas = list (
 
 //for lack of a better spot and I couldn't be assed to find the definition of it.
 /area/mine
-	ambient_sounds = list(/datum/ambience/dorf,/datum/ambience/minecraft,/datum/ambience/torvusmusic)
+	ambient_sounds = list(
+		/datum/ambience/dorf,
+		/datum/ambience/minecraft,
+		/datum/ambience/torvusmusic)

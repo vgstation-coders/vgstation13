@@ -80,7 +80,7 @@
 			if(initial(active_material.perunit) < 2000)
 				modifier = MAT_COST_RARE
 			var/amount = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize", "Material Synthesizer") as num
-			amount = Clamp(round(amount, 1), 0, 50)
+			amount = clamp(round(amount, 1), 0, 50)
 			if(amount)
 				if(TakeCost(amount, modifier, R))
 					var/obj/item/stack/sheet/inside_sheet = (locate(material_type) in R.module.modules)
@@ -144,7 +144,7 @@
 
 			if (unit_can_produce >= 1)
 				tospawn = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - [unit_can_produce])", "Material Synthesizer") as num
-				tospawn = Clamp(round(tospawn), 0, unit_can_produce)
+				tospawn = clamp(round(tospawn), 0, unit_can_produce)
 
 				if (tospawn >= 1 && TakeCost(tospawn, modifier, user))
 					var/obj/item/stack/sheet/spawned_sheet = new material_type(get_turf(src))

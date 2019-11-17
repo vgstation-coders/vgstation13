@@ -492,31 +492,22 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//otherwise, they come out inside a chunk of rock
 	var/obj/item/weapon/X
 	if(prob_clean)
-		X = new /obj/item/weapon/archaeological_find(src, new_item_type = F)
+		X = F.create_find(src)
 	else
-		X = new /obj/item/weapon/strangerock(src, inside_item_type = F)
+		X = new /obj/item/weapon/strangerock(src, F)
 		if(!geologic_data)
 			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		X:geologic_data = geologic_data
-
-	//some find types delete the /obj/item/weapon/archaeological_find and replace it with something else, this handles when that happens
-	//yuck
-	var/display_name = "something"
-	if(!X)
-		X = last_find
-	if(X)
-		display_name = X.name
 
 	//many finds are ancient and thus very delicate - luckily there is a specialised energy suspension field which protects them when they're being extracted
 	if(prob(F.prob_delicate))
 		var/obj/effect/suspension_field/S = locate() in src
 		if(!S || S.field_type != F.responsive_reagent)
 			if(X)
-				visible_message("<span class='danger'>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</span>")
+				visible_message("<span class='danger'>\The [X] [pick("crumbles away into dust","breaks apart")].</span>")
 				qdel(X)
 				X = null
-
 	finds.Remove(F)
 
 /turf/unsimulated/mineral/proc/artifact_debris(var/severity = 0)

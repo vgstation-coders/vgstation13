@@ -356,7 +356,6 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 // Account default values
 #define DEPARTMENT_START_FUNDS 500
 #define DEPARTMENT_START_WAGE 50
-#define PLAYER_START_WAGE 50
 
 //HUD MINIMAPS
 var/list/holoMiniMaps = list()
