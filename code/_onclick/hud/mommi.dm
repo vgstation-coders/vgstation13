@@ -58,13 +58,6 @@
 	src.adding += using
 	action_intent = using
 
-	// Cell
-	M.cells = getFromPool(/obj/abstract/screen)
-	M.cells.icon = 'icons/mob/screen1_robot.dmi'
-	M.cells.icon_state = "charge-empty"
-	M.cells.name = "cell"
-	M.cells.screen_loc = ui_toxin
-
 	// Health
 	mymob.healths = getFromPool(/obj/abstract/screen)
 	mymob.healths.icon = 'icons/mob/screen1_robot.dmi'
@@ -104,33 +97,12 @@
 	mymob.throw_icon.name = "store"
 	mymob.throw_icon.screen_loc = ui_mommi_store
 
-	//Temp
-	mymob.bodytemp = getFromPool(/obj/abstract/screen)
-	mymob.bodytemp.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.bodytemp.icon_state = "temp0"
-	mymob.bodytemp.name = "environment temperature"
-	mymob.bodytemp.screen_loc = ui_borg_temp
-	
-	//Pressure
-	mymob.pressure = getFromPool(/obj/abstract/screen)
-	mymob.pressure.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.pressure.icon_state = "pressure0"
-	mymob.pressure.name = "environment pressure"
-	mymob.pressure.screen_loc = ui_borg_pressure
-
 	// Oxygen
 	mymob.oxygen = getFromPool(/obj/abstract/screen)
 	mymob.oxygen.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.oxygen.icon_state = "oxy0"
 	mymob.oxygen.name = "oxygen"
 	mymob.oxygen.screen_loc = ui_oxygen
-
-	// Fire
-	mymob.fire = getFromPool(/obj/abstract/screen)
-	mymob.fire.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.fire.icon_state = "fire0"
-	mymob.fire.name = "fire"
-	mymob.fire.screen_loc = ui_fire
 
 	// Pulling
 	mymob.pullin = getFromPool(/obj/abstract/screen)
@@ -148,5 +120,5 @@
 	// Reset the client's screen
 	mymob.client.reset_screen()
 	// Add everything to their screen
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.pressure, mymob.bodytemp, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin) //, mymob.rest, mymob.sleep, mymob.mach, mymob.oxygen )
+	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.hands, mymob.healths, mymob.pullin)
 	mymob.client.screen += src.adding + src.other

@@ -10,13 +10,13 @@
  For example, high pressure's icon_state is "highpressure" and can be serverity 1 or 2 to get "highpressure1" or "highpressure2"
  new_master is optional and sets the alert's icon state to "template" in the ui_style icons with the master as an overlay.
  Clicks are forwarded to master
- Override makes it so the alert is not replaced until cleared by a clear_alert with clear_override, and it's used for hallucinations.
+ Override makes it so the alert is not replaced until cleared by a clear_alert with clear_override.
  */
 /mob/proc/throw_alert(category, alert_type, severity, obj/new_master, override = FALSE)
 	if(!category || gcDestroyed)
 		return
 
-	var/obj/abstract/screen/alert/new_alert
+	var/obj/abstract/screen/alert/new_alert = null
 
 	if(alerts[category])
 		new_alert = alerts[category]
@@ -45,13 +45,13 @@
 		var/old_plane = new_master.plane
 		new_master.layer = FLOAT_LAYER
 		new_master.plane = FLOAT_PLANE
-		new_alert.overlays.Add(new_master)
+		new_alert.overlays. += new_master
 		new_master.layer = old_layer
 		new_master.plane = old_plane
-		new_alert.icon_state = "template" // We'll set the icon to the client's ui pref in reorganize_alerts()
 		new_alert.master = new_master
+		new_alert.icon_state = "template" // We'll set the icon to the client's ui pref in reorganize_alerts()
 	else
-		new_alert.icon_state = "[initial(new_alert.icon_state)][new_alert.severity]"
+		new_alert.icon_state = "[initial(new_alert.icon_state)][severity]"
 		new_alert.severity = severity
 	alerts[category] = new_alert
 
@@ -109,7 +109,7 @@
 		var/obj/abstract/screen/alert = alerts[alerts[i]]
 		if(alert.icon_state == "template")
 			if(!icon_pref)
-				alert.icon = ui_style2icon(mymob.client.prefs.UI_style)
+				icon_pref = ui_style2icon(mymob.client.prefs.UI_style)
 			alert.icon = icon_pref
 		switch(i)
 			if(1)
@@ -147,10 +147,48 @@
 
 //Alarm defines
 #define SCREEN_ALARM_BUCKLE "buckle"
+#define SCREEN_ALARM_PRESSURE "pressure"
+#define SCREEN_ALARM_TEMPERATURE "temp"
+#define SCREEN_ALARM_ROBOT_CELL "cell_robot"
 
 //Object Alarms
 /obj/abstract/screen/alert/buckled
 	name = "Buckled"
 	desc = "You've been buckled to something and can't move. Click this alert to unbuckle unless you're unable to."
-	icon_state = "template"
+
+//Robot Alarms
+/obj/abstract/screen/alert/robot/temp
+	icon_state = "temp"
+
+/obj/abstract/screen/alert/robot/temp/hot
+	name = "Environment: Hot"
+	desc = "It's flaming hot!"
+
+/obj/abstract/screen/alert/robot/temp/cold
+	name = "Environment: Cold"
+	desc = "It's freezing cold!"
+
+/obj/abstract/screen/alert/robot/pressure
+	icon_state = "pressure"
+
+/obj/abstract/screen/alert/robot/pressure/low
+	name = "Environment: Low Pressure"
+	desc = "The air around you is hazardously thin."
+
+/obj/abstract/screen/alert/robot/pressure/high
+	name = "Environment: High Pressure"
+	desc = "The air around you is hazardously thick."
+
+/obj/abstract/screen/alert/robot/cell
+	name = "Missing Power Cell"
+	desc = "Unit has no power cell."
+	icon_state = "charge"
+
+/obj/abstract/screen/alert/robot/cell/low
+	name = "Low Charge"
+	desc = "Unit's power cell is running low."
+
+/obj/abstract/screen/alert/robot/cell/empty
+	name = "Out of Power"
+	desc = "Unit's power cell has no charge remaining."
 
