@@ -76,7 +76,7 @@ var/list/special_fruits = list()
 			bitesize = 1 + round(reagents.total_volume/2, 1)
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
-	
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom)
 	..()
@@ -353,6 +353,22 @@ var/list/special_fruits = list()
 	filling_color = "857e27"
 	potency = 25
 	plantname = "peanut"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut
+	name = "rocknut"
+	desc = "A mutated nut with a rock hard exterior and soft chewy core."
+	filling_color = "#583922"
+	potency = 25
+	plantname = "rocknut"
+	throwforce = 10///it's a rock
+	force = 10
+	var/cant_eat_msg = "'s hard exterior is too hard to bite through."
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/can_consume(mob/living/carbon/eater, mob/user)
+	if(cant_eat_msg)
+		to_chat(user, "<span class='notice'>This [name][cant_eat_msg]</span>")
+	else
+		return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 	name = "cabbage"
