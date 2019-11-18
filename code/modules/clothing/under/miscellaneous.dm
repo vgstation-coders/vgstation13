@@ -791,4 +791,5 @@
 	_color = "skelesuit"
 	species_fit = list(VOX_SHAPED)
 	clothing_flags = ONESIZEFITSALL
-	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
+	flags = HIDEHAIRCOMPLETELY | HIDEBEARDHAIR
+	body_parts_covered = FULL_HEAD|BEARD
