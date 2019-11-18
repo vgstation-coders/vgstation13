@@ -99,7 +99,7 @@
 #define ui_internal "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+1:[17*PIXEL_MULTIPLIER]"
 
 //borgs
-#define ui_borg_health "EAST-1:[26*PIXEL_MULTIPLIER],SOUTH+5:[7*PIXEL_MULTIPLIER]" //borgs have the health display where humans have the pressure damage indicator.
+#define ui_borg_health "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+5:[7*PIXEL_MULTIPLIER]"
 #define ui_alien_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[13*PIXEL_MULTIPLIER]" //aliens have the health display where humans have the pressure damage indicator.
 
 #define ui_construct_health "EAST,CENTER:[15*PIXEL_MULTIPLIER]" //same height as humans, hugging the right border
