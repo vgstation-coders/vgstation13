@@ -2,16 +2,15 @@
 
 //PUBLIC -  call these wherever you want
 
+//Proc to create or update an alert. Returns the alert if the alert is new or updated, 0 if it was thrown already
+//category is a text string. Each mob may only have one alert per category; the previous one will be replaced
+//alert_type is a type path of the actual alert to throw
+//severity is an optional number that will be placed at the end of the icon_state for this alert
+//For example, high pressure's icon_state is "highpressure" and can be serverity 1 or 2 to get "highpressure1" or "highpressure2"
+//new_master is optional and sets the alert's icon state to "template" in the ui_style icons with the master as an overlay.
+//Clicks are forwarded to master
+//override makes it so the alert is not replaced until cleared by a clear_alert with clear_override.
 
-/* Proc to create or update an alert. Returns the alert if the alert is new or updated, 0 if it was thrown already
- category is a text string. Each mob may only have one alert per category; the previous one will be replaced
- path is a type path of the actual alert type to throw
- severity is an optional number that will be placed at the end of the icon_state for this alert
- For example, high pressure's icon_state is "highpressure" and can be serverity 1 or 2 to get "highpressure1" or "highpressure2"
- new_master is optional and sets the alert's icon state to "template" in the ui_style icons with the master as an overlay.
- Clicks are forwarded to master
- Override makes it so the alert is not replaced until cleared by a clear_alert with clear_override.
- */
 /mob/proc/throw_alert(category, alert_type, severity, obj/new_master, override = FALSE)
 	if(!category || gcDestroyed)
 		return
@@ -39,7 +38,6 @@
 		if(override)
 			new_alert.timeout = null
 
-
 	if(new_master)
 		var/old_layer = new_master.layer
 		var/old_plane = new_master.plane
@@ -49,7 +47,6 @@
 		new_master.layer = old_layer
 		new_master.plane = old_plane
 		new_alert.master = new_master
-		new_alert.icon_state = "template" // We'll set the icon to the client's ui pref in reorganize_alerts()
 	else
 		new_alert.icon_state = "[initial(new_alert.icon_state)][severity]"
 		new_alert.severity = severity
@@ -85,6 +82,51 @@
 		client.screen -= alert
 	qdel(alert)
 
+
+// PRIVATE = only edit, use, or override these if you're editing the system as a whole
+#define SCREEN_ALARM_LIMIT 5 //Only change this if you're also touching the list bellow.
+var/global/list/screen_alarms_lock = list(
+	1 = ui_alert1,
+	2 = ui_alert2,
+	3 = ui_alert3,
+	4 = ui_alert4,
+	5 = ui_alert5
+	)
+
+//Re-render all alerts - also called in /datum/hud/show_hud() because it's needed there
+/datum/hud/proc/reorganize_alerts()
+	var/list/alerts = mymob.alerts
+	var/icon_pref
+	if(!hud_shown)
+		for(var/i = 1, i <= alerts.len, i++)
+			mymob.client.screen -= alerts[alerts[i]]
+		return TRUE
+	for(var/i = 1, i <= alerts.len, i++)
+		if(i > SCREEN_ALARM_LIMIT)
+			break
+		var/obj/abstract/screen/alert = alerts[alerts[i]]
+		if(alert.icon_state == "template")
+			if(!icon_pref)
+				icon_pref = ui_style2icon(mymob.client.prefs.UI_style)
+			alert.icon = icon_pref
+		alert.screen_loc = screen_alarms_lock[i]
+		mymob.client.screen |= alert
+	return TRUE
+
+#undef SCREEN_ALARM_LIMIT
+
+
+//Alarms defines
+#define SCREEN_ALARM_BUCKLE "buckle"
+#define SCREEN_ALARM_PRESSURE "pressure"
+#define SCREEN_ALARM_TEMPERATURE "temp"
+#define SCREEN_ALARM_FIRE "fire"
+
+#define SCREEN_ALARM_ROBOT_CELL "robot_cell"
+#define SCREEN_ALARM_ROBOT_LAW "robot_law"
+#define SCREEN_ALARM_ROBOT_HACK "robot_hack"
+#define SCREEN_ALARM_ROBOT_LOCK "robot_lock"
+
 /obj/abstract/screen/alert
 	name = "Alert"
 	desc = "Something seems to have gone wrong with this alert, so report this bug please."
@@ -95,38 +137,6 @@
 	var/severity = null
 	var/override_alerts = FALSE //If it is overriding other alerts of the same type
 	var/alerttooltipstyle = null 
-
-// PRIVATE = only edit, use, or override these if you're editing the system as a whole
-//Re-render all alerts - also called in /datum/hud/show_hud() because it's needed there
-/datum/hud/proc/reorganize_alerts()
-	var/list/alerts = mymob.alerts
-	var/icon_pref
-	if(!hud_shown)
-		for(var/i = 1, i <= alerts.len, i++)
-			mymob.client.screen -= alerts[alerts[i]]
-		return TRUE
-	for(var/i = 1, i <= alerts.len, i++)
-		var/obj/abstract/screen/alert = alerts[alerts[i]]
-		if(alert.icon_state == "template")
-			if(!icon_pref)
-				icon_pref = ui_style2icon(mymob.client.prefs.UI_style)
-			alert.icon = icon_pref
-		switch(i)
-			if(1)
-				. = ui_alert1
-			if(2)
-				. = ui_alert2
-			if(3)
-				. = ui_alert3
-			if(4)
-				. = ui_alert4
-			if(5)
-				. = ui_alert5 // Right now there's 5 slots
-			else
-				. = ""
-		alert.screen_loc = .
-		mymob.client.screen |= alert
-	return TRUE
 
 /obj/abstract/screen/alert/Click(location, control, params)
 	if(!usr || !usr.client)
@@ -145,19 +155,12 @@
 /obj/abstract/screen/alert/MouseExited()
 	closeToolTip(usr)
 
-//Alarm defines
-#define SCREEN_ALARM_BUCKLE "buckle"
-#define SCREEN_ALARM_PRESSURE "pressure"
-#define SCREEN_ALARM_TEMPERATURE "temp"
-#define SCREEN_ALARM_FIRE "fire"
-
-#define SCREEN_ALARM_ROBOT_CELL "robot_cell"
-#define SCREEN_ALARM_ROBOT_LAW "robot_law"
-#define SCREEN_ALARM_ROBOT_HACK "robot_hack"
-#define SCREEN_ALARM_ROBOT_LOCK "robot_lock"
 
 //Object Alarms
-/obj/abstract/screen/alert/buckled
+/obj/abstract/screen/alert/object
+	icon_state = "template" // We'll set the icon to the client's ui pref in reorganize_alerts()
+
+/obj/abstract/screen/alert/object/buckled
 	name = "Buckled"
 	desc = "You've been buckled to something and can't move. Click this alert to unbuckle unless you're unable to."
 
@@ -223,6 +226,7 @@ so as to remain in compliance with the most up-to-date laws."
 	timeout = 30 SECONDS
 
 /obj/abstract/screen/alert/robot/newlaw/Click()
+	..()
 	if(!issilicon(usr))
 		return
 	var/mob/living/silicon/S = usr
