@@ -42,7 +42,8 @@
 	name = "cult hood"
 	icon_state = "culthood"
 	desc = "A hood worn by the followers of Nar-Sie."
-	flags = FPRINT|HIDEHAIRCOMPLETELY
+	flags = FPRINT
+	clothing_flags = HIDEHAIRCOMPLETELY
 	armor = list(melee = 30, bullet = 10, laser = 5,energy = 5, bomb = 0, bio = 0, rad = 0)
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 0

@@ -326,7 +326,7 @@ var/global/list/damage_icon_parts = list()
 //		else
 			//warning("Invalid my_appearance.f_style for [species.name]: [my_appearance.f_style]")
 
-	if(my_appearance.h_style && !(src.head && ( src.head.flags & HIDEHAIRCOMPLETELY ) || \
+	if(my_appearance.h_style && !(src.head && ( src.head.clothing_flags & HIDEHAIRCOMPLETELY ) || \
 								  src.wear_mask && (src.wear_mask.body_parts_covered & HIDEHEADHAIR) ||\
 								  src.w_uniform && (src.w_uniform.body_parts_covered & HIDEHEADHAIR)) ) //ditto the comment above
 		var/datum/sprite_accessory/hair_style = hair_styles_list[my_appearance.h_style]

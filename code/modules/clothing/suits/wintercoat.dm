@@ -32,7 +32,7 @@
 	desc = "A hood attached to a heavy winter jacket."
 	icon_state = "whood"
 	body_parts_covered = HIDEHEADHAIR
-	flags = HIDEHAIRCOMPLETELY
+	clothing_flags = HIDEHAIRCOMPLETELY
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 	var/obj/item/clothing/suit/storage/wintercoat/coat
 

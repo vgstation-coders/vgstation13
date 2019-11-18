@@ -14,3 +14,4 @@
 #define CONTAINPLASMAMAN 	256
 #define IGNORE_LUBE			512
 #define MAGPULSE			1024 //prevents slipping in space, singulo pulling, etc
+#define HIDEHAIRCOMPLETELY  2048

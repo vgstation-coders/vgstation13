@@ -527,7 +527,8 @@
 	name = "Space helmet"
 	icon_state = "space"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment."
-	flags = FPRINT|HIDEHAIRCOMPLETELY
+	flags = FPRINT
+	clothing_flags = HIDEHAIRCOMPLETELY
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	item_state = "space"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/spacesuits.dmi', "right_hand" = 'icons/mob/in-hand/right/spacesuits.dmi')
