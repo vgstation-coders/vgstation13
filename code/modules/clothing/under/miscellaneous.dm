@@ -782,7 +782,6 @@
 	icon_state = "clownsuit"
 	item_state = "clownsuit"
 	_color = "clownsuit"
-	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/under/skelesuit
 	name = "skeleton suit"
