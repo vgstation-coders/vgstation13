@@ -792,8 +792,7 @@
 	_color = "skelesuit"
 	species_fit = list(VOX_SHAPED)
 	clothing_flags = ONESIZEFITSALL
-	flags = HIDEBEARDHAIR
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 
 /obj/item/clothing/under/clownpsyche
 	name = "Psychedelic clown outfit"
