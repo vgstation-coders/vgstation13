@@ -106,8 +106,12 @@
 				recieve_color = "maroon"
 			else
 				recieve_color = "red"
-			send_pm_type = holder.rank + " "
-			recieve_pm_type = holder.rank
+			if(holder.fakekey)
+				recieve_pm_type = "Admin"
+				send_pm_type = "Admin"
+			else
+				send_pm_type = holder.rank + " "
+				recieve_pm_type = holder.rank
 
 	else if(!C.holder)
 		to_chat(src, "<span class='red'>Error: Admin-PM: Non-admin to non-admin PM communication is forbidden.</span>")
