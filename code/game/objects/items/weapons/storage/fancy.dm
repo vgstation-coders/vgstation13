@@ -364,7 +364,7 @@
 	icon = 'icons/obj/vialbox.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "vialbox"
-	item_state = "vialbox_secure"
+	item_state = "vialbox"
 	icon_type = "vial"
 	storage_slots = 6
 	can_only_hold = list("/obj/item/weapon/reagent_containers/glass/beaker/vial")
