@@ -15,6 +15,7 @@
 	var/transfer_rate_coeff = 1 //What is the quality of the parts that transfer energy (capacitators) ?
 	var/transfer_efficiency_bonus = 0 //What is the efficiency "bonus" (additive to percentage) from the parts used (scanning module) ?
 	var/chargelevel = -1
+	var/has_beeped = FALSE
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EMAGGABLE
 
@@ -115,6 +116,7 @@
 		user.visible_message("<span class='notice'>[user] removes the cell from [src].</span>", "<span class='notice'>You remove the cell from [src].</span>")
 		chargelevel = -1
 		updateicon()
+		has_beeped = FALSE
 
 /obj/machinery/cell_charger/wrenchAnchor(var/mob/user)
 	if(charging)
@@ -144,6 +146,9 @@
 	else
 		use_power(transfer_rate*transfer_rate_coeff) //Snatch some power
 		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)) //Inefficiency (Joule effect + other shenanigans)
+	if(round(charging.percent() >= 100)&&!has_beeped)
+		playsound(src, 'sound/machines/charge_finish.ogg', 50)
+		has_beeped = TRUE
 
 	updateicon()
 
