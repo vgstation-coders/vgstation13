@@ -146,7 +146,6 @@
 			use_power = 1
 		appearance_backup=null
 		update_icon()
-		has_beeped = FALSE
 
 /obj/machinery/recharger/attack_paw(mob/user)
 	return attack_hand(user)
@@ -187,7 +186,7 @@
 				icon_state = "recharger2"
 				if(!has_beeped)
 					playsound(src, 'sound/machines/charge_finish.ogg', 50)
-				has_beeped = TRUE
+					has_beeped = TRUE
 			return
 		else if(istype(charging, /obj/item/energy_magazine))//pulse rifle rounds, Original values: 3rnd charged, 250e consumed, let's say 50e per round + 100e waste
 			var/obj/item/energy_magazine/M = charging
