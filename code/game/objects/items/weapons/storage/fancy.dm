@@ -405,67 +405,6 @@
 	if (.)
 		playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
 
-/obj/item/weapon/storage/lockbox/virusdish
-	name = "disease dish storage box"
-	desc = "Stores nerd shit."
-	icon = 'icons/obj/vialbox.dmi'
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
-	icon_state = "vialbox"
-	item_state = "vialbox_secure"
-	storage_slots = 6
-	can_only_hold = list("/obj/item/weapon/virusdish")
-	
-	foldable = null
-	req_one_access = list(access_virology)
-
-/obj/item/weapon/storage/lockbox/virusdish/New()
-	..()
-	update_icon()
-	
-/obj/item/weapon/storage/lockbox/virusdish/update_icon()
-	overlays.len = 0
-	icon_state = "vialbox"
-	item_state = "vialbox"
-	if (!broken && !locked)
-		overlays += image('icons/obj/vialbox.dmi',src,"cover_open")	
-		
-	// var/i = 0
-	// for (var/obj/item/weapon/virusdish/dish in contents)
-	// 	var/image/dish_image = image('icons/obj/virology.dmi',src,"virusdish1")
-	// 	if(dish.reagents.total_volume)
-	// 		var/image/filling = image('icons/obj/virology.dmi',src, "vial_reagents")
-	// 		filling.icon += mix_color_from_reagents(dish.reagents.reagent_list)
-	// 		filling.alpha = mix_alpha_from_reagents(dish.reagents.reagent_list)
-	// 		dish_image.overlays += filling
-	// 	if (i < 6)
-	// 		dish_image.pixel_x += (i % 3) * 4
-	// 		if (i > 2)
-	// 			dish_image.pixel_x -= 2
-	// 			dish_image.pixel_y -= 2
-	// 	else
-	// 		qdel(dish_image)
-	// 		continue
-	// 	overlays += dish_image
-	// 	i++
-
-	if (!broken)
-		overlays += image(icon, src, "led[locked]")
-		if(locked)
-			overlays += image(icon, src, "cover")
-	else
-		overlays += image(icon, src, "ledb")
-
-/obj/item/weapon/storage/lockbox/virusdish/attackby(obj/item/weapon/W, mob/user)
-	. = ..()
-	if (istype(W,/obj/item/weapon/card))
-		playsound(src, get_sfx("card_swipe"), 60, 1, -5)
-	update_icon()
-
-/obj/item/weapon/storage/lockbox/virusdish/handle_item_insertion(obj/item/W, prevent_warning)
-	. = ..()
-	if (.)
-		playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)	
-		
 //I know vial storage is just above, but it really shouldn't be there
 //Furthermore, this can lead to confusion with fancy items now having quick gather and quick empty
 /obj/item/weapon/storage/lockbox/vials

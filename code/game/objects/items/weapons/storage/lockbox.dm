@@ -463,3 +463,35 @@
 	.=..()
 	if (.)
 		playsound(loc, 'sound/machines/click.ogg', 30, -5)
+
+/obj/item/weapon/storage/lockbox/virusdish
+	name = "lockbox (disease dish)"
+	desc = "A lockable box for containing disease dishes."
+	storage_slots = 10
+	can_only_hold = list("/obj/item/weapon/virusdish")
+	
+	foldable = null
+	req_one_access = list(access_virology)
+
+/obj/item/weapon/storage/lockbox/virusdish/New()
+	..()
+	var/mutable_appearance/M = new /obj/structure/sign/biohazard
+	M.layer = FLOAT_LAYER
+	M.plane = FLOAT_PLANE
+	M.transform *= 0.40
+	M.pixel_x += 4
+	M.pixel_y -= 2
+	overlays += M
+	update_icon()
+	
+
+/obj/item/weapon/storage/lockbox/virusdish/attackby(obj/item/weapon/W, mob/user)
+	. = ..()
+	if (istype(W,/obj/item/weapon/card))
+		playsound(src, get_sfx("card_swipe"), 60, 1, -5)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/virusdish/handle_item_insertion(obj/item/W, prevent_warning)
+	.=..()
+	if (.)
+		playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
