@@ -1,6 +1,0 @@
----
-author: Goldsteel
-changes:
-  - bugfix: Simplemobs no longer make two sounds simultaneously.
-  - tweak: Cat volumes are slightly lower now.
-delete-after: true

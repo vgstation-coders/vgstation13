@@ -1,5 +1,0 @@
----
-author: MadmanMartian
-changes:
-  - bugfix: Fixes mobs not being affected by emitter beams
-delete-after: true

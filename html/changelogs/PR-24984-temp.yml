@@ -1,5 +1,0 @@
----
-author: Allspice
-changes:
-  - rscadd: "Add some \"magboots\" to the wizard spellbook. Two steps every three seconds, but breach where you walk."
-delete-after: true

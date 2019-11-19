@@ -1,7 +1,0 @@
----
-author: RealestEstate
-changes:
-  - rscadd: "Grenade Launchers now have a toggle-able mode that can override the timers on the grenades they fire so you shouldn't have to screwdriver every single one before loading them in anymore."
-  - rscadd: You can now unload grenades from the grenade launcher.
-  - tweak: "Syndicate bombs timer's default to 3 seconds instead of 5"
-delete-after: true

@@ -1,6 +1,0 @@
----
-author: bthomas2
-changes:
-  - rscadd: "Packed: Adds new Derelict RND equipment"
-  - bugfix: "Packed: Changes medbay area in maint to fsmaint2"
-delete-after: true

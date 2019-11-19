@@ -1,5 +1,0 @@
----
-author: boy2mantwicethefam
-changes:
-  - bugfix: "Custom admin titles when adminhelped don't show up anymore if the admins are invisible."
-delete-after: true

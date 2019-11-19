@@ -1,7 +1,0 @@
----
-author: brndd
-changes:
-  - tweak: The ammolathe now prints more useful ammo. Printing ammo from the ammolathe no longer requires silver aside from a couple of special types.
-  - tweak: "The protolathe no longer prints 9mm or 12mm ammo, nor shotgun stun shells. These have all been moved into the ammolathe."
-  - tweak: "The ammolathe circuit board can now be constructed at the circuit imprinter, requiring 2 Programming (data theory?), 2 Engineering, 4 Combat. It comes in a locked box."
-delete-after: true
