@@ -84,8 +84,8 @@
 
 
 // PRIVATE = only edit, use, or override these if you're editing the system as a whole
-#define SCREEN_ALARM_LIMIT 5 //Only change this if you're also touching the list bellow.
-var/global/list/screen_alarms_lock = list(
+
+var/global/list/screen_alarms_locs = list(
 	1 = ui_alert1,
 	2 = ui_alert2,
 	3 = ui_alert3,
@@ -102,18 +102,16 @@ var/global/list/screen_alarms_lock = list(
 			mymob.client.screen -= alerts[alerts[i]]
 		return TRUE
 	for(var/i = 1, i <= alerts.len, i++)
-		if(i > SCREEN_ALARM_LIMIT)
+		if(i > screen_alarms_locs)
 			break
 		var/obj/abstract/screen/alert = alerts[alerts[i]]
 		if(alert.icon_state == "template")
 			if(!icon_pref)
 				icon_pref = ui_style2icon(mymob.client.prefs.UI_style)
 			alert.icon = icon_pref
-		alert.screen_loc = screen_alarms_lock[i]
+		alert.screen_loc = screen_alarms_locs[i]
 		mymob.client.screen |= alert
 	return TRUE
-
-#undef SCREEN_ALARM_LIMIT
 
 
 //Alarms defines
