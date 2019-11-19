@@ -314,6 +314,7 @@ var/MAX_EXPLOSION_RANGE = 14
 
 
 // bitflags for invisibility
+// Used in body_parts_covered
 
 #define HIDEGLOVES			HANDS
 #define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
