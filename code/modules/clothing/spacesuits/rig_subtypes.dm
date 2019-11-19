@@ -36,7 +36,6 @@
 	boots_type = /obj/item/clothing/shoes/magboots/elite
 	tank_type = /obj/item/weapon/tank/emergency_oxygen/double
 	cell_type = /obj/item/weapon/cell/rad/large
-	actions_types = list(/datum/action/item_action/toggle_rig_suit, /datum/action/item_action/open_rig_ui)
 
 //Mining rig
 /obj/item/clothing/head/helmet/space/rig/mining

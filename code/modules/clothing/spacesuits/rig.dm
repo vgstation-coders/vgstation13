@@ -108,7 +108,7 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	var/activated = FALSE
 	var/list/modules = list()
-	actions_types = list(/datum/action/item_action/toggle_rig_suit, /datum/action/item_action/open_rig_ui)
+	actions_types = list(/datum/action/item_action/toggle_rig_suit)
 
 	var/obj/item/clothing/head/helmet/space/rig/H = null
 	var/obj/item/clothing/gloves/G = null
