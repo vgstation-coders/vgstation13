@@ -102,7 +102,7 @@ var/global/list/screen_alarms_locs = list(
 			mymob.client.screen -= alerts[alerts[i]]
 		return TRUE
 	for(var/i = 1, i <= alerts.len, i++)
-		if(i > screen_alarms_locs)
+		if(i > screen_alarms_locs.len)
 			break
 		var/obj/abstract/screen/alert = alerts[alerts[i]]
 		if(alert.icon_state == "template")
