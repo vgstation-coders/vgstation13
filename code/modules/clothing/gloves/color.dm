@@ -105,24 +105,20 @@
 //Storage pickpocket gloves! Currently only used for thief gloves, feel free to change it when you make storage gloves of any kind
 /obj/item/clothing/gloves/black/thief/storage
 	pickpocket = 2 //Will make pickpocketed items try to search for the gloves' storage to be quietly placed in
-	var/obj/item/weapon/storage/internal/hold
-	var/list/can_only_hold = new/list()
-	var/list/cant_hold = list("/obj/item/clothing/gloves/black/thief/storage") //ISHYGDDT
-	var/fits_max_w_class = W_CLASS_SMALL
-	var/max_combined_w_class = 4
-	var/storage_slots = 2 //Two gloves
+	var/obj/item/weapon/storage/internal/thief_gloves/hold
+
+/obj/item/weapon/storage/internal/thief_gloves //This is the internal storage
+	name = "black gloves"
+	cant_hold = list("/obj/item/clothing/gloves/black/thief/storage") //ISHYGDDT
+	fits_max_w_class = W_CLASS_SMALL
+	max_combined_w_class = 4
+	storage_slots = 2 //Two gloves
 
 //Copypasted storage suit code
 /obj/item/clothing/gloves/black/thief/storage/New()
 	..()
 	hold = new (src)
-	hold.name = name //So that you don't just put things into "the storage"
 	hold.master_item = src
-	hold.can_only_hold = can_only_hold
-	hold.cant_hold = cant_hold
-	hold.fits_max_w_class = fits_max_w_class
-	hold.max_combined_w_class = max_combined_w_class
-	hold.storage_slots = storage_slots
 
 /obj/item/clothing/gloves/black/thief/storage/Destroy()
 	if(hold)
