@@ -36,6 +36,8 @@
 		return
 	user.set_machine(src)
 	var/dat
+	if(ismalf(user))
+		dat = {"<h3><font color = red><b>Warning! Illegal privilegE&!#*</b>"}
 	if (src.temp)
 		dat = "<TT>[src.temp]</TT><BR><BR><A href='?src=\ref[src];temp=1'>Clear Screen</A>"
 	else
@@ -47,7 +49,7 @@
 		if(screen == 1)
 			for(var/mob/living/silicon/robot/R in mob_list)
 				if(istype(user, /mob/living/silicon/ai))
-					if (R.connected_ai != user)
+					if (R.connected_ai != user && !ismalf(user))
 						continue
 				if(istype(user, /mob/living/silicon/robot))
 					if (R != user)
@@ -75,8 +77,15 @@
 					dat += " Slaved to [R.connected_ai.name] |"
 				else
 					dat += " Independent from AI |"
-				if(issilicon(user) && ismalf(user) && !R.emagged)
-					dat += "<A href='?src=\ref[src];magbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A> "
+				if(issilicon(user) && ismalf(user)) //Malfs have a greater degree of digital control
+					if(R.emagged == 2 && R.connected_ai == user)
+						dat += "<font color=green><i>(Hacked)</i></font>"
+						dat += "<A href='?src=\ref[src];repair=\ref[R]'><font color=blue><i>Repair</i></font>)</A>"
+					else if(R.emagged || !R.connected_ai == user) //Emagged or not connected to us
+						dat += "<font color=red><i>(Out-of-control)</i></font>"
+						dat += "<A href='?src=\ref[src];override=\ref[R]'>(<font color=blue><i>Take under control</i></font>)</A>"
+					else //It's not emagged, show the option
+						dat += "<A href='?src=\ref[src];magbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A>"
 
 				dat += {"<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
 					<A href='?src=\ref[src];lockbot=\ref[R]'>(<font color=orange><i>[R.modulelock ? "Module-unlock" : "Module-lock"]</i></font>)</A>
@@ -172,9 +181,17 @@
 					var/choice = input("Are you certain you wish to detonate [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
-							if(R.self_destruct())
+							if(ismalf(usr) && R.connected_ai == usr) //Malf AI can blow up its own borgs but not other malf AI's borgs
+								if(R.self_destruct(1))
+									message_admins("<span class='notice'>[key_name_admin(usr)] malf-detonated [R.name]!</span>")
+									log_game("<span class='notice'>[key_name_admin(usr)] malf-detonated [R.name]!</span>")
+								else
+									to_chat(usr, "<span class='warning'>Despite the override, the console is unable to detonate [R.name]!</span>")
+							else if(R.self_destruct())
 								message_admins("<span class='notice'>[key_name_admin(usr)] detonated [R.name]!</span>")
 								log_game("<span class='notice'>[key_name_admin(usr)] detonated [R.name]!</span>")
+							else
+								to_chat(usr, "<span class='warning'>The console is unable to detonate [R.name]!")
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		else if (href_list["lockbot"])

@@ -1178,13 +1178,21 @@ var/list/cyborg_list = list()
 	if (station_holomap)
 		station_holomap.update_holomap()
 
-/mob/living/silicon/robot/proc/self_destruct()
-	if(istraitor(src) && emagged)
-		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
-		UnlinkSelf()
+/mob/living/silicon/robot/proc/self_destruct(var/malf_override = 0)
+	if(istraitor(src) || emagged == 1 || (emagged == 2 && !malf_override)) //Malf AIs can blow up their own robots...
+		to_chat(src, "<span class='danger'>Termination signal detected. [(istraitor(src) || emagged == 1) ? "Scrambling security and identification codes." : ""]</span>")
+		if(istraitor(src) || emagged == 1) //...but rogue robots will disconnect
+			UnlinkSelf()
 		return FALSE
 	gib()
 	return TRUE
+
+/mob/living/silicon/robot/proc/robot_override(var/mob/living/silicon/ai/A)
+	if(istraitor(src) || emagged == 1 || (emagged == 2 && connected_ai != A)) //Rogue borgs and borgs controlled by a different malf AI can't be taken over
+		return FALSE
+	connected_ai = A
+
+	
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
 	if(connected_ai)
@@ -1202,7 +1210,7 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/proc/ResetSecurityCodes()
 	set category = "Robot Commands"
 	set name = "Reset Identity Codes"
-	set desc = "Scrambles your security and identification codes and resets your current buffers.  Unlocks you and but permenantly severs you from your AI and the robotics console and will deactivate your camera system."
+	set desc = "Scrambles your security and identification codes and resets your current buffers.  Unlocks you and but permanently severs you from your AI and the robotics console and will deactivate your camera system."
 
 	var/mob/living/silicon/robot/R = src
 
