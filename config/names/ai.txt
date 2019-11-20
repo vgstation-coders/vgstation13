@@ -6,6 +6,7 @@ AM
 AMEE
 ASTAR
 Adaptive Manipulator
+ALICE
 Allied Mastercomputer
 Alpha 5
 Alpha 6
@@ -148,7 +149,7 @@ Trurl
 ULTRABOT
 Ulysses
 Uniblab
-VIKI
+V.I.K.I.
 V.I.N.CENT.
 Voltes V
 W1k1
