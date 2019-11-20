@@ -13,7 +13,8 @@
 	access = list(access_rd, access_heads, access_rnd, access_genetics, access_morgue,
 			            access_tox_storage, access_teleporter, access_sec_doors,
 			            access_science, access_robotics, access_xenobiology, access_ai_upload,
-			            access_RC_announce, access_keycard_auth, access_tcomsat, access_gateway, access_mechanic)
+			            access_RC_announce, access_keycard_auth, access_tcomsat, access_gateway, access_mechanic,
+						access_maint_tunnels)
 	minimal_access = list(access_rd, access_heads, access_rnd, access_genetics, access_morgue,
 			            access_tox_storage, access_teleporter, access_sec_doors,
 			            access_science, access_robotics, access_xenobiology, access_ai_upload,
