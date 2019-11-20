@@ -102,6 +102,57 @@
 	pickpocket = 1
 
 
+//Storage pickpocket gloves! Currently only used for thief gloves, feel free to change it when you make storage gloves of any kind
+/obj/item/clothing/gloves/black/thief/storage
+	pickpocket = 2 //Will make pickpocketed items try to search for the gloves' storage to be quietly placed in
+	var/obj/item/weapon/storage/internal/thief_gloves/hold
+
+/obj/item/weapon/storage/internal/thief_gloves //This is the internal storage
+	name = "black gloves"
+	cant_hold = list("/obj/item/clothing/gloves/black/thief/storage") //ISHYGDDT
+	fits_max_w_class = W_CLASS_SMALL
+	max_combined_w_class = 4
+	storage_slots = 2 //Two gloves
+
+//Copypasted storage suit code
+/obj/item/clothing/gloves/black/thief/storage/New()
+	..()
+	hold = new (src)
+	hold.master_item = src
+
+/obj/item/clothing/gloves/black/thief/storage/Destroy()
+	if(hold)
+		qdel(hold)
+		hold = null
+	return ..()
+
+/obj/item/clothing/gloves/black/thief/storage/attack_hand(mob/user)
+	if(user == src.loc)
+		return hold.attack_hand(user)
+	else
+		return ..()
+
+/obj/item/clothing/gloves/black/thief/storage/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	hold.attackby(W,user)
+	return 1
+
+/obj/item/clothing/gloves/black/thief/storage/emp_act(severity)
+	hold.emp_act(severity)
+	..()
+
+/obj/item/clothing/gloves/black/thief/storage/MouseDropFrom(atom/over_object)
+	if(over_object == usr) //show container to user
+		return hold.MouseDropFrom(over_object)
+	else if(istype(over_object, /obj/structure/table)) //empty on table
+		return hold.MouseDropFrom(over_object)
+	return ..()
+
+/obj/item/clothing/gloves/black/thief/storage/AltClick(mob/user as mob)
+	if(user == src.loc)
+		return hold.attack_hand(user)
+	else
+		return ..()
+
 /obj/item/clothing/gloves/orange
 	name = "orange gloves"
 	desc = "A pair of gloves, they don't look special in any way."
