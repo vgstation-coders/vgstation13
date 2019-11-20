@@ -140,7 +140,7 @@ Class Procs:
 	var/light_range_on = 0
 	var/light_power_on = 0
 	var/use_auto_lights = 0//Incase you want to use it, set this to 0, defaulting to 1 so machinery with no lights doesn't call set_light()
-	var/breakdown_chance = 0.0001 // Some machines can be set to 0 to prevent breakdowns, like telecomms.
+	var/breakdown_chance = 5 // Some machines can be set to 0 to prevent breakdowns.
 
 	/**
 	 * Machine construction/destruction/emag flags.
@@ -202,6 +202,9 @@ Class Procs:
 	..()
 
 /obj/machinery/projectile_check()
+	if(!stat & (BROKEN))
+		if(prob(breakdown_chance))
+			machine_breakdown()
 	return PROJREACT_OBJS
 
 /obj/machinery/process() // If you dont use process or power why are you here
@@ -765,13 +768,17 @@ Class Procs:
 			visible_message("<span class='notice'>\A [scan] pops out of \the [src]!</span>")
 			scan = null
 
+	if(!stat & (BROKEN))
+		if(prob(breakdown_chance))
+			machine_breakdown()
+
 /obj/machinery/proc/is_operational()
 	return !(stat & (NOPOWER|BROKEN|MAINT))
 
 // Machine breakdowns
 
 /obj/machinery/proc/machine_breakdown()
-    if(stat & (NOPOWER|BROKEN))
+    if(stat & (BROKEN))
         return
     else
         if(!component_parts.len)
@@ -782,7 +789,7 @@ Class Procs:
             S.break_part()
             break
         playsound(src, "sound/machines/WXP_error.ogg", 50, 1)
-        spark(M)
+        spark(src)
         visible_message("<span class='warning'>\The [src] has broken down!</span>")
         stat |= BROKEN
         update_icon()
