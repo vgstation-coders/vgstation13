@@ -140,6 +140,7 @@ Class Procs:
 	var/light_range_on = 0
 	var/light_power_on = 0
 	var/use_auto_lights = 0//Incase you want to use it, set this to 0, defaulting to 1 so machinery with no lights doesn't call set_light()
+	var/breakdown_chance = 0.0001 // Some machines can be set to 0 to prevent breakdowns, like telecomms.
 
 	/**
 	 * Machine construction/destruction/emag flags.
@@ -176,6 +177,8 @@ Class Procs:
 
 /obj/machinery/examine(mob/user)
 	..()
+	if(stat & BROKEN)
+		to_chat(user, "<span class='warning'>\The [src] is broken.</span>")
 	if(panel_open)
 		to_chat(user, "<span class='info'>Its maintenance panel is open.</span>")
 
@@ -403,7 +406,9 @@ Class Procs:
 	return handle_multitool_topic(href,href_list,usr)
 
 /obj/machinery/attack_ai(mob/user as mob)
+
 	src.add_hiddenprint(user)
+
 	if(isrobot(user))
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.
@@ -424,8 +429,6 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
-	if(stat & (NOPOWER|BROKEN|MAINT))
-		return 1
 
 	if(user.lying || (user.stat && !canGhostRead(user))) // Ghost read-only
 		return 1
@@ -710,6 +713,10 @@ Class Procs:
 							component_parts += B
 							B.forceMove(null)
 							to_chat(user, "<span class='notice'>[A.name] replaced with [B.name].</span>")
+							if((A.get_rating() == -1) && (stat & (NOPOWER|BROKEN)))
+								to_chat(user, "<span class='notice'>A broken part has been replaced, restoring the machine to working order.</span>")
+								stat &= ~BROKEN
+
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
 							break
 			RefreshParts()
@@ -760,3 +767,23 @@ Class Procs:
 
 /obj/machinery/proc/is_operational()
 	return !(stat & (NOPOWER|BROKEN|MAINT))
+
+// Machine breakdowns
+
+/obj/machinery/proc/machine_breakdown()
+    if(stat & (NOPOWER|BROKEN))
+        return
+    else
+        if(!component_parts.len)
+            return
+        for(var/obj/item/weapon/stock_parts/S in component_parts)
+            if(S.rating == -1) //Already broken
+                continue
+            S.break_part()
+            break
+        playsound(src, "sound/machines/WXP_error.ogg", 50, 1)
+        spark(M)
+        visible_message("<span class='warning'>\The [src] has broken down!</span>")
+        stat |= BROKEN
+        update_icon()
+    return

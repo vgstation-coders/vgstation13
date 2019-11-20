@@ -48,5 +48,8 @@ var/list/machines = list()
 		if (M.use_power)
 			M.auto_use_power()
 
+		if (M.breakdown_chance && prob(M.breakdown_chance))
+			M.machine_breakdown()
+
 		if (MC_TICK_CHECK)
 			return

@@ -281,3 +281,10 @@
 	desc = "A large piece of equipment used to open a window into the subspace dimension."
 	origin_tech = Tc_MAGNETS + "=5;" + Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 	starting_materials = list(MAT_IRON = 50)
+
+// Machine breakdown components for the RPED/BRPED
+
+/obj/item/weapon/stock_parts/proc/break_part()
+	name = "broken "+name
+	icon_state = "broken_part"
+	rating = -1
