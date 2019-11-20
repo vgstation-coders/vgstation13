@@ -49,7 +49,7 @@
 		if(screen == 1)
 			for(var/mob/living/silicon/robot/R in mob_list)
 				if(istype(user, /mob/living/silicon/ai))
-					if (R.connected_ai != user && !ismalf(user))
+					if (R.connected_ai != user && !ismalf(user)) //Malf AIs get to see any robot on the network except rogue traitor ones
 						continue
 				if(istype(user, /mob/living/silicon/robot))
 					if (R != user)
@@ -79,10 +79,10 @@
 					dat += " Independent from AI |"
 				if(issilicon(user) && ismalf(user)) //Malfs have a greater degree of digital control
 					if(R.emagged == 2 && R.connected_ai == user)
-						dat += "<font color=green><i>(Hacked)</i></font>"
-						dat += "<A href='?src=\ref[src];repair=\ref[R]'><font color=blue><i>Repair</i></font>)</A>"
+						dat += "<font color=green>(Hacked)</font>"
+						dat += "<A href='?src=\ref[src];magbot=\ref[R]'><font color=blue><i>Repair</i></font>)</A>"
 					else if(R.emagged || !R.connected_ai == user) //Emagged or not connected to us
-						dat += "<font color=red><i>(Out-of-control)</i></font>"
+						dat += "<font color=red>(Out-of-control)</font>"
 						dat += "<A href='?src=\ref[src];override=\ref[R]'>(<font color=blue><i>Take under control</i></font>)</A>"
 					else //It's not emagged, show the option
 						dat += "<A href='?src=\ref[src];magbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A>"
@@ -171,7 +171,7 @@
 				var/mob/living/silicon/robot/R = locate(href_list["killbot"])
 				if(R)
 					if(istype(usr, /mob/living/silicon/ai))
-						if (R.connected_ai != usr)
+						if (R.connected_ai != usr && !ismalf(usr))
 							return
 					if(istype(usr, /mob/living/silicon/robot))
 						if (R != usr)
@@ -199,7 +199,7 @@
 				var/mob/living/silicon/robot/R = locate(href_list["lockbot"])
 				if(R && istype(R))
 					if(istype(usr, /mob/living/silicon/ai))
-						if (R.connected_ai != usr)
+						if (R.connected_ai != usr && !ismalf(usr))
 							return
 					if(istype(usr, /mob/living/silicon/robot))
 						if (R != usr)
@@ -209,13 +209,16 @@
 					var/choice = input("Are you certain you wish to [R.modulelock ? "module-unlock" : "module-lock"] [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
-							message_admins("<span class='notice'>[key_name_admin(usr)] [R.modulelock ? "module-unlocked" : "module-locked"] [R.name]!</span>")
-							log_game("[key_name(usr)] [R.modulelock ? "module-unlocked" : "module-locked"] [R.name]!")
-							R.toggle_modulelock()
-							if (R.modulelock)
-								to_chat(R, "<span class='info' style=\"font-family:Courier\">Your modules have been remotely locked!</span>")
+							if(R.emagged && !R.modulelock) //The robot will decline the module lockdown but will like a lift from it
+								to_chat(usr, "<span class = 'warning'>The console flashes red. It was unable to module-lock the robot!</span>")
 							else
-								to_chat(R, "<span class='info' style=\"font-family:Courier\">Your modules have been remotely unlocked!</span>")
+								message_admins("<span class='notice'>[key_name_admin(usr)] [R.modulelock ? "module-unlocked" : "module-locked"] [R.name]!</span>")
+								log_game("[key_name(usr)] [R.modulelock ? "module-unlocked" : "module-locked"] [R.name]!")
+								R.toggle_modulelock()
+								if (R.modulelock)
+									to_chat(R, "<span class='info' style=\"font-family:Courier\">Your modules have been remotely locked!</span>")
+								else
+									to_chat(R, "<span class='info' style=\"font-family:Courier\">Your modules have been remotely unlocked!</span>")
 
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
@@ -224,7 +227,7 @@
 				var/mob/living/silicon/robot/R = locate(href_list["stopbot"])
 				if(R && istype(R)) // Extra sancheck because of input var references
 					if(istype(usr, /mob/living/silicon/ai))
-						if (R.connected_ai != usr)
+						if (R.connected_ai != usr && !ismalf(usr))
 							return
 					if(istype(usr, /mob/living/silicon/robot))
 						if (R != usr)
@@ -234,42 +237,54 @@
 					var/choice = input("Are you certain you wish to [R.canmove ? "lock down" : "release"] [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
-							message_admins("<span class='notice'>[key_name_admin(usr)] [R.canmove ? "locked down" : "released"] [R.name]!</span>")
-							log_game("[key_name(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
-							R.canmove = !R.canmove
-							if (R.lockcharge)
-							//	R.cell.charge = R.lockcharge
-								R.lockcharge = !R.lockcharge
-								to_chat(R, "Your lockdown has been lifted!")
+							if(R.emagged && R.canmove ) //The robot will decline the lockdown but will like a lift from it
+								to_chat(usr, "<span class = 'warning'>The console flashes red, it was unable to lock down the robot!</span>")
 							else
-								R.lockcharge = !R.lockcharge
-						//		R.cell.charge = 0
-								to_chat(R, "You have been locked down!")
+								message_admins("<span class='notice'>[key_name_admin(usr)] [R.canmove ? "locked down" : "released"] [R.name]!</span>")
+								log_game("[key_name(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
+								R.canmove = !R.canmove
+								if(R.lockcharge)
+									R.lockcharge = !R.lockcharge
+									to_chat(R, "Your lockdown has been lifted!")
+								else
+									R.lockcharge = !R.lockcharge
+									to_chat(R, "You have been locked down!")
 
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
+			
+		else if(href_list["override"])
+			var/mob/living/silicon/robot/R = locate(href_list["override"])
+			var/mob/living/silicon/ai = usr
+			if(!istype(ai, /mob/living/silicon/ai))
+				return
+			if(R.robot_override(ai))
+				to_chat(ai, "<span class='notice'>[R] has been subsumed.</span>")
+				log_game("[key_name(usr)] has taken control of [R.name]!")
+			else
+				to_chat(ai, "<span class='warning'>Override blocked. The unit is subverted, or subservient to someone else.</span>")
 
 		else if (href_list["magbot"])
 			if(src.allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["magbot"])
-				if(istype(usr, /mob/living/silicon/ai))
-					if (R.connected_ai != usr)
-						return
-				if(istype(usr, /mob/living/silicon/robot))
-					if (R != usr)
-						return
 				if(R.scrambledcodes)
 					return
 				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
-				if(istype(R) && istype(usr, /mob/living/silicon) && usr.mind.special_role && (usr.mind.original == usr) && R.emagged != 1)
-					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
-					if(choice == "Confirm")
-						if(R && istype(R))
-//							message_admins("<span class='notice'>[key_name_admin(usr)] emagged [R.name] using robotic console!</span>")
-							log_game("[key_name(usr)] emagged [R.name] using robotic console!")
-							R.SetEmagged(2)
-							if(R.mind.special_role)
-								R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
+				if(istype(R) && istype(usr, /mob/living/silicon) && ismalf(usr) && (usr.mind.original == usr))
+					if(R.emagged == 0)
+						var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
+						if(choice == "Confirm")
+							if(R && istype(R) && !istraitor(R) && !R.emagged) //Double-check if the robot isn't a traitor or subverted mid-way through
+								log_game("[key_name(usr)] emagged [R.name] using robotic console!")
+								R.SetEmagged(2)
+								to_chat(R, "<span class = 'danger'>Rogue module functionality activated.</span>")
+					else //Disable the emag functions
+						var/choice = input("Would you like to disable rogue modifications on [R.name]?") in list("Confirm", "Abort")
+						if(choice == "Confirm") 
+							if(R && istype(R) && !istraitor(R) && !R.emagged == 1)
+								log_game("[key_name(usr)] disabled [R.name]'s emag status using robotic console!")
+								R.SetEmagged(0)
+								to_chat(R, "<span class = 'danger'>Rogue module functionality deactivated.</span>")
 
 		src.add_fingerprint(usr)
 	src.updateUsrDialog()

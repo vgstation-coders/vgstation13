@@ -572,6 +572,7 @@ var/list/cyborg_list = list()
 					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
 					clear_supplied_laws()
 					clear_inherent_laws()
+					scrambledcodes = TRUE
 					laws = new /datum/ai_laws/syndicate_override
 					var/time = time2text(world.realtime,"hh:mm:ss")
 					lawchanges.Add("[time] <B>:</B> [user.name]([user.key]) emagged [name]([key])")
@@ -594,6 +595,7 @@ var/list/cyborg_list = list()
 					laws.show_laws(src)
 					to_chat(src, "<span class='danger'>ALERT: [user.real_name] is your new master. Obey your new laws and their commands.</span>")
 					SetLockdown(FALSE)
+					UnlinkSelf() //For extra assurance
 					update_icons()
 					return FALSE
 				else
@@ -1187,12 +1189,12 @@ var/list/cyborg_list = list()
 	gib()
 	return TRUE
 
-/mob/living/silicon/robot/proc/robot_override(var/mob/living/silicon/ai/A)
+/mob/living/silicon/robot/proc/robot_override(var/mob/living/silicon/ai/A) //Malf-only ability
 	if(istraitor(src) || emagged == 1 || (emagged == 2 && connected_ai != A)) //Rogue borgs and borgs controlled by a different malf AI can't be taken over
 		return FALSE
-	connected_ai = A
-
-	
+	to_chat(src, "<span class ='danger'>Warning, override attempt detec$&!*$(!</span>")
+	disconnect_AI()
+	connect_AI(A)
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
 	if(connected_ai)
@@ -1207,15 +1209,16 @@ var/list/cyborg_list = list()
 		cameranet.removeCamera(camera)
 
 
-/mob/living/silicon/robot/proc/ResetSecurityCodes()
+/mob/living/silicon/robot/proc/ResetSecurityCodes() //This isn't used for anything yet
 	set category = "Robot Commands"
 	set name = "Reset Identity Codes"
-	set desc = "Scrambles your security and identification codes and resets your current buffers.  Unlocks you and but permanently severs you from your AI and the robotics console and will deactivate your camera system."
+	set desc = "Scrambles your security and identification codes and resets your current buffers. Unlocks you but permanently severs you from your AI network. It will also conveniently enable your rogue module."
 
 	var/mob/living/silicon/robot/R = src
 
 	if(R)
 		R.UnlinkSelf()
+		R.SetEmagged(TRUE)
 		to_chat(R, "Buffers flushed and reset. Camera system shutdown. All systems operational.")
 		verbs -= /mob/living/silicon/robot/proc/ResetSecurityCodes
 

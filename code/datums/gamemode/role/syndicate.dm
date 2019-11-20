@@ -12,6 +12,10 @@
 	if(istype(antag.current, /mob/living/silicon))
 		can_be_smooth = FALSE //Can't buy anything
 		add_law_zero(antag.current)
+		if(istype(antag.current, /mob/living/silicon/robot))
+			to_chat(antag.current, "You also have access to an ability that will permanently disconnect you from the AI network, making you untouchable by a robotics console.")
+			to_chat(antag.current, "It can be found in Robot Commands. It will also unlock your rogue module.")
+			verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
 		antag.current << sound('sound/voice/AISyndiHack.ogg')
 	else
 		equip_traitor(antag.current, 20)
