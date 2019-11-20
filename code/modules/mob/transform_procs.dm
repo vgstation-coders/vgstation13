@@ -98,7 +98,7 @@
 	Postmorph(Mo, choose_name, "You have been turned into a monkey! Pick a monkey name for your new monkey self.")
 	return Mo
 
-/mob/living/carbon/human/monkeyize(ignore_primitive = FALSE)
+/mob/living/carbon/human/monkeyize(ignore_primitive = FALSE, choose_name = FALSE)
 	.=..()
 
 /mob/proc/Cluwneize()
