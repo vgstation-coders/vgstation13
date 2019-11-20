@@ -144,8 +144,6 @@
 // by default, check equipment channel & set flag
 // can override if needed
 /obj/machinery/proc/power_change()
-	if(BROKEN) // See machine breakdowns in machinery/machinery.dm
-		return
 	if(powered(power_channel))
 		stat &= ~NOPOWER
 
