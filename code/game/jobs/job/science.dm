@@ -45,6 +45,12 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
+	L.imp_in = H
+	L.implanted = 1
+	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
+	affected.implants += L
+	L.part = affected
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Science:</b> [SCI_FREQ]<br/>")
 	return 1
 
