@@ -210,33 +210,39 @@
 		else
 			healths.icon_state = "health7"
 
-	if(cells)
-		if(cell)
-			var/cellcharge = cell.charge/cell.maxcharge
-			switch(cellcharge)
-				if(0.75 to INFINITY)
-					cells.icon_state = "charge4"
-				if(0.5 to 0.75)
-					cells.icon_state = "charge3"
-				if(0.25 to 0.5)
-					cells.icon_state = "charge2"
-				if(0 to 0.25)
-					cells.icon_state = "charge1"
-				else
-					cells.icon_state = "charge0"
-		else
-			cells.icon_state = "charge-empty"
+	if(cell)
+		var/cellcharge = cell.charge/cell.maxcharge
+		switch(cellcharge)
+			if(0.5 to INFINITY)
+				clear_alert(SCREEN_ALARM_ROBOT_CELL)
+			if(0.25 to 0.5)
+				throw_alert(SCREEN_ALARM_ROBOT_CELL, /obj/abstract/screen/alert/robot/cell/low, 2)
+			if(0 to 0.25)
+				throw_alert(SCREEN_ALARM_ROBOT_CELL, /obj/abstract/screen/alert/robot/cell/low, 1)
+			else
+				throw_alert(SCREEN_ALARM_ROBOT_CELL, /obj/abstract/screen/alert/robot/cell/empty, 0)
+	else
+		throw_alert(SCREEN_ALARM_ROBOT_CELL, /obj/abstract/screen/alert/robot/cell)
 
-	if(bodytemp) //actually environment temperature but fuck it
-		bodytemp.icon_state = "temp[temp_alert]"
-	if(pressure)
-		pressure.icon_state = "pressure[pressure_alert]"
 	if(album_icon)
 		album_icon.icon_state = "album[connected_ai ? "1":""]"
 
-	update_pull_icon()
+	if(on_fire && !(locate(/obj/item/borg/fire_shield, module.modules)))
+		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/robot/fire)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
 
-	fire.icon_state = "fire[on_fire ? 1 : 0]"
+	if(modulelock || lockcharge)
+		throw_alert(SCREEN_ALARM_ROBOT_LOCK, /obj/abstract/screen/alert/robot/locked)
+	else
+		clear_alert(SCREEN_ALARM_ROBOT_LOCK)
+
+	if(emagged || illegal_weapons)
+		throw_alert(SCREEN_ALARM_ROBOT_HACK, /obj/abstract/screen/alert/robot/hacked)
+	else
+		clear_alert(SCREEN_ALARM_ROBOT_HACK)
+
+	update_pull_icon()
 
 	if(eye_blind || blinded)
 		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
@@ -257,7 +263,7 @@
 
 	if(!isDead())
 		if(machine)
-			if(!( machine.check_eye(src) ))
+			if(!(machine.check_eye(src)))
 				reset_view(null)
 		else
 			if(client && !client.adminobs && !iscamera(client.eye) && !isTeleViewing(client.eye))
@@ -336,17 +342,17 @@
 	var/adjusted_pressure = localpressure - ONE_ATMOSPHERE //REAL pressure
 	if(localpressure)
 		if(adjusted_pressure >= HAZARD_HIGH_PRESSURE)
-			pressure_alert = 2
+			throw_alert(SCREEN_ALARM_PRESSURE, /obj/abstract/screen/alert/robot/pressure/high, 2)
 		else if(localpressure >= WARNING_HIGH_PRESSURE && localpressure < WARNING_HIGH_PRESSURE)
-			pressure_alert = 1
+			throw_alert(SCREEN_ALARM_PRESSURE, /obj/abstract/screen/alert/robot/pressure/high, 1)
 		else if(localpressure <= WARNING_LOW_PRESSURE && localpressure > HAZARD_LOW_PRESSURE)
-			pressure_alert = -1
+			throw_alert(SCREEN_ALARM_PRESSURE, /obj/abstract/screen/alert/robot/pressure/low, -1)
 		else if(localpressure <= HAZARD_LOW_PRESSURE)
-			pressure_alert = -2
+			throw_alert(SCREEN_ALARM_PRESSURE, /obj/abstract/screen/alert/robot/pressure/low, -2)
 		else
-			pressure_alert = 0
+			clear_alert(SCREEN_ALARM_PRESSURE)
 	else //there ain't no air, we're in a vacuum
-		pressure_alert = -2
+		throw_alert(SCREEN_ALARM_PRESSURE, /obj/abstract/screen/alert/robot/pressure/low, -2)
 
 // This handles the temp sensor hud element
 /mob/living/silicon/robot/proc/handle_heat_damage(datum/gas_mixture/environment)
@@ -354,15 +360,15 @@
 	if(environment)
 		if(envirotemp)
 			if (envirotemp >= 1000 ) //1000 is the heat_level_3 for humans
-				temp_alert = 2
+				throw_alert(SCREEN_ALARM_TEMPERATURE, /obj/abstract/screen/alert/robot/temp/hot, 2)
 			else if (envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT && envirotemp < 1000 )
-				temp_alert = 1
+				throw_alert(SCREEN_ALARM_TEMPERATURE, /obj/abstract/screen/alert/robot/temp/hot, 1)
 			else if (envirotemp <= T0C && envirotemp > BODYTEMP_COLD_DAMAGE_LIMIT)
-				temp_alert = -1
+				throw_alert(SCREEN_ALARM_TEMPERATURE, /obj/abstract/screen/alert/robot/temp/cold, -1)
 			else if (envirotemp <= BODYTEMP_COLD_DAMAGE_LIMIT ) //space is cold
-				temp_alert = -2
+				throw_alert(SCREEN_ALARM_TEMPERATURE, /obj/abstract/screen/alert/robot/temp/cold, -2)
 			else
-				temp_alert = 0
-				return 0
+				clear_alert(SCREEN_ALARM_TEMPERATURE)
+				return FALSE
 	else //vacuums are cold
-		temp_alert = -2
+		throw_alert(SCREEN_ALARM_TEMPERATURE, /obj/abstract/screen/alert/robot/temp/cold, -2)
