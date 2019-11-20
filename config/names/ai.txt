@@ -148,6 +148,7 @@ Trurl
 ULTRABOT
 Ulysses
 Uniblab
+VIKI
 V.I.N.CENT.
 Voltes V
 W1k1
