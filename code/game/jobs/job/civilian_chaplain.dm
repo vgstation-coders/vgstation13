@@ -9,7 +9,7 @@
 	supervisors = "The God(s), the Head of Personnel too"
 	wage_payout = 25
 	selection_color = "#dddddd"
-	access = list(access_morgue, access_chapel_office, access_crematorium, access_maint_tunnels)
+	access = list(access_morgue, access_chapel_office, access_crematorium)
 	minimal_access = list(access_morgue, access_chapel_office, access_crematorium)
 	pdaslot = slot_belt
 	pdatype = /obj/item/device/pda/chaplain
