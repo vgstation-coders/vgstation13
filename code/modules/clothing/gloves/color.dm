@@ -173,6 +173,13 @@
 	_color = "mime"
 	species_fit = list(VOX_SHAPED)
 
+/obj/item/clothing/gloves/white/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/head/beret))
+		new /mob/living/simple_animal/hostile/retaliate/faguette/goblin(get_turf(src))
+		qdel(W)
+		qdel(src)
+
 /obj/item/clothing/gloves/white/advanced //mime traitor gloves, spawn in a silent hand gun with two shots
 	actions_types = list(/datum/action/item_action/toggle_gun)
 	var/obj/item/weapon/gun/projectile/handgun/current_gun = null
