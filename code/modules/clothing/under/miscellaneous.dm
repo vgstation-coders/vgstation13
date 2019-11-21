@@ -782,6 +782,7 @@
 	icon_state = "clownsuit"
 	item_state = "clownsuit"
 	_color = "clownsuit"
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/under/skelesuit
 	name = "skeleton suit"
@@ -794,3 +795,11 @@
 	flags = HIDEBEARDHAIR
 	clothing_flags = HIDEHAIRCOMPLETELY
 	body_parts_covered = FULL_HEAD|BEARD
+
+/obj/item/clothing/under/clownpsyche
+	name = "Psychedelic clown outfit"
+	desc = "Do you know the definition of insanity?"
+	icon_state = "clownpsyche"
+	item_state = "clownpsyche"
+	_color = "clownpsyche"
+	clothing_flags = ONESIZEFITSALL

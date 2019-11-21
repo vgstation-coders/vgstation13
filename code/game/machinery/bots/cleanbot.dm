@@ -46,7 +46,7 @@
 	var/next_dest_loc
 
 	var/coolingdown = FALSE
-	var/attackcooldown = 1 SECONDS // for admin cancer
+	var/attackcooldown = 10 SECONDS // for admin cancer
 
 	can_take_pai = TRUE
 

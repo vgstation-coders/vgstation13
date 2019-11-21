@@ -62,6 +62,8 @@
 		message_admins("[usr.key] has notified [key_name(S)] of a change to their laws.")
 
 		S << sound('sound/machines/lawsync.ogg')
+		if(isrobot(S))
+			S.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 		to_chat(S, "____________________________________")
 		to_chat(S, "<span class='danger'>LAW CHANGE NOTICE</span>")
 		if(S.laws)
