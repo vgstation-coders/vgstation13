@@ -264,6 +264,10 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/carbon/burn/fire/alien
 	icon_state = "alien_burn"
 
+//Cult Alarms
+/obj/abstract/screen/alert/carbon/burn/fire/cult
+	icon_state = "cult_burn"
+
 //Silicon Alarms
 /obj/abstract/screen/alert/robot
 	icon_state = "silicon_template"
