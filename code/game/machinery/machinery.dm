@@ -135,12 +135,12 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
+	var/machine_health = 100 // When this is less than or equal to 0, a machine breaks down
 
 	//These are some values to automatically set the light power/range on machines if they have power
 	var/light_range_on = 0
 	var/light_power_on = 0
 	var/use_auto_lights = 0//Incase you want to use it, set this to 0, defaulting to 1 so machinery with no lights doesn't call set_light()
-	var/breakdown_chance = 5 // Some machines can be set to 0 to prevent breakdowns.
 
 	/**
 	 * Machine construction/destruction/emag flags.
@@ -182,6 +182,13 @@ Class Procs:
 	if(panel_open)
 		to_chat(user, "<span class='info'>Its maintenance panel is open.</span>")
 
+	if(machine_health >= 50)
+		to_chat(user, "<span class='info'>This machine looks to be in good shape.</span>")
+	else if(machine_health << 50)
+		to_chat(user, "<span class='info'>This machine looks to be in bad shape.</span>")
+
+	to_chat(user, "<span class='info'>DEBUG: The current machine health is [machine_health]/100</span>")
+
 /obj/machinery/Destroy()
 
 	machines.Remove(src)
@@ -202,10 +209,18 @@ Class Procs:
 	..()
 
 /obj/machinery/projectile_check()
-	if(!stat & (BROKEN))
-		if(prob(breakdown_chance))
-			machine_breakdown()
 	return PROJREACT_OBJS
+
+/obj/machinery/bullet_act(var/obj/item/projectile/Proj)
+	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
+		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
+			if(Proj.firer)//turrets don't have "firers"
+				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
+			if(machine_health >= 0)
+				machine_health = max(0,machine_health - Proj.damage)
+				machine_breakdown()
+			playsound(src, 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
 
 /obj/machinery/process() // If you dont use process or power why are you here
 	set waitfor = FALSE
@@ -636,6 +651,16 @@ Class Procs:
 	if(istype(O, /obj/item/weapon/storage/bag/gadgets/part_replacer))
 		return exchange_parts(user, O)
 
+	if(istype(O, /obj/item/stack/nanopaste))
+		if((!component_parts.len) || (component_parts.len && (!stat & (BROKEN)))) // No parts, or has no broken parts inside
+			machine_health = 100
+			stat |= ~BROKEN
+			var/obj/item/stack/nanopaste = O
+			nanopaste.use(1)
+			to_chat(user, "\The [src] has been repaired!</span>")
+			update_icon()
+			return
+
 /obj/machinery/proc/wirejack(var/mob/living/silicon/pai/P)
 	if(!(machine_flags & WIREJACK))
 		return 0
@@ -719,7 +744,7 @@ Class Procs:
 							if((A.get_rating() == -1) && (stat & (NOPOWER|BROKEN)))
 								to_chat(user, "<span class='notice'>A broken part has been replaced, restoring the machine to working order.</span>")
 								stat &= ~BROKEN
-
+								machine_health = 100
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
 							break
 			RefreshParts()
@@ -768,8 +793,9 @@ Class Procs:
 			visible_message("<span class='notice'>\A [scan] pops out of \the [src]!</span>")
 			scan = null
 
-	if(!stat & (BROKEN))
-		if(prob(breakdown_chance))
+	if(!stat & (BROKEN)) // If it's not broken, apply some damage to it.
+		if(machine_health >=0)
+			machine_health = max(0,machine_health - 1)
 			machine_breakdown()
 
 /obj/machinery/proc/is_operational()
@@ -778,19 +804,20 @@ Class Procs:
 // Machine breakdowns
 
 /obj/machinery/proc/machine_breakdown()
-    if(stat & (BROKEN))
-        return
-    else
-        if(!component_parts.len)
-            return
-        for(var/obj/item/weapon/stock_parts/S in component_parts)
-            if(S.rating == -1) //Already broken
-                continue
-            S.break_part()
-            break
-        playsound(src, "sound/machines/WXP_error.ogg", 50, 1)
-        spark(src)
-        visible_message("<span class='warning'>\The [src] has broken down!</span>")
-        stat |= BROKEN
-        update_icon()
-    return
+	if(stat & (BROKEN)) // If it's broken, don't do anything
+		return
+	else
+		if(machine_health <= 0) // If it's not broken, check it's health is below or at 0.
+			if(!component_parts.len) // Many machines don't have parts!
+				return
+			for(var/obj/item/weapon/stock_parts/S in component_parts)
+				if(S.rating == -1) //Already broken
+					continue
+				S.break_part()
+				break
+
+			playsound(src, "sound/machines/WXP_error.ogg", 50, 1)
+			spark(src)
+			visible_message("<span class='warning'>\The [src] has broken down!</span>")
+			stat |= BROKEN
+			update_icon()
