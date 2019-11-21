@@ -134,14 +134,14 @@
 
 	if(istype(loc, /obj/item/weapon/melee/soulblade) && hud_used && gui_icons && gui_icons.soulblade_bloodbar)
 		var/obj/item/weapon/melee/soulblade/SB = loc
-		if(fire)
+		if(healths2)
 			switch(SB.health)
-				if (-INFINITY to 18)
-					fire.icon_state = "blade_reallynotok"
-				if (18 to 36)
-					fire.icon_state = "blade_notok"
-				if (36 to INFINITY)
-					fire.icon_state = "blade_ok"
+				if(-INFINITY to 18)
+					healths2.icon_state = "blade_reallynotok"
+				if(18 to 36)
+					healths2.icon_state = "blade_notok"
+				if(36 to INFINITY)
+					healths2.icon_state = "blade_ok"
 		var/matrix/M = matrix()
 		M.Scale(1,SB.blood/SB.maxblood)
 		var/total_offset = (60 + (100*(SB.blood/SB.maxblood))) * PIXEL_MULTIPLIER

@@ -99,11 +99,11 @@
 	mymob.gui_icons.soulblade_bloodbar.name = "Blood"
 	mymob.gui_icons.soulblade_bloodbar.screen_loc = ui_blob_powerbar
 
-	mymob.fire = getFromPool(/obj/abstract/screen)
-	mymob.fire.icon = 'icons/mob/screen1_shade.dmi'
-	mymob.fire.icon_state = "blade_ok"
-	mymob.fire.name = "blade integrity"
-	mymob.fire.screen_loc = ui_construct_sword
+	mymob.healths2 = getFromPool(/obj/abstract/screen)
+	mymob.healths2.icon = 'icons/mob/screen1_shade.dmi'
+	mymob.healths2.icon_state = "blade_ok"
+	mymob.healths2.name = "blade integrity"
+	mymob.healths2.screen_loc = ui_construct_sword
 	///////////////////////////////////////
 
 	mymob.client.reset_screen()
