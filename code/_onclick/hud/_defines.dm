@@ -62,8 +62,8 @@
 #define ui_gun_select "EAST-1:28,SOUTH+2:7" //Used as compile time value
 
 //Middle right (status indicators)
-#define ui_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[15*PIXEL_MULTIPLIER]"
-#define ui_internal "EAST-1:[28*PIXEL_MULTIPLIER],CENTER:[17*PIXEL_MULTIPLIER]"
+#define ui_health "EAST-1:[29*PIXEL_MULTIPLIER],CENTER-1:[15*PIXEL_MULTIPLIER]"
+#define ui_internal "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-2:[19*PIXEL_MULTIPLIER]"
 
 //borgs
 #define ui_borg_health "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+5:[7*PIXEL_MULTIPLIER]"
