@@ -82,8 +82,7 @@
 	name = "hastur's hood"
 	desc = "It's unspeakably stylish."
 	icon_state = "hasturhood"
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = EARS|HEAD
+	body_parts_covered = EARS|HEAD|HIDEHAIR
 
 /obj/item/clothing/head/nursehat
 	name = "nurse's hat"
@@ -289,8 +288,7 @@
 	desc = "Eeeee~heheheheheheh!"
 	icon_state = "witch"
 	item_state = "witch"
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = EARS|HEAD
+	body_parts_covered = EARS|HEAD|HIDEHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/chicken
@@ -298,8 +296,7 @@
 	desc = "Bkaw!"
 	icon_state = "chickenhead"
 	item_state = "chickensuit"
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/bearpelt
@@ -307,8 +304,7 @@
 	desc = "Not as fuzzy as the real thing."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = EARS|HEAD
+	body_parts_covered = EARS|HEAD|HIDEHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/bearpelt/real
@@ -330,8 +326,7 @@
 	icon_state = "xenos"
 	item_state = "xenos_helm"
 	desc = "A helmet made out of chitinous alien hide."
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/batman

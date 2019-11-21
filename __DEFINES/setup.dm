@@ -185,7 +185,6 @@ var/MAX_EXPLOSION_RANGE = 14
 #define INVULNERABLE 8
 #define HEAR		16 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
 #define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
-#define HIDEHAIRCOMPLETELY 64
 
 #define TWOHANDABLE	64
 #define MUSTTWOHAND	128
@@ -315,6 +314,7 @@ var/MAX_EXPLOSION_RANGE = 14
 
 
 // bitflags for invisibility
+// Used in body_parts_covered
 
 #define HIDEGLOVES			HANDS
 #define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)

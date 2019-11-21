@@ -125,9 +125,9 @@
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(M.client), 20)
 				emote("me", EMOTE_AUDIBLE, "purrs.")
-				playsound(loc, 'sound/voice/catpurr.ogg', 80, 1)
+				playsound(loc, 'sound/voice/catpurr.ogg', 50, 1)
 			if(I_HURT)
-				playsound(loc, 'sound/voice/cathiss.ogg', 80, 1)
+				playsound(loc, 'sound/voice/cathiss.ogg', 50, 1)
 				emote("me", EMOTE_AUDIBLE, "hisses.")
 
 /mob/living/simple_animal/cat/snek/react_to_touch(mob/M)

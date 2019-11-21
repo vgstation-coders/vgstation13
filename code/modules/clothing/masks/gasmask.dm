@@ -281,3 +281,12 @@
 	species_fit = list(VOX_SHAPED)
 	can_flip = 0
 	canstage = 0
+
+/obj/item/clothing/mask/gas/clownmaskpsyche
+	name = "clown psychedelic mask"
+	desc = "A true prankster's groovy facial attire. A clown is incomplete without his wig and mask."
+	icon_state = "clownmaskpsyche"
+	item_state = "clownmaskpsyche"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	can_flip = 0
+	canstage = 0

@@ -184,6 +184,7 @@
 			to_chat(src, "<span class='warning'>You have recently requested for heads of staff to open priority roles.</span>")
 			return
 		var/count_pings = 0
+		to_chat(src, "<span class='bnotice'>You have requested for heads of staff to open priority roles. Please stand by.</span>")
 		for(var/obj/item/device/pda/pingme in PDAs)
 			if(pingme.cartridge && pingme.cartridge.fax_pings && pingme.cartridge.access_status_display)
 				//This may seem like a strange check, but it's excluding the IAA for only HOP/Cap
@@ -367,6 +368,18 @@
 	job_master.AssignRole(src, rank, 1)
 
 	ticker.mode.latespawn(src)//can we make them a latejoin antag?
+
+	//Do this immediately so this works properly
+	if(rank == "AI")
+		close_spawn_windows()
+		AIize()
+		return
+	if(rank == "Cyborg")
+		create_roundstart_cyborg()
+		return
+	if(rank == "Mobile MMI")
+		MoMMIfy()
+		return
 
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)

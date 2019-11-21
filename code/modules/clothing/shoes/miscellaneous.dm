@@ -525,3 +525,13 @@ obj/item/clothing/shoes/jackboots/cowboy
 	icon_state = "highlanderboots"
 	item_state = "highlanderboots"
 	wizard_garb = 1
+
+/obj/item/clothing/shoes/clownshoespsyche
+	desc = "The prankster's illegal-issue clowning shoes. Damn they're huge!"
+	name = "clown psychedelic shoes"
+	icon_state = "clownshoespsyche"
+	item_state = "clownshoespsyche"
+	_color = "clownshoespsyche"
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
+
+	step_sound = "clownstep"

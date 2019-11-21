@@ -366,9 +366,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 			switch(mode)
 				if(1)
-					say(pick(speak))
-					if(emote_sound.len)
-						playsound(loc, "[pick(emote_sound)]", 80, 1)
+					say(pick(speak)) // The sound is in say_quote
 				if(2)
 					emote("me", MESSAGE_HEAR, "[pick(emote_hear)].")
 					if(emote_sound.len)

@@ -17,7 +17,6 @@
 #define BEAM_MAX_STEPS 50 // Or whatever
 
 #define BEAM_DEL(x) del(x)
-
 #ifdef BEAM_DEBUG
 # warn SOME ASSHOLE FORGOT TO COMMENT BEAM_DEBUG BEFORE COMMITTING
 # define beam_testing(x) to_chat(world, "(Line: [__LINE__]) [x]")
@@ -95,7 +94,7 @@
 /obj/effect/beam/proc/turf_density_change(var/list/args)
 	var/turf/T = args["atom"]
 	var/atom/A = T.has_dense_content()
-	if(A && !(A in sources))
+	if(A && !(A in sources) && Cross(A)) //If there is a dense atom, we're not being emitted by it, and it can cross us
 		Crossed(A)
 
 // Listener for /atom/on_density_change
@@ -143,7 +142,7 @@
 /obj/effect/beam/Bumped(var/atom/movable/AM)
 	if(!master || !AM)
 		return
-	if(istype(AM, /obj/effect/beam) || !AM.density || AM.Cross(src))
+	if(istype(AM, /obj/effect/beam) || !AM.density)
 		return
 	beam_testing("Bumped by [AM]")
 	am_connector=1
@@ -176,8 +175,10 @@
 /obj/effect/beam/proc/connect_to(var/atom/movable/AM)
 	if(!AM)
 		return
+	beam_testing("connecting to [AM]")
 	var/obj/effect/beam/BM=get_master()
 	if(BM.target == AM)
+		beam_testing("our target was already [AM]")
 		return
 	if(BM.target)
 		beam_testing("\ref[BM] - Disconnecting [BM.target]: target changed.")
@@ -231,7 +232,7 @@
 		beam_testing(" returning (!AM || !master)")
 		return
 
-	if(istype(AM, /obj/effect/beam) || (!AM.density && !istype(AM, /obj/effect/blob)) || AM.Cross(src))
+	if(istype(AM, /obj/effect/beam) || (!AM.density && !istype(AM, /obj/effect/blob)))
 		beam_testing(" returning (is beam or not dense)")
 		return
 

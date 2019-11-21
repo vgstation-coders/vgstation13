@@ -105,8 +105,13 @@
 	if(stage <= FACTION_DEFEATED)
 		return
 
-	// -- 2. Are all the heads dead ?
+	// -- 1. Did we get objectives in the first place.
 	var/remaining_targets = objective_holder.objectives.len
+	if (!remaining_targets)
+		forgeObjectives()
+		return FALSE
+
+	// -- 2. Are all the heads dead ?
 	for(var/datum/objective/objective in objective_holder.GetObjectives())
 		if(objective.IsFulfilled())
 			remaining_targets--
