@@ -5,7 +5,7 @@
 
 /mob/living/carbon/alien/larva
 
-	var/temperature_alert = 0
+	var/temperature_alert = TEMP_ALARM_SAFE
 
 
 /mob/living/carbon/alien/larva/Life()
@@ -307,18 +307,17 @@
 
 /mob/living/carbon/alien/larva/handle_regular_hud_updates()
 
-
-	if (stat == 2 || (M_XRAY in mutations))
+	if(isDead() || (M_XRAY in mutations))
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_MINIMUM
-	else if (stat != 2)
+	else if(!isDead())
 		change_sight(adding = SEE_MOBS, removing = SEE_TURFS|SEE_OBJS)
 		see_in_dark = 4
 		see_invisible = SEE_INVISIBLE_MINIMUM
 
-	if (healths)
-		if (stat != 2)
+	if(healths)
+		if(!isDead())
 			switch(health)
 				if(25 to INFINITY)
 					healths.icon_state = "health0"
@@ -337,36 +336,39 @@
 
 	update_pull_icon()
 
+	if(toxins_alert)
+		throw_alert(SCREEN_ALARM_TOXINS, /obj/abstract/screen/alert/tox/alien)
+	else
+		clear_alert(SCREEN_ALARM_TOXINS)
+	if(oxygen_alert)
+		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath/alien)
+	else
+		clear_alert(SCREEN_ALARM_BREATH)
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire/alien)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
 
-	if (toxin)
-		toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
-	if (oxygen)
-		oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
-	if (fire)
-		fire.icon_state = "fire[fire_alert ? 1 : 0]"
-	//NOTE: the alerts dont reset when youre out of danger. dont blame me,
-	//blame the person who coded them. Temporary fix added.
 	if (client)
 		clear_fullscreens()
-
 		if(src.eye_blind || src.blinded)
 			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		if (src.disabilities & NEARSIGHTED)
+		if(src.disabilities & NEARSIGHTED)
 			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
-		if (src.eye_blurry)
+		if(src.eye_blurry)
 			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-		if (src.druggy)
+		if(src.druggy)
 			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 
-	if (stat != 2)
-		if (machine)
-			if (!( machine.check_eye(src) ))
+	if(!isDead())
+		if(machine)
+			if(!( machine.check_eye(src) ))
 				reset_view(null)
 		else
 			if(client && !client.adminobs)
 				reset_view(null)
 
-	return 1
+	return TRUE
 
 /mob/living/carbon/alien/larva/proc/handle_random_events()
 	return

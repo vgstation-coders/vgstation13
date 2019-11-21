@@ -47,7 +47,6 @@
 	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
 
-
 	// Intent
 	using = getFromPool(/obj/abstract/screen)
 	using.name = "act_intent"
@@ -97,13 +96,6 @@
 	mymob.throw_icon.name = "store"
 	mymob.throw_icon.screen_loc = ui_mommi_store
 
-	// Oxygen
-	mymob.oxygen = getFromPool(/obj/abstract/screen)
-	mymob.oxygen.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.oxygen.icon_state = "oxy0"
-	mymob.oxygen.name = "oxygen"
-	mymob.oxygen.screen_loc = ui_oxygen
-
 	// Pulling
 	mymob.pullin = getFromPool(/obj/abstract/screen)
 	mymob.pullin.icon = 'icons/mob/screen1_robot.dmi'
@@ -120,5 +112,5 @@
 	// Reset the client's screen
 	mymob.client.reset_screen()
 	// Add everything to their screen
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.hands, mymob.healths, mymob.pullin)
+	mymob.client.screen += list(mymob.throw_icon, mymob.zone_sel, mymob.hands, mymob.healths, mymob.pullin)
 	mymob.client.screen += src.adding + src.other

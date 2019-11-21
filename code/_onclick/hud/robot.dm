@@ -103,7 +103,6 @@
 	mymob.throw_icon.screen_loc = ui_borg_store
 
 //Photography stuff
-
 	mymob.camera_icon = getFromPool(/obj/abstract/screen)
 	mymob.camera_icon.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.camera_icon.icon_state = "camera"
@@ -115,13 +114,6 @@
 	mymob.album_icon.icon_state = "album"
 	mymob.album_icon.name = "View Images"
 	mymob.album_icon.screen_loc = ui_borg_album
-
- //unused, go home
-	mymob.oxygen = getFromPool(/obj/abstract/screen)
-	mymob.oxygen.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.oxygen.icon_state = "oxy0"
-	mymob.oxygen.name = "oxygen"
-	mymob.oxygen.screen_loc = ui_oxygen
 
 	mymob.pullin = getFromPool(/obj/abstract/screen)
 	mymob.pullin.icon = 'icons/mob/screen1_robot.dmi'

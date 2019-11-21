@@ -149,12 +149,6 @@
 		hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
 		hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[SB.blood]"
 
-	if(purged)
-		if(purge > 0)
-			purged.icon_state = "purge1"
-		else
-			purged.icon_state = "purge0"
-
 	if(client && hud_used && healths)
 		switch(health)
 			if(50 to INFINITY)

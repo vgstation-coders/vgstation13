@@ -414,42 +414,45 @@
 		else
 			healths.icon_state = "health7"
 
-
-	if(pressure)
-		pressure.icon_state = "pressure[pressure_alert]"
+	switch(bodytemperature) //310.055 optimal body temp
+		if(345 to INFINITY)
+			temperature_alert = TEMP_ALARM_HEAT_STRONG
+		if(335 to 345)
+			temperature_alert = TEMP_ALARM_HEAT_MILD
+		if(327 to 335)
+			temperature_alert = TEMP_ALARM_HEAT_WEAK
+		if(295 to 327)
+			temperature_alert = TEMP_ALARM_SAFE
+		if(280 to 295)
+			temperature_alert = TEMP_ALARM_COLD_WEAK
+		if(260 to 280)
+			temperature_alert = TEMP_ALARM_COLD_MILD
+		else
+			temperature_alert = TEMP_ALARM_COLD_STRONG
 
 	update_pull_icon()
 
+	if(pressure_alert)
+		throw_alert(SCREEN_ALARM_PRESSURE, pressure_alert < 0 ? /obj/abstract/screen/alert/carbon/pressure/low : /obj/abstract/screen/alert/carbon/pressure/high, pressure_alert)
+	else
+		clear_alert(SCREEN_ALARM_PRESSURE)
+	if(oxygen_alert)
+		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath)
+	else
+		clear_alert(SCREEN_ALARM_BREATH)
+	if(toxins_alert)
+		throw_alert(SCREEN_ALARM_TOXINS, /obj/abstract/screen/alert/tox)
+	else
+		clear_alert(SCREEN_ALARM_TOXINS)
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire, fire_alert)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
+	if(temperature_alert)
+		throw_alert(SCREEN_ALARM_TEMPERATURE, temperature_alert < 0 ? /obj/abstract/screen/alert/carbon/temp/cold : /obj/abstract/screen/alert/carbon/temp/hot, temperature_alert)
+	else
+		clear_alert(SCREEN_ALARM_TEMPERATURE)
 
-	if (toxin)
-		toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
-	if (oxygen)
-		oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
-	if (fire)
-		fire.icon_state = "fire[fire_alert ? 2 : 0]"
-	//NOTE: the alerts dont reset when youre out of danger. dont blame me,
-	//blame the person who coded them. Temporary fix added.
-
-	if(bodytemp)
-		switch(bodytemperature) //310.055 optimal body temp
-			if(345 to INFINITY)
-				bodytemp.icon_state = "temp4"
-			if(335 to 345)
-				bodytemp.icon_state = "temp3"
-			if(327 to 335)
-				bodytemp.icon_state = "temp2"
-			if(316 to 327)
-				bodytemp.icon_state = "temp1"
-			if(300 to 316)
-				bodytemp.icon_state = "temp0"
-			if(295 to 300)
-				bodytemp.icon_state = "temp-1"
-			if(280 to 295)
-				bodytemp.icon_state = "temp-2"
-			if(260 to 280)
-				bodytemp.icon_state = "temp-3"
-			else
-				bodytemp.icon_state = "temp-4"
 
 	if(stat != DEAD)
 		if(src.eye_blind || blinded)
