@@ -9,7 +9,8 @@
 	name = "Syndicate Traitors"
 	persistent = 1
 	role_category = /datum/role/traitor
-	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 5
@@ -57,7 +58,8 @@
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
 	role_category = /datum/role/changeling
-	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,2,1,1,1,1,0,0,0)
@@ -88,7 +90,8 @@
 /datum/dynamic_ruleset/roundstart/vampire
 	name = "Vampires"
 	role_category = /datum/role/vampire
-	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI", "Chaplain")
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain", "Chaplain")
 	required_enemies = list(2,2,2,1,1,1,1,0,0,0)
@@ -219,7 +222,9 @@
 /datum/dynamic_ruleset/roundstart/bloodcult
 	name = "Blood Cult"
 	role_category = /datum/role/cultist
-	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
+	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective",
+							"Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent",
+							"Chief Engineer", "Chief Medical Officer", "Research Director")
 	enemy_jobs = list("Security Officer","Warden", "Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
 	required_candidates = 4
