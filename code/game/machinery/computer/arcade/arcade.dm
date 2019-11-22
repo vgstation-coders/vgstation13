@@ -41,6 +41,9 @@
 	A.game_data = game.export_data()
 
 /obj/machinery/computer/arcade/attack_hand(mob/user)
+	if(stat & (BROKEN))
+		to_chat(user, "<span class='warning'>\The [src] is broken.</span>")
+		return
 	if(..())
 		return
 	user.set_machine(src)

@@ -39,6 +39,9 @@
 
 //Someone needs to break down the dat += into chunks instead of long ass lines.
 /obj/machinery/computer/secure_data/attack_hand(mob/user as mob)
+	if(stat & (BROKEN))
+		to_chat(user, "<span class='warning'>\The [src] is broken.</span>")
+		return
 	if(..())
 		return
 	if (src.z > 6)

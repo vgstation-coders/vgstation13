@@ -20,6 +20,7 @@
 
 /obj/machinery/computer/New()
 	..()
+	machine_health = 100
 	if(ticker)
 		initialize()
 
@@ -65,9 +66,9 @@
 	return
 
 /obj/machinery/computer/bullet_act(var/obj/item/projectile/Proj)
-	if(prob(Proj.damage))
-		set_broken()
 	..()
+	if(machine_health <= 0)
+		set_broken()
 
 /obj/machinery/computer/attack_construct(var/mob/user)
 	if (!Adjacent(user))
@@ -104,6 +105,7 @@
 
 /obj/machinery/computer/proc/set_broken()
 	stat |= BROKEN
+	machine_health = 0
 	update_icon()
 
 /obj/machinery/computer/togglePanelOpen(var/obj/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)

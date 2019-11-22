@@ -135,7 +135,8 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
-	var/machine_health = 100 // When this is less than or equal to 0, a machine breaks down
+
+	var/machine_health = null // When this is less than or equal to 0, a machine breaks down. Starts assuming no machine health to stop EVERYTHING getting HP.
 
 	//These are some values to automatically set the light power/range on machines if they have power
 	var/light_range_on = 0
@@ -177,12 +178,12 @@ Class Procs:
 
 /obj/machinery/examine(mob/user)
 	..()
-	if(stat & BROKEN)
-		to_chat(user, "<span class='warning'>\The [src] is broken.</span>")
 	if(panel_open)
 		to_chat(user, "<span class='info'>Its maintenance panel is open.</span>")
 
-	if(machine_health >= 50)
+	if(machine_health == null)
+		return
+	else if(machine_health >= 50)
 		to_chat(user, "<span class='info'>This machine looks to be in good shape.</span>")
 	else if(machine_health < 50)
 		to_chat(user, "<span class='warning'>This machine looks to be in bad shape.</span>")
@@ -211,16 +212,19 @@ Class Procs:
 /obj/machinery/projectile_check()
 	return PROJREACT_OBJS
 
-/obj/machinery/bullet_act(var/obj/item/projectile/Proj)
+obj/machinery/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
 			if(Proj.firer)//turrets don't have "firers"
 				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
+			if(machine_health == null)
+				return
 			if(machine_health >= 0)
 				machine_health = max(0,machine_health - Proj.damage)
 				machine_breakdown()
-			playsound(src, 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
+			playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
+	..()
 
 /obj/machinery/process() // If you dont use process or power why are you here
 	set waitfor = FALSE
@@ -424,9 +428,7 @@ Class Procs:
 	return handle_multitool_topic(href,href_list,usr)
 
 /obj/machinery/attack_ai(mob/user as mob)
-
 	src.add_hiddenprint(user)
-
 	if(isrobot(user))
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.
@@ -447,6 +449,12 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
+	if(stat & (NOPOWER|BROKEN|MAINT))
+		return 1
+
+	if(stat & (BROKEN))
+		to_chat(user, "<span class='warning'>\The [src] is broken.</span>")
+		return
 
 	if(user.lying || (user.stat && !canGhostRead(user))) // Ghost read-only
 		return 1
@@ -473,6 +481,19 @@ Class Procs:
 
 	src.add_fingerprint(user)
 	return 0
+
+///obj/machinery/attack_hand(mob/user as mob)
+//	if(stat & (BROKEN))
+//		to_chat(user, "<span class='warning'>\The [src] is broken.</span>")
+//		return
+//
+//	if(user.lying || (user.stat && !canGhostRead(user))) // Ghost read-only
+//		return 1
+//
+//	if(istype(user,/mob/dead/observer))
+//		return 0
+
+
 
 /obj/machinery/proc/RefreshParts() //Placeholder proc for machines that are built using frames.
 	return
@@ -654,7 +675,7 @@ Class Procs:
 	if(istype(O, /obj/item/stack/nanopaste))
 		if((!component_parts.len) || (component_parts.len && (!stat & (BROKEN)))) // No parts, or has no broken parts inside
 			machine_health = 100
-			stat |= ~BROKEN
+			stat &= ~BROKEN
 			var/obj/item/stack/nanopaste = O
 			nanopaste.use(1)
 			to_chat(user, "\The [src] has been repaired!</span>")
@@ -741,11 +762,6 @@ Class Procs:
 							component_parts += B
 							B.forceMove(null)
 							to_chat(user, "<span class='notice'>[A.name] replaced with [B.name].</span>")
-							if((A.get_rating() == -1) && (stat & (NOPOWER|BROKEN)))
-								to_chat(user, "<span class='notice'>A broken part has been replaced, restoring the machine to working order.</span>")
-								stat &= ~BROKEN
-								machine_health = 100
-								update_icon()
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
 							break
 			RefreshParts()
@@ -795,6 +811,8 @@ Class Procs:
 			scan = null
 
 	if(!stat & (BROKEN)) // If it's not broken, apply some damage to it.
+		if(machine_health == null)
+			return
 		if(machine_health >=0)
 			machine_health = max(0,machine_health - 1)
 			machine_breakdown()
@@ -805,6 +823,8 @@ Class Procs:
 // Machine breakdowns
 
 /obj/machinery/proc/machine_breakdown()
+	if(machine_health == null) // If it doesn't have HP, don't do anything
+		return
 	if(stat & (BROKEN)) // If it's broken, don't do anything
 		return
 	else
