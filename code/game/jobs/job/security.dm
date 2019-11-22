@@ -146,8 +146,8 @@
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 
-	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court, access_eva)
-	minimal_access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court)
+	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, , access_court, access_eva)
+	minimal_access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, , access_court)
 	alt_titles = list("Forensic Technician","Gumshoe", "Private Eye")
 
 	minimal_player_age = 7

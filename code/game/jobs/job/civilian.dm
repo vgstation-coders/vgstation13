@@ -183,8 +183,8 @@
 	wage_payout = 65
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/supply
-	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
-	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
+	access = list(, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
+	minimal_access = list(, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/quartermaster
@@ -228,8 +228,8 @@
 	wage_payout = 20
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/supply
-	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
-	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
+	access = list(, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
+	minimal_access = list(, access_cargo, access_cargo_bot, access_mailsorting)
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/cargo
@@ -479,8 +479,8 @@
 	supervisors = "the head of personnel"
 	wage_payout = 20
 	selection_color = "#dddddd"
-	access = list(access_janitor, access_maint_tunnels)
-	minimal_access = list(access_janitor, access_maint_tunnels)
+	access = list(access_janitor, )
+	minimal_access = list(access_janitor, )
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/janitor
