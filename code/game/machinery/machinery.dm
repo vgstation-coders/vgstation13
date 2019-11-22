@@ -184,8 +184,8 @@ Class Procs:
 
 	if(machine_health >= 50)
 		to_chat(user, "<span class='info'>This machine looks to be in good shape.</span>")
-	else if(machine_health << 50)
-		to_chat(user, "<span class='info'>This machine looks to be in bad shape.</span>")
+	else if(machine_health < 50)
+		to_chat(user, "<span class='warning'>This machine looks to be in bad shape.</span>")
 
 	to_chat(user, "<span class='info'>DEBUG: The current machine health is [machine_health]/100</span>")
 
@@ -745,6 +745,7 @@ Class Procs:
 								to_chat(user, "<span class='notice'>A broken part has been replaced, restoring the machine to working order.</span>")
 								stat &= ~BROKEN
 								machine_health = 100
+								update_icon()
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
 							break
 			RefreshParts()
@@ -815,7 +816,6 @@ Class Procs:
 					continue
 				S.break_part()
 				break
-
 			playsound(src, "sound/machines/WXP_error.ogg", 50, 1)
 			spark(src)
 			visible_message("<span class='warning'>\The [src] has broken down!</span>")

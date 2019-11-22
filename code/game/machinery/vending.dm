@@ -18,8 +18,9 @@ var/global/num_vending_terminals = 1
 	anchored = 1
 	density = 1
 	layer = OPEN_DOOR_LAYER //This is below BELOW_OBJ_LAYER because vendors can contain crates/closets
-	var/health = 100
-	var/maxhealth = 100 //Kicking feature
+	//var/health = 100
+	//var/maxhealth = 100 //Kicking feature
+	//health is now obsolete, now machine_health from machinery.dm
 	var/active = 1		//No sales pitches if off!
 	var/vend_ready = 1	//Are we ready to vend?? Is it time??
 	var/vend_delay = 10	//How long does it take to vend?
@@ -439,7 +440,7 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='notice'>You replace the broken glass.</span>")
 			G.use(1)
 			stat &= ~BROKEN
-			src.health = 100
+			src.machine_health = 100
 			power_change()
 			getFromPool(/obj/item/weapon/shard, loc)
 		else
@@ -696,11 +697,8 @@ var/global/num_vending_terminals = 1
 		src.icon_state = "[initial(icon_state)]"
 
 /obj/machinery/vending/proc/damaged(var/coef=1)
-	src.health -= 4*coef
-	if(src.health <= 0)
-		stat |= BROKEN
-		src.update_vicon()
-		return
+	if(src.machine_health <= 0)
+		src.update_vicon() // machinery.dm will now handles breakdowns and damage
 	if(prob(2*coef)) //Jackpot!
 		malfunction()
 	if(prob(2*coef))
