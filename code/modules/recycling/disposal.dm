@@ -619,11 +619,10 @@
 /obj/structure/disposalholder/proc/move()
 	var/obj/structure/disposalpipe/last
 	while(active)
-		/* vg edit
 		if(hasmob && prob(3))
 			for(var/mob/living/H in src)
-				H.take_overall_damage(20, 0, "Blunt Trauma")//horribly maim any living creature jumping down disposals.  c'est la vie
-				*/
+				H.take_overall_damage(7, 0)
+
 
 		if(prob(2)) // chance of becoming stuck per segment if contains a fat guy
 			if(has_fat_guy())
