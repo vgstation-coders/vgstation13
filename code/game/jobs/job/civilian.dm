@@ -272,7 +272,7 @@
 	wage_payout = 30
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/supply
-	access = list(access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
+	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_mining, access_mint, access_mining_station, access_mailsorting)
 
 	pdaslot=slot_belt
@@ -322,7 +322,7 @@
 	wage_payout = 15
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/clown
-	access = list(access_clown, access_theatre)
+	access = list(access_clown, access_theatre, access_maint_tunnels)
 	minimal_access = list(access_clown, access_theatre)
 	alt_titles = list("Jester")
 
@@ -389,7 +389,7 @@
 	wage_payout = 15
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/mime
-	access = list(access_mime, access_theatre)
+	access = list(access_mime, access_theatre, access_maint_tunnels)
 	minimal_access = list(access_mime, access_theatre)
 
 	pdaslot=slot_belt
@@ -529,7 +529,7 @@
 	supervisors = "the head of personnel"
 	wage_payout = 25
 	selection_color = "#dddddd"
-	access = list(access_library)
+	access = list(access_library, access_maint_tunnels)
 	minimal_access = list(access_library)
 	alt_titles = list("Journalist", "Game Master")
 
