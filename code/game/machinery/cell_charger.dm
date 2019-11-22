@@ -86,6 +86,7 @@
 
 			if(user.drop_item(W, src))
 				charging = W
+				has_beeped = FALSE
 				user.visible_message("<span class='notice'>[user] inserts a cell into [src].</span>", "<span class='notice'>You insert a cell into [src].</span>")
 				chargelevel = -1
 		updateicon()
@@ -116,7 +117,6 @@
 		user.visible_message("<span class='notice'>[user] removes the cell from [src].</span>", "<span class='notice'>You remove the cell from [src].</span>")
 		chargelevel = -1
 		updateicon()
-		has_beeped = FALSE
 
 /obj/machinery/cell_charger/wrenchAnchor(var/mob/user)
 	if(charging)

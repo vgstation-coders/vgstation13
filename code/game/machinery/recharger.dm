@@ -100,6 +100,7 @@
 		M.Translate(0,6)
 		G.transform = M
 		charging = G
+		has_beeped = FALSE
 		if(!self_powered)
 			use_power = 2
 		update_icon()
@@ -145,7 +146,6 @@
 		if(!self_powered)
 			use_power = 1
 		appearance_backup=null
-		has_beeped = FALSE
 		update_icon()
 
 /obj/machinery/recharger/attack_paw(mob/user)
