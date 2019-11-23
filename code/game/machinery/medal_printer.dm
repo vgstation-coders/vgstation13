@@ -11,7 +11,8 @@
 	allowed_materials = list(
 						MAT_IRON,
 						MAT_GOLD,
-						MAT_SILVER
+						MAT_SILVER,
+						MAT_PLASMA
 	)
 
 	part_sets = list(
@@ -43,12 +44,12 @@
 	)
 	RefreshParts()
 
-/obj/machinery/r_n_d/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/r_n_d/attackby(var/obj/item/O, var/mob/user)
 	. = ..()
 
 	if(istype(O, /obj/item/clothing/accessory/medal))
-		O.name = sanitize((input(usr, "What would you like to label [O]?", "Medal Labelling", null)  as text), 1, MAX_NAME_LEN)
-		if((loc == usr && !usr.isUnconscious()))
+		O.name = sanitize((input(user, "What would you like to label \the [O]?", "Medal Labelling", null)  as text), 1, MAX_NAME_LEN)
+		if((loc == usr && usr.isUnconscious()))
 			O.name = "medal"
 		add_fingerprint(usr)
 	return
