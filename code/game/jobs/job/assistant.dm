@@ -47,7 +47,10 @@
 	H.put_in_hands(new /obj/item/weapon/storage/toolbox/mechanical(get_turf(H)))
 
 /datum/job/assistant/get_access()
-	return list()
+	if(config.assistant_maint)
+		return list(access_maint_tunnels)
+	else
+		return list()
 
 /datum/job/assistant/get_total_positions()
 	if(!config.assistantlimit)
