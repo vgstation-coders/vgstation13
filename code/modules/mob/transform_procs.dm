@@ -33,20 +33,7 @@
 		mind.transfer_to(new_mob)
 		//namepick
 		if(namepick)
-			if(!namepick_message)
-				namepick_message = "You have been transformed! You can pick a new name, or leave this empty to keep your current one."
-			spawn(10)
-				var/newname
-				for(var/i = 1 to 3)
-					newname = reject_bad_name(stripped_input(new_mob, namepick_message, "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
-					if(!newname || newname == "")
-						if(alert(new_mob,"Are you sure you want to keep your current name?",,"Yes","No") == "Yes")
-							break
-					else
-						if(alert(new_mob,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
-							break
-				if(newname)
-					new_mob.fully_replace_character_name(null, newname)
+			mob_rename_self(new_mob, null, namepick_message, FALSE)
 	else
 		new_mob.key = key
 	new_mob.a_intent = a_intent
@@ -159,7 +146,7 @@
 	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
 	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
 	O.job = "AI"
-	O.rename_self("ai",1)
+	mob_rename_self(O,"ai", null, 1)
 	. = O
 	if(del_mob)
 		qdel(src)
