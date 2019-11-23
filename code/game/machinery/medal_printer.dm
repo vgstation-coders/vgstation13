@@ -24,9 +24,10 @@
 		new /obj/item/clothing/accessory/medal/conduct(), \
 		new /obj/item/clothing/accessory/medal/bronze_heart(), \
 		new /obj/item/clothing/accessory/medal/silver/valor(), \
-		new /obj/item/clothing/accessory/medal/silver/security(),\
-		new /obj/item/clothing/accessory/medal/gold/captain(),\
+		new /obj/item/clothing/accessory/medal/silver/security(), \
+		new /obj/item/clothing/accessory/medal/gold/captain(), \
 		new /obj/item/clothing/accessory/medal/gold/heroism(), \
+		new /obj/item/clothing/accessory/medal/nobel_science(), \
 		))
 
 /obj/machinery/r_n_d/fabricator/medal_printer/New()
@@ -42,3 +43,12 @@
 	)
 	RefreshParts()
 
+/obj/machinery/r_n_d/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	. = ..()
+
+	if(istype(O, /obj/item/clothing/accessory/medal))
+		O.name = sanitize((input(usr, "What would you like to label [O]?", "Medal Labelling", null)  as text), 1, MAX_NAME_LEN)
+		if((loc == usr && !usr.isUnconscious()))
+			O.name = "medal"
+		add_fingerprint(usr)
+	return
