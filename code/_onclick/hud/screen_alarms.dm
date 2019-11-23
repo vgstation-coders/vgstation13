@@ -134,7 +134,7 @@ var/global/list/screen_alarms_locs = list(
 	var/timeout = null //If set to a number, this alert will clear itself after that many deciseconds
 	var/severity = null
 	var/override_alerts = FALSE //If it is overriding other alerts of the same type
-	var/alerttooltipstyle = null 
+	var/alerttooltipstyle = null
 
 /obj/abstract/screen/alert/Click(location, control, params)
 	if(!usr || !usr.client)
@@ -231,3 +231,28 @@ so as to remain in compliance with the most up-to-date laws."
 	if(S.alerts[SCREEN_ALARM_ROBOT_LAW] == src)
 		S.show_laws()
 		S.clear_alert(SCREEN_ALARM_ROBOT_LAW)
+
+#define SCREEN_ALARM_NAMEPICK "namepick"
+
+/obj/abstract/screen/alert/name_pick
+	name = "Pick a name"
+	desc = "Click here to change your name."
+	icon_state = "text"
+	timeout = 30 SECONDS
+	var/namepick_message
+	var/role
+	var/allow_numbers
+
+
+/obj/abstract/screen/alert/name_pick/Click()
+	..()
+	var/mob/living/L = usr
+	if(L.alerts[SCREEN_ALARM_NAMEPICK] == src)
+		L.clear_alert(SCREEN_ALARM_NAMEPICK)
+		L.rename_self(role, allow_numbers, namepick_message)
+
+/proc/mob_rename_self(mob/user, role, namepick_message, allow_numbers = FALSE)
+	var/obj/abstract/screen/alert/name_pick/name_pick = user.throw_alert(SCREEN_ALARM_NAMEPICK, /obj/abstract/screen/alert/name_pick)
+	name_pick.namepick_message = namepick_message
+	name_pick.role = role
+	name_pick.allow_numbers = allow_numbers

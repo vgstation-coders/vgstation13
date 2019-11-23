@@ -204,16 +204,7 @@
 	//Allows the wizard to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
 	if(wizard_mob.species && wizard_mob.species.name != "Human")
 		wizard_mob.set_species("Human", 1)
-	var/wizard_name_first = pick(wizard_first)
-	var/wizard_name_second = pick(wizard_second)
-	var/randomname = "[wizard_name_first] [wizard_name_second]"
-	spawn(0)
-		var/newname = stripped_input(wizard_mob, "You are a [role_name]. Would you like to change your name to something else?", "Name change", randomname, MAX_NAME_LEN)
-
-		if (!newname)
-			newname = randomname
-
-		wizard_mob.fully_replace_character_name(wizard_mob.real_name, newname)
+	mob_rename_self(wizard_mob, role_name)
 	return
 
 /proc/equip_highlander(var/mob/living/carbon/human/highlander_human)
@@ -439,16 +430,7 @@
 /proc/name_ninja(var/mob/living/carbon/human/H)
 	if(!isjusthuman(H))
 		H.set_species("Human", 1)
-	var/ninja_title = pick(ninja_titles)
-	var/ninja_name = pick(ninja_names)
-	var/randomname = "[ninja_title] [ninja_name]"
-	spawn(0)
-		var/newname = copytext(sanitize(input(H, "You are an angry Space ninja. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
-
-		if (!newname)
-			newname = randomname
-
-		H.fully_replace_character_name(H.real_name, newname)
+	mob_rename_self(H, "ninja")
 
 /proc/share_syndicate_codephrase(var/mob/living/agent)
 	if(!agent)
