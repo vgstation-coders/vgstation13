@@ -70,6 +70,14 @@
 	cur_health = 15
 	shard_count = 0				// No salvageable shards
 
+/obj/machinery/fishtank/bowl/full
+	water_level = 50
+	food_level = MAX_FOOD
+
+/obj/machinery/fishtank/bowl/full/goldfish/New()
+	. = ..()
+	add_fish("goldfish")
+
 /obj/machinery/fishtank/tank
 	name = "fish tank"
 	desc = "A large glass tank designed to house aquatic creatures. Contains an integrated water circulation system."
@@ -89,6 +97,9 @@
 	cur_health = 50
 	shard_count = 4
 
+/obj/machinery/fishtank/tank/full
+	water_level = 200
+	food_level = MAX_FOOD
 
 /obj/machinery/fishtank/wall
 	name = "wall aquarium"
@@ -107,10 +118,6 @@
 	max_health = 100			// This thing is a freaking wall, it can handle abuse.
 	cur_health = 100
 	shard_count = 9
-
-/obj/machinery/fishtank/wall/full
-	water_level = 500
-	food_level = MAX_FOOD
 
 /obj/machinery/fishtank/wall/full
 	water_level = 500
