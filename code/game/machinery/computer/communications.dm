@@ -12,6 +12,7 @@
 
 var/shuttle_call/shuttle_calls[0]
 var/global/ports_open = TRUE
+var/global/maint_access_req_revoked = FALSE
 
 #define SHUTTLE_RECALL  -1
 #define SHUTTLE_CALL     1
@@ -371,6 +372,27 @@ var/list/shuttle_log = list()
 				to_chat(usr, "<span class='warning'>You must wear an ID for this function.</span>")
 		if("ViewShuttleLog")
 			setMenuState(usr, COMM_SCREEN_SHUTTLE_LOG)
+		if("ToggleMaint")
+			if(issilicon(usr) || authenticated!=AUTH_CAPT)
+				return
+			maint_access_req_revoked = !maint_access_req_revoked
+			if(maint_access_req_revoked) //Remove
+				command_alert("Maintenance access requirements removed from maintenance doors.", "Maintenance access toggled", 1)
+				for(var/obj/machinery/door/airlock/maintenance/M in all_doors)
+					if(M.z == map.zMainStation)
+						M.set_up_access()
+						M.req_access.Remove(access_maint_tunnels)
+						M.req_one_access.Remove(access_maint_tunnels)
+			else
+				command_alert("Maintenance access requirements restored to most maintenance doors.", "Maintenance access toggled", 1)
+				for(var/obj/machinery/door/airlock/maintenance/M in all_doors) //Add/reset
+					if(M.z == map.zMainStation)
+						M.req_access = null
+						M.req_one_access = null
+						M.set_up_access()
+
+
+
 	return 1
 
 /obj/machinery/computer/communications/attack_ai(var/mob/user as mob)

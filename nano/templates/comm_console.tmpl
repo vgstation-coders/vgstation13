@@ -77,6 +77,11 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 					{{:helper.link('Request Response Team','alert',{'operation':'emergency_screen'})}}
 				</div>
 			{{/if}}
+			{{if data.authenticated==2}}
+				<div class="line">
+					{{:helper.link('Toggle station maintenance access requirements','alert',{'operation':'ToggleMaint'})}}
+				</div>
+			{{/if}}
 		</div>
 	{{else data.screen==2}}
 		<!-- STATUS DISPLAYS -->
