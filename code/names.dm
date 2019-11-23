@@ -3,6 +3,7 @@ var/list/wizard_first = file2list("config/names/wizardfirst.txt")
 var/list/wizard_second = file2list("config/names/wizardsecond.txt")
 var/list/ninja_titles = file2list("config/names/ninjatitle.txt")
 var/list/ninja_names = file2list("config/names/ninjaname.txt")
+var/list/planet_names = file2list("config/names/planetname.txt")
 var/list/commando_names = file2list("config/names/death_commando.txt")
 var/list/first_names_male = file2list("config/names/first_male.txt")
 var/list/first_names_female = file2list("config/names/first_female.txt")
@@ -21,3 +22,8 @@ var/list/borer_names = file2list("config/names/borer.txt")
 var/list/hologram_names = file2list("config/names/hologram.txt")
 
 var/list/autoborg_silly_names = file2listExceptComments("config/names/autoborg_silly.txt")
+
+/proc/take_name(var/list/list_of_names)
+	var/return_name = pick(list_of_names)
+	list_of_names.Remove(return_name)
+	return return_name
