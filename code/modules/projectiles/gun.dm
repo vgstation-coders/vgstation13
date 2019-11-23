@@ -242,7 +242,7 @@
 
 	if(recoil)
 		spawn()
-			shake_camera(user, recoil + 1, recoil)
+			directional_recoil(user, recoil, get_angle(user, target))
 		if(user.locked_to && isobj(user.locked_to) && !user.locked_to.anchored )
 			var/direction = get_dir(user,target)
 			spawn()
