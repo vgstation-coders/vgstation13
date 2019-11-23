@@ -178,4 +178,4 @@
 	name = "\improper Gas Miner"
 
 /obj/machinery/atmospherics/miner/gas_giant/AddAir()
-	air_contents.merge(gas_giant.GM)
+	air_contents.copy_from(gas_giant.GM)
