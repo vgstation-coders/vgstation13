@@ -46,10 +46,10 @@
 	RefreshParts()
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/medal_printer/attack_hand(mob/user as mob)
-	if((locked == 1) & (emagged == 0))
+	if((locked == 1) && (emagged == 0))
 		to_chat(usr, "[src] is locked.")
 		return
-	. = ..()
+	..()
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/medal_printer/attackby(var/obj/item/O, var/mob/user)
 	. = ..()
@@ -75,7 +75,7 @@
 			else
 				to_chat(usr, "You unlock \the [src].")
 
-	if((locked == 1) & (emagged == 0))
+	if((locked == 1) && (emagged == 0))
 		return
 
 	if(istype(O, /obj/item/clothing/accessory/medal))
@@ -83,4 +83,3 @@
 		if((loc == usr && usr.isUnconscious()))
 			O.name = "medal"
 		add_fingerprint(usr)
-	return
