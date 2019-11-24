@@ -25,7 +25,7 @@
 		if(istype(stored_shoes, /obj/item/clothing/shoes/magboots))
 			to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.shoes] are in the way.</span>")
 			stored_shoes = null
-			return 0
+			return FALSE
 		H.remove_from_mob(stored_shoes)
 		stored_shoes.forceMove(src)
 
