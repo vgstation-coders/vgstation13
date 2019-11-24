@@ -23,6 +23,18 @@
 	w_class = W
 	gift = target
 	update_icon()
+	
+/obj/item/weapon/gift/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/weapon/pen))
+		var/str = copytext(sanitize(input(user,"What should the label read? (max 26 characters)","Write a personal message!","")),1,MAX_NAME_LEN)
+		if (!Adjacent(user) || user.stat)
+			return
+		if(!str || !length(str))
+			to_chat(user, "<span class='warning'>Invalid text.</span>")
+			src.desc = "A wrapped item."
+			return
+		to_chat(M, "<span class='notice'>You write [str] on the label.</span>")
+		src.desc = "A wrapped item. The label reads: [str]"
 
 /obj/item/weapon/gift/update_icon()
 	switch(w_class)
