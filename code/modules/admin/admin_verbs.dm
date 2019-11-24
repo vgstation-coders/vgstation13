@@ -950,18 +950,25 @@ var/list/admin_verbs_mod = list(
 		return
 
 	if(istype(winner, /mob/living))
-		achoice = alert("Give our winner his own trophy?","Achievement Trophy", "Confirm", "Cancel")
+		achoice = alert("Give our winner his own award?","Achievement award", "Confirm", "Cancel")
 		if(achoice == "Cancel")
 			return
 
-	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Last Question", "No!","Yes!")
+	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Announce To All Players", "No!","Yes!")
 
 	if(achoice == "Confirm")
-		var/obj/item/weapon/reagent_containers/food/drinks/golden_cup/C = new(get_turf(winner))
-		C.name = name
-		C.desc = desc
+
+		achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup")
+		var/obj/item/I
+		if(achoice == "Gold cup")
+			I = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup(get_turf(winner))
+		if(achoice == "Gold medal")
+			I = new /obj/item/clothing/accessory/medal/gold(get_turf(winner))
+		I.name = name
+		I.desc = desc
 		if(iscarbon(winner) && (winner.stat == CONSCIOUS))
-			winner.put_in_hands(C)
+			winner.put_in_hands(I)
+
 	else
 		to_chat(winner, "<span class='danger'>You win [name]! [desc]</span>")
 
