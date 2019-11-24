@@ -1944,6 +1944,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/surface/garage
 	name = "\improper Public Garage"
+	forbid_apc = FALSE
 	icon_state = "yellow"
 
 /area/surface/junkyard
