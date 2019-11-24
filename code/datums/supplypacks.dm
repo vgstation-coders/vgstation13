@@ -829,8 +829,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/security/captain,
 					/obj/item/clothing/suit/storage/wintercoat/hop,
 					/obj/item/clothing/suit/storage/wintercoat/clown,
-					/obj/item/clothing/suit/storage/wintercoat/prisoner
-					/* mime */)
+					/obj/item/clothing/suit/storage/wintercoat/prisoner,
+					/obj/item/clothing/suit/storage/wintercoat/mime)
 	cost = 50
 	containertype = /obj/structure/closet/crate/basic
 	containername = "miscellaneous winter coats"
