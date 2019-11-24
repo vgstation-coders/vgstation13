@@ -26,7 +26,7 @@
 			to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.shoes] are in the way.</span>")
 			stored_shoes = null
 			return 0
-		H.drop_from_inventory(stored_shoes)
+		H.remove_from_mob(stored_shoes)
 		stored_shoes.forceMove(src)
 
 	if(!..())
