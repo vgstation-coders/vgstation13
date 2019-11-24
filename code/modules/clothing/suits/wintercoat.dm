@@ -185,6 +185,10 @@
 		/obj/item/weapon/soap,
 		/obj/item/weapon/reagent_containers/spray,
 		/obj/item/weapon/bikehorn)
+		
+/obj/item/clothing/suit/storage/wintercoat/mime
+	name = "mime winter coat"
+	icon_state = "coatmime"
 
 /obj/item/clothing/suit/storage/wintercoat/engineering/ce
 	name = "Chief Engineer's winter coat"
