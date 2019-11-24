@@ -21,8 +21,3 @@ var/list/borer_names = file2list("config/names/borer.txt")
 var/list/hologram_names = file2list("config/names/hologram.txt")
 
 var/list/autoborg_silly_names = file2listExceptComments("config/names/autoborg_silly.txt")
-
-/proc/take_name(var/list/list_of_names)
-	var/return_name = pick(list_of_names)
-	list_of_names.Remove(return_name)
-	return return_name
