@@ -975,11 +975,11 @@ var/list/admin_verbs_mod = list(
 	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
 
 	if(glob == "No!")
-		winner.client << sound('sound/misc/achievement.ogg')
+		winner.client << sound('sound/misc/achievement.ogg', volume=35)
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 	else
-		world << sound('sound/misc/achievement.ogg')
+		world << sound('sound/misc/achievement.ogg', volume=35)
 		to_chat(world, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 
 	to_chat(winner, "<span class='danger'>Congratulations!</span>")
