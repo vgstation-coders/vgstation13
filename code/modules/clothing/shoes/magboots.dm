@@ -14,6 +14,39 @@
 	var/stomp_hit = "crushes"
 	var/anchoring_system_examine = "Its mag-pulse traction system appears to be"
 
+	var/obj/item/clothing/shoes/stored_shoes = null	//Shoe holder
+
+/obj/item/clothing/shoes/magboots/mob_can_equip(mob/living/carbon/human/user)
+	var/mob/living/carbon/human/H = user
+	if(!istype(H) || stored_shoes)
+		return ..()
+	if(H.shoes)
+		stored_shoes = H.shoes
+		if(istype(stored_shoes, /obj/item/clothing/shoes/magboots))
+			to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.shoes] are in the way.</span>")
+			stored_shoes = null
+			return 0
+		H.drop_from_inventory(stored_shoes)
+		stored_shoes.forceMove(src)
+
+	if(!..())
+		if(stored_shoes)
+			if(H.equip_to_slot_if_possible(stored_shoes, slot_shoes))
+				stored_shoes = null
+		return FALSE
+
+	if(stored_shoes)
+		to_chat(H, "<span class='info'>You slip \the [src] on over \the [stored_shoes].</span>")
+	return TRUE
+
+/obj/item/clothing/shoes/magboots/unequipped(mob/living/carbon/human/H, var/from_slot = null)
+	..()
+	if(from_slot == slot_shoes && istype(H))
+		if(stored_shoes)
+			if(!H.equip_to_slot_if_possible(stored_shoes, slot_shoes))
+				stored_shoes.forceMove(get_turf(src))
+			stored_shoes = null
+
 /obj/item/clothing/shoes/magboots/verb/toggle_magboots()
 	set src in usr
 	set name = "Toggle Magboots"
