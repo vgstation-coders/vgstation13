@@ -114,7 +114,12 @@
 /mob/living/carbon/human/proc/get_breath_from_internal(volume_needed)
 	if(internal)
 		if(!contents.Find(internal))
-			internal = null
+			if(wear_suit && isrig(wear_suit))
+				var/obj/item/clothing/suit/space/rig/rig = wear_suit
+				if(!rig.T)
+					internal = null
+			else
+				internal = null
 		if(!((wear_mask?.clothing_flags & MASKINTERNALS) || is_wearing_item(/obj/item/clothing/head/helmet/space/rig, slot_head)))
 			internal = null
 		if(internal)

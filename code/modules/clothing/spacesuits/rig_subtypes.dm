@@ -27,6 +27,7 @@
 	desc = "A bleeding-edge helmet designed to protect its wearer against extreme environments. The armored padding in this helmet was totally removed to give place for its experimental plasmovsky alloy."
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 100, bomb = 100, bio = 100, rad = 100)
 
+//Self-charging, auto-refiller high-test suit.
 /obj/item/clothing/suit/space/rig/elite/test
 	name = "prototype advanced hardsuit"
 	desc = "A bleeding-edge prototype designed to protect its wearer against extreme environments. The armored padding in this suit was totally removed to give place for its experimental plasmovsky alloy."
@@ -34,8 +35,9 @@
 	head_type = /obj/item/clothing/head/helmet/space/rig/elite/test
 	gloves_type = /obj/item/clothing/gloves/yellow
 	boots_type = /obj/item/clothing/shoes/magboots/elite
-	tank_type = /obj/item/weapon/tank/emergency_oxygen/double
+	tank_type = /obj/item/weapon/tank/oxygen
 	cell_type = /obj/item/weapon/cell/rad/large
+	initial_modules = list(/obj/item/rig_module/health_readout, /obj/item/rig_module/tank_refiller)
 
 //Mining rig
 /obj/item/clothing/head/helmet/space/rig/mining

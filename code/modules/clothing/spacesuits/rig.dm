@@ -1,3 +1,9 @@
+#define ONLY_DEPLOY 1
+#define ONLY_RETRACT 2
+#define HARDSUIT_HEADGEAR "h_head"
+#define HARDSUIT_GLOVES "h_gloves"
+#define HARDSUIT_BOOTS "h_boots"
+
 //Regular rig suits
 /obj/item/clothing/head/helmet/space/rig
 	name = "engineering hardsuit helmet"
@@ -41,14 +47,14 @@
 /obj/item/clothing/head/helmet/space/rig/proc/check_light()
 	if(no_light) //There's no light on the helmet
 		if(on) //The helmet light is currently on
-			on = 0 //Force it off
+			on = FALSE //Force it off
 			update_brightness() //Update as neccesary
 		actions_types.Remove(/datum/action/item_action/toggle_rig_light)//Disable the action button (which is only used to toggle the light, in theory)
 	else //We have a light
 		actions_types |= /datum/action/item_action/toggle_rig_light //Make sure we restore the action button
 
-/obj/item/clothing/head/helmet/space/rig/process()
-	if(on && rig)
+/obj/item/clothing/head/helmet/space/rig/process() //Helmets are directly linked to the suit's power cell, they don't need it to be activated at all.
+	if(on && rig)	
 		if(!rig.cell.use(1) || rig.loc != loc)
 			toggle_light()
 
@@ -106,9 +112,11 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	actions_types = list(/datum/action/item_action/toggle_rig_suit)
+
 	var/activated = FALSE
 	var/list/modules = list()
-	actions_types = list(/datum/action/item_action/toggle_rig_suit)
+	var/list/initial_modules = list(/obj/item/rig_module/health_readout)
 
 	var/obj/item/clothing/head/helmet/space/rig/H = null
 	var/obj/item/clothing/gloves/G = null
@@ -122,19 +130,28 @@
 	var/tank_type = null
 	var/cell_type = /obj/item/weapon/cell/high //The cell_type we're actually using
 
+	var/mob/living/carbon/human/wearer
+
 /obj/item/clothing/suit/space/rig/New()
 	..()
 	if(cell_type)
 		cell = new cell_type(src)
 	if(head_type)
 		H = new head_type(src)
+		H.canremove = FALSE
 		H.rig = src
 	if(gloves_type)
 		G = new gloves_type(src)
+		G.canremove = FALSE
 	if(boots_type)
 		MB = new boots_type(src)
+		MB.canremove = FALSE
 	if(tank_type)
 		T = new tank_type(src)
+	if(initial_modules && initial_modules.len)
+		for(var/path in initial_modules)
+			var/obj/item/rig_module/new_module = new path(src)
+			modules += new_module
 
 /obj/item/clothing/suit/space/rig/Destroy()
 	if(processing_objects.Find(src))
@@ -148,10 +165,11 @@
 	MB = null
 	for(var/obj/M in modules)
 		qdel(M)
-	modules.Cut()
+	modules = null
 	if(cell)
 		qdel(cell)
 	cell = null
+	wearer = null
 	..()
 
 /obj/item/clothing/suit/space/rig/examine(mob/user)
@@ -162,10 +180,32 @@
 /obj/item/clothing/suit/space/rig/get_cell()
 	return cell
 
+/obj/item/clothing/suit/space/rig/equipped(mob/living/carbon/human/user, var/slot)
+	..()
+	wearer = user
+
 /obj/item/clothing/suit/space/rig/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	..()
 	if(from_slot == slot_wear_suit && istype(user))
 		deactivate_suit(user)
+	wearer = null
+
+/obj/item/clothing/suit/space/rig/dropped()
+	..()
+	for(var/piece in list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_BOOTS))
+		toggle_piece(piece, wearer, ONLY_RETRACT)
+	wearer = null
+
+/obj/item/clothing/suit/space/rig/proc/is_fully_equipped()
+	if(!istype(wearer) || loc != wearer || wearer.wear_suit != src)
+		return FALSE
+	if(head_type && !(H && wearer.head == H))
+		return FALSE
+	if(gloves_type && !(G && wearer.gloves == G))
+		return FALSE
+	if(boots_type && !(MB && wearer.shoes == MB))
+		return FALSE
+	return TRUE
 
 /obj/item/clothing/suit/space/rig/process()
 	if(gcDestroyed)
@@ -173,10 +213,9 @@
 	if(!activated)
 		processing_objects.Remove(src)
 		return
-	if(!ishuman(loc))
+	if(!istype(wearer))
 		activated = FALSE
 		return
-	var/mob/living/carbon/human/wearer = loc
 	if(!wearer.is_wearing_item(src, slot_wear_suit))
 		return
 	if(wearer.timestopped)
@@ -192,109 +231,114 @@
 /obj/item/clothing/suit/space/rig/proc/toggle_suit(mob/living/carbon/human/user)
 	if(!user.is_wearing_item(src, slot_wear_suit))
 		return
-	!activated ? initialize_suit(user) : deactivate_suit(user)
+	!activated ? initialize_suit(user, TRUE) : deactivate_suit(user, FALSE)
 
 /obj/item/clothing/suit/space/rig/proc/initialize_suit(mob/living/carbon/human/user, var/equipall = TRUE)
 	if(equipall)
-		for(var/obj/item/rig_module/priority_module in modules)
-			if(priority_module.requires_component)
-				priority_module.activate(user,src)
-		if(T)
-			if(user.s_store)
-				user.remove_from_mob(user.s_store)
-			to_chat(user, "<span class = 'notice'>\The [T] extends from \the [src].</span>")
-			user.equip_to_slot(T, slot_s_store)
-			T = null
-		if(H)
-			if(user.head)
-				user.remove_from_mob(user.head)
-			to_chat(user, "<span class = 'notice'>\The [H] extends from \the [src].</span>")
-			user.equip_to_slot(H, slot_head)
-			if(!user.internal)
-				user.toggle_internals(user)
-			H = null
-		if(G)
-			if(user.gloves)
-				user.remove_from_mob(user.gloves)
-			to_chat(user, "<span class = 'notice'>\The [G] extends from \the [src].</span>")
-			user.equip_to_slot(G, slot_gloves)
-			G = null
-		if(MB)
-			if(user.shoes)
-				user.remove_from_mob(user.shoes)
-			to_chat(user, "<span class = 'notice'>\The [MB] extends from \the [src].</span>")
-			user.equip_to_slot(MB, slot_shoes)
-			MB = null
-	for(var/obj/item/rig_module/module in modules)
-		if(!module.activated) //Skip what is already activated.
-			module.activate(user,src)
-	activated = TRUE
-	processing_objects.Add(src)
+		for(var/piece in list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_BOOTS))
+			toggle_piece(piece, user, ONLY_DEPLOY)
+	if(is_fully_equipped())
+		for(var/obj/item/rig_module/module in modules)
+			if(!module.activated) //Skip what is already activated.
+				module.activate(user,src)
+		activated = TRUE
+		if(!(src in processing_objects))
+			processing_objects.Add(src)
 
 /obj/item/clothing/suit/space/rig/proc/deactivate_suit(mob/living/carbon/human/user, var/unequipall = TRUE)
 	if(unequipall)
-		if(head_type && user.head)
-			if(!H)
-				if(istype(user.head, head_type))
-					var/obj/item/clothing/UH = user.head
-					to_chat(user, "<span class = 'notice'>\The [UH] retracts into \the [src].</span>")
-					user.u_equip(UH,0)
-					UH.forceMove(src)
-					H = UH
-				else
-					to_chat(user, "<span class = 'warning'>\The [user.head] isn't compatible with \the [src].</span>")
-		if(gloves_type && user.gloves)
-			if(!G)
-				if(istype(user.gloves, gloves_type))
-					var/obj/item/clothing/UG = user.gloves
-					to_chat(user, "<span class = 'notice'>\The [UG] retracts into \the [src].</span>")
-					user.u_equip(UG,0)
-					UG.forceMove(src)
-					G = UG
-				else
-					to_chat(user, "<span class = 'warning'>\The [user.gloves] isn't compatible with \the [src].</span>")
-		if(tank_type && user.s_store)
-			if(!T)
-				if(istype(user.s_store, tank_type))
-					var/obj/item/weapon/tank/UT = user.s_store
-					to_chat(user, "<span class = 'notice'>\The [UT] retracts into \the [src].</span>")
-					user.u_equip(UT,0)
-					UT.forceMove(src)
-					T = UT
-				else
-					to_chat(user, "<span class = 'warning'>\The [user.s_store] isn't compatible with \the [src].</span>")
-		if(boots_type && user.shoes)
-			if(!MB)
-				if(istype(user.shoes, boots_type))
-					var/obj/item/clothing/UMB = user.shoes
-					to_chat(user, "<span class = 'notice'>\The [UMB] retracts into \the [src].</span>")
-					user.u_equip(UMB,0)
-					UMB.forceMove(src)
-					MB = UMB
-				else
-					to_chat(user, "<span class = 'warning'>\The [user.shoes] isn't compatible with \the [src].</span>")
+		for(var/piece in list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_BOOTS))
+			toggle_piece(piece, user, ONLY_RETRACT)
 	for(var/obj/item/rig_module/R in modules)
 		R.deactivate(user,src)
 	activated = FALSE
 	if(processing_objects.Find(src))
 		processing_objects.Remove(src)
 
-/obj/item/clothing/suit/space/rig/attackby(obj/W, mob/user)
-	if(head_type && !H && istype(W, head_type) && user.drop_item(W, src, force_drop = TRUE))
-		to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src].</span>")
-		H = W
-		H.rig = src
+/obj/item/clothing/suit/space/rig/proc/toggle_piece(var/piece, var/mob/living/initiator, var/deploy_mode)
+	if(!cell || !cell.charge)
 		return
-	if(gloves_type && !G && istype(W, gloves_type) && user.drop_item(W, src, force_drop = TRUE))
-		to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src].</span>")
-		G = W
+	if(!wearer)
 		return
-	if(tank_type && !T && istype(W, tank_type) && user.drop_item(W, src, force_drop = TRUE))
-		to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src].</span>")
-		T = W
+	if(initiator == wearer && wearer.incapacitated()) // If the initiator isn't wearing the suit it's probably an AI.
 		return
-	if(boots_type && !MB && istype(W, boots_type) && user.drop_item(W, src, force_drop = TRUE))
-		to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src].</span>")
-		MB = W
+
+	var/obj/item/check_slot
+	var/equip_to
+	var/obj/item/use_obj
+
+	switch(piece)
+		if(HARDSUIT_HEADGEAR)
+			equip_to = slot_head
+			use_obj = H
+			check_slot = wearer.head
+		if(HARDSUIT_GLOVES)
+			equip_to = slot_gloves
+			use_obj = G
+			check_slot = wearer.gloves
+		if(HARDSUIT_BOOTS)
+			equip_to = slot_shoes
+			use_obj = MB
+			check_slot = wearer.shoes
+
+	if(use_obj)
+		if(check_slot == use_obj && deploy_mode != ONLY_DEPLOY)
+			var/mob/living/carbon/human/holder
+			if(use_obj)
+				holder = use_obj.loc
+				if(istype(holder))
+					if(use_obj && check_slot == use_obj)
+						if(wearer.remove_from_mob(use_obj,))
+							to_chat(wearer, "<font color='blue'><b>Your [use_obj.name] retracts swiftly.</b></font>")
+						use_obj.forceMove(src)
+		else
+			if(deploy_mode != ONLY_RETRACT)
+				if(check_slot && check_slot == use_obj)
+					return
+				use_obj.forceMove(wearer)
+				if(!wearer.equip_to_slot_if_possible(use_obj, equip_to, 0, 1))
+					use_obj.forceMove(src)
+					if(check_slot)
+						to_chat(initiator, "<span class='danger'>You are unable to deploy \the [use_obj.name] as \the [check_slot] [check_slot.gender == PLURAL ? "are" : "is"] in the way.</span>")
+						return
+				else
+					to_chat(wearer, "<span class='notice'>\The [use_obj.name] deploys swiftly.</span>")
+
+/obj/item/clothing/suit/space/rig/verb/toggle_helmet()
+
+	set name = "Toggle Helmet"
+	set desc = "Deploys or retracts your helmet."
+	set category = "Hardsuit"
+	set src = usr.contents
+
+	if(!wearer || !wearer.is_wearing_item(src, slot_wear_suit))
+		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>") 
 		return
-	..()
+
+	toggle_piece(HARDSUIT_HEADGEAR,wearer)
+
+/obj/item/clothing/suit/space/rig/verb/toggle_boots()
+
+	set name = "Toggle Boots"
+	set desc = "Deploys or retracts your boots."
+	set category = "Hardsuit"
+	set src = usr.contents
+
+	if(!wearer || !wearer.is_wearing_item(src, slot_wear_suit))
+		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>") 
+		return
+
+	toggle_piece(HARDSUIT_BOOTS,wearer)
+
+/obj/item/clothing/suit/space/rig/verb/toggle_gloves()
+
+	set name = "Toggle Gloves"
+	set desc = "Deploys or retracts your gloves."
+	set category = "Hardsuit"
+	set src = usr.contents
+
+	if(!wearer || !wearer.is_wearing_item(src, slot_wear_suit))
+		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>") 
+		return
+
+	toggle_piece(HARDSUIT_GLOVES,wearer)
