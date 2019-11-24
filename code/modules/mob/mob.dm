@@ -1057,34 +1057,28 @@ Use this proc preferably at the end of an equipment loadout
 //note: ghosts can point, this is intended
 //visible_message will handle invisibility properly
 //overriden here and in /mob/dead/observer for different point span classes and sanity checks
-/mob/verb/pointed(atom/A as turf | obj | mob in view(get_turf(src)))
+/mob/verb/pointed(atom/A as turf | obj | mob in view(isturf(src.loc) ? src : get_turf(src)))
 	set name = "Point To"
 	set category = "Object"
 
-	if((usr.isUnconscious() && !isobserver(src)) || !(get_turf(src))|| attack_delayer.blocked())
+	if((usr.isUnconscious() && !isobserver(src)) || attack_delayer.blocked())
 		return 0
-
 	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
-
 	if(isitem(A) && is_holding_item(A))
 		var/obj/item/I = A
 		I.showoff(src)
 		return 0
-
 	if(!(A in (view(get_turf(src)) + get_all_slots())) || (usr.see_invisible < A.invisibility))
 		message_admins("<span class='warning'><B>WARNING: </B><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?</span>", 1)
 		log_admin("[key_name_admin(src)] just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?")
 		return 0
-
 	if(istype(A, /obj/effect/decal/point))
 		return 0
-
 	if(istype(A, /mob/living/simple_animal))
 		var/mob/living/simple_animal/pointed_at_mob = A
 		pointed_at_mob.pointed_at(src)
 
 	var/tile = get_turf(A)
-
 	if(!tile)
 		return 0
 
@@ -1236,22 +1230,19 @@ Use this proc preferably at the end of an equipment loadout
 		memory()
 
 //mob verbs are faster than object verbs. See http://www.byond.com/forum/?post=1326139&page=2#comment8198716 for why this isn't atom/verb/examine()
-/mob/verb/examination(atom/A as mob|obj|turf in view(src)) //It used to be oview(12), but I can't really say why
+//This elaborate view check solves the issue of right-click examination failing if inside an atom
+/mob/verb/examination(atom/A as mob|obj|turf in view(isturf(src.loc) ? src : get_turf(src)))
 	set name = "Examine"
 	set category = "IC"
 
-//	if( (sdisabilities & BLIND || blinded || stat) && !istype(src,/mob/dead/observer) )
 	if(is_blind(src))
 		to_chat(src, "<span class='notice'>Something is there but you can't see it.</span>")
 		return
-
 	if(get_dist(A,client.eye) > client.view)
 		to_chat(src, "<span class='notice'>It is too far away to make out.</span>")
 		return
-
 	face_atom(A)
 	A.examine(src)
-
 
 /mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"
