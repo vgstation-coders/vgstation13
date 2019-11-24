@@ -177,5 +177,10 @@
 /obj/machinery/atmospherics/miner/gas_giant
 	name = "\improper Gas Miner"
 
+/obj/machinery/atmospherics/miner/gas_giant/initialize()
+	..()
+	AddAir()
+
 /obj/machinery/atmospherics/miner/gas_giant/AddAir()
-	air_contents.copy_from(gas_giant.GM)
+	if(ticker)
+		air_contents.copy_from(gas_giant.GM)
