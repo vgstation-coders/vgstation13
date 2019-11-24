@@ -956,33 +956,32 @@ var/list/admin_verbs_mod = list(
 
 	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Announce To All Players", "No!","Yes!")
 
+	var/icon/award
 	if(achoice == "Confirm")
-
-		achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup")
 		var/obj/item/I
+		achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup")
 		if(achoice == "Gold cup")
 			I = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup(get_turf(winner))
 		if(achoice == "Gold medal")
 			I = new /obj/item/clothing/accessory/medal/gold(get_turf(winner))
 		I.name = name
 		I.desc = desc
+		award = I
 		if(iscarbon(winner) && (winner.stat == CONSCIOUS))
 			winner.put_in_hands(I)
 
 	else
 		to_chat(winner, "<span class='danger'>You win [name]! [desc]</span>")
 
-	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
-
 	if(glob == "No!")
 		winner.client << sound('sound/misc/achievement.ogg', volume=35)
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+			to_chat(O, "<span class='danger'>[bicon(award)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 	else
 		world << sound('sound/misc/achievement.ogg', volume=35)
-		to_chat(world, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+		to_chat(world, "<span class='danger'>[bicon(award)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 
-	to_chat(winner, "<span class='danger'>Congratulations!</span>")
+	to_chat(winner, "<span class='danger'>[bicon(award)] Congratulations to you, <b>[winner.name]</b>! You have won \"<b>[name]</b>\"!</span>")
 
 	achievements += "<b>[winner.key]</b> as <b>[winner.name]</b> won \"<b>[name]</b>\"! \"[desc]\""
 
