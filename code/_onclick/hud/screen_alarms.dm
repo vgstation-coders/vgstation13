@@ -125,6 +125,8 @@ var/global/list/screen_alarms_locs = list(
 #define SCREEN_ALARM_ROBOT_HACK "robot_hack"
 #define SCREEN_ALARM_ROBOT_LOCK "robot_lock"
 
+#define SCREEN_ALARM_NAMEPICK "namepick"
+
 /obj/abstract/screen/alert
 	name = "Alert"
 	desc = "Something seems to have gone wrong with this alert, so report this bug please."
@@ -232,17 +234,14 @@ so as to remain in compliance with the most up-to-date laws."
 		S.show_laws()
 		S.clear_alert(SCREEN_ALARM_ROBOT_LAW)
 
-#define SCREEN_ALARM_NAMEPICK "namepick"
-
 /obj/abstract/screen/alert/name_pick
 	name = "Pick a name"
 	desc = "Click here to change your name."
 	icon_state = "text"
-	timeout = 30 SECONDS
+	timeout = 60 SECONDS
 	var/namepick_message
 	var/role
 	var/allow_numbers
-
 
 /obj/abstract/screen/alert/name_pick/Click()
 	..()
