@@ -27,10 +27,9 @@
 		var/datum/pipeline/pipeline = parent
 		var/list/update_later = list()
 		for(var/obj/machinery/atmospherics/pipe in pipeline.members)
-			pipe.color = mass_colour
 			if(!pipe.can_be_coloured)
-				pipe.default_colour = mass_colour
-				update_later += pipe
+				continue
+			pipe.color = mass_colour
 		for(var/obj/machinery/atmospherics/pipe in pipeline.edges)
 			pipe.update_icon()
 		update_later -= pipeline.edges
