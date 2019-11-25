@@ -193,6 +193,9 @@
 		if(isanimal(player) && !isborer(player))
 			living_players -= player //No animal traitors except borers.
 			continue
+		if(isalien(player))
+			living_players -= player //Xenos don't bother with the syndicate
+			continue
 		if(player.z == map.zCentcomm)
 			living_players -= player//we don't autotator people on Z=2
 			continue
