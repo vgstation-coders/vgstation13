@@ -16,6 +16,7 @@
 	burst_type = /obj/machinery/atmospherics/unary/vent/burstpipe/heat_exchanging
 
 	can_be_coloured = 0
+	var/icon_temperature = T20C //stop small changes in temperature causing an icon refresh
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/getNodeType(var/node_id)
 	return PIPE_TYPE_HE
@@ -103,6 +104,25 @@
 
 	if(parent && parent.network)
 		parent.network.update = 1
+	
+
+	//fancy radiation glowing
+	if(internal.temperature && (icon_temperature > 500 || internal.temperature > 500)) //start glowing at 500K
+		if(abs(internal.temperature - icon_temperature) > 10)
+			icon_temperature = internal.temperature
+
+			var/h_r = heat2color_r(icon_temperature)
+			var/h_g = heat2color_g(icon_temperature)
+			var/h_b = heat2color_b(icon_temperature)
+
+			if(icon_temperature < 2000) //scale up overlay until 2000K
+				var/scale = (icon_temperature - 500) / 1500
+				h_r = 64 + (h_r - 64)*scale
+				h_g = 64 + (h_g - 64)*scale
+				h_b = 64 + (h_b - 64)*scale
+
+			animate(src, color = rgb(h_r, h_g, h_b), time = 20, easing = SINE_EASING)
+
 	return 1
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/proc/radiate()
