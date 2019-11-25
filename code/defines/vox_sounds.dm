@@ -4974,8 +4974,9 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_fem/shat.ogg'] = 8.4
   vox_sounds["fem"]["she"] = 'sound/vox_fem/she.ogg'
   vox_sound_lengths['sound/vox_fem/she.ogg'] = 6.96
-  vox_sounds["fem"]["she'll"] = 'sound/vox_fem/she'll.ogg'
-  vox_sound_lengths['sound/vox_fem/she'll.ogg'] = 8.56
+  // Manual fix
+  //vox_sounds["fem"]["she'll"] = 'sound/vox_fem/she'll.ogg'
+  //vox_sound_lengths['sound/vox_fem/she'll.ogg'] = 8.56
   vox_sounds["fem"]["shield"] = 'sound/vox_fem/shield.ogg'
   vox_sound_lengths['sound/vox_fem/shield.ogg'] = 10
   vox_sounds["fem"]["shipment"] = 'sound/vox_fem/shipment.ogg'
@@ -11318,8 +11319,9 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_mas/shat.ogg'] = 8.88
   vox_sounds["mas"]["she"] = 'sound/vox_mas/she.ogg'
   vox_sound_lengths['sound/vox_mas/she.ogg'] = 8.56
-  vox_sounds["mas"]["she'll"] = 'sound/vox_mas/she'll.ogg'
-  vox_sound_lengths['sound/vox_mas/she'll.ogg'] = 9.2
+  // Manual fix
+  //vox_sounds["mas"]["she'll"] = 'sound/vox_mas/she'll.ogg'
+  //vox_sound_lengths['sound/vox_mas/she'll.ogg'] = 9.2
   vox_sounds["mas"]["shield"] = 'sound/vox_mas/shield.ogg'
   vox_sound_lengths['sound/vox_mas/shield.ogg'] = 9.84
   vox_sounds["mas"]["shipment"] = 'sound/vox_mas/shipment.ogg'
