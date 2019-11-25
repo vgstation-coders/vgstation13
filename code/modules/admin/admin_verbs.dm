@@ -957,7 +957,7 @@ var/list/admin_verbs_mod = list(
 	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Announce To All Players", "No!","Yes!")
 
 	var/obj/item/award
-	achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup","Dunce Cap")
+	achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup","Dunce cap")
 	if(achoice == "Gold cup")
 		award = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup(get_turf(winner))
 	if(achoice == "Gold medal")
