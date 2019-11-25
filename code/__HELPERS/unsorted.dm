@@ -1372,6 +1372,9 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 /mob/dview/send_to_future(var/duration)
 	return
 
+/mob/dview/Destroy()
+    CRASH("Somebody called qdel on dview. That's extremely rude.")
+
 //Gets the Z level datum for this atom's Z level
 /proc/get_z_level(var/atom/A)
 	var/z
