@@ -7,6 +7,7 @@
 	actions_types = list(/datum/action/item_action/toggle_magboots)
 	species_fit = list(VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
+	w_class = W_CLASS_LARGE
 
 	var/stomp_attack_power = 45
 	var/stomp_delay = 3 SECONDS
@@ -22,7 +23,7 @@
 		return ..()
 	if(H.shoes)
 		stored_shoes = H.shoes
-		if(istype(stored_shoes, /obj/item/clothing/shoes/magboots))
+		if(stored_shoes.w_class >= w_class)
 			to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.shoes] are in the way.</span>")
 			stored_shoes = null
 			return FALSE
