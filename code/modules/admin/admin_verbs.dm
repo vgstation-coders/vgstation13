@@ -950,40 +950,35 @@ var/list/admin_verbs_mod = list(
 		return
 
 	if(istype(winner, /mob/living))
-		achoice = alert("Give our winner his own award?","Achievement award", "Confirm", "Cancel")
+		achoice = alert("Are you sure you want to give them an award?","Achievement award", "Confirm", "Cancel")
 		if(achoice == "Cancel")
 			return
 
 	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Announce To All Players", "No!","Yes!")
 
-	var/icon/award
-	if(achoice == "Confirm")
-		var/obj/item/I
-		achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup")
-		if(achoice == "Gold cup")
-			I = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup(get_turf(winner))
-		if(achoice == "Gold medal")
-			I = new /obj/item/clothing/accessory/medal/gold(get_turf(winner))
-		I.name = name
-		I.desc = desc
-		award = I
-		if(iscarbon(winner) && (winner.stat == CONSCIOUS))
-			winner.put_in_hands(I)
-
-	else
-		to_chat(winner, "<span class='danger'>You win [name]! [desc]</span>")
+	var/obj/item/award
+	achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup","Dunce Cap")
+	if(achoice == "Gold cup")
+		award = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup(get_turf(winner))
+	if(achoice == "Gold medal")
+		award = new /obj/item/clothing/accessory/medal/gold(get_turf(winner))
+	if(achoice == "Dunce Cap")
+		award = new /obj/item/clothing/head/dunce_cap(get_turf(winner))
+	award.name = name
+	award.desc = desc
+	if(iscarbon(winner) && (winner.stat == CONSCIOUS))
+		winner.put_in_hands(award)
 
 	if(glob == "No!")
 		winner.client << sound('sound/misc/achievement.ogg', volume=35)
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='danger'>[bicon(award)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+			to_chat(O, "<span class='danger'>[bicon(award)] Attention all ghosts, <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 	else
 		world << sound('sound/misc/achievement.ogg', volume=35)
 		to_chat(world, "<span class='danger'>[bicon(award)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 
 	to_chat(winner, "<span class='danger'>[bicon(award)] Congratulations to you, <b>[winner.name]</b>! You have won \"<b>[name]</b>\"!</span>")
-
-	achievements += "<b>[winner.key]</b> as <b>[winner.name]</b> won \"<b>[name]</b>\"! \"[desc]\""
+	achievements.Add(award,winner.key,winner.name,name,desc)
 
 	message_admins("[key_name_admin(usr)] has awarded <b>[winner.key]</b>([winner.name]) with the achievement \"<b>[name]</b>\"! \"[desc]\".", 1)
 

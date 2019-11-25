@@ -700,13 +700,12 @@ var/datum/controller/gameticker/ticker
 	return text
 
 /datum/controller/gameticker/proc/achievement_declare_completion()
+	if((achievements.len == 0) || (achievements.len == null))
+		return
 	var/text = "<br><FONT size = 5><b>Additionally, the following players earned achievements:</b></FONT>"
-	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
-	end_icons += cup
-	var/tempstate = end_icons.len
-	for(var/winner in achievements)
-		text += {"<br><img src="logo_[tempstate].png"> [winner]"}
-
+	//ITEM, CKEY, MOB NAME, AWARD NAME, AWARD DESC
+	for(var/i = 1, i < achievements.len, i+=5)
+		text += {"<br>[bicon(achievements[i])] <b>[achievements[i+1]]</b> as <b>[achievements[i+2]]</b> won <b>[achievements[i+3]]</b>, <b>[achievements[i+4]]!</b>"}
 	return text
 
 /datum/controller/gameticker/proc/get_all_heads()
