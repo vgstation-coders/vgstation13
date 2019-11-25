@@ -183,6 +183,20 @@
 	return ..()
 
 /obj/structure/urinal/attackby(obj/item/I as obj, mob/user as mob)
+	if(iswrench(I))
+		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
+		anchored = !anchored
+	if(anchored == 0)
+		return
+
+	if(istype(I, /obj/item/weapon/crowbar))
+		to_chat(user, "<span class='info'>You begin to disassemble the urinal.</span>")
+		playsound('sound/items/Crowbar.ogg', 50, 1)
+		if(do_after(user, src, 3 SECONDS))
+			getFromPool(/obj/item/stack/sheet/metal, loc, 2)
+			qdel(src)
+		return
+
 	if(istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
 		if(isliving(G.affecting))
@@ -572,7 +586,7 @@
 		if (do_after(user,src, 40))
 			O.clean_blood()
 			if(O.current_glue_state == GLUE_STATE_TEMP)
-				O.unglue() 
+				O.unglue()
 			user.visible_message( \
 				"<span class='notice'>[user] washes \a [O] using \the [src].</span>", \
 				"<span class='notice'>You wash \a [O] using \the [src].</span>")
