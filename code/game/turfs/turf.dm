@@ -70,6 +70,8 @@
 
 	var/junction = 0
 
+	var/volume_mult = 1 //how loud are things on this turf?
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
