@@ -32,8 +32,9 @@
 
 	if(!..())
 		if(stored_shoes)
-			if(H.equip_to_slot_if_possible(stored_shoes, slot_shoes))
-				stored_shoes = null
+			if(!H.equip_to_slot_if_possible(stored_shoes, slot_shoes))
+				stored_shoes.forceMove(get_turf(src))
+			stored_shoes = null
 		return FALSE
 
 	if(stored_shoes)
