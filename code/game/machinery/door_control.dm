@@ -89,12 +89,11 @@
 		for(var/obj/machinery/door/airlock/D in range(range, src))
 			if(D.id_tag == src.id_tag)
 				spawn(0)
-				if(D)
+				if(specialfunctions & OPEN)
 					if(D.density)
 						D.open()
 					else
 						D.close()
-					return
 				if(specialfunctions & IDSCAN)
 					D.aiDisabledIdScanner = !D.aiDisabledIdScanner
 				if(specialfunctions & BOLTS)
