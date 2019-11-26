@@ -247,6 +247,7 @@
 #include "code\datums\emotes.dm"
 #include "code\datums\feedback.dm"
 #include "code\datums\fuzzy_rules.dm"
+#include "code\datums\gas_giant.dm"
 #include "code\datums\locking_category.dm"
 #include "code\datums\map_elements.dm"
 #include "code\datums\mind.dm"

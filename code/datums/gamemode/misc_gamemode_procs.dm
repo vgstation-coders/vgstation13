@@ -459,3 +459,63 @@
 
 	to_chat(agent,words)
 	return 1
+
+
+
+/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
+	vox.age = rand(12,20)
+	if(vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+		vox.overeatduration = 0 //Fat-B-Gone
+		if(vox.nutrition > 400) //We are also overeating nutriment-wise
+			vox.nutrition = 400 //Fix that
+		vox.mutations.Remove(M_FAT)
+		vox.update_mutantrace(0)
+		vox.update_mutations(0)
+		vox.update_inv_w_uniform(0)
+		vox.update_inv_wear_suit()
+
+	vox.my_appearance.s_tone = random_skin_tone("Vox")
+	vox.dna.mutantrace = "vox"
+	vox.set_species("Vox")
+	vox.fully_replace_character_name(vox.real_name, vox.generate_name())
+	vox.mind.name = vox.name
+	//vox.languages = HUMAN // Removing language from chargen.
+	vox.default_language = all_languages[LANGUAGE_VOX]
+	vox.flavor_text = ""
+	vox.species.default_language = LANGUAGE_VOX
+	vox.remove_language(LANGUAGE_GALACTIC_COMMON)
+	vox.my_appearance.h_style = "Short Vox Quills"
+	vox.my_appearance.f_style = "Shaved"
+	for(var/datum/organ/external/limb in vox.organs)
+		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
+	vox.regenerate_icons()
+
+
+/proc/equip_vox_raider(var/mob/living/carbon/human/H)
+	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
+	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
+	H.equip_to_slot_or_del(R, slot_ears)
+
+	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes(src)
+	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider(src))
+	H.equip_to_slot_or_del(uni, slot_w_uniform)
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox(src), slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox(src), slot_gloves) // AS ABOVE.
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox(src), slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen(src), slot_back)
+	H.equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_r_store)
+
+	var/obj/item/weapon/card/id/syndicate/C = new(src)
+	C.registered_name = H.real_name
+	C.assignment = "Trader"
+	C.UpdateName()
+	C.SetOwnerInfo(src)
+	C.icon_state = "trader"
+	C.access = list(access_syndicate, access_trade)
+	var/obj/item/weapon/storage/wallet/W = new(src)
+	W.handle_item_insertion(C)
+	W.handle_item_insertion(new /obj/item/weapon/coin/raider)
+	H.equip_to_slot_or_del(W, slot_wear_id)
+	return 1
