@@ -233,11 +233,8 @@ var/list/potential_bonus_items = list(
 	icon_state = "coin_gold"
 
 /datum/map_element/dungeon/vox_shuttle
-	file_path = "maps/randomvaults/misc/voxshuttle.dmm"
+	file_path = "maps/misc/voxshuttle.dmm"
 	unique = TRUE
-
-	border_type = /turf/simulated/shuttle/wall
-
 
 /obj/item/weapon/storage/box/large/vox_equipment
 	name = "Vox equipment box"
