@@ -277,3 +277,25 @@ var/global/current_centcomm_order_id=124901
 		/obj/item/weapon/reagent_containers/food/snacks/sundayroast = rand(1,2)
 	)
 	worth = rand(400,900)*requested[requested[1]]
+
+/proc/create_centcomm_order(var/datum/centcomm_order/C)
+	SSsupply_shuttle.add_centcomm_order(C)
+
+/proc/get_potential_orders()
+	var/list/orders = list()
+	orders.Add(subtypesof(/datum/centcomm_order/department/cargo))
+	orders.Add(subtypesof(/datum/centcomm_order/department/science))
+	orders.Add(subtypesof(/datum/centcomm_order/department/medical))
+	orders.Add(subtypesof(/datum/centcomm_order/department/civilian))
+
+	return orders
+
+/proc/create_random_order()
+	var/choice = pick(get_potential_orders())
+	create_centcomm_order(new choice)
+
+/proc/create_random_orders(var/num_orders)
+	var/list/choices = pick(get_potential_orders())
+	for(var/i = 0 to num_orders)
+		var/choice = pick_n_take(choices)
+		create_centcomm_order(new choice)
