@@ -173,3 +173,14 @@
 	air_contents.adjust_multi(
 		GAS_OXYGEN, O2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
 		GAS_NITROGEN, N2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+
+/obj/machinery/atmospherics/miner/gas_giant
+	name = "\improper Gas Miner"
+
+/obj/machinery/atmospherics/miner/gas_giant/initialize()
+	..()
+	AddAir()
+
+/obj/machinery/atmospherics/miner/gas_giant/AddAir()
+	if(ticker)
+		air_contents.copy_from(gas_giant.GM)
