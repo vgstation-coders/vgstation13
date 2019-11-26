@@ -13085,14 +13085,14 @@
       "wordlen": 1,
       "files": {
         "fem": {
-          "filename": "sound/vox_fem/con.ogg",
+          "filename": "sound/vox_fem/conn.ogg",
           "voice": "us-clb",
           "checksum": "9bb03d0907941c853befe0d3aa1ba8c8",
           "duration": 0.872,
           "size": 6114
         },
         "mas": {
-          "filename": "sound/vox_mas/con.ogg",
+          "filename": "sound/vox_mas/conn.ogg",
           "voice": "us-rms",
           "checksum": "5cf0c07aa81415b691fb720cd117d995",
           "duration": 0.84,
