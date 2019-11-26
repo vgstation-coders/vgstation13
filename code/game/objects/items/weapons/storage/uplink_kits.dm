@@ -1,6 +1,6 @@
 /obj/item/weapon/storage/box/syndicate/New()
 	..()
-	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
+	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "bangerboy" = 100, "highlander" = 100))
 
 	switch (tagname)
 		if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -96,16 +96,6 @@
 			new /obj/item/weapon/storage/pill_bottle/hyperzine(src)
 			new /obj/item/weapon/card/id/syndicate(src)
 			new /obj/item/weapon/soap/syndie(src)
-
-		if("balloon")//20+20+20+20+20+20+20+20=160
-			new /obj/item/toy/syndicateballoon(src)
-			new /obj/item/toy/syndicateballoon(src)
-			new /obj/item/toy/syndicateballoon(src)
-			new /obj/item/toy/syndicateballoon(src)
-			new /obj/item/toy/syndicateballoon(src)
-			new /obj/item/toy/syndicateballoon(src)
-			new /obj/item/toy/syndicateballoon(src)
-			new /obj/item/toy/syndicateballoon(src)
 
 		if("ocelot")
 			new /obj/item/weapon/gun/projectile/colt(src)
