@@ -295,7 +295,7 @@ var/global/current_centcomm_order_id=124901
 	create_centcomm_order(new choice)
 
 /proc/create_random_orders(var/num_orders)
-	var/list/choices = pick(get_potential_orders())
-	for(var/i = 0 to num_orders)
+	var/list/choices = get_potential_orders()
+	for(var/i = 1 to num_orders)
 		var/choice = pick_n_take(choices)
 		create_centcomm_order(new choice)
