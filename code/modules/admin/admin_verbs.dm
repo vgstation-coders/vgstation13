@@ -3,12 +3,12 @@ var/list/admin_verbs_default = list(
 
 // Everyone has +ADMIN so we don't actually need anything in here.
 // Downside: The observers no longer have msay if we lack defaults.
+	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
 
 	)
 var/list/admin_verbs_admin = list(
 
 	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
-	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
