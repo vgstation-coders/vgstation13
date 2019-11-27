@@ -62,8 +62,9 @@
 #define ui_gun_select "EAST-1:28,SOUTH+2:7" //Used as compile time value
 
 //Middle right (status indicators)
-#define ui_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[15*PIXEL_MULTIPLIER]"
-#define ui_internal "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-2:[19*PIXEL_MULTIPLIER]"
+#define ui_internal "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-0.5:[17*PIXEL_MULTIPLIER]"
+#define ui_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1.5:[15*PIXEL_MULTIPLIER]"
+#define ui_under_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-2.5:[13*PIXEL_MULTIPLIER]"
 
 //borgs
 #define ui_borg_health "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+5:[7*PIXEL_MULTIPLIER]"
@@ -85,11 +86,11 @@
 #define ui_mommi_hats "CENTER-3:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
 
 //aliens
-#define ui_alien_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[15*PIXEL_MULTIPLIER]" //same as humans
+#define ui_alien_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1.5:[15*PIXEL_MULTIPLIER]" //same as humans
 
 //constructs
-#define ui_construct_health "EAST,CENTER-1:[15*PIXEL_MULTIPLIER]" //same height as humans, hugging the right border
-#define ui_construct_sword "EAST:[-1*PIXEL_MULTIPLIER],CENTER-2:[15*PIXEL_MULTIPLIER]" //bellow the health HUD
+#define ui_construct_health "EAST,CENTER-1.5:[15*PIXEL_MULTIPLIER]" //same height as humans, hugging the right border
+#define ui_construct_sword "EAST:[-1*PIXEL_MULTIPLIER],CENTER-2.5:[15*PIXEL_MULTIPLIER]" //bellow the health HUD
 #define ui_construct_pull "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[10*PIXEL_MULTIPLIER]" //above the zone_sel icon
 
 //spells

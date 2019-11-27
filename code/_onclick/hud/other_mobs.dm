@@ -166,7 +166,7 @@
 	vampire_blood_display = getFromPool(/obj/abstract/screen)
 	vampire_blood_display.name = "Vampire Blood"
 	vampire_blood_display.icon_state = "dark128"
-	vampire_blood_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-3:[15*PIXEL_MULTIPLIER]"
+	vampire_blood_display.screen_loc = ui_under_health
 
 	mymob.client.screen += list(vampire_blood_display)
 
@@ -175,7 +175,7 @@
 	vampire_blood_display = getFromPool(/obj/abstract/screen)
 	vampire_blood_display.name = "Changeling Chems"
 	vampire_blood_display.icon_state = "dark128"
-	vampire_blood_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-3:[15*PIXEL_MULTIPLIER]"
+	vampire_blood_display.screen_loc = ui_under_health
 
 	mymob.client.screen += list(vampire_blood_display)
 
@@ -185,7 +185,7 @@
 	countdown_display = getFromPool(/obj/abstract/screen)
 	countdown_display.name = "Burst Countdown"
 	countdown_display.icon_state = "template"
-	countdown_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-3:[15*PIXEL_MULTIPLIER]"
+	countdown_display.screen_loc = ui_under_health
 
 	mymob.client.screen += list(countdown_display)
 
