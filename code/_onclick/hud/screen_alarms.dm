@@ -178,7 +178,7 @@ var/global/list/screen_alarms_locs = list(
 
 //Carbon Alarms
 /obj/abstract/screen/alert/carbon/breath
-	name = "Choking"
+	name = "Suffocating"
 	desc = "Find some good air before you pass out!"
 	icon_state = "carbon_oxy"
 
