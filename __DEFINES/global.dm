@@ -304,8 +304,6 @@ var/global/list/volunteer_gladiators = list()
 var/global/list/ready_gladiators = list()
 var/global/list/never_gladiators = list()
 
-var/global/list/achievements = list()
-
 //icons that appear on the Round End pop-up browser
 var/global/list/end_icons = list()
 
