@@ -6,7 +6,7 @@
 	item_state = null
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_COMBAT + "=6"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
-	recoil = 2
+	recoil = 16
 	slot_flags = SLOT_BACK
 	fire_delay = 30
 	w_class = W_CLASS_LARGE

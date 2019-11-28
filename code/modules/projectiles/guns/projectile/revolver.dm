@@ -6,6 +6,7 @@
 	caliber = list(POINT38 = 1, POINT357 = 1)
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/c38"
+	recoil = 3
 	var/perfect = 0
 
 	special_check(var/mob/living/carbon/human/M) //to see if the gun fires 357 rounds safely. A non-modified revolver randomly blows up
@@ -89,6 +90,7 @@
 	desc = "When you absolutely, positively need a 10mm hole in the other guy. Uses .357 ammo."	//>10mm hole >.357
 	icon_state = "mateba"
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
+	recoil = 3
 	
 	
 /obj/item/weapon/gun/projectile/nagant //revolver that simple mob russians use
@@ -101,6 +103,7 @@
 	ammo_type = "/obj/item/ammo_casing/c762x38r"
 	gun_flags = SILENCECOMP
 	fire_sound = 'sound/weapons/nagant.ogg'
+	recoil = 3
 	
 /obj/item/weapon/gun/projectile/nagant/update_icon()
 	..()
@@ -118,6 +121,7 @@
 	max_shells = 6
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	fire_delay = 1
+	recoil = 3
 
 /obj/item/weapon/gun/projectile/russian/New()
 	loaded = new/list(6) //imperative that this keeps 6 entries at all times
@@ -256,6 +260,7 @@
 	desc = "The greatest handgun ever made."
 	icon_state = "colt"
 	max_shells = 6
+	recoil = 3
 	var/cocked = FALSE
 	var/last_spin = 0
 	var/spin_delay = 1 SECONDS	//let's not get crazy

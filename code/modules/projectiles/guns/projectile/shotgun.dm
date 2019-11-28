@@ -8,6 +8,7 @@
 	slot_flags = SLOT_BACK
 	caliber = list(GAUGE12 = 1, GAUGEFLARE = 1)
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
+	recoil = 4
 
 /obj/item/weapon/gun/projectile/shotgun/isHandgun()
 	return FALSE
