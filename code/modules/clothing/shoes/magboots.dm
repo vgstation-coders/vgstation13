@@ -1,5 +1,5 @@
 /obj/item/clothing/shoes/magboots
-	desc = "Magnetic boots, often used during extravehicular activity to ensure the user remains safely attached to the vehicle."
+	desc = "Magnetic boots, often used during extravehicular activity to ensure the user remains safely attached to the vehicle. They're large enough to be worn over other footwear."
 	name = "magboots"
 	icon_state = "magboots0"
 	var/base_state = "magboots"
@@ -7,12 +7,47 @@
 	actions_types = list(/datum/action/item_action/toggle_magboots)
 	species_fit = list(VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
+	w_class = W_CLASS_LARGE
 
 	var/stomp_attack_power = 45
 	var/stomp_delay = 3 SECONDS
 	var/stomp_boot = "magboot"
 	var/stomp_hit = "crushes"
 	var/anchoring_system_examine = "Its mag-pulse traction system appears to be"
+
+	var/obj/item/clothing/shoes/stored_shoes = null	//Shoe holder
+
+/obj/item/clothing/shoes/magboots/mob_can_equip(mob/living/carbon/human/user)
+	var/mob/living/carbon/human/H = user
+	if(!istype(H) || stored_shoes)
+		return ..()
+	if(H.shoes)
+		stored_shoes = H.shoes
+		if(stored_shoes.w_class >= w_class)
+			to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.shoes] are in the way.</span>")
+			stored_shoes = null
+			return FALSE
+		H.remove_from_mob(stored_shoes)
+		stored_shoes.forceMove(src)
+
+	if(!..())
+		if(stored_shoes)
+			if(!H.equip_to_slot_if_possible(stored_shoes, slot_shoes))
+				stored_shoes.forceMove(get_turf(src))
+			stored_shoes = null
+		return FALSE
+
+	if(stored_shoes)
+		to_chat(H, "<span class='info'>You slip \the [src] on over \the [stored_shoes].</span>")
+	return TRUE
+
+/obj/item/clothing/shoes/magboots/unequipped(mob/living/carbon/human/H, var/from_slot = null)
+	..()
+	if(from_slot == slot_shoes && istype(H))
+		if(stored_shoes)
+			if(!H.equip_to_slot_if_possible(stored_shoes, slot_shoes))
+				stored_shoes.forceMove(get_turf(src))
+			stored_shoes = null
 
 /obj/item/clothing/shoes/magboots/verb/toggle_magboots()
 	set src in usr
