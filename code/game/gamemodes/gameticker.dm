@@ -16,6 +16,8 @@ var/datum/controller/gameticker/ticker
 	var/event_time = null
 	var/event = 0
 
+	var/list/achievements = list()
+
 	var/login_music			// music played in pregame lobby
 
 	var/list/datum/mind/minds = list()//The people in the game. Used for objective tracking.
@@ -700,12 +702,11 @@ var/datum/controller/gameticker/ticker
 	return text
 
 /datum/controller/gameticker/proc/achievement_declare_completion()
-	if(!achievements)
+	if(!ticker.achievements.len)
 		return
 	var/text = "<br><FONT size = 5><b>Additionally, the following players earned achievements:</b></FONT>"
-	//ITEM, CKEY, MOB NAME, AWARD NAME, AWARD DESC
-	for(var/i = 1, i < achievements.len, i+=5)
-		text += {"<br>[bicon(achievements[i])] <b>[achievements[i+1]]</b> as <b>[achievements[i+2]]</b> won <b>[achievements[i+3]]</b>, <b>[achievements[i+4]]!</b>"}
+	for(var/datum/achievement/achievement in ticker.achievements)
+		text += {"<br>[bicon(achievement.item)] <b>[achievement.ckey]</b> as <b>[achievement.mob_name]</b> won <b>[achievement.award_name]</b>, <b>[achievement.award_desc]!</b>"}
 	return text
 
 /datum/controller/gameticker/proc/get_all_heads()

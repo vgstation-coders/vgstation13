@@ -962,7 +962,7 @@ var/list/admin_verbs_mod = list(
 		award = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup(get_turf(winner))
 	if(achoice == "Gold medal")
 		award = new /obj/item/clothing/accessory/medal/gold(get_turf(winner))
-	if(achoice == "Dunce Cap")
+	if(achoice == "Dunce cap")
 		award = new /obj/item/clothing/head/dunce_cap(get_turf(winner))
 	award.name = name
 	award.desc = desc
@@ -978,7 +978,9 @@ var/list/admin_verbs_mod = list(
 		to_chat(world, "<span class='danger'>[bicon(award)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 
 	to_chat(winner, "<span class='danger'>[bicon(award)] Congratulations to you, <b>[winner.name]</b>! You have won \"<b>[name]</b>\"!</span>")
-	achievements.Add(award,winner.key,winner.name,name,desc)
+
+	var/datum/achievement = new /datum/achievement(award, winner.key, winner.name, name, desc)
+	ticker.achievements.Add(achievement)
 
 	message_admins("[key_name_admin(usr)] has awarded <b>[winner.key]</b>([winner.name]) with the achievement \"<b>[name]</b>\"! \"[desc]\".", 1)
 
