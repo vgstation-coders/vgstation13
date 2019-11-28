@@ -700,7 +700,7 @@ var/datum/controller/gameticker/ticker
 	return text
 
 /datum/controller/gameticker/proc/achievement_declare_completion()
-	if((achievements.len == 0) || (achievements.len == null))
+	if(!achievements)
 		return
 	var/text = "<br><FONT size = 5><b>Additionally, the following players earned achievements:</b></FONT>"
 	//ITEM, CKEY, MOB NAME, AWARD NAME, AWARD DESC
