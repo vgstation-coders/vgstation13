@@ -212,83 +212,83 @@
 							else
 								healths.icon_state = "health6"
 
-		if(nutrition_icon)
-			switch(nutrition)
-				if(450 to INFINITY)
-					nutrition_icon.icon_state = "nutrition0"
-				if(350 to 450)
-					nutrition_icon.icon_state = "nutrition1"
-				if(250 to 350)
-					nutrition_icon.icon_state = "nutrition2"
-				if(150 to 250)
-					nutrition_icon.icon_state = "nutrition3"
-				else
-					nutrition_icon.icon_state = "nutrition4"
 
-			if(ticker && ticker.hardcore_mode) //Hardcore mode: flashing nutrition indicator when starving!
-				if(nutrition < STARVATION_MIN)
-					nutrition_icon.icon_state = "nutrition5"
+		if(has_reagent_in_blood(CAPSAICIN))
+			temperature_alert = TEMP_ALARM_HEAT_STRONG
+		else if(has_reagent_in_blood(FROSTOIL))
+			temperature_alert = TEMP_ALARM_COLD_STRONG
+		else if(!(get_thermal_loss(loc.return_air()) > 0.1) || bodytemperature > T0C + 50)
+			switch(bodytemperature) //310.055 optimal body temp
+				if(370 to INFINITY)
+					temperature_alert = TEMP_ALARM_HEAT_STRONG
+				if(350 to 370)
+					temperature_alert = TEMP_ALARM_HEAT_MILD
+				if(335 to 350)
+					temperature_alert = TEMP_ALARM_HEAT_WEAK
+				if(320 to 335)
+					temperature_alert = TEMP_ALARM_SAFE
+				if(305 to 320)
+					temperature_alert = TEMP_ALARM_SAFE
+				if(303 to 305)
+					temperature_alert = TEMP_ALARM_SAFE
+				if(300 to 303)
+					temperature_alert = TEMP_ALARM_COLD_WEAK
+				if(290 to 295)
+					temperature_alert = TEMP_ALARM_COLD_MILD
+				if(0   to 290)
+					temperature_alert = TEMP_ALARM_COLD_STRONG
+		else if(is_vessel_dilated() && undergoing_hypothermia() == MODERATE_HYPOTHERMIA)
+			temperature_alert = TEMP_ALARM_HEAT_STRONG // yes, this is intentional - this is the cause of "paradoxical undressing", ie feeling 2hot when hypothermic
+		else
+			switch(get_thermal_loss(loc.return_air())) // How many degrees of celsius we are losing per tick.
+				if(0.1 to 0.15)
+					temperature_alert = TEMP_ALARM_SAFE
+				if(0.15 to 0.2)
+					temperature_alert = TEMP_ALARM_COLD_WEAK
+				if(0.2 to 0.4)
+					temperature_alert = TEMP_ALARM_COLD_MILD
+				if(0.4 to INFINITY)
+					temperature_alert = TEMP_ALARM_COLD_STRONG
 
-		if(pressure)
-			pressure.icon_state = "pressure[pressure_alert]"
 
+		if(pressure_alert)
+			throw_alert(SCREEN_ALARM_PRESSURE, pressure_alert < 0 ? /obj/abstract/screen/alert/carbon/pressure/low : /obj/abstract/screen/alert/carbon/pressure/high, pressure_alert)
+		else
+			clear_alert(SCREEN_ALARM_PRESSURE)
+		if(hal_screwyhud == 3 || oxygen_alert)
+			throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath)
+		else
+			clear_alert(SCREEN_ALARM_BREATH)
+		if(hal_screwyhud == 4 || toxins_alert)
+			throw_alert(SCREEN_ALARM_TOXINS, /obj/abstract/screen/alert/tox)
+		else
+			clear_alert(SCREEN_ALARM_TOXINS)
+		if(fire_alert)
+			throw_alert(SCREEN_ALARM_FIRE, fire_alert == 1 ? /obj/abstract/screen/alert/carbon/burn/ice : /obj/abstract/screen/alert/carbon/burn/fire, fire_alert) //fire_alert is either 0 if no alert, 1 for cold and 2 for heat.
+		else
+			clear_alert(SCREEN_ALARM_FIRE)
+		if(temperature_alert)
+			throw_alert(SCREEN_ALARM_TEMPERATURE, temperature_alert < 0 ? /obj/abstract/screen/alert/carbon/temp/cold : /obj/abstract/screen/alert/carbon/temp/hot, temperature_alert)
+		else
+			clear_alert(SCREEN_ALARM_TEMPERATURE)
+//		if(sleeping)
+//			throw_alert(SCREEN_ALARM_SLEEP,)
+//		else
+//			clear_alert(SCREEN_ALARM_SLEEP)
+		switch(nutrition)
+			if(450 to INFINITY)
+				throw_alert(SCREEN_ALARM_FOOD, /obj/abstract/screen/alert/carbon/food/fat, 0)
+			if(250 to 450)
+				clear_alert(SCREEN_ALARM_FOOD)
+			if(150 to 250)
+				throw_alert(SCREEN_ALARM_FOOD, /obj/abstract/screen/alert/carbon/food/hungry, 3)
+			else
+				throw_alert(SCREEN_ALARM_FOOD, /obj/abstract/screen/alert/carbon/food/starving, 4)
+		if(ticker && ticker.hardcore_mode) //Hardcore mode: flashing nutrition indicator when starving!
+			if(nutrition < STARVATION_MIN)
+				throw_alert(SCREEN_ALARM_FOOD, /obj/abstract/screen/alert/carbon/food/starving, 5)
+		
 		update_pull_icon()
-//			if(rest) //Not used with new UI
-//				if(resting || lying || sleeping)		rest.icon_state = "rest1"
-//				else									rest.icon_state = "rest0"
-		if(toxin)
-			if(hal_screwyhud == 4 || toxins_alert)
-				toxin.icon_state = "tox1"
-			else
-				toxin.icon_state = "tox0"
-		if(oxygen)
-			if(hal_screwyhud == 3 || oxygen_alert)
-				oxygen.icon_state = "oxy1"
-			else
-				oxygen.icon_state = "oxy0"
-		if(fire)
-			if(fire_alert)
-				fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for cold and 2 for heat.
-			else
-				fire.icon_state = "fire0"
-
-		if(bodytemp)
-			if(has_reagent_in_blood(CAPSAICIN))
-				bodytemp.icon_state = "temp4"
-			else if(has_reagent_in_blood(FROSTOIL))
-				bodytemp.icon_state = "temp-4"
-			else if(!(get_thermal_loss(loc.return_air()) > 0.1) || bodytemperature > T0C + 50)
-				switch(bodytemperature) //310.055 optimal body temp
-					if(370 to INFINITY)
-						bodytemp.icon_state = "temp4"
-					if(350 to 370)
-						bodytemp.icon_state = "temp3"
-					if(335 to 350)
-						bodytemp.icon_state = "temp2"
-					if(320 to 335)
-						bodytemp.icon_state = "temp1"
-					if(305 to 320)
-						bodytemp.icon_state = "temp0"
-					if(303 to 305)
-						bodytemp.icon_state = "temp-1"
-					if(300 to 303)
-						bodytemp.icon_state = "temp-2"
-					if(290 to 295)
-						bodytemp.icon_state = "temp-3"
-					if(0   to 290)
-						bodytemp.icon_state = "temp-4"
-			else if(is_vessel_dilated() && undergoing_hypothermia() == MODERATE_HYPOTHERMIA)
-				bodytemp.icon_state = "temp4" // yes, this is intentional - this is the cause of "paradoxical undressing", ie feeling 2hot when hypothermic
-			else
-				switch(get_thermal_loss(loc.return_air())) // How many degrees of celsius we are losing per tick.
-					if(0.1 to 0.15)
-						bodytemp.icon_state = "temp-1"
-					if(0.15 to 0.2)
-						bodytemp.icon_state = "temp-2"
-					if(0.2 to 0.4)
-						bodytemp.icon_state = "temp-3"
-					if(0.4 to INFINITY)
-						bodytemp.icon_state = "temp-4"
 
 		if(disabilities & NEARSIGHTED)	//This looks meh but saves a lot of memory by not requiring to add var/prescription
 			if(glasses)	//To every /obj/item

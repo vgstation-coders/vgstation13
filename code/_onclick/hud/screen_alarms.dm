@@ -104,7 +104,7 @@ var/global/list/screen_alarms_locs = list(
 	for(var/i = 1, i <= alerts.len, i++)
 		if(i > screen_alarms_locs.len)
 			break
-		var/obj/abstract/screen/alert = alerts[alerts[i]]
+		var/obj/abstract/screen/alert/alert = alerts[alerts[i]]
 		if(alert.icon_state == "template")
 			if(!icon_pref)
 				icon_pref = ui_style2icon(mymob.client.prefs.UI_style)
@@ -113,12 +113,26 @@ var/global/list/screen_alarms_locs = list(
 		mymob.client.screen |= alert
 	return TRUE
 
-
 //Alarms defines
-#define SCREEN_ALARM_BUCKLE "buckle"
-#define SCREEN_ALARM_PRESSURE "pressure"
-#define SCREEN_ALARM_TEMPERATURE "temp"
-#define SCREEN_ALARM_FIRE "fire"
+#define FIRE_ALARM_SAFE 0
+#define FIRE_ALARM_FROSTBITE 1
+#define FIRE_ALARM_ON_FIRE 2
+
+#define TEMP_ALARM_SAFE 0
+#define TEMP_ALARM_COLD_WEAK -2
+#define TEMP_ALARM_COLD_MILD -3
+#define TEMP_ALARM_COLD_STRONG -4
+#define TEMP_ALARM_HEAT_WEAK 2
+#define TEMP_ALARM_HEAT_MILD 3
+#define TEMP_ALARM_HEAT_STRONG 4
+
+#define SCREEN_ALARM_BUCKLE "mob_buckle"
+#define SCREEN_ALARM_PRESSURE "mob_pressure"
+#define SCREEN_ALARM_TEMPERATURE "mob_temp"
+#define SCREEN_ALARM_FIRE "mob_fire"
+#define SCREEN_ALARM_TOXINS "mob_toxins"
+#define SCREEN_ALARM_BREATH "mob_breath"
+#define SCREEN_ALARM_FOOD "mob_food"
 
 #define SCREEN_ALARM_ROBOT_CELL "robot_cell"
 #define SCREEN_ALARM_ROBOT_LAW "robot_law"
@@ -162,9 +176,101 @@ var/global/list/screen_alarms_locs = list(
 
 /obj/abstract/screen/alert/object/buckled
 	name = "Buckled"
-	desc = "You've been buckled to something and can't move. Click this alert to unbuckle unless you're unable to."
+	desc = "You've been buckled to something and can't move. Click on this alert to unbuckle."
 
-//Robot Alarms
+//Carbon Alarms
+/obj/abstract/screen/alert/carbon/breath
+	name = "Suffocating"
+	desc = "Find some good air before you pass out!"
+	icon_state = "carbon_oxy"
+
+/obj/abstract/screen/alert/tox
+	name = "Toxins"
+	desc = "Your body is exposed to either environmental toxins or radiation poisoning."
+	icon_state = "carbon_tox"
+
+/obj/abstract/screen/alert/carbon/burn
+	icon_state = "carbon_burn"
+
+/obj/abstract/screen/alert/carbon/burn/fire
+	name = "On Fire"
+	desc = "Your body is on fire. Click on this alert to stop, drop and roll."
+
+/obj/abstract/screen/alert/carbon/burn/fire/Click()
+	..()
+	if(isliving(usr))
+		var/mob/living/M = usr
+		M.resist()
+
+/obj/abstract/screen/alert/carbon/burn/ice
+	name = "Frostbite"
+	desc = "Your body is exposed to temperatures below freezing point."
+
+/obj/abstract/screen/alert/carbon/temp
+	icon_state = "carbon_temp"
+
+/obj/abstract/screen/alert/carbon/temp/hot
+	name = "Too Hot"
+	desc = "You're flaming hot!"
+
+/obj/abstract/screen/alert/carbon/temp/cold
+	name = "Too Cold"
+	desc = "You're freezing cold!"
+
+/obj/abstract/screen/alert/carbon/pressure
+	icon_state = "carbon_pressure"
+
+/obj/abstract/screen/alert/carbon/pressure/low
+	name = "Low Pressure"
+	desc = "The air around you is hazardously thin."
+
+/obj/abstract/screen/alert/carbon/pressure/high
+	name = "High Pressure"
+	desc = "The air around you is hazardously thick."
+
+/obj/abstract/screen/alert/carbon/food
+	icon_state = "nutrition"
+
+/obj/abstract/screen/alert/carbon/food/fat
+	name = "Fat"
+	desc = "You ate too much food, lardass."
+
+/obj/abstract/screen/alert/carbon/food/hungry
+	name = "Hungry"
+	desc = "Some food would be good right about now."
+
+/obj/abstract/screen/alert/carbon/food/starving
+	name = "Starving"
+	desc = "You're severely malnourished. The hunger pains make moving around a chore."
+
+//Corgi Alarms
+/obj/abstract/screen/alert/carbon/breath/corgi
+	icon_state = "corgi_oxy"
+
+/obj/abstract/screen/alert/tox/corgi
+	icon_state = "corgi_tox"
+
+/obj/abstract/screen/alert/carbon/burn/fire/corgi
+	icon_state = "corgi_burn"
+
+/obj/abstract/screen/alert/carbon/burn/ice/corgi
+	icon_state = "corgi_freeze"
+
+//Alien Alarms
+/obj/abstract/screen/alert/carbon/breath/alien
+	icon_state = "alien_oxy"
+
+/obj/abstract/screen/alert/tox/alien
+	icon_state = "alien_tox"
+
+/obj/abstract/screen/alert/carbon/burn/fire/alien
+	icon_state = "alien_burn"
+
+//Cult Alarms
+/obj/abstract/screen/alert/carbon/burn/fire/cult
+	icon_state = "cult_burn"
+
+//Silicon Alarms
 /obj/abstract/screen/alert/robot
 	icon_state = "silicon_template"
 

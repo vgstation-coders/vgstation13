@@ -287,10 +287,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	//Atmos effect
 	if(bodytemperature < minbodytemp)
-		fire_alert = 2
+		fire_alert = FIRE_ALARM_FROSTBITE
 		adjustBruteLoss(cold_damage_per_tick)
 	else if(bodytemperature > maxbodytemp)
-		fire_alert = 1
+		fire_alert = FIRE_ALARM_ON_FIRE
 		adjustBruteLoss(heat_damage_per_tick)
 	else
 		fire_alert = 0
