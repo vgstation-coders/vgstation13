@@ -243,10 +243,10 @@ var/global/list/screen_alarms_locs = list(
 
 //Corgi Alarms
 /obj/abstract/screen/alert/carbon/breath/corgi
-	icon = 'icons/mob/screen1_corgi.dmi'
+	icon_state = "corgi_oxy"
 
 /obj/abstract/screen/alert/tox/corgi
-	icon = 'icons/mob/screen1_corgi.dmi'
+	icon_state = "corgi_tox"
 
 /obj/abstract/screen/alert/carbon/burn/fire/corgi
 	icon_state = "corgi_burn"
