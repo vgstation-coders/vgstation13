@@ -46,7 +46,7 @@
 	RefreshParts()
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/medal_printer/attack_hand(mob/user as mob)
-	if((locked == 1) && (emagged == 0))
+	if(locked && !emagged)
 		to_chat(usr, "[src] is locked.")
 		return
 	..()
@@ -65,17 +65,17 @@
 
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
-		if(emagged == 1)
+		if(emagged)
 			to_chat(usr, "[src] does not respond to the ID.")
 			return
 		if((access_captain in I.access) || (access_hop in I.access))
 			locked = !locked
-			if(locked == 1)
+			if(locked)
 				to_chat(usr, "You lock \the [src].")
 			else
 				to_chat(usr, "You unlock \the [src].")
 
-	if((locked == 1) && (emagged == 0))
+	if(locked && !emagged)
 		return
 
 	if(istype(O, /obj/item/clothing/accessory/medal))
