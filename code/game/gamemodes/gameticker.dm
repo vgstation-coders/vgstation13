@@ -67,6 +67,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
 		"sound/music/twilight.ogg",
+		"sound/music/pes_5_league_mode.ogg",
 		))
 
 	if(SNOW_THEME)
