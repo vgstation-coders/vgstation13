@@ -4715,6 +4715,7 @@
 	density = 1.23
 	specheatcap = 0.89
 	overdose_am = 50
+	custom_metabolism = 0.1
 
 /datum/reagent/caffeine/on_mob_life(var/mob/living/M)
 	if(..())

@@ -1466,6 +1466,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy = 2,
 		)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 10,
