@@ -1,17 +1,23 @@
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
 var/list/admin_verbs_default = list(
-	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
+
+// Everyone has +ADMIN so we don't actually need anything in here.
+// Downside: The observers no longer have msay if we lack defaults.
 	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
+
+	)
+var/list/admin_verbs_admin = list(
+
+	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
 	/client/proc/check_antagonists,		/*shows all antags*/
 	/client/proc/advwho,				/*in addition to listing connected ckeys, shows character name and living/dead/antag status for each*/
 	/datum/admins/proc/checkCID,
-	/datum/admins/proc/checkCKEY
-//	/client/proc/deadchat				/*toggles deadchat on/off*/
-	)
-var/list/admin_verbs_admin = list(
+	/datum/admins/proc/checkCKEY,
+	//	/client/proc/deadchat				/*toggles deadchat on/off*/
+
 	/client/proc/set_base_turf,
 	/datum/admins/proc/delay,
 	/client/proc/SendCentcommFax,		/*sends a fax to all fax machines*/
