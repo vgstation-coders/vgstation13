@@ -391,7 +391,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/humanoid,						// JUST DON'T DO IT, OK?
 		/mob/living/simple_animal/hostile/retaliate/cockatrice,			// I'm just copying this from transmog.
 		/mob/living/simple_animal/hostile/giant_spider/hunter/dead,		// They are dead.
-		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// They aren't supposed to be playable.
+		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// Your motherfucking life ends in 5 seconds.
 		/mob/living/simple_animal/hologram,								// Can't live outside the holodeck.
 		/mob/living/simple_animal/hostile/carp/holocarp,				// These can but they're just a retarded hologram carp reskin for the love of god.
 		/mob/living/slime_pile,											// They are dead.
@@ -400,7 +400,6 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/mining_drone,					// This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
 		/mob/living/simple_animal/bee,									// Aren't set up to be playable
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
-		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// Your motherfucking life ends in 5 seconds.
 		)
 
 //Boss monster list
