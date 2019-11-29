@@ -262,7 +262,7 @@ var/datum/controller/gameticker/ticker
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 		//mode.Clean_Antags()
-
+		create_random_orders(3) //Populate the order system so cargo has something to do
 	//start_events() //handles random events and space dust.
 	//new random event system is handled from the MC.
 

@@ -40,6 +40,7 @@
 #include "__DEFINES\lighting.dm"
 #include "__DEFINES\limb_defines.dm"
 #include "__DEFINES\machinery.dm"
+#include "__DEFINES\materials.dm"
 #include "__DEFINES\math_physics.dm"
 #include "__DEFINES\MC.dm"
 #include "__DEFINES\mobs.dm"
