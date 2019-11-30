@@ -238,7 +238,7 @@ var/area/space_area
 /area/proc/firealert()
 	if(isspace(src)) //no fire alarms in space
 		return
-	if( !fire )
+	if(!fire)
 		fire = 1
 		updateicon()
 		mouse_opacity = 0
@@ -339,28 +339,26 @@ var/area/space_area
 /area/proc/updateicon()
 	if ((fire || eject || party || radalert) && ((!requires_power)?(!requires_power):power_environ))//If it doesn't require power, can still activate this proc.
 		// Highest priority at the top.
+		var/color_to_set
 		if(radalert && !fire)
-			icon_state = "radiation"
+			color_to_set = LIGHT_COLOR_GREEN
 		else if(fire && !radalert && !eject && !party)
-			icon_state = "blue"
-		/*else if(atmosalm && !fire && !eject && !party)
-			icon_state = "bluenew"*/
+			color_to_set = LIGHT_COLOR_BLUE
 		else if(!fire && eject && !party)
-			icon_state = "red"
+			color_to_set = LIGHT_COLOR_EMERGENCY
 		else if(party && !fire && !eject)
 			icon_state = "party"
+			return
 		else
 			icon_state = "blue-red"
+			return
+		for(var/obj/machinery/light/L in src)
+			L.set_light(L.light_range, L.light_power, color_to_set)
 	else
 	//	new lighting behaviour with obj lights
 		icon_state = null
-
-
-/*
-#define EQUIP 1
-#define LIGHT 2
-#define ENVIRON 3
-*/
+		for(var/obj/machinery/light/L in src)
+			L.set_light(L.light_range, L.light_power, LIGHT_COLOR_TUNGSTEN)
 
 /area/proc/powered(var/chan)		// return true if the area has power to given channel
 
