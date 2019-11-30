@@ -6,8 +6,8 @@
 	icon_state_open = "medalprinter_t"
 	nano_file = "medalprinter.tmpl"
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
-	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER
-	var/locked = 1
+	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | ACCESS_EMAG
+	req_access = list(access_hop)
 
 	allowed_materials = list(
 						MAT_IRON,
@@ -46,40 +46,19 @@
 	RefreshParts()
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/medal_printer/attack_hand(mob/user as mob)
-	if(locked && !emagged)
-		to_chat(usr, "[src] is locked.")
+	if(issilicon(user))
+		return
+	if(!allowed(usr) && !emagged)
+		to_chat(usr, "<span class='warning'>Access denied.</span>")
 		return
 	..()
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/medal_printer/attackby(var/obj/item/O, var/mob/user)
-	. = ..()
-
 	if(issilicon(user))
 		return
-
-	if(istype(O, /obj/item/weapon/card/emag))
-		machine_flags &= ~EMAGGABLE
-		emagged = 1
-		new/obj/effect/effect/sparks(get_turf(src))
-		playsound(loc,"sparks",50,1)
-
-	if(istype(O, /obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/I = O
-		if(emagged)
-			to_chat(usr, "[src] does not respond to the ID.")
-			return
-		if((access_captain in I.access) || (access_hop in I.access))
-			locked = !locked
-			if(locked)
-				to_chat(usr, "You lock \the [src].")
-			else
-				to_chat(usr, "You unlock \the [src].")
-
-	if(locked && !emagged)
-		return
-
-	if(istype(O, /obj/item/clothing/accessory/medal))
+	if(istype(O, /obj/item/clothing/accessory/medal) && ((allowed(usr) || emagged)))
 		O.name = sanitize((input(user, "What would you like to label \the [O]?", "Medal Labelling", null)  as text), 1, MAX_NAME_LEN)
 		if((loc == usr && usr.isUnconscious()))
 			O.name = "medal"
 		add_fingerprint(usr)
+	..()
