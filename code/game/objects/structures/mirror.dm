@@ -108,7 +108,7 @@
 			playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
 
 	else if(istype(I, /obj/item/weapon/crowbar))
-		to_chat(user, "<span class='info'>You begin to disassemble the mirror.</span>")
+		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
 		playsound('sound/items/Crowbar.ogg', 50, 1)
 		if(do_after(user, src, 3 SECONDS))
 			if(shattered)
