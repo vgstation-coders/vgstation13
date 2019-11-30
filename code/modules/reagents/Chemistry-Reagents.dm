@@ -4710,11 +4710,10 @@
 /datum/reagent/caffeine
 	name = "Caffeine"
 	id = CAFFEINE
-	description = "Caffeine is a stimulant that is commonly found in coffee and tea. Too much can cause increased blood pressure."
+	description = "Caffeine is a stimulant that is commonly found in coffee and tea. It works by making your metabolism faster so it also increases your appetite."
 	color = "#E8E8E8" //rgb: 232, 232, 232
 	density = 1.23
 	specheatcap = 0.89
-	overdose_am = 50
 	custom_metabolism = 0.1
 
 /datum/reagent/caffeine/on_mob_life(var/mob/living/M)
@@ -4722,14 +4721,8 @@
 		return 1
 	// you just ingested pure caffeine so you're gonna get the BIG shakes
 	M.Jitter(10)
-
-/datum/reagent/caffeine/on_overdose(var/mob/living/M)
-	// borderline seizures
-	M.Jitter(20)
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		var/datum/organ/internal/heart/theheart = H.get_heart()
-		theheart.damage++
+	// it also makes you hungry because it speeds up your metabolism
+	M.nutrition--
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
