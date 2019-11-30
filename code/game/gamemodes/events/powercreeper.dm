@@ -83,11 +83,14 @@
 		if(isturf(loc))
 			var/turf/T = loc
 			environment = T.return_air()
+			if(environment.temperature < T0C)
+				die()
+				return
 		//add power to powernet through converting atmospheric heat to power
 		add_avail(-(environment.add_thermal_energy(max(environment.get_thermal_energy_change(T0C),-POWER_PER_FRUIT*10)/10)))
 		if(growdirs)
 			var/grow_chance = clamp(MIN_SPREAD_CHANCE + (powernet.avail/1000), MIN_SPREAD_CHANCE, MAX_SPREAD_CHANCE)
-			if(prob(grow_chance))
+			if(prob(grow_chance) && (environment.temperature > T0C + 5))
 				var/chosen_dir = pick(cardinal)
 				if(growdirs & chosen_dir)
 					var/turf/target_turf = get_step(src, chosen_dir)
@@ -137,6 +140,8 @@
 
 /obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
 	if(!istype(M) || M.isDead())
+		return 0
+	if(M_NO_SHOCK in M.mutations)
 		return 0
 	Beam(M, "lighting", 'icons/obj/zap.dmi', 5, 2)
 	playsound(src,'sound/weapons/electriczap.ogg',50, 1) //we still want a sound
