@@ -1408,6 +1408,17 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/micro_laser = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1)
 
+/obj/item/weapon/circuitboard/medal_printer
+	name = "Circuit board (Medal Printer)"
+	desc = "A circuit board for the medal printer."
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=4"
+	build_path = /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/medal_printer
+	req_components = list(
+						/obj/item/weapon/stock_parts/matter_bin = 1,
+						/obj/item/weapon/stock_parts/manipulator = 2,
+						/obj/item/weapon/stock_parts/micro_laser = 1,
+						/obj/item/weapon/stock_parts/console_screen = 1)
 
 /*
  * Fishtanks
