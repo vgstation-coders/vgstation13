@@ -12,7 +12,7 @@
 	req_admin_notify = 1
 	access = list(access_medical, access_morgue, access_genetics, access_heads,
 			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
-			access_keycard_auth, access_sec_doors, access_paramedic, access_eva, access_maint_tunnels)
+			access_keycard_auth, access_sec_doors, access_paramedic, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_heads,
 			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
 			access_keycard_auth, access_sec_doors, access_paramedic)
@@ -72,7 +72,7 @@
 	wage_payout = 65
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva, access_maint_tunnels)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_surgery, access_virology)
 	alt_titles = list("Emergency Physician", "Nurse", "Surgeon")
 
@@ -146,7 +146,7 @@
 	wage_payout = 65
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva, access_maint_tunnels)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_chemistry)
 	alt_titles = list("Pharmacist")
 
@@ -197,7 +197,7 @@
 	wage_payout = 55
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_science, access_eva, access_maint_tunnels)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_science, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_science)
 
 	pdaslot=slot_belt
@@ -243,7 +243,7 @@
 	supervisors = "the chief medical officer"
 	wage_payout = 45
 	selection_color = "#ffeef0"
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva, access_maint_tunnels)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_virology, access_biohazard)
 	alt_titles = list("Pathologist", "Microbiologist")
 
