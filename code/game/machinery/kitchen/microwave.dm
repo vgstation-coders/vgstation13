@@ -66,6 +66,10 @@
 			for (var/reagent in recipe.reagents)
 				acceptable_reagents |= reagent
 
+		// Stuff to microwave that isn't food for destructive or stupid purposes
+		// Utensils explode non-harmfully, power cells blow up harmfully, the rest turns to burnt mess
+		acceptable_items.Add("/obj/item/weapon/kitchen/utensil","/obj/item/device/pda","/obj/item/device/paicard","/obj/item/weapon/cell")
+
 /*******************
 *   Part Upgrades
 ********************/
@@ -261,8 +265,8 @@
 			items_measures[display_name] = "slab of meat"
 			items_measures_p[display_name] = "slabs of meat"
 		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat))
-			items_measures[display_name] = "fillet of meat"
-			items_measures_p[display_name] = "fillets of meat"
+			items_measures[display_name] = "fillet of fish"
+			items_measures_p[display_name] = "fillets of fish"
 		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/egg))
 			items_measures[display_name] = "egg"
 			items_measures_p[display_name] = "eggs"
@@ -284,6 +288,9 @@
 			display_name = "Green Grapes"
 			items_measures[display_name] = "bunch of green grapes"
 			items_measures_p[display_name] = "bunches of green grapes"
+		if (istype(O,/obj/item/weapon/kitchen/utensil)) //any spoons, forks, knives, etc
+			items_measures[display_name] = "utensil"
+			items_measures_p[display_name] = "utensils"
 		items_counts[display_name]++
 	for (var/O in items_counts)
 		var/N = items_counts[O]
@@ -341,6 +348,31 @@
 
 	var/datum/recipe/recipe = select_recipe(available_recipes,src)
 	var/obj/cooked
+
+	for(var/obj/O in contents)
+		if(istype(O,/obj/item/weapon/kitchen/utensil) && !(O.melt_temperature == MELTPOINT_PLASTIC))
+			if (!wzhzhzh(4))
+				abort()
+				return
+			wzhzhzh(4)
+			stop()
+			broke()
+			empty()
+			to_chat(loc, "<span class='warning'>The [O] sparks in the microwave!</span>")
+			explosion(get_turf(src), -1,0,0)
+			return
+		if(istype(O,/obj/item/weapon/cell))
+			if (!wzhzhzh(4))
+				abort()
+				return
+			wzhzhzh(4)
+			stop()
+			broke()
+			empty()
+			to_chat(loc, "<span class='warning'>The [O] sparks violently in the microwave!.</span>")
+			explosion(get_turf(src), -1,0,2)
+			return
+
 	if (!recipe)
 		dirty += 1
 		if (prob(max(10,dirty*5)))
@@ -471,6 +503,12 @@
 	ffuu.reagents.add_reagent(CARBON, amount)
 	ffuu.reagents.add_reagent(TOXIN, amount/10)
 	return ffuu
+
+/obj/machinery/microwave/proc/empty()
+	for (var/obj/O in contents)
+		qdel(O)
+	src.reagents.clear_reagents()
+	return
 
 /obj/machinery/microwave/CtrlClick(mob/user)
 	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored))
