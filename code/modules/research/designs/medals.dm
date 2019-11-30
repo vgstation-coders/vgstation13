@@ -26,7 +26,7 @@
 	build_path = /obj/item/clothing/accessory/medal/bronze_heart
 
 /datum/design/medal/nobel_science
-	name = "nobel sciences award"
+	name = "\improper Nobel sciences award"
 	desc = "A bronze medal which represents significant contributions to the field of science or engineering."
 	id = "medal_nobel_science"
 	build_type = MEDALPRINTER

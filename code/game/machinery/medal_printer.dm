@@ -56,9 +56,9 @@
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/medal_printer/attackby(var/obj/item/O, var/mob/user)
 	if(issilicon(user))
 		return
-	if(istype(O, /obj/item/clothing/accessory/medal) && ((allowed(usr) || emagged)))
+	if(istype(O, /obj/item/clothing/accessory/medal) && ((allowed(user) || emagged)))
 		O.name = sanitize((input(user, "What would you like to label \the [O]?", "Medal Labelling", null)  as text), 1, MAX_NAME_LEN)
-		if((loc == usr && usr.isUnconscious()))
+		if((loc == user && user.isUnconscious()))
 			O.name = "medal"
-		add_fingerprint(usr)
+		add_fingerprint(user)
 	..()
