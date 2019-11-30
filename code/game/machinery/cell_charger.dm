@@ -140,12 +140,10 @@
 	if(!charging || (stat & (BROKEN|NOPOWER)) || !anchored)
 		return
 
-	if(emagged) //Did someone fuck with the charger ?
-		use_power(transfer_rate*transfer_rate_coeff*10) //Drain all the power
-		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)*0.25) //Lose most of it
-	else
-		use_power(transfer_rate*transfer_rate_coeff) //Snatch some power
-		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)) //Inefficiency (Joule effect + other shenanigans)
+	if(charging.give(transfer_rate*transfer_rate_coeff * (transfer_efficiency+transfer_efficiency_bonus) * (emagged ? 0.25 : 1)))//Inefficiency (Joule effect + other shenanigans)  //Lose most of it if emagged
+		use_power(transfer_rate * transfer_rate_coeff * (emagged ? 10 : 1))  //Drain all the power if emagged
+		if(has_beeped) //It's charging again
+			has_beeped = FALSE
 	if(round(charging.percent() >= 100)&&!has_beeped)
 		playsound(src, 'sound/machines/charge_finish.ogg', 50)
 		has_beeped = TRUE
