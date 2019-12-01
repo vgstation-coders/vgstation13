@@ -77,7 +77,7 @@
 	force = 30
 	w_class = W_CLASS_LARGE
 	sharpness = sharpness_on
-	sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD
 	armor_penetration = 100
 	hitsound = "sound/weapons/blade1.ogg"
 	update_icon()
@@ -120,7 +120,7 @@
 		sterility = 100
 		w_class = W_CLASS_LARGE
 		sharpness = sharpness_on
-		sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK
+		sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD
 		armor_penetration = 100
 		hitsound = "sound/weapons/blade1.ogg"
 		if(onsound)
@@ -242,7 +242,7 @@
 	..()
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
-	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK : 0
+	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
 	sharpness = wielded ? 1.5 : 0
 	armor_penetration = wielded ? 100 : 0
 	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
@@ -366,7 +366,7 @@
 		throwforce = 6
 		throw_speed = 3
 		sharpness = 1.7
-		sharpness_flags += HOT_EDGE | CUT_WALL | CUT_AIRLOCK
+		sharpness_flags += HOT_EDGE
 		armor_penetration = 100
 		to_chat(user, "<span class='warning'> [src] starts vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete1.ogg', 40, 0)
@@ -441,7 +441,7 @@
 	throw_speed = 3
 	sharpness = 1.7
 	w_class = W_CLASS_LARGE
-	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE | CUT_WALL | CUT_AIRLOCK
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
 	armor_penetration = 100
 	hitsound = get_sfx("machete_hit")
 	update_icon()
