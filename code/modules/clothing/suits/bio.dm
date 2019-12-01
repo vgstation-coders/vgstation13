@@ -56,7 +56,7 @@
 	name = "security bio suit"
 	desc = "A suit that protects against biological contamination. It has a reinforced synthetic lining to protect against tearing."
 	icon_state = "bio_security"
-	 allowed = list(
+	allowed = list(
 		/obj/item/weapon/gun/energy,
 		/obj/item/weapon/reagent_containers/spray/pepper,
 		/obj/item/weapon/gun/projectile,
