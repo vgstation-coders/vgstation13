@@ -96,9 +96,9 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 	if (!istype(dynamic_mode))
 		return // No dynamic mode = no raiders
-	if (!locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/hesit) in dynamic_mode.executed_rules)
+	if (!locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist) in dynamic_mode.executed_rules)
 		return
-	
+
 	var/datum/faction/vox_shoal/raiders_of_the_day = find_active_faction_by_type(/datum/faction/vox_shoal)
 
 	var/score = text2num(data["best_score"])

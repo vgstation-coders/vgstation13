@@ -271,7 +271,6 @@
 							if(W.health <= 0)
 								alpha_target = null
 								alpha_stance = WOLF_ALPHANONE*/
-						log_admin("A wolf is attacking a target, [key_name(alpha_target)], their alpha is: [key_name(pack_alpha)] @([src.x], [src.y], [src.z])")
 				if(WOLF_ALPHAMOVE)
 					var/turf/target = alpha_target
 					var/dist = get_dist(src, alpha_target)
@@ -390,8 +389,8 @@
 			stance = HOSTILE_STANCE_ATTACK
 			alpha_stance = WOLF_ALPHAATTACK
 			alpha_target = target
-			add_attacklogs(pack_alpha, target, "ordered a wolf a wolf to attack", src, null, TRUE)
-			log_admin("[key_name(pack_alpha)] has ordered a wolf to attack [key_name(target)] @([src.x], [src.y], [src.z])")
+			add_attacklogs(pack_alpha, target, "set [src] (wolf) on")
+			log_admin("[key_name(pack_alpha)] has ordered a wolf named \[src] to attack [key_name(target)] @([src.x], [src.y], [src.z])", admin_warn = TRUE)
 		if(istype (target, /turf)) //We go!
 			alpha_stance = WOLF_ALPHAMOVE
 			alpha_target = target

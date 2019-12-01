@@ -313,9 +313,10 @@ var/global/list/damage_icon_parts = list()
 
 	//base icons
 	var/icon/face_standing	= new /icon('icons/mob/human_face.dmi',"bald_s")
-	var/hair_suffix = check_hidden_head_flags(HIDEHEADHAIR) ? "s2" : "s" // s2 = cropped icon
+	//to_chat(world, "Maskheadhair? [check_hidden_head_flags(MASKHEADHAIR)]")
+	var/hair_suffix = check_hidden_head_flags(MASKHEADHAIR) ? "s2" : "s" // s2 = cropped icon
 
-	if(my_appearance.f_style && !(check_hidden_flags(get_clothing_items(),HIDEBEARDHAIR)))
+	if(my_appearance.f_style && !(check_hidden_flags(get_clothing_items(),HIDEBEARDHAIR))) //If the beard is hidden, don't draw it
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[my_appearance.f_style]
 		if((facial_hair_style) && (src.species.name in facial_hair_style.species_allowed))
 			var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
@@ -325,7 +326,8 @@ var/global/list/damage_icon_parts = list()
 //		else
 			//warning("Invalid my_appearance.f_style for [species.name]: [my_appearance.f_style]")
 
-	if(my_appearance.h_style && !(check_hidden_flags(get_clothing_items(),HIDEHEADHAIR)))
+	//to_chat(world, "Hideheadhair? [check_hidden_flags(get_clothing_items(),HIDEHEADHAIR)]")
+	if(my_appearance.h_style && !(check_hidden_flags(get_clothing_items(),HIDEHEADHAIR))) //If the hair is hidden, don't draw it
 		var/datum/sprite_accessory/hair_style = hair_styles_list[my_appearance.h_style]
 		if((hair_style) && (src.species.name in hair_style.species_allowed))
 			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_suffix]")

@@ -21,7 +21,7 @@
 			gui_icons.soulblade_bgLEFT,
 			gui_icons.soulblade_coverLEFT,
 			gui_icons.soulblade_bloodbar,
-			fire,
+			healths2,
 			)
 	var/obj/item/weapon/melee/soulblade/SB = loc
 	var/datum/control/new_control = new /datum/control/soulblade(src, SB)
@@ -45,7 +45,7 @@
 			gui_icons.soulblade_bgLEFT,
 			gui_icons.soulblade_coverLEFT,
 			gui_icons.soulblade_bloodbar,
-			fire,
+			healths2,
 			)
 	if (hud_used && gui_icons && gui_icons.soulblade_coverLEFT)
 		hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = ""

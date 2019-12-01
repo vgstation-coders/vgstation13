@@ -226,7 +226,14 @@
 	key = "blush"
 	key_third_person = "blushes"
 	message = "blushes."
-
+	
+/datum/emote/living/carbon/fear
+	key = "fear"
+	key_third_person = "fears"
+	message = "screams in fear!"
+	message_mime = "acts out a fearful scream!"
+	emote_type = EMOTE_AUDIBLE
+	
 /datum/emote/living/carbon/sound
 	var/list/science_sounds = null
 	var/list/male_sounds = null

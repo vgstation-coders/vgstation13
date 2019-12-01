@@ -234,6 +234,7 @@
 		"<span class='notice'>You climb onto \the [nick]!</span>")
 
 	lock_atom(M, /datum/locking_category/buckle/chair/vehicle)
+	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
 
 	add_fingerprint(user)
 

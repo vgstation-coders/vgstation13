@@ -14,7 +14,7 @@
 	if(bomberman_mode)
 		completions += "<br>[bomberman_declare_completion()]"
 
-	if(achievements.len)
+	if(ticker.achievements.len)
 		completions += "<br>[achievement_declare_completion()]"
 
 	var/ai_completions = ""
@@ -622,3 +622,17 @@
 	popup.open()
 
 	return
+
+/datum/achievement
+    var/item
+    var/ckey
+    var/mob_name
+    var/award_name
+    var/award_desc
+
+/datum/achievement/New(var/item, var/ckey, var/mob_name, var/award_name, var/award_desc)
+	src.item = item
+	src.ckey = ckey
+	src.mob_name = mob_name
+	src.award_name = award_name
+	src.award_desc = award_desc

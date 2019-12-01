@@ -54,6 +54,9 @@ var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuck
 	if(!vol) //don't do that
 		return
 
+	if(turf_source)
+		vol *= turf_source.volume_mult
+
 	if(gas_modified && turf_source && !turf_source.c_airblock(turf_source)) //if the sound is modified by air, and we are on an airflowing tile
 		var/atmosphere = 0
 		var/datum/gas_mixture/current_air = turf_source.return_air()

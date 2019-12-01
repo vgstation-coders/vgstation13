@@ -76,7 +76,7 @@
 	if(iswrench(I))
 		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
 		anchored = !anchored
-	if(anchored == 0)
+	if(!anchored)
 		return
 	if(open && cistern && state == NORODS && istype(I,/obj/item/stack/rods)) //State = 0 if no rods
 		var/obj/item/stack/rods/R = I
@@ -183,6 +183,20 @@
 	return ..()
 
 /obj/structure/urinal/attackby(obj/item/I as obj, mob/user as mob)
+	if(iswrench(I))
+		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
+		anchored = !anchored
+	if(!anchored)
+		return
+
+	if(istype(I, /obj/item/weapon/crowbar))
+		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
+		playsound('sound/items/Crowbar.ogg', 50, 1)
+		if(do_after(user, src, 3 SECONDS))
+			getFromPool(/obj/item/stack/sheet/metal, loc, 2)
+			qdel(src)
+		return
+
 	if(istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
 		if(isliving(G.affecting))
@@ -269,7 +283,7 @@
 								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
 			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 			if(do_after(user, src, 50))
-				if(anchored == 1)
+				if(anchored)
 					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
 								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
 					anchored = 0
@@ -480,7 +494,7 @@
 	if(!Adjacent(M))
 		return
 
-	if(anchored == 0)
+	if(!anchored)
 		return
 
 	if(busy)
@@ -526,7 +540,7 @@
 	if(iswrench(O))
 		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
 		anchored = !anchored
-	if(anchored == 0)
+	if(!anchored)
 		return
 
 	if(istype(O, /obj/item/weapon/mop))
@@ -572,7 +586,7 @@
 		if (do_after(user,src, 40))
 			O.clean_blood()
 			if(O.current_glue_state == GLUE_STATE_TEMP)
-				O.unglue() 
+				O.unglue()
 			user.visible_message( \
 				"<span class='notice'>[user] washes \a [O] using \the [src].</span>", \
 				"<span class='notice'>You wash \a [O] using \the [src].</span>")

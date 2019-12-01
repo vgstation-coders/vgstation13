@@ -9,7 +9,7 @@
 	supervisors = "the head of personnel"
 	wage_payout = 20
 	selection_color = "#dddddd"
-	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons, access_maint_tunnels)
+	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons)
 	minimal_access = list(access_bar,access_weapons)
 
 	pdaslot=slot_belt
@@ -72,7 +72,7 @@
 	supervisors = "the head of personnel"
 	wage_payout = 20
 	selection_color = "#dddddd"
-	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_maint_tunnels)
+	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue)
 	minimal_access = list(access_kitchen, access_morgue, access_bar)
 	alt_titles = list("Cook")
 
@@ -121,8 +121,8 @@
 	supervisors = "the head of personnel"
 	wage_payout = 20
 	selection_color = "#dddddd"
-	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_maint_tunnels)
-	minimal_access = list(access_hydroponics, access_morgue)
+	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
+	minimal_access = list(access_hydroponics, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
 	alt_titles = list("Hydroponicist", "Beekeeper", "Gardener")
 
 	pdaslot=slot_belt
@@ -583,8 +583,7 @@
 	supervisors = "Nanotrasen Law, CentComm Officals, and the station's captain."
 	wage_payout = 55
 	selection_color = "#dddddd"
-	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,
-				access_medical, access_bar, access_kitchen, access_hydroponics, access_maint_tunnels)
+	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo, access_medical, access_bar, access_kitchen, access_hydroponics)
 	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,  access_bar, access_kitchen)
 	alt_titles = list("Lawyer", "Bridge Officer")
 

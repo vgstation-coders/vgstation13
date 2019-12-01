@@ -133,21 +133,11 @@
 		if(client)
 			client.screen -= visible
 		visible = null
-	if(purged)
-		returnToPool(purged)
-		if(client)
-			client.screen -= purged
-		purged = null
 	if(internals)
 		returnToPool(internals)
 		if(client)
 			client.screen -= internals
 		internals = null
-	if(oxygen)
-		returnToPool(oxygen)
-		if(client)
-			client.screen -= oxygen
-		oxygen = null
 	if(i_select)
 		returnToPool(i_select)
 		if(client)
@@ -158,41 +148,21 @@
 		if(client)
 			client.screen -= m_select
 		m_select = null
-	if(toxin)
-		returnToPool(toxin)
-		if(client)
-			client.screen -= toxin
-		toxin = null
-	if(fire)
-		returnToPool(fire)
-		if(client)
-			client.screen -= fire
-		fire = null
-	if(bodytemp)
-		returnToPool(bodytemp)
-		if(client)
-			client.screen -= bodytemp
-		bodytemp = null
 	if(healths)
 		returnToPool(healths)
 		if(client)
 			client.screen -= healths
 		healths = null
+	if(healths2)
+		returnToPool(healths2)
+		if(client)
+			client.screen -= healths2
+		healths2 = null
 	if(throw_icon)
 		returnToPool(throw_icon)
 		if(client)
 			client.screen -= throw_icon
 		throw_icon = null
-	if(nutrition_icon)
-		returnToPool(nutrition_icon)
-		if(client)
-			client.screen -= nutrition_icon
-		nutrition_icon = null
-	if(pressure)
-		returnToPool(pressure)
-		if(client)
-			client.screen -= pressure
-		pressure = null
 	if(damageoverlay)
 		returnToPool(damageoverlay)
 		if(client)

@@ -4,7 +4,7 @@
 	item_state = "helmet"
 	flags = FPRINT
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	body_parts_covered = HEAD|EARS|EYES
+	body_parts_covered = HEAD|EARS|EYES|MASKHEADHAIR
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
