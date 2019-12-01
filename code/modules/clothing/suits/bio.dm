@@ -47,10 +47,14 @@
 
 //Security biosuit, grey with red stripe across the chest
 /obj/item/clothing/head/bio_hood/security
+	name = "security bio hood"
+	desc = "A hood that protects the head and face from biological comtaminants. It has a reinforced synthetic lining to protect against tearing."
 	icon_state = "bio_security"
 	armor = list(melee = 25, bullet = 10, laser = 15, energy = 5, bomb = 5, bio = 100, rad = 20)
 
 /obj/item/clothing/suit/bio_suit/security
+	name = "security bio suit"
+	desc = "A suit that protects against biological contamination. It has a reinforced synthetic lining to protect against tearing."
 	icon_state = "bio_security"
 	 allowed = list(
 		/obj/item/weapon/gun/energy,
