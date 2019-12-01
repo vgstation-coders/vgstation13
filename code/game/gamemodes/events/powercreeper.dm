@@ -141,8 +141,6 @@
 /obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
 	if(!istype(M) || M.isDead())
 		return 0
-	if(M_NO_SHOCK in M.mutations)
-		return 0
 	Beam(M, "lighting", 'icons/obj/zap.dmi', 5, 2)
 	playsound(src,'sound/weapons/electriczap.ogg',50, 1) //we still want a sound
 	return electrocute_mob(M, powernet, src)
