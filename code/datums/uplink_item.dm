@@ -260,7 +260,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/dangerous/dude_bombs_lmao
 	name = "Modified Tank Transfer Valve"
 	desc = "A small, expensive and powerful plasma-oxygen explosive. Handle very carefully."
-	item = /obj/effect/spawner/newbomb
+	item = /obj/effect/spawner/newbomb/timer
 	cost = 25
 	jobs_exclusive = list("Nuclear Operative")
 	refundable = TRUE
