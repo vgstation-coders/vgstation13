@@ -1,0 +1,4 @@
+author: Anonymous
+delete-after: True
+changes: 
+- tweak: "Recoil has been reworked and will now push your screen into the opposite direction when you fire a gun with recoil."

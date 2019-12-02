@@ -70,6 +70,8 @@
 
 	var/junction = 0
 
+	var/volume_mult = 1 //how loud are things on this turf?
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -87,6 +89,8 @@
 	for(var/atom/movable/AM as mob|obj in src)
 		spawn( 0 )
 			src.Entered(AM)
+	if(opacity)
+		has_opaque_atom = TRUE
 
 /turf/ex_act(severity)
 	return 0
@@ -267,6 +271,10 @@
 				if (istype(A,/obj/item/projectile))
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
+
+	if(A && A.opacity)
+		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
+		reconsider_lights()
 
 /turf/proc/is_plating()
 	return 0

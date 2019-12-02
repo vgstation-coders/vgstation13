@@ -74,7 +74,7 @@
 	victory = victorious
 
 	for(var/datum/objective/O in R.objectives.GetObjectives())
-		objectives.Add(new /datum/stat/role_objective)
+		objectives.Add(new /datum/stat/role_objective(O))
 
 /datum/stat/role_objective
 	var/obj_type = null

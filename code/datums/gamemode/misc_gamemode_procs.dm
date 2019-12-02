@@ -204,16 +204,7 @@
 	//Allows the wizard to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
 	if(wizard_mob.species && wizard_mob.species.name != "Human")
 		wizard_mob.set_species("Human", 1)
-	var/wizard_name_first = pick(wizard_first)
-	var/wizard_name_second = pick(wizard_second)
-	var/randomname = "[wizard_name_first] [wizard_name_second]"
-	spawn(0)
-		var/newname = stripped_input(wizard_mob, "You are a [role_name]. Would you like to change your name to something else?", "Name change", randomname, MAX_NAME_LEN)
-
-		if (!newname)
-			newname = randomname
-
-		wizard_mob.fully_replace_character_name(wizard_mob.real_name, newname)
+	mob_rename_self(wizard_mob, role_name)
 	return
 
 /proc/equip_highlander(var/mob/living/carbon/human/highlander_human)
@@ -439,16 +430,7 @@
 /proc/name_ninja(var/mob/living/carbon/human/H)
 	if(!isjusthuman(H))
 		H.set_species("Human", 1)
-	var/ninja_title = pick(ninja_titles)
-	var/ninja_name = pick(ninja_names)
-	var/randomname = "[ninja_title] [ninja_name]"
-	spawn(0)
-		var/newname = copytext(sanitize(input(H, "You are an angry Space ninja. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
-
-		if (!newname)
-			newname = randomname
-
-		H.fully_replace_character_name(H.real_name, newname)
+	mob_rename_self(H, "ninja")
 
 /proc/share_syndicate_codephrase(var/mob/living/agent)
 	if(!agent)
@@ -476,4 +458,64 @@
 		words += "Trust nobody.<br>"
 
 	to_chat(agent,words)
+	return 1
+
+
+
+/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
+	vox.age = rand(12,20)
+	if(vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+		vox.overeatduration = 0 //Fat-B-Gone
+		if(vox.nutrition > 400) //We are also overeating nutriment-wise
+			vox.nutrition = 400 //Fix that
+		vox.mutations.Remove(M_FAT)
+		vox.update_mutantrace(0)
+		vox.update_mutations(0)
+		vox.update_inv_w_uniform(0)
+		vox.update_inv_wear_suit()
+
+	vox.my_appearance.s_tone = random_skin_tone("Vox")
+	vox.dna.mutantrace = "vox"
+	vox.set_species("Vox")
+	vox.fully_replace_character_name(vox.real_name, vox.generate_name())
+	vox.mind.name = vox.name
+	//vox.languages = HUMAN // Removing language from chargen.
+	vox.default_language = all_languages[LANGUAGE_VOX]
+	vox.flavor_text = ""
+	vox.species.default_language = LANGUAGE_VOX
+	vox.remove_language(LANGUAGE_GALACTIC_COMMON)
+	vox.my_appearance.h_style = "Short Vox Quills"
+	vox.my_appearance.f_style = "Shaved"
+	for(var/datum/organ/external/limb in vox.organs)
+		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
+	vox.regenerate_icons()
+
+
+/proc/equip_vox_raider(var/mob/living/carbon/human/H)
+	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
+	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
+	H.equip_to_slot_or_del(R, slot_ears)
+
+	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes(src)
+	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider(src))
+	H.equip_to_slot_or_del(uni, slot_w_uniform)
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox(src), slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox(src), slot_gloves) // AS ABOVE.
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox(src), slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen(src), slot_back)
+	H.equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_r_store)
+
+	var/obj/item/weapon/card/id/syndicate/C = new(src)
+	C.registered_name = H.real_name
+	C.assignment = "Trader"
+	C.UpdateName()
+	C.SetOwnerInfo(src)
+	C.icon_state = "trader"
+	C.access = list(access_syndicate, access_trade)
+	var/obj/item/weapon/storage/wallet/W = new(src)
+	W.handle_item_insertion(C)
+	W.handle_item_insertion(new /obj/item/weapon/coin/raider)
+	H.equip_to_slot_or_del(W, slot_wear_id)
 	return 1

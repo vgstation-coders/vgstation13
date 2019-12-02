@@ -282,7 +282,7 @@ var/stacking_limit = 90
 				if (threat_level > 75)
 					extra_rulesets_amount++
 		else
-			if (rst_pop >= high_pop_limit - 10)
+			if (rst_pop >= high_pop_limit - 25)
 				if (threat_level >= second_rule_req[indice_pop])
 					extra_rulesets_amount++
 					if (threat_level >= third_rule_req[indice_pop])

@@ -164,7 +164,8 @@
 /datum/dynamic_ruleset/midround/autotraitor
 	name = "Syndicate Sleeper Agent"
 	role_category = /datum/role/traitor
-	protected_from_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Cyborg", "Merchant")
+	protected_from_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain","Head of Personnel",
+							"Cyborg", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 7
@@ -191,6 +192,9 @@
 			continue
 		if(isanimal(player) && !isborer(player))
 			living_players -= player //No animal traitors except borers.
+			continue
+		if(isalien(player))
+			living_players -= player //Xenos don't bother with the syndicate
 			continue
 		if(player.z == map.zCentcomm)
 			living_players -= player//we don't autotator people on Z=2
@@ -552,11 +556,11 @@
 
 //////////////////////////////////////////////
 //                                          //
-//          Vox Hesit			 (MIDROUND) ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//          Vox Heist			 (MIDROUND) ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/hesit
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist
 	name = "Vox Heist"
 	role_category = /datum/role/vox_raider
 	my_fac = /datum/faction/vox_shoal
@@ -570,19 +574,19 @@
 	var/vox_cap = list(2,2,3,3,4,5,5,5,5,5)
 	logo = "vox-logo"
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/hesit/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/acceptable(var/population=0,var/threat=0)
 	var/indice_pop = min(10,round(living_players.len/5)+1)
 	required_candidates = vox_cap[indice_pop]
 	return ..()
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/hesit/ready(var/forced = 0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/ready(var/forced = 0)
 	if (forced)
 		required_candidates = 1
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	return ..()
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/hesit/finish_setup(var/mob/new_character, var/index)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/vox_shoal/shoal = find_active_faction_by_type(/datum/faction/vox_shoal)
 	shoal.forgeObjectives()
 	if (index == 1) // Our first guy is the leader

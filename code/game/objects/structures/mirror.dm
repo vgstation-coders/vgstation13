@@ -35,12 +35,12 @@
 				if(41 to 50)
 					to_chat(H, "<span class='notice'>You don't see anything.</span>")
 					return
-		
+
 		var/which = alert("What would you like to change?", "Appearance", "Hair", "Beard", "Undies")
 
 		if((!which) || (!Adjacent(user)))
 			return
-		
+
 		//copypasted from user prefs, check there for more info
 
 		switch(which)
@@ -63,7 +63,7 @@
 					if(new_style)
 						H.my_appearance.h_style = new_style
 						H.update_hair()
-			
+
 			if("Undies")
 				var/list/underwear_options
 				if(H.gender == MALE)
@@ -106,6 +106,19 @@
 			shattered = 0
 			icon_state = "mirror"
 			playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
+
+	else if(istype(I, /obj/item/weapon/crowbar))
+		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
+		playsound('sound/items/Crowbar.ogg', 50, 1)
+		if(do_after(user, src, 3 SECONDS))
+			if(shattered)
+				getFromPool(/obj/item/weapon/shard, loc)
+				getFromPool(/obj/item/stack/sheet/metal, loc, 1)
+			else
+				getFromPool(/obj/item/stack/sheet/metal, loc, 1)
+				getFromPool(/obj/item/stack/sheet/glass/glass, loc, 2)
+			qdel(src)
+		return
 
 	else
 		user.do_attack_animation(src, I)

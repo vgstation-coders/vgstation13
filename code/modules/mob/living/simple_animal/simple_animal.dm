@@ -287,10 +287,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	//Atmos effect
 	if(bodytemperature < minbodytemp)
-		fire_alert = 2
+		fire_alert = FIRE_ALARM_FROSTBITE
 		adjustBruteLoss(cold_damage_per_tick)
 	else if(bodytemperature > maxbodytemp)
-		fire_alert = 1
+		fire_alert = FIRE_ALARM_ON_FIRE
 		adjustBruteLoss(heat_damage_per_tick)
 	else
 		fire_alert = 0
@@ -366,9 +366,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 			switch(mode)
 				if(1)
-					say(pick(speak))
-					if(emote_sound.len)
-						playsound(loc, "[pick(emote_sound)]", 80, 1)
+					say(pick(speak)) // The sound is in say_quote
 				if(2)
 					emote("me", MESSAGE_HEAR, "[pick(emote_hear)].")
 					if(emote_sound.len)

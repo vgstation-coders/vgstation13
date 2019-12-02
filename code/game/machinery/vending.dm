@@ -2507,6 +2507,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/red_suit = 3
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
+		/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/clothing/suit/cardborg = 3,
 		/obj/item/clothing/head/cardborg = 3,
 		/obj/item/clothing/suit/judgerobe = 3,

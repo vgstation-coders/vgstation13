@@ -357,7 +357,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/manifested/gib(mob/living/carbon/human/H)
 	handle_death(H)
-	
+
 /datum/species/unathi
 	name = "Unathi"
 	icobase = 'icons/mob/human_races/r_lizard.dmi'
@@ -382,7 +382,7 @@ var/global/list/whitelisted_species = list("Human")
 	default_mutations=list(M_CLAWS)
 
 	flesh_color = "#34AF10"
-	
+
 	head_icons      = 'icons/mob/species/unathi/head.dmi'
 	wear_suit_icons = 'icons/mob/species/unathi/suit.dmi'
 
@@ -437,16 +437,16 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/skellington/gib(mob/living/carbon/human/H)
 	..()
-	var/datum/organ/external/head_organ = H.get_organ(LIMB_HEAD)	
+	var/datum/organ/external/head_organ = H.get_organ(LIMB_HEAD)
 	if(head_organ.status & ORGAN_DESTROYED)
 		new /obj/effect/decal/remains/human/noskull(H.loc)
 	else
 		new /obj/effect/decal/remains/human(H.loc)
 		head_organ.droplimb(1,1)
 
-	H.drop_all()	
+	H.drop_all()
 	qdel(src)
-	
+
 
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative
 	name = "Skeletal Vox"
@@ -535,7 +535,7 @@ var/global/list/whitelisted_species = list("Human")
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes/tajaran
 	)
-	
+
 	head_icons      = 'icons/mob/species/tajaran/head.dmi'
 	wear_suit_icons = 'icons/mob/species/tajaran/suit.dmi'
 
@@ -598,7 +598,7 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/tajaran/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
-	
+
 /datum/species/grey // /vg/
 	name = "Grey"
 	icobase = 'icons/mob/human_races/r_grey.dmi'
@@ -649,7 +649,7 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/grey/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
-	
+
 /datum/species/muton // /vg/
 	name = "Muton"
 	icobase = 'icons/mob/human_races/r_muton.dmi'
@@ -703,7 +703,7 @@ var/global/list/whitelisted_species = list("Human")
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_SWEAT_GLANDS
 
 	flesh_color = "#8CD7A3"
-	
+
 
 	head_icons      = 'icons/mob/species/skrell/head.dmi'
 	wear_suit_icons = 'icons/mob/species/skrell/suit.dmi'
@@ -711,7 +711,7 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/skrell/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
-	
+
 /datum/species/vox
 	name = "Vox"
 	icobase = 'icons/mob/human_races/vox/r_vox.dmi'
@@ -954,7 +954,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	species_intro = "You are a Diona.<br>\
 					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\
-					You absorb radiation which helps you in a similar way to sunlight. You are incredibly slow as you are rooted to the ground.<br>\
+					You absorb radiation which helps you in a similar way to sunlight. Your rigid, wooden limbs make you incredibly slow.<br>\
 					You do not need to breathe, do not feel pain,  you are incredibly resistant to cold and low pressure, and have no blood to bleed.<br>\
 					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally."
 
@@ -1118,7 +1118,7 @@ var/list/has_died_as_golem = list()
 /datum/species/grue/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
-	
+
 /datum/species/ghoul
 	name = "Ghoul"
 	icobase = 'icons/mob/human_races/r_ghoul.dmi'
@@ -1339,12 +1339,12 @@ var/list/has_died_as_golem = list()
 
 /datum/species/lich/gib(mob/living/carbon/human/H)
 	..()
-	var/datum/organ/external/head_organ = H.get_organ(LIMB_HEAD)	
+	var/datum/organ/external/head_organ = H.get_organ(LIMB_HEAD)
 	if(head_organ.status & ORGAN_DESTROYED)
 		new /obj/effect/decal/remains/human/noskull(H.loc)
 	else
 		new /obj/effect/decal/remains/human(H.loc)
 		head_organ.droplimb(1,1)
 
-	H.drop_all()	
+	H.drop_all()
 	qdel(src)

@@ -7,6 +7,7 @@
 	use_power = 1
 	idle_power_usage = 4
 	active_power_usage = 250
+	var/has_beeped = FALSE
 
 
 	ghost_read = 0 // Deactivate ghost touching.
@@ -99,6 +100,7 @@
 		M.Translate(0,6)
 		G.transform = M
 		charging = G
+		has_beeped = FALSE
 		if(!self_powered)
 			use_power = 2
 		update_icon()
@@ -183,6 +185,9 @@
 				E.power_supply.charge = E.power_supply.maxcharge
 				update_icon()
 				icon_state = "recharger2"
+				if(!has_beeped)
+					playsound(src, 'sound/machines/charge_finish.ogg', 50)
+				has_beeped = TRUE
 			return
 		else if(istype(charging, /obj/item/energy_magazine))//pulse rifle rounds, Original values: 3rnd charged, 250e consumed, let's say 50e per round + 100e waste
 			var/obj/item/energy_magazine/M = charging
@@ -207,6 +212,9 @@
 						use_power(200*charging_speed_modifier)
 				else
 					icon_state = "recharger2"
+					if(!has_beeped)
+						playsound(src, 'sound/machines/charge_finish.ogg', 50)
+					has_beeped = TRUE
 			else
 				icon_state = "recharger0"
 

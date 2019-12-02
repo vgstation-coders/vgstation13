@@ -1,5 +1,6 @@
 /obj/item/clothing/head/helmet/tactical
 	var/preattached = FALSE
+	body_parts_covered = HEAD|EARS|EYES|MASKHEADHAIR
 	species_fit = list()
 
 /obj/item/clothing/head/helmet/tactical/New()

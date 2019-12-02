@@ -52,10 +52,11 @@
 	y_off = rand(-10,10)
 	x_player_off = 0
 	y_player_off = 0
-	cell = new/obj/item/weapon/cell(src)
 
 /obj/machinery/computer/telescience/initialize()
 	..()
+	if(ticker && ticker.current_state < GAME_STATE_PLAYING)
+		cell = new/obj/item/weapon/cell(src) // Stops cell duping, provides one 1000 cell at roundstart
 	for(var/obj/machinery/telepad/possible_telepad in range(src, 7))
 		if(telepad)
 			return //Stop checking if we are linked

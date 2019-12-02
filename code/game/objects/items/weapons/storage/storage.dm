@@ -338,9 +338,9 @@
 			for(var/mob/M in viewers(usr, null))
 				if (M == usr)
 					to_chat(usr, "<span class='notice'>You put \the [W] into \the [src].</span>")
-				else if (M in range(1)) //If someone is standing close enough, they can tell what it is...
+				else if (M in range(1) && !stealthy(usr)) //If someone is standing close enough, they can tell what it is...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
-				else if (W.w_class >= W_CLASS_MEDIUM) //Otherwise they can only see large or normal items from a distance...
+				else if (W.w_class >= W_CLASS_MEDIUM && !stealthy(usr)) //Otherwise they can only see large or normal items from a distance...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 
 
@@ -441,7 +441,8 @@
 	..()
 
 /obj/item/weapon/storage/attack_hand(mob/user as mob)
-	playsound(src, rustle_sound, 50, 1, -5)
+	if(!stealthy(user))
+		playsound(src, rustle_sound, 50, 1, -5)
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user

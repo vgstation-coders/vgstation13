@@ -81,6 +81,12 @@
 		if("grinchstart")
 			grinchstart += loc
 
+		if("voxstart")
+			voxstart += loc
+
+		if("voxlocker")
+			voxlocker += loc
+
 	landmarks_list += src
 	return 1
 

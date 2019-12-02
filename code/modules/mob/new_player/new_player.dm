@@ -184,6 +184,7 @@
 			to_chat(src, "<span class='warning'>You have recently requested for heads of staff to open priority roles.</span>")
 			return
 		var/count_pings = 0
+		to_chat(src, "<span class='bnotice'>You have requested for heads of staff to open priority roles. Please stand by.</span>")
 		for(var/obj/item/device/pda/pingme in PDAs)
 			if(pingme.cartridge && pingme.cartridge.fax_pings && pingme.cartridge.access_status_display)
 				//This may seem like a strange check, but it's excluding the IAA for only HOP/Cap

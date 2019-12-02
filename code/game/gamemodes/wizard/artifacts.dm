@@ -29,6 +29,13 @@
 	price = 2 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
+/datum/spellbook_artifact/staff_of_swapping
+	name = "Staff of Swapping"
+	desc = "An artefact that fires a glowing bolt of energy which transfers the caster and targets position in space. Wielding in it both hands increases the power of the staff, and allows it to pass through certain objects.."
+	abbreviation = "SW"
+	price = 20
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/swapper)
+
 /datum/spellbook_artifact/mental_focus
 	name = "Mental Focus"
 	desc = "An artefact that channels the will of the user into destructive bolts of force."
@@ -305,3 +312,9 @@
 	abbreviation = "BS"
 	desc = "Makes you much faster, but blinds you while you move."
 	spawned_items = list(/obj/item/clothing/shoes/blindingspeed)
+
+/datum/spellbook_artifact/fuckup
+	name = "Fuckup Boots"
+	abbreviation = "FU"
+	desc = "Makes you much slower, but breaches as you walk."
+	spawned_items = list(/obj/item/clothing/shoes/fuckup)

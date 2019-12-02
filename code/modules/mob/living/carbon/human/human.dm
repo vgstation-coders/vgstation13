@@ -660,6 +660,18 @@
 	if(istype(G))
 		return G.pickpocket
 
+//Don't forget to change this too if you universalize the gloves
+/mob/living/carbon/human/proc/place_in_glove_storage(var/obj/item/I)
+	var/obj/item/clothing/gloves/black/thief/storage/S = gloves
+	if(!I) //How did you do this
+		return 0
+	if(istype(S))
+		if(S.hold.can_be_inserted(I, 1)) //There is no check in handling item insertion
+			S.hold.handle_item_insertion(I, 1)
+		else
+			put_in_hands(I)
+
+
 /mob/living/carbon/human/abiotic(var/full_body = 0)
 	for(var/obj/item/I in held_items)
 		if(I.abstract)
@@ -1942,3 +1954,17 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/can_be_infected()
 	return 1
+
+//this method handles user getting attacked with an emag - the original logic was in human_defense.dm,
+//but it's better that it belongs to human.dm 
+/mob/living/carbon/human/emag_act(var/mob/attacker, var/datum/organ/external/affecting, var/obj/item/weapon/card/emag)
+	var/hit_area = affecting.display_name
+	if(!(affecting.status & ORGAN_ROBOT))
+		to_chat(attacker, "<span class='warning'>That limb isn't robotic.</span>")
+		return FALSE
+	if(affecting.sabotaged)
+		to_chat(attacker, "<span class='warning'>\The [src]'s [hit_area] is already sabotaged!</span>")
+	else
+		to_chat(attacker, "<span class='warning'>You sneakily slide [emag] into the dataport on \the [src]'s [hit_area] and short out the safeties.</span>")
+		affecting.sabotaged = TRUE
+	return FALSE
