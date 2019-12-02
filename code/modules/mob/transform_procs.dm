@@ -336,4 +336,34 @@
 	update_hair()
 	playsound(src, 'sound/misc/gal-o-sengen.ogg', 50, 1)// GO GO GO GO GO GO GAL-O-SENGEN
 
+/mob/living/carbon/human/proc/zwartepietify()
+	if(ishuman(src)) //daar word aan de deur geklopt
+		if(!isjusthuman(src))
+			src.Humanize("Human")
+		var/mob/living/carbon/human/M = src
+		if(!M.is_wearing_item(/obj/item/clothing/under/jester))
+			var/obj/item/clothing/under/jester/JE = new /obj/item/clothing/under/jester(get_turf(M))
+			if(M.w_uniform) //hard geklopt
+				M.u_equip(M.w_uniform, 1)
+			M.equip_to_slot(JE, slot_w_uniform)
+			JE.canremove = 0
+		if(!M.is_wearing_item(/obj/item/clothing/gloves/black))
+			var/obj/item/clothing/gloves/black/BG = new /obj/item/clothing/gloves/black(get_turf(M))
+			if(M.gloves) //zacht geklopt
+				M.u_equip(M.gloves, 1)
+			M.equip_to_slot(BG, slot_gloves)
+			BG.canremove = 0
+		my_appearance.s_tone = -250
+		lip_style = "red" 
+		update_body() //daar word aan de deur geklopt
+		if(my_appearance.h_style != "Afro")
+			my_appearance.h_style = "Afro"
+		if(my_appearance.f_style  != "Shaven")
+			my_appearance.f_style  = "Shaven"
+		my_appearance.r_facial = my_appearance.r_hair = 5
+		my_appearance.g_facial = my_appearance.g_hair = 5
+		my_appearance.b_facial = my_appearance.b_hair = 5
+		update_hair() //wie zal dat zijn?
+
+
 #undef MONKEY_ANIM_TIME

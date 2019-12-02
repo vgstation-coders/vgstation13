@@ -35,6 +35,13 @@
 	abbreviation = "SW"
 	price = 20
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/swapper)
+	
+/datum/spellbook_artifact/staff_of_sinterklaas
+	name = "Staff of Sinterklaas"
+	desc = "An artefact that fires a glowing bolt of energy which turns the target into a jovial helper."
+	abbreviation = "SS"
+	price = 5
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/sinterklaas, /obj/item/clothing/head/wizard/sinterklaas)
 
 /datum/spellbook_artifact/mental_focus
 	name = "Mental Focus"
