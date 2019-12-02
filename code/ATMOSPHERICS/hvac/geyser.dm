@@ -18,6 +18,11 @@
 	var/smoke_probability = 40
 	var/preparing_smoke = 0
 
+/obj/structure/geyser/New()
+	..()
+	if(istype(loc,/turf/simulated/floor/beach) || istype(loc,/turf/unsimulated/beach))
+		icon_state = "geyser-sandy"
+
 /obj/structure/geyser/process()
 	if (preparing_smoke)
 		return // We're about to exhaust smoke
