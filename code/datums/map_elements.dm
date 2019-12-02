@@ -24,6 +24,7 @@ var/list/datum/map_element/map_elements = list()
 	if(x + width > world.maxx || y + height > world.maxy)
 		WARNING("Cancelled loading [src]. Map enlargement is forbidden.")
 		return FALSE
+	return TRUE
 
 /datum/map_element/proc/initialize(list/objects) //Called after loading the element. The "objects" list contains all spawned atoms
 	map_elements.Add(src)
