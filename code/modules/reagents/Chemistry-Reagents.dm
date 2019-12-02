@@ -4710,7 +4710,7 @@
 /datum/reagent/caffeine
 	name = "Caffeine"
 	id = CAFFEINE
-	description = "Caffeine is a stimulant that is commonly found in coffee and tea. It works by making your metabolism faster so it also increases your appetite."
+	description = "Caffeine is a common stimulant. It works by making your metabolism faster so it also increases your appetite."
 	color = "#E8E8E8" //rgb: 232, 232, 232
 	density = 1.23
 	specheatcap = 0.89

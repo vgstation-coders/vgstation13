@@ -764,7 +764,7 @@
 	reagents.add_reagent(BLACKCOLOR, 5)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy
-	name = "Roentgen Energy"
+	name = "\improper Roentgen Energy"
 	desc = "Roentgen Energy, a meltdown in your mouth! Contains real actinides!"
 	icon_state = "roentgenenergy"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy/New()
