@@ -10,14 +10,11 @@
 	keytype = /obj/item/key/snowmobile
 	can_have_carts = TRUE
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/snowmobile
+	headlights = TRUE
 	var/list/approved_terrain = list(/turf/simulated/floor/engine/concrete,/turf/unsimulated/floor/snow,
 									 /turf/unsimulated/floor/noblizz_permafrost,
 									 /obj/glacier,
 									 /turf/simulated/floor/plating/snow)
-
-/obj/structure/bed/chair/vehicle/snowmobile/New()
-	..()
-	new /datum/action/vehicle/toggle_headlights(src)
 
 /obj/structure/bed/chair/vehicle/snowmobile/update_icon()
 	for(var/datum/action/vehicle/toggle_headlights/TH in vehicle_actions)
@@ -48,6 +45,25 @@
 /obj/structure/bed/chair/vehicle/snowmobile/universal/set_keys()
 	if(keytype && !vin)
 		heldkey = new keytype(src)
+
+/obj/structure/bed/chair/vehicle/snowmobile/security
+	name = "security snowmobile"
+	desc = "An armored security snowmobile. Take note, it does not use a universal key."
+	health = 200
+	max_health = 200
+	icon_state = "snowcurity"
+	headlights = FALSE
+
+/obj/structure/bed/chair/vehicle/snowmobile/New()
+	..()
+	new /datum/action/vehicle/toggle_headlights/siren(src)
+
+/obj/structure/bed/chair/vehicle/snowmobile/security/process()
+	if(light)
+		if(light_color == "#FF0000")
+			light_color = "#0000FF"
+		else
+			light_color = "#FF0000"
 
 /obj/structure/bed/chair/vehicle/snowmobile/getMovementDelay()
 	var/turf/T = loc
