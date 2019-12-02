@@ -111,6 +111,20 @@
 	original[1] = /obj/item/clothing/suit/space/rig/security
 	finished[1] = /obj/item/clothing/suit/space/rig/security/fat
 
+/obj/item/device/modkit/syndi_commander
+	name = "syndicate commander hardsuit modification kit"
+	desc = "For showing who's the boss. Apply to hardsuit."
+
+/obj/item/device/modkit/syndi_commander/New()
+	..()
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	1
+	original[1] = /obj/item/clothing/suit/space/rig/syndi
+	finished[1] = /obj/item/clothing/suit/space/rig/syndi/commander
+
 
 /* /vg/ - Not needed
 /obj/item/device/modkit/tajaran
