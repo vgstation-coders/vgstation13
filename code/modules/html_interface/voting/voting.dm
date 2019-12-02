@@ -276,8 +276,7 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0, var/weighted_vote = 0)
 	if(currently_voting)
-		for(var/client/C in admins)
-			to_chat(C, "<span class='info'>[C.ckey] attempted to begin a vote, however a vote is already in progress.</span>")
+		message_admins("<span class='info'>[initiator_key] attempted to begin a vote, however a vote is already in progress.</span>")
 		return
 	currently_voting = TRUE
 	if(!mode)
