@@ -99,6 +99,8 @@
 	var/center_x = 226
 	var/center_y = 254
 
+	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
+
 /datum/map/New()
 	. = ..()
 
