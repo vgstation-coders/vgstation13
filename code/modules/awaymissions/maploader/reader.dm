@@ -118,11 +118,19 @@ var/list/map_dimension_cache = list()
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
 		if(world.maxx < map_width + x_offset)
+			if(!map.can_enlarge)
+				WARNING("Cancelled load of [map_element] due to map bounds.")
+				return list()
 			world.maxx = map_width + x_offset
+			WARNING("Loading [map_element] enlarged the map. New max x = [world.maxx]")
 
 		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
 		if(world.maxy < y_depth + y_offset)
+			if(!map.can_enlarge)
+				WARNING("Cancelled load of [map_element] due to map bounds.")
+				return list()
 			world.maxy = y_depth + y_offset
+			WARNING("Loading [map_element] enlarged the map. New max y = [world.maxy]")
 
 		//then proceed it line by line, starting from top
 		ycrd = y_offset + y_depth
