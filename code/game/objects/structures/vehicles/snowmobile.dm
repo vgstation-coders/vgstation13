@@ -59,6 +59,7 @@
 	new /datum/action/vehicle/toggle_headlights/siren(src)
 
 /obj/structure/bed/chair/vehicle/snowmobile/security/process()
+	..()
 	if(light)
 		if(light_color == "#FF0000")
 			light_color = "#0000FF"
