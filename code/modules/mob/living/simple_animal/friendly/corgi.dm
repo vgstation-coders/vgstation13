@@ -40,7 +40,9 @@
 	size = SIZE_SMALL
 
 	var/obj/item/inventory_head
+	var/can_remove_head = TRUE
 	var/obj/item/inventory_back
+	var/can_remove_back = TRUE
 	var/obj/item/clothing/mask/facehugger/facehugger
 	var/list/spin_emotes = list("dances around","chases its tail")
 	var/corgi_status = IDLE
@@ -272,6 +274,10 @@
 
 					usr.drop_item(item_to_add, src, force_drop = 1)
 					src.inventory_back = item_to_add
+					if(isrig(item_to_add)) //TIME TO HACKINTOSH
+						var/obj/item/clothing/head/helmet/space/rig/rig_helmet = new (src)
+						place_on_head(rig_helmet)
+						can_remove_head = FALSE
 					regenerate_icons()
 
 		show_inv(usr)
@@ -498,6 +504,10 @@
 /mob/living/simple_animal/corgi/proc/remove_inventory(var/remove_from = "head", mob/user)
 	switch(remove_from)
 		if("head")
+			if(!can_remove_head)
+				if(user)
+					to_chat(user, "<span class='warning'>You cannot remove \the [inventory_head] from  its [remove_from]!</span>")
+				return
 			if(inventory_head)
 				name = real_name
 				desc = initial(desc)
@@ -518,7 +528,15 @@
 					to_chat(user, "<span class='warning'>There is nothing to remove from its [remove_from].</span>")
 				return
 		if("back")
+			if(!can_remove_back)
+				if(user)
+					to_chat(user, "<span class='warning'>You cannot remove \the [inventory_back] from  its [remove_from]!</span>")
+				return
 			if(inventory_back)
+				if(isrig(inventory_back) && inventory_head && isrighelmet(inventory_head)) //UNDO YOUR HACK
+					qdel(inventory_head)
+					inventory_head = null
+					can_remove_head = TRUE
 				inventory_back.forceMove(src.loc)
 				inventory_back = null
 				regenerate_icons()

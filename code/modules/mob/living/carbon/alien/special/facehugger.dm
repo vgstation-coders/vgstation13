@@ -254,7 +254,7 @@
 
 		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
 			var/rng = CHANCE_TO_REMOVE_HEADWEAR
-			if(istype(mouth_protection, /obj/item/clothing/head/helmet/space/rig))
+			if(isrighelmet(mouth_protection))
 				rng = CHANCE_TO_REMOVE_SPECIAL_HEADWEAR
 			if(prob(rng)) // Temporary balance change, all mouth-covering hats will be more effective
 				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s \the [mouth_protection], and rips it off in the process!</span>")
@@ -305,7 +305,7 @@
 		if(headwear)
 			if(istype(headwear, /obj/item/clothing/head/cardborg))
 				rng = CHANCE_TO_REMOVE_HEADWEAR
-			else if(istype(headwear, /obj/item/clothing/head/helmet/space/rig))
+			else if(isrighelmet(headwear))
 				rng = CHANCE_TO_REMOVE_SPECIAL_HEADWEAR
 
 			if(prob(rng))

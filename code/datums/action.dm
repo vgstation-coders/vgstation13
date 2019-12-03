@@ -228,7 +228,7 @@
 	name = "Toggle rig light"
 
 /datum/action/item_action/toggle_rig_light/Trigger()
-	if(IsAvailable() && target && istype(target, /obj/item/clothing/head/helmet/space/rig))
+	if(IsAvailable() && target && isrighelmet(target))
 		var/obj/item/clothing/head/helmet/space/rig/R = target
 		R.toggle_light(owner)
 		return TRUE
