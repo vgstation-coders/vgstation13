@@ -100,6 +100,12 @@
 	else
 		..()
 
+/obj/item/weapon/stamp/mime/try_stamp(mob/user,obj/item/weapon/paper/P)
+	if(!user.mind.miming)
+		to_chat(user, "<span class='warning'>Only a vow of silence will activate this stamp.</span>")
+	else
+		..()
+
 /obj/item/weapon/stamp/chaplain
 	name = "chaplain's seal"
 	icon_state = "stamp-chaplain"
