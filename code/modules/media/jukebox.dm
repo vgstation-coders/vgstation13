@@ -8,7 +8,7 @@ var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("lilslugger", "bar", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween"))
+	for(var/playlist_id in list("lilslugger", "bar", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		//testing("Updating playlist from [url]...")
 
@@ -783,6 +783,8 @@ var/global/list/loopModeNames=list(
 	var/MM = text2num(time2text(world.timeofday, "MM"))
 	if(MM == 10)
 		playlists["halloween"] = "Halloween"
+	if(MM == 12)
+		playlists["christmas"] = "Christmas Jingles"
 
 
 // Relaxing elevator music~
@@ -843,6 +845,7 @@ var/global/list/loopModeNames=list(
 		"emagged" ="Syndicate Mix",
 		"shuttle"= "Shuttle",
 		"halloween" = "Halloween",
+		"christmas" = "Christmas Jingles",
 		"endgame" = "Apocalypse",
 		"nukesquad" = "Syndicate Assault",
 		"malfdelta"= "Silicon Assault",
@@ -1066,3 +1069,7 @@ var/global/list/loopModeNames=list(
 	name = "nanovynil - slugger"
 	unformatted = "lilslugger"
 	formatted = "Battle of Lil Slugger"
+obj/item/weapon/vinyl/christmas
+	name = "nanovynil - christmas"
+	unformatted = "christmas"
+	formatted = "Christmas Jingles"
