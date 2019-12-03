@@ -417,11 +417,13 @@
 	if(H.backbag == 1)
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		H.equip_or_collect(new /obj/item/toy/crayon/mime(H), slot_l_store)
+		H.equip_or_collect(new /obj/item/weapon/stamp/mime(H), slot_l_store)
 		H.put_in_hands(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/toy/crayon/mime(H), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H), slot_in_backpack)
+		H.equip_or_collect(new /obj/item/weapon/stamp/mime(H), slot_in_backpack)
 	H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 	H.add_spell(new /spell/targeted/oathbreak/)
 	H.mind.miming = MIMING_OUT_OF_CHOICE
