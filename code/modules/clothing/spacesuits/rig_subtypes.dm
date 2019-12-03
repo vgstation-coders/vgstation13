@@ -165,11 +165,9 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 20, laser = 20,energy = 20, bomb = 35, bio = 100, rad = 60)
 	siemens_coefficient = 0.7
-
-	wizard_garb = 1
-
 	species_restricted = null
-
+	wizard_garb = TRUE
+	
 /obj/item/clothing/head/helmet/space/rig/wizard/acidable()
 	return 0
 
@@ -183,15 +181,15 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 20, laser = 20,energy = 20, bomb = 35, bio = 100, rad = 60)
 	siemens_coefficient = 0.7
-
-	wizard_garb = 1
-
 	species_restricted = null
+	wizard_garb = TRUE
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/weapon/teleportation_scroll, /obj/item/weapon/gun/energy/staff)
 	head_type = /obj/item/clothing/head/helmet/space/rig/wizard
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
+	gloves_type = /obj/item/clothing/gloves/purple/wizard
+	tank_type = /obj/item/weapon/tank/emergency_oxygen/double/wizard
 
 /obj/item/clothing/suit/space/rig/wizard/acidable()
-	return 0
+	return FALSE
 
 /obj/item/clothing/head/helmet/space/rig/wizard/lich_king
 	name = "helm of domination"
@@ -208,6 +206,9 @@
 	item_state = "lichking_armour"
 	species_restricted = list(UNDEAD_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|HANDS
+	head_type = /obj/item/clothing/head/helmet/space/rig/wizard/lich_king
+	boots_type = /obj/item/clothing/shoes/lich_king
+	tank_type = /obj/item/weapon/tank/oxygen/yellow
 
 //Medical Rig
 /obj/item/clothing/head/helmet/space/rig/medical

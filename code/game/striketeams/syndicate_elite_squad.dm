@@ -76,7 +76,6 @@
 
 	//Mask & Armor
 	equip_to_slot_or_del(new /obj/item/clothing/mask/gas/syndicate(src), slot_wear_mask)
-	equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndicate_elite(src), slot_head)
 	equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndicate_elite(src), slot_wear_suit)
 	equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen(src), slot_s_store)
 

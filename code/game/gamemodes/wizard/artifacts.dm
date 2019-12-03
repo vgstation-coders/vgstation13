@@ -61,10 +61,8 @@
 	abbreviation = "HS"
 	spawned_items = list(
 	/obj/item/clothing/shoes/sandal,\
-	/obj/item/clothing/gloves/purple/wizard,\
-	/obj/item/clothing/suit/space/rig/wizard,\
-	/obj/item/clothing/head/helmet/space/rig/wizard,\
-	/obj/item/weapon/tank/emergency_oxygen/double/wizard)
+	/obj/item/clothing/suit/space/rig/wizard
+	)
 
 /datum/spellbook_artifact/staff_of_animation
 	name = "Staff of Animation"

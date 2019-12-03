@@ -33,18 +33,20 @@
 /obj/abstract/loadout/proc/alter_items(var/list/items, var/mob/M)
 
 /obj/abstract/loadout/gemsuit
-	items_to_spawn = list(/obj/item/clothing/head/helmet/space/rig/wizard,
+	items_to_spawn = list(
 						/obj/item/clothing/suit/space/rig/wizard,
-						/obj/item/clothing/gloves/purple,
-						/obj/item/clothing/shoes/sandal)
+						/obj/item/clothing/shoes/sandal
+						)
 
 /obj/abstract/loadout/nazi_rigsuit
-	items_to_spawn = list(/obj/item/clothing/head/helmet/space/rig/nazi,
-						/obj/item/clothing/suit/space/rig/nazi)
+	items_to_spawn = list(
+						/obj/item/clothing/suit/space/rig/nazi
+						)
 
 /obj/abstract/loadout/soviet_rigsuit
-	items_to_spawn = list(/obj/item/clothing/head/helmet/space/rig/soviet,
-						/obj/item/clothing/suit/space/rig/soviet)
+	items_to_spawn = list(
+						/obj/item/clothing/suit/space/rig/soviet
+						)
 
 /obj/abstract/loadout/dredd_gear
 	items_to_spawn = list(/obj/item/clothing/under/darkred,
@@ -66,46 +68,53 @@
 						/obj/item/clothing/mask/breath)
 
 /obj/abstract/loadout/engineer_RIG
-	items_to_spawn = list(/obj/item/clothing/suit/space/rig,
-						/obj/item/clothing/head/helmet/space/rig,
+	items_to_spawn = list(
+						/obj/item/clothing/suit/space/rig,
 						/obj/item/weapon/tank/jetpack/oxygen,
-						/obj/item/clothing/mask/breath)
+						/obj/item/clothing/mask/breath
+						)
 
 /obj/abstract/loadout/CE_RIG
-	items_to_spawn = list(/obj/item/clothing/suit/space/rig/elite,
-						/obj/item/clothing/head/helmet/space/rig/elite,
+	items_to_spawn = list(
+						/obj/item/clothing/suit/space/rig/elite,
 						/obj/item/weapon/tank/jetpack/oxygen,
-						/obj/item/clothing/mask/breath)
+						/obj/item/clothing/mask/breath
+						)
 
 /obj/abstract/loadout/mining_RIG
-	items_to_spawn = list(/obj/item/clothing/suit/space/rig/mining,
-						/obj/item/clothing/head/helmet/space/rig/mining,
+	items_to_spawn = list(
+						/obj/item/clothing/suit/space/rig/mining,
 						/obj/item/weapon/tank/jetpack/oxygen,
-						/obj/item/clothing/mask/breath)
+						/obj/item/clothing/mask/breath
+						)
 
 /obj/abstract/loadout/syndi_RIG
-	items_to_spawn = list(/obj/item/clothing/suit/space/rig/syndi,
-						/obj/item/clothing/head/helmet/space/rig/syndi,
+	items_to_spawn = list(
+						/obj/item/clothing/suit/space/rig/syndi,
 						/obj/item/weapon/tank/jetpack/oxygen,
-						/obj/item/clothing/mask/breath)
+						/obj/item/clothing/mask/breath
+						)
 
 /obj/abstract/loadout/wizard_RIG
-	items_to_spawn = list(/obj/item/clothing/suit/space/rig/wizard,
-						/obj/item/clothing/head/helmet/space/rig/wizard,
+	items_to_spawn = list(
+						/obj/item/clothing/suit/space/rig/wizard,
 						/obj/item/weapon/tank/jetpack/oxygen,
-						/obj/item/clothing/mask/breath)
+						/obj/item/clothing/mask/breath
+						)
 
 /obj/abstract/loadout/medical_RIG
-	items_to_spawn = list(/obj/item/clothing/suit/space/rig/medical,
-						/obj/item/clothing/head/helmet/space/rig/medical,
+	items_to_spawn = list(
+						/obj/item/clothing/suit/space/rig/medical,
 						/obj/item/weapon/tank/jetpack/oxygen,
-						/obj/item/clothing/mask/breath)
+						/obj/item/clothing/mask/breath
+						)
 
 /obj/abstract/loadout/atmos_RIG
-	items_to_spawn = list(/obj/item/clothing/suit/space/rig/atmos,
-						/obj/item/clothing/head/helmet/space/rig/atmos,
+	items_to_spawn = list(
+						/obj/item/clothing/suit/space/rig/atmos,
 						/obj/item/weapon/tank/jetpack/oxygen,
-						/obj/item/clothing/mask/breath)
+						/obj/item/clothing/mask/breath
+						)
 
 /obj/abstract/loadout/tournament_standard_red
 	items_to_spawn = list(/obj/item/clothing/under/color/red,
@@ -245,14 +254,14 @@
 		P.name = "PDA-[M.real_name] ([P.ownjob])"
 
 /obj/abstract/loadout/death_commando
-	items_to_spawn = list(/obj/item/device/radio/headset/deathsquad,
+	items_to_spawn = list(
+						/obj/item/device/radio/headset/deathsquad,
 						/obj/item/clothing/under/deathsquad,
 						/obj/item/weapon/melee/energy/sword,
 						/obj/item/weapon/gun/projectile/mateba,
 						/obj/item/clothing/shoes/magboots/deathsquad,
 						/obj/item/clothing/gloves/combat,
 						/obj/item/clothing/glasses/thermal,
-						/obj/item/clothing/head/helmet/space/rig/deathsquad,
 						/obj/item/clothing/mask/gas/swat,
 						/obj/item/clothing/suit/space/rig/deathsquad,
 						/obj/item/weapon/tank/emergency_oxygen/double,
@@ -264,7 +273,8 @@
 						/obj/item/weapon/shield/energy,
 						/obj/item/weapon/plastique,
 						/obj/item/weapon/gun/energy/pulse_rifle,
-						/obj/item/weapon/card/id/death_commando)
+						/obj/item/weapon/card/id/death_commando
+						)
 
 /obj/abstract/loadout/death_commando/alter_items(var/list/items, var/mob/M)
 	for(var/obj/item/weapon/card/id/I in items)

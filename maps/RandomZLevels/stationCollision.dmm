@@ -62,7 +62,7 @@
 "bj" = (/obj/machinery/vending/cola,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/syndishuttle)
 "bk" = (/obj/machinery/vending/cigarette,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/syndishuttle)
 "bl" = (/obj/machinery/vending/coffee,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/syndishuttle)
-"bm" = (/obj/structure/closet/syndicate,/obj/item/clothing/suit/space/rig/syndi,/obj/item/clothing/head/helmet/space/rig/syndi,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/syndishuttle)
+"bm" = (/obj/structure/closet/syndicate,/obj/item/clothing/suit/space/rig/syndi,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/syndishuttle)
 "bn" = (/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/syndishuttle)
 "bo" = (/obj/structure/closet/syndicate,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/syndishuttle)
 "bp" = (/obj/structure/shuttle/engine/propulsion{tag = "icon-propulsion (EAST)"; icon_state = "propulsion"; dir = 4},/turf/simulated/shuttle/wall{icon_state = "wall3"},/area/awaymission/syndishuttle)

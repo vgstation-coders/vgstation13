@@ -10,7 +10,7 @@
 "aj" = (/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate2)
 "ak" = (/obj/machinery/door/airlock/external,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate2)
 "al" = (/mob/living/simple_animal/hostile/syndicate/ranged,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate2)
-"am" = (/obj/structure/table/reinforced,/obj/item/clothing/suit/space/rig/syndi,/obj/item/clothing/head/helmet/space/rig/syndi,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate2)
+"am" = (/obj/structure/table/reinforced,/obj/item/clothing/suit/space/rig/syndi,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate2)
 "an" = (/obj/structure/table/reinforced,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate2)
 "ao" = (/obj/machinery/sleeper,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate2)
 "ap" = (/obj/effect/landmark{name = "awaystart"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate2)
@@ -57,7 +57,7 @@
 "be" = (/obj/effect/landmark{name = "awaystart"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate1)
 "bf" = (/obj/machinery/porta_turret{dir = 8; emagged = 1; installation = /obj/item/weapon/gun/energy/lasercannon},/turf/simulated/floor/plating,/area/awaymission/spacebattle/syndicate2)
 "bg" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate3)
-"bh" = (/obj/structure/table/reinforced,/obj/item/clothing/suit/space/rig/syndi,/obj/item/clothing/head/helmet/space/rig/syndi,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate1)
+"bh" = (/obj/structure/table/reinforced,/obj/item/clothing/suit/space/rig/syndi,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate1)
 "bi" = (/obj/structure/table/reinforced,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate1)
 "bj" = (/obj/structure/table/reinforced,/obj/item/clothing/gloves/swat,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate1)
 "bk" = (/obj/machinery/sleeper,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/awaymission/spacebattle/syndicate1)
@@ -383,7 +383,7 @@
 "hs" = (/obj/structure/largecrate,/turf/simulated/floor/plating,/area/awaymission/spacebattle/cruiser)
 "ht" = (/obj/structure/closet/crate/secure/plasma,/obj/item/weapon/tank/plasma,/turf/simulated/floor/plating,/area/awaymission/spacebattle/cruiser)
 "hu" = (/obj/structure/closet/crate/medical,/obj/item/weapon/storage/firstaid/fire,/turf/simulated/floor/plating,/area/awaymission/spacebattle/cruiser)
-"hv" = (/obj/structure/rack,/obj/item/clothing/suit/space/rig,/obj/item/clothing/head/helmet/space/rig,/turf/simulated/floor,/area/awaymission/spacebattle/cruiser)
+"hv" = (/obj/structure/rack,/obj/item/clothing/suit/space/rig,/turf/simulated/floor,/area/awaymission/spacebattle/cruiser)
 "hw" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor{dir = 5; icon_state = "warning"},/area/awaymission/spacebattle/cruiser)
 "hx" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/engine,/area/awaymission/spacebattle/cruiser)
 "hy" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/engine,/area/awaymission/spacebattle/cruiser)
@@ -484,7 +484,7 @@
 "jp" = (/turf/simulated/wall/mineral/plasma,/area/awaymission/spacebattle/secret)
 "jq" = (/turf/simulated/floor{tag = "icon-alienvault"; icon_state = "alienvault"},/area/awaymission/spacebattle/secret)
 "jr" = (/obj/machinery/door/airlock/plasma,/turf/simulated/wall/mineral/plasma,/area/awaymission/spacebattle/secret)
-"js" = (/obj/item/clothing/suit/space/rig/wizard,/obj/item/clothing/head/helmet/space/rig/wizard,/turf/simulated/floor{tag = "icon-alienvault"; icon_state = "alienvault"},/area/awaymission/spacebattle/secret)
+"js" = (/obj/item/clothing/suit/space/rig/wizard,/turf/simulated/floor{tag = "icon-alienvault"; icon_state = "alienvault"},/area/awaymission/spacebattle/secret)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababababababababababababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
