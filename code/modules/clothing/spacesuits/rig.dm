@@ -88,14 +88,13 @@
 	..()
 	if(from_slot == slot_head && istype(user))
 		if(rig && rig.is_worn_by(user))
-			rig.deactivate_suit(user, unequipall = FALSE) //Do not unequip everything if they're just removing their helmet.
-			if(on)
-				toggle_light(user)
-			rig = null
+			rig.deactivate_suit(user, FALSE) //Do not unequip everything if they're just retracting their helmet.
+		if(on)
+			toggle_light(user)
 
 /obj/item/clothing/head/helmet/space/rig/equipped(mob/living/carbon/human/user, var/slot)
 	..()
-	if(user.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit))
+	if(!rig && user.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit))
 		var/obj/item/clothing/suit/space/rig/RS = user.wear_suit
 		if(RS.head_type && istype(src, RS.head_type)) //It's my suit! It was made for me!
 			rig = user.wear_suit
@@ -152,6 +151,8 @@
 		for(var/path in initial_modules)
 			var/obj/item/rig_module/new_module = new path(src)
 			modules += new_module
+	if(!(src in processing_objects))
+		processing_objects.Add(src)
 
 /obj/item/clothing/suit/space/rig/Destroy()
 	if(processing_objects.Find(src))
@@ -170,6 +171,8 @@
 		qdel(cell)
 	cell = null
 	wearer = null
+	if(processing_objects.Find(src))
+		processing_objects.Remove(src)
 	..()
 
 /obj/item/clothing/suit/space/rig/examine(mob/user)
@@ -187,7 +190,7 @@
 /obj/item/clothing/suit/space/rig/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	..()
 	if(from_slot == slot_wear_suit && istype(user))
-		deactivate_suit(user)
+		deactivate_suit(user, TRUE)
 	wearer = null
 
 /obj/item/clothing/suit/space/rig/dropped()
@@ -210,26 +213,39 @@
 /obj/item/clothing/suit/space/rig/process()
 	if(gcDestroyed)
 		return
-	if(!activated)
-		processing_objects.Remove(src)
+
+	check_builtin_pieces()
+
+	if(!istype(wearer) || !wearer.is_wearing_item(src, slot_wear_suit))
+		deactivate_suit(unequipall = FALSE)
+
+	if(activated)
+		process_rig_modules()
+
+/obj/item/clothing/suit/space/rig/proc/process_rig_modules()
+	if(istype(wearer) && wearer.timestopped)
 		return
-	if(!istype(wearer))
-		activated = FALSE
-		return
-	if(!wearer.is_wearing_item(src, slot_wear_suit))
-		return
-	if(wearer.timestopped)
-		return
+
 	for(var/obj/item/rig_module/R in modules)
 		if(R.activated && R.active_power_usage)
 			if(!cell.use(R.active_power_usage))
 				R.say_to_wearer("Not enough power available in [src]!")
-				R.deactivate(R.wearer,src)	
+				R.deactivate()	
 				continue
 			R.do_process()
 
+/obj/item/clothing/suit/space/rig/proc/check_builtin_pieces()
+	var/mob/living/M = null
+
+	for(var/obj/item/piece in list(H,G,MB))
+		if(piece && piece.loc != src && !(wearer && wearer.is_wearing_item(piece)))
+			if(istype(piece.loc, /mob/living))
+				M = piece.loc
+				M.drop_from_inventory(piece)
+			piece.forceMove(src)
+
 /obj/item/clothing/suit/space/rig/proc/toggle_suit(mob/living/carbon/human/user)
-	if(!user.is_wearing_item(src, slot_wear_suit))
+	if(!wearer.is_wearing_item(src, slot_wear_suit))
 		return
 	!activated ? initialize_suit(user, TRUE) : deactivate_suit(user, FALSE)
 
@@ -237,30 +253,30 @@
 	if(equipall)
 		for(var/piece in list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_BOOTS))
 			toggle_piece(piece, user, ONLY_DEPLOY)
+	if(H && wearer.is_wearing_item(H, slot_head))
+		H.toggle_light(wearer) //Lights on
+		if(T) //We have a built-in tank and our built-in helmet is equipped.
+			wearer.toggle_internals(user, T)
 	if(is_fully_equipped())
 		for(var/obj/item/rig_module/module in modules)
 			if(!module.activated) //Skip what is already activated.
-				module.activate(user,src)
+				module.activate(wearer,src)
 		activated = TRUE
-		if(!(src in processing_objects))
-			processing_objects.Add(src)
 
 /obj/item/clothing/suit/space/rig/proc/deactivate_suit(mob/living/carbon/human/user, var/unequipall = TRUE)
 	if(unequipall)
 		for(var/piece in list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_BOOTS))
 			toggle_piece(piece, user, ONLY_RETRACT)
 	for(var/obj/item/rig_module/R in modules)
-		R.deactivate(user,src)
+		R.deactivate()
 	activated = FALSE
-	if(processing_objects.Find(src))
-		processing_objects.Remove(src)
 
 /obj/item/clothing/suit/space/rig/proc/toggle_piece(var/piece, var/mob/living/initiator, var/deploy_mode)
 	if(!cell || !cell.charge)
 		return
 	if(!wearer)
 		return
-	if(initiator == wearer && wearer.incapacitated()) // If the initiator isn't wearing the suit it's probably an AI.
+	if(initiator == wearer && wearer.incapacitated()) // If the initiator isn't wearing the suit it's probably something like an AI.
 		return
 
 	var/obj/item/check_slot

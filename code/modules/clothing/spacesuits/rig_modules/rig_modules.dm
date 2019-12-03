@@ -16,7 +16,7 @@
 	wearer = user
 	rig = R
 
-/obj/item/rig_module/proc/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
+/obj/item/rig_module/proc/deactivate()
 	wearer = null
 	rig = null
 	activated = FALSE
@@ -36,11 +36,11 @@
 /obj/item/rig_module/speed_boost/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
 	..()
 	say_to_wearer("Speed module engaged.")
-	R.slowdown = max(1, slowdown/1.25)
+	rig.slowdown = max(1, slowdown/1.25)
 	activated = TRUE
 
-/obj/item/rig_module/speed_boost/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
-	R.slowdown = initial(R.slowdown)
+/obj/item/rig_module/speed_boost/deactivate()
+	rig.slowdown = initial(rig.slowdown)
 	..()
 
 /obj/item/rig_module/health_readout
@@ -72,17 +72,17 @@
 		say_to_wearer("Internals pressurizer online. Syphoning [gas_id] from environment to [H.internal].")
 	else
 		say_to_wearer("Internals pressurizer failed to find internals. Aborting.")
-		deactivate(wearer, rig)
+		deactivate()
 
 /obj/item/rig_module/tank_refiller/do_process()
 	if(!wearer || !ishuman(wearer))
-		deactivate(wearer, rig)
+		deactivate()
 		return
 
 	var/mob/living/carbon/human/H = wearer
 	if(!H.internal)
 		say_to_wearer("Internals pressurizer failed to find internals. Aborting.")
-		deactivate(wearer, rig)
+		deactivate()
 		return
 	else
 		var/obj/item/weapon/tank/T = H.internal
@@ -111,49 +111,43 @@
 /obj/item/rig_module/plasma_proof
 	name = "plasma-proof sealing authority"
 	desc = "Brings the suit it is installed into up to plasma environment standards."
-	requires_component = TRUE
 
 /obj/item/rig_module/plasma_proof/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
 	..()
-	if(R.cell && R.cell.use(250))
+	if(rig.cell && rig.cell.use(250))
 		say_to_wearer("Plasma seal initialized.")
-		R.clothing_flags |= PLASMAGUARD
-		if(R.H)
-			R.H.clothing_flags |= PLASMAGUARD
+		rig.clothing_flags |= PLASMAGUARD
+		if(rig.H)
+			rig.H.clothing_flags |= PLASMAGUARD
 		activated = TRUE
 
-/obj/item/rig_module/plasma_proof/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
+/obj/item/rig_module/plasma_proof/deactivate()
 	say_to_wearer("Plasma seal disengaged.")
-	R.clothing_flags &= ~PLASMAGUARD
-	if(R.H)
-		R.H.clothing_flags &= ~PLASMAGUARD
+	rig.clothing_flags &= ~PLASMAGUARD
+	if(rig.H)
+		rig.H.clothing_flags &= ~PLASMAGUARD
 	..()
 
 /obj/item/rig_module/muscle_tissue
 	name = "artificial muscle tissue"
 	desc = "A flexible tissue with a number of sensors stretched between its surface and interior of the suit. When these sensors detected an impact, the artificial muscle reacts instantaneously, contracting and diffusing the damage."
-	requires_component = TRUE
 	active_power_usage = 100
 
 /obj/item/rig_module/muscle_tissue/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
 	..()
-	user.mutations.Add(M_HULK) //I'M FUCKING INVINCIBLE!
-	user.update_mutations()
+	wearer.mutations.Add(M_HULK) //I'M FUCKING INVINCIBLE!
+	wearer.update_mutations()
 	say_to_wearer("Reactive sensors online.")
-	R.canremove = FALSE
-	if(R.H)
-		R.H.canremove = FALSE
+	rig.canremove = FALSE
 	say_to_wearer("Safety lock enabled.")
 	activated = TRUE
 	
 
-/obj/item/rig_module/muscle_tissue/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
-	user.mutations.Remove(M_HULK)
-	user.update_mutations()
+/obj/item/rig_module/muscle_tissue/deactivate()
+	wearer.mutations.Remove(M_HULK)
+	wearer.update_mutations()
 	say_to_wearer("Reactive sensors offline.")
-	R.canremove = TRUE
-	if(R.H)
-		R.H.canremove = TRUE
+	rig.canremove = TRUE
 	say_to_wearer("Safety lock disabled.")
 	..()
 
