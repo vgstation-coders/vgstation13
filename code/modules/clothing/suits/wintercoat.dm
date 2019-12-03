@@ -46,7 +46,7 @@
 	name = "captain's winter coat"
 	desc = "You guys gonna listen to Garry? You gonna let him give the orders? I mean, he could BE one of those things!"
 	icon_state = "coatcaptain"
-	armor = list(melee = 20, bullet = 15, laser = 10, energy = 10, bomb = 15, bio = 5, rad = 2)
+	armor = list(melee = 20, bullet = 15, laser = 20, energy = 10, bomb = 15, bio = 5, rad = 2)
 
 /obj/item/clothing/suit/storage/wintercoat/security
 	name = "security winter coat"
@@ -213,7 +213,8 @@
 /obj/item/clothing/suit/storage/wintercoat/bartender
 	name = "bartender winter coat"
 	icon_state = "coatbar"
-	armor = list(melee = 20, bullet = 10, laser = 20, energy = 0, bomb = 0, bio = 0, rad = 0)
+	desc = "A heavy jacket made from 'synthetic' animal furs. Reinforced to avoid tearing when breaking up bar fights."
+	armor = list(melee = 20, bullet = 10, laser = 10, energy = 0, bomb = 10, bio = 0, rad = 0)
 	allowed = list(
 		/obj/item/weapon/gun/projectile/shotgun/doublebarrel,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker,
