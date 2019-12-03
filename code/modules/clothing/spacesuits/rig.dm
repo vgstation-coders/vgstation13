@@ -216,7 +216,7 @@
 
 	check_builtin_pieces()
 
-	if(!istype(wearer) || !wearer.is_wearing_item(src, slot_wear_suit))
+	if(!is_fully_equipped())
 		deactivate_suit(unequipall = FALSE)
 
 	if(activated)
@@ -254,7 +254,7 @@
 		for(var/piece in list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_BOOTS))
 			toggle_piece(piece, user, ONLY_DEPLOY)
 	if(is_fully_equipped()) //Fully equipped? GOOD!
-		if(H && wearer.is_wearing_item(H, slot_head))
+		if(H && wearer.is_wearing_item(H, slot_head)) //I know we JUST ran a check, but still...
 			H.toggle_light(wearer) //Lights on
 			if(T) //We have a built-in tank and our built-in helmet is equipped.
 				wearer.toggle_internals(user, T)
