@@ -249,8 +249,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return 1
 
 /mob/living/simple_animal/handle_regular_hud_updates()
-	if(!client)
-		return
+	if(!..())
+		return FALSE
 
 	if(oxygen_alert)
 		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath)
@@ -268,6 +268,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		throw_alert(SCREEN_ALARM_TEMPERATURE, temperature_alert < 0 ? /obj/abstract/screen/alert/carbon/temp/cold : /obj/abstract/screen/alert/carbon/temp/hot, temperature_alert)
 	else
 		clear_alert(SCREEN_ALARM_TEMPERATURE)
+	return TRUE
 
 /mob/living/simple_animal/proc/handle_environment(datum/gas_mixture/environment)
 	toxins_alert = 0
