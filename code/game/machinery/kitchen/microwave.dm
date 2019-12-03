@@ -67,8 +67,11 @@
 				acceptable_reagents |= reagent
 
 		// Stuff to microwave that isn't food for destructive or stupid purposes
-		// Utensils explode non-harmfully, power cells blow up harmfully, the rest turns to burnt mess
-		acceptable_items.Add("/obj/item/weapon/kitchen/utensil","/obj/item/device/pda","/obj/item/device/paicard","/obj/item/weapon/cell")
+		// Utensils explode non-harmfully, power cells blow up harmfully, the rest turns to burnt mess or slag
+		acceptable_items.Add(
+							"/obj/item/weapon/kitchen/utensil","/obj/item/device/pda","/obj/item/device/paicard",
+							"/obj/item/weapon/cell","/obj/item/weapon/circuitboard","/obj/item/device/aicard"
+							)
 
 /*******************
 *   Part Upgrades
@@ -239,6 +242,10 @@
 				var/datum/recipe/recipe = select_recipe(available_recipes,src)
 				if (!recipe)
 					dat += {"<font color = 'red'>ERROR: No matching recipe found!</font><br>"}
+					for(var/obj/O in contents) // Informs them if it might blow up
+						if((istype(O,/obj/item/weapon/kitchen/utensil) && !(O.melt_temperature == MELTPOINT_PLASTIC)) || istype(O,/obj/item/weapon/cell))
+							dat += {"<font color = 'red'>ALERT: Hazardous contents! Do not microwave!</font><br>"}
+							break
 				else
 					var/obj/O = recipe.result
 					var/display_name = initial(O.name)
@@ -340,7 +347,7 @@
 		return
 	start()
 	if (reagents.total_volume==0 && !(locate(/obj) in contents)) //dry run
-		if (!wzhzhzh(10))
+		if (!microwave_run(10))
 			abort()
 			return
 		stop()
@@ -349,44 +356,58 @@
 	var/datum/recipe/recipe = select_recipe(available_recipes,src)
 	var/obj/cooked
 
-	for(var/obj/O in contents)
-		if(istype(O,/obj/item/weapon/kitchen/utensil) && !(O.melt_temperature == MELTPOINT_PLASTIC))
-			if (!wzhzhzh(4))
-				abort()
-				return
-			wzhzhzh(4)
-			stop()
-			broke()
-			empty()
-			to_chat(loc, "<span class='warning'>The [O] sparks in the microwave!</span>")
-			explosion(get_turf(src), -1,0,0)
-			return
-		if(istype(O,/obj/item/weapon/cell))
-			if (!wzhzhzh(4))
-				abort()
-				return
-			wzhzhzh(4)
-			stop()
-			broke()
-			empty()
-			to_chat(loc, "<span class='warning'>The [O] sparks violently in the microwave!.</span>")
-			explosion(get_turf(src), -1,0,2)
-			return
-
 	if (!recipe)
+		// Handle the silly stuff first
+		for(var/obj/O in contents)
+			if(istype(O,/obj/item/weapon/cell))
+				var/obj/item/weapon/cell/microwave_cell = O
+				src.visible_message("<span class='warning'>[O] sparks violently in the microwave!</span>")
+				if (!microwave_run(4))
+					abort()
+					return
+				broke()
+				playsound(usr, 'sound/machines/ding.ogg', 50, 1)
+				empty()
+				if(microwave_cell.rigged)
+					explosion(get_turf(src), -1, round(sqrt(microwave_cell.charge)/60), round(sqrt(microwave_cell.charge)/30))
+				else
+					explosion(get_turf(src), -1,0,2) // Let's not be too harsh on idiots
+				return
+			if(istype(O,/obj/item/weapon/kitchen/utensil) && !(O.melt_temperature == MELTPOINT_PLASTIC))
+				src.visible_message("<span class='warning'>[O] sparks in the microwave!</span>")
+				if (!microwave_run(4))
+					abort()
+					return
+				broke()
+				playsound(src, 'sound/machines/ding.ogg', 50, 1)
+				empty()
+				explosion(get_turf(src), -1,0,0)
+				return
+			if(istype(O,/obj/item/device/pda) || istype(O,/obj/item/device/paicard) || istype(O,/obj/item/device/aicard) || istype(O,/obj/item/weapon/circuitboard))
+				src.visible_message("<span class='warning'>[O] sparks in the microwave!</span>")
+				if (!microwave_run(4))
+					abort()
+					return
+				broke()
+				playsound(src, 'sound/machines/ding.ogg', 50, 1)
+				empty()
+				var/obj/item/trash/slag/gunk = new(src)
+				gunk.forceMove(src.loc)
+				return
+
+		// Everything else continued from here
 		dirty += 1
 		if (prob(max(10,dirty*5)))
-			if (!wzhzhzh(4))
+			if (!microwave_run(4))
 				abort()
 				return
 			muck_start()
-			wzhzhzh(4)
 			muck_finish()
 			cooked = fail()
 			cooked.forceMove(src.loc)
 			return
 		else if (has_extra_item())
-			if (!wzhzhzh(4))
+			if(!microwave_run(4))
 				abort()
 				return
 			broke()
@@ -394,7 +415,7 @@
 			cooked.forceMove(src.loc)
 			return
 		else
-			if (!wzhzhzh(10))
+			if(!microwave_run(10))
 				abort()
 				return
 			stop()
@@ -403,10 +424,10 @@
 			return
 	else
 		var/halftime = round(recipe.time/10/2)
-		if (!wzhzhzh(halftime))
+		if (!microwave_run(halftime))
 			abort()
 			return
-		if (!wzhzhzh(halftime))
+		if (!microwave_run(halftime))
 			abort()
 			cooked = fail()
 			cooked.forceMove(src.loc)
@@ -417,7 +438,7 @@
 			cooked.forceMove(src.loc)
 		return
 
-/obj/machinery/microwave/proc/wzhzhzh(var/seconds as num)
+/obj/machinery/microwave/proc/microwave_run(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)
 		if (stat & (NOPOWER|BROKEN))
 			return 0
