@@ -347,7 +347,7 @@
 		return
 	start()
 	if (reagents.total_volume==0 && !(locate(/obj) in contents)) //dry run
-		if (!microwave_run(10))
+		if (!running(10))
 			abort()
 			return
 		stop()
@@ -362,7 +362,7 @@
 			if(istype(O,/obj/item/weapon/cell))
 				var/obj/item/weapon/cell/microwave_cell = O
 				src.visible_message("<span class='warning'>[O] sparks violently in the microwave!</span>")
-				if (!microwave_run(4))
+				if (!running(4))
 					abort()
 					return
 				broke()
@@ -375,7 +375,7 @@
 				return
 			if(istype(O,/obj/item/weapon/kitchen/utensil) && !(O.melt_temperature == MELTPOINT_PLASTIC))
 				src.visible_message("<span class='warning'>[O] sparks in the microwave!</span>")
-				if (!microwave_run(4))
+				if (!running(4))
 					abort()
 					return
 				broke()
@@ -385,7 +385,7 @@
 				return
 			if(istype(O,/obj/item/device/pda) || istype(O,/obj/item/device/paicard) || istype(O,/obj/item/device/aicard) || istype(O,/obj/item/weapon/circuitboard))
 				src.visible_message("<span class='warning'>[O] sparks in the microwave!</span>")
-				if (!microwave_run(4))
+				if (!running(4))
 					abort()
 					return
 				broke()
@@ -398,7 +398,7 @@
 		// Everything else continued from here
 		dirty += 1
 		if (prob(max(10,dirty*5)))
-			if (!microwave_run(4))
+			if (!running(4))
 				abort()
 				return
 			muck_start()
@@ -407,7 +407,7 @@
 			cooked.forceMove(src.loc)
 			return
 		else if (has_extra_item())
-			if(!microwave_run(4))
+			if(!running(4))
 				abort()
 				return
 			broke()
@@ -415,7 +415,7 @@
 			cooked.forceMove(src.loc)
 			return
 		else
-			if(!microwave_run(10))
+			if(!running(10))
 				abort()
 				return
 			stop()
@@ -424,10 +424,10 @@
 			return
 	else
 		var/halftime = round(recipe.time/10/2)
-		if (!microwave_run(halftime))
+		if (!running(halftime))
 			abort()
 			return
-		if (!microwave_run(halftime))
+		if (!running(halftime))
 			abort()
 			cooked = fail()
 			cooked.forceMove(src.loc)
@@ -438,7 +438,7 @@
 			cooked.forceMove(src.loc)
 		return
 
-/obj/machinery/microwave/proc/microwave_run(var/seconds as num) // was called wzhzhzh, for some fucking reason
+/obj/machinery/microwave/proc/running(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)
 		if (stat & (NOPOWER|BROKEN))
 			return 0
