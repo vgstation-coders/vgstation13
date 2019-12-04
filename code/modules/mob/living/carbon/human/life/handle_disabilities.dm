@@ -81,7 +81,17 @@
 						"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
-					emote("drool")
+					if(mind.miming)
+						emote(pick("indicates that he NEEDS the igniter", \
+						"indicates he needs insulated gloves", \
+						"fuck you", \
+						"cuck", \
+						"writes in the air he needs an e gun", \
+						"default dances", \
+						"pulls both arms outwards in front of them and pumps them behind their back, repeats this motion in a smaller range of motion down to their hips two times once more all while sliding their legs in a faux walking motion, claps their hands together, pumps their arms downward, pronating their wrists and abducting their fingers outwards while crossing their legs back and forth, repeats this motion again two times while keeping their shoulders low and hunching over, does a finger gun with their left hand bent on their hip while looking directly forward and putting their left leg forward and then crossing their arms and leaning back a little while bending their knees at an angle", \
+						"spells the word lube with his fingers"))
+					else
+						emote("drool")
 
 	if(species.name == "Tajaran")
 		if(prob(1)) //Was 3
