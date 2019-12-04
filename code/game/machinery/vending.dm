@@ -2165,12 +2165,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/back/magiccape = 1,
 		)
 	specials = list(
-		/obj/item/clothing/suit/wizrobe/hallowiz = HALLOWEEN,
-		/obj/item/clothing/head/wizard/hallowiz = HALLOWEEN,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz = HALLOWEEN,
 		)
 
 	pack = /obj/structure/vendomatpack/magivend	//Who's laughing now? wizarditis doesn't do shit anyway. - Deity Link of 2014
-												//How about I make a foul of myself 5 years later? Wizarditis is now a proper symptom. - Deity Link of 2019
+												//How about I make a fool of myself 5 years later? Wizarditis is now a proper symptom. - Deity Link of 2019
 
 /obj/machinery/vending/dinnerware
 	name = "\improper Dinnerware"

@@ -32,7 +32,7 @@
 	var/A = null
 
 	if(!randomise_selection)
-		A = input("Area to teleport to", "Teleport", A) in teleportlocs
+		A = input("Area to teleport to", "Teleport", A) as null|anything in teleportlocs
 	else
 		A = pick(teleportlocs)
 

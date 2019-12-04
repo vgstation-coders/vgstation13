@@ -151,6 +151,12 @@ var/global/list/screen_alarms_locs = list(
 	var/severity = null
 	var/override_alerts = FALSE //If it is overriding other alerts of the same type
 	var/alerttooltipstyle = null
+	var/emph = FALSE //Whether to have a flashy outline
+
+/obj/abstract/screen/alert/New()
+	..()
+	if(emph)
+		overlays.Add(image('icons/mob/screen_alarms.dmi', icon_state = "emph_outline"))
 
 /obj/abstract/screen/alert/Click(location, control, params)
 	if(!usr || !usr.client)
@@ -345,6 +351,7 @@ so as to remain in compliance with the most up-to-date laws."
 	desc = "Click here to change your name."
 	icon_state = "text"
 	timeout = 60 SECONDS
+	emph = TRUE
 	var/namepick_message
 	var/role
 	var/allow_numbers
