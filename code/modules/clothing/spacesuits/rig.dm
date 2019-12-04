@@ -315,7 +315,8 @@
 				if(!wearer.equip_to_slot_if_possible(use_obj, equip_to, 0, 1))
 					use_obj.forceMove(src)
 					if(check_slot)
-						to_chat(initiator, "<span class='danger'>You are unable to deploy \the [use_obj.name] as \the [check_slot] [check_slot.gender == PLURAL ? "are" : "is"] in the way.</span>")
+						if(initiator)
+							to_chat(initiator, "<span class='danger'>You are unable to deploy \the [use_obj.name] as \the [check_slot] [check_slot.gender == PLURAL ? "are" : "is"] in the way.</span>")
 						return
 				else
 					to_chat(wearer, "<span class='notice'>\The [use_obj.name] deploys swiftly.</span>")
