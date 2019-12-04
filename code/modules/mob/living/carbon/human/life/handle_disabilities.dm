@@ -79,10 +79,17 @@
 						"why woud i take a pin pointner??", \
 						"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
 						"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
-						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
+						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!", \
+						"Latex vox are cute!", \
+						"HOG", \
+						";ITS LOOSE", \
+						"I C-CUM-M-M-MM-M-MED-D-D!!", \
+						"VOX ARE POX", \
+						"my body is on the asteroi", \
+						";how do i plasmaflood", \
+						"M-M-M-MY-Y P-P-P-PENIS-S IS HURTIN-N-NG-G-G!"))
 				if(3)
 					emote("drool")
-
 	if(species.name == "Tajaran")
 		if(prob(1)) //Was 3
 			vomit(1) //Hairball
