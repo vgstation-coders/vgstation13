@@ -37,9 +37,9 @@
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/sl_suit/armored
-	desc = "It's a very amish looking suit. This one looks armored."
+	desc = "It's a very amish looking suit. This one has a tag. It says "Gorlex" in cursive."
 	name = "armored amish suit"
-	armor = list(melee = 10, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+	armor = list(melee = 15, bullet = 5, laser = 5, energy = 0, bomb = 5, bio = 0, rad = 0)
 
 /obj/item/clothing/under/waiter
 	name = "waiter's outfit"
