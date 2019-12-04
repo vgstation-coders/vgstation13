@@ -1,0 +1,5 @@
+---
+author: Faptastic
+changes:
+  - bugfix: Admins can actually create accounts via the Economy Tool now.
+delete-after: true

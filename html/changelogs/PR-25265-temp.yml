@@ -1,0 +1,5 @@
+---
+author: Kurfursten
+changes:
+  - tweak: The geyser sprite is no longer sandy.
+delete-after: true

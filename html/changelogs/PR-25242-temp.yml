@@ -1,0 +1,6 @@
+---
+author: Kurfursten
+changes:
+  - tweak: "Snaxi's coat EVA has been replaced with a snazzy meeting room and the ERT will now dock on a landing pad."
+  - bugfix: Snaxi asteroid is no longer full of air filled cave tiles.
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: RealestEstate
+changes:
+  - soundadd: "Gun, defib, and cell chargers will now audibly beep when they reach 100%."
+delete-after: true

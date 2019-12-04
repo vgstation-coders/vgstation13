@@ -1,0 +1,5 @@
+---
+author: brndd
+changes:
+  - bugfix: wheelstation SME room has cameras now
+delete-after: true

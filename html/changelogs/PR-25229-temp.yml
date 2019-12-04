@@ -1,0 +1,6 @@
+---
+author: Goldsteel
+changes:
+  - bugfix: "Wolf attack logs are corrected from 'a wolf a wolf' to just one wolf."
+  - bugfix: Attack logging for wolves should work now.
+delete-after: true

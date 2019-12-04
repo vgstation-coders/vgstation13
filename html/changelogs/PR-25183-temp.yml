@@ -1,0 +1,7 @@
+---
+author: Goldsteel
+changes:
+  - rscadd: You can now deconstruct mirrors and urinals with a crowbar.
+  - tweak: Urinals can be unanchored with a wrench now.
+  - imageadd: Urinals have a rear sprite.
+delete-after: true

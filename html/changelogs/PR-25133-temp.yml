@@ -1,0 +1,6 @@
+---
+author: jknpj
+changes:
+  - rscadd: Converted every alarm HUD to screen alarms
+  - rscadd: Non-silicons will now receive the buckle screen alarm
+delete-after: true

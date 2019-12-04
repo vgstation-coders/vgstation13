@@ -1,0 +1,5 @@
+---
+author: jknpj
+changes:
+  - rscadd: "Fixes pipe painter/RPD being able to paint atmos devices that aren't supposed to be painted"
+delete-after: true

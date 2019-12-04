@@ -1,0 +1,5 @@
+---
+author: Kurfursten
+changes:
+  - tweak: The parking sign has an outline now.
+delete-after: true

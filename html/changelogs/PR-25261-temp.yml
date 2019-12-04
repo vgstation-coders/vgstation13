@@ -1,0 +1,5 @@
+---
+author: dylanstrategie
+changes:
+  - bugfix: "Fixed Nuclear Operatives bombs having a remote signaller instead of a timer. Now with 90 % less \"oh god\" factor for that fool who buys a bomb to gift to the station"
+delete-after: true

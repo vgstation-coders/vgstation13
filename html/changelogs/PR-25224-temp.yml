@@ -1,0 +1,5 @@
+---
+author: Goldsteel
+changes:
+  - rscadd: Changing ZAS settings is now logged properly.
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: boy2mantwicethefam
+changes:
+  - tweak: Dynamic now kicks in at 20 players instead of 35.
+delete-after: true

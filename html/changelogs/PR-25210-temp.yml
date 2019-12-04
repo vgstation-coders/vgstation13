@@ -1,0 +1,6 @@
+---
+author: Goldsteel
+changes:
+  - tweak: Default admin verbs no longer exist. They are now under +ADMIN.
+  - bugfix: Moderators are now a supported admin rank for those without +ADMIN
+delete-after: true

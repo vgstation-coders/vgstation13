@@ -1,0 +1,5 @@
+---
+author: jknpj
+changes:
+  - rscadd: "Magboots are now bigger, but you can now equip them over other shoes"
+delete-after: true
