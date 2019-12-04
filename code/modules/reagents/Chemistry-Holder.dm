@@ -551,7 +551,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return 0
 
-/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/remove_reagents = FALSE)
+/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0)
 
 	switch(method)
 		if(TOUCH)
@@ -560,7 +560,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					if(isanimal(A))
 						R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
 					else
-						R.reaction_mob(A, TOUCH, R.volume+volume_modifier, remove_reagents)
+						R.reaction_mob(A, TOUCH, R.volume+volume_modifier)
 				if(isturf(A))
 					R.reaction_turf(A, R.volume+volume_modifier)
 				if(istype(A, /obj))
