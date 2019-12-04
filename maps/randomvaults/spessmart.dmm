@@ -213,7 +213,7 @@
 "ee" = (/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor{icon_state = "redcorner"},/area/vault/supermarket/entrance)
 "ef" = (/turf/simulated/floor{icon_state = "red"; dir = 9},/area/vault/supermarket/entrance)
 "eg" = (/turf/simulated/floor{icon_state = "red"; dir = 1},/area/vault/supermarket/entrance)
-"eh" = (/obj/structure/window/reinforced/plasma,/turf/simulated/floor{icon_state = "red"; dir = 1},/area/vault/supermarket/entrance)
+"eh" = (/obj/structure/window/reinforced/plasma,/obj/item/beacon/bluespace_beacon{step_x = 31; step_y = 9},/turf/simulated/floor{icon_state = "red"; dir = 1},/area/vault/supermarket/entrance)
 "ei" = (/turf/simulated/floor{icon_state = "red"; dir = 5},/area/vault/supermarket/entrance)
 "ej" = (/obj/structure/bed/chair/comfy/black{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "redcorner"},/area/vault/supermarket/entrance)
 "ek" = (/obj/structure/bed/chair/comfy/beige{dir = 4},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
