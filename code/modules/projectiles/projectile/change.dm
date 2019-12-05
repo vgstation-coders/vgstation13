@@ -68,9 +68,9 @@
 /obj/item/projectile/zwartepiet/on_hit(var/atom/pietje)
 	var/type = changetype
 	spawn(1)
-		zwartepiet(pietje,type)
+		zwartepietenate(pietje,type)
 
-/obj/item/projectile/zwartepiet/proc/zwartepiet(var/mob/living/carbon/human/M,var/type) //WHY: as mob in living_mob_list
+/obj/item/projectile/zwartepiet/proc/zwartepietenate(var/mob/living/carbon/human/M,var/type) //WHY: as mob in living_mob_list
 	if(istype(M, /mob/living) && M.stat != DEAD)
 		M.zwartepietify()
 		to_chat(M, "<B>You feel jovial!</B>")
