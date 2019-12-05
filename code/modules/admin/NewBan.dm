@@ -168,6 +168,16 @@ var/savefile/Banlist
 			timeleftstring = "[exp] Minutes"
 		return timeleftstring
 
+/proc/round_ban_time(minutes as num)
+	var/timestring
+	if (minutes >= 1440) //1440 = 1 day in minutes
+		timestring = "[round(minutes / 1440, 0.1)] Days"
+	else if (minutes >= 60) //60 = 1 hour in minutes
+		timestring = "[round(minutes / 60, 0.1)] Hours"
+	else
+		timestring = "[minutes] Minutes"
+	return timestring
+
 /datum/admins/proc/unbanpanel()
 	var/count = 0
 	var/dat

@@ -759,7 +759,7 @@
 				var/mins = 0
 				if(minutes > CMinutes)
 					mins = minutes - CMinutes
-				to_chat(usr, "<span class='info'>The remaining time on this ban is [mins] minutes")
+				to_chat(usr, "<span class='info'>The remaining time on this ban is [round_ban_time(mins)]")
 				mins = 1440*input(usr,"How long (in days)?","Ban time", mins ? mins : 1440) as num|null
 				mins += 60*input(usr,"How long (in hours)?","Ban time", mins ? mins : 1440) as num|null
 				mins += input(usr,"How long (in minutes)?","Ban time", mins ? mins : 1440) as num|null
@@ -827,9 +827,9 @@
 							var/reason = input(usr,"Reason?","reason","Shinposting") as text|null
 							if(!reason)
 								return
-							ban_unban_log_save("[usr.client.ckey] has banned [M.ckey]. - Reason: [reason] - This will be removed in [mins] minutes.")
+							ban_unban_log_save("[usr.client.ckey] has banned [M.ckey]. - Reason: [reason] - This will be removed in [round_ban_time(mins)].")
 							to_chat(M, "<span class='warning'><BIG><B>You have been OOC banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
-							to_chat(M, "<span class='warning'>This is a temporary ooc ban, it will be removed in [mins] minutes.</span>")
+							to_chat(M, "<span class='warning'>This is a temporary ooc ban, it will be removed in [round_ban_time(mins)].</span>")
 							feedback_inc("ban_ooc_tmp",1)
 							DB_ban_record(BANTYPE_OOC_TEMP, M, mins, reason)
 							feedback_inc("ban_ooc_tmp_mins",mins)
@@ -837,8 +837,8 @@
 								to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals] or consider not being a shithead in OOC</span>")
 							else
 								to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
-							log_admin("[usr.client.ckey] has ooc banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
-							message_admins("<span class='warning'>[usr.client.ckey] has ooc banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.</span>")
+							log_admin("[usr.client.ckey] has ooc banned [M.ckey].\nReason: [reason]\nThis will be removed in [round_ban_time(mins)].")
+							message_admins("<span class='warning'>[usr.client.ckey] has ooc banned [M.ckey].\nReason: [reason]\nThis will be removed in [round_ban_time(mins)].</span>")
 
 						if("No")
 							var/reason = input(usr,"Reason?","reason","Shinposting") as text|null
@@ -1360,8 +1360,8 @@
 
 					var/msg
 					for(var/job in notbannedlist)
-						ban_unban_log_save("[key_name(usr)] temp-jobbanned [key_name(M)] from [job] for [mins] minutes. reason: [reason]")
-						log_admin("[key_name(usr)] temp-jobbanned [key_name(M)] from [job] for [mins] minutes")
+						ban_unban_log_save("[key_name(usr)] temp-jobbanned [key_name(M)] from [job] for [round_ban_time(mins)]. reason: [reason]")
+						log_admin("[key_name(usr)] temp-jobbanned [key_name(M)] from [job] for [round_ban_time(mins)]")
 						feedback_inc("ban_job_tmp",1)
 						DB_ban_record(BANTYPE_JOB_TEMP, M, mins, reason, job)
 						feedback_add_details("ban_job_tmp","- [job]")
@@ -1371,10 +1371,10 @@
 						else
 							msg += ", [job]"
 					notes_add(M.ckey, "Banned  from [msg] - [reason]")
-					message_admins("<span class='notice'>[key_name_admin(usr)] banned [key_name_admin(M)] from [msg] for [mins] minutes</span>", 1)
+					message_admins("<span class='notice'>[key_name_admin(usr)] banned [key_name_admin(M)] from [msg] for [round_ban_time(mins)]</span>", 1)
 					to_chat(M, "<span class='warning'><BIG><B>You have been jobbanned by [usr.client.ckey] from: [msg].</B></BIG></span>")
 					to_chat(M, "<span class='danger'>The reason is: [reason]</span>")
-					to_chat(M, "<span class='warning'>This jobban will be lifted in [mins] minutes.</span>")
+					to_chat(M, "<span class='warning'>This jobban will be lifted in [round_ban_time(mins)].</span>")
 					href_list["jobban2"] = 1 // lets it fall through and refresh
 					return 1
 				if("No")
@@ -1505,9 +1505,9 @@
 				if(!reason)
 					return
 				AddBan(M.ckey, M.computer_id, reason, usr.ckey, 1, mins)
-				ban_unban_log_save("[usr.client.ckey] has banned [M.ckey]. - Reason: [reason] - This will be removed in [mins] minutes.")
+				ban_unban_log_save("[usr.client.ckey] has banned [M.ckey]. - Reason: [reason] - This will be removed in [round_ban_time(mins)].")
 				to_chat(M, "<span class='warning'><BIG><B>You have been banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
-				to_chat(M, "<span class='warning'>This is a temporary ban, it will be removed in [mins] minutes.</span>")
+				to_chat(M, "<span class='warning'>This is a temporary ban, it will be removed in [round_ban_time(mins)].</span>")
 				feedback_inc("ban_tmp",1)
 				DB_ban_record(BANTYPE_TEMP, M, mins, reason)
 				feedback_inc("ban_tmp_mins",mins)
@@ -1515,8 +1515,8 @@
 					to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
 				else
 					to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
-				log_admin("[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
-				message_admins("<span class='warning'>[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.</span>")
+				log_admin("[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [round_ban_time(mins)].")
+				message_admins("<span class='warning'>[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [round_ban_time(mins)].</span>")
 
 				del(M.client)
 				//del(M)	// See no reason why to delete mob. Important stuff can be lost. And ban can be lifted before round ends.

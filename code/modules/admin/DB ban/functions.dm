@@ -231,7 +231,7 @@ datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 					return
 
 			var/DBQuery/update_query = dbcon.NewQuery("UPDATE erro_ban SET duration = [value], edits = CONCAT(edits,'- [eckey] changed ban duration from [duration] to [value]<br>'), expiration_time = DATE_ADD(bantime, INTERVAL [value] MINUTE) WHERE id = [banid]")
-			message_admins("[key_name_admin(usr)] has edited a ban for [pckey]'s duration from [duration] to [value]",1)
+			message_admins("[key_name_admin(usr)] has edited a ban for [pckey]'s duration from [round_ban_time(duration)] to [round_ban_time(value)]",1)
 			update_query.Execute()
 		if("unban")
 			if(alert("Unban [pckey]?", "Unban?", "Yes", "No") == "Yes")
