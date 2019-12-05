@@ -758,16 +758,15 @@
 				temp = 1
 				var/mins = 0
 				if(minutes > CMinutes)
-					mins = minutes - CMinutes
-				to_chat(usr, "<span class='info'>The remaining time on this ban is [round_ban_time(mins)]")
-				mins = 1440*input(usr,"How long (in days)?","Ban time", mins ? mins : 1440) as num|null
-				mins += 60*input(usr,"How long (in hours)?","Ban time", mins ? mins : 1440) as num|null
-				mins += input(usr,"How long (in minutes)?","Ban time", mins ? mins : 1440) as num|null
+					mins = minutes - CMinutes // CMinutes is actually the current time, in minutes, and the ban stores a large value that isn't our ban length
+				mins = 1440*input(usr,"How long (in days)?","Ban time", 0) as num|null
+				mins += 60*input(usr,"How long (in hours)?","Ban time", 0) as num|null
+				mins += input(usr,"How long (in minutes)?","Ban time", 0) as num|null
 				if(!mins)
 					return
 				mins = min(525599,mins)
-				minutes = CMinutes + mins
-				duration = GetExp(minutes)
+				minutes = CMinutes + mins // Converts this back into something we can store on file
+				duration = mins
 				reason = input(usr,"Reason?","reason",reason2) as text|null
 				if(!reason)
 					return
@@ -778,9 +777,9 @@
 				if(!reason)
 					return
 
-		log_admin("[key_name(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]")
-		ban_unban_log_save("[key_name(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]")
-		message_admins("<span class='notice'>[key_name_admin(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]</span>", 1)
+		log_admin("[key_name(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [round_ban_time(duration)]")
+		ban_unban_log_save("[key_name(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [round_ban_time(duration)]")
+		message_admins("<span class='notice'>[key_name_admin(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [round_ban_time(duration)]</span>", 1)
 		Banlist.cd = "/base/[banfolder]"
 		to_chat(Banlist["reason"], reason)
 		to_chat(Banlist["temp"], temp)
