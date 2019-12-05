@@ -1,5 +1,0 @@
----
-author: Goldsteel
-changes:
-  - rscadd: "Adds the medal printer, a printer that produces awards."
-delete-after: true

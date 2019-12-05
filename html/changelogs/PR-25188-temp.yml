@@ -1,5 +1,0 @@
----
-author: jknpj
-changes:
-  - tweak: The namepick alarm now lasts 60 seconds.
-delete-after: true

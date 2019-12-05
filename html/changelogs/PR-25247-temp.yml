@@ -1,5 +1,0 @@
----
-author: Goldsteel
-changes:
-  - bugfix: Adds sanity to the voting proc to prevent two admins editting the details at once by accident.
-delete-after: true

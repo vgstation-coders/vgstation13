@@ -1,6 +1,0 @@
----
-author: Goldsteel
-changes:
-  - rscadd: Admins can now give out gold medals and dunce caps as achievements.
-  - tweak: "Changes some of the text for achievements to better reflect what's going on."
-delete-after: true

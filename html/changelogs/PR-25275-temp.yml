@@ -1,5 +1,0 @@
----
-author: Goldsteel
-changes:
-  - bugfix: Wizard teleport spells and scrolls have a cancel button now.
-delete-after: true

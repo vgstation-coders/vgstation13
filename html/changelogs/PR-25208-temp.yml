@@ -1,5 +1,0 @@
----
-author: MadmanMartian
-changes:
-  - rscadd: 3 Centcomm orders are now generated at roundstart
-delete-after: true
