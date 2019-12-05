@@ -223,7 +223,9 @@ datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 			message_admins("[key_name_admin(usr)] has edited a ban for [pckey]'s reason from [reason] to [value]",1)
 		if("duration")
 			if(!value)
-				value = input("Insert the new duration (in minutes) for [pckey]'s ban", "New Duration", "[duration]", null) as null|num
+				value = 1440*input("Add to the new duration (in days) for [pckey]'s ban", "Days Duration", "[duration]", null) as null|num
+				value += 60*input("Add to the new duration (in hours) for [pckey]'s ban", "Hours Duration", "[duration]", null) as null|num
+				value += input("Add to the new duration (in minutes) for [pckey]'s ban", "Minutes Duration", "[duration]", null) as null|num
 				if(!isnum(value) || !value)
 					to_chat(usr, "Cancelled")
 					return

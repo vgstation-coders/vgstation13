@@ -759,7 +759,9 @@
 				var/mins = 0
 				if(minutes > CMinutes)
 					mins = minutes - CMinutes
-				mins = input(usr,"How long (in minutes)? (Default: 1440)","Ban time",mins ? mins : 1440) as num|null
+				mins += 1440*input(usr,"How long (in days)?","Ban time",0) as num|null
+				mins += 60*input(usr,"How long (in hours)?","Ban time",0) as num|null
+				mins += input(usr,"How long (in minutes)?","Ban time",0) as num|null
 				if(!mins)
 					return
 				mins = min(525599,mins)
@@ -814,7 +816,9 @@
 				if("Yes")
 					switch(alert("Temporary Ban?",,"Yes","No", "Cancel"))
 						if("Yes")
-							var/mins = input(usr,"How long (in minutes)?","OOC Ban time",1440) as num|null
+							var/mins = 1440*input(usr,"How long (in days)?","OOC Ban time",0) as num|null
+							mins += 60*input(usr,"How long (in hours)?","OOC Ban time",0) as num|null
+							mins += input(usr,"How long (in minutes)?","OOC Ban time",0) as num|null
 							if(!mins)
 								return
 							if(mins >= 525600)
@@ -1344,7 +1348,9 @@
 					if(config.ban_legacy_system)
 						to_chat(usr, "<span class='warning'>Your server is using the legacy banning system, which does not support temporary job bans. Consider upgrading. Aborting ban.</span>")
 						return
-					var/mins = input(usr,"How long (in minutes)?","Ban time",1440) as num|null
+					var/mins = 1440*input(usr,"How long (in days)?","Ban time",0) as num|null
+					mins += 60*input(usr,"How long (in hours)?","Ban time",0) as num|null
+					mins += input(usr,"How long (in minutes)?","Ban time",0) as num|null
 					if(!mins)
 						return
 					var/reason = input(usr,"Reason?","Please State Reason","") as text|null
@@ -1486,7 +1492,10 @@
 
 		switch(alert("Temporary Ban?",,"Yes","No", "Cancel"))
 			if("Yes")
-				var/mins = input(usr,"How long (in minutes)?","Ban time",1440) as num|null
+				var/mins
+				mins = 1440*input(usr,"How long (in days)?","Ban time",0) as num|null
+				mins += 60*input(usr,"How long (in hours)?","Ban time",0) as num|null
+				mins += input(usr,"How long (in minutes)?","Ban time",0) as num|null
 				if(!mins)
 					return
 				if(mins >= 525600)
