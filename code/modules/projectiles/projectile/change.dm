@@ -54,3 +54,23 @@
 			var/mob/living/carbon/human/H = new_mob
 			to_chat(new_mob, "<B>Your form morphs into that of a [(istype(H) && H.species && H.species.name) ? H.species.name : randomize].</B>")
 			return new_mob
+
+/obj/item/projectile/zwartepiet
+	name = "bolt of zwarte piet"
+	icon_state = "ice_1"
+	damage = 0
+	damage_type = BURN
+	nodamage = TRUE
+	flag = "energy"
+	var/changetype=null
+	fire_sound = 'sound/weapons/radgun.ogg'
+	
+/obj/item/projectile/zwartepiet/on_hit(var/atom/pietje)
+	var/type = changetype
+	spawn(1)
+		zwartepietenate(pietje,type)
+
+/obj/item/projectile/zwartepiet/proc/zwartepietenate(var/mob/living/carbon/human/M,var/type) //WHY: as mob in living_mob_list
+	if(istype(M, /mob/living) && M.stat != DEAD)
+		M.zwartepietify()
+		to_chat(M, "<B>You feel jovial!</B>")

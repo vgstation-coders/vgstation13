@@ -31,6 +31,7 @@
 #define KINDNESS_DAY "Kindness Day"
 #define FLOWERS_DAY "Flowers Day"
 #define SAYING_HELLO_DAY "Saying-'Hello' Day"
+#define SINTERKLAAS "Sinterklaasfeest"
 #define HUMAN_RIGHTS_DAY "Human-Rights Day"
 #define MONKEY_DAY "Monkey Day"
 #define END_OF_THE_WORLD "End of the World"
