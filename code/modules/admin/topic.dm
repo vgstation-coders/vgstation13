@@ -753,15 +753,16 @@
 
 		var/duration
 
-		switch(alert("Temporary Ban?",,"Yes","No"))
+		switch(alert("Edit This Ban?",,"Yes","No"))
 			if("Yes")
 				temp = 1
 				var/mins = 0
 				if(minutes > CMinutes)
 					mins = minutes - CMinutes
-				mins += 1440*input(usr,"How long (in days)?","Ban time",0) as num|null
-				mins += 60*input(usr,"How long (in hours)?","Ban time",0) as num|null
-				mins += input(usr,"How long (in minutes)?","Ban time",0) as num|null
+				to_chat(usr, "<span class='info'>The remaining time on this ban is [mins] minutes")
+				mins = 1440*input(usr,"How long (in days)?","Ban time", mins ? mins : 1440) as num|null
+				mins += 60*input(usr,"How long (in hours)?","Ban time", mins ? mins : 1440) as num|null
+				mins += input(usr,"How long (in minutes)?","Ban time", mins ? mins : 1440) as num|null
 				if(!mins)
 					return
 				mins = min(525599,mins)
