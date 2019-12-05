@@ -89,7 +89,8 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define MOMMI_MAX_COIL 50
 
 //Speed-related defines
-#define SILICON_NO_CHARGE_SLOWDOWN 1.4
+#define SILI_LOW_SLOW 1.4
+#define SILI_LOW_TRIGGER 1875 //25% of starter cell
 #define SILICON_NO_CELL_SLOWDOWN 15
 
 #define CYBORG_ENGINEERING_SPEED_MODIFIER 1
