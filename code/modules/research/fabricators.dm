@@ -171,12 +171,26 @@
 	if(queue.len==0)
 		stopped=1
 		return
-	busy=1
-	spawn(0)
-		var/datum/design/I = queue_pop()
-		if(!build_part(I))
-			queue.Add(I)
-		busy=0
+	handle_building()
+
+//Proc that handles building stuff so the delay between building items isn't roughly 2 seconds from process(), yell at me if it goes wrong - B2MTTF
+/obj/machinery/r_n_d/fabricator/proc/handle_building()
+	sleep(2)
+	if(busy || being_built || stat&(NOPOWER|BROKEN)) //Since this will handle item building once it's kicked off by process we need to repeat the process sanity
+		return
+	if(stopped)
+		if(auto_make && last_made && !queue.len)
+			add_to_queue(last_made)
+			start_processing_queue()
+		else
+			return
+	if(queue.len == 0)
+		stopped = 1
+		return
+	busy = 1
+	var/datum/design/I = queue_pop()
+	if(!build_part(I))
+		queue.Add(I)
 
 /obj/machinery/r_n_d/fabricator/proc/queue_pop()
 	var/datum/design/D = queue[1]
@@ -310,7 +324,7 @@
 	if(!part.build_path)
 		WARNING("[part.name] has a null build path var!")
 		return
-	if(is_contraband(part) && !src.hacked)
+	if(is_contraband(part) && !hacked)
 		stopped = 1
 		src.visible_message("<span class='notice'>The [src.name] buzzes, \"Safety procedures prevent current queued item from being built.\"</span>")
 		return
@@ -320,17 +334,17 @@
 		src.visible_message("<span class='notice'>The [src.name] beeps, \"Not enough materials to complete item.\"</span>")
 		return
 
-	src.being_built = new part.build_path(src)
+	being_built = new part.build_path(src)
 
-	src.busy = 1
+	busy = 1
 	icon_state = "[base_state]_ani"
 	if(start_end_anims)
 		flick("[base_state]_start",src)
-	src.use_power = 2
-	src.updateUsrDialog()
+	use_power = 2
+	updateUsrDialog()
 	//message_admins("We're going building with [get_construction_time_w_coeff(part)]")
 	sleep(get_construction_time_w_coeff(part))
-	src.use_power = 1
+	use_power = 1
 	icon_state = base_state
 	if(start_end_anims)
 		flick("[base_state]_end",src)
@@ -357,12 +371,13 @@
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
 		being_built.anchored = 0
-		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
-		src.being_built = null
+		visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
+		being_built = null
 		last_made = part
 		wires.SignalIndex(RND_WIRE_JOBFINISHED)
-	src.updateUsrDialog()
-	src.busy = 0
+	updateUsrDialog()
+	busy = 0
+	handle_building() //Restart the building if there's items left to be built
 	return 1
 
 //max_length is, from the top of the list, the parts you want to queue down to
