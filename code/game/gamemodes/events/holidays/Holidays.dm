@@ -124,6 +124,8 @@ var/global/Holiday = null
 
 		if(12) // Dec
 			switch(DD)
+				if(5)
+					current_holidays += SINTERKLAAS //we've had two dutch headmins -- it's fine
 				if(10)
 					current_holidays += HUMAN_RIGHTS_DAY
 				if(14)

@@ -46,7 +46,7 @@
 	flags = FPRINT
 	armor = list(melee = 82, bullet = 15, laser = 5,energy = 5, bomb = 5, bio = 2, rad = 0)
 	siemens_coefficient = 0.7
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FULL_HEAD|MASKHEADHAIR
 	eyeprot = 1
 
 /obj/item/clothing/head/helmet/tactical/swat

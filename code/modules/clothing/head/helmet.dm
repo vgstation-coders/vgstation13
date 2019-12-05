@@ -17,7 +17,7 @@
 	item_state = "riot_helm"
 	armor = list(melee = 50, bullet = 25, laser = 45, energy = 15, bomb = 30, bio = 0, rad = 0)
 	actions_types = list(/datum/action/item_action/toggle_helmet)
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FULL_HEAD|MASKHEADHAIR
 	var/state = 1
 
 /obj/item/clothing/head/helmet/visor/New()

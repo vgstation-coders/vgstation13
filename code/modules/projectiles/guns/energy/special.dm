@@ -140,6 +140,15 @@
 			changetype=selected
 	next_changetype=world.time+SOC_CHANGETYPE_COOLDOWN
 
+/obj/item/weapon/gun/energy/staff/sinterklaas
+	name = "staff of sinterklaas"
+	desc = "There's a knock on the door, a hard knock, a soft knock, there's a knock on the door, who could it be?"
+	icon_state = "staffofsinterklaas"
+	item_state = "sinterklaas"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/wiz_left.dmi', "right_hand" = 'icons/mob/in-hand/right/wiz_right.dmi')
+	projectile_type = "/obj/item/projectile/zwartepiet"
+	charge_cost = 100
+
 /obj/item/weapon/gun/energy/staff/animate
 	name = "staff of animation"
 	desc = "An artefact that spits bolts of life-force which causes objects which are hit by it to animate and come to life! This magic doesn't affect machines."
