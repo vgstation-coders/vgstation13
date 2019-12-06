@@ -615,7 +615,7 @@
 											replace_target(user)
 											return
 									else
-										to_chat(user,"<b>\The [O.sacrifice_target] is still aboard the station.</b>")
+										to_chat(user,"<b>\The [O.sacrifice_target] is in [get_area_name(O, 1)].</b>")
 						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>To perform the sacrifice, you'll have to forge a cult blade first. It doesn't matter if the target is alive of not, lay their body down on the altar and plant the blade on their stomach. Next, touch the altar to perform the next step of the ritual. The more of you, the quicker it will be done.</span></span>")
 					if (CULT_ACT_III)
 						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>The crew is now aware of our presence, prepare to draw blood. Your priority is to spill as much blood as you can all over the station, bloody trails left by foot steps count toward this goal. How you obtain the blood, I leave to your ambition, but remember that if the crew destroys every blood stones, you will be doomed.</span></span>")
