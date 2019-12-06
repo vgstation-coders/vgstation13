@@ -1926,6 +1926,10 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "storage"
 
 //SNOWMAP
+/area/icebar
+	name = "\improper Ice Bar"
+	icon_state = "ghettobar"
+
 /area/surface
 	forbid_apc = TRUE
 
