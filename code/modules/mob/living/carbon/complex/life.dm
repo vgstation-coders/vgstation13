@@ -384,18 +384,18 @@
 
 	regular_hud_updates()
 
-	if (stat == 2 || (M_XRAY in mutations))
+	if (stat == DEAD || (M_XRAY in mutations))
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_LEVEL_TWO
-	else if (stat != 2)
+	else if (stat != DEAD)
 		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 2
 		see_invisible = SEE_INVISIBLE_LIVING
 
 
 	if (healths)
-		if (stat != 2)
+		if (stat != DEAD)
 			switch(health)
 				if(150 to INFINITY)
 					healths.icon_state = "health0"
@@ -472,7 +472,7 @@
 		else
 			clear_fullscreen("high")
 
-	if (stat != 2)
+	if (stat != DEAD)
 		if (machine)
 			if (!( machine.check_eye(src) ))
 				reset_view(null)
