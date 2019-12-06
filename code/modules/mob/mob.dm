@@ -2212,7 +2212,8 @@ mob/proc/on_foot()
 	return FALSE
 
 /mob/proc/handle_regular_hud_updates()
-	return
+	if(client)
+		return TRUE
 
 /mob/proc/update_antag_huds()
 	if (mind)
