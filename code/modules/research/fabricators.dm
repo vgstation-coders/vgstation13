@@ -171,7 +171,8 @@
 	if(queue.len==0)
 		stopped=1
 		return
-	handle_building()
+	spawn(0)
+		handle_building()
 
 //Proc that handles building stuff so the delay between building items isn't roughly 2 seconds from process(), yell at me if it goes wrong - B2MTTF
 /obj/machinery/r_n_d/fabricator/proc/handle_building()
@@ -377,7 +378,8 @@
 		wires.SignalIndex(RND_WIRE_JOBFINISHED)
 	updateUsrDialog()
 	busy = 0
-	handle_building() //Restart the building if there's items left to be built
+	spawn(0)
+		handle_building() //Restart the building if there's items left to be built
 	return 1
 
 //max_length is, from the top of the list, the parts you want to queue down to
