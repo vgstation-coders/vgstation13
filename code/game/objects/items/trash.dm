@@ -242,6 +242,6 @@ var/list/crushed_cans_cache = list()
 	color = null
 
 /obj/item/trash/slag
-	name = "\improper slag"
+	name = "slag"
 	desc = "Electronics burnt to a crisp"
 	icon_state = "slag"

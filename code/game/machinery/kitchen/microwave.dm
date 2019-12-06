@@ -18,7 +18,10 @@
 	var/broken = 0 // ={0,1,2} How broken is it???
 	var/reagent_disposal = 1 //Does it empty out reagents when you eject? Default yes.
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
-	var/global/list/acceptable_items // List of the items you can put in
+	var/global/list/acceptable_items = list(
+							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
+							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
+							)// List of the items you can put in
 	var/global/list/acceptable_reagents // List of the reagents you can put in
 	var/list/holdingitems = list()
 	var/limit = 100
@@ -58,20 +61,12 @@
 		available_recipes = new
 		for (var/type in (typesof(/datum/recipe)-/datum/recipe))
 			available_recipes+= new type
-		acceptable_items = new
 		acceptable_reagents = new
 		for (var/datum/recipe/recipe in available_recipes)
 			for (var/item in recipe.items)
 				acceptable_items |= item
 			for (var/reagent in recipe.reagents)
 				acceptable_reagents |= reagent
-
-		// Stuff to microwave that isn't food for destructive or stupid purposes
-		// Utensils explode non-harmfully, power cells blow up harmfully, the rest turns to burnt mess or slag
-		acceptable_items.Add(
-							"/obj/item/weapon/kitchen/utensil","/obj/item/device/pda","/obj/item/device/paicard",
-							"/obj/item/weapon/cell","/obj/item/weapon/circuitboard","/obj/item/device/aicard"
-							)
 
 /*******************
 *   Part Upgrades
