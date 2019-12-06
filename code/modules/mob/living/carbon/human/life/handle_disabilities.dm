@@ -71,8 +71,7 @@
 					"why woud i take a pin pointner??",
 					"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!",
 					"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????",
-					"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!",
-					"f[pick("r","w")]ee the d[pick("a","4","e","@")]b!")
+					"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!")
 				if(prob(50))
 					message = uppertext(replacetext(message, ".", "!")) //Shout it
 				say(message)
