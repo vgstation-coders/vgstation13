@@ -176,7 +176,6 @@
 
 //Proc that handles building stuff so the delay between building items isn't roughly 2 seconds from process(), yell at me if it goes wrong - B2MTTF
 /obj/machinery/r_n_d/fabricator/proc/handle_building()
-	sleep(2)
 	if(busy || being_built || stat&(NOPOWER|BROKEN)) //Since this will handle item building once it's kicked off by process we need to repeat the process sanity
 		return
 	if(stopped)
@@ -189,6 +188,7 @@
 		stopped = 1
 		return
 	busy = 1
+	sleep(2)
 	var/datum/design/I = queue_pop()
 	if(!build_part(I))
 		queue.Add(I)
