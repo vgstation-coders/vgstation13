@@ -37,11 +37,12 @@
 		if(prob(3))
 			if(prob(66)) //All of those REALLY ought to be variable lists, but that would be too smart I guess
 				var/message = pick("IM A PONY NEEEEEEIIIIIIIIIGH",
+					"fukin furies!",
 					"without oxigen blob don't evoluate?",
-					"CAPTAINS A [pick("COMDOM","CONDOM")]",
+					"CAPTINS A [pick("COMDOM","CONDOM")]",
 					"[pick("", "that faggot traitor")] is grifing me HAL;P!!!",
 					"can u give me [pick("telikesis","halk","eppilapse")]?",
-					"THe saiyans screwed",
+					"THe saiyans screwed!",
 					"Bi is THE BEST OF BOTH WORLDS>",
 					"I WANNA PET TEH monkeyS",
 					"stop grifing me!!!!",
