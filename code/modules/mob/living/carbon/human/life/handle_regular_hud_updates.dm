@@ -271,10 +271,10 @@
 			throw_alert(SCREEN_ALARM_TEMPERATURE, temperature_alert < 0 ? /obj/abstract/screen/alert/carbon/temp/cold : /obj/abstract/screen/alert/carbon/temp/hot, temperature_alert)
 		else
 			clear_alert(SCREEN_ALARM_TEMPERATURE)
-//		if(sleeping)
-//			throw_alert(SCREEN_ALARM_SLEEP,)
-//		else
-//			clear_alert(SCREEN_ALARM_SLEEP)
+		if(sleeping)
+			throw_alert(SCREEN_ALARM_SLEEP, /obj/abstract/screen/alert/carbon/i_slep)
+		else
+			clear_alert(SCREEN_ALARM_SLEEP)
 		switch(nutrition)
 			if(450 to INFINITY)
 				throw_alert(SCREEN_ALARM_FOOD, /obj/abstract/screen/alert/carbon/food/fat, 0)
