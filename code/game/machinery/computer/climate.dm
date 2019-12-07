@@ -5,6 +5,8 @@
 	icon_state = "climate"
 	light_color = LIGHT_COLOR_CYAN
 	circuit = "/obj/item/weapon/circuitboard/labor"
+	var/reported_temp = T_ARCTIC
+	var/reported_snow = "minimal"
 
 /obj/machinery/computer/climate/New()
 	..()
