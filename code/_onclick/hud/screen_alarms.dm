@@ -133,6 +133,7 @@ var/global/list/screen_alarms_locs = list(
 #define SCREEN_ALARM_TOXINS "mob_toxins"
 #define SCREEN_ALARM_BREATH "mob_breath"
 #define SCREEN_ALARM_FOOD "mob_food"
+#define SCREEN_ALARM_SLEEP "mob_sleep"
 
 #define SCREEN_ALARM_ROBOT_CELL "robot_cell"
 #define SCREEN_ALARM_ROBOT_LAW "robot_law"
@@ -248,6 +249,11 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/carbon/food/starving
 	name = "Starving"
 	desc = "You're severely malnourished. The hunger pains make moving around a chore."
+
+/obj/abstract/screen/alert/carbon/i_slep
+	name = "Sleeping"
+	desc = "You're fast asleep."
+	icon_state = "asleep"
 
 //Corgi Alarms
 /obj/abstract/screen/alert/carbon/breath/corgi
