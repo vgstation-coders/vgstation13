@@ -19,7 +19,7 @@
 					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 
 /obj/machinery/patient_processor/process()
-	if((!(output_dir in cardinal) || !(input_dir in cardinal)) || output_dir == input_dir)
+	if((!(output_dir in cardinal) || !(input_dir in cardinal)) || output_dir == input_dir || !anchored)
 		return
 	var/input = get_step(src, input_dir)
 	var/output = get_step(src, output_dir)
