@@ -63,6 +63,6 @@
 	for(var/datum/language/L in brainmob.languages)
 		new_body.add_language(L.name)
 	qdel(brainmob)
+	qdel(O)
 	new_body.forceMove(output)
 	new_body.rejuvenate(animation = TRUE)
-	qdel(O)
