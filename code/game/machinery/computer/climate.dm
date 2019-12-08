@@ -27,10 +27,10 @@
 	var/dat = list()
 	dat += "<center>"
 	dat += "<div class='modal'><div class='modal-content'><div class='line'><b>Weather Report</b></div><br>"
-	dat += "<b>Temperature:</b> <div class='line'>[reported_temp] Celcius</div>"
+	dat += "<b>Temperature:</b> <div class='line'>[reported_temp-273.15] Celcius</div>"
 	dat += "<b>Snowfall:</b> <div class='line'>[reported_snow] </div></div></div></center>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "climate", "Climate Monitoring Console", 325, 500, src)
+	var/datum/browser/popup = new(user, "climate", "Climate Monitoring Console", 325, 350, src)
 	popup.set_content(dat)
 	popup.open()
 	onclose(user, "climate")
