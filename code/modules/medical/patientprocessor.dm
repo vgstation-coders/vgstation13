@@ -53,8 +53,7 @@
 	new_body.flavor_text = new_dna.flavor_text
 	new_body.ckey = brainmob.ckey
 	brainmob.ckey = null
-	if(brainmob.mind)
-		brainmob.mind.transfer_to(new_body)
+	brainmob.mind?.transfer_to(new_body)
 	to_chat(new_body, "<span class='notice'><b>You suddenly awaken inside some strange machine.</b></span>")
 	if(new_body.mind?.miming) //yes I know I'm using the forbidden operator
 		new_body.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
