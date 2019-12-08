@@ -214,6 +214,11 @@ var/global/list/alert_overlays_global = list()
 		if (mecha.occupant)
 			var/mob/M = mecha.occupant
 			attack_hand(M)
+	if(ismob(AM))
+		var/mob/M = AM
+		var/obj/item/weapon/crowbar/C = M.get_active_hand()
+		if(istype(C) && M.a_intent == I_HURT)
+			attackby(C,M)
 	return 0
 
 /obj/machinery/door/firedoor/power_change()
