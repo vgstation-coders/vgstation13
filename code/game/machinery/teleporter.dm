@@ -390,3 +390,12 @@
 	//		visible_message("<span class='notice'>Test fire completed.</span>", range = 2)
 	//src.add_fingerprint(usr)
 	//return
+
+/obj/machinery/teleport/hub/emergency
+	name = "emergency horizon generator"
+	desc = "This specialized horizon generator creates a portal, but always to the same place, and only becomes active during emergencies."
+	stat = BROKEN
+
+/obj/machinery/teleport/hub/emergency/examine(mob/user)
+	..()
+	to_chat(user,"<span class='warning'>It looks permanently out of service.</span>")

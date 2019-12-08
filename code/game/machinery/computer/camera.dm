@@ -121,6 +121,10 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	light_color = null
 
+/obj/machinery/computer/security/telescreen/entertainment/wooden_tv
+	icon_state = "security_det"
+	icon = 'icons/obj/computer.dmi'
+
 /obj/machinery/computer/security/wooden_tv
 	name = "Security Cameras"
 	desc = "An old TV hooked into the stations camera network."
