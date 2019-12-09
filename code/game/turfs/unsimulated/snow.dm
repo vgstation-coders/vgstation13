@@ -1,8 +1,3 @@
-#define SNOW_CALM 0
-#define SNOW_AVERAGE 1
-#define SNOW_HARD 2
-#define SNOW_BLIZZARD 3
-
 //This file includes all associated code with snow tiles, snowprints, and blizzards on them.
 
 /turf/unsimulated/floor/snow

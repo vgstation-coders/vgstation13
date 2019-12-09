@@ -6,6 +6,7 @@ var/blizzard_ready = 1 //Whether a new blizzard can be started.
 var/list/snowstorm_ambience = list('sound/misc/snowstorm/snowfall_calm.ogg','sound/misc/snowstorm/snowfall_average.ogg','sound/misc/snowstorm/snowfall_hard.ogg','sound/misc/snowstorm/snowfall_blizzard.ogg')
 var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 var/blizzard_cooldown = 3000 //5 minutes minimum
+var/list/climatecomps = list()
 
 /datum/event/blizzard/can_start()
 	return 80
@@ -60,6 +61,8 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	if(snow_intensity == SNOW_BLIZZARD)
 		return
 	snow_intensity++
+	for(var/obj/machinery/computer/climate/C in climatecomps)
+		C.update_weather(snow_intensity)
 	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
 		if(tile.ignore_blizzard_updates)
 			continue
@@ -71,6 +74,8 @@ var/blizzard_cooldown = 3000 //5 minutes minimum
 	if(snow_intensity == SNOW_CALM)
 		return
 	snow_intensity--
+	for(var/obj/machinery/computer/climate/C in climatecomps)
+		C.update_weather(snow_intensity)
 	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
 		if(tile.ignore_blizzard_updates)
 			continue

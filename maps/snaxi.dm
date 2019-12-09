@@ -44,8 +44,12 @@
 /datum/map/active/New()
 	.=..()
 
-	research_shuttle.name = "Research and Mining Shuttle"
-	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
+	research_shuttle.name = "Southern Station Shuttle"
+	research_shuttle.req_access = list()
+	mining_shuttle.name = "Northwest Station Shuttle"
+	mining_shuttle.req_access = list()
+	security_shuttle.name = "Northeast Station Shuttle"
+	security_shuttle.req_access = list()
 
 // Making nodes every 5*5 tiles in a 100*100 radius
 // This makes (100*100)/(10*10) = 100 nodes
