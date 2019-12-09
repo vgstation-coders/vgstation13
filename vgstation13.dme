@@ -1556,6 +1556,7 @@
 #include "code\modules\media\broadcast\receivers\radio.dm"
 #include "code\modules\media\broadcast\transmitters\broadcast.dm"
 #include "code\modules\medical\cloning.dm"
+#include "code\modules\medical\patientprocessor.dm"
 #include "code\modules\medical\computer\cloning.dm"
 #include "code\modules\migrations\migration.dm"
 #include "code\modules\migrations\migration_controller.dm"
