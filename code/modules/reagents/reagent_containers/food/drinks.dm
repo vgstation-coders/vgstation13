@@ -763,6 +763,17 @@
 	reagents.add_reagent(COCAINE, 5)
 	reagents.add_reagent(BLACKCOLOR, 5)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy
+	name = "\improper Roentgen Energy"
+	desc = "Roentgen Energy, a meltdown in your mouth! Contains real actinides!"
+	icon_state = "roentgenenergy"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy/New()
+	..()
+	reagents.add_reagent(CAFFEINE, 5)
+	reagents.add_reagent(COCAINE, 1.4)
+	reagents.add_reagent(URANIUM, 3.6)
+	reagents.add_reagent(SPORTDRINK, 20)
+
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "Vial of Food Coloring"
 	icon = 'icons/obj/chemical.dmi'
@@ -1442,7 +1453,7 @@
 					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
 			else
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
-		
+
 		create_broken_bottle()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/create_broken_bottle()
@@ -1598,14 +1609,14 @@
 			var/distance = manhattan_distance(over_location, src)
 			if (distance >= 8) // More than a full screen to go
 				return ..()
-		
+
 			// Geometrically checking if we're on a straight line.
 			var/vector/V = atoms2vector(src, over_location)
 			var/vector/V_norm = V.duplicate()
 			V_norm.normalize()
 			if (!V_norm.is_integer())
 				return ..() // Only a cardinal vector (north, south, east, west) can pass this test
-			
+
 			// Checks if there's tables on the path.
 			var/turf/dest = get_translated_turf(V)
 			var/turf/temp_turf = src_location
