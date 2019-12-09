@@ -813,6 +813,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/suit/storage/wintercoat/cargo,
 					/obj/item/clothing/suit/storage/wintercoat/cargo,
 					/obj/item/clothing/suit/storage/wintercoat/miner,
+					/obj/item/clothing/suit/storage/wintercoat/miner,
 					/obj/item/clothing/suit/storage/wintercoat/miner)
 	cost = 50
 	containertype = /obj/structure/closet/crate/basic
