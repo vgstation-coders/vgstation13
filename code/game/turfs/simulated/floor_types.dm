@@ -176,8 +176,8 @@
 	nitrogen = 0.001
 	temperature = TCMB
 
-/turf/simulated/floor/engine/accoustic
-	name = "accoustic panel"
+/turf/simulated/floor/engine/acoustic
+	name = "acoustic panel"
 	desc = "A special floor designed to muffle sound."
 	icon_state = "accoustic"
 	volume_mult = 0.1
