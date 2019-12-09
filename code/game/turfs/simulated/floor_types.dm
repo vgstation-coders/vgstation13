@@ -179,7 +179,7 @@
 /turf/simulated/floor/engine/acoustic
 	name = "acoustic panel"
 	desc = "A special floor designed to muffle sound."
-	icon_state = "accoustic"
+	icon_state = "acoustic"
 	volume_mult = 0.1
 
 /turf/simulated/floor/plating
