@@ -83,6 +83,7 @@
 		AM.pixel_y = initial(AM.pixel_y)
 
 /obj/item/critter_cage/pickup(var/mob/user)//When we pick up the cage, let's move the critter inside
+	..()
 	if (critter)
 		critter.forceMove(src)
 		var/image/I = image(critter.icon, src, critter.icon_state, layer+1, critter.dir)

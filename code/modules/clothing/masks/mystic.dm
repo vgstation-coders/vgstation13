@@ -27,6 +27,7 @@
 		..()
 
 /obj/item/clothing/mask/happy/pickup(mob/user as mob)
+	..()
 	flick("happiest_flash", src)
 	to_chat(user, "<span class=warning><B>The mask's eyesockets briefly flash with a foreboding red glare.</span></B>")
 

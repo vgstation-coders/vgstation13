@@ -5,8 +5,8 @@
 	icon_state = "unloader"
 	density = 1
 	anchored = 1
-	var/input_dir = 1
-	var/output_dir = 2
+	var/input_dir = NORTH
+	var/output_dir = SOUTH
 
 /obj/machinery/patient_processor/proc/notify_ghost(var/mob/M)
 	if(!M.client)

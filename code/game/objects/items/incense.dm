@@ -497,6 +497,7 @@
 	force = 10
 
 /obj/item/weapon/thurible/pickup(var/mob/living/user)
+	..()
 	if(user.mind)
 		if(ishuman(user))
 			var/datum/role/vampire/V = isvampire(user)

@@ -413,6 +413,15 @@
 	..()
 	reagents.add_reagent(NANOBOTS, 1)
 
+/obj/item/weapon/reagent_containers/pill/mednanobot
+	name = "medical nanobot pill"
+	desc = "Experuimental medication."
+	icon_state = "pill7"
+
+ /obj/item/weapon/reagent_containers/pill/mednanobot/New()
+ 	..()
+ 	reagents.add_reagent(MEDNANOBOTS, 3)
+
 /obj/item/weapon/reagent_containers/pill/hyronalin
 	name = "hyronalin pill"
 	desc = "Radiation poisoning treatment."

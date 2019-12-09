@@ -4538,6 +4538,7 @@
 	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chocofrog/pickup(mob/living/user as mob)
+	..()
 	var/mob/living/carbon/human/H = user
 	if(!H)
 		return 1

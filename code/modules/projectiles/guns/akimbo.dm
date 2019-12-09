@@ -22,6 +22,7 @@
 	..()
 
 /obj/item/weapon/gun/akimbo/pickup(mob/user)
+	..()
 	update_icon(user)
 
 /obj/item/weapon/gun/akimbo/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)

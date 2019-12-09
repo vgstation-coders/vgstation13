@@ -278,6 +278,7 @@
 		return 0
 
 /obj/item/weapon/bloodlust/pickup(mob/user)
+	..()
 	playsound(src.loc, 'sound/weapons/Genhit.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You attach [src] to your arm.</span>")
 	cant_drop = 1

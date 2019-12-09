@@ -95,6 +95,7 @@
 	colorchange()
 
 /obj/item/clothing/accessory/glowstick/phazon/pickup(mob/user)
+	..()
 	user.callOnFace |= "\ref[src]"
 	user.callOnFace["\ref[src]"] = "colorchange"
 

@@ -81,4 +81,7 @@
 
 
 		building = FALSE
-		return TRUE
+		finalize_spawn(M)
+		return M
+
+/obj/machinery/mob_printer/proc/finalize_spawn(var/mob/living/L)

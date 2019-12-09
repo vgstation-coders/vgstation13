@@ -82,6 +82,7 @@
 		call(/obj/effect/rune_legacy/proc/revealrunes)(src)//revealing legacy runes as well because why not
 
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
+	..()
 	if(user.mind)
 		if(isReligiousLeader(user))
 			to_chat(user, "<span class='notice'>\The [src] is teeming with divine power. You feel like you could [fluff_pickup] a horde of undead with this.</span>")
@@ -128,7 +129,7 @@
 		M.drop_item(src, force_drop = TRUE)
 		M.put_in_active_hand(holy_weapon)
 		qdel(src)
-		
+
 /obj/item/weapon/nullrod/sword
 	name = "holy avenger"
 	desc = "DEUS VULT!"

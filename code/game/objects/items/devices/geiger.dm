@@ -17,6 +17,7 @@
 	update_icon()
 
 /obj/item/device/geiger_counter/pickup(mob/user)
+	..()
 	event_key = user.on_irradiate.Add(src, "measure_rad")
 
 /obj/item/device/geiger_counter/dropped(mob/user)

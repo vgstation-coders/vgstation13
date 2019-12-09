@@ -103,6 +103,7 @@ var/global/list/wizard_cards_normal = list(
 	playsound(src, 'sound/items/AirHorn.ogg', 50, 1)
 
 /obj/item/toy/singlecard/wizard/legendary/honkmother/pickup(mob/living/user as mob)
+	..()
 	if(user.mind && user.mind.assigned_role == "Clown")
 		to_chat(user, "<span class ='notice'>You feel Honkmother's presence as you pick up the card.</span>")
 

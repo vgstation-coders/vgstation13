@@ -170,6 +170,7 @@
 	. = ..()
 
 /obj/item/weapon/storage/bible/pickup(mob/living/user as mob)
+	..()
 	if(my_rel.leadsThisReligion(user)) //We are the religious leader, yes we are
 		to_chat(user, "<span class ='notice'>You feel [my_rel.deity_name]'s holy presence as you pick up \the [src].</span>")
 	if(ishuman(user)) //We are checking for antagonists, only humans can be antagonists

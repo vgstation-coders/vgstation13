@@ -154,6 +154,7 @@
 		force = round((5+potency/5), 1)
 
 /obj/item/weapon/grown/nettle/pickup(mob/living/carbon/human/user as mob) //todo this
+	..()
 	if(istype(user))
 		if(!user.gloves)
 			to_chat(user, "<span class='warning'>The nettle burns your bare hand!</span>")
@@ -206,6 +207,7 @@
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS)
 
 /obj/item/weapon/grown/deathnettle/pickup(mob/living/carbon/human/user as mob)
+	..()
 	if(!user.gloves)
 		if(istype(user, /mob/living/carbon/human))
 			var/datum/organ/external/affecting = user.get_active_hand_organ()

@@ -903,6 +903,7 @@ proc/move_mining_shuttle()
 	return 1
 
 /obj/item/device/mobcapsule/pickup(mob/user)
+	..()
 	tripped = 0
 	capsuleowner = user
 

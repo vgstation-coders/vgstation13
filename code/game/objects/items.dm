@@ -66,6 +66,7 @@
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
+	var/event/on_pickup
 
 	var/list/datum/disease2/disease/virus2 = list()
 	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
@@ -76,6 +77,7 @@
 
 /obj/item/New()
 	..()
+	on_pickup = new(owner = src)
 	for(var/path in actions_types)
 		new path(src)
 
@@ -94,6 +96,8 @@
 		src:holder = null
 	for(var/x in actions)
 		qdel(x)
+	qdel(on_pickup)
+	on_pickup = null
 	/*  BROKEN, FUCK BYOND
 	if(hasvar(src, "my_atom"))
 		src:my_atom = null*/
@@ -320,6 +324,7 @@
 
 // called after an item is picked up (loc has already changed)
 /obj/item/proc/pickup(mob/user)
+	INVOKE_EVENT(on_pickup, list("user" = user, "src" = src))
 	return
 
 // called when this item is removed from a storage item, which is passed on as S. The loc variable is already set to the new destination before this is called.

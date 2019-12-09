@@ -185,7 +185,7 @@
 		/obj/item/weapon/soap,
 		/obj/item/weapon/reagent_containers/spray,
 		/obj/item/weapon/bikehorn)
-		
+
 /obj/item/clothing/suit/storage/wintercoat/mime
 	name = "mime winter coat"
 	icon_state = "coatmime"
@@ -269,6 +269,7 @@
 		hooddown(user)
 
 /obj/item/clothing/head/winterhood/pickup(var/mob/living/carbon/human/user)
+	..()
 	if(coat && istype(coat) && user.get_item_by_slot(slot_wear_suit) == coat)
 		coat.hooddown(user,unequip = 0)
 		user.drop_from_inventory(src)
