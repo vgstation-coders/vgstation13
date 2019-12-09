@@ -586,7 +586,7 @@
 		src.attack_hand(usr)
 		return
 
-	to_chat(usr, "<span class='warning'>This mob type can't use this verb.</span>")
+	to_chat(usr, "<span class='warning'>You can't toggle the open state of [src].</span>")
 
 /obj/structure/closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
 	overlays.len = 0
