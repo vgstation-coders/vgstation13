@@ -22,7 +22,7 @@
 	key = "grumble"
 	key_third_person = "grumbles"
 	message = "grumbles!"
-	message_mime = "silently appears to grumbling!"
+	message_mime = "grumbles silently!"
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/human/handshake
@@ -44,7 +44,7 @@
 	key = "mumble"
 	key_third_person = "mumbles"
 	message = "mumbles!"
-	message_mime = "silently appears to be mumbling!"
+	message_mime = "mumbles silently!"
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/human/pale
