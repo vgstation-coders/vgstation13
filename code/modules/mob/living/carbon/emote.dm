@@ -179,7 +179,7 @@
 	key = "gasp"
 	key_third_person = "gasps"
 	message = "gasps!"
-	message_mime = "opens their mouth in surprise!"
+	message_mime = "gasps silently!"
 	emote_type = EMOTE_AUDIBLE
 	stat_allowed = UNCONSCIOUS
 
