@@ -43,7 +43,7 @@ var/datum/subsystem/map_handlers/SSmaph
 /datum/map_handler/New(var/area/A)
 	map = A
 	for(var/obj/abstract/spawner/S in A)
-		spawners.Add(S)
+		S.handler = src
 		S.respawn()
 	map_handlers.Add(src)
 
@@ -52,7 +52,6 @@ var/datum/subsystem/map_handlers/SSmaph
 //If it has a respawn value left, we tick it down by 1
 //If it did have a respawn value left that was ticked down, and it is now 0, we handle it.
 /datum/map_handler/proc/Process()
-	to_chat(world, "handler: cleanup [120] spawners [spawners.len]")
 	for(var/obj/abstract/spawner/i in spawners)
 		if(spawners[i] > 0)
 			spawners[i]--
