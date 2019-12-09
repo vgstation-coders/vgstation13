@@ -223,7 +223,7 @@
 	key = "chuckle"
 	key_third_person = "chuckles"
 	message = "chuckles."
-	message_mime = "puts a hand on their chest and imitates a smug chuckle."
+	message_mime = "imitates a smug chuckle."
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/blush
