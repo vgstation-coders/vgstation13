@@ -37,5 +37,8 @@
 /datum/map_element/dungeon/deathmatch/fountain
 	file_path = "maps/misc/de_fountain.dmm"
 
+/datum/map_element/dungeon/deathmatch/maintenance
+	file_path = "maps/misc/de_maint.dmm"
+
 /area/vault/automap/nolight
 	dynamic_lighting = FALSE

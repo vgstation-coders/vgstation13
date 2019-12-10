@@ -1,7 +1,7 @@
-"a" = (/turf/unsimulated/wall,/area/vault/automap/nolight)
+"a" = (/turf/unsimulated/wall{icon_state = "rwall1"},/area/vault/automap/nolight)
 "b" = (/turf/unsimulated/floor/grass,/area/vault/automap/nolight)
 "c" = (/obj/machinery/mob_printer/deathmatch,/turf/unsimulated/floor/grass,/area/vault/automap/nolight)
-"d" = (/turf/simulated/wall,/area/vault/automap/nolight)
+"d" = (/turf/unsimulated/wall{icon_state = "0"},/area/vault/automap/nolight)
 "e" = (/obj/machinery/door/mineral/wood,/turf/unsimulated/floor{icon_state = "dark vault stripe"},/area/vault/automap/nolight)
 "f" = (/turf/unsimulated/floor{icon_state = "dark vault stripe"},/area/vault/automap/nolight)
 "g" = (/obj/structure/rack,/obj/abstract/spawner/smg,/turf/unsimulated/floor{icon_state = "dark vault stripe"},/area/vault/automap/nolight)
@@ -10,7 +10,7 @@
 "j" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1; pixel_y = 0},/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor{icon_state = "old_engine"},/area/vault/automap/nolight)
 "k" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1; pixel_y = 0},/turf/unsimulated/floor{icon_state = "old_engine"},/area/vault/automap/nolight)
 "l" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1; pixel_y = 0},/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor{icon_state = "old_engine"},/area/vault/automap/nolight)
-"m" = (/obj/machinery/patient_processor/WE,/turf/unsimulated/floor/grass,/area/vault/automap/nolight)
+"m" = (/obj/effect/decal/warning_stripes{tag = "icon-loading_area (WEST)"; icon_state = "loading_area"; dir = 8},/turf/unsimulated/floor{icon_state = "dark vault stripe"},/area/vault/automap/nolight)
 "n" = (/turf/unsimulated/floor{icon_state = "asteroid0"},/area/vault/automap/nolight)
 "o" = (/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 8},/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 1},/obj/structure/grille,/turf/unsimulated/floor{icon_state = "old_engine"},/area/vault/automap/nolight)
 "p" = (/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 8},/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 4},/obj/structure/grille,/turf/unsimulated/floor{icon_state = "old_engine"},/area/vault/automap/nolight)
@@ -19,7 +19,7 @@
 "s" = (/obj/structure/rack,/obj/abstract/spawner/ricochet,/turf/unsimulated/floor{icon_state = "dark vault stripe"},/area/vault/automap/nolight)
 "t" = (/obj/structure/sink/puddle,/turf/unsimulated/floor{icon_state = "asteroid0"},/area/vault/automap/nolight)
 "u" = (/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 8},/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced,/obj/structure/grille,/turf/unsimulated/floor{icon_state = "old_engine"},/area/vault/automap/nolight)
-"v" = (/obj/machinery/patient_processor/EW,/turf/unsimulated/floor/grass,/area/vault/automap/nolight)
+"v" = (/obj/machinery/patient_processor/EW,/turf/unsimulated/floor{icon_state = "dark vault stripe"},/area/vault/automap/nolight)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -28,10 +28,10 @@ abbcdbbbbbbbbbbbbbbbbbbbbdcbba
 abddbbbdedddddbdedddbbbbbbddba
 abbbbbcdfffffdbdfffdbcbbbbbbba
 abbbbdddddffgdbdgffdddddbbbbba
-abbbbbdhfdffidbdiffeffdbbbbbba
+abbbbbdhfdffidbdifmvmfdbbbbbba
 abbbbbdffefffdbdfffdffdbbbbbba
 abbbbbddddddedbdjklddedbbbbbba
-abbbbbbbbbbbbbbbbmbbbbbbddddda
+abbbbbbbbbbbbbbbbbbbbbbbddddda
 aedddddbbbbbbbbbbbbbbbbbdffffa
 afffffddddbbnnnnnnbbbbbbeffffa
 affffeffobbnnnnnnnnbbbbdddddfa
@@ -42,10 +42,10 @@ adjldfffpbbnnqqqqnnbbbbbusfdfa
 affffeffubbnnnnnnnnbbbbdddddfa
 afffffddddbbnnnnnnbbbbbbeffffa
 aedddddbbbbbbbbbbbbbbbbbdffffa
-abbbbbbbbbbbbbbbbvbbbbbbddddda
+abbbbbbbbbbbbbbbbbbbbbbbddddda
 abbbbbddddddedbdjklddedbbbbbba
 abbbbbdffefffdbdfffdffdbbbbbba
-abbbbbdhfdffidbdiffeffdbbbbbba
+abbbbbdhfdffidbdifmvmfdbbbbbba
 abbbbdddddffgdbdgffdddddbbbbba
 abbbbbcdfffffdbdfffdbcbbbbbbba
 abddbbbdedddddbdedddbbbbbbddba

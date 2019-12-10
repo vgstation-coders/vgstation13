@@ -119,3 +119,18 @@ var/datum/subsystem/map_handlers/SSmaph
 	name = "medical spawner"
 	item_to_spawn = /obj/item/weapon/storage/pill_bottle/mednanobots
 	respawn_time = 40
+
+/obj/abstract/spawner/laserpistol
+	name = "laser pistol spawner"
+	item_to_spawn = /obj/item/weapon/gun/energy/laser/pistol
+	respawn_time = 60
+
+/obj/abstract/spawner/nightvision
+	name = "night vision spawner"
+	item_to_spawn = /obj/item/clothing/glasses/scanner/night
+	respawn_time = 100
+
+/obj/abstract/spawner/beartrap
+	name = "bear trap spawner"
+	item_to_spawn = /obj/item/weapon/legcuffs/beartrap
+	respawn_time = 60
