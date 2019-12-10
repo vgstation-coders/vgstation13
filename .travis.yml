@@ -38,7 +38,7 @@ before_script:
 
 script:
 # Has to use Python 2 instead of 3 because else it won't find colorama.
-- python tools/travis/check_map_files.py maps/
+- tools/travis/check_map_files.py maps/
 - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
 # Python 2 is EOL but travis chokes on Python 3 for a wide variety of reasons.
 #- python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
