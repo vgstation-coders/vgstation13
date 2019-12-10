@@ -21,12 +21,12 @@
 "au" = (/obj/machinery/patient_processor/WE,/obj/machinery/atmospherics/pipe/simple/supply/visible{icon_state = "intact"; dir = 8},/turf/unsimulated/floor,/area/vault/automap)
 "av" = (/obj/effect/decal/warning_stripes{tag = "icon-loading_area (EAST)"; icon_state = "loading_area"; dir = 4},/obj/machinery/atmospherics/pipe/simple/supply/visible{icon_state = "intact"; dir = 8},/turf/unsimulated/floor,/area/vault/automap)
 "aw" = (/obj/machinery/atmospherics/pipe/manifold/supply/visible{dir = 4},/turf/unsimulated/floor,/area/vault/automap)
-"ax" = (/obj/structure/rack,/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor,/area/vault/automap)
+"ax" = (/obj/structure/rack,/obj/machinery/light/small{dir = 8},/obj/abstract/spawner/beartrap,/turf/unsimulated/floor,/area/vault/automap)
 "ay" = (/obj/effect/decal/cleanable/cobweb2,/turf/unsimulated/floor,/area/vault/automap)
 "az" = (/obj/machinery/door/airlock/maintenance,/obj/effect/decal/cleanable/crayon/fuckyou,/turf/unsimulated/wall{icon_state = "rwall2"},/area/vault/automap)
 "aA" = (/obj/machinery/light/small{dir = 4; on = 1},/obj/machinery/atmospherics/pipe/simple/supply/visible,/turf/unsimulated/floor,/area/vault/automap)
 "aB" = (/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor,/area/vault/automap)
-"aC" = (/obj/structure/rack,/obj/machinery/light/small{dir = 1},/turf/unsimulated/floor,/area/vault/automap)
+"aC" = (/obj/structure/rack,/obj/machinery/light/small{dir = 1},/obj/abstract/spawner/beartrap,/turf/unsimulated/floor,/area/vault/automap)
 "aD" = (/obj/machinery/atmospherics/pipe/simple/supply/visible,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/unsimulated/floor,/area/vault/automap)
 "aE" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_x = 0},/turf/unsimulated/floor,/area/vault/automap)
 "aF" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/unsimulated/floor,/area/vault/automap)
@@ -69,10 +69,12 @@
 "bq" = (/obj/machinery/light/small{dir = 1},/turf/unsimulated/floor,/area/vault/automap)
 "br" = (/obj/machinery/mob_printer/deathmatch,/obj/machinery/light/small{dir = 1},/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{dir = 6},/turf/unsimulated/floor,/area/vault/automap)
 "bs" = (/obj/structure/rack,/obj/abstract/spawner/nightvision,/obj/machinery/light/small{dir = 4; on = 1},/turf/unsimulated/floor,/area/vault/automap)
-"bt" = (/obj/structure/rack,/obj/machinery/light/small{dir = 4; on = 1},/turf/unsimulated/floor,/area/vault/automap)
+"bt" = (/obj/structure/rack,/obj/machinery/light/small{dir = 1},/obj/abstract/spawner/shotgun,/turf/unsimulated/floor,/area/vault/automap)
 "bu" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{icon_state = "intact"; dir = 5},/turf/unsimulated/floor,/area/vault/automap)
 "bv" = (/obj/effect/decal/cleanable/cobweb2,/obj/structure/rack,/obj/abstract/spawner/laserpistol,/obj/machinery/light/small{dir = 4; on = 1},/turf/unsimulated/floor,/area/vault/automap)
 "bw" = (/obj/structure/sign/redcross,/turf/unsimulated/wall{icon_state = "rwall2"},/area/vault/automap)
+"bx" = (/obj/structure/rack,/obj/machinery/light/small{dir = 8},/obj/abstract/spawner/shotgun,/turf/unsimulated/floor,/area/vault/automap)
+"by" = (/obj/structure/rack,/obj/machinery/light/small{dir = 4; on = 1},/obj/abstract/spawner/beartrap,/turf/unsimulated/floor,/area/vault/automap)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -86,7 +88,7 @@ aaaGaeaHaaaoaqaeaIaeaeafaeawajaoaoaoamajajajajaoaoajajajaoaa
 aaalaaaJaaaoaoaaajajajakajakajaoajajamaoaoaoaoaoaoajaoaoaoaa
 aaalaaaaaaaaaaaaabaeaeaKajaLahahahahaMajaoaoaoajaoaoaoajajaa
 aaalajaoaoaoaNajaAajajajajaOajajajajanajajajajajajajaoaoaoaa
-aaaqacacacacacacaPaQaQaQaQaRaoaoaCajanajaSaoaoajaoajajajaoaa
+aaaqacacacacacacaPaQaQaQaQaRaoaobtajanajaSaoaoajaoajajajaoaa
 aaajajajajajajajanajajajajaoaoaoaoaoaTaEaEaEaUajaoajaoaoaoaa
 aaapaoaoaoaoaoaoanaoajaVajajajajajajajajajajanaoaoajaoajajaa
 aaaoajaoajaoajajanaoajaoaoaoajaoajapaoajaWaEaFaoaoajaoaoaNaa
@@ -96,11 +98,11 @@ aaaoajaBajajaBaoaoaoaoaoaoajanajaoajaTaEbdajajaaaaaabwaabeaa
 aaaoajaoajaoaoajajajajajaoajanajaoajajaobeaoaNaaaVayaaaobeaa
 aaaoajaoajaoaoaoaoaoaoajaoaoanajaoaYajbfbgbcaaaaaoaoaaaobeaa
 aabhaoaoaoaoaoajaoaoaoajajajbiajaoaoajbeajbeaaaoaobjbkblbmaa
-aaajajajajajajajaxaoaoaWaEaEaFaobfbbbbbnajbebwaoaobeaaaobeaa
+aaajajajajajajajbxaoaoaWaEaEaFaobfbbbbbnajbebwaoaobeaaaobeaa
 aaaoaoaoaoaoaoajajajajanaoaoajaobeajaoaoajbobbbbbbbnaabpbeaa
 aaaoajajaoajaoajaoaobqanajajajajbeajaJaoajbeaaaaaaaaaaaabeaa
 aaaoajapaoajaoaoaoajajanajbrbbbbbmajajajajbeaaaoaoaoaoaobeaa
-aaaoajaobsajajajaobtajanajbeajaobubbbbbbbbbmajaoajaoajajbeaa
+aaaoajaobsajajajaobyajanajbeajaobubbbbbbbbbmajaoajaoajajbeaa
 aaaoajaoajajajaWaEaEaEaFajbeajajajajajajajbeajaoajaoajaxbeaa
 aaaoajaoaoaoaoanajajajajajbeajapaoaoaobvajbeajaoajaoajaobeaa
 aaaoaoaoajajajbabbbbbbbbbbbgbbbbbbbbbbbbbbbgbbbbbbbbbbbbbnaa
