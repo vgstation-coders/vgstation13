@@ -306,6 +306,18 @@
 	..()
 	reagents.add_reagent(SODAWATER, 30)
 
+/obj/item/weapon/reagent_containers/glass/beaker/large/old_cryomix/New()
+	..()
+	reagents.add_reagent(CLONEXADONE, 20)
+	reagents.add_reagent(CRYOXADONE, 20)
+	reagents.add_reagent(BICARIDINE, 10)
+	reagents.add_reagent(ANTI_TOXIN, 10)
+	reagents.add_reagent(KELOTANE, 10)
+	reagents.add_reagent(DERMALINE, 10)
+	reagents.add_reagent(ALKYSINE, 10)
+	reagents.add_reagent(DEXALINP, 5)
+	reagents.add_reagent(RYETALYN, 5)
+
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone/New()
 	..()
 	reagents.add_reagent(CRYOXADONE, 30)
