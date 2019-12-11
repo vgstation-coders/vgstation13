@@ -36,7 +36,7 @@
 "aJ" = (/obj/item/weapon/spellbook,/turf/simulated/floor,/area/crew_quarters/bar)
 "aK" = (/turf/unsimulated/wall/fakeglass,/area/crew_quarters/bar)
 "aL" = (/obj/machinery/suit_storage_unit/atmos,/turf/simulated/floor,/area/crew_quarters/bar)
-"aM" = (obj/item/clothing/mask/joy,/turf/simulated/floor,/area/crew_quarters/bar)
+"aM" = (/obj/item/clothing/head/helmet/space/rig/atmos,/turf/simulated/floor,/area/crew_quarters/bar)
 "aN" = (/obj/item/clothing/suit/space/rig/atmos,/turf/simulated/floor,/area/crew_quarters/bar)
 "aO" = (/obj/structure/table/reinforced,/obj/item/weapon/card/id/captains_spare,/obj/item/weapon/card/id/captains_spare,/obj/item/weapon/card/id/captains_spare,/obj/item/weapon/card/id/captains_spare,/obj/item/weapon/card/id/captains_spare,/obj/item/weapon/card/id/captains_spare,/obj/item/weapon/card/id/captains_spare,/obj/item/weapon/card/id/captains_spare,/obj/item/weapon/card/id/captains_spare,/turf/simulated/floor,/area/crew_quarters/bar)
 "aP" = (/obj/docking_port/destination/arrival/station{dir = 2},/turf/simulated/floor,/area/crew_quarters/bar)
