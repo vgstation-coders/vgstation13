@@ -21,7 +21,7 @@
 							  //then open it in a populated area to crash clients.
 	var/breakout_time = 2 //2 minutes by default
 	var/sound_file = 'sound/machines/click.ogg'
-
+	var/required_quirk = MODULE_CAN_CLOSE_CLOSETS
 	var/has_electronics = 0
 	var/has_lock_type = null //The type this closet should be converted to if made ID secured
 	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
@@ -396,7 +396,7 @@
 
 // This is broken, see attack_ai.
 /obj/structure/closet/attack_robot(mob/living/silicon/robot/user as mob)
-	if(isMoMMI(user))
+	if(isMoMMI(user) || HAS_MODULE_QUIRK(user, required_quirk))
 		src.add_hiddenprint(user)
 		add_fingerprint(user)
 		return src.attack_hand(user)
@@ -576,13 +576,17 @@
 	if(usr.incapacitated())
 		return
 
-	if(ishuman(usr) || isMoMMI(usr))
-		if(isMoMMI(usr))
-			src.add_hiddenprint(usr)
-			add_fingerprint(usr)
+	if (isrobot(usr))
+		var/mob/living/silicon/robot/R = usr
+		if(isMoMMI(R) || HAS_MODULE_QUIRK(R, required_quirk))
+			src.attack_robot(R)
+			return
+
+	if(ishuman(usr))
 		src.attack_hand(usr)
-	else
-		to_chat(usr, "<span class='warning'>This mob type can't use this verb.</span>")
+		return
+
+	to_chat(usr, "<span class='warning'>You can't toggle the open state of [src].</span>")
 
 /obj/structure/closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
 	overlays.len = 0
