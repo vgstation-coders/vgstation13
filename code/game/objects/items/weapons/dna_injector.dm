@@ -10,6 +10,7 @@
 	w_class = W_CLASS_TINY
 	var/uses = 1
 	var/nofail = 0
+	var/inuse = 0
 
 	// USE ONLY IN PREMADE SYRINGES.  WILL NOT WORK OTHERWISE.
 	var/datatype=0
@@ -162,13 +163,16 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
-
+	if(inuse)
+		return 0
 	if(!(M == user))
 		user.visible_message("<span class='danger'>\The [user] is trying to inject \the [M] with \the [src]!</span>")
 
+	inuse = 1
 	if(!(M == user) && !do_after(user, M, 5 SECONDS))
+		inuse = 0
 		return
-
+	inuse = 0
 	M.visible_message("<span class='danger'>\The [M] has been injected with \the [src] by \the [user].</span>")
 	if (!istype(M, /mob/living/carbon/human) && !istype(M, /mob/living/carbon/monkey) && !istype(M, /mob/living/carbon/slime/pygmy))
 		to_chat(user, "<span class='warning'>Apparently, the DNA injector didn't work...</span>")
