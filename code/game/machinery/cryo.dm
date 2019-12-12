@@ -549,8 +549,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(beaker && injecting && world.time > (last_injection + 10 SECONDS))
 			beaker.reagents.trans_to(src, inject_rate)
 			last_injection = world.time
-		if(!occupant_reagent_threshold || occupant_reagent_threshold > occupant.reagents.total_volume)
-			reagents.reaction(occupant, remove_reagents = TRUE)
+		reagents.reaction(occupant, remove_reagents = TRUE, mob_reagent_threshold = occupant_reagent_threshold)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/modify_occupant_bodytemp()
 	if(!occupant)
