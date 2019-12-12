@@ -1094,13 +1094,12 @@
 	potency = 10
 	ideal_light = 8
 
-
 /datum/seed/rocknut
 	name = "rocknut"
 	seed_name = "rocknut"
 	display_name = "quarry bush"
 	plant_dmi = 'icons/obj/hydroponics/rocknut.dmi'
-	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut)//TODO
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),IRON = list(3,5))
 
@@ -1109,7 +1108,6 @@
 	production = 6
 	yield = 4
 	potency = 10
-
 
 /datum/seed/cabbage
 	name = "cabbage"
