@@ -507,14 +507,14 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen(src), slot_back)
 	H.equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_r_store)
 
-	var/obj/item/weapon/card/id/syndicate/C = new(src)
+	var/obj/item/weapon/card/id/syndicate/C = new(get_turf(src))
 	C.registered_name = H.real_name
 	C.assignment = "Trader"
 	C.UpdateName()
 	C.SetOwnerInfo(src)
 	C.icon_state = "trader"
 	C.access = list(access_syndicate, access_trade)
-	var/obj/item/weapon/storage/wallet/W = new(src)
+	var/obj/item/weapon/storage/wallet/W = new(get_turf(src))
 	W.handle_item_insertion(C)
 	W.handle_item_insertion(new /obj/item/weapon/coin/raider)
 	H.equip_to_slot_or_del(W, slot_wear_id)
