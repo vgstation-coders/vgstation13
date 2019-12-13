@@ -496,7 +496,8 @@ Subject's pulse: ??? BPM"})
 		return
 	if(iscryotube(O))
 		var/obj/machinery/atmospherics/unary/cryo_cell/T = O
-		O = T.occupant
+		if(T.occupant)
+			O = T.occupant
 	if(O.reagents)
 		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 		var/dat = ""
