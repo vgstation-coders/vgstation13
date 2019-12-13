@@ -584,7 +584,8 @@
 		required_candidates = 1
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
-	return ..()
+	. = ..()
+	required_candidates = initial(required_candidates)
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/vox_shoal/shoal = find_active_faction_by_type(/datum/faction/vox_shoal)
