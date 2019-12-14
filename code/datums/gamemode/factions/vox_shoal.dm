@@ -295,4 +295,4 @@ var/list/potential_bonus_items = list(
 		/obj/item/weapon/storage/box/large/vox_equipment/saboteur = 2,
 		/obj/item/weapon/storage/box/large/vox_equipment/engineer = 2,
 		/obj/item/weapon/storage/box/large/vox_equipment/raider = 2
-		)
+	)

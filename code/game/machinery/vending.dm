@@ -773,7 +773,7 @@ var/global/num_vending_terminals = 1
 	if (premium.len > 0)
 		dat += "<b>Coin slot:</b> [coin ? coin : "No coin inserted"] (<a href='byond://?src=\ref[src];remove_coin=1'>Remove</A>)<br><br>"
 
-	if (src.product_records.len == 0)
+	if (src.product_records.len == 0 && coin_records.len == 0)
 		dat += "<font color = 'red'>No products loaded!</font><br><br></TT>"
 	else
 		var/list/display_records = src.product_records.Copy()
