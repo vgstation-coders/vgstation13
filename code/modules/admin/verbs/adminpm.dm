@@ -70,6 +70,9 @@
 			if(alert("That player has been PM'd in the last [config.simultaneous_pm_warning_timeout / 10] seconds by: [C.ckey_last_pm]","Simultaneous PMs warning","Continue","Cancel") == "Cancel")
 				return*/
 
+	if(check_rights(R_ADMIN)) //Only send the warning if the source is an admin since clients also use this proc
+		output_to_msay("<span class = 'bold'>[key_name_admin(src)] is sending an admin PM to [key_name_admin(C)]</span>.")
+
 	//get message text, limit it's length.and clean/escape html
 	if(!msg)
 		msg = input(src, "Message:", "Private message to [key_name(C, 0, 0, showantag = FALSE)]", "") as text | null
