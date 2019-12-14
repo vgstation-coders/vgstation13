@@ -204,8 +204,11 @@
 	//Allows the wizard to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
 	if(wizard_mob.species && wizard_mob.species.name != "Human")
 		wizard_mob.set_species("Human", 1)
+	var/wizard_name_first = pick(wizard_first)
+	var/wizard_name_second = pick(wizard_second)
+	wizard_mob.fully_replace_character_name(wizard_mob.real_name, "[wizard_name_first] [wizard_name_second]")
 	mob_rename_self(wizard_mob, role_name)
-	return
+
 
 /proc/equip_highlander(var/mob/living/carbon/human/highlander_human)
 	var/static/list/plasmaman_items = list(
@@ -430,6 +433,9 @@
 /proc/name_ninja(var/mob/living/carbon/human/H)
 	if(!isjusthuman(H))
 		H.set_species("Human", 1)
+	var/ninja_title = pick(ninja_titles)
+	var/ninja_name = pick(ninja_names)
+	H.fully_replace_character_name(H.real_name, "[ninja_title] [ninja_name]")
 	mob_rename_self(H, "ninja")
 
 /proc/share_syndicate_codephrase(var/mob/living/agent)
