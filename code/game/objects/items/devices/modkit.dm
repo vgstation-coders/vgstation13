@@ -117,13 +117,10 @@
 
 /obj/item/device/modkit/syndi_commander/New()
 	..()
-	parts = new/list(1)
-	original = new/list(1)
-	finished = new/list(1)
 
-	parts[1] =	1
-	original[1] = /obj/item/clothing/suit/space/rig/syndi
-	finished[1] = /obj/item/clothing/suit/space/rig/syndi/commander
+	parts =	list(1) //less shitcode when you only got one part
+	original = list(/obj/item/clothing/suit/space/rig/syndi)
+	finished = list(/obj/item/clothing/suit/space/rig/syndi/commander)
 
 
 /* /vg/ - Not needed
