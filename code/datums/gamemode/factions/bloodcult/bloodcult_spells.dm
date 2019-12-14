@@ -50,7 +50,7 @@ var/list/uristrune_cache = list()
 		else if(rune.runeset_identifier != runeset_identifier)
 			to_chat(user, "<span class='warning'>This type of rune is incompatible with the one on the ground.</span>")
 			return
-	if(write_rune_word(get_turf(user), data["blood"], word = global_runesets[runeset_identifier].words[word], user) > 1)
+	if(write_rune_word(get_turf(user), data["blood"], word = global_runesets[runeset_identifier].words[word], caster = user) > 1)
 		continue_drawing = 1
 
 		perform(user) //Recursion for drawing runes in a row with tome.
@@ -193,7 +193,7 @@ var/list/uristrune_cache = list()
 		else if(rune.runeset_identifier != runeset_identifier)
 			to_chat(user, "<span class='warning'>This type of rune is incompatible with the one on the ground.</span>")
 			return
-	if(write_rune_word(get_turf(user), data["blood"], word = global_runesets[runeset_identifier].words[word], user) > 1)
+	if(write_rune_word(get_turf(user), data["blood"], word = global_runesets[runeset_identifier].words[word], caster = user) > 1)
 		continue_drawing = 1
 		perform(user) //Recursion for drawing runes in a row with tome.
 	else
