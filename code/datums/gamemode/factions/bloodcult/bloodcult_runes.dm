@@ -454,7 +454,7 @@
 							"Oh just fuck off",)].</span></span>")
 
 
-/proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source, var/word = null, var/mob/user = null)
+/proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source, var/word = null, var/mob/caster = null)
 	if (!word)
 		return 0
 
@@ -470,8 +470,8 @@
 	if (rune.word1 && rune.word2 && rune.word3)
 		return 0
 
-	if (user)
-		rune.add_hiddenprint(user)
+	if (caster)
+		rune.add_hiddenprint(caster)
 
 	if (!rune.word1)
 		rune.word1 = word
