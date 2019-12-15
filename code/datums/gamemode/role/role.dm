@@ -222,7 +222,7 @@
 	if(disallow_job)
 		var/datum/job/job = job_master.GetJob(antag.assigned_role)
 		if(job)
-			job.current_positions = max(0, job.current_positions--)
+			job.current_positions = max(0, job.current_positions - 1)
 		antag.assigned_role="MODE"
 	return 1
 
