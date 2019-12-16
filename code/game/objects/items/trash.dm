@@ -240,3 +240,8 @@ var/list/crushed_cans_cache = list()
 /obj/item/trash/soda_cans/post_mapsave2atom(var/list/L)
 	name = color
 	color = null
+
+/obj/item/trash/slag
+	name = "slag"
+	desc = "Electronics burnt to a crisp"
+	icon_state = "slag"
