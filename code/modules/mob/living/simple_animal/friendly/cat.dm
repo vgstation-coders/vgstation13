@@ -178,3 +178,23 @@ var/list/wizard_snakes = list()
 	wizard_snakes[src] = null
 	wizard_snakes -= src
 	..()
+
+/mob/living/simple_animal/cat/snek/pudge
+	name = "Pudge"
+	desc = "He's quite chubby!"
+	icon_state = "pudge"
+	icon_living = "pudge"
+	icon_dead = "pudge_dead"
+	gender = NEUTER
+	speak = list("SssssSSSS.", "Slirp.","HSSSSS")
+	speak_emote = list("hisses")
+	emote_hear = list("hisses")
+	emote_see = list("slithers")
+	emote_sound = list() // stops snakes purring
+	kill_verbs = list("strikes at", "splats", "bites", "lunges at")
+	growl_verbs = list("hisses")
+
+	species_type = /mob/living/simple_animal/cat/snek
+	butchering_drops = null
+	childtype = null
+	holder_type = /obj/item/weapon/holder/animal/snek
