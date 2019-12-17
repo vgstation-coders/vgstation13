@@ -181,18 +181,18 @@ var/list/wizard_snakes = list()
 
 /mob/living/simple_animal/cat/snek/pudge
 	name = "Pudge"
-	desc = "He's quite chubby!"
+	desc = "You've never seen a snake like this before. It is quite chubby!"
 	icon_state = "pudge"
 	icon_living = "pudge"
 	icon_dead = "pudge_dead"
 	gender = NEUTER
-	speak = list("SssssSSSS.", "Slirp.","HSSSSS")
-	speak_emote = list("hisses")
-	emote_hear = list("hisses")
+	speak = list("Meep!", "Chirp!","Mweeeb!")
+	speak_emote = list("squeaks")
+	emote_hear = list("squeaks")
 	emote_see = list("slithers")
 	emote_sound = list() // stops snakes purring
 	kill_verbs = list("strikes at", "splats", "bites", "lunges at")
-	growl_verbs = list("hisses")
+	growl_verbs = list("squeaks")
 
 	species_type = /mob/living/simple_animal/cat/snek
 	butchering_drops = null
