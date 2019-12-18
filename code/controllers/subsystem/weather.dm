@@ -14,4 +14,9 @@ var/datum/subsystem/weather/SSweather
 
 
 /datum/subsystem/weather/fire(resumed = FALSE)
-	snowfall_tick()
+	if(map.climate)
+		var/datum/climate/C = map.climate
+		C.tick()
+	else
+		pause()
+		message_admins("Weather subsystem was paused due to lack of climate.")

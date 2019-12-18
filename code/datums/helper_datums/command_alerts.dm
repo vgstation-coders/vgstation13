@@ -578,10 +578,9 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	message = "Automated meteorological warning alert: the blizzard has been confirmed to be no longer active. Thank you for your cooperation with standard safety procedures."
 
 /datum/command_alert/blizzard_start
-	alert_title = "Blizzard Warning"
-	message = "Automated meteorological warning alert: formation of a blizzard has been detected near your station. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
+	alert_title = "Automated Meteorological Update - Unforecasted Blizzard"
+	message = "ROKER-class storm early warning systems have detected unforecasted, sudden-onset snowstorm approaching in the next two to four minutes. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
 
 /datum/command_alert/omega_blizzard
-	alert_title = "Urgent Warning - Omega Blizzard"
-	message = "Automated meteorological warning alert: rapid formation of a powerful blizzard has been detected near your station. This formation is projected to last at least four months. Station safety procedures are in full effect, and command should determine whether evacuation is necessary."
-
+	alert_title = "Urgent Warning - Dark Season"
+	message = "ROKER-class storm warning has determined that the Dark Season on your planet's surface has started early. It is anticipated that the oncoming blizzard will last no more than two hours and the season itself will last sixteen months. As space may soon become inaccessible from surface, crew should migrate valuables from orbital outpost in the next eight to ten minutes."
