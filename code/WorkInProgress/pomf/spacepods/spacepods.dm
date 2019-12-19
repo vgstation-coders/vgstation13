@@ -196,7 +196,7 @@
 					anyitem++
 					AM.forceMove(get_turf(user))
 			if(anyitem)
-				visible_message("<span class='warning'>With a clatter, [anyitem > 1 ? "some items" : "an item"] lands at the feet of [user].</span>")
+				visible_message("<span class='warning'>With a clatter, [anyitem > 1 ? "some items land" : "an item lands"] at the feet of [user].</span>")
 		return
 	if(health < maxHealth && iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
