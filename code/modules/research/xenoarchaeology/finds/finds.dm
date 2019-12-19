@@ -280,9 +280,10 @@
 	responsive_reagent = MERCURY
 
 /datum/find/box/spawn_item()
-	var/obj/item/new_item = new /obj/item/weapon/storage/box
+	var/obj/item/weapon/storage/box/new_item = new /obj/item/weapon/storage/box
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	new_item.icon_state = "box"
+	new_item.foldable = null
 	if(prob(30))
 		apply_image_decorations = TRUE
 	return new_item
