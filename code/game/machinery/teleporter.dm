@@ -238,8 +238,10 @@
 /obj/machinery/teleport/hub/update_icon()
 	if(stat & (BROKEN|NOPOWER) || !engaged)
 		icon_state = "tele0"
+		set_light(0)
 	else
 		icon_state = "tele1"
+		set_light(3, l_color = "#FFAA00")
 
 
 /obj/machinery/teleport/hub/Crossed(AM as mob|obj)
@@ -418,6 +420,9 @@
 
 /obj/machinery/teleport/hub/emergency/after_teleport()
 	return
+
+/obj/machinery/teleport/hub/emergency/process()
+	return //this prevents us from being removed from machines
 
 /obj/machinery/teleport/hub/emergency/get_target_lock()
 	if(!embeacon)
