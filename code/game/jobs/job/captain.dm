@@ -77,7 +77,7 @@
 	req_admin_notify = 1
 	minimal_player_age = 20
 
-	species_whitelist = list("Human")
+	species_whitelist = list("Grey","Human")
 
 	access = list(access_security, access_sec_doors, access_brig, access_court, access_weapons, access_forensics_lockers,
 			            access_medical, access_engine, access_change_ids, access_ai_upload, access_eva, access_heads,
