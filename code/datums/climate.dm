@@ -4,8 +4,11 @@
 *                                           *
 ********************************************/
 
-#define PREDICTION_MINIMUM 4
-#define PREDICTION_MAXIMUM 10
+#define PREDICTION_MINIMUM 4 //minimum number of forecast entries, counts separate weather entries indifferent to their length
+#define PREDICTION_MAXIMUM 10 //maximum attempts we will try to forecast, this matters because the same weather might get rolled repeatedly
+//this is important because if the next forecasted weather is the same as the one before it, it just adds to the first's timer instead
+//Forecast will stay unchanged until there are less than PREDICTION_MINIMUM weathers, at which point it will make a new forecast
+//Every forecast is freshly generated, which means forecasts change!
 
 /datum/climate
 	var/datum/weather/current_weather
@@ -22,6 +25,7 @@
 
 /datum/climate/proc/forecast()
 	var/cycle = 1
+	clear_forecast()
 	forecasts = list(current_weather) //project based on current weather
 	while(forecasts.len <= PREDICTION_MINIMUM+1 && cycle <= PREDICTION_MAXIMUM)
 		var/datum/weather/W = forecasts[forecasts.len]
@@ -33,6 +37,12 @@
 			forecasts += future
 		cycle++
 	forecasts -= current_weather //remove it from our future weather
+
+/datum/climate/proc/clear_forecast()
+	while(forecasts.len)
+		var/datum/weather/W = forecasts[1]
+		forecasts -= W
+		qdel(W)
 
 /datum/climate/proc/tick()
 	if(!current_weather)
@@ -63,10 +73,10 @@
 	else
 		WARNING("Change weather was called with [weather], neither a weather datum nor a path.")
 
-/datum/climate/snow
+/datum/climate/arctic
 	//some day this may not be the norm
 
-/datum/climate/snow/New()
+/datum/climate/arctic/New()
 	current_weather = new /datum/weather/snow/calm(src)
 	..()
 

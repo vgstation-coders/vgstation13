@@ -3,7 +3,7 @@ var/blizzard_cooldown = 5 MINUTES
 
 
 /datum/event/blizzard/can_start()
-	return 80 * istype(map.climate,/datum/climate/snow)
+	return 80 * istype(map.climate,/datum/climate/arctic)
 
 /datum/event/blizzard/start()
 	if(blizzard_ready)
@@ -21,7 +21,7 @@ var/blizzard_cooldown = 5 MINUTES
 	oneShot = 1
 
 /datum/event/omega_blizzard/can_start()
-	return 3 * istype(map.climate,/datum/climate/snow)
+	return 3 * istype(map.climate,/datum/climate/arctic)
 
 /datum/event/omega_blizzard/start() //Oh god oh fuck
 	if(blizzard_ready)
