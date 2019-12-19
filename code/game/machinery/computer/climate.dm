@@ -1,3 +1,5 @@
+var/list/climatecomps = list()
+
 /obj/machinery/computer/climate
 	name = "climate monitoring console"
 	desc = "A computer designed to report on the weather conditions nearby."
@@ -5,8 +7,6 @@
 	icon_state = "climate"
 	light_color = LIGHT_COLOR_CYAN
 	circuit = "/obj/item/weapon/circuitboard/labor"
-	var/reported_temp = T_ARCTIC
-	var/reported_snow = "minimal"
 
 /obj/machinery/computer/climate/New()
 	..()
@@ -27,28 +27,26 @@
 	var/dat = list()
 	dat += "<center>"
 	dat += "<div class='modal'><div class='modal-content'><div class='line'><b>Weather Report</b></div><br>"
-	dat += "<b>Temperature:</b> <div class='line'>[reported_temp-273.15] Celcius</div>"
-	dat += "<b>Snowfall:</b> <div class='line'>[reported_snow] </div></div></div></center>"
+	if(map.climate)
+		var/datum/climate/C = map.climate
+		if(istype(C.current_weather,/datum/weather/snow)) //This is a snowmap!
+			var/datum/weather/snow/S = C.current_weather
+			var/reported_temp = S.temperature - 273.15
+			var/reported_snow = S.snow_fluff_estimate
+			var/remaining_time = formatTimeDuration(C.current_weather.timeleft)
+			dat += "<b>Temperature:</b> <div class='line'>[reported_temp-273.15] Celcius</div>"
+			dat += "<b>Snowfall:</b> <div class='line'>[reported_snow] </div>"
+			dat += "<b>Next Meteorlogical Event:</b> <div class='line'>[remaining_time]</div>"
+			dat += "<b>Forecasted Snowfall:</b> <div class='line'>"
+			for(var/datum/weather/W in C.forecasts)
+				dat += "[W.name] "
+			dat += "</div></div></div></center>"
+		else
+			dat += "<b>Unknown Climate:</b> <div class='line'>Not configured for climate.</div></div></div></center>"
+	else
+		dat += "<b>Panic:</b> <div class='line'>No climate detected!</div></div></div></center>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "climate", "Climate Monitoring Console", 325, 350, src)
+	var/datum/browser/popup = new(user, "climate", "Climate Monitoring Console", 325, 375, src)
 	popup.set_content(dat)
 	popup.open()
 	onclose(user, "climate")
-
-/obj/machinery/computer/climate/proc/update_weather(var/intensity = SNOW_CALM)
-	switch(intensity)
-		if(SNOW_CALM)
-			reported_temp = T_ARCTIC
-			reported_snow = "minimal"
-
-		if(SNOW_AVERAGE)
-			reported_temp = T_ARCTIC-5
-			reported_snow = "about 1.5cm/minute (light)"
-
-		if(SNOW_HARD)
-			reported_temp = T_ARCTIC-10
-			reported_snow = "<span class='blob'>about 4.8cm/minute (heavy)</span>"
-
-		if(SNOW_BLIZZARD)
-			reported_temp = T_ARCTIC-20
-			reported_snow = "<span class='danger'>about 10.8cm/minute (ALERT)</span>"

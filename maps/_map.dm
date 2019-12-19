@@ -95,11 +95,12 @@
 
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
-	var/snow_theme = 0
 	var/center_x = 226
 	var/center_y = 254
 
+	var/snow_theme = FALSE
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
+	var/datum/climate/climate = null //use for weather cycle
 
 /datum/map/New()
 	. = ..()

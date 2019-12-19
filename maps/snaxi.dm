@@ -39,7 +39,7 @@
 	center_x = 150
 	center_y = 150
 
-	snow_theme = 1
+	snow_theme = TRUE
 	can_enlarge = FALSE
 
 /datum/map/active/New()
@@ -55,6 +55,8 @@
 // Making nodes every 5*5 tiles in a 100*100 radius
 // This makes (100*100)/(10*10) = 100 nodes
 /datum/map/active/map_specific_init()
+	climate = new /datum/climate/arctic()
+
 	for (var/x = center_x; x <= center_x + center_x/3; x = x + 10)
 		for (var/y = center_y; y <= center_y + center_y/3; y = y + 10)
 			gaussian_geyser(x, y)

@@ -39,7 +39,11 @@
 			snow_state = i
 			blizzard_parent.UpdateSnowfall()
 		snowtiles_setup = 1
-	snow_state = snow_intensity
+	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = map.climate.current_weather
+		snow_state = S.snow_intensity
+	else
+		snow_state = SNOW_CALM
 	if(real_snow_tile)
 		if(initial_snowballs == -1)
 			snowballs = rand(5, 10)

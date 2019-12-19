@@ -88,6 +88,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
 	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 	/client/proc/diseases_panel,
+	/client/proc/climate_panel
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
