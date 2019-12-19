@@ -191,6 +191,8 @@
 			var/anyitem = 0
 			for(var/atom/movable/AM in contents)
 				if(istype(AM,/obj/item))
+					if(AM == battery)
+						continue //don't eject this particular item!
 					anyitem++
 					AM.forceMove(get_turf(user))
 			if(anyitem)
