@@ -74,16 +74,16 @@
 	switch(snow_state)
 		if(SNOW_CALM)
 			temperature = T_ARCTIC
-			turf_speed_multiplier = 1
+			turf_speed_multiplier = 1 //higher numbers mean slower
 		if(SNOW_AVERAGE)
 			temperature = T_ARCTIC-5
-			turf_speed_multiplier = 1.15 //For some reason, higher numbers mean slower.
+			turf_speed_multiplier = 1
 		if(SNOW_HARD)
 			temperature = T_ARCTIC-10
-			turf_speed_multiplier = 1.6
+			turf_speed_multiplier = 1.4
 		if(SNOW_BLIZZARD)
 			temperature = T_ARCTIC-20
-			turf_speed_multiplier = 2.9
+			turf_speed_multiplier = 2.8
 	turf_speed_multiplier *= 1+(snowballs/10)
 
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
@@ -237,20 +237,18 @@
 			to_chat(user,"<span class='info'>It seems almost entirely devoid of snow, exposing the permafrost below.</span>")
 
 /turf/unsimulated/floor/snow/proc/change_snowballs(var/delta, var/limit) //Changes snowball count by delta, but to be no lower/greater than limit. Updates texture, too.
-	if(delta >= 0)
-		snowballs += delta
-		if(snowballs > limit)
-			snowballs = limit
+	snowballs += delta //this can be negative, in which case it subtracts
+	if(delta>=0)
+		snowballs = min(snowballs, limit) //no more than the limit
 	else
-		snowballs -= delta
-		if(snowballs < limit)
-			snowballs = limit
-		else if(snowballs < 0)
-			snowballs = 0
+		snowballs = max(snowballs, 0)
+	//This is a rare situation where we can't use Clamp(), because we don't want the limit to apply if subtracting
 	update_environment()
 
 /turf/unsimulated/floor/snow/proc/extract_snowballs(var/snowball_amount = 0, var/pick_up = FALSE, var/mob/user, var/obj/item/stack/sheet/snow/snowball_stack = null)
-
+	if(!Adjacent(user))
+		to_chat(user,"<span class='warning'>You're too far away to scoop snow.</span>")
+		return
 	if(!snowball_amount)
 		return
 
