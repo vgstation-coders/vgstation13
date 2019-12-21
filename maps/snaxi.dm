@@ -55,7 +55,7 @@
 
 // Making nodes every 5*5 tiles in a 100*100 radius
 // This makes (100*100)/(10*10) = 100 nodes
-/*
+
 /datum/map/active/map_specific_init()
 	climate = new /datum/climate/arctic()
 
@@ -73,7 +73,6 @@
 		for (var/y = center_y; y >= center_y - center_y/3; y = y - 10)
 			gaussian_geyser(x, y)
 			CHECK_TICK
-*/
 
 /proc/gaussian_geyser(var/x, var/y)
 	var/turf/T = locate(x, y, 1)
