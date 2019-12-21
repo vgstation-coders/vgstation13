@@ -3,6 +3,7 @@
 // Map Datum -- Boxstation
 //**************************************************************
 
+
 /datum/map/active
 	nameShort = "snaxi"
 	nameLong = "Snow Station"
@@ -54,6 +55,7 @@
 
 // Making nodes every 5*5 tiles in a 100*100 radius
 // This makes (100*100)/(10*10) = 100 nodes
+
 /datum/map/active/map_specific_init()
 	climate = new /datum/climate/arctic()
 
@@ -82,9 +84,8 @@
 		return
 	if (prob(30))
 		return
-
-	var/dx = round(16*GaussRand())
-	var/dy = round(16*GaussRand())
+	var/dx = round(16*GaussRand(1))
+	var/dy = round(16*GaussRand(1))
 	var/turf/T2 = locate(x + dx, y + dy, 1)
 	if (!istype(T2,/turf/unsimulated/floor/snow/))
 		return
