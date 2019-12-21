@@ -150,7 +150,7 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/calm
 	name = "calm"
 	snow_intensity = SNOW_CALM
-	next_weather = list(/datum/weather/snow/calm = 40, /datum/weather/snow/light = 60)
+	next_weather = list(/datum/weather/snow/calm = 60, /datum/weather/snow/light = 40)
 	snowfall_prob = 3
 	snowfall_rate = list(-1,0)
 	temperature = T_ARCTIC
@@ -165,7 +165,7 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/light
 	name = "light"
 	snow_intensity = SNOW_AVERAGE
-	next_weather = list(/datum/weather/snow/calm = 20, /datum/weather/snow/light = 55, /datum/weather/snow/heavy = 20, /datum/weather/snow/blizzard = 5)
+	next_weather = list(/datum/weather/snow/calm = 25, /datum/weather/snow/light = 55, /datum/weather/snow/heavy = 20)
 	snowfall_prob = 5
 	snowfall_rate = list(1,8)
 	temperature = T_ARCTIC - 5
@@ -180,7 +180,7 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/heavy
 	name = "<font color='orange'>heavy</font>"
 	snow_intensity = SNOW_HARD
-	next_weather = list(/datum/weather/snow/light = 20, /datum/weather/snow/heavy = 60, /datum/weather/snow/blizzard = 20)
+	next_weather = list(/datum/weather/snow/light = 30, /datum/weather/snow/heavy = 60, /datum/weather/snow/blizzard = 10)
 	snowfall_prob = 8
 	snowfall_rate = list(2,15)
 	temperature = T_ARCTIC - 10
@@ -195,7 +195,7 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/blizzard
 	name = "<font color='red'>blizzard</font>"
 	snow_intensity = SNOW_BLIZZARD
-	next_weather = list(/datum/weather/snow/heavy = 60, /datum/weather/snow/blizzard = 40)
+	next_weather = list(/datum/weather/snow/heavy = 50, /datum/weather/snow/blizzard = 50)
 	tile_interval = 3
 	snowfall_prob = 12
 	snowfall_rate = list(3,20)
