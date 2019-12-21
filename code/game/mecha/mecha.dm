@@ -1169,6 +1169,7 @@
 	if(!isnull(src.loc) && H && H.client && H in range(1))
 		H.reset_view(src)
 		H.stop_pulling()
+		H.unlock_from()
 		H.forceMove(src)
 		src.occupant = H
 		src.add_fingerprint(H)
