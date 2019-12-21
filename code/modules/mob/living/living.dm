@@ -971,18 +971,13 @@ Thanks.
 				var/mob/living/carbon/C = L
 				if(C.handcuffed)
 					if(isalienadult(C) || (M_HULK in usr.mutations))
-						C.visible_message("<span class='warning'>[C] is trying to forcefully unbuckle!</span>",
-						                   "<span class='warning'>You attempt to forcefully unbuckle (This will take around five seconds).</span>")
 						spawn(0) // I have no idea what this is supposed to actually do but everything else has it so why not
-							if(do_after(C, C, 50))
-								if(!C.handcuffed || !C.locked_to)
-									return
-								C.visible_message("<span class='danger'>[C] manages to forcefully unbuckle!</span>",
-								                  "<span class='notice'>You successfully forcefully unbuckle.</span>")
-								C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-								B.manual_unbuckle(C)
-							else
-								to_chat(C, "<span class='warning'>Your unbuckling attempt was interrupted.</span>")
+							if(!C.handcuffed || !C.locked_to)
+								return
+							C.visible_message("<span class='danger'>[C] forcibly unbuckles!</span>",
+							                  "<span class='notice'>You forcefully unbuckle.</span>")
+							C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+							B.manual_unbuckle(C)
 					else
 						C.visible_message("<span class='warning'>[C] attempts to unbuckle themself!</span>",
 						                  "<span class='warning'>You attempt to unbuckle yourself (this will take around one minute, and you need to stay still).</span>",
@@ -1114,21 +1109,16 @@ Thanks.
 	//breaking out of handcuffs
 		if(CM.handcuffed && CM.canmove)
 			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
-				CM.visible_message("<span class='danger'>[CM] is trying to break the handcuffs!</span>",
-								   "<span class='warning'>You attempt to break your handcuffs. (This will take around five seconds and you will need to stand still).</span>")
 				spawn(0)
-					if(do_after(CM, CM, 50))
-						if(!CM.handcuffed || CM.locked_to)
-							return
-						CM.visible_message("<span class='danger'>[CM] manages to break \the [CM.handcuffed]!</span>",
-										   "<span class='notice'>You successfully break \the [CM.handcuffed].</span>")
-						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-						var/obj/item/cuffs = CM.handcuffed
-						CM.drop_from_inventory(cuffs)
-						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
-							qdel(cuffs)
-					else
-						to_chat(CM, "<span class='warning'>Your cuff breaking attempt was interrupted.</span>")
+					if(!CM.handcuffed || CM.locked_to)
+						return
+					CM.visible_message("<span class='danger'>[CM] breaks \the [CM.handcuffed]!</span>",
+									   "<span class='notice'>You break \the [CM.handcuffed].</span>")
+					CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+					var/obj/item/cuffs = CM.handcuffed
+					CM.drop_from_inventory(cuffs)
+					if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
+						qdel(cuffs)
 
 
 			else
