@@ -328,7 +328,7 @@
 /turf/unsimulated/wall/statuelock/canSmoothWith()
 	return null
 
-/turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/unsimulated/wall/statuelock/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/voxpearl))
 		playsound(loc, 'sound/items/Deconstruct.ogg', 100, 1)
 		to_chat(user, "<span class='notice'>You place \the [W] in the hands of the statue, and it retracts into the floor.</span>")
