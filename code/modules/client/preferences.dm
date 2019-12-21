@@ -1256,7 +1256,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							s_tone = max(min(round(skin_c),6),1)
 							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
 					else if(species == "Grey")
-						var/skin_c = input(user, "Choose your Greys's skin color:\n(1 = Gray, 2 = Light, 3 = Green, 4 = Blue)", "Character Preference") as num|null
+						var/skin_c = input(user, "Choose your Grey's skin color:\n(1 = Gray, 2 = Light, 3 = Green, 4 = Blue)", "Character Preference") as num|null
 						if(skin_c)
 							s_tone = max(min(round(skin_c),4),1)
 							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
