@@ -19,7 +19,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
 	restraint_apply_sound = 'sound/weapons/handcuffs.ogg'
-	restraint_resist_time = 2 MINUTES
+	restraint_resist_time = 1 MINUTES
 	var/list/mutual_handcuffed_mobs = list()
 
 /obj/item/weapon/handcuffs/Destroy()
