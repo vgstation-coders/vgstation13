@@ -109,14 +109,14 @@ proc/skintone2racedescription(tone, species = "Human")
 				return "green"
 	else if(species == "Grey")
 		switch(tone)
-			if(GREYGRAY)
-				return "gray"
 			if(GREYLIGHT)
 				return "light gray"
 			if(GREYGREEN)
 				return "green"
 			if(GREYBLUE)
 				return "blue"
+			else
+				return "gray"
 	else if(species == "Tajaran")
 		switch(tone)
 			if(CATBEASTBLACK)
