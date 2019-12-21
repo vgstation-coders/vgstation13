@@ -10,7 +10,10 @@
 //Forecast will stay unchanged until there are less than PREDICTION_MINIMUM weathers, at which point it will make a new forecast
 //Every forecast is freshly generated, which means forecasts change!
 
+var/list/weathertracker = list() //associative list, gathers time spent one each weather for scoreboard
+
 /datum/climate
+	var/name = "climate"
 	var/datum/weather/current_weather
 	var/list/datum/weather/forecasts = list()
 	var/cycle_freq = list(3 MINUTES,6 MINUTES) //shortest possible time, longest possible time until next weather
@@ -74,6 +77,7 @@
 		WARNING("Change weather was called with [weather], neither a weather datum nor a path.")
 
 /datum/climate/arctic
+	name = "snow" //what scoreboard displays
 	//some day this may not be the norm
 
 /datum/climate/arctic/New()
@@ -98,6 +102,7 @@
 
 /datum/weather/proc/tick()
 	timeleft -= SS_WAIT_WEATHER
+	weathertracker[name] += SS_WAIT_WEATHER
 
 var/list/global_snowtiles = list()
 var/list/snow_state_to_texture = list()
