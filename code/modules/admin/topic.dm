@@ -615,10 +615,10 @@
 		if(!map.climate)
 			return
 		var/datum/weather/W = map.climate.current_weather
-		var/nu = input(usr, "Enter remaining time (deciseconds)", "Adjust Timeleft", W.timeleft) as null|num
+		var/nu = input(usr, "Enter remaining time (nearest 2 seconds)", "Adjust Timeleft", W.timeleft / (1 SECONDS)) as null|num
 		if(!nu)
 			return
-		W.timeleft = round(nu)
+		W.timeleft = round(nu SECONDS,SS_WAIT_WEATHER)
 		log_admin("[key_name(usr)] adjusted weather time.")
 		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time.</span>", 1)
 		climate_panel()
