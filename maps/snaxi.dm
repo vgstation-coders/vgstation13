@@ -89,9 +89,9 @@
 	var/turf/T2 = locate(x + dx, y + dy, 1)
 	if (!istype(T2,/turf/unsimulated/floor/snow/))
 		return
-	if (istype(T, /turf/unsimulated/floor/snow/asphalt))
+	if (istype(T2, /turf/unsimulated/floor/snow/asphalt))
 		return
-	if (locate(/obj/structure/snow_flora/tree/pine) in T)
+	if (locate(/obj/structure/snow_flora/tree/pine) in T2)
 		return
 	switch (rand(100))
 		if (0 to 60)
