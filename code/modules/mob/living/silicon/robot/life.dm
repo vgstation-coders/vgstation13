@@ -227,7 +227,7 @@
 	if(album_icon)
 		album_icon.icon_state = "album[connected_ai ? "1":""]"
 
-	if(on_fire && !(locate(/obj/item/borg/fire_shield, module.modules)))
+	if(on_fire && !(module && locate(/obj/item/borg/fire_shield, module.modules)))
 		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/robot/fire)
 	else
 		clear_alert(SCREEN_ALARM_FIRE)
