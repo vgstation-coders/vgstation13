@@ -415,7 +415,7 @@
 
 /obj/mecha/to_bump(atom/obstacle)
 	.=..()
-	if(!obstacle.density)
+	if(!obstacle.anchored)
 		step(obstacle, src.dir)
 
 /obj/mecha/throw_impact(atom/obstacle)
