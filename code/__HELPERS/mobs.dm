@@ -67,6 +67,9 @@ proc/random_skin_tone(species = "Human")
 	else if(species == "Vox")
 		. = rand(1,6)
 		return .
+	else if(species == "Grey")
+		. = rand(1,4)
+		return .
 	else if(species == "Tajaran")
 		return 1
 	else
