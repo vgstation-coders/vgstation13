@@ -415,8 +415,10 @@
 
 /obj/mecha/to_bump(atom/obstacle)
 	.=..()
-	if(!obstacle.anchored)
-		step(obstacle, src.dir)
+	if(ismovable(obstacle))
+		var/atom/movable/A = obstacle
+		if(!A.anchored)
+			step(obstacle, src.dir)
 
 /obj/mecha/throw_impact(atom/obstacle)
 	var/breakthrough = 0
@@ -479,7 +481,7 @@
 				src.throw_at(crashing, 50, src.throw_speed)
 		else
 			spawn(1)
-				crashing = get_distant_turf(get_turf(src), dash_dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
+				crashing = get_distant_turf(get_turf(src), dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
 				src.throw_at(crashing, 50, src.throw_speed)
 
 ///////////////////////////////////
