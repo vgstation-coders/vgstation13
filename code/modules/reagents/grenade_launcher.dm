@@ -67,37 +67,37 @@
 		F.det_time = timer_override_value
 	F.activate()
 
-/obj/item/weapon/gun/grenadelauncher/verb/TimerOverrideMode(mob/user)
+/obj/item/weapon/gun/grenadelauncher/verb/TimerOverrideMode()
 	set name = "Toggle Timer Override Mode"
 	set category = "Object"
 	set src in usr
 
 	if(timer_override)
-		to_chat(user, "You deactivate the timing override on \the [src]. Fired grenades will now use their individual timers")
+		to_chat(usr, "You deactivate the timing override on \the [src]. Fired grenades will now use their individual timers")
 		timer_override = FALSE
 	else
-		var/new_time = input(user, "Fired grenades will now be prime using \the [src]'s timer rather than their own. What would you like the timer to be set to, in seconds?","Time",timer_override_value/10) as num
+		var/new_time = input(usr, "Fired grenades will now be prime using \the [src]'s timer rather than their own. What would you like the timer to be set to, in seconds?","Time",timer_override_value/10) as num
 		if(new_time < 3)
-			to_chat(user, "<span class = 'warning'>\The [src] beeps. The given time cannot be below 3 second.</span>")
+			to_chat(usr, "<span class = 'warning'>\The [src] beeps. The given time cannot be below 3 second.</span>")
 			return
-		if(!Adjacent(user, MAX_ITEM_DEPTH))
-			to_chat(user, "<span class = 'warning'>You fumble while trying to modify \the [src]. It is best to keep the [src] in proximity when modifying it..</span>")
+		if(!Adjacent(usr, MAX_ITEM_DEPTH))
+			to_chat(usr, "<span class = 'warning'>You fumble while trying to modify \the [src]. It is best to keep the [src] in proximity when modifying it..</span>")
 			return
 		timer_override_value = new_time SECONDS
-		to_chat(user, "<span class = 'notice'>The detonation time on your shots is now [timer_override_value/10] seconds.</span>")
+		to_chat(usr, "<span class = 'notice'>The detonation time on your shots is now [timer_override_value/10] seconds.</span>")
 		timer_override = TRUE
 	return
 
-/obj/item/weapon/gun/grenadelauncher/verb/Unload(mob/user)
+/obj/item/weapon/gun/grenadelauncher/verb/Unload()
 	set name = "Unload Grenades"
 	set category = "Object"
 	set src in usr
-	if(!isturf(user.loc))
-		to_chat(user, "<span class = 'notice'>You cannot unload \the [src] in here.</span>")
+	if(!isturf(usr.loc))
+		to_chat(usr, "<span class = 'notice'>You cannot unload \the [src] in here.</span>")
 		return
 	for(var/obj/item/weapon/grenade/G in grenades)
 		grenades -= G
-		G.forceMove(user.loc)
+		G.forceMove(get_turf(src))
 
 /obj/item/weapon/gun/grenadelauncher/syndicate
 	name = "C32R multiple grenade launcher"
