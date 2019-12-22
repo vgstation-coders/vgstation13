@@ -203,9 +203,9 @@
 			if(ZL.transitionLoops)
 				locked_to_current_z = z
 
-			for(var/obj/item/weapon/disk/nuclear/nuclear in contents_brought)
-				locked_to_current_z = map.zMainStation
-				break
+			var/obj/item/weapon/disk/nuclear/nuclear = locate() in contents_brought
+			if(nuclear)
+				qdel(nuclear)
 
 			//Check if it's a mob pulling an object
 			var/obj/was_pulling = null
