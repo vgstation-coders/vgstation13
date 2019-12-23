@@ -582,9 +582,9 @@ proc/sql_sanitize_text(var/text)
 /proc/nekospeech(var/speech)
 	if(!speech)
 		return
-	var/static/regex/nya_lowercase = new("(n|N?=\[aeiou])", "g")
-	var/static/regex/nya_uppercase = new("(N|n?=\[AEIOU])", "g")
-	var/static/regex/nya_Ny = new("^(ny|NY?=\[aeiou])") //Thanks, saycode.
+	var/static/regex/nya_lowercase = new("n(?=\[aeiou])|N(?=\[aeiou])", "g")
+	var/static/regex/nya_uppercase = new("N(?=\[AEIOU])|n(?=\[AEIOU])", "g")
+	var/static/regex/nya_Ny = new("^ny|^NY(?!\[A-Z])") //Thanks, saycode.
 	speech = nya_lowercase.Replace(speech, "ny")
 	speech = nya_uppercase.Replace(speech, "NY")
 	speech = nya_Ny.Replace(speech, "Ny")
