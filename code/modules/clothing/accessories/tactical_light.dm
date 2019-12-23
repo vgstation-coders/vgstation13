@@ -112,7 +112,7 @@
 	var/obj/item/clothing/accessory/taclight/ownerlight
 
 /datum/action/item_action/toggle_taclight/Trigger()
-	ownerlight.attack_self()
+	ownerlight.attack_self(owner)
 	ownerlight.update_brightness(ownerlight.attached_to)
 
 /obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C)
