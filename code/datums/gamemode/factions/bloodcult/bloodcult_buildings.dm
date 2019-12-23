@@ -1422,6 +1422,8 @@ var/list/bloodstone_list = list()
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
 			cult.fail()
+		if(anchor)
+			global_anchor_bloodstone -= src
 	..()
 
 /obj/structure/cult/bloodstone/attack_construct(var/mob/user)
