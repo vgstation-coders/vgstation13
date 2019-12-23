@@ -623,8 +623,11 @@ Class Procs:
 		return to_chat(user, "<span class='warning'>\The [src] must be anchored first!</span>")
 
 	if(istype(O, /obj/item/device/paicard) && machine_flags & WIREJACK)
-		for(var/mob/M in O)
-			wirejack(M)
+		var/obj/item/device/paicard/P = O
+		if(!P.pai)
+			return 1
+		if(wirejack(P.pai))
+			to_chat(user, "<span class='notice'>Wirejack engaged on \the [src].</span>")
 		return 1
 
 	if(istype(O, /obj/item/weapon/storage/bag/gadgets/part_replacer))
