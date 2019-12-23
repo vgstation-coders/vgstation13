@@ -4,7 +4,7 @@
 	if(monkeyizing)
 		return
 
-	blinded = null
+	blinded = FALSE
 
 	//Status updates, death etc.
 	clamp_values()
@@ -14,16 +14,20 @@
 		handle_regular_hud_updates()
 		update_action_buttons_icon()
 		update_items()
+
 	if(!isDead()) //still using power
 		use_power()
 		process_killswitch()
 		process_locks()
+
 	update_canmove()
 	handle_fire()
 	handle_beams()
+
 	var/datum/gas_mixture/environment = loc.return_air()
 	handle_pressure_damage(environment)
 	handle_heat_damage(environment)
+
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
@@ -37,16 +41,13 @@
 	adjustFireLoss(0)
 
 /mob/living/silicon/robot/proc/use_power()
-	if(is_component_functioning("power cell") && cell)
+	if(cell && is_component_functioning("power cell"))
 		if(cell.charge <= 0)
 			uneq_all()
 		else
-			if(module_state_1)
-				cell.use(3)
-			if(module_state_2)
-				cell.use(3)
-			if(module_state_3)
-				cell.use(3)
+			for(var/M in get_all_slots())
+				if(M)
+					cell.use(3)
 
 			for(var/V in components)
 				var/datum/robot_component/C = components[V]
@@ -65,120 +66,96 @@
 
 
 /mob/living/silicon/robot/proc/handle_regular_status_updates()
-	if(camera && !scrambledcodes)
-		if(isDead() || wires.IsCameraCut())
-			camera.status = FALSE
-		else
-			camera.status = TRUE
-
 	updatehealth()
 
 	if(sleeping)
 		Paralyse(3)
-		sleeping--
+		sleeping = max(sleeping-1, 0)
 
 	if(resting)
 		Knockdown(5)
+	setDensity(!(lying))
 
 	if(health <= 0 && !isDead()) //die only once
 		death()
 
 	if(!isDead()) //Alive.
-		if(paralysis || stunned || knockdown) //Stunned etc.
-			stat = UNCONSCIOUS
-			if(stunned > 0)
-				AdjustStunned(-1)
-			if(knockdown > 0)
-				AdjustKnockdown(-1)
-			if(paralysis > 0)
-				AdjustParalysis(-1)
-				blinded = TRUE
-			else
-				blinded = FALSE
-
-		else	//Not stunned.
-			stat = CONSCIOUS
-
+		blinded = !(paralysis || is_component_functioning("camera") || (sdisabilities & BLIND)) ? TRUE : FALSE
+		stat = !(paralysis || stunned || knockdown) ? CONSCIOUS : UNCONSCIOUS
 	else //Dead.
 		blinded = TRUE
 		stat = DEAD
 
+	if(stunned > 0)
+		AdjustStunned(-1)
+	if(knockdown > 0)
+		AdjustKnockdown(-1)
+	if(paralysis > 0)
+		AdjustParalysis(-1)
 	if(stuttering)
-		stuttering--
-
+		stuttering = max(stuttering-1, 0)
 	if(eye_blind)
-		eye_blind--
-		blinded = TRUE
-
+		eye_blind = max(eye_blind-1,0)
 	if(ear_deaf)
-		ear_deaf--
+		ear_deaf = max(ear_deaf-1,0)
 	if(ear_damage < 25)
-		ear_damage -= 0.05
-		ear_damage = max(ear_damage, 0)
-
-	src.setDensity(!(src.lying))
-
-	if((sdisabilities & BLIND))
-		blinded = TRUE
+		ear_damage = max(ear_damage-0.05, 0)
 	if((sdisabilities & DEAF))
 		ear_deaf = TRUE
 
 	if(eye_blurry)
-		eye_blurry--
-		eye_blurry = max(0, eye_blurry)
-
+		eye_blurry = max(eye_blurry-1,0)
 	if(druggy)
-		druggy--
-		druggy = max(0, druggy)
+		druggy = max(druggy-1,0)
 
-	handle_dizziness()
+	if(jitteriness)
+		jitteriness = max(jitteriness-1,0)
 	handle_jitteriness()
+	if(dizziness)
+		dizziness = max(0, dizziness - 1)
+	handle_dizziness()
 
-	if(!is_component_functioning("radio"))
-		radio.on = FALSE
-	else
-		radio.on = TRUE
-
-	if(is_component_functioning("camera"))
-		blinded = FALSE
-	else
-		blinded = TRUE
+	if(camera && !scrambledcodes)
+		camera.status = (isDead() || wires.IsCameraCut()) ? TRUE : FALSE
+	if(radio)
+		radio.on = is_component_functioning("radio") ? TRUE : FALSE
 
 	return TRUE
 
 /mob/living/silicon/robot/proc/handle_sensor_modes()
-	change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS|BLIND)
 	if(client)
 		client.color = initial(client.color)
+	
+	change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS|BLIND)
+
 	see_in_dark = 8
 	see_invisible = SEE_INVISIBLE_LEVEL_TWO
+
 	if(isDead())
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-		see_in_dark = 8
-		see_invisible = SEE_INVISIBLE_LEVEL_TWO
-	else
-		if(M_XRAY in mutations || sight_mode & BORGXRAY)
-			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-			see_in_dark = 8
-			see_invisible = SEE_INVISIBLE_LEVEL_TWO
-		if((sight_mode & BORGTHERM) || sensor_mode == THERMAL_VISION)
-			change_sight(adding = SEE_MOBS)
-			see_in_dark = 4
-			see_invisible = SEE_INVISIBLE_MINIMUM
-		if(sensor_mode == NIGHT)
-			see_invisible = SEE_INVISIBLE_MINIMUM
-			see_in_dark = 8
-			if(client)
-				client.color = list(0.33,0.33,0.33,0,
-									0.33,0.33,0.33,0,
-				 					0.33,0.33,0.33,0,
-				 					0,0,0,1,
-				 					-0.2,0,-0.2,0)
-		if((sight_mode & BORGMESON) || (sensor_mode == MESON_VISION))
-			change_sight(adding = SEE_TURFS)
-			see_in_dark = 8
-			see_invisible = SEE_INVISIBLE_MINIMUM
+		return
 
+	if(M_XRAY in mutations || sight_mode & BORGXRAY)
+		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+
+	if(sensor_mode == NIGHT)
+		see_invisible = SEE_INVISIBLE_MINIMUM
+		if(client)
+			client.color = list(
+				0.33,0.33,0.33,0,
+				0.33,0.33,0.33,0,
+			 	0.33,0.33,0.33,0,
+			 	0,0,0,1,
+			 	-0.2,0,-0.2,0
+				 )
+
+	if((sight_mode & BORGMESON) || (sensor_mode == MESON_VISION))
+		change_sight(adding = SEE_TURFS)
+
+	if((sight_mode & BORGTHERM) || sensor_mode == THERMAL_VISION)
+		change_sight(adding = SEE_MOBS)
+		see_in_dark = 4
+		see_invisible = SEE_INVISIBLE_MINIMUM
 
 /mob/living/silicon/robot/handle_regular_hud_updates()
 	handle_sensor_modes()
@@ -227,7 +204,7 @@
 	if(album_icon)
 		album_icon.icon_state = "album[connected_ai ? "1":""]"
 
-	if(on_fire && !(locate(/obj/item/borg/fire_shield, module.modules)))
+	if(on_fire && !(module && locate(/obj/item/borg/fire_shield, module.modules)))
 		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/robot/fire)
 	else
 		clear_alert(SCREEN_ALARM_FIRE)
@@ -319,20 +296,15 @@
 	if(..())
 		return
 	adjustFireLoss(3)
-	return
 
 /mob/living/silicon/robot/update_fire()
 	overlays -= image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
 	if(on_fire)
 		overlays += image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
 	update_icons()
-	return
 
 /mob/living/silicon/robot/update_canmove()
-	if(paralysis || stunned || knockdown || locked_to || lockcharge)
-		canmove = FALSE
-	else
-		canmove = TRUE
+	canmove = !(paralysis || stunned || knockdown || locked_to || lockcharge) ? TRUE : FALSE
 	return canmove
 
 // This handles the pressure sensor hud element. Values based on human values.
