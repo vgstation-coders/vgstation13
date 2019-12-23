@@ -321,11 +321,16 @@
 	sharpness_added = 2
 	hitsound_added = 'sound/weapons/slice.ogg'
 	attack_verb_override = "claws"
+	var/last_used
 
 /obj/item/clothing/gloves/warping_claws/dexterity_check()
 	return FALSE
 
 /obj/item/clothing/gloves/warping_claws/on_wearer_threw_item(mob/user, atom/target, atom/movable/thrown)
+	if(world.time - last_used < 5 SECONDS)
+		var/cooldown = round(((50 - (world.time - last_used))/10), 1)
+		to_chat(user, "<span class='warning'>You have to wait [cooldown] second[cooldown == 1 ? "" : "s"] until \the [src.name] recharge!")
+		return
 	if(target && !thrown)
 		var/obj/effect/portal/tear/P1 = new (get_turf(user),5 SECONDS)
 		var/obj/effect/portal/tear/P2 = new (get_turf(target),5 SECONDS)
@@ -336,6 +341,7 @@
 		P1.owner = user
 		P2.owner = user
 		P1.teleport(user)
+		last_used = world.time
 
 /obj/item/clothing/gloves/mining
 	name = "fists of the rockernaut"
