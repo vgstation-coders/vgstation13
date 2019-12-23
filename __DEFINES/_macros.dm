@@ -275,7 +275,7 @@
 
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
 
-#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUADIE))
 
 #define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
 
