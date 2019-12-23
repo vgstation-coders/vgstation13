@@ -3735,10 +3735,10 @@
 	if(..())
 		return 1
 	switch(data)
-		if(1)
+		if(1 to 5)
 			M.confused += 2
 			M.drowsyness += 2
-		if(2 to 80)
+		if(6 to 80)
 			M.sleeping++
 		if(81 to INFINITY)
 			M.sleeping++
