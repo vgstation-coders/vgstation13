@@ -967,9 +967,6 @@
 	name = "synthetic burger"
 	desc = "It tastes like a normal burger, but it's just not the same."
 	icon_state = "hburger"
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger
 	name = "appendix burger"
@@ -1357,11 +1354,6 @@
 	trash = /obj/item/stack/rods
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeykabob/synth/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	bitesize = 2
-
 /obj/item/weapon/reagent_containers/food/snacks/corgikabob
 	name = "Corgi-kabob"
 	icon_state = "kabob"
@@ -1691,13 +1683,6 @@
 	icon_state = "meatstake"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/meatsteak/synth/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(SODIUMCHLORIDE, 1)
-	reagents.add_reagent(BLACKPEPPER, 1)
-	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/spacylibertyduff
 	name = "Spacy Liberty Duff"
@@ -3953,7 +3938,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar
@@ -3964,7 +3949,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar
@@ -3976,7 +3961,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown
@@ -3985,9 +3970,9 @@
 	icon_state = "clown_chips"
 	item_state = "clown_chips"
 
-/obj/item/weapon/reagent_containers/food/snacks/chip/cookable/clown/New()
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(HONKSERUM, 5)
 	bitesize = 2
 
@@ -3999,7 +3984,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(NUKA_COLA, 5)
 	bitesize = 2
 
@@ -4011,7 +3996,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(VODKA, 5)
 	bitesize = 2
 
@@ -4024,7 +4009,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi
