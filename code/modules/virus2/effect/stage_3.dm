@@ -282,8 +282,8 @@
 			if(multiplier >= 2)
 				if(multiplier >=2.3)
 					//Cursed, pure evil cat ears that should not have been created
-					var/obj/item/clothing/head/kitty/cursed/kitty_c = new /obj/item/clothing/head/kitty/cursed
-					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/cursed))
+					var/obj/item/clothing/head/kitty/anime/cursed/kitty_c = new /obj/item/clothing/head/kitty/anime/cursed
+					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/anime/cursed))
 						affected.u_equip(affected.head,1)
 						affected.equip_to_slot(kitty_c, slot_head)
 					if(!affected.head)
