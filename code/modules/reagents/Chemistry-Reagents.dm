@@ -3726,6 +3726,7 @@
 	description = "A powerful sedative."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#000067" //rgb: 0, 0, 103
+	custom_metabolism = REAGENTS_METABOLISM * 2 //0.4
 	data = 1 //Used as a tally
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 11.43
@@ -3738,11 +3739,11 @@
 		if(1)
 			M.confused += 2
 			M.drowsyness += 2
-		if(2 to 80)
+		if(2 to 40)
 			M.sleeping++
-		if(81 to INFINITY)
+		if(41 to INFINITY)
 			M.sleeping++
-			M.toxloss += (data - 50)
+			M.toxloss += (data - 10)
 	data++
 
 //Chloral hydrate disguised as normal beer for use by emagged brobots
