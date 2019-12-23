@@ -27,29 +27,29 @@
 	var/mob/living/carbon/occupant = null
 	var/step_in = 10 //make a step in step_in/10 sec.
 	var/dir_in = SOUTH//What direction will the mech face when entered/powered on? Defaults to South.
-	var/step_energy_drain = 10
+	var/step_energy_drain = 10 //How much energy we consume in a single step
 	var/health = 300 //health is health
 	var/deflect_chance = 10 //chance to deflect the incoming projectiles, hits, or lesser the effect of ex_act.
 	//the values in this list show how much damage will pass through, not how much will be absorbed.
 	var/list/damage_absorption = list("brute"=0.8,"fire"=1.2,"bullet"=0.9,"laser"=1,"energy"=1,"bomb"=1)
 	var/obj/item/weapon/cell/cell
 	var/state = STATE_BOLTSHIDDEN
-	var/list/log = new
+	var/list/log = new //Holds the log of what the mecha has done (Attacked, fired at, been attacked by, gone into maintenance mode, etc.)
 	var/last_message = 0 // Used in occupant_message()
-	var/add_req_access = 1
-	var/maint_access = 1
-	var/dna	//dna-locking the mech
-	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
-	var/lights = 0
+	var/add_req_access = TRUE //Whether somebody can add access to this mecha, from their own ID
+	var/maint_access = TRUE //Whether an external user can activate the mecha's maintenance mode through using an ID on them
+	var/dna	//Holds the DNA string of the user, should they choose to DNA lock the mech
+	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference, for equipment overrides of mecha procs.
+	var/lights = FALSE //Whether lights are active or inactive
 	var/light_range_on = 8 //the distance in tiles the light radiates.
 	var/light_brightness_on = 2 //the brightness of the light. does not affect distance, but intensity.
 	var/light_range_off = 2 //the amount of light passively produced by the mech when lights are off (cockpit glow)
 	var/light_brightness_off = 1 //the brightness of the passively produced light
 	var/rad_protection = 50 	//How much the mech shields its pilot from radiation.
-	var/lock_dir = FALSE
+	var/lock_dir = FALSE //Whether we've locked ourselves to a direction
 	//inner atmos
-	var/use_internal_tank = 0
-	var/internal_tank_valve = ONE_ATMOSPHERE
+	var/use_internal_tank = FALSE //Whether we are drawing from the internal tank, or from standing tile atmosphere
+	var/internal_tank_valve = ONE_ATMOSPHERE //How much atmosphere to draw from the internal tank
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/atmospherics/unary/portables_connector/connected_port = null
@@ -61,9 +61,9 @@
 	var/obj/item/mecha_parts/mecha_tracking/tracking = null
 	var/starts_with_tracking_beacon = TRUE
 
-	var/max_temperature = 25000
+	var/max_temperature = 25000 //Maximum temperature of a fire this mecha can withstand before it begins taking damage
 	var/internal_damage_threshold = 50 //health percentage below which internal damage is possible
-	var/internal_damage = 0 //contains bitflags
+	var/internal_damage = 0 //bitflags for what forms of damage we have (MECHA_INT_TEMP_CONTROL, MECHA_INT_SHORT_CIRCUIT, etc)
 
 	var/list/operation_req_access = list()//required access level for mecha operation
 	var/list/internals_req_access = list(access_engine,access_robotics)//required access level to open cell compartment
@@ -78,7 +78,7 @@
 
 	var/list/equipment = new
 	var/obj/item/mecha_parts/mecha_equipment/selected
-	var/max_equip = 3
+	var/max_equip = 3 //The maximum amount of equipment this mecha an hold at one time.
 
 	var/turf/crashing = null
 	var/list/mech_parts = list(/obj/item/weapon/cell,
@@ -413,88 +413,76 @@
 	 playsound(src, get_sfx("mechstep"),40,1)
 	return result
 
-/obj/mecha/to_bump(var/atom/obstacle)
-//	src.inertia_dir = null
-	if(src.throwing)//high velocity mechas in your face!
-		var/breakthrough = 0
-		if(istype(obstacle, /obj/structure/window/))
-			var/obj/structure/window/W = obstacle
-			W.shatter()
-			breakthrough = 1
+/obj/mecha/to_bump(atom/obstacle)
+	.=..()
+	if(ismovable(obstacle))
+		var/atom/movable/A = obstacle
+		if(!A.anchored)
+			step(obstacle, src.dir)
 
-		else if(istype(obstacle, /obj/structure/grille/))
-			var/obj/structure/grille/G = obstacle
-			G.health = (0.25*initial(G.health))
-			G.healthcheck()
-			breakthrough = 1
+/obj/mecha/throw_impact(atom/obstacle)
+	var/breakthrough = 0
+	if(istype(obstacle, /obj/structure/window/))
+		var/obj/structure/window/W = obstacle
+		W.shatter()
+		breakthrough = 1
 
-		else if(istype(obstacle, /obj/structure/table))
-			var/obj/structure/table/T = obstacle
-			T.destroy()
-			breakthrough = 1
+	else if(istype(obstacle, /obj/structure/grille/))
+		var/obj/structure/grille/G = obstacle
+		G.health = (0.25*initial(G.health))
+		G.healthcheck()
+		breakthrough = 1
 
-		else if(istype(obstacle, /obj/structure/rack))
-			new /obj/item/weapon/rack_parts(obstacle.loc)
-			qdel(obstacle)
-			breakthrough = 1
+	else if(istype(obstacle, /obj/structure/table))
+		var/obj/structure/table/T = obstacle
+		T.destroy()
+		breakthrough = 1
 
-		else if(istype(obstacle, /obj/structure/reagent_dispensers/fueltank))
-			obstacle.ex_act(1)
+	else if(istype(obstacle, /obj/structure/rack))
+		new /obj/item/weapon/rack_parts(obstacle.loc)
+		qdel(obstacle)
+		breakthrough = 1
 
-		else if(istype(obstacle, /mob/living))
-			var/mob/living/L = obstacle
-			if (L.flags & INVULNERABLE)
-				stopMechWalking()
-				src.throwing = 0
-				src.crashing = null
-			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
-				//can't be knocked down? you'll still take the damage.
-				stopMechWalking()
-				src.throwing = 0
-				src.crashing = null
-				L.take_overall_damage(5,0)
-				if(L.locked_to)
-					L.locked_to.unlock_atom(L)
-			else
-				var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
-				L.take_overall_damage(5,0)
-				if(L.locked_to)
-					L.locked_to.unlock_atom(L)
-				L.Stun(5)
-				L.Knockdown(5)
-				L.apply_effect(STUTTER, 5)
-				playsound(src, pick(hit_sound), 50, 0, 0)
-				breakthrough = 1
-		else
+	else if(istype(obstacle, /obj/structure/reagent_dispensers/fueltank))
+		obstacle.ex_act(1)
+
+	else if(istype(obstacle, /mob/living))
+		var/mob/living/L = obstacle
+		if (L.flags & INVULNERABLE)
 			stopMechWalking()
-			src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
+			src.throwing = 0
 			src.crashing = null
-
-		if(breakthrough)
-			if(crashing && !istype(crashing,/turf/space))
-				spawn(1)
-					src.throw_at(crashing, 50, src.throw_speed)
-			else
-				spawn(1)
-					crashing = get_distant_turf(get_turf(src), dash_dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
-					src.throw_at(crashing, 50, src.throw_speed)
-
-	if(istype(obstacle, /obj))
-		var/obj/O = obstacle
-		if(istype(O, /obj/effect/portal)) //derpfix
-			src.anchored = 0
-			O.Crossed(src)
-			spawn(0)//countering portal teleport spawn(0), hurr
-				src.anchored = 1
-		else if(!O.anchored)
-			step(obstacle,src.dir)
-		else //I have no idea why I disabled this
-			obstacle.Bumped(src)
-	else if(istype(obstacle, /mob))
-		step(obstacle,src.dir)
+		else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
+			//can't be knocked down? you'll still take the damage.
+			stopMechWalking()
+			src.throwing = 0
+			src.crashing = null
+			L.take_overall_damage(5,0)
+			if(L.locked_to)
+				L.locked_to.unlock_atom(L)
+		else
+			var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
+			L.take_overall_damage(5,0)
+			if(L.locked_to)
+				L.locked_to.unlock_atom(L)
+			L.Stun(5)
+			L.Knockdown(5)
+			L.apply_effect(STUTTER, 5)
+			playsound(src, pick(hit_sound), 50, 0, 0)
+			breakthrough = 1
 	else
-		obstacle.Bumped(src)
-	return
+		stopMechWalking()
+		src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
+		src.crashing = null
+
+	if(breakthrough)
+		if(crashing && !istype(crashing,/turf/space))
+			spawn(1)
+				src.throw_at(crashing, 50, src.throw_speed)
+		else
+			spawn(1)
+				crashing = get_distant_turf(get_turf(src), dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
+				src.throw_at(crashing, 50, src.throw_speed)
 
 ///////////////////////////////////
 ////////  Internal damage  ////////
@@ -1354,34 +1342,8 @@
 		return
 	var/obj/structure/deathsquad_gravpult/G = locate() in get_turf(src)
 	if(mob_container.forceMove(exit))//ejecting mob container
-	/*
-		if(ishuman(occupant) && (return_pressure() > HAZARD_HIGH_PRESSURE))
-			use_internal_tank = 0
-			var/datum/gas_mixture/environment = get_turf_air()
-			if(environment)
-				var/env_pressure = environment.return_pressure()
-				var/pressure_delta = (cabin.return_pressure() - env_pressure)
-		//Can not have a pressure delta that would cause environment pressure > tank pressure
-
-				var/transfer_moles = 0
-				if(pressure_delta > 0)
-					transfer_moles = pressure_delta*environment.volume/(cabin.return_temperature() * R_IDEAL_GAS_EQUATION)
-
-			//Actually transfer the gas
-					var/datum/gas_mixture/removed = cabin.air_contents.remove(transfer_moles)
-					loc.assume_air(removed)
-
-			occupant.SetStunned(5)
-			occupant.SetKnockdown(5)
-			to_chat(occupant, "You were blown out of the mech!")
-	*/
 		src.log_message("[mob_container] moved out.")
 		occupant.reset_view()
-		/*
-		if(src.occupant.client)
-			src.occupant.client.eye = src.occupant.client.mob
-			src.occupant.client.perspective = MOB_PERSPECTIVE
-		*/
 		empty_bad_contents()
 		src.occupant << browse(null, "window=exosuit")
 		remove_mech_spells()
