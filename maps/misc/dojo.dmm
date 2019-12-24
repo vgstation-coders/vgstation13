@@ -1,0 +1,35 @@
+"a" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/dojo)
+"b" = (/obj/structure/sign/vacuum,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/dojo)
+"c" = (/obj/structure/button/ninja/launcher,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/dojo)
+"d" = (/obj/structure/sign/chinese/restricted_area,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/dojo)
+"e" = (/obj/structure/button/ninja/teleporter,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/dojo)
+"f" = (/turf/simulated/floor/engine/acoustic,/area/dojo)
+"g" = (/obj/effect/decal/ninjaporter,/turf/simulated/floor/engine/acoustic,/area/dojo)
+"h" = (/obj/item/weapon/stool,/turf/simulated/floor/engine/acoustic,/area/dojo)
+"i" = (/obj/structure/table/glass,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake,/turf/simulated/floor/engine/acoustic,/area/dojo)
+"j" = (/obj/effect/landmark{name = "ninjastart"},/turf/simulated/floor/engine/acoustic,/area/dojo)
+"k" = (/obj/structure/punching_bag/captain,/turf/simulated/floor/engine/acoustic,/area/dojo)
+"l" = (/turf/simulated/wall,/area/dojo)
+"m" = (/obj/machinery/door/airlock{desc = "Great for practicing your ninja skills."},/turf/simulated/floor/engine/acoustic,/area/dojo)
+"n" = (/turf/simulated/wall/r_wall,/area/dojo)
+"o" = (/obj/machinery/door/airlock/vault{desc = "Great for practicing your ninja skills."; locked = 1; name = "Vault Door"},/turf/simulated/floor/engine/acoustic,/area/dojo)
+
+(1,1,1) = {"
+aaabcbaaaaadedaaa
+afffgfffffffgfffa
+afffffffffffffffa
+afffffffffffffffa
+afffffffffffffffa
+afffffffffffffffa
+afffffffffffffffa
+afhfffffffffffffa
+afifffffjfffffffa
+afffffffffffffffa
+afffffffffffffffa
+afffffffffffffffa
+afffffffffffffffa
+affkffffflmnolffa
+afffffffffffffffa
+afffffffffffffffa
+aaaaaaaaaaaaaaaaa
+"}

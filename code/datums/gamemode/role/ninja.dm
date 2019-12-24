@@ -13,43 +13,16 @@
 
 /datum/role/ninja/OnPostSetup()
 	. =..()
+	if(!.)
+		return
+	antag.current.forceMove(pick(ninjastart))
 	if(ishuman(antag.current))
-		antag.current << sound('sound/effects/gong.ogg')
+		antag.current << sound('sound/effects/yooooooooooo.ogg')
 		equip_ninja(antag.current)
 		name_ninja(antag.current)
 
 /datum/role/ninja/ForgeObjectives()
-
-	if(cyborg_list.len)
-		AppendObjective(/datum/objective/target/killsilicons)
-	else
-		if(prob(70))
-			AppendObjective(/datum/objective/target/delayed/assassinate)
-		else
-			AppendObjective(/datum/objective/target/skulls)
-
-	if(ai_list.len)
-		AppendObjective(/datum/objective/killorstealAI)
-	else
-		AppendObjective(/datum/objective/target/steal)
-
-	var/living = 0
-	for(var/mob/living/M in player_list)
-		if(!M.client)
-			continue
-		if(!iscarbon(M) && !issilicon(M))
-			continue
-		var/turf/T = get_turf(M)
-		if(T.z != STATION_Z)
-			continue
-		if(M.stat != DEAD)
-			living++
-	if(living<=16 && prob(25))
-		AppendObjective(/datum/objective/silence)
-	else
-		AppendObjective(/datum/objective/survive)
-	if(prob(15))
-		AppendObjective(/datum/objective/stealsake)
+	return
 
 /datum/role/ninja/extraPanelButtons()
 	var/dat = ""
@@ -79,9 +52,6 @@
 			to_chat(antag.current, "<span class='danger'>Remember that guns are not honoraburu, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja.<br>The Spider Clan has been insulted for the last time. Send Nanotrasen a message. You are forbidden by your code to use guns, do not forget!</span>")
-			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station.</span>")
-			to_chat(antag.current, "<span class='userdanger'>Your suit will lose pressure in approximately two minutes.</span>")
-			to_chat(antag.current, "<span class='danger'>Find a way inside before your suit's life support systems give out!</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
@@ -507,8 +477,12 @@ Helpers For Both Variants
 			owner.whisper("Not today, katana-san.")
 
 /obj/item/weapon/melee/energy/sword/ninja
-	name = "energy katana"
-	desc = "It makes you a little nervous even when it's off."
+	name = "energy blade"
+	desc = "Hot damn."
+	icon_state = "blade0"
+	base_state = "blade"
+	active_state = "blade1"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	activeforce = 40
 	siemens_coefficient = 0
 	onsound = null
@@ -529,6 +503,9 @@ Helpers For Both Variants
 	else
 		to_chat(user,"<span class='warning'>There's no buttons on it.</span>")
 		return
+
+/obj/item/weapon/melee/energy/sword/update_icon()
+	icon_state = "[base_state][active]"
 
 /obj/item/weapon/melee/energy/sword/ninja/proc/checkdroppable()
 	return cant_drop = active //they should be the same value every time
@@ -580,7 +557,7 @@ Suit and assorted
 	species_fit = list("Human")
 	species_restricted = list("Human")
 	eyeprot = 3
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|HIDEHAIR
 
 /obj/item/clothing/head/helmet/space/ninja/apprentice
 	name = "ninja hood"
@@ -591,11 +568,20 @@ Suit and assorted
 
 /obj/item/clothing/head/helmet/space/ninja/apprentice/New()
 	..()
+	
+
+/obj/item/clothing/head/helmet/space/ninja/apprentice/proc/pressurize()
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(H.wear_suit == src)
+			to_chat(H, "<span class='notice'>\The [src] pressurizes.</span>")
+	pressure_resistance = ONE_ATMOSPHERE
 	spawn(120 SECONDS)
 		pressure_resistance = 0
 		if(ishuman(loc))
 			var/mob/living/carbon/human/H = loc
-			to_chat(H, "<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
+			if(H.wear_suit == src)
+				to_chat(H, "<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
 
 /obj/item/clothing/suit/space/ninja
 	name = "elite ninja suit"
@@ -624,10 +610,17 @@ Suit and assorted
 	name = "ninja suit"
 	desc = "A rare suit of nano-enhanced armor designed for Spider Clan assassins."
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	pressure_resistance = ONE_ATMOSPHERE
+	pressure_resistance = 0
 
 /obj/item/clothing/suit/space/ninja/apprentice/New()
 	..()
+	
+/obj/item/clothing/suit/space/ninja/apprentice/proc/pressurize()
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(H.wear_suit == src)
+			to_chat(H, "<span class='notice'>\The [src] pressurizes.</span>")
+	pressure_resistance = ONE_ATMOSPHERE
 	spawn(150 SECONDS)
 		pressure_resistance = 0
 		if(ishuman(loc))
@@ -663,6 +656,9 @@ Suit and assorted
 	clothing_flags = NOSLIP
 
 /obj/item/clothing/shoes/ninja/apprentice/proc/activateMagnets()
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		to_chat(H, "<span class='notice'>The magnetic charge on \the [src] activates.</span>")
 	togglemagpulse(override = TRUE)
 	spawn(130 SECONDS)
 		togglemagpulse(override = TRUE)

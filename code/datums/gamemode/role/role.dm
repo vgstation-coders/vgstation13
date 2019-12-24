@@ -493,7 +493,7 @@
 /datum/role/proc/handle_splashed_reagent(var/reagent_id)
 	return
 
-//Does the role have special clothign restrictions?
+//Does the role have special clothing restrictions?
 /datum/role/proc/can_wear(var/obj/item/clothing/C)
 	return TRUE
 

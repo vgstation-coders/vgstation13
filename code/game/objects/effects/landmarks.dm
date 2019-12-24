@@ -86,6 +86,9 @@
 
 		if("voxlocker")
 			voxlocker += loc
+			
+		if("ninjastart")
+			ninjastart += loc
 
 	landmarks_list += src
 	return 1

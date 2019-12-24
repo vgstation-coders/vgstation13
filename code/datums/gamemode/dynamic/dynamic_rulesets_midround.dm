@@ -455,11 +455,9 @@
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/setup_role(var/datum/role/newninja)
 	newninja.OnPostSetup()
 	newninja.Greet(GREET_MIDROUND)
-	newninja.ForgeObjectives()
-	newninja.AnnounceObjectives()
-	if(!newninja.antag.current.ThrowAtStation())
-		newninja.antag.current.spawn_rand_maintenance()
-	return 1
+	var/datum/faction/spider_clan/spoiderclan = find_active_faction_by_type(/datum/faction/spider_clan)
+	spoiderclan.forgeObjectives()
+	return ..()
 
 //////////////////////////////////////////////
 //                                          //
