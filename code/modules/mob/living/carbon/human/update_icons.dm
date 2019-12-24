@@ -1270,7 +1270,7 @@ var/global/list/damage_icon_parts = list()
 	if(!W || gcDestroyed)
 		return
 
-	if(is_slot_hidden(W.body_parts_covered,HIDEHEADHAIR) || is_slot_hidden(W.body_parts_covered,HIDEBEARDHAIR))
+	if(is_slot_hidden(W.body_parts_covered,HIDEHEADHAIR) || is_slot_hidden(W.body_parts_covered,MASKHEADHAIR) || is_slot_hidden(W.body_parts_covered,HIDEBEARDHAIR))
 		update_hair()
 	if(is_slot_hidden(W.body_parts_covered,(HIDEMASK)))
 		update_inv_wear_mask()
