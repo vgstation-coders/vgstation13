@@ -141,6 +141,10 @@
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
+/obj/item/clothing/head/cardborg/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	if(L.is_wearing_item(src, slot_head))
+		speech.message_classes.Add("siliconsay")
+
 /obj/item/clothing/head/justice
 	name = "justice hat"
 	desc = "fight for what's righteous!"
