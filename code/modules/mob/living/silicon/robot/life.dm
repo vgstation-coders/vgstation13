@@ -31,6 +31,9 @@
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
+	
+	if(locked_to_z)
+		check_locked_zlevel()
 
 /mob/living/silicon/robot/proc/clamp_values()
 	SetParalysis(min(paralysis, 30))
@@ -44,6 +47,9 @@
 	if(cell && is_component_functioning("power cell"))
 		if(cell.charge <= 0)
 			uneq_all()
+		else if(cell.charge <= ROBOT_LOW_POWER)
+			uneq_all()
+			cell.use(1)
 		else
 			for(var/M in get_all_slots())
 				if(M)
@@ -80,7 +86,7 @@
 		death()
 
 	if(!isDead()) //Alive.
-		blinded = !(paralysis || is_component_functioning("camera") || (sdisabilities & BLIND)) ? TRUE : FALSE
+		blinded = !(paralysis || is_component_functioning("camera"))
 		stat = !(paralysis || stunned || knockdown) ? CONSCIOUS : UNCONSCIOUS
 	else //Dead.
 		blinded = TRUE
@@ -116,159 +122,46 @@
 	handle_dizziness()
 
 	if(camera && !scrambledcodes)
-		camera.status = (isDead() || wires.IsCameraCut()) ? TRUE : FALSE
+		camera.status = !(isDead() || wires.IsCameraCut())
 	if(radio)
-		radio.on = is_component_functioning("radio") ? TRUE : FALSE
+		radio.on = is_component_functioning("radio")
 
 	return TRUE
 
 /mob/living/silicon/robot/proc/handle_sensor_modes()
+	change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS|BLIND)
+	see_invisible = SEE_INVISIBLE_LEVEL_TWO
+	see_in_dark = 8
+
 	if(client)
 		client.color = initial(client.color)
-	
-	change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS|BLIND)
-
-	see_in_dark = 8
-	see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 	if(isDead())
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		return
 
-	if(M_XRAY in mutations || sight_mode & BORGXRAY)
-		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-
-	if(sensor_mode == NIGHT)
-		see_invisible = SEE_INVISIBLE_MINIMUM
-		if(client)
-			client.color = list(
-				0.33,0.33,0.33,0,
-				0.33,0.33,0.33,0,
-			 	0.33,0.33,0.33,0,
-			 	0,0,0,1,
-			 	-0.2,0,-0.2,0
-				 )
-
-	if((sight_mode & BORGMESON) || (sensor_mode == MESON_VISION))
-		change_sight(adding = SEE_TURFS)
-
-	if((sight_mode & BORGTHERM) || sensor_mode == THERMAL_VISION)
-		change_sight(adding = SEE_MOBS)
-		see_in_dark = 4
-		see_invisible = SEE_INVISIBLE_MINIMUM
-
-/mob/living/silicon/robot/handle_regular_hud_updates()
-	handle_sensor_modes()
-
-	regular_hud_updates() //Handles MED/SEC HUDs for borgs.
 	switch(sensor_mode)
-		if(SEC_HUD)
-			process_sec_hud(src, 1)
-		if(MED_HUD)
-			process_med_hud(src)
-
-	if(healths)
-		if(!isDead())
-			switch(health)
-				if(200 to INFINITY)
-					healths.icon_state = "health0"
-				if(150 to 200)
-					healths.icon_state = "health1"
-				if(100 to 150)
-					healths.icon_state = "health2"
-				if(50 to 100)
-					healths.icon_state = "health3"
-				if(0 to 50)
-					healths.icon_state = "health4"
-				if(config.health_threshold_dead to 0)
-					healths.icon_state = "health5"
-				else
-					healths.icon_state = "health6"
-		else
-			healths.icon_state = "health7"
-
-	if(cell)
-		var/cellcharge = cell.charge/cell.maxcharge
-		switch(cellcharge)
-			if(0.5 to INFINITY)
-				clear_alert(SCREEN_ALARM_ROBOT_CELL)
-			if(0.25 to 0.5)
-				throw_alert(SCREEN_ALARM_ROBOT_CELL, /obj/abstract/screen/alert/robot/cell/low, 2)
-			if(0 to 0.25)
-				throw_alert(SCREEN_ALARM_ROBOT_CELL, /obj/abstract/screen/alert/robot/cell/low, 1)
-			else
-				throw_alert(SCREEN_ALARM_ROBOT_CELL, /obj/abstract/screen/alert/robot/cell/empty, 0)
-	else
-		throw_alert(SCREEN_ALARM_ROBOT_CELL, /obj/abstract/screen/alert/robot/cell)
-
-	if(album_icon)
-		album_icon.icon_state = "album[connected_ai ? "1":""]"
-
-	if(on_fire && !(module && locate(/obj/item/borg/fire_shield, module.modules)))
-		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/robot/fire)
-	else
-		clear_alert(SCREEN_ALARM_FIRE)
-
-	if(modulelock || lockcharge)
-		throw_alert(SCREEN_ALARM_ROBOT_LOCK, /obj/abstract/screen/alert/robot/locked)
-	else
-		clear_alert(SCREEN_ALARM_ROBOT_LOCK)
-
-	if(emagged || illegal_weapons)
-		throw_alert(SCREEN_ALARM_ROBOT_HACK, /obj/abstract/screen/alert/robot/hacked)
-	else
-		clear_alert(SCREEN_ALARM_ROBOT_HACK)
-
-	update_pull_icon()
-
-	if(eye_blind || blinded)
-		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-	else
-		clear_fullscreen("blind")
-	if(disabilities & NEARSIGHTED)
-		overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
-	else
-		clear_fullscreen("impaired")
-	if(eye_blurry)
-		overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-	else
-		clear_fullscreen("blurry")
-	if(druggy)
-		overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
-	else
-		clear_fullscreen("high")
-
-	if(!isDead())
-		if(machine)
-			if(!(machine.check_eye(src)))
-				reset_view(null)
-		else
-			if(client && !client.adminobs && !iscamera(client.eye) && !isTeleViewing(client.eye))
-				reset_view(null)
-
-	return TRUE
-
-/mob/living/silicon/robot/proc/update_items()
-	if(client)
-		client.screen -= contents
-		for(var/obj/I in contents)
-			if(I && !(istype(I,/obj/item/weapon/cell) || istype(I,/obj/item/device/radio)  || istype(I,/obj/machinery/camera) || istype(I,/obj/item/device/mmi)))
-				client.screen += I
-	if(module_state_1)
-		module_state_1:screen_loc = ui_inv1
-	if(module_state_2)
-		module_state_2:screen_loc = ui_inv2
-	if(module_state_3)
-		module_state_3:screen_loc = ui_inv3
-	updateicon()
+		if(NIGHT)
+			if(client)
+				client.color = list(0.33,0.33,0.33,0,
+									0.33,0.33,0.33,0,
+			 						0.33,0.33,0.33,0,
+				 					0,0,0,1,
+				 					-0.2,0,-0.2,0)
+			see_invisible = SEE_INVISIBLE_MINIMUM
+		if(MESON_VISION)
+			change_sight(adding = SEE_TURFS)
+			see_invisible = SEE_INVISIBLE_MINIMUM
+		if(THERMAL_VISION)
+			change_sight(adding = SEE_MOBS)
+			see_invisible = SEE_INVISIBLE_MINIMUM
+			see_in_dark = 4
 
 /mob/living/silicon/robot/proc/process_killswitch()
 	if(killswitch)
-		killswitch_time --
+		killswitch_time--
 		if(killswitch_time <= 0)
-			if(client)
-				to_chat(src, "<span class='warning'><B>Killswitch Activated</span>")
-			killswitch = 0
+			to_chat(src, "<span class='warning' style=\"font-family:Courier\"><B>Killswitch Activated</span>")
 			spawn(5)
 				gib()
 
@@ -287,7 +180,7 @@
 	if(!module)
 		..()
 		return
-	if(locate(/obj/item/borg/fire_shield, module.modules))
+	if(module && locate(/obj/item/borg/fire_shield, module.modules))
 		return
 	..()
 
@@ -304,43 +197,20 @@
 	update_icons()
 
 /mob/living/silicon/robot/update_canmove()
-	canmove = !(paralysis || stunned || knockdown || locked_to || lockcharge) ? TRUE : FALSE
+	canmove = !(paralysis || stunned || knockdown || locked_to || lockcharge || anchored)
 	return canmove
 
-// This handles the pressure sensor hud element. Values based on human values.
-/mob/living/silicon/robot/proc/handle_pressure_damage(datum/gas_mixture/environment)
-	//by the power of Polymorph and Errorage
-	var/localpressure = environment.return_pressure()
-	var/adjusted_pressure = localpressure - ONE_ATMOSPHERE //REAL pressure
-	if(localpressure)
-		if(adjusted_pressure >= HAZARD_HIGH_PRESSURE)
-			throw_alert(SCREEN_ALARM_PRESSURE, /obj/abstract/screen/alert/robot/pressure/high, 2)
-		else if(localpressure >= WARNING_HIGH_PRESSURE && localpressure < WARNING_HIGH_PRESSURE)
-			throw_alert(SCREEN_ALARM_PRESSURE, /obj/abstract/screen/alert/robot/pressure/high, 1)
-		else if(localpressure <= WARNING_LOW_PRESSURE && localpressure > HAZARD_LOW_PRESSURE)
-			throw_alert(SCREEN_ALARM_PRESSURE, /obj/abstract/screen/alert/robot/pressure/low, -1)
-		else if(localpressure <= HAZARD_LOW_PRESSURE)
-			throw_alert(SCREEN_ALARM_PRESSURE, /obj/abstract/screen/alert/robot/pressure/low, -2)
-		else
-			clear_alert(SCREEN_ALARM_PRESSURE)
-	else //there ain't no air, we're in a vacuum
-		throw_alert(SCREEN_ALARM_PRESSURE, /obj/abstract/screen/alert/robot/pressure/low, -2)
+/mob/living/silicon/robot/proc/check_locked_zlevel()
+	if(!locked_to_z)
+		return
 
-// This handles the temp sensor hud element
-/mob/living/silicon/robot/proc/handle_heat_damage(datum/gas_mixture/environment)
-	var/envirotemp = environment.return_temperature()
-	if(environment)
-		if(envirotemp)
-			if (envirotemp >= 1000 ) //1000 is the heat_level_3 for humans
-				throw_alert(SCREEN_ALARM_TEMPERATURE, /obj/abstract/screen/alert/robot/temp/hot, 2)
-			else if (envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT && envirotemp < 1000 )
-				throw_alert(SCREEN_ALARM_TEMPERATURE, /obj/abstract/screen/alert/robot/temp/hot, 1)
-			else if (envirotemp <= T0C && envirotemp > BODYTEMP_COLD_DAMAGE_LIMIT)
-				throw_alert(SCREEN_ALARM_TEMPERATURE, /obj/abstract/screen/alert/robot/temp/cold, -1)
-			else if (envirotemp <= BODYTEMP_COLD_DAMAGE_LIMIT ) //space is cold
-				throw_alert(SCREEN_ALARM_TEMPERATURE, /obj/abstract/screen/alert/robot/temp/cold, -2)
-			else
-				clear_alert(SCREEN_ALARM_TEMPERATURE)
-				return FALSE
-	else //vacuums are cold
-		throw_alert(SCREEN_ALARM_TEMPERATURE, /obj/abstract/screen/alert/robot/temp/cold, -2)
+	var/datum/zLevel/current_zlevel = get_z_level(src)
+	if(!current_zlevel)
+		return
+	if(current_zlevel.z != locked_to_z)
+		to_chat(src, "<span class='userdanger'>Your hardware detects that you have left your intended location. Initiating self-destruct.</span>")
+		spawn(rand(2,7) SECONDS)
+			if(mmi) //no sneaking brains away
+				qdel(mmi)
+				mmi = null
+			gib()

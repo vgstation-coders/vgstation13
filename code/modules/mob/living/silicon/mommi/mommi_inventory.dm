@@ -25,14 +25,12 @@
 	else
 		return (W in src.module.modules)
 
-#define MOMMI_LOW_POWER 100
-
 /mob/living/silicon/robot/mommi/put_in_hands(var/obj/item/W)
 	// Fixing NPEs caused by PDAs giving me NULLs to hold :V - N3X
 	// And before you ask, this is how /mob handles NULLs, too.
 	if(!W)
 		return 0
-	if(cell && cell.charge <= MOMMI_LOW_POWER)
+	if(cell && cell.charge <= ROBOT_LOW_POWER)
 		drop_item(W)
 		return 0
 	if(W.type == /obj/item/device/material_synth)
@@ -330,3 +328,18 @@
 			update_items()
 		else
 			to_chat(M, "<span class='warning'>You are unable to equip that.</span>")
+
+// MoMMIs only have one hand.
+/mob/living/silicon/robot/mommi/update_items()
+	if(client)
+		client.screen -= contents
+		for(var/obj/I in src.contents)
+			if(I)
+				// Make sure we're not showing any of our internal components, as that would be lewd.
+				// This way of doing it ensures that shit we pick up will be visible, wheras shit inside of us isn't.
+				if(I!=cell && I!=radio && I!=camera && I!=mmi)
+					client.screen += I
+	if(tool_state)
+		tool_state:screen_loc = ui_inv2
+	if(head_state)
+		head_state:screen_loc = ui_monkey_mask
