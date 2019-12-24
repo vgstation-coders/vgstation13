@@ -11,6 +11,7 @@
 	var/heating_power = 40000
 	var/base_state = "sheater"
 	var/nocell = 0
+	var/intake_rate = 0.25
 	light_power_on = 0.75
 	light_range_on = 2
 	light_color = LIGHT_COLOR_ORANGE
@@ -20,6 +21,30 @@
 
 	flags = FPRINT
 	machine_flags = SCREWTOGGLE
+
+/obj/machinery/space_heater/vesta
+	name = "VESTA-class heater"
+	desc = "Named for the Roman goddess of fire and the hearth, this heater takes in more air and warms it faster. It's immobile and expends 5x as much power, drawn from the local APC."
+
+	intake_rate = 1
+	heating_power = 400000 //that's a spicy heater!
+	light_power_on = 2
+	set_temperature = 35 //so powerful, let's shut off early
+	icon_state = "vheater0"
+	base_state = "vheater"
+	anchored = 1
+
+/obj/machinery/space_heater/vesta/ispowered()
+	return !(stat & NOPOWER)
+
+/obj/machinery/space_heater/vesta/drain_powersource(var/amount = heating_power)
+	use_power(amount/40000) //uses 10x the power but 2x as efficient (5x consumption)
+
+/obj/machinery/space_heater/vesta/afterheat(var/datum/gas_mixture/G)
+	if(G.temperature >= set_temperature + T0C)
+		on = FALSE
+		loc.visible_message("\The [src] clicks loudly as it shuts off.")
+		update_icon()
 
 /obj/machinery/space_heater/get_cell()
 	return cell
@@ -275,17 +300,24 @@
 		usr.unset_machine()
 	return
 
+/obj/machinery/space_heater/proc/ispowered()
+	return cell && cell.charge > 0
 
+/obj/machinery/space_heater/proc/drain_powersource(var/amount = heating_power)
+	cell.use(heating_power/20000)
+
+/obj/machinery/space_heater/proc/afterheat(var/datum/gas_mixture/G)
+	return
 
 /obj/machinery/space_heater/process()
 	if(on)
-		if(cell && cell.charge > 0)
+		if(ispowered())
 			var/turf/simulated/L = loc
 			if(istype(L))
 				var/datum/gas_mixture/env = L.return_air()
 				if(env.temperature != set_temperature + T0C)
 
-					var/datum/gas_mixture/removed = env.remove_volume(0.25 * CELL_VOLUME)
+					var/datum/gas_mixture/removed = env.remove_volume(intake_rate * CELL_VOLUME)
 
 //					to_chat(world, "got [transfer_moles] moles at [removed.temperature]")
 
@@ -298,11 +330,13 @@
 								removed.temperature = min(removed.temperature + heating_power/heat_capacity, 1000) // Added min() check to try and avoid wacky superheating issues in low gas scenarios -- TLE
 							else
 								removed.temperature = max(removed.temperature - heating_power/heat_capacity, TCMB)
-							cell.use(heating_power/20000)
+							drain_powersource(heating_power)
 
 //						to_chat(world, "now at [removed.temperature]")
 
 					env.merge(removed)
+					afterheat(L.return_air())
+
 			 if(!istype(loc,/turf/space))
 			 	for (var/mob/living/carbon/M in view(src,light_range_on))
 			 		M.bodytemperature += 0.01 * set_temperature * 1/((get_dist(src,M)+1)) // this is a temporary algorithm until we fix life to not have body temperature change so willy-nilly.

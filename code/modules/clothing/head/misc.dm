@@ -82,7 +82,7 @@
 	name = "hastur's hood"
 	desc = "It's unspeakably stylish."
 	icon_state = "hasturhood"
-	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 
 /obj/item/clothing/head/nursehat
 	name = "nurse's hat"
@@ -288,7 +288,7 @@
 	desc = "Eeeee~heheheheheheh!"
 	icon_state = "witch"
 	item_state = "witch"
-	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/chicken
@@ -304,7 +304,7 @@
 	desc = "Not as fuzzy as the real thing."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
-	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/bearpelt/real
