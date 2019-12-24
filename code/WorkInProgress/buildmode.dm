@@ -78,61 +78,74 @@
 	icon = 'icons/misc/buildmode.dmi'
 	icon_state = "buildhelp"
 	screen_loc = "NORTH,WEST+1"
-	Click()
-		switch(master.cl.buildmode)
-			if(1)
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-				to_chat(usr, "<span class='notice'>Click and drag to do a fill operation</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button        = Construct / Upgrade</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button       = Deconstruct / Delete / Downgrade</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button + ctrl = R-Window</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button + alt  = Airlock</span>")
-				to_chat(usr, "")
-				to_chat(usr, "<span class='notice'>Use the button in the upper left corner to</span>")
-				to_chat(usr, "<span class='notice'>change the direction of built objects.</span>")
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-			if(2)
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-				to_chat(usr, "<span class='notice'>Click and drag to do a fill operation</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Set object type</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj          = Place objects</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button                     = Delete objects</span>")
-				to_chat(usr, "<span class='notice'>Middle Mouse Button                    = Copy atom</span>")
-				to_chat(usr, "<span class='notice'>Middle Mouse Button twice on a turf    = Area editing mode</span>")
-				to_chat(usr, "")
-				to_chat(usr, "<span class='notice'>Ctrl+Shift+Left Mouse Button           = Sets bottom left corner for fill mode</span>")
-				to_chat(usr, "<span class='notice'>Ctrl+Shift+Right Mouse Button           = Sets top right corner for fill mode</span>")
 
-				to_chat(usr, "")
-				to_chat(usr, "<span class='notice'>Use the button in the upper left corner to</span>")
-				to_chat(usr, "<span class='notice'>change the direction of built objects.</span>")
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-			if(3)
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-				to_chat(usr, "<span class='notice'>Click and drag to do a mass edit operation</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Select var(type) & value</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Set var(type) & value</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Reset var's value</span>")
-				to_chat(usr, "<span class='notice'>Middle Mouse Button on turf/obj/mob    = Copy value from object</span>")
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-			if(4)
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Select</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Throw</span>")
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-		return 1
-	DblClick(object,location,control,params)
-		return Click(object,location,control,params)
+/obj/effect/bmode/buildhelp/Click(location, control, params)
+	var/list/pa = params2list(params)
+
+	if(pa.Find("right"))
+		master.warnings = !master.warnings
+		to_chat(usr, "<span class='blob'>Toggled warnings [master.warnings ? "ON" : "OFF"].</span>")
+		return
+
+	switch(master.cl.buildmode)
+		if(1)
+			to_chat(usr, "<span class='notice'>Right click on help: toggle warnings on v off.</span>")
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			to_chat(usr, "<span class='notice'>Click and drag to do a fill operation</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button        = Construct / Upgrade</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button       = Deconstruct / Delete / Downgrade</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button + ctrl = R-Window</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button + alt  = Airlock</span>")
+			to_chat(usr, "")
+			to_chat(usr, "<span class='notice'>Use the button in the upper left corner to</span>")
+			to_chat(usr, "<span class='notice'>change the direction of built objects.</span>")
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+		if(2)
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			to_chat(usr, "<span class='notice'>Click and drag to do a fill operation</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Set object type</span>")
+			//this line is green because it is very important
+			to_chat(usr, "<span class='good'>On buildmode button: Rightclick = select type, Ctrlclick = toggle mass v selective, Altclick = toggle fill v delete, Middleclick = toggle exact-type vs children-ok")
+			to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj          = Place objects</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button                     = Delete objects</span>")
+			to_chat(usr, "<span class='notice'>Middle Mouse Button                    = Copy atom</span>")
+			to_chat(usr, "<span class='notice'>Middle Mouse Button twice on a turf    = Area editing mode</span>")
+			to_chat(usr, "")
+			to_chat(usr, "<span class='notice'>Ctrl+Shift+Left Mouse Button           = Sets bottom left corner for fill mode</span>")
+			to_chat(usr, "<span class='notice'>Ctrl+Shift+Right Mouse Button           = Sets top right corner for fill mode</span>")
+
+			to_chat(usr, "")
+			to_chat(usr, "<span class='notice'>Use the button in the upper left corner to</span>")
+			to_chat(usr, "<span class='notice'>change the direction of built objects.</span>")
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+		if(3)
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			to_chat(usr, "<span class='notice'>Click and drag to do a mass edit operation</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Select var(type) & value</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Set var(type) & value</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Reset var's value</span>")
+			to_chat(usr, "<span class='notice'>Middle Mouse Button on turf/obj/mob    = Copy value from object</span>")
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+		if(4)
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Select</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Throw</span>")
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+	return 1
+
+/obj/effect/bmode/buildhelp/DblClick(object,location,control,params)
+	return Click(object,location,control,params)
 
 /obj/effect/bmode/buildquit
 	icon_state = "buildquit"
 	screen_loc = "NORTH,WEST+3"
 
-	Click()
-		togglebuildmode(master.cl.mob)
-		return 1
-	DblClick(object,location,control,params)
-		return Click(object,location,control,params)
+/obj/effect/bmode/buildquit/Click()
+	togglebuildmode(master.cl.mob)
+	return 1
+
+/obj/effect/bmode/buildquit/DblClick(object,location,control,params)
+	return Click(object,location,control,params)
 
 var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 /obj/effect/bmode/buildholder
@@ -146,6 +159,11 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 	var/atom/movable/throw_atom = null
 	var/turf/fill_left
 	var/turf/fill_right
+	var/deletemode = FALSE
+	var/selective = FALSE
+	var/resetvars = FALSE
+	var/strictness = FALSE
+	var/warnings = TRUE
 
 obj/effect/bmode/buildholder/New()
 	..()
@@ -174,6 +192,26 @@ obj/effect/bmode/buildholder/New()
 
 /obj/effect/bmode/buildmode/Click(location, control, params)
 	var/list/pa = params2list(params)
+
+	if(pa.Find("middle"))
+		master.strictness = !master.strictness
+		to_chat(usr, "<span class='blob'>Toggled strictness [master.strictness ? "ON" : "OFF"].</span>")
+		return 1
+
+	if(pa.Find("ctrl"))
+		if(master.cl.buildmode < 4) //1 (basic), 2 (adv), or 3 (edit)
+			master.selective = !master.selective
+			to_chat(usr, "<span class='blob'>Toggled selective mode [master.selective ? "ON" : "OFF"].</span>")
+		return 1
+
+	if(pa.Find("alt"))
+		if(master.cl.buildmode < 3) //1 or 2
+			master.deletemode = !master.deletemode
+			to_chat(usr, "<span class='blob'>Toggled mass delete mode [master.deletemode ? "ON" : "OFF"].</span>")
+		else if(master.cl.buildmode == 3) //edit
+			master.resetvars = !master.resetvars
+			to_chat(usr, "<span class='blob'>Toggled resetvars mode [master.resetvars ? "ON" : "OFF"].</span>")
+		return 1
 
 	if(pa.Find("left"))
 		switch(master.cl.buildmode)
@@ -248,159 +286,138 @@ obj/effect/bmode/buildholder/New()
 	switch(buildmode)
 		if(1 to 2)
 			var/list/fillturfs = block(start,end)
-			if(fillturfs.len)
-				if(alert("You're about to do a fill operation spanning [fillturfs.len] tiles, are you sure?","Panic","Yes","No") == "Yes")
-					if(fillturfs.len > 150)
-						if(alert("Are you completely sure about filling [fillturfs.len] tiles?","Panic!!!!","Yes","No") != "Yes")
-							return
-					var/areaAction = alert("FILL tiles or DELETE them? areaAction will destroy EVERYTHING IN THE SELECTED AREA", "Create or destroy, your chance to be a GOD","FILL","DELETE") == "DELETE"
-					if(areaAction)
-						areaAction = (alert("Selective(TYPE) Delete or MASS Delete?", "Scorched Earth or selective destruction?", "Selective", "MASS") == "Selective" ? 2 : 1)
-					else
-						areaAction = (alert("Mass FILL or Selective(Type => Type) FILL?", "Do they really need [fillturfs.len] of closets?", "Selective", "Mass") == "Selective" ? 3 : 0)
+			if(fillturfs.len < 3) //most likely unintended
+				return
+			if(holder.warnings && alert("You're about to do a fill operation spanning [fillturfs.len] tiles, are you sure?","Panic","Yes","No") == "No")
+				return
+			var/areaAction = holder.deletemode
+			if(areaAction) //1
+				areaAction = holder.selective ? SELECTIVE_DELETE : MASS_DELETE //2 : 1
+			else //0
+				areaAction = holder.selective ? SELECTIVE_FILL : MASS_FILL //3 : 0
 
-					var/whatfill = (buildmode == 1 ? input("What are we filling with?", "So many choices") as null|anything in list(/turf/simulated/floor,/turf/simulated/wall,/turf/simulated/wall/r_wall,/obj/machinery/door/airlock, /obj/structure/window/reinforced) : holder.buildmode.objholder)
-					if(!whatfill)
+			var/whatfill = (buildmode == 1 ? input("What are we filling with?", "So many choices") as null|anything in list(/turf/simulated/floor,/turf/simulated/wall,/turf/simulated/wall/r_wall,/obj/machinery/door/airlock, /obj/structure/window/reinforced) : holder.buildmode.objholder)
+			if(!whatfill)
+				return
+			var/msglog = "<span class='danger'>[key_name_admin(usr)] just buildmode"
+			var/strict = holder.strictness
+			var/chosen
+			switch(areaAction)
+				if(MASS_DELETE)
+					msglog += " <big>DELETED EVERYTHING</big> in [fillturfs.len] tile\s "
+				if(SELECTIVE_DELETE)
+					chosen = easyTypeSelector()
+					if(!chosen)
 						return
-					var/msglog = "<span class='danger'>[key_name_admin(usr)] just buildmode"
-					var/strict = 1
-					var/chosen
-					switch(areaAction)
-						if(MASS_DELETE)
-							msglog += " <big>DELETED EVERYTHING</big> in [fillturfs.len] tile\s "
-						if(SELECTIVE_DELETE)
-							chosen = easyTypeSelector()
-							if(!chosen)
-								return
-							strict = alert("Delete all children of [chosen]?", "Children being all types and subtypes of [chosen]", "Yes", "No") == "No"
-							msglog += " <big>DELETED [!strict ? "ALL TYPES OF " :""][chosen]</big> in [fillturfs.len] tile\s "
-						if(SELECTIVE_FILL)
-							chosen = easyTypeSelector()
-							if(!chosen)
-								return
-							strict = alert("Change all children of [chosen]?", "Children being all types and subtypes of [chosen]", "Yes", "No") == "No"
-							msglog += " Changed all [chosen] in [fillturfs.len] tile\s to [whatfill] "
-						else
-							msglog += " FILLED [fillturfs.len] tile\s with [whatfill] "
-					msglog += "at ([formatJumpTo(start)] to [formatJumpTo(end)])</span>"
-					message_admins(msglog)
-					log_admin(msglog)
-					to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the fill may take longer than typical.</span>")
-					var/deletions = 0
-					for(var/turf/T in fillturfs)
-						if(areaAction == MASS_DELETE || areaAction == SELECTIVE_DELETE)
-							if(ispath(chosen, /turf))
-								T.ChangeTurf(chosen)
+					msglog += " <big>DELETED [!strict ? "ALL TYPES OF " :""][chosen]</big> in [fillturfs.len] tile\s "
+				if(SELECTIVE_FILL)
+					chosen = easyTypeSelector()
+					if(!chosen)
+						return
+					msglog += " Changed all [chosen] in [fillturfs.len] tile\s to [whatfill] "
+				else
+					msglog += " FILLED [fillturfs.len] tile\s with [whatfill] "
+			msglog += "at ([formatJumpTo(start)] to [formatJumpTo(end)])</span>"
+			message_admins(msglog)
+			log_admin(msglog)
+			to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the fill may take longer than typical.</span>")
+			var/deletions = 0
+			for(var/turf/T in fillturfs)
+				if(areaAction == MASS_DELETE || areaAction == SELECTIVE_DELETE)
+					if(ispath(chosen, /turf))
+						T.ChangeTurf(chosen)
+						deletions++
+					else
+						for(var/atom/thing in T.contents)
+							if(thing==usr)
+								continue
+							if(areaAction == MASS_DELETE || v_typechk(thing,chosen,strict))
+								qdel(thing)
 								deletions++
-							else
-								for(var/atom/thing in T.contents)
-									if(thing==usr)
-										continue
-									if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
-										qdel(thing)
-									deletions++
-									CHECK_TICK
-								if(areaAction == MASS_DELETE)
-									T.ChangeTurf(get_base_turf(T.z))
+							CHECK_TICK
+						if(areaAction == MASS_DELETE)
+							T.ChangeTurf(get_base_turf(T.z))
+				else
+					if(ispath(whatfill, /area) || istype(holder.buildmode.copycat, /area))
+						//In case of a selective fill, make sure the turf fits into the criteria before changing it
+						if(areaAction == SELECTIVE_FILL && !v_typechk(T,chosen,strict))
+							continue
+
+						var/area/A
+						if(istype(holder.buildmode.copycat, /area))
+							A = holder.buildmode.copycat
 						else
-							if(ispath(whatfill, /area) || istype(holder.buildmode.copycat, /area))
-								//In case of a selective fill, make sure the turf fits into the criteria before changing it
-								if(areaAction == SELECTIVE_FILL)
-									if(strict)
-										if(T.type != chosen)
-											continue
-									else
-										if(!istype(T, chosen))
-											continue
+							A = locate(whatfill)
 
-								var/area/A
-								if(istype(holder.buildmode.copycat, /area))
-									A = holder.buildmode.copycat
-								else
-									A = locate(whatfill)
+						T.set_area(A)
+					else if(ispath(whatfill, /turf))
+						if(areaAction == SELECTIVE_FILL && !v_typechk(T,chosen,strict))
+							continue
 
-								T.set_area(A)
-							else if(ispath(whatfill, /turf))
-								if(areaAction == SELECTIVE_FILL)
-									if(strict)
-										if(T.type != chosen)
-											continue
-									else
-										if(!istype(T, chosen))
-											continue
-
-								T.ChangeTurf(whatfill)
-							else
-								if(areaAction == SELECTIVE_FILL)
-									for(var/atom/thing in T.contents)
-										if(strict)
-											if(thing.type != chosen)
-												continue
-										else
-											if(!istype(thing, chosen))
-												continue
-										var/atom/A = new whatfill(T)
-										A.dir = thing.dir
-										qdel(thing)
-										CHECK_TICK
-								else
-									var/obj/A = new whatfill(T)
-									if(istype(A))
-										A.dir = holder.builddir.dir
-						CHECK_TICK
-					if(deletions)
-						to_chat(usr, "<span class='info'>Successfully deleted [deletions] [chosen]'\s</span>")
+						T.ChangeTurf(whatfill)
+					else
+						if(areaAction == SELECTIVE_FILL)
+							for(var/atom/thing in T.contents)
+								if(!v_typechk(thing,chosen,strict))
+									continue
+								var/atom/A = new whatfill(T)
+								A.dir = thing.dir
+								qdel(thing)
+								CHECK_TICK
+						else
+							var/obj/A = new whatfill(T)
+							if(istype(A))
+								A.dir = holder.builddir.dir
+				CHECK_TICK
+			if(deletions)
+				to_chat(usr, "<span class='info'>Successfully deleted [deletions] [chosen]'\s</span>")
 		if(3)
 			var/list/fillturfs = block(start,end)
-			if(fillturfs.len)
-				if(alert("You're about to do a mass edit operation spanning [fillturfs.len] tiles, are you sure?","Panic","Yes","No") == "Yes")
-					if(fillturfs.len > 150)
-						if(alert("Are you completely sure about mass editng [fillturfs.len] tiles?","Panic!!!!","Yes","No") != "Yes")
-							return
-
-					var/areaAction = (alert("Selective(TYPE) Edit or MASS Edit?", "Editing things one by one sure is annoying", "Selective", "MASS") == "Selective" ? 2 : 1)
-					var/reset = alert("Reset target variable to initial value?", "Aw shit cletus i dun fucked up", "Yes", "No") == "Yes" ? 1 : 0
+			if(fillturfs.len < 3)
+				return
+			if(holder.warnings && alert("You're about to do a mass edit operation spanning [fillturfs.len] tiles, are you sure?","Panic","Yes","No") == "No")
+				return
+			var/reset = holder.resetvars
 
 
-					var/msglog = "<span class='danger'>[key_name_admin(usr)] just buildmode"
-					var/strict = 1
-					var/chosen
-					switch(areaAction)
-						if(MASS_DELETE)
-							msglog += " <big>EDITED EVERYTHING</big> in [fillturfs.len] tile\s "
-						if(SELECTIVE_DELETE)
-							chosen = easyTypeSelector()
-							if(!chosen)
-								return
-							strict = alert("Edit all children of [chosen]?", "Children being all types and subtypes of [chosen]", "Yes", "No") == "No"
-							msglog += " <big>EDITED [!strict ? "ALL TYPES OF " :""][chosen]</big> in [fillturfs.len] tile\s "
-						else
-							return
-					msglog += "at ([formatJumpTo(start)] to [formatJumpTo(end)])</span>"
-					message_admins(msglog)
-					log_admin(msglog)
-					to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the mass edit may take longer than typical.</span>")
-					var/edits = 0
-					for(var/turf/T in fillturfs)
-						if(ispath(chosen, /turf))
-							setvar(holder.buildmode.varholder, holder.buildmode.valueholder, T, reset)
-						else
-							for(var/atom/thing in T.contents)
-								if(thing==usr)
-									continue
-								if(thing.invisibility > usr.see_invisible)
-									continue
-								if(!istype(thing, /mob) && !istype(thing, /obj)) //Checks if thing is either an object or a mob. Ignore other /atom/movable subtypes (such as lighting overlays)
-									continue
+			var/msglog = "<span class='danger'>[key_name_admin(usr)] just buildmode"
+			var/strict = holder.strictness
+			var/chosen
+			switch(holder.selective)
+				if(FALSE)
+					msglog += " <big>EDITED EVERYTHING</big> in [fillturfs.len] tile\s "
+				if(TRUE)
+					chosen = easyTypeSelector()
+					if(!chosen)
+						return
+					msglog += " <big>EDITED [!strict ? "ALL TYPES OF " :""][chosen]</big> in [fillturfs.len] tile\s "
+				else
+					return
+			msglog += "at ([formatJumpTo(start)] to [formatJumpTo(end)])</span>"
+			message_admins(msglog)
+			log_admin(msglog)
+			to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the mass edit may take longer than typical.</span>")
+			var/edits = 0
+			for(var/turf/T in fillturfs)
+				if(ispath(chosen, /turf))
+					setvar(holder.buildmode.varholder, holder.buildmode.valueholder, T, reset)
+				else
+					for(var/atom/thing in T.contents)
+						if(thing==usr)
+							continue
+						if(thing.invisibility > usr.see_invisible)
+							continue
+						if(!istype(thing, /mob) && !istype(thing, /obj)) //Checks if thing is either an object or a mob. Ignore other /atom/movable subtypes (such as lighting overlays)
+							continue
 
-								if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
-									setvar(holder.buildmode.varholder, holder.buildmode.valueholder, thing, reset, log = FALSE)
-									edits++
-								CHECK_TICK
-						edits++
+						if(!holder.selective || v_typechk(thing,chosen,strict))
+							setvar(holder.buildmode.varholder, holder.buildmode.valueholder, thing, reset, log = FALSE)
+							edits++
 						CHECK_TICK
-					if(edits)
-						to_chat(usr, "<span class='info'>Successfully edited [edits] [chosen]'\s</span>")
+				edits++
+				CHECK_TICK
+			if(edits)
+				to_chat(usr, "<span class='info'>Successfully edited [edits] [chosen]'\s</span>")
 		else
 			return
 
