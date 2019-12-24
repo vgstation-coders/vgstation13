@@ -27,7 +27,7 @@
 	desc = "Named for the Roman goddess of fire and the hearth, this heater takes in more air and warms it faster. It's immobile and expends 5x as much power, drawn from the local APC."
 
 	intake_rate = 1
-	heating_power = 200000 //that's a spicy heater!
+	heating_power = 400000 //that's a spicy heater!
 	light_power_on = 2
 	set_temperature = 35 //so powerful, let's shut off early
 	icon_state = "vheater0"
@@ -38,7 +38,7 @@
 	return !(stat & NOPOWER)
 
 /obj/machinery/space_heater/vesta/drain_powersource(var/amount = heating_power)
-	use_power(amount/20000)
+	use_power(amount/40000) //uses 10x the power but 2x as efficient (5x consumption)
 
 /obj/machinery/space_heater/vesta/afterheat(var/datum/gas_mixture/G)
 	if(G.temperature >= set_temperature + T0C)
