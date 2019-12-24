@@ -206,9 +206,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			if (O)
 				veil_thickness = CULT_ACT_IV
 				new_obj = new /datum/objective/bloodcult_tearinreality
-				sleep(150) //A delay before the anchor stone is announced
-				if(global_anchor_bloodstone) //Check if it exploded in the mean time
-					command_alert(/datum/command_alert/bloodstones_anchor)
+				spawn(15 SECONDS) //A delay before the anchor stone is announced
+					if(global_anchor_bloodstone) //Check if it exploded in the mean time
+						command_alert(/datum/command_alert/bloodstones_anchor)
 		if (CULT_EPILOGUE)
 			var/datum/objective/bloodcult_tearinreality/O = locate() in objective_holder.objectives
 			if (O)
