@@ -206,18 +206,27 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 		var/list/L = call(cur.source,adjacent)(id,closed)
 
 		for(var/turf/T in L)
+			if(T.color != "#00ff00")
+				T.color = "#FFA500" //orange
 			if(T == exclude)
+				if(T.color != "#00ff00")
+					T.color = "#FF0000" //red
 				continue
 
 			var/newg = cur.g + call(cur.source,dist)(T)
 			if(!T.PNode) //is not already in open list, so add it
 				open.Enqueue(new /PathNode(T,cur,newg,call(T,dist)(end),cur.nt+1))
+				if(T.color != "#00ff00")
+					T.color = "#0000ff" //blue
 			else //is already in open list, check if it's a better way from the current turf
 				if(newg < T.PNode.g)
+					T.color = "#00ff00" //green
 					T.PNode.prevNode = cur
 					T.PNode.g = newg
 					T.PNode.calc_f()
 					open.ReSort(T.PNode)//reorder the changed element in the list
+			to_chat(world, "[T.x] [T.y] [T.z], [T.color]")
+		sleep(5)
 
 	}
 
@@ -343,3 +352,18 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 	return 0
 
 /////////////////////////////////////////////////////////////////////////
+
+/atom/proc/make_astar_path(var/atom/target)
+	var/list/L = AStar(get_turf(src), get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30)
+	if(L)
+		to_chat(world, "make astar path succeeded")
+		pathfinders.Add(src)
+		return L
+	to_chat(world, "make astar path failed.")
+	return FALSE
+
+/atom/proc/process_astar_path()
+	return FALSE
+
+/atom/proc/drop_astar_path()
+	pathfinders.Remove(src)
