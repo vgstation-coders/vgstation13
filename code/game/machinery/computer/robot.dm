@@ -32,8 +32,6 @@
 				continue
 		if(R.scrambledcodes)
 			continue
-		if(z != R.z) //Not on the same z-level
-			continue
 		dat += "[R.name] |"
 		if(R.stat)
 			dat += " Not Responding |"
@@ -54,19 +52,22 @@
 			dat += " Slaved to [R.connected_ai.name] |"
 		else
 			dat += " Independent from AI |"
-		if(ismalf(user) && R.connected_ai == user)
-			if(R.emagged != MALFHACKED)
-				dat += "<A href='?src=\ref[src];hackbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A>"
-			else
-				dat += "<font color=green>Hacked</font>"
+		if(z == R.z)
+			if(ismalf(user) && R.connected_ai == user)
+				if(R.emagged != ROBOT_MALFHACKED)
+					dat += "<A href='?src=\ref[src];hackbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A>"
+				else
+					dat += "<font color=green>Hacked</font>"
 /*
-			else if(R.emagged == MALFHACKED)
-				dat += "<A href='?src=\ref[src];unhackbot=\ref[R]'>(<font color=blue><i>Repair</i></font>)</A>"
+				else if(R.emagged == ROBOT_MALFHACKED)
+					dat += "<A href='?src=\ref[src];unhackbot=\ref[R]'>(<font color=blue><i>Repair</i></font>)</A>"
 */
-		dat += {"<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
-			<A href='?src=\ref[src];lockbot=\ref[R]'>(<font color=orange><i>[R.modulelock ? "Module-unlock" : "Module-lock"]</i></font>)</A>
-			<A href='?src=\ref[src];killbot=\ref[R]'>(<font color=red><i>Destroy</i></font>)</A>
-			<BR><BR>"}
+			dat += {"<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
+				<A href='?src=\ref[src];lockbot=\ref[R]'>(<font color=orange><i>[R.modulelock ? "Module-unlock" : "Module-lock"]</i></font>)</A>
+				<A href='?src=\ref[src];killbot=\ref[R]'>(<font color=red><i>Destroy</i></font>)</A>
+				<BR><BR>"}
+		else
+			dat += "Out of range"
 
 	user << browse(dat, "window=computer;size=400x500")
 	onclose(user, "computer")
@@ -125,7 +126,7 @@
 				if(!sanity_check(usr, R))
 					return
 				log_game("[key_name(usr)] hacked [R.name] using the robotics console!")
-				R.SetEmagged(MALFHACKED)
+				R.SetEmagged(ROBOT_MALFHACKED)
 				if(R.mind.special_role)
 					R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
 /* //Unhacking borgs doesn't remove their emagged module currently
@@ -135,7 +136,7 @@
 				if(!sanity_check(usr, R))
 					return
 				log_game("[key_name(usr)] un-hacked [R.name] using the robotics console!")
-				R.SetEmagged(UNHACKED)
+				R.SetEmagged(ROBOT_UNHACKED)
 */
 		src.add_fingerprint(usr)
 	src.updateUsrDialog()

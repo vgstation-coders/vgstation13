@@ -57,9 +57,9 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 	return pickable_modules
 
 //Emagged silicon defines
-#define UNHACKED 0
-#define HACKED 1
-#define MALFHACKED 2
+#define ROBOT_UNHACKED 0
+#define ROBOT_HACKED 1
+#define ROBOT_MALFHACKED 2
 
 //Module quirks
 #define MODULE_CAN_BE_PUSHED 1			//What says on the tin.
