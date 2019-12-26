@@ -65,13 +65,13 @@
 		var/spell/S = new wizard_spell
 		all_spells += wizard_spell
 		if (!S.holiday_required.len || (Holiday in S.holiday_required))
-			if(S.specialization == OFFENSIVE)
+			if(S.specialization == SSOFFENSIVE)
 				offensive_spells += wizard_spell
-			if(S.specialization == DEFENSIVE)
+			if(S.specialization == SSDEFENSIVE)
 				defensive_spells += wizard_spell
-			if(S.specialization == UTILITY)
+			if(S.specialization == SSUTILITY)
 				utility_spells += wizard_spell
-			if(S.specialization == SPELL_SPECIALIZATION_DEFAULT)
+			else
 				misc_spells += wizard_spell
 
 	for(var/T in available_artifacts)

@@ -2,7 +2,7 @@
 	name = "Pacify"
 	desc = "Generates a burst of calming energies which inhibit hostile behavior in living beings. The caster is slightly affected by channeling these energies."
 	user_type = USER_TYPE_WIZARD
-	specialization = DEFENSIVE
+	specialization = SSDEFENSIVE
 
 	charge_max = 45 SECONDS
 	cooldown_reduc = 15 SECONDS
