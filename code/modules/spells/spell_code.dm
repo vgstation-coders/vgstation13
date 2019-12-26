@@ -15,6 +15,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/charge_type = Sp_RECHARGE //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with Sp_GRADUAL
 	//The following are allowed: Sp_RECHARGE (Recharges), Sp_CHARGE (Limited uses), Sp_GRADUAL (Gradually lose charges), Sp_PASSIVE (Does not cast)
 
+	var/initial_charge_max = 100 //Used to calculate cooldown reduction
 	var/charge_max = 100 //recharge time in deciseconds if charge_type = Sp_RECHARGE or starting charges if charge_type = Sp_CHARGES
 	var/charge_counter = 0 //can only cast spells if it equals recharge, ++ each decisecond if charge_type = Sp_RECHARGE or -- each cast if charge_type = Sp_CHARGES
 	var/minimum_charge = 0 //if set, the minimum charge_counter necessary to cast Sp_GRADUAL spells
@@ -110,6 +111,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	//still_recharging_msg = "<span class='notice'>[name] is still recharging.</span>"
 	charge_counter = charge_max
+	initial_charge_max = charge_max //Let's not add charge_max_initial to roughly 80 (at the time of this comment) spells
 
 /spell/proc/set_holder(var/new_holder)
 	if(holder == new_holder)
@@ -519,7 +521,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(cooldown_reduc)
 			charge_max = max(cooldown_min, charge_max - cooldown_reduc)
 		else
-			charge_max = round( max(cooldown_min, initial(charge_max) * ((level_max[Sp_SPEED] - spell_levels[Sp_SPEED]) / level_max[Sp_SPEED] ) ) ) //the fraction of the way you are to max speed levels is the fraction you lose
+			charge_max = round(initial_charge_max - spell_levels[Sp_SPEED] * (initial_charge_max - cooldown_min)/ level_max[Sp_SPEED])
 	if(charge_max < charge_counter)
 		charge_counter = charge_max
 
