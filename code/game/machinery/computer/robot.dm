@@ -8,98 +8,65 @@
 	icon_state = "robot"
 	req_access = list(access_robotics)
 	circuit = "/obj/item/weapon/circuitboard/robotics"
-
-	var/id = 0.0
-	var/temp = null
-	var/status = 0
-	var/timeleft = 60
-	var/stop = 0.0
-	var/screen = 0 // 0 - Main Menu, 1 - Cyborg Status, 2 - Kill 'em All! -- In text
-
 	light_color = LIGHT_COLOR_PINK
-
 
 /obj/machinery/computer/robotics/attack_ai(var/mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
 
 /obj/machinery/computer/robotics/attack_paw(var/mob/user as mob)
-
 	return src.attack_hand(user)
-	return
 
 /obj/machinery/computer/robotics/attack_hand(var/mob/user as mob)
 	if(..())
 		return
-	if (src.z > 6)
-		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
-		return
 	user.set_machine(src)
 	var/dat
-	if (src.temp)
-		dat = "<TT>[src.temp]</TT><BR><BR><A href='?src=\ref[src];temp=1'>Clear Screen</A>"
-	else
-		if(screen == 0)
-
-			dat += {"<h3>Cyborg Control Console</h3><BR>
-				<A href='?src=\ref[src];screen=1'>1. Cyborg Status</A><BR>
-				<A href='?src=\ref[src];screen=2'>2. Emergency Full Destruct</A><BR>"}
-		if(screen == 1)
-			for(var/mob/living/silicon/robot/R in mob_list)
-				if(istype(user, /mob/living/silicon/ai))
-					if (R.connected_ai != user)
-						continue
-				if(istype(user, /mob/living/silicon/robot))
-					if (R != user)
-						continue
-				if(R.scrambledcodes)
-					continue
-
-				dat += "[R.name] |"
-				if(R.stat)
-					dat += " Not Responding |"
-				else if (!R.canmove)
-					dat += " Locked Down |"
-				else
-					dat += " Operating Normally |"
-				if (!R.canmove)
-				else if(R.cell)
-					dat += " Battery Installed ([R.cell.charge]/[R.cell.maxcharge]) |"
-				else
-					dat += " No Cell Installed |"
-				if(R.module)
-					dat += " Module Installed ([R.module.name]) |"
-				else
-					dat += " No Module Installed |"
-				if(R.connected_ai)
-					dat += " Slaved to [R.connected_ai.name] |"
-				else
-					dat += " Independent from AI |"
-				if(issilicon(user) && ismalf(user) && !R.emagged)
-					dat += "<A href='?src=\ref[src];magbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A> "
-
-				dat += {"<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
-					<A href='?src=\ref[src];lockbot=\ref[R]'>(<font color=orange><i>[R.modulelock ? "Module-unlock" : "Module-lock"]</i></font>)</A>
-					<A href='?src=\ref[src];killbot=\ref[R]'>(<font color=red><i>Destroy</i></font>)</A>
-					<BR>"}
-			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
-		if(screen == 2)
-			if(!src.status)
-				dat += {"<BR><B>Emergency Robot Self-Destruct</B><HR>\nStatus: Off<BR>
-				\n<BR>
-				\nCountdown: [src.timeleft]/60 <A href='?src=\ref[src];reset=1'>\[Reset\]</A><BR>
-				\n<BR>
-				\n<A href='?src=\ref[src];eject=1'>Start Sequence</A><BR>
-				\n<BR>
-				\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
+	dat += {"<h3>Cyborg Control Console</h3><BR>"}
+	for(var/mob/living/silicon/robot/R in mob_list)
+		if(istype(user, /mob/living/silicon/ai))
+			if(R.connected_ai != user)
+				continue
+		if(istype(user, /mob/living/silicon/robot))
+			if(R != user)
+				continue
+		if(R.scrambledcodes)
+			continue
+		if(z != R.z) //Not on the same z-level
+			continue
+		dat += "[R.name] |"
+		if(R.stat)
+			dat += " Not Responding |"
+		else if (!R.canmove)
+			dat += " Locked Down |"
+		else
+			dat += " Operating Normally |"
+		if (!R.canmove)
+		else if(R.cell)
+			dat += " Battery Installed ([R.cell.charge]/[R.cell.maxcharge]) |"
+		else
+			dat += " No Cell Installed |"
+		if(R.module)
+			dat += " Module Installed ([R.module.name]) |"
+		else
+			dat += " No Module Installed |"
+		if(R.connected_ai)
+			dat += " Slaved to [R.connected_ai.name] |"
+		else
+			dat += " Independent from AI |"
+		if(ismalf(user) && R.connected_ai == user)
+			if(R.emagged != MALFHACKED)
+				dat += "<A href='?src=\ref[src];hackbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A>"
 			else
-				dat = {"<B>Emergency Robot Self-Destruct</B><HR>\nStatus: Activated<BR>
-				\n<BR>
-				\nCountdown: [src.timeleft]/60 \[Reset\]<BR>
-				\n<BR>\n<A href='?src=\ref[src];stop=1'>Stop Sequence</A><BR>
-				\n<BR>
-				\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
-			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
+				dat += "<font color=green>Hacked</font>"
+/*
+			else if(R.emagged == MALFHACKED)
+				dat += "<A href='?src=\ref[src];unhackbot=\ref[R]'>(<font color=blue><i>Repair</i></font>)</A>"
+*/
+		dat += {"<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
+			<A href='?src=\ref[src];lockbot=\ref[R]'>(<font color=orange><i>[R.modulelock ? "Module-unlock" : "Module-lock"]</i></font>)</A>
+			<A href='?src=\ref[src];killbot=\ref[R]'>(<font color=red><i>Destroy</i></font>)</A>
+			<BR><BR>"}
 
 	user << browse(dat, "window=computer;size=400x500")
 	onclose(user, "computer")
@@ -110,65 +77,11 @@
 		return 1
 	else
 		usr.set_machine(src)
-
-		if (href_list["eject"])
-			src.temp = {"Destroy Robots?<BR>
-			<BR><B><A href='?src=\ref[src];eject2=1'>\[Swipe ID to initiate destruction sequence\]</A></B><BR>
-			<A href='?src=\ref[src];temp=1'>Cancel</A>"}
-
-		else if (href_list["eject2"])
-			var/obj/item/weapon/card/id/I = usr.get_active_hand()
-			if (istype(I, /obj/item/device/pda))
-				var/obj/item/device/pda/pda = I
-				I = pda.id
-			if (istype(I))
-				if(src.check_access(I))
-					if (!status)
-						message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
-						log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
-						src.status = 1
-						src.start_sequence()
-						src.temp = null
-
-				else
-					to_chat(usr, "<span class='warning'>Access Denied.</span>")
-
-		else if (href_list["stop"])
-			src.temp = {"
-			Stop Robot Destruction Sequence?<BR>
-			<BR><A href='?src=\ref[src];stop2=1'>Yes</A><BR>
-			<A href='?src=\ref[src];temp=1'>No</A>"}
-
-		else if (href_list["stop2"])
-			src.stop = 1
-			src.temp = null
-			src.status = 0
-
-		else if (href_list["reset"])
-			src.timeleft = 60
-
-		else if (href_list["temp"])
-			src.temp = null
-		else if (href_list["screen"])
-			switch(href_list["screen"])
-				if("0")
-					screen = 0
-				if("1")
-					screen = 1
-				if("2")
-					screen = 2
-		else if (href_list["killbot"])
-			if(src.allowed(usr))
+		if(href_list["killbot"])
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["killbot"])
 				if(R)
-					if(istype(usr, /mob/living/silicon/ai))
-						if (R.connected_ai != usr)
-							return
-					if(istype(usr, /mob/living/silicon/robot))
-						if (R != usr)
-							return
-					if(R.scrambledcodes)
-						return
+					sanity_check(usr, R)
 					var/choice = input("Are you certain you wish to detonate [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
@@ -177,103 +90,67 @@
 								log_game("<span class='notice'>[key_name_admin(usr)] detonated [R.name]!</span>")
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
-		else if (href_list["lockbot"])
-			if(src.allowed(usr))
+		else if(href_list["lockbot"])
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["lockbot"])
 				if(R && istype(R))
-					if(istype(usr, /mob/living/silicon/ai))
-						if (R.connected_ai != usr)
-							return
-					if(istype(usr, /mob/living/silicon/robot))
-						if (R != usr)
-							return
-					if(R.scrambledcodes)
+					if(!sanity_check(usr, R))
 						return
-					var/choice = input("Are you certain you wish to [R.modulelock ? "module-unlock" : "module-lock"] [R.name]?") in list("Confirm", "Abort")
-					if(choice == "Confirm")
-						if(R && istype(R))
-							message_admins("<span class='notice'>[key_name_admin(usr)] [R.modulelock ? "module-unlocked" : "module-locked"] [R.name]!</span>")
-							log_game("[key_name(usr)] [R.modulelock ? "module-unlocked" : "module-locked"] [R.name]!")
-							R.toggle_modulelock()
-							if (R.modulelock)
-								to_chat(R, "<span class='info' style=\"font-family:Courier\">Your modules have been remotely locked!</span>")
-							else
-								to_chat(R, "<span class='info' style=\"font-family:Courier\">Your modules have been remotely unlocked!</span>")
-
+					message_admins("<span class='notice'>[key_name_admin(usr)] [R.modulelock ? "module-unlocked" : "module-locked"] [R.name]!</span>")
+					log_game("[key_name(usr)] [R.modulelock ? "module-unlocked" : "module-locked"] [R.name]!")
+					R.toggle_modulelock()
+					to_chat(R, "<span class='info' style=\"font-family:Courier\">Your modules have been remotely [R.modulelock ? "" : "un"]locked!</span>")
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
-		else if (href_list["stopbot"])
-			if(src.allowed(usr))
+		else if(href_list["stopbot"])
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["stopbot"])
 				if(R && istype(R)) // Extra sancheck because of input var references
-					if(istype(usr, /mob/living/silicon/ai))
-						if (R.connected_ai != usr)
-							return
-					if(istype(usr, /mob/living/silicon/robot))
-						if (R != usr)
-							return
-					if(R.scrambledcodes)
+					if(!sanity_check(usr, R))
 						return
-					var/choice = input("Are you certain you wish to [R.canmove ? "lock down" : "release"] [R.name]?") in list("Confirm", "Abort")
-					if(choice == "Confirm")
-						if(R && istype(R))
-							message_admins("<span class='notice'>[key_name_admin(usr)] [R.canmove ? "locked down" : "released"] [R.name]!</span>")
-							log_game("[key_name(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
-							R.canmove = !R.canmove
-							if (R.lockcharge)
-							//	R.cell.charge = R.lockcharge
-								R.lockcharge = !R.lockcharge
-								to_chat(R, "Your lockdown has been lifted!")
-							else
-								R.lockcharge = !R.lockcharge
-						//		R.cell.charge = 0
-								to_chat(R, "You have been locked down!")
-
+					message_admins("<span class='notice'>[key_name_admin(usr)] [R.canmove ? "locked down" : "released"] [R.name]!</span>")
+					log_game("[key_name(usr)] [R.canmove ? "locked down" : "released"] [R.name]!")
+					R.canmove = !R.canmove
+					if(R.lockcharge)
+						R.lockcharge = !R.lockcharge
+						to_chat(R, "Your lockdown has been lifted!")
+					else
+						R.lockcharge = !R.lockcharge
+						to_chat(R, "You have been locked down!")
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
-
-		else if (href_list["magbot"])
-			if(src.allowed(usr))
-				var/mob/living/silicon/robot/R = locate(href_list["magbot"])
-				if(istype(usr, /mob/living/silicon/ai))
-					if (R.connected_ai != usr)
-						return
-				if(istype(usr, /mob/living/silicon/robot))
-					if (R != usr)
-						return
-				if(R.scrambledcodes)
+		else if(href_list["hackbot"])
+			var/mob/living/silicon/robot/R = locate(href_list["hackbot"])
+			if(R && istype(R))
+				if(!sanity_check(usr, R))
 					return
-				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
-				if(istype(R) && istype(usr, /mob/living/silicon) && usr.mind.special_role && (usr.mind.original == usr) && R.emagged != 1)
-					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
-					if(choice == "Confirm")
-						if(R && istype(R))
-//							message_admins("<span class='notice'>[key_name_admin(usr)] emagged [R.name] using robotic console!</span>")
-							log_game("[key_name(usr)] emagged [R.name] using robotic console!")
-							R.SetEmagged(2)
-							if(R.mind.special_role)
-								R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
-
+				log_game("[key_name(usr)] hacked [R.name] using the robotics console!")
+				R.SetEmagged(MALFHACKED)
+				if(R.mind.special_role)
+					R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
+/* //Unhacking borgs doesn't remove their emagged module currently
+		else if(href_list["unhackbot"])
+			var/mob/living/silicon/robot/R = locate(href_list["unhackbot"])
+			if(R && istype(R))
+				if(!sanity_check(usr, R))
+					return
+				log_game("[key_name(usr)] un-hacked [R.name] using the robotics console!")
+				R.SetEmagged(UNHACKED)
+*/
 		src.add_fingerprint(usr)
 	src.updateUsrDialog()
 	return
 
-/obj/machinery/computer/robotics/proc/start_sequence()
-
-
-	do
-		if(src.stop)
-			src.stop = 0
-			return
-		src.timeleft--
-		sleep(10)
-	while(src.timeleft)
-
-	for(var/mob/living/silicon/robot/R in mob_list)
-		if(!R.scrambledcodes)
-			R.self_destruct()
-
-	return
+//Because the console is made in HTML, it requires a slight copypasted check so that the conditions remain true, namely
+//checking if the robot is still connected to the AI if the user is an AI, and if the borg got scrambled codes from traitorborg shenanigans
+/obj/machinery/computer/robotics/proc/sanity_check(var/mob/user, var/mob/living/silicon/robot/R)
+	if(istype(user, /mob/living/silicon/ai))
+		if(R.connected_ai != user)
+			return 0
+	if(R.scrambledcodes)
+		return 0
+	else
+		return 1
 
 /obj/machinery/computer/robotics/emag(mob/user)
 	..()
