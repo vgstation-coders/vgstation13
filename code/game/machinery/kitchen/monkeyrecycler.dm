@@ -39,9 +39,12 @@
 	if(lasercount == 3)
 		can_recycle_live = TRUE
 
-/obj/machinery/monkey_recycler/proc/process_monkey(var/obj/item/O as obj, var/mob/user as mob)
-	add_fingerprint(user)
+/obj/machinery/monkey_recycler/attackby(var/obj/item/O, var/mob/user)
+	if(..())
+		return 1
+	process_monkey(O, user)
 
+/obj/machinery/monkey_recycler/proc/process_monkey(var/obj/item/O, var/mob/user)
 	if(istype(O, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
 		var/grabbed = G.affecting
@@ -104,4 +107,5 @@
 		return
 	if(!ishigherbeing(user) && !isrobot(user))
 		return
+	add_fingerprint(user)
 	process_monkey(O,user)
