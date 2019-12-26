@@ -64,15 +64,16 @@
 	for(var/wizard_spell in getAllWizSpells())
 		var/spell/S = new wizard_spell
 		all_spells += wizard_spell
-		if (!S.holiday_required.len || (Holiday in S.holiday_required))
-			if(S.specialization == SSOFFENSIVE)
-				offensive_spells += wizard_spell
-			if(S.specialization == SSDEFENSIVE)
-				defensive_spells += wizard_spell
-			if(S.specialization == SSUTILITY)
-				utility_spells += wizard_spell
-			else
-				misc_spells += wizard_spell
+		if(!S.holiday_required.len || (Holiday in S.holiday_required))
+			switch(S.specialization)
+				if(SSOFFENSIVE)
+					offensive_spells += wizard_spell
+				if(SSDEFENSIVE)
+					defensive_spells += wizard_spell
+				if(SSUTILITY)
+					utility_spells += wizard_spell
+				else
+					misc_spells += wizard_spell
 
 	for(var/T in available_artifacts)
 		available_artifacts.Add(new T) //Create a new object with the path T
