@@ -11,8 +11,8 @@
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 7
+	level_max = list(Sp_TOTAL = 0, Sp_SPEED = 0, Sp_POWER = 0)
 	inner_radius = 1
-	cooldown_min = 5 //4 deciseconds reduction per rank
 	hud_state = "wiz_blink"
 	selection_type = "range"
 
@@ -31,7 +31,7 @@
 
 /spell/aoe_turf/blink/proc/makeAnimation(var/turf/T, var/turf/starting)
 	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
-	smoke.set_up(1, 0, T)
+	smoke.set_up(3, 0, T)
 	smoke.start()
 
 /spell/aoe_turf/blink/vamp
