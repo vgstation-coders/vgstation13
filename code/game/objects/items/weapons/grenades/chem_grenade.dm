@@ -99,7 +99,7 @@
 		user.before_take_item(src)
 		user.put_in_hands(E)
 		qdel(src)
-	else if(is_screwdriver(W) && path != 2)
+	else if(W.is_screwdriver(user) && path != 2)
 		if(stage == 1)
 			path = 1
 			if(beakers.len)
@@ -342,7 +342,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 		icon_state = initial(icon_state) +"_ass"
 		name = "unsecured EX grenade with [beakers.len] containers[detonator?" and detonator":""]"
 		stage = 1
-	else if(W.is_screwdriver() && path != 2)
+	else if(W.is_screwdriver(user) && path != 2)
 		if(stage == 1)
 			path = 1
 			if(beakers.len)

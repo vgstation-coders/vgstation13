@@ -52,7 +52,7 @@
 
 		return
 
-	if(is_screwdriver(W))
+	if(W.is_screwdriver(user))
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
@@ -154,7 +154,7 @@
 
 		return
 
-	if(is_screwdriver(W))
+	if(W.is_screwdriver(user))
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
@@ -312,7 +312,7 @@
 					build_step--
 					update_icon()
 					return
-				if(W.is_screwdriver())
+				if(W.is_screwdriver(user))
 					var/obj/item/device/deskbell/D = null
 					if(has_signaler)
 						D = new /obj/item/device/deskbell/signaler(get_turf(src))
