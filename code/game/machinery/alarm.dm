@@ -1104,7 +1104,7 @@ var/global/list/airalarm_presets = list(
 
 			else if(iscrowbar(W))
 				to_chat(user, "You start prying out the circuit...")
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(src, W.toolsound, 50, 1)
 				if(do_after(user, src, 20) && buildstage == 1)
 					to_chat(user, "You pry out the circuit!")
 					new /obj/item/weapon/circuitboard/air_alarm(get_turf(user))
@@ -1289,7 +1289,7 @@ FIRE ALARM
 
 				else if(iscrowbar(W))
 					to_chat(user, "You start prying out the circuit...")
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					playsound(src, W.toolsound, 50, 1)
 					if (do_after(user, src,  20) && buildstage == 1)
 						to_chat(user, "You pry out the circuit!")
 						new /obj/item/weapon/circuitboard/fire_alarm(get_turf(user))

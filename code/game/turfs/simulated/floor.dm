@@ -537,7 +537,7 @@ turf/simulated/floor/update_icon()
 
 		make_plating()
 		// Can't play sounds from areas. - N3X
-		playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
+		playsound(src, C.toolsound, 80, 1)
 
 		return
 	else if(C.is_screwdriver(user))

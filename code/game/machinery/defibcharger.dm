@@ -83,13 +83,13 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 		return
 	return(..())
 
-/obj/machinery/recharger/defibcharger/wallcharger/crowbarDestroy()
-	if(..() == 1)
+/obj/machinery/recharger/defibcharger/wallcharger/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+	if(..())
 		if(charging)
 			charging.forceMove(src.loc)
 			charging = null
-		return 1
-	return -1
+		return TRUE
+	return FALSE
 
 obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as obj, mob/user as mob)
 	if(istype(G, /obj/item/weapon/melee/defibrillator))

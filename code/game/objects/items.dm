@@ -47,7 +47,6 @@
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
 	var/list/species_fit = null //This object has a different appearance when worn by these species
-	var/surgery_speed = 1 //When this item is used as a surgery tool, multiply the delay of the surgery step by this much.
 	var/nonplant_seed_type
 
 	var/list/attack_verb // used in attack() to say how something was attacked "[x] [z.attack_verb] [y] with [z]". Present tense.
@@ -71,8 +70,8 @@
 	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
 	var/image/pathogen
 
-	var/toolsound = null
-	var/toolspeed = 1
+	var/toolsound = null //The sound it makes when used as a tool.
+	var/toolspeed = 1 //When this item is used as a tool, multiply the delay of its do_after by this much. Unless the item is a drill, because.
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)

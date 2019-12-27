@@ -142,7 +142,7 @@
 		var/obj/U = locate(/obj) in upgrades
 		if(U)
 			to_chat(user, "You unattach \the [U] from the assembly.")
-			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+			playsound(src, W.toolsound, 50, 1)
 			U.forceMove(get_turf(src))
 			upgrades -= U
 		return

@@ -214,7 +214,7 @@ var/list/mass_drivers = list()
 		if(4) // Grille in place
 			if(iscrowbar(W))
 				to_chat(user, "You begin to pry off the grille from \the [src]...")
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(src, W.toolsound, 50, 1)
 				if(do_after(user, src, 30) && (build == 4))
 					new /obj/item/stack/rods(loc,2)
 					build--

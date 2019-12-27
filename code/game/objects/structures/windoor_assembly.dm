@@ -211,7 +211,7 @@ obj/structure/windoor_assembly/Destroy()
 			to_chat(usr, "<span class='rose'>\The [name] is missing electronics.</span>")
 			return
 		usr << browse(null, "window=windoor_access")
-		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+		playsound(src, W.toolsound, 100, 1)
 		user.visible_message("[user] is prying [src] into the frame.", "You start prying [src] into the frame.")
 
 		if(do_after(user, src, 40))

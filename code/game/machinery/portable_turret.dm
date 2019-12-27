@@ -660,7 +660,7 @@ Status: []<BR>"},
 				return
 
 			else if(iscrowbar(W) && !anchored)
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				playsound(src, W.toolsound, 75, 1)
 				to_chat(user, "You dismantle the turret construction.")
 				getFromPool(/obj/item/stack/sheet/metal, loc, 5)
 				qdel(src)
@@ -775,7 +775,7 @@ Status: []<BR>"},
 					qdel(src)
 
 			else if(iscrowbar(W))
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				playsound(src, W.toolsound, 75, 1)
 				to_chat(user, "You pry off the turret's exterior armor.")
 				getFromPool(/obj/item/stack/sheet/metal, loc, 2)
 				build_step = 6

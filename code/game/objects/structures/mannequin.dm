@@ -939,7 +939,7 @@
 			"You pry \the [src] apart.", \
 			"You hear something pop.")
 		var/turf/T=get_turf(src)
-		playsound(T, 'sound/items/Crowbar.ogg', 50, 1)
+		playsound(T, W.toolsound, 50, 1)
 
 		if(do_after(user, src, 100))
 			var/obj/item/weapon/circuitboard/airlock/C = new(src)

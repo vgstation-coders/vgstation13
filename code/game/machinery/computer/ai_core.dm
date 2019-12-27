@@ -58,7 +58,7 @@
 				to_chat(user, "<span class='notice'>You screw the circuit board into place.</span>")
 				state = SECURED_CIRCUITBOARD
 			if(iscrowbar(P) && circuit)
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(loc, P.toolsound, 50, 1)
 				to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 				state = NOCIRCUITBOARD
 				circuit.forceMove(loc)
@@ -119,14 +119,14 @@
 						to_chat(user, "Added [P].")
 
 			if(iscrowbar(P) && brain)
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(loc, P.toolsound, 50, 1)
 				to_chat(user, "<span class='notice'>You remove the brain.</span>")
 				brain.forceMove(loc)
 				brain = null
 
 		if(GLASS_PANELED)
 			if(iscrowbar(P))
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(loc, P.toolsound, 50, 1)
 				to_chat(user, "<span class='notice'>You remove the glass panel.</span>")
 				state = WIREDFRAME
 				drop_stack(/obj/item/stack/sheet/glass/rglass, loc, 2, user)

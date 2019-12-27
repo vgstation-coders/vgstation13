@@ -228,14 +228,14 @@
 				construction_state += 1
 				return
 			if(iscrowbar(W))
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				playsound(src, W.toolsound, 75, 1)
 				user.visible_message("<span class='warning'>[user] pries \the [src] from its frame.</span>", \
 				"<span class='notice'>You pry \the [src] from its frame.</span>")
 				construction_state -= 1
 				return
 		if(0)
 			if(iscrowbar(W))
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				playsound(src, W.toolsound, 75, 1)
 				user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
 				"<span class='notice'>You pry \the [src] into its frame.</span>")
 				construction_state += 1

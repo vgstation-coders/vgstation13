@@ -147,7 +147,7 @@
 			update_icon()
 
 	else if(iscrowbar(W) && state == 0 && anchored) //Turning normal girder into disloged girder
-		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+		playsound(src, W.toolsound, 100, 1)
 		user.visible_message("<span class='warning'>[user] starts dislodging \the [src].</span>", \
 		"<span class='notice'>You start dislodging \the [src].</span>")
 		if(do_after(user, src, construction_length))

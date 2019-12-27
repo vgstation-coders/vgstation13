@@ -254,7 +254,7 @@
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
 	return
 
-/obj/machinery/conveyor/crowbarDestroy(mob/user)
+/obj/machinery/conveyor/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	return
 
 /obj/machinery/conveyor/attackby(obj/item/W, mob/user)
@@ -279,10 +279,10 @@
 		return
 	if(!isturf(over_location) || !Adjacent(user))
 		return
-	var/obj/O = user.get_active_hand()
+	var/obj/item/O = user.get_active_hand()
 	if(iscrowbar(O))
 		update_dir(get_dir(src, over_location))
-		playsound(src, 'sound/items/Crowbar.ogg', 25, 1)
+		playsound(src, O.toolsound, 25, 1)
 		to_chat(user, "You change the direction of \the [src] using \the [O].")
 		return
 	return ..()

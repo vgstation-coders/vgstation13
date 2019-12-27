@@ -56,7 +56,7 @@
 					build_path = 0
 					new /obj/item/stack/sheet/glass/glass(get_turf(src))
 					icon_state = "box_0"
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					playsound(src, P.toolsound, 50, 1)
 				if(istype(P, /obj/item/weapon/circuitboard/airlock) && P:icon_state != "door_electronics_smoked")
 					if (!C)
 						if(user.drop_item(P, src))
@@ -80,7 +80,7 @@
 						circuit = null
 					build_state--
 					icon_state = "box_glass"
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					playsound(src, P.toolsound, 50, 1)
 				if(P.is_screwdriver(user) && C)
 					var/obj/structure/displaycase/new_display_case = new(get_turf(src))
 					new_display_case.circuit = C
@@ -157,7 +157,7 @@
 		if(3)
 			if(!..())
 				if(iscrowbar(P))
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					playsound(src, P.toolsound, 50, 1)
 					set_build_state(2)
 					circuit.forceMove(src.loc)
 					circuit = null

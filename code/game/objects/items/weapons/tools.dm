@@ -638,6 +638,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
+	toolsound = 'sound/items/Crowbar.ogg'
 
 /obj/item/weapon/crowbar/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")

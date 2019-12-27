@@ -248,10 +248,10 @@
 		qdel(src)
 	return
 
-/obj/machinery/sleeper/crowbarDestroy(mob/user)
+/obj/machinery/sleeper/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupied.</span>")
-		return
+		return 0
 	return ..()
 
 /obj/machinery/sleeper/attackby(obj/item/weapon/obj_used, mob/user)

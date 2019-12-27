@@ -427,7 +427,7 @@
 				src.icon_state = "2"
 				return 1
 			if(iscrowbar(P) && circuit)
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(src, P.toolsound, 50, 1)
 				user.visible_message("[user] removes the circuit board.", "You remove the circuit board", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "0"
@@ -480,7 +480,7 @@
 				return 1
 		if(4)
 			if(iscrowbar(P))
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(src, P.toolsound, 50, 1)
 				user.visible_message("[user] removes the glass panel from the frame.", "You remove the glass panel from the frame.", "You hear metallic sounds.")
 				src.state = 3
 				src.icon_state = "3"

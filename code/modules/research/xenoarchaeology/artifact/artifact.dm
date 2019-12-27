@@ -86,7 +86,7 @@
 
 		busy = 1
 
-		if(do_after(user,src, P.digspeed))
+		if(do_after(user,src, P.toolspeed))
 
 			busy = 0
 

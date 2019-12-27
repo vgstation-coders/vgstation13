@@ -413,7 +413,7 @@ var/list/one_way_windows
 					return
 
 				if(iscrowbar(W))
-					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
+					playsound(loc, W.toolsound, 75, 1)
 					user.visible_message("<span class='warning'>[user] pries \the [src] from its frame.</span>", \
 					"<span class='notice'>You pry \the [src] from its frame.</span>")
 					d_state = WINDOWLOOSEFRAME
@@ -422,7 +422,7 @@ var/list/one_way_windows
 			if(WINDOWLOOSEFRAME)
 
 				if(iscrowbar(W))
-					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
+					playsound(loc, W.toolsound, 75, 1)
 					user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
 					"<span class='notice'>You pry \the [src] into its frame.</span>")
 					d_state = WINDOWUNSECUREFRAME
