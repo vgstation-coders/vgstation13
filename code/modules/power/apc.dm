@@ -460,12 +460,12 @@
 				if (has_electronics==1 && terminal)
 					has_electronics = 2
 					stat &= ~MAINT
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(src, W.toolsound, 50, 1)
 					to_chat(user, "You screw the circuit electronics into place.")
 				else if (has_electronics==2)
 					has_electronics = 1
 					stat |= MAINT
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(src, W.toolsound, 50, 1)
 					to_chat(user, "You unfasten the electronics.")
 				else /* has_electronics==0 */
 					to_chat(user, "<span class='warning'>There is nothing to secure.</span>")
@@ -475,7 +475,7 @@
 			if(has_electronics == 2 && !(stat & BROKEN))
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-				playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
+				playsound(src, W.toolsound, 25, 1, -6)
 				update_icon()
 			else
 				to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")

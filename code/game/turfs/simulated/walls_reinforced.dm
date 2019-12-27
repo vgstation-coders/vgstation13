@@ -123,7 +123,7 @@
 			if(W.is_screwdriver(user))
 				user.visible_message("<span class='warning'>[user] begins unsecuring \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin unsecuring \the [src]'s external cover.</span>")
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, W.toolsound, 100, 1)
 
 				if(do_after(user, src, 40) && d_state == WALLCOVEREXPOSED)
 					src.d_state = WALLCOVERUNSECURED
@@ -164,7 +164,7 @@
 			else if(W.is_screwdriver(user))
 				user.visible_message("<span class='notice'>[user] begins securing \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin securing \the [src]'s external cover.</span>")
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, W.toolsound, 100, 1)
 
 				if(do_after(user, src, 40) && d_state == WALLCOVERUNSECURED)
 					src.d_state = WALLCOVEREXPOSED
@@ -330,7 +330,7 @@
 
 		user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \
 		"<span class='notice'>You begin [PK.drill_verb] straight into \the [src].</span>")
-		playsound(src, PK.drill_sound, 100, 1)
+		playsound(src, PK.toolsound, 100, 1)
 		if(do_after(user, src, PK.digspeed * 50))
 			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")

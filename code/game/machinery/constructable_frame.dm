@@ -87,7 +87,7 @@
 					C.forceMove(new_display_case)
 					circuit = null
 					C = null
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(src, C.toolsound, 50, 1)
 					qdel(src)
 				return
 		return
@@ -181,7 +181,7 @@
 								component_check = 0
 								break
 						if(component_check)
-							playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+							playsound(src, P.toolsound, 50, 1)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
 								returnToPool(O)

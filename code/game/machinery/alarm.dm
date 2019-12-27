@@ -1059,7 +1059,7 @@ var/global/list/airalarm_presets = list(
 			if(W.is_screwdriver(user))  // Opening that Air Alarm up.
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, W.toolsound, 50, 1)
 				update_icon()
 				return
 
@@ -1256,7 +1256,7 @@ FIRE ALARM
 	if (W.is_screwdriver(user) && buildstage == 2)
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(src, W.toolsound, 50, 1)
 		update_icon()
 		return
 

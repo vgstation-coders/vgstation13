@@ -735,7 +735,7 @@ Status: []<BR>"},
 
 		if(5)
 			if(W.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, W.toolsound, 100, 1)
 				build_step = 6
 				to_chat(user, "<span class='notice'>You close the internal access hatch.</span>")
 				return
@@ -754,7 +754,7 @@ Status: []<BR>"},
 					return
 
 			else if(W.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, W.toolsound, 100, 1)
 				build_step = 5
 				to_chat(user, "You open the internal access hatch.")
 				return

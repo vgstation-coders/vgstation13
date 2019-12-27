@@ -54,7 +54,7 @@
 					state = UNSECURED_CIRCUITBOARD
 		if(UNSECURED_CIRCUITBOARD)
 			if(P.is_screwdriver(user) && circuit)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(loc, P.toolsound, 50, 1)
 				to_chat(user, "<span class='notice'>You screw the circuit board into place.</span>")
 				state = SECURED_CIRCUITBOARD
 			if(iscrowbar(P) && circuit)
@@ -65,7 +65,7 @@
 				circuit = null
 		if(SECURED_CIRCUITBOARD)
 			if(P.is_screwdriver(user) && circuit)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(loc, P.toolsound, 50, 1)
 				to_chat(user, "<span class='notice'>You unfasten the circuit board.</span>")
 				state = UNSECURED_CIRCUITBOARD
 			if(iscablecoil(P))
@@ -131,7 +131,7 @@
 				state = WIREDFRAME
 				drop_stack(/obj/item/stack/sheet/glass/rglass, loc, 2, user)
 			else if(P.is_screwdriver(user))
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(loc, P.toolsound, 50, 1)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )
 				if(A) //if there's no brain, the mob is deleted and a structure/AIcore is created

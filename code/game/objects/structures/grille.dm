@@ -179,7 +179,7 @@
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
 	else if((W.is_screwdriver(user)) && (istype(loc, /turf/simulated) || anchored))
 		if(!shock(user, 90, W.siemens_coefficient))
-			playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
+			playsound(loc, W.toolsound, 100, 1)
 			anchored = !anchored
 			user.visible_message("<span class='notice'>[user] [anchored ? "fastens" : "unfastens"] the grille [anchored ? "to" : "from"] the floor.</span>", \
 			"<span class='notice'>You [anchored ? "fasten" : "unfasten"] the grille [anchored ? "to" : "from"] the floor.</span>")

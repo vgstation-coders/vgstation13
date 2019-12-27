@@ -42,7 +42,7 @@ var/list/mass_drivers = list()
 
 	if(W.is_screwdriver(user))
 		to_chat(user, "You begin to unscrew the bolts off the [src]...")
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(src, W.toolsound, 50, 1)
 		if(do_after(user, src, 30))
 			var/obj/machinery/mass_driver_frame/F = new(get_turf(src))
 			F.dir = src.dir
@@ -222,7 +222,7 @@ var/list/mass_drivers = list()
 				return 1
 			if(W.is_screwdriver(user))
 				to_chat(user, "You finalize the Mass Driver...")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, W.toolsound, 50, 1)
 				var/obj/machinery/mass_driver/M = new(get_turf(src))
 				M.dir = src.dir
 				qdel(src)

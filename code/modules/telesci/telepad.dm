@@ -58,11 +58,11 @@
 	..()
 	if(W.is_screwdriver(user))
 		if(opened)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, W.toolsound, 50, 1)
 			to_chat(user, "<span class = 'caution'>You secure the access port on \the [src].</span>")
 			opened = 0
 		else
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, W.toolsound, 50, 1)
 			to_chat(user, "<span class = 'caution'>You open \the [src]'s access port.</span>")
 			opened = 1
 	if(istype(W, /obj/item/bluespace_crystal) && opened)

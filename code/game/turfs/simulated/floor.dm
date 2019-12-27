@@ -550,7 +550,7 @@ turf/simulated/floor/update_icon()
 					new floor_tile.type(src)
 
 			make_plating()
-			playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+			playsound(src, C.toolsound, 80, 1)
 		return
 	else if(istype(C, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = C

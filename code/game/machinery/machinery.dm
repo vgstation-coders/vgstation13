@@ -509,7 +509,7 @@ Class Procs:
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
 	if(toggleitem.is_screwdriver(user))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(src.loc, toggleitem.toolsound, 50, 1)
 	update_icon()
 	return 1
 

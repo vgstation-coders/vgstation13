@@ -79,7 +79,7 @@
 		playsound(holder, 'sound/items/Ratchet.ogg', 50, 1)
 
 	else if(used_atom.is_screwdriver(user))
-		playsound(holder, 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(holder, used_atom.toolsound, 50, 1)
 
 	else if(iswirecutter(used_atom))
 		playsound(holder, 'sound/items/Wirecutter.ogg', 50, 1)

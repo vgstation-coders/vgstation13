@@ -1809,7 +1809,7 @@ var/global/num_vending_terminals = 1
 				to_chat(usr, "You begin removing screws from \the [src] backplate...")
 				if(do_after(user, src, 50))
 					to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(src, W.toolsound, 50, 1)
 					new /obj/item/mounted/frame/wallmed(get_turf(src))
 					qdel(src)
 				return 1
@@ -1869,7 +1869,7 @@ var/global/num_vending_terminals = 1
 				return 1
 			if(W.is_screwdriver(user))
 				to_chat(user, "You begin to complete \the [src]...")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, W.toolsound, 50, 1)
 				if(do_after(user, src, 20))
 					if(!_circuitboard)
 						_circuitboard=new boardtype(src)
@@ -1882,7 +1882,7 @@ var/global/num_vending_terminals = 1
 		if(3) // Waiting for a recharge pack
 			if(W.is_screwdriver(user))
 				to_chat(user, "You begin to unscrew \the [src]...")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, W.toolsound, 50, 1)
 				if(do_after(user, src, 30))
 					build--
 					update_icon()

@@ -81,6 +81,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "screwdriver"
 	hitsound = 'sound/weapons/toolhit.ogg'
+	toolsound = 'sound/items/Screwdriver.ogg'
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1

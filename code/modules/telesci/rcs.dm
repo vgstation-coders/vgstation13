@@ -27,11 +27,11 @@
 		to_chat(user, "<span class='caution'>\the [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
 	if(W.is_screwdriver(user))
 		if(stage == 0)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, W.toolsound, 50, 1)
 			to_chat(user, "<span class = 'caution'>You unscrew the telepad's tracking beacon.</span>")
 			stage = 1
 		else if(stage == 1)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, W.toolsound, 50, 1)
 			to_chat(user, "<span class = 'caution'>You screw in the telepad's tracking beacon.</span>")
 			stage = 0
 	if(iswelder(W) && stage == 1)

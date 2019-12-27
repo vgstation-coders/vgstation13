@@ -222,7 +222,7 @@
 	if(used_item.is_screwdriver(user) && cauterymode)
 		if(held)
 			to_chat(user, "<span class='notice'>You detach \the [held] and \the [src] switches to cutting mode.</span>")
-			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
+			playsound(src, used_item.toolsound, 10, 1)
 			held.add_fingerprint(user)
 			held.forceMove(get_turf(src))
 			held = null

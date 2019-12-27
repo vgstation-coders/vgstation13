@@ -50,7 +50,7 @@
 		return 0
 	if(C.is_screwdriver(user))
 		to_chat(user, "<span class='notice'>You begin undoing the screws holding the catwalk together.</span>")
-		playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+		playsound(src, C.toolsound, 80, 1)
 		if(do_after(user, src, 30) && src)
 			to_chat(user, "<span class='notice'>You finish taking taking the catwalk apart.</span>")
 			new /obj/item/stack/rods(src.loc, 2)

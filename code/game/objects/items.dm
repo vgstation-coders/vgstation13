@@ -71,6 +71,9 @@
 	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
 	var/image/pathogen
 
+	var/toolsound = null
+	var/toolspeed = 1
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
