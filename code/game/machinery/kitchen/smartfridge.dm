@@ -23,6 +23,7 @@
 									/obj/item/weapon/grown,
 									/obj/item/seeds,
 									/obj/item/weapon/reagent_containers/food/snacks/meat,
+									/obj/item/weapon/reagent_containers/food/snacks/honeycomb,
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
