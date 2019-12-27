@@ -59,12 +59,13 @@
 	return 1
 
 /mob/living/silicon/robot/mommi/u_equip(W as obj)
-	if (W == tool_state)
+	if(W == tool_state)
 		if(module_active==tool_state)
 			module_active = null
 		tool_state = null
-		inv_tool.icon_state="inv1"
-	else if (W == head_state)
+		if(inv_tool)
+			inv_tool.icon_state="inv1"
+	else if(W == head_state)
 		// Delete the hat's reference
 		head_state = null
 		// Update the MoMMI's head inventory icons
@@ -156,15 +157,15 @@
 		var/obj/item/TS=tool_state
 		if(!is_in_modules(TS))
 			drop_item()
-		if (client)
+		if(client)
 			client.screen -= tool_state
 		contents -= tool_state
 		tool_state = null
-		inv_tool.icon_state = "inv1"
+		if(inv_tool)
+			inv_tool.icon_state = "inv1"
 		if(is_in_modules(TS))
 			TS.forceMove(src.module)
 		hud_used.update_robot_modules_display()
-
 
 /mob/living/silicon/robot/mommi/activated(obj/item/O)
 	if(tool_state == O) // Sight
@@ -331,15 +332,9 @@
 
 // MoMMIs only have one hand.
 /mob/living/silicon/robot/mommi/update_items()
-	if(client)
-		client.screen -= contents
-		for(var/obj/I in src.contents)
-			if(I)
-				// Make sure we're not showing any of our internal components, as that would be lewd.
-				// This way of doing it ensures that shit we pick up will be visible, wheras shit inside of us isn't.
-				if(I!=cell && I!=radio && I!=camera && I!=mmi)
-					client.screen += I
+	..()
 	if(tool_state)
 		tool_state:screen_loc = ui_inv2
 	if(head_state)
 		head_state:screen_loc = ui_monkey_mask
+	updateicon()

@@ -112,16 +112,17 @@
 /mob/living/silicon/robot/proc/handle_health_hud()
 	if(healths)
 		if(!isDead())
-			switch(health)
-				if(200 to INFINITY)
+			var/current_health = health/maxHealth
+			switch(current_health)
+				if(0.9 to 1)
 					healths.icon_state = "health0"
-				if(150 to 200)
+				if(0.75 to 0.9)
 					healths.icon_state = "health1"
-				if(100 to 150)
+				if(0.5 to 0.75)
 					healths.icon_state = "health2"
-				if(50 to 100)
+				if(0.25 to 0.5)
 					healths.icon_state = "health3"
-				if(0 to 50)
+				if(0 to 0.25)
 					healths.icon_state = "health4"
 				if(config.health_threshold_dead to 0)
 					healths.icon_state = "health5"

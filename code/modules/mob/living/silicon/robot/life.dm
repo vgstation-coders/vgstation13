@@ -24,9 +24,10 @@
 	handle_fire()
 	handle_beams()
 
-	var/datum/gas_mixture/environment = loc.return_air()
-	handle_pressure_damage(environment)
-	handle_heat_damage(environment)
+	if(loc)
+		var/datum/gas_mixture/environment = loc.return_air()
+		handle_pressure_damage(environment)
+		handle_heat_damage(environment)
 
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
@@ -47,12 +48,12 @@
 	if(cell && is_component_functioning("power cell"))
 		if(cell.charge <= 0)
 			uneq_all()
-		else if(cell.charge <= ROBOT_LOW_POWER)
-			uneq_all()
-			cell.use(1)
 		else
-			for(var/M in get_all_slots())
-				if(M)
+			if(cell.charge <= ROBOT_LOW_POWER)
+				uneq_all()
+				cell.use(1)
+			else
+				for(var/M in get_all_slots())
 					cell.use(3)
 
 			for(var/V in components)
@@ -65,9 +66,11 @@
 			stat = CONSCIOUS
 	else
 		uneq_all()
+
 		if(station_holomap)
 			if(station_holomap.watching_mob)
 				station_holomap.stopWatching()
+
 		stat = UNCONSCIOUS
 
 
