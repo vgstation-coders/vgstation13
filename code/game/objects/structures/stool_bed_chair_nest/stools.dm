@@ -34,7 +34,7 @@
 	return
 
 /obj/item/weapon/stool/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(iswrench(W) && sheet_type)
+	if(W.is_wrench(user) && sheet_type)
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)

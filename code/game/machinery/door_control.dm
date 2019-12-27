@@ -145,7 +145,7 @@
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
 
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			to_chat(user, "<span class='notice'>You detach \the [src] from the wall.</span>")

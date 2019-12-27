@@ -81,7 +81,7 @@
 		toggle_cover(usr)
 
 /obj/structure/cage/attackby(obj/item/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(anchored)
 			to_chat(user, "<span class='info'>You start unsecuring \the [src] from \the [loc].</span>")
 		else

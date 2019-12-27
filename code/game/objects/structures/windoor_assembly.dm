@@ -125,7 +125,7 @@ obj/structure/windoor_assembly/Destroy()
 				update_name()
 
 	//Wrenching an un/secure assembly un/anchors it in place. Step 4 complete/undone
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 		user.visible_message("[user] is [anchored ? "un":""]securing [src] [anchored ? "from" : "to"] the floor.", "You start to [anchored ? "un":""]secure [src] to the floor.")
 

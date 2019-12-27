@@ -790,7 +790,7 @@
 				to_chat(user, "<span class='warning'>Invalid ID: Access denied.</span>")
 		else
 			to_chat(user, "<span class='warning'>Maintenance protocols disabled by operator.</span>")
-	else if(iswrench(W))
+	else if(W.is_wrench(user))
 		if(state==STATE_BOLTSEXPOSED)
 			state = STATE_BOLTSOPENED
 			to_chat(user, "You undo the securing bolts.")

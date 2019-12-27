@@ -19,7 +19,7 @@
 
 //attaching papers!!
 /obj/structure/noticeboard/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
-	if(iswrench(O))
+	if(O.is_wrench(user))
 		to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
 		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 		new /obj/item/stack/sheet/wood (src.loc,2)

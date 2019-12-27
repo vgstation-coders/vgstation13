@@ -136,8 +136,6 @@
 
 #define istool(A) is_type_in_list(A, common_tools)
 
-#define iswrench(A) istype(A, /obj/item/weapon/wrench)
-
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
 #define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
