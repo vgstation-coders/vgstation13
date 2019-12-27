@@ -1212,7 +1212,7 @@ About the new airlock wires panel:
 		else
 			beingcrowbarred = 0
 		if( beingcrowbarred && (operating == -1 || density && welded && !operating && src.panel_open && (!src.arePowerSystemsOn() || stat & NOPOWER) && !src.locked) )
-			playsound(src.loc, I.toolsound, 100, 1)
+			I.playtoolsound(loc, 100)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
 			if (do_after(user, src, 40))

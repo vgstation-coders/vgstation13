@@ -356,7 +356,7 @@
 		if(WT.remove_fuel(1,user))
 			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
 			to_chat(user, "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
-			playsound(B.loc, 'sound/items/Welder.ogg', 30, 1)
+			I.playtoolsound(B.loc, 30)
 			if(user.get_inactive_hand() == src)
 				user.before_take_item(src)
 				user.put_in_hands(B)
@@ -397,7 +397,7 @@
 				if(WT.do_weld(user, src, 10, 0) && state == 0)
 					if(gcDestroyed)
 						return
-					playsound(src, 'sound/items/Welder.ogg', 50, 1)
+					WT.playtoolsound(src, 50)
 					user.visible_message("[user] welds the frame back into metal.", "You weld the frame back into metal.", "You hear welding.")
 					drop_stack(sheet_type, loc, 5, user)
 					state = -1
@@ -421,13 +421,13 @@
 					to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				return 1
 			if(P.is_screwdriver(user) && circuit)
-				playsound(src, P.toolsound, 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] screws the circuit board into place.", "You screw the circuit board into place.", "You hear metallic sounds.")
 				src.state = 2
 				src.icon_state = "2"
 				return 1
 			if(iscrowbar(P) && circuit)
-				playsound(src, P.toolsound, 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] removes the circuit board.", "You remove the circuit board", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "0"
@@ -436,7 +436,7 @@
 				return 1
 		if(2)
 			if(P.is_screwdriver(user) && circuit)
-				playsound(src, P.toolsound, 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] unfastens the circuit board.", "You unfasten the circuit board.", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "1"
@@ -480,14 +480,14 @@
 				return 1
 		if(4)
 			if(iscrowbar(P))
-				playsound(src, P.toolsound, 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] removes the glass panel from the frame.", "You remove the glass panel from the frame.", "You hear metallic sounds.")
 				src.state = 3
 				src.icon_state = "3"
 				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
 			if(P.is_screwdriver(user))
-				playsound(src, P.toolsound, 50, 1)
+				P.playtoolsound(src, 50)
 				if(!circuit.build_path) // the board has been soldered away!
 					to_chat(user, "<span class='warning'>You connect the monitor, but nothing turns on!</span>")
 					return

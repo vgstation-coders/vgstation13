@@ -81,7 +81,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "screwdriver"
 	hitsound = 'sound/weapons/toolhit.ogg'
-	toolsound = 'sound/items/Screwdriver.ogg'
+	toolsounds = list('sound/items/Screwdriver.ogg', 'sound/items/Screwdriver2.ogg')
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
@@ -248,6 +248,7 @@
 	var/start_fueled = 1 //Explicit, should the welder start with fuel in it ?
 	var/eye_damaging = TRUE	//Whether the welder damages unprotected eyes.
 	var/weld_speed = 1 //How much faster this welder is at welding. Higher number = faster
+	toolsounds = list('sound/items/Welder.ogg', 'sound/items/Welder2.ogg')
 
 /obj/item/weapon/weldingtool/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -306,7 +307,7 @@
 	if(!remove_fuel(fuel_cost, user))
 		return 0
 
-	playsound(src, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+	playtoolsound(src, 50)
 	return isOn() && do_after(user, thing, time/weld_speed) && isOn() //Checks if it's on, then does the do_after, then checks if it's still on after.
 
 /obj/item/weapon/weldingtool/process()
@@ -638,7 +639,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
-	toolsound = 'sound/items/Crowbar.ogg'
+	toolsounds = list('sound/items/Crowbar.ogg')
 
 /obj/item/weapon/crowbar/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -731,6 +732,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
+	toolsounds = list('sound/items/Welder.ogg')
 
 /obj/item/weapon/solder/New()
 	. = ..()

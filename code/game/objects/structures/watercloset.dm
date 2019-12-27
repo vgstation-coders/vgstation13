@@ -191,7 +191,7 @@
 
 	if(istype(I, /obj/item/weapon/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
-		playsound(I.toolsound, 50, 1)
+		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
 			getFromPool(/obj/item/stack/sheet/metal, loc, 2)
 			qdel(src)

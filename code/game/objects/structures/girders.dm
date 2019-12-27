@@ -90,7 +90,7 @@
 			qdel(src)
 
 	else if(W.is_screwdriver(user) && state == 2) //Unsecuring support struts, stage 2 to 1
-		playsound(src, W.toolsound, 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("<span class='warning'>[user] starts unsecuring \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start unsecuring \the [src]'s internal support struts.</span>")
 		if(do_after(user, src, construction_length))
@@ -102,7 +102,7 @@
 			update_icon()
 
 	else if(W.is_screwdriver(user) && state == 1) //Securing support struts, stage 1 to 2
-		playsound(src, W.toolsound, 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("<span class='notice'>[user] starts securing \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start securing \the [src]'s internal support struts.</span>")
 		if(do_after(user, src, construction_length))
@@ -147,7 +147,7 @@
 			update_icon()
 
 	else if(iscrowbar(W) && state == 0 && anchored) //Turning normal girder into disloged girder
-		playsound(src, W.toolsound, 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("<span class='warning'>[user] starts dislodging \the [src].</span>", \
 		"<span class='notice'>You start dislodging \the [src].</span>")
 		if(do_after(user, src, construction_length))

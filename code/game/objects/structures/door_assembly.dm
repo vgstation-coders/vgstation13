@@ -281,7 +281,7 @@
 
 	else if(iscrowbar(W) && state == 2 )
 		busy = 1
-		playsound(src, W.toolsound, 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to install electronics into the airlock assembly.")
 
 		if(do_after(user, src, 40))
@@ -325,7 +325,7 @@
 
 	else if(W.is_screwdriver(user) && state == 2 )
 		busy = 1
-		playsound(src, W.toolsound, 100, 1)
+		W.playtoolsound(src, 100)
 		to_chat(user, "<span class='notice'>Now finishing the airlock.</span>")
 
 		if(do_after(user, src, 40))

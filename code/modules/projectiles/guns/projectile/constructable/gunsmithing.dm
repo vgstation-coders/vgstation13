@@ -471,7 +471,7 @@
 		if("blunderbuss_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the igniter to \the [src].")
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/blunderbuss/I = new (get_turf(user))
@@ -485,7 +485,7 @@
 		if("stock_capacitorbank_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the wires in \the [src]'s capacitor bank.")
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_capacitorbank"
 				update_assembly()
 			if(iswirecutter(W))
@@ -503,7 +503,7 @@
 				qdel(W)
 			if(W.is_screwdriver(user))
 				to_chat(user, "You loosen the wires in \the [src]'s capacitor bank.")
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_capacitorbank_assembly"
 				update_assembly()
 		if("stock_capacitorbank_barrel_assembly")
@@ -523,7 +523,7 @@
 		if("railgun_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s triggering mechanism.")
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/gun/projectile/railgun/I = new (get_turf(user))
@@ -593,7 +593,7 @@
 		if("stock_ansible_amplifier_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace amplifier.")
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_ansible_amplifier"
 				update_assembly()
 		if("stock_ansible_amplifier")
@@ -605,7 +605,7 @@
 		if("stock_ansible_amplifier_transmitter_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace transmitter.")
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				state = "subspacetunneler_assembly"
 				update_assembly()
 		if("subspacetunneler_assembly")

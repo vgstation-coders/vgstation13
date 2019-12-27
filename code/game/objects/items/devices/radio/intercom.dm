@@ -96,7 +96,7 @@
 				return ..()
 		if(2)
 			if(W.is_screwdriver(user))
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10))
 					update_icon()
 					on = 1

@@ -201,7 +201,7 @@ proc/move_mining_shuttle()
 	toolspeed = 40 //moving the delay to an item var so R&D can make improved picks. --NEO
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("hits", "pierces", "slices", "attacks")
-	toolsound = 'sound/weapons/Genhit.ogg'
+	toolsounds = list('sound/weapons/Genhit.ogg')
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
 
@@ -266,7 +266,7 @@ proc/move_mining_shuttle()
 	desc = "A rock cutter that uses bursts of hot plasma"
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
-	toolsound = 'sound/items/Welder.ogg'
+	toolsounds = list('sound/items/Welder.ogg')
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator
 	name = "plasma cutter"

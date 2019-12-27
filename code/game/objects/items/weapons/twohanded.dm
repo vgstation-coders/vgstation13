@@ -285,7 +285,7 @@
 /obj/item/weapon/bloodlust/attackby(obj/item/weapon/W, mob/living/user)
 	..()
 	if(istype(W, /obj/item/weapon/screwdriver) && user.is_holding_item(src))
-		playsound(src.loc, W.toolsound, 50, 1)
+		W.playtoolsound(loc, 50)
 		to_chat(user, "<span class='notice'>You detach [src] from your arm.</span>")
 		user.drop_item(src, force_drop=1)
 

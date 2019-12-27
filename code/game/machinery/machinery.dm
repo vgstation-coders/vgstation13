@@ -485,7 +485,7 @@ Class Procs:
 	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
 							"You begin to pry out the circuitboard from \the [src]...")
 	if(do_after(user, src, 40))
-		playsound(src, I.toolsound, 50, 1)
+		I.playtoolsound(src, 50)
 		dropFrame()
 		spillContents()
 		user.visible_message(	"<span class='notice'>[user] successfully pries out the circuitboard from \the [src]!</span>",
@@ -509,7 +509,7 @@ Class Procs:
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
 	if(toggleitem.is_screwdriver(user))
-		playsound(src.loc, toggleitem.toolsound, 50, 1)
+		toggleitem.playtoolsound(loc, 50)
 	update_icon()
 	return 1
 

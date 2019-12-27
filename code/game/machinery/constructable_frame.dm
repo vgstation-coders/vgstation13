@@ -56,7 +56,7 @@
 					build_path = 0
 					new /obj/item/stack/sheet/glass/glass(get_turf(src))
 					icon_state = "box_0"
-					playsound(src, P.toolsound, 50, 1)
+					P.playtoolsound(src, 50)
 				if(istype(P, /obj/item/weapon/circuitboard/airlock) && P:icon_state != "door_electronics_smoked")
 					if (!C)
 						if(user.drop_item(P, src))
@@ -80,14 +80,14 @@
 						circuit = null
 					build_state--
 					icon_state = "box_glass"
-					playsound(src, P.toolsound, 50, 1)
+					P.playtoolsound(src, 50)
 				if(P.is_screwdriver(user) && C)
 					var/obj/structure/displaycase/new_display_case = new(get_turf(src))
 					new_display_case.circuit = C
 					C.forceMove(new_display_case)
 					circuit = null
 					C = null
-					playsound(src, C.toolsound, 50, 1)
+					P.playtoolsound(src, 50)
 					qdel(src)
 				return
 		return
@@ -157,7 +157,7 @@
 		if(3)
 			if(!..())
 				if(iscrowbar(P))
-					playsound(src, P.toolsound, 50, 1)
+					P.playtoolsound(src, 50)
 					set_build_state(2)
 					circuit.forceMove(src.loc)
 					circuit = null
@@ -181,7 +181,7 @@
 								component_check = 0
 								break
 						if(component_check)
-							playsound(src, P.toolsound, 50, 1)
+							P.playtoolsound(src, 50)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
 								returnToPool(O)
@@ -328,7 +328,7 @@ to destroy them and players will be able to make replacements.
 		var/obj/item/weapon/solder/S = O
 		if(!S.remove_fuel(4,user))
 			return
-		playsound(loc, 'sound/items/Welder.ogg', 50, 1)
+		S.playtoolsound(loc, 50)
 		soldering = 1
 		if(do_after(user, src,40))
 			var/boardType = allowed_boards[t]

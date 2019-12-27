@@ -660,7 +660,7 @@ Status: []<BR>"},
 				return
 
 			else if(iscrowbar(W) && !anchored)
-				playsound(src, W.toolsound, 75, 1)
+				W.playtoolsound(src, 75)
 				to_chat(user, "You dismantle the turret construction.")
 				getFromPool(/obj/item/stack/sheet/metal, loc, 5)
 				qdel(src)
@@ -735,7 +735,7 @@ Status: []<BR>"},
 
 		if(5)
 			if(W.is_screwdriver(user))
-				playsound(src, W.toolsound, 100, 1)
+				W.playtoolsound(src, 100)
 				build_step = 6
 				to_chat(user, "<span class='notice'>You close the internal access hatch.</span>")
 				return
@@ -754,7 +754,7 @@ Status: []<BR>"},
 					return
 
 			else if(W.is_screwdriver(user))
-				playsound(src, W.toolsound, 100, 1)
+				W.playtoolsound(src, 100)
 				build_step = 5
 				to_chat(user, "You open the internal access hatch.")
 				return
@@ -775,7 +775,7 @@ Status: []<BR>"},
 					qdel(src)
 
 			else if(iscrowbar(W))
-				playsound(src, W.toolsound, 75, 1)
+				W.playtoolsound(src, 75)
 				to_chat(user, "You pry off the turret's exterior armor.")
 				getFromPool(/obj/item/stack/sheet/metal, loc, 2)
 				build_step = 6

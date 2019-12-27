@@ -54,7 +54,7 @@ var/list/station_holomaps = list()
 	if(do_after(user, src, 40))
 		user.visible_message(	"[user] detaches \the [src] from the wall.",
 								"You detach \the [src] from the wall.")
-		playsound(src, C.toolsound, 50, 1)
+		C.playtoolsound(src, 50)
 		new /obj/item/mounted/frame/station_map(src.loc)
 
 		for(var/obj/I in src)

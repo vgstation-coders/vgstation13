@@ -121,7 +121,7 @@
 //					to_chat(user, "<span class='warning'>You need to add at least one beaker before locking the assembly.</span>")
 				to_chat(user, "<span class='warning'>You lock the empty assembly.</span>")
 				name = "fake grenade"
-			playsound(src, W.toolsound, 25, -3)
+			W.playtoolsound(src, 25, -3)
 			icon_state = initial(icon_state) +"_locked"
 			stage = 2
 		else if(stage == 2)
@@ -131,7 +131,7 @@
 				return
 			else
 				to_chat(user, "<span class='notice'>You unlock the assembly.</span>")
-				playsound(src, W.toolsound, 25, -3)
+				W.playtoolsound(src, 25, -3)
 				name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 				icon_state = initial(icon_state) + (detonator?"_ass":"")
 				stage = 1
@@ -351,7 +351,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 			else
 				to_chat(user, "<span class='notice'>You lock the empty assembly.</span>")
 				name = "fake grenade"
-			playsound(src, W.toolsound, 25, -3)
+			W.playtoolsound(src, 25, -3)
 			icon_state = initial(icon_state) +"_locked"
 			stage = 2
 		else if(stage == 2)
@@ -361,7 +361,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 				return
 			else
 				to_chat(user, "<span class='notice'>You unlock the assembly.</span>")
-				playsound(src, W.toolsound, 25, -3)
+				W.playtoolsound(src, 25, -3)
 				name = "unsecured EX grenade with [beakers.len] containers[detonator?" and detonator":""]"
 				icon_state = initial(icon_state) + (detonator?"_ass":"")
 				stage = 1

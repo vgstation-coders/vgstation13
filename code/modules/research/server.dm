@@ -304,7 +304,7 @@
 
 /obj/machinery/computer/rdservercontrol/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 	if(D.is_screwdriver(user))
-		playsound(src, D.toolsound, 50, 1)
+		D.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")

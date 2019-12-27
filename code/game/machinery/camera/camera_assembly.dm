@@ -82,7 +82,7 @@
 		if(3)
 			// State 3
 			if(W.is_screwdriver(user))
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 
 				var/input = stripped_input(usr, "Which networks would you like to connect this camera to? seperate networks with a comma. No Spaces!\nFor example: SS13,Security,Secret ", "Set Network", CAMERANET_SS13)
 				if(!input)
@@ -142,7 +142,7 @@
 		var/obj/U = locate(/obj) in upgrades
 		if(U)
 			to_chat(user, "You unattach \the [U] from the assembly.")
-			playsound(src, W.toolsound, 50, 1)
+			W.playtoolsound(src, 50)
 			U.forceMove(get_turf(src))
 			upgrades -= U
 		return
@@ -168,7 +168,7 @@
 		return 0
 
 	to_chat(user, "<span class='notice'>You start to weld the [src]...</span>")
-	playsound(src, 'sound/items/Welder.ogg', 50, 1)
+	WT.playtoolsound(src, 50)
 	WT.eyecheck(user)
 	busy = 1
 	if(do_after(user, src, 20))

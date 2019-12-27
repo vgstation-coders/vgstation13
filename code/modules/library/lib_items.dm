@@ -55,7 +55,7 @@
 		to_chat(user, "<span class='notice'>There are no screws on \the [src], it appears to be nailed together. You could probably disassemble it with just a crowbar.</span>")
 		return
 	else if(iscrowbar(O) && user.a_intent == I_HELP) //Only way to deconstruct, needs help intent
-		playsound(src, O.toolsound, 75, 1)
+		O.playtoolsound(src, 75)
 		user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 		"<span class='notice'>You start disassembling \the [src].</span>")
 		busy = 1

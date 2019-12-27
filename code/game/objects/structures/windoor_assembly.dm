@@ -187,7 +187,7 @@ obj/structure/windoor_assembly/Destroy()
 
 	//Screwdriver to remove airlock electronics. Step 6 undone.
 	if(W.is_screwdriver(user) && (anchored && electronics))
-		playsound(src, W.toolsound, 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] removes the [electronics] from [src].", "You start to uninstall [electronics] from [src].")
 
 		if(do_after(user, src, 40))
@@ -211,7 +211,7 @@ obj/structure/windoor_assembly/Destroy()
 			to_chat(usr, "<span class='rose'>\The [name] is missing electronics.</span>")
 			return
 		usr << browse(null, "window=windoor_access")
-		playsound(src, W.toolsound, 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] is prying [src] into the frame.", "You start prying [src] into the frame.")
 
 		if(do_after(user, src, 40))

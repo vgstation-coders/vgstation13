@@ -360,7 +360,7 @@
 	if(opened)
 		if(iscrowbar(O))
 			to_chat(user, "You begin to remove the circuits from the [src].")
-			playsound(src, O.toolsound, 50, 1)
+			O.playtoolsound(src, 50)
 			if(do_after(user, src, 50))
 				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 				M.state = 1

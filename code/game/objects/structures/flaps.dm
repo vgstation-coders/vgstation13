@@ -12,7 +12,7 @@
 /obj/structure/plasticflaps/attackby(obj/item/I as obj, mob/user as mob)
 	if(iscrowbar(I) && anchored == 1)
 		if(airtight == 0)
-			playsound(src, I.toolsound, 50, 1)
+			I.playtoolsound(src, 50)
 		else
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		user.visible_message("[user] [airtight? "loosen the [src] from" : "tighten the [src] into"] an airtight position.", "You [airtight? "loosen the [src] from" : "tighten the [src] into"] an airtight position.")

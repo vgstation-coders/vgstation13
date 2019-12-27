@@ -59,7 +59,7 @@
 			qdel(src)
 		return 1
 	if(W.is_screwdriver(user))
-		playsound(loc, W.toolsound, 50, 1)
+		W.playtoolsound(loc, 50)
 		user.visible_message("[user] [anchored? "unsecures" : "secures"] \the [src].", "You [anchored? "unsecure" : "secure"] \the [src].")
 		anchored = !anchored
 		return 1

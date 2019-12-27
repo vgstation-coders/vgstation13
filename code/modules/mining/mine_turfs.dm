@@ -288,7 +288,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 		last_act = world.time
 
-		playsound(user, P.toolsound, 20, 1)
+		P.playtoolsound(user, 20)
 
 		var/fail_message = ""
 		//handle any archaeological finds we might uncover

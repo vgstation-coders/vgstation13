@@ -939,7 +939,7 @@
 			"You pry \the [src] apart.", \
 			"You hear something pop.")
 		var/turf/T=get_turf(src)
-		playsound(T, W.toolsound, 50, 1)
+		W.playtoolsound(T, 50)
 
 		if(do_after(user, src, 100))
 			var/obj/item/weapon/circuitboard/airlock/C = new(src)
@@ -970,7 +970,7 @@
 				return
 			var/obj/item/weapon/weldingtool/WT = W
 			if(WT.remove_fuel(5))
-				playsound(loc, 'sound/items/Welder.ogg', 50, 1)
+				WT.playtoolsound(loc, 50)
 				health = min(health + 20, maxHealth)
 				to_chat(user, "<span class='notice'>You fix some of the dents on \the [src]!</span>")
 			else
@@ -986,7 +986,7 @@
 				return
 			var/obj/item/weapon/weldingtool/WT = W
 			if(WT.remove_fuel(5))
-				playsound(loc, 'sound/items/Welder.ogg', 50, 1)
+				WT.playtoolsound(loc, 50)
 				health = min(health + 20, maxHealth)
 				to_chat(user, "<span class='notice'>You fix some of the dents on \the [src]!</span>")
 			else

@@ -70,7 +70,7 @@
 	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
 	var/image/pathogen
 
-	var/toolsound = null //The sound it makes when used as a tool.
+	var/list/toolsounds = null //The sound(s) it makes when used as a tool.
 	var/toolspeed = 1 //When this item is used as a tool, multiply the delay of its do_after by this much. Unless the item is a drill, because.
 
 /obj/item/proc/return_thermal_protection()
@@ -1464,3 +1464,8 @@ var/global/list/image/blood_overlays = list()
 				perp.infect_disease2(D, notes="(Contact, from picking up \a [src])")
 			else if (bleeding && (D.spread & SPREAD_BLOOD))//if we're covered with a blood-spreading disease, we may infect people with bleeding hands.
 				perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")
+
+/obj/item/proc/playtoolsound(atom/A, var/volume = 75, vary = TRUE, extrarange = null)
+	if(A && toolsounds)
+		var/tool_sound = pick(toolsounds)
+		playsound(A, tool_sound, volume, TRUE, vary)

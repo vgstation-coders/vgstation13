@@ -57,7 +57,7 @@
 		if(2)
 			if(W.is_screwdriver(user))
 				to_chat(user, "You begin unscrewing \the [src].")
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 2)
 					to_chat(user, "<span class='notice'>You unscrew the cover blocking the inner wiring of \the [src].</span>")
 					buildstage = 1
@@ -67,7 +67,7 @@
 		if(1)
 			if(W.is_screwdriver(user))
 				to_chat(user, "You begin screwing closed \the [src].")
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 1)
 					to_chat(user, "<span class='notice'>You tightly screw closed the cover of \the [src].</span>")
 					buildstage = 2

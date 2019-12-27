@@ -196,7 +196,7 @@ For vending packs, see vending_packs.dm*/
 		C.contraband_enabled = 1
 		return
 	if(I.is_screwdriver(user))
-		playsound(loc, I.toolsound, 50, 1)
+		I.playtoolsound(loc, 50)
 		if(do_after(user, src, 20))
 			if (stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")

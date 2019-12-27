@@ -38,7 +38,7 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			to_chat(user, "You begin the delicate process of heating and moulding \the [src].")
-			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			WT.playtoolsound(user, 50)
 			if(do_after(user, src, 180))
 				to_chat(user, "You finish bending the metal into the shape of an ansible.")
 				if(src.loc == user)
@@ -215,7 +215,7 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			to_chat(user, "You begin slicing through \the [src].")
-			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			WT.playtoolsound(user, 50)
 			if(do_after(user, src, 60))
 				to_chat(user, "You cut \the [src] into a gun stock.")
 				if(src.loc == user)

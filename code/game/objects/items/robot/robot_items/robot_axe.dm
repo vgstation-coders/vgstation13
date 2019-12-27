@@ -11,7 +11,8 @@
 	origin_tech = Tc_SYNDICATE + "=6"
 	attack_verb = list("chops", "cleaves", "tears", "cuts")
 	toolspeed = 50
-	toolsound = 'sound/items/metal_impact.ogg'
+	toolsounds = list('sound/items/metal_impact.ogg')
+	var/list/activated_toolsounds = list('sound/items/Welder2.ogg')
 	var/active = FALSE
 	var/overheat = FALSE
 
@@ -39,7 +40,7 @@
 	force = active ? 25 : initial(force)
 	damtype = active ? BURN : BRUTE
 	toolspeed = active ? 15 : initial(toolspeed)
-	toolsound = active ? 'sound/items/Welder2.ogg' : initial(toolsound)
+	toolsounds = active ? activated_toolsounds : initial(toolsounds)
 	sharpness = active ? 1.4 : initial(sharpness)
 	heat_production = active ? 5000 : initial(heat_production)
 	w_class = active? W_CLASS_LARGE : initial(w_class)

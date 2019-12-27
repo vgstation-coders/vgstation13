@@ -1059,7 +1059,7 @@ var/global/list/airalarm_presets = list(
 			if(W.is_screwdriver(user))  // Opening that Air Alarm up.
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				update_icon()
 				return
 
@@ -1104,7 +1104,7 @@ var/global/list/airalarm_presets = list(
 
 			else if(iscrowbar(W))
 				to_chat(user, "You start prying out the circuit...")
-				playsound(src, W.toolsound, 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 20) && buildstage == 1)
 					to_chat(user, "You pry out the circuit!")
 					new /obj/item/weapon/circuitboard/air_alarm(get_turf(user))
@@ -1256,7 +1256,7 @@ FIRE ALARM
 	if (W.is_screwdriver(user) && buildstage == 2)
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-		playsound(src, W.toolsound, 50, 1)
+		W.playtoolsound(src, 50)
 		update_icon()
 		return
 
@@ -1289,7 +1289,7 @@ FIRE ALARM
 
 				else if(iscrowbar(W))
 					to_chat(user, "You start prying out the circuit...")
-					playsound(src, W.toolsound, 50, 1)
+					W.playtoolsound(src, 50)
 					if (do_after(user, src,  20) && buildstage == 1)
 						to_chat(user, "You pry out the circuit!")
 						new /obj/item/weapon/circuitboard/fire_alarm(get_turf(user))

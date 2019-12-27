@@ -282,7 +282,7 @@
 	var/obj/item/O = user.get_active_hand()
 	if(iscrowbar(O))
 		update_dir(get_dir(src, over_location))
-		playsound(src, O.toolsound, 25, 1)
+		O.playtoolsound(src, 25)
 		to_chat(user, "You change the direction of \the [src] using \the [O].")
 		return
 	return ..()
