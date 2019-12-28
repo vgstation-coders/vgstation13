@@ -536,7 +536,7 @@
 	else if(istype(W, /obj/item/weapon/card) && !opened && !broken)
 		togglelock(user)
 		return
-	else if(istype(W, /obj/item/weapon/screwdriver) && !opened && !locked && src.has_lockless_type)
+	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
 		remove_lock(user)
 		return
 	return ..()

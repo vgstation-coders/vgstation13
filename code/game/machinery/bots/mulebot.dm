@@ -144,7 +144,7 @@ var/global/mulebot_count = 0
 			updateDialog()
 	else if((istype(I,/obj/item/weapon/wirecutters)||istype(I,/obj/item/device/multitool)) && user.a_intent != I_HURT)
 		attack_hand(user)
-	else if(istype(I,/obj/item/weapon/screwdriver) && user.a_intent != I_HURT)
+	else if(I.is_screwdriver(user) && user.a_intent != I_HURT)
 		if(locked)
 			to_chat(user, "<span class='notice'>The maintenance hatch cannot be opened or closed while the controls are locked.</span>")
 			return
