@@ -218,7 +218,7 @@ var/global/list/alert_overlays_global = list()
 		var/mob/M = AM
 		var/obj/item/I = M.get_active_hand()
 		if((iscrowbar(I)||istype(I,/obj/item/weapon/fireaxe)) && M.a_intent == I_HURT)
-			attackby(I,M)
+			do_interaction(I,M)
 	return 0
 
 /obj/machinery/door/firedoor/power_change()
@@ -253,7 +253,7 @@ var/global/list/alert_overlays_global = list()
 		..()
 
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
-	return attackby(null, user)
+	return do_interaction(null, user)
 
 /obj/machinery/door/firedoor/attack_alien(mob/living/carbon/alien/humanoid/user)
 	force_open(user)
@@ -270,7 +270,10 @@ var/global/list/alert_overlays_global = list()
 		return 1
 	return 0
 
-/obj/machinery/door/firedoor/attackby(var/obj/item/weapon/C, var/mob/user, var/no_reruns = FALSE)
+/obj/machinery/door/firedoor/attackby(var/obj/item/weapon/C, var/mob/user)
+	return do_interaction(C, user)
+
+/obj/machinery/door/firedoor/proc/do_interaction(var/obj/item/weapon/C, var/mob/user, var/no_reruns = FALSE)
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
@@ -313,7 +316,7 @@ var/global/list/alert_overlays_global = list()
 			open()
 			return
 
-	if(C.is_wrench(user))
+	if(C != null && C.is_wrench(user))
 		if(blocked)
 			user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
 			"You begin to deconstruct \the [src] with \the [C].")
@@ -387,7 +390,7 @@ var/global/list/alert_overlays_global = list()
 			users_to_open = list()
 		users_to_open += users_name
 		if (twin && !no_reruns && !alarmed) // if it's alarmed, we don't want both to open, so that firelocks can still play their role.
-			twin.attackby(C, user, TRUE)
+			twin.do_interaction(C, user, TRUE)
 	var/needs_to_close = 0
 	if(density)
 		if(alarmed)
