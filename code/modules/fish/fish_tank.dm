@@ -688,7 +688,7 @@
 
 			return TRUE
 	//Wrenches can deconstruct empty tanks, but not tanks with any water. Kills any fish left inside and destroys any unharvested eggs in the process
-	if(iswrench(O))
+	if(O.is_wrench(user))
 		if (water_level == 0)
 			to_chat(user, "<span class='notice'>Now disassembling \the [src].</span>")
 			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)

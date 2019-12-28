@@ -71,7 +71,7 @@
 		else
 			busy = 0
 		return
-	else if(iswrench(O))
+	else if(O.is_wrench(user))
 		anchored = !anchored
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		user.visible_message("<span class='warning'>[user] [anchored ? "":"un"]anchors \the [src] [anchored ? "to":"from"] the floor.</span>", \

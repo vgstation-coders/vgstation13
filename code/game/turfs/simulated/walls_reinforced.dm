@@ -208,7 +208,7 @@
 				return
 
 		if(WALLCOVERREMOVED)
-			if(iswrench(W))
+			if(W.is_wrench(user))
 
 				user.visible_message("<span class='warning'>[user] starts loosening the bolts anchoring \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You start loosening the bolts anchoring \the [src]'s external support rods.</span>")
@@ -266,7 +266,7 @@
 				return
 
 			//Repair step, tighten the anchoring bolts
-			else if(iswrench(W))
+			else if(W.is_wrench(user))
 
 				user.visible_message("<span class='notice'>[user] starts tightening the bolts anchoring \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You start tightening the bolts anchoring \the [src]'s external support rods.</span>")

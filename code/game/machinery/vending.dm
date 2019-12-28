@@ -443,7 +443,7 @@ var/global/num_vending_terminals = 1
 	return 1
 
 /obj/machinery/vending/attackby(obj/item/W, mob/user)
-	if(stat & (BROKEN) && !iswrench(W))
+	if(stat & (BROKEN) && !W.is_wrench(user))
 		if(istype(W, /obj/item/stack/sheet/glass/rglass))
 			var/obj/item/stack/sheet/glass/rglass/G = W
 			to_chat(user, "<span class='notice'>You replace the broken glass.</span>")

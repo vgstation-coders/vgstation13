@@ -138,7 +138,7 @@
 /obj/item/weapon/gun/projectile/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
 	if(user.stat || user.restrained() || user.lying)
 		return
-	if(iswrench(W) && !status)//Taking this apart
+	if(W.is_wrench(user) && !status)//Taking this apart
 		var/turf/T = get_turf(src)
 		if(weldtool)
 			weldtool.forceMove(T)

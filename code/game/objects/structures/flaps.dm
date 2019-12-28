@@ -20,7 +20,7 @@
 		name = "\improper [airtight? "Airtight p" : "P"]lastic flaps"
 		desc = "[airtight? "Heavy duty, airtight, plastic flaps." : "I definitely can't get past those. No way."]"
 		return 1
-	if(iswrench(I) && airtight != 1)
+	if(I.is_wrench(user) && airtight != 1)
 		if(anchored == 0)
 			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		else

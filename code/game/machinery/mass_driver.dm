@@ -144,7 +144,7 @@ var/list/mass_drivers = list()
 					new /obj/item/stack/sheet/plasteel(get_turf(src),3)
 					qdel(src)
 				return 1
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				if(check_competition())
 					to_chat(user, "<span class = 'notice'>You can't anchor \the [src], as there's a mass driver in that location already.</span>")
 					return
@@ -157,7 +157,7 @@ var/list/mass_drivers = list()
 					update_icon()
 				return 1
 		if(1) // Fixed to the floor
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "You begin to de-anchor \the [src] from the floor.")
 				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 				if(do_after(user, src, 10) && (build == 1))

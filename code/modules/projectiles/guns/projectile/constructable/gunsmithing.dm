@@ -426,7 +426,7 @@
 /obj/item/weapon/gun_assembly/attackby(obj/item/weapon/W, mob/user)
 	switch(state)
 		if("stock_reservoir_assembly")
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "You securely fasten the fuel reservoir to \the [src].")
 				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 				state = "stock_reservoir"
@@ -446,7 +446,7 @@
 				state = "stock_capacitorbank_assembly"
 				update_assembly()
 				C.use(5)
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "You loosen the fuel reservoir on \the [src].")
 				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 				state = "stock_reservoir_assembly"
@@ -807,7 +807,7 @@
 		to_chat(user, "<span class='notice'>\The [src.name] is uncharged.</span>")
 
 /obj/machinery/power/secured_capacitor/attackby(obj/item/weapon/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(charging)
 			to_chat(user, "<span class='warning'>\The [src.name] needs to be turned off first.</span>")
 			return

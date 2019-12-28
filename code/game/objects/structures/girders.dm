@@ -38,7 +38,7 @@
 		icon_state = "displaced_wood"
 
 /obj/structure/girder/attackby(obj/item/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(state == 0) //Normal girder or wooden girder
 			if(anchored && !istype(src, /obj/structure/girder/displaced)) //Anchored, destroy it
 				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
@@ -414,7 +414,7 @@
 	return
 
 /obj/structure/cultgirder/attackby(obj/item/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 		user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", \
 		"<span class='notice'>You start disassembling \the [src].</span>")

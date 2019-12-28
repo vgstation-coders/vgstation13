@@ -102,7 +102,7 @@
 					qdel(L)
 
 /obj/item/stack/tile/wood/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(use(4))
 			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			drop_stack(sheet_type, get_turf(user), 1, user)

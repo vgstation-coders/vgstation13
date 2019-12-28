@@ -35,7 +35,7 @@
 
 		if(0)
 			// State 0
-			if(iswrench(W) && isturf(src.loc))
+			if(W.is_wrench(user) && isturf(src.loc))
 				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 				to_chat(user, "You wrench the assembly into place.")
 				anchored = 1
@@ -53,7 +53,7 @@
 					state = 2
 				return
 
-			else if(iswrench(W))
+			else if(W.is_wrench(user))
 				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 				to_chat(user, "You unattach the assembly from it's place.")
 				anchored = 0

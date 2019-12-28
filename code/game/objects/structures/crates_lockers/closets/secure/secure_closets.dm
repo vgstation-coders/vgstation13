@@ -95,7 +95,7 @@
 			src.update_icon()
 			for(var/mob/M in viewers(src))
 				M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
-		if(istype(W, /obj/item/weapon/screwdriver) && !src.locked && src.has_lockless_type)
+		if(W.is_screwdriver(user) && !src.locked && src.has_lockless_type)
 			remove_lock(user)
 			return
 		else

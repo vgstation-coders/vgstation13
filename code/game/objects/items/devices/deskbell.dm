@@ -29,7 +29,7 @@
 	var/wrenching = 0
 
 /obj/item/device/deskbell/attackby(obj/item/W, mob/user)
-	if(iswrench(W) && isturf(src.loc))
+	if(W.is_wrench(user) && isturf(src.loc))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
@@ -52,7 +52,7 @@
 
 		return
 
-	if(istype(W,/obj/item/weapon/screwdriver))
+	if(W.is_screwdriver(user))
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
@@ -132,7 +132,7 @@
 			radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/device/deskbell/signaler/attackby(obj/item/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
@@ -154,7 +154,7 @@
 
 		return
 
-	if(istype(W,/obj/item/weapon/screwdriver))
+	if(W.is_screwdriver(user))
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
@@ -279,7 +279,7 @@
 	else
 		switch(build_step)
 			if(0)
-				if(iswrench(W))
+				if(W.is_wrench(user))
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
 					playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
@@ -312,7 +312,7 @@
 					build_step--
 					update_icon()
 					return
-				if(istype(W,/obj/item/weapon/screwdriver))
+				if(W.is_screwdriver(user))
 					var/obj/item/device/deskbell/D = null
 					if(has_signaler)
 						D = new /obj/item/device/deskbell/signaler(get_turf(src))
