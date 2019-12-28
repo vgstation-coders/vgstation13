@@ -60,10 +60,10 @@
 	else
 		to_chat(user, "<span class='notice'>Access Denied.</span>")
 
-/obj/structure/closet/secure_closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(src.opened)
+/obj/structure/closet/secure_closet/attackby(obj/item/weapon/W, mob/user)
+	if(opened)
 		return ..()
-	else if(src.broken)
+	else if(broken)
 		if(issolder(W))
 			var/obj/item/weapon/solder/S = W
 			if(!S.remove_fuel(4,user))
@@ -73,13 +73,13 @@
 				playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 				broken = 0
 				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")
-				src.icon_state = src.icon_closed
+				icon_state = icon_closed
 		else
 			to_chat(user, "<span class='notice'>The locker appears to be broken.</span>")
 			return
-	else if(istype(W, /obj/item/weapon/card/emag) && !src.broken)
-		broken = 1
-		locked = 0
+	else if(isEmag(W) && !broken)
+		broken = TRUE
+		locked = FALSE
 		desc = "It appears to be broken."
 		icon_state = icon_off
 		flick(icon_broken, src)
@@ -91,15 +91,13 @@
 			var/obj/item/weapon/weldingtool/WT = W
 			if(!WT.remove_fuel(1,user))
 				return
-			src.welded =! src.welded
-			src.update_icon()
-			for(var/mob/M in viewers(src))
-				M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
-		if(W.is_screwdriver(user) && !src.locked && src.has_lockless_type)
+			welded =! welded
+			update_icon()
+			M.visible_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
+		if(W.is_screwdriver(user) && !locked && has_lockless_type)
 			remove_lock(user)
 			return
-		else
-			togglelock(user)
+		togglelock(user)
 
 /obj/structure/closet/secure_closet/relaymove(mob/user as mob)
 	if(user.stat || !isturf(src.loc))
@@ -128,16 +126,16 @@
 				to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>BANG, bang!</FONT>")
 	return
 
-/obj/structure/closet/secure_closet/attack_hand(mob/user as mob)
+/obj/structure/closet/secure_closet/attack_hand(mob/user)
 	if(!Adjacent(user))
 		return
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
-	if(!src.toggle())
-		return src.attackby(null, user)
+	if(!toggle())
+		return togglelock(user)
 
-/obj/structure/closet/secure_closet/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+/obj/structure/closet/secure_closet/attack_paw(mob/user)
+	return attack_hand(user)
 
 /obj/structure/closet/secure_closet/verb/verb_togglelock()
 	set src in oview(1) // One square distance
