@@ -145,7 +145,7 @@
 	. = ..()
 
 /obj/structure/mannequin/attackby(var/obj/item/weapon/W,var/mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		return wrenchAnchor(user, 5 SECONDS)
 	else if(user.a_intent == I_HURT)
 		user.delayNextAttack(8)
@@ -774,7 +774,7 @@
 
 
 /obj/structure/block/attackby(var/obj/item/weapon/W,var/mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		return wrenchAnchor(user, 5 SECONDS)
 	else if(istype(W, /obj/item/weapon/chisel))
 

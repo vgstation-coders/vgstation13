@@ -149,7 +149,7 @@
 	</ul>"}
 
 /obj/machinery/meter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 
 	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)

@@ -419,7 +419,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			beaker =  G
 			user.visible_message("[user] adds \a [G] to \the [src]!", "You add \a [G] to \the [src]!")
 			investigation_log(I_CHEMS, "was loaded with \a [G] by [key_name(user)], containing [G.reagents.get_reagent_ids(1)]")
-	if(iswrench(G))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
+	if(G.is_wrench(user))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
 		return
 	if(G.is_screwdriver(user))
 		if(occupant || on)

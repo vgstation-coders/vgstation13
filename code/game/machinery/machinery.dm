@@ -585,7 +585,7 @@ Class Procs:
 			emag(user)
 			return
 
-	if(iswrench(O) && wrenchable()) //make sure this is BEFORE the fixed2work check
+	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
 			if(state == 2 && src.machine_flags & WELD_FIXED) //prevent unanchoring welded machinery
 				to_chat(user, "\The [src] has to be unwelded from the floor first.")

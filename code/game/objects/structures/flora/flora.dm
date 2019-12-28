@@ -349,7 +349,7 @@
 		to_chat(user, "<span class='info'>You can see [plant_name] planted in it.</span>")
 
 /obj/structure/flora/pottedplant/claypot/attackby(var/obj/item/O,var/mob/user)
-	if(istype(O,/obj/item/weapon/wrench))
+	if(O.is_wrench(user))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			anchored = !anchored

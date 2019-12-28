@@ -47,7 +47,7 @@
 	anchored = FALSE
 
 /obj/structure/shuttle/engine/heater/DIY/attackby(obj/item/I, mob/user)
-	if(iswrench(I) && wrenchAnchor(user, 5 SECONDS))
+	if(I.is_wrench(user) && wrenchAnchor(user, 5 SECONDS))
 		if(!anchored)
 			if(connected_engine)
 				connected_engine.heater = null
@@ -77,7 +77,7 @@
 	anchored = FALSE
 
 /obj/structure/shuttle/engine/propulsion/DIY/attackby(obj/item/I, mob/user)
-	if(iswrench(I))
+	if(I.is_wrench(user))
 		return wrenchAnchor(user, 5 SECONDS)
 	return ..()
 

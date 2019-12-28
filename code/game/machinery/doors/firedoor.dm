@@ -313,7 +313,7 @@ var/global/list/alert_overlays_global = list()
 			open()
 			return
 
-	if(istype(C, /obj/item/weapon/wrench))
+	if(C.is_wrench(user))
 		if(blocked)
 			user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
 			"You begin to deconstruct \the [src] with \the [C].")

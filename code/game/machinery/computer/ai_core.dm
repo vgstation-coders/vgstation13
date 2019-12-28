@@ -34,7 +34,7 @@
 			icon_state = "4"
 
 /obj/structure/AIcore/attackby(var/obj/item/P, var/mob/user)
-	if(iswrench(P))
+	if(P.is_wrench(user))
 		wrenchAnchor(user, time_to_wrench = 2 SECONDS)
 	switch(state)
 		if(NOCIRCUITBOARD)

@@ -73,7 +73,7 @@
 		return
 	if(user.stat)
 		return
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2

@@ -159,7 +159,7 @@ var/global/mulebot_count = 0
 			icon_state = "[icon_initial]0"
 
 		updateDialog()
-	else if (iswrench(I) && user.a_intent != I_HURT)
+	else if (I.is_wrench(user) && user.a_intent != I_HURT)
 		if (src.health < maxhealth)
 			src.health = min(maxhealth, src.health+25)
 			user.visible_message(

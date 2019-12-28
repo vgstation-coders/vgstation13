@@ -32,7 +32,7 @@
 
 /obj/machinery/light_construct/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	src.add_fingerprint(user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		if (src.stage == 1)
 			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			to_chat(usr, "You begin deconstructing [src].")
