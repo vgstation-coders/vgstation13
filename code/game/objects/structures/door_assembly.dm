@@ -222,7 +222,7 @@
 			return
 	else if(W.is_wrench(user) && state == 0)
 		busy = 1
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		if(anchored)
 			user.visible_message("[user] unsecures the airlock assembly from the floor.", "You start to unsecure the airlock assembly from the floor.")
 		else

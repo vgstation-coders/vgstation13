@@ -117,7 +117,7 @@
 				return
 			else
 				if(P.is_wrench(user))
-					playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+					P.playtoolsound(src, 75)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
 					drop_stack(sheet_type, get_turf(src), 5, user)
 					qdel(src)

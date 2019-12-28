@@ -686,7 +686,7 @@ Status: []<BR>"},
 
 		if(2)
 			if(W.is_wrench(user))
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				to_chat(user, "<span class='notice'>You bolt the metal armor into place.</span>")
 				build_step = 3
 				return
@@ -715,7 +715,7 @@ Status: []<BR>"},
 				return
 
 			else if(W.is_wrench(user))
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				to_chat(user, "You remove the turret's metal armor bolts.")
 				build_step = 2
 				return

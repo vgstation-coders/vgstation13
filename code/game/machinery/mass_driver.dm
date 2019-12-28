@@ -149,7 +149,7 @@ var/list/mass_drivers = list()
 					to_chat(user, "<span class = 'notice'>You can't anchor \the [src], as there's a mass driver in that location already.</span>")
 					return
 				to_chat(user, "You begin to anchor \the [src] on the floor.")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10) && (build == 0))
 					to_chat(user, "<span class='notice'>You anchor \the [src]!</span>")
 					anchored = 1
@@ -159,7 +159,7 @@ var/list/mass_drivers = list()
 		if(1) // Fixed to the floor
 			if(W.is_wrench(user))
 				to_chat(user, "You begin to de-anchor \the [src] from the floor.")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10) && (build == 1))
 					build--
 					update_icon()

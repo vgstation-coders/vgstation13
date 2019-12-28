@@ -22,7 +22,7 @@
 		return 1
 	if(I.is_wrench(user) && airtight != 1)
 		if(anchored == 0)
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 		else
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		user.visible_message("[user] [anchored? "loosens" : "tightens"] the flap from its anchoring.", "You [anchored? "loosen" : "tighten"] the flap from its anchoring.")

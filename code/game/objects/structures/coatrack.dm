@@ -71,7 +71,7 @@
 			hat = C
 			update_icon()
 	else if(C.is_wrench(user))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		C.playtoolsound(src, 50)
 		getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 2)
 		qdel(src)//the hat and suit on the coat rack are automatically dropped by Destroy()
 	else

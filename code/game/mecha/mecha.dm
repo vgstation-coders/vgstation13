@@ -794,11 +794,11 @@
 		if(state==STATE_BOLTSEXPOSED)
 			state = STATE_BOLTSOPENED
 			to_chat(user, "You undo the securing bolts.")
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 		else if(state==STATE_BOLTSOPENED)
 			state = STATE_BOLTSEXPOSED
 			to_chat(user, "You tighten the securing bolts.")
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 		return
 	else if(iscrowbar(W))
 		if(state==STATE_BOLTSOPENED)
