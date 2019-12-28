@@ -488,12 +488,23 @@
 					src.desc = initial(src.desc)
 
 			if(ishuman(L))
-				var/mob/living/carbon/H = AM
+				var/mob/living/carbon/human/H = AM
 				if(H.m_intent == "run")
 					armed = 0
 					H.legcuffed = src
 					src.forceMove(H)
 					H.update_inv_legcuffed()
+
+					playsound(src, 'sound/effects/snap.ogg', 50, 1)
+					L.audible_scream()
+					H.Knockdown(5)
+					H.Stun(5)
+
+					var/datum/organ/external/affecting = H.pick_usable_organ(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+					if(affecting)
+						if(affecting.take_damage(25, 0, 25, SERRATED_BLADE & SHARP_BLADE))
+							H.UpdateDamageIcon()
+						H.updatehealth()
 
 					feedback_add_details("handcuffs","B") //Yes, I know they're legcuffs. Don't change this, no need for an extra variable. The "B" is used to tell them apart.
 
