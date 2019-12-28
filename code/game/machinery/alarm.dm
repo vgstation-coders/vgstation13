@@ -1123,7 +1123,7 @@ var/global/list/airalarm_presets = list(
 			else if(W.is_wrench(user))
 				to_chat(user, "You remove the air alarm assembly from the wall!")
 				new /obj/item/mounted/frame/alarm_frame(get_turf(user))
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				qdel(src)
 				return
 
@@ -1306,7 +1306,7 @@ FIRE ALARM
 				else if(W.is_wrench(user))
 					to_chat(user, "You remove the fire alarm assembly from the wall!")
 					new /obj/item/mounted/frame/firealarm(get_turf(user))
-					playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					qdel(src)
 		return
 

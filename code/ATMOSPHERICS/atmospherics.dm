@@ -303,7 +303,7 @@ Pipelines + Other Objects -> Pipe network
 		if(user.drop_item(pipe))
 			pipe.setPipingLayer(src.piping_layer) //align it with us
 			return 1
-	if (!W.is_wrench(user))
+	if(!W.is_wrench(user))
 		return ..()
 	if(src.machine_flags & WRENCHMOVE)
 		return ..()
@@ -328,7 +328,7 @@ Pipelines + Other Objects -> Pipe network
 		else
 			to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's too exerted due to internal pressure.</span>")
 			return 1
-	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	W.playtoolsound(src, 50)
 	to_chat(user, "<span class='notice'>You begin to unfasten \the [src]...</span>")
 	if (do_after(user, src, 40))
 		user.visible_message( \
