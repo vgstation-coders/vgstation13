@@ -51,14 +51,14 @@ var/list/solars_list = list()
 			anchored = 1
 			user.visible_message("<span class='notice'>[user] wrenches [src] down.</span>", \
 			"<span class='notice'>You wrench [src] down.</span>")
-			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+			W.playtoolsound(src, 75)
 			return 1
 	else
 		if(W.is_wrench(user))
 			anchored = 0
 			user.visible_message("<span class='notice'>[user] unwrenches [src] from the ground.</span>", \
 			"<span class='notice'>You unwrench [src] from the ground.</span>")
-			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+			W.playtoolsound(src, 75)
 			return 1
 
 		if(istype(W, /obj/item/stack/sheet/glass))

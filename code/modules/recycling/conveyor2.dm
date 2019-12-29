@@ -533,7 +533,7 @@
 		return .
 	if(W.is_wrench(user))
 		to_chat(user, "<span class='notice'>Deconstructing \the [src]...</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		if(do_after(user, src,50))
 			to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
 			var/turf/T=get_turf(src)

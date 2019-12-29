@@ -156,7 +156,7 @@
 
 /obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
     if(W.is_wrench(user) && wrenchable())
-        return wrenchAnchor(user)
+        return wrenchAnchor(user, W)
     ..()
 
 /obj/structure/closet/crate/bin/wrenchable()
@@ -221,7 +221,7 @@
 
 /obj/structure/closet/crate/secure/bin/attackby(var/obj/item/weapon/W, var/mob/user)
     if(W.is_wrench(user) && wrenchable())
-        return wrenchAnchor(user)
+        return wrenchAnchor(user, W)
     ..()
 
 /obj/structure/closet/crate/secure/bin/wrenchable()

@@ -35,7 +35,7 @@
 
 /obj/structure/AIcore/attackby(var/obj/item/P, var/mob/user)
 	if(P.is_wrench(user))
-		wrenchAnchor(user, time_to_wrench = 2 SECONDS)
+		wrenchAnchor(user, P, time_to_wrench = 2 SECONDS)
 	switch(state)
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))

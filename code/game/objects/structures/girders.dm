@@ -41,7 +41,7 @@
 	if(W.is_wrench(user))
 		if(state == 0) //Normal girder or wooden girder
 			if(anchored && !istype(src, /obj/structure/girder/displaced)) //Anchored, destroy it
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", \
 				"<span class='notice'>You start disassembling \the [src].</span>")
 				if(do_after(user, src, construction_length))
@@ -54,7 +54,7 @@
 					to_chat(user, "<span class='notice'>You can't secure \the [src] to [istype(src.loc,/turf/space) ? "space" : "this"]!</span>")
 					return
 
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				user.visible_message("<span class='notice'>[user] starts securing \the [src].</span>", \
 				"<span class='notice'>You start securing \the [src].</span>")
 				if(do_after(user, src, construction_length))
@@ -65,7 +65,7 @@
 					anchored = 1
 					update_icon()
 		else if(state == 1 || state == 2) //Clearly a reinforced girder
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			W.playtoolsound(src, 100)
 			user.visible_message("<span class='notice'>[user] starts [anchored ? "un" : ""]securing \the [src].</span>", \
 			"<span class='notice'>You start [anchored ? "un" : ""]securing \the [src].</span>")
 			if(do_after(user, src, construction_length))
@@ -415,7 +415,7 @@
 
 /obj/structure/cultgirder/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_wrench(user))
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", \
 		"<span class='notice'>You start disassembling \the [src].</span>")
 		if(do_after(user, src,40))

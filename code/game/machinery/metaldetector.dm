@@ -257,7 +257,7 @@
 		if ((src.anchored))
 			src.flash()
 
-/obj/machinery/detector/wrenchAnchor(var/mob/user)
+/obj/machinery/detector/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

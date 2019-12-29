@@ -179,7 +179,7 @@
 		return TRUE
 	return FALSE
 
-/obj/machinery/power/port_gen/pacman/wrenchAnchor(var/mob/user)
+/obj/machinery/power/port_gen/pacman/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

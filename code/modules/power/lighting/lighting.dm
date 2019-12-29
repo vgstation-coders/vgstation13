@@ -34,7 +34,7 @@
 	src.add_fingerprint(user)
 	if (W.is_wrench(user))
 		if (src.stage == 1)
-			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+			W.playtoolsound(src, 75)
 			to_chat(usr, "You begin deconstructing [src].")
 			if (!do_after(usr, src, 30))
 				return

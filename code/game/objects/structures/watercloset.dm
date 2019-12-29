@@ -281,7 +281,7 @@
 		if(I.is_wrench(user))
 			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
 								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			I.playtoolsound(src, 100)
 			if(do_after(user, src, 50))
 				if(anchored)
 					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \

@@ -147,7 +147,7 @@
 	else
 		return ..()
 
-/obj/machinery/pipedispenser/wrenchAnchor(var/mob/user)
+/obj/machinery/pipedispenser/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

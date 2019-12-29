@@ -245,7 +245,7 @@ Status: []<BR>"},
 
 	..()
 
-	if(W.is_wrench(user) && !on && !raised && wrenchAnchor(user))
+	if(W.is_wrench(user) && !on && !raised && wrenchAnchor(user, W))
 		// This code handles moving the turret around. After all, it's a portable turret!
 
 		if(anchored)
@@ -654,7 +654,7 @@ Status: []<BR>"},
 	// this is a bit unweildy but self-explanitory
 	switch(build_step)
 		if(0) // first step
-			if(W.is_wrench(user) && !anchored && wrenchAnchor(user))
+			if(W.is_wrench(user) && !anchored && wrenchAnchor(user, W))
 				build_step = 1
 				anchored = 1
 				return
@@ -678,7 +678,7 @@ Status: []<BR>"},
 					to_chat(user, "<span class='warning'>You need at least 2 [stack] to add internal armor.</span>")
 					return
 
-			else if(W.is_wrench(user) && wrenchAnchor(user))
+			else if(W.is_wrench(user) && wrenchAnchor(user, W))
 				build_step = 0
 				anchored = 0
 				return

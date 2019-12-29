@@ -181,7 +181,7 @@
 				return 1
 			if(W.is_wrench(user))
 				to_chat(user, "<span class='notice'>You remove the securing bolts...</span>")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISNOTDONE)
 					new /obj/item/mounted/frame/soundsystem(get_turf(src))
 					to_chat(user, "<span class='notice'>The frame pops off.</span>")

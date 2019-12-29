@@ -212,7 +212,7 @@
 
 				user.visible_message("<span class='warning'>[user] starts loosening the bolts anchoring \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You start loosening the bolts anchoring \the [src]'s external support rods.</span>")
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 
 				if(do_after(user, src, 40) && d_state == WALLCOVERREMOVED)
 					src.d_state = WALLRODSUNSECURED
@@ -270,7 +270,7 @@
 
 				user.visible_message("<span class='notice'>[user] starts tightening the bolts anchoring \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You start tightening the bolts anchoring \the [src]'s external support rods.</span>")
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 
 				if(do_after(user, src, 40) && d_state == WALLRODSUNSECURED)
 					src.d_state = WALLCOVERREMOVED

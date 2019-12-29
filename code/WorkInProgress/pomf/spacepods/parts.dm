@@ -82,7 +82,7 @@
 		to_chat(user, "<span class='notice'>You [!anchored ? "secure \the [src] in place."  : "remove the securing bolts."]</span>")
 		anchored = !anchored
 		setDensity(anchored)
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		O.playtoolsound(src, 50)
 
 /obj/item/pod_parts/pod_frame/verb/rotate()
 	set name = "Rotate Frame"

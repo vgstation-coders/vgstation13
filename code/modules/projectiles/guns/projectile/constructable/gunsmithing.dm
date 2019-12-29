@@ -428,7 +428,7 @@
 		if("stock_reservoir_assembly")
 			if(W.is_wrench(user))
 				to_chat(user, "You securely fasten the fuel reservoir to \the [src].")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_reservoir"
 				update_assembly()
 		if("stock_reservoir")
@@ -448,7 +448,7 @@
 				C.use(5)
 			if(W.is_wrench(user))
 				to_chat(user, "You loosen the fuel reservoir on \the [src].")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_reservoir_assembly"
 				update_assembly()
 
@@ -812,7 +812,7 @@
 			to_chat(user, "<span class='warning'>\The [src.name] needs to be turned off first.</span>")
 			return
 		to_chat(user, "You unsecure \the [src.name] from the floor.")
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		power_machines.Remove(src)
 		switch(name)
 			if("capacitor")

@@ -66,7 +66,7 @@
 		return
 	return ..()
 
-/obj/machinery/atmospherics/unary/cold_sink/freezer/wrenchAnchor(var/mob/user)
+/obj/machinery/atmospherics/unary/cold_sink/freezer/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(on)
 		to_chat(user, "You have to turn off \the [src] first!")
 		return FALSE
@@ -240,7 +240,7 @@
 		return
 	return ..()
 
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/wrenchAnchor(var/mob/user)
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(on)
 		to_chat(user, "You have to turn off \the [src] first!")
 		return FALSE

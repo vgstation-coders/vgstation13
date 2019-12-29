@@ -73,7 +73,7 @@
 		return
 	else if(O.is_wrench(user))
 		anchored = !anchored
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		O.playtoolsound(src, 50)
 		user.visible_message("<span class='warning'>[user] [anchored ? "":"un"]anchors \the [src] [anchored ? "to":"from"] the floor.</span>", \
 		"<span class='notice'>You [anchored ? "":"un"]anchor the [src] [anchored ? "to":"from"] the floor.</span>")
 	else if(istype(O, /obj/item/weapon/pen))
