@@ -13,12 +13,14 @@
 	max_targets = 1
 	cooldown_min = 100 //50 deciseconds reduction per rank
 	duration = 50 //in deciseconds
+	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 
 	hud_state = "wiz_jaunt"
 
 	var/enteranim = "liquify"
 	var/exitanim = "reappear"
 	var/mist = 1
+	var/empowered
 
 /image/jaunter
 
@@ -27,14 +29,25 @@
 
 /spell/targeted/ethereal_jaunt/cast(list/targets)
 	if(targets.len > 1)
-		mass_jaunt(targets, duration, enteranim, exitanim, mist)
+		mass_jaunt(targets, duration, enteranim, exitanim, mist, empowered)
 	else
-		ethereal_jaunt(targets[1], duration, enteranim, exitanim, mist)
+		ethereal_jaunt(targets[1], duration, enteranim, exitanim, mist, empowered)
 
-/proc/ethereal_jaunt(var/mob/living/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1)
+/spell/targeted/ethereal_jaunt/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Makes you faster while jaunting."
+	return ..()
+
+/spell/targeted/ethereal_jaunt/empower_spell()
+	if(!can_improve(Sp_POWER))
+		return 0
+	spell_levels[Sp_POWER]++
+	empowered = 1
+
+/proc/ethereal_jaunt(var/mob/living/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1, var/empowered)
 	var/mobloc = get_turf(target)
 	var/previncorp = target.incorporeal_move //This shouldn't ever matter under usual circumstances
-	if(target.incorporeal_move == INCORPOREAL_ETHEREAL) //they're already jaunting, we have another fix for this but this is sane
+	if(target.incorporeal_move) //they're already jaunting, we have another fix for this but this is sane
 		return
 	target.unlock_from()
 	//Begin jaunting with an animation
@@ -46,7 +59,10 @@
 		steam.start()
 
 	//Turn on jaunt incorporeal movement, make him invincible and invisible
-	target.incorporeal_move = INCORPOREAL_ETHEREAL
+	if(empowered)
+		target.incorporeal_move = INCORPOREAL_ETHEREAL_IMPROVED
+	else
+		target.incorporeal_move = INCORPOREAL_ETHEREAL
 	target.invisibility = INVISIBILITY_MAXIMUM
 	target.flags |= INVULNERABLE
 	var/old_density = target.density
@@ -94,7 +110,7 @@
 		jaunts[target] = I
 	for(var/mob/living/target in targets)
 		spawn(0)
-			if(target.incorporeal_move != INCORPOREAL_ETHEREAL) //To avoid the potential for infinite jaunt
+			if(target.incorporeal_move != INCORPOREAL_ETHEREAL && target.incorporeal_move != INCORPOREAL_ETHEREAL_IMPROVED)//To avoid the potential for infinite jaunt
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images += jaunts[A]

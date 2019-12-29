@@ -485,8 +485,11 @@
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
 			mob.delayNextMove(movedelay)
-		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
+		if(INCORPOREAL_ETHEREAL, INCORPOREAL_ETHEREAL_IMPROVED) //Jaunting, without needing to be done through relaymove
+			var/jaunt_type = mob.incorporeal_move
 			var/movedelay = ETHEREAL_MOVEDELAY
+			if(jaunt_type == INCORPOREAL_ETHEREAL_IMPROVED)
+				movedelay = ETHEREAL_IMPROVED_MOVEDELAY
 			mob.set_glide_size(DELAY2GLIDESIZE(movedelay))
 			var/turf/newLoc = get_step(mob,direct)
 			if(!(newLoc.turf_flags & NOJAUNT) && !newLoc.holy)
