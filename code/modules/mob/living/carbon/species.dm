@@ -601,8 +601,8 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/grey // /vg/
 	name = "Grey"
-	icobase = 'icons/mob/human_races/r_grey.dmi'
-	deform = 'icons/mob/human_races/r_def_grey.dmi'
+	icobase = 'icons/mob/human_races/grey/r_grey.dmi'
+	deform = 'icons/mob/human_races/grey/r_def_grey.dmi'
 	known_languages = list(LANGUAGE_GREY)
 	eyes = "grey_eyes_s"
 
@@ -646,6 +646,26 @@ var/global/list/whitelisted_species = list("Human")
 					You are particularly allergic to water, which acts like acid to you, but the inverse is so for acid, so you're fun at parties.<br>\
 					You're not as good in a fist fight as a regular baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
 
+/datum/species/grey/handle_post_spawn(var/mob/living/carbon/human/H)
+	if(myhuman != H)
+		return
+	updatespeciescolor(H)
+	H.update_icon()
+
+/datum/species/grey/updatespeciescolor(var/mob/living/carbon/human/H)
+	switch(H.my_appearance.s_tone)
+		if(4)
+			icobase = 'icons/mob/human_races/grey/r_greyblue.dmi'
+			deform = 'icons/mob/human_races/grey/r_def_greyblue.dmi'
+		if(3)
+			icobase = 'icons/mob/human_races/grey/r_greygreen.dmi'
+			deform = 'icons/mob/human_races/grey/r_def_greygreen.dmi'
+		if(2)
+			icobase = 'icons/mob/human_races/grey/r_greylight.dmi'
+			deform = 'icons/mob/human_races/grey/r_def_greylight.dmi'
+		else
+			icobase = 'icons/mob/human_races/grey/r_grey.dmi'
+			deform = 'icons/mob/human_races/grey/r_def_grey.dmi'
 /datum/species/grey/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
