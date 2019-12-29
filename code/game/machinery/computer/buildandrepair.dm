@@ -37,6 +37,7 @@
 	var/powernet = null
 	var/list/records = null
 	var/contain_parts = 1
+	toolsounds = list('sound/items/Screwdriver.ogg')
 
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"

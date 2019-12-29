@@ -1124,10 +1124,10 @@ About the new airlock wires panel:
 
 
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open
-/obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
+/obj/machinery/door/airlock/togglePanelOpen(var/obj/item/toggleitem, mob/user)
 	if(!operating)
 		panel_open = !panel_open
-		playsound(src, 'sound/items/Screwdriver.ogg', 25, 1, -6)
+		toggleitem.playtoolsound(src, 50, TRUE, -6)
 		to_chat(user, "<span class='notice'>You [panel_open?"open":"close"] the panel.</span>")
 		update_icon()
 		return 1

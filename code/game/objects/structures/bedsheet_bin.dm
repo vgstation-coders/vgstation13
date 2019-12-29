@@ -19,7 +19,7 @@ LINEN BINS
 	w_class = W_CLASS_TINY
 	_color = "white"
 	restraint_resist_time = 20 SECONDS
-	restraint_apply_sound = "rustle"
+	toolsounds = list("rustle")
 
 //cutting the bedsheet into rags
 /obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)

@@ -173,7 +173,7 @@ obj/structure/windoor_assembly/Destroy()
 			to_chat(user, "<span class='notice'>\The [AE.name] is too damaged to work.</span>")
 			return
 
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] installs [AE] into [src].", "You start to install [AE] into [src].")
 
 		if(do_after(user, src, 40))
