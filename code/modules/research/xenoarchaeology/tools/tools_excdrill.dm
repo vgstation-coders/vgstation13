@@ -5,7 +5,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
 	item_state = "excavationdrill"
 	excavation_amount = 0.5
-	toolspeed = 30
+	toolspeed = 0.3
 	desc = "Basic archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The tip is adjustable from 1 to 30 cms."
 	toolsounds = list('sound/weapons/thudswoosh.ogg')
 	drill_verb = "drilling"
@@ -50,7 +50,7 @@
 	icon_state = "Dexcavationdrill0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
 	item_state = "Dexcavationdrill"
-	toolspeed = 15
+	toolspeed = 0.15
 	desc = "Advanced archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The diamond tip is adjustable from 1 to 100 cms."
 
 /obj/item/weapon/pickaxe/excavationdrill/adv/attack_self(mob/user as mob)

@@ -7,7 +7,7 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick_brush"
 	item_state = "syringe_0"
-	toolspeed = 20
+	toolspeed = 0.2
 	desc = "Thick metallic wires for clearing away dust and loose scree (1 centimetre excavation depth)."
 	excavation_amount = 0.5
 	toolsounds = list('sound/weapons/thudswoosh.ogg')
@@ -19,7 +19,7 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick1"
 	item_state = "syringe_0"
-	toolspeed = 20
+	toolspeed = 0.2
 	desc = "A miniature excavation tool for precise digging (2 centimetre excavation depth)."
 	excavation_amount = 1
 	toolsounds = list('sound/items/Screwdriver.ogg')
@@ -31,7 +31,7 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick2"
 	item_state = "syringe_0"
-	toolspeed = 20
+	toolspeed = 0.2
 	desc = "A miniature excavation tool for precise digging (4 centimetre excavation depth)."
 	excavation_amount = 2
 	toolsounds = list('sound/items/Screwdriver.ogg')
@@ -43,7 +43,7 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick3"
 	item_state = "syringe_0"
-	toolspeed = 20
+	toolspeed = 0.2
 	desc = "A miniature excavation tool for precise digging (6 centimetre excavation depth)."
 	excavation_amount = 3
 	toolsounds = list('sound/items/Screwdriver.ogg')
@@ -55,7 +55,7 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick4"
 	item_state = "syringe_0"
-	toolspeed = 20
+	toolspeed = 0.2
 	desc = "A miniature excavation tool for precise digging (8 centimetre excavation depth)."
 	excavation_amount = 4
 	toolsounds = list('sound/items/Screwdriver.ogg')
@@ -67,7 +67,7 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick5"
 	item_state = "syringe_0"
-	toolspeed = 20
+	toolspeed = 0.2
 	desc = "A miniature excavation tool for precise digging (10 centimetre excavation depth)."
 	excavation_amount = 5
 	toolsounds = list('sound/items/Screwdriver.ogg')
@@ -79,7 +79,7 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick6"
 	item_state = "syringe_0"
-	toolspeed = 20
+	toolspeed = 0.2
 	desc = "A miniature excavation tool for precise digging (12 centimetre excavation depth)."
 	excavation_amount = 6
 	toolsounds = list('sound/items/Screwdriver.ogg')
@@ -91,7 +91,7 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick_hand"
 	item_state = "syringe_0"
-	toolspeed = 30
+	toolspeed = 0.3
 	desc = "A smaller, more precise version of the pickaxe (30 centimetre excavation depth)."
 	excavation_amount = 15
 	toolsounds = list('sound/items/Crowbar.ogg')
