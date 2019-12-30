@@ -59,6 +59,7 @@
 			src.icon_state = src.icon_closed
 	else
 		to_chat(user, "<span class='notice'>Access Denied.</span>")
+	update_icon()
 
 /obj/structure/closet/secure_closet/attackby(obj/item/weapon/W, mob/user)
 	if(opened)
@@ -131,7 +132,7 @@
 		return
 	add_fingerprint(user)
 
-	if(!toggle())
+	if(!toggle() && locked)
 		return togglelock(user)
 
 /obj/structure/closet/secure_closet/attack_paw(mob/user)
