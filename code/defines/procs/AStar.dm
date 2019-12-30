@@ -155,7 +155,7 @@ proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
 	return 0
 
 //the actual algorithm
-proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null)
+proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = FALSE)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
@@ -183,7 +183,6 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 			closeenough = call(cur.source,dist)(end) <= mintargetdist
 
 		//if too many steps, abandon that path
-		to_chat(world, "maxnodedepth:[maxnodedepth] cur.nodecount [cur.nodecount]")
 		if(maxnodedepth && (cur.nodecount > maxnodedepth))
 			continue
 
@@ -207,28 +206,26 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 		var/list/L = call(cur.source,adjacent)(id,closed)
 
 		for(var/turf/T in L)
-			if(T.color != "#00ff00")
+			if(debug && T.color != "#00ff00")
 				T.color = "#FFA500" //orange
 			if(T == exclude)
-				if(T.color != "#00ff00")
+				if(debug && T.color != "#00ff00")
 					T.color = "#FF0000" //red
 				continue
 
 			var/newenddist = call(T,dist)(end)
-			to_chat(world, "[T.x] [T.y] [T.z], val:[newenddist]")
 			if(!T.PNode) //is not already in open list, so add it
 				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1))
-				if(T.color != "#00ff00")
+				if(debug && T.color != "#00ff00")
 					T.color = "#0000ff" //blue
 			else //is already in open list, check if it's a better way from the current turf
 				if(newenddist < T.PNode.distance_from_end)
-					T.color = "#00ff00" //green
+					if(debug)
+						T.color = "#00ff00" //green
 					T.PNode.prevNode = cur
 					T.PNode.distance_from_start = newenddist
 					T.PNode.calc_f()
 					open.ReSort(T.PNode)//reorder the changed element in the list
-		sleep(5)
-
 	}
 
 	//cleaning after us
