@@ -22,6 +22,7 @@ var/savefile/panicfile
 	on_ban   = new ()
 	on_unban = new ()
 
+	TgsNew(minimum_required_security_level = TGS_SECURITY_TRUSTED)
 
 	/*Runtimes, not sure if i need it still so commenting out for now
 	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
@@ -141,6 +142,8 @@ var/savefile/panicfile
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
+	TgsInitializationComplete
+
 	Master.Setup()
 
 	process_teleport_locs()				//Sets up the wizard teleport locations
@@ -169,6 +172,7 @@ var/savefile/panicfile
 //		..()
 
 /world/Topic(T, addr, master, key)
+	TGS_TOPIC
 	diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key]"
 
 	if (T == "ping")
@@ -226,6 +230,7 @@ var/savefile/panicfile
 
 
 /world/Reboot(reason)
+	TgsReboot
 	testing("[time_stamp()] - World is rebooting. Reason: [reason]")
 	if(reason == REBOOT_HOST)
 		if(usr)
