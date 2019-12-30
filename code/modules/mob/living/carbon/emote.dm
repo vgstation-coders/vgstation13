@@ -341,8 +341,3 @@
 	else if(no_priority)
 		selected_clothing = pick(no_priority)
 	return selected_clothing
-
-//A proc to see at which emote the clothing will be played, coughs or screams
-//To be used with the result of selected_clothing
-/datum/emote/living/carbon/sound/proc/check_sound_clothing(var/obj/item/clothing/C)
-	return C.sound_change
