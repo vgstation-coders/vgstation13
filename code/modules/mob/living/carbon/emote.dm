@@ -279,28 +279,28 @@
 
 /datum/emote/living/carbon/sound/run_emote(mob/user, params)
 	var/mob/living/carbon/human/H = user
-	if (!istype(H))
+	if(!istype(H))
 		return ..()
-	if (H.stat == DEAD)
+	if(H.stat == DEAD)
 		return
 	if (!H.is_muzzled() && !issilent(H)) // Silent = mime, mute species.
-		if (params == TRUE) // Forced scream
+		if(params == TRUE) // Forced scream
 			if(world.time-H.last_emote_sound >= 30)//prevent scream spam with things like poly spray
 				if(sound_message)
 					message = sound_message
+				var/obj/item/clothing/C = search_sound_clothing(H)
 				var/sound
-				if (isvox(H) || isskelevox(H))
-					sound = pick(birb_sounds)
-
-				else
-					if(Holiday == APRIL_FOOLS_DAY && H.mind.assigned_role in science_positions && H.gender == MALE)
-						sound = pick(science_sounds) //ACK
+				if(!C || !(key in C.sound_change))
+					if(isvox(H) || isskelevox(H))
+						sound = pick(birb_sounds)
 					else
 						switch(H.gender)
-							if (MALE)
+							if(MALE)
 								sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-							if (FEMALE)
+							if(FEMALE)
 								sound = pick(female_sounds)
+				else
+					sound = pick(C.sound_file)
 				playsound(user, sound, 50, 0)
 				H.last_emote_sound = world.time
 
@@ -308,3 +308,41 @@
 		message = "makes a very loud noise."
 
 	return ..()
+
+//A lengthy checks that returns the clothes to be used by other procs
+/datum/emote/living/carbon/sound/proc/search_sound_clothing(mob/living/carbon/human/user)
+	var/selected_clothing //Check the clothing we've selected to be played
+	var/list/priority_high
+	var/list/priority_med
+	var/list/priority_low
+	var/list/no_priority
+	for(var/obj/item/clothing/C in user.get_equipped_items())
+		if(!C.sound_file)
+			continue
+		if(user.species && user.species.name in C.respect_species)
+			continue
+		switch(C.sound_priority)
+			if(CLOTHING_SOUND_HIGH_PRIORITY)
+				priority_high += C
+			if(CLOTHING_SOUND_MED_PRIORITY)
+				priority_med += C
+			if(CLOTHING_SOUND_LOW_PRIORITY)
+				priority_low += C
+			else
+				no_priority += C
+	if(!priority_high && !priority_med && !priority_low && !no_priority) //We didn't grab any clothing, stop the proc
+		return 0
+	if(priority_high)
+		selected_clothing = pick(priority_high)
+	else if(priority_med)
+		selected_clothing = pick(priority_med)
+	else if(priority_low)
+		selected_clothing = pick(priority_low)
+	else if(no_priority)
+		selected_clothing = pick(no_priority)
+	return selected_clothing
+
+//A proc to see at which emote the clothing will be played, coughs or screams
+//To be used with the result of selected_clothing
+/datum/emote/living/carbon/sound/proc/check_sound_clothing(var/obj/item/clothing/C)
+	return C.sound_change

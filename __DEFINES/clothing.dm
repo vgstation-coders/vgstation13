@@ -14,3 +14,12 @@
 #define CONTAINPLASMAMAN 	256
 #define IGNORE_LUBE			512
 #define MAGPULSE			1024 //prevents slipping in space, singulo pulling, etc
+
+//clothing audible emote flags
+#define CLOTHING_SOUND_SCREAM "scream"
+#define CLOTHING_SOUND_COUGH "cough"
+
+//clothing sound priority flags, if it's higher it will play first
+#define CLOTHING_SOUND_LOW_PRIORITY 1
+#define CLOTHING_SOUND_MED_PRIORITY 2
+#define CLOTHING_SOUND_HIGH_PRIORITY 3
