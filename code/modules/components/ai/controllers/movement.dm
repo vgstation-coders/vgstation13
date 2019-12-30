@@ -23,7 +23,7 @@
 				if(args["loc"] == target)
 					return //We're already on our way there
 				target = args["loc"]
-				movement_nodes = AStar(M, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=M.get_visible_id())
+				movement_nodes = AStar(src, M, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=M.get_visible_id())
 			if("dir" in args)
 				movement_nodes = list()
 				walk(M, args["dir"], walk_delay)

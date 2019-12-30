@@ -357,7 +357,7 @@
 
 	if(patient && path.len == 0 && (get_dist(src,patient) > 1))
 		spawn(0)
-			path = AStar(loc, get_turf(patient), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
+			path = AStar(src, loc, get_turf(patient), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
 			if (!path)
 				path = list()
 			if(path.len == 0)

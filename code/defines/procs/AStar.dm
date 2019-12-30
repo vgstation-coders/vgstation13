@@ -3,14 +3,14 @@ A Star pathfinding algorithm
 Returns a list of tiles forming a path from A to B, taking dense objects as well as walls, and the orientation of
 windows along the route into account.
 Use:
-your_list = AStar(start location, end location, adjacent turf proc, distance proc)
+your_list = AStar(src, start location, end location, adjacent turf proc, distance proc)
 For the adjacent turf proc i wrote:
 /turf/proc/AdjacentTurfs
 And for the distance one i wrote:
 /turf/proc/Distance
 So an example use might be:
 
-src.path_list = AStar(src.loc, target.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance)
+src.path_list = AStar(src, src.loc, target.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance)
 
 Then to start on the path, all you need to do it:
 Step_to(src, src.path_list[1])
@@ -118,9 +118,9 @@ length to avoid portals or something i guess?? Not that they're counted right no
 /PathNode
 	var/turf/source //turf associated with the PathNode
 	var/PathNode/prevNode //link to the parent PathNode
-	var/total_node_cost		//A* Node weight (f = g + h)
+	var/total_node_cost		//A* Node weight (total_node_cost = distance_from_start + distance_from_end)
 	var/distance_from_end		//A* movement cost variable, how far it is from the end
-	var/distance_from_start		//A* heuristic variable
+	var/distance_from_start		//A* heuristic variable, how far it is from the start
 	var/nodecount		//count the number of Nodes traversed
 
 /PathNode/New(s,p,ndistance_from_start,ndistance_from_end,pnt)
@@ -154,99 +154,21 @@ proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
 		i++
 	return 0
 
+#define ASTAR_REGISTERED 1
+#define ASTAR_PROCESSING 2
+
 //the actual algorithm
-proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = FALSE)
+proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = FALSE)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
-	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
-	var/list/closed = new() //the closed list
-	var/list/path = null //the returned path, if any
-	var/PathNode/cur //current processed turf
-
-	//sanitation
-	start = get_turf(start)
-	if(!start)
-		return 0
-
-	//initialization
-	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0))
-
-	//then run the main loop
-	while(!open.IsEmpty() && !path)
-	{
-			//get the lower f node on the open list
-		cur = open.Dequeue() //get the lowest node cost turf in the open list
-		closed.Add(cur.source) //and tell we've processed it
-
-		//if we only want to get near the target, check if we're close enough
-		var/closeenough
-		if(mintargetdist)
-			closeenough = call(cur.source,dist)(end) <= mintargetdist
-
-		//if too many steps, abandon that path
-		if(maxnodedepth && (cur.nodecount > maxnodedepth))
-			continue
-
-		//found the target turf (or close enough), let's create the path to it
-		if(cur.source == end || closeenough)
-			path = new()
-			path.Add(cur.source)
-			while(cur.prevNode)
-				cur = cur.prevNode
-				path.Add(cur.source)
-			break
-
-		//IMPLEMENTATION TO FINISH
-		//do we really need this minnodedist ???
-		/*if(minnodedist && maxnodedepth)
-			if(call(cur.source,minnodedist)(end) + cur.nt >= maxnodedepth)
-				continue
-		*/
-
-		//get adjacents turfs using the adjacent proc, checking for access with id
-		var/list/L = call(cur.source,adjacent)(id,closed)
-
-		for(var/turf/T in L)
-			if(debug && T.color != "#00ff00")
-				T.color = "#FFA500" //orange
-			if(T == exclude)
-				if(debug && T.color != "#00ff00")
-					T.color = "#FF0000" //red
-				continue
-
-			var/newenddist = call(T,dist)(end)
-			if(!T.PNode) //is not already in open list, so add it
-				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1))
-				if(debug && T.color != "#00ff00")
-					T.color = "#0000ff" //blue
-			else //is already in open list, check if it's a better way from the current turf
-				if(newenddist < T.PNode.distance_from_end)
-					if(debug)
-						T.color = "#00ff00" //green
-					T.PNode.prevNode = cur
-					T.PNode.distance_from_start = newenddist
-					T.PNode.calc_f()
-					open.ReSort(T.PNode)//reorder the changed element in the list
-	}
-
-	//cleaning after us
-	for(var/PathNode/PN in open.L)
-		PN.source.PNode = null
-	for(var/turf/T in closed)
-		T.PNode = null
-
-	//if the path is longer than maxnodes, then don't return it
-	if(path && maxnodes && path.len > (maxnodes + 1))
-		return 0
-
-	//reverse the path to get it from start to finish
-	if(path)
-		for(var/i = 1; i <= path.len/2; i++)
-			path.Swap(i,path.len-i+1)
-
-	return path
-
-
-
+	for(var/datum/path_maker/P in pathmakers)
+		if(P.owner == source && start == P.start && end == P.end)
+			return ASTAR_PROCESSING
+	var/atom/target
+	if(!isturf(end))
+		target = end
+	to_chat(world, "ASTAR called [source] [proc_to_call] [start] [end] [adjacent] [dist] [maxnodes] [maxnodedepth] [mintargetdist] [minnodedist] [id] [exclude] [debug]")
+	new /datum/path_maker(source,proc_to_call, start, end, target, adjacent, dist, maxnodes, maxnodedepth, mintargetdist, id, exclude, debug)
+	return ASTAR_REGISTERED
 
 
 
@@ -351,17 +273,18 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 
 /////////////////////////////////////////////////////////////////////////
 
-/atom/proc/make_astar_path(var/atom/target)
-	var/list/L = AStar(get_turf(src), get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30)
-	if(L)
-		to_chat(world, "make astar path succeeded")
-		pathfinders.Add(src)
+/atom/proc/make_astar_path(var/atom/target, var/receiving_proc = .proc/get_astar_path)
+	AStar(src, receiving_proc, get_turf(src), target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30)
+
+//override when needed to receive your path
+/atom/proc/get_astar_path(var/list/L)
+	if(L && L.len)
+		pathers.Add(src)
 		return L
-	to_chat(world, "make astar path failed.")
 	return FALSE
 
 /atom/proc/process_astar_path()
 	return FALSE
 
 /atom/proc/drop_astar_path()
-	pathfinders.Remove(src)
+	pathers.Remove(src)
