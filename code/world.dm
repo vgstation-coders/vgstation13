@@ -12,6 +12,9 @@
 
 var/savefile/panicfile
 /world/New()
+
+	TgsNew(minimum_required_security_level = TGS_SECURITY_TRUSTED)
+
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
@@ -21,8 +24,6 @@ var/savefile/panicfile
 	on_login = new ()
 	on_ban   = new ()
 	on_unban = new ()
-
-	TgsNew(minimum_required_security_level = TGS_SECURITY_TRUSTED)
 
 	/*Runtimes, not sure if i need it still so commenting out for now
 	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
@@ -142,8 +143,6 @@ var/savefile/panicfile
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
-	TgsInitializationComplete
-
 	Master.Setup()
 
 	process_teleport_locs()				//Sets up the wizard teleport locations
@@ -156,6 +155,8 @@ var/savefile/panicfile
 			ToRban_autoupdate()
 		/*if(config.kick_inactive)
 			KickInactiveClients()*/
+
+	TgsInitializationComplete
 
 #undef RECOMMENDED_VERSION
 	return ..()
