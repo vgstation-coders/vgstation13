@@ -161,6 +161,7 @@ var/global/list/accessable_z_levels = list()
 	var/bluespace_jammed = 0
 	var/movementChance = ZLEVEL_BASE_CHANCE
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
+	var/base_area = /area //default base area type, what blueprints erase into
 	var/z //Number of the z-level (the z coordinate)
 
 /datum/zLevel/proc/post_mapload()
@@ -210,6 +211,7 @@ var/global/list/accessable_z_levels = list()
 /datum/zLevel/snow
 	name = "snow"
 	base_turf = /turf/unsimulated/floor/snow
+	base_area = /area/surface/snow
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/snow/post_mapload()
@@ -257,6 +259,11 @@ proc/get_base_turf(var/z)
 
 	var/datum/zLevel/L = map.zLevels[z]
 	return L.base_turf
+
+//Area that blueprints should erase to
+proc/get_base_area(var/z)
+	var/datum/zLevel/L = map.zLevels[z]
+	return locate(L.base_area) //this is a type
 
 proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 	var/datum/zLevel/L = map.zLevels[choice]
