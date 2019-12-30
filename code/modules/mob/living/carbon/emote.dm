@@ -319,7 +319,7 @@
 	for(var/obj/item/clothing/C in user.get_equipped_items())
 		if(!C.sound_file)
 			continue
-		if(user.species && user.species.name in C.sound_respect_species)
+		if(user.species && (user.species.name in C.sound_respect_species))
 			continue
 		if(!(sound_key in C.sound_change))
 			continue
@@ -332,7 +332,7 @@
 				priority_low += C
 			else
 				no_priority += C
-	if(!priority_high && !priority_med && !priority_low && !no_priority) //We didn't grab any clothing, stop the proc
+	if(!priority_high.len && !priority_med.len && !priority_low.len && !no_priority.len) //We didn't grab any clothing, stop the proc
 		return 0
 	if(priority_high)
 		selected_clothing = pick(priority_high)
