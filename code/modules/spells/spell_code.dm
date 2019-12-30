@@ -10,7 +10,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/school = "evocation" //not relevant at now, but may be important later if there are changes to how spells work. the ones I used for now will probably be changed... maybe spell presets? lacking flexibility but with some other benefit?
 	var/user_type = USER_TYPE_NOUSER // What kind of mob uses this spell
-	var/specialization = SPELL_SPECIALIZATION_DEFAULT //Used for what list they belong to in the spellbook. SPELL_SPECIALIZATION_DEFAULT, OFFENSIVE, DEFENSIVE, UTILITY
+	var/specialization //Used for what list they belong to in the spellbook. SSOFFENSIVE, SSDEFENSIVE, SSUTILITY
 
 	var/charge_type = Sp_RECHARGE //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with Sp_GRADUAL
 	//The following are allowed: Sp_RECHARGE (Recharges), Sp_CHARGE (Limited uses), Sp_GRADUAL (Gradually lose charges), Sp_PASSIVE (Does not cast)

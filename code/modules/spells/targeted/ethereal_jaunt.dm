@@ -3,7 +3,7 @@
 	desc = "This spell creates your ethereal form, temporarily making you invisible and able to pass through walls."
 	abbreviation = "EJ"
 	user_type = USER_TYPE_WIZARD
-	specialization = UTILITY
+	specialization = SSUTILITY
 
 	school = "transmutation"
 	charge_max = 300
