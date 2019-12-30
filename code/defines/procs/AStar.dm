@@ -118,22 +118,22 @@ length to avoid portals or something i guess?? Not that they're counted right no
 /PathNode
 	var/turf/source //turf associated with the PathNode
 	var/PathNode/prevNode //link to the parent PathNode
-	var/f		//A* Node weight (f = g + h)
-	var/g		//A* movement cost variable
-	var/h		//A* heuristic variable
-	var/nt		//count the number of Nodes traversed
+	var/total_node_cost		//A* Node weight (f = g + h)
+	var/distance_from_end		//A* movement cost variable, how far it is from the end
+	var/distance_from_start		//A* heuristic variable
+	var/nodecount		//count the number of Nodes traversed
 
-/PathNode/New(s,p,pg,ph,pnt)
+/PathNode/New(s,p,ndistance_from_start,ndistance_from_end,pnt)
 	source = s
 	prevNode = p
-	g = pg
-	h = ph
-	f = g + h
+	distance_from_start = ndistance_from_start
+	distance_from_end = ndistance_from_end
+	total_node_cost = distance_from_start + distance_from_end
 	source.PNode = src
-	nt = pnt
+	nodecount = pnt
 
 /PathNode/proc/calc_f()
-	f = g + h
+	total_node_cost = distance_from_start + distance_from_end
 
 //////////////////////
 //A* procs
@@ -141,7 +141,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 //the weighting function, used in the A* algorithm
 proc/PathWeightCompare(PathNode/a, PathNode/b)
-	return a.f - b.f
+	return a.total_node_cost - b.total_node_cost
 
 //search if there's a PathNode that points to turf T in the Priority Queue
 proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
@@ -174,7 +174,7 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 	while(!open.IsEmpty() && !path)
 	{
 			//get the lower f node on the open list
-		cur = open.Dequeue() //get the lower f turf in the open list
+		cur = open.Dequeue() //get the lowest node cost turf in the open list
 		closed.Add(cur.source) //and tell we've processed it
 
 		//if we only want to get near the target, check if we're close enough
@@ -183,7 +183,8 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 			closeenough = call(cur.source,dist)(end) <= mintargetdist
 
 		//if too many steps, abandon that path
-		if(maxnodedepth && (cur.nt > maxnodedepth))
+		to_chat(world, "maxnodedepth:[maxnodedepth] cur.nodecount [cur.nodecount]")
+		if(maxnodedepth && (cur.nodecount > maxnodedepth))
 			continue
 
 		//found the target turf (or close enough), let's create the path to it
@@ -213,19 +214,19 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 					T.color = "#FF0000" //red
 				continue
 
-			var/newg = cur.g + call(cur.source,dist)(T)
+			var/newenddist = call(T,dist)(end)
+			to_chat(world, "[T.x] [T.y] [T.z], val:[newenddist]")
 			if(!T.PNode) //is not already in open list, so add it
-				open.Enqueue(new /PathNode(T,cur,newg,call(T,dist)(end),cur.nt+1))
+				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1))
 				if(T.color != "#00ff00")
 					T.color = "#0000ff" //blue
 			else //is already in open list, check if it's a better way from the current turf
-				if(newg < T.PNode.g)
+				if(newenddist < T.PNode.distance_from_end)
 					T.color = "#00ff00" //green
 					T.PNode.prevNode = cur
-					T.PNode.g = newg
+					T.PNode.distance_from_start = newenddist
 					T.PNode.calc_f()
 					open.ReSort(T.PNode)//reorder the changed element in the list
-			to_chat(world, "[T.x] [T.y] [T.z], [T.color]")
 		sleep(5)
 
 	}
