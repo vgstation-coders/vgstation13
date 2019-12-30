@@ -334,12 +334,12 @@
 				no_priority += C
 	if(!priority_high.len && !priority_med.len && !priority_low.len && !no_priority.len) //We didn't grab any clothing, stop the proc
 		return 0
-	if(priority_high)
+	if(priority_high.len)
 		selected_clothing = pick(priority_high)
-	else if(priority_med)
+	else if(priority_med.len)
 		selected_clothing = pick(priority_med)
-	else if(priority_low)
+	else if(priority_low.len)
 		selected_clothing = pick(priority_low)
-	else if(no_priority)
+	else if(no_priority.len)
 		selected_clothing = pick(no_priority)
 	return selected_clothing
