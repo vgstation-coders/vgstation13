@@ -288,9 +288,9 @@
 			if(world.time-H.last_emote_sound >= 30)//prevent scream spam with things like poly spray
 				if(sound_message)
 					message = sound_message
-				var/obj/item/clothing/C = search_sound_clothing(H)
+				var/obj/item/clothing/C = search_sound_clothing(H, key)
 				var/sound
-				if(!C || !(key in C.sound_change))
+				if(!C)
 					if(isvox(H) || isskelevox(H))
 						sound = pick(birb_sounds)
 					else
@@ -310,16 +310,18 @@
 	return ..()
 
 //A lengthy checks that returns the clothes to be used by other procs
-/datum/emote/living/carbon/sound/proc/search_sound_clothing(mob/living/carbon/human/user)
+/datum/emote/living/carbon/sound/proc/search_sound_clothing(mob/living/carbon/human/user, var/sound_key)
 	var/selected_clothing //Check the clothing we've selected to be played
-	var/list/priority_high
-	var/list/priority_med
-	var/list/priority_low
-	var/list/no_priority
+	var/list/priority_high = list()
+	var/list/priority_med = list()
+	var/list/priority_low = list()
+	var/list/no_priority = list()
 	for(var/obj/item/clothing/C in user.get_equipped_items())
 		if(!C.sound_file)
 			continue
-		if(user.species && user.species.name in C.respect_species)
+		if(user.species && user.species.name in C.sound_respect_species)
+			continue
+		if(!(sound_key in C.sound_change))
 			continue
 		switch(C.sound_priority)
 			if(CLOTHING_SOUND_HIGH_PRIORITY)
