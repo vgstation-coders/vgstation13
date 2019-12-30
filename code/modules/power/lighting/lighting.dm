@@ -364,7 +364,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	// attempt to deconstruct / stick weapon into light socket
 	else if(!current_bulb)
 		if(iswirecutter(W)) //If it's a wirecutter take out the wires
-			playsound(src, 'sound/items/Wirecutter.ogg', 75, 1)
+			W.playtoolsound(src, 75)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
 				"You remove \the [src]'s wires.", "You hear a noise.")
 			var/obj/machinery/light_construct/newlight = null

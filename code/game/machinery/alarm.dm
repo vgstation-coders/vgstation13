@@ -1069,7 +1069,7 @@ var/global/list/airalarm_presets = list(
 				buildstage = 1
 				update_icon()
 				user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				getFromPool(/obj/item/stack/cable_coil, get_turf(user), 5)
 				return
 			if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))// trying to unlock the interface with an ID card
@@ -1269,7 +1269,7 @@ FIRE ALARM
 					playsound(src, 'sound/items/healthanalyzer.ogg', 50, 1)
 				if(iswirecutter(W))
 					to_chat(user, "You begin to cut the wiring...")
-					playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					if (do_after(user, src,  50) && buildstage == 2 && wiresexposed)
 						buildstage=1
 						user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")

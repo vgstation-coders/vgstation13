@@ -116,7 +116,7 @@
 			else if(iswirecutter(W))
 
 				new/obj/item/stack/cable_coil(get_turf(src), 2)
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				to_chat(user, "You cut the wires from the circuits.")
 				state = 2
 				return

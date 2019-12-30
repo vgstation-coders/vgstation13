@@ -578,7 +578,7 @@
 		C.use(3)
 	else if(iswirecutter(W) && illegalradio_construction == 2 && b_stat)
 		to_chat(user, "You cut the extra wires out of the radio.")
-		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+		W.playtoolsound(user, 50)
 		illegalradio_construction = 1
 		var/obj/item/stack/cable_coil/C = new (get_turf(user))
 		C.amount = 3

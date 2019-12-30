@@ -148,7 +148,7 @@
 						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				else
 					if(iswirecutter(P))
-						playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+						P.playtoolsound(src, 50)
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
 						var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )

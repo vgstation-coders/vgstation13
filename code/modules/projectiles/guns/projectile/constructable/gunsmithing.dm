@@ -490,7 +490,7 @@
 				update_assembly()
 			if(iswirecutter(W))
 				to_chat(user, "You cut the wires out of the capacitor bank.")
-				playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(user, 50)
 				state = "stock_reservoir"
 				update_assembly()
 				var/obj/item/stack/cable_coil/C = new (get_turf(user))

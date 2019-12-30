@@ -112,7 +112,7 @@
 	switch(d_state)
 		if(WALLCOMPLETED)
 			if(iswirecutter(W))
-				playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				src.d_state = WALLCOVEREXPOSED
 				update_icon()
 				user.visible_message("<span class='warning'>[user] cuts out \the [src]'s outer grille.</span>", \

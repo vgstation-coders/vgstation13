@@ -340,7 +340,7 @@
 		if(iswirecutter(I)) //allows you to convert the wire back to a cable coil
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
-				playsound(usr, 'sound/items/Wirecutter.ogg', 50, 1)
+				I.playtoolsound(usr, 50)
 				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
 				var /obj/item/stack/cable_coil/S = new /obj/item/weapon/screwdriver(user.loc)
 				C.amount = 10
@@ -361,7 +361,7 @@
 				if(weight2)
 					weight2.forceMove(get_turf(usr))
 					weight2 = null
-				playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+				I.playtoolsound(user, 50)
 				update_icon()
 				return
 		if(I.w_class) //if it has a defined weight

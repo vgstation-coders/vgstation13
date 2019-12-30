@@ -51,7 +51,7 @@
 
 /obj/structure/curtain/attackby(obj/item/W, mob/user)
 	if(iswirecutter(W))
-		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
+		W.playtoolsound(loc, 50)
 		if(do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You cut \the [src] down.</span>")
 			if(!holo)

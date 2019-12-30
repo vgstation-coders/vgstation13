@@ -609,7 +609,7 @@
 	else if(iswirecutter(W))
 		if(rigged)
 			to_chat(user, "<span class='notice'>You cut away the wiring.</span>")
-			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
+			W.playtoolsound(loc, 100)
 			rigged = 0
 			return
 	else if(!place(user, W))

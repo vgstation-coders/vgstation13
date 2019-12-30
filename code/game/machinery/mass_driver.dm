@@ -196,7 +196,7 @@ var/list/mass_drivers = list()
 				to_chat(user, "You begin to remove the wiring from \the [src].")
 				if(do_after(user, src, 10) && (build == 3))
 					new /obj/item/stack/cable_coil(loc,3)
-					playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					to_chat(user, "<span class='notice'>You've removed the cables from \the [src].</span>")
 					build--
 					update_icon()

@@ -172,7 +172,7 @@
 		return
 	if(iswirecutter(W))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
-			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
+			W.playtoolsound(loc, 100)
 			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
 			qdel(src)
 			return

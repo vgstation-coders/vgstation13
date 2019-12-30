@@ -72,16 +72,13 @@
 	return 0
 
 /datum/construction/proc/custom_action(step, obj/item/used_atom, mob/user)
-	if(iswirecutter(used_atom))
-		playsound(holder, 'sound/items/Wirecutter.ogg', 50, 1)
-	else 
-		if(istype(used_atom,/obj/item/weapon/circuitboard))
-			playsound(holder, 'sound/items/Deconstruct.ogg', 50, 1)
+	if(istype(used_atom,/obj/item/weapon/circuitboard))
+		playsound(holder, 'sound/items/Deconstruct.ogg', 50, 1)
+	else
+		if(iscablecoil(used_atom))
+			playsound(holder, 'sound/items/zip.ogg', 50, 1)
 		else
-			if(iscablecoil(used_atom))
-				playsound(holder, 'sound/items/zip.ogg', 50, 1)
-			else
-				used_atom.playtoolsound(holder, 50)
+			used_atom.playtoolsound(holder, 50)
 	construct_message(step, user)
 	return 1
 

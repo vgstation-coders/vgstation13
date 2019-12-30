@@ -82,7 +82,7 @@
 				if(brain)
 					to_chat(user, "Get that brain out of there first!")
 				else
-					playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
+					P.playtoolsound(loc, 50)
 					to_chat(user, "<span class='notice'>You remove the cables.</span>")
 					state = SECURED_CIRCUITBOARD
 					drop_stack(/obj/item/stack/cable_coil, loc, 5, user)

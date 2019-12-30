@@ -154,7 +154,7 @@ obj/structure/windoor_assembly/Destroy()
 
 	//Removing wire from the assembly. Step 5 undone.
 	if(iswirecutter(W) && (anchored && wired))
-		playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] is cutting the wires from [src].", "You start to cut the wires from [src].")
 
 		if(do_after(user, src, 40))

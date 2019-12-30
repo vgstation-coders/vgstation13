@@ -249,7 +249,7 @@
 
 	else if(iswirecutter(W) && state == 1 )
 		busy = 1
-		playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] cuts the wires from the airlock assembly.", "You start to cut the wires from airlock assembly.")
 
 		if(do_after(user, src, 40))

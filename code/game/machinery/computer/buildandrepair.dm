@@ -458,7 +458,7 @@
 				return 1
 		if(3)
 			if(iswirecutter(P))
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] unplugs the wires from the frame.", "You unplug the wires from the frame.", "You hear metallic sounds.")
 				src.state = 2
 				src.icon_state = "2"
