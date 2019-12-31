@@ -1252,6 +1252,22 @@ About the new airlock wires panel:
 				sleep(6)
 				open(1)
 			operating = -1
+	else if(issolder(I))
+		var/obj/item/weapon/solder/S = I
+		if(operating == -1)
+			if(!S.check_fuel(4, user))
+				return
+			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			to_chat(user, "<span class='notice'>You start repairing the airlock.</span>")
+			if(do_after(user, src, 100))
+				if(!S.check_fuel(4, user))
+					return
+				playsound(loc, 'sound/items/Welder2.ogg', 100, 1)
+				S.remove_fuel(4)
+				operating = 0
+				to_chat(user, "<span class='notice'>You finish repairing the airlock.</span>")
+		else
+			to_chat(user, "<span class='warning'>The airlock doesn't require repairing.</span>")
 	else
 		..(I, user)
 	add_fingerprint(user)

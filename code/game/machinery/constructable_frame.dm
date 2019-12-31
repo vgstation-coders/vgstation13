@@ -318,25 +318,29 @@ to destroy them and players will be able to make replacements.
 			else
 				to_chat(user, "<span class='warning'>A fatal error with the board type occurred. Report this message.</span>")
 		else
-			to_chat(user, "<span class='warning'>The multitool flashes red briefly.</span>")
-	else
-		*/if(!soldering&&issolder(O))
+			to_chat(user, "<span class='warning'>The multitool flashes red briefly.</span>")*/
+
+	if(!soldering && issolder(O))
 		//local_fuses.Interact(user)
 		var/t = input(user, "Which board should be designed?") as null|anything in allowed_boards
 		if(!t)
 			return
 		var/obj/item/weapon/solder/S = O
-		if(!S.remove_fuel(4,user))
+		if(!S.check_fuel(4, user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 50, 1)
 		soldering = 1
 		if(do_after(user, src,40))
+			if(!S.check_fuel(4, user))
+				return
+			S.remove_fuel(4)
 			var/boardType = allowed_boards[t]
 			var/obj/item/I = new boardType(get_turf(user))
 			to_chat(user, "<span class='notice'>You fashion a crude [I] from the blank circuitboard.</span>")
 			qdel(src)
 			user.put_in_hands(I)
-		soldering = 0
+		else
+			soldering = 0
 	else if(iswelder(O))
 		var/obj/item/weapon/weldingtool/WT = O
 		if(WT.remove_fuel(1,user))

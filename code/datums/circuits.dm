@@ -109,7 +109,7 @@
 			if(href_list["fuse"]) // Toggles the fuse/unfuse status
 				if(issolder(I))
 					var/obj/item/weapon/solder/S = I
-					if(S.remove_fuel(1,L))
+					if(S.handle_solder(1))
 						playsound(L.loc, 'sound/items/Welder.ogg', 25, 1)
 						var/greek = href_list["fuse"]
 						togglefuse(text2num(greek))

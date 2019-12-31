@@ -100,11 +100,14 @@
 			to_chat(user, "<span class='warning'>[src] doesn't need to be repaired!</span>")
 			return
 		var/obj/item/weapon/solder/S = W
-		if(!S.remove_fuel(4,user))
+		if(!S.check_fuel(4,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 		if(do_after(user, src,40))
+			if(!S.check_fuel(4, user))
+				return
 			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			S.remove_fuel(4)
 			integrity = 100
 			to_chat(user, "<span class='notice'>You repair the blown fuses on [src].</span>")
 

@@ -349,7 +349,7 @@
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/weapon/solder/S = I
-		if(S.remove_fuel(2,user))
+		if(S.handle_solder(2, user))
 			solder_improve(user)
 	else if(iswelder(I))
 		var/obj/item/weapon/weldingtool/WT = I

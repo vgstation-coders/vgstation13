@@ -784,18 +784,28 @@
 	else
 		return ..()
 
-/obj/item/weapon/solder/proc/remove_fuel(var/amount, mob/user as mob)
-	if(reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID) >= amount)
-		var/facid_amount = amount - reagents.get_reagent_amount(SACID)
-		reagents.remove_reagent(SACID, amount)
-		if(facid_amount > 0)
-			reagents.remove_reagent(FORMIC_ACID, facid_amount)
-		update_icon()
-		return 1
-	else
-		user.simple_message("<span class='warn'>The tool does not have enough acid!</span>",
-			"<span class='warn'>The tool is too thirsty!</span>")
+//To be used in simple checks, if you bundle soldering with a do_after it's advised to use check_fuel and remove_fuel separately instead
+/obj/item/weapon/solder/proc/handle_solder(var/amount, mob/user)
+	if(check_fuel(amount))
+		remove_fuel(amount)
+	else if(user)
+		to_chat(user, "<span class='warning'>You require [amount] unit\s, you have [!reagents.total_volume ? "no units left" : "[amount] unit\s"].</span>")
+
+//When used individually in a do_after check, it is used twice, before and after to avoid consuming more fuel than what you have
+/obj/item/weapon/solder/proc/check_fuel(var/amount, mob/user)
+	if(reagents.total_volume <= amount)
+		if(user)
+			to_chat(user, "<span class='warning'>You require [amount] unit\s, you have [!reagents.total_volume ? "no units left" : "[amount] unit\s"].</span>")
 		return 0
+	else
+		return 1
+
+/obj/item/weapon/solder/proc/remove_fuel(var/amount)
+	var/facid_amount = amount - reagents.get_reagent_amount(SACID)
+	reagents.remove_reagent(SACID, amount)
+	if(facid_amount > 0)
+		reagents.remove_reagent(FORMIC_ACID, facid_amount)
+	update_icon()
 
 /obj/item/weapon/solder/pre_fueled/New()
 	. = ..()

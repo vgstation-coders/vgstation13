@@ -28,11 +28,15 @@
 	if(issolder(W))
 		var/obj/item/weapon/solder/S = W
 		if(icon_state == "door_electronics_smoked")
-			if(!S.remove_fuel(4,user))
+			if(!S.check_fuel(4, user))
 				return
+			to_chat(user, "<span class='notice'>You start repairing the blown fuses on the circuitboard.</span>")
 			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 			if(do_after(user, src,40))
+				if(!S.check_fuel(4, user))
+					return
 				playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+				S.remove_fuel(4)
 				icon_state = "door_electronics"
 				to_chat(user, "<span class='notice'>You repair the blown fuses on the circuitboard.</span>")
 

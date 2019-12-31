@@ -47,7 +47,7 @@
 		return
 	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
 		var/obj/item/weapon/solder/S = W
-		if(!S.remove_fuel(bullet_marks*2,user))
+		if(!S.handle_solder(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 		to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")

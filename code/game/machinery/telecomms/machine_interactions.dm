@@ -25,8 +25,7 @@
 			to_chat(user, "It's not damaged.")
 			return
 		var/obj/item/weapon/solder/S = W
-		if (!S.remove_fuel(2, user))
-			to_chat(user, "You need more fuel.")
+		if (!S.handle_solder(2, user))
 			return
 		playsound(user, 'sound/items/Welder.ogg', 100, 1)
 		integrity = TELECOMMS_MAX_INTEGRITY

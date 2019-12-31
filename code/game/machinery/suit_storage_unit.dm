@@ -584,11 +584,14 @@
 /obj/machinery/suit_storage_unit/attackby(obj/item/I as obj, mob/user as mob)
 	if((stat & BROKEN) && issolder(I))
 		var/obj/item/weapon/solder/S = I
-		if(!S.remove_fuel(4,user))
+		if(!S.check_fuel(4,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 		if(do_after(user, src,40))
+			if(!S.check_fuel(4, user))
+				return
 			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			S.remove_fuel(4)
 			stat &= !BROKEN
 			to_chat(user, "<span class='notice'>You repair the blown out electronics in the suit storage unit.</span>")
 	if((stat & NOPOWER) && iscrowbar(I) && !islocked)
