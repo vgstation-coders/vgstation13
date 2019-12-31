@@ -35,19 +35,19 @@
 	var/turf/oldtarget
 	var/oldloc = null
 	req_access = list(access_janitor)
-	var/path[] = new()
-	var/patrol_path[] = null
+	var/list/path = list()
+	var/list/patrol_path = list()
 	var/beacon_freq = 1445		// navigation beacon frequency
 	var/closest_dist
 	var/closest_loc
 	var/failed_steps
-	var/should_patrol
+	var/should_patrol = TRUE
 	var/next_dest
 	var/next_dest_loc
 
 	var/coolingdown = FALSE
 	var/attackcooldown = 10 SECONDS // for admin cancer
-
+	locked = FALSE
 	can_take_pai = TRUE
 
 /obj/machinery/bot/cleanbot/New()
@@ -55,15 +55,9 @@
 	cleanbot_list.Add(src)
 	src.get_targets()
 	src.icon_state = "[src.icon_initial][src.on]"
-
-	should_patrol = 1
-
 	src.botcard = new /obj/item/weapon/card/id(src)
 	var/datum/job/janitor/J = new/datum/job/janitor
 	src.botcard.access = J.get_access()
-
-	src.locked = 0 // Start unlocked so roboticist can set them to patrol.
-
 	if(radio_controller)
 		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 
@@ -216,7 +210,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 						T.targetted_by = src	// Claim the messy tile we are targeting.
 						break
 
-	if(!src.target || src.target == null)
+	if(!src.target)
 		if(src.loc != src.oldloc)
 			src.oldtarget = null
 
@@ -238,45 +232,18 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			signal.transmission_method = 1
 			signal.data = list("findbeacon" = "patrol")
 			frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
-			spawn(5)
-				if (!next_dest_loc)
-					next_dest_loc = closest_loc
-				if (next_dest_loc)
-					src.patrol_path = AStar(src, src.loc, next_dest_loc, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=null)
+			if (!next_dest_loc)
+				next_dest_loc = closest_loc
+			if (next_dest_loc)
+				make_astar_path(next_dest_loc, .proc/receive_patrol_path)
 		else
 			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
 			patrol_move()
 
 		return
 
-	if(!path)
-		path = new()
 	if(target && path.len == 0)
-		spawn(0)
-			if(!src || !target)
-				return
-			src.path = AStar(src, src.loc, src.target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 30)
-			if (!path)
-				path = list()
-			if(src.path.len == 0)
-				src.oldtarget = src.target
-				target.targetted_by = null
-				src.target = null
-		return
-	if(isturf(loc))
-		if(src.path.len > 0 && src.target && (src.target != null))
-			step_to(src, src.path[1])
-			src.path -= src.path[1]
-		else if(src.path.len == 1)
-			step_to(src, target)
-
-	if(src.target && (src.target != null))
-		patrol_path = null
-		if(src.loc == src.target)
-			clean(src.target)
-			src.path = new()
-			src.target = null
-			return
+		return make_astar_path(target, .proc/receive_path)
 
 	src.oldloc = src.loc
 
@@ -291,23 +258,37 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	if (next == src.loc)
 		return
 
-	var/moved = step_towards(src, next)
+	var/moved = step_to(src, next)
 	if (!moved)
 		failed_steps++
+	else
+		failed_steps = 0
+
 	if (failed_steps > 4)
 		patrol_path = null
 		next_dest = null
 		failed_steps = 0
-	else
-		failed_steps = 0
+
+/obj/machinery/bot/cleanbot/proc/move_to_target()
+	if(!isturf(loc))
+		return
+
+	if(src.path.len > 0)
+		step_to(src, src.path[1])
+		src.path -= src.path[1]
+
+	if(src.loc == src.target)
+		clean(src.target)
+		path = list()
 
 /obj/machinery/bot/cleanbot/receive_signal(datum/signal/signal)
 	var/recv = signal.data["beacon"]
 	var/valid = signal.data["patrol"]
 	if(!recv || !valid)
 		return
-
+	to_chat(world, "received signal [recv] [valid]")
 	var/dist = get_dist(src, signal.source.loc)
+	to_chat(world, "[dist] [closest_dist] [signal.source.loc]")
 	if (dist < closest_dist && signal.source.loc != src.loc)
 		closest_dist = dist
 		closest_loc = signal.source.loc
@@ -498,3 +479,14 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		to_chat(P.pai, "<span class='info'><b>Welcome to your new body. Remember: you're a pAI inside a cleanbot, so get cleaning.</b></span>")
 		to_chat(P.pai, "<span class='info'>- Click on something: Scrub it clean.</span>")
 		to_chat(P.pai, "<span class='info'>If you want to exit the cleanbot, somebody has to right-click you and press 'Remove pAI'.</span>")
+
+/obj/machinery/bot/cleanbot/make_astar_path(var/atom/target, var/receiving_proc)
+	AStar(src, receiving_proc, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30, id=botcard, exclude=null)
+
+/obj/machinery/bot/cleanbot/proc/receive_patrol_path(var/list/L)
+	if(islist(L))
+		patrol_path = L
+
+/obj/machinery/bot/cleanbot/proc/receive_path(var/list/L)
+	if(islist(L))
+		path = L

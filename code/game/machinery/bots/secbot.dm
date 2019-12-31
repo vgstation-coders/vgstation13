@@ -401,23 +401,13 @@ Auto Patrol: []"},
 
 
 		if(SECBOT_START_PATROL)	// start a patrol
-			if(path != null)
-				if(path.len > 0 && patrol_target)	// have a valid path, so just resume
-					mode = SECBOT_PATROL
-					return
-
-				else if(patrol_target)		// has patrol target already
-					spawn(0)
-						calc_path()		// so just find a route to it
-						if(path.len == 0)
-							patrol_target = 0
-							return
-						mode = SECBOT_PATROL
-
-
-				else					// no patrol target, so need a new one
-					find_patrol_target()
-					speak("Engaging patrol mode.")
+			if(patrol_target)
+				if(!path.len)
+					calc_path()
+				mode = SECBOT_PATROL
+			else
+				find_patrol_target()
+				speak("Engaging patrol mode.")
 
 
 		if(SECBOT_PATROL)		// patrol mode
@@ -442,52 +432,32 @@ Auto Patrol: []"},
 // perform a single patrol step
 
 /obj/machinery/bot/secbot/proc/patrol_step()
+	to_chat(world, "patrol step called")
 	if(!isturf(loc))
 		return
-
 
 	if(loc == patrol_target)		// reached target
 		at_patrol_target()
 		return
-
 	else if(path.len > 0 && patrol_target)		// valid path
-
 		var/turf/next = path[1]
-		if(next == loc)
-			path -= next
-			return
-
-
-		if(istype( next, /turf/simulated))
-
-			var/moved = step_towards(src, next)	// attempt to move
-			if(moved)	// successful move
+		to_chat(world, "valid path [next]")
+		if(istype(next,/turf/simulated))
+			to_chat(world, "it's the right turf")
+			step_to(src, next)	// successful move
+			if(get_turf(src) == next)
+				to_chat(world, "we stepped")
 				blockcount = 0
 				path -= loc
-
 				look_for_perp()
 			else		// failed to move
-
+				to_chat(world, "we didn't step, calculating again.")
 				blockcount++
-
 				if(blockcount > 5)	// attempt 5 times before recomputing
 					// find new path excluding blocked turf
-
-					spawn(2)
-						calc_path(next)
-						if(path.len == 0)
-							find_patrol_target()
-						else
-							blockcount = 0
-
-					return
-
-				return
-
+					calc_path(next)
 		else	// not a valid turf
 			mode = SECBOT_IDLE
-			return
-
 	else	// no path, so calculate new one
 		mode = SECBOT_START_PATROL
 
@@ -659,11 +629,15 @@ Auto Patrol: []"},
 // calculates a path to the current destination
 // given an optional turf to avoid
 /obj/machinery/bot/secbot/proc/calc_path(var/turf/avoid = null)
-	src.path = AStar(src, src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 120, id=botcard, exclude=avoid)
-	if(!src.path)
-		src.path = list()
+	AStar(src, .proc/receive_path, src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 120, id=botcard, exclude=avoid)
 
-
+/obj/machinery/bot/secbot/proc/receive_path(var/list/L)
+	to_chat(world, "receive path called. [L?.len]")
+	if(!islist(L))
+		find_patrol_target()
+		return
+	blockcount = 0
+	path = L
 // look for a criminal in view of the bot
 
 /obj/machinery/bot/secbot/proc/look_for_perp()
@@ -1022,23 +996,13 @@ Auto Patrol: []"},
 
 
 		if(SECBOT_START_PATROL)	// start a patrol
-			if(path != null)
-				if(path.len > 0 && patrol_target)	// have a valid path, so just resume
-					mode = SECBOT_PATROL
-					return
-
-				else if(patrol_target)		// has patrol target already
-					spawn(0)
-						calc_path()		// so just find a route to it
-						if(path.len == 0)
-							patrol_target = 0
-							return
-						mode = SECBOT_PATROL
-
-
-				else					// no patrol target, so need a new one
-					find_patrol_target()
-					speak("Engaging patrol mode.")
+			if(patrol_target)
+				if(!path.len)
+					calc_path()		// so just find a route to it
+				mode = SECBOT_PATROL
+			else					// no patrol target, so need a new one
+				find_patrol_target()
+				speak("Engaging patrol mode.")
 
 
 		if(SECBOT_PATROL)		// patrol mode

@@ -473,40 +473,23 @@ Auto Patrol: []"},
 	if(!path || !istype(path))
 		path = list()
 	else if(path.len > 0 && patrol_target)		// valid path
-
 		var/turf/next = path[1]
 		if(next == loc)
 			path -= next
 			return
-
-
-		if(istype( next, /turf/simulated))
-
+		if(istype(next, /turf/simulated))
 			var/moved = step_towards(src, next)	// attempt to move
 			if(moved)	// successful move
 				blockcount = 0
 				path -= loc
 
 				look_for_perp()
-				if(lasercolor)
-					sleep(20)
 			else		// failed to move
-
-				blockcount++
-
-				if(blockcount > 5)	// attempt 5 times before recomputing
+				if(++blockcount == 5)	// attempt 5 times before recomputing
 					// find new path excluding blocked turf
-
-					spawn(2)
-						calc_path(next)
-						if(path.len == 0)
-							find_patrol_target()
-						else
-							blockcount = 0
-
-					return
-
-				return
+					calc_path(next)
+				if(blockcount > 5)
+					find_patrol_target()
 
 		else	// not a valid turf
 			mode = SECBOT_IDLE
@@ -605,7 +588,6 @@ Auto Patrol: []"},
 				mode = SECBOT_SUMMON
 				calc_path()
 				speak("Responding.")
-
 				return
 
 
@@ -683,10 +665,11 @@ Auto Patrol: []"},
 // calculates a path to the current destination
 // given an optional turf to avoid
 /obj/machinery/bot/ed209/proc/calc_path(var/turf/avoid = null)
-	src.path = AStar(src, src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=avoid)
-	if (!src.path)
-		src.path = list()
+	AStar(src, .proc/receive_path, src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=avoid)
 
+/obj/machinery/bot/ed209/proc/receive_path(var/list/L)
+	if(islist(L))
+		path = L
 
 // look for a criminal in view of the bot
 

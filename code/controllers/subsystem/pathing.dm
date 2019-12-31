@@ -103,7 +103,7 @@ var/global/list/pathmakers = list()
 	debug = ndebug
 	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0))
 	pathmakers.Add(src)
-	to_chat(world, "[owner] [start] [end] [target] [adjacent] [dist] [maxnodes] [maxnodedepth] [id] [exclude] [debug] [pathmakers.len]")
+	//to_chat(world, "[owner] [start] [end] [target] [adjacent] [dist] [maxnodes] [maxnodedepth] [id] [exclude] [debug] [pathmakers.len]")
 
 /datum/path_maker/proc/can_process()
 	if(!owner || owner.gcDestroyed)
@@ -199,5 +199,5 @@ var/global/list/pathmakers = list()
 		for(var/i = 1; i <= path.len/2; i++)
 			path.Swap(i,path.len-i+1)
 
-	call(owner, proc_to_call)(path.Copy())
+	call(owner, proc_to_call)(path.Copy(), target)
 	qdel(src)

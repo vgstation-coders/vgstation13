@@ -58,7 +58,7 @@ var/global/list/floorbot_targets=list()
 	var/turf/oldtarget
 	var/oldloc = null
 	req_one_access = list(access_robotics, access_construction)
-	var/path[] = new()
+	var/list/path = list()
 	var/targetdirection
 	var/beacon_freq = 1445		// navigation beacon frequency
 
@@ -67,7 +67,7 @@ var/global/list/floorbot_targets=list()
 	var/new_destination		// pending new destination (waiting for beacon response)
 	var/destination			// destination description tag
 	var/next_destination	// the next destination in the patrol route
-	var/list/patpath = new				// list of path turfs
+	var/list/patpath = list()				// list of patrol path turfs
 
 	var/blockcount = 0		//number of times retried a blocked path
 	var/awaiting_beacon	= 0	// count of pticks awaiting a beacon response
@@ -242,13 +242,7 @@ var/global/list/floorbot_targets=list()
 				return
 
 			else if(patrol_target)		// has patrol target already
-				spawn(0)
-					calc_path()		// so just find a route to it
-					if(patpath.len == 0)
-						patrol_target = 0
-						return
-					mode = FLOORBOT_PATROL
-
+				calc_path()		// so just find a route to it
 
 			else					// no patrol target, so need a new one
 				find_patrol_target()
@@ -267,20 +261,8 @@ var/global/list/floorbot_targets=list()
 		if(src.loc != src.oldloc)
 			src.oldtarget = null
 		return 0
-	if(!src.path)
-		src.path = new()
-	if(src.target && (src.target != null) && src.path.len == 0)
-		spawn(0)
-			if(!istype(src.target, /turf/))
-				src.path = AStar(src, src.loc, src.target.loc, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=botcard)
-			else
-				src.path = AStar(src, src.loc, src.target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=botcard)
-			if (!src.path)
-				src.path = list()
-			if(src.path.len == 0)
-				src.oldtarget = src.target
-				floorbot_targets -= src.target
-				src.target = null
+	if(target && !path.len)
+		AStar(src, .proc/receive_target_path, src.loc, src.target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=botcard)
 		return 1
 	if(isturf(loc))
 		if(src.path.len > 0 && src.target && (src.target != null))
@@ -290,7 +272,7 @@ var/global/list/floorbot_targets=list()
 			step_to(src, target)
 			src.path = new()
 
-	if(src.loc == src.target || src.loc == src.target.loc)
+	if(src.loc == get_turf(target))
 		if(istype(src.target, /obj/item/stack/tile/plasteel))
 			src.eattile(src.target)
 			mode=FLOORBOT_IDLE
@@ -334,6 +316,14 @@ var/global/list/floorbot_targets=list()
 
 	src.oldloc = src.loc
 	return 1
+
+/obj/machinery/bot/floorbot/proc/receive_target_path(var/list/L)
+	if(!islist(L))
+		oldtarget = target
+		floorbot_targets -= target
+		target = null
+		return
+	path = L
 
 /obj/machinery/bot/floorbot/proc/checkforwork()
 	if(src.have_target())
@@ -512,52 +502,40 @@ var/global/list/floorbot_targets=list()
 
 
 /obj/machinery/bot/floorbot/proc/calc_path(var/turf/avoid = null)
-	src.path = AStar(src, src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=avoid)
-	src.path = reverseRange(src.path)
+	AStar(src, .proc/receive_patrol_path, src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=avoid)
+
+/obj/machinery/bot/floorbot/proc/receive_patrol_path(var/list/L)
+	if(!islist(L))
+		patrol_target = null
+		if(blockcount > 5)
+			find_patrol_target()
+		return
+	patpath = L
+	mode = FLOORBOT_PATROL
 
 // perform a single patrol step
-
 /obj/machinery/bot/floorbot/proc/patrol_step()
 	if(!isturf(loc))
 		return
-
-
 	if(loc == patrol_target)		// reached target
 		at_patrol_target()
 		return
 
 	else if(patpath.len > 0 && patrol_target)		// valid path
-
 		var/turf/next = patpath[1]
 		if(next == loc)
 			patpath -= next
 			return
-
-
-		if(istype( next, /turf/simulated))
-
-			var/moved = step_towards(src, next)	// attempt to move
+		if(istype(next, /turf/simulated))
+			var/moved = step_to(src, next)	// attempt to move
 			if(moved)	// successful move
 				blockcount = 0
 				patpath -= loc
-
 				checkforwork()
 			else		// failed to move
-
-				blockcount++
-
-				if(blockcount > 5)	// attempt 5 times before recomputing
+				if(++blockcount > 5)	// attempt 5 times before recomputing
 					// find new path excluding blocked turf
-
-					spawn(2)
-						calc_path(next)
-						if(patpath.len == 0)
-							find_patrol_target()
-						else
-							blockcount = 0
-
-					return
-
+					calc_path(next)
 				return
 
 		else	// not a valid turf

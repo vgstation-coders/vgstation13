@@ -157,8 +157,8 @@ proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
 #define ASTAR_REGISTERED 1
 #define ASTAR_PROCESSING 2
 
-//the actual algorithm
-proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = FALSE)
+
+proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = TRUE)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	for(var/datum/path_maker/P in pathmakers)
 		if(P.owner == source && start == P.start && end == P.end)
@@ -166,9 +166,87 @@ proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth =
 	var/atom/target
 	if(!isturf(end))
 		target = end
-	to_chat(world, "ASTAR called [source] [proc_to_call] [start] [end] [adjacent] [dist] [maxnodes] [maxnodedepth] [mintargetdist] [minnodedist] [id] [exclude] [debug]")
-	new /datum/path_maker(source,proc_to_call, start, end, target, adjacent, dist, maxnodes, maxnodedepth, mintargetdist, id, exclude, debug)
+	to_chat(world, "ASTAR called [source] [proc_to_call] [start:x][start:y][start:z] [end:x][end:y][end:z] [adjacent] [dist] [maxnodes] [maxnodedepth] [mintargetdist] [minnodedist] [id] [exclude] [debug]")
+	new /datum/path_maker(source,proc_to_call, get_turf(start), get_turf(end), target, adjacent, dist, maxnodes, maxnodedepth, mintargetdist, id, exclude, debug)
 	return ASTAR_REGISTERED
+
+//Only use if you just need to check if a path exists, and is a reasonable length
+proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null)
+	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
+	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
+	var/list/closed = new() //the closed list
+	var/list/path = null //the returned path, if any
+	var/PathNode/cur //current processed turf
+	start = get_turf(start)
+
+	if(!start)
+		return 0
+
+	//initialization
+	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0))
+
+	//then run the main loop
+	while(!open.IsEmpty() && !path)
+	{
+		cur = open.Dequeue() //get the lowest node cost turf in the open list
+		closed.Add(cur.source) //and tell we've processed it
+
+		//if we only want to get near the target, check if we're close enough
+		var/closeenough
+		if(mintargetdist)
+			closeenough = call(cur.source,dist)(end) <= mintargetdist
+
+		//if too many steps, abandon that path
+		if(maxnodedepth && (cur.nodecount > maxnodedepth))
+			return
+
+		//found the target turf (or close enough), let's create the path to it
+		if(cur.source == end || closeenough)
+			path = new()
+			path.Add(cur.source)
+			while(cur.prevNode)
+				cur = cur.prevNode
+				path.Add(cur.source)
+			break
+
+
+		//get adjacents turfs using the adjacent proc, checking for access with id
+		var/list/L = call(cur.source,adjacent)(id,closed)
+
+		for(var/turf/T in L)
+			if(T == exclude)
+				continue
+
+			var/newenddist = call(T,dist)(end)
+			if(!T.PNode) //is not already in open list, so add it
+				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1))
+			else //is already in open list, check if it's a better way from the current turf
+				if(newenddist < T.PNode.distance_from_end)
+
+					T.PNode.prevNode = cur
+					T.PNode.distance_from_start = newenddist
+					T.PNode.calc_f()
+					open.ReSort(T.PNode)//reorder the changed element in the list
+
+	}
+
+	//cleaning after us
+	for(var/PathNode/PN in open.L)
+		PN.source.PNode = null
+	for(var/turf/T in closed)
+		T.PNode = null
+
+	//if the path is longer than maxnodes, then don't return it
+	if(path && maxnodes && path.len > (maxnodes + 1))
+		return 0
+
+	//reverse the path to get it from start to finish
+	if(path)
+		for(var/i = 1; i <= path.len/2; i++)
+			path.Swap(i,path.len-i+1)
+
+	return path
+
 
 
 
