@@ -183,7 +183,6 @@ var/global/list/loopModeNames=list(
 
 	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE | MULTITOOL_MENU | SCREWTOGGLE | SHUTTLEWRENCH
 	mech_flags = MECH_SCAN_FAIL
-	emag_cost = 0 // because fun/unlimited uses.
 
 /obj/machinery/media/jukebox/New(loc)
 	..(loc)

@@ -57,7 +57,6 @@
 
 	explosion_block = 1
 
-	emag_cost = 1 // in MJ
 	machine_flags = SCREWTOGGLE | WIREJACK
 
 /obj/machinery/door/airlock/Destroy()
@@ -119,7 +118,6 @@
 	name = "Vault"
 	icon = 'icons/obj/doors/vault.dmi'
 	opacity = 1
-	emag_cost = 2 // in MJ
 	assembly_type = /obj/structure/door_assembly/door_assembly_vault
 
 	explosion_block = 3//that's some high quality plasteel door
@@ -330,7 +328,6 @@
 	name = "High Tech Security Airlock"
 	icon = 'icons/obj/doors/hightechsecurity.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_highsecurity
-	emag_cost = 2 // in MJ
 	animation_delay = 14
 
 /obj/machinery/door/airlock/clockwork
