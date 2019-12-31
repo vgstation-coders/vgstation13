@@ -1944,7 +1944,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "sno2"
 
 /area/surface/blizzard
-	name = "\improper The Blizzard"
+	name = "The Blizzard"
 	icon_state = "sno"
 	construction_zone = FALSE
 
