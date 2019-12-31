@@ -175,6 +175,8 @@
 	anchor.timeleft = 60
 	anchor.timetotal = anchor.timeleft
 
+	global_anchor_bloodstone = anchor
+
 	//Adding the anchor to the bloodstones holomap, so cultists can quickly go there to perform the final summoning
 	var/icon/updated_map = icon(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
 	var/datum/holomap_marker/holomarker = new()

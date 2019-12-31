@@ -485,7 +485,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	force_report = 1
 
 /datum/command_alert/bloodstones_anchor/announce()
-	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. Destroy it at all costs, do not let any cultist near it."
+	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. It appears to be in [get_area_name(global_anchor_bloodstone, 1)]. Destroy it at all costs, do not let any cultist near it."
 	..()
 
 /datum/command_alert/bloodstones_broken
