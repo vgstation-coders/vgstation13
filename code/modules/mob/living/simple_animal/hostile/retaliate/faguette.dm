@@ -62,6 +62,7 @@
 /mob/living/simple_animal/hostile/retaliate/faguette/attackby(obj/item/weapon/O, mob/user)
 	if(istype(O,/obj/item/weapon/book))
 		gib()
+	..()
 
 /mob/living/simple_animal/hostile/retaliate/faguette/proc/handle_disabilities()
 	if ((prob(5) && paralysis < 10))
