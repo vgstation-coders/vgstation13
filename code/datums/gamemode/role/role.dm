@@ -347,10 +347,10 @@
 			count++
 		if (!faction)
 			if(win)
-				text += "<br><font color='green'><B>The [name] was successful!</B></font>"
+				text += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 				feedback_add_details("[id]_success","SUCCESS")
 			else
-				text += "<br><font color='red'><B>The [name] has failed.</B></font>"
+				text += "<br><font color='red'><B>\The [name] has failed.</B></font>"
 				feedback_add_details("[id]_success","FAIL")
 	if(objectives.objectives.len > 0)
 		text += "</ul>"
