@@ -419,16 +419,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/command_link_lost
 	name = "Centcom Link Lost"
 	alert_title = "Automated Announcement"
-	alert = 'sound/AI/loss.ogg'
-	message = "This is an automated announcement. The link with central command has been lost. Repeat: The link with central command has been lost. Attempting to re-establish communications in T-10."
+	alert = 'sound/AI/connection_lost.ogg'
+	message = "Critical alert: Bluespace connection to Central Command has been lost. The emergency shuttle is be unable to be called or recalled until further notice."
 
 /datum/command_alert/command_link_restored
 	name = "Centcom Link Restored"
-	alert_title = "Link Established"
-
-/datum/command_alert/command_link_restored/announce()
-	message = "A link to Central Command has been established on [station_name()]."
-	..()
+	alert_title = "Automated Announcement"
+	alert = 'sound/AI/connection_made.ogg'
+	alert_title = "Link with Central Command has been re-established successfully. The emergency shuttle can now be called or recalled."
 
 /////////HOSTILE CREATURES
 
