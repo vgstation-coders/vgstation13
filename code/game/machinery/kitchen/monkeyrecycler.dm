@@ -39,13 +39,16 @@
 	if(lasercount == 3)
 		can_recycle_live = TRUE
 
-/obj/machinery/monkey_recycler/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (..())
+/obj/machinery/monkey_recycler/attackby(var/obj/item/O, var/mob/user)
+	if(..())
 		return 1
-	if (istype(O, /obj/item/weapon/grab))
+	process_monkey(O, user)
+
+/obj/machinery/monkey_recycler/proc/process_monkey(var/obj/item/O, var/mob/user)
+	if(istype(O, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
 		var/grabbed = G.affecting
-		if(istype(grabbed, /mob/living/carbon/monkey))
+		if(ismonkey(grabbed))
 			var/mob/living/carbon/monkey/target = grabbed
 			if(target.stat == CONSCIOUS && !can_recycle_live)
 				to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
@@ -64,7 +67,7 @@
 				to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
 		else
 			to_chat(user, "<span class='warning'>The machine only accepts monkeys!</span>")
-	else if(istype(O, /mob/living/carbon/monkey))
+	else if(ismonkey(O))
 		var/mob/living/carbon/monkey/target = O
 		if(target.stat == CONSCIOUS && !can_recycle_live)
 			to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
@@ -79,7 +82,6 @@
 			use_power(500)
 			src.grinded++
 			to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
-	return
 
 /obj/machinery/monkey_recycler/attack_hand(var/mob/user as mob)
 	if(..())
@@ -105,4 +107,5 @@
 		return
 	if(!ishigherbeing(user) && !isrobot(user))
 		return
-	attackby(O,user)
+	add_fingerprint(user)
+	process_monkey(O,user)
