@@ -67,6 +67,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/static_environ
 
 	var/forbid_apc = FALSE //never build an APC here?
+	var/construction_zone = FALSE //treat this area like space for blueprints?
 
 	var/has_gravity = 1
 
@@ -1930,30 +1931,31 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Ice Bar"
 	icon_state = "ghettobar"
 
+/area/station/garage
+	name = "\improper Public Garage"
+	icon_state = "yellow"
+
 /area/surface
 	forbid_apc = TRUE
+	construction_zone = TRUE
 
 /area/surface/snow
 	name = "\improper Planet Surface"
 	icon_state = "sno2"
-	shuttle_can_crush = TRUE
 
 /area/surface/blizzard
-	name = "\improper The Blizzard"
+	name = "The Blizzard"
 	icon_state = "sno"
+	construction_zone = FALSE
 
 /area/surface/icecore
 	name = "\improper Frozen Core"
 	icon_state = "icecore"
 
-/area/surface/garage
-	name = "\improper Public Garage"
-	forbid_apc = FALSE
-	icon_state = "yellow"
-
 /area/surface/junkyard
 	name = "\improper Junk Yard"
 	icon_state = "disposal"
+	construction_zone = FALSE
 
 /area/surface/forest/deer
 	name = "\improper Enclosed Forest"
