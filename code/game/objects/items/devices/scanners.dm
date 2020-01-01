@@ -494,6 +494,10 @@ Subject's pulse: ??? BPM"})
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
+	if(iscryotube(O))
+		var/obj/machinery/atmospherics/unary/cryo_cell/T = O
+		if(T.occupant)
+			O = T.occupant
 	if(O.reagents)
 		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 		var/dat = ""
