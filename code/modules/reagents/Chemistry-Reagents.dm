@@ -3012,6 +3012,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
+	custom_metabolism = REAGENTS_METABOLISM/2.5
 
 /datum/reagent/cryoxadone/on_mob_life(var/mob/living/M)
 
@@ -3032,6 +3033,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
+	custom_metabolism = REAGENTS_METABOLISM/2.5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 
