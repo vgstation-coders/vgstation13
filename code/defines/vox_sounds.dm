@@ -19,13 +19,13 @@ var/list/vox_sound_lengths = list()
 
 // This class is necessary because we have so many assignments to take it crashes the compiler over a certain limit.
 // STATS:
-//  194308 instructions spread over 3 procs.
+//  194192 instructions spread over 3 procs.
 //
 #ifndef DISABLE_VOX
 /__vox_sound_meta_init/New()
   src.__init_1() // 65527 instructions
   src.__init_2() // 65527 instructions
-  src.__init_3() // 63269 instructions
+  src.__init_3() // 63153 instructions
 /__vox_sound_meta_init/proc/__init_1()
   vox_sounds["fem"] = list()
   vox_sounds["fem"]["'cause"] = 'sound/vox_fem/_cause.ogg'
@@ -38,14 +38,6 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_sfx/,.ogg'] = 2.707
   vox_sounds["fem"]["."] = 'sound/vox_sfx/..ogg'
   vox_sound_lengths['sound/vox_sfx/..ogg'] = 5.054
-  vox_sounds["fem"]["I'd"] = 'sound/vox_fem/I_d.ogg'
-  vox_sound_lengths['sound/vox_fem/I_d.ogg'] = 6.96
-  vox_sounds["fem"]["I'll"] = 'sound/vox_fem/I_ll.ogg'
-  vox_sound_lengths['sound/vox_fem/I_ll.ogg'] = 6.96
-  vox_sounds["fem"]["I'm"] = 'sound/vox_fem/I_m.ogg'
-  vox_sound_lengths['sound/vox_fem/I_m.ogg'] = 6.96
-  vox_sounds["fem"]["I've"] = 'sound/vox_fem/I_ve.ogg'
-  vox_sound_lengths['sound/vox_fem/I_ve.ogg'] = 6.64
   vox_sounds["fem"]["_airhorn"] = 'sound/vox_sfx/_airhorn.ogg'
   vox_sound_lengths['sound/vox_sfx/_airhorn.ogg'] = 44.1
   vox_sounds["fem"]["_bizwarn"] = 'sound/vox/_bizwarn.wav'
@@ -2886,10 +2878,14 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_fem/hyronalin.ogg'] = 14.8
   vox_sounds["fem"]["i"] = 'sound/vox_fem/i.ogg'
   vox_sound_lengths['sound/vox_fem/i.ogg'] = 5.68
+  vox_sounds["fem"]["i'd"] = 'sound/vox_fem/i_d.ogg'
+  vox_sound_lengths['sound/vox_fem/i_d.ogg'] = 6.96
   vox_sounds["fem"]["i'll"] = 'sound/vox_fem/i_ll.ogg'
   vox_sound_lengths['sound/vox_fem/i_ll.ogg'] = 6.96
   vox_sounds["fem"]["i'm"] = 'sound/vox_fem/i_m.ogg'
   vox_sound_lengths['sound/vox_fem/i_m.ogg'] = 6.96
+  vox_sounds["fem"]["i've"] = 'sound/vox_fem/i_ve.ogg'
+  vox_sound_lengths['sound/vox_fem/i_ve.ogg'] = 6.64
   vox_sounds["fem"]["iaa"] = 'sound/vox_fem/iaa.ogg'
   vox_sound_lengths['sound/vox_fem/iaa.ogg'] = 22.8
   vox_sounds["fem"]["ian"] = 'sound/vox_fem/ian.ogg'
@@ -4546,11 +4542,11 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_fem/punches.ogg'] = 12.56
   vox_sounds["fem"]["punching"] = 'sound/vox_fem/punching.ogg'
   vox_sound_lengths['sound/vox_fem/punching.ogg'] = 12.08
-/__vox_sound_meta_init/proc/__init_2()
   vox_sounds["fem"]["punpun"] = 'sound/vox_fem/punpun.ogg'
   vox_sound_lengths['sound/vox_fem/punpun.ogg'] = 12.24
   vox_sounds["fem"]["purchase"] = 'sound/vox_fem/purchase.ogg'
   vox_sound_lengths['sound/vox_fem/purchase.ogg'] = 12.88
+/__vox_sound_meta_init/proc/__init_2()
   vox_sounds["fem"]["purchased"] = 'sound/vox_fem/purchased.ogg'
   vox_sound_lengths['sound/vox_fem/purchased.ogg'] = 12.56
   vox_sounds["fem"]["purchases"] = 'sound/vox_fem/purchases.ogg'
@@ -6718,14 +6714,6 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_sfx/,.ogg'] = 2.707
   vox_sounds["mas"]["."] = 'sound/vox_sfx/..ogg'
   vox_sound_lengths['sound/vox_sfx/..ogg'] = 5.054
-  vox_sounds["mas"]["I'd"] = 'sound/vox_mas/I_d.ogg'
-  vox_sound_lengths['sound/vox_mas/I_d.ogg'] = 7.6
-  vox_sounds["mas"]["I'll"] = 'sound/vox_mas/I_ll.ogg'
-  vox_sound_lengths['sound/vox_mas/I_ll.ogg'] = 8.56
-  vox_sounds["mas"]["I'm"] = 'sound/vox_mas/I_m.ogg'
-  vox_sound_lengths['sound/vox_mas/I_m.ogg'] = 8.24
-  vox_sounds["mas"]["I've"] = 'sound/vox_mas/I_ve.ogg'
-  vox_sound_lengths['sound/vox_mas/I_ve.ogg'] = 6.16
   vox_sounds["mas"]["_airhorn"] = 'sound/vox_sfx/_airhorn.ogg'
   vox_sound_lengths['sound/vox_sfx/_airhorn.ogg'] = 44.1
   vox_sounds["mas"]["_bizwarn"] = 'sound/vox/_bizwarn.wav'
@@ -9066,7 +9054,6 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_mas/gang.ogg'] = 8.56
   vox_sounds["mas"]["gangs"] = 'sound/vox_mas/gangs.ogg'
   vox_sound_lengths['sound/vox_mas/gangs.ogg'] = 10
-/__vox_sound_meta_init/proc/__init_3()
   vox_sounds["mas"]["gas"] = 'sound/vox_mas/gas.ogg'
   vox_sound_lengths['sound/vox_mas/gas.ogg'] = 8.88
   vox_sounds["mas"]["gassed"] = 'sound/vox_mas/gassed.ogg'
@@ -9079,6 +9066,7 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_mas/gasthevox.ogg'] = 29.2
   vox_sounds["mas"]["gateway"] = 'sound/vox_mas/gateway.ogg'
   vox_sound_lengths['sound/vox_mas/gateway.ogg'] = 10.48
+/__vox_sound_meta_init/proc/__init_3()
   vox_sounds["mas"]["gateways"] = 'sound/vox_mas/gateways.ogg'
   vox_sound_lengths['sound/vox_mas/gateways.ogg'] = 11.44
   vox_sounds["mas"]["gave"] = 'sound/vox_mas/gave.ogg'
@@ -9567,10 +9555,14 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_mas/hyronalin.ogg'] = 13.04
   vox_sounds["mas"]["i"] = 'sound/vox_mas/i.ogg'
   vox_sound_lengths['sound/vox_mas/i.ogg'] = 6.8
+  vox_sounds["mas"]["i'd"] = 'sound/vox_mas/i_d.ogg'
+  vox_sound_lengths['sound/vox_mas/i_d.ogg'] = 7.6
   vox_sounds["mas"]["i'll"] = 'sound/vox_mas/i_ll.ogg'
   vox_sound_lengths['sound/vox_mas/i_ll.ogg'] = 8.56
   vox_sounds["mas"]["i'm"] = 'sound/vox_mas/i_m.ogg'
   vox_sound_lengths['sound/vox_mas/i_m.ogg'] = 8.24
+  vox_sounds["mas"]["i've"] = 'sound/vox_mas/i_ve.ogg'
+  vox_sound_lengths['sound/vox_mas/i_ve.ogg'] = 6.16
   vox_sounds["mas"]["iaa"] = 'sound/vox_mas/iaa.ogg'
   vox_sound_lengths['sound/vox_mas/iaa.ogg'] = 21.84
   vox_sounds["mas"]["ian"] = 'sound/vox_mas/ian.ogg'

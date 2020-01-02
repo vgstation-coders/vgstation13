@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "compiled": 1577920043.555435,
+  "compiled": 1577990779.6843097,
   "voices": {
     "fem": {
       "id": "us-clb",
@@ -146,98 +146,6 @@
         "no-trim"
       ],
       "input-filename": "samples/fullpause.ogg"
-    },
-    "I'd": {
-      "wordlen": 1,
-      "files": {
-        "fem": {
-          "filename": "sound/vox_fem/I_d.ogg",
-          "voice": "us-clb",
-          "checksum": "8fa06f979283cf43465d05dcda73dd18",
-          "duration": 0.696,
-          "size": 5663
-        },
-        "mas": {
-          "filename": "sound/vox_mas/I_d.ogg",
-          "voice": "us-rms",
-          "checksum": "333328ebab6b20d9393da82f3e67ca9f",
-          "duration": 0.76,
-          "size": 5748
-        }
-      },
-      "flags": [],
-      "phrase": [
-        "I'd"
-      ]
-    },
-    "I'll": {
-      "wordlen": 1,
-      "files": {
-        "fem": {
-          "filename": "sound/vox_fem/I_ll.ogg",
-          "voice": "us-clb",
-          "checksum": "c97c6b56f6abf76c5bdb068d9110b43f",
-          "duration": 0.696,
-          "size": 5645
-        },
-        "mas": {
-          "filename": "sound/vox_mas/I_ll.ogg",
-          "voice": "us-rms",
-          "checksum": "3681c6f473b28b4a5080363850577082",
-          "duration": 0.856,
-          "size": 6004
-        }
-      },
-      "flags": [],
-      "phrase": [
-        "I'll"
-      ]
-    },
-    "I'm": {
-      "wordlen": 1,
-      "files": {
-        "fem": {
-          "filename": "sound/vox_fem/I_m.ogg",
-          "voice": "us-clb",
-          "checksum": "d57de27f6928b8b777a042f3500a2565",
-          "duration": 0.696,
-          "size": 5644
-        },
-        "mas": {
-          "filename": "sound/vox_mas/I_m.ogg",
-          "voice": "us-rms",
-          "checksum": "8ab53bb165d9766b2aa0af5194472a29",
-          "duration": 0.824,
-          "size": 5981
-        }
-      },
-      "flags": [],
-      "phrase": [
-        "I'm"
-      ]
-    },
-    "I've": {
-      "wordlen": 1,
-      "files": {
-        "fem": {
-          "filename": "sound/vox_fem/I_ve.ogg",
-          "voice": "us-clb",
-          "checksum": "11716322daf8d7e24ac581ef138809d6",
-          "duration": 0.664,
-          "size": 5612
-        },
-        "mas": {
-          "filename": "sound/vox_mas/I_ve.ogg",
-          "voice": "us-rms",
-          "checksum": "9c612c058bbe0677c71d64005b96c1c6",
-          "duration": 0.616,
-          "size": 5466
-        }
-      },
-      "flags": [],
-      "phrase": [
-        "I've"
-      ]
     },
     "_airhorn": {
       "wordlen": 1,
@@ -32948,6 +32856,29 @@
         "eye"
       ]
     },
+    "i'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/i_d.ogg",
+          "voice": "us-clb",
+          "checksum": "26b2c62af7be6113f7a8fc903ef8a746",
+          "duration": 0.696,
+          "size": 5674
+        },
+        "mas": {
+          "filename": "sound/vox_mas/i_d.ogg",
+          "voice": "us-rms",
+          "checksum": "d8b7fea944aee57a17418754fdcd6a9a",
+          "duration": 0.76,
+          "size": 5743
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "i'd"
+      ]
+    },
     "i'll": {
       "wordlen": 1,
       "files": {
@@ -32992,6 +32923,29 @@
       "flags": [],
       "phrase": [
         "i'm"
+      ]
+    },
+    "i've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/i_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "910ff5627b12babca3499a82425a29c9",
+          "duration": 0.664,
+          "size": 5600
+        },
+        "mas": {
+          "filename": "sound/vox_mas/i_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "967ff358b09311ae2ff0b379aa98483b",
+          "duration": 0.616,
+          "size": 5458
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "i've"
       ]
     },
     "iaa": {
