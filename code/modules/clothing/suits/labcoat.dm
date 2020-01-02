@@ -83,6 +83,10 @@
 	desc = "A suit that protects against minor chemical spills. Has a purple stripe on the shoulder."
 	base_icon_state = "labcoat_tox"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	sound_change = list(CLOTHING_SOUND_SCREAM)
+	sound_priority = CLOTHING_SOUND_LOW_PRIORITY
+	sound_file = list('sound/misc/science_scream1.ogg', 'sound/misc/science_scream2.ogg', 'sound/misc/science_scream3.ogg', 'sound/misc/science_scream4.ogg', 'sound/misc/science_scream5.ogg', 'sound/misc/science_scream6.ogg')
+	sound_respect_species = list("Vox", "Skeletal Vox", "Diona")
 
 /obj/item/clothing/suit/storage/labcoat/oncologist
 	name = "oncologist labcoat"
