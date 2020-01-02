@@ -70,6 +70,9 @@ var/global/list/alert_overlays_global = list()
 
 	dir = 2
 
+	animation_delay_predensity_opening = 3
+	animation_delay_predensity_closing = 7
+
 	var/list/alert_overlays_local
 
 	var/blocked = 0
