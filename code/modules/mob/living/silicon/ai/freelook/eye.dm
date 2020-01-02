@@ -142,6 +142,24 @@
 	for(var/datum/camerachunk/c in eyeobj.visibleCameraChunks)
 		c.remove(eyeobj)
 
+/mob/living/silicon/ai/proc/jump_to_area(var/area/A)
+	if(!A)
+		return
+	if(!eyeobj)
+		eyeobj = new(loc)
+		eyeobj.ai = src
+		eyeobj.name = "[name] (AI Eye)"
+		eyeobj.forceMove(loc)
+	var/list/turfs = list()
+	for(var/turf/T in A)
+		turfs.Add(T)
+	var/turf/T = pick(turfs)
+	if(!T)
+		to_chat(src, "<span class='danger'>Nowhere to jump to!</span>")
+		return
+	cameraFollow = null
+	eyeobj.forceMove(T)
+
 /mob/living/silicon/ai/verb/toggle_acceleration()
 	set category = "AI Commands"
 	set name = "Toggle Camera Acceleration"
