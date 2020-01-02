@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "compiled": 1575416250.6407316,
+  "compiled": 1577920043.555435,
   "voices": {
     "fem": {
       "id": "us-clb",
@@ -28,6 +28,75 @@
     }
   },
   "words": {
+    "'cause": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/_cause.ogg",
+          "voice": "us-clb",
+          "checksum": "e9f1b67ba7b50374e4c76124fb6beb8b",
+          "duration": 0.84,
+          "size": 6005
+        },
+        "mas": {
+          "filename": "sound/vox_mas/_cause.ogg",
+          "voice": "us-rms",
+          "checksum": "9d2140f2fbcca9d3103faf4d2653773c",
+          "duration": 0.824,
+          "size": 6086
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "'cause"
+      ]
+    },
+    "'tis": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/_tis.ogg",
+          "voice": "us-clb",
+          "checksum": "1692a37be58d16c90cfdbc40329c5f35",
+          "duration": 0.84,
+          "size": 6186
+        },
+        "mas": {
+          "filename": "sound/vox_mas/_tis.ogg",
+          "voice": "us-rms",
+          "checksum": "c8a72f51ebeafdd472de5646a6059e18",
+          "duration": 0.84,
+          "size": 6004
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "'tis"
+      ]
+    },
+    "'twas": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/_twas.ogg",
+          "voice": "us-clb",
+          "checksum": "f42e1f194d6f29e0cd7df16147d56938",
+          "duration": 1.0,
+          "size": 6482
+        },
+        "mas": {
+          "filename": "sound/vox_mas/_twas.ogg",
+          "voice": "us-rms",
+          "checksum": "67b8a83b962d12c9010dafe0a78f9072",
+          "duration": 0.952,
+          "size": 6373
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "'twas"
+      ]
+    },
     ",": {
       "wordlen": 1,
       "files": {
@@ -77,6 +146,98 @@
         "no-trim"
       ],
       "input-filename": "samples/fullpause.ogg"
+    },
+    "I'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/I_d.ogg",
+          "voice": "us-clb",
+          "checksum": "8fa06f979283cf43465d05dcda73dd18",
+          "duration": 0.696,
+          "size": 5663
+        },
+        "mas": {
+          "filename": "sound/vox_mas/I_d.ogg",
+          "voice": "us-rms",
+          "checksum": "333328ebab6b20d9393da82f3e67ca9f",
+          "duration": 0.76,
+          "size": 5748
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "I'd"
+      ]
+    },
+    "I'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/I_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "c97c6b56f6abf76c5bdb068d9110b43f",
+          "duration": 0.696,
+          "size": 5645
+        },
+        "mas": {
+          "filename": "sound/vox_mas/I_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "3681c6f473b28b4a5080363850577082",
+          "duration": 0.856,
+          "size": 6004
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "I'll"
+      ]
+    },
+    "I'm": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/I_m.ogg",
+          "voice": "us-clb",
+          "checksum": "d57de27f6928b8b777a042f3500a2565",
+          "duration": 0.696,
+          "size": 5644
+        },
+        "mas": {
+          "filename": "sound/vox_mas/I_m.ogg",
+          "voice": "us-rms",
+          "checksum": "8ab53bb165d9766b2aa0af5194472a29",
+          "duration": 0.824,
+          "size": 5981
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "I'm"
+      ]
+    },
+    "I've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/I_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "11716322daf8d7e24ac581ef138809d6",
+          "duration": 0.664,
+          "size": 5612
+        },
+        "mas": {
+          "filename": "sound/vox_mas/I_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "9c612c058bbe0677c71d64005b96c1c6",
+          "duration": 0.616,
+          "size": 5466
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "I've"
+      ]
     },
     "_airhorn": {
       "wordlen": 1,
@@ -648,6 +809,29 @@
       "flags": [],
       "phrase": [
         "about"
+      ]
+    },
+    "above": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/above.ogg",
+          "voice": "us-clb",
+          "checksum": "c8fc8291a95eee286ee19fb11f0bd5b9",
+          "duration": 1.032,
+          "size": 6683
+        },
+        "mas": {
+          "filename": "sound/vox_mas/above.ogg",
+          "voice": "us-rms",
+          "checksum": "1473c8b3f59367e78de76f79011b6824",
+          "duration": 0.872,
+          "size": 6069
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "above"
       ]
     },
     "abstain": {
@@ -1913,6 +2097,29 @@
       "flags": [],
       "phrase": [
         "A.I."
+      ]
+    },
+    "ain't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/ain_t.ogg",
+          "voice": "us-clb",
+          "checksum": "176daea18e9c32e5d2046e1e7574d768",
+          "duration": 0.84,
+          "size": 6150
+        },
+        "mas": {
+          "filename": "sound/vox_mas/ain_t.ogg",
+          "voice": "us-rms",
+          "checksum": "09f5975df4ec2c8640c9346463c1a5b1",
+          "duration": 0.776,
+          "size": 5992
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "ain't"
       ]
     },
     "air": {
@@ -3320,6 +3527,29 @@
         "areas"
       ]
     },
+    "aren't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/aren_t.ogg",
+          "voice": "us-clb",
+          "checksum": "100d6aee33cd1c5c646e8ca9fd7451c4",
+          "duration": 0.968,
+          "size": 6640
+        },
+        "mas": {
+          "filename": "sound/vox_mas/aren_t.ogg",
+          "voice": "us-rms",
+          "checksum": "2c04282c7aa350d557b9c38c03b40ce9",
+          "duration": 0.936,
+          "size": 6426
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "aren't"
+      ]
+    },
     "arm": {
       "wordlen": 1,
       "files": {
@@ -4677,6 +4907,75 @@
         "bad"
       ]
     },
+    "badder": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/badder.ogg",
+          "voice": "us-clb",
+          "checksum": "1d9212e91c8f35989b7631fee107df79",
+          "duration": 1.032,
+          "size": 6666
+        },
+        "mas": {
+          "filename": "sound/vox_mas/badder.ogg",
+          "voice": "us-rms",
+          "checksum": "e4328d1e18ff7e69bf56f5ce1aaebe62",
+          "duration": 0.952,
+          "size": 6337
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "badder"
+      ]
+    },
+    "baddest": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/baddest.ogg",
+          "voice": "us-clb",
+          "checksum": "14932b1b15da168e39c20c74e4acc7b0",
+          "duration": 1.112,
+          "size": 7103
+        },
+        "mas": {
+          "filename": "sound/vox_mas/baddest.ogg",
+          "voice": "us-rms",
+          "checksum": "3e107eac51463fcf01c335960c4562e1",
+          "duration": 1.048,
+          "size": 6820
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "baddest"
+      ]
+    },
+    "badly": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/badly.ogg",
+          "voice": "us-clb",
+          "checksum": "3fe75f03cd87d58811059acaa672e4aa",
+          "duration": 1.048,
+          "size": 6638
+        },
+        "mas": {
+          "filename": "sound/vox_mas/badly.ogg",
+          "voice": "us-rms",
+          "checksum": "5d4f1aaebab066361c89ac949b235b9f",
+          "duration": 1.048,
+          "size": 6784
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "badly"
+      ]
+    },
     "bag": {
       "wordlen": 1,
       "files": {
@@ -4928,6 +5227,29 @@
       "flags": [],
       "phrase": [
         "bananas"
+      ]
+    },
+    "bananium": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/bananium.ogg",
+          "voice": "us-clb",
+          "checksum": "78477ab0ab439642a2e44777e141e302",
+          "duration": 1.288,
+          "size": 7501
+        },
+        "mas": {
+          "filename": "sound/vox_mas/bananium.ogg",
+          "voice": "us-rms",
+          "checksum": "0df77f5cb755797475f413250c9896af",
+          "duration": 1.288,
+          "size": 7595
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "bananium"
       ]
     },
     "bar": {
@@ -5756,6 +6078,29 @@
       "flags": [],
       "phrase": [
         "bellmont"
+      ]
+    },
+    "below": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/below.ogg",
+          "voice": "us-clb",
+          "checksum": "e312437cbac54fb6309993a4859fb665",
+          "duration": 1.048,
+          "size": 6597
+        },
+        "mas": {
+          "filename": "sound/vox_mas/below.ogg",
+          "voice": "us-rms",
+          "checksum": "8e9c642a06da3d08f476b10d433cec18",
+          "duration": 0.92,
+          "size": 6248
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "below"
       ]
     },
     "between": {
@@ -9326,6 +9671,29 @@
       "flags": [],
       "phrase": [
         "can"
+      ]
+    },
+    "can't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/can_t.ogg",
+          "voice": "us-clb",
+          "checksum": "daaf95be9eae5701a6ab2ca7448e8e5f",
+          "duration": 0.968,
+          "size": 6634
+        },
+        "mas": {
+          "filename": "sound/vox_mas/can_t.ogg",
+          "voice": "us-rms",
+          "checksum": "9209280f53a6f6107d2e2502d91b13f7",
+          "duration": 0.84,
+          "size": 6178
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "can't"
       ]
     },
     "canal": {
@@ -14438,6 +14806,52 @@
         "could"
       ]
     },
+    "could've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/could_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "a72af4ceea0d752731c34f7329e44a5a",
+          "duration": 1.144,
+          "size": 7127
+        },
+        "mas": {
+          "filename": "sound/vox_mas/could_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "71cf4b00951af31d214d8fb0eb3b7f8d",
+          "duration": 0.952,
+          "size": 6459
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "could've"
+      ]
+    },
+    "couldn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/couldn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "dd6d55ec2af17c4ba74637fec6ffda89",
+          "duration": 1.128,
+          "size": 7009
+        },
+        "mas": {
+          "filename": "sound/vox_mas/couldn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "cd73e06b8d9e5daabc47841b28bc0697",
+          "duration": 0.904,
+          "size": 6293
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "couldn't"
+      ]
+    },
     "couldnt": {
       "wordlen": 1,
       "files": {
@@ -18076,6 +18490,52 @@
         "dexalin"
       ]
     },
+    "diamond": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/diamond.ogg",
+          "voice": "us-clb",
+          "checksum": "5333807a979ed49d3e1dea7ed77044ba",
+          "duration": 1.096,
+          "size": 6928
+        },
+        "mas": {
+          "filename": "sound/vox_mas/diamond.ogg",
+          "voice": "us-rms",
+          "checksum": "c99d9c353a47eee51e14d9d4540e276c",
+          "duration": 1.016,
+          "size": 6683
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "diamond"
+      ]
+    },
+    "diamonds": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/diamonds.ogg",
+          "voice": "us-clb",
+          "checksum": "fd197142ed2dc08f501489805158316b",
+          "duration": 1.272,
+          "size": 7631
+        },
+        "mas": {
+          "filename": "sound/vox_mas/diamonds.ogg",
+          "voice": "us-rms",
+          "checksum": "30004faeddefb3cf65ba1da9918375a0",
+          "duration": 1.096,
+          "size": 6961
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "diamonds"
+      ]
+    },
     "dick": {
       "wordlen": 1,
       "files": {
@@ -18189,6 +18649,29 @@
       "flags": [],
       "phrase": [
         "did"
+      ]
+    },
+    "didn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/didn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "ef9e31359e932bd5a062f9f7caa3b520",
+          "duration": 1.112,
+          "size": 7049
+        },
+        "mas": {
+          "filename": "sound/vox_mas/didn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "2c10c669a472b7ee4c723590d55e2130",
+          "duration": 0.84,
+          "size": 6217
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "didn't"
       ]
     },
     "die": {
@@ -19571,6 +20054,29 @@
         "does"
       ]
     },
+    "doesn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/doesn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "e6a5891b07b7f3b858573ea8dc2eb2ce",
+          "duration": 1.128,
+          "size": 7161
+        },
+        "mas": {
+          "filename": "sound/vox_mas/doesn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "e59585fe48c4ae20871a143523cd699d",
+          "duration": 0.936,
+          "size": 6360
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "doesn't"
+      ]
+    },
     "dog": {
       "wordlen": 1,
       "files": {
@@ -19638,6 +20144,29 @@
       "flags": [],
       "phrase": [
         "doing"
+      ]
+    },
+    "don't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/don_t.ogg",
+          "voice": "us-clb",
+          "checksum": "8c38c2a290f4dbebaa380fd6385e41f0",
+          "duration": 0.968,
+          "size": 6616
+        },
+        "mas": {
+          "filename": "sound/vox_mas/don_t.ogg",
+          "voice": "us-rms",
+          "checksum": "a942d3867acc1ad4855a4f0074071f15",
+          "duration": 0.808,
+          "size": 5975
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "don't"
       ]
     },
     "done": {
@@ -20236,6 +20765,29 @@
       "flags": [],
       "phrase": [
         "E."
+      ]
+    },
+    "e'er": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/e_er.ogg",
+          "voice": "us-clb",
+          "checksum": "cd14b17dbc427e18a426a12a80189713",
+          "duration": 0.904,
+          "size": 6156
+        },
+        "mas": {
+          "filename": "sound/vox_mas/e_er.ogg",
+          "voice": "us-rms",
+          "checksum": "e6111ced5ceb2cdc2554744aa8dabc0f",
+          "duration": 0.712,
+          "size": 5590
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "e'er"
       ]
     },
     "each": {
@@ -22241,6 +22793,29 @@
         "every"
       ]
     },
+    "everyone's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/everyone_s.ogg",
+          "voice": "us-clb",
+          "checksum": "056fbca6508e52b08c43fe59b5e4f112",
+          "duration": 1.384,
+          "size": 7952
+        },
+        "mas": {
+          "filename": "sound/vox_mas/everyone_s.ogg",
+          "voice": "us-rms",
+          "checksum": "9e3deba0609d860353cc2bf7e7d16b2b",
+          "duration": 1.16,
+          "size": 7158
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "everyone's"
+      ]
+    },
     "everywhere": {
       "wordlen": 1,
       "files": {
@@ -23667,6 +24242,52 @@
         "false"
       ]
     },
+    "far": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/far.ogg",
+          "voice": "us-clb",
+          "checksum": "a5e65e8fbddf106d9226fe18a2b2fdf9",
+          "duration": 0.872,
+          "size": 6016
+        },
+        "mas": {
+          "filename": "sound/vox_mas/far.ogg",
+          "voice": "us-rms",
+          "checksum": "805a8a751b0714e7b0ae7155973f3291",
+          "duration": 0.92,
+          "size": 6326
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "far"
+      ]
+    },
+    "farther": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/farther.ogg",
+          "voice": "us-clb",
+          "checksum": "5c2c865e7531eb52c7ea0e71cf2925ac",
+          "duration": 1.08,
+          "size": 6937
+        },
+        "mas": {
+          "filename": "sound/vox_mas/farther.ogg",
+          "voice": "us-rms",
+          "checksum": "a19cb34247a1a3daebe40992dfa44f2b",
+          "duration": 0.984,
+          "size": 6525
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "farther"
+      ]
+    },
     "farthest": {
       "wordlen": 1,
       "files": {
@@ -24378,6 +24999,29 @@
       "flags": [],
       "phrase": [
         "finishing"
+      ]
+    },
+    "finna": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/finna.ogg",
+          "voice": "us-clb",
+          "checksum": "df94c95828322dc6c83552ff6b139d3b",
+          "duration": 0.936,
+          "size": 6363
+        },
+        "mas": {
+          "filename": "sound/vox_mas/finna.ogg",
+          "voice": "us-rms",
+          "checksum": "c0418575485afd3387f4bf1bab46cb55",
+          "duration": 0.84,
+          "size": 6221
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "finna"
       ]
     },
     "fire": {
@@ -27306,6 +27950,29 @@
         "gibs"
       ]
     },
+    "gibtonite": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/gibtonite.ogg",
+          "voice": "us-clb",
+          "checksum": "52a6fc5d1e6c4e279f748cb95bc2cb7f",
+          "duration": 1.4,
+          "size": 8044
+        },
+        "mas": {
+          "filename": "sound/vox_mas/gibtonite.ogg",
+          "voice": "us-rms",
+          "checksum": "b6236cc15504f68deecea308d154f9c7",
+          "duration": 1.272,
+          "size": 7595
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "gibtonite"
+      ]
+    },
     "gigawatt": {
       "wordlen": 1,
       "files": {
@@ -27350,6 +28017,29 @@
       "flags": [],
       "phrase": [
         "gigawatts"
+      ]
+    },
+    "gimme": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/gimme.ogg",
+          "voice": "us-clb",
+          "checksum": "6f6df6711d6fd4fef9dc8ed3288199cd",
+          "duration": 0.984,
+          "size": 6532
+        },
+        "mas": {
+          "filename": "sound/vox_mas/gimme.ogg",
+          "voice": "us-rms",
+          "checksum": "3e003edf7fa19fa009ab89a833228103",
+          "duration": 0.968,
+          "size": 6575
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "gimme"
       ]
     },
     "girlfriend": {
@@ -27858,6 +28548,29 @@
       "flags": [],
       "phrase": [
         "gone"
+      ]
+    },
+    "gonna": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/gonna.ogg",
+          "voice": "us-clb",
+          "checksum": "b16c6ee5eca558c365259c4d7e19e8c6",
+          "duration": 0.952,
+          "size": 6367
+        },
+        "mas": {
+          "filename": "sound/vox_mas/gonna.ogg",
+          "voice": "us-rms",
+          "checksum": "37b83c91d0d1a98d5d1ee9002762b3c8",
+          "duration": 0.824,
+          "size": 6004
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "gonna"
       ]
     },
     "good": {
@@ -28481,6 +29194,98 @@
         "grenades"
       ]
     },
+    "grinch": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/grinch.ogg",
+          "voice": "us-clb",
+          "checksum": "1abc984d8e86e82f6a33374b5103e086",
+          "duration": 1.128,
+          "size": 7198
+        },
+        "mas": {
+          "filename": "sound/vox_mas/grinch.ogg",
+          "voice": "us-rms",
+          "checksum": "b79456a348d216628c3ee6cbf152b476",
+          "duration": 1.0,
+          "size": 6550
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "grinch"
+      ]
+    },
+    "grinched": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/grinched.ogg",
+          "voice": "us-clb",
+          "checksum": "d2b66e48b673e7b28f0cc41d68c9fd0a",
+          "duration": 1.288,
+          "size": 7642
+        },
+        "mas": {
+          "filename": "sound/vox_mas/grinched.ogg",
+          "voice": "us-rms",
+          "checksum": "f129ef26b6ba7d127367d6713a3c0d79",
+          "duration": 1.08,
+          "size": 6891
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "grinched"
+      ]
+    },
+    "grinches": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/grinches.ogg",
+          "voice": "us-clb",
+          "checksum": "bd2c2faca525fdd225313db5c0735391",
+          "duration": 1.272,
+          "size": 7569
+        },
+        "mas": {
+          "filename": "sound/vox_mas/grinches.ogg",
+          "voice": "us-rms",
+          "checksum": "1e333338c420af25dd44e173e6423c9f",
+          "duration": 1.032,
+          "size": 6770
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "grinches"
+      ]
+    },
+    "grinching": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/grinching.ogg",
+          "voice": "us-clb",
+          "checksum": "9458e9ecf6b28aa71c6dfa45cf3be85e",
+          "duration": 1.24,
+          "size": 7365
+        },
+        "mas": {
+          "filename": "sound/vox_mas/grinching.ogg",
+          "voice": "us-rms",
+          "checksum": "eb16487bf97b0934b6ca214e1cf46dac",
+          "duration": 1.048,
+          "size": 6889
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "grinching"
+      ]
+    },
     "grow": {
       "wordlen": 1,
       "files": {
@@ -28939,6 +29744,29 @@
       "flags": [],
       "phrase": [
         "had"
+      ]
+    },
+    "hadn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/hadn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "28d964045b6c88511f4099bf90f7d15b",
+          "duration": 1.128,
+          "size": 6982
+        },
+        "mas": {
+          "filename": "sound/vox_mas/hadn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "4052e502593a544726775e55b664d593",
+          "duration": 0.936,
+          "size": 6374
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "hadn't"
       ]
     },
     "half": {
@@ -29470,6 +30298,29 @@
         "has"
       ]
     },
+    "hasn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/hasn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "63156e7e28535b15344e1344e71ba4db",
+          "duration": 1.128,
+          "size": 7119
+        },
+        "mas": {
+          "filename": "sound/vox_mas/hasn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "7d6991b1bea1174e15648d7bc6cda6b3",
+          "duration": 1.0,
+          "size": 6576
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "hasn't"
+      ]
+    },
     "hate": {
       "wordlen": 1,
       "files": {
@@ -29585,6 +30436,29 @@
         "have"
       ]
     },
+    "haven't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/haven_t.ogg",
+          "voice": "us-clb",
+          "checksum": "45bb3826155705ec54480cbabe130fd1",
+          "duration": 1.128,
+          "size": 7069
+        },
+        "mas": {
+          "filename": "sound/vox_mas/haven_t.ogg",
+          "voice": "us-rms",
+          "checksum": "e057fbcae0ee434336f37187dd608868",
+          "duration": 0.936,
+          "size": 6359
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "haven't"
+      ]
+    },
     "hazard": {
       "wordlen": 1,
       "files": {
@@ -29675,6 +30549,75 @@
       "flags": [],
       "phrase": [
         "he"
+      ]
+    },
+    "he'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/he_d.ogg",
+          "voice": "us-clb",
+          "checksum": "b271e1e1b16f35fce57d77969aa86a59",
+          "duration": 0.872,
+          "size": 6147
+        },
+        "mas": {
+          "filename": "sound/vox_mas/he_d.ogg",
+          "voice": "us-rms",
+          "checksum": "71bed6bc4e3c3d0daddf95075bfc9ddf",
+          "duration": 0.76,
+          "size": 5750
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "he'd"
+      ]
+    },
+    "he'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/he_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "af8fe4c1cd0fa4d6f4096ff0e11217a3",
+          "duration": 0.872,
+          "size": 6125
+        },
+        "mas": {
+          "filename": "sound/vox_mas/he_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "219905809f94f75ac014b21c560d02b1",
+          "duration": 0.84,
+          "size": 5993
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "he'll"
+      ]
+    },
+    "he's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/he_s.ogg",
+          "voice": "us-clb",
+          "checksum": "9aed77cc247757de263e6994c5173c4c",
+          "duration": 0.84,
+          "size": 6158
+        },
+        "mas": {
+          "filename": "sound/vox_mas/he_s.ogg",
+          "voice": "us-rms",
+          "checksum": "43d3a5e134b6a569a31e48380bc057b0",
+          "duration": 0.808,
+          "size": 5894
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "he's"
       ]
     },
     "head": {
@@ -31338,6 +32281,121 @@
         "how"
       ]
     },
+    "how'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/how_d.ogg",
+          "voice": "us-clb",
+          "checksum": "b3002b6717e9bfa45e5dca874a3da08f",
+          "duration": 0.856,
+          "size": 6046
+        },
+        "mas": {
+          "filename": "sound/vox_mas/how_d.ogg",
+          "voice": "us-rms",
+          "checksum": "a5f8b498c58b797ff0852ca33a2cfb58",
+          "duration": 0.76,
+          "size": 5800
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "how'd"
+      ]
+    },
+    "how'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/how_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "f5a07752bf1de1a0018744830859e7c7",
+          "duration": 0.872,
+          "size": 6030
+        },
+        "mas": {
+          "filename": "sound/vox_mas/how_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "ea306568c3909c1309eeba516b621586",
+          "duration": 0.984,
+          "size": 6464
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "how'll"
+      ]
+    },
+    "how're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/how_re.ogg",
+          "voice": "us-clb",
+          "checksum": "06e50a97adc11b4c0769d1c09f879f5d",
+          "duration": 1.048,
+          "size": 6681
+        },
+        "mas": {
+          "filename": "sound/vox_mas/how_re.ogg",
+          "voice": "us-rms",
+          "checksum": "bb2e14b8ae5f99309d13336fb286b9bc",
+          "duration": 0.904,
+          "size": 6196
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "how're"
+      ]
+    },
+    "how's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/how_s.ogg",
+          "voice": "us-clb",
+          "checksum": "646abaa8f842b4eb9a9e270aa692f7c8",
+          "duration": 0.92,
+          "size": 6368
+        },
+        "mas": {
+          "filename": "sound/vox_mas/how_s.ogg",
+          "voice": "us-rms",
+          "checksum": "5a46382ec99b71ddb078dd792f04f745",
+          "duration": 0.776,
+          "size": 5963
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "how's"
+      ]
+    },
+    "howdy": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/howdy.ogg",
+          "voice": "us-clb",
+          "checksum": "c0ed1dcc09557b66141a342c0f097e89",
+          "duration": 1.128,
+          "size": 6914
+        },
+        "mas": {
+          "filename": "sound/vox_mas/howdy.ogg",
+          "voice": "us-rms",
+          "checksum": "a5efb3d8c899d6f64288315d24e177bb",
+          "duration": 1.096,
+          "size": 6866
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "howdy"
+      ]
+    },
     "hug": {
       "wordlen": 1,
       "files": {
@@ -31890,6 +32948,52 @@
         "eye"
       ]
     },
+    "i'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/i_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "6b3cdfd15d9a6b794a7f9e4e5777b941",
+          "duration": 0.696,
+          "size": 5651
+        },
+        "mas": {
+          "filename": "sound/vox_mas/i_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "ef286eed8f4a88709743921751048789",
+          "duration": 0.856,
+          "size": 6005
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "i'll"
+      ]
+    },
+    "i'm": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/i_m.ogg",
+          "voice": "us-clb",
+          "checksum": "92162cf005b886f98a8db16ab627690a",
+          "duration": 0.696,
+          "size": 5641
+        },
+        "mas": {
+          "filename": "sound/vox_mas/i_m.ogg",
+          "voice": "us-rms",
+          "checksum": "2da60ac07efea3fcd0fd999b6118aa74",
+          "duration": 0.824,
+          "size": 5979
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "i'm"
+      ]
+    },
     "iaa": {
       "wordlen": 3,
       "files": {
@@ -32235,6 +33339,29 @@
       "flags": [],
       "phrase": [
         "imidazoline"
+      ]
+    },
+    "imma": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/imma.ogg",
+          "voice": "us-clb",
+          "checksum": "c3e4c0ba5bd69608dbd4eb5d6aeb6736",
+          "duration": 0.808,
+          "size": 5892
+        },
+        "mas": {
+          "filename": "sound/vox_mas/imma.ogg",
+          "voice": "us-rms",
+          "checksum": "142e29d97aac2dfa267806d16260fd5b",
+          "duration": 0.728,
+          "size": 5766
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "imma"
       ]
     },
     "immediate": {
@@ -33525,6 +34652,29 @@
         "invasion"
       ]
     },
+    "iron": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/iron.ogg",
+          "voice": "us-clb",
+          "checksum": "055142dd283d8388c685bb5663351f36",
+          "duration": 1.032,
+          "size": 6619
+        },
+        "mas": {
+          "filename": "sound/vox_mas/iron.ogg",
+          "voice": "us-rms",
+          "checksum": "8110dce23333411cbbce931809dd09d4",
+          "duration": 0.904,
+          "size": 6229
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "iron"
+      ]
+    },
     "is": {
       "wordlen": 1,
       "files": {
@@ -33548,6 +34698,29 @@
         "is"
       ]
     },
+    "isn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/isn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "805fd9ad55b8d9321636e6b76dd01e79",
+          "duration": 0.952,
+          "size": 6657
+        },
+        "mas": {
+          "filename": "sound/vox_mas/isn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "ddf9b9927e1a506191f98de699a0f804",
+          "duration": 0.792,
+          "size": 5898
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "isn't"
+      ]
+    },
     "it": {
       "wordlen": 1,
       "files": {
@@ -33569,6 +34742,75 @@
       "flags": [],
       "phrase": [
         "it"
+      ]
+    },
+    "it'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/it_d.ogg",
+          "voice": "us-clb",
+          "checksum": "c314ccad67e7f9a751f781241ae1611c",
+          "duration": 0.904,
+          "size": 6136
+        },
+        "mas": {
+          "filename": "sound/vox_mas/it_d.ogg",
+          "voice": "us-rms",
+          "checksum": "383ab668e545def84f351ef142190aa6",
+          "duration": 0.856,
+          "size": 6044
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "it'd"
+      ]
+    },
+    "it'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/it_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "4ab87168b53dbb42b632b02d98adf405",
+          "duration": 0.968,
+          "size": 6317
+        },
+        "mas": {
+          "filename": "sound/vox_mas/it_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "49eb0cab88676351b556ece357a2bdce",
+          "duration": 0.936,
+          "size": 6298
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "it'll"
+      ]
+    },
+    "it's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/it_s.ogg",
+          "voice": "us-clb",
+          "checksum": "9f5c3a650bf902cf64537aeed8297d25",
+          "duration": 0.824,
+          "size": 6060
+        },
+        "mas": {
+          "filename": "sound/vox_mas/it_s.ogg",
+          "voice": "us-rms",
+          "checksum": "146b6972807703e23580c11d78aed1e3",
+          "duration": 0.792,
+          "size": 5855
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "it's"
       ]
     },
     "its": {
@@ -36589,6 +37831,29 @@
         "leporazine"
       ]
     },
+    "let's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/let_s.ogg",
+          "voice": "us-clb",
+          "checksum": "1cbf2b0c9bfe02d6d9984e4d00af36ad",
+          "duration": 0.824,
+          "size": 6119
+        },
+        "mas": {
+          "filename": "sound/vox_mas/let_s.ogg",
+          "voice": "us-rms",
+          "checksum": "c7b6dafececcd24148e213f72a214f14",
+          "duration": 0.808,
+          "size": 6049
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "let's"
+      ]
+    },
     "level": {
       "wordlen": 1,
       "files": {
@@ -38130,6 +39395,52 @@
         "long"
       ]
     },
+    "longer": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/longer.ogg",
+          "voice": "us-clb",
+          "checksum": "4a3ff21c6ed819ec616c83680f7ec901",
+          "duration": 1.16,
+          "size": 6990
+        },
+        "mas": {
+          "filename": "sound/vox_mas/longer.ogg",
+          "voice": "us-rms",
+          "checksum": "ed6670489d09a75bda8a73cf84d62c5c",
+          "duration": 1.096,
+          "size": 6571
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "longer"
+      ]
+    },
+    "longest": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/longest.ogg",
+          "voice": "us-clb",
+          "checksum": "f54d4914fd36f3195981aec9e2618481",
+          "duration": 1.256,
+          "size": 7481
+        },
+        "mas": {
+          "filename": "sound/vox_mas/longest.ogg",
+          "voice": "us-rms",
+          "checksum": "eea133faad9130fc15698ad768d8846f",
+          "duration": 1.176,
+          "size": 7021
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "longest"
+      ]
+    },
     "look": {
       "wordlen": 1,
       "files": {
@@ -38427,6 +39738,144 @@
       "flags": [],
       "phrase": [
         "lords"
+      ]
+    },
+    "lose": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/lose.ogg",
+          "voice": "us-clb",
+          "checksum": "1c482a4836a1d0cbfe8a49192fe55930",
+          "duration": 0.84,
+          "size": 6091
+        },
+        "mas": {
+          "filename": "sound/vox_mas/lose.ogg",
+          "voice": "us-rms",
+          "checksum": "f1f317e583af897f882dbaf9f0885438",
+          "duration": 0.856,
+          "size": 6035
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "lose"
+      ]
+    },
+    "loser": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/loser.ogg",
+          "voice": "us-clb",
+          "checksum": "8d42b85fc37fb601f8e731eebf7fc85f",
+          "duration": 1.048,
+          "size": 6830
+        },
+        "mas": {
+          "filename": "sound/vox_mas/loser.ogg",
+          "voice": "us-rms",
+          "checksum": "73fb3c84cdebd21364032d963ab26dda",
+          "duration": 1.016,
+          "size": 6610
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "loser"
+      ]
+    },
+    "losers": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/losers.ogg",
+          "voice": "us-clb",
+          "checksum": "5e1539cf51499a81c6fa7865c93171ca",
+          "duration": 1.224,
+          "size": 7517
+        },
+        "mas": {
+          "filename": "sound/vox_mas/losers.ogg",
+          "voice": "us-rms",
+          "checksum": "33c082537d6259f11aff194b98250118",
+          "duration": 1.144,
+          "size": 7023
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "losers"
+      ]
+    },
+    "loses": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/loses.ogg",
+          "voice": "us-clb",
+          "checksum": "0f140993595da2cae148281d3a6bca3a",
+          "duration": 1.112,
+          "size": 7195
+        },
+        "mas": {
+          "filename": "sound/vox_mas/loses.ogg",
+          "voice": "us-rms",
+          "checksum": "b87303dcb3d13e1b3b113503b273a001",
+          "duration": 1.064,
+          "size": 6783
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "loses"
+      ]
+    },
+    "losing": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/losing.ogg",
+          "voice": "us-clb",
+          "checksum": "50793f602e82bc1e8007a249e8135afe",
+          "duration": 1.096,
+          "size": 6975
+        },
+        "mas": {
+          "filename": "sound/vox_mas/losing.ogg",
+          "voice": "us-rms",
+          "checksum": "00a015e1db0842c135be10a50d5eaecc",
+          "duration": 1.112,
+          "size": 6991
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "losing"
+      ]
+    },
+    "lost": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/lost.ogg",
+          "voice": "us-clb",
+          "checksum": "fcfc81c5173c5189e57cf819227c38f3",
+          "duration": 0.968,
+          "size": 6616
+        },
+        "mas": {
+          "filename": "sound/vox_mas/lost.ogg",
+          "voice": "us-rms",
+          "checksum": "b3734e42a319fb74f05d7710f7f4e211",
+          "duration": 0.984,
+          "size": 6395
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "lost"
       ]
     },
     "lot": {
@@ -38728,6 +40177,29 @@
       "flags": [],
       "phrase": [
         "M."
+      ]
+    },
+    "ma'am": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/ma_am.ogg",
+          "voice": "us-clb",
+          "checksum": "e30844ada9ab73c06cfac6eaae822e55",
+          "duration": 0.872,
+          "size": 5973
+        },
+        "mas": {
+          "filename": "sound/vox_mas/ma_am.ogg",
+          "voice": "us-rms",
+          "checksum": "6062a5637071850b8b625f3881f017a3",
+          "duration": 0.84,
+          "size": 6003
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "ma'am"
       ]
     },
     "machine": {
@@ -39765,6 +41237,52 @@
         "may"
       ]
     },
+    "may've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/may_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "a8955311ab0a3e46dc13d868ad6d3693",
+          "duration": 0.824,
+          "size": 6026
+        },
+        "mas": {
+          "filename": "sound/vox_mas/may_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "0d5c07380159dcad32df3326d67f09d8",
+          "duration": 0.84,
+          "size": 6121
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "may've"
+      ]
+    },
+    "mayn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/mayn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "6a11f984336b7377f1500e1a767527da",
+          "duration": 0.968,
+          "size": 6572
+        },
+        "mas": {
+          "filename": "sound/vox_mas/mayn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "56d0caf43c7f6ea18a3be9e8c22ce491",
+          "duration": 0.84,
+          "size": 6036
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "mayn't"
+      ]
+    },
     "me": {
       "wordlen": 1,
       "files": {
@@ -40614,6 +42132,52 @@
       "flags": [],
       "phrase": [
         "middle"
+      ]
+    },
+    "might've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/might_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "a2cb9660379bcf0b4bd2f9d05ec2e392",
+          "duration": 1.032,
+          "size": 6673
+        },
+        "mas": {
+          "filename": "sound/vox_mas/might_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "c7216c9faeba43b17e9769f07af0e43b",
+          "duration": 1.064,
+          "size": 6753
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "might've"
+      ]
+    },
+    "mightn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/mightn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "b9f62591b769c523cf6527c7fdece576",
+          "duration": 1.112,
+          "size": 7118
+        },
+        "mas": {
+          "filename": "sound/vox_mas/mightn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "67218e51c87570dc0b627fe26a365854",
+          "duration": 0.984,
+          "size": 6509
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "mightn't"
       ]
     },
     "mike": {
@@ -42802,6 +44366,75 @@
         "must"
       ]
     },
+    "must've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/must_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "aee65027b4c828ff6a0e68b2b624a2cf",
+          "duration": 1.144,
+          "size": 7121
+        },
+        "mas": {
+          "filename": "sound/vox_mas/must_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "73c0dc64943ebbdcc61b45f9c2468c24",
+          "duration": 1.128,
+          "size": 6915
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "must've"
+      ]
+    },
+    "mustn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/mustn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "c363569724c86bd90b7ff069e76f5e57",
+          "duration": 1.112,
+          "size": 7191
+        },
+        "mas": {
+          "filename": "sound/vox_mas/mustn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "018d5a0b65a94c5dae71d151675745ef",
+          "duration": 0.936,
+          "size": 6296
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "mustn't"
+      ]
+    },
+    "mustn't've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/mustn_t_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "42f04d37d2048cf0b31071b60e675ea2",
+          "duration": 1.24,
+          "size": 7449
+        },
+        "mas": {
+          "filename": "sound/vox_mas/mustn_t_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "65a099f11e8b3ba56d4b737bc0d50b38",
+          "duration": 1.272,
+          "size": 7443
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "mustn't've"
+      ]
+    },
     "mutagen": {
       "wordlen": 1,
       "files": {
@@ -43262,6 +44895,29 @@
         "nar-see"
       ]
     },
+    "ne'er": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/ne_er.ogg",
+          "voice": "us-clb",
+          "checksum": "0040b41fe9c94b817c5c7a21173dd8f9",
+          "duration": 0.856,
+          "size": 6096
+        },
+        "mas": {
+          "filename": "sound/vox_mas/ne_er.ogg",
+          "voice": "us-rms",
+          "checksum": "80070d4a1717307d97e33d3383580877",
+          "duration": 0.776,
+          "size": 5791
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "ne'er"
+      ]
+    },
     "near": {
       "wordlen": 1,
       "files": {
@@ -43375,6 +45031,29 @@
       "flags": [],
       "phrase": [
         "need"
+      ]
+    },
+    "needn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/needn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "a40385a4b7a961b59e12e3826bd324a7",
+          "duration": 1.128,
+          "size": 7115
+        },
+        "mas": {
+          "filename": "sound/vox_mas/needn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "f2723b057176914b730d29d27c0f1da3",
+          "duration": 0.936,
+          "size": 6361
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "needn't"
       ]
     },
     "negative": {
@@ -43536,6 +45215,29 @@
       "flags": [],
       "phrase": [
         "news"
+      ]
+    },
+    "next": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/next.ogg",
+          "voice": "us-clb",
+          "checksum": "c702e56f70a40911c051e1f028a1e56e",
+          "duration": 1.112,
+          "size": 7100
+        },
+        "mas": {
+          "filename": "sound/vox_mas/next.ogg",
+          "voice": "us-rms",
+          "checksum": "f665f7bc7e1fc44cfd504431077af943",
+          "duration": 0.968,
+          "size": 6512
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "next"
       ]
     },
     "nice": {
@@ -44465,6 +46167,52 @@
         "O."
       ]
     },
+    "o'clock": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/o_clock.ogg",
+          "voice": "us-clb",
+          "checksum": "1d9435a6ed13347264d20abf0917192b",
+          "duration": 1.112,
+          "size": 6991
+        },
+        "mas": {
+          "filename": "sound/vox_mas/o_clock.ogg",
+          "voice": "us-rms",
+          "checksum": "d68ed067c192b4efbb3ad31a6d9d1e71",
+          "duration": 0.92,
+          "size": 6301
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "o'clock"
+      ]
+    },
+    "o'er": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/o_er.ogg",
+          "voice": "us-clb",
+          "checksum": "6d147db6d4c26fb23c1fd130497d8041",
+          "duration": 1.032,
+          "size": 6621
+        },
+        "mas": {
+          "filename": "sound/vox_mas/o_er.ogg",
+          "voice": "us-rms",
+          "checksum": "b3a5ba81fda31a3357ec5f3523d0dafa",
+          "duration": 0.712,
+          "size": 5604
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "o'er"
+      ]
+    },
     "objective": {
       "wordlen": 1,
       "files": {
@@ -44808,6 +46556,29 @@
       "flags": [],
       "phrase": [
         "O.K."
+      ]
+    },
+    "ol'": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/ol_.ogg",
+          "voice": "us-clb",
+          "checksum": "f0514ac9b29ec4934d5fc87bf52cfcf7",
+          "duration": 0.696,
+          "size": 5555
+        },
+        "mas": {
+          "filename": "sound/vox_mas/ol_.ogg",
+          "voice": "us-rms",
+          "checksum": "2cbaf1c479452427b1abc825993e9bef",
+          "duration": 0.664,
+          "size": 5458
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "ol'"
       ]
     },
     "old": {
@@ -45408,6 +47179,52 @@
         "order"
       ]
     },
+    "ore": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/ore.ogg",
+          "voice": "us-clb",
+          "checksum": "1c4b55192d4697548cfd23cec7b30158",
+          "duration": 0.696,
+          "size": 5627
+        },
+        "mas": {
+          "filename": "sound/vox_mas/ore.ogg",
+          "voice": "us-rms",
+          "checksum": "5f62222b8de36d18ddec5e512fe51f0b",
+          "duration": 0.84,
+          "size": 5932
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "ore"
+      ]
+    },
+    "ores": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/ores.ogg",
+          "voice": "us-clb",
+          "checksum": "36bb1e242f2a0d52d4ea74495db6da8c",
+          "duration": 0.824,
+          "size": 6135
+        },
+        "mas": {
+          "filename": "sound/vox_mas/ores.ogg",
+          "voice": "us-rms",
+          "checksum": "a23f303bab92213d0a87243458c3798f",
+          "duration": 0.936,
+          "size": 6348
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "ores"
+      ]
+    },
     "organic": {
       "wordlen": 1,
       "files": {
@@ -45544,6 +47361,29 @@
       "flags": [],
       "phrase": [
         "others"
+      ]
+    },
+    "oughtn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/oughtn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "194a23d5f944d725cfe5af5db21f5cfa",
+          "duration": 0.968,
+          "size": 6638
+        },
+        "mas": {
+          "filename": "sound/vox_mas/oughtn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "ade2f0574df811d490f86352979cffae",
+          "duration": 0.904,
+          "size": 6199
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "oughtn't"
       ]
     },
     "our": {
@@ -51162,6 +53002,75 @@
         "quick"
       ]
     },
+    "quicker": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/quicker.ogg",
+          "voice": "us-clb",
+          "checksum": "7401d43a6b50f3e72d2d342e812f409d",
+          "duration": 1.112,
+          "size": 7105
+        },
+        "mas": {
+          "filename": "sound/vox_mas/quicker.ogg",
+          "voice": "us-rms",
+          "checksum": "a78f66ac6c49274bb311a0ed2dddac1a",
+          "duration": 1.0,
+          "size": 6463
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "quicker"
+      ]
+    },
+    "quickest": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/quickest.ogg",
+          "voice": "us-clb",
+          "checksum": "2041430d9f227a308d31a08e79c37102",
+          "duration": 1.224,
+          "size": 7526
+        },
+        "mas": {
+          "filename": "sound/vox_mas/quickest.ogg",
+          "voice": "us-rms",
+          "checksum": "8f4562afe34007e31d0343b03e8c379f",
+          "duration": 1.032,
+          "size": 6691
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "quickest"
+      ]
+    },
+    "quickly": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/quickly.ogg",
+          "voice": "us-clb",
+          "checksum": "a5100ac66eb1f50cbed9756baed674e0",
+          "duration": 1.144,
+          "size": 7241
+        },
+        "mas": {
+          "filename": "sound/vox_mas/quickly.ogg",
+          "voice": "us-rms",
+          "checksum": "bcfd0862f847972a0d2ed0ab36fb923c",
+          "duration": 1.0,
+          "size": 6787
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "quickly"
+      ]
+    },
     "quit": {
       "wordlen": 1,
       "files": {
@@ -51761,6 +53670,29 @@
         "ready"
       ]
     },
+    "really": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/really.ogg",
+          "voice": "us-clb",
+          "checksum": "47461a87a04ec08de40916f11062d32b",
+          "duration": 0.952,
+          "size": 6386
+        },
+        "mas": {
+          "filename": "sound/vox_mas/really.ogg",
+          "voice": "us-rms",
+          "checksum": "e82d0c505ad403bec85b155cd04a1397",
+          "duration": 0.888,
+          "size": 6195
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "really"
+      ]
+    },
     "recommend": {
       "wordlen": 1,
       "files": {
@@ -51874,6 +53806,52 @@
       "flags": [],
       "phrase": [
         "red"
+      ]
+    },
+    "refineries": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/refineries.ogg",
+          "voice": "us-clb",
+          "checksum": "67df4c6fc36d04115d2025f7e7834291",
+          "duration": 1.608,
+          "size": 8671
+        },
+        "mas": {
+          "filename": "sound/vox_mas/refineries.ogg",
+          "voice": "us-rms",
+          "checksum": "a4fdcbdbc7139344b2781567fbf2eec7",
+          "duration": 1.512,
+          "size": 8317
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "refineries"
+      ]
+    },
+    "refinery": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/refinery.ogg",
+          "voice": "us-clb",
+          "checksum": "774adb4fde92dd654fa611e200500fd5",
+          "duration": 1.416,
+          "size": 7853
+        },
+        "mas": {
+          "filename": "sound/vox_mas/refinery.ogg",
+          "voice": "us-rms",
+          "checksum": "cafd25ce26dc522b6bca5a7c25e4a4de",
+          "duration": 1.384,
+          "size": 7860
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "refinery"
       ]
     },
     "regret": {
@@ -54682,6 +56660,29 @@
         "same"
       ]
     },
+    "sand": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/sand.ogg",
+          "voice": "us-clb",
+          "checksum": "d061da78f0b2d7147df2782a3a2c9636",
+          "duration": 1.0,
+          "size": 6723
+        },
+        "mas": {
+          "filename": "sound/vox_mas/sand.ogg",
+          "voice": "us-rms",
+          "checksum": "8746044fa25cf77e5e8a7c4904b0a116",
+          "duration": 0.936,
+          "size": 6383
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "sand"
+      ]
+    },
     "sandal": {
       "wordlen": 1,
       "files": {
@@ -56729,6 +58730,52 @@
         "shall"
       ]
     },
+    "shalln't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/shalln_t.ogg",
+          "voice": "us-clb",
+          "checksum": "549f5934607eb237bd8e23cec533da74",
+          "duration": 1.128,
+          "size": 7071
+        },
+        "mas": {
+          "filename": "sound/vox_mas/shalln_t.ogg",
+          "voice": "us-rms",
+          "checksum": "c5e6a5a9a1ed083753b219186890954e",
+          "duration": 1.048,
+          "size": 6878
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "shalln't"
+      ]
+    },
+    "shan't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/shan_t.ogg",
+          "voice": "us-clb",
+          "checksum": "17823289bb8efbd1fc575ebf376e5df4",
+          "duration": 0.968,
+          "size": 6624
+        },
+        "mas": {
+          "filename": "sound/vox_mas/shan_t.ogg",
+          "voice": "us-rms",
+          "checksum": "301bd57030b3fd9afe8fb464eae867e0",
+          "duration": 0.92,
+          "size": 6311
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "shan't"
+      ]
+    },
     "shard": {
       "wordlen": 1,
       "files": {
@@ -56821,6 +58868,29 @@
         "she"
       ]
     },
+    "she'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/she_d.ogg",
+          "voice": "us-clb",
+          "checksum": "fdfa174a3ad2f5598e7834137caf922d",
+          "duration": 0.856,
+          "size": 6155
+        },
+        "mas": {
+          "filename": "sound/vox_mas/she_d.ogg",
+          "voice": "us-rms",
+          "checksum": "1b9c6d93ef97f01bad391249cf8d9505",
+          "duration": 0.856,
+          "size": 6078
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "she'd"
+      ]
+    },
     "she'll": {
       "wordlen": 1,
       "files": {
@@ -56844,6 +58914,29 @@
         "she'll"
       ]
     },
+    "she's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/she_s.ogg",
+          "voice": "us-clb",
+          "checksum": "61f6a3fa4673e1c4ebcdb8bec853cf52",
+          "duration": 0.888,
+          "size": 6273
+        },
+        "mas": {
+          "filename": "sound/vox_mas/she_s.ogg",
+          "voice": "us-rms",
+          "checksum": "64763239b71a26dfdf3961aab29d554b",
+          "duration": 0.792,
+          "size": 5931
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "she's"
+      ]
+    },
     "shield": {
       "wordlen": 1,
       "files": {
@@ -56865,6 +58958,98 @@
       "flags": [],
       "phrase": [
         "shield"
+      ]
+    },
+    "shift": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/shift.ogg",
+          "voice": "us-clb",
+          "checksum": "ed7cd5d0656be008f678565c2e763f15",
+          "duration": 0.984,
+          "size": 6696
+        },
+        "mas": {
+          "filename": "sound/vox_mas/shift.ogg",
+          "voice": "us-rms",
+          "checksum": "3a14266b50bbee3d8dfbd08638396614",
+          "duration": 0.888,
+          "size": 6256
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "shift"
+      ]
+    },
+    "shifted": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/shifted.ogg",
+          "voice": "us-clb",
+          "checksum": "155628d903e47b06d8a73e02fd60cf10",
+          "duration": 1.128,
+          "size": 7154
+        },
+        "mas": {
+          "filename": "sound/vox_mas/shifted.ogg",
+          "voice": "us-rms",
+          "checksum": "9b963a034b90170d498a7fe66ec792e7",
+          "duration": 0.984,
+          "size": 6514
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "shifted"
+      ]
+    },
+    "shifting": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/shifting.ogg",
+          "voice": "us-clb",
+          "checksum": "ac046140c1d4349dbf9b51962bd6cfd3",
+          "duration": 1.192,
+          "size": 7296
+        },
+        "mas": {
+          "filename": "sound/vox_mas/shifting.ogg",
+          "voice": "us-rms",
+          "checksum": "2360210da47a23cd76fc236ee76bc597",
+          "duration": 1.048,
+          "size": 6889
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "shifting"
+      ]
+    },
+    "shifts": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/shifts.ogg",
+          "voice": "us-clb",
+          "checksum": "f06011d39ab068c2991f356c9c0f0716",
+          "duration": 1.128,
+          "size": 7309
+        },
+        "mas": {
+          "filename": "sound/vox_mas/shifts.ogg",
+          "voice": "us-rms",
+          "checksum": "c0caebea4b556315ad40fd772ab94d05",
+          "duration": 1.048,
+          "size": 6841
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "shifts"
       ]
     },
     "shipment": {
@@ -57256,6 +59441,75 @@
       "flags": [],
       "phrase": [
         "should"
+      ]
+    },
+    "should've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/should_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "21428c41d42eb4fd43cb6dd1bb75d4f3",
+          "duration": 1.288,
+          "size": 7555
+        },
+        "mas": {
+          "filename": "sound/vox_mas/should_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "9409a7e8504523ba72e0882dc0adab98",
+          "duration": 1.144,
+          "size": 7220
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "should've"
+      ]
+    },
+    "shouldn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/shouldn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "cdd2384ea30734f1d806d75ecb7f0723",
+          "duration": 1.128,
+          "size": 7063
+        },
+        "mas": {
+          "filename": "sound/vox_mas/shouldn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "6d9e989b65a40ad6a19f907e6c378711",
+          "duration": 0.984,
+          "size": 6533
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "shouldn't"
+      ]
+    },
+    "shouldn't've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/shouldn_t_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "45ef49bad3b7c76d3256d7a1e2a7945b",
+          "duration": 1.304,
+          "size": 7645
+        },
+        "mas": {
+          "filename": "sound/vox_mas/shouldn_t_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "86a5dda42ec57a5c49430261d45e816d",
+          "duration": 1.288,
+          "size": 7608
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "shouldn't've"
       ]
     },
     "show": {
@@ -59009,6 +61263,29 @@
         "so"
       ]
     },
+    "so're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/so_re.ogg",
+          "voice": "us-clb",
+          "checksum": "a97cd403317b38b19a56885b9b2b4f34",
+          "duration": 0.856,
+          "size": 6068
+        },
+        "mas": {
+          "filename": "sound/vox_mas/so_re.ogg",
+          "voice": "us-rms",
+          "checksum": "a9b95bc4df725af8fe96335b7504440c",
+          "duration": 0.904,
+          "size": 6189
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "so're"
+      ]
+    },
     "sodium": {
       "wordlen": 1,
       "files": {
@@ -59170,6 +61447,29 @@
         "some"
       ]
     },
+    "somebody's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/somebody_s.ogg",
+          "voice": "us-clb",
+          "checksum": "9904588c8623bbbd49cebc553dde262a",
+          "duration": 1.432,
+          "size": 8187
+        },
+        "mas": {
+          "filename": "sound/vox_mas/somebody_s.ogg",
+          "voice": "us-rms",
+          "checksum": "297c07ccd322c29044db90ec1ee5b0d1",
+          "duration": 1.32,
+          "size": 7630
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "somebody's"
+      ]
+    },
     "someone": {
       "wordlen": 1,
       "files": {
@@ -59193,6 +61493,29 @@
         "someone"
       ]
     },
+    "someone's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/someone_s.ogg",
+          "voice": "us-clb",
+          "checksum": "78b5b7ad9de8c48fab243a964189b8a2",
+          "duration": 1.24,
+          "size": 7573
+        },
+        "mas": {
+          "filename": "sound/vox_mas/someone_s.ogg",
+          "voice": "us-rms",
+          "checksum": "9e92fbf4bf5a864858f747704b639d0e",
+          "duration": 1.048,
+          "size": 6857
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "someone's"
+      ]
+    },
     "something": {
       "wordlen": 1,
       "files": {
@@ -59214,6 +61537,29 @@
       "flags": [],
       "phrase": [
         "something"
+      ]
+    },
+    "something's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/something_s.ogg",
+          "voice": "us-clb",
+          "checksum": "dcebf23952507d6cbe1e889161bba946",
+          "duration": 1.256,
+          "size": 7616
+        },
+        "mas": {
+          "filename": "sound/vox_mas/something_s.ogg",
+          "voice": "us-rms",
+          "checksum": "e87fec07edc7b0087551bb7b2065278d",
+          "duration": 1.144,
+          "size": 7205
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "something's"
       ]
     },
     "son": {
@@ -59260,6 +61606,75 @@
       "flags": [],
       "phrase": [
         "sons"
+      ]
+    },
+    "soon": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/soon.ogg",
+          "voice": "us-clb",
+          "checksum": "ecb95583a91908bf61dd0189df5906dc",
+          "duration": 0.856,
+          "size": 6187
+        },
+        "mas": {
+          "filename": "sound/vox_mas/soon.ogg",
+          "voice": "us-rms",
+          "checksum": "5a3a493f783efb88e8792084feb1c68d",
+          "duration": 0.904,
+          "size": 6220
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "soon"
+      ]
+    },
+    "sooner": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/sooner.ogg",
+          "voice": "us-clb",
+          "checksum": "a9fd7ea1502636a6caf7f224088a4c1d",
+          "duration": 1.144,
+          "size": 7071
+        },
+        "mas": {
+          "filename": "sound/vox_mas/sooner.ogg",
+          "voice": "us-rms",
+          "checksum": "a3f0e8ba3d3f2749284bf71d9aa2d436",
+          "duration": 0.984,
+          "size": 6509
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "sooner"
+      ]
+    },
+    "soonest": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/soonest.ogg",
+          "voice": "us-clb",
+          "checksum": "5bda8f792b54668552d37f8a9448bd60",
+          "duration": 1.24,
+          "size": 7494
+        },
+        "mas": {
+          "filename": "sound/vox_mas/soonest.ogg",
+          "voice": "us-rms",
+          "checksum": "d219acd9eea7db3ca2fd779c1e1685be",
+          "duration": 1.08,
+          "size": 6946
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "soonest"
       ]
     },
     "soporific": {
@@ -59839,6 +62254,75 @@
         "spooky"
       ]
     },
+    "spread": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/spread.ogg",
+          "voice": "us-clb",
+          "checksum": "8af7bda1d0239c781c1f7e95bc8b5b27",
+          "duration": 1.16,
+          "size": 7106
+        },
+        "mas": {
+          "filename": "sound/vox_mas/spread.ogg",
+          "voice": "us-rms",
+          "checksum": "c31db0b8c50daf9c48ce282c06ba4e24",
+          "duration": 0.936,
+          "size": 6417
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "spread"
+      ]
+    },
+    "spreading": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/spreading.ogg",
+          "voice": "us-clb",
+          "checksum": "7cb1e68d83a78fdc93e1218ac24deab9",
+          "duration": 1.272,
+          "size": 7602
+        },
+        "mas": {
+          "filename": "sound/vox_mas/spreading.ogg",
+          "voice": "us-rms",
+          "checksum": "1ddefb447ade40aec6b68fe29776e576",
+          "duration": 1.176,
+          "size": 7182
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "spreading"
+      ]
+    },
+    "spreads": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/spreads.ogg",
+          "voice": "us-clb",
+          "checksum": "3ababccbe5459c5cc2391f6967d60a0e",
+          "duration": 1.288,
+          "size": 7545
+        },
+        "mas": {
+          "filename": "sound/vox_mas/spreads.ogg",
+          "voice": "us-rms",
+          "checksum": "02612d6d5479a454e7658a65c1658818",
+          "duration": 1.08,
+          "size": 6953
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "spreads"
+      ]
+    },
     "squad": {
       "wordlen": 1,
       "files": {
@@ -59931,6 +62415,98 @@
         "Space",
         "Station",
         "Thirteen"
+      ]
+    },
+    "stack": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/stack.ogg",
+          "voice": "us-clb",
+          "checksum": "d93ba01ff2aca12c92cd4917f420560d",
+          "duration": 0.968,
+          "size": 6621
+        },
+        "mas": {
+          "filename": "sound/vox_mas/stack.ogg",
+          "voice": "us-rms",
+          "checksum": "3b0c0abe54add5e47db53daf92e9a8dd",
+          "duration": 0.984,
+          "size": 6521
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "stack"
+      ]
+    },
+    "stacked": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/stacked.ogg",
+          "voice": "us-clb",
+          "checksum": "74230aa35f5e0407cdca7be207f1ead0",
+          "duration": 1.112,
+          "size": 7072
+        },
+        "mas": {
+          "filename": "sound/vox_mas/stacked.ogg",
+          "voice": "us-rms",
+          "checksum": "799717528c29bd454ccf36db1080bc2f",
+          "duration": 1.096,
+          "size": 6954
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "stacked"
+      ]
+    },
+    "stacking": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/stacking.ogg",
+          "voice": "us-clb",
+          "checksum": "9cfd84a58a252fdb4ded594a878a65a2",
+          "duration": 1.32,
+          "size": 7821
+        },
+        "mas": {
+          "filename": "sound/vox_mas/stacking.ogg",
+          "voice": "us-rms",
+          "checksum": "9466dc38e904141a171d58d7d0bab8e1",
+          "duration": 1.128,
+          "size": 7040
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "stacking"
+      ]
+    },
+    "stacks": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/stacks.ogg",
+          "voice": "us-clb",
+          "checksum": "20e52f1cb5b3068821562798671d1d7b",
+          "duration": 1.128,
+          "size": 7213
+        },
+        "mas": {
+          "filename": "sound/vox_mas/stacks.ogg",
+          "voice": "us-rms",
+          "checksum": "7889396df80df8c9e3ead1fb858f793a",
+          "duration": 1.128,
+          "size": 7123
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "stacks"
       ]
     },
     "staff": {
@@ -64188,6 +66764,98 @@
         "that"
       ]
     },
+    "that'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/that_d.ogg",
+          "voice": "us-clb",
+          "checksum": "cd804eb017ebe4ead7f206140b3b4c6f",
+          "duration": 1.0,
+          "size": 6747
+        },
+        "mas": {
+          "filename": "sound/vox_mas/that_d.ogg",
+          "voice": "us-rms",
+          "checksum": "e881a710a3c655ad3ec0928da7ae9c18",
+          "duration": 1.0,
+          "size": 6650
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "that'd"
+      ]
+    },
+    "that'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/that_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "091dc641ea8a5b4ce5a23f9c0c89403c",
+          "duration": 1.016,
+          "size": 6588
+        },
+        "mas": {
+          "filename": "sound/vox_mas/that_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "2c1c81d32d65b25d5804df19fede817b",
+          "duration": 0.968,
+          "size": 6484
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "that'll"
+      ]
+    },
+    "that're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/that_re.ogg",
+          "voice": "us-clb",
+          "checksum": "d2123321de7c9c717ff925e6c3774c06",
+          "duration": 1.192,
+          "size": 7419
+        },
+        "mas": {
+          "filename": "sound/vox_mas/that_re.ogg",
+          "voice": "us-rms",
+          "checksum": "711f4f62b4a78b4e8daf8fc428b4fa30",
+          "duration": 1.032,
+          "size": 6712
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "that're"
+      ]
+    },
+    "that's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/that_s.ogg",
+          "voice": "us-clb",
+          "checksum": "7b4c542c6162f525c5d70c6912fa91e7",
+          "duration": 0.984,
+          "size": 6538
+        },
+        "mas": {
+          "filename": "sound/vox_mas/that_s.ogg",
+          "voice": "us-rms",
+          "checksum": "e130bebe5e01af869a50be3a91721c8d",
+          "duration": 1.048,
+          "size": 6774
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "that's"
+      ]
+    },
     "the": {
       "wordlen": 1,
       "files": {
@@ -64349,6 +67017,98 @@
         "there"
       ]
     },
+    "there'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/there_d.ogg",
+          "voice": "us-clb",
+          "checksum": "589aa32a74bf99d3e01313baf07b11a1",
+          "duration": 0.872,
+          "size": 6101
+        },
+        "mas": {
+          "filename": "sound/vox_mas/there_d.ogg",
+          "voice": "us-rms",
+          "checksum": "0d33c2e07ab1a1f36089f299e9d16a1b",
+          "duration": 0.808,
+          "size": 5945
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "there'd"
+      ]
+    },
+    "there'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/there_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "ab3ab48df21357aeae040431fa3b3b30",
+          "duration": 0.872,
+          "size": 6101
+        },
+        "mas": {
+          "filename": "sound/vox_mas/there_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "e6ea72c2a5eafaf2ca731bdd84205e6c",
+          "duration": 0.888,
+          "size": 6130
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "there'll"
+      ]
+    },
+    "there're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/there_re.ogg",
+          "voice": "us-clb",
+          "checksum": "5d5a53794d94681a4dbcff9887409cca",
+          "duration": 1.16,
+          "size": 7166
+        },
+        "mas": {
+          "filename": "sound/vox_mas/there_re.ogg",
+          "voice": "us-rms",
+          "checksum": "bd7863e1ddd6849b239de3df14acbc78",
+          "duration": 1.064,
+          "size": 6863
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "there're"
+      ]
+    },
+    "there's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/there_s.ogg",
+          "voice": "us-clb",
+          "checksum": "8a8a33ed924fe5f6a82a5f17c334eedd",
+          "duration": 0.824,
+          "size": 6084
+        },
+        "mas": {
+          "filename": "sound/vox_mas/there_s.ogg",
+          "voice": "us-rms",
+          "checksum": "f2ee1b21796432031db9d99fc87b542a",
+          "duration": 0.84,
+          "size": 6103
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "there's"
+      ]
+    },
     "thermal": {
       "wordlen": 1,
       "files": {
@@ -64441,6 +67201,29 @@
         "these"
       ]
     },
+    "these're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/these_re.ogg",
+          "voice": "us-clb",
+          "checksum": "848425ad044362411a45ab58263f6845",
+          "duration": 1.112,
+          "size": 7023
+        },
+        "mas": {
+          "filename": "sound/vox_mas/these_re.ogg",
+          "voice": "us-rms",
+          "checksum": "b0c21f02564c8681f2ebfcb883de33f9",
+          "duration": 0.952,
+          "size": 6420
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "these're"
+      ]
+    },
     "they": {
       "wordlen": 1,
       "files": {
@@ -64462,6 +67245,98 @@
       "flags": [],
       "phrase": [
         "they"
+      ]
+    },
+    "they'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/they_d.ogg",
+          "voice": "us-clb",
+          "checksum": "cc004f86e8af1b3fd01e22cebf785ad3",
+          "duration": 0.872,
+          "size": 6139
+        },
+        "mas": {
+          "filename": "sound/vox_mas/they_d.ogg",
+          "voice": "us-rms",
+          "checksum": "48d78448964b4247c359b3f00234ee3a",
+          "duration": 0.856,
+          "size": 6138
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "they'd"
+      ]
+    },
+    "they'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/they_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "9f9ee5ccd03793a2a04d80d3ac16454d",
+          "duration": 0.872,
+          "size": 6082
+        },
+        "mas": {
+          "filename": "sound/vox_mas/they_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "d605c84dc02ef6e2ff8266a4bacb0706",
+          "duration": 0.936,
+          "size": 6373
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "they'll"
+      ]
+    },
+    "they're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/they_re.ogg",
+          "voice": "us-clb",
+          "checksum": "119831aec8b2ae4f1057840f436fb510",
+          "duration": 0.696,
+          "size": 5542
+        },
+        "mas": {
+          "filename": "sound/vox_mas/they_re.ogg",
+          "voice": "us-rms",
+          "checksum": "1ad5ebb2f7f07cdd122975a5cd7ff6b9",
+          "duration": 0.712,
+          "size": 5603
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "they're"
+      ]
+    },
+    "they've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/they_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "fd7541eda857eb6ec0bf2fcc915ac9e2",
+          "duration": 0.824,
+          "size": 6059
+        },
+        "mas": {
+          "filename": "sound/vox_mas/they_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "15cc028e29c87d582c853beb9e6e03a3",
+          "duration": 0.888,
+          "size": 6262
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "they've"
       ]
     },
     "thick": {
@@ -64740,6 +67615,29 @@
         "this"
       ]
     },
+    "this's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/this_s.ogg",
+          "voice": "us-clb",
+          "checksum": "06f4fb69277fdd0c7c433cd995a0a9f3",
+          "duration": 1.176,
+          "size": 7351
+        },
+        "mas": {
+          "filename": "sound/vox_mas/this_s.ogg",
+          "voice": "us-rms",
+          "checksum": "b4321d7a7b33c7f89b487b785941a183",
+          "duration": 1.048,
+          "size": 6801
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "this's"
+      ]
+    },
     "those": {
       "wordlen": 1,
       "files": {
@@ -64761,6 +67659,29 @@
       "flags": [],
       "phrase": [
         "those"
+      ]
+    },
+    "those're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/those_re.ogg",
+          "voice": "us-clb",
+          "checksum": "1c3c7a3736daa5448eafcf00649abaf9",
+          "duration": 1.4,
+          "size": 7983
+        },
+        "mas": {
+          "filename": "sound/vox_mas/those_re.ogg",
+          "voice": "us-rms",
+          "checksum": "93f5b960210918b5d2900eacc2d08266",
+          "duration": 1.128,
+          "size": 7070
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "those're"
       ]
     },
     "thousand": {
@@ -65451,6 +68372,29 @@
       "flags": [],
       "phrase": [
         "two"
+      ]
+    },
+    "to've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/to_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "a056276b87d52f549c0ed514c5063fe8",
+          "duration": 0.84,
+          "size": 6005
+        },
+        "mas": {
+          "filename": "sound/vox_mas/to_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "50324759393077744aa01ff5d9652893",
+          "duration": 0.792,
+          "size": 5889
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "to've"
       ]
     },
     "toil": {
@@ -66440,6 +69384,98 @@
       "flags": [],
       "phrase": [
         "trees"
+      ]
+    },
+    "triangulate": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/triangulate.ogg",
+          "voice": "us-clb",
+          "checksum": "bbd5ecb0f5fd9435f0d5744f569d5c04",
+          "duration": 1.768,
+          "size": 9126
+        },
+        "mas": {
+          "filename": "sound/vox_mas/triangulate.ogg",
+          "voice": "us-rms",
+          "checksum": "8749c0a1587602deaa607441e6dc1f4b",
+          "duration": 1.56,
+          "size": 8548
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "triangulate"
+      ]
+    },
+    "triangulated": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/triangulated.ogg",
+          "voice": "us-clb",
+          "checksum": "82d5551a39c96ed0fa7eddfc1ad893ef",
+          "duration": 1.8,
+          "size": 9328
+        },
+        "mas": {
+          "filename": "sound/vox_mas/triangulated.ogg",
+          "voice": "us-rms",
+          "checksum": "0a1ba64ea1954725395230695ca5ac75",
+          "duration": 1.656,
+          "size": 8919
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "triangulated"
+      ]
+    },
+    "triangulates": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/triangulates.ogg",
+          "voice": "us-clb",
+          "checksum": "49ab9030af3fc0e749f41f943a585cc5",
+          "duration": 1.96,
+          "size": 9875
+        },
+        "mas": {
+          "filename": "sound/vox_mas/triangulates.ogg",
+          "voice": "us-rms",
+          "checksum": "3a388bfde958f5c64614019c6cce3f6f",
+          "duration": 1.752,
+          "size": 9102
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "triangulates"
+      ]
+    },
+    "triangulating": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/triangulating.ogg",
+          "voice": "us-clb",
+          "checksum": "4a5139cb4b322434d72461b37481e1b4",
+          "duration": 1.864,
+          "size": 9503
+        },
+        "mas": {
+          "filename": "sound/vox_mas/triangulating.ogg",
+          "voice": "us-rms",
+          "checksum": "0890db8f3358937ac33e098bc8d7014b",
+          "duration": 1.72,
+          "size": 9184
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "triangulating"
       ]
     },
     "tricordrazine": {
@@ -68189,6 +71225,52 @@
       "flags": [],
       "phrase": [
         "vacating"
+      ]
+    },
+    "vaccinated": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/vaccinated.ogg",
+          "voice": "us-clb",
+          "checksum": "cf3809209f248f0de0d9443e167976be",
+          "duration": 1.624,
+          "size": 8858
+        },
+        "mas": {
+          "filename": "sound/vox_mas/vaccinated.ogg",
+          "voice": "us-rms",
+          "checksum": "986855018b075482b84974f9890eb46c",
+          "duration": 1.464,
+          "size": 8216
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "vaccinated"
+      ]
+    },
+    "vaccinating": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/vaccinating.ogg",
+          "voice": "us-clb",
+          "checksum": "96f6f9f937f182827242a5332989b2e8",
+          "duration": 1.688,
+          "size": 8970
+        },
+        "mas": {
+          "filename": "sound/vox_mas/vaccinating.ogg",
+          "voice": "us-rms",
+          "checksum": "6e96a71d2c7bd0061392b9ad064287b1",
+          "duration": 1.544,
+          "size": 8450
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "vaccinating"
       ]
     },
     "vaccine": {
@@ -70508,6 +73590,29 @@
         "was"
       ]
     },
+    "wasn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/wasn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "72f1bda2e82b9bcd74a8235402f6036b",
+          "duration": 1.112,
+          "size": 7079
+        },
+        "mas": {
+          "filename": "sound/vox_mas/wasn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "b3c515c8f02fde41adf961ff073ebde9",
+          "duration": 1.0,
+          "size": 6506
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "wasn't"
+      ]
+    },
     "waste": {
       "wordlen": 1,
       "files": {
@@ -70667,6 +73772,121 @@
       "flags": [],
       "phrase": [
         "we"
+      ]
+    },
+    "we'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/we_d.ogg",
+          "voice": "us-clb",
+          "checksum": "72de6131d2066d801c87a2d77af617c8",
+          "duration": 0.856,
+          "size": 6153
+        },
+        "mas": {
+          "filename": "sound/vox_mas/we_d.ogg",
+          "voice": "us-rms",
+          "checksum": "b8ae99922fd4bf252ac06968015ac797",
+          "duration": 0.808,
+          "size": 5909
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "we'd"
+      ]
+    },
+    "we'd've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/we_d_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "7a70632a82fa42c16b007bcae4cedf59",
+          "duration": 0.984,
+          "size": 6477
+        },
+        "mas": {
+          "filename": "sound/vox_mas/we_d_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "f9074116e55995a3a7339b729213cb08",
+          "duration": 0.936,
+          "size": 6290
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "we'd've"
+      ]
+    },
+    "we'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/we_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "bf27102756b977ebc17f5f2dfbaf5df7",
+          "duration": 0.872,
+          "size": 6144
+        },
+        "mas": {
+          "filename": "sound/vox_mas/we_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "6941004fa23f491f4196ea68ba0a3d8f",
+          "duration": 0.888,
+          "size": 6138
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "we'll"
+      ]
+    },
+    "we're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/we_re.ogg",
+          "voice": "us-clb",
+          "checksum": "325b2fc44359d849ac3f53d3f31c31ba",
+          "duration": 0.856,
+          "size": 6122
+        },
+        "mas": {
+          "filename": "sound/vox_mas/we_re.ogg",
+          "voice": "us-rms",
+          "checksum": "8ceb01403ae9fd0e1a0c911165a6dfa1",
+          "duration": 0.872,
+          "size": 6044
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "we're"
+      ]
+    },
+    "we've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/we_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "0064f9e92dae94bc2a60c90f7627ebdb",
+          "duration": 0.824,
+          "size": 6021
+        },
+        "mas": {
+          "filename": "sound/vox_mas/we_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "48945c99beb91979b69854860868fa53",
+          "duration": 0.84,
+          "size": 6043
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "we've"
       ]
     },
     "weak": {
@@ -70830,6 +74050,29 @@
         "were"
       ]
     },
+    "weren't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/weren_t.ogg",
+          "voice": "us-clb",
+          "checksum": "50780f2b013d5da03bc05738c3eedd27",
+          "duration": 0.968,
+          "size": 6543
+        },
+        "mas": {
+          "filename": "sound/vox_mas/weren_t.ogg",
+          "voice": "us-rms",
+          "checksum": "7421e47229c68aa9ac0ca1a2bef1292e",
+          "duration": 0.84,
+          "size": 5942
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "weren't"
+      ]
+    },
     "west": {
       "wordlen": 1,
       "files": {
@@ -70899,6 +74142,121 @@
         "what"
       ]
     },
+    "what'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/what_d.ogg",
+          "voice": "us-clb",
+          "checksum": "953fb35ddcb7281c000fdc324cda6aed",
+          "duration": 1.016,
+          "size": 6653
+        },
+        "mas": {
+          "filename": "sound/vox_mas/what_d.ogg",
+          "voice": "us-rms",
+          "checksum": "25cbad24e67cc45e0f7a2eb4dfe72c2f",
+          "duration": 0.984,
+          "size": 6444
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "what'd"
+      ]
+    },
+    "what'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/what_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "0c2c17bcb7088430ada91b1c22812aa7",
+          "duration": 1.016,
+          "size": 6554
+        },
+        "mas": {
+          "filename": "sound/vox_mas/what_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "f81eba20e00f6524420674baae731d9d",
+          "duration": 0.984,
+          "size": 6437
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "what'll"
+      ]
+    },
+    "what're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/what_re.ogg",
+          "voice": "us-clb",
+          "checksum": "478e38e01595a2075810288097fbb9ce",
+          "duration": 1.096,
+          "size": 6946
+        },
+        "mas": {
+          "filename": "sound/vox_mas/what_re.ogg",
+          "voice": "us-rms",
+          "checksum": "4064b5f3d5901a959762f450ef9c28a6",
+          "duration": 0.984,
+          "size": 6369
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "what're"
+      ]
+    },
+    "what's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/what_s.ogg",
+          "voice": "us-clb",
+          "checksum": "c9e507a7efb0cae99ea06f13f589df60",
+          "duration": 0.808,
+          "size": 6054
+        },
+        "mas": {
+          "filename": "sound/vox_mas/what_s.ogg",
+          "voice": "us-rms",
+          "checksum": "83c4e27f2d8701a9ecc51137c6a10969",
+          "duration": 0.792,
+          "size": 5859
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "what's"
+      ]
+    },
+    "what've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/what_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "800b53a23b7dc6a7b7dd159e86c780dd",
+          "duration": 0.984,
+          "size": 6509
+        },
+        "mas": {
+          "filename": "sound/vox_mas/what_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "810ab2acd7cec685ae19bfac13ecbf0e",
+          "duration": 1.0,
+          "size": 6587
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "what've"
+      ]
+    },
     "when": {
       "wordlen": 1,
       "files": {
@@ -70920,6 +74278,29 @@
       "flags": [],
       "phrase": [
         "when"
+      ]
+    },
+    "when's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/when_s.ogg",
+          "voice": "us-clb",
+          "checksum": "8c84c474309888a231a69d53c225d56a",
+          "duration": 0.84,
+          "size": 6064
+        },
+        "mas": {
+          "filename": "sound/vox_mas/when_s.ogg",
+          "voice": "us-rms",
+          "checksum": "91237d91913b8f3ba92a7d8eaa029531",
+          "duration": 0.696,
+          "size": 5584
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "when's"
       ]
     },
     "where": {
@@ -70945,6 +74326,98 @@
         "where"
       ]
     },
+    "where'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/where_d.ogg",
+          "voice": "us-clb",
+          "checksum": "5c396b079fe462d8123bff00ebfe3ce8",
+          "duration": 0.856,
+          "size": 6080
+        },
+        "mas": {
+          "filename": "sound/vox_mas/where_d.ogg",
+          "voice": "us-rms",
+          "checksum": "cc3d8acec1c07fc2d7ac8afc5d113efa",
+          "duration": 0.808,
+          "size": 5827
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "where'd"
+      ]
+    },
+    "where're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/where_re.ogg",
+          "voice": "us-clb",
+          "checksum": "0fec5b4437eff37150b00936bc0cb147",
+          "duration": 1.064,
+          "size": 6691
+        },
+        "mas": {
+          "filename": "sound/vox_mas/where_re.ogg",
+          "voice": "us-rms",
+          "checksum": "87609b3195086080f116b9d21c70852b",
+          "duration": 1.064,
+          "size": 6695
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "where're"
+      ]
+    },
+    "where's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/where_s.ogg",
+          "voice": "us-clb",
+          "checksum": "6f82dd4c21ab67ee0fc0a3c115f14ba5",
+          "duration": 0.824,
+          "size": 6194
+        },
+        "mas": {
+          "filename": "sound/vox_mas/where_s.ogg",
+          "voice": "us-rms",
+          "checksum": "0341f000797b6c3f6cb6e26f7ca62e32",
+          "duration": 0.728,
+          "size": 5767
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "where's"
+      ]
+    },
+    "where've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/where_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "7eec4cb1939719b71e42f91bfd6d74e5",
+          "duration": 1.16,
+          "size": 7134
+        },
+        "mas": {
+          "filename": "sound/vox_mas/where_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "2acc133ae480f846d5469976bc07541b",
+          "duration": 1.032,
+          "size": 6737
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "where've"
+      ]
+    },
     "which": {
       "wordlen": 1,
       "files": {
@@ -70966,6 +74439,29 @@
       "flags": [],
       "phrase": [
         "which"
+      ]
+    },
+    "which's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/which_s.ogg",
+          "voice": "us-clb",
+          "checksum": "64ad3f9b0177083977533a1639d5b784",
+          "duration": 1.16,
+          "size": 7312
+        },
+        "mas": {
+          "filename": "sound/vox_mas/which_s.ogg",
+          "voice": "us-rms",
+          "checksum": "0fa6407ac01468bcfc0da7037a929545",
+          "duration": 1.032,
+          "size": 6678
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "which's"
       ]
     },
     "while": {
@@ -71152,6 +74648,144 @@
         "who"
       ]
     },
+    "who'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/who_d.ogg",
+          "voice": "us-clb",
+          "checksum": "a887d7851b9e32d965d7237f98d8cf41",
+          "duration": 0.856,
+          "size": 6133
+        },
+        "mas": {
+          "filename": "sound/vox_mas/who_d.ogg",
+          "voice": "us-rms",
+          "checksum": "9ccdc1d5ea5928d54a595dba56cefff8",
+          "duration": 0.76,
+          "size": 5839
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "who'd"
+      ]
+    },
+    "who'd've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/who_d_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "d58ba0183a5d207734d01b895967b0ae",
+          "duration": 0.984,
+          "size": 6419
+        },
+        "mas": {
+          "filename": "sound/vox_mas/who_d_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "69990945e8a3305afd39cb1342edd79b",
+          "duration": 0.888,
+          "size": 6208
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "who'd've"
+      ]
+    },
+    "who'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/who_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "7dcad627e4a517ef146157ab8f5b453c",
+          "duration": 0.856,
+          "size": 6107
+        },
+        "mas": {
+          "filename": "sound/vox_mas/who_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "675410d89b5b63fc37e81a3a1d4f3fc1",
+          "duration": 0.872,
+          "size": 6071
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "who'll"
+      ]
+    },
+    "who're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/who_re.ogg",
+          "voice": "us-clb",
+          "checksum": "331ef2a053b303af43af5802ebff2641",
+          "duration": 0.872,
+          "size": 5977
+        },
+        "mas": {
+          "filename": "sound/vox_mas/who_re.ogg",
+          "voice": "us-rms",
+          "checksum": "62d0b835797293d34d5ea3ee4b56627e",
+          "duration": 0.84,
+          "size": 5940
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "who're"
+      ]
+    },
+    "who's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/who_s.ogg",
+          "voice": "us-clb",
+          "checksum": "4c4fdc42cce3ec14a57d7adf7d523bf8",
+          "duration": 0.792,
+          "size": 6208
+        },
+        "mas": {
+          "filename": "sound/vox_mas/who_s.ogg",
+          "voice": "us-rms",
+          "checksum": "dc2b4ace14df491cbbf4050816a1ef04",
+          "duration": 0.648,
+          "size": 5502
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "who's"
+      ]
+    },
+    "who've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/who_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "5e311eb89fe16f14bf3f6df7dbaaf107",
+          "duration": 0.824,
+          "size": 6057
+        },
+        "mas": {
+          "filename": "sound/vox_mas/who_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "52920e2b1a703551d56c563ed8a7a7d7",
+          "duration": 0.808,
+          "size": 6009
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "who've"
+      ]
+    },
     "whom": {
       "wordlen": 1,
       "files": {
@@ -71219,6 +74853,75 @@
       "flags": [],
       "phrase": [
         "why"
+      ]
+    },
+    "why'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/why_d.ogg",
+          "voice": "us-clb",
+          "checksum": "169c16a67e9203502e0212444a69368d",
+          "duration": 0.856,
+          "size": 6074
+        },
+        "mas": {
+          "filename": "sound/vox_mas/why_d.ogg",
+          "voice": "us-rms",
+          "checksum": "5710b54fabab2ac8bb3bc8ce5f38cc16",
+          "duration": 0.728,
+          "size": 5712
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "why'd"
+      ]
+    },
+    "why're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/why_re.ogg",
+          "voice": "us-clb",
+          "checksum": "c98a765ffde55ea0e9d9468e2ac380c1",
+          "duration": 0.856,
+          "size": 6054
+        },
+        "mas": {
+          "filename": "sound/vox_mas/why_re.ogg",
+          "voice": "us-rms",
+          "checksum": "80ee1cf31fece9fd2ac64fd592f89016",
+          "duration": 1.048,
+          "size": 6582
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "why're"
+      ]
+    },
+    "why's": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/why_s.ogg",
+          "voice": "us-clb",
+          "checksum": "8476f2e98bffe41845f72dfae15e43c2",
+          "duration": 0.808,
+          "size": 6012
+        },
+        "mas": {
+          "filename": "sound/vox_mas/why_s.ogg",
+          "voice": "us-rms",
+          "checksum": "27f657d0f0344f996b97b266e1c1d403",
+          "duration": 0.84,
+          "size": 6067
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "why's"
       ]
     },
     "wiggle": {
@@ -71659,6 +75362,29 @@
         "women"
       ]
     },
+    "won't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/won_t.ogg",
+          "voice": "us-clb",
+          "checksum": "5580c968037f567755e6424146b995b1",
+          "duration": 0.968,
+          "size": 6559
+        },
+        "mas": {
+          "filename": "sound/vox_mas/won_t.ogg",
+          "voice": "us-rms",
+          "checksum": "952dbc60ef83373da0191af25033b775",
+          "duration": 0.84,
+          "size": 5999
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "won't"
+      ]
+    },
     "wood": {
       "wordlen": 1,
       "files": {
@@ -72025,6 +75751,52 @@
       "flags": [],
       "phrase": [
         "would"
+      ]
+    },
+    "would've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/would_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "f269fcfe8ec9d1a049bcb04a23690dfa",
+          "duration": 1.064,
+          "size": 6685
+        },
+        "mas": {
+          "filename": "sound/vox_mas/would_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "ca1977ef4a344e5e0dc55104402876d4",
+          "duration": 0.952,
+          "size": 6403
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "would've"
+      ]
+    },
+    "wouldn't": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/wouldn_t.ogg",
+          "voice": "us-clb",
+          "checksum": "4c6e69b519c01dd494e054f8e0b2ddfd",
+          "duration": 1.112,
+          "size": 6912
+        },
+        "mas": {
+          "filename": "sound/vox_mas/wouldn_t.ogg",
+          "voice": "us-rms",
+          "checksum": "edd5ea07f5de68784cddb45356ffee8d",
+          "duration": 0.936,
+          "size": 6317
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "wouldn't"
       ]
     },
     "wouldnt": {
@@ -72441,6 +76213,75 @@
         "Y."
       ]
     },
+    "y'all": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/y_all.ogg",
+          "voice": "us-clb",
+          "checksum": "9a198bbe532b0437b87995f475d06592",
+          "duration": 0.856,
+          "size": 5933
+        },
+        "mas": {
+          "filename": "sound/vox_mas/y_all.ogg",
+          "voice": "us-rms",
+          "checksum": "07866737707622498eead98e2fec8fc2",
+          "duration": 0.984,
+          "size": 6255
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "y'all"
+      ]
+    },
+    "y'all'd've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/y_all_d_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "a2fd2c7556294b23605b9a1e6ae13b1c",
+          "duration": 1.112,
+          "size": 6834
+        },
+        "mas": {
+          "filename": "sound/vox_mas/y_all_d_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "16ff49b0df86c09bcfd9a6c66e6875c0",
+          "duration": 1.128,
+          "size": 7066
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "y'all'd've"
+      ]
+    },
+    "y'all're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/y_all_re.ogg",
+          "voice": "us-clb",
+          "checksum": "67d1b3d6fb02e71547af71bb9ffcb56f",
+          "duration": 0.968,
+          "size": 6398
+        },
+        "mas": {
+          "filename": "sound/vox_mas/y_all_re.ogg",
+          "voice": "us-rms",
+          "checksum": "2a67097bb9f5abb75859ef22c7fe0cd9",
+          "duration": 0.92,
+          "size": 6194
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "y'all're"
+      ]
+    },
     "yankee": {
       "wordlen": 1,
       "files": {
@@ -72669,6 +76510,98 @@
       "flags": [],
       "phrase": [
         "you"
+      ]
+    },
+    "you'd": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/you_d.ogg",
+          "voice": "us-clb",
+          "checksum": "9051c9c96c60094b1c696ed9fb318e90",
+          "duration": 0.856,
+          "size": 6110
+        },
+        "mas": {
+          "filename": "sound/vox_mas/you_d.ogg",
+          "voice": "us-rms",
+          "checksum": "8fc518469518bbf5b260f41f9355c39d",
+          "duration": 0.824,
+          "size": 6088
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "you'd"
+      ]
+    },
+    "you'll": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/you_ll.ogg",
+          "voice": "us-clb",
+          "checksum": "560fd117417135335e613f4edbc60910",
+          "duration": 0.856,
+          "size": 6120
+        },
+        "mas": {
+          "filename": "sound/vox_mas/you_ll.ogg",
+          "voice": "us-rms",
+          "checksum": "275304a81ff1862e5ec4967541301372",
+          "duration": 0.936,
+          "size": 6301
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "you'll"
+      ]
+    },
+    "you're": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/you_re.ogg",
+          "voice": "us-clb",
+          "checksum": "faf5d5af5b1bf17f585ae7fe8e7e139b",
+          "duration": 0.872,
+          "size": 6117
+        },
+        "mas": {
+          "filename": "sound/vox_mas/you_re.ogg",
+          "voice": "us-rms",
+          "checksum": "f6a9fccd9fdbc096b365c2c8680ff8ba",
+          "duration": 0.904,
+          "size": 6098
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "you're"
+      ]
+    },
+    "you've": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_fem/you_ve.ogg",
+          "voice": "us-clb",
+          "checksum": "ab587b45f6f1f437da414485ac96c58d",
+          "duration": 0.824,
+          "size": 6062
+        },
+        "mas": {
+          "filename": "sound/vox_mas/you_ve.ogg",
+          "voice": "us-rms",
+          "checksum": "4ea4554ffeb5c2fcb37eabae0d723798",
+          "duration": 0.856,
+          "size": 6185
+        }
+      },
+      "flags": [],
+      "phrase": [
+        "you've"
       ]
     },
     "your": {
