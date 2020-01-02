@@ -19,6 +19,8 @@
 
 /mob/new_player/verb/new_player_panel()
 	set src = usr
+	if(client)
+		client.displayLobby()
 	new_player_panel_proc()
 
 
@@ -653,6 +655,8 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 
 /mob/new_player/proc/close_spawn_windows()
+	if(config.vgws_lobby && client)
+		client.closeLobby()
 	src << browse(null, "window=latechoices") //closes late choices window
 	src << browse(null, "window=playersetup") //closes the player setup window
 

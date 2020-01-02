@@ -338,3 +338,26 @@ ENABLE_WAGES
 # HTTP URL to send Discord messages to.
 # DISCORD_URL
 # DISCORD_PASSWORD
+
+##########################
+### VGWS Shit
+##########################
+
+##  VGWS is what our website runs on, as well as our rapsheet, ban panel, and lobby screen.
+##
+##  https://github.com/N3X15/vgws
+
+## Base URL for VGWS
+##  URL to VGWS install, excluding the "/index.php" portion.
+##
+#VGWS_BASE_URL https://ss13.moe
+
+## TCP Server
+##  Used when sending world.Topic() calls.
+##
+#VGWS_IP 198.245.63.50
+
+## New VGWS-based lobby screen
+##  Requires a VGWS install AND a media server, and that VGWS is also pointed to the media server.
+##
+#VGWS_LOBBY

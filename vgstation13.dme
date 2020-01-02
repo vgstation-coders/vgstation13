@@ -1544,6 +1544,8 @@
 #include "code\modules\lighting\lighting_source.dm"
 #include "code\modules\lighting\lighting_turf.dm"
 #include "code\modules\lighting\~lighting_undefs.dm"
+#include "code\modules\lobby\client_procs.dm"
+#include "code\modules\lobby\lobby_state.dm"
 #include "code\modules\liquid\splash_simulation.dm"
 #include "code\modules\maps\map_objects.dm"
 #include "code\modules\maps\movers.dm"

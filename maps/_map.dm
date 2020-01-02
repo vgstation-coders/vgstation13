@@ -21,7 +21,6 @@
 //**************************************************************
 
 /datum/map
-
 	var/nameShort = ""
 	var/nameLong = ""
 	var/list/zLevels = list()
@@ -101,6 +100,14 @@
 	var/snow_theme = FALSE
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
 	var/datum/climate/climate = null //use for weather cycle
+
+
+	// New HTML lobby screen stuff:
+	// Pool of screens+playlists for this map
+	var/lobby_pool = "main"
+	// Override the media system playlist used for this map's lobby screen by setting this.
+	// On the main pool, it's "lobby-main".
+	var/lobby_playlist_id = null
 
 /datum/map/New()
 	. = ..()
