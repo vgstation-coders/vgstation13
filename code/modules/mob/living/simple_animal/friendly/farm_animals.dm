@@ -25,11 +25,15 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES
 	speak_override = TRUE
 
+	var/anger_chance = 1
+
+	var/gives_milk = TRUE
 	var/datum/reagents/udder = null
 
 /mob/living/simple_animal/hostile/retaliate/goat/New()
-	udder = new(50)
-	udder.my_atom = src
+	if(gives_milk)
+		udder = new(50)
+		udder.my_atom = src
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/goat/Life()

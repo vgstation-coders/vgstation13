@@ -404,17 +404,14 @@
 			continue
 
 		var/obj/item/stack/ore/O = A
-		if(!O.material)
+		if(!O.materials)
+			if(O.material) //legacy goonores
+				ore.addAmount(O.material, O.amount)
+				returnToPool(O)
 			continue
 
-		ore.addAmount(O.material, O.amount)
-
-		var/datum/material/mat = ore.getMaterial(O.material)
-		if(!mat)
-			continue
-
-		credits += mat.value*O.amount //Dosh.
-
+		credits += O.materials.getValue()
+		ore.addFrom(O.materials, TRUE)
 		returnToPool(O)
 
 /obj/machinery/mineral/processing_unit/process()
@@ -439,7 +436,7 @@
 	for(var/datum/smelting_recipe/R in recipes)
 		while(R.checkIngredients(src)) //While we have materials for this
 			for(var/ore_id in R.ingredients)
-				ore.removeAmount(ore_id, 1)
+				ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
 				score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
 
 			drop_stack(R.yieldtype, out_T)
