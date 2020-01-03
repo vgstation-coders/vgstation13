@@ -444,17 +444,18 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_SUPER_FART    205		// Duh
 #define M_SMILE         206		// :)
 #define M_ELVIS         207		// You ain't nothin' but a hound dog.
+#define M_HORNS         208
 
 // /vg/ muts
-#define M_LOUD		208		// CAUSES INTENSE YELLING
-#define M_WHISPER	209		// causes quiet whispering
-#define M_DIZZY		210		// Trippy.
-#define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
-#define M_FARSIGHT	212		// Increases mob's view range by 2
-#define M_NOIR		213		// aww yis detective noir
-#define M_VEGAN		214
-#define M_ASTHMA	215
-#define M_LACTOSE	216
+#define M_LOUD		308		// CAUSES INTENSE YELLING
+#define M_WHISPER	309		// causes quiet whispering
+#define M_DIZZY		310		// Trippy.
+#define M_SANS		311		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'I love comic sans' IN YOUR PR.
+#define M_FARSIGHT	312		// Increases mob's view range by 2
+#define M_NOIR		313		// aww yis detective noir
+#define M_VEGAN		314
+#define M_ASTHMA	315
+#define M_LACTOSE	316
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\
