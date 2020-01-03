@@ -290,8 +290,6 @@ var/list/all_doors = list()
 
 	if (animation_delay_predensity_closing)
 		sleep(animation_delay_predensity_closing)
-	else
-		sleep(animation_delay)
 
 	setDensity(TRUE)
 	update_nearby_tiles()
@@ -305,6 +303,9 @@ var/list/all_doors = list()
 
 	if (animation_delay_predensity_closing)
 		sleep(animation_delay - animation_delay_predensity_closing)
+	else
+		sleep(animation_delay)
+
 	update_icon()
 
 	// TODO: rework how fire works on doors
