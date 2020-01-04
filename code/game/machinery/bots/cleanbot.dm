@@ -14,6 +14,7 @@
 
 
 //Cleanbot
+//Patrols the station, looking for mess to clean
 /obj/machinery/bot/cleanbot
 	name = "Cleanbot"
 	desc = "A little cleaning robot, he looks so excited!"
@@ -31,20 +32,11 @@
 	var/blood = 1
 	var/crayon = 0
 	var/list/blacklisted_targets = list()
-	var/turf/target
-	var/turf/oldtarget
-	var/oldloc = null
 	req_access = list(access_janitor)
-	var/list/path = list()
-	var/list/patrol_path = list()
-	var/beacon_freq = 1445		// navigation beacon frequency
-	var/closest_dist
-	var/closest_loc
-	var/failed_steps
-	var/should_patrol = TRUE
-	var/next_dest
-	var/next_dest_loc
+	bot_flags = BOT_PATROL|BOT_BEACON
+	auto_patrol = TRUE
 
+	//for attack code
 	var/coolingdown = FALSE
 	var/attackcooldown = 10 SECONDS // for admin cancer
 	locked = FALSE
@@ -73,11 +65,11 @@
 
 /obj/machinery/bot/cleanbot/turn_off()
 	..()
-	if(!isnull(src.target))
-		target.targetted_by = null
+	if(!isnull(src.target) && isturf(target))
+		var/turf/T = target
+		T.targetted_by = null
 	src.target = null
 	src.oldtarget = null
-	src.oldloc = null
 	src.icon_state = "[src.icon_initial][src.on]"
 	src.path = new()
 	src.updateUsrDialog()
@@ -100,7 +92,7 @@ text("<A href='?src=\ref[src];operation=start'>[src.on ? "On" : "Off"]</A>"))
 	if(!src.locked || issilicon(user))
 		dat += text({"<BR>Cleans Blood: []<BR>"}, text("<A href='?src=\ref[src];operation=blood'>[src.blood ? "Yes" : "No"]</A>"))
 		dat += text({"<BR>Cleans Crayon: []<BR>"}, text("<A href='?src=\ref[src];operation=crayon'>[src.crayon ? "Yes" : "No"]</A>"))
-		dat += text({"<BR>Patrol station: []<BR>"}, text("<A href='?src=\ref[src];operation=patrol'>[src.should_patrol ? "Yes" : "No"]</A>"))
+		dat += text({"<BR>Patrol station: []<BR>"}, text("<A href='?src=\ref[src];operation=patrol'>[src.auto_patrol ? "Yes" : "No"]</A>"))
 	//	dat += text({"<BR>Beacon frequency: []<BR>"}, text("<A href='?src=\ref[src];operation=freq'>[src.beacon_freq]</A>"))
 	if(src.open && !src.locked)
 		dat += text({"
@@ -133,7 +125,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			src.get_targets()
 			src.updateUsrDialog()
 		if("patrol")
-			src.should_patrol =!src.should_patrol
+			src.auto_patrol =!src.auto_patrol
 			src.patrol_path = null
 			src.updateUsrDialog()
 		if("freq")
@@ -174,129 +166,30 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		src.oddbutton = 1
 		src.screwloose = 1
 
-/obj/machinery/bot/cleanbot/process()
-	//set background = 1
-	if(integratedpai)
-		return
-	if(!src.on)
-		return
-	if(src.cleaning)
-		return
+/obj/machinery/bot/cleanbot/process_bot()
+	if(!target)
+		find_target()
 
-	if(!src.screwloose && !src.oddbutton && prob(5))
-		visible_message("[src] makes an excited beeping booping sound!")
+	if(oddbutton && prob(5))
+		visible_message("<span class='warning'>Something flies out of \the [src]!</span>")
+		oldtarget = get_turf(getFromPool(/obj/effect/decal/cleanable/blood/gibs, loc)) //So we don't target our own gibs
 
-	if(src.screwloose && prob(5))
-		if(istype(loc,/turf/simulated))
-			var/turf/simulated/T = src.loc
-			T.wet(800)
-	if(src.oddbutton && prob(5))
-		visible_message("Something flies out of [src]. He seems to be acting oddly.")
-		var/obj/effect/decal/cleanable/blood/gibs/gib = getFromPool(/obj/effect/decal/cleanable/blood/gibs, src.loc)
-		gib.New(gib.loc)
-		//gib.streak(list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST))
-		src.oldtarget = get_turf(gib)
-	if(!src.target || src.target == null)
-		for (var/turf/T in view(7,src))
-			if(target)
-				break
-			if(istype(T,/turf/space))
-				continue
-			for(var/obj/effect/decal/cleanable/sickfilth in T.contents)
-				if(sickfilth && !(is_type_in_list(sickfilth, blacklisted_targets)))
-					if(!T.targetted_by && T!=oldtarget)
-						oldtarget = T								 // or if it is but the bot is gone.
-						target = T									 // and it's stuff we clean?  Clean it.
-						T.targetted_by = src	// Claim the messy tile we are targeting.
-						break
-
-	if(!src.target)
-		if(src.loc != src.oldloc)
-			src.oldtarget = null
-
-		if (!should_patrol)
-			return
-
-		if (!patrol_path || patrol_path.len < 1)
-			var/datum/radio_frequency/frequency = radio_controller.return_frequency(beacon_freq)
-
-			if(!frequency)
+/obj/machinery/bot/cleanbot/find_target()
+	for(var/turf/T in view(7, src))
+		if(istype(T, /turf/space))
+			continue
+		for(var/obj/effect/decal/cleanable/C in T)
+			if(!is_type_in_list(C, blacklisted_targets) && !T.targetted_by && T!=oldtarget)
+				target = T
+				oldtarget = T
+				T.targetted_by = src
 				return
 
-			closest_dist = 9999
-			closest_loc = null
-			next_dest_loc = null
-
-			var/datum/signal/signal = getFromPool(/datum/signal)
-			signal.source = src
-			signal.transmission_method = 1
-			signal.data = list("findbeacon" = "patrol")
-			frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
-			if (!next_dest_loc)
-				next_dest_loc = closest_loc
-			if (next_dest_loc)
-				make_astar_path(next_dest_loc, .proc/receive_patrol_path)
-		else
-			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
-			patrol_move()
-
-		return
-
-	if(target && path.len == 0)
-		return make_astar_path(target, .proc/receive_path)
-
-	src.oldloc = src.loc
-
-/obj/machinery/bot/cleanbot/proc/patrol_move()
-	if(!isturf(loc))
-		return
-	if (src.patrol_path.len <= 0)
-		return
-
-	var/next = src.patrol_path[1]
-	src.patrol_path -= next
-	if (next == src.loc)
-		return
-
-	var/moved = step_to(src, next)
-	if (!moved)
-		failed_steps++
-	else
-		failed_steps = 0
-
-	if (failed_steps > 4)
-		patrol_path = null
-		next_dest = null
-		failed_steps = 0
-
-/obj/machinery/bot/cleanbot/proc/move_to_target()
-	if(!isturf(loc))
-		return
-
-	if(src.path.len > 0)
-		step_to(src, src.path[1])
-		src.path -= src.path[1]
-
-	if(src.loc == src.target)
-		clean(src.target)
-		path = list()
-
-/obj/machinery/bot/cleanbot/receive_signal(datum/signal/signal)
-	var/recv = signal.data["beacon"]
-	var/valid = signal.data["patrol"]
-	if(!recv || !valid)
-		return
-	to_chat(world, "received signal [recv] [valid]")
-	var/dist = get_dist(src, signal.source.loc)
-	to_chat(world, "[dist] [closest_dist] [signal.source.loc]")
-	if (dist < closest_dist && signal.source.loc != src.loc)
-		closest_dist = dist
-		closest_loc = signal.source.loc
-		next_dest = signal.data["next_patrol"]
-
-	if (recv == next_dest)
-		next_dest_loc = signal.source.loc
-		next_dest = signal.data["next_patrol"]
+/obj/machinery/bot/cleanbot/at_path_target()
+	clean(target)
+	oldtarget = target
+	target = null
+	return TRUE
 
 /obj/machinery/bot/cleanbot/proc/get_targets() //This seems slightly wasteful, but it will only be called approximately once every six rounds so whatever
 	blacklisted_targets = list()
@@ -306,20 +199,19 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	if(!src.crayon)
 		blacklisted_targets += (/obj/effect/decal/cleanable/crayon)
 
-/obj/machinery/bot/cleanbot/proc/clean(var/turf/target)
+/obj/machinery/bot/cleanbot/proc/clean(var/turf/target_turf)
+	target = null
 	anchored = 1
 	icon_state = "[src.icon_initial]-c"
 	visible_message("<span class='warning'>[src] begins to clean up the [target].</span>")
 	cleaning = 1
-	spawn(2 SECONDS)
-		for(var/obj/effect/decal/cleanable/C in target)
-			if(!(is_type_in_list(C,blacklisted_targets)))
-				spawn(5)
-				qdel(C)
-		src.cleaning = 0
-		icon_state = "[src.icon_initial][on]"
-		anchored = 0
-		target = null
+	for(var/obj/effect/decal/cleanable/C in target_turf)
+		if(!(is_type_in_list(C,blacklisted_targets)))
+			qdel(C)
+			sleep(5)
+	src.cleaning = 0
+	icon_state = "[src.icon_initial][on]"
+	anchored = 0
 
 /obj/machinery/bot/cleanbot/explode()
 	src.on = 0
@@ -336,7 +228,6 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	spark(src)
 	eject_integratedpai_if_present()
 	qdel(src)
-	return
 
 
 /obj/machinery/bot/cleanbot/roomba
@@ -479,14 +370,3 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		to_chat(P.pai, "<span class='info'><b>Welcome to your new body. Remember: you're a pAI inside a cleanbot, so get cleaning.</b></span>")
 		to_chat(P.pai, "<span class='info'>- Click on something: Scrub it clean.</span>")
 		to_chat(P.pai, "<span class='info'>If you want to exit the cleanbot, somebody has to right-click you and press 'Remove pAI'.</span>")
-
-/obj/machinery/bot/cleanbot/make_astar_path(var/atom/target, var/receiving_proc)
-	AStar(src, receiving_proc, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30, id=botcard, exclude=null)
-
-/obj/machinery/bot/cleanbot/proc/receive_patrol_path(var/list/L)
-	if(islist(L))
-		patrol_path = L
-
-/obj/machinery/bot/cleanbot/proc/receive_path(var/list/L)
-	if(islist(L))
-		path = L

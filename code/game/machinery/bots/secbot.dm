@@ -1,3 +1,5 @@
+//Secbot
+//Patrol, look for perps. If you find a perp, chase him and give him the spicy stick
 /obj/machinery/bot/secbot
 	name = "Securitron"
 	desc = "A little security robot.  He looks less than thrilled."
@@ -12,12 +14,10 @@
 	brute_dam_coeff = 0.5
 //	weight = 1.0E7
 	req_one_access = list(access_security, access_forensics_lockers)
-	var/mob/target
 	var/oldtarget_name
 	var/threatlevel = 0
 	var/target_lastloc //Loc of target when arrested.
 	var/last_found //There's a delay
-	var/frustration = 0
 	var/check_records = 1
 //	var/emagged = 0 //Emagged Secbots view everyone as a criminal
 
@@ -28,28 +28,8 @@
 	var/next_harm_time = 0
 
 	var/mode = 0
-
-	var/auto_patrol = 0		// set to make bot automatically patrol
-
-	var/beacon_freq = 1445		// navigation beacon frequency
-	var/control_freq = 1447		// bot control frequency
-
-
-	var/turf/patrol_target	// this is turf to navigate to (location of beacon)
-	var/new_destination		// pending new destination (waiting for beacon response)
-	var/destination			// destination description tag
-	var/next_destination	// the next destination in the patrol route
-	var/list/path = new				// list of path turfs
-
 	var/blockcount = 0		//number of times retried a blocked path
-	var/awaiting_beacon	= 0	// count of pticks awaiting a beacon response
-
-	var/nearest_beacon			// the nearest beacon's tag
-	var/turf/nearest_beacon_loc	// the nearest beacon's location
-
 	var/arrest_message = null //unique arrest message for beepsky variants
-
-
 
 	var/list/unsafe_weapons = list( //things that the secbot will check for
 		/obj/item/weapon/gun,
@@ -71,16 +51,17 @@
 		/obj/machinery/door/mineral/cult,
 		)
 	light_color = LIGHT_COLOR_RED
-	power_change()
-		..()
-		if(src.on)
-			set_light(2)
-		else
-			set_light(0)
-
+	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL
 	var/obj/item/weapon/melee/baton/baton = null
 	var/baton_type = /obj/item/weapon/melee/baton/
 	var/secbot_assembly_type = /obj/item/weapon/secbot_assembly/
+
+/obj/machinery/bot/secbot/power_change()
+	..()
+	if(src.on)
+		set_light(2)
+	else
+		set_light(0)
 
 /obj/machinery/bot/secbot/beepsky
 	name = "Officer Beep O'sky"
@@ -96,17 +77,13 @@
 	item_state = "helmet"
 	var/build_step = 0
 	var/created_name = "Securitron" //To preserve the name if it's a unique securitron I guess
-
+/*
 /obj/machinery/bot/secbot/New()
 	..()
-	src.icon_state = "[src.icon_initial][src.on]"
-	spawn(3)
-		src.botcard = new /obj/item/weapon/card/id(src)
-		var/datum/job/detective/J = new/datum/job/detective
-		src.botcard.access = J.get_access()
-		if(radio_controller)
-			radio_controller.add_object(src, control_freq, filter = RADIO_SECBOT)
-			radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
+	icon_state = "[src.icon_initial][src.on]"
+	botcard = new /obj/item/weapon/card/id(src)
+	var/datum/job/detective/J = new/datum/job/detective
+	botcard.access = J.get_access()
 
 
 /obj/machinery/bot/secbot/turn_on()
@@ -247,27 +224,16 @@ Auto Patrol: []"},
 		src.icon_state = "[src.icon_initial][src.on]"
 		mode = SECBOT_IDLE
 
-/obj/machinery/bot/secbot/process()
-	//set background = 1
-
-	if(!src.on)
-		return
-
+/obj/machinery/bot/secbot/process_bot()
 	switch(mode)
-
 		if(SECBOT_IDLE)		// idle
-
 			start_walk_to(0)
 			look_for_perp()	// see if any criminals are in range
 			if(!mode && auto_patrol)	// still idle, and set to patrol
 				mode = SECBOT_START_PATROL	// switch to patrol mode
-
 		if(SECBOT_HUNT)		// hunting for perp
-
 			// if can't reach perp for long enough, go idle
 			if(src.frustration >= 8)
-		//		for(var/mob/O in hearers(src, null))
-//					to_chat(O, "<span class='game say'><span class='name'>[src]</span> beeps, \"Backup requested! Suspect has evaded arrest.\"")
 				src.target = null
 				src.last_found = world.time
 				src.frustration = 0
@@ -410,27 +376,8 @@ Auto Patrol: []"},
 				speak("Engaging patrol mode.")
 
 
-		if(SECBOT_PATROL)		// patrol mode
-			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/2))
-			patrol_step()
-			spawn(SS_WAIT_MACHINERY/2)
-				if(mode == SECBOT_PATROL)
-					patrol_step()
-
-		if(SECBOT_SUMMON)		// summoned to PDA
-			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/3))
-			patrol_step()
-			spawn(SS_WAIT_MACHINERY/3)
-				if(mode == SECBOT_SUMMON)
-					patrol_step()
-					spawn(SS_WAIT_MACHINERY/3)
-					patrol_step()
-
-	return
-
-
 // perform a single patrol step
-
+/*
 /obj/machinery/bot/secbot/proc/patrol_step()
 	to_chat(world, "patrol step called")
 	if(!isturf(loc))
@@ -508,21 +455,15 @@ Auto Patrol: []"},
 	new_destination = new_dest
 	post_signal(beacon_freq, "findbeacon", "patrol")
 	awaiting_beacon = 1
-
+*/
 
 // receive a radio signal
 // used for beacon reception
 
 /obj/machinery/bot/secbot/receive_signal(datum/signal/signal)
-	//log_admin("DEBUG \[[world.timeofday]\]: /obj/machinery/bot/secbot/receive_signal([signal.debug_print()])")
-	if(!on)
-		return
-
-	/*
-	to_chat(world, "rec signal: [signal.source]")
-	for(var/x in signal.data)
-		to_chat(world, "* [x] = [signal.data[x]]")
-	*/
+	.=..()
+	if(.)
+		return .
 
 	var/recv = signal.data["command"]
 	// process all-bot input
@@ -551,40 +492,6 @@ Auto Patrol: []"},
 				mode = SECBOT_SUMMON
 				calc_path()
 				speak("Responding.")
-
-				return
-
-
-
-	// receive response from beacon
-	recv = signal.data["beacon"]
-	var/valid = signal.data["patrol"]
-	if(!recv || !valid)
-		return
-
-	if(recv == new_destination)	// if the recvd beacon location matches the set destination
-								// the we will navigate there
-		destination = new_destination
-		patrol_target = signal.source.loc
-		next_destination = signal.data["next_patrol"]
-		awaiting_beacon = 0
-
-	// if looking for nearest beacon
-	else if(new_destination == "__nearest__")
-		var/dist = get_dist(src,signal.source.loc)
-		if(nearest_beacon)
-
-			// note we ignore the beacon we are located at
-			if(dist>1 && dist<get_dist(src,nearest_beacon_loc))
-				nearest_beacon = recv
-				nearest_beacon_loc = signal.source.loc
-				return
-			else
-				return
-		else if(dist > 1)
-			nearest_beacon = recv
-			nearest_beacon_loc = signal.source.loc
-	return
 
 
 // send a radio signal with a single data key/value pair
@@ -628,9 +535,7 @@ Auto Patrol: []"},
 
 // calculates a path to the current destination
 // given an optional turf to avoid
-/obj/machinery/bot/secbot/proc/calc_path(var/turf/avoid = null)
-	AStar(src, .proc/receive_path, src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 120, id=botcard, exclude=avoid)
-
+/obj/machinery/bot/secbot/
 /obj/machinery/bot/secbot/proc/receive_path(var/list/L)
 	to_chat(world, "receive path called. [L?.len]")
 	if(!islist(L))
@@ -869,7 +774,7 @@ Auto Patrol: []"},
 	var/area/location = get_area(src)
 	declare_message = "<span class='info'>[bicon(src)] [name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] scumbag <b>[target]</b> in <b>[location]</b></span>"
 	..()
-
+*/
 /obj/machinery/bot/secbot/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in ed209bot.dm
 	if(is_type_in_list(slot_item, unsafe_weapons))
 		if(!(slot_item.type in safe_weapons))
@@ -888,16 +793,7 @@ Auto Patrol: []"},
 	if(istype(baton) && baton.bcell && baton.bcell.rigged && is_holder_of(src, baton))
 		if(baton.bcell.explode())
 			explode()
-
-/obj/machinery/bot/secbot/beepsky/cheapsky
-	name = "Officer Cheapsky"
-	desc = "The budget cuts have hit Security the hardest."
-	icon = 'icons/obj/aibots.dmi'
-	icon_state = "cheapsky0"
-	icon_initial = "cheapsky"
-	health = 15
-	maxhealth = 15
-
+/*
 /obj/machinery/bot/secbot/beepsky/cheapsky/look_for_perp()
 	..()
 	if(target)
@@ -1038,7 +934,15 @@ Auto Patrol: []"},
 	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
 	O.New(O.loc)
 	qdel(src)
-
+*/
+/obj/machinery/bot/secbot/beepsky/cheapsky
+	name = "Officer Cheapsky"
+	desc = "The budget cuts have hit Security the hardest."
+	icon = 'icons/obj/aibots.dmi'
+	icon_state = "cheapsky0"
+	icon_initial = "cheapsky"
+	health = 15
+	maxhealth = 15
 //Cheapsky Construction
 
 /obj/item/weapon/secbot_assembly/cheapsky

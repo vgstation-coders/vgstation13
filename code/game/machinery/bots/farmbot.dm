@@ -46,20 +46,15 @@
 	//var/setting_ignoreWeeds = 1 //These don't seem to do anything
 	//var/setting_ignoreMushrooms = 1
 	var/setting_ignoreEmpty = 0
-
-	var/atom/target //Current target, can be a human, a hydroponics tray, or a sink
 	var/mode //Which mode is being used, 0 means it is looking for work
 
 	var/obj/structure/reagent_dispensers/watertank/tank // the water tank that was used to make it, remains inside the bot.
-
-	var/list/path = list() // used for pathing
-	var/frustration
 
 /obj/machinery/bot/farmbot/vox_garden_farmbot
 	name = "Special Vox Trader Farmbot"
 	req_access = list()
 	req_one_access =  list(access_hydroponics, access_trade)
-
+/*
 /obj/machinery/bot/farmbot/New()
 	..()
 	src.icon_state = "[src.icon_initial][src.on]"
@@ -490,7 +485,7 @@
 		src.mode = 0
 		tank.reagents.add_reagent(WATER, tank.reagents.maximum_volume - tank.reagents.total_volume )
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-
+*/
 
 /obj/item/weapon/farmbot_arm_assembly
 	name = "water tank/robot arm assembly"

@@ -30,19 +30,15 @@ var/global/mulebot_count = 0
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	can_take_pai = TRUE
-	var/beacon_freq = 1400
-	var/control_freq = 1447
+	beacon_freq = 1400
+	control_freq = 1447
+	control_filter = RADIO_MULEBOT
 
 	suffix = ""
 
-	var/turf/target				// this is turf to navigate to (location of beacon)
 	var/loaddir = 0				// this the direction to unload onto/load from
-	var/new_destination = ""	// pending new destination (waiting for beacon response)
-	var/destination = ""		// destination description
 	var/home_destination = "" 	// tag of home beacon
 	req_access = list(access_cargo) // added robotics access so assembly line drop-off works properly -veyveyr //I don't think so, Tim. You need to add it to the MULE's hidden robot ID card. -NEO
-	var/list/path = list()
-
 	var/mode = MODE_IDLE		//0 = idle/ready
 						//1 = loading/unloading
 						//2 = moving to deliver
@@ -51,9 +47,6 @@ var/global/mulebot_count = 0
 						//5 = computing navigation
 						//6 = waiting for nav computation
 						//7 = no destination beacon found (or no route)
-
-	var/blockcount	= 0		//number of times retried a blocked path
-	var/reached_target = 1 	//true if already reached the target
 
 	var/refresh = 1		// true to refresh dialogue
 	var/auto_return = 1	// true if auto return to home beacon after unload
@@ -82,6 +75,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/get_cell()
 	return cell
 
+/*
 /obj/machinery/bot/mulebot/New()
 	..()
 	wires = new(src)
@@ -721,7 +715,7 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/alter_health()
 	return get_turf(src)
-
+*/
 // called from mob/living/carbon/human/Crossed() as well as .../alien/Crossed()
 /obj/machinery/bot/mulebot/proc/RunOverCreature(var/mob/living/H,var/bloodcolor)
 	if(integratedpai && coolingdown)
@@ -747,7 +741,7 @@ var/global/mulebot_count = 0
 	coolingdown = TRUE
 	spawn(run_over_cooldown)
 		coolingdown = FALSE
-
+/*
 // player INSIDE mulebot attempted to move
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)
 	unload()
@@ -982,3 +976,4 @@ var/global/mulebot_count = 0
 			togglePanelOpen(null, L)
 		if(wires)
 			wires.npc_tamper(L)
+*/

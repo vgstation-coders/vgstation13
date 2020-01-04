@@ -23,9 +23,6 @@
 
 	var/blocks_air = 0
 
-	//associated PathNode in the A* algorithm
-	var/PathNode/PNode = null
-
 	// Bot shit
 	var/targetted_by=null
 

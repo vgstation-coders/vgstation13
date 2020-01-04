@@ -123,10 +123,6 @@ var/global/list/pathmakers = list()
 /datum/path_maker/Destroy()
 	pathmakers.Remove(src)
 	//cleaning after us
-	for(var/PathNode/PN in open.L)
-		PN.source.PNode = null
-	for(var/turf/T in closed)
-		T.PNode = null
 	owner = null
 	start = null
 	end = null
@@ -141,6 +137,11 @@ var/global/list/pathmakers = list()
 	if(path)
 		return finish()
 	cur = open.Dequeue() //get the lowest node cost turf in the open list
+	if(!cur)
+		to_chat(world, "cur is 0 [cur]. ")
+		for(var/i in open.List())
+			to_chat(world, "[i]")
+		return qdel(src)
 	closed.Add(cur.source) //and tell we've processed it
 
 	//if we only want to get near the target, check if we're close enough
@@ -175,18 +176,20 @@ var/global/list/pathmakers = list()
 			continue
 
 		var/newenddist = call(T,dist)(end)
-		if(!T.PNode) //is not already in open list, so add it
+		var/PathNode/PNode = find_PNode(T, open.List())
+		if(!PNode) //is not already in open list, so add it
 			open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1))
 			if(debug && T.color != "#00ff00")
 				T.color = "#0000ff" //blue
 		else //is already in open list, check if it's a better way from the current turf
-			if(newenddist < T.PNode.distance_from_end)
+			if(newenddist < PNode.distance_from_end)
 				if(debug)
 					T.color = "#00ff00" //green
-				T.PNode.prevNode = cur
-				T.PNode.distance_from_start = newenddist
-				T.PNode.calc_f()
-				open.ReSort(T.PNode)//reorder the changed element in the list
+				PNode.prevNode = cur
+				PNode.distance_from_end = newenddist
+				PNode.calc_f()
+				if(!open.ReSort(PNode))//reorder the changed element in the list
+					open.Enqueue(PNode)
 
 /datum/path_maker/proc/finish()
 	//if the path is longer than maxnodes, then don't return it

@@ -1,4 +1,13 @@
 // AI (i.e. game AI, not the AI player) controlled bots
+#define BOT_PATROL 1
+#define BOT_BEACON 2
+#define BOT_CONTROL 4
+
+#define SEC_BOT 1 // Secutritrons (Beepsky) and ED-209s
+#define MULE_BOT 2 // MULEbots
+#define FLOOR_BOT 3 // Floorbots
+#define CLEAN_BOT 4 // Cleanbots
+#define MED_BOT 5 // Medibots
 
 /obj/machinery/bot
 	icon = 'icons/obj/aibots.dmi'
@@ -17,18 +26,42 @@
 	var/locked = 1
 	var/bot_type
 	var/declare_message = "" //What the bot will display to the HUD user.
-	#define SEC_BOT 1 // Secutritrons (Beepsky) and ED-209s
-	#define MULE_BOT 2 // MULEbots
-	#define FLOOR_BOT 3 // Floorbots
-	#define CLEAN_BOT 4 // Cleanbots
-	#define MED_BOT 5 // Medibots
-	//var/emagged = 0 //Urist: Moving that var to the general /bot tree as it's used by most bots
+	var/bot_flags
+
+	var/frustration
+
+	var/new_destination		// pending new destination (waiting for beacon response)
+	var/destination			// destination description tag
+	var/next_destination	// the next destination in the patrol route
+
+	var/target 				//The target of our path, could be a turf, could be a person, could be mess
+	var/oldtarget			//Our previous target, so we don't get caught constantly going to the same spot
+	var/list/path = list() //Our regular path
+
+	var/beacon_freq = 1445		// navigation beacon frequency
+	var/control_freq = 1447		// bot control frequency
+	var/control_filter = RADIO_SECBOT
+
+	var/awaiting_beacon //If we've sent out a signal to get a beacon
+	var/nearest_beacon //What our nearest beacon is
+	var/turf/nearest_beacon_loc //The turf of our nearest beacon
+
+	var/type_for_sig = "secbot"
+	var/turf/patrol_target	// this is turf to navigate to (location of beacon)
+	var/auto_patrol = 0		// set to make bot automatically patrol
+	var/list/patrol_path = list() //Our patroling path
+
 
 /obj/machinery/bot/New()
 	for(var/datum/event/ionstorm/I in events)
 		if(istype(I) && I.active)
 			I.bots += src
 	bots_list += src
+	if(radio_controller)
+		if(bot_flags & BOT_CONTROL)
+			radio_controller.add_object(src, control_freq, filter = control_filter)
+		if(bot_flags & BOT_BEACON)
+			radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 	..()
 
 /obj/machinery/bot/Destroy()
@@ -37,6 +70,189 @@
 		qdel(botcard)
 		botcard = null
 	bots_list -= src
+	nearest_beacon_loc = null
+	patrol_target = null
+	nearest_beacon = null
+	patrol_path.Cut()
+	path.Cut()
+
+/obj/machinery/bot/process()
+	if(!src.on)
+		return
+	process_pathing()
+	process_bot()
+
+/obj/machinery/bot/proc/find_target()
+
+//Regular path takes priority over the patrol path
+/obj/machinery/bot/proc/process_pathing()
+	if(!process_path() && (bot_flags & BOT_PATROL) && auto_patrol)
+		process_patrol()
+
+//If we don't have a path, we get a path
+//If we have a path, we step
+//return true to avoid calling process_patrol
+/obj/machinery/bot/proc/process_path()
+	if(!path.len) //It is assumed we gain a path through process_bot()
+		if(target)
+			calc_path(target, .proc/get_path)
+			return 1
+		return 0
+	to_chat(world, "process_path called [src] [path.len]")
+	patrol_path = list() //Kill any patrols we're making
+	if(loc == get_turf(target))
+		return at_path_target()
+
+	var/turf/next = path[1]
+	if(istype(next, /turf/simulated))
+		step_to(src, next)
+		if(get_turf(src) == next)
+			frustration = 0
+			path -= next
+			return on_path_step(next)
+		frustration++
+		return on_path_step_fail(next)
+
+/obj/machinery/bot/proc/on_path_step(var/turf/next)
+	return TRUE
+
+/obj/machinery/bot/proc/on_path_step_fail(var/turf/next)
+	if(frustration > 5)
+		calc_path(target, .proc/get_path, next)
+
+/obj/machinery/bot/proc/at_path_target()
+
+/obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null)
+	ASSERT(target && proc_to_call)
+	to_chat(world, "[new_destination]")
+	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 120, id=botcard, exclude=avoid)
+
+/obj/machinery/bot/proc/get_path(var/list/L, var/target)
+	if(islist(L))
+		path = L
+		return TRUE
+	return FALSE
+
+/obj/machinery/bot/proc/get_patrol_path(var/list/L, var/target)
+	if(islist(L))
+		patrol_path = L
+		return TRUE
+	return FALSE
+
+//Same as process_path. If we don't have a path, we get a path.
+//If we have a path, we take a step on that path
+/obj/machinery/bot/proc/process_patrol()
+	if(!patrol_path.len)
+		return find_patrol_path()
+	to_chat(world, "process patrol called [src] [patrol_path.len]")
+	if(loc == patrol_target)
+		path = list()
+		return at_patrol_target()
+
+	var/turf/next = patrol_path[1]
+	if(istype(next, /turf/simulated))
+		step_to(src, next)
+		if(get_turf(src) == next)
+			frustration = 0
+			patrol_path -= next
+			return on_patrol_step(next)
+		frustration++
+		return on_patrol_step_fail(next)
+
+/obj/machinery/bot/proc/find_patrol_path()
+	if(awaiting_beacon++)
+		if(awaiting_beacon > 5)
+			awaiting_beacon = 0
+			find_nearest_beacon()
+		return
+	if(next_destination)
+		set_destination(next_destination)
+
+	if(patrol_target)
+		calc_path(patrol_target, .proc/get_patrol_path)
+
+/obj/machinery/bot/proc/find_nearest_beacon()
+	to_chat(world, "find_nearest_beacon called")
+	if(awaiting_beacon)
+		return
+	nearest_beacon = null
+	new_destination = "__nearest__"
+	post_signal(beacon_freq, "findbeacon", "patrol")
+	awaiting_beacon = 1
+	spawn(10)
+		awaiting_beacon = 0
+		if(nearest_beacon)
+			set_destination(nearest_beacon)
+		else
+			auto_patrol = 0
+
+/obj/machinery/bot/proc/set_destination(var/new_dest)
+	to_chat(world, "new_destination [new_dest]")
+	new_destination = new_dest
+	post_signal(beacon_freq, "findbeacon", "patrol")
+	awaiting_beacon = 1
+
+/obj/machinery/bot/proc/at_patrol_target()
+	patrol_target = null
+	find_patrol_path()
+
+/obj/machinery/bot/proc/on_patrol_step(var/turf/next)
+
+/obj/machinery/bot/proc/on_patrol_step_fail(next)
+	if(frustration > 5)
+		calc_path(patrol_target, .proc/get_patrol_path, next)
+
+//misc stuff our bot may be doing (looking for people to heal, or hurt, or tile)
+/obj/machinery/bot/proc/process_bot()
+
+// send a radio signal with a single data key/value pair
+/obj/machinery/bot/proc/post_signal(var/freq, var/key, var/value)
+	post_signal_multiple(freq, list("[key]" = value) )
+
+/obj/machinery/bot/proc/post_signal_multiple(var/freq, var/list/keyval)
+	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
+
+	if(!frequency)
+		return
+
+	var/datum/signal/signal = getFromPool(/datum/signal)
+	signal.source = src
+	signal.transmission_method = 1
+	signal.data = keyval
+	if(signal.data["findbeacon"])
+		frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
+	else
+		frequency.post_signal(src, signal)
+
+/obj/machinery/bot/receive_signal(datum/signal/signal)
+	// receive response from beacon
+	var/recv = signal.data["beacon"]
+	var/valid = signal.data["patrol"]
+	if(!recv || !valid)
+		return 0
+	to_chat(world, "recv:[recv]. valid:[valid]. new_destination:[new_destination]. nearest_beacon: [nearest_beacon]. Next Dest: [signal.data["next_patrol"]]")
+	if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
+		to_chat(world, "new destination chosen")
+		destination = new_destination
+		patrol_target = signal.source.loc
+		next_destination = signal.data["next_patrol"]
+		awaiting_beacon = 0
+		return 1
+	// if looking for nearest beacon
+	if(new_destination == "__nearest__")
+		var/dist = get_dist(src,signal.source.loc)
+		if(nearest_beacon)
+			// note we ignore the beacon we are located at
+			if(dist>1 && dist<get_dist(src, nearest_beacon_loc))
+				to_chat(world, "replacing nearest_beacon [nearest_beacon] with recv as it is closer [recv]. [get_dist(src, nearest_beacon_loc)] [dist]")
+				nearest_beacon = recv
+				nearest_beacon_loc = signal.source.loc
+			return
+		else if(dist > 1) //We don't have a nearest beacon to compare to, so we're going to accept the first one we find that isn't on the same turf as us
+			to_chat(world, "new nearest_beacon is [recv]")
+			nearest_beacon = recv
+			nearest_beacon_loc = signal.source.loc
+		return 1
 
 /obj/machinery/bot/proc/turn_on()
 	if(stat)

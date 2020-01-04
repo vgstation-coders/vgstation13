@@ -102,7 +102,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 /PriorityQueue/proc/ReSort(var/atom/A)
 	var/i = Seek(A)
 	if(i == 0)
-		return
+		return 0
 	while(i < L.len && call(cmp)(L[i],L[i+1]) > 0)
 		L.Swap(i,i+1)
 		i++
@@ -129,7 +129,6 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	distance_from_start = ndistance_from_start
 	distance_from_end = ndistance_from_end
 	total_node_cost = distance_from_start + distance_from_end
-	source.PNode = src
 	nodecount = pnt
 
 /PathNode/proc/calc_f()
@@ -218,24 +217,18 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 				continue
 
 			var/newenddist = call(T,dist)(end)
-			if(!T.PNode) //is not already in open list, so add it
+			var/PathNode/PNode = find_PNode(T, open.List())
+			if(PNode) //is not already in open list, so add it
 				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1))
 			else //is already in open list, check if it's a better way from the current turf
-				if(newenddist < T.PNode.distance_from_end)
+				if(newenddist < PNode.distance_from_end)
 
-					T.PNode.prevNode = cur
-					T.PNode.distance_from_start = newenddist
-					T.PNode.calc_f()
-					open.ReSort(T.PNode)//reorder the changed element in the list
+					PNode.prevNode = cur
+					PNode.distance_from_start = newenddist
+					PNode.calc_f()
+					open.ReSort(PNode)//reorder the changed element in the list
 
 	}
-
-	//cleaning after us
-	for(var/PathNode/PN in open.L)
-		PN.source.PNode = null
-	for(var/turf/T in closed)
-		T.PNode = null
-
 	//if the path is longer than maxnodes, then don't return it
 	if(path && maxnodes && path.len > (maxnodes + 1))
 		return 0
@@ -253,6 +246,12 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 ///////////////////
 //A* helpers procs
 ///////////////////
+
+/proc/find_PNode(var/turf/T, var/list/L)
+	for(var/PathNode/P in L)
+		if(P.source == T)
+			return P
+	return 0
 
 // Returns true if a link between A and B is blocked
 // Movement through doors allowed if ID has access

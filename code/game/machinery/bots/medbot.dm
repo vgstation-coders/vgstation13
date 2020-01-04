@@ -33,11 +33,8 @@
 	var/list/botcard_access = list(access_medical)
 	var/obj/item/weapon/reagent_containers/glass/reagent_glass = null //Can be set to draw from this for reagents.
 	var/skin = null //Set to "tox", "ointment" or "o2" for the other two firstaid kits.
-	var/frustration = 0
-	var/list/path = list()
 	var/mob/living/carbon/patient = null
 	var/mob/living/carbon/oldpatient = null
-	var/oldloc = null
 	var/last_found = 0
 	var/last_newpatient_speak = 0 //Don't spam the "HEY I'M COMING" messages
 	var/currently_healing = 0
@@ -90,7 +87,7 @@
 		if(skin)
 			overlays += image('icons/obj/aibots.dmi', "kit_skin_[skin]")
 
-
+/*
 /obj/machinery/bot/medbot/New()
 	..()
 	icon_state = "[icon_initial][on]"
@@ -753,3 +750,4 @@
 		to_chat(P.pai, "<span class='info'>- Click on somebody: Depending on your mode, you inject or analyze a person.</span>")
 		to_chat(P.pai, "<span class='info'>What you inject depends on the medbot's configuration. You can't modify it</span>")
 		to_chat(P.pai, "<span class='info'>If you want to exit the medbot, somebody has to right-click you and press 'Remove pAI'.</span>")
+*/
