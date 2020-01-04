@@ -362,7 +362,7 @@
 	data["ore"] = list()
 	for(var/metal in ore.storage)
 		var/datum/material/M = ore.getMaterial(metal)
-		data["ore"][metal] = list("name" = M.name, "amount" = ore.getAmount(metal))
+		data["ore"][metal] = list("name" = M.name, "amount" = ore.getAmount(metal)/M.cc_per_sheet)
 
 	data["credits"] = credits
 
@@ -405,9 +405,6 @@
 
 		var/obj/item/stack/ore/O = A
 		if(!O.materials)
-			if(O.material) //legacy goonores
-				ore.addAmount(O.material, O.amount)
-				returnToPool(O)
 			continue
 
 		credits += O.materials.getValue()

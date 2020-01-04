@@ -149,10 +149,8 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		box = holder.pulling
 	if(box)
 		for(var/obj/item/stack/ore/ore in contents)
-			if(ore.material)
-				remove_from_storage(ore)
-				box.materials.addAmount(ore.material, ore.amount)
-				qdel(ore)
+			if(ore.materials)
+				remove_from_storage(ore,box)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(var/list/event_args, var/mob/holder)
 	if(isrobot(holder))

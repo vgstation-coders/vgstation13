@@ -6,16 +6,7 @@
 	icon_state = "ore2"
 	w_type = RECYK_MISC
 	max_amount = 100
-	var/material=null //legacy
 	var/datum/geosample/geologic_data
-
-/obj/item/stack/ore/recycle(var/datum/materials/rec)
-	if(!material && !materials)
-		return NOT_RECYCLABLE
-	if(materials)
-		return ..()
-	rec.addAmount(material, amount)
-	return w_type
 
 /obj/item/stack/ore/uranium
 	name = "Uranium ore"
@@ -87,35 +78,34 @@
 	name = "Plasma ore"
 	icon_state = "Plasma ore"
 	origin_tech = Tc_MATERIALS + "=2"
-	material=MAT_PLASMA
 	melt_temperature = MELTPOINT_STEEL+500
-	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_PLASMA)
 
 /obj/item/stack/ore/nanotrasite
 	name = "Nanotrasite ore"
 	icon_state = "Nanotrasite ore"
 	origin_tech = Tc_MATERIALS + "=3"
 	melt_temperature = MELTPOINT_STEEL+700
-	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL/2, MAT_PLASMA = CC_PER_SHEET_MISC/2)
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL/2, MAT_PLASMA = CC_PER_SHEET_PLASMA/2)
 
 /obj/item/stack/ore/silver
 	name = "Silver ore"
 	icon_state = "Silver ore"
 	origin_tech = Tc_MATERIALS + "=3"
-	starting_materials = list(MAT_SILVER = CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER)
 	melt_temperature = 961+T0C
 
 /obj/item/stack/ore/gold
 	name = "Gold ore"
 	icon_state = "Gold ore"
 	origin_tech = Tc_MATERIALS + "=4"
-	starting_materials = list(MAT_GOLD = CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD)
 	melt_temperature = 1064+T0C
 
 /obj/item/stack/ore/electrum
 	name = "Electrum ore"
 	icon_state = "Electrum ore"
-	starting_materials = list(MAT_GOLD = CC_PER_SHEET_MISC*0.6, MAT_SILVER = CC_PER_SHEET_MISC*0.4)
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD*0.6, MAT_SILVER = CC_PER_SHEET_SILVER*0.4)
 	origin_tech = Tc_MATERIALS + "=4"
 	melt_temperature = 1023.22+T0C //60% gold, 40% silver
 
@@ -123,14 +113,14 @@
 	name = "Diamond ore"
 	icon_state = "Diamond ore"
 	origin_tech = Tc_MATERIALS + "=6"
-	starting_materials = list(MAT_DIAMOND = 1750)
+	starting_materials = list(MAT_DIAMOND = CC_PER_SHEET_DIAMOND)
 
 /obj/item/stack/ore/clown
 	name = "Bananium ore"
 	icon_state = "Clown ore"
 	origin_tech = Tc_MATERIALS + "=4"
 	melt_temperature = MELTPOINT_GLASS
-	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_CLOWN)
 
 /obj/item/stack/ore/phazon
 	name = "Phazite"
@@ -138,7 +128,7 @@
 	icon_state = "Phazon ore"
 	origin_tech = Tc_MATERIALS + "=7"
 	melt_temperature = MELTPOINT_GLASS
-	starting_materials = list(MAT_PHAZON = 1500)
+	starting_materials = list(MAT_PHAZON = CC_PER_SHEET_PHAZON)
 
 /obj/item/stack/ore/slag
 	name = "Slag"
@@ -159,55 +149,60 @@
 
 /obj/item/stack/ore/mauxite
 	name = "mauxite ore"
-	desc = "A chunk of Mauxite, a sturdy common metal."
+	desc = "A chunk of Mauxite, a sturdy ore used on Clown Planet."
 	icon_state = "mauxite"
-	material="mauxite"
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*0.9, MAT_CLOWN = CC_PER_SHEET_CLOWN*0.1)
+
 /obj/item/stack/ore/molitz
 	name = "molitz crystal"
-	desc = "A crystal of Molitz, a common crystalline substance."
+	desc = "A crystal of Molitz, a rare crystalline substance."
 	icon_state = "molitz"
-	material="molitz"
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS*0.9, MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL*0.1)
+
 /obj/item/stack/ore/pharosium
 	name = "pharosium ore"
-	desc = "A chunk of Pharosium, a conductive metal."
+	desc = "A chunk of Pharosium, a conductive ore."
 	icon_state = "pharosium"
-	material="pharosium"
+	starting_materials = list(MAT_BRASS = CC_PER_SHEET_MISC*0.2, MAT_GOLD = CC_PER_SHEET_GOLD*0.8)
 // Common Cluster Ores
 
 /obj/item/stack/ore/cobryl
 	name = "cobryl ore"
-	desc = "A chunk of Cobryl, a somewhat valuable metal."
+	desc = "A chunk of Cobryl, a somewhat valuable ore."
 	icon_state = "cobryl"
-	material="cobryl"
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*0.8, MAT_SILVER = CC_PER_SHEET_SILVER*0.2)
+
 /obj/item/stack/ore/char
 	name = "char ore"
-	desc = "A heap of Char, a fossil energy source similar to coal."
+	desc = "A heap of Char, a fossil energy source that can be refined for plastic like oil."
 	icon_state = "char"
-	material="char"
+	starting_materials = list(MAT_PLASTIC = CC_PER_SHEET_MISC*0.5)
 // Rare Vein Ores
 
 /obj/item/stack/ore/claretine
 	name = "claretine ore"
 	desc = "A heap of Claretine, a highly conductive salt."
 	icon_state = "claretine"
-	material="claretine"
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD * 0.2, MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL * 0.4)
 /obj/item/stack/ore/bohrum
 	name = "bohrum ore"
-	desc = "A chunk of Bohrum, a heavy and highly durable metal."
+	desc = "A chunk of Bohrum, a heavy and highly durable ore."
 	icon_state = "bohrum"
-	material="bohrum"
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 3)
+
 /obj/item/stack/ore/syreline
 	name = "syreline ore"
-	desc = "A chunk of Syreline, an extremely valuable and coveted metal."
+	desc = "A chunk of Syreline, an extremely valuable and coveted ore."
 	icon_state = "syreline"
-	material="syreline"
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD*0.9,MAT_PHAZON = CC_PER_SHEET_PHAZON*0.1)
 // Rare Cluster Ores
 
 /obj/item/stack/ore/erebite
 	name = "erebite ore"
 	desc = "A chunk of Erebite, an extremely volatile high-energy mineral."
 	icon_state = "erebite"
-	material="erebite"
+	starting_materials = list(MAT_RALLOY = CC_PER_SHEET_MISC)
+
 /obj/item/stack/ore/erebite/ex_act()
 	explosion(src.loc,-1,0,2)
 	qdel(src)
@@ -220,7 +215,7 @@
 	name = "cerenkite ore"
 	desc = "A chunk of Cerenkite, a highly radioactive mineral."
 	icon_state = "cerenkite"
-	material="cerenkite"
+	starting_materials = list(MAT_URANIUM = CC_PER_SHEET_URANIUM * 2, MAT_GLASS = CC_PER_SHEET_GLASS * 0.2)
 
 /obj/item/stack/ore/cerenkite/ex_act()
 	var/L = get_turf(src)
@@ -244,7 +239,7 @@
 	name = "cytine"
 	desc = "A glowing Cytine gemstone, somewhat valuable but not paticularly useful."
 	icon_state = "cytine"
-	material="cytine"
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS * 0.1)
 /obj/item/stack/ore/cytine/New()
 	..()
 	color = pick("#FF0000","#0000FF","#008000","#FFFF00")
@@ -257,21 +252,21 @@
 
 /obj/item/stack/ore/uqill
 	name = "uqill nugget"
-	desc = "A nugget of Uqill, a rare and very dense stone."
+	desc = "A nugget of Uqill, a rare and very dense ore."
 	icon_state = "uqill"
-	material="uqill"
+	starting_materials = list(MAT_MYTHRIL = CC_PER_SHEET_MYTHRIL * 0.2, MAT_IRON = CC_PER_SHEET_METAL * 4)
 
 /obj/item/stack/ore/telecrystal
 	name = "telecrystal"
 	desc = "A large unprocessed telecrystal, a gemstone with space-warping properties."
 	icon_state = "telecrystal"
-	material=MAT_TELECRYSTAL
+	starting_materials = list(MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL)
 
 /obj/item/stack/ore/mythril
 	name = "mythril ore"
 	desc = "A naturally-occuring silver steel alloy."
 	icon_state = "cobryl"
-	material=MAT_MYTHRIL
+	starting_materials = list(MAT_MYTHRIL = CC_PER_SHEET_MYTHRIL)
 
 /obj/item/weapon/gibtonite
 	name = "Gibtonite ore"

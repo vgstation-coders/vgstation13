@@ -28,7 +28,7 @@
 	if(output && input)
 		var/obj/structure/ore_box/BOX = locate(/obj/structure/ore_box, input.loc)
 		if(BOX)
-			BOX.materials.makeAndRemoveOre(get_turf(output))
+			BOX.dump_everything()
 		var/obj/item/I = locate(/obj/item, input.loc)
 		if(I)
 			I.forceMove(get_turf(output))

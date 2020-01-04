@@ -421,7 +421,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype = /obj/item/ice_crystal
 
 /datum/material/mythril
-	name="mythril"
+	name="Mythril"
 	id=MAT_MYTHRIL
 	value=VALUE_MYTHRIL
 	oretype=/obj/item/stack/ore/mythril
@@ -432,119 +432,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.6
 	quality_mod = 1.5
 	armor_mod = 1.75
+	cc_per_sheet = CC_PER_SHEET_MYTHRIL
 
 /datum/material/telecrystal
-	name="telecrystal"
+	name="Telecrystal"
 	id=MAT_TELECRYSTAL
 	value=VALUE_TELECRYSTAL
 	oretype=/obj/item/stack/ore/telecrystal
 	sheettype=/obj/item/bluespace_crystal
 	cointype=null
-
-
-/* //Commented out to save save space in menus listing materials until they are used
-/datum/material/pharosium
-	name="Pharosium"
-	id="pharosium"
-	value=10
-	oretype=/obj/item/stack/ore/pharosium
-	sheettype=/obj/item/stack/sheet/mineral/pharosium
-	cointype=null
-
-/datum/material/char
-	name="Char"
-	id="char"
-	value=5
-	oretype=/obj/item/stack/ore/char
-	sheettype=/obj/item/stack/sheet/mineral/char
-	cointype=null
-
-
-/datum/material/claretine
-	name="Claretine"
-	id="claretine"
-	value=50
-	oretype=/obj/item/stack/ore/claretine
-	sheettype=/obj/item/stack/sheet/mineral/claretine
-	cointype=null
-
-
-/datum/material/bohrum
-	name="Bohrum"
-	id="bohrum"
-	value=50
-	oretype=/obj/item/stack/ore/bohrum
-	sheettype=/obj/item/stack/sheet/mineral/bohrum
-	cointype=null
-
-
-/datum/material/syreline
-	name="Syreline"
-	id="syreline"
-	value=70
-	oretype=/obj/item/stack/ore/syreline
-	sheettype=/obj/item/stack/sheet/mineral/syreline
-	cointype=null
-
-
-/datum/material/erebite
-	name="Erebite"
-	id="erebite"
-	value=50
-	oretype=/obj/item/stack/ore/erebite
-	sheettype=/obj/item/stack/sheet/mineral/erebite
-	cointype=null
-
-
-/datum/material/cytine
-	name="Cytine"
-	id="cytine"
-	value=30
-	oretype=/obj/item/stack/ore/cytine
-	sheettype=/obj/item/stack/sheet/mineral/cytine
-	cointype=null
-
-
-/datum/material/uqill
-	name="Uqill"
-	id="uqill"
-	value=90
-	oretype=/obj/item/stack/ore/uqill
-	sheettype=/obj/item/stack/sheet/mineral/uqill
-	cointype=null
-
-
-/datum/material/mauxite
-	name="Mauxite"
-	id="mauxite"
-	value=5
-	oretype=/obj/item/stack/ore/mauxite
-	sheettype=/obj/item/stack/sheet/mineral/mauxite
-	cointype=null
-
-
-/datum/material/cobryl
-	name="Cobryl"
-	id="cobryl"
-	value=30
-	oretype=/obj/item/stack/ore/cobryl
-	sheettype=/obj/item/stack/sheet/mineral/cobryl
-	cointype=null
-
-
-/datum/material/cerenkite
-	name="Cerenkite"
-	id="cerenkite"
-	value=50
-	oretype=/obj/item/stack/ore/cerenkite
-	sheettype=/obj/item/stack/sheet/mineral/cerenkite
-	cointype=null
-
-/datum/material/molitz
-	name="Molitz"
-	id="molitz"
-	value=10
-	oretype=/obj/item/stack/ore/molitz
-	sheettype=/obj/item/stack/sheet/mineral/molitz
-	cointype=null
-*/
+	cc_per_sheet = CC_PER_SHEET_TELECRYSTAL

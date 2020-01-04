@@ -61,15 +61,10 @@
 				continue
 
 			var/obj/item/stack/ore/O = I
-			if(!O.material)
+			if(!O.materials)
 				continue
 
-			ore.addAmount(O.material, O.amount)//1 per ore
-
-			var/datum/material/mat = ore.getMaterial(O.material)
-			if(!mat)
-				continue
-
+			ore.addFrom(O.materials, TRUE)
 			qdel(O)
 			user_cell.charge = max(user_cell.charge - PORTOSMELTER_POWER_DRAIN, 0)
 			sleep(1) //Small delay between each ore so the animation plays and your immulshions don't get ruined.

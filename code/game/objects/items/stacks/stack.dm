@@ -328,6 +328,7 @@
 			continue
 		S = new new_stack_type(loc)
 		S.amount = min(add_amount, S.max_amount)
+		S.update_materials()
 		add_amount -= S.amount
 	return S
 
