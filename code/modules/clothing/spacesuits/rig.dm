@@ -359,3 +359,45 @@
 		return
 
 	toggle_piece(HARDSUIT_GLOVES,wearer)
+
+/obj/item/clothing/suit/space/rig/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = TRUE)
+	if(!user)
+		return
+
+	var/list/data = list()
+
+	data["activated"] = activated
+
+	data["helmet"] =    (helmet ? "[helmet.name]" : "None.")
+	data["gauntlets"] = (gloves ? "[gloves.name]" : "None.")
+	data["boots"] =     (boots ?  "[boots.name]" :  "None.")
+	data["chest"] =     (chest ?  "[chest.name]" :  "None.")
+
+	data["charge"] =       cell ? cell.charge : 0
+	data["maxcharge"] =    cell ? cell.maxcharge : 0
+	data["chargestatus"] = cell ? Floor((cell.charge/cell.maxcharge)*50) : 0
+
+	var/list/module_list = list()
+	var/i = 1
+	for(var/obj/item/rig_module/module in installed_modules)
+		var/list/module_data = list(
+			"index" =             i,
+			"name" =              "[module.name]",
+			"desc" =              "[module.desc]",
+			"can_use" =           "[module.usable]",
+			"is_active" =         "[module.activated]",
+			"activecost" =        module.active_power_usage*10,
+			)
+
+		module_list += list(module_data)
+		i++
+
+	if(module_list.len)
+		data["modules"] = module_list
+
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	if (!ui)
+		ui = new(user, src, ui_key, ((src.loc != user) ? ai_interface_path : interface_path), interface_title, 750, 550)
+		ui.set_initial_data(data)
+		ui.open()
+		ui.set_auto_update(1)
