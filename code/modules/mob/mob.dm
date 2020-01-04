@@ -1499,6 +1499,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/Stat()
 	..()
 
+	statpanel("Status") //Default tab
 	if(client && client.holder && client.inactivity < 1200)
 		if(statpanel("MC"))
 			stat("Location:", "([x], [y], [z])")
