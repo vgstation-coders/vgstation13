@@ -42,6 +42,20 @@
 		//del(usr)
 		return
 
+	if(href_list["error"]) // A webpage imploded (window.onerror)
+		var/errmsg = href_list["error"]
+		var/source = href_list["source"]
+		var/lineno = text2num(href_list["lineno"])
+		var/colno = text2num(href_list["colno"])
+		var/user_agent = text2num(href_list["user_agent"])
+		var/platform = text2num(href_list["platform"])
+
+		to_chat(usr, "<span class='error javascript'>JS ERROR: [errmsg]</span> (logged)")
+		warning("JAVASCRIPT ERROR: ([src]) [errmsg]")
+		warning("  [source]@[lineno]:[colno]")
+		warning("  UA: [user_agent]")
+		warning("  PF: [platform]")
+
 	//Admin PM
 	if(href_list["priv_msg"])
 		var/client/C = locate(href_list["priv_msg"])

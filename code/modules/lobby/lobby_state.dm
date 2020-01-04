@@ -11,7 +11,7 @@ var/global/datum/lobby_controller/lobby = new
 	var/animation_url = null
 	var/playlist = null
 	var/song_url = null // URL.  Do not use the one from the media server, it's different for every user.
-	var/song_id = null // MD5 of the song from the media server.
+	var/song_md5 = null // MD5 of the song from the media server.
 
 /datum/lobby_controller/New()
 	..()
@@ -30,8 +30,12 @@ var/global/datum/lobby_controller/lobby = new
 	src.song_url = url
 	for(var/client/C in clients)
 		C.setLobbySongURL(url)
+/datum/lobby_controller/proc/setSongMD5(var/md5)
+	src.song_md5 = md5
+	for(var/client/C in clients)
+		C.setLobbySongMD5(md5)
 
-/datum/lobby_controller/proc/setPlaylist(var/id)
+/datum/lobby_controller/proc/setPlaylistID(var/id)
 	src.playlist = id
 	for(var/client/C in clients)
 		C.setLobbyPlaylistID(id)

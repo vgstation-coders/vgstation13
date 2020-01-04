@@ -17,7 +17,7 @@
 /client/proc/setLobbyPlaylistID(var/id)
 	src << output(list2params(list(id)), "[LOBBY_CONTROL]:setPlaylistID")
 
-/client/proc/setLobbySongID(var/id)
+/client/proc/setLobbySongMD5(var/id)
 	src << output(list2params(list(id)), "[LOBBY_CONTROL]:setSongMD5")
 
 /client/proc/setLobbySongURL(var/url)
@@ -25,10 +25,17 @@
 
 /client/proc/displayLobby()
 	var/list/query = list()
+	// Used in error reporting.
+	query["src"] = "\ref[src]"
+	// Used for admin shittery panel
+	query["ckey"] = "[src.ckey]"
+	// Also admin shittery panel
+	if(src.holder)
+		query["holder"] = "\ref[src.holder]"
 	if(lobby.song_url != null)
 		query["song_url"] = lobby.song_url
-	if(lobby.song_id != null)
-		query["song_id"] = lobby.song_id
+	if(lobby.song_md5 != null)
+		query["song_md5"] = lobby.song_md5
 	else if(lobby.playlist != null)
 		query["playlist"] = lobby.playlist
 	if(lobby.animation_id != null)
@@ -39,13 +46,7 @@
 		query["pool"] = lobby.pool
 	var/url="[config.vgws_base_url]/index.php/lobby"
 	url += buildurlquery(query)
-	/*url = {"
-	<html>
-		<body>
-			<iframe width='100%' height='100%' src="[url]"></iframe>
-		</body>
-	</html>
-	"}*/
+	// Yes, we have to redirect, because browse(link()) throws a fucking error
 	src << output("<html><head><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /></head><body><script>window.location='[url]';</script>Redirecting <a href=\"[url]\">here</a> due to a BYOND bug.</body></html>", LOBBY_CONTROL)
 	lobbyPlaying = TRUE
 	showLobbyControl(TRUE)

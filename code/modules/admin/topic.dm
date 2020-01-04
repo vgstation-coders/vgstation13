@@ -5563,6 +5563,42 @@
 				message_admins(msg)
 				updateRelWindow()
 
+	// Lobby system fuckery
+	if (href_list["lobby"])
+		if(!check_rights(R_FUN))
+			to_chat(usr, "<span class='warning'>You do not have +FUN, access denied.</span>")
+			return FALSE
+
+		if(href_list["setAnimationID"])
+			var/animid = sanitize(href_list["setAnimationID"])
+			if(animid == "")
+				animid = null
+				message_admins("[key_name(usr)] reset lobby animation.")
+			else:
+				message_admins("[key_name(usr)] set lobby animation ID to [animid]")
+			lobby.setAnimationID(animid)
+			return TRUE
+		if(href_list["setAnimationURL"])
+			var/url = sanitize(href_list["setAnimationURL"])
+			message_admins("[key_name(usr)] set lobby animation URL to [url]")
+			lobby.setAnimationURL(href_list["setAnimationURL"])
+			return TRUE
+
+		if(href_list["setPlaylistID"])
+			var/plid = sanitize(href_list["setPlaylistID"])
+			message_admins("[key_name(usr)] set lobby playlist ID to [plid]")
+			lobby.setPlaylistID(href_list["setPlaylistID"])
+
+		if(href_list["setSongMD5"])
+			var/md5 = sanitize(href_list["setSongMD5"])
+			message_admins("[key_name(usr)] set song MD5 to [md5]")
+			lobby.setSongMD5(href_list["setSongMD5"])
+			return TRUE
+		if(href_list["setSongURL"])
+			var/url = sanitize(href_list["setSongURL"])
+			message_admins("[key_name(usr)] set song URL to [url]")
+			lobby.setSongURL(href_list["setSongURL"])
+			return TRUE
 /datum/admins/proc/updateRelWindow()
 	var/text = list()
 	text += "<h3>Religions in game</h3>"
