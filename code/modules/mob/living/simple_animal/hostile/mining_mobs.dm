@@ -916,31 +916,6 @@ obj/item/asteroid/basilisk_hide/New()
 	gender = pick(MALE,FEMALE)
 	gives_milk = (FEMALE ? TRUE : FALSE)
 
-/mob/living/simple_animal/hostile/retaliate/goat/wooly/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	. = ..()
-	if(.)
-		//chance to go crazy and start wacking stuff
-		if(!enemies.len && prob(anger_chance))
-			Retaliate()
-
-		if(enemies.len && prob(10))
-			Calm()
-
-		if(locate(/obj/effect/plantsegment) in loc)
-			var/obj/effect/plantsegment/SV = locate(/obj/effect/plantsegment) in loc
-			SV.die_off()
-			if(prob(10))
-				say("Nom")
-
-		if(!pulledby)
-			for(var/direction in shuffle(alldirs))
-				var/step = get_step(src, direction)
-				if(step)
-					if(locate(/obj/effect/plantsegment) in step)
-						Move(step)
-
 /mob/living/simple_animal/hostile/scarybat/cave
 	name = "cave bats"
 	desc = "A nasty horde of bloodsuckers. They're extra tough."

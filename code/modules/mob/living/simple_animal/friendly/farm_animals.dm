@@ -42,7 +42,7 @@
 	. = ..()
 	if(.)
 		//chance to go crazy and start wacking stuff
-		if(!enemies.len && prob(1))
+		if(!enemies.len && prob(anger_chance))
 			Retaliate()
 
 		if(enemies.len && prob(10))
