@@ -92,7 +92,7 @@
 	for(var/O in materials.storage)
 		if(materials.storage[O] > 0)
 			var/datum/material/mat = materials.getMaterial(O)
-			dat += text("[capitalize(mat.processed_name)]: [materials.storage[O]/O.cc_per_sheet] <A href='?src=\ref[src];release=[mat.id]'>Release</A><br>")
+			dat += text("[capitalize(mat.processed_name)]: [materials.storage[O]/mat.cc_per_sheet] <A href='?src=\ref[src];release=[mat.id]'>Release</A><br>")
 
 	dat += text("<br>This unit can hold stacks of [stack_amt] sheets of each mineral type.<br><br>")
 
