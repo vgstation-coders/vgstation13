@@ -59,7 +59,7 @@
 
 	add_fingerprint(user)
 
-	if(iswrench(W) && !busy)
+	if(W.is_wrench(user) && !busy)
 		if(lantern)
 			user << "<span class='warning'>Remove \the [lantern] from \the [src] first.</span>"
 			return

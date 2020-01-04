@@ -1415,6 +1415,9 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/is_screwdriver(var/mob/user)
 	return FALSE
 
+/obj/item/proc/is_wrench(var/mob/user)
+	return FALSE
+
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	return

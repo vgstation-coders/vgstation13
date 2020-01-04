@@ -75,6 +75,7 @@
 	health = 75
 	melee_damage_lower=10
 	melee_damage_upper=40
+	faction = "mining"
 
 /mob/living/simple_animal/hostile/bear/spare
 	name = "spare bear"

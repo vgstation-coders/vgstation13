@@ -1120,7 +1120,7 @@ var/global/list/airalarm_presets = list(
 				update_icon()
 				return
 
-			else if(iswrench(W))
+			else if(W.is_wrench(user))
 				to_chat(user, "You remove the air alarm assembly from the wall!")
 				new /obj/item/mounted/frame/alarm_frame(get_turf(user))
 				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
@@ -1303,7 +1303,7 @@ FIRE ALARM
 					buildstage = 1
 					update_icon()
 
-				else if(iswrench(W))
+				else if(W.is_wrench(user))
 					to_chat(user, "You remove the fire alarm assembly from the wall!")
 					new /obj/item/mounted/frame/firealarm(get_turf(user))
 					playsound(src, 'sound/items/Ratchet.ogg', 50, 1)

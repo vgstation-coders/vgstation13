@@ -53,6 +53,57 @@
 	security_shuttle.name = "Northeast Station Shuttle"
 	security_shuttle.req_access = list()
 
+/obj/abstract/screen/Click(location, control, params)
+	if(!usr)
+		return 1
+
+	switch(name)
+		if("Jump Northwest / View Core")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.view_core()
+		if("Jump South")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				var/area/A = locate(/area/hallway/secondary/exit)
+				AI.jump_to_area(A)
+		if("Jump Northeast")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				var/area/A = locate(/area/wreck/engineering) //This is the area used for Snaxi Northeast Bridge
+				AI.jump_to_area(A)
+
+#define ui_jump_2 "SOUTH+1:[6*PIXEL_MULTIPLIER],WEST:0"
+#define ui_jump_3 "SOUTH+1:[6*PIXEL_MULTIPLIER],WEST:[32*PIXEL_MULTIPLIER]"
+/datum/map/active/give_AI_jumps(var/list/L)
+	//do not call parent, we have our own AI core button
+	var/obj/abstract/screen/using
+	//Jump to Core/Northwest
+	using = getFromPool(/obj/abstract/screen)
+	using.name = "Jump Northwest / View Core"
+	using.icon = 'icons/mob/screen_ai.dmi'
+	using.icon_state = "northwest"
+	using.screen_loc = ui_jump_2
+	L += using
+
+	//Jump to Northeast
+	using = getFromPool(/obj/abstract/screen)
+	using.name = "Jump Northeast"
+	using.icon = 'icons/mob/screen_ai.dmi'
+	using.icon_state = "northeast"
+	using.screen_loc = ui_jump_3
+	L += using
+
+	//Jump to South
+	using = getFromPool(/obj/abstract/screen)
+	using.name = "Jump South"
+	using.icon = 'icons/mob/screen_ai.dmi'
+	using.icon_state = "south"
+	using.screen_loc = ui_ai_core //confusing, but this one is on bottom so it views better
+	L += using
+
+	return L
+
 // Making nodes every 5*5 tiles in a 100*100 radius
 // This makes (100*100)/(10*10) = 100 nodes
 

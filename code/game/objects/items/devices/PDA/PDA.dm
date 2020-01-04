@@ -2441,6 +2441,10 @@ obj/item/device/pda/AltClick()
 		if(SCANMODE_REAGENT)
 			if(!A.Adjacent(user))
 				return
+			if(iscryotube(A))
+				var/obj/machinery/atmospherics/unary/cryo_cell/T = A
+				if(T.occupant)
+					A = T.occupant
 			if(!isnull(A.reagents))
 				if(A.reagents.reagent_list.len > 0)
 					var/reagents_length = A.reagents.reagent_list.len

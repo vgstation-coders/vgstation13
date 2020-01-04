@@ -64,15 +64,16 @@
 	for(var/wizard_spell in getAllWizSpells())
 		var/spell/S = new wizard_spell
 		all_spells += wizard_spell
-		if (!S.holiday_required.len || (Holiday in S.holiday_required))
-			if(S.specialization == OFFENSIVE)
-				offensive_spells += wizard_spell
-			if(S.specialization == DEFENSIVE)
-				defensive_spells += wizard_spell
-			if(S.specialization == UTILITY)
-				utility_spells += wizard_spell
-			if(S.specialization == SPELL_SPECIALIZATION_DEFAULT)
-				misc_spells += wizard_spell
+		if(!S.holiday_required.len || (Holiday in S.holiday_required))
+			switch(S.specialization)
+				if(SSOFFENSIVE)
+					offensive_spells += wizard_spell
+				if(SSDEFENSIVE)
+					defensive_spells += wizard_spell
+				if(SSUTILITY)
+					utility_spells += wizard_spell
+				else
+					misc_spells += wizard_spell
 
 	for(var/T in available_artifacts)
 		available_artifacts.Add(new T) //Create a new object with the path T
@@ -153,78 +154,25 @@
 //<i>(Description)</i>
 //Requires robes to cast
 
-//I truly am sorry for this terrible copypaste, but there was no other way. - B2MTTF
 	if(shown_offensive_spells.len)
 		dat += "<span style=\"color:red\"><strong>OFFENSIVE SPELLS:</strong></span><br><br>"
 		for(var/spell_path in shown_offensive_spells)
-			var/spell/abstract_spell = spell_path
-			var/spell_name = initial(abstract_spell.name)
-			var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
-			var/spell_price = get_spell_price(abstract_spell)
-			dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
-			dat += "<em>[initial(abstract_spell.desc)]</em><br>"
-			var/flags = initial(abstract_spell.spell_flags)
-			var/list/properties = get_spell_properties(flags, user)
-			var/property_data
-			for(var/P in properties)
-				property_data += "[P] "
-			if(property_data)
-				dat += "<span style=\"color:blue\">[property_data]</span><br>"
-			dat += "<br>"
+			dat += build_description(user, spell_path)
 
 	if(shown_defensive_spells.len)
 		dat += "<span style=\"color:blue\"><strong>DEFENSIVE SPELLS:</strong></span><br><br>"
 		for(var/spell_path in shown_defensive_spells)
-			var/spell/abstract_spell = spell_path
-			var/spell_name = initial(abstract_spell.name)
-			var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
-			var/spell_price = get_spell_price(abstract_spell)
-			dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
-			dat += "<em>[initial(abstract_spell.desc)]</em><br>"
-			var/flags = initial(abstract_spell.spell_flags)
-			var/list/properties = get_spell_properties(flags, user)
-			var/property_data
-			for(var/P in properties)
-				property_data += "[P] "
-			if(property_data)
-				dat += "<span style=\"color:blue\">[property_data]</span><br>"
-			dat += "<br>"
+			dat += build_description(user, spell_path)
 
 	if(shown_utility_spells.len)
 		dat += "<span style=\"color:green\"><strong>UTILITY SPELLS:</strong></span><br><br>"
 		for(var/spell_path in shown_utility_spells)
-			var/spell/abstract_spell = spell_path
-			var/spell_name = initial(abstract_spell.name)
-			var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
-			var/spell_price = get_spell_price(abstract_spell)
-			dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
-			dat += "<em>[initial(abstract_spell.desc)]</em><br>"
-			var/flags = initial(abstract_spell.spell_flags)
-			var/list/properties = get_spell_properties(flags, user)
-			var/property_data
-			for(var/P in properties)
-				property_data += "[P] "
-			if(property_data)
-				dat += "<span style=\"color:blue\">[property_data]</span><br>"
-			dat += "<br>"
+			dat += build_description(user, spell_path)
 
 	if(shown_misc_spells.len)
 		dat += "<span style=\"color:orange\"><strong>MISCELLANEOUS SPELLS:</strong></span><br><br>"
 		for(var/spell_path in shown_misc_spells)
-			var/spell/abstract_spell = spell_path
-			var/spell_name = initial(abstract_spell.name)
-			var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
-			var/spell_price = get_spell_price(abstract_spell)
-			dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
-			dat += "<em>[initial(abstract_spell.desc)]</em><br>"
-			var/flags = initial(abstract_spell.spell_flags)
-			var/list/properties = get_spell_properties(flags, user)
-			var/property_data
-			for(var/P in properties)
-				property_data += "[P] "
-			if(property_data)
-				dat += "<span style=\"color:blue\">[property_data]</span><br>"
-			dat += "<br><br>"
+			dat += build_description(user, spell_path)
 
 	dat += "<hr><span style=\"color:purple\"><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong></span><br><small>* Non-refundable</small><br><br>"
 
@@ -258,6 +206,24 @@
 
 	user << browse(dat, "window=spellbook;size=[book_window_size]")
 	onclose(user, "spellbook")
+
+/obj/item/weapon/spellbook/proc/build_description(var/mob/user, var/spell_path) //Building sounds more coderlike doesn't it
+	var/dat
+	var/spell/abstract_spell = spell_path
+	var/spell_name = initial(abstract_spell.name)
+	var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+	var/spell_price = get_spell_price(abstract_spell)
+	dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+	dat += "<em>[initial(abstract_spell.desc)]</em><br>"
+	var/flags = initial(abstract_spell.spell_flags)
+	var/list/properties = get_spell_properties(flags, user)
+	var/property_data
+	for(var/P in properties)
+		property_data += "[P] "
+	if(property_data)
+		dat += "<span style=\"color:blue\">[property_data]</span><br>"
+	dat += "<br>"
+	return dat
 
 /obj/item/weapon/spellbook/proc/get_spell_properties(flags, mob/user)
 	var/list/properties = list()

@@ -184,6 +184,16 @@
 					icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 				else
 					icobase = 'icons/mob/human_races/vox/r_vox.dmi'
+		if(current_species.name == "Grey")
+			switch(s_tone)
+				if(4)
+					icobase = 'icons/mob/human_races/grey/r_greyblue.dmi'
+				if(3)
+					icobase = 'icons/mob/human_races/grey/r_greygreen.dmi'
+				if(2)
+					icobase = 'icons/mob/human_races/grey/r_greylight.dmi'
+				else
+					icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 		else
 			icobase = current_species.icobase
 	else

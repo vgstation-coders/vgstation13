@@ -6,12 +6,14 @@
 	icon_state = "ore2"
 	w_type = RECYK_MISC
 	max_amount = 100
-	var/material=null
+	var/material=null //legacy
 	var/datum/geosample/geologic_data
 
 /obj/item/stack/ore/recycle(var/datum/materials/rec)
-	if(material==null)
+	if(!material && !materials)
 		return NOT_RECYCLABLE
+	if(materials)
+		return ..()
 	rec.addAmount(material, amount)
 	return w_type
 
@@ -19,24 +21,24 @@
 	name = "Uranium ore"
 	icon_state = "Uranium ore"
 	origin_tech = Tc_MATERIALS + "=5"
-	material=MAT_URANIUM
 	melt_temperature = 1070+T0C
+	starting_materials = list(MAT_URANIUM = CC_PER_SHEET_MISC)
 
 /obj/item/stack/ore/iron
 	name = "Iron ore"
 	icon_state = "Iron ore"
 	origin_tech = Tc_MATERIALS + "=1"
-	material=MAT_IRON
 	melt_temperature = MELTPOINT_STEEL
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
 
 /obj/item/stack/ore/glass
 	name = "Sand"
 	icon_state = "Glass ore"
 	origin_tech = Tc_MATERIALS + "=1"
-	material=MAT_GLASS
 	melt_temperature = MELTPOINT_GLASS
 	slot_flags = SLOT_POCKET
 	throw_range = 1 //It just scatters to the ground as soon as you throw it.
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS)
 
 /obj/item/stack/ore/glass/cave
 	name = "cave sand"
@@ -87,41 +89,56 @@
 	origin_tech = Tc_MATERIALS + "=2"
 	material=MAT_PLASMA
 	melt_temperature = MELTPOINT_STEEL+500
+	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_MISC)
+
+/obj/item/stack/ore/nanotrasite
+	name = "Nanotrasite ore"
+	icon_state = "Nanotrasite ore"
+	origin_tech = Tc_MATERIALS + "=3"
+	melt_temperature = MELTPOINT_STEEL+700
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL/2, MAT_PLASMA = CC_PER_SHEET_MISC/2)
 
 /obj/item/stack/ore/silver
 	name = "Silver ore"
 	icon_state = "Silver ore"
 	origin_tech = Tc_MATERIALS + "=3"
-	material=MAT_SILVER
+	starting_materials = list(MAT_SILVER = CC_PER_SHEET_MISC)
 	melt_temperature = 961+T0C
 
 /obj/item/stack/ore/gold
 	name = "Gold ore"
 	icon_state = "Gold ore"
 	origin_tech = Tc_MATERIALS + "=4"
-	material=MAT_GOLD
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_MISC)
 	melt_temperature = 1064+T0C
+
+/obj/item/stack/ore/electrum
+	name = "Electrum ore"
+	icon_state = "Electrum ore"
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_MISC*0.6, MAT_SILVER = CC_PER_SHEET_MISC*0.4)
+	origin_tech = Tc_MATERIALS + "=4"
+	melt_temperature = 1023.22+T0C //60% gold, 40% silver
 
 /obj/item/stack/ore/diamond
 	name = "Diamond ore"
 	icon_state = "Diamond ore"
 	origin_tech = Tc_MATERIALS + "=6"
-	material=MAT_DIAMOND
+	starting_materials = list(MAT_DIAMOND = 1750)
 
 /obj/item/stack/ore/clown
 	name = "Bananium ore"
 	icon_state = "Clown ore"
 	origin_tech = Tc_MATERIALS + "=4"
-	material=MAT_CLOWN
 	melt_temperature = MELTPOINT_GLASS
+	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_MISC)
 
 /obj/item/stack/ore/phazon
 	name = "Phazite"
 	desc = "What the fuck?"
 	icon_state = "Phazon ore"
 	origin_tech = Tc_MATERIALS + "=7"
-	material=MAT_PHAZON
 	melt_temperature = MELTPOINT_GLASS
+	starting_materials = list(MAT_PHAZON = 1500)
 
 /obj/item/stack/ore/slag
 	name = "Slag"

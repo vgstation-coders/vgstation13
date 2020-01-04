@@ -160,7 +160,7 @@ LINEN BINS
 
 
 /obj/structure/bedsheetbin/attackby(obj/item/I as obj, mob/user as mob)
-	if(iswrench(I))
+	if(I.is_wrench(user))
 		wrenchAnchor(user, time_to_wrench = 2 SECONDS)
 		return
 	if(iswelder(I))
