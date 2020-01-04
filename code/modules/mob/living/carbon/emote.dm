@@ -279,28 +279,28 @@
 
 /datum/emote/living/carbon/sound/run_emote(mob/user, params)
 	var/mob/living/carbon/human/H = user
-	if (!istype(H))
+	if(!istype(H))
 		return ..()
-	if (H.stat == DEAD)
+	if(H.stat == DEAD)
 		return
 	if (!H.is_muzzled() && !issilent(H)) // Silent = mime, mute species.
-		if (params == TRUE) // Forced scream
+		if(params == TRUE) // Forced scream
 			if(world.time-H.last_emote_sound >= 30)//prevent scream spam with things like poly spray
 				if(sound_message)
 					message = sound_message
+				var/obj/item/clothing/C = search_sound_clothing(H, key)
 				var/sound
-				if (isvox(H) || isskelevox(H))
-					sound = pick(birb_sounds)
-
-				else
-					if(Holiday == APRIL_FOOLS_DAY && H.mind.assigned_role in science_positions && H.gender == MALE)
-						sound = pick(science_sounds) //ACK
+				if(!C)
+					if(isvox(H) || isskelevox(H))
+						sound = pick(birb_sounds)
 					else
 						switch(H.gender)
-							if (MALE)
+							if(MALE)
 								sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-							if (FEMALE)
+							if(FEMALE)
 								sound = pick(female_sounds)
+				else
+					sound = pick(C.sound_file)
 				playsound(user, sound, 50, 0)
 				H.last_emote_sound = world.time
 
@@ -308,3 +308,38 @@
 		message = "makes a very loud noise."
 
 	return ..()
+
+//A lengthy checks that returns the clothes to be used by other procs
+/datum/emote/living/carbon/sound/proc/search_sound_clothing(mob/living/carbon/human/user, var/sound_key)
+	var/selected_clothing //Check the clothing we've selected to be played
+	var/list/priority_high = list()
+	var/list/priority_med = list()
+	var/list/priority_low = list()
+	var/list/no_priority = list()
+	for(var/obj/item/clothing/C in user.get_equipped_items())
+		if(!C.sound_file)
+			continue
+		if(user.species && (user.species.name in C.sound_respect_species))
+			continue
+		if(!(sound_key in C.sound_change))
+			continue
+		switch(C.sound_priority)
+			if(CLOTHING_SOUND_HIGH_PRIORITY)
+				priority_high += C
+			if(CLOTHING_SOUND_MED_PRIORITY)
+				priority_med += C
+			if(CLOTHING_SOUND_LOW_PRIORITY)
+				priority_low += C
+			else
+				no_priority += C
+	if(!priority_high.len && !priority_med.len && !priority_low.len && !no_priority.len) //We didn't grab any clothing, stop the proc
+		return 0
+	if(priority_high.len)
+		selected_clothing = pick(priority_high)
+	else if(priority_med.len)
+		selected_clothing = pick(priority_med)
+	else if(priority_low.len)
+		selected_clothing = pick(priority_low)
+	else if(no_priority.len)
+		selected_clothing = pick(no_priority)
+	return selected_clothing

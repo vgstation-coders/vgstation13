@@ -34,7 +34,7 @@ var/list/climatecomps = list()
 			var/reported_temp = S.temperature - 273.15
 			var/reported_snow = S.snow_fluff_estimate
 			var/remaining_time = formatTimeDuration(C.current_weather.timeleft)
-			dat += "<b>Temperature:</b> <div class='line'>[reported_temp-273.15] Celcius</div>"
+			dat += "<b>Temperature:</b> <div class='line'>[reported_temp] Celcius</div>"
 			dat += "<b>Snowfall:</b> <div class='line'>[reported_snow] </div>"
 			dat += "<b>Next Meteorlogical Event:</b> <div class='line'>[remaining_time]</div>"
 			dat += "<b>Forecasted Snowfall:</b> <div class='line'>"
