@@ -56,7 +56,7 @@
 				to_chat(user, "<span class='warning'>Not enough power available in \the [user_cell]!</span>")
 				break
 
-			if(!istype(I, /obj/item/stack/ore)) //Check if it's an ore
+			if(!istype(I, /obj/item/stack/ore) || !I.materials) //Check if it's an ore
 				I.forceMove(get_turf(loc))
 				continue
 

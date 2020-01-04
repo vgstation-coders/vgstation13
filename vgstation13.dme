@@ -1612,6 +1612,7 @@
 #include "code\modules\mining\minerals.dm"
 #include "code\modules\mining\mint.dm"
 #include "code\modules\mining\ore_box.dm"
+#include "code\modules\mining\ore_redemption.dm"
 #include "code\modules\mining\ores_coins.dm"
 #include "code\modules\mining\smelting.dm"
 #include "code\modules\mining\surprise.dm"
