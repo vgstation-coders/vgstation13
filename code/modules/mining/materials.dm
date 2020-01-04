@@ -63,7 +63,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/value=0
 	for(var/mat_id in storage)
 		var/datum/material/mat = getMaterial(mat_id)
-		value += mat.value * storage[mat_id]
+		value += mat.value * (storage[mat_id]/mat.cc_per_sheet)
 	return value
 
 //Returns however much we have of that material
