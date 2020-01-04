@@ -59,8 +59,9 @@
 
 	switch(name)
 		if("Jump Northwest / View Core")
-			var/mob/living/silicon/ai/AI = usr
-			AI.view_core()
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.view_core()
 		if("Jump South")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
@@ -74,7 +75,7 @@
 
 #define ui_jump_2 "SOUTH+1:[6*PIXEL_MULTIPLIER],WEST:0"
 #define ui_jump_3 "SOUTH+1:[6*PIXEL_MULTIPLIER],WEST:[32*PIXEL_MULTIPLIER]"
-/datum/map/give_AI_jumps(var/list/L)
+/datum/map/active/give_AI_jumps(var/list/L)
 	//do not call parent, we have our own AI core button
 	var/obj/abstract/screen/using
 	//Jump to Core/Northwest
