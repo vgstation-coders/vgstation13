@@ -60,24 +60,16 @@
 				I.forceMove(get_turf(loc))
 				continue
 
-			var/obj/item/stack/ore/O = I
-			if(!O.material)
-				continue
+			ore.addFrom(I.materials, FALSE)
 
-			ore.addAmount(O.material, O.amount)//1 per ore
-
-			var/datum/material/mat = ore.getMaterial(O.material)
-			if(!mat)
-				continue
-
-			qdel(O)
+			qdel(I)
 			user_cell.charge = max(user_cell.charge - PORTOSMELTER_POWER_DRAIN, 0)
 			sleep(1) //Small delay between each ore so the animation plays and your immulshions don't get ruined.
 
 		for(var/datum/smelting_recipe/R in recipes)
 			while(R.checkIngredients(src)) //While we have materials for this
 				for(var/ore_id in R.ingredients)
-					ore.removeAmount(ore_id, 1)
+					ore.removeAmount(ore_id, R.ingredients[ore_id])
 					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
 
 				getFromPool(R.yieldtype, get_turf(loc))

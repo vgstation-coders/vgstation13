@@ -362,7 +362,10 @@
 	data["ore"] = list()
 	for(var/metal in ore.storage)
 		var/datum/material/M = ore.getMaterial(metal)
-		data["ore"][metal] = list("name" = M.name, "amount" = ore.getAmount(metal))
+		var/amount = ore.getAmount(metal)
+		if (M.default_show_in_menus || amount != 0)
+			// display 1 = 1 sheet in the interface.
+			data["ore"][metal] = list("name" = M.name, "amount" = amount / M.cc_per_sheet)
 
 	data["credits"] = credits
 
@@ -399,20 +402,13 @@
 		if(sheets_this_tick >= sheets_per_tick)
 			break
 
-		if(!istype(A, /obj/item/stack/ore))//Check if it's an ore
+		if(!istype(A, /obj/item/stack/ore) || !A.materials) // Check if it's an ore
 			A.forceMove(out_T)
 			continue
 
-		var/obj/item/stack/ore/O = A
-		if(!O.materials)
-			if(O.material) //legacy goonores
-				ore.addAmount(O.material, O.amount)
-				returnToPool(O)
-			continue
-
-		credits += O.materials.getValue()
-		ore.addFrom(O.materials, TRUE)
-		returnToPool(O)
+		credits += A.materials.getValue()
+		ore.addFrom(A.materials, FALSE)
+		returnToPool(A)
 
 /obj/machinery/mineral/processing_unit/process()
 	if(stat & (NOPOWER | BROKEN))

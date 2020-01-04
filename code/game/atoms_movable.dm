@@ -376,10 +376,7 @@
 
 /atom/movable/proc/recycle(var/datum/materials/rec)
 	if(materials)
-		for(var/matid in materials.storage)
-			var/datum/material/material = materials.getMaterial(matid)
-			rec.addAmount(matid, materials.storage[matid] / material.cc_per_sheet) //the recycler's material is read as 1 = 1 sheet
-			materials.storage[matid] = 0
+		rec.addFrom(materials, TRUE)
 		return 1
 	return 0
 
