@@ -153,6 +153,10 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	for(var/id in storage)
 		removeAmount(id, storage[id])
 
+/proc/get_material_cc_per_sheet(var/matID)
+	var/datum/material/mat = material_list[matID]
+	return mat.cc_per_sheet
+
 //HOOKS//
 /atom/proc/onMaterialChange(matID, amount)
 	return
@@ -163,7 +167,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/name=""
 	var/processed_name=""
 	var/id=""
-	var/cc_per_sheet=CC_PER_SHEET_MISC
+	var/cc_per_sheet=CC_PER_SHEET_DEFAULT
 	var/oretype=null
 	var/sheettype=null
 	var/cointype=null
@@ -177,6 +181,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/quality_mod = 1
 	var/melt_temperature = MELTPOINT_STEEL
 	var/armor_mod = 1
+	var/default_show_in_menus = TRUE // If false, stuff like the smelter won't show these *unless it has some*.
 
 
 /datum/material/New()
@@ -230,7 +235,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Diamond"
 	id=MAT_DIAMOND
 	value=VALUE_DIAMOND
-	cc_per_sheet = 1750
+	cc_per_sheet = CC_PER_SHEET_DIAMOND
 	oretype=/obj/item/stack/ore/diamond
 	sheettype=/obj/item/stack/sheet/mineral/diamond
 	cointype=/obj/item/weapon/coin/diamond
@@ -252,6 +257,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.2
 	sharpness_mod = 1.4
 	quality_mod = 1.3
+	cc_per_sheet = CC_PER_SHEET_PLASMA
 
 /datum/material/plasma/on_use(obj/source, atom/target, mob/user)
 	if(!..())
@@ -272,6 +278,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.5
 	quality_mod = 1.7
 	melt_temperature = MELTPOINT_GOLD
+	cc_per_sheet = CC_PER_SHEET_GOLD
 
 /datum/material/silver
 	name="Silver"
@@ -285,6 +292,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.7
 	quality_mod = 1.5
 	melt_temperature = MELTPOINT_SILVER
+	cc_per_sheet = CC_PER_SHEET_SILVER
 
 
 /datum/material/uranium
@@ -299,6 +307,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.2
 	quality_mod = 1.4
 	melt_temperature = MELTPOINT_URANIUM
+	cc_per_sheet = CC_PER_SHEET_URANIUM
 
 
 /datum/material/uranium/on_use(obj/source, atom/target, mob/user)
@@ -316,6 +325,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
 	melt_temperature = MELTPOINT_POTASSIUM
+	cc_per_sheet = CC_PER_SHEET_CLOWN
 
 /datum/material/clown/New()
 	if(!..())
@@ -349,6 +359,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 1.8
 	quality_mod = 2.2
 	melt_temperature = MELTPOINT_PLASMA
+	cc_per_sheet = CC_PER_SHEET_PHAZON
 
 /datum/material/phazon/on_use(obj/source, atom/target, mob/user)
 	if(!..())
@@ -373,6 +384,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/plastic
 	cointype=null
 	color = "#F8F8FF" //rgb: 248, 248, 255
+	cc_per_sheet = CC_PER_SHEET_PLASTIC
 
 /datum/material/cardboard
 	name="Cardboard"
@@ -381,7 +393,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=null
 	sheettype=/obj/item/stack/sheet/cardboard
 	cointype=null
-	cc_per_sheet = CC_PER_SHEET_METAL
+	cc_per_sheet = CC_PER_SHEET_CARDBOARD
 
 /datum/material/wood
 	name="Wood"
@@ -390,7 +402,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=null
 	sheettype=/obj/item/stack/sheet/wood
 	cointype=null
-	cc_per_sheet = CC_PER_SHEET_METAL
+	cc_per_sheet = CC_PER_SHEET_WOOD
 	color = "#663300" //rgb: 102, 51, 0
 
 /datum/material/brass
@@ -400,7 +412,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype = null
 	sheettype = /obj/item/stack/sheet/brass
 	cointype = null
-	cc_per_sheet = CC_PER_SHEET_METAL
+	cc_per_sheet = CC_PER_SHEET_BRASS
 	color = "#A97F1B"
 	melt_temperature = MELTPOINT_BRASS
 
@@ -411,7 +423,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype = null
 	sheettype = /obj/item/stack/sheet/ralloy
 	cointype = null
-	cc_per_sheet = CC_PER_SHEET_METAL
+	cc_per_sheet = CC_PER_SHEET_RALLOY
 	color = "#363636"
 
 /datum/material/ice
@@ -419,6 +431,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id = MAT_ICE
 	value = 0
 	oretype = /obj/item/ice_crystal
+	cc_per_sheet = CC_PER_SHEET_ICE
 
 /datum/material/mythril
 	name="mythril"
@@ -432,6 +445,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.6
 	quality_mod = 1.5
 	armor_mod = 1.75
+	cc_per_sheet = CC_PER_SHEET_MYTHRIL
 
 /datum/material/telecrystal
 	name="telecrystal"
@@ -440,111 +454,135 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/stack/ore/telecrystal
 	sheettype=/obj/item/bluespace_crystal
 	cointype=null
+	cc_per_sheet = CC_PER_SHEET_TELECRYSTAL
 
 
-/* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium
 	name="Pharosium"
-	id="pharosium"
+	id=MAT_PHAROSIUM
 	value=10
 	oretype=/obj/item/stack/ore/pharosium
 	sheettype=/obj/item/stack/sheet/mineral/pharosium
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_PHAROSIUM
+
 
 /datum/material/char
 	name="Char"
-	id="char"
+	id=MAT_CHAR
 	value=5
 	oretype=/obj/item/stack/ore/char
 	sheettype=/obj/item/stack/sheet/mineral/char
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_CHAR
 
 
 /datum/material/claretine
 	name="Claretine"
-	id="claretine"
+	id=MAT_CLARETINE
 	value=50
 	oretype=/obj/item/stack/ore/claretine
 	sheettype=/obj/item/stack/sheet/mineral/claretine
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_CLARETINE
 
 
 /datum/material/bohrum
 	name="Bohrum"
-	id="bohrum"
+	id=MAT_BOHRUM
 	value=50
 	oretype=/obj/item/stack/ore/bohrum
 	sheettype=/obj/item/stack/sheet/mineral/bohrum
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_BOHRUM
 
 
 /datum/material/syreline
 	name="Syreline"
-	id="syreline"
+	id=MAT_SYRELINE
 	value=70
 	oretype=/obj/item/stack/ore/syreline
 	sheettype=/obj/item/stack/sheet/mineral/syreline
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_SYRELINE
 
 
 /datum/material/erebite
 	name="Erebite"
-	id="erebite"
+	id=MAT_EREBITE
 	value=50
 	oretype=/obj/item/stack/ore/erebite
 	sheettype=/obj/item/stack/sheet/mineral/erebite
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_EREBITE
 
 
 /datum/material/cytine
 	name="Cytine"
-	id="cytine"
+	id=MAT_CYTINE
 	value=30
 	oretype=/obj/item/stack/ore/cytine
 	sheettype=/obj/item/stack/sheet/mineral/cytine
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_CYTINE
 
 
 /datum/material/uqill
 	name="Uqill"
-	id="uqill"
+	id=MAT_UQILL
 	value=90
 	oretype=/obj/item/stack/ore/uqill
 	sheettype=/obj/item/stack/sheet/mineral/uqill
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_UQILL
 
 
 /datum/material/mauxite
 	name="Mauxite"
-	id="mauxite"
+	id=MAT_MAUXITE
 	value=5
 	oretype=/obj/item/stack/ore/mauxite
 	sheettype=/obj/item/stack/sheet/mineral/mauxite
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_MAUXITE
 
 
 /datum/material/cobryl
 	name="Cobryl"
-	id="cobryl"
+	id=MAT_COBRYL
 	value=30
 	oretype=/obj/item/stack/ore/cobryl
 	sheettype=/obj/item/stack/sheet/mineral/cobryl
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_COBRYL
 
 
 /datum/material/cerenkite
 	name="Cerenkite"
-	id="cerenkite"
+	id=MAT_CERENKITE
 	value=50
 	oretype=/obj/item/stack/ore/cerenkite
 	sheettype=/obj/item/stack/sheet/mineral/cerenkite
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_CERENKITE
 
 /datum/material/molitz
 	name="Molitz"
-	id="molitz"
+	id=MAT_MOLITZ
 	value=10
 	oretype=/obj/item/stack/ore/molitz
 	sheettype=/obj/item/stack/sheet/mineral/molitz
 	cointype=null
-*/
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_MOLITZ

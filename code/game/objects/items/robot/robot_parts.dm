@@ -12,20 +12,6 @@
 	var/brute_dam = 0
 	var/burn_dam = 0
 
-/*
-/obj/item/robot_parts/recycle(var/datum/materials/rec)
-	for(var/material in materials)
-		var/rec_mat=material
-		var/CCPS=CC_PER_SHEET_MISC
-		if(rec_mat=="metal")
-			rec_mat="iron"
-			CCPS=CC_PER_SHEET_METAL
-		if(rec_mat=="glass")
-			CCPS=CC_PER_SHEET_GLASS
-		rec.addAmount(material,materials[material]/CCPS)
-	return 1
-*/
-
 /obj/item/robot_parts/l_arm
 	name = "robot left arm"
 	desc = "A skeletal limb wrapped in pseudomuscles, with a low-conductivity case."
