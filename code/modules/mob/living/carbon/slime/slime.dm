@@ -616,7 +616,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
 	icon_state = "grey slime extract"
-	primarytype = /mob/living/carbon/slime/gold
+	primarytype = /mob/living/carbon/slime
 
 /obj/item/slime_extract/gold
 	name = "gold slime extract"
