@@ -2166,7 +2166,7 @@
 	required_other = 1
 
 /datum/chemical_reaction/slimecash/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/spacecash/c100/C = new /obj/item/weapon/spacecash/c100/
+	var/obj/item/weapon/spacecash/c1000/C = new /obj/item/weapon/spacecash/c1000/
 	C.amount = 1
 	C.forceMove(get_turf(holder.my_atom))
 
