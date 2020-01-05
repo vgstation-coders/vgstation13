@@ -15,6 +15,7 @@
 	minimal_player_age = 30
 
 	species_whitelist = list("Human")
+	gender_blacklist = list("female")
 
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/captain

@@ -364,6 +364,10 @@
 		if(!job.species_whitelist.Find(client.prefs.species))
 			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
 			return 0
+	if(job.gender_blacklist.len)
+		if(job.gender_blacklist.Find(client.prefs.gender))
+			to_chat(src, alert("[rank] is not available for [client.prefs.species]s."))
+			return 0
 
 	job_master.AssignRole(src, rank, 1)
 

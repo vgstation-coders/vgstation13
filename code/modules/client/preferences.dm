@@ -576,6 +576,13 @@ var/const/MAX_SAVE_SLOTS = 8
 				prefUpperLevel = 0
 				prefLowerLevel = 0
 
+		if(job.gender_blacklist.len)
+			if(job.gender_blacklist.Find(src.gender))
+				prefLevelLabel = "Unavailable"
+				prefLevelColor = "gray"
+				prefUpperLevel = 0
+				prefLowerLevel = 0
+
 		HTML += "<a class='white' onmouseup='javascript:return mouseUp(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");' oncontextmenu='javascript:return mouseDown(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");'>"
 
 
@@ -760,6 +767,10 @@ var/const/MAX_SAVE_SLOTS = 8
 
 			to_chat(user, "<span class='notice'>Only the following species can have this job: [allowed_species]. Your species is ([src.species]).</span>")
 			return
+	
+	if(job.gender_blacklist.Find(src.gender))
+		to_chat(user, "<span class='notice'>Your gender ("+src.gender+") isn't allowed to have this job!</span>")
+		return
 
 	if(inc == null)
 		if(GetJobDepartment(job, 1) & job.flag)
@@ -1183,6 +1194,15 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 									F &= ~job.flag //Disable that job in our preferences
 									SetDepartmentFlags(job, i, F)
+						
+						if(job.gender_blacklist.len)
+							if(job.gender_blacklist.Find(gender))
+								for(var/i = 1 to 3)
+									var/F = GetJobDepartment(job, i)
+									F &= ~job.flag
+									SetDepartmentFlags(job, i, F)
+								to_chat(usr, "<span class='info'>Your gender ([gender]) is blacklisted from [job.title].</span>")
+
 
 				if("language")
 					var/list/new_languages = list("None")
