@@ -53,25 +53,28 @@
 	security_shuttle.name = "Northeast Station Shuttle"
 	security_shuttle.req_access = list()
 
-/obj/abstract/screen/Click(location, control, params)
-	if(!usr)
-		return 1
-
-	switch(name)
+/datum/map/active/special_ui(var/obj/abstract/screen/S, mob/user)
+	if(!user)
+		return FALSE
+	switch(S.name)
 		if("Jump Northwest / View Core")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
 				AI.view_core()
+				return TRUE
 		if("Jump South")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
 				var/area/A = locate(/area/hallway/secondary/exit)
 				AI.jump_to_area(A)
+				return TRUE
 		if("Jump Northeast")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
 				var/area/A = locate(/area/wreck/engineering) //This is the area used for Snaxi Northeast Bridge
 				AI.jump_to_area(A)
+				return TRUE
+	return FALSE
 
 #define ui_jump_2 "SOUTH+1:[6*PIXEL_MULTIPLIER],WEST:0"
 #define ui_jump_3 "SOUTH+1:[6*PIXEL_MULTIPLIER],WEST:[32*PIXEL_MULTIPLIER]"
