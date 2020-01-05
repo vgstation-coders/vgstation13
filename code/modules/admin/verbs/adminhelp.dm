@@ -15,11 +15,11 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	if(prefs.muted & MUTE_ADMINHELP)
 		to_chat(src, "<span class='red'>Error: Admin-PM: You cannot send adminhelps (Muted).</span>")
 		return
-	var/msg = input(usr, "What message would you like to adminhelp?", "Send a message to admins", "")
+	var/msg = input(usr, "What message would you like to send to the administrators?", "Send a message to admins", "")
 	//clean the input msg
 	if(!msg)
 		return
-	msg = trim_left(sanitize(copytext(msg,1,MAX_MESSAGE_LEN)))
+	msg = trim_left(trim_right(sanitize(copytext(msg,1,MAX_MESSAGE_LEN))))
 	if(!msg)
 		return
 	if(src.handle_spam_prevention(msg,MUTE_ADMINHELP))
