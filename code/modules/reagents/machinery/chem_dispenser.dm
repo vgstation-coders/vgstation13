@@ -226,6 +226,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		else
 			custom = 0
 			amount = text2num(href_list["amount"])
+		amount = clamp(amount, 1, container ? container.volume : 100)
 		if (custom)
 			useramount = amount
 
