@@ -1,6 +1,6 @@
 /obj/item/weapon/storage/box/syndicate/New()
 	..()
-	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
+	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
 
 	switch (tagname)
 		if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -17,13 +17,6 @@
 			new /obj/item/weapon/pen/paralysis(src)
 			new /obj/item/device/chameleon(src)
 			new /obj/item/weapon/soap/syndie(src)
-
-		if("screwed")//6?+6?+10+4=26
-			new /obj/effect/spawner/newbomb/timer(src)
-			new /obj/effect/spawner/newbomb/timer(src)
-			new /obj/item/device/powersink(src)
-			new /obj/item/clothing/suit/space/syndicate(src)
-			new /obj/item/clothing/head/helmet/space/syndicate(src)
 
 		if("guns")//13+4+6+4=27
 			new /obj/item/weapon/gun/projectile(src)
