@@ -904,7 +904,8 @@ var/global/list/damage_icon_parts = list()
 				standing.icon = S.head_icons
 
 		if((gender == FEMALE) && (head.clothing_flags & GENDERFIT)) //genderfit
-			standing.icon_state = "[head.icon_state]_f"
+			if(has_icon(standing.icon, "[head.icon_state]_f"))
+				standing.icon_state = "[head.icon_state]_f"
 
 		if(head.dynamic_overlay)
 			if(head.dynamic_overlay["[HEAD_LAYER]"])
