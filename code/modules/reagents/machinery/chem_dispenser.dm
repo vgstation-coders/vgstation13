@@ -221,12 +221,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(href_list["amount"] == "0")
 			var/num = input("Enter desired output amount", "Amount", useramount) as num
 			if (num)
-				amount = round(text2num(num), 5)
+				amount = num
 				custom = 1
 		else
 			custom = 0
-			amount = round(text2num(href_list["amount"]), 5) // round to nearest 5
-		amount = clamp(amount, 5, 100) // Since the user can actually type the commands himself, some sanity checking
+			amount = text2num(href_list["amount"])
 		if (custom)
 			useramount = amount
 
