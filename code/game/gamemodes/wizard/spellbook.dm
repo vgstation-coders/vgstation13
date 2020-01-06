@@ -23,7 +23,7 @@
 
 	var/static/list/available_potions = list(
 		/obj/item/potion/healing = Sp_BASE_PRICE,
-		/obj/item/potion/transform = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/transform = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/toxin = Sp_BASE_PRICE*0.75,
 		/obj/item/potion/mana = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/invisibility/major = Sp_BASE_PRICE*0.5,
