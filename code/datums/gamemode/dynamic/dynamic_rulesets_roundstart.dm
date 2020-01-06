@@ -14,7 +14,7 @@
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 5
-	cost = 10
+	cost = 20
 	var/traitor_threshold = 3
 	var/additional_cost = 5
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
@@ -65,7 +65,7 @@
 	required_enemies = list(2,2,2,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 18
+	cost = 25
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 	high_population_requirement = 30
 
@@ -97,7 +97,7 @@
 	required_enemies = list(2,2,2,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 2
-	cost = 15
+	cost = 25
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
 
@@ -174,7 +174,7 @@
 	enemy_jobs = list("Security Officer","Detective","Warden","Head of Security", "Captain")
 	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
 	required_candidates = 1
-	weight = 2
+	weight = 1 //YOU'RE GUNKING THE ROUND
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -229,7 +229,7 @@
 	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
 	required_candidates = 2
 	weight = 2
-	cost = 30
+	cost = 50
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
 	var/cultist_cap = list(2,2,2,2,2,2,2,2,2,2)
@@ -427,7 +427,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 1
-	weight = 3
+	weight = 1
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
