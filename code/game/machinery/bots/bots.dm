@@ -9,6 +9,8 @@
 #define CLEAN_BOT 4 // Cleanbots
 #define MED_BOT 5 // Medibots
 
+#define BOT_OLDTARGET_FORGET_DEFAULT 10 //10*WaitMachinery
+
 /obj/machinery/bot
 	icon = 'icons/obj/aibots.dmi'
 	layer = MOB_LAYER
@@ -34,8 +36,8 @@
 	var/destination			// destination description tag
 	var/next_destination	// the next destination in the patrol route
 
-	var/target 				//The target of our path, could be a turf, could be a person, could be mess
-	var/oldtarget			//Our previous target, so we don't get caught constantly going to the same spot
+	var/atom/target 				//The target of our path, could be a turf, could be a person, could be mess
+	var/list/old_targets = list()			//Our previous targets, so we don't get caught constantly going to the same spot. Order as pointer => int (Time to forget)
 	var/list/path = list() //Our regular path
 
 	var/beacon_freq = 1445		// navigation beacon frequency
@@ -49,6 +51,7 @@
 	var/type_for_sig = "secbot"
 	var/turf/patrol_target	// this is turf to navigate to (location of beacon)
 	var/auto_patrol = 0		// set to make bot automatically patrol
+	var/waiting_for_patrol = FALSE
 	var/list/patrol_path = list() //Our patroling path
 
 
@@ -84,11 +87,32 @@
 
 /obj/machinery/bot/proc/find_target()
 
+//Set time_to_forget to -1 to never forget it
+/obj/machinery/bot/proc/add_oldtarget(var/old_target, var/time_to_forget = BOT_OLDTARGET_FORGET_DEFAULT)
+	old_targets.Add(old_target)
+	old_targets[old_target] = time_to_forget
+
+/obj/machinery/bot/proc/remove_oldtarget(var/old_target)
+	if(old_targets[old_target])
+		old_targets[old_target] = null
+		old_targets.Remove(old_target)
+
+/obj/machinery/bot/proc/decay_oldtargets()
+	for(var/i in old_targets)
+		if(old_targets[i] > 0)
+			old_targets[i]--
+		if(old_targets[i] == 0)
+			remove_oldtarget(i)
+
 //Regular path takes priority over the patrol path
 /obj/machinery/bot/proc/process_pathing()
 	if(!process_path() && (bot_flags & BOT_PATROL) && auto_patrol)
 		process_patrol()
 
+//misc stuff our bot may be doing (looking for people to heal, or hurt, or tile)
+/obj/machinery/bot/proc/process_bot()
+
+/*** Regular Pathing Section ***/
 //If we don't have a path, we get a path
 //If we have a path, we step
 //return true to avoid calling process_patrol
@@ -119,26 +143,12 @@
 /obj/machinery/bot/proc/on_path_step_fail(var/turf/next)
 	if(frustration > 5)
 		calc_path(target, .proc/get_path, next)
+	return TRUE
 
 /obj/machinery/bot/proc/at_path_target()
+	return TRUE
 
-/obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null)
-	ASSERT(target && proc_to_call)
-	to_chat(world, "[new_destination]")
-	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 120, id=botcard, exclude=avoid)
-
-/obj/machinery/bot/proc/get_path(var/list/L, var/target)
-	if(islist(L))
-		path = L
-		return TRUE
-	return FALSE
-
-/obj/machinery/bot/proc/get_patrol_path(var/list/L, var/target)
-	if(islist(L))
-		patrol_path = L
-		return TRUE
-	return FALSE
-
+/*** Patrol Pathing Section ***/
 //Same as process_path. If we don't have a path, we get a path.
 //If we have a path, we take a step on that path
 /obj/machinery/bot/proc/process_patrol()
@@ -160,7 +170,10 @@
 		return on_patrol_step_fail(next)
 
 /obj/machinery/bot/proc/find_patrol_path()
+	if(waiting_for_patrol)
+		return
 	if(awaiting_beacon++)
+		to_chat(world, "awaiting beacon:[awaiting_beacon]")
 		if(awaiting_beacon > 5)
 			awaiting_beacon = 0
 			find_nearest_beacon()
@@ -169,6 +182,7 @@
 		set_destination(next_destination)
 
 	if(patrol_target)
+		waiting_for_patrol = TRUE
 		calc_path(patrol_target, .proc/get_patrol_path)
 
 /obj/machinery/bot/proc/find_nearest_beacon()
@@ -197,13 +211,13 @@
 	find_patrol_path()
 
 /obj/machinery/bot/proc/on_patrol_step(var/turf/next)
+	return 1
 
 /obj/machinery/bot/proc/on_patrol_step_fail(next)
 	if(frustration > 5)
 		calc_path(patrol_target, .proc/get_patrol_path, next)
+	return 1
 
-//misc stuff our bot may be doing (looking for people to heal, or hurt, or tile)
-/obj/machinery/bot/proc/process_bot()
 
 // send a radio signal with a single data key/value pair
 /obj/machinery/bot/proc/post_signal(var/freq, var/key, var/value)
@@ -230,7 +244,7 @@
 	var/valid = signal.data["patrol"]
 	if(!recv || !valid)
 		return 0
-	to_chat(world, "recv:[recv]. valid:[valid]. new_destination:[new_destination]. nearest_beacon: [nearest_beacon]. Next Dest: [signal.data["next_patrol"]]")
+	//to_chat(world, "recv:[recv]. valid:[valid]. new_destination:[new_destination]. nearest_beacon: [nearest_beacon]. Next Dest: [signal.data["next_patrol"]]")
 	if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
 		to_chat(world, "new destination chosen")
 		destination = new_destination
@@ -244,7 +258,7 @@
 		if(nearest_beacon)
 			// note we ignore the beacon we are located at
 			if(dist>1 && dist<get_dist(src, nearest_beacon_loc))
-				to_chat(world, "replacing nearest_beacon [nearest_beacon] with recv as it is closer [recv]. [get_dist(src, nearest_beacon_loc)] [dist]")
+				to_chat(world, "replacing nearest_beacon [nearest_beacon] with [recv] as it is closer. [get_dist(src, nearest_beacon_loc)] [dist]")
 				nearest_beacon = recv
 				nearest_beacon_loc = signal.source.loc
 			return
@@ -253,6 +267,24 @@
 			nearest_beacon = recv
 			nearest_beacon_loc = signal.source.loc
 		return 1
+
+/obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null)
+	ASSERT(target && proc_to_call)
+	to_chat(world, "[new_destination]")
+	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+
+/obj/machinery/bot/proc/get_path(var/list/L, var/target)
+	if(islist(L))
+		path = L
+		return TRUE
+	return FALSE
+
+/obj/machinery/bot/proc/get_patrol_path(var/list/L, var/target)
+	waiting_for_patrol = FALSE
+	if(islist(L))
+		patrol_path = L
+		return TRUE
+	return FALSE
 
 /obj/machinery/bot/proc/turn_on()
 	if(stat)

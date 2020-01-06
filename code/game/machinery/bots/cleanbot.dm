@@ -50,8 +50,6 @@
 	src.botcard = new /obj/item/weapon/card/id(src)
 	var/datum/job/janitor/J = new/datum/job/janitor
 	src.botcard.access = J.get_access()
-	if(radio_controller)
-		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 
 /obj/machinery/bot/cleanbot/Destroy()
 	cleanbot_list.Remove(src)
@@ -69,9 +67,10 @@
 		var/turf/T = target
 		T.targetted_by = null
 	src.target = null
-	src.oldtarget = null
+	old_targets = list()
 	src.icon_state = "[src.icon_initial][src.on]"
-	src.path = new()
+	path = list()
+	patrol_path = list()
 	src.updateUsrDialog()
 
 /obj/machinery/bot/cleanbot/attack_hand(mob/user as mob)
@@ -170,24 +169,26 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	if(!target)
 		find_target()
 
+	decay_oldtargets()
+
 	if(oddbutton && prob(5))
 		visible_message("<span class='warning'>Something flies out of \the [src]!</span>")
-		oldtarget = get_turf(getFromPool(/obj/effect/decal/cleanable/blood/gibs, loc)) //So we don't target our own gibs
+		add_oldtarget(get_turf(getFromPool(/obj/effect/decal/cleanable/blood/gibs, loc)), -1) //So we don't target our own gibs
 
 /obj/machinery/bot/cleanbot/find_target()
 	for(var/turf/T in view(7, src))
 		if(istype(T, /turf/space))
 			continue
 		for(var/obj/effect/decal/cleanable/C in T)
-			if(!is_type_in_list(C, blacklisted_targets) && !T.targetted_by && T!=oldtarget)
+			if(!is_type_in_list(C, blacklisted_targets) && !T.has_dense_content() && !T.targetted_by && !(T in old_targets))
 				target = T
-				oldtarget = T
+				add_oldtarget(T)
 				T.targetted_by = src
 				return
 
 /obj/machinery/bot/cleanbot/at_path_target()
 	clean(target)
-	oldtarget = target
+	remove_oldtarget(target)
 	target = null
 	return TRUE
 
@@ -203,7 +204,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	target = null
 	anchored = 1
 	icon_state = "[src.icon_initial]-c"
-	visible_message("<span class='warning'>[src] begins to clean up the [target].</span>")
+	visible_message("<span class='warning'>[src] begins to clean up the [target_turf].</span>")
 	cleaning = 1
 	for(var/obj/effect/decal/cleanable/C in target_turf)
 		if(!(is_type_in_list(C,blacklisted_targets)))

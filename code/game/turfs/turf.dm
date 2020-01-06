@@ -23,6 +23,8 @@
 
 	var/blocks_air = 0
 
+	var/list/PathNodes = list()
+
 	// Bot shit
 	var/targetted_by=null
 
@@ -734,3 +736,12 @@
 
 /turf/proc/remove_rot()
 	return
+
+//Pathnode stuff
+
+/turf/proc/FindPathNode(var/id)
+	return PathNodes["[id]"]
+
+/turf/proc/AddPathNode(var/PathNode/PN, var/id)
+	ASSERT(!PathNodes["[id]"])
+	PathNodes["[id]"] = PN

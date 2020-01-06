@@ -1,5 +1,6 @@
 var/datum/subsystem/pathing/SSpath
 var/global/list/pathers = list()
+var/global/path_count = 0
 
 /datum/subsystem/pathing
 	name = "Pathing"
@@ -81,6 +82,7 @@ var/global/list/pathmakers = list()
 	var/id //What ID we will be using, needed for adjacent checks
 	var/turf/exclude //A turf to specifically avoid, used by mulebots
 	var/debug = FALSE //Whether we paint our turfs as we calculate
+	var/PM_id //How we will identify PathNodes associated with this, to prevent PathNode conflict
 
 /datum/path_maker/New(var/nowner, var/nproc_to_call, var/turf/nstart, var/turf/nend, var/atom/ntarget, var/nadjacent, var/ndist, var/nmaxnodes, var/nmaxnodedepth, var/nmintargetdist, var/nid=null, var/turf/nexclude, var/ndebug)
 	ASSERT(nowner)
@@ -101,28 +103,39 @@ var/global/list/pathmakers = list()
 	id = nid
 	exclude = nexclude
 	debug = ndebug
-	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0))
+	path_count++
+	PM_id = "PM_[path_count]"
+	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,PM_id))
 	pathmakers.Add(src)
 	//to_chat(world, "[owner] [start] [end] [target] [adjacent] [dist] [maxnodes] [maxnodedepth] [id] [exclude] [debug] [pathmakers.len]")
 
 /datum/path_maker/proc/can_process()
-	if(!owner || owner.gcDestroyed)
+	if(!owner || owner.gcDestroyed) //crit fail
 		to_chat(world, "owner no longer exists [owner?"owner is destroyed":"no owner"]")
 		qdel(src)
 		return FALSE
 	if(get_turf(owner) != start)
 		to_chat(world, "owner not in start position")
-		qdel(src)
+		fail()
 		return FALSE
 	if(target && get_turf(target) != end)
 		to_chat(world, "target moved from end")
-		qdel(src)
+		fail()
 		return FALSE
 	return TRUE
 
 /datum/path_maker/Destroy()
 	pathmakers.Remove(src)
 	//cleaning after us
+	for(var/PathNode/PN in open.L)
+		PN.source.PathNodes[PM_id] = null
+		PN.source.PathNodes.Remove("[PM_id]")
+		qdel(PN)
+	for(var/turf/T in closed)
+		var/PathNode/PN = T.FindPathNode(PM_id)
+		T.PathNodes[PM_id] = null
+		T.PathNodes.Remove("[PM_id]")
+		qdel(PN)
 	owner = null
 	start = null
 	end = null
@@ -141,7 +154,7 @@ var/global/list/pathmakers = list()
 		to_chat(world, "cur is 0 [cur]. ")
 		for(var/i in open.List())
 			to_chat(world, "[i]")
-		return qdel(src)
+		return fail()
 	closed.Add(cur.source) //and tell we've processed it
 
 	//if we only want to get near the target, check if we're close enough
@@ -152,7 +165,7 @@ var/global/list/pathmakers = list()
 	//if too many steps, abandon that path
 	if(maxnodedepth && (cur.nodecount > maxnodedepth))
 		to_chat(world, "max node depth reached")
-		return qdel(src)
+		return fail()
 
 	//found the target turf (or close enough), let's create the path to it
 	if(cur.source == end || closeenough)
@@ -166,7 +179,7 @@ var/global/list/pathmakers = list()
 
 	//get adjacents turfs using the adjacent proc, checking for access with id
 	var/list/L = call(cur.source,adjacent)(id,closed)
-
+	to_chat(world, "adjacent turfs [L.len]")
 	for(var/turf/T in L)
 		if(debug && T.color != "#00ff00")
 			T.color = "#FFA500" //orange
@@ -176,9 +189,9 @@ var/global/list/pathmakers = list()
 			continue
 
 		var/newenddist = call(T,dist)(end)
-		var/PathNode/PNode = find_PNode(T, open.List())
+		var/PathNode/PNode = T.FindPathNode(PM_id)
 		if(!PNode) //is not already in open list, so add it
-			open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1))
+			open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1, PM_id))
 			if(debug && T.color != "#00ff00")
 				T.color = "#0000ff" //blue
 		else //is already in open list, check if it's a better way from the current turf
@@ -186,10 +199,17 @@ var/global/list/pathmakers = list()
 				if(debug)
 					T.color = "#00ff00" //green
 				PNode.prevNode = cur
+				PNode.distance_from_start = call(cur.source,dist)(T)
 				PNode.distance_from_end = newenddist
 				PNode.calc_f()
 				if(!open.ReSort(PNode))//reorder the changed element in the list
+					to_chat(world, "failed to reorder, requeuing")
 					open.Enqueue(PNode)
+	to_chat(world, "open:[open.List().len]")
+
+/datum/path_maker/proc/fail()
+	call(owner, proc_to_call)()
+	qdel(src)
 
 /datum/path_maker/proc/finish()
 	//if the path is longer than maxnodes, then don't return it

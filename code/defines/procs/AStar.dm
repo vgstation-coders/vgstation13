@@ -73,8 +73,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 //removes and returns the first element in the queue
 /PriorityQueue/proc/Dequeue()
-	if(!L.len)
-		return 0
+	ASSERT(L.len)
 	. = L[1]
 	Remove(.)
 	return .
@@ -94,21 +93,20 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 //return the element at the i_th position
 /PriorityQueue/proc/Get(var/i)
-	if(i > L.len || i < 1)
-		return 0
+	ASSERT(i < L.len && i > 1)
 	return L[i]
 
 //replace the passed element at it's right position using the cmp proc
 /PriorityQueue/proc/ReSort(var/atom/A)
 	var/i = Seek(A)
-	if(i == 0)
-		return 0
+	ASSERT(i != 0)
 	while(i < L.len && call(cmp)(L[i],L[i+1]) > 0)
 		L.Swap(i,i+1)
 		i++
 	while(i > 1 && call(cmp)(L[i],L[i-1]) <= 0) //last inserted element being first in case of ties (optimization)
 		L.Swap(i,i-1)
 		i--
+	return 1
 
 //////////////////////
 //PathNode object
@@ -123,16 +121,22 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	var/distance_from_start		//A* heuristic variable, how far it is from the start
 	var/nodecount		//count the number of Nodes traversed
 
-/PathNode/New(s,p,ndistance_from_start,ndistance_from_end,pnt)
+/PathNode/New(s,p,ndistance_from_start,ndistance_from_end,pnt,id)
 	source = s
 	prevNode = p
 	distance_from_start = ndistance_from_start
 	distance_from_end = ndistance_from_end
-	total_node_cost = distance_from_start + distance_from_end
+	calc_f()
 	nodecount = pnt
+	source.AddPathNode(src, id)
 
 /PathNode/proc/calc_f()
 	total_node_cost = distance_from_start + distance_from_end
+
+/PathNode/Destroy()
+	source = null
+	prevNode = null
+	..()
 
 //////////////////////
 //A* procs
@@ -182,7 +186,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 		return 0
 
 	//initialization
-	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0))
+	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,"unique"))
 
 	//then run the main loop
 	while(!open.IsEmpty() && !path)
@@ -217,9 +221,9 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 				continue
 
 			var/newenddist = call(T,dist)(end)
-			var/PathNode/PNode = find_PNode(T, open.List())
-			if(PNode) //is not already in open list, so add it
-				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1))
+			var/PathNode/PNode = T.FindPathNode("unique")
+			if(!PNode) //is not already in open list, so add it
+				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1,"unique"))
 			else //is already in open list, check if it's a better way from the current turf
 				if(newenddist < PNode.distance_from_end)
 
@@ -229,6 +233,18 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 					open.ReSort(PNode)//reorder the changed element in the list
 
 	}
+
+	//cleanup
+	for(var/PathNode/PN in open.L)
+		PN.source.PathNodes["unique"] = null
+		PN.source.PathNodes.Remove("unique")
+		qdel(PN)
+	for(var/turf/T in closed)
+		var/PathNode/PN = T.FindPathNode("unique")
+		T.PathNodes["unique"] = null
+		T.PathNodes.Remove("unique")
+		qdel(PN)
+
 	//if the path is longer than maxnodes, then don't return it
 	if(path && maxnodes && path.len > (maxnodes + 1))
 		return 0
@@ -247,11 +263,6 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 //A* helpers procs
 ///////////////////
 
-/proc/find_PNode(var/turf/T, var/list/L)
-	for(var/PathNode/P in L)
-		if(P.source == T)
-			return P
-	return 0
 
 // Returns true if a link between A and B is blocked
 // Movement through doors allowed if ID has access
@@ -342,10 +353,9 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 			return 1 //matching border window
 
 	for(var/obj/machinery/door/D in loc)
-		if(!D.density)//if the door is open
-			continue
-		else
-			return 1	// if closed, it's a real, air blocking door
+		if(D.density)// if closed, it's a real, air blocking door
+			return 1
+
 	return 0
 
 /////////////////////////////////////////////////////////////////////////
