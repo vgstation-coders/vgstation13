@@ -577,7 +577,8 @@ var/global/list/damage_icon_parts = list()
 				standing.icon = species.uniform_icons
 
 		if((gender == FEMALE) && (w_uniform.clothing_flags & GENDERFIT)) //genderfit
-			standing.icon_state = "[w_uniform.icon_state]_s_f"
+			if(has_icon(standing.icon, "[w_uniform.icon_state]_s_f"))
+				standing.icon_state = "[w_uniform.icon_state]_s_f"
 
 		if(w_uniform.icon_override)
 			standing.icon	= w_uniform.icon_override
@@ -618,7 +619,8 @@ var/global/list/damage_icon_parts = list()
 				if(species.id_icons && has_icon(species.id_icons, ID_worn.icon_state))
 					O.icon = species.uniform_icons
 			if((gender == FEMALE) && (ID_worn.clothing_flags & GENDERFIT)) //genderfit
-				O.icon_state = "[ID_worn.icon_state]_f"
+				if(has_icon(O.icon,"[ID_worn.icon_state]_f"))
+					O.icon_state = "[ID_worn.icon_state]_f"
 	
 			O.overlays.len = 0
 			if(wear_id.dynamic_overlay)
@@ -668,7 +670,8 @@ var/global/list/damage_icon_parts = list()
 				standing.icon = S.gloves_icons
 
 		if((gender == FEMALE) && (gloves.clothing_flags & GENDERFIT)) //genderfit
-			standing.icon_state = "[gloves.icon_state]_f"
+			if(has_icon(standing.icon,"[gloves.icon_state]_f"))
+				standing.icon_state = "[gloves.icon_state]_f"
 
 		if(gloves.dynamic_overlay)
 			if(gloves.dynamic_overlay["[GLOVES_LAYER]"])
@@ -726,7 +729,8 @@ var/global/list/damage_icon_parts = list()
 				standing.icon = S.glasses_icons
 
 		if((gender == FEMALE) && (glasses.clothing_flags & GENDERFIT)) //genderfit
-			standing.icon_state = "[glasses.icon_state]_f"
+			if(has_icon(standing.icon,"[glasses.icon_state]_f"))
+				standing.icon_state = "[glasses.icon_state]_f"
 
 		if(glasses.cover_hair)
 			var/obj/abstract/Overlays/O = obj_overlays[GLASSES_OVER_HAIR_LAYER]
@@ -783,7 +787,8 @@ var/global/list/damage_icon_parts = list()
 				standing.icon = S.ears_icons
 
 		if((gender == FEMALE) && (ears.clothing_flags & GENDERFIT)) //genderfit
-			standing.icon_state = "[ears.icon_state]_f"
+			if(has_icon(standing.icon,"[ears.icon_state]_f"))
+				standing.icon_state = "[ears.icon_state]_f"
 
 		var/obj/abstract/Overlays/O = obj_overlays[EARS_LAYER]
 		O.icon = standing
@@ -825,7 +830,8 @@ var/global/list/damage_icon_parts = list()
 				O.icon = S.shoes_icons
 
 		if((gender == FEMALE) && (shoes.clothing_flags & GENDERFIT)) //genderfit
-			O.icon_state = "[shoes.icon_state]_f"
+			if(has_icon(O.icon,"[shoes.icon_state]_f"))
+				O.icon_state = "[shoes.icon_state]_f"
 
 		O.overlays.len = 0
 		if(shoes.dynamic_overlay)
@@ -947,7 +953,8 @@ var/global/list/damage_icon_parts = list()
 				standing.icon = S.belt_icons
 
 		if((gender == FEMALE) && (belt.clothing_flags & GENDERFIT)) //genderfit
-			standing.icon_state = "[belt.icon_state]_f"
+			if(has_icon(standing.icon,"[belt.icon_state]_f"))
+				standing.icon_state = "[belt.icon_state]_f"
 
 		var/obj/abstract/Overlays/O = obj_overlays[BELT_LAYER]
 		O.icon = standing
@@ -986,7 +993,8 @@ var/global/list/damage_icon_parts = list()
 					if(SP.fat_wear_suit_icons && has_icon(SP.fat_wear_suit_icons, wear_suit.icon_state))
 						standing.icon = SP.wear_suit_icons
 				if((gender == FEMALE) && (wear_suit.clothing_flags & GENDERFIT)) //genderfit
-					standing.icon_state = "[wear_suit.icon_state]_f"
+					if(has_icon(standing.icon,"[wear_suit.icon_state]_f"))
+						standing.icon_state = "[wear_suit.icon_state]_f"
 			else
 				to_chat(src, "<span class='warning'>You burst out of \the [wear_suit]!</span>")
 				drop_from_inventory(wear_suit)
@@ -995,7 +1003,8 @@ var/global/list/damage_icon_parts = list()
 				if(SP.wear_suit_icons && has_icon(SP.wear_suit_icons, wear_suit.icon_state))
 					standing.icon = SP.wear_suit_icons					
 			if((gender == FEMALE) && (wear_suit.clothing_flags & GENDERFIT)) //genderfit
-				standing.icon_state = "[wear_suit.icon_state]_f"
+				if(has_icon(standing.icon,"[wear_suit.icon_state]_f"))
+					standing.icon_state = "[wear_suit.icon_state]_f"
 
 
 
@@ -1063,7 +1072,8 @@ var/global/list/damage_icon_parts = list()
 				standing.icon = S.wear_mask_icons
 
 		if((gender == FEMALE) && (wear_mask.clothing_flags & GENDERFIT)) //genderfit
-			standing.icon_state = "[wear_mask.icon_state]_f"
+			if(has_icon(standing.icon,"[wear_mask.icon_state]_f"))
+				standing.icon_state = "[wear_mask.icon_state]_f"
 
 		if(wear_mask.dynamic_overlay)
 			if(wear_mask.dynamic_overlay["[FACEMASK_LAYER]"])
@@ -1109,7 +1119,8 @@ var/global/list/damage_icon_parts = list()
 				standing.icon = S.back_icons
 
 		if((gender == FEMALE) && (back.clothing_flags & GENDERFIT)) //genderfit
-			standing.icon_state = "[back.icon_state]_f"
+			if(has_icon(standing.icon, "[back.icon_state]_f"))
+				standing.icon_state = "[back.icon_state]_f"
 
 		var/obj/abstract/Overlays/O = obj_overlays[BACK_LAYER]
 		O.icon = standing
