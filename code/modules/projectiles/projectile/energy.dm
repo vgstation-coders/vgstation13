@@ -148,9 +148,7 @@
 /obj/item/projectile/energy/rad
 	name = "radiation bolt"
 	icon_state = "rad"
-	damage = 30
-	damage_type = TOX
-	nodamage = 0
+	nodamage = 1
 	weaken = 10
 	stutter = 10
 	fire_sound = 'sound/weapons/radgun.ogg'
