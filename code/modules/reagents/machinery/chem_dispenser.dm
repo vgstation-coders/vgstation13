@@ -221,11 +221,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(href_list["amount"] == "0")
 			var/num = input("Enter desired output amount", "Amount", useramount) as num
 			if (num)
-				amount = num
+				amount = round(text2num(num), 1)
 				custom = 1
 		else
 			custom = 0
-			amount = text2num(href_list["amount"])
+			amount = round(text2num(href_list["amount"]), 1)
 		amount = clamp(amount, 1, container ? container.volume : 100)
 		if (custom)
 			useramount = amount
