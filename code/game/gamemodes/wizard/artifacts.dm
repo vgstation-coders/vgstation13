@@ -175,6 +175,7 @@
 	return FALSE
 
 //SUMMON GUNS
+/*
 /datum/spellbook_artifact/summon_guns
 	name = "Summon Guns"
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
@@ -222,7 +223,7 @@
 
 	H.rightandwrong("swords")
 	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
-
+*/
 /datum/spellbook_artifact/glow_orbs
 	name = "Bundle of glow orbs"
 	desc = "Useful for lighting up the dark so you can read more books, touch-sensitive to assign a user. Warning - Do not expose to electricity."
