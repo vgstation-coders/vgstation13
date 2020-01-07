@@ -20,7 +20,7 @@
 		if(H.stat == DEAD || !(H.client) || iswizard(H))
 			continue
 
-		if (prob(65))
+		if (prob(90))
 			H.equip_survivor(survivor_type)
 			continue
 
