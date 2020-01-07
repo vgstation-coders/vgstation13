@@ -33,6 +33,7 @@
 	var/start_end_anims = 0
 	var/min_cap_C = 0.1 //The minimum cap used to how much cost coeff can be improved
 	var/min_cap_T = 0.1 //The minimum cap used to how much time coeff can be improved
+	var/fabricator_cooldown = 2 //In deciseconds, the delay between each item starting to be built
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	research_flags = TAKESMATIN | HASOUTPUT | HASMAT_OVER | NANOTOUCH
@@ -171,12 +172,6 @@
 	if(queue.len==0)
 		stopped=1
 		return
-	busy=1
-	spawn(0)
-		var/datum/design/I = queue_pop()
-		if(!build_part(I))
-			queue.Add(I)
-		busy=0
 
 /obj/machinery/r_n_d/fabricator/proc/queue_pop()
 	var/datum/design/D = queue[1]
@@ -302,6 +297,17 @@
 			reagent_total += RC.reagents.get_reagent_amount(M)
 		return round(reagent_total / get_resource_cost_w_coeff(being_built, M))
 	return 0
+
+//The build_part_loop fires independently and will build stuff until the queue is over or when it is stopped.
+/obj/machinery/r_n_d/fabricator/proc/build_part_loop()
+	if(busy || stopped || being_built || stat&(NOPOWER|BROKEN))
+		return
+	var/datum/design/D = queue_pop()
+	if(!build_part(D))
+		queue.Add(D)
+		return
+	sleep(fabricator_cooldown)
+	build_part_loop()
 
 /obj/machinery/r_n_d/fabricator/proc/build_part(var/datum/design/part)
 	if(!part || being_built) //we're in the middle of something here!
@@ -513,6 +519,9 @@
 // Tell the machine to start processing the queue on the next process().
 /obj/machinery/r_n_d/fabricator/proc/start_processing_queue()
 	stopped=0
+	spawn(0)
+		build_part_loop()
+	return
 
 // Stop processing queue (currently-executing ticks will finish first).
 /obj/machinery/r_n_d/fabricator/proc/stop_processing_queue()

@@ -522,10 +522,16 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					linked_imprinter.queue.len = 0
 
 	else if(href_list["setProtolatheStopped"] && linked_lathe) //Causes the protolathe to dispose of all it's reagents.
-		linked_lathe.stopped=(href_list["setProtolatheStopped"]=="1")
+		if(href_list["setProtolatheStopped"]=="0")
+			linked_lathe.start_processing_queue()
+		else
+			linked_lathe.stopped = 1
 
 	else if(href_list["setImprinterStopped"] && linked_imprinter) //Causes the protolathe to dispose of all it's reagents.
-		linked_imprinter.stopped=(href_list["setImprinterStopped"]=="1")
+		if(href_list["setProtolatheStopped"]=="0")
+			linked_imprinter.start_processing_queue()
+		else
+			linked_lathe.stopped = 1
 
 	else if(href_list["lathe_ejectsheet"] && linked_lathe) //Causes the protolathe to eject a sheet of material
 		if(!src.allowed(usr))
