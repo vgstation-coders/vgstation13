@@ -1056,7 +1056,7 @@
 			else if (buf.types & DNA2_BUF_SE)
 				src.connected.occupant.dna.SE = buf.dna.SE
 				src.connected.occupant.dna.UpdateSE()
-				domutcheck(src.connected.occupant,src.connected)
+				domutcheck(src.connected.occupant,src.connected, MUTCHK_FORCED)
 			src.connected.occupant.radiation += rand(20,50)
 			return 1
 
