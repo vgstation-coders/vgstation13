@@ -51,6 +51,7 @@
 	var/max_uses = STARTING_USES
 
 	var/op = 1
+	var/hassummoned //If 1, the wizard cannot buy summon guns/spells/swords
 
 /obj/item/weapon/spellbook/admin
 	uses = 30 * Sp_BASE_PRICE
@@ -177,7 +178,7 @@
 	dat += "<hr><span style=\"color:purple\"><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong></span><br><small>* Non-refundable</small><br><br>"
 
 	for(var/datum/spellbook_artifact/A in available_artifacts)
-		if(!A.can_buy(user))
+		if(!A.can_buy(user, src))
 			continue
 
 		var/artifact_name = A.name
@@ -342,8 +343,8 @@
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
 
 			if(istype(SA) && (SA in available_artifacts))
-				if(SA.can_buy(usr) && use(SA.price))
-					SA.purchased(usr)
+				if(SA.can_buy(usr, src) && use(SA.price))
+					SA.purchased(usr, src)
 					if(SA.one_use)
 						available_artifacts.Remove(SA)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)

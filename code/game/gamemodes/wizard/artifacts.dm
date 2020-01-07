@@ -7,7 +7,7 @@
 	var/list/spawned_items = list()
 	var/price = Sp_BASE_PRICE
 
-/datum/spellbook_artifact/proc/purchased(mob/living/user)
+/datum/spellbook_artifact/proc/purchased(mob/living/user, var/obj/item/weapon/spellbook/S)
 	to_chat(user, "<span class='info'>You have purchased [name].</span>")
 	for(var/path in spawned_items)
 		var/obj/item/I = new path(get_turf(user))
@@ -19,7 +19,7 @@
 				var/tempstate = end_icons.len
 				W.artifacts_bought += {"<img src="logo_[tempstate].png"> [name]<BR>"}
 
-/datum/spellbook_artifact/proc/can_buy(var/mob/user)
+/datum/spellbook_artifact/proc/can_buy(var/mob/user, var/obj/item/weapon/spellbook/S)
 	return TRUE
 
 /datum/spellbook_artifact/staff_of_change
@@ -180,16 +180,16 @@
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
 	abbreviation = "SG"
 
-/datum/spellbook_artifact/summon_guns/can_buy(var/mob/user)
+/datum/spellbook_artifact/summon_guns/can_buy(var/mob/user, obj/item/weapon/spellbook/S)
 	//Only roundstart wizards may summon guns, magic, or blades
-	return is_roundstart_wizard(user)
+	return is_roundstart_wizard(user) && !S.hassummoned
 
-
-/datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H)
+/datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H, obj/item/weapon/spellbook/S)
 	..()
 
 	H.rightandwrong("guns")
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
+	S.hassummoned = 1
 
 //SUMMON MAGIC
 /datum/spellbook_artifact/summon_magic
@@ -197,15 +197,16 @@
 	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
 	abbreviation = "SM"
 
-/datum/spellbook_artifact/summon_magic/can_buy(var/mob/user)
+/datum/spellbook_artifact/summon_magic/can_buy(var/mob/user, obj/item/weapon/spellbook/S)
 	//Only roundstart wizards may summon guns, magic, or blades
-	return is_roundstart_wizard(user)
+	return is_roundstart_wizard(user) && !S.hassummoned
 
-/datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
+/datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H, obj/item/weapon/spellbook/S)
 	..()
 
 	H.rightandwrong("magic")
 	to_chat(H, "<span class='userdanger'>You have shared the gift of magic with everyone.</span>")
+	S.hassummoned = 1
 
 //SUMMON SWORDS
 /datum/spellbook_artifact/summon_swords
@@ -213,15 +214,16 @@
 	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
 	abbreviation = "SS"
 
-/datum/spellbook_artifact/summon_swords/can_buy(var/mob/user)
+/datum/spellbook_artifact/summon_swords/can_buy(var/mob/user, obj/item/weapon/spellbook/S)
 	//Only roundstart wizards may summon guns, magic, or blades
-	return is_roundstart_wizard(user)
+	return is_roundstart_wizard(user) && !S.hassummoned
 
-/datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
+/datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H, obj/item/weapon/spellbook/S)
 	..()
 
 	H.rightandwrong("swords")
 	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
+	S.hassummoned = 1
 
 /datum/spellbook_artifact/glow_orbs
 	name = "Bundle of glow orbs"
