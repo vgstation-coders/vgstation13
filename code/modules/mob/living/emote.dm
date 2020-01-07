@@ -23,13 +23,20 @@
 	message = "collapses!"
 	emote_type = EMOTE_AUDIBLE
 
-/datum/emote/living/glare
-	key = "glare"
-	key_third_person = "glares"
-	message = "glares."
-	message_mommi = "glares as best a robot spider can glare."
-	message_param = "glares at %t."
-	emote_type = EMOTE_AUDIBLE
+/datum/emote/living/collapse/can_run_emote(mob/user, var/status_check = TRUE)
+	if(!..())
+		return FALSE
+	var/mob/living/L = user
+	var/index = L.find_held_item_by_type(/obj/item/weapon/cane)
+	if(index)
+		var/obj/item/weapon/cane/C = L.held_items[index]
+		if((M_HULK in L.mutations) || (M_FAT in L.mutations))
+			L.visible_message("\The [C] strains under the weight of [L] and slips free!")
+			return TRUE
+		else
+			L.visible_message("\The [C] prevents [L] from collapsing!")
+			return FALSE
+	return TRUE
 
 /datum/emote/living/collapse/run_emote(mob/user, params)
 	. = ..()
@@ -37,6 +44,14 @@
 		var/mob/living/L = user
 		L.Knockdown(10)
 		L.Stun(10)
+
+/datum/emote/living/glare
+	key = "glare"
+	key_third_person = "glares"
+	message = "glares."
+	message_mommi = "glares as best a robot spider can glare."
+	message_param = "glares at %t."
+	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/dance
 	key = "dance"

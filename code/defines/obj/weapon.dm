@@ -114,7 +114,7 @@
 
 /obj/item/weapon/cane
 	name = "cane"
-	desc = "A cane used by a true gentlemen. Or a clown."
+	desc = "A cane used by a true gentlemen. Or a clown. It can keep you from collapsing, if you don't weigh too much."
 	icon = 'icons/obj/weapons.dmi'
 	origin_tech = Tc_MATERIALS + "=1"
 	icon_state = "cane"
