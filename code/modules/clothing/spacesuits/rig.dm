@@ -360,6 +360,16 @@
 
 	toggle_piece(HARDSUIT_GLOVES,wearer)
 
+/obj/item/clothing/suit/space/rig/verb/hardsuit_interface()
+
+	set name = "Open Hardsuit Interface"
+	set desc = "Open the hardsuit system interface."
+	set category = "Hardsuit"
+	set src = usr.contents
+
+	if(wearer && wearer.is_wearing_item(src, slot_wear_suit))
+		ui_interact(usr)
+
 /obj/item/clothing/suit/space/rig/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = TRUE)
 	if(!user)
 		return
@@ -368,10 +378,9 @@
 
 	data["activated"] = activated
 
-	data["helmet"] =    (helmet ? "[helmet.name]" : "None.")
-	data["gauntlets"] = (gloves ? "[gloves.name]" : "None.")
-	data["boots"] =     (boots ?  "[boots.name]" :  "None.")
-	data["chest"] =     (chest ?  "[chest.name]" :  "None.")
+	data["helmet"] =    (H ? "[H.name]" : "None.")
+	data["gauntlets"] = (G ? "[G.name]" : "None.")
+	data["boots"] =     (MB ?  "[MB.name]" :  "None.")
 
 	data["charge"] =       cell ? cell.charge : 0
 	data["maxcharge"] =    cell ? cell.maxcharge : 0
@@ -379,12 +388,11 @@
 
 	var/list/module_list = list()
 	var/i = 1
-	for(var/obj/item/rig_module/module in installed_modules)
+	for(var/obj/item/rig_module/module in modules)
 		var/list/module_data = list(
 			"index" =             i,
 			"name" =              "[module.name]",
 			"desc" =              "[module.desc]",
-			"can_use" =           "[module.usable]",
 			"is_active" =         "[module.activated]",
 			"activecost" =        module.active_power_usage*10,
 			)
@@ -397,7 +405,7 @@
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, ((src.loc != user) ? ai_interface_path : interface_path), interface_title, 750, 550)
+		ui = new(user, src, ui_key, "hardsuit.tmpl", name, 750, 550)
 		ui.set_initial_data(data)
 		ui.open()
 		ui.set_auto_update(1)

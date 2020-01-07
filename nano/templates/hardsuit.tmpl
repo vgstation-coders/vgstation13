@@ -53,41 +53,18 @@ Used In File(s): /code/modules/clothing/spacesuits/rig/rig.dm
 		Boots: {{:helper.link(data.boots, 'circle-arrow-s', {'toggle_piece' : 'boots'}, null)}}
 	</div>
 
-	<div class="floatLeft">
-		Chest: {{:helper.link(data.chest, 'circle-arrow-s', {'toggle_piece' : 'chest'}, null)}}
-	</div>
 </div>
 </div>
 <div style="float:left;">
 	<div class="floatLeft">
-		{{:!data.activated ? "<h3><div class = 'bad'>HARDSUIT SYSTEMS OFFLINE</div></h3>" : null}}
 		{{for data.modules}}
 			{{"<div style='width:300px; background-color:#303030;' class='statusDisplay'>"}}
 				<div class="line">
 					<center>{{:value.name}}</center><hr />
 					{{:helper.link('Select', 'circle-arrow-s', {'interact_module' : value.index, 'module_mode' : 'select'}, null, 'fixedLeft')}}
-					{{if value.can_use == 1}}
-						{{:helper.link(value.engagestring, 'circle-arrow-s', {'interact_module' : value.index, 'module_mode' : 'engage'}, null, 'fixedLeft')}}
-					{{/if}}
-				</div>
-					{{if value.can_toggle == 1}}
-					<div class="line">
-						{{:helper.link((value.is_active == 1) ? value.deactivatestring : value.activatestring, 'circle-arrow-s', {'interact_module' : value.index, 'module_mode' : (value.is_active == 1) ? 'deactivate' : 'activate'}, null, 'fixedLeft')}}
-					</div>
-					{{/if}}
 				<div class="line">{{:helper.link("Engage", null, null, null, 'fixedLeft')}}{{:helper.link(value.engagecost, null, null, null, 'fixedLeft')}}</div>
 				<div class="line">{{:helper.link("Activate", null, null, null,'fixedLeft')}}{{:helper.link(value.activecost, null, null, null, 'fixedLeft')}}</div>
-				<div class="line">{{:helper.link("Passive", null, null, null, 'fixedLeft')}}{{:helper.link(value.passivecost, null, null, null, 'fixedLeft')}}</div>
-				{{if value.charges}}
-				<div class="line">{{:helper.link("Selected", null, null, null, 'fixedLeft')}}{{:helper.link(value.chargetype, null, null, null, 'fixedLeft selectedLeft')}}</div>
-					<hr />
-					{{for value.charges :itemValue:itemIndex}}
-						{{:helper.link(itemValue.caption, null, {'interact_module' : value.index, 'module_mode' : 'select_charge_type', 'charge_type' : itemValue.index}, null, 'fixedLeft')}}
-					{{/for}}
-				{{/if}}
 			</div>
-		{{empty}}
-			None
 		{{/for}}
 	</div>
 </div>
