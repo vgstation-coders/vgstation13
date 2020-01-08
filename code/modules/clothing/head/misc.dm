@@ -425,6 +425,8 @@
 	desc = "Pefect for the closet botanist."
 	icon_state = "cowboy"
 	item_state = "cowboy"
+	armor = list(melee = 0, bullet = 10, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+
 
 
 /obj/item/clothing/head/christmas/santahat/red
