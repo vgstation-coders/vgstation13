@@ -273,7 +273,7 @@
 	return 1
 
 /obj/machinery/teleport/hub/proc/get_target_lock()
-	var/obj/machinery/teleport/station/st = locate(/obj/machinery/teleport/station, orange(1),src)
+	var/obj/machinery/teleport/station/st = locate(/obj/machinery/teleport/station, orange(1,src))
 	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, orange(1, st))
 	if (!com)
 		visible_message("<span class='warning'>Failure: Cannot identify linked computer.</span>")
