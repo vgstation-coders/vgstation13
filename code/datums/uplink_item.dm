@@ -228,7 +228,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/dangerous/sword
 	name = "Energy Sword"
-	desc = "The energy sword is a blade of pure energy able to easily cut through organics with ease. The sword can be drawn and retracted from a small metal hilt that can be easily concealed, or linked to another sword for a double blade. Activating it produces a loud, distinctive noise."
+	desc = "The energy sword is a blade of pure energy able to easily cut through organics. The sword can be drawn and retracted from a small metal hilt that can be easily concealed, or linked to another sword for a double blade. Activating it produces a loud, distinctive noise."
 	item = /obj/item/weapon/melee/energy/sword
 	cost = 8
 
@@ -252,7 +252,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_weapons/crossbow
 	name = "Mini Energy Crossbow"
-	desc = "A miniature energy crossbow small enough to both fit into a pocket and slip into a backpack unnoticed and make it to spot when firing. Fires up to five bolts tipped with a poisonous substance that stuns targets for a short period of time and recharges on its own."
+	desc = "A miniature energy crossbow small enough to both fit into a pocket and slip into a backpack unnoticed, making it hard to spot when firing. Fires up to five bolts tipped with a poisonous substance that stuns targets for a short period of time and recharges on its own."
 	item = /obj/item/weapon/gun/energy/crossbow
 	cost = 12
 	discounted_cost = 10
