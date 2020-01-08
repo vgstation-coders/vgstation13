@@ -159,16 +159,20 @@ proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
 
 #define ASTAR_REGISTERED 1
 #define ASTAR_PROCESSING 2
+#define ASTAR_FAIL 3
 
 
 proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = TRUE)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
+	if(start:z != end:z) //if you're feeling ambitious and make something that can ASTAR through z levels, feel free to remove this check
+		return ASTAR_FAIL
 	for(var/datum/path_maker/P in pathmakers)
 		if(P.owner == source && start == P.start && end == P.end)
 			return ASTAR_PROCESSING
 	var/atom/target
 	if(!isturf(end))
 		target = end
+
 	to_chat(world, "ASTAR called [source] [proc_to_call] [start:x][start:y][start:z] [end:x][end:y][end:z] [adjacent] [dist] [maxnodes] [maxnodedepth] [mintargetdist] [minnodedist] [id] [exclude] [debug]")
 	new /datum/path_maker(source,proc_to_call, get_turf(start), get_turf(end), target, adjacent, dist, maxnodes, maxnodedepth, mintargetdist, id, exclude, debug)
 	return ASTAR_REGISTERED

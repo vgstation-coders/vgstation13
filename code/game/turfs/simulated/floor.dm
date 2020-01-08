@@ -380,33 +380,33 @@ turf/simulated/floor/update_icon()
 //If none is given it will make a new object. dropping or unequipping must be handled before or after calling
 //this proc.
 /turf/simulated/floor/proc/make_plasteel_floor(var/obj/item/stack/tile/plasteel/T = null)
-	broken = 0
-	burnt = 0
-	intact = 1
-	plane = TURF_PLANE
-	set_light(0)
 	if(floor_tile)
 		returnToPool(floor_tile)
 	floor_tile = null
-	if(T)
-		if(istype(T,/obj/item/stack/tile/plasteel))
-			floor_tile = T
-			if (icon_regular_floor)
-				icon_state = icon_regular_floor
-			else
-				icon_state = "floor"
-				icon_regular_floor = icon_state
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = getFromPool(/obj/item/stack/tile/plasteel, null)
-	icon_state = "floor"
-	icon_regular_floor = icon_state
-
+	floor_tile = getFromPool(T.type, null)
+	material = floor_tile.material
+	intact = 1
+	plane = TURF_PLANE
+	if(istype(T,/obj/item/stack/tile/light))
+		var/obj/item/stack/tile/light/L = T
+		var/obj/item/stack/tile/light/F = floor_tile
+		F.color_r = L.color_r
+		F.color_g = L.color_g
+		F.color_b = L.color_b
+		F.on = L.on
+	if(istype(T,/obj/item/stack/tile/grass))
+		for(var/direction in cardinal)
+			if(istype(get_step(src,direction),/turf/simulated/floor))
+				var/turf/simulated/floor/FF = get_step(src,direction)
+				FF.update_icon() //so siding gets updated properly
+	else if(istype(T,/obj/item/stack/tile/carpet))
+		for(var/direction in alldirs)
+			if(istype(get_step(src,direction),/turf/simulated/floor))
+				var/turf/simulated/floor/FF = get_step(src,direction)
+				FF.update_icon() //so siding gets updated properly
 	update_icon()
 	levelupdate()
-
+	playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 //This proc will make the turf a light floor tile. The expected argument is the tile to make the turf with
 //If none is given it will make a new object. dropping or unequipping must be handled before or after calling
 //this proc.
@@ -572,33 +572,7 @@ turf/simulated/floor/update_icon()
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
 				if(T.use(1))
-					if(floor_tile)
-						returnToPool(floor_tile)
-					floor_tile = null
-					floor_tile = getFromPool(T.type, null)
-					material = floor_tile.material
-					intact = 1
-					plane = TURF_PLANE
-					if(istype(T,/obj/item/stack/tile/light))
-						var/obj/item/stack/tile/light/L = T
-						var/obj/item/stack/tile/light/F = floor_tile
-						F.color_r = L.color_r
-						F.color_g = L.color_g
-						F.color_b = L.color_b
-						F.on = L.on
-					if(istype(T,/obj/item/stack/tile/grass))
-						for(var/direction in cardinal)
-							if(istype(get_step(src,direction),/turf/simulated/floor))
-								var/turf/simulated/floor/FF = get_step(src,direction)
-								FF.update_icon() //so siding gets updated properly
-					else if(istype(T,/obj/item/stack/tile/carpet))
-						for(var/direction in alldirs)
-							if(istype(get_step(src,direction),/turf/simulated/floor))
-								var/turf/simulated/floor/FF = get_step(src,direction)
-								FF.update_icon() //so siding gets updated properly
-					update_icon()
-					levelupdate()
-					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+					make_plasteel_floor(T)
 			else
 				to_chat(user, "<span class='warning'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
 	else if(istype(C, /obj/item/stack/cable_coil))

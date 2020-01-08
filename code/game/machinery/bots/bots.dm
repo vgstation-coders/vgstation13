@@ -9,7 +9,7 @@
 #define CLEAN_BOT 4 // Cleanbots
 #define MED_BOT 5 // Medibots
 
-#define BOT_OLDTARGET_FORGET_DEFAULT 10 //10*WaitMachinery
+#define BOT_OLDTARGET_FORGET_DEFAULT 100 //100*WaitMachinery
 
 /obj/machinery/bot
 	icon = 'icons/obj/aibots.dmi'
@@ -35,6 +35,8 @@
 	var/new_destination		// pending new destination (waiting for beacon response)
 	var/destination			// destination description tag
 	var/next_destination	// the next destination in the patrol route
+
+	var/steps_per = 2 //How many steps we take per process
 
 	var/atom/target 				//The target of our path, could be a turf, could be a person, could be mess
 	var/list/old_targets = list()			//Our previous targets, so we don't get caught constantly going to the same spot. Order as pointer => int (Time to forget)
@@ -89,19 +91,16 @@
 
 //Set time_to_forget to -1 to never forget it
 /obj/machinery/bot/proc/add_oldtarget(var/old_target, var/time_to_forget = BOT_OLDTARGET_FORGET_DEFAULT)
-	old_targets.Add(old_target)
 	old_targets[old_target] = time_to_forget
+	to_chat(world, "[old_target] = [old_targets[old_target]]")
 
 /obj/machinery/bot/proc/remove_oldtarget(var/old_target)
-	if(old_targets[old_target])
-		old_targets[old_target] = null
-		old_targets.Remove(old_target)
+	old_targets.Remove(old_target)
 
 /obj/machinery/bot/proc/decay_oldtargets()
 	for(var/i in old_targets)
-		if(old_targets[i] > 0)
-			old_targets[i]--
-		if(old_targets[i] == 0)
+		to_chat(world, "[i] [old_targets[i]]")
+		if(--old_targets[i] == 0)
 			remove_oldtarget(i)
 
 //Regular path takes priority over the patrol path
@@ -117,28 +116,32 @@
 //If we have a path, we step
 //return true to avoid calling process_patrol
 /obj/machinery/bot/proc/process_path()
-	if(!path.len) //It is assumed we gain a path through process_bot()
-		if(target)
-			calc_path(target, .proc/get_path)
-			return 1
-		return 0
-	to_chat(world, "process_path called [src] [path.len]")
-	patrol_path = list() //Kill any patrols we're making
-	if(loc == get_turf(target))
-		return at_path_target()
+	set_glide_size(DELAY2GLIDESIZE((SS_WAIT_MACHINERY/steps_per)-1))
+	var/turf/T = get_turf(src)
+	for(var/i = 1 to steps_per)
+		if(!path.len) //It is assumed we gain a path through process_bot()
+			if(target)
+				calc_path(target, .proc/get_path)
+				return 1
+			return 0
+		patrol_path = list() //Kill any patrols we're using
+		if(loc == get_turf(target))
+			return at_path_target()
 
-	var/turf/next = path[1]
-	if(istype(next, /turf/simulated))
-		step_to(src, next)
-		if(get_turf(src) == next)
-			frustration = 0
-			path -= next
-			return on_path_step(next)
-		frustration++
-		return on_path_step_fail(next)
+		var/turf/next = path[1]
+		if(istype(next, /turf/simulated))
+			step_to(src, next)
+			if(get_turf(src) == next)
+				frustration = 0
+				path -= next
+				if(on_path_step(next))
+					return TRUE
+			frustration++
+			return on_path_step_fail(next)
+		sleep((SS_WAIT_MACHINERY/steps_per)-1)
+	return T == get_turf(src)
 
 /obj/machinery/bot/proc/on_path_step(var/turf/next)
-	return TRUE
 
 /obj/machinery/bot/proc/on_path_step_fail(var/turf/next)
 	if(frustration > 5)
@@ -152,22 +155,28 @@
 //Same as process_path. If we don't have a path, we get a path.
 //If we have a path, we take a step on that path
 /obj/machinery/bot/proc/process_patrol()
-	if(!patrol_path.len)
-		return find_patrol_path()
 	to_chat(world, "process patrol called [src] [patrol_path.len]")
-	if(loc == patrol_target)
-		path = list()
-		return at_patrol_target()
+	set_glide_size(DELAY2GLIDESIZE((SS_WAIT_MACHINERY/steps_per)-1))
+	for(var/i = 1 to steps_per)
+		if(!patrol_path.len)
+			return find_patrol_path()
+		to_chat(world, "Step [i] of [steps_per]")
+		if(loc == patrol_target)
+			patrol_path = list()
+			return at_patrol_target()
 
-	var/turf/next = patrol_path[1]
-	if(istype(next, /turf/simulated))
-		step_to(src, next)
-		if(get_turf(src) == next)
-			frustration = 0
-			patrol_path -= next
-			return on_patrol_step(next)
-		frustration++
-		return on_patrol_step_fail(next)
+		var/turf/next = patrol_path[1]
+		if(istype(next, /turf/simulated))
+			step_to(src, next)
+			if(get_turf(src) == next)
+				frustration = 0
+				patrol_path -= next
+				if(on_patrol_step(next))
+					return TRUE
+			frustration++
+			on_patrol_step_fail(next)
+		sleep((SS_WAIT_MACHINERY/steps_per)-1)
+	return TRUE
 
 /obj/machinery/bot/proc/find_patrol_path()
 	if(waiting_for_patrol)
@@ -211,12 +220,10 @@
 	find_patrol_path()
 
 /obj/machinery/bot/proc/on_patrol_step(var/turf/next)
-	return 1
 
 /obj/machinery/bot/proc/on_patrol_step_fail(next)
 	if(frustration > 5)
 		calc_path(patrol_target, .proc/get_patrol_path, next)
-	return 1
 
 
 // send a radio signal with a single data key/value pair
@@ -277,6 +284,8 @@
 	if(islist(L))
 		path = L
 		return TRUE
+	target = null
+	add_oldtarget(target)
 	return FALSE
 
 /obj/machinery/bot/proc/get_patrol_path(var/list/L, var/target)

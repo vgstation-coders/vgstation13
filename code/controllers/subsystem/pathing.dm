@@ -122,6 +122,10 @@ var/global/list/pathmakers = list()
 		to_chat(world, "target moved from end")
 		fail()
 		return FALSE
+	if(end == exclude)
+		to_chat(world, "our target is being avoided.")
+		fail()
+		return FALSE
 	return TRUE
 
 /datum/path_maker/Destroy()
@@ -149,12 +153,10 @@ var/global/list/pathmakers = list()
 /datum/path_maker/proc/process()
 	if(path)
 		return finish()
-	cur = open.Dequeue() //get the lowest node cost turf in the open list
-	if(!cur)
-		to_chat(world, "cur is 0 [cur]. ")
-		for(var/i in open.List())
-			to_chat(world, "[i]")
+	if(open.List().len == 0)
+		to_chat(world, "ran out of open turfs")
 		return fail()
+	cur = open.Dequeue() //get the lowest node cost turf in the open list
 	closed.Add(cur.source) //and tell we've processed it
 
 	//if we only want to get near the target, check if we're close enough

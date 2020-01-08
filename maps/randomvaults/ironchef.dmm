@@ -55,6 +55,7 @@
 "bc" = (/turf/simulated/floor/plating,/area/vault/ironchef)
 "bd" = (/obj/machinery/door/airlock/glass{name = "Special Ingredients"},/turf/simulated/floor/plating,/area/vault/ironchef)
 "be" = (/obj/structure/disposalpipe/segment,/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor{blocks_air = 0; icon_state = "dark"},/area/vault/ironchef)
+"bf" = (/obj/machinery/bot/cleanbot{auto_patrol = 0},/turf/simulated/floor{blocks_air = 0; icon_state = "dark"},/area/vault/ironchef)
 "bg" = (/obj/structure/rack,/obj/item/clothing/suit/chef,/obj/item/clothing/under/rank/chef,/obj/item/clothing/head/chefhat,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/ironchef)
 "bh" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vodka,/obj/item/weapon/reagent_containers/food/snacks/pimiento,/obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod,/obj/item/weapon/reagent_containers/food/snacks/bustanuts,/obj/item/weapon/reagent_containers/food/drinks/coloring,/obj/item/weapon/reagent_containers/glass/beaker/vial/uranium,/obj/item/weapon/reagent_containers/glass/beaker/vial/radium,/turf/simulated/floor/plating,/area/vault/ironchef)
 "bi" = (/obj/structure/rack,/obj/item/organ/internal/brain,/obj/item/clothing/head/butt,/obj/item/organ/internal/appendix,/obj/item/organ/internal/heart,/turf/simulated/floor/plating,/area/vault/ironchef)
@@ -112,7 +113,6 @@
 "ci" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (SOUTHWEST)"; icon_state = "warning"; dir = 10},/obj/spacepod/taxi{dir = 8},/turf/simulated/floor/plating,/area/vault/ironchef)
 "cj" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"},/turf/simulated/floor/plating,/area/vault/ironchef)
 "ck" = (/obj/machinery/door/airlock/external,/obj/docking_port/destination/vault/ironchef{dir = 2},/turf/simulated/floor/carpet,/area/vault/ironchef)
-"cl" = (/obj/machinery/bot/cleanbot{should_patrol = 0},/turf/simulated/floor{blocks_air = 0; icon_state = "dark"},/area/vault/ironchef)
 
 (1,1,1) = {"
 aaaaabababababababababababababababababababababaaaa
@@ -123,11 +123,11 @@ aaaaabacararacasatatatasasasasasasanaDaEaEaFabaaaa
 aaaaabacacacacaGasaHasasasasasasaHanaIaJaKaLabaaaa
 aaaaabababaMaMaMaMaMaNaOaOaPaMaMaMaMaMaIaQaRabaaaa
 aaaaabaSaTaMaUaVaVaVaWaWaWaWaXaYaZbaaMaMaMaMabaaaa
-aaaaabbbbcbdaWaWaWaWbeaWaWaWaWaWclaWaMbgasasabaaaa
+aaaaabbbbcbdaWaWaWaWbeaWaWaWaWaWbfaWaMbgasasabaaaa
 aaaaabbhbiaMbjaWbkbkblaWbmbnaWaWaWaWboasasbpabaaaa
 aaaaabaMaMaMbqaWbraWbsaWaWbtaWbsbnbuaMbgasasabaaaa
 aaaaabbvbvaMbwaWbxbybzaWaWbxbybAaWbBabababbCabaaaa
-aaaaabbvbvaMbDaWaWbEaWbFbGbHbIaWclbJabbKbcbcabaaaa
+aaaaabbvbvaMbDaWaWbEaWbFbGbHbIaWbfbJabbKbcbcabaaaa
 aaaaababababababbLbLbLbLbLbLbLbLabababbMbcbcabaaaa
 aaaaaMbNbObPaMbQbRbRbRbRbRbRbRbRabbSbTbcbUbVabaaaa
 aaaaaMbWbXbYbZarararararararararbCbcbccacbcccdaaaa

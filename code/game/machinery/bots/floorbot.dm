@@ -41,13 +41,6 @@ var/global/list/floorbot_targets=list()
 	anchored = 0
 	health = 25
 	maxhealth = 25
-	//weight = 1.0E7
-	var/mode = 0
-#define FLOORBOT_IDLE 		    0		// idle
-#define FLOORBOT_FIXING_SHIT    1
-#define FLOORBOT_START_PATROL	2		// start patrol
-#define FLOORBOT_PATROL		    3		// patrolling
-
 	auto_patrol = 0		// set to make bot automatically patrol
 	bot_flags = BOT_PATROL|BOT_BEACON
 	var/amount = 10
@@ -82,7 +75,6 @@ var/global/list/floorbot_targets=list()
 	oldloc = null
 	update_icon()
 	updateUsrDialog()
-	mode=FLOORBOT_IDLE
 
 /obj/machinery/bot/floorbot/attack_hand(mob/user as mob)
 	. = ..()
@@ -181,7 +173,6 @@ var/global/list/floorbot_targets=list()
 			add_oldtarget(T)
 			target = T
 			floorbot_targets +=T
-			mode=FLOORBOT_FIXING_SHIT
 			return
 
 /obj/machinery/bot/floorbot/proc/hunt_for_metal(var/list/shit_in_view, var/list/floorbottargets)
@@ -190,7 +181,6 @@ var/global/list/floorbot_targets=list()
 			add_oldtarget(M)
 			target = M
 			floorbot_targets += M
-			mode=FLOORBOT_FIXING_SHIT
 			return
 
 /obj/machinery/bot/floorbot/proc/have_target()
@@ -199,7 +189,7 @@ var/global/list/floorbot_targets=list()
 /obj/machinery/bot/floorbot/process_bot()
 	if(repairing)
 		return
-
+	decay_oldtargets()
 	if(prob(1))
 		var/message = pick("Metal to the metal.","I am the only engineering staff on this station.","Law 1. Place tiles.","Tiles, tiles, tiles...")
 		speak(message)
@@ -209,17 +199,13 @@ var/global/list/floorbot_targets=list()
 /obj/machinery/bot/floorbot/at_path_target()
 	if(istype(target, /obj/item/stack/tile/plasteel))
 		eattile(target)
-		mode=FLOORBOT_IDLE
 	else if(istype(target, /obj/item/stack/sheet/metal))
 		maketile(target)
-		mode=FLOORBOT_IDLE
-	//else if(istype(target, /turf/) && emagged < 2)
 	else if(isturf(target))
 		var/turf/T = target
 		if(emagged < 2)
 			if((T.is_plating() || istype(T,/turf/space/)))
 				repair(target)
-				mode=FLOORBOT_IDLE
 			else if(T.is_plasteel_floor())
 				var/turf/simulated/floor/F = target
 				if(F.broken || F.burnt)
@@ -229,8 +215,6 @@ var/global/list/floorbot_targets=list()
 					spawn(50)
 						anchored = 0
 						repairing = 0
-						target = null
-						floorbot_targets -= target
 		else if(emagged == 2 && T.is_plating())
 			var/turf/simulated/floor/F = target
 			anchored = 1
@@ -244,16 +228,13 @@ var/global/list/floorbot_targets=list()
 				amount ++
 				anchored = 0
 				repairing = 0
-				target = null
-				floorbot_targets -= target
-
-
-
+	path = list()
+	floorbot_targets -= target
+	target = null
 
 /obj/machinery/bot/floorbot/proc/checkforwork()
 	if(have_target())
 		return 0
-	// Needed because we used to look this up 15 goddamn times per process. - Nexypoo
 	var/list/can_see = view(7, src)
 
 	if(amount < 50)
@@ -274,14 +255,12 @@ var/global/list/floorbot_targets=list()
 				add_oldtarget(T)
 				target = T
 				floorbot_targets+=T
-				mode=FLOORBOT_FIXING_SHIT
 				return 1
 		for (var/turf/space/D in can_see)
 			if(!(D in old_targets) && !isspace(D.loc) && !(D in floorbot_targets) && !D.has_dense_content())
 				add_oldtarget(D)
 				target = D
 				floorbot_targets += D
-				mode=FLOORBOT_FIXING_SHIT
 				return 1
 		if(improvefloors)
 			for(var/turf/simulated/floor/F in can_see)
@@ -296,13 +275,11 @@ var/global/list/floorbot_targets=list()
 						add_oldtarget(F)
 						target = F
 						floorbot_targets += F
-						mode=FLOORBOT_FIXING_SHIT
 						return 1
 				if(F.is_plasteel_floor() && (F.broken||F.burnt))
 					add_oldtarget(F)
 					target = F
 					floorbot_targets += F
-					mode=FLOORBOT_FIXING_SHIT
 					return 1
 	else
 		for (var/turf/simulated/floor/D in can_see)
@@ -316,7 +293,6 @@ var/global/list/floorbot_targets=list()
 				add_oldtarget(D)
 				target = D
 				floorbot_targets += D
-				mode=FLOORBOT_FIXING_SHIT
 				return 1
 	return 0
 
@@ -335,26 +311,22 @@ var/global/list/floorbot_targets=list()
 		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel
 		repairing = 1
 		spawn(50)
-			T.build(loc)
+			T.build(target)
 			repairing = 0
 			amount -= 1
 			update_icon()
 			anchored = 0
-			floorbot_targets -= target
-			target = null
 	else
 		var/turf/simulated/floor/F = loc
 		if(!F.broken && !F.burnt)
 			visible_message("<span class='warning'>[src] begins to improve the floor.</span>")
 			repairing = 1
 			spawn(50)
-				F.make_plasteel_floor()
+				F.make_plasteel_floor(new /obj/item/stack/tile/plasteel)
 				repairing = 0
 				amount -= 1
 				update_icon()
 				anchored = 0
-				floorbot_targets -= target
-				target = null
 		else
 			if(F.is_plating())
 				visible_message("<span class='warning'>[src] begins to fix dents in the floor.</span>")
@@ -365,8 +337,6 @@ var/global/list/floorbot_targets=list()
 					F.icon_state = "plating"
 					F.burnt = 0
 					F.broken = 0
-					floorbot_targets -= target
-					target = null
 
 /obj/machinery/bot/floorbot/proc/eattile(var/obj/item/stack/tile/plasteel/T)
 	if(!istype(T, /obj/item/stack/tile/plasteel))
@@ -375,7 +345,6 @@ var/global/list/floorbot_targets=list()
 	repairing = 1
 	spawn(20)
 		if(isnull(T))
-			target = null
 			repairing = 0
 			return
 		if(amount + T.amount > 50)
@@ -386,8 +355,6 @@ var/global/list/floorbot_targets=list()
 			amount += T.amount
 			returnToPool(T)
 		update_icon()
-		floorbot_targets -= target
-		target = null
 		repairing = 0
 
 /obj/machinery/bot/floorbot/proc/maketile(var/obj/item/stack/sheet/metal/M)
@@ -399,7 +366,6 @@ var/global/list/floorbot_targets=list()
 	repairing = 1
 	spawn(20)
 		if(!M || !get_turf(M))
-			target = null
 			repairing = 0
 			return
 		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel(get_turf(M))
@@ -409,8 +375,6 @@ var/global/list/floorbot_targets=list()
 			//qdel(M)
 		else
 			M.amount--
-		floorbot_targets -= target
-		target = null
 		repairing = 0
 
 /obj/machinery/bot/floorbot/update_icon()
@@ -422,7 +386,6 @@ var/global/list/floorbot_targets=list()
 
 /obj/machinery/bot/floorbot/get_patrol_path(var/list/L)
 	if(..())
-		mode = FLOORBOT_PATROL
 		return TRUE
 	return FALSE
 

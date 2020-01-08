@@ -43,8 +43,6 @@
 	var/setting_refill = 1
 	var/setting_fertilize = 1
 	var/setting_weed = 1
-	//var/setting_ignoreWeeds = 1 //These don't seem to do anything
-	//var/setting_ignoreMushrooms = 1
 	var/setting_ignoreEmpty = 0
 	var/mode //Which mode is being used, 0 means it is looking for work
 
@@ -54,31 +52,23 @@
 	name = "Special Vox Trader Farmbot"
 	req_access = list()
 	req_one_access =  list(access_hydroponics, access_trade)
-/*
+
 /obj/machinery/bot/farmbot/New()
 	..()
 	src.icon_state = "[src.icon_initial][src.on]"
-	spawn (4)
-		src.botcard = new /obj/item/weapon/card/id(src)
-		src.botcard.access = req_access
+	src.botcard = new /obj/item/weapon/card/id(src)
+	src.botcard.access = req_access
 
-		if ( !tank ) //Should be set as part of making it... but lets check anyway
-			tank = locate(/obj/structure/reagent_dispensers/watertank/) in contents
-		if ( !tank ) //An admin must have spawned the farmbot! Better give it a tank.
-			tank = new /obj/structure/reagent_dispensers/watertank(src)
+	if ( !tank ) //Should be set as part of making it... but lets check anyway
+		tank = locate(/obj/structure/reagent_dispensers/watertank/) in contents
+	if ( !tank ) //An admin must have spawned the farmbot! Better give it a tank.
+		tank = new /obj/structure/reagent_dispensers/watertank(src)
 
 /obj/machinery/bot/farmbot/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if (istype(mover,/mob/living/simple_animal/bee))
 		return 1
 	return ..()
 
-/obj/machinery/bot/farmbot/to_bump(M as mob|obj) //Leave no door unopened!
-	spawn(0)
-		if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
-			var/obj/machinery/door/D = M
-			if (!istype(D, /obj/machinery/door/firedoor) && !istype(D, /obj/machinery/door/poddoor) && D.check_access(src.botcard))
-				D.open()
-				src.frustration = 0
 
 /obj/machinery/bot/farmbot/turn_on()
 	. = ..()
@@ -126,8 +116,6 @@
 		dat += " Fertilize Plants : <A href='?src=\ref[src];fertilize=1'>[src.setting_fertilize ? "Yes" : "No"]</A><BR>"
 		dat += "<br>Weeding Controls:<br>"
 		dat += " Weed Plants : <A href='?src=\ref[src];weed=1'>[src.setting_weed ? "Yes" : "No"]</A><BR>"
-		//dat += "<br>Ignore Weeds : <A href='?src=\ref[src];ignoreWeed=1'>[src.setting_ignoreWeeds ? "Yes" : "No"]</A><BR>"
-		//dat += "Ignore Mushrooms : <A href='?src=\ref[src];ignoreMush=1'>[src.setting_ignoreMushrooms ? "Yes" : "No"]</A><BR>"
 		dat += "Ignore Empty Trays : <A href='?src=\ref[src];ignoreEmpty=1'>[src.setting_ignoreEmpty ? "Yes" : "No"]</A><BR>"
 		dat += "</TT>"
 
@@ -154,10 +142,6 @@
 		setting_fertilize = !setting_fertilize
 	else if((href_list["weed"]) && (!src.locked))
 		setting_weed = !setting_weed
-	//else if((href_list["ignoreWeed"]) && (!src.locked))
-	//	setting_ignoreWeeds = !setting_ignoreWeeds
-	//else if((href_list["ignoreMush"]) && (!src.locked))
-	//	setting_ignoreMushrooms = !setting_ignoreMushrooms
 	else if((href_list["ignoreEmpty"]) && (!src.locked))
 		setting_ignoreEmpty = !setting_ignoreEmpty
 	else if (href_list["eject"] )
@@ -230,7 +214,7 @@
 	qdel(src)
 	return
 
-/obj/machinery/bot/farmbot/process()
+/obj/machinery/bot/farmbot/process_bot()
 	//set background = 1
 
 	if(!src.on)
@@ -258,9 +242,7 @@
 			// If we are in emagged fertilize mode, we throw the fertilizer, so distance doesn't matter
 			frustration = 0
 			use_farmbot_item()
-		else
-			move_to_target()
-	return
+
 
 /obj/machinery/bot/farmbot/proc/use_farmbot_item()
 	if ( !target )
@@ -289,19 +271,19 @@
 			return
 		fertilize(fert)
 
-	if ( mode == FARMBOT_MODE_WEED )
+	if(mode == FARMBOT_MODE_WEED)
 		weed()
 
-	if ( mode == FARMBOT_MODE_WATER )
+	if(mode == FARMBOT_MODE_WATER)
 		water()
 
-	if ( mode == FARMBOT_MODE_REFILL )
+	if(mode == FARMBOT_MODE_REFILL)
 		refill()
 
 
 
 
-/obj/machinery/bot/farmbot/proc/find_target()
+/obj/machinery/bot/farmbot/find_target()
 	if ( emagged ) //Find a human and help them!
 		for ( var/mob/living/carbon/human/human in view(7,src) )
 			if (human.isDead())
@@ -346,24 +328,6 @@
 		return FARMBOT_MODE_FERTILIZE
 	return 0
 
-/obj/machinery/bot/farmbot/proc/move_to_target()
-	if(frustration > 8)
-		target = null
-		mode = 0
-		frustration = 0
-		path.Cut()
-	if(target)
-		if(!path.len)
-			return AStar(src, .get_astar_path, src, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 8, 30, 1, id=botcard)
-		if(!step_to(src, path[1]))
-			frustration++
-			return
-		path -= path[1]
-
-/obj/machinery/bot/farmbot/get_astar_path(var/list/L, var/target)
-	if(!islist(L))
-		frustration++
-	path = L
 
 /obj/machinery/bot/farmbot/proc/fertilize(var/obj/item/weapon/reagent_containers/glass/fert)
 	if ( !fert )
@@ -485,7 +449,7 @@
 		src.mode = 0
 		tank.reagents.add_reagent(WATER, tank.reagents.maximum_volume - tank.reagents.total_volume )
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-*/
+
 
 /obj/item/weapon/farmbot_arm_assembly
 	name = "water tank/robot arm assembly"
