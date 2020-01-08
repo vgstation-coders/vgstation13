@@ -77,7 +77,7 @@
 
 /datum/mind/proc/transfer_to(mob/living/new_character)
 	if(!istype(new_character))
-		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
+		CRASH("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
 
 	if (!current)
 		transfer_to_without_current(new_character)
