@@ -449,7 +449,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					use_power(power)
 					linked_lathe.queue += being_built
 				if(href_list["now"]=="1")
-					linked_lathe.stopped=0
+					linked_lathe.start_processing_queue()
 
 	else if(href_list["imprint"]) //Causes the Circuit Imprinter to build something.
 		if (!autorefresh)
@@ -482,7 +482,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					linked_imprinter.queue += being_built
 					use_power(power)
 				if(href_list["now"]=="1")
-					linked_imprinter.stopped=0
+					linked_imprinter.start_processing_queue()
 
 	else if(href_list["disposeI"] && linked_imprinter)  //Causes the circuit imprinter to dispose of a single reagent (all of it)
 		if(!src.allowed(usr))
