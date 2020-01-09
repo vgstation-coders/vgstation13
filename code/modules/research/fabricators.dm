@@ -304,8 +304,9 @@
 		return
 	var/datum/design/D = queue_pop()
 	if(!build_part(D))
-		queue.Add(D)
-		return
+		if(D)
+			queue.Add(D)
+		stop_processing_queue()
 	sleep(fabricator_cooldown)
 	build_part_loop()
 
@@ -326,17 +327,17 @@
 		src.visible_message("<span class='notice'>The [src.name] beeps, \"Not enough materials to complete item.\"</span>")
 		return
 
-	src.being_built = new part.build_path(src)
+	being_built = new part.build_path(src)
 
-	src.busy = 1
+	busy = 1
 	icon_state = "[base_state]_ani"
 	if(start_end_anims)
 		flick("[base_state]_start",src)
-	src.use_power = 2
-	src.updateUsrDialog()
+	use_power = 2
+	updateUsrDialog()
 	//message_admins("We're going building with [get_construction_time_w_coeff(part)]")
 	sleep(get_construction_time_w_coeff(part))
-	src.use_power = 1
+	use_power = 1
 	icon_state = base_state
 	if(start_end_anims)
 		flick("[base_state]_end",src)
@@ -363,12 +364,12 @@
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
 		being_built.anchored = 0
-		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
-		src.being_built = null
+		visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
+		being_built = null
 		last_made = part
 		wires.SignalIndex(RND_WIRE_JOBFINISHED)
-	src.updateUsrDialog()
-	src.busy = 0
+	updateUsrDialog()
+	busy = 0
 	return 1
 
 //max_length is, from the top of the list, the parts you want to queue down to
@@ -405,36 +406,6 @@
 
 /obj/machinery/r_n_d/fabricator/proc/is_contraband(var/datum/design/part)
 	return
-
-/* This is what process() is for you nerd - N3X
-/obj/machinery/r_n_d/fabricator/proc/process_queue()
-
-
-	if(!queue.len)
-		return
-
-	var/datum/design/part = src.queue[1]
-
-	if(!part)
-		remove_from_queue(1)
-		if(src.queue.len)
-			return process_queue()
-		else
-			return
-	while(part)
-		if(stat&(NOPOWER|BROKEN))
-			return 0
-		remove_from_queue(1)
-		build_part(part)
-		if(!queue.len)
-			return
-		else
-			if(!isnull(src.queue[1]))
-				part = src.queue[1]
-	src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Queue processing finished successfully\".")
-	return 1
-*/
-
 
 /obj/machinery/r_n_d/fabricator/proc/convert_designs()
 	if(!files)
@@ -516,12 +487,11 @@
 	if(stopped)
 		start_processing_queue()
 
-// Tell the machine to start processing the queue on the next process().
+//Makes the machine start build_part_loop() which will build parts until its conditions no longer allow it to
 /obj/machinery/r_n_d/fabricator/proc/start_processing_queue()
 	stopped=0
-	spawn(0)
+	spawn(0) //This way whatever is calling start_processing_queue won't wait until build_part_loop is finished to continue
 		build_part_loop()
-	return
 
 // Stop processing queue (currently-executing ticks will finish first).
 /obj/machinery/r_n_d/fabricator/proc/stop_processing_queue()
@@ -698,60 +668,8 @@
 		return
 
 	..()
-/*
-/obj/machinery/r_n_d/fabricator/mech/Topic(href, href_list)
 
-	if(href_list["process_queue"])
-		spawn(-1)
-			if(processing_queue || being_built)
-				return 0
-			processing_queue = 1
-			process_queue()
-			processing_queue = 0
-
-	if(href_list["clear_temp"])
-		temp = null
-	if(href_list["screen"])
-		src.screen = href_list["screen"]
-
-	if(href_list["queue_move"] && href_list["index"])
-		var/index = topic_filter.getNum("index")
-		var/new_index = index + topic_filter.getNum("queue_move")
-		if(isnum(index) && isnum(new_index))
-			if(IsInRange(new_index,1,queue.len))
-				queue.Swap(index,new_index)
-		return update_queue_on_page()
-
-	if(href_list["clear_queue"])
-		queue = list()
-		return update_queue_on_page()
-	if(href_list["sync"])
-		queue = list()
-		temp = "Updating local R&D database..."
-		src.updateUsrDialog()
-		spawn(30)
-			src.sync()
-		return update_queue_on_page()
-	if(href_list["part_desc"])
-		var/obj/part = topic_filter.getObj("part_desc")
-
-		// critical exploit prevention, do not remove unless you replace it -walter0o
-		if(src.exploit_prevention(part, usr, 1))
-			return
-
-		if(part)
-			temp = {"<h1>[part] description:</h1>
-						[part.desc]<br>
-						<a href='?src=\ref[src];clear_temp=1'>Return</a>
-						"}
-	if(href_list["remove_mat"] && href_list["material"])
-		temp = "Ejected [remove_material(href_list["material"],text2num(href_list["remove_mat"]))] of [href_list["material"]]<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
-	src.updateUsrDialog()
-	return
-*/
 /obj/machinery/r_n_d/fabricator/proc/remove_material(var/matID, var/amount)
-
-
 	var/datum/material/material = materials.getMaterial(matID)
 	if(material)
 		//var/obj/item/stack/sheet/res = new material.sheettype(src)
