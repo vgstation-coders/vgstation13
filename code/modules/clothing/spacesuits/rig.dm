@@ -403,6 +403,21 @@
 	if(module_list.len)
 		data["modules"] = module_list
 
+	if(wearer) //Internals below!!!
+		data["valveOpen"] = (wearer.internal == T)
+		data["maskConnected"] = FALSE
+		if(!wearer.internal || wearer.internal == T)	// if they have no active internals or if tank is current internal
+			if(wearer.wear_mask && (wearer.wear_mask.item_flags & ITEM_FLAG_AIRTIGHT))// mask
+				data["maskConnected"] = TRUE
+			else if(wearer.head && (wearer.head.item_flags & ITEM_FLAG_AIRTIGHT)) // Make sure they have a helmet and its airtight
+				data["maskConnected"] = TRUE
+
+	data["tankPressure"] = round(T && T.air_contents && T.air_contents.return_pressure() ? T.air_contents.return_pressure() : 0)
+	data["releasePressure"] = round(T && T.distribute_pressure ? T.distribute_pressure : 0)
+	data["defaultReleasePressure"] = T ? round(initial(T.distribute_pressure)) : 0
+	data["maxReleasePressure"] = T ? round(TANK_MAX_RELEASE_PRESSURE) : 0
+	data["tank"] = T ? TRUE : FALSE
+
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "hardsuit.tmpl", name, 750, 550)
