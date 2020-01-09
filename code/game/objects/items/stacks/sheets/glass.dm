@@ -19,6 +19,7 @@
 	var/shard_type = /obj/item/weapon/shard
 	mat_type = MAT_GLASS
 	siemens_coefficient = 0 //does not conduct
+	perunit = CC_PER_SHEET_GLASS
 
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user)
 	if(issolder(W))
@@ -53,7 +54,7 @@
 	desc = "HOLY SHEET! That is a lot of glass."
 	singular_name = "glass sheet"
 	icon_state = "sheet-glass"
-	starting_materials = list(MAT_GLASS = 3750)
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS)
 	origin_tech = Tc_MATERIALS + "=1"
 	rglass = /obj/item/stack/sheet/glass/rglass
 
@@ -90,7 +91,7 @@
 	singular_name = "reinforced glass sheet"
 	sname = "glass_ref"
 	icon_state = "sheet-rglass"
-	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = 3750)
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL/2, MAT_GLASS = CC_PER_SHEET_GLASS)
 	origin_tech = Tc_MATERIALS + "=2"
 	reinforced = 1
 	glass_quality = 1
@@ -114,7 +115,7 @@
 	singular_name = "glass sheet"
 	icon_state = "sheet-plasmaglass"
 	sname = "plasma"
-	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_PLASMA)
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_PLASMATECH + "=2"
 	rglass = /obj/item/stack/sheet/glass/plasmarglass
 	perunit = 2875 //average of plasma and glass
@@ -137,7 +138,7 @@
 	singular_name = "reinforced plasma glass sheet"
 	icon_state = "sheet-plasmarglass"
 	sname = "plasma_ref"
-	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL/2, MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_PLASMA)
 	melt_temperature = MELTPOINT_STEEL+500 // I guess...?
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=2"
 	perunit = 2875
