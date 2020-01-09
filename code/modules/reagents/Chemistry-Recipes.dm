@@ -2019,13 +2019,13 @@
 		P.forceMove(get_turf(holder.my_atom))
 	..()
 
-/datum/chemical_reaction/slime_extract/slimecash
+/datum/chemical_reaction/slime_extract/slime_extract/slimecash
 	name = "Slime Cash"
 	id = "m_cash"
 	required_reagents = list(BLOOD = 5)
 	required_container = /obj/item/slime_extract/pyrite
 
-/datum/chemical_reaction/slimecash/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimecash/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/spacecash/c1000/C = new /obj/item/weapon/spacecash/c1000/
 	C.amount = 1
 	C.forceMove(get_turf(holder.my_atom))
