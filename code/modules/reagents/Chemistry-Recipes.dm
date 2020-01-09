@@ -11,7 +11,6 @@
 
 	//Both of these variables are mostly going to be used with slime cores - but if you want to, you can use them for other things
 	var/atom/required_container = null //The container required for the reaction to happen
-	var/required_other = 0 //An integer required for the reaction to happen
 
 	var/result_amount = 0
 	var/secondary = 0 //Set to nonzero if secondary reaction
@@ -61,6 +60,10 @@
 
 /datum/chemical_reaction/proc/on_reaction(var/datum/reagents/holder, var/created_volume)
 	return
+
+//Add conditions here for whether a reaction will happen when reactions happen. Defaults to 1
+/datum/chemical_reaction/proc/required_condition_check(var/datum/reagents/holder)
+	return 1
 
 //I recommend you set the result amount to the total volume of all components.
 /datum/chemical_reaction/explosion_potassium
@@ -1087,178 +1090,181 @@
 
 /////////////////////////////////////////////NEW SLIME CORE REACTIONS/////////////////////////////////////////////
 
+//the slime_extract chem reaction parent, that will only be called when the container type is a slime extract
+//Automatically deletes the extract when used up
+/datum/chemical_reaction/slime_extract
+	result = null
+	result_amount = 1
+	var/reagent //If toggled on, will make a container appear on use that contains the reagent
+	var/reagent_amount
+	var/container_type = /obj/item/weapon/reagent_containers/glass/bottle //The type of container, default is a bottle
+
+/datum/chemical_reaction/slime_extract/required_condition_check(datum/reagents/holder)
+	if(istype(holder.my_atom, /obj/item/slime_extract))
+		var/obj/item/slime_extract/S = holder.my_atom
+		if(S.Uses > 0)
+			return 1
+	return 0
+
+/datum/chemical_reaction/slime_extract/on_reaction(datum/reagents/holder, created_volume)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	if(reagent && reagent_amount && container_type)
+		var/obj/item/weapon/reagent_containers/B = new container_type
+		B.reagents.add_reagent(reagent, reagent_amount)
+		B.forceMove(get_turf(holder.my_atom))
+	if(istype(holder.my_atom, /obj/item/slime_extract))
+		var/obj/item/slime_extract/S = holder.my_atom
+		S.Uses--
+		if(S.Uses <= 0)
+			if(!istype(S.loc, /obj/item/weapon/grenade/chem_grenade) && !quiet)
+				S.visible_message("<span class='notice'>[bicon(holder.my_atom)] \The [holder.my_atom]'s power is consumed in the reaction.</span>")
+			qdel(S)
+
 //Grey
-/datum/chemical_reaction/slimespawn
+/datum/chemical_reaction/slime_extract/slimespawn
 	name = "Slime Spawn"
 	id = "m_spawn"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/grey
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimespawn/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimespawn/on_reaction(var/datum/reagents/holder)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
-		feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-
 		if(istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
 			holder.my_atom.visible_message("<span class='rose'>The grenade bursts open and a new baby slime emerges from it!</span>")
 		else
 			holder.my_atom.visible_message("<span class='rose'>Infused with plasma, the core begins to quiver and grow, and soon a new baby slime emerges from it!</span>")
-
 		var/mob/living/carbon/slime/S = new /mob/living/carbon/slime
 		S.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimemonkey
+/datum/chemical_reaction/slime_extract/slimemonkey
 	name = "Slime Monkey"
 	id = "m_monkey"
-	result = null
 	required_reagents = list(BLOOD = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/grey
-	required_other = 1
 
-/datum/chemical_reaction/slimemonkey/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimemonkey/on_reaction(var/datum/reagents/holder)
 	for(var/i = 1, i <= 3, i++)
 		var /obj/item/weapon/reagent_containers/food/snacks/monkeycube/M = new /obj/item/weapon/reagent_containers/food/snacks/monkeycube
 		M.forceMove(get_turf(holder.my_atom))
+	..()
 
 //Green
-/datum/chemical_reaction/slimemutate
+/datum/chemical_reaction/slime_extract/slimemutate
 	name = "Mutation Toxin"
 	id = MUTATIONTOXIN
-	result = MUTATIONTOXIN
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
-	required_other = 1
 	required_container = /obj/item/slime_extract/green
+	reagent = MUTATIONTOXIN
+	reagent_amount = 1
 
-/datum/chemical_reaction/slimetile
+/datum/chemical_reaction/slime_extract/slimetile
 	name = "Slime tiles"
 	id = "slimetile"
-	result = null
 	required_reagents = list(IRON = 5)
 	required_container = /obj/item/slime_extract/green
-	required_other = 1
 
-/datum/chemical_reaction/slimetile/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimetile/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/tile/slime/T = new /obj/item/stack/tile/slime
 	T.amount = 20
 	T.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimeheart
+/datum/chemical_reaction/slime_extract/slimeheart
 	name = "slime heart"
 	id = "R_heart"
-	result = null
 	required_reagents = list(BLOOD = 5)
 	required_container = /obj/item/slime_extract/green
-	required_other = 1
-/datum/chemical_reaction/slimeheart/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+
+/datum/chemical_reaction/slime_extract/slimeheart/on_reaction(var/datum/reagents/holder)
 	var/obj/item/slime_heart/S = new /obj/item/slime_heart
 	S.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimecoat
+/datum/chemical_reaction/slime_extract/slimecoat
 	name = "slime coat"
 	id = "R_coat"
-	result = null
 	required_reagents = list(WATER = 5)
 	required_container = /obj/item/slime_extract/green
-	required_other = 1
-/datum/chemical_reaction/slimecoat/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+
+/datum/chemical_reaction/slime_extract/slimecoat/on_reaction(var/datum/reagents/holder)
 	var/obj/item/clothing/suit/storage/wintercoat/slimecoat/C = new /obj/item/clothing/suit/storage/wintercoat/slimecoat
 	C.forceMove(get_turf(holder.my_atom))
+	..()
 
 //Metal
-/datum/chemical_reaction/slimemetal
+/datum/chemical_reaction/slime_extract/slimemetal
 	name = "Slime Metal"
 	id = "m_metal"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/metal
-	required_other = 1
 
-/datum/chemical_reaction/slimemetal/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimemetal/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(holder.my_atom))
 	M.amount = 15
 	var/obj/item/stack/sheet/plasteel/P = new /obj/item/stack/sheet/plasteel
 	P.amount = 5
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimegold
+/datum/chemical_reaction/slime_extract/slimegold
 	name = "Slime Gold"
 	id = "m_gold"
-	result = null
 	required_reagents = list(COPPER = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/metal
-	required_other = 1
 
-/datum/chemical_reaction/slimegold/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimegold/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/gold/G = new /obj/item/stack/sheet/mineral/gold
 	G.amount = 5
 	G.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimesilver
+/datum/chemical_reaction/slime_extract/slimesilver
 	name = "Slime Silver"
 	id = "m_silver"
-	result = null
 	required_reagents = list(TUNGSTEN = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/metal
-	required_other = 1
 
-/datum/chemical_reaction/slimesilver/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimesilver/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/silver/S = new /obj/item/stack/sheet/mineral/silver
 	S.amount = 5
 	S.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimeuranium
+/datum/chemical_reaction/slime_extract/slimeuranium
 	name = "Slime Uranium"
 	id = "m_uranium"
-	result = null
 	required_reagents = list(RADIUM = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/metal
-	required_other = 1
 
-/datum/chemical_reaction/slimeuranium/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimeuranium/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/uranium/U = new /obj/item/stack/sheet/mineral/uranium
 	U.amount = 5
 	U.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimediamond
+/datum/chemical_reaction/slime_extract/slimediamond
 	name = "Slime diamond"
 	id = "m_diamond"
-	result = null
 	required_reagents = list(CARBON = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/metal
-	required_other = 1
 
-/datum/chemical_reaction/slimediamond/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimediamond/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/diamond/K = new /obj/item/stack/sheet/mineral/diamond
 	K.amount = 2
 	K.forceMove(get_turf(holder.my_atom))
-
+	..()
 
 //Gold
-/datum/chemical_reaction/slimecrit
+/datum/chemical_reaction/slime_extract/slimecrit
 	name = "Slime Crit (Summon Monsters)"
 	id = "m_tele"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/gold
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimecrit/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimecrit/on_reaction(var/datum/reagents/holder)
 	if(!istype(holder.my_atom.loc, /obj/item/weapon/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently!</span>")
 		sleep(50)
@@ -1300,19 +1306,16 @@
 		if(prob(50))
 			for(var/j = 1, j <= rand(1, 3), j++)
 				step(C, pick(NORTH,SOUTH,EAST,WEST))
+	..()
 
-/datum/chemical_reaction/slimecritlesser
+/datum/chemical_reaction/slime_extract/slimecritlesser
 	name = "Slime Crit Lesser (Summon Monsters)"
 	id = "m_tele3"
-	result = null
 	required_reagents = list(BLOOD = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/gold
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimecritlesser/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimecritlesser/on_reaction(var/datum/reagents/holder)
 	if(!istype(holder.my_atom.loc, /obj/item/weapon/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently !</span>")
 		sleep(50)
@@ -1350,19 +1353,16 @@
 	var/mob/living/simple_animal/hostile/C = new chosen
 	C.faction = "neutral" //Uh, beepsky ignores mobs in this faction as of Redmine #147 - N3X
 	C.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimecritweak
+/datum/chemical_reaction/slime_extract/slimecritweak
 	name = "Slime Animation"
 	id = "m_tele4"
-	result = null
 	required_reagents = list(WATER = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/gold
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimecritweak/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimecritweak/on_reaction(var/datum/reagents/holder)
 	if(!istype(holder.my_atom.loc, /obj/item/weapon/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to slowly vibrate!</span>")
 
@@ -1410,18 +1410,16 @@
 
 		else
 			new /mob/living/simple_animal/hostile/mimic/crate
+	..()
 
 //Silver
-/datum/chemical_reaction/slimebork
+/datum/chemical_reaction/slime_extract/slimebork
 	name = "Slime Bork"
 	id = "m_tele2"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/silver
-	required_other = 1
 
-/datum/chemical_reaction/slimebork/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimebork/on_reaction(var/datum/reagents/holder)
 	var/blocked = list(
 		/obj/item/weapon/reagent_containers/food/snacks,
 		/obj/item/weapon/reagent_containers/food/snacks/snackbar,
@@ -1467,18 +1465,15 @@
 			if(prob(50))
 				for(var/j = 1, j <= rand(1, 3), j++)
 					step(B, pick(NORTH,SOUTH,EAST,WEST))
+	..()
 
-/datum/chemical_reaction/slimedrinks
+/datum/chemical_reaction/slime_extract/slimedrinks
 	name = "Slime Drinks"
 	id = "m_tele3"
-	result = null
 	required_reagents = list(WATER = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/silver
-	required_other = 1
 
-/datum/chemical_reaction/slimedrinks/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimedrinks/on_reaction(var/datum/reagents/holder)
 
 	var/blocked = list(
 		/obj/item/weapon/reagent_containers/food/drinks,
@@ -1525,17 +1520,15 @@
 			if(prob(50))
 				for(var/j = 1, j <= rand(1, 3), j++)
 					step(B, pick(NORTH,SOUTH,EAST,WEST))
+	..()
 
-/datum/chemical_reaction/slimematerials
+/datum/chemical_reaction/slime_extract/slimematerials
 	name = "Slime Materials"
 	id = "m_mats"
-	result = null
 	required_reagents = list(CARBON = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/silver
-	required_other = 1
 
-/datum/chemical_reaction/slimematerials/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimematerials/on_reaction(var/datum/reagents/holder)
 	var/list/paths = list(/obj/item/stack/sheet/plasteel,
 			/obj/item/stack/sheet/metal,
 			/obj/item/stack/sheet/mineral/plasma,
@@ -1544,34 +1537,26 @@
 			/obj/item/stack/sheet/mineral/uranium)
 	getFromPool(pick(paths), get_turf(holder.my_atom), 5)
 	getFromPool(pick(paths), get_turf(holder.my_atom), 5)
-
+	..()
 
 //Blue
-/datum/chemical_reaction/slimefrost
+/datum/chemical_reaction/slime_extract/slimefrost
 	name = "Slime Frost Oil"
 	id = "m_frostoil"
-	result = FROSTOIL
 	required_reagents = list(PLASMA = 5)
-	result_amount = 10
 	required_container = /obj/item/slime_extract/blue
-	required_other = 1
-
-/datum/chemical_reaction/slimefrost/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	reagent = FROSTOIL
+	reagent_amount = 10
 
 //Dark Blue
-/datum/chemical_reaction/slimefreeze
+/datum/chemical_reaction/slime_extract/slimefreeze
 	name = "Slime Freeze"
 	id = "m_freeze"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/darkblue
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimefreeze/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimefreeze/on_reaction(var/datum/reagents/holder)
 	if(!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently!</span>")
 		sleep(50)
@@ -1581,46 +1566,36 @@
 	for(var/mob/living/M in range (get_turf(holder.my_atom), 7))
 		M.bodytemperature -= 6
 		to_chat(M, "<span class='notice'>You feel a chill!</span>")
+	..()
 
-/datum/chemical_reaction/slimenutrient
+/datum/chemical_reaction/slime_extract/slimenutrient
 	name = "Slime Nutrient"
 	id = "m_nutrient"
-	result = null
 	required_reagents = list(BLOOD = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/darkblue
-	required_other = 1
 
-/datum/chemical_reaction/slimenutrient/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimenutrient/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/slimenutrient/P = new /obj/item/weapon/slimenutrient
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
 //Orange
-/datum/chemical_reaction/slimecasp
+/datum/chemical_reaction/slime_extract/slimecasp
 	name = "Slime Capsaicin Oil"
 	id = "m_capsaicinoil"
-	result = CAPSAICIN
 	required_reagents = list(BLOOD = 5)
-	result_amount = 10
 	required_container = /obj/item/slime_extract/orange
-	required_other = 1
+	reagent = CAPSAICIN
+	reagent_amount = 10
 
-/datum/chemical_reaction/slimecasp/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-
-/datum/chemical_reaction/slimefire
+/datum/chemical_reaction/slime_extract/slimefire
 	name = "Slime Napalm"
 	id = "m_fire"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/orange
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimefire/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimefire/on_reaction(var/datum/reagents/holder)
 	if(!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently!</span>")
 		sleep(50)
@@ -1634,368 +1609,277 @@
 		target_tile.assume_air(napalm)
 		spawn(0)
 			target_tile.hotspot_expose(700, 400,surfaces = 1)
+	..()
 
 //Yellow
-/datum/chemical_reaction/slimeoverload
+/datum/chemical_reaction/slime_extract/slimeoverload
 	name = "Slime EMP"
 	id = "m_emp"
-	result = null
 	required_reagents = list(BLOOD = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/yellow
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimeoverload/on_reaction(var/datum/reagents/holder, var/created_volume)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimeoverload/on_reaction(var/datum/reagents/holder, var/created_volume)
 	empulse(get_turf(holder.my_atom), 3, 7)
+	..()
 
-/datum/chemical_reaction/slimecell
+/datum/chemical_reaction/slime_extract/slimecell
 	name = "Slime Powercell"
 	id = "m_cell"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/yellow
-	required_other = 1
 
-/datum/chemical_reaction/slimecell/on_reaction(var/datum/reagents/holder, var/created_volume)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimecell/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/obj/item/weapon/cell/slime/P = new /obj/item/weapon/cell/slime
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
-//Was a broken recipe that was supposed to make the extract produce some light
-//I changed it, so it now creates an /obj/item/device/flashlight/lamp/slime
-//Basically a lamp with two brightness settings. light slightly yellow
-/datum/chemical_reaction/slimeglow
+/datum/chemical_reaction/slime_extract/slimeglow
 	name = "Slime Glow"
 	id = "m_glow"
-	result = null
 	required_reagents = list(WATER = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/yellow
-	required_other = 1
 
-/datum/chemical_reaction/slimeglow/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimeglow/on_reaction(var/datum/reagents/holder)
 	var/obj/item/device/flashlight/lamp/slime/P = new /obj/item/device/flashlight/lamp/slime
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
 //Purple
-/datum/chemical_reaction/slimepsteroid
+/datum/chemical_reaction/slime_extract/slimepsteroid
 	name = "Slime Steroid"
 	id = "m_steroid"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/purple
-	required_other = 1
 
-/datum/chemical_reaction/slimepsteroid/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimepsteroid/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/slimesteroid/P = new /obj/item/weapon/slimesteroid
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimejam
+/datum/chemical_reaction/slime_extract/slimejam
 	name = "Slime Jam"
 	id = "m_jam"
-	result = SLIMEJELLY
 	required_reagents = list(SUGAR = 5)
-	result_amount = 10
 	required_container = /obj/item/slime_extract/purple
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
-
-/datum/chemical_reaction/slimejam/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used","[replacetext(name, " ", "_")]")
+	reagent = SLIMEJELLY
+	reagent_amount = 10
 
 //Dark Purple
-/datum/chemical_reaction/slimeplasma
+/datum/chemical_reaction/slime_extract/slimeplasma
 	name = "Slime Plasma"
 	id = "m_plasma"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/darkpurple
-	required_other = 1
 
-/datum/chemical_reaction/slimeplasma/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimeplasma/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/plasma/P = new /obj/item/stack/sheet/mineral/plasma
 	P.amount = 10
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
 //Red
-/datum/chemical_reaction/slimeglycerol
+/datum/chemical_reaction/slime_extract/slimeglycerol
 	name = "Slime Glycerol"
 	id = "m_glycerol"
-	result = GLYCEROL
 	required_reagents = list(PLASMA = 5)
-	result_amount = 8
 	required_container = /obj/item/slime_extract/red
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
+	reagent = GLYCEROL
+	reagent_amount = 8
 
-/datum/chemical_reaction/slimeglycerol/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-
-/datum/chemical_reaction/slimeres
+/datum/chemical_reaction/slime_extract/slimeres
 	name = "Slime Res"
 	id = "m_nutrient"
-	result = null
 	required_reagents = list(SUGAR = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/red
-	required_other = 1
 
-/datum/chemical_reaction/slimeres/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimeres/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/slimeres/P = new /obj/item/weapon/slimeres
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimebloodlust
+/datum/chemical_reaction/slime_extract/slimebloodlust
 	name = "Bloodlust"
 	id = "m_bloodlust"
-	result = null
 	required_reagents = list(BLOOD = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/red
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimebloodlust/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-
+/datum/chemical_reaction/slime_extract/slimebloodlust/on_reaction(var/datum/reagents/holder)
 	for(var/mob/living/carbon/slime/slime in viewers(get_turf(holder.my_atom), null))
 		slime.rabid()
 		holder.my_atom.visible_message("<span class='warning'>\The [slime] is driven into a frenzy!</span>")
 	for(var/mob/living/simple_animal/slime/slime in viewers(get_turf(holder.my_atom), null))
 		slime.rabid()
 		holder.my_atom.visible_message("<span class='warning'>\The [slime] is driven into a frenzy!</span>")
+	..()
 
 //Pink
-/datum/chemical_reaction/slimeppotion
+/datum/chemical_reaction/slime_extract/slimeppotion
 	name = "Slime Potion"
 	id = "m_potion"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/pink
-	required_other = 1
 
-/datum/chemical_reaction/slimeppotion/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimeppotion/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/slimepotion/P = new /obj/item/weapon/slimepotion
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
 //Black
-/datum/chemical_reaction/slimemutate2
+/datum/chemical_reaction/slime_extract/slimemutate2
 	name = "Advanced Mutation Toxin"
 	id = "mutationtoxin2"
-	result = AMUTATIONTOXIN
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
-	required_other = 1
 	required_container = /obj/item/slime_extract/black
 	alert_admins = ALERT_ALL_REAGENTS
+	reagent = AMUTATIONTOXIN
+	result_amount = 1
 
-/datum/chemical_reaction/slimemutate2/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-
-/datum/chemical_reaction/slimenanobots
+/datum/chemical_reaction/slime_extract/slimenanobots
 	name = "Slime Nanobots"
 	id = "s_nanobots"
-	result = NANOBOTS
 	required_reagents = list(GOLD = 5)
-	result_amount = 5
-	required_other = 1
 	required_container = /obj/item/slime_extract/black
 	alert_admins = ALERT_ALL_REAGENTS
+	reagent = NANOBOTS
+	reagent_amount = 5
 
-/datum/chemical_reaction/slimenanobots/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-
-/datum/chemical_reaction/slimeperidaxon
+/datum/chemical_reaction/slime_extract/slimeperidaxon
 	name = "Slime Peridaxon"
 	id = "m_peridaxon"
-	result = null
 	required_reagents = list(WATER = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/black
-	required_other = 1
+	reagent = PERIDAXON
+	reagent_amount = 5
 
-/datum/chemical_reaction/slimeperidaxon/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
-	B.name = "peridaxon bottle"
-	B.reagents.add_reagent(PERIDAXON, 5)
-	B.forceMove(get_turf(holder.my_atom))
-
-/datum/chemical_reaction/slimesdelight
+/datum/chemical_reaction/slime_extract/slimesdelight
 	name = "Slime Doctor's Delight"
 	id = "m_doctordelight"
-	result = null
 	required_reagents = list(SUGAR = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/black
-	required_other = 1
+	reagent = DOCTORSDELIGHT
+	reagent_amount = 10
 
-/datum/chemical_reaction/slimesdelight/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
-	B.name = "Doctor's Delight bottle"
-	B.reagents.add_reagent(DOCTORSDELIGHT, 10)
-	B.forceMove(get_turf(holder.my_atom))
-
-/datum/chemical_reaction/slimerezadone
+/datum/chemical_reaction/slime_extract/slimerezadone
 	name = "Slime Rezadone"
 	id = "m_rezadone"
-	result = REZADONE
 	required_reagents = list(BLOOD = 5)
-	result_amount = 10
 	required_container = /obj/item/slime_extract/black
-	required_other = 1
+	reagent = REZADONE
+	reagent_amount = 10
 
-/datum/chemical_reaction/slimerezadone/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 //Oil
-/datum/chemical_reaction/slimeexplosion
+/datum/chemical_reaction/slime_extract/slimeexplosion
 	name = "Slime Explosion"
 	id = "m_explosion"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/oil
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimeexplosion/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimeexplosion/on_reaction(var/datum/reagents/holder)
 	if(!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently!</span>")
 		sleep(50)
 	explosion(get_turf(holder.my_atom), 1 ,3, 6)
+	..()
 
-/datum/chemical_reaction/slimegenocide
+/datum/chemical_reaction/slime_extract/slimegenocide
 	name = "Slime Genocide" //Oy vey
 	id = "m_genocide"
-	result = null
 	required_reagents = list(BLOOD = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/oil
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimegenocide/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimegenocide/on_reaction(var/datum/reagents/holder)
 	for(var/mob/living/carbon/slime/S in viewers(get_turf(holder.my_atom), null)) //Kills slimes
 		S.death(0)
 	for(var/mob/living/simple_animal/slime/S in viewers(get_turf(holder.my_atom), null)) //Kills pet slimes too
 		S.death(0)
+	..()
 
 //Light Pink
-/datum/chemical_reaction/slimepotion2
+/datum/chemical_reaction/slime_extract/slimepotion2
 	name = "Slime Potion 2"
 	id = "m_potion2"
-	result = null
-	result_amount = 1
 	required_container = /obj/item/slime_extract/lightpink
 	required_reagents = list(PLASMA = 5)
-	required_other = 1
 
-/datum/chemical_reaction/slimepotion2/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimepotion2/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/slimepotion2/P = new /obj/item/weapon/slimepotion2
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimeparalyze
+/datum/chemical_reaction/slime_extract/slimeparalyze
 	name = "Slime Paralyzer"
 	id = "slimepara"
-	result = null
-	result_amount = 1
 	required_container = /obj/item/slime_extract/lightpink
 	required_reagents = list(BLOOD = 5)
-	required_other = 1
 
-/datum/chemical_reaction/slimeparalyze/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimeparalyze/on_reaction(var/datum/reagents/holder)
 	new /obj/item/weapon/slimeparapotion(get_turf(holder.my_atom))
+	..()
 
 //Adamantine
-/datum/chemical_reaction/slimegolem
+/datum/chemical_reaction/slime_extract/slimegolem
 	name = "Slime Golem"
 	id = "m_golem"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/adamantine
-	required_other = 1
 
-/datum/chemical_reaction/slimegolem/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimegolem/on_reaction(var/datum/reagents/holder)
 	var/obj/effect/golem_rune/Z = new /obj/effect/golem_rune
 	Z.forceMove(get_turf(holder.my_atom))
 	Z.announce_to_ghosts()
+	..()
 
-/datum/chemical_reaction/slimediamond2
+/datum/chemical_reaction/slime_extract/slimediamond2
 	name = "Slime Diamond2"
 	id = "m_Diamond2"
-	result = null
-	result_amount = 1
 	required_container = /obj/item/slime_extract/adamantine
 	required_reagents = list(CARBON = 5)
-	required_other = 1
 
-/datum/chemical_reaction/slimediamond2/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimediamond2/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/diamond/D = new /obj/item/stack/sheet/mineral/diamond
 	D.amount = 5
 	D.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimephazon
+/datum/chemical_reaction/slime_extract/slimephazon
 	name = "Slime Phazon"
 	id = "m_Phazon"
-	result = null
-	result_amount = 1
 	required_container = /obj/item/slime_extract/adamantine
 	required_reagents = list(GOLD = 5)
-	required_other = 1
 
-/datum/chemical_reaction/slimephazon/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimephazon/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/phazon/P = new /obj/item/stack/sheet/mineral/phazon
 	P.amount = 5
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimeclown
+/datum/chemical_reaction/slime_extract/slimeclown
 	name = "Slime Clown"
 	id = "m_Clown"
-	result = null
 	required_reagents = list(SILVER = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/adamantine
-	required_other = 1
 
-/datum/chemical_reaction/slimeclown/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimeclown/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/clown/C = new /obj/item/stack/sheet/mineral/clown
 	C.amount = 5
 	C.forceMove(get_turf(holder.my_atom))
+	..()
 
 //Bluespace
-/datum/chemical_reaction/slimeteleport
+/datum/chemical_reaction/slime_extract/slimeteleport
 	name = "Slime Teleport"
 	id = "m_tele"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/bluespace
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimeteleport/on_reaction(var/datum/reagents/holder, var/created_volume)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-
+/datum/chemical_reaction/slime_extract/slimeteleport/on_reaction(var/datum/reagents/holder, var/created_volume)
 	//Calculate new position (searches through beacons in world)
 	var/obj/item/beacon/chosen
 	var/list/possible = list()
@@ -2049,126 +1933,103 @@
 						M.client.screen -= blueeffect
 						qdel(blueeffect)
 						blueeffect = null
+	..()
 
-/datum/chemical_reaction/slimecrystal
+/datum/chemical_reaction/slime_extract/slimecrystal
 	name = "Slime Crystal"
 	id = "m_crystal"
-	result = null
 	required_reagents = list(BLOOD = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/bluespace
-	required_other = 1
 
-/datum/chemical_reaction/slimecrystal/on_reaction(var/datum/reagents/holder, var/created_volume)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	if(holder.my_atom)
-		var/obj/item/bluespace_crystal/BC = new(get_turf(holder.my_atom))
-		BC.visible_message("<span class='notice'>\The [BC] appears out of thin air!</span>")
+/datum/chemical_reaction/slime_extract/slimecrystal/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/obj/item/bluespace_crystal/BC = new(get_turf(holder.my_atom))
+	BC.visible_message("<span class='notice'>\The [BC] appears out of thin air!</span>")
+	..()
 
 //Cerulean
-/datum/chemical_reaction/slimepsteroid2
+/datum/chemical_reaction/slime_extract/slimepsteroid2
 	name = "Slime Steroid 2"
 	id = "m_steroid2"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/cerulean
-	required_other = 1
 
-/datum/chemical_reaction/slimepsteroid2/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimepsteroid2/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/slimesteroid2/P = new /obj/item/weapon/slimesteroid2
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimedupe
+/datum/chemical_reaction/slime_extract/slimedupe
 	name = "Slime Duplicator"
 	id = "m_dupe"
-	result = null
 	required_reagents = list(BLOOD = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/cerulean
-	required_other = 1
 
-/datum/chemical_reaction/slimedupe/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimedupe/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/slimedupe/P = new /obj/item/weapon/slimedupe
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
 //Sepia
-/datum/chemical_reaction/slimecamera
+/datum/chemical_reaction/slime_extract/slimecamera
 	name = "Slime Camera"
 	id = "m_camera"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/sepia
-	required_other = 1
 
-/datum/chemical_reaction/slimecamera/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimecamera/on_reaction(var/datum/reagents/holder)
 	var/obj/item/device/camera/sepia/P = new /obj/item/device/camera/sepia
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimefilm
+/datum/chemical_reaction/slime_extract/slimefilm
 	name = "Slime Film"
 	id = "m_film"
-	result = null
 	required_reagents = list(BLOOD = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/sepia
-	required_other = 1
 
-/datum/chemical_reaction/slimefilm/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimefilm/on_reaction(var/datum/reagents/holder)
 	var/obj/item/device/camera_film/P = new /obj/item/device/camera_film
 	P.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimestop
+/datum/chemical_reaction/slime_extract/slimestop
 	name = "Slime timestop"
 	id = "s_stop"
-	result = null
 	required_reagents = list(PHAZON = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/sepia
-	required_other = 1
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimestop/on_reaction(var/datum/reagents/holder, var/created_volume)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+/datum/chemical_reaction/slime_extract/slimestop/on_reaction(var/datum/reagents/holder, var/created_volume)
 	playsound(holder.my_atom, 'sound/effects/theworld3.ogg', 100, 1)
 	timestop(get_turf(holder.my_atom), 25,5)
+	..()
 
 //Pyrite
-/datum/chemical_reaction/slimepaint
+/datum/chemical_reaction/slime_extract/slimepaint
 	name = "Slime Paint"
 	id = "s_paint"
-	result = null
 	required_reagents = list(PLASMA = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/pyrite
-	required_other = 1
 
-/datum/chemical_reaction/slimepaint/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	var/list/paints = typesof(/obj/item/weapon/reagent_containers/glass/paint) - /obj/item/weapon/reagent_containers/glass/paint
+/datum/chemical_reaction/slime_extract/slimepaint/on_reaction(var/datum/reagents/holder)
+	var/list/paints = subtypesof(/obj/item/weapon/reagent_containers/glass/paint)
 	var/chosen = pick(paints)
 	var/obj/P = new chosen
 	if(P)
 		P.forceMove(get_turf(holder.my_atom))
+	..()
 
-/datum/chemical_reaction/slimecash
+/datum/chemical_reaction/slime_extract/slimecash
 	name = "Slime Cash"
 	id = "m_cash"
-	result = null
 	required_reagents = list(BLOOD = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/pyrite
-	required_other = 1
 
-/datum/chemical_reaction/slimecash/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimecash/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/spacecash/c100/C = new /obj/item/weapon/spacecash/c100/
 	C.amount = 1
 	C.forceMove(get_turf(holder.my_atom))
+	..()
 
 //////////////////////////////////////////FOOD MIXTURES////////////////////////////////////
 
