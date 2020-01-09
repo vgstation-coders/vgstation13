@@ -422,7 +422,7 @@
 
 /obj/item/clothing/head/cowboy
 	name = "cowboy hat"
-	desc = "Pefect for the closet botanist."
+	desc = "Perfect for the closet botanist."
 	icon_state = "cowboy"
 	item_state = "cowboy"
 	armor = list(melee = 0, bullet = 10, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
