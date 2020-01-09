@@ -2019,7 +2019,7 @@
 		P.forceMove(get_turf(holder.my_atom))
 	..()
 
-/datum/chemical_reaction/slime_extract/slime_extract/slimecash
+/datum/chemical_reaction/slime_extract/slimecash
 	name = "Slime Cash"
 	id = "m_cash"
 	required_reagents = list(BLOOD = 5)
