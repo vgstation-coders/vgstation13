@@ -199,7 +199,6 @@
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
 	new /obj/item/clothing/head/helmet/donutgiver(src)
-//	new /obj/item/clothing/under/securityskirt/elite(src)
 	new /obj/item/clothing/accessory/bangerboy(src)
 	new /obj/item/weapon/autocuffer(src)
 
@@ -349,38 +348,6 @@
 			H.put_in_hands(I)
 			last_donut = world.timeofday
 
-//Security Skirt spritework is coutesy of TG, CC BY-SA 3.0 license
-/*
-/obj/item/clothing/under/securityskirt/elite
-	name = "elite security skirt"
-	desc = "For demonstrating who is in charge."
-	icon_state = "secskirt"
-	item_state = "r_suit"
-	_color = "secskirt"
-	origin_tech = Tc_COMBAT + "=2"
-	armor = list(melee = 10, bullet = 10, laser = 10,energy = 0, bomb = 0, bio = 0, rad = 0)
-	clothing_flags = ONESIZEFITSALL
-	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED) //Unlike normal skirts this is not VOX_SHAPED
-	body_parts_covered = FULL_TORSO|ARMS
-
-/obj/item/clothing/under/securityskirt/elite/equipped(var/mob/user, var/slot)
-	..()
-	processing_objects += src
-
-/obj/item/clothing/under/securityskirt/elite/unequipped(mob/user, var/from_slot = null)
-	processing_objects -= src
-	..()
-
-/obj/item/clothing/under/securityskirt/elite/process()
-	if(ishuman(loc) && prob(1)) //Processing only happens when equipped anyway
-		var/mob/living/carbon/human/H = loc
-		if(!(H.wear_suit && H.wear_suit.body_parts_covered & LEGS)) //It doesn't make sense to swish about if it's covered under something
-			H.visible_message("<span class='warning'>[H]'s [src.name] swishes threateningly.</span>",
-				"\The [src] fills you with confidence.",
-				"Something cracks like a whip.")
-			H.reagents.add_reagent(PARACETAMOL,1)
-*/
 /obj/item/weapon/ram_kit
 	name = "battering ram drop-leaf kit"
 	desc = "A device so ingenius there is no way the Vox invented it. Exploits volt-induced superposition to allow battering ram to fold into itself."
