@@ -295,15 +295,11 @@
 	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/restrained()
-	if (timestopped)
-		return 1 //under effects of time magick
-	if (check_handcuffs())
-		return 1
+	if (..())
+		return TRUE
 	if (istype(wear_suit, /obj/item/clothing/suit/straight_jacket))
-		return 1
-	return 0
-
-
+		return TRUE
+	return FALSE
 
 /mob/living/carbon/human/var/co2overloadtime = null
 /mob/living/carbon/human/var/temperature_resistance = T0C+75 //but why is this here
@@ -1961,3 +1957,17 @@ mob/living/carbon/human/isincrit()
 		to_chat(attacker, "<span class='warning'>You sneakily slide [emag] into the dataport on \the [src]'s [hit_area] and short out the safeties.</span>")
 		affecting.sabotaged = TRUE
 	return FALSE
+
+/mob/living/carbon/human/swap_hand()
+	var/valid_hand = FALSE
+	for(var/i = 0; i < held_items.len; i++)
+		if (++active_hand > held_items.len)
+			active_hand = 1
+		if (can_use_hand_or_stump(active_hand))
+			valid_hand = TRUE
+			break
+
+	if(!valid_hand)
+		active_hand = 0
+
+	update_hands_icons()
