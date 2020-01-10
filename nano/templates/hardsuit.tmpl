@@ -4,12 +4,29 @@ Used In File(s): /code/modules/clothing/spacesuits/rig/rig.dm
  -->
 
 <style type="text/css">
+	.inlineBlock {
+		padding: 2px; 
+		display: inline-block;
+	}
+	.extraTopPadding {
+		padding-top: 10px;
+	}
 	.floatLeft {
 		float: left;
 		margin-left: 5px;
 	}
+	.paddedBorderBlue {
+		border: 1px solid #517087; 
+		padding: 2px;
+	}
 	.redText {
 		color: red;
+	}
+	.orangeText {
+		color: orange;
+	}
+	.greenText {
+		color: green;
 	}
 	.boldText {
 		font-weight: bold;
@@ -19,10 +36,18 @@ Used In File(s): /code/modules/clothing/spacesuits/rig/rig.dm
 		text-align: center;
 	}
 	<!-- display bar override -->
-	.selectedLeft {
-		background-color:#a1a1b6;
+	.displayBar {
+		width: 200px;
+	}
+	.statusDisplay {
+	background: #000000;
+	color: #ffffff;
+	border: 1px solid #40628a;
+	padding: 4px;
+	margin: 3px 0;
 	}
 </style>
+
 <div style="width: 100%;">
 	<div style="float:left; width:50%">
 		<div>
@@ -38,53 +63,55 @@ Used In File(s): /code/modules/clothing/spacesuits/rig/rig.dm
 </div>
 
 <div class="line"></div>
-<div style="width:70%;" class='statusDisplay'>
-	<center>Suit pieces</center><hr />
-	<div class='floatLeft'>
-		Helmet: {{:helper.link(data.helmet, 'circle-arrow-s', {'toggle_piece' : 'helmet'}, null)}}
-	</div>
-	<div class='floatLeft'>
-	Gauntlets: {{:helper.link(data.gauntlets, 'circle-arrow-s', {'toggle_piece' : 'gauntlets'}, null)}}
-	</div>
-	<div class="floatLeft">
-		Boots: {{:helper.link(data.boots, 'circle-arrow-s', {'toggle_piece' : 'boots'}, null)}}
-	</div>
-</div>
 
-{{if !data.tank}}
-	<h3><div class = 'bad'>INTERNAL TANK NOT FOUND</div></h3>
-{{else}}
-	<div class='inlineBlock extraTopPadding'>
+	<h2>Suit pieces</h2>
+	<div class='inlineBlock'>
 		<div class='fixedLeft boldText'>
-				Tank Pressure:
+			Helmet:
 		</div>
-		<div>
-			{{:helper.displayBar(data.tankPressure, 0, 1013, (data.tankPressure > 200) ? 'good' : ((data.tankPressure > 100) ? 'average' : 'bad'))}}
-			<div class="statusValue">
-				{{:data.tankPressure}} kPa
+		<div class='fixedLeftWider'>
+			{{:helper.capitalizeFirstLetter(data.helmet)}}
+		</div>
+		<div class='fixedLeft'>
+			{{:helper.link('Toggle', 'circle-arrow-s', {'toggle_piece' : 'h_head'}, null)}}
+		</div>
+	</div>
+	<div class='inlineBlock'>
+		<div class='fixedLeft boldText'>
+			Gauntlets:
+		</div>
+		<div class='fixedLeftWider'>
+			{{:helper.capitalizeFirstLetter(data.gauntlets)}}
+		</div>
+		<div class='fixedLeft'>
+			{{:helper.link('Toggle', 'circle-arrow-s', {'toggle_piece' : 'h_gloves'}, null)}}
+		</div>
+	</div>
+	<div class='inlineBlock'>
+		<div class='fixedLeft boldText'>
+			Boots:
+		</div>
+		<div class='fixedLeftWider'>
+			{{:helper.capitalizeFirstLetter(data.boots)}}
+		</div>
+		<div class='fixedLeft'>
+			{{:helper.link('Toggle', 'circle-arrow-s', {'toggle_piece' : 'h_boots'}, null)}}
+		</div>
+	</div>
+
+<h2>System modules</h2>
+{{if data.modules}}
+	<div>
+		{{for data.modules}}
+			<div class='inlineBlock'>
+				<div class='paddedBorderBlue floatLeft' style='width: 420px'>
+					<div class='floatLeft' style='width: 100%'>
+						<div class='average floatLeft'>
+							{{:helper.capitalizeFirstLetter(value.name)}}
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class='fixedLeft boldText'>
-			Release Pressure:
-		</div>
-		<div class="itemContent">
-			{{:helper.displayBar(data.releasePressure, 0, data.maxReleasePressure, (data.releasePressure >= 21) ? null : ((data.releasePressure >= 17) ? 'average' : 'bad'))}}
-			<div style="clear: both; padding-top: 4px;">
-				{{:helper.link('-', null, {'air_supply' : 1, 'dist_p' : -10}, (data.releasePressure > 0) ? null : 'disabled')}}
-				{{:helper.link('-', null, {'air_supply' : 1, 'dist_p' : -1}, (data.releasePressure > 0) ? null : 'disabled')}}
-				<div style="float: left; width: 80px; text-align: center;">&nbsp;{{:data.releasePressure}} kPa&nbsp;</div>
-				{{:helper.link('+', null, {'air_supply' : 1, 'dist_p' : 1}, (data.releasePressure < data.maxReleasePressure) ? null : 'disabled')}}
-				{{:helper.link('+', null, {'air_supply' : 1, 'dist_p' : 10}, (data.releasePressure < data.maxReleasePressure) ? null : 'disabled')}}
-				{{:helper.link('Max', null, {'air_supply' : 1, 'dist_p' : 'max'}, (data.releasePressure < data.maxReleasePressure) ? null : 'disabled')}}
-				{{:helper.link('Reset', null, {'air_supply' : 1, 'dist_p' : 'reset'}, (data.releasePressure != data.defaultReleasePressure) ? null : 'disabled')}}
-			</div>
-		</div>
-		<div class='fixedLeft boldText'>
-			Release Valve:
-		</div>
-		<div class="itemContent">
-			{{:helper.link('Open', 'unlocked', {'air_supply' : 1, 'stat' : 1}, (!data.maskConnected) ? 'disabled' : (data.valveOpen ? 'selected' : null))}}
-			{{:helper.link('Close', 'locked', {'air_supply' : 1, 'stat' : 1}, data.valveOpen ? null : 'selected')}}
-		</div>
+		{{/for}}
 	</div>
 {{/if}}

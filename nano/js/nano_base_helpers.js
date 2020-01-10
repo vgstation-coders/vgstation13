@@ -197,6 +197,10 @@ NanoBaseHelpers = function ()
 				if(level==1) return '"<span class="average">Minor Alert</span>"';
 				return '"<span class="bad">Major Alert</span>"';
 			},
+			// Capitalize the first letter of a string. From http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
+			capitalizeFirstLetter: function(string) {
+				return string.charAt(0).toUpperCase() + string.slice(1);
+			},
 			generateHref: function (parameters) {
 				var body = $('body'); // We store data in the body tag, it's as good a place as any
 				_urlParameters = body.data('urlParameters');
