@@ -762,7 +762,7 @@
 	corpsegender = G_FEMALE
 
 /obj/effect/landmark/corpse/waifu/secfu //bodybag sold separately.
-	corpseuniform = /obj/item/clothing/under/securityskirt/elite
+	corpseuniform = /obj/item/clothing/under/rank/security
 	corpsehelmet = /obj/item/clothing/head/beret/sec
 	corpseback = /obj/item/weapon/storage/backpack/security
 	corpseradio = /obj/item/device/radio/headset/headset_sec

@@ -199,7 +199,7 @@
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
 	new /obj/item/clothing/head/helmet/donutgiver(src)
-	new /obj/item/clothing/under/securityskirt/elite(src)
+//	new /obj/item/clothing/under/securityskirt/elite(src)
 	new /obj/item/clothing/accessory/bangerboy(src)
 	new /obj/item/weapon/autocuffer(src)
 
@@ -350,6 +350,7 @@
 			last_donut = world.timeofday
 
 //Security Skirt spritework is coutesy of TG, CC BY-SA 3.0 license
+/*
 /obj/item/clothing/under/securityskirt/elite
 	name = "elite security skirt"
 	desc = "For demonstrating who is in charge."
@@ -379,7 +380,7 @@
 				"\The [src] fills you with confidence.",
 				"Something cracks like a whip.")
 			H.reagents.add_reagent(PARACETAMOL,1)
-
+*/
 /obj/item/weapon/ram_kit
 	name = "battering ram drop-leaf kit"
 	desc = "A device so ingenius there is no way the Vox invented it. Exploits volt-induced superposition to allow battering ram to fold into itself."
