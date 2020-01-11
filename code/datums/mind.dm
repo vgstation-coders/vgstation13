@@ -105,7 +105,7 @@
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
 
-/datum/mind/proc/transfer_to_without_current(var/mob//new_character)
+/datum/mind/proc/transfer_to_without_current(var/mob/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"
 
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
