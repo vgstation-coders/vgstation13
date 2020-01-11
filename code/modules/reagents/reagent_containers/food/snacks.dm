@@ -5947,3 +5947,55 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter
+	name = "suppermatter"
+	desc = "Extremely dense and powerful food."
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/suppermattershard
+	storage_slots = 1
+	slices_num = 4
+	icon_state = "suppermatter"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 48)
+	bitesize = 12
+	set_light(1.4,2,"#FFFF00")
+	
+/obj/item/weapon/reagent_containers/food/snacks/suppermattershard
+	name = "suppermatter shard"
+	desc = "A single portion of power."
+	icon_state = "suppermattershard"
+	bitesize = 3
+	trash = null	
+	
+/obj/item/weapon/reagent_containers/food/snacks/suppermattershard/New()
+	..()
+	set_light(1.4,1.4,"#FFFF00")
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter
+	name = "exciting suppermatter"
+	desc = "Extremely dense, powerful and exciting food!"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
+	storage_slots = 1
+	slices_num = 5
+	icon_state = "excitingsuppermatter"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 60)
+	bitesize = 12
+	set_light(1.4,2,"#FF0000")
+	
+/obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
+	name = "exciting suppermatter shard"
+	desc = "A single portion of exciting power!"
+	icon_state = "excitingsuppermattershard"
+	bitesize = 3
+	trash = null
+
+/obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard/New()
+	..()
+	set_light(1.4,1.4,"#FF0000")	
