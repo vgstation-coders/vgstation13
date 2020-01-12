@@ -62,13 +62,18 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/available_for_job(var/user_job)
 	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
 
+//A condition which gets attached to the spawn_item proc that will apply on new 
+/datum/uplink_item/proc/buy_special_condition(var/mob/user)
+	return
+
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	if(!available_for_job(U.job))
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
-	return new item(loc,user)
+	var/condition = buy_special_condition(user)
+	return new item(loc, condition)
 
 /datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
 	if(!istype(U))
@@ -362,6 +367,10 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/card/emag
 	cost = 6
 
+//Uplink emags are infinite
+/datum/uplink_item/device_tools/emag/buy_special_condition()
+	return 1
+
 /datum/uplink_item/device_tools/explosive_gum
 	name = "Explosive Chewing Gum"
 	desc = "A single stick of explosive chewing gum that detonates five seconds after you start chewing, perfectly disguised as regular gum. Make sure to pull it out of your mouth if you don't intend to explode with it. Gum can be stuck to objects and walls, but not other people."
@@ -532,6 +541,10 @@ var/list/uplink_items = list()
 	desc = "A Syndicate Bundle is a specific, themed selection of syndicate items including some that are otherwise impossible to acquire that arrive stored in a plain, unmarked box. These items are collectively worth significantly more than 14 telecrystals, but you do not know which bundle you will receive or what it will be useful for."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 14
+
+/datum/uplink_item/badass/bundle/buy_special_condition(var/mob/user)
+	if(isplasmaman(A))
+		return "plasmaman"
 
 /datum/uplink_item/badass/balloon
 	name = "For showing that you are The Boss"
