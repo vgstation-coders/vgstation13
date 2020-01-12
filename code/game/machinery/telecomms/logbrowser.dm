@@ -67,7 +67,7 @@
 			for(var/datum/comm_log_entry/C in SelectedServer.log_entries)
 				i++
 
-				if (i > 25) // No more than 25 entries at the same time
+				if (i > 75) // No more than 75 entries at the same time
 					break
 
 				// If the log is a speech file
