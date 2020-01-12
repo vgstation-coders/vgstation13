@@ -513,7 +513,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	name = "Colorful Syndrome"
 	desc = "Causes the infected to synthesize smoke & rainbow colourant."
 	stage = 3
-	badness = EFFECT_DANGER_HINDRANCE
+	badness = EFFECT_DANGER_HARMFUL
 
 /datum/disease2/effect/colorsmoke/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You feel colorful!</span>")
