@@ -143,6 +143,8 @@
 		if(!bcell)
 			user.simple_message("<span class='warning'>[src] does not have a power source!</span>",
 				"<span class='warning'>[src] has no pulse and its soul has departed...</span>")
+		else if (bcell.maxcharge < hitcost)
+			to_chat(user, "<span class='warning'>[src] clicks but nothing happens. Something must be wrong with the battery.</span>")
 		else
 			user.simple_message("<span class='warning'>[src] is out of charge.</span>",
 				"<span class='warning'>[src] refuses to obey you.</span>")
