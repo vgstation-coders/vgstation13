@@ -2090,9 +2090,7 @@
 	O.clean_blood()
 	if(istype(O, /obj/effect/decal/cleanable))
 		qdel(O)
-	else if(O.color && istype(O, /obj/item/weapon/paper))
-		O.color = null
-	if(O)
+	else if(O.color)
 		O.color = ""
 	..()
 
