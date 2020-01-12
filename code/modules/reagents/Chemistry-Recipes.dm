@@ -2026,8 +2026,8 @@
 	required_container = /obj/item/slime_extract/pyrite
 
 /datum/chemical_reaction/slime_extract/slimecash/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/spacecash/c1000/C = new /obj/item/weapon/spacecash/c1000/
-	C.amount = 1
+	var/obj/item/weapon/spacecash/c100/C = new /obj/item/weapon/spacecash/c100/
+	C.amount = 5
 	C.forceMove(get_turf(holder.my_atom))
 	..()
 
