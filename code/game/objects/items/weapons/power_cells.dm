@@ -251,7 +251,7 @@
 	charge += power_used
 	if(prob(5))
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
-			L.apply_radiation(charge_rate, RAD_EXTERNAL)
+			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
 
 /obj/item/weapon/cell/rad/large
 	name = "PDTG power cell"
