@@ -109,37 +109,37 @@ mineral/phazon
 mineral/pharosium
 	name = "Pharosium"
 	result_amount = 5
-	spread_chance = 5
+	spread_chance = 25
 	ore = /obj/item/stack/ore/pharosium
 
 mineral/char
 	name = "Char"
 	result_amount = 5
-	spread_chance = 5
+	spread_chance = 35
 	ore = /obj/item/stack/ore/char
 
 mineral/claretine
 	name = "Claretine"
 	result_amount = 5
-	spread_chance = 5
+	spread_chance = 10
 	ore = /obj/item/stack/ore/claretine
 
 mineral/bohrum
 	name = "Bohrum"
 	result_amount = 5
-	spread_chance = 5
+	spread_chance = 15
 	ore = /obj/item/stack/ore/bohrum
 
 mineral/syreline
 	name = "Syreline"
 	result_amount = 5
-	spread_chance = 5
+	spread_chance = 0 //contains traces of phazon
 	ore = /obj/item/stack/ore/syreline
 
 mineral/erebite
 	name = "Erebite"
 	result_amount = 5
-	spread_chance = 5
+	spread_chance = 25
 	ore = /obj/item/stack/ore/erebite
 
 mineral/cytine
@@ -163,19 +163,19 @@ mineral/telecrystal
 mineral/mauxite
 	name = "Mauxite"
 	result_amount = 5
-	spread_chance = 5
+	spread_chance = 15
 	ore = /obj/item/stack/ore/mauxite
 
 mineral/cobryl
 	name = "Cobryl"
 	result_amount = 5
-	spread_chance = 5
+	spread_chance = 10
 	ore = /obj/item/stack/ore/cobryl
 
 mineral/cerenkite
 	name = "Cerenkite"
 	result_amount = 5
-	spread_chance = 5
+	spread_chance = 10
 	ore = /obj/item/stack/ore/cerenkite
 
 mineral/molitz
@@ -207,6 +207,13 @@ mineral/ice
 	result_amount = 3
 	spread = 3
 	ore = /obj/item/ice_crystal
+
+mineral/coal
+	display_name = "Coal"
+	name = "Coal"
+	result_amount = 5
+	spread = 25
+	ore = /obj/item/stack/sheet/charcoal
 
 mineral/cave
 	display_name = "Cave"

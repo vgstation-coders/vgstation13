@@ -157,59 +157,59 @@
 
 /obj/item/stack/ore/mauxite
 	name = "mauxite ore"
-	desc = "A chunk of Mauxite, a sturdy common metal."
+	desc = "A chunk of Mauxite, a sturdy ore used on Clown Planet."
 	icon_state = "mauxite"
-	starting_materials = list(MAT_MAUXITE = CC_PER_SHEET_MAUXITE)
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*0.9, MAT_CLOWN = CC_PER_SHEET_CLOWN*0.1)
 
 /obj/item/stack/ore/molitz
 	name = "molitz crystal"
-	desc = "A crystal of Molitz, a common crystalline substance."
+	desc = "A crystal of Molitz, a rare crystalline substance."
 	icon_state = "molitz"
-	starting_materials = list(MAT_MOLITZ = CC_PER_SHEET_MOLITZ)
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS*0.9, MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL*0.1)
 
 /obj/item/stack/ore/pharosium
 	name = "pharosium ore"
-	desc = "A chunk of Pharosium, a conductive metal."
+	desc = "A chunk of Pharosium, a conductive ore."
 	icon_state = "pharosium"
-	starting_materials = list(MAT_PHAROSIUM = CC_PER_SHEET_PHAROSIUM)
+	starting_materials = list(MAT_BRASS = CC_PER_SHEET_MISC*0.2, MAT_GOLD = CC_PER_SHEET_GOLD*0.8)
 
 // Common Cluster Ores
 
 /obj/item/stack/ore/cobryl
 	name = "cobryl ore"
-	desc = "A chunk of Cobryl, a somewhat valuable metal."
+	desc = "A chunk of Cobryl, a somewhat valuable ore."
 	icon_state = "cobryl"
-	starting_materials = list(MAT_COBRYL = CC_PER_SHEET_COBRYL)
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*0.8, MAT_SILVER = CC_PER_SHEET_SILVER*0.2)
 
 /obj/item/stack/ore/char
 	name = "char ore"
-	desc = "A heap of Char, a fossil energy source similar to coal."
+	desc = "A heap of Char, a fossil energy source that can be refined for plastic like oil."
 	icon_state = "char"
-	starting_materials = list(MAT_CHAR = CC_PER_SHEET_CHAR)
+	starting_materials = list(MAT_PLASTIC = CC_PER_SHEET_MISC*0.5)
 // Rare Vein Ores
 
 /obj/item/stack/ore/claretine
 	name = "claretine ore"
 	desc = "A heap of Claretine, a highly conductive salt."
 	icon_state = "claretine"
-	starting_materials = list(MAT_CLARETINE = CC_PER_SHEET_CLARETINE)
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD * 0.2, MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL * 0.4)
 /obj/item/stack/ore/bohrum
 	name = "bohrum ore"
-	desc = "A chunk of Bohrum, a heavy and highly durable metal."
+	desc = "A chunk of Bohrum, a heavy and highly durable ore."
 	icon_state = "bohrum"
-	starting_materials = list(MAT_BOHRUM = CC_PER_SHEET_BOHRUM)
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 3)
 /obj/item/stack/ore/syreline
 	name = "syreline ore"
-	desc = "A chunk of Syreline, an extremely valuable and coveted metal."
+	desc = "A chunk of Syreline, an extremely valuable and coveted ore."
 	icon_state = "syreline"
-	starting_materials = list(MAT_SYRELINE = CC_PER_SHEET_SYRELINE)
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD*0.9,MAT_PHAZON = CC_PER_SHEET_PHAZON*0.1)
 // Rare Cluster Ores
 
 /obj/item/stack/ore/erebite
 	name = "erebite ore"
 	desc = "A chunk of Erebite, an extremely volatile high-energy mineral."
 	icon_state = "erebite"
-	starting_materials = list(MAT_EREBITE = CC_PER_SHEET_EREBITE)
+	starting_materials = list(MAT_RALLOY = CC_PER_SHEET_MISC)
 /obj/item/stack/ore/erebite/ex_act()
 	explosion(src.loc,-1,0,2)
 	qdel(src)
@@ -222,7 +222,7 @@
 	name = "cerenkite ore"
 	desc = "A chunk of Cerenkite, a highly radioactive mineral."
 	icon_state = "cerenkite"
-	starting_materials = list(MAT_CERENKITE = CC_PER_SHEET_CERENKITE)
+	starting_materials = list(MAT_URANIUM = CC_PER_SHEET_URANIUM * 2, MAT_GLASS = CC_PER_SHEET_GLASS * 0.2)
 
 /obj/item/stack/ore/cerenkite/ex_act()
 	var/L = get_turf(src)
@@ -246,7 +246,7 @@
 	name = "cytine"
 	desc = "A glowing Cytine gemstone, somewhat valuable but not paticularly useful."
 	icon_state = "cytine"
-	starting_materials = list(MAT_CYTINE = CC_PER_SHEET_CYTINE)
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS * 0.1)
 /obj/item/stack/ore/cytine/New()
 	..()
 	color = pick("#FF0000","#0000FF","#008000","#FFFF00")
@@ -261,7 +261,7 @@
 	name = "uqill nugget"
 	desc = "A nugget of Uqill, a rare and very dense stone."
 	icon_state = "uqill"
-	starting_materials = list(MAT_UQILL = CC_PER_SHEET_UQILL)
+	starting_materials = list(MAT_MYTHRIL = CC_PER_SHEET_MYTHRIL * 0.2, MAT_IRON = CC_PER_SHEET_METAL * 4)
 
 /obj/item/stack/ore/telecrystal
 	name = "telecrystal"

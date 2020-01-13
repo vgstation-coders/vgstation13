@@ -379,7 +379,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/plastic
 	name="Plastic"
 	id=MAT_PLASTIC
-	value=0
+	value=VALUE_PLASTIC
 	oretype=null
 	sheettype=/obj/item/stack/sheet/mineral/plastic
 	cointype=null
@@ -408,7 +408,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/brass
 	name = "Brass"
 	id = MAT_BRASS
-	value = 0
+	value = VALUE_BRASS
 	oretype = null
 	sheettype = /obj/item/stack/sheet/brass
 	cointype = null
@@ -419,7 +419,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/ralloy
 	name = "Replicant Alloy"
 	id = MAT_RALLOY
-	value = 0
+	value = VALUE_RALLOY
 	oretype = null
 	sheettype = /obj/item/stack/sheet/ralloy
 	cointype = null
@@ -434,7 +434,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cc_per_sheet = CC_PER_SHEET_ICE
 
 /datum/material/mythril
-	name="mythril"
+	name="Mythril"
 	id=MAT_MYTHRIL
 	value=VALUE_MYTHRIL
 	oretype=/obj/item/stack/ore/mythril
@@ -448,141 +448,10 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cc_per_sheet = CC_PER_SHEET_MYTHRIL
 
 /datum/material/telecrystal
-	name="telecrystal"
+	name="Telecrystal"
 	id=MAT_TELECRYSTAL
 	value=VALUE_TELECRYSTAL
 	oretype=/obj/item/stack/ore/telecrystal
 	sheettype=/obj/item/bluespace_crystal
 	cointype=null
 	cc_per_sheet = CC_PER_SHEET_TELECRYSTAL
-
-
-/datum/material/pharosium
-	name="Pharosium"
-	id=MAT_PHAROSIUM
-	value=10
-	oretype=/obj/item/stack/ore/pharosium
-	sheettype=/obj/item/stack/sheet/mineral/pharosium
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_PHAROSIUM
-
-
-/datum/material/char
-	name="Char"
-	id=MAT_CHAR
-	value=5
-	oretype=/obj/item/stack/ore/char
-	sheettype=/obj/item/stack/sheet/mineral/char
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_CHAR
-
-
-/datum/material/claretine
-	name="Claretine"
-	id=MAT_CLARETINE
-	value=50
-	oretype=/obj/item/stack/ore/claretine
-	sheettype=/obj/item/stack/sheet/mineral/claretine
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_CLARETINE
-
-
-/datum/material/bohrum
-	name="Bohrum"
-	id=MAT_BOHRUM
-	value=50
-	oretype=/obj/item/stack/ore/bohrum
-	sheettype=/obj/item/stack/sheet/mineral/bohrum
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_BOHRUM
-
-
-/datum/material/syreline
-	name="Syreline"
-	id=MAT_SYRELINE
-	value=70
-	oretype=/obj/item/stack/ore/syreline
-	sheettype=/obj/item/stack/sheet/mineral/syreline
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_SYRELINE
-
-
-/datum/material/erebite
-	name="Erebite"
-	id=MAT_EREBITE
-	value=50
-	oretype=/obj/item/stack/ore/erebite
-	sheettype=/obj/item/stack/sheet/mineral/erebite
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_EREBITE
-
-
-/datum/material/cytine
-	name="Cytine"
-	id=MAT_CYTINE
-	value=30
-	oretype=/obj/item/stack/ore/cytine
-	sheettype=/obj/item/stack/sheet/mineral/cytine
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_CYTINE
-
-
-/datum/material/uqill
-	name="Uqill"
-	id=MAT_UQILL
-	value=90
-	oretype=/obj/item/stack/ore/uqill
-	sheettype=/obj/item/stack/sheet/mineral/uqill
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_UQILL
-
-
-/datum/material/mauxite
-	name="Mauxite"
-	id=MAT_MAUXITE
-	value=5
-	oretype=/obj/item/stack/ore/mauxite
-	sheettype=/obj/item/stack/sheet/mineral/mauxite
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_MAUXITE
-
-
-/datum/material/cobryl
-	name="Cobryl"
-	id=MAT_COBRYL
-	value=30
-	oretype=/obj/item/stack/ore/cobryl
-	sheettype=/obj/item/stack/sheet/mineral/cobryl
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_COBRYL
-
-
-/datum/material/cerenkite
-	name="Cerenkite"
-	id=MAT_CERENKITE
-	value=50
-	oretype=/obj/item/stack/ore/cerenkite
-	sheettype=/obj/item/stack/sheet/mineral/cerenkite
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_CERENKITE
-
-/datum/material/molitz
-	name="Molitz"
-	id=MAT_MOLITZ
-	value=10
-	oretype=/obj/item/stack/ore/molitz
-	sheettype=/obj/item/stack/sheet/mineral/molitz
-	cointype=null
-	default_show_in_menus = FALSE
-	cc_per_sheet = CC_PER_SHEET_MOLITZ

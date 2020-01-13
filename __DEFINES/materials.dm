@@ -16,19 +16,6 @@
 #define MAT_MYTHRIL		"$mythril"
 #define MAT_TELECRYSTAL	"$telecrystal"
 
-#define MAT_PHAROSIUM "$pharosium"
-#define MAT_CHAR      "$char"
-#define MAT_CLARETINE "$claretine"
-#define MAT_BOHRUM    "$bohrum"
-#define MAT_SYRELINE  "$syreline"
-#define MAT_EREBITE   "$erebite"
-#define MAT_CYTINE    "$cytine"
-#define MAT_UQILL     "$uqill"
-#define MAT_MAUXITE   "$mauxite"
-#define MAT_COBRYL    "$cobryl"
-#define MAT_CERENKITE "$cerenkite"
-#define MAT_MOLITZ    "$molitz"
-
 
 #define VALUE_IRON 0.2
 #define VALUE_GLASS 0.2
@@ -41,6 +28,9 @@
 #define VALUE_PHAZON 1
 #define VALUE_MYTHRIL 1
 #define VALUE_TELECRYSTAL 1
+#define VALUE_RALLOY 0.4
+#define VALUE_PLASTIC 0.2
+#define VALUE_BRASS 0.4
 
 
 #define CC_PER_SHEET_MISC        2000
@@ -64,16 +54,3 @@
 #define CC_PER_SHEET_WOOD        CC_PER_SHEET_METAL
 #define CC_PER_SHEET_BRASS       CC_PER_SHEET_METAL
 #define CC_PER_SHEET_RALLOY      CC_PER_SHEET_METAL
-
-#define CC_PER_SHEET_PHAROSIUM   CC_PER_SHEET_METAL
-#define CC_PER_SHEET_CHAR        CC_PER_SHEET_METAL
-#define CC_PER_SHEET_CLARETINE   CC_PER_SHEET_METAL
-#define CC_PER_SHEET_BOHRUM      CC_PER_SHEET_METAL
-#define CC_PER_SHEET_SYRELINE    CC_PER_SHEET_METAL
-#define CC_PER_SHEET_EREBITE     CC_PER_SHEET_METAL
-#define CC_PER_SHEET_CYTINE      CC_PER_SHEET_METAL
-#define CC_PER_SHEET_UQILL       CC_PER_SHEET_METAL
-#define CC_PER_SHEET_MAUXITE     CC_PER_SHEET_METAL
-#define CC_PER_SHEET_COBRYL      CC_PER_SHEET_METAL
-#define CC_PER_SHEET_CERENKITE   CC_PER_SHEET_METAL
-#define CC_PER_SHEET_MOLITZ      CC_PER_SHEET_METAL

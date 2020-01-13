@@ -839,6 +839,42 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
 
+/turf/unsimulated/mineral/random/iron_ores
+	mineralSpawnChanceList = list(
+		"Iron"      = 50,
+		"Mauxite"   = 5, //90% iron, 10% clown
+		"Bohrum"	= 25, //3x iron
+		"Cobryl"	= 5, //80% iron, 20% silver
+		"Nanotrasite" = 10, //50% iron, 50% plasma
+		"Uqill"		= 1) //4x iron, 20% mythril
+
+/turf/unsimulated/mineral/random/clock
+	mineralChance = 3 //less than 1/3 chance
+	mineralSpawnChanceList = list(
+		"Gibtonite"  = 10,
+		"Pharosium"   = 1, //80% gold, 20% brass
+		"Erebite"	= 1) //3 ralloy
+
+/turf/unsimulated/mineral/random/glass_ores
+	mineralSpawnChanceList = list(
+		"Sand" = 50,
+		"Cerenkite" = 5, //2x uranium + 20% glass
+		"Cytine" = 25, //Makes glowsticks, or 10% glass
+		"Molitz" = 1) //90% glass, 10% telecrystal
+
+
+/turf/unsimulated/mineral/random/telecrystals
+	mineralChance = 40
+	mineralSpawnChanceList = list(
+		"Claretine"  = 10, //20% gold, 40% telecrystal
+		"Molitz" = 10, //90% glass, 10% telecrystal
+		"Syreline" = 4) //90% gold, 10% phazon
+
+/turf/unsimulated/mineral/random/fuel
+	mineralChance = 40
+	mineralSpawnChanceList = list(
+		"Char"  = 1,
+		"Coal"	= 1)
 
 /turf/unsimulated/mineral/random/Destroy()
 	return
