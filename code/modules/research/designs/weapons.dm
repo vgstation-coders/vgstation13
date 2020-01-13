@@ -371,7 +371,7 @@
 	desc = "A 12 gauge shell filled with an incendiary mixture, for lighting up dark areas or setting things on fire."
 	id = "dragonshell"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 12500, MAT_PLASMA = 2000)
+	materials = list(MAT_IRON = 500, MAT_PLASMA = 2000)
 	build_path = /obj/item/ammo_casing/shotgun/dragonsbreath
 	
 /datum/design/shotgun_shell/frag
@@ -379,7 +379,7 @@
 	desc = "A 12 gauge shell filled with a high-explosive mixture, for heavy anti-personnel usage."
 	id = "fragshell"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 12500, MAT_PLASMA = 10000)
+	materials = list(MAT_IRON = 500, MAT_PLASMA = 8000)
 	build_path = /obj/item/ammo_casing/shotgun/frag
 
 //Box ammunition
@@ -492,7 +492,7 @@
 	desc = "A box of 12-gauge explosive shells."
 	id = "ammo_12ga_flare"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 8000, MAT_PLASMA = 160000)
+	materials = list(MAT_IRON = 8000, MAT_PLASMA = 128000)
 	build_path = /obj/item/weapon/storage/box/fragshells
 
 /datum/design/ammo_12mm
