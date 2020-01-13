@@ -180,6 +180,9 @@
 		user.lastattacked = L
 		L.lastattacker = user
 
+		if(L.check_shields(force, src))
+			return FALSE
+
 		L.Stun(stunforce)
 		L.apply_effect(10, STUTTER, 0)
 		L.Knockdown(stunforce)

@@ -908,7 +908,8 @@ obj/item/projectile/bullet/suffocationbullet
 /obj/item/projectile/bullet/syringe/on_hit(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
-	..()
+	if(!..())
+		return FALSE
 	if(ismob(A))
 		var/mob/M = A
 		var/blocked
