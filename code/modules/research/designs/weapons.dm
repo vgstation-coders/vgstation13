@@ -374,10 +374,10 @@
 	materials = list(MAT_IRON = 12500, MAT_PLASMA = 2000)
 	build_path = /obj/item/ammo_casing/shotgun/dragonsbreath
 	
-/datum/design/shotgun_shell/dragonsbreath
+/datum/design/shotgun_shell/frag
 	name = "12ga. frag shell"
-	desc = "A 12 gauge shell filled with an incendiary mixture, for lighting up dark areas or setting things on fire."
-	id = "dragonshell"
+	desc = "A 12 gauge shell filled with a high-explosive mixture, for heavy anti-personnel usage."
+	id = "fragshell"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 12500, MAT_PLASMA = 10000)
 	build_path = /obj/item/ammo_casing/shotgun/frag
