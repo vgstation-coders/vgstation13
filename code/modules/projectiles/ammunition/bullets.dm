@@ -168,15 +168,15 @@
 	desc = "A 12 gauge shell filled with an incendiary mixture, for lighting up dark areas or setting things on fire."
 	icon_state = "bdbshell"
 	projectile_type = /obj/item/projectile/bullet/fire_plume/dragonsbreath
-	starting_materials = list(MAT_IRON = 12500, MAT_PLASMA = 2000)
+	starting_materials = list(MAT_IRON = 500, MAT_PLASMA = 2000)
 	
 /obj/item/ammo_casing/shotgun/frag
 	name = "explosive shell"
 	desc = "A 12 gauge shell filled with a high-explosive mixture, for heavy anti-personnel usage."
 	icon_state = "fragshell"
 	projectile_type = /obj/item/projectile/bullet/boombullet
-	starting_materials = list(MAT_IRON = 12500, MAT_PLASMA = 8000)
-	w_type = RECYK_METAL
+	starting_materials = list(MAT_IRON = 500, MAT_PLASMA = 8000)
+	
 
 /obj/item/ammo_casing/a762
 	desc = "A 7.62x51mm bullet casing."
