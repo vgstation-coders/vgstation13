@@ -85,3 +85,19 @@
 /turf/simulated/floor/mineral/phazon/New()
 	floor_tile = getFromPool(/obj/item/stack/tile/mineral/phazon, null)
 	..()
+
+//BRASS
+
+/turf/simulated/floor/mineral/clockwork
+	name = "brass floor"
+	icon_state = "brass"
+
+/turf/simulated/floor/mineral/clockwork/New()
+	floor_tile = getFromPool(/obj/item/stack/tile/mineral/brass, null)
+	..()
+
+/turf/simulated/floor/mineral/clockwork/cultify()
+	return
+
+/turf/simulated/floor/mineral/clockwork/clockworkify()
+	return

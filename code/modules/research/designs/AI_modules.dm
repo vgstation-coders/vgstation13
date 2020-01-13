@@ -133,3 +133,34 @@
 	build_path = /obj/item/weapon/aiModule/core/tyrant
 	locked = 1
 	req_lock_access = list(access_captain)
+
+/datum/design/nt_default
+	name = "Core Module Design (NT default)"
+	desc = "Allows for the construction of a NT default AI Core Module."
+	id = "nt_default_module"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_MATERIALS = 6)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
+	category = "Module Boards"
+	build_path = /obj/item/weapon/aiModule/core/nanotrasen
+
+/datum/design/robocop
+	name = "Core Module Design (Robocop)"
+	desc = "Allows for the construction of a Robocop AI Core Module."
+	id = "robocop_module"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_MATERIALS = 6)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
+	category = "Module Boards"
+	build_path = /obj/item/weapon/aiModule/core/robocop
+
+
+/datum/design/lazymov
+	name = "Core Module Design (Lazymov)"
+	desc = "Allows for the construction of a Lazymov AI Core Module."
+	id = "lazymov_module"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_MATERIALS = 6)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
+	category = "Module Boards"
+	build_path = /obj/item/weapon/aiModule/core/lazymov

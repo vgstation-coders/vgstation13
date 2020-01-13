@@ -135,9 +135,7 @@ obj/machinery/atmospherics/trinary/initialize()
 
 
 	update_icon()
-	var/turf/T = loc
-	if (istype(T))
-		T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 obj/machinery/atmospherics/trinary/build_network()
 	if(!network1 && node1)

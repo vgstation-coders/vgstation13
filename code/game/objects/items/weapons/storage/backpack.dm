@@ -16,7 +16,8 @@
 	max_combined_w_class = 21
 
 /obj/item/weapon/storage/backpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	playsound(get_turf(src), "rustle", 50, 1, -5)
+	if(!stealthy(user))
+		playsound(src, "rustle", 50, 1, -5)
 	. = ..()
 
 /*
@@ -36,7 +37,7 @@
 
 /obj/item/weapon/storage/backpack/santabag/attack_hand(user)
 	if(contents.len < storage_slots)
-		var/empty_slots = Clamp((storage_slots - contents.len),0,storage_slots)
+		var/empty_slots = clamp((storage_slots - contents.len),0,storage_slots)
 		to_chat(user,"<span class='notice'>You look into the bag, and find it filled with [empty_slots] new presents!</span>")
 		for(var/i = 1,i <= empty_slots,i++)
 			var/gift = pick(/obj/item/weapon/winter_gift/cloth,/obj/item/weapon/winter_gift/regular,/obj/item/weapon/winter_gift/food)
@@ -45,45 +46,9 @@
 			new gift(src)
 	. = ..()
 
-/obj/item/weapon/storage/backpack/cultpack
-	name = "trophy rack"
-	desc = "It's useful for both carrying extra gear and proudly declaring your insanity."
-	icon_state = "cultpack_0skull"
-	item_state = "cultpack_0skull"
-	var/skulls = 0
-
-/obj/item/weapon/storage/backpack/cultpack/attack_self(mob/user as mob)
-	..()
-	if(skulls)
-		for(,skulls > 0,skulls--)
-			new/obj/item/weapon/skull(get_turf(src))
-		update_icon(user)
-
-/obj/item/weapon/storage/backpack/cultpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W == src)
-		return
-	if(istype(W, /obj/item/weapon/skull) && (skulls < 3))
-		user.u_equip(W,1)
-		qdel(W)
-		skulls++
-		update_icon(user)
-		to_chat(user,"<span class='warning'>You plant the skull on the trophy rack.</span>")
-		return
-	. = ..()
-
-/obj/item/weapon/storage/backpack/cultpack/update_icon(var/mob/living/carbon/user)
-	icon_state = "cultpack_[skulls]skull"
-	item_state = "cultpack_[skulls]skull"
-	if(istype(user))
-		user.update_inv_back()
-		user.update_inv_hands()
-
 /obj/item/weapon/storage/backpack/cultify()
 	new /obj/item/weapon/storage/backpack/cultpack(loc)
 	..()
-
-/obj/item/weapon/storage/backpack/cultpack/cultify()
-	return
 
 /obj/item/weapon/storage/backpack/clown
 	name = "Giggles Von Honkerton"
@@ -125,10 +90,9 @@
 	icon_state = "satchel"
 	item_state = "satchel"
 
-/obj/item/weapon/storage/backpack/satchel/withwallet
-	New()
-		..()
-		new /obj/item/weapon/storage/wallet/random( src )
+/obj/item/weapon/storage/backpack/satchel/withwallet/New()
+	..()
+	new /obj/item/weapon/storage/wallet/random( src )
 
 /obj/item/weapon/storage/backpack/satchel_norm
 	name = "satchel"
@@ -231,3 +195,14 @@
 	name = "security messenger bag"
 	desc = "A tactical backpack worn over one shoulder. This one is in Security colors."
 	icon_state = "courierbagsec"
+
+/obj/item/weapon/storage/backpack/messenger/black
+	name = "black messenger bag"
+	desc = "For the freerunning pizza delivery hacker on the go."
+	icon_state = "courierbagblack"
+
+/obj/item/weapon/storage/backpack/clownpackpsyche
+	name = "Giggles Neon Honkerton"
+	desc = "It's a backpack made by Honk! Co."
+	icon_state = "clownpackpsyche"
+	item_state = "clownpackpsyche"

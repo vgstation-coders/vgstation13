@@ -9,6 +9,17 @@
 	max_combined_w_class = 100
 	storage_slots = 50
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	display_contents_with_number = TRUE
+	var/bluespace = FALSE
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/discount_bluespace
+	name = "Prototype bluespace rapid part exchange device" //Alternative name: Discount BRPED, therefore denoted as DBRPED
+	desc = "Not as good as the real deal, but still good. This device is a better variant of the RPED that can hold twice as many parts and can function on machines that do not have their panels open."
+	icon_state = "DBRPED"
+	item_state = "DBRPED"
+	max_combined_w_class = 200
+	storage_slots = 100
+	bluespace = TRUE
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/proc/play_rped_sound()
 	//Plays the sound for RPED exhanging or installing parts.
@@ -36,49 +47,27 @@
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/pre_loaded/New() //Comes preloaded with loads of parts for testing
 	..()
-	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
-	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
-	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
-	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
-	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
-	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
-	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
-	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
-	new /obj/item/weapon/stock_parts/micro_laser/high/ultra(src)
-	new /obj/item/weapon/stock_parts/micro_laser/high/ultra(src)
-	new /obj/item/weapon/stock_parts/micro_laser/high/ultra(src)
-	new /obj/item/weapon/stock_parts/micro_laser/high/ultra(src)
-	new /obj/item/weapon/stock_parts/micro_laser/high/ultra(src)
-	new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src)
-	new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src)
-	new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src)
-	new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src)
-	new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src)
-	new /obj/item/weapon/stock_parts/capacitor/adv/super(src)
-	new /obj/item/weapon/stock_parts/capacitor/adv/super(src)
-	new /obj/item/weapon/stock_parts/capacitor/adv/super(src)
-	new /obj/item/weapon/stock_parts/capacitor/adv/super(src)
-	new /obj/item/weapon/stock_parts/capacitor/adv/super(src)
-	new /obj/item/weapon/stock_parts/manipulator/nano(src)
-	new /obj/item/weapon/stock_parts/manipulator/nano(src)
-	new /obj/item/weapon/stock_parts/manipulator/nano(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv(src)
-	new /obj/item/weapon/stock_parts/matter_bin/adv(src)
-	new /obj/item/weapon/stock_parts/micro_laser/high(src)
-	new /obj/item/weapon/stock_parts/micro_laser/high(src)
-	new /obj/item/weapon/stock_parts/micro_laser/high(src)
-	new /obj/item/weapon/stock_parts/scanning_module/adv(src)
-	new /obj/item/weapon/stock_parts/scanning_module/adv(src)
-	new /obj/item/weapon/stock_parts/scanning_module/adv(src)
-	new /obj/item/weapon/stock_parts/capacitor/adv(src)
-	new /obj/item/weapon/stock_parts/capacitor/adv(src)
-	new /obj/item/weapon/stock_parts/capacitor/adv(src)
+	for(var/i in 1 to 3)
+		new /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace(src)
+	for(var/i in 1 to 8)
+		new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
+	for(var/i in 1 to 8)
+		new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
+	for(var/i in 1 to 5)
+		new /obj/item/weapon/stock_parts/micro_laser/high/ultra(src)
+	for(var/i in 1 to 5)
+		new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src)
+	for(var/i in 1 to 5)
+		new /obj/item/weapon/stock_parts/capacitor/adv/super(src)
+	for(var/i in 1 to 3)
+		new /obj/item/weapon/stock_parts/manipulator/nano(src)
+	for(var/i in 1 to 3)
+		new /obj/item/weapon/stock_parts/matter_bin/adv(src)
+	for(var/i in 1 to 3)
+		new /obj/item/weapon/stock_parts/micro_laser/high(src)
+	for(var/i in 1 to 3)
+		new /obj/item/weapon/stock_parts/scanning_module/adv(src)
+	for(var/i in 1 to 3)
+		new /obj/item/weapon/stock_parts/capacitor/adv(src)
+	for(var/i in 1 to 8)
+		new /obj/item/weapon/stock_parts/console_screen(src)

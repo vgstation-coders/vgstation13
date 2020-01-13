@@ -20,10 +20,11 @@
 	var/minor_fault = 0 //If not 100% reliable, it will build up faults.
 	var/brute_damage = 0 //Used by cyborgs
 	var/electronics_damage = 0 //Used by cyborgs
+	var/starch_cell = 0
 
 /obj/item/weapon/cell/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return (FIRELOSS)
+	return (SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/cell/empty/New()
 	..()
@@ -39,6 +40,10 @@
 /obj/item/weapon/cell/crap/empty/New()
 	..()
 	charge = 0
+
+/obj/item/weapon/cell/crap/better
+	name = "\improper Nanotrasen brand rechargeable D battery"
+	maxcharge = 700 //for the ion carbine
 
 /obj/item/weapon/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
@@ -70,6 +75,10 @@
 	maxcharge = 10000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 60)
 
+/obj/item/weapon/cell/high/cyborg
+	name = "cyborg rechargeable power cell"
+	maxcharge = 7500
+
 /obj/item/weapon/cell/high/empty/New()
 	..()
 	charge = 0
@@ -100,13 +109,24 @@
 	name = "potato battery"
 	desc = "A rechargeable starch based power cell."
 	origin_tech = Tc_POWERSTORAGE + "=1"
-	icon = 'icons/obj/power.dmi' //'icons/obj/harvest.dmi'
-	icon_state = "potato_cell" //"potato_battery"
+	icon = 'icons/obj/power.dmi'
+	icon_state = "potato_cell"
 	charge = 100
 	maxcharge = 300
 	starting_materials = null
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
+	starch_cell = 1
+
+/obj/item/weapon/cell/potato/soviet
+	charge = 15000
+	maxcharge = 15000
+	minor_fault = 0
+
+/obj/item/weapon/cell/potato/soviet
+	charge = 15000
+	maxcharge = 15000
+	minor_fault = 0
 
 /obj/item/weapon/cell/crepe
 	name = "power crêpe"
@@ -117,6 +137,17 @@
 	charge = 12000
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
+	starch_cell = 1
+
+/obj/item/weapon/cell/crepe/mommi
+	maxcharge = 10000
+	charge = 10000
+	minor_fault = 0
+
+/obj/item/weapon/cell/crepe/mommi
+	maxcharge = 10000
+	charge = 10000
+	minor_fault = 0
 
 /obj/item/weapon/cell/crepe/attack_self(var/mob/living/user)
 	if(charge)
@@ -138,8 +169,8 @@
 	name = "charged slime core"
 	desc = "A yellow slime core infused with plasma, it crackles with power."
 	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_BIOTECH + "=4"
-	icon = 'icons/mob/slimes.dmi' //'icons/obj/harvest.dmi'
-	icon_state = "yellow slime extract" //"potato_battery"
+	icon = 'icons/mob/slimes.dmi'
+	icon_state = "yellow slime extract"
 	maxcharge = 30000
 	starting_materials =  null
 	w_type = RECYK_BIOLOGICAL
@@ -178,3 +209,58 @@
 	..()
 	charge = maxcharge
 	return 1
+
+/obj/item/weapon/cell/ultra
+	name = "ultra-capacity power cell"
+	origin_tech = Tc_POWERSTORAGE + "=8"
+	icon_state = "ucell"
+	maxcharge = 50000
+	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+
+/obj/item/weapon/cell/ultra/empty/New()
+	..()
+	charge = 0
+
+/obj/item/weapon/cell/rad
+	name = "RTG power cell"
+	origin_tech = Tc_POWERSTORAGE + "=7"
+	icon_state = "rcell"
+	maxcharge = 1000
+	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
+	var/charge_rate = 10
+
+/obj/item/weapon/cell/rad/empty/New()
+	..()
+	charge = 0
+
+/obj/item/weapon/cell/rad/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/item/weapon/cell/rad/Destroy()
+	..()
+	processing_objects.Remove(src)
+
+/obj/item/weapon/cell/rad/give()
+	return
+
+/obj/item/weapon/cell/rad/process()
+	if(maxcharge <= charge)
+		return 0
+	var/power_used = min(maxcharge-charge,charge_rate)
+	charge += power_used
+	if(prob(5))
+		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
+			L.apply_radiation(charge_rate, RAD_EXTERNAL)
+
+/obj/item/weapon/cell/rad/large
+	name = "PDTG power cell"
+	origin_tech = Tc_POWERSTORAGE + "=9"
+	icon_state = "pcell"
+	maxcharge = 2500
+	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_PHAZON = 100)
+	charge_rate = 25
+
+/obj/item/weapon/cell/rad/large/empty/New()
+	..()
+	charge = 0

@@ -22,14 +22,14 @@
 		return 1
 
 	to_chat(user, "Destroying Pipe...")
-	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, AM, 5))
+	playsound(master, 'sound/machines/click.ogg', 50, 1)
+	if(!master.delay(user, AM, 0.5 SECONDS))
 		return 1
 
 	if(!AM)
 		return 1
 
-	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	if(istype(AM, /obj/item/pipe))
 		returnToPool(A)
@@ -109,7 +109,11 @@
 
 	var/obj/machinery/atmospherics/O = A
 
-	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
+	if(!O.can_be_coloured)
+		to_chat(user, "<span class='danger'>\The [O] cannot be painted.</span>")
+		return 1
+
+	playsound(master, 'sound/machines/click.ogg', 50, 1)
 	if (selected_color in available_colors)
 		selected_color = available_colors[selected_color]
 	if(mass_colour && world.timeofday < last_colouration + colouring_delay)
@@ -118,7 +122,7 @@
 		var/obj/machinery/atmospherics/pipe/pipe_to_colour = O
 		var/datum/pipeline/pipe_line = pipe_to_colour.parent
 		var/list/pipeline_members = pipe_line.members
-		if (pipeline_members.len < 500)
+		if(pipeline_members.len < 500)
 			last_colouration = world.timeofday
 			colouring_delay = (pipeline_members.len)/2
 			O.color = selected_color
@@ -152,11 +156,11 @@
 		return
 
 	to_chat(user, "Building gas sensor...")
-	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
+	playsound(master, 'sound/machines/click.ogg', 50, 1)
+	if(!master.delay(user, A, 2 SECONDS))
 		return 1
 
-	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 	new /obj/item/pipe_gsensor(A)
 
 /datum/rcd_schematic/pmeter
@@ -169,11 +173,11 @@
 		return
 
 	to_chat(user, "Building pipe meter...")
-	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
+	playsound(master, 'sound/machines/click.ogg', 50, 1)
+	if(!master.delay(user, A, 2 SECONDS))
 		return 1
 
-	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 	new /obj/item/pipe_meter(A)
 
 //ACTUAL PIPES.
@@ -327,7 +331,7 @@
 		return 1
 
 	if(href_list["set_layer"] && layer) //Only handle this is layer is nonzero.
-		var/n_layer = Clamp(round(text2num(href_list["set_layer"])), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
+		var/n_layer = clamp(round(text2num(href_list["set_layer"])), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 		if(layer == n_layer) //No point doing anything.
 			return 1
 
@@ -373,13 +377,13 @@
 
 /datum/rcd_schematic/pipe/attack(var/atom/A, var/mob/user)
 	to_chat(user, "Building Pipes ...")
-	playsound(get_turf(user), 'sound/machines/click.ogg', 50, 1)
+	playsound(user, 'sound/machines/click.ogg', 50, 1)
 	var/thislayer = layer
 	var/thisdir = selected_dir
-	if(!do_after(user, A, 20))
+	if(!master.delay(user, A, 2 SECONDS))
 		return 1
 
-	playsound(get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	var/obj/item/pipe/P = getFromPool(/obj/item/pipe, A, pipe_id, thisdir)
 	P.setPipingLayer(thislayer)
@@ -418,14 +422,15 @@
 
 /datum/rcd_schematic/pipe/disposal/attack(var/atom/A, var/mob/user)
 	to_chat(user, "Building Pipes ...")
-	playsound(get_turf(user), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
+	playsound(user, 'sound/machines/click.ogg', 50, 1)
+	var/thisdir = selected_dir
+	if(!master.delay(user, A, 2 SECONDS))
 		return 1
 
-	playsound(get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	var/obj/structure/disposalconstruct/C = new/obj/structure/disposalconstruct(A)
-	C.dir	= selected_dir
+	C.dir	= thisdir
 	C.ptype	= actual_id
 	C.update()
 

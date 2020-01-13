@@ -15,7 +15,7 @@
 
 /obj/effect/mine/Crossed(mob/living/carbon/AM)
 	if(istype(AM))
-		visible_message("<font color='red'>[AM] triggered the [bicon(src)] [src]</font>")
+		visible_message("<span class='warning'>[AM] triggered \the [bicon(src)] [src]</span>")
 		trigger(AM)
 
 /obj/effect/mine/proc/trigger(mob/living/carbon/AM)
@@ -38,9 +38,7 @@
 /obj/effect/mine/plasma/trigger(AM)
 	for(var/turf/simulated/floor/target in range(1,src))
 		if(!target.blocks_air)
-			var/datum/gas_mixture/payload = new
-			payload.toxins = 30
-			target.zone.air.merge(payload)
+			target.zone.air.adjust_gas(GAS_PLASMA, 30)
 			target.hotspot_expose(1000, CELL_VOLUME)
 	qdel(src)
 
@@ -52,31 +50,12 @@
 	del(AM.client)
 	qdel(src)
 
-/obj/effect/mine/n2o
-	name = "N2O Mine"
-
-/obj/effect/mine/n2o/trigger(AM)
-	//example: n2o triggerproc
-	//note: im lazy
-
-	for (var/turf/simulated/floor/target in range(1,src))
-		if(!target.blocks_air)
-
-			var/datum/gas_mixture/payload = new
-			var/datum/gas/sleeping_agent/trace_gas = new
-
-			trace_gas.moles = 30
-			payload += trace_gas
-
-			target.zone.air.merge(payload)
-
-	qdel(src)
-
 /obj/effect/mine/stun
 	name = "Stun Mine"
 
 /obj/effect/mine/stun/trigger(mob/AM)
 	if(ismob(AM))
-		AM.Stun(30)
+		AM.Knockdown(10)
+		AM.Stun(10)
 	spark(src)
 	qdel(src)

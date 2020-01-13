@@ -8,8 +8,13 @@
 /datum/universal_state/halloween
 	name = "All Hallows Eve"
 	desc = "Double, double toil and Trouble. Fire burn and Cauldron bubble."
-
+	var/mob_amount = 10
 	decay_rate = 0
+
+/datum/universal_state/halloween/New(var/list/given_args = list())
+	..()
+	if(given_args["mobs"])
+		mob_amount = given_args["mobs"]
 
 /datum/universal_state/halloween/OnShuttleCall(var/mob/user)
 	return 1
@@ -52,7 +57,7 @@
 
 /datum/universal_state/halloween/proc/AreaSet()
 	for(var/area/A in areas)
-		if(!istype(A,/area) || isspace(A))
+		if(!istype(A,/area) || isspace(A) || istype(A,/area/chapel))
 			continue
 
 		// No cheating~
@@ -66,6 +71,20 @@
 		A.party    = null
 		A.radalert = 0
 		A.updateicon()
+		if(!A.area_turfs.len)
+			continue
+		var/list/available_turfs = A.area_turfs.Copy()
+		var/turf/test_turf = available_turfs[1]
+		if(test_turf.z != STATION_Z)
+			continue
+		for(var/i=1 to mob_amount)
+			if(!available_turfs.len)
+				break
+			var/turf/T = pick(available_turfs)
+			if(T.holy || T.z != STATION_Z || !istype(T, /turf/simulated/floor) || T.has_dense_content())
+				available_turfs.Remove(T)
+				continue
+			new /obj/effect/gravestone/halloween(T)
 		CHECK_TICK
 
 
@@ -75,8 +94,6 @@
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else
-			if(!T.holy && prob(5) && T.z == STATION_Z && istype(T, /turf/simulated/floor))
-				new /obj/effect/gravestone/halloween(T)
 			T.underlays += "hell01"
 		CHECK_TICK
 
@@ -95,7 +112,8 @@
 
 /datum/universal_state/halloween/proc/APCSet()
 	for (var/obj/machinery/power/apc/APC in power_machines)
-		if (!(APC.stat & BROKEN) && !(istype(APC.areaMaster,/area/turret_protected/ai) || istype(APC.areaMaster, /area/engineering/engine)))
+		var/area/APC_area = get_area(APC)
+		if (!(APC.stat & BROKEN) && !(istype(APC_area, /area/turret_protected/ai) || istype(APC_area, /area/engineering/engine)))
 			APC.chargemode = 0
 			if(APC.cell)
 				APC.cell.charge = 0

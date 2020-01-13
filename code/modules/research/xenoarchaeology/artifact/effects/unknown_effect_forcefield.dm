@@ -1,7 +1,7 @@
 
 /datum/artifact_effect/forcefield
 	effecttype = "forcefield"
-	effect = EFFECT_AURA
+	effect = ARTIFACT_EFFECT_AURA
 	var/list/created_field = list()
 	effect_type = 4
 
@@ -26,7 +26,7 @@
 			var/obj/effect/energy_field/E = new (locate(T.x,T.y,T.z))
 			created_field.Add(E)
 			E.strength = 1
-			E.density = 1
+			E.setDensity(TRUE)
 			E.anchored = 1
 			E.invisibility = 0
 		spawn(10)
@@ -49,7 +49,7 @@
 			var/obj/effect/energy_field/E = new (locate(T.x,T.y,T))
 			created_field.Add(E)
 			E.anchored = 1
-			E.density = 1
+			E.setDensity(TRUE)
 			E.invisibility = 0
 
 		var/obj/effect/energy_field/E = created_field[1]

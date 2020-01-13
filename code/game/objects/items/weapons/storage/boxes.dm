@@ -12,23 +12,24 @@
  *		Condiment bottle and silly cup boxes,
  *		Donkpocket and monkeycube boxes,
  *		ID and security PDA cart boxes,
- *		Handcuff, mousetrap, and pillbottle boxes,
+ *		Handcuff, sec/detective gear, mousetrap, and pillbottle boxes,
  *		Snap-pops and matchboxes,
  *		Replacement light boxes.
  *
  *		For syndicate call-ins see uplink_kits.dm
  */
+ #define BOX_SPACE 7
 
 /obj/item/weapon/storage/box
 	name = "box"
 	desc = "It's just an ordinary box."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box"
-	item_state = "syringe_kit"
+	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
-
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
 
@@ -37,7 +38,7 @@
 	desc = "You could build a fort with this."
 	icon_state = "largebox"
 	item_state = "largebox"
-	w_class = W_CLASS_GIANT // Big, bulky.
+	w_class = W_CLASS_LARGE // Big, bulky.
 	foldable = /obj/item/stack/sheet/cardboard
 	foldable_amount = 4 // Takes 4 to make. - N3X
 	starting_materials = list(MAT_CARDBOARD = 15000)
@@ -67,6 +68,7 @@
 	name = "survival equipment box"
 	desc = "Makes braving the hazards of space a little bit easier."
 	icon_state = "box_emergency"
+	item_state = "box_emergency"
 
 /obj/item/weapon/storage/box/survival/New()
 	..()
@@ -76,6 +78,7 @@
 
 /obj/item/weapon/storage/box/survival/vox
 	icon_state = "box_vox"
+	item_state = "box_vox"
 
 /obj/item/weapon/storage/box/survival/vox/New()
 	..()
@@ -87,6 +90,7 @@
 
 /obj/item/weapon/storage/box/survival/engineer
 	icon_state = "box_eva"
+	item_state = "box_eva"
 
 /obj/item/weapon/storage/box/survival/engineer/New()
 	..()
@@ -106,10 +110,71 @@
 	new /obj/item/clothing/mask/gas/ert(src)
 	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	new /obj/item/ammo_storage/magazine/c45(src)
+	new /obj/item/ammo_storage/magazine/c45/rubber(src)
+
+/obj/item/weapon/storage/box/survival/nuke
+	icon_state = "box_nuke"
+
+/obj/item/weapon/storage/box/survival/nuke/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	new /obj/item/clothing/mask/gas/syndicate(src)
+	new /obj/item/weapon/tank/emergency_oxygen/double(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	new /obj/item/weapon/reagent_containers/pill/cyanide(src) //For those who hate fun
+	new /obj/item/weapon/reagent_containers/pill/laststand(src) //HOOOOOO HOOHOHOHOHOHO - N3X
+
+/obj/item/weapon/storage/box/priority_care
+	name = "priority care parcel"
+	desc = "A small parcel of miscellaneous junk Nanotrasen hands out to their most requested employees."
+	icon_state = "nt"
+	item_state = "nt"
+
+/obj/item/weapon/storage/box/priority_care/New()
+	..()
+	new /obj/item/weapon/spacecash/c100(src)
+	new /obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating(src)
+	for(var/i in 1 to 3)
+		var/toSpawn = pick(
+			/obj/item/voucher/free_item/donk,
+			/obj/item/voucher/free_item/hot_drink,
+			/obj/item/voucher/free_item/glowing,
+			/obj/item/voucher/free_item/snack,
+			/obj/item/mounted/poster,
+			/obj/item/weapon/pen/NT,
+			/obj/item/clothing/accessory/medal/participation,
+			/obj/item/weapon/reagent_containers/food/drinks/americup,
+			/obj/item/weapon/lighter/NT,
+			25;/obj/item/toy/syndicateballoon/ntballoon,
+			25;/obj/item/weapon/reagent_containers/food/snacks/chococoin,
+			25;/obj/item/weapon/tank/emergency_oxygen/engi,
+			25;/obj/item/weapon/reagent_containers/hypospray/autoinjector,
+			25;/obj/item/weapon/reagent_containers/food/drinks/thermos/full
+		)
+		new toSpawn(src)
+
+/obj/item/weapon/storage/box/byond
+	name = "\improper BYOND support package"
+	desc = "A small box containing a branded trinket that the BYOND corporation sends to people that actually send them money."
+	icon_state = "byond"
+	item_state = "byond"
+	storage_slots = 1 //not very useful for storage
+	foldable = /obj/item/trash/byond_box //no free cardboard
+
+/obj/item/weapon/storage/box/byond/New()
+	..()
+	var/obj/item/gibsmedat = pick(
+		/obj/item/weapon/thermometer/byond,
+		/obj/item/clothing/accessory/medal/byond,
+		/obj/item/toy/syndicateballoon/byondballoon,
+	)
+	new gibsmedat(src)
 
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
-	desc = "A box containing white latex gloves. gloves."
+	desc = "A box containing white latex gloves. gloves. gloves."
 	icon_state = "latex"
 
 /obj/item/weapon/storage/box/gloves/New()
@@ -152,6 +217,7 @@
 	name = "syringes"
 	desc = "A box containing syringes. A reminder label warns of syringes becoming potential biohazards when not properly sanitized."
 	icon_state = "syringe"
+	item_state = "syringe"
 
 /obj/item/weapon/storage/box/syringes/New()
 	..()
@@ -162,6 +228,7 @@
 /obj/item/weapon/storage/box/beakers
 	name = "beaker box"
 	icon_state = "beaker"
+	item_state = "beaker"
 
 /obj/item/weapon/storage/box/beakers/New()
 	..()
@@ -180,7 +247,6 @@
 	for(var/i = 1 to 3)
 		new /obj/item/weapon/dnainjector/nofail/m2h(src)
 
-
 /obj/item/weapon/storage/box/blanks
 	name = "box of blank shells"
 	desc = "It has a picture of a gun and several warning symbols on the front."
@@ -190,21 +256,41 @@
 	for(var/i = 1 to 7)
 		new /obj/item/ammo_casing/shotgun/blank(src)
 
-
-
 /obj/item/weapon/storage/box/flashbangs
 	name = "box of flashbangs (WARNING)"
-	desc = "<FONT color=red><B>WARNING: Do not use without reading these preautions!</B></FONT>\n<B>These devices are extremely dangerous and can cause blindness or deafness if used incorrectly.</B>\nThe chemicals contained in these devices have been tuned for maximal effectiveness and due to\nextreme safety precuaiotn shave been incased in a tamper-proof pack. DO NOT ATTEMPT TO OPEN\nFLASH WARNING: Do not use continually. Excercise extreme care when detonating in closed spaces.\n\tMake attemtps not to detonate withing range of 2 meters of the intended target. It is imperative\n\tthat the targets visit a medical professional after usage. Damage to eyes increases extremely per\n\tuse and according to range. Glasses with flash resistant filters DO NOT always work on high powered\n\tflash devices such as this. <B>EXERCISE CAUTION REGARDLESS OF CIRCUMSTANCES</B>\nSOUND WARNING: Do not use continually. Visit a medical professional if hearing is lost.\n\tThere is a slight chance per use of complete deafness. Exercise caution and restraint.\nSTUN WARNING: If the intended or unintended target is too close to detonation the resulting sound\n\tand flash have been known to cause extreme sensory overload resulting in temporary\n\tincapacitation.\n<B>DO NOT USE CONTINUALLY</B>\nOperating Directions:\n\t1. Pull detonnation pin. <B>ONCE THE PIN IS PULLED THE GRENADE CAN NOT BE DISARMED!</B>\n\t2. Throw grenade. <B>NEVER HOLD A LIVE FLASHBANG</B>\n\t3. The grenade will detonste 10 seconds hafter being primed. <B>EXCERCISE CAUTION</B>\n\t-<B>Never prime another grenade until after the first is detonated</B>\nNote: Usage of this pyrotechnic device without authorization is an extreme offense and can\nresult in severe punishment upwards of <B>10 years in prison per use</B>.\n\nDefault 3 second wait till from prime to detonation. This can be switched with a screwdriver\nto 10 seconds.\n\nCopyright of Nanotrasen Industries- Military Armnaments Division\nThis device was created by Nanotrasen Labs a member of the Expert Advisor Corporation"
+	desc = "<FONT color=red><B>WARNING: Do not use without reading these precautions!</B></FONT>\n<B>These devices are extremely dangerous and can cause blindness or deafness if used incorrectly.</B>\nThe chemicals contained in these devices have been tuned for maximal effectiveness and due to\nextreme safety precuaiotn shave been incased in a tamper-proof pack. DO NOT ATTEMPT TO OPEN\nFLASH WARNING: Do not use continually. Excercise extreme care when detonating in closed spaces.\n\tMake attemtps not to detonate withing range of 2 meters of the intended target. It is imperative\n\tthat the targets visit a medical professional after usage. Damage to eyes increases extremely per\n\tuse and according to range. Glasses with flash resistant filters DO NOT always work on high powered\n\tflash devices such as this. <B>EXERCISE CAUTION REGARDLESS OF CIRCUMSTANCES</B>\nSOUND WARNING: Do not use continually. Visit a medical professional if hearing is lost.\n\tThere is a slight chance per use of complete deafness. Exercise caution and restraint.\nSTUN WARNING: If the intended or unintended target is too close to detonation the resulting sound\n\tand flash have been known to cause extreme sensory overload resulting in temporary\n\tincapacitation.\n<B>DO NOT USE CONTINUALLY</B>\nOperating Directions:\n\t1. Pull detonnation pin. <B>ONCE THE PIN IS PULLED THE GRENADE CAN NOT BE DISARMED!</B>\n\t2. Throw grenade. <B>NEVER HOLD A LIVE FLASHBANG</B>\n\t3. The grenade will detonste 10 seconds hafter being primed. <B>EXCERCISE CAUTION</B>\n\t-<B>Never prime another grenade until after the first is detonated</B>\nNote: Usage of this pyrotechnic device without authorization is an extreme offense and can\nresult in severe punishment upwards of <B>10 years in prison per use</B>.\n\nDefault 3 second wait till from prime to detonation. This can be switched with a screwdriver\nto 10 seconds.\n\nCopyright of Nanotrasen Industries- Military Armnaments Division\nThis device was created by Nanotrasen Labs a member of the Expert Advisor Corporation"
 	icon_state = "flashbang"
+	item_state = "flashbang"
 
 /obj/item/weapon/storage/box/flashbangs/New()
 	..()
 	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/flashbang(src)
 
+/obj/item/weapon/storage/box/syndigrenades
+	name = "box of C28E pipe bombs (WARNING)"
+	desc = "A box containing the cream of the crop of throwable syndicate explosive devices. There's instructions on the back explaining that you need to pull the pin and throw it, and a warning that forgetting either step could lead to bad results. A good thing to tell to demolition operatives."
+	icon_state = "syndienade"
+
+/obj/item/weapon/storage/box/syndigrenades/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/syndigrenade(src)
+
+/obj/item/weapon/storage/box/syndisyringes
+	name = "syndicate mix syringes (WARNING)"
+	desc = "A box containing syndicate mix syringes. A clear warning label instructs that they should not be used on your teammates. Ranged executions galore."
+	icon_state = "syndisyringe"
+
+/obj/item/weapon/storage/box/syndisyringes/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/reagent_containers/syringe/syndi(src)
+
 /obj/item/weapon/storage/box/smokebombs
 	name = "box of smokebombs"
 	icon_state = "smokebomb"
+	item_state = "flashbang"
 
 /obj/item/weapon/storage/box/smokebombs/New()
 	..()
@@ -319,7 +405,7 @@
 	name = "Death Alarm Kit"
 	desc = "Box of stuff used to implant death alarms."
 	icon_state = "implant"
-	item_state = "syringe_kit"
+	item_state = "beaker"
 
 /obj/item/weapon/storage/box/cdeathalarm_kit/New()
 	..()
@@ -352,6 +438,7 @@
 	name = "box of donk-pockets"
 	desc = "<span class='notice'>Instructions: Heat in microwave. Product will cool if not eaten within seven minutes.</span>"
 	icon_state = "donk_kit"
+	item_state = "donk_kit"
 	var/pocket_amount = 6
 
 /obj/item/weapon/storage/box/donkpockets/New()
@@ -369,13 +456,12 @@
 	desc = "Drymate brand monkey cubes. Just add water!"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "monkeycubebox"
-	storage_slots = 7
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/monkeycube")
 
 /obj/item/weapon/storage/box/monkeycubes/New()
 	..()
 	if(src.type == /obj/item/weapon/storage/box/monkeycubes)
-		for(var/i = 1; i <= 5; i++)
+		for(var/i = 1; i <= 6; i++)
 			new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(src)
 
 /obj/item/weapon/storage/box/monkeycubes/farwacubes
@@ -404,6 +490,16 @@
 	..()
 	for(var/i = 1; i <= 5; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube(src)
+
+/obj/item/weapon/storage/box/monkeycubes/mousecubes
+	name = "lab mouse cube box"
+	desc = "Drymate brand laboratory mouse cubes, shipped from Yensid. Just add water!"
+	icon_state = "mousecubebox"
+
+/obj/item/weapon/storage/box/monkeycubes/mousecubes/New()
+	..()
+	for(var/i = 1; i <= 5; i++)
+		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube(src)
 
 /obj/item/weapon/storage/box/ids
 	name = "spare IDs"
@@ -436,6 +532,54 @@
 	for(var/i=0,i<7,i++)
 		new /obj/item/weapon/handcuffs(src)
 
+/obj/item/weapon/storage/box/large/securitygear
+	name = "security essentials"
+	desc = "A box containing essential security officer equipment. It has a piece of paper with the letters SEC written on it taped to one side."
+	icon_state = "largebox_sec"
+
+/obj/item/weapon/storage/box/large/securitygear/New()
+	..()
+	new /obj/item/device/radio/headset/headset_sec(src)
+	var/glasses = pick(/obj/item/clothing/glasses/sunglasses/sechud/prescription, /obj/item/clothing/glasses/sunglasses/sechud)
+	new glasses(src)
+	new /obj/item/clothing/gloves/black(src)
+	new /obj/item/weapon/storage/belt/security(src)
+	new /obj/item/device/flashlight/tactical(src)
+	new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(src)
+	new /obj/item/device/gps/secure(src)
+	new /obj/item/device/flash(src)
+	new /obj/item/weapon/grenade/flashbang(src)
+	new /obj/item/weapon/melee/baton/loaded(src)
+	new /obj/item/weapon/gun/energy/taser(src)
+	new /obj/item/weapon/reagent_containers/spray/pepper(src)
+	new /obj/item/taperoll/police(src)
+	new /obj/item/device/hailer(src)
+
+/obj/item/weapon/storage/box/large/detectivegear
+	name = "detective essentials"
+	desc = "A box containing essential detective officer equipment. It has a piece of paper with the letters DET written on it taped to one side."
+	icon_state = "largebox_det"
+
+/obj/item/weapon/storage/box/large/detectivegear/New()
+	..()
+	new /obj/item/device/radio/headset/headset_sec(src)
+	var/glasses = pick(/obj/item/clothing/glasses/sunglasses/sechud/prescription, /obj/item/clothing/glasses/sunglasses/sechud)
+	new glasses(src)
+	new /obj/item/clothing/gloves/black(src)
+	new /obj/item/weapon/storage/belt/detective(src)
+	new /obj/item/weapon/switchtool/switchblade(src)
+	new /obj/item/device/gps/secure(src)
+	new /obj/item/ammo_storage/box/c38(src)
+	new /obj/item/ammo_storage/box/c38(src)
+	new /obj/item/ammo_storage/speedloader/c38(src)
+	new /obj/item/weapon/storage/box/evidence(src)
+	new /obj/item/device/detective_scanner(src)
+	new /obj/item/binoculars(src)
+	new /obj/item/weapon/storage/box/surveillance(src)
+	new /obj/item/device/handtv(src)
+	new /obj/item/weapon/reagent_containers/spray/luminol(src)
+	new /obj/item/taperoll/police(src)
+
 /obj/item/weapon/storage/box/mousetraps
 	name = "box of Pest-B-Gon Mousetraps"
 	desc = "<span class='userdanger'>WARNING: Keep out of reach of children.</span>"
@@ -456,48 +600,53 @@
 		new /obj/item/weapon/storage/pill_bottle(src)
 
 /obj/item/weapon/storage/box/lethalshells
-	name = "lethal shells"
+	name = "12-gauge slugs"
 	icon_state = "lethal shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/lethalshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun(src)
 
 /obj/item/weapon/storage/box/beanbagshells
-	name = "bean bag shells"
+	name = "12-gauge beanbag shells"
 	icon_state = "bean bag shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/beanbagshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/beanbag(src)
 
 /obj/item/weapon/storage/box/stunshells
-	name = "stun shells"
+	name = "12-gauge stun shells"
 	icon_state = "stun shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/stunshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/stunshell(src)
 
 /obj/item/weapon/storage/box/dartshells
-	name = "shotgun darts"
+	name = "12-gauge darts"
 	icon_state = "dart shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/dartshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/dart(src)
 
 /obj/item/weapon/storage/box/buckshotshells
-	name = "buckshot shells"
+	name = "12-gauge 00 buckshot shells"
 	icon_state = "lethal shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/buckshotshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/buckshot(src)
 
 /obj/item/weapon/storage/box/labels
@@ -507,17 +656,7 @@
 
 /obj/item/weapon/storage/box/labels/New()
 	..()
-	for(var/i=1; i <= storage_slots; i++)
-		new /obj/item/device/label_roll(src)
-
-/obj/item/weapon/storage/box/labels
-	name = "label roll box"
-	desc = "A box of refill rolls for a hand labeler."
-	icon_state = "labels"
-
-/obj/item/weapon/storage/box/labels/New()
-	..()
-	for(var/i=1; i <= storage_slots; i++)
+	for(var/i=1; i <= BOX_SPACE; i++)
 		new /obj/item/device/label_roll(src)
 
 /obj/item/weapon/storage/box/wreath/wreath_bow
@@ -527,7 +666,7 @@
 
 /obj/item/weapon/storage/box/wreath/wreath_bow/New()
 	..()
-	for(var/i=1; i <= storage_slots; i++)
+	for(var/i=1; i <= BOX_SPACE; i++)
 		new /obj/item/mounted/frame/wreath/wreath_bow(src)
 
 /obj/item/weapon/storage/box/wreath/wreath_nobow
@@ -537,7 +676,7 @@
 
 /obj/item/weapon/storage/box/wreath/wreath_nobow/New()
 	..()
-	for(var/i=1; i <= storage_slots; i++)
+	for(var/i=1; i <= BOX_SPACE; i++)
 		new /obj/item/mounted/frame/wreath/wreath_nobow(src)
 
 /obj/item/weapon/storage/box/snappops
@@ -550,17 +689,28 @@
 
 /obj/item/weapon/storage/box/snappops/New()
 	..()
-	for(var/i=1; i <= storage_slots; i++)
+	for(var/i=1; i <= BOX_SPACE+1; i++)
 		new /obj/item/toy/snappop(src)
 
 /obj/item/weapon/storage/box/syndicatefake/space
 	name = "Space Suit and Helmet Replica"
 	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
 
 /obj/item/weapon/storage/box/syndicatefake/space/New()
 	..()
 	new /obj/item/clothing/suit/syndicatefake(src)
 	new /obj/item/clothing/head/syndicatefake(src)
+
+/obj/item/weapon/storage/box/syndicatefake/ninja
+	name = "Ninja Suit and Hood Replica"
+	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
+
+/obj/item/weapon/storage/box/syndicatefake/ninja/New()
+	..()
+	new /obj/item/clothing/suit/spaceninjafake(src)
+	new /obj/item/clothing/head/spaceninjafake(src)
 
 /obj/item/weapon/storage/box/autoinjectors
 	name = "box of injectors"
@@ -569,7 +719,7 @@
 
 /obj/item/weapon/storage/box/autoinjectors/New()
 	..()
-	for (var/i; i < storage_slots; i++)
+	for (var/i; i < BOX_SPACE; i++)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 
 /obj/item/weapon/storage/box/mugs
@@ -587,7 +737,7 @@
 	name = "replacement bulbs"
 	icon_state = "light"
 	desc = "This box is shaped on the inside so that only light tubes and bulbs fit."
-	item_state = "syringe_kit"
+	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard //BubbleWrap
 	storage_slots=21
 	can_only_hold = list("/obj/item/weapon/light/tube", "/obj/item/weapon/light/bulb")
@@ -619,11 +769,6 @@
 	for(var/i = 0; i < 7; i++)
 		new /obj/item/weapon/light/bulb(src)
 
-/obj/item/weapon/storage/box/lights/tubes/New()
-	..()
-	for(var/i = 0; i < 21; i++)
-		new /obj/item/weapon/light/tube(src)
-
 /obj/item/weapon/storage/box/lights/he
 	name = "high efficiency lights"
 	icon_state = "lightmixed"
@@ -641,7 +786,8 @@
 	icon_state = "inf_box"
 	can_only_hold = list(
 		"/obj/item/inflatable/door",
-		"/obj/item/inflatable/wall")
+		"/obj/item/inflatable/wall",
+		"/obj/item/inflatable/shelter")
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 21
 
@@ -814,3 +960,418 @@
 							/obj/item/toy/prize/odysseus,
 							/obj/item/toy/prize/phazon)
 		new randomFigurine(src)
+
+/obj/item/weapon/storage/box/diy_soda
+	name = "Dr. Pecker's DIY soda kit"
+	desc = "A trendy and expensive 'DIY' soda that you have to mix yourself. Tastes like a science fair experiment."
+	icon_state = "box_DIY_soda"
+	vending_cat = "carbonated drinks"
+
+/obj/item/weapon/storage/box/diy_soda/New()
+	..()
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer(src)
+	new /obj/item/weapon/paper/diy_soda(src)
+
+
+//Smart boxes.
+/obj/item/weapon/storage/box/smartbox
+	name = "Smart-box"
+	desc = "A one-use box that leaves no trash or cardboard behind."
+	foldable = null
+	storage_slots = BOX_SPACE
+	var/one_way = 0 //For one way boxes, you can take out but not put in. Could be moved to /box.
+
+
+/obj/item/weapon/storage/box/smartbox/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
+	. = ..()
+	if(contents.len <= 0) //If this is the last item, kill the box.
+		new_location.visible_message("<span class='notice'>\The [src] fizzles away into a glittering dust.</span>")
+		qdel(src)
+
+/obj/item/weapon/storage/box/smartbox/attackby(obj/item/W, mob/user)
+	if(one_way)
+		to_chat(user, "<span class='warning'>\The [src] only lets items leave it!</span>") //Couldn't think of something better to explain the oneway interaction in-game.
+		return
+	else
+		..()
+
+//Clothing-boxes.
+/obj/item/weapon/storage/box/smartbox/clothing_box
+	name = "box"
+	desc = "A smart-box style box for clothing, convenient for distributing clothes."
+	icon_state = "clothing_box"
+	foldable = null
+	storage_slots = BOX_SPACE
+	one_way = 1
+
+//Every clothing box will base its label overlay off of the first object in its contents. Keep that in mind when making a new clothing box.
+/obj/item/weapon/storage/box/smartbox/clothing_box/New()
+    ..()
+    if(contents.len)
+        var/mutable_appearance/M = new(contents[1])
+        M.layer = FLOAT_LAYER
+        M.plane = FLOAT_PLANE
+        M.transform *= 0.5
+        overlays += M
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuit
+	name = "Chicken suit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuit/New()
+	new	/obj/item/clothing/head/chicken(src)
+	new /obj/item/clothing/suit/chickensuit(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/monkeysuit
+	name = "Monkey suit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/monkeysuit/New()
+	new	/obj/item/clothing/mask/gas/monkeymask(src)
+	new /obj/item/clothing/suit/monkeysuit(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/xenosuit
+	name = "Xeno suit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/xenosuit/New()
+	new /obj/item/clothing/head/xenos(src)
+	new /obj/item/clothing/suit/xenos(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gladiatorsuit
+	name = "Gladiator suit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gladiatorsuit/New()
+	new /obj/item/clothing/head/helmet/gladiator(src)
+	new /obj/item/clothing/under/gladiator(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/captaincasualoutfit
+	name = "Captain's casual box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/captaincasualoutfit/New()
+	new /obj/item/clothing/head/flatcap(src)
+	new /obj/item/clothing/under/gimmick/rank/captain/suit(src)
+	new /obj/item/clothing/glasses/gglasses(src)
+	new /obj/item/clothing/shoes/jackboots(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/schoolgirloutfit
+	name = "School girl outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/schoolgirloutfit/New()
+	new /obj/item/clothing/head/kitty(src)
+	new /obj/item/clothing/under/schoolgirl(src)
+	new /obj/item/clothing/shoes/kneesocks(src)
+	new /obj/item/clothing/under/blackskirt(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit
+	name = "Pirate outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit/New()
+	new /obj/item/clothing/glasses/eyepatch(src)
+	new /obj/item/clothing/head/pirate(src)
+	new /obj/item/clothing/suit/pirate(src)
+	new /obj/item/clothing/head/bandana(src)
+	new /obj/item/clothing/under/pirate(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sovietoutfit
+	name = "Soviet outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sovietoutfit/New()
+	new /obj/item/clothing/head/ushanka(src)
+	new /obj/item/clothing/under/soviet(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/fakewizard
+	name = "Wizard outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/fakewizard/New()
+	new /obj/item/clothing/head/wizard/fake(src)
+	new /obj/item/clothing/suit/wizrobe/fake(src)
+	new /obj/item/weapon/staff(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/witch
+	name = "Witch outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/witch/New()
+	new /obj/item/clothing/head/witchwig(src)
+	new /obj/item/weapon/staff/broom(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/marisa
+	name = "Marisa outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/marisa/New()
+	new /obj/item/clothing/head/wizard/marisa/fake(src)
+	new /obj/item/clothing/suit/wizrobe/marisa/fake(src)
+	new /obj/item/weapon/staff/broom(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sexyclown
+	name = "Sexy clown outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sexyclown/New()
+	new /obj/item/clothing/mask/gas/sexyclown(src)
+	new /obj/item/clothing/under/sexyclown(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sexymime
+	name = "Sexy mime outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sexymime/New()
+	new /obj/item/clothing/mask/gas/sexymime(src)
+	new /obj/item/clothing/under/sexymime(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/jester
+	name = "Jester outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/jester/New()
+	new /obj/item/clothing/head/jesterhat(src)
+	new /obj/item/clothing/under/jester(src)
+	new /obj/item/clothing/shoes/jestershoes(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clownpiece
+	name = "Clownpiece outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clownpiece/New()
+	new /obj/item/clothing/head/clownpiece(src)
+	new /obj/item/clothing/suit/clownpiece(src)
+	new /obj/item/clothing/under/clownpiece(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/plaguedoctor
+	name = "Plague doctor outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/plaguedoctor/New()
+	new /obj/item/clothing/mask/gas/plaguedoctor(src)
+	new /obj/item/clothing/head/plaguedoctorhat(src)
+	new /obj/item/clothing/suit/bio_suit/plaguedoctorsuit(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/maid
+	name = "Maid outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/maid/New()
+	new /obj/item/clothing/suit/maidapron(src)
+	new /obj/item/clothing/head/maidhat(src)
+	new /obj/item/clothing/under/maid(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/liberty
+	name = "Patriot outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/liberty/New()
+	new /obj/item/clothing/head/libertyhat(src)
+	new /obj/item/clothing/suit/libertycoat(src)
+	new /obj/item/clothing/under/libertyshirt(src)
+	new /obj/item/clothing/shoes/libertyshoes(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mega
+	name = "Megaman outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mega/New()
+	new /obj/item/clothing/head/helmet/megahelmet(src)
+	new /obj/item/clothing/under/mega(src)
+	new /obj/item/clothing/gloves/megagloves(src)
+	new /obj/item/clothing/shoes/megaboots(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/aviator
+	name = "Aviator outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/aviator/New()
+	new /obj/item/clothing/head/helmet/aviatorhelmet(src)
+	new /obj/item/clothing/under/aviatoruniform(src)
+	new /obj/item/clothing/shoes/aviatorboots(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/proto
+	name = "Protoman outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/proto/New()
+	new /obj/item/clothing/head/helmet/protohelmet(src)
+	new /obj/item/clothing/under/proto(src)
+	new /obj/item/clothing/gloves/protogloves(src)
+	new /obj/item/clothing/shoes/protoboots(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/hastur
+	name = "Hastur outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/hastur/New()
+	new	/obj/item/clothing/head/hasturhood(src)
+	new /obj/item/clothing/suit/hastur(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/owl
+	name = "Owl outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/owl/New()
+	new /obj/item/clothing/mask/gas/owl_mask(src)
+	new /obj/item/clothing/under/owl(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lordadmiral
+	name = "Lord admiral outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lordadmiral/New()
+	new /obj/item/clothing/head/lordadmiralhat(src)
+	new /obj/item/clothing/suit/lordadmiral(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/rotten
+	name = "Rotten outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/rotten/New()
+	new /obj/item/clothing/under/rottensuit(src)
+	new /obj/item/clothing/shoes/rottenshoes(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/frank
+	name = "Dr. Frank outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/frank/New()
+	new /obj/item/clothing/under/franksuit(src)
+	new /obj/item/clothing/gloves/frankgloves(src)
+	new /obj/item/clothing/shoes/frankshoes(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mexican //is this offensive?
+	name = "Mexican outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mexican/New()
+	new /obj/item/clothing/head/sombrero(src)
+	new /obj/item/clothing/suit/poncho(src)
+	..()
+
+//Premium boxes, no different than clothing_box, just sorting for clarity.
+/obj/item/weapon/storage/box/smartbox/clothing_box/joe
+	name = "Sniper outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/joe/New()
+	new /obj/item/clothing/head/helmet/joehelmet(src)
+	new /obj/item/clothing/under/joe(src)
+	new /obj/item/clothing/gloves/joegloves(src)
+	new /obj/item/clothing/shoes/joeboots(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lola
+	name = "Fighting clown outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/lola/New()
+	new /obj/item/clothing/mask/gas/lola(src)
+	new /obj/item/clothing/under/lola(src)
+	new /obj/item/clothing/shoes/clown_shoes/lola(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/wizard_robes
+	name = "Wizard robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/wizard_robes/New()
+	new /obj/item/clothing/head/wizard(src)
+	new /obj/item/clothing/suit/wizrobe(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/red_wizrobes
+	name = "Red wizard robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/red_wizrobes/New()
+	new /obj/item/clothing/head/wizard/red(src)
+	new /obj/item/clothing/suit/wizrobe/red(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clown_wizrobes
+	name = "Clown wizard outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clown_wizrobes/New()
+	new /obj/item/clothing/head/wizard/clown(src)
+	new /obj/item/clothing/suit/wizrobe/clown(src)
+	new /obj/item/clothing/mask/gas/clown_hat/wiz(src)
+	new /obj/item/clothing/shoes/sandal/slippers(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/marisa_wiz
+	name = "Ordinary witch robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/marisa_wiz/New()
+	new /obj/item/clothing/head/wizard/marisa(src)
+	new /obj/item/clothing/suit/wizrobe/marisa(src)
+	new /obj/item/clothing/shoes/sandal/marisa/leather(src)
+	new /obj/item/weapon/staff/broom(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz
+	name = "Halloween robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz/New()
+	new /obj/item/clothing/head/wizard/hallowiz(src)
+	new /obj/item/clothing/suit/wizrobe/hallowiz(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mystic_robes
+	name = "Mystic robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/mystic_robes/New()
+	new /obj/item/clothing/head/wizard/mystic(src)
+	new /obj/item/clothing/suit/wizrobe/mystic(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/winter_wiz
+	name = "\"Winter robes\" box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/winter_wiz/New()
+	new /obj/item/clothing/head/wizard/winter(src)
+	new /obj/item/clothing/suit/wizrobe/winter(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/magician
+	name = "Magician outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/magician/New()
+	new /obj/item/clothing/head/that/magic(src)
+	new /obj/item/clothing/suit/wizrobe/magician(src)
+	new /obj/item/clothing/shoes/sandal/marisa/leather(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer
+	name = "Necromancer robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer/New()
+	new /obj/item/clothing/head/wizard/necro(src)
+	new /obj/item/clothing/suit/wizrobe/necro(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh
+	name = "Pharaoh robe box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh/New()
+	new /obj/item/clothing/head/pharaoh(src)
+	new /obj/item/clothing/suit/wizrobe/pharaoh(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche
+	name = "Clown psychedelic outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche/New()
+	new /obj/item/clothing/mask/gas/clownmaskpsyche(src)
+	new /obj/item/weapon/storage/backpack/clownpackpsyche(src)
+	new /obj/item/clothing/under/clownpsyche(src)
+	new /obj/item/clothing/shoes/clownshoespsyche(src)
+	..()

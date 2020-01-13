@@ -18,10 +18,10 @@
 	attack_sound = 'sound/weapons/welderattack.ogg'
 	faction = "slimesummon"
 	speed = 5
-	can_butcher = 0
-	meat_type = null
+	can_butcher = FALSE
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 
-	var/colour = "grey"
+	colour = "grey"
 	held_items = list()
 
 /mob/living/simple_animal/hostile/slime/New()
@@ -43,7 +43,8 @@
 	overlays += image(icon = icon, icon_state = "bloodlust-adult")
 
 
-/mob/living/simple_animal/hostile/slime/adult/Die()
+/mob/living/simple_animal/hostile/slime/adult/death(var/gibbed = FALSE)
+	..(gibbed)
 	for(var/i=0;i<2;i++)
 		var/mob/living/simple_animal/hostile/slime/rabid = new /mob/living/simple_animal/hostile/slime (src.loc)
 		rabid.icon_state = "[src.colour] baby slime eat"

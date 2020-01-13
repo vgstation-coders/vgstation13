@@ -90,7 +90,7 @@
 				use_power = 1
 				icon_state = "borgcharger0(old)"
 
-			playsound(get_turf(src), 'sound/machines/heps.ogg', 50, 0)
+			playsound(src, 'sound/machines/heps.ogg', 50, 0)
 
 		else if(prob(5))
 			src.visible_message("<span class='notice'>[bicon(src)] [src] [pick("clicks","whizzes","whirrs","whooshes","clanks","clongs","clonks","bangs")].</span>")
@@ -106,8 +106,8 @@
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
 
-/obj/machinery/replicator/attackby(var/obj/O, var/mob/user)
-	if(iswrench(O))
+/obj/machinery/replicator/attackby(var/obj/item/O, var/mob/user)
+	if(O.is_wrench(user))
 		return ..()
 	else if(O.force > 10)
 		log_attack("<font color='red'>[user] damaged [src]/([formatJumpTo(src)]) with [O]</font>")
@@ -148,4 +148,4 @@
 			spawn_progress = 0
 			use_power = 2
 			icon_state = "borgcharger1(old)"
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 0)
+			playsound(src, 'sound/machines/click.ogg', 50, 0)

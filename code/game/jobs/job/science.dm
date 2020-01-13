@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 80
 	selection_color = "#ffddff"
 	idtype = /obj/item/weapon/card/id/rd
 	req_admin_notify = 1
@@ -17,7 +18,7 @@
 			            access_tox_storage, access_teleporter, access_sec_doors,
 			            access_science, access_robotics, access_xenobiology, access_ai_upload,
 			            access_RC_announce, access_keycard_auth, access_tcomsat, access_gateway, access_mechanic)
-	minimal_player_age = 7
+	minimal_player_age = 20
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/heads/rd
@@ -43,6 +44,14 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
+	L.imp_in = H
+	L.implanted = 1
+	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
+	affected.implants += L
+	L.part = affected
+	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Science:</b> [SCI_FREQ]<br/>")
 	return 1
 
 /datum/job/scientist
@@ -53,6 +62,7 @@
 	total_positions = 5
 	spawn_positions = 3
 	supervisors = "the research director"
+	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
 	access = list(access_robotics, access_rnd, access_tox_storage, access_science, access_xenobiology)
@@ -99,6 +109,8 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")
 	return 1
 
 /datum/job/roboticist
@@ -109,6 +121,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "research director"
+	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
 	access = list(access_robotics, access_tech_storage, access_morgue, access_science, access_rnd) //As a job that handles so many corpses, it makes sense for them to have morgue access.
@@ -146,4 +159,10 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")
 	return 1
+
+/datum/job/roboticist/priority_reward_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	H.equip_or_collect(new /obj/item/device/flash/synthetic(H.back), slot_in_backpack)

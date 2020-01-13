@@ -2,6 +2,7 @@
 /obj/structure/flora
 	name = "flora"
 	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
+	var/shovelaway = FALSE
 
 /obj/structure/flora/New()
 	..()
@@ -9,14 +10,18 @@
 
 /obj/structure/flora/update_icon()
 	clicked = new/icon(src.icon, src.icon_state, src.dir)
-/*
+
 /obj/structure/flora/attackby(var/obj/item/I, var/mob/user, params)
-	if(istype(I, /obj/item/ornament))
-		hang_ornament(I, user, params)
+	if(shovelaway && isshovel(I))
+		to_chat(user,"<span class='notice'>You clear away \the [src]</span>")
+		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+		qdel(src)
 		return 1
-	else
-		..()
-*/
+//	if(istype(I, /obj/item/ornament))
+//		hang_ornament(I, user, params)
+//		return 1
+	..()
+
 /obj/structure/flora/proc/hang_ornament(var/obj/item/I, var/mob/user, params)
 	var/list/params_list = params2list(params)
 	if(!istype(I, /obj/item/ornament))
@@ -36,8 +41,8 @@
 
 			var/clamp_x = clicked.Width() / 2
 			var/clamp_y = clicked.Height() / 2
-			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)+(((((clicked.Width()/32)-1)*16)*PIXEL_MULTIPLIER))
-			O.pixel_y = (Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)+((((clicked.Height()/32)-1)*16)*PIXEL_MULTIPLIER))-(5*PIXEL_MULTIPLIER)
+			O.pixel_x = clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)+(((((clicked.Width()/32)-1)*16)*PIXEL_MULTIPLIER))
+			O.pixel_y = (clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)+((((clicked.Height()/32)-1)*16)*PIXEL_MULTIPLIER))-(5*PIXEL_MULTIPLIER)
 			overlays += O
 			to_chat(user, "You hang \the [I] on \the [src].")
 			return 1
@@ -111,13 +116,11 @@
 	//Tell user about the height. Note that normally height ranges from 3 to 8 (with a 5% chance of having 6 to 15 instead)
 	to_chat(user, "<span class='info'>It appears to be about [height*3] feet tall.</span>")
 	switch(health / maxHealth)
-		if(1.0)
-			//It's healthy
-		if(0.9 to 0.6)
+		if(0.6 to 0.9)
 			to_chat(user, "<span class='info'>It's been partially cut down.</span>")
-		if(0.6 to 0.2)
+		if(0.2 to 0.6)
 			to_chat(user, "<span class='notice'>It's almost cut down, [falling_dir ? "and it's leaning towards the [dir2text(falling_dir)]." : "but it still stands upright."]</span>")
-		if(0.2 to 0)
+		if(0 to 0.2)
 			to_chat(user, "<span class='danger'>It's going to fall down any minute now!</span>")
 
 /obj/structure/flora/tree/attackby(obj/item/W, mob/living/user)
@@ -217,12 +220,14 @@
 	name = "tree stump"
 	icon = 'icons/obj/flora/pinetrees.dmi'
 	icon_state = "pine_stump"
+	shovelaway = TRUE
 
 //grass
 /obj/structure/flora/grass
 	name = "grass"
 	icon = 'icons/obj/flora/snowflora.dmi'
 	anchored = 1
+	shovelaway = TRUE
 
 /obj/structure/flora/grass/brown
 	icon_state = "snowgrass1bb"
@@ -256,9 +261,11 @@
 //bushes
 /obj/structure/flora/bush
 	name = "bush"
+	desc = "It's amazing what can grow out here."
 	icon = 'icons/obj/flora/snowflora.dmi'
 	icon_state = "snowbush1"
 	anchored = 1
+	shovelaway = TRUE
 
 /obj/structure/flora/bush/New()
 	..()
@@ -291,9 +298,11 @@
 				filled = TRUE
 		if(filled)
 			to_chat(user, "There is already something in the pot.")
+			playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 			return
 	if(user.drop_item(I, src))
 		user.visible_message("<span class='notice'>[user] stuffs something into the pot.</span>", "You stuff \the [I] into the [src].")
+		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 
 /obj/structure/flora/pottedplant/attack_hand(mob/user)
 	if(contents.len)
@@ -303,16 +312,19 @@
 			count++
 			if(count > contents.len)	//pot is emptied of non-ornament items
 				user.visible_message("<span class='notice'>[user] plucks \the [I] off \the [src].</span>", "You take \the [I] off \the [src].")
+				playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 				I.forceMove(loc)
 				user.put_in_active_hand(I)
 				overlays -= overlays[overlays.len]
 				return
 			I = contents[count]
 		user.visible_message("<span class='notice'>[user] retrieves something from the pot.</span>", "You retrieve \the [I] from the [src].")
+		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 		I.forceMove(loc)
 		user.put_in_active_hand(I)
 	else
-		to_chat(user, "You root around in the roots.")
+		to_chat(user, "You root around in the roots. There isn't anything in there.")
+		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 
 /obj/structure/flora/pottedplant/attack_paw(mob/user)
 	return attack_hand(user)
@@ -325,10 +337,10 @@
 /obj/structure/flora/pottedplant/claypot
 	name = "clay pot"
 	desc = "Plants placed in those stop aging, but cannot be retrieved either."
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "claypot"
 	anchored = 0
-	density = 0
+	density = FALSE
 	var/plant_name = ""
 
 /obj/structure/flora/pottedplant/claypot/examine(mob/user)
@@ -337,14 +349,14 @@
 		to_chat(user, "<span class='info'>You can see [plant_name] planted in it.</span>")
 
 /obj/structure/flora/pottedplant/claypot/attackby(var/obj/item/O,var/mob/user)
-	if(istype(O,/obj/item/weapon/wrench))
+	if(O.is_wrench(user))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			anchored = !anchored
 			user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 									"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 									"<span class='notice'>You hear a ratchet.</span>")
-	else if(plant_name && istype(O,/obj/item/weapon/pickaxe/shovel))
+	else if(plant_name && isshovel(O))
 		to_chat(user, "<span class='notice'>[bicon(src)] You start removing the [plant_name] from \the [src].</span>")
 		if(do_after(user, src, 30))
 			playsound(loc, 'sound/items/shovel.ogg', 50, 1)
@@ -489,6 +501,7 @@
 	icon_state = "rock1"
 	icon = 'icons/obj/flora/rocks.dmi'
 	anchored = 1
+	shovelaway = TRUE
 
 /obj/structure/flora/rock/New()
 	..()

@@ -5,6 +5,25 @@
 var/list/existing_dungeons = list()
 var/turf/dungeon_area = null
 
+/datum/map_element/dungeon
+	//If TRUE, don't load any duplicates (subtypes are fine)
+	//Note: When trying to load a duplicate, load_dungeon() will return a reference to the "original" dungeon datum, instead of a list of its objects
+	var/unique = 0
+
+	//If not null, spawn these objects at the border of the dungeon
+	//By default, random teleporters are created (making escaping to Z-2 impossible)
+	var/border_type = /obj/effect/step_trigger/teleporter/random/shuttle_transit
+
+/datum/map_element/dungeon/load(x,y,z)
+	.=..()
+
+	if(border_type)
+		for(var/turf/T in block_borders(location, locate(location.x + width, location.y + height, location.z)))
+			if(ispath(border_type, /turf))
+				T.ChangeTurf(border_type)
+			else
+				new border_type(T)
+
 
 //MARKER: put this on z-2, with plenty of space to the right and north
 /obj/effect/landmark/dungeon_area
@@ -22,6 +41,8 @@ var/turf/dungeon_area = null
 //NOTE: first dungeon spawns in the lower left corner. Next dungeons spawn to the right until there's no more space there.
 //Then spawn above the first dungeon and continue to the right...
 
+//Returns list of loaded objects. If trying to load a duplicate dungeon (and it's forbidden), returns a reference to the "original" dungeon instead
+
 #define MAXIMUM_DUNGEON_WIDTH 80
 
 proc/load_dungeon(dungeon_type)
@@ -35,6 +56,13 @@ proc/load_dungeon(dungeon_type)
 		ME = dungeon_type
 	else
 		return 0
+
+	var/datum/map_element/dungeon/D = ME
+	if(istype(D) && D.unique)
+		//Check if this exact dungeon already exists
+		for(var/datum/map_element/dungeon/dungeon in existing_dungeons)
+			if(dungeon.type == ME.type)
+				return dungeon
 
 	var/spawn_x = dungeon_area.x
 	var/spawn_y = dungeon_area.y

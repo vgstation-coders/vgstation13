@@ -140,8 +140,8 @@
 			icon_state = initial(icon_state)
 
 //copied from computer.dm
-/obj/machinery/power/monitor/attackby(I as obj, mob/user as mob)
-	if(isscrewdriver(I) && circuit)
+/obj/machinery/power/monitor/attackby(obj/item/I as obj, mob/user as mob)
+	if(I.is_screwdriver(user) && circuit)
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user,src,20))
 			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
@@ -202,8 +202,9 @@
 
 
 				var/obj/machinery/power/apc/A = term.master
+				var/area/APC_area = get_area(A)
 				tbl += "<tr>"
-				tbl += "<td><span class=\"area\">["\The [A.areaMaster]"]</span></td>"
+				tbl += "<td><span class=\"area\">["\The [APC_area]"]</span></td>"
 				tbl += "<td>[S[A.equipment+1]]</span></td><td>[S[A.lighting+1]]</span></td><td>[S[A.environ+1]]</span></td>"
 				tbl += "<td align=\"right\">[A.lastused_total]</td>"
 				if(A.cell)

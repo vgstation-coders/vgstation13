@@ -48,56 +48,56 @@
 				switch(S.type)
 					//Captains locker
 					if(/obj/structure/closet/secure_closet/captains)
-						new /obj/item/clothing/suit/wintercoat/captain(S)
+						new /obj/item/clothing/suit/storage/wintercoat/security/captain(S)
 
 					//HoPs attire
 					if(/obj/structure/closet/secure_closet/hop2)
-						new /obj/item/clothing/suit/wintercoat/hop(S)
+						new /obj/item/clothing/suit/storage/wintercoat/hop(S)
 
 					//Head of security's ling-hunting gear
 					if(/obj/structure/closet/secure_closet/hos)
-						new /obj/item/clothing/suit/wintercoat/security/hos(S)
+						new /obj/item/clothing/suit/storage/wintercoat/security/hos(S)
 
 					if(/obj/structure/closet/secure_closet/warden)
-						new /obj/item/clothing/suit/wintercoat/security/warden(S)
+						new /obj/item/clothing/suit/storage/wintercoat/security/warden(S)
 
 					if(/obj/structure/closet/secure_closet/security)
-						new /obj/item/clothing/suit/wintercoat/security(S)
+						new /obj/item/clothing/suit/storage/wintercoat/security(S)
 
 					if(/obj/structure/closet/secure_closet/brig)
-						new /obj/item/clothing/suit/wintercoat/prisoner(S)
-						new /obj/item/clothing/suit/wintercoat/prisoner(S)
+						new /obj/item/clothing/suit/storage/wintercoat/prisoner(S)
+						new /obj/item/clothing/suit/storage/wintercoat/prisoner(S)
 
 					if(/obj/structure/closet/secure_closet/scientist)
-						new /obj/item/clothing/suit/wintercoat/science(S)
-						new /obj/item/clothing/suit/wintercoat/science(S)
+						new /obj/item/clothing/suit/storage/wintercoat/medical/science(S)
+						new /obj/item/clothing/suit/storage/wintercoat/medical/science(S)
 
 					if(/obj/structure/closet/secure_closet/RD)
-						new /obj/item/clothing/suit/wintercoat/science(S)
+						new /obj/item/clothing/suit/storage/wintercoat/medical/science(S)
 
 					if(/obj/structure/closet/secure_closet/medical3 || /obj/structure/closet/secure_closet/paramedic)
-						new /obj/item/clothing/suit/wintercoat/medical(S)
-						new /obj/item/clothing/suit/wintercoat/medical(S)
+						new /obj/item/clothing/suit/storage/wintercoat/medical(S)
+						new /obj/item/clothing/suit/storage/wintercoat/medical(S)
 
 					if(/obj/structure/closet/secure_closet/CMO)
-						new /obj/item/clothing/suit/wintercoat/cmo(S)
+						new /obj/item/clothing/suit/storage/wintercoat/medical/cmo(S)
 
 					if(/obj/structure/closet/secure_closet/engineering_chief)
-						new /obj/item/clothing/suit/wintercoat/ce(S)
+						new /obj/item/clothing/suit/storage/wintercoat/engineering/ce(S)
 
 					if(/obj/structure/closet/secure_closet/engineering_personal || /obj/structure/closet/secure_closet/engineering_mechanic)
-						new /obj/item/clothing/suit/wintercoat/engineering(S)
-						new /obj/item/clothing/suit/wintercoat/engineering(S)
+						new /obj/item/clothing/suit/storage/wintercoat/engineering(S)
+						new /obj/item/clothing/suit/storage/wintercoat/engineering(S)
 
 					if(/obj/structure/closet/secure_closet/engineering_atmos)
-						new /obj/item/clothing/suit/wintercoat/engineering/atmos(S)
-						new /obj/item/clothing/suit/wintercoat/engineering/atmos(S)
+						new /obj/item/clothing/suit/storage/wintercoat/engineering/atmos(S)
+						new /obj/item/clothing/suit/storage/wintercoat/engineering/atmos(S)
 
 					else
 						if(prob(50))
-							new /obj/item/clothing/suit/wintercoat(S)
+							new /obj/item/clothing/suit/storage/wintercoat(S)
 							if(prob(80))
-								new /obj/item/clothing/suit/wintercoat(S)
+								new /obj/item/clothing/suit/storage/wintercoat(S)
 
 
 	var/area/christmas_bar = locate(/area/crew_quarters/bar)

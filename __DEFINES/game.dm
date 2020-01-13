@@ -25,9 +25,12 @@
 
 #define FIREAXE_SLOWDOWN 1.4
 
-// Cyborgs
+#define COMMAND_POSITIONS list("Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer")
+#define ENGINEERING_POSITIONS list("Chief Engineer", "Station  Engineer", "Atmospheric Technician", "Mechanic")
+#define MEDICAL_POSITIONS list("Chief Medical Officer", "Medical Doctor", "Geneticist", "Virologist", "Paramedic", "Chemist")
+#define SCIENCE_POSITIONS list("Research Director", "Scientist", "Geneticist", "Roboticist", "Mechanic")
+#define CIVILIAN_POSITIONS list("Head of Personnel", "Bartender", "Botanist", "Chef", "Janitor", "Librarian", "Internal Affairs Agent", "Chaplain", "Clown", "Mime", "Assistant")
+#define CARGO_POSITIONS list("Head of Personnel", "Quartermaster", "Cargo Technician", "Shaft Miner")
+#define SECURITY_POSITIONS list("Head of Security", "Warden", "Detective", "Security Officer")
 
-#define CYBORG_MOBILITY_MODULE_MODIFIER 0.75
-
-#define CYBORG_NO_CHARGE_SLOWDOWN 3
-#define CYBORG_NO_CELL_SLOWDOWN 15
+#define ALWAYSTRUE 2

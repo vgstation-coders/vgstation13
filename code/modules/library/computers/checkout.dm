@@ -19,8 +19,8 @@
 
 	var/bibledelay = 0 // LOL NO SPAM (1 minute delay) -- Doohl
 	var/booklist
-
-	machine_flags = EMAGGABLE
+	pass_flags = PASSTABLE
+	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/computer/library/checkout/attack_hand(var/mob/user as mob)
 	if(..())
@@ -177,12 +177,13 @@
 			var/manualcount = 1
 			var/obj/item/weapon/book/manual/M = null
 
-			for(var/manual_type in (typesof(/obj/item/weapon/book/manual) - forbidden))
-				M = new manual_type()
-				dat += "<tr><td><A href='?src=\ref[src];manual=[manualcount]'>[M.title]</A></td></tr>"
+			for(var/manual_type in typesof(/obj/item/weapon/book/manual))
+				if (!(manual_type in forbidden))
+					M = new manual_type()
+					dat += "<tr><td><A href='?src=\ref[src];manual=[manualcount]'>[M.title]</A></td></tr>"
+					qdel(M)
+					M = null
 				manualcount++
-				qdel(M)
-				M = null
 			dat += "</table>"
 			dat += "<BR><A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
 
@@ -227,13 +228,13 @@
 		else
 			var/pn = text2num(href_list["pagenum"])
 			if(!isnull(pn))
-				page_num = Clamp(pn, 0, num_pages)
+				page_num = clamp(pn, 0, num_pages)
 
 	if(href_list["page"])
 		if(num_pages == 0)
 			page_num = 0
 		else
-			page_num = Clamp(text2num(href_list["page"]), 0, num_pages)
+			page_num = clamp(text2num(href_list["page"]), 0, num_pages)
 	if(href_list["settitle"])
 		var/newtitle = input("Enter a title to search for:") as text|null
 		if(newtitle)
@@ -314,14 +315,31 @@
 			if("6")
 				if(!bibledelay)
 
-					var/obj/item/weapon/storage/bible/B = new /obj/item/weapon/storage/bible(src.loc)
-					if(ticker && ( ticker.Bible_icon_state && ticker.Bible_item_state) )
-						B.icon_state = ticker.Bible_icon_state
-						B.item_state = ticker.Bible_item_state
-						B.name = ticker.Bible_name
-						B.deity_name = ticker.Bible_deity_name
-
 					bibledelay = 1
+
+					var/obj/item/weapon/storage/bible/B = new
+					B = new(src.loc)
+					if (usr.mind && usr.mind.faith) // The user has a faith
+						var/datum/religion/R = usr.mind.faith
+						var/obj/item/weapon/storage/bible/HB = R.holy_book
+						if (!HB)
+							B = chooseBible(R, usr)
+						else
+							B.icon_state = HB.icon_state
+							B.item_state = HB.item_state
+						B.name = R.bible_name
+						B.my_rel = R
+
+					else if (ticker.religions.len) // No faith
+						var/datum/religion/R = input(usr, "Which holy book?") as anything in ticker.religions
+						if(!R.holy_book)
+							return
+						B.icon_state = R.holy_book.icon_state
+						B.item_state = R.holy_book.item_state
+						B.name = R.bible_name
+						B.my_rel = R
+					B.forceMove(src.loc)
+
 					spawn(60)
 						bibledelay = 0
 
@@ -466,4 +484,5 @@
 		B.author = newbook.author
 		B.dat = http
 		B.icon_state = "book[rand(1,9)]"
+		B.item_state = B.icon_state
 	src.visible_message("[src]'s printer hums as it produces a completely bound book. How did it do that?")

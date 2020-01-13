@@ -32,7 +32,7 @@ var/list/obj/machinery/power/photocollector/photocollector_list = list()
 
 /obj/machinery/power/photocollector/process()
 	last_power = 0
-	if(!anchored || beams.len == 0)
+	if(!anchored || !beams || !beams.len)
 		return
 	var/avail_energy = 0
 	for(var/obj/effect/beam/emitter/EB in beams)

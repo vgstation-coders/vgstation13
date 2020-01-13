@@ -88,7 +88,7 @@
 
 	for(var/fusepoint in fuse_point_names)
 		html += {"<tr>
-		<td[row_options1]><font color='blue'>[fusepoint]</font>
+		<td[row_options1]><span class='notice'>[fusepoint]</span>
 		</td>
 		<td[row_options2]>
 		<A href='?src=\ref[src];action=1;fuse=[fuse_point_names[fusepoint]]'>[checkfuse(text2num(fuse_point_names[fusepoint])) ? "Melt" :  "Fuse"]</A></td></tr>"}

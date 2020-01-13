@@ -15,7 +15,7 @@
 
 /obj/item/weapon/melee/chainofcommand/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return (OXYLOSS)
+	return (SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/melee/morningstar
 	name = "morningstar"

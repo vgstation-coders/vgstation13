@@ -41,6 +41,9 @@
 /datum/browser/proc/add_stylesheet(name, file)
 	stylesheets[name] = file
 
+/datum/browser/proc/remove_stylesheets()
+	stylesheets = list()
+
 /datum/browser/proc/add_script(name, file)
 	scripts[name] = file
 
@@ -122,32 +125,8 @@
 	return filename
 	*/
 
-
-// Registers the on-close verb for a browse window (client/verb/.windowclose)
-// this will be called when the close-button of a window is pressed.
-//
-// This is usually only needed for devices that regularly update the browse window,
-// e.g. canisters, timers, etc.
-//
-// windowid should be the specified window name
-// e.g. code is	: user << browse(text, "window=fred")
-// then use 	: onclose(user, "fred")
-//
-// Optionally, specify the "ref" parameter as the controlled atom (usually src)
-// to pass a "close=1" parameter to the atom's Topic() proc for special handling.
-// Otherwise, the user mob's machine var will be reset directly.
-//
 /proc/format_text(text)
 	return replacetext(replacetext(text,"\proper ",""),"\improper ","")
-
-/proc/onclosed(mob/user, windowid, var/atom/ref=null)
-	if(!user.client)
-		return
-	var/param = "null"
-	if(ref)
-		param = "\ref[ref]"
-
-	winset(user, windowid, "on-close=\".windowclose [param]\"")
 
 //	to_chat(world, "OnClose [user]: [windowid] : ["on-close=\".windowclose [param]\""]")
 

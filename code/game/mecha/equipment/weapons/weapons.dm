@@ -6,9 +6,9 @@
 	var/fire_sound
 
 
-/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj)
+/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj, var/override = FALSE)
 	if(..())
-		if(istype(M))
+		if(istype(M) || override)
 			return 1
 	return 0
 
@@ -126,6 +126,8 @@
 	playsound(chassis, 'sound/items/AirHorn.ogg', 100, 1)
 	chassis.occupant_message("<font color='red' size='5'>HONK</font>")
 	for(var/mob/living/carbon/M in ohearers(6, chassis))
+		if(M.is_deaf())
+			continue
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 			if(H.earprot())
@@ -168,6 +170,10 @@
 	..()
 	projectiles = max_projectiles
 
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/alt_action()
+	rearm()
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/become_defective()
 	if(!defective)
 		..()
@@ -195,6 +201,7 @@
 			chassis.use_power(projectile_energy_cost)
 	send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 	log_message("Rearmed [src.name].")
+	to_chat(chassis.occupant, "<span class='notice'>Rearmed [src.name].</span>")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/Topic(href, href_list)
@@ -411,7 +418,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/clarke/M)
 	if(istype(M))
-		return 1
+		return ..(M,TRUE)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable
 	name = "\improper Inflatable Barrier Launcher"
@@ -466,7 +473,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/can_attach(var/obj/mecha/working/clarke/M)
 	if(istype(M))
-		return 1
+		return ..(M,TRUE)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 	name = "\improper Banana Mortar"
@@ -563,7 +570,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
 	name = "\improper PCMK-6 Bolas Launcher"
 	icon_state = "mecha_bolas"
-	projectile = /obj/item/weapon/legcuffs/bolas
+	projectile = /obj/item/weapon/legcuffs/bolas/mech
 	fire_sound = 'sound/weapons/whip.ogg'
 	max_projectiles = 10
 	missile_speed = 1
@@ -576,13 +583,13 @@
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
-	var/obj/item/weapon/legcuffs/bolas/M = new projectile(chassis.loc)
+	var/obj/item/weapon/legcuffs/bolas/mech/M = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(defective)
 		target = get_inaccuracy(originaltarget, 1, chassis)
-	M.thrown_from = src
 	M.throw_at(target, missile_range, missile_speed)
+	playsound(src,'sound/weapons/whip.ogg', 20, 1) //because mechs play the sound anyways
 	projectiles--
 	log_message("Fired from [src.name], targeting [originaltarget].")
 	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
@@ -613,7 +620,7 @@
 				to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
 				return
 
-		playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+		playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 		user.visible_message("<span class='danger'>\The [M] is trying to handcuff \the [C]!</span>",
 							 "<span class='danger'>You try to handcuff \the [C]!</span>")
 

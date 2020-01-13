@@ -1,6 +1,9 @@
 var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
+
+#define HOLYWATER_DURATION 8 MINUTES
+
 /atom
 
 	var/ghost_read  = 1 // All ghosts can read
@@ -8,11 +11,14 @@ var/global/list/ghdel_profiling = list()
 	var/blessed=0 // Chaplain did his thing. (set by bless() proc, which is called by holywater)
 
 	var/flags = FPRINT
+	var/flow_flags = 0
 	var/list/fingerprints
 	var/list/fingerprintshidden
 	var/fingerprintslast = null
+	var/fingerprintslastTS = null
 	var/list/blood_DNA
 	var/blood_color
+	var/had_blood //Something was bloody at some point.
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
 
@@ -29,7 +35,9 @@ var/global/list/ghdel_profiling = list()
 	/////////////////////////////
 	// On Destroy()
 	var/event/on_destroyed
-
+	// When density is changed
+	var/event/on_density_change
+	var/event/on_z_transition
 
 
 	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
@@ -41,7 +49,9 @@ var/global/list/ghdel_profiling = list()
 	var/ignoreinvert = 0
 	var/timestopped
 
-	appearance_flags = TILE_BOUND
+	appearance_flags = TILE_BOUND|LONG_GLIDE
+
+	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -102,7 +112,7 @@ var/global/list/ghdel_profiling = list()
 
 // NOTE FROM AMATEUR CODER WHO STRUGGLED WITH RUNTIMES
 // throw_impact is called multiple times when an item is thrown: see /atom/movable/proc/hit_check at atoms_movable.dm
-// Do NOT delete an item as part of it's throw_impact unless you've checked the hit_atom is a turf, as that's effectively the last time throw_impact is called in a single throw.
+// Do NOT delete an item as part of its throw_impact unless you've checked the hit_atom is a turf, as that's effectively the last time throw_impact is called in a single throw.
 // Otherwise, shit will runtime in the subsequent throw_impact calls.
 /atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user)
 	if(istype(hit_atom,/mob/living))
@@ -113,10 +123,11 @@ var/global/list/ghdel_profiling = list()
 	else if(isobj(hit_atom))
 		var/obj/O = hit_atom
 		if(!O.anchored)
+			O.set_glide_size(0)
 			step(O, src.dir)
 		O.hitby(src,speed)
 
-	else if(isturf(hit_atom))
+	else if(isturf(hit_atom) && !istype(src,/obj/mecha))//heavy mechs don't just bounce off walls, also it can fuck up rocket dashes
 		var/turf/T = hit_atom
 		if(T.density)
 			spawn(2)
@@ -149,12 +160,21 @@ var/global/list/ghdel_profiling = list()
 		qdel(reagents)
 		reagents = null
 
+	if(density)
+		densityChanged()
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
 	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
 	if(on_destroyed)
 		on_destroyed.holder = null
 		on_destroyed = null
+	if (on_density_change)
+		on_density_change.holder = null
+		on_density_change = null
+	if(on_z_transition)
+		on_z_transition.holder = null
+		qdel(on_z_transition)
+		on_z_transition = null
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
 	/*if(istype(beams) && beams.len)
@@ -165,9 +185,12 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
+	..()
 
 /atom/New()
 	on_destroyed = new("owner"=src)
+	on_density_change = new("owner"=src)
+	on_z_transition = new("owner"=src)
 	. = ..()
 	AddToProfiler()
 
@@ -194,14 +217,33 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/Bumped(AM as mob|obj)
 	return
 
-/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
-	return Bumped(W)
+/atom/proc/setDensity(var/density)
+	if (density == src.density)
+		return FALSE // No need to invoke the event when we're not doing any actual change
+	src.density = density
+	densityChanged()
+
+/atom/proc/densityChanged()
+	INVOKE_EVENT(on_density_change, list("atom" = src)) // Invoke event for density change
+	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
+		beams.len = 0
+	if(!isturf(src))
+		var/turf/T = get_turf(src)
+		if(T && T.on_density_change)
+			T.densityChanged()
+
+/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
+	return Bumped(F)
 
 // Convenience proc to see if a container is open for chemistry handling
 // returns true if open
 // false if closed
 /atom/proc/is_open_container()
 	return flags & OPENCONTAINER
+
+// For when we want an open container that doesn't show its reagents on examine
+/atom/proc/hide_own_reagents()
+	return FALSE
 
 // As a rule of thumb, should smoke be able to pop out from inside this object?
 // Currently only used for chemical reactions, see Chemistry-Recipes.dm
@@ -210,11 +252,11 @@ var/global/list/ghdel_profiling = list()
 
 /*//Convenience proc to see whether a container can be accessed in a certain way.
 
-	proc/can_subract_container()
-		return flags & EXTRACT_CONTAINER
+/atom/proc/can_subract_container()
+	return flags & EXTRACT_CONTAINER
 
-	proc/can_add_container()
-		return flags & INSERT_CONTAINER
+/atom/proc/can_add_container()
+	return flags & INSERT_CONTAINER
 */
 
 /atom/proc/allow_drop()
@@ -224,6 +266,7 @@ var/global/list/ghdel_profiling = list()
 	return
 
 /atom/proc/emp_act(var/severity)
+	set waitfor = FALSE
 	return
 
 /atom/proc/kick_act(mob/living/carbon/human/user) //Called when this atom is kicked. If returns 1, normal click action will be performed after calling this (so attack_hand() in most cases)
@@ -242,6 +285,14 @@ var/global/list/ghdel_profiling = list()
 	else if(src in container)
 		return 1
 	return
+
+/atom/proc/recursive_in_contents_of(var/atom/container, var/atom/searching_for = src)
+	if(isturf(searching_for))
+		return FALSE
+	if(loc == container)
+		return TRUE
+	return recursive_in_contents_of(container, src.loc)
+
 
 /atom/proc/projectile_check()
 	return
@@ -383,7 +434,7 @@ its easier to just keep the beam vertical.
 
 //Woo hoo. Overtime
 //All atoms
-/atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE)
+/atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
 	if(src.blood_DNA && src.blood_DNA.len)
@@ -394,33 +445,15 @@ its easier to just keep the beam vertical.
 		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
 	if(show_name)
-		to_chat(user, "[bicon(src)] That's [f_name]" + size)
+		to_chat(user, "[show_icon ? bicon(src) : ""] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
 
-	if(reagents && is_open_container() && !ismob(src)) //is_open_container() isn't really the right proc for this, but w/e
+	if(reagents && is_open_container() && !ismob(src) && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
 		if(get_dist(user,src) > 3)
 			to_chat(user, "<span class='info'>You can't make out the contents.</span>")
 		else
-			to_chat(user, "It contains:")
-			if(!user.hallucinating())
-				if(reagents.reagent_list.len)
-					for(var/datum/reagent/R in reagents.reagent_list)
-						to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-				else
-					to_chat(user, "<span class='info'>Nothing.</span>")
-
-			else //Show stupid things to hallucinating mobs
-				var/list/fake_reagents = list("Water", "Orange juice", "Banana juice", "Tungsten", "Chloral Hydrate", "Helium",\
-					"Sea water", "Energy drink", "Gushin' Granny", "Salt", "Sugar", "something yellow", "something red", "something blue",\
-					"something suspicious", "something smelly", "something sweet", "Soda", "something that reminds you of home",\
-					"Chef's Special")
-				for(var/i, i < rand(1,10), i++)
-					var/fake_amount = rand(1,30)
-					var/fake_reagent = pick(fake_reagents)
-					fake_reagents -= fake_reagent
-
-					to_chat(user, "<span class='info'>[fake_amount] units of [fake_reagent]</span>")
+			reagents.get_examine(user)
 	if(on_fire)
 		user.simple_message("<span class='danger'>OH SHIT! IT'S ON FIRE!</span>",\
 			"<span class='info'>It's on fire, man.</span>")
@@ -453,9 +486,6 @@ its easier to just keep the beam vertical.
 		if(ishuman(usr) && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
 			bug.removed(usr)
 
-// /atom/proc/MouseDrop_T()
-// 	return
-
 /atom/proc/relaymove()
 	return
 
@@ -479,78 +509,15 @@ its easier to just keep the beam vertical.
 /atom/proc/can_mech_drill()
 	return acidable()
 
-/atom/proc/blob_act(destroy = 0)
+/atom/proc/blob_act(destroy = 0,var/obj/effect/blob/source = null)
 	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
 	if(flags & INVULNERABLE)
 		return
-	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
-	return
-
-/*
-/atom/proc/attack_hand(mob/user as mob)
-	return
-
-/atom/proc/attack_paw(mob/user as mob)
-	return
-
-/atom/proc/attack_ai(mob/user as mob)
-	return
-
-/atom/proc/attack_robot(mob/user as mob)
-	attack_ai(user)
-	return
-
-/atom/proc/attack_animal(mob/user as mob)
-	return
-
-/atom/proc/attack_ghost(mob/user as mob)
-	var/ghost_flags = 0
-	if(ghost_read)
-		ghost_flags |= PERMIT_ALL
-	if(canGhostRead(user,src,ghost_flags))
-		src.attack_ai(user)
+	if (source)
+		anim(target = loc, a_icon = source.icon, flick_anim = "blob_act", sleeptime = 15, direction = get_dir(source, src), lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
 	else
-		src.examine()
+		anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
 	return
-
-/atom/proc/attack_admin(mob/user as mob)
-	if(!user || !user.client || !user.client.holder)
-		return
-	attack_hand(user)
-
-//for aliens, it works the same as monkeys except for alien-> mob interactions which will be defined in the
-//appropiate mob files
-/atom/proc/attack_alien(mob/user as mob)
-	src.attack_paw(user)
-	return
-
-/atom/proc/attack_larva(mob/user as mob)
-	return
-
-// for slimes
-/atom/proc/attack_slime(mob/user as mob)
-	return
-
-/atom/proc/hand_h(mob/user as mob)			//human (hand) - restrained
-	return
-
-/atom/proc/hand_p(mob/user as mob)			//monkey (paw) - restrained
-	return
-
-/atom/proc/hand_a(mob/user as mob)			//AI - restrained
-	return
-
-/atom/proc/hand_r(mob/user as mob)			//Cyborg (robot) - restrained
-	src.hand_a(user)
-	return
-
-/atom/proc/hand_al(mob/user as mob)			//alien - restrained
-	src.hand_p(user)
-	return
-
-/atom/proc/hand_m(mob/user as mob)			//slime - restrained
-	return
-*/
 
 /atom/proc/singularity_act()
 	return
@@ -563,7 +530,7 @@ its easier to just keep the beam vertical.
 /atom/proc/shuttle_rotate(var/angle)
 	src.dir = turn(src.dir, -angle)
 
-	if(canSmoothWith) //Smooth the smoothable
+	if(canSmoothWith()) //Smooth the smoothable
 		spawn //Usually when this is called right after an atom is moved. Not having this "spawn" here will cause this atom to look for its neighbours BEFORE they have finished moving, causing bad stuff.
 			relativewall()
 			relativewall_neighbours()
@@ -591,39 +558,36 @@ its easier to just keep the beam vertical.
 /atom/proc/hitby(var/atom/movable/AM)
 	. = isobserver(AM)
 
-/*
-/atom/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (!(istype(W, /obj/item/weapon/grab) ) && !(istype(W, /obj/item/weapon/plastique)) && !(istype(W, /obj/item/weapon/reagent_containers/spray)) && !(istype(W, /obj/item/weapon/packageWrap)) && !istype(W, /obj/item/device/detective_scanner))
-		for(var/mob/O in viewers(src, null))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, "<span class='danger'>[src] has been hit by [user] with [W]</span>")
-	return
-*/
-/atom/proc/add_hiddenprint(mob/living/M as mob)
+/atom/proc/add_hiddenprint(mob/M as mob)
 	if(isnull(M))
 		return
 	if(isnull(M.key))
 		return
-	if (!( src.flags ) & FPRINT)
+	if (!(flags & FPRINT))
+		return
+	if((fingerprintslastTS == time_stamp()) && (fingerprintslast == M.key)) //otherwise holding arrow on airlocks spams fingerprints onto it
 		return
 	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if (!istype(H.dna, /datum/dna))
 			return 0
 		if (H.gloves)
-			if(src.fingerprintslast != H.key)
-				src.fingerprintshidden += text("\[[time_stamp()]\] (Wearing gloves). Real name: [], Key: []",H.real_name, H.key)
-				src.fingerprintslast = H.key
+			fingerprintshidden += text("\[[time_stamp()]\] (Wearing gloves). Real name: [], Key: []",H.real_name, H.key)
+			fingerprintslast = H.key
+			fingerprintslastTS = time_stamp()
 			return 0
 		if (!( src.fingerprints ))
-			if(src.fingerprintslast != H.key)
-				src.fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []",H.real_name, H.key)
-				src.fingerprintslast = H.key
+			fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []",H.real_name, H.key)
+			fingerprintslast = H.key
+			fingerprintslastTS = time_stamp()
 			return 1
 	else
-		if(src.fingerprintslast != M.key)
-			src.fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []",M.real_name, M.key)
-			src.fingerprintslast = M.key
+		var/ghost = ""
+		if (isobserver(M))
+			ghost = isAdminGhost(M) ? "ADMINGHOST" : "GHOST"
+		fingerprintshidden += text("\[[time_stamp()]\] [ghost ? "([ghost])" : ""] Real name: [], Key: []",M.real_name, M.key)
+		fingerprintslast = M.key
+		fingerprintslastTS = time_stamp()
 	return
 
 /atom/proc/add_fingerprint(mob/living/M as mob)
@@ -633,7 +597,9 @@ its easier to just keep the beam vertical.
 		return
 	if(isnull(M.key))
 		return
-	if (!( src.flags ) & FPRINT)
+	if (!(flags & FPRINT))
+		return
+	if((fingerprintslastTS == time_stamp()) && (fingerprintslast == M.key)) //otherwise holding arrow on airlocks spams fingerprints onto it
 		return
 	if (ishuman(M))
 		//Add the list if it does not exist.
@@ -645,9 +611,9 @@ its easier to just keep the beam vertical.
 
 		//He has no prints!
 		if (M_FINGERPRINTS in M.mutations)
-			if(fingerprintslast != M.key)
-				fingerprintshidden += "(Has no fingerprints) Real name: [M.real_name], Key: [M.key]"
-				fingerprintslast = M.key
+			fingerprintshidden += "\[[time_stamp()]\] (Has no fingerprints) Real name: [M.real_name], Key: [M.key]"
+			fingerprintslast = M.key
+			fingerprintslastTS = time_stamp()
 			return 0		//Now, lets get to the dirty work.
 		//First, make sure their DNA makes sense.
 		var/mob/living/carbon/human/H = M
@@ -660,9 +626,9 @@ its easier to just keep the beam vertical.
 
 		//Now, deal with gloves.
 		if (H.gloves && H.gloves != src)
-			if(fingerprintslast != H.key)
-				fingerprintshidden += text("\[[]\](Wearing gloves). Real name: [], Key: []",time_stamp(), H.real_name, H.key)
-				fingerprintslast = H.key
+			fingerprintshidden += text("\[[time_stamp()]\] (Wearing gloves). Real name: [], Key: []", H.real_name, H.key)
+			fingerprintslast = H.key
+			fingerprintslastTS = time_stamp()
 			H.gloves.add_fingerprint(M)
 
 		//Deal with gloves the pass finger/palm prints.
@@ -673,9 +639,12 @@ its easier to just keep the beam vertical.
 				return 0
 
 		//More adminstuffz
-		if(fingerprintslast != H.key)
-			fingerprintshidden += text("\[[]\]Real name: [], Key: []",time_stamp(), H.real_name, H.key)
-			fingerprintslast = H.key
+		var/ghost = ""
+		if (isobserver(M))
+			ghost = isAdminGhost(M) ? "ADMINGHOST" : "GHOST"
+		fingerprintshidden += text("\[[time_stamp()]\] [ghost ? "([ghost]) " : ""]Real name: [], Key: []", M.real_name, M.key)
+		fingerprintslast = M.key
+		fingerprintslastTS = time_stamp()
 
 		//Make the list if it does not exist.
 		if(!fingerprints)
@@ -691,8 +660,9 @@ its easier to just keep the beam vertical.
 	else
 		//Smudge up dem prints some
 		if(fingerprintslast != M.key)
-			fingerprintshidden += text("\[[]\]Real name: [], Key: []",time_stamp(), M.real_name, M.key)
+			fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []", M.real_name, M.key)
 			fingerprintslast = M.key
+			fingerprintslastTS = time_stamp()
 
 	//Cleaning up shit.
 	if(fingerprints && !fingerprints.len)
@@ -714,6 +684,13 @@ its easier to just keep the beam vertical.
 	if(fingerprintshidden && istype(fingerprintshidden))
 		A.fingerprintshidden |= fingerprintshidden.Copy()    //admin	A.fingerprintslast = fingerprintslast
 
+//Atomic level procs to be used elsewhere.
+/atom/proc/apply_luminol(var/atom/A)
+	return had_blood
+
+/atom/proc/clear_luminol(var/atom/A)
+	return had_blood
+
 
 //returns 1 if made bloody, returns 0 otherwise
 /atom/proc/add_blood(mob/living/carbon/human/M as mob)
@@ -722,15 +699,16 @@ its easier to just keep the beam vertical.
 		if(!blood_DNA || !istype(blood_DNA, /list))
 			blood_DNA = list()
 		blood_color = DEFAULT_BLOOD
-		return 1
+		had_blood = TRUE
+		return TRUE
 	if (!( istype(M, /mob/living/carbon/human) ))
-		return 0
+		return FALSE
 	if (!istype(M.dna, /datum/dna))
 		M.dna = new /datum/dna(null)
 		M.dna.real_name = M.real_name
 	M.check_dna()
 	if (!( src.flags ) & FPRINT)
-		return 0
+		return FALSE
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 	blood_color = DEFAULT_BLOOD
@@ -741,10 +719,11 @@ its easier to just keep the beam vertical.
 		var/mob/living/carbon/human/H = src
 		//if this blood isn't already in the list, add it
 		if(blood_DNA[H.dna.unique_enzymes])
-			return 0 //already bloodied with this blood. Cannot add more.
+			return FALSE //already bloodied with this blood. Cannot add more.
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 		H.update_inv_gloves()	//handles bloody hands overlays and updating
-		return 1 //we applied blood to the item
+		had_blood = TRUE
+		return TRUE //we applied blood to the item
 	return
 
 /atom/proc/add_vomit_floor(mob/living/carbon/M, toxvomit = 0, active = 0, steal_reagents_from_mob = 1)
@@ -754,6 +733,9 @@ its easier to just keep the beam vertical.
 			this = new /obj/effect/decal/cleanable/vomit/active(src)
 		else
 			this = new /obj/effect/decal/cleanable/vomit(src)
+
+		if (M)
+			this.virus2 += virus_copylist(M.virus2)
 
 		// Make toxins vomit look different
 		if(toxvomit)
@@ -769,6 +751,8 @@ its easier to just keep the beam vertical.
 		//del(blood_DNA)
 		blood_DNA.len = 0
 		return 1
+	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
+		clear_luminol()
 
 
 /atom/proc/get_global_map_pos()
@@ -843,8 +827,11 @@ its easier to just keep the beam vertical.
 /atom/proc/acidable()
 	return 0
 
-/atom/proc/holomapAlwaysDraw()
-	return 1
+/atom/proc/isacidhardened()
+	return FALSE
+
+/atom/proc/holomapDrawOverride()
+	return HOLOMAP_DRAW_NORMAL
 
 /atom/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
 	var/turf/curloc = get_turf(src)
@@ -885,3 +872,50 @@ its easier to just keep the beam vertical.
 	for(var/client/C in clients)
 		if(uppertext(C.ckey) == uppertext(fingerprintslast))
 			return C.mob
+
+/atom/proc/initialize()
+	return
+
+/atom/proc/get_cell()
+	return
+
+/atom/proc/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(!reagents)
+		return INJECTION_RESULT_FAIL
+	if(reagents.is_full())
+		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
+		return INJECTION_RESULT_FAIL
+	return INJECTION_RESULT_SUCCESS
+
+/atom/proc/is_hot()
+	return
+
+/atom/proc/thermal_energy_transfer()
+	return
+
+/atom/proc/suitable_colony()
+	return FALSE
+
+//Used for map persistence. Returns an associative list with some of our most pertinent variables. This list will be used ad-hoc by our relevant map_persistence_type datum to reconstruct this atom from scratch.
+/atom/proc/atom2mapsave()
+	. = list()
+	.["x"] = x
+	.["y"] = y
+	.["z"] = z
+	.["type"] = type
+	.["pixel_x"] = pixel_x
+	.["pixel_y"] = pixel_y
+	.["dir"] = dir
+	.["icon_state"] = icon_state
+	.["color"] = color
+	.["age"] = getPersistenceAge() + 1
+
+//We were just created using nothing but this associative list's ["x"], ["y"], ["z"] and ["type"]. OK, what else?
+/atom/proc/post_mapsave2atom(var/list/L)
+	return
+
+//Behold, my shitty attempt at an interface in DM. Or at least skimping on 1 atom-level variable so I don't get blamed for wasting RAM.
+/atom/proc/getPersistenceAge()
+	return 1
+/atom/proc/setPersistenceAge()
+	return

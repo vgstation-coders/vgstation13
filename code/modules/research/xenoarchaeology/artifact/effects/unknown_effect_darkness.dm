@@ -1,6 +1,6 @@
 /datum/artifact_effect/darkness
 	effecttype = "darkness"
-	effect = list(EFFECT_AURA, EFFECT_PULSE)
+	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	var/dark_level
 	copy_for_battery = list("dark_level")
 

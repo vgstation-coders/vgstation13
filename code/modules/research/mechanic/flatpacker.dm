@@ -49,7 +49,7 @@
 
 	if(!remove_materials(part))
 		stopped = 1
-		src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
+		src.visible_message("<span class='notice'>The [src.name] beeps, \"Not enough materials to complete item.\"</span>")
 		return
 
 	src.being_built = new part.build_path(src)

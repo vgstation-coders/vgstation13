@@ -39,7 +39,7 @@ var/list/wood_icons = list("wood","wood-broken")
 
 	melt_temperature = 1643.15 // Melting point of steel
 
-	plane = TURF_PLANE
+	plane = FLOOR_PLANE
 
 /turf/simulated/floor/New()
 	..()
@@ -69,7 +69,7 @@ var/list/wood_icons = list("wood","wood-broken")
 		if(1.0)
 			src.ChangeTurf(get_underlying_turf())
 		if(2.0)
-			switch(pick(1,2;75,3))
+			switch(pick(1,75;2,3))
 				if (1)
 					src.ReplaceWithLattice()
 					if(prob(33))
@@ -212,7 +212,7 @@ turf/simulated/floor/update_icon()
 		if("bananium")
 			if(!spam_flag)
 				spam_flag = 1
-				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
+				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 				spawn(20)
 					spam_flag = 0
 	..()
@@ -310,7 +310,7 @@ turf/simulated/floor/update_icon()
 			return //you can't break legos
 		if(material=="phazon") //Phazon shatters
 			spawn(rand(2,10))
-				playsound(get_turf(src), "shatter", 70, 1)
+				playsound(src, "shatter", 70, 1)
 				make_plating()
 			return
 
@@ -540,7 +540,7 @@ turf/simulated/floor/update_icon()
 		playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
 
 		return
-	else if(isscrewdriver(C))
+	else if(C.is_screwdriver(user))
 		if(is_wood_floor())
 			if(broken || burnt)
 				return
@@ -607,11 +607,10 @@ turf/simulated/floor/update_icon()
 			coil.turf_place(src, user)
 		else
 			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
-	else if(istype(C, /obj/item/weapon/pickaxe/shovel))
+	else if(isshovel(C))
 		if(is_grass_floor())
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
-			new /obj/item/weapon/ore/glass(src)
-			new /obj/item/weapon/ore/glass(src) //Make some sand if you shovel grass
+			drop_stack(/obj/item/stack/ore/glass, src, 2) //Make some sand if you shovel grass
 			to_chat(user, "<span class='notice'>You shovel the grass.</span>")
 			if(prob(10))
 				var/to_spawn = pick(
@@ -624,20 +623,18 @@ turf/simulated/floor/update_icon()
 				new to_spawn(src)
 				to_chat(user, "<span class='notice'>Something falls out of the grass!</span>")
 			make_plating()
-		else
-			to_chat(user, "<span class='warning'>You cannot shovel this.</span>")
 	else if(iswelder(C))
 		var/obj/item/weapon/weldingtool/welder = C
 		if(welder.isOn() && (is_plating()))
 			if(broken || burnt)
-				if(welder.remove_fuel(0,user))
+				if(welder.remove_fuel(1,user))
 					to_chat(user, "<span class='warning'>You fix some dents on the broken plating.</span>")
 					playsound(src, 'sound/items/Welder.ogg', 80, 1)
 					icon_state = "plating"
 					burnt = 0
 					broken = 0
 				else
-					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+					return
 
 /turf/simulated/floor/Entered(var/atom/movable/AM)
 	.=..()
@@ -647,7 +644,7 @@ turf/simulated/floor/update_icon()
 			if("bananium")
 				if(!spam_flag)
 					spam_flag = 1
-					playsound(get_turf(src), "clownstep", 50, 1)
+					playsound(src, "clownstep", 50, 1)
 					spawn(20)
 						spam_flag = 0
 			if("uranium")
@@ -673,15 +670,16 @@ turf/simulated/floor/update_icon()
 	if(P)
 		if(slipperiness > P.wet)
 			P.wet = slipperiness
-			P.lifespan = max(world.time + delay, world.time+P.lifespan)
+			P.lifespan = max(delay, P.lifespan)
 	else
 		new /obj/effect/overlay/puddle(src, slipperiness, delay)
 
 /turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
 	var/obj/effect/overlay/puddle/P = is_wet()
-	if(P.wet > slipperiness)
-		return
-	qdel(P)
+	if(P)
+		if(P.wet > slipperiness)
+			return
+		qdel(P)
 
 
 /turf/simulated/floor/attack_construct(mob/user as mob)
@@ -699,13 +697,17 @@ turf/simulated/floor/update_icon()
 /turf/simulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
+		icon = 'icons/turf/floors.dmi'
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
-	return
+
+/turf/simulated/floor/clockworkify()
+	ChangeTurf(/turf/simulated/floor/mineral/clockwork)
+	turf_animation('icons/effects/effects.dmi',CLOCKWORK_GENERIC_GLOW, 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
 
 /turf/simulated/floor/adjust_slowdown(mob/living/L, current_slowdown)
 	//Phazon floors make movement faster
 	if(floor_tile)
-		return floor_tile.adjust_slowdown(L, current_slowdown)
+		current_slowdown = floor_tile.adjust_slowdown(L, current_slowdown)
 
 	return ..()

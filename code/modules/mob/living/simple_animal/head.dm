@@ -40,7 +40,7 @@
 		if(health > 0)
 			icon_state = icon_living
 			stat = CONSCIOUS
-			density = 1
+			setDensity(TRUE)
 		return
 	else if(health < 1)
 		Die()

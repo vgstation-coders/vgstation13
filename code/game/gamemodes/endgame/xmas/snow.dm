@@ -43,7 +43,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 		overlays += image('icons/obj/flora/snowflora.dmi',pick(foliage))
 
 /obj/structure/snow/attackby(obj/item/W,mob/user)
-	if(istype(W,/obj/item/weapon/pickaxe/shovel))//using a shovel or spade harvests some snow and let's you click on the lower layers
+	if(isshovel(W))//using a shovel or spade harvests some snow and let's you click on the lower layers
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
 		snow_amount = SNOWCOVERING_LITTLE
 		icon_state = "snow_dug"
@@ -77,13 +77,13 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 /obj/structure/snow/Crossed(mob/user)
 	..()
 	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
-		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
+		playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 
 /obj/structure/snow/attack_hand(mob/user)
 	if(snow_amount != SNOWCOVERING_FULL)
 		return
-	playsound(get_turf(src), "rustle", 50, 1)
+	playsound(src, "rustle", 50, 1)
 	to_chat(user, "<span class='notice'>You start digging the snow with your hands.</span>")
 	if(do_after(user, src, 30))
 		snow_amount = SNOWCOVERING_MEDIUM
@@ -277,6 +277,9 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 
 	return ..()
 
+/obj/item/stack/sheet/snow/emag_act(mob/user)
+	to_chat(user, "<span class='warning'>You slide the emag across the snowball. Holy fuck. You are probably the most stupid person you've ever met.</span>")
+	
 /obj/item/stack/sheet/snow/proc/remove_snowball()
 	if(src && (src.loc == spawn_loc) && istype(src.loc,/turf))
 		qdel(src)
@@ -631,6 +634,13 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 /obj/structure/snow_flora/tree/pine/xmas/vg/New()
 	..()
 	icon_state = "spessmastree"
+
+/obj/item/ice_crystal
+	name = "ice crystal"
+	desc = "crystallized water. Take a chunk or two off to cool down your liquor."
+	icon_state = "ice_crystal"
+	melt_temperature = MELTPOINT_SNOW
+	w_class = W_CLASS_TINY
 
 #undef SNOWCOVERING_FULL
 #undef SNOWCOVERING_MEDIUM

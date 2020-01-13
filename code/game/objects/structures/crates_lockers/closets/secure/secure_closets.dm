@@ -7,6 +7,7 @@
 	opened = 0
 	large = 1
 	locked = 1
+	has_electronics = 1
 	icon_closed = "secure"
 	var/icon_locked = "secure1"
 	icon_opened = "secureopen"
@@ -15,10 +16,13 @@
 	wall_mounted = 0 //never solid (You can always pass over it)
 	health = 200
 
+/obj/structure/closet/secure_closet/basic
+	has_lockless_type = /obj/structure/closet/basic
+
 /obj/structure/closet/secure_closet/can_open()
 	if(!..())
 		return 0
-	if(src.locked)
+	if(src.locked)	
 		return 0
 	return 1
 
@@ -44,22 +48,17 @@
 	..()
 
 /obj/structure/closet/secure_closet/proc/togglelock(mob/user as mob)
-	if(src.allowed(user))
-		src.locked = !src.locked
-		for(var/mob/O in viewers(user, 3))
-			if((O.client && !( O.blinded )))
-				to_chat(O, "<span class='notice'>The locker has been [locked ? null : "un"]locked by [user].</span>")
-		if(src.locked)
-			src.icon_state = src.icon_locked
-		else
-			src.icon_state = src.icon_closed
+	if(allowed(user))
+		locked = !locked
+		visible_message("<span class='notice'>The locker has been [locked ? null : "un"]locked by [user].</span>")
 	else
 		to_chat(user, "<span class='notice'>Access Denied.</span>")
+	update_icon()
 
-/obj/structure/closet/secure_closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(src.opened)
+/obj/structure/closet/secure_closet/attackby(obj/item/weapon/W, mob/user)
+	if(opened)
 		return ..()
-	else if(src.broken)
+	else if(broken)
 		if(issolder(W))
 			var/obj/item/weapon/solder/S = W
 			if(!S.remove_fuel(4,user))
@@ -69,13 +68,13 @@
 				playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 				broken = 0
 				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")
-				src.icon_state = src.icon_closed
+				icon_state = icon_closed
 		else
 			to_chat(user, "<span class='notice'>The locker appears to be broken.</span>")
 			return
-	else if(istype(W, /obj/item/weapon/card/emag) && !src.broken)
-		broken = 1
-		locked = 0
+	else if(isEmag(W) && !broken)
+		broken = TRUE
+		locked = FALSE
 		desc = "It appears to be broken."
 		icon_state = icon_off
 		flick(icon_broken, src)
@@ -83,17 +82,17 @@
 			O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
 		update_icon()
 	else
-		if(istype(W, /obj/item/weapon/weldingtool))
+		if(iswelder(W))
 			var/obj/item/weapon/weldingtool/WT = W
-			if(!WT.remove_fuel(0,user))
-				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			if(!WT.remove_fuel(1,user))
 				return
-			src.welded =! src.welded
-			src.update_icon()
-			for(var/mob/M in viewers(src))
-				M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
-		else
-			togglelock(user)
+			welded =! welded
+			update_icon()
+			M.visible_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
+		if(W.is_screwdriver(user) && !locked && has_lockless_type)
+			remove_lock(user)
+			return
+		togglelock(user)
 
 /obj/structure/closet/secure_closet/relaymove(mob/user as mob)
 	if(user.stat || !isturf(src.loc))
@@ -109,8 +108,8 @@
 				M.client.perspective = MOB_PERSPECTIVE
 		src.icon_state = src.icon_opened
 		src.opened = 1
-		src.density = 0
-		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
+		setDensity(FALSE)
+		playsound(src, 'sound/machines/click.ogg', 15, 1, -3)
 	else
 		if(!can_open())
 			to_chat(user, "<span class='notice'>It won't budge!</span>")
@@ -122,16 +121,16 @@
 				to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>BANG, bang!</FONT>")
 	return
 
-/obj/structure/closet/secure_closet/attack_hand(mob/user as mob)
+/obj/structure/closet/secure_closet/attack_hand(mob/user)
 	if(!Adjacent(user))
 		return
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
-	if(!src.toggle())
-		return src.attackby(null, user)
+	if(!toggle() && locked)
+		return togglelock(user)
 
-/obj/structure/closet/secure_closet/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+/obj/structure/closet/secure_closet/attack_paw(mob/user)
+	return attack_hand(user)
 
 /obj/structure/closet/secure_closet/verb/verb_togglelock()
 	set src in oview(1) // One square distance

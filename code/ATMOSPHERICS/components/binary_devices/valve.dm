@@ -4,11 +4,11 @@
 
 	name = "manual valve"
 	desc = "A pipe valve."
-	var/open = 0
+	var/open = FALSE
 	var/openDuringInit = 0
 
 /obj/machinery/atmospherics/binary/valve/open
-	open = 1
+	open = TRUE
 	icon_state = "hvalve1"
 
 /obj/machinery/atmospherics/binary/valve/update_icon(var/adjacent_procd,var/animation)
@@ -33,12 +33,12 @@
 	return null
 
 /obj/machinery/atmospherics/binary/valve/proc/open()
-
-
 	if(open)
 		return 0
 
-	open = 1
+	update_icon(0,1) //animate
+	sleep(10)
+	open = TRUE
 	update_icon()
 
 	if(network1&&network2)
@@ -53,12 +53,12 @@
 	return 1
 
 /obj/machinery/atmospherics/binary/valve/proc/close()
-
-
 	if(!open)
 		return 0
 
-	open = 0
+	update_icon(0,1) //animate
+	sleep(10)
+	open = FALSE
 	update_icon()
 
 	if(network1)
@@ -81,19 +81,13 @@
 /obj/machinery/atmospherics/binary/valve/attack_ai(mob/user as mob)
 	return
 
-/obj/machinery/atmospherics/binary/valve/attack_hand(mob/user as mob)
-	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
-		to_chat(user, "<span class='warning'>Nope.</span>")
-		return
-	src.add_fingerprint(usr)
-	update_icon(0,1)
-	sleep(10)
-	if (src.open)
-		src.close()
-	else
-		src.open()
+/obj/machinery/atmospherics/binary/valve/attack_robot(mob/user as mob)
+	if(isMoMMI(user))
+		attack_hand(user)
+	return
 
-	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(usr)]")
+/obj/machinery/atmospherics/binary/valve/attack_hand(mob/user as mob)
+	toggle_status(user)
 
 /obj/machinery/atmospherics/binary/valve/investigation_log(var/subject, var/message)
 	activity_log += ..()
@@ -126,12 +120,6 @@
 /obj/machinery/atmospherics/binary/valve/digital/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
-
-/obj/machinery/atmospherics/binary/valve/digital/attack_hand(mob/user as mob)
-	if(!src.allowed(user))
-		to_chat(user, "<span class='warning'>Access denied.</span>")
-		return
-	..()
 
 //Radio remote control
 
@@ -223,3 +211,31 @@
 	else
 		open()
 	investigation_log(I_ATMOS,"was [(open ? "opened" : "closed")] by [key_name(L)]")
+
+/obj/machinery/atmospherics/binary/valve/toggle_status(var/mob/user)
+	if(!Adjacent(user))
+		return
+	if(issilicon(user) && !isMoMMI(user))
+		return //these are robotproof
+	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
+		to_chat(user, "<span class='warning'>Nope.</span>")
+		return
+	src.add_fingerprint(usr)
+	if (src.open)
+		src.close()
+	else
+		src.open()
+	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(usr)]")
+	return TRUE
+
+/obj/machinery/atmospherics/binary/valve/digital/toggle_status(var/mob/user)
+	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
+		to_chat(user, "<span class='warning'>Nope.</span>")
+		return
+	src.add_fingerprint(usr)
+	if (src.open)
+		src.close()
+	else
+		src.open()
+	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(usr)]")
+	return TRUE

@@ -118,11 +118,19 @@ var/list/map_dimension_cache = list()
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
 		if(world.maxx < map_width + x_offset)
+			if(!map.can_enlarge)
+				WARNING("Cancelled load of [map_element] due to map bounds.")
+				return list()
 			world.maxx = map_width + x_offset
+			WARNING("Loading [map_element] enlarged the map. New max x = [world.maxx]")
 
 		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
 		if(world.maxy < y_depth + y_offset)
+			if(!map.can_enlarge)
+				WARNING("Cancelled load of [map_element] due to map bounds.")
+				return list()
 			world.maxy = y_depth + y_offset
+			WARNING("Loading [map_element] enlarged the map. New max y = [world.maxy]")
 
 		//then proceed it line by line, starting from top
 		ycrd = y_offset + y_depth
@@ -152,7 +160,10 @@ var/list/map_dimension_cache = list()
 
 		if(map_element)
 			map_element.height = y_depth
-			map_element.location = locate(x_offset + 1, y_offset + 1, z_offset) //Set location to the upper left corner
+
+			if(!map_element.location)
+				//Set location to the lower left corner, if it hasn't already been set
+				map_element.location = locate(x_offset + 1, y_offset + 1, z_offset)
 
 		//reached End Of File
 		if(findtext(tfile,quote+"}",zpos,0)+2==tfile_len)
@@ -398,7 +409,7 @@ var/list/map_dimension_cache = list()
 //simulates the DM multiple turfs on one tile underlaying
 /dmm_suite/proc/add_underlying_turf(var/turf/placed,var/turf/underturf, var/list/turfs_underlays)
 	if(underturf.density)
-		placed.density = 1
+		placed.setDensity(TRUE)
 	if(underturf.opacity)
 		placed.opacity = 1
 	placed.underlays += turfs_underlays

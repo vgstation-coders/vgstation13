@@ -24,11 +24,10 @@ FLOOR SAFES
 
 /obj/structure/safe/New()
 	tumbler_1_pos = rand(0, 71)
-	tumbler_1_open = rand(0, 71)
+	tumbler_1_open = rand(2, 71)
 
 	tumbler_2_pos = rand(0, 71)
-	tumbler_2_open = rand(0, 71)
-
+	tumbler_2_open = rand(2, 71)
 
 /obj/structure/safe/initialize()
 	for(var/obj/item/I in loc)
@@ -37,7 +36,6 @@ FLOOR SAFES
 		if(I.w_class + space <= maxspace)
 			space += I.w_class
 			I.forceMove(src)
-
 
 /obj/structure/safe/proc/check_unlocked(mob/user as mob, canhear)
 	if(user && canhear)
@@ -73,7 +71,7 @@ FLOOR SAFES
 		icon_state = initial(icon_state)
 
 
-/obj/structure/safe/attack_hand(mob/user as mob)
+/obj/structure/safe/attack_hand(mob/user,params,proximity)
 	user.set_machine(src)
 
 	var/dat = {"<center>
@@ -89,12 +87,11 @@ FLOOR SAFES
 
 
 /obj/structure/safe/Topic(href, href_list)
-	if(!ishuman(usr))
+	if(!ishigherbeing(usr))
 		return
 	var/mob/living/carbon/human/user = usr
-
 	var/canhear = 0
-	if(user.find_held_item_by_type(/obj/item/clothing/accessory/stethoscope))
+	if(Adjacent(user) && user.find_held_item_by_type(/obj/item/clothing/accessory/stethoscope))
 		canhear = 1
 
 	if(href_list["open"])
@@ -203,7 +200,7 @@ obj/structure/safe/ex_act(severity)
 		/obj/item/weapon/spellbook/oneuse/mime,
 		/obj/item/weapon/spellbook/oneuse/shoesnatch,
 		/obj/item/weapon/spellbook/oneuse/bound_object,
-		/obj/item/weapon/gun/energy/staff,
+		/obj/item/weapon/gun/energy/staff/change,
 		/obj/item/weapon/gun/energy/staff/animate,
 		/obj/item/weapon/gun/energy/staff/focus,
 		/obj/abstract/loadout/gemsuit

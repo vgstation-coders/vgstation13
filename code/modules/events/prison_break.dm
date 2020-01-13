@@ -5,6 +5,8 @@
 	var/releaseWhen = 25
 	var/list/area/prisonAreas = list()
 
+/datum/event/prison_break/can_start()
+	return 25
 
 /datum/event/prison_break/setup()
 	announceWhen = rand(50, 60)

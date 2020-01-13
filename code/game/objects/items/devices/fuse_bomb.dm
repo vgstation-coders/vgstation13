@@ -22,7 +22,7 @@
 /obj/item/device/fuse_bomb/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if(!fuse_lit)
-		if(istype(W, /obj/item/weapon/weldingtool))
+		if(iswelder(W))
 			var/obj/item/weapon/weldingtool/WT = W
 			if(WT.isOn())
 				lit(user,W)

@@ -24,6 +24,8 @@
 	if (viewing)
 		viewing.mob.on_logout.Remove("\ref[src]:mob_logout")
 
+	..()
+
 /obj/item/device/holomap/examine(var/mob/M)
 	..()
 	if (panel)
@@ -74,16 +76,16 @@
 		target.holomap_data.Cut()
 
 	for (var/obj/O in target)
-		if (O.holomap)
+		if (O.supports_holomap())
 			target.add_holomap(O)
 
 	to_chat(user, "You reset the holomap data.")
 
 /obj/item/device/holomap/attackby(obj/item/W, mob/user)
-	if (isscrewdriver(W))
+	if (W.is_screwdriver(user))
 		panel = !panel
 		to_chat(user, "<span class='notify'>You [panel ? "open" : "close"] the panel on \the [src].</span>")
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		return 1
 
 	if (ismultitool(W) && panel)

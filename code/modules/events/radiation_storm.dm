@@ -8,11 +8,21 @@
 		/area/security/perma,
 		/area/security/gas_chamber,
 		/area/security/brig,
+		/area/security/toilet,
 		/area/shuttle,
 		/area/vox_station,
-		/area/syndicate_station
+		/area/syndicate_station,
+		/area/medical/coldstorage,
+		/area/mine,
+		/area/prison,
+		/area/medical/patients_rooms,
+		/area/medical/patient_room1,
+		/area/medical/patient_room2,
+		/area/derelictparts,
 	)
 
+/datum/event/radiation_storm/can_start()
+	return 50
 
 /datum/event/radiation_storm/announce()
 	// Don't do anything, we want to pack the announcement with the actual event
@@ -30,7 +40,7 @@
 		for(var/area/A in areas)
 			if(A.z != map.zMainStation || is_safe_zone(A))
 				continue
-			var/area/ma = get_area_master(A)
+			var/area/ma = get_area(A)
 			ma.radiation_alert()
 
 		make_maint_all_access()
@@ -72,7 +82,7 @@
 		for(var/area/A in areas)
 			if(A.z != map.zMainStation || is_safe_zone(A))
 				continue
-			var/area/ma = get_area_master(A)
+			var/area/ma = get_area(A)
 			ma.reset_radiation_alert()
 
 

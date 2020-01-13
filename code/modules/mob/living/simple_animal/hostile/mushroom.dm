@@ -90,9 +90,9 @@
 	icon_state = "mushroom_color"
 	UpdateMushroomCap()
 
-/mob/living/simple_animal/hostile/mushroom/Die()
+/mob/living/simple_animal/hostile/mushroom/death(var/gibbed = FALSE)
 	visible_message("<span class='notice'>[src] fainted.</span>")
-	..()
+	..(gibbed)
 	UpdateMushroomCap()
 
 /mob/living/simple_animal/hostile/mushroom/proc/UpdateMushroomCap()

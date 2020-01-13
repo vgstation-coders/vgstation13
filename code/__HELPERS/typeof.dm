@@ -96,3 +96,26 @@ var/global/list/existing_typesof_cache = list()
 	existing_typesof_cache[path] = L.Copy()
 
 	return L
+
+//existing_typesof does not like lists, so...
+/proc/existing_typesof_list(var/list/L)
+	if(!islist(L))
+		return
+
+	var/list/existing_types = list()
+
+	for(var/types in L)
+		existing_types += existing_typesof(types)
+
+	return existing_types
+
+//variable typecheck - can do either of the classic checks
+//strict = TRUE if you want that exact path, FALSE if children are okay
+/proc/v_typechk(atom/A,path,strict)
+	if(strict)
+		if(A.type == path)
+			return TRUE
+	else
+		if(istype(A, path))
+			return TRUE
+	return FALSE

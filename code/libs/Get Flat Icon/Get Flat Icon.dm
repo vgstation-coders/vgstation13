@@ -56,7 +56,6 @@ var/list/exception = list(
 proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override cache, 0 = ignore cache	//exact = 1 means the atom won't be rotated if it's a lying mob/living/carbon
 
 
-	var/list/layers = list() // Associative list of [overlay = layer]
 	var/hash = "" // Hash of overlay combination
 
 	if(is_type_in_list(A, directional)&&!is_type_in_list(A, exception))
@@ -82,65 +81,9 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 		var/image/copy = image(icon=A.icon,icon_state=A.icon_state,layer=A.layer,dir=dir)
 		initialimage[copy] = A.layer
 
-
-	// Loop through the underlays, then overlays, sorting them into the layers list
-	var/list/process = A.underlays // Current list being processed
-	var/processSubset=0 // Which list is being processed: 0 = underlays, 1 = overlays
-
-	var/currentIndex=1 // index of 'current' in list being processed
-	var/currentOverlay // Current overlay being sorted
-	var/currentLayer // Calculated layer that overlay appears on (special case for FLOAT_LAYER)
-
-	var/compareOverlay // The overlay that the current overlay is being compared against
-	var/compareIndex // The index in the layers list of 'compare'
-
-	var/list/underlaysort = list()
-	var/list/overlaysort = list()
-	var/list/sorting = underlaysort
-
-	while(TRUE)
-		if(currentIndex<=process.len)
-			//All this does is find the appropriate layer and image
-			currentOverlay = process[currentIndex]
-			currentLayer = currentOverlay:layer
-			if(currentLayer<0) // Special case for FLY_LAYER
-				ASSERT(currentLayer > -1000)
-				if(processSubset == 0) // Underlay
-					currentLayer = A.layer+currentLayer/1000
-				else // Overlay
-					currentLayer = A.layer+(1000+currentLayer)/1000
-
-			//Next is a simple sort algorithm to place the overlay by layer
-			if(!sorting.len)
-				sorting[currentOverlay] = currentLayer
-				currentIndex++
-				continue
-
-			for(compareIndex=1,compareIndex<=sorting.len,compareIndex++)
-				compareOverlay = sorting[compareIndex]
-				if(currentLayer < sorting[compareOverlay]) // Associated value is the calculated layer
-					sorting.Insert(compareIndex,currentOverlay)
-					sorting[currentOverlay] = currentLayer
-					break
-			if(compareIndex>sorting.len) // Reached end of list without inserting
-				sorting[currentOverlay]=currentLayer // Place at end
-
-			currentIndex++
-
-		if(currentIndex>process.len)
-			if(processSubset == 0) // Switch to overlays
-				currentIndex = 1
-				processSubset = 1
-				process = A.overlays
-				sorting = overlaysort
-			else // All done
-				break
-
-	//Get flat icon previously understood layers as interspersing
-	//and could render overlays above the atom's icon before this following modification
-	layers = underlaysort
+	var/list/layers = plane_layer_sort(A.underlays)
 	layers += initialimage
-	layers += overlaysort
+	layers += plane_layer_sort(A.overlays)
 
 	if(cache!=0) // If cache is NOT disabled
 		// Create a hash value to represent this specific flattened icon

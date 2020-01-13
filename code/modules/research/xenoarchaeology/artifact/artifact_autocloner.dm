@@ -41,7 +41,7 @@
 			/mob/living/simple_animal/parrot,
 			/mob/living/simple_animal/slime,
 			/mob/living/simple_animal/crab,
-			/mob/living/simple_animal/mouse,
+			/mob/living/simple_animal/mouse/common,
 			/mob/living/simple_animal/hostile/retaliate/goat,
 			/mob/living/carbon/monkey,
 			)
@@ -69,7 +69,7 @@
 			if(spawn_type)
 				new spawn_type(src.loc)
 				investigation_log(I_ARTIFACT, "|| spawned a [spawn_type].")
-				playsound(get_turf(src), 'sound/machines/heps.ogg', 50, 0)
+				playsound(src, 'sound/machines/heps.ogg', 50, 0)
 
 		//if we're getting close to finished, kick into overdrive power usage
 		if(current_ticks_spawning / ticks_required_to_spawn > 0.75)
@@ -101,8 +101,8 @@
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
 
-/obj/machinery/auto_cloner/attackby(var/obj/O, var/mob/user)
-	if(iswrench(O))
+/obj/machinery/auto_cloner/attackby(var/obj/item/O, var/mob/user)
+	if(O.is_wrench(user))
 		return ..()
 	else if(O.force > 10)
 		log_attack("<font color='red'>[user] damaged [src]/([formatJumpTo(src)]) with [O]</font>")

@@ -15,7 +15,10 @@
 /mob/living/simple_animal/unarmed_attack_mob()
 	if(!melee_damage_upper && size == SIZE_TINY) //No nuzzling for mice
 		return
-	return ..()
+	if(icon_attack && do_flick(src, icon_attack, icon_attack_time))
+		return ..()
+	else
+		return ..()
 
 /mob/living/simple_animal/get_attack_message(mob/living/target, attack_verb)
 	if(attack_verb == friendly)

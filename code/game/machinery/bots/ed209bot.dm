@@ -34,13 +34,6 @@
 
 	var/mode = 0
 	bot_type = SEC_BOT
-#define SECBOT_IDLE 		0		// idle
-#define SECBOT_HUNT 		1		// found target, hunting
-#define SECBOT_PREP_ARREST 	2		// at target, preparing to arrest
-#define SECBOT_ARREST		3		// arresting target
-#define SECBOT_START_PATROL	4		// start patrol
-#define SECBOT_PATROL		5		// patrolling
-#define SECBOT_SUMMON		6		// summoned by PDA
 
 	var/auto_patrol = 0		// set to make bot automatically patrol
 
@@ -134,7 +127,7 @@
 	src.oldtarget_name = null
 	src.anchored = 0
 	src.mode = SECBOT_IDLE
-	walk_to(src,0)
+	start_walk_to(0)
 	src.icon_state = "[lasercolor][icon_initial][src.on]"
 	src.updateUsrDialog()
 
@@ -219,28 +212,28 @@ Auto Patrol: []"},
 			src.declare_arrests = !src.declare_arrests
 			src.updateUsrDialog()
 
-/obj/machinery/bot/ed209/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/bot/ed209/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if (src.allowed(user) && !open && !emagged)
-			src.locked = !src.locked
+		if (allowed(user) && !open && !emagged)
+			locked = !locked
 			to_chat(user, "<span class='notice'>Controls are now [src.locked ? "locked" : "unlocked"].</span>")
+			updateUsrDialog()
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
+			else if(open)
 				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
 				to_chat(user, "<span class='notice'>Access denied.</span>")
 	else
-		..()
-		if (!isscrewdriver(W) && (!src.target))
-			if(hasvar(W,"force") && W.force)//If force is defined and non-zero
-				threatlevel = user.assess_threat(src)
-				threatlevel += PERP_LEVEL_ARREST_MORE
-				if(threatlevel > 0)
-					src.target = user
-					src.shootAt(user)
-					src.mode = SECBOT_HUNT
+		. = ..()
+		if (. && !target)
+			threatlevel = user.assess_threat(src)
+			threatlevel += PERP_LEVEL_ARREST_MORE
+			if(threatlevel > 0)
+				target = user
+				shootAt(user)
+				mode = SECBOT_HUNT
 
 /obj/machinery/bot/ed209/kick_act(mob/living/H)
 	..()
@@ -310,7 +303,7 @@ Auto Patrol: []"},
 	switch(mode)
 
 		if(SECBOT_IDLE)		// idle
-			walk_to(src,0)
+			start_walk_to(0)
 			look_for_perp()	// see if any criminals are in range
 			if(!mode && auto_patrol)	// still idle, and set to patrol
 				mode = SECBOT_START_PATROL	// switch to patrol mode
@@ -327,13 +320,13 @@ Auto Patrol: []"},
 				src.last_found = world.time
 				src.frustration = 0
 				src.mode = 0
-				walk_to(src,0)
+				start_walk_to(0)
 
 			if (target)		// make sure target exists
 				if(!istype(target.loc, /turf))
 					return
 				if (Adjacent(target))		// if right next to perp
-					playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
+					playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 					src.icon_state = "[lasercolor][icon_initial]-c"
 					spawn(2)
 						src.icon_state = "[lasercolor][icon_initial][src.on]"
@@ -364,7 +357,7 @@ Auto Patrol: []"},
 
 				else								// not next to perp
 					var/turf/olddist = get_dist(src, src.target)
-					walk_to(src, src.target,1,4)
+					start_walk_to(src.target,1,4)
 					shootAt(target)
 					if ((get_dist(src, src.target)) >= (olddist))
 						src.frustration++
@@ -387,7 +380,7 @@ Auto Patrol: []"},
 
 			if(istype(src.target,/mob/living/carbon))
 				if (!src.target.handcuffed && !src.arrest_type)
-					playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+					playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 					mode = SECBOT_ARREST
 					visible_message("<span class='danger'>[src] is trying to put handcuffs on [src.target]!</span>")
 
@@ -406,7 +399,7 @@ Auto Patrol: []"},
 							src.last_found = world.time
 							src.frustration = 0
 
-		//					playsound(get_turf(src), pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+		//					playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
 		//					var/arrest_message = pick("Have a secure day!","I AM THE LAW.", "God made tomorrow for the crooks we don't catch today.","You can't outrun a radio.")
 		//					src.speak(arrest_message)
 			else
@@ -449,17 +442,19 @@ Auto Patrol: []"},
 
 
 		if(SECBOT_PATROL)		// patrol mode
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/2))
 			patrol_step()
-			spawn(5)
+			spawn(SS_WAIT_MACHINERY/2)
 				if(mode == SECBOT_PATROL)
 					patrol_step()
 
 		if(SECBOT_SUMMON)		// summoned to PDA
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/3))
 			patrol_step()
-			spawn(4)
+			spawn(SS_WAIT_MACHINERY/3)
 				if(mode == SECBOT_SUMMON)
 					patrol_step()
-					sleep(4)
+					spawn(SS_WAIT_MACHINERY/3)
 					patrol_step()
 
 	return
@@ -468,6 +463,8 @@ Auto Patrol: []"},
 // perform a single patrol step
 
 /obj/machinery/bot/ed209/proc/patrol_step()
+	if(!isturf(loc))
+		return
 
 
 	if(loc == patrol_target)		// reached target
@@ -721,7 +718,7 @@ Auto Patrol: []"},
 			src.oldtarget_name = C.name
 			src.speak("Level [src.threatlevel] infraction alert!")
 			if(!src.lasercolor)
-				playsound(get_turf(src), pick('sound/voice/ed209_20sec.ogg', 'sound/voice/EDPlaceholder.ogg'), 50, 0)
+				playsound(src, pick('sound/voice/ed209_20sec.ogg', 'sound/voice/EDPlaceholder.ogg'), 50, 0)
 			src.visible_message("<b>[src]</b> points at [C.name]!")
 			mode = SECBOT_HUNT
 			spawn(0)
@@ -794,6 +791,9 @@ Auto Patrol: []"},
 
 			if(E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)
+					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*High Threat*"))
+						threatcount = PERP_LEVEL_TERMINATE
+						break
 					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
 						threatcount = PERP_LEVEL_ARREST
 						break
@@ -825,7 +825,7 @@ Auto Patrol: []"},
 	return
 
 /obj/machinery/bot/ed209/explode()
-	walk_to(src,0)
+	start_walk_to(0)
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
@@ -883,7 +883,7 @@ Auto Patrol: []"},
 		return
 
 	//if(lastfired && world.time - lastfired < 100)
-	//	playsound(get_turf(src), 'ed209_shoot.ogg', 50, 0)
+	//	playsound(src, 'ed209_shoot.ogg', 50, 0)
 
 	if (!( istype(U, /turf) ))
 		return
@@ -987,7 +987,7 @@ Auto Patrol: []"},
 					icon_state = "[lasercolor]ed209_shell"
 
 		if(3)
-			if( istype(W, /obj/item/weapon/weldingtool) )
+			if( iswelder(W) )
 				var/obj/item/weapon/weldingtool/WT = W
 				if(WT.remove_fuel(0,user))
 					build_step++
@@ -1051,8 +1051,8 @@ Auto Patrol: []"},
 			qdel(W)
 
 		if(8)
-			if( isscrewdriver(W) )
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+			if( W.is_screwdriver(user) )
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				var/turf/T = get_turf(user)
 				to_chat(user, "<span class='notice'>Now attaching the gun to the frame...</span>")
 				sleep(40)

@@ -130,9 +130,9 @@
 	if(!radio_connection)
 		return
 
-	if(!(frequency in (MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY)))
+	if(!(frequency in MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY))
 		return
-	if(!(code in (1 to 100)))
+	if(!(code in 1 to 100))
 		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
@@ -141,15 +141,11 @@
 	signal.data["message"] = "ACTIVATE"
 	radio_connection.post_signal(src, signal)
 
-	var/time = time2text(world.realtime,"hh:mm:ss")
-	var/turf/T = get_turf(src)
-	if(usr)
-		var/mob/user = usr
-		if(user)
-			lastsignalers.Add("[time] <B>:</B> [user.key] used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
-		else
-			lastsignalers.Add("[time] <B>:</B> (<span class='danger'>NO USER FOUND</span>) used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
-	return
+	if(istype(loc, /obj/item/device/assembly_holder))
+		investigation_log(I_WIRES, "used as signaler in \a [loc]. Last touched by: [fingerprintslast], Last user processed: [key_name(usr)] - [format_frequency(frequency)]/[code]")
+	else
+		investigation_log(I_WIRES, "used as signaler. Last touched by: [fingerprintslast], Last user processed: [key_name(usr)] - [format_frequency(frequency)]/[code]")
+
 /*
 	for(var/obj/item/device/assembly/signaler/S in world)
 		if(!S)
@@ -224,7 +220,7 @@
 	set name = "Threaten to push the button!"
 	set desc = "BOOOOM!"
 
-	if(usr)
+	if(usr && !usr.incapacitated())
 		var/mob/user = usr
 		deadman = 1
 		processing_objects.Add(src)
@@ -274,7 +270,7 @@
 		return
 	if(iscrowbar(W))
 		to_chat(user, "You begin prying \the [src] off the wall.")
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src,10))
 			to_chat(user, "<span class='notice'>You pry the button off of the wall.</span>")
 			var/obj/item/mounted/frame/driver_button/signaler_button/I = new (get_turf(user))
@@ -288,6 +284,6 @@
 
 /obj/item/device/assembly/signaler/set_value(var/var_name, var/new_value)
 	if(var_name == "frequency")
-		new_value = sanitize_frequency(new_value)
-
-	return ..(var_name, new_value)
+		set_frequency(sanitize_frequency(new_value))
+	else
+		return ..()

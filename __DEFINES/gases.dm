@@ -1,0 +1,7 @@
+#define GAS_OXYGEN   "oxygen"
+#define GAS_NITROGEN "nitrogen"
+#define GAS_CARBON   "carbon_dioxide"
+#define GAS_PLASMA   "plasma"
+#define GAS_SLEEPING "sleeping_agent"
+#define GAS_VOLATILE "volatile_fuel"
+#define GAS_OXAGENT  "oxygen_agent_b"

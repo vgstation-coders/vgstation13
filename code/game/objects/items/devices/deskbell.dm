@@ -29,7 +29,7 @@
 	var/wrenching = 0
 
 /obj/item/device/deskbell/attackby(obj/item/W, mob/user)
-	if(iswrench(W) && isturf(src.loc))
+	if(W.is_wrench(user) && isturf(src.loc))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
@@ -52,7 +52,7 @@
 
 		return
 
-	if(istype(W,/obj/item/weapon/screwdriver))
+	if(W.is_screwdriver(user))
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
@@ -79,6 +79,7 @@
 
 /obj/item/device/deskbell/attack_hand(var/mob/user)
 	if(anchored)
+		disease_contact(user,HANDS)
 		ring()
 	add_fingerprint(user)
 	return
@@ -91,14 +92,16 @@
 		return 1
 	return 0
 
-/obj/item/device/deskbell/MouseDrop(mob/user as mob)
+/obj/item/device/deskbell/MouseDropFrom(mob/user as mob)
 	if(user == usr && !usr.incapacitated() && (usr.contents.Find(src) || in_range(src, usr)))
 		if(istype(user, /mob/living/carbon/human) || istype(user, /mob/living/carbon/monkey))
 			if(anchored)
 				to_chat(user, "You must undo the securing bolts before you can pick it up.")
 				return
 			if( !user.get_active_hand() )		//if active hand is empty
-				src.forceMove(user)
+				if(istype(loc, /obj/item/weapon/storage))
+					var/obj/item/weapon/storage/bag = loc
+					bag.remove_from_storage(src)
 				user.put_in_hands(src)
 				user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You grab [src] from the floor!</span>")
 
@@ -129,7 +132,7 @@
 			radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/device/deskbell/signaler/attackby(obj/item/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
@@ -151,7 +154,7 @@
 
 		return
 
-	if(istype(W,/obj/item/weapon/screwdriver))
+	if(W.is_screwdriver(user))
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
@@ -191,14 +194,12 @@
 		signal.data["message"] = "ACTIVATE"			//there is no risk that one of the desk bells already there at round start could trigger a signaler
 		radio_connection.post_signal(src, signal)	//(unless it's been deconstructed-reconstructed of course)
 
-		var/time = time2text(world.realtime,"hh:mm:ss")
-		var/turf/T = get_turf(src)
 		if(usr)
 			var/mob/user = usr
 			if(user)
-				lastsignalers.Add("[time] <B>:</B> [user.key] used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
+				investigation_log(I_WIRES, "used as signaler by [key_name(user)] - [format_frequency(frequency)]/[code]")
 			else
-				lastsignalers.Add("[time] <B>:</B> (<span class='danger'>NO USER FOUND</span>) used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
+				investigation_log(I_WIRES, "used as signaler by UNKNOWN - [format_frequency(frequency)]/[code]")
 		return
 
 //////////////////
@@ -278,9 +279,9 @@
 	else
 		switch(build_step)
 			if(0)
-				if(iswrench(W))
+				if(W.is_wrench(user))
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
-					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+					playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 					M.amount = 2
@@ -291,7 +292,7 @@
 					user.visible_message(
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",
 						"You add cables to \the [src].")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					C.use(1)
 					build_step++
 					update_icon()
@@ -311,7 +312,7 @@
 					build_step--
 					update_icon()
 					return
-				if(istype(W,/obj/item/weapon/screwdriver))
+				if(W.is_screwdriver(user))
 					var/obj/item/device/deskbell/D = null
 					if(has_signaler)
 						D = new /obj/item/device/deskbell/signaler(get_turf(src))

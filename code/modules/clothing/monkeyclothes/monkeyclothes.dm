@@ -47,9 +47,11 @@
 	desc = "Sterile latex gloves included."
 	icon_state = "doctor_icon"
 	item_state = "doctor_item"
+	sterility = 100//pathogens hate him
 
 /obj/item/clothing/monkeyclothes/space
 	name = "monkey-sized space suit"
 	desc = "A small step for a monkey, but a giant leap for bananas."
 	icon_state = "space_icon"
 	item_state = "space_item"
+	sterility = 100

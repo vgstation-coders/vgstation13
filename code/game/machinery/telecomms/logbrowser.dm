@@ -67,6 +67,8 @@
 			for(var/datum/comm_log_entry/C in SelectedServer.log_entries)
 				i++
 
+				if (i > 75) // No more than 75 entries at the same time
+					break
 
 				// If the log is a speech file
 				if(C.input_type == "Speech File")
@@ -138,6 +140,7 @@
 						<u><font color = #787700>Output</font color></u>: \"[C.parameters["message"]]\"<br>
 						</li><br>"}
 
+				CHECK_TICK
 
 			dat += "</ol>"
 
@@ -233,8 +236,8 @@
 
 /obj/machinery/computer/telecomms/server/emag(mob/user)
 	if(!emagged)
-		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
 		if(user)
-			to_chat(user, "<span class='notice'>You you disable the security protocols</span>")
+			to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 		return 1

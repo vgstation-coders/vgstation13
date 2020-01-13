@@ -16,7 +16,7 @@
 	user.visible_message("<span class='danger'>[user] is breaking open \the [src] and eating the liquid inside! It looks like \he's trying to commit suicide!</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 	qdel(src)
-	return (TOXLOSS)
+	return (SUICIDE_ACT_TOXLOSS)
 
 
 /obj/item/weapon/glowstick/New()
@@ -82,7 +82,7 @@
 	user.visible_message("<span class='danger'>[user] is breaking open \the [src] and eating the liquid inside! It looks like \he's trying to commit suicide!</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 	qdel(src)
-	return (TOXLOSS)
+	return (SUICIDE_ACT_TOXLOSS)
 
 
 /obj/item/clothing/accessory/glowstick/phazon

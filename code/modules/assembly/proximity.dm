@@ -126,7 +126,7 @@
 		grenade.primed(scanning)
 	return
 
-/obj/item/device/assembly/prox_sensor/Move()
+/obj/item/device/assembly/prox_sensor/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	sense()
 	return
@@ -173,7 +173,7 @@
 	if(href_list["range"])
 		var/r = text2num(href_list["range"])
 		range += r
-		range = Clamp(range, 1, 5)
+		range = clamp(range, 1, 5)
 
 	if(href_list["set_default_time"])
 		default_time = time

@@ -41,9 +41,9 @@ var/const/CAMERA_WIRE_ALARM = 8
 var/const/CAMERA_WIRE_NOTHING1 = 16
 var/const/CAMERA_WIRE_NOTHING2 = 32
 
-/datum/wires/camera/UpdateCut(var/index, var/mended)
+/datum/wires/camera/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/camera/C = holder
-
+	..()
 	switch(index)
 		if(CAMERA_WIRE_FOCUS)
 			var/range = (mended ? initial(C.view_range) : C.short_range)
@@ -51,7 +51,7 @@ var/const/CAMERA_WIRE_NOTHING2 = 32
 
 		if(CAMERA_WIRE_POWER)
 			if(C.status && !mended || !C.status && mended)
-				C.deactivate(usr, 1)
+				C.deactivate(user, 1)
 
 		if(CAMERA_WIRE_LIGHT)
 			C.light_disabled = !mended
@@ -65,6 +65,7 @@ var/const/CAMERA_WIRE_NOTHING2 = 32
 
 /datum/wires/camera/UpdatePulsed(var/index)
 	var/obj/machinery/camera/C = holder
+	..()
 	if(IsIndexCut(index))
 		return
 	switch(index)

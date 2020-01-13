@@ -25,7 +25,7 @@
 
 /datum/artifact_effect/projectiles
 	effecttype = "projectiles"
-	effect = EFFECT_PULSE
+	effect = ARTIFACT_EFFECT_PULSE
 	effectrange = 7
 	var/projectiletype
 	var/num_of_shots

@@ -26,7 +26,7 @@
 		/obj/item/projectile/bullet/blastwave,
 		/obj/item/projectile/beam/lightning,
 		/obj/item/projectile/beam/lightning/spell,
-		/obj/item/projectile/nikita,
+		/obj/item/projectile/rocket/nikita,
 		/obj/item/projectile/test,
 		/obj/item/projectile/beam/emitter,
 		/obj/item/projectile/meteor,

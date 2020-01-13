@@ -5,11 +5,10 @@
 
 /mob/living/carbon/alien/larva
 
-	var/temperature_alert = 0
+	var/temperature_alert = TEMP_ALARM_SAFE
 
 
 /mob/living/carbon/alien/larva/Life()
-	set invisibility = 0
 	//set background = 1
 	if (!loc)
 		return
@@ -73,7 +72,7 @@
 /mob/living/carbon/alien/larva/proc/breathe()
 
 
-	if(reagents.has_reagent(LEXORIN))
+	if(reagents.has_any_reagents(LEXORINS))
 		return
 	if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
 		return
@@ -101,16 +100,13 @@
 				var/obj/location_as_object = loc
 				breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 			else if(istype(loc, /turf/))
-				var/breath_moles = 0
 				/*if(environment.return_pressure() > ONE_ATMOSPHERE)
 					// Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
 					breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
 				else
 					*/
 					// Not enough air around, take a percentage of what's there to model this properly
-				breath_moles = environment.total_moles()*BREATH_PERCENTAGE
-
-				breath = loc.remove_air(breath_moles)
+				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				// Handle chem smoke effect  -- Doohl
 				for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))
@@ -159,24 +155,26 @@
 		return 0
 
 	var/toxins_used = 0
-	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
+	breath.volume = BREATH_VOLUME
+	breath.update_values()
 
 	//Partial pressure of the toxins in our breath
-	var/Toxins_pp = (breath.toxins/breath.total_moles())*breath_pressure
+	var/Toxins_pp = breath.partial_pressure(GAS_PLASMA)
 
 	if(Toxins_pp) // Detect toxins in air
 
-		AdjustPlasma(breath.toxins*250)
+		AdjustPlasma(breath[GAS_PLASMA] * 250)
 		toxins_alert = max(toxins_alert, 1)
 
-		toxins_used = breath.toxins
+		toxins_used = breath[GAS_PLASMA]
 
 	else
 		toxins_alert = 0
 
 	//Breathe in toxins and out oxygen
-	breath.toxins -= toxins_used
-	breath.oxygen += toxins_used
+	breath.adjust_multi(
+		GAS_PLASMA, -toxins_used,
+		GAS_OXYGEN, toxins_used)
 
 	if(breath.temperature > (T0C+66) && !(M_RESIST_HEAT in mutations)) // Hot air hurts :(
 		if(prob(20))
@@ -215,7 +213,7 @@
 			sleeping += 1
 			Paralyse(5)
 
-	confused = max(0, confused - 1)
+	remove_confused(1)
 	// decrement dizziness counter, clamped to 0
 	if(resting)
 		dizziness = max(0, dizziness - 5)
@@ -246,7 +244,7 @@
 			//if( health <= 20 && prob(1) )
 			//	spawn(0)
 			//		emote("gasp")
-			if(!reagents.has_reagent(INAPROVALINE))
+			if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 				adjustOxyLoss(1)
 			Paralyse(3)
 
@@ -293,6 +291,9 @@
 		if(knockdown)
 			knockdown = max(knockdown-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
 
+		if(say_mute)
+			say_mute = max(say_mute-1, 0)
+
 		if(stuttering)
 			stuttering = max(stuttering-1, 0)
 
@@ -304,20 +305,19 @@
 	return 1
 
 
-/mob/living/carbon/alien/larva/proc/handle_regular_hud_updates()
+/mob/living/carbon/alien/larva/handle_regular_hud_updates()
 
-
-	if (stat == 2 || (M_XRAY in mutations))
+	if(isDead() || (M_XRAY in mutations))
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_MINIMUM
-	else if (stat != 2)
+	else if(!isDead())
 		change_sight(adding = SEE_MOBS, removing = SEE_TURFS|SEE_OBJS)
 		see_in_dark = 4
 		see_invisible = SEE_INVISIBLE_MINIMUM
 
-	if (healths)
-		if (stat != 2)
+	if(healths)
+		if(!isDead())
 			switch(health)
 				if(25 to INFINITY)
 					healths.icon_state = "health0"
@@ -336,36 +336,39 @@
 
 	update_pull_icon()
 
+	if(toxins_alert)
+		throw_alert(SCREEN_ALARM_TOXINS, /obj/abstract/screen/alert/tox/alien)
+	else
+		clear_alert(SCREEN_ALARM_TOXINS)
+	if(oxygen_alert)
+		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath/alien)
+	else
+		clear_alert(SCREEN_ALARM_BREATH)
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire/alien)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
 
-	if (toxin)
-		toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
-	if (oxygen)
-		oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
-	if (fire)
-		fire.icon_state = "fire[fire_alert ? 1 : 0]"
-	//NOTE: the alerts dont reset when youre out of danger. dont blame me,
-	//blame the person who coded them. Temporary fix added.
 	if (client)
 		clear_fullscreens()
-
 		if(src.eye_blind || src.blinded)
 			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		if (src.disabilities & NEARSIGHTED)
+		if(src.disabilities & NEARSIGHTED)
 			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
-		if (src.eye_blurry)
+		if(src.eye_blurry)
 			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-		if (src.druggy)
+		if(src.druggy)
 			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 
-	if (stat != 2)
-		if (machine)
-			if (!( machine.check_eye(src) ))
+	if(!isDead())
+		if(machine)
+			if(!( machine.check_eye(src) ))
 				reset_view(null)
 		else
 			if(client && !client.adminobs)
 				reset_view(null)
 
-	return 1
+	return TRUE
 
 /mob/living/carbon/alien/larva/proc/handle_random_events()
 	return

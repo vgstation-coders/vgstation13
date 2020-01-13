@@ -76,7 +76,7 @@
 
 			if(T.canBuildLattice(src))
 				to_chat(user, "<span class='notice'>Constructing support lattice ...</span>")
-				playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
+				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 				new /obj/structure/lattice(T)
 				use(1)
 				return
@@ -143,3 +143,26 @@
 		to_chat(user, "<span class='notice'>You assembled a grille!</span>")
 		Grille.add_fingerprint(user)
 		use(2)
+
+
+/obj/item/stack/chains
+	name = "chain"
+	desc = "link by link, my chain got longer."
+	icon_state = "chains"
+	singular_name = "chain"
+	irregular_plural = "chains"
+	max_amount = 20
+
+/obj/item/stack/chains/can_stack_with(var/obj/item/other_stack)
+	if(!ispath(other_stack) && istype(other_stack) && other_stack.material_type == material_type)
+		return ..()
+	return 0
+
+/obj/item/stack/chains/New(var/loc, var/amount=null)
+	recipes = chain_recipes
+	..()
+
+var/list/datum/stack_recipe/chain_recipes = list (
+	new/datum/stack_recipe/blacksmithing("Suit of Chainmail",		/obj/item/clothing/suit/armor/vest/chainmail,					10,	time = 100,required_strikes = 15),
+	new/datum/stack_recipe/blacksmithing("Chainmail Coif",		/obj/item/clothing/head/helmet/chainmail,					5,	time = 100,required_strikes = 15),
+	)

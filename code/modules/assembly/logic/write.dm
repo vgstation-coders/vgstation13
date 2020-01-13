@@ -106,7 +106,7 @@
 
 		stored_num = choice
 	if(href_list["set_txt_value"])
-		var/choice = stripped_input(usr, "Select a new string value to be stored in \the [src].", "\The [src]", max_length = MAX_TEXT_VALUE_LEN) as null|text
+		var/choice = stripped_input(usr, "Select a new string value to be stored in \the [src].", "\The [src]", max_length = MAX_TEXT_VALUE_LEN)
 
 		if(isnull(choice))
 			return

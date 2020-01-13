@@ -322,7 +322,13 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	//src.pipe_dir = get_pipe_dir()
 	return
 
-/obj/item/pipe/Move()
+/obj/item/pipe/AltClick(var/mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		..()
+		return
+	rotate()
+
+/obj/item/pipe/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if ((pipe_type in bent_pipes) \
 		&& (src.dir in cardinal))
@@ -412,7 +418,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 /obj/item/pipe/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
 	//*
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!isturf(src.loc))
 		return 1
@@ -526,7 +532,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	P.setPipingLayer(src.piping_layer)
 	if(P.buildFrom(usr,src))
 		investigation_log(I_ATMOS,"was created by [user]/([user.ckey]) at [formatJumpTo(loc)].")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		user.visible_message( \
 			"[user] fastens \the [src].", \
 			"<span class='notice'>You have fastened \the [src].</span>", \
@@ -556,7 +562,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 /obj/item/pipe_meter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
 
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	var/obj/machinery/atmospherics/pipe/pipe
 	for(var/obj/machinery/atmospherics/pipe/P in src.loc)
@@ -567,7 +573,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 		to_chat(user, "<span class='warning'>You need to fasten it to a pipe.</span>")
 		return 1
 	new/obj/machinery/meter(src.loc, pipe)
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You have fastened the meter to the pipe.</span>")
 	qdel(src)
 
@@ -592,9 +598,9 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 
 /obj/item/pipe_gsensor/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	new/obj/machinery/air_sensor( src.loc )
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You have fastened the gas sensor.</span>")
 	qdel(src)

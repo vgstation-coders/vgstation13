@@ -482,6 +482,7 @@ shelter
 shiver
 shock
 shop
+shriek
 shrug
 sigh
 sign

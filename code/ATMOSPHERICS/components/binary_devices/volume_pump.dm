@@ -21,7 +21,6 @@ Thus, the two variables affect pump operation are set in New():
 	name = "Volumetric gas pump"
 	desc = "A volumetric pump"
 
-	var/on = 0
 	var/transfer_rate = MAX_TRANSFER_RATE
 
 	var/frequency = 0
@@ -126,7 +125,7 @@ Thus, the two variables affect pump operation are set in New():
 		if("power")
 			on = text2num(signal.data["value"])
 		if("set_transfer_rate")
-			transfer_rate = Clamp(text2num(signal.data["value"]), 0, MAX_TRANSFER_RATE)
+			transfer_rate = clamp(text2num(signal.data["value"]), 0, MAX_TRANSFER_RATE)
 			investigation_log(I_ATMOS, "was set to [transfer_rate] L/s by a remote signal.")
 
 	if("status" in signal.data)
@@ -172,7 +171,7 @@ Thus, the two variables affect pump operation are set in New():
 			id_tag = newid
 			initialize()
 		return MT_UPDATE
-		
+
 	if("set_freq" in href_list)
 		var/newfreq=frequency
 		if(href_list["set_freq"]!="-1")

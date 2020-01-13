@@ -28,7 +28,7 @@
 	return 0
 
 /obj/machinery/atmospherics/unary/outlet_injector/update_icon()
-	if(node)
+	if(node1)
 		if(on && !(stat & NOPOWER))
 			icon_state = "hon"
 		else
@@ -54,7 +54,7 @@
 		return
 
 	if(air_contents.temperature > 0)
-		var/transfer_moles = (air_contents.return_pressure())*volume_rate/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
+		var/transfer_moles = (air_contents.return_pressure()) * volume_rate / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
 		var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 
@@ -72,7 +72,7 @@
 	injecting = 1
 
 	if(air_contents.temperature > 0)
-		var/transfer_moles = (air_contents.return_pressure())*volume_rate/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
+		var/transfer_moles = (air_contents.return_pressure()) * volume_rate / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
 		var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 
@@ -131,7 +131,7 @@
 
 	if("set_volume_rate" in signal.data)
 		var/number = text2num(signal.data["set_volume_rate"])
-		volume_rate = Clamp(number, 0, air_contents.volume)
+		volume_rate = clamp(number, 0, air_contents.volume)
 
 	if("status" in signal.data)
 		spawn(2)
@@ -145,7 +145,7 @@
 	update_icon()
 
 /obj/machinery/atmospherics/unary/outlet_injector/hide(var/i) //to make the little pipe section invisible, the icon changes.
-	if(node)
+	if(node1)
 		if(on)
 			icon_state = "[i == 1 && istype(loc, /turf/simulated) ? "h" : "" ]on"
 		else
@@ -167,7 +167,7 @@
 "}
 
 /obj/machinery/atmospherics/unary/outlet_injector/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")

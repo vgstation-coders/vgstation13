@@ -7,9 +7,9 @@
 	var/obj/structure/bed/chair/vehicle/paired_to = null
 	var/vin = null
 
-/obj/item/key/New()
+/obj/item/key/initialize()
 	if(vin)
-		for(var/obj/structure/bed/chair/vehicle/V in world)
+		for(var/obj/structure/bed/chair/vehicle/V in vehicle_list)
 			if(V.vin == vin)
 				paired_to = V
 				V.mykey = src
@@ -34,19 +34,27 @@
 	var/ethereal = 0
 
 	var/keytype = null
+	var/obj/item/key/heldkey
 	var/obj/item/key/mykey
 
 	var/vin=null
 	var/datum/delay_controller/move_delayer = new(1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
-	var/movement_delay = 0 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
+	var/movement_delay = 1 //Speed of the vehicle decreases as this value increases. Do NOT set to 0 holy shit.
 
 	var/obj/machinery/cart/next_cart = null
 	var/can_have_carts = TRUE
 
 	var/mob/occupant
-	lock_type = /datum/locking_category/buckle/chair/vehicle
+	mob_lock_type = /datum/locking_category/buckle/chair/vehicle
 	var/wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle
 	var/last_warn
+
+	var/list/offsets = list()
+	var/last_dir
+
+	var/list/datum/action/vehicle_actions = list()
+
+	var/headlights = FALSE
 
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
@@ -67,10 +75,17 @@
 /obj/structure/bed/chair/vehicle/New()
 	..()
 	processing_objects |= src
-
+	vehicle_list.Add(src)
 	if(!nick)
 		nick=name
 	set_keys()
+	make_offsets()
+	if(headlights)
+		new /datum/action/vehicle/toggle_headlights(src)
+
+/obj/structure/bed/chair/vehicle/Destroy()
+	vehicle_list.Remove(src)
+	..()
 
 /obj/structure/bed/chair/vehicle/proc/set_keys()
 	if(keytype && !vin)
@@ -83,8 +98,8 @@
 	if(empstun < 0)
 		empstun = 0
 
-/obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/user)
-	if (istype(W, /obj/item/weapon/weldingtool))
+/obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/living/user)
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
 			add_fingerprint(user)
@@ -95,16 +110,53 @@
 			to_chat(user, "Need more welding fuel!")
 			return
 	else if(istype(W, /obj/item/key))
-		if(keytype)
-			to_chat(user, "Hold \the [W] in one of your hands while you drive \the [src].")
+		if(!heldkey)
+			if(keytype)
+				if(!istype(W, keytype))
+					to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
+					return
+				if(mykey && mykey != W)
+					to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
+					return
+				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
+					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
+					return
+				if(user.drop_item(W, src))
+					to_chat(user, "<span class='notice'>You insert \the [W] into \the [src]'s ignition and turn it.</span>")
+					user.visible_message("<span class='notice'>\The [src]'s engine roars to life!</span>")
+					src.heldkey = W
+					return
+				else //In case the key is unable to leave the user's hand. IE glue.
+					to_chat(user, "<span class='notice'>You fail to put \the [W] into \the [src]'s ignition and turn it.</span>")
+			else
+				to_chat(user, "<span class='notice'>You don't need a key.</span>")
 		else
-			to_chat(user, "You don't need a key.")
+			to_chat(user, "<span class='notice'>\The [src] already has \the [heldkey] in it.</span>")
+	else if(W.is_screwdriver(user) && !heldkey)
+		var/mob/living/carbon/human/H = user
+		to_chat(user, "<span class='warning'>You jam \the [W] into \the [src]'s ignition and feel like a genius as you try turning it!</span>")
+		playsound(src, "sound/items/screwdriver.ogg", 10, 1)
+		H.adjustBrainLoss(10)
+
+/obj/structure/bed/chair/vehicle/attack_hand(mob/user)
+	if(occupant && occupant == user)
+		return ..()
+	if(heldkey && !user.incapacitated() && Adjacent(user) && user.dexterity_check())
+		to_chat(user, "<span class='notice'>You remove \the [heldkey] from \the [src]'s ignition.</span>")
+		user.visible_message("<span class='notice'>\The [src]'s engine shuts off.</span>")
+		heldkey.forceMove(get_turf(user))
+		user.put_in_hands(heldkey)
+		heldkey = null
+	else
+		..()
 
 /obj/structure/bed/chair/vehicle/proc/check_key(var/mob/user)
 	if(!keytype)
 		return 1
 	if(mykey)
-		return user.is_holding_item(mykey)
+		return heldkey == mykey || user.is_holding_item(mykey)
+	return istype(heldkey, keytype) || user.find_held_item_by_type(keytype)
+
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
 	if(user.incapacitated())
@@ -112,7 +164,7 @@
 		return
 	if(!check_key(user))
 		if(can_warn())
-			to_chat(user, "<span class='notice'>You'll need the keys in one of your hands to drive \the [src].</span>")
+			to_chat(user, "<span class='notice'>You'll need the key in one of your hands or inside the ignition slot to drive \the [src].</span>")
 		return 0
 	if(empstun > 0)
 		if(user && can_warn(user))
@@ -122,9 +174,9 @@
 		return 0
 
 	//If we're in space or our area has no gravity...
-	var/turf/T = get_turf(loc)
-	if(!T)
-		return 0
+	var/turf/T = loc
+	if(!istype(T))
+		return 0 //location isn't a turf or doesn't exist
 	if(!T.has_gravity())
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))
@@ -139,8 +191,10 @@
 			tether_datum.snap = 1
 			tether_datum.Delete_Chain()
 
+	var/movedelay = getMovementDelay()
+	set_glide_size(DELAY2GLIDESIZE(movedelay))
 	step(src, direction)
-	delayNextMove(getMovementDelay())
+	delayNextMove(movedelay)
 
 	if(T != loc)
 		user.handle_hookchain(direction)
@@ -184,8 +238,19 @@
 		"<span class='notice'>You climb onto \the [nick]!</span>")
 
 	lock_atom(M, /datum/locking_category/buckle/chair/vehicle)
+	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
 
 	add_fingerprint(user)
+
+	for (var/datum/action/action in vehicle_actions)
+		if (action.owner && action.owner != user)
+			action.Remove(action.owner)
+		action.Grant(user)
+
+/obj/structure/bed/chair/vehicle/manual_unbuckle(user)
+	..()
+	for (var/datum/action/action in vehicle_actions)
+		action.Remove(user)
 
 /obj/structure/bed/chair/vehicle/handle_layer()
 	if(dir == SOUTH)
@@ -195,26 +260,30 @@
 		plane = OBJ_PLANE
 		layer = ABOVE_OBJ_LAYER
 
-/obj/structure/bed/chair/vehicle/MouseDrop_T(var/atom/movable/C, mob/user)
+/obj/structure/bed/chair/vehicle/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
 
-	if (user.incapacitated() || !in_range(user, src) || !can_have_carts)
+	if (user.incapacitated() || !in_range(user, src) || !in_range(src, C) || !can_have_carts)
 		return
 
 	if (istype(C, /obj/machinery/cart))
 
 		if (!next_cart)
+			var/obj/machinery/cart/connecting = C
+			if(connecting.previous_cart)
+				to_chat(user, "\The [connecting] already has a cart connected to it!", "red")
+				return
 			next_cart = C
 			next_cart.previous_cart = src
 			user.visible_message("[user] connects [C] to [src].", "You connect [C] to [src]")
-			playsound(get_turf(src), 'sound/misc/buckle_click.ogg', 50, 1)
+			playsound(src, 'sound/misc/buckle_click.ogg', 50, 1)
 			return
 
 		else if (next_cart == C)
 			next_cart.previous_cart = null
 			next_cart = null
 			user.visible_message("[user] disconnects [C] to [src].", "You disconnect [C] to [src]")
-			playsound(get_turf(src), 'sound/misc/buckle_unclick.ogg', 50, 1)
+			playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
 			return
 
 /obj/structure/bed/chair/vehicle/update_dir()
@@ -222,23 +291,28 @@
 
 	update_mob()
 
+/obj/structure/bed/chair/vehicle/proc/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 7 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 13 * PIXEL_MULTIPLIER, "y" = 7 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 4 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = -13 * PIXEL_MULTIPLIER, "y" = 7 * PIXEL_MULTIPLIER)
+		)
+
 /obj/structure/bed/chair/vehicle/proc/update_mob()
 	if(!occupant)
 		return
+	if(!(dir in cardinal))
+		return
 
-	switch(dir)
-		if(SOUTH)
-			occupant.pixel_x = 0
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(WEST)
-			occupant.pixel_x = 13 * PIXEL_MULTIPLIER
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(NORTH)
-			occupant.pixel_x = 0
-			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
-		if(EAST)
-			occupant.pixel_x = -13 * PIXEL_MULTIPLIER
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+	if(last_dir)
+		occupant.pixel_x -= offsets["[last_dir]"]["x"]
+		occupant.pixel_y -= offsets["[last_dir]"]["y"]
+
+	occupant.pixel_x += offsets["[dir]"]["x"]
+	occupant.pixel_y += offsets["[dir]"]["y"]
+
+	last_dir = dir
 
 /obj/structure/bed/chair/vehicle/emp_act(severity)
 	switch(severity)
@@ -325,8 +399,10 @@
 	if(!.)
 		return
 
-	AM.pixel_x = 0
-	AM.pixel_y = 0
+	AM.pixel_x -= offsets["[dir]"]["x"]
+	AM.pixel_y -= offsets["[dir]"]["y"]
+
+	last_dir = null
 
 	if(occupant == AM)
 		occupant = null
@@ -340,12 +416,51 @@
 
 	update_mob()
 
-/obj/structure/bed/chair/vehicle/Move()
+/obj/structure/bed/chair/vehicle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/oldloc = loc
 	..()
 	if (loc == oldloc)
 		return
 	if(next_cart)
-		next_cart.Move(oldloc)
+		sleep(0)
+		next_cart.Move(oldloc, glide_size_override = src.glide_size)
+
+/obj/structure/bed/chair/vehicle/proc/disconnected() //proc that carts call, we have no use for it
+	return
 
 /datum/locking_category/buckle/chair/vehicle
+
+
+/////////////////////////////////////
+//           VEHICLE ACTIONS
+////////////////////////////////////
+
+/datum/action/vehicle/toggle_headlights
+	name = "toggle headlights"
+	desc = "Turn the headlights on or off."
+	var/on = FALSE
+	var/brightness = 6
+	var/sounds = list('sound/items/flashlight_on.ogg','sound/items/flashlight_off.ogg')
+
+/datum/action/vehicle/toggle_headlights/New(var/obj/structure/bed/chair/vehicle/Target)
+	..()
+	icon_icon = Target.icon
+	button_icon_state = Target.icon_state
+	Target.vehicle_actions += src
+
+/datum/action/vehicle/toggle_headlights/Trigger()
+	if(!..())
+		return FALSE
+	on = !on
+	if(on)
+		target.set_light(brightness)
+		playsound(target, sounds[1], 50, 1)
+	else
+		target.set_light(0)
+		playsound(target, sounds[2], 50, 1)
+	target.update_icon()
+
+/datum/action/vehicle/toggle_headlights/siren
+	name = "toggle siren"
+	desc = "Turn the siren lights on or off."
+	sounds = list('sound/voice/woopwoop.ogg','sound/items/flashlight_off.ogg')

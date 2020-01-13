@@ -9,9 +9,9 @@ use std::ffi::CStr;
 use std::slice;
 use std::ptr::null;
 
-/// Encodes a byte string to UTF-8, using the encoding supplied.
-///
-/// Arguments are in the order of encoding, bytes.
+// Encodes a byte string to UTF-8, using the encoding supplied.
+//
+// Arguments are in the order of encoding, bytes.
 #[no_mangle]
 pub extern "C" fn to_utf8(n: libc::c_int, v: *const *const libc::c_char) -> *const libc::c_char {
     // We do not let the byond crate handle arguments, as we want BYTES directly.
@@ -25,10 +25,10 @@ pub extern "C" fn to_utf8(n: libc::c_int, v: *const *const libc::c_char) -> *con
     return_to_byond(&text).unwrap_or(null())
 }
 
-/// Encodes a byte string with a windows encoding, filters bad characters and limits message length.
-///
-/// Operations like message length are done on Unicode code points!
-/// Arguments are in the order of encoding, bytes, cap.
+// Encodes a byte string with a windows encoding, filters bad characters and limits message length.
+//
+// Operations like message length are done on Unicode code points!
+// Arguments are in the order of encoding, bytes, cap.
 #[no_mangle]
 pub extern "C" fn utf8_sanitize(
     n: libc::c_int,
@@ -48,7 +48,7 @@ pub extern "C" fn utf8_sanitize(
     return_to_byond(&text).unwrap_or(null())
 }
 
-/// Removes non-ASCII characters from the input string.
+// Removes non-ASCII characters from the input string.
 #[no_mangle]
 pub extern "C" fn strict_ascii(
     n: libc::c_int,
@@ -62,7 +62,7 @@ pub extern "C" fn strict_ascii(
     return_to_byond(ASCII.decode(bytes, DecoderTrap::Ignore).unwrap()).unwrap_or(null())
 }
 
-/// Returns the length of a UTF-8 string.
+// Returns the length of a UTF-8 string.
 byond!(utf8_len: text; {
     format!("{}", text.chars().count())
 });

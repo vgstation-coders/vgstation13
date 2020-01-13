@@ -248,7 +248,9 @@ var/global/datum/interactive_map/camera/adv_camera = new
 				A.eyeobj.forceMove(get_turf(cam))
 				A.client.eye = A.eyeobj
 			else
+				var/mob/M = usr
 				use_power(50)
 				current = cam
-				usr.reset_view(current)
+				M.change_sight(copying = cam.vision_flags)
+				M.reset_view(current)
 	return 1

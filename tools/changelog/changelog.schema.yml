@@ -1,0 +1,44 @@
+# This is a JSON Schema represented in YAML because YAML doesn't have decent schemas.
+# You can use this to validate your changelogs using a tool like pajv.
+$schema: 'http://json-schema.org/draft-06/schema#'
+$id: changelog.schema.yml
+title: Changelog
+author: N3X15
+description: A changelog entry block.
+type: object
+required:
+  - author
+  - changes
+additionalProperties: false
+properties:
+  author:
+    type: string
+  delete-after:
+    anyOf:
+      - type: boolean
+      - enum:
+        - yes
+        - no
+  changes:
+    type: array
+    minItems: 1
+    items:
+      type: object
+      minProperties: 1
+      maxProperties: 1
+      additionalProperties:
+        type: string
+      propertyNames:
+        enum:
+          - bugfix
+          - wip
+          - tweak
+          - soundadd
+          - sounddel
+          - rscdel
+          - rscadd
+          - imageadd
+          - imagedel
+          - spellcheck
+          - experiment
+          - tgs

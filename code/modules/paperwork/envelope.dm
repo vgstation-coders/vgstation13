@@ -40,7 +40,7 @@
 		if(P.sharpness && P.sharpness_flags & SHARP_BLADE)
 			open()
 			user.visible_message("\The [user] slices the top of \the [src] open with \the [P].","You slice the top of \the [src] open with \the [P].")
-			playsound(get_turf(src), 'sound/effects/paper_tear.ogg', 10, 1)
+			playsound(src, 'sound/effects/paper_tear.ogg', 10, 1)
 
 	if(istype(P, /obj/item/device/destTagger))
 		var/obj/item/device/destTagger/O = P
@@ -51,7 +51,7 @@
 			var/tag = uppertext(O.destinations[O.currTag])
 			to_chat(user, "<span class='notice'>*[tag]*</span>")
 			sortTag = tag
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
 			overlays = 0
 			overlays += image(icon = icon, icon_state = "deliverytag")
 			desc = "It has a label reading [tag]."
@@ -94,7 +94,7 @@
 		else
 			open()
 			user.visible_message("\The [user] tears open the top of \the [src].","You tear open the top of \the [src].")
-			playsound(get_turf(src), 'sound/effects/paper_tear.ogg', 50, 1)
+			playsound(src, 'sound/effects/paper_tear.ogg', 50, 1)
 	else
 		AltClick(user)
 

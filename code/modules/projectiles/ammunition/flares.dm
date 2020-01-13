@@ -5,7 +5,7 @@
 	name = "flare shell"
 	desc = "Flare shell, shot by flare guns. Contains a flare and little else."
 	icon_state = "flareshell"
-	caliber = "flare"
+	caliber = GAUGEFLARE
 	projectile_type = "/obj/item/projectile/flare"
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL

@@ -185,3 +185,6 @@
 			health = maxHealth - getOxyLoss() - getToxLoss() - getBruteLoss()
 		else
 			health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
+
+/mob/living/silicon/ai/update_canmove() //If the AI dies, mobs won't go through it anymore
+	return FALSE

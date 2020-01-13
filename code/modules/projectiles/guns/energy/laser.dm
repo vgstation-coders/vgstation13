@@ -219,8 +219,7 @@
 	fire_sound = 'sound/weapons/lasercannonfire.ogg'
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=3;" + Tc_POWERSTORAGE + "=3"
 	projectile_type = "/obj/item/projectile/beam/heavylaser"
-
-	fire_delay = 2
+	fire_delay = 2 SECONDS // 2 (TWO) seconds fire delay
 
 /obj/item/weapon/gun/energy/laser/cannon/empty/New()
 	..()
@@ -275,7 +274,7 @@
 		return 1
 	if(prob(5))
 		M.drop_item()
-		M.emote("scream",,, 1)
+		M.audible_scream()
 		M.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
 		M.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
 		to_chat(M, "<span class='danger'>\The [src] burns your hands!.</span>")

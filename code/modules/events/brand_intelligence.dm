@@ -7,6 +7,8 @@
 	var/list/obj/machinery/vending/infectedVendingMachines = list()
 	var/obj/machinery/vending/originMachine
 
+/datum/event/brand_intelligence/can_start()
+	return 30
 
 /datum/event/brand_intelligence/announce()
 	command_alert(/datum/command_alert/vending_machines)

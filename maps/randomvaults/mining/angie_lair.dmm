@@ -1,0 +1,38 @@
+"a" = (/turf/unsimulated/mineral/dense,/area/asteroid)
+"b" = (/turf/unsimulated/mineral/random/high_chance,/area/asteroid)
+"c" = (/turf/unsimulated/mineral/mythril,/area/asteroid)
+"d" = (/turf/unsimulated/mineral/telecrystal,/area/asteroid)
+"e" = (/turf/unsimulated/floor/asteroid,/area/asteroid)
+"f" = (/turf/unsimulated/mineral/random,/area/asteroid)
+"g" = (/turf/unsimulated/mineral/gibtonite,/area/asteroid)
+"h" = (/turf/unsimulated/mineral/random/high_chance_clown{rockernaut = 2},/area/asteroid)
+"i" = (/turf/unsimulated/mineral/hyperdense,/area/asteroid)
+"j" = (/turf/unsimulated/mineral/random/high_chance_clown,/area/asteroid)
+
+(1,1,1) = {"
+iiiiiiiiiiiiiiiiiiiiiiiii
+ibbbbbbbbbbbbbbbbbbbbbbbi
+iibbbcccbbbbbbbbbddbbbbii
+iibbbceebbbbbbbbbeedbbbii
+iibbbbeeeebbbbbeeeebbbbii
+ibbbbeeeeeejjjeeeeeebbbbi
+ibbbbeeeeeeejeeeeeeebbbbi
+ibbbbeeeeeeeeeeeeeeebbbbi
+iibbbeeeeeeeeeeeeeeebbbii
+iiiiiieeeeeeeeeeeeeiiiiii
+affffiiiieeeeeeeiiiiffffi
+affgffffaieeeeeiafffffffi
+afgggeeefaieeeiafeeeffffi
+afgeeeeeeffihiffeeeeeeffa
+affeeeeeeeaeeeaeeeeeeeffa
+afffeeeeeeeeeeeeeeeeefffa
+affffeeeeeeeeeeeeeeeffffa
+afffffeeeeeeeeeeeeefffffa
+afffffeeeeeeeeeeeeefffffa
+affffeeeeeeeeeeeeeeeffffa
+affeeeeeeeeeeeeeeeeeeeffa
+affeeeeeeeeeeeeeeeeeeeffa
+afffeeeeeeeeeeeeeeeeefffa
+aafffffeeeeeeeeeeefffffaa
+aaaafffffffffffffffffaaaa
+"}

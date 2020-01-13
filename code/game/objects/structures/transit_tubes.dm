@@ -1,3 +1,4 @@
+#define TUBE_POD_UNLOAD_LIMIT 20
 
 // Basic transit tubes. Straight pieces, curved sections,
 //  and basic splits/joins (no routing logic).
@@ -77,8 +78,8 @@ obj/structure/transit_tube_pod/ex_act(severity)
 /obj/structure/transit_tube_pod/New()
 	. = ..()
 	air_contents.adjust_multi_temp(
-		"oxygen", MOLES_O2STANDARD, T20C,
-		"nitrogen", MOLES_N2STANDARD, T20C)
+		GAS_OXYGEN, MOLES_O2STANDARD, T20C,
+		GAS_NITROGEN, MOLES_N2STANDARD, T20C)
 
 	// Give auto tubes time to align before trying to start moving
 	spawn (5)
@@ -91,7 +92,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 		init_dirs()
 
 /obj/structure/transit_tube/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-	if(get_exit(get_dir(src, mover)))
+	if(test_blocked(get_dir(src, mover)))
 		return ..() //If there's an opening on the side they're trying to enter, only let them do so if they can normally pass dense structures.
 	return TRUE //Otherwise, whatever.
 
@@ -125,16 +126,62 @@ obj/structure/transit_tube_pod/ex_act(severity)
 	..()
 
 
-/obj/structure/transit_tube/station/attack_hand(mob/user as mob)
+/obj/structure/transit_tube/station/attack_hand(mob/user)
 	if(!pod_moving)
 		for(var/obj/structure/transit_tube_pod/pod in loc)
 			if(!pod.moving && pod.dir in directions())
 				if(open)
+					if(!user.lying && user.loc != pod)
+						var/unloaded = 0
+						var/incomplete = FALSE
+
+						for(var/atom/movable/AM in pod)
+							if(isobserver(AM))
+								continue
+							if(unloaded >= TUBE_POD_UNLOAD_LIMIT)
+								incomplete = TRUE
+								break
+							AM.forceMove(get_step(loc, dir))
+							unloaded++
+
+						if(unloaded)
+							user.visible_message("<span class='notice'>[user] unloads [incomplete ? "some things" : "everything"] from the tube pod.</span>", \
+							"<span class='notice'>You unload [incomplete ? "some things" : "everything"] from the tube pod.</span>")
+							return
+
 					close_animation()
 
 				else
 					open_animation()
 
+
+/obj/structure/transit_tube/station/attack_robot(mob/user)
+	if(Adjacent(user))
+		attack_hand(user)
+
+
+/obj/structure/transit_tube_pod/examine(mob/user)
+	..()
+	show_occupants(user)
+
+
+/obj/structure/transit_tube/examine(mob/user)
+	..()
+	for(var/obj/structure/transit_tube_pod/pod in loc)
+		pod.show_occupants(user)
+
+
+/obj/structure/transit_tube_pod/proc/show_occupants(mob/user)
+	if(contents.len)
+		var/list/occupants = contents.Copy()
+		for(var/atom/movable/O in occupants)
+			if(O.invisibility > user.see_invisible)
+				occupants -= O
+		if(occupants.len)
+			to_chat(user, "<span class='info'>The tube pod contains [english_list(occupants)].</span>")
+			return
+
+	to_chat(user, "<span class='info'>The tube pod looks empty.</span>")
 
 
 /obj/structure/transit_tube/station/proc/open_animation()
@@ -270,6 +317,9 @@ obj/structure/transit_tube_pod/ex_act(severity)
 
 	return near_dir
 
+/obj/structure/transit_tube/proc/test_blocked(in_dir)	//You can now only squeeze under transit tubes if you can go out the same way you came in.
+	return (get_exit(in_dir) || get_exit(turn(in_dir, 180)))
+
 
 
 // Return how many BYOND ticks to wait before entering/exiting
@@ -331,13 +381,13 @@ obj/structure/transit_tube_pod/ex_act(severity)
 			sleep(last_delay)
 			dir = next_dir
 			forceMove(next_loc) // When moving from one tube to another, skip collision and such.
-			density = current_tube.density
+			setDensity(current_tube.density)
 
 			if(current_tube && current_tube.should_stop_pod(src, next_dir))
 				current_tube.pod_stopped(src, dir)
 				break
 
-		density = 1
+		setDensity(TRUE)
 
 		// If the pod is no longer in a tube, move in a line until stopped or slowed to a halt.
 		//  /turf/inertial_drift appears to only work on mobs, and re-implementing some of the
@@ -440,7 +490,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 		tube_dirs = parse_dirs(icon_state)
 
 		if(copytext(icon_state, 1, 3) == "D-" || findtextEx(icon_state, "Pass"))
-			density = 0
+			setDensity(FALSE)
 
 
 
@@ -621,3 +671,5 @@ obj/structure/transit_tube_pod/ex_act(severity)
 			return "SW"
 		else
 	return
+
+#undef TUBE_POD_UNLOAD_LIMIT

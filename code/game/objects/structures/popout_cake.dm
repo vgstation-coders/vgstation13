@@ -136,7 +136,7 @@
 
 	spawn(10)
 
-		playsound(get_turf(src), 'sound/effects/party_horn.ogg', 50, 1)
+		playsound(src, 'sound/effects/party_horn.ogg', 50, 1)
 
 		sleep(10)
 
@@ -170,7 +170,7 @@
 	check_slices()
 
 /obj/structure/popout_cake/bullet_act(var/obj/item/projectile/Proj)
-	slices_amount -= Clamp(round(Proj.damage / 3), 1, 4)
+	slices_amount -= clamp(round(Proj.damage / 3), 1, 4)
 
 	check_slices()
 

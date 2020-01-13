@@ -17,19 +17,6 @@
 /obj/mecha/working/range_action(atom/target as obj|mob|turf)
 	return
 
-/*
-/obj/mecha/working/get_stats_part()
-	var/output = ..()
-	output += "<b>[src.name] Tools:</b><div style=\"margin-left: 15px;\">"
-	if(equipment.len)
-		for(var/obj/item/mecha_parts/mecha_equipment/MT in equipment)
-			output += "[selected==MT?"<b>":"<a href='?src=\ref[src];select_equip=\ref[MT]'>"][MT.get_equip_info()][selected==MT?"</b>":"</a>"]<br>"
-	else
-		output += "None"
-	output += "</div>"
-	return output
-*/
-
 /obj/mecha/working/Exit(atom/movable/O)
 	if(O in cargo)
 		return 0

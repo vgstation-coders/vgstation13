@@ -156,7 +156,7 @@
 			nodealert = 0
 */
 
-/obj/machinery/atmospherics/trinary/tvalve/return_network_air(datum/network/reference)
+/obj/machinery/atmospherics/trinary/tvalve/return_network_air(datum/pipe_network/reference)
 	return null
 
 /obj/machinery/atmospherics/trinary/tvalve/mirrored

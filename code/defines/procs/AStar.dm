@@ -274,7 +274,7 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 		return 1
 
 	for(var/obj/O in B)
-		if(O.density && !istype(O, /obj/machinery/door) && !(O.flags & ON_BORDER))
+		if(O.density && !istype(O, /obj/machinery/door) && !(O.flow_flags & ON_BORDER))
 			return 1
 
 	return 0
@@ -319,7 +319,7 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 		return 1
 
 	for(var/obj/O in B)
-		if(O.density && !istype(O, /obj/machinery/door) && !(O.flags & ON_BORDER))
+		if(O.density && !istype(O, /obj/machinery/door) && !(O.flow_flags & ON_BORDER))
 			return 1
 
 	return 0

@@ -1,7 +1,7 @@
 /obj/machinery/egg_incubator
 	name = "egg incubator"
 	icon = 'icons/obj/virology.dmi'
-	icon_state = "incubator"
+	icon_state = "incubator_old"
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -14,7 +14,7 @@
 	var/limit = 1
 	var/speed_bonus = 0
 	var/circuitpath = /obj/item/weapon/circuitboard/egg_incubator
-	var/active_state = "incubator_on"
+	var/active_state = "incubator_old_on"
 
 /obj/machinery/egg_incubator/New()
 	. = ..()
@@ -106,7 +106,7 @@
 	use_power = 2
 	update_icon()
 	if(handle_growth(contents))
-		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1) //Only ding once per process
+		playsound(src, 'sound/machines/ding.ogg', 50, 1) //Only ding once per process
 
 	src.updateUsrDialog()
 

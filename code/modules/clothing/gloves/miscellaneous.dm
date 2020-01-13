@@ -60,10 +60,11 @@
 	permeability_coefficient = 0.01
 	_color = "medical"				//matches cmo stamp
 	species_fit = list(VOX_SHAPED)
+	sterility = 100
 
 /obj/item/clothing/gloves/botanic_leather
 	desc = "These leather gloves protect against thorns, barbs, prickles, spikes and other harmful objects of floral origin."
-	name = "botanist's leather gloves"
+	name = "botany gloves"
 	icon_state = "leather"
 	item_state = "leather"
 	permeability_coefficient = 0.9
@@ -154,6 +155,7 @@
 	desc = "Utilizes a non-slip technology that allows you to never drop your precious bottles of vodka."
 	icon_state = "nr_gloves"
 	item_state = "nr_gloves"
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/gloves/neorussian/fingerless
 	name = "neo-Russian fingerless gloves"
@@ -257,7 +259,7 @@
 /obj/item/clothing/gloves/powerfist/on_punch(mob/user, mob/living/victim)
 	if(istype(victim) && use_fuel(fuel_cost))
 		to_chat(user, "<span class='notice'>As \the [src] activate, you feel a truly powerful force assisting your punch.</span>")
-		playsound(get_turf(src), 'sound/mecha/mechentry.ogg', 100, 1)
+		playsound(src, 'sound/mecha/mechentry.ogg', 100, 1)
 
 		victim.throw_at(get_edge_target_turf(loc, loc.dir), 5, 1)
 		victim.Stun(stunforce)
@@ -318,6 +320,7 @@
 	damage_added = 17
 	sharpness_added = 2
 	hitsound_added = 'sound/weapons/slice.ogg'
+	attack_verb_override = "claws"
 
 /obj/item/clothing/gloves/warping_claws/dexterity_check()
 	return FALSE
@@ -333,3 +336,25 @@
 		P1.owner = user
 		P2.owner = user
 		P1.teleport(user)
+
+/obj/item/clothing/gloves/mining
+	name = "fists of the rockernaut"
+	desc = "Start 'em up and rock and roll!"
+	icon_state = "rockernaut_gloves"
+	item_state = "rockernaut_gloves"
+	damage_added = 5
+	hitsound_added = 'sound/weapons/heavysmash.ogg'
+
+/obj/item/clothing/gloves/mining/dexterity_check()
+	return FALSE
+
+/obj/item/clothing/gloves/mining/Touch(var/atom/A, mob/user, proximity)
+	if(proximity && istype(A, /turf/unsimulated/mineral))
+		var/turf/unsimulated/mineral/M = A
+		if(do_after(user, A, max(M.minimum_mine_time,4 SECONDS*M.mining_difficulty)))
+			playsound(get_turf(src), hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(M, src)
+			M.GetDrilled(0)
+
+/obj/item/clothing/gloves/mining/attack_icon()
+	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")

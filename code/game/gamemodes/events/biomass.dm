@@ -63,7 +63,7 @@
 		adjust_health(-30)
 	else
 		icon_state = "stage3"
-		density = 1
+		setDensity(TRUE)
 		energy = 2
 		adjust_health(-30)
 
@@ -73,7 +73,7 @@
 		qdel(src)
 
 /obj/effect/biomass/proc/spread()
-	var/location = get_step_rand(src)
+	var/location = get_step(src, pick(alldirs))
 
 	if(istype(location, /turf/simulated/floor))
 		var/turf/simulated/floor/Floor = location

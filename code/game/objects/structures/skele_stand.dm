@@ -20,7 +20,7 @@
 			visible_message("\The [src] rattles [pick("ominously","violently")] on \his stand! [pick("Spooky","Weird")].")
 		else
 			visible_message("\The [src] rattles[thingy ? " upon being hit by \the [thingy]" : ""].")
-		playsound(get_turf(src), 'sound/effects/rattling_bones.ogg', 50, 0)
+		playsound(src, 'sound/effects/rattling_bones.ogg', 50, 0)
 		last_rattle_time = world.time
 	else
 		return

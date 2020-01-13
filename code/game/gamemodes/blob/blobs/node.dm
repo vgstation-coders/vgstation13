@@ -13,7 +13,8 @@
 	icon_new = "node"
 	icon_classic = "blob_node"
 
-/obj/effect/blob/node/New(loc,newlook = "new",no_morph = 0)
+//obj/effect/blob/node/New(loc,newlook = "new",no_morph = 0) HALLOWEEN
+/obj/effect/blob/node/New(loc,newlook = null,no_morph = 0)
 	blob_nodes += src
 	processing_objects.Add(src)
 	..(loc, newlook)
@@ -45,7 +46,7 @@
 			M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
 
 	for(var/i = 1; i < 8; i += i)
-		Pulse(5, i)
+		Pulse(5, i, overmind)
 
 	if(health < maxhealth)
 		health = min(maxhealth, health + 1)

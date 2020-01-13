@@ -75,7 +75,7 @@
 		/obj/item/weapon/pickaxe/diamond				=3,
 		/obj/item/weapon/pickaxe/drill/diamond			=3,
 		/obj/item/weapon/pickaxe/gold					=3,
-		/obj/item/weapon/pickaxe/plasmacutter			=2,
+		/obj/item/weapon/pickaxe/plasmacutter/accelerator			=2,
 		/obj/structure/closet/syndicate/resources		=2,
 		/obj/item/weapon/melee/energy/sword/pirate		=1,
 		/obj/mecha/working/ripley/mining				=1
@@ -131,3 +131,10 @@
 			var/turf/egg_turf = pick(all_floors)
 			if(egg_turf && !(locate(/obj/effect/alien) in egg_turf))
 				new /obj/effect/alien/egg(egg_turf)
+
+
+/datum/map_element/mining_surprise/angie
+	name = "Angie's lair"
+	desc = "From within this rich soil, the stone gathers moss."
+
+	file_path = "maps/randomvaults/mining/angie_lair.dmm"

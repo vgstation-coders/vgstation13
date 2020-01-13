@@ -23,8 +23,8 @@
 	build_path = /obj/item/weapon/circuitboard/pdapainter
 
 /datum/design/telehub
-	name = "Circuit Design (Teleporter Hub)"
-	desc = "Allows for the construction of circuit boards used to build a Teleporter Hub"
+	name = "Circuit Design (Teleporter Generator)"
+	desc = "Allows for the construction of circuit boards used to build a Teleporter Generator"
 	id = "telehub"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 3, Tc_BLUESPACE = 3)
 	build_type = IMPRINTER
@@ -33,11 +33,21 @@
 	build_path = /obj/item/weapon/circuitboard/telehub
 
 /datum/design/telestation
-	name = "Circuit Design (Teleporter Station)"
-	desc = "Allows for the construction of circuit boards used to build a Teleporter Station."
+	name = "Circuit Design (Teleporter Controller)"
+	desc = "Allows for the construction of circuit boards used to build a Teleporter Controller."
 	id = "telestation"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 3, Tc_BLUESPACE = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/telestation
+
+/datum/design/laborconsole
+	name = "Circuit Design (Labor Administration Console)"
+	desc = "Allows for the construction of circuit boards used to build a labor administration console."
+	id = "laborconsole"
+	req_tech = list(Tc_PROGRAMMING = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Console Boards"
+	build_path = /obj/item/weapon/circuitboard/labor

@@ -115,7 +115,7 @@
 		/obj/item/weapon/gun/energy/ionrifle,
 		/obj/item/weapon/gun/energy/laser,
 		/obj/item/weapon/gun/energy/laser/cannon,
-		/obj/item/weapon/gun/projectile/automatic/mini_uzi,
+		/obj/item/weapon/gun/projectile/automatic/uzi,
 		/obj/item/weapon/gun/projectile/automatic,
 		/obj/item/weapon/gun/projectile/automatic/l6_saw,
 		/obj/item/weapon/gun/projectile/deagle,
@@ -207,7 +207,6 @@
 		/obj/machinery/vending/sovietsoda,
 		/obj/structure/AIcore,
 		/obj/structure/piano,
-		/obj/structure/displaycase_frame,
 		/obj/structure/particle_accelerator/fuel_chamber,
 		/obj/structure/reagent_dispensers/fueltank,
 		/obj/structure/reagent_dispensers/water_cooler,
@@ -512,11 +511,10 @@
 		/obj/item/weapon/bucket_sensor,
 		/obj/item/stack/cable_coil,
 		/obj/item/weapon/camera_assembly,
-		/obj/item/weapon/cigbutt/cigarbutt,
+		/obj/item/trash/cigbutt/cigarbutt,
 		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,
-		/obj/item/weapon/coin/adamantine,
 		/obj/item/weapon/coin/clown,
 		/obj/item/weapon/coin/diamond,
 		/obj/item/weapon/coin/iron,
@@ -589,23 +587,42 @@
 		/obj/item/weapon/switchtool/swiss_army_knife
 		)
 
+/obj/abstract/map/spawner/maint/lowchance
+	name = "low-chance maint spawner"
+	amount = 1
+	chance = 10
+
 /obj/abstract/map/spawner/highrisk
 	name = "high risk spawner"
 	icon_state = "maint"
 	chance = 20
-	to_spawn = list(
+	/* Removed until they get properly converted to virus2 or something
 		/obj/item/weapon/reagent_containers/glass/bottle/epiglottis_virion,
 		/obj/item/weapon/reagent_containers/glass/bottle/flu_virion,
-		/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
 		/obj/item/weapon/reagent_containers/glass/bottle/pierrot_throat,
-		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/weapon/reagent_containers/glass/bottle/cold,
+	*/
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+		/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
 		/obj/item/device/powersink,
 		/obj/item/device/powersink,
 		/obj/item/weapon/gun/projectile/flamethrower/full,
 		/obj/item/weapon/gun/projectile/deagle/gold,
+		/obj/item/clothing/shoes/magboots/magnificent,
 		/obj/item/weapon/gun/projectile/russian,
 	)
+
+/obj/abstract/map/spawner/floorpill
+	name = "floor pill spawner"
+	icon_state = "maint_pills"
+	chance = 20
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/pill/random/maintenance
+	)
+
+/obj/abstract/map/spawner/floorpill/guaranteed
+	chance = 100
 
 // Space ///////////////////////////////////////////////////////
 
@@ -632,7 +649,7 @@
 		/obj/item/weapon/gun/projectile/silenced,
 		/obj/item/weapon/harpoon,
 		/obj/item/weapon/melee/classic_baton,
-		/obj/item/weapon/pickaxe/plasmacutter,
+		/obj/item/weapon/pickaxe/plasmacutter/accelerator,
 		/obj/item/weapon/shield/energy,
 		)
 
@@ -819,6 +836,7 @@
 	chance = 5
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/russian/ranged)
 
+
 /obj/abstract/map/spawner/space/vox/trader/spacesuit // for the vox outpost trader closets to spawn a random hardsuit. Each hardsuit has the same stats which are ofcourse very poor armor.
  	name = "trader spacesuit spawner"
  	icon_state = "space_supply"
@@ -839,8 +857,24 @@
 		if (4)
 			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
-
 // Mobs ////////////////////////////////////////////////////////
+
+/obj/abstract/map/spawner/mobs/monkeys
+	name = "monkey spawner"
+	icon_state = "mob_monkey"
+	chance = 50
+	to_spawn = list(
+		/mob/living/carbon/monkey,
+		/mob/living/carbon/monkey/tajara,
+		/mob/living/carbon/monkey/skrell,
+		/mob/living/carbon/monkey/unathi,
+		/mob/living/carbon/monkey/grey,
+		/mob/living/carbon/monkey/mushroom,
+		/mob/living/carbon/monkey/rock,
+		/mob/living/carbon/monkey/diona,
+		/mob/living/carbon/monkey/skellington,
+		/mob/living/carbon/monkey/skellington/plasma)
+
 
 /obj/abstract/map/spawner/mobs/carp
 	name = "carp spawner"
@@ -853,18 +887,14 @@
 	icon_state = "mob_lizard"
 	amount = 2
 	chance = 50
-	to_spawn = list(/mob/living/simple_animal/lizard)
+	to_spawn = list(/mob/living/simple_animal/hostile/lizard)
 
 /obj/abstract/map/spawner/mobs/mouse
 	name = "mouse spawner"
 	icon_state = "mob_mouse"
 	amount = 2
 	chance = 50
-	to_spawn = list(
-		/mob/living/simple_animal/mouse/brown,
-		/mob/living/simple_animal/mouse/gray,
-		/mob/living/simple_animal/mouse/white,
-		)
+	to_spawn = list(/mob/living/simple_animal/mouse/common)
 
 /obj/abstract/map/spawner/mobs/bear
 	name = "bear spawner"
@@ -894,6 +924,13 @@
 		/mob/living/simple_animal/hostile/wolf/alpha,
 		/mob/living/simple_animal/hostile/wolf/alpha,
 		)
+
+/obj/abstract/map/spawner/mobs/deer
+	name = "deer spawner"
+	icon_state = "mob_deer"
+	amount = 5
+	to_spawn = list(/mob/living/simple_animal/hostile/deer)
+
 /obj/abstract/map/spawner/mobs/humanoid/wiz
 	name = "wizard spawner"
 	icon_state = "mob_wiz"
@@ -904,13 +941,51 @@
 /obj/abstract/map/spawner/mobs/medivault
 	name = "medivault spawner"
 	icon_state = "mob_medivault"
-	chance = 50
+	chance = 60
 	to_spawn = list(
-		/mob/living/simple_animal/hostile/monster/cyber_horror/Tajaran,
-		/mob/living/simple_animal/hostile/monster/cyber_horror,
 		/mob/living/simple_animal/hostile/necro/skeleton,
+		/mob/living/simple_animal/hostile/necro/skeleton,
+		/mob/living/simple_animal/hostile/necro/skeleton,
+		/mob/living/simple_animal/hostile/necro/zombie/leatherman,
+		/mob/living/simple_animal/hostile/necro/zombie/ghoul,
+		/mob/living/simple_animal/hostile/necro/zombie/ghoul,
+		/mob/living/simple_animal/hostile/necro/zombie/ghoul,
+		/mob/living/simple_animal/hostile/necro/zombie,
+		/mob/living/simple_animal/hostile/necro/zombie,
+		/mob/living/simple_animal/hostile/necro/zombie,
 		/mob/living/simple_animal/hostile/necro/zombie,
 		)
+
+/obj/abstract/map/spawner/misc/medivault
+	name = "medivault loot spawner"
+	icon_state = "loot_medivault"
+	chance = 80
+	amount = 1
+	jiggle = 5
+	to_spawn = list(/obj/item/weapon/dnainjector/nofail/polymorph,
+	/obj/item/weapon/dnainjector/nofail/polymorph,
+	/obj/item/weapon/dnainjector/nofail/telemut,
+	/obj/item/weapon/dnainjector/nofail/telemut,
+	/obj/item/weapon/dnainjector/nofail/randompower,
+	/obj/item/weapon/dnainjector/nofail/randompower,
+	/obj/item/weapon/dnainjector/nofail/randompower,
+	/obj/item/weapon/dnainjector/nofail/hulkmut,
+	/obj/item/weapon/dnainjector/nofail/nobreath,
+	/obj/item/weapon/dnainjector/nofail/nobreath,
+	/obj/item/weapon/storage/firstaid/adv,
+	/obj/item/weapon/storage/firstaid/adv,
+	/obj/item/weapon/storage/firstaid/adv,
+	/obj/item/weapon/storage/pill_bottle/hyperzine,
+	/obj/item/weapon/storage/pill_bottle/hyperzine,
+	/obj/item/weapon/reagent_containers/glass/beaker/mednanobots,
+	/obj/item/weapon/reagent_containers/glass/beaker/mednanobots,
+	/obj/item/weapon/gun/energy/laser/smart,
+	/obj/item/weapon/gun/energy/laser/pistol,
+	/obj/item/weapon/gun/energy/laser/pistol,
+	/obj/item/weapon/gun/projectile/shotgun/pump/combat,
+
+
+)
 
 // Robutts /////////////////////////////////////////////////////
 
@@ -1081,7 +1156,7 @@
 		/obj/item/clothing/accessory/medal/gold/heroism,
 		/obj/item/clothing/accessory/storage/webbing,
 		/obj/item/clothing/suit/armor/laserproof,
-		/obj/item/clothing/accessory/holster,
+		/obj/item/clothing/accessory/holster/handgun,
 		/obj/item/clothing/glasses/scanner/night,
 		/obj/item/clothing/head/collectable/petehat,
 		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
@@ -1099,6 +1174,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
 		/obj/item/mounted/frame/painting
 )
+
 
 /obj/abstract/map/spawner/safe/medical
 	name = "safe medical spawner"
@@ -1140,7 +1216,7 @@
 	/obj/item/weapon/gun/projectile/deagle/gold,
 	/obj/item/weapon/bikehorn,
 	/obj/item/weapon/storage/box/emps,
-	/obj/item/weapon/gun/projectile/automatic/mini_uzi,
+	/obj/item/weapon/gun/projectile/automatic/uzi,
 	/obj/item/weapon/melee/energy/axe/rusty,
 	/obj/item/weapon/gun/projectile/russian,
 	/obj/item/weapon/gun/mahoguny,
@@ -1155,7 +1231,7 @@
 	/obj/item/clothing/accessory/storage/webbing,
 	/obj/item/clothing/under/sexyclown,
 	/obj/item/clothing/suit/armor/laserproof,
-	/obj/item/clothing/accessory/holster,
+	/obj/item/clothing/accessory/holster/handgun,
 	/obj/item/clothing/head/helmet/siren,
 	/obj/item/clothing/glasses/scanner/night,
 	/obj/item/clothing/head/collectable/petehat,

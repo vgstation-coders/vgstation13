@@ -75,7 +75,7 @@
 				working = 0
 				return 1
 
-			playsound(get_turf(src), 'sound/machines/Ping.ogg', 50, 1) //User feedback
+			playsound(src, 'sound/machines/Ping.ogg', 50, 1) //User feedback
 			to_chat(user, "<span class='notice'>\The [src] pings softly. A small message appears on its HUD, instructing to not move until finished.")
 
 			component_interaction(M, user) //Our job is done here, we transfer to the second proc (it needs to be recalled if needed)
@@ -189,4 +189,4 @@
 	remove_from_storage(R, M)
 	M.component_parts += R
 	//Update the machine's parts
-	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1) //User feedback
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1) //User feedback

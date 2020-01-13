@@ -52,7 +52,7 @@
 		E.reliability = round(rand(E.reliability/3,E.reliability))
 	else
 		E.forceMove(get_turf(src))
-		E.destroy()
+		qdel(E)
 
 /obj/effect/decal/mecha_wreckage/bullet_act(var/obj/item/projectile/Proj)
 	return
@@ -82,12 +82,12 @@
 	return provided
 
 /obj/effect/decal/mecha_wreckage/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(isemptylist(welder_salvage))
 			to_chat(user, "You don't see anything that can be cut with [W].")
 			return
-		if (WT.remove_fuel(0,user))
+		if (WT.remove_fuel(1,user))
 			var/type = prob(70)?pick(welder_salvage):null
 			if(type)
 				var/N = new type(get_turf(user))
@@ -97,7 +97,6 @@
 			else
 				to_chat(user, "You failed to salvage anything valuable from [src].")
 		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 			return
 	if(iswirecutter(W))
 		if(isemptylist(wirecutters_salvage))

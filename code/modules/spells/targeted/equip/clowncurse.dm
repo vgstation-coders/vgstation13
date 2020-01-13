@@ -2,6 +2,8 @@
 	name = "The Clown Curse"
 	desc = "A curse that will turn its victim into a miserable clown."
 	abbreviation = "CC"
+	user_type = USER_TYPE_WIZARD
+	specialization = SSOFFENSIVE
 
 	school = "evocation"
 	charge_max = 300
@@ -49,6 +51,7 @@
 	name = "The Elf Curse"
 	desc = "A curse that will turn its victim into a miserable christmas elf."
 	abbreviation = "EC"
+	holiday_required = list(XMAS)
 
 	hud_state = "wiz_elf"
 

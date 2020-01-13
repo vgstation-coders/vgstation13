@@ -36,7 +36,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	icon_state = "0-1"
 	var/d1 = 0								// cable direction 1 (see above)
 	var/d2 = 1								// cable direction 2 (see above)
-	plane = ABOVE_PLATING_PLANE
+	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in New()
 	layer = WIRE_LAYER
 	var/obj/item/device/powersink/attached	// holding this here for qdel
 	var/_color = "red"
@@ -48,8 +48,8 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/oldnewavail = 0
 	var/oldload = 0
 
-	holomap      = TRUE
-	auto_holomap = TRUE
+/obj/structure/cable/supports_holomap()
+	return TRUE
 
 /obj/structure/cable/yellow
 	_color = "yellow"
@@ -83,6 +83,7 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/New(loc)
 	..(loc)
 
+	reset_plane()
 	cableColor(_color)
 
 	// ensure d1 & d2 reflect the icon_state for entering and exiting cable
@@ -99,6 +100,10 @@ By design, d1 is the smallest direction and d2 is the highest
 		hide(T.intact)
 
 	cable_list += src		//add it to the global cable list
+
+/obj/structure/cable/initialize()
+	..()
+	add_self_to_holomap()
 
 /obj/structure/cable/Destroy()			// called when a cable is deleted
 	if(powernet)
@@ -117,7 +122,10 @@ By design, d1 is the smallest direction and d2 is the highest
 	attached = null
 	..()								// then go ahead and delete the cable
 
-/obj/structure/cable/forceMove()
+/obj/structure/cable/proc/reset_plane() //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
+	plane = ABOVE_PLATING_PLANE
+
+/obj/structure/cable/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	.=..()
 
 	if(powernet)
@@ -187,8 +195,8 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(T.intact)
 		return
 
-	if(iswirecutter(W))
-		if(shock(user, 50))
+	if(W.sharpness >= 1)
+		if(shock(user, 50, W.siemens_coefficient))
 			return
 		cut(user, T)
 		return
@@ -202,14 +210,14 @@ By design, d1 is the smallest direction and d2 is the highest
 			R.is_empty()
 	else if(istype(W, /obj/item/device/multitool))
 		if((powernet) && (powernet.avail > 0))		// is it powered?
-			to_chat(user, "<SPAN CLASS='warning'>[powernet.avail]W in power network.</SPAN>")
+			to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.load)] - Available: [format_watts(powernet.avail)].</SPAN>")
 		else
 			to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
 
 		shock(user, 5, 0.2)
 	else
 		if(src.d1 && W.is_conductor()) // d1 determines if this is a cable end
-			shock(user, 50, 0.7)
+			shock(user, 50, W.siemens_coefficient)
 
 	src.add_fingerprint(user)
 
@@ -219,6 +227,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			var/mob/living/simple_animal/mouse/N = M
 			M.delayNextAttack(10)
 			M.visible_message("<span class='danger'>[M] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span>")
+			flick(N.icon_eat, N)
 			shock(M, 50)
 			if(prob(5) && N.can_chew_wires)
 				var/turf/T = src.loc
@@ -504,3 +513,6 @@ By design, d1 is the smallest direction and d2 is the highest
 		return
 
 	rebuild_from()
+
+/obj/structure/cable/proc/hasDir(var/dir)
+	return (d1 == dir || d2 == dir)

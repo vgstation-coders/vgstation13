@@ -9,8 +9,9 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 0)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_restricted = list("Plasmaman")
-	clothing_flags = PLASMAGUARD
+	species_restricted = list(PLASMAMAN_SHAPED)
+	species_fit = list(PLASMAMAN_SHAPED)
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	pressure_resistance = 40 * ONE_ATMOSPHERE //we can't change, so some resistance is needed
 
 	icon_state = "plasmaman_suit"
@@ -19,8 +20,7 @@
 	var/next_extinguish=0
 	var/extinguish_cooldown=10 SECONDS
 
-/obj/item/clothing/suit/space/plasmaman/proc/Extinguish(var/mob/user)
-	var/mob/living/carbon/human/H=user
+/obj/item/clothing/suit/space/plasmaman/proc/Extinguish(var/mob/living/carbon/human/H)
 	if(next_extinguish > world.time)
 		return
 
@@ -28,12 +28,19 @@
 	to_chat(H, "<span class='warning'>Your suit automatically extinguishes the fire.</span>")
 	H.ExtinguishMob()
 
+/obj/item/clothing/suit/space/plasmaman/proc/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	if(H.bodytemperature < T0C+37)
+		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
+	else
+		H.bodytemperature = max(H.bodytemperature-5,T0C+37)
+
 /obj/item/clothing/head/helmet/space/plasmaman
 	name = "plasmaman helmet"
 	desc = "A special containment helmet designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
-	clothing_flags = PLASMAGUARD
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	species_restricted = list("Plasmaman")
+	species_restricted = list(PLASMAMAN_SHAPED)
+	species_fit = list(PLASMAMAN_SHAPED)
 	eyeprot = 0
 
 	icon_state = "plasmaman_helmet0"
@@ -80,6 +87,10 @@
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
+/obj/item/clothing/head/helmet/space/plasmaman/atmostech/New()
+	actions_types += /datum/action/item_action/toggle_helmet_mask
+	..()
+
 /obj/item/clothing/suit/space/plasmaman/engineer
 	name = "plasmaman engineer suit"
 	icon_state = "plasmamanEngineer_suit"
@@ -95,6 +106,10 @@
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 1
+
+/obj/item/clothing/head/helmet/space/plasmaman/engineer/New()
+	actions_types += /datum/action/item_action/toggle_helmet_mask
+	..()
 
 /obj/item/clothing/suit/space/plasmaman/engineer/ce
 	name = "plasmaman chief engineer suit"
@@ -198,14 +213,14 @@
 	icon_state = "plasmamanMiner_suit"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE|CONTAINPLASMAMAN
 
 /obj/item/clothing/head/helmet/space/plasmaman/miner
 	name = "plasmaman miner helmet"
 	icon_state = "plasmamanMiner_helmet0"
 	base_state = "plasmamanMiner_helmet"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE|CONTAINPLASMAMAN
 
 
 // MEDSCI
@@ -257,6 +272,10 @@
 	icon_state = "plasmamanScience_helmet0"
 	base_state = "plasmamanScience_helmet"
 
+/obj/item/clothing/head/helmet/space/plasmaman/science/New()
+	actions_types += /datum/action/item_action/toggle_helmet_mask
+	..()
+
 /obj/item/clothing/suit/space/plasmaman/science/rd
 	name = "plasmaman research director suit"
 	icon_state = "plasmaman_RD"
@@ -280,6 +299,15 @@
 	base_state = "plasmamanSecurity_helmet"
 	armor = list(melee = 40, bullet = 15, laser = 35,energy = 5, bomb = 35, bio = 100, rad = 20)
 	eyeprot = 1
+
+/obj/item/clothing/suit/space/plasmaman/security/detective
+	name = "plasmaman detective suit"
+	icon_state = "plasmamanDetective_suit"
+
+/obj/item/clothing/head/helmet/space/plasmaman/security/detective
+	name = "plasmaman detective helmet"
+	icon_state = "plasmamanDetective_helmet0"
+	base_state = "plasmamanDetective_helmet"
 
 /obj/item/clothing/suit/space/plasmaman/security/hos
 	name = "plasmaman head of security suit"
@@ -338,7 +366,7 @@
 
 //NUKEOPS
 
-/obj/item/clothing/suit/space/plasmaman/nuclear
+/obj/item/clothing/suit/space/plasmaman/nuclear //should just replace this with a ref to the normal suit
 	name = "blood red plasmaman suit"
 	icon_state = "plasmaman_Nukeops"
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)

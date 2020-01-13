@@ -73,11 +73,10 @@
 //The return of data disks?? Just for transferring between genetics machine/cloning machine.
 //TO-DO: Make the genetics machine accept them.
 /obj/item/weapon/disk/data
-	name = "Cloning Data Disk"
-	icon = 'icons/obj/cloning.dmi'
-	icon_state = "datadisk0" //Gosh I hope syndies don't mistake them for the nuke disk.
-	item_state = "card-id"
-	w_class = W_CLASS_TINY
+	name = "cloning data disk"
+	desc = "A disk for storing DNA data, and to transfer it between a cloning console and a DNA modifier."
+	icon = 'icons/obj/datadisks.dmi'
+	icon_state = "disk_cloning" //Gosh I hope syndies don't mistake them for the nuke disk.
 	var/datum/dna2/record/buf=null
 	var/list/datum/block_label/labels[DNA_SE_LENGTH] //This is not related to cloning, these are colored tabs for Genetics machinery. Multipurpose floppies, why not?
 	var/read_only = 0 //Well,it's still a floppy disk
@@ -147,11 +146,6 @@
 	return selected
 
 //Disk stuff.
-/obj/item/weapon/disk/data/New()
-	..()
-	var/diskcolor = pick(0,1,2)
-	icon_state = "datadisk[diskcolor]"
-
 /obj/item/weapon/disk/data/attack_self(mob/user as mob)
 	read_only = !read_only
 	to_chat(user, "You flip the write-protect tab to [read_only ? "protected" : "unprotected"].")
@@ -216,7 +210,6 @@
 					if((G.mind && (G.mind.current.stat != DEAD) ||  G.mind != clonemind))
 						return FALSE
 
-
 	heal_level = rand(10,40) //Randomizes what health the clone is when ejected
 	working = TRUE //One at a time!!
 	locked = TRUE
@@ -227,6 +220,8 @@
 
 	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna = TRUE)
 	occupant = H
+	H.times_cloned = R.times_cloned +1
+	H.talkcount = R.talkcount
 
 	if(!connected.emagged)
 		icon_state = "pod_1"
@@ -234,6 +229,9 @@
 		icon_state = "pod_e"
 
 	connected.update_icon()
+
+	if(isplasmaman(H))
+		H.fire_sprite = "Plasmaman"
 
 	//Get the clone body ready
 	H.dna = R.dna.Clone()
@@ -256,28 +254,10 @@
 	H.ckey = R.ckey
 	to_chat(H, "<span class='notice'><b>Consciousness slowly creeps over you as your body regenerates.</b><br><i>So this is what cloning feels like?</i></span>")
 
-	// -- Mode/mind specific stuff goes here
-
-	if(isrev(H) || isrevhead(H))
-		ticker.mode.update_all_rev_icons() //So the icon actually appears
-	if(isnukeop(H))
-		ticker.mode.update_all_synd_icons()
-	if (iscult(H))
-		ticker.mode.add_cultist(occupant.mind)
-		ticker.mode.update_all_cult_icons() //So the icon actually appears
-	if(iswizard(H) || isapprentice(H))
-		ticker.mode.update_all_wizard_icons()
-	if(("\ref[H.mind]" in ticker.mode.necromancer) || (H.mind in ticker.mode.risen))
-		ticker.mode.update_all_necro_icons()
-	if(("\ref[H.mind]" in ticker.mode.implanter) || (H.mind in ticker.mode.implanted))
-		ticker.mode.update_traitor_icons_added(H.mind) //So the icon actually appears
-	if(("\ref[H.mind]" in ticker.mode.thralls) || (H.mind in ticker.mode.enthralled))
-		ticker.mode.update_vampire_icons_added(H.mind)
-	if(H.mind && H.mind.wizard_spells)
-		for(var/spell/spell_to_add in H.mind.wizard_spells)
-			H.add_spell(spell_to_add)
-
-	// -- End mode specific stuff
+	if (H.mind.miming)
+		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
+		if (H.mind.miming == MIMING_OUT_OF_CHOICE)
+			H.add_spell(new /spell/targeted/oathbreak/)
 
 	H.UpdateAppearance()
 	H.set_species(R.dna.species)
@@ -317,14 +297,15 @@
 			//Premature clones may have brain damage.
 			occupant.adjustBrainLoss(-1*time_coeff) //Ditto above
 
-			//So clones don't die of oxyloss in a running pod.
-			if (occupant.reagents.get_reagent_amount(INAPROVALINE) < 30)
-				occupant.reagents.add_reagent(INAPROVALINE, 60)
-
 			var/mob/living/carbon/human/H = occupant
 
-			if(istype(H.species, /datum/species/vox) & occupant.reagents.get_reagent_amount(NITROGEN) < 30)
-				occupant.reagents.add_reagent(NITROGEN, 60)
+			if(isvox(H))
+				if(occupant.reagents.get_reagent_amount(NITROGEN) < 30)
+					occupant.reagents.add_reagent(NITROGEN, 60)
+
+			//So clones don't die of oxyloss in a running pod.
+			else if(occupant.reagents.get_reagent_amount(INAPROVALINE) < 30) //Done like this because inaprovaline is toxic to vox
+				occupant.reagents.add_reagent(INAPROVALINE, 60)
 
 			//Also heal some oxyloss ourselves because inaprovaline is so bad at preventing it!!
 			occupant.adjustOxyLoss(-4)
@@ -391,7 +372,7 @@
 			to_chat(user, "System unlocked.")
 	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
 		if(user.drop_item(W))
-			playsound(get_turf(src), 'sound/machines/juicerfast.ogg', 30, 1)
+			playsound(src, 'sound/machines/juicerfast.ogg', 30, 1)
 			to_chat(user, "<span class='notice'>\The [src] processes \the [W].</span>")
 			biomass += BIOMASS_CHUNK
 			qdel(W)
@@ -452,8 +433,8 @@
 
 	return TRUE
 
-/obj/machinery/cloning/clonepod/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!occupant || occupant == usr || (!ishuman(usr) && !isrobot(usr)) || usr.incapacitated() || usr.lying)
+/obj/machinery/cloning/clonepod/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	if(!occupant || occupant == usr || (!ishigherbeing(usr) && !isrobot(usr)) || usr.incapacitated() || usr.lying)
 		return
 	if(!istype(over_location) || over_location.density)
 		return
@@ -466,7 +447,7 @@
 			return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 
@@ -521,7 +502,7 @@
 		else
 	return
 
-/obj/machinery/cloning/clonepod/MouseDrop_T(obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
+/obj/machinery/cloning/clonepod/MouseDropTo(obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
 	var/busy = FALSE
 	var/visible_message = FALSE
 
@@ -531,7 +512,7 @@
 	if(issilicon(user))
 		return //*buzz
 
-	if(!Adjacent(user) || !user.Adjacent(src) || M.loc == user || !isturf(M.loc) || !isturf(user.loc) || user.loc==null)
+	if(!Adjacent(user) || !user.Adjacent(src) || !user.Adjacent(M) || M.loc == user || !isturf(M.loc) || !isturf(user.loc) || user.loc==null)
 		return
 
 	if(user.incapacitated() || user.lying)
@@ -548,7 +529,7 @@
 			visible_message = TRUE // Prevent chatspam when multiple meat are near
 
 		if(visible_message)
-			playsound(get_turf(src), 'sound/machines/juicer.ogg', 30, 1)
+			playsound(src, 'sound/machines/juicer.ogg', 30, 1)
 			visible_message("<span class = 'notice'>[src] sucks in and processes the nearby biomass.</span>")
 		busy = FALSE
 
@@ -557,7 +538,7 @@
 
 	if(occupant && prob(5))
 		visible_message("<span class='notice'>[src] buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
-		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
+		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		locked = FALSE
 		go_out()
 

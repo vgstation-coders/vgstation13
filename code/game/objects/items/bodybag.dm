@@ -39,7 +39,7 @@
 	icon_closed = "bodybag_closed"
 	icon_opened = "bodybag_open"
 	density = 0
-
+	sound_file = 'sound/items/zip.ogg'
 
 /obj/structure/closet/body_bag/attackby(W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/sheet/metal))
@@ -50,7 +50,7 @@
 		new /obj/structure/morgue(src.loc)
 		qdel(src)
 	else if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
-		set_tiny_label(user)
+		set_tiny_label(user, maxlength=32)
 	else if(iswirecutter(W))
 		remove_label()
 		to_chat(user, "<span class='notice'>You cut the tag off the bodybag.</span>")
@@ -63,17 +63,9 @@
 	..()
 	src.overlays.len = 0
 
-
-/obj/structure/closet/body_bag/close()
-	if(..())
-		density = 0
-		return 1
-	return 0
-
-
-/obj/structure/closet/body_bag/MouseDrop(over_object, src_location, over_location)
+/obj/structure/closet/body_bag/MouseDropFrom(over_object, src_location, over_location)
 	..()
-	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+	if(!usr.incapacitated() && over_object == usr && (in_range(src, usr) || usr.contents.Find(src)))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 		if(opened)
@@ -91,6 +83,34 @@
 		icon_state = icon_closed
 	else
 		icon_state = icon_opened
+
+/obj/structure/closet/body_bag/open(mob/user)
+
+	icon_closed = "bodybag_closed"
+
+	var/mob/living/L
+	for (L in src)
+		if (ishuman(L))
+			if (!L.isStunned() && !L.resting)
+				if(!istype(user))
+					return 1
+				if (do_after (user, src, 35)) //delay if someone is standing up
+					return ..()
+				else
+					return 1 //prevents "it won't budge! messages from [closets.dm]
+	return ..()
+
+/obj/structure/closet/body_bag/close(mob/user)
+	var/mob/living/L
+	for (L in get_turf(src))
+		if (ishuman(L))
+			if (!L.isStunned() && !L.resting)
+				if (do_after (user, src, 35))
+					icon_closed = "bodybag_closed_alive"
+					return ..()
+				else
+					return 1
+	return ..()
 
 //Cryobag (statis bag) below, not currently functional it seems
 
@@ -126,8 +146,8 @@
 		O.desc = "Pretty useless now.."
 		qdel(src)
 
-/obj/structure/closet/body_bag/cryobag/MouseDrop(over_object, src_location, over_location)
-	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+/obj/structure/closet/body_bag/cryobag/MouseDropFrom(over_object, src_location, over_location)
+	if(!usr.incapacitated() && over_object == usr && (in_range(src, usr) || usr.contents.Find(src)))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 		to_chat(usr, "<span class='warning'>You can't fold that up anymore.</span>")

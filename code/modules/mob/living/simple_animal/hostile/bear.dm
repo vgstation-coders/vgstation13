@@ -26,6 +26,7 @@
 	melee_damage_lower = 20
 	melee_damage_upper = 30
 	size = SIZE_BIG
+	speak_override = TRUE
 
 	//Space bears aren't affected by atmos.
 	min_oxy = 0
@@ -74,8 +75,32 @@
 	health = 75
 	melee_damage_lower=10
 	melee_damage_upper=40
+	faction = "mining"
 
-/mob/living/simple_animal/hostile/bear/Move()
+/mob/living/simple_animal/hostile/bear/spare
+	name = "spare bear"
+	desc = "This bear has adapted a form of camouflage from generations of natural selection in which the omnivores scavenge from space stations and their dumpsters. Its golden skin fools card scanners into opening the door."
+	health = 300
+	maxHealth = 300
+	melee_damage_lower = 15
+	melee_damage_upper = 35
+	icon_state = "sparebear"
+	icon_dead = "sparebear_dead"
+	default_icon_floor = "sparebear"
+	default_icon_space = "sparebear"
+
+/mob/living/simple_animal/hostile/bear/spare/getarmor(var/def_zone, var/type)
+	if(type == "laser")
+		return 80
+	return 10
+
+/mob/living/simple_animal/hostile/bear/spare/getarmorabsorb()
+	return 25
+
+/mob/living/simple_animal/hostile/bear/spare/GetAccess()
+	return get_all_accesses()
+
+/mob/living/simple_animal/hostile/bear/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(stat != DEAD)
 		if(loc && istype(loc,/turf/space))
@@ -115,7 +140,7 @@
 					if(stance_step in list(1,4,7)) //every 3 ticks
 						var/action = pick( list( "growls at [target]", "stares angrily at [target]", "prepares to attack [target]", "closely watches [target]" ) )
 						if(action)
-							emote(action)
+							emote("me",, action)
 			if(!found_mob)
 				stance_step--
 
@@ -126,7 +151,7 @@
 
 		if(HOSTILE_STANCE_ATTACKING)
 			if(stance_step >= 20)	//attacks for 20 ticks, then it gets tired and needs to rest
-				emote( "is worn out and needs to rest" )
+				emote("me",,"is worn out and needs to rest" )
 				stance = HOSTILE_STANCE_TIRED
 				stance_step = 0
 				walk(src, 0) //This stops the bear's walking
@@ -160,7 +185,7 @@
 /mob/living/simple_animal/hostile/bear/FindTarget()
 	. = ..()
 	if(.)
-		emote("stares alertly at [.]")
+		emote("me",,"stares alertly at [.].")
 		stance = HOSTILE_STANCE_ALERT
 
 /mob/living/simple_animal/hostile/bear/LoseTarget()

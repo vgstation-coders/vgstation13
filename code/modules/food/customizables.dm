@@ -289,6 +289,8 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie
 	name = "pie"
 	icon_state = "piecustom"
+	trash = /obj/item/trash/pietin
+	ingMax = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/cake
 	name = "cake"

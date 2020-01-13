@@ -35,6 +35,8 @@
 				return 0
 			switch(choice)
 				if("Authorize")
+					if(!emergency_shuttle.location == 1)
+						return 
 					src.authorized -= W:registered_name
 					src.authorized += W:registered_name
 					if (src.auth_need - src.authorized.len > 0)
@@ -47,6 +49,7 @@
 						to_chat(world, "<span class='notice'><B>Alert: Shuttle launch time shortened to 10 seconds!</B></span>")
 						emergency_shuttle.online = 1
 						emergency_shuttle.settimeleft(10)
+						emergency_shuttle.was_early_launched = TRUE
 						//src.authorized = null
 						del(src.authorized)
 						src.authorized = list(  )
@@ -75,6 +78,7 @@
 				if("Launch")
 					to_chat(world, "<span class='notice'><B>Alert: Shuttle launch time shortened to 10 seconds!</B></span>")
 					emergency_shuttle.settimeleft( 10 )
+					emergency_shuttle.was_early_launched = TRUE
 					emagged = 1
 					return 1
 				if("Cancel")

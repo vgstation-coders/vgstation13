@@ -124,6 +124,7 @@
 		return FALSE
 
 	playSpecials(curturf,effectin,soundin)
+	teleatom.unlock_from()
 
 	if(istype(teleatom,/obj/item/projectile))
 		var/Xchange = destturf.x - curturf.x
@@ -134,6 +135,11 @@
 		P.override_target_X += Xchange
 		P.override_target_Y += Ychange
 		P.reflected = TRUE//you can now get hit by the projectile you just fired. Careful with portals!
+
+	if(curturf.z != destturf.z)
+		INVOKE_EVENT(teleatom.on_z_transition, list("user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z))
+		for(var/atom/AA in recursive_type_check(teleatom))
+			INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
 
 	if(force_teleport)
 		teleatom.forceMove(destturf,TRUE)

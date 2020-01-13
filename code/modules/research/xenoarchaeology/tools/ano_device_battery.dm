@@ -1,7 +1,3 @@
-#define EFFECT_TOUCH 0
-#define EFFECT_AURA 1
-#define EFFECT_PULSE 2
-
 /obj/item/weapon/anobattery
 	name = "Anomaly power battery"
 	icon = 'icons/obj/xenoarchaeology.dmi'
@@ -114,7 +110,7 @@
 			//process the effect
 			inserted_battery.battery_effect.process()
 			//if someone is holding the device, do the effect on them
-			if(inserted_battery.battery_effect.effect == EFFECT_TOUCH && ismob(src.loc))
+			if(inserted_battery.battery_effect.effect == ARTIFACT_EFFECT_TOUCH && ismob(src.loc))
 				inserted_battery.battery_effect.DoEffectTouch(src.loc)
 
 			//handle charge
@@ -178,6 +174,8 @@
 			inserted_battery.battery_effect.ToggleActivate(1)
 	if(href_list["shutdown"])
 		activated = 0
+		if(inserted_battery.battery_effect.activated)
+			inserted_battery.battery_effect.ToggleActivate(0)
 	if(href_list["starttimer"])
 		timing = 1
 		archived_time = time

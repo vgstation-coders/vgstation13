@@ -7,7 +7,7 @@
 /mob/living/carbon/human/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
 
-	if(a_intent == "hurt" && A.loc != src)
+	if(!is_pacified() && a_intent == "hurt" && A.loc != src)
 		var/special_attack_result = SPECIAL_ATTACK_SUCCESS
 		switch(attack_type) //Special attacks - kicks, bites
 			if(ATTACK_KICK)
@@ -52,9 +52,10 @@
 	else
 		A.attack_stump(src, params)
 
-	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && istype(A, /turf/simulated) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
-		Move(A, get_dir(src,A))
-		delayNextMove(movement_delay()*3,additive=1)
+	if(proximity && isobj(A))
+		var/obj/O = A
+		if(O.material_type)
+			O.material_type.on_use(O, src, null)
 
 /atom/proc/attack_hand(mob/user as mob, params, var/proximity)
 	return
@@ -71,7 +72,7 @@
 	return 0
 
 /mob/living/carbon/human/RestrainedClickOn(var/atom/A)
-	return
+	..()
 
 /mob/living/carbon/human/RangedAttack(var/atom/A)
 	if(!gloves && !mutations.len)
@@ -109,7 +110,7 @@
 /atom/proc/attack_animal(mob/user as mob)
 	return
 /mob/living/RestrainedClickOn(var/atom/A)
-	return
+	..()
 
 /*
 	Monkeys
@@ -143,7 +144,7 @@
 		ML.apply_damage(rand(1,3), BRUTE, dam_zone, armor)
 		for(var/mob/O in viewers(ML, null))
 			O.show_message("<span class='danger'>[name] has bit [ML]!</span>", 1)
-		if(armor >= 2)
+		if(armor >= 100)
 			return
 		if(ismonkey(ML))
 			for(var/datum/disease/D in viruses)
@@ -216,12 +217,12 @@
 	return 0
 
 //Martians
-/mob/living/carbon/martian/UnarmedAttack(atom/A)
+/mob/living/carbon/complex/martian/UnarmedAttack(atom/A)
 	if(ismob(A))
 		delayNextAttack(10)
 	A.attack_martian(src)
 
-/mob/living/carbon/martian/RangedAttack(atom/A)
+/mob/living/carbon/complex/martian/RangedAttack(atom/A)
 	if(mutations.len)
 		if((M_LASER in mutations) && a_intent == I_HURT)
 			LaserEyes(A) // moved into a proc below

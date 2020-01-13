@@ -276,7 +276,7 @@
 	if(!A)
 		return 0
 
-	playsound(get_turf(src), fire_sound, 50, 1)
+	playsound(src, fire_sound, 50, 1)
 
 
 	var/turf/T = get_step(src, get_turf(src))

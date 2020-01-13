@@ -13,6 +13,11 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
                           8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10)
 */
 
+
+// Returns y so that y/x = a/b.
+#define RULE_OF_THREE(a, b, x) ((a*x)/b)
+#define tan(x) (sin(x)/cos(x))
+
 /proc/Atan2(x, y)
 	if (!x && !y)
 		return 0
@@ -20,16 +25,60 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 	var/invcos = arccos(x / sqrt(x * x + y * y))
 	return y >= 0 ? invcos : -invcos
 
+#if DM_VERSION < 513
 proc/arctan(x)
 	var/y=arcsin(x/sqrt(1+x*x))
 	return y
+#endif
 
 /proc/Ceiling(x, y = 1)
 	. = -round(-x / y) * y
 
+/proc/sgn(const/i)
+	if(i > 0)
+		return 1
+	else if(i < 0)
+		return -1
+	else
+		return 0
+
+// -- Returns a Lorentz-distributed number.
+// -- The probability density function has centre x0 and width s.
+
+/proc/lorentz_distribution(var/x0, var/s)
+	var/x = rand()
+	var/y = s*tan_rad(PI*(x-0.5)) + x0
+	return y
+
+// -- Returns the Lorentz cummulative distribution of the real x.
+
+/proc/lorentz_cummulative_distribution(var/x, var/x0, var/s)
+	var/y = (1/PI)*ToRadians(arctan((x-x0)/s)) + 1/2
+	return y
+
+// -- Returns an exponentially-distributed number.
+// -- The probability density function has mean lambda
+
+/proc/exp_distribution(var/desired_mean)
+	if (desired_mean <= 0)
+		desired_mean = 1 // Let's not allow that to happen
+	var/lambda = 1/desired_mean
+	var/x = rand()
+	while (x == 1)
+		x = rand()
+	var/y = -(1/lambda)*log(1-x)
+	return y
+
+// -- Returns the Lorentz cummulative distribution of the real x, with mean lambda
+
+/proc/exp_cummulative_distribution(var/x, var/lambda)
+	var/y = 1 - E**(lambda*x)
+	return y
+
+
 //Moved to macros.dm to reduce pure calling overhead, this was being called shitloads, like, most calls of all procs.
 /*
-/proc/Clamp(const/val, const/min, const/max)
+/proc/clamp(const/val, const/min, const/max)
 	if (val <= min)
 		return min
 
@@ -139,7 +188,7 @@ proc/arctan(x)
 /proc/unmix(x, a, b, min = 0, max = 1)
 	if(a==b)
 		return 1
-	return Clamp( (b - x)/(b - a), min, max )
+	return clamp( (b - x)/(b - a), min, max )
 
 /proc/Mean(...)
 	var/values 	= 0
@@ -183,12 +232,16 @@ proc/arctan(x)
 /proc/Tan(const/x)
 	return sin(x) / cos(x)
 
+/proc/tan_rad(const/x) // This one assumes that x is in radians.
+	return Tan(ToDegrees(x))
+
+
 /proc/ToDegrees(const/radians)
-					// 180 / Pi
+	// 180 / Pi
 	return radians * 57.2957795
 
 /proc/ToRadians(const/degrees)
-					// Pi / 180
+	// Pi / 180
 	return degrees * 0.0174532925
 
 // min is inclusive, max is exclusive
@@ -251,3 +304,83 @@ proc/arctan(x)
 	var/mult = input/scale
 	var/trinum = (sqrt(8 * mult + 1) - 1 ) / 2
 	return trinum * scale
+
+// Input: a number
+// Returns: the number of bits set
+/proc/count_set_bitflags(var/input)
+	. = 0
+	while(input)
+		input &= (input - 1)
+		.++
+
+#if UNIT_TESTS_ENABLED
+/datum/unit_test/count_set_bitflags/start()
+	assert_eq(count_set_bitflags(0), 0)
+	assert_eq(count_set_bitflags(1|2|4|8|16|32|64|128|256|512|1024|2048|4096|8192|16384|32768|65535|131072|262144|524288|1048576|2097152|4194304|8388608), 23)
+	assert_eq(count_set_bitflags(1), 1)
+	assert_eq(count_set_bitflags(2), 1)
+	assert_eq(count_set_bitflags(3), 2)
+	assert_eq(count_set_bitflags(1|2), 2)
+	assert_eq(count_set_bitflags(1|4), 2)
+	assert_eq(count_set_bitflags(1|65536), 2)
+	assert_eq(count_set_bitflags(65536|32768), 2)
+	assert_eq(count_set_bitflags(1|4|16), 3)
+#endif
+
+// Basic geometry things.
+
+/vector/
+	var/x = 0
+	var/y = 0
+
+/vector/New(var/x, var/y)
+	src.x = x
+	src.y = y
+
+/vector/proc/duplicate()
+	return new /vector(x, y)
+
+/vector/proc/euclidian_norm()
+	return sqrt(x*x + y*y)
+
+/vector/proc/squared_norm()
+	return x*x + y*y
+
+/vector/proc/normalize()
+	var/norm = euclidian_norm()
+	x = x/norm
+	y = y/norm
+	return src
+
+/vector/proc/chebyshev_norm()
+	return max(abs(x), abs(y))
+
+/vector/proc/chebyshev_normalize()
+	var/norm = chebyshev_norm()
+	x = x/norm
+	y = y/norm
+	return src
+
+/vector/proc/is_integer()
+	return IS_INT(x) && IS_INT(y)
+
+/atom/movable/proc/vector_translate(var/vector/V, var/delay)
+	var/turf/T = get_turf(src)
+	var/turf/destination = locate(T.x + V.x, T.y + V.y, z)
+	var/vector/V_norm = V.duplicate()
+	V_norm.chebyshev_normalize()
+	if (!V_norm.is_integer())
+		return
+	var/turf/destination_temp
+	while (destination_temp != destination)
+		destination_temp = locate(T.x + V_norm.x, T.y + V_norm.y, z)
+		forceMove(destination_temp, glide_size_override = DELAY2GLIDESIZE(delay))
+		T = get_turf(src)
+		sleep(delay + world.tick_lag) // Shortest possible time to sleep
+
+/atom/proc/get_translated_turf(var/vector/V)
+	var/turf/T = get_turf(src)
+	return locate(T.x + V.x, T.y + V.y, z)
+
+/proc/atoms2vector(var/atom/A, var/atom/B)
+	return new /vector((B.x - A.x), (B.y - A.y)) // Vector from A -> B

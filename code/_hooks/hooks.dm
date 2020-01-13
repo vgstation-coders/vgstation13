@@ -16,10 +16,10 @@
 	var/name = "DefaultHookName"
 	var/list/handlers = list()
 
-	proc/Called(var/list/args) // When the hook is called
-		return 0
+/hook/proc/Called(var/list/args) // When the hook is called
+	return 0
 
-	proc/Setup() // Called when the setup things is ran for the hook, objs contain all objects with that is hooking
+/hook/proc/Setup() // Called when the setup things is ran for the hook, objs contain all objects with that is hooking
 
 /hook_handler
 	// Your hook handler should do this:

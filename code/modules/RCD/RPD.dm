@@ -49,12 +49,6 @@
 		/datum/rcd_schematic/pipe/he_manifold,
 		/datum/rcd_schematic/pipe/he_manifold4w,
 
-		/* Insulated Pipes */
-		/datum/rcd_schematic/pipe/insulated,
-		/datum/rcd_schematic/pipe/insulated_bent,
-		/datum/rcd_schematic/pipe/insulated_manifold,
-		/datum/rcd_schematic/pipe/insulated_4w_manifold,
-
 		/* Disposal Pipes */
 		/datum/rcd_schematic/pipe/disposal,
 		/datum/rcd_schematic/pipe/disposal/bent,
@@ -91,6 +85,8 @@
 /obj/item/device/rcd/rpd/proc/mob_onclickon(var/list/event_args, var/mob/living/L)
 	if (L.get_active_hand() != src)
 		return
+	if(istype(event_args["target"], /mob/living/carbon))
+		return //If we're alt clicking a carbon, let's assume we want to interact with them.
 
 	var/list/modifiers = event_args["modifiers"]
 	modifiers -= list("alt", "shift", "ctrl")
@@ -142,3 +138,15 @@
 	if (selected)
 		return selected.Topic(href, href_list)
 
+/obj/item/device/rcd/rpd/admin
+	name = "experimental Rapid-Piping-Device (RPD)"
+
+/obj/item/device/rcd/rpd/admin/afterattack(var/atom/A, var/mob/user)
+	if(!user.check_rights(R_ADMIN))
+		visible_message("\The [src] disappears into nothing.")
+		qdel(src)
+		return
+	return ..()
+
+/obj/item/device/rcd/rpd/admin/delay(var/mob/user, var/atom/target, var/amount)
+	return TRUE

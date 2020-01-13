@@ -68,6 +68,18 @@
 	category = "Robot"
 	materials = list(MAT_IRON=25000)
 
+/datum/design/robot/ref_torso
+	name = "Cyborg Component (Reinforced robot torso)"
+	desc = "Used to build a reinforced Robot torso."
+	id = "ref_robot_torso"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = MECHFAB
+	build_path = /obj/item/robot_parts/chest/reinforced
+	category = "Robot_Part"
+	materials = list(MAT_IRON=40000, MAT_SILVER=10000, MAT_GOLD=5000, MAT_URANIUM=5000, MAT_DIAMOND=5000, MAT_PLASMA=5000)
+
+
+//Components
 /datum/design/robot/binary_commucation_device
 	name = "Cyborg Component (Binary Communication Device)"
 	desc = "Used to build a binary communication device."
@@ -127,3 +139,63 @@
 	build_path = /obj/item/robot_parts/robot_component/armour
 	category = "Robot_Part"
 	materials = list(MAT_IRON=5000)
+
+/datum/design/robot/ref_binary_commucation_device
+	name = "Cyborg Component (Reinf. Binary Comm. Device)"
+	desc = "Used to build a reinforced binary communication device."
+	id = "robot_ref_bin_comms"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = MECHFAB
+	build_path = /obj/item/robot_parts/robot_component/binary_communication_device/reinforced
+	category = "Robot_Part"
+	materials = list(MAT_IRON=5000, MAT_GOLD=5000)
+
+/datum/design/robot/ref_radio
+	name = "Cyborg Component (Reinforced Radio)"
+	desc = "Used to build a reinforced radio."
+	id = "robot_ref_radio"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = MECHFAB
+	build_path = /obj/item/robot_parts/robot_component/radio/reinforced
+	category = "Robot_Part"
+	materials = list(MAT_IRON=5000, MAT_URANIUM=5000)
+
+/datum/design/robot/ref_actuator
+	name = "Cyborg Component (Reinforced Actuator)"
+	desc = "Used to build an reinforced actuator."
+	id = "robot_ref_actuator"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = MECHFAB
+	build_path = /obj/item/robot_parts/robot_component/actuator/reinforced
+	category = "Robot_Part"
+	materials = list(MAT_IRON=5000, MAT_SILVER=5000)
+
+/datum/design/robot/ref_diagnosis_unit
+	name = "Cyborg Component (Reinforced Diagnosis Unit)"
+	desc = "Used to build a reinforced diagnosis unit."
+	id = "robot_ref_diagnosis_unit"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = MECHFAB
+	build_path = /obj/item/robot_parts/robot_component/diagnosis_unit/reinforced
+	category = "Robot_Part"
+	materials = list(MAT_IRON=5000, MAT_SILVER=5000)
+
+/datum/design/robot/ref_camera
+	name = "Cyborg Component (Reinforced Camera)"
+	desc = "Used to build a reinforced diagnosis unit."
+	id = "robot_ref_camera"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = MECHFAB
+	build_path = /obj/item/robot_parts/robot_component/camera/reinforced
+	category = "Robot_Part"
+	materials = list(MAT_IRON=5000, MAT_PLASMA=5000)
+
+/datum/design/robot/ref_armour
+	name = "Cyborg Component (Reinforced Armor)"
+	desc = "Used to build reinforced cyborg armor."
+	id = "robot_ref_armour"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = MECHFAB
+	build_path = /obj/item/robot_parts/robot_component/armour/reinforced
+	category = "Robot_Part"
+	materials = list(MAT_IRON=5000, MAT_DIAMOND=5000)

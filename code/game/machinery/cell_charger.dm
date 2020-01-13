@@ -15,11 +15,15 @@
 	var/transfer_rate_coeff = 1 //What is the quality of the parts that transfer energy (capacitators) ?
 	var/transfer_efficiency_bonus = 0 //What is the efficiency "bonus" (additive to percentage) from the parts used (scanning module) ?
 	var/chargelevel = -1
+	var/has_beeped = FALSE
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EMAGGABLE
 
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
+
+/obj/machinery/cell_charger/get_cell()
+	return charging
 
 /obj/machinery/cell_charger/New()
 	. = ..()
@@ -75,12 +79,14 @@
 			to_chat(user, "<span class='warning'>There is already a cell in [src].</span>")
 			return
 		else
-			if(areaMaster.power_equip == 0) // There's no APC in this area, don't try to cheat power!
+			var/area/this_area = get_area(src)
+			if(this_area.power_equip == 0) // There's no APC in this area, don't try to cheat power!
 				to_chat(user, "<span class='warning'>[src] blinks red as you try to insert the cell!</span>")
 				return
 
 			if(user.drop_item(W, src))
 				charging = W
+				has_beeped = FALSE
 				user.visible_message("<span class='notice'>[user] inserts a cell into [src].</span>", "<span class='notice'>You insert a cell into [src].</span>")
 				chargelevel = -1
 		updateicon()
@@ -102,7 +108,7 @@
 			spark(src, 5)
 			spawn(15)
 				explosion(src.loc, -1, 1, 3, adminlog = 0) //Overload
-				Destroy(src) //It exploded, rip
+				qdel(src) //It exploded, rip
 			return
 		usr.put_in_hands(charging)
 		charging.add_fingerprint(user)
@@ -134,12 +140,13 @@
 	if(!charging || (stat & (BROKEN|NOPOWER)) || !anchored)
 		return
 
-	if(emagged) //Did someone fuck with the charger ?
-		use_power(transfer_rate*transfer_rate_coeff*10) //Drain all the power
-		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)*0.25) //Lose most of it
-	else
-		use_power(transfer_rate*transfer_rate_coeff) //Snatch some power
-		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)) //Inefficiency (Joule effect + other shenanigans)
+	if(charging.give(transfer_rate*transfer_rate_coeff * (transfer_efficiency+transfer_efficiency_bonus) * (emagged ? 0.25 : 1)))//Inefficiency (Joule effect + other shenanigans)  //Lose most of it if emagged
+		use_power(transfer_rate * transfer_rate_coeff * (emagged ? 10 : 1))  //Drain all the power if emagged
+		if(has_beeped) //It's charging again
+			has_beeped = FALSE
+	if(round(charging.percent() >= 100)&&!has_beeped)
+		playsound(src, 'sound/machines/charge_finish.ogg', 50)
+		has_beeped = TRUE
 
 	updateicon()
 
@@ -180,7 +187,7 @@
 
 /datum/construction/reversible/crank_charger/spawn_result(mob/user as mob)
 	if(result)
-		testing("[user] finished a [result]!")
+//		testing("[user] finished a [result]!")
 
 		new result(get_turf(holder))
 
@@ -207,6 +214,9 @@
 	var/obj/item/weapon/cell/stored = null
 	var/state = 0 //0 if up, 1 if down; only used for icons
 
+/obj/item/device/crank_charger/get_cell()
+	return stored
+
 /obj/item/device/crank_charger/update_icon()
 	if(stored)
 		icon_state = "crankcharger[state ? "-1" : "-0"]"
@@ -231,10 +241,11 @@
 	if(stored)
 		if(stored.charge<stored.maxcharge)
 			user.delayNextAttack(1)
-			stored.charge += 10
+			stored.charge += 100
 			state = !state
 			update_icon()
-			playsound(get_turf(src), 'sound/items/crank.ogg',50,1)
+			stored.updateicon()
+			playsound(src, 'sound/items/crank.ogg',50,1)
 			if(stored.charge>stored.maxcharge)
 				stored.charge = stored.maxcharge
 	else
@@ -242,6 +253,7 @@
 
 /obj/item/device/crank_charger/attack_hand(mob/user)
 	if(stored && user.get_inactive_hand() == src)
+		stored.updateicon()
 		user.put_in_hands(stored)
 		stored = null
 		update_icon()

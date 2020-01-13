@@ -68,8 +68,9 @@
 	var/species_type
 	var/holder_type = /obj/item/weapon/holder/animal	//When picked up, put us into a holder of this type. Dionae use /obj/item/weapon/holder/diona, others - the default one
 														//Set to null to prevent people from picking this mob up!
-	//
-	var/list/callOnLife = list() //
+	var/list/hud_list = list()
+
+	var/event/on_life
 	var/obj/abstract/screen/schematics_background
 	var/shown_schematics_background = 0
 
@@ -79,6 +80,8 @@
 	var/calorie_burning_heat_multiplier = 1		//The heat generated from burning calories is multiplied by this value.
 	var/thermal_loss_multiplier = 1				//The heat the mob loses to the environment is multiplied by this value.
 
-/mob/living/proc/unsubLife(datum/sub)
-	while("\ref[sub]" in callOnLife)
-		callOnLife -= "\ref[sub]"
+	var/datum/component_container/BrainContainer
+
+	var/list/datum/disease2/disease/virus2 = list()
+	var/image/pathogen
+	var/datum/immune_system/immune_system

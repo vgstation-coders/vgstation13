@@ -53,7 +53,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	var/message = "";
 	var/dpt = ""; //the department which will be receiving the message
 	var/priority = -1 ; //Priority of the message being sent
-	var/announceSound = 'sound/vox/bloop.wav'
+	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
 
 /obj/machinery/requests_console/power_change()
@@ -181,13 +181,12 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				dat += text("<A href='?src=\ref[src];setScreen=0'>Continue</A><BR>")
 
 			if(8)	//view messages
-				for (var/obj/machinery/requests_console/Console in allConsoles)
-					if (Console.department == department)
-						Console.newmessagepriority = 0
-						Console.icon_state = "req_comp0"
-						Console.set_light(1)
-				newmessagepriority = 0
-				icon_state = "req_comp0"
+				if(!isAdminGhost(user)) //Do not clear if admin
+					for (var/obj/machinery/requests_console/Console in allConsoles)
+						if (Console.department == department)
+							Console.newmessagepriority = 0
+							Console.icon_state = "req_comp0"
+							Console.set_light(1)
 				for(var/msg in messages)
 					dat += text("[msg]<BR>")
 				dat += text("<A href='?src=\ref[src];setScreen=0'>Back to main menu</A><BR>")
@@ -255,6 +254,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				else
 					priority = -1
 		else
+			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
 			dpt = "";
 			msgVerified = ""
 			msgStamped = ""
@@ -271,6 +271,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				else
 					priority = -1
 		else
+			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
 			message = ""
 			announceAuth = 0
 			screen = 0
@@ -288,7 +289,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		if (msgStamped)
 			sending += msgStamped
 			sending += "<br>"
-		screen = 7 //if it's successful, this will get overrwritten (7 = unsufccessfull, 6 = successfull)
+		screen = 7 //if it's successful, this will get overrwritten (7 = unsuccessfull, 6 = successfull)
 		if (sending)
 			var/pass = 0
 			for (var/obj/machinery/message_server/MS in message_servers)
@@ -302,7 +303,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 				for (var/obj/machinery/requests_console/Console in allConsoles)
 					if (ckey(Console.department) == ckey(href_list["department"]))
-
+						screen = 6
 						switch(priority)
 							if(2)		//High priority
 								if(Console.newmessagepriority < 2)
@@ -310,7 +311,11 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 									Console.icon_state = "req_comp3"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
-									say("PRIORITY Alert in [department]")
+									visible_message("The [src] beeps; <span class='bold'>PRIORITY Alert at [department]</span>")
+									sleep(10)
+									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
+									sleep(10)
+									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
 								Console.messages += "<B><FONT color='red'>High Priority message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[sending]"
 
 		//					if("3")		//Not implemanted, but will be 		//Removed as it doesn't look like anybody intends on implimenting it ~Carn
@@ -329,10 +334,12 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 									Console.icon_state = "req_comp2"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
-									say("Message from [department]")
+									visible_message("The [src] beeps; Message from [department]")
+									sleep(10)
+									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
+									sleep(10)
+									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
 								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[message]"
-
-						screen = 6
 						Console.set_light(2)
 				messages += "<B>Message sent to [dpt]</B><BR>[message]"
 			else
@@ -430,7 +437,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state="req_comp_open"
 			else
 				icon_state="req_comp_rewired"
-	if (isscrewdriver(O))
+	if (O.is_screwdriver(user))
 		if(open)
 			if(!hackState)
 				hackState = 1
@@ -440,9 +447,9 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state="req_comp_open"
 		else
 			to_chat(user, "You can't do much with that.")
-	if(iswrench(O) && open && !departmentType)
+	if(O.is_wrench(user) && open && !departmentType)
 		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 		new /obj/item/stack/sheet/metal (src.loc,2)
 		qdel(src)
 		return

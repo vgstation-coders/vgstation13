@@ -23,10 +23,17 @@
 
 /obj/effect/plantsegment/proc/harvest(var/mob/user)
 	seed.harvest(user, yield_mod = 0.5)
+	after_harvest()
+
+/obj/effect/plantsegment/proc/autoharvest()
+	seed.autoharvest(get_turf(src), yield_mod = 0.5)
+	after_harvest()
+
+/obj/effect/plantsegment/proc/after_harvest()
 	harvest = 0
 	age = mature_time // Since we don't die of old age, there's no need to keep an accurate age count.
 	update_icon()
-	plant_controller.add_plant(src)
+	SSplant.add_plant(src)
 
 /obj/effect/plantsegment/proc/do_thorns(var/mob/living/carbon/human/victim, var/chance)
 	if(!seed || !seed.thorny)
@@ -56,7 +63,7 @@
 	if(victim.get_exposed_body_parts() && prob(chance))
 		if(seed.chems && seed.chems.len)
 			for(var/rid in seed.chems)
-				victim.reagents.add_reagent(rid, Clamp(1, 5, seed.potency/10))
+				victim.reagents.add_reagent(rid, clamp(1, 5, seed.potency/10))
 			to_chat(victim, "<span class='danger'>You are stung by \the [src]!</span>")
 	last_special = world.time
 
@@ -102,7 +109,7 @@
 		var/mob/M = locked[1]
 		if(!user || !istype(user))
 			user = M //Since the event sytem can't hot-potato arguments, for now, assume if noone's trying to free you, then you're trying to free yourself.
-		if(prob(Clamp(140 - seed.potency, 20, 100)))
+		if(prob(clamp(140 - seed.potency, 20, 100)))
 			if(M != user)
 				M.visible_message(\
 					"<span class='notice'>[user.name] frees [M.name] from \the [src].</span>",\

@@ -81,7 +81,7 @@
 			continue
 		choices[A.name]=A
 	if (choices.len==0)
-		testing("Unable to find automations with returntype in [english_list(valid_returntypes)]!")
+		//testing("Unable to find automations with returntype in [english_list(valid_returntypes)]!")
 		return 0
 	var/label=input(user, "Select new automation:", "Automations", "Cancel") as null|anything in choices
 	if(!label)
@@ -328,11 +328,11 @@
 	if(json && json.len > 0)
 		for(var/list/cData in json)
 			if(isnull(cData) || !("type" in cData))
-				testing("AAC: Null cData in root JS array.")
+				//testing("AAC: Null cData in root JS array.")
 				continue
 			var/Atype=text2path(cData["type"])
 			if(!(Atype in automation_types))
-				testing("AAC: Unrecognized Atype [Atype].")
+				//testing("AAC: Unrecognized Atype [Atype].")
 				continue
 			var/datum/automation/A = new Atype(src)
 			A.Import(cData)

@@ -7,7 +7,7 @@
 	var/num_pages = 0
 	var/num_results = 0
 	var/datum/library_query/query = new()
-
+	pass_flags = PASSTABLE
 	icon = 'icons/obj/library.dmi'
 	icon_state = "computer"
 
@@ -95,5 +95,5 @@
 	return library_catalog.getBookByID(id)
 
 /obj/machinery/computer/library/cultify()
-	new /obj/structure/cult/tome(loc)
+	new /obj/structure/cult_legacy/tome(loc)
 	..()

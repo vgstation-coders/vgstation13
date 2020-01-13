@@ -24,7 +24,13 @@
 									  "glass" = /obj/item/stack/sheet/glass/glass,
 									  "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
 									  "plasteel" = /obj/item/stack/sheet/plasteel)
-	var/list/can_scan = list(/obj/item/stack/sheet)
+
+	var/list/can_scan = list(/obj/item/stack/sheet/metal,
+							/obj/item/stack/sheet/glass/,
+							/obj/item/stack/sheet/wood,
+							/obj/item/stack/sheet/plasteel,
+							/obj/item/stack/sheet/mineral)
+	var/list/cant_scan = list()
 	var/matter = 0
 
 /obj/item/device/material_synth/robot/engiborg //Cyborg version, has less materials but can make rods n shit as well as scan.
@@ -36,7 +42,7 @@
 
 /obj/item/device/material_synth/robot/engiborg/New() //We have to do this during New() because BYOND can't pull a typesof() during compile time.
 	. = ..()
-	can_scan = existing_typesof(/obj/item/stack/sheet) - list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
+	cant_scan = list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
 
 /obj/item/device/material_synth/robot/mommi //MoMMI version, a few more materials to start with.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
@@ -45,6 +51,19 @@
 							 "plasteel" = /obj/item/stack/sheet/plasteel,
 							 "plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
 							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass)
+
+/obj/item/device/material_synth/robot/soviet
+	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
+							"glass" = /obj/item/stack/sheet/glass/glass,
+							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
+							 "plasteel" = /obj/item/stack/sheet/plasteel,
+							 "plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
+							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass,
+							 "silver" = /obj/item/stack/sheet/mineral/silver,
+							 "gold" = /obj/item/stack/sheet/mineral/gold,
+							 "diamond" = /obj/item/stack/sheet/mineral/diamond,
+							 "plasma" = /obj/item/stack/sheet/mineral/plasma,
+							 "uranium" = /obj/item/stack/sheet/mineral/uranium)
 
 /obj/item/device/material_synth/update_icon()
 	icon_state = "mat_synth[mode ? "on" : "off"]"
@@ -61,7 +80,7 @@
 			if(initial(active_material.perunit) < 2000)
 				modifier = MAT_COST_RARE
 			var/amount = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize", "Material Synthesizer") as num
-			amount = Clamp(round(amount, 1), 0, 50)
+			amount = clamp(round(amount, 1), 0, 50)
 			if(amount)
 				if(TakeCost(amount, modifier, R))
 					var/obj/item/stack/sheet/inside_sheet = (locate(material_type) in R.module.modules)
@@ -125,13 +144,13 @@
 
 			if (unit_can_produce >= 1)
 				tospawn = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - [unit_can_produce])", "Material Synthesizer") as num
-				tospawn = Clamp(round(tospawn), 0, unit_can_produce)
+				tospawn = clamp(round(tospawn), 0, unit_can_produce)
 
-				if (tospawn >= 1)
+				if (tospawn >= 1 && TakeCost(tospawn, modifier, user))
 					var/obj/item/stack/sheet/spawned_sheet = new material_type(get_turf(src))
 					spawned_sheet.amount = tospawn
 
-					TakeCost(tospawn, modifier, user)
+
 			else
 				to_chat(user, "<span class='warning'>\The [src] matter is not enough to create the selected material!</span>")
 				return
@@ -146,7 +165,7 @@
 /obj/item/device/material_synth/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return 0 // not adjacent
-	if(is_type_in_list(target, can_scan)) //Can_scan, can you?
+	if(is_type_in_list(target, can_scan) && !is_type_in_list(target, cant_scan))
 		for(var/matID in materials_scanned)
 			if(materials_scanned[matID] == target.type)
 				to_chat(user, "<span class='warning'>You have already scanned \the [target].</span>")
@@ -173,7 +192,7 @@
 			return
 		else
 			matter += 10
-			playsound(get_turf(src), 'sound/machines/click.ogg', 20, 1)
+			playsound(src, 'sound/machines/click.ogg', 20, 1)
 			qdel(RA)
 			to_chat(user, "<span class='notice'>The material synthetizer now holds [matter]/[MAX_MATSYNTH_MATTER] matter-units.</span>")
 	if(istype(O, /obj/item/weapon/card/emag))
@@ -213,8 +232,10 @@
 	create_material(user, active_material)
 
 /obj/item/device/material_synth/proc/TakeCost(var/spawned, var/modifier, mob/user)
-	if(spawned)
+	if(spawned && matter >= round(spawned*modifier))
 		matter -= round(spawned * modifier)
+		return 1
+	return 0
 
 /obj/item/device/material_synth/robot/TakeCost(var/spawned, var/modifier, mob/user)
 	if(isrobot(user))

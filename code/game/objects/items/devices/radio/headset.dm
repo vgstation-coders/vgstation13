@@ -37,6 +37,14 @@
 	syndie = 1
 	recalculateChannels()
 
+/obj/item/device/radio/headset/revsquad/New()
+	..()
+	keyslot2 = new /obj/item/device/encryptionkey/rev
+	syndie = 1 //prevents broadcast without key
+
+/obj/item/device/radio/headset/revsquad/emp_act()
+	return
+
 /obj/item/device/radio/headset/syndicate/commando/New()
 	..()
 	set_frequency(SYND_FREQ)
@@ -175,9 +183,10 @@
 
 /obj/item/device/radio/headset/heads/cmo
 	name = "chief medical officer's headset"
-	desc = "The headset of the highly trained medical chief. To access the medical channel, use :m. For command, use :c."
+	desc = "The headset of the highly trained medical chief. This one is sterilized against memetic infection. To access the medical channel, use :m. For command, use :c."
 	icon_state = "com_headset"
 	item_state = "headset"
+	sterility = 100
 
 /obj/item/device/radio/headset/heads/cmo/New()
 	keyslot2 = new /obj/item/device/encryptionkey/heads/cmo
@@ -267,7 +276,7 @@
 
 /obj/item/device/radio/headset/ert
 	name = "CentCom Response Team headset"
-	desc = "The headset of the boss's boss. Channels are as follows: :r - Response Team :c - command, :s - security, :e - engineering, :d - mining, :q - cargo, :m - medical, :n - science."
+	desc = "The headset of the boss's boss. Channels are as follows: ':-' - Response Team :c - command, :s - security, :e - engineering, :d - mining, :q - cargo, :m - medical, :n - science."
 	icon_state = "ert_headset"
 	item_state = "headset"
 	freerange = 1
@@ -279,10 +288,10 @@
 /obj/item/device/radio/headset/attackby(obj/item/weapon/W as obj, mob/user as mob)
 //	..()
 	user.set_machine(src)
-	if (!( isscrewdriver(W) || (istype(W, /obj/item/device/encryptionkey/ ))))
+	if (!( W.is_screwdriver(user) || (istype(W, /obj/item/device/encryptionkey/ ))))
 		return
 
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(keyslot1 || keyslot2)
 
 

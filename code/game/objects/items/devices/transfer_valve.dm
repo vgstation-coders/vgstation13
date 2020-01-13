@@ -13,7 +13,7 @@
 	var/toggle = 1
 
 	var/damaged = 0
-	
+
 	w_class = W_CLASS_LARGE
 
 	flags = FPRINT | PROXMOVE
@@ -23,8 +23,6 @@
 	if(damaged)
 		to_chat(user, "<span class='info'>\The [src] appears to be damaged.</span>")
 
-/obj/item/device/transfer_valve/proc/process_activation(var/obj/item/device/D)
-
 /obj/item/device/transfer_valve/IsAssemblyHolder()
 	return 1
 
@@ -33,9 +31,9 @@
 		attached_device.Crossed(AM)
 	..()
 
-/obj/item/device/transfer_valve/on_found(AM as mob|obj)
+/obj/item/device/transfer_valve/on_found(wearer, AM as mob|obj)
 	if(attached_device)
-		attached_device.on_found(AM)
+		attached_device.on_found(wearer, AM)
 	..()
 
 /obj/item/device/transfer_valve/attackby(obj/item/item, mob/user)
@@ -118,7 +116,7 @@
 			tank_two = null
 			update_icon()
 		else if(href_list["open"])
-			toggle_valve()
+			toggle_valve(usr)
 		else if(attached_device)
 			if(href_list["rem_device"])
 				attached_device.forceMove(get_turf(src))
@@ -133,10 +131,10 @@
 		return
 	return
 
-/obj/item/device/transfer_valve/process_activation(var/obj/item/device/D)
+/obj/item/device/transfer_valve/proc/process_activation(var/obj/item/device/D)
 	if(toggle)
 		toggle = 0
-		toggle_valve()
+		toggle_valve(D)
 		spawn(50) // To stop a signal being spammed from a proxy sensor constantly going off or whatever
 			toggle = 1
 
@@ -178,30 +176,22 @@
 	it explodes properly when it gets a signal (and it does).
 	*/
 
-/obj/item/device/transfer_valve/proc/toggle_valve()
+/obj/item/device/transfer_valve/proc/toggle_valve(var/whodunnit)
 	if(valve_open==0 && (tank_one && tank_two))
 		valve_open = 1
-		var/turf/bombturf = get_turf(src)
-		var/area/A = get_area(bombturf)
 
-		var/attacher_name = ""
-		if(!attacher)
-			attacher_name = "Unknown"
-		else
-			attacher_name = "[attacher.name]([attacher.ckey])"
-
-		var/log_str = "Bomb valve opened in <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name]</a> "
-		log_str += "with [attached_device ? attached_device : "no device"] attacher: [attacher_name]"
-
-		if(attacher)
-			log_str += "(<A HREF='?_src_=holder;adminmoreinfo=\ref[attacher]'>?</A>)"
+		var/log_str = "Tank transfer valve opened in [formatJumpTo(get_turf(src))], "
+		if(attached_device && attacher && whodunnit == attached_device)
+			log_str += "opened by \a [attached_device] attached by [key_name(attacher)]. "
+		else if(isliving(whodunnit))
+			log_str += "opened by [key_name(whodunnit)](<A HREF='?_src_=holder;adminmoreinfo=\ref[whodunnit]'>?</A>). "
 
 		var/mob/mob = get_mob_by_key(src.fingerprintslast)
 		var/last_touch_info = ""
 		if(mob)
 			last_touch_info = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[mob]'>?</A>)"
+		log_str += "Last touched by: [src.fingerprintslast][last_touch_info] - Last user processed: [key_name(usr)]"
 
-		log_str += " Last touched by: [src.fingerprintslast][last_touch_info]"
 		bombers += log_str
 		message_admins(log_str, 0, 1)
 		log_game(log_str)
@@ -235,6 +225,10 @@
 		// Delete ourselves.
 		qdel(src)
 
+
+/obj/item/device/transfer_valve/blob_act()
+	toggle_valve()
+	qdel(src)
 
 // this doesn't do anything but the timer etc. expects it to be here
 // eventually maybe have it update icon to show state (timer, prox etc.) like old bombs

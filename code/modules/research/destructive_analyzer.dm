@@ -37,7 +37,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/S in component_parts)
 		T += S.rating * 0.1
-	T = Clamp(T, 0, 1)
+	T = clamp(T, 0, 1)
 	decon_mod = T
 
 /obj/machinery/r_n_d/destructive_analyzer/proc/ConvertReqString2List(var/list/source_list)
@@ -120,6 +120,11 @@ Note: Must be placed within 3 tiles of the R&D Console
 		visible_message("<span class='danger'>\The [L] stuffs \the [I] into \the [src]!</span>")
 		attackby(I, L)
 
+
+/obj/machinery/r_n_d/destructive_analyzer/kick_act(mob/living/carbon/human/H)
+	..()
+	if(linked_console)
+		linked_console.deconstruct_item(H)
 
 //For testing purposes only.
 /*/obj/item/weapon/deconstruction_test

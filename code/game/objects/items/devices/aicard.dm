@@ -24,7 +24,7 @@
 
 	transfer_ai("AICORE", "AICARD", M, user)
 
-	playsound(get_turf(src), 'sound/machines/paistartup.ogg', 50, 1)
+	playsound(src, 'sound/machines/paistartup.ogg', 50, 1)
 	return
 
 /obj/item/device/aicard/attack_self(mob/user)

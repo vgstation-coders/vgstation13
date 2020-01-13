@@ -27,5 +27,5 @@
 	if(istype(target, /obj))
 		var/obj/O = target
 		O.price = current_price
-		playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+		playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
 		to_chat(user, "<span class='notice'>Changed price to [current_price] credits.</span>")

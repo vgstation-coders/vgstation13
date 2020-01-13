@@ -3,7 +3,7 @@
 
 /obj/machinery/sweet
 	name = "\improper Sweet Machine"
-	desc = "Insert coin, recieve a sweet!"
+	desc = "Insert coin, receive a pack of sweets!"
 	icon = 'icons/obj/candymachine.dmi'
 	icon_state = "sweetmachine"
 	anchored = 1

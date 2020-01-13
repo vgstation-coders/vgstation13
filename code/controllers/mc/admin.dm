@@ -40,9 +40,6 @@
 		return
 
 	switch (controller)
-		if ("Supply Shuttle")
-			supply_shuttle.process()
-			feedback_add_details("admin_verb","RSupply")
 		if ("Master")
 			new/datum/controller/master()
 			feedback_add_details("admin_verb","RMC")
@@ -54,7 +51,7 @@
 
 
 
-/client/proc/debug_controller(controller in list("Air", "Cameras", "Configuration", "Emergency Shuttle", "failsafe", "Garbage", "Jobs", "Master", "pAI", "Radio", "Sun", "Supply Shuttle", "Ticker", "Vote"))
+/client/proc/debug_controller(controller in list("Air", "Cameras", "Configuration", "Emergency Shuttle", "failsafe", "Garbage", "Jobs", "Master", "pAI", "Radio", "Sun", "Ticker", "Vote"))
 	set category = "Debug"
 	set name = "debug controller"
 	set desc = "debug the various periodic loop controllers for the game (be careful!)."
@@ -84,9 +81,6 @@
 		if("Radio")
 			debug_variables(radio_controller)
 			feedback_add_details("admin_verb","DRadio")
-		if("Supply Shuttle")
-			debug_variables(supply_shuttle)
-			feedback_add_details("admin_verb","DSupply")
 		if("Emergency Shuttle")
 			debug_variables(emergency_shuttle)
 			feedback_add_details("admin_verb","DEmergency")
@@ -106,3 +100,31 @@
 			debug_variables(vote)
 			feedback_add_details("admin_verb","DprocessVote")
 	message_admins("Admin [key_name_admin(usr)] is debugging the [controller] controller.")
+
+/client/proc/rigvote()
+	set category = "Debug"
+	set name = "Rig Vote"
+	set desc = "easily rig an ongoing vote"
+
+	if(!vote)
+		return
+	var/winner
+	if(vote.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Input New") == "Preexisting")
+		winner = input(usr,"Choose a result.","Choose a result.", vote.choices[1]) as null|anything in vote.choices
+		if(!winner)
+			return
+		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
+	else
+		winner = input(usr,"Add a result.","Add a result","") as text|null
+		if(!winner)
+			return
+		if(vote.ismapvote)
+			var/path = input(usr,"Add the map path.","Path","") as text|null
+			if(!path)
+				to_chat(usr,"<span class='warning'>You must specify a path to rig a mapvote!</span>")
+				return
+			vote.ismapvote[winner] = path
+			to_chat(usr,"<span class='info'>Set path as [path]. Hope that's right...</span>")
+		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
+	message_admins("Admin [key_name_admin(usr)] rigged the vote for [winner].")
+	log_admin("Admin [key_name(usr)] rigged the vote for [winner]. Choices were [vote.choices.Join(", ")]")

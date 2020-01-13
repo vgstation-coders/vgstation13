@@ -17,7 +17,7 @@
 	var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
 	if (!istype(C))
 		return
-	C.integrity = Clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
+	C.integrity = clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
 
 /obj/item/weapon/circuitboard/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
 	if(issolder(W))
@@ -28,7 +28,7 @@
 		if (!S.remove_fuel(2, user))
 			to_chat(user, "You need more fuel.")
 			return
-		playsound(get_turf(user), 'sound/items/Welder.ogg', 100, 1)
+		playsound(user, 'sound/items/Welder.ogg', 100, 1)
 		integrity = TELECOMMS_MAX_INTEGRITY
 		to_chat(user, "<span class='notice'>You repair the damaged internals of \the [src].</span>")
 		updateUsrDialog()
@@ -70,7 +70,7 @@
 	dat = {"
 		<p>[temp]</p>
 		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[toggled ? "On" : "Off"]</a></p>
-		<p><b>Integrity:</b> [Clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
+		<p><b>Integrity:</b> [clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
 	"}
 	if(on && toggled)
 		dat += {"
@@ -224,7 +224,7 @@
 
 	var/obj/item/device/multitool/P = get_multitool(usr)
 	if(!istype(P))
-		testing("get_multitool returned [P].")
+//		testing("get_multitool returned [P].")
 		return
 
 	if(href_list["input"])
@@ -268,7 +268,7 @@
 				if(newfreq && canAccess(usr))
 					if(findtext(num2text(newfreq), "."))
 						newfreq *= 10 // shift the decimal one place
-					if(!(newfreq == SYND_FREQ || newfreq == RAID_FREQ))
+					if(!(newfreq == SYND_FREQ || newfreq == RAID_FREQ || newfreq == REV_FREQ))
 						if(!(newfreq in freq_listening) && newfreq < 10000)
 							freq_listening.Add(newfreq)
 							temp = "<font color = #666633>-% New frequency filter assigned: \"[newfreq] GHz\" %-</font color>"
@@ -302,6 +302,9 @@
 			temp = "<font color = #666633>-% Removed \ref[T] [T.name] from linked entities. %-</font color>"
 		else
 			temp = "<font color = #666633>-% Unable to locate machine to unlink from, try again. %-</font color>"
+
+	for(var/obj/machinery/computer/telecomms/monitor/M in range(25,src))
+		M.notify_unlinked()
 
 /obj/machinery/telecomms/linkWith(var/mob/user, var/mob/O)
 	if(O && O != src && istype(O, /obj/machinery/telecomms))

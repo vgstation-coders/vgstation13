@@ -9,7 +9,7 @@
 
 /obj/item/mounted/frame/light_fixture/do_build(turf/on_wall, mob/user)
 	to_chat(user, "You begin attaching [src] to \the [on_wall].")
-	playsound(get_turf(src), 'sound/machines/click.ogg', 75, 1)
+	playsound(src, 'sound/machines/click.ogg', 75, 1)
 	var/constrdir = user.dir
 	var/constrloc = get_turf(user)
 	if (!do_after(user, on_wall, 30))

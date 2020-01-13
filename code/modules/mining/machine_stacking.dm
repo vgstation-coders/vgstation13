@@ -210,7 +210,7 @@
 
 			stacks["[stackA.type]"] = stack
 			returnToPool(stackA)
-		//else if (istype(O, /obj/item/weapon/ore/slag))
+		//else if (istype(O, /obj/item/stack/ore/slag))
 		//	returnToPool(O)
 		else
 			A.forceMove(out_T)
@@ -312,7 +312,7 @@
 /obj/machinery/mineral/stacking_machine/multitool_topic(mob/user, list/href_list, obj/item/device/multitool/P)
 	if("changedir" in href_list)
 		var/changingdir = text2num(href_list["changedir"])
-		changingdir = Clamp(changingdir, 1, 2)//No runtimes from HREF exploits.
+		changingdir = clamp(changingdir, 1, 2)//No runtimes from HREF exploits.
 
 		var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
 		if(!newdir)

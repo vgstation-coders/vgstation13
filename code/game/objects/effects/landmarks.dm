@@ -78,6 +78,15 @@
 			endgame_exits += loc
 			qdel(src)
 
+		if("grinchstart")
+			grinchstart += loc
+
+		if("voxstart")
+			voxstart += loc
+
+		if("voxlocker")
+			voxlocker += loc
+
 	landmarks_list += src
 	return 1
 
@@ -126,3 +135,12 @@
 
 	if(play_sound)
 		L << play_sound
+
+/obj/effect/landmark/grinchstart
+	name = "grinchstart"
+
+/obj/effect/landmark/xtra_cleanergrenades
+	name = "xtra_cleanergrenades"
+
+/obj/effect/landmark/vox_locker
+	name = "vox_locker"

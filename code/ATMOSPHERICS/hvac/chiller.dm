@@ -65,7 +65,7 @@
 				var/value = text2num(href_list["val"])
 
 				// limit to 0c and 25c(room temp)
-				set_temperature = Clamp(set_temperature + value, 0, 25)
+				set_temperature = clamp(set_temperature + value, 0, 25)
 
 			if("cellremove")
 				if(panel_open && cell && !usr.get_active_hand())
@@ -93,8 +93,7 @@
 	var/turf/simulated/L = loc
 	if(istype(L))
 		var/datum/gas_mixture/env = L.return_air()
-		var/transfer_moles = 0.25 * env.total_moles()
-		var/datum/gas_mixture/removed = env.remove(transfer_moles)
+		var/datum/gas_mixture/removed = env.remove_volume(0.25 * CELL_VOLUME)
 		if(removed)
 			if(removed.temperature > (set_temperature + T0C))
 				var/air_heat_capacity = removed.heat_capacity()
@@ -102,8 +101,8 @@
 				//var/old_temperature = removed.temperature
 
 				if(combined_heat_capacity > 0)
-					var/combined_energy = set_temperature*cooling_power + air_heat_capacity*removed.temperature
-					removed.temperature = combined_energy/combined_heat_capacity
+					var/combined_energy = set_temperature * cooling_power + removed.thermal_energy()
+					removed.temperature = combined_energy / combined_heat_capacity
 				env.merge(removed)
 				return 1
 			env.merge(removed)

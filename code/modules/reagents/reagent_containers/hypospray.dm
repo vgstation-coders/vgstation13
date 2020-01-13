@@ -53,7 +53,7 @@
 		user.visible_message("<span class='warning'>[M == user ? "[user] injects \himself" : "[user] injects [M]"] with [src].</span>", \
 		"[inject_message]")
 		to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
-		playsound(get_turf(src), 'sound/items/hypospray.ogg', 50, 1)
+		playsound(src, 'sound/items/hypospray.ogg', 50, 1)
 
 		src.reagents.reaction(M, INGEST)
 		if(M.reagents)
@@ -83,13 +83,13 @@
 	item_state = "autoinjector"
 	amount_per_transfer_from_this = 5
 	volume = 5
+	flags = FPRINT
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/attack(mob/M as mob, mob/user as mob)
 	..()
-	if(reagents.total_volume <= 0) //Prevents autoinjectors to be refilled.
-		flags &= ~OPENCONTAINER
+//	if(reagents.total_volume <= 0) //Prevents autoinjectors to be refilled.
+//		flags &= ~OPENCONTAINER
 	update_icon()
-	return
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/update_icon()
 	if(reagents.total_volume > 0)

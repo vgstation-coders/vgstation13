@@ -1,7 +1,7 @@
 
 /datum/artifact_effect/emp
 	effecttype = "emp"
-	effect = EFFECT_PULSE
+	effect = ARTIFACT_EFFECT_PULSE
 	effect_type = 3
 
 /datum/artifact_effect/emp/DoEffectPulse()

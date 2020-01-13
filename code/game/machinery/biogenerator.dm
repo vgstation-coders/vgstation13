@@ -84,6 +84,12 @@
 /datum/biogen_recipe/leather
 	category="Leather"
 
+/datum/biogen_recipe/leather/bee_net
+	cost = 100
+	id="bee_net"
+	name = "Bee Net"
+	result=/obj/item/weapon/bee_net
+
 /datum/biogen_recipe/leather/wallet
 	cost=100
 	id="wallet"
@@ -96,17 +102,17 @@
 	name="Botanical Gloves"
 	result=/obj/item/clothing/gloves/botanic_leather
 
-/datum/biogen_recipe/leather/belt
-	cost=300
-	id="belt"
-	name="Utility Belt"
-	result=/obj/item/weapon/storage/belt/utility
+/datum/biogen_recipe/leather/knifeholster
+	cost=250
+	id="knifeholster"
+	name="Boot Knife Holster"
+	result=/obj/item/clothing/accessory/holster/knife/boot
 
-/datum/biogen_recipe/leather/belt/slim
-	cost=300
-	id="slim-belt"
-	name="Slim Belt"
-	result=/obj/item/weapon/storage/belt/slim
+/datum/biogen_recipe/leather/ammo_pouch
+	cost = 250
+	id="ammopouch"
+	name = "Ammo Pouch"
+	result=/obj/item/weapon/storage/bag/ammo_pouch
 
 /datum/biogen_recipe/leather/moneybag
 	cost=300
@@ -114,17 +120,29 @@
 	name="Money Bag"
 	result=/obj/item/weapon/storage/bag/money
 
-/datum/biogen_recipe/leather/plants
-	cost=350
-	id="plants"
-	name="Plant Bag"
-	result=/obj/item/weapon/storage/bag/plants
+/datum/biogen_recipe/leather/belt/slim
+	cost=300
+	id="slim-belt"
+	name="Slim Belt"
+	result=/obj/item/weapon/storage/belt/slim
 
-/datum/biogen_recipe/leather/gadget
+/datum/biogen_recipe/leather/belt
+	cost=300
+	id="belt"
+	name="Utility Belt"
+	result=/obj/item/weapon/storage/belt/utility
+
+/datum/biogen_recipe/leather/bandolier
+	cost = 300
+	id="bandolier"
+	name = "Bandolier"
+	result=/obj/item/clothing/accessory/storage/bandolier
+
+/datum/biogen_recipe/leather/handgunholster
 	cost=350
-	id="gadget"
-	name="Gadget Bag"
-	result=/obj/item/weapon/storage/bag/gadgets
+	id="handgunholster"
+	name="Handgun Holster"
+	result=/obj/item/clothing/accessory/holster/handgun/biogenerator
 
 /datum/biogen_recipe/leather/ore
 	cost=350
@@ -132,11 +150,23 @@
 	name="Mining Satchel"
 	result=/obj/item/weapon/storage/bag/ore
 
-/datum/biogen_recipe/leather/satchel
+/datum/biogen_recipe/leather/gadget
+	cost=350
+	id="gadget"
+	name="Gadget Bag"
+	result=/obj/item/weapon/storage/bag/gadgets
+
+/datum/biogen_recipe/leather/plants
+	cost=350
+	id="plants"
+	name="Plant Bag"
+	result=/obj/item/weapon/storage/bag/plants
+
+/datum/biogen_recipe/leather/secbelt
 	cost=400
-	id="satchel"
-	name="Leather Satchel"
-	result=/obj/item/weapon/storage/backpack/satchel
+	id="secbelt"
+	name="Security Belt"
+	result=/obj/item/weapon/storage/belt/security
 
 /datum/biogen_recipe/leather/briefcase
 	cost=400
@@ -144,17 +174,11 @@
 	name="Leather Briefcase"
 	result=/obj/item/weapon/storage/briefcase/biogen
 
-/datum/biogen_recipe/leather/knifeholster
-	cost=250
-	id="knifeholster"
-	name="Boot Knife Holster"
-	result=/obj/item/clothing/accessory/holster/knife/boot
-
-/datum/biogen_recipe/leather/handgunholster
-	cost=350
-	id="handgunholster"
-	name="Handgun Holster"
-	result=/obj/item/clothing/accessory/holster/handgun/biogenerator
+/datum/biogen_recipe/leather/satchel
+	cost=400
+	id="satchel"
+	name="Leather Satchel"
+	result=/obj/item/weapon/storage/backpack/satchel
 
 /datum/biogen_recipe/paper
 	category="Paper"
@@ -165,12 +189,6 @@
 	name="Paper Sheet"
 	other_amounts=list(5,10)
 	result=/obj/item/weapon/paper
-
-/datum/biogen_recipe/paper/clipboard
-	cost=75
-	id="clipboard"
-	name="Clipboard"
-	result=/obj/item/weapon/storage/bag/clipboard
 
 /datum/biogen_recipe/paper/cardboard
 	cost=25
@@ -192,6 +210,12 @@
 	name="Package Wrap"
 	amount_per_unit = 24
 	result=/obj/item/stack/package_wrap
+
+/datum/biogen_recipe/paper/clipboard
+	cost=75
+	id="clipboard"
+	name="Clipboard"
+	result=/obj/item/weapon/storage/bag/clipboard
 
 /datum/biogen_recipe/paper/paperbin
 	cost=475 //25 from the cardboard, 30*15=450 from the paper
@@ -234,6 +258,12 @@
 	id="crayons"
 	name="Box of Crayons"
 	result=/obj/item/weapon/storage/fancy/crayons
+
+/datum/biogen_recipe/misc/rice_hat
+	name = "Rice Hat"
+	id = "rice_hat"
+	cost = 300
+	result = /obj/item/clothing/head/rice_hat
 
 /datum/biogen_recipe/flooring
 	category="Flooring"
@@ -477,7 +507,7 @@
 		processing = 1
 		update_icon()
 		updateUsrDialog()
-		playsound(get_turf(src), 'sound/machines/blender.ogg', 50, 1)
+		playsound(src, 'sound/machines/blender.ogg', 50, 1)
 		use_power(S*30)
 		sleep(speed_coefficient*(S+15))
 		processing = 0

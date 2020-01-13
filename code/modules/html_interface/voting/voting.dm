@@ -37,6 +37,7 @@ var/global/datum/controller/vote/vote = new()
 	var/list/voted     = list()
 	var/list/voting    = list()
 	var/list/current_votes = list()
+	var/list/discarded_choices = list()
 	var/list/ismapvote
 	var/chosen_map
 	name               = "datum"
@@ -47,7 +48,10 @@ var/global/datum/controller/vote/vote = new()
 	var/initialized    = 0
 	var/lastupdate     = 0
 	var/total_votes    = 0
+	var/vote_threshold = 0.15
+	var/discarded_votes = 0
 	var/weighted        = FALSE // Whether to use weighted voting.
+	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
 	var/lock = FALSE
@@ -106,6 +110,8 @@ var/global/datum/controller/vote/vote = new()
 	voted.len = 0
 	voting.len = 0
 	total_votes = 0
+	discarded_votes = 0
+	discarded_choices.len = 0
 	current_votes.len = 0
 	weighted = FALSE
 	update(1)
@@ -113,6 +119,7 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
 	var/greatest_votes = 0
+	currently_voting = FALSE
 	for(var/option in choices)
 		var/votes = choices[option]
 		total_votes += votes
@@ -156,6 +163,11 @@ var/global/datum/controller/vote/vote = new()
 		for(var/a in filteredchoices)
 			if(!filteredchoices[a])
 				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
+				continue
+			if(filteredchoices[a] / total_votes < vote_threshold)
+				discarded_votes += filteredchoices[a]
+				filteredchoices -= a
+				discarded_choices += a
 		if(filteredchoices.len)
 			. += pickweight(filteredchoices.Copy())
 	else
@@ -171,6 +183,8 @@ var/global/datum/controller/vote/vote = new()
 	var/list/winners = get_result()
 	var/text
 	var/feedbackanswer
+	var/qualified_votes = total_votes - discarded_votes
+	currently_voting = FALSE
 	if(winners.len > 0)
 		if(winners.len > 1)
 			text = "<b>Vote Tied Between:</b><br>"
@@ -185,11 +199,11 @@ var/global/datum/controller/vote/vote = new()
 			else
 				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
 
-		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] won with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/total_votes)]% chance of winning" : null].</b>"
+		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] won with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/qualified_votes)]% chance of winning" : null].</b>"
 		for(var/choice in choices)
 			if(. == choice)
 				continue
-			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s[(weighted&&choices[choice])? " and a [round(100*choices[choice]/total_votes)]% chance of winning" : null]."
+			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s[(weighted&&choices[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*choices[choice]/qualified_votes)]% chance of winning"]" : null]."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	log_vote(text)
@@ -198,6 +212,7 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/result()
 	. = announce_result()
 	var/restart = 0
+	currently_voting = FALSE
 	if(.)
 		switch(mode)
 			if("restart")
@@ -212,7 +227,7 @@ var/global/datum/controller/vote/vote = new()
 						master_mode = .
 				if(!going)
 					going = 1
-					to_chat(world, "<font color='red'><b>The round will start soon.</b></font>")
+					to_chat(world, "<span class='red'><b>The round will start soon.</b></span>")
 			if("crew_transfer")
 				if(. == "Initiate Crew Transfer")
 					init_shift_change(null, 1)
@@ -239,6 +254,17 @@ var/global/datum/controller/vote/vote = new()
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
+		if(mode == "map")
+			if(!usr.client.holder)
+				var/mob/M = usr
+				if(isnewplayer(M))
+					to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
+					return 0
+				if(isobserver(M))
+					var/mob/dead/observer/O = M
+					if(O.started_as_observer)
+						to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
+						return 0
 		if(current_votes[ckey])
 			choices[choices[current_votes[ckey]]]--
 		if(vote && 1<=vote && vote<=choices.len)
@@ -249,6 +275,10 @@ var/global/datum/controller/vote/vote = new()
 	return 0
 
 /datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0, var/weighted_vote = 0)
+	if(currently_voting)
+		message_admins("<span class='info'>[initiator_key] attempted to begin a vote, however a vote is already in progress.</span>")
+		return
+	currently_voting = TRUE
 	if(!mode)
 		if(started_time != null && !check_rights(R_ADMIN))
 			var/next_allowed_time = (started_time + config.vote_delay)
@@ -303,6 +333,16 @@ var/global/datum/controller/vote/vote = new()
 		update(1)
 		if(popup)
 			for(var/client/C in clients)
+				if(vote_type == "map" && !C.holder)
+					if(C.mob)
+						var/mob/M = C.mob
+						//Do not prompt non-admin new players or round start observers for a map vote - Pomf
+						if(isnewplayer(M))
+							continue
+						if(isobserver(M))
+							var/mob/dead/observer/O = M
+							if(O.started_as_observer)
+								continue
 				interact(C)
 		else
 			if(istype(usr) && usr.client)
@@ -320,7 +360,7 @@ var/global/datum/controller/vote/vote = new()
 				world << sound('sound/misc/rockthevote.ogg')
 		if(mode == "gamemode" && going)
 			going = 0
-			to_chat(world, "<font color='red'><b>Round start has been delayed.</b></font>")
+			to_chat(world, "<span class='red'><b>Round start has been delayed.</b></span>")
 
 		time_remaining = (ismapvote && ismapvote.len ? 60 : round(config.vote_period/10))
 		return 1
@@ -406,6 +446,7 @@ var/global/datum/controller/vote/vote = new()
 			if(usr.client.holder)
 				reset()
 				update()
+				currently_voting = FALSE
 		if("toggle_restart")
 			if(usr.client.holder)
 				config.allow_vote_restart = !config.allow_vote_restart

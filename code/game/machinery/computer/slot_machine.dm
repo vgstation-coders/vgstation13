@@ -1,6 +1,6 @@
 //#define DEBUG_SLOT_MACHINES
 #ifdef DEBUG_SLOT_MACHINES
-	#warning Slot machines are being debugged! Turn this off in code/game/machinery/computer/slot_machine.dm
+	#warn Slot machines are being debugged! Turn this off in code/game/machinery/computer/slot_machine.dm
 #endif
 
 #define SEVEN		1
@@ -53,7 +53,7 @@
 
 	id = rand(1,99999)
 
-	our_money_account = create_account("slot machine ([id])", rand(30000,50000))
+	our_money_account = create_account("slot machine ([id])", rand(30000,50000), null, 0, 1, TRUE)
 	radio = new(src)
 
 	update_icon()
@@ -135,7 +135,7 @@
 
 	//Pre-calculate results
 	if(rigged)
-		value_1 = Clamp(rigged, 1, TREE)
+		value_1 = clamp(rigged, 1, TREE)
 		value_2 = value_1
 		value_3 = value_1
 
@@ -169,21 +169,21 @@
 	add_overlays()
 
 	var/sound/sound_to_play = pick('sound/effects/xylophone1.ogg','sound/effects/xylophone2.ogg','sound/effects/xylophone3.ogg')
-	playsound(get_turf(src),sound(sound_to_play),30,-4)
+	playsound(src,sound(sound_to_play),30,-4)
 
 	var/sleep_time = 48
 
 	sleep(sleep_time/3)
 	update_overlay_icon_state(overlay_1,"[value_1]")
-	playsound(get_turf(src),'sound/machines/chime.ogg',50,-4)
+	playsound(src,'sound/machines/chime.ogg',50,-4)
 
 	sleep(sleep_time/3)
 	update_overlay_icon_state(overlay_2,"[value_2]")
-	playsound(get_turf(src),'sound/machines/chime.ogg',50,-4)
+	playsound(src,'sound/machines/chime.ogg',50,-4)
 
 	sleep(sleep_time/3)
 	update_overlay_icon_state(overlay_3,"[value_3]")
-	playsound(get_turf(src),'sound/machines/chime.ogg',50,-4)
+	playsound(src,'sound/machines/chime.ogg',50,-4)
 
 	check_victory(user)
 
@@ -244,7 +244,7 @@
 			spawn(10)
 				if(our_money_account.charge(win_value,null,"Victory","one-armed bandit #[id]"))
 					dispense_cash(win_value, get_turf(src))
-					playsound(get_turf(src), "polaroid", 50, 1)
+					playsound(src, "polaroid", 50, 1)
 
 					to_chat(user, "<span class='notice'>You win $[win_value]!</span>")
 				else

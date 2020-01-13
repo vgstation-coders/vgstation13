@@ -25,7 +25,8 @@
 	if(blob_nodes.len)
 		var/list/nodes = list()
 		for(var/i = 1; i <= blob_nodes.len; i++)
-			nodes["Blob Node #[i]"] = blob_nodes[i]
+			var/obj/effect/blob/node/B = blob_nodes[i]
+			nodes["Blob Node #[i] ([get_area_name(B)])"] = B
 		var/node_name = input(src, "Choose a node to jump to.", "Node Jump") in nodes
 		var/obj/effect/blob/node/chosen_node = nodes[node_name]
 		if(chosen_node)
@@ -48,6 +49,11 @@
 		to_chat(src, "There is no blob here!")
 		return
 
+	if(istype(B, /obj/effect/blob/core))
+		if(B.overmind == src)
+			restrain_blob()
+			return
+
 	if(!istype(B, /obj/effect/blob/normal))
 		to_chat(src, "Unable to use this blob, find a normal one.")
 		return
@@ -57,9 +63,13 @@
 
 
 	B.change_to(/obj/effect/blob/shield)
+
+	if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
+		var/datum/faction/blob_conglomerate/BC = mind.faction
+		if(istype(BC.stat_datum, /datum/stat/faction/blob))
+			var/datum/stat/faction/blob/BS = BC.stat_datum
+			BS.built_structures.shields++
 	return
-
-
 
 /mob/camera/blob/verb/create_resource()
 	set category = "Blob"
@@ -96,6 +106,11 @@
 		R.overmind = src
 		special_blobs += R
 		update_specialblobs()
+		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
+			var/datum/faction/blob_conglomerate/BC = mind.faction
+			if(istype(BC.stat_datum, /datum/stat/faction/blob))
+				var/datum/stat/faction/blob/BS = BC.stat_datum
+				BS.built_structures.resgens++
 	return
 
 /mob/camera/blob/proc/create_core()
@@ -130,7 +145,13 @@
 		return
 
 
-	B.change_to(/obj/effect/blob/core, src)
+	B.change_to(/obj/effect/blob/core, src, TRUE)
+
+	if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
+		var/datum/faction/blob_conglomerate/BC = mind.faction
+		if(istype(BC.stat_datum, /datum/stat/faction/blob))
+			var/datum/stat/faction/blob/BS = BC.stat_datum
+			BS.built_structures.cores++
 
 	return
 
@@ -170,6 +191,11 @@
 		special_blobs += N
 		update_specialblobs()
 		max_blob_points += BLOBNDPOINTINC
+		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
+			var/datum/faction/blob_conglomerate/BC = mind.faction
+			if(istype(BC.stat_datum, /datum/stat/faction/blob))
+				var/datum/stat/faction/blob/BS = BC.stat_datum
+				BS.built_structures.nodes++
 	return
 
 
@@ -206,6 +232,11 @@
 		F.overmind = src
 		special_blobs += F
 		update_specialblobs()
+		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
+			var/datum/faction/blob_conglomerate/BC = mind.faction
+			if(istype(BC.stat_datum, /datum/stat/faction/blob))
+				var/datum/stat/faction/blob/BS = BC.stat_datum
+				BS.built_structures.factories++
 	return
 
 
@@ -278,9 +309,14 @@
 		to_chat(src, "There is no blob adjacent to you.")
 		return
 
+	if(attack_delayer.blocked())
+		return
+
 	if(!can_buy(BLOBATTCOST))
 		return
-	OB.expand(T, 0)
+
+	delayNextAttack(5)
+	OB.expand(T, 0) //Doesn't give source because we don't care about passive restraint
 	return
 
 
@@ -314,7 +350,9 @@
 	set category = "Blob"
 	set name = "Psionic Message"
 	set desc = "Give a psionic message to all creatures on and around your 'local' vicinity."
-	telepathy()
+	var/text = input(src, "What message should we send?", "Message") as null|text
+	if (text)
+		telepathy(text)
 
 /mob/camera/blob/proc/telepathy(message as text)
 
@@ -327,3 +365,7 @@
 	to_chat(current_zlevel, "<span class='blob'>[message]</span>") //Only sends messages to things on its own z level
 	add_gamelogs(src, "used blob telepathy to convey \"[message]\"", tp_link = TRUE)
 	log_blobtelepathy("[key_name(usr)]: [message]")
+
+/mob/camera/blob/proc/restrain_blob()
+	restrain_blob = !restrain_blob
+	to_chat(src,"<span class='notice'>You will [restrain_blob ? "now" : "not"] restrain your blobs from passively spreading into walls.</span>")

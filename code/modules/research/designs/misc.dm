@@ -38,12 +38,12 @@
 	materials = list(MAT_IRON=37500)
 	category = "Misc"
 
-/datum/design/surgery_rollerbed
-	name = "Mobile Operating Table"
-	desc = "A collapsed mobile operating table that can be carried around."
-	id = "surgery_rollerbed"
-	build_type = PROTOLATHE | MECHFAB
-	build_path = /obj/item/roller/surgery
-	req_tech = list(Tc_BIOTECH = 5, Tc_ENGINEERING = 4, Tc_PROGRAMMING = 2)
-	materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
+/datum/design/polarized_contacts
+	name = "Polarized Contacts"
+	desc = "Shield your eyes from flashes in style."
+	id = "polarized_contacts"
+	build_type = PROTOLATHE
+	build_path = /obj/item/clothing/glasses/contacts/polarized
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_BIOTECH = 5)
+	materials = list(MAT_GLASS = 2000)
 	category = "Misc"

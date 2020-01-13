@@ -31,7 +31,7 @@
 	var/green
 	var/blue
 
-	var/col = pick ("blonde", "black", "chestnut", "copper", "brown", "wheat", "old", "punk")
+	var/col = pick ("blonde", "black", "chestnut", "copper", "brown", "wheat", "old", 15;"punk")
 	switch(col)
 		if("blonde")
 			red = 255
@@ -62,9 +62,9 @@
 			green = red
 			blue = red
 		if("punk")
-			red = rand (0, 255)
-			green = rand (0, 255)
-			blue = rand (0, 255)
+			red = rand(0, 255)
+			green = rand(0, 255)
+			blue = rand(0, 255)
 
 	red = max(min(red + rand (-25, 25), 255), 0)
 	green = max(min(green + rand (-25, 25), 255), 0)
@@ -184,6 +184,16 @@
 					icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 				else
 					icobase = 'icons/mob/human_races/vox/r_vox.dmi'
+		if(current_species.name == "Grey")
+			switch(s_tone)
+				if(4)
+					icobase = 'icons/mob/human_races/grey/r_greyblue.dmi'
+				if(3)
+					icobase = 'icons/mob/human_races/grey/r_greygreen.dmi'
+				if(2)
+					icobase = 'icons/mob/human_races/grey/r_greylight.dmi'
+				else
+					icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 		else
 			icobase = current_species.icobase
 	else
@@ -271,8 +281,9 @@
 				if(HOP)
 					clothes_s = new /icon(uniform_dmi, "hop_s")
 					clothes_s.Blend(new /icon(feet_dmi, "brown"), ICON_UNDERLAY)
-					clothes_s.Blend(new /icon(suit_dmi, "armor"), ICON_OVERLAY)
-					clothes_s.Blend(new /icon('icons/mob/head.dmi', "helmet"), ICON_OVERLAY)
+					clothes_s.Blend(new /icon(suit_dmi, "HoP_Coat"), ICON_OVERLAY)
+					clothes_s.Blend(new /icon('icons/mob/head.dmi', "hopcap"), ICON_OVERLAY)
+					clothes_s.Blend(new /icon('icons/mob/eyes.dmi', "sun"), ICON_OVERLAY)
 					clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
 				if(BARTENDER)
 					clothes_s = new /icon(uniform_dmi, "ba_suit_s")
@@ -324,7 +335,7 @@
 
 				if(CHAPLAIN)
 					clothes_s = new /icon(uniform_dmi, "chapblack_s")
-					clothes_s.Blend(new /icon(feet_dmi, "black"), ICON_UNDERLAY)
+					clothes_s.Blend(new /icon(feet_dmi, "laceups"), ICON_UNDERLAY)
 					clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
 				if(CLOWN)
 					clothes_s = new /icon(uniform_dmi, "clown_s")

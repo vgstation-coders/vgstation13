@@ -1,5 +1,6 @@
 #define NO_GAS 0.01
 #define SOME_GAS 1
+#define ENERGY_MULT 6.4   // Not sure what this is, keeping it the same as plates.
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging
 	icon = 'icons/obj/pipes/heat.dmi'
@@ -8,14 +9,14 @@
 
 	minimum_temperature_difference = 20
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
-
-	var/RADIATION_CAPACITY = 32000       // Radiation isn't particularly effective (TODO BALANCE)
-	                                     //  Plate value is 30000, increased it a bit because of additional surface area. - N3X
-	var/const/ENERGY_MULT        = 6.4   // Not sure what this is, keeping it the same as plates.
+	var/radiation_capacity = 30000  // Radiation isn't particularly effective (TODO BALANCE)
+									//  Plate value is 30000, increased it a bit because of additional surface area. - N3X
+									// Screw you N3X15, 30000 is a perfectly fine number. - bur
 
 	burst_type = /obj/machinery/atmospherics/unary/vent/burstpipe/heat_exchanging
 
 	can_be_coloured = 0
+	var/icon_temperature = T20C //stop small changes in temperature causing an icon refresh
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/getNodeType(var/node_id)
 	return PIPE_TYPE_HE
@@ -66,41 +67,51 @@
 	if(!parent)
 		. = ..()
 
-	// Get gas from pipenet
-	var/datum/gas_mixture/internal = return_air()
-	var/remove_ratio = volume/internal.volume
-	var/datum/gas_mixture/internal_removed = internal.remove_ratio(remove_ratio)
-
 	//Get processable air sample and thermal info from environment
 	var/datum/gas_mixture/environment = loc.return_air()
-	var/environment_moles = environment.total_moles()
-	var/transfer_moles = 0.25 * environment_moles
-	var/datum/gas_mixture/external_removed = environment.remove(transfer_moles)
+	var/environment_moles = environment.molar_density() * CELL_VOLUME //Moles per turf
+	//Get gas from pipenet
+	var/datum/gas_mixture/internal = return_air()
 
-	// No environmental gas?  We radiate it, then.
-	if(!external_removed)
-		if(internal_removed)
-			internal.merge(internal_removed)
-		return radiate()
+	//fancy radiation glowing
+	if(internal && internal.temperature)
+		if(icon_temperature > 500 || internal.temperature > 500) //start glowing at 500K
+			if(abs(internal.temperature - icon_temperature) > 10)
+				icon_temperature = internal.temperature
 
-	// Not enough gas in the air around us to care about.  Radiate. Less gas than airless tiles start with.
+				var/h_r = heat2color_r(icon_temperature)
+				var/h_g = heat2color_g(icon_temperature)
+				var/h_b = heat2color_b(icon_temperature)
+
+				if(icon_temperature < 2000) //scale up overlay until 2000K
+					var/scale = (icon_temperature - 500) / 1500
+					h_r = 64 + (h_r - 64)*scale
+					h_g = 64 + (h_g - 64)*scale
+					h_b = 64 + (h_b - 64)*scale
+				
+				var/heat_color = rgb(h_r, h_g, h_b)
+
+				animate(src, color = heat_color, time = 2 SECONDS, easing = SINE_EASING)
+				light_color = heat_color
+		set_light(internal.temperature >= 673.15 ? 1 : 0) //Red heat, visible in the dark
+
+	//Not enough gas in the air around us to care about. Radiate. Less gas than airless tiles start with.
 	if(environment_moles < NO_GAS)
-		if(internal_removed)
-			internal.merge(internal_removed)
-		environment.merge(external_removed)
 		return radiate()
-	// A tiny bit of air so this isn't really space, but its not worth activating exchange procs
+	//A tiny bit of air so this isn't really space, but it's not worth activating exchange procs
 	else if(environment_moles < SOME_GAS)
 		return 0
 
-	// No internal gas.  Screw this, we're out.
-	if(!internal_removed)
-		environment.merge(external_removed)
+	if(!internal.total_moles)
 		return
+
+	var/datum/gas_mixture/external_removed = environment.remove(0.25 * environment_moles)
+	var/datum/gas_mixture/internal_removed = internal.remove_volume(volume)
+
 
 	//Get same info from connected gas
 	var/combined_heat_capacity = internal_removed.heat_capacity() + external_removed.heat_capacity()
-	var/combined_energy = internal_removed.temperature * internal_removed.heat_capacity() + external_removed.heat_capacity() * external_removed.temperature
+	var/combined_energy = internal_removed.thermal_energy() + external_removed.thermal_energy()
 
 	if(!combined_heat_capacity)
 		combined_heat_capacity = 1
@@ -115,18 +126,18 @@
 
 	if(parent && parent.network)
 		parent.network.update = 1
+
 	return 1
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/proc/radiate()
 	var/datum/gas_mixture/internal = return_air()
-	var/remove_ratio = volume/internal.volume
-	var/datum/gas_mixture/internal_removed = internal.remove_ratio(remove_ratio)
+	var/datum/gas_mixture/internal_removed = internal.remove_volume(volume)
 
 	if (!internal_removed)
 		return
 
-	var/combined_heat_capacity = internal_removed.heat_capacity() + RADIATION_CAPACITY
-	var/combined_energy = internal_removed.temperature * internal_removed.heat_capacity() + (RADIATION_CAPACITY * ENERGY_MULT)
+	var/combined_heat_capacity = internal_removed.heat_capacity() + radiation_capacity
+	var/combined_energy = internal_removed.thermal_energy() + (radiation_capacity * ENERGY_MULT)
 
 	var/final_temperature = combined_energy / combined_heat_capacity
 
@@ -217,7 +228,7 @@
 	icon = 'icons/obj/pipe-item.dmi'
 	icon_state = "he_manifold"
 	var/obj/machinery/atmospherics/node3
-	RADIATION_CAPACITY = 24000
+	radiation_capacity = 24000
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/New()
 	.. ()
@@ -271,7 +282,7 @@
 	icon_state = "he_manifold4w"
 	var/obj/machinery/atmospherics/node3
 	var/obj/machinery/atmospherics/node4
-	RADIATION_CAPACITY = 24000
+	radiation_capacity = 24000
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/New()
 	.. ()
@@ -312,3 +323,7 @@
 
 	if(!suppress_icon_check)
 		update_icon()
+
+#undef NO_GAS
+#undef SOME_GAS
+#undef ENERGY_MULT

@@ -12,7 +12,6 @@ var/datum/subsystem/finish/SSfinish
 
 
 /datum/subsystem/finish/Initialize(timeofday)
-	setup_species()
 	setup_shuttles()
 
 	stat_collection.artifacts_discovered = 0 // Because artifacts during generation get counted otherwise!

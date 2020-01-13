@@ -2,7 +2,7 @@
 	name = "alien larva" //The alien larva, not 'Alien Larva'
 	real_name = "alien larva"
 	icon_state = "larva0"
-	status_flags = CANSTUN
+	status_flags = CANSTUN|UNPACIFIABLE
 	pass_flags = PASSTABLE
 
 	maxHealth = 25

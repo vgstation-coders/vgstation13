@@ -1,7 +1,3 @@
-#define HEAT_DAMAGE_LEVEL_1 2 //Amount of damage applied when your body temperature just passes the 360.15k safety point
-#define HEAT_DAMAGE_LEVEL_2 4 //Amount of damage applied when your body temperature passes the 400K point
-#define HEAT_DAMAGE_LEVEL_3 8 //Amount of damage applied when your body temperature passes the 460K point and you are on fire
-
 #define LARVA_GROW_TIME 100
 
 /mob/living/carbon/alien
@@ -27,7 +23,7 @@
 
 	var/move_delay_add = 0 // movement delay to add
 
-	status_flags = CANPARALYSE|CANPUSH
+	status_flags = CANPARALYSE|CANPUSH|UNPACIFIABLE
 	var/heal_rate = 2.5
 	var/plasma_rate = 5
 
@@ -36,6 +32,7 @@
 	var/fire_alert = 0
 
 	var/heat_protection = 0.5
+	var/list/can_only_pickup = list(/obj/item/clothing/mask/facehugger, /obj/item/weapon/grab) //What types of object can the alien pick up?
 
 /mob/living/carbon/alien/AdjustPlasma(amount)
 	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
@@ -120,7 +117,8 @@ In all, this is a lot like the monkey code. /N
 		var/turf/heat_turf = get_turf(src)
 		loc_temp = heat_turf.temperature
 	else if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
-		loc_temp = loc:air_contents.temperature
+		var/obj/machinery/atmospherics/unary/cryo_cell/tube = loc
+		loc_temp = tube.air_contents.temperature
 	else
 		loc_temp = environment.temperature
 
@@ -217,7 +215,8 @@ In all, this is a lot like the monkey code. /N
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
 				var/timeleft = emergency_shuttle.timeleft()
 				if (timeleft)
-					stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+					var/acronym = emergency_shuttle.location == 1 ? "ETD" : "ETA"
+					stat(null, "[acronym]-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 /mob/living/carbon/alien/Stun(amount)
 	if(status_flags & CANSTUN)
@@ -298,7 +297,3 @@ Des: Removes all infected images from the alien.
 
 /mob/living/carbon/alien/has_eyes()
 	return 0
-
-#undef HEAT_DAMAGE_LEVEL_1
-#undef HEAT_DAMAGE_LEVEL_2
-#undef HEAT_DAMAGE_LEVEL_3

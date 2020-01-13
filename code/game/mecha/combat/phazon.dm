@@ -27,21 +27,40 @@
 	ME.attach(src)
 	ME = new /obj/item/mecha_parts/mecha_equipment/gravcatapult
 	ME.attach(src)
+	intrinsic_spells = list(new /spell/mech/phazon/phasing(src))
 	return
 
 /obj/mecha/combat/phazon/to_bump(var/atom/obstacle)
 	if(phasing && get_charge()>=phasing_energy_drain)
-		spawn()
-			if(can_move)
-				can_move = 0
-				flick("phazon-phase", src)
-				src.forceMove(get_step(src,src.dir))
-				src.use_power(phasing_energy_drain)
-				sleep(step_in*3)
+		var/turf/new_turf = get_step(src, dir)
+		var/datum/zLevel/L = get_z_level(new_turf)
+		if (L.teleJammed)
+			return
+		var/area/A = get_area(new_turf)
+		if (A.flags & NO_TELEPORT || A.jammed)
+			return
+		if(can_move)
+			can_move = 0
+			flick("phazon-phase", src)
+			src.forceMove(new_turf)
+			src.use_power(phasing_energy_drain)
+			spawn(step_in*3)
 				can_move = 1
 	else
 		. = ..()
-	return
+
+/spell/mech/phazon/phasing
+	name = "Phasing"
+	desc = "Phase through walls."
+	charge_max = 10
+	charge_counter = 10
+	hud_state = "phazon-phase"
+	override_icon = 'icons/mecha/mecha.dmi'
+
+/spell/mech/phazon/phasing/cast(list/targets, mob/user)
+	var/obj/mecha/combat/phazon/Phazon = linked_mech
+	Phazon.phasing = !Phazon.phasing
+	Phazon.occupant_message("<font color=\"[Phazon.phasing?"#00f\">En":"#f00\">Dis"]abled phasing.</font>")
 
 /obj/mecha/combat/phazon/click_action(atom/target,mob/user)
 	if(phasing)
@@ -49,22 +68,3 @@
 		return
 	else
 		return ..()
-
-/obj/mecha/combat/phazon/get_commands()
-	var/output = {"<div class='wr'>
-						<div class='header'>Special</div>
-						<div class='links'>
-						<a href='?src=\ref[src];phasing=1'><span id="phasing_command">[phasing?"Dis":"En"]able phasing</span></a>
-						</div>
-						</div>
-						"}
-	output += ..()
-	return output
-
-/obj/mecha/combat/phazon/Topic(href, href_list)
-	..()
-	if (href_list["phasing"])
-		phasing = !phasing
-		send_byjax(src.occupant,"exosuit.browser","phasing_command","[phasing?"Dis":"En"]able phasing")
-		src.occupant_message("<font color=\"[phasing?"#00f\">En":"#f00\">Dis"]abled phasing.</font>")
-	return

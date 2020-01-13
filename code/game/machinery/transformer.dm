@@ -23,6 +23,7 @@
 	var/force_borg_module=null
 	var/name_type=NAMETYPE_NORMAL
 	var/enable_namepick=TRUE
+	var/belongstomalf=null //malf AI that owns autoborger
 
 /obj/machinery/transformer/New()
 	// On us
@@ -65,15 +66,15 @@
 		return
 
 	if(!transform_dead && H.stat == DEAD)
-		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
+		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return
 
 	if(jobban_isbanned(H, "Cyborg"))
 		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
 		return
 
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-	H.emote("scream",,, 1) // It is painful
+	playsound(src, 'sound/items/Welder.ogg', 50, 1)
+	H.audible_scream() // It is painful
 	H.adjustBruteLoss(max(0, 80 - H.getBruteLoss())) // Hurt the human, don't try to kill them though.
 	H.handle_regular_hud_updates() // Make sure they see the pain.
 
@@ -82,7 +83,7 @@
 
 	// Delete the items or they'll all pile up in a single tile and lag
 	// skipnaming disables namepick on New(). It's annoying as fuck on malf.  Later on, we enable or disable namepick.
-	var/mob/living/silicon/robot/R = H.Robotize(1, skipnaming=TRUE)
+	var/mob/living/silicon/robot/R = H.Robotize(1, skipnaming=TRUE, malfAI=belongstomalf)
 	if(R)
 		R.cell.maxcharge = robot_cell_charge
 		R.cell.charge = robot_cell_charge
@@ -113,7 +114,7 @@
 		R.updatename()
 
 	spawn(50)
-		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 0)
+		playsound(src, 'sound/machines/ding.ogg', 50, 0)
 		if(R)
 			R.SetKnockdown(0)
 
@@ -129,7 +130,7 @@
 	if(cooldown_state!=old_cooldown_state)
 		update_icon()
 		if(!cooldown_state)
-			playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 0)
+			playsound(src, 'sound/machines/ping.ogg', 50, 0)
 
 /obj/machinery/transformer/conveyor/New()
 	..()

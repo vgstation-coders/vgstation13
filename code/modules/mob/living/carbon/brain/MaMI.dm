@@ -4,6 +4,7 @@
 	origin_tech = Tc_BIOTECH + "=4;" + Tc_PROGRAMMING + "=4"
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "mami_empty"
+	robotic = TRUE
 	var/obj/item/device/mmi/posibrain/posibrain = null
 
 /obj/item/organ/internal/brain/mami/attackby(obj/item/O, mob/user)
@@ -26,7 +27,7 @@
 		to_chat(src.brainmob, "<b><font color='red' size=3>Recall your positronic directives!</font></b>")
 		to_chat(src.brainmob, "<b>You are \a [posibrain], brought into existence on [station_name()].</b>")
 		to_chat(src.brainmob, "<b>As a synthetic intelligence, you answer to all crewmembers, as well as the AI.</b>")
-		to_chat(src.brainmob, "<b>Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm.</b>")
+		to_chat(src.brainmob, "<b>Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm to the station or its crew.</b>")
 
 		name = "Machine-Man Interface: [brainmob.real_name]"
 		icon_state = "mami_full"

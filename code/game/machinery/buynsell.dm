@@ -11,7 +11,7 @@
 				break
 
 //Normally where the transaction itself takes place - logs the transation datums for future reference
-/obj/machinery/proc/scan_card(var/mob/user,var/obj/item/weapon/card/id/C)
+/obj/machinery/proc/scan_card(var/mob/user,var/obj/item/weapon/card/C)
 	return
 
 /obj/machinery/proc/connect_account(var/mob/user, var/obj/item/W)

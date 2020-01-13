@@ -11,6 +11,7 @@
 	var/heating_power = 40000
 	var/base_state = "sheater"
 	var/nocell = 0
+	var/intake_rate = 0.25
 	light_power_on = 0.75
 	light_range_on = 2
 	light_color = LIGHT_COLOR_ORANGE
@@ -20,6 +21,33 @@
 
 	flags = FPRINT
 	machine_flags = SCREWTOGGLE
+
+/obj/machinery/space_heater/vesta
+	name = "VESTA-class heater"
+	desc = "Named for the Roman goddess of fire and the hearth, this heater takes in more air and warms it faster. It's immobile and expends 5x as much power, drawn from the local APC."
+
+	intake_rate = 1
+	heating_power = 400000 //that's a spicy heater!
+	light_power_on = 2
+	set_temperature = 35 //so powerful, let's shut off early
+	icon_state = "vheater0"
+	base_state = "vheater"
+	anchored = 1
+
+/obj/machinery/space_heater/vesta/ispowered()
+	return !(stat & NOPOWER)
+
+/obj/machinery/space_heater/vesta/drain_powersource(var/amount = heating_power)
+	use_power(amount/40000) //uses 10x the power but 2x as efficient (5x consumption)
+
+/obj/machinery/space_heater/vesta/afterheat(var/datum/gas_mixture/G)
+	if(G.temperature >= set_temperature + T0C)
+		on = FALSE
+		loc.visible_message("\The [src] clicks loudly as it shuts off.")
+		update_icon()
+
+/obj/machinery/space_heater/get_cell()
+	return cell
 
 /obj/machinery/space_heater/campfire
 	name = "campfire"
@@ -127,23 +155,23 @@
 	..()
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
-	if(env.oxygen < 5)
+	if(env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
 		to_chat(user, "<span class='notice'>You try to light \the [name], but it won't catch on fire!")
 		return
 	if(!on && cell.charge > 0)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
-		if(istype(I, /obj/item/weapon/weldingtool))
+		if(iswelder(I))
 			var/obj/item/weapon/weldingtool/WT = I
 			if(WT.is_hot()) //Badasses dont get blinded while lighting their !!campfire!! with a welding tool
-				light("<span class='notice'>[user] casually lights \the [name] with \his [I], what a badass.</span>")
+				light("<span class='notice'>[user] casually lights \the [name] with \the [I], what a badass.</span>")
 		else if(istype(I, /obj/item/weapon/lighter/zippo))
 			var/obj/item/weapon/lighter/zippo/Z = I
 			if(Z.is_hot())
-				light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \the [name] with \his [I]. Damn, that's cool.</span>")
+				light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \the [name] with \the [I]. Damn, that's cool.</span>")
 		else if(istype(I, /obj/item/weapon/lighter))
 			var/obj/item/weapon/lighter/L = I
 			if(L.is_hot())
-				light("<span class='notice'>After some fiddling, [user] manages to light \the [name] with \his [I].</span>")
+				light("<span class='notice'>After some fiddling, [user] manages to light \the [name] with \the [I].</span>")
 		else if(istype(I, /obj/item/weapon/melee/energy/sword))
 			var/obj/item/weapon/melee/energy/sword/S = I
 			if(S.is_hot())
@@ -154,11 +182,11 @@
 				light("<span class='notice'>[user] fiddles with \his [I.name], and manages to light \the [name].</span>")
 		//All other items are included here, any item that is hot can light the campfire
 		else if(I.is_hot())
-			light("<span class='notice'>[user] lights \the [name] with \his [I].</span>")
+			light("<span class='notice'>[user] lights \the [name] with \the [I].</span>")
 		return
 	if(istype(I, /obj/item/stack/sheet/wood) && ((on)||(nocell == 2)))
 		var/woodnumber = input(user, "You may insert a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
-		woodnumber = Clamp(woodnumber,0,4)
+		woodnumber = clamp(woodnumber,0,4)
 		var/obj/item/stack/sheet/wood/woody = I
 		woody.use(woodnumber)
 		user.visible_message("<span class='notice'>[user] adds some wood to \the [src].</span>", "<span class='notice'>You add some wood to \the [src].</span>")
@@ -246,7 +274,7 @@
 				var/value = text2num(href_list["val"])
 
 				// limit to 20-90 degC
-				set_temperature = Clamp(set_temperature + value, 20, 90)
+				set_temperature = clamp(set_temperature + value, 20, 90)
 
 			if("cellremove")
 				if(panel_open && cell && !usr.get_active_hand())
@@ -272,19 +300,24 @@
 		usr.unset_machine()
 	return
 
+/obj/machinery/space_heater/proc/ispowered()
+	return cell && cell.charge > 0
 
+/obj/machinery/space_heater/proc/drain_powersource(var/amount = heating_power)
+	cell.use(heating_power/20000)
+
+/obj/machinery/space_heater/proc/afterheat(var/datum/gas_mixture/G)
+	return
 
 /obj/machinery/space_heater/process()
 	if(on)
-		if(cell && cell.charge > 0)
+		if(ispowered())
 			var/turf/simulated/L = loc
 			if(istype(L))
 				var/datum/gas_mixture/env = L.return_air()
 				if(env.temperature != set_temperature + T0C)
 
-					var/transfer_moles = 0.25 * env.total_moles()
-
-					var/datum/gas_mixture/removed = env.remove(transfer_moles)
+					var/datum/gas_mixture/removed = env.remove_volume(intake_rate * CELL_VOLUME)
 
 //					to_chat(world, "got [transfer_moles] moles at [removed.temperature]")
 
@@ -297,11 +330,13 @@
 								removed.temperature = min(removed.temperature + heating_power/heat_capacity, 1000) // Added min() check to try and avoid wacky superheating issues in low gas scenarios -- TLE
 							else
 								removed.temperature = max(removed.temperature - heating_power/heat_capacity, TCMB)
-							cell.use(heating_power/20000)
+							drain_powersource(heating_power)
 
 //						to_chat(world, "now at [removed.temperature]")
 
 					env.merge(removed)
+					afterheat(L.return_air())
+
 			 if(!istype(loc,/turf/space))
 			 	for (var/mob/living/carbon/M in view(src,light_range_on))
 			 		M.bodytemperature += 0.01 * set_temperature * 1/((get_dist(src,M)+1)) // this is a temporary algorithm until we fix life to not have body temperature change so willy-nilly.
@@ -319,13 +354,13 @@
 	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
-	if(!(cell && cell.charge > 0) && nocell != 2 | env.oxygen < 5)
+	if(!(cell && cell.charge > 0) && nocell != 2 | env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
 		new /obj/effect/decal/cleanable/campfire(get_turf(src))
 		qdel(src)
 		return
 	lastcharge = Floor(cell.charge/10)
 	if(on)
-		playsound(get_turf(src), pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
+		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
 
 
 /obj/machinery/space_heater/campfire/Crossed(mob/user as mob)

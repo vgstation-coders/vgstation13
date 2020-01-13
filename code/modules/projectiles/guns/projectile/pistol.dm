@@ -6,7 +6,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	w_class = W_CLASS_MEDIUM
 	max_shells = 10
-	caliber = list(".45"  = 1)
+	caliber = list(POINT45  = 1)
 	silenced = 1
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
@@ -22,10 +22,11 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	force = 14.0
 	max_shells = 7
-	caliber = list(".50" = 1)
+	caliber = list(POINT50 = 1)
 	ammo_type ="/obj/item/ammo_casing/a50"
 	mag_type = "/obj/item/ammo_storage/magazine/a50"
 	load_method = 2
+	recoil = 3
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -49,12 +50,13 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 8
-	caliber = list("75" = 1)
+	caliber = list(POINT75 = 1)
 	fire_sound = 'sound/weapons/elecfire.ogg'
 	origin_tech = Tc_COMBAT + "=3"
 	ammo_type = "/obj/item/ammo_casing/a75"
 	mag_type = "/obj/item/ammo_storage/magazine/a75"
 	load_method = 2
+	recoil = 4
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -72,7 +74,7 @@
 	icon_state = "pistol"
 	w_class = W_CLASS_SMALL
 	max_shells = 8
-	caliber = list("9mm" = 1)
+	caliber = list(MM9 = 1)
 	silenced = 0
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
@@ -118,10 +120,11 @@
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/c45"
 	max_shells = 8
-	caliber = list(".45"  = 1)
+	caliber = list(POINT45  = 1)
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
+	recoil = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/NTUSP/update_icon()
@@ -139,32 +142,42 @@
 
 
 
-/obj/item/weapon/gun/projectile/sec
+/obj/item/weapon/gun/projectile/glock
 	name = "\improper NT Glock"
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. "
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket."
 	icon = 'icons/obj/biggun.dmi'
+	w_class = W_CLASS_SMALL
+	clowned = CLOWNABLE
 	icon_state = "secglockfancy"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
+	mag_type_restricted = list(/obj/item/ammo_storage/magazine/m380auto/extended)
 	max_shells = 8
-	caliber = list(".45"  = 1)
+	caliber = list(POINT380  = 1)
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
 
-/obj/item/weapon/gun/projectile/sec/update_icon()
+/obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
-	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
+	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
 
-/obj/item/weapon/gun/projectile/sec/fancy
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds.<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maint crawling!</span>"
+/obj/item/weapon/gun/projectile/glock/fancy
 	name = "\improper NT Glock Custom"
 	icon_state = "secgunfancy"
+	clowned = UNCLOWN
 
-/obj/item/weapon/gun/projectile/sec/fancy/update_icon()
+/obj/item/weapon/gun/projectile/glock/fancy/New()
+	. = ..()
+	desc += "<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maintenance crawling!</span>"
+
+/obj/item/weapon/gun/projectile/glock/fancy/update_icon()
 	..()
 	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
+
+/obj/item/weapon/gun/projectile/glock/lockbox
+	spawn_mag = FALSE
 
 /obj/item/weapon/gun/projectile/luger
 	name = "\improper Luger P08"
@@ -172,7 +185,7 @@
 	icon_state = "p08"
 	max_shells = 8
 	origin_tech = "combat=2;materials=2"
-	caliber = list("9mm" = 1)
+	caliber = list(MM9 = 1)
 	silenced = 0
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
@@ -184,3 +197,52 @@
 /obj/item/weapon/gun/projectile/luger/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][stored_magazine ? "" : "empty"]"
+
+/obj/item/weapon/gun/projectile/luger/small
+	desc = "The wrath of the SS. Now in extra-concealed size for civilian uses!"
+	w_class = W_CLASS_SMALL
+
+/obj/item/weapon/gun/projectile/beretta
+	name = "\improper Beretta 92FS"
+	desc = "The classic wonder nine and favorite of the undercover cop. Kong whiskey not included."
+	icon = 'icons/obj/beretta.dmi'
+	icon_state = "beretta"
+	max_shells = 15
+	caliber = list(MM9 = 1)
+	silenced = 0
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"
+	ammo_type = "/obj/item/ammo_casing/c9mm"
+	mag_type = "/obj/item/ammo_storage/magazine/beretta"
+	load_method = 2
+	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/beretta/update_icon()
+	..()
+	icon_state = "beretta[chambered ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/automag
+	name = "\improper Automag VI"
+	desc = "It also doubles as a fingerprint removal tool."
+	icon_state = "automag"
+	max_shells = 7
+	caliber = list(POINT357 = 1)
+	silenced = 0
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3;" + Tc_SYNDICATE + "=3"
+	ammo_type = "/obj/item/ammo_casing/a357"
+	mag_type = "/obj/item/ammo_storage/magazine/a357"
+	load_method = 2
+	recoil = 3
+	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/automag/update_icon()
+	..()
+	icon_state = "automag[chambered ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/automag/prestige
+	name = "\improper Prestige Automag VI"
+	desc = "It also doubles as a fingerprint removal tool. This one is made to look more like the original AutomagIV from the 20th century."
+	icon_state = "automag-prestige"
+
+/obj/item/weapon/gun/projectile/automag/prestige/update_icon()
+	..()
+	icon_state = "automag-prestige[chambered ? "" : "-e"]"

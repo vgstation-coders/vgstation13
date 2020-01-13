@@ -1,0 +1,48 @@
+<div class="item">
+	<div class="itemLabel">
+		Stored Capacity:
+	</div>
+	<div class="itemContent">
+		{{:helper.displayBar(data.charge, 0, 2000, data.active ? 'good' : 'average')}}
+		<div class="statusValue">
+			{{:helper.round(data.charge)}} megajoules
+		</div>
+	</div>
+	<div class="itemLabel">
+		Power Management:
+	</div>
+	<div class="itemContent">
+		{{:helper.link('Toggle Power', 'power', {'toggle' : 1})}}
+		{{:helper.link('Set Consumption', 'battery-3', {'set_draw' : 1})}}
+	</div>
+	<div class="itemLabel">
+		Consumption:
+	</div>
+	<div class="itemContent">
+		{{:helper.precisionRound(data.consumption,1)}} megawatts 
+	</div>
+	<div class="itemContent"> 
+		{{if data.active}}
+			{{if data.charging}}
+				<span class='good'>Charging</span>
+			{{else}}
+				<span class='bad'>Insufficient Power</span>
+			{{/if}}
+		{{else}}
+			<span class='average'>Off</span>
+		{{/if}}
+	</div>
+</div>
+{{for data.categories}}
+	{{:helper.link(value.category, 'folder-collapsed', {'category' : value.category}, value.category == data.selectedCategory ? 'selected' : null)}}
+{{for}}
+<div class="item">&nbsp;</div>
+<div class="statusDisplay">
+	{{for data.synthList}}
+		{{if value.category == data.selectedCategory}}
+			<div class="item">
+				{{:helper.link(value.name, 'gear', {'synth' : value.name})}} {{:value.cost}} megajoules
+			</div>
+		{{/if}}
+	{{for}}
+</div>

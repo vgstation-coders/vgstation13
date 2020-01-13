@@ -1,6 +1,6 @@
 /obj/item/device/maracas
 	name = "maracas"
-	desc = "Chick-chicky-boom, chick-chicky boom."
+	desc = "Rather than using beads in a hollow shell, these space maracas use a long-life WATT potassium battery and a sensor to detect when they're shaken. Chick-chicky-boom, chick-chicky boom."
 	icon = 'icons/obj/maracas.dmi'
 	icon_state = "maracas"
 	item_state = "maracas"
@@ -40,11 +40,8 @@
 	if(emagged)
 		to_chat(user, "<span class='warning'>You're not sure why, but you swear that you can hear the maracas ticking.</span>")
 
-/obj/item/device/maracas/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
-		to_chat(user, "<span class='warning'>You're not sure why, but you swear that you can hear the maracas ticking.</span>")
-		emagged = 1
-	return
+/obj/item/device/maracas/emag_act(mob/user)
+	emagged = 1
 
 /obj/item/device/maracas/afterattack()
 	chickchicky()

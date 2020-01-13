@@ -141,6 +141,8 @@ var/syndicate_elite_shuttle_timeleft = 0
 			explosion(T,4,6,8,10,0)
 
 	sleep(40)
+	
+	//what the fuck is that \/
 //	proc/explosion(turf/epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, adminlog = 1)
 
 */

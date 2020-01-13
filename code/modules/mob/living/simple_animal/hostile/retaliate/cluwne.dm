@@ -12,16 +12,18 @@
 	icon_gib = "clown_gib"
 	speak_chance = 50
 	turns_per_move = 5
-	response_help = "pokes the"
-	response_disarm = "gently pushes aside the"
-	response_harm = "hits the"
+	response_help = "pokes"
+	response_disarm = "gently pushes aside"
+	response_harm = "hits"
 	speak = list("HONK", "Honk!", "PLEASE KILL ME")
 	speak_emote = list("squeals", "cries","sobs")
-	emote_see = list("honks sadly")
+	emote_hear = list("honks sadly")
 	speak_chance = 1
 	a_intent = I_HELP
 	var/footstep=0 // For clownshoe noises
 	//deny_client_move=1 // HONK // Doesn't work right yet
+
+	meat_type = null
 
 	stop_automated_movement_when_pulled = 1
 	maxHealth = 30
@@ -53,13 +55,13 @@
 	disabilities=EPILEPSY|COUGHING
 	mutations = list(M_CLUMSY)
 
-	var/datum/speech_filter/filter
+	var/datum/speech_filter/speech_filter
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/New()
 	..()
 	// Set up wordfilter
-	filter = new
-	filter.addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)",
+	speech_filter = new
+	speech_filter.addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)",
 	list(
 		"honker",
 		"fun police",
@@ -68,189 +70,32 @@
 	// HELP THEY'RE KILLING ME
 	// FINALLY THEY'RE TICKLING ME
 	var/tickle_prefixes="\\b(kill+|murder|beat|wound|hurt|harm)"
-	filter.addReplacement("[tickle_prefixes]ing","tickling")
-	filter.addReplacement("[tickle_prefixes]ed", "tickled")
-	filter.addReplacement(tickle_prefixes,       "tickle")
+	speech_filter.addReplacement("[tickle_prefixes]ing","tickling")
+	speech_filter.addReplacement("[tickle_prefixes]ed", "tickled")
+	speech_filter.addReplacement(tickle_prefixes,       "tickle")
 
-	filter.addReplacement("h\[aei\]lp\\s+me","end my show")
-	filter.addReplacement("h\[aei\]lp\\s+him","end his show")
-	filter.addReplacement("h\[aei\]lp\\s+her","end her show")
-	filter.addReplacement("h\[aei\]lp\\s+them","end their show")
-	filter.addReplacement("h\[aei\]lp\\s+(\[^\\s\]+)","end $1's show")
-	filter.addReplacement("^h\[aei\]lp.*","END THE SHOW")
+	speech_filter.addReplacement("h\[aei\]lp\\s+me","end my show")
+	speech_filter.addReplacement("h\[aei\]lp\\s+him","end his show")
+	speech_filter.addReplacement("h\[aei\]lp\\s+her","end her show")
+	speech_filter.addReplacement("h\[aei\]lp\\s+them","end their show")
+	speech_filter.addReplacement("h\[aei\]lp\\s+(\[^\\s\]+)","end $1's show")
+	speech_filter.addReplacement("^h\[aei\]lp.*","END THE SHOW")
 
-/*
-	var/stance = CLOWN_STANCE_IDLE	//Used to determine behavior
-	var/mob/living/target_mob
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	if(client || stat || stat==DEAD)
-		return //Lets not force players or dead/incap cluwnes to move
-	..()
-	if(!stat && !resting && !locked_to)
-		if(health > maxHealth)
-			health = maxHealth
-		if(health <= 0)
-			stat=DEAD
-
-
-		if(!ckey && !stop_automated_movement)
-			if(isturf(src.loc) && !resting && !locked_to && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
-				turns_since_move++
-				if(turns_since_move >= turns_per_move)
-					if(!(stop_automated_movement_when_pulled && pulledby)) //Soma animals don't move when pulled
-						Move(get_step(src,pick(cardinal)))
-						turns_since_move = 0
-
-		if(!stat)
-			switch(stance)
-				if(CLOWN_STANCE_IDLE)
-					if (src.hostile == 0)
-						return
-					for(var/atom/A in view(7,src))
-						if(iscluwne(A))
-							continue
-
-						if(isliving(A))
-							var/mob/living/L = A
-							if(!L.stat)
-								stance = CLOWN_STANCE_ATTACK
-								target_mob = L
-								break
-
-						if(istype(A, /obj/mecha))
-							var/obj/mecha/M = A
-							if (M.occupant)
-								stance = CLOWN_STANCE_ATTACK
-								target_mob = M
-								break
-					if (target_mob)
-						emote("honks menacingly at [target_mob]")
-
-				if(CLOWN_STANCE_ATTACK)	//This one should only be active for one tick
-					stop_automated_movement = 1
-					if(!target_mob || SA_attackable(target_mob))
-						stance = CLOWN_STANCE_IDLE
-					if(target_mob in view(7,src))
-						walk_to(src, target_mob, 1, 3)
-						stance = CLOWN_STANCE_ATTACKING
-
-				if(CLOWN_STANCE_ATTACKING)
-					stop_automated_movement = 1
-					if(!target_mob || SA_attackable(target_mob))
-						stance = CLOWN_STANCE_IDLE
-						target_mob = null
-						return
-					if(!(target_mob in view(7,src)))
-						stance = CLOWN_STANCE_IDLE
-						target_mob = null
-						return
-					if(get_dist(src, target_mob) <= 1)	//Attacking
-						if(isliving(target_mob))
-							var/mob/living/L = target_mob
-							L.attack_animal(src)
-							if(prob(10))
-								L.Knockdown(5)
-								L.visible_message("<span class='danger'>\the [src] slips \the [L]!</span>")
-							for(var/mob/H in viewers(src, null))
-								if(istype(H, /mob/living/simple_animal/clown))
-									var/mob/living/simple_animal/clown/C = H
-									C.hostile = 1
-						if(istype(target_mob,/obj/mecha))
-							var/obj/mecha/M = target_mob
-							M.attack_animal(src)
-							for(var/mob/H in viewers(src, null))
-								if(istype(H, /mob/living/simple_animal/clown))
-									var/mob/living/simple_animal/clown/C = H
-									C.hostile = 1
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/bullet_act(var/obj/item/projectile/Proj)
-	..()
-	hostile = 1
-	for(var/mob/M in viewers(src, null))
-		if(istype(M, /mob/living/simple_animal/hostile/retaliate/cluwne))
-			var/mob/living/simple_animal/hostile/retaliate/cluwne/C = M
-			C.hostile = 1
-	return 0
-
-
-/*
-/mob/living/simple_animal/hostile/retaliate/cluwne/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	..()
-	hostile = 1
-	for(var/mob/Z in viewers(src, null))
-		if(istype(Z, /mob/living/simple_animal/hostile/retaliate/cluwne))
-			var/mob/living/simple_animal/hostile/retaliate/cluwne/C = Z
-			C.hostile = 1
-	return 0
-*/
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	..()
-	hostile = 1
-	for(var/mob/Z in viewers(src, null))
-		if(istype(Z, /mob/living/simple_animal/hostile/retaliate/cluwne))
-			var/mob/living/simple_animal/hostile/retaliate/cluwne/C = Z
-			C.hostile = 1
-	return 0
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/attack_hand(mob/living/carbon/human/M as mob)
-	..()
-	hostile = 1
-	for(var/mob/Z in viewers(src, null))
-		if(istype(Z, /mob/living/simple_animal/hostile/retaliate/cluwne))
-			var/mob/living/simple_animal/hostile/retaliate/cluwne/C = Z
-			C.hostile = 1
-	return 0
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/proc/alertMode()
-	hostile = 1
-	for(var/mob/Z in viewers(src, null))
-		if(istype(Z, /mob/living/simple_animal/hostile/retaliate/cluwne))
-			var/mob/living/simple_animal/hostile/retaliate/cluwne/C = Z
-			C.hostile = 1
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/attack_animal(mob/living/simple_animal/M as mob)
-	alertMode()
-	if(M.melee_damage_upper <= 0)
-		M.emote("[M.friendly] \the <EM>[src]</EM>")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		health -= damage
-/*
-/mob/living/simple_animal/hostile/retaliate/cluwne/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	alertMode()
-	if(M.melee_damage_upper <= 0)
-		M.emote("[M.friendly] \the <EM>[src]</EM>")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		health -= damage
-*/
-*/
 /mob/living/simple_animal/hostile/retaliate/cluwne/AttackingTarget()
 	if(isliving(target))
 		var/mob/living/L = target
 		if(prob(10))
 			L.Knockdown(5)
+			L.Stun(5)
 			L.visible_message("<span class='danger'>\The [src.name] slips \the [L.name]!</span>")
 			return
 	return ..()
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	var/currenthealth = health
+	..()
+	playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
+	health = currenthealth
 	//only knowledge can kill a cluwne
 	if(istype(O,/obj/item/weapon/book))
 		gib()
@@ -277,7 +122,7 @@
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/say(var/message)
-	message = filter.FilterSpeech(lowertext(message))
+	message = speech_filter.FilterSpeech(lowertext(message))
 	var/list/temp_message = splittext(message, " ") //List each word in the message
 	// Stolen from peirrot's throat
 	for(var/i=1, (i <= temp_message.len), i++) //Loop for each stage of the disease or until we run out of words
@@ -285,10 +130,6 @@
 			temp_message[i] = "HONK"
 	message = uppertext(jointext(temp_message, " "))
 	return ..(message)
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/Die()
-	..()
-	walk(src, 0)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/proc/handle_disabilities()
 	if ((prob(5) && paralysis < 10))
@@ -300,11 +141,10 @@
 		return //under effects of time magick
 
 	var/msg = pick("quietly sobs into a dirty handkerchief","cries into [gender==MALE?"his":"her"] hands","bawls like a cow")
-	msg = "<B>[src]</B> [msg]"
-	return ..(msg)
+	return ..("me", type, "[msg].")
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
-	. = ..(NewLoc, Dir, step_x, step_y)
+/mob/living/simple_animal/hostile/retaliate/cluwne/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	. = ..()
 
 	if(.)
 		if(m_intent == "run")
@@ -325,7 +165,7 @@
 	response_help = "honks the"
 	speak = list("Honk!")
 	speak_emote = list("sqeaks")
-	emote_see = list("honks")
+	emote_hear = list("honks")
 	maxHealth = 100
 	health = 100
 	size = 1
@@ -344,8 +184,8 @@
 		return
 	..()
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/Die()
-	..()
+/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/death(var/gibbed = FALSE)
+	..(TRUE)
 	new /obj/item/clothing/mask/gas/clown_hat(src.loc)
 	new /obj/item/clothing/shoes/clown_shoes(src.loc)
 	qdel(src)

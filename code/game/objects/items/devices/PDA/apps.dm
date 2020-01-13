@@ -2,6 +2,7 @@
 
 //Menu values
 var/global/list/pda_app_menus = list(
+	PDA_APP_ALARM,
 	PDA_APP_RINGER,
 	PDA_APP_SPAMFILTER,
 	PDA_APP_BALANCECHECK,
@@ -37,14 +38,39 @@ var/global/list/pda_app_menus = list(
 	desc = "Set the frequency to that of a desk bell to be notified anytime someone presses it."
 	price = 10
 	menu = PDA_APP_RINGER
+	icon = "pda_bell"
 	var/frequency = 1457	//	1200 < frequency < 1600 , always end with an odd number.
 	var/status = 1			//	0=off 1=on
 
+/datum/pda_app/alarm
+	name = "Alarm"
+	desc = "Set a time for a personal alarm to trigger."
+	price = 0
+	//menu = PDA_APP_ALARM Don't uncomment, it's listed elsewhere by the clock
+	icon = "pda_clock"
+	var/target = 0
+	var/status = 1			//	0=off 1=on
+
+/datum/pda_app/alarm/proc/set_alarm(var/await)
+	if(await<=0)
+		return FALSE
+	target = world.time + (await MINUTES)
+	spawn((await MINUTES) + 1 SECONDS)
+		alarm()
+	return TRUE
+
+/datum/pda_app/alarm/proc/alarm()
+	if(!status || world.time < target)
+		return //End the loop if if was disabled or if the target isn't here yet. e.g.: target changed
+	playsound(pda_device, 'sound/machines/chime.ogg', 200, FALSE)
+	sleep(1 SECONDS)
+	alarm()
 
 /datum/pda_app/light_upgrade
 	name = "PDA Flashlight Enhancer"
 	desc = "Slightly increases the luminosity of your PDA's flashlight."
 	price = 60
+	icon = "pda_flashlight"
 
 /datum/pda_app/light_upgrade/onInstall()
 	..()
@@ -57,8 +83,8 @@ var/global/list/pda_app_menus = list(
 	desc = "Spam messages won't ring your PDA anymore. Enjoy the quiet."
 	price = 30
 	menu = PDA_APP_SPAMFILTER
+	icon = "pda_mail"
 	var/function = 1	//0=do nothing 1=conceal the spam 2=block the spam
-
 
 /datum/pda_app/balance_check
 	name = "Virtual Wallet and Balance Check"
@@ -85,23 +111,23 @@ var/global/list/pda_app_menus = list(
 	..()
 
 /datum/pda_app/station_map
-	name = "Station Map"
-	desc = "Displays a minimap of the station. You'll find a marker at your location. Place more markers using coordinates."
+	name = "Station Holo-Map ver. 2.0"
+	desc = "Displays a holo-map of the station. Useful for finding your way."
 	price = 50
 	menu = PDA_APP_STATIONMAP
-	var/list/markers = list()
-	var/markx = 1
-	var/marky = 1
+	icon = "pda_map"
+	var/obj/item/device/station_map/holomap = null
+
+/datum/pda_app/station_map/onInstall(var/obj/item/device/pda/device)
+	..()
+	if (istype(device))
+		holomap = new(device)
 
 /datum/pda_app/station_map/Destroy()
-	markers = null
+	if (holomap)
+		qdel(holomap)
+		holomap = null
 	..()
-
-/datum/minimap_marker
-	var/name = "default marker"
-	var/x = 1
-	var/y = 1
-	var/num = 0
 
 ///////////SNAKEII//////////////////////////////////////////////////////////////
 
@@ -140,7 +166,7 @@ var/global/list/pda_app_menus = list(
 	game_update(user)
 
 	if(snake_game.head.next_full)
-		playsound(get_turf(pda_device), 'sound/misc/pda_snake_eat.ogg', volume * 5, 1)
+		playsound(pda_device, 'sound/misc/pda_snake_eat.ogg', volume * 5, 1)
 
 	if(!paused)
 		if(!snake_game.gameover)
@@ -173,7 +199,7 @@ var/global/list/pda_app_menus = list(
 		pause(user)
 
 /datum/pda_app/snake/proc/game_over(var/mob/user)
-	playsound(get_turf(pda_device), 'sound/misc/pda_snake_over.ogg', volume * 5, 0)
+	playsound(pda_device, 'sound/misc/pda_snake_over.ogg', volume * 5, 0)
 	for(var/i=1;i <= 4;i++)
 		for(var/datum/snake/body/B in snake_game.snakeparts)
 			B.flicking = 1

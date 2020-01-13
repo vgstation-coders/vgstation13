@@ -58,10 +58,10 @@
 	interact(user)
 
 /obj/item/device/destTagger/attackby(obj/item/W, mob/user)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		panel = !panel
 		to_chat(user, "<span class='notify'>You [panel ? "open" : "close"] the panel on \the [src].</span>")
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		update_icon()
 		return 1
 
@@ -88,12 +88,12 @@
 	add_fingerprint(usr)
 
 	if(href_list["nextTag"])
-		currTag = Clamp(text2num(href_list["nextTag"]), 0, destinations.len)
+		currTag = clamp(text2num(href_list["nextTag"]), 0, destinations.len)
 		interact(usr)
 		return 1
 
 	if(href_list["remove_dest"] && mode)
-		var/idx = Clamp(text2num(href_list["remove_dest"]), 1, destinations.len)
+		var/idx = clamp(text2num(href_list["remove_dest"]), 1, destinations.len)
 		if(currTag == destinations[idx])
 			currTag = 0 // In case the index was at the end of the list
 		destinations -= destinations[idx]
@@ -105,6 +105,10 @@
 		destinations |= newtag
 		interact(usr)
 		return 1
+
+/obj/item/device/destTagger/cyborg
+	name = "cyborg destination tagger"
+	mode = TRUE
 
 /obj/machinery/disposal/deliveryChute
 	name = "Delivery chute"
@@ -195,36 +199,32 @@
 	if(!I || !user)
 		return
 
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		if(c_mode==0)
 			c_mode=1
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
 		else if(c_mode==1)
 			c_mode=0
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
-	else if(istype(I,/obj/item/weapon/weldingtool) && c_mode==1)
+	else if(iswelder(I) && c_mode==1)
 		var/obj/item/weapon/weldingtool/W = I
-		if(W.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the floorweld off the delivery chute.")
-			if(do_after(user, src,20))
-				if(!src || !W.isOn())
-					return
-				to_chat(user, "You sliced the floorweld off the delivery chute.")
-				var/obj/structure/disposalconstruct/C = new (src.loc)
-				C.ptype = 8 // 8 =  Delivery chute
-				C.update()
-				C.anchored = 1
-				C.density = 1
-				qdel(src)
-			return
-		else
-			to_chat(user, "You need more welding fuel to complete this task.")
-			return
+		to_chat(user, "You start slicing the floorweld off the delivery chute.")
+		if(W.do_weld(user, src,20, 0))
+			if(gcDestroyed)
+				return
+			to_chat(user, "You sliced the floorweld off the delivery chute.")
+			var/obj/structure/disposalconstruct/C = new (src.loc)
+			C.ptype = 8 // 8 =  Delivery chute
+			C.update()
+			C.anchored = 1
+			C.setDensity(TRUE)
+			qdel(src)
+
+
 
 /obj/machinery/disposal/deliveryChute/process()
 	if(doFlushIn>0)
@@ -341,7 +341,7 @@
 
 	if("changedir" in href_list)
 		var/changingdir = text2num(href_list["changedir"])
-		changingdir = Clamp(changingdir, 1, 3)//No runtimes from HREF exploits.
+		changingdir = clamp(changingdir, 1, 3)//No runtimes from HREF exploits.
 
 		var/newdir = input("Select the new direction", "MinerX SortMaster 5000", "North") as null|anything in list("North", "South", "East", "West")
 		if(!newdir)
@@ -405,7 +405,7 @@
 	if(href_list["toggle_types"])
 		var/typeID = text2num(href_list["toggle_types"])
 
-		typeID = Clamp(typeID, 1, types.len)//No HREF exploits causing runtimes.
+		typeID = clamp(typeID, 1, types.len)//No HREF exploits causing runtimes.
 
 		if(types[typeID] in selected_types)//Toggle these
 			selected_types -= types[typeID]
@@ -507,7 +507,7 @@
 		return
 
 	if(href_list["toggle_dest"])
-		var/idx = Clamp(text2num(href_list["toggle_dest"]), 0, destinations.len)
+		var/idx = clamp(text2num(href_list["toggle_dest"]), 0, destinations.len)
 		if(destinations[idx] in sorting)
 			sorting -= destinations[idx]
 		else
@@ -516,7 +516,7 @@
 		return 1
 
 	if(href_list["remove_dest"])
-		var/idx = Clamp(text2num(href_list["remove_dest"]), 0, destinations.len)
+		var/idx = clamp(text2num(href_list["remove_dest"]), 0, destinations.len)
 		sorting -= destinations[idx]
 		destinations -= destinations[idx]
 		updateUsrDialog()
@@ -535,41 +535,3 @@
 
 /obj/machinery/sorting_machine/destination/unwrapped
 	unwrapped = 1
-
-/obj/machinery/sorting_machine/destination/taxi_engi
-	sorting = list(
-		"QM OFFICE",
-		"CARGO BAY",
-		"JANITOR CLOSET",
-		"HOP OFFICE",
-		"HYDROPONICS",
-		"KITCHEN",
-		"THEATRE",
-		"BAR",
-		"ATMOSPHERICS",
-		"CE OFFICE",
-		"ENGINEERING"
-	)
-
-/obj/machinery/sorting_machine/destination/taxi_engi/unwrapped
-	unwrapped = 1
-
-/obj/machinery/sorting_machine/destination/taxi_med
-	sorting = list(
-		"MEDBAY",
-		"CMO OFFICE",
-		"CHEMISTRY",
-		"GENETICS",
-		"RESEARCH",
-		"RD OFFICE",
-		"TELECOMMS",
-		"ROBOTICS"
-	)
-
-/obj/machinery/sorting_machine/destination/taxi_secsci
-	sorting = list(
-		"SECURITY",
-		"HOS OFFICE",
-		"CHAPEL",
-		"LIBRARY"
-	)

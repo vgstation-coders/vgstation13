@@ -22,37 +22,6 @@ var/global/lastDecTalkUse = 0
 	This file has the basic atom/movable level speech procs.
 	And the base of the send_speech() proc, which is the core of saycode.
 */
-var/list/freqtospan = list(
-	"1459" = "commonradio",
-	"1351" = "sciradio",
-	"1355" = "medradio",
-	"1357" = "engradio",
-	"1347" = "supradio",
-	"1349" = "serradio",
-	"1359" = "secradio",
-	"1353" = "comradio",
-	"1447" = "aiprivradio",
-	"1213" = "syndradio",
-	"1441" = "dsquadradio",
-	"1345" = "resteamradio",
-	"1215" = "raiderradio",
-	)
-
-var/list/freqtoname = list(
-	"1459" = "Common",
-	"1351" = "Science",
-	"1353" = "Command",
-	"1355" = "Medical",
-	"1357" = "Engineering",
-	"1359" = "Security",
-	"1441" = "Deathsquad",
-	"1213" = "Syndicate",
-	"1347" = "Supply",
-	"1349" = "Service",
-	"1447" = "AI Private",
-	"1345" = "Response Team",
-	"1215" = "Raider",
-)
 
 /atom/movable/proc/say(message, var/datum/language/speaking, var/atom/movable/radio=src, var/class) //so we can force nonmobs to speak a certain language
 	if(!can_speak())
@@ -76,9 +45,40 @@ var/list/freqtoname = list(
 	say_testing(src, "/atom/movable/proc/send_speech() start, msg = [speech.message]; message_range = [range]; language = [speech.language ? speech.language.name : "None"];")
 	if(isnull(range))
 		range = 7
+	range = atmospheric_speech(speech,range)
 	var/rendered = render_speech(speech)
-	for(var/atom/movable/AM in get_hearers_in_view(range, src))
+	var/list/listeners = get_hearers_in_view(range, src)
+	if(speech.speaker.GhostsAlwaysHear())
+		listeners |= observers
+	for(var/atom/movable/AM in listeners)
 		AM.Hear(speech, rendered)
+
+/atom/movable/proc/atmospheric_speech(var/datum/speech/speech, var/range=7)
+	var/turf/T = get_turf(speech.speaker)
+	if(T && !T.c_airblock(T)) //we are on an airflowing tile
+		var/atmos = 0
+		var/datum/gas_mixture/current_air = T.return_air()
+		if(current_air)
+			atmos = round(current_air.return_pressure()/ONE_ATMOSPHERE, 0.1)
+		else
+			atmos = 0 //no air
+
+		range = min(round(range * sqrt(atmos)), range) //Range technically falls off with the root of pressure (see Newtonian sound)
+		range = max(range, 1) //If you get right next to someone you can read their lips, or something.
+		/*Rough range breakpoints for default 7-range speech
+		10kpa: 0 (round 0.09 down to 0 for atmos value)
+		11kpa: 2
+		21kpa: 3
+		51kpa: 4
+		61kpa: 5
+		81kpa: 6
+		101kpa: 7 (normal)
+		*/
+
+	return range
+
+/atom/movable/proc/GhostsAlwaysHear()
+	return FALSE
 
 /atom/movable/proc/create_speech(var/message, var/frequency=0, var/atom/movable/transmitter=null)
 	if(!transmitter)
@@ -102,11 +102,8 @@ var/list/freqtoname = list(
 /atom/movable/proc/render_speech(var/datum/speech/speech)
 	say_testing(src, "render_speech() - Freq: [speech.frequency], radio=\ref[speech.radio]")
 	var/freqpart = ""
-	var/radioicon = ""
 	if(speech.frequency)
-		if(speech.radio)
-			radioicon = "[bicon(speech.radio)]"
-		freqpart = " [radioicon]\[[get_radio_name(speech.frequency)]\]"
+		freqpart = " \[[get_radio_name(speech.frequency)]\]"
 		speech.wrapper_classes.Add(get_radio_span(speech.frequency))
 	var/pooled=0
 	var/datum/speech/filtered_speech

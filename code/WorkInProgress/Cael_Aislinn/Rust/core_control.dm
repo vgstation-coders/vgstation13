@@ -7,7 +7,7 @@
 	var/list/connected_devices = list()
 	var/scan_range = 25
 	circuit = /obj/item/weapon/circuitboard/rust_core_control
-	
+
 	//currently viewed
 	var/obj/machinery/power/rust_core/cur_viewed_device
 
@@ -119,7 +119,7 @@
 		return
 
 	if(href_list["access_device"])
-		var/idx = Clamp(text2num(href_list["toggle_active"]), 1, connected_devices.len)
+		var/idx = clamp(text2num(href_list["toggle_active"]), 1, connected_devices.len)
 		cur_viewed_device = connected_devices[idx]
 		updateUsrDialog()
 		return 1

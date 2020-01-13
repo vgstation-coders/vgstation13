@@ -2,7 +2,7 @@
 //todo
 /datum/artifact_effect/sleepy
 	effecttype = "sleepy"
-	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
+	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 
 /datum/artifact_effect/sleepy/New()
 	..()
