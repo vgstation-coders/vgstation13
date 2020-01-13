@@ -6,8 +6,6 @@
 ######################################################################
 
 abi79 - Game Master
-bomberharris - Game Master
-bomber harris - Game Master
 arcalane - Game Admin
 asanadas - Game Admin
 bobbehluvspropane - Game Admin
