@@ -171,7 +171,13 @@ proc/process_adminbus_teleport_locs()
 /area/no_ethereal
 	anti_ethereal = 1
 
-
+/area/dojo
+	name = "\improper Spider Clan Dojo"
+	icon_state = "dojo"
+	requires_power = 0
+	dynamic_lighting = 0
+	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE 
 
 //These are shuttle areas, they must contain two areas in a subgroup if you want to move a shuttle from one
 //place to another. Look at escape shuttle for example.
