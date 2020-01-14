@@ -179,7 +179,7 @@
 					to_chat(user, "<span class='notice'>You wire \the [src]!</span>")
 					buildstage = SYSTEMISKINDADONE
 				return 1
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "<span class='notice'>You remove the securing bolts...</span>")
 				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISNOTDONE)

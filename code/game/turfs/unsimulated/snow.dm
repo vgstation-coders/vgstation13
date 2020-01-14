@@ -301,6 +301,11 @@
 	name = "asphalt"
 	desc = "Specially treated Centcomm asphalt, designed to disintegrate all snow that touches it."
 
+/turf/unsimulated/floor/snow/asphalt/mine
+	name = "mine road"
+	desc = "Made of asphalt. If you get lost, just follow the old mining road..."
+	ignore_blizzard_updates = TRUE
+
 /turf/unsimulated/floor/snow/permafrost
 	icon_state = "permafrost_full"
 	real_snow_tile = FALSE
@@ -325,6 +330,11 @@
 	desc = "Sheltered from blizzards outside, but still cold."
 	ignore_blizzard_updates = TRUE
 	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
+
+/turf/unsimulated/floor/snow/cave/rock
+	name = "rocky cave floor"
+	real_snow_tile = FALSE
+	icon_state = "permafrost_full"
 
 /turf/unsimulated/floor/snow/heavy_blizzard
 	name = "heavy blizzard"

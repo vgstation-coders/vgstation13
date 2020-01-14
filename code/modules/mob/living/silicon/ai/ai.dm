@@ -844,7 +844,7 @@ var/list/ai_list = list()
 
 
 /mob/living/silicon/ai/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(anchored)
 			user.visible_message("<span class='notice'>\The [user] starts to unbolt \the [src] from the plating...</span>")
 			if(!do_after(user, src,40))

@@ -48,6 +48,9 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
+/obj/item/weapon/wrench/is_wrench(mob/user)
+	return TRUE
+
 /obj/item/weapon/wrench/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(user.is_in_modules(src))

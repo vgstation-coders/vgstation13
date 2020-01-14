@@ -69,7 +69,7 @@ log transactions
 			number_incorrect_tries = 0
 
 /obj/machinery/atm/attackby(obj/item/I as obj, mob/user as mob)
-	if(iswrench(I))
+	if(I.is_wrench(user))
 		user.visible_message("<span class='notice'>[user] begins to take apart the [src]!</span>", "<span class='notice'>You start to take apart the [src]</span>")
 		if(do_after(user, src, 40))
 			user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")

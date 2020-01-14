@@ -127,7 +127,6 @@
 	icon_state = "blshell"
 	projectile_type = /obj/item/projectile/bullet/blank
 	starting_materials = list(MAT_IRON = 250)
-	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/shotgun/beanbag
 	name = "beanbag shell"
@@ -135,7 +134,6 @@
 	icon_state = "bshell"
 	projectile_type = /obj/item/projectile/bullet/weakbullet
 	starting_materials = list(MAT_IRON = 500)
-	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/shotgun/fakebeanbag
 	name = "beanbag shell"
@@ -143,7 +141,6 @@
 	icon_state = "bshell"
 	projectile_type = /obj/item/projectile/bullet/weakbullet/booze
 	starting_materials = list(MAT_IRON = 12500)
-	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/shotgun/stunshell
 	name = "stun shell"
@@ -151,7 +148,6 @@
 	icon_state = "stunshell"
 	projectile_type = /obj/item/projectile/bullet/stunshot
 	starting_materials = list(MAT_IRON = 2500)
-	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/shotgun/dart
 	name = "shotgun dart"
@@ -159,7 +155,6 @@
 	icon_state = "blshell"
 	projectile_type = /obj/item/projectile/bullet/dart
 	starting_materials = list(MAT_IRON = 12500)
-	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/shotgun/buckshot
 	name = "buckshot shell"
@@ -167,7 +162,21 @@
 	icon_state = "bsshell"
 	projectile_type = /obj/item/projectile/bullet/buckshot
 	starting_materials = list(MAT_IRON = 12500)
-	w_type = RECYK_METAL
+	
+/obj/item/ammo_casing/shotgun/dragonsbreath
+	name = "dragon's breath shell"
+	desc = "A 12 gauge shell filled with an incendiary mixture, for lighting up dark areas or setting things on fire."
+	icon_state = "bdbshell"
+	projectile_type = /obj/item/projectile/bullet/fire_plume/dragonsbreath
+	starting_materials = list(MAT_IRON = 500, MAT_PLASMA = 2000)
+	
+/obj/item/ammo_casing/shotgun/frag
+	name = "explosive shell"
+	desc = "A 12 gauge shell filled with a high-explosive mixture, for heavy anti-personnel usage."
+	icon_state = "fragshell"
+	projectile_type = /obj/item/projectile/bullet/boombullet
+	starting_materials = list(MAT_IRON = 500, MAT_PLASMA = 8000)
+	
 
 /obj/item/ammo_casing/a762
 	desc = "A 7.62x51mm bullet casing."

@@ -201,7 +201,9 @@
 		/mob/living/simple_animal/hostile/asteroid/goliath,
 		/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider,
 		/mob/living/simple_animal/hostile/retaliate/cockatrice,
-		/mob/living/simple_animal/hostile/retaliate/malf_drone,
+		/mob/living/simple_animal/construct/armoured/perfect,
+		/mob/living/simple_animal/hostile/necro/zombie/putrid,
+		/mob/living/simple_animal/hostile/humanoid/frostgolem/knight,
 		/mob/living/simple_animal/hostile/gingerbread,
 		/mob/living/simple_animal/vox/armalis,
 		/mob/living/carbon/alien/humanoid/hunter

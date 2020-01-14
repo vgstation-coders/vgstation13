@@ -98,7 +98,7 @@
 					"<span class='notice'>You have fixed part of the microwave.</span>" \
 				)
 				src.broken = 1 // Fix it a bit
-		else if(src.broken == 1 && iswrench(O)) // If it's broken and they're doing the wrench
+		else if(src.broken == 1 && O.is_wrench(user)) // If it's broken and they're doing the wrench
 			user.visible_message( \
 				"<span class='notice'>[user] starts to fix part of the microwave.</span>", \
 				"<span class='notice'>You start to fix part of the microwave.</span>" \
