@@ -285,10 +285,6 @@
 				if (joined)
 					joined.HandleRecruitedRole(newRole)
 
-		if (isninja(current))
-			if ((alert("Throw the ninja into the station from space?", "Alert", "Yes", "No") == "Yes"))
-				current.ThrowAtStation()
-
 		newRole.OnPostSetup(FALSE)
 		if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))
 			newRole.Greet(chosen_greeting,custom_greeting)
