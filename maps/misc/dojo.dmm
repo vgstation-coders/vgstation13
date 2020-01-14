@@ -6,7 +6,7 @@
 "f" = (/turf/simulated/floor/engine/acoustic,/area/dojo)
 "g" = (/obj/effect/decal/ninjaporter,/turf/simulated/floor/engine/acoustic,/area/dojo)
 "h" = (/obj/item/weapon/stool/cushion,/turf/simulated/floor/engine/acoustic,/area/dojo)
-"i" = (/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake,/obj/item/weapon/reagent_containers/food/snacks/sushi_Sake{pixel_x = 8; pixel_y = -6},/obj/item/weapon/reagent_containers/food/snacks/sushi_Masago{pixel_x = -8; pixel_y = -6},/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi{pixel_x = 8; pixel_y = 8},/obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura{pixel_w = 0; pixel_x = -8; pixel_y = 8},/turf/simulated/floor/engine/acoustic,/area/dojo)
+"i" = (/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake,/obj/item/weapon/reagent_containers/food/snacks/sushi_Sake{pixel_x = 8; pixel_y = -6},/obj/item/weapon/reagent_containers/food/snacks/sushi_Masago{pixel_x = -8; pixel_y = -6},/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi{pixel_x = 8; pixel_y = 8},/obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura{pixel_x = -8; pixel_y = 8},/turf/simulated/floor/engine/acoustic,/area/dojo)
 "j" = (/obj/effect/landmark{name = "ninjastart"},/turf/simulated/floor/engine/acoustic,/area/dojo)
 "k" = (/obj/structure/punching_bag/captain,/turf/simulated/floor/engine/acoustic,/area/dojo)
 "l" = (/turf/simulated/wall,/area/dojo)
