@@ -34,7 +34,7 @@
 	activate(user)
 	
 /obj/structure/button/ninja/launcher
-	name = "Launch button"
+	name = "launcher button"
 	desc = "Pressing this button will activate your space protection and launch you to the target station from a random direction."
 	
 /obj/structure/button/ninja/launcher/activate(mob/user)
@@ -46,7 +46,7 @@
 	spaceninja.ThrowAtStation()
 
 /obj/structure/button/ninja/teleporter
-	name = "Teleport button"
+	name = "teleporter button"
 	desc = "Pressing this button will teleport you into a dark secluded place on the target station."
 
 /obj/structure/button/ninja/teleporter/activate(mob/user)
@@ -57,3 +57,14 @@
 	desc = "Teleports you at the press of a button!"
 	icon = 'icons/mecha/mecha_equipment.dmi' //placeholder until someone sprites something better
 	icon_state = "mecha_teleport"  // much like the acoustic floors instead of tatami mats
+	
+/obj/effect/decal/arrow
+	name = "arrow"
+	desc = "Points at something."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "arrows"  
+	
+/obj/structure/sign/ninjaglove
+	name = "Glove Draining Practice"
+	desc = "This sign indicates you can practice power glove draining here."
+	icon_state = "NJ_glove"
