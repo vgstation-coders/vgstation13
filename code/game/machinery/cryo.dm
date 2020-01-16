@@ -29,7 +29,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/last_injection
 	var/injecting = TRUE
 	var/current_heat_capacity = 50
-	var/occupant_reagent_threshold = 0 //If we have an occupant, check if their reagent holder's volume is less than or equal to this value. If so, we inject.
 	var/running_bob_animation = FALSE // This is used to prevent threads from building up if update_icons is called multiple times
 	var/scan_level = 0 //Current scanner level
 	var/auto_eject = FALSE
@@ -303,7 +302,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	data["controls"] = controls
 	data["dump_loc"] = dump_loc
 	data["scan_level"] = scan_level
-	data["occupant_reagent_threshold"] = occupant_reagent_threshold
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -359,12 +357,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			return 0
 		inject_rate = clamp(newval, 0, inject_rate_max)
 		return 1
-
-	if(href_list["set_reagent_threshold"])
-		var/newval = input("Enter new reagent threshold") as num|null
-		if(isnull(newval))
-			return 0
-		occupant_reagent_threshold = clamp(newval, 0, inject_rate_max)
 
 	if(href_list["toggle_inject"])
 		injecting = !injecting
@@ -549,8 +541,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(beaker && injecting && world.time > (last_injection + 10 SECONDS))
 			beaker.reagents.trans_to(src, inject_rate)
 			last_injection = world.time
-		if(!occupant_reagent_threshold || occupant_reagent_threshold > occupant.reagents.total_volume)
-			reagents.reaction(occupant, remove_reagents = TRUE)
+		reagents.reaction(occupant, remove_reagents = TRUE)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/modify_occupant_bodytemp()
 	if(!occupant)
