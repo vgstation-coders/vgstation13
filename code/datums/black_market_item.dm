@@ -357,6 +357,25 @@ for anyone but the person committing mass murder.
 /datum/black_market_item/tool
 	category = "Utility Items"
 
+/datum/black_market_item/tool/spessmart_disk
+	name = "Spessmart Disk"
+	desc = "A destination disk that contains the coordinates to Spessmart."
+	item = /obj/item/weapon/disk/shuttle_coords/vault/supermarket
+	sps_chances = list(0, 0, 100)
+	delivery_fees = list(0, 0, 0)
+	delivery_available = list(0, 0, 1)
+	stock_min = 1
+	stock_max = 1
+	cost_min = 600 //You need lots of money to buy stuff from Spessmart in the first place
+	cost_max = 600
+	display_chance = 0 //Special conditions to unlock
+
+/datum/black_market_item/tool/spessmart_disk/is_active()
+	if(spessmart_exists)
+		return 1
+	else
+		..()
+
 /datum/black_market_item/tool/stethoscope
 	name = "Stethoscope"
 	desc = "For medical use only, honest!"
