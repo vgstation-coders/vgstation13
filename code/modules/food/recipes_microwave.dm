@@ -2729,3 +2729,17 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/winepear
+	
+/datum/recipe/suppermatter
+	reagents = list(PLASMA = 5, NITROGEN = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter
+	
+/datum/recipe/excitingsuppermatter
+	reagents = list(PLASMA = 5, OXYGEN = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter
