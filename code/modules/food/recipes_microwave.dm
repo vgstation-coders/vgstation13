@@ -1282,6 +1282,15 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/avocadotoast
 
+/datum/recipe/pbj
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		/obj/item/weapon/reagent_containers/food/snacks/grapejelly,
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pbj
+
 // Coder Snacks ///////////////////////////////////////////////////////
 
 /datum/recipe/spaghetti
@@ -2743,3 +2752,26 @@
 		/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter
+
+/datum/recipe/saltednuts
+	reagents = list(SODIUMCHLORIDE = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/saltednuts
+
+/datum/recipe/grapejelly
+	reagents = list (SUGAR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes)
+	result = /obj/item/weapon/reagent_containers/food/snacks/grapejelly
+
+/datum/recipe/peanutbutter
+	reagents = list (SODIUMCHLORIDE = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/peanutbutter

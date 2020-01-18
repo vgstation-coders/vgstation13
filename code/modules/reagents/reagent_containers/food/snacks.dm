@@ -5998,4 +5998,51 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard/New()
 	..()
-	set_light(1.4,1.4,"#FF0000")	
+	set_light(1.4,1.4,"#FF0000")
+
+/obj/item/weapon/reagent_containers/food/snacks/grapejelly
+	name = "jelly"
+	desc = "The choice of choosey moms."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "grapejelly"
+
+/obj/item/weapon/reagent_containers/food/snacks/grapejelly/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	reagents.add_reagent (SUGAR, 2)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutbutter
+	name = "peanut butter"
+	desc = "A jar of smashed peanuts, contains no actual butter."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "peanutbutter"
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutbutter/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 3)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/saltednuts
+	name = "salted peanuts"
+	desc = "Popular in saloons."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "saltednuts"
+
+/obj/item/weapon/reagent_containers/food/snacks/saltednuts/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	reagents.add_reagent (SODIUMCHLORIDE, 2)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/pbj
+	name = "peanut butter and jelly sandwhich"
+	desc = "A classic treat of childhood."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "pbj"
+	trash = /obj/item/trash/plate
+
+/obj/item/weapon/reagent_containers/food/snacks/pbj/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 4)
+	bitesize = 3
