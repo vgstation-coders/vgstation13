@@ -443,8 +443,8 @@
 
 	//Note : Remember process() rechecks this, so the mix/max procs slowly increase/decrease body temperature
 	//Every second under the shower adjusts body temperature by 1 degree Celsius. Water conducts heat pretty efficiently in real life too
-	if(watertemp == "freezing cold") //Down to -200 degree Celsius, we don't need cryo tubes where we're going
-		C.bodytemperature = max(T0C - 200, C.bodytemperature - 1)
+	if(watertemp == "freezing cold") //Down to -137 degree Celsius, water's glass transition temperature. we don't need cryo tubes where we're going
+		C.bodytemperature = max(T0C - 137, C.bodytemperature - 1)
 		return
 	if(watertemp == "searing hot") //Up to 60 degree Celsius, upper limit for common water boilers. Getting super hot easily in space is hard.
 		C.bodytemperature = min(T0C + 60, C.bodytemperature + 1)
