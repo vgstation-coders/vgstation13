@@ -102,10 +102,12 @@ Please contact me on #coderbus IRC. ~Carn x
 //UPDATES OVERLAYS FROM OVERLAYS_LYING/OVERLAYS_STANDING
 //this proc is messy as I was forced to include some old laggy cloaking code to it so that I don't break cloakers
 //I'll work on removing that stuff by rewriting some of the cloaking stuff at a later date.
+// - you never did, elly1989@rocketmail.com on Jun 13, 2012
 /mob/living/carbon/human/update_icons()
 	update_hud()		//TODO: remove the need for this
 	update_overlays_standing()
 	update_transform()
+	update_hands_icons()
 	if(istype(loc,/obj/structure/inflatable/shelter))
 		var/obj/O = loc
 		O.update_icon() //Shelters use an overlay of the human inside, so if we change state we want the appearance to reflect that.
@@ -1363,3 +1365,15 @@ proc/is_slot_hidden(var/clothes, var/slot = -1,var/ignore_slot = 0)
 		update_inv_wear_suit()
 	if(slot_flags & SLOT_ICLOTHING)
 		update_inv_w_uniform()
+
+/mob/living/carbon/human/update_hand_icon(var/obj/abstract/screen/inventory/hand_hud_object)
+	hand_hud_object.overlays.len = 0
+	if(!can_use_hand_or_stump(hand_hud_object.hand_index))
+		var/image/cross = image(icon='icons/mob/screen1_White.dmi', icon_state="x")
+		cross.alpha = 122
+		hand_hud_object.overlays += cross
+	else if (!can_use_hand(hand_hud_object.hand_index))
+		var/image/bluecross = image(icon='icons/mob/screen1_White.dmi', icon_state="x2")
+		bluecross.alpha = 122
+		hand_hud_object.overlays += bluecross
+	..()
