@@ -2007,6 +2007,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "anomaly container crate"
 	group = "Science"
 
+/datum/supply_packs/transfer_valves
+	name = "Tank Transfer Valves"
+	contains = list (/obj/item/device/transfer_valve,
+				     /obj/item/device/transfer_valve)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/plasma
+	containername = "tank transfer valve crate"
+	access = list(access_tox_storage)
+	group = "Science"
+	
 
 //////HYDROPONICS//////
 
@@ -2431,3 +2441,4 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "Al's Fun And Games stack of packs"
 	group = "Vending Machine Packs"
+	
