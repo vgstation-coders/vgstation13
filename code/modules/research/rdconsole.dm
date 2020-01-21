@@ -267,7 +267,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						linked_destroy.loaded_item.materials.TransferAll(linked_lathe.materials)
 					qdel(linked_destroy.loaded_item)
 					linked_destroy.loaded_item = null
-			linked_destroy.icon_state = "d_analyzer"
+			if(linked_destroy.loaded_item) //It deconstructed something with stacks, make it show up full
+				linked_destroy.icon_state = "d_analyzer_l"
+			else
+				linked_destroy.icon_state = "d_analyzer"
 			use_power(250)
 			screen = 1.0
 			updateUsrDialog()
@@ -716,13 +719,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "<A href='?src=\ref[src];menu=1.6'>Settings</A>"
 
 		if(1.1) //Research viewer
+			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A><BR>"
 			dat += "Current Research Levels:<BR><BR>"
 			for(var/ID in files.known_tech)
 				var/datum/tech/T = files.known_tech[ID]
 				dat += {"[T.name]<BR>
 					* Level: [T.level]<BR>
 					* Summary: [T.desc]<HR>"}
-			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A>"
 
 		if(1.2) //Technology Disk Menu
 
