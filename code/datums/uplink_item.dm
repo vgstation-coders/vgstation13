@@ -470,8 +470,8 @@ var/list/uplink_items = list()
 	name = "NT Central Command Report Falsifier"
 	desc = "A command report intercom stolen from Nanotrasen Command that allows for a single fake Command Update to be sent. Ensure tastefulness so that the crew actually falls for the message. Item is particular obvious and will have to be manually discarded after use."
 	item = /obj/item/device/reportintercom
-	cost = 6
-	discounted_cost = 4
+	cost = 24
+	discounted_cost = 16
 	jobs_with_discount = list("Nuclear Operative")
 
 /datum/uplink_item/sabotage_tools/plastic_explosives

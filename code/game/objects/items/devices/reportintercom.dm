@@ -8,10 +8,10 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 
-	var/used = 0
+	var/uses = 4
 
 /obj/item/device/reportintercom/attack_self(mob/user) // can create a custom announcement once
-	if(used)
+	if(uses <= 0)
 		to_chat(user, "<span class='notice'>You press the [src]'s button, but nothing happens.</span>")
 		return
 
@@ -47,11 +47,11 @@
 
 	icon_state = "intercom-p-open"
 	desc = "Looks like a typical intercom. The wires look burnt out. 'PROPERTY OF NANOTRASEN CENTRAL COMMAND' is stamped on the side."
-	used = 1
+	uses--
 	return 1
 
 /obj/item/device/reportintercom/emag_act(mob/user) //Please don't do this
-	if(!used)
+	if(uses)
 		to_chat(user, "<span class='warning'>You overload the [src] and hear an unearthly noise.</span>")
 
 		world << sound('sound/items/AirHorn.ogg')
@@ -64,7 +64,7 @@
 
 		icon_state = "intercom-p-open"
 		desc = "Looks like a typical intercom. The wires look burnt out. 'PROPERTY OF NANOTRASEN CENTRAL COMMAND' is stamped on the side."
-		used = 1
+		uses = 0
 
 		return
 	return
