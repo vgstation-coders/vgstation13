@@ -291,6 +291,7 @@
 						watertemp = "cool"
 				user.visible_message("<span class='warning'>[user] adjusts \the [src]'s temperature with \a [I.name].</span>",
 				"<span class='notice'>You adjust \the [src]'s temperature with \a [I.name], the water is now [watertemp].</span>")
+				add_fingerprint(user)
 	else
 		if(I.is_wrench(user))
 			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
