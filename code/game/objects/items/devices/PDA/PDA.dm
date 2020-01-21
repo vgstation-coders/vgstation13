@@ -2314,6 +2314,8 @@ obj/item/device/pda/AltClick()
 // access to status display signals
 /obj/item/device/pda/attackby(obj/item/C as obj, mob/user as mob)
 	..()
+	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, C))
+		return
 	if(istype(C, /obj/item/weapon/cartridge) && !cartridge)
 		if(user.drop_item(C, src))
 			cartridge = C
