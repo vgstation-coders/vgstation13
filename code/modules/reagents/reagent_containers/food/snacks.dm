@@ -6002,7 +6002,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/grapejelly
 	name = "jelly"
-	desc = "The choice of choosey moms."
+	desc = "The choice of choosy moms."
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "grapejelly"
 
@@ -6036,7 +6036,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/pbj
-	name = "peanut butter and jelly sandwhich"
+	name = "peanut butter and jelly sandwich"
 	desc = "A classic treat of childhood."
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "pbj"
