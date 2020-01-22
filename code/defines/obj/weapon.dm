@@ -447,7 +447,7 @@
 
 		update_icon()
 
-		to_chat(user, "<span class='notice'>[src.name] is now [armed ? "armed" : "disarmed"]</span>")
+		to_chat(user, "<span class='notice'>The [src.name] is now [armed ? "armed" : "disarmed"]</span>")
 		playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
 		anchored = TRUE
 		user.drop_item(src, force_drop = 1)
@@ -489,8 +489,8 @@
 				user.visible_message("<span class='notice'>[H] managed to pry \the [src.name] off of [L]!</span>", \
 				"<span class='notice'>You manage to pry \the [src.name] off!</span>")
 				playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
-
 				trapped = 0
+				trappeduser = null
 				unlock_atom(L)
 				anchored = FALSE
 			else
@@ -502,10 +502,11 @@
 					L.UpdateDamageIcon()
 				L.updatehealth()
 
-				if(L.pick_usable_organ(trappedorgan)) //check if they lost their leg, and get them out of the trap
-					to_chat(L, "<span class='warning'>With your leg missing, you slip out of the bear trap</span>")
+				if(!L.pick_usable_organ(trappedorgan)) //check if they lost their leg, and get them out of the trap
+					to_chat(L, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
 					trapped = 0
 					unlock_atom(L)
+					trappeduser = null
 					anchored = FALSE
 			return
 	..()
@@ -541,6 +542,14 @@
 		to_chat(user, "<span class='notice'>You remove the IED from the [src].</span>")
 		overlays.Remove(ied_overlay)
 		return
+	else if(iscrowbar(I) && trapped)
+		to_chat(user, "<span class='notice'>You begin to pry the bear trap off of [trappeduser.name].</span>")
+		if(do_after(user, src, 30))
+			to_chat(user, "<span class='notice'>You pry open the beartrap with \the [I.name].</span>")
+			trapped = 0
+			anchored = FALSE
+			unlock_atom(trappeduser)
+			trappeduser = null
 	else
 		to_chat(user, "<span class='notice'>You carefully set the bear trap off with \the [I.name].</span>")
 		playsound(src, 'sound/effects/snap.ogg', 60, 1)
@@ -555,13 +564,18 @@
 
 		if(L.on_foot() && ishuman(L)) //Flying mobs can't get caught in beartraps! Note that this also prevents lying mobs from triggering traps
 			var/mob/living/carbon/human/H = L
+			H.visible_message("<span class='danger'>[H] steps on \the [src].</span>",\
+					"<span class='danger'>You step on \the [src]![(IED && IED.active) ? " The explosive device attached to it activates." : ""]</span>",\
+					"<span class='notice'>You hear a sudden snapping sound!",\
+					//Hallucination messages
+					"<span class='danger'>A terrifying crocodile snaps at [H]!</span>",\
+					"<span class='danger'>A [(IED && IED.active) ? "crocodile" : "horrifying fiery dragon"] attempts to bite your leg off!</span>")
 			if(IED && isturf(src.loc))
 				trapped = 1
 
 				playsound(src, 'sound/effects/snap.ogg', 60, 1)
 				H.audible_scream()
 				lock_atom(H, /datum/locking_category/beartrap)
-				trappeduser = H
 
 				to_chat(H, "<span class='danger'>The bear trap latches to your legs as you hear a hissing sound!</span>")
 
@@ -596,20 +610,15 @@
 						H.UpdateDamageIcon()
 					H.updatehealth()
 
-					if(H.pick_usable_organ(affecting)) //check if they lost their leg, and get them out of the trap
+					if(!H.pick_usable_organ(affecting)) //check if they lost their leg, and get them out of the trap
 						to_chat(H, "<span class='warning'>With your leg missing, you slip out of the bear trap</span>")
 						trapped = 0
+						trappeduser = null
 						unlock_atom(H)
 						anchored = FALSE
 
 				H.update_canmove()
 
-				H.visible_message("<span class='danger'>[H] steps on \the [src].</span>",\
-					"<span class='danger'>You step on \the [src]![(IED && IED.active) ? " The explosive device attached to it activates." : ""]</span>",\
-					"<span class='notice'>You hear a sudden snapping sound!",\
-					//Hallucination messages
-					"<span class='danger'>A terrifying crocodile snaps at [H]!</span>",\
-					"<span class='danger'>A [(IED && IED.active) ? "crocodile" : "horrifying fiery dragon"] attempts to bite your leg off!</span>")
 			else if(isanimal(AM))
 				armed = 0
 				var/mob/living/simple_animal/SA = AM
