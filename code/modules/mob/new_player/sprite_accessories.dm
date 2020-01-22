@@ -817,6 +817,43 @@
 	species_allowed = list("Diona")
 	do_colouration = 0
 
+	/datum/sprite_accessory/hair/hair_fullboom
+	name = "Bloomed"
+	icon_state = "hair_fullbloom"
+	species_allowed = list("Diona")
+	additional_accessories = TRUE
+
+/datum/sprite_accessory/hair/hair_bushy
+	name = "Bushy"
+	icon_state = "hair_bushy"
+	species_allowed = list("Diona")
+	
+/datum/sprite_accessory/hair/hair_weepingwillow
+	name = "Weeping Willow"
+	icon_state = "hair_weepingwillow"
+	species_allowed = list("Diona")
+	do_colouration = 0
+	additional_accessories = TRUE
+
+/datum/sprite_accessory/hair/hair_vines
+	name = "Vines"
+	icon_state = "hair_vines"
+	species_allowed = list("Diona")
+	do_colouration = 0
+	additional_accessories = TRUE
+
+/datum/sprite_accessory/hair/hair_mushroom
+	name = "Mushrooms"
+	icon_state = "hair_mushroom"
+	species_allowed = list("Diona")
+	additional_accessories = TRUE
+
+/datum/sprite_accessory/hair/hair_flowers
+	name = "Flowers"
+	icon_state = "hair_flowers"
+	species_allowed = list("Diona")
+	additional_accessories = TRUE
+
 /datum/sprite_accessory/hair/slime_tendrils
 	name = "Long Tendrils"
 	icon_state = "slime_tendrils"

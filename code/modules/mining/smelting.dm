@@ -26,42 +26,42 @@
 	name = "Reinforced Glass"
 	ingredients=list(
 		MAT_GLASS = CC_PER_SHEET_GLASS,
-		MAT_IRON = CC_PER_SHEET_METAL
+		MAT_IRON = CC_PER_SHEET_METAL/2
 	)
 	yieldtype = /obj/item/stack/sheet/glass/rglass
 
 /datum/smelting_recipe/gold
 	name = "Gold"
 	ingredients=list(
-		MAT_GOLD = CC_PER_SHEET_MISC
+		MAT_GOLD = CC_PER_SHEET_GOLD
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/gold
 
 /datum/smelting_recipe/silver
 	name = "Silver"
 	ingredients=list(
-		MAT_SILVER = CC_PER_SHEET_MISC
+		MAT_SILVER = CC_PER_SHEET_SILVER
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/silver
 
 /datum/smelting_recipe/diamond
 	name = "Diamond"
 	ingredients=list(
-		MAT_DIAMOND = 1750
+		MAT_DIAMOND = CC_PER_SHEET_DIAMOND
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/diamond
 
 /datum/smelting_recipe/plasma
 	name = "Plasma"
 	ingredients=list(
-		MAT_PLASMA = CC_PER_SHEET_MISC
+		MAT_PLASMA = CC_PER_SHEET_PLASMA
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/plasma
 
 /datum/smelting_recipe/uranium
 	name = "Uranium"
 	ingredients=list(
-		MAT_URANIUM = CC_PER_SHEET_MISC
+		MAT_URANIUM = CC_PER_SHEET_URANIUM
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/uranium
 
@@ -76,7 +76,7 @@
 	name = "Plasteel"
 	ingredients=list(
 		MAT_IRON = CC_PER_SHEET_METAL,
-		MAT_PLASMA = CC_PER_SHEET_MISC
+		MAT_PLASMA = CC_PER_SHEET_PLASMA
 	)
 	yieldtype = /obj/item/stack/sheet/plasteel
 
@@ -91,14 +91,14 @@
 /datum/smelting_recipe/clown
 	name = "Bananium"
 	ingredients=list(
-		MAT_CLOWN = CC_PER_SHEET_MISC
+		MAT_CLOWN = CC_PER_SHEET_CLOWN
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/clown
 
 /datum/smelting_recipe/plasma_glass
 	name = "Plasma Glass"
 	ingredients=list(
-		MAT_PLASMA = CC_PER_SHEET_MISC,
+		MAT_PLASMA = CC_PER_SHEET_PLASMA,
 		MAT_GLASS = CC_PER_SHEET_GLASS
 	)
 	yieldtype = /obj/item/stack/sheet/glass/plasmaglass
@@ -106,43 +106,43 @@
 /datum/smelting_recipe/plasma_rglass
 	name="Reinforced Plasma Glass"
 	ingredients=list(
-		MAT_PLASMA = CC_PER_SHEET_MISC,
+		MAT_PLASMA = CC_PER_SHEET_PLASMA,
 		MAT_GLASS = CC_PER_SHEET_GLASS,
-		MAT_IRON = CC_PER_SHEET_METAL
+		MAT_IRON = CC_PER_SHEET_METAL/2
 	)
 	yieldtype=/obj/item/stack/sheet/glass/plasmarglass
 
 /datum/smelting_recipe/phazon
 	name = "phazon"
 	ingredients=list(
-		MAT_PHAZON = 1500
+		MAT_PHAZON = CC_PER_SHEET_PHAZON
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/phazon
 
 /datum/smelting_recipe/plastic
 	name = "Plastic"
 	ingredients=list(
-		MAT_PLASTIC = CC_PER_SHEET_MISC
+		MAT_PLASTIC = CC_PER_SHEET_PLASTIC
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/plastic
 
 /datum/smelting_recipe/cardboard
 	name = "Cardboard"
 	ingredients=list(
-		MAT_CARDBOARD = 3750
+		MAT_CARDBOARD = CC_PER_SHEET_CARDBOARD
 	)
 	yieldtype = /obj/item/stack/sheet/cardboard
 
 /datum/smelting_recipe/mythril
 	name = "Mythril"
 	ingredients=list(
-		MAT_MYTHRIL = 1
+		MAT_MYTHRIL = CC_PER_SHEET_MYTHRIL
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/mythril
 
 /datum/smelting_recipe/telecrystal
 	name="Telecrystal"
 	ingredients=list(
-		MAT_TELECRYSTAL=1
+		MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL
 	)
 	yieldtype=/obj/item/bluespace_crystal

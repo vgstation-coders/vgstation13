@@ -304,6 +304,9 @@
 	if(!usr)
 		return 1
 
+	if(map.special_ui(src,usr))
+		return 1 //exit early, we found our UI on map
+
 	switch(name)
 		if("toggle")
 			if(usr.hud_used.inventory_shown)

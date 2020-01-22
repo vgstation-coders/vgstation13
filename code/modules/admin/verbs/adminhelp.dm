@@ -3,7 +3,7 @@
 //This is a list of words which are ignored by the parser when comparing message contents for names. MUST BE IN LOWER CASE!
 var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","alien","as")
 
-/client/verb/adminhelp(msg as text)
+/client/verb/adminhelp()
 	set category = "Admin"
 	set name = "Adminhelp"
 
@@ -15,21 +15,14 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	if(prefs.muted & MUTE_ADMINHELP)
 		to_chat(src, "<span class='red'>Error: Admin-PM: You cannot send adminhelps (Muted).</span>")
 		return
-	if(src.handle_spam_prevention(msg,MUTE_ADMINHELP))
-		return
-
-	/**src.verbs -= /client/verb/adminhelp
-
-	spawn(1200)
-		src.verbs += /client/verb/adminhelp	// 2 minute cool-down for adminhelps
-		src.verbs += /client/verb/adminhelp	// 2 minute cool-down for adminhelps//Go to hell
-	**/
-
+	var/msg = input(usr, "What message would you like to send to the administrators?", "Send a message to admins", "")
 	//clean the input msg
 	if(!msg)
 		return
-	msg = sanitize(copytext(msg,1,MAX_MESSAGE_LEN))
+	msg = trim_left(trim_right(sanitize(copytext(msg,1,MAX_MESSAGE_LEN))))
 	if(!msg)
+		return
+	if(src.handle_spam_prevention(msg,MUTE_ADMINHELP))
 		return
 	var/original_msg = msg
 

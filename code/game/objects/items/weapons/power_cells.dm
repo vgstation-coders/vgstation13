@@ -227,7 +227,7 @@
 	icon_state = "rcell"
 	maxcharge = 1000
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
-	var/charge_rate = 10
+	var/charge_rate = 100
 
 /obj/item/weapon/cell/rad/empty/New()
 	..()
@@ -251,7 +251,7 @@
 	charge += power_used
 	if(prob(5))
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
-			L.apply_radiation(charge_rate, RAD_EXTERNAL)
+			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
 
 /obj/item/weapon/cell/rad/large
 	name = "PDTG power cell"
@@ -259,7 +259,7 @@
 	icon_state = "pcell"
 	maxcharge = 2500
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_PHAZON = 100)
-	charge_rate = 25
+	charge_rate = 250
 
 /obj/item/weapon/cell/rad/large/empty/New()
 	..()

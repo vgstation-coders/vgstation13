@@ -329,6 +329,7 @@
 		S = new new_stack_type(loc)
 		S.amount = min(add_amount, S.max_amount)
 		add_amount -= S.amount
+		S.update_materials()
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)

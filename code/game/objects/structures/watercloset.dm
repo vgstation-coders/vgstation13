@@ -279,20 +279,6 @@
 		to_chat(user, "<span class='notice'>The water's temperature seems to be [watertemp].</span>")
 	if(panel_open) //The panel is open
 		if(I.is_wrench(user))
-			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
-								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
-			if(do_after(user, src, 50))
-				if(anchored)
-					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
-								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
-					anchored = 0
-				else
-					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
-								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
-					anchored = 1
-	else
-		if(I.is_wrench(user))
 			user.visible_message("<span class='warning'>[user] begins to adjust \the [src]'s temperature valve with \a [I.name].</span>", \
 								 "<span class='notice'>You begin to adjust \the [src]'s temperature valve with \a [I.name].</span>")
 			if(do_after(user, src, 50))
@@ -306,6 +292,20 @@
 				user.visible_message("<span class='warning'>[user] adjusts \the [src]'s temperature with \a [I.name].</span>",
 				"<span class='notice'>You adjust \the [src]'s temperature with \a [I.name], the water is now [watertemp].</span>")
 				add_fingerprint(user)
+	else
+		if(I.is_wrench(user))
+			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
+								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
+			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			if(do_after(user, src, 50))
+				if(anchored)
+					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
+								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
+					anchored = 0
+				else
+					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
+								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
+					anchored = 1
 
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
@@ -443,19 +443,19 @@
 		return
 
 	//Note : Remember process() rechecks this, so the mix/max procs slowly increase/decrease body temperature
-	//Every second under the shower adjusts body temperature by 0.5 degree Celsius. Water conducts heat pretty efficiently in real life too
-	if(watertemp == "freezing cold") //Down to 0 degree Celsius, Nanotrasen waterworks are perfect and never fluctuate even slightly below that
-		C.bodytemperature = max(T0C, C.bodytemperature - 0.5)
+	//Every second under the shower adjusts body temperature by 1 degree Celsius. Water conducts heat pretty efficiently in real life too
+	if(watertemp == "freezing cold") //Down to -137 degree Celsius, water's glass transition temperature. we don't need cryo tubes where we're going
+		C.bodytemperature = max(T0C - 137, C.bodytemperature - 1)
 		return
-	if(watertemp == "searing hot") //Up to 60 degree Celsius, upper limit for common water boilers
-		C.bodytemperature = min(T0C + 60, C.bodytemperature + 0.5)
+	if(watertemp == "searing hot") //Up to 60 degree Celsius, upper limit for common water boilers. Getting super hot easily in space is hard.
+		C.bodytemperature = min(T0C + 60, C.bodytemperature + 1)
 		return
 	if(watertemp == "cool") //Adjusts towards "perfect" body temperature, 37.5 degree Celsius. Actual showers tend to average at 40 degree Celsius, but it's the future
 		if(C.bodytemperature > T0C + 37.5) //Cooling down
-			C.bodytemperature = max(T0C + 37.5, C.bodytemperature - 0.5)
+			C.bodytemperature = max(T0C + 37.5, C.bodytemperature - 1)
 			return
 		if(C.bodytemperature < T0C + 37.5) //Heating up
-			C.bodytemperature = min(T0C + 37.5, C.bodytemperature + 0.5)
+			C.bodytemperature = min(T0C + 37.5, C.bodytemperature + 1)
 			return
 
 /obj/machinery/shower/npc_tamper_act(mob/living/L)
