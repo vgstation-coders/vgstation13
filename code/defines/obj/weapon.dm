@@ -502,7 +502,7 @@
 					L.UpdateDamageIcon()
 				L.updatehealth()
 
-				if(L.pick_usable_organ(affecting)) //check if they lost their leg, and get them out of the trap
+				if(L.pick_usable_organ(trappedorgan)) //check if they lost their leg, and get them out of the trap
 					to_chat(L, "<span class='warning'>With your leg missing, you slip out of the bear trap</span>")
 					trapped = 0
 					unlock_atom(L)
