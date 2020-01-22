@@ -4,9 +4,6 @@
 
 	Guidelines for using minds properly:
 
-	-	Never mind.transfer_to(ghost). The var/current and var/original of a mind must always be of type mob/living!
-		ghost.mind is however used as a reference to the ghost's corpse
-
 	-	When creating a new mob for an existing IC character (e.g. cloning a dead guy or borging a brain of a human)
 		the existing mind of the old mob should be transfered to the new mob like so:
 
@@ -32,8 +29,8 @@
 /datum/mind
 	var/key
 	var/name				//replaces mob/var/original_name
-	var/mob/living/current
-	var/mob/living/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
+	var/mob/current
+	var/mob/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
 	var/active = 0
 
 	var/memory
@@ -75,10 +72,7 @@
 /datum/mind/New(var/key)
 	src.key = key
 
-/datum/mind/proc/transfer_to(mob/living/new_character)
-	if(!istype(new_character))
-		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
-
+/datum/mind/proc/transfer_to(mob/new_character)
 	if (!current)
 		transfer_to_without_current(new_character)
 		return
@@ -111,7 +105,7 @@
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
 
-/datum/mind/proc/transfer_to_without_current(var/mob/living/new_character)
+/datum/mind/proc/transfer_to_without_current(var/mob/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"
 
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
