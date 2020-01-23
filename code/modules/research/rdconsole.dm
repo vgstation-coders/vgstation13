@@ -452,7 +452,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					use_power(power)
 					linked_lathe.queue += being_built
 				if(href_list["now"]=="1")
-					linked_lathe.stopped=0
+					linked_lathe.start_processing_queue()
 
 	else if(href_list["imprint"]) //Causes the Circuit Imprinter to build something.
 		if (!autorefresh)
@@ -485,7 +485,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					linked_imprinter.queue += being_built
 					use_power(power)
 				if(href_list["now"]=="1")
-					linked_imprinter.stopped=0
+					linked_imprinter.start_processing_queue()
 
 	else if(href_list["disposeI"] && linked_imprinter)  //Causes the circuit imprinter to dispose of a single reagent (all of it)
 		if(!src.allowed(usr))
@@ -505,7 +505,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				RC.reagents.clear_reagents()
 			linked_imprinter.update_buffer_size()
 
-	else if(href_list["removeQItem"]) //Causes the protolathe to dispose of all it's reagents.
+	else if(href_list["removeQItem"]) //Removes an item from the queue
 		var/i=text2num(href_list["removeQItem"])
 		switch(href_list["device"])
 			if("protolathe")
@@ -515,7 +515,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(linked_imprinter)
 					linked_imprinter.queue.Cut(i,i+1)
 
-	else if(href_list["clearQ"]) //Causes the protolathe to dispose of all it's reagents.
+	else if(href_list["clearQ"]) //Clears queue
 		switch(href_list["device"])
 			if("protolathe")
 				if(linked_lathe)
@@ -524,11 +524,17 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(linked_imprinter)
 					linked_imprinter.queue.len = 0
 
-	else if(href_list["setProtolatheStopped"] && linked_lathe) //Causes the protolathe to dispose of all it's reagents.
-		linked_lathe.stopped=(href_list["setProtolatheStopped"]=="1")
+	else if(href_list["setProtolatheStopped"] && linked_lathe) //Makes the protolathe start or stop processing the queue
+		if(href_list["setProtolatheStopped"]=="0")
+			linked_lathe.start_processing_queue()
+		else
+			linked_lathe.stop_processing_queue()
 
-	else if(href_list["setImprinterStopped"] && linked_imprinter) //Causes the protolathe to dispose of all it's reagents.
-		linked_imprinter.stopped=(href_list["setImprinterStopped"]=="1")
+	else if(href_list["setImprinterStopped"] && linked_imprinter) //Ditto for imprinter
+		if(href_list["setImprinterStopped"]=="0")
+			linked_imprinter.start_processing_queue()
+		else
+			linked_imprinter.stop_processing_queue()
 
 	else if(href_list["lathe_ejectsheet"] && linked_lathe) //Causes the protolathe to eject a sheet of material
 		if(!src.allowed(usr))
