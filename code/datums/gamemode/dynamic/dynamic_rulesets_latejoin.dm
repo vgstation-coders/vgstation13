@@ -47,7 +47,7 @@
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
 	weight = 7
-	cost = 5
+	cost = 10
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	repeatable = TRUE
@@ -76,7 +76,7 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 1
-	cost = 20
+	cost = 25
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 	repeatable = TRUE
