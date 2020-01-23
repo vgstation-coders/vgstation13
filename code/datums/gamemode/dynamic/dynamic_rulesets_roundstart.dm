@@ -466,7 +466,7 @@
 	enemy_jobs = list()
 	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 0
-	weight = 3
+	weight = 7
 	cost = 0
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	high_population_requirement = 101
