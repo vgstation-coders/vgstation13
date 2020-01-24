@@ -119,7 +119,7 @@
 			new /obj/item/clothing/accessory/storage/bandolier(src)
 
 		if ("sith")
-			if(conditions == "plasmaman") //General Veers, you're too close to me
+			if(condition == "plasmaman") //General Veers, you're too close to me
 				new /obj/item/weapon/melee/energy/sword/red(src)
 				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
 				new /obj/item/weapon/spellbook/oneuse/telekinetic_choke(src)

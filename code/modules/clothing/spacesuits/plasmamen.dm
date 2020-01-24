@@ -413,3 +413,13 @@
 	base_state = "plasmamanCult_helmet"
 	desc = "A containment suit designed by the followers of Nar-Sie. It glows menacingly with unearthly flames."
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+
+//Sith
+
+/obj/item/clothing/suit/space/plasmaman/sith
+	name = "Plasmaman Sith Suit"
+	icon_state = "plasmaman_sith"
+	item_state = "plasmaman_sith"
+	desc = "A menacing armored suit that seems to protect the wearer from harm, fit for a plasmaman."
+	armor = list(melee = 80, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
+
