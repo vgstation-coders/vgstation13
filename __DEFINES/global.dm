@@ -333,9 +333,6 @@ var/list/bees_species = list()
 
 var/datum/stat_collector/stat_collection = new
 
-//If 1, Spessmart exists
-var/spessmart_exists
-
 //Hardcore mode
 //When enabled, starvation kills
 var/global/hardcore_mode = 0
