@@ -329,7 +329,7 @@
 /obj/item/weapon/spellbook/oneuse/lightning/sith
 	spell = /spell/lightning/sith
 	spellname = "sith lightning"
-	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
+	desc = "You can hear it crackle with malevolent electricity."
 
 /obj/item/weapon/spellbook/oneuse/timestop
 	spell = /spell/aoe_turf/fall
@@ -462,6 +462,17 @@
 			break
 	if(!success)
 		user.forceMove(pick(L))
+
+/obj/item/weapon/spellbook/oneuse/telekinetic_choke
+	spell = /spell/targeted/telekinetic_choke
+	spellname = "Telekinetic Choke"
+	desc = "It's hard to look at this book without gasping."
+
+/obj/item/weapon/spellbook/oneuse/telekinetic_choke/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class='warning'>You feel out of breath!</span>")
+	user.adjustOxyLoss(60)
+	user.Stun(5)
+	user.Knockdown(5)
 
 /obj/item/weapon/spellbook/oneuse/pie
 	spell = /spell/targeted/projectile/pie

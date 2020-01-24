@@ -62,7 +62,8 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/available_for_job(var/user_job)
 	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
 
-//A condition which gets attached to the spawn_item proc that will apply on new 
+//A condition which gets attached to the spawn_item proc that will apply on new()
+//Use this with things that have variables attached to their New() 
 /datum/uplink_item/proc/buy_special_condition(var/mob/user)
 	return
 
