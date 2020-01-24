@@ -2089,8 +2089,9 @@
 	O.clean_blood()
 	if(istype(O, /obj/effect/decal/cleanable))
 		qdel(O)
-	else if(O.color && istype(O, /obj/item/weapon/paper))
-		O.color = null
+	else if(O.color)
+		O.color = ""
+	..()
 
 /datum/reagent/space_cleaner/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -2108,6 +2109,8 @@
 		for(var/mob/living/carbon/human/H in T)
 			if(isslimeperson(H))
 				H.adjustToxLoss(rand(5, 10)/10)
+
+	T.color = ""
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -2138,6 +2141,7 @@
 				if(H.shoes.clean_blood())
 					H.update_inv_shoes(0)
 		M.clean_blood()
+		M.color = ""
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2183,7 +2187,7 @@
 				else if(prob(5))
 					H.vomit()
 	data++
-
+	M.color = ""
 	M.adjustToxLoss(4 * REM)
 
 /datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)

@@ -35,8 +35,8 @@
 			manipcount += SP.rating
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating
-	minimum_monkeys = 4 - (manipcount/2) //Tier 1 = 3, Tier 2 = 2, Tier 3 = 1
-	if(lasercount == 3)
+	minimum_monkeys = max(1,4 - (manipcount/2)) //Tier 1 = 3, Tier 2 = 2, Tier 3 = 1
+	if(lasercount >= 3)
 		can_recycle_live = TRUE
 
 /obj/machinery/monkey_recycler/attackby(var/obj/item/O, var/mob/user)

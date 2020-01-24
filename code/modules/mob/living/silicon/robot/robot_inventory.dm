@@ -289,8 +289,6 @@
 	else
 		..()
 
-#define ROBOT_LOW_POWER 100
-
 /mob/living/silicon/robot/put_in_hands(var/obj/item/W)
 	var/obj/item/weapon/gripper/G = null
 	if(!W)
@@ -321,3 +319,17 @@
 
 /mob/living/silicon/robot/get_inactive_hand(var/obj/item/W)
 	return FALSE
+
+/mob/living/silicon/robot/proc/update_items()
+	if(client)
+		client.screen -= contents
+		for(var/obj/I in contents)
+			if(I!=cell && I!=radio && I!=camera && I!=mmi && I!=rbPDA && I!=aicamera)
+				client.screen += I
+	if(module_state_1)
+		module_state_1:screen_loc = ui_inv1
+	if(module_state_2)
+		module_state_2:screen_loc = ui_inv2
+	if(module_state_3)
+		module_state_3:screen_loc = ui_inv3
+	updateicon()
