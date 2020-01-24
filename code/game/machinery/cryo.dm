@@ -493,7 +493,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			var/mob/living/carbon/human/guy = occupant //Gotta cast to read this guy's species
 			if(istype(guy) && guy.species && guy.species.breath_type != GAS_OXYGEN)
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
-<<<<<<< HEAD
 			if(air_contents[GAS_OXYGEN] > 2)
 				if(occupant.getOxyLoss())
 					occupant.adjustOxyLoss(-1)
@@ -514,15 +513,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			beaker.reagents.reaction(occupant)
 			if (beaker.reagents.total_volume == 0)
 				update_icon() // Update icon so the "no mix" warning starts flashing.
-=======
-		if(scan_level >= 4 && auto_eject && occupant.health == occupant.maxHealth)
-			go_out(ejector = occupant)
-			return
-		if(beaker && injecting && world.time > (last_injection + 10 SECONDS))
-			beaker.reagents.trans_to(src, inject_rate)
-			last_injection = world.time
-		reagents.reaction(occupant, remove_reagents = TRUE, mob_reagent_threshold = occupant_reagent_threshold)
->>>>>>> upstream/Bleeding-Edge
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/modify_occupant_bodytemp()
 	if(!occupant)
