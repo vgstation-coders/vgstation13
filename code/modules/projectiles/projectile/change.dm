@@ -41,7 +41,7 @@
 			if(SOC_SLIME)
 				new_mob = M.slimeize()
 			if(SOC_XENO)
-				new_mob = M.Alienize("Hunter")
+				new_mob = M.Alienize(pick("Hunter", "Sentinel"))
 			if(SOC_HUMAN)
 				new_mob = M.Humanize()
 			if(SOC_CATBEAST)
