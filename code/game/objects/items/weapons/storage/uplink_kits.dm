@@ -125,7 +125,6 @@
 				new /obj/item/weapon/spellbook/oneuse/telekinetic_choke(src)
 				new /obj/item/clothing/head/vader(src)
 				new /obj/item/clothing/suit/vader(src)
-				new /obj/item/clothing/shoes/vader(src)
 			else // It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
 				new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
 				new /obj/item/weapon/melee/energy/sword/red(src) //Combine these into a double e-sword

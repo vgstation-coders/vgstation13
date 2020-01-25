@@ -423,3 +423,10 @@
 	desc = "A menacing armored suit that seems to protect the wearer from harm, fit for a plasmaman."
 	armor = list(melee = 80, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
 
+/obj/item/clothing/suit/space/plasmaman/sith/
+
+/obj/item/clothing/head/helmet/space/plasmaman/sith
+	name = "Plasmaman Sith Suit"
+	icon_state = "plasmaman_sith_helmet"
+	item_state = "plasmaman_sith_helmet"
+	desc = ""
