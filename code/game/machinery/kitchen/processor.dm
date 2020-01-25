@@ -252,7 +252,7 @@
 
 /obj/machinery/processor/examine(mob/user)
 	..()
-	to_chat(user, "<span class='notice'>It can fit up to [content_limit] foodstuffs!")
+	to_chat(user, "<span class='notice'>It can fit up to [content_limit] things!")
 
 /obj/machinery/processor/MouseDropTo(atom/movable/O, mob/user)
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O))
