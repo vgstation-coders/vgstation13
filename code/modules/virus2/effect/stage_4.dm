@@ -917,7 +917,7 @@
 	var/old_species = "Human"
 
 /datum/disease2/effect/humanity/activate(var/mob/living/mob)
-	if(istype(mob,/mob/living/carbon/human/vox)) 
+	if(istype(mob,/mob/living/carbon/human)) 
 		var/mob/living/carbon/human/h = mob
 		old_species = h.species.name
 		if(old_species != "Human")
