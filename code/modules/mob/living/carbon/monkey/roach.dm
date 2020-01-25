@@ -4,7 +4,7 @@
 	speak_emote = list("hisses")
 	icon_state = "bigroach"
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
-	species_type = /mob/living/carbon/monkey/rock
+	species_type = /mob/living/carbon/monkey/roach
 	flag = RAD_IMMUNE
 
 	mob_bump_flag = MONKEY

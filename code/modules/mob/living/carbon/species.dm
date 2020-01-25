@@ -1285,6 +1285,7 @@ var/list/has_died_as_golem = list()
 	name = "Insectoid"
 	icobase = 'icons/mob/human_races/r_insect.dmi'
 	deform = 'icons/mob/human_races/r_def_insect.dmi'
+	eyes = "insectoid_eyes_m"
 	known_languages = list(LANGUAGE_INSECT)
 	primitive = /mob/living/carbon/monkey/roach
 
@@ -1301,12 +1302,21 @@ var/list/has_died_as_golem = list()
 
 	has_mutant_race = 0
 
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain/ash,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes
+		)
+
 	species_intro = "You are an Insectoid.<br>\
 					Your body is utterly immune to the perils of radiation, and you are able to better defend against toxic chemicals <br>\
-					However, your rigid body is somewhat more fragile than that of more soft-bodied species. Resilient though you may be, a good smack may put you out of comission."
+					However, your rigid body is somewhat more fragile than that of more soft-bodied species. Resilient though you may be, a good smack may put you out of commission."
 
-/datum/species/skrell/gib(mob/living/carbon/human/H) //placeholder til I get this figured
-	..()
+/datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
 	H.default_gib()
 
 

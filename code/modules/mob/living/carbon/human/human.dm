@@ -86,7 +86,7 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-mob/living/carbon/human/insectoid/New(var/new_loc, delay_ready_dna = 0)
+/mob/living/carbon/human/insectoid/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Insectoid")
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
