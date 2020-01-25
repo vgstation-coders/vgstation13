@@ -484,6 +484,9 @@ This function restores all organs.
 	update_canmove()
 
 /mob/living/carbon/human/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
+	if(species.flags & RAD_IMMUNE)
+		return
+
 	if(application == RAD_EXTERNAL)
 		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
 
