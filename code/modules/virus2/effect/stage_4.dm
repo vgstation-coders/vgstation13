@@ -917,14 +917,8 @@
 	var/old_species = "Human"
 
 /datum/disease2/effect/humanity/activate(var/mob/living/mob)
-	if(istype(mob,/mob/living/carbon/human/vox)) // Pox
-		var/mob/living/carbon/human/vox/h = mob
-		old_species = h.species.name
-		if(old_species != "Human")
-			if(h.set_species("Human"))
-				h.regenerate_icons()
-	if(istype(mob,/mob/living/carbon/human/grey)) // Grey
-		var/mob/living/carbon/human/grey/h = mob
+	if(istype(mob,/mob/living/carbon/human/vox)) 
+		var/mob/living/carbon/human/h = mob
 		old_species = h.species.name
 		if(old_species != "Human")
 			if(h.set_species("Human"))
