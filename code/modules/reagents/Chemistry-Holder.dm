@@ -536,13 +536,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if(TOUCH)
 			for(var/datum/reagent/R in reagent_list)
 				if(ismob(A))
+					var/datum/reagent/MR //Prevents a runtime
 					if(A.reagents)
-						var/datum/reagent/MR = A.reagents.get_reagent_by_type(R.type)
-						if(!mob_reagent_threshold || !MR || (mob_reagent_threshold > MR.volume))
-							if(isanimal(A))
-								R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
-							else
-								R.reaction_mob(A, TOUCH, R.volume+volume_modifier, remove_reagents)
+						MR = A.reagents.get_reagent_by_type(R.type)
+					if(!mob_reagent_threshold || !MR || (mob_reagent_threshold > MR.volume))
+						if(isanimal(A))
+							R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
+						else
+							R.reaction_mob(A, TOUCH, R.volume+volume_modifier, remove_reagents)
 				if(isturf(A))
 					R.reaction_turf(A, R.volume+volume_modifier)
 				if(istype(A, /obj))
