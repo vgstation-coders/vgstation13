@@ -318,8 +318,8 @@
 		H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD)
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
-
-/mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)
+/*
+/mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)  // Uncomment this and the same proc in the gameticker if somebody wants roundstart viruses again in the future.
 	// 5% of players are joining the station with some minor disease
 	if(prob(5))
 		var/datum/disease2/disease/D = get_random_weighted_disease(WLATEJOIN)
@@ -346,7 +346,7 @@
 		H.virus2["[D.uniqueID]-[D.subID]"] = D
 
 		D.AddToGoggleView(H)
-
+*/
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0

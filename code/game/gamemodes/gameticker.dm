@@ -401,7 +401,7 @@ var/datum/controller/gameticker/ticker
 					else
 						data_core.manifest_inject(new_character)
 				player.FuckUpGenes(new_character)
-				player.DiseaseCarrierCheck(new_character)
+				//player.DiseaseCarrierCheck(new_character) Uncomment this & the new_player proc if somebody in the future wants roundstart virus again.
 				qdel(player)
 
 
