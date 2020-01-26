@@ -531,7 +531,6 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	mob.reagents.add_reagent(CLEANER, 5)
 	mob.reagents.add_reagent(PAISMOKE, 5)
 
-
 /datum/disease2/effect/chimera
 	name = "Chimeral Xenosis"
 	desc = "Causes the infected's body to gradually mutate into a chimera of different alien species."
