@@ -616,6 +616,9 @@ var/list/beam_master = list()
 	return
 
 ////////Laser Tag////////////////////
+
+var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/clothing/suit/tag/bluetag)
+
 /obj/item/projectile/beam/lasertag
 	name = "lasertag beam"
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
@@ -628,13 +631,41 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/lasertag/on_hit(var/atom/target, var/blocked = 0)
 	if(ismob(target))
 		var/mob/M = target
-		if(is_type_in_list(get_tag_armor(M), enemy_vest_types))
-			if(!M.lying) //Kick a man while he's down, will ya
+		var/obj/item/clothing/suit/tag/their_tag = get_tag_armor(M)
+		if(is_type_in_list(tag, laser_tag_vests))
+			var/datum/laser_tag_game/game = their_tag.my_laser_tag_game
+			if (!game) // No registered game : classic laser tag
+				if (!(is_type_in_list(their_tag, enemy_vest_types)))
+					return 1
+				if(!M.lying) //Kick a man while he's down, will ya
+					var/obj/item/weapon/gun/energy/tag/taggun = shot_from
+					if(istype(taggun))
+						taggun.score()
+				M.Knockdown(2)
+				M.Stun(2)
+			else // We've got a game on the reciever, let's check if we've got a game on the wearer.
+				var/obj/item/clothing/suit/tag/my_tag = get_tag_armor(firer)
+				if (!my_tag || !my_tag.my_laser_tag_game || my_tag.my_laser_tag_game =! their_tag.my_laser_tag_game)
+					return 1
+				if (!my_tag.player || !their_tag.player)
+					CRASH("A suit has a laser tag game registered, but no players attached.")
+
+				var/datum/laser_tag_participant/my_player = my_tag.player
+				var/datum/laser_tag_participant/their_player = my_tag.player
+
+				if (my_tag.my_laser_tag_game.mode == LT_MODE_TEAM && !(is_type_in_list(their_tag, enemy_vest_types)))
+					return 1
+				if(!M.lying) // Not counting scores if the opponent is lying down.
+					my_player.total_hits++
+					their_player.total_hit_by++
+					their_player.hit_by[my_player.tag]++
+				
+				M.Knockdown(my_laser_tag_game.stun_time/2)
+				M.Stun(my_laser_tag_game.stun_time/2)	
 				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
-				if(istype(taggun))
-					taggun.score()
-			M.Knockdown(5)
-			M.Stun(5)
+					if(istype(taggun))
+						taggun.cooldown(my_laser_tag_game.disable_time/2)
+
 	return 1
 
 /obj/item/projectile/beam/lasertag/blue

@@ -24,3 +24,9 @@
 #define CLOTHING_SOUND_LOW_PRIORITY 1
 #define CLOTHING_SOUND_MED_PRIORITY 2
 #define CLOTHING_SOUND_HIGH_PRIORITY 3
+
+// Laser tag
+#define LT_MODE_TEAM "team"
+#define LT_MODE_FFA "free for all"
+#define LT_FIREMODE_LASER "laser"
+#define LT_FIREMODE_TASER "taser"

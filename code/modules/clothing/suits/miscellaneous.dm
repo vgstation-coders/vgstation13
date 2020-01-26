@@ -9,11 +9,25 @@
  * Lasertag
  */
 
+ var/list/obj/item/clothing/suit/tag/tag_suits = list()
+
+ /obj/item/clothing/suit/tag/New(...)
+	tag_suits += src
+	return ..()
+
+/obj/item/clothing/suit/tag/Destroy()
+	tag_suits -= src
+	my_laser_tag_game = null
+	my_player = null
+	return ..()
+
 /obj/item/clothing/suit/tag
 	blood_overlay_type = "armor"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
 	body_parts_covered = FULL_TORSO
 	siemens_coefficient = 3.0
+	var/datum/laser_tag_game/my_laser_tag_game = null
+	var/datum/laser_tag_participant/player = null
 
 /obj/item/clothing/suit/tag/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
@@ -33,6 +47,66 @@
 			L.update_icon()
 		return 1
 	return ..()
+
+/obj/item/clothing/suit/tag/attack_hand(var/mob/living/carbon/human/H)
+	if (H.incapacitated())
+		return
+	else
+		H << browse(get_window_text(H),"window=laser_tag_window;size=700x500")
+
+/obj/item/clothing/suit/tag/proc/get_window_text(H)
+	var/dat = list()
+	dat += "<h3>Laser tag games</h3> <br/>"
+	dat += "<b>Tag:</b> [get_gamer_tag(H)]"
+	if (!my_laser_tag_game)
+		dat += "Available laser tag games: <br/>"
+		for (var/datum/laser_tag_game/game in laser_tag_games)
+			dat += "<b>[game.name]</b> - <a href='?src=\ref[src]&join_game=\ref[game]>Join!</a> <br/>'"
+	else
+		dat += "My game: <b>[my_laser_tag_game.name]</b>"
+		if (my_laser_tag_game.owner == player)
+			dat += "<a href='?src=\ref[src]&edit_game=\ref[my_laser_tag_game]'>Edit/delete</a>"
+		dat += "<br/>"
+		dat += "<b>Mode:</b> [my_laser_tag_game.mode] <br/>"
+		dat += "<a href='?src=\ref[src]&get_score=\ref[my_laser_tag_game]'>Get scoreboard/a><br/>"
+		dat += "<a href='?src=\ref[src]&leave_game=\ref[my_laser_tag_game]'>Leave game</a><br/>"
+
+	dat += "<a href='?src=\ref[src]&clear_gamertag=1'>Clear tag</a>"
+	
+	return jointext(dat,"")
+
+/obj/item/clothing/suit/tag/Topic(href, href_list)
+	if(..())
+		return 1
+
+	if (href_list["join_game"])
+		var/datum/laser_tag_game/game = locate(href_list["join_game"])
+		game.handle_new_player(player, usr)
+		return
+	
+	if (href_list["edit_game"])
+		var/datum/laser_tag_game/game = locate(href_list["edit_game"])
+		if (my_laser_tag_game.owner != player)
+			return
+		game.edit(usr)
+		return
+
+	if (href_list["get_score"])
+		var/datum/laser_tag_game/game = locate(href_list["get_score"])
+		game.print_scoreboard(usr)
+		return
+
+	if (href_list["join_game"])
+		var/datum/laser_tag_game/game = locate(href_list["join_game"])
+		game.kick_player(player)
+		return
+	
+	if (href_list["clear_gamertag"])
+		my_laser_tag_game = null
+		player = null
+		H << browse(null,"window=laser_tag_window;size=700x500")
+		to_chat(usr, "<span = 'notice'>You clear your tag out of the vest and leave it to be used by someone else.</span>")
+		return
 
 /proc/get_tag_armor(mob/M)
 	if(ishuman(M))
