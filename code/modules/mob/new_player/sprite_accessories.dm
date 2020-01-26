@@ -859,7 +859,7 @@
 	species_allowed = list("Diona")
 	do_colouration = 0
 
-	/datum/sprite_accessory/hair/hair_fullboom
+/datum/sprite_accessory/hair/hair_fullboom
 	name = "Bloomed"
 	icon_state = "hair_fullbloom"
 	species_allowed = list("Diona")
