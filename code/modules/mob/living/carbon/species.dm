@@ -1283,8 +1283,8 @@ var/list/has_died_as_golem = list()
 
 /datum/species/insectoid
 	name = "Insectoid"
-	icobase = 'icons/mob/human_races/r_insect.dmi'
-	deform = 'icons/mob/human_races/r_def_insect.dmi'
+	icobase = 'icons/mob/human_races/r_insectoid.dmi'
+	deform = 'icons/mob/human_races/r_def_insectoid.dmi'
 	eyes = "insectoid_eyes_m"
 	known_languages = list(LANGUAGE_INSECT)
 	primitive = /mob/living/carbon/monkey/roach

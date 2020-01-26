@@ -62,7 +62,7 @@
 	name = "Bald"
 	icon_state = "bald"
 	gender = MALE
-	species_allowed = list("Human","Manifested","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
+	species_allowed = list("Human","Manifested","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom","Insectoid")
 
 /datum/sprite_accessory/hair/short
 	name = "Short Hair"	  // try to capatilize the names please~
@@ -403,7 +403,7 @@
 	name = "Twintails"
 	icon_state = "hair_twintail"
 	gender = FEMALE
-	
+
 /datum/sprite_accessory/hair/cia
 	name = "CIA"
 	icon_state = "hair_cia"
@@ -528,7 +528,7 @@
 	name = "Shaved"
 	icon_state = "bald"
 	gender = NEUTER
-	species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
+	species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom","Insectoid")
 
 /datum/sprite_accessory/facial_hair/watson
 	name = "Watson Mustache"
@@ -869,7 +869,7 @@
 	name = "Bushy"
 	icon_state = "hair_bushy"
 	species_allowed = list("Diona")
-	
+
 /datum/sprite_accessory/hair/hair_weepingwillow
 	name = "Weeping Willow"
 	icon_state = "hair_weepingwillow"
@@ -1020,3 +1020,5 @@
 /datum/sprite_accessory/hair/mohawk
 	name = "Mohawk"
 	icon_state = "mohawk"
+
+
