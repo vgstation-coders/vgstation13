@@ -913,7 +913,7 @@
 	name = "Forced Humanity Syndrome"
 	desc = "A recent development by human supremacists. Causes non-human infected to mutate into a Human."
 	stage = 4
-	badness = EFFECT_DANGER_HELPFUL
+	badness = EFFECT_DANGER_HINDRANCE
 	var/old_species = "Human"
 
 /datum/disease2/effect/humanity/activate(var/mob/living/mob)
