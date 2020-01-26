@@ -913,13 +913,12 @@
 	name = "Forced Humanity Syndrome"
 	desc = "A recent development by human supremacists. Causes non-human infected to mutate into a Human."
 	stage = 4
-	badness = EFFECT_DANGER_DEADLY
+	badness = EFFECT_DANGER_HELPFUL
 	var/old_species = "Human"
 
 /datum/disease2/effect/humanity/activate(var/mob/living/mob)
 	if(istype(mob,/mob/living/carbon/human)) 
 		var/mob/living/carbon/human/h = mob
-		old_species = h.species.name
-		if(old_species != "Human")
-			if(h.set_species("Human"))
-				h.regenerate_icons()
+		if(!istype(h.species.name, /datum/species/human))
+			h.set_species("Human")
+			h.regenerate_icons()
