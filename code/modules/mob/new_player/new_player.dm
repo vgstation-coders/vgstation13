@@ -321,7 +321,7 @@
 
 /mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)  
 	// 5% of players are joining the station with some minor disease
-	/*  Uncomment this and the same proc in the gameticker if somebody wants roundstart viruses again in the future.
+	/*  Uncomment this if somebody wants roundstart viruses again in the future.
 	if(prob(5))
 		var/datum/disease2/disease/D = get_random_weighted_disease(WLATEJOIN)
 
