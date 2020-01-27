@@ -1297,7 +1297,7 @@ var/list/has_died_as_golem = list()
 	burn_mod = 1.3
 	tox_mod = 0.5
 
-	blood_color = "#e6e600"
+	blood_color = "#ebece6"
 	flesh_color = "#9c7f25"
 
 	has_mutant_race = 0

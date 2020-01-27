@@ -62,7 +62,7 @@
 	name = "Bald"
 	icon_state = "bald"
 	gender = MALE
-	species_allowed = list("Human","Manifested","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom","Insectoid")
+	species_allowed = list("Human","Manifested","Insectoid","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
 
 /datum/sprite_accessory/hair/short
 	name = "Short Hair"	  // try to capatilize the names please~
@@ -508,9 +508,6 @@
 	icon_state = "hair_manbun"
 	gender = MALE
 
-/datum/sprite_accessory/hair/bald
-	name = "Bald"
-	icon_state = "bald"
 /*
 ///////////////////////////////////
 /  =---------------------------=  /
@@ -983,6 +980,7 @@
 	species_allowed = list(VOX_SHAPED)
 	do_colouration = 0
 
+
 //skin styles - WIP
 //going to have to re-integrate this with surgery
 //let the icon_state hold an icon preview for now
@@ -1020,5 +1018,4 @@
 /datum/sprite_accessory/hair/mohawk
 	name = "Mohawk"
 	icon_state = "mohawk"
-
 
