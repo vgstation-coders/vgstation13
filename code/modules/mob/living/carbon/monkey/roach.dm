@@ -17,5 +17,5 @@
 	greaterform = "Insectoid"
 	languagetoadd = LANGUAGE_INSECT
 
-/mob/living/carbon/monkey/rock/passive_emote()
+/mob/living/carbon/monkey/roach/passive_emote()
 	emote(pick("scratch","jump","roll"))
