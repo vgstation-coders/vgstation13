@@ -5974,7 +5974,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#666300" //rgb: 102, 99, 0
 
-/datum/reagent/ethanol/deadrumm/threemileisland
+/datum/reagent/ethanol/deadrum/threemileisland
 	name = "Three Mile Island Iced Tea"
 	id = THREEMILEISLAND
 	description = "Made for a woman. Strong enough for a man."

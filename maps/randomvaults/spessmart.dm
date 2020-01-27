@@ -176,10 +176,6 @@ var/list/shop_prices = list( //Cost in space credits
 	var/goods_purchased = 0
 	var/alarm_activated = "" //Holds the explanation for alarm's activation
 
-/datum/map_element/vault/supermarket/pre_load()
-	..()
-	spessmart_exists = 1
-
 /datum/map_element/vault/supermarket/process_scoreboard()
 	var/list/L = list()
 
