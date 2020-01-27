@@ -628,6 +628,14 @@
 ///////////////////////////////////
 */
 
+/datum/sprite_accessory/hair/insect_antennae
+	name = "Insectoid Antennae"
+	icon_state = "insect_antennae"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+	do_colouration = 0
+
+
 /datum/sprite_accessory/hair/una_spines_long
 	name = "Long Unathi Spines"
 	icon_state = "soghun_longspines"

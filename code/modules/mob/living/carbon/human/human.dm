@@ -88,7 +88,7 @@
 
 /mob/living/carbon/human/insectoid/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Insectoid")
-	my_appearance.h_style = "Bald"
+	my_appearance.h_style = "Insectoid Antennae"
 	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
