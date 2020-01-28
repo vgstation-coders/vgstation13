@@ -196,6 +196,7 @@
 	valid_containers = list(
 		/obj/item/weapon/storage/fancy/vials,
 		/obj/item/weapon/storage/lockbox/vials,
+		/obj/item/stack/sheet/mineral/plasma,
 		)
 
 /obj/item/weapon/gripper/organ //Used to handle organs.
