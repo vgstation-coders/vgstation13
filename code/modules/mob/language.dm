@@ -108,8 +108,10 @@
 	ask_verb = "clicks"
 	exclaim_verb = "hisses"
 	colour = "gutter"
-	key = "y"
+	key = "%"
+	native = 1
 	syllables = list("ch","ke","chi","tch","sk","skch","ra","kch","esk","kra","sh","tik","ech","ks")
+	space_chance = 40
 
 /datum/language/diona
 	name = LANGUAGE_ROOTSPEAK
