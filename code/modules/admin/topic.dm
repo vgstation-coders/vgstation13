@@ -5615,6 +5615,8 @@
 					qdel(thing)
 					CHECK_TICK
 				var/total_time = stop_watch(time)
+				log_admin("[key_name(usr)] deleted [number] [type_del] in a [x_max_del - x_min_del]x[y_max_del - y_min_del] square starting at ([x_min_del],[x_max_del],[z_del])")
+				message_admins("[key_name(usr)] deleted [number] [type_del] in a [x_max_del - x_min_del]x[y_max_del - y_min_del] square starting at ([x_min_del],[x_max_del],[z_del])")
 				x_min_del = 0
 				x_max_del = 0
 				y_min_del = 0
