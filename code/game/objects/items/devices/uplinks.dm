@@ -36,7 +36,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		var/obj/item/stack/sheet/S = I
 		uses += S.amount
 		user.drop_item(S, src)
-		to_chat(user, "<span class='notice'>You insert [S.amount] telecrystal inside the uplink.</span>")
+		to_chat(user, "<span class='notice'>You insert [S.amount] telecrystal[S.amount > 1 ? "s" : ""] into the uplink.</span>")
 		qdel(S)
 	if(!uplink_items)
 		get_uplink_items()
@@ -187,12 +187,12 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			return
 		var/amount = input("How many telecrystals do you wish to withdraw?:", "Extract telecrystals", null) as num
 		if (amount > uses)
-			return
+			amount = uses
 		uses -= amount
 		var/obj/item/stack/sheet/mineral/telecrystal/refined/R = new /obj/item/stack/sheet/mineral/telecrystal/refined(usr, amount)
 		var/mob/living/carbon/human/H = usr
+		to_chat(usr, "<span class='notice'>You withdraw [amount] telecrystal[amount > 1 ? "s" : ""] from your uplink.</span>")
 		H.put_in_hands(R)
-		return
 
 // HIDDEN UPLINK - Can be stored in anything but the host item has to have a trigger for it.
 /* How to create an uplink in 3 easy steps!
