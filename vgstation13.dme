@@ -1206,6 +1206,7 @@
 #include "code\libs\s_html\inverthtml.dm"
 #include "code\modules\admin\admin.dm"
 #include "code\modules\admin\admin_investigate.dm"
+#include "code\modules\admin\admin_mass_del_in_zone.dm"
 #include "code\modules\admin\admin_memo.dm"
 #include "code\modules\admin\admin_ranks.dm"
 #include "code\modules\admin\admin_verbs.dm"
