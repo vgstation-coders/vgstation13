@@ -29,9 +29,15 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		welcome = "THANKS FOR MAPPING IN THIS THING AND NOT CHECKING FOR RUNTIMES BUDDY"
 		uses = 90 // Because this is only happening on centcomm's snowflake uplink
 
-/obj/item/device/uplink/proc/refund(mob/user, obj/item/I)
+/obj/item/device/uplink/proc/refund(mob/living/carbon/human/user, obj/item/I)
 	if(!user || !I)
 		return
+	if (istype(I, /obj/item/stack/sheet/mineral/telecrystal/refined))
+		var/obj/item/stack/sheet/S = I
+		uses += S.amount
+		user.drop_item(S, src)
+		to_chat(user, "<span class='notice'>You insert [S.amount] telecrystal[S.amount > 1 ? "s" : ""] into the uplink.</span>")
+		qdel(S)
 	if(!uplink_items)
 		get_uplink_items()
 	for(var/category in uplink_items)
@@ -116,6 +122,10 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			dat += "<br>"
 
 	dat += "<HR>"
+	if (uses)
+		dat += "<a href='byond://?src=\ref[src];get_tc=1'>Extract telecrystals</a><br/>"
+	else
+		dat += "<font color='grey'><i>Extract telecrystals</i>/</font><br/>"
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 	return dat
 
@@ -171,6 +181,18 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	else if(href_list["show_desc"])
 		show_description = text2num(href_list["show_desc"])
 		interact(usr)
+
+	else if(href_list["get_tc"])
+		if (uses <= 0)
+			return
+		var/amount = input("How many telecrystals do you wish to withdraw?:", "Extract telecrystals", null) as num
+		if (amount > uses)
+			amount = uses
+		uses -= amount
+		var/obj/item/stack/sheet/mineral/telecrystal/refined/R = new /obj/item/stack/sheet/mineral/telecrystal/refined(usr, amount)
+		var/mob/living/carbon/human/H = usr
+		to_chat(usr, "<span class='notice'>You withdraw [amount] telecrystal[amount > 1 ? "s" : ""] from your uplink.</span>")
+		H.put_in_hands(R)
 
 // HIDDEN UPLINK - Can be stored in anything but the host item has to have a trigger for it.
 /* How to create an uplink in 3 easy steps!
