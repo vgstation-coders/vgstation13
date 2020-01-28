@@ -19,19 +19,19 @@
 	src = usr.client.holder // why lummox why
 	
 	var/list/dat = list()
-	dat += "<h3>Mass deletion in a zone</h3>"
-	dat += "Delete all the atoms of a given type in a zone given by z, x, and y coordinates."
-	dat += "<br/>"
-	dat += "<b>Z-level:</b> <a href='?src=\ref[src];change_zone_del=z_del;'>[z_del]</a> <br/>"
-	dat += "<br/>"
-	dat += "<b>X-min:</b> <a href='?src=\ref[src];change_zone_del=x_min_del;'>[x_min_del]</a> <br/>"
-	dat += "<b>X-max:</b> <a href='?src=\ref[src];change_zone_del=x_max_del;'>[x_max_del]</a> <br/>"
-	dat += "<br/>"
-	dat += "<b>Y-min:</b> <a href='?src=\ref[src];change_zone_del=y_min_del;'>[y_min_del]</a> <br/>"
-	dat += "<b>Y-max:</b> <a href='?src=\ref[src];change_zone_del=y_max_del;'>[y_max_del]</a> <br/>"
-	dat += "<br/>"
-	dat += "<b>Type:</b>  <a href='?src=\ref[src];change_zone_del=type;'>[type_del ? type_del : "No type"]</a> <br/>"
-	dat += "<br/>"
-	dat += "<a href='?src=\ref[src];change_zone_del=exec'>Delete it.</a>'"
+	dat += {"<h3>Mass deletion in a zone</h3>"
+	"Delete all the atoms of a given type in a zone given by z, x, and y coordinates."
+	"<br/>"
+	"<b>Z-level:</b> <a href='?src=\ref[src];change_zone_del=z_del;'>[z_del]</a> <br/>"
+	"<br/>"
+	"<b>X-min:</b> <a href='?src=\ref[src];change_zone_del=x_min_del;'>[x_min_del]</a> <br/>"
+	"<b>X-max:</b> <a href='?src=\ref[src];change_zone_del=x_max_del;'>[x_max_del]</a> <br/>"
+	"<br/>"
+	"<b>Y-min:</b> <a href='?src=\ref[src];change_zone_del=y_min_del;'>[y_min_del]</a> <br/>"
+	"<b>Y-max:</b> <a href='?src=\ref[src];change_zone_del=y_max_del;'>[y_max_del]</a> <br/>"
+	"<br/>"
+	"<b>Type:</b>  <a href='?src=\ref[src];change_zone_del=type;'>[type_del ? type_del : "No type"]</a> <br/>"
+	"<br/>"
+	"<a href='?src=\ref[src];change_zone_del=exec'>Delete it.</a>'"}
 
 	usr << browse(jointext(dat, ""), "window=mass_del_in_zone;size=490x310")
