@@ -858,6 +858,8 @@
 	icon_state = "hair_popcorn"
 	species_allowed = list("Diona")
 	do_colouration = 0
+	gender = FEMALE
+	gender = MALE
 
 /datum/sprite_accessory/hair/hair_fullbloom
 	name = "Bloomed"
