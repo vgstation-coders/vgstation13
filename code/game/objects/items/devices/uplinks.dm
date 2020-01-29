@@ -186,12 +186,11 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		if (uses <= 0)
 			return
 		var/amount = input("How many telecrystals do you wish to withdraw?:", "Extract telecrystals", null) as num
-		if(amount <= 0)
+		if(!usr.Adjacent(src))
 			return
-		if(get_dist(usr, src) >= 1)
+		amount = clamp(amount, 0, uses)
+		if (amount < 0)
 			return
-		if (amount > uses)
-			amount = uses
 		uses -= amount
 		var/obj/item/stack/sheet/mineral/telecrystal/refined/R = new /obj/item/stack/sheet/mineral/telecrystal/refined(usr, amount)
 		var/mob/living/carbon/human/H = usr

@@ -285,8 +285,10 @@
 	keyslot2 = new /obj/item/device/encryptionkey/ert
 	..()
 
-/obj/item/device/radio/headset/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/device/radio/headset/attackby(obj/item/weapon/W, mob/user)
 //	..()
+	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, W))
+		return
 	user.set_machine(src)
 	if (!( W.is_screwdriver(user) || (istype(W, /obj/item/device/encryptionkey/ ))))
 		return
