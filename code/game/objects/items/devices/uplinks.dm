@@ -186,6 +186,10 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		if (uses <= 0)
 			return
 		var/amount = input("How many telecrystals do you wish to withdraw?:", "Extract telecrystals", null) as num
+		if(amount <= 0)
+			return
+		if(get_dist(usr, src) >= 1)
+			return
 		if (amount > uses)
 			amount = uses
 		uses -= amount
