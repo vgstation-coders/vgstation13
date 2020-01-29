@@ -812,6 +812,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(body_part == LOWER_TORSO)
 			to_chat(owner, "<span class='danger'>You are now sterile.</span>")
 
+		if(body_part & (HAND_LEFT | HAND_RIGHT | ARM_LEFT | ARM_RIGHT))
+			owner.update_hands_icons()
+
 		if(slots_to_drop && slots_to_drop.len)
 			for(var/slot_id in slots_to_drop)
 				owner.u_equip(owner.get_item_by_slot(slot_id), 1)
@@ -1171,6 +1174,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return 0
 
 /datum/organ/external/proc/can_grasp()
+	if(parent) // if the person doesn't have an arm then the hand can't grasp
+		return (parent.is_existing() && can_grasp && grasp_id)
 	return (can_grasp && grasp_id)
 
 /datum/organ/external/proc/process_grasp(var/obj/item/c_hand, var/hand_name)

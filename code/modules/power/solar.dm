@@ -47,14 +47,14 @@ var/list/solars_list = list()
 
 /obj/machinery/power/solar_assembly/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(!anchored && isturf(loc))
-		if(iswrench(W))
+		if(W.is_wrench(user))
 			anchored = 1
 			user.visible_message("<span class='notice'>[user] wrenches [src] down.</span>", \
 			"<span class='notice'>You wrench [src] down.</span>")
 			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			return 1
 	else
-		if(iswrench(W))
+		if(W.is_wrench(user))
 			anchored = 0
 			user.visible_message("<span class='notice'>[user] unwrenches [src] from the ground.</span>", \
 			"<span class='notice'>You unwrench [src] from the ground.</span>")

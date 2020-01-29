@@ -386,7 +386,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				var/total_required_catalysts = C.required_catalysts.len
 				var/total_matching_catalysts= 0
 				var/matching_container = 0
-				var/matching_other = 0
+				var/required_conditions = 0
 				var/list/multipliers = new/list()
 				var/required_temp = C.required_temp
 				var/is_cold_recipe = C.is_cold_recipe
@@ -422,25 +422,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					if(istype(my_atom, C.required_container))
 						matching_container = 1
 
-				if(!C.required_other)
-					matching_other = 1
-
-				else
-					/*if(istype(my_atom, /obj/item/slime_core))
-						var/obj/item/slime_core/M = my_atom
-
-						if(M.POWERFLAG == C.required_other && M.Uses > 0) // added a limit to slime cores -- Muskets requested this
-							matching_other = 1*/
-					if(istype(my_atom, /obj/item/slime_extract))
-						var/obj/item/slime_extract/M = my_atom
-
-						if(M.Uses > 0) // added a limit to slime cores -- Muskets requested this
-							matching_other = 1
+				if(C.required_condition_check(src))
+					required_conditions = 1
 
 				if(required_temp == 0 || (is_cold_recipe && chem_temp <= required_temp) || (!is_cold_recipe && chem_temp >= required_temp))
 					meets_temp_requirement = 1
 
-				if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && matching_other && meets_temp_requirement)
+				if(total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && required_conditions && meets_temp_requirement)
 					var/multiplier = min(multipliers)
 					var/preserved_data = null
 					for(var/B in C.required_reagents)
@@ -479,15 +467,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 						if(!quiet)
 							my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
 						C.log_reaction(src, created_volume)
-
-					if(istype(my_atom, /obj/item/slime_extract))
-						var/obj/item/slime_extract/ME2 = my_atom
-						ME2.Uses--
-						if(ME2.Uses <= 0) // give the notification that the slime core is dead
-							if (!istype(ME2.loc, /obj/item/weapon/grenade/chem_grenade) && !quiet)
-								ME2.visible_message("<span class='notice'>[bicon(my_atom)] \The [my_atom]'s power is consumed in the reaction.</span>")
-							ME2.name = "used slime extract"
-							ME2.desc = "This extract has been used up."
 
 					if(!quiet && !(my_atom.flags & SILENTCONTAINER))
 						playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
@@ -551,16 +530,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return 0
 
-/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/remove_reagents = FALSE)
+/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/remove_reagents = FALSE, var/mob_reagent_threshold = 0)
 
 	switch(method)
 		if(TOUCH)
 			for(var/datum/reagent/R in reagent_list)
 				if(ismob(A))
-					if(isanimal(A))
-						R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
-					else
-						R.reaction_mob(A, TOUCH, R.volume+volume_modifier, remove_reagents)
+					var/datum/reagent/MR = A.reagents.get_reagent_by_type(R.type)
+					if(!mob_reagent_threshold || !MR || (mob_reagent_threshold > MR.volume))
+						if(isanimal(A))
+							R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
+						else
+							R.reaction_mob(A, TOUCH, R.volume+volume_modifier, remove_reagents)
 				if(isturf(A))
 					R.reaction_turf(A, R.volume+volume_modifier)
 				if(istype(A, /obj))
@@ -576,7 +557,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.reaction_turf(A, R.volume+volume_modifier)
 				if(istype(A, /obj) && R)
 					R.reaction_obj(A, R.volume+volume_modifier)
-	return
 
 /datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
 	if(!my_atom)

@@ -432,9 +432,9 @@
 		target.AdjustStunned(-3)
 		target.AdjustKnockdown(-3)
 		playsound(target, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-		target.visible_message(
+		user.visible_message(
 			"<span class='notice'>[user] prods [target] trying to wake \him up!</span>",
-			"<span class='notice'>You prod [target] trying to wake \him up!</span>",
+			"<span class='notice'>You prod [target] trying to wake \him up!</span>"
 			)
 	else
 		return ..()

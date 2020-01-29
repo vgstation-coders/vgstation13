@@ -368,6 +368,8 @@
 		S.real_name = name
 		S.name = name
 		S.ckey = O.ckey
+		S.universal_speak = TRUE
+		S.universal_understand = TRUE
 		S.status_flags |= GODMODE //Make sure they can NEVER EVER leave the blade.
 		to_chat(S, "<span class='info'>You open your eyes and find yourself in a strange, unknown location with no recollection of your past.</span>")
 		to_chat(S, "<span class='info'>Despite being a sword, you have the ability to speak, as well as an abnormal desire for slicing and killing evil beings.</span>")

@@ -173,7 +173,7 @@
 /obj/structure/bed/guillotine/attackby(obj/item/weapon/W, mob/user)
 	if(user == victim)
 		return
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		wrenchAnchor(user)
 
 /obj/structure/bed/guillotine/wrenchAnchor(var/mob/user)

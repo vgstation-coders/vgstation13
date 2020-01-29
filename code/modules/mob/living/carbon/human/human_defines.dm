@@ -80,3 +80,4 @@
 	var/talkcount = 0 // How many times a person has talked - used for determining who's been the "star" for the purposes of round end credits
 	var/calorie_burn_rate = HUNGER_FACTOR
 	var/time_last_speech = 0 //When was the last time we talked?
+	var/manual_emote_sound_override = 0 //If toggled on, allows humans to make audible emotes

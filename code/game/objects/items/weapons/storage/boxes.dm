@@ -601,7 +601,7 @@
 
 /obj/item/weapon/storage/box/lethalshells
 	name = "12-gauge slugs"
-	icon_state = "lethal shells"
+	icon_state = "slug_shells"
 	storage_slots = 16
 
 /obj/item/weapon/storage/box/lethalshells/New()
@@ -611,7 +611,7 @@
 
 /obj/item/weapon/storage/box/beanbagshells
 	name = "12-gauge beanbag shells"
-	icon_state = "bean bag shells"
+	icon_state = "beanbag_shells"
 	storage_slots = 16
 
 /obj/item/weapon/storage/box/beanbagshells/New()
@@ -621,7 +621,7 @@
 
 /obj/item/weapon/storage/box/stunshells
 	name = "12-gauge stun shells"
-	icon_state = "stun shells"
+	icon_state = "stun_shells"
 	storage_slots = 16
 
 /obj/item/weapon/storage/box/stunshells/New()
@@ -631,7 +631,7 @@
 
 /obj/item/weapon/storage/box/dartshells
 	name = "12-gauge darts"
-	icon_state = "dart shells"
+	icon_state = "dart_shells"
 	storage_slots = 16
 
 /obj/item/weapon/storage/box/dartshells/New()
@@ -641,13 +641,33 @@
 
 /obj/item/weapon/storage/box/buckshotshells
 	name = "12-gauge 00 buckshot shells"
-	icon_state = "lethal shells"
+	icon_state = "buckshot_shells"
 	storage_slots = 16
 
 /obj/item/weapon/storage/box/buckshotshells/New()
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/buckshot(src)
+		
+/obj/item/weapon/storage/box/dragonsbreathshells
+	name = "12-gauge dragon's breath shells"
+	icon_state = "dragonsbreath_shells"
+	storage_slots = 16
+
+/obj/item/weapon/storage/box/dragonsbreathshells/New()
+	..()
+	for(var/i in 1 to 16)
+		new /obj/item/ammo_casing/shotgun/dragonsbreath(src)
+		
+/obj/item/weapon/storage/box/fragshells
+	name = "12-gauge high-explosive fragmentation shells"
+	icon_state = "frag_shells"
+	storage_slots = 16		
+		
+/obj/item/weapon/storage/box/fragshells/New()
+	..()
+	for(var/i in 1 to 16)
+		new /obj/item/ammo_casing/shotgun/frag(src)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"

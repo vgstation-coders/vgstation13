@@ -1356,6 +1356,15 @@ client/proc/check_convertables()
 	feedback_add_details("admin_verb","DIS")
 	return
 
+/client/proc/climate_panel()
+	set name = "Climate Panel"
+	set category = "Admin"
+	if(holder)
+		holder.climate_panel()
+		log_admin("[key_name(usr)] checked the Climate Panel.")
+	feedback_add_details("admin_verb","CLI")
+
+
 /client/proc/start_line_profiling()
 	set category = "Profile"
 	set name = "Start line profiling"

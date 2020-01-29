@@ -75,7 +75,7 @@
 	if(iswelder(used_atom))
 		playsound(holder, 'sound/items/Welder2.ogg', 50, 1)
 
-	else if(iswrench(used_atom))
+	else if(used_atom.is_wrench(user))
 		playsound(holder, 'sound/items/Ratchet.ogg', 50, 1)
 
 	else if(used_atom.is_screwdriver(user))

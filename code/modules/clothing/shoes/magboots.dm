@@ -17,16 +17,19 @@
 
 	var/obj/item/clothing/shoes/stored_shoes = null	//Shoe holder
 
-/obj/item/clothing/shoes/magboots/mob_can_equip(mob/living/carbon/human/user)
+/obj/item/clothing/shoes/magboots/mob_can_equip(mob/living/carbon/human/user, slot, disable_warning = 0)
 	var/mob/living/carbon/human/H = user
 	if(!istype(H) || stored_shoes)
 		return ..()
+	if(slot != slot_shoes)
+		return CANNOT_EQUIP
 	if(H.shoes)
 		stored_shoes = H.shoes
 		if(stored_shoes.w_class >= w_class)
-			to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.shoes] are in the way.</span>")
+			if(!disable_warning)
+				to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.shoes] are in the way.</span>")
 			stored_shoes = null
-			return FALSE
+			return CANNOT_EQUIP
 		H.remove_from_mob(stored_shoes)
 		stored_shoes.forceMove(src)
 

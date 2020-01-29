@@ -43,6 +43,7 @@ var/list/special_fruits = list()
 			icon = seed.plant_dmi
 			potency = round(seed.potency)
 			force = seed.thorny ? 5+seed.carnivorous*3 : 0
+			throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
 
 			if(seed.teleporting)
 				name = "blue-space [name]"
@@ -76,7 +77,7 @@ var/list/special_fruits = list()
 			bitesize = 1 + round(reagents.total_volume/2, 1)
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
-	
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom)
 	..()
@@ -353,6 +354,43 @@ var/list/special_fruits = list()
 	filling_color = "857e27"
 	potency = 25
 	plantname = "peanut"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut
+	name = "rocknut"
+	desc = "A mutated nut with a rock hard exterior and soft chewy core."
+	filling_color = "#583922"
+	potency = 25
+	plantname = "rocknut"
+	force = 10
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New()
+	..()
+	throwforce = throwforce + round((5+potency/7.5), 1) ///it's a rock, add bonus damage that scales with potency
+	eatverb = pick("crunch","gnaw","bite")
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/before_consume(mob/living/carbon/eater)
+	if(!seed.juicy)//juicy mutated rock nuts will not return your teeth
+		var/mob/living/carbon/C = eater
+		if(istype(C))//we carbon?
+			var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in C.butchering_drops //used in tooth check
+			if(istype(T)&&T.amount == 0)//we're a creature with teeth but we don't have any right now
+				to_chat(eater, "<span class='warning'>I can't eat \the [src] because I have no teeth!</span>")
+				return //don't call consume
+			else if((istype(T) && T.amount != 0) && prob(round(potency/2.5)))//tooth check and potency probability
+				playsound(src, 'sound/effects/tooth_crack.ogg', 50, 1)
+				C.adjustBruteLoss(potency/25)
+				to_chat(eater, "<span class='warning'>OUCH! I broke a tooth!</span>")
+				eater.visible_message("<span class='warning'>[eater] broke a tooth trying to eat \the [src]!</span>")
+				T.spawn_result(get_turf(eater), eater, 1)
+				return..()//call consume
+			else//didn't pass potency probability or some other shit
+				C.adjustBruteLoss(potency/50)
+				to_chat(eater, "<span class='warning'>OW! I nearly broke a tooth!</span>")
+				return..()
+		else //not even a carbon, fuck it
+			to_chat(eater, "<span class='notice'>\The [src]'s rock hard shell prevents you from biting into it.</span>")
+			return
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 	name = "cabbage"

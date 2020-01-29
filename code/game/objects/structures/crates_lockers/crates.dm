@@ -155,7 +155,7 @@
 	icon_closed = "largebin"
 
 /obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
-    if(iswrench(W) && wrenchable())
+    if(W.is_wrench(user) && wrenchable())
         return wrenchAnchor(user)
     ..()
 
@@ -220,7 +220,7 @@
 	emag = "largebinemag"
 
 /obj/structure/closet/crate/secure/bin/attackby(var/obj/item/weapon/W, var/mob/user)
-    if(iswrench(W) && wrenchable())
+    if(W.is_wrench(user) && wrenchable())
         return wrenchAnchor(user)
     ..()
 
@@ -536,7 +536,7 @@
 	else if(istype(W, /obj/item/weapon/card) && !opened && !broken)
 		togglelock(user)
 		return
-	else if(istype(W, /obj/item/weapon/screwdriver) && !opened && !locked && src.has_lockless_type)
+	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
 		remove_lock(user)
 		return
 	return ..()

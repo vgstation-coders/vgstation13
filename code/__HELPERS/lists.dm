@@ -318,6 +318,15 @@
 		if(R.fields[field] == value)
 			return R
 
+//get total of nums in a list, ignores non-num values
+//great with get_list_of_elements!
+/proc/total_list(var/list/L)
+	var/total = 0
+	for(var/element in L)
+		if(!isnum(element))
+			continue
+		total += element
+	return total
 
 //Move a single element from position fromIndex within a list, to position toIndex
 //All elements in the range [1,toIndex) before the move will be before the pivot afterwards

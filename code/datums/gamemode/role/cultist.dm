@@ -101,7 +101,9 @@
 				H.adjustOxyLoss(20)
 				H.adjustToxLoss(10)
 		else
-			antag.current.adjustBruteLoss(rand(20,50))
+			if(isliving(antag.current))
+				var/mob/living/L = antag.current
+				L.adjustBruteLoss(rand(20,50))
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)

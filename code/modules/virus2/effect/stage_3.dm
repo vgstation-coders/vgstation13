@@ -282,8 +282,8 @@
 			if(multiplier >= 2)
 				if(multiplier >=2.3)
 					//Cursed, pure evil cat ears that should not have been created
-					var/obj/item/clothing/head/kitty/cursed/kitty_c = new /obj/item/clothing/head/kitty/cursed
-					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/cursed))
+					var/obj/item/clothing/head/kitty/anime/cursed/kitty_c = new /obj/item/clothing/head/kitty/anime/cursed
+					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/anime/cursed))
 						affected.u_equip(affected.head,1)
 						affected.equip_to_slot(kitty_c, slot_head)
 					if(!affected.head)
@@ -513,7 +513,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	name = "Colorful Syndrome"
 	desc = "Causes the infected to synthesize smoke & rainbow colourant."
 	stage = 3
-	badness = EFFECT_DANGER_HINDRANCE
+	badness = EFFECT_DANGER_HARMFUL
 
 /datum/disease2/effect/colorsmoke/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You feel colorful!</span>")

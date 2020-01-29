@@ -794,6 +794,14 @@
 	..()
 	reagents.add_reagent(IRISHCOFFEE, 50)
 	on_reagent_change()
+	
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake
+	name = "glass of sake"
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake/New()
+	..()
+	reagents.add_reagent(SAKE, 50)
+	on_reagent_change()
 
 // Cafe Stuff. Mugs act the same as drinking glasses, but they don't break when thrown.
 

@@ -408,7 +408,7 @@
 	while(failsafe < 1000)
 		failsafe++
 		//are our payers still here and about?
-		var/summoners = 0
+		var/summoners = 1//the higher, the easier it is to perform the ritual without many cultists. default=0
 		for(var/mob/living/L in contributors)
 			if (iscultist(L) && (L in range(spell_holder,1)) && (L.stat == CONSCIOUS))
 				summoners++

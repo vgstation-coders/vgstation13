@@ -569,3 +569,23 @@ proc/sql_sanitize_text(var/text)
 
 		split_phrase[index] = "butt"
 	return jointext(split_phrase," ") // No longer need to sanitize, speech is automatically html_encoded at render-time.
+
+/proc/tumblrspeech(var/speech)
+	if(!speech)
+		return
+	var/static/regex/hewwo_lowercase = new("l|r", "g")
+	var/static/regex/hewwo_uppercase = new("L|R", "g")
+	speech = hewwo_lowercase.Replace(speech, "w")
+	speech = hewwo_uppercase.Replace(speech, "W")
+	return speech
+
+/proc/nekospeech(var/speech)
+	if(!speech)
+		return
+	var/static/regex/nya_lowercase = new("n(?=\[aeiou])|N(?=\[aeiou])", "g")
+	var/static/regex/nya_uppercase = new("N(?=\[AEIOU])|n(?=\[AEIOU])", "g")
+	var/static/regex/nya_Ny = new("^ny|^NY(?!\[A-Z])") //Thanks, saycode.
+	speech = nya_lowercase.Replace(speech, "ny")
+	speech = nya_uppercase.Replace(speech, "NY")
+	speech = nya_Ny.Replace(speech, "Ny")
+	return speech

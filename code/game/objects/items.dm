@@ -532,7 +532,7 @@
 					if(automatic)
 						if(H.check_for_open_slot(src))
 							return CANNOT_EQUIP
-					if(H.belt.canremove && !isbelt(src))
+					if(H.belt.canremove)
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
@@ -1416,6 +1416,9 @@ var/global/list/image/blood_overlays = list()
 	return
 
 /obj/item/proc/is_screwdriver(var/mob/user)
+	return FALSE
+
+/obj/item/proc/is_wrench(var/mob/user)
 	return FALSE
 
 //This proc will be called when the person holding or equipping it talks.

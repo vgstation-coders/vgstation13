@@ -83,13 +83,24 @@
 /mob/living/carbon/human/var/list/grasp_organs = list()
 
 /mob/living/carbon/human/proc/can_use_hand(var/this_hand = active_hand)
+	if(restrained()) // TODO: make a proper system for this ffs
+		return FALSE
 	if(hasorgans(src))
 		var/datum/organ/external/temp = src.find_organ_by_grasp_index(this_hand)
 		if(temp && !temp.is_usable())
-			return
+			return FALSE
 		else if (!temp)
-			return
-	return 1
+			return FALSE
+	return TRUE
+
+/mob/living/carbon/human/proc/can_use_hand_or_stump(var/this_hand = active_hand)
+	if(restrained()) // handcuffed stump is retarded but let's do that in another PR ok?
+		return FALSE
+	if(hasorgans(src))
+		var/datum/organ/external/hand = src.find_organ_by_grasp_index(this_hand)
+		if(hand && hand.can_grasp())
+			return TRUE
+	return FALSE
 
 //Takes care of organ related updates, such as broken and missing limbs
 /mob/living/carbon/human/proc/handle_organs(var/force_process = 0)
