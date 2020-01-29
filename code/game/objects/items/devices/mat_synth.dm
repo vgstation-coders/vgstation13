@@ -30,7 +30,7 @@
 							/obj/item/stack/sheet/wood,
 							/obj/item/stack/sheet/plasteel,
 							/obj/item/stack/sheet/mineral)
-	var/list/cant_scan = list()
+	var/list/cant_scan = list(/obj/item/stack/sheet/mineral/telecrystal/refined)
 	var/matter = 0
 
 /obj/item/device/material_synth/robot/engiborg //Cyborg version, has less materials but can make rods n shit as well as scan.
@@ -42,7 +42,7 @@
 
 /obj/item/device/material_synth/robot/engiborg/New() //We have to do this during New() because BYOND can't pull a typesof() during compile time.
 	. = ..()
-	cant_scan = list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
+	cant_scan = list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon, /obj/item/stack/sheet/mineral/telecrystal/refined)
 
 /obj/item/device/material_synth/robot/mommi //MoMMI version, a few more materials to start with.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
