@@ -667,6 +667,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if(user.client)
 		var/datum/asset/simple/C = new/datum/asset/simple/pda()
 		send_asset_list(user.client, C.assets)
+		var/datum/asset/simple/E = new/datum/asset/simple/emoji_list()
+		send_asset_list(user.client, E.assets)
 
 	var/dat = list()
 	dat += {"
@@ -2163,7 +2165,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/t = multicast_message
 	if(!t)
 		t = input(U, "Please enter message", "Message to [P]", null) as text|null
-		t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
+		t = copytext(emoji_parse(sanitize(t)), 1, MAX_MESSAGE_LEN)
 		if (!t || toff || (!in_range(src, U) && loc != U)) //If no message, messaging is off, and we're either out of range or not in usr
 			return
 

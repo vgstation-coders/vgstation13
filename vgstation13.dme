@@ -1447,6 +1447,7 @@
 #include "code\modules\Economy\price_tagger.dm"
 #include "code\modules\Economy\utils.dm"
 #include "code\modules\Economy\Wages.dm"
+#include "code\modules\emoji\emoji.dm"
 #include "code\modules\error_handler\error_handler.dm"
 #include "code\modules\error_handler\error_viewer.dm"
 #include "code\modules\events\alien_infestation.dm"
