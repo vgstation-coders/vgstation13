@@ -99,7 +99,7 @@ Used In File(s): /code/modules/clothing/spacesuits/rig/rig.dm
 		</div>
 	</div>
 
-<h2>System modules</h2>
+<h2>RIG modules</h2>
 {{if data.modules}}
 	<div>
 		{{for data.modules}}
@@ -108,6 +108,13 @@ Used In File(s): /code/modules/clothing/spacesuits/rig/rig.dm
 					<div class='floatLeft' style='width: 100%'>
 						<div class='average floatLeft'>
 							{{:helper.capitalizeFirstLetter(value.name)}}
+						</div>
+						<div class="line">
+							{{if value.is_active == 1}}
+								{{:helper.link('Deactivate', 'circle-arrow-s', {'interact_module' : value.index, 'module_mode' : 'deactivate'}, null, 'linkOn')}}
+							{{else}}
+								{{:helper.link('Activate', 'circle-arrow-s', {'interact_module' : value.index, 'module_mode' : 'activate'}, null)}}
+							{{/if}}
 						</div>
 					</div>
 				</div>

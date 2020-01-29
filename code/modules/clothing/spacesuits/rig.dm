@@ -4,6 +4,8 @@
 #define HARDSUIT_GLOVES "h_gloves"
 #define HARDSUIT_BOOTS "h_boots"
 
+var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_BOOTS)
+
 //Regular rig suits
 /obj/item/clothing/head/helmet/space/rig
 	name = "engineering hardsuit helmet"
@@ -122,6 +124,8 @@
 	var/obj/item/clothing/shoes/magboots/MB = null
 	var/obj/item/weapon/tank/T = null
 	var/obj/item/weapon/cell/cell = null
+	var/list/all_hardsuit_parts = list()
+	var/list/external_hardsuit_parts = list()
 
 	var/head_type = /obj/item/clothing/head/helmet/space/rig
 	var/boots_type =  null
@@ -129,7 +133,7 @@
 	var/tank_type = null
 	var/cell_type = /obj/item/weapon/cell/high //The cell_type we're actually using
 
-	var/mob/living/carbon/human/wearer
+	var/mob/living/carbon/human/wearer = null
 
 /obj/item/clothing/suit/space/rig/New()
 	..()
@@ -147,17 +151,19 @@
 		MB.canremove = FALSE
 	if(tank_type)
 		T = new tank_type(src)
+	for(var/part in list(H,G,T,MB))
+		all_hardsuit_parts += part
+	for(var/part in list(H,G,MB))
+		external_hardsuit_parts += part
 	if(initial_modules && initial_modules.len)
 		for(var/path in initial_modules)
 			var/obj/item/rig_module/new_module = new path(src)
 			modules += new_module
-	if(!(src in processing_objects))
-		processing_objects.Add(src)
+	processing_objects |= src
 
 /obj/item/clothing/suit/space/rig/Destroy()
-	if(processing_objects.Find(src))
-		processing_objects.Remove(src)
-	for(var/obj/item/I in list(H,G,T,MB))
+	processing_objects -= src
+	for(var/obj/item/I in all_hardsuit_parts)
 		if(I && (I.loc == src || !I.loc))
 			qdel(I)
 	H = null
@@ -171,8 +177,6 @@
 		qdel(cell)
 	cell = null
 	wearer = null
-	if(processing_objects.Find(src))
-		processing_objects.Remove(src)
 	..()
 
 /obj/item/clothing/suit/space/rig/examine(mob/user)
@@ -195,7 +199,7 @@
 
 /obj/item/clothing/suit/space/rig/dropped()
 	..()
-	for(var/piece in list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_BOOTS))
+	for(var/piece in all_hardsuit_pieces)
 		toggle_piece(piece, wearer, ONLY_RETRACT)
 	wearer = null
 
@@ -237,7 +241,7 @@
 /obj/item/clothing/suit/space/rig/proc/check_builtin_pieces()
 	var/mob/living/M = null
 
-	for(var/obj/item/piece in list(H,G,MB))
+	for(var/obj/item/piece in external_hardsuit_parts)
 		if(piece && piece.loc != src && !(wearer && wearer.is_wearing_item(piece)))
 			if(istype(piece.loc, /mob/living))
 				M = piece.loc
@@ -251,7 +255,7 @@
 
 /obj/item/clothing/suit/space/rig/proc/initialize_suit(mob/living/carbon/human/user, var/equipall = TRUE)
 	if(equipall)
-		for(var/piece in list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_BOOTS))
+		for(var/piece in all_hardsuit_pieces)
 			toggle_piece(piece, user, ONLY_DEPLOY)
 	if(is_fully_equipped()) //Fully equipped? GOOD!
 		if(H && wearer.is_wearing_item(H, slot_head)) //I know we JUST ran a check, but still...
@@ -265,7 +269,7 @@
 
 /obj/item/clothing/suit/space/rig/proc/deactivate_suit(mob/living/carbon/human/user, var/unequipall = TRUE)
 	if(unequipall)
-		for(var/piece in list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_BOOTS))
+		for(var/piece in all_hardsuit_pieces)
 			toggle_piece(piece, user, ONLY_RETRACT)
 	for(var/obj/item/rig_module/R in modules)
 		R.deactivate()
@@ -322,9 +326,26 @@
 					to_chat(wearer, "<span class='notice'>\The [use_obj.name] deploys swiftly.</span>")
 
 /obj/item/clothing/suit/space/rig/Topic(href,href_list)
+	if(..())
+		return
+
 	if(href_list["toggle_piece"])
 		toggle_piece(href_list["toggle_piece"], usr)
 		return TRUE
+	
+	if(href_list["interact_module"])
+		if(!is_fully_equipped() || !activated) //Can't mess with these if your suit isn't full equipped and activated.
+			return FALSE
+		var/module_index = text2num(href_list["interact_module"])
+
+		if(module_index > 0 && module_index <= modules.len)
+			var/obj/item/rig_module/RM = modules[module_index]
+			switch(href_list["module_mode"])
+				if("activate")
+					RM.activate(wearer,src)
+				if("deactivate")
+					RM.deactivate()
+		return 	TRUE
 	
 	return FALSE
 
@@ -399,9 +420,7 @@
 		var/list/module_data = list(
 			"index" =             i,
 			"name" =              "[module.name]",
-			"desc" =              "[module.desc]",
-			"is_active" =         "[module.activated]",
-			"activecost" =        module.active_power_usage*10,
+			"is_active" =         "[module.activated]"
 			)
 
 		module_list += list(module_data)
@@ -414,7 +433,7 @@
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "hardsuit.tmpl", name, 750, 550)
+		ui = new(user, src, ui_key, "hardsuit.tmpl", name, 450, 550)
 		ui.set_initial_data(data)
 		ui.open()
 		ui.set_auto_update(1)
