@@ -385,5 +385,6 @@
 		"emoji-joy.png"		=	'icons/pda_icons/emoji/joy.png',
 		"emoji-gun.png"		=	'icons/pda_icons/emoji/gun.png',
 		"emoji-ok_hand.png"		=	'icons/pda_icons/emoji/ok_hand.png',
-		"emoji-middle_finger.png"		=	'icons/pda_icons/emoji/middle_finger.png'
+		"emoji-middle_finger.png"		=	'icons/pda_icons/emoji/middle_finger.png',
+		"emoji-thinking.png"		=	'icons/pda_icons/emoji/thinking.png'
 	)
