@@ -507,6 +507,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 
 /obj/item/stack/sheet/mineral/telecrystal/refined
 	name = "refined telecrystals"
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/stack/sheet/mineral/mauxite
 	name = "mauxite"
