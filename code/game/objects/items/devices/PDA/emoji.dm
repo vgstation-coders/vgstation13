@@ -15,7 +15,11 @@
 	"thumbs_down",
 	"rocket_ship",
 	"tada",
-	"heart"
+	"heart",
+	"carp",
+	"clown",
+	"prohibited",
+	"sunglasses"
 )
 
 /proc/parse_emoji(input_text)

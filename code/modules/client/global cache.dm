@@ -391,5 +391,9 @@
 		"emoji-thumbs_down.png"		=	'icons/pda_icons/emoji/thumbs_down.png',
 		"emoji-rocket_ship.png"		=	'icons/pda_icons/emoji/rocket_ship.png',
 		"emoji-tada.png"		=	'icons/pda_icons/emoji/tada.png',
-		"emoji-heart.png"		=	'icons/pda_icons/emoji/heart.png'
+		"emoji-heart.png"		=	'icons/pda_icons/emoji/heart.png',
+		"emoji-carp.png"		=	'icons/pda_icons/emoji/carp.png',
+		"emoji-clown.png"		=	'icons/pda_icons/emoji/clown.png',
+		"emoji-prohibited.png"		=	'icons/pda_icons/emoji/prohibited.png',
+		"emoji-sunglasses.png"		=	'icons/pda_icons/emoji/sunglasses.png'
 	)
