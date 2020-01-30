@@ -106,14 +106,16 @@ var/list/potential_bonus_items = list(
 
 	for (var/i = 1 to 4)
 		var/chosen_one = pick(potential_bonus_items_temp)
-		potential_bonus_items_temp =- chosen_one
+		to_chat(world, "[chosen_one]")
+		potential_bonus_items_temp.Remove(chosen_one)
 		bonus_items_of_the_day += chosen_one
 
-	AppendObjective(/datum/objective/steal_priority)
+	var/datum/objective/steal_priority/SP = new(bonus_items_of_the_day)
+	AppendObjective(SP)
 
 /datum/faction/vox_shoal/GetScoreboard()
 	. = ..()
-	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
+	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b> minutes"
 	if (time_left < 0)
 		. += "<br/> <span class='danger'>The raid took too long.</span>"
 	. += "<br/> The raiders took <b>[got_personnel]</b> people to the Shoal."
