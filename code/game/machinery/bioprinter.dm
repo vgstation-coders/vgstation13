@@ -22,13 +22,16 @@
 	var/loaded_dna //Blood sample for DNA hashing.
 	var/list/products = list(
 		"heart"            = list(/obj/item/organ/internal/heart,  50),
+		"insectoid heart"  = list(/obj/item/organ/internal/heart/insectoid, 50),
 		"human lungs"      = list(/obj/item/organ/internal/lungs,  30),
 		"vox lungs"        = list(/obj/item/organ/internal/lungs/vox,  30),
 		"plasmaman lungs"  = list(/obj/item/organ/internal/lungs/plasmaman,  30),
+		"book lungs"       = list(/obj/item/organ/internal/lungs/insectoid, 30),
 		"kidneys"          = list(/obj/item/organ/internal/kidneys,20),
 		"human eyes"       = list(/obj/item/organ/internal/eyes,   30),
 		"grey eyes"        = list(/obj/item/organ/internal/eyes/grey,   30),
 		"vox eyes"         = list(/obj/item/organ/internal/eyes/vox,   30),
+		"compound eyes"    = list(/obj/item/organ/internal/eyes/compound, 30),
 		"liver"            = list(/obj/item/organ/internal/liver,  50),
 		"tooth"	           = list(/obj/item/stack/teeth, 10)
 	)

@@ -1303,18 +1303,26 @@ var/list/has_died_as_golem = list()
 	has_mutant_race = 0
 
 	has_organ = list(
-		"heart" =    /datum/organ/internal/heart,
+		"heart" =    /datum/organ/internal/heart/insect,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
 		"kidneys" =  /datum/organ/internal/kidney,
-		"brain" =    /datum/organ/internal/brain/ash,
-		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes
+		"brain" =    /datum/organ/internal/brain,
+		"eyes" =     /datum/organ/internal/eyes/compound/
 		)
 
 	species_intro = "You are an Insectoid.<br>\
 					Your body is utterly immune to the perils of radiation, and you are able to better defend against toxic chemicals <br>\
 					However, your rigid body is somewhat more fragile than that of more soft-bodied species. Resilient though you may be, a good smack may put you out of commission."
+
+
+/datum/species/insectoid/makeName(var/gender,var/mob/living/carbon/human/H=null)
+	var/sounds = rand(2,3)
+	var/newname = ""
+
+	for(var/i = 1 to sounds)
+		newname += pick(insectoid_name_syllables)
+	return capitalize(newname)
 
 /datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
 	H.default_gib()
