@@ -106,7 +106,6 @@ var/list/potential_bonus_items = list(
 
 	for (var/i = 1 to 4)
 		var/chosen_one = pick(potential_bonus_items_temp)
-		to_chat(world, "[chosen_one]")
 		potential_bonus_items_temp.Remove(chosen_one)
 		bonus_items_of_the_day += chosen_one
 
