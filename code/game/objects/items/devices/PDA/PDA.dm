@@ -2165,7 +2165,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/t = multicast_message
 	if(!t)
 		t = input(U, "Please enter message", "Message to [P]", null) as text|null
-		t = copytext(emoji_parse(sanitize(t)), 1, MAX_MESSAGE_LEN)
+		t = copytext(parse_emoji(sanitize(t)), 1, MAX_MESSAGE_LEN)
 		if (!t || toff || (!in_range(src, U) && loc != U)) //If no message, messaging is off, and we're either out of range or not in usr
 			return
 

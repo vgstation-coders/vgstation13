@@ -386,5 +386,10 @@
 		"emoji-gun.png"		=	'icons/pda_icons/emoji/gun.png',
 		"emoji-ok_hand.png"		=	'icons/pda_icons/emoji/ok_hand.png',
 		"emoji-middle_finger.png"		=	'icons/pda_icons/emoji/middle_finger.png',
-		"emoji-thinking.png"		=	'icons/pda_icons/emoji/thinking.png'
+		"emoji-thinking.png"		=	'icons/pda_icons/emoji/thinking.png',
+		"emoji-thumbs_up.png"		=	'icons/pda_icons/emoji/thumbs_up.png',
+		"emoji-thumbs_down.png"		=	'icons/pda_icons/emoji/thumbs_down.png',
+		"emoji-rocket_ship.png"		=	'icons/pda_icons/emoji/rocket_ship.png',
+		"emoji-tada.png"		=	'icons/pda_icons/emoji/tada.png',
+		"emoji-heart.png"		=	'icons/pda_icons/emoji/heart.png'
 	)
