@@ -32,8 +32,8 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/uplink/proc/refund(mob/living/carbon/human/user, obj/item/I)
 	if(!user || !I)
 		return
-	if (istype(I, /obj/item/stack/sheet/mineral/telecrystal/refined))
-		var/obj/item/stack/sheet/S = I
+	if (istype(I, /obj/item/stack/telecrystal))
+		var/obj/item/stack/telecrystal/S = I
 		uses += S.amount
 		user.drop_item(S, src)
 		to_chat(user, "<span class='notice'>You insert [S.amount] telecrystal[S.amount > 1 ? "s" : ""] into the uplink.</span>")
@@ -189,10 +189,10 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		if(!usr.Adjacent(src))
 			return
 		amount = clamp(amount, 0, uses)
-		if (amount < 0)
+		if (amount <= 0)
 			return
 		uses -= amount
-		var/obj/item/stack/sheet/mineral/telecrystal/refined/R = new /obj/item/stack/sheet/mineral/telecrystal/refined(usr, amount)
+		var/obj/item/stack/telecrystal/R = new /obj/item/stack/telecrystal(usr, amount)
 		var/mob/living/carbon/human/H = usr
 		to_chat(usr, "<span class='notice'>You withdraw [amount] telecrystal[amount > 1 ? "s" : ""] from your uplink.</span>")
 		H.put_in_hands(R)
