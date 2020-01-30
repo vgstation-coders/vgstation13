@@ -1737,6 +1737,7 @@
 	alert_admins = ALERT_ALL_REAGENTS
 	reagent = AMUTATIONTOXIN
 	result_amount = 1
+	reagent_amount = 1
 
 /datum/chemical_reaction/slime_extract/slimenanobots
 	name = "Slime Nanobots"
