@@ -569,7 +569,7 @@
 					"<span class='notice'>You hear a sudden snapping sound!",\
 					//Hallucination messages
 					"<span class='danger'>A terrifying crocodile snaps at [H]!</span>",\
-					"<span class='danger'>A [(IED && IED.active) ? "crocodile" : "horrifying fiery dragon"] attempts to bite your leg off!</span>")
+					"<span class='danger'>A [(IED && IED.active) ? "horrifying fiery dragon" : "crocodile"] attempts to bite your leg off!</span>")
 			if(IED && isturf(src.loc) && H.m_intent == "run")
 				trapped = 1
 
