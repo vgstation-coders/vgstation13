@@ -595,7 +595,7 @@
 					src.desc = initial(src.desc)
 
 			else if(H.m_intent == "run") //This is where the real fun begins
-
+				trap(H)
 
 			else if(isanimal(AM))
 				armed = 0
