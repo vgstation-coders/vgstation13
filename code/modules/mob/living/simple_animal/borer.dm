@@ -122,6 +122,13 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	icon_living = "bestborer"
 	icon_dead = "bestborer"
 
+/mob/living/simple_animal/borer/defected_borer/singularity_act(current_size, obj/machinery/singularity/S)
+	to_chat(world, "<span class='numb'><font size='15'>You feel Very Nice.</font></span>")
+	S.modifier = "special_"
+	S.name = "specialarity"
+	world << sound('sound/effects/explosionfar.ogg')
+	..()
+
 /mob/living/simple_animal/borer/New(var/loc, var/egg_prefix_index = 1)
 	..(loc)
 	name_prefix_index = min(egg_prefix_index, 10)
@@ -153,6 +160,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			borer_avail_unlocks_leg.Add(U)
 
 	extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
+
 
 /*
 /mob/living/simple_animal/borer/Login()
