@@ -186,7 +186,7 @@
 	organ_type = /datum/organ/internal/lungs
 
 /obj/item/organ/internal/lungs/insectoid
-	name = "book lungs"
+	name = "insectoid lungs"
 	icon_state = "book-lungs"
 	prosthetic_name = "gas exchange system"
 	prosthetic_icon = "lungs-prosthetic"
