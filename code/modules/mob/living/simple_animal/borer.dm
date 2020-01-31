@@ -123,10 +123,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	icon_dead = "bestborer"
 
 /mob/living/simple_animal/borer/defected_borer/singularity_act(current_size, obj/machinery/singularity/S)
-	to_chat(world, "<span class='numb'><font size='15'>You feel Very Nice.</font></span>")
-	S.modifier = "special_"
-	S.name = "specialarity"
-	world << sound('sound/effects/explosionfar.ogg')
+	if(S.modifier != "special_")
+		to_chat(world, "<span class='numb'><font size='15'>You feel Very Nice.</font></span>")
+		S.modifier = "special_"
+		S.name = "specialarity"
+		world << sound('sound/effects/explosionfar.ogg')
 	..()
 
 /mob/living/simple_animal/borer/New(var/loc, var/egg_prefix_index = 1)
