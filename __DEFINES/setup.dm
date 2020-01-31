@@ -919,6 +919,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define ELECTRIC_HEAL 2048
 #define IS_SPECIES_MUTE 4096
 #define REQUIRE_DARK 8192
+#define RAD_IMMUNE 16384
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -1277,6 +1278,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_GOLEM "Golem"
 #define LANGUAGE_SLIME "Slime"
 #define LANGUAGE_MARTIAN "Martian"
+#define LANGUAGE_INSECT "Insectoid"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
