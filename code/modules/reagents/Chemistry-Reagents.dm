@@ -1657,10 +1657,10 @@
 		if(istype(E) && !E.robotic)
 			if(E.damage > 0)
 				E.damage = max(0, E.damage - 0.2)
-		if(prob(50))
-			H.custom_pain("You feel a throbbing pain in your head", 0)
+		if(prob(15))
+			H.custom_pain("You feel a throbbing pain in your head", 1)
 			M.adjustBrainLoss(2 * REM)
-	if(prob(60))
+	if(prob(50))
 		M.drowsyness = max(M.drowsyness, 4)
 
 /datum/reagent/radium
