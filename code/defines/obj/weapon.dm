@@ -570,7 +570,7 @@
 					//Hallucination messages
 					"<span class='danger'>A terrifying crocodile snaps at [H]!</span>",\
 					"<span class='danger'>A [(IED && IED.active) ? "crocodile" : "horrifying fiery dragon"] attempts to bite your leg off!</span>")
-			if(IED && isturf(src.loc))
+			if(IED && isturf(src.loc) && H.m_intent == "run")
 				trapped = 1
 
 				playsound(src, 'sound/effects/snap.ogg', 60, 1)
@@ -593,7 +593,6 @@
 					IED.prime()
 					src.desc = initial(src.desc)
 					overlays.Remove(ied_overlay)
-					update_icon()
 
 			else if(H.m_intent == "run") //This is where the real fun begins
 				trap(H)
@@ -603,6 +602,7 @@
 			var/mob/living/simple_animal/SA = AM
 			SA.health -= 20
 
+	update_icon()
 	..()
 
 /obj/item/weapon/beartrap/proc/trap(var/mob/living/carbon/human/H)
