@@ -667,8 +667,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if(user.client)
 		var/datum/asset/simple/C = new/datum/asset/simple/pda()
 		send_asset_list(user.client, C.assets)
-		var/datum/asset/simple/E = new/datum/asset/simple/emoji_list()
-		send_asset_list(user.client, E.assets)
 
 	var/dat = list()
 	dat += {"
