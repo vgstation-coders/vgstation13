@@ -606,7 +606,7 @@
 			update_icon()
 	..()
 
-/obj/item/weapon/beartrap/trap(var/mob/living/carbon/human/H)
+/obj/item/weapon/beartrap/proc/trap(var/mob/living/carbon/human/H)
 	trapped = 1
 	trappeduser = H
 	armed = 0
