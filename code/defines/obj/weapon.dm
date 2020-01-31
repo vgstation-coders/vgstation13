@@ -515,7 +515,8 @@
 		if(IED)
 			to_chat(user, "<span class='warning'>This beartrap already has an IED hooked up to it!</span>")
 			return
-		switch(IED.assembled)
+		var/obj/item/weapon/grenade/iedcasing/candidate_IED = I
+		switch(candidate_IED.assembled)
 			if(0,1) //if it's not fueled/hooked up
 				to_chat(user, "<span class='warning'>You haven't prepared this IED yet!</span>")
 				return
@@ -604,8 +605,9 @@
 					IED.prime()
 					src.desc = initial(src.desc)
 					overlays.Remove(ied_overlay)
+				return
 
-			else if(H.m_intent == "run") //This is where the real fun begins
+			if(H.m_intent == "run") //This is where the real fun begins
 				trap(H)
 
 		else if(isanimal(AM))
