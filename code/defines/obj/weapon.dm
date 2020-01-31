@@ -427,7 +427,7 @@
 	anchored = TRUE
 	icon_state = "beartrap1"
 
-/obj/item/weapon/beartrap/suicide_act(mob/user as mob)
+/obj/item/weapon/beartrap/suicide_act(mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
@@ -440,7 +440,7 @@
 /obj/item/weapon/beartrap/update_icon()
 	icon_state = "beartrap[armed]"
 
-/obj/item/weapon/beartrap/attack_self(mob/user as mob)
+/obj/item/weapon/beartrap/attack_self(mob/user)
 	..()
 	if(ishuman(user) && !user.stat && !user.restrained())
 		armed = !armed
@@ -456,21 +456,21 @@
 			message_admins("[key_name(usr)] has armed a beartrap rigged with an IED at [formatJumpTo(get_turf(src))]!")
 			log_game("[key_name(usr)] has armed a beartrap rigged with an IED at [formatJumpTo(get_turf(src))]!")
 
-/obj/item/weapon/beartrap/attack_hand(mob/living/user as mob)
+/obj/item/weapon/beartrap/attack_hand(mob/living/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(armed)
-
-			user.visible_message("<span class='warning'>[H] sets off \the [src.name]!</span>", \
-			"<span class='danger'>You set off \the [src.name] and it crushes your hand!</span>")
-			playsound(src, 'sound/effects/snap.ogg', 60, 1)
-			H.audible_scream()
-
 			var/datum/organ/external/affecting = user.get_active_hand_organ()
-			if(affecting)
-				H.audible_scream()
-				if(affecting.take_damage(15, 0, 15, SERRATED_BLADE & SHARP_BLADE))
-					H.UpdateDamageIcon()
+			if (!affecting)
+				return
+
+			user.visible_message("<span class='warning'>\The [H] sets off \the [src]!</span>", \
+			"<span class='danger'>You set off \the [src] and it crushes your hand!</span>")
+			playsound(src, 'sound/effects/snap.ogg', 60, 1)
+
+			H.audible_scream()
+			if(affecting.take_damage(15, 0, 15, SERRATED_BLADE & SHARP_BLADE))
+				H.UpdateDamageIcon()
 				H.updatehealth()
 			
 			armed = 0
@@ -481,21 +481,21 @@
 
 		else if(trapped && trappedorgan) //shouldn't need both of these but eh
 			var/mob/living/carbon/human/L = trappeduser
-			user.visible_message("<span class='notice'>[H] tries to pry \the [src.name] off of [L]!</span>", \
-			"<span class='notice'>You try to pry open \the [src.name] with your bear hands.</span>")
+			user.visible_message("<span class='notice'>[H] tries to pry \the [src] off of [L]!</span>", \
+			"<span class='notice'>You try to pry open \the [src] with your bear hands.</span>")
 
 			if(do_after(user, src, 40) && prob(60)) //60% chance I think
 				
-				user.visible_message("<span class='notice'>[H] managed to pry \the [src.name] off of [L]!</span>", \
-				"<span class='notice'>You manage to pry \the [src.name] off!</span>")
+				user.visible_message("<span class='notice'>\The [H] managed to pry \the [src] off of [L]!</span>", \
+				"<span class='notice'>You manage to pry \the [src] off!</span>")
 				playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
 				trapped = 0
 				trappeduser = null
 				unlock_atom(L)
 				anchored = FALSE
 			else
-				user.visible_message("<span class='warning'>[H] fails to pry \the [src.name] off of [L], and crushes their leg even more!</span>", \
-				"<span class='warning'>You fail to pry \the [src.name] off of [L], and you crush their leg even more!</span>")
+				user.visible_message("<span class='warning'>\The [H] fails to pry \the [src] off of [L], and crushes their leg even more!</span>", \
+				"<span class='warning'>You fail to pry \the [src] off of [L], and you crush their leg even more!</span>")
 
 				L.audible_scream()
 				if(trappedorgan.take_damage(5,0,0)) //holy fuck it's easy to knock out legs
@@ -511,7 +511,7 @@
 			return
 	..()
 
-/obj/item/weapon/beartrap/attackby(var/obj/item/I, mob/user as mob) //Let's get explosive.
+/obj/item/weapon/beartrap/attackby(var/obj/item/I, mob/user) //Let's get explosive.
 	if(istype(I, /obj/item/weapon/grenade/iedcasing))
 		if(IED)
 			to_chat(user, "<span class='warning'>This beartrap already has an IED hooked up to it!</span>")
@@ -557,7 +557,7 @@
 		anchored = FALSE
 	..()
 
-/obj/item/weapon/beartrap/Crossed(AM as mob|obj)
+/obj/item/weapon/beartrap/Crossed(AM)
 	if(armed && isliving(AM) && isturf(src.loc))
 
 		var/mob/living/L = AM
@@ -595,29 +595,7 @@
 					src.desc = initial(src.desc)
 
 			else if(H.m_intent == "run") //This is where the real fun begins
-				trapped = 1
-				trappeduser = H
-				armed = 0
 
-				playsound(src, 'sound/effects/snap.ogg', 60, 1)
-				H.audible_scream()
-				lock_atom(H, /datum/locking_category/beartrap)
-
-				var/datum/organ/external/affecting = H.pick_usable_organ(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
-				if(affecting)
-					trappedorgan = affecting
-					if(affecting.take_damage(15, 0, 25, SERRATED_BLADE & SHARP_BLADE))
-						H.UpdateDamageIcon()
-					H.updatehealth()
-
-					if(!H.pick_usable_organ(affecting)) //check if they lost their leg, and get them out of the trap
-						to_chat(H, "<span class='warning'>With your leg missing, you slip out of the bear trap</span>")
-						trapped = 0
-						trappeduser = null
-						unlock_atom(H)
-						anchored = FALSE
-
-				H.update_canmove()
 
 			else if(isanimal(AM))
 				armed = 0
@@ -627,6 +605,32 @@
 			overlays.Remove(ied_overlay)
 			update_icon()
 	..()
+
+/obj/item/weapon/beartrap/proc/trap(var/mob/living/carbon/human/H)
+	trapped = 1
+	trappeduser = H
+	armed = 0
+
+	playsound(src, 'sound/effects/snap.ogg', 60, 1)
+	H.audible_scream()
+	lock_atom(H, /datum/locking_category/beartrap)
+
+	var/datum/organ/external/affecting = H.pick_usable_organ(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+	if(affecting)
+		trappedorgan = affecting
+		if(affecting.take_damage(15, 0, 25, SERRATED_BLADE & SHARP_BLADE))
+			H.UpdateDamageIcon()
+			H.updatehealth()
+
+	if(!H.pick_usable_organ(affecting)) //check if they lost their leg, and get them out of the trap
+		to_chat(H, "<span class='warning'>With your leg missing, you slip out of the bear trap</span>")
+		trapped = 0
+		trappeduser = null
+		unlock_atom(H)
+		anchored = FALSE
+
+	H.update_canmove()
+
 
 /obj/item/weapon/batteringram
 	name = "battering ram"
