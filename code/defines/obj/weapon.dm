@@ -591,19 +591,18 @@
 
 				spawn(IED.det_time)
 					IED.prime()
-
 					src.desc = initial(src.desc)
+					overlays.Remove(ied_overlay)
+					update_icon()
 
 			else if(H.m_intent == "run") //This is where the real fun begins
 				trap(H)
 
-			else if(isanimal(AM))
-				armed = 0
-				var/mob/living/simple_animal/SA = AM
-				SA.health -= 20
+		else if(isanimal(AM))
+			armed = 0
+			var/mob/living/simple_animal/SA = AM
+			SA.health -= 20
 
-			overlays.Remove(ied_overlay)
-			update_icon()
 	..()
 
 /obj/item/weapon/beartrap/proc/trap(var/mob/living/carbon/human/H)
