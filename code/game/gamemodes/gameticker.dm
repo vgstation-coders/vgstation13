@@ -401,7 +401,6 @@ var/datum/controller/gameticker/ticker
 					else
 						data_core.manifest_inject(new_character)
 				player.FuckUpGenes(new_character)
-				player.DiseaseCarrierCheck(new_character) 
 				qdel(player)
 
 
