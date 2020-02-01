@@ -15,6 +15,8 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/bar
 
+	species_blacklist = list("Insectoid")
+
 /datum/job/bartender/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0
@@ -78,6 +80,8 @@
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/chef
+
+	species_blacklist = list("Insectoid")
 
 /datum/job/chef/equip(var/mob/living/carbon/human/H)
 	if(!H)

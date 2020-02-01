@@ -15,6 +15,8 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/medical
 
+	species_blacklist = list("Insectoid")
+
 /datum/job/paramedic/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0

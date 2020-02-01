@@ -22,6 +22,8 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/heads/cmo
 
+	species_blacklist = list("Insectoid")
+
 /datum/job/cmo/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0
@@ -77,7 +79,9 @@
 	alt_titles = list("Emergency Physician", "Nurse", "Surgeon")
 
 	pdaslot=slot_belt
-	pdatype=/obj/item/device/pda/medical
+	pdatype=/obj/item/device/pda/
+	
+	species_blacklist = list("Insectoid")
 
 /datum/job/doctor/equip(var/mob/living/carbon/human/H)
 	if(!H)
@@ -152,6 +156,8 @@
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/chemist
+
+	species_blacklist = list("Insectoid")
 
 /datum/job/chemist/equip(var/mob/living/carbon/human/H)
 	if(!H)
@@ -249,6 +255,8 @@
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/viro
+
+	species_blacklist = list("Insectoid")
 
 /datum/job/virologist/equip(var/mob/living/carbon/human/H)
 	if(!H)
