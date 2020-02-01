@@ -527,6 +527,14 @@
 	e.start()
 	holder.clear_reagents()
 
+/datum/chemical_reaction/trinitrine
+	name = "Trinitrine"
+	id = TRINITRINE
+	result = TRINITRINE
+	required_reagents = list(GLYCEROL = 1, SACID = 1, WATER = 3)
+	required_catalysts = list(NITROGEN = 5)
+	result_amount = 5
+
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
 	id = SODIUMCHLORIDE

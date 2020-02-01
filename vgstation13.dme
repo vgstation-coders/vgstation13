@@ -2174,6 +2174,7 @@
 #include "code\modules\reagents\reagent_containers\glass\bottle.dm"
 #include "code\modules\reagents\reagent_containers\glass\jar.dm"
 #include "code\modules\reagents\reagent_containers\glass\bottle\robot.dm"
+#include "code\modules\reagents\reagents\heart_medication.dm"
 #include "code\modules\reagents\reagents\vg.dm"
 #include "code\modules\recycling\compactor.dm"
 #include "code\modules\recycling\conveyor2.dm"
