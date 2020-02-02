@@ -344,7 +344,7 @@
 //Shower cleaning has been nerfed (no, really). 75 % chance to clean everything on each tick
 //You'll have to stay under it for a bit to clean every last noggin
 
-#define CLEAN_PROB 5 //Percentage
+#define CLEAN_PROB 10 //Percentage
 
 /obj/machinery/shower/proc/wash(atom/movable/O as obj|mob)
 	if(!on)
