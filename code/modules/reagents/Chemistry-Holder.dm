@@ -535,7 +535,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	switch(method)
 		if(TOUCH)
 			for(var/datum/reagent/R in reagent_list)
-				if(ismob(A))
+				if(isliving(A))
 					var/datum/reagent/MR = A.reagents.get_reagent_by_type(R.type)
 					if(!mob_reagent_threshold || !MR || (mob_reagent_threshold > MR.volume))
 						if(isanimal(A))
