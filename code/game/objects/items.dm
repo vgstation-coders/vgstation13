@@ -1422,6 +1422,20 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	return
 
+/obj/item/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
+	..()
+	var/processed_name = lowertext(mat? mat.processed_name : material_type.processed_name)
+	var/to_icon_state = "[initial(icon_state)]_[processed_name]_[quality]"
+	if(has_icon(inhand_states[inhand_states[1]], to_icon_state))
+		item_state = to_icon_state
+
+/obj/item/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
+	.=..()
+	if(. && material_type)
+		armor["melee"] = min(90, armor["melee"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+		armor["bullet"] = min(90, armor["bullet"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+		armor["laser"] = min(90, armor["laser"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+
 /////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
 
 /obj/item/clothing/suitable_colony()

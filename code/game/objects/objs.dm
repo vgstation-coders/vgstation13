@@ -655,13 +655,6 @@ a {
 	if(has_icon(icon, to_icon_state))
 		icon_state = to_icon_state
 
-/obj/item/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
-	..()
-	var/processed_name = lowertext(mat? mat.processed_name : material_type.processed_name)
-	var/to_icon_state = "[initial(icon_state)]_[processed_name]_[quality]"
-	if(has_icon(inhand_states[inhand_states[1]], to_icon_state))
-		item_state = to_icon_state
-
 /obj/proc/gen_description(mob/user)
 	var/material_mod = quality-B_GOOD>1 ? quality-B_GOOD : 0
 	var/additional_description
@@ -708,7 +701,15 @@ a {
 	gen_quality(additional_quality, min_quality)
 	if(quality > B_SUPERIOR)
 		gen_description()
-	if(!findtext(lowertext(name), lowertext(mat.name)))
+	if(material_type)
+		if(sharpness_flags && sharpness)
+			force = initial(force)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+			throwforce = initial(throwforce)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+			sharpness = initial(sharpness)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+		else
+			force = initial(force)*(material_type.brunt_damage_mod*(quality/B_AVERAGE))
+			throwforce = initial(throwforce)*(material_type.brunt_damage_mod*(quality/B_AVERAGE))
+	if(!findtext(lowertext(name), lowertext(material_type.name)))
 		name = "[quality == B_AVERAGE ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
 
 /obj/proc/check_uplink_validity()
