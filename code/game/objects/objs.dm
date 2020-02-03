@@ -650,6 +650,17 @@ a {
 	*/
 	var/initial_quality = round(((rand(1,3)*surrounding_mod)*material_mod)+modifier)
 	quality = clamp(initial_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
+	var/processed_name = lowertext(mat? mat.processed_name : material_type.processed_name)
+	var/to_icon_state = "[initial(icon_state)]_[processed_name]_[quality]"
+	if(has_icon(icon, to_icon_state))
+		icon_state = to_icon_state
+
+/obj/item/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
+	..()
+	var/processed_name = lowertext(mat? mat.processed_name : material_type.processed_name)
+	var/to_icon_state = "[initial(icon_state)]_[processed_name]_[quality]"
+	if(has_icon(inhand_states[inhand_states[1]], to_icon_state))
+		item_state = to_icon_state
 
 /obj/proc/gen_description(mob/user)
 	var/material_mod = quality-B_GOOD>1 ? quality-B_GOOD : 0
