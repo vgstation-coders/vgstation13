@@ -142,7 +142,7 @@
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/dart(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
-		new /obj/item/weapon/legcuffs/beartrap(),\
+		new /obj/item/weapon/beartrap(),\
 		)
 	)
 

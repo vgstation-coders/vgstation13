@@ -105,7 +105,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/toy/syndicateballoon/ntballoon = 80,
 /obj/item/weapon/am_containment = 10,
 /obj/item/weapon/cane = 5,
-/obj/item/weapon/legcuffs/beartrap = 50,
+/obj/item/weapon/beartrap = 50,
 /obj/item/weapon/rcd_ammo = 10,
 /obj/item/weapon/storage/pneumatic = 40,
 /obj/item/weapon/resonator = 100,
@@ -175,10 +175,6 @@ var/list/shop_prices = list( //Cost in space credits
 	var/credits_spent   = 0
 	var/goods_purchased = 0
 	var/alarm_activated = "" //Holds the explanation for alarm's activation
-
-/datum/map_element/vault/supermarket/pre_load()
-	..()
-	spessmart_exists = 1
 
 /datum/map_element/vault/supermarket/process_scoreboard()
 	var/list/L = list()

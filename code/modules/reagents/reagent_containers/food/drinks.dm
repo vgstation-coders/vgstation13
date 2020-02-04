@@ -1607,7 +1607,7 @@
 			if (!user.Adjacent(src))
 				return
 			var/distance = manhattan_distance(over_location, src)
-			if (distance >= 8) // More than a full screen to go
+			if (distance >= 8 || distance == 0) // More than a full screen to go, or we're not moving at all
 				return ..()
 
 			// Geometrically checking if we're on a straight line.

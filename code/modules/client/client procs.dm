@@ -393,6 +393,8 @@
 	while(!vote || !vote.interface)
 		sleep(1)
 	vote.interface.sendAssets(src)
+	var/datum/asset/simple/E = new/datum/asset/simple/emoji_list()
+	send_asset_list(src, E.assets)
 
 /proc/get_role_desire_str(var/rolepref)
 	switch(rolepref & ROLEPREF_VALMASK)

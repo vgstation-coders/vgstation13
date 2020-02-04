@@ -505,7 +505,6 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	origin_tech = Tc_MATERIALS + "=5"
 	perunit = CC_PER_SHEET_TELECRYSTAL
 
-
 /obj/item/stack/sheet/mineral/mauxite
 	name = "mauxite"
 	icon_state = "sheet-mauxite"

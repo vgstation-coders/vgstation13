@@ -252,7 +252,7 @@
 
 /datum/find/beartrap/spawn_item()
 	item_type = "[pick("wicked","evil","byzantine","dangerous")] looking [pick("device","contraption","thing","trap")]"
-	return new /obj/item/weapon/legcuffs/beartrap
+	return new /obj/item/weapon/beartrap
 
 /datum/find/beartrap/additional_description(var/obj/item/I)
 	I.desc += "[pick("It looks like it could take a limb off",\

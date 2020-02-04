@@ -86,6 +86,11 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
+/mob/living/carbon/human/insectoid/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Insectoid")
+	my_appearance.h_style = "Insectoid Antennae"
+	regenerate_icons()
+
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc)
 	initialize_basic_NPC_components()
@@ -1944,7 +1949,7 @@ mob/living/carbon/human/isincrit()
 	return 1
 
 //this method handles user getting attacked with an emag - the original logic was in human_defense.dm,
-//but it's better that it belongs to human.dm 
+//but it's better that it belongs to human.dm
 /mob/living/carbon/human/emag_act(var/mob/attacker, var/datum/organ/external/affecting, var/obj/item/weapon/card/emag)
 	var/hit_area = affecting.display_name
 	if(!(affecting.status & ORGAN_ROBOT))
