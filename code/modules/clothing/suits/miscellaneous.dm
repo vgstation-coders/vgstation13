@@ -145,7 +145,7 @@ var/list/tag_suits_list = list()
 		return player.nametag
 	else // Let's create a new one on the fly
 		var/datum/laser_tag_participant/gamer = new
-		gamer.gamertag = get_first_word(H.name) + "[rand(1000, 9999)]"
+		gamer.nametag = get_first_word(H.name) + "#[rand(1000, 9999)]"
 		gamer.team = "Blue"
 		src.player = gamer
 
@@ -161,7 +161,7 @@ var/list/tag_suits_list = list()
 		return player.nametag
 	else // Let's create a new one on the fly
 		var/datum/laser_tag_participant/gamer = new
-		gamer.gamertag = get_first_word(H.name) + "[rand(1000, 9999)]"
+		gamer.nametag = get_first_word(H.name) + "#[rand(1000, 9999)]"
 		gamer.team = "Red"
 		src.player = gamer
 /*
