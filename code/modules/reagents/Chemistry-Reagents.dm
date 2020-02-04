@@ -1647,6 +1647,22 @@
 	density = 4.33
 	specheatcap = 2.64
 
+/datum/reagent/nitroglycerin/on_mob_life(var/mob/living/M)
+	M.adjustToxLoss(2 * REM)
+	if(prob(80))
+		M.adjustOxyLoss(2 * REM)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/E = H.internal_organs_by_name["heart"]
+		if(istype(E) && !E.robotic)
+			if(E.damage > 0)
+				E.damage = max(0, E.damage - 0.2)
+		if(prob(15))
+			H.custom_pain("You feel a throbbing pain in your head", 1)
+			M.adjustBrainLoss(2 * REM)
+	if(prob(50))
+		M.drowsyness = max(M.drowsyness, 4)
+
 /datum/reagent/radium
 	name = "Radium"
 	id = RADIUM
@@ -5974,7 +5990,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#666300" //rgb: 102, 99, 0
 
-/datum/reagent/ethanol/deadrumm/threemileisland
+/datum/reagent/ethanol/deadrum/threemileisland
 	name = "Three Mile Island Iced Tea"
 	id = THREEMILEISLAND
 	description = "Made for a woman. Strong enough for a man."

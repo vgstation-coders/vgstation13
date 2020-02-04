@@ -500,7 +500,7 @@
 		/obj/item/weapon/corncob,
 		/obj/item/weapon/bikehorn,
 		/obj/item/weapon/c_tube,
-		/obj/item/weapon/legcuffs/beartrap,
+		/obj/item/weapon/beartrap,
 		/obj/item/weapon/caution,
 		/obj/item/weapon/rack_parts,
 		/obj/item/weapon/caution/cone,

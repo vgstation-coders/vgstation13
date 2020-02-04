@@ -665,7 +665,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
 				if(istype(taggun))
 					taggun.cooldown(my_tag.my_laser_tag_game.disable_time/2)
-
+					taggun.score()
 	return 1
 
 /obj/item/projectile/beam/lasertag/blue

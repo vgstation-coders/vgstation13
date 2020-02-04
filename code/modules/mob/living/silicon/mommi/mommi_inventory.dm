@@ -25,14 +25,12 @@
 	else
 		return (W in src.module.modules)
 
-#define MOMMI_LOW_POWER 100
-
 /mob/living/silicon/robot/mommi/put_in_hands(var/obj/item/W)
 	// Fixing NPEs caused by PDAs giving me NULLs to hold :V - N3X
 	// And before you ask, this is how /mob handles NULLs, too.
 	if(!W)
 		return 0
-	if(cell && cell.charge <= MOMMI_LOW_POWER)
+	if(cell && cell.charge <= ROBOT_LOW_POWER)
 		drop_item(W)
 		return 0
 	if(W.type == /obj/item/device/material_synth)
@@ -61,12 +59,13 @@
 	return 1
 
 /mob/living/silicon/robot/mommi/u_equip(W as obj)
-	if (W == tool_state)
+	if(W == tool_state)
 		if(module_active==tool_state)
 			module_active = null
 		tool_state = null
-		inv_tool.icon_state="inv1"
-	else if (W == head_state)
+		if(inv_tool)
+			inv_tool.icon_state="inv1"
+	else if(W == head_state)
 		// Delete the hat's reference
 		head_state = null
 		// Update the MoMMI's head inventory icons
@@ -158,15 +157,15 @@
 		var/obj/item/TS=tool_state
 		if(!is_in_modules(TS))
 			drop_item()
-		if (client)
+		if(client)
 			client.screen -= tool_state
 		contents -= tool_state
 		tool_state = null
-		inv_tool.icon_state = "inv1"
+		if(inv_tool)
+			inv_tool.icon_state = "inv1"
 		if(is_in_modules(TS))
 			TS.forceMove(src.module)
 		hud_used.update_robot_modules_display()
-
 
 /mob/living/silicon/robot/mommi/activated(obj/item/O)
 	if(tool_state == O) // Sight
@@ -330,3 +329,12 @@
 			update_items()
 		else
 			to_chat(M, "<span class='warning'>You are unable to equip that.</span>")
+
+// MoMMIs only have one hand.
+/mob/living/silicon/robot/mommi/update_items()
+	..()
+	if(tool_state)
+		tool_state:screen_loc = ui_inv2
+	if(head_state)
+		head_state:screen_loc = ui_monkey_mask
+	updateicon()

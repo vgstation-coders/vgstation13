@@ -87,7 +87,6 @@
 				if(istype(taggun))
 					taggun.cooldown(my_tag.my_laser_tag_game.disable_time/2)
 					taggun.score()
-
 	return 1
 
 /obj/item/projectile/energy/tag/blue

@@ -184,7 +184,7 @@
 					icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 				else
 					icobase = 'icons/mob/human_races/vox/r_vox.dmi'
-		if(current_species.name == "Grey")
+		else if(current_species.name == "Grey")
 			switch(s_tone)
 				if(4)
 					icobase = 'icons/mob/human_races/grey/r_greyblue.dmi'

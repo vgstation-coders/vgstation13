@@ -81,6 +81,7 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define CYBORG_STARTING_TONER 40
 #define CYBORG_MAX_TONER 100
 #define CYBORG_PHOTO_COST 20
+#define ROBOT_LOW_POWER 100
 
 //Respawnable defines
 #define MEDICAL_MAX_KIT 10
