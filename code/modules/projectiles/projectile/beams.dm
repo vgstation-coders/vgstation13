@@ -645,7 +645,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 				M.Stun(2)
 			else // We've got a game on the reciever, let's check if we've got a game on the wearer.
 				var/obj/item/clothing/suit/tag/my_tag = get_tag_armor(firer)
-				if (!my_tag || !my_tag.my_laser_tag_game || my_tag.my_laser_tag_game =! their_tag.my_laser_tag_game)
+				if (!my_tag || !my_tag.my_laser_tag_game || (my_tag.my_laser_tag_game != their_tag.my_laser_tag_game))
 					return 1
 				if (!my_tag.player || !their_tag.player)
 					CRASH("A suit has a laser tag game registered, but no players attached.")
@@ -660,11 +660,11 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 					their_player.total_hit_by++
 					their_player.hit_by[my_player.tag]++
 				
-				M.Knockdown(my_laser_tag_game.stun_time/2)
-				M.Stun(my_laser_tag_game.stun_time/2)	
+				M.Knockdown(my_tag.my_laser_tag_game.stun_time/2)
+				M.Stun(my_tag.my_laser_tag_game.stun_time/2)	
 				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
-					if(istype(taggun))
-						taggun.cooldown(my_laser_tag_game.disable_time/2)
+				if(istype(taggun))
+					taggun.cooldown(my_tag.my_laser_tag_game.disable_time/2)
 
 	return 1
 

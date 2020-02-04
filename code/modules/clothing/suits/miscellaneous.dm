@@ -9,17 +9,7 @@
  * Lasertag
  */
 
- var/list/obj/item/clothing/suit/tag/tag_suits = list()
-
- /obj/item/clothing/suit/tag/New(...)
-	tag_suits += src
-	return ..()
-
-/obj/item/clothing/suit/tag/Destroy()
-	tag_suits -= src
-	my_laser_tag_game = null
-	my_player = null
-	return ..()
+var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/tag
 	blood_overlay_type = "armor"
@@ -28,6 +18,16 @@
 	siemens_coefficient = 3.0
 	var/datum/laser_tag_game/my_laser_tag_game = null
 	var/datum/laser_tag_participant/player = null
+
+/obj/item/clothing/suit/tag/New()
+	tag_suits_list += src
+	return ..()
+
+/obj/item/clothing/suit/tag/Destroy()
+	tag_suits_list -= src
+	my_laser_tag_game = null
+	player = null
+	return ..()
 
 /obj/item/clothing/suit/tag/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
@@ -54,7 +54,7 @@
 	else
 		H << browse(get_window_text(H),"window=laser_tag_window;size=700x500")
 
-/obj/item/clothing/suit/tag/proc/get_window_text(H)
+/obj/item/clothing/suit/tag/proc/get_window_text(var/mob/living/carbon/human/H)
 	var/dat = list()
 	dat += "<h3>Laser tag games</h3> <br/>"
 	dat += "<b>Tag:</b> [get_gamer_tag(H)]"
@@ -75,6 +75,8 @@
 	
 	return jointext(dat,"")
 
+/obj/item/clothing/suit/tag/proc/get_gamer_tag(var/mob/living/carbon/human/H)
+
 /obj/item/clothing/suit/tag/Topic(href, href_list)
 	if(..())
 		return 1
@@ -93,18 +95,18 @@
 
 	if (href_list["get_score"])
 		var/datum/laser_tag_game/game = locate(href_list["get_score"])
-		game.print_scoreboard(usr)
+		game.get_score_board(usr)
 		return
 
-	if (href_list["join_game"])
-		var/datum/laser_tag_game/game = locate(href_list["join_game"])
-		game.kick_player(player)
+	if (href_list["leave_game"])
+		var/datum/laser_tag_game/game = locate(href_list["leave_game"])
+		game.kick_player(usr)
 		return
 	
 	if (href_list["clear_gamertag"])
 		my_laser_tag_game = null
 		player = null
-		H << browse(null,"window=laser_tag_window;size=700x500")
+		usr << browse(null,"window=laser_tag_window;size=700x500")
 		to_chat(usr, "<span = 'notice'>You clear your tag out of the vest and leave it to be used by someone else.</span>")
 		return
 
@@ -138,6 +140,15 @@
 	item_state = "bluetag"
 	allowed = list (/obj/item/weapon/gun/energy/tag/blue)
 
+/obj/item/clothing/suit/tag/bluetag/get_gamer_tag(var/mob/living/carbon/human/H)
+	if (player)
+		return player.nametag
+	else // Let's create a new one on the fly
+		var/datum/laser_tag_participant/gamer = new
+		gamer.gamertag = get_first_word(H.name) + "[rand(1000, 9999)]"
+		gamer.team = "Blue"
+		src.player = gamer
+
 /obj/item/clothing/suit/tag/redtag
 	name = "red laser tag armour"
 	desc = "Pew pew pew."
@@ -145,6 +156,14 @@
 	item_state = "redtag"
 	allowed = list (/obj/item/weapon/gun/energy/tag/red)
 
+/obj/item/clothing/suit/tag/redtag/get_gamer_tag(var/mob/living/carbon/human/H)
+	if (player)
+		return player.nametag
+	else // Let's create a new one on the fly
+		var/datum/laser_tag_participant/gamer = new
+		gamer.gamertag = get_first_word(H.name) + "[rand(1000, 9999)]"
+		gamer.team = "Red"
+		src.player = gamer
 /*
  * Costume
  */

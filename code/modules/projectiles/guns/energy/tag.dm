@@ -110,3 +110,6 @@
 	power_supply.give(100)
 	update_icon()
 	return 1
+
+/obj/item/weapon/gun/energy/tag/proc/cooldown(var/time)
+

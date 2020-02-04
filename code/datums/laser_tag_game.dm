@@ -1,7 +1,7 @@
 var/list/laser_tag_games = list()
 
 /datum/laser_tag_participant
-    var/tag = ""
+    var/nametag = ""
     var/total_shoots = 0
     var/total_hits = 0
     var/total_hit_by = 0
@@ -21,8 +21,8 @@ var/list/laser_tag_games = list()
     var/mode = LT_MODE_TEAM
     var/datum/laser_tag_participant/owner = null
     var/list/teams = list(
-        "Blue" = list()
-        "Red" = list()
+        "Blue" = list(),
+        "Red" = list(),
     )
     // In seconds
     var/stun_time = 4
@@ -30,7 +30,7 @@ var/list/laser_tag_games = list()
 
     var/fire_mode = LT_FIREMODE_LASER
 
-/datum/laser_tag_game/proc/get_score_board()
+/datum/laser_tag_game/proc/get_score_board(var/mob/M)
     var/dat = list()
     dat += "<h3>Laser tag game</h3><br/>"
     dat += "<b><Mode:/b> [mode]<br/>"
@@ -53,10 +53,21 @@ var/list/laser_tag_games = list()
                 dat += "<hr/>"
             dat += "<hr/>"
     
-    return jointext(dat,"")
+    var/text = jointext(dat,"")
+    var/obj/item/weapon/paper/P = new(get_turf(M))
+    P.info = text
+    P.name = "Laser tag scoreboard"
+    M.put_in_hands(P)
 
 /datum/laser_tag_game/proc/handle_new_player(var/datum/laser_tag_participant/new_player, var/mob/player_mob)
+    teams[new_player.team] |= new_player
+    var/obj/item/clothing/suit/tag/tag_vest = get_tag_armor(player_mob)
+    if (tag_vest)
+        tag_vest.my_laser_tag_game = src
 
 /datum/laser_tag_game/proc/edit(var/mob/owner)
 
-/datum/laser_tag_game/proc/kick_player(var/datum/laser_tag_participant/player)
+/datum/laser_tag_game/proc/kick_player(var/mob/player_mob)
+    var/obj/item/clothing/suit/tag/tag_vest = get_tag_armor(player_mob)
+    if (tag_vest)
+        tag_vest.my_laser_tag_game = null // Don't delete their particpant datum, we need it for the score.
