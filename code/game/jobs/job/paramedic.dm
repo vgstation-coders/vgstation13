@@ -10,7 +10,7 @@
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva, access_morgue, access_chemistry, access_surgery)
-	minimal_access=list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva, access_morgue)
+	minimal_access=list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva, access_morgue, access_chemistry, access_surgery)
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/medical
