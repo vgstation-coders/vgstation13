@@ -1333,8 +1333,7 @@ var/list/cyborg_list = list()
 	modulelock = !modulelock
 	return modulelock
 
-//Currently only used for borg movement, to avoid awkward situations where borgs with RTG cells are always slowed down while
-//borgs with ultra capacity power cells won't get
+//Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
 /mob/living/silicon/robot/proc/get_percentage_power_for_movement()
 	if(get_cell())
 		var/percentage = round(cell.maxcharge / 4)
