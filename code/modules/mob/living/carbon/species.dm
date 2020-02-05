@@ -1281,52 +1281,6 @@ var/list/has_died_as_golem = list()
 				to_chat(user, "<span class='notice'>You place \the [O] into \the [src].</span>")
 				qdel(O)
 
-/datum/species/insectoid
-	name = "Insectoid"
-	icobase = 'icons/mob/human_races/r_insectoid.dmi'
-	deform = 'icons/mob/human_races/r_def_insectoid.dmi'
-	eyes = "insectoid_eyes_m"
-	known_languages = list(LANGUAGE_INSECT)
-	primitive = /mob/living/carbon/monkey/roach
-
-	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
-
-	default_mutations=list(RAD_IMMUNE)
-	brute_mod = 1.3
-	burn_mod = 1.3
-	tox_mod = 0.5
-
-	blood_color = "#ebece6"
-	flesh_color = "#9c7f25"
-
-	has_mutant_race = 0
-
-	has_organ = list(
-		"heart" =    /datum/organ/internal/heart/insect,
-		"lungs" =    /datum/organ/internal/lungs,
-		"liver" =    /datum/organ/internal/liver,
-		"kidneys" =  /datum/organ/internal/kidney,
-		"brain" =    /datum/organ/internal/brain,
-		"eyes" =     /datum/organ/internal/eyes/compound/
-		)
-
-	species_intro = "You are an Insectoid.<br>\
-					Your body is utterly immune to the perils of radiation, and you are able to better defend against toxic chemicals <br>\
-					However, your rigid body is somewhat more fragile than that of more soft-bodied species. Resilient though you may be, a good smack may put you out of commission."
-
-
-/datum/species/insectoid/makeName(var/gender,var/mob/living/carbon/human/H=null)
-	var/sounds = rand(2,3)
-	var/newname = ""
-
-	for(var/i = 1 to sounds)
-		newname += pick(insectoid_name_syllables)
-	return capitalize(newname)
-
-/datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
-	H.default_gib()
-
 
 /datum/species/mushroom
 	name = "Mushroom"

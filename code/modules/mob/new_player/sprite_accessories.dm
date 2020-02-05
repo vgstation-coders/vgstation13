@@ -62,7 +62,7 @@
 	name = "Bald"
 	icon_state = "bald"
 	gender = MALE
-	species_allowed = list("Human","Manifested","Insectoid","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
+	species_allowed = list("Human","Manifested","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
 
 /datum/sprite_accessory/hair/short
 	name = "Short Hair"	  // try to capatilize the names please~
@@ -403,7 +403,7 @@
 	name = "Twintails"
 	icon_state = "hair_twintail"
 	gender = FEMALE
-
+	
 /datum/sprite_accessory/hair/cia
 	name = "CIA"
 	icon_state = "hair_cia"
@@ -508,6 +508,9 @@
 	icon_state = "hair_manbun"
 	gender = MALE
 
+/datum/sprite_accessory/hair/bald
+	name = "Bald"
+	icon_state = "bald"
 /*
 ///////////////////////////////////
 /  =---------------------------=  /
@@ -525,7 +528,7 @@
 	name = "Shaved"
 	icon_state = "bald"
 	gender = NEUTER
-	species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom","Insectoid")
+	species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
 
 /datum/sprite_accessory/facial_hair/watson
 	name = "Watson Mustache"
@@ -627,14 +630,6 @@
 /  =---------------------------=  /
 ///////////////////////////////////
 */
-
-/datum/sprite_accessory/hair/insect_antennae
-	name = "Insectoid Antennae"
-	icon_state = "insect_antennae"
-	species_allowed = list("Insectoid")
-	gender = NEUTER
-	do_colouration = 0
-
 
 /datum/sprite_accessory/hair/una_spines_long
 	name = "Long Unathi Spines"
@@ -874,7 +869,7 @@
 	name = "Bushy"
 	icon_state = "hair_bushy"
 	species_allowed = list("Diona")
-
+	
 /datum/sprite_accessory/hair/hair_weepingwillow
 	name = "Weeping Willow"
 	icon_state = "hair_weepingwillow"
@@ -988,7 +983,6 @@
 	species_allowed = list(VOX_SHAPED)
 	do_colouration = 0
 
-
 //skin styles - WIP
 //going to have to re-integrate this with surgery
 //let the icon_state hold an icon preview for now
@@ -1026,4 +1020,3 @@
 /datum/sprite_accessory/hair/mohawk
 	name = "Mohawk"
 	icon_state = "mohawk"
-
