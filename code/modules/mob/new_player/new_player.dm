@@ -416,7 +416,6 @@
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
 			FuckUpGenes(character)
-			DiseaseCarrierCheck(character)
 		else
 			character.Robotize()
 	qdel(src)
