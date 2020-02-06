@@ -1640,6 +1640,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/dropper = 2,
 		/obj/item/stack/medical/splint = 4,
 		/obj/item/weapon/thermometer = 3,
+		/obj/item/weapon/storage/pill_bottle = 4,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/pill/tox = 3,
