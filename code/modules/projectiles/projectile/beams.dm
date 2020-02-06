@@ -653,7 +653,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 				var/datum/laser_tag_participant/my_player = my_tag.player
 				var/datum/laser_tag_participant/their_player = my_tag.player
 
-				if (my_tag.my_laser_tag_game.mode == LT_MODE_TEAM && !(is_type_in_list(their_tag, enemy_vest_types)))
+				if (my_tag.my_laser_tag_game.mode == LT_MODE_TEAM && !(is_type_in_list(their_tag, enemy_vest_types))) // If not a free for all, we check for enemy vest type
 					return 1
 				if(!M.lying) // Not counting scores if the opponent is lying down.
 					my_player.total_hits++

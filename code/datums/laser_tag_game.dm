@@ -14,6 +14,10 @@ var/list/laser_tag_games = list()
 
 /datum/laser_tag_game/Destroy()
     laser_tag_games -= src
+    owner = null
+    for (var/obj/item/clothing/suit/tag/tag_vest in tag_suits_list)
+        if (tag_vest.my_laser_tag_game == src)
+            tag_vest.my_laser_tag_game = null
     return ..()
 
 /datum/laser_tag_game
@@ -60,12 +64,10 @@ var/list/laser_tag_games = list()
     M.put_in_hands(P)
 
 /datum/laser_tag_game/proc/handle_new_player(var/datum/laser_tag_participant/new_player, var/mob/player_mob)
-    teams[new_player.team] |= new_player
+    teams[new_player.team] |= new_player // Allows people to rejoin games they left.
     var/obj/item/clothing/suit/tag/tag_vest = get_tag_armor(player_mob)
     if (tag_vest)
         tag_vest.my_laser_tag_game = src
-
-/datum/laser_tag_game/proc/edit(var/mob/owner)
 
 /datum/laser_tag_game/proc/kick_player(var/mob/player_mob)
     var/obj/item/clothing/suit/tag/tag_vest = get_tag_armor(player_mob)

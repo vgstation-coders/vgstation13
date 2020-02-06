@@ -75,7 +75,19 @@ var/list/tag_suits_list = list()
 	
 	return jointext(dat,"")
 
-/obj/item/clothing/suit/tag/proc/get_gamer_tag(var/mob/living/carbon/human/H)
+/obj/item/clothing/suit/tag/proc/refresh_edit_window(var/mob/user, var/datum/laser_tag_game/my_laser_tag_game)
+	var/dat = {"
+		"<h3>"Game parameters</h3>"
+		"<br/>"
+		"<b>Mode:</b> <a href='?src=\ref[src]&game_mode=\ref[my_laser_tag_game]'>[my_laser_tag_game.mode] </a><br/>"
+		"<b>Fire mode:</b> <a href='?src=\ref[src]&fire_mode=\ref[my_laser_tag_game]'>[my_laser_tag_game.fire_mode] </a> <br/>"
+		"<b>Stun time:</b> <a href='?src=\ref[src]&stun_time=\ref[my_laser_tag_game]'>[my_laser_tag_game.stun_time] </a> <br/>"
+		"<b>Disable time:</b> <a href='?src=\ref[src]&disable_time=\ref[my_laser_tag_game]'>[my_laser_tag_game.disable_time] </a> <br/>"
+		"<b><a href='?src=\ref[src]&delete_game=\ref[my_laser_tag_game]'>Delete the game</a></b> <br/>"
+		"<br/>"
+		"<b><a href='?src=\ref[src]&edition_done=\ref[my_laser_tag_game]'>Done</a></b>"
+	"}
+	user << browse(dat,"window=laser_tag_window2;size=500x500")
 
 /obj/item/clothing/suit/tag/Topic(href, href_list)
 	if(..())
@@ -84,14 +96,65 @@ var/list/tag_suits_list = list()
 	if (href_list["join_game"])
 		var/datum/laser_tag_game/game = locate(href_list["join_game"])
 		game.handle_new_player(player, usr)
+		usr << browse(get_window_text(usr),"window=laser_tag_window;size=700x500")
 		return
 	
+	// Game parametrisation
 	if (href_list["edit_game"])
 		var/datum/laser_tag_game/game = locate(href_list["edit_game"])
 		if (my_laser_tag_game.owner != player)
 			return
-		game.edit(usr)
+		refresh_edit_window(usr, game)
 		return
+	
+	if (href_list["game_mode"])
+		var/datum/laser_tag_game/game = locate(href_list["game_mode"])
+		var/choices = list(
+			LT_MODE_TEAM,
+			LT_MODE_FFA,
+		)
+		var/choice = input(usr, "Choose the game mode.", "Game mode") as null|anything in choices
+		if (choice)
+			game.mode = choice
+		refresh_edit_window(usr, game)
+		return
+
+	if (href_list["fire_mode"])
+		var/datum/laser_tag_game/game = locate(href_list["fire_mode"])
+		var/choices = list(
+			LT_FIREMODE_LASER,
+			LT_FIREMODE_TASER,
+		)
+		var/choice = input(usr, "Choose the fire mode.", "Fire mode") as null|anything in choices
+		if (choice)
+			game.fire_mode = choice
+		refresh_edit_window(usr, game)
+		return
+	
+	if (href_list["stun_time"])
+		var/datum/laser_tag_game/game = locate(href_list["stun_time"])
+		var/choice = input(usr, "Choose the stun duration.", "Stun duration") as null|num
+		game.stun_time = clamp(choice, 0, 12)
+		refresh_edit_window(usr, game)
+		return
+
+	if (href_list["disable_time"])
+		var/datum/laser_tag_game/game = locate(href_list["disable_time"])
+		var/choice = input(usr, "Choose the disbale duration.", "Disable duration") as null|num
+		game.disable_time = clamp(choice, 0, 12)
+		refresh_edit_window(usr, game)
+		return
+
+	if (href_list["edition_done"])
+		usr << browse(null,"window=laser_tag_window2;size=500x500")
+		return
+
+	if (href_list["delete_game"])
+		var/datum/laser_tag_game/game = locate(href_list["delete_game"])
+		qdel(game)
+		usr << browse(null,"window=laser_tag_window2;size=500x500")
+		return
+	// End game parametrisation
 
 	if (href_list["get_score"])
 		var/datum/laser_tag_game/game = locate(href_list["get_score"])
@@ -101,6 +164,7 @@ var/list/tag_suits_list = list()
 	if (href_list["leave_game"])
 		var/datum/laser_tag_game/game = locate(href_list["leave_game"])
 		game.kick_player(usr)
+		usr << browse(get_window_text(usr),"window=laser_tag_window;size=700x500")
 		return
 	
 	if (href_list["clear_gamertag"])
@@ -132,6 +196,9 @@ var/list/tag_suits_list = list()
 			var/obj/item/clothing/C = AH.w_uniform
 			for(var/obj/item/clothing/accessory/lasertag/L in C.accessories)
 				return L.source_vest
+
+// The proc is intentionally empty and overriden later.
+/obj/item/clothing/suit/tag/proc/get_gamer_tag(var/mob/living/carbon/human/H)
 
 /obj/item/clothing/suit/tag/bluetag
 	name = "blue laser tag armour"
