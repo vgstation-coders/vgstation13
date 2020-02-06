@@ -2543,8 +2543,17 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/that/magic = 3,
 		/obj/item/clothing/suit/kimono = 3,
 		/obj/item/clothing/gloves/white = 3,
+<<<<<<< HEAD
 		/obj/item/weapon/storage/box/smartbox/clothing_box/lola = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/clothing/under/clownsuit = 3
+=======
+		/obj/item/clothing/mask/gas/lola = 3,
+		/obj/item/clothing/under/lola = 3,
+		/obj/item/clothing/shoes/clown_shoes/lola = 3,
+		/obj/item/clothing/mask/gas/oni = 3,
+		/obj/item/clothing/head/helmet/samurai = 3,
+		/obj/item/clothing/suit/armor/samurai = 3
+>>>>>>> Adds samurai stuff
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe

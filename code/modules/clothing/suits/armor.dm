@@ -94,6 +94,14 @@
 	clothing_flags = GOLIATHREINFORCE
 
 
+/obj/item/clothing/suit/armor/samurai
+	name = "samurai armor"
+	desc = "Forged long ago, in a distant land."
+	icon_state = "samurai"
+	item_state = "samurai"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	armor = list(melee = 40, bullet = 0, laser = 10, energy = 5, bomb = 0, bio = 0, rad = 0)
+
 /obj/item/clothing/suit/armor/knight/yellow
 	icon_state = "knight_yellow"
 	item_state = "knight_yellow"
