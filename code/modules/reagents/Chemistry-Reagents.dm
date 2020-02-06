@@ -4405,6 +4405,33 @@
 
 	M.nutrition += nutriment_factor
 
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		switch(volume)
+			if(1 to 15)
+				if(prob(5))
+					to_chat(H,"<span class='warning'>You burp.</span>")
+					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
+			if(15 to 200)
+				if(prob(10))
+					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
+				if(prob(5))
+					to_chat(H,"<span class='warning'>You feel a burn in your chest.</span>")
+					var/datum/organ/internal/heart/L = H.internal_organs_by_name["heart"]
+					if(istype(L))
+						L.take_damage(0.2, 1)
+			if(100 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
+					if(H.get_heart())//Got a heart?
+				var/datum/organ/internal/heart/damagedheart = H.get_heart()
+				if (heartdamage >= 30)
+					if(H.species.name != "Diona" && damagedheart) //fuck dionae
+						to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
+						damagedheart.damage += heartdamage //Bye heart.
+						if(explodeheart)
+							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
+						H.adjustOxyLoss(heartdamage*2)
+						H.adjustBruteLoss(heartdamage)
+
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
 
 	if(..())
