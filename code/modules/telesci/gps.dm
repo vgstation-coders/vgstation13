@@ -116,15 +116,15 @@ var/list/SPS_list = list()
 			return TRUE
 
 		var/a = input("Please enter desired tag.", name, gpstag) as text|null
-		if(!a) //what a check
-			return TRUE
 
 		if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //second check in case some chucklefuck drops the GPS while typing the tag
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")
 			return TRUE
 		a = strict_ascii(a)
-		if(length(a) < 4 || length(a) > 5)
-			to_chat(usr, "<span class = 'caution'>The tag must be between four and five characters long!</span>")
+		if(!a) //what a check
+			return TRUE
+		if(length(a) > 5)
+			to_chat(usr, "<span class = 'caution'>The tag must have a maximum of five characters!</span>")
 		else
 			gpstag = a
 			update_name()
