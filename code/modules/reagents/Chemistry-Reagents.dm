@@ -4412,7 +4412,7 @@
 				if(prob(5))
 					to_chat(H,"<span class='warning'>You burp.</span>")
 					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
-			if(15 to 200)
+			if(15 to 100)
 				if(prob(10))
 					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
 				if(prob(5))
