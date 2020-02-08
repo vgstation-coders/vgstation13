@@ -245,7 +245,7 @@ Status: []<BR>"},
 
 	..()
 
-	if(W.is_wrench(user) && !on && !raised && wrenchAnchor(user))
+	if(W.is_wrench(user) && !on && !raised && wrenchAnchor(user, W))
 		// This code handles moving the turret around. After all, it's a portable turret!
 
 		if(anchored)
@@ -654,13 +654,13 @@ Status: []<BR>"},
 	// this is a bit unweildy but self-explanitory
 	switch(build_step)
 		if(0) // first step
-			if(W.is_wrench(user) && !anchored && wrenchAnchor(user))
+			if(W.is_wrench(user) && !anchored && wrenchAnchor(user, W))
 				build_step = 1
 				anchored = 1
 				return
 
 			else if(iscrowbar(W) && !anchored)
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				to_chat(user, "You dismantle the turret construction.")
 				getFromPool(/obj/item/stack/sheet/metal, loc, 5)
 				qdel(src)
@@ -678,7 +678,7 @@ Status: []<BR>"},
 					to_chat(user, "<span class='warning'>You need at least 2 [stack] to add internal armor.</span>")
 					return
 
-			else if(W.is_wrench(user) && wrenchAnchor(user))
+			else if(W.is_wrench(user) && wrenchAnchor(user, W))
 				build_step = 0
 				anchored = 0
 				return
@@ -686,7 +686,7 @@ Status: []<BR>"},
 
 		if(2)
 			if(W.is_wrench(user))
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				to_chat(user, "<span class='notice'>You bolt the metal armor into place.</span>")
 				build_step = 3
 				return
@@ -715,7 +715,7 @@ Status: []<BR>"},
 				return
 
 			else if(W.is_wrench(user))
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				to_chat(user, "You remove the turret's metal armor bolts.")
 				build_step = 2
 				return
@@ -735,7 +735,7 @@ Status: []<BR>"},
 
 		if(5)
 			if(W.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				build_step = 6
 				to_chat(user, "<span class='notice'>You close the internal access hatch.</span>")
 				return
@@ -754,7 +754,7 @@ Status: []<BR>"},
 					return
 
 			else if(W.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				build_step = 5
 				to_chat(user, "You open the internal access hatch.")
 				return
@@ -775,7 +775,7 @@ Status: []<BR>"},
 					qdel(src)
 
 			else if(iscrowbar(W))
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				to_chat(user, "You pry off the turret's exterior armor.")
 				getFromPool(/obj/item/stack/sheet/metal, loc, 2)
 				build_step = 6

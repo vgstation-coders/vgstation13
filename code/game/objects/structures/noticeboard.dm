@@ -21,7 +21,7 @@
 /obj/structure/noticeboard/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
 	if(O.is_wrench(user))
 		to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+		O.playtoolsound(src, 100)
 		new /obj/item/stack/sheet/wood (src.loc,2)
 		qdel(src)
 	if(istype(O, /obj/item/weapon/paper))

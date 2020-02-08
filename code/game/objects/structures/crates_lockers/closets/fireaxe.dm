@@ -134,7 +134,7 @@
 	else
 		if(O.is_wrench(user) && src.localopened && !src.fireaxe)
 			to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			O.playtoolsound(src, 100)
 			new /obj/item/stack/sheet/plasteel (src.loc,2)
 			qdel(src)
 		if(smashed)

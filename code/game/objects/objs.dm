@@ -475,7 +475,7 @@ a {
  * @param time_to_wrench The time to complete the wrenchening
  * @returns TRUE on success, FALSE on fail
  */
-/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench = 3 SECONDS) //proc to wrench an object that can be secured
+/obj/proc/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS) //proc to wrench an object that can be secured
 	if(!canAffixHere(user))
 		return FALSE
 	if(!anchored)
@@ -488,7 +488,8 @@ a {
 				return FALSE
 	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
-	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(I)
+		I.playtoolsound(loc, 50)
 	if(do_after(user, src, time_to_wrench))
 		if(!canAffixHere(user))
 			return FALSE

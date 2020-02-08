@@ -149,10 +149,10 @@
 	</ul>"}
 
 /obj/machinery/meter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!W.is_wrench(user))
+	if(!W.is_wrench(user))
 		return ..()
 
-	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	W.playtoolsound(src, 50)
 	to_chat(user, "<span class='notice'>You begin to unfasten \the [src]...</span>")
 	if (do_after(user, src, 40))
 		user.visible_message( \

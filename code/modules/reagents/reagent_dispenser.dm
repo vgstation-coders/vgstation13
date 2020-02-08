@@ -24,7 +24,7 @@
 
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.is_wrench(user) && wrenchable())
-		return wrenchAnchor(user)
+		return wrenchAnchor(user, W)
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()

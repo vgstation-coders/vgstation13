@@ -191,7 +191,7 @@
 
 	if(istype(I, /obj/item/weapon/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
-		playsound('sound/items/Crowbar.ogg', 50, 1)
+		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
 			getFromPool(/obj/item/stack/sheet/metal, loc, 2)
 			qdel(src)
@@ -289,6 +289,7 @@
 						watertemp = "searing hot"
 					if("searing hot")
 						watertemp = "cool"
+				I.playtoolsound(src, 100)
 				user.visible_message("<span class='warning'>[user] adjusts \the [src]'s temperature with \a [I.name].</span>",
 				"<span class='notice'>You adjust \the [src]'s temperature with \a [I.name], the water is now [watertemp].</span>")
 				add_fingerprint(user)

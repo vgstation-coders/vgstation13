@@ -134,7 +134,7 @@
 			new /obj/item/stack/sheet/metal(src.loc,5)
 			qdel(src)
 	if(P.is_wrench(user))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		P.playtoolsound(src, 50)
 		if(dir==4)
 			dir=8
 		else

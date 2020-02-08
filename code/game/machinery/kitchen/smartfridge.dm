@@ -338,7 +338,7 @@
 	return TRUE
 
 //Unwrenching a SmartFridge is especially longer to make it much easier to intervene
-/obj/machinery/smartfridge/wrenchAnchor(var/mob/user, var/time_to_wrench = 10 SECONDS)
+/obj/machinery/smartfridge/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 10 SECONDS)
 
 	. = ..()
 	if(.)

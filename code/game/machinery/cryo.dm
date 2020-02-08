@@ -396,15 +396,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		beaker.forceMove(get_step(loc, SOUTH))
 		beaker = null
 
-	update_icon()
-
-/obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user)
+/obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(on)
 		to_chat(user, "[src] is on.")
-		return
+		return FALSE
 	if(occupant)
 		to_chat(user, "<span class='warning'>[occupant.name] is inside the [src]!</span>")
-		return
+		return FALSE
 	if(beaker) //special check to avoid destroying this
 		detach()
 	return ..()

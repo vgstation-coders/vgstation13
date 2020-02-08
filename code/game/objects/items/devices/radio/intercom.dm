@@ -83,7 +83,7 @@
 		if(3)
 			if(iswirecutter(W) && b_stat && wires.IsAllCut())
 				to_chat(user, "<span class='notice'>You cut out the intercoms wiring and disconnect its electronics.</span>")
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10))
 					new /obj/item/stack/cable_coil(get_turf(src),5)
 					on = 0
@@ -96,7 +96,7 @@
 				return ..()
 		if(2)
 			if(W.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10))
 					update_icon()
 					on = 1

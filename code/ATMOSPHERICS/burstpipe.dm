@@ -39,10 +39,10 @@
 		node1.build_network()
 
 /obj/machinery/atmospherics/unary/vent/burstpipe/attackby(var/obj/item/weapon/W, var/mob/user)
-	if (!W.is_wrench(user))
+	if(!W.is_wrench(user))
 		return ..()
 	var/turf/T = get_turf(src)
-	playsound(T, 'sound/items/Ratchet.ogg', 50, 1)
+	W.playtoolsound(T, 50)
 	to_chat(user, "<span class='notice'>You begin to remove \the [src]...</span>")
 	if (do_after(user, src, 40))
 		user.visible_message( \

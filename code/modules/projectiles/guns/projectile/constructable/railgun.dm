@@ -166,10 +166,10 @@
 	else if(W.is_screwdriver(user))
 		if(rails_secure)
 			to_chat(user, "You loosen the rail assembly within \the [src].")
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 		else
 			to_chat(user, "You tighten the rail assembly inside \the [src].")
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 		rails_secure = !rails_secure
 
 /obj/item/weapon/gun/projectile/railgun/examine(mob/user)

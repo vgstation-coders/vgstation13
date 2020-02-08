@@ -285,7 +285,7 @@
 /obj/item/weapon/bloodlust/attackby(obj/item/weapon/W, mob/living/user)
 	..()
 	if(W.is_screwdriver(user) && user.is_holding_item(src))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		W.playtoolsound(loc, 50)
 		to_chat(user, "<span class='notice'>You detach [src] from your arm.</span>")
 		new /obj/item/weapon/melee/energy/hfmachete(user.loc)
 		new /obj/item/weapon/melee/energy/hfmachete(user.loc)

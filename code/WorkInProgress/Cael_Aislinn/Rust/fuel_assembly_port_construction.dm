@@ -45,7 +45,7 @@
 	if (iscrowbar(W))
 		if(opened)
 			if(has_electronics & 1)
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				to_chat(user, "You begin removing the circuitboard")//lpeters - fixed grammar issues
 
 				if(do_after(user, src, 50))

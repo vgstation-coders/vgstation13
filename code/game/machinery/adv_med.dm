@@ -198,10 +198,10 @@
 	update_icon()
 	set_light(0)
 
-/obj/machinery/bodyscanner/crowbarDestroy(mob/user)
+/obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
-		return
+		return FALSE
 	return ..()
 
 /obj/machinery/bodyscanner/attackby(obj/item/weapon/W as obj, user as mob)

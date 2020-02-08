@@ -182,10 +182,10 @@
 		return P
 	return 0
 
-/obj/machinery/processor/crowbarDestroy(mob/user)
+/obj/machinery/processor/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(contents.len)
 		to_chat(user, "You can't do that while something is loaded in \the [src].")
-		return -1
+		return 0
 	return ..()
 
 /obj/machinery/processor/attackby(var/obj/item/O, var/mob/user)

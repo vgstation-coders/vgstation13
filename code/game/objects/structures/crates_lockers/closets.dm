@@ -218,7 +218,7 @@
 
 /obj/structure/closet/proc/add_lock(var/obj/item/weapon/circuitboard/airlock/E, var/mob/user)
 	if(has_lock_type && !electronics && E && E.icon_state != "door_electronics_smoked")
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		E.playtoolsound(src, 100)
 		user.visible_message("[user] is installing electronics on \the [src].", "You start to install electronics into \the [src].")
 		if(do_after(user, src, 40))
 			var/obj/structure/closet/new_closet
@@ -249,7 +249,7 @@
 
 /obj/structure/closet/proc/remove_lock(var/mob/user)
 	if(has_lockless_type)
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		electronics.playtoolsound(src, 100)
 		user.visible_message("[user] is removing \the [src]'s electronics.", "You start removing \the [src]'s electronics.")
 		if(do_after(user, src, 40))
 			var/obj/structure/closet/new_closet

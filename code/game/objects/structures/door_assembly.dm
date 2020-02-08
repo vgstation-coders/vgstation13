@@ -222,7 +222,7 @@
 			return
 	else if(W.is_wrench(user) && state == 0)
 		busy = 1
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		if(anchored)
 			user.visible_message("[user] unsecures the airlock assembly from the floor.", "You start to unsecure the airlock assembly from the floor.")
 		else
@@ -249,7 +249,7 @@
 
 	else if(iswirecutter(W) && state == 1 )
 		busy = 1
-		playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] cuts the wires from the airlock assembly.", "You start to cut the wires from airlock assembly.")
 
 		if(do_after(user, src, 40))
@@ -262,7 +262,7 @@
 
 	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && state == 1 && W:icon_state != "door_electronics_smoked")
 		busy = 1
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] installs the electronics into the airlock assembly.", "You start to install electronics into the airlock assembly.")
 		user.drop_item(W, src, force_drop = 1)
 
@@ -281,7 +281,7 @@
 
 	else if(iscrowbar(W) && state == 2 )
 		busy = 1
-		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to install electronics into the airlock assembly.")
 
 		if(do_after(user, src, 40))
@@ -325,7 +325,7 @@
 
 	else if(W.is_screwdriver(user) && state == 2 )
 		busy = 1
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		to_chat(user, "<span class='notice'>Now finishing the airlock.</span>")
 
 		if(do_after(user, src, 40))

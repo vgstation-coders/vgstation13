@@ -167,7 +167,7 @@
 	emp_act(1)
 	return 1
 
-/obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user) //don't like the copy/paste, but the proc has special handling in the middle so we need it
+/obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I) //don't like the copy/paste, but the proc has special handling in the middle so we need it
 	if(..())
 		while ( sheets > 0 )
 			var/obj/item/stack/sheet/G = new sheet_path(src.loc)
@@ -176,10 +176,10 @@
 			else
 				G.amount = sheets
 			sheets -= G.amount
-		return 1
-	return -1
+		return TRUE
+	return FALSE
 
-/obj/machinery/power/port_gen/pacman/wrenchAnchor(var/mob/user)
+/obj/machinery/power/port_gen/pacman/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

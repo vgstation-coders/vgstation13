@@ -106,10 +106,10 @@
 	stat |= BROKEN
 	update_icon()
 
-/obj/machinery/computer/togglePanelOpen(var/obj/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)
+/obj/machinery/computer/togglePanelOpen(var/obj/item/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)
 	if(!circuit) //we can't disassemble with no circuit, so add some fucking circuits if you want disassembly
 		return
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+	toggleitem.playtoolsound(src, 50)
 	user.visible_message(	"[user] begins to unscrew \the [src]'s monitor.",
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))

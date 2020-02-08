@@ -348,10 +348,10 @@
 	go_out()
 	return
 
-/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user)
+/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
-		return
+		return FALSE
 	for(biomass; biomass > 0;biomass -= BIOMASS_CHUNK)
 		new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(loc)
 	return..()
