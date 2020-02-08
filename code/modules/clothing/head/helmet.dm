@@ -130,6 +130,7 @@
 	item_state = "hopcap"
 	icon_state = "hopcap"
 	body_parts_covered = HEAD
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/aviatorhelmet
 	name = "Aviator Helmet"

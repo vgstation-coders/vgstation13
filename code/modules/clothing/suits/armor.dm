@@ -50,6 +50,7 @@
 	desc = "An armoured jacket with silver rank pips and livery."
 	icon_state = "warden_jacket"
 	item_state = "armor"
+	species_fit = list (VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/neorussian
 	name = "neo-Russian vest"
