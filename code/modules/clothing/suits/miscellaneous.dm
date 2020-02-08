@@ -48,7 +48,7 @@ var/list/tag_suits_list = list()
 		return 1
 	return ..()
 
-/obj/item/clothing/suit/tag/attack_hand(var/mob/living/carbon/human/H)
+/obj/item/clothing/suit/tag/attack_self(var/mob/living/carbon/human/H)
 	if (H.incapacitated())
 		return
 	else
@@ -57,37 +57,40 @@ var/list/tag_suits_list = list()
 /obj/item/clothing/suit/tag/proc/get_window_text(var/mob/living/carbon/human/H)
 	var/dat = list()
 	dat += "<h3>Laser tag games</h3> <br/>"
-	dat += "<b>Tag:</b> [get_gamer_tag(H)]"
+	dat += "<b>Tag:</b> [get_gamer_tag(H)]<br/>"
+	dat += "<hr/>"
 	if (!my_laser_tag_game)
 		dat += "Available laser tag games: <br/>"
 		for (var/datum/laser_tag_game/game in laser_tag_games)
-			dat += "<b>[game.name]</b> - <a href='?src=\ref[src]&join_game=\ref[game]>Join!</a> <br/>'"
+			dat += "<b>[game.name]</b> - <a href='?src=\ref[src]&join_game=\ref[game]'>Join!</a> <br/>'"
 	else
 		dat += "My game: <b>[my_laser_tag_game.name]</b>"
 		if (my_laser_tag_game.owner == player)
-			dat += "<a href='?src=\ref[src]&edit_game=\ref[my_laser_tag_game]'>Edit/delete</a>"
+			dat += " -- <a href='?src=\ref[src]&edit_game=\ref[my_laser_tag_game]'>Edit/delete</a>"
 		dat += "<br/>"
 		dat += "<b>Mode:</b> [my_laser_tag_game.mode] <br/>"
-		dat += "<a href='?src=\ref[src]&get_score=\ref[my_laser_tag_game]'>Get scoreboard/a><br/>"
+		dat += "<a href='?src=\ref[src]&get_score=\ref[my_laser_tag_game]'>Get scoreboard</a><br/>"
 		dat += "<a href='?src=\ref[src]&leave_game=\ref[my_laser_tag_game]'>Leave game</a><br/>"
-
+	dat += "<hr/>"
+	dat += "<a href='?src=\ref[src]&create_game=1'>Create a new game</a><br/>"
+	dat += "<hr/>"
 	dat += "<a href='?src=\ref[src]&clear_gamertag=1'>Clear tag</a>"
 	
 	return jointext(dat,"")
 
 /obj/item/clothing/suit/tag/proc/refresh_edit_window(var/mob/user, var/datum/laser_tag_game/my_laser_tag_game)
 	var/dat = {"
-		"<h3>"Game parameters</h3>"
-		"<br/>"
-		"<b>Mode:</b> <a href='?src=\ref[src]&game_mode=\ref[my_laser_tag_game]'>[my_laser_tag_game.mode] </a><br/>"
-		"<b>Fire mode:</b> <a href='?src=\ref[src]&fire_mode=\ref[my_laser_tag_game]'>[my_laser_tag_game.fire_mode] </a> <br/>"
-		"<b>Stun time:</b> <a href='?src=\ref[src]&stun_time=\ref[my_laser_tag_game]'>[my_laser_tag_game.stun_time] </a> <br/>"
-		"<b>Disable time:</b> <a href='?src=\ref[src]&disable_time=\ref[my_laser_tag_game]'>[my_laser_tag_game.disable_time] </a> <br/>"
-		"<b><a href='?src=\ref[src]&delete_game=\ref[my_laser_tag_game]'>Delete the game</a></b> <br/>"
-		"<br/>"
-		"<b><a href='?src=\ref[src]&edition_done=\ref[my_laser_tag_game]'>Done</a></b>"
-	"}
-	user << browse(dat,"window=laser_tag_window2;size=500x500")
+		<h3>Game parameters</h3>
+		<br/>
+		<b>Mode:</b> <a href='?src=\ref[src]&game_mode=\ref[my_laser_tag_game]'>[my_laser_tag_game.mode] </a><br/>
+		<b>Fire mode:</b> <a href='?src=\ref[src]&fire_mode=\ref[my_laser_tag_game]'>[my_laser_tag_game.fire_mode] </a> <br/>
+		<b>Stun time:</b> <a href='?src=\ref[src]&stun_time=\ref[my_laser_tag_game]'>[my_laser_tag_game.stun_time] </a> <br/>
+		<b>Disable time:</b> <a href='?src=\ref[src]&disable_time=\ref[my_laser_tag_game]'>[my_laser_tag_game.disable_time] </a> <br/>
+		<b><a href='?src=\ref[src]&delete_game=\ref[my_laser_tag_game]'>Delete the game</a></b> <br/>
+		<br/>
+		<b><a href='?src=\ref[src]&edition_done=\ref[my_laser_tag_game]'>Done</a></b>
+	""}
+	user << browse(dat,"window=laser_tag_window2;size=250x250")
 
 /obj/item/clothing/suit/tag/Topic(href, href_list)
 	if(..())
@@ -96,9 +99,20 @@ var/list/tag_suits_list = list()
 	if (href_list["join_game"])
 		var/datum/laser_tag_game/game = locate(href_list["join_game"])
 		game.handle_new_player(player, usr)
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=700x500")
+		my_laser_tag_game = game
+		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
 		return
 	
+	if (href_list["create_game"])
+		var/datum/laser_tag_game/game = new
+		game.owner = player
+		my_laser_tag_game = game
+		game.name = "[get_first_word(usr.name)]'s game"
+		game.handle_new_player(player, usr)
+		refresh_edit_window(usr, game)
+		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		return
+
 	// Game parametrisation
 	if (href_list["edit_game"])
 		var/datum/laser_tag_game/game = locate(href_list["edit_game"])
@@ -141,18 +155,18 @@ var/list/tag_suits_list = list()
 	if (href_list["disable_time"])
 		var/datum/laser_tag_game/game = locate(href_list["disable_time"])
 		var/choice = input(usr, "Choose the disbale duration.", "Disable duration") as null|num
-		game.disable_time = clamp(choice, 0, 12)
+		game.disable_time = clamp(choice, 0, 30)
 		refresh_edit_window(usr, game)
 		return
 
 	if (href_list["edition_done"])
-		usr << browse(null,"window=laser_tag_window2;size=500x500")
+		usr << browse(null,"window=laser_tag_window2;size=250x250")
 		return
 
 	if (href_list["delete_game"])
 		var/datum/laser_tag_game/game = locate(href_list["delete_game"])
 		qdel(game)
-		usr << browse(null,"window=laser_tag_window2;size=500x500")
+		usr << browse(null,"window=laser_tag_window2;size=250x250")
 		return
 	// End game parametrisation
 
@@ -164,13 +178,13 @@ var/list/tag_suits_list = list()
 	if (href_list["leave_game"])
 		var/datum/laser_tag_game/game = locate(href_list["leave_game"])
 		game.kick_player(usr)
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=700x500")
+		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
 		return
 	
 	if (href_list["clear_gamertag"])
 		my_laser_tag_game = null
 		player = null
-		usr << browse(null,"window=laser_tag_window;size=700x500")
+		usr << browse(null,"window=laser_tag_window;size=500x250")
 		to_chat(usr, "<span = 'notice'>You clear your tag out of the vest and leave it to be used by someone else.</span>")
 		return
 
@@ -197,8 +211,17 @@ var/list/tag_suits_list = list()
 			for(var/obj/item/clothing/accessory/lasertag/L in C.accessories)
 				return L.source_vest
 
-// The proc is intentionally empty and overriden later.
 /obj/item/clothing/suit/tag/proc/get_gamer_tag(var/mob/living/carbon/human/H)
+	if (!player)
+		var/datum/laser_tag_participant/gamer = new
+		gamer.nametag = get_first_word(H.name) + "#[rand(1000, 9999)]"
+		switch (src.type)
+			if (/obj/item/clothing/suit/tag/bluetag)
+				gamer.team = "Blue"
+			if (/obj/item/clothing/suit/tag/redtag)
+				gamer.team = "Red"
+		src.player = gamer
+	return player.nametag
 
 /obj/item/clothing/suit/tag/bluetag
 	name = "blue laser tag armour"
@@ -207,15 +230,6 @@ var/list/tag_suits_list = list()
 	item_state = "bluetag"
 	allowed = list (/obj/item/weapon/gun/energy/tag/blue)
 
-/obj/item/clothing/suit/tag/bluetag/get_gamer_tag(var/mob/living/carbon/human/H)
-	if (player)
-		return player.nametag
-	else // Let's create a new one on the fly
-		var/datum/laser_tag_participant/gamer = new
-		gamer.nametag = get_first_word(H.name) + "#[rand(1000, 9999)]"
-		gamer.team = "Blue"
-		src.player = gamer
-
 /obj/item/clothing/suit/tag/redtag
 	name = "red laser tag armour"
 	desc = "Pew pew pew."
@@ -223,14 +237,6 @@ var/list/tag_suits_list = list()
 	item_state = "redtag"
 	allowed = list (/obj/item/weapon/gun/energy/tag/red)
 
-/obj/item/clothing/suit/tag/redtag/get_gamer_tag(var/mob/living/carbon/human/H)
-	if (player)
-		return player.nametag
-	else // Let's create a new one on the fly
-		var/datum/laser_tag_participant/gamer = new
-		gamer.nametag = get_first_word(H.name) + "#[rand(1000, 9999)]"
-		gamer.team = "Red"
-		src.player = gamer
 /*
  * Costume
  */

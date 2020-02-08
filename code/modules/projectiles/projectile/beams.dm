@@ -631,11 +631,12 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 /obj/item/projectile/beam/lasertag/on_hit(var/atom/target, var/blocked = 0)
 	if(ismob(target))
 		var/mob/M = target
-		var/obj/item/clothing/suit/tag/their_tag = get_tag_armor(M)
-		if(is_type_in_list(tag, laser_tag_vests))
-			var/datum/laser_tag_game/game = their_tag.my_laser_tag_game
+		var/obj/item/clothing/suit/tag/target_tag = get_tag_armor(M)
+		var/obj/item/clothing/suit/tag/firer_tag = get_tag_armor(firer)
+		if(is_type_in_list(target_tag, laser_tag_vests))
+			var/datum/laser_tag_game/game = firer_tag.my_laser_tag_game
 			if (!game) // No registered game : classic laser tag
-				if (!(is_type_in_list(their_tag, enemy_vest_types)))
+				if (!(is_type_in_list(target_tag, enemy_vest_types)))
 					return 1
 				if(!M.lying) //Kick a man while he's down, will ya
 					var/obj/item/weapon/gun/energy/tag/taggun = shot_from
@@ -644,27 +645,28 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 				M.Knockdown(2)
 				M.Stun(2)
 			else // We've got a game on the reciever, let's check if we've got a game on the wearer.
-				var/obj/item/clothing/suit/tag/my_tag = get_tag_armor(firer)
-				if (!my_tag || !my_tag.my_laser_tag_game || (my_tag.my_laser_tag_game != their_tag.my_laser_tag_game))
+				if (!firer_tag || !firer_tag.my_laser_tag_game || (target_tag.my_laser_tag_game != firer_tag.my_laser_tag_game))
 					return 1
-				if (!my_tag.player || !their_tag.player)
+				if (!target_tag.player || !firer_tag.player)
 					CRASH("A suit has a laser tag game registered, but no players attached.")
 
-				var/datum/laser_tag_participant/my_player = my_tag.player
-				var/datum/laser_tag_participant/their_player = my_tag.player
+				var/datum/laser_tag_participant/target_player = target_tag.player
+				var/datum/laser_tag_participant/firer_player = firer_tag.player
 
-				if (my_tag.my_laser_tag_game.mode == LT_MODE_TEAM && !(is_type_in_list(their_tag, enemy_vest_types))) // If not a free for all, we check for enemy vest type
+				if (firer_tag.my_laser_tag_game.mode == LT_MODE_TEAM && !(is_type_in_list(target_tag, enemy_vest_types)))
 					return 1
 				if(!M.lying) // Not counting scores if the opponent is lying down.
-					my_player.total_hits++
-					their_player.total_hit_by++
-					their_player.hit_by[my_player.tag]++
-				
-				M.Knockdown(my_tag.my_laser_tag_game.stun_time/2)
-				M.Stun(my_tag.my_laser_tag_game.stun_time/2)	
+					firer_player.total_hits++
+					target_player.total_hit_by++
+					target_player.hit_by[firer_player.nametag]++
+				var/taggun_index = M.find_held_item_by_type(/obj/item/weapon/gun/energy/tag)
+				if (taggun_index)
+					var/obj/item/weapon/gun/energy/tag/their_gun = M.held_items[taggun_index]
+					their_gun.cooldown(target_tag.my_laser_tag_game.disable_time/2)
+				M.Knockdown(target_tag.my_laser_tag_game.stun_time/2)
+				M.Stun(target_tag.my_laser_tag_game.stun_time/2)	
 				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
 				if(istype(taggun))
-					taggun.cooldown(my_tag.my_laser_tag_game.disable_time/2)
 					taggun.score()
 	return 1
 
