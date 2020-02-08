@@ -73,6 +73,8 @@
 		new /obj/item/ammo_storage/magazine/a12mm/ops/empty(), \
 		new /obj/item/ammo_storage/magazine/a75/empty(), \
 		new /obj/item/ammo_storage/box/a75(), \
+		new /obj/item/ammo_casing/shotgun/dragonsbreath(), \
+		new /obj/item/weapon/storage/box/dragonsbreathshells(), \
 		)
 	)
 

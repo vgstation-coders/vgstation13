@@ -115,7 +115,7 @@
 
 // called by solar tracker when sun position changes (somehow, that's not supposed to be in process)
 /obj/machinery/power/solar/control/proc/tracker_update(angle)
-	if(track != 2 || stat & (NOPOWER | BROKEN))
+	if(track != TRACK_AUTOMATIC || stat & (NOPOWER | BROKEN))
 		return
 
 	cdir = angle

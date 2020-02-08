@@ -421,6 +421,7 @@
 #define DENSITY_SEPARATED_SAMPLE 			"density_separated_sample"
 #define ANALYSIS_SAMPLE 			"analysis_sample"
 #define CHEMICAL_WASTE 			"chemical_waste"
+#define TRINITRINE		"trinitrine"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"

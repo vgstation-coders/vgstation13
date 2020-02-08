@@ -1647,6 +1647,22 @@
 	density = 4.33
 	specheatcap = 2.64
 
+/datum/reagent/nitroglycerin/on_mob_life(var/mob/living/M)
+	M.adjustToxLoss(2 * REM)
+	if(prob(80))
+		M.adjustOxyLoss(2 * REM)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/E = H.internal_organs_by_name["heart"]
+		if(istype(E) && !E.robotic)
+			if(E.damage > 0)
+				E.damage = max(0, E.damage - 0.2)
+		if(prob(15))
+			H.custom_pain("You feel a throbbing pain in your head", 1)
+			M.adjustBrainLoss(2 * REM)
+	if(prob(50))
+		M.drowsyness = max(M.drowsyness, 4)
+
 /datum/reagent/radium
 	name = "Radium"
 	id = RADIUM
@@ -2090,8 +2106,9 @@
 	O.clean_blood()
 	if(istype(O, /obj/effect/decal/cleanable))
 		qdel(O)
-	else if(O.color && istype(O, /obj/item/weapon/paper))
-		O.color = null
+	else if(O.color)
+		O.color = ""
+	..()
 
 /datum/reagent/space_cleaner/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -2109,6 +2126,8 @@
 		for(var/mob/living/carbon/human/H in T)
 			if(isslimeperson(H))
 				H.adjustToxLoss(rand(5, 10)/10)
+
+	T.color = ""
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -2139,6 +2158,7 @@
 				if(H.shoes.clean_blood())
 					H.update_inv_shoes(0)
 		M.clean_blood()
+		M.color = ""
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2184,7 +2204,7 @@
 				else if(prob(5))
 					H.vomit()
 	data++
-
+	M.color = ""
 	M.adjustToxLoss(4 * REM)
 
 /datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -3012,6 +3032,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
+	custom_metabolism = REAGENTS_METABOLISM/2.5
 
 /datum/reagent/cryoxadone/on_mob_life(var/mob/living/M)
 
@@ -3032,6 +3053,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
+	custom_metabolism = REAGENTS_METABOLISM/2.5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 
@@ -5968,7 +5990,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#666300" //rgb: 102, 99, 0
 
-/datum/reagent/ethanol/deadrumm/threemileisland
+/datum/reagent/ethanol/deadrum/threemileisland
 	name = "Three Mile Island Iced Tea"
 	id = THREEMILEISLAND
 	description = "Made for a woman. Strong enough for a man."

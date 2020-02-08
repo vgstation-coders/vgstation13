@@ -25,11 +25,15 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES
 	speak_override = TRUE
 
+	var/anger_chance = 1
+
+	var/gives_milk = TRUE
 	var/datum/reagents/udder = null
 
 /mob/living/simple_animal/hostile/retaliate/goat/New()
-	udder = new(50)
-	udder.my_atom = src
+	if(gives_milk)
+		udder = new(50)
+		udder.my_atom = src
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/goat/Life()
@@ -38,7 +42,7 @@
 	. = ..()
 	if(.)
 		//chance to go crazy and start wacking stuff
-		if(!enemies.len && prob(1))
+		if(!enemies.len && prob(anger_chance))
 			Retaliate()
 
 		if(enemies.len && prob(10))

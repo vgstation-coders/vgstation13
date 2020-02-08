@@ -464,7 +464,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			if(!announcement_intercom || !istype(announcement_intercom))
 				announcement_intercom = new(null)
 
-			if(istype(t, /area/syndicate_station) || istype(t, /area/syndicate_mothership) || istype(t, /area/shuttle/syndicate_elite) )
+			if(istype(t, /area/shuttle/nuclearops) || istype(t, /area/syndicate_mothership) || istype(t, /area/shuttle/syndicate_elite) )
 				//give the syndies a bit of stealth
 				speech.message="[mobname] has died in Space!"
 			else

@@ -9,7 +9,6 @@ var/list/cyborg_list = list()
 	health = 300
 	flashed = FALSE
 
-	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon

@@ -34,6 +34,11 @@
 	see_in_dark=1
 	removed_type = /obj/item/organ/internal/eyes/muton
 
+/datum/organ/internal/eyes/compound
+	name = "compound eyes"
+	see_in_dark=3
+	removed_type = /obj/item/organ/internal/eyes/compound
+
 /datum/organ/internal/eyes/vox
 	name = "bird eyes"
 //	colourmatrix = list(1,0.0,0.0,0,\

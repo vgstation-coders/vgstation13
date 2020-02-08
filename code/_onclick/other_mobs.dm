@@ -47,6 +47,9 @@
 	if(ismob(A))
 		delayNextAttack(10)
 
+	if(!can_use_hand_or_stump())
+		to_chat(src, "You try to move your arm but nothing happens. Need a hand?")
+		return
 	if(src.can_use_hand())
 		A.attack_hand(src, params, proximity)
 	else

@@ -5947,3 +5947,102 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter
+	name = "suppermatter"
+	desc = "Extremely dense and powerful food."
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/suppermattershard
+	storage_slots = 1
+	slices_num = 4
+	icon_state = "suppermatter"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 48)
+	bitesize = 12
+	set_light(1.4,2,"#FFFF00")
+	
+/obj/item/weapon/reagent_containers/food/snacks/suppermattershard
+	name = "suppermatter shard"
+	desc = "A single portion of power."
+	icon_state = "suppermattershard"
+	bitesize = 3
+	trash = null	
+	
+/obj/item/weapon/reagent_containers/food/snacks/suppermattershard/New()
+	..()
+	set_light(1.4,1.4,"#FFFF00")
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter
+	name = "exciting suppermatter"
+	desc = "Extremely dense, powerful and exciting food!"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
+	storage_slots = 1
+	slices_num = 5
+	icon_state = "excitingsuppermatter"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 60)
+	bitesize = 12
+	set_light(1.4,2,"#FF0000")
+	
+/obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
+	name = "exciting suppermatter shard"
+	desc = "A single portion of exciting power!"
+	icon_state = "excitingsuppermattershard"
+	bitesize = 3
+	trash = null
+
+/obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard/New()
+	..()
+	set_light(1.4,1.4,"#FF0000")
+
+/obj/item/weapon/reagent_containers/food/snacks/grapejelly
+	name = "jelly"
+	desc = "The choice of choosy moms."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "grapejelly"
+
+/obj/item/weapon/reagent_containers/food/snacks/grapejelly/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	reagents.add_reagent (SUGAR, 2)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutbutter
+	name = "peanut butter"
+	desc = "A jar of smashed peanuts, contains no actual butter."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "peanutbutter"
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutbutter/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 3)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/saltednuts
+	name = "salted peanuts"
+	desc = "Popular in saloons."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "saltednuts"
+
+/obj/item/weapon/reagent_containers/food/snacks/saltednuts/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	reagents.add_reagent (SODIUMCHLORIDE, 2)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/pbj
+	name = "peanut butter and jelly sandwich"
+	desc = "A classic treat of childhood."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "pbj"
+	trash = /obj/item/trash/plate
+
+/obj/item/weapon/reagent_containers/food/snacks/pbj/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 4)
+	bitesize = 3

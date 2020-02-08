@@ -34,22 +34,6 @@
 		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		qdel(src)
 		return
-	if (iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(1, user))
-			to_chat(user, "You begin the delicate process of heating and moulding \the [src].")
-			WT.playtoolsound(user, 50)
-			if(do_after(user, src, 180))
-				to_chat(user, "You finish bending the metal into the shape of an ansible.")
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/ghetto_ansible/I = new (user.loc)
-					user.put_in_hands(I)
-					qdel(src)
-				else
-					new /obj/item/weapon/ghetto_ansible(loc)
-					qdel(src)
-			return
 	if (istype(W, /obj/item/stack/rods))
 		var/obj/item/stack/rods/rods = W
 		if (rods.amount >= 4)

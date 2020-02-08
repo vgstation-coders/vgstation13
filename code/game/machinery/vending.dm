@@ -2570,18 +2570,20 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/boaterhat = 10,
 		/obj/item/clothing/head/fedora = 10,
 		/obj/item/clothing/head/fez = 10,
+		/obj/item/clothing/head/soft/black = 10,
 		/obj/item/clothing/head/soft/blue = 10,
 		/obj/item/clothing/head/soft/green = 10,
 		/obj/item/clothing/head/soft/grey = 10,
 		/obj/item/clothing/head/soft/orange = 10,
 		/obj/item/clothing/head/soft/purple = 10,
 		/obj/item/clothing/head/soft/red = 10,
+		/obj/item/clothing/head/soft/mime = 10,
 		/obj/item/clothing/head/soft/yellow = 10,
-		/obj/item/clothing/head/soft/black = 10,
 		)
 	contraband = list(
+		/obj/item/clothing/mask/balaclava = 5,
 		/obj/item/clothing/head/bearpelt = 5,
-		/obj/item/clothing/head/energy_dome = 5
+		/obj/item/clothing/head/energy_dome = 5,
 		)
 	premium = list(
 		/obj/item/clothing/head/soft/rainbow = 1,

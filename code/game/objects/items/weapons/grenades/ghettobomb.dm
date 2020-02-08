@@ -139,8 +139,8 @@
 	process_shrapnel()
 	explosion(get_turf(src.loc),-1,0,2)
 
-	if(istype(loc, /obj/item/weapon/legcuffs/beartrap))
-		var/obj/item/weapon/legcuffs/beartrap/boomtrap = loc
+	if(istype(loc, /obj/item/weapon/beartrap))
+		var/obj/item/weapon/beartrap/boomtrap = loc
 		if(istype(boomtrap.loc, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = loc.loc
 			if(H.legcuffed == boomtrap)
@@ -150,6 +150,7 @@
 
 				qdel(H.legcuffed)
 				H.legcuffed = null
+				unlock_atom(H)
 				boomtrap.IED = null
 	qdel(src)
 
