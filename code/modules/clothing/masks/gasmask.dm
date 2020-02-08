@@ -274,6 +274,14 @@
 	can_flip = 0
 	canstage = 0
 
+/obj/item/clothing/mask/gas/oni
+	name = "oni mask"
+	desc = "Probably not as intimidating as you think it is."
+	icon_state = "onimask"
+	item_state = "onimask"
+	can_flip = 0
+	canstage = 0
+
 /obj/item/clothing/mask/gas/owl_mask
 	name = "owl mask"
 	desc = "Twoooo!"

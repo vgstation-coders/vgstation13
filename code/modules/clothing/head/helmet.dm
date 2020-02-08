@@ -123,6 +123,14 @@
 	item_state = "roman_c"
 	body_parts_covered = HEAD|EARS
 
+/obj/item/clothing/head/helmet/samurai
+	name = "samurai helmet"
+	desc = "Banzai!"
+	armor = list(melee = 40, bullet = 0, laser = 10, energy = 10, bomb = 10, bio = 0, rad = 0)
+	icon_state = "kabuto"
+	item_state = "kabuto"
+	body_parts_covered = HEAD|EARS
+
 /obj/item/clothing/head/helmet/hopcap
 	name = "Head of Personnel's Cap"
 	desc = "Papers, Please."
