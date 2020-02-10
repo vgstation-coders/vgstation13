@@ -240,11 +240,11 @@
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
-	supervisors = "the chief medical officer"
+	supervisors = "the chief medical officer and research director"
 	wage_payout = 45
 	selection_color = "#ffeef0"
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva)
-	minimal_access = list(access_medical, access_virology, access_biohazard)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva, access_science)
+	minimal_access = list(access_medical, access_virology, access_biohazard, access_science)
 	alt_titles = list("Pathologist", "Microbiologist")
 
 	pdaslot=slot_belt
@@ -253,7 +253,7 @@
 /datum/job/virologist/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0
-	H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
+	H.equip_or_collect(new /obj/item/device/radio/headset/headset_medsci(H), slot_ears)
 	switch(H.backbag)
 		if(2)
 			H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
