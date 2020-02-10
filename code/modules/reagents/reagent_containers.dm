@@ -129,14 +129,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			return 0
 
 
-// this prevented pills, food, and other things from being picked up by bags.
-// possibly intentional, but removing it allows us to not duplicate functionality.
-// -Sayu (storage consolidation)
-/*
-/obj/item/weapon/reagent_containers/attackby(obj/item/I as obj, mob/user as mob)
-	return
-*/
-
 /**
  * This usually handles reagent transfer between containers and splashing the contents.
  * Please see `transfer()` for a general reusable proc for that.

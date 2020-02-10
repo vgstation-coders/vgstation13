@@ -1,11 +1,11 @@
 var/global/list/outbreak_level_words=list(
-	/* 1 */ 'sound/vox_fem/one.ogg',
-	/* 2 */ 'sound/vox_fem/two.ogg',
-	/* 3 */ 'sound/vox_fem/three.ogg',
-	/* 4 */ 'sound/vox_fem/four.ogg',
-	/* 5 */ 'sound/vox_fem/five.ogg',
-	/* 6 */ 'sound/vox_fem/six.ogg',
-	/* 7 */ 'sound/vox_fem/seven.ogg',
+	/* 1 */ 'sound/AI/one.ogg',
+	/* 2 */ 'sound/AI/two.ogg',
+	/* 3 */ 'sound/AI/three.ogg',
+	/* 4 */ 'sound/AI/four.ogg',
+	/* 5 */ 'sound/AI/five.ogg',
+	/* 6 */ 'sound/AI/six.ogg',
+	/* 7 */ 'sound/AI/seven.ogg',
 )
 /proc/biohazard_alert()
 	command_alert(/datum/command_alert/biohazard_alert)

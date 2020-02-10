@@ -57,11 +57,12 @@
 	to_chat(current, "These are your laws now:")
 	current.show_laws()
 	current << sound('sound/machines/lawsync.ogg')
-	for(var/mob/living/silicon/robot/R in mob_list)
+	for(var/mob/living/silicon/robot/R in cyborg_list)
 		if(R.lawupdate && (R.connected_ai == current))
 			to_chat(R, "These are your laws now:")
 			R.show_laws()
 			R << sound('sound/machines/lawsync.ogg')
+			R.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 	to_chat(user, "<span class='notice'>Upload complete. The AI's laws have been modified.</span>")
 
 /obj/machinery/computer/aiupload/proc/same_zlevel()
@@ -150,6 +151,7 @@
 	to_chat(current, "These are your laws now:")
 	current.show_laws()
 	current << sound('sound/machines/lawsync.ogg')
+	current.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 	to_chat(usr, "<span class='notice'>Upload complete. The robot's laws have been modified.</span>")
 
 /obj/machinery/computer/borgupload/proc/install_module(var/obj/item/weapon/aiModule/M,var/mob/user)

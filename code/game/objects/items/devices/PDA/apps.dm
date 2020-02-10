@@ -129,27 +129,6 @@ var/global/list/pda_app_menus = list(
 		holomap = null
 	..()
 
-/* Old Station Map Stuff
-/datum/pda_app/station_map
-	name = "Station Map"
-	desc = "Displays a minimap of the station. You'll find a marker at your location. Place more markers using coordinates."
-	price = 50
-	menu = PDA_APP_STATIONMAP
-	var/list/markers = list()
-	var/markx = 1
-	var/marky = 1
-
-/datum/pda_app/station_map/Destroy()
-	markers = null
-	..()
-
-/datum/minimap_marker
-	var/name = "default marker"
-	var/x = 1
-	var/y = 1
-	var/num = 0
-*/
-
 ///////////SNAKEII//////////////////////////////////////////////////////////////
 
 /datum/pda_app/snake

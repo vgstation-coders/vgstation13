@@ -23,10 +23,7 @@ var/round_end_info = ""
 var/global/list/deadmins = list()
 
 //List of vars that require DEBUG on top of VAREDIT to be able to edit
-var/list/lockedvars = list("vars", "client", "holder")
-
-//List of vars that you can NEVER edit through VV itself
-var/list/nevervars = list("step_x", "step_y", "step_size")
+var/list/lockedvars = list("vars", "client", "holder", "step_x", "step_y", "step_size")
 
 // List of types and how many instances of each type there are.
 var/global/list/type_instances[0]
@@ -133,6 +130,8 @@ var/list/prisonsecuritywarp = list()	//prison security goes to these
 var/list/prisonwarped = list()	//list of players already warped
 var/list/blobstart = list()
 var/list/ninjastart = list()
+var/list/voxstart = list() //Vox raider spawn points
+var/list/voxlocker = list() //Vox locker spawn points
 //	list/traitors = list()	//traitor list
 var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
 var/list/diagonal = list(NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
@@ -305,8 +304,6 @@ var/global/list/volunteer_gladiators = list()
 var/global/list/ready_gladiators = list()
 var/global/list/never_gladiators = list()
 
-var/global/list/achievements = list()
-
 //icons that appear on the Round End pop-up browser
 var/global/list/end_icons = list()
 
@@ -356,7 +353,6 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 // Account default values
 #define DEPARTMENT_START_FUNDS 500
 #define DEPARTMENT_START_WAGE 50
-#define PLAYER_START_WAGE 50
 
 //HUD MINIMAPS
 var/list/holoMiniMaps = list()
@@ -395,7 +391,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/humanoid,						// JUST DON'T DO IT, OK?
 		/mob/living/simple_animal/hostile/retaliate/cockatrice,			// I'm just copying this from transmog.
 		/mob/living/simple_animal/hostile/giant_spider/hunter/dead,		// They are dead.
-		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// They aren't supposed to be playable.
+		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// Your motherfucking life ends in 5 seconds.
 		/mob/living/simple_animal/hologram,								// Can't live outside the holodeck.
 		/mob/living/simple_animal/hostile/carp/holocarp,				// These can but they're just a retarded hologram carp reskin for the love of god.
 		/mob/living/slime_pile,											// They are dead.

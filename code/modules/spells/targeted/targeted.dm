@@ -170,6 +170,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	target.eye_blurry += amt_eye_blurry
 	target.dizziness += amt_dizziness
 	target.confused += amt_confused
+	target.confused_intensity = CONFUSED_MAGIC
 	target.stuttering += amt_stuttering
 
 /spell/targeted/proc/tinfoil_check(mob/living/carbon/human/user)

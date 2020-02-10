@@ -49,7 +49,7 @@
 			"<span class='notice'>You dig out some snow with \the [W].</span>")
 			extract_snowballs(5, FALSE, user)
 
-/turf/simulated/floor/plating/snow/attack_hand(mob/user as mob)
+/turf/simulated/floor/plating/snow/CtrlClick(mob/user)
 
 	//Reach down and make a snowball
 	if(!snowballs)
@@ -116,9 +116,6 @@
 
 /turf/simulated/floor/plating/snow/cold
 	temperature = T_ARCTIC
-
-/turf/simulated/floor/plating/snow/permafrost
-	icon_state = "permafrost_full"
 
 /turf/simulated/floor/plating/snow/ice
 	name = "ice"

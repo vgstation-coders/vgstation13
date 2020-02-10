@@ -39,6 +39,7 @@ var/veil_thickness = CULT_PROLOGUE
 //CULT_EPILOGUE		The cult succeeded. The station is no longer reachable from space or through teleportation, and is now part of hell. Nar-Sie hunts the survivors.
 //CULT_MENDED		The cult failed (bloodstones all destroyed or rift closed). cult magic permanently disabled, living cultists progressively die by themselves.
 
+var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anchor stone
 
 ///////////////////////////////FACTION CODE - START/////////////////////////////////
 
@@ -204,8 +205,10 @@ var/veil_thickness = CULT_PROLOGUE
 			var/datum/objective/bloodcult_bloodbath/O = locate() in objective_holder.objectives
 			if (O)
 				veil_thickness = CULT_ACT_IV
-				command_alert(/datum/command_alert/bloodstones_anchor)
 				new_obj = new /datum/objective/bloodcult_tearinreality
+				spawn(15 SECONDS) //A delay before the anchor stone is announced
+					if(global_anchor_bloodstone) //Check if it exploded in the mean time
+						command_alert(/datum/command_alert/bloodstones_anchor)
 		if (CULT_EPILOGUE)
 			var/datum/objective/bloodcult_tearinreality/O = locate() in objective_holder.objectives
 			if (O)

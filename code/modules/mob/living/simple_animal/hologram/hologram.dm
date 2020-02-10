@@ -39,11 +39,6 @@
 	if(desc)
 		to_chat(user, desc)
 
-/mob/living/simple_animal/hologram/RangedAttack(var/atom/A)
-	if((istype(A, /obj) || isliving(A)) && A != src)
-		mimic(A.type)
-
-
 /mob/living/simple_animal/hologram/corgi
 	atom_to_mimic = /mob/living/simple_animal/corgi
 

@@ -99,6 +99,7 @@ var/list/poddoors = list()
 		return 0
 	if(!src.operating) //in case of emag
 		src.operating = 1
+	playsound(loc, 'sound/machines/poddoor.ogg', 60, 1)
 	flick(openingicon, src)
 	src.icon_state = openicon
 	src.set_opacity(0)
@@ -111,12 +112,14 @@ var/list/poddoors = list()
 		src.operating = 0
 	if(autoclose)
 		spawn(150)
+			playsound(loc, 'sound/machines/poddoor.ogg', 60, 1)
 			autoclose()
 	return 1
 
 /obj/machinery/door/poddoor/close()
 	if (src.operating)
 		return
+	playsound(loc, 'sound/machines/poddoor.ogg', 60, 1)
 	src.operating = 1
 	layer = closed_layer
 	flick(closingicon, src)

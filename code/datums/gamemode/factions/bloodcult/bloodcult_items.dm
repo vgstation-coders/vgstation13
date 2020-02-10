@@ -582,7 +582,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/soulblade
 	name = "soul blade"
-	desc = "An obsidian blade fitted with a soul gem, giving it soul catching propertiess."
+	desc = "An obsidian blade fitted with a soul gem, giving it soul catching properties."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon = 'icons/obj/cult_64x64.dmi'
 	pixel_x = -16 * PIXEL_MULTIPLIER
@@ -984,9 +984,8 @@ var/list/arcane_tomes = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "culthood"
 	desc = "A hood worn by the followers of Nar-Sie."
-	flags = FPRINT|HIDEHAIRCOMPLETELY
 	armor = list(melee = 30, bullet = 10, laser = 10,energy = 5, bomb = 10, bio = 25, rad = 0)
-	body_parts_covered = EARS|HEAD
+	body_parts_covered = EARS|HEAD|HIDEHAIR
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED)
@@ -1157,7 +1156,7 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
-	
+
 ///////////////////////////////////////DEBUG ITEMS////////////////////////////////////////////////
 //Pamphlet: turns you into a cultist
 /obj/item/weapon/bloodcult_pamphlet
@@ -1233,7 +1232,7 @@ var/list/arcane_tomes = list()
 	volume = 60
 	force = 5
 	throwforce = 7
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/cult/examine(var/mob/user)
 	..()
 	if (iscultist(user))

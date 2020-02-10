@@ -62,7 +62,7 @@
 			to_chat(user, "You fail to hack \the [src]'s controls.")
 	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 
-/obj/machinery/shield_capacitor/wrenchAnchor(var/mob/user)
+/obj/machinery/shield_capacitor/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

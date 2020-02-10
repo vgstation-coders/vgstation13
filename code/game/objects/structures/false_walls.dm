@@ -111,6 +111,7 @@
 
 /obj/structure/falsewall/closed
 	density = 1
+	opacity = 1
 
 /obj/structure/falsewall/New()
 	..()
@@ -222,14 +223,6 @@
 			T = get_turf(src)
 			T.attackby(W,user)
 		qdel(src)
-
-/obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
-	..()
-	if(density)
-		icon_state = "[mineral]0"
-		src.relativewall()
-	else
-		icon_state = "[mineral]fwall_open"
 
 /*
  * False R-Walls

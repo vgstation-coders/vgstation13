@@ -148,6 +148,10 @@
         /obj/item/weapon/implant/explosive/nuclear,
     )
 
+/datum/outfit/striketeam/nukeops/post_equip(var/mob/living/carbon/human/H)
+	if(H.mind.GetRole(NUKE_OP_LEADER))
+		H.equip_to_slot_or_del(new /obj/item/device/modkit/syndi_commander(src), slot_in_backpack)
+
 /datum/outfit/striketeam/nukeops/spawn_id(var/mob/living/carbon/human/H, rank)
     return // Nuke ops have anonymous ID cards.
 

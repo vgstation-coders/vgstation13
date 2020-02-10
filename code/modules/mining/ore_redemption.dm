@@ -3,7 +3,7 @@
 
 /obj/machinery/mineral/ore_redemption
 	name = "ore redemption machine"
-	desc = "A machine that accepts ore and instantly transforms it into workable material sheets, but cannot produce alloys such as Plasteel. Points for ore are generated based on type and can be redeemed at a mining equipment locker."
+	desc = "A machine that accepts ore and gives credits, putting the materials into longterm storage."
 	icon = 'icons/obj/machines/mining_machines.dmi'
 	icon_state = "ore_redemption"
 	density = 1
@@ -44,14 +44,6 @@
 			if(usr.drop_item(I, src))
 				inserted_id = I
 
-/obj/machinery/mineral/ore_redemption/proc/process_sheet(var/obj/item/stack/ore/O)
-	var/obj/item/stack/sheet/processed_sheet = SmeltMineral(O)
-	if(processed_sheet)
-		var/datum/material/mat = materials.getMaterial(O.material)
-		materials.addAmount(O.material, processed_sheet.amount) //Stack the sheets
-		credits += mat.value * processed_sheet.amount //Gimme my fucking credits
-	returnToPool(O)
-
 /obj/machinery/mineral/ore_redemption/process()
 	var/turf/T = get_turf(input)
 	var/i
@@ -62,28 +54,29 @@
 				if(istype(O,/obj/item/stack/ore/slag))
 					continue //Skip slag for now.
 				if(O)
-					process_sheet(O)
+					SmeltMineral(O)
 					score["oremined"] += O.amount
 				else
 					break
 		else
 			var/obj/structure/ore_box/B = locate() in T
 			if(B)
-				for(var/mat_id in B.materials.storage)
-					var/datum/material/mat = B.materials.getMaterial(mat_id)
-					materials.addAmount(mat_id, B.materials.storage[mat_id])
-					score["oremined"] += B.materials.storage[mat_id]
-					credits += mat.value * B.materials.storage[mat_id] //Gimme my fucking credits
-					B.materials.removeAmount(mat_id, B.materials.storage[mat_id])
+				for(var/O in B.stored_ores)
+					var/amount = B.stored_ores[O]
+					SmeltOreType(O, amount)
+					score["oremined"] += amount
 
 /obj/machinery/mineral/ore_redemption/proc/SmeltMineral(var/obj/item/stack/ore/O)
-	if(O.material)
-		var/datum/material/mat = materials.getMaterial(O.material)
-		var/obj/item/stack/sheet/M = getFromPool(mat.sheettype, (src), O.amount)
-		M.redeemed = 1
-		//credits += mat.value //Old behavior
-		return M
-	return
+	if(O.materials)
+		credits += O.materials.getValue()
+		materials.addFrom(O.materials, TRUE)
+		returnToPool(O)
+
+/obj/machinery/mineral/ore_redemption/proc/SmeltOreType(var/type, var/amount)
+	var/obj/item/stack/ore/O = getFromPool(type)
+	O.max_amount = INFINITY
+	O.set_amount(amount)
+	SmeltMineral(O)
 
 /obj/machinery/mineral/ore_redemption/attack_hand(user as mob)
 	if(..())
@@ -106,7 +99,7 @@
 	for(var/O in materials.storage)
 		if(materials.storage[O] > 0)
 			var/datum/material/mat = materials.getMaterial(O)
-			dat += text("[capitalize(mat.processed_name)]: [materials.storage[O]] <A href='?src=\ref[src];release=[mat.id]'>Release</A><br>")
+			dat += text("[capitalize(mat.processed_name)]: [materials.storage[O]/mat.cc_per_sheet] <A href='?src=\ref[src];release=[mat.id]'>Release</A><br>")
 
 	dat += text("<br>This unit can hold stacks of [stack_amt] sheets of each mineral type.<br><br>")
 
@@ -155,13 +148,13 @@
 			if(!mat)
 				to_chat(usr, "<span class='warning'>Unable to find material [release]!</span>")
 				return 1
-			var/desired = input("How much?","How much [mat.processed_name] to eject?", materials.storage[release]) as num
+			var/desired = input("How much?","How much [mat.processed_name] to eject?", materials.storage[release]/mat.cc_per_sheet) as num
 			if(desired==0)
 				return 1
 			var/obj/item/stack/sheet/out = new mat.sheettype(output.loc)
 			out.redeemed = 1 //Central command will not pay for this mineral stack.
-			out.amount = clamp(desired, 0, min(materials.storage[release], out.max_amount))
-			materials.removeAmount(release, out.amount)
+			out.set_amount(clamp(round(desired), 0, min(materials.storage[release]/mat.cc_per_sheet, out.max_amount)))
+			materials.removeAmount(release, out.amount * mat.cc_per_sheet)
 	updateUsrDialog()
 	return
 

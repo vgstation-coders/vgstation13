@@ -4,6 +4,7 @@
 	icon_state = "syndicate"
 	item_state = "syndicate"
 	origin_tech = Tc_SYNDICATE + "=2" + Tc_COMBAT + "=3"
+	det_time = 3 SECONDS
 
 /obj/item/weapon/grenade/syndigrenade/prime()
 	..()

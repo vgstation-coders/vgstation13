@@ -151,7 +151,7 @@
 	src.dir = turn(src.dir, 90)
 	return 1
 
-/obj/machinery/atmospherics/unary/tank/wrenchAnchor(var/mob/user)
+/obj/machinery/atmospherics/unary/tank/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

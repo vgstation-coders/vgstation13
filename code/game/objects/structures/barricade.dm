@@ -69,7 +69,7 @@
 /obj/structure/window/barricade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	if(iscrowbar(W) && user.a_intent == I_HURT && !busy) //Only way to deconstruct, needs harm intent
-		playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
+		W.playtoolsound(loc, 75)
 		user.visible_message("<span class='warning'>[user] starts struggling to pry \the [src] back into planks.</span>", \
 		"<span class='notice'>You start struggling to pry \the [src] back into planks.</span>")
 		busy = 1

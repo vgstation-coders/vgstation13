@@ -115,7 +115,7 @@
 	desc = "Perfect for winter in Siberia, da?"
 	icon_state = "ushanka"
 	item_state = "ushanka"
-	flags = HIDEHAIRCOMPLETELY
+	flags = HIDEHEADHAIR
 	body_parts_covered = EARS|HEAD
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 
@@ -137,6 +137,15 @@
 	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
 	icon_state = "ushankared"
 	item_state = "ushankared"
+	armor = list(melee = 30, bullet = 15, laser = 25, energy = 10, bomb = 20, bio = 0, rad = 0)
+
+/obj/item/clothing/head/ushanka/hos
+	name = "head of security ushanka"
+	desc = "The armored ushanka of the head of security. You cannot bribe an officer of Nanotrasen."
+	icon_state = "ushankablack"
+	item_state = "ushankablack"
+	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
+
 /*
  * Pumpkin head
  */
@@ -173,15 +182,17 @@
 	desc = "A pair of kitty ears. Meow!"
 	icon_state = "kitty"
 	flags = FPRINT
-	var/haircolored = 1
+	var/haircolored = TRUE
+	var/cringe = FALSE
+	var/anime = FALSE
 	siemens_coefficient = 1.5
 
-/obj/item/clothing/head/kitty/cursed
-	canremove = 0
-
-/obj/item/clothing/head/kitty/collectable
-	desc = "A pair of black kitty ears. Meow!"
-	haircolored = 0
+/obj/item/clothing/head/kitty/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	if(L.is_wearing_item(src, slot_head))
+		if(cringe || Holiday == APRIL_FOOLS_DAY)
+			speech.message = tumblrspeech(speech.message)
+		if(anime || Holiday == APRIL_FOOLS_DAY)
+			speech.message = nekospeech(speech.message)
 
 /obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
 	if(!istype(user) || !haircolored)
@@ -191,6 +202,18 @@
 
 	var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
 	wear_override.Blend(earbit, ICON_OVERLAY)
+
+/obj/item/clothing/head/kitty/collectable
+	desc = "A pair of black kitty ears. Meow!"
+	haircolored = FALSE
+
+/obj/item/clothing/head/kitty/anime	
+	desc = "A pair of nekomimi. Nya!"
+	anime = TRUE
+
+/obj/item/clothing/head/kitty/anime/cursed
+	canremove = FALSE
+	cringe = TRUE
 
 /obj/item/clothing/head/butt
 	name = "butt"

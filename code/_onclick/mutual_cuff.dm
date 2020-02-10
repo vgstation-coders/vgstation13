@@ -9,8 +9,8 @@
 	if(!istype(first) || !istype(second) || !istype(third))
 		return FALSE
 
-	if(restraint_apply_sound)
-		playsound(src, restraint_apply_sound, 30, 1, -2)
+	playtoolsound(src, 30, TRUE, -2)
+
 	third.visible_message("<span class='danger'>\The [third] is trying to restrain \the [first] and \the [second] together with the \the [src]!</span>",
 						 "<span class='danger'>You try to tether \the [first] and \the [second] using \the [src]!</span>")
 

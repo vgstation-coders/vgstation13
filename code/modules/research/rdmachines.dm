@@ -125,7 +125,7 @@ var/global/list/rnd_machines = list()
 		return 1
 
 /obj/machinery/r_n_d/crowbarDestroy(mob/user)
-	if(..() == 1)
+	if(..())
 		if (materials)
 			for(var/matID in materials.storage)
 				if (materials.storage[matID] == 0) // No materials of this type
@@ -139,8 +139,8 @@ var/global/list/rnd_machines = list()
 						materials.removeAmount(matID, sheet.amount * sheet.perunit)
 					else
 						qdel(sheet)
-		return 1
-	return -1
+		return TRUE
+	return FALSE
 
 /obj/machinery/r_n_d/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (shocked)

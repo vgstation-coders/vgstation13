@@ -3,7 +3,7 @@
 	abbreviation = "PP"
 	desc = "This spell summons a random pie, and throws it at the location of your choosing. More power means more pies."
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 
 	school = "evocation"
 	charge_max = 100
@@ -13,7 +13,7 @@
 	range = 20
 
 	spell_aspect_flags = SPELL_FIRE
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	duration = 20
 	projectile_speed = 1
 

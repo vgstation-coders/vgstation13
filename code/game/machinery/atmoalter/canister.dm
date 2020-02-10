@@ -67,6 +67,10 @@
 	canister_color = "orange"
 	can_label = 0
 
+/obj/machinery/portable_atmospherics/canister/plasma/broken
+	icon_state = "orange-1"
+	destroyed = 1
+
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide
 	name = "Canister \[CO2\]"
 	icon_state = "black"
@@ -263,7 +267,7 @@
 			qdel (src)
 		return
 
-	if(!iswrench(W) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
+	if(!W.is_wrench(user) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
 		visible_message("<span class='warning'>[user] hits the [src] with a [W]!</span>")
 		investigation_log(I_ATMOS, "<span class='danger'>was smacked with \a [W] by [key_name(user)]</span>")
 		src.health -= W.force

@@ -123,15 +123,18 @@
 	var/teleport_y_offset = 0
 	var/teleport_z_offset = 0
 
-	Trigger(var/atom/movable/A)
-		if(!istype(A))
-			return
-		if(teleport_x && teleport_y && teleport_z)
-			if(teleport_x_offset && teleport_y_offset && teleport_z_offset)
+/obj/effect/step_trigger/teleporter/random/Trigger(var/atom/movable/A)
+	if(!istype(A))
+		return
+	if(istype(A,/obj/item/projectile/fire_breath/shuttle_exhaust))
+		qdel(A)
+		return
+	if(teleport_x && teleport_y && teleport_z)
+		if(teleport_x_offset && teleport_y_offset && teleport_z_offset)
 
-				A.x = rand(teleport_x, teleport_x_offset)
-				A.y = rand(teleport_y, teleport_y_offset)
-				A.z = rand(teleport_z, teleport_z_offset)
+			A.x = rand(teleport_x, teleport_x_offset)
+			A.y = rand(teleport_y, teleport_y_offset)
+			A.z = rand(teleport_z, teleport_z_offset)
 
 /obj/effect/step_trigger/teleporter/random/shuttle_transit
 	teleport_x = 25

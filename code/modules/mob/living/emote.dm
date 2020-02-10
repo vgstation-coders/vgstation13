@@ -163,6 +163,7 @@
 	key = "sigh"
 	key_third_person = "sighs"
 	message = "sighs."
+	message_mime = "performs a silent theatrical sigh."
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/sit

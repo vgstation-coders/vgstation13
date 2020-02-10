@@ -355,7 +355,7 @@
 					msg_admin_attack("a random chance hydroponics mutation has spawned space vines ([newseed.display_name]). <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
 
 		if("change_appearance")
-			seed.randomize_icon(change_packet=0)
+			seed.randomize_icon()
 			update_icon()
 			visible_message("<span class='notice'>\The [seed.display_name] suddenly looks a little different.</span>")
 

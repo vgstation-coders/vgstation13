@@ -75,10 +75,6 @@
 		return 1
 	return 0
 
-/obj/item/weapon/reagent_containers/food/condiment/attackby(obj/item/I as obj, mob/user as mob) //We already have an attackby for weapons, but sure, whatever
-
-	return
-
 /obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag)
 	if(!flag || ismob(target))
 		return 0

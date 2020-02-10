@@ -243,7 +243,7 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			to_chat(user, "You slice the handle off of \the [src].")
-			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			WT.playtoolsound(user, 50)
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/metal_blade/I = new (get_turf(user))

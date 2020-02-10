@@ -106,8 +106,8 @@
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
 
-/obj/machinery/replicator/attackby(var/obj/O, var/mob/user)
-	if(iswrench(O))
+/obj/machinery/replicator/attackby(var/obj/item/O, var/mob/user)
+	if(O.is_wrench(user))
 		return ..()
 	else if(O.force > 10)
 		log_attack("<font color='red'>[user] damaged [src]/([formatJumpTo(src)]) with [O]</font>")

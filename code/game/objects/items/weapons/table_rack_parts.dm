@@ -30,26 +30,10 @@
 
 /obj/item/weapon/table_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		qdel(src)
 		return
-	if (iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(1, user))
-			to_chat(user, "You begin the delicate process of heating and moulding \the [src].")
-			playsound(user, 'sound/items/Welder.ogg', 50, 1)
-			if(do_after(user, src, 180))
-				to_chat(user, "You finish bending the metal into the shape of an ansible.")
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/ghetto_ansible/I = new (user.loc)
-					user.put_in_hands(I)
-					qdel(src)
-				else
-					new /obj/item/weapon/ghetto_ansible(loc)
-					qdel(src)
-			return
 	if (istype(W, /obj/item/stack/rods))
 		var/obj/item/stack/rods/rods = W
 		if (rods.amount >= 4)
@@ -99,7 +83,7 @@
 	table_type = /obj/structure/table/reinforced
 
 /obj/item/weapon/table_parts/reinforced/attackby(obj/item/weapon/W, mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(sheet_type, user.loc, 1, user)
 		drop_stack(/obj/item/stack/rods, user.loc, 1, user)
 		qdel(src)
@@ -116,7 +100,7 @@
 	return
 
 /obj/item/weapon/table_parts/wood/attackby(obj/item/weapon/W, mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(sheet_type, user.loc, 1, user)
 		qdel(src)
 		return
@@ -137,7 +121,7 @@
 	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/item/weapon/table_parts/wood/poker/attackby(obj/item/weapon/W, mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(sheet_type, user.loc, 1, user)
 		drop_stack(/obj/item/stack/tile/grass, user.loc, 1, user)
 		qdel(src)
@@ -155,7 +139,7 @@
 	table_type = /obj/structure/table/glass
 
 /obj/item/weapon/table_parts/glass/attackby(obj/item/weapon/W, mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(/obj/item/stack/sheet/glass/glass, loc, 1, user)
 		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
@@ -173,7 +157,7 @@
 	table_type = /obj/structure/table/glass/plasma
 
 /obj/item/weapon/table_parts/glass/plasma/attackby(obj/item/weapon/W, mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(/obj/item/stack/sheet/glass/plasmaglass, loc, 1, user)
 		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
@@ -207,7 +191,7 @@
 
 /obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		qdel(src)
 		return
@@ -215,7 +199,7 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			to_chat(user, "You begin slicing through \the [src].")
-			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			WT.playtoolsound(user, 50)
 			if(do_after(user, src, 60))
 				to_chat(user, "You cut \the [src] into a gun stock.")
 				if(src.loc == user)
