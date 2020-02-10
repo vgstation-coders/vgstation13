@@ -10,6 +10,7 @@
 	body_parts_covered = HEAD|EARS|EYES|MOUTH
 	siemens_coefficient = 0.9
 	sterility = 100
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/bio_suit
 	name = "bio suit"
