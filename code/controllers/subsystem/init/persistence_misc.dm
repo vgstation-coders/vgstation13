@@ -25,7 +25,8 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	..()
 
 /datum/subsystem/persistence_misc/Shutdown()
-	for (var/datum/persistence_task/task in tasks)
+	for (var/task_type in tasks)
+		var/datum/persistence_task/task = tasks[task_type]
 		task.on_shutdown()
 	..()
 
