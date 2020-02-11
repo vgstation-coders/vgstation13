@@ -18,46 +18,7 @@
 			            access_heads, access_construction, access_sec_doors,
 			            access_ce, access_RC_announce, access_keycard_auth, access_tcomsat, access_ai_upload, access_mechanic)
 	minimal_player_age = 20
-<<<<<<< HEAD
 	outfit_datum = /datum/outfit/chief_engineer
-=======
-
-	pdaslot=slot_l_store
-	pdatype=/obj/item/device/pda/heads/ce
-
-
-/datum/job/chief_engineer/equip(var/mob/living/carbon/human/H)
-	if(!H)
-		return 0
-	H.equip_or_collect(new /obj/item/device/radio/headset/heads/ce(H), slot_ears)
-	switch(H.backbag)
-		if(2)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
-		if(3)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
-		if(4)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		if(5)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
-	H.equip_or_collect(new /obj/item/clothing/under/rank/chief_engineer(H), slot_w_uniform)
-	//H.equip_or_collect(new /obj/item/device/pda/heads/ce(H), slot_l_store)
-	H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
-	H.equip_or_collect(new /obj/item/clothing/head/hardhat/white(H), slot_head)
-	H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/complete(H), slot_belt)
-	H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
-	if(H.backbag == 1)
-		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
-	else
-		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
-	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
-	L.imp_in = H
-	L.implanted = 1
-	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
-	affected.implants += L
-	L.part = affected
-	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/>")
-	return 1
->>>>>>> 72bdaae3c1c87e2198a5ecdf23af7a682611dd91
 
 /datum/job/chief_engineer/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()

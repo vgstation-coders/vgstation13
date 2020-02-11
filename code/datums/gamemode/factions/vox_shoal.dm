@@ -126,7 +126,6 @@ var/list/potential_bonus_items = list(
 	. = ..()
 	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
 
-<<<<<<< HEAD
 /datum/faction/vox_shoal/OnPostSetup()
 	..()
 	var/list/turf/vox_spawn = list()
@@ -185,13 +184,13 @@ var/list/potential_bonus_items = list(
 	vox.regenerate_icons()
 	vox.store_memory("The priority items for the day are: [english_list(bonus_items_of_the_day)]")
 
+	/*
 	spawn()
 		var/chosen_loadout = input(vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
 		concrete_outfit.chosen_spec = chosen_loadout
 		concrete_outfit.equip_special_items(vox)
+	*/
 
-=======
->>>>>>> 72bdaae3c1c87e2198a5ecdf23af7a682611dd91
 /datum/faction/vox_shoal/process()
 	if (completed)
 		return

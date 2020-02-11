@@ -16,47 +16,7 @@
 			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
 			access_keycard_auth, access_sec_doors, access_paramedic)
 	minimal_player_age = 20
-<<<<<<< HEAD
 	outfit_datum = /datum/outfit/cmo
-=======
-
-
-	pdaslot=slot_belt
-	pdatype=/obj/item/device/pda/heads/cmo
-
-/datum/job/cmo/equip(var/mob/living/carbon/human/H)
-	if(!H)
-		return 0
-	H.equip_or_collect(new /obj/item/device/radio/headset/heads/cmo(H), slot_ears)
-	switch(H.backbag)
-		if(2)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
-		if(3)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
-		if(4)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		if(5)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
-	H.equip_or_collect(new /obj/item/clothing/under/rank/chief_medical_officer(H), slot_w_uniform)
-	H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
-	//H.equip_or_collect(new /obj/item/device/pda/heads/cmo(H), slot_belt)
-	H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/cmo(H), slot_wear_suit)
-	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(H))
-	H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
-	H.equip_or_collect(new /obj/item/clothing/glasses/hud/health(H), slot_glasses)
-	if(H.backbag == 1)
-		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-	else
-		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
-	L.imp_in = H
-	L.implanted = 1
-	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
-	affected.implants += L
-	L.part = affected
-	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <b>Medical:</b> [MED_FREQ]")
-	return 1
->>>>>>> 72bdaae3c1c87e2198a5ecdf23af7a682611dd91
 
 /datum/job/cmo/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()
