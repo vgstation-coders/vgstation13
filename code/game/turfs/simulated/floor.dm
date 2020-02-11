@@ -113,6 +113,7 @@ turf/simulated/floor/update_icon()
 		icon_state = "tile-slime"
 	else if(is_light_floor())
 		var/obj/item/stack/tile/light/T = floor_tile
+		overlays -= floor_overlay //Removes overlay without removing other overlays. Replaces it a few lines down if on.
 		if(T.on)
 			set_light(5)
 			floor_overlay = T.get_turf_image()
@@ -122,7 +123,6 @@ turf/simulated/floor/update_icon()
 		else
 			set_light(0)
 			icon_state = "light_off"
-			overlays -= floor_overlay //Removes overlay when off without removing other overlays.
 	else if(is_grass_floor())
 		if(!broken && !burnt)
 			if(!(icon_state in list("grass1","grass2","grass3","grass4")))
