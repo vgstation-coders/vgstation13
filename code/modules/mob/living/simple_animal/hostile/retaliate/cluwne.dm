@@ -199,6 +199,7 @@
 	response_help = "honks the"
 	speak = list("Honk!", "Groovy!", "Far Out!")
 	speak_emote = list("squeaks")
+
 	emote_hear = list("honks")
 	maxHealth = 100
 	health = 100
@@ -210,6 +211,7 @@
 
 	melee_damage_type = "BRAIN"
 	var/spacedrugs_chance = 30
+
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/weapon/pen)) //Renaming
