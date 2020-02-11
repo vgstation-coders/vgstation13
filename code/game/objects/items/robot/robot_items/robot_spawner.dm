@@ -108,6 +108,7 @@
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	if(nuclear)
 		var/datum/role/nuclear_operative/newCop = new
+		newCop.disallow_job = FALSE
 		newCop.AssignToRole(R.mind,1)
 		nuclear.HandleRecruitedRole(newCop)
 		newCop.Greet(GREET_MIDROUND)

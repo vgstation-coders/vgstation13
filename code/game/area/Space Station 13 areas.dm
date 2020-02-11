@@ -67,6 +67,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/static_environ
 
 	var/forbid_apc = FALSE //never build an APC here?
+	var/construction_zone = FALSE //treat this area like space for blueprints?
 
 	var/has_gravity = 1
 
@@ -99,7 +100,7 @@ var/list/teleportlocs = list()
 
 proc/process_teleport_locs()
 	for(var/area/AR in areas)
-		if(istype(AR, /area/shuttle) || istype(AR, /area/syndicate_station) || istype(AR, /area/wizard_station))
+		if(istype(AR, /area/shuttle) || istype(AR, /area/wizard_station))
 			continue
 		if(teleportlocs.Find(AR.name))
 			continue
@@ -170,7 +171,13 @@ proc/process_adminbus_teleport_locs()
 /area/no_ethereal
 	anti_ethereal = 1
 
-
+/area/dojo
+	name = "\improper Spider Clan Dojo"
+	icon_state = "dojo"
+	requires_power = 0
+	dynamic_lighting = 0
+	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE 
 
 //These are shuttle areas, they must contain two areas in a subgroup if you want to move a shuttle from one
 //place to another. Look at escape shuttle for example.
@@ -339,6 +346,14 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/syndicate_elite/mothership
 	name = "\improper Syndicate Elite Shuttle"
 	icon_state = "shuttlered"
+
+/area/shuttle/nuclearops
+	name = "\improper Nuclear Opeartive Shuttle"
+	icon_state = "yellow"
+	requires_power = 0
+	dynamic_lighting = 1
+	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/shuttle/syndicate_elite/station
 	name = "\improper Syndicate Elite Shuttle"
@@ -633,48 +648,6 @@ proc/process_adminbus_teleport_locs()
 //ENEMY
 
 //names are used
-/area/syndicate_station
-	name = "\improper Syndicate Shuttle"
-	icon_state = "yellow"
-	requires_power = 0
-	dynamic_lighting = 1
-	shuttle_can_crush = FALSE
-	flags = NO_PERSISTENCE
-
-/area/syndicate_station/start
-	icon_state = "yellow"
-
-/area/syndicate_station/southwest
-	name = "\improper south-west of SS13"
-	icon_state = "southwest"
-
-/area/syndicate_station/northwest
-	name = "\improper north-west of SS13"
-	icon_state = "northwest"
-
-/area/syndicate_station/northeast
-	name = "\improper north-east of SS13"
-	icon_state = "northeast"
-
-/area/syndicate_station/southeast
-	name = "\improper south-east of SS13"
-	icon_state = "southeast"
-
-/area/syndicate_station/north
-	name = "\improper north of SS13"
-	icon_state = "north"
-
-/area/syndicate_station/south
-	name = "\improper south of SS13"
-	icon_state = "south"
-
-/area/syndicate_station/commssat
-	name = "\improper south of the communication satellite"
-	icon_state = "south"
-
-/area/syndicate_station/mining
-	name = "\improper north east of the mining asteroid"
-	icon_state = "north"
 
 /area/wizard_station
 	name = "\improper Wizard's Den"
@@ -1926,29 +1899,35 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "storage"
 
 //SNOWMAP
+/area/icebar
+	name = "\improper Ice Bar"
+	icon_state = "ghettobar"
+
+/area/station/garage
+	name = "\improper Public Garage"
+	icon_state = "yellow"
+
 /area/surface
 	forbid_apc = TRUE
+	construction_zone = TRUE
 
 /area/surface/snow
 	name = "\improper Planet Surface"
 	icon_state = "sno2"
-	shuttle_can_crush = TRUE
 
 /area/surface/blizzard
-	name = "\improper The Blizzard"
+	name = "The Blizzard"
 	icon_state = "sno"
+	construction_zone = FALSE
 
 /area/surface/icecore
 	name = "\improper Frozen Core"
 	icon_state = "icecore"
 
-/area/surface/garage
-	name = "\improper Public Garage"
-	icon_state = "yellow"
-
 /area/surface/junkyard
 	name = "\improper Junk Yard"
 	icon_state = "disposal"
+	construction_zone = FALSE
 
 /area/surface/forest/deer
 	name = "\improper Enclosed Forest"

@@ -422,6 +422,10 @@ var/list/department_radio_keys = list(
 	return 0
 
 /mob/living/proc/treat_speech(var/datum/speech/speech, genesay = 0)
+	if(!(copytext(speech.message, 1, 2) == "*"))
+		for(var/obj/item/I in get_all_slots() + held_items)
+			I.affect_speech(speech, src)
+
 	if(getBrainLoss() >= 60)
 		speech.message = derpspeech(speech.message, stuttering)
 

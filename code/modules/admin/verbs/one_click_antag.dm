@@ -279,6 +279,6 @@ client/proc/one_click_antag()
 	new_vox.mind.special_role = "Vox Raider"
 	new_vox.mutations |= M_NOCLONE //Stops the station crew from messing around with their DNA.
 
-	new_vox.equip_vox_raider()
+	equip_vox_raider(new_vox)
 
 	return new_vox

@@ -122,6 +122,14 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	icon_living = "bestborer"
 	icon_dead = "bestborer"
 
+/mob/living/simple_animal/borer/defected_borer/singularity_act(current_size, obj/machinery/singularity/S)
+	if(S.modifier != "special_")
+		to_chat(world, "<span class='numb'><font size='15'>You feel Very Nice.</font></span>")
+		S.modifier = "special_"
+		S.name = "specialarity"
+		world << sound('sound/effects/explosionfar.ogg')
+	..()
+
 /mob/living/simple_animal/borer/New(var/loc, var/egg_prefix_index = 1)
 	..(loc)
 	name_prefix_index = min(egg_prefix_index, 10)
@@ -154,6 +162,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
 
+
 /*
 /mob/living/simple_animal/borer/Login()
 	..()
@@ -176,11 +185,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		regular_hud_updates()
 
 /mob/living/simple_animal/borer/regular_hud_updates()
-	if(fire)
-		if(fire_alert)
-			fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for heat and 2 for cold.
-		else
-			fire.icon_state = "fire0"
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, fire_alert == 1 ? /obj/abstract/screen/alert/carbon/burn/ice : /obj/abstract/screen/alert/carbon/burn/fire, fire_alert) //fire_alert is either 0 if no alert, 1 for cold and 2 for heat.
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
 
 	var/severity = 0
 

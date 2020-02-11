@@ -94,7 +94,7 @@
 
 /obj/item/clothing/accessory/tie
 	restraint_resist_time = 30 SECONDS
-	restraint_apply_sound = "rustle"
+	toolsounds = list("rustle")
 
 /obj/item/clothing/accessory/tie/can_attach_to(obj/item/clothing/C)
 	if(istype(C))
@@ -126,7 +126,7 @@
 	_color = "stethoscope"
 	origin_tech = Tc_BIOTECH + "=1"
 	restraint_resist_time = 30 SECONDS
-	restraint_apply_sound = "rustle"
+	toolsounds = list("rustle")
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))

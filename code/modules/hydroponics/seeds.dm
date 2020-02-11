@@ -101,6 +101,10 @@
 	name = "packet of peanut seeds"
 	seed_type = "peanut"
 
+/obj/item/seeds/rocknut
+	name = "packet of rocknut seeds"
+	seed_type = "rocknut"
+
 /obj/item/seeds/cabbageseed
 	name = "packet of cabbage seeds"
 	seed_type = "cabbage"
@@ -1079,6 +1083,7 @@
 	display_name = "peanut vines"
 	plant_dmi = 'icons/obj/hydroponics/peanut.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/peanut)
+	mutants = list("rocknut")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
 
@@ -1088,6 +1093,21 @@
 	yield = 6
 	potency = 10
 	ideal_light = 8
+
+/datum/seed/rocknut
+	name = "rocknut"
+	seed_name = "rocknut"
+	display_name = "quarry bush"
+	plant_dmi = 'icons/obj/hydroponics/rocknut.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut)
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,10),IRON = list(3,5))
+
+	lifespan = 70
+	maturation = 6
+	production = 6
+	yield = 4
+	potency = 10
 
 /datum/seed/cabbage
 	name = "cabbage"

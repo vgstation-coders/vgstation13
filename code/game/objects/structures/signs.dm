@@ -331,3 +331,8 @@
 
 /obj/structure/sign/pox/red/cicle/no_cross
 	icon_state = "novox_circle2"
+
+/obj/structure/sign/taxi
+	name = "TAXI"
+	desc = "A sign designating the way to a public shuttle for transport into space."
+	icon_state = "taxi"

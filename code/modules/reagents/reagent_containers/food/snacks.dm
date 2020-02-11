@@ -967,9 +967,6 @@
 	name = "synthetic burger"
 	desc = "It tastes like a normal burger, but it's just not the same."
 	icon_state = "hburger"
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger
 	name = "appendix burger"
@@ -1357,11 +1354,6 @@
 	trash = /obj/item/stack/rods
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeykabob/synth/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	bitesize = 2
-
 /obj/item/weapon/reagent_containers/food/snacks/corgikabob
 	name = "Corgi-kabob"
 	icon_state = "kabob"
@@ -1691,13 +1683,6 @@
 	icon_state = "meatstake"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/meatsteak/synth/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(SODIUMCHLORIDE, 1)
-	reagents.add_reagent(BLACKPEPPER, 1)
-	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/spacylibertyduff
 	name = "Spacy Liberty Duff"
@@ -3953,7 +3938,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar
@@ -3964,7 +3949,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar
@@ -3976,7 +3961,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown
@@ -3985,9 +3970,9 @@
 	icon_state = "clown_chips"
 	item_state = "clown_chips"
 
-/obj/item/weapon/reagent_containers/food/snacks/chip/cookable/clown/New()
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(HONKSERUM, 5)
 	bitesize = 2
 
@@ -3999,7 +3984,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(NUKA_COLA, 5)
 	bitesize = 2
 
@@ -4011,7 +3996,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(VODKA, 5)
 	bitesize = 2
 
@@ -4024,7 +4009,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi
@@ -5962,3 +5947,102 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter
+	name = "suppermatter"
+	desc = "Extremely dense and powerful food."
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/suppermattershard
+	storage_slots = 1
+	slices_num = 4
+	icon_state = "suppermatter"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 48)
+	bitesize = 12
+	set_light(1.4,2,"#FFFF00")
+	
+/obj/item/weapon/reagent_containers/food/snacks/suppermattershard
+	name = "suppermatter shard"
+	desc = "A single portion of power."
+	icon_state = "suppermattershard"
+	bitesize = 3
+	trash = null	
+	
+/obj/item/weapon/reagent_containers/food/snacks/suppermattershard/New()
+	..()
+	set_light(1.4,1.4,"#FFFF00")
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter
+	name = "exciting suppermatter"
+	desc = "Extremely dense, powerful and exciting food!"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
+	storage_slots = 1
+	slices_num = 5
+	icon_state = "excitingsuppermatter"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 60)
+	bitesize = 12
+	set_light(1.4,2,"#FF0000")
+	
+/obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
+	name = "exciting suppermatter shard"
+	desc = "A single portion of exciting power!"
+	icon_state = "excitingsuppermattershard"
+	bitesize = 3
+	trash = null
+
+/obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard/New()
+	..()
+	set_light(1.4,1.4,"#FF0000")
+
+/obj/item/weapon/reagent_containers/food/snacks/grapejelly
+	name = "jelly"
+	desc = "The choice of choosy moms."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "grapejelly"
+
+/obj/item/weapon/reagent_containers/food/snacks/grapejelly/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	reagents.add_reagent (SUGAR, 2)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutbutter
+	name = "peanut butter"
+	desc = "A jar of smashed peanuts, contains no actual butter."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "peanutbutter"
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutbutter/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 3)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/saltednuts
+	name = "salted peanuts"
+	desc = "Popular in saloons."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "saltednuts"
+
+/obj/item/weapon/reagent_containers/food/snacks/saltednuts/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	reagents.add_reagent (SODIUMCHLORIDE, 2)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/pbj
+	name = "peanut butter and jelly sandwich"
+	desc = "A classic treat of childhood."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "pbj"
+	trash = /obj/item/trash/plate
+
+/obj/item/weapon/reagent_containers/food/snacks/pbj/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 4)
+	bitesize = 3

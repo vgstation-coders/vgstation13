@@ -17,7 +17,7 @@
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
-
+	recoil = 4
 
 	gun_flags = 0
 

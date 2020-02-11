@@ -232,7 +232,7 @@
 
 /obj/item/weapon/switchtool/swiss_army_knife
 	name = "swiss army knife"
-
+	sharpness_flags = 0
 	icon_state = "s_a_k"
 	desc = "Crafted by the Space Swiss for everyday use in military campaigns. Nonpareil."
 
@@ -240,7 +240,7 @@
 						"/obj/item/weapon/wrench:wrench" = null,
 						"/obj/item/weapon/wirecutters:wirecutters" = null,
 						"/obj/item/weapon/crowbar:crowbar" = null,
-						"/obj/item/weapon/kitchen/utensil/knife/large:kitchen knife" = null,
+						"/obj/item/weapon/kitchen/utensil/knife/large:knife" = null,
 						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
 						"/obj/item/weapon/hatchet:hatchet" = null,
 						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
@@ -259,6 +259,15 @@
 		var/obj/item/weapon/lighter/lighter = deployed
 		lighter.lit = 1
 		..()
+
+/obj/item/weapon/switchtool/swiss_army_knife/choose_deploy(mob/user)
+	. = ..()
+	if(. && deployed)
+		sharpness_flags = deployed.sharpness_flags
+	
+/obj/item/weapon/switchtool/swiss_army_knife/undeploy()
+	. = ..()
+	sharpness_flags = 0
 
 /obj/item/weapon/switchtool/switchblade
 	name = "switchblade"

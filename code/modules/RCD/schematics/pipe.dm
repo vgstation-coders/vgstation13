@@ -109,6 +109,10 @@
 
 	var/obj/machinery/atmospherics/O = A
 
+	if(!O.can_be_coloured)
+		to_chat(user, "<span class='danger'>\The [O] cannot be painted.</span>")
+		return 1
+
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
 	if (selected_color in available_colors)
 		selected_color = available_colors[selected_color]
@@ -118,7 +122,7 @@
 		var/obj/machinery/atmospherics/pipe/pipe_to_colour = O
 		var/datum/pipeline/pipe_line = pipe_to_colour.parent
 		var/list/pipeline_members = pipe_line.members
-		if (pipeline_members.len < 500)
+		if(pipeline_members.len < 500)
 			last_colouration = world.timeofday
 			colouring_delay = (pipeline_members.len)/2
 			O.color = selected_color

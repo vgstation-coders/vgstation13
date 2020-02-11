@@ -144,11 +144,11 @@ var/global/mulebot_count = 0
 			updateDialog()
 	else if((istype(I,/obj/item/weapon/wirecutters)||istype(I,/obj/item/device/multitool)) && user.a_intent != I_HURT)
 		attack_hand(user)
-	else if(istype(I,/obj/item/weapon/screwdriver) && user.a_intent != I_HURT)
+	else if(I.is_screwdriver(user) && user.a_intent != I_HURT)
 		if(locked)
 			to_chat(user, "<span class='notice'>The maintenance hatch cannot be opened or closed while the controls are locked.</span>")
 			return
-		playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
+		I.playtoolsound(src, 25, extrarange = -6)
 		open = !open
 		if(open)
 			src.visible_message("[user] opens the maintenance hatch of [src]", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
@@ -159,7 +159,7 @@ var/global/mulebot_count = 0
 			icon_state = "[icon_initial]0"
 
 		updateDialog()
-	else if (iswrench(I) && user.a_intent != I_HURT)
+	else if (I.is_wrench(user) && user.a_intent != I_HURT)
 		if (src.health < maxhealth)
 			src.health = min(maxhealth, src.health+25)
 			user.visible_message(

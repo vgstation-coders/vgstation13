@@ -14,11 +14,6 @@
 	mymob.client.screen += list(mymob.visible)
 
 /datum/hud/proc/corgi_hud()
-	mymob.fire = getFromPool(/obj/abstract/screen)
-	mymob.fire.icon = 'icons/mob/screen1_corgi.dmi'
-	mymob.fire.icon_state = "fire0"
-	mymob.fire.name = "fire"
-	mymob.fire.screen_loc = ui_fire
 
 	mymob.healths = getFromPool(/obj/abstract/screen)
 	mymob.healths.icon = 'icons/mob/screen1_corgi.dmi'
@@ -32,26 +27,13 @@
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_construct_pull
 
-	mymob.oxygen = getFromPool(/obj/abstract/screen)
-	mymob.oxygen.icon = 'icons/mob/screen1_corgi.dmi'
-	mymob.oxygen.icon_state = "oxy0"
-	mymob.oxygen.name = "oxygen"
-	mymob.oxygen.screen_loc = ui_oxygen
-
-	mymob.toxin = getFromPool(/obj/abstract/screen)
-	mymob.toxin.icon = 'icons/mob/screen1_corgi.dmi'
-	mymob.toxin.icon_state = "tox0"
-	mymob.toxin.name = "toxin"
-	mymob.toxin.screen_loc = ui_toxin
-
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.fire, mymob.healths, mymob.pullin, mymob.oxygen, mymob.toxin)
+	mymob.client.screen += list(mymob.healths, mymob.pullin)
 
 /datum/hud/proc/brain_hud(ui_style = 'icons/mob/screen1_Midnight.dmi')
 
 /datum/hud/proc/slime_hud()
-
 
 	mymob.healths = getFromPool(/obj/abstract/screen)
 	mymob.healths.icon = 'icons/mob/screen1_slime.dmi'
@@ -76,7 +58,6 @@
 
 /datum/hud/proc/shade_hud()
 
-
 	mymob.healths = getFromPool(/obj/abstract/screen)
 	mymob.healths.icon = 'icons/mob/screen1_shade.dmi'
 	mymob.healths.icon_state = "shade_health0"
@@ -88,12 +69,6 @@
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_construct_pull
-
-	mymob.purged = getFromPool(/obj/abstract/screen)
-	mymob.purged.icon = 'icons/mob/screen1_shade.dmi'
-	mymob.purged.icon_state = "purge0"
-	mymob.purged.name = "purged"
-	mymob.purged.screen_loc = ui_construct_purge
 
 	mymob.zone_sel = getFromPool(/obj/abstract/screen/zone_sel)
 	mymob.zone_sel.icon = 'icons/mob/screen1_shade.dmi'
@@ -124,23 +99,18 @@
 	mymob.gui_icons.soulblade_bloodbar.name = "Blood"
 	mymob.gui_icons.soulblade_bloodbar.screen_loc = ui_blob_powerbar
 
-	mymob.fire = getFromPool(/obj/abstract/screen)
-	mymob.fire.icon = 'icons/mob/screen1_shade.dmi'
-	mymob.fire.icon_state = "blade_ok"
-	mymob.fire.name = "blade integrity"
-	mymob.fire.screen_loc = ui_construct_fire
+	mymob.healths2 = getFromPool(/obj/abstract/screen)
+	mymob.healths2.icon = 'icons/mob/screen1_shade.dmi'
+	mymob.healths2.icon_state = "blade_ok"
+	mymob.healths2.name = "blade integrity"
+	mymob.healths2.screen_loc = ui_construct_sword
 	///////////////////////////////////////
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged)
+	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel)
 
 /datum/hud/proc/borer_hud()
-	mymob.fire = getFromPool(/obj/abstract/screen)
-	mymob.fire.icon = 'icons/mob/screen1_borer.dmi'
-	mymob.fire.icon_state = "fire0"
-	mymob.fire.name = "fire"
-	mymob.fire.screen_loc = ui_fire
 
 	mymob.healths = getFromPool(/obj/abstract/screen)
 	mymob.healths.icon = 'icons/mob/screen1_borer.dmi'
@@ -155,7 +125,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.healths, mymob.zone_sel, mymob.fire)
+	mymob.client.screen += list(mymob.healths, mymob.zone_sel)
 
 /datum/hud/proc/construct_hud()
 	var/constructtype
@@ -170,12 +140,6 @@
 		constructtype = "harvester"
 
 	if(constructtype)
-		mymob.fire = getFromPool(/obj/abstract/screen)
-		mymob.fire.icon = 'icons/mob/screen1_construct.dmi'
-		mymob.fire.icon_state = "fire0"
-		mymob.fire.name = "fire"
-		mymob.fire.screen_loc = ui_construct_fire
-
 		mymob.healths = getFromPool(/obj/abstract/screen)
 		mymob.healths.icon = 'icons/mob/screen1_construct.dmi'
 		mymob.healths.icon_state = "[constructtype]_health0"
@@ -193,40 +157,35 @@
 		mymob.zone_sel.overlays.len = 0
 		mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
 
-		mymob.purged = getFromPool(/obj/abstract/screen)
-		mymob.purged.icon = 'icons/mob/screen1_construct.dmi'
-		mymob.purged.icon_state = "purge0"
-		mymob.purged.name = "purged"
-		mymob.purged.screen_loc = ui_construct_purge
-
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.fire, mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged)
+	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel)
 
 /datum/hud/proc/vampire_hud(ui_style = 'icons/mob/screen1_Midnight.dmi')
-
 
 	vampire_blood_display = getFromPool(/obj/abstract/screen)
 	vampire_blood_display.name = "Vampire Blood"
 	vampire_blood_display.icon_state = "dark128"
-	vampire_blood_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[15*PIXEL_MULTIPLIER]"
+	vampire_blood_display.screen_loc = ui_under_health
 
 	mymob.client.screen += list(vampire_blood_display)
 
 /datum/hud/proc/changeling_hud()
+
 	vampire_blood_display = getFromPool(/obj/abstract/screen)
 	vampire_blood_display.name = "Changeling Chems"
 	vampire_blood_display.icon_state = "dark128"
-	vampire_blood_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[15*PIXEL_MULTIPLIER]"
+	vampire_blood_display.screen_loc = ui_under_health
 
 	mymob.client.screen += list(vampire_blood_display)
 
 
 /datum/hud/proc/countdown_hud()
+
 	countdown_display = getFromPool(/obj/abstract/screen)
 	countdown_display.name = "Burst Countdown"
 	countdown_display.icon_state = "template"
-	countdown_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[15*PIXEL_MULTIPLIER]"
+	countdown_display.screen_loc = ui_under_health
 
 	mymob.client.screen += list(countdown_display)
 

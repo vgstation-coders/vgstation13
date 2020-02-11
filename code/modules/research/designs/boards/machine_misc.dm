@@ -97,6 +97,16 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/coin_press
 
+/datum/design/medal_printer
+	name = "Circuit Design (Medal Printer)"
+	desc = "Allows for the construction of circuit boards used to build a medal printer."
+	id = "medal_printer"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 4, Tc_ENGINEERING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, MAT_GOLD = 1000, MAT_SILVER = 1000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/medal_printer
+
 /datum/design/vendomat
 	name = "Circuit Design (Vending Machine)"
 	desc = "Allows for the construction of circuit boards used to build a vending machines."
@@ -170,4 +180,3 @@
 	desc = "Allows for the construction of circuit boards used to build a booze dispenser."
 	id = "booze_dispenser"
 	build_path = /obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser
-

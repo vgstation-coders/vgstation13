@@ -421,6 +421,7 @@
 #define DENSITY_SEPARATED_SAMPLE 			"density_separated_sample"
 #define ANALYSIS_SAMPLE 			"analysis_sample"
 #define CHEMICAL_WASTE 			"chemical_waste"
+#define TRINITRINE		"trinitrine"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
@@ -451,6 +452,7 @@
 #define AMINOCYPRINIDOL	"aminocyprinidol"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
+#define CAFFEINE		"caffeine"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -469,7 +471,7 @@
 #define REAGENTS_EFFECT_MULTIPLIER REAGENTS_METABOLISM / 0.4
 
 //Pulse related bullshit
-var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, HYPOZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE, COCAINE)	//increase heart rate
+var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, HYPOZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE, COCAINE, CAFFEINE)	//increase heart rate
 var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN, GREYVODKA, CURARE, MESCALINE, VALERENIC_ACID)	//decrease heart rate
 var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
 var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stops the heart when overdose is met -- c = conditional

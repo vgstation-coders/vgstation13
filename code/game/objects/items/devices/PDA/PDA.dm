@@ -2163,7 +2163,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/t = multicast_message
 	if(!t)
 		t = input(U, "Please enter message", "Message to [P]", null) as text|null
-		t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
+		t = copytext(parse_emoji(sanitize(t)), 1, MAX_MESSAGE_LEN)
 		if (!t || toff || (!in_range(src, U) && loc != U)) //If no message, messaging is off, and we're either out of range or not in usr
 			return
 
@@ -2314,6 +2314,8 @@ obj/item/device/pda/AltClick()
 // access to status display signals
 /obj/item/device/pda/attackby(obj/item/C as obj, mob/user as mob)
 	..()
+	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, C))
+		return
 	if(istype(C, /obj/item/weapon/cartridge) && !cartridge)
 		if(user.drop_item(C, src))
 			cartridge = C
@@ -2441,6 +2443,10 @@ obj/item/device/pda/AltClick()
 		if(SCANMODE_REAGENT)
 			if(!A.Adjacent(user))
 				return
+			if(iscryotube(A))
+				var/obj/machinery/atmospherics/unary/cryo_cell/T = A
+				if(T.occupant)
+					A = T.occupant
 			if(!isnull(A.reagents))
 				if(A.reagents.reagent_list.len > 0)
 					var/reagents_length = A.reagents.reagent_list.len

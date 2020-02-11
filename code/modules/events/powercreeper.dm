@@ -1,7 +1,7 @@
 /datum/event/powercreeper
 
 /datum/event/powercreeper/can_start()
-	return 0
+	return 15
 
 /datum/event/powercreeper/start()
 	spawn()

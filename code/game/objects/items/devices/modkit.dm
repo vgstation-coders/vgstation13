@@ -7,6 +7,7 @@
 	var/list/parts = list()		//how many times can this kit perform a given modification
 	var/list/original = list()	//the starting parts
 	var/list/finished = list()	//the finished products
+	toolsounds = list('sound/items/Screwdriver.ogg')
 
 /obj/item/device/modkit/New()
 	..()
@@ -47,7 +48,7 @@
 	if(!isturf(O.loc))
 		to_chat(user, "<span class='warning'>\The [O] must be safely placed on the ground for modification.</span>")
 		return
-	playsound(user.loc, 'sound/items/Screwdriver.ogg', 100, 1)
+	playtoolsound(user.loc, 100)
 	var/N = new to_type(O.loc)
 	user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] into \the [N].</span>","<span class='warning'>You open \the [src] and modify \the [O] into \the [N].</span>")
 	qdel(O)
@@ -110,6 +111,17 @@
 	parts[1] =	1
 	original[1] = /obj/item/clothing/suit/space/rig/security
 	finished[1] = /obj/item/clothing/suit/space/rig/security/fat
+
+/obj/item/device/modkit/syndi_commander
+	name = "syndicate commander hardsuit modification kit"
+	desc = "For showing who's the boss. Apply to hardsuit."
+
+/obj/item/device/modkit/syndi_commander/New()
+	..()
+
+	parts =	list(1) //less shitcode when you only got one part
+	original = list(/obj/item/clothing/suit/space/rig/syndi)
+	finished = list(/obj/item/clothing/suit/space/rig/syndi/commander)
 
 
 /* /vg/ - Not needed

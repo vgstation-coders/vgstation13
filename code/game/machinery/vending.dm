@@ -186,6 +186,7 @@ var/global/num_vending_terminals = 1
 			newpack.product_records = product_records
 			newpack.hidden_records = hidden_records
 			newpack.coin_records = coin_records
+			newpack.targetvendomat = src.type
 
 	if(coinbox)
 		coinbox.forceMove(get_turf(src))
@@ -220,6 +221,11 @@ var/global/num_vending_terminals = 1
 		if(!anchored)
 			to_chat(user, "<span class='warning'>You need to anchor the vending machine before you can refill it.</span>")
 			return
+		if(P.targetvendomat != type)
+			var/list/any_records = get_all_records()
+			if(any_records.len)
+				to_chat(user, "<span class='warning'>That vending machine is neither empty nor a matching type.</span>")
+				return
 		if(!pack)
 			if(is_being_filled)
 				to_chat(user, "<span class='warning'>\The [src] is already in use!</span>")
@@ -256,7 +262,7 @@ var/global/num_vending_terminals = 1
 				is_being_filled = FALSE
 				P.in_use = FALSE
 		else
-			if(istype(P,pack))
+			if(P.targetvendomat == type)
 				if(is_being_filled)
 					to_chat(user, "<span class='warning'>\The [src] is already in use!</span>")
 					return
@@ -370,13 +376,17 @@ var/global/num_vending_terminals = 1
 			R.product_name = initial(initializer.name)
 		R.subcategory = initial(initializer.vending_cat)
 
-/obj/machinery/vending/proc/get_item_by_type(var/this_type)
+/obj/machinery/vending/proc/get_all_records()
 	var/list/datum_products = list()
 	datum_products |= hidden_records
 	datum_products |= coin_records
 	datum_products |= voucher_records
 	datum_products |= holiday_records
 	datum_products |= product_records
+	return datum_products
+
+/obj/machinery/vending/proc/get_item_by_type(var/this_type)
+	var/list/datum_products = get_all_records()
 	for(var/datum/data/vending_product/product in datum_products)
 		if(product.product_path == this_type)
 			return product
@@ -433,7 +443,7 @@ var/global/num_vending_terminals = 1
 	return 1
 
 /obj/machinery/vending/attackby(obj/item/W, mob/user)
-	if(stat & (BROKEN) && !iswrench(W))
+	if(stat & (BROKEN) && !W.is_wrench(user))
 		if(istype(W, /obj/item/stack/sheet/glass/rglass))
 			var/obj/item/stack/sheet/glass/rglass/G = W
 			to_chat(user, "<span class='notice'>You replace the broken glass.</span>")
@@ -773,7 +783,7 @@ var/global/num_vending_terminals = 1
 	if (premium.len > 0)
 		dat += "<b>Coin slot:</b> [coin ? coin : "No coin inserted"] (<a href='byond://?src=\ref[src];remove_coin=1'>Remove</A>)<br><br>"
 
-	if (src.product_records.len == 0)
+	if (src.product_records.len == 0 && coin_records.len == 0)
 		dat += "<font color = 'red'>No products loaded!</font><br><br></TT>"
 	else
 		var/list/display_records = src.product_records.Copy()
@@ -1732,13 +1742,13 @@ var/global/num_vending_terminals = 1
 	..()
 	component_parts = 0
 
-/obj/machinery/vending/wallmed1/crowbarDestroy(mob/user)
+/obj/machinery/vending/wallmed1/crowbarDestroy(mob/user, obj/item/weapon/crowbar/C)
 	user.visible_message(	"[user] begins to pry out the NanoMed from the wall.",
 							"You begin to pry out the NanoMed from the wall...")
 	if(do_after(user, src, 40))
 		user.visible_message(	"[user] detaches the NanoMed from the wall.",
 								"You detach the NanoMed from the wall.")
-		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+		C.playtoolsound(src, 50)
 		new /obj/item/mounted/frame/wallmed(src.loc)
 
 		for(var/obj/I in src)
@@ -1747,16 +1757,16 @@ var/global/num_vending_terminals = 1
 		new /obj/item/weapon/circuitboard/vendomat(src.loc)
 		new /obj/item/stack/cable_coil(loc,5)
 
-		return 1
-	return -1
+		return TRUE
+	return FALSE
 
-/obj/machinery/vending/wallmed2/crowbarDestroy(mob/user)
+/obj/machinery/vending/wallmed2/crowbarDestroy(mob/user, obj/item/weapon/crowbar/C)
 	user.visible_message(	"[user] begins to pry out the NanoMed from the wall.",
 							"You begin to pry out the NanoMed from the wall...")
 	if(do_after(user, src, 40))
 		user.visible_message(	"[user] detaches the NanoMed from the wall.",
 								"You detach the NanoMed from the wall.")
-		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+		C.playtoolsound(src, 50)
 		new /obj/item/mounted/frame/wallmed(src.loc)
 
 		for(var/obj/I in src)
@@ -1765,8 +1775,8 @@ var/global/num_vending_terminals = 1
 		new /obj/item/weapon/circuitboard/vendomat(src.loc)
 		new /obj/item/stack/cable_coil(loc,5)
 
-		return 1
-	return -1
+		return TRUE
+	return FALSE
 
 /obj/machinery/wallmed_frame
 	name = "\improper NanoMed frame"
@@ -1799,7 +1809,7 @@ var/global/num_vending_terminals = 1
 				to_chat(usr, "You begin removing screws from \the [src] backplate...")
 				if(do_after(user, src, 50))
 					to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					new /obj/item/mounted/frame/wallmed(get_turf(src))
 					qdel(src)
 				return 1
@@ -1859,7 +1869,7 @@ var/global/num_vending_terminals = 1
 				return 1
 			if(W.is_screwdriver(user))
 				to_chat(user, "You begin to complete \the [src]...")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 20))
 					if(!_circuitboard)
 						_circuitboard=new boardtype(src)
@@ -1872,7 +1882,7 @@ var/global/num_vending_terminals = 1
 		if(3) // Waiting for a recharge pack
 			if(W.is_screwdriver(user))
 				to_chat(user, "You begin to unscrew \the [src]...")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 30))
 					build--
 					update_icon()
@@ -2061,6 +2071,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/cinnamomum = 3,
 		/obj/item/seeds/avocadoseed = 3,
 		/obj/item/seeds/pearseed = 3,
+		/obj/item/seeds/peanutseed = 3,
 		)//,/obj/item/seeds/synthmeatseed = 3)
 	contraband = list(
 		/obj/item/seeds/amanitamycelium = 2,
@@ -2165,12 +2176,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/back/magiccape = 1,
 		)
 	specials = list(
-		/obj/item/clothing/suit/wizrobe/hallowiz = HALLOWEEN,
-		/obj/item/clothing/head/wizard/hallowiz = HALLOWEEN,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz = HALLOWEEN,
 		)
 
 	pack = /obj/structure/vendomatpack/magivend	//Who's laughing now? wizarditis doesn't do shit anyway. - Deity Link of 2014
-												//How about I make a foul of myself 5 years later? Wizarditis is now a proper symptom. - Deity Link of 2019
+												//How about I make a fool of myself 5 years later? Wizarditis is now a proper symptom. - Deity Link of 2019
 
 /obj/machinery/vending/dinnerware
 	name = "\improper Dinnerware"
@@ -2534,7 +2544,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/kimono = 3,
 		/obj/item/clothing/gloves/white = 3,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/lola = AUTO_DROBE_DEFAULT_STOCK,
-		/obj/item/clothing/under/clownsuit = 3
+		/obj/item/clothing/under/clownsuit = 3,
+		/obj/item/clothing/mask/gas/oni = 3,
+		/obj/item/clothing/head/helmet/samurai = 3,
+		/obj/item/clothing/suit/armor/samurai = 3
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
@@ -2560,18 +2573,20 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/boaterhat = 10,
 		/obj/item/clothing/head/fedora = 10,
 		/obj/item/clothing/head/fez = 10,
+		/obj/item/clothing/head/soft/black = 10,
 		/obj/item/clothing/head/soft/blue = 10,
 		/obj/item/clothing/head/soft/green = 10,
 		/obj/item/clothing/head/soft/grey = 10,
 		/obj/item/clothing/head/soft/orange = 10,
 		/obj/item/clothing/head/soft/purple = 10,
 		/obj/item/clothing/head/soft/red = 10,
+		/obj/item/clothing/head/soft/mime = 10,
 		/obj/item/clothing/head/soft/yellow = 10,
-		/obj/item/clothing/head/soft/black = 10,
 		)
 	contraband = list(
+		/obj/item/clothing/mask/balaclava = 5,
 		/obj/item/clothing/head/bearpelt = 5,
-		/obj/item/clothing/head/energy_dome = 5
+		/obj/item/clothing/head/energy_dome = 5,
 		)
 	premium = list(
 		/obj/item/clothing/head/soft/rainbow = 1,
@@ -2919,6 +2934,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink = 50,
 		/obj/item/weapon/reagent_containers/food/drinks/groansbanned = 50,
+		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/groansbanned = 10,

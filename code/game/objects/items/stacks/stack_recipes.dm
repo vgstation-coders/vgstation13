@@ -313,7 +313,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe("station holomap frame",     /obj/item/mounted/frame/station_map,          3, time = 25, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("light fixture frame",       /obj/item/mounted/frame/light_fixture,        2                                           ),
 		new/datum/stack_recipe("small light fixture frame", /obj/item/mounted/frame/light_fixture/small,  1                                           ),
-		new/datum/stack_recipe("embedded controller frame", /obj/item/mounted/frame/airlock_controller,   1, time = 50, one_per_turf = 0, on_floor = 1),
+		new/datum/stack_recipe("embedded controller frame", /obj/item/mounted/frame/airlock_controller,   2, time = 50, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("access button frame",       /obj/item/mounted/frame/access_button,        1, time = 50, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("airlock sensor frame",      /obj/item/mounted/frame/airlock_sensor,       1, time = 50, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("mass driver button frame",  /obj/item/mounted/frame/driver_button,        1, time = 50, one_per_turf = 0, on_floor = 1),

@@ -32,7 +32,7 @@
 
 	interact(user)
 
-/obj/machinery/computer/rust_gyrotron_controller/wrenchAnchor(var/mob/user)
+/obj/machinery/computer/rust_gyrotron_controller/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

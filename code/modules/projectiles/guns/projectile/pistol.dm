@@ -26,6 +26,7 @@
 	ammo_type ="/obj/item/ammo_casing/a50"
 	mag_type = "/obj/item/ammo_storage/magazine/a50"
 	load_method = 2
+	recoil = 3
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -55,6 +56,7 @@
 	ammo_type = "/obj/item/ammo_casing/a75"
 	mag_type = "/obj/item/ammo_storage/magazine/a75"
 	load_method = 2
+	recoil = 4
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -122,6 +124,7 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
+	recoil = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/NTUSP/update_icon()
@@ -228,6 +231,7 @@
 	ammo_type = "/obj/item/ammo_casing/a357"
 	mag_type = "/obj/item/ammo_storage/magazine/a357"
 	load_method = 2
+	recoil = 3
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/automag/update_icon()

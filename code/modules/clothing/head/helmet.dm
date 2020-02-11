@@ -4,7 +4,7 @@
 	item_state = "helmet"
 	flags = FPRINT
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	body_parts_covered = HEAD|EARS|EYES
+	body_parts_covered = HEAD|EARS|EYES|MASKHEADHAIR
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
@@ -17,7 +17,7 @@
 	item_state = "riot_helm"
 	armor = list(melee = 50, bullet = 25, laser = 45, energy = 15, bomb = 30, bio = 0, rad = 0)
 	actions_types = list(/datum/action/item_action/toggle_helmet)
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FULL_HEAD|MASKHEADHAIR
 	var/state = 1
 
 /obj/item/clothing/head/helmet/visor/New()
@@ -123,6 +123,14 @@
 	item_state = "roman_c"
 	body_parts_covered = HEAD|EARS
 
+/obj/item/clothing/head/helmet/samurai
+	name = "samurai helmet"
+	desc = "Banzai!"
+	armor = list(melee = 40, bullet = 0, laser = 10, energy = 10, bomb = 10, bio = 0, rad = 0)
+	icon_state = "kabuto"
+	item_state = "kabuto"
+	body_parts_covered = HEAD|EARS
+
 /obj/item/clothing/head/helmet/hopcap
 	name = "Head of Personnel's Cap"
 	desc = "Papers, Please."
@@ -130,6 +138,7 @@
 	item_state = "hopcap"
 	icon_state = "hopcap"
 	body_parts_covered = HEAD
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/aviatorhelmet
 	name = "Aviator Helmet"

@@ -125,8 +125,7 @@
 	add_fingerprint(user)
 
 	lock_atom(M, mob_lock_type)
-	if(isrobot(M)) //Only borgs/mommis for now.
-		M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
+	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
 
 	if(M.pulledby)
 		M.pulledby.start_pulling(src)
@@ -149,8 +148,8 @@
 	..()
 
 /obj/structure/bed/attackby(obj/item/weapon/W, mob/user)
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 50)
 		drop_stack(sheet_type, loc, 2, user)
 		qdel(src)
 		return
