@@ -167,6 +167,7 @@
 		/obj/item/device/device_analyser,
 		/obj/item/weapon/soap/nanotrasen,
 		/obj/item/clothing/gloves/black,
+		/obj/item/weapon/storage/box/parts,
 		/obj/item/device/assembly_frame = 2,
 		pick(
 			/obj/item/clothing/head/welding,
