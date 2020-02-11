@@ -184,6 +184,27 @@
 	rating = 3
 	starting_materials = list(MAT_IRON = 80)
 
+//mechanic Rank 3
+/obj/item/weapon/stock_parts/capacitor/adv/super/plastic
+	name = "plasticised super capacitor"
+	starting_materials = list(MAT_IRON = 50, MAT_PLASTIC = 50)
+
+/obj/item/weapon/stock_parts/scanning_module/adv/phasic/plastic
+	name = "plasticised scanning module"
+	starting_materials = list(MAT_IRON = 50, MAT_PLASTIC = 100)
+
+/obj/item/weapon/stock_parts/manipulator/nano/pico/plastic
+	name = "plasticised pico-manipulator"
+	starting_materials = list(MAT_IRON = 50, MAT_PLASTIC = 80)
+
+/obj/item/weapon/stock_parts/micro_laser/high/ultra/plastic
+	name = "plasticised ultra-high-power micro-laser"
+	starting_materials = list(MAT_IRON = 50, MAT_PLASTIC = 120)
+
+/obj/item/weapon/stock_parts/matter_bin/adv/super/plastic
+	name = "plasticised matter bin"
+	starting_materials = list(MAT_IRON = 50, MAT_PLASTIC = 100)
+
 //Rating 4
 //Please don't make these too easily accessible to the station.
 
