@@ -18,6 +18,7 @@
 #define BLOBCONGLOMERATE "blob conglomerate"
 #define CLOCKWORK "clockwork"
 #define PLAGUEMICE "plague mice invasion"
+#define SPIDERCLAN "spider clan"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"

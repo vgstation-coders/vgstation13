@@ -37,9 +37,9 @@
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/sl_suit/armored
-	desc = "It's a very amish looking suit. This one looks armored."
+	desc = "It's a very amish looking suit. This one has a tag. It says \"Gorlex\" in cursive."
 	name = "armored amish suit"
-	armor = list(melee = 30, bullet = 20, laser = 10,energy = 5, bomb = 5, bio = 0, rad = 0)
+	armor = list(melee = 15, bullet = 5, laser = 5, energy = 0, bomb = 5, bio = 0, rad = 0)
 
 /obj/item/clothing/under/waiter
 	name = "waiter's outfit"
@@ -782,6 +782,7 @@
 	icon_state = "clownsuit"
 	item_state = "clownsuit"
 	_color = "clownsuit"
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/under/skelesuit
 	name = "skeleton suit"
@@ -791,5 +792,12 @@
 	_color = "skelesuit"
 	species_fit = list(VOX_SHAPED)
 	clothing_flags = ONESIZEFITSALL
-	flags = HIDEHAIRCOMPLETELY | HIDEBEARDHAIR
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
+
+/obj/item/clothing/under/clownpsyche
+	name = "Psychedelic clown outfit"
+	desc = "Do you know the definition of insanity?"
+	icon_state = "clownpsyche"
+	item_state = "clownpsyche"
+	_color = "clownpsyche"
+	clothing_flags = ONESIZEFITSALL

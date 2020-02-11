@@ -201,7 +201,7 @@
 		to_chat(user, "<span class='warning'>\The [src] doesn't work on the fly, wrench it down first.</span>")
 		return
 
-/obj/machinery/singularity_beacon/wrenchAnchor(var/mob/user)
+/obj/machinery/singularity_beacon/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(active)
 		to_chat(user, "<span class='warning'>Turn off \the [src] first.</span>")
 		return FALSE

@@ -219,7 +219,7 @@
 
 /obj/machinery/computer/turbine_computer/attackby(obj/item/I as obj, mob/user as mob)
 	if(I.is_screwdriver(user))
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		I.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")

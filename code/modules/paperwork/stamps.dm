@@ -89,9 +89,20 @@
 	icon_state = "stamp-clown"
 	_color = "clown"
 
+/obj/item/weapon/stamp/mime
+	name = "mimes's rubber stamp"
+	icon_state = "stamp-mime"
+	_color = "mime"
+
 /obj/item/weapon/stamp/clown/try_stamp(mob/user,obj/item/weapon/paper/P)
 	if(!clumsy_check(user))
 		to_chat(user, "<span class='warning'>You are totally unable to use the stamp. HONK!</span>")
+	else
+		..()
+
+/obj/item/weapon/stamp/mime/try_stamp(mob/user,obj/item/weapon/paper/P)
+	if(!user.mind.miming)
+		to_chat(user, "<span class='warning'>Only a vow of silence will activate this stamp.</span>")
 	else
 		..()
 

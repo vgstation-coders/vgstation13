@@ -1,17 +1,23 @@
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
 var/list/admin_verbs_default = list(
-	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
+
+// Everyone has +ADMIN so we don't actually need anything in here.
+// Downside: The observers no longer have msay if we lack defaults.
 	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
+
+	)
+var/list/admin_verbs_admin = list(
+
+	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
 	/client/proc/check_antagonists,		/*shows all antags*/
 	/client/proc/advwho,				/*in addition to listing connected ckeys, shows character name and living/dead/antag status for each*/
 	/datum/admins/proc/checkCID,
-	/datum/admins/proc/checkCKEY
-//	/client/proc/deadchat				/*toggles deadchat on/off*/
-	)
-var/list/admin_verbs_admin = list(
+	/datum/admins/proc/checkCKEY,
+	//	/client/proc/deadchat				/*toggles deadchat on/off*/
+
 	/client/proc/set_base_turf,
 	/datum/admins/proc/delay,
 	/client/proc/SendCentcommFax,		/*sends a fax to all fax machines*/
@@ -82,6 +88,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
 	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 	/client/proc/diseases_panel,
+	/client/proc/climate_panel
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -950,34 +957,37 @@ var/list/admin_verbs_mod = list(
 		return
 
 	if(istype(winner, /mob/living))
-		achoice = alert("Give our winner his own trophy?","Achievement Trophy", "Confirm", "Cancel")
+		achoice = alert("Are you sure you want to give them an award?","Achievement award", "Confirm", "Cancel")
 		if(achoice == "Cancel")
 			return
 
-	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Last Question", "No!","Yes!")
+	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Announce To All Players", "No!","Yes!")
 
-	if(achoice == "Confirm")
-		var/obj/item/weapon/reagent_containers/food/drinks/golden_cup/C = new(get_turf(winner))
-		C.name = name
-		C.desc = desc
-		if(iscarbon(winner) && (winner.stat == CONSCIOUS))
-			winner.put_in_hands(C)
-	else
-		to_chat(winner, "<span class='danger'>You win [name]! [desc]</span>")
-
-	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
+	var/obj/item/award
+	achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup","Dunce cap")
+	if(achoice == "Gold cup")
+		award = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup(get_turf(winner))
+	if(achoice == "Gold medal")
+		award = new /obj/item/clothing/accessory/medal/gold(get_turf(winner))
+	if(achoice == "Dunce cap")
+		award = new /obj/item/clothing/head/dunce_cap(get_turf(winner))
+	award.name = name
+	award.desc = desc
+	if(iscarbon(winner) && (winner.stat == CONSCIOUS))
+		winner.put_in_hands(award)
 
 	if(glob == "No!")
-		winner.client << sound('sound/misc/achievement.ogg')
+		winner.client << sound('sound/misc/achievement.ogg', volume=35)
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+			to_chat(O, "<span class='danger'>[bicon(award)] Attention all ghosts, <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 	else
-		world << sound('sound/misc/achievement.ogg')
-		to_chat(world, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+		world << sound('sound/misc/achievement.ogg', volume=35)
+		to_chat(world, "<span class='danger'>[bicon(award)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 
-	to_chat(winner, "<span class='danger'>Congratulations!</span>")
+	to_chat(winner, "<span class='danger'>[bicon(award)] Congratulations to you, <b>[winner.name]</b>! You have won \"<b>[name]</b>\"!</span>")
 
-	achievements += "<b>[winner.key]</b> as <b>[winner.name]</b> won \"<b>[name]</b>\"! \"[desc]\""
+	var/datum/achievement = new /datum/achievement(award, winner.key, winner.name, name, desc)
+	ticker.achievements.Add(achievement)
 
 	message_admins("[key_name_admin(usr)] has awarded <b>[winner.key]</b>([winner.name]) with the achievement \"<b>[name]</b>\"! \"[desc]\".", 1)
 

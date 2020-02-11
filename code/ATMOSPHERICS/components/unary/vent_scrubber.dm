@@ -177,7 +177,7 @@
 	//scrubbing mode
 	if(scrubbing)
 		//if internal pressure limit is enabled and met, we don't do anything
-		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.return_pressure()) < 0.05)
+		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.return_pressure()) <= 0.05)
 			if(reducing_pressure)
 				reducing_pressure = 0
 				update_icon()
@@ -251,6 +251,11 @@
 
 			if(network)
 				network.update = 1
+
+		//turn off pressure reduction flag if we were within the margin on the "I'm sorry you had to see this" check.
+		else if(reducing_pressure)
+			reducing_pressure = 0
+			update_icon()
 
 	else //Just siphoning all air
 		if(reducing_pressure)
@@ -395,7 +400,7 @@
 				investigation_log(I_ATMOS, "has been unwelded by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 				welded = 0
 				update_icon()
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")

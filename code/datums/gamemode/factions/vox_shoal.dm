@@ -1,29 +1,3 @@
-/datum/faction/vox_shoal
-	name = "Vox Shoal"
-	desc = "In short supply of money, organs, experts, and rubber duckies."
-	ID = VOXSHOAL
-	required_pref = VOXRAIDER
-	initial_role = VOXRAIDER
-	late_role = VOXRAIDER
-	roletype = /datum/role/vox_raider
-	initroletype = /datum/role/vox_raider
-	logo_state = "vox-logo"
-	hud_icons = list("vox-logo")
-
-	var/time_left = (30 MINUTES)/10
-	var/completed = FALSE
-
-	var/results = "The Shoal didn't return yet."
-
-	var/list/dept_objective = list()
-	var/list/bonus_items_of_the_day = list()
-
-	var/got_personnel = 0
-	var/got_items = 0
-
-	var/total_points = 0
-	var/list/our_bounty_lockers = list()
-
 var/list/low_score_items = list(
 	/obj/item/stack,
 	/obj/item/clothing,
@@ -53,7 +27,7 @@ var/list/high_score_items = list(
 	/obj/item/weapon/pinpointer,
 	/obj/item/weapon/disk/nuclear,
 	/obj/item/weapon/hand_tele,
-	/obj/item/clothing/suit/armor/captain,
+	/obj/item/clothing/suit/space/rig/captain,
 	/obj/item/clothing/shoes/magboots/elite,
 	/obj/item/weapon/planning_frame,
 	/obj/item/weapon/storage/belt/utility/chief,
@@ -70,6 +44,35 @@ var/list/potential_bonus_items = list(
 	/obj/item/weapon/stock_parts/subspace/amplifier,
 	/obj/item/clothing/mask/gas/clown_hat,
 )
+
+/datum/faction/vox_shoal
+	name = "Vox Shoal"
+	desc = "In short supply of money, organs, experts, and rubber duckies."
+	ID = VOXSHOAL
+	required_pref = VOXRAIDER
+	initial_role = VOXRAIDER
+	late_role = VOXRAIDER
+	roletype = /datum/role/vox_raider
+	initroletype = /datum/role/vox_raider
+	logo_state = "vox-logo"
+	hud_icons = list("vox-logo")
+
+	var/time_left = (30 MINUTES)/10
+	var/completed = FALSE
+	var/results = "The Shoal didn't return yet."
+	var/list/dept_objective = list()
+	var/list/bonus_items_of_the_day = list()
+
+	var/got_personnel = 0
+	var/got_items = 0
+
+	var/total_points = 0
+	var/list/our_bounty_lockers = list()
+
+/datum/faction/vox_shoal/New()
+	..()
+	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
+	vox_shuttle.initialize() //As the area isn't loaded until the above call, its docking ports aren't populated until we call this
 
 /datum/faction/vox_shoal/forgeObjectives()
 	var/list/dept_of_choice = pick(
@@ -103,14 +106,15 @@ var/list/potential_bonus_items = list(
 
 	for (var/i = 1 to 4)
 		var/chosen_one = pick(potential_bonus_items_temp)
-		potential_bonus_items_temp =- chosen_one
+		potential_bonus_items_temp -= chosen_one
 		bonus_items_of_the_day += chosen_one
 
-	AppendObjective(/datum/objective/steal_priority)
+	var/datum/objective/steal_priority/SP = new(bonus_items_of_the_day)
+	AppendObjective(SP)
 
 /datum/faction/vox_shoal/GetScoreboard()
 	. = ..()
-	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
+	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b> minutes"
 	if (time_left < 0)
 		. += "<br/> <span class='danger'>The raid took too long.</span>"
 	. += "<br/> The raiders took <b>[got_personnel]</b> people to the Shoal."
@@ -122,6 +126,7 @@ var/list/potential_bonus_items = list(
 	. = ..()
 	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
 
+<<<<<<< HEAD
 /datum/faction/vox_shoal/OnPostSetup()
 	..()
 	var/list/turf/vox_spawn = list()
@@ -185,6 +190,8 @@ var/list/potential_bonus_items = list(
 		concrete_outfit.chosen_spec = chosen_loadout
 		concrete_outfit.equip_special_items(vox)
 
+=======
+>>>>>>> 72bdaae3c1c87e2198a5ecdf23af7a682611dd91
 /datum/faction/vox_shoal/process()
 	if (completed)
 		return
@@ -288,3 +295,71 @@ var/list/potential_bonus_items = list(
 	<br/>
 	Our best agents of all time were able to gather an estimate of [score_to_beat] voxcoins in assets, on [vox_raider_data["MM"]]/[vox_raider_data["DD"]]/[vox_raider_data["YY"]]. <br/>
 	Their names are as follows: [best_team]."}
+
+/obj/item/weapon/coin/raider
+	name = "raider coin"
+	icon_state = "coin_gold"
+
+/datum/map_element/dungeon/vox_shuttle
+	file_path = "maps/misc/voxshuttle.dmm"
+	unique = TRUE
+
+/obj/item/weapon/storage/box/large/vox_equipment
+	name = "Vox equipment box"
+	desc = "A Vox Box for short."
+
+/obj/item/weapon/storage/box/large/vox_equipment/raider/New()
+	..()
+	new /obj/item/clothing/suit/space/vox/carapace(src)
+	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
+	new /obj/item/weapon/melee/telebaton(src)
+	new /obj/item/clothing/glasses/thermal/monocle(src)
+	new /obj/item/device/chameleon(src)
+	var/obj/item/weapon/crossbow/W = new(src)
+	W.cell = new /obj/item/weapon/cell/crap(W)
+	W.cell.charge = 500
+	var/obj/item/stack/rods/A = new(src)
+	A.amount = 20
+
+/obj/item/weapon/storage/box/large/vox_equipment/engineer/New()
+	..()
+	new /obj/item/clothing/suit/space/vox/pressure(src)
+	new /obj/item/clothing/head/helmet/space/vox/pressure(src)
+	new /obj/item/weapon/storage/belt/utility/full(src)
+	new /obj/item/clothing/glasses/scanner/meson(src)
+	new /obj/item/weapon/storage/box/emps(src)
+	new /obj/item/device/multitool(src)
+	var/obj/item/weapon/paper/vox_paper/VP = new(src)
+	VP.initialize()
+
+/obj/item/weapon/storage/box/large/vox_equipment/saboteur/New()
+	..()
+	new /obj/item/clothing/suit/space/vox/carapace(src)
+	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
+	new /obj/item/weapon/storage/belt/utility/full(src)
+	new /obj/item/clothing/glasses/thermal/monocle(src)
+	new /obj/item/weapon/card/emag(src)
+	new /obj/item/weapon/gun/dartgun/vox/raider(src)
+	new /obj/item/device/multitool(src)
+
+/obj/item/weapon/storage/box/large/vox_equipment/medic/New()
+	..()
+	new /obj/item/clothing/suit/space/vox/pressure(src)
+	new /obj/item/clothing/head/helmet/space/vox/pressure(src)
+	new /obj/item/weapon/storage/belt/utility/full(src)
+	new /obj/item/clothing/glasses/hud/health(src)
+	new /obj/item/weapon/circular_saw(src)
+	new /obj/item/weapon/gun/dartgun/vox/medical(src)
+
+/obj/machinery/vending/raider
+	name = "\improper Raider Surplus"
+	icon_state = "voxseed"
+	vend_reply = "Happy hunting!"
+	unhackable = TRUE
+	accepted_coins = list(/obj/item/weapon/coin/raider)
+	premium = list(
+		/obj/item/weapon/storage/box/large/vox_equipment/medic = 2,
+		/obj/item/weapon/storage/box/large/vox_equipment/saboteur = 2,
+		/obj/item/weapon/storage/box/large/vox_equipment/engineer = 2,
+		/obj/item/weapon/storage/box/large/vox_equipment/raider = 2
+	)

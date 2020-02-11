@@ -2,7 +2,7 @@
 	name = "Ring of Fire"
 	desc = "Summon a stationary ring of flames around your current location for 10 seconds. While the ring is active, you are fully immune to fire and burns."
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 	school = "conjuration"
 	charge_max = 300
 	cooldown_min = 100
@@ -10,7 +10,7 @@
 	spell_levels = list(Sp_SPEED = 0, Sp_MOVE = 0)
 	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 3, Sp_MOVE = 1)
 
-	spell_flags = NEEDSCLOTHES
+	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	spell_aspect_flags = SPELL_FIRE
 	charge_type = Sp_RECHARGE
 	invocation = "E ROHA"

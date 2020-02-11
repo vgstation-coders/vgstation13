@@ -1168,7 +1168,7 @@ function loadPage(list) {
 			else
 				return FALSE
 
-		if (!(index in L))
+		if (index < 1 || index > L.len)
 			return FALSE
 
 		log_admin("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")

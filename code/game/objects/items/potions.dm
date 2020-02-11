@@ -127,7 +127,7 @@
 	user.make_invisible(INVISIBLEPOTION, time, include_clothes)
 
 /obj/item/potion/invisibility/impact_atom(atom/target)
-	if(isatommovable(target))
+	if(ismovable(target))
 		var/atom/movable/AM = target
 		AM.make_invisible(INVISIBLEPOTION, time)
 
@@ -201,7 +201,9 @@
 		/mob/living/simple_animal/hostile/asteroid/goliath,
 		/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider,
 		/mob/living/simple_animal/hostile/retaliate/cockatrice,
-		/mob/living/simple_animal/hostile/retaliate/malf_drone,
+		/mob/living/simple_animal/construct/armoured/perfect,
+		/mob/living/simple_animal/hostile/necro/zombie/putrid,
+		/mob/living/simple_animal/hostile/humanoid/frostgolem/knight,
 		/mob/living/simple_animal/hostile/gingerbread,
 		/mob/living/simple_animal/vox/armalis,
 		/mob/living/carbon/alien/humanoid/hunter
@@ -273,7 +275,7 @@
 		user.alphas -= TRANSPARENCYPOTION
 
 /obj/item/potion/transparency/impact_atom(atom/target)
-	if(!isatommovable(target))
+	if(!ismovable(target))
 		return
 	target.alpha = 125
 	spawn(10 MINUTES)

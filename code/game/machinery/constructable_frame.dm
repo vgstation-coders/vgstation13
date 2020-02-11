@@ -56,7 +56,7 @@
 					build_path = 0
 					new /obj/item/stack/sheet/glass/glass(get_turf(src))
 					icon_state = "box_0"
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					P.playtoolsound(src, 50)
 				if(istype(P, /obj/item/weapon/circuitboard/airlock) && P:icon_state != "door_electronics_smoked")
 					if (!C)
 						if(user.drop_item(P, src))
@@ -80,14 +80,14 @@
 						circuit = null
 					build_state--
 					icon_state = "box_glass"
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					P.playtoolsound(src, 50)
 				if(P.is_screwdriver(user) && C)
 					var/obj/structure/displaycase/new_display_case = new(get_turf(src))
 					new_display_case.circuit = C
 					C.forceMove(new_display_case)
 					circuit = null
 					C = null
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					P.playtoolsound(src, 50)
 					qdel(src)
 				return
 		return
@@ -116,8 +116,8 @@
 				icon_state="box_glass"
 				return
 			else
-				if(iswrench(P))
-					playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+				if(P.is_wrench(user))
+					P.playtoolsound(src, 75)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
 					drop_stack(sheet_type, get_turf(src), 5, user)
 					qdel(src)
@@ -148,7 +148,7 @@
 						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				else
 					if(iswirecutter(P))
-						playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+						P.playtoolsound(src, 50)
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
 						var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )
@@ -157,7 +157,7 @@
 		if(3)
 			if(!..())
 				if(iscrowbar(P))
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					P.playtoolsound(src, 50)
 					set_build_state(2)
 					circuit.forceMove(src.loc)
 					circuit = null
@@ -181,7 +181,7 @@
 								component_check = 0
 								break
 						if(component_check)
-							playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+							P.playtoolsound(src, 50)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
 								returnToPool(O)
@@ -328,7 +328,7 @@ to destroy them and players will be able to make replacements.
 		var/obj/item/weapon/solder/S = O
 		if(!S.remove_fuel(4,user))
 			return
-		playsound(loc, 'sound/items/Welder.ogg', 50, 1)
+		S.playtoolsound(loc, 50)
 		soldering = 1
 		if(do_after(user, src,40))
 			var/boardType = allowed_boards[t]
@@ -374,7 +374,7 @@ to destroy them and players will be able to make replacements.
 	desc = "A circuit board used to run a machine that fabricates guns, ammunition, and firearm accessories."
 	build_path = /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe
 	board_type = MACHINE
-	//origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_COMBAT + "=4"
+	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_COMBAT + "=4"
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 3,
 							/obj/item/weapon/stock_parts/manipulator = 1,
@@ -1408,6 +1408,17 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/micro_laser = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1)
 
+/obj/item/weapon/circuitboard/medal_printer
+	name = "Circuit board (Medal Printer)"
+	desc = "A circuit board for the medal printer."
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=4"
+	build_path = /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/medal_printer
+	req_components = list(
+						/obj/item/weapon/stock_parts/matter_bin = 1,
+						/obj/item/weapon/stock_parts/manipulator = 2,
+						/obj/item/weapon/stock_parts/micro_laser = 1,
+						/obj/item/weapon/stock_parts/console_screen = 1)
 
 /*
  * Fishtanks

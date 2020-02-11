@@ -53,7 +53,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	var/message = "";
 	var/dpt = ""; //the department which will be receiving the message
 	var/priority = -1 ; //Priority of the message being sent
-	var/announceSound = 'sound/vox/bloop.wav'
+	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
 
 /obj/machinery/requests_console/power_change()
@@ -447,9 +447,9 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state="req_comp_open"
 		else
 			to_chat(user, "You can't do much with that.")
-	if(iswrench(O) && open && !departmentType)
+	if(O.is_wrench(user) && open && !departmentType)
 		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+		O.playtoolsound(src, 100)
 		new /obj/item/stack/sheet/metal (src.loc,2)
 		qdel(src)
 		return

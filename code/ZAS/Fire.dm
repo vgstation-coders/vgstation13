@@ -34,11 +34,24 @@ Attach to transfer valve and open. BOOM.
 		//testing("[src] ashifying (BFF)!")
 		ashify()
 
+/atom/proc/burnItselfUp()
+	while(on_fire)
+		var/in_fire = FALSE
+		for(var/obj/effect/fire/F in loc)
+			in_fire = TRUE
+			break
+		if(!in_fire)
+			fire_fuel -= 0.2
+			if(fire_fuel<=0.1)
+				ashify()
+		sleep(2 SECONDS)
+
 /atom/proc/ashify()
 	if(!on_fire)
 		return
 	var/ashtype = ashtype()
 	new ashtype(src.loc)
+	extinguish()
 	qdel(src)
 
 /atom/proc/extinguish()
@@ -52,6 +65,8 @@ Attach to transfer valve and open. BOOM.
 	if(fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
+	spawn()
+		burnItselfUp()
 
 /atom/proc/melt()
 	return //lolidk

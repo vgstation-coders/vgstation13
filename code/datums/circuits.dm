@@ -110,7 +110,7 @@
 				if(issolder(I))
 					var/obj/item/weapon/solder/S = I
 					if(S.remove_fuel(1,L))
-						playsound(L.loc, 'sound/items/Welder.ogg', 25, 1)
+						I.playtoolsound(L.loc, 25)
 						var/greek = href_list["fuse"]
 						togglefuse(text2num(greek))
 				else

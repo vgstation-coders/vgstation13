@@ -9,6 +9,8 @@
 
 	maxHealth = 75
 	health = 75
+	universal_speak = 1
+	universal_understand = 1
 
 	held_items = list()
 

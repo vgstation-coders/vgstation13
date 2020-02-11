@@ -68,6 +68,7 @@
 	icon_state = "mailman"
 	desc = "<i>'Right-on-time'</i> mail service head wear."
 	flags = FPRINT
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/plaguedoctorhat
 	name = "plague doctor's hat"
@@ -82,8 +83,7 @@
 	name = "hastur's hood"
 	desc = "It's unspeakably stylish."
 	icon_state = "hasturhood"
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = EARS|HEAD
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 
 /obj/item/clothing/head/nursehat
 	name = "nurse's hat"
@@ -141,6 +141,10 @@
 	body_parts_covered = FULL_HEAD|BEARD
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
+
+/obj/item/clothing/head/cardborg/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	if(L.is_wearing_item(src, slot_head))
+		speech.message_classes.Add("siliconsay")
 
 /obj/item/clothing/head/justice
 	name = "justice hat"
@@ -212,6 +216,7 @@
 	item_state = "bowler_hat"
 	desc = "For that industrial age look."
 	flags = FPRINT
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/beaverhat
 	name = "beaver hat"
@@ -226,6 +231,7 @@
 	item_state = "boater_hat"
 	desc = "Goes well with celery."
 	flags = FPRINT
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/squatter_hat
 	name = "slav squatter hat"
@@ -281,6 +287,7 @@
 	item_state = "fez"
 	desc = "Put it on your monkey, make lots of cash money."
 	flags = FPRINT
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 //end bs12 hats
 
@@ -289,8 +296,7 @@
 	desc = "Eeeee~heheheheheheh!"
 	icon_state = "witch"
 	item_state = "witch"
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = EARS|HEAD
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/chicken
@@ -298,8 +304,7 @@
 	desc = "Bkaw!"
 	icon_state = "chickenhead"
 	item_state = "chickensuit"
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/bearpelt
@@ -307,8 +312,7 @@
 	desc = "Not as fuzzy as the real thing."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = EARS|HEAD
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/bearpelt/real
@@ -330,8 +334,7 @@
 	icon_state = "xenos"
 	item_state = "xenos_helm"
 	desc = "A helmet made out of chitinous alien hide."
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/batman
@@ -432,10 +435,10 @@
 
 /obj/item/clothing/head/cowboy
 	name = "cowboy hat"
-	desc = "Pefect for the closet botanist."
+	desc = "Perfect for the closet botanist."
 	icon_state = "cowboy"
 	item_state = "cowboy"
-
+	armor = list(melee = 0, bullet = 10, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/head/christmas/santahat/red
 	name = "red santa hat"

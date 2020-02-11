@@ -9,7 +9,6 @@ var/list/cyborg_list = list()
 	health = 300
 	flashed = FALSE
 
-	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
@@ -19,14 +18,9 @@ var/list/cyborg_list = list()
 	var/startup_sound = 'sound/voice/liveagain.ogg'
 	var/startup_vary = TRUE //Does the startup sounds vary?
 
-	// Alerts
-	var/pressure_alert = FALSE
-	var/temp_alert = FALSE
-
 	var/obj/item/device/station_map/station_holomap = null
 
 	//Hud stuff
-	var/obj/abstract/screen/cells = null
 	var/obj/abstract/screen/inv1 = null
 	var/obj/abstract/screen/inv2 = null
 	var/obj/abstract/screen/inv3 = null
@@ -212,11 +206,6 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
-	if(cells)
-		returnToPool(cells)
-		if(client)
-			client.screen -= cells
-		cells = null //TODO: Move to mob level helper
 	if(inv1)
 		returnToPool(inv1)
 		if(client)

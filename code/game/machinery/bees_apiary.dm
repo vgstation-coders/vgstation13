@@ -15,7 +15,7 @@ var/list/apiaries_list = list()
 
 /obj/machinery/apiary
 	name = "apiary tray"
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1

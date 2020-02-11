@@ -12,7 +12,7 @@
 	//Whether the rune is pulsating
 	var/animated = 0
 
-	//A rune is made of up to 3 words. 
+	//A rune is made of up to 3 words.
 	var/runeset_identifier = "base"
 	var/datum/runeword/word1
 	var/datum/runeword/word2
@@ -70,7 +70,7 @@
 		active_spell = null
 
 	global_runesets[runeset_identifier].rune_list.Remove(src)
-	
+
 	..()
 
 /obj/effect/rune/examine(var/mob/user)
@@ -81,7 +81,7 @@
 	if(can_read_rune(user) || isobserver(user))
 		to_chat(user, "<span class='info'>It reads: <i>[word1 ? "[word1.rune]" : ""][word2 ? " [word2.rune]" : ""][word3 ? " [word3.rune]" : ""]</i>. [rune_name ? " That's a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
 
-	
+
 /obj/effect/rune/proc/can_read_rune(var/mob/user) //Overload for specific criteria.
 	return 1
 
@@ -110,7 +110,7 @@
 	else
 		animated = 0
 
-	var/lookup = "" 
+	var/lookup = ""
 	if (word1)
 		lookup += "[word1.icon_state]-[animated]-[blood1.data["blood_colour"]]"
 	if (word2)
@@ -142,7 +142,7 @@
 		idle_pulse()
 	else
 		animate(src)
-		
+
 /obj/effect/rune/proc/make_iconcache(var/datum/runeword/word, var/datum/reagent/blood/blood, var/animated) //For caching rune icons
 	var/icon/I = icon('icons/effects/uristrunes.dmi', "")
 	if (!blood)
@@ -191,9 +191,9 @@
 
 		I.MapColors(0.5,0,0,0,0.5,0,0,0,0.5)//we'll darken that color a bit
 	return I
-	
+
 /obj/effect/rune/proc/idle_pulse()
-	//This masterpiece of a color matrix stack produces a nice animation no matter which color the rune is. 
+	//This masterpiece of a color matrix stack produces a nice animation no matter which color the rune is.
 	animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)//1
 	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)//2
 	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)//3
@@ -255,10 +255,10 @@
 
 /obj/effect/rune/attack_hand(var/mob/living/user)
 	trigger(user)
-	
+
 /obj/effect/rune/attack_robot(var/mob/living/user) //Allows for robots to remotely trigger runes, since attack_robot has infinite range.
 	trigger(user)
-	
+
 /obj/effect/rune/proc/trigger(var/mob/living/user)
 	user.delayNextAttack(5)
 
@@ -284,6 +284,8 @@
 
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
 		return fizzle(user)
+
+	add_hiddenprint(user)
 
 	if (active_spell)
 		active_spell.midcast(user)
@@ -327,9 +329,9 @@
 				conceal_cooldown = 0
 		return 1
 	return 0
-		
+
 /////////////////////////BLOOD CULT RUNES//////////////////////
-		
+
 /obj/effect/rune/blood_cult
 	desc = "A strange collection of symbols drawn in blood."
 	runeset_identifier = "blood_cult"
@@ -346,8 +348,8 @@
 
 /obj/effect/rune/blood_cult/Destroy()
 	..()
-	holomap_markers -= HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]" //Add to blood cult rune	
-				
+	holomap_markers -= HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]" //Add to blood cult rune
+
 /obj/effect/rune/blood_cult/attackby(obj/I, mob/user)
 	..()
 	if(isholyweapon(I))
@@ -360,7 +362,7 @@
 		var/obj/item/weapon/talisman/T = I
 		T.imbue(user,src)
 	return
-		
+
 /obj/effect/rune/blood_cult/trigger(var/mob/living/user, var/talisman_trigger=0)
 	user.delayNextAttack(5)
 
@@ -386,6 +388,8 @@
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
 		return fizzle(user)
 
+	add_hiddenprint(user)
+
 	if(active_spell)//rune is already channeling a spell? let's see if we can interact with it somehow.
 		if(talisman_trigger)
 			var/datum/rune_spell/blood_cult/active_spell_typecast = active_spell
@@ -404,13 +408,13 @@
 		return fizzle(user)
 	else if (active_spell.destroying_self)
 		active_spell = null
-		
+
 /obj/effect/rune/blood_cult/can_read_rune(var/mob/user) //Overload for specific criteria.
 	return iscultist(user)
 
 /obj/effect/rune/blood_cult/examine(var/mob/user)
 	..()
-		
+
 	if(can_read_rune(user) || isobserver(user))
 		var/datum/rune_spell/blood_cult/rune_name = get_rune_spell(null, null, "examine", word1,word2,word3)
 		if(rune_name)
@@ -425,10 +429,10 @@
 					if (PE.network)
 						to_chat(user, "<span class='info'>This exit was attuned to the <b>[PE.network]</b> path.</span>")
 			else
-				to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")	
-				
+				to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
+
 	//"Cult" chaplains can read the words, but they have to figure out the spell themselves. Also has a chance to trigger a taunt from Nar-Sie.
-	else if(istype(user, /mob/living/carbon/human) && (user.mind.assigned_role == "Chaplain")) 
+	else if(istype(user, /mob/living/carbon/human) && (user.mind.assigned_role == "Chaplain"))
 		var/list/cult_blood_chaplain = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
 		var/list/cult_clock_chaplain = list("ratvar", "clockwork", "ratvarism")
 		if (religion_name in cult_blood_chaplain)
@@ -449,23 +453,25 @@
 					to_chat(user, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
 							"Oh just fuck off",)].</span></span>")
 
-	
-/proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source, var/word = null)
+
+/proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source, var/word = null, var/mob/caster = null)
 	if (!word)
 		return 0
 
 	//Add word to a rune if there is one, otherwise create one. However, there can be no more than 3 words.
 	//Returns 0 if failure, 1 if finished a rune, 2 if success but rune still has room for words.
-		
+
 	var/obj/effect/rune/rune = locate() in T
 	if(!rune)
 		var/datum/runeword/rune_typecast = word
 		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.
-			rune = new /obj/effect/rune/blood_cult(T) 
+			rune = new /obj/effect/rune/blood_cult(T)
 
 	if (rune.word1 && rune.word2 && rune.word3)
 		return 0
-	
+
+	if (caster)
+		rune.add_hiddenprint(caster)
 
 	if (!rune.word1)
 		rune.word1 = word
@@ -533,7 +539,7 @@
 	rune.update_icon()
 	return 2
 
-	
+
 /proc/erase_rune_word(var/turf/T)
 	var/obj/effect/rune/rune = locate() in T
 	if(!rune)
@@ -565,4 +571,3 @@
 		qdel(rune)
 		return null
 	return word_erased
-	

@@ -75,6 +75,8 @@
 
 /area/vault/hive_shuttle
 
+/area/vault/rsvault
+
 /area/vault/syndiecargo
 
 //prison vault
@@ -919,3 +921,8 @@
 		/obj/item/weapon/stock_parts/console_screen\
 	)
 
+
+/obj/machinery/turret/russian
+	faction = "russian"
+	lasers = 1
+	lasertype = 2

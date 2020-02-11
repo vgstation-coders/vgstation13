@@ -1,8 +1,3 @@
-#define SNOW_CALM 0
-#define SNOW_AVERAGE 1
-#define SNOW_HARD 2
-#define SNOW_BLIZZARD 3
-
 //This file includes all associated code with snow tiles, snowprints, and blizzards on them.
 
 /turf/unsimulated/floor/snow
@@ -19,7 +14,9 @@
 	var/initial_snowballs = -1 //-1 means random.
 	var/snowballs = 0
 	var/snow_state = SNOW_CALM
+	var/snowprints = TRUE //if false, do not set up a snowprint parent, do not make snowprints
 	var/obj/effect/snowprint_holder/snowprint_parent
+	var/ignore_blizzard_updates = FALSE //if true, don't worry about global blizzard events
 	var/obj/effect/blizzard_holder/blizzard_parent
 	turf_speed_multiplier = 1
 	gender = PLURAL
@@ -42,14 +39,19 @@
 			snow_state = i
 			blizzard_parent.UpdateSnowfall()
 		snowtiles_setup = 1
-	snow_state = snow_intensity
+	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = map.climate.current_weather
+		snow_state = S.snow_intensity
+	else
+		snow_state = SNOW_CALM
 	if(real_snow_tile)
 		if(initial_snowballs == -1)
 			snowballs = rand(5, 10)
 		else
 			snowballs = initial_snowballs
 		icon_state = "snow[rand(0, 6)]"
-		snowprint_parent = new /obj/effect/snowprint_holder(src)
+		if(snowprints)
+			snowprint_parent = new /obj/effect/snowprint_holder(src)
 	update_environment()
 	global_snowtiles += src
 
@@ -72,24 +74,28 @@
 	switch(snow_state)
 		if(SNOW_CALM)
 			temperature = T_ARCTIC
-			turf_speed_multiplier = 1
+			turf_speed_multiplier = 1 //higher numbers mean slower
 		if(SNOW_AVERAGE)
 			temperature = T_ARCTIC-5
-			turf_speed_multiplier = 1.15 //For some reason, higher numbers mean slower.
+			turf_speed_multiplier = 1
 		if(SNOW_HARD)
 			temperature = T_ARCTIC-10
-			turf_speed_multiplier = 1.6
+			turf_speed_multiplier = 1.4
 		if(SNOW_BLIZZARD)
 			temperature = T_ARCTIC-20
-			turf_speed_multiplier = 2.9
+			turf_speed_multiplier = 2.8
 	turf_speed_multiplier *= 1+(snowballs/10)
 
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
 	..()
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
-		if(snowprint_parent && snowballs)
-			snowprint_parent.AddSnowprintGoing(H.get_footprint_type(),H.dir)
+		if(snowprint_parent && snowballs && !H.flying)
+			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
+				snowprint_parent.AddSnowprintGoing(H.get_footprint_type(), H.dir)
+			else //Our human is down on his ass or in a vehicle, create tracks
+				snowprint_parent.AddSnowprintGoing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+
 		if(!istype(newloc,/turf/unsimulated/floor/snow))
 			H.clear_fullscreen("snowfall_average",0)
 			H.clear_fullscreen("snowfall_hard",0)
@@ -101,8 +107,11 @@
 	..()
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
-		if(snowprint_parent && snowballs)
-			snowprint_parent.AddSnowprintComing(H.get_footprint_type(),H.dir)
+		if(snowprint_parent && snowballs && !H.flying)
+			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
+				snowprint_parent.AddSnowprintComing(H.get_footprint_type(), H.dir)
+			else //Our human is down on his ass or in a vehicle, create tracks
+				snowprint_parent.AddSnowprintComing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
 		switch(snow_state)
 			if(SNOW_CALM)
 				H.clear_fullscreen("snowfall_average",0)
@@ -208,7 +217,7 @@
 		extract_snowballs(1, TRUE, user, W)
 
 
-/turf/unsimulated/floor/snow/attack_hand(mob/user as mob)
+/turf/unsimulated/floor/snow/CtrlClick(mob/user)
 
 	if(snowballs)
 		//Reach down and make a snowball
@@ -228,20 +237,18 @@
 			to_chat(user,"<span class='info'>It seems almost entirely devoid of snow, exposing the permafrost below.</span>")
 
 /turf/unsimulated/floor/snow/proc/change_snowballs(var/delta, var/limit) //Changes snowball count by delta, but to be no lower/greater than limit. Updates texture, too.
-	if(delta >= 0)
-		snowballs += delta
-		if(snowballs > limit)
-			snowballs = limit
+	snowballs += delta //this can be negative, in which case it subtracts
+	if(delta>=0)
+		snowballs = min(snowballs, limit) //no more than the limit
 	else
-		snowballs -= delta
-		if(snowballs < limit)
-			snowballs = limit
-		else if(snowballs < 0)
-			snowballs = 0
+		snowballs = max(snowballs, 0)
+	//This is a rare situation where we can't use Clamp(), because we don't want the limit to apply if subtracting
 	update_environment()
 
 /turf/unsimulated/floor/snow/proc/extract_snowballs(var/snowball_amount = 0, var/pick_up = FALSE, var/mob/user, var/obj/item/stack/sheet/snow/snowball_stack = null)
-
+	if(!Adjacent(user))
+		to_chat(user,"<span class='warning'>You're too far away to scoop snow.</span>")
+		return
 	if(!snowball_amount)
 		return
 
@@ -294,11 +301,51 @@
 	name = "asphalt"
 	desc = "Specially treated Centcomm asphalt, designed to disintegrate all snow that touches it."
 
+/turf/unsimulated/floor/snow/asphalt/mine
+	name = "mine road"
+	desc = "Made of asphalt. If you get lost, just follow the old mining road..."
+	ignore_blizzard_updates = TRUE
+
 /turf/unsimulated/floor/snow/permafrost
 	icon_state = "permafrost_full"
 	real_snow_tile = FALSE
 	name = "permafrost"
 	desc = "Soil that never unfreezes."
+
+/turf/unsimulated/floor/snow/dirt
+	name = "snowy dirt"
+	desc = "Dirty."
+	real_snow_tile = FALSE
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "asteroid"
+
+/turf/unsimulated/floor/pit
+	name = "pit"
+	desc = "A dark pit drilled deep into the planetary core for the purposes of gas disposal. A near vacuum."
+	icon = 'icons/turf/new_snow.dmi'
+	icon_state = "pit"
+
+/turf/unsimulated/floor/snow/cave
+	name = "snowy cave floor"
+	desc = "Sheltered from blizzards outside, but still cold."
+	ignore_blizzard_updates = TRUE
+	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
+
+/turf/unsimulated/floor/snow/cave/rock
+	name = "rocky cave floor"
+	real_snow_tile = FALSE
+	icon_state = "permafrost_full"
+
+/turf/unsimulated/floor/snow/heavy_blizzard
+	name = "heavy blizzard"
+	desc = "Without cover or landmarks, dense blizzards are easy to get lost in."
+	snowprints = FALSE
+	ignore_blizzard_updates = TRUE
+	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
+
+/turf/unsimulated/floor/snow/heavy_blizzard/update_environment()
+	snow_state = SNOW_BLIZZARD //forces this to always be blizzarding regardless of blizzard rules
+	..()
 
 /turf/unsimulated/floor/noblizz_permafrost
 	icon = 'icons/turf/new_snow.dmi'
@@ -312,6 +359,7 @@
 	can_border_transition = 1
 	plane = PLATING_PLANE
 
+#define MOLES_ICECORE 11100
 /turf/unsimulated/floor/noblizz_permafrost/icecore
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "ice"
@@ -320,6 +368,8 @@
 	temperature = TCMB
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
 	heat_capacity = 700000
+	oxygen = MOLES_ICECORE * 0.2
+	nitrogen = MOLES_ICECORE * 0.8
 
 /obj/glacier
 	desc = "A frozen lake kept solid by temperatures way below freezing."

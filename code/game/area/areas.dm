@@ -708,7 +708,7 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 					if(turftoleave)
 						fromupdate += T.ChangeTurf(turftoleave, allow = 1)
 					else
-						if(ispath(AA.type, /area/syndicate_station/start))
+						if(ispath(AA.type, /area/shuttle/nuclearops))
 							T.ChangeTurf(/turf/unsimulated/floor, allow = 1)
 							T.icon = 'icons/turf/snow.dmi'
 							T.icon_state = "snow"

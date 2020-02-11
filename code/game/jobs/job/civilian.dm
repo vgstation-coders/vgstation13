@@ -7,6 +7,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 20
 	selection_color = "#dddddd"
 	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons)
 	minimal_access = list(access_bar,access_weapons)
@@ -69,6 +70,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 20
 	selection_color = "#dddddd"
 	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue)
 	minimal_access = list(access_kitchen, access_morgue, access_bar)
@@ -117,6 +119,7 @@
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the head of personnel"
+	wage_payout = 20
 	selection_color = "#dddddd"
 	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
 	minimal_access = list(access_hydroponics, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
@@ -177,6 +180,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 65
 	selection_color = "#dddddd"
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
@@ -190,6 +194,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the quartermaster and the head of personnel"
+	wage_payout = 20
 	selection_color = "#dddddd"
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
@@ -203,6 +208,7 @@
 	total_positions = 3
 	spawn_positions = 3
 	supervisors = "the quartermaster and the head of personnel"
+	wage_payout = 30
 	selection_color = "#dddddd"
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_mining, access_mint, access_mining_station, access_mailsorting)
@@ -221,6 +227,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 15
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/clown
 	access = list(access_clown, access_theatre, access_maint_tunnels)
@@ -255,7 +262,7 @@
 				H.equip_or_collect(new /obj/item/clothing/shoes/clown_shoes(H), slot_shoes)
 	H.fully_replace_character_name(H.real_name,pick(clown_names))
 	H.dna.real_name = H.real_name
-	H.rename_self("clown")
+	mob_rename_self(H,"clown")
 	return 1
 
 /datum/job/clown/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -287,6 +294,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 15
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/mime
 	access = list(access_mime, access_theatre, access_maint_tunnels)
@@ -317,15 +325,17 @@
 	if(H.backbag == 1)
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		H.equip_or_collect(new /obj/item/toy/crayon/mime(H), slot_l_store)
+		H.equip_or_collect(new /obj/item/weapon/stamp/mime(H), slot_l_store)
 		H.put_in_hands(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/toy/crayon/mime(H), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H), slot_in_backpack)
+		H.equip_or_collect(new /obj/item/weapon/stamp/mime(H), slot_in_backpack)
 	H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 	H.add_spell(new /spell/targeted/oathbreak/)
 	H.mind.miming = MIMING_OUT_OF_CHOICE
-	H.rename_self("mime")
+	mob_rename_self(H,"mime")
 	return 1
 
 /datum/job/mime/priority_reward_equip(var/mob/living/carbon/human/H)
@@ -377,6 +387,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 20
 	selection_color = "#dddddd"
 	access = list(access_janitor, access_maint_tunnels)
 	minimal_access = list(access_janitor, access_maint_tunnels)
@@ -426,6 +437,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of personnel"
+	wage_payout = 25
 	selection_color = "#dddddd"
 	access = list(access_library, access_maint_tunnels)
 	minimal_access = list(access_library)
@@ -479,6 +491,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "Nanotrasen Law, CentComm Officals, and the station's captain."
+	wage_payout = 55
 	selection_color = "#dddddd"
 	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo, access_medical, access_bar, access_kitchen, access_hydroponics)
 	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,  access_bar, access_kitchen)

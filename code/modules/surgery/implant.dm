@@ -211,6 +211,7 @@
 		obj.forceMove(get_turf(target))
 		if(istype(obj,/obj/item/weapon/implant))
 			var/obj/item/weapon/implant/imp = obj
+			imp.handle_removal(user)
 			imp.imp_in = null
 			imp.implanted = 0
 			affected.implants -= imp

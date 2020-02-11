@@ -57,8 +57,8 @@
 			qdel(src)
 			return
 
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 50)
 		drop_stack(sheet_type, loc, sheet_amt, user)
 		qdel(src)
 		return
@@ -283,7 +283,7 @@
 
 
 /obj/structure/bed/chair/comfy/attackby(var/obj/item/W, var/mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		for (var/atom/movable/AM in src)
 			AM.forceMove(loc)
 
@@ -616,7 +616,7 @@
 	if(istype(W, /obj/item/assembly/shock_kit))
 		to_chat(user,"<span class='warning'>\The [W] cannot be rigged onto \the [src].</span>")
 		return
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		to_chat(user,"<span class='warning'>You cannot find any bolts to unwrench on \the [src].</span>")
 		return
 	if (iswelder(W))

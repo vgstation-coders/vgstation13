@@ -52,6 +52,10 @@
 	var/list/offsets = list()
 	var/last_dir
 
+	var/list/datum/action/vehicle_actions = list()
+
+	var/headlights = FALSE
+
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
 
@@ -76,6 +80,8 @@
 		nick=name
 	set_keys()
 	make_offsets()
+	if(headlights)
+		new /datum/action/vehicle/toggle_headlights(src)
 
 /obj/structure/bed/chair/vehicle/Destroy()
 	vehicle_list.Remove(src)
@@ -168,9 +174,9 @@
 		return 0
 
 	//If we're in space or our area has no gravity...
-	var/turf/T = get_turf(loc)
-	if(!T)
-		return 0
+	var/turf/T = loc
+	if(!istype(T))
+		return 0 //location isn't a turf or doesn't exist
 	if(!T.has_gravity())
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))
@@ -232,8 +238,19 @@
 		"<span class='notice'>You climb onto \the [nick]!</span>")
 
 	lock_atom(M, /datum/locking_category/buckle/chair/vehicle)
+	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
 
 	add_fingerprint(user)
+
+	for (var/datum/action/action in vehicle_actions)
+		if (action.owner && action.owner != user)
+			action.Remove(action.owner)
+		action.Grant(user)
+
+/obj/structure/bed/chair/vehicle/manual_unbuckle(user)
+	..()
+	for (var/datum/action/action in vehicle_actions)
+		action.Remove(user)
 
 /obj/structure/bed/chair/vehicle/handle_layer()
 	if(dir == SOUTH)
@@ -412,3 +429,38 @@
 	return
 
 /datum/locking_category/buckle/chair/vehicle
+
+
+/////////////////////////////////////
+//           VEHICLE ACTIONS
+////////////////////////////////////
+
+/datum/action/vehicle/toggle_headlights
+	name = "toggle headlights"
+	desc = "Turn the headlights on or off."
+	var/on = FALSE
+	var/brightness = 6
+	var/sounds = list('sound/items/flashlight_on.ogg','sound/items/flashlight_off.ogg')
+
+/datum/action/vehicle/toggle_headlights/New(var/obj/structure/bed/chair/vehicle/Target)
+	..()
+	icon_icon = Target.icon
+	button_icon_state = Target.icon_state
+	Target.vehicle_actions += src
+
+/datum/action/vehicle/toggle_headlights/Trigger()
+	if(!..())
+		return FALSE
+	on = !on
+	if(on)
+		target.set_light(brightness)
+		playsound(target, sounds[1], 50, 1)
+	else
+		target.set_light(0)
+		playsound(target, sounds[2], 50, 1)
+	target.update_icon()
+
+/datum/action/vehicle/toggle_headlights/siren
+	name = "toggle siren"
+	desc = "Turn the siren lights on or off."
+	sounds = list('sound/voice/woopwoop.ogg','sound/items/flashlight_off.ogg')

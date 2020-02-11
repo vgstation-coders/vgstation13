@@ -136,8 +136,6 @@
 
 #define istool(A) is_type_in_list(A, common_tools)
 
-#define iswrench(A) istype(A, /obj/item/weapon/wrench)
-
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
 #define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
@@ -188,6 +186,8 @@
 
 #define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod))
 
+#define iscryotube(T) (istype(T, /obj/machinery/atmospherics/unary/cryo_cell))
+
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
 #define isAPC(A) istype(A, /obj/machinery/power/apc)
@@ -198,9 +198,11 @@
 
 #define isclient(A) (istype(A, /client))
 
-#define isatom(A) (istype(A, /atom))
+#define isatom(A) isloc(A)
 
-#define isatommovable(A) (istype(A, /atom/movable))
+#if DM_VERSION < 513
+#define ismovable(A) (istype(A, /atom/movable))
+#endif
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
@@ -273,7 +275,7 @@
 
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
 
-#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUADIE))
 
 #define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
 

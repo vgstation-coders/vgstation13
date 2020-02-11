@@ -188,7 +188,7 @@
 	new /obj/item/toy/crayon/yellow(src)
 	new /obj/item/toy/crayon/green(src)
 	new /obj/item/toy/crayon/blue(src)
-	new /obj/item/toy/crayon/purple(src)
+	new /obj/item/toy/crayon/violet(src)
 	new /obj/item/toy/crayon/black(src)
 	update_icon()
 
@@ -469,6 +469,10 @@
 	if (.)
 		playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
 
+/obj/item/weapon/storage/lockbox/vials/toggle(var/mob/user, var/id_name)
+    ..()
+    update_icon()
+	
 //FLARE BOX
 //Useful for lots of things, this box has 6 flares in it. Only takes unused and unlight flares.
 //Great for emergency crates/closets etc.

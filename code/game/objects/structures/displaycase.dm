@@ -159,7 +159,7 @@
 		user.visible_message("[user.name] pries \the [src] apart.", \
 			"You pry \the [src] apart.", \
 			"You hear something pop.")
-		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		dump()
 
 		var/obj/item/weapon/circuitboard/airlock/C = circuit

@@ -280,6 +280,7 @@ client/proc/one_click_antag()
 	new_vox.mind.special_role = "Vox Raider"
 	new_vox.mutations |= M_NOCLONE //Stops the station crew from messing around with their DNA.
 
+<<<<<<< HEAD
 	var/datum/outfit/striketeam/voxraider/v = new
 	v.equip(new_vox)
 	
@@ -289,5 +290,8 @@ client/proc/one_click_antag()
 		v.equip_special_items(new_vox)
 
 	v.post_equip(new_vox)
+=======
+	equip_vox_raider(new_vox)
+>>>>>>> 72bdaae3c1c87e2198a5ecdf23af7a682611dd91
 
 	return new_vox

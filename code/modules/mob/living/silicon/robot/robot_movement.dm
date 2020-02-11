@@ -40,8 +40,12 @@
 			. *= SILICON_HIGH_DAMAGE_SLOWDOWN_MULTIPLIER
 		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
 			. *= SILICON_MOBILITY_MODULE_SPEED_MODIFIER
-		if(cell.charge <= 0)
-			. *= SILICON_NO_CHARGE_SLOWDOWN
+		if(cell.charge <= SILI_LOW_TRIGGER) //25% of a starter cell
+			if(cell.charge <= 0)
+				. *= SILICON_NO_CELL_SLOWDOWN
+			else
+				//This should be +1.4 at the trigger point and +2 at maximum
+				. += SILI_LOW_SLOW + 0.6*(SILI_LOW_TRIGGER-cell.charge)/SILI_LOW_TRIGGER
 		else
 			if(module)
 				. *= module.speed_modifier

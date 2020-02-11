@@ -326,3 +326,61 @@ proc/arctan(x)
 	assert_eq(count_set_bitflags(65536|32768), 2)
 	assert_eq(count_set_bitflags(1|4|16), 3)
 #endif
+
+// Basic geometry things.
+
+/vector/
+	var/x = 0
+	var/y = 0
+
+/vector/New(var/x, var/y)
+	src.x = x
+	src.y = y
+
+/vector/proc/duplicate()
+	return new /vector(x, y)
+
+/vector/proc/euclidian_norm()
+	return sqrt(x*x + y*y)
+
+/vector/proc/squared_norm()
+	return x*x + y*y
+
+/vector/proc/normalize()
+	var/norm = euclidian_norm()
+	x = x/norm
+	y = y/norm
+	return src
+
+/vector/proc/chebyshev_norm()
+	return max(abs(x), abs(y))
+
+/vector/proc/chebyshev_normalize()
+	var/norm = chebyshev_norm()
+	x = x/norm
+	y = y/norm
+	return src
+
+/vector/proc/is_integer()
+	return IS_INT(x) && IS_INT(y)
+
+/atom/movable/proc/vector_translate(var/vector/V, var/delay)
+	var/turf/T = get_turf(src)
+	var/turf/destination = locate(T.x + V.x, T.y + V.y, z)
+	var/vector/V_norm = V.duplicate()
+	V_norm.chebyshev_normalize()
+	if (!V_norm.is_integer())
+		return
+	var/turf/destination_temp
+	while (destination_temp != destination)
+		destination_temp = locate(T.x + V_norm.x, T.y + V_norm.y, z)
+		forceMove(destination_temp, glide_size_override = DELAY2GLIDESIZE(delay))
+		T = get_turf(src)
+		sleep(delay + world.tick_lag) // Shortest possible time to sleep
+
+/atom/proc/get_translated_turf(var/vector/V)
+	var/turf/T = get_turf(src)
+	return locate(T.x + V.x, T.y + V.y, z)
+
+/proc/atoms2vector(var/atom/A, var/atom/B)
+	return new /vector((B.x - A.x), (B.y - A.y)) // Vector from A -> B

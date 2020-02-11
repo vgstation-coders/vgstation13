@@ -975,7 +975,11 @@
 	if (!held_banger)
 		to_chat(preacher, "<span class='warning'>You need to hold a flashbang to begin the conversion.</span>")
 		return FALSE
-	var/held_screwdriver = subject.find_held_item_by_type(/obj/item/weapon/screwdriver)
+	var/held_screwdriver = null
+	for(var/obj/item/I in preacher.held_items)
+		if(I.is_screwdriver(preacher))
+			held_screwdriver = I
+			break
 	if (!held_screwdriver)
 		to_chat(preacher, "<span class='warning'>The subject needs to hold a screwdriver to begin the conversion.</span>")
 		return FALSE

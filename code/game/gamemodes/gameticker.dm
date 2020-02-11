@@ -16,6 +16,8 @@ var/datum/controller/gameticker/ticker
 	var/event_time = null
 	var/event = 0
 
+	var/list/achievements = list()
+
 	var/login_music			// music played in pregame lobby
 
 	var/list/datum/mind/minds = list()//The people in the game. Used for objective tracking.
@@ -260,7 +262,7 @@ var/datum/controller/gameticker/ticker
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 		//mode.Clean_Antags()
-
+		create_random_orders(3) //Populate the order system so cargo has something to do
 	//start_events() //handles random events and space dust.
 	//new random event system is handled from the MC.
 
@@ -700,13 +702,11 @@ var/datum/controller/gameticker/ticker
 	return text
 
 /datum/controller/gameticker/proc/achievement_declare_completion()
+	if(!ticker.achievements.len)
+		return
 	var/text = "<br><FONT size = 5><b>Additionally, the following players earned achievements:</b></FONT>"
-	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
-	end_icons += cup
-	var/tempstate = end_icons.len
-	for(var/winner in achievements)
-		text += {"<br><img src="logo_[tempstate].png"> [winner]"}
-
+	for(var/datum/achievement/achievement in ticker.achievements)
+		text += {"<br>[bicon(achievement.item)] <b>[achievement.ckey]</b> as <b>[achievement.mob_name]</b> won <b>[achievement.award_name]</b>, <b>[achievement.award_desc]!</b>"}
 	return text
 
 /datum/controller/gameticker/proc/get_all_heads()

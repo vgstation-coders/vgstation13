@@ -48,13 +48,13 @@ var/list/station_holomaps = list()
 	holomap_datum = null
 	..()
 
-/obj/machinery/station_map/crowbarDestroy(mob/user)
+/obj/machinery/station_map/crowbarDestroy(mob/user, obj/item/weapon/crowbar/C)
 	user.visible_message(	"[user] begins to pry out \the [src] from the wall.",
 							"You begin to pry out \the [src] from the wall...")
 	if(do_after(user, src, 40))
 		user.visible_message(	"[user] detaches \the [src] from the wall.",
 								"You detach \the [src] from the wall.")
-		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+		C.playtoolsound(src, 50)
 		new /obj/item/mounted/frame/station_map(src.loc)
 
 		for(var/obj/I in src)
@@ -65,7 +65,7 @@ var/list/station_holomaps = list()
 		new /obj/item/stack/sheet/glass/glass(loc,1)
 
 		return 1
-	return -1
+	return 0
 
 /obj/machinery/station_map/initialize()
 	bogus = 0

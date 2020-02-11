@@ -27,7 +27,7 @@
 		/obj/item/clothing/gloves/captain,
 		/obj/item/clothing/shoes/magboots/captain,
 		/obj/item/weapon/gun/energy/gun,
-		/obj/item/clothing/suit/armor/captain,
+		/obj/item/clothing/suit/space/rig/captain,
 		/obj/item/weapon/melee/telebaton,
 		/obj/item/clothing/under/dress/dress_cap,
 		/obj/item/device/gps/secure,

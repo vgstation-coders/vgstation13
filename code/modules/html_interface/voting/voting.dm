@@ -51,6 +51,7 @@ var/global/datum/controller/vote/vote = new()
 	var/vote_threshold = 0.15
 	var/discarded_votes = 0
 	var/weighted        = FALSE // Whether to use weighted voting.
+	var/currently_voting = FALSE // If we are already voting, don't allow another one
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
 	var/lock = FALSE
@@ -118,6 +119,7 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
 	var/greatest_votes = 0
+	currently_voting = FALSE
 	for(var/option in choices)
 		var/votes = choices[option]
 		total_votes += votes
@@ -182,6 +184,7 @@ var/global/datum/controller/vote/vote = new()
 	var/text
 	var/feedbackanswer
 	var/qualified_votes = total_votes - discarded_votes
+	currently_voting = FALSE
 	if(winners.len > 0)
 		if(winners.len > 1)
 			text = "<b>Vote Tied Between:</b><br>"
@@ -209,6 +212,7 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/result()
 	. = announce_result()
 	var/restart = 0
+	currently_voting = FALSE
 	if(.)
 		switch(mode)
 			if("restart")
@@ -271,6 +275,10 @@ var/global/datum/controller/vote/vote = new()
 	return 0
 
 /datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0, var/weighted_vote = 0)
+	if(currently_voting)
+		message_admins("<span class='info'>[initiator_key] attempted to begin a vote, however a vote is already in progress.</span>")
+		return
+	currently_voting = TRUE
 	if(!mode)
 		if(started_time != null && !check_rights(R_ADMIN))
 			var/next_allowed_time = (started_time + config.vote_delay)
@@ -438,6 +446,7 @@ var/global/datum/controller/vote/vote = new()
 			if(usr.client.holder)
 				reset()
 				update()
+				currently_voting = FALSE
 		if("toggle_restart")
 			if(usr.client.holder)
 				config.allow_vote_restart = !config.allow_vote_restart

@@ -195,7 +195,7 @@
 			to_chat(user, "<span class='warning'>You can't reach the wires with the power cell in the way.</span>")
 			return
 		to_chat(user, "You cut the wires out of the film chamber.")
-		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+		W.playtoolsound(user, 50)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/device/camera/I = new decon_path(get_turf(user), empty = TRUE)

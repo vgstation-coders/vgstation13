@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 80
 	selection_color = "#ffdddd"
 	req_admin_notify = 1
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court,
@@ -28,6 +29,11 @@
 	else
 		return "Red Alert"
 
+/datum/job/hos/priority_reward_equip(var/mob/living/carbon/human/H) 
+	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/glock/fancy, /obj/item/clothing/under, 5)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(H.back), slot_in_backpack)
+	
 
 /datum/job/warden
 	title = "Warden"
@@ -37,11 +43,61 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of security"
+	wage_payout = 65
 	selection_color = "#ffeeee"
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court, access_maint_tunnels, access_morgue, access_eva)
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court, access_maint_tunnels)
 	minimal_player_age = 7
+<<<<<<< HEAD
 	outfit_datum = /datum/outfit/warden
+=======
+
+	pdaslot=slot_belt
+	pdatype=/obj/item/device/pda/warden
+
+/datum/job/warden/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/headset_sec(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/security(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_sec(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/sec(H), slot_back)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/warden(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/jackboots(H), slot_shoes)
+	//H.equip_or_collect(new /obj/item/device/pda/warden(H), slot_belt)
+	H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
+	H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses/sechud(H), slot_glasses)
+//		H.equip_or_collect(new /obj/item/clothing/mask/gas(H), slot_wear_mask) //Grab one from the armory you donk
+	H.equip_or_collect(new /obj/item/device/flash(H), slot_l_store)
+	H.equip_or_collect(new /obj/item/weapon/gun/energy/taser(H), slot_in_backpack)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
+		H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/weapon/handcuffs(H))
+	else
+		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+		H.equip_or_collect(new /obj/item/weapon/handcuffs(H), slot_in_backpack)
+	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
+	L.imp_in = H
+	L.implanted = 1
+	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
+	affected.implants += L
+	L.part = affected
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
+	return 1
+
+/datum/job/warden/priority_reward_equip(var/mob/living/carbon/human/H) 
+	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
+	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/glock, /obj/item/clothing/under, 5)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/storage/fancy/donut_box(H.back), slot_in_backpack)
+	
+>>>>>>> 72bdaae3c1c87e2198a5ecdf23af7a682611dd91
 
 /datum/job/detective
 	title = "Detective"
@@ -51,12 +107,88 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of security"
+	wage_payout = 55
 	selection_color = "#ffeeee"
 	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court, access_eva)
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court)
+<<<<<<< HEAD
 	alt_titles = list("Forensic Technician","Gumshoe")
 	minimal_player_age = 7
 	outfit_datum = /datum/outfit/detective
+=======
+	alt_titles = list("Forensic Technician","Gumshoe", "Private Eye")
+
+	minimal_player_age = 7
+
+
+	pdaslot=slot_belt
+	pdatype=/obj/item/device/pda/detective
+
+/datum/job/detective/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/headset_sec(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/sec(H), slot_back)
+	//H.equip_or_collect(new /obj/item/device/pda/detective(H), slot_belt)
+/*		var/obj/item/clothing/mask/cigarette/CIG = new /obj/item/clothing/mask/cigarette(H)
+	CIG.light("")
+	H.equip_or_collect(CIG, slot_wear_mask)	*/
+	H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
+	if(H.mind.role_alt_title)
+		switch(H.mind.role_alt_title)
+			if("Forensic Technician")
+				H.equip_or_collect(new /obj/item/clothing/under/det(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/forensics/blue(H), slot_wear_suit)
+				H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+			if("Gumshoe","Private Eye")
+				H.mutations += M_NOIR
+				H.dna.SetSEState(NOIRBLOCK,1)
+				H.equip_or_collect(new /obj/item/clothing/under/det/noir(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/det_suit/noir(H), slot_wear_suit)
+				H.equip_or_collect(new /obj/item/clothing/head/det_hat/noir(H), slot_head)
+				H.equip_or_collect(new /obj/item/clothing/shoes/laceup(H), slot_shoes)
+			if("Detective")
+				H.equip_or_collect(new /obj/item/clothing/under/det(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/det_suit(H), slot_wear_suit)
+				H.equip_or_collect(new /obj/item/clothing/head/det_hat(H), slot_head)
+				H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+		H.equip_or_collect(new /obj/item/weapon/lighter/zippo(H), slot_l_store)
+	if(H.backbag == 1)//Why cant some of these things spawn in his office?
+		H.put_in_r_hand(new H.species.survival_gear(H))
+		H.put_in_l_hand(new /obj/item/weapon/storage/box/evidence(H))
+		H.equip_or_collect(new /obj/item/device/detective_scanner(H), slot_r_store)
+	else
+		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+		H.equip_or_collect(new /obj/item/weapon/storage/box/evidence(H), slot_in_backpack)
+		H.equip_or_collect(new /obj/item/device/detective_scanner(H), slot_in_backpack)
+	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
+	L.imp_in = H
+	L.implanted = 1
+	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
+	affected.implants += L
+	L.part = affected
+	H.dna.SetSEState(SOBERBLOCK,1)
+	H.mutations += M_SOBER
+	H.check_mutations = 1
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
+	return 1
+
+/datum/job/detective/priority_reward_equip(var/mob/living/carbon/human/H) 
+	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
+	var/obj/item/weapon/reagent_containers/food/drinks/flask/detflask/bonusflask = new /obj/item/weapon/reagent_containers/food/drinks/flask/detflask(H.back)
+	bonusflask.reagents.add_reagent(DETCOFFEE, 60)
+	H.equip_or_collect(bonusflask, slot_in_backpack)
+	
+
+>>>>>>> 72bdaae3c1c87e2198a5ecdf23af7a682611dd91
 
 /datum/job/officer
 	title = "Security Officer"
@@ -66,6 +198,7 @@
 	total_positions = 5
 	spawn_positions = 5
 	supervisors = "the head of security"
+	wage_payout = 55
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels, access_morgue, access_eva)
@@ -79,3 +212,9 @@
 	var/datum/job/assistant = job_master.GetJob("Assistant")
 	if(assistant.current_positions > 5)
 		. = clamp(. + assistant.current_positions - 5, 0, 99)
+
+/datum/job/officer/priority_reward_equip(var/mob/living/carbon/human/H) 
+	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(H.back), slot_in_backpack)
+	
