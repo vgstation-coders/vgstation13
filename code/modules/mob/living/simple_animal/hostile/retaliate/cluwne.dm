@@ -164,7 +164,7 @@
 	icon_dead = null
 	response_help = "honks the"
 	speak = list("Honk!")
-	speak_emote = list("sqeaks")
+	speak_emote = list("squeaks")
 	emote_hear = list("honks")
 	maxHealth = 100
 	health = 100
@@ -197,8 +197,9 @@
 	icon_living = "ClownPsychedelicGoblin"
 	icon_dead = null
 	response_help = "honks the"
-	speak = list("Honk!")
-	speak_emote = list("sqeaks")
+	speak = list("Honk!", "Groovy!", "Far Out!")
+	speak_emote = list("squeaks")
+
 	emote_hear = list("honks")
 	maxHealth = 100
 	health = 100
@@ -209,6 +210,8 @@
 	turns_per_move = 1
 
 	melee_damage_type = "BRAIN"
+	var/spacedrugs_chance = 30
+
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/weapon/pen)) //Renaming
@@ -217,6 +220,14 @@
 			name = "[n_name]"
 		return
 	..()
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/AttackingTarget()
+	..()
+	var/mob/living/L = target
+	if(L.reagents)
+		if(prob(spacedrugs_chance))
+			visible_message("<b><span class='warning'>[src] injects something into [L]!</span>")
+			L.reagents.add_reagent(SPACE_DRUGS, 1)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/death(var/gibbed = FALSE)
 	..(TRUE)
