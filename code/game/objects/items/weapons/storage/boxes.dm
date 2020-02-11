@@ -648,7 +648,7 @@
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/buckshot(src)
-		
+
 /obj/item/weapon/storage/box/dragonsbreathshells
 	name = "12-gauge dragon's breath shells"
 	icon_state = "dragonsbreath_shells"
@@ -658,12 +658,12 @@
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/dragonsbreath(src)
-		
+
 /obj/item/weapon/storage/box/fragshells
 	name = "12-gauge high-explosive fragmentation shells"
 	icon_state = "frag_shells"
-	storage_slots = 16		
-		
+	storage_slots = 16
+
 /obj/item/weapon/storage/box/fragshells/New()
 	..()
 	for(var/i in 1 to 16)
@@ -1394,4 +1394,16 @@
 	new /obj/item/weapon/storage/backpack/clownpackpsyche(src)
 	new /obj/item/clothing/under/clownpsyche(src)
 	new /obj/item/clothing/shoes/clownshoespsyche(src)
+	..()
+
+/obj/item/weapon/storage/box/parts
+	name = "Box of stock parts"
+	desc = "A box containing specially made stock parts. These parts are made with plastic but can stand in performance with Nanotrasen's best technology"
+
+/obj/item/weapon/storage/box/parts/New()
+	new /obj/item/weapon/stock_parts/capacitor/adv/super/plastic(src)
+	new /obj/item/weapon/stock_parts/scanning_module/adv/phasic/plastic(src)
+	new /obj/item/weapon/stock_parts/manipulator/nano/pico/plastic(src)
+	new /obj/item/weapon/stock_parts/micro_laser/high/ultra/plastic(src)
+	new /obj/item/weapon/stock_parts/matter_bin/adv/super/plastic(src)
 	..()
