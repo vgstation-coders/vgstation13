@@ -189,3 +189,37 @@
 	new /obj/item/clothing/mask/gas/clown_hat(src.loc)
 	new /obj/item/clothing/shoes/clown_shoes(src.loc)
 	qdel(src)
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin
+	name = "psychedelic clown goblin"
+	desc = "A tiny walking mask and clown shoes. You want to honk his nose and cover your eyes!"
+	icon_state = "ClownPsychedelicGoblin"
+	icon_living = "ClownPsychedelicGoblin"
+	icon_dead = null
+	response_help = "honks the"
+	speak = list("Honk!")
+	speak_emote = list("sqeaks")
+	emote_hear = list("honks")
+	maxHealth = 100
+	health = 100
+	size = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES
+
+	speed = 1
+	turns_per_move = 1
+
+	melee_damage_type = "BRAIN"
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W,/obj/item/weapon/pen)) //Renaming
+		var/n_name = copytext(sanitize(input(user, "What would you like to name this psychedelic clown goblin?", "Clown Goblin Name", null) as text|null), 1, MAX_NAME_LEN*3)
+		if(n_name && Adjacent(user) && !user.stat)
+			name = "[n_name]"
+		return
+	..()
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/death(var/gibbed = FALSE)
+	..(TRUE)
+	new /obj/item/clothing/mask/gas/clownmaskpsyche(src.loc)
+	new /obj/item/clothing/shoes/clownshoespsyche(src.loc)
+	qdel(src)

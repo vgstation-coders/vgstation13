@@ -535,3 +535,10 @@ obj/item/clothing/shoes/jackboots/cowboy
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 
 	step_sound = "clownstep"
+
+/obj/item/clothing/shoes/clownshoespsyche/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/mask/gas/clownmaskpsyche))
+		new /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin(get_turf(src))
+		qdel(W)
+		qdel(src)
