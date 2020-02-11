@@ -207,7 +207,7 @@
 	desc = "A pair of black kitty ears. Meow!"
 	haircolored = FALSE
 
-/obj/item/clothing/head/kitty/anime	
+/obj/item/clothing/head/kitty/anime
 	desc = "A pair of nekomimi. Nya!"
 	anime = TRUE
 
@@ -242,6 +242,7 @@
 	icon_state = "foilhat"
 	item_state = "paper"
 	siemens_coefficient = 2
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/celtic
 	name = "\improper Celtic crown"
