@@ -295,7 +295,7 @@
 /datum/language/deathsquad
 	name = LANGUAGE_DEATHSQUAD
 	desc = "A set of codewords that Nanotrasen's deathsquads use for communication."
-	key = "%"
+	key = "&"
 	colour = "dsquadradio"
 	flags = RESTRICTED
 	space_chance = 100
