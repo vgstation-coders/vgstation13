@@ -4404,14 +4404,8 @@
 		has_had_heart_explode = 1
 		if(!override_remove)
 			holder.remove_reagent(src.id) //Clean them out so medbay can replace the heart with a fresh one if they want to
-
-/datum/reagent/cornoil/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	M.nutrition += nutriment_factor
-	if(ishuman(M))
+	
+		if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		switch(volume)
 			if(1 to 15)
@@ -4439,6 +4433,14 @@
 							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
 						H.adjustOxyLoss(heartdamage*2)
 						H.adjustBruteLoss(heartdamage)
+
+/datum/reagent/cornoil/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += nutriment_factor
+
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
 
