@@ -114,13 +114,13 @@
 	desc = "An armor plate for use in plate carriers. This one is optimized for impact negation."
 	icon_state = "plate_2"
 	health = 30
-	armor = list(melee = 50, bullet = 50, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
-	armor_absorb = list(melee = 25, bullet = 40, laser = 10, energy = -5, bomb = 35, bio = 0, rad = 0)
+	armor = list(melee = 50, bullet = 90, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
+	armor_absorb = list(melee = 25, bullet = 15, laser = 10, energy = -5, bomb = 35, bio = 0, rad = 0)
 
 /obj/item/weapon/armor_plate/laser_resistant
 	name = "ablated ceramite armor plate"
 	desc = "An armor plate for use in plate carriers. This one is optimized for heat dissipation."
 	icon_state = "plate_3"
 	health = 30
-	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
-	armor_absorb = list(melee = 25, bullet = 20, laser = 40, energy = -5, bomb = 0, bio = 0, rad = 0)
+	armor = list(melee = 10, bullet = 10, laser = 90, energy = 50, bomb = 0, bio = 0, rad = 0)
+	armor_absorb = list(melee = 25, bullet = 20, laser = 50, energy = -5, bomb = 0, bio = 0, rad = 0)
