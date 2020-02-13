@@ -4397,6 +4397,13 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	var/has_had_heart_explode = 0
+
+/datum/reagent/cornoil/proc/decornoil(var/mob/living/M, heartdamage = 30, override_remove = 0, explodeheart = 1)
+	if(!has_had_heart_explode)
+		has_had_heart_explode = 1
+		if(!override_remove)
+			holder.remove_reagent(src.id) //Clean them out so medbay can replace the heart with a fresh one if they want to
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
 
@@ -4404,7 +4411,6 @@
 		return 1
 
 	M.nutrition += nutriment_factor
-
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		switch(volume)
@@ -4412,6 +4418,7 @@
 				if(prob(5))
 					to_chat(H,"<span class='warning'>You burp.</span>")
 					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
+					
 			if(15 to 100)
 				if(prob(10))
 					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
@@ -4420,8 +4427,9 @@
 					var/datum/organ/internal/heart/L = H.internal_organs_by_name["heart"]
 					if(istype(L))
 						L.take_damage(0.2, 1)
+						
 			if(100 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
-					if(H.get_heart())//Got a heart?
+				if(H.get_heart())//Got a heart?
 				var/datum/organ/internal/heart/damagedheart = H.get_heart()
 				if (heartdamage >= 30)
 					if(H.species.name != "Diona" && damagedheart) //fuck dionae
