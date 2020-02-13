@@ -115,7 +115,7 @@
 	icon_state = "plate_2"
 	health = 15
 	armor = list(melee = 50, bullet = 90, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
-	armor_absorb = list(melee = 25, bullet = 5, laser = 10, energy = -5, bomb = 35, bio = 0, rad = 0)
+	armor_absorb = list(melee = 25, bullet = 20, laser = 10, energy = -5, bomb = 35, bio = 0, rad = 0)
 
 /obj/item/weapon/armor_plate/laser_resistant
 	name = "ablated ceramite armor plate"
