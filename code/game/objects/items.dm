@@ -47,7 +47,6 @@
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
 	var/list/species_fit = null //This object has a different appearance when worn by these species
-	var/surgery_speed = 1 //When this item is used as a surgery tool, multiply the delay of the surgery step by this much.
 	var/nonplant_seed_type
 
 	var/list/attack_verb // used in attack() to say how something was attacked "[x] [z.attack_verb] [y] with [z]". Present tense.
@@ -62,7 +61,6 @@
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
 	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
 	var/restraint_apply_time = 3 SECONDS
-	var/restraint_apply_sound = null
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
@@ -70,6 +68,9 @@
 	var/list/datum/disease2/disease/virus2 = list()
 	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
 	var/image/pathogen
+
+	var/list/toolsounds = null //The sound(s) it makes when used as a tool.
+	var/toolspeed = 1 //When this item is used as a tool, multiply the delay of its do_after by this much.
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
@@ -529,7 +530,7 @@
 					if(automatic)
 						if(H.check_for_open_slot(src))
 							return CANNOT_EQUIP
-					if(H.belt.canremove && !isbelt(src))
+					if(H.belt.canremove)
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
@@ -955,7 +956,7 @@
 			return FALSE
 		if (prob(50 - round(damage / 3)))
 			visible_message("<span class='borange'>[loc] blocks \the [blocked] with \the [src]!</span>")
-			if(isatommovable(blocked))
+			if(ismovable(blocked))
 				var/atom/movable/M = blocked
 				M.throwing = FALSE
 			return TRUE
@@ -1298,8 +1299,8 @@ var/global/list/image/blood_overlays = list()
 			to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
 			return FALSE
 
-	if(restraint_apply_sound)
-		playsound(src, restraint_apply_sound, 30, 1, -2)
+	playtoolsound(src, 30, TRUE, -2)
+
 	user.visible_message("<span class='danger'>[user] is trying to restrain \the [C] with \the [src]!</span>",
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
@@ -1342,6 +1343,9 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/on_mousedrop_to_inventory_slot()
 	return
+
+/obj/item/proc/stealthy(var/mob/living/carbon/human/H)
+	return H.isGoodPickpocket()
 
 /obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
 	return TRUE
@@ -1412,9 +1416,26 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/is_screwdriver(var/mob/user)
 	return FALSE
 
+/obj/item/proc/is_wrench(var/mob/user)
+	return FALSE
+
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	return
+
+/obj/item/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
+	..()
+	var/processed_name = lowertext(mat? mat.processed_name : material_type.processed_name)
+	var/to_icon_state = "[initial(icon_state)]_[processed_name]_[quality]"
+	if(has_icon(inhand_states[inhand_states[1]], to_icon_state))
+		item_state = to_icon_state
+
+/obj/item/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
+	.=..()
+	if(. && material_type)
+		armor["melee"] = min(90, armor["melee"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+		armor["bullet"] = min(90, armor["bullet"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+		armor["laser"] = min(90, armor["laser"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 
 /////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
 
@@ -1459,3 +1480,8 @@ var/global/list/image/blood_overlays = list()
 				perp.infect_disease2(D, notes="(Contact, from picking up \a [src])")
 			else if (bleeding && (D.spread & SPREAD_BLOOD))//if we're covered with a blood-spreading disease, we may infect people with bleeding hands.
 				perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")
+
+/obj/item/proc/playtoolsound(atom/A, var/volume = 75, vary = TRUE, extrarange = null)
+	if(A && toolsounds)
+		var/tool_sound = pick(toolsounds)
+		playsound(A, tool_sound, volume, TRUE, vary)

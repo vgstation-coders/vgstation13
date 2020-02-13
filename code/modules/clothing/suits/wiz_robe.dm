@@ -236,3 +236,9 @@
 	icon_state = "wizard_snow"
 	item_state = "wizard_snow"
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	
+/obj/item/clothing/head/wizard/sinterklaas
+	name = "sinterklaas mitre"
+	desc = "Strange-looking red head-wear that most certainly belongs to a real saint."
+	icon_state = "sinterklaasmitre"
+	siemens_coefficient = 0.8

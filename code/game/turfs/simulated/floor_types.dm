@@ -33,7 +33,6 @@
 	name = "floor"
 
 /turf/simulated/floor/vox/wood
-	name = "floor"
 	icon_state = "wood"
 	floor_tile
 
@@ -110,9 +109,9 @@
 		return
 	if(!user)
 		return
-	if(iswrench(C))
+	if(C.is_wrench(user))
 		to_chat(user, "<span class='notice'>Removing rods...</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 80, 1)
+		C.playtoolsound(src, 80)
 		if(do_after(user, src, 30) && istype(src, /turf/simulated/floor/engine)) // Somehow changing the turf does NOT kill the current running proc.
 			new /obj/item/stack/rods(src, 2)
 			ChangeTurf(/turf/simulated/floor)
@@ -176,6 +175,12 @@
 	oxygen = 0
 	nitrogen = 0.001
 	temperature = TCMB
+
+/turf/simulated/floor/engine/acoustic
+	name = "acoustic panel"
+	desc = "A special floor designed to muffle sound."
+	icon_state = "acoustic"
+	volume_mult = 0.1
 
 /turf/simulated/floor/plating
 	name = "plating"

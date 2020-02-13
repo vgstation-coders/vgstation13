@@ -3,11 +3,11 @@
 	desc = "whomever you select with this spell is given a carnivorous pumpkin, that will eat the head of whomever is holding it after 60 seconds"
 	abbreviation = "PTP"
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 
 	school = "transmutation"
 	charge_max = 600
-	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
+	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	range = 1
 	max_targets = 1
 	invocation = "H'T POT'TO"

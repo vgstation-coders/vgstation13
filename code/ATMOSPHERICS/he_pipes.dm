@@ -16,6 +16,7 @@
 	burst_type = /obj/machinery/atmospherics/unary/vent/burstpipe/heat_exchanging
 
 	can_be_coloured = 0
+	var/icon_temperature = T20C //stop small changes in temperature causing an icon refresh
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/getNodeType(var/node_id)
 	return PIPE_TYPE_HE
@@ -69,6 +70,30 @@
 	//Get processable air sample and thermal info from environment
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/environment_moles = environment.molar_density() * CELL_VOLUME //Moles per turf
+	//Get gas from pipenet
+	var/datum/gas_mixture/internal = return_air()
+
+	//fancy radiation glowing
+	if(internal && internal.temperature)
+		if(icon_temperature > 500 || internal.temperature > 500) //start glowing at 500K
+			if(abs(internal.temperature - icon_temperature) > 10)
+				icon_temperature = internal.temperature
+
+				var/h_r = heat2color_r(icon_temperature)
+				var/h_g = heat2color_g(icon_temperature)
+				var/h_b = heat2color_b(icon_temperature)
+
+				if(icon_temperature < 2000) //scale up overlay until 2000K
+					var/scale = (icon_temperature - 500) / 1500
+					h_r = 64 + (h_r - 64)*scale
+					h_g = 64 + (h_g - 64)*scale
+					h_b = 64 + (h_b - 64)*scale
+				
+				var/heat_color = rgb(h_r, h_g, h_b)
+
+				animate(src, color = heat_color, time = 2 SECONDS, easing = SINE_EASING)
+				light_color = heat_color
+		set_light(internal.temperature >= 673.15 ? 1 : 0) //Red heat, visible in the dark
 
 	//Not enough gas in the air around us to care about. Radiate. Less gas than airless tiles start with.
 	if(environment_moles < NO_GAS)
@@ -77,8 +102,6 @@
 	else if(environment_moles < SOME_GAS)
 		return 0
 
-	//Get gas from pipenet
-	var/datum/gas_mixture/internal = return_air()
 	if(!internal.total_moles)
 		return
 
@@ -103,6 +126,7 @@
 
 	if(parent && parent.network)
 		parent.network.update = 1
+
 	return 1
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/proc/radiate()

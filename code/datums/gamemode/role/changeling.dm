@@ -2,7 +2,8 @@
 	name = "Changeling"
 	id = CHANGELING
 	required_pref = CHANGELING
-	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")
+	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain",
+						"Chief Engineer", "Chief Medical Officer", "Research Director")
 	protected_traitor_prob = PROB_PROTECTED_RARE
 	logo_state = "change-logoa"
 	var/list/absorbed_dna = list()

@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "Nanotrasen officials and Space law"
+	wage_payout = 105
 	selection_color = "#ccccff"
 	idtype = /obj/item/weapon/card/id/gold
 	req_admin_notify = 1
@@ -70,6 +71,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 80
 	selection_color = "#ddddff"
 	req_admin_notify = 1
 	minimal_player_age = 20

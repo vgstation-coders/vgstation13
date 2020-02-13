@@ -62,7 +62,7 @@
 	power_connection.connect()
 	update_icon()
 
-/obj/machinery/media/transmitter/broadcast/wrenchAnchor(var/mob/user)
+/obj/machinery/media/transmitter/broadcast/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

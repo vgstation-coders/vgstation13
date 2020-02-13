@@ -109,10 +109,10 @@
 						step_towards(src,movement_target,1)
 						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
-							emote("me", 1, "barks at [movement_target], as if begging it to go into his mouth.")
+							emote("me", 1, "barks at [movement_target], as if begging it to go into \his mouth.")
 							corgi_status = BEGIN_FOOD_HUNTING
 						else if(ishuman(movement_target))
-							emote("me", 1, "barks at [movement_target] and wags his tail.")
+							emote("me", 1, "barks at [movement_target] and wags \his tail.")
 							corgi_status = IDLE
 						else
 							emote("me", 1, "barks with an attitude!")
@@ -123,24 +123,21 @@
 				corgi_status = IDLE
 
 /mob/living/simple_animal/corgi/regular_hud_updates()
-	if(fire)
-		if(fire_alert)
-			fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for heat and 2 for cold.
-		else
-			fire.icon_state = "fire0"
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, fire_alert == 1 ? /obj/abstract/screen/alert/carbon/burn/ice/corgi : /obj/abstract/screen/alert/carbon/burn/fire/corgi)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
 	update_pull_icon()
-	if(oxygen)
-		if(oxygen_alert)
-			oxygen.icon_state = "oxy1"
-		else
-			oxygen.icon_state = "oxy0"
-	if(toxin)
-		if(toxins_alert)
-			toxin.icon_state = "tox1"
-		else
-			toxin.icon_state = "tox0"
+	if(oxygen_alert)
+		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath/corgi)
+	else
+		clear_alert(SCREEN_ALARM_BREATH)
+	if(toxins_alert)
+		throw_alert(SCREEN_ALARM_TOXINS, /obj/abstract/screen/alert/tox/corgi)
+	else
+		clear_alert(SCREEN_ALARM_TOXINS)
 
-	if (healths)
+	if(healths)
 		switch(health)
 			if(30 to INFINITY)
 				healths.icon_state = "health0"
@@ -158,8 +155,6 @@
 				healths.icon_state = "health6"
 			else
 				healths.icon_state = "health7"
-	//regenerate_icons()
-
 
 /mob/living/simple_animal/corgi/show_inv(mob/user as mob)
 	user.set_machine(src)

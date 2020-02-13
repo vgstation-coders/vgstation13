@@ -198,6 +198,18 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	app2.onInstall(src)
 	reply = src
 
+	PDAs += src
+	if(default_cartridge)
+		cartridge = new default_cartridge(src)
+	new /obj/item/weapon/pen(src)
+	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
+	currentevent1 = pick(currentevents1)
+	currentevent2 = pick(currentevents2)
+	currentevent3 = pick(currentevents3)
+	onthisday = pick(history)
+	didyouknow = pick(facts)
+
 /obj/item/device/pda/medical
 	name = "Medical PDA"
 	default_cartridge = /obj/item/weapon/cartridge/medical
@@ -613,20 +625,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /*
  *	The Actual PDA
  */
-
-/obj/item/device/pda/New()
-	..()
-	PDAs += src
-	if(default_cartridge)
-		cartridge = new default_cartridge(src)
-	new /obj/item/weapon/pen(src)
-	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
-	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
-	currentevent1 = pick(currentevents1)
-	currentevent2 = pick(currentevents2)
-	currentevent3 = pick(currentevents3)
-	onthisday = pick(history)
-	didyouknow = pick(facts)
 
 /obj/item/device/pda/proc/can_use(mob/user)
 	if(user && ismob(user))
@@ -1829,7 +1827,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 					var/log = replacetext(n, "\n", "(new line)")//no intentionally spamming admins with 100 lines, nice try
 					log_say("[src] notes - [U] changed the text to: [log]")
-					message_admins("[src] notes - [U] changed the text to: [log]", 1)
 					for(var/mob/dead/observer/M in player_list)
 						if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA))
 							M.show_message("<span class='game say'>[src] notes - <span class = 'name'>[U]</span> changed the text to:</span> [log]")
@@ -2166,7 +2163,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/t = multicast_message
 	if(!t)
 		t = input(U, "Please enter message", "Message to [P]", null) as text|null
-		t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
+		t = copytext(parse_emoji(sanitize(t)), 1, MAX_MESSAGE_LEN)
 		if (!t || toff || (!in_range(src, U) && loc != U)) //If no message, messaging is off, and we're either out of range or not in usr
 			return
 
@@ -2317,6 +2314,8 @@ obj/item/device/pda/AltClick()
 // access to status display signals
 /obj/item/device/pda/attackby(obj/item/C as obj, mob/user as mob)
 	..()
+	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, C))
+		return
 	if(istype(C, /obj/item/weapon/cartridge) && !cartridge)
 		if(user.drop_item(C, src))
 			cartridge = C
@@ -2444,6 +2443,10 @@ obj/item/device/pda/AltClick()
 		if(SCANMODE_REAGENT)
 			if(!A.Adjacent(user))
 				return
+			if(iscryotube(A))
+				var/obj/machinery/atmospherics/unary/cryo_cell/T = A
+				if(T.occupant)
+					A = T.occupant
 			if(!isnull(A.reagents))
 				if(A.reagents.reagent_list.len > 0)
 					var/reagents_length = A.reagents.reagent_list.len

@@ -1,40 +1,4 @@
-//I will need to recode parts of this but I am way too tired atm <- whoever said this, I've got your back -Deity Link
 
-/* Contents
-/obj/effect/blob
-/obj/effect/blob/blob_act()
-/obj/effect/blob/New(turf/loc,newlook = "new")
-/obj/effect/blob/Destroy()
-/obj/effect/blob/projectile_check()
-/obj/effect/blob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-/obj/effect/blob/beam_connect(var/obj/effect/beam/B)
-/obj/effect/blob/beam_disconnect(var/obj/effect/beam/B)
-/obj/effect/blob/apply_beam_damage(var/obj/effect/beam/B)
-/obj/effect/blob/handle_beams()
-/obj/effect/blob/process()
-/obj/effect/blob/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-/obj/effect/blob/ex_act(severity)
-/obj/effect/blob/bullet_act(var/obj/item/projectile/Proj)
-/obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/user)
-/obj/effect/blob/update_icon(var/spawnend = 0)
-
-/obj/effect/blob/proc/update_looks()
-var/list/blob_looks
-/obj/effect/blob/proc/Life()
-/obj/effect/blob/proc/aftermove()
-/obj/effect/blob/proc/Pulse(var/pulse = 0, var/origin_dir = 0)
-/obj/effect/blob/proc/run_action()
-/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1)
-/obj/effect/blob/proc/change_to(var/type, var/mob/camera/blob/M = null)
-/obj/effect/blob/proc/Delete()
-/obj/effect/blob/proc/update_health()
-
-
-/obj/effect/blob/normal
-/obj/effect/blob/normal/Delete()
-/obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
-/obj/effect/blob/normal/update_icon(var/spawnend = 0)
-*/
 //Few global vars to track the blob
 var/blob_tiles_grown_total = 0
 var/list/blobs = list()

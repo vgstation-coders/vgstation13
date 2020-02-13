@@ -1100,13 +1100,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	usr.visible_message("<span class='deadsay'><b>[src]</b> points to [A]</span>.")
 	return 1
 
-/mob/dead/observer/Login()
-	..()
-	observers += src
-
 /mob/dead/observer/Logout()
-	observers -= src
+	observers.Remove(src)
 	..()
+	spawn(0)
+		if(src && !key && !transmogged_to)	//we've transferred to another mob. This ghost should be deleted.
+			qdel(src)
 
 /mob/dead/observer/verb/modify_movespeed()
 	set name = "Change Speed"

@@ -85,7 +85,7 @@
 	if (W.is_screwdriver(user))
 		panel = !panel
 		to_chat(user, "<span class='notify'>You [panel ? "open" : "close"] the panel on \the [src].</span>")
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		return 1
 
 	if (ismultitool(W) && panel)

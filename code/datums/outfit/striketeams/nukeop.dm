@@ -151,6 +151,10 @@
 /datum/outfit/striketeam/nukeops/spawn_id(var/mob/living/carbon/human/H, rank)
     return // Nuke ops have anonymous ID cards.
 
+/datum/outfit/striketeam/nukeops/post_equip(var/mob/living/carbon/human/H)
+	if(H.mind.GetRole(NUKE_OP_LEADER))
+		H.equip_to_slot_or_del(new /obj/item/device/modkit/syndi_commander(H), slot_in_backpack)
+
 /datum/outfit/striketeam/nukeops/pre_equip(var/mob/living/carbon/human/H)
 	if(H.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
 		to_chat(H, "<span class='notice'>Your intensive physical training to become a Nuclear Operative has paid off and made you fit again!</span>")

@@ -42,6 +42,10 @@
 		),
 	)
 
+	implant_types = list(
+		/obj/item/weapon/implant/loyalty/,
+	)
+
 	pda_type = /obj/item/device/pda/heads/cmo
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/cmo

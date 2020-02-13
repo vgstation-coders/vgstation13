@@ -3,13 +3,13 @@
 	abbreviation = "FB"
 	desc = "This spell conjures a fireball that will fly in the direction you're facing and explode on collision with anything, or when it gets close to anyone else."
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 
 	proj_type = /obj/item/projectile/spell_projectile/fireball
 
 	school = "evocation"
 	charge_max = 100
-	spell_flags = 0
+	spell_flags = IS_HARMFUL
 	invocation = "ONI SOMA"
 	invocation_type = SpI_SHOUT
 	range = 20

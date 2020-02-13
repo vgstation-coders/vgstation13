@@ -20,6 +20,7 @@
 #define TALKED_BEFORE	4096//spells require you to have heard the person you are casting it upon
 #define CAN_CHANNEL_RESTRAINED 8192 //channeled spells that you can cast despite having handcuffs on
 #define LOSE_IN_TRANSFER 16384 //If your mind is transferred, you'll lose this spell.
+#define IS_HARMFUL 32768	//For pacify checks to determine whether the spell can be cast
 
 //invocation
 #define SpI_SHOUT	"shout"
@@ -32,6 +33,7 @@
 #define Sp_POWER	"power"
 #define Sp_MOVE		"mobility"
 #define Sp_AMOUNT	"amount"
+#define Sp_RANGE	"range"
 
 #define Sp_TOTAL	"total"
 
@@ -73,7 +75,10 @@
 #define SPELL_NECROTIC 16 //Necromantic spells
 
 //Spell specializations, used for spellbook lists
-#define SPELL_SPECIALIZATION_DEFAULT 1 //So it doesn't gorge on a word that could be used for better things
-#define OFFENSIVE 2
-#define DEFENSIVE 4
-#define UTILITY 8
+#define SPELL_SPECIALIZATION_OFFENSIVE 1
+#define SPELL_SPECIALIZATION_DEFENSIVE 2
+#define SPELL_SPECIALIZATION_UTILITY 4
+
+#define SSOFFENSIVE SPELL_SPECIALIZATION_OFFENSIVE
+#define SSDEFENSIVE SPELL_SPECIALIZATION_DEFENSIVE
+#define SSUTILITY SPELL_SPECIALIZATION_UTILITY

@@ -14,6 +14,7 @@
 	var/obj/item/device/assembly/a_left = null
 	var/obj/item/device/assembly/a_right = null
 	var/obj/special_assembly = null
+	toolsounds = list('sound/items/Screwdriver.ogg')
 
 /obj/item/device/assembly_holder/proc/attach(var/obj/item/device/D, var/obj/item/device/D2, var/mob/user)
 	return

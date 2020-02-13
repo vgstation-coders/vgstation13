@@ -58,7 +58,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/juicy = 0					// 0 = no, 1 = splatters when thrown, 2 = slips
 
 	// Cosmetics.
-	var/plant_dmi = 'icons/obj/hydroponics.dmi'// DMI  to use for the plant growing in the tray.
+	var/plant_dmi = 'icons/obj/hydroponics/apple.dmi'// DMI  to use for the plant growing in the tray.
 	var/plant_icon                  // Icon to use for the plant growing in the tray.
 	var/packet_icon = "seed"        // Icon to use for physical seed packet item.
 	var/biolum                      // Plant is bioluminescent.
@@ -68,6 +68,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/mob_drop					// Seed type dropped by the mobs when it dies without an host
 
 	var/large = 1					// Is the plant large? For clay pots.
+
+/datum/seed/New()
+	..()
 
 //Creates a random seed. MAKE SURE THE LINE HAS DIVERGED BEFORE THIS IS CALLED.
 /datum/seed/proc/randomize()
@@ -239,75 +242,74 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	return 1
 
 //Gives the plant a new, random icon from a list, with matching growth stages number.
-/datum/seed/proc/randomize_icon(var/change_packet = 1)
+/datum/seed/proc/randomize_icon()
 	var/list/plant_icons = pick(list(
-		list("seed-chili",              "chili",				6),
-		list("seed-icepepper",          "chiliice",				6),
-		list("seed-berry",              "berry",				6),
-		list("seed-glowberry",          "glowberry",			6),
-		list("seed-poisonberry",        "poisonberry",			6),
-		list("seed-deathberry",         "deathberry",			6),
-		list("seed-nettle",             "nettle",				6),
-		list("seed-deathnettle",        "deathnettle",			6),
-		list("seed-tomato",             "tomato",				6),
-		list("seed-bloodtomato",        "bloodtomato",			6),
-		list("seed-killertomato",       "killertomato",			2),
-		list("seed-bluetomato",         "bluetomato",			6),
-		list("seed-bluespacetomato",    "bluespacetomato",		6),
-		list("seed-eggplant",           "eggplant",				6),
-		list("seed-eggy",               "eggy",					6),
-		list("seed-apple",              "apple",				6),
-		list("seed-goldapple",          "goldapple",			6),
-		list("seed-ambrosiavulgaris",   "ambrosiavulgaris",		6),
-		list("seed-ambrosiadeus",       "ambrosiadeus",			6),
-		list("mycelium-chanter",        "chanter",				3),
-		list("mycelium-plump",          "plump",				3),
-		list("mycelium-reishi",         "reishi",				4),
-		list("mycelium-liberty",        "liberty",				3),
-		list("mycelium-amanita",        "amanita",				3),
-		list("mycelium-angel",          "angel",				3),
-		list("mycelium-tower",          "towercap",				3),
-		list("mycelium-glowshroom",     "glowshroom",			4),
-		list("mycelium-walkingmushroom","walkingmushroom",		3),
-		list("mycelium-plast",          "plastellium",			3),
-		list("seed-harebell",           "harebell",				4),
-		list("seed-poppy",              "poppy",				3),
-		list("seed-sunflower",          "sunflower",			3),
-		list("seed-moonflower",         "moonflower",			3),
-		list("seed-novaflower",         "novaflower",			3),
-		list("seed-grapes",             "grape",				2),
-		list("seed-greengrapes",        "greengrape",			2),
-		list("seed-peanut",             "peanut",				6),
-		list("seed-cabbage",            "cabbage",				1),
-		list("seed-shand",              "shand",				3),
-		list("seed-mtear",              "mtear",				4),
-		list("seed-banana",             "banana",				6),
-		list("seed-corn",               "corn",					3),
-		list("seed-potato",             "potato",				4),
-		list("seed-soybean",            "soybean",				6),
-		list("seed-koibean",            "soybean",				6),
-		list("seed-wheat",              "wheat",				6),
-		list("seed-rice",               "rice",					4),
-		list("seed-carrot",             "carrot",				3),
-		list("seed-ambrosiavulgaris",   "weeds",				4),
-		list("seed-whitebeet",          "whitebeet",			6),
-		list("seed-sugarcane",          "sugarcane",			3),
-		list("seed-watermelon",         "watermelon",			6),
-		list("seed-pumpkin",            "pumpkin",				2),
-		list("seed-lime",               "lime",					6),
-		list("seed-lemon",              "lemon",				6),
-		list("seed-orange",             "orange",				6),
-		list("seed-grass",              "grass",				2),
-		list("seed-cocoapod",           "cocoapod",				5),
-		list("seed-cherry",             "cherry",				5),
-		list("seed-kudzu",              "kudzu",				4),
-		list("seed-pear",               "pear", 				6),
+		list('icons/obj/hydroponics/chili.dmi',				6),
+		list('icons/obj/hydroponics/chiliice.dmi',			6),
+		list('icons/obj/hydroponics/berry.dmi',				6),
+		list('icons/obj/hydroponics/glowberry.dmi',			6),
+		list('icons/obj/hydroponics/poisonberry.dmi',			6),
+		list('icons/obj/hydroponics/deathberry.dmi',			6),
+		list('icons/obj/hydroponics/nettle.dmi',				6),
+		list('icons/obj/hydroponics/deathnettle.dmi',			6),
+		list('icons/obj/hydroponics/tomato.dmi',				6),
+		list('icons/obj/hydroponics/bloodtomato.dmi',			6),
+		list('icons/obj/hydroponics/killertomato.dmi',		2),
+		list('icons/obj/hydroponics/bluetomato.dmi',			6),
+		list('icons/obj/hydroponics/bluespacetomato.dmi',		6),
+		list('icons/obj/hydroponics/eggplant.dmi',			6),
+		list('icons/obj/hydroponics/eggy.dmi',				6),
+		list('icons/obj/hydroponics/apple.dmi',				6),
+		list('icons/obj/hydroponics/goldapple.dmi',			6),
+		list('icons/obj/hydroponics/ambrosiavulgaris.dmi',	6),
+		list('icons/obj/hydroponics/ambrosiadeus.dmi',		6),
+		list('icons/obj/hydroponics/chanter.dmi',				3),
+		list('icons/obj/hydroponics/plump.dmi',				3),
+		list('icons/obj/hydroponics/reishi.dmi',				4),
+		list('icons/obj/hydroponics/liberty.dmi',				3),
+		list('icons/obj/hydroponics/amanita.dmi',				3),
+		list('icons/obj/hydroponics/angel.dmi',				3),
+		list('icons/obj/hydroponics/towercap.dmi',			3),
+		list('icons/obj/hydroponics/glowshroom.dmi',			4),
+		list('icons/obj/hydroponics/walkingmushroom.dmi',		3),
+		list('icons/obj/hydroponics/plastellium.dmi',		3),
+		list('icons/obj/hydroponics/harebell.dmi',				4),
+		list('icons/obj/hydroponics/poppy.dmi',				3),
+		list('icons/obj/hydroponics/sunflower.dmi',			3),
+		list('icons/obj/hydroponics/moonflower.dmi',			3),
+		list('icons/obj/hydroponics/novaflower.dmi',			3),
+		list('icons/obj/hydroponics/grape.dmi',				2),
+		list('icons/obj/hydroponics/greengrape.dmi',			2),
+		list('icons/obj/hydroponics/peanut.dmi',				6),
+		list('icons/obj/hydroponics/cabbage.dmi',				1),
+		list('icons/obj/hydroponics/shand.dmi',				3),
+		list('icons/obj/hydroponics/mtear.dmi',				4),
+		list('icons/obj/hydroponics/banana.dmi',				6),
+		list('icons/obj/hydroponics/corn.dmi',					3),
+		list('icons/obj/hydroponics/potato.dmi',				4),
+		list('icons/obj/hydroponics/soybean.dmi',				6),
+		list('icons/obj/hydroponics/soybean.dmi',				6),
+		list('icons/obj/hydroponics/wheat.dmi',				6),
+		list('icons/obj/hydroponics/rice.dmi',					4),
+		list('icons/obj/hydroponics/carrot.dmi',				3),
+		list('icons/obj/hydroponics/weeds.dmi',				4),
+		list('icons/obj/hydroponics/whitebeet.dmi',			6),
+		list('icons/obj/hydroponics/sugarcane.dmi',			3),
+		list('icons/obj/hydroponics/watermelon.dmi',			6),
+		list('icons/obj/hydroponics/pumpkin.dmi',				2),
+		list('icons/obj/hydroponics/lime.dmi',					6),
+		list('icons/obj/hydroponics/lemon.dmi',				6),
+		list('icons/obj/hydroponics/orange.dmi',				6),
+		list('icons/obj/hydroponics/grass.dmi',				2),
+		list('icons/obj/hydroponics/cocoapod.dmi',				5),
+		list('icons/obj/hydroponics/cherry.dmi',				5),
+		list('icons/obj/hydroponics/kudzu.dmi',				4),
+		list('icons/obj/hydroponics/pear.dmi', 				6),
 		))
+	
+	plant_dmi = plant_icons[1]
+	growth_stages = plant_icons[2]
 
-	if (change_packet)
-		packet_icon = plant_icons[1]
-	plant_icon = plant_icons[2]
-	growth_stages = plant_icons[3]
 
 //Random mutations moved to hydroponics_mutations.dm!
 

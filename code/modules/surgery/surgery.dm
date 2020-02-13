@@ -79,7 +79,7 @@
 
 	if(istype(tool,/obj/item/weapon/scalpel/laser) || istype(tool,/obj/item/weapon/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_on"
-		spawn(max_duration * tool.surgery_speed)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
+		spawn(max_duration * tool.toolspeed)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
 			tool.icon_state = "[initial(tool.icon_state)]_off"
 	return
 
@@ -134,7 +134,7 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 
 				var/selection = user.zone_sel ? user.zone_sel.selecting : null //Check if the zone selection hasn't changed
 				//We had proper tools! (or RNG smiled.) and user did not move or change hands.
-				if(do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.surgery_speed) && (prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))) && (!user.zone_sel || selection == user.zone_sel.selecting)) //Last part checks whether the zone selection hasn't changed
+				if(do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.toolspeed) && (prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))) && (!user.zone_sel || selection == user.zone_sel.selecting)) //Last part checks whether the zone selection hasn't changed
 					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] successfully completed by [user.name] ([user.ckey])</font>")
 					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Successfully completed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to successfully complete surgery type [S.type] on [M.name] ([M.ckey])</font>")

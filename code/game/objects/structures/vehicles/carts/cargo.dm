@@ -3,6 +3,12 @@
 
 /obj/machinery/cart/cargo
 	name = "cargo cart"
+	desc = "A cart for transporting crates. Designed to attach to a tractor."
+
+/obj/machinery/cart/cargo/toboggan
+	name = "toboggan"
+	desc = "A toboggan designed to transport crates and injured crewmen through the snow. Designed to attach to a snowmobile."
+	icon_state = "toboggan"
 
 /obj/machinery/cart/cargo/relaymove(mob/user)
 	unload()
@@ -10,7 +16,7 @@
 						 "<span class='warning'>You stumble while trying to get off \the [src]. Be more careful next time.</span>")
 	user.Knockdown(4)
 	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-	
+
 /obj/machinery/cart/cargo/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
 	if(user.incapacitated() || user.lying)
@@ -35,21 +41,23 @@
 /obj/machinery/cart/cargo/proc/load(var/atom/movable/C)
 
 	if (istype(C, /obj/abstract/screen))
-		return
+		return FALSE
 	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
-		return
+		return FALSE
 
 	if(C.locked_to || C.is_locking() || C.anchored)
-		return
+		return FALSE
 
 	if(get_dist(C, src) > 1 || is_locking(/datum/locking_category/cargocart))
-		return
+		return FALSE
 
-	var/obj/structure/closet/crate/crate = C
-	if(istype(crate))
+
+	if(istype(C,/obj/structure/closet/crate))
+		var/obj/structure/closet/crate/crate = C
 		crate.close()
 
 	lock_atom(C, /datum/locking_category/cargocart)
+	return TRUE
 
 /obj/machinery/cart/cargo/proc/unload(var/dirn = 0)
 	if(!is_locking(/datum/locking_category/cargocart))

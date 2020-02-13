@@ -99,9 +99,9 @@
 
 /obj/machinery/suit_storage_unit/captain
 	name = "Command Suit Storage Unit"
-	department = "sec"
-	suit_type = /obj/item/clothing/suit/armor/captain
-	helmet_type = /obj/item/clothing/head/helmet/space/capspace
+	department = "cap"
+	suit_type = /obj/item/clothing/suit/space/rig/captain
+	helmet_type = null
 	mask_type = /obj/item/clothing/mask/gas
 	boot_type = /obj/item/clothing/shoes/magboots/captain
 
@@ -586,9 +586,9 @@
 		var/obj/item/weapon/solder/S = I
 		if(!S.remove_fuel(4,user))
 			return
-		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		S.playtoolsound(loc, 100)
 		if(do_after(user, src,40))
-			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			S.playtoolsound(loc, 100)
 			stat &= !BROKEN
 			to_chat(user, "<span class='notice'>You repair the blown out electronics in the suit storage unit.</span>")
 	if((stat & NOPOWER) && iscrowbar(I) && !islocked)

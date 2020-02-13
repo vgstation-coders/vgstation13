@@ -1,8 +1,7 @@
 /datum/hud/proc/alien_hud()
 
-
-	src.adding = list(  )
-	src.other = list(  )
+	src.adding = list()
+	src.other = list()
 
 	var/obj/abstract/screen/using
 	var/obj/abstract/screen/inventory/inv_box
@@ -129,24 +128,6 @@
 	mymob.throw_icon.name = "throw"
 	mymob.throw_icon.screen_loc = ui_drop_throw
 
-	mymob.oxygen = getFromPool(/obj/abstract/screen)
-	mymob.oxygen.icon = 'icons/mob/screen1_alien.dmi'
-	mymob.oxygen.icon_state = "oxy0"
-	mymob.oxygen.name = "oxygen"
-	mymob.oxygen.screen_loc = ui_alien_oxygen
-
-	mymob.toxin = getFromPool(/obj/abstract/screen)
-	mymob.toxin.icon = 'icons/mob/screen1_alien.dmi'
-	mymob.toxin.icon_state = "tox0"
-	mymob.toxin.name = "toxin"
-	mymob.toxin.screen_loc = ui_alien_toxin
-
-	mymob.fire = getFromPool(/obj/abstract/screen)
-	mymob.fire.icon = 'icons/mob/screen1_alien.dmi'
-	mymob.fire.icon_state = "fire0"
-	mymob.fire.name = "fire"
-	mymob.fire.screen_loc = ui_alien_fire
-
 	mymob.healths = getFromPool(/obj/abstract/screen)
 	mymob.healths.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.healths.icon_state = "health0"
@@ -168,7 +149,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.toxin, mymob.fire, mymob.healths, mymob.pullin, vampire_blood_display) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
+	mymob.client.screen += list(mymob.throw_icon, mymob.zone_sel, mymob.healths, mymob.pullin, vampire_blood_display)
 	mymob.client.screen += src.adding + src.other
 
 /datum/hud/proc/plasma_hud()
@@ -176,4 +157,4 @@
 	vampire_blood_display = getFromPool(/obj/abstract/screen)
 	vampire_blood_display.name = "Alien Plasma"
 	vampire_blood_display.icon_state = "dark128"
-	vampire_blood_display.screen_loc = "14:[28*PIXEL_MULTIPLIER],9:[15*PIXEL_MULTIPLIER]"
+	vampire_blood_display.screen_loc = ui_under_health

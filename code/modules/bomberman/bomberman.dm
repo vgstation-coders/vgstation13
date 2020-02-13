@@ -473,10 +473,10 @@ obj/structure/bomberflame/Destroy()
 	icon_state = "hardwall"
 	opacity = 0
 
-/turf/unsimulated/wall/ex_act(severity)
+/turf/unsimulated/wall/bomberman/ex_act(severity)
 	return
 
-/turf/unsimulated/wall/cultify()
+/turf/unsimulated/wall/bomberman/cultify()
 	return
 
 ///////////////////////////////POWER-UPS//////////////////////////////

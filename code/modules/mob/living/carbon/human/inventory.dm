@@ -91,7 +91,7 @@
 		items = get_clothing_items()
 	items -= list(gloves,shoes,w_uniform,glasses,ears) // now that these can hide stuff they need to be excluded
 	if(!hidden_flags)
-		return
+		return 0
 	var/ignore_slot
 	for(var/obj/item/equipped in items)
 		ignore_slot = (equipped == wear_mask) ? MOUTH : 0
@@ -99,6 +99,7 @@
 			continue
 		else if(is_slot_hidden(equipped.body_parts_covered,hidden_flags,ignore_slot))
 			return 1
+	return 0
 
 /mob/living/carbon/human/proc/equip_in_one_of_slots(obj/item/W, list/slots, act_on_fail = 1, put_in_hand_if_fail = 0)
 	for (var/slot in slots)
@@ -439,7 +440,7 @@
 			if (istype(cuffs) && cuffs.mutual_handcuffed_mobs.len) //if those are regular cuffs, and there are mobs cuffed to each other, do the mutual handcuff logic
 				src.mutual_handcuffs = cuffs
 				update_inv_mutual_handcuffed(redraw_mob)
-			else 
+			else
 				src.handcuffed = cuffs
 				update_inv_handcuffed(redraw_mob)
 		if(slot_legcuffed)

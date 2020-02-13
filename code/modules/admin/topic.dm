@@ -62,6 +62,8 @@
 		message_admins("[usr.key] has notified [key_name(S)] of a change to their laws.")
 
 		S << sound('sound/machines/lawsync.ogg')
+		if(isrobot(S))
+			S.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 		to_chat(S, "____________________________________")
 		to_chat(S, "<span class='danger'>LAW CHANGE NOTICE</span>")
 		if(S.laws)
@@ -606,6 +608,37 @@
 		if(O.locked_to)
 			O.manual_stop_follow(O.locked_to)
 		O.forceMove(get_turf(dish))
+
+	else if(href_list["climate_timeleft"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!map.climate)
+			return
+		var/datum/weather/W = map.climate.current_weather
+		var/nu = input(usr, "Enter remaining time (nearest 2 seconds)", "Adjust Timeleft", W.timeleft / (1 SECONDS)) as null|num
+		if(!nu)
+			return
+		W.timeleft = round(nu SECONDS,SS_WAIT_WEATHER)
+		log_admin("[key_name(usr)] adjusted weather time.")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time.</span>", 1)
+		climate_panel()
+
+	else if(href_list["climate_weather"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!map.climate)
+			return
+		var/datum/climate/C = map.climate
+		var/nu = input(usr, "Select New Weather", "Adjust Weather", C.current_weather.type) as null|anything in typesof(/datum/weather)
+		if(!nu || nu == C.current_weather.type)
+			return
+		if(!ispath(nu))
+			return
+		C.change_weather(nu)
+		C.forecast()
+		log_admin("[key_name(usr)] adjusted weather type.")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather type.</span>", 1)
+		climate_panel()
 
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
@@ -3815,26 +3848,25 @@
 				feedback_add_details("admin_secrets_fun_used","TD")
 				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
 				log_admin("[key_name_admin(usr)] spawned himself as a Test Dummy.")
+				var/newname = ""
+				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
+				if (!newname)
+					newname = "Admin"
 				var/turf/T = get_turf(usr)
 				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
-				usr.client.cmd_assume_direct_control(D)
+				var/obj/item/weapon/card/id/admin/admin_id = new(D)
+				admin_id.registered_name = newname
 				D.equip_to_slot_or_del(new /obj/item/clothing/under/color/black(D), slot_w_uniform)
 				D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
 				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
+				D.equip_to_slot_or_del(admin_id, slot_wear_id)
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
-				D.name = "Admin"
-				D.real_name = "Admin"
-				var/newname = ""
-				newname = copytext(sanitize(input(D, "Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
-				if (!newname)
-					newname = "Admin"
 				D.name = newname
 				D.real_name = newname
-				var/obj/item/weapon/card/id/admin/admin_id = new(D)
-				admin_id.registered_name = newname
-				D.equip_to_slot_or_del(admin_id, slot_wear_id)
+				usr.client.cmd_assume_direct_control(D)
+
 			//False flags and bait below. May cause mild hilarity or extreme pain. Now in one button
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)

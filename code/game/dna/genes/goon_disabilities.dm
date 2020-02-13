@@ -293,6 +293,7 @@
 	activation_message = "A pair of horns erupt from your head."
 	deactivation_message = "Your horns crumble away into nothing."
 	flags = GENE_UNNATURAL
+	mutation = M_HORNS
 
 /datum/dna/gene/disability/horns/New()
 	..()

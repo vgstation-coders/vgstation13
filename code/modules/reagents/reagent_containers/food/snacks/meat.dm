@@ -11,13 +11,10 @@
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
-	..(A)
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 3
 	if(M)
 		if(uppertext(M.name) != "UNKNOWN")
 			name = "[M.name] [meatword]"

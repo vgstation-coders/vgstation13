@@ -44,7 +44,6 @@
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Diona")
-	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
 /mob/living/carbon/human/skellington/New(var/new_loc, delay_ready_dna = 0)
@@ -85,6 +84,11 @@
 /mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Slime")
 	my_appearance.h_style = "Bald"
+	regenerate_icons()
+
+/mob/living/carbon/human/insectoid/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Insectoid")
+	my_appearance.h_style = "Insectoid Antennae"
 	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
@@ -295,15 +299,11 @@
 	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/restrained()
-	if (timestopped)
-		return 1 //under effects of time magick
-	if (check_handcuffs())
-		return 1
+	if (..())
+		return TRUE
 	if (istype(wear_suit, /obj/item/clothing/suit/straight_jacket))
-		return 1
-	return 0
-
-
+		return TRUE
+	return FALSE
 
 /mob/living/carbon/human/var/co2overloadtime = null
 /mob/living/carbon/human/var/temperature_resistance = T0C+75 //but why is this here
@@ -652,6 +652,18 @@
 	var/obj/item/clothing/gloves/G = gloves
 	if(istype(G))
 		return G.pickpocket
+
+//Don't forget to change this too if you universalize the gloves
+/mob/living/carbon/human/proc/place_in_glove_storage(var/obj/item/I)
+	var/obj/item/clothing/gloves/black/thief/storage/S = gloves
+	if(!I) //How did you do this
+		return 0
+	if(istype(S))
+		if(S.hold.can_be_inserted(I, 1)) //There is no check in handling item insertion
+			S.hold.handle_item_insertion(I, 1)
+		else
+			put_in_hands(I)
+
 
 /mob/living/carbon/human/abiotic(var/full_body = 0)
 	for(var/obj/item/I in held_items)
@@ -1929,9 +1941,37 @@ mob/living/carbon/human/isincrit()
 			stuttering = max(0,stuttering-rand(8,10))
 			jitteriness = max(0,jitteriness-rand(8,10))
 			hallucination = max(0,hallucination-rand(8,10))
-			confused = max(0,confused-rand(8,10))
+			remove_confused(rand(8, 10))
 			drowsyness = max(0, drowsyness-rand(8,10))
 			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
 
 /mob/living/carbon/human/can_be_infected()
 	return 1
+
+//this method handles user getting attacked with an emag - the original logic was in human_defense.dm,
+//but it's better that it belongs to human.dm
+/mob/living/carbon/human/emag_act(var/mob/attacker, var/datum/organ/external/affecting, var/obj/item/weapon/card/emag)
+	var/hit_area = affecting.display_name
+	if(!(affecting.status & ORGAN_ROBOT))
+		to_chat(attacker, "<span class='warning'>That limb isn't robotic.</span>")
+		return FALSE
+	if(affecting.sabotaged)
+		to_chat(attacker, "<span class='warning'>\The [src]'s [hit_area] is already sabotaged!</span>")
+	else
+		to_chat(attacker, "<span class='warning'>You sneakily slide [emag] into the dataport on \the [src]'s [hit_area] and short out the safeties.</span>")
+		affecting.sabotaged = TRUE
+	return FALSE
+
+/mob/living/carbon/human/swap_hand()
+	var/valid_hand = FALSE
+	for(var/i = 0; i < held_items.len; i++)
+		if (++active_hand > held_items.len)
+			active_hand = 1
+		if (can_use_hand_or_stump(active_hand))
+			valid_hand = TRUE
+			break
+
+	if(!valid_hand)
+		active_hand = 0
+
+	update_hands_icons()

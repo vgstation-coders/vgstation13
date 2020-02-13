@@ -245,7 +245,7 @@
 	update_icon()
 	updateUsrDialog()
 
-/obj/machinery/power/generator/wrenchAnchor()
+/obj/machinery/power/generator/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

@@ -4,7 +4,7 @@
 
 /obj/item/weapon/grown // Grown weapons
 	name = "grown_weapon"
-	icon = 'icons/obj/weapons.dmi'
+	icon = 'icons/obj/hydroponics/nettle.dmi'
 	var/plantname
 	var/potency = 1
 	var/fragrance = null
@@ -51,8 +51,8 @@
 /obj/item/weapon/grown/log
 	name = "tower-cap log"
 	desc = "It's better than bad, it's good!"
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "logs"
+	icon = 'icons/obj/hydroponics/towercap.dmi'
+	icon_state = "produce"
 	force = 5
 	flags = 0
 	throwforce = 5
@@ -82,8 +82,8 @@
 	plantname = "sunflowers"
 	name = "sunflower"
 	desc = "It's beautiful! A certain person might beat you to death if you trample these."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "sunflower"
+	icon = 'icons/obj/hydroponics/sunflower.dmi'
+	icon_state = "produce"
 	damtype = "fire"
 	force = 0
 	flags = 0
@@ -102,8 +102,8 @@
 	plantname = "novaflowers"
 	name = "novaflower"
 	desc = "These beautiful flowers have a crisp smokey scent, like a summer bonfire."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "novaflower"
+	icon = 'icons/obj/hydroponics/novaflower.dmi'
+	icon_state = "produce"
 	damtype = "fire"
 	force = 0
 	flags = 0
@@ -136,9 +136,9 @@
 /obj/item/weapon/grown/nettle // -- Skie
 	plantname = "nettle"
 	desc = "It's probably <B>not</B> wise to touch it with bare hands..."
-	icon = 'icons/obj/weapons.dmi'
+	icon = 'icons/obj/hydroponics/nettle.dmi'
 	name = "nettle"
-	icon_state = "nettle"
+	icon_state = "produce"
 	damtype = "fire"
 	force = 15
 	flags = 0
@@ -183,9 +183,9 @@
 /obj/item/weapon/grown/deathnettle // -- Skie
 	plantname = "deathnettle"
 	desc = "A glowing red nettle that incites rage in you just from looking at it."
-	icon = 'icons/obj/weapons.dmi'
+	icon = 'icons/obj/hydroponics/deathnettle.dmi'
 	name = "deathnettle"
-	icon_state = "deathnettle"
+	icon_state = "produce"
 	damtype = "fire"
 	force = 30
 	flags = 0
@@ -248,8 +248,8 @@
 /obj/item/weapon/corncob
 	name = "corn cob"
 	desc = "A reminder of meals gone by."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "corncob"
+	icon = 'icons/obj/hydroponics/corn.dmi'
+	icon_state = "cob"
 	item_state = "corncob"
 	w_class = W_CLASS_SMALL
 	throwforce = 0

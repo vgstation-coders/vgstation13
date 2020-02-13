@@ -167,7 +167,7 @@
 "}
 
 /obj/machinery/atmospherics/unary/outlet_injector/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")

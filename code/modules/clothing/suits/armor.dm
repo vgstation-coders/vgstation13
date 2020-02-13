@@ -50,6 +50,7 @@
 	desc = "An armoured jacket with silver rank pips and livery."
 	icon_state = "warden_jacket"
 	item_state = "armor"
+	species_fit = list (VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/neorussian
 	name = "neo-Russian vest"
@@ -74,6 +75,14 @@
 	armor = list(melee = 80, bullet = 10, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.5
 
+/obj/item/clothing/suit/armor/rune
+	name = "rune platebody"
+	desc = "Provides excellent protection."
+	icon_state = "knight_rune"
+	item_state = "knight_rune"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	slowdown = HARDSUIT_SLOWDOWN_LOW
+	armor = list(melee = 80, bullet = 80, laser = 50, energy = 30, bomb = 80, bio = 10, rad = 10)
 
 /obj/item/clothing/suit/armor/knight
 	name = "plate armour"
@@ -85,6 +94,14 @@
 	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = GOLIATHREINFORCE
 
+
+/obj/item/clothing/suit/armor/samurai
+	name = "samurai armor"
+	desc = "Forged long ago, in a distant land."
+	icon_state = "samurai"
+	item_state = "samurai"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	armor = list(melee = 40, bullet = 0, laser = 10, energy = 5, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/knight/yellow
 	icon_state = "knight_yellow"
