@@ -55,7 +55,7 @@ var/global/list/boo_phrases_silicon=list(
 
 /spell/aoe_turf/boo/New()
 	..()
-	charge_counter = 0 //Prevent re-entering body to recharge Boo!
+	take_charge(holder) //Prevent re-entering body to recharge Boo!
 
 /spell/aoe_turf/boo/cast(list/targets)
 	for(var/turf/T in targets)
