@@ -39,37 +39,34 @@
 	else
 		..()
 		
-#define CLOWNABLE 0
-#define CLOWNED 1
-
 /obj/item/clothing/suit/armor/vest/security
 	name = "security armor"
 	desc = "An armored vest that protects against some damage. This one has a Nanotrasen corporate security badge."
 	icon_state = "armorsec"
 	item_state = "armor"
-	var/clowned = CLOWNABLE
+	var/clowned = FALSE //so clowns can deface this item
 	
 /obj/item/clothing/suit/armor/vest/security/attackby(var/obj/item/A, mob/user)
-	if(clowned == CLOWNABLE && istype(A,/obj/item/toy/crayon/rainbow))
+	if(clowned == FALSE && istype(A,/obj/item/toy/crayon/rainbow))
 		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
 		if(do_after(user, src, 4 SECONDS))
 			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
-			clowned = CLOWNED
+			clowned = TRUE
 			update_icon()
 	..()
 
 /obj/item/clothing/suit/armor/vest/security/decontaminate()
 	..()
-	if(clowned == CLOWNED)
-		clowned = CLOWNABLE
+	if(clowned == TRUE)
+		clowned = FALSE
 		update_icon()
 
 /obj/item/clothing/suit/armor/vest/security/update_icon()
-	icon_state = initial(icon_state) + "[clowned == CLOWNED ? "c" : ""]"
-	item_state = initial(icon_state) + "[clowned == CLOWNED ? "c" : ""]"
+	icon_state = initial(icon_state) + "[clowned == TRUE ? "c" : ""]"
+	item_state = initial(icon_state) + "[clowned == TRUE ? "c" : ""]"
 	
 /obj/item/clothing/suit/armor/vest/security/clown/New()
-	clowned = CLOWNED
+	clowned = TRUE
 	update_icon()
 	
 /obj/item/clothing/suit/armor/vest/warden
