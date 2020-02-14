@@ -57,7 +57,7 @@
 
 /obj/item/clothing/suit/armor/vest/security/decontaminate()
 	..()
-	if(clowned == TRUE)
+	if(clowned)
 		clowned = FALSE
 		update_icon()
 
