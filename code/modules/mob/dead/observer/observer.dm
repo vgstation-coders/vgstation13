@@ -1,5 +1,3 @@
-#define POLTERGEIST_COOLDOWN 300 // 30s
-
 #define GHOST_CAN_REENTER 1
 #define GHOST_IS_OBSERVER 2
 /mob/dead/observer
@@ -41,6 +39,7 @@
 	var/movespeed = 0.75
 	var/lastchairspin
 	var/pathogenHUD = FALSE
+	var/manual_poltergeist_cooldown //var-edit this to manually modify a ghost's poltergeist cooldown, set it to null to reset to global
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
@@ -433,7 +432,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	return FALSE
 
 /mob/dead/observer/proc/start_poltergeist_cooldown()
-	next_poltergeist=world.time + POLTERGEIST_COOLDOWN
+	if(isnull(manual_poltergeist_cooldown))
+		next_poltergeist=world.time + global_poltergeist_cooldown
+	else
+		next_poltergeist=world.time + manual_poltergeist_cooldown
 
 /mob/dead/observer/proc/reset_poltergeist_cooldown()
 	next_poltergeist=0
