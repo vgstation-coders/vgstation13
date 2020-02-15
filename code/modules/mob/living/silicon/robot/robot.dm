@@ -1335,8 +1335,4 @@ var/list/cyborg_list = list()
 
 //Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
 /mob/living/silicon/robot/proc/get_percentage_power_for_movement()
-	if(get_cell())
-		var/percentage = round(cell.maxcharge / 4)
-		return clamp(percentage, 0, SILI_LOW_TRIGGER)
-	else
-		return 0
+	return clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER)
