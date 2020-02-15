@@ -38,13 +38,37 @@
 			B.attackby(I,user)
 	else
 		..()
-
+		
 /obj/item/clothing/suit/armor/vest/security
 	name = "security armor"
-	desc = "An armored vest that protects against some damage. This one has Nanotrasen corporate badge."
+	desc = "An armored vest that protects against some damage. This one has a Nanotrasen corporate security badge."
 	icon_state = "armorsec"
 	item_state = "armor"
+	var/clowned = FALSE //so clowns can deface this item
+	
+/obj/item/clothing/suit/armor/vest/security/attackby(var/obj/item/A, mob/user)
+	if(clowned == FALSE && istype(A,/obj/item/toy/crayon/rainbow))
+		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
+		if(do_after(user, src, 4 SECONDS))
+			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
+			clowned = TRUE
+			update_icon()
+	..()
 
+/obj/item/clothing/suit/armor/vest/security/decontaminate()
+	..()
+	if(clowned)
+		clowned = FALSE
+		update_icon()
+
+/obj/item/clothing/suit/armor/vest/security/update_icon()
+	icon_state = initial(icon_state) + "[clowned == TRUE ? "c" : ""]"
+	item_state = initial(icon_state) + "[clowned == TRUE ? "c" : ""]"
+	
+/obj/item/clothing/suit/armor/vest/security/clown/New()
+	clowned = TRUE
+	update_icon()
+	
 /obj/item/clothing/suit/armor/vest/warden
 	name = "Warden's jacket"
 	desc = "An armoured jacket with silver rank pips and livery."
