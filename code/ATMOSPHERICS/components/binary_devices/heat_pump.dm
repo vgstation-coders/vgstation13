@@ -29,13 +29,26 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 	var/mtd_limit = 2500
 	var/mtd_slope_at_zero = 0.5
 
-	use_power = 0
-	idle_power_usage = 1000
+	active_power_usage = 1000
+
+	var/id_tag
+	var/frequency = 0
+	var/datum/radio_frequency/radio_connection
+	machine_flags = MULTITOOL_MENU
+
+
+/obj/machinery/atmospherics/binary/heat_pump/New()
+	..()
+	if(ticker)
+		initialize()
 
 
 /obj/machinery/atmospherics/binary/heat_pump/process()
 	. = ..()
 	if(!on || stat & (NOPOWER | BROKEN))
+		return
+
+	if(!air1.total_moles || !air2.total_moles)
 		return
 
 	var/temp_diff = air2.temperature - air1.temperature
@@ -50,17 +63,35 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 	air2.add_thermal_energy(heat_transfer) //Realistically it should also add idle_power_usage, but this might be more trouble than it's worth.
 	//It would further complicate setups, and would also allow for infinite energy memes since (at the time of writing) the TEG can break 100% efficiency.
 
-	network1.update = TRUE
-	network2.update = TRUE
+	network1?.update = TRUE
+	network2?.update = TRUE
+
+
+//It's hard to read here, but it's just an inverse function offset and scaled to match the variables as described above.
+//(Specifically, it's 1/x flipped vertically and offset by 1 left and 1 up, then scaled vertically to set the asymptote and horizontally to set the slope at 0.)
+/obj/machinery/atmospherics/binary/heat_pump/proc/get_mtd(temp)
+	return mtd_limit * (1 - 1 / (1 + temp * mtd_slope_at_zero / mtd_limit))
 
 
 /obj/machinery/atmospherics/binary/heat_pump/attack_hand(mob/user)
 	toggle_status(user)
 
 
+/obj/machinery/atmospherics/binary/heat_pump/attack_ai(mob/user)
+	toggle_status(user)
+
+
 /obj/machinery/atmospherics/binary/heat_pump/toggle_status(mob/user)
+	if(issilicon(user))
+		add_hiddenprint(user)
+	else
+		add_fingerprint(user)
 	. = ..()
-	use_power = on
+	update_status()
+
+
+/obj/machinery/atmospherics/binary/heat_pump/proc/update_status() //Really not sure why this isn't defined on the parent
+	use_power = on + 1
 
 
 /obj/machinery/atmospherics/binary/heat_pump/update_icon()
@@ -71,7 +102,62 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 	..()
 
 
-//It's hard to read here, but it's just an inverse function offset and scaled to match the variables as described above.
-//(Specifically, it's 1/x flipped vertically and offset by 1 left and 1 up, then scaled vertically to set the asymptote and horizontally to set the slope at 0.)
-/obj/machinery/atmospherics/binary/heat_pump/proc/get_mtd(temp)
-	return mtd_limit * (1 - 1 / (1 + temp * mtd_slope_at_zero / mtd_limit))
+/obj/machinery/atmospherics/binary/heat_pump/initialize()
+	..()
+	if(frequency)
+		set_frequency(frequency)
+
+
+/obj/machinery/atmospherics/binary/heat_pump/proc/set_frequency(new_frequency)
+	radio_controller.remove_object(src, frequency)
+	frequency = new_frequency
+	if(frequency)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
+
+
+/obj/machinery/atmospherics/binary/heat_pump/multitool_menu(mob/user, obj/item/device/multitool/P)
+	return {"
+	<ul>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
+		<li>[format_tag("ID Tag","id_tag","set_id")]</a></li>
+	</ul>
+	"}
+
+
+/obj/machinery/atmospherics/binary/heat_pump/receive_signal(datum/signal/signal)
+	if(!signal.data["tag"] || (signal.data["tag"] != id_tag))
+		return 0
+
+	var/old_on = on
+	switch(signal.data["command"])
+		if("cooler_on")
+			on = TRUE
+
+		if("cooler_off")
+			on = FALSE
+
+		if("cooler_set")
+			on = !!signal.data["state"] //The double inversion forces it to be either 1/TRUE or 0/FALSE and not some other value
+
+		if("cooler_toggle")
+			on = !on
+
+	update_status()
+	if(on != old_on)
+		investigation_log(I_ATMOS,"was turned [(on ? "on" : "off")] by a signal")
+
+
+/obj/machinery/atmospherics/binary/heat_pump/canClone(obj/O)
+	return istype(O, /obj/machinery/atmospherics/binary/heat_pump)
+
+
+/obj/machinery/atmospherics/binary/heat_pump/clone(obj/machinery/atmospherics/binary/heat_pump/O)
+	id_tag = O.id_tag
+	set_frequency(O.frequency)
+	return 1
+
+
+/obj/machinery/atmospherics/binary/heat_pump/npc_tamper_act(mob/living/L)
+	on = !on
+	update_status()
+	investigation_log(I_ATMOS,"was turned [(on ? "on" : "off")] by [key_name(L)]")
