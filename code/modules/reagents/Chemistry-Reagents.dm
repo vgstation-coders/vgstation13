@@ -40,7 +40,7 @@
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
 	var/specheatcap = 1 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
 
-/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/remove_reagents = FALSE)
+/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
 
 	if(!holder)
@@ -76,8 +76,7 @@
 			if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
-					if(remove_reagents)
-						self.holder.remove_reagent(self.id, self.volume/2)
+
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
@@ -3032,7 +3031,6 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
-	custom_metabolism = REAGENTS_METABOLISM/2.5
 
 /datum/reagent/cryoxadone/on_mob_life(var/mob/living/M)
 
@@ -3053,7 +3051,6 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
-	custom_metabolism = REAGENTS_METABOLISM/2.5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 
