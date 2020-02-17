@@ -4579,13 +4579,13 @@
 	item_state = "lollipop_stick"
 	food_flags = FOOD_SWEET
 	icon = 'icons/obj/candymachine.dmi'
-	bitesize = 2
+	bitesize = 5
 	slot_flags = SLOT_MASK //No, really, suck on this.
 	attack_verb = list("taps", "pokes")
 	eatverb = "crunch"
 	edible_by_utensil = FALSE
 	trash = /obj/item/trash/lollipopstick
-	var/candyness = 100 //how long this thing will last
+	var/candyness = 150 //how long this thing will last
 	volume = 15 //not a lotta room for poison
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/New()
