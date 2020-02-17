@@ -133,6 +133,7 @@
 	icon_state = "jensencoat"
 	item_state = "jensencoat"
 	siemens_coefficient = 0.6
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/hos/sundowner
 	name = "armoured greatcoat"

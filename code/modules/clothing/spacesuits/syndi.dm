@@ -3,8 +3,7 @@
 	name = "red space helmet"
 	icon_state = "syndicate"
 	item_state = "syndicate"
-	species_fit = list(GREY_SHAPED)
-	species_restricted = list("exclude",VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 	desc = "Has a tag on it: Totally not property of a hostile corporation, honest!"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.8
@@ -13,9 +12,9 @@
 	name = "red space suit"
 	icon_state = "syndicate"
 	item_state = "space_suit_syndicate"
+	species_fit = list(VOX_SHAPED)
 	desc = "Has a tag on it: Totally not property of a hostile corporation, honest!"
 	w_class = W_CLASS_MEDIUM
-	species_restricted = list("exclude",VOX_SHAPED)
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/jetpack,/obj/item/weapon/tank/jetpack/void,/obj/item/weapon/tank/jetpack/oxygen,/obj/item/weapon/tank/jetpack/nitrogen,/obj/item/weapon/tank/jetpack/carbondioxide,/obj/item/weapon/tank/oxygen,/obj/item/weapon/tank/air)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
@@ -51,11 +50,13 @@
 	name = "Orange Space Helmet"
 	icon_state = "syndicate-helm-orange"
 	item_state = "syndicate-helm-orange"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/space/syndicate/orange
 	name = "Orange Space Suit"
 	icon_state = "syndicate-orange"
 	item_state = "syndicate-orange"
+	species_fit = list(VOX_SHAPED)
 
 
 //Blue syndicate space suit

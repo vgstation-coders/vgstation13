@@ -44,6 +44,7 @@
 	desc = "An armored vest that protects against some damage. This one has Nanotrasen corporate badge."
 	icon_state = "armorsec"
 	item_state = "armor"
+	species_fit = list (VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/warden
 	name = "Warden's jacket"
@@ -162,6 +163,7 @@
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 80, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.7
+	species_fit = list (VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/laserproof
 	name = "Ablative Armor Vest"
@@ -172,6 +174,7 @@
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0
 	var/basereflectchance = 60
+	species_fit = list (VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/laserproof/advanced
 	name = "Vest of Reflection"
