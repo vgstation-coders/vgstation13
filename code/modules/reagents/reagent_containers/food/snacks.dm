@@ -5962,14 +5962,14 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	reagents.add_reagent(NUTRIMENT, 48)
 	bitesize = 12
 	set_light(1.4,2,"#FFFF00")
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/suppermattershard
 	name = "suppermatter shard"
 	desc = "A single portion of power."
 	icon_state = "suppermattershard"
 	bitesize = 3
-	trash = null	
-	
+	trash = null
+
 /obj/item/weapon/reagent_containers/food/snacks/suppermattershard/New()
 	..()
 	set_light(1.4,1.4,"#FFFF00")
@@ -5988,7 +5988,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	reagents.add_reagent(NUTRIMENT, 60)
 	bitesize = 12
 	set_light(1.4,2,"#FF0000")
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
 	name = "exciting suppermatter shard"
 	desc = "A single portion of exciting power!"
@@ -6046,3 +6046,13 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	..()
 	reagents.add_reagent (NUTRIMENT, 4)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/PAIcookie
+	name = "cookie"
+	desc = "Oh god, it's self-replicating"
+	icon = 'icons/obj/food2.dmi'
+
+/obj/item/weapon/reagent_containers/food/snacks/PAIcookie/New()
+	icon_state = "paicookie[pick(1,2,3,4)]"
+	reagents.add_reagent(NUTRIMENT,5)
+	bitesize = 1

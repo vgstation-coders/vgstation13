@@ -53,8 +53,31 @@
 	var/holo_target = "show_map" // Our holomap target.
 
 	var/list/synthable_default_food = list(
-		"Donut" = /obj/item/weapon/reagent_containers/food/snacks/donut/normal,
+		"Apple" = /obj/item/weapon/reagent_containers/food/snacks/grown/apple,
 		"Banana" = /obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+		"Orange" = /obj/item/weapon/reagent_containers/food/snacks/grown/orange,
+		"Chili" = /obj/item/weapon/reagent_containers/food/snacks/grown/chili,
+		"Peanut" = /obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
+		"Mint" = /obj/item/weapon/reagent_containers/food/snacks/mint,
+		"Donut" = /obj/item/weapon/reagent_containers/food/snacks/donut/normal,
+		"Muffin" = /obj/item/weapon/reagent_containers/food/snacks/muffin,
+		"Cookie" = /obj/item/weapon/reagent_containers/food/snacks/cookie,
+		"Fortune Cookie" = /obj/item/weapon/reagent_containers/food/snacks/fortunecookie,
+		"Pie" = /obj/item/weapon/reagent_containers/food/snacks/pie,
+		"Chocolate Bar" = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
+		"Space Twinkie" = /obj/item/weapon/reagent_containers/food/snacks/spacetwinkie,
+		"Discount Dan's Chocolate Bar"= /obj/item/weapon/reagent_containers/food/snacks/discountchocolate,
+		"Sweets" = /obj/item/weapon/reagent_containers/food/snacks/sweet,
+		"Gum" = /obj/item/gum,
+		"Popcorn" = /obj/item/weapon/reagent_containers/food/snacks/popcorn,
+		"Danitos" = /obj/item/weapon/reagent_containers/food/snacks/danitos,
+		"Synthmeat" = /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
+		"Faggot" = /obj/item/weapon/reagent_containers/food/snacks/faggot,
+		"Sausage" = /obj/item/weapon/reagent_containers/food/snacks/sausage,
+		"Buttered Toast" = /obj/item/weapon/reagent_containers/food/snacks/butteredtoast,
+		"Egg" = /obj/item/weapon/reagent_containers/food/snacks/egg,
+		"Chocolate Egg" = /obj/item/weapon/reagent_containers/food/snacks/chocolateegg,
+		"PAI-Shaped Cookie" = /obj/item/weapon/reagent_containers/food/snacks/PAIcookie,
 		"Burn it!" = /obj/item/weapon/reagent_containers/food/snacks/badrecipe,
 	)
 
