@@ -4585,7 +4585,7 @@
 	eatverb = "crunch"
 	edible_by_utensil = FALSE
 	trash = /obj/item/trash/lollipopstick
-	var/candyness = 150 //how long this thing will last
+	var/candyness = 161 //how long this thing will last
 	volume = 15 //not a lotta room for poison
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/New()
@@ -4626,8 +4626,10 @@
 		qdel(src)
 		H.equip_to_slot(new_stick, slot_wear_mask, 1)
 	else
-		var/transferamount = clamp(reagents.total_volume / 100, 0.1, 1)
-		reagents.trans_to(H, transferamount, log_transfer = FALSE, whodunnit = null)
+		if(candyness%10 == 0) //every 10 ticks, ~15 times
+			reagents.trans_to(H, 1, log_transfer = FALSE, whodunnit = null)
+		if(candyness%50 == 0) //every 50 ticks, so ~3 times
+			bitecount++ //we're arguably eating it
 		
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/equipped(mob/living/carbon/human/H, equipped_slot)
 	if(!H.isDead())
