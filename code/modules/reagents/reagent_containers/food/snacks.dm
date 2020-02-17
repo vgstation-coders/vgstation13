@@ -4587,7 +4587,6 @@
 	trash = /obj/item/trash/lollipopstick
 	var/candyness = 100 //how long this thing will last
 	volume = 15 //not a lotta room for poison
-	
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/New()
 	..() 
@@ -4602,44 +4601,41 @@
 	
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/consume()
 	..()
-	candyness -= bitesize*10 //taking a bite out reduces how long it'll last, duh
+	candyness -= bitesize*10 //taking a bite out reduces how long it'll last
 	
-/obj/item/weapon/reagent_containers/food/snacks/lollipop/proc/updateconsuming(var/sucking)
-	if(sucking)
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/proc/updateconsuming(var/consuming)
+	if(consuming)
 		processing_objects.Add(src)
 	else
 		processing_objects.Remove(src)		
 
-/obj/item/weapon/reagent_containers/food/snacks/lollipop/Destroy()
-	. = ..()
-
-	processing_objects -= src
-
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/process()
 	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
+	if(!H) //we ended up outside our human somehow
+		updateconsuming(FALSE)
+		return
+	if(H.isDead()) //human isn't really consuming it
+		return 
 	if(H.get_item_by_slot(slot_wear_mask) == src)
 		candyness--
 	if(candyness <= 0)
-		processing_objects.Remove(src)
+		to_chat(H, "<span class='notice'>You finish \the [src].</span>")
 		var/turf/T = get_turf(src)
 		var/atom/new_stick = new /obj/item/trash/lollipopstick(T)
 		transfer_fingerprints_to(new_stick)
-		H.equip_to_slot(new_stick, slot_wear_mask, 1)
-		to_chat(H, "<span class='notice'>You finish \the [src].</span>")
 		qdel(src)
-		updateconsuming(FALSE)
-		H.update_inv_wear_mask()
-		return
+		H.equip_to_slot(new_stick, slot_wear_mask, 1)
 	else
-		var/transferamount = clamp(reagents.total_volume / 100, 0.1, 0.5)
+		var/transferamount = clamp(reagents.total_volume / 100, 0.1, 1)
 		reagents.trans_to(H, transferamount, log_transfer = FALSE, whodunnit = null)
 		
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/equipped(mob/living/carbon/human/H, equipped_slot)
-	updateconsuming(equipped_slot == slot_wear_mask)
+	if(!H.isDead())
+		updateconsuming(equipped_slot == slot_wear_mask)
 	
 /obj/item/trash/lollipopstick
 	name = "lollipop stick"
-	desc = "A small plastic straw."
+	desc = "A small plastic stick."
 	icon = 'icons/obj/candymachine.dmi'
 	icon_state = "lollipop_stick"
 	w_class = W_CLASS_TINY
