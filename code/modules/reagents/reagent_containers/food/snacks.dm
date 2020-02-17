@@ -4571,6 +4571,81 @@
 	LEXORIN=5, GRAVY=5, DETCOFFEE=5, AMUTATIONTOXIN=5, GYRO=5, SILENCER= 5, URANIUM=5)
 	var/reagent=pick(possible_reagents)
 	reagents.add_reagent(reagent, possible_reagents[reagent])
+	
+/obj/item/weapon/reagent_containers/food/snacks/lollipop
+	name = "lollipop"
+	desc = "Suck on this!"
+	icon_state = "lollipop_stick"
+	item_state = "lollipop_stick"
+	food_flags = FOOD_SWEET
+	icon = 'icons/obj/candymachine.dmi'
+	bitesize = 2
+	slot_flags = SLOT_MASK //No, really, suck on this.
+	attack_verb = list("taps", "pokes")
+	eatverb = "crunch"
+	edible_by_utensil = FALSE
+	trash = /obj/item/trash/lollipopstick
+	var/candyness = 100 //how long this thing will last
+	volume = 15 //not a lotta room for poison
+	
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/New()
+	..() 
+	eatverb = pick("bite","crunch","chomp")
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(SUGAR, 8)
+	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
+	var/image/colorpop = image('icons/obj/candymachine.dmi', icon_state = "lollipop_head")
+	colorpop.color = pick(random_color_list)
+	src.overlays += colorpop
+	filling_color = colorpop.color
+	
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/consume()
+	..()
+	candyness -= bitesize*10 //taking a bite out reduces how long it'll last, duh
+	
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/proc/updateconsuming(var/sucking)
+	if(sucking)
+		processing_objects.Add(src)
+	else
+		processing_objects.Remove(src)		
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/Destroy()
+	. = ..()
+
+	processing_objects -= src
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/process()
+	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
+	if(H.get_item_by_slot(slot_wear_mask) == src)
+		candyness--
+	if(candyness <= 0)
+		processing_objects.Remove(src)
+		var/turf/T = get_turf(src)
+		var/atom/new_stick = new /obj/item/trash/lollipopstick(T)
+		transfer_fingerprints_to(new_stick)
+		H.equip_to_slot(new_stick, slot_wear_mask, 1)
+		to_chat(H, "<span class='notice'>You finish \the [src].</span>")
+		qdel(src)
+		updateconsuming(FALSE)
+		H.update_inv_wear_mask()
+		return
+	else
+		var/transferamount = clamp(reagents.total_volume / 100, 0.1, 0.5)
+		reagents.trans_to(H, transferamount, log_transfer = FALSE, whodunnit = null)
+		
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/equipped(mob/living/carbon/human/H, equipped_slot)
+	updateconsuming(equipped_slot == slot_wear_mask)
+	
+/obj/item/trash/lollipopstick
+	name = "lollipop stick"
+	desc = "A small plastic straw."
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "lollipop_stick"
+	w_class = W_CLASS_TINY
+	slot_flags = SLOT_MASK
+	throwforce = 1
+	autoignition_temperature = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin
 	name = "\improper Choco-Coin"

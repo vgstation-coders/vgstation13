@@ -1409,6 +1409,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 2,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
+		/obj/item/weapon/storage/pill_bottle/lollipops = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 100,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
 		)
@@ -1429,6 +1430,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 75,
 		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
+		/obj/item/weapon/storage/pill_bottle/lollipops = 20,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 100,
 		)
