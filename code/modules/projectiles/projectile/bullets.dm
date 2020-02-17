@@ -194,7 +194,7 @@ obj/item/projectile/bullet/suffocationbullet
 	..()
 	explosion(target, 0,1,1,5)
 	qdel(src)
-	
+
 /obj/item/projectile/bullet/boombullet
 	name = "small exploding bullet"
 	embed = 0
@@ -736,7 +736,7 @@ obj/item/projectile/bullet/suffocationbullet
 	burn_damage = 10
 	jet_pressure = 0
 	gas_jet = null
-	
+
 /obj/item/projectile/bullet/fire_plume/dragonsbreath/New()
 	..()
 	var/datum/gas_mixture/firemix = new /datum/gas_mixture
@@ -973,3 +973,14 @@ obj/item/projectile/bullet/suffocationbullet
 
 /obj/item/projectile/bullet/syringe/dart
 	stealthy = TRUE
+
+/obj/item/projectile/bullet/dot308 //Hunting bullet, meant to decimate mobs
+	damage = 40
+	icon_state = "bullet"
+	penetration = 7
+
+/obj/item/projectile/bullet/dot308/on_hit(atom/A as mob|obj|turf|area)
+	if(!A)
+		return
+	if(ismob(A) && istype(A, /mob/living/simple_animal))
+		call(A, /mob/living/simple_animal/adjustBruteLoss)(damage) //basicly, damage proc in hostile mobs occurs twice

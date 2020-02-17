@@ -19,6 +19,7 @@
 		new /obj/item/weapon/gun/projectile/glock/lockbox(), \
 		new /obj/item/weapon/gun/projectile/automatic/vector/lockbox(), \
 		new /obj/item/weapon/gun/projectile/shotgun/pump(), \
+		new /obj/item/weapon/gun/projectile/hecate/hunting(), \
 		new /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox(), \
 		),
 		"Single_ammunition"=list(
@@ -40,6 +41,7 @@
 		new /obj/item/ammo_storage/box/c45/practice(), \
 		new /obj/item/ammo_storage/box/c45/rubber(), \
 		new /obj/item/ammo_storage/box/a50(), \
+		new /obj/item/ammo_storage/box/dot308(), \
 		new /obj/item/weapon/storage/box/lethalshells(), \
 		new /obj/item/weapon/storage/box/buckshotshells(), \
 		new /obj/item/weapon/storage/box/beanbagshells(), \
@@ -62,6 +64,7 @@
 		"Misc_Other"=list(
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/speedloader/shotgun(), \
+		new /obj/item/gun_part/extended_mag(), \
 		),
 		"Hidden_Items" = list(
 		new /obj/item/ammo_storage/speedloader/a357/empty(), \

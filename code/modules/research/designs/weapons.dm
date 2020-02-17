@@ -265,6 +265,16 @@
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
+/datum/design/hunting_file
+	name = "Hunting rifle"
+	desc = "A bolt-action .308 rifle."
+	id = "hunting_rifle"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 20000, MAT_GLASS = 5000, MAT_PLASTIC = 6000)
+	build_path = /obj/item/weapon/gun/projectile/hecate/hunting
+	locked = TRUE
+	req_lock_access = list(access_armory, access_weapons)
+
 /datum/design/rocketlauncher
 	name = "rocket launcher"
 	desc = "Watch the backblast, you idiot."
@@ -365,7 +375,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 250)
 	build_path = /obj/item/ammo_casing/shotgun/blank
-	
+
 /datum/design/shotgun_shell/dragonsbreath
 	name = "12ga. dragon's breath shell"
 	desc = "A 12 gauge shell filled with an incendiary mixture, for lighting up dark areas or setting things on fire."
@@ -373,7 +383,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 500, MAT_PLASMA = 2000)
 	build_path = /obj/item/ammo_casing/shotgun/dragonsbreath
-	
+
 /datum/design/shotgun_shell/frag
 	name = "12ga. frag shell"
 	desc = "A 12 gauge shell filled with a high-explosive mixture, for heavy anti-personnel usage."
@@ -478,7 +488,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000)
 	build_path = /obj/item/ammo_storage/box/flare
-	
+
 /datum/design/ammo_shotgun/dragonsbreath
 	name = "Ammunition box (12ga. dragon's breath)"
 	desc = "A box of 12-gauge dragon's breath shells."
@@ -486,7 +496,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000, MAT_PLASMA = 32000)
 	build_path = /obj/item/weapon/storage/box/dragonsbreathshells
-	
+
 /datum/design/ammo_shotgun/frag
 	name = "Ammunition box (12ga. frag)"
 	desc = "A box of 12-gauge explosive shells."
@@ -534,6 +544,14 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 6000)
 	build_path = /obj/item/ammo_storage/box/a50
+
+/datum/design/ammo_308
+	name = "Ammunition box (.308)"
+	desc = "A box of .308 cartridges."
+	id = "ammo_308"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 4000)
+	build_path = /obj/item/ammo_storage/box/dot308
 
 //Magazines
 /datum/design/magazine_9mm_beretta
@@ -634,6 +652,13 @@
 	materials = list(MAT_IRON = 400)
 	build_path = /obj/item/ammo_storage/speedloader/shotgun
 
+/datum/design/extended_mag
+	name = "Internal magazine extender"
+	desc = "Universal internal magazine extender."
+	id = "extended_mag"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 400)
+	build_path = /obj/item/gun_part/extended_mag
 
 //Hidden
 

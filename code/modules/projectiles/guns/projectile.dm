@@ -26,6 +26,11 @@
 	var/reloadsound = 'sound/items/Deconstruct.ogg'
 	var/casingsound = 'sound/weapons/casing_drop.ogg'
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
+	var scoped = 0
+	var extended_mag = 0
+	var extended_shells = 0
+	var scope_overlay = null
+	var extended_mag_overlay = null
 
 /obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
 	return TRUE
@@ -203,6 +208,34 @@
 					num_loaded++
 					playsound(src, reloadsound, 25, 1)
 
+	if(istype(A, /obj/item/gun_part/scope) && src.gun_flags &SCOPED)
+		if(scoped)
+			return
+		if(!user.is_holding_item(src))
+			to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
+			return
+		if(user.drop_item(A, src))
+			to_chat(user, "<span class='notice'>You attach [A] onto [src].</span>")
+			scoped = A
+			//var/datum/action/item_action/toggle_scope
+			new/datum/action/item_action/toggle_scope(src)
+			src.actions_types += /datum/action/item_action/toggle_scope
+			update_icon()
+			return
+
+	if(istype(A, /obj/item/gun_part/extended_mag) && src.gun_flags &EXTENDEDMAG)
+		if(extended_mag)
+			return
+		if(!user.is_holding_item(src))
+			to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
+			return
+		if(user.drop_item(A, src))
+			to_chat(user, "<span class='notice'>You attach [A] onto [src].</span>")
+			extended_mag = A
+			max_shells += extended_shells
+			update_icon()
+			return
+
 	if(num_loaded)
 		to_chat(user, "<span class='notice'>You load [num_loaded] shell\s into \the [src]!</span>")
 	A.update_icon()
@@ -281,11 +314,32 @@
 	return ..()
 
 /obj/item/weapon/gun/projectile/proc/RemoveAttach(var/mob/user)
-	to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
-	user.put_in_hands(silenced)
-	silenced = 0
-	w_class = W_CLASS_SMALL
-	update_icon()
+	if(silenced)
+		to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
+		user.put_in_hands(silenced)
+		silenced = 0
+		w_class = W_CLASS_SMALL
+	if(scoped)
+		to_chat(user, "<span class='notice'>You unscrew [scoped] from [src].</span>")
+		user.put_in_hands(scoped)
+		scoped = 0
+		src.actions_types -= /datum/action/item_action/toggle_scope
+		for(var/datum/action/A in src.actions)
+			if(istype(A, /datum/action/item_action/toggle_scope))
+				qdel(A)
+		update_icon()
+	if(extended_mag)
+		to_chat(user, "<span class='notice'>You detach [extended_mag] from [src].</span>")
+		user.put_in_hands(extended_mag)
+		extended_mag = 0
+		max_shells -= extended_shells
+		if(getAmmo() > max_shells)
+			for(var/obj/item/ammo_casing/AC in loaded)
+				AC.forceMove(get_turf(src))
+				loaded -= AC
+				if(getAmmo() <= max_shells)
+					break
+		update_icon()
 
 /obj/item/weapon/gun/projectile/verb/RemoveAttachments()
 	set name = "Remove Attachments"
@@ -297,7 +351,7 @@
 	if(usr.incapacitated())
 		to_chat(usr, "<span class='rose'>You can't do this!</span>")
 		return
-	if(silenced)
+	if(silenced || scoped || extended_mag)
 		RemoveAttach(usr)
 	else
 		to_chat(usr, "<span class='rose'>There are no attachments to remove!</span>")

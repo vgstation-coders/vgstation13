@@ -13,6 +13,7 @@
 #define POINT762X55 "7.62x55"
 #define NAGANTREVOLVER "7.62x38R"
 #define BROWNING50 ".50BMG"
+#define POINT308 ".308"
 
 #define ROCKETGRENADE "rpg"
 #define GUIDEDROCKET "guided rocket"

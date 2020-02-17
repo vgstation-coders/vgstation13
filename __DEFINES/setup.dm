@@ -1115,6 +1115,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define SILENCECOMP  1 		//Silencer-compatible
 #define AUTOMAGDROP  2		//Does the mag drop when it's empty?
 #define EMPTYCASINGS 4		//Does the gun eject empty casings?
+#define SCOPED		 8		//You can attach scope to it
+#define EXTENDEDMAG  16		//Its internal magazine can be extended
 
 //projectiles bouncing off and phasing through obstacles
 #define PROJREACT_WALLS		1//includes opaque doors

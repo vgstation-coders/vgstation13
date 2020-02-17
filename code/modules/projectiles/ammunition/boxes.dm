@@ -147,3 +147,10 @@
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a762"
 	max_ammo = 100
+
+/obj/item/ammo_storage/box/dot308
+	name = "ammo box .308"
+	icon_state = "308-ammo"
+	origin_tech = Tc_COMBAT + "=3"
+	ammo_type = "/obj/item/ammo_casing/dot308"
+	max_ammo = 30
