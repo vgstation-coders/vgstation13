@@ -265,7 +265,7 @@
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
-/datum/design/hunting_file
+/datum/design/hunting_rifle
 	name = "Hunting rifle"
 	desc = "A bolt-action .308 rifle."
 	id = "hunting_rifle"
@@ -550,7 +550,7 @@
 	desc = "A box of .308 cartridges."
 	id = "ammo_308"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 4000)
+	materials = list(MAT_IRON = 8000)
 	build_path = /obj/item/ammo_storage/box/dot308
 
 //Magazines

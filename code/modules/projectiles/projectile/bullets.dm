@@ -975,7 +975,7 @@ obj/item/projectile/bullet/suffocationbullet
 	stealthy = TRUE
 
 /obj/item/projectile/bullet/dot308 //Hunting bullet, meant to decimate mobs
-	damage = 40
+	damage = 60
 	icon_state = "bullet"
 	penetration = 7
 
@@ -983,4 +983,4 @@ obj/item/projectile/bullet/suffocationbullet
 	if(!A)
 		return
 	if(ismob(A) && istype(A, /mob/living/simple_animal))
-		call(A, /mob/living/simple_animal/adjustBruteLoss)(damage) //basicly, damage proc in hostile mobs occurs twice
+		call(A, /mob/living/simple_animal/adjustBruteLoss)(damage) //basicly, damage proc in mobs occurs twice

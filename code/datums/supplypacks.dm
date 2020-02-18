@@ -1149,6 +1149,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Security Biosuits"
 	group = "Security"
 
+/datum/supply_packs/hunting_rifle
+	name = "Hunting Rifle Production License"
+	contains = list(/obj/item/weapon/disk/design_disk/hunting_rifle_license)
+	cost = 200
+	containertype = /obj/structure/closet/crate/basic
+	containername = "Hunting Rifle License"
+	group = "Security"
+
 //////HOSPITALITY//////
 
 /datum/supply_packs/food
