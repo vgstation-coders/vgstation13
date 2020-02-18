@@ -1607,7 +1607,7 @@
 		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
 
 /mob/living/carbon/human/reset_layer()
-	if(locked_to)
+	if(locked_to && istype(locked_to, /obj/machinery/bot/mulebot)) //we only care about not appearing behind mulebots
 		return
 	if(lying)
 		plane = LYING_HUMAN_PLANE
