@@ -52,7 +52,6 @@ Thus, the two variables affect pump operation are set in New():
 
 	var/input_starting_pressure = air1.return_pressure()
 	var/output_starting_pressure = air2.return_pressure()
-	/*var/input_volume = air1.volume  || input_volume == 200*/
 
 	if((input_starting_pressure < 0.01) || (output_starting_pressure > (9000+input_starting_pressure)))
 		pump_stalled = 1
