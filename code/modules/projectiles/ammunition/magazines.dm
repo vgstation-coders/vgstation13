@@ -234,6 +234,8 @@
 	icon_state = "uzi45"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
+	exact = 0
+	caliber = POINT45
 	max_ammo = 16
 	multiple_sprites = 1
 	sprite_modulo = 4

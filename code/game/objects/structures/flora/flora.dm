@@ -383,6 +383,7 @@
 	icon = 'icons/obj/flora/ausflora.dmi'
 	icon_state = "firstbush_1"
 	anchored = 1
+	shovelaway = TRUE
 
 /obj/structure/flora/ausbushes/New()
 	..()

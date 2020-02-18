@@ -125,7 +125,7 @@
 	item_state = "jensensuit"
 	_color = "jensen"
 	siemens_coefficient = 0.6
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/hos/jensen
 	name = "armored trenchcoat"
