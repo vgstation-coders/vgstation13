@@ -4616,12 +4616,11 @@
 		return
 	if(H.isDead()) //human isn't really consuming it
 		return 
-	if(H.get_item_by_slot(slot_wear_mask) == src)
+	if(H.is_wearing_item(src,slot_wear_mask))
 		candyness--
 	if(candyness <= 0)
 		to_chat(H, "<span class='notice'>You finish \the [src].</span>")
-		var/turf/T = get_turf(src)
-		var/atom/new_stick = new /obj/item/trash/lollipopstick(T)
+		var/atom/new_stick = new /obj/item/trash/lollipopstick(loc)
 		transfer_fingerprints_to(new_stick)
 		qdel(src)
 		H.equip_to_slot(new_stick, slot_wear_mask, 1)
@@ -4644,6 +4643,8 @@
 	slot_flags = SLOT_MASK
 	throwforce = 1
 	autoignition_temperature = 0
+	w_type = RECYK_MISC
+	starting_materials = list(MAT_PLASTIC = 100)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin
 	name = "\improper Choco-Coin"
