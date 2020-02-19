@@ -72,6 +72,7 @@
 	body_parts_covered = FULL_TORSO|ARMS
 	allowed = list (/obj/item/weapon/kitchen/utensil/knife/large,/obj/item/weapon/kitchen/utensil/knife/large/butch)
 	species_fit = list(VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 //Chef
 /obj/item/clothing/suit/chef/classic
@@ -278,6 +279,7 @@
 	desc = "They suspend the illusion of the mime's play."
 	icon = 'icons/obj/clothing/belts.dmi'
 	icon_state = "suspenders"
+	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	body_parts_covered = 0
 
