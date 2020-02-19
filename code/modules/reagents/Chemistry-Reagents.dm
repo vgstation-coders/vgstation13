@@ -4410,7 +4410,7 @@
 		switch(volume)
 			if(1 to 15)
 				if(prob(5))
-					to_chat(H,"<span class='warning'>You burp.</span>")
+					H.emote("me", 1, "burps.")
 					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
 					
 			if(15 to 100)
