@@ -4395,16 +4395,35 @@
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	var/has_had_heart_explode = 0
+	var/has_cornoil_inside = 0
 
-/datum/reagent/cornoil/proc/decornoil(var/mob/living/M, heartdamage = 30, override_remove = 0, explodeheart = 1)
-	if(!has_had_heart_explode)
-		has_had_heart_explode = 1
-		if(!override_remove)
-			holder.remove_reagent(src.id) //Clean them out so medbay can replace the heart with a fresh one if they want to
-	
-		if(ishuman(M))
+/datum/reagent/cornoil/reagent_deleted()
+
+	if(..())
+		return 1
+
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+
+	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		switch(volume)
+		if(!has_cornoil_inside)
+			return
+		var/timedmg = ((data - 60) / 2)
+		if (timedmg > 0)
+			decornoil(H, timedmg, 1, 0)
+
+
+/datum/reagent/cornoil/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += nutriment_factor
+	
+	var/mob/living/carbon/human/H = M
+	switch(volume)
 			if(1 to 15)
 				if(prob(5))
 					H.emote("me", 1, "burps.")
@@ -4420,23 +4439,49 @@
 						L.take_damage(0.2, 1)
 						
 			if(100 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
-				if(H.get_heart())//Got a heart?
-					var/datum/organ/internal/heart/damagedheart = H.get_heart()
-					if (heartdamage >= 30)
-						if(H.species.name != "Diona" && damagedheart) //fuck dionae
-							to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
-							damagedheart.damage += heartdamage //Bye heart.
-							if(explodeheart)
-								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
+				decornoil(M)
+		data++
+
+/datum/reagent/cornoil/proc/decornoil(var/mob/living/M, heartdamage = 30, override_remove = 0, explodeheart = 1)
+	if(!has_had_heart_explode)
+		has_had_heart_explode = 1
+		if(!override_remove)
+			holder.remove_reagent(src.id) //Clean them out so medbay can replace the heart with a fresh one if they want to
+	
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+
+			if(H.get_heart())//Got a heart?
+				var/datum/organ/internal/heart/damagedheart = H.get_heart()
+				if (heartdamage >= 30)
+					if(H.species.name != "Diona" && damagedheart) //fuck dionae
+						to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
+						damagedheart.damage += heartdamage //Bye heart.
+						if(explodeheart)
+							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
 						H.adjustOxyLoss(heartdamage*2)
 						H.adjustBruteLoss(heartdamage)
-
-/datum/reagent/cornoil/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	M.nutrition += nutriment_factor
+					else
+						to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
+						for(var/datum/organ/external/E in H.organs)
+							E.droplimb(1, 1) //Bye limbs!
+							H.adjustFireLoss(heartdamage)
+							H.adjustBruteLoss(heartdamage)
+							H.adjustToxLoss(heartdamage)
+							if(explodeheart)
+								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST))) //and heart!
+				else if (heartdamage < 30)
+					if(H.species.name != "Diona")
+						to_chat(H, "<span class='danger'>You feel a sharp pain in your chest!</span>")
+					else
+						to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
+						H.adjustFireLoss(heartdamage)
+					damagedheart.damage += heartdamage
+					H.adjustToxLoss(heartdamage)
+					H.adjustBruteLoss(heartdamage)
+			else
+			M.gib()
+		data = 0
 
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
