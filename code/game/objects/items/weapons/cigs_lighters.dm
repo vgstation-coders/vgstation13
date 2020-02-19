@@ -358,7 +358,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(smoketime <= 0 | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		if(smoketime > 0 && ishuman(loc))
 			var/mob/living/carbon/human/mysmoker = loc
-			if(mysmoker.internal && mysmoker.internal.air_contents.partial_pressure(GAS_OXYGEN) > 0)
+			if(mysmoker.internal?.air_contents.partial_pressure(GAS_OXYGEN) > 0)
 				return //if there's oxygen in the tank, let my cig live freely
 		if(!inside_item)
 			var/atom/new_butt = new type_butt(location) //Spawn the cigarette butt
