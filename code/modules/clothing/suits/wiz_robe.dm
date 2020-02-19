@@ -117,6 +117,7 @@
 	armor = list(melee = 30, bullet = 20, laser = 20,energy = 20, bomb = 20, bio = 20, rad = 20)
 	allowed = list(/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
 	siemens_coefficient = 0.8
+	clothing_flags = ONESIZEFITSALL
 
 	wizard_garb = 1
 
