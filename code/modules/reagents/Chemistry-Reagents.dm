@@ -4424,13 +4424,13 @@
 						
 			if(100 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
 				if(H.get_heart())//Got a heart?
-				var/datum/organ/internal/heart/damagedheart = H.get_heart()
-				if (heartdamage >= 30)
-					if(H.species.name != "Diona" && damagedheart) //fuck dionae
-						to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
-						damagedheart.damage += heartdamage //Bye heart.
-						if(explodeheart)
-							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
+					var/datum/organ/internal/heart/damagedheart = H.get_heart()
+					if (heartdamage >= 30)
+						if(H.species.name != "Diona" && damagedheart) //fuck dionae
+							to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
+							damagedheart.damage += heartdamage //Bye heart.
+							if(explodeheart)
+								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
 						H.adjustOxyLoss(heartdamage*2)
 						H.adjustBruteLoss(heartdamage)
 
