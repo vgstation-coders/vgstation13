@@ -15,7 +15,8 @@
 	invocation = "GR'T W'TH K'DS"
 	invocation_type = SpI_SHOUT
 	spell_flags = NEEDSCLOTHES
-	//hud_state = "wiz_doppelganger"  //TODO
+	override_icon = 'icons/mob/animal.dmi'
+	hud_state = "pitbull"  //TODO
 
 
 var/list/pitbulls_count_by_wizards = list()
