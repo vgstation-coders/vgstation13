@@ -30,11 +30,6 @@ var/list/pitbulls = list()
 	return ..()
 
 
-/obj/testing
-
-/obj/testing/New()
-	to_chat(world,"<span class = 'warning'>number of pitbulls[pitbulls_count_by_wizards]</span>")
-
 /spell/aoe_turf/conjure/pitbull/summon_object(var/type, var/location)
 	..()
 	pitbulls_count_by_wizards[holder]++
