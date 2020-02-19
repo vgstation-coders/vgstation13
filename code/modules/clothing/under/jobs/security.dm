@@ -132,6 +132,7 @@
 	desc = "A trenchcoat augmented with a special alloy for protection and style."
 	icon_state = "jensencoat"
 	item_state = "jensencoat"
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.6
 
 /obj/item/clothing/suit/armor/hos/sundowner
