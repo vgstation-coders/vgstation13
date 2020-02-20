@@ -4411,7 +4411,7 @@
 			if(1 to 15)
 				if(prob(5))
 					H.emote("me", 1, "burps.")
-					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
+					holder.remove_reagent(id, 0.1 * FOOD_METABOLISM)
 			if(15 to 100)
 				if(prob(10))
 					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
@@ -4420,7 +4420,7 @@
 						to_chat(H,"<span class='warning'>You feel a burn in your chest.</span>")
 						heart.take_damage(0.2, 1)
 			if(100 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
-				if(heart)
+				if(heart && !heart.robotic)
 					to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
 					has_had_heart_explode = 1 //That way it doesn't blow up any new transplant hearts
 					qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
