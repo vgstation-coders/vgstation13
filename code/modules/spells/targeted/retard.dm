@@ -7,7 +7,7 @@
 	school = "evocation"
 	charge_max = 200 // 20 seconds
 	//Invocation is noted below
-	invocation_type = SpI_WHISPER //Wizard will whisper what they say instead of shouting
+	invocation_type = SpI_SHOUT //Wizard will shout what they say
 	range = 3 // Target anyone within 3 tiles of you
 	amt_dam_brain = 30 //30 brain damage
 	max_targets = 1 // Can only target one person
@@ -16,3 +16,7 @@
 	message = "<span class='danger'>You feel dumber!<span>" //What the victim sees when affected
 	mind_affecting = 1 //Blocked by tinfoil hat
 	hud_state = "wiz_retard" //Icon is from screen_spells.dmi
+
+/spell/targeted/retard/invocation()
+	invocation = pick("SCRUN GL RITY", "BLO XYG EVO", "SAI AN SCRE", "PO NY NEEI", "MIE NIA PICE", "LOL 2 CAT", "OK R TARD", "WO A MAMA", "CAP TIN CODOM")
+	..()
