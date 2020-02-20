@@ -103,6 +103,8 @@
 	else
 		icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
 
+/obj/item/weapon/gun/projectile/automatic/uzi/bigmag
+	mag_type = "/obj/item/ammo_storage/magazine/uzi45/extended"
 
 /obj/item/weapon/gun/projectile/automatic/microuzi
 	//micro uzi is 9mm :)
