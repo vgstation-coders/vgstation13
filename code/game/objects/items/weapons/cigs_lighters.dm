@@ -355,7 +355,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		M.IgniteMob()
 	smoketime--
 	var/datum/gas_mixture/env = location.return_air()
-	if(smoketime <= 0 | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+	if(smoketime <= 0 || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		if(smoketime > 0 && ishuman(loc))
 			var/mob/living/carbon/human/mysmoker = loc
 			if(mysmoker.internal?.air_contents.partial_pressure(GAS_OXYGEN) > 0)
