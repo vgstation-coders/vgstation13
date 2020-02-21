@@ -6,13 +6,13 @@
 	name = "shard"
 	icon = 'icons/obj/shards.dmi'
 	icon_state = "large"
-	sharpness = 0.8
+	sharpness = 9.8
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	desc = "Could probably be used as ... a throwing weapon?"
 	w_class = W_CLASS_TINY
 	hitsound = 'sound/weapons/bladeslice.ogg'
-	force = 5.0
-	throwforce = 15.0
+	force = 150.0
+	throwforce = 75.0
 
 	item_state = "shard-glassnew"
 	starting_materials = list(MAT_GLASS = 3750)
@@ -45,8 +45,8 @@
 /obj/item/weapon/shard/plasma
 	name = "plasma shard"
 	desc = "A shard of plasma glass. Considerably tougher then normal glass shards. Apparently not tough enough to be a window."
-	force = 9.0
-	throwforce = 15.0
+	force = 225.0
+	throwforce = 150.0
 	icon_state = "plasmalarge"
 	item_state = "shard-plasglass"
 	glass = /obj/item/stack/sheet/glass/plasmaglass
