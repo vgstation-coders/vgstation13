@@ -61,7 +61,7 @@
 	..()
 	// Set up wordfilter
 	speech_filter = new
-	speech_filter.addPickReplacement("\\b(asshole|condom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)",
+	speech_filter.addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)",
 	list(
 		"honker",
 		"fun police",
@@ -174,7 +174,7 @@
 	speed = 1
 	turns_per_move = 1
 
-	melee_damage_type = "BRAIN"
+	melee_damage_type = BRAIN
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/goblin/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/weapon/pen)) //Renaming
@@ -209,7 +209,7 @@
 	speed = 1
 	turns_per_move = 1
 
-	melee_damage_type = "BRAIN"
+	melee_damage_type = BRAIN
 	var/spacedrugs_chance = 30
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/attackby(obj/item/weapon/W, mob/user)
