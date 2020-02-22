@@ -27,7 +27,7 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 	desc = "A device that actively transfers heat between two pipelines."
 
 	var/mtd_limit = 2500
-	var/mtd_slope_at_zero = 0.5
+	var/mtd_slope_at_zero = 2 / 3
 
 	active_power_usage = 1000
 
