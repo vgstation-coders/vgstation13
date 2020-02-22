@@ -100,7 +100,7 @@
 	speed = 1
 	turns_per_move = 1
 
-	melee_damage_type = "BRAIN"
+	melee_damage_type = BRAIN
 
 /mob/living/simple_animal/hostile/retaliate/faguette/goblin/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/weapon/pen)) //Renaming
