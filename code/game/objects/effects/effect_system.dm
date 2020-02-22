@@ -715,7 +715,7 @@ steam.start() -- spawns the effect
 	var/expand = 1
 	animate_movement = 0
 	var/metal = 0
-	var/lowest_temperature = 0
+	var/lowest_temperature = T0C
 
 /obj/effect/effect/foam/fire
 	name = "fire supression foam"
@@ -759,21 +759,14 @@ steam.start() -- spawns the effect
 		savedtemp = old_air.temperature
 		if(istype(T) && savedtemp > lowest_temperature)
 			var/datum/gas_mixture/lowertemp = old_air.remove_volume(CELL_VOLUME)
-			lowertemp.temperature = max(min(lowertemp.temperature - 500, lowertemp.temperature / 2), 1) //Reaching exactly 0K causes problems
-			lowertemp.react()
+			lowertemp.add_thermal_energy(max(lowertemp.get_thermal_energy_change(lowest_temperature), -(15*CELL_VOLUME)*max(1,lowertemp.return_temperature()/10)))
 			T.assume_air(lowertemp)
 	spawn(3)
 		process()
 	spawn(120)
 		processing_objects.Remove(src)
 		sleep(30)
-		var/turf/simulated/T = get_turf(src)
-		var/datum/gas_mixture/local_air = T.return_air()
 		flick("[icon_state]-disolve", src)
-		if((local_air.temperature < lowest_temperature) && (savedtemp > lowest_temperature)) //ie, we have over-chilled
-			local_air.temperature = lowest_temperature
-		else if((local_air.temperature < lowest_temperature) && (savedtemp < lowest_temperature) && savedtemp) //ie it chilled when it shouldn't have
-			local_air.temperature = savedtemp
 		sleep(5)
 		qdel(src)
 	AddToProfiler()

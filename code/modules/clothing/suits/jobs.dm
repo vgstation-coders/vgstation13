@@ -118,7 +118,58 @@
 	name = "blue jacket"
 	desc = "A blue forensics technician jacket."
 	icon_state = "forensics_blue"
+	
+/obj/item/clothing/suit/secdressjacket
+	body_parts_covered = FULL_TORSO|ARMS
 
+//Head of Security
+/obj/item/clothing/suit/secdressjacket/hosblue
+	name = "\improper HoS' blue dress jacket"
+	desc = "A blue dress jacket for the Head of Security."
+	icon_state = "hosbluejacket"
+	
+/obj/item/clothing/suit/secdressjacket/hosnavy
+	name = "\improper HoS' navy dress jacket"
+	desc = "A navy dress jacket for the Head of Security."
+	icon_state = "hosdnavyjacket"
+	
+/obj/item/clothing/suit/secdressjacket/hostan
+	name = "\improper HoS' tan dress jacket"
+	desc = "A tan dress jacket for the Head of Security."
+	icon_state = "hostanjacket"
+	
+//Warden
+/obj/item/clothing/suit/secdressjacket/wardenblue
+	name = "warden's blue dress jacket"
+	desc = "A blue dress jacket for the warden."
+	icon_state = "wardenbluejacket"
+	
+/obj/item/clothing/suit/secdressjacket/wardennavy
+	name = "warden's navy dress jacket"
+	desc = "A navy dress jacket for the warden."
+	icon_state = "wardendnavyjacket"
+	
+/obj/item/clothing/suit/secdressjacket/wardentan
+	name = "warden's tan dress jacket"
+	desc = "A tan dress jacket for the warden."
+	icon_state = "wardentanjacket"
+	
+//Security officer
+/obj/item/clothing/suit/secdressjacket/officerblue
+	name = "officer's blue dress jacket"
+	desc = "A blue dress jacket for a security officer."
+	icon_state = "officerbluejacket"
+	
+/obj/item/clothing/suit/secdressjacket/officernavy
+	name = "officer's navy dress jacket"
+	desc = "A navy dress jacket for a security officer."
+	icon_state = "officerdnavyjacket"
+	
+/obj/item/clothing/suit/secdressjacket/officertan
+	name = "officer's tan dress jacket"
+	desc = "A tan dress jacket for a security officer."
+	icon_state = "officertanjacket"
+	
 //Engineering
 /obj/item/clothing/suit/storage/hazardvest
 	name = "hazard vest"
