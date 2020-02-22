@@ -264,8 +264,7 @@
 
 	if (H.mind.miming)
 		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
-		if (H.mind.miming == MIMING_OUT_OF_CHOICE)
-			H.add_spell(new /spell/targeted/oathbreak/)
+		H.add_spell(new /spell/targeted/oathbreak/)
 
 	H.UpdateAppearance()
 	H.set_species(R.dna.species)

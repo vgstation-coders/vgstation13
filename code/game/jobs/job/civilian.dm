@@ -426,7 +426,7 @@
 		H.equip_or_collect(new /obj/item/weapon/stamp/mime(H), slot_in_backpack)
 	H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 	H.add_spell(new /spell/targeted/oathbreak/)
-	H.mind.miming = MIMING_OUT_OF_CHOICE
+	H.mind.miming = 1
 	mob_rename_self(H,"mime")
 	return 1
 

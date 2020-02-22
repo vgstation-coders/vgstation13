@@ -57,8 +57,7 @@
 	to_chat(new_body, "<span class='notice'><b>You suddenly awaken inside some strange machine.</b></span>")
 	if(new_body.mind?.miming) //yes I know I'm using the forbidden operator
 		new_body.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
-		if(new_body.mind.miming == MIMING_OUT_OF_CHOICE)
-			new_body.add_spell(new /spell/targeted/oathbreak/)
+		new_body.add_spell(new /spell/targeted/oathbreak/)
 	new_body.UpdateAppearance()
 	for(var/datum/language/L in brainmob.languages)
 		new_body.add_language(L.name)
