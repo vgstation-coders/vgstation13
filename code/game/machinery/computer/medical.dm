@@ -146,7 +146,8 @@
 	<br><b>Dangerousness:</b> <A href='?src=\ref[src];field=danger_vir;edit_vir=\ref[v]'>[v.fields["danger"]]</A>
 	<br><b>Antigen:</b> [v.fields["antigen"]]
 	<br><b>Spread:</b> [v.fields["spread type"]]
-	<br><b>Details:</b><br> <A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["description"]]</A>
+	<br><b>Details:</b><br>[v.fields["description"]]<br/>
+	<A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["custom_desc"]]</A>
 	<br><b>Management:</b><br> <A href='?src=\ref[src];field=del_vir;del_vir=\ref[v]'>Delete</A>"}
 	return dat
 
@@ -352,10 +353,10 @@
 					if("vir_desc")
 						var/datum/data/record/v = locate(href_list["edit_vir"])
 						if (v)
-							var/t1 = copytext(sanitize(input("Please input information about pathogen:", "VirusDB", v.fields["description"], null)  as message),1,MAX_MESSAGE_LEN)
+							var/t1 = copytext(sanitize(input("Please input information about pathogen:", "VirusDB", v.fields["custom_desc"], null)  as message),1,MAX_MESSAGE_LEN)
 							if ((!( t1 ) || !( authenticated ) || usr.stat || usr.restrained() || (!in_range(src, usr) && (!istype(usr, /mob/living/silicon))) || active1 != a1))
 								return
-							v.fields["description"] = t1
+							v.fields["custom_desc"] = t1
 							temp = pathogen_dat(v)
 					if("danger_vir")
 						var/datum/data/record/v = locate(href_list["edit_vir"])
@@ -367,8 +368,7 @@
 							virusDB.Remove("[V.fields["id"]]-[V.fields["sub"]]")
 							qdel(V)
 							temp = "Record Deleted."
-							screen = 5
-
+							screen = MEDDATA_PATHOGEN_DATABASE
 
 			if (href_list["p_stat"])
 				if (active1)
