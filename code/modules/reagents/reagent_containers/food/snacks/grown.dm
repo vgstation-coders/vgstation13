@@ -30,6 +30,7 @@ var/list/special_fruits = list()
 	if(ticker)
 		initialize()
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/proc/post_potency_spawn()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/initialize()
 
@@ -75,6 +76,7 @@ var/list/special_fruits = list()
 
 		if(reagents.total_volume > 0)
 			bitesize = 1 + round(reagents.total_volume/2, 1)
+		post_potency_spawn()
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
@@ -363,7 +365,7 @@ var/list/special_fruits = list()
 	plantname = "rocknut"
 	force = 10
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New()
+/obj/item/weapon/reagent_containers/food/snacks/grown/post_potency_spawn()
 	..()
 	throwforce = throwforce + round((5+potency/7.5), 1) ///it's a rock, add bonus damage that scales with potency
 	eatverb = pick("crunch","gnaw","bite")
