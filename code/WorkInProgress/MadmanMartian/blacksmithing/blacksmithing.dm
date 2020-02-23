@@ -104,12 +104,6 @@
 		to_chat(user, "<span class = 'warning'>There is no anvil to shape \the [src] over.</span>")
 		return
 	playsound(loc, 'sound/items/hammer_strike.ogg', 50, 1)
-	if(istype(A,/obj/item/weapon/hammer))
-		strikes+=max(1, round(A.quality/2))
-	else if(istype(A,/obj/item/weapon/storage/toolbox))
-		strikes+=0.25
-	if(strikes == strikes_required)
-		to_chat(user, "<span class = 'notice'>\The [src] seems to have taken shape nicely.</span>")
 	if(strikes > strikes_required)
 		if(prob(5*(strikes/strikes_required)))
 			to_chat(user, "<span class = 'warning'>\The [src] becomes brittle and unmalleable.</span>")
@@ -118,6 +112,13 @@
 			result.recycle(S.mats)
 			qdel(result)
 			qdel(src)
+			return
+	if(istype(A,/obj/item/weapon/hammer))
+		strikes+=max(1, round(A.quality/2))
+	else if(istype(A,/obj/item/weapon/storage/toolbox))
+		strikes+=0.25
+	if(strikes == strikes_required)
+		to_chat(user, "<span class = 'notice'>\The [src] seems to have taken shape nicely.</span>")
 
 
 /obj/item/smithing_placeholder/proc/quench(obj/O, mob/user)
