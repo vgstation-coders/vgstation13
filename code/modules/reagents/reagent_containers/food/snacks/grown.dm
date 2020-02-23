@@ -365,7 +365,7 @@ var/list/special_fruits = list()
 	plantname = "rocknut"
 	force = 10
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/post_potency_spawn()
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/post_potency_spawn()
 	..()
 	throwforce = throwforce + round((5+potency/7.5), 1) ///it's a rock, add bonus damage that scales with potency
 	eatverb = pick("crunch","gnaw","bite")
