@@ -83,13 +83,13 @@
 		var/obj/item/clothing/suit/tag/our_tag = vest
 		if (our_tag.my_laser_tag_game)
 			if (world.time < last_disable_time)
-				to_chat(M, "<span class='warning'>Your gun is currentlty disabled!</span>")
+				to_chat(M, "<span class='warning'>Your gun is currently disabled!</span>")
 				return 0
 			if ((our_tag.my_laser_tag_game.fire_mode == LT_FIREMODE_LASER) && (projectile_type != laser_projectile))
-				to_chat(M, "<span class='warning'>Your laser tag game requires to play with lasers!</span>")
+				to_chat(M, "<span class='warning'>Your laser tag game requires you to play with lasers!</span>")
 				return 0
 			if ((our_tag.my_laser_tag_game.fire_mode == LT_FIREMODE_TASER) && (projectile_type != taser_projectile))
-				to_chat(M, "<span class='warning'>Your laser tag game requires to play with tasers!</span>")
+				to_chat(M, "<span class='warning'>Your laser tag game requires you to play with tasers!</span>")
 				return 0
 			vest.player.total_shoots++
 		return 1

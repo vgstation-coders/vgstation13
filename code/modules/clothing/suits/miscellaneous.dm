@@ -116,13 +116,15 @@ var/list/tag_suits_list = list()
 	// Game parametrisation
 	if (href_list["edit_game"])
 		var/datum/laser_tag_game/game = locate(href_list["edit_game"])
-		if (my_laser_tag_game.owner != player)
+		if (game.owner != player)
 			return
 		refresh_edit_window(usr, game)
 		return
 	
 	if (href_list["game_mode"])
 		var/datum/laser_tag_game/game = locate(href_list["game_mode"])
+		if (game.owner != player)
+			return
 		var/choices = list(
 			LT_MODE_TEAM,
 			LT_MODE_FFA,
@@ -135,6 +137,8 @@ var/list/tag_suits_list = list()
 
 	if (href_list["fire_mode"])
 		var/datum/laser_tag_game/game = locate(href_list["fire_mode"])
+		if (game.owner != player)
+			return
 		var/choices = list(
 			LT_FIREMODE_LASER,
 			LT_FIREMODE_TASER,
@@ -147,6 +151,8 @@ var/list/tag_suits_list = list()
 	
 	if (href_list["stun_time"])
 		var/datum/laser_tag_game/game = locate(href_list["stun_time"])
+		if (game.owner != player)
+			return
 		var/choice = input(usr, "Choose the stun duration.", "Stun duration") as null|num
 		game.stun_time = clamp(choice, 0, 12)
 		refresh_edit_window(usr, game)
@@ -154,6 +160,8 @@ var/list/tag_suits_list = list()
 
 	if (href_list["disable_time"])
 		var/datum/laser_tag_game/game = locate(href_list["disable_time"])
+		if (game.owner != player)
+			return
 		var/choice = input(usr, "Choose the disbale duration.", "Disable duration") as null|num
 		game.disable_time = clamp(choice, 0, 30)
 		refresh_edit_window(usr, game)
@@ -165,6 +173,8 @@ var/list/tag_suits_list = list()
 
 	if (href_list["delete_game"])
 		var/datum/laser_tag_game/game = locate(href_list["delete_game"])
+		if (game.owner != player)
+			return
 		qdel(game)
 		usr << browse(null,"window=laser_tag_window2;size=250x250")
 		return
