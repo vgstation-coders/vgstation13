@@ -30,7 +30,7 @@ var/list/special_fruits = list()
 	if(ticker)
 		initialize()
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/proc/post_potency_spawn()
+/obj/item/weapon/reagent_containers/food/snacks/grown/proc/post_potency_spawn() // Empty proc
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/initialize()
 
