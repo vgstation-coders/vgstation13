@@ -141,13 +141,13 @@
 	return
 
 /obj/machinery/computer/med_data/proc/pathogen_dat(var/datum/data/record/v)
-	var/dat = {"<center><b>GNAv2 [v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""]</b></center>"
-	"<br><b>Nickname:</b> <A href='?src=\ref[src];field=vir_nickname;edit_vir=\ref[v]'>[v.fields["nickname"] ? "[v.fields["nickname"]]" : "(input)"]</A>"
-	"<br><b>Dangerousness:</b> <A href='?src=\ref[src];field=danger_vir;edit_vir=\ref[v]'>[v.fields["danger"]]</A>"
-	"<br><b>Antigen:</b> [v.fields["antigen"]]"
-	"<br><b>Spread:</b> [v.fields["spread type"]] "
-	"<br><b>Details:</b><br> <A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["description"]]</A>"
-	"<br><b>Management:</b><br> <A href='?src=\ref[src];field=del_vir;del_vir=\ref[v]'>Delete</A>"}
+	var/dat = {"<center><b>GNAv2 [v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""]</b></center>
+	<br><b>Nickname:</b> <A href='?src=\ref[src];field=vir_nickname;edit_vir=\ref[v]'>[v.fields["nickname"] ? "[v.fields["nickname"]]" : "(input)"]</A>
+	<br><b>Dangerousness:</b> <A href='?src=\ref[src];field=danger_vir;edit_vir=\ref[v]'>[v.fields["danger"]]</A>
+	<br><b>Antigen:</b> [v.fields["antigen"]]
+	<br><b>Spread:</b> [v.fields["spread type"]]
+	<br><b>Details:</b><br> <A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["description"]]</A>
+	<br><b>Management:</b><br> <A href='?src=\ref[src];field=del_vir;del_vir=\ref[v]'>Delete</A>"}
 	return dat
 
 /obj/machinery/computer/med_data/Topic(href, href_list)
