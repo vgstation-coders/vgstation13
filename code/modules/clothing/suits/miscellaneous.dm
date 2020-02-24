@@ -361,6 +361,13 @@ var/list/tag_suits_list = list()
 	item_state = "hastur"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
+obj/item/clothing/suit/cassock
+	name = "Cassock"
+	desc = "A black garment belonging to a priest."
+	icon_state = "cassock"
+	item_state = "cassock"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+
 /obj/item/clothing/suit/imperium_monk
 	name = "Imperium monk"
 	desc = "Have YOU killed a xenos today?"
