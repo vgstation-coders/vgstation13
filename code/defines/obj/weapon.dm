@@ -199,7 +199,7 @@
 	throw_range = 10
 	var/dispenser = 0
 	var/throw_sound = 'sound/weapons/whip.ogg'
-	var/trip_prob = 90
+	var/trip_prob = 100
 	ignore_blocking = IGNORE_SOME_SHIELDS
 
 /obj/item/weapon/legcuffs/bolas/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
@@ -472,7 +472,7 @@
 			if(affecting.take_damage(15, 0, 15, SERRATED_BLADE & SHARP_BLADE))
 				H.UpdateDamageIcon()
 				H.updatehealth()
-			
+
 			armed = 0
 			anchored = FALSE
 			update_icon()
@@ -492,7 +492,7 @@
 				"<span class='notice'>You try to pry open \the [src] with your bear hands.</span>")
 
 				if(do_after(user, src, 40) && prob(60)) //60% chance I think
-				
+
 					user.visible_message("<span class='notice'>\The [H] managed to pry \the [src] off of [L]!</span>", \
 					"<span class='notice'>You manage to pry \the [src] off!</span>")
 					playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
