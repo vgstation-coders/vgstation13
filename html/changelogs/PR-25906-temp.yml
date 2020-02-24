@@ -1,0 +1,5 @@
+---
+author: boy2mantwicethefam
+changes:
+  - tweak: "Blacksmithing has been tuned a little, you can no longer break an object that is being crafted just as you pass the \"required strikes\" threshold"
+delete-after: true

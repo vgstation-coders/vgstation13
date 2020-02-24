@@ -1,0 +1,5 @@
+---
+author: ShiftyRail
+changes:
+  - rscadd: NT has moved to a more humane management. Your faxes to HR now actually get read.
+delete-after: true

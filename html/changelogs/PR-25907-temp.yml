@@ -1,0 +1,5 @@
+---
+author: boy2mantwicethefam
+changes:
+  - tweak: Blacksmithing hammers have been tweaked a little and will generally count for more strikes at one quality level lower. Legendary hammers can now count for 5 strikes per strike.
+delete-after: true

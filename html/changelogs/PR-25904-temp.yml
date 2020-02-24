@@ -1,0 +1,5 @@
+---
+author: ShiftyRail
+changes:
+  - bugfix: Rocknut potency should scale properly now
+delete-after: true

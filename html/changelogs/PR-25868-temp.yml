@@ -1,0 +1,5 @@
+---
+author: SonixApache
+changes:
+  - bugfix: buckling to a bed will properly display bedsheets over you again
+delete-after: true
