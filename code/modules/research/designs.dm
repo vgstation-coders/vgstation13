@@ -165,11 +165,3 @@ proc/getScanDesign(var/obj/O)
 /obj/item/weapon/disk/design_disk/ammolathe/New()
 	..()
 	blueprint = new/datum/design/ammolathe(src)
-
-/obj/item/weapon/disk/design_disk/hunting_rifle_license
-	name = "hunting rifle production license"
-	desc = "A disk for storing device design data for construction in lathes. This one can be inserted directly."
-
-/obj/item/weapon/disk/design_disk/hunting_rifle_license/New()
-	..()
-	blueprint = new/datum/design/hunting_rifle(src)

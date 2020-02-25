@@ -265,16 +265,6 @@
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
-/datum/design/hunting_rifle
-	name = "Hunting rifle"
-	desc = "A bolt-action .308 rifle."
-	id = "hunting_rifle"
-	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 20000, MAT_GLASS = 5000, MAT_PLASTIC = 6000)
-	build_path = /obj/item/weapon/gun/projectile/hecate/hunting
-	locked = TRUE
-	req_lock_access = list(access_armory, access_weapons)
-
 /datum/design/rocketlauncher
 	name = "rocket launcher"
 	desc = "Watch the backblast, you idiot."

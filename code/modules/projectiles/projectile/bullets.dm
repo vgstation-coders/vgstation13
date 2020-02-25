@@ -975,7 +975,7 @@ obj/item/projectile/bullet/suffocationbullet
 	stealthy = TRUE
 
 /obj/item/projectile/bullet/dot308 //Hunting bullet, meant to decimate mobs
-	damage = 60
+	damage = 40
 	icon_state = "bullet"
 	penetration = 7
 

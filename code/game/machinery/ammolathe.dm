@@ -20,7 +20,6 @@
 		new /obj/item/weapon/gun/projectile/glock/lockbox(), \
 		new /obj/item/weapon/gun/projectile/automatic/vector/lockbox(), \
 		new /obj/item/weapon/gun/projectile/shotgun/pump(), \
-		//new /obj/item/weapon/gun/projectile/hecate/hunting(), \/
 		new /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox(), \
 		),
 		"Single_ammunition"=list(
@@ -42,7 +41,7 @@
 		new /obj/item/ammo_storage/box/c45/practice(), \
 		new /obj/item/ammo_storage/box/c45/rubber(), \
 		new /obj/item/ammo_storage/box/a50(), \
-		//new /obj/item/ammo_storage/box/dot308(), \/
+		new /obj/item/ammo_storage/box/dot308(), \
 		new /obj/item/weapon/storage/box/lethalshells(), \
 		new /obj/item/weapon/storage/box/buckshotshells(), \
 		new /obj/item/weapon/storage/box/beanbagshells(), \
@@ -95,16 +94,3 @@
 	)
 
 	RefreshParts()
-
-/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(..())
-		return 1
-	else if(istype(A, /obj/item/weapon/disk/design_disk/hunting_rifle_license))
-		if(hunting_rifle)
-			visible_message("[bicon(src)] <b>[src]</b> beeps: \"[A] was processed before.\" ")
-		else if(user.drop_item(A, src))
-			//part_sets["Weapons"] += new /obj/item/weapon/gun/projectile/hecate/hunting() //it doesn't work, add designs directly
-			part_sets["Weapons"] += new /datum/design/hunting_rifle
-			part_sets["Box_ammunition"] += new /datum/design/ammo_308
-			visible_message("[bicon(src)] <b>[src]</b> beeps: \"[A] processed. Updating available schematics list.\" ")
-			hunting_rifle = A

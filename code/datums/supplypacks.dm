@@ -1150,11 +1150,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/hunting_rifle
-	name = "Hunting Rifle Production License"
-	contains = list(/obj/item/weapon/disk/design_disk/hunting_rifle_license)
+	name = "Hunting Pack"
+	contains = list(/obj/item/weapon/gun/projectile/hecate/hunting,
+					/obj/item/ammo_storage/box/dot308,
+					/obj/item/clothing/head/ushanka,
+					/obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning,
+					/obj/item/weapon/reagent_containers/food/drinks/flask/barflask)
 	cost = 200
-	containertype = /obj/structure/closet/crate/basic
-	containername = "Hunting Rifle License"
+	containertype = /obj/structure/closet/crate/secure/gear
+	containername = "Hunter Pack"
+	access = list(access_armory)
 	group = "Security"
 
 //////HOSPITALITY//////
