@@ -226,7 +226,7 @@
 //                              		    //
 //////////////////////////////////////////////
 /datum/dynamic_ruleset/midround/malf
-	name = "Malfunctioning AI"
+	name = "damian"
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	exclusive_to_jobs = list("AI")

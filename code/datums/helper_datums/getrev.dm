@@ -95,7 +95,7 @@ var/global/datum/getrev/revdata = new("config/svndir.txt")
 	return output
 
 /client/verb/showrevinfo()
-	set category = "OOC"
+	set category = "damian"
 	set name = "Show Server Revision"
 	var/output =  "Sorry, the revision info is unavailable."
 	output = file2text(".git/refs/heads/Bleeding-Edge")

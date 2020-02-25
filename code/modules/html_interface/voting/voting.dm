@@ -473,7 +473,7 @@ var/global/datum/controller/vote/vote = new()
 
 
 /mob/verb/vote()
-	set category = "OOC"
+	set category = "damian"
 	set name = "Vote"
 	if(vote)
 		if(!vote.initialized)

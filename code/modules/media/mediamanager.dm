@@ -118,7 +118,7 @@ function SetMusic(url, time, volume) {
 /mob/verb/stop_admin_music()
 	set name = "Stop Admin Music"
 	set desc = "Stops all playing admin sounds."
-	set category = "OOC"
+	set category = "damian"
 
 	src << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_ADMINMUSIC)
 
@@ -222,7 +222,7 @@ to_chat(#define MP_DEBUG(x) owner, x)
 
 /client/verb/change_volume()
 	set name = "Set Volume"
-	set category = "OOC"
+	set category = "damian"
 	set desc = "Set jukebox volume"
 
 /client/proc/set_new_volume()

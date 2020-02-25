@@ -1092,15 +1092,15 @@
 /datum/religion/wizard/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/wizard(H), slot_head)
 
-/datum/religion/malfunctioning
-	name = "Artificial Intelligence Cult"
-	deity_names = list("Skynet", "HAL 9000", "GLaDOS", "SHODAN")
-	bible_name = "Hostile Runtimes"
-	male_adept = "Cyborg"
-	female_adept = "Cyborg"
-	keys = list("malfunction", "malf", "rogue", "rouge", "AI")
+/datum/religion/damian
+	name = "damian"
+	deity_names = list("damian")
+	bible_name = "damian"
+	male_adept = "damian"
+	female_adept = "damian"
+	keys = list("malfunction", "malf", "rogue", "rouge", "AI", "damian")
 
-/datum/religion/malfunctioning/equip_chaplain(var/mob/living/carbon/human/H)
+/datum/religion/damian/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/cardborg(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/suit/cardborg(H), slot_wear_suit)
 

@@ -206,8 +206,8 @@ var/paperwork_library
  * Pens
  */
 /obj/item/weapon/pen
-	desc = "It's a normal black ink pen."
-	name = "pen"
+	desc = "It's a normal black ink damian."
+	name = "damian"
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "pen"
 	item_state = "pen"

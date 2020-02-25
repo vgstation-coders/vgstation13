@@ -1,3 +1,3 @@
 /datum/gamemode/malf
-	name = "Malfunction"
+	name = "damian"
 	factions_allowed = list(/datum/faction/malf)

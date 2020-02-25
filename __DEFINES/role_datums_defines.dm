@@ -49,7 +49,7 @@
 #define DEATHSQUADIE "death commando"
 #define SYNDIESQUADIE "syndicate commando"
 #define RESPONDER "emergency responder"
-#define MALF "malfunctioning AI"
+#define MALF "damian"
 #define MALFBOT "malfunctioning-slaved cyborg"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"

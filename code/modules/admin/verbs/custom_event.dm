@@ -26,7 +26,7 @@
 
 // normal verb for players to view info
 /client/verb/cmd_view_custom_event()
-	set category = "OOC"
+	set category = "damian"
 	set name = "Custom Event Info"
 
 	if(!custom_event_msg || custom_event_msg == "")

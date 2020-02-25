@@ -590,7 +590,7 @@ nanoui is used to open and update nano browser uis
 
 /mob/verb/fix_nanoui()
 	set name = "Fix NanoUI"
-	set category = "OOC"
+	set category = "damian"
 
 	world.log << "[key_name(src)] used the Fix NanoUI verb. Open UIs: [length(open_uis)]"
 	for(var/datum/nanoui/ui in open_uis)

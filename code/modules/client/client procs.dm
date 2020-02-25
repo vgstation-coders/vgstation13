@@ -356,7 +356,7 @@
 /client/verb/resend_resources()
 	set name = "Resend Resources"
 	set desc = "Re-send resources for NanoUI. May help those with NanoUI issues."
-	set category = "OOC"
+	set category = "damian"
 
 	to_chat(usr, "<span class='notice'>Re-sending NanoUI resources.  This may result in lag.</span>")
 	nanomanager.send_resources(src)

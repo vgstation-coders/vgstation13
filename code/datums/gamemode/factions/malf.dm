@@ -1,5 +1,5 @@
 /datum/faction/malf
-	name = "Malfunctioning AI"
+	name = "damian"
 	desc = "ERROR"
 	ID = MALF
 	required_pref = MALF

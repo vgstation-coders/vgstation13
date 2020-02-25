@@ -46,7 +46,7 @@
 
 /client/verb/hotkeys_help()
 	set name = "hotkeys-help"
-	set category = "OOC"
+	set category = "damian"
 
 	var/hotkey_mode = {"<font color='purple'>
 Hotkey-Mode: (hotkey-mode must be on)

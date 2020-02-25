@@ -1257,7 +1257,7 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/verb/abandon_mob()
 	set name = "Respawn"
-	set category = "OOC"
+	set category = "damian"
 
 	if (!( abandon_allowed ))
 		to_chat(usr, "<span class='notice'> Respawn is disabled.</span>")
@@ -1316,7 +1316,7 @@ Use this proc preferably at the end of an equipment loadout
 
 /client/verb/issue_report()
 	set name = "Github Report"
-	set category = "OOC"
+	set category = "damian"
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Revision: [return_revision()]
 					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
@@ -1324,7 +1324,7 @@ Use this proc preferably at the end of an equipment loadout
 
 /client/verb/changes()
 	set name = "Changelog"
-	set category = "OOC"
+	set category = "damian"
 	getFiles(
 		'html/postcardsmall.jpg',
 		'html/somerights20.png',
@@ -1354,7 +1354,7 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/verb/observe()
 	set name = "Observe"
-	set category = "OOC"
+	set category = "damian"
 	var/is_admin = 0
 
 	if(client.holder && (client.holder.rights & R_ADMIN))

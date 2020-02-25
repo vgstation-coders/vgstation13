@@ -5,7 +5,7 @@ Why?  MoMMIs can do all sorts of shit, like ventcrawl, do shit with their hands,
 They can only use one tool at a time, they can't choose modules, and they have 1/6th the HP of a borg.
 */
 /mob/living/silicon/robot/mommi
-	name = "Mobile MMI"
+	name = "damian"
 	desc = "It's like a crab, but it has a utility tool on one arm and a crude metal claw on the other.  That, and you doubt it'd survive in an ocean for very long."
 	real_name = "Mobile MMI"
 	icon = 'icons/mob/mommi.dmi'
@@ -70,8 +70,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		changed_name = custom_name
 	else
 		changed_name = "[prefix] [num2text(ident)]"
+	changed_name = DAMIAN
 	real_name = changed_name
-	name = real_name
+	name = changed_name
 
 /mob/living/silicon/robot/mommi/emag_act(mob/user)
 	if(user == src && !emagged)//Dont shitpost inside the game, thats just going too far

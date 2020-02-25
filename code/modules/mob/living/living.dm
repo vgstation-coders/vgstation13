@@ -665,7 +665,7 @@ Thanks.
 
 /mob/living/proc/Examine_OOC()
 	set name = "Examine Meta-Info (OOC)"
-	set category = "OOC"
+	set category = "damian"
 	set src in view()
 
 	if(config.allow_Metadata)

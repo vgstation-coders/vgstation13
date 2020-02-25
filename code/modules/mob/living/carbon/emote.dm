@@ -95,7 +95,7 @@
 	message = "twitches."
 
 /datum/emote/living/carbon/wave
-	key = "wave"
+	key = "damian"
 	key_third_person = "waves"
 	message = "waves."
 

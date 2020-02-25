@@ -13,7 +13,7 @@ var/list/ai_list = list()
 
 
 /mob/living/silicon/ai
-	name = "AI"
+	name = "damian"
 	icon = 'icons/mob/AI.dmi'
 	icon_state = "ai"
 	anchored = TRUE // -- TLE
@@ -91,8 +91,8 @@ var/list/ai_list = list()
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
-	real_name = pickedName
-	name = real_name
+	real_name = "damian"
+	name = "damian"
 	anchored = TRUE
 	canmove = FALSE
 	setDensity(TRUE)
