@@ -229,7 +229,7 @@
 	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
 	required_candidates = 2
 	weight = 2
-	cost = 30
+	cost = 101
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
 	var/cultist_cap = list(2,2,2,2,2,2,2,2,2,2)
