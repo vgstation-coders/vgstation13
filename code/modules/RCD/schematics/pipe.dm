@@ -615,6 +615,13 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= PIPE_THERMAL_PLATE
 	pipe_type	= PIPE_UNARY
 
+/datum/rcd_schematic/pipe/heat_pump
+	name		= "Thermoelectric Cooler"
+	category	= "Devices"
+
+	pipe_id		= PIPE_HEAT_PUMP
+	pipe_type	= PIPE_UNARY
+
 /datum/rcd_schematic/pipe/injector
 	name		= "Injector"
 	category	= "Devices"
