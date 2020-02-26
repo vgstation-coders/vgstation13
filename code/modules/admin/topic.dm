@@ -4091,7 +4091,7 @@
 					"greytide gremlins" = VERM_GREMTIDE,
 					"crabs" = VERM_CRABS,
 					"diona nymphs" = VERM_DIONA,
-					"mushman babies" = VERM_MUSHMEN
+					"mushman pinheads" = VERM_MUSHMEN
 					)
 				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
 				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]

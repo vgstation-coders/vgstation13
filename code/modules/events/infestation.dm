@@ -114,7 +114,7 @@
 			vermstring = "diona nymphs"
 		if(VERM_MUSHMEN)
 			spawn_types = /mob/living/carbon/monkey/mushroom
-			vermstring = "mushroom spores"
+			vermstring = "mushroom pinheads"
 
 
 	var/number = rand(2, max_number)
