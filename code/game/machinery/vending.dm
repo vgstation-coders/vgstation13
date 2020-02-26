@@ -2988,6 +2988,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/chaplain_hood = 2,
 		/obj/item/clothing/suit/holidaypriest = 2,
 		/obj/item/clothing/under/wedding/bride_white = 2,
+		/obj/item/clothing/suit/cassock = 2,
 		/obj/item/clothing/head/hasturhood = 2,
 		/obj/item/clothing/suit/hastur = 2,
 		/obj/item/clothing/suit/unathi/robe = 2,

@@ -37,6 +37,7 @@ Buildable meters
 #define PIPE_LAYER_ADAPTER      30
 #define PIPE_HE_MANIFOLD		31
 #define PIPE_HE_MANIFOLD4W      32
+#define PIPE_HEAT_PUMP          33
 
 //Disposal piping numbers - do NOT hardcode these, use the defines
 #define DISP_PIPE_STRAIGHT		0
@@ -198,6 +199,8 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 			src.pipe_type = PIPE_PASV_VENT
 		else if(istype(make_from, /obj/machinery/atmospherics/pipe/layer_adapter))
 			src.pipe_type = PIPE_LAYER_ADAPTER
+		else if(istype(make_from, /obj/machinery/atmospherics/binary/heat_pump))
+			src.pipe_type = PIPE_HEAT_PUMP
 		setPipingLayer(make_from.piping_layer)
 
 	else
@@ -251,6 +254,7 @@ var/global/list/pipeID2State = list(
 	"layeradapter",
 	"he_manifold",
 	"he_manifold4w",
+	"heat_pump"
 )
 var/global/list/nlist = list( \
 	"pipe", \
@@ -286,6 +290,7 @@ var/global/list/nlist = list( \
 	"pipe alignment adapter",
 	"h/e manifold", \
 	"h/e 4-way manifold", \
+	"heat pump"
 )
 /obj/item/pipe/proc/update()
 
@@ -358,7 +363,8 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			PIPE_DVALVE, \
 			PIPE_DP_VENT, \
 			PIPE_LAYER_MANIFOLD, \
-			PIPE_LAYER_ADAPTER
+			PIPE_LAYER_ADAPTER,
+			PIPE_HEAT_PUMP
 		)
 			return dir|flip
 		if(PIPE_SIMPLE_BENT, PIPE_INSULATED_BENT, PIPE_HE_BENT)
@@ -528,6 +534,9 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 
 		if(PIPE_LAYER_ADAPTER)
 			P =new /obj/machinery/atmospherics/pipe/layer_adapter(src.loc)
+
+		if(PIPE_HEAT_PUMP)
+			P = new /obj/machinery/atmospherics/binary/heat_pump(loc)
 
 	P.setPipingLayer(src.piping_layer)
 	if(P.buildFrom(usr,src))

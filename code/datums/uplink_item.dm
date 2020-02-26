@@ -621,6 +621,11 @@ var/list/uplink_items = list()
 	discounted_cost = 10
 	jobs_with_discount = list("Internal Affairs Agent")
 
+/datum/uplink_item/jobspecific/command_security/briefcase_smg/on_item_spawned(var/obj/I, var/mob/user)
+	if(gives_discount(user.job))
+		I.icon_state = "briefcase-centcomm"
+	return
+
 /datum/uplink_item/jobspecific/command_security/knifeboot
 	name = "Concealed knife shoes"
 	desc = "Lace-up shoes with a knife concealed in the toecap. Tap your heels together to reveal the small knife. Remember to kick the target to stab them. Knife will be visible when pulled out, but kicking with the knife will not be directly obvious to observers."

@@ -38,6 +38,7 @@
 		/datum/rcd_schematic/pipe/filter,
 		/datum/rcd_schematic/pipe/mixer,
 		/datum/rcd_schematic/pipe/thermal_plate,
+		/datum/rcd_schematic/pipe/heat_pump,
 		/datum/rcd_schematic/pipe/injector,
 		/datum/rcd_schematic/pipe/dp_vent,
 

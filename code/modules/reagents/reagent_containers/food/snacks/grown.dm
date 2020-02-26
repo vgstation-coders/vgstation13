@@ -30,51 +30,49 @@ var/list/special_fruits = list()
 	if(ticker)
 		initialize()
 
-
 /obj/item/weapon/reagent_containers/food/snacks/grown/initialize()
 
 	//Handle some post-spawn var stuff.
-	spawn()
-		//Fill the object up with the appropriate reagents.
-		if(!isnull(plantname))
-			seed = SSplant.seeds[plantname]
-			if(!seed)
-				return
-			icon = seed.plant_dmi
-			potency = round(seed.potency)
-			force = seed.thorny ? 5+seed.carnivorous*3 : 0
-			throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
+	//Fill the object up with the appropriate reagents.
+	if(!isnull(plantname))
+		seed = SSplant.seeds[plantname]
+		if(!seed)
+			return
+		icon = seed.plant_dmi
+		potency = round(seed.potency)
+		force = seed.thorny ? 5+seed.carnivorous*3 : 0
+		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
 
-			if(seed.teleporting)
-				name = "blue-space [name]"
-			if(seed.stinging)
-				name = "stinging [name]"
-			if(seed.juicy == 2)
-				name = "slippery [name]"
+		if(seed.teleporting)
+			name = "blue-space [name]"
+		if(seed.stinging)
+			name = "stinging [name]"
+		if(seed.juicy == 2)
+			name = "slippery [name]"
 
-			if(!seed.chems)
-				return
+		if(!seed.chems)
+			return
 
-			var/totalreagents = 0
+		var/totalreagents = 0
+		for(var/rid in seed.chems)
+			var/list/reagent_data = seed.chems[rid]
+			var/rtotal = reagent_data[1]
+			if(reagent_data.len > 1 && potency > 0)
+				rtotal += round(potency/reagent_data[2])
+			totalreagents += rtotal
+
+		if(totalreagents)
+			var/coeff = min(reagents.maximum_volume / totalreagents, 1)
+
 			for(var/rid in seed.chems)
 				var/list/reagent_data = seed.chems[rid]
 				var/rtotal = reagent_data[1]
 				if(reagent_data.len > 1 && potency > 0)
 					rtotal += round(potency/reagent_data[2])
-				totalreagents += rtotal
+				reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
 
-			if(totalreagents)
-				var/coeff = min(reagents.maximum_volume / totalreagents, 1)
-
-				for(var/rid in seed.chems)
-					var/list/reagent_data = seed.chems[rid]
-					var/rtotal = reagent_data[1]
-					if(reagent_data.len > 1 && potency > 0)
-						rtotal += round(potency/reagent_data[2])
-					reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
-
-		if(reagents.total_volume > 0)
-			bitesize = 1 + round(reagents.total_volume/2, 1)
+	if(reagents.total_volume > 0)
+		bitesize = 1 + round(reagents.total_volume/2, 1)
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 

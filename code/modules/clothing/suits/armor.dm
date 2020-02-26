@@ -76,6 +76,7 @@
 	desc = "An armoured jacket with silver rank pips and livery."
 	icon_state = "warden_jacket"
 	item_state = "armor"
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list (VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/neorussian
@@ -89,6 +90,7 @@
 	desc = "A series of chains linked together in a way to look like a suit."
 	icon_state = "chainmail_torso"
 	item_state = "chainmail_torso"
+	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 20, bullet = 35, laser = 10, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/riot
@@ -195,6 +197,7 @@
 	icon_state = "bulletproof"
 	item_state = "armor"
 	species_fit = list(VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 80, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.7
@@ -205,6 +208,7 @@
 	icon_state = "armor_reflec"
 	item_state = "armor_reflec"
 	species_fit = list(VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0

@@ -625,6 +625,7 @@
 	desc = "The one that you want!"
 	icon_state = "greaser_default"
 	item_state = "greaser_default"
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/under/greaser/New()
 	var/greaser_colour = "default"
@@ -641,6 +642,7 @@
 	icon_state = "greaser_[greaser_colour]"
 	item_state = "greaser_[greaser_colour]"
 	_color = "greaser_[greaser_colour]"
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/under/wintercasualwear
 	name = "winter casualwear"
@@ -739,6 +741,7 @@
 	icon_state = "britpolice"
 	item_state = "britpolice"
 	_color = "britpolice"
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/under/inquisitor
 	name = "inquisitor's suit"

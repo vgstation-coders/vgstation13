@@ -145,16 +145,16 @@
 	return max(MINIMUM_HEAT_CAPACITY, heat_capacity)
 
 
-//Adds or removes thermal energy. Returns the actual thermal energy change, as in the case of removing energy we can't go below TCMB.
-/datum/gas_mixture/proc/add_thermal_energy(var/thermal_energy)
+//Adds or removes thermal energy. Returns the actual thermal energy change, as in the case of removing energy we can't go below min_temp.
+/datum/gas_mixture/proc/add_thermal_energy(var/thermal_energy, var/min_temp = TCMB)
 	if(total_moles == 0)
 		return 0
 
 	var/heat_capacity = heat_capacity()
 	if(thermal_energy < 0)
-		if(temperature < TCMB)
+		if(temperature <= min_temp)
 			return 0
-		var/thermal_energy_limit = -(temperature - TCMB) * heat_capacity	//ensure temperature does not go below TCMB
+		var/thermal_energy_limit = -(temperature - min_temp) * heat_capacity	//ensure temperature does not go below min_temp
 		thermal_energy = max(thermal_energy, thermal_energy_limit)	//thermal_energy and thermal_energy_limit are negative here.
 	temperature += thermal_energy/heat_capacity
 	return thermal_energy

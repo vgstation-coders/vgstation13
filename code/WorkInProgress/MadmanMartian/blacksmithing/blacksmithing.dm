@@ -114,7 +114,7 @@
 			qdel(src)
 			return
 	if(istype(A,/obj/item/weapon/hammer))
-		strikes+=max(1, round(A.quality/2))
+		strikes+=max(1, round(A.quality/2, 1))
 	else if(istype(A,/obj/item/weapon/storage/toolbox))
 		strikes+=0.25
 	if(strikes == strikes_required)
