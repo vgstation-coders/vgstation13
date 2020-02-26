@@ -24,6 +24,7 @@ Thus, the two variables affect pump operation are set in New():
 	var/transfer_rate = MAX_TRANSFER_RATE
 
 	var/frequency = 0
+	var/pump_stalled = 0
 	var/id_tag = null
 	var/datum/radio_frequency/radio_connection
 
@@ -36,6 +37,8 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/volume_pump/update_icon(var/adjacent_procd)
 	if(stat & NOPOWER)
 		icon_state = "intact_off"
+	else if (pump_stalled)
+		icon_state="intact_stalled"
 	else if(node1 && node2)
 		icon_state = "intact_[on?("on"):("off")]"
 	..()
@@ -50,8 +53,13 @@ Thus, the two variables affect pump operation are set in New():
 	var/input_starting_pressure = air1.return_pressure()
 	var/output_starting_pressure = air2.return_pressure()
 
-	if((input_starting_pressure < 0.01) || (output_starting_pressure > 9000))
+	if((input_starting_pressure < 0.01) || (output_starting_pressure > (9000+input_starting_pressure)))
+		pump_stalled = 1
+		update_icon()
 		return
+	else
+		pump_stalled = 0
+		update_icon() 
 
 	var/transfer_ratio = max(1, transfer_rate/air1.volume)
 
