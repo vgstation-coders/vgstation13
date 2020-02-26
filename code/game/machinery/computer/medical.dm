@@ -1,5 +1,12 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
+#define MEDDATA_DEFAULT 1
+#define MEDDATA_LIST_RECORDS 2
+#define MEDDATA_RECORDS_MAINT 3
+#define MEDDATA_PHOTO 4 // unsued
+#define MEDDATA_PATHOGEN_DATABASE 5
+#define MEDDATA_MEDBOT_TRACKING 6
+
 /obj/machinery/computer/med_data//TODO:SANITY
 	name = "Medical Records"
 	desc = "This can be used to check medical records."
@@ -36,25 +43,24 @@
 		dat = text("Confirm Identity: <A href='?src=\ref[];scan=1'>[]</A><HR>", src, (scan ? text("[]", scan.name) : "----------"))
 		if (authenticated)
 			switch(screen)
-				if(1.0)
+				if(MEDDATA_DEFAULT)
 					dat += {"
 <A href='?src=\ref[src];search=1'>Search Records</A>
-<BR><A href='?src=\ref[src];screen=2'>List Records</A>
+<BR><A href='?src=\ref[src];screen=[MEDDATA_LIST_RECORDS]'>List Records</A>
 <BR>
-<BR><A href='?src=\ref[src];screen=5'>Pathogen Database</A>
-<BR><A href='?src=\ref[src];screen=6'>Medbot Tracking</A>
+<BR><A href='?src=\ref[src];screen=[MEDDATA_PATHOGEN_DATABASE]'>Pathogen Database</A>
+<BR><A href='?src=\ref[src];screen=[MEDDATA_MEDBOT_TRACKING]>Medbot Tracking</A>
 <BR>
-<BR><A href='?src=\ref[src];screen=3'>Record Maintenance</A>
+<BR><A href='?src=\ref[src];screen=[MEDDATA_RECORDS_MAINT]'>Record Maintenance</A>
 <BR><A href='?src=\ref[src];logout=1'>{Log Out}</A><BR>
 "}
-				if(2.0)
+				if(MEDDATA_LIST_RECORDS)
 					dat += "<B>Record List</B>:<HR>"
 					if(!isnull(data_core.general))
 						for(var/datum/data/record/R in sortRecord(data_core.general))
 							dat += text("<A href='?src=\ref[];d_rec=\ref[]'>[]: []<BR>", src, R, R.fields["id"], R.fields["name"])
-							//Foreach goto(132)
 					dat += text("<HR><A href='?src=\ref[];screen=1'>Back</A>", src)
-				if(3.0)
+				if(MEDDATA_RECORDS_MAINT)
 					dat += text("<B>Records Maintenance</B><HR>\n<A href='?src=\ref[];back=1'>Backup To Disk</A><BR>\n<A href='?src=\ref[];u_load=1'>Upload From disk</A><BR>\n<A href='?src=\ref[];del_all=1'>Delete All Records</A><BR>\n<BR>\n<A href='?src=\ref[];screen=1'>Back</A>", src, src, src, src)
 				if(4.0)
 					var/icon/front = new(active1.fields["photo"], dir = SOUTH)
@@ -85,7 +91,7 @@
 						dat += "<B>Medical Record Lost!</B><BR>"
 						dat += text("<A href='?src=\ref[src];new=1'>New Record</A><BR><BR>")
 					dat += text("\n<A href='?src=\ref[];print_p=1'>Print Record</A><BR>\n<A href='?src=\ref[];screen=2'>Back</A><BR>", src, src)
-				if(5.0)
+				if(MEDDATA_PATHOGEN_DATABASE)
 					dat += "<CENTER><B>Pathogen Database</B></CENTER>"
 					/*	Advanced diseases is weak! Feeble! Glory to virus2!
 					for(var/Dt in typesof(/datum/disease/))
@@ -98,10 +104,14 @@
 					*/
 					for (var/ID in virusDB)
 						var/datum/data/record/v = virusDB[ID]
-						dat += "<br><a href='?src=\ref[src];vir=\ref[v]'>[v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""]</a>"
+						var/virusname = v.fields["name"]
+						var/virusnickname = v.fields["nickname"]
+						if (virusnickname)
+							virusnickname = " ([virusnickname])" // Adding parenthesis for style and emphasis.
+						dat += " <br><a href='?src=\ref[src];vir=\ref[v]'>[virusname][virusnickname]</a>"
 
 					dat += "<br><a href='?src=\ref[src];screen=1'>Back</a>"
-				if(6.0)
+				if(MEDDATA_MEDBOT_TRACKING)
 
 					dat += {"<center><b>Medical Robot Monitor</b></center>
 						<a href='?src=\ref[src];screen=1'>Back</a>
@@ -131,14 +141,14 @@
 	return
 
 /obj/machinery/computer/med_data/proc/pathogen_dat(var/datum/data/record/v)
-	var/dat = "<center><b>GNAv2 [v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""]</b></center>"
-	//temp += "<br><b>Name:</b> <A href='?src=\ref[src];field=vir_name;edit_vir=\ref[v]'>[v.fields["name"]]</A>"
-	dat += "<br><b>Nickname:</b> <A href='?src=\ref[src];field=vir_nickname;edit_vir=\ref[v]'>[v.fields["nickname"] ? "[v.fields["nickname"]]" : "(input)"]</A>"
-	dat += "<br><b>Dangerousness:</b> <A href='?src=\ref[src];field=danger_vir;edit_vir=\ref[v]'>[v.fields["danger"]]</A>"
-	dat += "<br><b>Antigen:</b> [v.fields["antigen"]]"
-	dat += "<br><b>Spread:</b> [v.fields["spread type"]] "
-	dat += "<br><b>Details:</b><br> <A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["description"]]</A>"
-	dat += "<br><b>Management:</b><br> <A href='?src=\ref[src];field=del_vir;del_vir=\ref[v]'>Delete</A>"
+	var/dat = {"<center><b>GNAv2 [v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""]</b></center>
+	<br><b>Nickname:</b> <A href='?src=\ref[src];field=vir_nickname;edit_vir=\ref[v]'>[v.fields["nickname"] ? "[v.fields["nickname"]]" : "(input)"]</A>
+	<br><b>Dangerousness:</b> <A href='?src=\ref[src];field=danger_vir;edit_vir=\ref[v]'>[v.fields["danger"]]</A>
+	<br><b>Antigen:</b> [v.fields["antigen"]]
+	<br><b>Spread:</b> [v.fields["spread type"]]
+	<br><b>Details:</b><br>[v.fields["description"]]<br/>
+	<A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["custom_desc"]]</A>
+	<br><b>Management:</b><br> <A href='?src=\ref[src];field=del_vir;del_vir=\ref[v]'>Delete</A>"}
 	return dat
 
 /obj/machinery/computer/med_data/Topic(href, href_list)
@@ -343,10 +353,10 @@
 					if("vir_desc")
 						var/datum/data/record/v = locate(href_list["edit_vir"])
 						if (v)
-							var/t1 = copytext(sanitize(input("Please input information about pathogen:", "VirusDB", v.fields["description"], null)  as message),1,MAX_MESSAGE_LEN)
+							var/t1 = copytext(sanitize(input("Please input information about pathogen:", "VirusDB", v.fields["custom_desc"], null)  as message),1,MAX_MESSAGE_LEN)
 							if ((!( t1 ) || !( authenticated ) || usr.stat || usr.restrained() || (!in_range(src, usr) && (!istype(usr, /mob/living/silicon))) || active1 != a1))
 								return
-							v.fields["description"] = t1
+							v.fields["custom_desc"] = t1
 							temp = pathogen_dat(v)
 					if("danger_vir")
 						var/datum/data/record/v = locate(href_list["edit_vir"])
@@ -358,8 +368,7 @@
 							virusDB.Remove("[V.fields["id"]]-[V.fields["sub"]]")
 							qdel(V)
 							temp = "Record Deleted."
-							screen = 5
-
+							screen = MEDDATA_PATHOGEN_DATABASE
 
 			if (href_list["p_stat"])
 				if (active1)
