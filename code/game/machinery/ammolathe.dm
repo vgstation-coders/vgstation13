@@ -9,7 +9,6 @@
 	//build_time = 0.5
 	allowed_materials = 0 //A 0 or FALSE Allows all materials.
 	light_color = LIGHT_COLOR_RED
-	var hunting_rifle = null //to prevent multiple instances of one design
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK //| EMAGGABLE
 	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | LOCKBOXES
