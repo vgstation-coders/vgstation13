@@ -141,9 +141,9 @@
 			var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 			uncapped = range
 			if(!ignorecap)
-				if(range > MAX_EXPLOSION_RANGE*1.5)
+				if(range > MAX_EXPLOSION_RANGE*2)
 					cap = 1
-				range = min(range, MAX_EXPLOSION_RANGE*1.5)
+				range = min(range, MAX_EXPLOSION_RANGE*2)
 			var/turf/epicenter = get_turf(loc)
 
 			var/transfer_moles1 = (bomb.tank_one.air_contents.return_pressure() * bomb.tank_one.air_contents.volume) / (bomb.tank_one.air_contents.temperature * R_IDEAL_GAS_EQUATION)
@@ -156,9 +156,9 @@
 
 			user.visible_message("<span class='danger'>[user] opens \the [bomb] on \his [src.name] and fires a blast wave at \the [A]!</span>","<span class='danger'>You open \the [bomb] on your [src.name] and fire a blast wave at \the [A]!</span>")
 
-			heavy_damage_range = round(range*0.375)
-			medium_damage_range = round(range*0.75)
-			light_damage_range = round(range*1.5)
+			heavy_damage_range = round(range*0.5)
+			medium_damage_range = round(range)
+			light_damage_range = round(range*2)
 
 			if(ismob(src.loc))
 				var/mob/shooter = src.loc
