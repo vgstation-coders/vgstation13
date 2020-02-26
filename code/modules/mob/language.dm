@@ -292,6 +292,15 @@
 	native = 1
 	syllables = list("khah","kig","kitol","kaor","bar","dar","dator","lok","ma","mu","o","och","gort","gal")
 
+/datum/language/deathsquad
+	name = LANGUAGE_DEATHSQUAD
+	desc = "A set of codewords that Nanotrasen's deathsquads use for communication."
+	key = "&"
+	colour = "dsquadradio"
+	flags = RESTRICTED
+	space_chance = 100
+	syllables = list("alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike", "november", "oscar", "papa", "quebec", "romeo", "sierra", "tango", "uniform", "victor", "whiskey", "x-ray", "yankee", "zulu")
+
 // Language handling.
 /mob/proc/add_language(var/language)
 

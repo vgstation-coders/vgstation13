@@ -136,4 +136,7 @@
 	W.registered_name = real_name
 	equip_to_slot_or_del(W, slot_wear_id)
 
+	add_language(LANGUAGE_DEATHSQUAD)
+	default_language = all_languages[LANGUAGE_DEATHSQUAD]
+
 	return 1
