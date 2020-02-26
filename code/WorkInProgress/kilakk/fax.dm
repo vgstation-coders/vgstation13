@@ -129,19 +129,11 @@ var/list/alldepartments = list("Central Command")
 		return 1
 	if(href_list["send"])
 		if(tofax)
-			if((dpt == "Central Command") | (dpt == "Nanotrasen HR"))
+			if((dpt == "Central Command") || (dpt == "Nanotrasen HR"))
 				if(!map.linked_to_centcomm)
-					to_chat(usr, "<span class='danger'>\The [src] displays a 404 error: Central Command not found</span>")
+					to_chat(usr, "<span class='danger'>\The [src] displays a 404 error: Central Command not found.</span>")
 					return
-				if(dpt == "Central Command")
-					Centcomm_fax(tofax, tofax.name, usr)
-				if(dpt == "Nanotrasen HR")
-					if(findtext(tofax.stamps, "magnetic"))
-						if(findtext(tofax.name,"Demotion"))
-							new /obj/item/demote_chip(src.loc)
-						if(findtext(tofax.name,"Commendation"))
-							new /obj/item/mounted/poster(src.loc,-1)
-
+				Centcomm_fax(tofax, tofax.name, usr, dpt)
 			else
 				SendFax(tofax.info, tofax.name, usr, dpt, 0, tofax.display_x, tofax.display_y)
 			log_game("([usr]/([usr.ckey]) sent a fax titled [tofax] to [dpt] - contents: [tofax.info]")
@@ -231,15 +223,23 @@ var/list/alldepartments = list("Central Command")
 		scan = null
 		return
 
-/proc/Centcomm_fax(var/obj/item/weapon/paper/sent, var/sentname, var/mob/Sender)
+/proc/Centcomm_fax(var/obj/item/weapon/paper/sent, var/sentname, var/mob/Sender, var/centcomm_dpt)
 
 //why the fuck doesnt the thing show as orange
-	var/msg = "<span class='notice'><b>  CENTCOMM FAX: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<a href='?_src_=holder;role_panel=\ref[Sender]'>RP</a>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
+	var/msg = "<span class='notice'><b>  CENTCOMM FAX: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<a href='?_src_=holder;role_panel=\ref[Sender]'>RP</a>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' to <b>[centcomm_dpt]</b> via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
 	for (var/client/C in admins)
 		C.output_to_special_tab(msg)
 		C << 'sound/effects/fax.ogg'
 
-proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/xdim, var/ydim)
+	for (var/obj/machinery/faxmachine/fax in allfaxes)
+		if (fax.z == CENTCOMM_Z)
+			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(fax)
+			P.name = "[sentname]"
+			P.info = "[sent.info]"
+			playsound(fax.loc, "sound/effects/fax.ogg", 50, 1)
+	
+
+/proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/xdim, var/ydim)
 
 	var/faxed = null
 	for(var/obj/machinery/faxmachine/F in allfaxes)
@@ -253,7 +253,7 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/
 
 				if (centcomm)
 					P.name = "[command_name()] - [sentname]"
-				else//probably a
+				else//probably a // Probably a what? Answer me
 					P.name = "[sentname]"
 				P.info = "[sent]"
 				if(xdim)
