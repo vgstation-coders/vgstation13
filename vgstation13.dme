@@ -1285,6 +1285,7 @@
 #include "code\modules\atmos_automation\implementation\digital_valves.dm"
 #include "code\modules\atmos_automation\implementation\emitters.dm"
 #include "code\modules\atmos_automation\implementation\gas_pumps.dm"
+#include "code\modules\atmos_automation\implementation\heat_pumps.dm"
 #include "code\modules\atmos_automation\implementation\injectors.dm"
 #include "code\modules\atmos_automation\implementation\passive_gates.dm"
 #include "code\modules\atmos_automation\implementation\registers.dm"

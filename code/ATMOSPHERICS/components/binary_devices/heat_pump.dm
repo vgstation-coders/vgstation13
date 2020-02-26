@@ -29,7 +29,7 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 	var/mtd_limit = 2500
 	var/mtd_slope_at_zero = 2 / 3
 
-	active_power_usage = 1000
+	active_power_usage = 5000
 
 	var/id_tag
 	var/frequency = 0
@@ -71,6 +71,11 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 //(Specifically, it's 1/x flipped vertically and offset by 1 left and 1 up, then scaled vertically to set the asymptote and horizontally to set the slope at 0.)
 /obj/machinery/atmospherics/binary/heat_pump/proc/get_mtd(temp)
 	return mtd_limit * (1 - 1 / (1 + temp * mtd_slope_at_zero / mtd_limit))
+
+
+/obj/machinery/atmospherics/binary/heat_pump/power_change()
+	..()
+	update_icon()
 
 
 /obj/machinery/atmospherics/binary/heat_pump/attack_hand(mob/user)
