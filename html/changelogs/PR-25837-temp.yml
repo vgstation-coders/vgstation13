@@ -1,5 +1,0 @@
----
-author: Exxion
-changes:
-  - rscadd: "Thermoelectric coolers can now be made with the RPD. They will help you reach low temperatures, but they consume power from the APC. They can be controlled with the AAC and interface with a multitool for configuration."
-delete-after: true

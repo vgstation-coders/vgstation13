@@ -1,5 +1,0 @@
----
-author: SonixApache
-changes:
-  - tweak: "You can now use lit cigarettes as internals again, without them fizzling out when there's no air!"
-delete-after: true
