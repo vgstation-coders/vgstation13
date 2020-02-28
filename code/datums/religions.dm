@@ -1188,10 +1188,10 @@
 	deity_name = "Peter Kropotkin"
 	bible_name = "The Conquest of Bread"
 	bible_type = /obj/item/weapon/storage/bible/booze
-	male_adept = "Activist" 
+	male_adept = "Activist"
 	female_adept = "Activist"
 	keys = list("anarcho-communism", "communalism", "mutualism")
-	
+
 /datum/religion/ancom/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/mask/balaclava(H), slot_l_store) // Black Bloc
 
@@ -1366,3 +1366,57 @@
 /datum/religion/belmont/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/vamphunter, slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/head/vamphunter, slot_shoes)
+
+/datum/religion/esports
+	name = "E-Sports"
+	deity_name = "E-Sports"
+	bible_name = "Spess.TV End User License Agreement"
+	male_adept = "Donitos Pope"
+	female_adept = "Donitos Priestess"
+	keys = list("gaming", "esport", "esports", "e-sports", "electronic sports", "donitos", "geometer")
+	convert_method = "having others hold a bag of Donitos, while you do the same."
+	bookstyle = "Creeper"
+
+/datum/religion/esports/equip_chaplain(mob/living/carbon/human/H)
+	var/turf/here = get_turf(H)
+	new /obj/item/weapon/crowbar/red(here)
+	var/obj/item/clothing/head/donitos_pope/pope_hat = new(here)
+	H.equip_to_appropriate_slot(pope_hat, override=TRUE)
+	var/obj/structure/closet/crate/flatpack/tv_pack1 = new(here)
+	tv_pack1.insert_machine(new /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen)
+	var/obj/structure/closet/crate/flatpack/tv_pack2 = new(here)
+	tv_pack2.insert_machine(new /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen)
+
+	var/obj/structure/closet/crate/flatpack/cameras_pack = new(here)
+	cameras_pack.insert_machine(new /obj/item/weapon/storage/lockbox/team_security_cameras)
+
+	var/obj/structure/closet/crate/flatpack/vending_machine_pack = new(here)
+	vending_machine_pack.insert_machine(new /obj/machinery/vending/team_security)
+
+	tv_pack1.add_stack(tv_pack2)
+	tv_pack1.add_stack(cameras_pack)
+	tv_pack1.add_stack(vending_machine_pack)
+
+/datum/religion/esports/convertCeremony(mob/living/preacher, mob/living/subject)
+	var/obj/item/weapon/reagent_containers/food/snacks/donitos/preacher_donitos = preacher.get_held_item_by_index(preacher.find_held_item_by_type(/obj/item/weapon/reagent_containers/food/snacks/donitos))
+	if(!preacher_donitos)
+		to_chat(preacher, "<span class='warning'>You need to hold a bag of Donitos to begin the conversion.</span>")
+		return FALSE
+	var/obj/item/weapon/reagent_containers/food/snacks/donitos/subject_donitos = subject.get_held_item_by_index(subject.find_held_item_by_type(/obj/item/weapon/reagent_containers/food/snacks/donitos))
+	if(!subject_donitos)
+		to_chat(preacher, "<span class='warning'>The subject needs to hold a bag of Donitos to begin the conversion.</span>")
+		return FALSE
+
+	subject.visible_message("<span class='notice'>\The [preacher] attemps to convert \the [subject] to [name].</span>")
+
+	if(!convertCheck(subject))
+		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
+		return FALSE
+
+	preacher_donitos.attack_self(preacher)
+	subject_donitos.attack_self(subject)
+
+	subject.visible_message("<span class='notice'>\The [subject] signs Spess.TV's End User License Agreement and becomes a registered user! Let's go watch some [deity_name]!</span>")
+
+	convert(subject, preacher)
+	return TRUE

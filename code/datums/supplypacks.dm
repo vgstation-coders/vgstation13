@@ -2431,3 +2431,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "Al's Fun And Games stack of packs"
 	group = "Vending Machine Packs"
+
+/datum/supply_packs/teamsecurity
+	name = "Team Security stack of packs"
+	contains = list(/obj/structure/vendomatpack/team_security, /obj/structure/vendomatpack/team_security)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "Team Security stack of packs"
+	group = "Vending Machine packs"

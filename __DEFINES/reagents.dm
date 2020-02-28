@@ -414,6 +414,7 @@
 #define PLUMPHJUICE		"plumphjuice"
 #define PLUMPHWINE		"phwine"
 #define IRONROT			"ironrot"
+#define GEOMETER		"geometer"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

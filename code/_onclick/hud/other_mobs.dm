@@ -170,6 +170,14 @@
 
 	mymob.client.screen += list(vampire_blood_display)
 
+/datum/hud/proc/streamer_hud(ui_style = 'icons/mob/screen1_Midnight.dmi')
+	streamer_display = getFromPool(/obj/abstract/screen)
+	streamer_display.name = "Streaming Stats"
+	streamer_display.icon = null
+	streamer_display.screen_loc = ui_more_under_health_and_to_the_left
+
+	mymob.client.screen += list(streamer_display)
+
 /datum/hud/proc/changeling_hud()
 
 	vampire_blood_display = getFromPool(/obj/abstract/screen)

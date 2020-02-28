@@ -241,6 +241,7 @@ var/list/impact_master = list()
 					visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 			admin_warn(M)
 			if(istype(firer, /mob))
+				M.do_hitmarker(firer)
 				if(!iscarbon(firer))
 					M.LAssailant = null
 				else

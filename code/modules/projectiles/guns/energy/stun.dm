@@ -56,6 +56,11 @@
 	else
 		charge_tick = 0
 
+/obj/item/weapon/gun/energy/taser/team_security
+	name = "\improper Team Security sniper taser gun"
+	icon_state = "taser"
+	charge_cost = 500
+	fire_sound = 'sound/effects/intervention.ogg'
 
 /obj/item/weapon/gun/energy/stunrevolver
 	name = "stun revolver"

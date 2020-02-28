@@ -3383,3 +3383,48 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/games
 	vend_reply = "Don't have too much fun!"
+
+/obj/machinery/vending/team_security
+	name = "\improper Team Security Merch"
+	desc = "A refurbished vending machine selling merch for Team Security."
+	icon_state = "teamsec"
+	vend_reply = "Team Security is my Guideline."
+	product_slogans = list(
+		"Security helmet: on. Knuckles: cracked. Clown: brutalized. Yep...it's Team Security time.",
+		"It's a steal!",
+		"Get caught red-handed."
+	)
+	product_ads = list(
+		"For Security, by Security.",
+		"For the Bold.",
+		"Colonel Quality, guaranteed.",
+		"Red Team cuts off demon wings.",
+	)
+	products = list(
+		/obj/item/weapon/reagent_containers/food/snacks/donitos = 10,
+		/obj/item/clothing/head/soft/sec = 10,
+		/obj/item/clothing/under/team_security = 10,
+		/obj/item/clothing/under/team_security/dark = 10,
+		/obj/item/clothing/under/spesstv = 1,
+		/obj/item/clothing/shoes/jackboots = 10,
+		)
+	contraband = list(
+		/obj/item/clothing/under/team_geometer = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch = 10,
+		)
+	premium = list(
+		/obj/item/clothing/under/team_nt = 1,
+		/obj/item/weapon/gun/energy/taser/team_security = 1,
+		)
+	prices = list(
+		/obj/item/weapon/reagent_containers/food/snacks/donitos = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch = 10,
+		/obj/item/clothing/head/soft/sec = 25,
+		/obj/item/clothing/under/team_security = 25,
+		/obj/item/clothing/under/team_security/dark = 25,
+		/obj/item/clothing/shoes/jackboots = 25,
+		/obj/item/weapon/gun/energy/taser/team_security = 100,
+	)
+	pack = /obj/structure/vendomatpack/team_security
+
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE

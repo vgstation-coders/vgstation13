@@ -191,6 +191,12 @@
 
 	update_icon()
 
+/obj/structure/closet/crate/flatpack/proc/insert_machine(atom/movable/thing)
+	thing.forceMove(src)
+	name += " ([thing.name])"
+	machine = thing
+	update_icon()
+
 /*
 #define Fl_ACTION	"action"
 
@@ -294,3 +300,4 @@
 /obj/structure/closet/crate/flatpack/starscreen_capacitor/New()
 	..()
 	machine = new /obj/machinery/shield_capacitor(src)
+

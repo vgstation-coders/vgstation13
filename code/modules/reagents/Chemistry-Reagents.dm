@@ -5190,6 +5190,13 @@
 	M.dizziness += 5
 	M.drowsyness = 0
 
+/datum/reagent/drink/cold/geometer
+	name = "Geometer"
+	id = GEOMETER
+	description = "Summon the Beast."
+	color = "#ffd700"
+	adj_sleepy = -2
+
 /datum/reagent/drink/cold/spacemountainwind
 	name = "Space Mountain Wind"
 	id = SPACEMOUNTAINWIND
