@@ -290,7 +290,7 @@ var/global/list/nlist = list( \
 	"pipe alignment adapter",
 	"h/e manifold", \
 	"h/e 4-way manifold", \
-	"heat pump"
+	"thermoelectric cooler"
 )
 /obj/item/pipe/proc/update()
 
