@@ -9,7 +9,7 @@
 	var/potency = 1
 	var/fragrance = null
 
-/obj/item/weapon/grown/New()
+/obj/item/weapon/grown/New(atom/loc, custom_plantname)
 
 	..()
 
@@ -17,33 +17,34 @@
 	reagents = R
 	R.my_atom = src
 
-	//Handle some post-spawn var stuff.
-	spawn(1)
-		// Fill the object up with the appropriate reagents.
-		if(!isnull(plantname))
-			var/datum/seed/S = SSplant.seeds[plantname]
-			if(!S || !S.chems)
-				return
+	if(custom_plantname)
+		plantname = custom_plantname
 
-			potency = round(S.potency)
+	// Fill the object up with the appropriate reagents.
+	if(!isnull(plantname))
+		var/datum/seed/S = SSplant.seeds[plantname]
+		if(!S || !S.chems)
+			return
 
-			var/totalreagents = 0
+		potency = round(S.potency)
+
+		var/totalreagents = 0
+		for(var/rid in S.chems)
+			var/list/reagent_data = S.chems[rid]
+			var/rtotal = reagent_data[1]
+			if(reagent_data.len > 1 && potency > 0)
+				rtotal += round(potency/reagent_data[2])
+			totalreagents += rtotal
+
+		if(totalreagents)
+			var/coeff = min(reagents.maximum_volume / totalreagents, 1)
+
 			for(var/rid in S.chems)
 				var/list/reagent_data = S.chems[rid]
 				var/rtotal = reagent_data[1]
 				if(reagent_data.len > 1 && potency > 0)
 					rtotal += round(potency/reagent_data[2])
-				totalreagents += rtotal
-
-			if(totalreagents)
-				var/coeff = min(reagents.maximum_volume / totalreagents, 1)
-
-				for(var/rid in S.chems)
-					var/list/reagent_data = S.chems[rid]
-					var/rtotal = reagent_data[1]
-					if(reagent_data.len > 1 && potency > 0)
-						rtotal += round(potency/reagent_data[2])
-					reagents.add_reagent(rid,max(1,round(rtotal*coeff, 0.1)))
+				reagents.add_reagent(rid,max(1,round(rtotal*coeff, 0.1)))
 
 /obj/item/weapon/grown/proc/changePotency(newValue) //-QualityVan
 	potency = newValue

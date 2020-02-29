@@ -25,8 +25,10 @@ var/list/special_fruits = list()
 		if(initial(G.hydroflags) & filter)
 			. += T
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/New()
+/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname)
 	..()
+	if(custom_plantname)
+		plantname = custom_plantname
 	if(ticker)
 		initialize()
 
