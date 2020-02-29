@@ -29,7 +29,11 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 	var/mtd_limit = 2500
 	var/mtd_slope_at_zero = 2 / 3
 
+	var/process_margin = 0.99 //Doesn't process when the current temperature difference is within 1% of MTD for performance reasons
+
 	active_power_usage = 5000
+
+	ghost_read = FALSE
 
 	var/id_tag
 	var/frequency = 0
@@ -53,13 +57,13 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 
 	var/temp_diff = air2.temperature - air1.temperature
 	var/mtd = get_mtd(air2.temperature)
-	if(temp_diff >= mtd)
+	if(temp_diff >= mtd * process_margin)
 		return
 
 	//This calculates the amount of thermal energy that must be moved from air1 to air2 to get them to the desired temperature difference.
 	var/heat_transfer = (air1.temperature - air2.temperature + mtd) / (1 / air1.heat_capacity() + 1 / air2.heat_capacity())
 
-	air1.add_thermal_energy(-heat_transfer, 0)
+	heat_transfer = -air1.add_thermal_energy(-heat_transfer, 0)
 	air2.add_thermal_energy(heat_transfer) //Realistically it should also add idle_power_usage, but this might be more trouble than it's worth.
 	//It would further complicate setups, and would also allow for infinite energy memes since (at the time of writing) the TEG can break 100% efficiency.
 
