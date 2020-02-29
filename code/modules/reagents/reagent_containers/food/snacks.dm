@@ -4571,7 +4571,7 @@
 	LEXORIN=5, GRAVY=5, DETCOFFEE=5, AMUTATIONTOXIN=5, GYRO=5, SILENCER= 5, URANIUM=5)
 	var/reagent=pick(possible_reagents)
 	reagents.add_reagent(reagent, possible_reagents[reagent])
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/lollipop
 	name = "lollipop"
 	desc = "Suck on this!"
@@ -4590,7 +4590,7 @@
 	volume = 15 //not a lotta room for poison
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/New()
-	..() 
+	..()
 	eatverb = pick("bite","crunch","chomp")
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(SUGAR, 8)
@@ -4599,16 +4599,16 @@
 	colorpop.color = pick(random_color_list)
 	src.overlays += colorpop
 	filling_color = colorpop.color
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/consume()
 	..()
 	candyness -= bitesize*10 //taking a bite out reduces how long it'll last
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/proc/updateconsuming(var/consuming)
 	if(consuming)
 		processing_objects.Add(src)
 	else
-		processing_objects.Remove(src)		
+		processing_objects.Remove(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/process()
 	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
@@ -4616,7 +4616,7 @@
 		updateconsuming(FALSE)
 		return
 	if(H.isDead()) //human isn't really consuming it
-		return 
+		return
 	if(H.is_wearing_item(src,slot_wear_mask))
 		candyness--
 	if(candyness <= 0)
@@ -4630,11 +4630,11 @@
 			reagents.trans_to(H, 1, log_transfer = FALSE, whodunnit = null)
 		if(candyness%50 == 0) //every 50 ticks, so ~3 times
 			bitecount++ //we're arguably eating it
-		
+
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/equipped(mob/living/carbon/human/H, equipped_slot)
 	if(!H.isDead())
 		updateconsuming(equipped_slot == slot_wear_mask)
-	
+
 /obj/item/trash/lollipopstick
 	name = "lollipop stick"
 	desc = "A small plastic stick."
@@ -5446,7 +5446,7 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(TOMATOJUICE, 15)
 
-var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/item/toy/bomb, /obj/item/weapon/plastique, /obj/item/device/fuse_bomb, /obj/item/weapon/grenade, /obj/item/device/onetankbomb)
+var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/item/toy/bomb, /obj/item/weapon/c4, /obj/item/device/fuse_bomb, /obj/item/weapon/grenade, /obj/item/device/onetankbomb)
 
 /obj/item/weapon/reagent_containers/food/snacks/lasagna/can_hold(obj/item/weapon/W) //GREAT SCOTT!
 	if(is_type_in_list(W, bomb_like_items))

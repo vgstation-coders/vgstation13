@@ -477,7 +477,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/sabotage_tools/plastic_explosives
 	name = "Composition C-4"
 	desc = "C-4 is plastic explosive of the common variety Composition C. Can be attached to any item or organic to reliably destroy it. Connect a signaler to its wiring to make it remotely detonable even when unplanted. Timer starts at 10 seconds but can be set to any length. Takes a few seconds to apply."
-	item = /obj/item/weapon/plastique
+	item = /obj/item/weapon/c4
 	cost = 4
 
 /datum/uplink_item/sabotage_tools/megaphone
