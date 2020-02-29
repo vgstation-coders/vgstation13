@@ -1,3 +1,7 @@
+//Listen here you god damn piece of shit. Do not add magazines for strong calibers. 
+//Dont fucking do it. If you do you're gonna gunk the vector to high heaven again and someone's gonna get mad that they got one hit and grudgecode
+//So dont fucking do it
+
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe
 	name = "\improper Ammolathe"
 	desc = "Produces guns, ammunition, and firearm accessories."
