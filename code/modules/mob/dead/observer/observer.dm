@@ -119,6 +119,11 @@
 	..()
 	ghostMulti = null
 	observers.Remove(src)
+	if(!ticker)
+		return
+	var/datum/gamemode/dynamic/D = ticker.mode
+	if(istype(D))
+		D.dead_players -= src
 
 /mob/dead/observer/hasFullAccess()
 	return isAdminGhost(src)
