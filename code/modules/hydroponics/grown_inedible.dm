@@ -26,7 +26,7 @@
 		if(!S || !S.chems)
 			return
 
-		potency = round(S.potency)
+		changePotency(S.potency)
 
 		var/totalreagents = 0
 		for(var/rid in S.chems)
@@ -116,12 +116,14 @@
 	attack_verb = list("sears", "heats", "whacks", "steams")
 	fragrance = INCENSE_NOVAFLOWERS
 
-/obj/item/weapon/grown/novaflower/New()
+/obj/item/weapon/grown/novaflower/New(atom/loc, custom_plantname)
 	..()
-	spawn(5) // So potency can be set in the proc that creates these crops
-		reagents.add_reagent(NUTRIMENT, 1)
-		reagents.add_reagent(CAPSAICIN, round(potency, 1))
-		force = round((5 + potency / 5), 1)
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(CAPSAICIN, round(potency, 1))
+
+/obj/item/weapon/grown/novaflower/changePotency(newValue)
+	potency = newValue
+	force = round((5 + potency / 5), 1)
 
 /obj/item/weapon/grown/novaflower/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(!..())
@@ -148,11 +150,6 @@
 	throw_speed = 1
 	throw_range = 3
 	origin_tech = Tc_COMBAT + "=1"
-
-/obj/item/weapon/grown/nettle/New()
-	..()
-	spawn(5)
-		force = round((5+potency/5), 1)
 
 /obj/item/weapon/grown/nettle/pickup(mob/living/carbon/human/user as mob) //todo this
 	if(istype(user))
@@ -196,11 +193,6 @@
 	throw_range = 3
 	origin_tech = Tc_COMBAT + "=3"
 	attack_verb = list("stings, pricks")
-
-/obj/item/weapon/grown/deathnettle/New()
-	..()
-	spawn(5)
-		force = round((5+potency/2.5), 1)
 
 /obj/item/weapon/grown/deathnettle/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")

@@ -363,7 +363,7 @@ var/list/special_fruits = list()
 	plantname = "rocknut"
 	force = 10
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New()
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New(atom/loc, custom_plantname)
 	..()
 	throwforce = throwforce + round((5+potency/7.5), 1) ///it's a rock, add bonus damage that scales with potency
 	eatverb = pick("crunch","gnaw","bite")
@@ -901,7 +901,7 @@ var/list/special_fruits = list()
 	var/current_path = null
 	var/counter = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New()
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname)
 	..()
 	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits()
 	available_fruits = shuffle(available_fruits)
