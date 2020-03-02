@@ -66,6 +66,16 @@
 				return
 			if(iscarbon(usr) || ishologram(usr))
 				var/mob/living/carbon/C = usr
+				if(C.carried_being)
+					var/mob/M = C.carried_being
+					if(do_mob(usr, usr, 15, 10, 0))
+						if(C.carried_being)
+							to_chat(usr, "<span class='notice'>You gently lay [C.carried_being] down on \the [get_turf(usr)]</span>")
+							C.unlock_atom(M)
+							M.pixel_y -= 15
+							M.being_carried = null
+							C.carried_being = null
+							return
 				if(!C.get_active_hand())
 					to_chat(usr, "<span class='warning'>You have nothing to drop in your hand.</span>")
 					return

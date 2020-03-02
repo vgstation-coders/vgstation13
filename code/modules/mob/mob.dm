@@ -1479,6 +1479,11 @@ Use this proc preferably at the end of an equipment loadout
 		return ..()
 	show_inv(usr)
 
+/mob/living/ShiftMouseDropFrom(mob/living/M as mob)
+	if(M != usr || !istype(M))
+		return ..()
+	M.carry_mob(src)
+	return
 
 /mob/proc/can_use_hands()
 	if(restrained())

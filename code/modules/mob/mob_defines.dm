@@ -290,6 +290,9 @@
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 	var/forced_density = 0 // If the mob was made non-dense by an admin.
+	
+	var/mob/being_carried // Used by fireman carrying
+	var/mob/carried_being // Used by fireman carrying
 
 /mob/resetVariables()
 	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \

@@ -254,11 +254,21 @@
 //Like forceMove(), but for dirs!
 /atom/movable/proc/change_dir(new_dir, var/changer)
 	if(locked_to && changer != locked_to)
-		return
+		return 0
 
 	if(new_dir != dir)
 		dir = new_dir
 		update_dir()
+	return 1
+
+/mob/change_dir(new_dir, var/changer)
+	. = ..()
+	if(.)
+		if(being_carried)
+			if(new_dir == NORTH)
+				src.plane = being_carried.plane + 1
+			else
+				src.plane = being_carried.plane - 1
 
 // Atom locking, lock an atom to another atom, and the locked atom will move when the other atom moves.
 // Essentially buckling mobs to chairs. For all atoms.

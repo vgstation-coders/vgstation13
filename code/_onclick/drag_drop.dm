@@ -14,6 +14,11 @@
 			over_object.CtrlMouseDropTo(src,usr,src_location,over_location,src_control,over_control,params)
 		return CtrlMouseDropFrom(over_object,src_location,over_location,src_control,over_control,params)
 
+	if(params_list["shift"]) //More modifiers can be added - check click.dm
+		spawn(0)
+			over_object.ShiftMouseDropTo(src,usr,src_location,over_location,src_control,over_control,params)
+		return ShiftMouseDropFrom(over_object,src_location,over_location,src_control,over_control,params)
+
 	spawn(0)
 		over_object.MouseDropTo(src,usr,src_location,over_location,src_control,over_control,params)
 	return MouseDropFrom(over_object,src_location,over_location,src_control,over_control,params)
@@ -66,4 +71,9 @@
 	usr.face_atom(T)
 
 /atom/proc/CtrlMouseDropTo(atom/over_object,mob/user,src_location,over_location,src_control,over_control,params)
+	return
+
+/atom/proc/ShiftMouseDropFrom(atom/over_object,src_location,over_location,src_control,over_control,params)
+	return
+/atom/proc/ShiftMouseDropTo(atom/over_object,mob/user,src_location,over_location,src_control,over_control,params)
 	return
