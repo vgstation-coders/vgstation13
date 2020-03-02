@@ -863,7 +863,6 @@ Auto Patrol: []"},
 	spark(src)
 
 	var/obj/effect/decal/cleanable/blood/oil/gib = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	gib.New(gib.loc)
 	qdel(src)
 
 
