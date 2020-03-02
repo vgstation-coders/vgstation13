@@ -64,6 +64,9 @@
 	manual_unbuckle(usr)
 
 /obj/structure/bed/proc/manual_unbuckle(var/mob/user)
+	if(user.incapacitated())
+		return FALSE
+
 	if(user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return FALSE
