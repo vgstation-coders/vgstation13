@@ -151,6 +151,14 @@
 			druggy = max(druggy - 1, 0)
 			if(!druggy)
 				to_chat(src, "It looks like you are back in Kansas.")
+
+
+		//Assigns Cult Aura at Tier 3 or higher
+	for(var/datum/role/cultist/C)
+		var/mob/living/carbon/human/H = C.antag.current
+		if (veil_thickness >= 3)
+			H.underlays |= image('icons/mob/human.dmi',src,"unholyaura")
+
 /*
 		// Increase germ_level regularly
 		if(prob(40))
