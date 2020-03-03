@@ -4,9 +4,7 @@ proc/get_random_weighted_disease(var/operation = WDISH)
 	var/list/weighted_list = list()
 	for(var/P in possibles)
 		var/datum/disease2/disease/D = new P
-		var/weight = D.type_weight[operation]
-		if (weight != 0)
-			weighted_list[D] = weight
+		weighted_list[D] = D.type_weight[operation]
 	return pickweight(weighted_list)
 
 ////////////////////////////////////////////////////
