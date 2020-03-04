@@ -1,9 +1,9 @@
 /obj/item/weapon/storage/box/syndicate/New()
 	..()
-	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
+	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "implants" = 50, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
 
 	switch (tagname)
-		if("bloodyspai")//2+5+2+2+4+4+4=23
+		if("bloodyspai")//2+5+2+2+4+4+4+7=30
 			new /obj/item/clothing/under/chameleon(src)
 			new /obj/item/clothing/mask/gas/voice(src)
 			new /obj/item/weapon/card/id/syndicate(src)
@@ -11,6 +11,7 @@
 			new /obj/item/weapon/dnascrambler(src)
 			new /obj/item/weapon/dnascrambler(src)
 			new /obj/item/weapon/dnascrambler(src)
+			new /obj/item/weapon/butterflyknife/viscerator(src)
 
 		if("stealth")//12+8+6+1=27
 			new /obj/item/weapon/gun/energy/crossbow(src)
@@ -38,7 +39,7 @@
 			new /obj/item/clothing/shoes/syndigaloshes(src)
 			new /obj/item/weapon/storage/belt/skull(src)
 
-		if("freedom")//18+5=23
+		if("Implants")//18+5+12+6=41, also who the fuck coded implants without putting in implanter childs what the fuck
 			var/obj/item/weapon/implanter/O = new /obj/item/weapon/implanter(src)
 			O.imp = new /obj/item/weapon/implant/freedom(O)
 			O.update()
@@ -47,6 +48,8 @@
 			U.imp = new /obj/item/weapon/implant/uplink(U)
 			U.update()
 			U.name = "Uplink"
+			new /obj/item/weapon/implanter/explosive(src)
+			new /obj/item/weapon/implanter/compressed(src)
 
 		if("hacker")//14+6+5+3=28
 			new /obj/item/weapon/aiModule/freeform/syndicate(src)
@@ -54,27 +57,29 @@
 			new /obj/item/device/encryptionkey/binary(src)
 			new /obj/item/device/multitool/ai_detect(src)
 
-		if("lordsingulo")//14+4+6=24
+		if("lordsingulo")//14+4+6=24, round ender, not really something you want to really buff
 			new /obj/item/beacon/syndicate(src)
 			new /obj/item/clothing/suit/space/syndicate(src)
 			new /obj/item/clothing/head/helmet/space/syndicate(src)
 			new /obj/item/weapon/card/emag(src)
 
-		if("smoothoperator")//6?+2+2?+1+1?+1?+4+4=21
+		if("smoothoperator")//6?+2+2+2?+1+1?+1?+1?+1?+4+4=25
 			new /obj/item/weapon/gun/projectile/pistol(src)
 			new /obj/item/gun_part/silencer(src)
+			new /obj/item/ammo_storage/magazine/mc9mm(src)
+			new /obj/item/ammo_storage/magazine/mc9mm(src)
 			new /obj/item/clothing/gloves/knuckles/spiked(src)
 			new /obj/item/weapon/soap/syndie(src)
 			new /obj/item/weapon/storage/bag/trash(src)
 			new /obj/item/bodybag(src)
 			new /obj/item/clothing/under/suit_jacket(src)
-			new /obj/item/clothing/shoes/laceup(src)
+			new /obj/item/clothing/shoes/syndigaloshes(src)
 			new /obj/item/weapon/soap/syndie(src)
 			new /obj/item/device/chameleon(src)
 			new /obj/item/device/encryptionkey/syndicate/hacked(src)
 			new /obj/item/weapon/c4(src)
 
-		if("psycho")//1+1+5+2+6+(fireaxe, 6?)+2=23
+		if("psycho")//1+1+5+2+6+(fireaxe, 6?, hyperzine pills, 2?)+2=25
 			new /obj/item/clothing/suit/raincoat(src)
 			new /obj/item/clothing/under/suit_jacket(src)
 			new /obj/item/weapon/soap/syndie(src)
@@ -84,13 +89,17 @@
 			new /obj/item/weapon/newspaper(src)
 			new /obj/item/weapon/fireaxe(src)
 			new /obj/item/clothing/shoes/syndigaloshes(src)
+			new /obj/item/clothing/mask/cigarette/cigar(src)
+			new /obj/item/weapon/lighter/zippo(src)
+			new /obj/item/weapon/storage/pill_bottle/hyperzine(src)
 
-		if("hotline")//5+10+2+(hyperzine pills, 2x2?)=22
+		if("hotline")//5+10+10+2+(hyperzine pills, 2x2?)=32
 			new /obj/item/clothing/under/bikersuit(src)
 			new /obj/item/clothing/head/helmet/biker(src)
 			new /obj/item/clothing/shoes/mime/biker(src)
 			new /obj/item/clothing/gloves/bikergloves(src)
 			new /obj/item/clothing/mask/gas/voice(src)
+			new /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver(src)
 			new /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver(src)
 			new /obj/item/weapon/storage/pill_bottle/hyperzine(src)
 			new /obj/item/weapon/storage/pill_bottle/hyperzine(src)
@@ -107,9 +116,10 @@
 			new /obj/item/toy/syndicateballoon(src)
 			new /obj/item/toy/syndicateballoon(src)
 
-		if("ocelot")
+		if("ocelot")// 10? + 10? + 4 + 4
 			new /obj/item/weapon/gun/projectile/colt(src)
 			new /obj/item/weapon/gun/projectile/colt(src)
+			new /obj/item/ammo_storage/speedloader/a357(src)
 			new /obj/item/ammo_storage/speedloader/a357(src)
 			new /obj/item/clothing/mask/scarf/red(src)
 			new /obj/item/clothing/under/color/black(src)
@@ -129,7 +139,7 @@
 			new /obj/item/clothing/suit/sith(src)
 			new /obj/item/clothing/shoes/sandal(src)
 
-		if("anarchist")//14+14+6=34, plus molotovs
+		if("anarchist")//20+6=26, plus molotovs
 			new /obj/item/weapon/implanter/traitor(src)
 			new /obj/item/weapon/implanter/traitor(src)
 			new /obj/item/clothing/mask/bandana/red(src)
@@ -156,7 +166,7 @@
 			new /obj/item/clothing/glasses/sunglasses(src)
 			new /obj/item/device/radio/headset/headset_earmuffs(src)
 
-		if("highlander")//SCOTLAND
+		if("highlander")//SCOTLANDFFFOOORRREEEVVVEEERRR!!!
 			new /obj/item/clothing/head/beret/highlander(src)
 			new /obj/item/clothing/suit/highlanderkilt(src)
 			new /obj/item/clothing/shoes/jackboots/highlander(src)
@@ -164,6 +174,7 @@
 			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/vinyl/scotland(src)
 			new /obj/item/weapon/spellbook/oneuse/mutate/highlander(src)
+
 
 	tag = tagname
 
