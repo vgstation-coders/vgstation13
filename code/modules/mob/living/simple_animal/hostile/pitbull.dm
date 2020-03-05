@@ -1,5 +1,3 @@
-//[]TODO: increase the chance of pitbulls targetting younger aged crew according to character preferences or something, alot of people wanted this but I have no idea how to code it. - realestestate
-
 /mob/living/simple_animal/hostile/pitbull
 	name = "pitbull"
 	icon_state = "pitbull"
@@ -13,11 +11,11 @@
 
 	health = 25
 	maxHealth = 25
-	turns_per_move =2//I don't know what this does //default 3
+	turns_per_move =2//I don't know what this does
 	speed = 4
-	move_to_delay = 3 //debug: was 3
+	move_to_delay = 3
 
-	melee_damage_lower = 5
+	melee_damage_lower = 3
 	melee_damage_upper = 5
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
@@ -27,6 +25,7 @@
 
 	var/treachery_chance = 0.25
 	var/treacherous = FALSE
+	var/calmdown_chance = 20
 
 
 var/list/pitbulls = list()
@@ -46,7 +45,7 @@ var/list/pitbulls = list()
 /mob/living/simple_animal/hostile/pitbull/ListTargets()
 	var/list/L = ..()
 	for(var/mob/M in L)
-		if(M in pitbulls) //if(pitbulls[src] == M) was the original
+		if(M in pitbulls)
 			L.Remove(M)
 	return L
 
@@ -54,27 +53,27 @@ var/list/pitbulls = list()
 	if(prob(treachery_chance))
 		Treachery() //empties the friend list and faction allignment
 
-	if(treacherous && prob(5))
+	if(treacherous && prob(calmdown_chance))
 		Calmdown() //repopulates the friend list and realligns our faction
 	..()
 
-/mob/living/simple_animal/hostile/pitbull/proc/Treachery() //something isn't working and pitbulls are attacking other pitbulls when becoming treacherous
+/mob/living/simple_animal/hostile/pitbull/proc/Treachery()
 	faction_original = faction
 	faction = ""
-	friends_temp = friends
+	friends_temp = friends.Copy()
 	friends.Cut()
 	treacherous = TRUE
 
 /mob/living/simple_animal/hostile/pitbull/proc/Calmdown()
 	faction = faction_original
-	friends = friends_temp
+	friends = friends_temp.Copy()
 	if(target && ismob(target))
 		var/mob/M = target
 		if((M.faction == faction) || (M in src.friends))//stop chasing our friend when we calm down
 			LoseTarget()
 	treacherous = FALSE
 
-//some dude named yclat asked for this, I'm so fucking sorry ahhhhhhh
+//some dude named yclat asked for this, I'm so fucking sorry aaaaahhh
 /mob/living/simple_animal/hostile/pitbull/attackby(obj/item/I, mob/user)
 	..()
 	if(istype(I,/obj/item/weapon/pickaxe/shovel))

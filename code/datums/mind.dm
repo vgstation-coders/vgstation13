@@ -69,6 +69,8 @@
 
 	var/miming = null //Toggle for the mime's abilities.
 
+	var/list/summons = list() //list of references to summons that a spell caster could call to a location after already summoning them.
+
 /datum/mind/New(var/key)
 	src.key = key
 
