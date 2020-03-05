@@ -39,7 +39,7 @@
 			new /obj/item/clothing/shoes/syndigaloshes(src)
 			new /obj/item/weapon/storage/belt/skull(src)
 
-		if("Implants")//18+5+12+6=41, also who the fuck coded implants without putting in implanter childs what the fuck
+		if("implants")//18+5+12+6=41, also who the fuck coded implants without putting in implanter childs what the fuck
 			var/obj/item/weapon/implanter/O = new /obj/item/weapon/implanter(src)
 			O.imp = new /obj/item/weapon/implant/freedom(O)
 			O.update()
