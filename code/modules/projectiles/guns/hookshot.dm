@@ -469,6 +469,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "bullwhip"
 	fire_sound = 'sound/weapons/whip_crack.ogg'
+	fire_action = "flick"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 5
 	maxlength = 5

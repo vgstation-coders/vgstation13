@@ -187,7 +187,6 @@
 	name = "whip"
 	icon_state = "whip"
 	icon_name = "whip"
-	fire_action = "flick"
 	nodamage = 0
 	damage = 15
 	kill_count = 5
