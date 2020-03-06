@@ -188,7 +188,7 @@
 	icon_state = "whip"
 	icon_name = "whip"
 	nodamage = 0
-	damage = 15
+	damage = 10
 	kill_count = 5
 	sharpness = 1.2
 	failure_message = "Your hand slips and the whip falls loose..."
@@ -214,7 +214,14 @@
 /obj/item/projectile/hookshot/whip/vampkiller/true
 	icon_state = "vampkiller_true"
 	icon_name = "vampkiller_true"
-	damage = 30
+	damage = 20
 	sharpness = 1.5
 	failure_message = "The lash's tip falls to the ground with a heavy clunk..."
 	whipitgood_bonus = null
+
+/obj/item/projectile/hookshot/whip/vampkiller/true/to_bump(atom/A as mob|obj|turf|area)
+	var/mob/M = A
+	if(istype(M) && isvampire(M))
+		damage = 30
+		sharpness = 2
+	..(A)
