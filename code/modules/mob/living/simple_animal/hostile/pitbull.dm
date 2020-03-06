@@ -27,12 +27,9 @@
 	var/treacherous = FALSE
 	var/calmdown_chance = 20
 
-
-var/list/pitbulls = list()
-
 /mob/living/simple_animal/hostile/pitbull/New()
 	..()
-	pitbulls.Add(src)
+	pitbulls_exclude_kinlist.Add(src)
 	desc = pick(
 		"There is no such thing as a bad dog, only bad owners.",
 		"Blame the owner not the breed!",
@@ -45,7 +42,7 @@ var/list/pitbulls = list()
 /mob/living/simple_animal/hostile/pitbull/ListTargets()
 	var/list/L = ..()
 	for(var/mob/M in L)
-		if(M in pitbulls)
+		if(M in pitbulls_exclude_kinlist)
 			L.Remove(M)
 	return L
 
@@ -84,10 +81,3 @@ var/list/pitbulls = list()
 
 /mob/living/simple_animal/hostile/pitbull/summoned_pitbull
 	faction = "wizard"
-
-/mob/living/simple_animal/hostile/pitbull/summoned_pitbull/death()
-	..(TRUE)
-	var/mob/my_wiz = pitbulls[src]
-	pitbulls_count_by_wizard[my_wiz]--
-	if(pitbulls_count_by_wizard[my_wiz] == 0)
-		pitbulls_count_by_wizard -= my_wiz
