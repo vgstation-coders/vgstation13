@@ -14,8 +14,7 @@ datum/event/viral_outbreak/announce()
 	biohazard_alert_major()
 
 datum/event/viral_outbreak/start()
-	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - /datum/disease2/disease/bacteria)
-	var/datum/disease2/disease/D = new virus_choice
+	var/datum/disease2/disease/D = get_random_weighted_disease(WOUTBREAK)
 
 	var/list/anti = list(
 		ANTIGEN_BLOOD	= 0,
