@@ -6757,6 +6757,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
 	custom_metabolism = 0.05
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/honkserum/on_overdose(var/mob/living/H)
 
