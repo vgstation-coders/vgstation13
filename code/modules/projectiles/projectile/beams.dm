@@ -946,37 +946,6 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 /obj/item/projectile/beam/white
 	icon_state = "whitelaser"
 
-
-/obj/item/projectile/beam/bullwhip
-	name = "bullwhip"
-	icon_state = "whip"
-	damage = 0
-	fire_sound = null
-	travel_range = 3
-	bounce_sound = "sound/weapons/whip_crack.ogg"
-	pass_flags = PASSTABLE
-	var/obj/item/weapon/bullwhip/whip = null
-	var/mob/user = null
-	var/has_played_sound = FALSE
-
-/obj/item/projectile/beam/bullwhip/New(atom/A, dir, var/spawning_whip, var/whipper)
-	..(A,dir)
-	whip = spawning_whip
-	user = whipper
-	if(!istype(whip) || !istype(user))
-		spawn()
-			returnToPool(src)
-
-/obj/item/projectile/beam/bullwhip/on_hit(var/atom/atarget)
-	whip.attack(atarget, user)
-	user.delayNextAttack(10)
-	has_played_sound = TRUE
-
-/obj/item/projectile/beam/bullwhip/OnDeath()
-	if(!has_played_sound && get_turf(src))
-		playsound(src, bounce_sound, 30, 1)
-		user.delayNextAttack(2)
-
 /obj/item/projectile/beam/liquid_stream
 	name = "stream of liquid"
 	icon_state = "liquid_stream"

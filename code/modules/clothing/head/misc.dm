@@ -85,6 +85,13 @@
 	icon_state = "hasturhood"
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 
+/obj/item/clothing/head/vamphunter
+	name = "vampire hunter circlet"
+	desc = "A golden chain circlet which gives the impression of a halo."
+	icon_state = "vamphunter"
+	item_state = "vamphunter"
+	body_parts_covered = NONE
+
 /obj/item/clothing/head/nursehat
 	name = "nurse's hat"
 	desc = "It allows quick identification of trained medical personnel."

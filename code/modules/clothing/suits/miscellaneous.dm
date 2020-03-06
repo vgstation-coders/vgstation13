@@ -375,6 +375,13 @@ obj/item/clothing/suit/cassock
 	item_state = "imperium_monk"
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
 
+/obj/item/clothing/suit/vamphunter
+	name = "vampire hunter armor"
+	desc = "A set of ornate leather armor modelled off of a set worn by an ancient vampire-hunting warrior. While quite fearsome looking, it offers little in protection."
+	icon_state = "vamphunter"
+	item_state = "vamphunter"
+	body_parts_covered = FULL_TORSO|FEET
+
 
 /obj/item/clothing/suit/chickensuit
 	name = "Chicken Suit"
