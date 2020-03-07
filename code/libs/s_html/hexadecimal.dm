@@ -22,7 +22,7 @@ proc/hex2num(hex)
 	var/num = 0
 	var/power = 0
 
-	for(var/i = lentext(hex), i > 0, i--)
+	for(var/i = length(hex), i > 0, i--)
 		var/char = copytext(hex, i, i+1) //extract hexadecimal character from string
 		switch(char)
 			if("0")

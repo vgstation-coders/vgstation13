@@ -9,6 +9,7 @@
 	speak_emote = list("brays")
 	emote_hear = list("brays")
 	emote_see = list("shakes its head", "stamps a foot", "glares around")
+	emote_sound = list("sound/voice/goat.ogg")
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6
@@ -24,11 +25,15 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES
 	speak_override = TRUE
 
+	var/anger_chance = 1
+
+	var/gives_milk = TRUE
 	var/datum/reagents/udder = null
 
 /mob/living/simple_animal/hostile/retaliate/goat/New()
-	udder = new(50)
-	udder.my_atom = src
+	if(gives_milk)
+		udder = new(50)
+		udder.my_atom = src
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/goat/Life()
@@ -37,7 +42,7 @@
 	. = ..()
 	if(.)
 		//chance to go crazy and start wacking stuff
-		if(!enemies.len && prob(1))
+		if(!enemies.len && prob(anger_chance))
 			Retaliate()
 
 		if(enemies.len && prob(10))
@@ -113,6 +118,7 @@
 	speak_emote = list("moos","moos hauntingly")
 	emote_hear = list("brays")
 	emote_see = list("shakes its head")
+	emote_sound = list("sound/voice/cow.ogg")
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6
@@ -180,6 +186,7 @@
 	speak_emote = list("cheeps")
 	emote_hear = list("cheeps")
 	emote_see = list("pecks at the ground","flaps its tiny wings")
+	emote_sound = list("sound/voice/chick.ogg")
 	speak_chance = 2
 	turns_per_move = 2
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
@@ -220,6 +227,7 @@
 	speak_emote = list("clucks","croons")
 	emote_hear = list("clucks")
 	emote_see = list("pecks at the ground","flaps its wings viciously")
+	emote_sound = list("sound/voice/chicken.ogg")
 	speak_chance = 2
 	turns_per_move = 3
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
@@ -292,6 +300,7 @@
 	speak = list("SQUEEEEE!","Oink...","Oink, oink", "Oink, oink, oink", "Oink!", "Oiiink.")
 	emote_hear = list("squeals hauntingly")
 	emote_see = list("roots about","squeals hauntingly")
+	emote_sound = list("sound/voice/pigsnort.ogg","sound/voice/pigsqueal.ogg")
 	speak_chance = 1
 	turns_per_move = 6
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/box

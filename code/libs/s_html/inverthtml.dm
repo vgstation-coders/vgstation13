@@ -23,11 +23,11 @@ proc/invertHTML(HTMLstring)
 	textr = num2hex(255-r)
 	textg = num2hex(255-g)
 	textb = num2hex(255-b)
-	if(lentext(textr) < 2)
+	if(length(textr) < 2)
 		textr = "0[textr]"
-	if(lentext(textg) < 2)
+	if(length(textg) < 2)
 		textr = "0[textg]"
-	if(lentext(textb) < 2)
+	if(length(textb) < 2)
 		textr = "0[textb]"
 
 	return("#[textr][textg][textb]")

@@ -47,6 +47,10 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
+	toolsounds = list('sound/items/Ratchet.ogg')
+
+/obj/item/weapon/wrench/is_wrench(mob/user)
+	return TRUE
 
 /obj/item/weapon/wrench/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -95,6 +99,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	attack_verb = list("stabs")
+	toolsounds = list('sound/items/Screwdriver.ogg', 'sound/items/Screwdriver2.ogg')
 
 /obj/item/weapon/screwdriver/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
@@ -189,6 +194,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("pinches", "nips at")
+	toolsounds = list('sound/items/Wirecutter.ogg')
 
 /obj/item/weapon/wirecutters/New()
 	. = ..()
@@ -230,6 +236,7 @@
 	sharpness_flags = INSULATED_EDGE | HOT_EDGE // A gas flame is pretty insulated, is it?
 	heat_production = 3800
 	source_temperature = TEMPERATURE_WELDER
+	light_color = LIGHT_COLOR_FIRE
 
 	//Cost to make in the autolathe
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
@@ -246,6 +253,7 @@
 	var/start_fueled = 1 //Explicit, should the welder start with fuel in it ?
 	var/eye_damaging = TRUE	//Whether the welder damages unprotected eyes.
 	var/weld_speed = 1 //How much faster this welder is at welding. Higher number = faster
+	toolsounds = list('sound/items/Welder.ogg', 'sound/items/Welder2.ogg')
 
 /obj/item/weapon/weldingtool/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -304,7 +312,7 @@
 	if(!remove_fuel(fuel_cost, user))
 		return 0
 
-	playsound(src, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+	playtoolsound(src, 50)
 	return isOn() && do_after(user, thing, time/weld_speed) && isOn() //Checks if it's on, then does the do_after, then checks if it's still on after.
 
 /obj/item/weapon/weldingtool/process()
@@ -420,6 +428,8 @@
 		src.welding = 1
 		if (remove_fuel(1))
 			to_chat(usr, "<span class='notice'>\The [src] switches on.</span>")
+			playsound(src,pick('sound/items/lighter1.ogg','sound/items/lighter2.ogg'),40,1)
+			set_light(2)
 			src.force = 15
 			src.damtype = "fire"
 			update_icon()
@@ -431,6 +441,8 @@
 	//Otherwise
 	else
 		to_chat(usr, "<span class='notice'>\The [src] switches off.</span>")
+		playsound(src,'sound/effects/zzzt.ogg',20,1)
+		set_light(0)
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()
@@ -454,6 +466,8 @@
 		if (remove_fuel(1))
 			if(user && istype(user))
 				to_chat(user, "<span class='notice'>You switch the [src] on.</span>")
+			playsound(src,pick('sound/items/lighter1.ogg','sound/items/lighter2.ogg'),40,1)
+			set_light(2)
 			src.force = 15
 			src.damtype = "fire"
 			update_icon()
@@ -468,6 +482,8 @@
 			to_chat(usr, "<span class='notice'>You switch the [src] off.</span>")
 		else
 			visible_message("<span class='notice'>\The [src] shuts off!</span>")
+		playsound(src,'sound/effects/zzzt.ogg',20,1)
+		set_light(0)
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()
@@ -628,6 +644,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
+	toolsounds = list('sound/items/Crowbar.ogg')
 
 /obj/item/weapon/crowbar/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -720,6 +737,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
+	toolsounds = list('sound/items/Welder.ogg')
 
 /obj/item/weapon/solder/New()
 	. = ..()

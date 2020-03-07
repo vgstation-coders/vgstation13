@@ -296,18 +296,18 @@
 	// Updates the plant overlay.
 	if(!isnull(seed))
 		if(draw_warnings && health <= (seed.endurance / 2))
-			overlays += image(seed.plant_dmi,"over_lowhealth3")
+			overlays += image('icons/obj/hydroponics/hydro_tools.dmi',"over_lowhealth3")
 
 		if(dead)
-			overlays += image(seed.plant_dmi,"[seed.plant_icon]-dead")
+			overlays += image(seed.plant_dmi,"dead")
 		else if(harvest)
-			overlays += image(seed.plant_dmi,"[seed.plant_icon]-harvest")
+			overlays += image(seed.plant_dmi,"harvest")
 		else if(age < seed.maturation)
 			var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-			overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[t_growthstate]")
+			overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
 			lastproduce = age
 		else
-			overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[seed.growth_stages]")
+			overlays += image(seed.plant_dmi,"stage-[seed.growth_stages]")
 
 	//Draw the cover.
 	if(closed_system)

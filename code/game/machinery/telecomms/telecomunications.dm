@@ -170,11 +170,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	telecomms_list -= src
 	..()
 
-/obj/machinery/telecomms/unlinkFrom(var/mob/user, var/obj/buffer)
-	..()
-	for(var/obj/machinery/computer/telecomms/monitor/M in range(25,src))
-		M.notify_unlinked()
-
 // Used in auto linking
 /obj/machinery/telecomms/proc/add_link(var/obj/machinery/telecomms/T)
 	var/turf/position = get_turf(src)

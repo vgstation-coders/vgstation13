@@ -123,8 +123,8 @@ Frequency:
 /obj/item/weapon/bananapeel/bluespace
 	name = "bluespace banana peel"
 	desc = "A peel from a bluespace banana."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "bluespacebanana_peel"
+	icon = 'icons/obj/hydroponics/bluespacebanana.dmi'
+	icon_state = "peel"
 	item_state = "bluespacebanana_peel"
 
 /obj/item/weapon/bananapeel/bluespace/Crossed(AM as mob|obj)

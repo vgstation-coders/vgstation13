@@ -62,11 +62,15 @@
 	robot_compatibility = MODULE_CAN_LIFT_ENGITAPE
 
 /obj/item/taperoll/attack_self(mob/user as mob)
+	..()
+	lay_tape(user)
+
+/obj/item/taperoll/proc/lay_tape(mob/user as mob)
 	if(icon_state == "[icon_base]_start")
 		start = get_turf(src)
 		if(istype(start,/turf/space))
 			to_chat(usr, "<span class='warning'>You can't place [src] in space</span>")
-			return
+			return 0
 		to_chat(usr, "<span class='notice'>You place the first end of [src].</span>")
 		icon_state = "[icon_base]_stop"
 	else
@@ -74,10 +78,10 @@
 		end = get_turf(src)
 		if(istype(end,/turf/space))
 			to_chat(usr, "<span class='warning'>You can't place [src] in space</span>")
-			return
+			return 0
 		if(start.y != end.y && start.x != end.x || start.z != end.z)
 			to_chat(usr, "<span class='notice'>[src] can only be laid in a straight line.</span>")
-			return
+			return 0
 
 		var/turf/cur = start
 		var/dir
@@ -106,7 +110,7 @@
 			cur = get_step_towards(cur,end)
 		if (!can_place)
 			to_chat(usr, "<span class='warning'>You can't run [src] through that!</span>")
-			return
+			return 0
 
 		cur = start
 		var/tapetest = 0
@@ -118,36 +122,46 @@
 				var/obj/item/tape/P = new tape_type(cur)
 				P.icon_state = "[P.icon_base]_[dir]"
 			cur = get_step_towards(cur,end)
-	//is_blocked_turf(var/turf/T)
-		to_chat(usr, "<span class='notice'>You finish placing [src].</span>")
-		user.visible_message("<span class='warning'>[user] finishes placing [src].</span>") //Now you know who to whack with a stun baton
+		
+		if(start != end)//Prevent wasting charges on rolls with limited charges by just spamming use on the same tile.
+			to_chat(usr, "<span class='notice'>You finish placing [src].</span>")
+			user.visible_message("<span class='warning'>[user] finishes placing [src].</span>") //Now you know who to whack with a stun baton
+			return 1
+
+//Reset the process if dropped mid laying tape.
+/obj/item/taperoll/dropped(mob/user)
+	. = ..()
+	start = null
+	end = null
+
 
 /obj/item/taperoll/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(proximity_flag == 0) // not adjacent
-		return
+	..()
+	tape_door(target, user, proximity_flag)
 
-	if(istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor))
+
+/obj/item/taperoll/proc/tape_door(atom/target, mob/user, proximity_flag)
+	if(proximity_flag == 0)//Check adjacency.
+		return 0
+
+	if(istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor))	//Make sure we can tape the target.	
 		var/turf = get_turf(target)
-
-		if(locate(tape_type) in turf)
-			to_chat(user, "<span class='warning'>There's some tape already!</span>")
-			return 1
-
+		
+		//Check to see if the object already has any tape of any kind on it.
+		for(var/obj/item/I in turf)
+			if(istype(I, /obj/item/tape))
+				to_chat(user, "<span class='warning'>It's already taped with [I]!</span>")
+				return 0
+		
+		//Success
 		to_chat(user, "<span class='notice'>You start placing [src].</span>")
-		if(!do_mob(user, target, 3 SECONDS))
+		if(do_after(user, target, 3 SECONDS))
+			var/atom/tape = new tape_type(turf)
+			tape.icon_state = "[icon_base]_door"
+			tape.layer = ABOVE_DOOR_LAYER
+			to_chat(user, "<span class='notice'>You placed \the [src].</span>")
 			return 1
-
-		if(locate(tape_type) in turf)
-			to_chat(user, "<span class='warning'>There's some tape already!</span>")
-			return 1
-
-		var/atom/tape = new tape_type(turf)
-		tape.icon_state = "[icon_base]_door"
-		tape.layer = ABOVE_DOOR_LAYER
-
-		to_chat(user, "<span class='notice'>You placed [src].</span>")
-		return 1
-
+	
 /obj/item/tape/Bumped(M as mob)
 	if(src.allowed(M))
 		var/turf/T = get_turf(src)
@@ -238,10 +252,8 @@
 
 	return TRUE
 
-// Syndie tapes
-
+//Syndie tapes
 // -- /taperoll/syndie = contains all the things dealing with charges
-
 /obj/item/taperoll/syndie
 	var/charges_left = 3
 
@@ -268,33 +280,26 @@
 	tape_type = /obj/item/tape/engineering/syndie
 
 /obj/item/taperoll/syndie/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if (charges_left & (istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor)))
-		charges_left--
-		if (!(charges_left))
-			to_chat(user, "<span class = 'warning'>There is no tape left.</span>")
-			qdel(src)
-			return TRUE
-		to_chat(user, "<span class = 'notice'>There [charges_left > 1 ? "are" : "is"] [charges_left] roll[charges_left > 1 ? "s" : ""] of tape left.</span>")
+	tape_door(target, user, proximity_flag)
+
+/obj/item/taperoll/syndie/tape_door(atom/target, mob/user, proximity_flag)
 	. = ..()
+	if (charges_left && . )
+		charges_left--
+		check_charges(user)
 
-/obj/item/taperoll/syndie/afterattack(var/atom/A, mob/user, proximity_flag)
-	if (!charges_left)
-		to_chat(user, "<span class = 'warning'>There is no tape left.</span>")
-		qdel(src)
-
-/obj/item/taperoll/syndie/attack_self(var/mob/user)
+/obj/item/taperoll/syndie/lay_tape(mob/user as mob)
 	if (charges_left)
-		..()
-		if (icon_state == "[icon_base]_start")
+		if (..())
 			charges_left--
-			if (!charges_left)
-				to_chat(user, "<span class = 'warning'>There is no tape left.</span>")
-				qdel(src)
-				return
-			to_chat(user, "<span class = 'notice'>There [charges_left > 1 ? "are" : "is"] [charges_left] roll[charges_left > 1 ? "s" : ""] of tape left.</span>")
-	else
-		to_chat(user, "<span class = 'warning'>There is no tape left.</span>")
+			check_charges(user)
+			
+/obj/item/taperoll/syndie/proc/check_charges(mob/user as mob)
+	if(!charges_left)
+		to_chat(user, "<span class = 'warning'>You are out of [src]</span>")
 		qdel(src)
+	else
+		to_chat(user, "<span class = 'notice'>Rolls remaining: <b>[charges_left]</b>.</span>")
 
 // -- Syndie police tape : it cuffs people attempting to attack it. It's also unbreakable by simple mobs.
 
@@ -308,7 +313,7 @@
 		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
 			if (H.has_organ_for_slot(slot_handcuffed))
-				H.visible_message("<span class='danger'>[H] wraps \his hands on the tape!</span>", "<span class='danger'>The tape wraps itself on your hands!</span>")
+				H.visible_message("<span class='danger'>[H] wraps \his hands on the tape!</span>", "<span class='danger'>The tape wraps itself around your hands!</span>")
 				var/obj/item/taperoll/police/cuffs
 				cuffs = new(get_turf(src))
 				cuffs.on_restraint_apply(H)
@@ -320,7 +325,7 @@
 /obj/item/tape/police/syndie/examine(mob/user)
 	. = ..()
 	if (get_dist(user, src) < 3)
-		to_chat(user, "<span class = 'warning'>This one looks heavier than the usual.</span>")
+		to_chat(user, "<span class = 'warning'>It looks more heavy duty than conventional tape.</span>")
 
 // -- Syndie engie tape : shocks and sparks you (useful for lighting those plasma fires)
 
@@ -355,7 +360,7 @@
 /obj/item/tape/engineering/syndie/examine(mob/user)
 	. = ..()
 	if (get_dist(user, src) < 3 && charged)
-		to_chat(user, "<span class = 'warning'>The reflective strips on it seem strangely active, somehow.</span>")
+		to_chat(user, "<span class = 'warning'>The reflective strips on it seem unusually active.</span>")
 
 /obj/item/tape/engineering/syndie/emp_act(severity)
 	charged = FALSE
@@ -385,4 +390,4 @@
 /obj/item/tape/atmos/syndie/examine(mob/user)
 	. = ..()
 	if (get_dist(user, src) < 3)
-		to_chat(user, "<span class = 'warning'>This one looks much sharper than the usual.</span>")
+		to_chat(user, "<span class = 'warning'>Its edges look razor sharp!</span>")

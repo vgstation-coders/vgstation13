@@ -113,6 +113,7 @@ turf/simulated/floor/update_icon()
 		icon_state = "tile-slime"
 	else if(is_light_floor())
 		var/obj/item/stack/tile/light/T = floor_tile
+		overlays -= floor_overlay //Removes overlay without removing other overlays. Replaces it a few lines down if on.
 		if(T.on)
 			set_light(5)
 			floor_overlay = T.get_turf_image()
@@ -122,7 +123,6 @@ turf/simulated/floor/update_icon()
 		else
 			set_light(0)
 			icon_state = "light_off"
-			overlays -= floor_overlay //Removes overlay when off without removing other overlays.
 	else if(is_grass_floor())
 		if(!broken && !burnt)
 			if(!(icon_state in list("grass1","grass2","grass3","grass4")))
@@ -537,7 +537,7 @@ turf/simulated/floor/update_icon()
 
 		make_plating()
 		// Can't play sounds from areas. - N3X
-		playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
+		C.playtoolsound(src, 80)
 
 		return
 	else if(C.is_screwdriver(user))
@@ -550,7 +550,7 @@ turf/simulated/floor/update_icon()
 					new floor_tile.type(src)
 
 			make_plating()
-			playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+			C.playtoolsound(src, 80)
 		return
 	else if(istype(C, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = C
@@ -629,7 +629,7 @@ turf/simulated/floor/update_icon()
 			if(broken || burnt)
 				if(welder.remove_fuel(1,user))
 					to_chat(user, "<span class='warning'>You fix some dents on the broken plating.</span>")
-					playsound(src, 'sound/items/Welder.ogg', 80, 1)
+					welder.playtoolsound(src, 80)
 					icon_state = "plating"
 					burnt = 0
 					broken = 0

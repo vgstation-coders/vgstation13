@@ -229,6 +229,11 @@
 #define WINE 			"wine"
 #define COGNAC 			"cognac"
 #define HOOCH 			"hooch"
+#define CHAMPAGNE		"champagne"
+#define BLUECURACAO "bluecuracao"
+#define TRIPLESEC		"triplesec"
+#define BITTERS 		"bitters"
+#define SCHNAPPS		"schnapps"
 #define ALE 			"ale"
 #define THIRTEENLOKO 			"thirteenloko"
 #define BILK 			"bilk"
@@ -257,6 +262,29 @@
 #define MANLYDORF 			"manlydorf"
 #define LONGISLANDICEDTEA 			"longislandicedtea"
 #define MOONSHINE 			"moonshine"
+#define MIDNIGHTKISS	"midnightkiss"
+#define COSMOPOLITAN	"cosmopolitan"
+#define CORPSEREVIVER	"corpsereviver"
+#define BLUELAGOON		"bluelagoon"
+#define SEXONTHEBEACH	"sexonthebeach"
+#define AMERICANO		"americano"
+#define BETWEENTHESHEETS	"betweenthesheets"
+#define SIDECAR		"sidecar"
+#define CHAMPAGNECOCKTAIL	"champagnecocktail"
+#define ESPRESSOMARTINI		"espressomartini"
+#define KAMIKAZE		"kamikaze"
+#define MOJITO			"mojito"
+#define WHISKEYTONIC	"whiskeytonic"
+#define MOSCOWMULE		"moscowmule"
+#define CINNAMONWHISKY	"cinnamonwhisky"
+#define C4COCKTAIL		"c4cocktail"
+#define DRAGONSBLOOD	"dragonsblood"
+#define DRAGONSSPIT		"dragonsspit"
+#define FIREBALLCIDER	"fireballcider"
+#define CINNAMONTOASTCOCKTAIL	"cinnamontoastcocktail"
+#define MANHATTANFIREBALL		"manhattanfireball"
+#define FIREBALLCOLA	"fireballcola"
+#define FIRERITA 		"firerita"
 #define IRISHCOFFEE 			"irishcoffee"
 #define MARGARITA 			"margarita"
 #define BLACKRUSSIAN 			"blackrussian"
@@ -393,6 +421,7 @@
 #define DENSITY_SEPARATED_SAMPLE 			"density_separated_sample"
 #define ANALYSIS_SAMPLE 			"analysis_sample"
 #define CHEMICAL_WASTE 			"chemical_waste"
+#define TRINITRINE		"trinitrine"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
@@ -423,6 +452,7 @@
 #define AMINOCYPRINIDOL	"aminocyprinidol"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
+#define CAFFEINE		"caffeine"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -441,7 +471,7 @@
 #define REAGENTS_EFFECT_MULTIPLIER REAGENTS_METABOLISM / 0.4
 
 //Pulse related bullshit
-var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, HYPOZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE, COCAINE)	//increase heart rate
+var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, HYPOZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE, COCAINE, CAFFEINE)	//increase heart rate
 var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN, GREYVODKA, CURARE, MESCALINE, VALERENIC_ACID)	//decrease heart rate
 var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
 var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stops the heart when overdose is met -- c = conditional

@@ -108,7 +108,7 @@
 				</div>
 			</body>
 			</html>"}
-	usr << browse(dat, "window=pai;size=640x480;border=0;can_close=1;can_resize=1;can_minimize=1;titlebar=1")
+	src << browse(dat, "window=pai;size=640x480;border=0;can_close=1;can_resize=1;can_minimize=1;titlebar=1")
 	onclose(usr, "pai")
 	temp = null
 	return
@@ -252,12 +252,19 @@
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
 		if("foodsynth")
 			if(href_list["food"] && chargeloop("foodsynth"))
-				var/obj/item/weapon/reagent_containers/food/F = href_list["food"]
-				new F(get_turf(src))
-				var/mob/M = get_holder_of_type(loc, /mob)
-				if(M)
-					M.put_in_hands(F)
-				playsound(loc, 'sound/machines/foodsynth.ogg', 50, 1)
+				var/foodType = href_list["food"]
+				var/found = FALSE
+				for (var/name in synthable_default_food)
+					if ("[synthable_default_food[name]]" == foodType)
+						found = TRUE
+						break
+
+				if (found)
+					var/obj/item/weapon/reagent_containers/food/F = new foodType(get_turf(src))
+					var/mob/M = get_holder_of_type(loc, /mob)
+					if(M)
+						M.put_in_hands(F)
+					playsound(loc, 'sound/machines/foodsynth.ogg', 50, 1)
 		if("flashlight")
 			if(href_list["toggle"])
 				lighted = !lighted

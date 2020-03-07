@@ -15,18 +15,26 @@
 	var/hidecount = 0
 	var/extinguishingProb = 15
 
+//Sound stuff
+//sound_change flags are CLOTHING_SOUND_SCREAM and CLOTHING_SOUND_COUGH
+//sound_priority are CLOTHING_SOUND_[level]_PRIORITY, replace [level] with LOW/MED/HIGH
+	var/list/sound_change //Clothing can change audible emotes, this will determine what is affected
+	var/sound_priority //The priority of the clothing when it comes to playing sounds, higher priority means it will always play first otherwise it will randomly pick
+	var/list/sound_file //The actual files to be played, it will pick from the list
+	var/list/sound_respect_species //Species will not play sounds from clothing
+
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
 		accessories.Remove(A)
 		qdel(A)
 	..()
-	
+
 /obj/item/clothing/CtrlClick(var/mob/user)
 	if(isturf(loc))
 		return ..()
 	if(isliving(user) && !user.incapacitated() && user.Adjacent(src) && accessories.len)
 		removeaccessory()
-	
+
 /obj/item/clothing/examine(mob/user)
 	..()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -484,7 +492,7 @@
 	if(user.equip_to_slot_if_possible(src, slot_shoes))
 		user.visible_message("<span class='notice'>[user] kicks \the [src] and slips them on!</span>", "<span class='notice'>You kick \the [src] and slip them on!</span>")
 	else
-		..()	
+		..()
 
 /obj/item/clothing/shoes/clean_blood()
 	. = ..()
@@ -527,13 +535,12 @@
 	name = "Space helmet"
 	icon_state = "space"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment."
-	flags = FPRINT|HIDEHAIRCOMPLETELY
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	item_state = "space"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/spacesuits.dmi', "right_hand" = 'icons/mob/in-hand/right/spacesuits.dmi')
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|HIDEHAIR
 	siemens_coefficient = 0.9
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_restricted = list("exclude","Diona","Muton")

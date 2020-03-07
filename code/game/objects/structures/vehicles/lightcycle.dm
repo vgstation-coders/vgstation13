@@ -261,7 +261,7 @@
 		to_chat(user, "\The [src] dissipates as you hit it with \the [W].")
 		erase(src)
 
-/obj/effect/lightribbon/proc/erase() //Originally coded for admemes, black market version calls this whenever a ribbon is destroyed
+/obj/effect/lightribbon/proc/erase() //Used for the safe version when a ribbon is destroyed.
 	erasing = TRUE
 	for(var/obj/effect/lightribbon/L in orange(1,src))
 		if(L.l_color == l_color)
@@ -285,7 +285,7 @@
 	desc = "Awaiting garbage collection."
 
 	
-/obj/item/key/lightcycle/black_market //Less dangerous version for the black market.
-	desc = "A strange-looking glowing rod. According to black market vendors, you're supposed to snap it in half."
+/obj/item/key/lightcycle/temp_ribbons
+	desc = "A strange-looking glowing rod. It's apparently activated by cracking it."
 	delete_ribbons_on_dismount = 1
 	

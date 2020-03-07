@@ -283,11 +283,12 @@ client/proc/one_click_antag()
 	var/datum/outfit/striketeam/voxraider/v = new
 	v.equip(new_vox)
 	
+	/*
 	spawn()
 		var/chosen_loadout = input(new_vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
 		v.chosen_spec = chosen_loadout
 		v.equip_special_items(new_vox)
-
+	*/
 	v.post_equip(new_vox)
 
 	return new_vox

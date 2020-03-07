@@ -36,6 +36,7 @@
 	var/auto_eject_after = 1 //Boot the mooch off after waking 'em up
 	var/drag_delay = 20
 	var/cools = 0
+	var/works_in_crit = FALSE //Will it let you inject chemicals into people in critical condition
 
 /obj/machinery/sleeper/New()
 	..()
@@ -54,6 +55,10 @@
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		T += SP.rating
+	if(T >= 12) //Congrats you got T4 components
+		works_in_crit = TRUE
+	else
+		works_in_crit = FALSE
 	switch(T)
 		if(0 to 5)
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", KELOTANE = "Kelotane", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
@@ -133,7 +138,7 @@
 						"<span class='warning'>Sorry pal, safety procedures.</span>", \
 						"<span class='warning'>But it's not bedtime yet!</span>")]")
 					sedativeblock++
-				else if(occupant.health < 0 && href_list["chemical"] != INAPROVALINE)
+				else if((!works_in_crit && occupant.health < 0) && (href_list["chemical"] != INAPROVALINE))
 					to_chat(usr, "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>")
 				else
 					if(!(href_list["chemical"] in available_options)) //href exploitu go home
@@ -240,11 +245,6 @@
 /obj/machinery/sleeper/allow_drop()
 	return FALSE
 
-/obj/machinery/sleeper/process()
-	updateDialog()
-	return
-
-
 /obj/machinery/sleeper/blob_act()
 	if(prob(75))
 		for(var/atom/movable/A as mob|obj in src)
@@ -253,10 +253,10 @@
 		qdel(src)
 	return
 
-/obj/machinery/sleeper/crowbarDestroy(mob/user)
+/obj/machinery/sleeper/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupied.</span>")
-		return
+		return 0
 	return ..()
 
 /obj/machinery/sleeper/attackby(obj/item/weapon/obj_used, mob/user)

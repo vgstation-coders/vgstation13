@@ -89,12 +89,6 @@
 		for(var/obj/machinery/door/airlock/D in range(range, src))
 			if(D.id_tag == src.id_tag)
 				spawn(0)
-				if(D)
-					if(D.density)
-						D.open()
-					else
-						D.close()
-					return
 				if(specialfunctions & IDSCAN)
 					D.aiDisabledIdScanner = !D.aiDisabledIdScanner
 				if(specialfunctions & BOLTS)
@@ -105,6 +99,11 @@
 					D.secondsElectrified = D.secondsElectrified ? 0 : -1
 				if(specialfunctions & SAFE)
 					D.safe = !D.safe
+				if(specialfunctions & OPEN)
+					if(D.density)
+						D.open()
+					else
+						D.close()
 
 	else
 		for(var/obj/machinery/door/poddoor/M in poddoors)
@@ -146,8 +145,8 @@
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
 
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 50)
 		if(do_after(user, src, 30))
 			to_chat(user, "<span class='notice'>You detach \the [src] from the wall.</span>")
 			new/obj/item/mounted/frame/driver_button(get_turf(src))

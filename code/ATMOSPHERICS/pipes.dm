@@ -3,7 +3,7 @@
 	var/datum/pipeline/parent
 	var/volume = 0
 	force = 20
-	plane = ABOVE_PLATING_PLANE
+	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in update_planes_and_layers() (called on New())
 	layer = PIPE_LAYER
 	use_power = 0
 	var/alert_pressure = 80*ONE_ATMOSPHERE
@@ -13,7 +13,7 @@
 	return FLOAT_PLANE
 
 /obj/machinery/atmospherics/pipe/update_planes_and_layers()
-	if (level == LEVEL_BELOW_FLOOR)
+	if(level == LEVEL_BELOW_FLOOR)
 		plane = ABOVE_PLATING_PLANE
 		layer = PIPE_LAYER
 	else
@@ -27,10 +27,8 @@
 		var/datum/pipeline/pipeline = parent
 		var/list/update_later = list()
 		for(var/obj/machinery/atmospherics/pipe in pipeline.members)
-			pipe.color = mass_colour
-			if(!pipe.can_be_coloured)
-				pipe.default_colour = mass_colour
-				update_later += pipe
+			if(pipe.can_be_coloured)
+				pipe.color = mass_colour
 		for(var/obj/machinery/atmospherics/pipe in pipeline.edges)
 			pipe.update_icon()
 		update_later -= pipeline.edges

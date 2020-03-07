@@ -243,7 +243,7 @@
 	// Make emagged/open doors able to be deconstructed
 	if(!density && operating != 1 && iscrowbar(I))
 		user.visible_message("[user] is removing \the [electronics.name] from \the [name].", "You start to remove \the [electronics.name] from \the [name].")
-		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+		I.playtoolsound(src, 100)
 		if(do_after(user, src, 40) && src && !density && operating != 1)
 			to_chat(user, "<span class='notice'>You removed \the [electronics.name]!</span>")
 			make_assembly()

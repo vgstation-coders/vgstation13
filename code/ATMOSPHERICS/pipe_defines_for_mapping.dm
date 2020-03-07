@@ -52,6 +52,10 @@
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden
 	level = 1
 	alpha=128
+/obj/machinery/atmospherics/binary/valve/layered/scrubbers
+	piping_layer=DEF_PIPELAYER_SCRUBBERS
+	pixel_x=DEF_PIXELX_SCRUBBERS
+	pixel_y=DEF_PIXELY_SCRUBBERS
 
 /obj/machinery/atmospherics/pipe/simple/supply/visible/layered
 	piping_layer=DEF_PIPELAYER_SUPPLY
@@ -95,6 +99,10 @@
 /obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden
 	level = 1
 	alpha=128
+/obj/machinery/atmospherics/binary/valve/layered/supply
+	piping_layer=DEF_PIPELAYER_SUPPLY
+	pixel_x=DEF_PIXELX_SUPPLY
+	pixel_y=DEF_PIXELY_SUPPLY
 
 #define ROID_PIPELAYER_GENERAL1 1
 #define ROID_PIXELX_GENERAL1 (ROID_PIPELAYER_GENERAL1 - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X

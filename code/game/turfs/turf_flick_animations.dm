@@ -66,7 +66,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		animation.color = col
 	if(trans)
 		animation.transform = trans
-	if (target && isatommovable(target))
+	if (target && ismovable(target))
 		var/atom/movable/AM = target
 		AM.lock_atom(animation, /datum/locking_category/buckle)
 	if(a_icon_state)

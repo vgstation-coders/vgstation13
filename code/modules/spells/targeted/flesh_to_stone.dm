@@ -3,11 +3,11 @@
 	desc = "This spell turns a single person into an inert statue for a long period of time."
 	abbreviation = "FS"
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 
 	school = "transmutation"
 	charge_max = 600
-	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
+	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	range = 1
 	max_targets = 1
 	invocation = "STAUN EI"

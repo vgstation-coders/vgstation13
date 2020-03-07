@@ -11,7 +11,7 @@
 	siemens_coefficient = 1
 
 /obj/item/mounted/frame/rust_fuel_compressor/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		new /obj/item/stack/sheet/plasteel( get_turf(src.loc), 12 )
 		qdel(src)
 		return
@@ -46,7 +46,7 @@
 	if (iscrowbar(W))
 		if(opened)
 			if(has_electronics & 1)
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				to_chat(user, "You begin removing the circuitboard")//lpeters - fixed grammar issues
 
 				if(do_after(user, src, 50))

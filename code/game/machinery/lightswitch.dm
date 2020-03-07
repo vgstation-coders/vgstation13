@@ -57,7 +57,7 @@
 		if(2)
 			if(W.is_screwdriver(user))
 				to_chat(user, "You begin unscrewing \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 2)
 					to_chat(user, "<span class='notice'>You unscrew the cover blocking the inner wiring of \the [src].</span>")
 					buildstage = 1
@@ -67,7 +67,7 @@
 		if(1)
 			if(W.is_screwdriver(user))
 				to_chat(user, "You begin screwing closed \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 1)
 					to_chat(user, "<span class='notice'>You tightly screw closed the cover of \the [src].</span>")
 					buildstage = 2
@@ -75,7 +75,7 @@
 				return
 			if(iswirecutter(W))
 				to_chat(user, "You begin cutting the wiring from \the [src].")
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 1)
 					to_chat(user, "<span class='notice'>You cut the wiring to the lighting power line.</span>")
 					new /obj/item/stack/cable_coil(get_turf(src),3)

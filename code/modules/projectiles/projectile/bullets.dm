@@ -185,12 +185,25 @@ obj/item/projectile/bullet/suffocationbullet
 	damage = 40
 	damage_type = TOX
 
-
 /obj/item/projectile/bullet/burstbullet
 	name = "exploding bullet"
+	embed = 0
+	damage = 0
 
 /obj/item/projectile/bullet/burstbullet/on_hit(var/atom/target, var/blocked = 0)
+	..()
 	explosion(target, 0,1,1,5)
+	qdel(src)
+	
+/obj/item/projectile/bullet/boombullet
+	name = "small exploding bullet"
+	embed = 0
+	damage = 0
+	penetration = -1
+
+/obj/item/projectile/bullet/boombullet/to_bump(var/atom/target)
+	..()
+	explosion(target, 0,0,1,5)
 	qdel(src)
 
 #define SPUR_FULL_POWER 4
@@ -715,6 +728,24 @@ obj/item/projectile/bullet/suffocationbullet
 
 /obj/item/projectile/bullet/fire_plume/ex_act()
 	return
+
+/obj/item/projectile/bullet/fire_plume/dragonsbreath //for the shotgun shells
+	has_O2_in_mix = 0
+	max_range = 5
+	burn_strength = 0
+	burn_damage = 10
+	jet_pressure = 0
+	gas_jet = null
+	
+/obj/item/projectile/bullet/fire_plume/dragonsbreath/New()
+	..()
+	var/datum/gas_mixture/firemix = new /datum/gas_mixture
+	firemix.adjust_gas(GAS_PLASMA, 666)
+	gas_jet = firemix
+	jet_pressure = firemix.return_pressure()
+	gas_jet.temperature = 383.15
+	burn_strength = gas_jet.temperature
+
 
 /obj/item/projectile/bullet/mahoganut
 	name = "mahogany nut"

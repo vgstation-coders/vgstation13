@@ -66,6 +66,9 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/static_light = 0
 	var/static_environ
 
+	var/forbid_apc = FALSE //never build an APC here?
+	var/construction_zone = FALSE //treat this area like space for blueprints?
+
 	var/has_gravity = 1
 
 	var/no_air = null
@@ -97,7 +100,7 @@ var/list/teleportlocs = list()
 
 proc/process_teleport_locs()
 	for(var/area/AR in areas)
-		if(istype(AR, /area/shuttle) || istype(AR, /area/syndicate_station) || istype(AR, /area/wizard_station))
+		if(istype(AR, /area/shuttle) || istype(AR, /area/wizard_station))
 			continue
 		if(teleportlocs.Find(AR.name))
 			continue
@@ -168,7 +171,13 @@ proc/process_adminbus_teleport_locs()
 /area/no_ethereal
 	anti_ethereal = 1
 
-
+/area/dojo
+	name = "\improper Spider Clan Dojo"
+	icon_state = "dojo"
+	requires_power = 0
+	dynamic_lighting = 0
+	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE 
 
 //These are shuttle areas, they must contain two areas in a subgroup if you want to move a shuttle from one
 //place to another. Look at escape shuttle for example.
@@ -337,6 +346,14 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/syndicate_elite/mothership
 	name = "\improper Syndicate Elite Shuttle"
 	icon_state = "shuttlered"
+
+/area/shuttle/nuclearops
+	name = "\improper Nuclear Opeartive Shuttle"
+	icon_state = "yellow"
+	requires_power = 0
+	dynamic_lighting = 1
+	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
 
 /area/shuttle/syndicate_elite/station
 	name = "\improper Syndicate Elite Shuttle"
@@ -591,23 +608,6 @@ proc/process_adminbus_teleport_locs()
 /area/asteroid/artifactroom/holomapDrawOverride()
 	return HOLOMAP_DRAW_FULL
 
-/area/asteroid/snow_inner
-	name = "\improper Snow Asteroid"
-	icon_state = "sno2"
-	shuttle_can_crush = TRUE
-
-/area/asteroid/snow_outer
-	name = "\improper Snow Asteroid - Outer Wall"
-	icon_state = "sno"
-
-/area/asteroid/icecore
-	name = "\improper Snow Asteroid - Frozen Core"
-	icon_state = "icecore"
-
-/area/asteroid/garage
-	name = "\improper Public Garage"
-	icon_state = "yellow"
-
 /area/planet/clown
 	name = "\improper Clown Planet"
 	icon_state = "honk"
@@ -648,48 +648,6 @@ proc/process_adminbus_teleport_locs()
 //ENEMY
 
 //names are used
-/area/syndicate_station
-	name = "\improper Syndicate Shuttle"
-	icon_state = "yellow"
-	requires_power = 0
-	dynamic_lighting = 1
-	shuttle_can_crush = FALSE
-	flags = NO_PERSISTENCE
-
-/area/syndicate_station/start
-	icon_state = "yellow"
-
-/area/syndicate_station/southwest
-	name = "\improper south-west of SS13"
-	icon_state = "southwest"
-
-/area/syndicate_station/northwest
-	name = "\improper north-west of SS13"
-	icon_state = "northwest"
-
-/area/syndicate_station/northeast
-	name = "\improper north-east of SS13"
-	icon_state = "northeast"
-
-/area/syndicate_station/southeast
-	name = "\improper south-east of SS13"
-	icon_state = "southeast"
-
-/area/syndicate_station/north
-	name = "\improper north of SS13"
-	icon_state = "north"
-
-/area/syndicate_station/south
-	name = "\improper south of SS13"
-	icon_state = "south"
-
-/area/syndicate_station/commssat
-	name = "\improper south of the communication satellite"
-	icon_state = "south"
-
-/area/syndicate_station/mining
-	name = "\improper north east of the mining asteroid"
-	icon_state = "north"
 
 /area/wizard_station
 	name = "\improper Wizard's Den"
@@ -1939,6 +1897,73 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	name = "\improper Test Room"
 	icon_state = "storage"
+
+//SNOWMAP
+/area/icebar
+	name = "\improper Ice Bar"
+	icon_state = "ghettobar"
+
+/area/station/garage
+	name = "\improper Public Garage"
+	icon_state = "yellow"
+
+/area/surface
+	forbid_apc = TRUE
+	construction_zone = TRUE
+
+/area/surface/snow
+	name = "\improper Planet Surface"
+	icon_state = "sno2"
+
+/area/surface/blizzard
+	name = "The Blizzard"
+	icon_state = "sno"
+	construction_zone = FALSE
+
+/area/surface/icecore
+	name = "\improper Frozen Core"
+	icon_state = "icecore"
+
+/area/surface/junkyard
+	name = "\improper Junk Yard"
+	icon_state = "disposal"
+	construction_zone = FALSE
+
+/area/surface/forest/deer
+	name = "\improper Enclosed Forest"
+	icon_state = "forest1"
+
+/area/surface/forest/north
+	name = "\improper Northern Forest"
+	icon_state = "forest2"
+
+/area/surface/forest/south
+	name = "\improper Southern Forest"
+	icon_state = "forest3"
+
+/area/surface/cave
+	name = "\improper Snow Cave"
+	icon_state = "cave"
+
+/area/surface/mine
+	name = "\improper Surface Mine"
+	icon_state = "mine"
+
+/area/surface/outer/nw
+	name = "\improper Northwest Reaches"
+	icon_state = "tundra1"
+
+/area/surface/outer/ne
+	name = "\improper Northeast Reaches"
+	icon_state = "tundra2"
+
+/area/surface/outer/sw
+	name = "\improper Southwest Reaches"
+	icon_state = "tundra3"
+
+/area/surface/outer/se
+	name = "\improper Southeast Reaches"
+	icon_state = "tundra4"
 
 //DJSTATION
 

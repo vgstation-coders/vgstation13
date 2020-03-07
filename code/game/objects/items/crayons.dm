@@ -61,11 +61,11 @@ var/global/list/all_graffitis = list(
 	shadeColour = "#0082A8"
 	colourName = "blue"
 
-/obj/item/toy/crayon/purple
+/obj/item/toy/crayon/violet
 	icon_state = "crayonpurple"
 	colour = "#DA00FF"
 	shadeColour = "#810CFF"
-	colourName = "purple"
+	colourName = "violet"
 
 /obj/item/toy/crayon/black
 	icon_state = "crayonblack"
@@ -224,6 +224,8 @@ var/global/list/all_graffitis = list(
 			"<span class='notice'>You bite a chunk out of \the [src].</span>")
 		user.nutrition += 5
 		score["foodeaten"]++
+		if(ispath(text2path("/datum/reagent/paint/[colourName]")) && M.reagents)
+			M.reagents.add_reagent("paint_[colourName]", 10)
 		if(uses)
 			uses -= 5
 			if(uses <= 0)

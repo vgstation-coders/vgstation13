@@ -89,7 +89,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	update_beams()
 	return 1
 
-/obj/machinery/mirror/wrenchAnchor(var/mob/user)
+/obj/machinery/mirror/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

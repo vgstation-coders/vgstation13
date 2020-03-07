@@ -139,6 +139,9 @@ var/list/uplink_items = list()
 */
 //Work in Progress, job specific antag tools
 
+// NUKE OPS
+// Any Syndicate item exclusive to Nuclear Operatives goes here
+
 /datum/uplink_item/valentine
 	category = "Valentine's Day Special!"
 	only_on_month = "02"
@@ -150,430 +153,407 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
 	cost = 8
 
-//Nuke Ops Prices
+//Nuclear Operative exclusive items and (totally) discounted regular items for them
 /datum/uplink_item/nukeprice
+	category = "Nuclear Opeations Specials"
 	jobs_exclusive = list("Nuclear Operative")
 
-/datum/uplink_item/nukeprice/crossbow
-	name = "Energy Crossbow"
-	desc = "A miniature energy crossbow that is small enough both to fit into a pocket and to slip into a backpack unnoticed by observers. Fires bolts tipped with an organic, poisonous substance. Stuns enemies for a short period of time. Recharges on its own."
-	category = "Highly Visible and Dangerous Weapons"
-	item = /obj/item/weapon/gun/energy/crossbow
-	cost = 10
-
-/datum/uplink_item/nukeprice/voice_changer
-	name = "Voice Changer"
-	desc = "A conspicuous gas mask that mimics the voice named on your identification card. When no identification is worn, the mask will render your voice distinguishably unrecognizable."
-	category = "Stealth and Camouflage Items"
-	item = /obj/item/clothing/mask/gas/voice
-	cost = 8
-
-/datum/uplink_item/nukeprice/syndigaloshes
-	name = "No-Slip Chameleon Shoes"
-	desc = "A pair of species-flexible shoes that can look, and in some cases sound, like any other piece of footgear. Protects against slipping on water, but cannot protect against lubricated surfaces. They can attract suspicion while off your person, and are explicitly identifiable as illegal tech when closely examined."
-	category = "Stealth and Camouflage Items"
-	item = /obj/item/clothing/shoes/syndigaloshes
-	cost = 4
-
-/datum/uplink_item/nukeprice/chameleon_jumpsuit
-	name = "Chameleon Jumpsuit"
-	desc = "A jumpsuit used to imitate the uniforms of Nanotrasen crewmembers. When caught in an EMP blast, will become psychedelic and unchangeable. When interacted with by another jumpsuit, will scan and add its appearance."
-	category = "Stealth and Camouflage Items"
-	item = /obj/item/clothing/under/chameleon
+/datum/uplink_item/nukeprice/popout_cake
+	name = "Pop-Out Cake"
+	desc = "A massive and delicious cake, big enough to store a person inside. It is equipped with a one-use party horn and other special effects, and can be cut into edible slices in case of an emergency."
+	item = /obj/structure/popout_cake
 	cost = 6
 
+/datum/uplink_item/nukeprice/teleporter
+	name = "Teleporter Circuit Board"
+	desc = "A printed circuit board that completes the teleporter onboard the mothership, allowing deployment onto any activated bluespace beacon. It is advised to test fire the teleporter before entering it or sending items through as malfunctions can occur."
+	item = /obj/item/weapon/circuitboard/teleporter
+	cost = 40
+
+/datum/uplink_item/nukeprice/gatling
+	name = "Gatling Gun"
+	desc = "A huge man-portable minigun. Makes up for its lack of mobility and discretion with sheer firepower. Has a drum of 200 bullets and a flawless cooling action allowing for uninterrupted fire from start to end."
+	item = /obj/structure/closet/crate/secure/weapon/experimental/gatling
+	cost = 40
+
+/datum/uplink_item/nukeprice/nikita
+	name = "Nikita RC Missile Launcher"
+	desc = "A remote-controlled missile launcher, trades in raw explosive power for extreme steering precision, allowing it to make perfect turns around corners or turn around at will, or simply accelerate normally. Comes with four spare RC rockets."
+	item = /obj/structure/closet/crate/secure/weapon/experimental/nikita
+	cost = 40
+
+/datum/uplink_item/nukeprice/hecate
+	name = "PMG Hecate II Anti-Material Rifle"
+	desc = "A .50 BMG anti-material sniper rifle. Anything between the barrel and the next three solid walls should be tenderized in short order. Comes with eight individual rounds, thermals and earmuffs."
+	item = /obj/structure/closet/crate/secure/weapon/experimental/hecate
+	cost = 40
+
+/datum/uplink_item/nukeprice/dude_bombs_lmao
+	name = "Modified Tank Transfer Valve"
+	desc = "A small, expensive and powerful plasma-oxygen explosive attached with a timer assembly. Will trigger a massive explosion upon detonation, vaporizing the general area around the device. Handle with extreme care and keep away from fires and explosions."
+	item = /obj/effect/spawner/newbomb/timer
+	cost = 25
+	refundable = TRUE
+
+/datum/uplink_item/nukeprice/robot
+	name = "Syndicate-modified Combat Robot Teleporter"
+	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT silicons these don't have access to most of the station's machinery."
+	item = /obj/item/weapon/robot_spawner/syndicate
+	cost = 60
+	refundable = TRUE
+
+/datum/uplink_item/nukeprice/mecha
+	name = "Syndicate Mass-Produced Assault Mecha 'Mauler'"
+	desc = "A Heavy-duty combat unit. Not usually used by nuclear operatives due to its ridiculous pricetag and lack of stealth. Yet, against heavily-guarded stations, it might be just the thing." //Implying bombs aren't better.
+	item = /obj/effect/spawner/mecha/mauler
+	cost = 80
+
 // DANGEROUS WEAPONS
+// Any Syndicate item with applying lethal force to people while being very much detected (Ex: Revolver, E-Sword, Machete)
 
 /datum/uplink_item/dangerous
 	category = "Highly Visible and Dangerous Weapons"
 
 /datum/uplink_item/dangerous/revolver
-	name = "Fully Loaded Revolver"
-	desc = "A traditional handgun which fires .357 rounds. Has 7 chambers. Can down an unarmored target with two shots."
+	name = "Loaded .357 Revolver"
+	desc = "A traditional repeating handgun with seven chambers which fires .357 rounds. Can incapacitate most unarmored targets in two shots."
 	item = /obj/item/weapon/gun/projectile
 	cost = 12
 
 /datum/uplink_item/dangerous/ammo
-	name = "Ammo-357"
-	desc = "A speedloader and seven additional rounds for the revolver. Extra seven-piece boxes of .357 rounds can be made in a modified autolathe."
+	name = ".357 Speedloader"
+	desc = "A speedloader loaded with seven additional rounds for the .357 Revolver. Extra seven-piece boxes of .357 rounds can be made in a modified autolathe."
 	item = /obj/item/weapon/storage/box/syndie_kit/ammo
 	cost = 4
 
-/datum/uplink_item/dangerous/crossbow
-	name = "Energy Crossbow"
-	desc = "A miniature energy crossbow that is small enough both to fit into a pocket and to slip into a backpack unnoticed by observers. Fires bolts tipped with an organic, poisonous substance. Stuns enemies for a short period of time. Recharges on its own."
-	item = /obj/item/weapon/gun/energy/crossbow
-	cost = 12
-	jobs_excluded = list("Nuclear Operative")
-
 /datum/uplink_item/dangerous/sword
 	name = "Energy Sword"
-	desc = "The esword is an edged weapon with a blade of pure energy. The sword is small enough to be pocketed when inactive. Activating it produces a loud, distinctive noise."
+	desc = "The energy sword is a blade of pure energy able to easily cut through organics. The sword can be drawn and retracted from a small metal hilt that can be easily concealed, or linked to another sword for a double blade. Activating it produces a loud, distinctive noise."
 	item = /obj/item/weapon/melee/energy/sword
 	cost = 8
 
 /datum/uplink_item/dangerous/machete
 	name = "High-Frequency Machete"
-	desc = "A broad blade used either as an implement or in combat. When inactive can be used as an powerful throwing weapon and when activated its damage is comparable to an Energy Sword."
+	desc = "A high quality machete blade augmented with a high-frequency blade not dissimilar to the Energy Sword. When inactive, can be used as a powerful throwing weapon. Can be dual-wielded with another machete but will cause bloodlust until death."
 	item = /obj/item/weapon/melee/energy/hfmachete
 	cost = 8
 
-/datum/uplink_item/dangerous/emp
-	name = "5 EMP Grenades"
-	desc = "A box that contains 5 EMP grenades. Useful to disrupt communication and silicon lifeforms."
-	item = /obj/item/weapon/storage/box/emps
-	cost = 4
-
 /datum/uplink_item/dangerous/viscerator
 	name = "Viscerator Grenade"
-	desc = "A single grenade containing a pair of incredibly destructive viscerators. Be aware that they will attack any nearby targets, including yourself. Emits a blinding flash upon detonation."
+	desc = "A single grenade containing a pair of incredibly destructive viscerators and a basic flashbang mix on a five second timer. The viscerators will viscerate any non-Syndicate lifeforms in the area with extreme prejudice."
 	item = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
 	cost = 6
 
-/datum/uplink_item/dangerous/butterfly
-	name = "Butterfly Knife"
-	desc = "A butterfly knife containing a deadly viscerator. It can be flipped to conceal the blade and deploy a stored viscerator. The viscerator will self destruct after 20 seconds but the knife will renew it's storage every 25 seconds automatically."
-	item = /obj/item/weapon/butterflyknife/viscerator
-	cost = 7
-
-/datum/uplink_item/dangerous/gatling
-	name = "Gatling Gun"
-	desc = "A huge minigun. Makes up for its lack of mobility and discretion with sheer firepower. Has 200 bullets."
-	item = /obj/structure/closet/crate/secure/weapon/experimental/gatling
-	cost = 40
-	jobs_exclusive = list("Nuclear Operative")
-
-/datum/uplink_item/dangerous/nikita
-	name = "Nikita RC Missile Launcher"
-	desc = "A remote-controlled missile launcher, trades in raw explosive power for extreme steering precision, this one might actually not blow up in your face. Comes with four rockets"
-	item = /obj/structure/closet/crate/secure/weapon/experimental/nikita
-	cost = 40
-	jobs_exclusive = list("Nuclear Operative")
-
-/datum/uplink_item/dangerous/hecate
-	name = "PMG Hecate II Anti-Material Rifle"
-	desc = "A .50 BMG anti-material sniper rifle. Anything between the barrel and the next three solid walls should be tenderized in short order. Comes with eight individual rounds, thermals and earmuffs."
-	item = /obj/structure/closet/crate/secure/weapon/experimental/hecate
-	cost = 40
-	jobs_exclusive = list("Nuclear Operative")
-
-/datum/uplink_item/dangerous/dude_bombs_lmao
-	name = "Modified Tank Transfer Valve"
-	desc = "A small, expensive and powerful plasma-oxygen explosive. Handle very carefully."
-	item = /obj/effect/spawner/newbomb
-	cost = 25
-	jobs_exclusive = list("Nuclear Operative")
-	refundable = TRUE
-
-/datum/uplink_item/dangerous/robot
-	name = "Syndicate-modded Combat Robot Teleporter"
-	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT silicons these don't have access to most of the station's machinery."
-	item = /obj/item/weapon/robot_spawner/syndicate
-	cost = 60
-	jobs_exclusive = list("Nuclear Operative")
-	refundable = TRUE
-
-/datum/uplink_item/dangerous/mecha
-	name = "Syndicate Mass-Produced Assault Mecha - 'Mauler'"
-	desc = "A Heavy-duty combat unit. Not usually used by nuclear operatives, for its ridiculous pricetag and lack of stealth. Yet, against heavily-guarded stations, it might be just the thing." //Implying bombs aren't better.
-	item = /obj/effect/spawner/mecha/mauler
-	cost = 80
-	jobs_exclusive = list("Nuclear Operative")
-
 // STEALTHY WEAPONS
+// Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
 
 /datum/uplink_item/stealthy_weapons
 	category = "Stealthy and Inconspicuous Weapons"
 
+/datum/uplink_item/stealthy_weapons/crossbow
+	name = "Mini Energy Crossbow"
+	desc = "A miniature energy crossbow small enough to both fit into a pocket and slip into a backpack unnoticed, making it hard to spot when firing. Fires up to five bolts tipped with a poisonous substance that stuns targets for a short period of time and recharges on its own."
+	item = /obj/item/weapon/gun/energy/crossbow
+	cost = 12
+	discounted_cost = 10
+	jobs_with_discount = list("Nuclear Operative")
+
 /datum/uplink_item/stealthy_weapons/para_pen
 	name = "Paralysis Pen"
-	desc = "A syringe disguised as a functional pen, filled with a neuromuscular-blocking drug that renders a target immobile on injection and makes them appear dead to observers and scanners. Side effects of the drug include increased toxicity in the victim. The pen holds one dose of paralyzing agent, and cannot be refilled."
+	desc = "A functional pen containing a hidden syringe filled with a neuromuscular-blocking drug that paralyses a target and makes them appear dead to observers and basic medical scanners. Apply with a firm stabbing motion. The pen holds one dose of paralyzing mix and cannot be refilled."
 	item = /obj/item/weapon/pen/paralysis
 	cost = 8
 
-/datum/uplink_item/stealthy_weapons/soap
-	name = "Syndicate Soap"
-	desc = "A sinister-looking surfactant used to clean blood stains to hide murders and prevent DNA analysis. You can also drop it underfoot to slip people."
-	item = /obj/item/weapon/soap/syndie
-	cost = 1
+/datum/uplink_item/stealthy_weapons/butterfly
+	name = "Butterfly Knife"
+	desc = "A butterfly knife containing a deadly viscerator. It can be flipped closed to conceal the blade and open to deploy the viscerator. The viscerator will self-destruct after 20 seconds but the knife will reconstruct a new one every 25 seconds."
+	item = /obj/item/weapon/butterflyknife/viscerator
+	cost = 7
 
 /datum/uplink_item/stealthy_weapons/detomatix
 	name = "Detomatix PDA Cartridge"
-	desc = "When inserted into a Personal Data Assistant, this cartridge gives you four opportunities to detonate PDAs of crewmembers who have their message feature enabled. The concussive effect from the explosion will knock the recipient out for a short period, and deafen them for longer. It has a chance to detonate your PDA."
+	desc = "When inserted into a PDA, gives you four charges allowing you to detonate PDAs of crewmembers who have messaging enabled. The concussive effect from the explosion will lightly wound the recipient and deafen them for a while. Has a chance to backfire and detonate your PDA."
 	item = /obj/item/weapon/cartridge/syndicate
 	cost = 6
 
 /datum/uplink_item/stealthy_weapons/knuckles
 	name = "Spiked Knuckles"
-	desc = "A pair of spiked metal knuckles that can be worn on your hands, increasing damage done by your punches."
+	desc = "A pair of spiked metal knuckles that can be worn directly on your hands in place of gloves, dramatically increasing damage done by your punches without giving any obvious signs to observers unless they inspect you more closely."
 	item = /obj/item/clothing/gloves/knuckles/spiked
 	cost = 2
 
+/datum/uplink_item/stealthy_weapons/soap
+	name = "Syndicate Soap"
+	desc = "A sinister-looking bar of surfactant used to clean blood stains and other traces of misdoings and interfere with DNA collection. Doubles as a tool of Syndicate hygiene and a slipping hazard for split-second takedowns."
+	item = /obj/item/weapon/soap/syndie
+	cost = 1
+
 // STEALTHY TOOLS
+// Any Syndicate item that helps with concealing one's identity, avoiding detection or fleeing if caught, without lethal or stun applications
 
 /datum/uplink_item/stealthy_tools
 	category = "Stealth and Camouflage Items"
 
-/datum/uplink_item/stealthy_tools/chameleon_jumpsuit
-	name = "Chameleon Jumpsuit"
-	desc = "A jumpsuit used to imitate the uniforms of Nanotrasen crewmembers. When caught in an EMP blast, will become psychedelic and unchangeable. When interacted with by another jumpsuit, will scan and add its appearance."
-	item = /obj/item/clothing/under/chameleon
-	cost = 2
-	jobs_excluded = list("Nuclear Operative")
-
-/datum/uplink_item/stealthy_tools/cold_jumpsuit
-	name = "Quick Vent Jumpsuit"
-	desc = "A variant of the Chameleon Jumpsuit that quickly vents the wearer's body heat, causing them to suffer latent hypothermia"
-	item = /obj/item/clothing/under/chameleon/cold
-	cost = 2
-
-/datum/uplink_item/stealthy_tools/syndigaloshes
-	name = "No-Slip Chameleon Shoes"
-	desc = "A pair of species-flexible shoes that can look, and in some cases sound, like any other piece of footgear. Protects against slipping on water, but cannot protect against lubricated surfaces. They can attract suspicion while off your person, and are explicitly identifiable as illegal tech when closely examined."
-	item = /obj/item/clothing/shoes/syndigaloshes
-	cost = 2
-	jobs_excluded = list("Nuclear Operative")
-
 /datum/uplink_item/stealthy_tools/agent_card
 	name = "Agent ID Card"
-	desc = "Agent cards prevent artificial intelligences from tracking the wearer, and can copy access from other identification cards. The access is cumulative, so scanning one card does not erase the access gained from another."
+	desc = "A fully programmable ID card that can be modified without the help of an indentification computer, allowing one to craft a full identity on the fly. Starts with Assistant-level access but can accumulate more by scanning other ID cards. Modified ID chip blocks all AI tracking when equipped."
 	item = /obj/item/weapon/card/id/syndicate
 	cost = 2
 
+/datum/uplink_item/stealthy_tools/chameleon_jumpsuit
+	name = "Chameleon Jumpsuit"
+	desc = "An innocuous-looking jumpsuit used to imitate any uniform on the Nanotrasen crew roster. Comes with a large selection of job-specific jumpsuits and can scan more via direct application. Dial can be concealed and is sensible to EMP blasts."
+	item = /obj/item/clothing/under/chameleon
+	cost = 2
+
+/datum/uplink_item/stealthy_tools/syndigaloshes
+	name = "Chameleon No-Slip Shoes"
+	desc = "A pair of species-flexible shoes that can look and sound like any other piece of footwear. Protects against slipping on virtually all slippery surfaces and items with the exception of lubrication agents. Can be discerned as syndicate technology when examined closely."
+	item = /obj/item/clothing/shoes/syndigaloshes
+	cost = 2
+
 /datum/uplink_item/stealthy_tools/voice_changer
-	name = "Voice Changer"
-	desc = "A conspicuous gas mask that mimics the voice named on your identification card. When no identification is worn, the mask will render your voice distinguishably unrecognizable."
+	name = "Chameleon Voice Changer"
+	desc = "An innocuous-looking face mask that can imitate a wide range of facewear and synthesize a voice based on your equipped ID. When no identification is worn, the mask will scramble and distort your voice to make it unrecognizable. Can be discerned as syndicate technology when examined closely."
 	item = /obj/item/clothing/mask/gas/voice
 	cost = 5
-	jobs_excluded = list("Nuclear Operative")
-
-/datum/uplink_item/stealthy_tools/dnascrambler
-	name = "DNA Scrambler"
-	desc = "A syringe with one injection that randomizes appearance and name upon use. A cheaper but less versatile alternative to an agent card and voice changer. A crewmember with a copy of the crew manifest and/or a security HUD could question your identity."
-	item = /obj/item/weapon/dnascrambler
-	cost = 4
+	discounted_cost = 4
+	jobs_with_discount = list("Nuclear Operative")
 
 /datum/uplink_item/stealthy_tools/chameleon_proj
-	name = "Chameleon-Projector"
-	desc = "Projects an image across a user, disguising them as an object scanned with it, as long as they don't move the projector from their hand. The disguised user cannot run and projectiles pass over them."
+	name = "Chameleon Projector"
+	desc = "When activated, will cloak the user into any portable item, concealing them and causing enemies and projectiles to pass over them. The projector can store the apperance of a specific item by scanning it. Allows limited movement, but dropping the projector or being interacted with will break the projection."
 	item = /obj/item/device/chameleon
 	cost = 6
 
+/datum/uplink_item/stealthy_tools/dnascrambler
+	name = "DNA Scrambler"
+	desc = "A single-use syringe that will instantly and permanently randomize the appearance and name of the person injected including an unique genetic UI+UE, fingerprints and DNA sequence. While the new identity is perfect, it will not be registered to the crew manifest and the ID card will not update."
+	item = /obj/item/weapon/dnascrambler
+	cost = 4
+
+/datum/uplink_item/stealthy_tools/cold_jumpsuit
+	name = "Heat Sink Jumpsuit"
+	desc = "A booby-trapped variant of the Chameleon Jumpsuit that quickly vents the wearer's body heat once equipped, causing them to suffer crippling hypothermia and usually pass out near instantly. Will usually result in user death unless assisted."
+	item = /obj/item/clothing/under/chameleon/cold
+	cost = 2
+
 /datum/uplink_item/stealthy_tools/smoke_bombs
 	name = "Instant Smoke Bombs"
-	desc = "A package of eight instant-action smoke bombs, cleverly disguised as harmless snap-pops. The cover of smoke they create is large enough to cover most of a room. Pair well with thermal imaging glasses."
+	desc = "A package of 8 instant-action smoke bombs cleverly disguised as harmless snap-pops. The cover of smoke they create is large enough to cover most of a room within seconds. Pairs well with thermal imaging glasses or concealment items."
 	item = /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	cost = 2
 
 /datum/uplink_item/stealthy_tools/decoy_balloon
 	name = "Decoy Balloon"
-	desc = "A balloon that looks just like you when inflated."
+	desc = "A balloon that will instantly imitate your current look when inflated. Will not fool any tracking devices or HUD displays by itself but will hold up to a rapid examination. Doubles as an extra-strength punching mannequin, but vulnerable to projectiles and sharp implements."
 	item = /obj/item/toy/balloon/decoy
 	cost = 1
 
-/datum/uplink_item/stealthy_tools/flashlightemp
-	name = "EMP Flashlight"
-	desc = "A flashlight that blasts a weak EMP pulse on whatever or whoever you use it on. Up to 4 charges that recover every 30 seconds, as shown when examined. Devastating against energy weapons and silicons. Can use it to cheat at the Arcade machine."
-	item = /obj/item/device/flashlight/emp
-	cost = 4
-
-
 // DEVICE AND TOOLS
+// Any Syndicate item that helps with hacking, low-key sabotage, damaging or subverting equipment (ex: Emag, camera bugs, EMP flashlight)
 
 /datum/uplink_item/device_tools
-	category = "Devices and Tools"
-	abstract = 1
+	category = "Infiltration and Hacking Tools"
 
 /datum/uplink_item/device_tools/emag
 	name = "Cryptographic Sequencer"
-	desc = "Also referred to as the \"emag\", a small card that unlocks hidden functions in electronic devices, subverts intended functions and characteristically breaks security mechanisms. Many machines will show signs of tampering if used."
+	desc = "Colloquially referred to as an \"emag\". This modified ID card unlocks hidden Syndicate programming in most Nanotrasen electronic devices, subverting intended functions and bypassing most security mechanisms. Most machines will show signs of tampering during and after use and the emag itself is blatant when spotted."
 	item = /obj/item/weapon/card/emag
 	cost = 6
 
+/datum/uplink_item/device_tools/explosive_gum
+	name = "Explosive Chewing Gum"
+	desc = "A single stick of explosive chewing gum that detonates five seconds after you start chewing, perfectly disguised as regular gum. Make sure to pull it out of your mouth if you don't intend to explode with it. Gum can be stuck to objects and walls, but not other people."
+	item = /obj/item/gum/explosive
+	cost = 6
+
+/datum/uplink_item/device_tools/flashlightemp
+	name = "EMP Flashlight"
+	desc = "A functional flashlight that can deliver an instantaneous weak EMP pulse on whatever or whomever you press it on on when lit. Holds up to 4 charges that recharges fully in 30 seconds. Devastating against Silicons and enemies using energy weapons or artificial organs."
+	item = /obj/item/device/flashlight/emp
+	cost = 4
+
+/datum/uplink_item/device_tools/emp
+	name = "EMP Grenade Box"
+	desc = "A box that contains 5 EMP grenades ready for use. Useful to disrupt all Silicon lifeforms and any machinery or device near an exploding grenade, including all energy weapons and communications devices."
+	item = /obj/item/weapon/storage/box/emps
+	cost = 4
+
 /datum/uplink_item/device_tools/toolbox
 	name = "Fully Loaded Toolbox"
-	desc = "A suspicious black and red toolbox with a cable coil and multitool. Insulated gloves are not included."
+	desc = "A sinister-looking black and red toolbox loaded with a full set of tools, including a cable coil and a multitool. Insulated gloves are not included in the package. The toolbox itself is lined with a heavier material for more intense robusting action if caught by surprise or desperate."
 	item = /obj/item/weapon/storage/toolbox/syndicate
 	cost = 1
 
 /datum/uplink_item/device_tools/bugdetector
 	name = "Bug Detector & Camera Disabler"
-	desc = "A functional multitool that can detect certain surveillance devices. Its screen changes color if the AI or a pAI can see you, or if a tape recorder or voice analyzer is nearby. Conspicuous if currently detecting something. Examine it to see everything it detects. Activating it will disable cameras nearby, plus the ones far away randomly, causing massive disruptions to the AI and anyone using them."
+	desc = "A functional multitool that can detect certain surveillance devices. Its screen changes color if the AI or a pAI can see you or if a tape recorder or voice analyzer is nearby. Conspicuous if currently detecting something. Examine it to see everything it detects. Activating it will temporarily disable all cameras nearby plus random ones across the camera network."
 	item = /obj/item/device/multitool/ai_detect
 	cost = 3
 
 /datum/uplink_item/device_tools/space_suit
-	name = "Space Suit"
-	desc = "The red syndicate space suit is less encumbering than Nanotrasen variants, fits inside bags, and has a weapon slot. Nanotrasen crewmembers are trained to report red space suit sightings."
+	name = "Syndicate Space Suit"
+	desc = "A red syndicate space suit that is less encumbering than most Nanotrasen variants, fitting inside backpacks while providing a weapon and jetpack holster. Do note that the space suit is not only obvious but outright infamous and that most Nanotrasen crew will instantly recognize it as Syndicate."
 	item = /obj/item/weapon/storage/box/syndie_kit/space
 	cost = 4
 
 /datum/uplink_item/device_tools/thermal
 	name = "Thermal Imaging Glasses"
-	desc = "These glasses are thermals disguised as engineers' optical meson scanners. Allows you to see organisms through walls and regardless of light."
+	desc = "A modified pair of Optical Meson Scanners frame fitted with thermal vision lenses, allowing you to spot organics through walls and in total darkness. Do note that they will not function as regular meson scanners in any way, shape or form."
 	item = /obj/item/clothing/glasses/thermal/syndi
 	cost = 6
 
 /datum/uplink_item/device_tools/surveillance
 	name = "Camera Surveillance Kit"
-	desc = "A kit containing five camera bugs and one mobile receiver. Attach camera bugs to a camera to enable remote viewing."
+	desc = "A kit consisting containing of five camera bugs hidden in a cigarette pack and a mobile TV receiver. Attach camera bugs to a camera to enable remote viewing with the receiver. Make sure to set an ID tag before applying to ensure stealthy bugging."
 	item = /obj/item/weapon/storage/box/syndie_kit/surveillance
 	cost = 6
 
 /datum/uplink_item/device_tools/camerabugs
 	name = "Camera Bugs"
-	desc = "A box of five camera bugs. Does not come with a receiver."
+	desc = "A cigarette pack containing five camera bugs hidden within. Requires a mobile TV receiver to use, intended to recharge the above bundle for extra surveillance coverage."
 	item = /obj/item/weapon/storage/box/surveillance
 	cost = 4
 
 /datum/uplink_item/device_tools/binary
 	name = "Binary Translator Key"
-	desc = "A key that, when inserted into a radio headset, allows you to listen to and talk with artificial intelligences and cybernetic organisms in binary."
+	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk with artificial intelligences and cybernetic organisms in Binary using the :b communications key. Screwdriver to replace encryption keys not included."
 	item = /obj/item/device/encryptionkey/binary
 	cost = 5
 
 /datum/uplink_item/device_tools/cipherkey
 	name = "Centcomm Encryption Key"
-	desc = "A key that, when inserted into a radio headset, allows you to listen to and talk on all known radio channels."
+	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk on all known Nanotrasen radio channels using their respective communications keys. Screwdriver to replace encryption keys not included."
 	item = /obj/item/device/encryptionkey/syndicate/hacked
 	cost = 4
 
-/datum/uplink_item/device_tools/hacked_module
-	name = "Hacked AI Upload Module"
-	desc = "When used with an upload console, this module allows you to upload priority laws to an artificial intelligence. Be careful with their wording, as artificial intelligences may look for loopholes to exploit. The laws uploaded surpass core laws and have priority in the order they are uploaded."
-	item = /obj/item/weapon/aiModule/freeform/syndicate
-	cost = 14
-
-/datum/uplink_item/device_tools/plastic_explosives
-	name = "Composition C-4"
-	desc = "C-4 is plastic explosive of the common variety Composition C. You can use it to breach walls, attach it to organisms to destroy them, or connect a signaler to its wiring to make it remotely detonable. It has a modifiable timer with a minimum setting of 10 seconds."
-	item = /obj/item/weapon/plastique
-	cost = 4
-
-/datum/uplink_item/device_tools/explosive_gum
-	name = "Explosive Chewing Gum"
-	desc = "A single stick of explosive chewing gum, detonates five seconds after you start chewing. Can be stuck to walls and objects."
-	item = /obj/item/gum/explosive
-	cost = 6
-
-/datum/uplink_item/device_tools/powersink
-	name = "Power Sink"
-	desc = "When screwed to wiring attached to an electric grid, then activated, this large device places excessive load on the grid, causing a stationwide blackout. The sink cannot be carried because of its massive size. Ordering this sends you a small beacon that will teleport the power sink to your location on activation."
-	item = /obj/item/device/powersink
-	cost = 10
-
-/datum/uplink_item/device_tools/singularity_beacon
-	name = "Singularity Beacon"
-	desc = "When screwed to wiring attached to an electric grid, then activated, this large device pulls the singularity towards it. Does not work when the singularity is still in containment. A singularity beacon can cause catastrophic damage to a space station, leading to an emergency evacuation. Because of its size, it cannot be carried. Ordering this sends you a small beacon that will teleport the larger beacon to your location on activation."
-	item = /obj/item/beacon/syndicate
-	cost = 14
-
 /datum/uplink_item/device_tools/pdapinpointer
 	name = "PDA Pinpointer"
-	desc = "A pinpointer that tracks any PDA on the station. Useful for locating assassination targets or other high-value targets that you can't find. WARNING: Can only set once."
+	desc = "A pinpointer that can flawlessly track any PDA in the local space sector. Useful for locating assassination targets or other high-value targets that you can't find. Do note that it can only be set once and cannot track normal targets like the nuclear disk, and is obvious upon inspection."
 	item = /obj/item/weapon/pinpointer/pdapinpointer
 	cost = 4
 
-/datum/uplink_item/device_tools/teleporter
-	name = "Teleporter Circuit Board"
-	desc = "A printed circuit board that completes the teleporter onboard the mothership. It is advised to test fire the teleporter before entering it, as malfunctions can occur."
-	item = /obj/item/weapon/circuitboard/teleporter
-	cost = 40
-	jobs_exclusive = list("Nuclear Operative")
 
-/datum/uplink_item/device_tools/popout_cake
-	name = "Pop-Out Cake"
-	desc = "A massive and delicious cake, big enough to store a person inside. It's equipped with a one-use party horn and special effects, and can be cut into edible slices in case of an emergency."
-	item = /obj/structure/popout_cake
+// LOUD SABOTAGE
+// Any Syndicate item that helps with high-level, destructive station-wide sabotage (Ex: Does Not Tip backdoor, Singularity Beacon, Power Sink, C-4)
+
+/datum/uplink_item/sabotage_tools
+	category = "Sabotage and Disruption Devices"
+
+/datum/uplink_item/sabotage_tools/powersink
+	name = "Power Sink"
+	desc = "When screwed down onto an exposed wire connected to the power grid, this large device will cause an excessive and untraceable power load on the grid, causing a stationwide power failure in short order. Do note that the power sink can explode if it feeds too much power. Ordering this will send you a full power sink that can be carried but cannot be stored away. No screwdriver included, plan accordingly."
+	item = /obj/item/device/powersink
+	cost = 10
+
+/datum/uplink_item/sabotage_tools/singularity_beacon
+	name = "Singularity Beacon"
+	desc = "When anchored to the floor and ran through a powered wire by hand, this large device will pull the singularity towards it regularly if it is loose from containment. Ordering this will send a small beacon that will teleport the singularity beacon to your location on activation. Beacon cannot be stored again, requires a lot of power to run, has an internal battery of one minute if power fails, and glows in the dark. No wrench included, plan accordingly."
+	item = /obj/item/beacon/syndicate
+	cost = 14
+
+/datum/uplink_item/sabotage_tools/hacked_module
+	name = "Hacked AI Freeform Module"
+	desc = "When used on any AI Upload console, this module allows you to upload freeform laws to station Silicons that take priority over their core lawset and thus directly override it. Be careful with their wording as Silicons may look for loopholes to exploit or announce their subversion if not prevented to."
+	item = /obj/item/weapon/aiModule/freeform/syndicate
+	cost = 14
+
+/datum/uplink_item/sabotage_tools/does_not_tip_note
+	name = "\"Does Not Tip\" database backdoor"
+	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the Cargo workers at Central Command. Ensures that all pizza orders will be poisoned from the moment the screen flashes red, without giving any obvious hints to such. Appears as a PDA until inspected more closely."
+	item = /obj/item/device/does_not_tip_backdoor
+	num_in_stock = 1
+	cost = 10
+
+/datum/uplink_item/sabotage_tools/reportintercom
+	name = "NT Central Command Report Falsifier"
+	desc = "A command report intercom stolen from Nanotrasen Command that allows for a single fake Command Update to be sent. Ensure tastefulness so that the crew actually falls for the message. Item is particular obvious and will have to be manually discarded after use."
+	item = /obj/item/device/reportintercom
 	cost = 6
-	jobs_exclusive = list("Nuclear Operative")
+	discounted_cost = 4
+	jobs_with_discount = list("Nuclear Operative")
 
-/datum/uplink_item/device_tools/megaphone
+/datum/uplink_item/sabotage_tools/plastic_explosives
+	name = "Composition C-4"
+	desc = "C-4 is plastic explosive of the common variety Composition C. Can be attached to any item or organic to reliably destroy it. Connect a signaler to its wiring to make it remotely detonable even when unplanted. Timer starts at 10 seconds but can be set to any length. Takes a few seconds to apply."
+	item = /obj/item/weapon/plastique
+	cost = 4
+
+/datum/uplink_item/sabotage_tools/megaphone
 	name = "Mad Scientist Megaphone"
-	desc = "For making your demands known. On top of making your speech loud, it can broadcast into (but not receive from) station radio frequencies, including Security and Command. Can also optionally scramble your voice, for ominous-anonymous threats."
+	desc = "A large megaphone with a communications chip, for making your demands known very loud and clear. This megaphone can broadcast to any known radio frequency. Can also optionally scramble your voice for ominous, anonymous threats. Make sure to strip your ID to avoid leaking your job to the communications system."
 	item = /obj/item/device/megaphone/madscientist
 	num_in_stock = 3
 	cost = 1
 	discounted_cost = 0
 	jobs_with_discount = SCIENCE_POSITIONS
 
-/datum/uplink_item/device_tools/reportintercom
-	name = "NTT Report Falsifier"
-	desc = "An intercom stolen from Nanotrasen Command that allows a single fake Galactic Update to be sent. Single-Use only. Let the crew know about the upcoming disk inspection."
-	item = /obj/item/device/reportintercom
-	cost = 6
-	discounted_cost = 4
-	jobs_with_discount = list("Nuclear Operative")
-
-/datum/uplink_item/device_tools/does_not_tip_note
-	name = "\"Does Not Tip\" database backdoor"
-	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."
-	item = /obj/item/device/does_not_tip_backdoor
-	num_in_stock = 1
-	cost = 10
 
 // IMPLANTS
+// Any Syndicate item that gets implanted into the body goes here
 
 /datum/uplink_item/implants
 	category = "Implants"
 
 /datum/uplink_item/implants/freedom
 	name = "Freedom Implant"
-	desc = "An implant usable after injection into the body. Activated using a bodily gesture to slip restraints. Has four uses."
+	desc = "An implant usable after being injected into one's body. When activated with a specific body gesture that is indicated upon injection, it will instantly slip any restraints you are in. Has four effective uses."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_freedom
 	cost = 5
 
 /datum/uplink_item/implants/uplink
 	name = "Uplink Implant"
-	desc = "An implant usable after injection into the body. Activated using a bodily gesture to open an uplink with 10 telecrystals. The ability for an agent to open an uplink after their posessions have been stripped from them makes this implant excellent for escaping confinement."
+	desc = "An implant usable after being injected into one's body. When activated with a specific body gesture that is chosen upon injection, it will discreetly open an uplink with 10 telecrystals loaded in. This uplink works even if you have been stripped naked."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_uplink
 	cost = 16
 
 /datum/uplink_item/implants/explosive
 	name = "Explosive Implant"
-	desc = "An implant usable after injection into the body. Activated using a vocal command to cause a large explosion from the implant."
+	desc = "An implant usable after being injected into one's body. When activated with a specific speech line that is chosen upon injection, it will cause a large explosion from the implant that will gib the user and easily space a room. Can be triggered remotely using the communications system, avoid common words and phrases."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_explosive
 	cost = 12
 
 /datum/uplink_item/implants/compression
 	name = "Compressed Matter Implant"
-	desc = "An implant usable after injection into the body. Activated using a bodily gesture to retrieve an item that was earlier compressed."
+	desc = "An implant usable after being injected into one's body. When activated with a specific body gesture that is chosen upon injection, it will retrieve an item that was earlier compressed into the implant and put it in your hand. Can only compress portable, non-storage items, choose wisely."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_compress
 	cost = 6
 
 
 // POINTLESS BADASSERY
+// "Misc" section for things that don't fit above
 
 /datum/uplink_item/badass
 	category = "Badassery"
 
 /datum/uplink_item/badass/bundle
 	name = "Syndicate Bundle"
-	desc = "Syndicate Bundles are specialised bundles of Syndicate items that arrive in a plain box. These items are collectively worth significantly more than 14 telecrystals, but you do not know which bundle you will receive."
+	desc = "A Syndicate Bundle is a specific, themed selection of syndicate items including some that are otherwise impossible to acquire that arrive stored in a plain, unmarked box. These items are collectively worth significantly more than 14 telecrystals, but you do not know which bundle you will receive or what it will be useful for."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 14
 
 /datum/uplink_item/badass/balloon
 	name = "For showing that you are The Boss"
-	desc = "A useless red balloon with the syndicate logo on it, which can blow the deepest of covers."
+	desc = "A useless red balloon with the syndicate logo printed on it which can blow even the deepest of covers. Otherwise looks similar to the Synidicate HUD pip that Nuclear Operatives would see."
 	item = /obj/item/toy/syndicateballoon
 	cost = 20
 
 /datum/uplink_item/badass/trophybelt
  	name = "Trophy Belt"
- 	desc = "A belt for holding the heads you've collected."
+ 	desc = "An unremarkable leather belt specially crafted to hold whole heads in storage, perfect for serial killers with something to prove. Comes with seven storage slots. Will not accept brains, so behead mindfully."
  	item = /obj/item/weapon/storage/belt/skull
  	cost = 4
 
 /datum/uplink_item/badass/raincoat
  	name = "Raincoat"
- 	desc = "It's hip to be square!"
+ 	desc = "It's hip to be square! Fireaxe not included."
  	item = /obj/item/clothing/suit/raincoat
  	cost = 1
 
 /datum/uplink_item/badass/random
 	name = "Random Item"
-	desc = "Picking this choice will send you a random item from the list for half the cost. Useful for when you cannot think of a strategy to finish your objectives with."
+	desc = "Picking this choice will send you a random item from anywhere in the list for half the normal cost. Useful for when you cannot think of a strategy to finish your objectives with, or cannot think of anything to begin with."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
@@ -598,358 +578,382 @@ var/list/uplink_items = list()
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return new I.item(loc)
 
+/datum/uplink_item/jobspecific/command_security
+	category = "Command and Security Specials"
 
-
-
-/datum/uplink_item/jobspecific
-	category = "Job Specials"
-
-/datum/uplink_item/jobspecific/syndicuffs
+/datum/uplink_item/jobspecific/command_security/syndicuffs
 	name = "Syndicate Cuffs"
-	desc = "A pair of cuffs rigged with electronics and laced with a C4 charge. Can be toggled between explosion on application and explosion on removal."
+	desc = "A pair of handcuffs rigged with electronics and laced with a C4 charge. Can be toggled between explosion a few seconds after application and explosion immediately upon removal by pulling on the rotating arm. Concealed unless interacted with."
 	item = /obj/item/weapon/handcuffs/syndicate
 	cost = 5
 	discounted_cost = 4
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
 
-/datum/uplink_item/jobspecific/syndietape_police
+/datum/uplink_item/jobspecific/command_security/syndietape_police
 	name = "Syndicate Police Tape"
-	desc = "A length of police tape rigged with adapative electronics that will wraps itself around the hands unathorised personnel who crosses it, cuffing them.  Do not (let them) cross. Can be used 3 times."
+	desc = "A length of police tape rigged with adapative electronics that will wrap a segment of itself around the hands of any non-Syndicate personnel who attempts to cross or break it, instantly cuffing them with weak bindings. They shall not pass. Can be used 3 times before it runs out."
 	item = /obj/item/taperoll/syndie/police
 	cost = 10
 	discounted_cost = 8
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
 
-/datum/uplink_item/jobspecific/evidenceforger
+/datum/uplink_item/jobspecific/command_security/evidenceforger
 	name = "Evidence Forger"
-	desc = "An evidence scanner that allows you to forge evidence by setting the output before scanning the item."
+	desc = "A hacked evidence scanner that allows you to forge evidence by setting a specific output that will apply on the next item scan only. Keep Security Records handy to input all requested data. Concealed as long as the evidence forger itself is not interacted with."
 	item = /obj/item/device/detective_scanner/forger
 	cost = 6
 	discounted_cost = 4
 	jobs_with_discount = list("Detective")
 
-/datum/uplink_item/jobspecific/conversionkit
+/datum/uplink_item/jobspecific/command_security/conversionkit
 	name = "Revolver Conversion Kit"
-	desc = "A bundle that comes with a professional revolver conversion kit and 1 box of .357 ammo. The kit allows you to convert your revolver to fire lethal rounds or vice versa. The modification is perfect and will not result in catastrophic failure, but remember to empty your gun first!"
+	desc = "A bundle that comes with a professional revolver conversion kit and one box of .357 ammo. This kit allows you to convert your ballistic revolver to fire either .357 lethal or .38 less-than-lethal rounds. The modification is perfect and will never result in a chamber failure, but remember to empty your gun before attempting a modification!"
 	item = /obj/item/weapon/storage/box/syndie_kit/conversion
 	cost = 12
 	discounted_cost = 10
 	jobs_with_discount = list("Detective")
 
-/datum/uplink_item/jobspecific/briefcase_smg
-	name = "Concealed SMG"
-	desc = "A modified briefcase capable of storing and firing a gun under a false bottom. Starts with an internal SMG and 18 rounds. Use a screwdriver to pry away the false bottom and make modifications. Distinguishable upon close examination due to the added weight."
+/datum/uplink_item/jobspecific/command_security/briefcase_smg
+	name = "Briefcase SMG"
+	desc = "A modified briefcase capable of storing and firing a gun under a false bottom, while still allowing regular storage functions. Starts with a 9mm SMG loaded with 18 rounds that can be fired by holding the briefcase. Use a screwdriver to pry away the false bottom and either retrieve the gun or insert a new one. Distinguishable upon close examination due to the added weight."
 	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
 	cost = 14
 	discounted_cost = 10
 	jobs_with_discount = list("Internal Affairs Agent")
 
-/datum/uplink_item/jobspecific/knifeboot
+/datum/uplink_item/jobspecific/command_security/knifeboot
 	name = "Concealed knife shoes"
-	desc = "Shoes with a knife concealed in the toecap. Tap your heels together to reveal the knife. Kick the target to stab them."
+	desc = "Lace-up shoes with a knife concealed in the toecap. Tap your heels together to reveal the small knife. Remember to kick the target to stab them. Knife will be visible when pulled out, but kicking with the knife will not be directly obvious to observers."
 	item = /obj/item/clothing/shoes/knifeboot
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Internal Affairs Agent")
 
-/datum/uplink_item/jobspecific/ambrosiacruciatus
-	name = "Ambrosia Cruciatus Seeds"
-	desc = "Part of the notorious Ambrosia family, this species is nearly indistinguishable from Ambrosia Vulgaris. However, its branches contain a revolting toxin. Eight units are enough to drive victims insane after a three-minute delay."
-	item = /obj/item/seeds/ambrosiacruciatusseed
-	cost = 6
-	discounted_cost = 2
-	jobs_with_discount = list("Botanist")
+/datum/uplink_item/jobspecific/medical
+	category = "Medical Specials"
 
-/datum/uplink_item/jobspecific/beecase
-	name = "Briefcase Full of Bees"
-	desc = "A briefcase containing twenty angry bees."
-	item = /obj/item/weapon/storage/briefcase/bees
-	cost = 5
-	discounted_cost = 4
-	jobs_with_discount = list("Botanist")
-
-/datum/uplink_item/jobspecific/hornetqueen
-	name = "Hornet Queen Packet"
-	desc = "Place her into an apiary tray, add a few packs of BeezEez, then lay it inside your nemesis' office. Surprise guaranteed. Protective gear won't be enough to shield you reliably from these."
-	item = /obj/item/queen_bee/hornet
-	cost = 3
-	discounted_cost = 2
-	jobs_with_discount = list("Botanist")
-
-/datum/uplink_item/jobspecific/syndiepaper
-	name = "Extra Adhesive Wrapping Paper"
-	desc = "This extra-strong wrapping paper is perfect for concealing bodies or trapping a victim with no escape. Simply apply directly to the victim and wrap them up into a regular-looking delivery package. Takes about three seconds to wrap."
-	item = /obj/item/stack/package_wrap/syndie
-	cost = 6
-	discounted_cost = 4
-	jobs_with_discount = list("Cargo Technician", "Quartermaster")
-
-/datum/uplink_item/jobspecific/syndiepaper/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
-	U.uses -= max(cost, 0)
-	feedback_add_details("traitor_uplink_items_bought", name)
-	return new item(loc) //Fix for amount ref
-
-/datum/uplink_item/jobspecific/mastertrainer
-	name = "Master Trainer's Belt"
-	desc = "A trainer's belt containing 6 random hostile mobs loyal to you alone."
-	item = /obj/item/weapon/storage/belt/lazarus/antag
-	cost = 12
-	discounted_cost = 8
-	jobs_with_discount = list("Shaft Miner")
-
-/datum/uplink_item/jobspecific/clowngrenade
-	name = "1 Banana Grenade"
-	desc = "A grenade that, when exploded, releases banana peels that are genetically modified to be extra slippery and release caustic acid when stepped on."
-	item = /obj/item/weapon/grenade/clown_grenade
-	cost = 6
-	discounted_cost = 5
-	jobs_with_discount = list("Clown")
-
-/datum/uplink_item/jobspecific/bsword
-	name = "Energized Bananium Sword"
-	desc = "When concealed a simple banana, when active a deadly means of executing swift justice. Highly regarded for their utility on away missions from the Clown Planet. WARNING: Extremely dangerous if two Bananium Swords are combined! Only those trained in the clownish arts should attempt!"
-	item = /obj/item/weapon/melee/energy/sword/bsword
-	cost = 8
-	jobs_exclusive = list("Clown")
-
-/datum/uplink_item/jobspecific/banannon
-	name = "Banannon"
-	desc = "A fearsome example of clown technology, the armor-piercing discarding sabonanas fired by this weapon shed their peels in flight, increasing their damage and creating a slipping hazard. WARNING: Only those trained in the clownish arts can use this weapon effectively!"
-	item = /obj/item/weapon/gun/banannon
-	cost = 18
-	jobs_exclusive = list("Clown")
-
-/datum/uplink_item/jobspecific/livingballoons
-	name = "Box of Living Long Balloons"
-	desc = "Can be tied into living balloon animals, which will come to life and attack non-clowns if a balloon is popped near them. Needless to say, using these is a bad idea for those not trained in the clownish arts."
-	item = /obj/item/weapon/storage/box/balloons/long/living
-	cost = 6
-	jobs_exclusive = list("Clown")
-
-/datum/uplink_item/jobspecific/bananagun
-	name = "Banana Gun"
-	desc = "One shot only, appears to be a banana until fired. Do not attempt to eat."
-	item = /obj/item/weapon/gun/projectile/banana
-	cost = 4
-	discounted_cost = 2
-	jobs_with_discount = list("Clown")
-
-/datum/uplink_item/jobspecific/superglue
-	name = "1 Bottle of Superglue"
-	desc = "Considered illegal everywhere except for the Clown Planet, this water-resistant superglue can instantly bind human flesh to ANY material, permanently. One-time use."
-	item = /obj/item/weapon/glue
-	cost = 6
-	discounted_cost = 4
-	jobs_with_discount = list("Clown", "Mime")
-
-/datum/uplink_item/jobspecific/invisible_spray
-	name = "Can of Invisible Spray"
-	desc = "Spray something to render it invisible for five minutes! One-time use. Permanence not guaranteed when exposed to water."
-	item = /obj/item/weapon/invisible_spray
-	cost = 6
-	jobs_excluded = list("Clown", "Mime")
-
-/datum/uplink_item/jobspecific/invisible_spray/permanent
-	desc = "Spray something to render it permanently invisible! One-time use. Permanence not guaranteed when exposed to water."
-	item = /obj/item/weapon/invisible_spray/permanent
-	cost = 4
-	jobs_excluded = list()
-	jobs_exclusive = list("Clown", "Mime")
-
-/datum/uplink_item/jobspecific/advancedmime
-	name = "Advanced Mime Gloves"
-	desc = "Grants the user the ability to periodically fire an invisible gun from their white gloves. Only real Mimes are trained in the art of firing this artefact silently."
-	item = /obj/item/clothing/gloves/white/advanced
-	cost = 12
-	jobs_exclusive = list("Mime")
-
-/datum/uplink_item/jobspecific/specialsauce
-	name = "Chef Excellence's Special Sauce"
-	desc = "A custom made sauce made from the toxin glands of many space carp. If one ingests enough, he or she will be dead in 3 minutes or less."
-	item = /obj/item/weapon/reagent_containers/food/condiment/syndisauce
-	cost = 8
-	discounted_cost = 2
-	jobs_with_discount = list("Chef")
-
-/datum/uplink_item/jobspecific/meatcleaver
-	name = "Meat Cleaver"
-	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died and the chance to stun when thrown."
-	item = /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
-	cost = 12
-	discounted_cost = 10
-	jobs_with_discount = list("Chef")
-
-/datum/uplink_item/jobspecific/cautionsign
-	name = "Proximity Mine Wet Floor Sign"
-	desc = "An Anti-Personnel proximity mine cleverly disguised as a wet floor caution sign that is triggered by running past it. Interact with it to start the 15 second timer and activate again to disarm."
-	item = /obj/item/weapon/caution/proximity_sign
-	cost = 5
-	discounted_cost = 3
-	jobs_with_discount = list("Janitor")
-
-/datum/uplink_item/jobspecific/pickpocketgloves
-	name = "Pickpocket's Gloves"
-	desc = "A pair of sleek gloves to aid in pickpocketing, while wearing these you can sneakily strip any item without the other person being alerted. Pickpocketed items will also be put into your hand rather than fall to the ground."
-	item = /obj/item/clothing/gloves/black/thief
-	cost = 8
-	discounted_cost = 6
-	jobs_with_discount = list("Assistant")
-
-/datum/uplink_item/jobspecific/greytide
-	name = "Greytide Implants"
-	desc = "A box containing two greytide implanters that when injected into another person makes them loyal to the greytide and your cause, unless they're already implanted by someone else. Loyalty ends if he or she no longer has the implant. CAUTION: WILL NOT WORK ON SUBJECTS WITH NT LOYALTY IMPLANTS. Now with disguised sechud sunglasses. These will have limited access until you can get your hands on some containing security codes."
-	item = /obj/item/weapon/storage/box/syndie_kit/greytide
-	cost = 20
-	discounted_cost = 14
-	jobs_with_discount = list("Assistant")
-
-/datum/uplink_item/jobspecific/cheaptide
-	name = "Cheaptide Implant"
-	desc = "A box containing one greytide implanter that when injected into another person makes them loyal to the greytide and your cause, unless they're already implanted by someone else. Loyalty ends if he or she no longer has the implant. CAUTION: WILL NOT WORK ON SUBJECTS WITH NT LOYALTY IMPLANTS. Now with disguised sechud sunglasses. These will have limited access until you can get your hands on some containing security codes."
-	item = /obj/item/weapon/storage/box/syndie_kit/cheaptide
-	cost = 12
-	discounted_cost = 8
-	jobs_with_discount = list("Assistant")
-
-/datum/uplink_item/jobspecific/drunkbullets
-	name = "Boozey Shotgun Shells"
-	desc = "A box containing 6 shotgun shells that simulate the effects of extreme drunkenness on the target. Efficacy increases for each type of alcohol in the target's bloodstream."
-	item = /obj/item/weapon/storage/box/syndie_kit/boolets
-	cost = 7
-	discounted_cost = 6
-	jobs_with_discount = list("Bartender")
-
-/datum/uplink_item/jobspecific/chemsprayer
-	name = "Chemical Sprayer"
-	desc = "A powerful industrial spraygun that holds 600 units of any liquid and can cover large areas faster than a standard spray bottle."
-	item = /obj/item/weapon/reagent_containers/spray/chemsprayer
-	cost = 10
-	discounted_cost = 8
-	jobs_with_discount = list("Chemist", "Chief Medical Officer")
-
-/datum/uplink_item/jobspecific/antisocial
-	name = "Explosive Hug Chemical"
-	desc = "30 units of Bicarodyne, a chemical that causes a devastating explosion when exposed to endorphins released in the body by a hug. Metabolizes quite slowly."
-	item = /obj/item/weapon/storage/box/syndie_kit/explosive_hug //Had to be put in a box because it didn't play well with reagent creation
-	cost = 9
-	discounted_cost = 8
-	jobs_with_discount = list("Chemist", "Chief Medical Officer")
-
-/datum/uplink_item/jobspecific/wheelchair
+/datum/uplink_item/jobspecific/medical/wheelchair
 	name = "Syndicate Wheelchair"
-	desc = "A combat-modified motorized wheelchair. Forward thrust is sufficient to knock down and run over victims."
+	desc = "This combat-modified motorized wheelchair has a forward thrust sufficient enough to knock down and run over victims, with special bladed wheels that will make short work of anyone caught under them. Provides limited protection against ballistic weaponry."
 	item = /obj/item/syndicate_wheelchair_kit
 	cost = 18
 	discounted_cost = 12
 	jobs_with_discount = list("Medical Doctor", "Chief Medical Officer")
 
-/datum/uplink_item/jobspecific/hypozinebottle
-	name = "Lethal Speed Chemical"
-	desc = "30 units of Hypozine, a chemical that causes the body to synthesize hyperzine, but also causes increases in muscle speed at levels that tear the body apart. Metabolizes quite slowly."
-	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
-	cost = 5
-	discounted_cost = 4
-	jobs_with_discount = list("Chemist", "Medical Doctor", "Chief Medical Officer")
-
-/datum/uplink_item/jobspecific/zombievirus
-	name = "Zombie Virus Syndrome"
-	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a disk."
-	item = /obj/item/weapon/disk/disease/zombie
-	cost = 20
-	discounted_cost = 12
-	jobs_with_discount = list("Virologist", "Chief Medical Officer")
-
-/datum/uplink_item/jobspecific/organ_remover
+/datum/uplink_item/jobspecific/medical/organ_remover
 	name = "Modified Organics Extractor"
-	desc = "A tool used by vox raiders to extract organs from unconscious victims has been reverse-engineered by syndicate scientists to be used by anyone, but it cannot extract hearts. It works twice as fast as the vox-only variant. Click on it to select the type of organ to extract, and then select the appropiate body zone."
+	desc = "A tool used by Vox Raiders to extract organs from unconscious victims that has been reverse-engineered by Syndicate scientists to be used by anyone. Cannot extract hearts, but works twice as fast as the original variant. Interact with it to select the type of organ to extract, and then select the appropiate body zone."
 	item = /obj/item/weapon/organ_remover/traitor
 	cost = 8
 	discounted_cost = 6
 	jobs_with_discount = list("Medical Doctor", "Chief Medical Officer")
 
-/datum/uplink_item/jobspecific/powergloves
-	name = "Power Gloves"
-	desc = "Insulated gloves that can utilize the power of the station to deliver a short arc of electricity at a target. Must be standing on a powered cable to use."
-	item = /obj/item/clothing/gloves/yellow/power
-	cost = 14
+/datum/uplink_item/jobspecific/medical/chemsprayer
+	name = "Chemical Sprayer"
+	desc = "A powerful industrial spraygun that holds 600 units of any liquid and can cover large areas faster than a standard spray bottle. Keep away from face."
+	item = /obj/item/weapon/reagent_containers/spray/chemsprayer
+	cost = 10
 	discounted_cost = 8
-	jobs_with_discount = list("Station Engineer", "Chief Engineer")
+	jobs_with_discount = list("Chemist", "Chief Medical Officer")
 
-/datum/uplink_item/jobspecific/syndietape_engineering
-	name = "Syndicate Engineering Tape"
-	desc = "A length of engineering tape charged with a powerful electric potential. Will spark and shock people who attempt to remove it, creating fires. Can be used 3 times."
-	item = /obj/item/taperoll/syndie/engineering
-	cost = 4
-	discounted_cost = 2
-	jobs_with_discount = list("Station Engineer", "Chief Engineer")
+/datum/uplink_item/jobspecific/medical/antisocial
+	name = "Explosive Hug Chemical"
+	desc = "30 units of Bicarodyne, a special chemical that causes a devastating explosion when exposed to endorphins released in the body by a hug. Metabolizes quite slowly."
+	item = /obj/item/weapon/storage/box/syndie_kit/explosive_hug //Had to be put in a box because it didn't play well with reagent creation
+	cost = 9
+	discounted_cost = 8
+	jobs_with_discount = list("Chemist", "Chief Medical Officer")
 
-/datum/uplink_item/jobspecific/contortionist
-	name = "Contortionist's Jumpsuit"
-	desc = "A highly flexible jumpsuit that will help you navigate the ventilation loops of the station internally. Comes with pockets and ID slot, but can't be used without stripping off most gear, including backpack, belt, helmet, and exosuit. Free hands are also necessary to crawl around inside."
-	item = /obj/item/clothing/under/contortionist
-	cost = 8
-	discounted_cost = 6
-	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
+/datum/uplink_item/jobspecific/medical/hypozinebottle
+	name = "Lethal Speed Chemical"
+	desc = "30 units of Hypozine, a special chemical that causes the body to seamlessly synthesize Hyperzine, but also causes increases in muscle activity to levels that rapidly tear the user's body apart, causing catastrophic ligament failure. Metabolizes quite slowly."
+	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
+	cost = 5
+	discounted_cost = 4
+	jobs_with_discount = list("Chemist", "Medical Doctor", "Chief Medical Officer")
 
-/datum/uplink_item/jobspecific/syndietape_atmos
-	name = "Syndicate Atmospherics Tape"
-	desc = "A length of atmospherics tape made of an extremely sharp material that will cuts the hands of trespassers. Very difficult to remove. Can be used 3 times."
-	item = /obj/item/taperoll/syndie/atmos
-	cost = 4
-	discounted_cost = 2
-	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
-
-/datum/uplink_item/jobspecific/radgun
+/datum/uplink_item/jobspecific/medical/radgun
 	name = "Radgun"
-	desc = "An experimental energy gun that fires radioactive projectiles that burn, irradiate, and scramble DNA, giving the victim a different appearance and name, and potentially harmful or beneficial mutations. Recharges on its own."
+	desc = "An experimental energy gun that fires radioactive projectiles that burn, irradiate and scramble DNA, giving the victim a different appearance and name, and potentially harmful or beneficial mutations. Recharges on its own."
 	item = /obj/item/weapon/gun/energy/radgun
 	cost = 18
 	discounted_cost = 12
 	jobs_with_discount = list("Geneticist", "Chief Medical Officer")
 
-/datum/uplink_item/jobspecific/flaregun
+/datum/uplink_item/jobspecific/medical/zombievirus
+	name = "Zombie Virus Syndrome"
+	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a virus data disk, requires full virus splicing and growth to deploy. Avoid ingesting end results if possible, and ensure you create spare virus data disks if needed."
+	item = /obj/item/weapon/disk/disease/zombie
+	cost = 20
+	discounted_cost = 12
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
+
+/datum/uplink_item/jobspecific/engineering
+	category = "Engineering Specials"
+
+/datum/uplink_item/jobspecific/engineering/powergloves
+	name = "Power Gloves"
+	desc = "Insulated gloves that can utilize the station's power grid to deliver a short but powerful arc of electricity at a target. Requires standing over a powered cable to use, but does not require for it to be uncovered. Damage scales with spare power in the grid."
+	item = /obj/item/clothing/gloves/yellow/power
+	cost = 14
+	discounted_cost = 8
+	jobs_with_discount = list("Station Engineer", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/engineering/powercreeper_packet
+	name = "Powercreep Packet"
+	desc = "A packet that creates a dangerous mutated version of kudzu vines. The vines will repeatedly shock people and connect themselves to any cables near them, rapidly growing and spreading out of control if left unchecked."
+	item = /obj/item/powercreeper_packet
+	cost = 16
+	discounted_cost = 10
+	jobs_with_discount = list("Botanist", "Station Engineer", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/engineering/syndietape_engineering
+	name = "Syndicate Engineering Tape"
+	desc = "A length of Engineering tape doubled with a conducting material, providing for a powerful electric potential. Will spark and shock people who attempt to break it, causing severe burn damage and potentially creating fires. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/engineering
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Station Engineer", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/engineering/syndietape_atmos
+	name = "Syndicate Atmospherics Tape"
+	desc = "A length of Atmospherics tape doubled with an extremely sharp material that will severely shred the hands of anyone attempting to break or cross it. Very difficult to remove from their hands once applied. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/atmos
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/engineering/contortionist
+	name = "Contortionist's Jumpsuit"
+	desc = "A highly flexible jumpsuit that will help you climb into and navigate the internal ventilation loops of the station. Comes with pockets and ID slot, but can't be used without stripping off most gear, including backpack, belt, helmet, and exosuit. Free hands are also necessary to crawl around inside. Mind vent temperature and pressure before use."
+	item = /obj/item/clothing/under/contortionist
+	cost = 8
+	discounted_cost = 6
+	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/engineering/flaregun
 	name = "Modified Flaregun"
-	desc = "A modified flaregun, identical in most appearances to the regular kind, as well as 7 rounds of flare ammunition. Capable of firing flares at lethal velocity, as well as firing shotgun ammunition."
+	desc = "A modified flaregun, identical in most appearances to the regular kind. Capable of firing flares at lethal velocity as well as firing any kind of shotgun ammunition normally. Comes with 7 rounds of flare ammunition."
 	item = /obj/item/weapon/storage/box/syndie_kit/flaregun
 	cost = 6
 	discounted_cost = 4
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
-/datum/uplink_item/jobspecific/dev_analyser
+/datum/uplink_item/jobspecific/engineering/dev_analyser
 	name = "Modified Device Analyser"
-	desc = "A device analyser with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment."
+	desc = "A device analyser with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment for further duplication using the station's Mechanic equipment."
 	item = /obj/item/device/device_analyser/syndicate
 	cost = 9
 	discounted_cost = 6
 	jobs_with_discount = list("Mechanic")
 
-/datum/uplink_item/jobspecific/etwenty
+/datum/uplink_item/jobspecific/cargo
+	category = "Cargo and Mining Specials"
+
+/datum/uplink_item/jobspecific/cargo/syndiepaper
+	name = "Extra Adhesive Wrapping Paper"
+	desc = "This extra-strong wrapping paper is perfect for concealing bodies or trapping a victim with no escape. Simply apply directly to the victim to wrap them up into a regular-looking delivery package that can be further tagged or delivered. Takes about three seconds to wrap up fully."
+	item = /obj/item/stack/package_wrap/syndie
+	cost = 6
+	discounted_cost = 4
+	jobs_with_discount = list("Cargo Technician", "Quartermaster")
+
+/datum/uplink_item/jobspecific/cargo/syndiepaper/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
+	U.uses -= max(cost, 0)
+	feedback_add_details("traitor_uplink_items_bought", name)
+	return new item(loc) //Fix for amount ref
+
+/datum/uplink_item/jobspecific/cargo/mastertrainer
+	name = "Master Trainer's Belt"
+	desc = "A trainer's belt containing 6 Lazarus capsules loaded with random but particularly hostile and lethal mobs loyal to you alone. You can inspect what the Lazarus capsules contain before throwing them."
+	item = /obj/item/weapon/storage/belt/lazarus/antag
+	cost = 12
+	discounted_cost = 8
+	jobs_with_discount = list("Shaft Miner")
+
+/datum/uplink_item/jobspecific/service
+	category = "Service Specials"
+
+/datum/uplink_item/jobspecific/service/ambrosiacruciatus
+	name = "Ambrosia Cruciatus Seeds"
+	desc = "Part of the notorious Ambrosia family, this species is nearly indistinguishable from Ambrosia Vulgaris. However, when harvested and grown, its branches contain spiritbreaker toxin. Eight units are enough to drive victims insane after a three-minute delay. Can be turned into seeds and regrown freely, ground into chemicals or rolled into blunts."
+	item = /obj/item/seeds/ambrosiacruciatusseed
+	cost = 6
+	discounted_cost = 2
+	jobs_with_discount = list("Botanist")
+
+/datum/uplink_item/jobspecific/service/beecase
+	name = "Briefcase Full of Bees"
+	desc = "A briefcase containing twenty angry bees. Will deliver the bee payload when first opened, functions as a normal briefcase after this initial swarm. The bees do not discriminate on targets, so either get someone else to open the briefcase for you or run."
+	item = /obj/item/weapon/storage/briefcase/bees
+	cost = 5
+	discounted_cost = 4
+	jobs_with_discount = list("Botanist")
+
+/datum/uplink_item/jobspecific/service/hornetqueen
+	name = "Hornet Queen Packet"
+	desc = "A lethally dangerous hornet queen, providing a very nasty surprise once fully tended for. Place her into an apiary tray and add a few packs of BeezEez along with usual care to obtain the goods. Protective gear won't be enough to shield you reliably from these, so keep a good distance."
+	item = /obj/item/queen_bee/hornet
+	cost = 3
+	discounted_cost = 2
+	jobs_with_discount = list("Botanist")
+
+/datum/uplink_item/jobspecific/service/specialsauce
+	name = "Chef Excellence's Special Sauce"
+	desc = "Twenty units of a custom-made sauce cooked from the toxin glands of an exotic species of space carps, and other delicious, hand-picked high-quality ingredients. If roughly two units are ingested, the victim will drop dead a few minutes after ingestion."
+	item = /obj/item/weapon/reagent_containers/food/condiment/syndisauce
+	cost = 8
+	discounted_cost = 2
+	jobs_with_discount = list("Chef")
+
+/datum/uplink_item/jobspecific/service/meatcleaver
+	name = "Meat Cleaver"
+	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died. It also has a strong to stun when thrown."
+	item = /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
+	cost = 12
+	discounted_cost = 10
+	jobs_with_discount = list("Chef")
+
+/datum/uplink_item/jobspecific/service/cautionsign
+	name = "Proximity Mine Wet Floor Sign"
+	desc = "An anti-personnel proximity mine cleverly disguised as a wet floor caution sign that is triggered by running past it. Interact with it to start the 15 second timer and activate it again to disarm."
+	item = /obj/item/weapon/caution/proximity_sign
+	cost = 5
+	discounted_cost = 3
+	jobs_with_discount = list("Janitor")
+
+/datum/uplink_item/jobspecific/service/drunkbullets
+	name = "Boozey Shotgun Shells"
+	desc = "A box containing 6 shotgun shells that simulate the effects of extreme drunkenness on the target. Efficacy increases for each type of alcohol currently present in the target's bloodstream, regardless of amount."
+	item = /obj/item/weapon/storage/box/syndie_kit/boolets
+	cost = 7
+	discounted_cost = 6
+	jobs_with_discount = list("Bartender")
+
+/datum/uplink_item/jobspecific/service/etwenty
 	name = "The E20"
-	desc = "A seemingly innocent die. Those who are not afraid to roll for attack will find its effects quite explosive. Has a four second timer."
+	desc = "A seemingly innocent die with a lethal secret. When rolled, it will set a four second timer and then explode for the strength of the roll. More powerful than even expert-crafted bombs on a Nat 20!"
 	item = /obj/item/weapon/dice/d20/e20
 	cost = 6
 	jobs_exclusive = list("Librarian")
 
-/datum/uplink_item/jobspecific/traitor_bible
+/datum/uplink_item/jobspecific/service/traitor_bible
 	name = "Feldbischof's Bible"
-	desc = "A copy of the station's holy book of choice, with a little ballistic discount on conversions. 88 rapid, eight in the gun, eight in the extra mag."
+	desc = "A copy of the station's holy book of choice, with a little ballistic discount on conversions in the form of a genuine, Chinese-made Luger pistol. 88 rapid, eight in the gun, eight in the extra mag."
 	item = /obj/item/weapon/storage/bible/traitor_gun
 	cost = 14
 	discounted_cost = 10
 	jobs_with_discount = list("Chaplain")
 
-/datum/uplink_item/jobspecific/occultbook
+/datum/uplink_item/jobspecific/service/occultbook
 	name = "Occult Book"
-	desc = "A reproduction of a forbidden and occult book. Causes brain damage, eye damage and hallucinations to anyone unfortunate enough to attempt to read it. Use a pen to change its title."
+	desc = "A reproduction of a forbidden and occult book. Causes brain damage, eye damage and hallucinations to anyone unfortunate or stupid enough to attempt to read it. Use a pen to change its title."
 	item = /obj/item/weapon/book/occult
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Librarian", "Chaplain")
 
-/datum/uplink_item/jobspecific/powercreeper_packet
-	name = "Powercreep Packet"
-	desc = "A packet that creates a dangerous mutated version of kudzu. The vines shock people and connect themselves to any cables near them."
-	item = /obj/item/powercreeper_packet
-	cost = 16
-	discounted_cost = 10
-	jobs_with_discount = list("Botanist", "Station Engineer", "Chief Engineer")
+/datum/uplink_item/jobspecific/clown_mime
+	category = "Clown Planet Specials"
+
+/datum/uplink_item/jobspecific/clown_mime/banannon
+	name = "Banannon"
+	desc = "A fearsome piece of ancient Clown technology, the armor-piercing discarding sabonanas fired by this weapon shed their peels in flight, increasing their damage and creating a slipping hazard in their wake. Only those trained in the Clown arts may use this weapon without risking a severe malfunction."
+	item = /obj/item/weapon/gun/banannon
+	cost = 18
+	jobs_exclusive = list("Clown")
+
+/datum/uplink_item/jobspecific/clown_mime/bsword
+	name = "Energized Bananium Sword"
+	desc = "An ancient piece of technology from a lost civilization. This energy sword conceals perfectly into a banana hilt that will easily fool most, but becomes extremely lethal when activated. Two of these can be combined to create the ultimate power weapon, but only a Clown may safely handle such power for the glory of Clown-kind."
+	item = /obj/item/weapon/melee/energy/sword/bsword
+	cost = 8
+	jobs_exclusive = list("Clown")
+
+/datum/uplink_item/jobspecific/clown_mime/livingballoons
+	name = "Box of Living Long Balloons"
+	desc = "These modified balloons can be tied into special balloon animals, which will come to life and attack any nearby non-Clowns if a balloon is popped near them. Serious hazard if manipulated by those not versed in the Clown arts."
+	item = /obj/item/weapon/storage/box/balloons/long/living
+	cost = 6
+	jobs_exclusive = list("Clown")
+
+/datum/uplink_item/jobspecific/clown_mime/clowngrenade
+	name = "Banana Grenade"
+	desc = "A grenade that will release a large field of banana peels on detonation that are genetically modified to be extra slippery and release caustic acid when stepped on. Covers roughly a 5x5 area."
+	item = /obj/item/weapon/grenade/clown_grenade
+	cost = 6
+	discounted_cost = 5
+	jobs_with_discount = list("Clown")
+
+/datum/uplink_item/jobspecific/clown_mime/bananagun
+	name = "Banana Gun"
+	desc = "A single-shot but particularly powerful banana gun, appearing as a banana until fired. Will do catastrophic damage to whomever it hits and only leave a banana peel behind as evidence. Do not attempt to eat."
+	item = /obj/item/weapon/gun/projectile/banana
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Clown")
+
+/datum/uplink_item/jobspecific/clown_mime/superglue
+	name = "Bottle of Superglue"
+	desc = "Considered illegal everywhere except for the Clown Planet, this water-resistant superglue can instantly bind human flesh to any material, permanently. Can only be used once."
+	item = /obj/item/weapon/glue
+	cost = 6
+	discounted_cost = 4
+	jobs_with_discount = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/invisible_spray
+	name = "Can of Invisible Spray"
+	desc = "Spray something to render it invisible for five minutes! Can only be used once. Permanence not guaranteed when exposed to water, may not render all parts invisible, especially for humans."
+	item = /obj/item/weapon/invisible_spray
+	cost = 6
+	jobs_excluded = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/invisible_spray/permanent
+	name = "Can of Permanent Invisible Spray"
+	desc = "Spray something to render it permanently invisible! Can only be used once. Permanence not guaranteed when exposed to water, may not render all parts invisible, especially for humans."
+	item = /obj/item/weapon/invisible_spray/permanent
+	cost = 4
+	jobs_excluded = list()
+	jobs_exclusive = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/advancedmime
+	name = "Advanced Mime Gloves"
+	desc = "Grants the user the ability to periodically fire an invisible gun from their white gloves with two rounds in the chamber, dealing decent damage. Only real Mimes are trained in the art of firing this artefact silently when using the forbidden hand-gun technique."
+	item = /obj/item/clothing/gloves/white/advanced
+	cost = 12
+	jobs_exclusive = list("Mime")
+
+/datum/uplink_item/jobspecific/assistant
+	category = "Assistant Specials"
+
+/datum/uplink_item/jobspecific/assistant/greytide
+	name = "Greytide Implants"
+	desc = "A box containing two greytide implanters that when injected into another person makes them loyal to the Greytide and thus your cause. Loyalty will end on implant removal or destruction, and loyalty implants will fry the implant. The bundle contains disguised SecHUD sunglasses with limited access until they scan a real pair."
+	item = /obj/item/weapon/storage/box/syndie_kit/greytide
+	cost = 20
+	discounted_cost = 14
+	jobs_with_discount = list("Assistant")
+
+/datum/uplink_item/jobspecific/assistant/cheaptide
+	name = "Cheaptide Implant"
+	desc = "A box containing one greytide implanter that when injected into another person makes them loyal to the Greytide and thus your cause. Loyalty will end on implant removal or destruction, and loyalty implants will fry the implant. The bundle contains disguised SecHUD sunglasses with limited access until they scan a real pair."
+	item = /obj/item/weapon/storage/box/syndie_kit/cheaptide
+	cost = 12
+	discounted_cost = 8
+	jobs_with_discount = list("Assistant")
+
+/datum/uplink_item/jobspecific/assistant/pickpocketgloves
+	name = "Pickpocket's Gloves"
+	desc = "A pair of sleek gloves used to aid in pickpocketing. While wearing these you can sneakily strip any item off someone without alerting their owner. Pickpocketed items will also be put into your hand rather than falling to the ground."
+	item = /obj/item/clothing/gloves/black/thief
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Assistant")
+
+/datum/uplink_item/jobspecific/assistant/pickpocketglovestorage
+	name = "Pickpocket's Gloves with Storage"
+	desc = "A pair of sleek gloves used to aid in pickpocketing. These custom-made gloves come with a two-slot storage where pickpocketed items will automatically be placed. These items can be retrieved at will when needed."
+	item = /obj/item/clothing/gloves/black/thief/storage
+	cost = 7
+	discounted_cost = 4
+	jobs_with_discount = list("Assistant")

@@ -106,7 +106,7 @@
 
 /obj/structure/conveyor_assembly/attackby(obj/item/P, mob/user)
 	if(iscrowbar(P))
-		playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+		P.playtoolsound(src, 75)
 		if(do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You unhinge the frame.</span>")
 			getFromPool(/obj/item/stack/conveyor_assembly, src.loc)

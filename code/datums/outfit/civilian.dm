@@ -315,7 +315,7 @@
 	H.mutations.Add(M_CLUMSY)
 	H.fully_replace_character_name(H.real_name,pick(clown_names))
 	H.dna.real_name = H.real_name
-	H.rename_self("clown")
+	mob_rename_self(H,"clown")
 	return 1
 
 // -- Mime
@@ -366,7 +366,8 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing = GRASP_LEFT_HAND
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing = GRASP_LEFT_HAND,
+		/obj/item/weapon/stamp/mime = slot_r_store_str,
 	)
 
 	pda_type = /obj/item/device/pda/mime
@@ -377,7 +378,7 @@
 	H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 	H.add_spell(new /spell/targeted/oathbreak/)
 	H.mind.miming = MIMING_OUT_OF_CHOICE
-	H.rename_self("mime")
+	mob_rename_self(H,"mime")
 	return 1
 
 // -- Janitor

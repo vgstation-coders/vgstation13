@@ -295,7 +295,8 @@ var/list/lawgiver_modes = list(
 
 
 /obj/item/weapon/gun/lawgiver/process_chambered()
-	return 1
+	if(dna_check())
+		return chamber_round()
 
 /obj/item/weapon/gun/lawgiver/proc/rapidFire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0) //Burst fires don't work well except by calling Fire() multiple times
 	rapidFirecheck = 1
@@ -332,76 +333,19 @@ var/list/lawgiver_modes = list(
 	new_casing.BB = null
 	new_casing.update_icon()
 
-/obj/item/weapon/gun/lawgiver/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
-	//Suicide handling.
-	if (M == user && user.zone_sel.selecting == "mouth" && !mouthshoot)
-		if(istype(M.wear_mask, /obj/item/clothing/mask/happy))
-			to_chat(M, "<span class='sinister'>BUT WHY? I'M SO HAPPY!</span>")
-			return
-		mouthshoot = 1
-		M.visible_message("<span class='warning'>[user] sticks their gun in their mouth, ready to pull the trigger...</span>")
-		if(!do_after(user,src, 40))
-			M.visible_message("<span class='notice'>[user] decided life was worth living</span>")
-			mouthshoot = 0
-			return
-		if(dna_profile)
-			if(dna_profile != user.dna.unique_enzymes)
-				self_destruct(user)
-				return
-		else
-			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")
-			click_empty(user)
-			say("PLEASE REGISTER A DNA SAMPLE.")
-			return
-		if (chamber_round())
-			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")
-			playsound(user, fire_sound, 50, 1)
-			in_chamber.on_hit(M)
-			if (!in_chamber.nodamage)
-				user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
-				user.stat=2 // Just to be sure
-				user.death()
-			else
-				to_chat(user, "<span class = 'notice'>Ow...</span>")
-				user.apply_effect(110,AGONY,0)
-			qdel(in_chamber)
-			in_chamber = null
-			mouthshoot = 0
-			return
-		else
-			click_empty(user)
-			mouthshoot = 0
-			return
-
-	if (can_shoot())
-		//Point blank shooting if on harm intent or target we were targeting.
-		if(user.a_intent == I_HURT || (target && M in target))
-			if(dna_profile)
-				if(dna_profile != user.dna.unique_enzymes)
-					self_destruct(user)
-					return
-			else
-				click_empty(user)
-				say("PLEASE REGISTER A DNA SAMPLE.")
-				return
-			if(user.a_intent == I_HURT)
-				if(chamber_round())
-					user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
-					damage_multiplier = 1.3
-					src.Fire(M,user,0,0,1)
-					damage_multiplier = 1
-				return
-			else
-				if(chamber_round())
-					src.Fire(M,user,0,0,1)
-				return
-		else
-			return ..()
-	else
-		return ..()
-
 /obj/item/weapon/gun/lawgiver/proc/chamber_round()
-	if(in_chamber || !magazine)
+	if(in_chamber)
+		if(in_chamber.type == projectile_type)
+			return 1
+		else
+			for(var/datum/lawgiver_mode/M in lawgiver_modes[type])
+				if(in_chamber && (in_chamber.type == M.projectile_type))
+					magazine.ammo_counters[M] = min(magazine.ammo_counters[M]+M.ammo_per_shot,LAWGIVER_MAX_AMMO * M.ammo_per_shot)
+					qdel(in_chamber)
+					in_chamber = null
+			if(in_chamber)
+				return 1
+	if(!magazine)
 		return 0
 	if(magazine.ammo_counters[firing_mode_datum] < firing_mode_datum.ammo_per_shot)
 		return 0
@@ -411,7 +355,9 @@ var/list/lawgiver_modes = list(
 	magazine.ammo_counters[firing_mode_datum] -= firing_mode_datum.ammo_per_shot
 	return 1
 
-/obj/item/weapon/gun/lawgiver/proc/can_shoot() //Only made so that firing point-blank can run its checks without chambering a round, since rounds are chambered in Fire()
+/obj/item/weapon/gun/lawgiver/can_discharge()
+	if(!dna_check())
+		return FALSE
 	if(!magazine)
 		return FALSE
 	if(magazine.ammo_counters[firing_mode_datum] < firing_mode_datum.ammo_per_shot)
@@ -454,6 +400,22 @@ var/list/lawgiver_modes = list(
 	else
 		return 0
 
+/obj/item/weapon/gun/lawgiver/proc/dna_check(var/mob/user)
+	if(!user)
+		if(ismob(loc))
+			user = loc
+		else
+			return 0
+	if(dna_profile)
+		if(dna_profile != user.dna.unique_enzymes)
+			self_destruct(user)
+			return 0
+	else
+		click_empty(user)
+		say("PLEASE REGISTER A DNA SAMPLE.")
+		return 0
+	return 1
+
 /obj/item/weapon/gun/lawgiver/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
@@ -464,13 +426,7 @@ var/list/lawgiver_modes = list(
 	if(istype(A, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))
 		return//Shouldnt flag take care of this?
 
-	if(dna_profile)
-		if(dna_profile != user.dna.unique_enzymes)
-			self_destruct(user)
-			return
-	else
-		click_empty(user)
-		say("PLEASE REGISTER A DNA SAMPLE.")
+	if(!dna_check(user))
 		return
 
 	if(in_chamber)

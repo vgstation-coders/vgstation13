@@ -541,6 +541,12 @@
 				occupants.Add(L)
 	return occupants
 
+/proc/get_refill_area(var/obj/docking_port/destination/D)
+	if(ispath(D.refill_area))
+		return locate(D.refill_area)
+	else
+		return get_space_area()
+
 //The proc that does most of the work
 //RETURNS: 1 if everything is good, 0 if everything is bad
 /datum/shuttle/proc/move_area_to(var/turf/our_center, var/turf/new_center, var/rotate = 0)
@@ -559,11 +565,12 @@
 	//For displacing
 	var/throwy = world.maxy
 
-	var/area/space
+	var/obj/docking_port/destination/D = linked_port.docked_with
+	var/area/refill_area //the area that will be stamped over where the shuttle left
 
-	space = get_space_area()
-	if(!space)
-		warning("Unable to find space area for shuttle [src.type]")
+	refill_area = get_refill_area(D)
+	if(!refill_area)
+		warning("Unable to find refill area for shuttle [src.type]")
 
 	//Make a list of coordinates of turfs to move, and associate the coordinates with the turfs they represent
 	var/list/turfs_to_move = list()
@@ -650,9 +657,14 @@
 			else
 				AM.forceMove(displace_to)
 
-		var/area/old_area = get_area(new_turf)
+		var/area/old_area = get_area(new_turf) //this is the area that is being replaced by shuttle area in the destination
 		if(!old_area)
-			old_area = space
+			old_area = get_space_area()
+
+		for(var/O in old_turf.overlays)
+			var/image/I = O
+			if(I.icon == 'icons/obj/projectiles.dmi')
+				old_turf.overlays.Remove(I)		//remove beam overlays so they don't stay on the new turfs forever
 
 		//Get the turf's image before it's gone!
 		var/image/undlay
@@ -669,13 +681,13 @@
 
 		//***Remove old turf from shuttle's area****
 
-		space.contents.Add(old_turf)
-		old_turf.change_area(linked_area,space)
+		refill_area.contents.Add(old_turf)
+		old_turf.change_area(linked_area,refill_area)
 
-		//All objects which can't be moved by the shuttle have their area changed to space!
+		//All objects which can't be moved by the shuttle have their area changed to refill_area!
 		for(var/atom/movable/AM in old_turf.contents)
 			if(!AM.can_shuttle_move(src))
-				AM.change_area(linked_area,space)
+				AM.change_area(linked_area,refill_area)
 
 		//****Move all variables from the old turf over to the new turf****
 
@@ -726,22 +738,15 @@
 			S_OLD.zone.remove(S_OLD)
 
 		//*****Move objects and mobs*****
+		for(var/mob/M in old_turf)	//mobs first
+			if(!M.can_shuttle_move(src))
+				continue
+			move_atom(M, new_turf, rotate)
 		for(var/atom/movable/AM in old_turf)
 			if(!AM.can_shuttle_move(src))
 				continue
+			move_atom(AM, new_turf, rotate)
 
-			if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
-				AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
-
-				spawn()
-					AM.forceMove(new_turf)
-
-				//TODO: Make this compactible with bound_x and bound_y.
-			else
-				AM.forceMove(new_turf)
-
-			if(rotate)
-				AM.shuttle_rotate(rotate)
 
 		//Move landmarks - for moving the arrivals shuttle
 		for(var/list/L in moved_landmarks) //moved_landmarks: code/game/area/areas.dm, 527 (above the move_contents_to proc)
@@ -754,7 +759,6 @@
 
 		//Delete the old turf
 		var/replacing_turf_type = old_turf.get_underlying_turf()
-		var/obj/docking_port/destination/D = linked_port.docked_with
 
 		if(D && istype(D))
 			replacing_turf_type = D.base_turf_type
@@ -777,6 +781,20 @@
 				D2.update_nearby_tiles()
 
 	return 1
+
+/datum/shuttle/proc/move_atom(var/atom/movable/AM, var/new_turf, var/rotate)
+	if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
+		AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
+
+		spawn()
+			AM.forceMove(new_turf)
+
+		//TODO: Make this compactible with bound_x and bound_y.
+	else
+		AM.forceMove(new_turf)
+
+	if(rotate)
+		AM.shuttle_rotate(rotate)
 
 /proc/setup_shuttles()
 	world.log << "Setting up all shuttles..."

@@ -8,6 +8,7 @@
 /datum/organ/internal/kidney/filter
 	name = "toxin filters"
 	removed_type = /obj/item/organ/internal/kidneys/filter
+	robotic = 2
 
 	min_bruised_damage = 15
 	min_broken_damage = 30
