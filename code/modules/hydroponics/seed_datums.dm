@@ -306,7 +306,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		list('icons/obj/hydroponics/kudzu.dmi',				4),
 		list('icons/obj/hydroponics/pear.dmi', 				6),
 		))
-	
+
 	plant_dmi = plant_icons[1]
 	growth_stages = plant_icons[2]
 
@@ -565,6 +565,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 		if(ispath(product_type, /obj/item/stack))
 			product = drop_stack(product_type, T, 1, null)
+		else if(ispath(product_type, /obj/item/weapon/reagent_containers/food/snacks/grown) || ispath(product_type, /obj/item/weapon/grown))
+			product = new product_type(T, custom_plantname = name)
 		else
 			product = new product_type(T)
 
@@ -585,14 +587,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 			product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
 			handle_living_product(product)
-
-		// Make sure the product is inheriting the correct seed type reference.
-		else if(istype(product,/obj/item/weapon/reagent_containers/food/snacks/grown))
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/current_product = product
-			current_product.plantname = name
-		else if(istype(product,/obj/item/weapon/grown))
-			var/obj/item/weapon/grown/current_product = product
-			current_product.plantname = name
 
 //Harvest without concern for the user
 /datum/seed/proc/autoharvest(var/turf/T, var/yield_mod = 1)

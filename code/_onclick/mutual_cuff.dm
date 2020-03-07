@@ -50,6 +50,11 @@
 	second.equip_to_slot(cuffs, slot_handcuffed)
 	first.equip_to_slot(cuffs, slot_handcuffed)
 
+	first.z_transition_bringalong_key = first.on_z_transition.Add(first, "z_transition_bringalong")
+	second.z_transition_bringalong_key = second.on_z_transition.Add(second, "z_transition_bringalong")
+	first.post_z_transition_bringalong_key = first.post_z_transition.Add(first, "post_z_transition_bringalong")
+	second.post_z_transition_bringalong_key = second.post_z_transition.Add(second, "post_z_transition_bringalong")
+
 	second.mutual_handcuffed_to_event_key = second.on_moved.Add(first, "on_mutual_cuffed_move")
 	first.mutual_handcuffed_to_event_key = first.on_moved.Add(second, "on_mutual_cuffed_move")
 
@@ -71,6 +76,12 @@
 		//remove from the event
 		C.on_moved.Remove(C.mutual_handcuffed_to_event_key)
 		handcuffed_to.on_moved.Remove(handcuffed_to.mutual_handcuffed_to_event_key)
+
+		C.on_z_transition.Remove(C.z_transition_bringalong_key)
+		handcuffed_to.on_z_transition.Remove(handcuffed_to.z_transition_bringalong_key)
+
+		C.post_z_transition.Remove(C.post_z_transition_bringalong_key)
+		handcuffed_to.post_z_transition.Remove(handcuffed_to.post_z_transition_bringalong_key)
 
 		//reset the mob's vars
 		handcuffed_to.mutual_handcuffed_to = null
@@ -99,3 +110,20 @@
 		//last_call as not to get too many nested calls
 		mutual_handcuff_forcemove_time = world.time
 
+/mob/living/carbon/proc/z_transition_bringalong(var/mob/user, var/from_z, var/to_z)
+	if (mutual_handcuffed_to)
+		// Remove the ability to bring his buddy, since his buddy already brought him here
+		mutual_handcuffed_to.on_z_transition.Remove(mutual_handcuffed_to.z_transition_bringalong_key)
+		mutual_handcuffed_to.z_transition_bringalong_key = null
+		mutual_handcuffed_to.post_z_transition.Remove(mutual_handcuffed_to.post_z_transition_bringalong_key)
+		mutual_handcuffed_to.post_z_transition_bringalong_key = null
+		mutual_handcuffed_to.on_moved.Remove(mutual_handcuffed_to.mutual_handcuffed_to_event_key)
+		mutual_handcuffed_to_event_key = null
+
+/mob/living/carbon/proc/post_z_transition_bringalong(var/mob/user, var/from_z, var/to_z)
+	if (mutual_handcuffed_to)
+		// Re-adds the events on the fly once the transition is done.
+		mutual_handcuffed_to.forceMove(get_turf(src))
+		mutual_handcuffed_to.z_transition_bringalong_key = mutual_handcuffed_to.on_z_transition.Add(mutual_handcuffed_to, "z_transition_bringalong")
+		mutual_handcuffed_to.post_z_transition_bringalong_key = mutual_handcuffed_to.post_z_transition.Add(mutual_handcuffed_to, "post_z_transition_bringalong")
+		mutual_handcuffed_to_event_key = mutual_handcuffed_to.on_moved.Add(src, "on_mutual_cuffed_move")

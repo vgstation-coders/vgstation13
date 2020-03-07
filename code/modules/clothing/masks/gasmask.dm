@@ -298,3 +298,10 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	can_flip = 0
 	canstage = 0
+
+/obj/item/clothing/mask/gas/clownmaskpsyche/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/shoes/clownshoespsyche))
+		new /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin(get_turf(src))
+		qdel(W)
+		qdel(src)

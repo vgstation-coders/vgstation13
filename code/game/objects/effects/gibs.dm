@@ -57,7 +57,6 @@
 			for(var/j = 1, j<= gibamounts[i], j++)
 				var/gibType = gibtypes[i]
 				gib = getFromPool(gibType,location)//new gibType(location)
-				gib.New(location)
 
 				// Apply human species colouration to masks.
 				if(fleshcolor)

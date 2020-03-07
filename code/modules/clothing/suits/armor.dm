@@ -28,6 +28,7 @@
 	desc = "An armored vest that protects against some damage."
 	icon_state = "armor"
 	item_state = "armor"
+	species_fit = list(VOX_SHAPED)
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
@@ -38,14 +39,15 @@
 			B.attackby(I,user)
 	else
 		..()
-		
+
 /obj/item/clothing/suit/armor/vest/security
 	name = "security armor"
 	desc = "An armored vest that protects against some damage. This one has a Nanotrasen corporate security badge."
 	icon_state = "armorsec"
 	item_state = "armor"
+	species_fit = list(VOX_SHAPED)
 	var/clowned = FALSE //so clowns can deface this item
-	
+
 /obj/item/clothing/suit/armor/vest/security/attackby(var/obj/item/A, mob/user)
 	if(clowned == FALSE && istype(A,/obj/item/toy/crayon/rainbow))
 		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
@@ -64,16 +66,17 @@
 /obj/item/clothing/suit/armor/vest/security/update_icon()
 	icon_state = initial(icon_state) + "[clowned == TRUE ? "c" : ""]"
 	item_state = initial(icon_state) + "[clowned == TRUE ? "c" : ""]"
-	
+
 /obj/item/clothing/suit/armor/vest/security/clown/New()
 	clowned = TRUE
 	update_icon()
-	
+
 /obj/item/clothing/suit/armor/vest/warden
 	name = "Warden's jacket"
 	desc = "An armoured jacket with silver rank pips and livery."
 	icon_state = "warden_jacket"
 	item_state = "armor"
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list (VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/neorussian
@@ -87,6 +90,7 @@
 	desc = "A series of chains linked together in a way to look like a suit."
 	icon_state = "chainmail_torso"
 	item_state = "chainmail_torso"
+	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 20, bullet = 35, laser = 10, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/riot
@@ -94,6 +98,7 @@
 	desc = "A suit of armor with heavy padding to protect against melee attacks. Looks like it might impair movement."
 	icon_state = "riot"
 	item_state = "swat_suit"
+	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 80, bullet = 10, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
@@ -191,6 +196,8 @@
 	desc = "A vest that excels in protecting the wearer against high-velocity solid projectiles."
 	icon_state = "bulletproof"
 	item_state = "armor"
+	species_fit = list(VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 80, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.7
@@ -200,6 +207,8 @@
 	desc = "A vest that excels in protecting the wearer against energy projectiles."
 	icon_state = "armor_reflec"
 	item_state = "armor_reflec"
+	species_fit = list(VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0

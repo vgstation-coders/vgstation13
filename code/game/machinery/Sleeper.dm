@@ -378,22 +378,27 @@
 			go_out(ejector = user)
 		process()
 
+/obj/machinery/sleeper/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
+	if (O == occupant)
+		occupant = null
+		update_icon()
+
 /obj/machinery/sleeper/proc/go_out(var/exit = loc, var/mob/ejector)
+	var/mob/old_occupant = occupant
 	if(!occupant)
 		return FALSE
 	for(var/atom/movable/x in contents)
 		if(x in component_parts)
 			continue
 		x.forceMove(loc)
-	if(!occupant.gcDestroyed)
-		occupant.forceMove(exit)
-		occupant.reset_view()
-		if(istype(ejector) && ejector != occupant)
+	if(!old_occupant.gcDestroyed)
+		old_occupant.forceMove(exit)
+		old_occupant.reset_view()
+		if(istype(ejector) && ejector != old_occupant)
 			var/obj/structure/bed/roller/B = locate() in exit
 			if(B)
-				B.buckle_mob(occupant, ejector)
+				B.buckle_mob(old_occupant, ejector)
 				ejector.start_pulling(B)
-	occupant = null
 	update_icon()
 	return TRUE
 

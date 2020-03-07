@@ -291,7 +291,7 @@
 
 //The build_part_loop fires independently and will build stuff until the queue is over or when it is stopped.
 /obj/machinery/r_n_d/fabricator/proc/build_part_loop()
-	if(busy || stopped || being_built || stat&(NOPOWER|BROKEN))
+	if(busy || stopped || being_built || stat&(NOPOWER|BROKEN) || queue.len == 0)
 		return
 	var/datum/design/D = queue_pop()
 	if(!build_part(D))
