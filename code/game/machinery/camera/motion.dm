@@ -40,6 +40,7 @@
 /obj/machinery/camera/proc/lostTarget(var/mob/target)
 	if (target in motionTargets)
 		motionTargets -= target
+		target.on_destroyed.Remove("\ref[src]:clearDeletedTarget")
 	if (motionTargets.len == 0)
 		cancelAlarm()
 
