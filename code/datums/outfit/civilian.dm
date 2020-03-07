@@ -112,7 +112,7 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
-/datum/outfit/chef/post_equip(var/mob/living/carbon/human/H)
+/datum/outfit/bartender/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
