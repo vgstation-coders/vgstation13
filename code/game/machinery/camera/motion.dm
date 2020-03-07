@@ -34,6 +34,7 @@
 		detectTime = world.time // start the clock
 	if (!(target in motionTargets))
 		motionTargets += target
+		target.on_destroyed.Add(src, "clearDeletedTarget")
 	return 1
 
 /obj/machinery/camera/proc/lostTarget(var/mob/target)
@@ -41,6 +42,10 @@
 		motionTargets -= target
 	if (motionTargets.len == 0)
 		cancelAlarm()
+
+/obj/machinery/camera/proc/clearDeletedTarget(list/params)
+	var/atom/destroyed = params["atom"]
+	lostTarget(destroyed)
 
 /obj/machinery/camera/proc/cancelAlarm()
 	if (detectTime == -1)
