@@ -306,6 +306,10 @@
 		name = cardname
 	update_icon()
 
+/obj/item/toy/singlecard/Destroy()
+	parentdeck.cards -= src
+	..()
+
 /obj/item/toy/singlecard/update_icon()
 	if(flipped)
 		icon_state = "singlecard_down"
