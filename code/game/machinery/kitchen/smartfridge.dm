@@ -34,12 +34,12 @@
 /obj/machinery/smartfridge/power_change()
 	if( powered() )
 		stat &= ~NOPOWER
-		set_light(0)
+		set_light(2)
 	else
 		spawn(rand(0, 15))
 		stat |= NOPOWER
 		if(!(stat & BROKEN))
-			set_light(2)
+			set_light(0)
 			
 
 /datum/fridge_pile
