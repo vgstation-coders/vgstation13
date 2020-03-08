@@ -165,7 +165,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
 	/client/proc/debug_pooling,
 	/client/proc/cmd_admin_list_open_jobs,
-	/proc/getbrokeninhands,
 	/client/proc/Debug2,
 	/client/proc/cmd_debug_make_powernets,
 	/client/proc/debug_controller,
