@@ -206,7 +206,7 @@
 	name = "flail"
 	icon_state = "vampkiller"
 	icon_name = "vampkiller"
-	damage = 1
+	damage = 0
 	sharpness = 0
 	failure_message = "The lash's tip falls to the ground with a clunk..."
 	whipitgood_bonus = null

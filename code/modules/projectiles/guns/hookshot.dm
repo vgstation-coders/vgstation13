@@ -475,6 +475,7 @@
 	maxlength = 5
 	hooktype = /obj/item/projectile/hookshot/whip
 	empty_sound = null
+	slot_flags = SLOT_BELT
 
 /obj/item/weapon/gun/hookshot/whip/update_icon()
 	return
@@ -484,6 +485,8 @@
 	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It's said to be imbued with holy powers, but this one looks like a cheap replica."
 	icon_state = "vampkiller"
 	item_state = "vampkiller"
+	force = 0
+	throwforce = 0
 	hooktype = /obj/item/projectile/hookshot/whip/vampkiller
 	fire_sound = 'sound/weapons/vampkiller.ogg'
 

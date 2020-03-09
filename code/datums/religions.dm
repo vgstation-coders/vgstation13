@@ -358,6 +358,10 @@
 		if ("The Dokument")
 			R.holy_book.icon_state = "gunbible"
 			R.holy_book.item_state = "gunbible"
+		if("Holy Grimoire")
+			R.holy_book.icon_state = "holygrimoire"
+			R.holy_book.item_state = "holygrimoire"
+			R.holy_book.desc = "A version of the Christian Bible with several apocryphal sections appended which detail how to combat evil forces of the night. Apply to head repeatedly."
 		else
 			//If christian bible, revert to default
 			R.holy_book.icon_state = "bible"
@@ -1342,3 +1346,16 @@
 	spawn(rand(1,3))
 		L.get_subtle_message(buttbottify(prayer_message), src.deity_name)
 		L.playsound_local(src,'sound/misc/fart.ogg', 50, 1)
+
+/datum/religion/belmont
+	name = "Brotherhood of Light"
+	deity_name = "The Almighty"
+	bible_name = "Holy Grimoire"
+	male_adept = "Vampire Hunter"
+	female_adept = "Vampire Hunter"
+	keys = list("vampire killer", "vampire hunter", "belmont clan", "die monster", "uuddlrlrbastart")
+	bookstyle = "Holy Grimoire"
+
+/datum/religion/belmont/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/vamphunter, slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/head/vamphunter, slot_shoes)
