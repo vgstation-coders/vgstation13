@@ -485,13 +485,11 @@
 	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It's said to be imbued with holy powers, but this one looks like a cheap replica."
 	icon_state = "vampkiller"
 	item_state = "vampkiller"
-	force = 0
-	throwforce = 0
+	force = 15
 	hooktype = /obj/item/projectile/hookshot/whip/vampkiller
 	fire_sound = 'sound/weapons/vampkiller.ogg'
 
 /obj/item/weapon/gun/hookshot/whip/vampkiller/true
 	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It is blessed to be effective against the undead and radiates an awesome holy aura."
 	icon_state = "vampkiller_true"
-	force = 15
 	hooktype = /obj/item/projectile/hookshot/whip/vampkiller/true
