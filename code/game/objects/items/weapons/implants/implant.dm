@@ -630,22 +630,21 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 
 /obj/item/weapon/implant/freedom/New()
-	src.activation_emote = pick("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
+	activation_emote = pick("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
 	..()
 	return
 
 
 /obj/item/weapon/implant/freedom/trigger(emote, mob/living/carbon/source as mob)
-	if (src.uses < 1)
+	if (uses < 1)
 		return 0
-	if (emote == src.activation_emote)
-		src.uses--
+	if (emote == activation_emote)
+		uses--
 		to_chat(source, "You feel a faint click.")
 		if (source.handcuffed)
 			source.drop_from_inventory(source.handcuffed)
 		if (source.legcuffed)
 			source.drop_from_inventory(source.legcuffed)
-	return
 
 
 /obj/item/weapon/implant/freedom/implanted(mob/living/carbon/source)
@@ -681,7 +680,6 @@ No Implant Specifics"}
 	hidden_uplink = new(src)
 	hidden_uplink.uses = 10
 	..()
-	return
 
 /obj/item/weapon/implant/uplink/implanted(mob/source)
 	activation_emote = input("Choose activation emote:") in list("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
@@ -693,5 +691,3 @@ No Implant Specifics"}
 /obj/item/weapon/implant/uplink/trigger(emote, mob/source as mob)
 	if(hidden_uplink && usr == source) // Let's not have another people activate our uplink
 		hidden_uplink.check_trigger(source, emote, activation_emote)
-	return
-
