@@ -26,6 +26,7 @@
 	ghost_read = 0
 
 	var/fire_sound = 'sound/weapons/Gunshot.ogg'
+	var/fire_action = "fire"
 	var/empty_sound = 'sound/weapons/empty.ogg'
 	var/fire_volume = 50 //the volume of the fire_sound
 	var/obj/item/projectile/in_chamber = null
@@ -121,7 +122,7 @@
 		else if (in_chamber.fire_sound)
 			playsound(user, in_chamber.fire_sound, fire_volume, 1)
 		user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
-		"<span class='warning'>You fire [src][reflex ? "by reflex":""]!</span>", \
+		"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
 		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 
 /obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
