@@ -632,7 +632,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/freedom/New()
 	activation_emote = pick("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
 	..()
-	return
 
 
 /obj/item/weapon/implant/freedom/trigger(emote, mob/living/carbon/source as mob)
