@@ -12,6 +12,9 @@
 
 var/savefile/panicfile
 /world/New()
+	if(fexists("byond-extools.dll"))
+		call("byond-extools.dll", "maptick_initialize")()
+	
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
