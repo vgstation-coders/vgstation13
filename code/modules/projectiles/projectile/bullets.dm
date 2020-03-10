@@ -78,11 +78,16 @@
 /obj/item/projectile/bullet/shrapnel/New()
 	..()
 	kill_count = rand(6,10)
+	damage = rand(15,75)
 
 /obj/item/projectile/bullet/shrapnel/small
 
 	name = "small shrapnel"
 	damage = 25
+
+/obj/item/projectile/bullet/shrapnel/small/New()
+	..()
+	damage = rand(5,45)
 
 /obj/item/projectile/bullet/shrapnel/small/plasma
 
@@ -91,6 +96,9 @@
 	color = "#BF5FFF"
 	damage = 35
 
+/obj/item/projectile/bullet/shrapnel/small/plasma/New()
+	..()
+	damage = rand(10,60)
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
