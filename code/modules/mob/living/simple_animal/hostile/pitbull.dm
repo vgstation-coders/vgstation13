@@ -70,7 +70,6 @@
 			LoseTarget()
 	treacherous = FALSE
 
-//some dude named yclat asked for this, I'm so fucking sorry aaaaahhh
 /mob/living/simple_animal/hostile/pitbull/attackby(obj/item/I, mob/user)
 	..()
 	if(istype(I,/obj/item/weapon/pickaxe/shovel))
