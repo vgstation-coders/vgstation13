@@ -122,3 +122,11 @@
 		c.scanned = I
 		c.scanned.forceMove(c)
 		update()
+
+/obj/item/weapon/implanter/uplink
+	name = "implanter-uplink"
+	imp_type = /obj/item/weapon/implant/uplink
+
+/obj/item/weapon/implanter/freedom
+	name = "implanter-freedom"
+	imp_type = /obj/item/weapon/implant/freedom
