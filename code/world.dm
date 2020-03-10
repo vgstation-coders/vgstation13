@@ -12,7 +12,7 @@
 
 var/savefile/panicfile
 /world/New()
-	if(fexists("byond-extools.dll"))
+	if(fexists("byond-extools.dll") && system_type == MS_WINDOWS)
 		call("byond-extools.dll", "maptick_initialize")()
 	
 	// Honk honk, fuck you science
