@@ -172,10 +172,8 @@
 	name = "Freedom Implant (with injector)"
 
 /obj/item/weapon/storage/box/syndie_kit/imp_freedom/New()
+	new /obj/item/weapon/implanter/freedom(src)
 	..()
-	var/obj/item/weapon/implanter/O = new(src)
-	O.imp = new /obj/item/weapon/implant/freedom(O)
-	O.update()
 	return
 
 /obj/item/weapon/storage/box/syndie_kit/imp_compress
@@ -198,10 +196,8 @@
 	name = "Uplink Implant (with injector)"
 
 /obj/item/weapon/storage/box/syndie_kit/imp_uplink/New()
+	new /obj/item/weapon/implanter/uplink(src)
 	..()
-	var/obj/item/weapon/implanter/O = new(src)
-	O.imp = new /obj/item/weapon/implant/uplink(O)
-	O.update()
 	return
 
 /obj/item/weapon/storage/box/syndie_kit/space
