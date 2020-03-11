@@ -383,6 +383,7 @@
 	for(var/mob/M in targets)
 		if (istype(M,/mob/living/carbon/human/))
 			var/mob/living/carbon/human/H = M
+			var/no_blood = (H.species.flags & NO_BLOOD)
 			if(isskellington(H))
 				to_chat(H, "<span class='warning'>You have no flesh left to melt!</span>")
 				return 0
@@ -391,13 +392,12 @@
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()
-				gibs(H.loc, H.virus2, H.dna)
-				return
-
-			if(H.set_species("Skellington"))
+			else if(H.set_species("Skellington"))
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()
+			
+			if (!no_blood)
 				gibs(H.loc, H.virus2, H.dna)
 		else
 			M.visible_message("<span class='danger'>[usr.name] melts into a pile of bloody viscera!</span>")
