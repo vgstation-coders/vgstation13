@@ -39,14 +39,8 @@
 			new /obj/item/weapon/storage/belt/skull(src)
 
 		if("freedom")//18+5=23
-			var/obj/item/weapon/implanter/O = new /obj/item/weapon/implanter(src)
-			O.imp = new /obj/item/weapon/implant/freedom(O)
-			O.update()
-			O.name= "Freedom"
-			var/obj/item/weapon/implanter/U = new /obj/item/weapon/implanter(src)
-			U.imp = new /obj/item/weapon/implant/uplink(U)
-			U.update()
-			U.name = "Uplink"
+			new /obj/item/weapon/implanter/uplink(src)
+			new /obj/item/weapon/implanter/freedom(src)
 
 		if("hacker")//14+6+5+3=28
 			new /obj/item/weapon/aiModule/freeform/syndicate(src)
