@@ -164,7 +164,22 @@
 			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/vinyl/scotland(src)
 			new /obj/item/weapon/spellbook/oneuse/mutate/highlander(src)
-
+		
+		if("Dealer")//Sell your drugs and make bank, or go on a shooting stabbing spree if you're a boring fuck
+			new /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff(src)
+			new /obj/item/weapon/card/id/syndicate(src)
+			new /obj/item/clothing/mask/gas/voice(src)
+			new /obj/item/weapon/pocket_mirror/comb(src)
+			new /obj/item/clothing/gloves/black(src)
+			new /obj/item/weapon/butterflyknife/viscerator(src)
+			new /obj/item/weapon/storage/wallet(src)
+			new /obj/item/weapon/lighter/zippo(src)
+			new /obj/item/weapon/storage/fancy/cigarettes/dromedaryco(src)
+			new /obj/item/weapon/storage/pill_bottle/happy(src)
+			new /obj/item/weapon/storage/pill_bottle/zoom(src)
+			new /obj/item/weapon/storage/pill_bottle/hyperzine(src)
+			new /obj/item/weapon/storage/pill_bottle/creatine(src)
+			new /obj/item/weapon/reagent_containers/pill/laststand(src) //If the feds corner you
 	tag = tagname
 
 
