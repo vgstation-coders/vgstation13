@@ -17,7 +17,8 @@
 									"emagsandglue" = 10,
 									"balloon" = 10,
 									"bangerboy" = 100,
-									"highlander" = 100))
+									"highlander" = 100,
+									"dealer" = 100))
 	switch (tagname)
 		if("bloodyspai")//2+5+2+2+4+4+4=23
 			new /obj/item/clothing/under/chameleon(src)
