@@ -634,7 +634,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	..()
 
 
-/obj/item/weapon/implant/freedom/trigger(emote, mob/living/carbon/source as mob)
+/obj/item/weapon/implant/freedom/trigger(emote, mob/living/carbon/source)
 	if (uses < 1)
 		return 0
 	if (emote == activation_emote)
@@ -687,6 +687,6 @@ No Implant Specifics"}
 	return 1
 
 
-/obj/item/weapon/implant/uplink/trigger(emote, mob/source as mob)
+/obj/item/weapon/implant/uplink/trigger(emote, mob/source)
 	if(hidden_uplink && usr == source) // Let's not have another people activate our uplink
 		hidden_uplink.check_trigger(source, emote, activation_emote)
