@@ -290,9 +290,9 @@
 			icon_state = icon_on
 	else
 		spawn(rand(0, 15))
-		stat |= NOPOWER
-		if(!(stat & BROKEN))
-			icon_state = icon_off
+			stat |= NOPOWER
+			if(!(stat & BROKEN))
+				icon_state = icon_off
 
 /*******************
 *   Item Adding
