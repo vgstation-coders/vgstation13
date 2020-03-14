@@ -1205,6 +1205,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana)
 	plant_icon = "banana"
 	mutants = null
+	chems = list(BANANA = list(1,10), HONKSERUM = list(1,20))
 
 /datum/seed/corn
 	name = "corn"
