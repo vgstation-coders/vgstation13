@@ -382,6 +382,10 @@
 		if(src in clients) //Did we log out before we reached this part of the function?
 			nanomanager.send_resources(src)
 
+// Sends resources to the client asynchronously.
+/client/proc/preload_resource(var/rsc)
+	Export("##action=preload_rsc", rsc)
+
 
 /client/proc/send_html_resources()
 	if(adv_camera && minimapinit)
@@ -389,6 +393,8 @@
 	while(!vote || !vote.interface)
 		sleep(1)
 	vote.interface.sendAssets(src)
+	var/datum/asset/simple/E = new/datum/asset/simple/emoji_list()
+	send_asset_list(src, E.assets)
 
 /proc/get_role_desire_str(var/rolepref)
 	switch(rolepref & ROLEPREF_VALMASK)

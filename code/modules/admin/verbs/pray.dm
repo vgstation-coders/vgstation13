@@ -50,8 +50,5 @@
 /proc/send_prayer_to_admins(var/msg,var/sound)
 	for(var/client/C in admins)
 		if(C.prefs.toggles & CHAT_PRAYER)
-			if(C.prefs.special_popup)
-				C << output(msg, "window1.msay_output") //If i get told to make this a proc imma be fuckin mad
-			else
-				to_chat(C, msg)
+			C.output_to_special_tab(msg)
 			C << sound

@@ -219,6 +219,11 @@
 	targetvendomat = /obj/machinery/vending/mining
 	icon_state = "mining"
 
+/obj/structure/vendomatpack/games
+	name = "Al's Fun And Games recharge pack"
+	targetvendomat = /obj/machinery/vending/games
+	icon_state = "games"
+
 //////EMPTY PACKS//////
 
 /obj/item/emptyvendomatpack

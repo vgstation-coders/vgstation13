@@ -170,7 +170,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	var containerCurrentVolume = 0
 	if(container && container.reagents && container.reagents.reagent_list.len)
 		for(var/datum/reagent/R in container.reagents.reagent_list)
-			containerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
+			var/reg_name = R.name
+			if (istype(R,/datum/reagent/vaccine))
+				var/datum/reagent/vaccine/vaccine = R
+				var/vaccines = ""
+				for (var/A in vaccine.data["antigen"])
+					vaccines += "[A]"
+				if (vaccines == "")
+					vaccines = "blank"
+				reg_name = "[reg_name] ([vaccines])"
+			containerContents.Add(list(list("name" = reg_name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 			containerCurrentVolume += R.volume
 	data["beakerContents"] = containerContents
 
@@ -212,12 +221,12 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(href_list["amount"] == "0")
 			var/num = input("Enter desired output amount", "Amount", useramount) as num
 			if (num)
-				amount = round(text2num(num), 5)
+				amount = round(text2num(num), 1)
 				custom = 1
 		else
 			custom = 0
-			amount = round(text2num(href_list["amount"]), 5) // round to nearest 5
-		amount = Clamp(amount, 5, 100) // Since the user can actually type the commands himself, some sanity checking
+			amount = round(text2num(href_list["amount"]), 1)
+		amount = clamp(amount, 1, container ? container.volume : 100)
 		if (custom)
 			useramount = amount
 
@@ -422,6 +431,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		COGNAC,
 		WINE,
 		SAKE,
+		TRIPLESEC,
+		BITTERS,
+		CINNAMONWHISKY,
+		SCHNAPPS,
+		BLUECURACAO,
 		KAHLUA,
 		ALE,
 		ICE = T0C,

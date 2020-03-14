@@ -1,5 +1,3 @@
-
-
 /datum/event/infestation
 	announceWhen = 15
 	endWhen = 20
@@ -8,6 +6,9 @@
 	var/vermin = VERM_MICE
 	var/override_location = null
 	var/override_vermin = null
+
+/datum/event/infestation/can_start()
+	return 50
 
 /datum/event/infestation/start()
 
@@ -49,14 +50,14 @@
 	var/max_number = 4
 
 	vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS, VERM_ROACHES, VERM_GREMLINS, VERM_BEES, VERM_HORNETS,
-	VERM_SYPHONER, VERM_GREMTIDE, VERM_CRABS)
+	VERM_SYPHONER, VERM_GREMTIDE, VERM_CRABS, VERM_DIONA, VERM_MUSHMEN)
 
 	if (override_vermin)
 		vermin = override_vermin
 
 	switch(vermin)
 		if(VERM_MICE)
-			spawn_types = list(/mob/living/simple_animal/mouse/gray, /mob/living/simple_animal/mouse/brown, /mob/living/simple_animal/mouse/white)
+			spawn_types = list(/mob/living/simple_animal/mouse/common/gray, /mob/living/simple_animal/mouse/common/brown, /mob/living/simple_animal/mouse/common/white)
 			max_number = 12
 			vermstring = "mice"
 		if(VERM_LIZARDS)
@@ -108,6 +109,13 @@
 			spawn_types = list(/mob/living/simple_animal/crab, /mob/living/simple_animal/crab/kickstool, /mob/living/simple_animal/crab/snowy)
 			vermstring = "crabs"
 			max_number = 5
+		if(VERM_DIONA)
+			spawn_types = /mob/living/carbon/monkey/diona
+			vermstring = "diona nymphs"
+		if(VERM_MUSHMEN)
+			spawn_types = /mob/living/carbon/monkey/mushroom
+			vermstring = "mushroom pinheads"
+
 
 	var/number = rand(2, max_number)
 

@@ -62,6 +62,8 @@
 
 	if(istype(target, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = target
+		if(M.mining_difficulty > MINE_DIFFICULTY_TOUGH)
+			return
 		if(M.finds && M.finds.len) //Shameless copypaste. TODO: Make an actual proc for this then apply it to mechs as well.
 			if(prob(5))
 				M.excavate_find(5, M.finds[1])
@@ -73,10 +75,9 @@
 		if(OB)
 			var/count = 0
 			for(var/obj/item/stack/ore/ore in range(src,1))
-				if(get_dir(src,ore)&dir && ore.material)
-					OB.materials.addAmount(ore.material,ore.amount)
+				if(get_dir(src,ore)&dir && OB.try_add_ore(ore))
 					returnToPool(ore)
-					count++
+					count += ore.amount
 			if(count)
 				to_chat(occupant,"<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
 

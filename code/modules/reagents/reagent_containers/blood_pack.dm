@@ -88,16 +88,7 @@
 		to_chat(user, "<span class='info'>You can't make out the contents.</span>")
 		return
 	if(reagents)
-		to_chat(user, "It contains:")
-		if(reagents.reagent_list.len)
-			for(var/datum/reagent/R in reagents.reagent_list)
-				if (R.id == BLOOD)
-					var/type = R.data["blood_type"]
-					to_chat(user, "<span class='info'>[R.volume] units of [R.name], of type [type]</span>")
-				else
-					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-		else
-			to_chat(user, "<span class='info'>Nothing.</span>")
+		reagents.get_examine(user, blood_type = TRUE)
 
 /obj/item/weapon/reagent_containers/blood/fits_in_iv_drip()
 	if (mode == BLOODPACK_NORMAL)

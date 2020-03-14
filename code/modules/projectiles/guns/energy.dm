@@ -52,7 +52,7 @@
 	//If there's no power cell, the gun looks as if it had an empty power cell
 
 	ratio *= 100
-	ratio = Clamp(ratio, 0, 100) //Value between 0 and 100
+	ratio = clamp(ratio, 0, 100) //Value between 0 and 100
 
 	if(ratio >= 50)
 		ratio = Floor(ratio, icon_charge_multiple)
@@ -63,6 +63,8 @@
 		icon_state = "[modifystate][ratio]"
 	else if(charge_states)
 		icon_state = "[initial(icon_state)][ratio]"
+	if(clowned == CLOWNED)
+		icon_state += "c"
 
 /obj/item/weapon/gun/energy/New()
 	. = ..()

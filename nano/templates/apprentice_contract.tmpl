@@ -1,0 +1,32 @@
+<!-- code\game\gamemodes\wizard\apprentice_contract.dm -->
+{{:helper.syndicateMode()}}
+{{if data.summoning}}
+	<div class="mask">
+		<div class="maskContent" style="margin: 160px 0">
+			<h1>SUMMONING</h1>
+			<h3>Summoning {{>data.summoning}} apprentice...</h3>
+		</div>
+	</div>
+{{/if}}
+
+<div class="item">
+    <div class="itemLabel">Forced name:</div>
+    <div class="itemContent">
+        {{:helper.link(data.forced_name || 'Unspecified', 'pencil', {'set_name' : '1'}, null)}}
+    </div>
+</div>
+
+<div class="item">
+    <div class="itemLabel">Forced gender:</div>
+    <div class="itemContent">
+        {{:helper.link('Unspecified', null, {'unset_gender' : '1'}, data.forced_gender ? null : 'disabled')}}
+        {{:helper.link('Male', null, {'set_gender' : 'male'}, data.forced_gender != 'male' ? null : 'disabled')}}
+        {{:helper.link('Female', null, {'set_gender' : 'female'}, data.forced_gender != 'female' ? null : 'disabled')}}
+    </div>
+</div>
+
+{{for data.setups}}
+    <div class="item">
+        {{:helper.link(value.name + ': '+value.desc, null, {'summon':value.name})}}
+    </div>
+{{/for}}

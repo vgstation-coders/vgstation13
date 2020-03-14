@@ -56,6 +56,12 @@
 	else
 		return !density
 
+
+/mob/living/simple_animal/hostile/viscerator/proc/handle_faction(var/mob/user)
+	if(!user || isnukeop(user) || iswizard(user)) //wizard and nook ops already properly match faction
+		return
+	faction = "\ref[user]"
+
 /mob/living/simple_animal/hostile/viscerator/flying_skull
 	name = "flying skull"
 	desc = "A human skull levitating in the air."

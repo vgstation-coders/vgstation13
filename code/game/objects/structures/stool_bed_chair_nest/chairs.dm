@@ -57,8 +57,8 @@
 			qdel(src)
 			return
 
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 50)
 		drop_stack(sheet_type, loc, sheet_amt, user)
 		qdel(src)
 		return
@@ -157,27 +157,31 @@
 			return
 	change_dir(direction)
 	return 1
+	
+/obj/structure/bed/chair/AltClick(mob/user as mob)
+	buckle_chair(user,user)	
 
 /obj/structure/bed/chair/MouseDropTo(mob/M as mob, mob/user as mob)
+	buckle_chair(M,user)
+
+/obj/structure/bed/chair/proc/buckle_chair(mob/M as mob, mob/user as mob)
 	if(!istype(M))
 		return ..()
+
 	var/mob/living/carbon/human/target = null
 	if(ishuman(M))
 		target = M
+		
+	if(!user.Adjacent(M) || !user.Adjacent(src))
+		return
+
 	if(target && target.op_stage.butt == 4 && Adjacent(target) && user.Adjacent(src) && !user.incapacitated()) //Butt surgery is at stage 4
 		if(!M.knockdown)	//Spam prevention
-			if(M == usr)
-				M.visible_message(\
-					"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
-					"Having no butt, you slide right out of the [src]",\
-					"You hear metal clanking.")
-
-			else
-				M.visible_message(\
-					"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
-					"Having no butt, you slide right out of the [src]",\
-					"You hear metal clanking.")
-
+			M.visible_message(\
+				"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
+				"Having no butt, you slide right out of the [src]",\
+				"You hear metal clanking.")
+				
 			M.Knockdown(5)
 			M.Stun(5)
 		else
@@ -187,6 +191,7 @@
 		buckle_mob(M, user)
 	if(material_type)
 		material_type.on_use(src,M,user)
+
 
 // Chair types
 /obj/structure/bed/chair/wood
@@ -278,7 +283,7 @@
 
 
 /obj/structure/bed/chair/comfy/attackby(var/obj/item/W, var/mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		for (var/atom/movable/AM in src)
 			AM.forceMove(loc)
 
@@ -611,7 +616,7 @@
 	if(istype(W, /obj/item/assembly/shock_kit))
 		to_chat(user,"<span class='warning'>\The [W] cannot be rigged onto \the [src].</span>")
 		return
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		to_chat(user,"<span class='warning'>You cannot find any bolts to unwrench on \the [src].</span>")
 		return
 	if (iswelder(W))

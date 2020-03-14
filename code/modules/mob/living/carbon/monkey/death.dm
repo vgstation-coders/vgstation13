@@ -6,7 +6,7 @@
 	invisibility = 101
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-m", sleeptime = 15)
-	gibs(loc, viruses, dna)
+	gibs(loc, virus2, dna)
 
 	qdel(src)
 

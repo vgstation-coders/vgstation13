@@ -47,26 +47,28 @@
 /obj/machinery/cart/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/oldloc = src.loc
 	..()
-	if (src.loc == oldloc)
-		return
-
-	if (next_cart)
-		next_cart.Move(oldloc, glide_size_override = src.glide_size)
-
-	if (next_cart) //This one is really unlikely to happen
-		if (get_dist(next_cart, src) > 1.99) //This is a nasty nasty hack but IT WORKS SO DON'T TOUCH IT
-			var/obj/machinery/cart/C = next_cart
-			next_cart.previous_cart = null
-			next_cart = null
-			disconnected()
-			C.disconnected()
-			playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
 
 	if (previous_cart)
 		if (get_dist(previous_cart, src) > 1.99)
 			var/obj/machinery/cart/C = previous_cart
 			previous_cart.next_cart = null
 			previous_cart = null
+			disconnected()
+			C.disconnected()
+			playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
+
+	if (src.loc == oldloc)
+		return
+
+	if (next_cart)
+		sleep(0)
+		next_cart.Move(oldloc, get_dir(next_cart, oldloc), glide_size_override = src.glide_size)
+
+	if (next_cart) //This one is really unlikely to happen
+		if (get_dist(next_cart, src) > 1.99) //This is a nasty nasty hack but IT WORKS SO DON'T TOUCH IT
+			var/obj/machinery/cart/C = next_cart
+			next_cart.previous_cart = null
+			next_cart = null
 			disconnected()
 			C.disconnected()
 			playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)

@@ -105,6 +105,13 @@
     icon_state = "ntballoon"
     item_state = "ntballoon"
     inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
+
+/obj/item/toy/syndicateballoon/byondballoon
+    name = "\improper BYOND balloon"
+    desc = "There is a tag on the back that reads \"LUMMOX <3!\"."
+    icon_state = "byondballoon"
+    item_state = "byondballoon"
+    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
 /*
  * Fake telebeacon
  */
@@ -495,8 +502,8 @@
 /obj/item/toy/snappop/virus
 	name = "unstable goo"
 	desc = "Your palm is oozing this stuff!"
-	icon = 'icons/mob/slimes.dmi'
-	icon_state = "red slime extract"
+	icon = 'icons/obj/virology.dmi'
+	icon_state = "unstable_goo"
 	throwforce = 30.0
 	throw_speed = 10
 	throw_range = 30
@@ -533,8 +540,8 @@
 /obj/item/toy/waterflower
 	name = "Water Flower"
 	desc = "A seemingly innocent sunflower...with a twist."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "sunflower"
+	icon = 'icons/obj/hydroponics/sunflower.dmi'
+	icon_state = "produce"
 	item_state = "sunflower"
 	var/empty = 0
 	flags = OPENCONTAINER
@@ -1044,13 +1051,13 @@
 
 /obj/item/toy/gasha/AI/attack_self(mob/user as mob)
 	if(cooldown < world.time - 8)
-		playsound(user, 'sound/vox/doop.wav', 20, 1)
+		playsound(user, 'sound/vox/_doop.wav', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/AI/attack_hand(mob/user as mob)
 	if(loc == user)
 		if(cooldown < world.time - 8)
-			playsound(user, 'sound/vox/doop.wav', 20, 1)
+			playsound(user, 'sound/vox/_doop.wav', 20, 1)
 			cooldown = world.time
 			return
 	..()
@@ -1106,17 +1113,17 @@
 	name = "fingerbox"
 	desc = "A high quality fingerbox."
 	icon_state = "fingerbox"
-	
+
 /obj/item/toy/gasha/bangerboy
 	name = "toy Bangerboy"
 	icon_state = "bangerboy"
 	desc = "<B>BANG</B>"
-	
+
 /obj/item/toy/gasha/femsec
 	name = "toy femsec"
 	icon_state = "femsec"
 	desc = "bodybag accessory not included"
-	
+
 /obj/item/toy/gasha/hoptard
 	name = "toy HoPtard"
 	icon_state = "hoptard"
@@ -1380,7 +1387,7 @@
 	if(desc)
 		to_chat(user, desc)
 
-/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+/obj/item/toy/balloon/inflated/decoy/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(!src.gcDestroyed)
 		attack_hand(user)
@@ -1776,4 +1783,3 @@ var/list/living_balloons = list()
 	name = "\improper Trader action figure"
 	icon_state = "trader"
 	toysay = "Shiny rock for nuke, good trade yes?"
-	

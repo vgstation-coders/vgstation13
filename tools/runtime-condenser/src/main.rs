@@ -1,14 +1,3 @@
-extern crate clap;
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde;
-extern crate serde_json;
-extern crate regex;
-extern crate rayon_hash;
-extern crate rayon;
-
 use std::cmp::Ordering;
 use std::fs::File;
 use std::io::prelude::*;
@@ -16,6 +5,8 @@ use std::io::{BufReader, BufWriter};
 use clap::{App, Arg};
 use regex::Regex;
 use rayon::prelude::*;
+use lazy_static::lazy_static;
+use serde_derive::Serialize;
 
 const DEFAULT_INPUT_FILE: &str = "input.txt";
 
@@ -25,7 +16,7 @@ lazy_static! {
 	};
 }
 
-type Runtimes = rayon_hash::HashMap<String, RuntimeData>;
+type Runtimes = std::collections::HashMap<String, RuntimeData>;
 
 struct SerializableRuntimes<'a> {
     map: &'a Runtimes,
@@ -458,7 +449,7 @@ fn main() {
             }
         }
     }
-    
+
     let stdout = std::io::stdout();
     match output {
         Some(file_name) => {

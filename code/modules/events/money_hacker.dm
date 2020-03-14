@@ -7,6 +7,11 @@
 	var/datum/money_account/affected_account
 	var/obj/machinery/account_database/affected_db
 
+/datum/event/money_hacker/can_start()
+	if(account_hack_attempted)
+		return 30
+	return 0
+
 /datum/event/money_hacker/setup()
 	if(all_money_accounts.len)
 		for(var/obj/machinery/account_database/DB in account_DBs)

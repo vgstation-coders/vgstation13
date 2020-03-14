@@ -14,7 +14,6 @@
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE, GREET_MASTER)
 	required_pref = VAMPIRE
 	protected_traitor_prob = PROB_PROTECTED_RARE
-	refund_value = BASE_SOLO_REFUND
 
 	var/list/powers = list()
 	var/ismenacing = FALSE
@@ -36,6 +35,8 @@
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
 	var/list/image/cached_images = list()
+
+	stat_datum_type = /datum/stat/role/vampire
 
 /datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
@@ -128,7 +129,7 @@
 	. += ..() // Who he was, his objectives...
 
 /datum/role/vampire/ForgeObjectives()
-	if(!SOLO_ANTAG_OBJECTIVES)
+	if(!antag.current.client.prefs.antag_objectives)
 		AppendObjective(/datum/objective/freeform/vampire)
 		return
 
@@ -288,6 +289,10 @@
 				I.status &= ~ORGAN_BROKEN
 				I.status &= ~ORGAN_SPLINTED
 				I.status &= ~ORGAN_BLEEDING
+		for(var/datum/organ/external/O in H.organs)
+			O.status &= ~ORGAN_BROKEN
+			O.status &= ~ORGAN_SPLINTED
+			O.status &= ~ORGAN_BLEEDING
 	nullified = max(0, nullified - 1)
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)

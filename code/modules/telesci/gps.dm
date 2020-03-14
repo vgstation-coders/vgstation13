@@ -116,15 +116,15 @@ var/list/SPS_list = list()
 			return TRUE
 
 		var/a = input("Please enter desired tag.", name, gpstag) as text|null
-		if(!a) //what a check
-			return TRUE
 
 		if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //second check in case some chucklefuck drops the GPS while typing the tag
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")
 			return TRUE
 		a = strict_ascii(a)
-		if(length(a) < 4 || length(a) > 5)
-			to_chat(usr, "<span class = 'caution'>The tag must be between four and five characters long!</span>")
+		if(!a) //what a check
+			return TRUE
+		if(length(a) > 5)
+			to_chat(usr, "<span class = 'caution'>The tag must have a maximum of five characters!</span>")
 		else
 			gpstag = a
 			update_name()
@@ -207,8 +207,7 @@ var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'soun
 		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>", MESSAGE_HEAR)
 	else if(isturf(loc))
 		visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>")
-
-
+		
 var/const/DEATHSOUND_CHANNEL = 300
 
 /obj/item/device/gps/secure/proc/deathsound(var/turf/pos,var/dead=FALSE,num,var/sound_channel)

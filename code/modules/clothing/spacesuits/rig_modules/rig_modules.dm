@@ -25,11 +25,13 @@
 	desc = "Self-lubricating joints allow for ease of movement when walking in a rigsuit."
 
 /obj/item/rig_module/speed_boost/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
+	..()
 	if(R.cell.use(500))
 		say_to_wearer("Speed module engaged.")
 		R.slowdown = max(1, slowdown/1.25)
 
 /obj/item/rig_module/speed_boost/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
+	..()
 	R.slowdown = initial(R.slowdown)
 
 /obj/item/rig_module/health_readout
@@ -98,3 +100,71 @@
 		//NEED TO GET MAXIMUM AMOUNT OF MOLES WITHOUT GOING OVER 10*ONE_ATMOSPHERE
 		//pressure = total_moles * R_IDEAL_GAS_EQUATION * temperature / volume
 		//pressure_delta = target_moles * 8.314 * sample_temperature / internals.volume
+
+
+/obj/item/rig_module/plasma_proof
+	name = "plasma-proof sealing authority"
+	desc = "Brings the suit it is installed into up to plasma environment standards."
+
+/obj/item/rig_module/plasma_proof/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
+	..()
+	if(R.cell.use(250))
+		say_to_wearer("Plasma seal initialized.")
+		R.clothing_flags |= PLASMAGUARD
+		if(R.H)
+			R.H.clothing_flags |= PLASMAGUARD
+
+/obj/item/rig_module/plasma_proof/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
+	..()
+	say_to_wearer("Plasma seal disengaged.")
+	R.clothing_flags &= ~PLASMAGUARD
+	if(R.H)
+		R.H.clothing_flags &= ~PLASMAGUARD
+
+/obj/item/rig_module/muscle_tissue
+	name = "artificial muscle tissue"
+	desc = "A flexible tissue with a number of sensors stretched between its surface and interior of the suit. When these sensors detected an impact, the artificial muscle reacts instantaneously, contracting and diffusing the damage."
+
+/obj/item/rig_module/muscle_tissue/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
+	..()
+	if(R.cell.use(1000))
+		user.mutations.Add(M_HULK) //I'M FUCKING INVINCIBLE!
+		user.update_mutations()
+		say_to_wearer("Reactive sensors online.")
+		processing_objects.Add(src)
+		R.cant_drop = TRUE
+		if(R.H)
+			R.H.cant_drop = TRUE
+		say_to_wearer("Safety lock enabled.")
+		return
+	say_to_wearer("<span class='warning'>Not enough power available in [R]!</span>")
+
+/obj/item/rig_module/muscle_tissue/deactivate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
+	..()
+	user.mutations.Remove(M_HULK)
+	user.update_mutations()
+	say_to_wearer("Reactive sensors offline.")
+	if(processing_objects.Find(src))
+		processing_objects.Remove(src)
+	R.cant_drop = FALSE
+	if(R.H)
+		R.H.cant_drop = FALSE
+	say_to_wearer("Safety lock disabled.")
+
+/obj/item/rig_module/muscle_tissue/Destroy()
+	if(processing_objects.Find(src))
+		processing_objects.Remove(src)
+	..()
+
+/obj/item/rig_module/muscle_tissue/process()
+	if(gcDestroyed)
+		return
+	if(!wearer || !ishuman(wearer))
+		processing_objects.Remove(src)
+		return
+	if(wearer.timestopped)
+		return
+	if(!rig.cell.use(50))
+		say_to_wearer("<span class='warning'>Not enough power available in [rig]!</span>")
+		deactivate(wearer,rig)
+		processing_objects.Remove(src)

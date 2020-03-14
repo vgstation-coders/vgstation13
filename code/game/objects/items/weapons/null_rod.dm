@@ -263,13 +263,27 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	fluff_pickup = "smite"
 
+
+/obj/item/weapon/nullrod/vampkiller
+	name = "holy whip"
+	desc = "A brutal looking, holy weapon consisting of a morning star head attached to a chain lash. The chain on this one seems a bit shorter than described in legend."
+	icon_state = "vampkiller"
+	item_state = "vampkiller"
+	hitsound = 'sound/weapons/vampkiller.ogg'
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("bashes", "smashes", "pulverizes")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	fluff_pickup = "smite"
+	slot_flags = SLOT_BELT
+
+
 /obj/item/weapon/nullrod/mosinnagant
 	name = "mosin nagant"
 	desc = "Many centuries later, it's still drenched in cosmoline, just like the Murdercube intended. This one cannot be fired."
 	icon = 'icons/obj/gun.dmi'
-	icon_override = "nagant"
-	icon_state = "nagant"
-	item_state = "nagant"
+	icon_override = "mosin"
+	icon_state = "mosin"
+	item_state = "mosin"
 	slot_flags = SLOT_BELT | SLOT_BACK
 	w_class = W_CLASS_LARGE
 	attack_verb = list("bashes", "smashes", "buttstrokes")
@@ -368,6 +382,8 @@
 		S.real_name = name
 		S.name = name
 		S.ckey = O.ckey
+		S.universal_speak = TRUE
+		S.universal_understand = TRUE
 		S.status_flags |= GODMODE //Make sure they can NEVER EVER leave the blade.
 		to_chat(S, "<span class='info'>You open your eyes and find yourself in a strange, unknown location with no recollection of your past.</span>")
 		to_chat(S, "<span class='info'>Despite being a sword, you have the ability to speak, as well as an abnormal desire for slicing and killing evil beings.</span>")

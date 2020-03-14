@@ -55,6 +55,8 @@
 	id = HEADREV
 	logo_state = "rev_head-logo"
 
+	stat_datum_type = /datum/stat/role/revolutionary/leader
+
 /datum/role/revolutionary/leader/OnPostSetup()
 	.=..()
 	if(!.)

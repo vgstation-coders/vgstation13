@@ -42,7 +42,7 @@
 			overlays -= current_damage_overlay
 			current_damage_overlay = null
 		return
-	var/damage_fraction = Clamp(round((max_health - current_health) / max_health * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
+	var/damage_fraction = clamp(round((max_health - current_health) / max_health * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
 	var/icon_state = "[cracked_base][damage_fraction]"
 	if(!damage_overlays[icon_state])
 		var/image/_damage_overlay = image('icons/obj/structures.dmi', icon_state)
@@ -215,27 +215,27 @@
 	switch(construction_state)
 		if(2) // intact
 			if(W.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 				"<span class='notice'>You unfasten \the [src] from its frame.</span>")
 				construction_state -= 1
 				return
 		if(1)
 			if(W.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 				"<span class='notice'>You fasten \the [src] to its frame.</span>")
 				construction_state += 1
 				return
 			if(iscrowbar(W))
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				user.visible_message("<span class='warning'>[user] pries \the [src] from its frame.</span>", \
 				"<span class='notice'>You pry \the [src] from its frame.</span>")
 				construction_state -= 1
 				return
 		if(0)
 			if(iscrowbar(W))
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
 				"<span class='notice'>You pry \the [src] into its frame.</span>")
 				construction_state += 1

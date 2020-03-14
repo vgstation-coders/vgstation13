@@ -73,6 +73,7 @@
 	if(timestopped)
 		return FALSE //under effects of time magick
 	..()
+	regular_hud_updates()
 	if(isDead())
 		for(var/i=0;i<3;i++)
 			new /obj/item/weapon/ectoplasm (src.loc)
@@ -128,38 +129,25 @@
 
 ////////////////HUD//////////////////////
 
-/mob/living/simple_animal/shade/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	. = ..()
-
-	regular_hud_updates()
-
 /mob/living/simple_animal/shade/regular_hud_updates()
 	update_pull_icon() //why is this here?
 
 	if(istype(loc, /obj/item/weapon/melee/soulblade) && hud_used && gui_icons && gui_icons.soulblade_bloodbar)
 		var/obj/item/weapon/melee/soulblade/SB = loc
-		if(fire)
+		if(healths2)
 			switch(SB.health)
-				if (-INFINITY to 18)
-					fire.icon_state = "blade_reallynotok"
-				if (18 to 36)
-					fire.icon_state = "blade_notok"
-				if (36 to INFINITY)
-					fire.icon_state = "blade_ok"
+				if(-INFINITY to 18)
+					healths2.icon_state = "blade_reallynotok"
+				if(18 to 36)
+					healths2.icon_state = "blade_notok"
+				if(36 to INFINITY)
+					healths2.icon_state = "blade_ok"
 		var/matrix/M = matrix()
 		M.Scale(1,SB.blood/SB.maxblood)
 		var/total_offset = (60 + (100*(SB.blood/SB.maxblood))) * PIXEL_MULTIPLIER
 		hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
 		hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
 		hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[SB.blood]"
-
-	if(purged)
-		if(purge > 0)
-			purged.icon_state = "purge1"
-		else
-			purged.icon_state = "purge0"
 
 	if(client && hud_used && healths)
 		switch(health)
@@ -185,6 +173,20 @@
 	transmogrify()
 	if(!gcDestroyed)
 		qdel(src)
+
+/mob/living/simple_animal/shade/gondola
+	name = "Gondola Shade"
+	real_name = "Gondola Shade"
+	desc = "A wandering spirit"
+	icon = 'icons/mob/gondola.dmi'
+	icon_state = "gondola_shade"
+	icon_living = "gondola_shade"
+	icon_dead = "gondola_skull"
+
+/mob/living/simple_animal/shade/gondola/say()
+	return
+
+
 
 ///////////////////////////////CHAOS SWORD STUFF///////////////////////////////////////////////////
 

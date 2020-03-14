@@ -120,3 +120,13 @@
 	category = "Misc"
 	materials = list(MAT_GLASS = 1000, SACID = 15, MAT_SILVER = 150)
 	build_path = /obj/item/rig_module/speed_boost
+
+/datum/design/rigsuit_powercreep
+	name = "Circut Design (Rigsuit plasma sealant)"
+	desc = "When installed and activated, ensures that the suit is now resistant to plasma contamination."
+	id = "rigsuit_plasma"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_PLASMATECH = 4)
+	build_type = IMPRINTER
+	category = "Misc"
+	materials = list(MAT_GLASS = 2500, SACID = 25, MAT_SILVER = 1000, MAT_PLASMA = 1000)
+	build_path = /obj/item/rig_module/plasma_proof

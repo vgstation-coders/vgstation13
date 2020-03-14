@@ -172,6 +172,10 @@ var/global/ingredientLimit = 10
 	if(isjustobserver(usr) || ismouse(usr))
 		return
 
+	if(active)
+		to_chat(usr, "<span class='warning'>\The [src] is currently busy!</span>")
+		return
+
 	if(cooks_in_reagents)
 		if(do_after(usr, src, src.reagents.total_volume / 10))
 			src.reagents.clear_reagents()

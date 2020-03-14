@@ -45,6 +45,8 @@ Used In File(s): \code\game\supplyshuttle.dm
 		{{:data.money}}
 	</div>
 </div>
+<br />
+<div style="border-bottom:3px solid #fff;width:100%px;height:100%;"></div>
 {{if data.show_permissions}}
 	<div class="item">
 		<div class="itemLabel">
@@ -63,8 +65,9 @@ Used In File(s): \code\game\supplyshuttle.dm
 		</div>
 	</div>
 {{else}}
-	<div style="float: left; width: 32%;">
-		<div class="itemLabel" style="margin-bottom: 3px;margin-top: 12px">
+<div id="container" style="width:100%; height:100%;display:flex;border-bottom:3px solid #fff;">
+	<div style="float: left; width: 32%; height:auto;">
+		<div class="itemLabel" style="margin-left:15%;">
 			Categories
 		</div>
 		{{for data.all_supply_groups}}
@@ -77,9 +80,9 @@ Used In File(s): \code\game\supplyshuttle.dm
 		<div class="itemLabel">
 			Supply Crates
 		</div>
-		<div class="itemContentWide" style="width: 95%;">
-			<div class="statusDisplay">
-				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 184px">
+		<div class="itemContentWide" style="width: 100%;">
+			<div class="statusDisplay style="height:100%;">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height:200px;">
 					{{for data.supply_packs}}
 						<div class="line">
 							<div class="statusValue">
@@ -92,10 +95,11 @@ Used In File(s): \code\game\supplyshuttle.dm
 			</div>
 		</div>
 	</div>
+</div>
 {{/if}}
 <div class="item">
 	<div class="itemLabel">Screen:</div>
-	<div class="itemContents">
+	<div style="float:right;" class="itemContents">
 		{{:helper.link('Main',      'gear',{'screen':1},(data.screen==1)?'linkOn':'')}}
 		{{:helper.link('Central Command Requests',     'gear',{'screen':2},(data.screen==2)?'linkOn':'')}}
 	</div>

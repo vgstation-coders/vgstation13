@@ -1,119 +1,47 @@
 //CULT 3.0 BY DEITY LINK (2018)
 //BASED ON THE ORIGINAL GAME MODE BY URIST MCDORF
 
+/* In this file:
+
+	* faction code
+
+	> special procs:
+		* get_available_blood
+			-> returns a /list with information on nearby available blood. For use by use_available_blood().
+		* use_available_blood
+			-> actually removes the blood from containers, displays flavor texts, and returns a /list with informations on the success/failure of the proc.
+		* spawn_bloodstones
+			-> called at the start of ACT III, or by set_veil_thickness. Triggers the rise of bloodstones accross the station Z level.
+		* prepare_cult_holomap
+			-> initialize the cult holomap displayed by Altars, and Bloodstones when it gets checked by a cultist
+		* cult_risk
+			-> rolls for a chance to reveal the presence of the cult to the crew prior to ACT III, called after a ritual that increases the cultist count.
+		> /obj/item procs:
+			* get_cult_power
+				-> returns the item's cult power. set manually for each item in bloodcult_items.dm.
+		> /mob procs:
+			* get_cult_power
+				-> returns the combined cult power of every item worn by that mob.
+		> /client procs:
+			* set_veil_thickness
+				-> debug proc that lets you manipulate what powers are currently available to cult, disregarding the current completion of their objectives
+				-> WARNING: setting to "3" will trigger the rise of bloodstones.
+
+*/
+
 var/veil_thickness = CULT_PROLOGUE
 
-/client/proc/set_veil_thickness()
-	set category = "Special Verbs"
-	set name = "Set Veil Thickness"
-	set desc = "Debug verb for Cult 3.0 shenanigans"
-
-	if(!check_rights(R_ADMIN))
-		return
-
-	veil_thickness = input(usr, "Enter a value (default = [CULT_PROLOGUE])", "Debug Veil Thickness", veil_thickness) as num
-
-	if (veil_thickness == CULT_ACT_III)
-		spawn_bloodstones()
-
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (cult)
-		for (var/datum/role/cultist/C in cult.members)
-			C.update_cult_hud()
-
-	for (var/obj/structure/cult/spire/S in cult_spires)
-		S.upgrade()
-
-	for (var/obj/effect/rune/R in rune_list)
-		R.update_icon()
-
-/proc/spawn_bloodstones(var/turf/source = null)
-	//Called at the beginning of ACT III, this is basically the cult's declaration of war on the crew
-	//Spawns 4 structures, one in each quarters of the station
-	//When spawning, those structures break and convert stuff around them, and add a wall layer in case of space exposure.
-	var/list/places_to_spawn = list()
-	for (var/i = 1 to 4)
-		for (var/j = 10; j > 0; j--)
-			var/turf/T = get_turf(pick(range(j*3,locate(map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 ),map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 ),map.zMainStation))))
-			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
-				//Adding some blacklisted areas, specifically solars
-				if (!istype(T.loc,/area/solar))
-					places_to_spawn += T
-					break
-	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space or on a shuttle)
-	if (source && (source.z == map.zMainStation) && !isspace(source.loc) && !is_on_shuttle(source) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
-		places_to_spawn.Add(source)
-	for (var/T in places_to_spawn)
-		new /obj/structure/cult/bloodstone(T)
-
-	//Cultists can use those bloodstones to locate the rest of them, they work just like station holomaps
-
-	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		if (!B.loc)
-			qdel(B)
-			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
-			log_admin("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
-
-/proc/prepare_cult_holomap()
-	var/image/I = image(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
-	for(var/marker in holomap_markers)
-		var/datum/holomap_marker/holomarker = holomap_markers[marker]
-		var/image/markerImage = image(holomarker.icon,holomarker.id)
-		markerImage.color = holomarker.color
-		if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
-			if(map.holomap_offset_x.len >= map.zMainStation)
-				markerImage.pixel_x = holomarker.x-8+map.holomap_offset_x[map.zMainStation]
-				markerImage.pixel_y = holomarker.y-8+map.holomap_offset_y[map.zMainStation]
-			else
-				markerImage.pixel_x = holomarker.x-8
-				markerImage.pixel_y = holomarker.y-8
-			markerImage.appearance_flags = RESET_COLOR
-			I.overlays += markerImage
-	return I
-
-/proc/cult_risk(var/mob/M)//too many conversions/soul-stoning might bring the cult to the attention of Nanotrasen prematurely
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (!cult)
-		return
-	if (cult.warning)
-		return
-	if (veil_thickness == CULT_MENDED || veil_thickness >= CULT_ACT_III)
-		return
-
-	var/living_cultists = 0
-	var/living_noncultists = 0
-	for (var/mob/living/L in player_list)
-		if (issilicon(L)||isborer(L))
-			continue
-		if (L.stat != DEAD)
-			if (iscultist(L))
-				living_cultists++
-			else
-				living_noncultists++
-
-	var/rate = 40//the percent of living cultist at which the risk starts appearing
-	var/risk = min((living_cultists*((100-rate)/50) - living_noncultists*(rate/50)) * 25, 100)//the risk increases very rapidly. at 2-3 cultists over the limit, the exposure is guarranted
-
-	if (risk > 0)
-		if(prob(risk))
-			message_admins("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have been prematurely exposed.")
-			log_admin("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have been prematurely exposed.")
-			cult.warning = TRUE
-			command_alert(/datum/command_alert/cult_detected)
-		else
-			message_admins("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have avoided raising suspicion for now...")
-			log_admin("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have avoided raising suspicion for now...")
-			if (M)
-				to_chat(M,"<span class='warning'>Be mindful, overzealous conversions and soul trapping will bring us unwanted attention. You should focus on the objective with your current force.</span>")
-
-
-//CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
+//CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled.
 //CULT_ACT_I		Altar raised. cultists can now convert.
-//CULT_ACT_II		Cultist amount reached. cultists are now looking for the sacrifice
-//CULT_ACT_III		Sacrifice complete. cult is now going loud, spreading blood and protecting bloodstones while the crew tries to destroy them
-//CULT_ACT_IV		Bloodspill threshold reached. bloodstones become indestructible, rift opens above one of them. cultists must open it, crew must close it.
+//CULT_ACT_II		Cultist amount reached. Cultists are now looking for the sacrifice.
+//CULT_ACT_III		Sacrifice complete. Cult is now going loud, spreading blood and protecting bloodstones while the crew tries to destroy them.
+//CULT_ACT_IV		Bloodspill threshold reached. A bloodstone becomes the anchor stone. Cultists must summon Nar-Sie here, whereas crew members must destroy it.
 //CULT_EPILOGUE		The cult succeeded. The station is no longer reachable from space or through teleportation, and is now part of hell. Nar-Sie hunts the survivors.
 //CULT_MENDED		The cult failed (bloodstones all destroyed or rift closed). cult magic permanently disabled, living cultists progressively die by themselves.
+
+var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anchor stone
+
+///////////////////////////////FACTION CODE - START/////////////////////////////////
 
 /datum/faction/bloodcult
 	name = "Cult of Nar-Sie"
@@ -141,9 +69,16 @@ var/veil_thickness = CULT_PROLOGUE
 	return cult_win
 
 /datum/faction/bloodcult/proc/fail()
-	if (veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
+	if(veil_thickness == CULT_MENDED || veil_thickness == CULT_EPILOGUE)
 		return
 	stage(CULT_MENDED)
+
+/datum/faction/bloodcult/HandleRecruitedRole(var/datum/role/R)
+	. = ..()
+	if (cult_reminders.len)
+		to_chat(R.antag.current, "<span class='notice'>The other cultists have left some useful reminders for you. They will be stored in your memory.</span>")
+	for (var/reminder in cult_reminders)
+		R.antag.store_memory("Cult reminder: [reminder].")
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
@@ -181,7 +116,7 @@ var/veil_thickness = CULT_PROLOGUE
 	M.special_role = "Cultist"
 
 /datum/faction/bloodcult/OnPostSetup()
-	initialize_cultwords()
+	initialize_runesets()
 	AppendObjective(/datum/objective/bloodcult_reunion)
 
 
@@ -224,7 +159,7 @@ var/veil_thickness = CULT_PROLOGUE
 		command_alert(/datum/command_alert/bloodstones_broken)
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
-		for (var/obj/effect/rune/R in rune_list)
+		for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)
 			R.update_icon()
 		for (var/datum/role/cultist/C in members)
 			C.update_cult_hud()
@@ -270,8 +205,10 @@ var/veil_thickness = CULT_PROLOGUE
 			var/datum/objective/bloodcult_bloodbath/O = locate() in objective_holder.objectives
 			if (O)
 				veil_thickness = CULT_ACT_IV
-				command_alert(/datum/command_alert/bloodstones_anchor)
 				new_obj = new /datum/objective/bloodcult_tearinreality
+				spawn(15 SECONDS) //A delay before the anchor stone is announced
+					if(global_anchor_bloodstone) //Check if it exploded in the mean time
+						command_alert(/datum/command_alert/bloodstones_anchor)
 		if (CULT_EPILOGUE)
 			var/datum/objective/bloodcult_tearinreality/O = locate() in objective_holder.objectives
 			if (O)
@@ -305,7 +242,7 @@ var/veil_thickness = CULT_PROLOGUE
 		for (var/obj/structure/cult/spire/S in cult_spires)//spires update their appearance on Act 2 and 3, signaling new available tattoos.
 			S.upgrade()
 
-		for (var/obj/effect/rune/R in rune_list)//runes now available will start pulsing
+		for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)//runes now available will start pulsing
 			R.update_icon()
 
 		if (istype(new_obj,/datum/objective/bloodcult_bloodbath))
@@ -336,13 +273,6 @@ var/veil_thickness = CULT_PROLOGUE
 		B.update_icon()
 	bloody_floors -= T
 
-/datum/faction/bloodcult/HandleRecruitedRole(var/datum/role/R)
-	. = ..()
-	if (cult_reminders.len)
-		to_chat(R.antag.current, "<span class='notice'>The other cultists have left some useful reminders for you. They will be stored in your memory.</span>")
-	for (var/reminder in cult_reminders)
-		R.antag.store_memory("Cult reminder: [reminder].")
-
 /datum/faction/bloodcult/proc/minor_victory()
 	for(var/datum/role/cultist/C in members)
 		var/mob/M = C.antag.current
@@ -360,15 +290,21 @@ var/veil_thickness = CULT_PROLOGUE
 		if(L.wounded)
 			. += "<BR><font color = 'green'><B>Though defeated, the crew managed to deal [L.wounded] damaging blows to \the [L].</B></font>"
 
-/proc/is_convertable_to_cult(datum/mind/mind)
-	if(!istype(mind))
-		return 0
-	if(ishuman(mind.current) && (mind.assigned_role == "Chaplain"))
-		return 0
-	for(var/obj/item/weapon/implant/loyalty/L in mind.current)
-		if(L.imp_in == mind.current)//Checks to see if the person contains an implant, then checks that the implant is actually inside of them
-			return 0
-	return 1
+
+
+
+///////////////////////////////FACTION CODE - END/////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
 
 //When cultists need to pay in blood to use their spells, they have a few options at their disposal:
 // * If their hands are bloody, they can use the few units of blood on them.
@@ -379,6 +315,12 @@ var/veil_thickness = CULT_PROLOGUE
 // * If they are standing above a container that has blood in it, they can dip their fingers into them
 // * Finally if there are no alternative blood sources, you can always use your own blood.
 
+/*	get_available_blood
+	user: the mob (generally a cultist) trying to spend blood
+	amount_needed: the amount of blood required
+
+	returns: a /list with information on nearby available blood. For use by use_available_blood().
+*/
 /proc/get_available_blood(var/mob/user, var/amount_needed = 0)
 	var/data = list(
 		BLOODCOST_TARGET_BLEEDER = null,
@@ -443,7 +385,7 @@ var/veil_thickness = CULT_PROLOGUE
 	if (Grab)
 		if(ishuman(Grab.affecting))
 			var/mob/living/carbon/human/H = Grab.affecting
-			if(!(H.species.flags & NO_BLOOD))
+			if(!(H.species.anatomy_flags & NO_BLOOD))
 				for(var/datum/organ/external/org in H.organs)
 					if(org.status & ORGAN_BLEEDING)
 						var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
@@ -458,7 +400,7 @@ var/veil_thickness = CULT_PROLOGUE
 
 	//Is there a bleeding mob/corpse on the turf that still has blood in it?
 	for (var/mob/living/carbon/human/H in T)
-		if(H.species.flags & NO_BLOOD)
+		if(H.species.anatomy_flags & NO_BLOOD)
 			continue
 		if(user != H)
 			for(var/datum/organ/external/org in H.organs)
@@ -523,12 +465,68 @@ var/veil_thickness = CULT_PROLOGUE
 			else
 				data[BLOODCOST_LID_CONTAINER] = 1
 
+	var/mob/living/silicon/robot/robot_user = user
+	if(istype(robot_user))
+		var/module_items = robot_user.get_equipped_items() //This function allows robot modules to be used as blood sources. Somewhat important, considering silicons have no blood.
+		for(var/obj/item/weapon/gripper/G_held in module_items)
+			if (!istype(G_held) || !G_held.wrapped || !istype(G_held.wrapped,/obj/item/weapon/reagent_containers))
+				continue
+			var/obj/item/weapon/reagent_containers/gripper_item = G_held.wrapped
+			if(round(gripper_item.reagents.get_reagent_amount(BLOOD)))
+				var/blood_volume = round(gripper_item.reagents.get_reagent_amount(BLOOD))
+				if (blood_volume)
+					data[BLOODCOST_TARGET_HELD] = gripper_item
+					if (gripper_item.is_open_container())
+						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+						data[BLOODCOST_AMOUNT_HELD] = blood_gathered
+						amount_gathered += blood_gathered
+					else
+						data[BLOODCOST_LID_HELD] = 1
+
+				if (amount_gathered >= amount_needed)
+					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
+					return data
+
+		for(var/obj/item/weapon/reagent_containers/G_held in module_items)
+			if (!istype(G_held) || !round(G_held.reagents.get_reagent_amount(BLOOD)))
+				continue
+
+			if(istype(G_held, /obj/item/weapon/reagent_containers/blood)) //Bloodbags have their own functionality
+				var/obj/item/weapon/reagent_containers/blood/blood_pack = G_held
+				var/blood_volume = round(blood_pack.reagents.get_reagent_amount(BLOOD))
+				if (blood_volume)
+					data[BLOODCOST_TARGET_BLOODPACK] = blood_pack
+					if (blood_pack.holes)
+						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+						data[BLOODCOST_AMOUNT_BLOODPACK] = blood_gathered
+						amount_gathered += blood_gathered
+					else
+						data[BLOODCOST_HOLES_BLOODPACK] = 1
+				if (amount_gathered >= amount_needed)
+					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_BLOODPACK
+					return data
+
+			else
+				var/blood_volume = round(G_held.reagents.get_reagent_amount(BLOOD))
+				if (blood_volume)
+					data[BLOODCOST_TARGET_HELD] = G_held
+					if (G_held.is_open_container())
+						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+						data[BLOODCOST_AMOUNT_HELD] = blood_gathered
+						amount_gathered += blood_gathered
+					else
+						data[BLOODCOST_LID_HELD] = 1
+
+				if (amount_gathered >= amount_needed)
+					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
+					return data
+
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_CONTAINER
 		return data
 
 	//Does the user have blood? (the user can pay in blood without having to bleed first)
-	if(istype(H_user) && !(H_user.species.flags & NO_BLOOD))
+	if(istype(H_user) && !(H_user.species.anatomy_flags & NO_BLOOD))
 		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
 		data[BLOODCOST_TARGET_USER] = H_user
@@ -543,6 +541,14 @@ var/veil_thickness = CULT_PROLOGUE
 	return data
 
 
+/*	use_available_blood
+	user: the mob (generally a cultist) trying to spend blood
+	amount_needed: the amount of blood required
+	previous_result: the result of the previous call of this proc if any, to prevent the same flavor text from displaying every single call of this proc in a row
+	tribute: set to 1 when called by a contributor to Blood Communion
+
+	returns: a /list with information on the success/failure of the proc, and in the former case, information the blood that was used (color, type, dna)
+*/
 /proc/use_available_blood(var/mob/user, var/amount_needed = 0,var/previous_result = "", var/tribute = 0)
 	//Blood Communion
 	var/communion = 0
@@ -603,9 +609,15 @@ var/veil_thickness = CULT_PROLOGUE
 					if (BLOODCOST_TARGET_GRAB)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_GRAB]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 					if (BLOODCOST_TARGET_BLEEDER)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_BLEEDER]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 					if (BLOODCOST_TARGET_HELD)
 						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_HELD]
 						blood = locate() in G.reagents.reagent_list
@@ -618,6 +630,9 @@ var/veil_thickness = CULT_PROLOGUE
 					if (BLOODCOST_TARGET_USER)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
 						blood = get_blood(HU.vessel)
+						if (!blood.data["virus2"])
+							blood.data["virus2"] = list()
+						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 			if (!tribute && previous_result != BLOODCOST_TRIBUTE)
 				user.visible_message("<span class='warning'>Drips of blood seem to appear out of thin air around \the [user], and fall onto the floor!</span>",
 									"<span class='rose'>An ally has lent you a drip of their blood for your ritual.</span>",
@@ -772,6 +787,102 @@ var/veil_thickness = CULT_PROLOGUE
 	data["blood"] = blood
 	return data
 
+/*	spawn_bloodstones
+	source: the turf where the ritual that triggered ACT III took place if any. Serves as the location of the 5th Bloodstone if close enough from the station center.
+
+*/
+/proc/spawn_bloodstones(var/turf/source = null)
+	//Called at the beginning of ACT III, this is basically the cult's declaration of war on the crew
+	//Spawns 4 structures, one in each quarters of the station
+	//When spawning, those structures break and convert stuff around them, and add a wall layer in case of space exposure.
+	var/list/places_to_spawn = list()
+	for (var/i = 1 to 4)
+		for (var/j = 10; j > 0; j--)
+			var/turf/T = get_turf(pick(range(j*3,locate(map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 ),map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 ),map.zMainStation))))
+			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
+				//Adding some blacklisted areas, specifically solars
+				if (!istype(T.loc,/area/solar))
+					places_to_spawn += T
+					break
+	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space or on a shuttle)
+	if (source && (source.z == map.zMainStation) && !isspace(source.loc) && !is_on_shuttle(source) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
+		places_to_spawn.Add(source)
+	for (var/T in places_to_spawn)
+		new /obj/structure/cult/bloodstone(T)
+
+	//Cultists can use those bloodstones to locate the rest of them, they work just like station holomaps
+
+	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
+		if (!B.loc)
+			qdel(B)
+			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			log_admin("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+
+/*	prepare_cult_holomap
+	returns: the initialized cult holomap
+
+*/
+//Instead of updating in realtime, cult holomaps update every time you check them again, saves some CPU.
+/proc/prepare_cult_holomap()
+	var/image/I = image(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
+	for(var/marker in holomap_markers)
+		var/datum/holomap_marker/holomarker = holomap_markers[marker]
+		var/image/markerImage = image(holomarker.icon,holomarker.id)
+		markerImage.color = holomarker.color
+		if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
+			if(map.holomap_offset_x.len >= map.zMainStation)
+				markerImage.pixel_x = holomarker.x-8+map.holomap_offset_x[map.zMainStation]
+				markerImage.pixel_y = holomarker.y-8+map.holomap_offset_y[map.zMainStation]
+			else
+				markerImage.pixel_x = holomarker.x-8
+				markerImage.pixel_y = holomarker.y-8
+			markerImage.appearance_flags = RESET_COLOR
+			I.overlays += markerImage
+	return I
+
+/*	cult_risk
+	M: the cultist responsible for the ritual that called this proc, so they get a warning message if they didn't trigger the announcement
+
+*/
+/proc/cult_risk(var/mob/M)//too many conversions/soul-stoning might bring the cult to the attention of Nanotrasen prematurely
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		return
+	if (cult.warning)
+		return
+	if (veil_thickness == CULT_MENDED || veil_thickness >= CULT_ACT_III)
+		return
+
+	var/living_cultists = 0
+	var/living_noncultists = 0
+	for (var/mob/living/L in player_list)
+		if (issilicon(L)||isborer(L))
+			continue
+		if (L.stat != DEAD)
+			if (iscultist(L))
+				living_cultists++
+			else
+				living_noncultists++
+
+	var/rate = 40//the percent of living cultist at which the risk starts appearing
+	var/risk = min((living_cultists*((100-rate)/50) - living_noncultists*(rate/50)) * 25, 100)//the risk increases very rapidly. at 2-3 cultists over the limit, the exposure is guarranted
+
+	if (risk > 0)
+		if(prob(risk))
+			message_admins("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have been prematurely exposed.")
+			log_admin("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have been prematurely exposed.")
+			cult.warning = TRUE
+			command_alert(/datum/command_alert/cult_detected)
+		else
+			message_admins("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have avoided raising suspicion for now...")
+			log_admin("With a chance of [risk]% ([living_cultists] Cultists vs [living_noncultists] non-cultists), the cult's activities have avoided raising suspicion for now...")
+			if (M)
+				to_chat(M,"<span class='warning'>Be mindful, overzealous conversions and soul trapping will bring us unwanted attention. You should focus on the objective with your current force.</span>")
+
+/*	get_cult_power
+	returns: an int. Set directly in bloodcult_items.dm
+
+*/
 /obj/item/proc/get_cult_power()
 	return 0
 
@@ -781,6 +892,10 @@ var/static/list/valid_cultpower_slots = list(
 	slot_shoes,
 	)//might add more slots later as I add more items that could fit in them
 
+/*	get_cult_power
+	returns: the combined cult power of every item worn by src.
+
+*/
 /mob/proc/get_cult_power()
 	var/power = 0
 	for (var/slot in valid_cultpower_slots)
@@ -789,3 +904,29 @@ var/static/list/valid_cultpower_slots = list(
 			power += I.get_cult_power()
 
 	return power
+
+//WARNING: setting to "3" will trigger the rise of bloodstones.
+/client/proc/set_veil_thickness()
+	set category = "Special Verbs"
+	set name = "Set Veil Thickness"
+	set desc = "Debug verb for Cult 3.0 shenanigans"
+
+	if(!check_rights(R_ADMIN))
+		return
+
+	veil_thickness = input(usr, "Enter a value (default = [CULT_PROLOGUE])", "Debug Veil Thickness", veil_thickness) as num
+
+	if (veil_thickness == CULT_ACT_III)
+		spawn_bloodstones()
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult)
+		for (var/datum/role/cultist/C in cult.members)
+			C.update_cult_hud()
+
+	for (var/obj/structure/cult/spire/S in cult_spires)
+		S.upgrade()
+
+	var/datum/runeset/bloodcult_runeset = global_runesets["blood_cult"]
+	for (var/obj/effect/rune/R in bloodcult_runeset.rune_list)
+		R.update_icon()

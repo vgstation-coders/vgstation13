@@ -30,6 +30,8 @@
 		desc = "An evidence bag containing [I]. [I.desc]"
 		w_class = I.w_class
 	else
+		desc = initial(desc)
+		w_class = initial(w_class)
 		overlays.Cut()
 
 /obj/item/weapon/storage/box/evidence

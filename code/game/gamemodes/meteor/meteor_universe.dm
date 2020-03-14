@@ -67,5 +67,5 @@
 	spawn()
 		while(meteors_allowed && src == global.universe)
 			var/meteors_in_wave = rand(meteor_wave_size_l, meteor_wave_size_h)
-			meteor_wave(meteors_in_wave, 3)
+			meteor_wave(meteors_in_wave, 3, offset_origin = 150, offset_dest = 230)
 			sleep(10)

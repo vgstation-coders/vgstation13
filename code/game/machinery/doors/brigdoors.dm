@@ -22,6 +22,7 @@
 	var/picture_state		// icon_state of alert picture, if not displaying text/numbers
 	var/list/obj/machinery/targets = list()
 	var/last_call = 0
+	layer = ABOVE_WINDOW_LAYER
 
 /obj/machinery/door_timer/initialize()
 	..()

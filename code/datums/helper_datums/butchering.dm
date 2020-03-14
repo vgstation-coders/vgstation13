@@ -182,6 +182,13 @@
 /datum/butchering_product/skin/bear
 	result = /obj/item/clothing/head/bearpelt/real
 
+/datum/butchering_product/skin/bear/spare
+	result = /obj/item/clothing/head/bearpelt/real/spare
+
+/datum/butchering_product/skin/bear/spare/spawn_result(location, mob/parent)
+	..()
+	parent.dust()
+
 /datum/butchering_product/skin/xeno
 	result = /obj/item/stack/sheet/xenochitin
 	verb_name = "remove chitin"
@@ -310,6 +317,7 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/hostile/asteroid/hivelord	= list(/datum/butchering_product/hivelord_core),
 	/mob/living/simple_animal/hostile/giant_spider		= list(/datum/butchering_product/spider_legs),
 	/mob/living/simple_animal/hostile/bear				= list(/datum/butchering_product/skin/bear, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/bear/spare		= list(/datum/butchering_product/skin/bear/spare, TEETH_LOTS),
 	/mob/living/carbon/alien/humanoid					= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH),
 	/mob/living/simple_animal/hostile/alien				= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH), //Same as the player-controlled aliens
 	/mob/living/simple_animal/hostile/retaliate/cluwne	= list(TEETH_BUNCH), //honk

@@ -44,7 +44,6 @@
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Diona")
-	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
 /mob/living/carbon/human/skellington/New(var/new_loc, delay_ready_dna = 0)
@@ -85,6 +84,11 @@
 /mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Slime")
 	my_appearance.h_style = "Bald"
+	regenerate_icons()
+
+/mob/living/carbon/human/insectoid/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Insectoid")
+	my_appearance.h_style = "Insectoid Antennae"
 	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
@@ -278,6 +282,11 @@
 			stat("Spacepod Charge", "[istype(S.battery) ? "[S.battery.charge] / [S.battery.maxcharge]" : "No cell detected"]")
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
 
+		if (mind)
+			for (var/role in mind.antag_roles)
+				var/datum/role/R = mind.antag_roles[role]
+				stat(R.StatPanel())
+
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
 		if(istype(L, /obj/item/weapon/implant/loyalty))
@@ -290,15 +299,11 @@
 	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/restrained()
-	if (timestopped)
-		return 1 //under effects of time magick
-	if (handcuffed)
-		return 1
+	if (..())
+		return TRUE
 	if (istype(wear_suit, /obj/item/clothing/suit/straight_jacket))
-		return 1
-	return 0
-
-
+		return TRUE
+	return FALSE
 
 /mob/living/carbon/human/var/co2overloadtime = null
 /mob/living/carbon/human/var/temperature_resistance = T0C+75 //but why is this here
@@ -395,7 +400,7 @@
 
 //Removed the horrible safety parameter. It was only being used by ninja code anyways.
 //Now checks siemens_coefficient of the affected area by default
-/mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/base_siemens_coeff = 1.0, var/def_zone = null)
+/mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/base_siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration)
 	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)
 		return 0	//godmode
 
@@ -405,7 +410,7 @@
 	var/datum/organ/external/affected_organ = get_organ(check_zone(def_zone))
 	var/siemens_coeff = base_siemens_coeff * get_siemens_coefficient_organ(affected_organ)
 
-	return ..(shock_damage, source, siemens_coeff, def_zone)
+	return ..(shock_damage, source, siemens_coeff, def_zone, incapacitation_duration)
 
 /mob/living/carbon/human/hear_radio_only()
 	if(!ears)
@@ -454,11 +459,10 @@
 	if(slot_w_uniform in obscured)
 		dat += "<BR><font color=grey><B>Uniform:</B> Obscured by [wear_suit]</font>"
 	else
+		dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
 		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(w_uniform)]</A>"
 		if(w_uniform)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Suit Sensors:</B> <A href='?src=\ref[src];sensors=1'>Set</A>"
-	if(w_uniform)
-		dat += "<BR>[HTMLTAB]&#8627;<B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
 		if(pickpocket)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
 			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? r_store : "<font color=grey>Right (Empty)</font>"]</A>"
@@ -467,7 +471,7 @@
 			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? "Right (Full)" : "<font color=grey>Right (Empty)</font>"]</A>"
 		dat += "<BR>[HTMLTAB]&#8627;<B>ID:</B> <A href='?src=\ref[src];id=1'>[makeStrippingButton(wear_id)]</A>"
 	dat += "<BR>"
-	if(handcuffed)
+	if(handcuffed || mutual_handcuffs)
 		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=[slot_handcuffed]'>Remove</A>"
 	if(legcuffed)
 		dat += "<BR><B>Legcuffed:</B> <A href='?src=\ref[src];item=[slot_legcuffed]'>Remove</A>"
@@ -638,7 +642,7 @@
 	if(E)
 		. += E.eyeprot
 
-	return Clamp(., -2, 2)
+	return clamp(., -2, 2)
 
 
 /mob/living/carbon/human/IsAdvancedToolUser()
@@ -648,6 +652,18 @@
 	var/obj/item/clothing/gloves/G = gloves
 	if(istype(G))
 		return G.pickpocket
+
+//Don't forget to change this too if you universalize the gloves
+/mob/living/carbon/human/proc/place_in_glove_storage(var/obj/item/I)
+	var/obj/item/clothing/gloves/black/thief/storage/S = gloves
+	if(!I) //How did you do this
+		return 0
+	if(istype(S))
+		if(S.hold.can_be_inserted(I, 1)) //There is no check in handling item insertion
+			S.hold.handle_item_insertion(I, 1)
+		else
+			put_in_hands(I)
+
 
 /mob/living/carbon/human/abiotic(var/full_body = 0)
 	for(var/obj/item/I in held_items)
@@ -696,6 +712,9 @@
 			to_chat(src, "<spawn class='danger'>You feel like you are about to throw up!</span>")
 
 			sleep((instant ? 0 : 100))	//And you have 10 more seconds to move it to the bathrooms
+
+			if(gcDestroyed)
+				return
 
 			Stun(5)
 
@@ -907,9 +926,6 @@
 
 	for (var/datum/disease/virus in viruses)
 		virus.cure()
-	for (var/ID in virus2)
-		var/datum/disease2/disease/V = virus2[ID]
-		V.cure(src)
 
 	..()
 
@@ -1189,6 +1205,7 @@
 		src.do_deferred_species_setup = 1
 	meat_type = species.meat_type
 	spawn()
+		src.movement_speed_modifier = species.move_speed_multiplier
 		src.dna.species = new_species_name
 		src.species.handle_post_spawn(src)
 		src.update_icons()
@@ -1547,6 +1564,7 @@
 	var/obj/item/clothing/shoes/S = shoes //Why isn't shoes just typecast in the first place?
 	return ((istype(S) && S.footprint_type) || (species && species.footprint_type) || /obj/effect/decal/cleanable/blood/tracks/footprints) //The shoes' footprint type overrides the mob's, for obvious reasons. Shoes with a falsy footprint_type will let the mob's footprint take over, though.
 
+
 /mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
 	if(..()) // we've been flashed
 		var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
@@ -1589,7 +1607,7 @@
 		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
 
 /mob/living/carbon/human/reset_layer()
-	if(locked_to)
+	if(istype(locked_to, /obj/machinery/bot/mulebot)) //we only care about not appearing behind mulebots
 		return
 	if(lying)
 		plane = LYING_HUMAN_PLANE
@@ -1770,7 +1788,6 @@ mob/living/carbon/human/isincrit()
 		"meatleft",
 		"check_mutations",
 		"lastFart",
-		"lastDab",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
@@ -1831,6 +1848,7 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
 	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+	T.virus2 = virus_copylist(virus2)
 	T.get_clothes(src, T)
 	T.name = real_name
 	T.host = src
@@ -1869,8 +1887,10 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/get_cell()
 	var/datum/organ/internal/heart/cell/C = get_heart()
-	if(istype(C))
+	if(istype(C) && C.cell)
 		return C.cell
+	if(wear_suit && wear_suit.get_cell())
+		return wear_suit.get_cell()
 
 // Returns null on failure, the butt on success.
 /mob/living/carbon/human/proc/remove_butt(var/where = loc)
@@ -1888,21 +1908,70 @@ mob/living/carbon/human/isincrit()
 		return FALSE
 	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
 		return FALSE
-	var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
+	var/crawldelay = 0.2 SECONDS
+	if (crawlcounter >= max_crawls_before_fatigue)
+		if (prob(10))
+			to_chat(src, "<span class='warning'>You get tired from all this crawling around.</span>")
+		crawldelay = round(1 + base_movement_tally()/10) * 3 SECONDS
+		crawlcounter = 1
+	else
+		crawlcounter++
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
-	delayNextMove(crawldelay, additive=1)
+	delayNextMove(crawldelay, additive = 1)
+
+/mob/living/carbon/human/resist_memes(var/datum/speech/speech)
+	//do not use check_contact_sterility because other things cover ears, like helmets
+	if(ears && prob(ears.sterility))
+		return TRUE //If wearing sterile earpiece, block the meme
+	else
+		return ..()
 
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
-	if(!mind.faith || speech.frequency || speech.speaker == src || !ishuman(speech.speaker) || length(speech.message) < 20)
-		return
+	if(stat)
+		return //Don't bother if we're dead or unconscious
+	if(ear_deaf || speech.frequency || speech.speaker == src)
+		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
+	if(!mind || !mind.faith || length(speech.message) < 20)
+		return //If we aren't religious or hearing a long message, don't check further
+	var/mob/living/H = speech.speaker
 	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
-		var/mob/living/carbon/human/H = speech.speaker
-		if(H.mind == mind.faith.religiousLeader)
+		if(isliving(H) && H.mind == mind.faith.religiousLeader)
 			AdjustDizzy(rand(-8,-10))
 			stuttering = max(0,stuttering-rand(8,10))
 			jitteriness = max(0,jitteriness-rand(8,10))
 			hallucination = max(0,hallucination-rand(8,10))
-			confused = max(0,confused-rand(8,10))
+			remove_confused(rand(8, 10))
 			drowsyness = max(0, drowsyness-rand(8,10))
 			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
+
+/mob/living/carbon/human/can_be_infected()
+	return 1
+
+//this method handles user getting attacked with an emag - the original logic was in human_defense.dm,
+//but it's better that it belongs to human.dm
+/mob/living/carbon/human/emag_act(var/mob/attacker, var/datum/organ/external/affecting, var/obj/item/weapon/card/emag)
+	var/hit_area = affecting.display_name
+	if(!(affecting.status & ORGAN_ROBOT))
+		to_chat(attacker, "<span class='warning'>That limb isn't robotic.</span>")
+		return FALSE
+	if(affecting.sabotaged)
+		to_chat(attacker, "<span class='warning'>\The [src]'s [hit_area] is already sabotaged!</span>")
+	else
+		to_chat(attacker, "<span class='warning'>You sneakily slide [emag] into the dataport on \the [src]'s [hit_area] and short out the safeties.</span>")
+		affecting.sabotaged = TRUE
+	return FALSE
+
+/mob/living/carbon/human/swap_hand()
+	var/valid_hand = FALSE
+	for(var/i = 0; i < held_items.len; i++)
+		if (++active_hand > held_items.len)
+			active_hand = 1
+		if (can_use_hand_or_stump(active_hand))
+			valid_hand = TRUE
+			break
+
+	if(!valid_hand)
+		active_hand = 0
+
+	update_hands_icons()

@@ -9,7 +9,6 @@ var/list/cyborg_list = list()
 	health = 300
 	flashed = FALSE
 
-	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
@@ -19,14 +18,9 @@ var/list/cyborg_list = list()
 	var/startup_sound = 'sound/voice/liveagain.ogg'
 	var/startup_vary = TRUE //Does the startup sounds vary?
 
-	// Alerts
-	var/pressure_alert = FALSE
-	var/temp_alert = FALSE
-
 	var/obj/item/device/station_map/station_holomap = null
 
 	//Hud stuff
-	var/obj/abstract/screen/cells = null
 	var/obj/abstract/screen/inv1 = null
 	var/obj/abstract/screen/inv2 = null
 	var/obj/abstract/screen/inv3 = null
@@ -148,6 +142,11 @@ var/list/cyborg_list = list()
 
 	..()
 
+	if (mind && !stored_freqs)
+		spawn(1)
+			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
+		stored_freqs = 1
+
 	if(cell)
 		var/datum/robot_component/cell_component = components["power cell"]
 		cell_component.wrapped = cell
@@ -207,11 +206,6 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
-	if(cells)
-		returnToPool(cells)
-		if(client)
-			client.screen -= cells
-		cells = null //TODO: Move to mob level helper
 	if(inv1)
 		returnToPool(inv1)
 		if(client)
@@ -1174,7 +1168,7 @@ var/list/cyborg_list = list()
 		station_holomap.update_holomap()
 
 /mob/living/silicon/robot/proc/self_destruct()
-	if(mind && mind.special_role && emagged)
+	if(istraitor(src) && emagged)
 		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE
@@ -1338,3 +1332,7 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/proc/toggle_modulelock()
 	modulelock = !modulelock
 	return modulelock
+
+//Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
+/mob/living/silicon/robot/proc/get_percentage_power_for_movement()
+	return clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER)

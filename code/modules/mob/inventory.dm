@@ -474,6 +474,9 @@
 			if(!src.handcuffed)
 				src.handcuffed = W
 				equipped = 1
+			if (!src.mutual_handcuffs)
+				src.mutual_handcuffs = W
+				equipped = 1
 		if(slot_belt)
 			if(!src.belt && src.w_uniform)
 				src.belt = W

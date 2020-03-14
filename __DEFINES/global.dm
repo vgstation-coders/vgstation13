@@ -7,12 +7,14 @@
 #define DNA_SE_LENGTH 58
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
-
 #define GREY_SHAPED "Grey"
-
+#define UNATHI_SHAPED "Unathi"
+#define SKRELL_SHAPED "Skrell"
+#define TAJARAN_SHAPED "Tajaran"
+#define PLASMAMAN_SHAPED "Plasmaman"
 #define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
-
 #define MUSHROOM_SHAPED "Mushroom"
+
 
 //Content of the Round End Information window
 var/round_end_info = ""
@@ -21,10 +23,7 @@ var/round_end_info = ""
 var/global/list/deadmins = list()
 
 //List of vars that require DEBUG on top of VAREDIT to be able to edit
-var/list/lockedvars = list("vars", "client", "holder")
-
-//List of vars that you can NEVER edit through VV itself
-var/list/nevervars = list("step_x", "step_y", "step_size")
+var/list/lockedvars = list("vars", "client", "holder", "step_x", "step_y", "step_size")
 
 // List of types and how many instances of each type there are.
 var/global/list/type_instances[0]
@@ -131,6 +130,8 @@ var/list/prisonsecuritywarp = list()	//prison security goes to these
 var/list/prisonwarped = list()	//list of players already warped
 var/list/blobstart = list()
 var/list/ninjastart = list()
+var/list/voxstart = list() //Vox raider spawn points
+var/list/voxlocker = list() //Vox locker spawn points
 //	list/traitors = list()	//traitor list
 var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
 var/list/diagonal = list(NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
@@ -234,7 +235,10 @@ var/list/score=list(
 	"mess"           = 0, //How much messes on the floor went uncleaned
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
-	"disease"        = 0, //How many disease vectors in the world (one disease on one person is one)
+	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
+	"disease_bad"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger >= 3
+	"disease_most"        = null, //Most spread disease
+	"disease_most_count"        = 0, //Most spread disease
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
@@ -300,8 +304,6 @@ var/global/list/volunteer_gladiators = list()
 var/global/list/ready_gladiators = list()
 var/global/list/never_gladiators = list()
 
-var/global/list/achievements = list()
-
 //icons that appear on the Round End pop-up browser
 var/global/list/end_icons = list()
 
@@ -327,7 +329,7 @@ var/nanocoins_lastchange = 0
 
 var/minimapinit = 0
 
-var/bees_species = list()
+var/list/bees_species = list()
 
 var/datum/stat_collector/stat_collection = new
 
@@ -351,7 +353,6 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 // Account default values
 #define DEPARTMENT_START_FUNDS 500
 #define DEPARTMENT_START_WAGE 50
-#define PLAYER_START_WAGE 50
 
 //HUD MINIMAPS
 var/list/holoMiniMaps = list()
@@ -390,7 +391,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/humanoid,						// JUST DON'T DO IT, OK?
 		/mob/living/simple_animal/hostile/retaliate/cockatrice,			// I'm just copying this from transmog.
 		/mob/living/simple_animal/hostile/giant_spider/hunter/dead,		// They are dead.
-		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// They aren't supposed to be playable.
+		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// Your motherfucking life ends in 5 seconds.
 		/mob/living/simple_animal/hologram,								// Can't live outside the holodeck.
 		/mob/living/simple_animal/hostile/carp/holocarp,				// These can but they're just a retarded hologram carp reskin for the love of god.
 		/mob/living/slime_pile,											// They are dead.
@@ -412,6 +413,7 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/humanoid/surgeon/boss, 		// First stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
+	/mob/living/simple_animal/hostile/bear/spare,					// Captain bear
 	)
 
 // Set by traitor item, affects cargo supplies
@@ -463,9 +465,15 @@ var/list/variables_not_to_be_copied = list(
 	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
 	"group","on_login","on_ban","on_unban","on_pipenet_tick","on_item_added",
 	"on_item_removed","on_moved","on_destroyed","on_density_change",
-	"on_z_transition","on_use","on_emote","on_life","on_resist",
+	"on_z_transition","on_use","on_emote","on_life","on_resist","post_z_transition",
 	"on_spellcast","on_uattack","on_ruattack","on_logout","on_damaged",
 	"on_irradiate","on_death","on_clickon","on_attackhand","on_attackby",
 	"on_explode","on_projectile","in_chamber","power_supply","contents",
 	"x","y","z"
 )
+
+//Item lists
+var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible)
+
+//Observers
+var/global_poltergeist_cooldown = 300 //30s by default, badmins can var-edit this to reduce the poltergeist cooldown globally

@@ -442,10 +442,11 @@
 
 /turf/unsimulated/floor/evil/breathing/adjust_slowdown(mob/living/L, current_slowdown)
 	if(istype(L, /mob/living/simple_animal/hostile/hive_alien)) //Hive aliens are sped up
-		return -1
-
-	//Everybody else is slowed down
-	return current_slowdown + additional_slowdown
+		current_slowdown *= 0.01
+	else
+		//Everybody else is slowed down
+		current_slowdown *= 4
+	..()
 
 /turf/unsimulated/floor/fake_supermatter/hive
 	carbon_dioxide = EVIL_FLOOR_CO2

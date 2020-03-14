@@ -174,7 +174,7 @@ proc/n_str2num(var/string)
 // Clamps N between min and max
 /proc/n_clamp(var/num, var/min = 0, var/max = 1)
 	if(isnum(num) && isnum(min) && isnum(max))
-		return Clamp(num, min, max)
+		return clamp(num, min, max)
 
 // Number shit
 proc/n_num2str(var/num)

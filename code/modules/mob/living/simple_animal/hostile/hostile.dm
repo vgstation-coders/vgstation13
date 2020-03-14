@@ -36,6 +36,12 @@
 	..()
 	initialize_rules()
 
+/mob/living/simple_animal/hostile/Destroy()
+	for(var/datum/fuzzy_ruling/D in target_rules)
+		qdel(D)
+	target_rules = null
+	..()
+
 /mob/living/simple_animal/hostile/proc/initialize_rules()
 	target_rules.Add(new /datum/fuzzy_ruling/is_mob)
 	target_rules.Add(new /datum/fuzzy_ruling/is_obj{weighting = 0.5})

@@ -37,7 +37,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/S in component_parts)
 		T += S.rating * 0.1
-	T = Clamp(T, 0, 1)
+	T = clamp(T, 0, 1)
 	decon_mod = T
 
 /obj/machinery/r_n_d/destructive_analyzer/proc/ConvertReqString2List(var/list/source_list)
@@ -52,12 +52,12 @@ Note: Must be placed within 3 tiles of the R&D Console
 		return -1
 	return ..()
 
-/obj/machinery/r_n_d/destructive_analyzer/crowbarDestroy(mob/user)
-	if(..() == 1)
+/obj/machinery/r_n_d/destructive_analyzer/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+	if(..())
 		if(loaded_item)
 			loaded_item.forceMove(loc)
-		return 1
-	return -1
+		return TRUE
+	return FALSE
 
 /obj/machinery/r_n_d/destructive_analyzer/attackby(var/obj/O as obj, var/mob/user as mob)
 	if(..())
@@ -89,6 +89,8 @@ Note: Must be placed within 3 tiles of the R&D Console
 			spawn(10)
 				icon_state = "d_analyzer_l"
 				busy = 0
+				if(linked_console)
+					linked_console.updateUsrDialog()
 	return 1
 
 /obj/machinery/r_n_d/destructive_analyzer/attack_hand(mob/user as mob)

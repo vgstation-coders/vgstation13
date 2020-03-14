@@ -78,7 +78,7 @@
 
 /datum/theft_objective/traitor/cap_hardsuit
 	name = "the captain's full-body armor" //technically only the bodypiece, which is the hardest one to conceal anyways
-	typepath = /obj/item/clothing/suit/armor/captain
+	typepath = /obj/item/clothing/suit/space/rig/captain
 	protected_jobs = list("Captain")
 
 /datum/theft_objective/traitor/cap_stamp
@@ -186,6 +186,16 @@
 	typepath = /obj/item/weapon/switchtool/holo
 	protected_jobs = list("Research Director")
 
+/datum/theft_objective/traitor/telesci
+	name = "the telescience computer's circuit"
+	typepath = /obj/item/weapon/circuitboard/telesci_computer
+	protected_jobs = list("Research Director", "Scientist", "Roboticist", "Mechanic", "Paramedic")
+
+
+/datum/theft_objective/traitor/lawgiver
+	name = "the lawgiver"
+	typepath = /obj/item/weapon/gun/lawgiver
+	protected_jobs = list("Head of Security")
 
 /datum/theft_objective/number
 	var/min=0

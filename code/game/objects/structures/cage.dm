@@ -81,7 +81,7 @@
 		toggle_cover(usr)
 
 /obj/structure/cage/attackby(obj/item/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(anchored)
 			to_chat(user, "<span class='info'>You start unsecuring \the [src] from \the [loc].</span>")
 		else
@@ -91,7 +91,7 @@
 			to_chat(user, "<span class='info'>You start securing \the [src] to \the [loc].</span>")
 
 		spawn()
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			W.playtoolsound(src, 100)
 			if(do_after(user, src, 50))
 				anchored = !anchored
 				to_chat(user, "<span class='info'>[anchored ? "You successfully secure \the [src] to \the [loc]." : "You successfully unsecure \the [src] from \the [loc]."]")
@@ -196,13 +196,16 @@
 			if(cover_state == C_OPENED)
 				toggle_cover() //Close the cover, too
 
-			door_state = C_CLOSED
-			setDensity(TRUE)
-
 			for(var/mob/living/L in get_turf(src))
+				if(L.size >= SIZE_HUGE)
+					continue
 				add_mob(L)
 				log_admin("[key_name(usr)] has trapped \the [L] in a cage at [formatJumpTo(src)]")
 				message_admins("[key_name(usr)] has trapped \the [L] in a cage at [formatJumpTo(src)]")
+
+
+			door_state = C_CLOSED
+			setDensity(TRUE)
 
 		if(C_CLOSED) //Open the door
 			if(cover_state == C_CLOSED)

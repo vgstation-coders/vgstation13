@@ -140,7 +140,8 @@
 	material = "phazon"
 
 /obj/item/stack/tile/mineral/phazon/adjust_slowdown(mob/living/L, current_slowdown)
-	return current_slowdown * 0.75
+	current_slowdown *= 0.75
+	..()
 
 /obj/item/stack/tile/mineral/brass
 	name = "brass tile"

@@ -438,7 +438,7 @@ var/list/bloodstone_backup = 0
 		return
 
 	victim = loc
-	current_dots = Clamp(round(victim.knockdown/2.5),0,5)
+	current_dots = clamp(round(victim.knockdown/2.5),0,5)
 
 	if (!current_dots)
 		qdel(src)
@@ -458,7 +458,7 @@ var/list/bloodstone_backup = 0
 	while (victim && (victim.stat < DEAD) && victim.knockdown)
 		for (var/client/C in viewers)
 			C.images -= indicator
-		var/dots = Clamp(1+round(victim.knockdown/2.5),1,6)
+		var/dots = clamp(1+round(victim.knockdown/2.5),1,6)
 		var/anim = 0
 		if (dots!=current_dots)
 			anim = 1

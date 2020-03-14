@@ -86,6 +86,7 @@
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/uzi45"
+	recoil = 2
 
 /obj/item/weapon/gun/projectile/automatic/uzi/isHandgun()
 	return TRUE
@@ -102,6 +103,8 @@
 	else
 		icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
 
+/obj/item/weapon/gun/projectile/automatic/uzi/bigmag
+	mag_type = "/obj/item/ammo_storage/magazine/uzi45/extended"
 
 /obj/item/weapon/gun/projectile/automatic/microuzi
 	//micro uzi is 9mm :)
@@ -141,6 +144,7 @@
 	mag_drop_sound = 'sound/weapons/smg_empty_alarm.ogg'
 	automagdrop_delay_time = 0
 	load_method = 2
+	recoil = 2
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -170,6 +174,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	load_method = 2
+	recoil = 2
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/automatic/xcom/isHandgun()
@@ -195,6 +200,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/a762"
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	load_method = 2
+	recoil = 2
 	var/cover_open = 0
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/isHandgun()
@@ -358,7 +364,7 @@
 	var/caliber = ".380AUTO" //Its not a list but IT WORKS ON MY MACHINE.
 	var/ammo_type = "/obj/item/ammo_casing/c380auto"
 	var/mag_type = "/obj/item/ammo_storage/magazine/m380auto"
-	var/list/mag_blacklist = list(/obj/item/ammo_storage/magazine/lawgiver, /obj/item/ammo_storage/magazine/a12ga, /obj/item/ammo_storage/magazine/a357)
+	var/list/mag_blacklist = list(/obj/item/ammo_storage/magazine/lawgiver, /obj/item/ammo_storage/magazine/a12ga, /obj/item/ammo_storage/magazine/a357, /obj/item/ammo_storage/magazine/a75, /obj/item/ammo_storage/magazine/uzi45, /obj/item/ammo_storage/magazine/c45, /obj/item/ammo_storage/magazine/a50, /obj/item/ammo_storage/magazine/a762)
 	//Insert unacceptable mags here ^^. The lawgiver makes error gas so always exclude it.
 
 /obj/item/weapon/vectorreceiver/New()

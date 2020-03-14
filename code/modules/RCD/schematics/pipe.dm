@@ -109,6 +109,10 @@
 
 	var/obj/machinery/atmospherics/O = A
 
+	if(!O.can_be_coloured)
+		to_chat(user, "<span class='danger'>\The [O] cannot be painted.</span>")
+		return 1
+
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
 	if (selected_color in available_colors)
 		selected_color = available_colors[selected_color]
@@ -118,7 +122,7 @@
 		var/obj/machinery/atmospherics/pipe/pipe_to_colour = O
 		var/datum/pipeline/pipe_line = pipe_to_colour.parent
 		var/list/pipeline_members = pipe_line.members
-		if (pipeline_members.len < 500)
+		if(pipeline_members.len < 500)
 			last_colouration = world.timeofday
 			colouring_delay = (pipeline_members.len)/2
 			O.color = selected_color
@@ -327,7 +331,7 @@
 		return 1
 
 	if(href_list["set_layer"] && layer) //Only handle this is layer is nonzero.
-		var/n_layer = Clamp(round(text2num(href_list["set_layer"])), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
+		var/n_layer = clamp(round(text2num(href_list["set_layer"])), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 		if(layer == n_layer) //No point doing anything.
 			return 1
 
@@ -609,6 +613,13 @@ var/global/list/disposalpipeID2State = list(
 	category	= "Devices"
 
 	pipe_id		= PIPE_THERMAL_PLATE
+	pipe_type	= PIPE_UNARY
+
+/datum/rcd_schematic/pipe/heat_pump
+	name		= "Thermoelectric Cooler"
+	category	= "Devices"
+
+	pipe_id		= PIPE_HEAT_PUMP
 	pipe_type	= PIPE_UNARY
 
 /datum/rcd_schematic/pipe/injector

@@ -8,6 +8,11 @@ REAGENT SCANNER
 BREATHALYZER
 */
 
+#define CAN_REVIVE_NO 0 // Human cannot be revived.
+#define CAN_REVIVE_GHOSTING 1 // Human is observing but can otherwise be revived.
+#define CAN_REVIVE_IN_BODY 2 // Human can be revived AND is in body.
+
+
 /obj/item/device/t_scanner
 	name = "\improper T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible."
@@ -78,8 +83,9 @@ BREATHALYZER
 
 /obj/item/device/healthanalyzer
 	name = "health analyzer"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	icon_state = "health"
-	item_state = "analyzer"
+	item_state = "healthanalyzer"
 	desc = "A hand-held body scanner able to distinguish vital signs of the subject."
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -109,6 +115,27 @@ BREATHALYZER
 		else
 			to_chat(user, "<span class='notice'>\The [src] glows [pick("red", "green", "blue", "pink")]! You wonder what that would mean.</span>")
 	src.add_fingerprint(user)
+
+
+/obj/item/device/healthanalyzer/afterattack(var/atom/A, var/mob/user)
+	. = ..()
+	if(.)
+		return
+
+	if (A.Adjacent(user) && isitem(A))
+		var/obj/item/I = A
+		if(I.virus2 && I.virus2.len > 0)
+			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+			for(var/ID in I.virus2)
+				var/datum/disease2/disease/D = I.virus2[ID]
+				if(ID in virusDB)
+					var/datum/data/record/V = virusDB[ID]
+					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] detected on \the [src]. Antigen: [D.get_antigen_string()]</span>")
+				else
+					to_chat(user,"<span class='warning'>Warning: Unknown [D.form] detected on \the [src].</span>")
+		else
+			to_chat(user,"<span class='notice'>No pathogen detected on \the [src].</span>")
+
 
 /obj/item/device/healthanalyzer/attack_self(mob/living/user as mob)
 	. = ..()
@@ -185,13 +212,16 @@ Subject's pulse: ??? BPM"})
 		if(H.nutrition < STARVATION_MIN)
 			message += "<br><span class='danger'>Warning: Subject starving.</span>"
 
-	if(iscarbon(M))
-		var/mob/living/carbon/C = M
-		if(C.virus2.len)
-			for(var/ID in C.virus2)
-				if(ID in virusDB)
-					var/datum/data/record/V = virusDB[ID]
-					message += "<br><span class='warning'>Warning: [V.fields["name"]] detected in subject's blood. Known antigen : [V.fields["antigen"]]</span>"
+	if(M.virus2.len)
+		for(var/ID in M.virus2)
+			var/datum/disease2/disease/D = M.virus2[ID]
+			if(ID in virusDB)
+				var/datum/data/record/V = virusDB[ID]
+				message += "<br><span class='warning'>[V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] detected in subject's blood. Strength: [D.strength]. Antigen: [D.get_antigen_string()]</span>"
+			else
+				message += "<br><span class='warning'>Unknown [D.form] detected in subject's blood. Strength: [D.strength]</span>"
+	else
+		message += "<br><span class='notice'>No pathogen detected in subject's blood.</span>"
 
 	for(var/datum/disease/D in M.viruses)
 		if(!D.hidden[SCANNER])
@@ -242,9 +272,41 @@ Subject's pulse: ??? BPM"})
 				if(-1000000000 to BLOOD_VOLUME_SURVIVE)
 					message += "<br><span class='danger'>Danger: Blood Level Fatal: [blood_percent]% [blood_volume]cl</span>"
 		message += "<br><span class='notice'>Subject's pulse: <font color='[H.pulse == PULSE_THREADY || H.pulse == PULSE_NONE ? "red" : "blue"]'>[H.get_pulse(GETPULSE_TOOL)] BPM</font></span>"
+		if (H.isDead())
+			var/revive_status = check_can_revive(H)
+
+			if (revive_status == CAN_REVIVE_NO)
+				message += "<br><span class='danger'>No brainwaves detected. Subject cannot be revived.</span>"
+
+			else if (revive_status == CAN_REVIVE_GHOSTING)
+				message += "<br><span class='notice'>Faint brainwaves detected. Subject may be revivable.</span>"
+
+			else if (revive_status == CAN_REVIVE_IN_BODY)
+				message += "<br><span class='notice'>Faint brainwaves detected. Subject can be revived.</span>"
+
 	to_chat(user, message)//Here goes
 
 	return message //To read last scan
+
+/proc/check_can_revive(mob/living/carbon/human/target)
+	ASSERT(istype(target))
+	ASSERT(target.isDead())
+
+	if (!target.mind)
+		return CAN_REVIVE_NO
+
+	if (target.client)
+		return CAN_REVIVE_IN_BODY
+
+	var/mob/dead/observer/ghost = mind_can_reenter(target.mind)
+	if (!ghost)
+		return CAN_REVIVE_NO
+
+	var/mob/ghostmob = ghost.get_top_transmogrification()
+	if (!ghostmob)
+		return CAN_REVIVE_NO
+
+	return CAN_REVIVE_GHOSTING
 
 /obj/item/device/healthanalyzer/verb/toggle_mode()
 	set name = "Switch mode"
@@ -555,3 +617,8 @@ Subject's pulse: ??? BPM"})
 /obj/item/device/breathalyzer/examine(mob/user)
 	..()
 	to_chat(user, "<span class='notice'>Its legal limit is set to [legal_limit] units.</span>")
+
+
+#undef CAN_REVIVE_NO
+#undef CAN_REVIVE_GHOSTING
+#undef CAN_REVIVE_IN_BODY

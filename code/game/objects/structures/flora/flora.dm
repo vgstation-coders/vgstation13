@@ -41,8 +41,8 @@
 
 			var/clamp_x = clicked.Width() / 2
 			var/clamp_y = clicked.Height() / 2
-			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)+(((((clicked.Width()/32)-1)*16)*PIXEL_MULTIPLIER))
-			O.pixel_y = (Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)+((((clicked.Height()/32)-1)*16)*PIXEL_MULTIPLIER))-(5*PIXEL_MULTIPLIER)
+			O.pixel_x = clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)+(((((clicked.Width()/32)-1)*16)*PIXEL_MULTIPLIER))
+			O.pixel_y = (clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)+((((clicked.Height()/32)-1)*16)*PIXEL_MULTIPLIER))-(5*PIXEL_MULTIPLIER)
 			overlays += O
 			to_chat(user, "You hang \the [I] on \the [src].")
 			return 1
@@ -220,6 +220,7 @@
 	name = "tree stump"
 	icon = 'icons/obj/flora/pinetrees.dmi'
 	icon_state = "pine_stump"
+	shovelaway = TRUE
 
 //grass
 /obj/structure/flora/grass
@@ -336,7 +337,7 @@
 /obj/structure/flora/pottedplant/claypot
 	name = "clay pot"
 	desc = "Plants placed in those stop aging, but cannot be retrieved either."
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "claypot"
 	anchored = 0
 	density = FALSE
@@ -348,8 +349,8 @@
 		to_chat(user, "<span class='info'>You can see [plant_name] planted in it.</span>")
 
 /obj/structure/flora/pottedplant/claypot/attackby(var/obj/item/O,var/mob/user)
-	if(istype(O,/obj/item/weapon/wrench))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(O.is_wrench(user))
+		O.playtoolsound(loc, 50)
 		if(do_after(user, src, 30))
 			anchored = !anchored
 			user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"].</span>",
@@ -382,6 +383,7 @@
 	icon = 'icons/obj/flora/ausflora.dmi'
 	icon_state = "firstbush_1"
 	anchored = 1
+	shovelaway = TRUE
 
 /obj/structure/flora/ausbushes/New()
 	..()

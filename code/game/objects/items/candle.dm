@@ -110,7 +110,7 @@
 	update_icon()
 	light("<span class='notice'>[user] flips \the [src]'s switch.</span>")
 
-/obj/item/candle/attackby(obj/item/weapon/W, mob/user)
+/obj/item/candle/holo/attackby(obj/item/weapon/W, mob/user)
 	var/list/choices = list("red","blue","purple","green","yellow")
 	if(ismultitool(W))
 		wax = input("What color would do you want?","Color Selection") as anything in choices

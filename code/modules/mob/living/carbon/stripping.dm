@@ -16,7 +16,7 @@
 
 	target_item.add_fingerprint(user) //We don't need to be successful in order to get our prints on the thing
 
-	if(do_mob(user, src, strip_time())) //Fails if the user moves, changes held item, is incapacitated, etc.
+	if(do_mob(user, src, strip_time(), 10, 0)) //Fails if the user moves, changes held item, is incapacitated, etc.
 		if(temp_loc != target_item.loc) //This will also fail if the item to strip went anywhere, necessary because do_mob() doesn't keep track of it.
 			return
 
@@ -25,8 +25,11 @@
 
 		drop_from_inventory(target_item)
 		target_item.stripped(src, user)
-		if(pickpocket)
-			user.put_in_hands(target_item)
+		var/mob/living/carbon/human/H = user
+		if(pickpocket == 2) //Search for the glove's storage suits and see if they are full as only the thief storage gloves use this
+			H.place_in_glove_storage(target_item) //Defined in human.dm
+		else if(pickpocket)
+			H.put_in_hands(target_item)
 
 		return TRUE
 

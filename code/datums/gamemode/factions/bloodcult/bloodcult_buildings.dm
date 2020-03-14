@@ -551,6 +551,8 @@
 							origin_text = "Soul captured by [C.conversion[conversion]]"
 						if ("altar")
 							origin_text = "Volunteer shade"
+						if ("sacrifice")
+							origin_text = "Sacrifice"
 						else
 							origin_text = "Founder"
 					var/mob/living/carbon/H = C.antag.current
@@ -613,7 +615,7 @@
 											replace_target(user)
 											return
 									else
-										to_chat(user,"<b>\The [O.sacrifice_target] is still aboard the station.</b>")
+										to_chat(user,"<b>\The [O.sacrifice_target] is in [get_area_name(O, 1)].</b>")
 						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>To perform the sacrifice, you'll have to forge a cult blade first. It doesn't matter if the target is alive of not, lay their body down on the altar and plant the blade on their stomach. Next, touch the altar to perform the next step of the ritual. The more of you, the quicker it will be done.</span></span>")
 					if (CULT_ACT_III)
 						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>The crew is now aware of our presence, prepare to draw blood. Your priority is to spill as much blood as you can all over the station, bloody trails left by foot steps count toward this goal. How you obtain the blood, I leave to your ambition, but remember that if the crew destroys every blood stones, you will be doomed.</span></span>")
@@ -696,6 +698,7 @@
 		var/mob/M = usr
 		if(!isobserver(M) || !iscultist(M))
 			return
+		var/mob/dead/observer/O = M
 		var/obj/item/weapon/melee/soulblade/blade = locate() in src
 		if (!istype(blade))
 			to_chat(usr, "<span class='warning'>The blade was removed from \the [src].</span>")
@@ -711,6 +714,9 @@
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
 		M.mind.transfer_to(shadeMob)
+		O.can_reenter_corpse = 1
+		O.reenter_corpse()
+
 		/* Only cultists get brought back this way now, so let's assume they kept their identity.
 		spawn()
 			var/list/shade_names = list("Orenmir","Felthorn","Sparda","Vengeance","Klinge")
@@ -752,6 +758,18 @@
 			new_shade.forceMove(blade)
 			blade.update_icon()
 			blade = null
+
+			if (!iscultist(new_shade))
+				var/datum/role/cultist/newCultist = new
+				newCultist.AssignToRole(new_shade.mind,1)
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				if (!cult)
+					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+				cult.HandleRecruitedRole(newCultist)
+				newCultist.OnPostSetup()
+				newCultist.Greet(GREET_SACRIFICE)
+				newCultist.conversion.Add("sacrifice")
+
 			new_shade.status_flags |= GODMODE
 			new_shade.canmove = 0
 			new_shade.name = "[M.real_name] the Shade"
@@ -803,7 +821,7 @@ var/list/cult_spires = list()
 	..()
 	cult_spires.Add(src)
 	set_light(1)
-	stage = Clamp(veil_thickness, 1, 3)
+	stage = clamp(veil_thickness, 1, 3)
 	flick("spire[stage]-spawn",src)
 	spawn(10)
 		update_stage()
@@ -822,7 +840,7 @@ var/list/cult_spires = list()
 	..()
 
 /obj/structure/cult/spire/proc/upgrade()
-	var/new_stage = Clamp(veil_thickness, 1, 3)
+	var/new_stage = clamp(veil_thickness, 1, 3)
 	if (new_stage>stage)
 		stage = new_stage
 		alpha = 255
@@ -1404,6 +1422,8 @@ var/list/bloodstone_list = list()
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
 			cult.fail()
+		if(anchor)
+			global_anchor_bloodstone -= src
 	..()
 
 /obj/structure/cult/bloodstone/attack_construct(var/mob/user)
@@ -1580,7 +1600,6 @@ var/list/bloodstone_list = list()
 		qdel(TW)
 	if (!gcDestroyed && loc)
 		new /obj/machinery/singularity/narsie/large(src.loc)
-		stat_collection.cult_narsie_summoned = TRUE
 		SSpersistence_map.setSavingFilth(FALSE)
 	return 1
 

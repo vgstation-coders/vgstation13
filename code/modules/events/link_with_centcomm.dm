@@ -1,6 +1,9 @@
 /datum/event/unlink_from_centcomm
 	endWhen = 300
 
+/datum/event/unlink_from_centcomm/can_start()
+	return 10
+
 /datum/event/unlink_from_centcomm/start()
 	unlink_from_centcomm()
 

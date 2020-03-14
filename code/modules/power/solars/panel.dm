@@ -116,7 +116,7 @@
 		return
 
 	if(adir != ndir)
-		adir = (360 + adir + Clamp(ndir - adir, -10, 10)) % 360
+		adir = (360 + adir + clamp(ndir - adir, -10, 10)) % 360
 		update_icon()
 		update_solar_exposure()
 

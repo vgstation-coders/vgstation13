@@ -36,6 +36,8 @@
 #define ARCHAEO_MASK "mask"
 #define ARCHAEO_DICE "dice"
 #define ARCHAEO_SPACESUIT "spacesuit"
+#define ARCHAEO_EXCASUIT "excasuit"
+#define ARCHAEO_ANOMSUIT "anomsuit"
 #define ARCHAEO_LANCE "lance"
 #define ARCHAEO_ROULETTE "roulette"
 #define ARCHAEO_ROBOT "robot"

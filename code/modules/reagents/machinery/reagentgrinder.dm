@@ -64,6 +64,7 @@ var/global/list/juice_items = list (
 		/obj/item/weapon/reagent_containers/pill = list(),
 		/obj/item/weapon/reagent_containers/food = list(),
 		/obj/item/ice_crystal                = list(ICE = 10),
+		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 10),
 	)
 
 
@@ -110,10 +111,10 @@ var/global/list/juice_items = list (
 		return -1
 	return ..()
 
-/obj/machinery/reagentgrinder/crowbarDestroy(mob/user)
+/obj/machinery/reagentgrinder/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(beaker)
 		to_chat(user, "You can't do that while \the [src] has a beaker loaded!")
-		return -1
+		return FALSE
 	return ..()
 
 /obj/machinery/reagentgrinder/attackby(var/obj/item/O as obj, var/mob/user as mob)

@@ -131,7 +131,7 @@
 
 	if("set_volume_rate" in signal.data)
 		var/number = text2num(signal.data["set_volume_rate"])
-		volume_rate = Clamp(number, 0, air_contents.volume)
+		volume_rate = clamp(number, 0, air_contents.volume)
 
 	if("status" in signal.data)
 		spawn(2)
@@ -167,7 +167,7 @@
 "}
 
 /obj/machinery/atmospherics/unary/outlet_injector/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")

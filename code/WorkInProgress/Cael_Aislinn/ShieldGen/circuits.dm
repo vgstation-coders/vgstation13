@@ -9,7 +9,7 @@
 	build_path = /obj/machinery/shield_gen/external
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PLASMATECH + "=3"
 	req_components = list(
-							/obj/item/weapon/stock_parts/manipulator/nano/pico = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2,
 							/obj/item/weapon/stock_parts/subspace/transmitter = 1,
 							/obj/item/weapon/stock_parts/subspace/crystal = 1,
 							/obj/item/weapon/stock_parts/subspace/amplifier = 1,
@@ -30,7 +30,7 @@
 	build_path = /obj/machinery/shield_gen
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PLASMATECH + "=3"
 	req_components = list(
-							/obj/item/weapon/stock_parts/manipulator/nano/pico = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2,
 							/obj/item/weapon/stock_parts/subspace/transmitter = 1,
 							/obj/item/weapon/stock_parts/subspace/crystal = 1,
 							/obj/item/weapon/stock_parts/subspace/amplifier = 1,

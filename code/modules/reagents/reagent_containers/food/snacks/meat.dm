@@ -10,14 +10,11 @@
 	var/meatword = "meat"
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
-	
-/obj/item/weapon/reagent_containers/food/snacks/meat/New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
-	..(A)
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 3
 	if(M)
 		if(uppertext(M.name) != "UNKNOWN")
 			name = "[M.name] [meatword]"
@@ -101,7 +98,7 @@
 	name = "carp fillet"
 	desc = "A fillet of spess carp meat"
 	icon_state = "fishfillet"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/New()
 	..()
 	poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
@@ -158,7 +155,8 @@
 	name = "bear meat"
 	desc = "A very manly slab of meat."
 	icon_state = "bearmeat"
-/obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland/New()
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 12)
 	reagents.add_reagent(HYPERZINE, 5)

@@ -9,6 +9,45 @@
 
 	var/shred_on_use = 1
 
+//Vouchers that get turned into an item based on regular check-ins
+/obj/item/voucher/warp
+	name = "warp voucher"
+	desc = "Uses bluespace technology to send you an item once certain conditions are met."
+	var/redeem_path
+
+/obj/item/voucher/warp/New()
+	..()
+	processing_objects += src
+
+/obj/item/voucher/warp/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/item/voucher/warp/process()
+	if(vouch_condition())
+		var/turf/T = get_turf(src)
+		var/obj/item/I = new redeem_path(T)
+		T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = EFFECTS_PLANE)
+		var/mob/M = get_holder_of_type(src,/mob)
+		if(M)
+			M.put_in_hands(I)
+		visible_message("\The [src] vanishes in a warp-flash, leaving behind a brand new [I.name].")
+		qdel(src)
+
+/obj/item/voucher/warp/proc/vouch_condition()
+	return FALSE
+
+/obj/item/voucher/warp/kinetic_accelerator
+	name = "warp voucher - kinetic accelerator"
+	desc = "Uses bluespace technology to send you an item once certain conditions are met. This one is triggered by entering an NT designated mining area."
+	redeem_path = /obj/item/weapon/gun/energy/kinetic_accelerator
+
+/obj/item/voucher/warp/kinetic_accelerator/vouch_condition()
+	var/turf/T = get_turf(src)
+	if(istype(T.loc, /area/mine/explored)||istype(T.loc, /area/mine/unexplored))
+		return TRUE
+	return FALSE
+
 /obj/item/voucher/free_item
 	name = "free products voucher"
 	desc = "A slip of electropaper redeemable for any brand product from a particular brand of vending machines."

@@ -37,8 +37,8 @@ proc/check_complex_placement(var/turf/T,var/size_x,var/size_y,var/ignore_walls=0
 	surroundings |= range(7, locate(T.x,T.y+size_y,T.z))
 	surroundings |= range(7, locate(T.x+size_x,T.y+size_y,T.z))
 
-	for(var/area in list(/area/mine/explored,/area/vox_trading_post,/area/research_outpost, /area/asteroid, /area/asteroid/clown))
-		if(locate(area) in surroundings)// +5s are for view range
+	for(var/area/A in surroundings)
+		if(!istype(A,/area/mine/unexplored))
 			return 0
 
 	if(locate(/turf/space) in surroundings)

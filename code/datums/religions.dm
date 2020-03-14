@@ -358,6 +358,10 @@
 		if ("The Dokument")
 			R.holy_book.icon_state = "gunbible"
 			R.holy_book.item_state = "gunbible"
+		if("Holy Grimoire")
+			R.holy_book.icon_state = "holygrimoire"
+			R.holy_book.item_state = "holygrimoire"
+			R.holy_book.desc = "A version of the Christian Bible with several apocryphal sections appended which detail how to combat evil forces of the night. Apply to head repeatedly."
 		else
 			//If christian bible, revert to default
 			R.holy_book.icon_state = "bible"
@@ -508,6 +512,25 @@
 	male_adept = "Godi"
 	female_adept = "Godi"
 	keys = list("norse", "german pagan","viking")
+
+/datum/religion/obesity
+	name = "Church of Corpulence"
+	deity_names = list("Fat Albert", "Gaben", "William Howard Taft")
+	bible_names = list("The Menu", "The Larder of Heaven")
+	male_adept = "Fatcolyte"
+	female_adept = "Fatcolyte"
+	keys = list("fat", "obese","absolute unit", "obesity")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/cornoil
+
+/datum/religion/obesity/equip_chaplain(var/mob/living/carbon/human/H)
+	H.reagents.add_reagent(NUTRIMENT, 40)
+	H.overeatduration = 600
+
+/datum/religion/obesity/convert(var/mob/living/preacher, var/mob/living/subject, var/can_renounce = TRUE)
+	. = ..()
+	if (subject)
+		subject.reagents.add_reagent(NUTRIMENT, 40)
+		subject.overeatduration = 600
 
 /datum/religion/celtic
 	name = "Celtic Mythos"
@@ -956,7 +979,11 @@
 	if (!held_banger)
 		to_chat(preacher, "<span class='warning'>You need to hold a flashbang to begin the conversion.</span>")
 		return FALSE
-	var/held_screwdriver = subject.find_held_item_by_type(/obj/item/weapon/screwdriver)
+	var/held_screwdriver = null
+	for(var/obj/item/I in preacher.held_items)
+		if(I.is_screwdriver(preacher))
+			held_screwdriver = I
+			break
 	if (!held_screwdriver)
 		to_chat(preacher, "<span class='warning'>The subject needs to hold a screwdriver to begin the conversion.</span>")
 		return FALSE
@@ -1149,6 +1176,18 @@
 /datum/religion/ancap/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
 
+/datum/religion/ancom
+	name = "Anarcho-Communism"
+	deity_name = "Peter Kropotkin"
+	bible_name = "The Conquest of Bread"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Activist" 
+	female_adept = "Activist"
+	keys = list("anarcho-communism", "communalism", "mutualism")
+	
+/datum/religion/ancom/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/mask/balaclava(H), slot_l_store) // Black Bloc
+
 /datum/religion/samurai
 	name = "Bushido" // The way of the warrior
 	deity_name = "The Way of the Warrior"
@@ -1307,3 +1346,16 @@
 	spawn(rand(1,3))
 		L.get_subtle_message(buttbottify(prayer_message), src.deity_name)
 		L.playsound_local(src,'sound/misc/fart.ogg', 50, 1)
+
+/datum/religion/belmont
+	name = "Brotherhood of Light"
+	deity_name = "The Almighty"
+	bible_name = "Holy Grimoire"
+	male_adept = "Vampire Hunter"
+	female_adept = "Vampire Hunter"
+	keys = list("vampire killer", "vampire hunter", "belmont clan", "die monster", "uuddlrlrbastart")
+	bookstyle = "Holy Grimoire"
+
+/datum/religion/belmont/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/vamphunter, slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/head/vamphunter, slot_shoes)

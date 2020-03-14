@@ -6,6 +6,7 @@
 	total_positions = 4
 	spawn_positions = 2
 	supervisors = "the chief medical officer"
+	wage_payout = 55
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva, access_morgue)
@@ -41,6 +42,7 @@
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/device/healthanalyzer(H.back), slot_in_backpack)
+	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/>")
 	return 1
 
 /datum/job/paramedic/priority_reward_equip(var/mob/living/carbon/human/H)

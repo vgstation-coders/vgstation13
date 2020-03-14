@@ -62,7 +62,7 @@
 	power_connection.connect()
 	update_icon()
 
-/obj/machinery/media/transmitter/broadcast/wrenchAnchor(var/mob/user)
+/obj/machinery/media/transmitter/broadcast/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
@@ -242,7 +242,7 @@
 		var/datum/gas_mixture/environment = loc.return_air()
 		switch(environment.temperature)
 			if(T0C to (T20C + 20))
-				integrity = Clamp(integrity, 0, 100)
+				integrity = clamp(integrity, 0, 100)
 			if((T20C + 20) to INFINITY)
 				integrity = max(0, integrity - 1)
 

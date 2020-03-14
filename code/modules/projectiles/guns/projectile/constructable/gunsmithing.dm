@@ -1,5 +1,5 @@
 //This file will contain all the intermediary parts used in the crafting of craftable weapons, before they actually become said weapons.
-
+	
 /obj/item/weapon/aluminum_cylinder
 	name = "aluminum cylinder"
 	desc = "A soda can that has had the top and bottom cut out."
@@ -190,6 +190,7 @@
 		else
 			new /obj/item/stack/medical/splint/ghetto(get_turf(src.loc))
 		qdel(W)
+		qdel(src)
 
 /obj/item/weapon/cylinder
 	name = "beaker"
@@ -416,9 +417,9 @@
 /obj/item/weapon/gun_assembly/attackby(obj/item/weapon/W, mob/user)
 	switch(state)
 		if("stock_reservoir_assembly")
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "You securely fasten the fuel reservoir to \the [src].")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_reservoir"
 				update_assembly()
 		if("stock_reservoir")
@@ -436,9 +437,9 @@
 				state = "stock_capacitorbank_assembly"
 				update_assembly()
 				C.use(5)
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "You loosen the fuel reservoir on \the [src].")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_reservoir_assembly"
 				update_assembly()
 
@@ -461,7 +462,7 @@
 		if("blunderbuss_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the igniter to \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/blunderbuss/I = new (get_turf(user))
@@ -475,12 +476,12 @@
 		if("stock_capacitorbank_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the wires in \the [src]'s capacitor bank.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_capacitorbank"
 				update_assembly()
 			if(iswirecutter(W))
 				to_chat(user, "You cut the wires out of the capacitor bank.")
-				playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(user, 50)
 				state = "stock_reservoir"
 				update_assembly()
 				var/obj/item/stack/cable_coil/C = new (get_turf(user))
@@ -493,7 +494,7 @@
 				qdel(W)
 			if(W.is_screwdriver(user))
 				to_chat(user, "You loosen the wires in \the [src]'s capacitor bank.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_capacitorbank_assembly"
 				update_assembly()
 		if("stock_capacitorbank_barrel_assembly")
@@ -513,7 +514,7 @@
 		if("railgun_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s triggering mechanism.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/gun/projectile/railgun/I = new (get_turf(user))
@@ -583,7 +584,7 @@
 		if("stock_ansible_amplifier_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace amplifier.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_ansible_amplifier"
 				update_assembly()
 		if("stock_ansible_amplifier")
@@ -595,7 +596,7 @@
 		if("stock_ansible_amplifier_transmitter_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace transmitter.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "subspacetunneler_assembly"
 				update_assembly()
 		if("subspacetunneler_assembly")
@@ -797,12 +798,12 @@
 		to_chat(user, "<span class='notice'>\The [src.name] is uncharged.</span>")
 
 /obj/machinery/power/secured_capacitor/attackby(obj/item/weapon/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(charging)
 			to_chat(user, "<span class='warning'>\The [src.name] needs to be turned off first.</span>")
 			return
 		to_chat(user, "You unsecure \the [src.name] from the floor.")
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		power_machines.Remove(src)
 		switch(name)
 			if("capacitor")
@@ -815,6 +816,10 @@
 				I.maximum_charge = maxcharge
 			if("super capacitor")
 				var/obj/item/weapon/stock_parts/capacitor/adv/super/I = new (get_turf(src.loc))
+				I.stored_charge = charge
+				I.maximum_charge = maxcharge
+			if("ultra capacitor")
+				var/obj/item/weapon/stock_parts/capacitor/adv/super/ultra/I = new (get_turf(src.loc))
 				I.stored_charge = charge
 				I.maximum_charge = maxcharge
 		qdel(src)

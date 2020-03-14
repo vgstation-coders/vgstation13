@@ -59,10 +59,9 @@
 			if(istype(O, /obj/item/stack/ore) && W.ore_box)
 				var/count = 0
 				for(var/obj/item/stack/ore/I in get_turf(target))
-					if(I.material)
-						W.ore_box.materials.addAmount(I.material, I.amount)
+					if(W.ore_box.try_add_ore(I))
 						returnToPool(I)
-						count++
+						count += I.amount
 				if(count)
 					log_message("Loaded [count] ore into compatible ore box.")
 					occupant_message("<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
@@ -168,7 +167,7 @@
 	else if(istype(target, /turf/unsimulated/mineral))
 		if(do_after_cooldown(target, 1/MECHDRILL_ROCK_SPEED) && C == chassis.loc && src == chassis.selected)
 			for(var/turf/unsimulated/mineral/M in range(chassis,1))
-				if(get_dir(chassis,M)&chassis.dir)
+				if(get_dir(chassis,M)&chassis.dir && M.mining_difficulty < MINE_DIFFICULTY_DENSE)
 					M.GetDrilled(safety_override = TRUE, driller = src)
 			log_message("Drilled through [target]")
 			if(istype(chassis, /obj/mecha/working))
@@ -176,10 +175,9 @@
 				if(W.hydraulic_clamp && W.ore_box)
 					var/count = 0
 					for(var/obj/item/stack/ore/ore in range(chassis,1))
-						if(get_dir(chassis,ore)&chassis.dir && ore.material)
-							W.ore_box.materials.addAmount(ore.material,ore.amount)
+						if(get_dir(chassis,ore)&chassis.dir && W.ore_box.try_add_ore(ore))
 							returnToPool(ore)
-							count++
+							count += ore.amount
 					if(count)
 						occupant_message("<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
 
@@ -197,9 +195,9 @@
 					M.gets_dug()
 					if(hydraulic_clamp && ore_box)
 						for(var/obj/item/stack/ore/glass/sandore in get_turf(M))
-							ore_box.materials.addAmount(sandore.material,sandore.amount)
-							returnToPool(sandore)
-							count++
+							if (ore_box.try_add_ore(sandore))
+								returnToPool(sandore)
+								count += sandore.amount
 			log_message("Drilled through [target]")
 			if(count)
 				occupant_message("<span class='notice'>[count] sand successfully loaded into cargo compartment.</span>")
@@ -269,7 +267,7 @@
 			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
 			playsound(target, 'sound/mecha/mechsmash.ogg', 50, 1)
 			tray.smashDestroy(50) //Just to really drive it home
-	else if(istype(target, /obj/effect/plantsegment) || istype(target, /obj/effect/alien/weeds) || istype(target, /obj/effect/biomass)|| istype(target, /turf/simulated/floor))
+	else if(istype(target, /obj/effect/plantsegment) || istype(target, /obj/effect/alien/weeds) || istype(target, /obj/effect/biomass)|| istype(target, /turf/simulated/floor) || istype(target, /obj/structure/cable/powercreeper))
 		set_ready_state(0)
 		var/olddir = chassis.dir
 		var/eradicated = 0
@@ -283,6 +281,11 @@
 						eradicated++
 					else if(istype(E, /obj/effect/alien/weeds) || istype(E, /obj/effect/biomass))
 						qdel(E)
+						eradicated++
+			for(var/obj/structure/cable/powercreeper/C in range(chassis,i == 4 ? 2 : 1))
+				if(get_dir(chassis,C)&chassis.dir || C.loc == get_turf(chassis))
+					if(istype(C, /obj/structure/cable/powercreeper))
+						C.die()
 						eradicated++
 			sleep(3)
 		if(eradicated)
@@ -387,12 +390,6 @@
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/on_reagent_change()
 	return
 
-/obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M as obj)
-	if(..())
-		if(istype(M))
-			return 1
-	return 0
-
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/New()
 	. = ..()
 	create_reagents(200)
@@ -424,6 +421,7 @@
 	if(!ion_trail)
 		ion_trail = new /datum/effect/effect/system/trail()
 	ion_trail.set_up(chassis)
+	linked_spell = new /spell/mech/jetpack(M, src)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/proc/toggle()
@@ -431,10 +429,6 @@
 		return
 	!equip_ready? turn_off() : turn_on()
 	return equip_ready
-
-/obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
-	..()
-	linked_spell = new /spell/mech/jetpack(M, src)
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/activate()
 	toggle()
@@ -1516,10 +1510,13 @@
 		return
 
 	playsound(T, 'sound/weapons/Genhit.ogg', 50, 1)
-	if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
-		T.ChangeTurf(/turf/simulated/floor/plating/airless)
-	else
-		T.ChangeTurf(/turf/simulated/floor/plating)
+	if(T.air)
+		var/datum/gas_mixture/GM = T.air
+		if(GM.pressure > HALF_ATM)
+			T.ChangeTurf(/turf/simulated/floor/plating)
+			return
+	T.ChangeTurf(/turf/simulated/floor/plating/airless)
+
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector
 	name = "\improper Exosuit-Mounted Radiation Collector Array"

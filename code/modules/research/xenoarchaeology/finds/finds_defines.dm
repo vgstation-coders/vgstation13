@@ -1,12 +1,5 @@
 var/list/digsite_types = list()
 var/list/archaeo_types = list()
-
-/proc/get_responsive_reagent(var/find_type)
-	var/datum/find/F = archaeo_types[find_type]
-	if(F)
-		return initial(F.responsive_reagent)
-	return PLASMA
-
 /proc/get_random_digsite_type()
 	var/value = pick(100;DIGSITE_GARDEN,95;DIGSITE_ANIMAL,90;DIGSITE_HOUSE,85;DIGSITE_TECHNICAL,80;DIGSITE_TEMPLE,75;DIGSITE_WAR)
 	return digsite_types[value]
@@ -46,3 +39,15 @@ var/list/finds_as_strings = list(
 	CHLORINE = "Metamorphic/igneous rock composite",
 	PHOSPHORUS = "Metamorphic/sedimentary rock composite",
 	PLASMA = "Anomalous material" )
+
+var/list/color_from_find_reagent = list(
+	CARBON = "#008000",
+	POTASSIUM = "#FFC0CB",
+	HYDROGEN = "#FF0000",
+	NITROGEN = "#AFEEEE",
+	MERCURY = "#484848",
+	IRON = "#b7410e",
+	CHLORINE = "#ffff00",
+	PHOSPHORUS = "#00ff00",
+	PLASMA = "#500064",
+	)

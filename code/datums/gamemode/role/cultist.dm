@@ -2,7 +2,9 @@
 	id = CULTIST
 	name = "Cultist"
 	required_pref = CULTIST
-	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Merchant")
+	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chief Engineer",
+						"Chief Medical Officer", "Research Director", "Chaplain", "Head of Personnel",
+						"Internal Affairs Agent", "Merchant")
 	logo_state = "cult-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 	var/list/tattoos = list()
@@ -23,7 +25,7 @@
 	antag.current.add_language(LANGUAGE_CULT)
 
 	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
-		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 	antag.store_memory("A couple of runes appear clearly in your mind:")
@@ -47,7 +49,7 @@
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
-		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /datum/mind/proc/decult()
@@ -99,7 +101,9 @@
 				H.adjustOxyLoss(20)
 				H.adjustToxLoss(10)
 		else
-			antag.current.adjustBruteLoss(rand(20,50))
+			if(isliving(antag.current))
+				var/mob/living/L = antag.current
+				L.adjustBruteLoss(rand(20,50))
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -133,6 +137,8 @@
 			to_chat(antag.current, "<span class='sinister'>Your soul has made its way into the blade's soul gem! The dark energies of the altar forge your mind into an instrument of the cult of Nar-Sie, be of assistance to your fellow cultists.</span>")
 		if (GREET_RESURRECT)
 			to_chat(antag.current, "<span class='sinister'>You were resurrected from beyond the veil by the followers of Nar-Sie, and are already familiar with their rituals! You have now joined their ranks as a cultist.</span>")
+		if (GREET_SACRIFICE)
+			to_chat(antag.current, "<span class='sinister'>The cult has spared your soul following the sacrifice of your body. You are now living as a shade inside the Soul Blade that nailed your body to the altar. You are to help the cult in their endeavours to repay their graciousness.</span>")
 		else
 			if (faction && faction.ID == BLOODCULT)
 				to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>You are cultist, from the cult of Nar-Sie, the Geometer of Blood.</span>")
@@ -209,7 +215,7 @@
 				M.gui_icons.soulblade_bgLEFT,
 				M.gui_icons.soulblade_coverLEFT,
 				M.gui_icons.soulblade_bloodbar,
-				M.fire,
+				M.healths2,
 				)
 
 /mob/living/carbon/proc/muted()
@@ -227,7 +233,7 @@
 	if (!istype(H))
 		return
 	var/unholy = H.checkTattoo(TATTOO_HOLY)
-	var/current_act = Clamp(veil_thickness,CULT_MENDED,CULT_EPILOGUE)
+	var/current_act = clamp(veil_thickness,CULT_MENDED,CULT_EPILOGUE)
 	if (reagent_id == INCENSE_HAREBELLS)
 		if (unholy)
 			H.eye_blurry = max(H.eye_blurry, 3)

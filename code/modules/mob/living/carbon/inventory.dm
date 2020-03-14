@@ -5,7 +5,7 @@
 		if(slot_wear_mask)
 			return wear_mask
 		if(slot_handcuffed)
-			return handcuffed
+			return handcuffed || mutual_handcuffs
 		if(slot_legcuffed)
 			return legcuffed
 	return null
@@ -21,6 +21,13 @@
 		success = 1
 		slot = slot_handcuffed
 		update_inv_handcuffed()
+	else if (W == mutual_handcuffs)
+		if(mutual_handcuffs.on_restraint_removal(src)) //If this returns 1, then the unquipping action was interrupted
+			return 0
+		mutual_handcuffs = null
+		success = 1
+		slot = slot_handcuffed
+		update_inv_mutual_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1

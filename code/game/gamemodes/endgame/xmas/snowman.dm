@@ -116,6 +116,8 @@
 		playsound(A.loc, "swing_hit", 50, 1)
 		if(istype(A,/mob/living/carbon/))
 			var/mob/living/carbon/C = A
+			if (M_RESIST_COLD in C.mutations)
+				return
 			if(C.bodytemperature >= SNOWBALL_MINIMALTEMP)
 				C.bodytemperature -= 5
 

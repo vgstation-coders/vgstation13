@@ -53,6 +53,7 @@ The required techs are the following:
 #define FLATPACKER	64  //This design creates a machine, not an item.
 #define GENFAB		128 //Generic item.
 #define AMMOLATHE	256	//Adding this for ammolathes but its pretty much the same as PROTOLATHE.
+#define MEDALPRINTER 512 //Outputs misc items from metal, silver, gold and plasma. Similar to the protolathe.
 //Note: More then one of these can be added to a design but imprinter and lathe designs are incompatable.
 
 /datum/design							//Datum for object designs, used in construction
@@ -77,7 +78,7 @@ The required techs are the following:
 	for(var/datum/tech/T in temp_techs)
 		if(T.id in req_tech)
 			new_reliability += T.level
-	new_reliability = Clamp(new_reliability, reliability_base, 100)
+	new_reliability = clamp(new_reliability, reliability_base, 100)
 	reliability = new_reliability
 	return
 

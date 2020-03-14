@@ -40,8 +40,8 @@ var/const/BORG_WIRE_LAWCHECK    = 16 // Not used on MoMMIs
 	return .
 
 /datum/wires/robot/UpdateCut(var/index, var/mended, var/mob/user)
-
 	var/mob/living/silicon/robot/R = holder
+	..()
 	switch(index)
 		if(BORG_WIRE_LAWCHECK) //Cut the law wire, and the borg will no longer receive law updates from its AI
 			if(!mended)
@@ -70,8 +70,8 @@ var/const/BORG_WIRE_LAWCHECK    = 16 // Not used on MoMMIs
 
 
 /datum/wires/robot/UpdatePulsed(var/index)
-
 	var/mob/living/silicon/robot/R = holder
+	..()
 	switch(index)
 		if (BORG_WIRE_AI_CONTROL) //pulse the AI wire to make the borg reselect an AI
 			if(!R.emagged && !isMoMMI(R))

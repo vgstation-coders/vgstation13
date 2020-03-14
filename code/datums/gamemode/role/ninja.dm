@@ -1,24 +1,29 @@
+#define GREET_WEEB "weebgreet"
+
 /datum/role/ninja
 	name = NINJA
 	id = NINJA
 	required_pref = NINJA
 	special_role = NINJA
 	logo_state = "ninja-logo"
-	refund_value = BASE_SOLO_REFUND
 	wikiroute = NINJA
 	disallow_job = TRUE
 	restricted_jobs = list()
 	greets = list(GREET_DEFAULT,GREET_WEEB,GREET_CUSTOM)
 
+	stat_datum_type = /datum/stat/role/ninja
+
 /datum/role/ninja/OnPostSetup()
 	. =..()
+	if(!.)
+		return
+	antag.current.forceMove(pick(ninjastart))
 	if(ishuman(antag.current))
-		antag.current << sound('sound/effects/gong.ogg')
+		antag.current << sound('sound/effects/yooooooooooo.ogg')
 		equip_ninja(antag.current)
 		name_ninja(antag.current)
 
 /datum/role/ninja/ForgeObjectives()
-
 	if(cyborg_list.len)
 		AppendObjective(/datum/objective/target/killsilicons)
 	else
@@ -49,6 +54,7 @@
 		AppendObjective(/datum/objective/survive)
 	if(prob(15))
 		AppendObjective(/datum/objective/stealsake)
+		
 
 /datum/role/ninja/extraPanelButtons()
 	var/dat = ""
@@ -78,9 +84,6 @@
 			to_chat(antag.current, "<span class='danger'>Remember that guns are not honoraburu, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja.<br>The Spider Clan has been insulted for the last time. Send Nanotrasen a message. You are forbidden by your code to use guns, do not forget!</span>")
-			to_chat(antag.current, "<span class='danger'>You are currently on a direct course to the station.</span>")
-			to_chat(antag.current, "<span class='userdanger'>Your suit will lose pressure in approximately two minutes.</span>")
-			to_chat(antag.current, "<span class='danger'>Find a way inside before your suit's life support systems give out!</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
@@ -111,12 +114,17 @@
 /obj/item/stack/shuriken/throw_at(var/atom/A, throw_range, throw_speed)
 	if(ishuman(usr))
 		var/mob/living/carbon/human/H = usr
-		if(H.mind.GetRole(NINJA))
+		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
+		if(N)
 			if(amount>1)
 				use(1)
 				var/obj/item/stack/shuriken/S = new(loc)
 				S.throw_at(A,throw_range,throw_speed*2)
 				H.put_in_hands(src)
+				//statistics collection: ninja shuriken thrown
+				if(istype(N.stat_datum, /datum/stat/role/ninja))
+					var/datum/stat/role/ninja/ND = N.stat_datum
+					ND.shuriken_thrown++
 			else
 				..(A,throw_range,throw_speed*2)
 		else
@@ -231,16 +239,17 @@
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	var/cooldown = 0
-	var/reservoir = 0
 	var/shuriken_icon = "radial_print"
 	actions_types = list(/datum/action/item_action/make_shuriken, /datum/action/item_action/charge_sword)
 
 /obj/item/clothing/gloves/ninja/examine(mob/user)
 	..()
-	if(ishuman(user))
+	if(ishuman(user) && user.is_wearing_item(src))
 		var/mob/living/carbon/human/H = user
 		if(H.mind.GetRole(NINJA))
-			to_chat(H,"<span class='info'>Alt-Click to use drained power. It currently holds [round(reservoir)] energy units.</span>")
+			var/obj/item/weapon/cell/C = H.get_cell()
+			if(C)
+				to_chat(H, "<span class='notice'>You have [C.get_charge()] charge remaining.</span>")
 			if(cooldown-world.time>0)
 				to_chat(H,"<span class='warning'>It will be ready to drain a cell in [round((cooldown-world.time)/10)] seconds.</span>")
 			else
@@ -253,7 +262,7 @@
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			if(H.mind.GetRole(NINJA) && A.get_cell())
-				if(draincell(A.get_cell()))
+				if(draincell(A.get_cell(), user))
 					if(istype(A,/obj/machinery/power/apc))
 						var/obj/machinery/power/apc/APC = A
 						APC.charging = 0
@@ -273,7 +282,11 @@
 	if(C.charge<100)
 		return FALSE
 	playsound(get_turf(src), pick(lightning_sound), 100, 1, "vary" = 0)
-	reservoir += C.charge
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/obj/item/weapon/cell/CC = H.get_cell()
+		if(CC)
+			CC.give(C.charge)
 	C.use(C.charge)
 	cooldown = world.time + 10 SECONDS
 	return TRUE
@@ -345,7 +358,10 @@
 	..()
 
 /obj/item/clothing/gloves/ninja/proc/make_shuriken(mob/user)
-	if(reservoir>=MAKE_SHURIKEN_COST)
+	var/obj/item/weapon/cell/C = user.get_cell()
+	if(!C)
+		to_chat(user, "<span class = 'notice'>You do not have a cell to draw power from.</span>")
+	if(C.use(MAKE_SHURIKEN_COST))
 		var/obj/item/stack/shuriken/S = locate(/obj/item/stack/shuriken) in user.held_items
 		if(S)
 			to_chat(user,"<span class='notice'>Your generated shuriken is added to the stack.</span>")
@@ -354,9 +370,8 @@
 		else
 			to_chat(user,"<span class='good'>Your glove generates a fresh shuriken in your hand!</span>")
 			user.put_in_hands(new /obj/item/stack/shuriken(user))
-		reservoir -= MAKE_SHURIKEN_COST
 	else
-		to_chat(user,"<span class='warning'>You need [MAKE_SHURIKEN_COST] to make that!</span>")
+		to_chat(user,"<span class='warning'>You need [MAKE_SHURIKEN_COST] charge to make a shuriken!</span>")
 
 /obj/item/clothing/gloves/ninja/proc/charge_sword(mob/user)
 	var/obj/item/weapon/oursword = GetNinjaWeapon(user)
@@ -371,13 +386,21 @@
 	if(difference<=0)
 		to_chat(user,"<span class='warning'>Your blade is already fully charged!</span>")
 		return
-	var/to_subtract = min(difference,reservoir) //Take the least between: how much we need, how much we have
+	var/obj/item/weapon/cell/C = user.get_cell()
+	var/to_subtract = min(difference,C.get_charge()) //Take the least between: how much we need, how much we have
 	T.cooldown -= to_subtract/CHARGE_COST_MULTIPLIER
-	reservoir -= to_subtract
+	C.use(to_subtract)
 	if(T.cooldown < world.time)
 		to_chat(user,"<span class='good'>The glove's power flows into your weapon. Your blade is ready to be unleashed!</span>")
 	else
 		to_chat(user,"<span class='notice'>The glove's power flows into your weapon. It will be ready in [round((T.cooldown - world.time)/10)] seconds.</span>")
+
+	//statistics collection: ninja times charged sword
+	var/datum/role/ninja/N = user.mind.GetRole(NINJA)
+	if(istype(N.stat_datum, /datum/stat/role/ninja))
+		var/datum/stat/role/ninja/ND = N.stat_datum
+		ND.times_charged_sword++
+
 
 /obj/item/mounted/poster/stealth
 	name = "rolled-up stealth poster"
@@ -395,9 +418,14 @@
 	var/obj/structure/sign/poster/stealth/P = ..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.mind.GetRole(NINJA) && P)
+		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
+		if(N && P)
 			P.entry_turf = get_turf(user)
 			user.forceMove(P)
+			//statistics collection: ninja stealth posters posted
+			if(istype(N.stat_datum, /datum/stat/role/ninja))
+				var/datum/stat/role/ninja/ND = N.stat_datum
+				ND.stealth_posters_posted++
 	return P
 
 /obj/item/mounted/poster/stealth/poster_animation(obj/D,mob/user)
@@ -481,8 +509,12 @@ Helpers For Both Variants
 			owner.whisper("Not today, katana-san.")
 
 /obj/item/weapon/melee/energy/sword/ninja
-	name = "energy katana"
-	desc = "It makes you a little nervous even when it's off."
+	name = "energy blade"
+	desc = "Hot damn."
+	icon_state = "blade0"
+	base_state = "blade"
+	active_state = "blade1"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	activeforce = 40
 	siemens_coefficient = 0
 	onsound = null
@@ -493,22 +525,29 @@ Helpers For Both Variants
 	daemon = new /datum/daemon/teleport(src,"Weakness",null)
 
 /obj/item/weapon/melee/energy/sword/ninja/toggleActive(mob/user, var/togglestate = "")
+	if(togglestate) //override
+		..()
+		checkdroppable()
+		return
 	if(isninja(user))
 		..()
+		checkdroppable()
 	else
 		to_chat(user,"<span class='warning'>There's no buttons on it.</span>")
 		return
-	if(active)
-		cant_drop = TRUE
-	else
-		cant_drop = FALSE
+
+/obj/item/weapon/melee/energy/sword/update_icon()
+	icon_state = "[base_state][active]"
+
+/obj/item/weapon/melee/energy/sword/ninja/proc/checkdroppable()
+	return cant_drop = active //they should be the same value every time
 
 /obj/item/weapon/melee/energy/sword/ninja/attackby(obj/item/weapon/W, mob/living/user)
 	if(istype(W,/obj/item/weapon/melee/energy/sword))
 		return
 	else
 		return ..()
-		
+
 /obj/item/weapon/melee/energy/sword/ninja/examine(mob/user)
 	..()
 	if(!isninja(user))
@@ -525,12 +564,18 @@ Helpers For Both Variants
 		return 1
 	else
 		return ..()
-		
+
 /obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
 	if(active)
 		toggleActive(user,togglestate = "off")
+	..()
 
-		
+/obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
+	if(!isninja(user) && active)
+		toggleActive(user,togglestate = "off")
+		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
+	..()
+
 /*=======
 Suit and assorted
 =======*/
@@ -544,21 +589,32 @@ Suit and assorted
 	species_fit = list("Human")
 	species_restricted = list("Human")
 	eyeprot = 3
-	body_parts_covered = FULL_HEAD|BEARD
-	
+	body_parts_covered = FULL_HEAD|HIDEHAIR
+
 /obj/item/clothing/head/helmet/space/ninja/apprentice
 	name = "ninja hood"
 	desc = "What may appear to be a simple black garment is in fact a sophisticated nano-weave helmet. Standard issue ninja apprentice gear."
 	eyeprot = 0
 	pressure_resistance = ONE_ATMOSPHERE
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	
+
 /obj/item/clothing/head/helmet/space/ninja/apprentice/New()
 	..()
+	
+
+/obj/item/clothing/head/helmet/space/ninja/apprentice/proc/pressurize()
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(H.wear_suit == src)
+			to_chat(H, "<span class='notice'>\The [src] pressurizes.</span>")
+	pressure_resistance = ONE_ATMOSPHERE
 	spawn(120 SECONDS)
 		pressure_resistance = 0
-		visible_message("<span class='danger'>\The [src] lets out a hiss.  It's no longer pressurized!</span>")
-	
+		if(ishuman(loc))
+			var/mob/living/carbon/human/H = loc
+			if(H.wear_suit == src)
+				to_chat(H, "<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
+
 /obj/item/clothing/suit/space/ninja
 	name = "elite ninja suit"
 	desc = "A unique, vacuum-proof suit of nano-enhanced armor designed specifically for elite Spider Clan assassins."
@@ -571,19 +627,39 @@ Suit and assorted
 	species_fit = list("Human")
 	species_restricted = list("Human") //only have human sprites :/
 	can_take_pai = 1
-	
+	var/obj/item/weapon/cell/cell
+
+/obj/item/clothing/suit/space/ninja/New()
+	..()
+	equip_cell()
+
+/obj/item/clothing/suit/space/ninja/proc/equip_cell()
+	cell = new /obj/item/weapon/cell/high/empty()
+
+/obj/item/clothing/suit/space/ninja/get_cell()
+	return cell
 /obj/item/clothing/suit/space/ninja/apprentice
 	name = "ninja suit"
 	desc = "A rare suit of nano-enhanced armor designed for Spider Clan assassins."
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	pressure_resistance = ONE_ATMOSPHERE
-	
+	pressure_resistance = 0
+
 /obj/item/clothing/suit/space/ninja/apprentice/New()
 	..()
+	
+/obj/item/clothing/suit/space/ninja/apprentice/proc/pressurize()
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(H.wear_suit == src)
+			to_chat(H, "<span class='notice'>\The [src] pressurizes.</span>")
+	pressure_resistance = ONE_ATMOSPHERE
 	spawn(150 SECONDS)
 		pressure_resistance = 0
-		visible_message("<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
-	
+		if(ishuman(loc))
+			var/mob/living/carbon/human/H = loc
+			if(H.wear_suit == src)
+				to_chat(H, "<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
+
 /obj/item/clothing/suit/space/ninja/equipped(mob/living/carbon/human/H, equipped_slot)
 	/*if(!isninja(H))
 		if(equipped_slot != slot_wear_suit)
@@ -592,12 +668,12 @@ Suit and assorted
 			src.visible_message("<span class='danger'>\The [src] suddenly explodes as [H] tries to put it on!</span>")
 			explosion(H.loc, 0, 0, 1)
 			H.u_equip(src, 1)
-			qdel(src)*/ 
+			qdel(src)*/
 	//else //Maybe when there's more functionality to warrant the suit exploding.
 	if(equipped_slot == slot_wear_suit)
 		icon_state = H.gender==FEMALE ? "s-ninjaf" : "s-ninja"
 		H.update_inv_wear_suit()
-	
+
 /obj/item/clothing/shoes/ninja
 	name = "ninja shoes"
 	desc = "A pair of ninja shoes, excellent for running and even better for smashing skulls."
@@ -606,16 +682,21 @@ Suit and assorted
 	permeability_coefficient = 0.01
 	mag_slow = NO_SLOWDOWN
 	clothing_flags = NOSLIP | MAGPULSE
-	
+
 /obj/item/clothing/shoes/ninja/apprentice
 	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
-	
-/obj/item/clothing/shoes/ninja/apprentice/New()
-	..()
+	clothing_flags = NOSLIP
+
+/obj/item/clothing/shoes/ninja/apprentice/proc/activateMagnets()
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		to_chat(H, "<span class='notice'>The magnetic charge on \the [src] activates.</span>")
+	togglemagpulse(override = TRUE)
 	spawn(130 SECONDS)
 		togglemagpulse(override = TRUE)
-		visible_message("<span class='danger'>The magnetic charge on \the [src] disappates!</span>")
-		
+		if(ishuman(loc))
+			var/mob/living/carbon/human/H = loc
+			to_chat(H, "<span class='danger'>The magnetic charge on \the [src] disappates!</span>")
 
 /obj/item/clothing/mask/gas/voice/ninja
 	name = "ninja mask"
@@ -626,7 +707,7 @@ Suit and assorted
 	actions_types = list()
 	species_fit = list("Human")
 	species_restricted = list("Human")
-		
+
 /*******************************************
 ****          WEEABOO VARIANTS          ****
 ********************************************/
@@ -717,7 +798,7 @@ Suit and assorted
 	to_chat(user, "[message]")
 
 /obj/item/weapon/katana/hesfast/suicide_act(mob/user)
-	visible_message("<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit sudoku.</span>")
+	visible_message("<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit [pick("seppuku","sudoku","harikari","crossword puzzle")].</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/hesfast/preattack(atom/target, mob/user, proximity_flag, click_parameters)
@@ -726,3 +807,75 @@ Suit and assorted
 		return 1
 	else
 		return ..()
+
+// -- Ninja procs --
+
+/proc/equip_ninja(var/mob/living/carbon/human/spaceninja)
+	if(!istype(spaceninja))
+		return 0
+	if(!isjusthuman(spaceninja))
+		spaceninja = spaceninja.Humanize("Human")
+	spaceninja.delete_all_equipped_items()
+	if(spaceninja.gender == FEMALE)
+		spaceninja.equip_to_slot_or_del(new /obj/item/clothing/under/color/blackf, slot_w_uniform)
+	else
+		spaceninja.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
+	disable_suit_sensors(spaceninja)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/ninja/apprentice, slot_head)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/voice/ninja, slot_wear_mask)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/suit/space/ninja/apprentice, slot_wear_suit)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/shoes/ninja/apprentice, slot_shoes)
+	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/ninja(), slot_s_store)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/stack/shuriken(spaceninja,10), slot_l_store)
+	spaceninja.equip_to_slot_or_del(new /obj/item/device/radio/headset, slot_ears)
+	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen/double(spaceninja), slot_r_store)
+	spaceninja.internal = spaceninja.get_item_by_slot(slot_r_store)
+	if (spaceninja.internals)
+		spaceninja.internals.icon_state = "internal1"
+
+	spaceninja.see_in_dark_override = 8
+
+/proc/equip_weeaboo(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return 0
+	H.delete_all_equipped_items()
+	H.put_in_hands(new /obj/item/weapon/katana/hesfast)
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat, slot_head)
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
+	disable_suit_sensors(H)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja/nentendiepower, slot_gloves)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth/anime, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
+
+	H.see_in_dark_override = 8
+
+	var/datum/role/R = H.mind.GetRole(NINJA)
+	if(R)
+		R.Greet(GREET_WEEB)
+
+/proc/name_ninja(var/mob/living/carbon/human/H)
+	if(!isjusthuman(H))
+		H.set_species("Human", 1)
+	var/ninja_title = pick(ninja_titles)
+	var/ninja_name = pick(ninja_names)
+	H.fully_replace_character_name(H.real_name, "[ninja_title] [ninja_name]")
+	mob_rename_self(H, "ninja")
+	

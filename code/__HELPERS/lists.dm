@@ -40,10 +40,12 @@
 			return L[index]
 	return
 
+#if DM_VERSION < 513
 /proc/islist(list/L)
 	if(istype(L))
 		return 1
 	return 0
+#endif
 
 //Return either pick(list) or null if list is not of type /list or is empty
 /proc/safepick(list/L)
@@ -135,7 +137,7 @@
 	var/total = 0
 	var/item
 	for (item in L)
-		if (!L[item])
+		if (isnull(L[item]))
 			L[item] = 1
 		total += L[item]
 
@@ -297,6 +299,13 @@
 		elements += L[key]
 	return elements
 
+//In an associative list, get only the keys and not the elements.
+/proc/get_list_of_keys(var/list/L)
+	var/list/keys = list()
+	for(var/key in L)
+		keys += key
+	return keys
+
 /proc/count_by_type(var/list/L, type)
 	var/i = 0
 	for(var/T in L)
@@ -309,6 +318,15 @@
 		if(R.fields[field] == value)
 			return R
 
+//get total of nums in a list, ignores non-num values
+//great with get_list_of_elements!
+/proc/total_list(var/list/L)
+	var/total = 0
+	for(var/element in L)
+		if(!isnum(element))
+			continue
+		total += element
+	return total
 
 //Move a single element from position fromIndex within a list, to position toIndex
 //All elements in the range [1,toIndex) before the move will be before the pivot afterwards

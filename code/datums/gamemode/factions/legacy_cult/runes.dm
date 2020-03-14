@@ -169,7 +169,6 @@
 	"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that now instead of the rune there's a book.</span>", \
 	"<span class='warning'>You hear a pop and smell ozone.</span>")
 	qdel(src)
-	stat_collection.cult_tomes_created++
 
 /////////////////////////////////////////THIRD RUNE
 
@@ -205,7 +204,6 @@
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
 			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the [my_cult.deity_name] cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
 			add_attacklogs(usr, M, "converted to the Cult of [my_cult.deity_name]!")
-			stat_collection.cult_converted++
 			if(M.client)
 				spawn(600)
 					if(M && !M.client)
@@ -338,7 +336,6 @@
 			summoning = 0
 			my_cult.getNewObjective()
 			new /obj/machinery/singularity/narsie/large(src.loc)
-			stat_collection.cult_narsie_summoned = TRUE
 		return
 
 	currentCountdown--

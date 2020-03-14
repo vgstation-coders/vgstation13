@@ -21,21 +21,21 @@
 	return ..()
 
 /obj/machinery/telepad_cargo/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 50)
 		anchored = !anchored
 		to_chat(user, "<span class='caution'>\the [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
 	if(W.is_screwdriver(user))
 		if(stage == 0)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			to_chat(user, "<span class = 'caution'>You unscrew the telepad's tracking beacon.</span>")
 			stage = 1
 		else if(stage == 1)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			to_chat(user, "<span class = 'caution'>You screw in the telepad's tracking beacon.</span>")
 			stage = 0
 	if(iswelder(W) && stage == 1)
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		to_chat(user, "<span class = 'caution'>You disassemble the telepad.</span>")
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 		M.amount = 1
@@ -167,8 +167,14 @@
 			P.name = "letter from [user]"
 			P.info = note
 
+	//After inputs to prevent process-pause exploitation
+	var/area/A = get_area(target)
+	if(A.jammed || A.flags & (NO_TELEPORT|NO_PORTALS))
+		to_chat(user, "<span class='warning'>You can not teleport \the [target] from here, due to bluespace interference.</span>")
+		return
+
 	playsound(src, 'sound/machines/click.ogg', 50, 1)
-	to_chat(user, "<span class='notic'>Teleporting \the [target]...</span>")
+	to_chat(user, "<span class='notice'>Teleporting \the [target]...</span>")
 	teleporting = TRUE
 	if (!do_after(user, target, 50))
 		teleporting = FALSE

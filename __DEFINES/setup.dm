@@ -5,9 +5,6 @@
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
 
-// If set to 0, replaces solo antags' objectives with an always-pass freeform
-#define SOLO_ANTAG_OBJECTIVES 1
-
 // Defines for the shuttle
 #define SHUTTLE_ON_STANDBY 0
 #define SHUTTLE_ON_STATION 1
@@ -188,7 +185,6 @@ var/MAX_EXPLOSION_RANGE = 14
 #define INVULNERABLE 8
 #define HEAR		16 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
 #define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
-#define HIDEHAIRCOMPLETELY 64
 
 #define TWOHANDABLE	64
 #define MUSTTWOHAND	128
@@ -318,6 +314,7 @@ var/MAX_EXPLOSION_RANGE = 14
 
 
 // bitflags for invisibility
+// Used in body_parts_covered
 
 #define HIDEGLOVES			HANDS
 #define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
@@ -326,7 +323,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEEARS			EARS
 #define HIDEEYES			EYES
 #define HIDEFACE			FACE
-#define HIDEHEADHAIR 		EARS|HEAD
+#define HIDEHEADHAIR 		65536
+#define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
 #define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
 #define	HIDESUITSTORAGE		LOWER_TORSO
@@ -446,17 +444,18 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_SUPER_FART    205		// Duh
 #define M_SMILE         206		// :)
 #define M_ELVIS         207		// You ain't nothin' but a hound dog.
+#define M_HORNS         208
 
 // /vg/ muts
-#define M_LOUD		208		// CAUSES INTENSE YELLING
-#define M_WHISPER	209		// causes quiet whispering
-#define M_DIZZY		210		// Trippy.
-#define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
-#define M_FARSIGHT	212		// Increases mob's view range by 2
-#define M_NOIR		213		// aww yis detective noir
-#define M_VEGAN		214
-#define M_ASTHMA	215
-#define M_LACTOSE	216
+#define M_LOUD		308		// CAUSES INTENSE YELLING
+#define M_WHISPER	309		// causes quiet whispering
+#define M_DIZZY		310		// Trippy.
+#define M_SANS		311		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'I love comic sans' IN YOUR PR.
+#define M_FARSIGHT	312		// Increases mob's view range by 2
+#define M_NOIR		313		// aww yis detective noir
+#define M_VEGAN		314
+#define M_ASTHMA	315
+#define M_LACTOSE	316
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\
@@ -523,9 +522,6 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define GAS_CO2	(1 << 3)
 #define GAS_N2O	(1 << 4)
 
-#define CC_PER_SHEET_METAL 3750
-#define CC_PER_SHEET_GLASS 3750
-#define CC_PER_SHEET_MISC 2000
 
 #define INV_SLOT_SIGHT "sight_slot"
 #define INV_SLOT_TOOL "tool_slot"
@@ -733,6 +729,8 @@ SEE_PIXELS	256
 #define VERM_SYPHONER 11
 #define VERM_GREMTIDE 12
 #define VERM_CRABS 13
+#define VERM_DIONA 14
+#define VERM_MUSHMEN 15
 
 
 #define MONSTER_BEAR    0
@@ -774,25 +772,6 @@ SEE_PIXELS	256
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
 #define ORGAN_MALFUNCTIONING 8192
 
-//////////////////MATERIAL DEFINES/////////////////
-
-#define MAT_IRON		"$iron"
-#define MAT_GLASS		"$glass"
-#define MAT_GOLD		"$gold"
-#define MAT_SILVER		"$silver"
-#define MAT_URANIUM		"$uranium"
-#define MAT_DIAMOND		"$diamond"
-#define MAT_PHAZON		"$phazon"
-#define MAT_PLASMA		"$plasma"
-#define MAT_CLOWN		"$clown"
-#define MAT_PLASTIC		"$plastic"
-#define MAT_CARDBOARD   "$cardboard"
-#define MAT_WOOD		"$wood"
-#define MAT_BRASS   	"$brass"
-#define MAT_RALLOY   	"$ralloy"
-#define MAT_ICE			"$ice"
-#define MAT_MYTHRIL		"$mythril"
-#define MAT_TELECRYSTAL	"$telecrystal"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -942,6 +921,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define ELECTRIC_HEAL 2048
 #define IS_SPECIES_MUTE 4096
 #define REQUIRE_DARK 8192
+#define RAD_IMMUNE 16384
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -976,7 +956,43 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define INFECTION_LEVEL_TWO 500
 #define INFECTION_LEVEL_THREE 1000
 
+//Diseases, Virus, Antigens
+#define	SPREAD_BLOOD	1//can be extracted from the carrier's blood, all diseases have this by default.
+#define	SPREAD_CONTACT	2//touching or bumping into someone may transmit the virus, virus can survive on items for a while. gloves lower the chance of transmission.
+#define	SPREAD_AIRBORNE	4//carrier mobs will periodically release invisible clouds that carry the virus to adjacent mobs that can breath it.
+#define SPREAD_COLONY 8 //like contact, but only spreads to suited individuals or pressure-resistant clothing.
+#define SPREAD_MEMETIC 16 //spreads on hearing, doesn't appear on goggles
 
+
+#define EFFECT_DANGER_HELPFUL	"0"
+#define EFFECT_DANGER_FLAVOR	"1"
+#define EFFECT_DANGER_ANNOYING	"2"
+#define EFFECT_DANGER_HINDRANCE	"3"
+#define EFFECT_DANGER_HARMFUL	"4"
+#define EFFECT_DANGER_DEADLY	"5"
+
+#define	ANTIGEN_BLOOD	"blood"
+#define	ANTIGEN_COMMON	"common"
+#define	ANTIGEN_RARE	"rare"
+#define	ANTIGEN_ALIEN	"alien"
+
+//blood antigens
+#define	ANTIGEN_O	"O"
+#define	ANTIGEN_A	"A"
+#define	ANTIGEN_B	"B"
+#define	ANTIGEN_RH	"Rh"
+//common antigens
+#define	ANTIGEN_Q	"Q"
+#define	ANTIGEN_U	"U"
+#define	ANTIGEN_V	"V"
+//rare antigens
+#define	ANTIGEN_M	"M"
+#define	ANTIGEN_N	"N"
+#define	ANTIGEN_P	"P"
+//alien antigens
+#define	ANTIGEN_X	"X"
+#define	ANTIGEN_Y	"Y"
+#define	ANTIGEN_Z	"Z"
 
 //Language flags.
 #define WHITELISTED 1  // Language is available if the speaker is whitelisted.
@@ -1215,6 +1231,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 ////////////////////////
 ////PDA APPS DEFINES////
 ////////////////////////
+#define PDA_APP_ALARM			100
 #define PDA_APP_RINGER			101
 #define PDA_APP_SPAMFILTER		102
 #define PDA_APP_BALANCECHECK	103
@@ -1263,6 +1280,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_GOLEM "Golem"
 #define LANGUAGE_SLIME "Slime"
 #define LANGUAGE_MARTIAN "Martian"
+#define LANGUAGE_INSECT "Insectoid"
+#define LANGUAGE_DEATHSQUAD "Deathsquad"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
@@ -1298,18 +1317,22 @@ var/proccalls = 1
 #define ORE_PROCESSING_ALLOY 2
 
 //SOUND CHANNELS
+#define CHANNEL_WEATHER				1018
 #define CHANNEL_MEDBOTS				1019
 #define CHANNEL_BALLOON				1020
 #define CHANNEL_GRUE				1021	//only ever used to allow the ambient grue sound to be made to stop playing
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
+#define CHANNEL_STARMAN				1025
 
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
 #define INCORPOREAL_GHOST		1
+#define INCORPOREAL_ETHEREAL_IMPROVED 1.5
 #define INCORPOREAL_ETHEREAL	2
 #define GHOST_MOVEDELAY 1
+#define ETHEREAL_IMPROVED_MOVEDELAY 1.5
 #define ETHEREAL_MOVEDELAY 2
 
 
@@ -1397,6 +1420,7 @@ var/proccalls = 1
 #define MODE_CULTCHAT "cultchat"
 #define MODE_ANCIENT "ancientchat"
 #define MODE_MUSHROOM "sporechat"
+#define MODE_BORER "borerchat"
 
 //Hardcore mode stuff
 
@@ -1531,6 +1555,9 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_CULT_EXIT		"path_exit"
 #define HOLOMAP_MARKER_CULT_RUNE		"rune"
 
+#define HOLOMAP_DRAW_NORMAL	0
+#define HOLOMAP_DRAW_FULL	1
+#define HOLOMAP_DRAW_EMPTY	2
 
 #define DEFAULT_BLOOD "#A10808"
 #define DEFAULT_FLESH "#FFC896"
@@ -1592,11 +1619,6 @@ var/proccalls = 1
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
-
-//used in /datum/preferences/var/alternate_option
-#define GET_RANDOM_JOB 0
-#define BE_ASSISTANT 1
-#define RETURN_TO_LOBBY 2
 
 // How many times to retry winset()ing window parameters before giving up
 #define WINSET_MAX_ATTEMPTS 10

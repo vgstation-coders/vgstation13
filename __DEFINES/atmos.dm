@@ -26,7 +26,7 @@
 #define HUMAN_NEEDED_OXYGEN	(MOLES_CELLSTANDARD*BREATH_PERCENTAGE*0.16) //Amount of air needed before pass out/suffocation commences
 
 #define MINIMUM_AIR_RATIO_TO_SUSPEND 0.05 //Minimum ratio of air that must move to/from a tile to suspend group processing
-#define MINIMUM_AIR_TO_SUSPEND (MOLES_CELLSTANDARD*MINIMUM_AIR_RATIO_TO_SUSPEND) //Minimum amount of air that has to move before a group processing can be suspended
+#define MINIMUM_AIR_TO_SUSPEND (MOLES_CELLSTANDARD / CELL_VOLUME * MINIMUM_AIR_RATIO_TO_SUSPEND) //Minimum amount of air that has to move before a group processing can be suspended
 
 #define MINIMUM_MOLES_DELTA_TO_MOVE (MOLES_CELLSTANDARD*MINIMUM_AIR_RATIO_TO_SUSPEND) //Either this must be active
 #define MINIMUM_TEMPERATURE_TO_MOVE	(T20C+100) 		  //or this (or both, obviously)
@@ -79,8 +79,7 @@
 #define BASE_ZAS_FUEL_REQ	0.1
 
 //Snowmap when?
-#define ARCTIC_ATMOSPHERE 90.13
 #define T_ARCTIC 223.65 //- 49.5 Celcius, taken from South Pole averages
-#define MOLES_ARCTICSTANDARD (ARCTIC_ATMOSPHERE*CELL_VOLUME/(T_ARCTIC*R_IDEAL_GAS_EQUATION)) //Note : Open air tiles obviously aren't 2.5 meters in height, but abstracted for now with infinite atmos
+#define MOLES_ARCTICSTANDARD (ONE_ATMOSPHERE*CELL_VOLUME/(T_ARCTIC*R_IDEAL_GAS_EQUATION)) //Note : Open air tiles obviously aren't 2.5 meters in height, but abstracted for now with infinite atmos
 #define MOLES_O2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*O2STANDARD	//O2 standard value (21%)
 #define MOLES_N2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*N2STANDARD	//N2 standard value (79%)

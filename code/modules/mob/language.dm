@@ -101,6 +101,18 @@
 	syllables = list("ti","ti","ti","hi","hi","ki","ki","ki","ki","ya","ta","ha","ka","ya","chi","cha","kah", \
 	"SKRE","AHK","EHK","RAWK","KRA","AAA","EEE","KI","II","KRI","KA")
 
+/datum/language/insectoid
+	name = LANGUAGE_INSECT
+	desc = "A collection of disquieting vibrations and chittering sounds, the spoken tongue of insectoids. "
+	speech_verb = "chitters"
+	ask_verb = "clicks"
+	exclaim_verb = "hisses"
+	colour = "gutter"
+	key = "%"
+	native = 1
+	syllables = list("ch","ke","chi","tch","sk","skch","ra","kch","esk","kra","sh","tik","ech","ks")
+	space_chance = 40
+
 /datum/language/diona
 	name = LANGUAGE_ROOTSPEAK
 	desc = "A creaking, subvocal language spoken instinctively by the Dionaea. Due to the unique makeup of the average Diona, a phrase of Rootspeak can be a combination of anywhere from one to twelve individual voices and notes."
@@ -279,6 +291,15 @@
 	space_chance = 35
 	native = 1
 	syllables = list("khah","kig","kitol","kaor","bar","dar","dator","lok","ma","mu","o","och","gort","gal")
+
+/datum/language/deathsquad
+	name = LANGUAGE_DEATHSQUAD
+	desc = "A set of codewords that Nanotrasen's deathsquads use for communication."
+	key = "&"
+	colour = "dsquadradio"
+	flags = RESTRICTED
+	space_chance = 100
+	syllables = list("alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike", "november", "oscar", "papa", "quebec", "romeo", "sierra", "tango", "uniform", "victor", "whiskey", "x-ray", "yankee", "zulu")
 
 // Language handling.
 /mob/proc/add_language(var/language)

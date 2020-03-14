@@ -54,7 +54,7 @@
 	return time2text(world.timeofday, "hh:mm:ss")
 
 /* Preserving this so future generations can see how fucking retarded some people are
-/proc/time_stamp()
+//proc/time_stamp()
 	var/hh = text2num(time2text(world.timeofday, "hh")) // Set the hour
 	var/mm = text2num(time2text(world.timeofday, "mm")) // Set the minute
 	var/ss = text2num(time2text(world.timeofday, "ss")) // Set the second

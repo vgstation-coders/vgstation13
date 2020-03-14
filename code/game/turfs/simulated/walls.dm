@@ -218,7 +218,7 @@
 	//Deconstruction
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if(WT.remove_fuel(1, user))
 			if(engraving)
 				to_chat(user, "<span class='notice'>You deform the wall back into its original shape")
 				engraving = null
@@ -244,11 +244,10 @@
 					message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				dismantle_wall()
 		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 			return
 
     //CUT_WALL will dismantle the wall
-	else if(W.sharpness_flags & (CUT_WALL))
+	else if((W.sharpness_flags & (CUT_WALL)) && user.a_intent == I_HURT)
 		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer plating.</span>", \
 		"<span class='notice'>You begin slicing through \the [src]'s outer plating.</span>", \
 		"<span class='warning'>You hear slicing noises.</span>")
@@ -276,8 +275,8 @@
 
 		user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \
 		"<span class='notice'>You begin [PK.drill_verb] straight into \the [src].</span>")
-		playsound(src, PK.drill_sound, 100, 1)
-		if(do_after(user, src, PK.digspeed * 10))
+		PK.playtoolsound(src, 100)
+		if(do_after(user, src, (MINE_DURATION * PK.toolspeed) * 10))
 			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
 			dismantle_wall()
@@ -367,10 +366,6 @@
 	F.icon_state = "wall_thermite"
 	visible_message("<span class='danger'>\The [src] spontaenously combusts!.</span>") //!!OH SHIT!!
 	return
-
-/turf/simulated/wall/Destroy()
-	remove_rot()
-	..()
 
 /turf/simulated/wall/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	remove_rot()

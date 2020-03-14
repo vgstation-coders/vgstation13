@@ -18,7 +18,7 @@
 	name = "Health Scanner HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status."
 	icon_state = "healthhud"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/hud/health/process_hud(var/mob/M)
 	if(harm_labeled < min_harm_label)
@@ -35,6 +35,7 @@
 	desc = "Polarized bioneural eyewear, designed to augment your vision."
 	icon_state = "jensenshades"
 	item_state = "jensenshades"
+	species_fit = list(GREY_SHAPED)
 	min_harm_label = 12
 	vision_flags = SEE_MOBS
 	invisa_view = 2
@@ -53,6 +54,7 @@
 /obj/item/clothing/glasses/hud/diagnostic
 	name = "diagnostic HUD"
 	icon_state = "diagnostichud"
+	species_fit = list(GREY_SHAPED)
 	desc = "A heads-up display that displays diagnostic information for compatible cyborgs and exosuits."
 
 /obj/item/clothing/glasses/hud/diagnostic/prescription

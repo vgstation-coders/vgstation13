@@ -22,6 +22,12 @@
 		return
 
 	switch(signal.data["command"])
+		if("cycle")
+			if(density)
+				open(1)
+			else
+				close(1)
+		
 		if("open")
 			open(1)
 
@@ -39,18 +45,39 @@
 			update_icon()
 
 		if("toggle_lock")
-			if(!density)
-				close(1)
-				sleep(2)
 			toggle_bolts()
+			sleep(2)
 			update_icon()
+			
+		if("secure_cycle")
+			if(density)
+				if(locked)
+					locked = 0
+					playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
+					update_icon()
+					sleep(2)
+				open(1)
+
+				locked = 1
+				playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
+				update_icon()
+			else
+				if(locked)
+					locked = 0
+					playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
+				close(1)
+
+				locked = 1
+				playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
+				sleep(2)
+				update_icon()
 
 		if("secure_open")
-			locked = 0
-			playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
-			update_icon()
-
-			sleep(2)
+			if(locked)
+				locked = 0
+				playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
+				update_icon()
+				sleep(2)
 			open(1)
 
 			locked = 1
@@ -58,8 +85,9 @@
 			update_icon()
 
 		if("secure_close")
-			locked = 0
-			playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
+			if(locked)
+				locked = 0
+				playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 			close(1)
 
 			locked = 1
@@ -268,7 +296,7 @@ obj/machinery/airlock_sensor/attackby(var/obj/item/W, var/mob/user)
 	. = ..()
 	if(.)
 		return .
-	if(istype(W,/obj/item/weapon/screwdriver))
+	if(W.is_screwdriver(user))
 		to_chat(user, "You begin to pry \the [src] off the wall...")
 		if(do_after(user, src, 50))
 			to_chat(user, "You successfully pry \the [src] off the wall.")
@@ -345,7 +373,7 @@ obj/machinery/access_button/attackby(var/obj/item/W, var/mob/user)
 	. = ..()
 	if(.)
 		return .
-	if(istype(W,/obj/item/weapon/screwdriver))
+	if(W.is_screwdriver(user))
 		to_chat(user, "You begin to pry \the [src] off the wall...")
 		if(do_after(user, src, 50))
 			to_chat(user, "You successfully pry \the [src] off the wall.")

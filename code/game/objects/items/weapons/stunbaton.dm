@@ -15,6 +15,8 @@
 	var/status = 0
 	var/obj/item/weapon/cell/bcell = null
 	var/hitcost = 100 // 10 hits on crap cell
+	var/stunsound = 'sound/weapons/Egloves.ogg'
+	var/swingsound = "swing_hit"
 
 /obj/item/weapon/melee/baton/get_cell()
 	return bcell
@@ -141,6 +143,8 @@
 		if(!bcell)
 			user.simple_message("<span class='warning'>[src] does not have a power source!</span>",
 				"<span class='warning'>[src] has no pulse and its soul has departed...</span>")
+		else if (bcell.maxcharge < hitcost)
+			to_chat(user, "<span class='warning'>[src] clicks but nothing happens. Something must be wrong with the battery.</span>")
 		else
 			user.simple_message("<span class='warning'>[src] is out of charge.</span>",
 				"<span class='warning'>[src] refuses to obey you.</span>")
@@ -166,7 +170,7 @@
 
 	if(user.a_intent == I_HURT) // Harm intent : possibility to miss (in exchange for doing actual damage)
 		. = ..() // Does the actual damage and missing chance. Returns null on sucess ; 0 on failure (blame oldcoders)
-		playsound(loc, "swing_hit", 50, 1, -1)
+		playsound(loc, swingsound, 50, 1, -1)
 
 	else
 		if(!status) // Help intent + no charge = nothing
@@ -185,13 +189,11 @@
 		L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
 			"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
 			self_drugged_message="<span class='userdanger'>\The [user]'s [src] sucks the life right out of you!</span>")
-		playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+		playsound(loc, stunsound, 50, 1, -1)
 
 		deductcharge(hitcost)
 
-		if(ishuman(L))
-			var/mob/living/carbon/human/H = L
-			H.forcesay(hit_appends)
+		L.forcesay(hit_appends)
 
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
 		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
@@ -218,13 +220,11 @@
 	L.apply_effect(STUTTER, stunforce)
 
 	L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
-	playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+	playsound(loc, stunsound, 50, 1, -1)
 
 	deductcharge(hitcost)
 
-	if(ishuman(L))
-		var/mob/living/carbon/human/H = L
-		H.forcesay(hit_appends)
+	L.forcesay(hit_appends)
 
 	foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
 	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"

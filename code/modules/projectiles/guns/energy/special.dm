@@ -23,7 +23,7 @@
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
 	cell_type = "/obj/item/weapon/cell/crap/better"
-	projectile_type = "/obj/item/projectile/ionsmall"
+	projectile_type = "/obj/item/projectile/ion/small"
 
 /obj/item/weapon/gun/energy/ionrifle/ioncarbine/ionpistol
 	name = "ion pistol"
@@ -139,6 +139,15 @@
 		else
 			changetype=selected
 	next_changetype=world.time+SOC_CHANGETYPE_COOLDOWN
+
+/obj/item/weapon/gun/energy/staff/sinterklaas
+	name = "staff of sinterklaas"
+	desc = "There's a knock on the door, a hard knock, a soft knock, there's a knock on the door, who could it be?"
+	icon_state = "staffofsinterklaas"
+	item_state = "sinterklaas"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/wiz_left.dmi', "right_hand" = 'icons/mob/in-hand/right/wiz_right.dmi')
+	projectile_type = "/obj/item/projectile/zwartepiet"
+	charge_cost = 100
 
 /obj/item/weapon/gun/energy/staff/animate
 	name = "staff of animation"
@@ -427,10 +436,10 @@
 	set category = "Object"
 	if(mode == 2)
 		mutstrength = input(usr, "Enter new mutation strength level (15-25):", "Somatoray Gamma Ray Threshold", mutstrength) as num
-		mutstrength = Clamp(round(mutstrength), 15, 25)
+		mutstrength = clamp(round(mutstrength), 15, 25)
 	else
 		mutstrength = input(usr, "Enter new mutation strength level (1-15):", "Somatoray Alpha Ray Threshold", mutstrength) as num
-		mutstrength = Clamp(round(mutstrength), 1, 15)
+		mutstrength = clamp(round(mutstrength), 1, 15)
 
 /obj/item/weapon/gun/energy/floragun/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isEmag(W) || issolder(W))
@@ -531,6 +540,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	desc = "According to Nanotrasen accounting, this is mining equipment. It's been modified for extreme power output to crush rocks, but often serves as a miner's first defense against hostile alien life; it's not very powerful unless used in a low pressure environment."
 	icon_state = "kineticgun"
 	item_state = "kineticgun"
+	fire_sound = 'sound/weapons/kinetic_accelerator.ogg'
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/crap"
 	charge_cost = 50

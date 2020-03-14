@@ -18,6 +18,18 @@
 	var/datum/dna/owner_dna
 
 
+/datum/organ/internal/Destroy()
+	if(owner) //Just going to assume these lists are here because we have bigger problems than a runtime if they aren't
+		owner.internal_organs -= src
+		owner.internal_organs_by_name -= organ_type
+		var/datum/organ/external/E = owner.organs_by_name[parent_organ] //Fuck this setup
+		E.internal_organs -= src
+		owner = null
+	if(organ_holder)
+		organ_holder.organ_data = null
+		organ_holder = null
+	..()
+
 /datum/organ/internal/Copy()
 	var/datum/organ/internal/I = ..()
 	I.damage = damage

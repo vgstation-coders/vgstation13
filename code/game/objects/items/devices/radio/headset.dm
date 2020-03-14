@@ -183,9 +183,10 @@
 
 /obj/item/device/radio/headset/heads/cmo
 	name = "chief medical officer's headset"
-	desc = "The headset of the highly trained medical chief. To access the medical channel, use :m. For command, use :c."
+	desc = "The headset of the highly trained medical chief. This one is sterilized against memetic infection. To access the medical channel, use :m. For command, use :c."
 	icon_state = "com_headset"
 	item_state = "headset"
+	sterility = 100
 
 /obj/item/device/radio/headset/heads/cmo/New()
 	keyslot2 = new /obj/item/device/encryptionkey/heads/cmo
@@ -284,8 +285,10 @@
 	keyslot2 = new /obj/item/device/encryptionkey/ert
 	..()
 
-/obj/item/device/radio/headset/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/device/radio/headset/attackby(obj/item/weapon/W, mob/user)
 //	..()
+	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, W))
+		return
 	user.set_machine(src)
 	if (!( W.is_screwdriver(user) || (istype(W, /obj/item/device/encryptionkey/ ))))
 		return

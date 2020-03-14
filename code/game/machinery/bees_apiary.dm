@@ -11,9 +11,11 @@
 */
 var/list/apiary_reservation = list()
 
+var/list/apiaries_list = list()
+
 /obj/machinery/apiary
 	name = "apiary tray"
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1
@@ -46,6 +48,7 @@ var/list/apiary_reservation = list()
 
 /obj/machinery/apiary/New()
 	..()
+	apiaries_list.Add(src)
 	overlays += image('icons/obj/apiary_bees_etc.dmi', icon_state=apiary_icon)
 	create_reagents(100)
 	consume = new()
@@ -53,6 +56,7 @@ var/list/apiary_reservation = list()
 		open_for_exile = 1
 
 /obj/machinery/apiary/Destroy()
+	apiaries_list.Remove(src)
 	for (var/datum/bee/B in bees_outside_hive)
 		B.home = null
 		if (B.mob)

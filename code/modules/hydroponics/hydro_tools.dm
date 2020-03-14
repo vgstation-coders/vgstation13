@@ -258,7 +258,7 @@
 // *************************************
 
 /obj/item/weapon/plantspray
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	item_state = "spray"
 	flags = FPRINT | NO_ATTACK_MSG
 	slot_flags = SLOT_BELT
@@ -322,7 +322,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "hoe"
 	item_state = "hoe"
-	flags = FPRINT  | NO_ATTACK_MSG
+	flags = FPRINT
 	siemens_coefficient = 1
 	force = 5.0
 	throwforce = 7.0
@@ -419,11 +419,13 @@
 /obj/item/weapon/scythe/afterattack(atom/A, mob/user as mob, proximity)
 	if(!proximity)
 		return
-	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor) || istype(A, /obj/effect/biomass))
+	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor) || istype(A, /obj/effect/biomass) || istype(A, /obj/structure/cable/powercreeper))
 		for(var/obj/effect/plantsegment/B in range(user,1))
 			B.take_damage(src)
 		for(var/obj/effect/biomass/BM in range(user,1))
 			BM.adjust_health(rand(15,45))
+		for(var/obj/structure/cable/powercreeper/C in range(user,1))
+			C.die()
 		user.delayNextAttack(10)
 		/*var/olddir = user.dir
 		spawn for(var/i=-2, i<=2, i++) //hheeeehehe i'm so dumb
@@ -443,7 +445,7 @@
 /obj/item/claypot
 	name = "clay pot"
 	desc = "Plants placed in those stop aging, but cannot be retrieved either."
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "claypot-item"
 	item_state = "claypot"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')

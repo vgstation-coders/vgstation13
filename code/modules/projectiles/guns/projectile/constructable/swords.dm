@@ -97,7 +97,7 @@
 	if (N)
 		if(usr.incapacitated() || !(usr in range(src,0)))
 			return
-		inject_amount = Clamp(N, min_inject_amount, max_inject_amount)
+		inject_amount = clamp(N, min_inject_amount, max_inject_amount)
 		to_chat(usr, "<span class='notice'>\The [src] will now inject [inject_amount] units each hit.</span>")
 
 /obj/item/weapon/sword/venom/examine(mob/user)
@@ -105,7 +105,7 @@
 	if(beaker)
 		to_chat(user, "[bicon(beaker)] There is \a [beaker] in \the [src]'s beaker port.")
 		var/obj/item/weapon/reagent_containers/glass/beaker/B = beaker
-		B.show_list_of_reagents(user)
+		B.reagents.get_examine(user)
 	to_chat(user, "<span class='info'>\The [src] is set to inject [inject_amount] units each hit.</span>")
 
 /obj/item/weapon/sword/venom/Destroy()
@@ -287,23 +287,31 @@
 /obj/item/weapon/sword/shortsword
 	name = "shortsword"
 	desc = "A short-bladed sword, used for close combat agility, over overpowering your foes."
+	icon = 'icons/obj/blacksmithing/shortsword.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shortsword_left.dmi', "right_hand" = 'icons/mob/in-hand/right/shortsword_right.dmi')
 	icon_state = "shortsword"
-	item_state = "sword"
+	item_state = "shortsword"
 
 /obj/item/weapon/sword/gladius
 	name = "gladius"
 	desc = "An ancient sword design employed by the romans, used for its simple design for mass manufacture. It lacks a cross-guard."
+	icon = 'icons/obj/blacksmithing/gladius.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/gladius_left.dmi', "right_hand" = 'icons/mob/in-hand/right/gladius_right.dmi')
 	icon_state = "gladius"
 	item_state = "sword"
 
 /obj/item/weapon/sword/sabre
 	name = "sabre"
 	desc = "A sword with a slight-curved blade, associated with cavalry usage. Commonly used for duelling in academic fencing."
+	icon = 'icons/obj/blacksmithing/sabre.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sabre_left.dmi', "right_hand" = 'icons/mob/in-hand/right/sabre_right.dmi')
 	icon_state = "sabre"
 	item_state = "sword"
 
 /obj/item/weapon/sword/scimitar
 	name = "scimitar"
 	desc = "A sword with a curved blade. The curved blade made it easier for use from horseback."
+	icon = 'icons/obj/blacksmithing/scimitar.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/scimitar_left.dmi', "right_hand" = 'icons/mob/in-hand/right/scimitar_right.dmi')
 	icon_state = "scimitar"
 	item_state = "sword"

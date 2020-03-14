@@ -86,7 +86,7 @@
 
 				if(network1)
 					network1.update = 1
-		
+
 		else //external -> internal
 			if(node2 && (environment.temperature || air2.temperature))
 				var/air_temperature = (environment.temperature > 0) ? environment.temperature : air2.temperature
@@ -174,13 +174,13 @@
 		pressure_checks = text2num(signal.data["checks"])
 
 	if("set_input_pressure" in signal.data)
-		input_pressure_min = Clamp(text2num(signal.data["set_input_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		input_pressure_min = clamp(text2num(signal.data["set_input_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("set_output_pressure" in signal.data)
-		output_pressure_max = Clamp(text2num(signal.data["set_output_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		output_pressure_max = clamp(text2num(signal.data["set_output_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("set_external_pressure" in signal.data)
-		external_pressure_bound = Clamp(text2num(signal.data["set_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		external_pressure_bound = clamp(text2num(signal.data["set_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("status" in signal.data)
 		spawn(2)

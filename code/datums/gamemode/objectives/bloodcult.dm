@@ -90,16 +90,21 @@
 	var/list/possible_targets = list()
 	var/list/backup_targets = list()
 	for(var/mob/living/carbon/human/player in player_list)
+		//They may be dead, but we only need their flesh
 		var/turf/player_turf = get_turf(player)
 		if(player_turf.z != STATION_Z)//We only look for people currently aboard the station
 			continue
-		if (iscultist(player)) // If there are only cultists left on the station, we'll have to sacrifice one of them
-			backup_targets += player
-		else
-			//They may be dead, but we only need their flesh
+		var/is_implanted = FALSE
+		for(var/obj/item/weapon/implant/loyalty/loyalty_implant in player)
+			if(loyalty_implant.implanted)
+				is_implanted = TRUE
+				break
+		if(is_implanted || isReligiousLeader(player) || isantagbanned(player) || jobban_isbanned(player, CULTIST))
 			possible_targets += player
+		else
+			backup_targets += player
 
-	if(possible_targets.len <= 0)
+	if(possible_targets.len <= 0) // If there are only non-implanted players left on the station, we'll have to sacrifice one of them
 		if (backup_targets.len <= 0)
 			message_admins("Blood Cult: Could not find a suitable sacrifice target. Trying again in a minute.")
 			log_admin("Blood Cult: Could not find a suitable sacrifice target. Trying again in a minute.")
@@ -169,6 +174,8 @@
 	anchor.anchor = TRUE
 	anchor.timeleft = 60
 	anchor.timetotal = anchor.timeleft
+
+	global_anchor_bloodstone = anchor
 
 	//Adding the anchor to the bloodstones holomap, so cultists can quickly go there to perform the final summoning
 	var/icon/updated_map = icon(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])

@@ -41,15 +41,12 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/on
 	on = 1
-	icon_state = "hout"
 
 /obj/machinery/atmospherics/unary/vent_pump/siphon
 	pump_direction = 0
-	icon_state = "hoff"
 
 /obj/machinery/atmospherics/unary/vent_pump/siphon/on
 	on = 1
-	icon_state = "hin"
 
 /obj/machinery/atmospherics/unary/vent_pump/New()
 	..()
@@ -122,7 +119,7 @@
 			var/transfer_moles = (pressure_delta * environment.volume) / (air_temperature * R_IDEAL_GAS_EQUATION)
 			var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 			loc.assume_air(removed)
-		
+
 		else //external -> internal
 			var/air_temperature = (environment.temperature > 0) ? environment.temperature : air_contents.temperature
 			var/output_volume = air_contents.volume + (network ? network.volume : 0)
@@ -133,7 +130,7 @@
 			if(isnull(removed)) //in space
 				return
 			air_contents.merge(removed)
-		
+
 		if(network)
 			network.update = 1
 	else
@@ -248,16 +245,16 @@
 		pump_direction = text2num(signal.data["direction"])
 
 	if("set_internal_pressure" in signal.data)
-		internal_pressure_bound = Clamp(text2num(signal.data["set_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		internal_pressure_bound = clamp(text2num(signal.data["set_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("set_external_pressure" in signal.data)
-		external_pressure_bound = Clamp(text2num(signal.data["set_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		external_pressure_bound = clamp(text2num(signal.data["set_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("adjust_internal_pressure" in signal.data)
-		internal_pressure_bound = Clamp(internal_pressure_bound + text2num(signal.data["adjust_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		internal_pressure_bound = clamp(internal_pressure_bound + text2num(signal.data["adjust_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("adjust_external_pressure" in signal.data)
-		external_pressure_bound = Clamp(external_pressure_bound + text2num(signal.data["adjust_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		external_pressure_bound = clamp(external_pressure_bound + text2num(signal.data["adjust_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("init" in signal.data)
 		name = signal.data["init"]
@@ -319,7 +316,7 @@
 				investigation_log(I_ATMOS, "has been unwelded by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 				welded = 0
 				update_icon()
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")

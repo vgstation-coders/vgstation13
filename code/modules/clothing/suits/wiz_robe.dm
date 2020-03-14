@@ -62,6 +62,7 @@
 /obj/item/clothing/head/wizard/necro/fake
 	desc = "An elegant hood woven with child labor somewhere in Space China."
 	wizard_garb = 0
+
 /*
 //No longer required due to /obj/item/clothing/head/that/magic
 /obj/item/clothing/head/wizard/magician
@@ -71,6 +72,7 @@
 	item_state = "tophat"
 	siemens_coefficient = 0.8
 */
+
 /obj/item/clothing/head/wizard/lich
 	name = "crown of the Lich"
 	desc = "Get the Lich a crown, Liches love crowns."
@@ -91,6 +93,20 @@
 	icon_state = "hallowiz"
 	item_state = "hallowiz"
 
+/obj/item/clothing/head/wizard/mystic
+	name = "mystic hat"
+	desc = "A strange pointed hat imbued with runic energies."
+	icon_state = "mystichat"
+	item_state = "mystichat"
+	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+
+/obj/item/clothing/head/wizard/winter
+	name = "winter wizard hat"
+	desc = "A clever enchantment on this hat keeps your head warm in harsh winter weather."
+	icon_state = "wizard_snow"
+	item_state = "wizard_snow"
+	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+
 /obj/item/clothing/suit/wizrobe
 	name = "wizard robe"
 	desc = "A magnificant, gem-lined robe that seems to radiate power."
@@ -101,6 +117,7 @@
 	armor = list(melee = 30, bullet = 20, laser = 20,energy = 20, bomb = 20, bio = 20, rad = 20)
 	allowed = list(/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
 	siemens_coefficient = 0.8
+	clothing_flags = ONESIZEFITSALL
 
 	wizard_garb = 1
 
@@ -200,3 +217,29 @@
 	desc = "Boys and girls of every age, wouldn't you like to see something strange?"
 	icon_state = "hallowiz"
 	item_state = "hallowiz"
+
+/obj/item/clothing/suit/wizrobe/pharaoh
+	name = "pharaonic garments"
+	desc = "Ornate garments worn by the ancient rulers of Space Egypt."
+	icon_state = "pharaoh"
+	item_state = "pharaoh"
+
+/obj/item/clothing/suit/wizrobe/mystic
+	name = "mystic robes"
+	desc = "A set of thick robes made from fabric imbued with runic energies."
+	icon_state = "mysticrobe"
+	item_state = "mysticrobe"
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+
+/obj/item/clothing/suit/wizrobe/winter
+	name = "winter wizard robes"
+	desc = "A clever enchantment on these robes keeps you nice and toasty in harsh winter weather."
+	icon_state = "wizard_snow"
+	item_state = "wizard_snow"
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	
+/obj/item/clothing/head/wizard/sinterklaas
+	name = "sinterklaas mitre"
+	desc = "Strange-looking red head-wear that most certainly belongs to a real saint."
+	icon_state = "sinterklaasmitre"
+	siemens_coefficient = 0.8

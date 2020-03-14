@@ -135,7 +135,7 @@
 
 	//Pre-calculate results
 	if(rigged)
-		value_1 = Clamp(rigged, 1, TREE)
+		value_1 = clamp(rigged, 1, TREE)
 		value_2 = value_1
 		value_3 = value_1
 

@@ -22,7 +22,7 @@
 	attack_verb = list("stabs", "slashes", "slices", "cuts")
 	var/glass = /obj/item/stack/sheet/glass/glass
 	shrapnel_amount = 3
-	shrapnel_type = "/obj/item/projectile/bullet/shrapnel/small"
+	shrapnel_type = /obj/item/projectile/bullet/shrapnel/small
 	shrapnel_size = 2
 
 /obj/item/weapon/shard/New()
@@ -50,7 +50,7 @@
 	icon_state = "plasmalarge"
 	item_state = "shard-plasglass"
 	glass = /obj/item/stack/sheet/glass/plasmaglass
-	shrapnel_type = "/obj/item/projectile/bullet/shrapnel/small/plasma"
+	shrapnel_type = /obj/item/projectile/bullet/shrapnel/small/plasma
 
 /obj/item/weapon/shard/plasma/New()
 	..()
@@ -105,30 +105,6 @@
 			return
 	return ..()
 
-/obj/item/weapon/shard/Crossed(mob/living/AM)
-	if(istype(AM))
-		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
-			playsound(src, 'sound/effects/glass_step.ogg', 50, 1) //Make noise
-			return //Stop here
-		if(AM.flying) //We don't check for lying yet because it's intended to hurt
-			return
-		else //Stepping on the glass
-			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
-			if(ishuman(AM))
-				var/mob/living/carbon/human/H = AM
-				var/danger = FALSE
-
-				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
-				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
-					if(foot.is_organic())
-						danger = TRUE
-
-						if(!H.lying && H.feels_pain())
-							H.Knockdown(3)
-							H.Stun(3)
-						if(foot.take_damage(5, 0))
-							H.UpdateDamageIcon()
-						H.updatehealth()
-
-				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in the broken glass!</span>")
+/obj/item/weapon/shard/Crossed(var/mob/living/AM)
+	FeetStab(AM)
 	..()

@@ -2,6 +2,8 @@
 	var/lightsoutAmount	= 1
 	var/lightsoutRange	= 25
 
+/datum/event/electrical_storm/can_start()
+	return 10
 
 /datum/event/electrical_storm/announce()
 	command_alert(/datum/command_alert/electrical_storm)

@@ -20,7 +20,7 @@
 	anchored = 1
 	density = 1
 	icon = 'icons/obj/virology.dmi'
-	icon_state = "analyser"
+	icon_state = "analyser_old"
 
 	idle_power_usage = 20 //watts
 	active_power_usage = 300 //Because  I need to make up numbers~
@@ -191,10 +191,10 @@ obj/machinery/anomaly/Topic(href, href_list)
 
 /obj/machinery/anomaly/update_icon()
 	if (scan_process)
-		icon_state = "analyser_processing"
+		icon_state = "analyser_old_processing"
 
 	else
-		icon_state = "analyser"
+		icon_state = "analyser_old"
 
 
 /obj/machinery/anomaly/AltClick(var/mob/user)

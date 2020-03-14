@@ -256,17 +256,22 @@
 
 /obj/structure/closet/wardrobe/virology_white
 	name = "virology wardrobe"
-	icon_state = "white"
-	icon_closed = "white"
+	icon_state = "viro"
+	icon_closed = "viro"
 
 /obj/structure/closet/wardrobe/virology_white/atoms_to_spawn()
 	return list(
-		/obj/item/clothing/under/rank/virologist = 2,
-		/obj/item/clothing/shoes/white = 2,
-		/obj/item/clothing/suit/storage/labcoat/virologist = 2,
-		/obj/item/clothing/mask/surgical = 2,
+		/obj/item/clothing/monkeyclothes/doctor = 2,
 		/obj/item/weapon/storage/backpack/messenger/viro,
 		/obj/item/weapon/storage/backpack/satchel_vir,
+		/obj/item/weapon/book/manual/virology_encyclopedia,
+		/obj/item/weapon/book/manual/virology_guide,
+		/obj/item/device/antibody_scanner = 2,
+		/obj/item/clothing/suit/storage/labcoat/virologist = 2,
+		/obj/item/clothing/under/rank/virologist = 2,
+		/obj/item/clothing/mask/surgical = 2,
+		/obj/item/clothing/shoes/white = 2,
+		/obj/item/clothing/glasses/hud/health/prescription = 2,
 	)
 
 
@@ -322,4 +327,5 @@
 		/obj/item/clothing/shoes/purple,
 		/obj/item/clothing/shoes/leather,
 		/obj/item/clothing/under/casualwear,
+		/obj/item/clothing/under/tourist,
 	)

@@ -12,6 +12,7 @@
 	name = "box of Marauder circuits"
 	desc = "All in one box!"
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -26,6 +27,7 @@
 	name = "chemist's pallet"
 	desc = "Everything you need to make art."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -37,8 +39,9 @@
 
 /obj/item/weapon/storage/bluespace_crystal
 	name = "natural bluespace crystals box"
-	desc = "Hmmm... it smells like tomato"
+	desc = "Hmmm... it smells like tomato."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -68,7 +71,7 @@
 	list(/obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/clothing/suit/wizrobe/skelelich),
 	list(/obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist),
 	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
-	/obj/item/clothing/under/skelevoxsuit,
+	/obj/item/clothing/under/skelesuit,
 	list(/obj/item/clothing/suit/storage/wintercoat/engineering/ce, /obj/item/clothing/suit/storage/wintercoat/medical/cmo, /obj/item/clothing/suit/storage/wintercoat/security/hos, /obj/item/clothing/suit/storage/wintercoat/hop, /obj/item/clothing/suit/storage/wintercoat/security/captain, /obj/item/clothing/suit/storage/wintercoat/clown, /obj/item/clothing/suit/storage/wintercoat/slimecoat),
 	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
 	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
@@ -511,6 +514,7 @@
 	name = "box of winter"
 	desc = "It has a single red button on top. Probably want to be careful where you open this."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 

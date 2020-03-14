@@ -76,7 +76,7 @@
 					episode_names += new /datum/episode_name/rare("THE LONG NIGHT", "Low threat level of [mode.threat_level]%, and the round lasted over three hours.", 300)
 			if(35 to 60)
 				episode_names += new /datum/episode_name("[pick("THERE MIGHT BE BLOOD", "IT CAME FROM [uppr_name]!", "THE [uppr_name] INCIDENT", "THE ENEMY WITHIN", "MIDDAY MADNESS", "AS THE CLOCK STRIKES TWELVE", "CONFIDENCE AND PARANOIA", "THE PRANK THAT WENT WAY TOO FAR", "A HOUSE DIVIDED", "[uppr_name] TO THE RESCUE!", "ESCAPE FROM [uppr_name]", \
-				"HIT AND RUN", "THE AWAKENING", "THE GREAT ESCAPE", "THE LAST TEMPTATION OF [uppr_name]", "[uppr_name]'S FALL FROM GRACE", "BETTER THE [uppr_name] YOU KNOW...", "PLAYING WITH FIRE", "UNDER PRESSURE", "THE DAY BEFORE THE DEADLINE", "THE BALLAD OF [uppr_name]")]", "Moderate threat level of [mode.threat_level]%.", 150)
+				"HIT AND RUN", "THE AWAKENING", "THE GREAT ESCAPE", "THE LAST TEMPTATION OF [uppr_name]", "[uppr_name]'S FALL FROM GRACE", "BETTER THE [uppr_name] YOU KNOW...", "PLAYING WITH FIRE", "UNDER PRESSURE", "THE DAY BEFORE THE DEADLINE", "[uppr_name]'S MOST WANTED", "THE BALLAD OF [uppr_name]")]", "Moderate threat level of [mode.threat_level]%.", 150)
 			if(60 to 100)
 				episode_names += new /datum/episode_name("[pick("ATTACK! ATTACK! ATTACK!", "CAN'T FIX CRAZY", "APOCALYPSE [pick("N", "W", "H")]OW", "A TASTE OF ARMAGEDDON", "OPERATION: ANNIHILATE!", "THE PERFECT STORM", "TIME'S UP FOR THE CREW", "A TOTALLY FUN THING THAT THE CREW WILL NEVER DO AGAIN", "EVERYBODY HATES [uppr_name]", "BATTLE OF [uppr_name]", \
 				"THE SHOWDOWN", "MANHUNT", "THE ONE WITH ALL THE FIGHTING", "THE RECKONING OF [uppr_name]", "THERE GOES THE NEIGHBORHOOD", "THE THIN RED LINE", "ONE DAY FROM RETIREMENT")]", "High threat level of [mode.threat_level]%.", 250)
@@ -90,10 +90,10 @@
 			episode_names += new /datum/episode_name/rare("[pick("THE CREW STARTS A REVOLUTION", "HELL IS OTHER SPESSMEN", "INSURRECTION", "THE CREW RISES UP", 25;"FUN WITH FRIENDS")]", "Round included roundstart revs.", 350)
 			if(copytext(uppr_name,1,2) == "V")
 				episode_names += new /datum/episode_name/rare("V FOR [uppr_name]", "Round included roundstart revs... and the station's name starts with V.", 1500)
-		if(locate(/datum/dynamic_ruleset/roundstart/blob) in mode.executed_rules) //uncomment when blob gets readded
+		if(locate(/datum/dynamic_ruleset/roundstart/blob) in mode.executed_rules)
 			episode_names += new /datum/episode_name/rare("[pick("MARRIED TO THE BLOB", "THE CREW GETS QUARANTINED")]", "Round included a roundstart blob.", 350)
 		if(ticker.explosion_in_progress || ticker.station_was_nuked)
-			episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS NUKED", "THE CREW IS THE BOMB", "THE CREW BLASTS OFF AGAIN!", "THE 'BOOM' HEARD 'ROUND THE WORLD", 25;"THE BIG BANG THEORY")]", "The station was nuked!", 350)
+			episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS NUKED", "THE CREW IS THE BOMB", "THE CREW GOES NUCLEAR", "THE CREW BLASTS OFF AGAIN!", "THE 'BOOM' HEARD 'ROUND THE WORLD", 25;"THE BIG BANG THEORY")]", "The station was nuked!", 450)
 			if((locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules) || (locate(/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear) in mode.executed_rules))
 				theme = "syndie" //This really should use the nukeop's check_win(), but the newcops gamemode wasn't coded like that.
 		else
@@ -109,21 +109,23 @@
 	if(SNOW_THEME)
 		episode_names += new /datum/episode_name("A VERY [pick("NANOTRASEN", "EXPEDITIONARY", "SECURE", "PLASMA", "MARTIAN")] CHRISTMAS", "'Tis the season.", 1000)
 	if(score["gunsspawned"] > 0)
-		episode_names += new /datum/episode_name/rare("[pick("GUNS, GUNS EVERYWHERE", "THUNDER GUN EXPRESS", "THE CREW GOES AMERICA ALL OVER EVERYBODY'S ASS")]", "[score["gunsspawned"]] guns were spawned this round.", min(750, score["gunsspawned"]*10))
+		episode_names += new /datum/episode_name/rare("[pick("GUNS, GUNS EVERYWHERE", "THUNDER GUN EXPRESS", "THE CREW GOES AMERICA ALL OVER EVERYBODY'S ASS")]", "[score["gunsspawned"]] guns were spawned this round.", min(750, score["gunsspawned"]*25))
 	if(score["dimensionalpushes"] > 6)
-		episode_names += new /datum/episode_name/rare("THE CREW GETS PUSHED TOO FAR", "[score["dimensionalpushes"]] things were dimensionalpush'd this round.", min(1500, score["dimensionalpushes"]*25))
+		episode_names += new /datum/episode_name/rare("THE CREW GETS PUSHED TOO FAR", "[score["dimensionalpushes"]] things were dimensionalpush'd this round.", min(1500, score["dimensionalpushes"]*35))
 	if(score["assesblasted"] > 4)
-		episode_names += new /datum/episode_name/rare("A SONG OF ASS AND FIRE", "[score["assesblasted"]] people were magically assblasted this round.", min(1500, score["assesblasted"]*50))
+		episode_names += new /datum/episode_name/rare("A SONG OF ASS AND FIRE", "[score["assesblasted"]] people were magically assblasted this round.", min(1500, score["assesblasted"]*100))
 	if(score["assesblasted"] > 3 && score["random_soc"] > 4)
-		episode_names += new /datum/episode_name/rare("WINDS OF CHANGE", "A combination of asses blasted, and the staff of change.", min(1500, score["assesblasted"]*50 + score["random_soc"]*50))
+		episode_names += new /datum/episode_name/rare("WINDS OF CHANGE", "A combination of asses blasted, and the staff of change.", min(1500, score["assesblasted"]*75 + score["random_soc"]*75))
 	if(score["greasewiz"] > 7 && score["lightningwiz"] > 7)
-		episode_names += new /datum/episode_name/rare("GREASED LIGHTNING", "A combination of the Grease and Lightning spells.", min(1500, score["greasewiz"]*30 + score["lightningwiz"]*30))
+		episode_names += new /datum/episode_name/rare("GREASED LIGHTNING", "A combination of the Grease and Lightning spells.", min(1500, score["greasewiz"]*45 + score["lightningwiz"]*45))
+	if(score["lightningwiz"] > 12)
+		episode_names += new /datum/episode_name/rare("[pick("SHOCK AND AWE", "SHOCK THERAPY")]", "[score["lightningwiz"]] people were shocked this round.", min(1500, score["lightningwiz"]*75))
 	if(score["heartattacks"] > 4)
-		episode_names += new /datum/episode_name/rare("MY HEART WILL GO ON", "[score["heartattacks"]] hearts were reanimated and burst out of someone's chest this round.", min(1500, score["heartattacks"]*150))
+		episode_names += new /datum/episode_name/rare("MY HEART WILL GO ON", "[score["heartattacks"]] hearts were reanimated and burst out of someone's chest this round.", min(1500, score["heartattacks"]*250))
 	if(score["richestcash"] > 30000)
 		episode_names += new /datum/episode_name/rare("[pick("WAY OF THE WALLET", "THE IRRESISTIBLE RISE OF [uppertext(score["richestname"])]", "PRETTY PENNY", "IT'S THE ECONOMY, STUPID")]", "Scrooge Mc[score["richestkey"]] racked up [score["richestcash"]] credits this round.", min(450, score["richestcash"]/500))
 	if(score["deadaipenalty"] > 3)
-		episode_names += new /datum/episode_name/rare("THE ONE WHERE [score["deadaipenalty"]] AIS DIE", "That's a lot of dead AIs.", min(1500, score["deadaipenalty"]*150))
+		episode_names += new /datum/episode_name/rare("THE ONE WHERE [score["deadaipenalty"]] AIS DIE", "That's a lot of dead AIs.", min(1500, score["deadaipenalty"]*300))
 	if(score["lawchanges"] > 12)
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW LEARNS ABOUT LAWSETS", 15;"THE UPLOAD RAILROAD", 15;"FREEFORM", 15;"ASIMOV SAYS")]", "There were [score["lawchanges"]] law changes this round.", min(750, score["lawchanges"]*25))
 	if(score["slips"] > 100)
@@ -139,23 +141,30 @@
 	if(score["shardstouched"] > 0)
 		episode_names += new /datum/episode_name/rare("[pick("HIGH EFFECT ENGINEERING", 25;"THE CREW'S ENGINE BLOWS", 25;"NEVER GO SHARD TO SHARD")]", "This is what happens when two shards touch.", min(2000, score["shardstouched"]*750))
 	if(score["kudzugrowth"] > 150)
-		episode_names += new /datum/episode_name/rare("[pick("REAP WHAT YOU SOW", "FARM ILL", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]*2))
+		episode_names += new /datum/episode_name/rare("[pick("REAP WHAT YOU SOW", "OUT OF THE WOODS", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]*2))
 	if(score["disease"] >= score["escapees"] && score["escapees"] > 5)
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS DOWN WITH THE SICKNESS", "THE CREW GETS AN INCURABLE DISEASE", "THE CREW'S SICK PUNS")]", "[score["disease"]] disease points this round.", min(500, (score["disease"]*25) * (score["disease"]/score["escapees"])))
 	//future idea: "the crew loses their chill"/"disco inferno"/"ashes to ashes"/"burning down the house" if most of the station is on fire, if the chef was the only survivor, "if you can't stand the heat..."
+	//future idea: "a cold day in hell" if most of the station was freezing and threat was high
 	//future idea: "the crew has a blast" if six big explosions happen, "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox, "on a wing and a prayer" if the shuttle is bombed but enough people survive anyways
 
 	var/deadcatbeastcount = 0
 	for(var/mob/living/carbon/human/H in dead_mob_list)
 		if(iscatbeast(H) && (H.z == map.zMainStation || istype(get_area(H), /area/shuttle/escape/centcom)))
 			deadcatbeastcount++
-	if(deadcatbeastcount > 6)
+	if(deadcatbeastcount > 5)
 		episode_names += new /datum/episode_name/rare("APOCALYPSE MEOW", "There were [deadcatbeastcount] dead catbeasts in world.", min(1000, deadcatbeastcount*75))
 
 	for(var/mob/living/simple_animal/corgi/C in living_mob_list)
 		if(C.spell_list.len > 0)
-			episode_names += new /datum/episode_name/rare("[pick("WHERE NO DOG HAS GONE BEFORE", "IAN SAYS", "IAN'S DAY OUT", "CORGI MAGIC", "THE ONE WITH THE MAGIC PUPPY")]", "You know what you did.", 1000)
+			episode_names += new /datum/episode_name/rare("[pick("WHERE NO DOG HAS GONE BEFORE", "IAN SAYS", "IAN'S DAY OUT", "EVERY DOG HAS ITS DAY", "THE ONE WITH THE MAGIC PUPPY")]", "You know what you did.", 1000)
 			break
+
+	if(score["greasewiz"] > 4)
+		for(var/mob/living/carbon/monkey/M in mob_list)
+			if(M.spell_list.len && (locate(/spell/targeted/grease) in M.spell_list))
+				episode_names += new /datum/episode_name/rare("GREASE MONKEY", "A successful Grease wizard got monkeyed.", score["greasewiz"]*100)
+				break
 
 	if(ticker && ticker.shuttledocked_time != -1 && emergency_shuttle.location == CENTCOMM_Z)
 		var/area/shuttle = locate(/area/shuttle/escape/centcom)
@@ -170,13 +179,15 @@
 					human_escapees |= M
 
 			if(ticker.shuttledocked_time - ticker.gamestart_time < SHUTTLEARRIVETIME + SHUTTLEGRACEPERIOD + 60) //shuttle docked in less than 16 minutes!!
-				episode_names += new /datum/episode_name/rare("[pick("THE CAPTAIN STUBS THEIR TOE", "QUICK GETAWAY", "A MOST EFFICIENT APOCALYPSE", "ON SECOND THOUGHT, LET'S NOT GO TO [uppr_name]. 'TIS A SILLY PLACE.")]", "This round was about as short as they come.", 750)
+				episode_names += new /datum/episode_name/rare("[pick("THE CAPTAIN STUBS THEIR TOE", "QUICK GETAWAY", "A MOST EFFICIENT APOCALYPSE", "THE CREW'S [round(score["time"]/60)] MINUTES OF FAME", "ON SECOND THOUGHT, LET'S NOT GO TO [uppr_name]. 'TIS A SILLY PLACE.")]", "This round was about as short as they come.", 750)
+				if(score["escapees"] == 0)
+					episode_names += new /datum/episode_name/rare("DRY RUN", "This round was as short as they come, and there were no escapees.", 2500)
 			if(score["deadcrew"] == 0)
-				episode_names += new /datum/episode_name/rare("[pick("EMPLOYEE TRANSFER", "LIVE LONG AND PROSPER", "PEACE AND QUIET IN [uppr_name]", "THE ONE WITHOUT ALL THE FIGHTING", "THE CREW TRIES TO KILL A FLY FOR [round(score["time"]/60)] MINUTES")]", "No-one died this round.", 2000) //in practice, this one is very very very rare, so if it happens let's pick it more often
+				episode_names += new /datum/episode_name/rare("[pick("EMPLOYEE TRANSFER", "LIVE LONG AND PROSPER", "PEACE AND QUIET IN [uppr_name]", "THE ONE WITHOUT ALL THE FIGHTING", "THE CREW TRIES TO KILL A FLY FOR [round(score["time"]/60)] MINUTES")]", "No-one died this round.", 2500) //in practice, this one is very very very rare, so if it happens let's pick it more often
 			if(score["escapees"] == 0 && ticker && ticker.shuttledocked_time != -1)
-				episode_names += new /datum/episode_name("[pick("DEAD SPACE", "THE CREW GOES MISSING", "LOST IN TRANSLATION", "[uppr_name]: DELETED SCENES", "WHAT HAPPENS IN [uppr_name], STAYS IN [uppr_name]", "SCOOBY-DOO, WHERE'S THE CREW?")]", "There were no escapees on the shuttle.", 200)
+				episode_names += new /datum/episode_name("[pick("DEAD SPACE", "THE CREW GOES MISSING", "LOST IN TRANSLATION", "[uppr_name]: DELETED SCENES", "WHAT HAPPENS IN [uppr_name], STAYS IN [uppr_name]", "MISSING IN ACTION", "SCOOBY-DOO, WHERE'S THE CREW?")]", "There were no escapees on the shuttle.", 300)
 			if(score["escapees"] < 6 && score["escapees"] > 0 && score["deadcrew"] > score["escapees"]*2)
-				episode_names += new /datum/episode_name("[pick("AND THEN THERE WERE FEWER", "THE 'FUN' IN 'FUNERAL'", "FREEDOM RIDE OR DIE", "THINGS WE LOST IN [uppr_name]", "GONE WITH [uppr_name]", "LAST TANGO IN [uppr_name]", "GET BUSY LIVING OR GET BUSY DYING", "THE CREW FUCKING DIES", "WISH YOU WERE HERE")]", "[score["deadcrew"]] people died this round.", 300)
+				episode_names += new /datum/episode_name("[pick("AND THEN THERE WERE FEWER", "THE 'FUN' IN 'FUNERAL'", "FREEDOM RIDE OR DIE", "THINGS WE LOST IN [uppr_name]", "GONE WITH [uppr_name]", "LAST TANGO IN [uppr_name]", "GET BUSY LIVING OR GET BUSY DYING", "THE CREW FUCKING DIES", "WISH YOU WERE HERE")]", "[score["deadcrew"]] people died this round.", 400)
 
 			var/clowncount = 0
 			var/mimecount = 0
@@ -241,8 +252,10 @@
 				episode_names += new /datum/episode_name/rare("[pick("GREY GOO", "RISE OF THE GREYTIDE")]", "Most of the survivors were Assistants, or at least dressed like one.", min(1500, assistantcount*200))
 			if(skeletoncount / human_escapees.len > 0.6 && human_escapees.len > 3)
 				episode_names += new /datum/episode_name/rare("SKELETON CREW", "Most of the survivors were literal skeletons.", min(1500, skeletoncount*350))
-			if(voxcount / human_escapees.len > 0.6)
+			if(voxcount / human_escapees.len > 0.6 && human_escapees.len > 2)
 				episode_names += new /datum/episode_name/rare("BIRDS OF A FEATHER...", "Most of the survivors were Vox.", min(1500, voxcount*250))
+			if(voxcount / human_escapees.len > 0.6 && emergency_shuttle.was_early_launched)
+				episode_names += new /datum/episode_name/rare("EARLY BIRD GETS THE WORM", "Most or all of the survivors were Vox, and the shuttle timer was shortened.", 1500)
 			if(dionacount / human_escapees.len > 0.6)
 				episode_names += new /datum/episode_name/rare("[pick("ALL BARK AND NO BITE", "THE CREW GETS STUMPED")]", "Most of the survivors were Diona.", min(1500, dionacount*350))
 			if(baldycount / human_escapees.len > 0.6 && human_escapees.len > 3)
@@ -259,6 +272,11 @@
 
 				if(istraitor(H) || isdoubleagent(H) || isnukeop(H))
 					theme = "syndie"
+
+				if(isloosecatbeast(H))
+					episode_names += new /datum/episode_name/rare("CAT'S PAW", "The only survivor was a loose catbeast.", 1500)
+					//if(station was freezing!!!!)
+						//episode_names += new /datum/episode_name/rare("ONE COOL CAT", "The only survivor was a loose catbeast. Also the station was freezing.", 2500)
 
 				if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chef")
 					var/chance = 250
@@ -317,7 +335,18 @@
 					if(H.is_wearing_item(/obj/item/clothing/under/suit_jacket/red))
 						chance += 500
 					episode_names += new /datum/episode_name/rare("COOKING THE BOOKS", "The Librarian was the only survivor in the shuttle.", chance)
-
+				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chemist")
+					var/chance = 1000
+					if(H.is_wearing_item(/obj/item/clothing/suit/storage/labcoat/chemist))
+						chance += 500
+					if(H.is_wearing_any(list(/obj/item/clothing/under/rank/pharma, /obj/item/clothing/under/rank/chemist)))
+						chance += 250
+					episode_names += new /datum/episode_name/rare("A BITTER PILL TO SWALLOW", "The Chemist was the only survivor in the shuttle.", chance)
+				else if(!H.isUnconscious() && H.mind && H.mind.role_alt_title == "Xenoarcheologist")
+					var/chance = 1000
+					if(H.is_wearing_item(/obj/item/clothing/under/rank/xenoarch))
+						chance += 500
+					episode_names += new /datum/episode_name/rare("THE CREW IS NOW ANCIENT HISTORY", "The Xenoarchaeologist was the only survivor in the shuttle.", chance)
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chaplain") //We don't check for uniform here because the chaplain's thing kind of is to improvise their garment gimmick
 					episode_names += new /datum/episode_name/rare("BLESS THIS MESS", "The Chaplain was the only survivor in the shuttle.", 1250)
 
@@ -357,17 +386,27 @@
 				if(headcount > 3)
 					episode_names += new /datum/episode_name/rare("HEAD OF THE CLASS", "There was only one survivor in the shuttle, and they got a lot of head.", min(2000, headcount*300))
 
-			var/braindamage_total = 0
-			var/all_retarded = TRUE
-			for(var/mob/living/carbon/human/H in human_escapees)
-				if(H.brainloss < 60)
-					all_retarded = FALSE
-				braindamage_total += H.brainloss
-			var/average_braindamage = braindamage_total / human_escapees.len
-			if(average_braindamage > 30)
-				episode_names += new /datum/episode_name/rare("[pick("THE CREW'S SMALL IQ PROBLEM", "OW! MY BALLS", "BR[pick("AI", "IA")]N DAM[pick("AGE", "GE", "AG")]", "THE VERY SPECIAL CREW OF [uppr_name]")]", "Average of [average_braindamage] brain damage for each human shuttle escapee.", min(1000, average_braindamage*10))
-			if(all_retarded && human_escapees.len > 2)
-				episode_names += new /datum/episode_name/rare("...AND PRAY THERE'S INTELLIGENT LIFE SOMEWHERE OUT IN SPACE, 'CAUSE THERE'S BUGGER ALL DOWN HERE IN [uppr_name]", "Everyone was retarded this round.", human_escapees.len * 500)
+			if(human_escapees.len == 0)
+				var/wolfcount = 0
+				for(var/mob/living/simple_animal/hostile/wolf/W in shuttle)
+					wolfcount += 1
+				var/livingmobcount = 0
+				for(var/mob/living/L in shuttle)
+					livingmobcount += 1
+				if(wolfcount == 1 && livingmobcount == 1)
+					episode_names += new /datum/episode_name/rare("LONE WOLF", "...", 1500)
+			else //more than 0 human escapees
+				var/braindamage_total = 0
+				var/all_retarded = TRUE
+				for(var/mob/living/carbon/human/H in human_escapees)
+					if(H.brainloss < 60)
+						all_retarded = FALSE
+					braindamage_total += H.brainloss
+				var/average_braindamage = braindamage_total / human_escapees.len
+				if(average_braindamage > 30)
+					episode_names += new /datum/episode_name/rare("[pick("THE CREW'S SMALL IQ PROBLEM", "OW! MY BALLS", "BR[pick("AI", "IA")]N DAM[pick("AGE", "GE", "AG")]", "THE VERY SPECIAL CREW OF [uppr_name]")]", "Average of [average_braindamage] brain damage for each human shuttle escapee.", min(1000, average_braindamage*10))
+				if(all_retarded && human_escapees.len > 2)
+					episode_names += new /datum/episode_name/rare("...AND PRAY THERE'S INTELLIGENT LIFE SOMEWHERE OUT IN SPACE, 'CAUSE THERE'S BUGGER ALL DOWN HERE IN [uppr_name]", "Everyone was retarded this round.", human_escapees.len * 500)
 
 			var/bearcount = 0
 			for(var/mob/living/simple_animal/hostile/bear/B in shuttle)

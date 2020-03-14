@@ -131,7 +131,7 @@
 			if(!next_turf.Cross(src, next_turf)) //We can't pass through our planned path
 				break
 			for(var/obj/structure/window/W in next_turf)
-				W.Destroy(brokenup = 1)
+				W.shatter()
 				sleep(5)
 			for(var/obj/structure/table/O in next_turf)
 				O.ex_act(1)
@@ -182,7 +182,7 @@
 				if(!next_turf.Cross(src, next_turf)) //We can't pass through our planned path
 					break
 				for(var/obj/structure/window/W in next_turf)
-					W.Destroy(brokenup = 1)
+					W.shatter()
 					sleep(5)
 				for(var/obj/structure/table/O in next_turf)
 					O.ex_act(1)

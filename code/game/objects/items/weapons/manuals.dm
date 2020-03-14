@@ -602,3 +602,308 @@
 
 				</body>
 				</html>"}
+
+/obj/item/weapon/book/manual/virology_guide
+	name = "A Crash Course in Virology"
+	icon_state ="bookVirologyGuide"
+	author = "Frederick Chapman Montagnier"
+	title = "A Crash Course in Virology"
+	book_width = 819
+	book_height = 516
+	dat = {"<html>
+				<head>
+				<style>
+				h1 {
+				  font-family: Arial, Helvetica, sans-serif;
+				  text-align:center;
+				  margin-bottom: 0;
+				}
+				h2 {
+				  font-family: Arial, Helvetica, sans-serif;
+				  color: grey;
+				  text-align:center;
+				  margin-top: 0;
+				}
+				h3 {
+				  font-family: Arial, Helvetica, sans-serif;
+				}
+				p,li {
+				  font-family: Arial, Helvetica, sans-serif;
+				  font-size: .95em;
+				}
+				dt {
+				  font-family: Arial, Helvetica, sans-serif;
+				  font-size: .95em;
+				  font-weight: bold;
+				}
+				dd {
+				  font-family: Arial, Helvetica, sans-serif;
+				  font-size: .95em;
+				}
+				table {
+				  font-family: Arial, Helvetica, sans-serif;
+				  border-collapse: collapse;
+				  width:100%;
+				  border: 2px solid black;
+				}
+
+				td, th {
+				  border: 1px solid gray;
+				}
+				</style>
+				</head>
+				<body>
+				<h1>A Crash Course in Virology</h1>
+				<h2>and pathogenics in general</h2>
+				<ul id="menu">
+				  <li><a href="#chapter0">Preamble: HOW DO I CURE VIRUS</a></li>
+				  <li><a href="#chapter1">Chapter 1: Proper Safety</a></li>
+				  <li><a href="#chapter2">Chapter 2: Acquiring Pathogenic Samples</a></li>
+				  <li><a href="#chapter3">Chapter 3: Incubating and Analyzing Samples</a></li>
+				  <li><a href="#chapter4">Chapter 4: Pathogen Modification</a></li>
+				  <li><a href="#chapter5">Chapter 5: Overview of the Various Cures and the Immune System</a></li>
+				  <li><a href="#chapter6">Afterword: On your Purpose as Virologist</a></li>
+				</ul>
+				<h3 id="chapter0">Preamble: Quick, how do I cure a disease?</h3>
+				<p>Because let's be honest, unless you are a diplomed Pathologist, this is most likely the reason why you opened this manual. Now keep calm, put on a sterile mask and some latex gloves, and follow these steps:</p>
+				<dl>
+				  <dt>1- Inject patient with 5u of spaceacillin</dt>
+				  <dd>Easily found in any Nanomed, or at Chemistry. This will slowly reinforce the patient's immune system to help it combat the pathogen, and allow for a vaccine to be isolated afterwards.</dd>
+				  <dt>2- Scan the patient with an Health Analyzer</dt>
+				  <dd>&#8226; If nothing shows up, then either there is no disease at all or you're dealing with a more simple disease. Use the body scanner to identify it. The rest of the steps do not apply to those diseases, in which case, <b><font color='orange'>Sorry</font></b>, check out an external guide.</dd>
+				  <dd>&#8226; If the pathogen is in the database, the analyzer will identify its antigens, allowing you to check Chemistry's smartfridge for a supply of a corresponding vaccine. 5u of vaccine are enough to kill even the strongest diseases after a few seconds. If there is no vaccine available, move on to the next step.</dd>
+				  <dd>&#8226; If the pathogen is Unknown, take a blood sample from the patient and deliver it to Virology so the disease can be identified later, then move on to the next step.</dd>
+				  <dt>3- Scan the patient with an Immunity Scanner</dt>
+				  <dd>The results will display the status of the patient's immune system, most importantly their antibody concentrations, and the strength of any disease present.</dd>
+				  <dd>&#8226;If the disease's strength is of about 50% or less, spaceacillin will cure the disease on its own after a few minutes. Resting in a bed can speed up the process. <b><font color='green'>Good Work</font></b>.</dd>
+				  <dd>&#8226;If the disease's strength is above 50%, move on the the next step.</dd>
+				  <dt>4- Have the patient lie in a bed...</dt>
+				  <dd>...until the antibody concentration reaches 50%, <b>then take a blood sample</b> and move on to the next step. This should take about minute, so now is as good of a time as any to analyze the pathogen.</dd>
+				  <dd>&#8226; If after the analysis the pathogen turns out to have very dangerous symptoms, throw the patient in cryo, as very low temperatures will completely freeze the pathogen. Cryo can also speed up antibody production in place of a bed, so you can do it preemptively if you feel like it.</dd>
+				  <dt>5- Split the blood sample into two vials, and insert them in the 1st and 3rd (or 2nd and 4th) slots of an Isolation Centrifuge. </dt>
+				  <dd>Splitting into two vials allows both to keep the centrifuge balanced which will allow the vaccine synthesizing to progress at optimal speed, and also to create vaccines for both antigen.</dd>
+				  <dt>6- After selecting the antigen to synthesize vaccine from, turn on the centrifuge. </dt>
+				  <dd>Synthesizing takes one minute at 50% concentration.</dd>
+				  <dd>Each subsequent percent will divide the time needed by two.</dd>
+				  <dd>Each lacking percent will cause the synthesizing to take an additional minute.</dd>
+				  <dd>Only antibodies with at least 30% concentration can be turned into vaccine.</dd>
+				  <dt>7- Administer up to 5u of vaccine to the patient. </dt>
+				  <dd>Each unit of vaccine raises the concentration by 20%. The disease will die as soon as antibody concentration overcomes the disease's strength. <b><font color='green'>Good Work</font></b>.</dd>
+				  <dd>Leftover vaccine should be brought to Chemistry, so it can be mixed with more (blank) vaccine, created by mixing Water, Aluminum, and Sugar.</dd>
+				</dl>
+				<a href="#menu">Table of Contents</a>
+				<p>And now, on with the proper guide.</p>
+				<h3 id="chapter1">Chapter 1: Proper Safety</h3>
+				<p>You should always wear a sterile mask, white shoes, and latex gloves before entering Virology, or alternatively a full bio suit, as growth dishes have to be kept open during incubation and analysis, which may cause infections in surrounding unprotected individuals.</p>
+				<p>There are three main known vectors of infection: <b>Blood</b>, <b>Contact</b>, and <b>Airborne</b>. Diseases generally always can spread through blood, but they may also have either one, or even both of the other vectors. Science Goggles allow you to visualize those vectors, at the cost of making everything look purple.</p>
+				<p>Getting infected through <b>Blood</b> occurs from injections, drinking infected blood, or eating meat from a diseased <i>animal</i>. Additionally, if you're getting splashed with blood on areas of your body that are bleeding themselves, an infection can occur.</p>
+				<p>Getting infected through <b>Contact</b> occurs from touching, punching, bumping between two individuals. Getting splashed with blood that also have the Contact spread vector may cause an infection. On top of that, when picking up an item, there is a chance to transmit the infection to the item, where it'll remain for a few minutes. Picking up or getting hit by an infected item can also infect you. Keep all of that in mind when doing surgery, as most tools are not sterile. A quick spray of space cleaner over infected items is all it takes to remove the pathogen.</p>
+				<p>Getting infected through the <b>Air</b> occurs from breathing a pathogenic cloud, emitted by another infected individual, an open growth dish, or some other occurrences.</p>
+				<p>Also keep in mind that blood, vomit, sputum, or mucus laying on the floor can all be pathogen carriers. Standing over them can infect you if you're not wearing appropriate protection depending on the pathogen's vectors.</p>
+				<p>To protect yourself from diseases with the Airborne vector, anything sterile that covers your mouth will work: a sterile mask, a bio hood, a space helmet, internals (connected to an appropriate air tank)</p>
+				<p>To protect yourself from diseases with the Contact vector, keep in mind that it all depends on which areas of your body enter in contact. For instance, when you bump into someone, your <b>hands</b> will touch their <b>torso</b>, so wearing latex gloves is sufficient. However if THEY bump into you and aren't wearing gloves, you should wear a bio suit to protect your torso. All clothing have a bit of sterility, but doctor clothing usually have a fairly decent level of protection. Keeping your labcoat's buttons closed also helps a fair bit.</p>
+				<a href="#menu">Table of Contents</a>
+				<h3 id="chapter2">Chapter 2: Acquiring pathogenic Samples</h3>
+				<p>If you work for a megacorporation like NanoTrasen, chances are that there are some growth dishes lying in the virology lab waiting to be analyzed. It's nice to keep you busy for a while, but you might want to work on different forms of pathogens, or ones with a completely different symptoms without having to wait for ages while incubating mutagen.</p>
+				<p>A first solution is to pass an order at your local Cargo bay for some disease dishes. Each crate is usually fitted with 4 new dishes to work with</p>
+				<p><b>Note, however, that dishes that come from either Virology or Cargo tend to have relatively high strength, making them more complicated to cure for the uninitiated, and also a problem for the crew if they have dangerous symptoms, which they often have. So if you value your job (and your head) do not allow those diseases to get loose.</b></p>
+				<p>Less dangerous diseases are generally fairly easy to come by. Crew members occasionally arrive with a cold or a flu, mice also tend to carry diseases. All you need is a blood sample, <b>the Isolation Centrifuge lets you print sample dishes from any infected blood you give to it</b>. Remember to keep the vials balanced so the isolation process takes as little time as possible.</p>
+				<p>Lastly, viral outbreaks may occur even without a containment failure. Whether from some bacteria that can survive through space, or an invasion of Black Plague Mice, or some Xenoarchaeologist brought back some artifact that generates pathogenic clouds. When then happens, you NEED to acquire a sample of it as quickly as possible, analyze it so that infected people show up on medical HUDs, and synthesize a vaccine to be distributed in medbay lobby.</p>
+				<a href="#menu">Table of Contents</a>
+				<h3 id="chapter3">Chapter 3: Incubating and Analyzing Samples</h3>
+				<p>Growth dishes have a distinctive color and pattern depending on the disease in it. This color may slightly change after an effect mutation, and the pattern becomes more visible as the dish's growth rises. After acquiring a new growth dish, you generally want to open its lid (after wearing latex gloves and a sterile mask) add some virus food to it, and insert it in the Pathogenic Incubator, then turn it on.</p>
+				<p>(Also keep in mind that Virology machinery is quite taxing on power, so turn off machines that you aren't using.)</p>
+				<p>Incubators use radiation to cause pathogens to react to various reagents. The following reactions are known to occur:</p>
+				<ul>
+				<li>Virus Food(0.2u): <b>Increases Dish Growth</b>
+				<li>Water(0.2u): <b>Decreases Dish Growth</b> (not that you'd have any reason to do that)
+				<li>Mutagen(0.05u): <b>(MAJOR) Effect Mutation</b>, small chance to cause an effect to be randomized with another effect.
+				<li>Radium(0.02u): <b>(MAJOR) Antigen Mutation</b>, very small chance to cause the disease's antigen to change.
+				<li>Creatine(0.05u): <b>(minor) Strengthening</b>, chance to increase the disease's strength.
+				<li>Spaceacillin(0.05u): <b>(minor)  Weakening</b>, chance to weaken the disease's strength.
+				<li>Mutagen(0.5u)+Creatine(0.5u): <b>(minor) Effect and Robustness Strengthening</b>, slightly increases the strength of all individual effects
+				<li>Mutagen(0.5u)+Spaceacillin(0.5u): <b>(minor) Effect and Robustness Weakening</b>, slightly decreases the strength of all individual effects
+				</ul>
+				<p>Reactions that share reagents will not occure at the same time. Combination reactions will occur in priority (for instance, if there is 5u of mutagen and 5u of creatine in your dish, only Robustness Strengthening will occur, and no Effect Mutation nor Strengthening will occur).</p>
+				<p>The green gauge displayed next to the dish lets you keep track of it's current growth level. The lights underneath, from left to right turn on as follow:</p>
+				<ul>
+				<li>Green: Dish Growth at 100%
+				<li>Red: Dish has no more reagent
+				<li>Purple: Dish has had a major mutation occur
+				<li>Blue: Dish has had a minor mutation occur
+				</ul>
+				<p><b>Incubation also has a chance to occur in individuals irradiated to dangerous levels, however should an Effect Mutation occur this way, it has been observed that the new effect would have a similar danger to the original one, thankfully.</b></p>
+				<p>At 100% growth, the dish can be removed from the incubator and analyzed.</p>
+				<p>Simply place it on the Analyser and operate it. The process is very quick, but requires you to remain adjacent. After the process is done, the following occurs:</p>
+				<ul>
+				<li>a sticker appears on the dish that you can examine and that lets you check what is the disease's information, such as quick descriptions of its effects or its antigens
+				<li>this information is also added to the Pathogen Database which you can edit, and also give the disease a Nickname or set it's dangerousness.
+				<li>diseases analysed this way will now show up on medical HUDs, the icon will depend on the dangerousness set in the database.
+				<li>their ID and name will appear in the results of scans from Health Analyzer, Immunity Scanner, and they will be recognized by other virology machines.
+				</ul>
+				<p>If a dish that was already analyzed had a major mutation, and you analyze it again, it will register in the Database under a separate entry, with a child ID.</p>
+				<p>Among the data stored, the following information is the most important:</p>
+				<ul>
+				<li><b>Strength</b>: This is the antibody concentration required for the body to get rid of the pathogen. Lower values mean the disease will easily be cured with spaceacillin alone.
+				<li><b>Robustness</b>: This is the percentage of the strength at which the stronger effects will start getting muted. The numbers in parenthesis next to it indicate the specific concentrations at which the effects will be muted. So for example, if your body has 50% antibody concentration, and the disease has a Strength of 51%, and a Robustness bellow 90%, you will carry the disease WITHOUT seeing any of its effects yourself.
+				<li><b>Infection Chance</b>: Whenever there is a window of opportunity for a vector to infect you, and it manages to get through any clothing or other protections due to insufficient sterility, this is the chance percentage that you will be infected by the disease. Additionally, Pathogenic Clouds emitted will travel much further and be more numerous if the Infection chance is high, and infected items will remain infected for a longer duration.
+				<li><b>Progress Speed</b>: The percentage chance that a disease will progress to the next stage after it has been present in a body for long enough.
+				</ul>
+				<p>Additionally, the following information is relevant to the disease's effects:</p>
+				<ul>
+				<li><b>Stage</b>: This is the stage from which the effect may trigger.
+				<li><b>Danger</b>: A value from 0 (helpful) to 5 (deadly) indicating how much of a boon or an inconvenience a symptom can be.
+				<li><b>Strength</b>: Specific to each effect, check the Symptom Encyclopedia for more details.
+				<li><b>Occurrence</b>: The percentage chance that the effect will occur at every second when the stage has been reached. Some effects can have this value altered randomly following a Robustness alteration reaction during incubation.
+				</ul>
+				<a href="#menu">Table of Contents</a>
+				<h3 id="chapter4">Chapter 4: Pathogen Modification</h3>
+				<p>As explained in the previous chapter, with a few chemicals and an incubator, you can alter a pathogen to some degree. Keep in mind though that there is currently no way to change a pathogen's form (a Virus won't magically become a Bacteria) or their spread vectors. Here are the following default characteristics of each forms:</p>
+				<ul>
+				<li><b>Virus</b>: 4 stages, High infection chance, Very Low Progress Speed, stage reduced by 1 after an infection, can kill weaker Bacteria
+				<li><b>Bacteria</b>: 3 stages, Very High infection chance, Low Progress Speed, stage reduced back to 1 after an infection, can kill weaker Parasite
+				<li><b>Parasite</b>: 4 stages, Average infection chance, Very Low Progress Speed, stage is not reduced after an infection, can kill weaker Virus
+				<li><b>Prion</b>: 4 stages, Very Low infection chance, Very High Progress Speed, stage reduced back to 1 after an infection, cannot kill any pathogen
+				</ul>
+				<p>However, as a virologist, you will want to shape a pathogen with very specific effects and values in mind. That's where the Disease Splicer comes in. This computer can scan (and destroy in the process) dishes to extract GNA disks, containing the gene data of an effect, including its current strength and occurrence. These disks can then be swiped anytime on the Disease Splicer to re-add it to the computer's buffer.</p>
+				<p>You may then splice the buffered effect into any other dish, letting you create the desired pathogen, one effect at a time.</p>
+				<p>When removing a modified dish from the computer, it will be automatically and instantly re-analysed, adding the new modified pathogen to the database.</p>
+				<a href="#menu">Table of Contents</a>
+				<h3 id="chapter5">Chapter 5: Overview of the Various Cures and the Immune System</h3>
+				<p>While the Preambule takes a laconic approach to the topic of curing diseases, this chapter will go more into depths. For starters there are 5 ways to remove a disease from a body:</p>
+				<ol>
+				<li><b>Antipathogenics</b>. Pros: work on every diseases regardless of antigen, very efficient at getting rid of weak diseases Cons: works relatively slowly, most antipathogenics cannot efficiently reach 100% antibody concentration making them unable to cure the strongest diseases, stronger antipathogenics have nasty overdose reactions.
+				<li><b>Vaccine</b>. Pros: can be taken preemptively to prevent infection altogether, takes effect very quickly. Cons: Requires antipathogenics and time to produce, can only target specific antigens making it hard to acquire vaccine for rare antigen (X, Y, Z) before an outbreak.
+				<li><b>Radium Overload</b>. Pros: very straightforward, works fairly quickly. Cons: causes lots of toxin damage over the body, destroys the immune system which prevents antipathogenics or vaccines to ever work again, and most importantly can only be done once.
+				<li><b>Pathogenic Warfare</b>. Pros: Can work even on people who no longer have an immune system, quite neat to watch those pathogens kill each others. Cons: Requires access to specific forms, raising strength while keeping the cure pathogen harmless takes time, cannot be used against Prions.
+				<li><b>Cooking the body at over a thousand Kelvin</b>. Pros: It works at killing EVERYTHING in your body, unsurprisingly. Cons: You have to reach a certain level of desperation to even consider this option.
+				</ol>
+				<p>Spaceacillin should never be taken in doses of 15u or more, as you risk to overdose. A stronger variant, Nanofloxacin, obtained by mixing Spaceacillin with Nanobots and Fluorine, is so potent that it can easily cure even the strongest diseases, but should never be taken in doses of more than 2u.</p>
+				<p>When doing a Radium Overload, the patient will often vomit just before getting rid of the disease, and the vomit might contain said diseases, so have them wear a biosuit first so they don't immediately get re-infected with littly hope of getting cured.</p>
+				<p>A last resort to cure a body is to simple create a clone. But keep in mind that newly cloned individuals will have a temporarily weakend immune system. It'll take about two minutes for their immune system to be again at full strength.</p>
+				<a href="#menu">Table of Contents</a>
+				<h3 id="chapter6">Afterword: On your Purpose as Virologist</h3>
+				<p>As a Virologist, a Microbiologist, or a Pathologist, your work priorities are as follow by order of importance:</p>
+				<ol>
+				<li>Curing any ongoing outbreaks
+				<li>Isolating and analyzing any disease that you can get your hands on
+				<li>Producing vaccines from as many distinct antibodies as possible in preparation for future outbreaks
+				<li>Inducing mutations in dishes to acquire new effects and save them to GNA disks
+				<li>Use said disks to engineer new interesting diseases
+				</ol>
+				<p>With all the slots in the incubator, and the centrifuge, you can easily work on several of those tasks in parallel.</p>
+				<p>Remember to keep good relationships with the rest of the medical team, so they can trust you to be reliable when needed.</p>
+				<p>Also remember that as you are still technically a doctor, if there is an influx of patients, it should be welcome of you to come give your colleagues a hand.</p>
+				<p>Lastly on that point about interesting diseases, what you do with said diseases, keep in mind that you are NOT to distribute diseases outside of medbay without control. Release of engineered beneficial pathogen should be supervised by the Chief Medical Officer, and limited to medbay at the beginning. Never release a pathogen that you don't have the cure to, and do NOT sell pathogen to Vox Traders or Syndicate Agents, as you'll be held accountable for any casualty caused by a subsequent uncontrolled release of the pathogen.</p>
+				<a href="#menu">Table of Contents</a>
+				</body>
+				</html>"}
+
+var/virology_encyclopedia = ""
+
+/obj/item/weapon/book/manual/virology_encyclopedia
+	name = "Symptom Encyclopedia"
+	icon_state ="bookVirologyEncyclopedia"
+	author = "Frederick Chapman Montagnier"
+	title = "Symptom Encyclopedia"
+	dat = ""
+	book_width = 819
+	book_height = 516
+
+
+/obj/item/weapon/book/manual/virology_encyclopedia/New()
+	..()
+	if (!virology_encyclopedia)
+
+		virology_encyclopedia = {"<html>
+					<head>
+					<style>
+					h1 {
+					  font-family: Arial, Helvetica, sans-serif;
+					  text-align:center;
+					  margin-bottom: 0;
+					}
+					h2 {
+					  font-family: Arial, Helvetica, sans-serif;
+					  color: grey;
+					  text-align:center;
+					  margin-top: 0;
+					}
+					h3 {
+					  font-family: Arial, Helvetica, sans-serif;
+					}
+					p,li {
+					  font-family: Arial, Helvetica, sans-serif;
+					  font-size: .95em;
+					}
+					dt {
+					  font-family: Arial, Helvetica, sans-serif;
+					  font-size: .95em;
+					  font-weight: bold;
+					}
+					dd {
+					  font-family: Arial, Helvetica, sans-serif;
+					  font-size: .95em;
+					}
+					table {
+					  font-family: Arial, Helvetica, sans-serif;
+					  border-collapse: collapse;
+					  width:100%;
+					  border: 2px solid black;
+					}
+					table {
+					  font-family: Arial, Helvetica, sans-serif;
+					  border: 3px groove black;
+					}
+					th, td {
+					  font-family: Arial, Helvetica, sans-serif;
+					  border: 2px inset #CCCCCC;
+					}
+					</style>
+					</head>
+					<body>
+					"}
+
+		virology_encyclopedia += {"<h1>Symptom Encyclopedia</h1>
+				<h2>all known syndromes and other effects</h2>
+				<p>The symptom's danger scale is as follow:</p>
+				<ul>
+				<li><b>Danger 0</b>: Generally helpful.
+				<li><b>Danger 1</b>: Easy to ignore.
+				<li><b>Danger 2</b>: Hard to ignore but relatively harmless.
+				<li><b>Danger 3</b>: Severe Hinderance.
+				<li><b>Danger 4</b>: Harmful.
+				<li><b>Danger 5</b>: Deadly.
+				</ul>
+				"}
+		for (var/i = 1 to 4)
+			virology_encyclopedia += {"<h3>Stage [i] Symptoms</h3>
+				<table>
+				<tr>
+				<th style="width:25%">Name</th>
+				<th style="width:60%">Description</th>
+				<th style="width:5%">Danger</th>
+				<th style="width:5%">Strength (Default/Max)</th>
+				<th style="width:5%">Occurrence (Default/Max)</th>
+				</tr>
+				"}
+
+			var/list/to_choose = subtypesof(/datum/disease2/effect)
+			for(var/e_type in to_choose)
+				var/datum/disease2/effect/e = e_type
+				if(initial(e.stage) == i && initial(e.restricted) < 2)
+					virology_encyclopedia += {"<tr>
+					    <td>[initial(e.name)]</td>
+					    <td>[initial(e.desc)] [initial(e.encyclopedia)]</td>
+					    <td>[initial(e.badness)]</td>
+					    <td>[initial(e.multiplier)]/[initial(e.max_multiplier)]</td>
+					    <td>[initial(e.chance)]/[initial(e.max_chance)]</td>
+					  </tr>
+						"}
+			virology_encyclopedia += {"</table>
+				"}
+
+		virology_encyclopedia += {"</body>
+				</html>"}
+
+	dat = virology_encyclopedia

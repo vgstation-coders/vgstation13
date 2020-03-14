@@ -126,7 +126,7 @@ air2.volume
 		if("power")
 			on = text2num(signal.data["value"])
 		if("set_target_pressure")
-			target_pressure = Clamp(text2num(signal.data["value"]), 0, MAX_PRESSURE)
+			target_pressure = clamp(text2num(signal.data["value"]), 0, MAX_PRESSURE)
 			investigation_log(I_ATMOS, "was set to [target_pressure] kPa by a remote signal.")
 	if("status" in signal.data)
 		spawn(2)
@@ -202,7 +202,7 @@ air2.volume
 	update_icon()
 
 /obj/machinery/atmospherics/binary/pump/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")

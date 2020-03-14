@@ -386,85 +386,142 @@ menu "menu"
 		name = "&Client"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Quick screenshot\tF2"
 		command = ".screenshot auto"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Save screenshot as...\tShift+F2"
 		command = ".screenshot"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Reconnect"
 		command = ".reconnect"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Quit"
 		command = ".quit"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem
-		name = "&Icons"
+	elem 
+		name = "&Display"
 		command = ""
+		saved-params = "is-checked"
+	elem "distort"
+		name = "&Distort"
+		command = ".winset \"mapwindow.map.zoom-mode=distort\""
+		category = "&Display"
+		group = "scaling"
+		can-check = true
+		saved-params = "is-checked"
+	elem "Normal"
+		name = "&Normal"
+		command = ".winset \"mapwindow.map.zoom-mode=normal\""
+		category = "&Display"
+		is-checked = true
+		can-check = true
+		group = "scaling"
+		saved-params = "is-checked"	
+	elem "blur"
+		name = "&Blur"
+		command = ".winset \"mapwindow.map.zoom-mode=blur\""
+		category = "&Display"
+		group = "scaling"
+		can-check = true
+		saved-params = "is-checked"	
+	elem 
+		name = ""
+		command = ""
+		category = "&Display"
 		saved-params = "is-checked"
 	elem "stretch"
 		name = "&Stretch to fit"
 		command = ".winset \"mapwindow.map.icon-size=0\""
-		category = "&Icons"
+		category = "&Display"
 		is-checked = true
+		can-check = true
+		group = "size"
+		saved-params = "is-checked" 
+	elem 
+		name = ""
+		command = ""
+		category = "&Display"
+		saved-params = "is-checked"
+	elem "icon128"
+		name = "&128x128 (4x)"
+		command = ".winset \"mapwindow.map.icon-size=128\""
+		category = "&Display"
+		can-check = true
+		group = "size"
+		saved-params = "is-checked"
+	elem "icon96"
+		name = "&96x96 (3x)"
+		command = ".winset \"mapwindow.map.icon-size=96\""
+		category = "&Display"
 		can-check = true
 		group = "size"
 		saved-params = "is-checked"
 	elem "icon64"
 		name = "&64x64 (2x)"
 		command = ".winset \"mapwindow.map.icon-size=64\""
-		category = "&Icons"
+		category = "&Display"
 		can-check = true
 		group = "size"
 		saved-params = "is-checked"
 	elem "icon64"
 		name = "&48x48 (1.5x)"
 		command = ".winset \"mapwindow.map.icon-size=48\""
-		category = "&Icons"
+		category = "&Display"
 		can-check = true
 		group = "size"
 		saved-params = "is-checked"
 	elem "icon32"
 		name = "&32x32"
 		command = ".winset \"mapwindow.map.icon-size=32\""
-		category = "&Icons"
+		category = "&Display"
 		can-check = true
 		group = "size"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
-		category = "&Icons"
+		category = "&Display"
 		saved-params = "is-checked"
 	elem "textmode"
 		name = "&Text"
 		command = ".winset \"menu.textmode.is-checked=true?mapwindow.map.text-mode=true:mapwindow.map.text-mode=false\""
-		category = "&Icons"
+		category = "&Display"
 		can-check = true
 		saved-params = "is-checked"
 	elem
+		name = ""
+		command = ""
+		category = "&Display"
+		saved-params = "is-checked"
+	elem "swapsides"
+		name = "&Swap Sides"
+		command = "swapsides"
+		category = "&Display"
+		can-check = true
+		saved-params = "is-checked"
+	elem 
 		name = "&Help"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Admin help\tF1"
 		command = "adminhelp"
 		category = "&Help"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Hotkeys"
 		command = "hotkeys-help"
 		category = "&Help"
@@ -473,36 +530,27 @@ menu "menu"
 		name = "Settings"
 		command = ""
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "General Settings"
 		command = "modifypreferences 1"
 		category = "Settings"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Special Roles"
 		command = "modifypreferences 2"
 		category = "Settings"
-		saved-params = "is-checked"
-	elem "skinmenu"
-		name = "Skin"
-		command = ""
-		saved-params = "is-checked"
-	elem
-		name = "Swap Sides"
-		command = "swapsides"
-		category = "Skin"
 		saved-params = "is-checked"
 	elem "server_menu"
 		name = "Server"
 		command = ""
 		is-disabled = true
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "Profiler"
 		command = ".profile"
 		category = "Server"
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "Server"
@@ -594,7 +642,6 @@ window "Telecomms IDE"
 		command = "cancel"
 		multi-line = true
 		no-command = true
-
 
 window "mainwindow"
 	elem "mainwindow"
@@ -750,6 +797,18 @@ window "outputwindow"
 		is-disabled = true
 		saved-params = ""
 		auto-format = false
+
+window "popupwindow"
+	elem "popupwindow"
+		type = MAIN
+		pos = 281,0
+		size = 120x120
+		anchor1 = none
+		anchor2 = none
+		background-color = none
+		is-visible = false
+		saved-params = "pos;size;is-minimized;is-maximized"
+		statusbar = false
 
 window "rpane"
 	elem "rpane"
@@ -973,3 +1032,4 @@ window "window1"
 		background-color = #fffdd0
 		border = sunken
 		saved-params = "max-lines"
+
