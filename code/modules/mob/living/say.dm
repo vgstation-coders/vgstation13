@@ -26,8 +26,6 @@
 			return "ancientchat"
 		if(MODE_MUSHROOM)
 			return "sporechat"
-		if(MODE_BORER)
-			return "borerchat"
 		else
 			return "Unknown"
 var/list/department_radio_keys = list(
@@ -70,8 +68,6 @@ var/list/department_radio_keys = list(
 	  //z Used by LANGUAGE_CLATTER
 	  //@ Used by LANGUAGE_MARTIAN
 	  ":~" = "sporechat",	"#~" = "sporechat",	    ".~" = "sporechat",
-	  //borers
-	  ":&" = "borerchat", "#&" = "borerchat", ".&" = "borerchat",
 )
 
 /mob/living/proc/get_default_language()
@@ -203,26 +199,10 @@ var/list/department_radio_keys = list(
 	returnToPool(speech)
 	return 1
 
-/mob/living/proc/resist_memes(var/datum/speech/speech)
-	if(stat || ear_deaf || speech.frequency || speech.speaker == src || !isliving(speech.speaker))
-		return TRUE
-	return FALSE
 
 /mob/living/Hear(var/datum/speech/speech, var/rendered_message = null)
 	if(!rendered_message)
 		rendered_message = speech.message
-
-	//Meme disease code. Needs to come before client so that NPCs/catatonic can be infected.
-	//We don't concern ourselves with: radio chatter, our own speech, or if we're deaf.
-	if(!resist_memes(speech))
-		var/mob/living/L = speech.speaker
-		var/list/diseases = L.virus2
-		if(istype(diseases) && diseases.len)
-			for(var/ID in diseases)
-				var/datum/disease2/disease/V = diseases[ID]
-				if(V.spread & SPREAD_MEMETIC)
-					infect_disease2(V, notes="(Memed, from [L])")
-
 	if(!client)
 		return
 	say_testing(src, "[src] ([src.type]) has heard a message (lang=[speech.language ? speech.language.name : "null"])")
@@ -242,7 +222,7 @@ var/list/department_radio_keys = list(
 	var/atom/movable/AM = speech.speaker.GetSource()
 	if(!say_understands((istype(AM) ? AM : speech.speaker),speech.language)|| force_compose) //force_compose is so AIs don't end up without their hrefs.
 		rendered_message = render_speech(speech)
-
+	
 	//checking for syndie codephrases if person is a tator
 	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP))
 		//is tator
@@ -259,35 +239,20 @@ var/list/department_radio_keys = list(
 	return 0
 
 /mob/living/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type) // what is bubble type?
-	var/visual_range = message_range //the range of hearers who can see that something was said, but not hear the message
 	say_testing(src, "/mob/living/send_speech() start, msg = [speech.message]; message_range = [message_range]; language = [speech.language ? speech.language.name : "None"]; speaker = [speech.speaker];")
 	if(isnull(message_range))
 		message_range = 7
 
-	message_range = atmospheric_speech(speech,message_range)
-
-	var/list/total_listeners = get_hearers_in_view(visual_range, speech.speaker)
-	var/list/actual_listeners = observers.Copy()
-	var/outside_range_message = "<span class='name'>[speech.speaker]</span> appears to say something, but you can't make it out from here."
-	for(var/atom/A in total_listeners)
-		if(!(A in actual_listeners))
-			if(get_dist(src, A) <= message_range)
-				actual_listeners.Add(A)
-			else if(ismob(A))
-				var/mob/M = A
-				if(!M.is_blind())
-					M.show_message(outside_range_message,MESSAGE_SEE,speaker = src)
-			else
-				to_chat(A, outside_range_message)
+	var/list/listeners = get_hearers_in_view(message_range, speech.speaker) | observers
 
 	var/rendered = render_speech(speech)
 
-	var/list/listening_nonmobs = actual_listeners.Copy()
-	for(var/mob/M in actual_listeners)
+	var/list/listening_nonmobs = listeners.Copy()
+	for(var/mob/M in listeners)
 		listening_nonmobs -= M
 		M.Hear(speech, rendered)
 
-	send_speech_bubble(speech.message, bubble_type, total_listeners)
+	send_speech_bubble(speech.message, bubble_type, listeners)
 
 	for (var/atom/movable/listener in listening_nonmobs)
 		listener.Hear(speech, rendered)
@@ -402,30 +367,9 @@ var/list/department_radio_keys = list(
 						handle_render(M, message,src)
 				if((M in dead_mob_list) && !istype(M, /mob/new_player))
 					handle_render(M, message,src)
-		if(MODE_BORER)
-			//this is sent to and usable by borers and mobs controlled by borers
-			var/mob/living/simple_animal/borer/head = src.has_brain_worms(LIMB_HEAD)
-			if(isborer(src) || head && head.controlling)
-				var/mob/living/simple_animal/borer/B = head && head.controlling ? head : src
-				var/message = text("<span class='cortical'>Cortical link, <b>[]</b>: []</span>",B.truename, html_encode(speech.message))
-				var/turf/T = get_turf(src)
-				log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Borer chat: [html_encode(speech.message)]")
-
-				for(var/mob/M in mob_list)
-					if(isborer(M) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
-						if(isborer (M)) //for borers that are IN CONTROL
-							B = M //why it no typecast
-							if(B.controlling)
-								M = B.host
-						handle_render(M, message, src)
-				return 1
 	return 0
 
 /mob/living/proc/treat_speech(var/datum/speech/speech, genesay = 0)
-	if(!(copytext(speech.message, 1, 2) == "*"))
-		for(var/obj/item/I in get_all_slots() + held_items)
-			I.affect_speech(speech, src)
-
 	if(getBrainLoss() >= 60)
 		speech.message = derpspeech(speech.message, stuttering)
 

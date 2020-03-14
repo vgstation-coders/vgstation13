@@ -3,11 +3,10 @@
 	abbreviation = "MM"
 	desc = "This spell fires several, slow moving, magic projectiles at nearby targets."
 	user_type = USER_TYPE_WIZARD
-	specialization = SSOFFENSIVE
 
 	school = "evocation"
 	charge_max = 150
-	spell_flags = NEEDSCLOTHES | IS_HARMFUL
+	spell_flags = NEEDSCLOTHES
 	invocation = "FORTI GY AMA"
 	invocation_type = SpI_SHOUT
 	range = 7

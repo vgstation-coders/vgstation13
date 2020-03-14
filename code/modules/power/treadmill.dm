@@ -100,7 +100,7 @@
 	else
 		return 1
 
-/obj/machinery/power/treadmill/wrenchAnchor(var/mob/user, var/obj/item/I)
+/obj/machinery/power/treadmill/wrenchAnchor(var/mob/user)
 	. = ..()
 	if(!.)
 		return

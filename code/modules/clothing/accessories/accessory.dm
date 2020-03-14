@@ -94,7 +94,7 @@
 
 /obj/item/clothing/accessory/tie
 	restraint_resist_time = 30 SECONDS
-	toolsounds = list("rustle")
+	restraint_apply_sound = "rustle"
 
 /obj/item/clothing/accessory/tie/can_attach_to(obj/item/clothing/C)
 	if(istype(C))
@@ -126,7 +126,7 @@
 	_color = "stethoscope"
 	origin_tech = Tc_BIOTECH + "=1"
 	restraint_resist_time = 30 SECONDS
-	toolsounds = list("rustle")
+	restraint_apply_sound = "rustle"
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
@@ -219,19 +219,6 @@
 /obj/item/clothing/accessory/medal/gold/heroism
 	name = "medal of exceptional heroism"
 	desc = "An extremely rare golden medal awarded only by CentComm. To recieve such a medal is the highest honor and as such, very few exist. This medal is almost never awarded to anybody but commanders."
-	
-/obj/item/clothing/accessory/medal/byond
-	name = "\improper BYOND support pin"
-	icon_state = "byond"
-	_color = "byond"
-	desc = "A cheap, but surprisingly rare, plastic pin. Sent to supporters by the BYOND corporation."
-	
-/obj/item/clothing/accessory/medal/byond/on_attached(obj/item/clothing/C)
-	..()
-	if(ismob(C.loc))
-		var/mob/living/carbon/human/supporter = C.loc
-		if((supporter.getBrainLoss()) < 5)
-			supporter.adjustBrainLoss(1)
 
 /*
 	Holobadges are worn on the belt or neck, and can be used to show that the holder is an authorized

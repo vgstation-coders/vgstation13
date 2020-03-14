@@ -62,7 +62,6 @@
 	update_icon()
 
 /obj/machinery/disposal/Destroy()
-	eject()
 	if(trunk)
 		if(trunk.disposal)
 			trunk.disposal = null
@@ -107,12 +106,12 @@
 				return
 			if(mode==0) // It's off but still not unscrewed
 				mode=-1 // Set it to doubleoff l0l
-				I.playtoolsound(src, 50)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "You remove the screws around the power connection.")
 				return
 			else if(mode==-1)
 				mode=0
-				I.playtoolsound(src, 50)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "You attach the screws around the power connection.")
 				return
 		else if(iswelder(I) && mode==-1)
@@ -537,6 +536,10 @@
 	target.forceMove(src)
 	update_icon()
 
+/obj/machinery/disposal/Destroy()
+	eject()
+	..()
+
 // virtual disposal object
 // travels through pipes in lieu of actual items
 // contents will be items flushed by the disposal
@@ -727,7 +730,7 @@
 	dir = 0				// dir will contain dominant direction for junction pipes
 	var/health = 10 	// health points 0-10
 	layer = DISPOSALS_PIPE_LAYER
-	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in New()
+	plane = ABOVE_PLATING_PLANE
 	var/base_icon_state	// initial icon state on map
 	var/deconstructable = TRUE
 
@@ -741,7 +744,6 @@
 // new pipe, set the icon_state as on map
 /obj/structure/disposalpipe/New()
 	..()
-	plane = ABOVE_PLATING_PLANE //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
 	base_icon_state = icon_state
 
 
@@ -1596,12 +1598,12 @@
 	if(I.is_screwdriver(user))
 		if(mode==0)
 			mode=1
-			I.playtoolsound(src, 50)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
 		else if(mode==1)
 			mode=0
-			I.playtoolsound(src, 50)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && mode==1)

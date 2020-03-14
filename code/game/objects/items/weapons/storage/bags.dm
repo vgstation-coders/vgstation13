@@ -149,8 +149,9 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		box = holder.pulling
 	if(box)
 		for(var/obj/item/stack/ore/ore in contents)
-			if(box.try_add_ore(ore))
+			if(ore.material)
 				remove_from_storage(ore)
+				box.materials.addAmount(ore.material, ore.amount)
 				qdel(ore)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(var/list/event_args, var/mob/holder)
@@ -174,7 +175,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 // -----------------------------
 
 /obj/item/weapon/storage/bag/plants
-	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
+	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "plantbag"
 	name = "Plant Bag"
 	storage_slots = 50; //the number of plant pieces it can carry.

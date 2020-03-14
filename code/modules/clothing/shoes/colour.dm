@@ -25,7 +25,6 @@
 	_color = "director"	//Exists for washing machines. Is not different from brown shoes in any way.
 
 /obj/item/clothing/shoes/brown/cmo
-	sterility = 100
 	_color = "medical"	//Exists for washing machines. Is not different from brown shoes in any way.
 
 /obj/item/clothing/shoes/brown/cargo
@@ -67,7 +66,6 @@
 	permeability_coefficient = 0.01
 	_color = "white"
 	species_fit = list(VOX_SHAPED)
-	sterility = 100
 
 /obj/item/clothing/shoes/leather
 	name = "leather shoes"

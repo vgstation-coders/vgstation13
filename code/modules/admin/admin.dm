@@ -399,7 +399,7 @@ var/global/floorIsLava = 0
 				I.rank = "N/A"
 				update_file = 1
 			dat += "<font color=#008800>[I.content]</font> <i>by [I.author] ([I.rank])</i> on <i><font color=blue>[I.timestamp]</i></font> "
-			if(ckey(I.author) == usr.ckey || check_rights(R_PERMISSIONS, show_msg = 0)) // Older notes stored the key of the banning admin.
+			if(I.author == usr.key || check_rights(R_PERMISSIONS, show_msg = 0))
 				dat += "<A href='?src=\ref[src];remove_player_info=[key];remove_index=[i]'>Remove</A>"
 			dat += "<br><br>"
 		if(update_file)
@@ -882,7 +882,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
-			<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
 			<A href='?src=\ref[src];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
@@ -903,6 +902,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
+			<BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
 			<BR>
@@ -932,6 +932,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=maint_access_engiebrig'>Change all maintenance doors to engie/brig access only</A><BR>
 			<A href='?src=\ref[src];secretsfun=maint_access_brig'>Change all maintenance doors to brig access only</A><BR>
 			<A href='?src=\ref[src];secretsfun=infinite_sec'>Remove cap on security officers</A><BR>
+			<a href='?src=\ref[src];secretsfun=virus_custom'>Custom Virus Outbreak</a><BR>
 			<BR>
 			"}
 	dat +=	{"

@@ -124,7 +124,7 @@
 								Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 	qdel(connected)
 
-/obj/structure/morgue/attackby(obj/item/P, mob/user)
+/obj/structure/morgue/attackby(P as obj, mob/user as mob)
 	if(iscrowbar(P)&&!contents.len)
 		user.visible_message("<span class='notice'>\The [user] begins dismantling \the [src].</span>", "<span class='notice'>You begin dismantling \the [src].</span>")
 		if(do_after(user, src,50))
@@ -133,8 +133,8 @@
 			new /obj/structure/closet/body_bag(src.loc)
 			new /obj/item/stack/sheet/metal(src.loc,5)
 			qdel(src)
-	if(P.is_wrench(user))
-		P.playtoolsound(src, 50)
+	if(iswrench(P))
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(dir==4)
 			dir=8
 		else
@@ -294,8 +294,8 @@
 	else if (src.locked == 0)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		src.connected = new /obj/structure/c_tray( src.loc )
-		step(src.connected, dir)
-		var/turf/T = get_step(src, dir)
+		step(src.connected, SOUTH)
+		var/turf/T = get_step(src, SOUTH)
 		if (T.contents.Find(src.connected))
 			src.connected.connected = src
 			src.icon_state = "crema0"

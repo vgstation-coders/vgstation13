@@ -59,7 +59,12 @@
 			to_chat(user, "<span class = 'notice'>\The [src] is on.</span>")
 		if(BUNSEN_OPEN)
 			to_chat(user, "<span class = 'notice'>\The [src]'s fuel port is open.</span>")
-	reagents.get_examine(user)
+	to_chat(user, "<span class='info'>It contains:</span>")
+	if(reagents && reagents.reagent_list.len)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+	else
+		to_chat(user, "<span class='info'>Nothing.</span>")
 	if(held_container)
 		to_chat(user, "<span class='info'>It is holding a:</span>")
 		held_container.examine(user)
@@ -81,10 +86,10 @@
 				add_fingerprint(user)
 				load_item(W)
 				return 1 // avoid afterattack() being called
-	if(W.is_wrench(user))
+	if(iswrench(W))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
 		if(do_after(user, src, 5 SECONDS))
-			W.playtoolsound(src, 50)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			drop_stack(sheet_type, loc, rand(3,4), user)
 			qdel(src)
 	else

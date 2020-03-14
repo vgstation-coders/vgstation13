@@ -86,7 +86,7 @@
 
 		busy = 1
 
-		if(do_after(user,src, (MINE_DURATION * P.toolspeed)))
+		if(do_after(user,src, P.digspeed))
 
 			busy = 0
 

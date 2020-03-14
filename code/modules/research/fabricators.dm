@@ -33,7 +33,6 @@
 	var/start_end_anims = 0
 	var/min_cap_C = 0.1 //The minimum cap used to how much cost coeff can be improved
 	var/min_cap_T = 0.1 //The minimum cap used to how much time coeff can be improved
-	var/fabricator_cooldown = 2 //In deciseconds, the delay between each item starting to be built
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	research_flags = TAKESMATIN | HASOUTPUT | HASMAT_OVER | NANOTOUCH
@@ -54,7 +53,7 @@
 /obj/machinery/r_n_d/fabricator/examine(mob/user)
 	..()
 	if(being_built)
-		to_chat(user, "<span class='info'>It's building \a [being_built].</span>")
+		to_chat(user, "<span class='info'>It's building \a [src.being_built].</span>")
 	else
 		to_chat(user, "<span class='info'>Nothing's being built.</span>")
 
@@ -83,20 +82,29 @@
 	switch(emagged)
 		if(0)
 			emagged = 0.5
-			visible_message("[bicon(src)] <b>[src]</b> beeps: \"DB error \[Code 0x00F1\]\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"DB error \[Code 0x00F1\]\"")
 			sleep(10)
-			visible_message("[bicon(src)] <b>[src]</b> beeps: \"Attempting auto-repair\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"Attempting auto-repair\"")
 			sleep(15)
-			visible_message("[bicon(src)] <b>[src]</b> beeps: \"User DB corrupted \[Code 0x00FA\]. Truncating data structure...\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"User DB corrupted \[Code 0x00FA\]. Truncating data structure...\"")
 			sleep(30)
-			visible_message("[bicon(src)] <b>[src]</b> beeps: \"User DB truncated. Please contact your Nanotrasen system operator for future assistance.\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"User DB truncated. Please contact your Nanotrasen system operator for future assistance.\"")
 			req_access = null
 			emagged = 1
 		if(0.5)
-			visible_message("[bicon(src)] <b>[src]</b> beeps: \"DB not responding \[Code 0x0003\]...\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"DB not responding \[Code 0x0003\]...\"")
 		if(1)
-			visible_message("[bicon(src)] <b>[src]</b> beeps: \"No records in User DB\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"No records in User DB\"")
 	return
+
+/*
+/obj/machinery/r_n_d/fabricator/crowbarDestroy(mob/user)
+	if(..())
+		for(var/obj/I in src.contents) //remove any stuff loaded, like for fridges
+			qdel(I)
+		return 1
+	return -1
+*/
 
 //takes all the items in a list, and gets the ones which aren't designs and turns them into designs
 //basically, we call this whenever we add something that isn't a design to part_sets
@@ -161,8 +169,14 @@
 		else
 			return
 	if(queue.len==0)
-		stop_processing_queue()
+		stopped=1
 		return
+	busy=1
+	spawn(0)
+		var/datum/design/I = queue_pop()
+		if(!build_part(I))
+			queue.Add(I)
+		busy=0
 
 /obj/machinery/r_n_d/fabricator/proc/queue_pop()
 	var/datum/design/D = queue[1]
@@ -236,7 +250,7 @@
 /obj/machinery/r_n_d/fabricator/proc/has_bluespace_bin()
 	var/I = /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace/
 	//return (I in component_parts)
-	return locate(I,component_parts)
+	return locate(I,src.component_parts)
 
 //steals mats from other fabricators, then calls remove_materials again
 /obj/machinery/r_n_d/fabricator/proc/bluespace_materials(var/datum/design/part)
@@ -246,60 +260,27 @@
 	for (var/obj/machinery/r_n_d/fabricator/gibmats in machines)
 		if(gibmats.has_bluespace_bin())
 			for(var/gib in part.materials)
-				if (gibmats.check_mat(part,gib) && !check_mat(part,gib))//they have what we need && we don't need more
+				if (gibmats.check_mat(part,gib) && !src.check_mat(part,gib))//they have what we need && we don't need more
 					if(copytext(gib,1,2) == "$" && !(research_flags & IGNORE_MATS))
-						var/bluespaceamount = get_resource_cost_w_coeff(part, gib)
+						var/bluespaceamount = src.get_resource_cost_w_coeff(part, gib)
 						gibmats.materials.removeAmount(gib,bluespaceamount)
-						materials.addAmount(gib,bluespaceamount)
+						src.materials.addAmount(gib,bluespaceamount)
 	return remove_materials(part)
-
-//Returns however much of that material we have
-/obj/machinery/r_n_d/fabricator/proc/check_mats(var/material)
-	if(copytext(material,1,2) == "$")//It's iron/gold/glass
-		return materials.getAmount(material)
-	else
-		var/reagent_total = 0
-		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
-			reagent_total += RC.reagents.get_reagent_amount(material)
-		return reagent_total
-
-//Returns however much of that material is in the bluespace network
-/obj/machinery/r_n_d/fabricator/proc/check_mats_bluespace(var/material)
-	if(!has_bluespace_bin()) //We can't access that
-		return 0
-
-	var/amount
-	for(var/obj/machinery/r_n_d/fabricator/gibmats in machines)
-		if(gibmats.has_bluespace_bin())
-			amount += gibmats.materials.getAmount(material)
-	return amount
 
 
 /obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M)
 	if(copytext(M,1,2) == "$")
-		if(research_flags & IGNORE_MATS)
+		if(src.research_flags & IGNORE_MATS)
 			return 1
 		return round(materials.storage[M] / get_resource_cost_w_coeff(being_built, M))
 	else
-		if(research_flags & IGNORE_CHEMS)
+		if(src.research_flags & IGNORE_CHEMS)
 			return 1
 		var/reagent_total = 0
 		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
 			reagent_total += RC.reagents.get_reagent_amount(M)
 		return round(reagent_total / get_resource_cost_w_coeff(being_built, M))
 	return 0
-
-//The build_part_loop fires independently and will build stuff until the queue is over or when it is stopped.
-/obj/machinery/r_n_d/fabricator/proc/build_part_loop()
-	if(busy || stopped || being_built || stat&(NOPOWER|BROKEN) || queue.len == 0)
-		return
-	var/datum/design/D = queue_pop()
-	if(!build_part(D))
-		if(D)
-			queue.Add(D)
-		stop_processing_queue()
-	sleep(fabricator_cooldown)
-	build_part_loop()
 
 /obj/machinery/r_n_d/fabricator/proc/build_part(var/datum/design/part)
 	if(!part || being_built) //we're in the middle of something here!
@@ -308,27 +289,27 @@
 	if(!part.build_path)
 		WARNING("[part.name] has a null build path var!")
 		return
-	if(is_contraband(part) && !hacked)
+	if(is_contraband(part) && !src.hacked)
 		stopped = 1
-		visible_message("<span class='notice'>The [name] buzzes, \"Safety procedures prevent current queued item from being built.\"</span>")
+		src.visible_message("<span class='notice'>The [src.name] buzzes, \"Safety procedures prevent current queued item from being built.\"</span>")
 		return
 
 	if(!remove_materials(part) && !bluespace_materials(part))
 		stopped = 1
-		visible_message("<span class='notice'>The [name] beeps, \"Not enough materials to complete item.\"</span>")
+		src.visible_message("<span class='notice'>The [src.name] beeps, \"Not enough materials to complete item.\"</span>")
 		return
 
-	being_built = new part.build_path(src)
+	src.being_built = new part.build_path(src)
 
-	busy = 1
+	src.busy = 1
 	icon_state = "[base_state]_ani"
 	if(start_end_anims)
 		flick("[base_state]_start",src)
-	use_power = 2
-	updateUsrDialog()
+	src.use_power = 2
+	src.updateUsrDialog()
 	//message_admins("We're going building with [get_construction_time_w_coeff(part)]")
 	sleep(get_construction_time_w_coeff(part))
-	use_power = 1
+	src.use_power = 1
 	icon_state = base_state
 	if(start_end_anims)
 		flick("[base_state]_end",src)
@@ -355,12 +336,12 @@
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
 		being_built.anchored = 0
-		visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
-		being_built = null
+		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
+		src.being_built = null
 		last_made = part
 		wires.SignalIndex(RND_WIRE_JOBFINISHED)
-	updateUsrDialog()
-	busy = 0
+	src.updateUsrDialog()
+	src.busy = 0
 	return 1
 
 //max_length is, from the top of the list, the parts you want to queue down to
@@ -372,7 +353,7 @@
 				break
 			var/datum/design/D = set_parts[i]
 			add_to_queue(D)
-	visible_message("[bicon(src)] <b>[src]</b> beeps: \"[set_name] parts were added to the queue\".")
+	src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"[set_name] parts were added to the queue\".")
 	return
 
 /obj/machinery/r_n_d/fabricator/proc/add_to_queue(var/datum/design/part)
@@ -381,8 +362,10 @@
 	if(!part)
 		return
 	if(part)
-		if(is_contraband(part) && !hacked)
-			visible_message("<span class='notice'>The [name] buzzes, \"Safety procedures prevent that item from being queued.\"</span>")
+		//src.visible_message("[bicon(src)] <b>[src]</b> beeps: [part.name] was added to the queue\".")
+		//queue[++queue.len] = part
+		if(is_contraband(part) && !src.hacked)
+			src.visible_message("<span class='notice'>The [src.name] buzzes, \"Safety procedures prevent that item from being queued.\"</span>")
 			return
 		queue.Add(part)
 	return queue.len
@@ -396,12 +379,42 @@
 /obj/machinery/r_n_d/fabricator/proc/is_contraband(var/datum/design/part)
 	return
 
+/* This is what process() is for you nerd - N3X
+/obj/machinery/r_n_d/fabricator/proc/process_queue()
+
+
+	if(!queue.len)
+		return
+
+	var/datum/design/part = src.queue[1]
+
+	if(!part)
+		remove_from_queue(1)
+		if(src.queue.len)
+			return process_queue()
+		else
+			return
+	while(part)
+		if(stat&(NOPOWER|BROKEN))
+			return 0
+		remove_from_queue(1)
+		build_part(part)
+		if(!queue.len)
+			return
+		else
+			if(!isnull(src.queue[1]))
+				part = src.queue[1]
+	src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Queue processing finished successfully\".")
+	return 1
+*/
+
+
 /obj/machinery/r_n_d/fabricator/proc/convert_designs()
 	if(!files)
 		return
 	var/i = 0
 	for(var/datum/design/D in files.known_designs)
-		if(D.build_type & build_number)
+		if(D.build_type & src.build_number)
 			if(D.category in part_sets)//Checks if it's a valid category
 				if(add_part_to_set(D.category, D))//Adds it to said category
 					i++
@@ -441,12 +454,12 @@
 	var/found = 0
 	var/obj/machinery/computer/rdconsole/console
 	if(busy)
-		visible_message("[bicon(src)] <b>[src]</b> beeps, \"Please wait for completion of current operation.\"")
+		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Please wait for completion of current operation.\"")
 		return
 	if(linked_console)
 		console = linked_console
 	else
-		visible_message("[bicon(src)] <b>[src]</b> beeps, \"Not connected to a server. Please connect from a local console first.\"")
+		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Not connected to a server. Please connect from a local console first.\"")
 	if(console)
 		for(var/ID in console.files.known_tech)
 			var/datum/tech/T = console.files.known_tech[ID]
@@ -456,31 +469,29 @@
 			if(D)
 				files.AddDesign2Known(D)
 		files.RefreshResearch()
-		var/i = convert_designs()
+		var/i = src.convert_designs()
 		var/tech_output = update_tech()
 		if(!silent)
 			temp = "Processed [i] equipment designs.<br>"
 			temp += tech_output
 			temp += "<a href='?src=\ref[src];clear_temp=1'>Return</a>"
-			updateUsrDialog()
+			src.updateUsrDialog()
 		if(i || tech_output)
 			new_data=1
 	if(new_data)
-		visible_message("[bicon(src)] <b>[src]</b> beeps, \"Successfully synchronized with R&D server. New data processed.\"")
+		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Successfully synchronized with R&D server. New data processed.\"")
 	if(!silent && !found)
 		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
-	updateUsrDialog()
+	src.updateUsrDialog()
 
 /obj/machinery/r_n_d/fabricator/kick_act(mob/living/H)
 	..()
 	if(stopped)
 		start_processing_queue()
 
-//Makes the machine start build_part_loop() which will build parts until its conditions no longer allow it to
+// Tell the machine to start processing the queue on the next process().
 /obj/machinery/r_n_d/fabricator/proc/start_processing_queue()
 	stopped=0
-	spawn(0) //This way whatever is calling start_processing_queue won't wait until build_part_loop is finished to continue
-		build_part_loop()
 
 // Stop processing queue (currently-executing ticks will finish first).
 /obj/machinery/r_n_d/fabricator/proc/stop_processing_queue()
@@ -574,7 +585,7 @@
 	if(href_list["eject"])
 		var/num = input("Enter amount to eject", "Amount", "5") as num
 		if(num)
-			amount = clamp(round(text2num(num), 1), 0, 50)
+			amount = Clamp(round(text2num(num), 1), 0, 50)
 		remove_material(href_list["eject"], amount)
 		return 1
 
@@ -587,7 +598,7 @@
 	if(href_list["add_to_queue"])
 		var/datum/design/part = getTopicDesign(href_list["add_to_queue"])
 		if(queue.len > FAB_MAX_QUEUE)
-			visible_message("[bicon(src)] <b>[src]</b> beeps, \"Queue is full, please clear or finish.\".")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Queue is full, please clear or finish.\".")
 			return
 
 		add_to_queue(part)
@@ -596,7 +607,7 @@
 	if(href_list["queue_part_set"])
 		var/set_name = href_list["queue_part_set"]
 		if(queue.len > FAB_MAX_QUEUE)
-			visible_message("[bicon(src)] <b>[src]</b> beeps, \"Queue is full, please clear or finish.\".")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Queue is full, please clear or finish.\".")
 			return
 		add_part_set_to_queue(set_name)
 		return 1
@@ -609,9 +620,9 @@
 	if(href_list["sync"])
 		queue = list()
 		temp = "Updating local R&D database..."
-		updateUsrDialog()
+		src.updateUsrDialog()
 		spawn(30)
-			sync()
+			src.sync()
 		return 1
 
 	if(href_list["process_queue"])
@@ -646,19 +657,71 @@
 
 	var/turf/exit = get_output()
 	if(exit.density)
-		visible_message("[bicon(src)] <b>[src]</b> beeps, \"Error! Part outlet is obstructed\".")
+		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Error! Part outlet is obstructed\".")
 		return
 
 	if(stat & BROKEN)
 		return
 
 	if(!allowed(user) && !emagged)
-		visible_message("<span class='warning'>Unauthorized Access</span>: attempted by <b>[user]</b>")
+		src.visible_message("<span class='warning'>Unauthorized Access</span>: attempted by <b>[user]</b>")
 		return
 
 	..()
+/*
+/obj/machinery/r_n_d/fabricator/mech/Topic(href, href_list)
 
+	if(href_list["process_queue"])
+		spawn(-1)
+			if(processing_queue || being_built)
+				return 0
+			processing_queue = 1
+			process_queue()
+			processing_queue = 0
+
+	if(href_list["clear_temp"])
+		temp = null
+	if(href_list["screen"])
+		src.screen = href_list["screen"]
+
+	if(href_list["queue_move"] && href_list["index"])
+		var/index = topic_filter.getNum("index")
+		var/new_index = index + topic_filter.getNum("queue_move")
+		if(isnum(index) && isnum(new_index))
+			if(IsInRange(new_index,1,queue.len))
+				queue.Swap(index,new_index)
+		return update_queue_on_page()
+
+	if(href_list["clear_queue"])
+		queue = list()
+		return update_queue_on_page()
+	if(href_list["sync"])
+		queue = list()
+		temp = "Updating local R&D database..."
+		src.updateUsrDialog()
+		spawn(30)
+			src.sync()
+		return update_queue_on_page()
+	if(href_list["part_desc"])
+		var/obj/part = topic_filter.getObj("part_desc")
+
+		// critical exploit prevention, do not remove unless you replace it -walter0o
+		if(src.exploit_prevention(part, usr, 1))
+			return
+
+		if(part)
+			temp = {"<h1>[part] description:</h1>
+						[part.desc]<br>
+						<a href='?src=\ref[src];clear_temp=1'>Return</a>
+						"}
+	if(href_list["remove_mat"] && href_list["material"])
+		temp = "Ejected [remove_material(href_list["material"],text2num(href_list["remove_mat"]))] of [href_list["material"]]<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
+	src.updateUsrDialog()
+	return
+*/
 /obj/machinery/r_n_d/fabricator/proc/remove_material(var/matID, var/amount)
+
+
 	var/datum/material/material = materials.getMaterial(matID)
 	if(material)
 		//var/obj/item/stack/sheet/res = new material.sheettype(src)

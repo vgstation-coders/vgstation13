@@ -400,9 +400,9 @@
 			returnToPool(W)
 			return
 
-	if (W.is_wrench(user) && can_disassemble())
+	if (iswrench(W) && can_disassemble())
 		to_chat(user, "<span class='notice'>Now disassembling table...</span>")
-		W.playtoolsound(src, 50)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src,50))
 			destroy()
 		return
@@ -665,12 +665,6 @@
 	else
 		..()
 
-/obj/structure/table/glass/plasma
-	name = "plasma glass table"
-	desc = "A standard table with a reinforced plasma glass finish."
-	icon_state = "plasma_table"
-	parts = /obj/item/weapon/table_parts/glass/plasma
-	health = 150
 
 /*
  * Brass
@@ -765,8 +759,8 @@
 	destroy()
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench(user) && can_disassemble())
-		W.playtoolsound(src, 50)
+	if(iswrench(W) && can_disassemble())
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		destroy(TRUE)
 		return
 
@@ -786,7 +780,7 @@
 			offset_step++
 			return 1
 
-/obj/structure/rack/attack_hand(mob/living/user)
+/obj/structure/table/attack_hand(mob/living/user)
 	if(M_HULK in user.mutations)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")

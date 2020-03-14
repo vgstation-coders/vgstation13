@@ -109,8 +109,8 @@
 	name = "potato battery"
 	desc = "A rechargeable starch based power cell."
 	origin_tech = Tc_POWERSTORAGE + "=1"
-	icon = 'icons/obj/power.dmi'
-	icon_state = "potato_cell"
+	icon = 'icons/obj/power.dmi' //'icons/obj/harvest.dmi'
+	icon_state = "potato_cell" //"potato_battery"
 	charge = 100
 	maxcharge = 300
 	starting_materials = null
@@ -169,8 +169,8 @@
 	name = "charged slime core"
 	desc = "A yellow slime core infused with plasma, it crackles with power."
 	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_BIOTECH + "=4"
-	icon = 'icons/mob/slimes.dmi'
-	icon_state = "yellow slime extract"
+	icon = 'icons/mob/slimes.dmi' //'icons/obj/harvest.dmi'
+	icon_state = "yellow slime extract" //"potato_battery"
 	maxcharge = 30000
 	starting_materials =  null
 	w_type = RECYK_BIOLOGICAL
@@ -227,7 +227,7 @@
 	icon_state = "rcell"
 	maxcharge = 1000
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
-	var/charge_rate = 100
+	var/charge_rate = 10
 
 /obj/item/weapon/cell/rad/empty/New()
 	..()
@@ -251,7 +251,7 @@
 	charge += power_used
 	if(prob(5))
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
-			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
+			L.apply_radiation(charge_rate, RAD_EXTERNAL)
 
 /obj/item/weapon/cell/rad/large
 	name = "PDTG power cell"
@@ -259,7 +259,7 @@
 	icon_state = "pcell"
 	maxcharge = 2500
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_PHAZON = 100)
-	charge_rate = 250
+	charge_rate = 25
 
 /obj/item/weapon/cell/rad/large/empty/New()
 	..()

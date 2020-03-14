@@ -23,7 +23,6 @@
 									/obj/item/weapon/grown,
 									/obj/item/seeds,
 									/obj/item/weapon/reagent_containers/food/snacks/meat,
-									/obj/item/weapon/reagent_containers/food/snacks/honeycomb,
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
@@ -338,7 +337,7 @@
 	return TRUE
 
 //Unwrenching a SmartFridge is especially longer to make it much easier to intervene
-/obj/machinery/smartfridge/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 10 SECONDS)
+/obj/machinery/smartfridge/wrenchAnchor(var/mob/user, var/time_to_wrench = 10 SECONDS)
 
 	. = ..()
 	if(.)

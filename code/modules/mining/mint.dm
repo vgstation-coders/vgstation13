@@ -112,7 +112,7 @@
 
 /obj/machinery/mineral/mint/proc/Change_Dir(var/dir)
 	var/changingdir = dir //See ore processing_unit for original comments
-	changingdir = clamp(changingdir, 1, 2)
+	changingdir = Clamp(changingdir, 1, 2)
 
 	var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
 	if(!newdir)
@@ -173,7 +173,7 @@
 	if("changedir" in href_list)
 		//Change_Dir()
 		var/changingdir = text2num(href_list["changedir"]) //See ore processing_unit for original comments
-		changingdir = clamp(changingdir, 1, 2)
+		changingdir = Clamp(changingdir, 1, 2)
 
 		var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
 		if(!newdir)
@@ -197,7 +197,7 @@
 		chosen = href_list["choose"]
 
 	if(href_list["chooseAmt"])
-		coinsToProduce = clamp(coinsToProduce + text2num(href_list["chooseAmt"]), 0, 1000)
+		coinsToProduce = Clamp(coinsToProduce + text2num(href_list["chooseAmt"]), 0, 1000)
 
 	if(href_list["makeCoins"])
 		if(chosen == null)
@@ -235,10 +235,10 @@
 	mover = null
 	..()
 
-/obj/machinery/mineral/mint/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
-	if(..())
+/obj/machinery/mineral/mint/crowbarDestroy(mob/user)
+	if(..() == 1)
 		if(materials)
 			for(var/matID in materials.storage)
 				DropSheet(matID)
-		return TRUE
-	return FALSE
+		return 1
+	return -1

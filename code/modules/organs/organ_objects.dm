@@ -33,11 +33,9 @@
 	spawn(1)
 		update()
 
-/obj/item/organ/internal/Destroy()
+/obj/item/organ/internal/Del()
 	if(!robotic)
 		processing_objects -= src
-	qdel(organ_data)
-	organ_data = null
 	..()
 
 /obj/item/organ/internal/examine(var/mob/user, var/size = "")
@@ -139,16 +137,6 @@
 	dead_icon = "heart-off"
 	organ_type = /datum/organ/internal/heart
 
-/obj/item/organ/internal/heart/insectoid
-	name = "insectoid heart"
-	icon_state = "insectoid-heart-on"
-	prosthetic_name = "circulatory pump"
-	prosthetic_icon = "heart-prosthetic"
-	organ_tag = "heart"
-	fresh = 6
-	dead_icon = "insectoid-heart-off"
-	organ_type = /datum/organ/internal/heart
-
 /obj/item/organ/internal/heart/cell
 	name = "biocharger"
 	icon_state = "heart-cell"
@@ -184,14 +172,6 @@
 	prosthetic_icon = "lungs-prosthetic"
 	organ_tag = "lungs"
 	organ_type = /datum/organ/internal/lungs
-
-/obj/item/organ/internal/lungs/insectoid
-	name = "insectoid lungs"
-	icon_state = "book-lungs"
-	prosthetic_name = "gas exchange system"
-	prosthetic_icon = "lungs-prosthetic"
-	organ_tag = "lungs"
-	organ_type = /datum/organ/internal/lungs/insectoid
 
 /obj/item/organ/internal/lungs/vox
 	name = "vox lungs"
@@ -256,14 +236,6 @@
 	icon_state = "eyes-grey"
 	prosthetic_name = "grey visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/grey
-
-/obj/item/organ/internal/eyes/compound
-	name = "compound eyes"
-	icon_state = "eye-compound"
-	prosthetic_name = "visual prosthetis"
-	prosthetic_name = "eyes-prosthetic"
-	organ_tag = "eyes"
-	organ_type = /datum/organ/internal/eyes/compound
 
 /obj/item/organ/internal/eyes/vox
 	name = "vox eyeballs"

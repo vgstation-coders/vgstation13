@@ -24,6 +24,11 @@
 	construct = null
 	..()
 
+/obj/structure/spacepod_frame/attackby(obj/item/W as obj, mob/user as mob)
+	if(!construct || !construct.action(W, user))
+		return ..()
+	return 1
+
 /obj/structure/spacepod_frame/attack_hand()
 	return
 
@@ -38,7 +43,7 @@
 	construct = null
 
 /obj/structure/spacepod_frame/attackby(obj/item/W, mob/user)
-	if(!construct || !construct.action(W, user))
+	if(!construct)
 		if(istype(W,/obj/item/pod_parts/armor/civ))
 			construct = new /datum/construction/reversible/pod/unarmored/civ(src)
 		else if(istype(W, /obj/item/pod_parts/armor/taxi))

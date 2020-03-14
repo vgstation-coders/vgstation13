@@ -20,7 +20,7 @@ If latejoin reaches 0, it stays there  until someone joins.
 If midround reaches 0, it updates playercounts again, then tries to inject and resets its timer regardless of whether a rule is picked.
 
 ROLE process()
-Does nothing.
+Checks for RoleMobDestroyed()
 
 FACTION process()
 Calls process to each member role

@@ -33,6 +33,10 @@
 		gulp_size = 5
 	else
 		gulp_size = max(round(reagents.total_volume / 5), 5)
+	if(reagents.has_reagent(BLACKCOLOR))
+		viewcontents = 0
+	else
+		viewcontents = 1
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/try_consume(mob/user)
 	if(!is_open_container())
@@ -78,7 +82,7 @@
 			armor_block = H.run_armor_check(affecting, "melee") // For normal attack damage
 
 			//If they have a hat/helmet and the user is targeting their head.
-			if(istype(H.head, /obj/item) && affecting == LIMB_HEAD)
+			if(istype(H.head, /obj/item/clothing/head) && affecting == LIMB_HEAD)
 
 				// If their head has an armour value, assign headarmor to it, else give it 0.
 				if(H.head.armor["melee"])
@@ -214,7 +218,13 @@
 	transfer(target, user, can_send = TRUE, can_receive = FALSE)
 
 /obj/item/weapon/reagent_containers/food/drinks/examine(mob/user)
-	..()
+
+	if(viewcontents)
+		..()
+	else
+		to_chat(user, "[bicon(src)] That's \a [src].")
+		to_chat(user, desc)
+		to_chat(user, "<span class='info'>You can't quite make out its content!</span>")
 
 	if(!reagents || reagents.total_volume == 0)
 		to_chat(user, "<span class='info'>\The [src] is empty!</span>")
@@ -609,7 +619,7 @@
 	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
 
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(mob/user as mob)
 	if(!is_open_container())
 		to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
 		flags |= OPENCONTAINER
@@ -617,16 +627,21 @@
 		playsound(user, pick(open_sounds), 50, 1)
 		overlays += image(icon = icon, icon_state = "soda_open")
 		return
-	if (reagents.total_volume > 0)
-		return ..()
-	else if (user.a_intent == I_HURT)
-		var/turf/T = get_turf(user)
-		user.drop_item(src, T, 1)
-		var/obj/item/trash/soda_cans/crushed_can = new (T, icon_state = icon_state)
-		crushed_can.name = "crushed [name]"
-		user.put_in_active_hand(crushed_can)
-		playsound(user, 'sound/items/can_crushed.ogg', 75, 1)
-		qdel(src)
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(iswirecutter(W))
+		to_chat(user, "You cut out the top and bottom of \the [src] with \the [W].")
+		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/weapon/aluminum_cylinder/I = new (get_turf(user))
+			user.put_in_hands(I)
+			qdel(src)
+		else
+			new /obj/item/weapon/aluminum_cylinder(get_turf(src.loc))
+			qdel(src)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola
 	name = "Space Cola"
@@ -763,17 +778,6 @@
 	reagents.add_reagent(COCAINE, 5)
 	reagents.add_reagent(BLACKCOLOR, 5)
 
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy
-	name = "\improper Roentgen Energy"
-	desc = "Roentgen Energy, a meltdown in your mouth! Contains real actinides!"
-	icon_state = "roentgenenergy"
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy/New()
-	..()
-	reagents.add_reagent(CAFFEINE, 5)
-	reagents.add_reagent(COCAINE, 1.4)
-	reagents.add_reagent(URANIUM, 3.6)
-	reagents.add_reagent(SPORTDRINK, 20)
-
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "Vial of Food Coloring"
 	icon = 'icons/obj/chemical.dmi'
@@ -891,24 +895,6 @@
 	..()
 	reagents.add_reagent(CAFE_LATTE, 50)
 
-
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee
-	name = "HOSS Rainbow Donut Blend"
-	desc = "All the essentials, for on the go."
-	icon_state = "cannedcopcoffee"
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee/New()
-	..()
-	reagents.add_reagent(SECCOFFEE, 50)
-
-
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear
-	name = "bear arms beer"
-	desc = "Crack open a bear at the end of a long shift."
-	icon_state = "bearbeer"
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear/New()
-	..()
-	reagents.add_reagent(BEER, 30)
-	reagents.add_reagent(HYPERZINE, rand(3,5))
 
 //////////////////////////drinkingglass and shaker//
 //Note by Darem: This code handles the mixing of drinks. New drinks go in three places: In Chemistry-Reagents.dm (for the drink
@@ -1141,72 +1127,6 @@
 	..()
 	reagents.add_reagent(TEQUILA, 100)
 
-/obj/item/weapon/reagent_containers/food/drinks/bottle/bluecuracao
-	name = "Bluespace Curacao"
-	desc = "This is either Blue Curacao, or window cleaner. Take a sip and find out."
-	icon_state = "bluecuracaobottle"
-	vending_cat = "spirits"
-	isGlass = 1
-	molotov = -1
-/obj/item/weapon/reagent_containers/food/drinks/bottle/bluecuracao/New()
-	..()
-	reagents.add_reagent(BLUECURACAO, 100)
-
-/obj/item/weapon/reagent_containers/food/drinks/bottle/bitters
-	name = "Wizard's Bitters"
-	desc = "Named for it's seemingly magical ability to take the place of any variety of bitters. Abracadabra, Angostura!"
-	icon_state = "bittersbottle"
-	vending_cat = "spirits"
-	isGlass = 1
-	molotov = -1
-/obj/item/weapon/reagent_containers/food/drinks/bottle/bitters/New()
-	..()
-	reagents.add_reagent(BITTERS, 100)
-
-/obj/item/weapon/reagent_containers/food/drinks/bottle/triplesec
-	name = "Cufftreau Triple Sec"
-	desc = "Named for what'll be wrapped around your wrists by the end of the night if you keep drinking like this."
-	icon_state = "triplesecbottle"
-	vending_cat = "spirits"
-	isGlass = 1
-	molotov = -1
-/obj/item/weapon/reagent_containers/food/drinks/bottle/triplesec/New()
-	..()
-	reagents.add_reagent(TRIPLESEC, 100)
-
-/obj/item/weapon/reagent_containers/food/drinks/bottle/schnapps
-	name = "All-in-One Fancy Space Schnapps"
-	desc = "For when you can't be bothered to stock a dozen varieties of Schnapps - just don't complain when it doesn't taste quite right."
-	icon_state = "schnappsbottle"
-	vending_cat = "spirits"
-	isGlass = 1
-	molotov = -1
-/obj/item/weapon/reagent_containers/food/drinks/bottle/schnapps/New()
-	..()
-	reagents.add_reagent(SCHNAPPS, 100)
-
-/obj/item/weapon/reagent_containers/food/drinks/bottle/champagne
-	name = "Captain's Finest Champagne"
-	desc = "A premium brand of champagne, intended for only the most discerning of tastes - for Captains, by Captains."
-	icon_state = "champagnebottle"
-	vending_cat = "fermented"
-	isGlass = 1
-	molotov = -1
-/obj/item/weapon/reagent_containers/food/drinks/bottle/champagne/New()
-	..()
-	reagents.add_reagent(CHAMPAGNE, 100)
-
-/obj/item/weapon/reagent_containers/food/drinks/bottle/fireballwhisky
-	name = "Oni Soma's Fireball Whisky"
-	desc = "A cinnamon flavored Whisky - without the E - favored by cheap drunks with no taste buds."
-	icon_state = "fireballwhiskybottle"
-	vending_cat = "spirits"
-	isGlass = 1
-	molotov = -1
-/obj/item/weapon/reagent_containers/food/drinks/bottle/fireballwhisky/New()
-	..()
-	reagents.add_reagent(CINNAMONWHISKY, 100)
-
 /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing
 	name = "Bottle of Nothing"
 	icon_state = "bottleofnothing"
@@ -1396,7 +1316,13 @@
 	..()
 	reagents.add_reagent(GREYVODKA, 100)
 
+
+
+
+
 /obj/item/weapon/reagent_containers/food/drinks/proc/smash(mob/living/M as mob, mob/living/user as mob)
+
+
 	if(molotov == 1) //for molotovs
 		if(lit)
 			new /obj/effect/decal/cleanable/ash(get_turf(src))
@@ -1454,27 +1380,29 @@
 			else
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
 
-		create_broken_bottle()
 
-/obj/item/weapon/reagent_containers/food/drinks/proc/create_broken_bottle()
-	//create new broken bottle
-	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(loc)
-	B.name = src.smashname
-	B.icon_state = src.icon_state
+		//create new broken bottle
+		var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(loc)
+		B.name = src.smashname
+		B.icon_state = src.icon_state
 
-	if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
-		B.icon_state = "glass_empty"
+		if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
+			B.icon_state = "glass_empty"
 
-	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(src)) // Create a glass shard at the hit location!
+		if(prob(33))
+			getFromPool(/obj/item/weapon/shard, get_turf(src)) // Create a glass shard at the hit location!
 
-	var/icon/Q = new('icons/obj/drinks.dmi', B.icon_state)
-	Q.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
-	Q.SwapColor(rgb(255, 0, 220, 255), rgb(0, 0, 0, 0))
-	B.icon = Q
-	src.transfer_fingerprints_to(B)
-	playsound(src, "shatter", 70, 1)
-	qdel(src)
+		var/icon/Q = new('icons/obj/drinks.dmi', B.icon_state)
+		Q.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
+		Q.SwapColor(rgb(255, 0, 220, 255), rgb(0, 0, 0, 0))
+		B.icon = Q
+		src.transfer_fingerprints_to(B)
+
+
+		spawn(50)
+			qdel(src)
+
+
 
 //////////////////////
 // molotov cocktail //
@@ -1547,26 +1475,6 @@
 	else
 		set_light(0)
 
-//todo: can light cigarettes with
-//todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now
-
-////////  Could be expanded upon:
-//  make it work with more chemicals and reagents, more like a chem grenade
-//  only allow the bottle to be stuffed if there are certain reagents inside, like fuel
-//  different flavor text for different means of lighting
-//  new fire overlay - current is edited version of the IED one
-//  a chance to not break, if desired
-//  fingerprints appearing on the object, which might already happen, and the shard
-//  belt sprite and new hand sprite
-//	ability to put out with water or otherwise
-//	burn out after a time causing the contents to ignite
-//	make into its own item type so they could be spawned full of fuel with New()
-//  colored light instead of white light
-//	the rag can store chemicals as well so maybe the rag's chemicals could react with the bottle's chemicals before or upon breaking
-//  somehow make it possible to wipe down the bottles instead of exclusively stuffing rags into them
-//  make rag retain chemical properties or color (if implemented) after smashing
-////////
-
 /obj/item/weapon/reagent_containers/food/drinks/update_icon()
 	src.overlays.len = 0
 	var/image/Im
@@ -1594,56 +1502,23 @@
 		loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
 	return
 
-// Sliding from one table to another
-/obj/item/weapon/reagent_containers/food/drinks/MouseDropFrom(atom/over_object,atom/src_location,atom/over_location,src_control,over_control,params)
-	var/mob/user = usr
-	if (!istype(src_location))
-		return
-	if (!user || user.incapacitated())
-		return
-	// Attempted drink sliding
-	if (locate(/obj/structure/table) in src_location)
-		if (M_SOBER in user.mutations)
-			if (!user.Adjacent(src))
-				return
-			var/distance = manhattan_distance(over_location, src)
-			if (distance >= 8 || distance == 0) // More than a full screen to go, or we're not moving at all
-				return ..()
 
-			// Geometrically checking if we're on a straight line.
-			var/vector/V = atoms2vector(src, over_location)
-			var/vector/V_norm = V.duplicate()
-			V_norm.normalize()
-			if (!V_norm.is_integer())
-				return ..() // Only a cardinal vector (north, south, east, west) can pass this test
+//todo: can light cigarettes with
+//todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now
 
-			// Checks if there's tables on the path.
-			var/turf/dest = get_translated_turf(V)
-			var/turf/temp_turf = src_location
-
-			do
-				temp_turf = temp_turf.get_translated_turf(V_norm)
-				if (!locate(/obj/structure/table) in temp_turf)
-					var/vector/V2 = atoms2vector(src, temp_turf)
-					vector_translate(V2, 0.1 SECONDS)
-					user.visible_message("<span class='warning'>\The [user] slides \the [src] down the table... and straight into the ground!</span>", "<span class='warning'>You slide \the [src] down the table, and straight into the ground!</span>")
-					create_broken_bottle()
-					return
-			while (temp_turf != dest)
-
-			vector_translate(V, 0.1 SECONDS)
-			user.visible_message("<span class='notice'>\The [user] expertly slides \the [src] down the table.</span>", "<span class='notice'>You slide \the [src] down the table. What a pro.</span>")
-			return
-		else
-			if (!(locate(/obj/structure/table) in over_location))
-				return ..()
-			if (!user.Adjacent(src) || !src_location.Adjacent(over_location)) // Regular users can only do short slides.
-				return ..()
-			if ((M_CLUMSY in user.mutations) && prob(10))
-				user.visible_message("<span class='warning'>\The [user] tries to slide \the [src] down the table, but fails miserably.</span>", "<span class='warning'>You <b>fail</b> to slide \the [src] down the table!</span>")
-				create_broken_bottle()
-				return
-			user.visible_message("<span class='notice'>\The [user] slides \the [src] down the table.</span>", "<span class='notice'>You slide \the [src] down the table!</span>")
-			forceMove(over_location, glide_size_override = DELAY2GLIDESIZE(0.4 SECONDS))
-			return
-	return ..()
+////////  Could be expanded upon:
+//  make it work with more chemicals and reagents, more like a chem grenade
+//  only allow the bottle to be stuffed if there are certain reagents inside, like fuel
+//  different flavor text for different means of lighting
+//  new fire overlay - current is edited version of the IED one
+//  a chance to not break, if desired
+//  fingerprints appearing on the object, which might already happen, and the shard
+//  belt sprite and new hand sprite
+//	ability to put out with water or otherwise
+//	burn out after a time causing the contents to ignite
+//	make into its own item type so they could be spawned full of fuel with New()
+//  colored light instead of white light
+//	the rag can store chemicals as well so maybe the rag's chemicals could react with the bottle's chemicals before or upon breaking
+//  somehow make it possible to wipe down the bottles instead of exclusively stuffing rags into them
+//  make rag retain chemical properties or color (if implemented) after smashing
+////////

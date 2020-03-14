@@ -31,9 +31,6 @@
 				var/obj/abstract/screen/inventory/OI = over_object
 
 				if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index))
-					if(istype(loc, /obj/item/weapon/storage))
-						var/obj/item/weapon/storage/bag = loc
-						bag.remove_from_storage(src)
 					usr.u_equip(src, 0)
 					usr.put_in_hand(OI.hand_index, src)
 					src.add_fingerprint(usr)
@@ -41,9 +38,6 @@
 			else if(istype(over_object,/mob/living)) //We're being dragged on a living mob's sprite...
 				if(usr == over_object) //It's the user!
 					if( !usr.get_active_hand() )		//if active hand is empty
-						if(istype(loc, /obj/item/weapon/storage))
-							var/obj/item/weapon/storage/bag = loc
-							bag.remove_from_storage(src)
 						usr.put_in_hands(src)
 						usr.visible_message("<span class='notice'>[usr] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
 	return ..()

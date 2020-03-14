@@ -9,9 +9,9 @@
 	standard 0 if fail
 */
 /mob/living/proc/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/used_weapon = null, ignore_events = 0)
-	if(!damage)
+	if(!damage || (blocked >= 2))
 		return 0
-	var/damage_done = (damage/100)*(100-blocked)
+	var/damage_done = damage/(blocked+1)
 	switch(damagetype)
 		if(BRUTE)
 			adjustBruteLoss(damage_done)
@@ -35,7 +35,7 @@
 
 
 /mob/living/proc/apply_damages(var/brute = 0, var/burn = 0, var/tox = 0, var/oxy = 0, var/clone = 0, var/halloss = 0, var/def_zone = null, var/blocked = 0)
-	if(blocked >= 100)
+	if(blocked >= 2)
 		return 0
 	if(brute)
 		apply_damage(brute, BRUTE, def_zone, blocked)
@@ -54,38 +54,41 @@
 
 
 /mob/living/proc/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
-	if(!effect)
+	if(!effect || (blocked >= 2))
 		return 0
-	var/altered = (effect/100)*(100-blocked)
+	var/altered = 0
 	switch(effecttype)
 		if(STUN)
+			altered = effect/(blocked+1)
 			Stun(altered)
 		if(WEAKEN)
+			altered = effect/(blocked+1)
 			Knockdown(altered)
 		if(PARALYZE)
+			altered = effect/(blocked+1)
 			Paralyse(altered)
 		if(AGONY)
 			altered = effect
 			halloss += altered // Useful for objects that cause "subdual" damage. PAIN!
 		if(IRRADIATE)
-			altered = max(0, (effect/100)*(100-getarmor(null, "rad"))) //Get overall radiation protection, rather than point-exposure
+			altered = max((((effect - (effect*(getarmor(null, "rad")/100))))/(blocked+1)),0)//Rads auto check armor
 			radiation += altered
 		if(STUTTER)
 			if(status_flags & CANSTUN) // stun is usually associated with stutter
-				altered = max(stuttering,altered)
+				altered = max(stuttering,(effect/(blocked+1)))
 				stuttering = altered
 		if(EYE_BLUR)
-			altered = max(eye_blurry,altered)
+			altered = max(eye_blurry,(effect/(blocked+1)))
 			eye_blurry = altered
 		if(DROWSY)
-			altered = max(drowsyness,altered)
+			altered = max(drowsyness,(effect/(blocked+1)))
 			drowsyness = altered
 	updatehealth()
 	return altered
 
 
 /mob/living/proc/apply_effects(var/stun = 0, var/weaken = 0, var/paralyze = 0, var/irradiate = 0, var/stutter = 0, var/eyeblur = 0, var/drowsy = 0, var/agony = 0, var/blocked = 0)
-	if(blocked >= 100)
+	if(blocked >= 2)
 		return 0
 	if(stun)
 		apply_effect(stun, STUN, blocked)

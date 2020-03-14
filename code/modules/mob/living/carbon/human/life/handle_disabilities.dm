@@ -63,7 +63,6 @@
 						"PACKETS!!!", \
 						"SARAH HALE DID IT!!!", \
 						"Don't tell Chase", \
-						"WOAH MAMA", \
 						"not so tough now huh", \
 						"WERE NOT BAY!!", \
 						"IF YOU DONT LIKE THE CYBORGS OR SLIMES WHY DONT YU O JUST MAKE YORE OWN!", \

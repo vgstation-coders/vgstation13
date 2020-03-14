@@ -31,6 +31,7 @@ var/datum/subsystem/more_init/SSmore_init
 	..()
 
 	buildcamlist()
+
 	if(config.media_base_url)
 		watch = start_watch()
 		log_startup_progress("Caching jukebox playlists...")
@@ -43,13 +44,6 @@ var/datum/subsystem/more_init/SSmore_init
 	for (var/obj/machinery/computer/security/S in tv_monitors)
 		S.init_cams()
 
-	init_wizard_apprentice_setups()
-
-/proc/init_wizard_apprentice_setups()
-	for (var/setup_type in subtypesof(/datum/wizard_apprentice_setup))
-		var/datum/wizard_apprentice_setup/setup_datum = new setup_type
-		wizard_apprentice_setups_nanoui += list(list("name" = setup_datum.name, "desc" = setup_datum.generate_description()))
-		wizard_apprentice_setups_by_name[setup_datum.name] = setup_datum
 
 /datum/subsystem/more_init/proc/buildcamlist()
 	adv_camera.camerasbyzlevel = list()

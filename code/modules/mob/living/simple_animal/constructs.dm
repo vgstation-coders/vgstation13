@@ -394,11 +394,19 @@
 
 
 /mob/living/simple_animal/construct/regular_hud_updates()
-	if(fire_alert)
-		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire/cult)
-	else
-		clear_alert(SCREEN_ALARM_FIRE)
+	if(fire)
+		if(fire_alert)
+			fire.icon_state = "fire1"
+		else
+			fire.icon_state = "fire0"
 	update_pull_icon()
+
+	if(purged)
+		if(purge > 0)
+			purged.icon_state = "purge1"
+		else
+			purged.icon_state = "purge0"
+
 	silence_spells(purge)
 
 

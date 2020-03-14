@@ -51,124 +51,32 @@ BLIND     // can't see anything
 	name = "prescription health scanner HUD"
 	desc = "A Health Scanner HUD with prescription lenses."
 	prescription = 1
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/sechud/prescription
 	name = "prescription security HUD"
 	desc = "A Security HUD with prescription lenses."
 	prescription = 1
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-
-////////////////////////////////////////////////PATHOGEN HUD///////////////////////////////////////////////////
-var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/science
 	name = "science goggles"
-	desc = "almost nothing."
+	desc = "nothing."
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
-	species_fit = list(GREY_SHAPED)
-	actions_types = list(/datum/action/item_action/toggle_goggles)
-	var/on = FALSE
-
-/obj/item/clothing/glasses/science/prescription
-	name = "prescription science goggles"
-	prescription = 1
-	species_fit = list(GREY_SHAPED)
-
-/obj/item/clothing/glasses/science/attack_self(var/mob/user)
-	toggle(user)
-
-/obj/item/clothing/glasses/science/proc/toggle(var/mob/user)
-	if (user.incapacitated())
-		return
-	if (on)
-		on = FALSE
-		to_chat(user, "You turn the pathogen scanner off.")
-		disable(user)
-	else
-		on = TRUE
-		to_chat(user, "You turn the pathogen scanner on.")
-		enable(user)
-	user.handle_regular_hud_updates()
-
-/obj/item/clothing/glasses/science/equipped(var/mob/M, var/slot)
-	..()
-	if (!M.client)
-		return
-	if(slot == slot_glasses)
-		if (on)
-			enable(M)
-
-/obj/item/clothing/glasses/science/unequipped(var/mob/M, var/from_slot)
-	..()
-	if (!M.client)
-		return
-	if(from_slot == slot_glasses)
-		disable(M)
-
-/obj/item/clothing/glasses/science/proc/enable(var/mob/M)
-	var/toggle = 0
-	if (ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if (H.glasses == src)
-			toggle = 1
-	if (ismonkey(M))
-		var/mob/living/carbon/monkey/H = M
-		if (H.glasses == src)
-			toggle = 1
-	if (toggle)
-		playsound(M,'sound/misc/click.ogg',30,0,-5)
-		science_goggles_wearers.Add(M)
-		for (var/obj/item/I in infected_items)
-			if (I.pathogen)
-				M.client.images |= I.pathogen
-		for (var/mob/living/L in infected_contact_mobs)
-			if (L.pathogen)
-				M.client.images |= L.pathogen
-		for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
-			if (C.pathogen)
-				M.client.images |= C.pathogen
-		for (var/obj/effect/decal/cleanable/C in infected_cleanables)
-			if (C.pathogen)
-				M.client.images |= C.pathogen
-
-/obj/item/clothing/glasses/science/proc/disable(var/mob/M)
-	playsound(M,'sound/misc/click.ogg',30,0,-5)
-	science_goggles_wearers.Remove(M)
-	for (var/obj/item/I in infected_items)
-		M.client.images -= I.pathogen
-	for (var/mob/living/L in infected_contact_mobs)
-		M.client.images -= L.pathogen
-	for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
-		M.client.images -= C.pathogen
-	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
-		M.client.images -= C.pathogen
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
 	desc = "Yarr."
-	icon_state = "eyepatch0"
-	species_fit = list(GREY_SHAPED)
-	item_state = "eyepatch0"
+	icon_state = "eyepatch"
+	item_state = "eyepatch"
 	min_harm_label = 0
-	var/flipped = FALSE
-
-/obj/item/clothing/glasses/eyepatch/attack_self(mob/user)
-	flipped = !flipped
-	icon_state = "eyepatch[flipped]"
-	species_fit = list(GREY_SHAPED)
-	item_state = "eyepatch[flipped]"
-	to_chat(user, "You flip \the [src] to your [flipped ? "left" : "right"] eye.")
 
 /obj/item/clothing/glasses/monocle
 	name = "monocle"
 	desc = "Such a dapper eyepiece!"
 	icon_state = "monocle"
 	item_state = "headset" // lol
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED)
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
 /obj/item/clothing/glasses/monocle/harm_label_update()
@@ -180,7 +88,6 @@ var/list/science_goggles_wearers = list()
 	icon_state = "glasses"
 	item_state = "glasses"
 	prescription = 1
-	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/regular/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
@@ -197,14 +104,12 @@ var/list/science_goggles_wearers = list()
 	desc = "Made by Uncool. Co."
 	icon_state = "hipster_glasses"
 	item_state = "hipster_glasses"
-	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/gglasses
 	name = "Green Glasses"
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."
 	icon_state = "gglasses"
 	item_state = "gglasses"
-	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
@@ -248,32 +153,27 @@ var/list/science_goggles_wearers = list()
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in purple."
 	name = "purple sunglasses"
 	icon_state = "sun_purple"
-	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/star
 	name = "star-shaped sunglasses"
 	desc = "Novelty sunglasses, both lenses are in the shape of a star."
 	icon_state = "sun_star"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/rockstar
 	name = "red star-shaped sunglasses"
 	desc = "Novelty sunglasses with a fancy silver frame and two red-tinted star-shaped lenses. You should probably stomp on them and get a pair of normal ones."
 	icon_state = "sun_star_silver"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/red
 	name = "red sunglasses"
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in red."
 	icon_state = "sunred"
 	item_state = "sunred"
-	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/security
 	name = "security sunglasses"
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes. Often worn by budget security officers."
 	icon_state = "sunhud"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/virussunglasses
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
@@ -282,7 +182,7 @@ var/list/science_goggles_wearers = list()
 	item_state = "sunglasses"
 	origin_tech = Tc_COMBAT + "=2"
 	darkness_view = -1
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/glasses/welding
 	name = "welding goggles"
@@ -326,7 +226,6 @@ var/list/science_goggles_wearers = list()
 	desc = "Welding goggles made from more expensive materials, strangely smells like potatoes. Allows for better vision than normal goggles.."
 	icon_state = "rwelding-g"
 	item_state = "rwelding-g"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MATERIALS + "=3"
 
 /obj/item/clothing/glasses/sunglasses/blindfold
@@ -337,7 +236,7 @@ var/list/science_goggles_wearers = list()
 	see_invisible = SEE_INVISIBLE_LIVING
 	vision_flags = BLIND
 	eyeprot = 4 //What you can't see can't burn your eyes out
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED)
 	min_harm_label = 0
 
 /obj/item/clothing/glasses/sunglasses/prescription
@@ -349,7 +248,7 @@ var/list/science_goggles_wearers = list()
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Larger than average enhanced shielding blocks many flashes."
 	icon_state = "bigsunglasses"
 	item_state = "bigsunglasses"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED)
 	min_harm_label = 15
 
 /obj/item/clothing/glasses/sunglasses/sechud
@@ -388,7 +287,6 @@ var/list/science_goggles_wearers = list()
 	name = "sunglasses"
 	icon_state = "sun"
 	item_state = "sunglasses"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	darkness_view = 0 //Subtly better than normal shades
 	origin_tech = Tc_SYNDICATE + "=3"
 	actions_types = list(/datum/action/item_action/change_appearance_shades)
@@ -442,7 +340,6 @@ var/list/science_goggles_wearers = list()
 	desc = "Thermals in the shape of glasses."
 	icon_state = "thermal"
 	item_state = "glasses"
-	species_fit = list(GREY_SHAPED)
 	origin_tech = Tc_MAGNETS + "=3"
 	vision_flags = SEE_MOBS
 	see_invisible = SEE_INVISIBLE_MINIMUM
@@ -472,7 +369,6 @@ var/list/science_goggles_wearers = list()
 	name = "Thermonocle"
 	desc = "A monocle thermal."
 	icon_state = "thermoncle"
-	species_fit = list(GREY_SHAPED)
 	flags = 0 //doesn't protect eyes because it's a monocle, duh
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
@@ -491,7 +387,6 @@ var/list/science_goggles_wearers = list()
 	desc = "An eyepatch with built-in thermal optics."
 	icon_state = "eyepatch"
 	item_state = "eyepatch"
-	species_fit = list(GREY_SHAPED)
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
 /obj/item/clothing/glasses/thermal/eyepatch/harm_label_update()
@@ -509,14 +404,13 @@ var/list/science_goggles_wearers = list()
 	desc = "A set of implantable lenses designed to augment your vision."
 	icon_state = "thermalimplants"
 	item_state = "syringe_kit"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/glasses/simonglasses
 	name = "Simon's Glasses"
 	desc = "Just who the hell do you think I am?"
 	icon_state = "simonglasses"
 	item_state = "simonglasses"
-	species_fit = list(GREY_SHAPED)
 	cover_hair = 1
 
 /obj/item/clothing/glasses/kaminaglasses
@@ -524,7 +418,6 @@ var/list/science_goggles_wearers = list()
 	desc = "I'm going to tell you something important now, so you better dig the wax out of those huge ears of yours and listen! The reputation of Team Gurren echoes far and wide. When they talk about its badass leader - the man of indomitable spirit and masculinity - they're talking about me! The mighty Kamina!"
 	icon_state = "kaminaglasses"
 	item_state = "kaminaglasses"
-	species_fit = list(GREY_SHAPED)
 	cover_hair = 1
 
 /obj/item/clothing/glasses/contacts

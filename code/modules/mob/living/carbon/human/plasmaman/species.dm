@@ -35,7 +35,6 @@
 /datum/species/plasmaman/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
 	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
-	..()
 
 /datum/species/plasmaman/equip(var/mob/living/carbon/human/H)
 	H.fire_sprite = "Plasmaman"
@@ -125,9 +124,6 @@
 		if("Internal Affairs Agent")
 			suit=/obj/item/clothing/suit/space/plasmaman/lawyer
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/lawyer
-		if("Librarian")
-			suit=/obj/item/clothing/suit/space/plasmaman/librarian
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/librarian
 	H.equip_or_collect(new suit(H), slot_wear_suit)
 	H.equip_or_collect(new helm(H), slot_head)
 	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.

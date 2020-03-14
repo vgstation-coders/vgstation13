@@ -7,7 +7,7 @@
 	icon_state = "forensic1"
 	var/amount = 20.0
 	var/list/stored = list()
-	w_class = W_CLASS_SMALL
+	w_class = W_CLASS_MEDIUM
 	item_state = "electronic"
 	flags = FPRINT
 	siemens_coefficient = 1

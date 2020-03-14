@@ -4,6 +4,9 @@
 
 	Guidelines for using minds properly:
 
+	-	Never mind.transfer_to(ghost). The var/current and var/original of a mind must always be of type mob/living!
+		ghost.mind is however used as a reference to the ghost's corpse
+
 	-	When creating a new mob for an existing IC character (e.g. cloning a dead guy or borging a brain of a human)
 		the existing mind of the old mob should be transfered to the new mob like so:
 
@@ -29,8 +32,8 @@
 /datum/mind
 	var/key
 	var/name				//replaces mob/var/original_name
-	var/mob/current
-	var/mob/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
+	var/mob/living/current
+	var/mob/living/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
 	var/active = 0
 
 	var/memory
@@ -72,7 +75,10 @@
 /datum/mind/New(var/key)
 	src.key = key
 
-/datum/mind/proc/transfer_to(mob/new_character)
+/datum/mind/proc/transfer_to(mob/living/new_character)
+	if(!istype(new_character))
+		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
+
 	if (!current)
 		transfer_to_without_current(new_character)
 		return
@@ -105,7 +111,7 @@
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
 
-/datum/mind/proc/transfer_to_without_current(var/mob/new_character)
+/datum/mind/proc/transfer_to_without_current(var/mob/living/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"
 
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
@@ -122,14 +128,7 @@
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
 
-/datum/mind/proc/store_memory(new_text, var/forced)
-	if(!forced)
-		if(length(memory) > MAX_PAPER_MESSAGE_LEN)
-			to_chat(current, "<span class = 'warning'>Your memory, however hazy, is full.</span>")
-			return
-		if(length(new_text) > MAX_MESSAGE_LEN)
-			to_chat(current, "<span class = 'warning'>That's a lot to memorize at once.</span>")
-			return
+/datum/mind/proc/store_memory(new_text)
 	if(new_text)
 		memory += "[new_text]<BR>"
 
@@ -225,8 +224,8 @@
 
 			if ((chosen_greeting && chosen_greeting != GREET_CUSTOM) || (chosen_greeting == GREET_CUSTOM && custom_greeting))
 				R.Greet(chosen_greeting,custom_greeting)
-
-
+			
+			
 
 	if (href_list["add_role"])
 		var/list/available_roles = list()
@@ -279,6 +278,10 @@
 				var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[joined_faction], null, 1)
 				if (joined)
 					joined.HandleRecruitedRole(newRole)
+
+		if (isninja(current))
+			if ((alert("Throw the ninja into the station from space?", "Alert", "Yes", "No") == "Yes"))
+				current.ThrowAtStation()
 
 		newRole.OnPostSetup(FALSE)
 		if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))

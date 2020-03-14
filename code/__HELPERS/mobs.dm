@@ -67,9 +67,6 @@ proc/random_skin_tone(species = "Human")
 	else if(species == "Vox")
 		. = rand(1,6)
 		return .
-	else if(species == "Grey")
-		. = rand(1,4)
-		return .
 	else if(species == "Tajaran")
 		return 1
 	else
@@ -110,16 +107,6 @@ proc/skintone2racedescription(tone, species = "Human")
 				return "gray"
 			else
 				return "green"
-	else if(species == "Grey")
-		switch(tone)
-			if(GREYLIGHT)
-				return "light gray"
-			if(GREYGREEN)
-				return "green"
-			if(GREYBLUE)
-				return "blue"
-			else
-				return "gray"
 	else if(species == "Tajaran")
 		switch(tone)
 			if(CATBEASTBLACK)

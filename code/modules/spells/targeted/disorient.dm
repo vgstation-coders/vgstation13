@@ -3,7 +3,6 @@
 	desc = "This spell temporarily disorients a target."
 	abbreviation = "SJ"
 	user_type = USER_TYPE_WIZARD
-	specialization = SSOFFENSIVE
 
 	school = "transmutation"
 	charge_max = 300

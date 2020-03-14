@@ -35,20 +35,17 @@
 			manipcount += SP.rating
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating
-	minimum_monkeys = max(1,4 - (manipcount/2)) //Tier 1 = 3, Tier 2 = 2, Tier 3 = 1
-	if(lasercount >= 3)
+	minimum_monkeys = 4 - (manipcount/2) //Tier 1 = 3, Tier 2 = 2, Tier 3 = 1
+	if(lasercount == 3)
 		can_recycle_live = TRUE
 
-/obj/machinery/monkey_recycler/attackby(var/obj/item/O, var/mob/user)
-	if(..())
+/obj/machinery/monkey_recycler/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if (..())
 		return 1
-	process_monkey(O, user)
-
-/obj/machinery/monkey_recycler/proc/process_monkey(var/obj/item/O, var/mob/user)
-	if(istype(O, /obj/item/weapon/grab))
+	if (istype(O, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
 		var/grabbed = G.affecting
-		if(ismonkey(grabbed))
+		if(istype(grabbed, /mob/living/carbon/monkey))
 			var/mob/living/carbon/monkey/target = grabbed
 			if(target.stat == CONSCIOUS && !can_recycle_live)
 				to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
@@ -67,7 +64,7 @@
 				to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
 		else
 			to_chat(user, "<span class='warning'>The machine only accepts monkeys!</span>")
-	else if(ismonkey(O))
+	else if(istype(O, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/target = O
 		if(target.stat == CONSCIOUS && !can_recycle_live)
 			to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
@@ -82,6 +79,7 @@
 			use_power(500)
 			src.grinded++
 			to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
+	return
 
 /obj/machinery/monkey_recycler/attack_hand(var/mob/user as mob)
 	if(..())
@@ -107,5 +105,4 @@
 		return
 	if(!ishigherbeing(user) && !isrobot(user))
 		return
-	add_fingerprint(user)
-	process_monkey(O,user)
+	attackby(O,user)

@@ -260,7 +260,6 @@ steam.start() -- spawns the effect
 /obj/effect/effect/smoke/Destroy()
 	if(reagents)
 		reagents.my_atom = null
-		qdel(reagents)
 		reagents = null
 	..()
 
@@ -345,18 +344,6 @@ steam.start() -- spawns the effect
 	R.updatehealth()
 	return
 
-/obj/effect/effect/smoke/heat
-	name = "geyser smoke"
-
-/obj/effect/effect/smoke/heat/affect(var/mob/living/carbon/human/R)
-	if (!..())
-		return 0
-	if (R.wear_suit)
-		return 0
-
-	R.burn_skin(2)
-	M.bodytemperature = min(60, M.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
-
 /////////////////////////////////////////////
 // Smoke spread
 /////////////////////////////////////////////
@@ -365,7 +352,6 @@ steam.start() -- spawns the effect
 	var/total_smoke = 0 // To stop it being spammed and lagging!
 	var/direction
 	var/smoke_type = /obj/effect/effect/smoke
-	var/time_to_live = 10 SECONDS
 
 /datum/effect/effect/system/smoke_spread/set_up(n = 5, c = 0, loca, direct)
 	if(n > 10)
@@ -388,8 +374,7 @@ steam.start() -- spawns the effect
 			if(holder)
 				src.location = get_turf(holder)
 			var/obj/effect/effect/smoke/smoke = new smoke_type(src.location)
-			smoke.time_to_live = time_to_live
-			total_smoke++
+			src.total_smoke++
 			var/direction = src.direction
 			if(!direction)
 				if(src.cardinals)
@@ -411,18 +396,20 @@ steam.start() -- spawns the effect
 /datum/effect/effect/system/smoke_spread/sleepy
 	smoke_type = /obj/effect/effect/smoke/sleepy
 
+
 /datum/effect/effect/system/smoke_spread/mustard
 	smoke_type = /obj/effect/effect/smoke/mustard
-
-/datum/effect/effect/system/smoke_spread/heat
-	smoke_type = /obj/effect/effect/smoke/heat
-
 /////////////////////////////////////////////
 // Chem smoke
 /////////////////////////////////////////////
 /obj/effect/effect/smoke/chem
 	icon = 'icons/effects/chemsmoke.dmi'
 
+/obj/effect/effect/smoke/Destroy()
+	if(reagents)
+		qdel(reagents)
+		reagents = null
+	..()
 /obj/effect/effect/smoke/chem/New()
 	. = ..()
 	create_reagents(500)
@@ -715,7 +702,7 @@ steam.start() -- spawns the effect
 	var/expand = 1
 	animate_movement = 0
 	var/metal = 0
-	var/lowest_temperature = T0C
+	var/lowest_temperature = 0
 
 /obj/effect/effect/foam/fire
 	name = "fire supression foam"
@@ -759,14 +746,21 @@ steam.start() -- spawns the effect
 		savedtemp = old_air.temperature
 		if(istype(T) && savedtemp > lowest_temperature)
 			var/datum/gas_mixture/lowertemp = old_air.remove_volume(CELL_VOLUME)
-			lowertemp.add_thermal_energy(max(lowertemp.get_thermal_energy_change(lowest_temperature), -(15*CELL_VOLUME)*max(1,lowertemp.return_temperature()/10)))
+			lowertemp.temperature = max(min(lowertemp.temperature - 500, lowertemp.temperature / 2), 1) //Reaching exactly 0K causes problems
+			lowertemp.react()
 			T.assume_air(lowertemp)
 	spawn(3)
 		process()
 	spawn(120)
 		processing_objects.Remove(src)
 		sleep(30)
+		var/turf/simulated/T = get_turf(src)
+		var/datum/gas_mixture/local_air = T.return_air()
 		flick("[icon_state]-disolve", src)
+		if((local_air.temperature < lowest_temperature) && (savedtemp > lowest_temperature)) //ie, we have over-chilled
+			local_air.temperature = lowest_temperature
+		else if((local_air.temperature < lowest_temperature) && (savedtemp < lowest_temperature) && savedtemp) //ie it chilled when it shouldn't have
+			local_air.temperature = savedtemp
 		sleep(5)
 		qdel(src)
 	AddToProfiler()

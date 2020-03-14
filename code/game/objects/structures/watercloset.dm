@@ -73,10 +73,10 @@
 	icon_state = "toilet[open][cistern]"
 
 /obj/structure/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
-	if(I.is_wrench(user))
+	if(iswrench(I))
 		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
 		anchored = !anchored
-	if(!anchored)
+	if(anchored == 0)
 		return
 	if(open && cistern && state == NORODS && istype(I,/obj/item/stack/rods)) //State = 0 if no rods
 		var/obj/item/stack/rods/R = I
@@ -116,11 +116,11 @@
 					GM.visible_message("<span class='danger'>[user] starts to place [GM.name]'s head inside \the [src].</span>", "<span class='userdanger'>[user] is placing your head inside \the [src]!</span>")
 					swirlie = GM
 					if(do_after(user, src, 3 SECONDS, needhand = FALSE))
-						GM.forcesay(list("-BLERGH", "-BLURBL", "-HURGBL"))
 						playsound(src, 'sound/misc/toilet_flush.ogg', 50, TRUE)
 						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", "You hear a toilet flushing.")
 						add_fingerprint(user)
 						add_fingerprint(GM)
+
 						watersource.reagents.reaction(GM, TOUCH)
 
 						if(!GM.internal && GM.losebreath <= 30)
@@ -183,20 +183,6 @@
 	return ..()
 
 /obj/structure/urinal/attackby(obj/item/I as obj, mob/user as mob)
-	if(I.is_wrench(user))
-		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
-		anchored = !anchored
-	if(!anchored)
-		return
-
-	if(istype(I, /obj/item/weapon/crowbar))
-		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
-		I.playtoolsound(src, 50)
-		if(do_after(user, src, 3 SECONDS))
-			getFromPool(/obj/item/stack/sheet/metal, loc, 2)
-			qdel(src)
-		return
-
 	if(istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
 		if(isliving(G.affecting))
@@ -278,7 +264,21 @@
 	if(I.type == /obj/item/device/analyzer)
 		to_chat(user, "<span class='notice'>The water's temperature seems to be [watertemp].</span>")
 	if(panel_open) //The panel is open
-		if(I.is_wrench(user))
+		if(iswrench(I))
+			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
+								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
+			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			if(do_after(user, src, 50))
+				if(anchored == 1)
+					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
+								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
+					anchored = 0
+				else
+					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
+								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
+					anchored = 1
+	else
+		if(iswrench(I))
 			user.visible_message("<span class='warning'>[user] begins to adjust \the [src]'s temperature valve with \a [I.name].</span>", \
 								 "<span class='notice'>You begin to adjust \the [src]'s temperature valve with \a [I.name].</span>")
 			if(do_after(user, src, 50))
@@ -289,24 +289,9 @@
 						watertemp = "searing hot"
 					if("searing hot")
 						watertemp = "cool"
-				I.playtoolsound(src, 100)
 				user.visible_message("<span class='warning'>[user] adjusts \the [src]'s temperature with \a [I.name].</span>",
 				"<span class='notice'>You adjust \the [src]'s temperature with \a [I.name], the water is now [watertemp].</span>")
 				add_fingerprint(user)
-	else
-		if(I.is_wrench(user))
-			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
-								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
-			if(do_after(user, src, 50))
-				if(anchored)
-					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
-								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
-					anchored = 0
-				else
-					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
-								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
-					anchored = 1
 
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
@@ -444,19 +429,19 @@
 		return
 
 	//Note : Remember process() rechecks this, so the mix/max procs slowly increase/decrease body temperature
-	//Every second under the shower adjusts body temperature by 1 degree Celsius. Water conducts heat pretty efficiently in real life too
-	if(watertemp == "freezing cold") //Down to -137 degree Celsius, water's glass transition temperature. we don't need cryo tubes where we're going
-		C.bodytemperature = max(T0C - 137, C.bodytemperature - 1)
+	//Every second under the shower adjusts body temperature by 0.5 degree Celsius. Water conducts heat pretty efficiently in real life too
+	if(watertemp == "freezing cold") //Down to 0 degree Celsius, Nanotrasen waterworks are perfect and never fluctuate even slightly below that
+		C.bodytemperature = max(T0C, C.bodytemperature - 0.5)
 		return
-	if(watertemp == "searing hot") //Up to 60 degree Celsius, upper limit for common water boilers. Getting super hot easily in space is hard.
-		C.bodytemperature = min(T0C + 60, C.bodytemperature + 1)
+	if(watertemp == "searing hot") //Up to 60 degree Celsius, upper limit for common water boilers
+		C.bodytemperature = min(T0C + 60, C.bodytemperature + 0.5)
 		return
 	if(watertemp == "cool") //Adjusts towards "perfect" body temperature, 37.5 degree Celsius. Actual showers tend to average at 40 degree Celsius, but it's the future
 		if(C.bodytemperature > T0C + 37.5) //Cooling down
-			C.bodytemperature = max(T0C + 37.5, C.bodytemperature - 1)
+			C.bodytemperature = max(T0C + 37.5, C.bodytemperature - 0.5)
 			return
 		if(C.bodytemperature < T0C + 37.5) //Heating up
-			C.bodytemperature = min(T0C + 37.5, C.bodytemperature + 1)
+			C.bodytemperature = min(T0C + 37.5, C.bodytemperature + 0.5)
 			return
 
 /obj/machinery/shower/npc_tamper_act(mob/living/L)
@@ -495,7 +480,7 @@
 	if(!Adjacent(M))
 		return
 
-	if(!anchored)
+	if(anchored == 0)
 		return
 
 	if(busy)
@@ -538,10 +523,10 @@
 		to_chat(user, "<span class='warning'>Someone's already washing here.</span>")
 		return
 
-	if(O.is_wrench(user))
+	if(iswrench(O))
 		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
 		anchored = !anchored
-	if(!anchored)
+	if(anchored == 0)
 		return
 
 	if(istype(O, /obj/item/weapon/mop))
@@ -586,8 +571,6 @@
 
 		if (do_after(user,src, 40))
 			O.clean_blood()
-			if(O.current_glue_state == GLUE_STATE_TEMP)
-				O.unglue()
 			user.visible_message( \
 				"<span class='notice'>[user] washes \a [O] using \the [src].</span>", \
 				"<span class='notice'>You wash \a [O] using \the [src].</span>")

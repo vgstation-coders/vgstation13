@@ -141,7 +141,7 @@
 			M.canmove = 0
 			if(!client)
 				if(Victim && !attacked)
-					if(Victim.LAssailant && (Victim.LAssailant != Victim) && Victim.LAssailant.mind)
+					if(Victim.LAssailant && Victim.LAssailant != Victim)
 						if(prob(50))
 							if(!(Victim.LAssailant in Friends))
 								Friends.Add(Victim.LAssailant) // no idea why i was using the |= operator

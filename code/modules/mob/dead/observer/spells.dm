@@ -53,10 +53,6 @@ var/global/list/boo_phrases_silicon=list(
 	override_base = "grey"
 	hud_state = "boo"
 
-/spell/aoe_turf/boo/New()
-	..()
-	take_charge(holder) //Prevent re-entering body to recharge Boo!
-
 /spell/aoe_turf/boo/cast(list/targets)
 	for(var/turf/T in targets)
 		for(var/atom/A in T.contents)

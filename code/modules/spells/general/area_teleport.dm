@@ -3,7 +3,6 @@
 	desc = "This spell teleports you to a type of area of your selection."
 	abbreviation = "TP"
 	user_type = USER_TYPE_WIZARD
-	specialization = SSUTILITY
 
 	school = "abjuration"
 	spell_flags = NEEDSCLOTHES
@@ -32,7 +31,7 @@
 	var/A = null
 
 	if(!randomise_selection)
-		A = input("Area to teleport to", "Teleport", A) as null|anything in teleportlocs
+		A = input("Area to teleport to", "Teleport", A) in teleportlocs
 	else
 		A = pick(teleportlocs)
 

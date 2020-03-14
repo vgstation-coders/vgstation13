@@ -17,14 +17,20 @@
 	var/obj/abstract/screen/kick_icon = null
 	var/obj/abstract/screen/bite_icon = null
 	var/obj/abstract/screen/visible = null
+	var/obj/abstract/screen/purged = null
 	var/obj/abstract/screen/internals = null
+	var/obj/abstract/screen/oxygen = null
 	var/obj/abstract/screen/i_select = null
 	var/obj/abstract/screen/m_select = null
+	var/obj/abstract/screen/toxin = null
+	var/obj/abstract/screen/fire = null
+	var/obj/abstract/screen/bodytemp = null
 	var/obj/abstract/screen/healths = null
-	var/obj/abstract/screen/healths2 = null
 	var/obj/abstract/screen/throw_icon = null
 	var/obj/abstract/screen/camera_icon = null
 	var/obj/abstract/screen/album_icon = null
+	var/obj/abstract/screen/nutrition_icon = null
+	var/obj/abstract/screen/pressure = null
 	var/obj/abstract/screen/damageoverlay = null
 	var/obj/abstract/screen/pain = null
 	var/obj/abstract/screen/gun/item/item_use_icon = null
@@ -91,7 +97,6 @@
 	var/obj/effect/rune/ajourn
 	var/druggy = 0			//Carbon
 	var/confused = 0		//Carbon
-	var/confused_intensity = 0 //Carbon
 	var/sleeping = 0		//Carbon
 	var/resting = 0			//Carbon
 	var/lying = 0
@@ -288,8 +293,6 @@
 
 	var/obj/transmog_body_container/transmogged_from	//holds a reference to the container holding the mob that this mob used to be before being transmogrified
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
-
-	var/forced_density = 0 // If the mob was made non-dense by an admin.
 
 /mob/resetVariables()
 	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \

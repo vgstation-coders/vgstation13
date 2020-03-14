@@ -24,7 +24,6 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_STEEL
 	mat_type = MAT_IRON
-	perunit = CC_PER_SHEET_METAL
 
 /obj/item/stack/sheet/metal/resetVariables()
 	return ..("recipes", "pixel_x", "pixel_y")
@@ -69,7 +68,7 @@
 	desc = "This sheet is an alloy of iron and plasma."
 	icon_state = "sheet-plasteel"
 	item_state = "sheet-plasteel"
-	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL, MAT_PLASMA = CC_PER_SHEET_PLASMA) // Was 7500, which doesn't make any fucking sense
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL, MAT_PLASMA = CC_PER_SHEET_MISC) // Was 7500, which doesn't make any fucking sense
 	perunit = 2875 //average of plasma and metal
 	throwforce = 15.0
 	flags = FPRINT
@@ -97,7 +96,6 @@
 	w_type = RECYK_WOOD
 	siemens_coefficient = 0 //no conduct
 	mat_type = MAT_WOOD
-	perunit = CC_PER_SHEET_WOOD
 
 
 /obj/item/stack/sheet/wood/afterattack(atom/Target, mob/user, adjacent, params)
@@ -131,14 +129,14 @@
 /*
  * Cardboard
  */
-/obj/item/stack/sheet/cardboard	//BubbleWrap //what???
+/obj/item/stack/sheet/cardboard	//BubbleWrap
 	name = "cardboard"
 	desc = "Large sheets of card, like boxes folded flat."
 	singular_name = "cardboard sheet"
 	icon_state = "sheet-card"
 	flags = FPRINT
 	origin_tech = Tc_MATERIALS + "=1"
-	starting_materials = list(MAT_CARDBOARD = CC_PER_SHEET_CARDBOARD)
+	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
 /obj/item/stack/sheet/cardboard/New(var/loc, var/amount=null)
@@ -146,7 +144,7 @@
 		return ..()
 
 /obj/item/stack/sheet/cardboard/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_CARDBOARD, amount * get_material_cc_per_sheet(MAT_CARDBOARD))
+	rec.addAmount(MAT_CARDBOARD, amount)
 	return 1
 
 /*
@@ -167,7 +165,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 		recipes = charcoal_recipes
 		return ..()
 
-
+		
 /obj/item/stack/sheet/bone
 	name = "bone"
 	desc = "Boney.  Probably has some marrow left."
@@ -184,7 +182,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	sheettype = "clockwork"
 	flags = FPRINT
 	origin_tech = Tc_ANOMALY + "=1"
-	starting_materials = list(MAT_BRASS = CC_PER_SHEET_BRASS)
+	starting_materials = list(MAT_BRASS = CC_PER_SHEET_METAL)
 	mat_type = MAT_BRASS
 
 /obj/item/stack/sheet/brass/New(var/loc, var/amount=null)
@@ -198,7 +196,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	icon_state = "sheet-alloy"
 	flags = FPRINT
 	origin_tech = Tc_ANOMALY + "=1"
-	starting_materials = list(MAT_RALLOY = CC_PER_SHEET_RALLOY)
+	starting_materials = list(MAT_RALLOY = CC_PER_SHEET_METAL)
 	mat_type = MAT_RALLOY
 
 /obj/item/stack/sheet/ralloy/New(var/loc, var/amount=null)

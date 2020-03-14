@@ -5,11 +5,12 @@
 	desc = "Use this to escape from those evil Red Shirts."
 	_color = "r"
 	var/activation_emote = "chuckle"
-	var/uses = 5
+	var/uses = 1.0
 
 
 /obj/item/weapon/implant/freedom/New()
 	src.activation_emote = pick("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
+	src.uses = rand(1, 5)
 	..()
 	return
 

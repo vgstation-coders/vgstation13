@@ -15,17 +15,10 @@
 	if(is_type_in_list(I, finishing_requirements))
 		to_chat(user, "<span class = 'notice'>You begin to attach \the [I] to \the [src].</span>")
 		if(do_after(user, src, 4 SECONDS))
-			if(istype(I, /obj/item/stack))
-				var/obj/item/stack/S = I
-				if(!S.use(1))
-					return
-			else
-				if(!user.drop_item(I))
-					return
+			user.drop_item(I)
 			finishing_requirements.Remove(I.type)
 			gen_quality(quality-I.quality, quality, I.material_type)
-			if(!istype(I, /obj/item/stack))
-				qdel(I) //stacks handle themselves if they run out
+			qdel(I)
 
 			if(!finishing_requirements.len) //We're done
 				user.drop_item(src)
@@ -94,9 +87,3 @@
 	name = "sabre blade"
 	icon_state = "large_curved_blade"
 	result = /obj/item/weapon/sword/sabre
-
-/obj/item/item_head/tower_shield
-	name = "unstrapped tower shield"
-	icon_state = "large_plate"
-	finishing_requirements = list(/obj/item/stack/leather_strip)
-	result = /obj/item/weapon/shield/riot/tower

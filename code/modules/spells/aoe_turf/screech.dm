@@ -63,7 +63,7 @@
 		C.Stun(8)
 		C.Jitter(150)
 	for(var/obj/structure/window/W in view(4))
-		W.shatter()
+		W.Destroy(brokenup = 1)
 
 	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 

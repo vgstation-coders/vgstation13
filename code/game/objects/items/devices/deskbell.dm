@@ -29,12 +29,12 @@
 	var/wrenching = 0
 
 /obj/item/device/deskbell/attackby(obj/item/W, mob/user)
-	if(W.is_wrench(user) && isturf(src.loc))
+	if(iswrench(W) && isturf(src.loc))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
 			)
-		W.playtoolsound(loc, 50)
+		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 
 		if(wrenching)
 			return
@@ -52,7 +52,7 @@
 
 		return
 
-	if(W.is_screwdriver(user))
+	if(istype(W,/obj/item/weapon/screwdriver))
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
@@ -79,7 +79,6 @@
 
 /obj/item/device/deskbell/attack_hand(var/mob/user)
 	if(anchored)
-		disease_contact(user,HANDS)
 		ring()
 	add_fingerprint(user)
 	return
@@ -99,9 +98,7 @@
 				to_chat(user, "You must undo the securing bolts before you can pick it up.")
 				return
 			if( !user.get_active_hand() )		//if active hand is empty
-				if(istype(loc, /obj/item/weapon/storage))
-					var/obj/item/weapon/storage/bag = loc
-					bag.remove_from_storage(src)
+				src.forceMove(user)
 				user.put_in_hands(src)
 				user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You grab [src] from the floor!</span>")
 
@@ -132,12 +129,12 @@
 			radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/device/deskbell/signaler/attackby(obj/item/W, mob/user)
-	if(W.is_wrench(user))
+	if(iswrench(W))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
 			)
-		W.playtoolsound(loc, 50)
+		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 
 		if(wrenching)
 			return
@@ -154,7 +151,7 @@
 
 		return
 
-	if(W.is_screwdriver(user))
+	if(istype(W,/obj/item/weapon/screwdriver))
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
@@ -279,9 +276,9 @@
 	else
 		switch(build_step)
 			if(0)
-				if(W.is_wrench(user))
+				if(iswrench(W))
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
-					W.playtoolsound(src, 50)
+					playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 					M.amount = 2
@@ -312,7 +309,7 @@
 					build_step--
 					update_icon()
 					return
-				if(W.is_screwdriver(user))
+				if(istype(W,/obj/item/weapon/screwdriver))
 					var/obj/item/device/deskbell/D = null
 					if(has_signaler)
 						D = new /obj/item/device/deskbell/signaler(get_turf(src))

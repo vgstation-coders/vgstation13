@@ -52,19 +52,6 @@
 							 "plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
 							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass)
 
-/obj/item/device/material_synth/robot/soviet
-	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
-							"glass" = /obj/item/stack/sheet/glass/glass,
-							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
-							 "plasteel" = /obj/item/stack/sheet/plasteel,
-							 "plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
-							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass,
-							 "silver" = /obj/item/stack/sheet/mineral/silver,
-							 "gold" = /obj/item/stack/sheet/mineral/gold,
-							 "diamond" = /obj/item/stack/sheet/mineral/diamond,
-							 "plasma" = /obj/item/stack/sheet/mineral/plasma,
-							 "uranium" = /obj/item/stack/sheet/mineral/uranium)
-
 /obj/item/device/material_synth/update_icon()
 	icon_state = "mat_synth[mode ? "on" : "off"]"
 
@@ -80,7 +67,7 @@
 			if(initial(active_material.perunit) < 2000)
 				modifier = MAT_COST_RARE
 			var/amount = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize", "Material Synthesizer") as num
-			amount = clamp(round(amount, 1), 0, 50)
+			amount = Clamp(round(amount, 1), 0, 50)
 			if(amount)
 				if(TakeCost(amount, modifier, R))
 					var/obj/item/stack/sheet/inside_sheet = (locate(material_type) in R.module.modules)
@@ -144,13 +131,13 @@
 
 			if (unit_can_produce >= 1)
 				tospawn = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - [unit_can_produce])", "Material Synthesizer") as num
-				tospawn = clamp(round(tospawn), 0, unit_can_produce)
+				tospawn = Clamp(round(tospawn), 0, unit_can_produce)
 
-				if (tospawn >= 1 && TakeCost(tospawn, modifier, user))
+				if (tospawn >= 1)
 					var/obj/item/stack/sheet/spawned_sheet = new material_type(get_turf(src))
 					spawned_sheet.amount = tospawn
 
-
+					TakeCost(tospawn, modifier, user)
 			else
 				to_chat(user, "<span class='warning'>\The [src] matter is not enough to create the selected material!</span>")
 				return
@@ -232,10 +219,8 @@
 	create_material(user, active_material)
 
 /obj/item/device/material_synth/proc/TakeCost(var/spawned, var/modifier, mob/user)
-	if(spawned && matter >= round(spawned*modifier))
+	if(spawned)
 		matter -= round(spawned * modifier)
-		return 1
-	return 0
 
 /obj/item/device/material_synth/robot/TakeCost(var/spawned, var/modifier, mob/user)
 	if(isrobot(user))

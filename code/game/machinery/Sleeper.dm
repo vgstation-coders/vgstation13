@@ -3,7 +3,7 @@
 /////////////////////////////////////////
 
 /obj/machinery/sleeper
-	name = "sleeper"
+	name = "\improper Sleeper"
 	icon = 'icons/obj/cryogenics3.dmi'
 	icon_state = "sleeper_0"
 	density = TRUE
@@ -36,7 +36,6 @@
 	var/auto_eject_after = 1 //Boot the mooch off after waking 'em up
 	var/drag_delay = 20
 	var/cools = 0
-	var/works_in_crit = FALSE //Will it let you inject chemicals into people in critical condition
 
 /obj/machinery/sleeper/New()
 	..()
@@ -55,10 +54,6 @@
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		T += SP.rating
-	if(T >= 12) //Congrats you got T4 components
-		works_in_crit = TRUE
-	else
-		works_in_crit = FALSE
 	switch(T)
 		if(0 to 5)
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", KELOTANE = "Kelotane", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
@@ -138,7 +133,7 @@
 						"<span class='warning'>Sorry pal, safety procedures.</span>", \
 						"<span class='warning'>But it's not bedtime yet!</span>")]")
 					sedativeblock++
-				else if((!works_in_crit && occupant.health < 0) && (href_list["chemical"] != INAPROVALINE))
+				else if(occupant.health < 0 && href_list["chemical"] != INAPROVALINE)
 					to_chat(usr, "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>")
 				else
 					if(!(href_list["chemical"] in available_options)) //href exploitu go home
@@ -245,6 +240,11 @@
 /obj/machinery/sleeper/allow_drop()
 	return FALSE
 
+/obj/machinery/sleeper/process()
+	updateDialog()
+	return
+
+
 /obj/machinery/sleeper/blob_act()
 	if(prob(75))
 		for(var/atom/movable/A as mob|obj in src)
@@ -253,10 +253,10 @@
 		qdel(src)
 	return
 
-/obj/machinery/sleeper/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/sleeper/crowbarDestroy(mob/user)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupied.</span>")
-		return 0
+		return
 	return ..()
 
 /obj/machinery/sleeper/attackby(obj/item/weapon/obj_used, mob/user)
@@ -378,27 +378,22 @@
 			go_out(ejector = user)
 		process()
 
-/obj/machinery/sleeper/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
-	if (O == occupant)
-		occupant = null
-		update_icon()
-
 /obj/machinery/sleeper/proc/go_out(var/exit = loc, var/mob/ejector)
-	var/mob/old_occupant = occupant
 	if(!occupant)
 		return FALSE
 	for(var/atom/movable/x in contents)
 		if(x in component_parts)
 			continue
 		x.forceMove(loc)
-	if(!old_occupant.gcDestroyed)
-		old_occupant.forceMove(exit)
-		old_occupant.reset_view()
-		if(istype(ejector) && ejector != old_occupant)
+	if(!occupant.gcDestroyed)
+		occupant.forceMove(exit)
+		occupant.reset_view()
+		if(istype(ejector) && ejector != occupant)
 			var/obj/structure/bed/roller/B = locate() in exit
 			if(B)
-				B.buckle_mob(old_occupant, ejector)
+				B.buckle_mob(occupant, ejector)
 				ejector.start_pulling(B)
+	occupant = null
 	update_icon()
 	return TRUE
 
@@ -478,21 +473,6 @@
 	updateUsrDialog()
 	return
 
-
-/obj/machinery/sleeper/upgraded
-	name = "advanced sleeper"
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/sleeper,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico
-	)
-
-
-/////////////////////////////////////////
-// MANCROWAVE
-/////////////////////////////////////////
-
 /obj/machinery/sleeper/mancrowave
 	name = "thermal homeostasis regulator"
 	desc = "The new generation 'minicrowave' from Mancrowave Inc. It has the same satisfying ping as the classic."
@@ -510,15 +490,10 @@
 	automatic = TRUE
 	drag_delay = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE | EJECTNOTDEL
-	var/galize = 0
 
 /obj/machinery/sleeper/mancrowave/New()
 	..()
-	if(Holiday == APRIL_FOOLS_DAY)
-		base_icon = "galo"
-		icon_state = "galo_open"
-		galize = 1
-	else if(map.nameShort == "deff")
+	if(map.nameShort == "deff")
 		icon = 'maps/defficiency/medbay.dmi'
 	update_icon()
 
@@ -671,17 +646,7 @@
 						playsound(src, 'sound/effects/pop.ogg', 50, 1)
 						H.my_appearance.h_style = "Popped Hair"
 						H.update_hair()
-				else if(isjusthuman(H) && galize == 1)
+				else if(isjusthuman(H) && Holiday == APRIL_FOOLS_DAY)
 					H.GALize()
 			go_out()
 		update_icon()
-
-/obj/machinery/sleeper/mancrowave/galo
-	name = "tanning bed"
-	desc = "An experimental G4L-0 model thermal homeostasis regulator. Just looking at it makes you feel unusually excited."
-	galize = 1
-
-/obj/machinery/sleeper/mancrowave/galo/New()
-	..()
-	base_icon = "galo"
-	icon_state = "galo_open"

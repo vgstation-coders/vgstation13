@@ -1,5 +1,3 @@
-var/list/infected_cleanables = list()
-
 /obj/effect/decal/cleanable
 	var/list/random_icon_states = list()
 	var/targeted_by = null	//Used so cleanbots can claim a mess.
@@ -18,7 +16,6 @@ var/list/infected_cleanables = list()
 	var/list/absorbs_types = list() // Types to aggregate.
 
 	var/on_wall = 0 //Wall on which this decal is placed on
-	var/image/pathogen
 
 	var/persistence_type = SS_CLEANABLE
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
@@ -70,22 +67,16 @@ var/list/infected_cleanables = list()
 						blood_DNA |= C.blood_DNA.Copy()
 					amount += C.amount
 					returnToPool(C)
-	spawn(1)//cleanables can get infected in many different ways when they spawn so it's much easier to handle the pathogen overlay here after a delay
-		if (virus2 && virus2.len > 0)
-			infected_cleanables += src
-			if (!pathogen)
-				pathogen = image('icons/effects/effects.dmi',src,"pathogen_blood")
-				pathogen.plane = HUD_PLANE
-				pathogen.layer = UNDER_HUD_LAYER
-				pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
-			for (var/mob/L in science_goggles_wearers)
-				if (L.client)
-					L.client.images |= pathogen
 
 /obj/effect/decal/cleanable/initialize()
 	..()
 	if(persistence_type)
 		SSpersistence_map.track(src, persistence_type)
+
+/obj/effect/decal/cleanable/Destroy()
+	if(persistence_type)
+		SSpersistence_map.forget(src, persistence_type)
+	..()
 
 /obj/effect/decal/cleanable/getPersistenceAge()
 	return age
@@ -99,20 +90,12 @@ var/list/infected_cleanables = list()
 	if(persistent_type_replacement)
 		.["type"] = persistent_type_replacement
 
-
 /obj/effect/decal/cleanable/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O,/obj/item/weapon/mop))
 		return ..()
 	return 0 //No more "X HITS THE BLOOD WITH AN RCD"
 
 /obj/effect/decal/cleanable/Destroy()
-	infected_cleanables -= src
-	if (pathogen)
-		for (var/mob/L in science_goggles_wearers)
-			if (L.client)
-				L.client.images -= pathogen
-		pathogen = null
-
 	blood_list -= src
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
@@ -121,8 +104,6 @@ var/list/infected_cleanables = list()
 	if(counts_as_blood)
 		bloodspill_remove()
 
-	if(persistence_type)
-		SSpersistence_map.forget(src, persistence_type)
 	..()
 
 /obj/effect/decal/cleanable/proc/dry(var/drying_age)
@@ -163,6 +144,7 @@ var/list/infected_cleanables = list()
 //		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
 //
 /obj/effect/decal/cleanable/resetVariables()
+	Destroy()
 	..("viruses","virus2", "blood_DNA", "random_icon_states", args)
 	viruses = list()
 	virus2 = list()

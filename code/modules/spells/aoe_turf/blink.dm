@@ -2,7 +2,6 @@
 	name = "Blink"
 	desc = "This spell randomly teleports you a short distance."
 	user_type = USER_TYPE_WIZARD
-	specialization = SSDEFENSIVE
 	abbreviation = "BL"
 
 	school = "abjuration"

@@ -74,23 +74,11 @@ mineral/silver
 	spread_chance = 10
 	ore = /obj/item/stack/ore/silver
 
-mineral/electrum
-	name = "Electrum"
-	result_amount = 5
-	spread_chance = 10
-	ore = /obj/item/stack/ore/electrum
-
 mineral/plasma
 	name = "Plasma"
 	result_amount = 5
 	spread_chance = 25
 	ore = /obj/item/stack/ore/plasma
-
-mineral/nanotrasite
-	name = "Nanotrasite"
-	result_amount = 5
-	spread_chance = 10
-	ore = /obj/item/stack/ore/nanotrasite
 
 mineral/clown
 	display_name = "Bananium"

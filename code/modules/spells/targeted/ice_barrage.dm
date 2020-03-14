@@ -5,7 +5,7 @@
 
 	school = "abjuration"
 	charge_max = 300
-	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
+	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
 	range = 7
 	max_targets = 1
 

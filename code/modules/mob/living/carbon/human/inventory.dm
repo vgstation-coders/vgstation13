@@ -91,7 +91,7 @@
 		items = get_clothing_items()
 	items -= list(gloves,shoes,w_uniform,glasses,ears) // now that these can hide stuff they need to be excluded
 	if(!hidden_flags)
-		return 0
+		return
 	var/ignore_slot
 	for(var/obj/item/equipped in items)
 		ignore_slot = (equipped == wear_mask) ? MOUTH : 0
@@ -99,7 +99,6 @@
 			continue
 		else if(is_slot_hidden(equipped.body_parts_covered,hidden_flags,ignore_slot))
 			return 1
-	return 0
 
 /mob/living/carbon/human/proc/equip_in_one_of_slots(obj/item/W, list/slots, act_on_fail = 1, put_in_hand_if_fail = 0)
 	for (var/slot in slots)
@@ -134,7 +133,7 @@
 		if(slot_wear_mask)
 			return wear_mask
 		if(slot_handcuffed)
-			return handcuffed || mutual_handcuffs
+			return handcuffed
 		if(slot_legcuffed)
 			return legcuffed
 		if(slot_belt)
@@ -256,7 +255,7 @@
 			u_equip(l_store, 1)
 		if (wear_id)
 			u_equip(wear_id, 1)
-		if (belt && !isbelt(belt))
+		if (belt)
 			u_equip(belt, 1)
 		w_uniform = null
 		success = 1
@@ -333,13 +332,6 @@
 		success = 1
 		slot = slot_handcuffed
 		update_inv_handcuffed()
-	else if (W == mutual_handcuffs)
-		if(mutual_handcuffs.on_restraint_removal(src)) //If this returns 1, then the unquipping action was interrupted
-			return 0
-		mutual_handcuffs = null
-		success = 1
-		slot = slot_handcuffed
-		update_inv_mutual_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1
@@ -436,13 +428,8 @@
 			src.wear_mask = W
 			update_inv_wear_mask(redraw_mob)
 		if(slot_handcuffed)
-			var/obj/item/weapon/handcuffs/cuffs = W
-			if (istype(cuffs) && cuffs.mutual_handcuffed_mobs.len) //if those are regular cuffs, and there are mobs cuffed to each other, do the mutual handcuff logic
-				src.mutual_handcuffs = cuffs
-				update_inv_mutual_handcuffed(redraw_mob)
-			else
-				src.handcuffed = cuffs
-				update_inv_handcuffed(redraw_mob)
+			src.handcuffed = W
+			update_inv_handcuffed(redraw_mob)
 		if(slot_legcuffed)
 			src.legcuffed = W
 			update_inv_legcuffed(redraw_mob)

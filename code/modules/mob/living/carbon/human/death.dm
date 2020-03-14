@@ -1,17 +1,10 @@
 /mob/living/carbon/human/gib()
-	if(species)
-		species.gib(src)
-		return
-	
 	death(1)
 	monkeyizing = 1
 	canmove = 0
 	icon = null
 	invisibility = 101
-	default_gib()
 
-//This will get called often at first until custom gibbing events get made up for each species.
-/mob/living/carbon/human/proc/default_gib()
 	for(var/datum/organ/external/E in src.organs)
 		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
 			continue
@@ -25,9 +18,8 @@
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
-	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
-	qdel(src)	
-
+	hgibs(loc, viruses, dna, species.flesh_color, species.blood_color, gib_radius)
+	qdel(src)
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
 	death(1)
@@ -53,13 +45,6 @@
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
-	infected_contact_mobs -= src
-	if (pathogen)
-		for (var/mob/L in science_goggles_wearers)
-			if (L.client)
-				L.client.images -= pathogen
-		pathogen = null
-
 	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
 		var/turf/T = get_turf(src)
 		if (T)

@@ -8,7 +8,6 @@
  *		Butt
  *		Tinfoil Hat
  *		Celtic Crown
- *		Energy Dome
  */
 
 /*
@@ -115,7 +114,7 @@
 	desc = "Perfect for winter in Siberia, da?"
 	icon_state = "ushanka"
 	item_state = "ushanka"
-	flags = HIDEHEADHAIR
+	flags = HIDEHAIRCOMPLETELY
 	body_parts_covered = EARS|HEAD
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 
@@ -137,15 +136,6 @@
 	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
 	icon_state = "ushankared"
 	item_state = "ushankared"
-	armor = list(melee = 30, bullet = 15, laser = 25, energy = 10, bomb = 20, bio = 0, rad = 0)
-
-/obj/item/clothing/head/ushanka/hos
-	name = "head of security ushanka"
-	desc = "The armored ushanka of the head of security. You cannot bribe an officer of Nanotrasen."
-	icon_state = "ushankablack"
-	item_state = "ushankablack"
-	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
-
 /*
  * Pumpkin head
  */
@@ -182,17 +172,15 @@
 	desc = "A pair of kitty ears. Meow!"
 	icon_state = "kitty"
 	flags = FPRINT
-	var/haircolored = TRUE
-	var/cringe = FALSE
-	var/anime = FALSE
+	var/haircolored = 1
 	siemens_coefficient = 1.5
 
-/obj/item/clothing/head/kitty/affect_speech(var/datum/speech/speech, var/mob/living/L)
-	if(L.is_wearing_item(src, slot_head))
-		if(cringe || Holiday == APRIL_FOOLS_DAY)
-			speech.message = tumblrspeech(speech.message)
-		if(anime || Holiday == APRIL_FOOLS_DAY)
-			speech.message = nekospeech(speech.message)
+/obj/item/clothing/head/kitty/cursed
+	canremove = 0
+
+/obj/item/clothing/head/kitty/collectable
+	desc = "A pair of black kitty ears. Meow!"
+	haircolored = 0
 
 /obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
 	if(!istype(user) || !haircolored)
@@ -202,18 +190,6 @@
 
 	var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
 	wear_override.Blend(earbit, ICON_OVERLAY)
-
-/obj/item/clothing/head/kitty/collectable
-	desc = "A pair of black kitty ears. Meow!"
-	haircolored = FALSE
-
-/obj/item/clothing/head/kitty/anime
-	desc = "A pair of nekomimi. Nya!"
-	anime = TRUE
-
-/obj/item/clothing/head/kitty/anime/cursed
-	canremove = FALSE
-	cringe = TRUE
 
 /obj/item/clothing/head/butt
 	name = "butt"
@@ -242,7 +218,6 @@
 	icon_state = "foilhat"
 	item_state = "paper"
 	siemens_coefficient = 2
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/celtic
 	name = "\improper Celtic crown"
@@ -275,9 +250,3 @@
 	if(wearer.get_item_by_slot(slot_head) == src)
 		if(prob(5))
 			wearer.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))
-
-/obj/item/clothing/head/energy_dome
-	name = "energy dome"
-	desc = "According to the manufacturer it was designed according to ancient ziggurat mound proportions used in votive worship. Like the mounds it collects energy and recirculates it. In this case the Dome collects energy that escapes from the crown of the human head and pushes it back into the medulla oblongata for increased mental energy."
-	icon_state = "energy_dome"
-	item_state = "energy_dome"

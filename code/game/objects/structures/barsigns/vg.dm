@@ -83,13 +83,3 @@
 	icon = "progressive"
 	desc = "Whatever that means."
 	pixel_y = -64
-
-/datum/barsign/vg/va11halla
-	name = "VA-11 HALL-A"
-	icon = "va11halla"
-	desc = "Not as dangerous as N1-RV Ann-A."
-
-/datum/barsign/squatopia
-	name = "Squatopia"
-	icon = "squatopia"
-	desc = "The crystal belonged to my father. He was murdered."

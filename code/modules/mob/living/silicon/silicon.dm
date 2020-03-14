@@ -6,7 +6,6 @@
 
 	var/flashed = 0
 	var/syndicate = 0
-	var/cult_permitted = 0 //For use in some special items to allow silicons to be converted
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
 	var/list/alarms_to_show = list()
 	var/list/alarms_to_clear = list()
@@ -24,8 +23,6 @@
 	var/list/alarm_types_clear = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 
 	var/datum/state_laws_ui/state_laws_ui = new() //holds the UI state for the State Laws verb. See: state_laws.dm
-
-	var/stored_freqs = 0
 
 /mob/living/silicon/hasFullAccess()
 	return 1

@@ -5,9 +5,6 @@
 /obj/item/weapon/cell/get_cell()
 	return src //No John, you're the cell.
 
-/obj/item/weapon/cell/proc/get_charge()
-	return charge
-
 /obj/item/weapon/cell/New()
 	..()
 	charge = maxcharge

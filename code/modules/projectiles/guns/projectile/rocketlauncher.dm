@@ -9,7 +9,7 @@
 	starting_materials = list(MAT_IRON = 5000)
 	w_type = RECYK_METAL
 	force = 10
-	recoil = 1 //The backblast isn't just decorative you know
+	recoil = 5
 	throw_speed = 4
 	throw_range = 3
 	fire_delay = 5
@@ -65,7 +65,7 @@
 	starting_materials = list(MAT_IRON = 50000, MAT_GLASS = 50000, MAT_GOLD = 6000)
 	w_type = RECYK_METAL
 	force = 10
-	recoil = 1
+	recoil = 5
 	throw_speed = 4
 	throw_range = 3
 	fire_delay = 5
@@ -106,7 +106,7 @@
 	origin_tech = null
 	fire_sound = 'sound/weapons/rocket.ogg'
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg/nikita"
-	var/obj/item/projectile/rocket/nikita/fired = null
+	var/obj/item/projectile/nikita/fired = null
 	var/emagged = 0
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/update_icon()
@@ -124,7 +124,7 @@
 	else
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
 		spawn(10) //RUN YOU IDIOT, RUN
-			explosion(src.loc, 1, 3, 5, 8) //Using the actual rocket damage, instead of the very old, super nerfed value
+			explosion(src.loc, -1, 1, 4, 8)
 			return(SUICIDE_ACT_BRUTELOSS)
 	return
 
@@ -148,7 +148,7 @@
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "nikita"
 	caliber = GUIDEDROCKET
-	projectile_type = "/obj/item/projectile/rocket/nikita"
+	projectile_type = "/obj/item/projectile/nikita"
 
 /obj/item/ammo_casing/rocket_rpg/nikita/New()
 	..()

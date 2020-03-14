@@ -5,12 +5,11 @@
 	required_pref = WIZARD
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
+	refund_value = BASE_SOLO_REFUND * 2
 	greets = list(GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND)
 
-	stat_datum_type = /datum/stat/role/wizard
-
 /datum/role/wizard/ForgeObjectives()
-	if(!antag.current.client.prefs.antag_objectives)
+	if(!SOLO_ANTAG_OBJECTIVES)
 		AppendObjective(/datum/objective/freeform/wizard)
 		return
 	switch(rand(1,100))

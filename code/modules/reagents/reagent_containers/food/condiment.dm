@@ -75,6 +75,10 @@
 		return 1
 	return 0
 
+/obj/item/weapon/reagent_containers/food/condiment/attackby(obj/item/I as obj, mob/user as mob) //We already have an attackby for weapons, but sure, whatever
+
+	return
+
 /obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag)
 	if(!flag || ismob(target))
 		return 0
@@ -198,10 +202,6 @@
 				icon_state = CINNAMON
 			if(GRAVY)
 				icon_state = GRAVY
-			if(COCO)
-				name = "cocoa powder"
-				desc = "A vital component for making chocolate."
-				icon_state = COCO
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."

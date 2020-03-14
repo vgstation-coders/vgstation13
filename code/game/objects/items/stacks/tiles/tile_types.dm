@@ -75,13 +75,10 @@
 	material = "wood"
 
 /obj/item/stack/tile/wood/proc/build(turf/S as turf)
-	if(S.air)
-		var/datum/gas_mixture/GM = S.air
-		if(GM.pressure > HALF_ATM)
-			S.ChangeTurf(/turf/simulated/floor/plating/deck)
-			return
-	S.ChangeTurf(/turf/simulated/floor/plating/deck/airless)
-
+	if(istype(S,/turf/unsimulated/floor/asteroid))
+		S.ChangeTurf(/turf/simulated/floor/plating/deck/airless)
+	else
+		S.ChangeTurf(/turf/simulated/floor/plating/deck)
 
 /obj/item/stack/tile/wood/afterattack(atom/target, mob/user, adjacent, params)
 	if(adjacent)
@@ -102,9 +99,9 @@
 					qdel(L)
 
 /obj/item/stack/tile/wood/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(W.is_wrench(user))
+	if(iswrench(W))
 		if(use(4))
-			W.playtoolsound(src, 50)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			drop_stack(sheet_type, get_turf(user), 1, user)
 		else
 			to_chat(user, "<span class='warning'>You need at least 4 [src]\s to get a wooden plank back!</span>")
@@ -162,7 +159,5 @@ obj/item/stack/tile/slime
 
 /obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
 	if(isslimeperson(L) || isslime(L))
-		current_slowdown *= 5
-	else
-		current_slowdown *= 0.01
-	..()
+		return -1
+	return current_slowdown+5

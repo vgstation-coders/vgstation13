@@ -14,7 +14,7 @@
 		//testing("Cannot monkey-ify [M], type is [M.type].")
 		return
 	var/mob/living/carbon/human/H = M
-	var/mob/living/carbon/monkey/O = H.monkeyize(choose_name = TRUE)
+	var/mob/living/carbon/monkey/O = H.monkeyize()
 	H = null
 	if (connected) // properly put new monkey inside machine
 		var/obj/machinery/dna_scannernew/C = connected
@@ -73,15 +73,12 @@
 		O.viruses += D
 		D.affected_mob = O
 		M.viruses -= D
-	O.virus2 = virus_copylist(M.virus2)
-	if (M.immune_system)
-		M.immune_system.transfer_to(O)
 
 	//for(var/obj/T in M)
 	//	del(T)
 
 	O.forceMove(M.loc)
-	Mo.dropBorers() //safer to just drop these like I originally did
+	Mo.transferBorers(O)
 	if(M.mind)
 		M.mind.transfer_to(O)	//transfer our mind to the human
 

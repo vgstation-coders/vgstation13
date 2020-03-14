@@ -385,6 +385,17 @@ About the new airlock wires panel:
 			user.stunned += 10
 	..(user)
 
+/obj/machinery/door/Bumped(atom/AM)
+	if (panel_open)
+		return
+
+	..(AM)
+
+	return
+
+/obj/machinery/door/airlock/bump_open(mob/living/simple_animal/user as mob)
+	..(user)
+
 /obj/machinery/door/airlock/proc/isElectrified()
 	if(src.secondsElectrified != 0)
 		return 1
@@ -1124,11 +1135,10 @@ About the new airlock wires panel:
 
 
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open
-/obj/machinery/door/airlock/togglePanelOpen(var/obj/item/toggleitem, mob/user)
+/obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(!operating)
 		panel_open = !panel_open
-		toggleitem.playtoolsound(src, 50, TRUE, -6)
-		to_chat(user, "<span class='notice'>You [panel_open?"open":"close"] the panel.</span>")
+		playsound(src, 'sound/items/Screwdriver.ogg', 25, 1, -6)
 		update_icon()
 		return 1
 	return
@@ -1212,7 +1222,7 @@ About the new airlock wires panel:
 		else
 			beingcrowbarred = 0
 		if( beingcrowbarred && (operating == -1 || density && welded && !operating && src.panel_open && (!src.arePowerSystemsOn() || stat & NOPOWER) && !src.locked) )
-			I.playtoolsound(loc, 100)
+			playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
 			if (do_after(user, src, 40))
@@ -1387,7 +1397,7 @@ About the new airlock wires panel:
 	for(var/turf/T in loc)
 		var/obj/structure/window/W = locate(/obj/structure/window) in T
 		if (W)
-			W.shatter()
+			W.Destroy(brokenup = 1)
 
 	..()
 	return

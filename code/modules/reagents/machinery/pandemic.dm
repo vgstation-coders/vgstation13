@@ -1,5 +1,3 @@
-
-/*
 /obj/machinery/computer/pandemic
 	name = "PanD.E.M.I.C 2200"
 	density = 1
@@ -288,4 +286,3 @@
 	else
 		..()
 	return
-*/

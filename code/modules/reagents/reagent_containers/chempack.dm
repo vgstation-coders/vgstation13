@@ -68,8 +68,13 @@
 	..()
 	if(beaker)
 		to_chat(user, "[bicon(beaker)] There is \a [beaker] in \the [src]'s auxiliary chamber.")
+		to_chat(user, "It contains:")
 		var/obj/item/weapon/reagent_containers/glass/B = beaker
-		B.reagents.get_examine(user)
+		if(B.reagents.reagent_list.len)
+			for(var/datum/reagent/R in B.reagents.reagent_list)
+				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+		else
+			to_chat(user, "<span class='info'>Nothing.</span>")
 
 /obj/item/weapon/reagent_containers/chempack/on_reagent_change()
 	update_icon()
@@ -191,7 +196,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 		else
 			return
 
-	if(W.is_wrench(user))
+	if(iswrench(W))
 		if (stage)
 			to_chat(user, "<span class='warning'>You need to secure the maintenance panel before you can access the auxiliary chamber bolts!</span>")
 			return

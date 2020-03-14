@@ -26,7 +26,6 @@
 	ammo_type ="/obj/item/ammo_casing/a50"
 	mag_type = "/obj/item/ammo_storage/magazine/a50"
 	load_method = 2
-	recoil = 3
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -56,7 +55,6 @@
 	ammo_type = "/obj/item/ammo_casing/a75"
 	mag_type = "/obj/item/ammo_storage/magazine/a75"
 	load_method = 2
-	recoil = 4
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -124,7 +122,6 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
-	recoil = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/NTUSP/update_icon()
@@ -142,16 +139,13 @@
 
 
 
-/obj/item/weapon/gun/projectile/glock
+/obj/item/weapon/gun/projectile/sec
 	name = "\improper NT Glock"
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket."
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds."
 	icon = 'icons/obj/biggun.dmi'
-	w_class = W_CLASS_SMALL
-	clowned = CLOWNABLE
 	icon_state = "secglockfancy"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
-	mag_type_restricted = list(/obj/item/ammo_storage/magazine/m380auto/extended)
 	max_shells = 8
 	caliber = list(POINT380  = 1)
 	origin_tech = Tc_COMBAT + "=3"
@@ -159,24 +153,20 @@
 	load_method = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
 
-/obj/item/weapon/gun/projectile/glock/update_icon()
+/obj/item/weapon/gun/projectile/sec/update_icon()
 	..()
-	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
+	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 
-/obj/item/weapon/gun/projectile/glock/fancy
+/obj/item/weapon/gun/projectile/sec/fancy
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds.<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maint crawling!</span>"
 	name = "\improper NT Glock Custom"
 	icon_state = "secgunfancy"
-	clowned = UNCLOWN
 
-/obj/item/weapon/gun/projectile/glock/fancy/New()
-	. = ..()
-	desc += "<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maintenance crawling!</span>"
-
-/obj/item/weapon/gun/projectile/glock/fancy/update_icon()
+/obj/item/weapon/gun/projectile/sec/fancy/update_icon()
 	..()
 	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 
-/obj/item/weapon/gun/projectile/glock/lockbox
+/obj/item/weapon/gun/projectile/sec/lockbox
 	spawn_mag = FALSE
 
 /obj/item/weapon/gun/projectile/luger
@@ -231,7 +221,6 @@
 	ammo_type = "/obj/item/ammo_casing/a357"
 	mag_type = "/obj/item/ammo_storage/magazine/a357"
 	load_method = 2
-	recoil = 3
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/automag/update_icon()

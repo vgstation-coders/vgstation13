@@ -5,9 +5,6 @@
 	var/winner_sum = 0
 	var/deposit_success = 0
 
-/datum/event/money_lotto/can_start()
-	return 20
-
 /datum/event/money_lotto/start()
 	winner_sum = pick(5000, 10000, 50000, 100000, 500000, 1000000, 1500000)
 	if(all_money_accounts.len)

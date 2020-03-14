@@ -3,7 +3,6 @@
 	desc = "A curse that will turn its victim into a miserable clown."
 	abbreviation = "CC"
 	user_type = USER_TYPE_WIZARD
-	specialization = SSOFFENSIVE
 
 	school = "evocation"
 	charge_max = 300

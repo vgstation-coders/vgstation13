@@ -33,6 +33,7 @@
 	name = "floor"
 
 /turf/simulated/floor/vox/wood
+	name = "floor"
 	icon_state = "wood"
 	floor_tile
 
@@ -109,9 +110,9 @@
 		return
 	if(!user)
 		return
-	if(C.is_wrench(user))
+	if(iswrench(C))
 		to_chat(user, "<span class='notice'>Removing rods...</span>")
-		C.playtoolsound(src, 80)
+		playsound(src, 'sound/items/Ratchet.ogg', 80, 1)
 		if(do_after(user, src, 30) && istype(src, /turf/simulated/floor/engine)) // Somehow changing the turf does NOT kill the current running proc.
 			new /obj/item/stack/rods(src, 2)
 			ChangeTurf(/turf/simulated/floor)
@@ -175,12 +176,6 @@
 	oxygen = 0
 	nitrogen = 0.001
 	temperature = TCMB
-
-/turf/simulated/floor/engine/acoustic
-	name = "acoustic panel"
-	desc = "A special floor designed to muffle sound."
-	icon_state = "acoustic"
-	volume_mult = 0.1
 
 /turf/simulated/floor/plating
 	name = "plating"
@@ -366,6 +361,28 @@
 	name = "Iron Sand"
 	icon_state = "ironsand[rand(1,15)]"
 
+//snow moved to seperate file pending testing
+/*
+/turf/simulated/floor/plating/snow
+	name = "snow"
+	icon = 'icons/turf/snow.dmi'
+	icon_state = "snow"
+	gender = PLURAL
+
+/turf/simulated/floor/plating/snow/concrete
+	name = "concrete"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "concrete"
+
+/turf/simulated/floor/plating/snow/cold
+	temperature = 273
+/turf/simulated/floor/plating/snow/ex_act(severity)
+	return
+
+/turf/simulated/floor/plating/snow/ice
+	name = "ice"
+	icon_state = "ice"
+*/
 /turf/simulated/floor/plating/airless/damaged
 	icon_state = "platingdmg1"
 
@@ -380,22 +397,6 @@
 		icon_state = "panelscorched"
 
 	. = ..()
-
-//Server rooms, supercooled nitrogen atmosphere
-/turf/simulated/floor/server
-	icon_state = "dark"
-	oxygen = 0
-	temperature = 90
-	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD
-
-/turf/simulated/floor/server/bluegrid
-	icon_state = "bcircuit"
-
-/turf/simulated/floor/server/one_atmosphere
-	nitrogen = (ONE_ATMOSPHERE*CELL_VOLUME/(90*R_IDEAL_GAS_EQUATION))
-
-/turf/simulated/floor/server/one_atmosphere/bluegrid
-	icon_state = "bcircuit"
 
 // VOX SHUTTLE SHIT
 /turf/simulated/shuttle/floor/vox

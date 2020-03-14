@@ -33,8 +33,6 @@ default behaviour is:
 
 	strength += (M_HULK in src.mutations)
 	strength += (M_STRONG in src.mutations)
-	if(reagents)
-		strength += (reagents.get_sportiness() >= 5)
 
 	. = strength
 

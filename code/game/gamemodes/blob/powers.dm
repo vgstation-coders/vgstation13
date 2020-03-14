@@ -25,8 +25,7 @@
 	if(blob_nodes.len)
 		var/list/nodes = list()
 		for(var/i = 1; i <= blob_nodes.len; i++)
-			var/obj/effect/blob/node/B = blob_nodes[i]
-			nodes["Blob Node #[i] ([get_area_name(B)])"] = B
+			nodes["Blob Node #[i]"] = blob_nodes[i]
 		var/node_name = input(src, "Choose a node to jump to.", "Node Jump") in nodes
 		var/obj/effect/blob/node/chosen_node = nodes[node_name]
 		if(chosen_node)
@@ -63,13 +62,9 @@
 
 
 	B.change_to(/obj/effect/blob/shield)
-
-	if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
-		var/datum/faction/blob_conglomerate/BC = mind.faction
-		if(istype(BC.stat_datum, /datum/stat/faction/blob))
-			var/datum/stat/faction/blob/BS = BC.stat_datum
-			BS.built_structures.shields++
 	return
+
+
 
 /mob/camera/blob/verb/create_resource()
 	set category = "Blob"
@@ -106,11 +101,6 @@
 		R.overmind = src
 		special_blobs += R
 		update_specialblobs()
-		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
-			var/datum/faction/blob_conglomerate/BC = mind.faction
-			if(istype(BC.stat_datum, /datum/stat/faction/blob))
-				var/datum/stat/faction/blob/BS = BC.stat_datum
-				BS.built_structures.resgens++
 	return
 
 /mob/camera/blob/proc/create_core()
@@ -146,12 +136,6 @@
 
 
 	B.change_to(/obj/effect/blob/core, src, TRUE)
-
-	if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
-		var/datum/faction/blob_conglomerate/BC = mind.faction
-		if(istype(BC.stat_datum, /datum/stat/faction/blob))
-			var/datum/stat/faction/blob/BS = BC.stat_datum
-			BS.built_structures.cores++
 
 	return
 
@@ -191,11 +175,6 @@
 		special_blobs += N
 		update_specialblobs()
 		max_blob_points += BLOBNDPOINTINC
-		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
-			var/datum/faction/blob_conglomerate/BC = mind.faction
-			if(istype(BC.stat_datum, /datum/stat/faction/blob))
-				var/datum/stat/faction/blob/BS = BC.stat_datum
-				BS.built_structures.nodes++
 	return
 
 
@@ -232,11 +211,6 @@
 		F.overmind = src
 		special_blobs += F
 		update_specialblobs()
-		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
-			var/datum/faction/blob_conglomerate/BC = mind.faction
-			if(istype(BC.stat_datum, /datum/stat/faction/blob))
-				var/datum/stat/faction/blob/BS = BC.stat_datum
-				BS.built_structures.factories++
 	return
 
 

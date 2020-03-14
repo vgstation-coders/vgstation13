@@ -11,7 +11,6 @@ var/global/obj/machinery/account_database/centcomm_account_db
 var/global/datum/money_account/vendor_account
 var/global/list/all_money_accounts = list()
 var/global/datum/money_account/trader_account
-var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command, engineering, medical, security, science, cargo, and civilian
 
 /proc/create_station_account()
 	if(!station_account)
@@ -216,7 +215,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 		if(access_level > 0 || isAdminGhost(user))
 
 			dat += {"<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
-				Combined department and personnel budget is currently [global.allowable_payroll_amount] credits. A total of [global.requested_payroll_amount] credits were requested during the last payroll cycle.<br>"}
+				You may not edit accounts at this terminal, only create and view them.<br>"}
 			if(creating_new_account)
 
 				dat += {"<br>
@@ -238,7 +237,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 						<b>Account number:</b> #[detailed_account_view.account_number]<br>
 						<b>Account holder:</b> [detailed_account_view.owner_name]<br>
 						<b>Account balance:</b> $[detailed_account_view.money]<br>
-						<b>Assigned wage payout:</b> $[detailed_account_view.wage_gain] <a href='?src=\ref[src];choice=edit_wage_payout;account_num=[detailed_account_view.account_number]'>Edit</a><br>
+						<b>Assigned wage payout:</b> $[detailed_account_view.wage_gain]<br>
 						<b>Account status:</b> "}
 					switch(detailed_account_view.disabled)
 						if(0)
@@ -384,14 +383,6 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 			if("toggle_account")
 				if(detailed_account_view)
 					detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
-			if("edit_wage_payout")
-				var/acc_num = text2num(href_list["account_num"])
-				var/datum/money_account/acc = get_money_account_global(acc_num)
-				if(acc)
-					var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
-					if(new_payout >= 0 && new_payout != null)
-						acc.wage_gain = round(new_payout)
-					detailed_account_view = acc
 
 	src.attack_hand(usr)
 

@@ -15,7 +15,6 @@
 	idle_power_usage = 20
 	active_power_usage = 500
 	var/time_coeff = 1
-	var/content_limit = 3
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -34,14 +33,10 @@
 
 /obj/machinery/processor/RefreshParts()
 	var/manipcount = 0
-	var/scancount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
-			scancount += SP.rating
 	time_coeff = 2/manipcount
-	content_limit = 3 * scancount
 
 /datum/food_processor_process
 	var/input
@@ -102,7 +97,7 @@
 	var/C = S.cores
 	if(S.stat != DEAD)
 		S.forceMove(loc)
-		S.visible_message("<span class='notice'>[S] crawls free of the processor!</span>")
+		S.visible_message("<span class='notice'>[C] crawls free of the processor!</span>")
 		return
 	for(var/i = 1, i <= C, i++)
 		new S.coretype(loc)
@@ -112,7 +107,7 @@
 /datum/food_processor_process/mob/monkey
 	input = /mob/living/carbon/monkey
 	output = null
-
+			
 /datum/food_processor_process/mob/monkey/process(loc, what)
 	var/mob/living/carbon/monkey/O = what
 	if (O.client) //grief-proof
@@ -163,7 +158,7 @@
 		for(var/obj/I in target.contents)
 			I.forceMove(loc)
 			I.throw_at(pick(throwzone),rand(2,5),0)
-		hgibs(loc, target.virus2, target.dna, target.species.flesh_color, target.species.blood_color)
+		hgibs(loc, target.viruses, target.dna, target.species.flesh_color, target.species.blood_color)
 		qdel(target)
 		target = null
 		for(var/i = 1;i<=6;i++)
@@ -182,40 +177,39 @@
 		return P
 	return 0
 
-/obj/machinery/processor/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/processor/crowbarDestroy(mob/user)
 	if(contents.len)
 		to_chat(user, "You can't do that while something is loaded in \the [src].")
-		return 0
+		return -1
 	return ..()
 
-/obj/machinery/processor/attackby(var/obj/item/O, var/mob/user)
-	if(..())
-		return 1
-	return add_to(O, user)
-
-/obj/machinery/processor/proc/add_to(var/atom/movable/A, var/mob/user)
+/obj/machinery/processor/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
 		return 1
-	if(src.contents.len >= content_limit) //TODO: several items at once? several different items?
-		to_chat(user, "<span class='warning'>\The [src] is full, it cannot fit anymore.</span>")
-		return 1
-	if (istype(A, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = A
-		A = G.affecting
 
-	var/datum/food_processor_process/P = select_recipe(A)
+	if(..())
+		return 1
+	if(src.contents.len > 0) //TODO: several items at once? several different items?
+		to_chat(user, "<span class='warning'>Something is already in [src]</span>.")
+		return 1
+	var/atom/movable/what = O
+	if (istype(O, /obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = O
+		what = G.affecting
+
+	var/datum/food_processor_process/P = select_recipe(what)
 	if (!P)
 		to_chat(user, "<span class='warning'>This probably won't blend.</span>")
 		return 1
-	user.visible_message("<span class='notice'>[user] puts [A] into [src].</span>", \
-		"You put [A] into the [src].")
-	if(A == user.get_active_hand())
-		user.drop_item(A, src)
+	user.visible_message("<span class='notice'>[user] puts [what] into [src].</span>", \
+		"You put [what] into the [src].")
+	if(what == user.get_active_hand())
+		user.drop_item(what, src)
 	else
-		if(A.loc == user)
-			user.drop_item(A)
-		A.forceMove(src)
+		if(O.loc == user)
+			user.drop_item(O)
+		what.forceMove(src)
 	return
 
 /obj/machinery/processor/attack_hand(var/mob/user as mob)
@@ -230,15 +224,15 @@
 	if(src.contents.len == 0)
 		to_chat(user, "<span class='warning'>[src] is empty!</span>")
 		return 1
-	user.visible_message("<span class='notice'>[user] turns on [src]</span>.", \
-	"You turn on \a [src].", \
-	"You hear [src] start")
 	for(var/O in src.contents)
 		var/datum/food_processor_process/P = select_recipe(O)
 		if (!P)
 			log_admin("DEBUG: [O] in processor is not suitable. How did you put it in?") //-rastaf0
 			continue
 		src.processing = 1
+		user.visible_message("<span class='notice'>[user] turns on [src]</span>.", \
+			"You turn on \a [src].", \
+			"You hear [src] start")
 		playsound(src, 'sound/machines/blender.ogg', 50, 1)
 		use_power(500)
 		sleep(P.time*time_coeff)
@@ -250,10 +244,6 @@
 /obj/machinery/processor/attack_ghost(mob/user as mob)
 	user.examination(src)
 
-/obj/machinery/processor/examine(mob/user)
-	..()
-	to_chat(user, "<span class='notice'>It can fit up to [content_limit] things!")
-
 /obj/machinery/processor/MouseDropTo(atom/movable/O, mob/user)
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O))
 		return
@@ -263,4 +253,4 @@
 		return
 	if(!ishigherbeing(user) && !isrobot(user))
 		return
-	add_to(O,user)
+	attackby(O,user)

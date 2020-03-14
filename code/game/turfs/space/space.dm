@@ -190,7 +190,7 @@
 	return
 
 /turf/space/void
-	name = "\proper the void"
+	name = "the void"
 	icon_state = "void"
 	desc = "The final final frontier."
 	plane = ABOVE_PARALLAX_PLANE
@@ -203,10 +203,3 @@
 
 /turf/space/has_gravity()
 	return 0
-
-/turf/space/densityChanged()
-	..()
-	var/atom/A = has_dense_content()
-	if(A)
-		for(var/obj/effect/beam/B in src)
-			B.Crossed(A)

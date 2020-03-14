@@ -15,6 +15,22 @@
 // each contiguous network of cables & nodes
 ////////////////////////////////////////////
 
+/*
+Powernet procs :
+/datum/powernet/New()
+/datum/powernet/Del()
+/datum/powernet/Destroy()
+/datum/powernet/resetVariables()
+/datum/powernet/proc/remove_cable(var/obj/structure/cable/C)
+/datum/powernet/proc/add_cable(var/obj/structure/cable/C)
+/datum/powernet/proc/remove_machine(var/obj/machinery/power/M)
+/datum/powernet/proc/add_machine(var/obj/machinery/power/M)
+/datum/powernet/proc/reset()
+/datum/powernet/proc/get_electrocute_damage()
+/datum/powernet/proc/set_to_build()
+/obj/structure/cable/proc/rebuild_from()
+*/
+
 /datum/powernet/New()
 	powernets |= src
 
@@ -203,7 +219,7 @@ var/global/powernets_broke = 0
 		else if(istype(AM,/obj/structure/cable))
 			var/obj/structure/cable/C = AM
 			if(!unmarked || !C.powernet)
-				if(C.hasDir(d))
+				if(C.d1 == d || C.d2 == d)
 					. += C
 
 // rebuild all power networks from scratch - only called at world creation or by the admin verb
@@ -290,9 +306,6 @@ var/global/powernets_broke = 0
 // no animations will be performed by this proc.
 /proc/electrocute_mob(mob/living/M, power_source, obj/source, siemens_coeff = 1.0)
 	if(istype(M.loc, /obj/mecha))											// feckin mechs are dumb
-		return 0
-
-	if(M_NO_SHOCK in M.mutations)
 		return 0
 
 	if(istype(M, /mob/living/carbon/human))

@@ -105,13 +105,8 @@
 	if(stage <= FACTION_DEFEATED)
 		return
 
-	// -- 1. Did we get objectives in the first place.
-	var/remaining_targets = objective_holder.objectives.len
-	if (!remaining_targets)
-		forgeObjectives()
-		return FALSE
-
 	// -- 2. Are all the heads dead ?
+	var/remaining_targets = objective_holder.objectives.len
 	for(var/datum/objective/objective in objective_holder.GetObjectives())
 		if(objective.IsFulfilled())
 			remaining_targets--
@@ -127,7 +122,7 @@
 			if (isrev(L))
 				living_revs++
 			total_valid_living++
-		var/threshold = 50 //the percentage of living revs at which point the announcement is triggered
+		var/threshold = 40 //the percentage of living revs at which point the announcement is triggered
 		if(living_revs > 0 && total_valid_living > 0)
 			var/revs_percentage = round((living_revs * 100)/total_valid_living)
 			if(revs_percentage >= threshold)

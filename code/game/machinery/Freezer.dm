@@ -54,10 +54,10 @@
 		icon_state = "freezer_0"
 	..()
 
-/obj/machinery/atmospherics/unary/cold_sink/freezer/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/atmospherics/unary/cold_sink/freezer/crowbarDestroy(mob/user)
 	if(on)
 		to_chat(user, "You have to turn off \the [src]!")
-		return FALSE
+		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/togglePanelOpen(var/obj/toggleitem, mob/user)
@@ -66,7 +66,7 @@
 		return
 	return ..()
 
-/obj/machinery/atmospherics/unary/cold_sink/freezer/wrenchAnchor(var/mob/user, var/obj/item/I)
+/obj/machinery/atmospherics/unary/cold_sink/freezer/wrenchAnchor(var/mob/user)
 	if(on)
 		to_chat(user, "You have to turn off \the [src] first!")
 		return FALSE
@@ -228,10 +228,10 @@
 	..()
 	return
 
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/crowbarDestroy(mob/user)
 	if(on)
 		to_chat(user, "You have to turn off \the [src]!")
-		return FALSE
+		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/togglePanelOpen(var/obj/toggleitem, mob/user)
@@ -240,7 +240,7 @@
 		return
 	return ..()
 
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/wrenchAnchor(var/mob/user, var/obj/item/I)
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/wrenchAnchor(var/mob/user)
 	if(on)
 		to_chat(user, "You have to turn off \the [src] first!")
 		return FALSE

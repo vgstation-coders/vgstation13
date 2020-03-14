@@ -894,13 +894,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 			if(I.is_screwdriver(user) && !(stat & BROKEN))
 				user.visible_message("<span class='notice'>[user] screws in the [src]!</span>", "<span class='notice'>You screw in the [src]</span>")
-				I.playtoolsound(src, 100)
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				buildstage = 1
 
 		if(1)
 			if(I.is_screwdriver(user) && !(stat & BROKEN))
 				user.visible_message("<span class='notice'>[user] unscrews the [src]!</span>", "<span class='notice'>You unscrew the [src]</span>")
-				I.playtoolsound(src, 100)
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				buildstage = 0
 				update_icon()
 				return
@@ -944,6 +944,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				else
 					to_chat(user, "<span class='notice'>This does nothing.</span>")
 	update_icon()
+
+/obj/machinery/newscaster/attack_ai(mob/user as mob)
+	add_hiddenprint(user)
+	return attack_hand(user) //or maybe it'll have some special functions? No idea.
+
 
 /obj/machinery/newscaster/attack_paw(mob/user as mob)
 	to_chat(user, "<span class='notice'>The newscaster controls are far too complicated for your tiny brain!</span>")

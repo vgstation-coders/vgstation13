@@ -70,7 +70,7 @@
 
 
 /obj/machinery/atmospherics/unary/portables_connector/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!W.is_wrench(user))
+	if (!iswrench(W))
 		return ..()
 	if (connected_device)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], dettach [connected_device] first.</span>")

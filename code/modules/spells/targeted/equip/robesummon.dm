@@ -8,7 +8,6 @@
 	desc = "A spell which will summon you a new set of robes."
 	abbreviation = "RS"
 	user_type = USER_TYPE_WIZARD
-	specialization = SSUTILITY
 
 	school = "evocation"
 	charge_max = 300

@@ -177,11 +177,11 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 // Called when wires cut/mended.
 /datum/wires/proc/UpdateCut(var/index, var/mended, mob/user)
-	playsound(holder, 'sound/items/wirecutter.ogg', 25, 1, -6)
+	return
 
 // Called when wire pulsed. Add code here.
 /datum/wires/proc/UpdatePulsed(var/index, mob/user)
-	playsound(holder, 'sound/machines/airlock_beep.ogg', 25, 1, -6)
+	return
 
 /datum/wires/proc/CanUse(var/mob/L)
 	if(!L.dexterity_check())

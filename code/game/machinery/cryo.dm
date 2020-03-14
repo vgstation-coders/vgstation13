@@ -256,7 +256,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		occupantData["bodyTemperature"] = occupant.bodytemperature
 	data["occupant"] = occupantData;
 
-	data["cellTemperature"] = air_contents.temperature
+	data["cellTemperature"] = round(air_contents.temperature)
 	data["cellTemperatureStatus"] = "good"
 	if(air_contents.temperature > T0C) // if greater than 273.15 kelvin (0 celcius)
 		data["cellTemperatureStatus"] = "bad"
@@ -337,13 +337,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		beaker.forceMove(get_step(loc, SOUTH))
 		beaker = null
 
-/obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user)
 	if(on)
 		to_chat(user, "[src] is on.")
-		return FALSE
+		return
 	if(occupant)
 		to_chat(user, "<span class='warning'>[occupant.name] is inside the [src]!</span>")
-		return FALSE
+		return
 	if(beaker) //special check to avoid destroying this
 		detach()
 	return ..()
@@ -360,10 +360,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			beaker =  G
 			user.visible_message("[user] adds \a [G] to \the [src]!", "You add \a [G] to \the [src]!")
 			investigation_log(I_CHEMS, "was loaded with \a [G] by [key_name(user)], containing [G.reagents.get_reagent_ids(1)]")
-			update_icon()
-
-
-	if(G.is_wrench(user))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
+	if(iswrench(G))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
 		return
 	if(G.is_screwdriver(user))
 		if(occupant || on)
@@ -402,6 +399,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 	if(!src.occupant)
 		overlays += "lid[on]" //if no occupant, just put the lid overlay on, and ignore the rest
+		return
 
 	if(occupant)
 		var/image/pickle = image(occupant.icon, occupant.icon_state)
@@ -466,16 +464,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 									overlays += cryo_health_indicator["critworse"]
 								else //Shouldn't ever happen. I really hope it doesn't ever happen.
 									overlays += cryo_health_indicator["dead"]
-
-					if (beaker == null || beaker.reagents.total_volume == 0)
-						overlays += "nomix"
-
 					sleep(7) //don't want to jiggle violently, just slowly bob
 				running_bob_animation = 0
-
-	if (on && (beaker == null || beaker.reagents.total_volume == 0))
-		overlays += "nomix"
-
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/process_occupant()
 	if(air_contents.total_moles() < 10)
@@ -509,8 +499,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(beaker && !has_cryo_medicine)
 			beaker.reagents.trans_to(occupant, 1, 1)
 			beaker.reagents.reaction(occupant)
-			if (beaker.reagents.total_volume == 0)
-				update_icon() // Update icon so the "no mix" warning starts flashing.
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/modify_occupant_bodytemp()
 	if(!occupant)

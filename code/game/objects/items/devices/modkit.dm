@@ -7,7 +7,6 @@
 	var/list/parts = list()		//how many times can this kit perform a given modification
 	var/list/original = list()	//the starting parts
 	var/list/finished = list()	//the finished products
-	toolsounds = list('sound/items/Screwdriver.ogg')
 
 /obj/item/device/modkit/New()
 	..()
@@ -48,7 +47,7 @@
 	if(!isturf(O.loc))
 		to_chat(user, "<span class='warning'>\The [O] must be safely placed on the ground for modification.</span>")
 		return
-	playtoolsound(user.loc, 100)
+	playsound(user.loc, 'sound/items/Screwdriver.ogg', 100, 1)
 	var/N = new to_type(O.loc)
 	user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] into \the [N].</span>","<span class='warning'>You open \the [src] and modify \the [O] into \the [N].</span>")
 	qdel(O)
@@ -98,30 +97,6 @@
 	parts[2] =	1
 	original[2] = /obj/item/clothing/suit/space/rig/atmos
 	finished[2] = /obj/item/clothing/suit/space/rig/atmos/gold
-
-/obj/item/device/modkit/fatsec_rig
-	name = "gut expansion hardsuit modification kit"
-
-/obj/item/device/modkit/fatsec_rig/New()
-	..()
-	parts = new/list(1)
-	original = new/list(1)
-	finished = new/list(1)
-
-	parts[1] =	1
-	original[1] = /obj/item/clothing/suit/space/rig/security
-	finished[1] = /obj/item/clothing/suit/space/rig/security/fat
-
-/obj/item/device/modkit/syndi_commander
-	name = "syndicate commander hardsuit modification kit"
-	desc = "For showing who's the boss. Apply to hardsuit."
-
-/obj/item/device/modkit/syndi_commander/New()
-	..()
-
-	parts =	list(1) //less shitcode when you only got one part
-	original = list(/obj/item/clothing/suit/space/rig/syndi)
-	finished = list(/obj/item/clothing/suit/space/rig/syndi/commander)
 
 
 /* /vg/ - Not needed
@@ -188,10 +163,6 @@
 	finished[1] = /obj/item/weapon/pickaxe/plasmacutter/accelerator
 
 /obj/item/device/modkit/plasmacutter/attackby(atom/target, mob/user, proximity_flag)
-	if(proximity_flag && parts[1] == 1 && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
-		to_chat(user, "<span class='warning'>\The [src] is already loaded!</span>")
-		return
-
-	else if(proximity_flag && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
+	if(proximity_flag && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
 		parts[1] = 1
 		qdel(target)

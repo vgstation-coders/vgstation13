@@ -51,8 +51,6 @@
  	var/under_turf = /turf/space
  */
 
-	var/turf_speed_multiplier = 1
-
 	var/explosion_block = 0
 
 	//For shuttles - if 1, the turf's underlay will never be changed when moved
@@ -69,8 +67,6 @@
 	var/image/viewblock
 
 	var/junction = 0
-
-	var/volume_mult = 1 //how loud are things on this turf?
 
 /turf/examine(mob/user)
 	..()
@@ -89,17 +85,21 @@
 	for(var/atom/movable/AM as mob|obj in src)
 		spawn( 0 )
 			src.Entered(AM)
-	if(opacity)
-		has_opaque_atom = TRUE
+			return
 
 /turf/ex_act(severity)
+	return 0
+
+
+/turf/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.destroy)
+		src.ex_act(2)
+	..()
 	return 0
 
 /turf/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/bullet/gyro))
 		explosion(src, -1, 0, 2)
-	if(Proj.destroy)
-		src.ex_act(2)
 	..()
 	return 0
 
@@ -187,7 +187,7 @@
 		// if(ticker.mode.name == "nuclear emergency")	return
 		if(A.z > 6)
 			return
-		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE + 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE + 1))
+		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE - 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE - 1))
 
 			var/list/contents_brought = list()
 			contents_brought += recursive_type_check(A)
@@ -199,13 +199,9 @@
 
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
 
-			var/datum/zLevel/ZL = map.zLevels[z]
-			if(ZL.transitionLoops)
-				locked_to_current_z = z
-
-			var/obj/item/weapon/disk/nuclear/nuclear = locate() in contents_brought
-			if(nuclear)
-				qdel(nuclear)
+			for(var/obj/item/weapon/disk/nuclear/nuclear in contents_brought)
+				locked_to_current_z = map.zMainStation
+				break
 
 			//Check if it's a mob pulling an object
 			var/obj/was_pulling = null
@@ -271,14 +267,6 @@
 				if (istype(A,/obj/item/projectile))
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
-
-			INVOKE_EVENT(A.post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
-			for(var/atom/AA in contents_brought)
-				INVOKE_EVENT(AA.post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
-
-	if(A && A.opacity)
-		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
-		reconsider_lights()
 
 /turf/proc/is_plating()
 	return 0
@@ -352,7 +340,6 @@
 	var/old_affecting_lights = affecting_lights
 	var/old_lighting_overlay = lighting_overlay
 	var/old_corners = corners
-	var/old_density = density
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -364,14 +351,14 @@
 		for(var/obj/effect/decal/cleanable/C in src)
 			qdel(C)//enough with footprints floating in space
 
-	//Rebuild turf
-	var/turf/T = src
-	env = T.air //Get the air before the change
 	if(istype(src,/turf/simulated))
+		//Yeah, we're just going to rebuild the whole thing.
+		//Despite this being called a bunch during explosions,
+		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
+		env = S.air //Get the air before the change
 		if(S.zone)
 			S.zone.rebuild()
-
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)
@@ -438,8 +425,6 @@
 
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.
-	if(density != old_density)
-		densityChanged()
 
 /turf/proc/AddDecal(const/image/decal)
 	if(!turfdecals)
@@ -492,7 +477,7 @@
 	holy = 1
 	..()
 	new /obj/effect/overlay/holywaterpuddle(src)
-
+	
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs
 // Used for A-star pathfinding
@@ -688,10 +673,6 @@
 // Return a high number to make the mob move slower.
 // Return a low number to make the mob move superfast.
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
-	for(var/atom/A in src)
-		if(A.slowdown_modifier)
-			base_slowdown *= A.slowdown_modifier
-	base_slowdown *= turf_speed_multiplier
 	return base_slowdown
 
 /turf/proc/has_gravity(mob/M)

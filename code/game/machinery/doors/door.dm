@@ -44,11 +44,7 @@ var/list/all_doors = list()
 
 	// TODO: refactor to best :(
 	var/animation_delay = 10
-	// These two vars control animation delays for changing density when the door opens/closes.
-	// If they are not 0, the density change of a door will happen only after the delay.
-	// Total animation delay is still animation_delay, these just give a "sub section".
-	var/animation_delay_predensity_opening = 0
-	var/animation_delay_predensity_closing = 0
+	var/animation_delay_2 = null
 
 	// turf animation
 	var/atom/movable/overlay/c_animation = null
@@ -73,8 +69,6 @@ var/list/all_doors = list()
 		return FALSE
 	if(operating || !density)
 		return FALSE
-	if(!length(thing.GetAccess()))
-		return FALSE
 	if(!check_access(thing))
 		denied()
 		return FALSE
@@ -82,7 +76,6 @@ var/list/all_doors = list()
 	return TRUE
 
 /obj/machinery/door/Bumped(atom/AM)
-
 	if (ismob(AM))
 		var/mob/M = AM
 
@@ -235,6 +228,8 @@ var/list/all_doors = list()
 	else
 		icon_state = "[prefix]door_closed"
 
+	sleep(animation_delay_2)
+
 
 /obj/machinery/door/proc/open()
 	if(!density)
@@ -251,18 +246,13 @@ var/list/all_doors = list()
 
 	set_opacity(0)
 	door_animate("opening")
-	if (animation_delay_predensity_opening)
-		sleep(animation_delay_predensity_opening)
-	else
-		sleep(animation_delay)
+	sleep(animation_delay)
 	layer = open_layer
-	setDensity(FALSE)
-	update_nearby_tiles()
+	density = 0
 	explosion_resistance = 0
-	if (animation_delay_predensity_opening)
-		sleep(animation_delay - animation_delay_predensity_opening)
 	update_icon()
 	set_opacity(0)
+	update_nearby_tiles()
 	//update_freelook_sight()
 
 	if(operating == 1)
@@ -286,33 +276,24 @@ var/list/all_doors = list()
 	if (makes_noise)
 		playsound(src, soundeffect, soundpitch, 1)
 
-	door_animate("closing")
-
-	if (animation_delay_predensity_closing)
-		sleep(animation_delay_predensity_closing)
-
 	setDensity(TRUE)
-	update_nearby_tiles()
+	door_animate("closing")
+	sleep(animation_delay)
+	update_icon()
 
 	if (!glass)
 		src.set_opacity(1)
-	// Copypasta!!!
-	var/obj/effect/beam/B = locate() in loc
-	if(B)
-		qdel(B)
-
-	if (animation_delay_predensity_closing)
-		sleep(animation_delay - animation_delay_predensity_closing)
-	else
-		sleep(animation_delay)
-
-	update_icon()
+		// Copypasta!!!
+		var/obj/effect/beam/B = locate() in loc
+		if(B)
+			qdel(B)
 
 	// TODO: rework how fire works on doors
 	var/obj/effect/fire/F = locate() in loc
 	if(F)
 		qdel(F)
 
+	update_nearby_tiles()
 	operating = 0
 
 /obj/machinery/door/New()

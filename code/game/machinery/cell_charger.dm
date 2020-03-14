@@ -15,7 +15,6 @@
 	var/transfer_rate_coeff = 1 //What is the quality of the parts that transfer energy (capacitators) ?
 	var/transfer_efficiency_bonus = 0 //What is the efficiency "bonus" (additive to percentage) from the parts used (scanning module) ?
 	var/chargelevel = -1
-	var/has_beeped = FALSE
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EMAGGABLE
 
@@ -86,7 +85,6 @@
 
 			if(user.drop_item(W, src))
 				charging = W
-				has_beeped = FALSE
 				user.visible_message("<span class='notice'>[user] inserts a cell into [src].</span>", "<span class='notice'>You insert a cell into [src].</span>")
 				chargelevel = -1
 		updateicon()
@@ -108,7 +106,7 @@
 			spark(src, 5)
 			spawn(15)
 				explosion(src.loc, -1, 1, 3, adminlog = 0) //Overload
-				qdel(src) //It exploded, rip
+				Destroy(src) //It exploded, rip
 			return
 		usr.put_in_hands(charging)
 		charging.add_fingerprint(user)
@@ -118,7 +116,7 @@
 		chargelevel = -1
 		updateicon()
 
-/obj/machinery/cell_charger/wrenchAnchor(var/mob/user, var/obj/item/I)
+/obj/machinery/cell_charger/wrenchAnchor(var/mob/user)
 	if(charging)
 		to_chat(user, "<span class='warning'>Remove the cell first!</span>")
 		return FALSE
@@ -140,13 +138,12 @@
 	if(!charging || (stat & (BROKEN|NOPOWER)) || !anchored)
 		return
 
-	if(charging.give(transfer_rate*transfer_rate_coeff * (transfer_efficiency+transfer_efficiency_bonus) * (emagged ? 0.25 : 1)))//Inefficiency (Joule effect + other shenanigans)  //Lose most of it if emagged
-		use_power(transfer_rate * transfer_rate_coeff * (emagged ? 10 : 1))  //Drain all the power if emagged
-		if(has_beeped) //It's charging again
-			has_beeped = FALSE
-	if(round(charging.percent() >= 100)&&!has_beeped)
-		playsound(src, 'sound/machines/charge_finish.ogg', 50)
-		has_beeped = TRUE
+	if(emagged) //Did someone fuck with the charger ?
+		use_power(transfer_rate*transfer_rate_coeff*10) //Drain all the power
+		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)*0.25) //Lose most of it
+	else
+		use_power(transfer_rate*transfer_rate_coeff) //Snatch some power
+		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)) //Inefficiency (Joule effect + other shenanigans)
 
 	updateicon()
 

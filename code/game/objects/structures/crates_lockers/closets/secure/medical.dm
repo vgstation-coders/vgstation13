@@ -109,8 +109,7 @@
 			/obj/item/weapon/storage/backpack/medic,
 			/obj/item/weapon/storage/backpack/satchel_med,
 			/obj/item/weapon/storage/backpack/messenger/med),
-		/obj/item/clothing/head/bio_hood/cmo,
-		/obj/item/clothing/suit/bio_suit/cmo,
+		/obj/item/clothing/suit/bio_suit/cmo = 2,
 		/obj/item/clothing/shoes/white,
 	)
 	switch(pick("blue", "green", "purple"))
@@ -161,7 +160,6 @@
 
 /obj/structure/closet/secure_closet/chemical/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/storage/fancy/vials,
 		/obj/item/weapon/storage/box/pillbottles = 2,
 		/obj/item/weapon/book/manual/chemistry_manual,
 		/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer = 2

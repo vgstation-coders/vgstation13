@@ -49,7 +49,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/fire_alert = 0
 	var/oxygen_alert = 0
 	var/toxins_alert = 0
-	var/temperature_alert = 0
 
 	var/show_stat_health = 1	//does the percentage health show in the stat panel for the mob
 
@@ -158,9 +157,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			set_glide_size(DELAY2GLIDESIZE(0.5 SECONDS))
 		Move(dest)
 
-/mob/living/simple_animal/proc/check_environment_susceptibility()
-	return TRUE
-
 /mob/living/simple_animal/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -193,7 +189,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		AdjustKnockdown(-1)
 	if(paralysis)
 		AdjustParalysis(-1)
-	handle_jitteriness()
 
 	//Eyes
 	if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
@@ -212,7 +207,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else if(ear_damage < 25)	//ear damage heals slowly under this threshold.
 		ear_damage = max(ear_damage-0.05, 0)
 
-	remove_confused(1)
+	confused = max(0, confused - 1)
 
 	if(say_mute)
 		say_mute = max(say_mute-1, 0)
@@ -234,102 +229,80 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	handle_automated_speech()
 
-	var/datum/gas_mixture/environment
-	if(loc)
-		environment = loc.return_air()
-		
-	handle_environment(environment)
-	handle_regular_hud_updates()
+	//Atmos
+	if(flags & INVULNERABLE)
+		return 1
+
+	var/atmos_suitable = 1
+
+	var/atom/A = loc
+
+	if(isturf(A))
+		var/turf/T = A
+		var/datum/gas_mixture/Environment = T.return_air()
+
+		if(Environment)
+			if(abs(Environment.temperature - bodytemperature) > 40)
+				bodytemperature += ((Environment.temperature - bodytemperature) / 5)
+
+			if(min_oxy)
+				if(Environment.molar_density(GAS_OXYGEN) < min_oxy / CELL_VOLUME)
+					atmos_suitable = 0
+					oxygen_alert = 1
+				else
+					oxygen_alert = 0
+
+			if(max_oxy)
+				if(Environment.molar_density(GAS_OXYGEN) > max_oxy / CELL_VOLUME)
+					atmos_suitable = 0
+
+			if(min_tox)
+				if(Environment.molar_density(GAS_PLASMA) < min_tox / CELL_VOLUME)
+					atmos_suitable = 0
+
+			if(max_tox)
+				if(Environment.molar_density(GAS_PLASMA) > max_tox / CELL_VOLUME)
+					atmos_suitable = 0
+					toxins_alert = 1
+				else
+					toxins_alert = 0
+
+			if(min_n2)
+				if(Environment.molar_density(GAS_NITROGEN) < min_n2 / CELL_VOLUME)
+					atmos_suitable = 0
+
+			if(max_n2)
+				if(Environment.molar_density(GAS_NITROGEN) > max_n2 / CELL_VOLUME)
+					atmos_suitable = 0
+
+			if(min_co2)
+				if(Environment.molar_density(GAS_CARBON) < min_co2 / CELL_VOLUME)
+					atmos_suitable = 0
+
+			if(max_co2)
+				if(Environment.molar_density(GAS_CARBON) > max_co2 / CELL_VOLUME)
+					atmos_suitable = 0
+
+	//Atmos effect
+	if(bodytemperature < minbodytemp)
+		fire_alert = 2
+		adjustBruteLoss(cold_damage_per_tick)
+	else if(bodytemperature > maxbodytemp)
+		fire_alert = 1
+		adjustBruteLoss(heat_damage_per_tick)
+	else
+		fire_alert = 0
+
+	if(!atmos_suitable)
+		adjustBruteLoss(unsuitable_atoms_damage)
 
 	if(can_breed)
 		make_babies()
 
 	if(reagents)
 		reagents.metabolize(src)
+
 	return 1
-
-/mob/living/simple_animal/handle_regular_hud_updates()
-	if(!..())
-		return FALSE
-
-	if(oxygen_alert)
-		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath)
-	else
-		clear_alert(SCREEN_ALARM_BREATH)
-	if(toxins_alert)
-		throw_alert(SCREEN_ALARM_TOXINS, /obj/abstract/screen/alert/tox)
-	else
-		clear_alert(SCREEN_ALARM_TOXINS)
-	if(fire_alert)
-		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire, fire_alert)
-	else
-		clear_alert(SCREEN_ALARM_FIRE)
-	if(temperature_alert)
-		throw_alert(SCREEN_ALARM_TEMPERATURE, temperature_alert < 0 ? /obj/abstract/screen/alert/carbon/temp/cold : /obj/abstract/screen/alert/carbon/temp/hot, temperature_alert)
-	else
-		clear_alert(SCREEN_ALARM_TEMPERATURE)
-	return TRUE
-
-/mob/living/simple_animal/proc/handle_environment(datum/gas_mixture/environment)
-	toxins_alert = 0
-	if(flags & INVULNERABLE)
-		return
-
-	var/atmos_suitable = 1
-
-	if(environment && check_environment_susceptibility())
-		if(abs(environment.temperature - bodytemperature) > 40)
-			bodytemperature += ((environment.temperature - bodytemperature) / 5)
-
-		if(min_oxy)
-			if(environment.molar_density(GAS_OXYGEN) < min_oxy / CELL_VOLUME)
-				atmos_suitable = 0
-				oxygen_alert = 1
-			else
-				oxygen_alert = 0
-
-		if(max_oxy)
-			if(environment.molar_density(GAS_OXYGEN) > max_oxy / CELL_VOLUME)
-				atmos_suitable = 0
-
-		if(min_tox)
-			if(environment.molar_density(GAS_PLASMA) < min_tox / CELL_VOLUME)
-				atmos_suitable = 0
-
-		if(max_tox)
-			if(environment.molar_density(GAS_PLASMA) > max_tox / CELL_VOLUME)
-				atmos_suitable = 0
-				toxins_alert = 1
-
-		if(min_n2)
-			if(environment.molar_density(GAS_NITROGEN) < min_n2 / CELL_VOLUME)
-				atmos_suitable = 0
-
-		if(max_n2)
-			if(environment.molar_density(GAS_NITROGEN) > max_n2 / CELL_VOLUME)
-				atmos_suitable = 0
-				toxins_alert = 1
-
-		if(min_co2)
-			if(environment.molar_density(GAS_CARBON) < min_co2 / CELL_VOLUME)
-				atmos_suitable = 0
-
-		if(max_co2)
-			if(environment.molar_density(GAS_CARBON) > max_co2 / CELL_VOLUME)
-				atmos_suitable = 0
-				toxins_alert = 1
-
-	if(!atmos_suitable)
-		adjustBruteLoss(unsuitable_atoms_damage)
-
-	if(bodytemperature < minbodytemp)
-		temperature_alert = TEMP_ALARM_COLD_STRONG
-		adjustBruteLoss(cold_damage_per_tick)
-	else if(bodytemperature > maxbodytemp)
-		temperature_alert = TEMP_ALARM_HEAT_STRONG
-		adjustBruteLoss(heat_damage_per_tick)
-	else
-		temperature_alert = 0
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(icon_gib)
@@ -357,7 +330,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			return "[emote], [text]"
 	return "says, [text]";
 
-/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null, var/ignore_status = FALSE)
+/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null)
 	if(timestopped)
 		return //under effects of time magick
 	if(stat)
@@ -391,7 +364,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 			switch(mode)
 				if(1)
-					say(pick(speak)) // The sound is in say_quote
+					say(pick(speak))
+					if(emote_sound.len)
+						playsound(loc, "[pick(emote_sound)]", 80, 1)
 				if(2)
 					emote("me", MESSAGE_HEAR, "[pick(emote_hear)].")
 					if(emote_sound.len)
@@ -405,6 +380,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return
+	// FUCK mice. - N3X
+	if(ismouse(src) && (Proj.stun+Proj.weaken+Proj.paralyze+Proj.agony)>5)
+		var/mob/living/simple_animal/mouse/M=src
+		to_chat(M, "<span class='warning'>What would probably not kill a human completely overwhelms your tiny body.</span>")
+		M.splat()
+		return 0
 	adjustBruteLoss(Proj.damage)
 	Proj.on_hit(src, 0)
 	return 0
@@ -544,6 +525,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		emote("deathgasp", message = TRUE)
 
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
+	living_mob_list -= src
+	dead_mob_list += src
 	stat = DEAD
 	if(icon_dying && !gibbed)
 		do_flick(src, icon_dying, icon_dying_time)
@@ -557,6 +540,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 		for(var/butchering_type in L)
 			src.butchering_drops += new butchering_type
+
+	verbs += /mob/living/proc/butcher
 
 	..(gibbed)
 
@@ -587,7 +572,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(purge)
 		damage = damage * 2
 
-	health = clamp(health - damage, 0, maxHealth)
+	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		death()
 
@@ -602,7 +587,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		damage = damage * 2
 	if(purge)
 		damage = damage * 2
-	health = clamp(health - damage, 0, maxHealth)
+	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		death()
 

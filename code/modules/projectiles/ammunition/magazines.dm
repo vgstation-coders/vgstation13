@@ -86,9 +86,6 @@
 /obj/item/ammo_storage/magazine/a12mm/empty
 	starting_ammo = 0
 
-/obj/item/ammo_storage/magazine/a12mm/ops/empty
-	starting_ammo = 0
-
 /obj/item/ammo_storage/magazine/smg9mm
 	name = "magazine (9mm)"
 	icon_state = "smg9mm"
@@ -117,7 +114,7 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a50
-	name = "magazine (.50AE)"
+	name = "magazine (.50)"
 	icon_state = "50ae"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a50"
@@ -129,7 +126,7 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a75
-	name = "magazine (.75 gyrojet)"
+	name = "magazine (.75)"
 	icon_state = "75"
 	ammo_type = "/obj/item/ammo_casing/a75"
 	multiple_sprites = 1
@@ -140,7 +137,7 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/a762
-	name = "magazine (7.62x51mm)"
+	name = "magazine (a762)"
 	icon_state = "a762"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a762"
@@ -218,24 +215,11 @@
 /obj/item/ammo_storage/magazine/m380auto/practice/empty
 	starting_ammo = 0
 
-/obj/item/ammo_storage/magazine/m380auto/extended
-	name = "magazine (.380AUTO extended) "
-	desc = "A magazine designed for .380AUTO vectors. Holds 20 rounds. This one doesn't fit into glocks."
-	icon_state = "m380AUTO-E"
-	max_ammo = 20
-	multiple_sprites = 1
-	sprite_modulo = 2
-
-/obj/item/ammo_storage/magazine/m380auto/extended/empty
-	starting_ammo = 0
-
 /obj/item/ammo_storage/magazine/uzi45 //Uzi mag
 	name = "magazine (.45)"
 	icon_state = "uzi45"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
-	exact = 0
-	caliber = POINT45
 	max_ammo = 16
 	multiple_sprites = 1
 	sprite_modulo = 4

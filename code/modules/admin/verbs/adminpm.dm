@@ -106,12 +106,8 @@
 				recieve_color = "maroon"
 			else
 				recieve_color = "red"
-			if(holder.fakekey)
-				send_pm_type = "Admin "
-				recieve_pm_type = "Admin"
-			else
-				send_pm_type = holder.rank + " "
-				recieve_pm_type = holder.rank
+			send_pm_type = holder.rank + " "
+			recieve_pm_type = holder.rank
 
 	else if(!C.holder)
 		to_chat(src, "<span class='red'>Error: Admin-PM: Non-admin to non-admin PM communication is forbidden.</span>")
@@ -136,16 +132,21 @@
 				return
 
 	recieve_message = "\[[time_stamp()]] <font color='[recieve_color]'>[recieve_pm_type] PM from-<b>[key_name(src, C, C.holder ? 1 : 0)]</b>: [strict_ascii(msg)]</font>"
-	C.output_to_special_tab(recieve_message, force_focus = TRUE)
-
-	output_to_special_tab("<span class='notice'>[send_pm_type]PM to-<b>[key_name(C, src, holder ? 1 : 0)]</b>: [msg]</span>")
+	if(C.prefs.special_popup)
+		C << output(recieve_message, "window1.msay_output")
+		if(!C.holder) //Force normal players to see the admin message when it gets sent to them
+			winset(C, "rpane.special_button", "is-checked=true")
+			winset(C, null, "rpanewindow.left=window1")
+	else
+		to_chat(C, recieve_message)
+	if(src.prefs.special_popup)
+		src << output("\[[time_stamp()]] <span class='notice'>[send_pm_type]PM to-<b>[key_name(C, src, holder ? 1 : 0)]</b>: [msg]</span>", "window1.msay_output")
+	else
+		to_chat(src, "<span class='notice'>[send_pm_type]PM to-<b>[key_name(C, src, holder ? 1 : 0)]</b>: [msg]</span>")
 
 	/*if(holder && !C.holder)
 		C.last_pm_received = world.time
 		C.ckey_last_pm = ckey*/
-
-	//Makes Dreamseeker flash on Windows, regardless of window flashing preference.
-	window_flash(C, 1)
 
 	//play the recieving admin the adminhelp sound (if they have them enabled)
 	//non-admins shouldn't be able to disable this
@@ -211,4 +212,7 @@
 		if(X == C || X == src)
 			continue
 		if(X.key!=key && X.key!=C.key && (X.holder.rights & R_ADMIN) || (X.holder.rights & R_MOD) )
-			X.output_to_special_tab("<B><span class='notice'>PM: [key_name(src, X, 0)]-&gt;[key_name(C, X, 0)]:</B> <span class='notice'>[msg]</span></span>")
+			if(X.prefs.special_popup)
+				X << output("\[[time_stamp()]] <B><span class='notice'>PM: [key_name(src, X, 0)]-&gt;[key_name(C, X, 0)]:</B> <span class='notice'>[msg]</span></span>", "window1.msay_output") //inform X
+			else
+				to_chat(X, "<B><span class='notice'>PM: [key_name(src, X, 0)]-&gt;[key_name(C, X, 0)]:</B> <span class='notice'>[msg]</span></span>")//inform X

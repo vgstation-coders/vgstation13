@@ -4,12 +4,12 @@
 
 /obj/item/weapon/grown // Grown weapons
 	name = "grown_weapon"
-	icon = 'icons/obj/hydroponics/nettle.dmi'
+	icon = 'icons/obj/weapons.dmi'
 	var/plantname
 	var/potency = 1
 	var/fragrance = null
 
-/obj/item/weapon/grown/New(atom/loc, custom_plantname)
+/obj/item/weapon/grown/New()
 
 	..()
 
@@ -17,34 +17,33 @@
 	reagents = R
 	R.my_atom = src
 
-	if(custom_plantname)
-		plantname = custom_plantname
+	//Handle some post-spawn var stuff.
+	spawn(1)
+		// Fill the object up with the appropriate reagents.
+		if(!isnull(plantname))
+			var/datum/seed/S = SSplant.seeds[plantname]
+			if(!S || !S.chems)
+				return
 
-	// Fill the object up with the appropriate reagents.
-	if(!isnull(plantname))
-		var/datum/seed/S = SSplant.seeds[plantname]
-		if(!S || !S.chems)
-			return
+			potency = round(S.potency)
 
-		changePotency(S.potency)
-
-		var/totalreagents = 0
-		for(var/rid in S.chems)
-			var/list/reagent_data = S.chems[rid]
-			var/rtotal = reagent_data[1]
-			if(reagent_data.len > 1 && potency > 0)
-				rtotal += round(potency/reagent_data[2])
-			totalreagents += rtotal
-
-		if(totalreagents)
-			var/coeff = min(reagents.maximum_volume / totalreagents, 1)
-
+			var/totalreagents = 0
 			for(var/rid in S.chems)
 				var/list/reagent_data = S.chems[rid]
 				var/rtotal = reagent_data[1]
 				if(reagent_data.len > 1 && potency > 0)
 					rtotal += round(potency/reagent_data[2])
-				reagents.add_reagent(rid,max(1,round(rtotal*coeff, 0.1)))
+				totalreagents += rtotal
+
+			if(totalreagents)
+				var/coeff = min(reagents.maximum_volume / totalreagents, 1)
+
+				for(var/rid in S.chems)
+					var/list/reagent_data = S.chems[rid]
+					var/rtotal = reagent_data[1]
+					if(reagent_data.len > 1 && potency > 0)
+						rtotal += round(potency/reagent_data[2])
+					reagents.add_reagent(rid,max(1,round(rtotal*coeff, 0.1)))
 
 /obj/item/weapon/grown/proc/changePotency(newValue) //-QualityVan
 	potency = newValue
@@ -52,8 +51,8 @@
 /obj/item/weapon/grown/log
 	name = "tower-cap log"
 	desc = "It's better than bad, it's good!"
-	icon = 'icons/obj/hydroponics/towercap.dmi'
-	icon_state = "produce"
+	icon = 'icons/obj/harvest.dmi'
+	icon_state = "logs"
 	force = 5
 	flags = 0
 	throwforce = 5
@@ -83,8 +82,8 @@
 	plantname = "sunflowers"
 	name = "sunflower"
 	desc = "It's beautiful! A certain person might beat you to death if you trample these."
-	icon = 'icons/obj/hydroponics/sunflower.dmi'
-	icon_state = "produce"
+	icon = 'icons/obj/harvest.dmi'
+	icon_state = "sunflower"
 	damtype = "fire"
 	force = 0
 	flags = 0
@@ -103,8 +102,8 @@
 	plantname = "novaflowers"
 	name = "novaflower"
 	desc = "These beautiful flowers have a crisp smokey scent, like a summer bonfire."
-	icon = 'icons/obj/hydroponics/novaflower.dmi'
-	icon_state = "produce"
+	icon = 'icons/obj/harvest.dmi'
+	icon_state = "novaflower"
 	damtype = "fire"
 	force = 0
 	flags = 0
@@ -116,14 +115,12 @@
 	attack_verb = list("sears", "heats", "whacks", "steams")
 	fragrance = INCENSE_NOVAFLOWERS
 
-/obj/item/weapon/grown/novaflower/New(atom/loc, custom_plantname)
+/obj/item/weapon/grown/novaflower/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	reagents.add_reagent(CAPSAICIN, round(potency, 1))
-
-/obj/item/weapon/grown/novaflower/changePotency(newValue)
-	potency = newValue
-	force = round((5 + potency / 5), 1)
+	spawn(5) // So potency can be set in the proc that creates these crops
+		reagents.add_reagent(NUTRIMENT, 1)
+		reagents.add_reagent(CAPSAICIN, round(potency, 1))
+		force = round((5 + potency / 5), 1)
 
 /obj/item/weapon/grown/novaflower/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(!..())
@@ -139,9 +136,9 @@
 /obj/item/weapon/grown/nettle // -- Skie
 	plantname = "nettle"
 	desc = "It's probably <B>not</B> wise to touch it with bare hands..."
-	icon = 'icons/obj/hydroponics/nettle.dmi'
+	icon = 'icons/obj/weapons.dmi'
 	name = "nettle"
-	icon_state = "produce"
+	icon_state = "nettle"
 	damtype = "fire"
 	force = 15
 	flags = 0
@@ -150,6 +147,11 @@
 	throw_speed = 1
 	throw_range = 3
 	origin_tech = Tc_COMBAT + "=1"
+
+/obj/item/weapon/grown/nettle/New()
+	..()
+	spawn(5)
+		force = round((5+potency/5), 1)
 
 /obj/item/weapon/grown/nettle/pickup(mob/living/carbon/human/user as mob) //todo this
 	if(istype(user))
@@ -181,9 +183,9 @@
 /obj/item/weapon/grown/deathnettle // -- Skie
 	plantname = "deathnettle"
 	desc = "A glowing red nettle that incites rage in you just from looking at it."
-	icon = 'icons/obj/hydroponics/deathnettle.dmi'
+	icon = 'icons/obj/weapons.dmi'
 	name = "deathnettle"
-	icon_state = "produce"
+	icon_state = "deathnettle"
 	damtype = "fire"
 	force = 30
 	flags = 0
@@ -193,6 +195,11 @@
 	throw_range = 3
 	origin_tech = Tc_COMBAT + "=3"
 	attack_verb = list("stings, pricks")
+
+/obj/item/weapon/grown/deathnettle/New()
+	..()
+	spawn(5)
+		force = round((5+potency/2.5), 1)
 
 /obj/item/weapon/grown/deathnettle/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -241,8 +248,8 @@
 /obj/item/weapon/corncob
 	name = "corn cob"
 	desc = "A reminder of meals gone by."
-	icon = 'icons/obj/hydroponics/corn.dmi'
-	icon_state = "cob"
+	icon = 'icons/obj/harvest.dmi'
+	icon_state = "corncob"
 	item_state = "corncob"
 	w_class = W_CLASS_SMALL
 	throwforce = 0

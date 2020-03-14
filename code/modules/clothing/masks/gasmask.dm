@@ -57,11 +57,9 @@
 	icon_state = "plaguedoctor"
 	item_state = "gas_mask"
 	armor = list(melee = 0, bullet = 0, laser = 2,energy = 2, bomb = 0, bio = 75, rad = 0)
-	body_parts_covered = FULL_HEAD | BEARD
 	species_fit = list(VOX_SHAPED)
 	can_flip = 0
 	canstage = 0
-	sterility = 100
 
 /obj/item/clothing/mask/gas/swat
 	name = "\improper SWAT mask"
@@ -210,14 +208,6 @@
 	can_flip = 0
 	canstage = 0
 
-/obj/item/clothing/mask/gas/lola
-	name = "fighting clown mask"
-	desc = "Honk!"
-	icon_state = "lola"
-	item_state = "lola"
-	can_flip = 0
-	canstage = 0
-
 /obj/item/clothing/mask/gas/mime
 	name = "mime mask"
 	desc = "The traditional mime's mask. It has an eerie facial posture."
@@ -274,14 +264,6 @@
 	can_flip = 0
 	canstage = 0
 
-/obj/item/clothing/mask/gas/oni
-	name = "oni mask"
-	desc = "Probably not as intimidating as you think it is."
-	icon_state = "onimask"
-	item_state = "onimask"
-	can_flip = 0
-	canstage = 0
-
 /obj/item/clothing/mask/gas/owl_mask
 	name = "owl mask"
 	desc = "Twoooo!"
@@ -289,19 +271,3 @@
 	species_fit = list(VOX_SHAPED)
 	can_flip = 0
 	canstage = 0
-
-/obj/item/clothing/mask/gas/clownmaskpsyche
-	name = "clown psychedelic mask"
-	desc = "A true prankster's groovy facial attire. A clown is incomplete without his wig and mask."
-	icon_state = "clownmaskpsyche"
-	item_state = "clownmaskpsyche"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	can_flip = 0
-	canstage = 0
-
-/obj/item/clothing/mask/gas/clownmaskpsyche/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W, /obj/item/clothing/shoes/clownshoespsyche))
-		new /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin(get_turf(src))
-		qdel(W)
-		qdel(src)

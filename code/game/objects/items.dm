@@ -36,7 +36,6 @@
 	var/slowdown = NO_SLOWDOWN // How much each piece of clothing is slowing you down. Works as a MULTIPLIER, i.e. 0.8 slowdown makes you go 20% faster, 1.5 slowdown makes you go 50% slower.
 
 	var/canremove = TRUE //Mostly for Ninja code at this point but basically will not allow the item to be removed if set to 0. /N
-	var/cant_remove_msg = " cannot be taken off!"
 	var/cant_drop = FALSE //If 1, can't drop it from hands!
 	var/cant_drop_msg = " sticks to your hand!"
 
@@ -47,6 +46,7 @@
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
 	var/list/species_fit = null //This object has a different appearance when worn by these species
+	var/surgery_speed = 1 //When this item is used as a surgery tool, multiply the delay of the surgery step by this much.
 	var/nonplant_seed_type
 
 	var/list/attack_verb // used in attack() to say how something was attacked "[x] [z.attack_verb] [y] with [z]". Present tense.
@@ -61,16 +61,10 @@
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
 	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
 	var/restraint_apply_time = 3 SECONDS
+	var/restraint_apply_sound = null
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
-
-	var/list/datum/disease2/disease/virus2 = list()
-	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
-	var/image/pathogen
-
-	var/list/toolsounds = null //The sound(s) it makes when used as a tool.
-	var/toolspeed = 1 //When this item is used as a tool, multiply the delay of its do_after by this much.
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
@@ -81,13 +75,6 @@
 		new path(src)
 
 /obj/item/Destroy()
-	infected_items -= src
-	if (pathogen)
-		for (var/mob/L in science_goggles_wearers)
-			if (L.client)
-				L.client.images -= pathogen
-		pathogen = null
-
 	if(istype(loc, /mob))
 		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
@@ -227,7 +214,7 @@
 		R.activate_module(src)
 		R.hud_used.update_robot_modules_display()
 
-/obj/item/attack_hand(var/mob/user)
+/obj/item/attack_hand(mob/user as mob)
 	if (!user)
 		return
 
@@ -246,7 +233,6 @@
 				return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
 		if(!canremove)
-			to_chat(user, "<span class='notice'>\The [src][cant_remove_msg]</span>")
 			return
 
 		user.u_equip(src,FALSE)
@@ -258,8 +244,7 @@
 	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
-	//transfers diseases between the mob and the item
-	disease_contact(user)
+	return
 
 /obj/item/requires_dexterity(mob/user)
 	return TRUE
@@ -520,7 +505,7 @@
 						return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_belt)
-				if(!H.w_uniform && !isbelt(src))
+				if(!H.w_uniform)
 					if(!disable_warning)
 						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return CANNOT_EQUIP
@@ -530,7 +515,7 @@
 					if(automatic)
 						if(H.check_for_open_slot(src))
 							return CANNOT_EQUIP
-					if(H.belt.canremove)
+					if(H.belt.canremove && !istype(H.belt, /obj/item/weapon/storage/belt))
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
@@ -696,8 +681,6 @@
 			if(slot_handcuffed)
 				if(H.handcuffed)
 					return CANNOT_EQUIP
-				if (H.mutual_handcuffs)
-					return CANNOT_EQUIP
 				if(!istype(src, /obj/item/weapon/handcuffs))
 					return CANNOT_EQUIP
 				return CAN_EQUIP
@@ -710,8 +693,6 @@
 			if(slot_in_backpack)
 				if (H.back && istype(H.back, /obj/item/weapon/storage/backpack))
 					var/obj/item/weapon/storage/backpack/B = H.back
-					if(!B.storage_slots && w_class <= B.fits_max_w_class)
-						return CAN_EQUIP
 					if(B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
 						return CAN_EQUIP
 				return CANNOT_EQUIP
@@ -848,24 +829,21 @@
 		return CANNOT_EQUIP //Unsupported slot
 		//END GRINCH
 
-/obj/item/can_pickup(mob/living/user, var/actually_picking_up = TRUE, var/silent = FALSE)
+/obj/item/can_pickup(mob/living/user)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return FALSE
-	if(actually_picking_up && prepickup(user))
+	if(prepickup(user))
 		return FALSE
 	if(user.incapacitated() || !Adjacent(user))
 		return FALSE
 	if((!iscarbon(user) && !isMoMMI(user)) && !ishologram(user) && !isgrinch(user) || isbrain(user)) //Is not a carbon being, MoMMI, advanced hologram, or is a brain
-		if(!silent)
-			to_chat(user, "You can't pick things up!")
+		to_chat(user, "You can't pick things up!")
 		return FALSE
 	if(anchored) //Object isn't anchored
-		if(!silent)
-			to_chat(user, "<span class='warning'>You can't pick that up!</span>")
+		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
 	if(!istype(loc, /turf) && !is_holder_of(user, src)) //Object is not on a turf
-		if(!silent)
-			to_chat(user, "<span class='warning'>You can't pick that up!</span>")
+		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
 	return TRUE
 
@@ -956,7 +934,7 @@
 			return FALSE
 		if (prob(50 - round(damage / 3)))
 			visible_message("<span class='borange'>[loc] blocks \the [blocked] with \the [src]!</span>")
-			if(ismovable(blocked))
+			if(isatommovable(blocked))
 				var/atom/movable/M = blocked
 				M.throwing = FALSE
 			return TRUE
@@ -1046,17 +1024,16 @@
 
 /obj/item/clean_blood()
 	. = ..()
-	remove_disease2()
-	if (blood_overlay)
+	if(blood_overlay)
 		overlays.Remove(blood_overlay)
-	if (had_blood)
+	if(had_blood)
 		clear_luminol()
-	if (istype(src, /obj/item/clothing/gloves))
+	if(istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
 
 
-/obj/item/add_blood(var/mob/living/carbon/human/M)
+/obj/item/add_blood(mob/living/carbon/human/M as mob)
 	if (!..())
 		return FALSE
 	if(istype(src, /obj/item/weapon/melee/energy))
@@ -1077,17 +1054,6 @@
 	//if this blood isn't already in the list, add it
 	if(!M)
 		return
-
-	if (M.virus2?.len)
-		var/list/blood_diseases = filter_disease_by_spread(M.virus2,required = SPREAD_BLOOD)
-		if (blood_diseases?.len)
-			for (var/ID in blood_diseases)
-				var/datum/disease2/disease/D = blood_diseases[ID]
-				infect_disease2(D, notes="(Blood, coming from [M])")
-				if (isliving(loc))
-					var/mob/living/L = loc
-					infection_attempt(L,D)//Wear gloves when doing surgery or beating that catbeast to death!
-
 	if(blood_DNA[M.dna.unique_enzymes])
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
@@ -1236,7 +1202,6 @@ var/global/list/image/blood_overlays = list()
 		if(bit & slot_flags)
 			if(M.get_item_by_flag(bit) == src)
 				return TRUE
-
 /obj/item/proc/get_shrapnel_projectile()
 	if(shrapnel_type)
 		return new shrapnel_type(src)
@@ -1299,13 +1264,13 @@ var/global/list/image/blood_overlays = list()
 			to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
 			return FALSE
 
-	playtoolsound(src, 30, TRUE, -2)
-
+	if(restraint_apply_sound)
+		playsound(src, restraint_apply_sound, 30, 1, -2)
 	user.visible_message("<span class='danger'>[user] is trying to restrain \the [C] with \the [src]!</span>",
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
 	if(do_after(user, C, restraint_apply_time))
-		if(C.handcuffed || C.mutual_handcuffs)
+		if(C.handcuffed)
 			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
 			return FALSE
 		feedback_add_details("handcuffs", "[name]")
@@ -1343,9 +1308,6 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/on_mousedrop_to_inventory_slot()
 	return
-
-/obj/item/proc/stealthy(var/mob/living/carbon/human/H)
-	return H.isGoodPickpocket()
 
 /obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
 	return TRUE
@@ -1416,72 +1378,6 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/is_screwdriver(var/mob/user)
 	return FALSE
 
-/obj/item/proc/is_wrench(var/mob/user)
-	return FALSE
-
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	return
-
-/obj/item/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
-	..()
-	var/processed_name = lowertext(mat? mat.processed_name : material_type.processed_name)
-	var/to_icon_state = "[initial(icon_state)]_[processed_name]_[quality]"
-	if(has_icon(inhand_states[inhand_states[1]], to_icon_state))
-		item_state = to_icon_state
-
-/obj/item/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
-	.=..()
-	if(. && material_type)
-		armor["melee"] = min(90, armor["melee"]*(material_type.armor_mod*(quality/B_AVERAGE)))
-		armor["bullet"] = min(90, armor["bullet"]*(material_type.armor_mod*(quality/B_AVERAGE)))
-		armor["laser"] = min(90, armor["laser"]*(material_type.armor_mod*(quality/B_AVERAGE)))
-
-/////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
-
-/obj/item/clothing/suitable_colony()
-	return pressure_resistance > ONE_ATMOSPHERE
-
-//Called by attack_hand(), transfers diseases between the mob and the item
-/obj/item/proc/disease_contact(var/mob/living/M,var/bodypart = null)
-	//first let's try to infect them with our viruses
-	for (var/ID in virus2)
-		var/datum/disease2/disease/D = virus2[ID]
-		infection_attempt(M,D,bodypart)
-
-	if (!bodypart)//no bodypart specified? that should mean we're being held.
-		bodypart = HANDS
-	//secondly, do they happen to carry contact-spreading viruses themselves?
-	var/list/contact_diseases = filter_disease_by_spread(M.virus2,required = SPREAD_CONTACT | SPREAD_COLONY)
-	if (contact_diseases?.len)
-		//if so are their hands protected?
-		var/block = M.check_contact_sterility(bodypart)
-		for (var/ID in contact_diseases)
-			var/datum/disease2/disease/D = contact_diseases[ID]
-			if(attempt_colony(src,D,"from being touched by [M]"))
-			else if(!block)
-				infect_disease2(D, notes="(Contact, from being touched by [M])")
-
-	//spreading of blood-spreading diseases to items is handled by add_blood()
-
-//Called by disease_contact(), trying to infect people who pick us up
-/obj/item/proc/infection_attempt(var/mob/living/perp,var/datum/disease2/disease/D,var/bodypart = null)
-	if (!istype(D))
-		return
-	if(attempt_colony(perp,D,"from picking up \a [src]"))
-		return
-	if (src in perp.held_items)
-		bodypart = HANDS
-	if (bodypart)
-		var/block = perp.check_contact_sterility(bodypart)
-		var/bleeding = perp.check_bodypart_bleeding(bodypart)
-		if (!block)
-			if (D.spread & SPREAD_CONTACT)
-				perp.infect_disease2(D, notes="(Contact, from picking up \a [src])")
-			else if (bleeding && (D.spread & SPREAD_BLOOD))//if we're covered with a blood-spreading disease, we may infect people with bleeding hands.
-				perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")
-
-/obj/item/proc/playtoolsound(atom/A, var/volume = 75, vary = TRUE, extrarange = null)
-	if(A && toolsounds)
-		var/tool_sound = pick(toolsounds)
-		playsound(A, tool_sound, volume, TRUE, vary)

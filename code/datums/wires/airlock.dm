@@ -65,9 +65,9 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 
 /datum/wires/airlock/UpdateCut(var/index, var/mended, mob/user)
+
 	var/obj/machinery/door/airlock/A = holder
 	var/obj/I = user.get_active_hand()
-	..()
 	switch(index)
 		if(AIRLOCK_WIRE_MAIN_POWER1, AIRLOCK_WIRE_MAIN_POWER2)
 
@@ -118,10 +118,13 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 			if(!mended)
 				//Cutting this wire electrifies the door, so that the next person to touch the door without insulated gloves gets electrocuted.
-				A.shockedby += text("\[[time_stamp()]\][user](ckey:[user.ckey])")
-				A.secondsElectrified = -1
+				if(A.secondsElectrified != -1)
+					A.shockedby += text("\[[time_stamp()]\][user](ckey:[user.ckey])")
+					A.secondsElectrified = -1
 			else
-				A.secondsElectrified = 0
+				if(A.secondsElectrified == -1)
+					A.secondsElectrified = 0
+			return // Don't update the dialog.
 
 		if (AIRLOCK_WIRE_SAFETY)
 			A.safe = mended
@@ -136,9 +139,10 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 			A.lights = mended
 			A.update_icon()
 
+
 /datum/wires/airlock/UpdatePulsed(var/index, mob/user)
+
 	var/obj/machinery/door/airlock/A = holder
-	..()
 	switch(index)
 		if(AIRLOCK_WIRE_IDSCAN)
 			//Sending a pulse through this flashes the red light on the door (if the door has power).
@@ -192,6 +196,7 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 							if(A.secondsElectrified<0)
 								A.secondsElectrified = 0
 							sleep(10)
+				return
 		if(AIRLOCK_WIRE_OPEN_DOOR)
 			//tries to open the door without ID
 			//will succeed only if the ID wire is cut or the door requires no access
@@ -216,3 +221,4 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 		if(AIRLOCK_WIRE_ONOPEN)
 			A.visible_message("<span class = 'notice'>\The [A]'s motors whirr.</span>")
+

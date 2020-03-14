@@ -46,7 +46,7 @@
 			to_chat(user, "<span class='info'>\The [src.name] has maximum charge!</span>")
 
 /obj/item/weapon/stock_parts/capacitor/attackby(obj/item/weapon/W, mob/user)
-	if(W.is_wrench(user))
+	if(iswrench(W))
 		if(!istype(src.loc, /turf))
 			to_chat(user, "<span class='warning'>\The [src] needs to be on the ground to be secured.</span>")
 			return
@@ -54,7 +54,7 @@
 			to_chat(user, "<span class='notice'>You can't secure \the [src] to [istype(src.loc,/turf/space) ? "space" : "this"]!</span>")
 			return
 		to_chat(user, "You discharge \the [src] and secure it to the floor.")
-		W.playtoolsound(src, 50)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		switch(src.type)
 			if(/obj/item/weapon/stock_parts/capacitor)
 				new /obj/machinery/power/secured_capacitor(get_turf(src.loc))

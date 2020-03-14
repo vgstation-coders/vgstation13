@@ -257,7 +257,7 @@
 		update_icon()
 		return 1
 
-/obj/machinery/shieldgen/wrenchAnchor(var/mob/user, var/obj/item/I)
+/obj/machinery/shieldgen/wrenchAnchor(var/mob/user)
 	if(locked)
 		to_chat(user, "The bolts are covered, unlocking this would retract the covers.")
 		return FALSE
@@ -472,7 +472,7 @@
 		CF.forceMove(T)
 		CF.dir = field_dir
 
-/obj/machinery/shieldwallgen/wrenchAnchor(var/mob/user, var/obj/item/I)
+/obj/machinery/shieldwallgen/wrenchAnchor(var/mob/user)
 	if(active)
 		to_chat(user, "Turn off the field generator first.")
 		return FALSE

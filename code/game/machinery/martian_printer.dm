@@ -12,7 +12,6 @@
 	var/cooldown_duration = 10 MINUTES
 	var/cooldown_time = 0
 	var/cooldown_active = 0
-	var/corpse_check = 0 // if set to 1, you can't enter it after ghosting or otherwise being unable to enter corpse (being sharded or deleted)
 	var/print_path = /mob/living/carbon/complex/martian
 
 /obj/machinery/mob_printer/attack_ghost(var/mob/dead/observer/O)
@@ -22,7 +21,7 @@
 		to_chat(O, "<span class='warning'>Error: printer still recharging. Time left: [round((cooldown_time - world.time + 20)/10)] seconds.</span>")
 		return
 
-	if(!corpse_check || O.can_reenter_corpse)
+	if(O.can_reenter_corpse)
 		if(alert(O,"Do you want to enter a corporeal form?","Inset Disk","Yes","No")== "Yes")
 			if(building)
 				to_chat(O, "<span class='notice'>\The [src] is already processing another. Try again later.</span>")
@@ -30,7 +29,7 @@
 		else
 			return
 	else if(!(O.can_reenter_corpse))
-		to_chat(O,"<span class='notice'>You have recently ghosted or have no corpse, and cannot use the [src].</span>")
+		to_chat(O,"<span class='notice'>You have recently ghosted and can not enter right now. Try again later.</span>")
 		return
 
 	make_mob(O)

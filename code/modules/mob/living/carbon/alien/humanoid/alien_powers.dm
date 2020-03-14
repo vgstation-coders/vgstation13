@@ -290,9 +290,8 @@ Doesn't work on other aliens/AI.*/
 
 /spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
 	. = ..()
-	// TODO on hypothetical xeno role addition
-	//if(!.) //Returning 1 if we failed to cast
-		//stat_collection.xeno_eggs_laid++
+	if(!.) //Returning 1 if we failed to cast
+		stat_collection.xeno_eggs_laid++
 
 ///////////////////////////////////
 ////////// DRONE BROS /////////////

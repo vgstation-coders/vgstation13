@@ -30,9 +30,9 @@
 		if(icon_state == "door_electronics_smoked")
 			if(!S.remove_fuel(4,user))
 				return
-			S.playtoolsound(loc, 100)
+			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 			if(do_after(user, src,40))
-				S.playtoolsound(loc, 100)
+				playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 				icon_state = "door_electronics"
 				to_chat(user, "<span class='notice'>You repair the blown fuses on the circuitboard.</span>")
 

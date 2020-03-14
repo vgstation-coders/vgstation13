@@ -7,7 +7,6 @@ obj/machinery/recharger/defibcharger/wallcharger // obj/machinery/recharger/defi
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 150
-	has_beeped = FALSE
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY //| WRENCHMOVE | FIXED2WORK if we want it to be wrenchable
 
@@ -73,9 +72,6 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 				use_power(150)
 			else
 				icon_state = "wrecharger2"
-				if(!has_beeped)
-					playsound(src, 'sound/machines/charge_finish.ogg', 50)
-					has_beeped = TRUE
 
 /obj/machinery/recharger/defibcharger/wallcharger/togglePanelOpen(var/obj/toggleitem, var/mob/user)
 	if(charging)
@@ -83,13 +79,13 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 		return
 	return(..())
 
-/obj/machinery/recharger/defibcharger/wallcharger/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
-	if(..())
+/obj/machinery/recharger/defibcharger/wallcharger/crowbarDestroy()
+	if(..() == 1)
 		if(charging)
 			charging.forceMove(src.loc)
 			charging = null
-		return TRUE
-	return FALSE
+		return 1
+	return -1
 
 obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as obj, mob/user as mob)
 	if(istype(G, /obj/item/weapon/melee/defibrillator))
@@ -103,7 +99,6 @@ obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as o
 			charging = G
 			use_power = 2
 			update_icon()
-			has_beeped = FALSE
 	else if (G.is_screwdriver(user) || iscrowbar(G))
 		..()
 	else

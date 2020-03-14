@@ -40,7 +40,7 @@
 	
 	if(required_upgrades.len)
 		for(var/U in required_upgrades)
-			if(!R.module.upgrades.Find(U))
+			if(!U in R.module.upgrades)
 				to_chat(user, "<span class='warning'>\The [R] is missing a required upgrade to install [src].</span>")
 				return FAILED_TO_ADD
 

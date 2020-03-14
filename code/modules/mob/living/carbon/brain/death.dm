@@ -30,7 +30,7 @@
 			qdel(loc)//Gets rid of the brain item
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', /*flick_anim = "gibbed-m"*/, sleeptime = 15)
-	gibs(loc, virus2, dna)
+	gibs(loc, viruses, dna)
 
 	dead_mob_list -= src
 	qdel(src)

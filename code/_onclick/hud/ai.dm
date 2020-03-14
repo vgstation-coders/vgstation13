@@ -4,9 +4,15 @@
 	adding = list()
 	other = list()
 
-	adding = map.give_AI_jumps(adding) //gives AI core button, or more based on map
-
 	var/obj/abstract/screen/using
+
+//AI core
+	using = getFromPool(/obj/abstract/screen)
+	using.name = "AI Core"
+	using.icon = 'icons/mob/screen_ai.dmi'
+	using.icon_state = "ai_core"
+	using.screen_loc = ui_ai_core
+	adding += using
 
 //Camera list
 	using = getFromPool(/obj/abstract/screen)

@@ -12,16 +12,15 @@
 
 /datum/striketeam/deathsquad/create_commando(obj/spawn_location, leader_selected = 0)
 	var/mob/living/carbon/human/new_commando = new(spawn_location.loc)
-	var/commando_leader_rank = pick("Major", "Rescue Leader", "Commander")
+	var/commando_leader_rank = "Major"
 	var/commando_rank = pick("Corporal", "Sergeant", "Staff Sergeant", "Sergeant 1st Class", "Master Sergeant", "Sergeant Major")
 	var/commando_name = pick(last_names)
-	var/commando_leader_name = pick("Creed", "Dahl")
 
 	new_commando.gender = pick(MALE, FEMALE)
 
 	new_commando.randomise_appearance_for(new_commando.gender)
 
-	new_commando.real_name = "[!leader_selected ? commando_rank : commando_leader_rank] [!leader_selected ? commando_name : commando_leader_name]"
+	new_commando.real_name = "[!leader_selected ? commando_rank : commando_leader_rank] [!leader_selected ? commando_name : "Creed"]"
 	new_commando.age = !leader_selected ? rand(23,35) : rand(35,45)
 
 	new_commando.dna.ready_dna(new_commando)//Creates DNA.
@@ -41,8 +40,6 @@
 	if (leader_selected)
 		var/datum/role/death_commando/D = new_commando.mind.GetRole(DEATHSQUADIE)
 		D.logo_state = "creed-logo"
-	else
-		leader_name = new_commando.real_name
 	new_commando.equip_death_commando(leader_selected)
 
 	return new_commando
@@ -54,7 +51,7 @@
 	else
 		to_chat(H, "<span class='notice'>You are [H.real_name], a Death Squad commando, in the service of Nanotrasen.</span>")
 		if (leader_key != "")
-			to_chat(H, "<span class='notice'>Follow directions from your superior, [leader_name].</span>")
+			to_chat(H, "<span class='notice'>Follow directions from your superior, Creed.</span>")
 	//to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
 	for (var/role in H.mind.antag_roles)
 		var/datum/role/R = H.mind.antag_roles[role]
@@ -76,6 +73,8 @@
 		equip_to_slot_or_del(uni, slot_w_uniform)
 	else
 		equip_to_slot_or_del(new /obj/item/clothing/under/deathsquad(src), slot_w_uniform)
+	equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword(src), slot_l_store)
+	equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/mateba(src), slot_belt)
 
 	//Shoes & gloves
 	equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/deathsquad(src), slot_shoes)
@@ -93,19 +92,16 @@
 	//Backpack
 	equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(src), slot_back)
 	equip_to_slot_or_del(new /obj/item/weapon/storage/box(src), slot_in_backpack)
-	equip_to_slot_or_del(new /obj/item/ammo_storage/speedloader/a357(src), slot_in_backpack)
+	equip_to_slot_or_del(new /obj/item/ammo_storage/box/a357(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/regular(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/weapon/pinpointer(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/weapon/shield/energy(src), slot_in_backpack)
 	if (leader)
 		equip_to_slot_or_del(new /obj/item/weapon/disk/nuclear(src), slot_in_backpack)
 	else
-		equip_to_slot_or_del(new /obj/item/weapon/c4(src), slot_in_backpack)
+		equip_to_slot_or_del(new /obj/item/weapon/plastique(src), slot_in_backpack)
 
-	//Other equipment and accessories
-	equip_to_slot_or_del(new /obj/item/weapon/gun/energy/pulse_rifle(src), slot_belt)
-	equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)
-	equip_accessory(src, /obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword, /obj/item/clothing/shoes, 5)
+	put_in_hands(new /obj/item/weapon/gun/energy/pulse_rifle(src))
 
 
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(src)//Here you go Deuryn
@@ -125,18 +121,11 @@
 
 	var/obj/item/weapon/card/id/W = new(src)
 	W.name = "[real_name]'s ID Card"
-	if(leader)
-		W.access = get_centcom_access("Creed Commander")
-		W.icon_state = "creed"
-		W.assignment = "Death Commander"
-	else
-		W.access = get_centcom_access("Death Commando")
-		W.icon_state = "deathsquad"
-		W.assignment = "Death Commando"
+	W.icon_state = "centcom"
+	W.access = get_centcom_access("Death Commando")
+	W.icon_state = "deathsquad"
+	W.assignment = "Death Commando"
 	W.registered_name = real_name
 	equip_to_slot_or_del(W, slot_wear_id)
-
-	add_language(LANGUAGE_DEATHSQUAD)
-	default_language = all_languages[LANGUAGE_DEATHSQUAD]
 
 	return 1

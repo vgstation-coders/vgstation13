@@ -39,7 +39,7 @@
 /obj/structure/window/barricade/healthcheck(var/mob/M, var/sound = 1)
 
 	if(health <= 0)
-		qdel(src)
+		Destroy()
 
 //Note : We don't want glass knocking sounds to play
 /obj/structure/window/barricade/attack_hand(mob/user as mob)
@@ -69,7 +69,7 @@
 /obj/structure/window/barricade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	if(iscrowbar(W) && user.a_intent == I_HURT && !busy) //Only way to deconstruct, needs harm intent
-		W.playtoolsound(loc, 75)
+		playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 		user.visible_message("<span class='warning'>[user] starts struggling to pry \the [src] back into planks.</span>", \
 		"<span class='notice'>You start struggling to pry \the [src] back into planks.</span>")
 		busy = 1

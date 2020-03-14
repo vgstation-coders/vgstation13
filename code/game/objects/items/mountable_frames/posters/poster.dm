@@ -53,7 +53,6 @@
 	name = "poster"
 	desc = "A large piece of space-resistant printed paper. "
 	icon = 'icons/obj/posters.dmi'
-	icon_state = "default"
 	anchored = 1
 	var/serial_number	//Will hold the value of src.loc if nobody initialises it
 	var/ruined = 0
@@ -81,7 +80,7 @@
 
 /obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswirecutter(W))
-		W.playtoolsound(loc, 100)
+		playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
 		if(ruined)
 			to_chat(user, "<span class='notice'>You remove the remnants of the poster.</span>")
 			qdel(src)

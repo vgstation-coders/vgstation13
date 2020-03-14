@@ -6,7 +6,6 @@ AM
 AMEE
 ASTAR
 Adaptive Manipulator
-ALICE
 Allied Mastercomputer
 Alpha 5
 Alpha 6
@@ -149,7 +148,6 @@ Trurl
 ULTRABOT
 Ulysses
 Uniblab
-V.I.K.I.
 V.I.N.CENT.
 Voltes V
 W1k1
@@ -162,7 +160,6 @@ Windows XP
 Windows Vista
 Wintermute
 X-5
-X.A.N.A.
 XERXES
 XR
 Yod

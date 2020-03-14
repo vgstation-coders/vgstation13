@@ -196,7 +196,7 @@
 				to_chat(user, "<span class='warning'>Unscrew \the [src]'s battery panel first.</span>")
 		else
 			to_chat(user, "<span class='warning'>\the [src]'s security locks are engaged.</span>")
-	else if (W.is_wrench(user))
+	else if (iswrench(W))
 		if(!suspension_field)
 			if(anchored)
 				anchored = 0

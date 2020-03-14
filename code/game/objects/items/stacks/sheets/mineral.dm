@@ -23,7 +23,7 @@ Mineral Sheets
 	if(!recyck_mat)
 		return 0
 
-	rec.addAmount(recyck_mat, amount * get_material_cc_per_sheet(recyck_mat))
+	rec.addAmount(recyck_mat, amount)
 	. = 1
 
 /*
@@ -80,7 +80,7 @@ var/list/datum/stack_recipe/sandstone_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=6"
-	perunit = CC_PER_SHEET_DIAMOND
+	perunit = 1750
 	sheettype = "diamond"
 	melt_temperature = 3820 // In a vacuum, but fuck dat
 	recyck_mat = MAT_DIAMOND
@@ -110,7 +110,7 @@ var/list/datum/stack_recipe/diamond_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_URANIUM
+	perunit = 2000
 	sheettype = "uranium"
 	melt_temperature = 1132+T0C
 	recyck_mat = MAT_URANIUM
@@ -142,7 +142,7 @@ var/list/datum/stack_recipe/uranium_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_PLASMATECH + "=2;" + Tc_MATERIALS + "=2"
-	perunit = CC_PER_SHEET_PLASMA
+	perunit = 2000
 	sheettype = "plasma"
 	melt_temperature = MELTPOINT_STEEL + 500
 	recyck_mat = MAT_PLASMA
@@ -170,7 +170,7 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=3"
-	perunit = CC_PER_SHEET_PLASTIC
+	perunit = 2000
 	melt_temperature = MELTPOINT_PLASTIC
 	sheettype = "plastic"
 	recyck_mat = MAT_PLASTIC
@@ -219,7 +219,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=4"
-	perunit = CC_PER_SHEET_GOLD
+	perunit = 2000
 	melt_temperature = 1064+T0C
 	sheettype = "gold"
 	recyck_mat = MAT_GOLD
@@ -259,7 +259,7 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 	icon_state = "sheet-phazon"
 	item_state = "sheet-phazon"
 	sheettype = "phazon"
-	perunit = CC_PER_SHEET_PHAZON
+	perunit = 1500
 	melt_temperature = MELTPOINT_PLASTIC
 	throwforce = 15.0
 	flags = FPRINT
@@ -285,7 +285,7 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=3"
-	perunit = CC_PER_SHEET_SILVER
+	perunit = 2000
 	sheettype = "silver"
 	recyck_mat = MAT_SILVER
 	mat_type = MAT_SILVER
@@ -317,7 +317,7 @@ var/list/datum/stack_recipe/silver_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=4"
-	perunit = CC_PER_SHEET_CLOWN
+	perunit = 2000
 	sheettype = "clown"
 	recyck_mat = MAT_CLOWN
 	mat_type = MAT_CLOWN
@@ -362,7 +362,7 @@ var/list/datum/stack_recipe/clown_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=4"
-	perunit = CC_PER_SHEET_MYTHRIL
+	perunit = 2000
 	recyck_mat = MAT_MYTHRIL
 	mat_type = MAT_MYTHRIL
 
@@ -375,6 +375,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	..()
 
 
+/*
 /obj/item/stack/sheet/mineral/pharosium
 	name = "pharosium"
 	icon_state = "sheet-pharosium"
@@ -384,7 +385,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_PHAROSIUM
+	perunit = 3750
 
 /obj/item/stack/sheet/mineral/char
 	name = "char"
@@ -395,7 +396,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_CHAR
+	perunit = 3750
 
 
 /obj/item/stack/sheet/mineral/claretine
@@ -407,7 +408,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_CLARETINE
+	perunit = 3750
 
 
 /obj/item/stack/sheet/mineral/cobryl
@@ -419,7 +420,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_COBRYL
+	perunit = 3750
 
 
 /obj/item/stack/sheet/mineral/bohrum
@@ -431,7 +432,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_BOHRUM
+	perunit = 3750
 
 
 /obj/item/stack/sheet/mineral/syreline
@@ -443,7 +444,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_SYRELINE
+	perunit = 3750
 
 
 /obj/item/stack/sheet/mineral/erebite
@@ -455,7 +456,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_EREBITE
+	perunit = 3750
 
 
 /obj/item/stack/sheet/mineral/cerenkite
@@ -467,7 +468,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_CERENKITE
+	perunit = 3750
 
 
 /obj/item/stack/sheet/mineral/cytine
@@ -479,7 +480,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_CYTINE
+	perunit = 3750
 
 
 /obj/item/stack/sheet/mineral/uqill
@@ -491,7 +492,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_UQILL
+	perunit = 3750
 
 
 /obj/item/stack/sheet/mineral/telecrystal
@@ -503,7 +504,8 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_TELECRYSTAL
+	perunit = 3750
+
 
 /obj/item/stack/sheet/mineral/mauxite
 	name = "mauxite"
@@ -514,7 +516,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_MAUXITE
+	perunit = 3750
 
 
 /obj/item/stack/sheet/mineral/molitz
@@ -526,4 +528,5 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
-	perunit = CC_PER_SHEET_MOLITZ
+	perunit = 3750
+*/

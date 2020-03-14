@@ -119,10 +119,10 @@
 	add_fingerprint(usr)
 	return
 
-/obj/machinery/dna_scannernew/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/dna_scannernew/crowbarDestroy(mob/user)
 	if(occupant)
 		to_chat(user, "<span class='warning'>\the [src] is occupied.</span>")
-		return FALSE
+		return
 	return ..()
 
 /obj/machinery/dna_scannernew/Destroy()

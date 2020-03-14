@@ -1,4 +1,5 @@
 /datum/hud/proc/robot_hud()
+	var/mob/living/silicon/robot/mommi/myrobot = mymob
 	src.adding = list()
 	src.other = list()
 
@@ -72,6 +73,13 @@
 	src.adding += using
 	action_intent = using
 
+//Cell
+	myrobot.cells = getFromPool(/obj/abstract/screen)
+	myrobot.cells.icon = 'icons/mob/screen1_robot.dmi'
+	myrobot.cells.icon_state = "charge-empty"
+	myrobot.cells.name = "cell"
+	myrobot.cells.screen_loc = ui_toxin
+
 //Health
 	mymob.healths = getFromPool(/obj/abstract/screen)
 	mymob.healths.icon = 'icons/mob/screen1_robot.dmi'
@@ -102,7 +110,22 @@
 	mymob.throw_icon.name = "store"
 	mymob.throw_icon.screen_loc = ui_borg_store
 
+//Temp
+	mymob.bodytemp = getFromPool(/obj/abstract/screen)
+	mymob.bodytemp.icon = 'icons/mob/screen1_robot.dmi'
+	mymob.bodytemp.icon_state = "temp0"
+	mymob.bodytemp.name = "environment temperature"
+	mymob.bodytemp.screen_loc = ui_borg_temp
+	
+//Pressure
+	mymob.pressure = getFromPool(/obj/abstract/screen)
+	mymob.pressure.icon = 'icons/mob/screen1_robot.dmi'
+	mymob.pressure.icon_state = "pressure0"
+	mymob.pressure.name = "environment pressure"
+	mymob.pressure.screen_loc = ui_borg_pressure
+
 //Photography stuff
+
 	mymob.camera_icon = getFromPool(/obj/abstract/screen)
 	mymob.camera_icon.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.camera_icon.icon_state = "camera"
@@ -114,6 +137,19 @@
 	mymob.album_icon.icon_state = "album"
 	mymob.album_icon.name = "View Images"
 	mymob.album_icon.screen_loc = ui_borg_album
+
+ //unused, go home
+	mymob.oxygen = getFromPool(/obj/abstract/screen)
+	mymob.oxygen.icon = 'icons/mob/screen1_robot.dmi'
+	mymob.oxygen.icon_state = "oxy0"
+	mymob.oxygen.name = "oxygen"
+	mymob.oxygen.screen_loc = ui_oxygen
+
+	mymob.fire = getFromPool(/obj/abstract/screen)
+	mymob.fire.icon = 'icons/mob/screen1_robot.dmi'
+	mymob.fire.icon_state = "fire0"
+	mymob.fire.name = "fire"
+	mymob.fire.screen_loc = ui_fire
 
 	mymob.pullin = getFromPool(/obj/abstract/screen)
 	mymob.pullin.icon = 'icons/mob/screen1_robot.dmi'
@@ -148,7 +184,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.hands, mymob.healths, mymob.pullin, mymob.gun_setting_icon, mymob.camera_icon, mymob.album_icon)
+	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.fire, mymob.pressure, mymob.bodytemp, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.gun_setting_icon, mymob.camera_icon, mymob.album_icon) //, mymob.rest, mymob.sleep, mymob.mach, mymob.oxygen)
 	mymob.client.screen += src.adding + src.other
 
 	return

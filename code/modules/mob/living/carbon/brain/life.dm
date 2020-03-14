@@ -113,7 +113,7 @@
 	if(reagents)
 		reagents.metabolize(src)
 
-	remove_confused(1)
+	confused = max(0, confused - 1)
 	// decrement dizziness counter, clamped to 0
 	if(resting)
 		dizziness = max(0, dizziness - 5)

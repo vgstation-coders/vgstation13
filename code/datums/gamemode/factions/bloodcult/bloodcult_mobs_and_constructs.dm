@@ -20,8 +20,7 @@
 	if(src.throwing)
 		var/breakthrough = 0
 		if(istype(obstacle, /obj/structure/window/))
-			var/obj/structure/window/W = obstacle
-			W.shatter()
+			obstacle.Destroy(brokenup = 1)
 			breakthrough = 1
 
 		else if(istype(obstacle, /obj/structure/grille/))

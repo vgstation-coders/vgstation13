@@ -63,7 +63,7 @@
 		return connected_to.surplus()
 	return 0
 
-/obj/machinery/power/battery/portable/wrenchAnchor(var/mob/user, var/obj/item/I)
+/obj/machinery/power/battery/portable/wrenchAnchor(var/mob/user)
 	. = ..()
 	if(!.)
 		return

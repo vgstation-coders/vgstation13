@@ -37,7 +37,6 @@ Buildable meters
 #define PIPE_LAYER_ADAPTER      30
 #define PIPE_HE_MANIFOLD		31
 #define PIPE_HE_MANIFOLD4W      32
-#define PIPE_HEAT_PUMP          33
 
 //Disposal piping numbers - do NOT hardcode these, use the defines
 #define DISP_PIPE_STRAIGHT		0
@@ -199,8 +198,6 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 			src.pipe_type = PIPE_PASV_VENT
 		else if(istype(make_from, /obj/machinery/atmospherics/pipe/layer_adapter))
 			src.pipe_type = PIPE_LAYER_ADAPTER
-		else if(istype(make_from, /obj/machinery/atmospherics/binary/heat_pump))
-			src.pipe_type = PIPE_HEAT_PUMP
 		setPipingLayer(make_from.piping_layer)
 
 	else
@@ -254,7 +251,6 @@ var/global/list/pipeID2State = list(
 	"layeradapter",
 	"he_manifold",
 	"he_manifold4w",
-	"heat_pump"
 )
 var/global/list/nlist = list( \
 	"pipe", \
@@ -290,7 +286,6 @@ var/global/list/nlist = list( \
 	"pipe alignment adapter",
 	"h/e manifold", \
 	"h/e 4-way manifold", \
-	"thermoelectric cooler"
 )
 /obj/item/pipe/proc/update()
 
@@ -363,8 +358,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			PIPE_DVALVE, \
 			PIPE_DP_VENT, \
 			PIPE_LAYER_MANIFOLD, \
-			PIPE_LAYER_ADAPTER,
-			PIPE_HEAT_PUMP
+			PIPE_LAYER_ADAPTER
 		)
 			return dir|flip
 		if(PIPE_SIMPLE_BENT, PIPE_INSULATED_BENT, PIPE_HE_BENT)
@@ -424,7 +418,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 /obj/item/pipe/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
 	//*
-	if(!W.is_wrench(user))
+	if (!iswrench(W))
 		return ..()
 	if (!isturf(src.loc))
 		return 1
@@ -535,13 +529,10 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 		if(PIPE_LAYER_ADAPTER)
 			P =new /obj/machinery/atmospherics/pipe/layer_adapter(src.loc)
 
-		if(PIPE_HEAT_PUMP)
-			P = new /obj/machinery/atmospherics/binary/heat_pump(loc)
-
 	P.setPipingLayer(src.piping_layer)
 	if(P.buildFrom(usr,src))
 		investigation_log(I_ATMOS,"was created by [user]/([user.ckey]) at [formatJumpTo(loc)].")
-		W.playtoolsound(src, 50)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		user.visible_message( \
 			"[user] fastens \the [src].", \
 			"<span class='notice'>You have fastened \the [src].</span>", \
@@ -571,7 +562,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 /obj/item/pipe_meter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
 
-	if(!W.is_wrench(user))
+	if (!iswrench(W))
 		return ..()
 	var/obj/machinery/atmospherics/pipe/pipe
 	for(var/obj/machinery/atmospherics/pipe/P in src.loc)
@@ -582,7 +573,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 		to_chat(user, "<span class='warning'>You need to fasten it to a pipe.</span>")
 		return 1
 	new/obj/machinery/meter(src.loc, pipe)
-	W.playtoolsound(src, 50)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You have fastened the meter to the pipe.</span>")
 	qdel(src)
 
@@ -607,9 +598,9 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 
 /obj/item/pipe_gsensor/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
-	if(!W.is_wrench(user))
+	if (!iswrench(W))
 		return ..()
 	new/obj/machinery/air_sensor( src.loc )
-	W.playtoolsound(src, 50)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You have fastened the gas sensor.</span>")
 	qdel(src)

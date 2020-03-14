@@ -2,12 +2,11 @@
 	name = "Butt-Bot's Revenge"
 	desc = "This spell removes the target's ass in a firey explosion."
 	user_type = USER_TYPE_WIZARD
-	specialization = SSOFFENSIVE
 	abbreviation = "AN"
 
 	school = "evocation"
 	charge_max = 500
-	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
+	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
 	invocation = "ARSE NATH"
 	invocation_type = SpI_SHOUT
 	range = 1

@@ -28,7 +28,16 @@
 
 /datum/dynamic_ruleset/latejoin/ready(var/forced = 0)
 	if (!forced)
-		if(!check_enemy_jobs(TRUE))
+		var/job_check = 0
+		if (enemy_jobs.len > 0)
+			for (var/mob/M in mode.living_players)
+				if (M.stat == DEAD)
+					continue//dead players cannot count as opponents
+				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+
+		var/threat = round(mode.threat_level/10)
+		if (job_check < required_enemies[threat])
 			return 0
 	return ..()
 
@@ -42,8 +51,7 @@
 /datum/dynamic_ruleset/latejoin/infiltrator
 	name = "Syndicate Infiltrator"
 	role_category = /datum/role/traitor
-	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security",
-							"Captain", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
+	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security", "Captain", "Merchant")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
 	weight = 7
@@ -109,8 +117,7 @@
 //                                          //
 //////////////////////////////////////////////
 
-
-/*/datum/dynamic_ruleset/latejoin/ninja
+/datum/dynamic_ruleset/latejoin/ninja
 	name = "Space Ninja Attack"
 	role_category = /datum/role/ninja
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
@@ -133,14 +140,10 @@
 	newninja.Greet(GREET_DEFAULT)
 	newninja.OnPostSetup()
 	newninja.AnnounceObjectives()
-	spawn(1) //TODO - FIX THE NEED FOR THIS. CHECK PR, CHECK THE REVERTED COMMIT
-		if(!newninja.antag.current.ThrowAtStation())
-			newninja.antag.current.spawn_rand_maintenance()
+	spawn(5)
+		newninja.antag.current.ThrowAtStation()
 	return 1
-*/
-//TODO: ADD A "DO YOU WANT TO BE A [ROLE]?" PROMPT TO LATE-JOINERS BECAUSE PEOPLE HATE BEING A NINJA
-//TODO: ADD AN EQUIVALENT OF generate_ruleset_body() FOR LATEJOINS SO NINJAS DON'T SPAWN AS NAKED DYING VOX
-//DON'T RE-ENABLE TILL THAT'S DONE
+	
 
 
 //////////////////////////////////////////////

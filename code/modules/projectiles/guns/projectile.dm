@@ -19,7 +19,6 @@
 	var/obj/item/ammo_storage/magazine/stored_magazine = null
 	var/obj/item/ammo_casing/chambered = null
 	var/mag_type = ""
-	var/list/mag_type_restricted = list() //better magazine manipulation
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 	var/automagdrop_delay_time = 5 // delays the automagdrop
 	var/spawn_mag = TRUE
@@ -45,9 +44,6 @@
 //loads the argument magazine into the gun
 /obj/item/weapon/gun/projectile/proc/LoadMag(var/obj/item/ammo_storage/magazine/AM, var/mob/user)
 	if(istype(AM, text2path(mag_type)) && !stored_magazine)
-		for(var/T in mag_type_restricted)
-			if (istype(AM, T))
-				return 0
 		if(user)
 			if(user.drop_item(AM, src))
 				to_chat(usr, "<span class='notice'>You load the magazine into \the [src].</span>")
@@ -231,7 +227,14 @@
 			update_icon()
 			return
 		if(silenced)
-			RemoveAttach(usr)
+			if(!user.is_holding_item(src))
+				..()
+				return
+			to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
+			user.put_in_hands(silenced)
+			silenced = 0
+			w_class = W_CLASS_SMALL
+			update_icon()
 			return
 	else
 		to_chat(user, "<span class='warning'>Nothing loaded in \the [src]!</span>")
@@ -279,25 +282,3 @@
 		playsound(M, empty_sound, 100, 1)
 		return 0
 	return ..()
-
-/obj/item/weapon/gun/projectile/proc/RemoveAttach(var/mob/user)
-	to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
-	user.put_in_hands(silenced)
-	silenced = 0
-	w_class = W_CLASS_SMALL
-	update_icon()
-
-/obj/item/weapon/gun/projectile/verb/RemoveAttachments()
-	set name = "Remove Attachments"
-	set category = "Object"
-	set src in usr
-	if(!usr.is_holding_item(src))
-		to_chat(usr, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
-		return
-	if(usr.incapacitated())
-		to_chat(usr, "<span class='rose'>You can't do this!</span>")
-		return
-	if(silenced)
-		RemoveAttach(usr)
-	else
-		to_chat(usr, "<span class='rose'>There are no attachments to remove!</span>")

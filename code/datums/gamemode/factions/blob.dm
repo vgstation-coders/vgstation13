@@ -31,8 +31,6 @@
 	var/prelude_announcement
 	var/outbreak_announcement
 
-	stat_datum_type = /datum/stat/faction/blob
-
 // -- Victory procs --
 
 /datum/faction/blob_conglomerate/check_win()

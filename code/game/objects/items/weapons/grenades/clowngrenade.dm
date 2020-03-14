@@ -1,9 +1,8 @@
 /obj/item/weapon/grenade/clown_grenade
 	name = "Banana Grenade"
 	desc = "A grenade used for rapid slipping of larger areas. Contains banana peels that release acid when slipped on."
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
-	icon_state = "banana"
-	item_state = "banana" //banana inhand sprites when
+	icon_state = "chemg"
+	item_state = "flashbang"
 	w_class = W_CLASS_SMALL
 	force = 2.0
 	var/stage = 0
@@ -12,7 +11,7 @@
 	var/affected_area = 2
 
 /obj/item/weapon/grenade/clown_grenade/New()
-	icon_state = initial(icon_state)
+	icon_state = initial(icon_state) +"_locked"
 
 /obj/item/weapon/grenade/clown_grenade/prime()
 	..()
@@ -56,8 +55,8 @@
 /obj/item/weapon/bananapeel/traitorpeel
 	name = "banana peel"
 	desc = "A peel from a banana."
-	icon = 'icons/obj/hydroponics/banana.dmi'
-	icon_state = "peel"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "banana_peel"
 	item_state = "banana_peel"
 	w_class = W_CLASS_TINY
 	throwforce = 0

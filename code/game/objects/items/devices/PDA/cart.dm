@@ -26,7 +26,6 @@
 	var/access_hydroponics = 0
 	var/access_trader = 0
 	var/access_robotics = 0
-	var/fax_pings = FALSE
 	var/mode = null
 	var/menu
 	var/datum/data/record/active1 = null //General
@@ -115,7 +114,6 @@
 	name = "\improper P.R.O.V.E. Cartridge"
 	icon_state = "cart-s"
 	access_security = 1
-	fax_pings = TRUE
 
 /obj/item/weapon/cartridge/clown
 	name = "\improper Honkworks 5.0"
@@ -180,7 +178,6 @@
 	access_quartermaster = 1
 	access_janitor = 1
 	access_security = 1
-	fax_pings = TRUE
 
 /obj/item/weapon/cartridge/hop/New()
 	..()
@@ -241,7 +238,6 @@
 	access_reagent_scanner = 1
 	access_status_display = 1
 	access_atmos = 1
-	fax_pings = TRUE
 
 /obj/item/weapon/cartridge/syndicate
 	name = "\improper Detomatix Cartridge"

@@ -30,7 +30,7 @@ var/list/syndicate_bomb_spawners = list()
 
 /obj/effect/spawner/newbomb/New()
 	..()
-	if(delayedspawn)
+	if (delayedspawn)
 		return
 
 	spawnbomb()
@@ -51,21 +51,24 @@ var/list/syndicate_bomb_spawners = list()
 		T.master = V
 		var/datum/gas_mixture/G = T.air_contents
 		G.update_values()
-		G.multiply(20 * ONE_ATMOSPHERE / G.pressure) //Sets each tank's pressure to twenty atmospheres, generates a 3, 7, 14 explosion (used to be 10 times for 1, 3, 7)
+		G.multiply(10 * ONE_ATMOSPHERE / G.pressure) //Sets each tank's pressure to ten atmospheres, which incidentally results in an explosion of exactly 7 dev with default settings.
 
 	var/obj/item/device/assembly/S
 
-	switch(btype)
-		//Radio
-		if(0)
+	switch (src.btype)
+		// radio
+		if (0)
+
 			S = new/obj/item/device/assembly/signaler(V)
 
-		//Proximity
+		// proximity
 		if (1)
+
 			S = new/obj/item/device/assembly/prox_sensor(V)
 
-		//Timer
+		// timer
 		if (2)
+
 			S = new/obj/item/device/assembly/timer(V)
 
 

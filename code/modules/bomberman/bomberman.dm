@@ -473,10 +473,10 @@ obj/structure/bomberflame/Destroy()
 	icon_state = "hardwall"
 	opacity = 0
 
-/turf/unsimulated/wall/bomberman/ex_act(severity)
+/turf/unsimulated/wall/ex_act(severity)
 	return
 
-/turf/unsimulated/wall/bomberman/cultify()
+/turf/unsimulated/wall/cultify()
 	return
 
 ///////////////////////////////POWER-UPS//////////////////////////////
@@ -1384,8 +1384,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	arena = a
 
 /obj/structure/planner/Destroy()
-	arena.planners -= src
 	..()
+	arena = null
 
 /obj/structure/planner/ex_act(severity)
 	return

@@ -123,6 +123,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 	if(send_count > 0 && is_freq_listening(signal))
 		traffic++
+
 	return send_count
 
 /obj/machinery/telecomms/proc/relay_direct_information(datum/signal/signal, obj/machinery/telecomms/machine)
@@ -137,7 +138,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	// return 1 if found, 0 if not found
 	if(!signal)
 		return 0
-	if((!freq_listening.len) || (freq_listening.Find(signal.frequency)))
+	if((signal.frequency in freq_listening) || (!freq_listening.len))
 		return 1
 	else
 		return 0
@@ -169,6 +170,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		unlinkFrom(null, link)
 	telecomms_list -= src
 	..()
+
+/obj/machinery/telecomms/unlinkFrom(var/mob/user, var/obj/buffer)
+	..()
+	for(var/obj/machinery/computer/telecomms/monitor/M in range(25,src))
+		M.notify_unlinked()
 
 // Used in auto linking
 /obj/machinery/telecomms/proc/add_link(var/obj/machinery/telecomms/T)

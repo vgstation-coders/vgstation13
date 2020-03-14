@@ -3,13 +3,12 @@
 # define AREA_SPACE		2
 # define AREA_SPECIAL	3
 # define AREA_BLUEPRINTS 4
-# define AREA_CONSTRUCT 5
 
 # define BORDER_ERROR   0
-# define BORDER_NONE    1 //add, and continue branching
-# define BORDER_BETWEEN 2 //nothing
-# define BORDER_2NDTILE 3 //add, but do not continue searching in this direction
-# define BORDER_SPACE   4 //reject room, space
+# define BORDER_NONE    1
+# define BORDER_BETWEEN 2
+# define BORDER_2NDTILE 3
+# define BORDER_SPACE   4
 
 # define ROOM_ERR_LOLWAT    0
 # define ROOM_ERR_SPACE    -1
@@ -25,7 +24,7 @@
 
 	var/header = "<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small>"
 
-	var/can_create_areas_in = list(AREA_SPACE,AREA_CONSTRUCT)
+	var/can_create_areas_in = list(AREA_SPACE)
 	var/can_rename_areas = list(AREA_STATION, AREA_BLUEPRINTS)
 	var/can_edit_areas = list(AREA_BLUEPRINTS)
 	var/can_delete_areas = list(AREA_BLUEPRINTS)
@@ -129,8 +128,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	switch (area_type)
 		if (AREA_SPACE)
 			text += "<p>According to the blueprints, you are now in <b>outer space</b>.  Hold your breath.</p>"
-		if (AREA_CONSTRUCT)
-			text += "<p>According to the blueprints, you are now in <b>\"[A.name]\"</b>. Time to build!</p>"
 		if (AREA_STATION)
 			text += "<p>According to the blueprints, you are now in <b>\"[A.name]\"</b>.</p>"
 		if (AREA_SPECIAL)
@@ -162,8 +159,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		A = get_area(src)
 	if (isspace(A))
 		return AREA_SPACE
-	else if(A.construction_zone)
-		return AREA_CONSTRUCT
 	else if(istype(A, /area/station/custom))
 		return AREA_BLUEPRINTS
 
@@ -174,10 +169,10 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		/area/centcom,
 		/area/asteroid,
 		/area/tdome,
+		/area/syndicate_station,
 		/area/wizard_station,
 		/area/prison,
 		/area/vault,
-		/area/surface/blizzard
 	)
 	for (var/type in SPECIALS)
 		if ( istype(A,type) )
@@ -188,8 +183,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/process()
 	//Blueprints must be in hands to be usable
 	//Editor must be in the edited area
-	var/turf/turf_loc = get_turf(editor)
-	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || turf_loc.loc != currently_edited )
+	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || (!currently_edited.contents.Find(get_turf(editor))) )
 		if(editor)
 			to_chat(editor, "<span class='info'>You finish modifying \the [src].</span>")
 
@@ -228,19 +222,18 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	//Click on a turf = add it to the edited area or remove it from the edited area
 	var/turf/T = get_turf(A)
 	if(isturf(T))
-		var/area/fill_area = get_base_area(A.z)
+		var/area/space = get_space_area()
 		var/area/target_area = T.loc
-		var/area_type = get_area_type(target_area)
 
 		if(target_area == currently_edited) //Removing the turf from the current area
 			//Check if there are any APCs or air alarms nearby
 			var/atom/obstacle = get_removal_obstruction(T, target_area)
 			if(!obstacle)
-				T.set_area(fill_area)
+				T.set_area(space)
 			else
 				to_chat(user, "<span class='notice'>A nearby [obstacle.name] prevents you from doing that.</span>")
 
-		else if(area_type == AREA_SPACE || area_type == AREA_CONSTRUCT)
+		else if(target_area == space)
 			T.set_area(currently_edited) //Add to current area
 		else
 			#define error_flash_dur 30
@@ -379,6 +372,8 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 			to_chat(user, "<span class='notice'>You can't erase an area with an APC in it!</span>")
 			return
 
+	var/area/space = get_space_area()
+
 	if(alert(usr,"Are you sure you want to erase \"[areadeleted]\" from the blueprints?","Blueprint Editing","Yes","No") != "Yes")
 		return
 	if(!Adjacent(user))
@@ -386,11 +381,8 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	if(!(areadeleted == get_area(src)))
 		return //if the blueprints are no longer in the area, return
 
-	var/area/fill_area
 	for(var/turf/T in areadeleted)
-		if(!fill_area)
-			fill_area = get_base_area(T.z)
-		T.set_area(fill_area)
+		T.set_area(space)
 
 	to_chat(usr, "You've erased the \"[areadeleted]\" from the blueprints.")
 
@@ -401,9 +393,8 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		return BORDER_SPACE //omg hull breach we all going to die here
 	if (istype(T2, /turf/simulated/shuttle))
 		return BORDER_SPACE
-	var/areatype = get_area_type(T2.loc)
-	if (areatype != AREA_SPACE && areatype != AREA_CONSTRUCT)
-		return BORDER_BETWEEN //found something part of a non-buildable area, like a preexisting structure
+	if (get_area_type(T2.loc)!=AREA_SPACE)
+		return BORDER_BETWEEN
 	if (istype(T2, /turf/simulated/wall))
 		return BORDER_2NDTILE
 	if (!istype(T2, /turf/simulated))
@@ -478,12 +469,11 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	desc = "Required for turning a dull room with some engines in the back into something that can move through space!"
-	var/area_requirement_override = FALSE //so admins can allow a licence to turn any area into a shuttle
 
 /obj/item/shuttle_license/attack_self(mob/user)
 	to_chat(user, "<span class = 'notice'>Checking current area...</span>")
 	var/area/A = get_area(user)
-	if(!area_requirement_override && !istype(A, /area/station/custom))
+	if(!istype(A, /area/station/custom))
 		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Custom areas only.</span>")
 		return
 
@@ -499,7 +489,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		if(D.heater && D.anchored)
 			active_engines++
 
-	if(active_engines < 2 || area_size/active_engines > 15) //2 engines per 30 tiles, with a minimum of 2 engines.
+	if(active_engines < 2 || area_size/active_engines > 12.5) //2 engines per 25 tiles, with a minimum of 2 engines.
 		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Insufficient engine count.</span>")
 		to_chat(user, "<span class = 'notice'> Active engine count: [active_engines]. Area size: [area_size] meters squared.</span>")
 		return

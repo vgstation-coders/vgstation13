@@ -83,14 +83,15 @@
 			to_chat(user, "<span class='notice'>[src] is full.</span>")
 		updateUsrDialog()
 		return
-	if(I.is_wrench(user))
+	if(iswrench(I))
 		if(anchored)
 			to_chat(user, "<span class='notice'>You lean down and unwrench [src].</span>")
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = 0
 		else
 			to_chat(user, "<span class='notice'>You wrench [src] into place.</span>")
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = 1
-		I.playtoolsound(src, 50)
 		return
 
 /obj/structure/dispenser/Topic(href, href_list)

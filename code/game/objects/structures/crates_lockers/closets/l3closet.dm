@@ -9,7 +9,6 @@
 	return list(
 		/obj/item/clothing/suit/bio_suit/general,
 		/obj/item/clothing/head/bio_hood/general,
-		/obj/item/clothing/glasses/science,
 	)
 
 
@@ -22,7 +21,6 @@
 	return list(
 		/obj/item/clothing/suit/bio_suit/general,
 		/obj/item/clothing/head/bio_hood/general,
-		/obj/item/clothing/glasses/science,
 	)
 
 
@@ -35,7 +33,6 @@
 	return list(
 		/obj/item/clothing/suit/bio_suit/virology,
 		/obj/item/clothing/head/bio_hood/virology,
-		/obj/item/clothing/glasses/science,
 	)
 
 
@@ -48,7 +45,6 @@
 	return list(
 		/obj/item/clothing/suit/bio_suit/security,
 		/obj/item/clothing/head/bio_hood/security,
-		/obj/item/clothing/glasses/science,
 	)
 
 
@@ -61,7 +57,6 @@
 	return list(
 		/obj/item/clothing/suit/bio_suit/janitor,
 		/obj/item/clothing/head/bio_hood/janitor,
-		/obj/item/clothing/glasses/science,
 	)
 
 
@@ -74,5 +69,4 @@
 	return list(
 		/obj/item/clothing/suit/bio_suit/scientist,
 		/obj/item/clothing/head/bio_hood/scientist,
-		/obj/item/clothing/glasses/science,
 	)

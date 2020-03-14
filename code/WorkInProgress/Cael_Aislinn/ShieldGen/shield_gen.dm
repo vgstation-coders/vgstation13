@@ -63,9 +63,9 @@
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
 		T += Ma.rating - 1
-		energy_conversion_rate = (initial(energy_conversion_rate)+(T * 0.01))
-		max_strengthen_rate = (initial(max_strengthen_rate)+(T))
-
+		energy_conversion_rate = (initial(energy_conversion_rate)+(T * 0.01))	
+		max_strengthen_rate = (initial(max_strengthen_rate)+(T))	
+	
 /obj/machinery/shield_gen/Destroy()
 	..()
 	owned_capacitor = null
@@ -93,7 +93,7 @@
 			to_chat(user, "You fail to hack \the [src]'s controls.")
 	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 
-/obj/machinery/shield_gen/wrenchAnchor(var/mob/user, var/obj/item/I)
+/obj/machinery/shield_gen/wrenchAnchor(var/mob/user)
 	. = ..()
 	if(!.)
 		return
@@ -189,11 +189,11 @@
 	if(href_list["toggle_active"])
 		toggle()
 	else if(href_list["adjust_field_radius"])
-		field_radius = clamp(field_radius + text2num(href_list["adjust_field_radius"]), MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
+		field_radius = Clamp(field_radius + text2num(href_list["adjust_field_radius"]), MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
 	else if(href_list["adjust_strengthen_rate"])
-		strengthen_rate = clamp(strengthen_rate + text2num(href_list["adjust_strengthen_rate"]), MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)
+		strengthen_rate = Clamp(strengthen_rate + text2num(href_list["adjust_strengthen_rate"]), MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)
 	else if(href_list["adjust_field_strength_cap"])
-		field_strength_cap = clamp(field_strength_cap + text2num(href_list["adjust_field_strength_cap"]), MIN_FIELD_STRENGTH_CAP, MAX_FIELD_STRENGTH_CAP)
+		field_strength_cap = Clamp(field_strength_cap + text2num(href_list["adjust_field_strength_cap"]), MIN_FIELD_STRENGTH_CAP, MAX_FIELD_STRENGTH_CAP)
 	return 1
 
 /obj/machinery/shield_gen/update_icon()
@@ -265,7 +265,7 @@
 		return
 	if(prob(50))
 		active = !active
-
+	
 /obj/machinery/shield_gen/npc_tamper_act(var/mob/living/L)
 	field_radius = rand(MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
 	strengthen_rate = rand(MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)

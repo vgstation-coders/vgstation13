@@ -250,7 +250,7 @@
 	if(I.is_screwdriver(user))
 		to_chat(user, "You [panelopen ? "close" : "open"] the panel on the side of \the [src].")
 		panelopen = !panelopen
-		I.playtoolsound(src, 50)
+		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 
 	if(istype(I, /obj/item/stack/cable_coil))
 		if(!panelopen)

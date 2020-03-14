@@ -454,8 +454,7 @@ var/global/datum/controller/occupations/job_master
 		var/bank_pref_number = H.client.prefs.bank_security
 		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
-			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = job.wage_payout, security_pref = bank_pref_number)
-			global.allowable_payroll_amount += job.wage_payout + 10 //Adding an overhead of 10 credits per crew member
+			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = PLAYER_START_WAGE, security_pref = bank_pref_number)
 			if(H.mind)
 				var/remembered_info = ""
 				remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
@@ -556,12 +555,6 @@ var/global/datum/controller/occupations/job_master
 		else
 			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
 
-	if (H.client.IsByondMember())
-		to_chat(H, "Thank you for supporting BYOND!")
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/byond(H))
-		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/byond(H), slot_in_backpack)
 	return 1
 
 

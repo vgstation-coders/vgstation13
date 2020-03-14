@@ -142,6 +142,12 @@
 /obj/structure/closet/statue/open()
 	return
 
+/obj/structure/closet/statue/take_contents()
+	return
+
+/obj/structure/closet/statue/open()
+	return
+
 /obj/structure/closet/statue/insert()
 	return
 

@@ -1,23 +1,17 @@
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
 var/list/admin_verbs_default = list(
-
-// Everyone has +ADMIN so we don't actually need anything in here.
-// Downside: The observers no longer have msay if we lack defaults.
-	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
-
-	)
-var/list/admin_verbs_admin = list(
-
 	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
+	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
 	/client/proc/check_antagonists,		/*shows all antags*/
 	/client/proc/advwho,				/*in addition to listing connected ckeys, shows character name and living/dead/antag status for each*/
 	/datum/admins/proc/checkCID,
-	/datum/admins/proc/checkCKEY,
-	//	/client/proc/deadchat				/*toggles deadchat on/off*/
-
+	/datum/admins/proc/checkCKEY
+//	/client/proc/deadchat				/*toggles deadchat on/off*/
+	)
+var/list/admin_verbs_admin = list(
 	/client/proc/set_base_turf,
 	/datum/admins/proc/delay,
 	/client/proc/SendCentcommFax,		/*sends a fax to all fax machines*/
@@ -86,9 +80,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/manage_religions,
 	/client/proc/set_veil_thickness,
 	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
-	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
-	/client/proc/diseases_panel,
-	/client/proc/climate_panel
+	/client/proc/persistence_panel			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -128,7 +120,6 @@ var/list/admin_verbs_fun = list(
 	/client/proc/makepAI,
 	/client/proc/set_blob_looks,
 	/client/proc/set_teleport_pref,
-	/client/proc/deadchat_singularity
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -158,8 +149,7 @@ var/list/admin_verbs_server = list(
 	/client/proc/toggle_random_events,
 	/client/proc/check_customitem_activity,
 	/client/proc/dump_chemreactions,
-	/client/proc/save_coordinates,
-	/datum/admins/proc/mass_delete_in_zone,
+	/client/proc/save_coordinates
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
@@ -203,7 +193,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/view_runtimes,
 	/client/proc/cmd_mass_modify_object_variables,
 	/client/proc/emergency_shuttle_panel,
-	/client/proc/bee_count,
 #if UNIT_TESTS_ENABLED
 	/client/proc/unit_test_panel,
 #endif
@@ -371,7 +360,6 @@ var/list/admin_verbs_mod = list(
 		/client/proc/ticklag,
 		/client/proc/cmd_admin_grantfullaccess,
 		/client/proc/kaboom,
-		/client/proc/rigvote,
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
@@ -700,26 +688,6 @@ var/list/admin_verbs_mod = list(
 	log_admin("[key_name(usr)] gave [key_name(T)] the spell [S].")
 	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the spell [S].</span>", 1)
 
-
-/client/proc/toggle_invisible(mob/T as mob in mob_list)
-	set category = "Fun"
-	set name = "Toggle invisiblity"
-	set desc = "Make a mob completely invisible."
-
-	if (T.alphas["admin_invis"] == 0)
-		T.forced_density = 0
-		T.alphas -= "admin_invis"
-	else
-		T.alphas["admin_invis"] = 0
-		T.density = 0
-		T.forced_density = 1
-
-	to_chat(T, "<span class='notice'>Admin [key_name_admin(usr)] toggled your invisiblity.</span>")
-
-	feedback_add_details("admin_verb","MI") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	log_admin("[key_name(usr)] toggled [key_name(T)] invisibility.")
-	message_admins("<span class='notice'>[key_name_admin(usr)] toggled [key_name(T)] invisibility.</span>", 1)
-
 /client/proc/give_disease(mob/T as mob in mob_list) // -- Giacom
 	set category = "Fun"
 	set name = "Give Disease"
@@ -958,37 +926,34 @@ var/list/admin_verbs_mod = list(
 		return
 
 	if(istype(winner, /mob/living))
-		achoice = alert("Are you sure you want to give them an award?","Achievement award", "Confirm", "Cancel")
+		achoice = alert("Give our winner his own trophy?","Achievement Trophy", "Confirm", "Cancel")
 		if(achoice == "Cancel")
 			return
 
-	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Announce To All Players", "No!","Yes!")
+	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Last Question", "No!","Yes!")
 
-	var/obj/item/award
-	achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup","Dunce cap")
-	if(achoice == "Gold cup")
-		award = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup(get_turf(winner))
-	if(achoice == "Gold medal")
-		award = new /obj/item/clothing/accessory/medal/gold(get_turf(winner))
-	if(achoice == "Dunce cap")
-		award = new /obj/item/clothing/head/dunce_cap(get_turf(winner))
-	award.name = name
-	award.desc = desc
-	if(iscarbon(winner) && (winner.stat == CONSCIOUS))
-		winner.put_in_hands(award)
+	if(achoice == "Confirm")
+		var/obj/item/weapon/reagent_containers/food/drinks/golden_cup/C = new(get_turf(winner))
+		C.name = name
+		C.desc = desc
+		if(iscarbon(winner) && (winner.stat == CONSCIOUS))
+			winner.put_in_hands(C)
+	else
+		to_chat(winner, "<span class='danger'>You win [name]! [desc]</span>")
+
+	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
 
 	if(glob == "No!")
-		winner.client << sound('sound/misc/achievement.ogg', volume=35)
+		winner.client << sound('sound/misc/achievement.ogg')
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='danger'>[bicon(award)] Attention all ghosts, <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+			to_chat(O, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 	else
-		world << sound('sound/misc/achievement.ogg', volume=35)
-		to_chat(world, "<span class='danger'>[bicon(award)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+		world << sound('sound/misc/achievement.ogg')
+		to_chat(world, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 
-	to_chat(winner, "<span class='danger'>[bicon(award)] Congratulations to you, <b>[winner.name]</b>! You have won \"<b>[name]</b>\"!</span>")
+	to_chat(winner, "<span class='danger'>Congratulations!</span>")
 
-	var/datum/achievement = new /datum/achievement(award, winner.key, winner.name, name, desc)
-	ticker.achievements.Add(achievement)
+	achievements += "<b>[winner.key]</b> as <b>[winner.name]</b> won \"<b>[name]</b>\"! \"[desc]\""
 
 	message_admins("[key_name_admin(usr)] has awarded <b>[winner.key]</b>([winner.name]) with the achievement \"<b>[name]</b>\"! \"[desc]\".", 1)
 
@@ -1149,8 +1114,8 @@ var/list/admin_verbs_mod = list(
 			if(z_coord == null)
 				return
 
-			x_coord = clamp(x_coord, 1, world.maxx)
-			y_coord = clamp(y_coord, 1, world.maxy)
+			x_coord = Clamp(x_coord, 1, world.maxx)
+			y_coord = Clamp(y_coord, 1, world.maxy)
 
 		if(ML_LOAD_TO_Z2)
 			if(!dungeon_area)

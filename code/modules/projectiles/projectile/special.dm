@@ -11,15 +11,21 @@
 /obj/item/projectile/ion/to_bump(atom/A as mob|obj|turf|area)
 	if(!bumped && ((A != firer) || reflected))
 		empulse(get_turf(A), 1, 1)
-		qdel(src)
-		return
 	..()
 
-/obj/item/projectile/ion/small/to_bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/ionsmall
+	name = "ion bolt"
+	icon_state = "ion"
+	damage = 0
+	damage_type = BURN
+	nodamage = 1
+	layer = PROJECTILE_LAYER
+	flag = "energy"
+	fire_sound = 'sound/weapons/ion.ogg'
+
+/obj/item/projectile/ionsmall/to_bump(atom/A as mob|obj|turf|area)
 	if(!bumped && ((A != firer) || reflected))
-		empulse(get_turf(A), 0, 1)
-		qdel(src)
-		return
+		empulse(src, 0, 1)
 	..()
 
 /obj/item/projectile/bullet/gyro
@@ -231,8 +237,7 @@ obj/item/projectile/kinetic/New()
 	//testing("Hit [target.type], on [target_turf.type].")
 	if(istype(target_turf, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = target_turf
-		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
-			M.GetDrilled()
+		M.GetDrilled()
 	new /obj/item/effect/kinetic_blast(target_turf)
 	..(target,blocked)
 
@@ -250,8 +255,7 @@ obj/item/projectile/kinetic/New()
 			//testing("Bumped [A.type], on [target_turf.type].")
 			if(istype(target_turf, /turf/unsimulated/mineral))
 				var/turf/unsimulated/mineral/M = target_turf
-				if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
-					M.GetDrilled()
+				M.GetDrilled()
 			// Now we bump as a bullet, if the atom is a non-turf.
 			if(!isturf(A))
 				..(A)

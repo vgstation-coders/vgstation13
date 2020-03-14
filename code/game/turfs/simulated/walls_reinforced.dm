@@ -112,7 +112,7 @@
 	switch(d_state)
 		if(WALLCOMPLETED)
 			if(iswirecutter(W))
-				W.playtoolsound(src, 100)
+				playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
 				src.d_state = WALLCOVEREXPOSED
 				update_icon()
 				user.visible_message("<span class='warning'>[user] cuts out \the [src]'s outer grille.</span>", \
@@ -123,7 +123,7 @@
 			if(W.is_screwdriver(user))
 				user.visible_message("<span class='warning'>[user] begins unsecuring \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin unsecuring \the [src]'s external cover.</span>")
-				W.playtoolsound(src, 100)
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 
 				if(do_after(user, src, 40) && d_state == WALLCOVEREXPOSED)
 					src.d_state = WALLCOVERUNSECURED
@@ -164,7 +164,7 @@
 			else if(W.is_screwdriver(user))
 				user.visible_message("<span class='notice'>[user] begins securing \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin securing \the [src]'s external cover.</span>")
-				W.playtoolsound(src, 100)
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 
 				if(do_after(user, src, 40) && d_state == WALLCOVERUNSECURED)
 					src.d_state = WALLCOVEREXPOSED
@@ -179,7 +179,7 @@
 				user.visible_message("<span class='warning'>[user] starts prying off \the [src]'s external cover.</span>", \
 				"<span class='notice'>You struggle to pry off \the [src]'s external cover.</span>", \
 				"<span class='warning'>You hear a crowbar.</span>")
-				W.playtoolsound(src, 100)
+				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 
 				if(do_after(user, src, 100) && d_state == WALLCOVERWEAKENED)
 					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1) //SLAM
@@ -208,11 +208,11 @@
 				return
 
 		if(WALLCOVERREMOVED)
-			if(W.is_wrench(user))
+			if(iswrench(W))
 
 				user.visible_message("<span class='warning'>[user] starts loosening the bolts anchoring \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You start loosening the bolts anchoring \the [src]'s external support rods.</span>")
-				W.playtoolsound(src, 100)
+				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 
 				if(do_after(user, src, 40) && d_state == WALLCOVERREMOVED)
 					src.d_state = WALLRODSUNSECURED
@@ -266,11 +266,11 @@
 				return
 
 			//Repair step, tighten the anchoring bolts
-			else if(W.is_wrench(user))
+			else if(iswrench(W))
 
 				user.visible_message("<span class='notice'>[user] starts tightening the bolts anchoring \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You start tightening the bolts anchoring \the [src]'s external support rods.</span>")
-				W.playtoolsound(src, 100)
+				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 
 				if(do_after(user, src, 40) && d_state == WALLRODSUNSECURED)
 					src.d_state = WALLCOVERREMOVED
@@ -284,7 +284,7 @@
 
 				user.visible_message("<span class='warning'>[user] starts prying off [src]'s internal cover.</span>", \
 				"<span class='notice'>You struggle to pry off [src]'s internal cover.</span>")
-				W.playtoolsound(src, 100)
+				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 
 				if(do_after(user, src, 100) && d_state == WALLRODSCUT)
 					user.visible_message("<span class='warning'>[user] pries off [src]'s internal cover.</span>", \
@@ -304,7 +304,7 @@
 			else if(iswelder(W))
 
 				var/obj/item/weapon/weldingtool/WT = W
-				if(WT.remove_fuel(1,user))
+				if(WT.remove_fuel(0,user))
 					user.visible_message("<span class='notice'>[user] begins mending \the [src]'s external support rods.</span>", \
 					"<span class='notice'>You begin mending \the [src]'s external support rods.</span>")
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
@@ -316,7 +316,8 @@
 						user.visible_message("<span class='warning'>[user] mends \the [src]'s external support rods.</span>", \
 						"<span class='notice'>You mend \the [src]'s external support rods.</span>")
 				else
-					return
+					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+				return
 
 //This is where we perform actions that aren't deconstructing, constructing or thermiting the reinforced wall
 
@@ -330,8 +331,8 @@
 
 		user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \
 		"<span class='notice'>You begin [PK.drill_verb] straight into \the [src].</span>")
-		PK.playtoolsound(src, 100)
-		if(do_after(user, src, (MINE_DURATION * PK.toolspeed) * 50))
+		playsound(src, PK.drill_sound, 100, 1)
+		if(do_after(user, src, PK.digspeed * 50))
 			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
 			var/pdiff = performWallPressureCheck(src.loc)

@@ -9,8 +9,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 0)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_restricted = list(PLASMAMAN_SHAPED)
-	species_fit = list(PLASMAMAN_SHAPED)
+	species_restricted = list("Plasmaman")
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	pressure_resistance = 40 * ONE_ATMOSPHERE //we can't change, so some resistance is needed
 
@@ -39,8 +38,7 @@
 	desc = "A special containment helmet designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	species_restricted = list(PLASMAMAN_SHAPED)
-	species_fit = list(PLASMAMAN_SHAPED)
+	species_restricted = list("Plasmaman")
 	eyeprot = 0
 
 	icon_state = "plasmaman_helmet0"
@@ -133,15 +131,6 @@
 	name = "plasmaman botanist helmet"
 	icon_state = "plasmamanBotanist_helmet0"
 	base_state = "plasmamanBotanist_helmet"
-	
-/obj/item/clothing/suit/space/plasmaman/librarian
-	name = "plasmaman librarian suit"
-	icon_state = "plasmamanLibrarian_suit"
-
-/obj/item/clothing/head/helmet/space/plasmaman/librarian
-	name = "plasmaman librarian helmet"
-	icon_state = "plasmamanLibrarian_helmet0"
-	base_state = "plasmamanLibrarian_helmet"	
 
 /obj/item/clothing/suit/space/plasmaman/chaplain
 	name = "plasmaman chaplain suit"
@@ -375,7 +364,7 @@
 
 //NUKEOPS
 
-/obj/item/clothing/suit/space/plasmaman/nuclear //should just replace this with a ref to the normal suit
+/obj/item/clothing/suit/space/plasmaman/nuclear
 	name = "blood red plasmaman suit"
 	icon_state = "plasmaman_Nukeops"
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)

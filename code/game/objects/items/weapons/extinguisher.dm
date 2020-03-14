@@ -28,10 +28,6 @@
 	create_reagents(max_water)
 	reagents.add_reagent(WATER, max_water)
 
-/obj/item/weapon/extinguisher/empty/New()
-	. = ..()
-	reagents.clear_reagents()
-
 /obj/item/weapon/extinguisher/mini
 	name = "fire extinguisher"
 	desc = "A light and compact fibreglass-framed model fire extinguisher."
@@ -70,7 +66,12 @@
 /obj/item/weapon/extinguisher/examine(mob/user)
 	..()
 	if(!is_open_container())
-		reagents.get_examine(user)
+		to_chat(user, "It contains:")
+		if(reagents && reagents.reagent_list.len)
+			for(var/datum/reagent/R in reagents.reagent_list)
+				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+		else
+			to_chat(user, "<span class='info'>Nothing</span>")
 	for(var/thing in src)
 		to_chat(user, "<span class='warning'>\A [thing] is jammed into the nozzle!</span>")
 
@@ -84,18 +85,18 @@
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)
 		return
-	if (W.is_wrench(user))
+	if (iswrench(W))
 		if(!is_open_container())
 			user.visible_message("[user] begins to unwrench the fill cap on \the [src].","<span class='notice'>You begin to unwrench the fill cap on \the [src].</span>")
 			if(do_after(user, src, 25))
 				user.visible_message("[user] removes the fill cap on \the [src].","<span class='notice'>You remove the fill cap on \the [src].</span>")
-				W.playtoolsound(src, 100)
+				playsound(src,'sound/items/Ratchet.ogg', 100, 1)
 				flags |= OPENCONTAINER
 		else
 			user.visible_message("[user] begins to seal the fill cap on \the [src].","<span class='notice'>You begin to seal the fill cap on \the [src].</span>")
 			if(do_after(user, src, 25))
 				user.visible_message("[user] fastens the fill cap on \the [src].","<span class='notice'>You fasten the fill cap on \the [src].</span>")
-				W.playtoolsound(src, 100)
+				playsound(src,'sound/items/Ratchet.ogg', 100, 1)
 				flags &= ~OPENCONTAINER
 		return
 

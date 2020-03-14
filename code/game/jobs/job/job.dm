@@ -54,7 +54,6 @@
 
 	var/no_crew_manifest = 0 //If 1, don't inject players with this job into the crew manifest
 	var/no_starting_money = 0 //If 1, don't start with a bank account or money
-	var/wage_payout = 50 //Default wage payout
 	var/no_id = 0 //If 1, don't spawn with an ID
 	var/no_pda= 0 //If 1, don't spawn with a PDA
 	var/no_headset = 0 //If 1, don't spawn with a headset
@@ -65,7 +64,7 @@
 	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority_reward_equip on spawn.
 
 /datum/job/proc/get_total_positions()
-	return clamp(total_positions + xtra_positions, 0, 99)
+	return Clamp(total_positions + xtra_positions, 0, 99)
 
 /datum/job/proc/set_total_positions(var/nu)
 	total_positions = nu

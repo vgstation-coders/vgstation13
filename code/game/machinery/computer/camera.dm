@@ -96,7 +96,6 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	network = list(CAMERANET_THUNDER)
 	density = 0
 	circuit = null
-	layer = ABOVE_WINDOW_LAYER
 
 	light_color = null
 
@@ -121,17 +120,12 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	light_color = null
 
-/obj/machinery/computer/security/telescreen/entertainment/wooden_tv
-	icon_state = "security_det"
-	icon = 'icons/obj/computer.dmi'
-
 /obj/machinery/computer/security/wooden_tv
 	name = "Security Cameras"
 	desc = "An old TV hooked into the stations camera network."
 	icon_state = "security_det"
-	circuit = /obj/item/weapon/circuitboard/security/wooden_tv
+
 	light_color = null
-	pass_flags = PASSTABLE
 
 /obj/machinery/computer/security/mining
 	name = "Outpost Cameras"

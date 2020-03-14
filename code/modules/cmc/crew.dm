@@ -245,17 +245,13 @@ GENERAL PROCS
 
 	for(var/mob/living/carbon/brain/B in mob_list)
 		var/obj/item/device/mmi/M = B.loc
-		var/parea = "ERROR"
-		// area can be null in the case of nullspacing
-		var/area/A = get_area(B)
-		if(!isnull(A))
-			parea = format_text(A.name)
+		var/parea = format_text(get_area(B).name)
 
 		if(istype(M.loc,/obj/item/weapon/storage/belt/silicon))
 			continue
 
 		var/turf/pos = get_turf(B)
-		if(!isnull(pos) && (pos.z in all_tracked_z_levels) && istype(M) && M.brainmob == B && !isrobot(M.loc))
+		if((pos.z in all_tracked_z_levels) && istype(M) && M.brainmob == B && !isrobot(M.loc))
 			var/see_x = pos.x - WORLD_X_OFFSET[pos.z]
 			var/see_y = pos.y - WORLD_Y_OFFSET[pos.z]
 			entries[pos.z][++entries[pos.z].len] = list(see_x, see_y, B, "[B]", "MMI", null, null, parea, 60, pos)
@@ -333,10 +329,8 @@ HOLOMAP PROCS
 		user.client.images -= holomap_images[uid]
 		user.client.screen -= holomap_tooltips[uid]
 
-	if(holomap_images[uid])
-		holomap_images[uid].len = 0
-	if(holomap_tooltips[uid])
-		holomap_tooltips[uid].len = 0
+	holomap_images[uid].len = 0
+	holomap_tooltips[uid].len = 0
 	freeze[uid] = 0
 	holomap[uid] = 0
 

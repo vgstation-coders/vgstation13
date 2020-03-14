@@ -110,7 +110,7 @@
 
 	return 1
 
-/obj/machinery/atmospherics/binary/circulator/wrenchAnchor(var/mob/user, var/obj/item/I)
+/obj/machinery/atmospherics/binary/circulator/wrenchAnchor(var/mob/user)
 	. = ..()
 	if(!.)
 		return

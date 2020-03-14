@@ -13,11 +13,6 @@
 	name = "bar stool"
 	desc = "Apply butt. Get drunk."
 	icon_state = "bar-stool"
-	
-/obj/item/weapon/stool/cushion
-	name = "cushion"
-	desc = "Apply butt. Get comfy."
-	icon_state = "cushion"
 
 /obj/item/weapon/stool/hologram
 	sheet_type = null
@@ -39,8 +34,8 @@
 	return
 
 /obj/item/weapon/stool/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(W.is_wrench(user) && sheet_type)
-		W.playtoolsound(src, 50)
+	if(iswrench(W) && sheet_type)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
 

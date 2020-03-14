@@ -34,25 +34,8 @@ var/const/RND_WIRE_JOBFINISHED = 16
 	. += "The blue light is [rnd.hacked ? "off" : "on"].<BR>"
 	. += "The yellow light is [rnd.auto_make ? "on": "off"].<BR>"
 
-
-/datum/wires/rnd/UpdateCut(var/index, var/mended, var/mob/user)
-	var/obj/machinery/r_n_d/rnd = holder
-	..()
-	switch(index)
-		if(RND_WIRE_DISABLE)
-			rnd.disabled = !mended
-		if(RND_WIRE_SHOCK)
-			rnd.shocked = (mended ? 0 : -1)
-		if(RND_WIRE_HACK)
-			rnd.hacked = 0
-			rnd.update_hacked()
-		if(RND_WIRE_AUTOMAKE)
-			rnd.auto_make = 0
-
-
 /datum/wires/rnd/UpdatePulsed(var/index)
 	var/obj/machinery/r_n_d/rnd = holder
-	..()
 	switch(index)
 		if(RND_WIRE_DISABLE)
 			rnd.disabled = !rnd.disabled
@@ -63,3 +46,16 @@ var/const/RND_WIRE_JOBFINISHED = 16
 			rnd.update_hacked()
 		if(RND_WIRE_AUTOMAKE)
 			rnd.auto_make = !rnd.auto_make
+
+/datum/wires/rnd/UpdateCut(var/index, var/mended, var/mob/user)
+	var/obj/machinery/r_n_d/rnd = holder
+	switch(index)
+		if(RND_WIRE_DISABLE)
+			rnd.disabled = !mended
+		if(RND_WIRE_SHOCK)
+			rnd.shocked = (mended ? 0 : -1)
+		if(RND_WIRE_HACK)
+			rnd.hacked = 0
+			rnd.update_hacked()
+		if(RND_WIRE_AUTOMAKE)
+			rnd.auto_make = 0

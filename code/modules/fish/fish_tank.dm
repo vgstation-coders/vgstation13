@@ -70,14 +70,6 @@
 	cur_health = 15
 	shard_count = 0				// No salvageable shards
 
-/obj/machinery/fishtank/bowl/full
-	water_level = 50
-	food_level = MAX_FOOD
-
-/obj/machinery/fishtank/bowl/full/goldfish/New()
-	. = ..()
-	add_fish("goldfish")
-
 /obj/machinery/fishtank/tank
 	name = "fish tank"
 	desc = "A large glass tank designed to house aquatic creatures. Contains an integrated water circulation system."
@@ -97,9 +89,6 @@
 	cur_health = 50
 	shard_count = 4
 
-/obj/machinery/fishtank/tank/full
-	water_level = 200
-	food_level = MAX_FOOD
 
 /obj/machinery/fishtank/wall
 	name = "wall aquarium"
@@ -118,6 +107,10 @@
 	max_health = 100			// This thing is a freaking wall, it can handle abuse.
 	cur_health = 100
 	shard_count = 9
+
+/obj/machinery/fishtank/wall/full
+	water_level = 500
+	food_level = MAX_FOOD
 
 /obj/machinery/fishtank/wall/full
 	water_level = 500
@@ -688,10 +681,10 @@
 
 			return TRUE
 	//Wrenches can deconstruct empty tanks, but not tanks with any water. Kills any fish left inside and destroys any unharvested eggs in the process
-	if(O.is_wrench(user))
+	if(iswrench(O))
 		if (water_level == 0)
 			to_chat(user, "<span class='notice'>Now disassembling \the [src].</span>")
-			O.playtoolsound(loc, 50)
+			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 			if(do_after(user,50, target = src))
 				destroy(1)
 		else
@@ -813,7 +806,7 @@
 	else
 		return 0
 
-/obj/machinery/power/conduction_plate/wrenchAnchor(var/mob/user, var/obj/item/I)
+/obj/machinery/power/conduction_plate/wrenchAnchor(var/mob/user)
 	. = ..()
 	if(!.)
 		return

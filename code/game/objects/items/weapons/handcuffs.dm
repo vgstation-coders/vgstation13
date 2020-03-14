@@ -18,15 +18,9 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
-	toolsounds = list('sound/weapons/handcuffs.ogg')
+	restraint_apply_sound = 'sound/weapons/handcuffs.ogg'
 	restraint_resist_time = 2 MINUTES
-	var/list/mutual_handcuffed_mobs = list()
 
-/obj/item/weapon/handcuffs/Destroy()
-	for (var/mob/living/carbon/cuffed_mob in mutual_handcuffed_mobs)
-		src.remove_mutual_cuff_events(cuffed_mob)
-	. = ..()
-	
 /obj/item/weapon/handcuffs/restraint_apply_intent_check(mob/user)
 	return 1
 
@@ -112,7 +106,7 @@
 	icon_state = "cuff_red"
 	_color = "red"
 	restraint_resist_time = 30 SECONDS
-	toolsounds = list('sound/weapons/cablecuff.ogg')
+	restraint_apply_sound = 'sound/weapons/cablecuff.ogg'
 
 /obj/item/weapon/handcuffs/cable/red
 	icon_state = "cuff_red"

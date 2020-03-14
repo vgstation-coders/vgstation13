@@ -27,7 +27,6 @@
 	item_state = "hardhat0_orange"
 	_color = "orange"
 	name = "orange hard hat"
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/hardhat/red
 	icon_state = "hardhat0_red"
@@ -38,7 +37,6 @@
 	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY
 	pressure_resistance = 3 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/head/hardhat/white
 	icon_state = "hardhat0_white"
@@ -48,12 +46,10 @@
 	flags = FPRINT
 	pressure_resistance = 3 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/hardhat/dblue
 	icon_state = "hardhat0_dblue"
 	item_state = "hardhat0_dblue"
 	_color = "dblue"
 	name = "blue hard hat"
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 

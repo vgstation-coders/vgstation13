@@ -256,7 +256,7 @@
 		C.Stun(8)
 		C.Jitter(150)
 	for(var/obj/structure/window/W in view(4, src))
-		W.shatter()
+		W.Destroy(brokenup = 1)
 	playsound(src.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
@@ -495,7 +495,7 @@
 		var/obj/structure/cable/C = target
 		if(latched && locked_to && locked_to == C)
 			var/datum/powernet/PN = C.get_powernet()
-			if(cell && PN && PN.avail > 0 && cell.percent() < 100)
+			if(PN && PN.avail > 0 && cell.percent() < 100)
 				var/drained = min (rand(500,1500), PN.avail )
 				PN.load += drained
 				cell.give(drained/10)

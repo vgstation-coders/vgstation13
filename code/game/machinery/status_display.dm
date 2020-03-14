@@ -50,9 +50,6 @@ var/global/list/status_displays = list() //This list contains both normal status
 	maptext_width = WORLD_ICON_SIZE
 	layer = ABOVE_WINDOW_LAYER
 
-/obj/machinery/status_display/supply
-	supply_display = 1
-
 // new display
 // register for radio system
 /obj/machinery/status_display/New()
@@ -341,7 +338,6 @@ var/global/list/status_display_images = list(
 	name = "AI display"
 	anchored = 1
 	density = 0
-	layer = ABOVE_WINDOW_LAYER
 
 	var/spookymode=0 // Ghosts
 

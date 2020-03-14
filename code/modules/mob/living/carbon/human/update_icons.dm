@@ -102,12 +102,10 @@ Please contact me on #coderbus IRC. ~Carn x
 //UPDATES OVERLAYS FROM OVERLAYS_LYING/OVERLAYS_STANDING
 //this proc is messy as I was forced to include some old laggy cloaking code to it so that I don't break cloakers
 //I'll work on removing that stuff by rewriting some of the cloaking stuff at a later date.
-// - you never did, elly1989@rocketmail.com on Jun 13, 2012
 /mob/living/carbon/human/update_icons()
 	update_hud()		//TODO: remove the need for this
 	update_overlays_standing()
 	update_transform()
-	update_hands_icons()
 	if(istype(loc,/obj/structure/inflatable/shelter))
 		var/obj/O = loc
 		O.update_icon() //Shelters use an overlay of the human inside, so if we change state we want the appearance to reflect that.
@@ -315,10 +313,9 @@ var/global/list/damage_icon_parts = list()
 
 	//base icons
 	var/icon/face_standing	= new /icon('icons/mob/human_face.dmi',"bald_s")
-	//to_chat(world, "Maskheadhair? [check_hidden_head_flags(MASKHEADHAIR)]")
-	var/hair_suffix = check_hidden_head_flags(MASKHEADHAIR) ? "s2" : "s" // s2 = cropped icon
+	var/hair_suffix = check_hidden_head_flags(HIDEHEADHAIR) ? "s2" : "s" // s2 = cropped icon
 
-	if(my_appearance.f_style && !(check_hidden_flags(get_clothing_items(),HIDEBEARDHAIR))) //If the beard is hidden, don't draw it
+	if(my_appearance.f_style && !check_hidden_head_flags(HIDEBEARDHAIR))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[my_appearance.f_style]
 		if((facial_hair_style) && (src.species.name in facial_hair_style.species_allowed))
 			var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
@@ -328,8 +325,7 @@ var/global/list/damage_icon_parts = list()
 //		else
 			//warning("Invalid my_appearance.f_style for [species.name]: [my_appearance.f_style]")
 
-	//to_chat(world, "Hideheadhair? [check_hidden_flags(get_clothing_items(),HIDEHEADHAIR)]")
-	if(my_appearance.h_style && !(check_hidden_flags(get_clothing_items(),HIDEHEADHAIR))) //If the hair is hidden, don't draw it
+	if(my_appearance.h_style && !(src.head && (src.head.flags & HIDEHAIRCOMPLETELY)))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[my_appearance.h_style]
 		if((hair_style) && (src.species.name in hair_style.species_allowed))
 			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_[hair_suffix]")
@@ -337,6 +333,7 @@ var/global/list/damage_icon_parts = list()
 				hair_s.Blend(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair), ICON_ADD)
 			if(hair_style.additional_accessories)
 				hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
+
 			face_standing.Blend(hair_s, ICON_OVERLAY)
 //		else
 			//warning("Invalid my_appearance.h_style for [species.name]: [my_appearance.h_style]")
@@ -396,14 +393,14 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += image(icon = O.icon, icon_state = "lasereyes_s")
 				add_image = 1
 	if((M_RESIST_COLD in mutations) && (M_RESIST_HEAT in mutations))
-		if(!(src.species.name == "Vox") && !(src.species.name == "Skeletal Vox"))
+		if(!(src.species.name == "Vox") && !(src.species.name == "Skeletal Vox"))	
 			//standing.underlays	-= "cold[fat]_s"
 			//standing.underlays	-= "fire[fat]_s"
 			//standing.underlays	+= "coldfire[fat]_s"
 			O.underlays	-= "cold[fat]_s"
 			O.underlays	-= "fire[fat]_s"
 			O.underlays	+= "coldfire[fat]_s"
-		else if((src.species.name == "Vox") || (src.species.name == "Skeletal Vox"))
+		else if((src.species.name == "Vox") || (src.species.name == "Skeletal Vox"))	
 			O.underlays -= "coldvox_s"
 			O.underlays	-= "firevox_s"
 			O.underlays	+= "coldfirevox_s"
@@ -522,7 +519,6 @@ var/global/list/damage_icon_parts = list()
 	update_inv_wear_id(0)
 	update_inv_hands(0)
 	update_inv_handcuffed(0)
-	update_inv_mutual_handcuffed(0)
 	update_inv_legcuffed(0)
 	update_inv_pockets(0)
 	QueueUpdateDamageIcon(1)
@@ -537,11 +533,8 @@ var/global/list/damage_icon_parts = list()
 
 	overlays -= obj_overlays[UNIFORM_LAYER]
 	if(!w_uniform)
-		var/list/drop_items = list(r_store, l_store, wear_id)
-		if(!isbelt(belt))
-			drop_items.Add(belt)
-		// Automatically drop anything in store / id if you're not wearing a uniform.	//CHECK IF NECESARRY
-		for( var/obj/item/thing in drop_items)						//
+		// Automatically drop anything in store / id / belt if you're not wearing a uniform.	//CHECK IF NECESARRY
+		for( var/obj/item/thing in list(r_store, l_store, wear_id, belt) )						//
 			if(thing)																			//
 				u_equip(thing,1)																//
 				if (client)																		//
@@ -574,13 +567,10 @@ var/global/list/damage_icon_parts = list()
 			standing = image("icon" = w_uniform.wear_override)
 
 		var/obj/item/clothing/under/under_uniform = w_uniform
-		if(species.name in under_uniform.species_fit) //Allows clothes to display differently for multiple species
-			if(species.uniform_icons && has_icon(species.uniform_icons, "[w_uniform.icon_state]_s"))
-				standing.icon = species.uniform_icons
 
-		if((gender == FEMALE) && (w_uniform.clothing_flags & GENDERFIT)) //genderfit
-			if(has_icon(standing.icon, "[w_uniform.icon_state]_s_f"))
-				standing.icon_state = "[w_uniform.icon_state]_s_f"
+		if(species.name in under_uniform.species_fit) //Allows clothes to display differently for multiple species
+			if(species.wear_suit_icons && has_icon(species.wear_suit_icons, w_uniform.icon_state))
+				standing.icon = species.uniform_icons
 
 		if(w_uniform.icon_override)
 			standing.icon	= w_uniform.icon_override
@@ -620,10 +610,7 @@ var/global/list/damage_icon_parts = list()
 			if(species.name in ID_worn.species_fit) //Allows clothes to display differently for multiple species
 				if(species.id_icons && has_icon(species.id_icons, ID_worn.icon_state))
 					O.icon = species.uniform_icons
-			if((gender == FEMALE) && (ID_worn.clothing_flags & GENDERFIT)) //genderfit
-				if(has_icon(O.icon,"[ID_worn.icon_state]_f"))
-					O.icon_state = "[ID_worn.icon_state]_f"
-	
+
 			O.overlays.len = 0
 			if(wear_id.dynamic_overlay)
 				if(wear_id.dynamic_overlay["[ID_LAYER]"])
@@ -671,9 +658,6 @@ var/global/list/damage_icon_parts = list()
 			if(S.gloves_icons && has_icon(S.gloves_icons, t_state))
 				standing.icon = S.gloves_icons
 
-		if((gender == FEMALE) && (gloves.clothing_flags & GENDERFIT)) //genderfit
-			if(has_icon(standing.icon,"[gloves.icon_state]_f"))
-				standing.icon_state = "[gloves.icon_state]_f"
 
 		if(gloves.dynamic_overlay)
 			if(gloves.dynamic_overlay["[GLOVES_LAYER]"])
@@ -730,10 +714,6 @@ var/global/list/damage_icon_parts = list()
 			if(S.glasses_icons && has_icon(S.glasses_icons, glasses.icon_state))
 				standing.icon = S.glasses_icons
 
-		if((gender == FEMALE) && (glasses.clothing_flags & GENDERFIT)) //genderfit
-			if(has_icon(standing.icon,"[glasses.icon_state]_f"))
-				standing.icon_state = "[glasses.icon_state]_f"
-
 		if(glasses.cover_hair)
 			var/obj/abstract/Overlays/O = obj_overlays[GLASSES_OVER_HAIR_LAYER]
 			O.icon = standing
@@ -788,10 +768,6 @@ var/global/list/damage_icon_parts = list()
 			if(S.ears_icons && has_icon(S.ears_icons, ears.icon_state))
 				standing.icon = S.ears_icons
 
-		if((gender == FEMALE) && (ears.clothing_flags & GENDERFIT)) //genderfit
-			if(has_icon(standing.icon,"[ears.icon_state]_f"))
-				standing.icon_state = "[ears.icon_state]_f"
-
 		var/obj/abstract/Overlays/O = obj_overlays[EARS_LAYER]
 		O.icon = standing
 		O.icon_state = standing.icon_state
@@ -830,10 +806,6 @@ var/global/list/damage_icon_parts = list()
 		if(S.name in shoes.species_fit) //Allows clothes to display differently for multiple species
 			if(S.shoes_icons && has_icon(S.shoes_icons, shoes.icon_state))
 				O.icon = S.shoes_icons
-
-		if((gender == FEMALE) && (shoes.clothing_flags & GENDERFIT)) //genderfit
-			if(has_icon(O.icon,"[shoes.icon_state]_f"))
-				O.icon_state = "[shoes.icon_state]_f"
 
 		O.overlays.len = 0
 		if(shoes.dynamic_overlay)
@@ -905,10 +877,6 @@ var/global/list/damage_icon_parts = list()
 			if(S.head_icons && has_icon(S.head_icons, head.icon_state))
 				standing.icon = S.head_icons
 
-		if((gender == FEMALE) && (head.clothing_flags & GENDERFIT)) //genderfit
-			if(has_icon(standing.icon, "[head.icon_state]_f"))
-				standing.icon_state = "[head.icon_state]_f"
-
 		if(head.dynamic_overlay)
 			if(head.dynamic_overlay["[HEAD_LAYER]"])
 				var/image/dyn_overlay = head.dynamic_overlay["[HEAD_LAYER]"]
@@ -955,10 +923,6 @@ var/global/list/damage_icon_parts = list()
 			if(S.belt_icons && has_icon(S.belt_icons, t_state))
 				standing.icon = S.belt_icons
 
-		if((gender == FEMALE) && (belt.clothing_flags & GENDERFIT)) //genderfit
-			if(has_icon(standing.icon,"[belt.icon_state]_f"))
-				standing.icon_state = "[belt.icon_state]_f"
-
 		var/obj/abstract/Overlays/O = obj_overlays[BELT_LAYER]
 		O.icon = standing
 		O.icon_state = standing.icon_state
@@ -995,19 +959,14 @@ var/global/list/damage_icon_parts = list()
 				if(SP.name in wear_suit.species_fit) //Allows clothes to display differently for multiple species
 					if(SP.fat_wear_suit_icons && has_icon(SP.fat_wear_suit_icons, wear_suit.icon_state))
 						standing.icon = SP.wear_suit_icons
-				if((gender == FEMALE) && (wear_suit.clothing_flags & GENDERFIT)) //genderfit
-					if(has_icon(standing.icon,"[wear_suit.icon_state]_f"))
-						standing.icon_state = "[wear_suit.icon_state]_f"
 			else
 				to_chat(src, "<span class='warning'>You burst out of \the [wear_suit]!</span>")
 				drop_from_inventory(wear_suit)
 		else
 			if(SP.name in wear_suit.species_fit) //Allows clothes to display differently for multiple species
 				if(SP.wear_suit_icons && has_icon(SP.wear_suit_icons, wear_suit.icon_state))
-					standing.icon = SP.wear_suit_icons					
-			if((gender == FEMALE) && (wear_suit.clothing_flags & GENDERFIT)) //genderfit
-				if(has_icon(standing.icon,"[wear_suit.icon_state]_f"))
-					standing.icon_state = "[wear_suit.icon_state]_f"
+					standing.icon = SP.wear_suit_icons
+
 
 
 
@@ -1074,10 +1033,6 @@ var/global/list/damage_icon_parts = list()
 			if(S.wear_mask_icons && has_icon(S.wear_mask_icons, wear_mask.icon_state))
 				standing.icon = S.wear_mask_icons
 
-		if((gender == FEMALE) && (wear_mask.clothing_flags & GENDERFIT)) //genderfit
-			if(has_icon(standing.icon,"[wear_mask.icon_state]_f"))
-				standing.icon_state = "[wear_mask.icon_state]_f"
-
 		if(wear_mask.dynamic_overlay)
 			if(wear_mask.dynamic_overlay["[FACEMASK_LAYER]"])
 				var/image/dyn_overlay = wear_mask.dynamic_overlay["[FACEMASK_LAYER]"]
@@ -1121,10 +1076,6 @@ var/global/list/damage_icon_parts = list()
 			if(S.back_icons && has_icon(S.back_icons, back.icon_state))
 				standing.icon = S.back_icons
 
-		if((gender == FEMALE) && (back.clothing_flags & GENDERFIT)) //genderfit
-			if(has_icon(standing.icon, "[back.icon_state]_f"))
-				standing.icon_state = "[back.icon_state]_f"
-
 		var/obj/abstract/Overlays/O = obj_overlays[BACK_LAYER]
 		O.icon = standing
 		O.icon_state = standing.icon_state
@@ -1160,20 +1111,6 @@ var/global/list/damage_icon_parts = list()
 		var/obj/abstract/Overlays/O = obj_overlays[HANDCUFF_LAYER]
 		O.icon = 'icons/mob/mob.dmi'
 		O.icon_state = "handcuff1"
-		O.pixel_x = species.inventory_offsets["[slot_handcuffed]"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["[slot_handcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER
-		obj_to_plane_overlay(O,HANDCUFF_LAYER)
-
-	if(update_icons)
-		update_icons()
-
-/mob/living/carbon/human/update_inv_mutual_handcuffed(var/update_icons = TRUE)
-	overlays -= obj_overlays[HANDCUFF_LAYER]
-	if (mutual_handcuffs && mutual_handcuffs.is_visible())
-		stop_pulling()	//TODO: should be handled elsewhere
-		var/obj/abstract/Overlays/O = obj_overlays[HANDCUFF_LAYER]
-		O.icon = 'icons/mob/mob.dmi'
-		O.icon_state = "singlecuff1"
 		O.pixel_x = species.inventory_offsets["[slot_handcuffed]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_handcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,HANDCUFF_LAYER)
@@ -1315,7 +1252,7 @@ var/global/list/damage_icon_parts = list()
 	if(!W || gcDestroyed)
 		return
 
-	if(is_slot_hidden(W.body_parts_covered,HIDEHEADHAIR) || is_slot_hidden(W.body_parts_covered,MASKHEADHAIR) || is_slot_hidden(W.body_parts_covered,HIDEBEARDHAIR))
+	if(is_slot_hidden(W.body_parts_covered,HIDEHEADHAIR) || is_slot_hidden(W.body_parts_covered,HIDEBEARDHAIR))
 		update_hair()
 	if(is_slot_hidden(W.body_parts_covered,(HIDEMASK)))
 		update_inv_wear_mask()
@@ -1365,15 +1302,3 @@ proc/is_slot_hidden(var/clothes, var/slot = -1,var/ignore_slot = 0)
 		update_inv_wear_suit()
 	if(slot_flags & SLOT_ICLOTHING)
 		update_inv_w_uniform()
-
-/mob/living/carbon/human/update_hand_icon(var/obj/abstract/screen/inventory/hand_hud_object)
-	hand_hud_object.overlays.len = 0
-	if(!can_use_hand_or_stump(hand_hud_object.hand_index))
-		var/image/cross = image(icon='icons/mob/screen1_White.dmi', icon_state="x")
-		cross.alpha = 122
-		hand_hud_object.overlays += cross
-	else if (!can_use_hand(hand_hud_object.hand_index))
-		var/image/bluecross = image(icon='icons/mob/screen1_White.dmi', icon_state="x2")
-		bluecross.alpha = 122
-		hand_hud_object.overlays += bluecross
-	..()

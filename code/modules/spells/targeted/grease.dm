@@ -3,7 +3,6 @@
 	desc = "Slick grease covers the ground in a radius, turning the terrain into difficult terrain. Has spell congruency with fire-based spells."
 	abbreviation = "GR"
 	user_type = USER_TYPE_WIZARD
-	specialization = SSOFFENSIVE
 
 	school = "evocation"
 	charge_max = 300

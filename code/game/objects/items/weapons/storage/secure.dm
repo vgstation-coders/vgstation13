@@ -162,8 +162,7 @@
 	if ((src.loc == user) && (src.locked == 1))
 		to_chat(user, "<span class='warning'>[src] is locked and cannot be opened!</span>")
 	else if ((src.loc == user) && (!src.locked))
-		if(!stealthy(user))
-			playsound(src, "rustle", 50, 1, -5)
+		playsound(src, "rustle", 50, 1, -5)
 		if (user.s_active)
 			user.s_active.close(user) //Close and re-open
 		src.show_to(user)
@@ -237,7 +236,7 @@
 	new /obj/item/weapon/gun/energy/crossbow(src)
 	new /obj/item/weapon/gun/projectile/mateba(src)
 	new /obj/item/ammo_storage/box/a357(src)
-	new /obj/item/weapon/c4(src)
+	new /obj/item/weapon/plastique(src)
 
 // -----------------------------
 //        Secure Safe
