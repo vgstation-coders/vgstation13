@@ -805,25 +805,6 @@ var/global/list/whitelisted_species = list("Human")
 	var/tank_slot = slot_s_store
 	var/tank_slot_name = "suit storage"
 	switch(H.mind.assigned_role)
-
-		if("Bartender")
-			suit=/obj/item/clothing/suit/space/vox/civ/bartender
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/bartender
-		if("Chef")
-			suit=/obj/item/clothing/suit/space/vox/civ/chef
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/chef
-		if("Botanist")
-			suit=/obj/item/clothing/suit/space/vox/civ/botanist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/botanist
-		if("Janitor")
-			suit=/obj/item/clothing/suit/space/vox/civ/janitor
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/janitor
-		if("Chaplain")
-			suit=/obj/item/clothing/suit/space/vox/civ/chaplain
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
-		if("Librarian")
-			suit=/obj/item/clothing/suit/space/vox/civ/librarian
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/librarian
 		if("Scientist")
 			suit=/obj/item/clothing/suit/space/vox/civ/science
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
@@ -833,9 +814,6 @@ var/global/list/whitelisted_species = list("Human")
 		if("Roboticist")
 			suit=/obj/item/clothing/suit/space/vox/civ/science/roboticist
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/roboticist
-//		if("Clown","Mime")
-//			tank_slot=null
-//			tank_slot_name = "hand"
 		if("Trader")
 			suit = /obj/item/clothing/suit/space/vox/civ/trader
 			helm = /obj/item/clothing/head/helmet/space/vox/civ/trader

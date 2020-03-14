@@ -52,6 +52,7 @@
 	var/list/equip_survival_gear = list()
 
 	var/list/items_to_collect = list()
+	var/list/alt_title_items_to_collect = list()
 
 	var/list/implant_types = list()
 
@@ -133,19 +134,22 @@
 		chosen_backpack = backpack_types[BACKPACK_STRING]
 
 	// -- The (wo)man has a backpack, let's put stuff in them
+	var/special_items = alt_title_items_to_collect[H.mind.role_alt_title]
 
 	if (chosen_backpack)
 		H.equip_to_slot_or_del(new chosen_backpack(H), slot_back, 1)
-		for (var/item in items_to_collect)
-			var/item_type = item
-			if (islist(item)) // For alt-titles.
-				item_type = item[H.mind.role_alt_title]
+		for (var/item_type in items_to_collect)
 			H.equip_or_collect(new item_type(H.back), slot_in_backpack)
 		if (equip_survival_gear.len)
 			if (ispath(equip_survival_gear[species]))
 				H.equip_or_collect(new equip_survival_gear(H.back), slot_in_backpack)
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+
+		// Special alt-title items
+		if (special_items)
+			for (var/item_type in special_items)
+				H.equip_or_collect(new item_type(H.back), slot_in_backpack)
 
 	// -- No backbag, let's improvise
 	
@@ -172,6 +176,12 @@
 					var/hand_slot = items_to_collect[item]
 					if (hand_slot) // ie, if it's an actual number
 						H.put_in_hand(hand_slot, new item)
+
+		// Special alt-title items ;
+		if (special_items)
+			for (var/item_type in special_items)
+				var/chosen_slot = special_items[item_type]
+				H.equip_to_slot_if_possible(new item_type(get_turf(H)), chosen_slot)	
 
 /datum/outfit/proc/species_final_equip(var/mob/living/carbon/human/H)
 	if (H.species)
