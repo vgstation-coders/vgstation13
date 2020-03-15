@@ -322,6 +322,9 @@ var/list/telesci_warnings = list(
 
 	var/things = 0
 	for(var/atom/movable/ROI in source)
+		if(isliving(ROI))
+			var/mob/living/L = ROI
+			L.unlock_from()
 		if(ROI.anchored)
 			continue
 
