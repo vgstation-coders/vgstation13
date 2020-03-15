@@ -14,6 +14,13 @@ var/savefile/panicfile
 /world/New()
 	if(fexists("byond-extools.dll") && system_type == MS_WINDOWS)
 		call("byond-extools.dll", "maptick_initialize")()
+	else if(system_type == UNIX)
+	// extools on linux does not exist and is not in the repository
+	// warn in log if it doesn't exist (probably forever)
+		if(fexist("libbyond-extools.so")) 
+			call("libbyond-extools.so", "maptick_initialize")()
+		else
+			warning("Dream Daemon appears to be running on Unix, but there is no extools library included with this repository. Performance may differ significantly from a Windows host. This warning will not show if libbyond-extools.so is added to the root of the game directory.")
 	
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
