@@ -126,15 +126,15 @@ rcd light flash thingy on matter drain
 		explosion(get_turf(M), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
 		qdel(M)
 
-/datum/AI_Module/large/place_cyborg_transformer
+/datum/AI_Module/large/place_cyborg_autoborger
 	module_name = "Robotic Factory (Removes Shunting)"
 	mod_pick_name = "cyborgtransformer"
 	description = "Build a machine anywhere, using expensive nanomachines, that can convert a living human into a loyal cyborg slave when placed inside."
 	cost = 100
 
-	power_type = /spell/aoe_turf/conjure/place_transformer
+	power_type = /spell/aoe_turf/conjure/place_autoborger
 
-/spell/aoe_turf/conjure/place_transformer
+/spell/aoe_turf/conjure/place_autoborger
 	name = "Place Robotic Factory"
 	user_type = USER_TYPE_MALFAI
 	panel = MALFUNCTION
@@ -142,14 +142,14 @@ rcd light flash thingy on matter drain
 	charge_max = 1
 	spell_flags = WAIT_FOR_CLICK | NODUPLICATE | IGNORESPACE | IGNOREDENSE
 	range = GLOBALCAST
-	summon_type = list(/obj/machinery/transformer/conveyor)
+	summon_type = list(/obj/machinery/autoborger/conveyor)
 	hud_state = "autoborger"
 	override_base = "grey"
 
-/spell/aoe_turf/conjure/place_transformer/New()
+/spell/aoe_turf/conjure/place_autoborger/New()
 	..()
 
-/spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
+/spell/aoe_turf/conjure/place_autoborger/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
 	if(!istype(A))
 		return 1
@@ -157,7 +157,7 @@ rcd light flash thingy on matter drain
 		return 1
 	return 0
 
-/spell/aoe_turf/conjure/place_transformer/is_valid_target(var/atom/target)
+/spell/aoe_turf/conjure/place_autoborger/is_valid_target(var/atom/target)
 	// Make sure there is enough room.
 	if(!isturf(target))
 		return 0
@@ -181,8 +181,8 @@ rcd light flash thingy on matter drain
 	newVars = list("belongstomalf" = holder)
 	return 1
 
-/spell/aoe_turf/conjure/place_transformer/cast(var/list/targets,mob/user)
-	// All clear, place the transformer
+/spell/aoe_turf/conjure/place_autoborger/cast(var/list/targets,mob/user)
+	// All clear, place the autoborger
 	..()
 	playsound(targets[1], 'sound/effects/phasein.ogg', 100, 1)
 	var/mob/living/silicon/ai/A = user
