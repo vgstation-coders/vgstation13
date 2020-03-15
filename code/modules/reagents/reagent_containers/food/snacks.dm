@@ -1150,11 +1150,22 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/throw_impact(atom/hit_atom)
 	..()
+	if(ismob(hit_atom))
+		var/mob/M = hit_atom
+		src.visible_message("<span class='warning'>[src] splats in [M]'s face!</span>")
+
+		M.eye_blind = 2
+
+
+		// apply pie face overlay
+		// cleaning reagents remove the blindness
+		// wiping face removes the blindness quickly
 	if(isturf(hit_atom))
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
 			new trash(src.loc)
 		qdel(src)
+		playsound(get_turf(src), 'sound/effects/splat.ogg', 100, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment
 	trash = null
