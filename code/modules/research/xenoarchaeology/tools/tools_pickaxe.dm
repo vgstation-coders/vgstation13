@@ -3,27 +3,15 @@
 // Excavation pickaxes - sorted in order of delicacy. Players will have to choose the right one for each part of excavation.
 
 /obj/item/weapon/pickaxe/brush
-	name = "0.5 cm brush"
+	name = "1 cm brush"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick_brush"
 	item_state = "syringe_0"
 	toolspeed = 0.2
-	desc = "Thick metallic wires for clearing away dust and loose scree (0.5 centimetre excavation depth)."
-	excavation_amount = 0.5
+	desc = "Thick metallic wires for clearing away dust and loose scree (1 centimetre excavation depth)."
+	excavation_amount = 1
 	toolsounds = list('sound/weapons/thudswoosh.ogg')
 	drill_verb = "brushing"
-	w_class = W_CLASS_SMALL
-
-/obj/item/weapon/pickaxe/one_pick
-	name = "1 cm pick"
-	icon = 'icons/obj/xenoarchaeology.dmi'
-	icon_state = "pick1"
-	item_state = "syringe_0"
-	toolspeed = 0.2
-	desc = "A miniature excavation tool for precise digging (1 centimetre excavation depth)."
-	excavation_amount = 1
-	toolsounds = list('sound/items/Screwdriver.ogg')
-	drill_verb = "delicately picking"
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/two_pick
@@ -108,10 +96,9 @@
 	desc = "A set of picks for excavation."
 	item_state = "syringe_kit"
 	foldable = /obj/item/stack/sheet/cardboard //BubbleWrap
-	storage_slots = 7
+	storage_slots = 6
 	w_class = W_CLASS_SMALL
 	can_only_hold = list("/obj/item/weapon/pickaxe/brush",\
-	"/obj/item/weapon/pickaxe/one_pick",\
 	"/obj/item/weapon/pickaxe/two_pick",\
 	"/obj/item/weapon/pickaxe/three_pick",\
 	"/obj/item/weapon/pickaxe/four_pick",\
@@ -124,7 +111,6 @@
 /obj/item/weapon/storage/box/excavation/New()
 	..()
 	new /obj/item/weapon/pickaxe/brush(src)
-	new /obj/item/weapon/pickaxe/one_pick(src)
 	new /obj/item/weapon/pickaxe/two_pick(src)
 	new /obj/item/weapon/pickaxe/three_pick(src)
 	new /obj/item/weapon/pickaxe/four_pick(src)
