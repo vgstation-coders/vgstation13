@@ -53,8 +53,8 @@
 	desc = "Advanced archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The diamond tip is adjustable from 1 to 100 cms."
 
 /obj/item/weapon/pickaxe/excavationdrill/adv/attack_self(mob/user as mob)
-	var/depth = round(input("Put the desired depth (1-100 centimeters).", "Set Depth", excavation_amount) as num)
-	if(depth>100 || depth<1)
+	var/depth = round(input("Put the desired depth (1-50 centimeters).", "Set Depth", excavation_amount) as num)
+	if(depth>15 || depth<1)
 		to_chat(user, "<span class='notice'>Invalid depth.</span>")
 		return
 	excavation_amount = depth
