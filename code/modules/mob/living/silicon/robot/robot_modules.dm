@@ -570,6 +570,7 @@
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/switchtool/surgery(src)
 	modules += new /obj/item/robot_rack/bed/syndie(src)
+	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
 
 	sensor_augs = list("Thermal", "Medical", "Disable")
 
