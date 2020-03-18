@@ -9,8 +9,6 @@
 	var/view_range = 20				//how close excavation has to come to show an overlay on the turf
 	var/clearance_range = 3			//how close excavation has to come to extract the item
 									//if excavation hits var/excavation_required exactly, it's contained find is extracted cleanly without the ore
-	var/prob_delicate = 90			//probability it requires an active suspension field to not insta-crumble
-	var/dissonance_spread = 1		//proportion of the tile that is affected by this find
 	var/responsive_reagent = PLASMA
 	var/apply_material_decorations = FALSE
 	var/apply_image_decorations = FALSE
@@ -24,7 +22,6 @@
 /datum/find/New(var/exc_req)
 	excavation_required = exc_req
 	clearance_range = rand(2,6)
-	dissonance_spread = rand(1500,2500) / 100
 
 /datum/find/proc/create_find(var/atom/loc) //Makes the item. Applies strangeness to it. Returns item
 	if(prob(5))
@@ -598,12 +595,10 @@
 	additional_desc = TRUE
 
 /datum/find/gun/spawn_item()
-	var/obj/item/weapon/gun/projectile/new_gun = new /obj/item/weapon/gun/projectile
-	new_gun.icon_state = "gun[rand(1,4)]"
-	new_gun.icon = 'icons/obj/xenoarchaeology.dmi'
-	new_gun.item_state = new_gun.icon_state
-	new_gun.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
-	new_gun.desc = ""
+	// use subtypes to change icon_state.
+	// because gun code relies on initial(icon_state)
+	var/gun_type = pick(subtypesof(/obj/item/weapon/gun/projectile/xenoarch))
+	var/obj/item/weapon/gun/projectile/new_gun = new gun_type
 
 	//let's get some ammunition in this gun : weighted to pick available ammo
 	new_gun.caliber = pick(50;list(POINT357 = 1),
@@ -635,6 +630,27 @@
 				I.forceMove(null)
 
 	return new_gun
+
+/obj/item/weapon/gun/projectile/xenoarch
+	icon = 'icons/obj/xenoarchaeology.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
+	desc = ""
+
+/obj/item/weapon/gun/projectile/xenoarch/gun1
+	icon_state = "gun1"
+	item_state = "gun1"
+
+/obj/item/weapon/gun/projectile/xenoarch/gun2
+	icon_state = "gun2"
+	item_state = "gun2"
+
+/obj/item/weapon/gun/projectile/xenoarch/gun3
+	icon_state = "gun3"
+	item_state = "gun3"
+
+/obj/item/weapon/gun/projectile/xenoarch/gun4
+	icon_state = "gun4"
+	item_state = "gun4"
 
 /datum/find/gun/additional_description(var/obj/item/I)
 	I.desc += "Looks like an antique projectile weapon, you're not sure if it will fire or not."

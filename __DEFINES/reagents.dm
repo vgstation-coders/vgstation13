@@ -418,7 +418,6 @@
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
 #define GROUND_ROCK 			"ground_rock"
-#define DENSITY_SEPARATED_SAMPLE 			"density_separated_sample"
 #define ANALYSIS_SAMPLE 			"analysis_sample"
 #define CHEMICAL_WASTE 			"chemical_waste"
 #define TRINITRINE		"trinitrine"

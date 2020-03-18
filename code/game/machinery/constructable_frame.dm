@@ -1361,30 +1361,10 @@ obj/item/weapon/circuitboard/rdserver
 	req_components = list (
 							/obj/item/weapon/stock_parts/scanning_module = 3)
 
-/obj/item/weapon/circuitboard/anom/accelerator
-	name = "Circuit Board (Accelerator Spectrometer)"
-	desc = "A circuit board used to run a machine used in xenoarcheology."
-	build_path = /obj/machinery/anomaly/accelerator
-
-/obj/item/weapon/circuitboard/anom/gas
-	name = "Circuit Board (Gas Chromatography Spectrometer)"
-	desc = "A circuit board used to run a machine used in xenoarcheology."
-	build_path = /obj/machinery/anomaly/gas_chromatography
-
 /obj/item/weapon/circuitboard/anom/hyper
 	name = "Circuit Board (Hyperspectral Imager)"
 	desc = "A circuit board used to run a machine used in xenoarcheology."
 	build_path = /obj/machinery/anomaly/hyperspectral
-
-/obj/item/weapon/circuitboard/anom/ion
-	name = "Circuit Board (Ion Mobility Spectrometer)"
-	desc = "A circuit board used to run a machine used in xenoarcheology."
-	build_path = /obj/machinery/anomaly/ion_mobility
-
-/obj/item/weapon/circuitboard/anom/iso
-	name = "Circuit Board (Isotope Ratio Spectrometer)"
-	desc = "A circuit board used to run a machine used in xenoarcheology."
-	build_path = /obj/machinery/anomaly/isotope_ratio
 
 /obj/item/weapon/circuitboard/confectionator
 
