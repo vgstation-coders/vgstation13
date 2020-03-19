@@ -459,7 +459,7 @@
 #include "code\datums\helper_datums\teleport.dm"
 #include "code\datums\helper_datums\topic_input.dm""
 #include "code\datums\ray\ray.dm"
-#include "code\datums\ray\ray_procs.dm"
+#include "code\datums\ray\ray_test_procs.dm"
 #include "code\datums\ray\rayhit.dm"
 #include "code\datums\ray\vector3.dm"
 #include "code\datums\research\research_tree.dm"
