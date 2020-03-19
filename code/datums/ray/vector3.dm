@@ -24,6 +24,9 @@
 /vector3/proc/plus(var/vector3/vectorB)
 	return new /vector3(x + vectorB.x, y + vectorB.y, z + vectorB.z)
 
+/vector3/proc/minus(var/vector3/vectorB)
+	return new /vector3(x - vectorB.x, y - vectorB.y, z - vectorB.z)
+
 /vector3/proc/times(var/mult)
 	return new /vector3(x * mult, y * mult, z * mult)
 
