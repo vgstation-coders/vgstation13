@@ -89,3 +89,55 @@
 
 	if(req_admin_notify)
 		to_chat(M, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
+
+
+/datum/job/prisoner
+	title = "Prisoner"
+	flag = PRISONER
+	department_flag = CIVILIAN
+	faction = "Station"
+	total_positions = 3
+	spawn_positions = 2
+	supervisors = "no-one"
+	selection_color = "#dddddd"
+	access = list()
+	minimal_access = list()
+	alt_titles = list("Inmate","Detainee")
+
+	must_be_map_enabled = 1
+
+	no_random_roll = 1 //Don't become a prisoner randomly
+	no_crew_manifest = 1
+
+	//Don't spawn with any of the average crew member's luxuries (only an ID)
+	no_starting_money = 1
+	no_pda = 1
+
+	no_headset = 1
+
+
+/datum/job/prisoner/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/clothing/under/color/prisoner(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/shoes/orange(H), slot_shoes)
+
+	switch(H.backbag) //BS12 EDIT
+		if(2)
+			H.equip_or_collect(new/obj/item/weapon/storage/backpack(H), slot_back)
+		if(3)
+			H.equip_or_collect(new/obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+		if(4)
+			H.equip_or_collect(new/obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
+
+	return 1
+
+/datum/job/prisoner/introduce(mob/living/carbon/human/M, job_title)
+	if(!job_title)
+		job_title = src.title
+
+	to_chat(M, "<B>You are a [job_title].</B>")
+
+	to_chat(M, "<b>As one of the few permanent inhabitants of your station's prison wing, you have no real responsibilites and answer to no-one. However, the Warden (along with your criminal record) decides what happens to you.</b>")

@@ -45,6 +45,7 @@ var/const/CLOWN				=(1<<11)
 var/const/MIME				=(1<<12)
 var/const/ASSISTANT			=(1<<13)
 var/const/TRADER			=(1<<14)
+var/const/PRISONER			=(1<<15)
 
 var/list/command_positions = list(
 	"Captain",
@@ -118,6 +119,7 @@ var/list/nonhuman_positions = list(
 
 var/list/misc_positions = list(
 	"Trader",
+	"Prisoner",
 )
 
 var/list/all_jobs_txt = list(
