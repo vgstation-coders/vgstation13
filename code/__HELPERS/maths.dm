@@ -376,5 +376,8 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 	var/turf/T = get_turf(src)
 	return locate(T.x + V.x, T.y + V.y, z)
 
+/proc/atom2vector(var/atom/A)
+	return new /vector(A.x, A.y)
+
 /proc/atoms2vector(var/atom/A, var/atom/B)
 	return new /vector((B.x - A.x), (B.y - A.y)) // Vector from A -> B
