@@ -19,9 +19,9 @@
 	var/vector3/pointer = new /vector3(0,0,0)
 	while(pointer.euclidian_norm() < max_distance)
 		pointer = pointer.plus(step)
-		var/vector3/pointer_floored = pointer.floored()
-		if(!pointer_floored.equals(new /vector3(0,0,0)))
-			var/turf/T = locate(pointer_floored.x, pointer_floored.y, pointer_floored.z)
+		var/vector3/new_position = origin.plus(pointer).floored()
+		if(!new_position.equals(origin.floored()))
+			var/turf/T = locate(new_position.x, new_position.y, new_position.z)
 			return T
 
 /ray/proc/getTurfs(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE)
@@ -35,7 +35,7 @@
 		for(var/vector3/V in positions)
 			if(V.equals(new_position))
 				exists = TRUE
-		if(!exists && !new_position.equals(new /vector3(0,0,0)))
+		if(!exists && !new_position.equals(origin.floored()))
 			positions += new_position
 
 	. = list()
