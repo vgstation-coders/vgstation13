@@ -14,7 +14,7 @@
 	var/vector3/path = direction.times(distance)
 	return origin.plus(path).floored()
 
-/ray/proc/getFirstTurf(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE)
+/ray/proc/getFirstHit(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE)
 	var/vector3/step = direction.times(RAY_CAST_STEP)
 	var/vector3/pointer = new /vector3(0,0,0)
 	while(pointer.euclidian_norm() < max_distance)
@@ -22,9 +22,9 @@
 		var/vector3/new_position = origin.plus(pointer).floored()
 		if(!new_position.equals(origin.floored()))
 			var/turf/T = locate(new_position.x, new_position.y, new_position.z)
-			return T
+			return new /rayCastHit(src, T, new_position.minus(origin).euclidian_norm())
 
-/ray/proc/getTurfs(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE)
+/ray/proc/getAllHits(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE)
 	var/vector3/step = direction.times(RAY_CAST_STEP)
 	var/list/vector3/positions = list()
 	var/vector3/pointer = new /vector3(0,0,0)
@@ -41,4 +41,4 @@
 	. = list()
 	for(var/vector3/P in positions)
 		var/turf/T = locate(P.x, P.y, P.z)
-		. += T
+		. += new /rayCastHit(src, T, P.minus(origin).euclidian_norm())
