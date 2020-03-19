@@ -30,6 +30,9 @@
 /vector3/proc/equals(var/vector3/vectorB)
 	return (x == vectorB.x && y == vectorB.y && z == vectorB.z)
 
+/vector3/proc/toString()
+	return "\[Vector3\]([x],[y],[z])"
+
 /proc/atom2vector3(var/atom/A)
 	return new /vector3(A.x, A.y, A.z)
 
