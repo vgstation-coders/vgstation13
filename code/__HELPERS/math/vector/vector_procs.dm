@@ -1,8 +1,7 @@
 /atom/movable/proc/vector_translate(var/vector/V, var/delay)
 	var/turf/T = get_turf(src)
 	var/turf/destination = locate(T.x + V.x, T.y + V.y, z)
-	var/vector/V_norm = V.duplicate()
-	V_norm.chebyshev_normalize()
+	var/vector/V_norm = V.chebyshev_normalized()
 	if (!V_norm.is_integer())
 		return
 	var/turf/destination_temp
