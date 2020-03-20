@@ -1,5 +1,5 @@
 // Basic geometry things.
-/vector/
+/vector
 	var/x = 0
 	var/y = 0
 
@@ -16,20 +16,58 @@
 /vector/proc/squared_norm()
 	return x*x + y*y
 
-/vector/proc/normalize()
+/vector/proc/normalized()
 	var/norm = euclidian_norm()
-	x = x/norm
-	y = y/norm
-	return src
+	return new /vector(x/norm, y/norm)
+
+/vector/proc/floored()
+	return new /vector(Floor(x), Floor(y))
 
 /vector/proc/chebyshev_norm()
 	return max(abs(x), abs(y))
 
-/vector/proc/chebyshev_normalize()
+/vector/proc/chebyshev_normalized()
 	var/norm = chebyshev_norm()
-	x = x/norm
-	y = y/norm
-	return src
+	return new /vector(x/norm, y/norm)
 
 /vector/proc/is_integer()
 	return IS_INT(x) && IS_INT(y)
+
+/vector/proc/toString()
+	return "\[Vector\]([x],[y])"
+
+//operator overloading
+/vector/proc/operator+(var/vector/B)
+	if(isnum(B))
+		return new /vector(x + B, y + B)
+	return new /vector(x + B.x, y + B.y)
+
+/*/vector/proc/operator+=(var/vector/B)
+	if(isnum(B))
+		x += B
+		y += B
+	x += B.x
+	y += B.y*/
+
+/vector/proc/operator-(var/vector/B)
+	if(isnum(B))
+		return new /vector(x - B, y - B)
+	return new /vector(x - B.x, y - B.y)
+
+/*/vector/proc/operator-=(var/vector/B)
+	if(isnum(B))
+		x -= B
+		y -= B
+	x -= B.x
+	y -= B.y*/
+
+/vector/proc/operator*(var/mult)
+	return new /vector(x * mult, y * mult)
+
+/*/vector/proc/operator*=(var/mult)
+	x *= mult
+	y *= mult*/
+
+/vector/proc/equals(var/vector/vectorB)
+	return (x == vectorB.x && y == vectorB.y)
+
