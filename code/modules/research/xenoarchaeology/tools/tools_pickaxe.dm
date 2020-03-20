@@ -9,78 +9,66 @@
 	item_state = "syringe_0"
 	toolspeed = 0.2
 	desc = "Thick metallic wires for clearing away dust and loose scree (1 centimetre excavation depth)."
-	excavation_amount = 0.5
+	excavation_amount = 1
 	toolsounds = list('sound/weapons/thudswoosh.ogg')
 	drill_verb = "brushing"
 	w_class = W_CLASS_SMALL
 
-/obj/item/weapon/pickaxe/one_pick
-	name = "2 cm pick"
-	icon = 'icons/obj/xenoarchaeology.dmi'
-	icon_state = "pick1"
-	item_state = "syringe_0"
-	toolspeed = 0.2
-	desc = "A miniature excavation tool for precise digging (2 centimetre excavation depth)."
-	excavation_amount = 1
-	toolsounds = list('sound/items/Screwdriver.ogg')
-	drill_verb = "delicately picking"
-	w_class = W_CLASS_SMALL
-
 /obj/item/weapon/pickaxe/two_pick
-	name = "4 cm pick"
+	name = "2 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick2"
 	item_state = "syringe_0"
 	toolspeed = 0.2
-	desc = "A miniature excavation tool for precise digging (4 centimetre excavation depth)."
+	desc = "A miniature excavation tool for precise digging (2 centimetre excavation depth)."
 	excavation_amount = 2
 	toolsounds = list('sound/items/Screwdriver.ogg')
 	drill_verb = "delicately picking"
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/three_pick
-	name = "6 cm pick"
+	name = "3 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick3"
 	item_state = "syringe_0"
 	toolspeed = 0.2
-	desc = "A miniature excavation tool for precise digging (6 centimetre excavation depth)."
+	desc = "A miniature excavation tool for precise digging (3 centimetre excavation depth)."
 	excavation_amount = 3
 	toolsounds = list('sound/items/Screwdriver.ogg')
 	drill_verb = "delicately picking"
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/four_pick
-	name = "8 cm pick"
+	name = "4 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick4"
 	item_state = "syringe_0"
 	toolspeed = 0.2
-	desc = "A miniature excavation tool for precise digging (8 centimetre excavation depth)."
+	desc = "A miniature excavation tool for precise digging (4 centimetre excavation depth)."
 	excavation_amount = 4
 	toolsounds = list('sound/items/Screwdriver.ogg')
 	drill_verb = "delicately picking"
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/five_pick
-	name = "10 cm pick"
+	name = "5 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick5"
 	item_state = "syringe_0"
 	toolspeed = 0.2
-	desc = "A miniature excavation tool for precise digging (10 centimetre excavation depth)."
+	desc = "A miniature excavation tool for precise digging (5 centimetre excavation depth)."
 	excavation_amount = 5
 	toolsounds = list('sound/items/Screwdriver.ogg')
 	drill_verb = "delicately picking"
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/pickaxe/six_pick
-	name = "12 cm pick"
+	name = "6 cm pick"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "pick6"
 	item_state = "syringe_0"
 	toolspeed = 0.2
-	desc = "A miniature excavation tool for precise digging (12 centimetre excavation depth)."
+	desc = "A miniature excavation tool for precise digging (6 centimetre excavation depth)."
 	excavation_amount = 6
 	toolsounds = list('sound/items/Screwdriver.ogg')
 	drill_verb = "delicately picking"
@@ -92,7 +80,7 @@
 	icon_state = "pick_hand"
 	item_state = "syringe_0"
 	toolspeed = 0.3
-	desc = "A smaller, more precise version of the pickaxe (30 centimetre excavation depth)."
+	desc = "A smaller, more precise version of the pickaxe (15 centimetre excavation depth)."
 	excavation_amount = 15
 	toolsounds = list('sound/items/Crowbar.ogg')
 	drill_verb = "clearing"
@@ -108,10 +96,9 @@
 	desc = "A set of picks for excavation."
 	item_state = "syringe_kit"
 	foldable = /obj/item/stack/sheet/cardboard //BubbleWrap
-	storage_slots = 7
+	storage_slots = 6
 	w_class = W_CLASS_SMALL
 	can_only_hold = list("/obj/item/weapon/pickaxe/brush",\
-	"/obj/item/weapon/pickaxe/one_pick",\
 	"/obj/item/weapon/pickaxe/two_pick",\
 	"/obj/item/weapon/pickaxe/three_pick",\
 	"/obj/item/weapon/pickaxe/four_pick",\
@@ -124,7 +111,6 @@
 /obj/item/weapon/storage/box/excavation/New()
 	..()
 	new /obj/item/weapon/pickaxe/brush(src)
-	new /obj/item/weapon/pickaxe/one_pick(src)
 	new /obj/item/weapon/pickaxe/two_pick(src)
 	new /obj/item/weapon/pickaxe/three_pick(src)
 	new /obj/item/weapon/pickaxe/four_pick(src)
