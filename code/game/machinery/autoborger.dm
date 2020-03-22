@@ -1,7 +1,7 @@
 #define NAMETYPE_NORMAL  0
 #define NAMETYPE_SILLY   1
 
-/obj/machinery/transformer
+/obj/machinery/autoborger
 	name = "Automatic Robotic Factory 5000"
 	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, robot comes out'. Human must be lying down and alive. Has to cooldown between each use."
 	icon = 'icons/obj/recycling.dmi'
@@ -25,23 +25,23 @@
 	var/enable_namepick=TRUE
 	var/belongstomalf=null //malf AI that owns autoborger
 
-/obj/machinery/transformer/New()
+/obj/machinery/autoborger/New()
 	// On us
 	..()
 	new /obj/machinery/conveyor/auto(loc, WEST)
 
-/obj/machinery/transformer/power_change()
+/obj/machinery/autoborger/power_change()
 	..()
 	update_icon()
 
-/obj/machinery/transformer/update_icon()
+/obj/machinery/autoborger/update_icon()
 	..()
 	if(stat & (BROKEN|NOPOWER) || cooldown_time > world.time)
 		icon_state = "separator-AO0"
 	else
 		icon_state = initial(icon_state)
 
-/obj/machinery/transformer/Bumped(var/atom/movable/AM)
+/obj/machinery/autoborger/Bumped(var/atom/movable/AM)
 	if(cooldown_state)
 		return
 
@@ -59,7 +59,7 @@
 		if(move_dir == EAST)
 			AM.forceMove(src.loc)
 
-/obj/machinery/transformer/proc/do_transform(var/mob/living/carbon/human/H)
+/obj/machinery/autoborger/proc/do_transform(var/mob/living/carbon/human/H)
 	if(stat & (BROKEN|NOPOWER))
 		return
 	if(cooldown_state)
@@ -123,7 +123,7 @@
 	cooldown_state = 1
 	update_icon()
 
-/obj/machinery/transformer/process()
+/obj/machinery/autoborger/process()
 	..()
 	var/old_cooldown_state=cooldown_state
 	cooldown_state = cooldown_time > world.time
@@ -132,7 +132,7 @@
 		if(!cooldown_state)
 			playsound(src, 'sound/machines/ping.ogg', 50, 0)
 
-/obj/machinery/transformer/conveyor/New()
+/obj/machinery/autoborger/conveyor/New()
 	..()
 	var/turf/T = loc
 	if(T)
@@ -148,10 +148,10 @@
 		if(istype(west, /turf/simulated/floor))
 			new /obj/machinery/conveyor/auto(west, WEST)
 
-/obj/machinery/transformer/attack_ai(var/mob/user)
+/obj/machinery/autoborger/attack_ai(var/mob/user)
 	interact(user)
 
-/obj/machinery/transformer/interact(var/mob/user)
+/obj/machinery/autoborger/interact(var/mob/user)
 	var/data=""
 	if(cooldown_state)
 		data += {"<b>Recalibrating.</b> Time left: [(cooldown_time - world.time)/10] seconds."}
@@ -176,12 +176,12 @@
 		</ul>
 	"}
 
-	var/datum/browser/popup = new(user, "transformer", src.name, 400, 300)
+	var/datum/browser/popup = new(user, "autoborger", src.name, 400, 300)
 	popup.set_content(data)
 	popup.set_title_image(user.browse_rsc_icon(icon, icon_state))
 	popup.open()
 
-/obj/machinery/transformer/Topic(href, href_list)
+/obj/machinery/autoborger/Topic(href, href_list)
 	if(!isAI(usr))
 		to_chat(usr, "<span class='warning'>This machine is way above your pay-grade.</span>")
 		return 0
