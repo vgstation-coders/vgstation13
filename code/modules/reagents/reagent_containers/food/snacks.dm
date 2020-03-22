@@ -4665,7 +4665,7 @@
 	..()
 	candyness -= bitesize*10 //taking a bite out reduces how long it'll last
 
-/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/proc/updateconsuming(var/consuming)
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/proc/updateconsumingalt(var/consuming)
 	if(consuming)
 		processing_objects.Add(src)
 	else
