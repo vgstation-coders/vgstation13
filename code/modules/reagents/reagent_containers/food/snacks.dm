@@ -4648,7 +4648,53 @@
 	starting_materials = list(MAT_PLASTIC = 100)
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/New()
+	..()
+	eatverb = pick("bite","crunch","chomp")
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(SUGAR, 8)
 	reagents.add_reagent(TRICORDRAZINE, 10)
+	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
+	var/image/colorpop = image('icons/obj/candymachine.dmi', icon_state = "lollipop_head")
+	colorpop.color = pick(random_color_list)
+	src.overlays += colorpop
+	filling_color = colorpop.color
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/consume()
+	..()
+	candyness -= bitesize*10 //taking a bite out reduces how long it'll last
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/proc/updateconsuming(var/consuming)
+	if(consuming)
+		processing_objects.Add(src)
+	else
+		processing_objects.Remove(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/process()
+	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
+	if(!H) //we ended up outside our human somehow
+		updateconsuming(FALSE)
+		return
+	if(H.isDead()) //human isn't really consuming it
+		return
+	if(H.is_wearing_item(src,slot_wear_mask))
+		candyness--
+	if(candyness <= 0)
+		to_chat(H, "<span class='notice'>You finish \the [src].</span>")
+		var/atom/new_stick = new /obj/item/trash/lollipopstick(loc)
+		transfer_fingerprints_to(new_stick)
+		qdel(src)
+		H.equip_to_slot(new_stick, slot_wear_mask, 1)
+	else
+		if(candyness%10 == 0) //every 10 ticks, ~15 times
+			reagents.trans_to(H, 1, log_transfer = FALSE, whodunnit = null)
+		if(candyness%50 == 0) //every 50 ticks, so ~3 times
+			bitecount++ //we're arguably eating it
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/equipped(mob/living/carbon/human/H, equipped_slot)
+	if(!H.isDead())
+		updateconsuming(equipped_slot == slot_wear_mask)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin
 	name = "\improper Choco-Coin"
