@@ -4647,6 +4647,9 @@
 	w_type = RECYK_MISC
 	starting_materials = list(MAT_PLASTIC = 100)
 
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop
+	reagents.add_reagent(TRICORDRAZINE, 10)
+
 /obj/item/weapon/reagent_containers/food/snacks/chococoin
 	name = "\improper Choco-Coin"
 	desc = "A thin wafer of milky, chocolatey, melt-in-your-mouth goodness. That alone is already worth a hoard."
