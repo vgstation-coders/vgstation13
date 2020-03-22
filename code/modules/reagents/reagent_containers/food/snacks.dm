@@ -4677,7 +4677,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/medipop/process()
 	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
 	if(!H) //we ended up outside our human somehow
-		updateconsuming(FALSE)
+		updateconsumingalt(FALSE)
 		return
 	if(H.isDead()) //human isn't really consuming it
 		return
@@ -4697,7 +4697,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/medipop/equipped(mob/living/carbon/human/H, equipped_slot)
 	if(!H.isDead())
-		updateconsuming(equipped_slot == slot_wear_mask)
+		updateconsumingalt(equipped_slot == slot_wear_mask)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin
 	name = "\improper Choco-Coin"
