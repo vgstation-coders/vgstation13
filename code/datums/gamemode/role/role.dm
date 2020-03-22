@@ -649,7 +649,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	if (!(former_minions.len))
 		return ..()
 	// else...
-	var/icon/logo_slave = icon('icons/logos.dmi', greytide-logo)
+	var/icon/logo_slave = icon('icons/logos.dmi', "greytide-logo")
 	var/list/dat = list()
 	dat += ..()
 	dat += "<br/>The greytide leader's former slaves were: <br/>"
@@ -661,7 +661,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	if (!(former_minions.len))
 		return ..()
 	// else...
-	var/icon/logo_slave = icon('icons/logos.dmi', greytide-logo)
+	var/icon/logo_slave = icon('icons/logos.dmi', "greytide-logo")
 	var/list/dat = list()
 	dat += ..()
 	dat += "<br/>The greytide leader's former slaves were: <br/>"
