@@ -4635,21 +4635,24 @@
 	if(!H.isDead())
 		updateconsuming(equipped_slot == slot_wear_mask)
 
-/obj/item/trash/lollipopstick
-	name = "lollipop stick"
-	desc = "A small plastic stick."
-	icon = 'icons/obj/candymachine.dmi'
+/obj/item/weapon/reagent_containers/food/snacks/medipop
+	name = "medipop"
+	desc = "Suck on this!"
 	icon_state = "lollipop_stick"
-	w_class = W_CLASS_TINY
-	slot_flags = SLOT_MASK
-	throwforce = 1
-	autoignition_temperature = 0
-	w_type = RECYK_MISC
-	starting_materials = list(MAT_PLASTIC = 100)
+	item_state = "lollipop_stick"
+	food_flags = FOOD_SWEET
+	icon = 'icons/obj/candymachine.dmi'
+	bitesize = 5
+	slot_flags = SLOT_MASK //No, really, suck on this.
+	attack_verb = list("taps", "pokes")
+	eatverb = "crunch"
+	edible_by_utensil = FALSE
+	trash = /obj/item/trash/lollipopstick
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	var/candyness = 161 //how long this thing will last
+	volume = 15 //not a lotta room for poison
 
-/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop
-
-/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/New()
+/obj/item/weapon/reagent_containers/food/snacks/medipop/New()
 	..()
 	eatverb = pick("bite","crunch","chomp")
 	reagents.add_reagent(NUTRIMENT, 2)
@@ -4661,17 +4664,17 @@
 	src.overlays += colorpop
 	filling_color = colorpop.color
 
-/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/consume()
+/obj/item/weapon/reagent_containers/food/snacks/medipop/consume()
 	..()
 	candyness -= bitesize*10 //taking a bite out reduces how long it'll last
 
-/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/proc/updateconsumingalt(var/consuming)
+/obj/item/weapon/reagent_containers/food/snacks/medipop/proc/updateconsumingalt(var/consuming)
 	if(consuming)
 		processing_objects.Add(src)
 	else
 		processing_objects.Remove(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/process()
+/obj/item/weapon/reagent_containers/food/snacks/medipop/process()
 	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
 	if(!H) //we ended up outside our human somehow
 		updateconsuming(FALSE)
@@ -4692,7 +4695,7 @@
 		if(candyness%50 == 0) //every 50 ticks, so ~3 times
 			bitecount++ //we're arguably eating it
 
-/obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop/equipped(mob/living/carbon/human/H, equipped_slot)
+/obj/item/weapon/reagent_containers/food/snacks/medipop/equipped(mob/living/carbon/human/H, equipped_slot)
 	if(!H.isDead())
 		updateconsuming(equipped_slot == slot_wear_mask)
 
@@ -4702,6 +4705,18 @@
 	food_flags = FOOD_SWEET
 	icon_state = "chococoin_unwrapped"
 	bitesize = 4
+
+/obj/item/trash/lollipopstick
+	name = "lollipop stick"
+	desc = "A small plastic stick."
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "lollipop_stick"
+	w_class = W_CLASS_TINY
+	slot_flags = SLOT_MASK
+	throwforce = 1
+	autoignition_temperature = 0
+	w_type = RECYK_MISC
+	starting_materials = list(MAT_PLASTIC = 100)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped
 	desc = "Still covered in golden foil wrapper."
