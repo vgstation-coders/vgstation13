@@ -27,15 +27,20 @@
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK
 
 	light_color = LIGHT_COLOR_CYAN
-	power_change()
-		..()
-		if(!(stat & (BROKEN|NOPOWER)))
-			set_light(2)
-		else
-			set_light(0)
+
+/obj/machinery/smartfridge/power_change()
+	if( powered() )
+		stat &= ~NOPOWER
+		set_light(2)
+	else
+		spawn(rand(0, 15))
+			stat |= NOPOWER
+			if(!(stat & BROKEN))
+				set_light(0)
+			
 
 /datum/fridge_pile
 	var/name = ""
@@ -278,17 +283,16 @@
 		insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 
-
-/obj/machinery/smartfridge/power_change()
+/obj/machinery/smartfridge/bloodbank/power_change()
 	if( powered() )
 		stat &= ~NOPOWER
 		if(!(stat & BROKEN))
 			icon_state = icon_on
 	else
 		spawn(rand(0, 15))
-		stat |= NOPOWER
-		if(!(stat & BROKEN))
-			icon_state = icon_off
+			stat |= NOPOWER
+			if(!(stat & BROKEN))
+				icon_state = icon_off
 
 /*******************
 *   Item Adding

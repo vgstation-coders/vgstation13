@@ -272,6 +272,7 @@
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/robot_rack/bed(src)
+	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
 	B.max_amount = MEDICAL_MAX_KIT
 	B.amount = MEDICAL_MAX_KIT
@@ -569,6 +570,7 @@
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/switchtool/surgery(src)
 	modules += new /obj/item/robot_rack/bed/syndie(src)
+	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
 
 	sensor_augs = list("Thermal", "Medical", "Disable")
 
