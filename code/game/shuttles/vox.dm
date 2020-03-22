@@ -77,7 +77,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 
 /datum/shuttle/vox/actually_travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
 	. = ..()
-	if (!(user.mind.GetRole(VOXRAIDER)))
+	if (!(user.mind.GetRole(VOXRAIDER)) && (D == dock_home))
 		var/datum/faction/vox_shoal/our_raiders = find_active_faction_by_type(/datum/faction/vox_shoal)
 		our_raiders.complete_failure = TRUE // they completely failed if a non-raider manages to access the shuttle.
 
