@@ -16,9 +16,9 @@ var/savefile/panicfile
 	if(fexists(extools_path))
 		call(extools_path, "maptick_initialize")()
 	// lib missing, show warning if on linux
-	else if(system_type == UNIX)
-		// extools on linux does not exist and is not in the repository as of yet		
-		warning("Dream Daemon appears to be running on Unix, but there is no extools library included with this repository. Performance may differ significantly from a Windows host. This warning will not show if libbyond-extools.so is added to the root of the game directory.")
+	else
+		// extools on linux does not exist and is not in the repository as of yet
+		warning("There is no extools library for this system included with this build. Performance may differ significantly than if it were present. This warning will not show if [extools_path] is added to the root of the game directory.")
 	
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
