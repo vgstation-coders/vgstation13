@@ -15,8 +15,8 @@ var/savefile/panicfile
 	var/extools_path = system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
 	if(fexists(extools_path))
 		call(extools_path, "maptick_initialize")()
-	// lib missing, show warning if on linux
 	else
+		// warn on missing library
 		// extools on linux does not exist and is not in the repository as of yet
 		warning("There is no extools library for this system included with this build. Performance may differ significantly than if it were present. This warning will not show if [extools_path] is added to the root of the game directory.")
 	
