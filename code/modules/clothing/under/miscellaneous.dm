@@ -34,7 +34,7 @@
 	icon_state = "sl_suit"
 	_color = "sl_suit"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/sl_suit/armored
 	desc = "It's a very amish looking suit. This one has a tag. It says \"Gorlex\" in cursive."
@@ -56,7 +56,7 @@
 	icon_state = "mailman"
 	item_state = "b_suit"
 	_color = "mailman"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/sexyclown
 	name = "sexy-clown suit"
@@ -172,7 +172,7 @@
 	icon_state = "teal_suit"
 	item_state = "g_suit"
 	_color = "teal_suit"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/suit_jacket
 	name = "black suit"
@@ -197,7 +197,7 @@
 	icon_state = "black_suit_fem"
 	item_state = "black_suit_fem"
 	_color = "black_suit_fem"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/suit_jacket/red
 	name = "red suit"
@@ -205,7 +205,7 @@
 	icon_state = "red_suit"
 	item_state = "r_suit"
 	_color = "red_suit"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/blackskirt
 	name = "black skirt"
@@ -239,7 +239,7 @@
 	icon_state = "pirate"
 	item_state = "pirate"
 	_color = "pirate"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/soviet
 	name = "soviet uniform"
@@ -421,7 +421,7 @@
 	icon_state = "spants"
 	_color = "simonpants"
 	item_state = "spants"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	gender = PLURAL
 
 /obj/item/clothing/under/batmansuit

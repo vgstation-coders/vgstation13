@@ -1293,12 +1293,24 @@ var/list/has_died_as_golem = list()
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
 
 	default_mutations=list(RAD_IMMUNE)
-	brute_mod = 1.3
-	burn_mod = 1.3
+	burn_mod = 1.1
 	tox_mod = 0.5
 
 	blood_color = "#ebece6"
 	flesh_color = "#9c7f25"
+
+	uniform_icons = 'icons/mob/species/insectoid/uniform.dmi'
+//	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
+	gloves_icons    = 'icons/mob/species/vox/gloves.dmi'
+	glasses_icons   = 'icons/mob/species/insectoid/eyes.dmi'
+	ears_icons      = 'icons/mob/species/insectoid/ears.dmi'
+	shoes_icons 	= 'icons/mob/species/insectoid/feet.dmi'
+	head_icons      = 'icons/mob/species/insectoid/head.dmi'
+//	belt_icons      = 'icons/mob/belt.dmi'
+	wear_suit_icons = 'icons/mob/species/insectoid/suit.dmi'
+	wear_mask_icons = 'icons/mob/species/insectoid/mask.dmi'
+//	back_icons      = 'icons/mob/back.dmi'
+
 
 	has_mutant_race = 0
 
@@ -1312,8 +1324,8 @@ var/list/has_died_as_golem = list()
 		)
 
 	species_intro = "You are an Insectoid.<br>\
-					Your body is utterly immune to the perils of radiation, and you are able to better defend against toxic chemicals <br>\
-					However, your rigid body is somewhat more fragile than that of more soft-bodied species. Resilient though you may be, a good smack may put you out of commission."
+					Your body is highly resistant to the initial effects of radiation exposure, and you are able to better defend against toxic chemicals <br>\
+					However, your body is somewhat more susceptible to heat than that of other species. Resilient though you may be, burns will prove more dangerous than typical. ."
 
 
 /datum/species/insectoid/makeName(var/gender,var/mob/living/carbon/human/H=null)

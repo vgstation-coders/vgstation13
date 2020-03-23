@@ -75,7 +75,7 @@ var/list/tag_suits_list = list()
 	dat += "<a href='?src=\ref[src]&create_game=1'>Create a new game</a><br/>"
 	dat += "<hr/>"
 	dat += "<a href='?src=\ref[src]&clear_gamertag=1'>Clear tag</a>"
-	
+
 	return jointext(dat,"")
 
 /obj/item/clothing/suit/tag/proc/refresh_edit_window(var/mob/user, var/datum/laser_tag_game/my_laser_tag_game)
@@ -102,7 +102,7 @@ var/list/tag_suits_list = list()
 		my_laser_tag_game = game
 		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
 		return
-	
+
 	if (href_list["create_game"])
 		var/datum/laser_tag_game/game = new
 		game.owner = player
@@ -120,7 +120,7 @@ var/list/tag_suits_list = list()
 			return
 		refresh_edit_window(usr, game)
 		return
-	
+
 	if (href_list["game_mode"])
 		var/datum/laser_tag_game/game = locate(href_list["game_mode"])
 		if (game.owner != player)
@@ -148,7 +148,7 @@ var/list/tag_suits_list = list()
 			game.fire_mode = choice
 		refresh_edit_window(usr, game)
 		return
-	
+
 	if (href_list["stun_time"])
 		var/datum/laser_tag_game/game = locate(href_list["stun_time"])
 		if (game.owner != player)
@@ -190,7 +190,7 @@ var/list/tag_suits_list = list()
 		game.kick_player(usr)
 		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
 		return
-	
+
 	if (href_list["clear_gamertag"])
 		my_laser_tag_game = null
 		player = null
@@ -314,6 +314,7 @@ var/list/tag_suits_list = list()
 	item_state = "wcoat"
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/apron/overalls
@@ -333,6 +334,7 @@ var/list/tag_suits_list = list()
 	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/spaceninjafake
 	name = "space ninja suit replica"
@@ -761,7 +763,7 @@ obj/item/clothing/suit/cassock
 	blood_overlay_type = "coat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	max_combined_w_class = 28
 	storage_slots = 14
 	actions_types = list(/datum/action/item_action/show_wares)

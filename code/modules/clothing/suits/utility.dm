@@ -131,7 +131,7 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/radiation
 	name = "radiation suit"
@@ -145,5 +145,5 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = 1.5
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
