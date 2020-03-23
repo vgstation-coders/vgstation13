@@ -136,8 +136,9 @@
 
 /datum/job/prisoner/introduce(mob/living/carbon/human/M, job_title)
 	if(!job_title)
-		job_title = src.title
+		job_title
 
 	to_chat(M, "<B>You are a [job_title].</B>")
 
 	to_chat(M, "<b>As one of the few permanent inhabitants of your station's prison wing, you have no real responsibilites and answer to no-one. However, the Warden (along with your criminal record) decides what happens to you.</b>")
+	to_chat(M, "<b>Even though you are a criminal, this DOES NOT mean you have a licence to tide. You are at the mercy of security. Expect punishment.</b>")
