@@ -805,15 +805,6 @@ var/global/list/whitelisted_species = list("Human")
 	var/tank_slot = slot_s_store
 	var/tank_slot_name = "suit storage"
 	switch(H.mind.assigned_role)
-		if("Scientist")
-			suit=/obj/item/clothing/suit/space/vox/civ/science
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
-		if("Research Director")
-			suit=/obj/item/clothing/suit/space/vox/civ/science/rd
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/rd
-		if("Roboticist")
-			suit=/obj/item/clothing/suit/space/vox/civ/science/roboticist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/roboticist
 		if("Trader")
 			suit = /obj/item/clothing/suit/space/vox/civ/trader
 			helm = /obj/item/clothing/head/helmet/space/vox/civ/trader

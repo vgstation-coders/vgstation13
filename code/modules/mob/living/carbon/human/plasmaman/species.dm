@@ -37,41 +37,9 @@
 	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
 	..()
 
-/datum/species/plasmaman/equip(var/mob/living/carbon/human/H)
-	H.fire_sprite = "Plasmaman"
-
-	// Unequip existing suits and hats.
-	H.u_equip(H.wear_suit,1)
-	H.u_equip(H.head,1)
-	if(H.mind.assigned_role!="Clown")
-		H.u_equip(H.wear_mask,1)
-
-	H.equip_or_collect(new /obj/item/clothing/mask/breath(H), slot_wear_mask)
-	var/suit=/obj/item/clothing/suit/space/plasmaman
-	var/helm=/obj/item/clothing/head/helmet/space/plasmaman
-	var/tank_slot = slot_s_store
-	var/tank_slot_name = "suit storage"
-
-	switch(H.mind.assigned_role)
-		if("Scientist","Geneticist","Roboticist")
-			suit=/obj/item/clothing/suit/space/plasmaman/science
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/science
-		if("Research Director")
-			suit=/obj/item/clothing/suit/space/plasmaman/science/rd
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/science/rd
-		if("Captain")
-			suit=/obj/item/clothing/suit/space/plasmaman/security/captain
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/captain
-	H.equip_or_collect(new suit(H), slot_wear_suit)
-	H.equip_or_collect(new helm(H), slot_head)
-	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.
-	to_chat(H, "<span class='notice'>You are now running on plasma internals from the [H.s_store] in your [tank_slot_name].  You must breathe plasma in order to survive, and are extremely flammable.</span>")
-	H.internal = H.get_item_by_slot(tank_slot)
-	if (H.internals)
-		H.internals.icon_state = "internal1"
-
 // -- Outfit datums --
 /datum/species/plasmaman/final_equip(var/mob/living/carbon/human/H)
+	H.fire_sprite = "Plasmaman"
 	var/tank_slot = slot_s_store
 	var/tank_slot_name = "suit storage"
 	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.
