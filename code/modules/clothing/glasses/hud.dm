@@ -18,7 +18,7 @@
 	name = "Health Scanner HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status."
 	icon_state = "healthhud"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/hud/health/process_hud(var/mob/M)
 	if(harm_labeled < min_harm_label)

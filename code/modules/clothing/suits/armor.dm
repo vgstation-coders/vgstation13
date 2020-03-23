@@ -28,7 +28,7 @@
 	desc = "An armored vest that protects against some damage."
 	icon_state = "armor"
 	item_state = "armor"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
@@ -45,7 +45,7 @@
 	desc = "An armored vest that protects against some damage. This one has a Nanotrasen corporate security badge."
 	icon_state = "armorsec"
 	item_state = "armor"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	var/clowned = FALSE //so clowns can deface this item
 
 /obj/item/clothing/suit/armor/vest/security/attackby(var/obj/item/A, mob/user)
@@ -77,7 +77,7 @@
 	icon_state = "warden_jacket"
 	item_state = "armor"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list (VOX_SHAPED)
+	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/neorussian
 	name = "neo-Russian vest"
@@ -98,7 +98,7 @@
 	desc = "A suit of armor with heavy padding to protect against melee attacks. Looks like it might impair movement."
 	icon_state = "riot"
 	item_state = "swat_suit"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 80, bullet = 10, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
@@ -196,7 +196,7 @@
 	desc = "A vest that excels in protecting the wearer against high-velocity solid projectiles."
 	icon_state = "bulletproof"
 	item_state = "armor"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 80, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
@@ -207,7 +207,7 @@
 	desc = "A vest that excels in protecting the wearer against energy projectiles."
 	icon_state = "armor_reflec"
 	item_state = "armor_reflec"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
@@ -240,6 +240,7 @@
 	desc = "An armored jacket used in special operations."
 	icon_state = "detective"
 	item_state = "det_suit"
+	species_fit = list(INSECT_SHAPED)
 	blood_overlay_type = "coat"
 
 /obj/item/clothing/suit/armor/det_suit
@@ -247,6 +248,7 @@
 	desc = "An armored vest with a detective's badge on it."
 	icon_state = "detective-armor"
 	item_state = "armor"
+	species_fit = list(INSECT_SHAPED)
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)

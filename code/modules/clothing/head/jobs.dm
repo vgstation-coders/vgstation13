@@ -16,7 +16,7 @@
 	desc = "The commander in chef's head wear."
 	flags = FPRINT
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 //Captain: This probably shouldn't be space-worthy
 /obj/item/clothing/head/caphat
@@ -27,6 +27,7 @@
 	item_state = "caphat"
 	siemens_coefficient = 0.9
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
+	species_fit = list(INSECT_SHAPED)
 
 //Captain: This probably shouldn't be space-worthy
 /obj/item/clothing/head/helmet/cap
@@ -37,7 +38,7 @@
 	body_parts_covered = HEAD
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 //Chaplain
 /obj/item/clothing/head/chaplain_hood
@@ -77,7 +78,7 @@
 	desc = "A beret with the security insignia emblazoned on it. For officers that are more inclined towards style than safety."
 	icon_state = "beret_badge"
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 //Medical
 /obj/item/clothing/head/surgery

@@ -10,7 +10,7 @@
 	item_state = "paramedic-vest"
 	allowed = list(/obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/flashlight/pen,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/radio,/obj/item/device/gps, /obj/item/roller)
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 10, rad = 10)
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 //Botonist
 /obj/item/clothing/suit/apron
@@ -21,7 +21,7 @@
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/reagent_containers/spray/plantbgone,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass,/obj/item/weapon/wirecutters/clippers,/obj/item/weapon/minihoe)
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 //Captain
 /obj/item/clothing/suit/captunic
@@ -71,7 +71,7 @@
 	permeability_coefficient = 0.50
 	body_parts_covered = FULL_TORSO|ARMS
 	allowed = list (/obj/item/weapon/kitchen/utensil/knife/large,/obj/item/weapon/kitchen/utensil/knife/large/butch)
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 
 //Chef
@@ -82,7 +82,7 @@
 	item_state = "apronchef"
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 //Detective
 /obj/item/clothing/suit/storage/det_suit
@@ -95,7 +95,7 @@
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/lighter,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/det_suit/noir
 	desc = "Ah, your trusty coat. There's a few tears here and there, giving it a more timely look. Or at least, that's what you told yourself when you found out gettin' it repaired would set you back 200 credits."
@@ -119,7 +119,7 @@
 	name = "blue jacket"
 	desc = "A blue forensics technician jacket."
 	icon_state = "forensics_blue"
-	
+
 /obj/item/clothing/suit/secdressjacket
 	body_parts_covered = FULL_TORSO|ARMS
 
@@ -128,49 +128,49 @@
 	name = "\improper HoS' blue dress jacket"
 	desc = "A blue dress jacket for the Head of Security."
 	icon_state = "hosbluejacket"
-	
+
 /obj/item/clothing/suit/secdressjacket/hosnavy
 	name = "\improper HoS' navy dress jacket"
 	desc = "A navy dress jacket for the Head of Security."
 	icon_state = "hosdnavyjacket"
-	
+
 /obj/item/clothing/suit/secdressjacket/hostan
 	name = "\improper HoS' tan dress jacket"
 	desc = "A tan dress jacket for the Head of Security."
 	icon_state = "hostanjacket"
-	
+
 //Warden
 /obj/item/clothing/suit/secdressjacket/wardenblue
 	name = "warden's blue dress jacket"
 	desc = "A blue dress jacket for the warden."
 	icon_state = "wardenbluejacket"
-	
+
 /obj/item/clothing/suit/secdressjacket/wardennavy
 	name = "warden's navy dress jacket"
 	desc = "A navy dress jacket for the warden."
 	icon_state = "wardendnavyjacket"
-	
+
 /obj/item/clothing/suit/secdressjacket/wardentan
 	name = "warden's tan dress jacket"
 	desc = "A tan dress jacket for the warden."
 	icon_state = "wardentanjacket"
-	
+
 //Security officer
 /obj/item/clothing/suit/secdressjacket/officerblue
 	name = "officer's blue dress jacket"
 	desc = "A blue dress jacket for a security officer."
 	icon_state = "officerbluejacket"
-	
+
 /obj/item/clothing/suit/secdressjacket/officernavy
 	name = "officer's navy dress jacket"
 	desc = "A navy dress jacket for a security officer."
 	icon_state = "officerdnavyjacket"
-	
+
 /obj/item/clothing/suit/secdressjacket/officertan
 	name = "officer's tan dress jacket"
 	desc = "A tan dress jacket for a security officer."
 	icon_state = "officertanjacket"
-	
+
 //Engineering
 /obj/item/clothing/suit/storage/hazardvest
 	name = "hazard vest"
