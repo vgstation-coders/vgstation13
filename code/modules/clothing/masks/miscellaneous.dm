@@ -79,6 +79,7 @@
 	body_parts_covered = HIDEHAIR | MOUTH
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_restricted = list("exclude", INSECT_SHAPED)
 	hides_identity = HIDES_IDENTITY_ALWAYS
 
 /obj/item/clothing/mask/balaclava/skimask
