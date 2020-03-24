@@ -886,9 +886,6 @@
 	flick("rune_convert_start",conversion)
 	playsound(R, 'sound/effects/convert_start.ogg', 75, 0, -4)
 
-	for(var/obj/item/device/gps/secure/SPS in get_contents_in_object(victim))
-		SPS.OnMobDeath(victim)//Think carefully before converting a sec officer
-
 	if (victim.mind)
 		if (victim.mind.assigned_role in impede_medium)
 			to_chat(victim, "<span class='warning'>Your sense of duty impedes down the ritual.</span>")
@@ -1037,6 +1034,9 @@
 			else
 				message_admins("Blood Cult: A conversion ritual occured...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 			cult_risk(activator)//risk of exposing the cult early if too many conversions
+
+		for(var/obj/item/device/gps/secure/SPS in get_contents_in_object(victim)) //Place it here because the conversion ran its course
+			SPS.OnMobDeath(victim)//Think carefully before converting a sec officer
 
 		switch (success)
 			if (CONVERSION_ACCEPT)
