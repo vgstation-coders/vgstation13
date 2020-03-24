@@ -611,6 +611,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "russofurcoat"
 	allowed = list(/obj/item/weapon/gun)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/doshjacket
 	name = "Plasterer's Jacket"
@@ -735,6 +736,7 @@ obj/item/clothing/suit/cassock
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	var/bearpelt = 0
 	extinguishingProb = 70
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)
@@ -753,6 +755,7 @@ obj/item/clothing/suit/cassock
 	heat_conductivity = 0
 	slowdown = HARDSUIT_SLOWDOWN_MED
 	bearpelt = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/trader
 	name = "trader's coat"

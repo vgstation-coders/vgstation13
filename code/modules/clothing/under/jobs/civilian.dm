@@ -229,7 +229,7 @@
 	item_state = "mime"
 	_color = "mime"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/miner

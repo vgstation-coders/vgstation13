@@ -172,7 +172,7 @@
 	icon_state = "teal_suit"
 	item_state = "g_suit"
 	_color = "teal_suit"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/suit_jacket
 	name = "black suit"
@@ -189,7 +189,7 @@
 	icon_state = "really_black_suit"
 	item_state = "bl_suit"
 	_color = "black_suit"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/suit_jacket/female
 	name = "executive suit"
@@ -324,18 +324,21 @@
 	desc = "Feminine fashion for the style concious RD."
 	icon_state = "dress_rd"
 	_color = "dress_rd"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_cap
 	name = "captain dress uniform"
 	desc = "Feminine fashion for the style concious captain."
 	icon_state = "dress_cap"
 	_color = "dress_cap"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_hop
 	name = "head of personal dress uniform"
 	desc = "Feminine fashion for the style concious HoP."
 	icon_state = "dress_hop"
 	_color = "dress_hop"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/dress/dress_hr
 	name = "human resources director uniform"

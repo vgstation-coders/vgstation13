@@ -202,6 +202,7 @@
 	icon_state = "suitjacket_blue_open"
 	item_state = "suitjacket_blue_open"
 	blood_overlay_type = "coat"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/lawyer/purpjacket
 	name = "Purple Suit Jacket"
@@ -225,6 +226,7 @@
 	icon_state = "ia_jacket_open"
 	item_state = "ia_jacket"
 	blood_overlay_type = "coat"
+	species_fit = list(INSECT_SHAPED)
 
 	verb/toggle()
 		set name = "Toggle Coat Buttons"
@@ -282,6 +284,7 @@
 	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	body_parts_covered = 0
+	species_fit = list(INSECT_SHAPED)
 
 //Head of Personnell
 /obj/item/clothing/suit/storage/Hop_Coat
@@ -289,6 +292,7 @@
 	desc = "A slightly armoured greatcoat. It looks like it's mostly ceremonial."
 	icon_state = "HoP_Coat"
 	item_state = "HoP_Coat"
+	species_fit = list(INSECT_SHAPED)
 	blood_overlay_type = "coat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/lighter,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)

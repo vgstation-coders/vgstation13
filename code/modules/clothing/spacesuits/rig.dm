@@ -725,6 +725,7 @@
 	item_state = "arch_hardsuit"
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
 	head_type = /obj/item/clothing/head/helmet/space/rig/arch
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/space/rig/arch
 	name = "archaeology hardsuit helmet"
@@ -734,3 +735,4 @@
 	_color = "arch"
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
 	color_on = "#81F9C6" //Aquamarine. A combination of the colors from the lamp and rail light.
+	species_fit = list(INSECT_SHAPED)
