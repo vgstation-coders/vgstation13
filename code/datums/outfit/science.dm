@@ -43,7 +43,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/pda/science/rd
+	pda_type = /obj/item/device/pda/heads/rd
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/rd
 
