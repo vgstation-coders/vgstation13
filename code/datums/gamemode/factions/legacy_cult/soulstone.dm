@@ -163,6 +163,8 @@
 						//if the player ghosted, you don't need to put his body into crit to successfully soulstone them.
 						to_chat(new_target, "<span class='danger'>You feel your soul getting sucked into \the [src].</span>")
 						to_chat(user, "<span class='rose'>\The [src] reacts to the corpse and starts glowing.</span>")
+						for(var/obj/item/device/gps/secure/SPS in get_contents_in_object(humanTarget))
+							SPS.stripped(humanTarget) //The victim is already dead, consider the SPS stripped
 						capture_soul_process(user,new_target.client,carbonMob)
 			else if(humanTarget)
 				//aw shit, our target is a brain/headless human, let's try and locate the head.
@@ -195,6 +197,8 @@
 			else
 				to_chat(carbonMob, "<span class='danger'>You feel your soul getting sucked into \the [src].</span>")
 				to_chat(user, "<span class='rose'>\The [src] reacts to the corpse and starts glowing.</span>")
+				for(var/obj/item/device/gps/secure/SPS in get_contents_in_object(carbonMob))
+					SPS.OnMobDeath(carbonMob) //The victim was killed by this
 				capture_soul_process(user,carbonMob.client,carbonMob)
 	else
 		if (!silent)
