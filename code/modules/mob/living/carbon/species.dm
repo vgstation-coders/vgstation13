@@ -1327,7 +1327,7 @@ var/list/has_died_as_golem = list()
 	..()
 
 	species_intro = "You are an Insectoid.<br>\
-					Your body is highly resistant to the initial effects of radiation exposure, and you are able to better defend against toxic chemicals <br>\
+					Your body is highly resistant to the initial effects of radiation exposure, and you are able to better defend against toxic chemicals. <br>\
 					However, your body is somewhat more susceptible to heat than that of other species. Resilient though you may be, burns will prove more dangerous than typical. ."
 
 
