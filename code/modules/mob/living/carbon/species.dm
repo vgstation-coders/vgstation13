@@ -1322,6 +1322,9 @@ var/list/has_died_as_golem = list()
 		"brain" =    /datum/organ/internal/brain,
 		"eyes" =     /datum/organ/internal/eyes/compound/
 		)
+/datum/species/insectoid/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
+	speech.message = replacetext(speech.message, "s", "z") //stolen from plasman code if it borks.
+	..()
 
 	species_intro = "You are an Insectoid.<br>\
 					Your body is highly resistant to the initial effects of radiation exposure, and you are able to better defend against toxic chemicals <br>\
