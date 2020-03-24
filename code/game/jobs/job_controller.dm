@@ -497,9 +497,6 @@ var/global/datum/controller/occupations/job_master
 			if("Mobile MMI")
 				H.MoMMIfy()
 				return 1
-			if("AI","Clown","Cyborg")	//don't need bag preference stuff!
-				if(rank=="Clown") // Clowns DO need to breathe, though - N3X
-					H.species.equip(H)
 	if(job)
 		job.introduce(H, (alt_title ? alt_title : rank))
 	else

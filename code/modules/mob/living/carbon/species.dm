@@ -702,11 +702,10 @@ var/global/list/whitelisted_species = list("Human")
 
 	move_speed_mod = 1
 
-/datum/species/muton/equip(var/mob/living/carbon/human/H)
+/datum/species/muton/final_equip(var/mob/living/carbon/human/H)
 	// Unequip existing suits and hats.
 	H.u_equip(H.wear_suit,1)
 	H.u_equip(H.head,1)
-
 	move_speed_mod = 1
 
 /datum/species/muton/gib(mob/living/carbon/human/H)
