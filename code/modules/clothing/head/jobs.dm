@@ -63,7 +63,7 @@
 	icon_state = "beret"
 	flags = FPRINT
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/beret/attackby(obj/item/weapon/W, mob/user)
 	..()
