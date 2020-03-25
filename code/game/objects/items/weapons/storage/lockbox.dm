@@ -279,6 +279,39 @@
 	icon_closed = "coinbox"
 	icon_broken = "coinbox+b"
 
+
+/obj/item/weapon/storage/lockbox/traitor_name
+	name = "lockbox"
+	desc = "A secure case containing nothing of importance."
+
+/obj/item/weapon/storage/lockbox/traitor_name/New()
+	..()
+
+	var/paper_content = ""
+	var/datum/faction/F = find_active_faction_by_type(/datum/faction/syndicate/traitor)
+	for(var/datum/role/RR in F.members)
+		if(RR.antag != usr.mind)
+			paper_content = "<B>FOR SYNDICATE EYES ONLY</B>:<BR><BR>"
+			paper_content += text("    <B>[]</B> -  []<BR><BR><B>DESTROY AFTER READING</B>", RR.antag.name, RR.antag.assigned_role)
+			break
+
+	// No other traitor was found
+	if(length(paper_content)<2)
+		paper_content = "<B>Shopping list</B>:<BR><BR>    Banana<BR>    Cucumber<BR>    Zucchini<BR>    Eggplant<BR>    Batteries"
+
+
+	var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(src)
+	P.info = paper_content
+	P.name = "paper- 'Shopping List'"
+
+// Only syndicate agents should be able to open the box
+/obj/item/weapon/storage/lockbox/traitor_name/allowed(var/mob/M)
+
+	var/datum/faction/F = find_active_faction_by_type(/datum/faction/syndicate/traitor)
+	if (M.mind && F.get_member_by_mind(M.mind))
+		return 1
+	return 0
+
 /obj/item/weapon/storage/lockbox/lawgiver
 	name = "lockbox (lawgiver)"
 	req_one_access = list(access_armory)

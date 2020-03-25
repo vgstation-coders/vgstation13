@@ -557,6 +557,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
+/datum/uplink_item/badass/traitor_name
+	name = "Syndicate Agent Reveal"
+	desc = "Are your code phrases being ignored? HQ can send you a name of a fellow agent. Beware, if you are the only agent then the paper will be worthless!"
+	item = /obj/item/weapon/storage/lockbox/traitor_name
+	cost = 10
+
 /datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/obj/item/device/uplink/U)
 
 	var/list/buyable_items = get_uplink_items()
