@@ -5375,6 +5375,30 @@
 
 		PersistencePanel() //refresh!
 
+	// --- Rod tracking
+
+	else if (href_list["rod_to_untrack"])
+		if(!check_rights(R_FUN))
+			return
+		var/obj/item/projectile/P = locate(href_list["rod_to_untrack"])
+
+		if (!P)
+			return
+			
+		P.tracking = FALSE
+		P.tracker_datum = null
+		qdel(P.tracker_datum)
+
+		var/log_data = "[P.original]"
+		if (ismob(P.original))
+			var/mob/M = P.original
+			if (M.client)
+				log_data += " (M.client.ckey)"
+		
+		log_admin("[key_name(usr)] stopped a rod thrown at [log_data].")
+		message_admins("<span class='notice'>[key_name(usr)]  stopped a rod thrown at [log_data].</span>")
+
+		ViewAllRods()
 
 	// ----- Religion and stuff
 	else if(href_list["ashpaper"])

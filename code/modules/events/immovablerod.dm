@@ -4,6 +4,8 @@
 //As well as hurting all dense mobs
 //Recoded as a projectile for better movement/appearance
 
+var/list/all_rods = list()
+
 /datum/event/immovable_rod
 	announceWhen = 1
 
@@ -70,6 +72,14 @@
 	pixel_y = -32
 	lock_angle = 1
 	clongSound = 'sound/effects/immovablerod_clong.ogg'
+
+/obj/item/projectile/immovablerod/New()
+	all_rods += src
+	..()
+
+/obj/item/projectile/immovablerod/Destroy()
+	all_rods -= src
+	..()
 
 /obj/item/projectile/immovablerod/hyper/New()
 	..()
@@ -188,3 +198,29 @@
 	for (var/mob/M in range(loc,20))
 		to_chat(M,"<FONT size=[max(0, 5 - round(get_dist(src, M)/4))]>CLANG!</FONT>")
 		M.playsound_local(loc, clongSound, 100 - (get_dist(src,M)*5), 1)
+
+/proc/random_start_turf(var/z)
+	var/startx
+	var/starty
+	var/chosen_dir = pick(NORTH, SOUTH, EAST, WEST)
+
+	switch(chosen_dir)
+
+		if(NORTH) //North, along the y = max edge
+			starty = world.maxy - (TRANSITIONEDGE + 2)
+			startx = rand((TRANSITIONEDGE + 2), world.maxx - (TRANSITIONEDGE + 2))
+
+		if(SOUTH) //South, along the y = 0 edge
+			starty = (TRANSITIONEDGE + 2)
+			startx = rand((TRANSITIONEDGE + 2), world.maxx - (TRANSITIONEDGE + 2))
+
+		if(EAST) //East, along the x = max edge
+			starty = rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2))
+			startx = world.maxx - (TRANSITIONEDGE + 2)
+
+		if(WEST) //West, along the x = 0 edge
+			starty = rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2))
+			startx = (TRANSITIONEDGE + 2)
+
+	var/turf/T = locate(startx, starty, z)
+	return T
