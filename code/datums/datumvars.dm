@@ -133,6 +133,7 @@
 
 	if(istype(D,/atom/movable))
 		body += "<option value='?_src_=vars;teleport_here=\ref[D]'>Teleport Here</option>"
+		body += "<option value='?_src_=vars;throw_a_fucking_rod_at_it=\ref[D]'>Throw a rod at it</option>"
 
 	if(istype(D,/atom))
 		body += "<option value='?_src_=vars;teleport_to=\ref[D]'>Teleport To</option>"
@@ -833,6 +834,48 @@ function loadPage(list) {
 			if("Stealthy")
 				A.alpha = 0
 				animate(A, alpha = 255, time = stealthy_level)
+
+	else if(href_list["throw_a_fucking_rod_at_it"])
+		if(!check_rights(R_FUN))
+			to_chat(usr, "<span class='warning'>You do not have sufficient permissions to do this.</span>")
+			return
+
+		var/atom/movable/A = locate(href_list["throw_a_fucking_rod_at_it"])
+		if(!istype(A))
+			to_chat(usr, "<span class='warning'>This can only be done to instances of movable atoms.</span>")
+			return
+
+		var/rod_size = input("What type of rod do you want to throw?","Throwing an Immovable Rod",null) as null|anything in list("Normal", "Pillar", "Monolith")
+		var/rod_type
+
+		if (!rod_size)
+			return
+
+		switch (rod_size)
+			if ("Normal")
+				rod_type = /obj/item/projectile/immovablerod
+			if ("Pillar")
+				rod_type = /obj/item/projectile/immovablerod/big
+			if ("Monolith")
+				rod_type = /obj/item/projectile/immovablerod/hyper
+
+		if(alert("Are you sure you want to do this?","Confirm","Yes","No") != "Yes")	
+			return
+
+		var/obj/item/projectile/immovablerod/rod = new rod_type(random_start_turf(A.z))
+		rod.tracking = TRUE
+		rod.throw_at(A)
+
+		var/log_data = "[A]"
+		if (ismob(A))
+			var/mob/M = A
+			if (M.client)
+				log_data += " ([M.client.ckey])"
+
+		log_admin("[key_name(usr)] threw a rod at [log_data].")
+		message_admins("<span class='notice'>[key_name(usr)] threw a rod at [log_data].</span>")
+		to_chat(usr, "<span class='danger'>If you changed your mind, you can always stop the tracking by using the verb 'VIEW-ALL-RODS' and click the 'Untrack' link.</span>")
+		return
 
 	else if(href_list["teleport_to"])
 		if(!check_rights(0))
