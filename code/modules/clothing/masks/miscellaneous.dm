@@ -6,7 +6,7 @@
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = MOUTH
 
@@ -29,7 +29,7 @@
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 25, rad = 0)
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 100
 	clothing_flags = BLOCK_GAS_SMOKE_EFFECT
 
@@ -79,6 +79,7 @@
 	body_parts_covered = HIDEHAIR | MOUTH
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_restricted = list("exclude", INSECT_SHAPED)
 	hides_identity = HIDES_IDENTITY_ALWAYS
 
 /obj/item/clothing/mask/balaclava/skimask
@@ -109,6 +110,7 @@
 	desc = "A mask made of soft vinyl and latex, representing the head of a horse."
 	icon_state = "horsehead"
 	item_state = "horsehead"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL

@@ -12,7 +12,7 @@
 	name = "tactical helmet"
 	desc = "Standard Security gear. Protects the head from impacts. Can be attached with a flashlight."
 	icon_state = "helmet_sec"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
 
 
 /obj/item/clothing/head/helmet/tactical/sec/preattached
@@ -40,7 +40,7 @@
 	desc = "It's a special helmet issued to the Warden of a security force. Protects the head from impacts."
 	icon_state = "policehelm"
 	body_parts_covered = HEAD
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/tactical/riot
 	name = "riot helmet"

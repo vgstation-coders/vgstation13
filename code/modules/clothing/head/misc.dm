@@ -68,7 +68,7 @@
 	icon_state = "mailman"
 	desc = "<i>'Right-on-time'</i> mail service head wear."
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
 
 /obj/item/clothing/head/plaguedoctorhat
 	name = "plague doctor's hat"
@@ -223,7 +223,7 @@
 	item_state = "bowler_hat"
 	desc = "For that industrial age look."
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
 
 /obj/item/clothing/head/beaverhat
 	name = "beaver hat"
@@ -238,7 +238,7 @@
 	item_state = "boater_hat"
 	desc = "Goes well with celery."
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
 
 /obj/item/clothing/head/squatter_hat
 	name = "slav squatter hat"
@@ -254,6 +254,7 @@
 	actions_types = list(/datum/action/item_action/tip_fedora)
 	desc = "A great hat ruined by being within fifty yards of you."
 	flags = FPRINT
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/fedora/OnMobLife(var/mob/living/carbon/human/wearer)
 	if(!istype(wearer))
@@ -294,7 +295,7 @@
 	item_state = "fez"
 	desc = "Put it on your monkey, make lots of cash money."
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
 
 //end bs12 hats
 
