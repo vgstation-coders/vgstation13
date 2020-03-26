@@ -1037,10 +1037,10 @@
 	else
 		if(M.losebreath >= 10)
 			M.losebreath = max(10, M.losebreath - 5)
-		if(M.InCritical() && !istype(M.locked_to,/obj/structure/bed/chair/vehicle)
-				M.adjustOxyLoss(-2)
-				M.heal_organ_damage(2,2)
-				M.adjustToxLoss(-2)
+		if(M.locked_to && M.InCritical() && !istype(M.locked_to,/obj/structure/bed/chair/vehicle))
+			M.adjustOxyLoss(-2)
+			M.heal_organ_damage(2,2)
+			M.adjustToxLoss(-2)
 
 
 /datum/reagent/space_drugs
