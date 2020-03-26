@@ -24,7 +24,7 @@
 	desc = "A jumpsuit made of strong material, providing robust protection."
 	icon_state = "security"
 	item_state = "r_suit"
-	_color = "secred"
+	_color = "security"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
