@@ -22,7 +22,6 @@
 	heat_damage_per_tick = 20
 	cold_damage_per_tick = 20
 	faction = "klendathu"
-	pass_flags = PASSTABLE
 	move_to_delay = 6
 	speed = 4
 	attack_sound = 'sound/weapons/bladeslice.ogg'
