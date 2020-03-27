@@ -48,7 +48,7 @@
 	item_state = "waiter"
 	_color = "waiter"
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/mailman
 	name = "mailman's jumpsuit"
@@ -552,6 +552,7 @@
 	icon_state = "darkholme"
 	item_state = "darkholme"
 	_color = "darkholme"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/gokugidown
 	name = "turtle hermit undershirt"
@@ -594,6 +595,7 @@
 	icon_state = "darkholme"
 	item_state = "darkholme"
 	_color = "darkholme"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/contortionist/proc/check_clothing(mob/user as mob)
 	//Allowed to wear: glasses, shoes, gloves, pockets, mask, and jumpsuit (obviously)
