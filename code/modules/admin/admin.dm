@@ -1618,3 +1618,17 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 		dat += "Max [T.max_per_turf] per turf. Lasts up to [T.max_age] rounds.<hr>"
 
 	usr << browse(dat, "window=persistencepanel;size=350x600")
+
+/datum/admins/proc/ViewAllRods()
+	if(!check_rights(0))
+		return
+	
+	var/dat = "<center><B>View all active rods</B></center><hr>"
+
+	for (var/obj/item/projectile/immovablerod/rod in all_rods)
+		dat += "<b>[rod]</b> in z = [rod.z] (<a href='?_src_=vars;Vars=\ref[rod]'>\[VV\]</A>)"
+		if (rod.tracking)
+			dat += "- <A href='?src=\ref[src];rod_to_untrack=\ref[rod]'>(UNTRACK)</A>"
+		dat += "<br/>"
+
+	usr << browse(dat, "window=rodswindow;size=350x300")

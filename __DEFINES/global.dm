@@ -14,6 +14,7 @@
 #define PLASMAMAN_SHAPED "Plasmaman"
 #define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
 #define MUSHROOM_SHAPED "Mushroom"
+#define INSECT_SHAPED "Insectoid"
 
 
 //Content of the Round End Information window

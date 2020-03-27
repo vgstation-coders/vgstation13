@@ -57,6 +57,8 @@
 
 	var/last_explosion_push = 0
 
+	var/list/datum/tracker/trackers = list()
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -1060,3 +1062,43 @@
 				forceMove(F)
 				return TRUE
 	return FALSE
+
+// -- trackers
+
+/atom/movable/proc/add_tracker(var/datum/tracker/T)
+	on_moved.Add(T, "recieve_position")
+
+/datum/tracker
+	var/name = "Tracker"
+	var/active = TRUE
+	var/changed = FALSE
+
+	var/turf/target
+
+	var/tick_refresh = 5 // The number of moved events before we update the position.
+	var/current_tick = 1
+
+	var/lost_position_probability = 0 // Probability of losing the target
+	var/lost_position_distance = 0 // Distance at which the tracker loses the target
+
+/datum/tracker/proc/recieve_position(var/list/loc)
+
+	ASSERT(loc)
+
+	if (!active)
+		return
+	if (current_tick < tick_refresh)
+		current_tick++
+		return
+
+	if (prob(lost_position_probability))
+		active = FALSE
+		return
+
+	var/target_loc = loc["loc"]
+	if (target != target_loc)
+		changed = TRUE
+
+	target = get_turf(target_loc)
+
+	current_tick = 1

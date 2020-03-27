@@ -9,7 +9,7 @@
 	_color = "director"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 50
 
 /obj/item/clothing/under/rank/scientist
@@ -21,7 +21,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 10, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/chemist
@@ -33,7 +33,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/pharma
@@ -109,7 +109,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 50
 
 /obj/item/clothing/under/rank/geneticist
@@ -121,7 +121,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/virologist
@@ -133,7 +133,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 50
 
 /obj/item/clothing/under/rank/nursesuit
@@ -145,7 +145,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/nurse
@@ -169,7 +169,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/medical
@@ -181,7 +181,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/medical/blue
@@ -190,7 +190,7 @@
 	icon_state = "scrubsblue"
 	_color = "scrubsblue"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/medical/green
 	name = "medical scrubs"
@@ -198,7 +198,7 @@
 	icon_state = "scrubsgreen"
 	_color = "scrubsgreen"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/medical/purple
@@ -207,7 +207,7 @@
 	icon_state = "scrubspurple"
 	_color = "scrubspurple"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 //paramedic
@@ -220,7 +220,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 10)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 
