@@ -54,7 +54,7 @@
 /obj/item/clothing/glasses/hud/diagnostic
 	name = "diagnostic HUD"
 	icon_state = "diagnostichud"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	desc = "A heads-up display that displays diagnostic information for compatible cyborgs and exosuits."
 
 /obj/item/clothing/glasses/hud/diagnostic/prescription

@@ -74,7 +74,7 @@
 	item_state = "mechatron"
 	_color = "mechatron"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/biomechanical
 	desc = "It's a slim black jumpsuit with a long white undercoat, perfect for surgery and service."
