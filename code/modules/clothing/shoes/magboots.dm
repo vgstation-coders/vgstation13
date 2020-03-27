@@ -5,7 +5,7 @@
 	var/base_state = "magboots"
 //	clothing_flags = NOSLIP //disabled by default
 	actions_types = list(/datum/action/item_action/toggle_magboots)
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
 	w_class = W_CLASS_LARGE
 
@@ -153,14 +153,14 @@
 	desc = "Reverse-engineered red magnetic boots that have a heavy magnetic pull. A tag on it says \"Property of Gorlex Marauders\"."
 	icon_state = "syndiemag0"
 	base_state = "syndiemag"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/shoes/magboots/syndie/elite
 	name = "advanced blood-red magboots"
 	desc = "Reverse-engineered red magnetic boots that have a heavy magnetic pull. These ones include brand new magnet technology stolen from NT. A tag on it says \"Property of Gorlex Marauders\"."
 	icon_state = "syndiemag0"
 	base_state = "syndiemag"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	mag_slow = MAGBOOTS_SLOWDOWN_LOW
 
 //Captain

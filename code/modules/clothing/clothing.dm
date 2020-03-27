@@ -547,6 +547,7 @@
 	eyeprot = 1
 	cold_breath_protection = 230
 	sterility = 100
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
@@ -568,6 +569,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	clothing_flags = CANEXTINGUISH
 	sterility = 100
+	species_fit = list(INSECT_SHAPED)
 
 //Under clothing
 /obj/item/clothing/under
