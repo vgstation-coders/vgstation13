@@ -1,4 +1,4 @@
-proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
+/proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
 	if(!epicenter)
 		return
 
@@ -44,7 +44,7 @@ proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
 			var/act = 2
 			if(dist <= heavy_range)
 				act = 1
-
+			CHECK_TICK
 			for(var/atom/movable/A in T.contents)
 				A.emp_act(act)
 	return

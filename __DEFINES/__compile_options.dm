@@ -19,7 +19,7 @@
 // metaclub.dm:
 //#define MAP_OVERRIDE 2
 // packedstation.dm
-//#define MAP_OVERRIDE 3
+#define MAP_OVERRIDE 3
 // roidstation.dm
 //#define MAP_OVERRIDE 4
 // test_box.dm:
