@@ -272,7 +272,10 @@ obj/machinery/gateway/centerstation/process()
 			calibrated = 1
 			return
 
-/obj/machinery/gateway/centerstation/attack_ghost(mob/user as mob)
+/obj/machinery/gateway/centerstation/attack_ghost(mob/user)
+	if (isAdminGhost(user) && existing_away_missions.len)
+		admin_active()
+		return
 	return src.Bumped(user)
 
 /obj/machinery/gateway/centeraway/attack_ghost(mob/user as mob)
