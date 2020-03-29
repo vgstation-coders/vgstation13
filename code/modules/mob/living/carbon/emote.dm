@@ -271,14 +271,14 @@
 	voxemote = TRUE
 	voxrestrictedemote = TRUE
 
-/datum/emote/living/carbon/sound/hiss
-	key = "hiss"
-	key_third_person = "hisses"
-	message = "hisses!"
-	message_mime = "acts out a hiss!"
+/datum/emote/living/carbon/sound/chitter
+	key = "chitter"
+	key_third_person = "chitters"
+	message = "chitters!"
+	message_mime = "chitters silently!"
 	emote_type = EMOTE_AUDIBLE
 	insect_sounds = list('sound/misc/hiss1.ogg', 'sound/misc/hiss2.ogg', 'sound/misc/hiss3.ogg')
-	sound_message = "hisses in agony!"
+	sound_message = "chitters in agony!"
 	insectoidemote = TRUE
 	insectoidrestrictedemote = TRUE
 
@@ -308,15 +308,15 @@
 				if(!C)
 					if(isvox(H) || isskelevox(H))
 						sound = pick(birb_sounds)
+					if(isinsectoid(H))
+						sound = pick(insect_sounds)
+
 					else
-						if(isinsectoid(H))
-							sound = pick(insect_sounds)
-						else
-							switch(H.gender)
-								if(MALE)
-									sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-								if(FEMALE)
-									sound = pick(female_sounds)
+						switch(H.gender)
+							if(MALE)
+								sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
+							if(FEMALE)
+								sound = pick(female_sounds)
 				else
 					sound = pick(C.sound_file)
 				playsound(user, sound, 50, 0)

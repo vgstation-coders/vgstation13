@@ -190,9 +190,8 @@
 	if(isvox(src) || isskelevox(src))
 		emote("shrieks", message = TRUE, ignore_status = TRUE)
 		return
-
 	if(isinsectoid(src))
-		emote("hisses", message = TRUE, ignore_status = TRUE)
+		emote("chitters", message = TRUE, ignore_status = TRUE)
 		return
 	else
 		emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced
