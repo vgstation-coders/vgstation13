@@ -6767,7 +6767,10 @@
 			H.remove_spell(spell)
 		for(var/spell/targeted/oathbreak/spell in H.spell_list)
 			H.remove_spell(spell)
-		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>, <span class='notice'><i>Where did Marcel go...?</i></span>'")
+		if (istype(H.wear_mask, /obj/item/clothing/mask/gas/mime/stickymagic))
+			qdel(H.wear_mask)
+			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")			
+		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
 
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
