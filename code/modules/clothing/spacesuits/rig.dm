@@ -680,7 +680,7 @@
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	eyeprot = 0
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/space/ghettorig
 	name = "jury-rigged space-proof firesuit"

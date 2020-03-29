@@ -193,7 +193,7 @@
 		/obj/item/weapon/tank/emergency_nitrogen,
 		/obj/item/device/device_analyser,
 		/obj/item/device/rcd)
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 //Lawyer
 /obj/item/clothing/suit/storage/lawyer/bluejacket

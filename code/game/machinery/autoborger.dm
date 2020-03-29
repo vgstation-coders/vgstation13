@@ -69,7 +69,7 @@
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return
 
-	if(jobban_isbanned(H, "Cyborg"))
+	if(jobban_isbanned(H, "Cyborg") || !job_master.GetJob("Cyborg").player_old_enough(H.client))
 		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
 		return
 
