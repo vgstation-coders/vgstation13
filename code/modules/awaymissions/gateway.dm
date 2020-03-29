@@ -37,6 +37,12 @@ var/list/gateways = list() //List containing the gateways on away missions
 	var/wait = 0				//this just grabs world.time at world start
 	var/obj/machinery/gateway/centeraway/awaygate = null
 
+/obj/machinery/gateway/centerstation/proc/admin_active()
+	detect()
+	initialize()
+	wait = 0
+	toggleon()
+
 /obj/machinery/gateway/centerstation/initialize()
 	update_icon()
 	wait = world.time + config.gateway_delay	//+ thirty minutes default
