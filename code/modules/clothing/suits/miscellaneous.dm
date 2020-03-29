@@ -263,7 +263,7 @@ var/list/tag_suits_list = list()
 	desc = "Yarr."
 	icon_state = "hgpirate"
 	flags = FPRINT
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
 
@@ -435,6 +435,7 @@ obj/item/clothing/suit/cassock
 	item_state = "straight_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/ianshirt
 	name = "worn shirt"
@@ -550,6 +551,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "swim_black"
 	_color = "swim_black"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/blue
 	name = "blue swimsuit"
@@ -557,6 +559,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "swim_blue"
 	_color = "swim_blue"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/purple
 	name = "purple swimsuit"
@@ -564,6 +567,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "swim_purp"
 	_color = "swim_purp"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/green
 	name = "green swimsuit"
@@ -571,6 +575,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "swim_green"
 	_color = "swim_green"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/red
 	name = "red swimsuit"
@@ -578,6 +583,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "swim_red"
 	_color = "swim_red"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/simonjacket
 	name = "Simon's Jacket"
@@ -651,7 +657,7 @@ obj/item/clothing/suit/cassock
 	blood_overlay_type = "coat"
 	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/maidapron
 	name = "Apron"

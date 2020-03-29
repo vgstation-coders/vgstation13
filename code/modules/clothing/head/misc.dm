@@ -201,6 +201,7 @@
 	desc = "Yarr."
 	icon_state = "hgpiratecap"
 	item_state = "hgpiratecap"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/bandana
 	name = "pirate bandana"
