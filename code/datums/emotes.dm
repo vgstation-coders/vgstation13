@@ -24,6 +24,8 @@
 	var/list/mob_type_ignore_stat_typelist
 	var/voxemote = TRUE //Flags if a vox CAN use an emote. Defaults to can.
 	var/voxrestrictedemote = FALSE //Flags if Non-Vox CANNOT use an emote. Defaults to CAN.
+	var/insectoidemote = TRUE
+	var/insectoidrestrictedemote = FALSE
 	var/stat_allowed = CONSCIOUS
 	var/static/list/emote_list = list()
 
@@ -135,6 +137,12 @@
 	if(is_type_in_list(user, mob_type_blacklist_typelist))
 		return FALSE
 
+	if((isinsectoid(user)) && insectoidrestrictedemote == TRUE)
+		return TRUE
+	if((!isinsectoid(user)) && insectoidrestrictedemote == TRUE)
+		return FALSE
+	if((isinsectoid(user)) && insectoidemote == FALSE)
+		return FALSE
 	if((isvox(user) || isskelevox(user)) && voxrestrictedemote == TRUE)
 		return TRUE
 	if((!isvox(user) || !isskelevox(user)) && voxrestrictedemote == TRUE)
@@ -183,5 +191,10 @@
 		emote("shrieks", message = TRUE, ignore_status = TRUE)
 		return
 
+	if(isinsectoid(src))
+		emote("hisses", message = TRUE, ignore_status = TRUE)
+		return
 	else
 		emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced
+
+

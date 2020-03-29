@@ -230,20 +230,22 @@
 	key = "blush"
 	key_third_person = "blushes"
 	message = "blushes."
-	
+
 /datum/emote/living/carbon/fear
 	key = "fear"
 	key_third_person = "fears"
 	message = "screams in fear!"
 	message_mime = "acts out a fearful scream!"
 	emote_type = EMOTE_AUDIBLE
-	
+
 /datum/emote/living/carbon/sound
 	var/list/science_sounds = null
 	var/list/male_sounds = null
 	var/list/female_sounds = null
 	var/list/birb_sounds = null
+	var/list/insect_sounds = null
 	var/sound_message = null
+
 
 /datum/emote/living/carbon/sound/scream
 	key = "scream"
@@ -256,6 +258,7 @@
 	female_sounds = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 	sound_message = "screams in agony!"
 	voxemote = FALSE
+	insectoidemote = FALSE
 
 /datum/emote/living/carbon/sound/shriek
 	key = "shriek"
@@ -267,6 +270,18 @@
 	sound_message = "shrieks in agony!"
 	voxemote = TRUE
 	voxrestrictedemote = TRUE
+
+/datum/emote/living/carbon/sound/hiss
+	key = "hiss"
+	key_third_person = "hisses"
+	message = "hisses!"
+	message_mime = "acts out a hiss!"
+	emote_type = EMOTE_AUDIBLE
+	insect_sounds = list('sound/misc/hiss1.ogg', 'sound/misc/hiss2.ogg', 'sound/misc/hiss3.ogg')
+	sound_message = "hisses in agony!"
+	insectoidemote = TRUE
+	insectoidrestrictedemote = TRUE
+
 
 /datum/emote/living/carbon/sound/cough
 	key = "cough"
@@ -294,11 +309,14 @@
 					if(isvox(H) || isskelevox(H))
 						sound = pick(birb_sounds)
 					else
-						switch(H.gender)
-							if(MALE)
-								sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-							if(FEMALE)
-								sound = pick(female_sounds)
+						if(isinsectoid(H))
+							sound = pick(insect_sounds)
+						else
+							switch(H.gender)
+								if(MALE)
+									sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
+								if(FEMALE)
+									sound = pick(female_sounds)
 				else
 					sound = pick(C.sound_file)
 				playsound(user, sound, 50, 0)
