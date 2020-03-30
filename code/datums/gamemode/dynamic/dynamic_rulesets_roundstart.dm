@@ -7,7 +7,7 @@
 
 /datum/dynamic_ruleset/roundstart/traitor
 	name = "Syndicate Traitors"
-	persistent = 1
+	persistent = 0
 	role_category = /datum/role/traitor
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
@@ -19,7 +19,6 @@
 	var/additional_cost = 5
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
-	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
@@ -37,14 +36,6 @@
 		else
 			break
 	return 1
-
-/datum/dynamic_ruleset/roundstart/traitor/process()
-	if (autotraitor_cooldown)
-		autotraitor_cooldown--
-	else
-		autotraitor_cooldown = 450//15 minutes
-		message_admins("Dynamic Mode: Checking if we can turn someone into a traitor...")
-		mode.picking_specific_rule(/datum/dynamic_ruleset/midround/autotraitor)
 
 //////////////////////////////////////////////
 //                                          //
