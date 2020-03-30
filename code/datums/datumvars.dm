@@ -132,8 +132,8 @@
 		body += "<option value='?_src_=vars;mob_player_panel=\ref[D]'>Show player panel</option>"
 
 	if(istype(D,/atom/movable))
-		body += "<option value='?_src_=vars;teleport_here=\ref[D]'>Teleport Here</option>"
 		body += "<option value='?_src_=vars;throw_a_fucking_rod_at_it=\ref[D]'>Throw a rod at it</option>"
+		body += "<option value='?_src_=vars;teleport_here=\ref[D]'>Teleport Here</option>"
 
 	if(istype(D,/atom))
 		body += "<option value='?_src_=vars;teleport_to=\ref[D]'>Teleport To</option>"
