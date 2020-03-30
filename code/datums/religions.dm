@@ -38,11 +38,18 @@
 				chaplain_religion.holy_book = B
 				H.equip_or_collect(new rel.preferred_incense(H.back), slot_in_backpack)
 				rel.religiousLeader = H.mind
+				var/new_alt_title = (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
 				for(var/object in H.get_body_slots())
 					if(istype(object, /obj/item/weapon/card/id))
 						var/obj/item/weapon/card/id/ID = object
-						ID.assignment =  (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
-						ID.name = "[H]'s ID Card ([ID.assignment])"
+						ID.assignment = new_alt_title
+						ID.name = "[H.mind.name]'s ID Card ([ID.assignment])"
+					if(istype(object, /obj/item/device/pda))
+						var/obj/item/device/pda/PDA = object
+						if(PDA.owner == H.real_name)
+							PDA.ownjob = new_alt_title
+							PDA.name = "PDA-[PDA.owner] ([PDA.ownjob])"
+				data_core.manifest_modify(H.real_name, new_alt_title)
 				rel.convert(H, null, can_renounce = FALSE)
 				rel.OnPostActivation()
 				to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [rel.name]. Convert people by [rel.convert_method]")
