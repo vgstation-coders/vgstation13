@@ -1,4 +1,4 @@
- //Food items that are eaten normally and don't leave anything behind.
+//Food items that are eaten normally and don't leave anything behind.
 #define ANIMALBITECOUNT 4
 
 
@@ -1161,19 +1161,16 @@
 		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-2")
 		spawn(120)
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
-		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-3")//this iisn't working
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-3")
 		spawn(100)
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-3")
 
-		// apply pie face overlay
-		// cleaning reagents remove the blindness
-		// wiping face removes the blindness quickly
 	if(isturf(hit_atom))
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
 			new trash(src.loc)
-		qdel(src)
 		playsound(get_turf(src), 'sound/effects/splat.ogg', 100, 1)
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment
 	trash = null
