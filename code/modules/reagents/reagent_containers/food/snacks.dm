@@ -1,4 +1,4 @@
-//Food items that are eaten normally and don't leave anything behind.
+ //Food items that are eaten normally and don't leave anything behind.
 #define ANIMALBITECOUNT 4
 
 
@@ -1152,10 +1152,18 @@
 	..()
 	if(ismob(hit_atom))
 		var/mob/M = hit_atom
-		src.visible_message("<span class='warning'>[src] splats in [M]'s face!</span>")
+		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
 
 		M.eye_blind = 2
-
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied")
+		spawn(55)
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		spawn(120)
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-3")//this iisn't working
+		spawn(100)
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-3")
 
 		// apply pie face overlay
 		// cleaning reagents remove the blindness
