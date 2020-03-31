@@ -107,6 +107,7 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 2.0
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/spaceninjafake
 	name = "ninja hood replica"
