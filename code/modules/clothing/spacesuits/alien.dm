@@ -151,10 +151,16 @@
 	eyeprot = 3
 
 /obj/item/clothing/suit/space/vox/stealth
-	name = "alien stealth suit"
+	name = "latex stealth suit"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
-	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
+	desc = "Squeak."
+	var/step_sound = "clownstep"
+
+/obj/item/clothing/suit/space/vox/stealth/step_action()
+    if(ishuman(loc))
+        var/mob/living/carbon/human/H = loc
+        playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/head/helmet/space/vox/medic
 	name = "alien goggled helmet"
@@ -270,10 +276,16 @@
 	desc = "An alien helmet with enormous goggled lenses."
 
 /obj/item/clothing/suit/space/vox/civ/trader/stealth // blacksuit
-	name = "alien stealth suit"
+	name = "latex stealth suit"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
-	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
+	desc = "Squeak."
+	var/step_sound = "clownstep"
+
+/obj/item/clothing/suit/space/vox/civ/trader/stealth/step_action()
+    if(ishuman(loc))
+        var/mob/living/carbon/human/H = loc
+        playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "alien stealth helmet"
