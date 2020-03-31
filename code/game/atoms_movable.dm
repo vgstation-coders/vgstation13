@@ -946,23 +946,41 @@
 		for(var/client/C in viewers)
 			C.images -= override_image
 
-//Attack Animation for ghost object being pixel shifted onto person
-	var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
-	item.appearance = tool.attack_icon()
-	item.alpha = 128
-	item.loc = target
-	item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
-	item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
-	item.mouse_opacity = 0
+	spawn()
+		//Attack Animation for ghost object being pixel shifted onto person
+		var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
+		item.appearance = tool.attack_icon()
+		item.alpha = 128
+		item.loc = target
+		item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
+		item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
+		item.mouse_opacity = 0
 
-	var/viewers = item_animation_viewers.Copy()
-	for(var/client/C in viewers)
-		C.images += item
+		var/viewers = item_animation_viewers.Copy()
+		for(var/client/C in viewers)
+			C.images += item
 
-	animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
-	sleep(3)
-	for(var/client/C in viewers)
-		C.images -= item
+		animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
+		sleep(3)
+		for(var/client/C in viewers)
+			C.images -= item
+
+	spawn()
+		target.do_hitmarker(usr)
+
+/atom/proc/do_hitmarker(mob/shooter)
+	spawn()
+		var/datum/role/streamer/streamer_role = shooter?.mind?.GetRole(STREAMER)
+		if(streamer_role?.team == ESPORTS_SECURITY)
+			streamer_role.hits += IS_WEEKEND ? 2 : 1
+			streamer_role.update_antag_hud()
+			playsound(src, 'sound/effects/hitmarker.ogg', 100, FALSE)
+			var/image/hitmarker = image(icon='icons/effects/effects.dmi', loc=src, icon_state="hitmarker")
+			for(var/client/C in clients)
+				C.images += hitmarker
+			sleep(3)
+			for(var/client/C in clients)
+				C.images -= hitmarker
 
 /atom/movable/proc/make_invisible(var/source_define, var/time, var/include_clothing)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
 	return invisibility || alpha <= 1	//already invisible

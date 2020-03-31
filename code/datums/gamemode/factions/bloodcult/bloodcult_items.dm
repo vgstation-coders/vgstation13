@@ -57,6 +57,8 @@ var/list/arcane_tomes = list()
 	var i = 1
 	for(var/subtype in subtypesof(/datum/rune_spell))
 		var/datum/rune_spell/blood_cult/instance = subtype
+		if(instance == /datum/rune_spell/blood_cult)
+			continue
 		if (initial(instance.Act_restriction) <= veil_thickness)
 			dat += "<a href='byond://?src=\ref[src];page=[i]'><label> \Roman[i] </label> <li>  [initial(instance.name)] </li></a>"
 			if (i == current_page)
@@ -1220,6 +1222,16 @@ var/list/arcane_tomes = list()
 	starting_materials = list(MAT_IRON = 3750)
 	w_type=RECYK_METAL
 
+/obj/item/weapon/storage/cult/sponsored
+	name = "sponsored coffer"
+	desc = "A sponsor-sticker-plastered storage chest."
+
+/obj/item/weapon/storage/cult/sponsored/New()
+	..()
+	var/obj/item/weapon/reagent_containers/food/drinks/cult/cup = new(src)
+	cup.reagents.add_reagent(BLOOD, 50)
+	for(var/i in 1 to 2)
+		new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer(src)
 ///////////////////////////////////////CULT GLASS////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/cult
@@ -1261,6 +1273,11 @@ var/list/arcane_tomes = list()
 				reagents.reaction(H, INGEST)
 				reagents.trans_to(H, gulp_size)
 	transfer(get_turf(hit_atom), null, splashable_units = -1)
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/gamer
+	name = "gamer goblet"
+	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
+	icon_state = "cult_gamer"
 
 ///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////
 

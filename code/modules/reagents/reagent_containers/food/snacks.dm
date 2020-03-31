@@ -1525,6 +1525,27 @@
 	bitesize = 2
 
 
+/obj/item/weapon/reagent_containers/food/snacks/donitos
+	name = "Donitos"
+	desc = "Ranch or cool ranch?"
+	icon_state = "donitos"
+	trash = /obj/item/trash/donitos
+
+/obj/item/weapon/reagent_containers/food/snacks/donitos/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(SPRINKLES, 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch
+	name = "Donitos Cool Ranch"
+	desc = "Cool ranch."
+	icon_state = "donitos_coolranch"
+	trash = /obj/item/trash/donitos_coolranch
+
+/obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch/New()
+	..()
+	reagents.add_reagent(SPRINKLES, 5)
+
 /obj/item/weapon/reagent_containers/food/snacks/danitos
 	name = "Danitos"
 	desc = "For only the most MLG hardcore robust spessmen."

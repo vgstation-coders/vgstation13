@@ -1622,3 +1622,10 @@ var/proccalls = 1
 
 // How many times to retry winset()ing window parameters before giving up
 #define WINSET_MAX_ATTEMPTS 10
+
+// E-Sports teams
+#define ESPORTS_CULTISTS "Team Geometer"
+#define ESPORTS_SECURITY "Team Security"
+
+var/list/weekend_days = list("Friday", "Saturday", "Sunday")
+#define IS_WEEKEND (weekend_days.Find(time2text(world.timeofday, "Day")))

@@ -591,6 +591,20 @@
 		*/
 	var/displays_id = 1
 	clothing_flags = CANEXTINGUISH
+	var/icon/jersey_overlays
+
+// Associative list of exact type -> number
+var/list/jersey_numbers = list()
+
+/obj/item/clothing/under/New()
+	..()
+	if(jersey_overlays)
+		var/number = jersey_numbers[type]++ % 99
+		var/first_digit = num2text(round((number / 10) % 10))
+		var/second_digit = num2text(round(number % 10))
+		var/image/jersey_overlay = image(jersey_overlays, src, "[first_digit]-")
+		jersey_overlay.overlays += image(jersey_overlays, src, second_digit)
+		dynamic_overlay["[UNIFORM_LAYER]"] = jersey_overlay
 
 /obj/item/clothing/under/examine(mob/user)
 	..()

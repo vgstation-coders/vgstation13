@@ -809,3 +809,42 @@
 	item_state = "clownpsyche"
 	_color = "clownpsyche"
 	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/under/team_security
+	name = "light Team Security suit"
+	desc = "A snappy white and red suit worn by Team Security members and fans."
+	icon_state = "teamsec_light"
+	_color = "teamsec_light"
+	jersey_overlays = 'icons/mob/uniform_overlays.dmi'
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/under/team_security/dark
+	name = "dark Team Security suit"
+	desc = "A snappy black and red suit worn by Team Security members and fans."
+	icon_state = "teamsec_dark"
+	_color = "teamsec_dark"
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/under/spesstv
+	name = "promotional Spess.TV suit"
+	desc = "A cheap green and white suit worn by Spess.TV members and fans."
+	icon_state = "spesstv"
+	_color = "spesstv"
+	jersey_overlays = 'icons/mob/uniform_overlays.dmi'
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/under/team_geometer
+	name = "\improper Team Geometer suit"
+	desc = "A smelly green and black suit worn by team Geometer members and fans."
+	icon_state = "teamgeometer"
+	_color = "teamgeometer"
+	jersey_overlays = 'icons/mob/uniform_overlays.dmi'
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/under/team_nt
+	name = "\improper NanoTrasen sports suit"
+	desc = "A dusty blue and white suit worn by NanoTrasen referees."
+	icon_state = "teamnt"
+	_color = "teamnt"
+	jersey_overlays = 'icons/mob/uniform_overlays.dmi'
+	clothing_flags = ONESIZEFITSALL

@@ -1037,6 +1037,10 @@
 			else
 				message_admins("Blood Cult: A conversion ritual occured...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 			cult_risk(activator)//risk of exposing the cult early if too many conversions
+			var/datum/role/streamer/streamer_role = activator?.mind?.GetRole(STREAMER)
+			if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
+				streamer_role.conversions += IS_WEEKEND ? 2 : 1
+				streamer_role.update_antag_hud()
 
 		switch (success)
 			if (CONVERSION_ACCEPT)
@@ -2699,6 +2703,33 @@ var/list/bloodcult_exitportals = list()
 	plane = ABOVE_HUMAN_PLANE
 	mouse_opacity = 0
 
+//RUNE XXI
+/datum/rune_spell/blood_cult/stream
+	name = "Stream"
+	desc = "Start or stop streaming on Spess.TV"
+	desc_talisman = "Start or stop streaming on Spess.TV"
+	Act_restriction = CULT_PROLOGUE
+	invocation = "L'k' c'mm'nt 'n' s'bscr'b! P'g ch'mp! Kappah!"
+	word1 = /datum/runeword/blood_cult/other
+	word2 = /datum/runeword/blood_cult/see
+	word3 = /datum/runeword/blood_cult/self
+	page = "This rune lets you start (or stop) streaming on Spess.TV so that you can let your audience watch and cheer for you while you slay infidels in the name of Nar-sie. #Sponsored"
 
+/datum/rune_spell/blood_cult/stream/cast()
+	var/datum/role/streamer/streamer = activator.mind.GetRole(STREAMER)
+	if(!streamer)
+		streamer = new /datum/role/streamer
+		streamer.team = ESPORTS_CULTISTS
+		if(!streamer.AssignToRole(activator.mind, 1))
+			streamer.Drop()
+			return
+		streamer.OnPostSetup()
+		streamer.Greet(GREET_DEFAULT)
+		streamer.AnnounceObjectives()
+	streamer.team = ESPORTS_CULTISTS
+	if(!streamer.camera)
+		streamer.set_camera(new /obj/machinery/camera/arena/spesstv(activator))
+	streamer.toggle_streaming()
+	qdel(src)
 
 #undef RUNE_STAND

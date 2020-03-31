@@ -569,3 +569,7 @@
 	icon_state = "sombrero"
 	item_state = "sombrero"
 
+/obj/item/clothing/head/donitos_pope
+	name = "\improper Donitos Pope hat"
+	desc = "An oversized Donitos promotional plastic donut-shaped hat."
+	icon_state = "donitos_pope"
