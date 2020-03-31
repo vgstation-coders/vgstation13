@@ -151,7 +151,7 @@
 	eyeprot = 3
 
 /obj/item/clothing/suit/space/vox/stealth
-	name = "latex stealth suit"
+	name = "vox suit"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "Squeak."
@@ -276,7 +276,7 @@
 	desc = "An alien helmet with enormous goggled lenses."
 
 /obj/item/clothing/suit/space/vox/civ/trader/stealth // blacksuit
-	name = "latex stealth suit"
+	name = "vox suit"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "Squeak."
