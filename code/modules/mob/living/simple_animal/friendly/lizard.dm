@@ -83,3 +83,14 @@
 	else
 		plane = MOB_PLANE
 		to_chat(src, "<span class='notice'>You have stopped hiding.</span>")
+
+//freg
+/mob/living/simple_animal/hostile/lizard/frog
+	species_type = /mob/living/simple_animal/hostile/lizard/frog
+	name = "frog"
+	desc = "Ribbit."
+	icon_state = "smallfrog"
+	icon_living = "smallfrog"
+	icon_dead = "smallfrog_dead"
+	speak_emote = list("ribbits")
+	holder_type = /obj/item/weapon/holder/animal/frog
