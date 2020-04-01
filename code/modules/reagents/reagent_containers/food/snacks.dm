@@ -51,6 +51,11 @@
 		"<span class='notice'>You finish eating \the [src].</span>")
 		score["foodeaten"]++ //For post-round score
 
+		if(ishuman(user))
+			var/mob/living/carbon/human/POO = user
+			if(POO.shit_counter <= 12) //We can go up to 12 through actively eating!
+				POO.shit_counter++
+
 		//Drop our item before we delete it, to clear any references of ourselves in people's hands or whatever.
 		var/old_loc = loc
 		if(loc == user)
@@ -6228,3 +6233,41 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/attackby(obj/item/I,mob/user,params)
 	return ..() //sorry no custom pai sandwiches
+
+/obj/item/weapon/reagent_containers/food/snacks/literal_feces
+	name = "shit"
+	desc = "Its literally shit."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "poo1"
+	item_state = "poo"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+
+/obj/item/weapon/reagent_containers/food/snacks/literal_feces/New()
+	..()
+	icon_state = pick("poo1","poo2","saltednuts","poo3","poo4")
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(SHIT, 1)
+	bitesize = 12
+	
+/obj/item/weapon/reagent_containers/food/snacks/literal_feces/throw_impact(atom/hit_atom)
+	..()
+	if(isturf(hit_atom))
+		playsound(src, 'sound/effects/splat.ogg', 50, 1)
+		new /obj/effect/decal/cleanable/literal_feces(src.loc)
+		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/literal_feces/Crossed(atom/movable/O)
+	if(istype(O, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = O
+		if(H.CheckSlip() != TRUE)
+			return
+
+		H.stop_pulling()
+		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
+		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+		playsound(src, 'sound/effects/splat.ogg', 50, 1)
+		H.Stun(4)
+		H.Knockdown(3)
+		new /obj/effect/decal/cleanable/literal_feces(src.loc)
+		qdel(src)
+

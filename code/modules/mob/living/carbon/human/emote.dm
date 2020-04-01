@@ -212,3 +212,97 @@
 						H.dust()
 
 //There was a cancer here, it's gone now.
+//Its back bitch.
+/datum/emote/living/carbon/human/poo
+	key = "poo"
+	key_third_person = "poo"
+
+/datum/emote/living/carbon/human/poo/run_emote(mob/user, params, type_override, ignore_status = FALSE)
+	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
+		return FALSE
+	var/mob/living/carbon/human/H = user
+	if(H.op_stage.butt == SURGERY_NO_BUTT)
+		return FALSE // Can't shit without an arse (dummy)
+
+	if(H.shit_counter <= 0) //YOU GOT NOTHIN IN THE TANK BUDDY
+		message = "strains, and nothing happens."
+		emote_type = EMOTE_VISIBLE
+		return ..()
+
+	emote_type = EMOTE_AUDIBLE
+	var/turf/location = get_turf(H)
+	var/aoe_range = 2 // Default
+	if(M_SUPER_FART in H.mutations)
+		aoe_range += 3 //Was 5
+
+	if(H.wear_suit && H.wear_suit.body_parts_covered & LOWER_TORSO)
+		H.visible_message("<span class = 'warning'><b>[H]</b> shits into their own suit!</span>")
+		return
+
+	if(H.w_uniform && H.w_uniform.body_parts_covered & LOWER_TORSO)
+		H.visible_message("<span class = 'warning'><b>[H]</b> shits into their own uniform!</span>")
+		return
+
+	if(M_SUPER_FART in H.mutations)
+		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
+		H.visible_message("<span class = 'warning'><b>[H]</b> hunches down and grits their teeth!</span>")
+		if(do_after(H,H,30))
+			H.visible_message("<span class = 'warning'><b>[H]</b> unleashes a [pick("tremendous","gigantic","colossal")] shit!</span>","<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
+			playsound(location, 'sound/effects/superfart.ogg', 50, 1)
+			for(var/mob/living/V in oviewers(aoe_range, get_turf(H)))
+				if(!airborne_can_reach(location,get_turf(V),aoe_range))
+					continue
+				shake_camera(V,10,5)
+				if (V == H)
+					continue
+				to_chat(V, "<span class = 'danger'>You're sent flying!</span>")
+				V.Knockdown(12) // why the hell was this set to 12 christ
+				V.Stun(20)
+				step_away(V,location,15)
+				step_away(V,location,15)
+				step_away(V,location,15)
+				var/turf/T = get_turf(H)
+				if(!T.has_gravity(H))
+					to_chat(H, "<span class = 'notice'>The gastrointestinal blast sends you careening through space!</span>")
+					H.throw_at(get_edge_target_turf(H, H.dir), 5, 5)
+
+			new /obj/effect/decal/cleanable/literal_feces(H.loc) //1 decal, but 8 poo objects.
+			playsound(H, 'sound/effects/splat.ogg', 50, 1) //Yes you actually got both originally.
+			for(var/i = 1 to rand(4,8)) // ITS THE POONADO
+				var/obj/item/weapon/reagent_containers/food/snacks/literal_feces/PP = new(H.loc)
+				PP.throw_at(get_turf(pick(orange(5,H))), 5, 5)
+
+			if(prob(80))
+				to_chat(H,"<span class = 'warning'> OH NO! WE ARE EXPERIENCING A INTESTINAL OVERLOAD! </span>")
+				playsound(location, 'sound/effects/superfart.ogg', 100, 1)
+				H.gib()
+
+		else
+			to_chat(H, "<span class = 'notice'>You were interrupted and couldn't shit! Rude!</span>")
+			return
+
+	var/list/poos = list(
+		"shits.",
+		"passes a meaty loaf.",
+		"unleashes the konoha brown beast.",
+		"lets out a jonathan bravo.",
+		"poos [pick("lightly", "tenderly", "violently", "with anger", "calmly")].",
+	)
+
+	if(H.mind?.miming)
+		poos = list("silently shits.", "acts out a brown baguette.", "produces a visceral stain upon the material plane.")
+
+	message = pick(poos)
+
+	if(!H.mind.miming)
+		if(H.mind && H.mind.assigned_role == "Clown")
+			playsound(H, pick('sound/items/bikehorn.ogg','sound/items/AirHorn.ogg'), 50, 1)
+		else
+			playsound(H, 'sound/misc/fart.ogg', 100, 1)
+		. =..()
+
+	H.shit_counter-- //NEGATIVE ONE SHITS
+	playsound(H, 'sound/effects/splat.ogg', 50, 1) //Yes you actually got both originally.
+	new /obj/item/weapon/reagent_containers/food/snacks/literal_feces(H.loc)
+	new /obj/effect/decal/cleanable/literal_feces(H.loc)
+

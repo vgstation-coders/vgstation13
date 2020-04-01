@@ -37,6 +37,8 @@
 					nutrition += 10
 
 	//I put the nutriment stuff here
+	if(shit_counter <= 8) //If 8 is greater than or equal to our shit_counter, and we aren't starving.
+		shit_counter++ //We add +1
 
 	if(!hardcore_mode_on)
 		return //If hardcore mode isn't on, return
@@ -108,3 +110,4 @@
 
 				if(prob(10))
 					Knockdown(15)
+	

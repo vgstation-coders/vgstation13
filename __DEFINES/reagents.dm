@@ -75,6 +75,7 @@
 #define SILICON 			"silicon"
 #define FUEL 			"fuel"
 #define VOMIT 			"vomit"
+#define SHIT			"shit"
 #define CLEANER 			"cleaner"
 #define BLEACH 				"bleach"
 #define FERTILIZER 			"fertilizer"

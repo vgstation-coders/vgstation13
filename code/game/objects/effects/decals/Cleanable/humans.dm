@@ -230,3 +230,48 @@ var/global/list/blood_list = list()
 	random_icon_states = list("mucus")
 
 	var/dry=0
+
+/obj/effect/decal/cleanable/literal_feces
+	name = "shit"
+	desc = "Its literally shit"
+	gender = FEMALE
+	density = 0
+	anchored = 1
+	icon = 'icons/effects/blood.dmi'
+	icon_state = "poo1"	//I just wanted it to stay on cleanable with a supercall, lol.
+	random_icon_states = list("poo1","poo2","poo3","poo4","poo5","poo6","poo7","poo8","poo9","poo10","poo11","poo12","poo13","poo14")
+	transfers_dna = 1
+	basecolor="#66410a"
+	flags = OPENCONTAINER
+	var/dry_state = 40
+	var/can_slip = TRUE
+	var/wet = TURF_WET_LUBE
+
+/obj/effect/decal/cleanable/literal_feces/New() 
+	..()
+	processing_objects.Add(src)
+	create_reagents(10)
+	reagents.add_reagent(SHIT, rand(2,5))
+
+/obj/effect/decal/cleanable/literal_feces/Destroy()
+	..()
+	processing_objects.Remove(src)
+
+/obj/effect/decal/cleanable/literal_feces/process()
+	if(--dry_state <= 0) //Decrease dry_state by 1. Check if it's equal to zero
+		dry()
+
+/obj/effect/decal/cleanable/literal_feces/dry(var/drying_age)
+	processing_objects.Remove(src)
+	qdel(reagents)
+	reagents = null
+	can_slip = FALSE
+
+/obj/effect/decal/cleanable/literal_feces/Crossed(atom/movable/AM)
+	if(!isliving(AM))
+		return ..()
+	var/mob/living/L = AM
+	if(can_slip) //We go inert after a bit.
+		if(!L.ApplySlip(src))
+			return ..()
+

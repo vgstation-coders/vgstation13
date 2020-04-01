@@ -1063,6 +1063,36 @@
 	if(prob(7))
 		M.emote(pick("twitch", "drool", "moan", "giggle"), null, null, TRUE)
 
+/datum/reagent/shit
+	name = "Shit"
+	id = SHIT
+	description = "Its literal shit"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#724c04" //poo colored
+	density = 1.35
+	specheatcap = 5.2
+
+/datum/reagent/shit/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(data <= 50)
+			if(prob(9))
+				H.vomit()
+				if(prob(20))
+					new /obj/item/weapon/reagent_containers/food/snacks/literal_feces(H.loc)
+	data++
+
+/datum/reagent/shit/reaction_turf(turf/simulated/T, volume)
+	if(..())
+		return 1
+
+	if(volume >= 3)
+		if(!(locate(/obj/effect/decal/cleanable/vomit) in T))
+			new /obj/effect/decal/cleanable/literal_feces(T)
+
 /datum/reagent/holywater
 	name = "Holy Water"
 	id = HOLYWATER
