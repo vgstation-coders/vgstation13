@@ -6,6 +6,7 @@
 	desc = "A ready-to-assemble machine flatpack produced in the space-Swedish style."
 	icon = 'icons/obj/machines/flatpack.dmi'
 	icon_state = "flatpack"
+	layer = ABOVE_OBJ_LAYER
 	density = 1
 	anchored = 0
 	pass_flags = PASSTABLE
