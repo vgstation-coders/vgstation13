@@ -301,6 +301,12 @@
         var/mob/living/carbon/human/H = loc
         playsound(H, step_sound, 20, 1)
 
+/obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
+	name = "alien stealth helmet"
+	icon_state = "vox-stealth"
+	item_state = "vox-stealth"
+	desc = "A smoothly contoured, matte-black alien helmet.?"
+
 // -- Mushroom,traders --
 
 /obj/item/clothing/suit/space/vox/civ/mushmen
