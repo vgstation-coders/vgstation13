@@ -15,6 +15,7 @@
 #define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
 #define MUSHROOM_SHAPED "Mushroom"
 #define INSECT_SHAPED "Insectoid"
+#define AVALI_SHAPED "Avali"
 
 
 //Content of the Round End Information window

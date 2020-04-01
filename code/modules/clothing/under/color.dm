@@ -21,7 +21,7 @@
 	item_state = "b_suit"
 	_color = "blue"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/color/green
 	name = "green jumpsuit"
@@ -37,7 +37,7 @@
 	item_state = "gy_suit"
 	_color = "grey"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/color/orange
 	name = "orange jumpsuit"
@@ -72,7 +72,7 @@
 	item_state = "r_suit"
 	_color = "red"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/color/white
 	name = "white jumpsuit"
@@ -88,7 +88,7 @@
 	item_state = "y_suit"
 	_color = "yellow"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/psyche
 	name = "psychedelic jumpsuit"
