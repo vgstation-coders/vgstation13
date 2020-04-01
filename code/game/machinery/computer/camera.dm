@@ -151,6 +151,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	name = "high-definition Spess.TV telescreen"
 	icon = 'icons/obj/status_display.dmi'
 	icon_state = "entertainment"
+	circuit = /obj/item/weapon/circuitboard/security/spesstv
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen/New()
 	..()

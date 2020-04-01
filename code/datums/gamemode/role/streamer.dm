@@ -45,7 +45,7 @@
 		text = {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 [name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[key_name(M)]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
  - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
- - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a>"}
+ - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
 	return text
 
 /datum/role/streamer/ForgeObjectives()

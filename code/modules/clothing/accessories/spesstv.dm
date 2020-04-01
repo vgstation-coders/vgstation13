@@ -4,6 +4,8 @@
 	icon_state = "small_camera" // Credits to https://github.com/discordia-space/CEV-Eris
 	accessory_exclusion = ACCESSORY_LIGHT
 	var/obj/machinery/camera/arena/spesstv/internal_camera
+	origin_tech = Tc_PROGRAMMING + "=2"
+	mech_flags = MECH_SCAN_ILLEGAL
 
 /obj/item/clothing/accessory/spesstv_tactical_camera/New()
 	..()

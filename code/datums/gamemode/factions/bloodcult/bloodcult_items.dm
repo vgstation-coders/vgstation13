@@ -1277,7 +1277,6 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/reagent_containers/food/drinks/cult/gamer
 	name = "gamer goblet"
 	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
-	icon_state = "cult_gamer"
 
 ///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////
 

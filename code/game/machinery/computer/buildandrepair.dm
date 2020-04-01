@@ -51,6 +51,9 @@
 /obj/item/weapon/circuitboard/security/wooden_tv
 	name = "Circuit board (Security Cameras TV)"
 	build_path = /obj/machinery/computer/security/wooden_tv
+/obj/item/weapon/circuitboard/security/spesstv
+	name = "Circuit board (high-definition Spess.TV telescreen)"
+	build_path = /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen
 /obj/item/weapon/circuitboard/security/engineering
 	name = "Circuit board (Engineering Cameras)"
 	desc = "A circuit board for running a computer used for viewing engineering cameras."
