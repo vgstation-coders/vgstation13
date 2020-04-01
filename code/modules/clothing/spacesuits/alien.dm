@@ -151,14 +151,21 @@
 	eyeprot = 3
 
 /obj/item/clothing/suit/space/vox/stealth
-	name = "vox suit"
+	name = "alien stealth suit"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
-	desc = "Squeak."
-	var/step_sound = "clownstep"
+	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
+	var/step_sound = ""
+
+/obj/item/clothing/suit/space/vox/stealth/New()
+  ..()
+  if(Holiday == APRIL_FOOLS_DAY)
+    name = "vox suit"
+    desc = "Squeak."
+    step_sound = "clownstep"
 
 /obj/item/clothing/suit/space/vox/stealth/step_action()
-    if(ishuman(loc))
+    if(ishuman(loc)&&Holiday == APRIL_FOOLS_DAY)
         var/mob/living/carbon/human/H = loc
         playsound(H, step_sound, 20, 1)
 
@@ -276,22 +283,23 @@
 	desc = "An alien helmet with enormous goggled lenses."
 
 /obj/item/clothing/suit/space/vox/civ/trader/stealth // blacksuit
-	name = "vox suit"
+	name = "alien stealth suit"
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
-	desc = "Squeak."
-	var/step_sound = "clownstep"
+	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
+	var/step_sound = ""
+
+/obj/item/clothing/suit/space/vox/civ/trader/stealth/New()
+  ..()
+  if(Holiday == APRIL_FOOLS_DAY)
+    name = "vox suit"
+    desc = "Squeak."
+    step_sound = "clownstep"
 
 /obj/item/clothing/suit/space/vox/civ/trader/stealth/step_action()
-    if(ishuman(loc))
+    if(ishuman(loc)&&Holiday == APRIL_FOOLS_DAY)
         var/mob/living/carbon/human/H = loc
         playsound(H, step_sound, 20, 1)
-
-/obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
-	name = "alien stealth helmet"
-	icon_state = "vox-stealth"
-	item_state = "vox-stealth"
-	desc = "A smoothly contoured, matte-black alien helmet.?"
 
 // -- Mushroom,traders --
 
