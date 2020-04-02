@@ -1150,10 +1150,23 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/throw_impact(atom/hit_atom)
 	..()
+	if(ismob(hit_atom))
+		var/mob/M = hit_atom
+		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
+
+		M.eye_blind = 2
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied")
+		sleep(55)
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		sleep(120)
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
+
 	if(isturf(hit_atom))
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
 			new trash(src.loc)
+		playsound(get_turf(src), pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 100, 1)
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment
