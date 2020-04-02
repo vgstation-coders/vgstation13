@@ -282,18 +282,13 @@ var/stacking_limit = 90
 				if (threat_level > 75)
 					extra_rulesets_amount++
 		else
-			if (rst_pop >= high_pop_limit - 25)
-				if (threat_level >= second_rule_req[indice_pop])
+			if (threat_level >= second_rule_req[indice_pop])
+				extra_rulesets_amount++
+				if (threat_level >= third_rule_req[indice_pop])
 					extra_rulesets_amount++
-					if (threat_level >= third_rule_req[indice_pop])
-						extra_rulesets_amount++
-			else
-				classic_secret = 1
-				dynamic_classic_secret = 1
-				extra_rulesets_amount = 0
 
 	if (classic_secret)
-		message_admins("Classic secret was either forced or readied-up amount was low enough secret was rolled.")
+		message_admins("Classic secret was forced.")
 	else
 		message_admins("[i] rulesets qualify for the current pop and threat level, including [drafted_rules.len] with eligible candidates.")
 	if (drafted_rules.len > 0 && picking_roundstart_rule(drafted_rules))
@@ -487,8 +482,7 @@ var/stacking_limit = 90
 			for (var/datum/dynamic_ruleset/midround/rule in midround_rules)
 				if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
 					// Classic secret : only autotraitor/minor roles
-					/*if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))*/
-					if (classic_secret && !((rule.flags & TRAITOR_RULESET))) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
+					if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
 						message_admins("[rule] was refused because we're on classic secret mode.")
 						continue
 					// No stacking : only one round-enter, unless > stacking_limit threat.
@@ -603,8 +597,7 @@ var/stacking_limit = 90
 		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
 			if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
 				// Classic secret : only autotraitor/minor roles
-				/*if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))*/
-				if (classic_secret && !((rule.flags & TRAITOR_RULESET))) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
+				if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
 					message_admins("[rule] was refused because we're on classic secret mode.")
 					continue
 				// No stacking : only one round-enter, unless > stacking_limit threat.
@@ -702,8 +695,7 @@ var/stacking_limit = 90
 
 	// Concrete testing
 
-	/*if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))*/
-	if (classic_secret && !((to_test.flags & TRAITOR_RULESET))) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
+	if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))
 		message_admins("[to_test] was refused because we're on classic secret mode.")
 		return
 	// No stacking : only one round-enter, unless > stacking_limit threat.
@@ -746,8 +738,7 @@ var/stacking_limit = 90
 
 	// Concrete testing
 
-	/*if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))*/
-	if (classic_secret && !((to_test.flags & TRAITOR_RULESET))) //secret should be 1 ruleset only. Admins can bus in stuff if they want.
+	if (classic_secret && !((to_test.flags & TRAITOR_RULESET) || (to_test.flags & MINOR_RULESET)))
 		message_admins("[to_test] was refused because we're on classic secret mode.")
 		return
 	// No stacking : only one round-enter, unless > stacking_limit threat.
