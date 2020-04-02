@@ -7,6 +7,13 @@
 	max_temperature = 20000
 	health = 200
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley
+	mech_sprites = (
+		"ripley",
+		"proto-ripley",
+		"titan",
+		"ripley_flames_red",
+		"ripley_flames_blue"
+	)
 
 /*
 /obj/mecha/working/ripley/New()

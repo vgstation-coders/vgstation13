@@ -11,6 +11,10 @@
 	deflect_chance = 15
 	step_energy_drain = 6
 	var/obj/item/clothing/glasses/hud/health/mech/hud
+	mech_sprites = (
+		"odysseus",
+		"murdysseus",
+	)
 
 /obj/mecha/medical/odysseus/New()
 	..()

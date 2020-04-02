@@ -15,6 +15,12 @@
 	var/overlay_applied = FALSE
 	var/obj/machinery/portable_atmospherics/scrubber/mech/scrubber
 	var/obj/machinery/atmospherics/unary/portables_connector/scrubber_port = null
+	mech_sprites = (
+		"clarke",
+		"orangey",
+		"proto-clarke",
+	)
+
 
 /obj/mecha/working/clarke/New()
 	..()

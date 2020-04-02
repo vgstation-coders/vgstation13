@@ -15,6 +15,12 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/gygax
 	internal_damage_threshold = 35
 	max_equip = 3
+	mech_sprites = (
+		"gygax",
+		"gygax_old",
+		"recitence", //subvariant
+		"medgax",  //subvariant
+	)
 
 /obj/mecha/combat/gygax/dark
 	desc = "A lightweight exosuit used by Nanotrasen Death Squads. A significantly upgraded Gygax security mech."
@@ -29,6 +35,10 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/gygax/dark
 	max_equip = 4
 	step_energy_drain = 5
+	mech_sprites = (
+		"darkgygax",
+		"darkgygax_old",
+	)
 
 /obj/mecha/combat/gygax/New()
 	..()
@@ -60,7 +70,7 @@
 	desc = "Greatly enhance the mech's speed at the cost of integrity per step."
 	charge_max = 10
 	charge_counter = 10
-	hud_state = "gygax-gofast"
+	hud_state = "[initial_state]-gofast"//modified - realest
 	override_icon = 'icons/mecha/mecha.dmi'
 
 /spell/mech/gygax/overload/cast(list/targets, mob/user)
@@ -71,7 +81,7 @@
 		Gygax.step_energy_drain = initial(Gygax.step_energy_drain)
 		Gygax.occupant_message("<span class='notice'>You disable leg actuators overload.</span>")
 		if(!istype(Gygax,/obj/mecha/combat/gygax/dark))
-			flick("gygax-gofast-aoff",Gygax)
+			flick("[initial_state]-gofast-aoff",Gygax)
 			Gygax.icon_state = Gygax.initial_icon
 	else
 		Gygax.overload = 1
@@ -79,7 +89,7 @@
 		Gygax.step_energy_drain = Gygax.step_energy_drain*Gygax.overload_coeff
 		Gygax.occupant_message("<span class='red'>You enable leg actuators overload.</span>")
 		if(!istype(Gygax,/obj/mecha/combat/gygax/dark))
-			flick("gygax-gofast-aon",Gygax)
+			flick("[initial_state]-gofast-aon",Gygax)
 			Gygax.icon_state = Gygax.initial_icon + "-gofast"
 	Gygax.log_message("Toggled leg actuators overload.")
 	return

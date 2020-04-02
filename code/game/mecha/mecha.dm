@@ -97,6 +97,8 @@
 		/obj/item/projectile/ion,
 	)
 
+	var/list/mech_sprites = list() //modified - realest
+
 /obj/mecha/get_cell()
 	return cell
 
@@ -2082,6 +2084,20 @@
 		if(0 to 0.10)
 			return "huddiagdead"
 	return "huddiagmax"
+
+/obj/mecha/proc/repaint_mech(mob/user) //added -realest
+	if(!mech_sprites.len)//mech paint list is empty
+		to_chat(user, "<span class='info'>You cannot repaint this mech.</span>")
+		return
+
+	var/icontype = input("Select an icon!")in mech_sprites
+
+	if(icontype)
+		to_chat(user, "<span class='info'>You begin repainting the mech.</span>")
+		spawn(60)
+			icon_state = mech_sprites[icontype]
+			initial_icon = icon_state
+
 
 
 //////////////////////////////////////////

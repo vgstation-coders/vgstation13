@@ -19,7 +19,11 @@
 	var/phasing = 0
 	var/phasing_energy_drain = 200
 	max_equip = 4
-
+	mech_sprites = (
+		"phazon",
+		"imperion",
+		"janus",
+	)
 
 /obj/mecha/combat/phazon/New()
 	..()
@@ -41,7 +45,7 @@
 			return
 		if(can_move)
 			can_move = 0
-			flick("phazon-phase", src)
+			flick("[initial_icon]-phase", src)//modified -realest
 			src.forceMove(new_turf)
 			src.use_power(phasing_energy_drain)
 			spawn(step_in*3)
@@ -54,7 +58,7 @@
 	desc = "Phase through walls."
 	charge_max = 10
 	charge_counter = 10
-	hud_state = "phazon-phase"
+	hud_state = "[initial_state]-phase" //modified -realest
 	override_icon = 'icons/mecha/mecha.dmi'
 
 /spell/mech/phazon/phasing/cast(list/targets, mob/user)
