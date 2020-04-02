@@ -14,6 +14,8 @@
 
 	no_random_roll = 1 //Don't become assistant randomly
 
+	species_blacklist = list()
+
 /datum/job/assistant/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0

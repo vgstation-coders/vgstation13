@@ -15,6 +15,8 @@
 	pdatype = /obj/item/device/pda/chaplain
 	var/datum/religion/chap_religion
 
+	species_blacklist = list()
+
 /datum/job/chaplain/equip(var/mob/living/carbon/human/H)
 	switch(H.backbag)
 		if(2)

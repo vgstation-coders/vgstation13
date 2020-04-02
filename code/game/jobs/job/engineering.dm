@@ -81,6 +81,7 @@
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/engineering
 
+	species_blacklist = list()
 
 /datum/job/engineer/equip(var/mob/living/carbon/human/H)
 	if(!H)
@@ -138,6 +139,7 @@
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/atmos
 
+	species_blacklist = list()
 
 /datum/job/atmos/equip(var/mob/living/carbon/human/H)
 	if(!H)
@@ -185,6 +187,8 @@
 
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/mechanic
+
+	species_blacklist = list()
 
 
 /datum/job/mechanic/equip(var/mob/living/carbon/human/H)

@@ -128,6 +128,8 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/botanist
 
+	species_blacklist = list()
+
 /datum/job/hydro/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0
@@ -189,6 +191,8 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/quartermaster
 
+	species_blacklist = list()
+
 /datum/job/qm/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0
@@ -234,6 +238,8 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/cargo
 
+	species_blacklist = list()
+
 /datum/job/cargo_tech/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0
@@ -277,6 +283,8 @@
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/shaftminer
+
+	species_blacklist = list()
 
 /datum/job/mining/equip(var/mob/living/carbon/human/H)
 	if(!H)
@@ -328,6 +336,8 @@
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/clown
+
+	species_blacklist = list()
 
 /datum/job/clown/equip(var/mob/living/carbon/human/H)
 	if(!H)
@@ -394,6 +404,8 @@
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/mime
+
+	species_blacklist = list()
 
 /datum/job/mime/equip(var/mob/living/carbon/human/H)
 	if(!H)
@@ -486,6 +498,8 @@
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/janitor
+
+	species_blacklist = list()
 
 /datum/job/janitor/equip(var/mob/living/carbon/human/H)
 	if(!H)
