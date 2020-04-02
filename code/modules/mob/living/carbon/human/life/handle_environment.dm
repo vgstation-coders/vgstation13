@@ -28,7 +28,7 @@
 		return
 
 	// Slimed carbons are protected against heat damage
-	if (bodytemperature < species?.cold_level_1 || (bodytemperature > species?.heat_level_1 && dna.mutantrace != "slime"))
+	if (bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT || (bodytemperature > BODYTEMP_HEAT_DAMAGE_LIMIT && dna.mutantrace != "slime"))
 		// Update fire/cold overlay
 		var/temp_alert = (bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT) ? 1 : 2
 		fire_alert = max(fire_alert, temp_alert)
