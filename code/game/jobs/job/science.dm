@@ -72,6 +72,8 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/toxins
 
+	species_blacklist = list()
+
 /datum/job/scientist/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0
@@ -130,6 +132,8 @@
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/roboticist
+
+	species_blacklist = list()
 
 /datum/job/roboticist/equip(var/mob/living/carbon/human/H)
 	if(!H)
