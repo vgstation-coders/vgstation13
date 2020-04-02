@@ -21,6 +21,7 @@
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/heads/cmo
+	species_blacklist = list("Vox")
 
 /datum/job/cmo/equip(var/mob/living/carbon/human/H)
 	if(!H)

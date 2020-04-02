@@ -22,7 +22,7 @@
 
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/heads/ce
-
+	species_blacklist = list("Vox")
 
 /datum/job/chief_engineer/equip(var/mob/living/carbon/human/H)
 	if(!H)
