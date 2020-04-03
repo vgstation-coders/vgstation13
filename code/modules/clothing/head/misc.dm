@@ -105,7 +105,7 @@
 	item_state = "syndicate"
 	desc = "A plastic replica of a syndicate agent's space helmet, you'll look just like a real murderous syndicate agent in this! This is a toy, it is not made for use in space!"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FULL_HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 	species_fit = list(INSECT_SHAPED)
 
@@ -115,7 +115,7 @@
 	item_state = "s-ninja"
 	desc = "A plastic replica of a space ninja's hood, you'll look just like a real murderous space ninja in this! This is a toy, it is not made for use in space!"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/head/cueball
@@ -123,7 +123,7 @@
 	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"
 	icon_state = "cueball"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHEADHAIR
 	item_state="cueball"
 
 /obj/item/clothing/head/greenbandana
