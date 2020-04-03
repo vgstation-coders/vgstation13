@@ -15,6 +15,7 @@
 	..()
 	if(material_type)
 		sheet_type = material_type.sheettype
+	verbs -= /obj/structure/bed/verb/buckle_out
 
 /obj/structure/bed/cultify()
 	var/obj/structure/bed/chair/wood/wings/I = new /obj/structure/bed/chair/wood/wings(loc)
@@ -50,7 +51,22 @@
 /obj/structure/bed/AltClick(mob/user as mob)
 	buckle_mob(user, user)
 
+/obj/structure/bed/verb/buckle_in()
+	set name = "Buckle In"
+	set category = "Object"
+	set src in range(0)
+	buckle_mob(usr, usr)
+
+/obj/structure/bed/verb/buckle_out()
+	set name = "Buckle Out"
+	set category = "Object"
+	set src in range(0)
+	manual_unbuckle(usr)
+
 /obj/structure/bed/proc/manual_unbuckle(var/mob/user)
+	if(user.incapacitated())
+		return FALSE
+
 	if(user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return FALSE
@@ -81,6 +97,8 @@
 				"You hear metal clanking.")
 		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
 		M.clear_alert(SCREEN_ALARM_BUCKLE)
+		verbs += /obj/structure/bed/verb/buckle_in
+		verbs -= /obj/structure/bed/verb/buckle_out
 		return TRUE
 
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
@@ -89,7 +107,7 @@
 
 	if(!ismob(M) || (M.loc != src.loc)  || M.locked_to)
 		return
-		
+
 	if(!user.Adjacent(M))
 		return
 
@@ -126,6 +144,8 @@
 
 	lock_atom(M, mob_lock_type)
 	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
+	verbs -= /obj/structure/bed/verb/buckle_in
+	verbs += /obj/structure/bed/verb/buckle_out
 
 	if(M.pulledby)
 		M.pulledby.start_pulling(src)
