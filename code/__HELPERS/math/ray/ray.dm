@@ -19,24 +19,33 @@
 	return (origin + path).floored()
 
 //inherit and override this for costum logic
-/ray/proc/raycast_filter(var/turf/T)
-	return 1
+// 1 means hit, 0 means no hit
+/ray/proc/raycast_hit_check(var/atom/movable/A)
+	return TRUE
 
-//the optional proc takes a turf as input and returns either 1 for break and return or FALSE for continue
+//checked every loop to verify that our ray should still run
+/ray/proc/loop_condition()
+	return TRUE
+
 /ray/proc/getFirstHit(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE)
 	var/vector/a_step = direction * RAY_CAST_STEP
 	var/step_distance = a_step.chebyshev_norm()
 	var/vector/pointer = new /vector(0,0)
 	var/distance = 0
-	while(distance < max_distance)
+	while(distance < max_distance && loop_condition())
 		pointer += a_step
 		distance += step_distance
 		var/vector/new_position_unfloored = origin + pointer
 		var/vector/new_position = new_position_unfloored.floored()
 		if(!new_position.equals(origin_floored))
 			var/turf/T = locate(new_position.x, new_position.y, z)
-			if(raycast_filter(T))
+
+			if(raycast_hit_check(T))
 				return new /rayCastHit(src, T, distance)
+
+			for(var/atom/movable/A in T)
+				if(raycast_hit_check(A))
+					return new /rayCastHit(src, A, distance)
 
 /ray/proc/getAllHits(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE)
 	var/vector/a_step = direction * RAY_CAST_STEP
@@ -45,7 +54,7 @@
 	var/distance = 0
 	var/list/vector/positions = list()
 	. = list()
-	while(distance < max_distance)
+	while(distance < max_distance && loop_condition())
 		pointer += a_step
 		distance += step_distance
 		var/vector/new_position_unfloored = origin + pointer
@@ -56,7 +65,13 @@
 				exists = TRUE
 		if(!exists && !new_position.equals(origin_floored))
 			var/turf/T = locate(new_position.x, new_position.y, z)
-			if(raycast_filter(T))
+
+			if(raycast_hit_check(T))
 				positions += new_position
 				. += new /rayCastHit(src, T, distance)
+
+			for(var/atom/movable/A in T)
+				if(raycast_hit_check(A))
+					positions += new_position
+					. += new /rayCastHit(src, A, distance)
 

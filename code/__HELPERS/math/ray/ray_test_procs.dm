@@ -6,9 +6,9 @@
 	var/list/res = our_ray.getAllHits(dist)
 	for(var/rayCastHit/rCH in res)
 		var/image/I = image('icons/Testing/Zone.dmi',"fullblock",10)
-		rCH.hit_turf.overlays += I
-		var/ref = "\ref[rCH.hit_turf]"
+		rCH.hit_atom.overlays += I
+		var/ref = "\ref[rCH.hit_atom]"
 		spawn(30)
-			var/turf/R = locate(ref)
+			var/atom/movable/R = locate(ref)
 			R.overlays -= I
 	return res

@@ -9,7 +9,34 @@
  *         icon_states/dirs for each placed beam image
  *             turfs that have that icon_state/dir
  */
+
 var/list/beam_master = list()
+
+#define MAX_BEAM_DISTANCE 100
+
+//overriding the filter function of an inherited beam
+/ray/beam_ray
+	var/obj/item/projectile/beam/fired_beam
+
+/ray/beam_ray/New(var/vector/p_origin, var/vector/p_direction, var/obj/item/projectile/beam/fired_beam)
+	..(p_origin, p_direction, fired_beam.starting.z)
+	src.fired_beam = fired_beam
+
+/ray/
+
+/ray/beam_ray/raycast_hit_check(var/atom/movable/A)
+	/*if(!A.Cross(fired_beam))
+		return 1
+
+	if(istype(A, /turf))
+		for(var/atom/movable/mA in A)
+			if(!mA.Cross(fired_beam))
+				return 1
+
+	if(A == fired_beam.original && !fired_beam.bumped && !isturf(fired_beam.original))
+		return 1*/
+
+	return 0
 
 /obj/item/projectile/beam
 	name = "laser"
@@ -29,37 +56,28 @@ var/list/beam_master = list()
 	var/wait = 0
 	var/beam_color= null
 
-
-/obj/item/projectile/beam/OnFired()	//if assigned, allows for code when the projectile gets fired
-	target = get_turf(original)
-	dist_x = abs(target.x - starting.x)
-	dist_y = abs(target.y - starting.y)
-
-	override_starting_X = starting.x
-	override_starting_Y = starting.y
-	override_target_X = target.x
-	override_target_Y = target.y
-
-	if (target.x > starting.x)
-		dx = EAST
-	else
-		dx = WEST
-
-	if (target.y > starting.y)
-		dy = NORTH
-	else
-		dy = SOUTH
-
-	if(dist_x > dist_y)
-		error = dist_x/2 - dist_y
-	else
-		error = dist_y/2 - dist_x
-
-	target_angle = round(Get_Angle(starting,target))
-
-	return 1
-
 /obj/item/projectile/beam/process()
+	message_admins("abc")
+	var/vector/origin = atom2vector(starting)
+	var/vector/direction = atoms2vector(starting, original)
+
+	var/ray/beam_ray/our_ray = new /ray/beam_ray(origin, direction, src)
+
+	var/rayCastHit/our_hit
+	if(travel_range)
+		our_hit = our_ray.getFirstHit(travel_range)
+	else
+		our_hit = our_ray.getFirstHit(MAX_BEAM_DISTANCE)
+
+	if(!our_hit || !our_hit.hit_atom)
+		CRASH("Beam didn't hit ANYTHING, fired in nullspace?")
+
+	shot_from.Beam(our_hit.hit_atom) //, icon_state, icon, 50, MAX_BEAM_DISTANCE)
+	to_bump(our_hit.hit_atom)
+
+	bullet_die()
+	return
+
 	var/lastposition = loc
 	var/reference = "\ref[src]" //So we do not have to recalculate it a ton
 
@@ -90,6 +108,7 @@ var/list/beam_master = list()
 			reference = bresenham_step(dist_y,dist_x,dy,dx,lastposition,target_dir,reference)
 
 	cleanup(reference)
+
 
 /obj/item/projectile/beam/bresenham_step(var/distA, var/distB, var/dA, var/dB, var/lastposition, var/target_dir, var/reference)
 	var/first = 1

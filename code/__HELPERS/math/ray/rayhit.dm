@@ -1,9 +1,9 @@
 /rayCastHit
 	var/ray/used_ray
-	var/turf/hit_turf
+	var/atom/movable/hit_atom
 	var/distance
 
-/rayCastHit/New(var/ray/used_ray, var/turf/hit_turf, var/distance)
+/rayCastHit/New(var/ray/used_ray, var/atom/movable/hit_atom, var/distance)
 	src.used_ray = used_ray
-	src.hit_turf = hit_turf
+	src.hit_atom = hit_atom
 	src.distance = distance
