@@ -971,7 +971,7 @@
 /atom/proc/do_hitmarker(mob/shooter)
 	spawn()
 		var/datum/role/streamer/streamer_role = shooter?.mind?.GetRole(STREAMER)
-		if(streamer_role?.team == ESPORTS_SECURITY)
+		if(streamer_role && streamer_role.team == ESPORTS_SECURITY)
 			streamer_role.hits += IS_WEEKEND ? 2 : 1
 			streamer_role.update_antag_hud()
 			playsound(src, 'sound/effects/hitmarker.ogg', 100, FALSE)
