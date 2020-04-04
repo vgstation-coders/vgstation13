@@ -11,10 +11,6 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
-/obj/item/mecha_parts/Destroy()
-	to_chat(world, "k thx bai")
-	return ..()
-
 /obj/item/mecha_parts/chassis
 	name="Mecha Chassis"
 	icon_state = "backbone"
