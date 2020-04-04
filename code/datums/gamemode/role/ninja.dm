@@ -378,7 +378,7 @@
 	if(!oursword)
 		to_chat(user,"<span class='warning'>You need to hold the sword to channel power into it!</span>")
 		return
-	var/datum/daemon/teleport/T = oursword.daemon
+	var/datum/daemon/teleport/T = oursword.daemon_datum
 	if(!istype(T))
 		to_chat(user,"<span class='warning'>No power dwells within that blade!</span>")
 		return
@@ -502,10 +502,10 @@ Helpers For Both Variants
 		return
 	if(!ismob(owner) || !isninja(owner))
 		return
-	if(W.daemon && istype(W.daemon,/datum/daemon/teleport))
-		W.daemon.activate()
-		to_chat(owner,"<span class='notice'>Teleportation is now [W.daemon.active ? "active" : "inactive"].</span>")
-		if(!W.daemon.active && istype(W,/obj/item/weapon/katana/hesfast))
+	if(W.daemon_datum && istype(W.daemon_datum,/datum/daemon/teleport))
+		W.daemon_datum.activate()
+		to_chat(owner,"<span class='notice'>Teleportation is now [W.daemon_datum.active ? "active" : "inactive"].</span>")
+		if(!W.daemon_datum.active && istype(W,/obj/item/weapon/katana/hesfast))
 			owner.whisper("Not today, katana-san.")
 
 /obj/item/weapon/melee/energy/sword/ninja
@@ -522,7 +522,7 @@ Helpers For Both Variants
 
 /obj/item/weapon/melee/energy/sword/ninja/New()
 	..()
-	daemon = new /datum/daemon/teleport(src,"Weakness",null)
+	daemon_datum = new /datum/daemon/teleport(src,"Weakness",null)
 
 /obj/item/weapon/melee/energy/sword/ninja/toggleActive(mob/user, var/togglestate = "")
 	if(togglestate) //override
@@ -552,11 +552,11 @@ Helpers For Both Variants
 	..()
 	if(!isninja(user))
 		return
-	if(!daemon)
+	if(!daemon_datum)
 		return
-	var/cc = max(round((daemon.cooldown - world.time)/10),0)
+	var/cc = max(round((daemon_datum.cooldown - world.time)/10),0)
 	to_chat(user,"<span class='notice'>The hilt displays its status in the form of a cryptic readout.</span>")
-	to_chat(user,"<span class='notice'>TP: </span>[daemon.active ? "<span class='good'>I":"<span class='warning'>O"]</span><span class='notice'>; CD: [cc ? "[cc]s ([cc*10*CHARGE_COST_MULTIPLIER]J)</span>" : "</span><span class='warning'><B>X</B></span>"]")
+	to_chat(user,"<span class='notice'>TP: </span>[daemon_datum.active ? "<span class='good'>I":"<span class='warning'>O"]</span><span class='notice'>; CD: [cc ? "[cc]s ([cc*10*CHARGE_COST_MULTIPLIER]J)</span>" : "</span><span class='warning'><B>X</B></span>"]")
 
 /obj/item/weapon/melee/energy/sword/ninja/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(target == user)
@@ -776,22 +776,22 @@ Suit and assorted
 
 /obj/item/weapon/katana/hesfast/New()
 	..()
-	daemon = new /datum/daemon/teleport(src,"sound/weapons/shing.ogg", "Pshh... nothing personnel... kid...")
+	daemon_datum = new /datum/daemon/teleport(src,"sound/weapons/shing.ogg", "Pshh... nothing personnel... kid...")
 
 /obj/item/weapon/katana/hesfast/examine(mob/user)
 	..()
 	if(!isninja(user))
 		return
-	if(!daemon)
+	if(!daemon_datum)
 		return
 	to_chat(user, "<span class='notice'>This katana has an ancient power dwelling inside of it!</span>")
 	var/message = "<span class='notice'>"
-	if(daemon.cooldown < world.time)
+	if(daemon_datum.cooldown < world.time)
 		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
 	else
-		var/cooldowncalculated = round((daemon.cooldown - world.time)/10)
+		var/cooldowncalculated = round((daemon_datum.cooldown - world.time)/10)
 		message += "Your steel has unleashed its dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
-	if(daemon.active)
+	if(daemon_datum.active)
 		message += " Your teleport is active, just like Goku's Shunkan Idou (Instant Transmission for Gaijin).</span>"
 	else
 		message += " Your teleport is inactive, just like a no-warp trap room in Aincrad.</span>"

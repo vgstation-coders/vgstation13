@@ -63,7 +63,7 @@
 	var/restraint_apply_time = 3 SECONDS
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
-	var/datum/daemon/daemon
+	var/datum/daemon/daemon_datum
 
 	var/list/datum/disease2/disease/virus2 = list()
 	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
@@ -99,10 +99,10 @@
 	/*  BROKEN, FUCK BYOND
 	if(hasvar(src, "my_atom"))
 		src:my_atom = null*/
-	qdel(daemon)
-	deamon = null
+	qdel(daemon_datum)
 	qdel(hidden_uplink)
 	hidden_uplink = null
+	daemon_datum = null
 	virus2.Cut()
 	..()
 
@@ -214,8 +214,8 @@
 		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
 		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
-	if(daemon && daemon.flags & DAEMON_EXAMINE)
-		daemon.examine(user)
+	if(daemon_datum && daemon_datum.flags & DAEMON_EXAMINE)
+		daemon_datum.examine(user)
 
 
 /obj/item/attack_ai(mob/user as mob)
