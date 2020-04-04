@@ -26,6 +26,17 @@
 	direction = p_direction.chebyshev_normalized()
 	src.z = z
 
+//checks if another ray overlaps this one
+/ray/proc/overlaps(var/ray/other_ray)
+	if(!direction.equals(other_ray.direction)) //direction is normalized, so we can check like this
+		return FALSE
+
+	return is_point(other_ray.origin)
+
+//returns true if point is on our ray
+/ray/proc/is_point(var/vector/point)
+	//TODO CALC
+
 //gets a point along the ray
 /ray/proc/getPoint(var/distance)
 	var/vector/path = direction * distance

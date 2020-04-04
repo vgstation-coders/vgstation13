@@ -25,6 +25,11 @@ var/list/beam_master = list()
 /ray/
 
 /ray/beam_ray/raycast_hit_check(var/atom/movable/A)
+
+	fired_beam.loc = A.loc //we need to do this for to_bump to properly calculate
+	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
+		return RAY_CAST_HIT_EXIT
+
 	/*if(!A.Cross(fired_beam))
 		return 1
 
@@ -55,59 +60,34 @@ var/list/beam_master = list()
 	var/frequency = 1
 	var/wait = 0
 	var/beam_color= null
+	var/list/ray/beam_ray/paths = list() //full of rays
+
+/obj/item/projectile/beam/proc/fireto(var/vector/origin, var/vector/direction)
+	var/ray/beam_ray/our_ray = new /ray/beam_ray(origin, direction, src)
+	for(var/ray/beam_ray/other_ray in paths)
+		if(other_ray.overlaps(our_ray))
+			return //we already went here
+
+	var/list/rayCastHit/hits
+	if(travel_range)
+		hits = our_ray.cast(travel_range)
+	else
+		hits = our_ray.cast(MAX_BEAM_DISTANCE)
+
+	paths += our_ray
+
+	//visuals
+	shot_from.Beam(hits[hits.len].hit_atom) //, icon_state, icon, 50, MAX_BEAM_DISTANCE)
 
 /obj/item/projectile/beam/process()
-	message_admins("abc")
 	var/vector/origin = atom2vector(starting)
 	var/vector/direction = atoms2vector(starting, original)
 
-	var/ray/beam_ray/our_ray = new /ray/beam_ray(origin, direction, src)
+	fireto(origin, direction)
 
-	var/rayCastHit/our_hit
-	if(travel_range)
-		our_hit = our_ray.getFirstHit(travel_range)
-	else
-		our_hit = our_ray.getFirstHit(MAX_BEAM_DISTANCE)
-
-	if(!our_hit || !our_hit.hit_atom)
-		CRASH("Beam didn't hit ANYTHING, fired in nullspace?")
-
-	shot_from.Beam(our_hit.hit_atom) //, icon_state, icon, 50, MAX_BEAM_DISTANCE)
-	to_bump(our_hit.hit_atom)
-
-	bullet_die()
-	return
-
-	var/lastposition = loc
-	var/reference = "\ref[src]" //So we do not have to recalculate it a ton
-
-	target = get_turf(original)
-	dist_x = abs(target.x - src.x)
-	dist_y = abs(target.y - src.y)
-
-	if (target.x > src.x)
-		dx = EAST
-	else
-		dx = WEST
-
-	if (target.y > src.y)
-		dy = NORTH
-	else
-		dy = SOUTH
-	var/target_dir = SOUTH
-
-	if(dist_x > dist_y)
-		error = dist_x/2 - dist_y
-
-		spawn
-			reference = bresenham_step(dist_x,dist_y,dx,dy,lastposition,target_dir,reference)
-
-	else
-		error = dist_y/2 - dist_x
-		spawn
-			reference = bresenham_step(dist_y,dist_x,dy,dx,lastposition,target_dir,reference)
-
-	cleanup(reference)
+/obj/item/projectile/beam/rebound(atom/A)
+	//TODO CALC ANGLE
+	fireto()
 
 
 /obj/item/projectile/beam/bresenham_step(var/distA, var/distB, var/dA, var/dB, var/lastposition, var/target_dir, var/reference)
@@ -215,7 +195,6 @@ var/list/beam_master = list()
 		while((loc.timestopped || timestopped) && !first)
 			sleep(3)
 		first = 0
-
 
 	return reference
 
