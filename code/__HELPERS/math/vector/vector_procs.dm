@@ -15,8 +15,10 @@
 	var/turf/T = get_turf(src)
 	return locate(T.x + V.x, T.y + V.y, z)
 
+//Vector representing world-pos of A
 /proc/atom2vector(var/atom/A)
 	return new /vector(A.x, A.y)
 
+//Vector from A -> B
 /proc/atoms2vector(var/atom/A, var/atom/B)
-	return new /vector((B.x - A.x), (B.y - A.y)) // Vector from A -> B
+	return new /vector((B.x - A.x), (B.y - A.y))
