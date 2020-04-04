@@ -94,7 +94,7 @@ world/loop_checks = 0
 			#endif
 
 			#ifdef GC_DEBUG
-			to_chat(world, "gc process force delete [D.type]")
+			warning("gc process force delete [D.type]")
 			#endif
 
 			if(istype(D, /atom/movable))
