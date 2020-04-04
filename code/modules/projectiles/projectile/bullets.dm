@@ -40,9 +40,11 @@
 	stun = 5
 	weaken = 5
 	embed = 0
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/weakbullet/booze
 	name = "booze bullet"
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/booze/on_hit(var/atom/target, var/blocked = 0)
 	if(..(target, blocked))
@@ -105,12 +107,13 @@
 	stun = 5
 	weaken = 5
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/midbullet/lawgiver
 	damage = 10
 	stun = 0
 	weaken = 0
-	projectile_speed = 0.66
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/midbullet/assault
 	damage = 20
@@ -149,6 +152,7 @@
 	stun = 5
 	weaken = 5
 	penetration = 1
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
 	damage = 15
@@ -169,6 +173,7 @@
 	weaken = 5
 	embed = 0
 	penetration = 0
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/stunshot
 	name = "stunshot"
@@ -369,7 +374,7 @@ obj/item/projectile/bullet/suffocationbullet
 	stutter = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
 	penetration = 20 //can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
-	projectile_speed = 0.66
+	projectile_speed = 0.5
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
 
 /obj/item/projectile/bullet/hecate/OnFired()
@@ -394,6 +399,7 @@ obj/item/projectile/bullet/suffocationbullet
 	weaken = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS
 	penetration = 10
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/beegun
 	name = "bee"
