@@ -74,6 +74,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		qdel(on_use)
 		on_use = null
 
+	qdel(pAImove_delayer)
+	pAImove_delayer = null
 	material_type = null //Don't qdel, they're held globally
 	..()
 

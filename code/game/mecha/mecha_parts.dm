@@ -11,6 +11,9 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
+/obj/item/mecha_parts/Destroy()
+	to_chat(world, "k thx bai")
+	return ..()
 
 /obj/item/mecha_parts/chassis
 	name="Mecha Chassis"
@@ -18,6 +21,11 @@
 	var/datum/construction/construct
 	flags = FPRINT
 	siemens_coefficient = 1
+
+/obj/item/mecha_parts/chassis/Destroy()
+	qdel(construct)
+	construct = null
+	return ..()
 
 /obj/item/mecha_parts/chassis/attackby(obj/item/W as obj, mob/user as mob)
 	if(!construct || !construct.action(W, user))

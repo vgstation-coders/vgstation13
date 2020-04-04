@@ -11,6 +11,9 @@ A daemon can be used to give behaviors to two items that are very different
 /datum/daemon/New(atom/holder)
 	my_atom = holder
 
+/datum/daemon/Destroy()
+	my_atom = null
+
 /datum/daemon/proc/examine(mob/user)
 
 /datum/daemon/proc/afterattack(atom/target, mob/user, proximity_flag, click_parameters)

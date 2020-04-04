@@ -95,9 +95,15 @@
 		src:holder = null
 	for(var/x in actions)
 		qdel(x)
+		x = null
 	/*  BROKEN, FUCK BYOND
 	if(hasvar(src, "my_atom"))
 		src:my_atom = null*/
+	qdel(daemon)
+	deamon = null
+	qdel(hidden_uplink)
+	hidden_uplink = null
+	virus2.Cut()
 	..()
 
 
