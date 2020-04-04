@@ -36,6 +36,24 @@
 /vector/proc/toString()
 	return "\[Vector\]([x],[y])"
 
+//returns angle from 0 to 360
+//-1 if vector is (0,0)
+/vector/proc/toAngle()
+	if(x == 0)
+		if(y == 0)
+			return -1
+		else if(y > 0)
+			return 0
+		else if(y < 0)
+			return 180
+	else if(y == 0)
+		if(x > 0)
+			return 90
+		else if(x < 0)
+			return 270
+
+	return arctan(y/x)
+
 //operator overloading
 /vector/proc/operator+(var/vector/B)
 	if(isnum(B))
@@ -70,4 +88,5 @@
 
 /vector/proc/equals(var/vector/vectorB)
 	return (x == vectorB.x && y == vectorB.y)
+
 
