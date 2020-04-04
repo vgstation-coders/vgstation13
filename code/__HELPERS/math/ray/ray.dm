@@ -8,10 +8,10 @@
 #define RAY_CAST_UNLIMITED_HITS 0
 
 //Return values for raycast_hit_check
-#define RAY_CAST_NO_HIT_EXIT -1
-#define RAY_CAST_NO_HIT_CONTINUE 0
-#define RAY_CAST_HIT_CONTINUE 1
-#define RAY_CAST_HIT_EXIT 2
+#define RAY_CAST_NO_HIT_EXIT 		-1
+#define RAY_CAST_NO_HIT_CONTINUE 	0
+#define RAY_CAST_HIT_CONTINUE 		1
+#define RAY_CAST_HIT_EXIT 			2
 
 /ray
 	var/z //the z-level we are casting our ray in
@@ -28,14 +28,57 @@
 
 //checks if another ray overlaps this one
 /ray/proc/overlaps(var/ray/other_ray)
-	if(!direction.equals(other_ray.direction)) //direction is normalized, so we can check like this
+	if(!(direction.equals(other_ray.direction) || direction.equals(-1*other_ray.direction))) //direction is normalized, so we can check like this
 		return FALSE
 
-	return is_point(other_ray.origin)
+	return hitsPoint(other_ray.origin)
 
-//returns true if point is on our ray
-/ray/proc/is_point(var/vector/point)
-	//TODO CALC
+//returns true if point is on our ray (can be called with a max distance)
+/ray/proc/hitsPoint(var/vector/point, var/max_distance = 0)
+	if(origin.equals(point)) //the easy way out
+		return TRUE
+
+	var/c_x = (point.x - origin.x) / direction.x
+	var/c_y = (point.y - origin.y) / direction.y
+	return (c_x == c_y && (!max_distance || c_x <= max_distance ))
+
+/ray/proc/hitsArea(var/vector/position, var/vector/dimensions)
+	var/angle = direction.getAngle()
+	if(angle < 90)
+		return (hitsLine(position, position + new vector(0, dimensions.y)) || hitsLine(position, position + new vector(dimensions.x, 0)))
+	else if(angle < 180)
+		return (hitsLine(position, position + new vector(0, dimensions.y)) || hitsLine(position + new vector(0, dimensions.y), position + dimensions))
+	else if(angle < 270)
+		return (hitsLine(position + new vector(0, dimensions.y), position + dimensions) || hitsLine(position + new vector(dimensions.x, 0), position + dimensions))
+	else if(angle < 360)
+		return (hitsLine(position, position + new vector(dimensions.x, 0)) || hitsLine(position + new vector(dimensions.x, 0), position + dimension))
+	else
+		return FALSE
+
+/ray/proc/hitsLine(var/vector/start, var/vector/end)
+	var/vector/line_direction = end - start
+	line_direction = line_direction.chebyshev_normalized()
+	if(direction.equals(line_direction) || direction.equals(-1*line_direction))
+		if(hitsPoint(start))
+			return TRUE
+		else
+			return FALSE
+
+	//TODO CROSS CALC
+
+//returns angle we hit atom with
+//assumes atom is 1x1 square box
+/ray/proc/getHitAngleOnAtom(var/atom/hit_atom)
+	var/entry_angle = direction.toAngle()
+	if(entry_angle < 90)
+	else if(entry_angle < 180)
+	else if(entry_angle < 270)
+	else if(entry_angle < 360)
+	else
+		return -1
+
+	var/vector/atom_pos = atom2vector(hit_atom)
+
 
 //gets a point along the ray
 /ray/proc/getPoint(var/distance)

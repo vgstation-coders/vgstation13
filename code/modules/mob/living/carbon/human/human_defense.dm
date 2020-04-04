@@ -18,7 +18,6 @@ emp_act
 			if(prob(reflectchance))
 				visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s [wear_suit.name]!</span>")
 
-				P.reflected = 1
 				P.rebound(src)
 
 				return -1 // complete projectile permutation

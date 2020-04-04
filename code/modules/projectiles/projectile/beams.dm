@@ -22,8 +22,6 @@ var/list/beam_master = list()
 	..(p_origin, p_direction, fired_beam.starting.z)
 	src.fired_beam = fired_beam
 
-/ray/
-
 /ray/beam_ray/raycast_hit_check(var/atom/movable/A)
 
 	fired_beam.loc = A.loc //we need to do this for to_bump to properly calculate
@@ -86,8 +84,24 @@ var/list/beam_master = list()
 	fireto(origin, direction)
 
 /obj/item/projectile/beam/rebound(atom/A)
-	//TODO CALC ANGLE
-	fireto()
+	//we only allow this laser to be rebound once
+	if(reflected)
+		return
+
+	//we assume that our latest ray is what caused this rebound
+	var/ray/beam_ray/latest_ray = paths[paths.len]
+
+	//TODO calc angle
+
+	//TODO make new ray
+	var/vector/origin =
+	var/vector/direction =
+
+	//TODO check if raypath was already traveled
+	for(var/ray/beam_ray/other_ray in paths)
+
+	reflected = 1
+	fireto(origin, direction)
 
 
 /obj/item/projectile/beam/bresenham_step(var/distA, var/distB, var/dA, var/dB, var/lastposition, var/target_dir, var/reference)
