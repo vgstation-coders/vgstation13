@@ -979,7 +979,8 @@ Thanks.
 									return
 								C.visible_message("<span class='danger'>[C] manages to forcefully unbuckle!</span>",
 								                  "<span class='notice'>You successfully forcefully unbuckle.</span>")
-								C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+								if(!isalien(C))
+									C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 								B.manual_unbuckle(C)
 							else
 								to_chat(C, "<span class='warning'>Your unbuckling attempt was interrupted.</span>")
@@ -1122,7 +1123,8 @@ Thanks.
 							return
 						CM.visible_message("<span class='danger'>[CM] manages to break \the [CM.handcuffed]!</span>",
 										   "<span class='notice'>You successfully break \the [CM.handcuffed].</span>")
-						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+						if(!isalien(CM))
+							CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 						var/obj/item/cuffs = CM.handcuffed
 						CM.drop_from_inventory(cuffs)
 						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
@@ -1161,7 +1163,8 @@ Thanks.
 							return
 						CM.visible_message("<span class='danger'>[CM] manages to break the legcuffs!</span>",
 										   "<span class='notice'>You successfully break your legcuffs.</span>")
-						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+						if(!isalien(CM))
+							CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 						qdel(CM.legcuffed)
 						CM.legcuffed = null
 						CM.update_inv_legcuffed()
@@ -1195,7 +1198,8 @@ Thanks.
 							return
 						CM.visible_message("<span class='danger'>[CM] manages to break \the [CM.mutual_handcuffs]!</span>",
 										   "<span class='notice'>You successfully break \the [CM.mutual_handcuffs].</span>")
-						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+						if(!isalien(CM))
+							CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 						var/obj/item/cuffs = CM.mutual_handcuffs
 						CM.drop_from_inventory(cuffs)
 						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
