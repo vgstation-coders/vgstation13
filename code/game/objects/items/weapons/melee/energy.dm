@@ -54,7 +54,7 @@
 /obj/item/weapon/melee/energy/sword
 	name = "energy sword"
 	desc = "May the force be within you."
-	icon_state = "sword0"
+	icon_state = "sword0" //In the file it is called "sword", this is intentional so it does not show up in-hand when deactivated
 	var/base_state = "sword"
 	var/active_state = ""
 	sharpness_flags = 0 //starts inactive
