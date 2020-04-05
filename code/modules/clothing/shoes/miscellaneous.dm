@@ -158,6 +158,11 @@
 
 	step_sound = "clownstep"
 
+/obj/item/clothing/shoes/clown_shoes/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		modulo_steps = 1 //Honk on every step
+
 /obj/item/clothing/shoes/clown_shoes/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/mask/gas/clown_hat))
