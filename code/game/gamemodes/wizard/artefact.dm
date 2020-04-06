@@ -338,14 +338,93 @@
 	item_state = "fuckup"
 	wizard_garb = 1
 	w_class = W_CLASS_LARGE
-	step_sound = "fuckupstep"
+
+	var/active = 0
+	var/max_steps = 4
+	var/current_step = 0
+	var/spellcast_key = null
+	var/equip_cooldown = 50
+
+	var/step_cooldown = 1 SECONDS // The step delay.
+
 
 /obj/item/clothing/shoes/fuckup/step_action()
+	if (equip_cooldown)
+		equip_cooldown--
+		return ..()
+	if (!active)
+		return ..()
+	if (current_step >= max_steps)
+		active = 0
+		step_sound = null
+		return ..()
+	
 	var/mob/living/carbon/human/H = loc
-	H.delayNextMove(15)
+	H.delayNextMove(step_cooldown)
 	playsound(H, step_sound, 50, 1)
 	if(istype(H.loc,/turf/simulated))
 		var/turf/simulated/T = H.loc
 		T.ex_act(1)
 	for (var/turf/simulated/T in orange(1,get_turf(H)))
 		T.ex_act(3)
+	current_step++
+
+/obj/item/clothing/shoes/fuckup/equipped(mob/living/carbon/human/H, equipped_slot)
+	equip_cooldown = initial(equip_cooldown)
+	var/spell/fuckup/F = new
+	H.add_spell(/spell/fuckup)
+	spellcast_key = H.on_spellcast.Add(F, "on_spellcast")
+	return ..()
+
+/obj/item/clothing/shoes/fuckup/unequipped(mob/living/carbon/human/H, equipped_slot)
+	equip_cooldown = initial(equip_cooldown)
+	for (var/spell/fuckup/F in H.spell_list)
+		H.remove_spell(F)
+		H.on_spellcast.Remove(spellcast_key)
+	return ..()
+
+// -- Fuckup boot spell
+
+/spell/fuckup
+	name = "Activate fuckup boots (toggle)"
+	desc = "Unleash the power of fuckup boots."
+	abbreviation = "CK"
+
+	user_type = USER_TYPE_ARTIFACT
+
+	charge_type = Sp_RECHARGE
+	charge_max = 30 SECONDS
+	invocation_type = SpI_SHOUT
+	invocation = "FA'R N' AL'ENC'ED"
+	range = 0
+	spell_flags = NEEDSCLOTHES | NEEDSHUMAN
+	cooldown_min = 30 SECONDS
+	var/cooldown_on_blink = 4 SECONDS // The cooldown given upon blinking. Reduce to 0 for "fun".
+
+	hud_state = "wiz_fuckup"
+
+/spell/fuckup/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.) // No need to go further.
+		return FALSE
+	var/mob/living/carbon/human/H = user // not false because NEEDSHUMAN
+	if (!istype(H.shoes, /obj/item/clothing/shoes/fuckup))
+		return FALSE
+	return TRUE
+
+/spell/fuckup/choose_targets(var/mob/user = usr)
+	return list(user) // Self-cast
+
+/spell/fuckup/cast(var/list/targets, var/mob/user)
+	var/mob/living/carbon/human/H = user
+	var/obj/item/clothing/shoes/fuckup/F = H.shoes
+	F.active = TRUE
+	F.step_sound = "fuckupstep"
+	spawn (3 SECONDS)
+		F.active = FALSE
+		F.step_sound = null
+
+/spell/fuckup/proc/on_spellcast(var/list/arguments)
+	var/spell/spell_casted = arguments["spell"]
+	if (istype(spell_casted, /spell/aoe_turf/blink))
+		charge_counter = min(charge_counter, cooldown_min - cooldown_on_blink)
