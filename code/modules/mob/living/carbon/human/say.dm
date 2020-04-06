@@ -29,7 +29,7 @@
 	if(istype(wear_mask, /obj/item/clothing/mask/gas/voice) || istype(wear_mask, /obj/item/clothing/head/cardborg/))
 		if (istype(wear_mask, /obj/item/clothing/mask/gas/voice))
 			var/obj/item/clothing/mask/gas/voice/V = wear_mask
-			if (!(V.vchange) || V.speech_mode == SPEECH_MODE_SAYS)
+			if (!(V.vchange) || V.speech_mode == VOICE_CHANGER_SAYS)
 				return ..()
 		var/ending = copytext(msg, length(msg))
 		if (ending == "?")
