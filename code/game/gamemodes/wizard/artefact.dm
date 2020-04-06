@@ -388,7 +388,7 @@
 /spell/fuckup
 	name = "Activate fuckup boots (toggle)"
 	desc = "Unleash the power of fuckup boots."
-	abbreviation = "CK"
+	abbreviation = "FU"
 
 	user_type = USER_TYPE_ARTIFACT
 
