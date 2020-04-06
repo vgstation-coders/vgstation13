@@ -4,7 +4,6 @@
 	faction = "necro"
 	mob_property_flags = MOB_UNDEAD
 
-
 /mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
 	..()
 	if(Victim && Victim.mind)
