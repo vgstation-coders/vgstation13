@@ -177,6 +177,7 @@
 	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 
 /obj/item/weapon/gun/projectile/glock/lockbox
+	max_shells = 0
 	spawn_mag = FALSE
 
 /obj/item/weapon/gun/projectile/luger
