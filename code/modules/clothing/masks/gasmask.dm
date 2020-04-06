@@ -136,7 +136,7 @@
 			to_chat(owner, "<span class='notice'>You will now <i>state</i> things like a machine would.</span>")
 		if (VOICE_CHANGER_STATES)
 			T.speech_mode = VOICE_CHANGER_SAYS
-			to_chat(owner, "<span class='notice'>You will now <i>say</i> things like a machine would.</span>")
+			to_chat(owner, "<span class='notice'>You will now <i>say</i> things like a human would.</span>")
 
 /obj/item/clothing/mask/gas/voice/proc/change()
 	var/choice = input(usr, "Select Form to change it to", "BOOYEA") as null|anything in clothing_choices
