@@ -1,7 +1,7 @@
 /mob/living/simple_animal/hostile/necro
 	var/mob/creator
 	var/unique_name = 0
-	faction = "\ref[Owner]"
+	faction = "necro"
 	mob_property_flags = MOB_UNDEAD
 	var/global/list/datum/mind/undead = list()
 
@@ -13,7 +13,7 @@
 		if(ghost && ghost.can_reenter_corpse)
 			key = mind.key // Force the ghost in here
 	if(Owner)
-		faction = "necro"
+		faction = "\ref[Owner]"
 		friends.Add(Owner)
 		creator = Owner
 		if(client)
