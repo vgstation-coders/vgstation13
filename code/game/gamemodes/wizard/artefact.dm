@@ -347,6 +347,9 @@
 
 	var/step_cooldown = 1 SECONDS // The step delay.
 
+	var/warmup_steps = 4
+	var/current_warmup_steps = 0
+
 
 /obj/item/clothing/shoes/fuckup/step_action()
 	if (equip_cooldown)
@@ -354,9 +357,11 @@
 		return ..()
 	if (!active)
 		return ..()
+	if (current_warmup_steps < warmup_steps)
+		current_warmup_steps++
+		return ..()
 	if (current_step >= max_steps)
-		active = 0
-		step_sound = null
+		deactivate()
 		return ..()
 	
 	var/mob/living/carbon/human/H = loc
@@ -368,6 +373,16 @@
 	for (var/turf/simulated/T in orange(1,get_turf(H)))
 		T.ex_act(3)
 	current_step++
+
+/obj/item/clothing/shoes/fuckup/activate()
+	active = 1
+	current_step = 0
+	current_warmup_steps = 0
+	step_sound = "fuckupstep"
+
+/obj/item/clothing/shoes/fuckup/deactivate()
+	active = 0
+	step_sound = initial(step_sound)
 
 /obj/item/clothing/shoes/fuckup/equipped(mob/living/carbon/human/H, equipped_slot)
 	equip_cooldown = initial(equip_cooldown)
@@ -418,13 +433,16 @@
 /spell/fuckup/cast(var/list/targets, var/mob/user)
 	var/mob/living/carbon/human/H = user
 	var/obj/item/clothing/shoes/fuckup/F = H.shoes
-	F.active = TRUE
-	F.step_sound = "fuckupstep"
-	spawn (3 SECONDS)
-		F.active = FALSE
-		F.step_sound = null
+	F.activate()
+	spawn (7 SECONDS)
+		if (F)
+			F.deactivate()
 
 /spell/fuckup/proc/on_spellcast(var/list/arguments)
 	var/spell/spell_casted = arguments["spell"]
-	if (istype(spell_casted, /spell/aoe_turf/blink))
+	if (istype(spell_casted, /spell/aoe_turf/blink) || istype(spell_casted, /spell/targeted/ethereal_jaunt))
 		charge_counter = min(charge_counter, cooldown_min - cooldown_on_blink)
+		if (istype(H.shoes, /obj/item/clothing/shoes/fuckup))
+			var/obj/item/clothing/shoes/fuckup/F = H.shoes
+			F.deactivate()
+
