@@ -12,7 +12,7 @@
 		if(ghost && ghost.can_reenter_corpse)
 			key = mind.key // Force the ghost in here
 	if(Owner)
-		faction = "\ref[Owner]"
+		faction = "necro"
 		friends.Add(Owner)
 		creator = Owner
 		if(client)
@@ -134,7 +134,11 @@
 	search_objects = 1
 
 	var/list/clothing = list() //If the previous corpse had clothing, it 'wears' it
-
+/*
+/mob/living/simple_animal/hostile/necro/zombie/New()
+	.()
+	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudundead")
+*/
 /mob/living/simple_animal/hostile/necro/zombie/CanAttack(var/atom/the_target)
 	if(the_target == creator)
 		return 0
