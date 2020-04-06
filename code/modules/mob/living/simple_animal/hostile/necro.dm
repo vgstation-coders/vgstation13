@@ -3,7 +3,7 @@
 	var/unique_name = 0
 	faction = "necro"
 	mob_property_flags = MOB_UNDEAD
-	var/global/list/datum/mind/undead = list()
+
 
 /mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
 	..()
