@@ -255,7 +255,7 @@
 //Syndie tapes
 // -- /taperoll/syndie = contains all the things dealing with charges
 /obj/item/taperoll/syndie
-	var/charges_left = 3
+	var/charges_left = 12
 
 /obj/item/taperoll/syndie/police
 	name = "police tape"
@@ -296,7 +296,7 @@
 			
 /obj/item/taperoll/syndie/proc/check_charges(mob/user as mob)
 	if(!charges_left)
-		to_chat(user, "<span class = 'warning'>You are out of [src]</span>")
+		to_chat(user, "<span class = 'warning'>You are out of [src].</span>")
 		qdel(src)
 	else
 		to_chat(user, "<span class = 'notice'>Rolls remaining: <b>[charges_left]</b>.</span>")
