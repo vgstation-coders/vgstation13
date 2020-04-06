@@ -374,13 +374,13 @@
 		T.ex_act(3)
 	current_step++
 
-/obj/item/clothing/shoes/fuckup/activate()
+/obj/item/clothing/shoes/fuckup/proc/activate()
 	active = 1
 	current_step = 0
 	current_warmup_steps = 0
 	step_sound = "fuckupstep"
 
-/obj/item/clothing/shoes/fuckup/deactivate()
+/obj/item/clothing/shoes/fuckup/proc/deactivate()
 	active = 0
 	step_sound = initial(step_sound)
 
@@ -440,6 +440,10 @@
 
 /spell/fuckup/proc/on_spellcast(var/list/arguments)
 	var/spell/spell_casted = arguments["spell"]
+	var/mob/caster = arguments["user"]
+	if (!ishuman(caster))
+		return
+	var/mob/living/carbon/human/H = caster
 	if (istype(spell_casted, /spell/aoe_turf/blink) || istype(spell_casted, /spell/targeted/ethereal_jaunt))
 		charge_counter = min(charge_counter, cooldown_min - cooldown_on_blink)
 		if (istype(H.shoes, /obj/item/clothing/shoes/fuckup))
