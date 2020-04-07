@@ -97,13 +97,13 @@
 			if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
 				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
 
-	var/pop_and_ennemies = mode.living_players.len + enemies_count // Ennemies count twice
+	var/pop_and_enemies = mode.living_players.len + enemies_count // Enemies count twice
 
 	var/threat = round(mode.threat_level/10)
-	if (pop_and_ennemies >= required_pop[threat])
+	if (pop_and_enemies >= required_pop[threat])
 		return TRUE
 	if (!dead_dont_count)//roundstart check only
-		message_admins("Dynamic Mode: Despite [name] having enough candidates, there are not enough poo and enemy jobs ready ([enemies_count] and [mode.living_players.len] out of [required_pop[threat]])")
+		message_admins("Dynamic Mode: Despite [name] having enough candidates, there are not enough pop and enemy jobs ready ([enemies_count] and [mode.living_players.len] out of [required_pop[threat]])")
 		log_admin("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs ready ([enemies_count] and [mode.living_players.len] out of [required_pop[threat]])")
 	return FALSE
 
