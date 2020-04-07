@@ -33,11 +33,8 @@
 	var/list/botcard_access = list(access_medical)
 	var/obj/item/weapon/reagent_containers/glass/reagent_glass = null //Can be set to draw from this for reagents.
 	var/skin = null //Set to "tox", "ointment" or "o2" for the other two firstaid kits.
-	var/frustration = 0
-	var/path[] = new()
 	var/mob/living/carbon/patient = null
 	var/mob/living/carbon/oldpatient = null
-	var/oldloc = null
 	var/last_found = 0
 	var/last_newpatient_speak = 0 //Don't spam the "HEY I'M COMING" messages
 	var/currently_healing = 0
@@ -90,7 +87,7 @@
 		if(skin)
 			overlays += image('icons/obj/aibots.dmi', "kit_skin_[skin]")
 
-
+/*
 /obj/machinery/bot/medbot/New()
 	..()
 	icon_state = "[icon_initial][on]"
@@ -309,76 +306,65 @@
 		patient = null
 		currently_healing = 0
 		last_found = world.time
-		path = new()
+		path = list()
 
-	if(!patient)
+	if(!patient) //Find a patient
 		if(!shut_up && prob(1))
 			var/message = pick("Radar, put a mask on!","There's always a catch, and it's the best there is.","I knew it, I should've been a plastic surgeon.","What kind of medbay is this? Everyone's dropping like dead flies.","Delicious!")
 			speak(message)
+		find_patient()
 
-		for (var/mob/living/carbon/C in view(7,src)) //Time to find a patient!
-			if ((C.isDead()) || !istype(C, /mob/living/carbon/human))
-				continue
+	else //We have a patient
+		move_to_patient()
 
-			if ((C == oldpatient) && (world.time < last_found + 100))
-				continue
+/obj/machinery/bot/medbot/proc/find_patient()
+	for (var/mob/living/carbon/C in view(7,src)) //Time to find a patient!
+		if ((C.isDead()) || !istype(C, /mob/living/carbon/human))
+			continue
 
-			if(assess_patient(C))
-				patient = C
-				oldpatient = C
-				last_found = world.time
-				spawn(0)
-					if((last_newpatient_speak + 100 < world.time) &&  (shut_up == 0)) //Don't spam these messages!
-						playsound(src.loc, 'sound/medbot/Administering_medical.ogg', 35, channel = CHANNEL_MEDBOTS)
-						say("Administering medical attention!")
-						last_newpatient_speak = world.time
-						if(declare_treatment)
-							var/area/location = get_area(src)
-							broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
-					visible_message("<b>[src]</b> points at [C.name]!")
-					sleep(35)
-				break
-			else
-				continue
+		if ((C == oldpatient) && (world.time < last_found + 100))
+			continue
 
-	if(!path)
-		path = new()
-	if(patient && (get_dist(src,patient) <= 1))
+		if(assess_patient(C))
+			patient = C
+			oldpatient = C
+			last_found = world.time
+			if((last_newpatient_speak + 100 < world.time) &&  (shut_up == 0)) //Don't spam these messages!
+				playsound(src.loc, 'sound/medbot/Administering_medical.ogg', 35, channel = CHANNEL_MEDBOTS)
+				say("Administering medical attention!")
+				last_newpatient_speak = world.time
+				if(declare_treatment)
+					var/area/location = get_area(src)
+					broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
+			visible_message("<b>[src]</b> points at [C.name]!")
+			break
+
+/obj/machinery/bot/medbot/proc/move_to_patient()
+	if(get_dist(src,patient) <= 1) //We are next to the patient
 		if(!currently_healing)
 			currently_healing = 1
 			frustration = 0
 			medicate_patient(patient)
 		return
+	if(path.len)
+		if(get_dist(patient,path[path.len]) > 2) //Patient has moved
+			currently_healing = 0
+			last_found = world.time
+			return
+		if(!step_to(src, path[1]))
+			frustration++
+			return
+		path -= path[1]
+	else
+		AStar(src, .proc/get_path_to_patient, src, patient, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 8, 30, id=botcard)
 
-	else if(patient && (path.len) && (get_dist(patient,path[path.len]) > 2))
-		path = new()
+/obj/machinery/bot/medbot/proc/get_path_to_patient(var/list/L)
+	if(!islist(L))
+		oldpatient = patient
+		patient = null
 		currently_healing = 0
 		last_found = world.time
-
-	if(patient && path.len == 0 && (get_dist(src,patient) > 1))
-		spawn(0)
-			path = AStar(loc, get_turf(patient), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
-			if (!path)
-				path = list()
-			if(path.len == 0)
-				oldpatient = patient
-				patient = null
-				currently_healing = 0
-				last_found = world.time
-		return
-
-	if(path.len > 0 && patient && isturf(loc))
-		step_to(src, path[1])
-		path -= path[1]
-		spawn(3)
-			if(path.len)
-				step_to(src, path[1])
-				path -= path[1]
-
-	if(path.len > 8 && patient)
-		frustration++
-
-	return
+	path = L
 
 /obj/machinery/bot/medbot/proc/assess_patient(mob/living/carbon/C as mob)
 	//Time to see if they need medical help!
@@ -764,3 +750,4 @@
 		to_chat(P.pai, "<span class='info'>- Click on somebody: Depending on your mode, you inject or analyze a person.</span>")
 		to_chat(P.pai, "<span class='info'>What you inject depends on the medbot's configuration. You can't modify it</span>")
 		to_chat(P.pai, "<span class='info'>If you want to exit the medbot, somebody has to right-click you and press 'Remove pAI'.</span>")
+*/

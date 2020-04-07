@@ -30,20 +30,16 @@ var/global/mulebot_count = 0
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	can_take_pai = TRUE
-	var/beacon_freq = 1400
-	var/control_freq = 1447
+	beacon_freq = 1400
+	control_freq = 1447
+	control_filter = RADIO_MULEBOT
 
 	suffix = ""
 
-	var/turf/target				// this is turf to navigate to (location of beacon)
 	var/loaddir = 0				// this the direction to unload onto/load from
-	var/new_destination = ""	// pending new destination (waiting for beacon response)
-	var/destination = ""		// destination description
 	var/home_destination = "" 	// tag of home beacon
 	req_access = list(access_cargo) // added robotics access so assembly line drop-off works properly -veyveyr //I don't think so, Tim. You need to add it to the MULE's hidden robot ID card. -NEO
-	var/path[] = new()
-
-	var/mode = 0		//0 = idle/ready
+	var/mode = MODE_IDLE		//0 = idle/ready
 						//1 = loading/unloading
 						//2 = moving to deliver
 						//3 = returning to home
@@ -51,9 +47,6 @@ var/global/mulebot_count = 0
 						//5 = computing navigation
 						//6 = waiting for nav computation
 						//7 = no destination beacon found (or no route)
-
-	var/blockcount	= 0		//number of times retried a blocked path
-	var/reached_target = 1 	//true if already reached the target
 
 	var/refresh = 1		// true to refresh dialogue
 	var/auto_return = 1	// true if auto return to home beacon after unload
@@ -82,6 +75,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/get_cell()
 	return cell
 
+/*
 /obj/machinery/bot/mulebot/New()
 	..()
 	wires = new(src)
@@ -331,17 +325,17 @@ var/global/mulebot_count = 0
 
 
 			if("stop")
-				if(mode >=2)
-					mode = 0
+				if(mode != MODE_LOADING || mode != MODE_IDLE)
+					mode = MODE_IDLE
 					updateDialog()
 
 			if("go")
-				if(mode == 0)
+				if(mode == MODE_IDLE)
 					start()
 					updateDialog()
 
 			if("home")
-				if(mode == 0 || mode == 2)
+				if(mode == MODE_IDLE || mode == MODE_MOVING)
 					start_home()
 					updateDialog()
 
@@ -372,7 +366,7 @@ var/global/mulebot_count = 0
 
 			if("unload")
 				var/atom/movable/load = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1]
-				if(load && mode !=1)
+				if(load && mode != MODE_LOADING)
 					if(loc == target)
 						unload(loaddir)
 					else
@@ -461,7 +455,7 @@ var/global/mulebot_count = 0
 	for(var/obj/structure/plasticflaps/P in src.loc)//Takes flaps into account
 		if(!Cross(C,P))
 			return
-	mode = 1
+	mode = MODE_LOADING
 
 	// if a crate, close before loading
 	var/obj/structure/closet/crate/crate = C
@@ -470,7 +464,7 @@ var/global/mulebot_count = 0
 
 	lock_atom(C, /datum/locking_category/mulebot)
 
-	mode = 0
+	mode = MODE_IDLE
 	send_status()
 
 // called to unload the bot
@@ -480,7 +474,7 @@ var/global/mulebot_count = 0
 	if(!is_locking(/datum/locking_category/mulebot))
 		return
 
-	mode = 1
+	mode = MODE_LOADING
 	overlays.len = 0
 	if(integratedpai)
 		overlays += image('icons/obj/aibots.dmi', "mulebot1_pai")
@@ -504,7 +498,7 @@ var/global/mulebot_count = 0
 			continue
 
 		AM.forceMove(src.loc)
-	mode = 0
+	mode = MODE_IDLE
 
 
 /obj/machinery/bot/mulebot/process()
@@ -538,27 +532,22 @@ var/global/mulebot_count = 0
 		updateDialog()
 
 /obj/machinery/bot/mulebot/proc/process_bot()
-//	to_chat(if(mode) world, "Mode: [mode]")
 	switch(mode)
-		if(0)		// idle
+		if(MODE_IDLE)		// idle
 			icon_state = "[icon_initial]0"
 			return
-		if(1)		// loading/unloading
-			return
-		if(2,3,4)		// navigating to deliver,home, or blocked
-
+		if(MODE_MOVING,MODE_RETURNING,MODE_BLOCKED)		// navigating to deliver,home, or blocked
 			if(loc == target)		// reached target
 				at_target()
 				return
 
 			else if(path.len > 0 && target)		// valid path
-
 				var/turf/next = path[1]
 				reached_target = 0
 				if(next == loc)
 					path -= next
 					return
-				if(istype( next, /turf/simulated))
+				if(istype(next,/turf/simulated))
 //					to_chat(world, "at ([x],[y]) moving to ([next.x],[next.y])")
 					if(bloodiness)
 						var/turf/simulated/T=loc
@@ -579,7 +568,7 @@ var/global/mulebot_count = 0
 						bloodiness--
 
 					set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
-					var/moved = step_towards(src, next)	// attempt to move
+					var/moved = step_to(src, next)	// attempt to move
 					if(cell)
 						cell.use(1)
 					if(moved)	// successful move
@@ -587,101 +576,75 @@ var/global/mulebot_count = 0
 						blockcount = 0
 						path -= loc
 
-
-						if(mode==4)
+						if(mode==MODE_BLOCKED)
 							spawn(1)
 								send_status()
 
 						if(destination == home_destination)
-							mode = 3
+							mode = MODE_RETURNING
 						else
-							mode = 2
+							mode = MODE_MOVING
 
 					else		// failed to move
-
-//						to_chat(world, "Unable to move.")
-
-
-
 						blockcount++
-						mode = 4
+						mode = MODE_BLOCKED
 						if(blockcount == 3)
 							src.visible_message("[src] makes an annoyed buzzing sound.", "You hear an electronic buzzing sound.")
 							playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
-
 						if(blockcount > 5)	// attempt 5 times before recomputing
 							// find new path excluding blocked turf
 							src.visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
 							playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
-
-							spawn(2)
-								calc_path(next)
-								if(path.len > 0)
-									src.visible_message("[src] makes a delighted ping!", "You hear a ping.")
-									playsound(src, 'sound/machines/ping.ogg', 50, 0)
-								mode = 4
-							mode =6
-							return
+							calc_path(next)
 						return
 				else
 					src.visible_message("[src] makes an annoyed buzzing sound.", "You hear an electronic buzzing sound.")
 					playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 //					to_chat(world, "Bad turf.")
-					mode = 5
+					mode = MODE_COMPUTING
 					return
 			else
 //				to_chat(world, "No path.")
-				mode = 5
+				mode = MODE_COMPUTING
 				return
 
 		if(5)		// calculate new path
 //			to_chat(world, "Calc new path.")
-			mode = 6
-			spawn(0)
+			mode = MODE_WAITING
+			calc_path()
 
-				calc_path()
-
-				if(path.len > 0)
-					blockcount = 0
-					mode = 4
-					src.visible_message("[src] makes a delighted ping!", "You hear a ping.")
-					playsound(src, 'sound/machines/ping.ogg', 50, 0)
-
-				else
-					src.visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
-					playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
-
-					mode = 7
-		//if(6)
-//			to_chat(world, "Pending path calc.")
-		//if(7)
-//			to_chat(world, "No dest / no route.")
-	return
 
 
 // calculates a path to the current destination
 // given an optional turf to avoid
 /obj/machinery/bot/mulebot/proc/calc_path(var/turf/avoid = null)
-	src.path = AStar(src.loc, src.target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 250, id=botcard, exclude=avoid)
-	if(!src.path)
-		src.path = list()
+	AStar(src, .proc/receive_path, src.loc, src.target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 250, id=botcard, exclude=avoid)
 
+/obj/machinery/bot/mulebot/proc/receive_path(var/list/L)
+	if(!islist(L))
+		visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
+		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
+		mode = MODE_NOROUTE
+		return
+	blockcount = 0
+	path = L
+	visible_message("\The [src] makes a delighted ping!", "You hear a ping.")
+	playsound(src, 'sound/machines/ping.ogg', 50, 0)
 
 // sets the current destination
 // signals all beacons matching the delivery code
 // beacons will return a signal giving their locations
 /obj/machinery/bot/mulebot/proc/set_destination(var/new_dest)
-	spawn(0)
-		new_destination = new_dest
-		post_signal(beacon_freq, "findbeacon", "delivery")
-		updateDialog()
+	new_destination = new_dest
+	post_signal(beacon_freq, "findbeacon", "delivery")
+	updateDialog()
 
 // starts bot moving to current destination
 /obj/machinery/bot/mulebot/proc/start()
 	if(destination == home_destination)
-		mode = 3
+		mode = MODE_RETURNING
 	else
-		mode = 2
+		mode = MODE_MOVING
 	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
 
 // starts bot moving to home
@@ -689,7 +652,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/proc/start_home()
 	spawn(0)
 		set_destination(home_destination)
-		mode = 4
+		mode = MODE_BLOCKED
 	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
 
 // called when bot reaches current target
@@ -723,9 +686,9 @@ var/global/mulebot_count = 0
 		if(auto_return && destination != home_destination)
 			// auto return set and not at home already
 			start_home()
-			mode = 4
+			mode = MODE_BLOCKED
 		else
-			mode = 0	// otherwise go idle
+			mode = MODE_IDLE	// otherwise go idle
 
 	send_status()	// report status to anyone listening
 
@@ -752,7 +715,7 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/alter_health()
 	return get_turf(src)
-
+*/
 // called from mob/living/carbon/human/Crossed() as well as .../alien/Crossed()
 /obj/machinery/bot/mulebot/proc/RunOverCreature(var/mob/living/H,var/bloodcolor)
 	if(integratedpai && coolingdown)
@@ -778,7 +741,7 @@ var/global/mulebot_count = 0
 	coolingdown = TRUE
 	spawn(run_over_cooldown)
 		coolingdown = FALSE
-
+/*
 // player INSIDE mulebot attempted to move
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)
 	unload()
@@ -807,7 +770,7 @@ var/global/mulebot_count = 0
 		// process control input
 		switch(recv)
 			if("stop")
-				mode = 0
+				mode = MODE_IDLE
 				return
 
 			if("go")
@@ -1013,3 +976,4 @@ var/global/mulebot_count = 0
 			togglePanelOpen(null, L)
 		if(wires)
 			wires.npc_tamper(L)
+*/

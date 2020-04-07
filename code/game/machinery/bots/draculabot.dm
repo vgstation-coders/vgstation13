@@ -16,7 +16,6 @@
 	health = 40
 	maxhealth = 20
 	req_access = list(access_medical)
-	var/mob/living/carbon/human/target //Only used if emagged
 	var/currently_drawing_blood = 0 //One patient at a time.
 	var/quiet = 0
 	var/since_last_reward = 0 //Once every 55u, dispense reward
@@ -29,7 +28,7 @@
 								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy) //3/7 chance for one cookie, 3/7 chance for chococoin, 1/7 for many cookies!
 	var/list/contained_bags = list()
 	var/obj/item/weapon/reagent_containers/blood/last_bag
-
+/*
 /obj/machinery/bot/bloodbot/New()
 	..()
 	for(var/i = 1 to 8)
@@ -284,3 +283,4 @@
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	spark(src)
 	..()
+*/

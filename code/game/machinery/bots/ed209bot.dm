@@ -20,12 +20,10 @@
 
 	//var/lasers = 0
 
-	var/mob/living/carbon/target
 	var/oldtarget_name
 	var/threatlevel = 0
 	var/target_lastloc //Loc of target when arrested.
 	var/last_found //There's a delay
-	var/frustration = 0
 //var/emagged = 0 //Emagged Secbots view everyone as a criminal
 	var/check_records = 1 //Does it check security records?
 	var/arrest_type = 0 //If true, don't handcuff
@@ -35,27 +33,11 @@
 	var/mode = 0
 	bot_type = SEC_BOT
 
-	var/auto_patrol = 0		// set to make bot automatically patrol
-
-	var/beacon_freq = 1445		// navigation beacon frequency
-	var/control_freq = 1447		// bot control frequency
-
-
-	var/turf/patrol_target	// this is turf to navigate to (location of beacon)
-	var/new_destination		// pending new destination (waiting for beacon response)
-	var/destination			// destination description tag
-	var/next_destination	// the next destination in the patrol route
-	var/list/path = new				// list of path turfs
-
-	var/blockcount = 0		//number of times retried a blocked path
-	var/awaiting_beacon	= 0	// count of pticks awaiting a beacon response
-
-	var/nearest_beacon			// the nearest beacon's tag
-	var/turf/nearest_beacon_loc	// the nearest beacon's location
+	auto_patrol = 0		// set to make bot automatically patrol
 	var/declare_arrests = 1 //When making an arrest, should it notify everyone wearing sechuds?
 	var/idcheck = 1 //If true, arrest people with no IDs
 	var/weaponscheck = 1 //If true, arrest people for weapons if they don't have access
-
+	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL
 	//List of weapons that secbots will not arrest for, also copypasted in secbot.dm and metaldetector.dm
 	var/safe_weapons = list(
 		/obj/item/weapon/gun/energy/tag,
@@ -83,7 +65,7 @@
 /obj/machinery/bot/ed209/redtag
 	lasercolor = "r"
 	projectile = /obj/item/projectile/beam/lasertag/red
-
+/*
 /obj/machinery/bot/ed209/New(loc,created_name,created_lasercolor)
 	..()
 	if(created_name)
@@ -473,40 +455,23 @@ Auto Patrol: []"},
 	if(!path || !istype(path))
 		path = list()
 	else if(path.len > 0 && patrol_target)		// valid path
-
 		var/turf/next = path[1]
 		if(next == loc)
 			path -= next
 			return
-
-
-		if(istype( next, /turf/simulated))
-
+		if(istype(next, /turf/simulated))
 			var/moved = step_towards(src, next)	// attempt to move
 			if(moved)	// successful move
 				blockcount = 0
 				path -= loc
 
 				look_for_perp()
-				if(lasercolor)
-					sleep(20)
 			else		// failed to move
-
-				blockcount++
-
-				if(blockcount > 5)	// attempt 5 times before recomputing
+				if(++blockcount == 5)	// attempt 5 times before recomputing
 					// find new path excluding blocked turf
-
-					spawn(2)
-						calc_path(next)
-						if(path.len == 0)
-							find_patrol_target()
-						else
-							blockcount = 0
-
-					return
-
-				return
+					calc_path(next)
+				if(blockcount > 5)
+					find_patrol_target()
 
 		else	// not a valid turf
 			mode = SECBOT_IDLE
@@ -605,7 +570,6 @@ Auto Patrol: []"},
 				mode = SECBOT_SUMMON
 				calc_path()
 				speak("Responding.")
-
 				return
 
 
@@ -683,10 +647,11 @@ Auto Patrol: []"},
 // calculates a path to the current destination
 // given an optional turf to avoid
 /obj/machinery/bot/ed209/proc/calc_path(var/turf/avoid = null)
-	src.path = AStar(src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=avoid)
-	if (!src.path)
-		src.path = list()
+	AStar(src, .proc/receive_path, src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=avoid)
 
+/obj/machinery/bot/ed209/proc/receive_path(var/list/L)
+	if(islist(L))
+		path = L
 
 // look for a criminal in view of the bot
 
@@ -1106,3 +1071,4 @@ Auto Patrol: []"},
 	var/area/location = get_area(src)
 	declare_message = "<span class='info'>[bicon(src)] [name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] scumbag <b>[target]</b> in <b>[location]</b></span>"
 	..()
+*/

@@ -30,6 +30,7 @@
 #define SS_PRIORITY_WEATHER        210
 #define SS_PRIORITY_TICKER         200
 #define SS_PRIORITY_MOB            150
+#define SS_PRIORITY_PATHING        149
 #define SS_PRIORITY_COMPONENT      125
 #define SS_PRIORITY_NANOUI         120
 #define SS_PRIORITY_VOTE           110
