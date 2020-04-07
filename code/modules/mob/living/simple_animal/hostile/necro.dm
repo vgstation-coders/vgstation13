@@ -135,6 +135,10 @@
 
 	var/list/clothing = list() //If the previous corpse had clothing, it 'wears' it
 
+/mob/living/simple_animal/hostile/necro/zombie/New() //(mob/living/L)
+	..()
+	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudundead")
+
 /mob/living/simple_animal/hostile/necro/zombie/CanAttack(var/atom/the_target)
 	if(the_target == creator)
 		return 0
