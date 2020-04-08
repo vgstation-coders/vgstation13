@@ -294,6 +294,38 @@
 		C.affecting -= src
 		effect_str -= C
 
+/datum/light_source/map/apply_lum()
+	//world light, we have no range or source
+	var/static/update_gen = 1
+	applied = 1
+
+	// Keep track of the last applied lum values so that the lighting can be reversed
+	applied_lum_r = lum_r
+	applied_lum_g = lum_g
+	applied_lum_b = lum_b
+
+	for(var/turf/T in affecting_turfs) //note we do not care about anything related to light_range or source_turf
+		for (var/datum/lighting_corner/C in T.get_corners()) //we also don't build a list of affecting turfs ever
+			if (C.update_gen == update_gen)
+				continue
+			C.update_gen = update_gen
+			C.affecting += src
+
+			if (!C.active)
+				effect_str[C] = 0
+				continue
+
+			effect_str[C] = light_power //normally this is multiplied by LUM_FALLOFF, but we have no falloff
+			C.update_lumcount(effect_str[C] * applied_lum_r, effect_str[C] * applied_lum_g, effect_str[C] * applied_lum_b)
+
+			if(!T.affecting_lights)
+				T.affecting_lights = list()
+			if(!(src in T.affecting_lights))
+				T.affecting_lights += src
+
+	update_gen++
+
+
 #undef effect_update
 #undef LUM_FALLOFF
 #undef REMOVE_CORNER

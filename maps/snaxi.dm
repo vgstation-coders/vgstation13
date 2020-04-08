@@ -128,6 +128,10 @@
 			gaussian_geyser(x, y)
 			CHECK_TICK
 
+	var/datum/light_source/map/suncycle = new /datum/light_source/map()
+	for(var/area/A in outside_areas)
+		suncycle.affecting_turfs += A.area_turfs
+
 /proc/gaussian_geyser(var/x, var/y)
 	var/turf/T = locate(x, y, 1)
 	if (!istype(T,/turf/unsimulated/floor/snow/))

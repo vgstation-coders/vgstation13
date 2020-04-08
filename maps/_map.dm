@@ -174,6 +174,8 @@ var/global/list/accessable_z_levels = list()
 	var/transitionLoops = FALSE //if true, transition sends you back to the same Z-level (see turfs/turf.dm)
 	var/bluespace_jammed = 0
 	var/movementChance = ZLEVEL_BASE_CHANCE
+
+	var/suntype = SUN_ROTATE //SUN_ROTATE for circling around a station, SUN_CYCLE for day/night
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
 	var/base_area = null //default base area type, what blueprints erase into; if null, space; be careful with parent areas because locate() could find a child!
 	var/z //Number of the z-level (the z coordinate)
@@ -208,6 +210,7 @@ var/global/list/accessable_z_levels = list()
 //for snowmap
 /datum/zLevel/snowsurface
 	name = "snowy surface"
+	suntype = SUN_CYCLE
 	base_turf = /turf/unsimulated/floor/snow
 	base_area = /area/surface/snow
 	movementJammed = TRUE
