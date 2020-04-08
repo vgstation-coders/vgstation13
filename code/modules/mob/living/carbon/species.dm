@@ -1281,6 +1281,67 @@ var/list/has_died_as_golem = list()
 				to_chat(user, "<span class='notice'>You place \the [O] into \the [src].</span>")
 				qdel(O)
 
+/datum/species/insectoid
+	name = "Insectoid"
+	icobase = 'icons/mob/human_races/r_insectoid.dmi'
+	deform = 'icons/mob/human_races/r_def_insectoid.dmi'
+	eyes = "insectoid_eyes_m"
+	known_languages = list(LANGUAGE_INSECT)
+	primitive = /mob/living/carbon/monkey/roach
+
+	flags = IS_WHITELISTED
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
+
+	default_mutations=list(RAD_IMMUNE)
+	burn_mod = 1.1
+	tox_mod = 0.5
+
+	blood_color = "#ebece6"
+	flesh_color = "#9c7f25"
+
+	uniform_icons = 'icons/mob/species/insectoid/uniform.dmi'
+//	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
+	gloves_icons    = 'icons/mob/species/vox/gloves.dmi'
+	glasses_icons   = 'icons/mob/species/insectoid/eyes.dmi'
+	ears_icons      = 'icons/mob/species/insectoid/ears.dmi'
+	shoes_icons 	= 'icons/mob/species/insectoid/feet.dmi'
+	head_icons      = 'icons/mob/species/insectoid/head.dmi'
+//	belt_icons      = 'icons/mob/belt.dmi'
+	wear_suit_icons = 'icons/mob/species/insectoid/suit.dmi'
+	wear_mask_icons = 'icons/mob/species/insectoid/mask.dmi'
+//	back_icons      = 'icons/mob/back.dmi'
+
+
+	has_mutant_race = 0
+
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart/insect,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"eyes" =     /datum/organ/internal/eyes/compound/
+		)
+/datum/species/insectoid/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
+	speech.message = replacetext(speech.message, "s", "z") //stolen from plasman code if it borks.
+	..()
+
+	species_intro = "You are an Insectoid.<br>\
+					Your body is highly resistant to the initial effects of radiation exposure, and you'll be better able to defend against toxic chemicals. <br>\
+					However, your body is more susceptible to heat than that of other species. Resilient though you may be, heat and flame are your biggest concern."
+
+
+/datum/species/insectoid/makeName(var/gender,var/mob/living/carbon/human/H=null)
+	var/sounds = rand(2,3)
+	var/newname = ""
+
+	for(var/i = 1 to sounds)
+		newname += pick(insectoid_name_syllables)
+	return capitalize(newname)
+
+/datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
+	H.default_gib()
+
 
 /datum/species/mushroom
 	name = "Mushroom"

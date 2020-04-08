@@ -1150,10 +1150,23 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/throw_impact(atom/hit_atom)
 	..()
+	if(ismob(hit_atom))
+		var/mob/M = hit_atom
+		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
+
+		M.eye_blind = 2
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied")
+		sleep(55)
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		sleep(120)
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
+
 	if(isturf(hit_atom))
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
 			new trash(src.loc)
+		playsound(get_turf(src), pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 100, 1)
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment
@@ -1524,6 +1537,27 @@
 	reagents.add_reagent(CHEMICAL_WASTE, 2) //Does nothing, but it's pretty fucking funny.
 	bitesize = 2
 
+
+/obj/item/weapon/reagent_containers/food/snacks/donitos
+	name = "Donitos"
+	desc = "Ranch or cool ranch?"
+	icon_state = "donitos"
+	trash = /obj/item/trash/donitos
+
+/obj/item/weapon/reagent_containers/food/snacks/donitos/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(SPRINKLES, 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch
+	name = "Donitos Cool Ranch"
+	desc = "Cool ranch."
+	icon_state = "donitos_coolranch"
+	trash = /obj/item/trash/donitos_coolranch
+
+/obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch/New()
+	..()
+	reagents.add_reagent(SPRINKLES, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/danitos
 	name = "Danitos"
@@ -4572,12 +4606,151 @@
 	var/reagent=pick(possible_reagents)
 	reagents.add_reagent(reagent, possible_reagents[reagent])
 
+/obj/item/weapon/reagent_containers/food/snacks/lollipop
+	name = "lollipop"
+	desc = "Suck on this!"
+	icon_state = "lollipop_stick"
+	item_state = "lollipop_stick"
+	food_flags = FOOD_SWEET
+	icon = 'icons/obj/candymachine.dmi'
+	bitesize = 5
+	slot_flags = SLOT_MASK //No, really, suck on this.
+	attack_verb = list("taps", "pokes")
+	eatverb = "crunch"
+	edible_by_utensil = FALSE
+	trash = /obj/item/trash/lollipopstick
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	var/candyness = 161 //how long this thing will last
+	volume = 15 //not a lotta room for poison
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/New()
+	..()
+	eatverb = pick("bite","crunch","chomp")
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(SUGAR, 8)
+	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
+	var/image/colorpop = image('icons/obj/candymachine.dmi', icon_state = "lollipop_head")
+	colorpop.color = pick(random_color_list)
+	src.overlays += colorpop
+	filling_color = colorpop.color
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/consume()
+	..()
+	candyness -= bitesize*10 //taking a bite out reduces how long it'll last
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/proc/updateconsuming(var/consuming)
+	if(consuming)
+		processing_objects.Add(src)
+	else
+		processing_objects.Remove(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/process()
+	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
+	if(!H) //we ended up outside our human somehow
+		updateconsuming(FALSE)
+		return
+	if(H.isDead()) //human isn't really consuming it
+		return
+	if(H.is_wearing_item(src,slot_wear_mask))
+		candyness--
+	if(candyness <= 0)
+		to_chat(H, "<span class='notice'>You finish \the [src].</span>")
+		var/atom/new_stick = new /obj/item/trash/lollipopstick(loc)
+		transfer_fingerprints_to(new_stick)
+		qdel(src)
+		H.equip_to_slot(new_stick, slot_wear_mask, 1)
+	else
+		if(candyness%10 == 0) //every 10 ticks, ~15 times
+			reagents.trans_to(H, 1, log_transfer = FALSE, whodunnit = null)
+		if(candyness%50 == 0) //every 50 ticks, so ~3 times
+			bitecount++ //we're arguably eating it
+
+/obj/item/weapon/reagent_containers/food/snacks/lollipop/equipped(mob/living/carbon/human/H, equipped_slot)
+	if(!H.isDead())
+		updateconsuming(equipped_slot == slot_wear_mask)
+
+/obj/item/weapon/reagent_containers/food/snacks/medipop
+	name = "medipop"
+	desc = "Suck on this!"
+	icon_state = "lollipop_stick"
+	item_state = "lollipop_stick"
+	food_flags = FOOD_SWEET
+	icon = 'icons/obj/candymachine.dmi'
+	bitesize = 5
+	slot_flags = SLOT_MASK //No, really, suck on this.
+	attack_verb = list("taps", "pokes")
+	eatverb = "crunch"
+	edible_by_utensil = FALSE
+	trash = /obj/item/trash/lollipopstick
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	var/candyness = 161 //how long this thing will last
+	volume = 15 //not a lotta room for poison
+
+/obj/item/weapon/reagent_containers/food/snacks/medipop/New()
+	..()
+	eatverb = pick("bite","crunch","chomp")
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(SUGAR, 8)
+	reagents.add_reagent(TRICORDRAZINE, 10)
+	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
+	var/image/colorpop = image('icons/obj/candymachine.dmi', icon_state = "lollipop_head")
+	colorpop.color = pick(random_color_list)
+	src.overlays += colorpop
+	filling_color = colorpop.color
+
+/obj/item/weapon/reagent_containers/food/snacks/medipop/consume()
+	..()
+	candyness -= bitesize*10 //taking a bite out reduces how long it'll last
+
+/obj/item/weapon/reagent_containers/food/snacks/medipop/proc/updateconsumingalt(var/consuming)
+	if(consuming)
+		processing_objects.Add(src)
+	else
+		processing_objects.Remove(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/medipop/process()
+	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
+	if(!H) //we ended up outside our human somehow
+		updateconsumingalt(FALSE)
+		return
+	if(H.isDead()) //human isn't really consuming it
+		return
+	if(H.is_wearing_item(src,slot_wear_mask))
+		candyness--
+	if(candyness <= 0)
+		to_chat(H, "<span class='notice'>You finish \the [src].</span>")
+		var/atom/new_stick = new /obj/item/trash/lollipopstick(loc)
+		transfer_fingerprints_to(new_stick)
+		qdel(src)
+		H.equip_to_slot(new_stick, slot_wear_mask, 1)
+	else
+		if(candyness%10 == 0) //every 10 ticks, ~15 times
+			reagents.trans_to(H, 1, log_transfer = FALSE, whodunnit = null)
+		if(candyness%50 == 0) //every 50 ticks, so ~3 times
+			bitecount++ //we're arguably eating it
+
+/obj/item/weapon/reagent_containers/food/snacks/medipop/equipped(mob/living/carbon/human/H, equipped_slot)
+	if(!H.isDead())
+		updateconsumingalt(equipped_slot == slot_wear_mask)
+
 /obj/item/weapon/reagent_containers/food/snacks/chococoin
 	name = "\improper Choco-Coin"
 	desc = "A thin wafer of milky, chocolatey, melt-in-your-mouth goodness. That alone is already worth a hoard."
 	food_flags = FOOD_SWEET
 	icon_state = "chococoin_unwrapped"
 	bitesize = 4
+
+/obj/item/trash/lollipopstick
+	name = "lollipop stick"
+	desc = "A small plastic stick."
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "lollipop_stick"
+	w_class = W_CLASS_TINY
+	slot_flags = SLOT_MASK
+	throwforce = 1
+	autoignition_temperature = 0
+	w_type = RECYK_MISC
+	starting_materials = list(MAT_PLASTIC = 100)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped
 	desc = "Still covered in golden foil wrapper."
@@ -5371,7 +5544,7 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(TOMATOJUICE, 15)
 
-var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/item/toy/bomb, /obj/item/weapon/plastique, /obj/item/device/fuse_bomb, /obj/item/weapon/grenade, /obj/item/device/onetankbomb)
+var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/item/toy/bomb, /obj/item/weapon/c4, /obj/item/device/fuse_bomb, /obj/item/weapon/grenade, /obj/item/device/onetankbomb)
 
 /obj/item/weapon/reagent_containers/food/snacks/lasagna/can_hold(obj/item/weapon/W) //GREAT SCOTT!
 	if(is_type_in_list(W, bomb_like_items))
@@ -5947,3 +6120,124 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter
+	name = "suppermatter"
+	desc = "Extremely dense and powerful food."
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/suppermattershard
+	storage_slots = 1
+	slices_num = 4
+	icon_state = "suppermatter"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 48)
+	bitesize = 12
+	set_light(1.4,2,"#FFFF00")
+
+/obj/item/weapon/reagent_containers/food/snacks/suppermattershard
+	name = "suppermatter shard"
+	desc = "A single portion of power."
+	icon_state = "suppermattershard"
+	bitesize = 3
+	trash = null
+
+/obj/item/weapon/reagent_containers/food/snacks/suppermattershard/New()
+	..()
+	set_light(1.4,1.4,"#FFFF00")
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter
+	name = "exciting suppermatter"
+	desc = "Extremely dense, powerful and exciting food!"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
+	storage_slots = 1
+	slices_num = 5
+	icon_state = "excitingsuppermatter"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 60)
+	bitesize = 12
+	set_light(1.4,2,"#FF0000")
+
+/obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
+	name = "exciting suppermatter shard"
+	desc = "A single portion of exciting power!"
+	icon_state = "excitingsuppermattershard"
+	bitesize = 3
+	trash = null
+
+/obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard/New()
+	..()
+	set_light(1.4,1.4,"#FF0000")
+
+/obj/item/weapon/reagent_containers/food/snacks/grapejelly
+	name = "jelly"
+	desc = "The choice of choosy moms."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "grapejelly"
+
+/obj/item/weapon/reagent_containers/food/snacks/grapejelly/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	reagents.add_reagent (SUGAR, 2)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutbutter
+	name = "peanut butter"
+	desc = "A jar of smashed peanuts, contains no actual butter."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "peanutbutter"
+
+/obj/item/weapon/reagent_containers/food/snacks/peanutbutter/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 3)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/saltednuts
+	name = "salted peanuts"
+	desc = "Popular in saloons."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "saltednuts"
+
+/obj/item/weapon/reagent_containers/food/snacks/saltednuts/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	reagents.add_reagent (SODIUMCHLORIDE, 2)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/pbj
+	name = "peanut butter and jelly sandwich"
+	desc = "A classic treat of childhood."
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "pbj"
+	trash = /obj/item/trash/plate
+
+/obj/item/weapon/reagent_containers/food/snacks/pbj/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 4)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/PAIcookie
+	name = "cookie"
+	desc = "Oh god, it's self-replicating"
+	icon = 'icons/obj/food2.dmi'
+
+/obj/item/weapon/reagent_containers/food/snacks/PAIcookie/New()
+	icon_state = "paicookie[pick(1,2,3)]"
+	reagents.add_reagent(NUTRIMENT,5)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread
+	icon_state = "paitoast"
+	trash = 0
+	desc = "A slice of bread, browned onto it is the image of a familiar friend."
+
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/New()
+	reagents.add_reagent(NUTRIMENT,5)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/attackby(obj/item/I,mob/user,params)
+	return ..() //sorry no custom pai sandwiches

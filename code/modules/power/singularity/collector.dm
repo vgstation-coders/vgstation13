@@ -87,7 +87,7 @@ var/global/list/rad_collectors = list()
 	else
 		return
 
-/obj/machinery/power/rad_collector/wrenchAnchor(var/mob/user)
+/obj/machinery/power/rad_collector/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(P)
 		to_chat(user, "<span class='warning'>Remove the plasma tank first.</span>")
 		return FALSE

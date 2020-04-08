@@ -57,6 +57,8 @@
 
 	var/last_explosion_push = 0
 
+	var/list/datum/tracker/trackers = list()
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -944,23 +946,41 @@
 		for(var/client/C in viewers)
 			C.images -= override_image
 
-//Attack Animation for ghost object being pixel shifted onto person
-	var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
-	item.appearance = tool.attack_icon()
-	item.alpha = 128
-	item.loc = target
-	item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
-	item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
-	item.mouse_opacity = 0
+	spawn()
+		//Attack Animation for ghost object being pixel shifted onto person
+		var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
+		item.appearance = tool.attack_icon()
+		item.alpha = 128
+		item.loc = target
+		item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
+		item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
+		item.mouse_opacity = 0
 
-	var/viewers = item_animation_viewers.Copy()
-	for(var/client/C in viewers)
-		C.images += item
+		var/viewers = item_animation_viewers.Copy()
+		for(var/client/C in viewers)
+			C.images += item
 
-	animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
-	sleep(3)
-	for(var/client/C in viewers)
-		C.images -= item
+		animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
+		sleep(3)
+		for(var/client/C in viewers)
+			C.images -= item
+
+	spawn()
+		target.do_hitmarker(usr)
+
+/atom/proc/do_hitmarker(mob/shooter)
+	spawn()
+		var/datum/role/streamer/streamer_role = shooter?.mind?.GetRole(STREAMER)
+		if(streamer_role?.team == ESPORTS_SECURITY)
+			streamer_role.hits += IS_WEEKEND ? 2 : 1
+			streamer_role.update_antag_hud()
+			playsound(src, 'sound/effects/hitmarker.ogg', 100, FALSE)
+			var/image/hitmarker = image(icon='icons/effects/effects.dmi', loc=src, icon_state="hitmarker")
+			for(var/client/C in clients)
+				C.images += hitmarker
+			sleep(3)
+			for(var/client/C in clients)
+				C.images -= hitmarker
 
 /atom/movable/proc/make_invisible(var/source_define, var/time, var/include_clothing)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
 	return invisibility || alpha <= 1	//already invisible
@@ -1060,3 +1080,43 @@
 				forceMove(F)
 				return TRUE
 	return FALSE
+
+// -- trackers
+
+/atom/movable/proc/add_tracker(var/datum/tracker/T)
+	on_moved.Add(T, "recieve_position")
+
+/datum/tracker
+	var/name = "Tracker"
+	var/active = TRUE
+	var/changed = FALSE
+
+	var/turf/target
+
+	var/tick_refresh = 5 // The number of moved events before we update the position.
+	var/current_tick = 1
+
+	var/lost_position_probability = 0 // Probability of losing the target
+	var/lost_position_distance = 0 // Distance at which the tracker loses the target
+
+/datum/tracker/proc/recieve_position(var/list/loc)
+
+	ASSERT(loc)
+
+	if (!active)
+		return
+	if (current_tick < tick_refresh)
+		current_tick++
+		return
+
+	if (prob(lost_position_probability))
+		active = FALSE
+		return
+
+	var/target_loc = loc["loc"]
+	if (target != target_loc)
+		changed = TRUE
+
+	target = get_turf(target_loc)
+
+	current_tick = 1

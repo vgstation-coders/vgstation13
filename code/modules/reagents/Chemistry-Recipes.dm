@@ -527,6 +527,14 @@
 	e.start()
 	holder.clear_reagents()
 
+/datum/chemical_reaction/trinitrine
+	name = "Trinitrine"
+	id = TRINITRINE
+	result = TRINITRINE
+	required_reagents = list(GLYCEROL = 1, SACID = 1, WATER = 3)
+	required_catalysts = list(NITROGEN = 5)
+	result_amount = 5
+
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
 	id = SODIUMCHLORIDE
@@ -1737,6 +1745,7 @@
 	alert_admins = ALERT_ALL_REAGENTS
 	reagent = AMUTATIONTOXIN
 	result_amount = 1
+	reagent_amount = 1
 
 /datum/chemical_reaction/slime_extract/slimenanobots
 	name = "Slime Nanobots"
@@ -2027,7 +2036,7 @@
 
 /datum/chemical_reaction/slime_extract/slimecash/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/spacecash/c100/C = new /obj/item/weapon/spacecash/c100/
-	C.amount = 1
+	C.amount = 5
 	C.forceMove(get_turf(holder.my_atom))
 	..()
 

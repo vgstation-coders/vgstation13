@@ -1,3 +1,7 @@
+//Listen here you god damn piece of shit. Do not add magazines for strong calibers. 
+//Dont fucking do it. If you do you're gonna gunk the vector to high heaven again and someone's gonna get mad that they got one hit and grudgecode
+//So dont fucking do it
+
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe
 	name = "\improper Ammolathe"
 	desc = "Produces guns, ammunition, and firearm accessories."
@@ -73,6 +77,8 @@
 		new /obj/item/ammo_storage/magazine/a12mm/ops/empty(), \
 		new /obj/item/ammo_storage/magazine/a75/empty(), \
 		new /obj/item/ammo_storage/box/a75(), \
+		new /obj/item/ammo_casing/shotgun/dragonsbreath(), \
+		new /obj/item/weapon/storage/box/dragonsbreathshells(), \
 		)
 	)
 

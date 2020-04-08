@@ -35,7 +35,7 @@
 
 /obj/structure/AIcore/attackby(var/obj/item/P, var/mob/user)
 	if(P.is_wrench(user))
-		wrenchAnchor(user, time_to_wrench = 2 SECONDS)
+		wrenchAnchor(user, P, time_to_wrench = 2 SECONDS)
 	switch(state)
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))
@@ -54,18 +54,18 @@
 					state = UNSECURED_CIRCUITBOARD
 		if(UNSECURED_CIRCUITBOARD)
 			if(P.is_screwdriver(user) && circuit)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You screw the circuit board into place.</span>")
 				state = SECURED_CIRCUITBOARD
 			if(iscrowbar(P) && circuit)
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 				state = NOCIRCUITBOARD
 				circuit.forceMove(loc)
 				circuit = null
 		if(SECURED_CIRCUITBOARD)
 			if(P.is_screwdriver(user) && circuit)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You unfasten the circuit board.</span>")
 				state = UNSECURED_CIRCUITBOARD
 			if(iscablecoil(P))
@@ -82,7 +82,7 @@
 				if(brain)
 					to_chat(user, "Get that brain out of there first!")
 				else
-					playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
+					P.playtoolsound(loc, 50)
 					to_chat(user, "<span class='notice'>You remove the cables.</span>")
 					state = SECURED_CIRCUITBOARD
 					drop_stack(/obj/item/stack/cable_coil, loc, 5, user)
@@ -119,19 +119,19 @@
 						to_chat(user, "Added [P].")
 
 			if(iscrowbar(P) && brain)
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You remove the brain.</span>")
 				brain.forceMove(loc)
 				brain = null
 
 		if(GLASS_PANELED)
 			if(iscrowbar(P))
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You remove the glass panel.</span>")
 				state = WIREDFRAME
 				drop_stack(/obj/item/stack/sheet/glass/rglass, loc, 2, user)
 			else if(P.is_screwdriver(user))
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )
 				if(A) //if there's no brain, the mob is deleted and a structure/AIcore is created

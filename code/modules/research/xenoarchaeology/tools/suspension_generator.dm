@@ -1,3 +1,6 @@
+// No longer necessary for doing xenoarch, but kept in because you can use it on people.
+// Still available from cargo.
+
 /obj/machinery/suspension_gen
 	name = "suspension field generator"
 	desc = "It has stubby legs bolted up against it's body for stabilising."

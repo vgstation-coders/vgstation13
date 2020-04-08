@@ -9,7 +9,7 @@
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FACE
 	pressure_resistance = ONE_ATMOSPHERE
 	var/canstage = 1
@@ -100,7 +100,7 @@
 	canstage = 0
 	origin_tech = Tc_SYNDICATE + "=4"
 	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger)
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED,INSECT_SHAPED)
 	permeability_coefficient = 0.90
 	var/static/list/clothing_choices
 
@@ -161,7 +161,7 @@
 	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask."
 	icon_state = "clown"
 	item_state = "clown_hat"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -223,7 +223,7 @@
 	desc = "The traditional mime's mask. It has an eerie facial posture."
 	icon_state = "mime"
 	item_state = "mime"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 	var/muted = 0
@@ -253,7 +253,7 @@
 	desc = "A traditional female mime's mask."
 	icon_state = "sexymime"
 	item_state = "sexymime"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -274,6 +274,14 @@
 	can_flip = 0
 	canstage = 0
 
+/obj/item/clothing/mask/gas/oni
+	name = "oni mask"
+	desc = "Probably not as intimidating as you think it is."
+	icon_state = "onimask"
+	item_state = "onimask"
+	can_flip = 0
+	canstage = 0
+
 /obj/item/clothing/mask/gas/owl_mask
 	name = "owl mask"
 	desc = "Twoooo!"
@@ -290,3 +298,10 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	can_flip = 0
 	canstage = 0
+
+/obj/item/clothing/mask/gas/clownmaskpsyche/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/shoes/clownshoespsyche))
+		new /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin(get_turf(src))
+		qdel(W)
+		qdel(src)

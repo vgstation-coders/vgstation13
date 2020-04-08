@@ -75,7 +75,7 @@
 	if(istype(W,/obj/item/weapon/pickaxe))
 		var/obj/item/weapon/pickaxe/digTool = W
 		to_chat(user, "You start digging \the [src].")
-		if(do_after(user, src, digTool.digspeed*hardness) && src)
+		if(do_after(user, src, (100*digTool.toolspeed)*hardness) && src)
 			to_chat(user, "You finished digging.")
 			return Dismantle()
 	else if(istype(W, /obj/item/weapon/card))

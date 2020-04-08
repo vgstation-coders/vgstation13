@@ -7,6 +7,7 @@
 	volume = 50
 	amount_per_transfer_from_this = 5
 	//We want the all-in-one grinder audience
+	var/crush_flick = "mortar_crush"
 
 	var/list/blend_items = list (
 		/obj/item/stack/sheet/metal           = list(IRON,20),
@@ -95,6 +96,7 @@
 		to_chat(user, "<span class='warning'>There is no more space inside!</span>")
 		return
 	if(is_type_in_list(crushable, juice_items))
+		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You smash the contents into juice!</span>")
 		var/id = null
 		for(var/i in juice_items)
@@ -107,6 +109,7 @@
 			juiceable.potency = 0
 		reagents.add_reagent(id[1], min(round(5*sqrt(juiceable.potency)), volume - reagents.total_volume))
 	else if(is_type_in_list(crushable, blend_items))
+		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")
 		var/id = null
 		var/space = volume - reagents.total_volume
@@ -132,6 +135,7 @@
 			to_chat(user, "<span class ='warning'>An error was encountered. Report this message.</span>")
 			return
 	else
+		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You smash the contents into nothingness.</span>")
 	qdel(crushable)
 	crushable = null

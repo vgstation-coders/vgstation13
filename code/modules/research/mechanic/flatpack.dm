@@ -6,6 +6,7 @@
 	desc = "A ready-to-assemble machine flatpack produced in the space-Swedish style."
 	icon = 'icons/obj/machines/flatpack.dmi'
 	icon_state = "flatpack"
+	layer = ABOVE_OBJ_LAYER
 	density = 1
 	anchored = 0
 	pass_flags = PASSTABLE
@@ -191,6 +192,12 @@
 
 	update_icon()
 
+/obj/structure/closet/crate/flatpack/proc/insert_machine(atom/movable/thing)
+	thing.forceMove(src)
+	name += " ([thing.name])"
+	machine = thing
+	update_icon()
+
 /*
 #define Fl_ACTION	"action"
 
@@ -294,3 +301,4 @@
 /obj/structure/closet/crate/flatpack/starscreen_capacitor/New()
 	..()
 	machine = new /obj/machinery/shield_capacitor(src)
+

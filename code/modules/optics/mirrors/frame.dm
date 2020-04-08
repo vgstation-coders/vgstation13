@@ -16,7 +16,7 @@
 		if(do_after(user, src,20))
 			anchored=!anchored
 			user.visible_message("<span class='info'>You unfasten \the [src]'s bolts.</span>", "[user] unfastens the [src]'s bolts.","You hear a ratchet.")
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W

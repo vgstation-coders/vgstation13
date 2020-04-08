@@ -249,7 +249,7 @@
 			user.visible_message("<span class='danger'>[user] shorts out \the [src]'s lock.</span>", "<span class='warning'>You short out \the [src]'s lock.</span>")
 		return
 
-/obj/machinery/power/emitter/wrenchAnchor(var/mob/user)
+/obj/machinery/power/emitter/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(active)
 		to_chat(user, "<span class='warning'>Turn off \the [src] first.</span>")
 		return FALSE

@@ -894,13 +894,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 			if(I.is_screwdriver(user) && !(stat & BROKEN))
 				user.visible_message("<span class='notice'>[user] screws in the [src]!</span>", "<span class='notice'>You screw in the [src]</span>")
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				I.playtoolsound(src, 100)
 				buildstage = 1
 
 		if(1)
 			if(I.is_screwdriver(user) && !(stat & BROKEN))
 				user.visible_message("<span class='notice'>[user] unscrews the [src]!</span>", "<span class='notice'>You unscrew the [src]</span>")
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				I.playtoolsound(src, 100)
 				buildstage = 0
 				update_icon()
 				return

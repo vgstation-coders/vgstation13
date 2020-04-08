@@ -254,7 +254,7 @@
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
 	return
 
-/obj/machinery/conveyor/crowbarDestroy(mob/user)
+/obj/machinery/conveyor/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	return
 
 /obj/machinery/conveyor/attackby(obj/item/W, mob/user)
@@ -279,10 +279,10 @@
 		return
 	if(!isturf(over_location) || !Adjacent(user))
 		return
-	var/obj/O = user.get_active_hand()
+	var/obj/item/O = user.get_active_hand()
 	if(iscrowbar(O))
 		update_dir(get_dir(src, over_location))
-		playsound(src, 'sound/items/Crowbar.ogg', 25, 1)
+		O.playtoolsound(src, 25)
 		to_chat(user, "You change the direction of \the [src] using \the [O].")
 		return
 	return ..()
@@ -533,7 +533,7 @@
 		return .
 	if(W.is_wrench(user))
 		to_chat(user, "<span class='notice'>Deconstructing \the [src]...</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		if(do_after(user, src,50))
 			to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
 			var/turf/T=get_turf(src)

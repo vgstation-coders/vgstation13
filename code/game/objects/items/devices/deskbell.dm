@@ -34,7 +34,7 @@
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
 			)
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(loc, 50)
 
 		if(wrenching)
 			return
@@ -137,7 +137,7 @@
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
 			)
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(loc, 50)
 
 		if(wrenching)
 			return
@@ -281,7 +281,7 @@
 			if(0)
 				if(W.is_wrench(user))
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
-					playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 					M.amount = 2

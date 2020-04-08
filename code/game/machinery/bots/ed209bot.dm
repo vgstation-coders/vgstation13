@@ -862,8 +862,7 @@ Auto Patrol: []"},
 
 	spark(src)
 
-	var/obj/effect/decal/cleanable/blood/oil/gib = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	gib.New(gib.loc)
+	getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
 	qdel(src)
 
 
@@ -1052,7 +1051,7 @@ Auto Patrol: []"},
 
 		if(8)
 			if( W.is_screwdriver(user) )
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				var/turf/T = get_turf(user)
 				to_chat(user, "<span class='notice'>Now attaching the gun to the frame...</span>")
 				sleep(40)

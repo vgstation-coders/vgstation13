@@ -19,7 +19,7 @@ LINEN BINS
 	w_class = W_CLASS_TINY
 	_color = "white"
 	restraint_resist_time = 20 SECONDS
-	restraint_apply_sound = "rustle"
+	toolsounds = list("rustle")
 
 //cutting the bedsheet into rags
 /obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)
@@ -161,7 +161,7 @@ LINEN BINS
 
 /obj/structure/bedsheetbin/attackby(obj/item/I as obj, mob/user as mob)
 	if(I.is_wrench(user))
-		wrenchAnchor(user, time_to_wrench = 2 SECONDS)
+		wrenchAnchor(user, I, time_to_wrench = 2 SECONDS)
 		return
 	if(iswelder(I))
 		if(anchored)

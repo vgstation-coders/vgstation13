@@ -29,7 +29,7 @@
 		var/obj/item/weapon/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
-		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		S.playtoolsound(loc, 100)
 		to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
 		bullet_marks = 0
 		icon = initial(icon)

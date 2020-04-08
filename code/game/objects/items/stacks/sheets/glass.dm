@@ -25,7 +25,7 @@
 	if(issolder(W))
 		new /obj/item/weapon/circuitboard/blank(user.loc)
 		to_chat(user, "<span class='notice'>You fashion a blank circuitboard out of the glass.</span>")
-		playsound(src.loc, 'sound/items/Welder.ogg', 35, 1)
+		W.playtoolsound(loc, 35)
 		src.use(1)
 	if(istype(W, /obj/item/stack/rods) && !reinforced)
 		var/obj/item/stack/rods/V  = W

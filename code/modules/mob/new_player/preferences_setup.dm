@@ -184,7 +184,7 @@
 					icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 				else
 					icobase = 'icons/mob/human_races/vox/r_vox.dmi'
-		if(current_species.name == "Grey")
+		else if(current_species.name == "Grey")
 			switch(s_tone)
 				if(4)
 					icobase = 'icons/mob/human_races/grey/r_greyblue.dmi'
@@ -433,7 +433,7 @@
 					clothes_s.Blend(new /icon(suit_dmi, "detective"), ICON_OVERLAY)
 					clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
 				if(OFFICER)
-					clothes_s = new /icon(uniform_dmi, "secred_s")
+					clothes_s = new /icon(uniform_dmi, "security_s")
 					clothes_s.Blend(new /icon(feet_dmi, "jackboots"), ICON_UNDERLAY)
 					clothes_s.Blend(new /icon('icons/mob/head.dmi', "beret"), ICON_OVERLAY)
 					clothes_s.Blend(new /icon('icons/mob/hands.dmi', "black"), ICON_UNDERLAY)

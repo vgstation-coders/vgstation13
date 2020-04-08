@@ -113,7 +113,7 @@
 	return ..()
 
 
-/obj/machinery/recharger/wrenchAnchor(var/mob/user)
+/obj/machinery/recharger/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(charging)
 		to_chat(user, "<span class='notice'>Remove the charging item first!</span>")
 		return FALSE

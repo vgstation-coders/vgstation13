@@ -1,5 +1,5 @@
 /obj/machinery/anomaly/hyperspectral
-	name = "Hyperspectral Imager"
+	name = "hyperspectral imager"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "hyperspectral"
 	light_power = 0.75

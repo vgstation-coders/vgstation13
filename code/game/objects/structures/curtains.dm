@@ -51,7 +51,7 @@
 
 /obj/structure/curtain/attackby(obj/item/W, mob/user)
 	if(iswirecutter(W))
-		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
+		W.playtoolsound(loc, 50)
 		if(do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You cut \the [src] down.</span>")
 			if(!holo)
@@ -59,7 +59,7 @@
 			qdel(src)
 		return 1
 	if(W.is_screwdriver(user))
-		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		W.playtoolsound(loc, 50)
 		user.visible_message("[user] [anchored? "unsecures" : "secures"] \the [src].", "You [anchored? "unsecure" : "secure"] \the [src].")
 		anchored = !anchored
 		return 1

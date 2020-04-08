@@ -61,7 +61,7 @@
 	light_color = LIGHT_COLOR_RED
 	actions_types = list(/datum/action/item_action/activate_siren)
 	var/spamcheck = 0
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/siren/attack_self(mob/user)
 	if(spamcheck)
@@ -123,6 +123,14 @@
 	item_state = "roman_c"
 	body_parts_covered = HEAD|EARS
 
+/obj/item/clothing/head/helmet/samurai
+	name = "samurai helmet"
+	desc = "Banzai!"
+	armor = list(melee = 40, bullet = 0, laser = 10, energy = 10, bomb = 10, bio = 0, rad = 0)
+	icon_state = "kabuto"
+	item_state = "kabuto"
+	body_parts_covered = HEAD|EARS
+
 /obj/item/clothing/head/helmet/hopcap
 	name = "Head of Personnel's Cap"
 	desc = "Papers, Please."
@@ -130,6 +138,7 @@
 	item_state = "hopcap"
 	icon_state = "hopcap"
 	body_parts_covered = HEAD
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/aviatorhelmet
 	name = "Aviator Helmet"

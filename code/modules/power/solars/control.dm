@@ -83,7 +83,7 @@
 
 /obj/machinery/power/solar/control/attackby(obj/item/I as obj, mob/user as mob)
 	if(I.is_screwdriver(user))
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		I.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
 			if(src.stat & BROKEN)
 				visible_message("<span class='notice'>[user] clears the broken monitor off of [src].</span>", \

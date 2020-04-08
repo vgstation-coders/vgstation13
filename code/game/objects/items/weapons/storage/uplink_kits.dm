@@ -32,7 +32,7 @@
 			new /obj/item/weapon/gun/projectile(src)
 			new /obj/item/ammo_storage/box/a357(src)
 			new /obj/item/weapon/card/emag(src)
-			new /obj/item/weapon/plastique(src)
+			new /obj/item/weapon/c4(src)
 
 		if("murder")//8+6+6+2+4=26
 			new /obj/item/weapon/melee/energy/sword(src)
@@ -75,7 +75,7 @@
 			new /obj/item/weapon/soap/syndie(src)
 			new /obj/item/device/chameleon(src)
 			new /obj/item/device/encryptionkey/syndicate/hacked(src)
-			new /obj/item/weapon/plastique(src)
+			new /obj/item/weapon/c4(src)
 
 		if("psycho")//1+1+5+2+6+(fireaxe, 6?)+2=23
 			new /obj/item/clothing/suit/raincoat(src)

@@ -174,7 +174,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		/area/centcom,
 		/area/asteroid,
 		/area/tdome,
-		/area/syndicate_station,
 		/area/wizard_station,
 		/area/prison,
 		/area/vault,

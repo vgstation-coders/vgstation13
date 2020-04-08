@@ -488,7 +488,7 @@ var/global/list/loopModeNames=list(
 	update_icon()
 	update_music()
 
-/obj/machinery/media/jukebox/wrenchAnchor(var/mob/user)
+/obj/machinery/media/jukebox/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

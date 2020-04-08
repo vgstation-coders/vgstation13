@@ -28,7 +28,7 @@
 	body_parts_covered = HEAD
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -118,6 +118,7 @@
 	flags = HIDEHEADHAIR
 	body_parts_covered = EARS|HEAD
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
 	var/initial_icon_state = initial(icon_state)
@@ -207,7 +208,7 @@
 	desc = "A pair of black kitty ears. Meow!"
 	haircolored = FALSE
 
-/obj/item/clothing/head/kitty/anime	
+/obj/item/clothing/head/kitty/anime
 	desc = "A pair of nekomimi. Nya!"
 	anime = TRUE
 
@@ -242,6 +243,7 @@
 	icon_state = "foilhat"
 	item_state = "paper"
 	siemens_coefficient = 2
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/celtic
 	name = "\improper Celtic crown"

@@ -37,6 +37,7 @@
 	var/powernet = null
 	var/list/records = null
 	var/contain_parts = 1
+	toolsounds = list('sound/items/Screwdriver.ogg')
 
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"
@@ -50,6 +51,9 @@
 /obj/item/weapon/circuitboard/security/wooden_tv
 	name = "Circuit board (Security Cameras TV)"
 	build_path = /obj/machinery/computer/security/wooden_tv
+/obj/item/weapon/circuitboard/security/spesstv
+	name = "Circuit board (high-definition Spess.TV telescreen)"
+	build_path = /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen
 /obj/item/weapon/circuitboard/security/engineering
 	name = "Circuit board (Engineering Cameras)"
 	desc = "A circuit board for running a computer used for viewing engineering cameras."
@@ -356,7 +360,7 @@
 		if(WT.remove_fuel(1,user))
 			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
 			to_chat(user, "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
-			playsound(B.loc, 'sound/items/Welder.ogg', 30, 1)
+			I.playtoolsound(B.loc, 30)
 			if(user.get_inactive_hand() == src)
 				user.before_take_item(src)
 				user.put_in_hands(B)
@@ -388,7 +392,7 @@
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)
-			if(P.is_wrench(user) && wrenchAnchor(user))
+			if(P.is_wrench(user) && wrenchAnchor(user, P))
 				src.state = 1
 				return 1
 			if(iswelder(P))
@@ -397,14 +401,14 @@
 				if(WT.do_weld(user, src, 10, 0) && state == 0)
 					if(gcDestroyed)
 						return
-					playsound(src, 'sound/items/Welder.ogg', 50, 1)
+					WT.playtoolsound(src, 50)
 					user.visible_message("[user] welds the frame back into metal.", "You weld the frame back into metal.", "You hear welding.")
 					drop_stack(sheet_type, loc, 5, user)
 					state = -1
 					qdel(src)
 				return 1
 		if(1)
-			if(P.is_wrench(user) && wrenchAnchor(user))
+			if(P.is_wrench(user) && wrenchAnchor(user, P))
 				src.state = 0
 				return 1
 			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
@@ -421,13 +425,13 @@
 					to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				return 1
 			if(P.is_screwdriver(user) && circuit)
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] screws the circuit board into place.", "You screw the circuit board into place.", "You hear metallic sounds.")
 				src.state = 2
 				src.icon_state = "2"
 				return 1
 			if(iscrowbar(P) && circuit)
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] removes the circuit board.", "You remove the circuit board", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "0"
@@ -436,7 +440,7 @@
 				return 1
 		if(2)
 			if(P.is_screwdriver(user) && circuit)
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] unfastens the circuit board.", "You unfasten the circuit board.", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "1"
@@ -457,7 +461,7 @@
 				return 1
 		if(3)
 			if(iswirecutter(P))
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] unplugs the wires from the frame.", "You unplug the wires from the frame.", "You hear metallic sounds.")
 				src.state = 2
 				src.icon_state = "2"
@@ -480,14 +484,14 @@
 				return 1
 		if(4)
 			if(iscrowbar(P))
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] removes the glass panel from the frame.", "You remove the glass panel from the frame.", "You hear metallic sounds.")
 				src.state = 3
 				src.icon_state = "3"
 				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
 			if(P.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				if(!circuit.build_path) // the board has been soldered away!
 					to_chat(user, "<span class='warning'>You connect the monitor, but nothing turns on!</span>")
 					return

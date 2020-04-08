@@ -263,6 +263,20 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	fluff_pickup = "smite"
 
+
+/obj/item/weapon/nullrod/vampkiller
+	name = "holy whip"
+	desc = "A brutal looking, holy weapon consisting of a morning star head attached to a chain lash. The chain on this one seems a bit shorter than described in legend."
+	icon_state = "vampkiller"
+	item_state = "vampkiller"
+	hitsound = 'sound/weapons/vampkiller.ogg'
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("bashes", "smashes", "pulverizes")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	fluff_pickup = "smite"
+	slot_flags = SLOT_BELT
+
+
 /obj/item/weapon/nullrod/mosinnagant
 	name = "mosin nagant"
 	desc = "Many centuries later, it's still drenched in cosmoline, just like the Murdercube intended. This one cannot be fired."

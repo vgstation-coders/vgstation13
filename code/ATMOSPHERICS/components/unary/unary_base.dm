@@ -45,7 +45,7 @@
 
 //this is used when a machine_flags = WRENCHMOVE machine gets anchored down
 //we want to check that it doesn't form any connections where there is already a connection
-/obj/machinery/atmospherics/unary/wrenchAnchor(var/mob/user)
+/obj/machinery/atmospherics/unary/wrenchAnchor(var/mob/user, var/obj/item/I)
 	//this has to be first because ..() already starts the anchoring
 	if(!anchored)
 		for(var/obj/machinery/atmospherics/M in src.loc)

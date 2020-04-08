@@ -167,12 +167,12 @@
 	O.forceMove(loc)
 	O.mmi = new /obj/item/device/mmi(O)
 	O.mmi.transfer_identity(src)//Does not transfer key/client.
-	if(jobban_isbanned(O, "Cyborg")) //You somehow managed to get borged, congrats.
+	if(jobban_isbanned(O, "Cyborg") || !job_master.GetJob("Cyborg").player_old_enough(O.client)) //You somehow managed to get borged, congrats.
 		to_chat(src, "<span class='warning' style=\"font-family:Courier\">WARNING: Illegal operation detected.</span>")
 		to_chat(src, "<span class='danger'>Self-destruct mechanism engaged.</span>")
 		O.self_destruct()
-		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
-		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
+		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
+		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
 	if(!skipnaming)
 		spawn()
 			O.Namepick()
@@ -354,7 +354,7 @@
 			M.equip_to_slot(BG, slot_gloves)
 			BG.canremove = 0
 		my_appearance.s_tone = -250
-		lip_style = "red" 
+		lip_style = "red"
 		update_body() //daar word aan de deur geklopt
 		if(my_appearance.h_style != "Afro")
 			my_appearance.h_style = "Afro"

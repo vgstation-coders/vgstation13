@@ -23,7 +23,7 @@
 	icon_state = "incisionmanager"
 	item_state = "incisionmanager"
 	force = 7.5
-	surgery_speed = 0.5
+	toolspeed = 0.5
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
 
 /obj/item/weapon/retractor/manager/New()
@@ -52,7 +52,7 @@
 	icon_state = "pico_grasper"
 	item_state = "pico_grasper"
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
-	surgery_speed = 0.5
+	toolspeed = 0.5
 
 
 /obj/item/weapon/hemostat/suicide_act(mob/user)
@@ -92,7 +92,7 @@
 	damtype = "fire"
 	force = 10.0
 	throwforce = 5.0
-	surgery_speed = 0.6
+	toolspeed = 0.6
 	heat_production = 1500
 	source_temperature = TEMPERATURE_PLASMA
 	sterility = 100
@@ -104,7 +104,7 @@
 	icon_state = "lasercautery_old"
 	item_state = "laserscalpel2old"
 	force = 12.0
-	surgery_speed = 0.5
+	toolspeed = 0.5
 */
 
 /obj/item/weapon/cautery/laser/tier2
@@ -113,7 +113,7 @@
 	icon_state = "lasercautery_T2"
 	item_state = "laserscalpel2"
 	force = 15.0
-	surgery_speed = 0.4
+	toolspeed = 0.4
 
 /obj/item/weapon/surgicaldrill
 	name = "surgical drill"
@@ -137,7 +137,7 @@
 	desc = "Yours is the drill that will pierce the tiny heavens!"
 	icon_state = "diamond_drill"
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
-	surgery_speed = 0.1 //It's near instant like the mining one.
+	toolspeed = 0.1 //It's near instant like the mining one.
 
 
 /obj/item/weapon/surgicaldrill/suicide_act(mob/user)
@@ -184,7 +184,7 @@
 	source_temperature = TEMPERATURE_PLASMA //Even if it's laser based, it depends on plasma
 	damtype = "fire"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
-	surgery_speed = 0.6
+	toolspeed = 0.6
 	sterility = 100
 	var/cauterymode = 0 //1 = cautery enabled
 	var/obj/item/weapon/cautery/laser/held
@@ -222,7 +222,7 @@
 	if(used_item.is_screwdriver(user) && cauterymode)
 		if(held)
 			to_chat(user, "<span class='notice'>You detach \the [held] and \the [src] switches to cutting mode.</span>")
-			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
+			used_item.playtoolsound(src, 10)
 			held.add_fingerprint(user)
 			held.forceMove(get_turf(src))
 			held = null
@@ -246,7 +246,7 @@
 	desc = "A laser scalpel."
 	icon_state = "scalpel_laser_old"
 	item_state = "laserscalpel2old"
-	surgery_speed = 0.5
+	toolspeed = 0.5
 
 /obj/item/weapon/scalpel/laser/old/New()
 	..()
@@ -260,7 +260,7 @@
 	icon_state = "scalpel_laser2"
 	item_state = "laserscalpel2"
 	force = 15.0
-	surgery_speed = 0.4
+	toolspeed = 0.4
 
 /obj/item/weapon/scalpel/laser/tier2/New()
 	..()
@@ -298,7 +298,7 @@
 	item_state = "plasmasaw"
 	force = 18.0
 	sharpness = 1.3
-	surgery_speed = 0.5
+	toolspeed = 0.5
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
 	heat_production = 3000
@@ -347,7 +347,7 @@
 	item_state = "clot"
 	sharpness = null
 	sharpness_flags = null
-	surgery_speed = 0.5
+	toolspeed = 0.5
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
 	var/foam = 0
 
@@ -411,7 +411,7 @@
 	icon_state = "bone-mender"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "bonemender"
-	surgery_speed = 0.5
+	toolspeed = 0.5
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
 
 

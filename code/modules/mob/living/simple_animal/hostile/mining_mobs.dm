@@ -882,11 +882,15 @@ obj/item/asteroid/basilisk_hide/New()
 	icon_dead = "pillow_dead"
 	holder_type = /obj/item/weapon/holder/animal/pillow
 	size = SIZE_SMALL
+	var/pacify_aura = TRUE
 	var/image/eyes
+
+/mob/living/simple_animal/hostile/asteroid/pillow/no_pacify
+	pacify_aura = FALSE
 
 /mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)
 	..()
-	if(!isDead())
+	if(!isDead() && pacify_aura)
 		to_chat(user, "<span class = 'notice'>It looks so comforting, you feel like the world, at least in the general vicinity, is at peace.</span>")
 
 /mob/living/simple_animal/hostile/asteroid/pillow/New()

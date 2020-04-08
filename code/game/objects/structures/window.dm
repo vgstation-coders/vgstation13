@@ -397,7 +397,7 @@ var/list/one_way_windows
 			if(WINDOWSECURE) //Reinforced, fully secured
 
 				if(W.is_screwdriver(user))
-					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+					W.playtoolsound(loc, 75)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 					"<span class='notice'>You unfasten \the [src] from its frame.</span>")
 					d_state = WINDOWUNSECUREFRAME
@@ -406,14 +406,14 @@ var/list/one_way_windows
 			if(WINDOWUNSECUREFRAME)
 
 				if(W.is_screwdriver(user))
-					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+					W.playtoolsound(loc, 75)
 					user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 					"<span class='notice'>You fasten \the [src] to its frame.</span>")
 					d_state = WINDOWSECURE
 					return
 
 				if(iscrowbar(W))
-					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
+					W.playtoolsound(loc, 75)
 					user.visible_message("<span class='warning'>[user] pries \the [src] from its frame.</span>", \
 					"<span class='notice'>You pry \the [src] from its frame.</span>")
 					d_state = WINDOWLOOSEFRAME
@@ -422,14 +422,14 @@ var/list/one_way_windows
 			if(WINDOWLOOSEFRAME)
 
 				if(iscrowbar(W))
-					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
+					W.playtoolsound(loc, 75)
 					user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
 					"<span class='notice'>You pry \the [src] into its frame.</span>")
 					d_state = WINDOWUNSECUREFRAME
 					return
 
 				if(W.is_screwdriver(user))
-					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+					W.playtoolsound(loc, 75)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src]'s frame from the floor.</span>", \
 					"<span class='notice'>You unfasten \the [src]'s frame from the floor.</span>")
 					d_state = WINDOWLOOSE
@@ -453,7 +453,7 @@ var/list/one_way_windows
 			if(WINDOWLOOSE)
 
 				if(W.is_screwdriver(user))
-					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+					W.playtoolsound(loc, 75)
 					user.visible_message("<span class='notice'>[user] fastens \the [src]'s frame to the floor.</span>", \
 					"<span class='notice'>You fasten \the [src]'s frame to the floor.</span>")
 					d_state = WINDOWLOOSEFRAME
@@ -474,7 +474,7 @@ var/list/one_way_windows
 					user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 						"<span class='notice'>You start disassembling \the [src].</span>")
 					if(WT.do_weld(user, src, 40, 1) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
-						playsound(src, 'sound/items/Welder.ogg', 100, 1)
+						WT.playtoolsound(src, 100)
 						user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 						"<span class='notice'>You disassemble \the [src].</span>")
 						drop_stack(sheet_type, get_turf(src), sheetamount, user)
@@ -486,7 +486,7 @@ var/list/one_way_windows
 	else if(!reinforced) //Normal window steps
 
 		if(W.is_screwdriver(user))
-			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+			W.playtoolsound(loc, 75)
 			user.visible_message("<span class='[d_state ? "warning":"notice"]'>[user] [d_state ? "un":""]fastens \the [src].</span>", \
 			"<span class='notice'>You [d_state ? "un":""]fasten \the [src].</span>")
 			d_state = !d_state

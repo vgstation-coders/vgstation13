@@ -729,6 +729,8 @@ SEE_PIXELS	256
 #define VERM_SYPHONER 11
 #define VERM_GREMTIDE 12
 #define VERM_CRABS 13
+#define VERM_DIONA 14
+#define VERM_MUSHMEN 15
 
 
 #define MONSTER_BEAR    0
@@ -919,6 +921,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define ELECTRIC_HEAL 2048
 #define IS_SPECIES_MUTE 4096
 #define REQUIRE_DARK 8192
+#define RAD_IMMUNE 16384
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -1277,6 +1280,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_GOLEM "Golem"
 #define LANGUAGE_SLIME "Slime"
 #define LANGUAGE_MARTIAN "Martian"
+#define LANGUAGE_INSECT "Insectoid"
+#define LANGUAGE_DEATHSQUAD "Deathsquad"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
@@ -1617,3 +1622,10 @@ var/proccalls = 1
 
 // How many times to retry winset()ing window parameters before giving up
 #define WINSET_MAX_ATTEMPTS 10
+
+// E-Sports teams
+#define ESPORTS_CULTISTS "Team Geometer"
+#define ESPORTS_SECURITY "Team Security"
+
+var/list/weekend_days = list("Friday", "Saturday", "Sunday")
+#define IS_WEEKEND (weekend_days.Find(time2text(world.timeofday, "Day")))

@@ -14,6 +14,8 @@
 	fire_delay = 0
 	fire_sound = 'sound/weapons/hookshot_fire.ogg'
 	clumsy_check = 0
+	var/chaintype = /obj/effect/overlay/hookchain
+	var/hooktype = /obj/item/projectile/hookshot
 	var/maxlength = 14
 	var/obj/item/projectile/hookshot/hook = null
 	var/list/links = list()
@@ -38,14 +40,9 @@
 /obj/item/weapon/gun/hookshot/New()
 	..()
 	for(var/i = 0;i <= maxlength; i++)
-		if(istype(src, /obj/item/weapon/gun/hookshot/flesh))
-			var/obj/effect/overlay/hookchain/flesh/HC = new(src)
-			HC.shot_from = src
-			links["[i]"] = HC
-		else
-			var/obj/effect/overlay/hookchain/HC = new(src)
-			HC.shot_from = src
-			links["[i]"] = HC
+		var/obj/effect/overlay/hookchain/HC = new chaintype(src)
+		HC.shot_from = src
+		links["[i]"] = HC
 
 /obj/item/weapon/gun/hookshot/Destroy()//if a single link of the chain is destroyed, the rest of the chain is instantly destroyed as well.
 	if(chain_datum)
@@ -81,7 +78,7 @@
 		panic = 0
 
 	if(!hook && !rewinding && !clockwerk && !check_tether())//if there is no projectile already, and we aren't currently rewinding the chain, or reeling in toward a target,
-		hook = new/obj/item/projectile/hookshot(src)		//and that the hookshot isn't currently sustaining a tether, then we can fire.
+		hook = new hooktype(src)		//and that the hookshot isn't currently sustaining a tether, then we can fire.
 		in_chamber = hook
 		firer = loc
 		update_icon()
@@ -466,3 +463,33 @@
 		chain_datum.snap = 1
 		chain_datum.Delete_Chain()
 	..()
+
+/obj/item/weapon/gun/hookshot/whip
+	name = "bullwhip"
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "bullwhip"
+	fire_sound = 'sound/weapons/whip_crack.ogg'
+	fire_action = "flick"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 5
+	maxlength = 5
+	hooktype = /obj/item/projectile/hookshot/whip
+	empty_sound = null
+	slot_flags = SLOT_BELT
+
+/obj/item/weapon/gun/hookshot/whip/update_icon()
+	return
+
+/obj/item/weapon/gun/hookshot/whip/vampkiller
+	name = "vampire killer"
+	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It's said to be imbued with holy powers, but this one looks like a cheap replica."
+	icon_state = "vampkiller"
+	item_state = "vampkiller"
+	force = 15
+	hooktype = /obj/item/projectile/hookshot/whip/vampkiller
+	fire_sound = 'sound/weapons/vampkiller.ogg'
+
+/obj/item/weapon/gun/hookshot/whip/vampkiller/true
+	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It is blessed to be effective against the undead and radiates an awesome holy aura."
+	icon_state = "vampkiller_true"
+	hooktype = /obj/item/projectile/hookshot/whip/vampkiller/true

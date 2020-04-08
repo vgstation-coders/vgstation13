@@ -30,7 +30,7 @@
 	air_contents.update_values()
 	update_icon()
 
-/obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user)
+/obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

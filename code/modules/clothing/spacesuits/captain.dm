@@ -12,7 +12,7 @@
 	brightness_on = 4
 	on = 0
 	no_light = 0
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	species_restricted = null
 
 
@@ -26,7 +26,7 @@
 	icon_state = "caparmor"
 	item_state = "capspacesuit"
 	species_restricted = null
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	w_class = W_CLASS_LARGE
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.02

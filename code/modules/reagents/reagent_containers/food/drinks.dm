@@ -848,6 +848,19 @@
 	reagents.add_reagent(BEER, 25)
 	reagents.add_reagent(POTATO, 25)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer
+	name = "Geometer"
+	desc = "Summon the Beast."
+	icon_state = "geometer"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer/New()
+	..()
+	reagents.add_reagent(GEOMETER, 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer/blanco
+	name = "Geometer Blanco"
+	desc = "'member when we had to research words..."
+	icon_state = "geometer_blanco"
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka
 	name = "Greyshit Vodka"
 	desc = "Experts spent a long time squatting around a mixing bench to bring you this."
@@ -1607,7 +1620,7 @@
 			if (!user.Adjacent(src))
 				return
 			var/distance = manhattan_distance(over_location, src)
-			if (distance >= 8) // More than a full screen to go
+			if (distance >= 8 || distance == 0) // More than a full screen to go, or we're not moving at all
 				return ..()
 
 			// Geometrically checking if we're on a straight line.

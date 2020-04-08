@@ -40,7 +40,7 @@
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
 	var/specheatcap = 1 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
 
-/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/remove_reagents = FALSE)
+/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
 
 	if(!holder)
@@ -76,8 +76,7 @@
 			if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
-					if(remove_reagents)
-						self.holder.remove_reagent(self.id, self.volume/2)
+
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
@@ -1647,6 +1646,22 @@
 	density = 4.33
 	specheatcap = 2.64
 
+/datum/reagent/nitroglycerin/on_mob_life(var/mob/living/M)
+	M.adjustToxLoss(2 * REM)
+	if(prob(80))
+		M.adjustOxyLoss(2 * REM)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/E = H.internal_organs_by_name["heart"]
+		if(istype(E) && !E.robotic)
+			if(E.damage > 0)
+				E.damage = max(0, E.damage - 0.2)
+		if(prob(15))
+			H.custom_pain("You feel a throbbing pain in your head", 1)
+			M.adjustBrainLoss(2 * REM)
+	if(prob(50))
+		M.drowsyness = max(M.drowsyness, 4)
+
 /datum/reagent/radium
 	name = "Radium"
 	id = RADIUM
@@ -2090,8 +2105,9 @@
 	O.clean_blood()
 	if(istype(O, /obj/effect/decal/cleanable))
 		qdel(O)
-	else if(O.color && istype(O, /obj/item/weapon/paper))
-		O.color = null
+	else if(O.color)
+		O.color = ""
+	..()
 
 /datum/reagent/space_cleaner/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -2109,6 +2125,8 @@
 		for(var/mob/living/carbon/human/H in T)
 			if(isslimeperson(H))
 				H.adjustToxLoss(rand(5, 10)/10)
+
+	T.color = ""
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -2139,6 +2157,7 @@
 				if(H.shoes.clean_blood())
 					H.update_inv_shoes(0)
 		M.clean_blood()
+		M.color = ""
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2184,7 +2203,7 @@
 				else if(prob(5))
 					H.vomit()
 	data++
-
+	M.color = ""
 	M.adjustToxLoss(4 * REM)
 
 /datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -3012,7 +3031,6 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
-	custom_metabolism = REAGENTS_METABOLISM/2.5
 
 /datum/reagent/cryoxadone/on_mob_life(var/mob/living/M)
 
@@ -3033,7 +3051,6 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
-	custom_metabolism = REAGENTS_METABOLISM/2.5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 
@@ -4377,6 +4394,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
 
@@ -4384,6 +4402,30 @@
 		return 1
 
 	M.nutrition += nutriment_factor
+
+//Now handle corn oil interactions
+	if(!has_had_heart_explode && ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/heart = H.internal_organs_by_name["heart"]
+		switch(volume)
+			if(1 to 15)
+				if(prob(5))
+					H.emote("me", 1, "burps.")
+					holder.remove_reagent(id, 0.1 * FOOD_METABOLISM)
+			if(15 to 100)
+				if(prob(10))
+					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
+				if(prob(5))
+					if(heart && !heart.robotic)
+						to_chat(H,"<span class='warning'>You feel a burn in your chest.</span>")
+						heart.take_damage(0.2, 1)
+			if(100 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
+				if(heart && !heart.robotic)
+					to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
+					has_had_heart_explode = 1 //That way it doesn't blow up any new transplant hearts
+					qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
+					H.adjustOxyLoss(60)
+					H.adjustBruteLoss(30)
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -5147,6 +5189,13 @@
 	M.druggy = max(M.druggy, 30)
 	M.dizziness += 5
 	M.drowsyness = 0
+
+/datum/reagent/drink/cold/geometer
+	name = "Geometer"
+	id = GEOMETER
+	description = "Summon the Beast."
+	color = "#ffd700"
+	adj_sleepy = -2
 
 /datum/reagent/drink/cold/spacemountainwind
 	name = "Space Mountain Wind"
@@ -5970,7 +6019,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#666300" //rgb: 102, 99, 0
 
-/datum/reagent/ethanol/deadrumm/threemileisland
+/datum/reagent/ethanol/deadrum/threemileisland
 	name = "Three Mile Island Iced Tea"
 	id = THREEMILEISLAND
 	description = "Made for a woman. Strong enough for a man."
@@ -6715,6 +6764,21 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
 	custom_metabolism = 0.05
+	overdose_am = REAGENTS_OVERDOSE
+
+/datum/reagent/honkserum/on_overdose(var/mob/living/H)
+
+	if (H.mind.miming)
+		H.mind.miming = 0
+		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in H.spell_list)
+			H.remove_spell(spell)
+		for(var/spell/targeted/oathbreak/spell in H.spell_list)
+			H.remove_spell(spell)
+		if (istype(H.wear_mask, /obj/item/clothing/mask/gas/mime/stickymagic))
+			qdel(H.wear_mask)
+			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")			
+		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
+
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 

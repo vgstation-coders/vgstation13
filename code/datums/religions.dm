@@ -38,11 +38,18 @@
 				chaplain_religion.holy_book = B
 				H.equip_or_collect(new rel.preferred_incense(H.back), slot_in_backpack)
 				rel.religiousLeader = H.mind
+				var/new_alt_title = (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
 				for(var/object in H.get_body_slots())
 					if(istype(object, /obj/item/weapon/card/id))
 						var/obj/item/weapon/card/id/ID = object
-						ID.assignment =  (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
-						ID.name = "[H]'s ID Card ([ID.assignment])"
+						ID.assignment = new_alt_title
+						ID.name = "[H.mind.name]'s ID Card ([ID.assignment])"
+					if(istype(object, /obj/item/device/pda))
+						var/obj/item/device/pda/PDA = object
+						if(PDA.owner == H.real_name)
+							PDA.ownjob = new_alt_title
+							PDA.name = "PDA-[PDA.owner] ([PDA.ownjob])"
+				data_core.manifest_modify(H.real_name, new_alt_title)
 				rel.convert(H, null, can_renounce = FALSE)
 				rel.OnPostActivation()
 				to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [rel.name]. Convert people by [rel.convert_method]")
@@ -358,6 +365,10 @@
 		if ("The Dokument")
 			R.holy_book.icon_state = "gunbible"
 			R.holy_book.item_state = "gunbible"
+		if("Holy Grimoire")
+			R.holy_book.icon_state = "holygrimoire"
+			R.holy_book.item_state = "holygrimoire"
+			R.holy_book.desc = "A version of the Christian Bible with several apocryphal sections appended which detail how to combat evil forces of the night. Apply to head repeatedly."
 		else
 			//If christian bible, revert to default
 			R.holy_book.icon_state = "bible"
@@ -1177,10 +1188,10 @@
 	deity_name = "Peter Kropotkin"
 	bible_name = "The Conquest of Bread"
 	bible_type = /obj/item/weapon/storage/bible/booze
-	male_adept = "Activist" 
+	male_adept = "Activist"
 	female_adept = "Activist"
 	keys = list("anarcho-communism", "communalism", "mutualism")
-	
+
 /datum/religion/ancom/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/mask/balaclava(H), slot_l_store) // Black Bloc
 
@@ -1342,3 +1353,70 @@
 	spawn(rand(1,3))
 		L.get_subtle_message(buttbottify(prayer_message), src.deity_name)
 		L.playsound_local(src,'sound/misc/fart.ogg', 50, 1)
+
+/datum/religion/belmont
+	name = "Brotherhood of Light"
+	deity_name = "The Almighty"
+	bible_name = "Holy Grimoire"
+	male_adept = "Vampire Hunter"
+	female_adept = "Vampire Hunter"
+	keys = list("vampire killer", "vampire hunter", "belmont clan", "die monster", "uuddlrlrbastart")
+	bookstyle = "Holy Grimoire"
+
+/datum/religion/belmont/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/vamphunter, slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/head/vamphunter, slot_shoes)
+
+/datum/religion/esports
+	name = "E-Sports"
+	deity_name = "E-Sports"
+	bible_name = "Spess.TV End User License Agreement"
+	male_adept = "Donitos Pope"
+	female_adept = "Donitos Priestess"
+	keys = list("gaming", "esport", "esports", "e-sports", "electronic sports", "donitos", "geometer")
+	convert_method = "having others hold a bag of Donitos, while you do the same."
+	bookstyle = "Creeper"
+
+/datum/religion/esports/equip_chaplain(mob/living/carbon/human/H)
+	var/turf/here = get_turf(H)
+	new /obj/item/weapon/crowbar/red(here)
+	var/obj/item/clothing/head/donitos_pope/pope_hat = new(here)
+	H.equip_to_appropriate_slot(pope_hat, override=TRUE)
+	var/obj/structure/closet/crate/flatpack/tv_pack1 = new(here)
+	tv_pack1.insert_machine(new /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen)
+	var/obj/structure/closet/crate/flatpack/tv_pack2 = new(here)
+	tv_pack2.insert_machine(new /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen)
+
+	var/obj/structure/closet/crate/flatpack/cameras_pack = new(here)
+	cameras_pack.insert_machine(new /obj/item/weapon/storage/lockbox/team_security_cameras)
+
+	var/obj/structure/closet/crate/flatpack/vending_machine_pack = new(here)
+	vending_machine_pack.insert_machine(new /obj/machinery/vending/team_security)
+
+	tv_pack1.add_stack(tv_pack2)
+	tv_pack1.add_stack(cameras_pack)
+	tv_pack1.add_stack(vending_machine_pack)
+
+/datum/religion/esports/convertCeremony(mob/living/preacher, mob/living/subject)
+	var/obj/item/weapon/reagent_containers/food/snacks/donitos/preacher_donitos = preacher.get_held_item_by_index(preacher.find_held_item_by_type(/obj/item/weapon/reagent_containers/food/snacks/donitos))
+	if(!preacher_donitos)
+		to_chat(preacher, "<span class='warning'>You need to hold a bag of Donitos to begin the conversion.</span>")
+		return FALSE
+	var/obj/item/weapon/reagent_containers/food/snacks/donitos/subject_donitos = subject.get_held_item_by_index(subject.find_held_item_by_type(/obj/item/weapon/reagent_containers/food/snacks/donitos))
+	if(!subject_donitos)
+		to_chat(preacher, "<span class='warning'>The subject needs to hold a bag of Donitos to begin the conversion.</span>")
+		return FALSE
+
+	subject.visible_message("<span class='notice'>\The [preacher] attemps to convert \the [subject] to [name].</span>")
+
+	if(!convertCheck(subject))
+		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
+		return FALSE
+
+	preacher_donitos.attack_self(preacher)
+	subject_donitos.attack_self(subject)
+
+	subject.visible_message("<span class='notice'>\The [subject] signs Spess.TV's End User License Agreement and becomes a registered user! Let's go watch some [deity_name]!</span>")
+
+	convert(subject, preacher)
+	return TRUE

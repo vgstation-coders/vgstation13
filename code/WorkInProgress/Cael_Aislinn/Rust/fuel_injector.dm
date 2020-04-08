@@ -73,7 +73,7 @@
 
 	cached_power_avail = avail()
 
-/obj/machinery/power/rust_fuel_injector/wrenchAnchor(var/mob/user)
+/obj/machinery/power/rust_fuel_injector/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(injecting)
 		to_chat(user, "Turn off \the [src] first.")
 		return FALSE

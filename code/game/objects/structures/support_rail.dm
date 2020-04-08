@@ -16,7 +16,7 @@
 
 /obj/structure/support_rail/attackby(obj/item/weapon/W, mob/living/carbon/human/user as mob)
 	if(W.is_wrench(user))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 		M.amount = 1
 		qdel(src)

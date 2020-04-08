@@ -133,6 +133,15 @@
 	name = "plasmaman botanist helmet"
 	icon_state = "plasmamanBotanist_helmet0"
 	base_state = "plasmamanBotanist_helmet"
+	
+/obj/item/clothing/suit/space/plasmaman/librarian
+	name = "plasmaman librarian suit"
+	icon_state = "plasmamanLibrarian_suit"
+
+/obj/item/clothing/head/helmet/space/plasmaman/librarian
+	name = "plasmaman librarian helmet"
+	icon_state = "plasmamanLibrarian_helmet0"
+	base_state = "plasmamanLibrarian_helmet"	
 
 /obj/item/clothing/suit/space/plasmaman/chaplain
 	name = "plasmaman chaplain suit"

@@ -109,7 +109,7 @@
 
 	else if(istype(I, /obj/item/weapon/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
-		playsound('sound/items/Crowbar.ogg', 50, 1)
+		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
 			if(shattered)
 				getFromPool(/obj/item/weapon/shard, loc)

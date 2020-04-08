@@ -128,7 +128,8 @@ var/list/admin_verbs_fun = list(
 	/client/proc/makepAI,
 	/client/proc/set_blob_looks,
 	/client/proc/set_teleport_pref,
-	/client/proc/deadchat_singularity
+	/client/proc/deadchat_singularity,
+	/client/proc/view_all_rods,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -158,7 +159,8 @@ var/list/admin_verbs_server = list(
 	/client/proc/toggle_random_events,
 	/client/proc/check_customitem_activity,
 	/client/proc/dump_chemreactions,
-	/client/proc/save_coordinates
+	/client/proc/save_coordinates,
+	/datum/admins/proc/mass_delete_in_zone,
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
@@ -1263,4 +1265,12 @@ var/list/admin_verbs_mod = list(
 	if(holder)
 		holder.PersistencePanel()
 	feedback_add_details("admin_verb","PEP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return
+
+/client/proc/view_all_rods()
+	set name = "VIEW-ALL-RODS"
+	set category = "Fun"
+	if(holder)
+		holder.ViewAllRods()
+	feedback_add_details("admin_verb","V-ROD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return

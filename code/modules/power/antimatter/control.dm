@@ -173,7 +173,7 @@
 		return
 	if(W.is_wrench(user))
 		if(!anchored)
-			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+			W.playtoolsound(src, 75)
 			user.visible_message("[user.name] secures the [src.name] to the floor.", \
 				"You secure the anchor bolts to the floor.", \
 				"You hear a ratchet")
@@ -182,7 +182,7 @@
 			check_shield_icons()
 			connect_to_network()
 		else if(!linked_shielding.len > 0)
-			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+			W.playtoolsound(src, 75)
 			user.visible_message("[user.name] unsecures the [src.name].", \
 				"You remove the anchor bolts.", \
 				"You hear a ratchet")

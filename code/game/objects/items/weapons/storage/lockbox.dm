@@ -463,3 +463,26 @@
 	.=..()
 	if (.)
 		playsound(loc, 'sound/machines/click.ogg', 30, -5)
+
+/obj/item/weapon/storage/lockbox/security_sponsored
+	name = "sponsored Team Security lockbox"
+	desc = "A sponsor-sticker-plastered lockbox."
+	req_one_access = list(access_brig)
+	storage_slots = 6
+
+/obj/item/weapon/storage/lockbox/security_sponsored/New()
+	..()
+	for(var/i in 1 to 4)
+		new /obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch(src)
+	new /obj/item/weapon/implanter/spesstv(src)
+
+/obj/item/weapon/storage/lockbox/team_security_cameras
+	name = "sponsored Team Security cameras lockbox"
+	desc = "A sponsor-sticker-plastered lockbox."
+	req_one_access = list(access_brig)
+	storage_slots = 6
+
+/obj/item/weapon/storage/lockbox/team_security_cameras/New()
+	..()
+	for(var/i in 1 to 6)
+		new /obj/item/clothing/accessory/spesstv_tactical_camera(src)

@@ -44,7 +44,6 @@
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Diona")
-	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
 /mob/living/carbon/human/skellington/New(var/new_loc, delay_ready_dna = 0)
@@ -85,6 +84,11 @@
 /mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Slime")
 	my_appearance.h_style = "Bald"
+	regenerate_icons()
+
+/mob/living/carbon/human/insectoid/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Insectoid")
+	my_appearance.h_style = "Insectoid Antennae"
 	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
@@ -295,15 +299,11 @@
 	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/restrained()
-	if (timestopped)
-		return 1 //under effects of time magick
-	if (check_handcuffs())
-		return 1
+	if (..())
+		return TRUE
 	if (istype(wear_suit, /obj/item/clothing/suit/straight_jacket))
-		return 1
-	return 0
-
-
+		return TRUE
+	return FALSE
 
 /mob/living/carbon/human/var/co2overloadtime = null
 /mob/living/carbon/human/var/temperature_resistance = T0C+75 //but why is this here
@@ -1607,7 +1607,7 @@
 		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
 
 /mob/living/carbon/human/reset_layer()
-	if(locked_to)
+	if(istype(locked_to, /obj/machinery/bot/mulebot)) //we only care about not appearing behind mulebots
 		return
 	if(lying)
 		plane = LYING_HUMAN_PLANE
@@ -1949,7 +1949,7 @@ mob/living/carbon/human/isincrit()
 	return 1
 
 //this method handles user getting attacked with an emag - the original logic was in human_defense.dm,
-//but it's better that it belongs to human.dm 
+//but it's better that it belongs to human.dm
 /mob/living/carbon/human/emag_act(var/mob/attacker, var/datum/organ/external/affecting, var/obj/item/weapon/card/emag)
 	var/hit_area = affecting.display_name
 	if(!(affecting.status & ORGAN_ROBOT))
@@ -1961,3 +1961,17 @@ mob/living/carbon/human/isincrit()
 		to_chat(attacker, "<span class='warning'>You sneakily slide [emag] into the dataport on \the [src]'s [hit_area] and short out the safeties.</span>")
 		affecting.sabotaged = TRUE
 	return FALSE
+
+/mob/living/carbon/human/swap_hand()
+	var/valid_hand = FALSE
+	for(var/i = 0; i < held_items.len; i++)
+		if (++active_hand > held_items.len)
+			active_hand = 1
+		if (can_use_hand_or_stump(active_hand))
+			valid_hand = TRUE
+			break
+
+	if(!valid_hand)
+		active_hand = 0
+
+	update_hands_icons()

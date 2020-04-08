@@ -1183,6 +1183,7 @@
 	plant_dmi = 'icons/obj/hydroponics/bluespacebanana.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana)
 	mutants = null
+	chems = list(BANANA = list(1,10), HONKSERUM = list(1,10))
 
 /datum/seed/corn
 	name = "corn"

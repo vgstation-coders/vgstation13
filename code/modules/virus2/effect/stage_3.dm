@@ -513,11 +513,22 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	name = "Colorful Syndrome"
 	desc = "Causes the infected to synthesize smoke & rainbow colourant."
 	stage = 3
-	badness = EFFECT_DANGER_HINDRANCE
+	badness = EFFECT_DANGER_HARMFUL
 
 /datum/disease2/effect/colorsmoke/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='notice'>You feel colorful!</span>")
 	mob.reagents.add_reagent(COLORFUL_REAGENT, 5)
+	mob.reagents.add_reagent(PAISMOKE, 5)
+
+/datum/disease2/effect/cleansmoke
+	name = "Cleaning Syndrome"
+	desc = "Causes the infected to synthesize smoke & space cleaner."
+	stage = 3
+	badness = EFFECT_DANGER_HELPFUL
+
+/datum/disease2/effect/cleansmoke/activate(var/mob/living/mob)
+	to_chat(mob, "<span class='notice'>You feel clean!</span>")
+	mob.reagents.add_reagent(CLEANER, 5)
 	mob.reagents.add_reagent(PAISMOKE, 5)
 
 /datum/disease2/effect/chimera
