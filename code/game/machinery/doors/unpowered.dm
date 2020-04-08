@@ -27,13 +27,13 @@
 
 	if(locked)
 		return
-		
+
 	..()
 
 /obj/machinery/door/unpowered/shuttle
 	icon = 'icons/obj/doors/shuttle.dmi'
 	icon_state = "door_closed"
-	animation_delay = 14
+	animation_delay = 7
 
 	explosion_block = 1
 
