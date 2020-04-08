@@ -62,10 +62,10 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/available_for_job(var/user_job)
 	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
 
-//A condition which gets attached to the spawn_item proc that will apply on new()
-//Use this with things that have variables attached to their New() 
-/datum/uplink_item/proc/buy_special_condition(var/mob/user)
-	return
+//This will get called that is essentially a New() by default.
+//Use this to make New()s that have extra conditions, such as bundles
+/datum/uplink_item/proc/new_uplink_item(var/new_item, var/turf/location, mob/user)
+	new new_item(location)
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	if(!available_for_job(U.job))
@@ -73,8 +73,7 @@ var/list/uplink_items = list()
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
-	var/condition = buy_special_condition(user)
-	return new item(loc, condition)
+	new_uplink_item(item, loc, user)
 
 /datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
 	if(!istype(U))
@@ -368,9 +367,8 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/card/emag
 	cost = 6
 
-//Uplink emags are infinite
-/datum/uplink_item/device_tools/emag/buy_special_condition()
-	return 1
+/datum/uplink_item/device_tools/emag/new_uplink_item(new_item, turf/location, mob/user)
+	new new_item(location, 1) //Uplink emags are infinite
 
 /datum/uplink_item/device_tools/explosive_gum
 	name = "Explosive Chewing Gum"
@@ -543,9 +541,11 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 14
 
-/datum/uplink_item/badass/bundle/buy_special_condition(var/mob/user)
-	if(isplasmaman(A))
-		return "plasmaman"
+/datum/uplink_item/badass/bundle/new_uplink_item(new_item, location, user)
+	var/list/conditions = list()
+	if(isplasmaman(user))
+		conditions += "plasmaman"
+	new new_item(location, conditions)
 
 /datum/uplink_item/badass/balloon
 	name = "For showing that you are The Boss"
@@ -571,7 +571,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
-/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/obj/item/device/uplink/U)
+/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, user)
 
 	var/list/buyable_items = get_uplink_items()
 	var/list/possible_items = list()
@@ -590,7 +590,7 @@ var/list/uplink_items = list()
 		var/datum/uplink_item/I = pick(possible_items)
 		U.uses -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
-		return new I.item(loc)
+		new_uplink_item(item, loc, user)
 
 /datum/uplink_item/jobspecific/command_security
 	category = "Command and Security Specials"
@@ -771,11 +771,6 @@ var/list/uplink_items = list()
 	cost = 6
 	discounted_cost = 4
 	jobs_with_discount = list("Cargo Technician", "Quartermaster")
-
-/datum/uplink_item/jobspecific/cargo/syndiepaper/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
-	U.uses -= max(cost, 0)
-	feedback_add_details("traitor_uplink_items_bought", name)
-	return new item(loc) //Fix for amount ref
 
 /datum/uplink_item/jobspecific/cargo/mastertrainer
 	name = "Master Trainer's Belt"

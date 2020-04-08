@@ -463,11 +463,6 @@
 	if(!success)
 		user.forceMove(pick(L))
 
-/obj/item/weapon/spellbook/oneuse/telekinetic_choke
-	spell = /spell/targeted/telekinetic_choke
-	spellname = "Telekinetic Choke"
-	desc = "It's hard to look at this book without gasping."
-
 /obj/item/weapon/spellbook/oneuse/telekinetic_choke/recoil(mob/living/carbon/user)
 	to_chat(user, "<span class='warning'>You feel out of breath!</span>")
 	user.adjustOxyLoss(60)

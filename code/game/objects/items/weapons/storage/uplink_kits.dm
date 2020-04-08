@@ -1,6 +1,9 @@
-/obj/item/weapon/storage/box/syndicate/New(var/loc, var/condition)
+/obj/item/weapon/storage/box/syndicate/New(var/loc, var/list/conditions, var/forced_bundle)
 	..()
 	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "sith" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
+
+	if(forced_bundle)
+		tagname = forced_bundle
 
 	switch (tagname)
 		if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -119,12 +122,11 @@
 			new /obj/item/clothing/accessory/storage/bandolier(src)
 
 		if ("sith")
-			if(condition == "plasmaman") //General Veers, you're too close to me
+			if("plasmaman" in conditions) //General Veers, you're too close to me
 				new /obj/item/weapon/melee/energy/sword/red(src)
 				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
-				new /obj/item/weapon/spellbook/oneuse/telekinetic_choke(src)
-				new /obj/item/clothing/head/vader(src)
-				new /obj/item/clothing/suit/vader(src)
+				new /obj/item/clothing/head/helmet/space/plasmaman/sith(src)
+				new /obj/item/clothing/suit/space/plasmaman/sith(src)
 			else // It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
 				new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
 				new /obj/item/weapon/melee/energy/sword/red(src) //Combine these into a double e-sword
@@ -280,7 +282,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	..()
 	new /obj/item/weapon/implanter/traitor(src)
 	new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
-	
+
 /obj/item/weapon/storage/box/syndie_kit/flaregun
 	name = "box (modified flare gun)"
 
