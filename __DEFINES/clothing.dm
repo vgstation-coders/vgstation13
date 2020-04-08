@@ -30,3 +30,8 @@
 #define LT_MODE_FFA "free for all"
 #define LT_FIREMODE_LASER "laser"
 #define LT_FIREMODE_TASER "taser"
+
+// voice changer
+
+#define VOICE_CHANGER_SAYS "says"
+#define VOICE_CHANGER_STATES "states"
