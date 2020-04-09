@@ -12,7 +12,7 @@
 		if(ghost && ghost.can_reenter_corpse)
 			key = mind.key // Force the ghost in here
 	if(Owner)
-		faction = "\ref[Owner]"
+		faction = "necro"
 		friends.Add(Owner)
 		creator = Owner
 		if(client)
