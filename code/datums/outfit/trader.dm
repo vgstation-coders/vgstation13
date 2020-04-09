@@ -23,9 +23,9 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
 		),
 	)
-	
+
 	items_to_collect = list(
-		/obj/item/weapon/storage/wallet/trader = "Surival Box",
+		/obj/item/weapon/storage/wallet/trader = "Survival Box",
 	)
 
 	pda_type = null
@@ -35,8 +35,8 @@
 /datum/outfit/trader/pre_equip(var/mob/living/carbon/human/H)
 	switch(H.mind.role_alt_title) // Add to the survival box in case we don't have a backbag.
 		if("Trader") //Traders get snacks and a coin
-			items_to_collect[/obj/item/weapon/storage/box/donkpockets/random_amount] = "Surival Box"
-			items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/thermos/full] = "Surival Box"
+			items_to_collect[/obj/item/weapon/storage/box/donkpockets/random_amount] = "Survival Box"
+			items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/thermos/full] = "Survival Box"
 			items_to_collect[/obj/item/weapon/coin/trader] = "Survival Box"
 
 		if("Merchant") //Merchants get an implant
