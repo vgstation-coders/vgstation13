@@ -48,6 +48,7 @@
 	id_type = /obj/item/weapon/card/id/rd
 
 /datum/outfit/rd/post_equip(var/mob/living/carbon/human/H)
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Science:</b> [SCI_FREQ]<br/>")
 
