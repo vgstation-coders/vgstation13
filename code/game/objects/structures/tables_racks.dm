@@ -360,16 +360,23 @@
 		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
 			return
 		var/mob/living/carbon/M = user
-		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
-		M.adjustBrainLoss(5)
-		M.Knockdown(1)
-		M.Stun(1)
-		if (prob(50))
-			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-		else
-			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
-		M.visible_message("<span class='danger'>[user] bangs \his head on \the [src].</span>", "<span class='danger'>You bang your head on \the [src].</span>", "You hear a bang.")
-		return
+		M.visible_message("<span class='danger'>[M] is attempting to climb over the table!</span>", "<span class='danger'>You attempt to climb over the table!</span>")
+		if(do_after(M, src, 50))
+			if(prob(1) && Holiday == APRIL_FOOLS_DAY)
+				M.forceMove(src.loc)
+				M.visible_message("<span class='danger'>[M] successfully climbs \the [src]! What a champion!</span>", "<span class='danger'>You successfully climb \the [src]!</span>")
+				return
+			else
+				M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
+				M.adjustBrainLoss(5)
+				M.Knockdown(1)
+				M.Stun(1)
+				if (prob(50))
+					playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
+				else
+					playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
+				M.visible_message("<span class='danger'>[user] slips and bangs \his head on \the [src].</span>", "<span class='danger'>You slip and bang your head on \the [src].</span>", "You hear a bang.")
+				return
 	return ..()
 
 /obj/structure/table/attackby(obj/item/W as obj, mob/user as mob, params)
