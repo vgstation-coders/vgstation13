@@ -124,7 +124,7 @@
 	speech.message = replacetext(speech.message,"drink","water")
 	speech.message = replacetext(speech.message,"feminist","empowered woman")
 	speech.message = replacetext(speech.message,"i hate you","you're mean")
-	speech.message = replacetext(speech.message,"nigger","african american")
+	speech.message = replacetext(speech.message,"nigger","african american") //It's a filter, it filters words
 	speech.message = replacetext(speech.message,"jew","jewish")
 	speech.message = replacetext(speech.message,"shit","shiz")
 	speech.message = replacetext(speech.message,"crap","poo")
@@ -396,7 +396,7 @@
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()
-			
+
 			if (!no_blood)
 				gibs(H.loc, H.virus2, H.dna)
 		else

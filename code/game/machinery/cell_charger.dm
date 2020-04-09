@@ -104,7 +104,7 @@
 
 /obj/machinery/cell_charger/attack_hand(mob/user)
 	if(charging)
-		if(emagged) //Oh shit nigger what are you doing
+		if(emagged) //Oh shit what are you doing
 			spark(src, 5)
 			spawn(15)
 				explosion(src.loc, -1, 1, 3, adminlog = 0) //Overload
