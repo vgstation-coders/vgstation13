@@ -1,0 +1,5 @@
+---
+author: ShiftyRail
+changes:
+  - tweak: Dynamic mode will no longer look at the security player count but rather the global player count for executing rulesets.
+delete-after: true

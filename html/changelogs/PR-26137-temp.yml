@@ -1,0 +1,5 @@
+---
+author: DamianX
+changes:
+  - bugfix: Fixed a bug that prevented handcuffed people from unbuckling themselves from chairs.
+delete-after: true

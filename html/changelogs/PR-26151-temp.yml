@@ -1,0 +1,5 @@
+---
+author: DamianX
+changes:
+  - tweak: Pills can now be crushed into cauldrons and barrels.
+delete-after: true

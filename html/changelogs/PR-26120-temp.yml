@@ -1,0 +1,5 @@
+---
+author: Irradiation
+changes:
+  - tweak: "Putrid zombies will no longer attack the zombies they've created."
+delete-after: true
