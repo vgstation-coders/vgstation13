@@ -64,7 +64,7 @@
 	manual_unbuckle(usr)
 
 /obj/structure/bed/proc/manual_unbuckle(var/mob/user)
-	if(user.incapacitated())
+	if(user.isStunned())
 		return FALSE
 
 	if(user.size <= SIZE_TINY)
