@@ -98,7 +98,7 @@
 				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
 
 	var/pop_and_enemies
-	if (ticker.current_state == GAME_STATE_PLAYING)
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
 		pop_and_enemies += mode.living_players.len
 	else
 		pop_and_enemies += mode.roundstart_pop_ready
