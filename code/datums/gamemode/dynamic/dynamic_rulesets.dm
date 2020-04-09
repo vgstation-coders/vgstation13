@@ -97,7 +97,13 @@
 			if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
 				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
 
-	var/pop_and_enemies = mode.living_players.len + enemies_count // Enemies count twice
+	var/pop_and_enemies
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		pop_and_enemies += mode.living_players.len
+	else
+		pop_and_enemies += mode.roundstart_pop_ready
+
+	pop_and_enemies += enemies_count // Enemies count twice
 
 	var/threat = round(mode.threat_level/10)
 	if (pop_and_enemies >= required_pop[threat])
