@@ -360,7 +360,7 @@
 		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
 			return
 		var/mob/living/carbon/M = user
-		M.visible_message("<span class='danger'>[M] is attempting to climb over the table!</span>", "<span class='danger'>You attempt to climb over the table!</span>")
+		M.visible_message("<span class='danger'>[M] is attempting to climb over \the [src]!</span>", "<span class='danger'>You attempt to climb over \the [src]!</span>")
 		if(do_after(M, src, 50))
 			if(prob(1) && Holiday == APRIL_FOOLS_DAY)
 				M.forceMove(src.loc)
