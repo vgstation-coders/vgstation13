@@ -274,8 +274,6 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/proc/OutOfCrit(var/mob/living/carbon/human/H)
 
-/datum/species/proc/equip(var/mob/living/carbon/human/H)
-
 // -- Outfit datums --
 /datum/species/proc/final_equip(var/mob/living/carbon/human/H)
 
@@ -704,11 +702,10 @@ var/global/list/whitelisted_species = list("Human")
 
 	move_speed_mod = 1
 
-/datum/species/muton/equip(var/mob/living/carbon/human/H)
+/datum/species/muton/final_equip(var/mob/living/carbon/human/H)
 	// Unequip existing suits and hats.
 	H.u_equip(H.wear_suit,1)
 	H.u_equip(H.head,1)
-
 	move_speed_mod = 1
 
 /datum/species/muton/gib(mob/living/carbon/human/H)
@@ -790,53 +787,6 @@ var/global/list/whitelisted_species = list("Human")
 					You are somewhat more adept at handling the lower pressures of space and colder temperatures.<br>\
 					You have talons with which you can slice others in a fist fight, and a beak which can be used to butcher corpses without the need for finer tools.<br>\
 					However, Oxygen is incredibly toxic to you, in breathing it or consuming it. You can only breathe nitrogen."
-
-/datum/species/vox/equip(var/mob/living/carbon/human/H)
-	// Unequip existing suits and hats.
-	if(H.mind.assigned_role != "MODE")
-		H.u_equip(H.wear_suit,1)
-		H.u_equip(H.head,1)
-	if(H.mind.assigned_role!="Clown")
-		H.u_equip(H.wear_mask,1)
-
-	H.equip_or_collect(new /obj/item/clothing/mask/breath/vox(H), slot_wear_mask)
-	var/suit=/obj/item/clothing/suit/space/vox/civ
-	var/helm=/obj/item/clothing/head/helmet/space/vox/civ
-	var/tank_slot = slot_s_store
-	var/tank_slot_name = "suit storage"
-	switch(H.mind.assigned_role)
-		if("Scientist")
-			suit=/obj/item/clothing/suit/space/vox/civ/science
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
-		if("Research Director")
-			suit=/obj/item/clothing/suit/space/vox/civ/science/rd
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/rd
-		if("Roboticist")
-			suit=/obj/item/clothing/suit/space/vox/civ/science/roboticist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/roboticist
-		if("Trader")
-			suit = /obj/item/clothing/suit/space/vox/civ/trader
-			helm = /obj/item/clothing/head/helmet/space/vox/civ/trader
-
-		if("MODE") // Gamemode stuff
-			switch(H.mind.special_role)
-				if("Wizard")
-					suit = null
-					helm = null
-					tank_slot = null
-					tank_slot_name = "hand"
-	if(suit)
-		H.equip_or_collect(new suit(H), slot_wear_suit)
-	if(helm)
-		H.equip_or_collect(new helm(H), slot_head)
-	if(tank_slot)
-		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
-	else
-		H.put_in_hands(new/obj/item/weapon/tank/nitrogen(H))
-	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name].</span>")
-	H.internal = H.get_item_by_slot(tank_slot)
-	if (H.internals)
-		H.internals.icon_state = "internal1"
 
 // -- Outfit datums --
 /datum/species/vox/final_equip(var/mob/living/carbon/human/H)
