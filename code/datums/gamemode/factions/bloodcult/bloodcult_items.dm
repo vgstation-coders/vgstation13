@@ -55,10 +55,8 @@ var/list/arcane_tomes = list()
 			<a href='byond://?src=\ref[src];page=[PAGE_FOREWORD]'><label> * </label> <li> Foreword</a> </li>"}
 
 	var i = 1
-	for(var/subtype in subtypesof(/datum/rune_spell))
+	for(var/subtype in subtypesof(/datum/rune_spell/blood_cult))
 		var/datum/rune_spell/blood_cult/instance = subtype
-		if(instance == /datum/rune_spell/blood_cult)
-			continue
 		if (initial(instance.Act_restriction) <= veil_thickness)
 			dat += "<a href='byond://?src=\ref[src];page=[i]'><label> \Roman[i] </label> <li>  [initial(instance.name)] </li></a>"
 			if (i == current_page)
