@@ -306,7 +306,8 @@
 		var/mob/M = mover
 		if(M.flying)
 			return 1
-		if(istype(M.loc, /obj/structure/table))
+		var/obj/structure/table/t = locate() in M.loc
+		if(t)
 			return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
