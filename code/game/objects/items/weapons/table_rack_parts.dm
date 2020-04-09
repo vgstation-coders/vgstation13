@@ -58,14 +58,28 @@
 			to_chat(user, "<span class='notice'>You add plasma glass panes to \the [name].</span>")
 			plasma.use(1)
 			qdel(src)
-/obj/item/weapon/table_parts/attack_self(mob/user)
-	if(locate(/obj/structure/table) in get_turf(user))
+
+//All of these return 1 because we aren't attacking people or objects with table parts
+/obj/item/weapon/table_parts/preattack(target, mob/user, proximity_flag, click_parameters)
+	. = 1
+	if(!proximity_flag)
+		return
+	if(!isturf(target))
+		return
+	var/turf/T = target //I could've just used var/turf/T at the top but it would runtime and you could place items inside objects
+	if(locate(/obj/structure/table) in T) //There is a table, don't do it
 		to_chat(user, "<span class='warning'>There is already a table here!</span>")
 		return
-
-	new table_type(user.loc)
+	if(locate(/mob/living) in T) //Don't build tables on top of anyone, otherwise they can walk over other tables
+		to_chat(user, "<span class='warning'>You can't build a table on top of beings!</span>")
+		return
+	if(T.density) //Don't build into walls, airlocks or anywhere that just can't be passed over
+		to_chat(user, "<span class='warning'>You can't build a table there!</span>")
+		return
+	new table_type(T)
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
+	return
 
 /obj/item/weapon/table_parts/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/item/weapon/table_parts/clockwork, CLOCKWORK_GENERIC_GLOW)
