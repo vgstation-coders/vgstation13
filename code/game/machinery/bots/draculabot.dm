@@ -28,6 +28,7 @@
 								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy) //3/7 chance for one cookie, 3/7 chance for chococoin, 1/7 for many cookies!
 	var/list/contained_bags = list()
 	var/obj/item/weapon/reagent_containers/blood/last_bag
+
 /*
 /obj/machinery/bot/bloodbot/New()
 	..()

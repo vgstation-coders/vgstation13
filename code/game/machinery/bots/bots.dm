@@ -84,6 +84,8 @@
 /obj/machinery/bot/process()
 	if(!src.on)
 		return
+	if (src.integratedpai)
+		return
 	process_pathing()
 	process_bot()
 

@@ -157,7 +157,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	else
 		return ..()
 
-/obj/machinery/bot/cleanbot/Emag(mob/user as mob)
+/obj/machinery/bot/cleanbot/Emag(mob/user)
 	..()
 	if(open && !locked)
 		if(user)
@@ -171,8 +171,16 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 
 	decay_oldtargets()
 
+	if (!screwloose && !oddbutton & prob(5))
+		visible_message("<span class='notice'>[src] makes an excited beeping booping sound!</span>")
+
+	if (screwloose && prob(5))
+		if (istype(loc, /turf/simulated))
+			var/turf/simulated/T = loc
+			T.wet(800)
+
 	if(oddbutton && prob(5))
-		visible_message("<span class='warning'>Something flies out of \the [src]!</span>")
+		visible_message("<span class='warning'>Something flies out of \the [src]! He seems to be acting oddly.</span>")
 		add_oldtarget(get_turf(getFromPool(/obj/effect/decal/cleanable/blood/gibs, loc)), -1) //So we don't target our own gibs
 
 /obj/machinery/bot/cleanbot/find_target()
