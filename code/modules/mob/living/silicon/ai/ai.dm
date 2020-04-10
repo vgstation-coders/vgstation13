@@ -353,9 +353,7 @@ var/list/ai_list = list()
 		return
 	var/confirm = alert("Are you sure you want to call the shuttle?", "Confirm Shuttle Call", "Yes", "Cancel")
 	if(confirm == "Yes")
-		if(call_shuttle_proc(src, justification))
-			if(!isobserver(usr))
-				shuttle_log += "\[[worldtime2text()]] Called from [get_area(usr)]."
+		call_shuttle_proc(src, justification)
 
 	// hack to display shuttle timer
 	if(emergency_shuttle.online)
@@ -409,7 +407,8 @@ var/list/ai_list = list()
 			if(1)
 				view_core()
 			if(2)
-				ai_call_shuttle()
+				if(call_shuttle_proc(src))
+					message_admins("[key_name_admin(src)] called the shuttle due to being hit with an EMP.'.")
 	..()
 
 /mob/living/silicon/ai/ex_act(severity)
