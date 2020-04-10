@@ -504,6 +504,7 @@ var/global/mulebot_count = 0
 	if(!has_power())
 		on = 0
 		return
+	steps_per = initial(steps_per) + (wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) // The more motor wires active, the faster we go
 
 /*
 /obj/machinery/bot/mulebot/process()
