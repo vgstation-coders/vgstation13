@@ -164,6 +164,8 @@ proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
 
 proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = TRUE)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
+	ASSERT(istype(start,/turf))
+	ASSERT(istype(end, /turf))
 	if(start:z != end:z) //if you're feeling ambitious and make something that can ASTAR through z levels, feel free to remove this check
 		return ASTAR_FAIL
 	for(var/datum/path_maker/P in pathmakers)
