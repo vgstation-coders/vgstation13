@@ -82,7 +82,6 @@ var/global/mulebot_count = 0
 	botcard = new(src)
 	var/datum/job/cargo_tech/J = new/datum/job/cargo_tech
 	botcard.access = J.get_access()
-//	botcard.access += access_robotics //Why --Ikki
 	cell = new(src)
 	cell.charge = 2000
 	cell.maxcharge = 2000
@@ -344,7 +343,6 @@ var/global/mulebot_count = 0
 				if(new_dest && Adjacent(usr) && !usr.stat)
 					set_destination(new_dest)
 
-
 			if("setid")
 				refresh=0
 				var/new_id = copytext(sanitize(input("Enter new bot ID", "Mulebot [suffix ? "([suffix])" : ""]", suffix) as text|null),1,MAX_NAME_LEN)
@@ -495,6 +493,11 @@ var/global/mulebot_count = 0
 		AM.forceMove(src.loc)
 	mode = MODE_IDLE
 
+/obj/machinery/bot/mulebot/process_pathing()
+	if (mode == MODE_IDLE)
+		return
+	return ..()
+
 /obj/machinery/bot/mulebot/process_bot()
 	if(!has_power())
 		on = 0
@@ -516,137 +519,6 @@ var/global/mulebot_count = 0
 			goingdir = newdir
 		next.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
 
-
-/*
-/obj/machinery/bot/mulebot/process()
-	if(!has_power())
-		on = 0
-		return
-	if(on)
-		var/speed = (wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0)
-//		to_chat(world, "speed: [speed]")
-		switch(speed)
-			if(0)
-				// do nothing
-			if(1)
-				process_bot()
-				spawn(2)
-					process_bot()
-					sleep(2)
-					process_bot()
-					sleep(2)
-					process_bot()
-					sleep(2)
-					process_bot()
-			if(2)
-				process_bot()
-				spawn(4)
-					process_bot()
-			if(3)
-				process_bot()
-
-	if(refresh)
-		updateDialog()
-
-/obj/machinery/bot/mulebot/proc/process_bot()
-	switch(mode)
-		if(MODE_IDLE)		// idle
-			icon_state = "[icon_initial]0"
-			return
-		if(MODE_MOVING,MODE_RETURNING,MODE_BLOCKED)		// navigating to deliver,home, or blocked
-			if(loc == target)		// reached target
-				at_target()
-				return
-
-			else if(path.len > 0 && target)		// valid path
-				var/turf/next = path[1]
-				reached_target = 0
-				if(next == loc)
-					path -= next
-					return
-				if(istype(next,/turf/simulated))
-//					to_chat(world, "at ([x],[y]) moving to ([next.x],[next.y])")
-					if(bloodiness)
-						var/turf/simulated/T=loc
-						if(istype(T))
-
-						bloodiness--
-
-					set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
-					var/moved = step_to(src, next)	// attempt to move
-					if(cell)
-						cell.use(1)
-					if(moved)	// successful move
-//						to_chat(world, "Successful move.")
-						blockcount = 0
-						path -= loc
-
-						if(mode==MODE_BLOCKED)
-							spawn(1)
-								send_status()
-
-						if(destination == home_destination)
-							mode = MODE_RETURNING
-						else
-							mode = MODE_MOVING
-
-					else		// failed to move
-						blockcount++
-						mode = MODE_BLOCKED
-						if(blockcount == 3)
-							src.visible_message("[src] makes an annoyed buzzing sound.", "You hear an electronic buzzing sound.")
-							playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
-						if(blockcount > 5)	// attempt 5 times before recomputing
-							// find new path excluding blocked turf
-							src.visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
-							playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
-							calc_path(next)
-						return
-				else
-					src.visible_message("[src] makes an annoyed buzzing sound.", "You hear an electronic buzzing sound.")
-					playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
-//					to_chat(world, "Bad turf.")
-					mode = MODE_COMPUTING
-					return
-			else
-//				to_chat(world, "No path.")
-				mode = MODE_COMPUTING
-				return
-
-		if(5)		// calculate new path
-//			to_chat(world, "Calc new path.")
-			mode = MODE_WAITING
-			calc_path()
-
-
-
-// calculates a path to the current destination
-// given an optional turf to avoid
-/obj/machinery/bot/mulebot/proc/calc_path(var/turf/avoid = null)
-	AStar(src, .proc/receive_path, src.loc, src.target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 250, id=botcard, exclude=avoid)
-
-/obj/machinery/bot/mulebot/proc/receive_path(var/list/L)
-	if(!islist(L))
-		visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
-		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
-		mode = MODE_NOROUTE
-		return
-	blockcount = 0
-	path = L
-	visible_message("\The [src] makes a delighted ping!", "You hear a ping.")
-	playsound(src, 'sound/machines/ping.ogg', 50, 0)
-
-// sets the current destination
-// signals all beacons matching the delivery code
-// beacons will return a signal giving their locations
-
-// called when bot reaches current target
-
-/obj/machinery/bot/mulebot/alter_health()
-	return get_turf(src)
-*/
-// called from mob/living/carbon/human/Crossed() as well as .../alien/Crossed()
-
 // starts bot moving to current destination
 /obj/machinery/bot/mulebot/proc/start()
 	if(destination == home_destination)
@@ -654,6 +526,33 @@ var/global/mulebot_count = 0
 	else
 		mode = MODE_MOVING
 	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
+
+/obj/machinery/bot/mulebot/set_destination(var/new_dest)
+	request_path(new_dest)
+	to_chat(world, "new_destination [new_dest]")
+	new_destination = new_dest
+	request_path(new_dest)
+
+/obj/machinery/bot/mulebot/proc/request_path(var/new_dest)
+	var/datum/radio_frequency/frequency = radio_controller.return_frequency(beacon_freq)
+	var/datum/signal/signal = getFromPool(/datum/signal)
+	signal.source = src
+	signal.transmission_method = 1
+	var/list/keyval = list(
+		"findbeacon" = new_dest
+	)
+	signal.data = keyval
+	frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
+
+/obj/machinery/bot/receive_signal(datum/signal/signal)
+	var/recv = signal.data["beacon"]
+	if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
+		to_chat(world, "new destination chosen")
+		destination = new_destination
+		new_destination = ""
+		target = signal.source.loc
+		awaiting_beacon = 0
+		return 1
 
 // starts bot moving to home
 // sends a beacon query to find
@@ -666,7 +565,6 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/proc/RunOverCreature(var/mob/living/H,var/bloodcolor)
 	if(integratedpai && coolingdown)
 		return
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/mulebot/proc/RunOverCreature() called tick#: [world.time]")
 	src.visible_message("<span class='warning'>[src] drives over [H]!</span>")
 	playsound(src, 'sound/effects/splat.ogg', 50, 1)
 	var/damage = rand(5,15)
@@ -718,25 +616,17 @@ var/global/mulebot_count = 0
 		start_home()
 	else
 		mode = MODE_IDLE	// otherwise go idle
-
-	var/list/kv = list(
-		"type" = "mulebot",
-		"name" = suffix,
-		"loca" = (loc ? loc.loc : "Unknown"),	// somehow loc can be null and cause a runtime - Quarxink
-		"mode" = mode,
-		"powr" = (cell ? cell.percent() : 0),
-		"dest" = destination,
-		"home" = home_destination,
-		"load" = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1],
-		"retn" = auto_return,
-		"pick" = auto_pickup,
-	)
-	post_signal_multiple(control_freq, kv) // Report our status
-
 	return
 
 // called when bot bumps into anything
 /obj/machinery/bot/mulebot/to_bump(var/atom/obs)
+
+	if ((istype(obs, /obj/machinery/door)) && (!isnull(botcard)))
+		var/obj/machinery/door/D = M
+		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
+			D.open()
+			frustration = 0
+
 	if(!wires.MobAvoid())		//usually just bumps, but if avoidance disabled knock over mobs
 		var/mob/M = obs
 		if(ismob(M))
@@ -759,132 +649,8 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)
 	unload()
 
-/*
 // receive a radio signal
 // used for control and beacon reception
-
-/obj/machinery/bot/mulebot/receive_signal(datum/signal/signal)
-
-	if(!on || !wires)
-		return
-
-	/*
-	to_chat(world, "rec signal: [signal.source]")
-	for(var/x in signal.data)
-		to_chat(world, "* [x] = [signal.data[x]]")
-	*/
-	var/recv = signal.data["command"]
-	// process all-bot input
-	if(recv=="bot_status" && wires.RemoteRX())
-		send_status()
-
-
-	recv = signal.data["command [suffix]"]
-	if(wires.RemoteRX())
-		// process control input
-		switch(recv)
-			if("stop")
-				mode = MODE_IDLE
-				return
-
-			if("go")
-				start()
-				return
-
-			if("target")
-				set_destination(signal.data["destination"] )
-				return
-
-			if("unload")
-				if(loc == target)
-					unload(loaddir)
-				else
-					unload(0)
-				return
-
-			if("home")
-				start_home()
-				return
-
-			if("bot_status")
-				send_status()
-				return
-
-			if("autoret")
-				auto_return = text2num(signal.data["value"])
-				return
-
-			if("autopick")
-				auto_pickup = text2num(signal.data["value"])
-				return
-
-	// receive response from beacon
-	recv = signal.data["beacon"]
-	if(wires.BeaconRX())
-		if(recv == new_destination)	// if the recvd beacon location matches the set destination
-									// the we will navigate there
-			destination = new_destination
-			target = signal.source.loc
-			var/direction = signal.data["dir"]	// this will be the load/unload dir
-			if(direction)
-				loaddir = text2num(direction)
-			else
-				loaddir = 0
-			icon_state = "[icon_initial][(wires.MobAvoid() != null)]"
-			calc_path()
-			updateDialog()
-
-// send a radio signal with a single data key/value pair
-/obj/machinery/bot/mulebot/proc/post_signal(var/freq, var/key, var/value)
-	post_signal_multiple(freq, list("[key]" = value) )
-
-// send a radio signal with multiple data key/values
-/obj/machinery/bot/mulebot/proc/post_signal_multiple(var/freq, var/list/keyval)
-
-
-	if(freq == beacon_freq && !(wires.BeaconRX()))
-		return
-	if(freq == control_freq && !(wires.RemoteTX()))
-		return
-
-	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
-
-	if(!frequency)
-		return
-
-
-
-	var/datum/signal/signal = getFromPool(/datum/signal)
-	signal.source = src
-	signal.transmission_method = 1
-	//for(var/key in keyval)
-	//	signal.data[key] = keyval[key]
-	signal.data = keyval
-//		to_chat(world, "sent [key],[keyval[key]] on [freq]")
-	if (signal.data["findbeacon"])
-		frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
-	else if (signal.data["type"] == "mulebot")
-		frequency.post_signal(src, signal, filter = RADIO_MULEBOT)
-	else
-		frequency.post_signal(src, signal)
-
-// signals bot status etc. to controller
-/obj/machinery/bot/mulebot/proc/send_status()
-	var/list/kv = list(
-		"type" = "mulebot",
-		"name" = suffix,
-		"loca" = (loc ? loc.loc : "Unknown"),	// somehow loc can be null and cause a runtime - Quarxink
-		"mode" = mode,
-		"powr" = (cell ? cell.percent() : 0),
-		"dest" = destination,
-		"home" = home_destination,
-		"load" = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1],
-		"retn" = auto_return,
-		"pick" = auto_pickup,
-	)
-	post_signal_multiple(control_freq, kv)
-
-*/
 
 /obj/machinery/bot/mulebot/install_pai(obj/item/device/paicard/P)
 	..()
@@ -977,7 +743,6 @@ var/global/mulebot_count = 0
 	for (var/x in keyval)
 		to_chat(world, "[x] : [keyval[x]]")
 	return ..()
-
 
 /obj/machinery/bot/mulebot/explode()
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)

@@ -246,10 +246,13 @@
 	else
 		frequency.post_signal(src, signal)
 
+/obj/machinery/bot/proc/is_valid_signal(var/datum/signal/signal)
+	return signal.data["patrol"] // Most bots wait for a patrol signal
+
 /obj/machinery/bot/receive_signal(datum/signal/signal)
 	// receive response from beacon
 	var/recv = signal.data["beacon"]
-	var/valid = signal.data["patrol"]
+	var/valid = is_valid_signal(signal)
 	if(!recv || !valid)
 		return 0
 	//to_chat(world, "recv:[recv]. valid:[valid]. new_destination:[new_destination]. nearest_beacon: [nearest_beacon]. Next Dest: [signal.data["next_patrol"]]")
