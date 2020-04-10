@@ -75,7 +75,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/get_cell()
 	return cell
 
-/*
+
 /obj/machinery/bot/mulebot/New()
 	..()
 	wires = new(src)
@@ -500,7 +500,12 @@ var/global/mulebot_count = 0
 		AM.forceMove(src.loc)
 	mode = MODE_IDLE
 
+/obj/machinery/bot/mulebot/process_bot()
+	if(!has_power())
+		on = 0
+		return
 
+/*
 /obj/machinery/bot/mulebot/process()
 	if(!has_power())
 		on = 0

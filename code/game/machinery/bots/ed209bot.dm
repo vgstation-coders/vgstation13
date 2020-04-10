@@ -13,7 +13,7 @@
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	steps_per = 4
-	cuffing = 0
+	var/cuffing = 0
 	var/lastfired = 0
 	var/shot_delay = 3 //.3 seconds between shots
 	var/lasercolor = null
@@ -231,6 +231,7 @@ Auto Patrol: []"},
 		anchored = 0
 		emagged = TRUE
 		on = 1
+		steps_per = 5 // Gotta go fast
 		icon_state = "[lasercolor][icon_initial][on]"
 		if(lasercolor)
 			projectile = /obj/item/projectile/beam/lasertag/omni
@@ -266,6 +267,7 @@ Auto Patrol: []"},
 			if(!lasercolor)
 				playsound(src, pick('sound/voice/ed209_20sec.ogg', 'sound/voice/EDPlaceholder.ogg'), 50, 0)
 			visible_message("<b>[src]</b> points at [C.name]!")
+			proces_path() // Let's waste no time
 
 //If the security records say to arrest them, arrest them
 //Or if they have weapons and aren't security, arrest them.
