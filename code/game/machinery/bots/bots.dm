@@ -234,7 +234,6 @@
 
 /obj/machinery/bot/proc/post_signal_multiple(var/freq, var/list/keyval)
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
-
 	if(!frequency)
 		return
 

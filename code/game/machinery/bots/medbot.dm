@@ -473,7 +473,7 @@
 					var/area/location = get_area(src)
 					broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
 			visible_message("<b>[src]</b> points at [C.name]!")
-			proces_path() // Let's waste no time
+			process_path() // Let's waste no time
 			break
 
 /obj/machinery/bot/medbot/proc/assess_patient(mob/living/carbon/C)

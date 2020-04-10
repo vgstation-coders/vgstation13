@@ -202,7 +202,7 @@
 		if (possible_targets.len)
 			target = pick(possible_targets)
 			to_chat(world, "final target is [target]")
-			proces_path() // Let's waste no time
+			process_path() // Let's waste no time
 
 /obj/machinery/bot/bloodbot/proc/drink(mob/living/carbon/human/H)
 	if(!on || !istype(H))

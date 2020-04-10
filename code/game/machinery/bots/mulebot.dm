@@ -330,14 +330,12 @@ var/global/mulebot_count = 0
 					updateDialog()
 
 			if("go")
-				if(mode == MODE_IDLE)
-					start()
-					updateDialog()
+				start()
+				updateDialog()
 
 			if("home")
-				if(mode == MODE_IDLE || mode == MODE_MOVING)
-					start_home()
-					updateDialog()
+				start_home()
+				updateDialog()
 
 			if("destination")
 				refresh=0
@@ -464,9 +462,6 @@ var/global/mulebot_count = 0
 
 	lock_atom(C, /datum/locking_category/mulebot)
 
-	mode = MODE_IDLE
-	send_status()
-
 // called to unload the bot
 // argument is optional direction to unload
 // if zero, unload at bot's location
@@ -504,7 +499,23 @@ var/global/mulebot_count = 0
 	if(!has_power())
 		on = 0
 		return
-	steps_per = initial(steps_per) + (wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) // The more motor wires active, the faster we go
+	steps_per = 2 + (wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) // The more motor wires active, the faster we go
+
+/obj/machinery/bot/mulebot/on_path_step(var/turf/simulated/next)
+	if (istype(next))
+		var/goingdir=0
+		var/newdir = get_dir(next, loc)
+		if(newdir == dir)
+			goingdir = newdir
+		else
+			newdir = newdir | dir
+			if(newdir == (NORTH + SOUTH))
+				newdir = NORTH
+			else if(newdir == (EAST + WEST))
+				newdir = EAST
+			goingdir = newdir
+		next.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
+
 
 /*
 /obj/machinery/bot/mulebot/process()
@@ -558,19 +569,7 @@ var/global/mulebot_count = 0
 					if(bloodiness)
 						var/turf/simulated/T=loc
 						if(istype(T))
-							var/goingdir=0
 
-							var/newdir = get_dir(next, loc)
-							if(newdir == dir)
-								goingdir = newdir
-							else
-								newdir = newdir | dir
-								if(newdir == 3)
-									newdir = 1
-								else if(newdir == 12)
-									newdir = 4
-								goingdir = newdir
-							T.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
 						bloodiness--
 
 					set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
@@ -640,10 +639,13 @@ var/global/mulebot_count = 0
 // sets the current destination
 // signals all beacons matching the delivery code
 // beacons will return a signal giving their locations
-/obj/machinery/bot/mulebot/proc/set_destination(var/new_dest)
-	new_destination = new_dest
-	post_signal(beacon_freq, "findbeacon", "delivery")
-	updateDialog()
+
+// called when bot reaches current target
+
+/obj/machinery/bot/mulebot/alter_health()
+	return get_turf(src)
+*/
+// called from mob/living/carbon/human/Crossed() as well as .../alien/Crossed()
 
 // starts bot moving to current destination
 /obj/machinery/bot/mulebot/proc/start()
@@ -658,71 +660,9 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/proc/start_home()
 	spawn(0)
 		set_destination(home_destination)
-		mode = MODE_BLOCKED
 	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
 
-// called when bot reaches current target
-/obj/machinery/bot/mulebot/proc/at_target()
-	if(!reached_target)
-		src.visible_message("[src] makes a chiming sound!", "You hear a chime.")
-		playsound(src, 'sound/machines/chime.ogg', 50, 0)
-		reached_target = 1
 
-		if(is_locking(/datum/locking_category/mulebot))		// if loaded, unload at target
-			unload(loaddir)
-		else
-			// not loaded
-			if(auto_pickup)		// find a crate
-				var/atom/movable/AM
-				if(!wires.LoadCheck())		// if emagged, load first unanchored thing we find
-					for(var/atom/movable/A in get_step(loc, loaddir))
-						if(!A.anchored)
-							AM = A
-							break
-				else			// otherwise, look for crates only
-					for(var/i=1,i<=can_load.len,i++)
-						var/loadin_type = can_load[i]
-						AM = locate(loadin_type) in get_step(loc,loaddir)
-						if(AM)
-							load(AM)
-							break
-
-		// whatever happened, check to see if we return home
-
-		if(auto_return && destination != home_destination)
-			// auto return set and not at home already
-			start_home()
-			mode = MODE_BLOCKED
-		else
-			mode = MODE_IDLE	// otherwise go idle
-
-	send_status()	// report status to anyone listening
-
-	return
-
-// called when bot bumps into anything
-/obj/machinery/bot/mulebot/to_bump(var/atom/obs)
-	if(!wires.MobAvoid())		//usually just bumps, but if avoidance disabled knock over mobs
-		var/mob/M = obs
-		if(ismob(M))
-			if(istype(M,/mob/living/silicon/robot))
-				src.visible_message("<span class='warning'>[src] bumps into [M]!</span>")
-			else
-				src.visible_message("<span class='warning'>[src] knocks over [M]!</span>")
-				M.stop_pulling()
-				if(integratedpai)
-					M.Stun(1)
-					M.Knockdown(1)
-				else
-					M.Stun(8)
-					M.Knockdown(5)
-				M.lying = 1
-	..()
-
-/obj/machinery/bot/mulebot/alter_health()
-	return get_turf(src)
-*/
-// called from mob/living/carbon/human/Crossed() as well as .../alien/Crossed()
 /obj/machinery/bot/mulebot/proc/RunOverCreature(var/mob/living/H,var/bloodcolor)
 	if(integratedpai && coolingdown)
 		return
@@ -747,11 +687,79 @@ var/global/mulebot_count = 0
 	coolingdown = TRUE
 	spawn(run_over_cooldown)
 		coolingdown = FALSE
-/*
+
+/obj/machinery/bot/mulebot/at_path_target()
+	src.visible_message("[src] makes a chiming sound!", "You hear a chime.")
+	playsound(src, 'sound/machines/chime.ogg', 50, 0)
+
+	if(is_locking(/datum/locking_category/mulebot))		// if loaded, unload at target
+		unload(loaddir)
+	else
+		// not loaded
+		if(auto_pickup)		// find a crate
+			var/atom/movable/AM
+			if(!wires.LoadCheck())		// if emagged, load first unanchored thing we find
+				for(var/atom/movable/A in get_step(loc, loaddir))
+					if(!A.anchored)
+						AM = A
+						break
+			else			// otherwise, look for crates only
+				for(var/i=1,i<=can_load.len,i++)
+					var/loadin_type = can_load[i]
+					AM = locate(loadin_type) in get_step(loc,loaddir)
+					if(AM)
+						load(AM)
+						break
+
+		// whatever happened, check to see if we return home
+
+	if(auto_return && destination != home_destination)
+		// auto return set and not at home already
+		start_home()
+	else
+		mode = MODE_IDLE	// otherwise go idle
+
+	var/list/kv = list(
+		"type" = "mulebot",
+		"name" = suffix,
+		"loca" = (loc ? loc.loc : "Unknown"),	// somehow loc can be null and cause a runtime - Quarxink
+		"mode" = mode,
+		"powr" = (cell ? cell.percent() : 0),
+		"dest" = destination,
+		"home" = home_destination,
+		"load" = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1],
+		"retn" = auto_return,
+		"pick" = auto_pickup,
+	)
+	post_signal_multiple(control_freq, kv) // Report our status
+
+	return
+
+// called when bot bumps into anything
+/obj/machinery/bot/mulebot/to_bump(var/atom/obs)
+	if(!wires.MobAvoid())		//usually just bumps, but if avoidance disabled knock over mobs
+		var/mob/M = obs
+		if(ismob(M))
+			if(istype(M,/mob/living/silicon/robot))
+				src.visible_message("<span class='warning'>[src] bumps into [M]!</span>")
+			else
+				src.visible_message("<span class='warning'>[src] knocks over [M]!</span>")
+				M.stop_pulling()
+				if(integratedpai)
+					M.Stun(1)
+					M.Knockdown(1)
+				else
+					M.Stun(8)
+					M.Knockdown(5)
+				M.lying = 1
+	..()
+
+
 // player INSIDE mulebot attempted to move
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)
 	unload()
 
+/*
 // receive a radio signal
 // used for control and beacon reception
 
@@ -876,31 +884,7 @@ var/global/mulebot_count = 0
 	)
 	post_signal_multiple(control_freq, kv)
 
-/obj/machinery/bot/mulebot/emp_act(severity)
-	if (cell)
-		cell.emp_act(severity)
-	..()
-
-
-/obj/machinery/bot/mulebot/explode()
-	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
-	var/turf/Tsec = get_turf(src)
-
-	new /obj/item/device/assembly/prox_sensor(Tsec)
-	new /obj/item/stack/rods(Tsec)
-	new /obj/item/stack/rods(Tsec)
-	new /obj/item/stack/cable_coil/cut(Tsec)
-	if (cell)
-		cell.forceMove(Tsec)
-		cell.update_icon()
-		cell = null
-
-	spark(src)
-
-	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	O.New(O.loc)
-	unload(0)
-	qdel(src)
+*/
 
 /obj/machinery/bot/mulebot/install_pai(obj/item/device/paicard/P)
 	..()
@@ -982,4 +966,35 @@ var/global/mulebot_count = 0
 			togglePanelOpen(null, L)
 		if(wires)
 			wires.npc_tamper(L)
-*/
+
+/obj/machinery/bot/mulebot/emp_act(severity)
+	if (cell)
+		cell.emp_act(severity)
+	..()
+
+/obj/machinery/bot/mulebot/post_signal_multiple(var/freq, var/list/keyval)
+	to_chat(world, "post_signal_multiple, [freq]")
+	for (var/x in keyval)
+		to_chat(world, "[x] : [keyval[x]]")
+	return ..()
+
+
+/obj/machinery/bot/mulebot/explode()
+	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
+	var/turf/Tsec = get_turf(src)
+
+	new /obj/item/device/assembly/prox_sensor(Tsec)
+	new /obj/item/stack/rods(Tsec)
+	new /obj/item/stack/rods(Tsec)
+	new /obj/item/stack/cable_coil/cut(Tsec)
+	if (cell)
+		cell.forceMove(Tsec)
+		cell.update_icon()
+		cell = null
+
+	spark(src)
+
+	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+	O.New(O.loc)
+	unload(0)
+	qdel(src)
