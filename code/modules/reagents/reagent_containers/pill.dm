@@ -26,7 +26,7 @@
 
 // Handles pill dissolving in containers
 /obj/item/weapon/reagent_containers/pill/afterattack(atom/target, var/mob/user, var/adjacency_flag, var/click_params)
-	var/list/allowed_targets = list(/obj/item/weapon/reagent_containers, /obj/structure/reagent_dispensers/cauldron)
+	var/static/list/allowed_targets = list(/obj/item/weapon/reagent_containers, /obj/structure/reagent_dispensers/cauldron)
 	if(!adjacency_flag || !is_type_in_list(target, allowed_targets) || !target.is_open_container())
 		return
 
