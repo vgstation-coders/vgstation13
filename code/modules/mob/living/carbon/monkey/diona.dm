@@ -14,7 +14,7 @@
 	canWearHats = TRUE
 	canWearClothes = FALSE
 	canWearGlasses = FALSE
-	burn_damage_modifier = 2.5 //TREEEEEES
+	burn_damage_modifier = 0.3333 //TREEEEEES
 	languagetoadd = LANGUAGE_ROOTSPEAK
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 	flag = NO_BREATHE
