@@ -1862,6 +1862,7 @@
 #include "code\modules\mob\living\simple_animal\shade.dm"
 #include "code\modules\mob\living\simple_animal\shade_powers.dm"
 #include "code\modules\mob\living\simple_animal\simple_animal.dm"
+#include "code\modules\mob\living\simple_animal\snail.dm"
 #include "code\modules\mob\living\simple_animal\vox.dm"
 #include "code\modules\mob\living\simple_animal\worm.dm"
 #include "code\modules\mob\living\simple_animal\bees\bees_datums.dm"
