@@ -66,6 +66,7 @@
 
 
 /obj/machinery/bot/New()
+	. = ..()
 	for(var/datum/event/ionstorm/I in events)
 		if(istype(I) && I.active)
 			I.bots += src

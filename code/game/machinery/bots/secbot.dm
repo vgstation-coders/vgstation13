@@ -285,13 +285,13 @@ Auto Patrol: []"},
 					if (M.handcuffed)
 						return
 					add_oldtarget(M.name, 6)
-					M.handcuffed = new /obj/item/weapon/handcuffs(src.target)
+					M.handcuffed = new /obj/item/weapon/handcuffs(M)
 					M.update_inv_handcuffed()	//update handcuff overlays
 					playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
 			if(declare_arrests)
 				var/area/location = get_area(src)
-				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
-			visible_message("<span class='danger'>[target] has been stunned by [src]!</span>")
+				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)
+			visible_message("<span class='danger'>[M] has been stunned by [src]!</span>")
 
 			anchored = 1
 			return

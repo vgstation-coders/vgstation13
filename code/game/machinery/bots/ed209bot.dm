@@ -65,7 +65,7 @@
 	projectile = /obj/item/projectile/beam/lasertag/red
 
 /obj/machinery/bot/ed209/New(loc,created_name,created_lasercolor)
-	..()
+	. = ..()
 	if(created_name)
 		name = created_name
 	if(created_lasercolor)
@@ -353,7 +353,6 @@ Auto Patrol: []"},
 		if (Adjacent(target))		// if right next to perp
 			var/mob/living/carbon/M = target
 			target = null // Don't teabag them
-			add_oldtarget(target.name)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
 			if (beat_them)
 				playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
@@ -375,16 +374,17 @@ Auto Patrol: []"},
 			var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
 			spawn(cuff_time)
 				cuffing = 0
-				if (Adjacent(target))
+				if (Adjacent(M))
 					if (!istype(M))
 						return
 					if (M.handcuffed)
 						return
 					M.handcuffed = new /obj/item/weapon/handcuffs(src.target)
 					M.update_inv_handcuffed()	//update handcuff overlays
+					add_oldtarget(M.name, 6)
 			if(declare_arrests)
 				var/area/location = get_area(src)
-				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
+				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)
 			visible_message("<span class='danger'>[target] has been stunned by [src]!</span>")
 
 			anchored = 1
