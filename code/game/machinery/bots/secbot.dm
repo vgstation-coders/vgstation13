@@ -260,6 +260,7 @@ Auto Patrol: []"},
 		if (Adjacent(target))		// if right next to perp
 			var/mob/living/carbon/M = target
 			target = null // Don't teabag them
+			add_oldtarget(M.name, 12)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
 			if (beat_them)
 				playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
@@ -274,7 +275,7 @@ Auto Patrol: []"},
 			if (cuffing)
 				return
 			playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
-			visible_message("<span class='danger'>[src] is trying to put handcuffs on [src.target]!</span>")
+			visible_message("<span class='danger'>[src] is trying to put handcuffs on [M]!</span>")
 			cuffing = 1
 			var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
 			spawn(cuff_time)
@@ -284,7 +285,6 @@ Auto Patrol: []"},
 						return
 					if (M.handcuffed)
 						return
-					add_oldtarget(M.name, 6)
 					M.handcuffed = new /obj/item/weapon/handcuffs(M)
 					M.update_inv_handcuffed()	//update handcuff overlays
 					playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)

@@ -49,14 +49,6 @@ length to avoid portals or something i guess?? Not that they're counted right no
 //PriorityQueue object
 //////////////////////
 
-//#define ASTAR_DEBUG 1
-
-#ifdef ASTAR_DEBUG
-#warn "Astar debug is on. Don't forget to turn it off after you've done :)"
-#define astar_debug(text) to_chat(world, text)
-#else
-#define astar_debug(text)
-
 //an ordered list, using the cmp proc to weight the list elements
 /PriorityQueue
 	var/list/L //the actual queue

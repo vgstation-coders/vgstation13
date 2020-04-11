@@ -18,6 +18,7 @@
 #else
 #define log_astar_bot(text)
 #define log_astar_beacon(text)
+#endif
 
 /obj/machinery/bot
 	icon = 'icons/obj/aibots.dmi'
@@ -249,12 +250,14 @@
 	find_patrol_path()
 
 /obj/machinery/bot/proc/on_patrol_step(var/turf/next)
+	return TRUE
 
 /obj/machinery/bot/proc/on_patrol_step_fail(var/turf/next) // No door shall be left unopened
 	to_chat(world, "patrol step fehled :(")
 	var/obj/machinery/door/D = locate() in next
 	if (D)
 		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
+			to_chat(world, "open sesame")
 			D.open()
 			frustration = 0
 	if(frustration > 5)

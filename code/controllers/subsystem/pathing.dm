@@ -107,23 +107,22 @@ var/global/list/pathmakers = list()
 	PM_id = "PM_[path_count]"
 	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,PM_id))
 	pathmakers.Add(src)
-	//to_chat(world, "[owner] [start] [end] [target] [adjacent] [dist] [maxnodes] [maxnodedepth] [id] [exclude] [debug] [pathmakers.len]")
 
 /datum/path_maker/proc/can_process()
 	if(!owner || owner.gcDestroyed) //crit fail
-		to_chat(world, "owner no longer exists [owner?"owner is destroyed":"no owner"]")
+		astar_debug("owner no longer exists [owner?"owner is destroyed":"no owner"]")
 		qdel(src)
 		return FALSE
 	if(get_turf(owner) != start)
-		to_chat(world, "owner not in start position")
+		astar_debug("owner not in start position")
 		fail()
 		return FALSE
 	if(target && get_turf(target) != end)
-		to_chat(world, "target moved from end")
+		astar_debug("target moved from end")
 		fail()
 		return FALSE
 	if(end == exclude)
-		to_chat(world, "our target is being avoided.")
+		astar_debug("our target is being avoided.")
 		fail()
 		return FALSE
 	return TRUE
@@ -154,7 +153,7 @@ var/global/list/pathmakers = list()
 	if(path)
 		return finish()
 	if(open.List().len == 0)
-		to_chat(world, "ran out of open turfs")
+		astar_debug("ran out of open turfs")
 		return fail()
 	cur = open.Dequeue() //get the lowest node cost turf in the open list
 	closed.Add(cur.source) //and tell we've processed it
@@ -166,7 +165,7 @@ var/global/list/pathmakers = list()
 
 	//if too many steps, abandon that path
 	if(maxnodedepth && (cur.nodecount > maxnodedepth))
-		to_chat(world, "max node depth reached")
+		astar_debug("max node depth reached")
 		return fail()
 
 	//found the target turf (or close enough), let's create the path to it
@@ -181,7 +180,7 @@ var/global/list/pathmakers = list()
 
 	//get adjacents turfs using the adjacent proc, checking for access with id
 	var/list/L = call(cur.source,adjacent)(id,closed)
-	to_chat(world, "adjacent turfs [L.len]")
+	astar_debug("adjacent turfs [L.len]")
 	for(var/turf/T in L)
 		if(debug && T.color != "#00ff00")
 			T.color = "#FFA500" //orange
@@ -205,9 +204,9 @@ var/global/list/pathmakers = list()
 				PNode.distance_from_end = newenddist
 				PNode.calc_f()
 				if(!open.ReSort(PNode))//reorder the changed element in the list
-					to_chat(world, "failed to reorder, requeuing")
+					astar_debug("failed to reorder, requeuing")
 					open.Enqueue(PNode)
-	to_chat(world, "open:[open.List().len]")
+	astar_debug("open:[open.List().len]")
 
 /datum/path_maker/proc/fail()
 	call(owner, proc_to_call)()
@@ -216,7 +215,7 @@ var/global/list/pathmakers = list()
 /datum/path_maker/proc/finish()
 	//if the path is longer than maxnodes, then don't return it
 	if(path && maxnodes && path.len > (maxnodes + 1))
-		to_chat(world, "max node count reached")
+		astar_debug("max node count reached")
 		return qdel(src)
 
 	//reverse the path to get it from start to finish

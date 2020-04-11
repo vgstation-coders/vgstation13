@@ -353,6 +353,7 @@ Auto Patrol: []"},
 		if (Adjacent(target))		// if right next to perp
 			var/mob/living/carbon/M = target
 			target = null // Don't teabag them
+			add_oldtarget(M.name, 12)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
 			if (beat_them)
 				playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
@@ -369,7 +370,7 @@ Auto Patrol: []"},
 			if (cuffing)
 				return
 			playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
-			visible_message("<span class='danger'>[src] is trying to put handcuffs on [src.target]!</span>")
+			visible_message("<span class='danger'>[src] is trying to put handcuffs on [M]!</span>")
 			cuffing = 1
 			var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
 			spawn(cuff_time)
@@ -379,13 +380,13 @@ Auto Patrol: []"},
 						return
 					if (M.handcuffed)
 						return
-					M.handcuffed = new /obj/item/weapon/handcuffs(src.target)
+					M.handcuffed = new /obj/item/weapon/handcuffs(M)
 					M.update_inv_handcuffed()	//update handcuff overlays
 					add_oldtarget(M.name, 6)
 			if(declare_arrests)
 				var/area/location = get_area(src)
 				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)
-			visible_message("<span class='danger'>[target] has been stunned by [src]!</span>")
+			visible_message("<span class='danger'>[M] has been stunned by [src]!</span>")
 
 			anchored = 1
 			return
