@@ -968,9 +968,10 @@ var/global/list/whitelisted_species = list("Human")
 	flesh_color = "#907E4A"
 
 	has_mutant_race = 0
-	burn_mod = -100 //FUCK YOU DIONA REIGNS SUPREME 
-
-	
+	brute_mod = 0
+	burn_mod = 0
+	tox_mod = 0
+		
 
 	species_intro = "You are the biggest chad ever."
 					
@@ -1294,7 +1295,7 @@ var/list/has_died_as_golem = list()
 	default_mutations=list(RAD_IMMUNE)
 	burn_mod = 9.9
 	tox_mod = 9.9
-    brute_mod = 9.9
+	brute_mod = 9.9
 
 	blood_color = "#ebece6"
 	flesh_color = "#9c7f25"
