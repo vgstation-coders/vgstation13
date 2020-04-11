@@ -14,6 +14,7 @@
 	brute_dam_coeff = 0.5
 	steps_per = 4
 	bot_flags = BOT_DENSE
+	control_filter = RADIO_SECBOT
 	var/cuffing = 0
 	var/lastfired = 0
 	var/shot_delay = 3 //.3 seconds between shots
@@ -74,10 +75,6 @@
 		botcard = new /obj/item/weapon/card/id(src)
 		var/datum/job/detective/J = new/datum/job/detective
 		botcard.access = J.get_access()
-
-		if(radio_controller)
-			radio_controller.add_object(src, control_freq, filter = RADIO_SECBOT)
-			radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 		if(lasercolor)
 			shot_delay = 6//Longer shot delay because JESUS CHRIST
 			check_records = 0//Don't actively target people set to arrest

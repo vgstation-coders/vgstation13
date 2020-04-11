@@ -70,6 +70,10 @@
 		if(istype(I) && I.active)
 			I.bots += src
 	bots_list += src
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
+
+/obj/machinery/bot/initialize()
 	if(radio_controller)
 		if(bot_flags & BOT_CONTROL)
 			radio_controller.add_object(src, control_freq, filter = control_filter)
@@ -246,6 +250,7 @@
 /obj/machinery/bot/proc/on_patrol_step(var/turf/next)
 
 /obj/machinery/bot/proc/on_patrol_step_fail(var/turf/next) // No door shall be left unopened
+	to_chat(world, "patrol step fehled :(")
 	var/obj/machinery/door/D = locate() in next
 	if (D)
 		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))

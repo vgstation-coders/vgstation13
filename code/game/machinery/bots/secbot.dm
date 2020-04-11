@@ -14,6 +14,7 @@
 	brute_dam_coeff = 0.5
 //	weight = 1.0E7
 	req_one_access = list(access_security, access_forensics_lockers)
+	control_filter = RADIO_SECBOT
 	var/check_records = 1
 //	var/emagged = 0 //Emagged Secbots view everyone as a criminal
 
@@ -76,19 +77,11 @@
 	var/created_name = "Securitron" //To preserve the name if it's a unique securitron I guess
 
 /obj/machinery/bot/secbot/New()
-	..()
+	. = ..()
 	icon_state = "[src.icon_initial][src.on]"
 	botcard = new /obj/item/weapon/card/id(src)
 	var/datum/job/detective/J = new/datum/job/detective
 	botcard.access = J.get_access()
-	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
-		initialize()
-
-/obj/machinery/bot/secbot/initialize()
-	. = ..()
-	if(radio_controller)
-		radio_controller.add_object(src, control_freq, filter = RADIO_SECBOT)
-		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 
 /obj/machinery/bot/secbot/turn_on()
 	..()
@@ -252,7 +245,7 @@ Auto Patrol: []"},
 				src.speak("[src.arrest_message]")
 			playsound(src, pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
 			visible_message("<b>[src]</b> points at [C.name]!")
-			
+
 /obj/machinery/bot/secbot/process_bot()
 	if (!target || target.gcDestroyed)
 		target = null
@@ -267,7 +260,6 @@ Auto Patrol: []"},
 		if (Adjacent(target))		// if right next to perp
 			var/mob/living/carbon/M = target
 			target = null // Don't teabag them
-			add_oldtarget(target.name)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
 			if (beat_them)
 				playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
@@ -287,14 +279,14 @@ Auto Patrol: []"},
 			var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
 			spawn(cuff_time)
 				cuffing = 0
-				if (Adjacent(target))
+				if (Adjacent(M))
 					if (!istype(M))
 						return
 					if (M.handcuffed)
 						return
+					add_oldtarget(M.name, 6)
 					M.handcuffed = new /obj/item/weapon/handcuffs(src.target)
 					M.update_inv_handcuffed()	//update handcuff overlays
-					add_oldtarget(target.name, 6)
 					playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
 			if(declare_arrests)
 				var/area/location = get_area(src)

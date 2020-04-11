@@ -50,13 +50,6 @@
 	src.botcard = new /obj/item/weapon/card/id(src)
 	var/datum/job/janitor/J = new/datum/job/janitor
 	src.botcard.access = J.get_access()
-	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
-		initialize()
-
-/obj/machinery/bot/cleanbot/initialize()
-	. = ..()
-	if(radio_controller)
-		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 
 /obj/machinery/bot/cleanbot/Destroy()
 	cleanbot_list.Remove(src)
