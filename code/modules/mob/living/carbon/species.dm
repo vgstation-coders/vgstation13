@@ -1174,9 +1174,8 @@ var/list/has_died_as_golem = list()
 	gender = NEUTER
 
 	tox_mod = 9.9
-    burn_mod = 9.9
-    brute_mod = 9.9
-
+	brute_mod = 9.9
+	burn_mod = 9.9
 	primitive = /mob/living/carbon/slime/pygmy
 
 	blood_color = "#96FFC5"
