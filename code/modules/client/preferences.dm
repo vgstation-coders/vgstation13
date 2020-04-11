@@ -78,7 +78,7 @@ var/list/special_popup_text2num = list(
 	"Use both chat and special" = SPECIAL_POPUP_USE_BOTH,
 )
 
-var/const/MAX_SAVE_SLOTS = 8
+var/const/MAX_SAVE_SLOTS = 16
 
 #define POLLED_LIMIT	100
 
@@ -1248,7 +1248,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(species == "Human")
 						var/new_s_tone = input(user, "Choose your character's skin-tone:\n(Light 1 - 220 Dark)", "Character Preference")  as num|null
 						if(new_s_tone)
-							s_tone = 35 - clamp(new_s_tone,1,220) 
+							s_tone = 35 - clamp(new_s_tone,1,220)
 							to_chat(user,"You're now [skintone2racedescription(s_tone, species)].")
 					else if(species == "Vox")//Can't reference species flags here, sorry.
 						var/skin_c = input(user, "Choose your Vox's skin color:\n(1 = Green, 2 = Brown, 3 = Gray, 4 = Light Green, 5 = Azure, 6 = Emerald)", "Character Preference") as num|null
@@ -1258,7 +1258,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					else if(species == "Grey")
 						var/skin_c = input(user, "Choose your Grey's skin color:\n(1 = Gray, 2 = Light, 3 = Green, 4 = Blue)", "Character Preference") as num|null
 						if(skin_c)
-							s_tone = clamp(skin_c,1,4) 
+							s_tone = clamp(skin_c,1,4)
 							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
 					else
 						to_chat(user,"Your species doesn't have different skin tones. Yet?")
