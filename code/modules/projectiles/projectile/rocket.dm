@@ -223,6 +223,8 @@
 		qdel(src)
 
 /obj/item/projectile/rocket/nikita/proc/reset_view()
+	if(!mob)
+		return
 	var/datum/control/C = mob.orient_object[src]
 	if(C)
 		C.break_control()
