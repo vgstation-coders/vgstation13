@@ -946,8 +946,8 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_plant.dmi'
 	known_languages = list(LANGUAGE_ROOTSPEAK)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
-	attack_verb = "slashes"
-	punch_damage = 5
+	attack_verb = "OBLITERATES"
+	punch_damage = 1000
 	primitive = /mob/living/carbon/monkey/diona
 
 	warning_low_pressure = 50
@@ -968,15 +968,13 @@ var/global/list/whitelisted_species = list("Human")
 	flesh_color = "#907E4A"
 
 	has_mutant_race = 0
-	burn_mod = 2.5 //treeeeees
+	brute_mod = 0
+	burn_mod = 0
+	tox_mod = 0
+		
 
-	move_speed_mod = 7
-
-	species_intro = "You are a Diona.<br>\
-					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\
-					You absorb radiation which helps you in a similar way to sunlight. Your rigid, wooden limbs make you incredibly slow.<br>\
-					You do not need to breathe, do not feel pain,  you are incredibly resistant to cold and low pressure, and have no blood to bleed.<br>\
-					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally."
+	species_intro = "You are the biggest chad ever."
+					
 
 /datum/species/diona/gib(mob/living/carbon/human/H)
 	..()
@@ -1175,8 +1173,9 @@ var/list/has_died_as_golem = list()
 
 	gender = NEUTER
 
-	tox_mod = 2
-
+	tox_mod = 9.9
+	brute_mod = 9.9
+	burn_mod = 9.9
 	primitive = /mob/living/carbon/slime/pygmy
 
 	blood_color = "#96FFC5"
@@ -1293,8 +1292,9 @@ var/list/has_died_as_golem = list()
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
 
 	default_mutations=list(RAD_IMMUNE)
-	burn_mod = 1.1
-	tox_mod = 0.5
+	burn_mod = 9.9
+	tox_mod = 9.9
+	brute_mod = 9.9
 
 	blood_color = "#ebece6"
 	flesh_color = "#9c7f25"
