@@ -108,7 +108,7 @@ var/list/navbeacons = list()
 	for(var/key in codes)
 		signal.data[key] = codes[key]
 
-	to_chat(world, "navbeacon [location] posted signal with request [request] on freq [freq].")
+	astar_debug("navbeacon [location] posted signal with request [request] on freq [freq].")
 	frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
 
 /obj/machinery/navbeacon/attackby(var/obj/item/I, var/mob/user)

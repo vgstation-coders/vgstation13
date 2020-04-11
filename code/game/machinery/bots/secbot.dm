@@ -172,7 +172,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/proc/set_target(var/mob/M)
 	target = M
-	steps_per = 5
+	steps_per = 10
 	process_path() // Gotta go fast
 
 /obj/machinery/bot/secbot/attackby(obj/item/weapon/W, mob/user)
@@ -191,6 +191,7 @@ Auto Patrol: []"},
 	else
 		. = ..()
 		if(. && !target)
+			sleep(0.5 SECONDS)
 			threatlevel = user.assess_threat(src)
 			threatlevel += PERP_LEVEL_ARREST_MORE
 			if(threatlevel > 0)
@@ -198,7 +199,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/kick_act(mob/living/H)
 	..()
-
+	sleep(0.5 SECONDS)
 	threatlevel = H.assess_threat(src)
 	threatlevel += PERP_LEVEL_ARREST_MORE
 
@@ -276,18 +277,20 @@ Auto Patrol: []"},
 				return
 			playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 			visible_message("<span class='danger'>[src] is trying to put handcuffs on [M]!</span>")
-			cuffing = 1
-			var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
-			spawn(cuff_time)
-				cuffing = 0
-				if (Adjacent(M))
-					if (!istype(M))
-						return
-					if (M.handcuffed)
-						return
-					M.handcuffed = new /obj/item/weapon/handcuffs(M)
-					M.update_inv_handcuffed()	//update handcuff overlays
-					playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+			if (!arrest_type)
+				cuffing = 1
+				var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
+				spawn(cuff_time)
+					cuffing = 0
+					if (Adjacent(M))
+						if (!istype(M))
+							return
+						if (M.handcuffed)
+							return
+						M.handcuffed = new /obj/item/weapon/handcuffs(M)
+						M.update_inv_handcuffed()	//update handcuff overlays
+						playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+						porcess_patrol() // Back to work.
 			if(declare_arrests)
 				var/area/location = get_area(src)
 				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)

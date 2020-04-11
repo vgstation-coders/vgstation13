@@ -371,18 +371,19 @@ Auto Patrol: []"},
 				return
 			playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 			visible_message("<span class='danger'>[src] is trying to put handcuffs on [M]!</span>")
-			cuffing = 1
-			var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
-			spawn(cuff_time)
-				cuffing = 0
-				if (Adjacent(M))
-					if (!istype(M))
-						return
-					if (M.handcuffed)
-						return
-					M.handcuffed = new /obj/item/weapon/handcuffs(M)
-					M.update_inv_handcuffed()	//update handcuff overlays
-					add_oldtarget(M.name, 6)
+			if (!arrest_type)
+				cuffing = 1
+				var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
+				spawn(cuff_time)
+					cuffing = 0
+					if (Adjacent(M))
+						if (!istype(M))
+							return
+						if (M.handcuffed)
+							return
+						M.handcuffed = new /obj/item/weapon/handcuffs(M)
+						M.update_inv_handcuffed()	//update handcuff overlays
+					porcess_patrol() // Back to work.
 			if(declare_arrests)
 				var/area/location = get_area(src)
 				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)
