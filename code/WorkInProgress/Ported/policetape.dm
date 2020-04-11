@@ -351,7 +351,7 @@
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/obj/item/clothing/gloves/G = H.get_item_by_slot(slot_gloves)
-		if(G & G.siemens_coefficient == 0)
+		if(G && G.siemens_coefficient == 0)
 			return FALSE
 
 	var/mob/living/L = user
