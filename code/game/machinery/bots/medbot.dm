@@ -104,6 +104,13 @@
 			botcard.access = J.get_access()
 		else
 			botcard.access = botcard_access
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
+
+/obj/machinery/bot/medbot/initialize()
+	. = ..()
+	if(radio_controller)
+		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 
 /obj/machinery/bot/medbot/turn_on()
 	. = ..()
@@ -442,18 +449,6 @@
 	eject_integratedpai_if_present()
 	qdel(src)
 	return
-
-/obj/machinery/bot/medbot/to_bump(M) //Leave no door unopened!
-	if ((istype(M, /obj/machinery/door)) && (!isnull(botcard)))
-		var/obj/machinery/door/D = M
-		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
-			D.open()
-			frustration = 0
-	else if ((istype(M, /mob/living/)) && (!anchored))
-		forceMove(M:loc)
-		frustration = 0
-	return
-
 
 /obj/machinery/bot/medbot/find_target()
 	for (var/mob/living/carbon/C in view(7,src)) //Time to find a patient!

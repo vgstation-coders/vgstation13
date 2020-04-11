@@ -60,6 +60,14 @@ var/global/list/floorbot_targets=list()
 	var/datum/job/engineer/E = new /datum/job/engineer
 	botcard.access = E.get_access()
 	update_icon()
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
+
+/obj/machinery/bot/medbot/initialize()
+	. = ..()
+	if(radio_controller)
+		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
+
 
 /obj/machinery/bot/floorbot/turn_on()
 	. = ..()

@@ -33,7 +33,7 @@ var/global/mulebot_count = 0
 	beacon_freq = 1400
 	control_freq = 1447
 	control_filter = RADIO_MULEBOT
-
+	bot_flags = BOT_DENSE
 	suffix = ""
 
 	var/loaddir = 0				// this the direction to unload onto/load from
@@ -544,10 +544,10 @@ var/global/mulebot_count = 0
 	signal.data = keyval
 	frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
 
-/obj/machinery/bot/receive_signal(datum/signal/signal)
+/obj/machinery/bot/mulebot/receive_signal(datum/signal/signal)
 	var/recv = signal.data["beacon"]
 	if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
-		to_chat(world, "new destination chosen")
+		to_chat(world, "[src] : new destination chosen, [recv]")
 		destination = new_destination
 		new_destination = ""
 		target = signal.source.loc
@@ -620,13 +620,6 @@ var/global/mulebot_count = 0
 
 // called when bot bumps into anything
 /obj/machinery/bot/mulebot/to_bump(var/atom/obs)
-
-	if ((istype(obs, /obj/machinery/door)) && (!isnull(botcard)))
-		var/obj/machinery/door/D = M
-		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
-			D.open()
-			frustration = 0
-
 	if(!wires.MobAvoid())		//usually just bumps, but if avoidance disabled knock over mobs
 		var/mob/M = obs
 		if(ismob(M))

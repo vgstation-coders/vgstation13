@@ -36,6 +36,7 @@
 	health = 50
 	maxhealth = 50
 	req_access =list(access_hydroponics)
+	bot_flags = BOT_DENSE
 
 	var/Max_Fertilizers = 10
 
@@ -68,7 +69,6 @@
 	if (istype(mover,/mob/living/simple_animal/bee))
 		return 1
 	return ..()
-
 
 /obj/machinery/bot/farmbot/turn_on()
 	. = ..()

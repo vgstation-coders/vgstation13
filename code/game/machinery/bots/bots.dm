@@ -2,6 +2,7 @@
 #define BOT_PATROL 1
 #define BOT_BEACON 2
 #define BOT_CONTROL 4
+#define BOT_DENSE 8
 
 #define SEC_BOT 1 // Secutritrons (Beepsky) and ED-209s
 #define MULE_BOT 2 // MULEbots
@@ -10,6 +11,13 @@
 #define MED_BOT 5 // Medibots
 
 #define BOT_OLDTARGET_FORGET_DEFAULT 100 //100*WaitMachinery
+
+#ifdef ASTAR_DEBUG
+#define log_astar_bot(text) to_chat(world, "[src] : text")
+#define log_astar_beacon(text) to_chat(world, "[src] : text")
+#else
+#define log_astar_bot(text)
+#define log_astar_beacon(text)
 
 /obj/machinery/bot
 	icon = 'icons/obj/aibots.dmi'
@@ -94,14 +102,14 @@
 //Set time_to_forget to -1 to never forget it
 /obj/machinery/bot/proc/add_oldtarget(var/old_target, var/time_to_forget = BOT_OLDTARGET_FORGET_DEFAULT)
 	old_targets[old_target] = time_to_forget
-	to_chat(world, "[old_target] = [old_targets[old_target]]")
+	log_astar_bot("[old_target] = [old_targets[old_target]]")
 
 /obj/machinery/bot/proc/remove_oldtarget(var/old_target)
 	old_targets.Remove(old_target)
 
 /obj/machinery/bot/proc/decay_oldtargets()
 	for(var/i in old_targets)
-		to_chat(world, "[i] [old_targets[i]]")
+		log_astar_bot("[i] [old_targets[i]]")
 		if(--old_targets[i] == 0)
 			remove_oldtarget(i)
 
@@ -118,6 +126,8 @@
 //If we have a path, we step
 //return true to avoid calling process_patrol
 /obj/machinery/bot/proc/process_path()
+	if (!isturf(src.loc))
+		return // Stay in the closet, little bot. The world isn't ready to accept you yet ;_;
 	set_glide_size(DELAY2GLIDESIZE((SS_WAIT_MACHINERY/steps_per)-1))
 	var/turf/T = get_turf(src)
 	for(var/i = 1 to steps_per)
@@ -143,12 +153,22 @@
 		sleep((SS_WAIT_MACHINERY/steps_per)-1)
 	return T == get_turf(src)
 
-/obj/machinery/bot/proc/on_path_step(var/turf/next)
-
-/obj/machinery/bot/proc/on_path_step_fail(var/turf/next)
+/obj/machinery/bot/proc/on_path_step_fail(var/turf/next) // No door shall be left unopened
+	var/obj/machinery/door/D = locate() in next
+	if (D)
+		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
+			D.open()
+			frustration = 0
 	if(frustration > 5)
 		calc_path(target, .proc/get_path, next)
-	return TRUE
+	return
+
+/obj/machinery/bot/to_bump(var/M) //Leave no man un-phased through!
+	if((istype(M, /mob/living/)) && (!src.anchored) && !(bot_flags & BOT_DENSE))
+		src.forceMove(M:loc)
+		src.frustration = 0
+
+/obj/machinery/bot/proc/on_path_step(var/turf/next)
 
 /obj/machinery/bot/proc/at_path_target()
 	return TRUE
@@ -157,12 +177,12 @@
 //Same as process_path. If we don't have a path, we get a path.
 //If we have a path, we take a step on that path
 /obj/machinery/bot/proc/process_patrol()
-	to_chat(world, "process patrol called [src] [patrol_path.len]")
+	astar_debug("process patrol called [src] [patrol_path.len]")
 	set_glide_size(DELAY2GLIDESIZE((SS_WAIT_MACHINERY/steps_per)-1))
 	for(var/i = 1 to steps_per)
 		if(!patrol_path.len)
 			return find_patrol_path()
-		to_chat(world, "Step [i] of [steps_per]")
+		astar_debug("Step [i] of [steps_per]")
 		if(loc == patrol_target)
 			patrol_path = list()
 			return at_patrol_target()
@@ -184,12 +204,13 @@
 	if(waiting_for_patrol)
 		return
 	if(awaiting_beacon++)
-		to_chat(world, "awaiting beacon:[awaiting_beacon]")
+		log_astar_beacon("awaiting beacon:[awaiting_beacon]")
 		if(awaiting_beacon > 5)
 			awaiting_beacon = 0
 			find_nearest_beacon()
 		return
 	if(next_destination)
+		log_astar_beacon("onwards to [new_destination]")
 		set_destination(next_destination)
 
 	if(patrol_target)
@@ -197,7 +218,7 @@
 		calc_path(patrol_target, .proc/get_patrol_path)
 
 /obj/machinery/bot/proc/find_nearest_beacon()
-	to_chat(world, "find_nearest_beacon called")
+	log_astar_beacon("find_nearest_beacon called")
 	if(awaiting_beacon)
 		return
 	nearest_beacon = null
@@ -207,12 +228,13 @@
 	spawn(10)
 		awaiting_beacon = 0
 		if(nearest_beacon)
+			log_astar_beacon("nearest_beacon was found and is [nearest_beacon]")
 			set_destination(nearest_beacon)
 		else
 			auto_patrol = 0
 
 /obj/machinery/bot/proc/set_destination(var/new_dest)
-	to_chat(world, "new_destination [new_dest]")
+	log_astar_beacon("new_destination [new_dest]")
 	new_destination = new_dest
 	post_signal(beacon_freq, "findbeacon", "patrol")
 	awaiting_beacon = 1
@@ -223,14 +245,19 @@
 
 /obj/machinery/bot/proc/on_patrol_step(var/turf/next)
 
-/obj/machinery/bot/proc/on_patrol_step_fail(next)
+/obj/machinery/bot/proc/on_patrol_step_fail(var/turf/next) // No door shall be left unopened
+	var/obj/machinery/door/D = locate() in next
+	if (D)
+		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
+			D.open()
+			frustration = 0
 	if(frustration > 5)
-		calc_path(patrol_target, .proc/get_patrol_path, next)
-
+		calc_path(patrol_target, .proc/get_path, next)
 
 // send a radio signal with a single data key/value pair
 /obj/machinery/bot/proc/post_signal(var/freq, var/key, var/value)
-	post_signal_multiple(freq, list("[key]" = value) )
+	log_astar_beacon("posted signal [key] = [value] on freq [freq].")
+	post_signal_multiple(freq, list("[key]" = value))
 
 /obj/machinery/bot/proc/post_signal_multiple(var/freq, var/list/keyval)
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
@@ -242,6 +269,7 @@
 	signal.transmission_method = 1
 	signal.data = keyval
 	if(signal.data["findbeacon"])
+		log_astar_beacon("singal sent via navbeacons")
 		frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
 	else
 		frequency.post_signal(src, signal)
@@ -253,11 +281,11 @@
 	// receive response from beacon
 	var/recv = signal.data["beacon"]
 	var/valid = is_valid_signal(signal)
+	log_astar_beacon("[src] recieved signal : [recv]")
 	if(!recv || !valid)
 		return 0
-	//to_chat(world, "recv:[recv]. valid:[valid]. new_destination:[new_destination]. nearest_beacon: [nearest_beacon]. Next Dest: [signal.data["next_patrol"]]")
 	if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
-		to_chat(world, "new destination chosen")
+		log_astar_beacon("[src] : new destination chosen, [recv]")
 		destination = new_destination
 		patrol_target = signal.source.loc
 		next_destination = signal.data["next_patrol"]
@@ -265,23 +293,24 @@
 		return 1
 	// if looking for nearest beacon
 	if(new_destination == "__nearest__")
+		log_astar_beacon("[src] : calculating nearest beacon")
 		var/dist = get_dist(src,signal.source.loc)
 		if(nearest_beacon)
 			// note we ignore the beacon we are located at
 			if(dist>1 && dist<get_dist(src, nearest_beacon_loc))
-				to_chat(world, "replacing nearest_beacon [nearest_beacon] with [recv] as it is closer. [get_dist(src, nearest_beacon_loc)] [dist]")
+				log_astar_beacon("replacing nearest_beacon [nearest_beacon] with [recv] as it is closer. [get_dist(src, nearest_beacon_loc)] [dist]")
 				nearest_beacon = recv
 				nearest_beacon_loc = signal.source.loc
 			return
 		else if(dist > 1) //We don't have a nearest beacon to compare to, so we're going to accept the first one we find that isn't on the same turf as us
-			to_chat(world, "new nearest_beacon is [recv]")
+			log_astar_beacon("new nearest_beacon is [recv]")
 			nearest_beacon = recv
 			nearest_beacon_loc = signal.source.loc
 		return 1
 
 /obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null)
 	ASSERT(target && proc_to_call)
-	to_chat(world, "[new_destination]")
+	log_astar_beacon("[new_destination]")
 	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
 
 /obj/machinery/bot/proc/get_path(var/list/L, var/target)

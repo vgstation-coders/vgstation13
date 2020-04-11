@@ -13,6 +13,7 @@
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	steps_per = 4
+	bot_flags = BOT_DENSE
 	var/cuffing = 0
 	var/lastfired = 0
 	var/shot_delay = 3 //.3 seconds between shots
@@ -354,6 +355,8 @@ Auto Patrol: []"},
 			return
 		if (Adjacent(target))		// if right next to perp
 			var/mob/living/carbon/M = target
+			target = null // Don't teabag them
+			add_oldtarget(target.name)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
 			if (beat_them)
 				playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
@@ -382,8 +385,6 @@ Auto Patrol: []"},
 						return
 					M.handcuffed = new /obj/item/weapon/handcuffs(src.target)
 					M.update_inv_handcuffed()	//update handcuff overlays
-					add_oldtarget(target.name, 6)
-					target = null
 			if(declare_arrests)
 				var/area/location = get_area(src)
 				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
@@ -394,18 +395,6 @@ Auto Patrol: []"},
 
 		else								// not next to perp
 			shootAt(target)
-
-/obj/machinery/bot/ed209/to_bump(M) //Leave no door unopened!
-	if ((istype(M, /obj/machinery/door)) && (!isnull(botcard)))
-		var/obj/machinery/door/D = M
-		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
-			D.open()
-			frustration = 0
-	else if ((istype(M, /mob/living/)) && (!anchored))
-		forceMove(M:loc)
-		frustration = 0
-	return
-
 
 /obj/machinery/bot/ed209/proc/speak(var/message)
 	visible_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",\
