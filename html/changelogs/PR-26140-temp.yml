@@ -1,6 +1,0 @@
----
-author: DamianX
-changes:
-  - bugfix: Fixed a bug that caused shooting an AI with EMPs to open a popup to call the shuttle.
-  - bugfix: "Fixed a bug that caused entries to be added to the communication's console shuttle log when the shuttle wasn't actually called."
-delete-after: true
