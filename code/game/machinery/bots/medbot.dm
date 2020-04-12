@@ -27,6 +27,7 @@
 	health = 20
 	maxhealth = 20
 	req_access =list(access_medical)
+	bot_flags = BOT_NOT_CHASING
 	can_take_pai = TRUE
 	var/stunned = 0 //It can be stunned by tasers. Delicate circuits.
 	var/list/botcard_access = list(access_medical)

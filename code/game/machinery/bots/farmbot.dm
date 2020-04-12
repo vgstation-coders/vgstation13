@@ -36,7 +36,7 @@
 	health = 50
 	maxhealth = 50
 	req_access =list(access_hydroponics)
-	bot_flags = BOT_DENSE
+	bot_flags = BOT_DENSE|BOT_NOT_CHASING
 
 	var/Max_Fertilizers = 10
 
