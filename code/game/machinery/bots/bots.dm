@@ -321,11 +321,11 @@
 			nearest_beacon_loc = signal.source.loc
 		return 1
 
-/obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null, var/temporary_result)
+/obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null)
 	ASSERT(target && proc_to_call)
 	log_astar_beacon("[new_destination]")
 	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
-		path = quick_AStar(src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
 		if (!path)
 			path = list()
 		return TRUE

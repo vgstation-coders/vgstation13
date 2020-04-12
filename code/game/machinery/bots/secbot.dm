@@ -290,7 +290,6 @@ Auto Patrol: []"},
 						M.handcuffed = new /obj/item/weapon/handcuffs(M)
 						M.update_inv_handcuffed()	//update handcuff overlays
 						playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
-						process_patrol() // Back to work.
 			if(declare_arrests)
 				var/area/location = get_area(src)
 				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)
