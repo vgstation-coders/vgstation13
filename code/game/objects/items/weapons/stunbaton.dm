@@ -182,6 +182,11 @@
 		user.lastattacked = L
 		L.lastattacker = user
 
+	if(iscarbon(L))
+		var/mob/living/carbon/C = L
+		if(C.check_shields(force,src))
+			return FALSE
+
 		L.Stun(stunforce)
 		L.apply_effect(10, STUTTER, 0)
 		L.Knockdown(stunforce)
