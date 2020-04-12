@@ -2,7 +2,7 @@
 /mob/living/simple_animal/snail
 	species_type = /mob/living/simple_animal/snail
 	name = "space snail"
-	desc = "Taking on the world at its own pace. Larger than its consins down on Earth."
+	desc = "Taking on the world at its own pace. Larger than its cousins down on Earth."
 	icon_state = "snail"
 	icon_living = "snail"
 	icon_dead = "snail_dead"
