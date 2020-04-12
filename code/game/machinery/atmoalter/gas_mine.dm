@@ -184,3 +184,26 @@
 /obj/machinery/atmospherics/miner/gas_giant/AddAir()
 	if(ticker)
 		air_contents.copy_from(gas_giant.GM)
+
+
+/obj/machinery/atmospherics/miner/mixed_nitrogen
+	name = "\improper Mixed Gas Miner"
+	desc = "Pumping nitrogen, carbon dioxide, and plasma."
+	overlay_color = "#FF80BD"
+
+/obj/machinery/atmospherics/miner/mixed_nitrogen/AddAir()
+	air_contents.adjust_multi(
+		GAS_CARBON, 0.3 * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
+		GAS_NITROGEN, 0.4 * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
+		GAS_PLASMA, 0.3 * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+
+
+/obj/machinery/atmospherics/miner/mixed_oxygen
+	name = "\improper Mixed Gas Miner"
+	desc = "Pumping oxygen and nitrous oxide."
+	overlay_color = "#7EA7E0"
+
+/obj/machinery/atmospherics/miner/mixed_oxygen/AddAir()
+	air_contents.adjust_multi(
+		GAS_OXYGEN, 0.5 * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
+		GAS_SLEEPING, 0.5 * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
