@@ -46,6 +46,8 @@
 	if (in_shell)
 		in_shell--
 		return
+	if (!in_shell)
+		icon_state = initial(icon_state)
 	if (being_romantic)
 		being_romantic--
 		if (being_romantic == 0)
@@ -69,6 +71,7 @@
 		loving_partner.recoil()
 		being_romantic = 0
 		loving_partner = null
+	icon_state = "snail_recoil"
 	visible_message("<span class = 'notice'>\The [src] stops whatever it was doing and recoils into its shell.</span>")
 	in_shell = 5 // Shy for some cycles
 
