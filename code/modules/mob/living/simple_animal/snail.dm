@@ -10,8 +10,8 @@
 	response_help  = "pets"
 	response_disarm = "pokes"
 	response_harm   = "stomps on"
-	maxHealth = 4
-	health = 4
+	maxHealth = 12
+	health = 12
 
 	size = SIZE_TINY
 
@@ -27,8 +27,9 @@
 	var/mob/living/simple_animal/snail/loving_partner = null
 
 /mob/living/simple_animal/snail/Destroy()
-	loving_partner.loving_partner = null
-	loving_partner = null
+	if (loving_partner)
+		loving_partner.loving_partner = null
+		loving_partner = null
 	return ..()
 
 /mob/living/simple_animal/snail/bite_act(mob/living/carbon/human/H)
@@ -57,7 +58,8 @@
 	return ..()
 
 /mob/living/simple_animal/snail/Crossed(mob/living/O)
-
+	if (!in_shell)
+		recoil()
 	return ..()
 
 /mob/living/simple_animal/snail/proc/recoil()
@@ -76,12 +78,14 @@
 		if (partner.being_romantic)
 			return // the other snail is busy
 
-		being_romantic = TRUE
+		if (prob(80))
+			return
+
+		being_romantic = 15
 		loving_partner = partner
-		partner.being_romantic = TRUE
+		partner.being_romantic = 15
 		partner.loving_partner = src
 		visible_message("<span class='notice'>\The [src] begins to softly approach \the [partner]...</span>")
-
 
 /mob/living/simple_animal/snail/examine(var/mob/user)
 	. = ..()
@@ -91,18 +95,36 @@
 		to_chat(user, "It looks pretty busy.")
 
 /mob/living/simple_animal/snail/attackby(var/obj/item/O, var/mob/user, var/no_delay = FALSE, var/originator = null)
-	recoil()
+	if (!in_shell)
+		recoil()
 	return ..()
 
 /mob/living/simple_animal/snail/kick_act(mob/living/carbon/human/M)
-	recoil()
+	if (!in_shell)
+		recoil()
 	return ..()
 
 /mob/living/simple_animal/snail/airflow_stun()
-	recoil()
+	if (!in_shell)
+		recoil()
 	return ..()
 
 /mob/living/simple_animal/snail/airflow_hit(atom/A)
-	recoil()
+	if (!in_shell)
+		recoil()
 	return ..()
 
+/mob/living/simple_animal/snail/adjustBruteLoss(var/damage)
+	if (in_shell)
+		return ..(damage/2)
+	return ..()
+
+// -- Greasy snail. Lube up hallways as he go. Tougher than its regular counterpart
+/mob/living/simple_animal/snail/greasy
+	maxHealth = 40
+	health = 40
+
+/mob/living/simple_animal/snail/greasy/wander_move(turf/simulated/dest)
+	if (istype(dest) && prob(20))
+		dest.wet(800, TURF_WET_LUBE)
+	return ..()

@@ -305,5 +305,6 @@
 	icon_state = "snail_helm"
 	item_state = "snail_helm"
 	armor = list(melee = 10, bullet = 5, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hats.dmi', "right_hand" = 'icons/mob/in-hand/right/hats.dmi')
 	flags = FPRINT
 	siemens_coefficient = 1
