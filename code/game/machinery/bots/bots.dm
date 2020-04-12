@@ -3,6 +3,7 @@
 #define BOT_BEACON 2
 #define BOT_CONTROL 4
 #define BOT_DENSE 8
+#define BOT_NOT_CHASING 16
 
 #define SEC_BOT 1 // Secutritrons (Beepsky) and ED-209s
 #define MULE_BOT 2 // MULEbots
@@ -13,7 +14,7 @@
 #define BOT_OLDTARGET_FORGET_DEFAULT 100 //100*WaitMachinery
 
 #ifdef ASTAR_DEBUG
-#define log_astar_bot(text) to_chat(world, "[src] : text")
+#define log_astar_bot(text) visible_message("[src] : text")
 #define log_astar_beacon(text) to_chat(world, "[src] : text")
 #else
 #define log_astar_bot(text)
@@ -134,14 +135,15 @@
 /obj/machinery/bot/proc/process_path()
 	if (!isturf(src.loc))
 		return // Stay in the closet, little bot. The world isn't ready to accept you yet ;_;
-	set_glide_size(DELAY2GLIDESIZE((SS_WAIT_MACHINERY/steps_per)-1))
 	var/turf/T = get_turf(src)
+	set_glide_size(DELAY2GLIDESIZE((SS_WAIT_MACHINERY/steps_per)-1))
 	for(var/i = 1 to steps_per)
+		log_astar_bot("Step [i] of [steps_per]")
 		if(!path.len) //It is assumed we gain a path through process_bot()
 			if(target)
 				calc_path(target, .proc/get_path)
 				return 1
-			return 0
+			return  0
 		patrol_path = list() //Kill any patrols we're using
 		if(loc == get_turf(target))
 			return at_path_target()
@@ -150,21 +152,23 @@
 		if(istype(next, /turf/simulated))
 			step_to(src, next)
 			if(get_turf(src) == next)
-				frustration = 0
 				path -= next
-				if(on_path_step(next))
-					return TRUE
-			frustration++
-			return on_path_step_fail(next)
+				frustration = 0
+				on_path_step(next)
+			else
+				frustration++
+				on_path_step_fail(next)
 		sleep((SS_WAIT_MACHINERY/steps_per)-1)
 	return T == get_turf(src)
 
 /obj/machinery/bot/proc/on_path_step_fail(var/turf/next) // No door shall be left unopened
-	var/obj/machinery/door/D = locate() in next
-	if (D)
-		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
+	for (var/obj/machinery/door/D in next)
+		if (istype(D, /obj/machinery/door/firedoor))
+			continue
+		if (D.check_access(botcard))
 			D.open()
 			frustration = 0
+			return TRUE
 	if(frustration > 5)
 		calc_path(target, .proc/get_path, next)
 	return
@@ -188,7 +192,7 @@
 	for(var/i = 1 to steps_per)
 		if(!patrol_path.len)
 			return find_patrol_path()
-		astar_debug("Step [i] of [steps_per]")
+		log_astar_bot("Step [i] of [steps_per]")
 		if(loc == patrol_target)
 			patrol_path = list()
 			return at_patrol_target()
@@ -199,10 +203,10 @@
 			if(get_turf(src) == next)
 				frustration = 0
 				patrol_path -= next
-				if(on_patrol_step(next))
-					return TRUE
-			frustration++
-			on_patrol_step_fail(next)
+				on_patrol_step(next)
+			else
+				frustration++
+				on_patrol_step_fail(next)
 		sleep((SS_WAIT_MACHINERY/steps_per)-1)
 	return TRUE
 
@@ -253,15 +257,15 @@
 	return TRUE
 
 /obj/machinery/bot/proc/on_patrol_step_fail(var/turf/next) // No door shall be left unopened
-	log_astar_bot("patrol step fehled :(")
-	var/obj/machinery/door/D = locate() in next
-	if (D)
-		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
-			log_astar_bot("open sesame")
+	for (var/obj/machinery/door/D in next)
+		if (istype(D, /obj/machinery/door/firedoor))
+			continue
+		if (D.check_access(botcard))
 			D.open()
 			frustration = 0
+			return TRUE
 	if(frustration > 5)
-		calc_path(patrol_target, .proc/get_path, next)
+		calc_path(target, .proc/get_path, next)
 
 // send a radio signal with a single data key/value pair
 /obj/machinery/bot/proc/post_signal(var/freq, var/key, var/value)
@@ -317,17 +321,23 @@
 			nearest_beacon_loc = signal.source.loc
 		return 1
 
-/obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null)
+/obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null, var/temporary_result)
 	ASSERT(target && proc_to_call)
 	log_astar_beacon("[new_destination]")
+	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
+		path = quick_AStar(src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+		if (!path)
+			path = list()
+		return TRUE
 	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
 
 /obj/machinery/bot/proc/get_path(var/list/L, var/target)
 	if(islist(L))
 		path = L
+		if (flags & BOT_NOT_CHASING) // Chasing bots are obstinate and will not forget their target so easily.
+			target = null
+			add_oldtarget(target)
 		return TRUE
-	target = null
-	add_oldtarget(target)
 	return FALSE
 
 /obj/machinery/bot/proc/get_patrol_path(var/list/L, var/target)

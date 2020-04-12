@@ -265,7 +265,7 @@ Auto Patrol: []"},
 			if(!lasercolor)
 				playsound(src, pick('sound/voice/ed209_20sec.ogg', 'sound/voice/EDPlaceholder.ogg'), 50, 0)
 			visible_message("<b>[src]</b> points at [C.name]!")
-			process_path() // Let's waste no time
+			process_path()
 
 //If the security records say to arrest them, arrest them
 //Or if they have weapons and aren't security, arrest them.
@@ -341,7 +341,7 @@ Auto Patrol: []"},
 
 
 /obj/machinery/bot/ed209/process_bot()
-	if (!target || target.gcDestroyed)
+	if (!target || target.gcDestroyed || get_dist(src, target) > 12)
 		target = null
 		find_target()
 
@@ -383,7 +383,7 @@ Auto Patrol: []"},
 							return
 						M.handcuffed = new /obj/item/weapon/handcuffs(M)
 						M.update_inv_handcuffed()	//update handcuff overlays
-					porcess_patrol() // Back to work.
+					process_patrol() // Back to work.
 			if(declare_arrests)
 				var/area/location = get_area(src)
 				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)

@@ -172,8 +172,8 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/proc/set_target(var/mob/M)
 	target = M
-	steps_per = 10
-	process_path() // Gotta go fast
+	steps_per = 5
+	process_path()
 
 /obj/machinery/bot/secbot/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
@@ -248,7 +248,7 @@ Auto Patrol: []"},
 			visible_message("<b>[src]</b> points at [C.name]!")
 
 /obj/machinery/bot/secbot/process_bot()
-	if (!target || target.gcDestroyed)
+	if (!target || target.gcDestroyed || get_dist(src, target) > 7)
 		target = null
 		steps_per = initial(steps_per)
 		find_target()
@@ -290,7 +290,7 @@ Auto Patrol: []"},
 						M.handcuffed = new /obj/item/weapon/handcuffs(M)
 						M.update_inv_handcuffed()	//update handcuff overlays
 						playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
-						porcess_patrol() // Back to work.
+						process_patrol() // Back to work.
 			if(declare_arrests)
 				var/area/location = get_area(src)
 				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)

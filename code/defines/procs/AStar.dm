@@ -161,7 +161,18 @@ proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
 #define ASTAR_PROCESSING 2
 #define ASTAR_FAIL 3
 
+/*
+ * ASTAR
+ * source: the atom which calls this Astar call.TRUE
+ * proc_to_call: the proc to call on the source
+ * start: starting atom
+ * end: end of targetted path
+ * Adjacent: the proc which rules what is adjacent for us
+ * dist: the proc which rules what is the distance for us
 
+ * Returns an hint (are we processing the path, did we make the path already, or are we unable to make the path?)
+ * Creates a pathmaker datum to process the path
+ */
 proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = TRUE)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	if(start:z != end:z) //if you're feeling ambitious and make something that can ASTAR through z levels, feel free to remove this check
