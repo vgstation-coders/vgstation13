@@ -12,7 +12,7 @@
 	maxhealth = 100
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
-	steps_per = 4
+	steps_per = 2
 	bot_flags = BOT_DENSE
 	control_filter = RADIO_SECBOT
 	var/cuffing = 0
@@ -229,7 +229,7 @@ Auto Patrol: []"},
 		anchored = 0
 		emagged = TRUE
 		on = 1
-		steps_per = 5 // Gotta go fast
+		steps_per = 3 // Gotta go fast
 		icon_state = "[lasercolor][icon_initial][on]"
 		if(lasercolor)
 			projectile = /obj/item/projectile/beam/lasertag/omni

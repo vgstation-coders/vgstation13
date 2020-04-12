@@ -172,7 +172,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/proc/set_target(var/mob/M)
 	target = M
-	steps_per = 5
+	steps_per = 3
 	process_path()
 
 /obj/machinery/bot/secbot/attackby(obj/item/weapon/W, mob/user)

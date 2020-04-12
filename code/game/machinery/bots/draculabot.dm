@@ -168,7 +168,7 @@
 		visible_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		emagged = 1
 		on = 1
-		steps_per = 5 // Gotta go fast
+		steps_per = 4 // Gotta go fast
 		update_icon()
 	else
 		locked = 0

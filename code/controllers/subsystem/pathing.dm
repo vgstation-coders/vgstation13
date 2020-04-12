@@ -2,6 +2,9 @@ var/datum/subsystem/pathing/SSpath
 var/global/list/pathers = list()
 var/global/path_count = 0
 
+// -- The pathing subsystem has a list of path_makers datums which are currently calculating paths for mobs or bots.
+// It iterates through them and checks if the pathmaking is still relevant.
+
 /datum/subsystem/pathing
 	name = "Pathing"
 	wait = 1
@@ -62,6 +65,9 @@ var/global/list/pathmakers = list()
 
 		if (MC_TICK_CHECK)
 			return
+
+// -- The datum which stores the path currently being calculated for the owner.
+// -- It will tell its owner the path to follow by calling back a proc it was given.
 
 /datum/path_maker
 	var/atom/owner

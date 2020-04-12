@@ -171,7 +171,8 @@ proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
  * dist: the proc which rules what is the distance for us
 
  * Returns an hint (are we processing the path, did we make the path already, or are we unable to make the path?)
- * Creates a pathmaker datum to process the path
+ * Creates a pathmaker datum to process the path if we aren't processing the path.
+ * Returns nothing if this path is already being processed.
  */
 proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = FALSE)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
@@ -188,7 +189,10 @@ proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth =
 	new /datum/path_maker(source,proc_to_call, get_turf(start), get_turf(end), target, adjacent, dist, maxnodes, maxnodedepth, mintargetdist, id, exclude, debug)
 	return ASTAR_REGISTERED
 
-//Only use if you just need to check if a path exists, and is a reasonable length
+// Only use if you just need to check if a path exists, and is a reasonable length
+// The main difference is that it'll be caculated immediately and transmitted to the bot rather than waiting for the path to be made.
+// Currently, security bots are using this method to chase suspsects.
+// You MUST have the start and end be turfs.
 proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
