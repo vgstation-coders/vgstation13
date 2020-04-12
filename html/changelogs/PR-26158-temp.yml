@@ -1,0 +1,5 @@
+---
+author: boy2mantwicethefam
+changes:
+  - tweak: The malf AI autoborger no longer has a cooldown between borg conversions
+delete-after: true

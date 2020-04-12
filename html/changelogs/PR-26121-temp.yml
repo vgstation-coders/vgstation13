@@ -1,0 +1,5 @@
+---
+author: ShiftyRail
+changes:
+  - tweak: "The fuckup boots will no longer breach as you walk. You will need to activate them before destroying the ground. This doesn't actually add them back to the spellbook."
+delete-after: true

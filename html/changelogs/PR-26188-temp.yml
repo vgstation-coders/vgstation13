@@ -1,0 +1,5 @@
+---
+author: Buchse
+changes:
+  - rscadd: Fixes broken sprites and adds missing code
+delete-after: true

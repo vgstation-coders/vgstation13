@@ -1,0 +1,5 @@
+---
+author: DamianX
+changes:
+  - tweak: "Dynamic will only avoid polling ghosts with their preferences set to \"Never\" for midround roles."
+delete-after: true

@@ -1,0 +1,6 @@
+---
+author: Buchse
+changes:
+  - tweak: Returned Beanbag shotgun shells to regular speed.
+  - tweak: Cut stun time from 10 seconds to 6 seconds.
+delete-after: true

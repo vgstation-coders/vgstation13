@@ -1,0 +1,7 @@
+---
+author: ShiftyRail
+changes:
+  - bugfix: You will no longer be able to pick up beartraps if someone is stuck trapped on them. You will attempt to free them instead.
+  - tweak: "You can use the verb \"Resist\" to try and free yourself from an armed beartrap."
+  - bugfix: You can no longer use help intent to tile swap with someone whose leg is stuck in an armed beartrap.
+delete-after: true

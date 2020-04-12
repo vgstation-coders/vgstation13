@@ -1,0 +1,5 @@
+---
+author: BomberBro
+changes:
+  - bugfix: "Stun batons can be blocked by shields, syringes no longer transfer reagants if blocked."
+delete-after: true

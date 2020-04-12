@@ -1,0 +1,5 @@
+---
+author: Allspice
+changes:
+  - tweak: "\"Teleport\" button produced by people querying ghosts for a pAI, now makes the clicking ghosts follow the pAI instead of just teleporting to it."
+delete-after: true
