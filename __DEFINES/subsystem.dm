@@ -54,7 +54,7 @@
 
 #define SS_WAIT_WEATHER         	2 SECONDS
 #define SS_WAIT_MACHINERY           2 SECONDS //TODO move the rest of these to defines
-#define SS_WAIT_BOTS           		1 SECONDS 
+#define SS_WAIT_BOTS           		1 SECONDS
 #define SS_WAIT_FAST_MACHINERY      0.7 SECONDS
 #define SS_WAIT_FAST_OBJECTS        0.5 SECONDS
 #define SS_WAIT_TICKER              2 SECONDS
@@ -67,7 +67,7 @@
 #define SS_DISPLAY_FAST_OBJECTS   -65
 #define SS_DISPLAY_OBJECTS        -60
 #define SS_DISPLAY_MACHINERY      -50
-#define SS_PRIORITY_BOTS          -45
+#define SS_DISPLAY_BOTS           -45
 #define SS_DISPLAY_PIPENET        -40
 #define SS_DISPLAY_FAST_MACHINERY -30
 #define SS_DISPLAY_PLANT          -25

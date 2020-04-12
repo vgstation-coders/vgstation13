@@ -1,7 +1,4 @@
-var/datum/subsystem/bots/SSbots
-
-var/list/machines = list()
-
+var/datum/subsystem/bots/SSBots
 
 /datum/subsystem/bots
 	name          = "Bots"

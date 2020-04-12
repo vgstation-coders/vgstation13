@@ -91,7 +91,7 @@
 		qdel(botcard)
 		botcard = null
 	if (waiting_for_patrol)
-		for (var/datum/pathmaker/PM in pathmakers)
+		for (var/datum/path_maker/PM in pathmakers)
 			if (PM.owner == src)
 				qdel(PM)
 	bots_list -= src
