@@ -566,6 +566,11 @@
 		if(~lang.flags & RESTRICTED && !(lang in H.languages))
 			new_languages += lang.name
 
+	if (H.mind.role_alt_title == "Game Master")
+		var/obj/item/weapon/storage/pill_bottle/dice/dice_bag = new(get_turf(H))
+		new /obj/item/weapon/dice/borg(dice_bag)
+		H.put_in_hands(dice_bag)
+
 	var/picked_lang = pick(new_languages)
 	H.add_language(picked_lang)
 	to_chat(H, "<span class = 'notice'>Due to your well read nature, you find yourself versed in the language of [picked_lang]. Check-Known-Languages under the IC tab to use it.</span>")
