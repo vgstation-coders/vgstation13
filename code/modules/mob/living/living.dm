@@ -1267,7 +1267,7 @@ Thanks.
 	return
 
 //same as above
-/mob/living/pointed(atom/A as mob|obj|turf in view(get_turf(src)))
+/mob/living/pointed(atom/A as mob|obj|turf in tview(src))
 	if(src.incapacitated())
 		return 0
 	if(!..())
