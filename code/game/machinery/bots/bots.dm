@@ -142,7 +142,7 @@
 	if (!isturf(src.loc))
 		return // Stay in the closet, little bot. The world isn't ready to accept you yet ;_;
 	var/turf/T = get_turf(src)
-	set_glide_size(DELAY2GLIDESIZE((SS_WAIT_BOTS/steps_per)-1))
+	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per - 0.5))
 	for(var/i = 1 to steps_per)
 		log_astar_bot("Step [i] of [steps_per]")
 		if(!path.len) //It is assumed we gain a path through process_bot()
@@ -164,7 +164,7 @@
 			else
 				frustration++
 				on_path_step_fail(next)
-		sleep((SS_WAIT_BOTS/steps_per)-1)
+		sleep((SS_WAIT_BOTS/steps_per)-0.5)
 	return T == get_turf(src)
 
 // What happens when the bot cannot go to the next turf.
@@ -172,6 +172,8 @@
 /obj/machinery/bot/proc/on_path_step_fail(var/turf/next) // No door shall be left unopened
 	for (var/obj/machinery/door/D in next)
 		if (istype(D, /obj/machinery/door/firedoor))
+			continue
+		if (istype(D, /obj/machinery/door/poddoor))
 			continue
 		if (D.check_access(botcard))
 			D.open()
@@ -199,7 +201,7 @@
 // It is very important to exit this proc when you don't have a path.
 /obj/machinery/bot/proc/process_patrol()
 	astar_debug("process patrol called [src] [patrol_path.len]")
-	set_glide_size(DELAY2GLIDESIZE((SS_WAIT_BOTS/steps_per)-1))
+	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per - 0.5))
 	for(var/i = 1 to steps_per)
 		if(!patrol_path.len)
 			return find_patrol_path()
@@ -218,7 +220,7 @@
 			else
 				frustration++
 				on_patrol_step_fail(next)
-		sleep((SS_WAIT_BOTS/steps_per)-1)
+		sleep((SS_WAIT_BOTS/steps_per)-0.5)
 	return TRUE
 
 // This proc is called when the bot has no patrol path, no regular path, and is on autopatrol.
@@ -288,6 +290,8 @@
 /obj/machinery/bot/proc/on_patrol_step_fail(var/turf/next) // No door shall be left unopened
 	for (var/obj/machinery/door/D in next)
 		if (istype(D, /obj/machinery/door/firedoor))
+			continue
+		if (istype(D, /obj/machinery/door/poddoor))
 			continue
 		if (D.check_access(botcard))
 			D.open()
