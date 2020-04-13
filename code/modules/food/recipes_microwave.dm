@@ -2781,7 +2781,7 @@
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/snail,
 		/obj/item/clothing/head/helmet/snail_helm,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet,
 		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/escargot
@@ -2792,7 +2792,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/snail,
 		/obj/item/clothing/head/helmet/snail_helm,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
-		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet,
 		/obj/item/stack/sheet/cardboard,
 		/obj/item/weapon/paper,
 	)
