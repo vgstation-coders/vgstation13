@@ -960,7 +960,7 @@ var/list/datum/dna/hivemind_bank = list()
 		return 0 //One is inside, the other is outside something.
 	if(sting_range < 2)
 		return Adjacent(M)
-	if(AStar(src.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, sting_range)) //If a path exists, good!
+	if(quick_AStar(src.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, sting_range)) //If a path exists, good!
 		return 1
 	return 0
 

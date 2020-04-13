@@ -36,6 +36,7 @@
 	health = 50
 	maxhealth = 50
 	req_access =list(access_hydroponics)
+	bot_flags = BOT_DENSE|BOT_NOT_CHASING
 
 	var/Max_Fertilizers = 10
 
@@ -43,17 +44,10 @@
 	var/setting_refill = 1
 	var/setting_fertilize = 1
 	var/setting_weed = 1
-	//var/setting_ignoreWeeds = 1 //These don't seem to do anything
-	//var/setting_ignoreMushrooms = 1
 	var/setting_ignoreEmpty = 0
-
-	var/atom/target //Current target, can be a human, a hydroponics tray, or a sink
 	var/mode //Which mode is being used, 0 means it is looking for work
 
 	var/obj/structure/reagent_dispensers/watertank/tank // the water tank that was used to make it, remains inside the bot.
-
-	var/path[] = new() // used for pathing
-	var/frustration
 
 /obj/machinery/bot/farmbot/vox_garden_farmbot
 	name = "Special Vox Trader Farmbot"
@@ -63,27 +57,18 @@
 /obj/machinery/bot/farmbot/New()
 	..()
 	src.icon_state = "[src.icon_initial][src.on]"
-	spawn (4)
-		src.botcard = new /obj/item/weapon/card/id(src)
-		src.botcard.access = req_access
+	src.botcard = new /obj/item/weapon/card/id(src)
+	src.botcard.access = req_access
 
-		if ( !tank ) //Should be set as part of making it... but lets check anyway
-			tank = locate(/obj/structure/reagent_dispensers/watertank/) in contents
-		if ( !tank ) //An admin must have spawned the farmbot! Better give it a tank.
-			tank = new /obj/structure/reagent_dispensers/watertank(src)
+	if ( !tank ) //Should be set as part of making it... but lets check anyway
+		tank = locate(/obj/structure/reagent_dispensers/watertank/) in contents
+	if ( !tank ) //An admin must have spawned the farmbot! Better give it a tank.
+		tank = new /obj/structure/reagent_dispensers/watertank(src)
 
 /obj/machinery/bot/farmbot/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if (istype(mover,/mob/living/simple_animal/bee))
 		return 1
 	return ..()
-
-/obj/machinery/bot/farmbot/to_bump(M as mob|obj) //Leave no door unopened!
-	spawn(0)
-		if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
-			var/obj/machinery/door/D = M
-			if (!istype(D, /obj/machinery/door/firedoor) && !istype(D, /obj/machinery/door/poddoor) && D.check_access(src.botcard))
-				D.open()
-				src.frustration = 0
 
 /obj/machinery/bot/farmbot/turn_on()
 	. = ..()
@@ -131,8 +116,6 @@
 		dat += " Fertilize Plants : <A href='?src=\ref[src];fertilize=1'>[src.setting_fertilize ? "Yes" : "No"]</A><BR>"
 		dat += "<br>Weeding Controls:<br>"
 		dat += " Weed Plants : <A href='?src=\ref[src];weed=1'>[src.setting_weed ? "Yes" : "No"]</A><BR>"
-		//dat += "<br>Ignore Weeds : <A href='?src=\ref[src];ignoreWeed=1'>[src.setting_ignoreWeeds ? "Yes" : "No"]</A><BR>"
-		//dat += "Ignore Mushrooms : <A href='?src=\ref[src];ignoreMush=1'>[src.setting_ignoreMushrooms ? "Yes" : "No"]</A><BR>"
 		dat += "Ignore Empty Trays : <A href='?src=\ref[src];ignoreEmpty=1'>[src.setting_ignoreEmpty ? "Yes" : "No"]</A><BR>"
 		dat += "</TT>"
 
@@ -159,10 +142,6 @@
 		setting_fertilize = !setting_fertilize
 	else if((href_list["weed"]) && (!src.locked))
 		setting_weed = !setting_weed
-	//else if((href_list["ignoreWeed"]) && (!src.locked))
-	//	setting_ignoreWeeds = !setting_ignoreWeeds
-	//else if((href_list["ignoreMush"]) && (!src.locked))
-	//	setting_ignoreMushrooms = !setting_ignoreMushrooms
 	else if((href_list["ignoreEmpty"]) && (!src.locked))
 		setting_ignoreEmpty = !setting_ignoreEmpty
 	else if (href_list["eject"] )
@@ -235,7 +214,7 @@
 	qdel(src)
 	return
 
-/obj/machinery/bot/farmbot/process()
+/obj/machinery/bot/farmbot/process_bot()
 	//set background = 1
 
 	if(!src.on)
@@ -263,9 +242,7 @@
 			// If we are in emagged fertilize mode, we throw the fertilizer, so distance doesn't matter
 			frustration = 0
 			use_farmbot_item()
-		else
-			move_to_target()
-	return
+
 
 /obj/machinery/bot/farmbot/proc/use_farmbot_item()
 	if ( !target )
@@ -294,19 +271,19 @@
 			return
 		fertilize(fert)
 
-	if ( mode == FARMBOT_MODE_WEED )
+	if(mode == FARMBOT_MODE_WEED)
 		weed()
 
-	if ( mode == FARMBOT_MODE_WATER )
+	if(mode == FARMBOT_MODE_WATER)
 		water()
 
-	if ( mode == FARMBOT_MODE_REFILL )
+	if(mode == FARMBOT_MODE_REFILL)
 		refill()
 
 
 
 
-/obj/machinery/bot/farmbot/proc/find_target()
+/obj/machinery/bot/farmbot/find_target()
 	if ( emagged ) //Find a human and help them!
 		for ( var/mob/living/carbon/human/human in view(7,src) )
 			if (human.isDead())
@@ -347,55 +324,9 @@
 
 	if ( setting_weed && tray.weedlevel >= 5 )
 		return FARMBOT_MODE_WEED
-
 	if ( setting_fertilize && tray.nutrilevel <= 2 && get_total_ferts() && (!tray.seed || !tray.seed.hematophage) )
 		return FARMBOT_MODE_FERTILIZE
-
 	return 0
-
-/obj/machinery/bot/farmbot/proc/move_to_target()
-	//Mostly copied from medibot code.
-
-	if(src.frustration > 8)
-		target = null
-		mode = 0
-		frustration = 0
-		src.path = new()
-	if(!src.path)
-		src.path = new()
-	if(src.target && (src.path.len) && (get_dist(src.target,src.path[src.path.len]) > 2))
-		src.path = new()
-	if(src.target && src.path.len == 0 && (get_dist(src,src.target) > 1))
-		spawn(0)
-			var/turf/dest = get_step_towards(target,src)  //Can't pathfind to a tray, as it is dense, so pathfind to the spot next to the tray
-
-			src.path = AStar(src.loc, dest, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
-			if(path && src.path.len == 0)
-				for ( var/turf/spot in orange(1,target) ) //The closest one is unpathable, try  the other spots
-					if ( spot == dest ) //We already tried this spot
-						continue
-					if ( spot.density )
-						continue
-					src.path = AStar(src.loc, spot, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
-					src.path = reverseRange(src.path)
-					if ( src.path.len > 0 )
-						break
-
-				if ( src.path.len == 0 )
-					target = null
-					mode = 0
-		return
-
-	if(src.path.len > 0 && src.target && isturf(loc))
-		step_to(src, src.path[1])
-		src.path -= src.path[1]
-		spawn(3)
-			if(src.path.len)
-				step_to(src, src.path[1])
-				src.path -= src.path[1]
-
-	if(src.path.len > 8 && src.target)
-		src.frustration++
 
 
 /obj/machinery/bot/farmbot/proc/fertilize(var/obj/item/weapon/reagent_containers/glass/fert)

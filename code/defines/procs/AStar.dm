@@ -3,14 +3,14 @@ A Star pathfinding algorithm
 Returns a list of tiles forming a path from A to B, taking dense objects as well as walls, and the orientation of
 windows along the route into account.
 Use:
-your_list = AStar(start location, end location, adjacent turf proc, distance proc)
+your_list = AStar(src, start location, end location, adjacent turf proc, distance proc)
 For the adjacent turf proc i wrote:
 /turf/proc/AdjacentTurfs
 And for the distance one i wrote:
 /turf/proc/Distance
 So an example use might be:
 
-src.path_list = AStar(src.loc, target.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance)
+src.path_list = AStar(src, src.loc, target.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance)
 
 Then to start on the path, all you need to do it:
 Step_to(src, src.path_list[1])
@@ -73,8 +73,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 //removes and returns the first element in the queue
 /PriorityQueue/proc/Dequeue()
-	if(!L.len)
-		return 0
+	ASSERT(L.len)
 	. = L[1]
 	Remove(.)
 	return .
@@ -94,21 +93,20 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 //return the element at the i_th position
 /PriorityQueue/proc/Get(var/i)
-	if(i > L.len || i < 1)
-		return 0
+	ASSERT(i < L.len && i > 1)
 	return L[i]
 
 //replace the passed element at it's right position using the cmp proc
 /PriorityQueue/proc/ReSort(var/atom/A)
 	var/i = Seek(A)
-	if(i == 0)
-		return
+	ASSERT(i != 0)
 	while(i < L.len && call(cmp)(L[i],L[i+1]) > 0)
 		L.Swap(i,i+1)
 		i++
 	while(i > 1 && call(cmp)(L[i],L[i-1]) <= 0) //last inserted element being first in case of ties (optimization)
 		L.Swap(i,i-1)
 		i--
+	return 1
 
 //////////////////////
 //PathNode object
@@ -118,22 +116,27 @@ length to avoid portals or something i guess?? Not that they're counted right no
 /PathNode
 	var/turf/source //turf associated with the PathNode
 	var/PathNode/prevNode //link to the parent PathNode
-	var/f		//A* Node weight (f = g + h)
-	var/g		//A* movement cost variable
-	var/h		//A* heuristic variable
-	var/nt		//count the number of Nodes traversed
+	var/total_node_cost		//A* Node weight (total_node_cost = distance_from_start + distance_from_end)
+	var/distance_from_end		//A* movement cost variable, how far it is from the end
+	var/distance_from_start		//A* heuristic variable, how far it is from the start
+	var/nodecount		//count the number of Nodes traversed
 
-/PathNode/New(s,p,pg,ph,pnt)
+/PathNode/New(s,p,ndistance_from_start,ndistance_from_end,pnt,id)
 	source = s
 	prevNode = p
-	g = pg
-	h = ph
-	f = g + h
-	source.PNode = src
-	nt = pnt
+	distance_from_start = ndistance_from_start
+	distance_from_end = ndistance_from_end
+	calc_f()
+	nodecount = pnt
+	source.AddPathNode(src, id)
 
 /PathNode/proc/calc_f()
-	f = g + h
+	total_node_cost = distance_from_start + distance_from_end
+
+/PathNode/Destroy()
+	source = null
+	prevNode = null
+	..()
 
 //////////////////////
 //A* procs
@@ -141,7 +144,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 //the weighting function, used in the A* algorithm
 proc/PathWeightCompare(PathNode/a, PathNode/b)
-	return a.f - b.f
+	return a.total_node_cost - b.total_node_cost
 
 //search if there's a PathNode that points to turf T in the Priority Queue
 proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
@@ -154,27 +157,60 @@ proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
 		i++
 	return 0
 
-//the actual algorithm
-proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null)
+#define ASTAR_REGISTERED 1
+#define ASTAR_PROCESSING 2
+#define ASTAR_FAIL 3
+
+/*
+ * ASTAR
+ * source: the atom which calls this Astar call.TRUE
+ * proc_to_call: the proc to call on the source
+ * start: starting atom
+ * end: end of targetted path
+ * Adjacent: the proc which rules what is adjacent for us
+ * dist: the proc which rules what is the distance for us
+
+ * Returns an hint (are we processing the path, did we make the path already, or are we unable to make the path?)
+ * Creates a pathmaker datum to process the path if we aren't processing the path.
+ * Returns nothing if this path is already being processed.
+ */
+proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = FALSE)
+	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
+	if(start:z != end:z) //if you're feeling ambitious and make something that can ASTAR through z levels, feel free to remove this check
+		return ASTAR_FAIL
+	for(var/datum/path_maker/P in pathmakers)
+		if(P.owner == source && start == P.start && end == P.end)
+			return ASTAR_PROCESSING
+	var/atom/target
+	if(!isturf(end))
+		target = end
+
+	astar_debug("ASTAR called [source] [proc_to_call] [start:x][start:y][start:z] [end:x][end:y][end:z] [adjacent] [dist] [maxnodes] [maxnodedepth] [mintargetdist] [minnodedist] [id] [exclude] [debug]")
+	new /datum/path_maker(source,proc_to_call, get_turf(start), get_turf(end), target, adjacent, dist, maxnodes, maxnodedepth, mintargetdist, id, exclude, debug)
+	return ASTAR_REGISTERED
+
+// Only use if you just need to check if a path exists, and is a reasonable length
+// The main difference is that it'll be caculated immediately and transmitted to the bot rather than waiting for the path to be made.
+// Currently, security bots are using this method to chase suspsects.
+// You MUST have the start and end be turfs.
+proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
 	var/list/path = null //the returned path, if any
 	var/PathNode/cur //current processed turf
-
-	//sanitation
 	start = get_turf(start)
+
 	if(!start)
 		return 0
 
 	//initialization
-	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0))
+	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,"unique"))
 
 	//then run the main loop
 	while(!open.IsEmpty() && !path)
 	{
-			//get the lower f node on the open list
-		cur = open.Dequeue() //get the lower f turf in the open list
+		cur = open.Dequeue() //get the lowest node cost turf in the open list
 		closed.Add(cur.source) //and tell we've processed it
 
 		//if we only want to get near the target, check if we're close enough
@@ -183,8 +219,8 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 			closeenough = call(cur.source,dist)(end) <= mintargetdist
 
 		//if too many steps, abandon that path
-		if(maxnodedepth && (cur.nt > maxnodedepth))
-			continue
+		if(maxnodedepth && (cur.nodecount > maxnodedepth))
+			return
 
 		//found the target turf (or close enough), let's create the path to it
 		if(cur.source == end || closeenough)
@@ -195,12 +231,6 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 				path.Add(cur.source)
 			break
 
-		//IMPLEMENTATION TO FINISH
-		//do we really need this minnodedist ???
-		/*if(minnodedist && maxnodedepth)
-			if(call(cur.source,minnodedist)(end) + cur.nt >= maxnodedepth)
-				continue
-		*/
 
 		//get adjacents turfs using the adjacent proc, checking for access with id
 		var/list/L = call(cur.source,adjacent)(id,closed)
@@ -209,23 +239,30 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 			if(T == exclude)
 				continue
 
-			var/newg = cur.g + call(cur.source,dist)(T)
-			if(!T.PNode) //is not already in open list, so add it
-				open.Enqueue(new /PathNode(T,cur,newg,call(T,dist)(end),cur.nt+1))
+			var/newenddist = call(T,dist)(end)
+			var/PathNode/PNode = T.FindPathNode("unique")
+			if(!PNode) //is not already in open list, so add it
+				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1,"unique"))
 			else //is already in open list, check if it's a better way from the current turf
-				if(newg < T.PNode.g)
-					T.PNode.prevNode = cur
-					T.PNode.g = newg
-					T.PNode.calc_f()
-					open.ReSort(T.PNode)//reorder the changed element in the list
+				if(newenddist < PNode.distance_from_end)
+
+					PNode.prevNode = cur
+					PNode.distance_from_start = newenddist
+					PNode.calc_f()
+					open.ReSort(PNode)//reorder the changed element in the list
 
 	}
 
-	//cleaning after us
+	//cleanup
 	for(var/PathNode/PN in open.L)
-		PN.source.PNode = null
+		PN.source.PathNodes["unique"] = null
+		PN.source.PathNodes.Remove("unique")
+		qdel(PN)
 	for(var/turf/T in closed)
-		T.PNode = null
+		var/PathNode/PN = T.FindPathNode("unique")
+		T.PathNodes["unique"] = null
+		T.PathNodes.Remove("unique")
+		qdel(PN)
 
 	//if the path is longer than maxnodes, then don't return it
 	if(path && maxnodes && path.len > (maxnodes + 1))
@@ -241,11 +278,10 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 
 
 
-
-
 ///////////////////
 //A* helpers procs
 ///////////////////
+
 
 // Returns true if a link between A and B is blocked
 // Movement through doors allowed if ID has access
@@ -336,10 +372,25 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 			return 1 //matching border window
 
 	for(var/obj/machinery/door/D in loc)
-		if(!D.density)//if the door is open
-			continue
-		else
-			return 1	// if closed, it's a real, air blocking door
+		if(D.density)// if closed, it's a real, air blocking door
+			return 1
+
 	return 0
 
 /////////////////////////////////////////////////////////////////////////
+
+/atom/proc/make_astar_path(var/atom/target, var/receiving_proc = .proc/get_astar_path)
+	AStar(src, receiving_proc, get_turf(src), target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30)
+
+//override when needed to receive your path
+/atom/proc/get_astar_path(var/list/L)
+	if(L && L.len)
+		pathers.Add(src)
+		return L
+	return FALSE
+
+/atom/proc/process_astar_path()
+	return FALSE
+
+/atom/proc/drop_astar_path()
+	pathers.Remove(src)
