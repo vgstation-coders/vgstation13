@@ -205,7 +205,7 @@
 	for(var/i = 1 to steps_per)
 		if(!patrol_path.len)
 			return find_patrol_path()
-		to_chat(world, "Step [i] of [steps_per]")
+		log_astar_bot("Step [i] of [steps_per]")
 		if(loc == patrol_target)
 			patrol_path = list()
 			return at_patrol_target()
