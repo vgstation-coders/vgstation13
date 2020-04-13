@@ -336,3 +336,17 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/weapon/card/emag(src)
 	new /obj/item/weapon/glue(src)
 	return
+
+
+//Syndicate Experimental Gear
+//Contains unique gear not found anywhere else
+/obj/item/weapon/storage/box/syndicate_experimental/New()
+	..()
+	var/selection = pick("damocles", "bomber vest", "bike horn")
+	switch(selection)
+		if("damocles")
+			new /obj/item/weapon/damocles
+		if("bomber vest")
+			new /obj/item/clothing/suit/bomber_vest
+		if("bike horn")
+			new /obj/item/weapon/bikehorn/syndicate

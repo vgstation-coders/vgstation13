@@ -137,6 +137,16 @@
 		return 1
 	return 0
 
+/obj/item/weapon/bikehorn/syndicate/honk()
+	if(..())
+		for(var/mob/living/carbon/human/H in range(7))
+			H.adjustBrainLoss(10)
+
+/obj/item/weapon/bikehorn/syndicate/examine(mob/user)
+	..()
+	if(is_holder_of(user, src))
+		to_chat(user, "<span class='warning'>This one seems to have extra circuitry attached...</span>")
+
 /obj/item/weapon/bikehorn/rubberducky
 	name = "rubber ducky"
 	desc = "Rubber ducky, you're the one, you make bathtime lots of fuuun. Rubber ducky, I'm awfully fooooond of yooooouuuu~"
@@ -208,7 +218,7 @@
 	var/list/allowed_glue_types = list(
 		/obj/item,
 		/obj/structure/bed,
-	)	
+	)
 
 /obj/item/weapon/glue/examine(mob/user)
 	..()

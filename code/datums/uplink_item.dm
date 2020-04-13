@@ -551,6 +551,12 @@ var/list/uplink_items = list()
  	item = /obj/item/clothing/suit/raincoat
  	cost = 1
 
+/datum/uplink_item/badass/experimental_gear
+	name = "Syndicate Experimental Gear Bundle"
+	desc = "A box that contains a randomly-selected experimental Syndicate gear, an unique state-of-the-art object. Satisfaction not guaranteed."
+	item = /obj/item/weapon/storage/box/syndicate_experimental
+	cost = 20
+
 /datum/uplink_item/badass/random
 	name = "Random Item"
 	desc = "Picking this choice will send you a random item from anywhere in the list for half the normal cost. Useful for when you cannot think of a strategy to finish your objectives with, or cannot think of anything to begin with."
