@@ -6,6 +6,8 @@
 	var/said_last_words = 0 // All mobs can now whisper as they die
 	var/list/alerts = list()
 
+	var/event/on_blink
+
 /mob/variable_edited(var_name, old_value, new_value)
 	.=..()
 
