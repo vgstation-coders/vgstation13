@@ -41,3 +41,9 @@
 #define BOXING_DAY "Boxing Day"
 #define NEW_YEARS_EVE "New Year's Eve"
 #define FRIDAY_THE_13TH "Friday the 13th"
+
+#define SLEEPTIME "timeslot_sleep" //3 to 11
+#define EUROTIME "timeslot_euro" //12 to 15
+#define DAYTIME "timeslot_day" //16 to 18
+#define PRIMETIME "timeslot_prime" //19 to 22
+#define LATETIME "timeslot_late" //23 to 2

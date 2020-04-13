@@ -98,3 +98,18 @@
 //returns timestamp in a sql and ISO 8601 friendly format
 /proc/SQLtime()
 	return time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")
+
+//Returns time as a "slot", a predefined type of time, see dates.dm for defines
+/proc/getTimeslot()
+	switch(text2num(time2text(world.timeofday, "hh")))
+		if(3 to 11)
+			return SLEEPTIME
+		if(12 to 15)
+			return EUROTIME
+		if(16 to 18)
+			return DAYTIME
+		if(19 to 22)
+			return PRIMETIME
+		if(23, 0 to 2)
+			return LATETIME
+	CRASH("getTimeslot: Hour not found.")

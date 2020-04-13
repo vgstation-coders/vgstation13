@@ -21,7 +21,7 @@
 	high_population_requirement = 10
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
-	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels	
+	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
 	var/num_traitors = min(round(mode.roundstart_pop_ready / traitor_scaling_coeff) + 1, candidates.len)
 	for (var/i = 1 to num_traitors)
 		var/mob/M = pick(candidates)
@@ -421,6 +421,7 @@
 	required_pop = list(30,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = 3
+	weekday_rule_boost = list("Tue")
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
