@@ -80,6 +80,7 @@
 	var/obj_type = null
 	var/name = null
 	var/desc = null
+	var/owner_key = null // used when factionless antags happen (vampires)
 	var/belongs_to_faction = null
 	var/target = null
 	var/is_fulfilled = FALSE
@@ -88,7 +89,9 @@
 	obj_type = O.type
 	name = O.name
 	desc = O.explanation_text
-	belongs_to_faction = O.faction.ID
+	belongs_to_faction = O.faction?.ID
+	if(O.owner)
+		owner_key = ckey(O.owner.key)
 	is_fulfilled = O.IsFulfilled()
 	if(istype(O, /datum/objective/target))
 		var/datum/objective/target/TO = O
