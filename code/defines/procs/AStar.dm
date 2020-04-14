@@ -99,7 +99,8 @@ length to avoid portals or something i guess?? Not that they're counted right no
 //replace the passed element at it's right position using the cmp proc
 /PriorityQueue/proc/ReSort(var/atom/A)
 	var/i = Seek(A)
-	ASSERT(i != 0)
+	if (i == 0)
+		CRASH("[src] was seeking [A] but could not find it.")
 	while(i < L.len && call(cmp)(L[i],L[i+1]) > 0)
 		L.Swap(i,i+1)
 		i++
