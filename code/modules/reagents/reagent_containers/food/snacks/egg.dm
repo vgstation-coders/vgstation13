@@ -150,3 +150,7 @@
 	icon_state = "egg-snail"
 	can_color = FALSE
 	hatch_type = /mob/living/simple_animal/snail
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/snail/New()
+	processing_objects.Add(src)
+	return ..()

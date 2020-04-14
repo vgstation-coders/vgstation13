@@ -79,6 +79,8 @@
 
 /mob/living/simple_animal/snail/wander_move(turf/dest)
 	..()
+	if (life_tick < 25)
+		return
 	for(var/mob/living/simple_animal/snail/partner in loc)
 		if (partner.being_romantic)
 			return // the other snail is busy
