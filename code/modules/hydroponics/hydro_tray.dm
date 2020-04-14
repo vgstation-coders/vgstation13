@@ -579,7 +579,7 @@
 
 	..()
 
-/obj/machinery/portable_atmospherics/hydroponics/AltClick(/var/mob/usr)
+/obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/usr)
 	if((usr.incapacitated() || !Adjacent(usr)))
 		return
 	close_lid()
