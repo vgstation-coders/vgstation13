@@ -180,7 +180,11 @@
 			frustration = 0
 			return TRUE
 	if(frustration > 5)
-		calc_path(target, .proc/get_path, next)
+		if (target && !target.gcDestroyed)
+			calc_path(target, .proc/get_path, next)
+		else
+			target = null
+			path = list()
 	return
 
 /obj/machinery/bot/to_bump(var/M) //Leave no man un-phased through!
@@ -298,7 +302,11 @@
 			frustration = 0
 			return TRUE
 	if(frustration > 5)
-		calc_path(target, .proc/get_path, next)
+		if (target && !target.gcDestroyed)
+			calc_path(target, .proc/get_path, next)
+		else
+			target = null
+			patrol_path = list()
 
 // send a radio signal with a single data key/value pair
 /obj/machinery/bot/proc/post_signal(var/freq, var/key, var/value)
