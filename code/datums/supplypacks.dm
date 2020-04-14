@@ -2165,6 +2165,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "cat crate"
 	group = "Hydroponics"
 
+/datum/supply_packs/snails
+	name = "Snails"
+	contains = list()
+	cost = 25
+	containertype = /obj/structure/largecrate/snails
+	containername = "snail crate"
+	group = "Hydroponics"
+
 /datum/supply_packs/weedcontrol
 	name = "Weed control equipment"
 	contains = list(/obj/item/weapon/scythe,

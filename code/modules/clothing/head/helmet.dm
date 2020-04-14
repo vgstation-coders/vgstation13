@@ -298,3 +298,13 @@
 	armor = list(melee = 10, bullet = 15, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
 	flags = FPRINT
 	siemens_coefficient = 1
+
+/obj/item/clothing/head/helmet/snail_helm
+	name = "snail helmet"
+	desc = "You feel arrogant and important just by wearing it."
+	icon_state = "snail_helm"
+	item_state = "snail_helm"
+	armor = list(melee = 10, bullet = 5, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hats.dmi', "right_hand" = 'icons/mob/in-hand/right/hats.dmi')
+	flags = FPRINT
+	siemens_coefficient = 1

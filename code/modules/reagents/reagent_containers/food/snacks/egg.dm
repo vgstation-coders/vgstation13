@@ -143,3 +143,10 @@
 	new choice(get_turf(src))
 	processing_objects.Remove(src)
 	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/snail
+	name = "snail egg"
+	desc = "Proud and arrogant, even before birth."
+	icon_state = "egg-snail"
+	can_color = FALSE
+	hatch_type = /mob/living/simple_animal/snail
