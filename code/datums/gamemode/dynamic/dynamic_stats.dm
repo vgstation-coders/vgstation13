@@ -139,7 +139,7 @@
 	// count of all built structures
 	var/datum/stat/faction_data/blob/structure_counts/built_structures = new
 
-/datum/stat/faction/blob/generate_statistics(/var/datum/faction/blob_conglomerate/BF)
+/datum/stat/faction/blob/generate_statistics(var/datum/faction/blob_conglomerate/BF)
 	..(BF)
 	//we're using global pre-existing global vars here: structure counts are collected
 	//throughout the round elsewhere
