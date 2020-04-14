@@ -245,7 +245,7 @@ steam.start() -- spawns the effect
 	spawn(time_to_live)
 		qdel(src)
 
-/obj/effect/effect/smoke/Crossed(mob/living/carbon/M as mob )
+/obj/effect/effect/smoke/Crossed(mob/living/carbon/M)
 	..()
 	if(istype(M))
 		affect(M)
@@ -305,7 +305,7 @@ steam.start() -- spawns the effect
 	for(var/mob/living/carbon/M in get_turf(src))
 		affect(M)
 
-/obj/effect/effect/smoke/sleepy/affect(mob/living/carbon/M as mob )
+/obj/effect/effect/smoke/sleepy/affect(mob/living/carbon/M)
 	if (!..())
 		return 0
 
@@ -355,7 +355,7 @@ steam.start() -- spawns the effect
 		return 0
 
 	R.burn_skin(2)
-	M.bodytemperature = min(60, M.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	R.bodytemperature = min(60, R.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /////////////////////////////////////////////
 // Smoke spread
@@ -438,7 +438,7 @@ steam.start() -- spawns the effect
 
 	return
 
-/obj/effect/effect/smoke/chem/affect(mob/living/carbon/M as mob )
+/obj/effect/effect/smoke/chem/affect(mob/living/carbon/M)
 	reagents.reaction(M)
 
 /datum/effect/effect/system/smoke_spread/chem
@@ -615,26 +615,21 @@ steam.start() -- spawns the effect
 						src.oldposition = T
 						src.oldposition = get_step(oldposition, SOUTH)
 						src.oldloc = get_step(oldposition,EAST)
-						//src.oldloc = get_step(oldloc, SOUTH)
 					if(SOUTH) // More difficult, offset to the north!
 						src.oldposition = get_step(holder,NORTH)
 						src.oldposition = get_step(oldposition,NORTH)
 						src.oldloc = get_step(oldposition,EAST)
-						//src.oldloc = get_step(oldloc,NORTH)
 					if(EAST) // Just one to the north should suffice
 						src.oldposition = T
 						src.oldposition = get_step(oldposition, WEST)
 						src.oldloc = get_step(oldposition,NORTH)
-						//src.oldloc = get_step(oldloc,WEST)
 					if(WEST) // One to the east and north from there
 						src.oldposition = get_step(holder,EAST)
 						src.oldposition = get_step(oldposition,EAST)
 						src.oldloc = get_step(oldposition,NORTH)
-						//src.oldloc = get_step(oldloc,EAST)
 				if(istype(T, /turf/space))
 					var/obj/effect/effect/trails/ion/I = getFromPool(/obj/effect/effect/trails/ion,src.oldposition)
 					var/obj/effect/effect/trails/ion/II = getFromPool(/obj/effect/effect/trails/ion,src.oldloc)
-					//src.oldposition = T
 					I.dir = src.holder.dir
 					II.dir = src.holder.dir
 					flick("ion_fade", I)
@@ -752,7 +747,6 @@ steam.start() -- spawns the effect
 	if(ccolor)
 		icon += ccolor
 	var/savedtemp
-	//playsound(src, 'sound/effects/bubbles2.ogg', 80, 1, -3)
 	if(reagents.has_reagent(WATER))
 		var/turf/simulated/T = get_turf(src)
 		var/datum/gas_mixture/old_air = T.return_air()
@@ -992,7 +986,7 @@ steam.start() -- spawns the effect
 	else
 		to_chat(user, "<span class='notice'>You hit \the [src] but bounce off it.</span>")
 
-/turf/simulated/floor/foamedmetal/attackby(obj/item/C as obj, mob/living/user as mob)
+/turf/simulated/floor/foamedmetal/attackby(obj/item/C, mob/living/user)
 	if(!(locate(/obj/structure/lattice) in contents))
 		if(istype(C, /obj/item/stack/rods))
 			return
@@ -1079,20 +1073,6 @@ steam.start() -- spawns the effect
 		heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
 		light = min(7, range) // clamps to 7 light range for grenades
 		flash = range * 1.5
-		/*
-		if (round(amount/12) > 0)
-			devastation = min (MAX_EXPLOSION_RANGE, devastation + round(amount/12))
-
-		if (round(amount/6) > 0)
-			heavy = min (MAX_EXPLOSION_RANGE, heavy + round(amount/6))
-
-		if (round(amount/3) > 0)
-			light = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
-
-		if (flash && flashing_factor)
-			flash += (round(amount/4) * flashing_factor)
-		*/
-
 		for(var/mob/M in viewers(8, location))
 			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
 
