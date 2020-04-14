@@ -236,6 +236,10 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 		if(user.s_active)
 			user.s_active.show_to(user)
 
+
+/obj/item/weapon/storage/bag/plants/portactor/CtrlClick()
+	return
+
 // -----------------------------
 //          Food bag
 // -----------------------------
