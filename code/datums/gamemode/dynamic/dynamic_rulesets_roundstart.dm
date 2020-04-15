@@ -21,7 +21,7 @@
 	high_population_requirement = 10
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
-	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels	
+	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
 	var/num_traitors = min(round(mode.roundstart_pop_ready / traitor_scaling_coeff) + 1, candidates.len)
 	for (var/i = 1 to num_traitors)
 		var/mob/M = pick(candidates)
@@ -231,6 +231,8 @@
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
 	required_candidates = cultist_cap[indice_pop]
+	if (forced)
+		required_candidates = 1
 	. = ..()
 
 /datum/dynamic_ruleset/roundstart/bloodcult/execute()
@@ -316,6 +318,8 @@
 /datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
 	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
 	required_candidates = operative_cap[indice_pop]
+	if (forced)
+		required_candidates = 1
 	. = ..()
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
