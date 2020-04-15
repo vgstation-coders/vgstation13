@@ -1,6 +1,8 @@
 //snail
 
 var/snail_count = 0
+var/max_snail_eggs = 15
+var/max_snails = 40
 
 /mob/living/simple_animal/snail
 	species_type = /mob/living/simple_animal/snail
@@ -94,9 +96,9 @@ var/snail_count = 0
 	..()
 	if (life_tick < 25)
 		return
-	if (snail_egg_count >= 15)
+	if (snail_egg_count >= max_snail_eggs)
 		return
-	if (snail_count >= 40)
+	if (snail_count >= max_snails)
 		return
 	if (mated)
 		return
