@@ -209,7 +209,7 @@ var/global/list/pathmakers = list()
 				PNode.distance_from_start = call(cur.source,dist)(T)
 				PNode.distance_from_end = newenddist
 				PNode.calc_f()
-				if(!open.ReSort(PNode))//reorder the changed element in the list
+				if(!open.ReSort(PNode.source))//reorder the changed element in the list
 					astar_debug("failed to reorder, requeuing")
 					open.Enqueue(PNode)
 	astar_debug("open:[open.List().len]")

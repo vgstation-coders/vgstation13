@@ -250,7 +250,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 					PNode.prevNode = cur
 					PNode.distance_from_start = newenddist
 					PNode.calc_f()
-					open.ReSort(PNode)//reorder the changed element in the list
+					open.ReSort(PNode.source)//reorder the changed element in the list
 
 	}
 
