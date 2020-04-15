@@ -33,7 +33,6 @@ var/max_snails = 40
 
 	var/in_shell = 0
 	var/being_romantic = 0
-	var/mated = FALSE
 	var/mob/living/simple_animal/snail/loving_partner = null
 
 /mob/living/simple_animal/snail/New()
@@ -66,8 +65,6 @@ var/max_snails = 40
 	if (being_romantic)
 		being_romantic--
 		if (being_romantic == 0)
-			mated = TRUE
-			loving_partner.mated = TRUE
 			new /obj/item/weapon/reagent_containers/food/snacks/egg/snail(get_turf(src))
 			visible_message("<span class='notice'>\The [src] gently goes off its partner.</span>")
 			loving_partner.being_romantic = 0
@@ -99,8 +96,6 @@ var/max_snails = 40
 	if (snail_egg_count >= max_snail_eggs)
 		return
 	if (snail_count >= max_snails)
-		return
-	if (mated)
 		return
 	for(var/mob/living/simple_animal/snail/partner in loc)
 		if (partner.being_romantic)
