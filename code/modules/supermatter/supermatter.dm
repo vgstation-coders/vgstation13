@@ -104,7 +104,7 @@
 /obj/machinery/power/supermatter/Destroy()
 	qdel(radio)
 	radio = null
-	qdel(radio_connection)
+	radio_controller.remove_object(src, frequency)
 	radio_connection = null
 	. = ..()
 
