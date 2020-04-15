@@ -245,12 +245,17 @@ var/stacking_limit = 90
 
 /datum/gamemode/dynamic/proc/rigged_roundstart()
 	message_admins("[forced_roundstart_ruleset.len] rulesets being forced. Will now attempt to draft players for them.")
+	var/forced_rules = 0
 	for (var/datum/dynamic_ruleset/roundstart/rule in forced_roundstart_ruleset)
 		rule.mode = src
 		rule.candidates = candidates.Copy()
 		rule.trim_candidates()
 		if (rule.ready(1))//ignoring enemy job requirements
 			picking_roundstart_rule(list(rule))
+			forced_rules++
+	if (forced_rules == 0)
+		message_admins("Not a single forced ruleset could be executed. Sad! Will now start a regular round of dynamic.")
+		roundstart()
 
 /datum/gamemode/dynamic/proc/roundstart()
 	if (forced_extended)
