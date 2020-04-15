@@ -1,4 +1,9 @@
 //snail
+
+var/snail_count = 0
+var/max_snail_eggs = 15
+var/max_snails = 40
+
 /mob/living/simple_animal/snail
 	species_type = /mob/living/simple_animal/snail
 	name = "space snail"
@@ -22,13 +27,20 @@
 
 	turns_per_move = 8 //8 life ticks / move
 
+	density = 0
+
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/snail
 
 	var/in_shell = 0
 	var/being_romantic = 0
 	var/mob/living/simple_animal/snail/loving_partner = null
 
+/mob/living/simple_animal/snail/New()
+	snail_count++
+	return ..()
+
 /mob/living/simple_animal/snail/Destroy()
+	snail_count--
 	if (loving_partner)
 		loving_partner.loving_partner = null
 		loving_partner = null
@@ -81,6 +93,10 @@
 	..()
 	if (life_tick < 25)
 		return
+	if (snail_egg_count >= max_snail_eggs)
+		return
+	if (snail_count >= max_snails)
+		return
 	for(var/mob/living/simple_animal/snail/partner in loc)
 		if (partner.being_romantic)
 			return // the other snail is busy
@@ -88,9 +104,9 @@
 		if (prob(80))
 			return
 
-		being_romantic = 15
+		being_romantic = 45
 		loving_partner = partner
-		partner.being_romantic = 15
+		partner.being_romantic = 45
 		partner.loving_partner = src
 		visible_message("<span class='notice'>\The [src] begins to softly approach \the [partner]...</span>")
 

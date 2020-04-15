@@ -144,6 +144,8 @@
 	processing_objects.Remove(src)
 	qdel(src)
 
+var/snail_egg_count = 0
+
 /obj/item/weapon/reagent_containers/food/snacks/egg/snail
 	name = "snail egg"
 	desc = "Proud and arrogant, even before birth."
@@ -153,4 +155,9 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/snail/New()
 	processing_objects.Add(src)
+	snail_egg_count++
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/snail/Destroy()
+	snail_egg_count--
 	return ..()
