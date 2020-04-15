@@ -178,14 +178,14 @@
 				self_drugged_message="<span class='warning'>\The [name] decides to spare this one.</span>")
 			return
 
-	if(status && . != FALSE) // This is charged : we stun
-		user.lastattacked = L
-		L.lastattacker = user
-
 	if(iscarbon(L))
 		var/mob/living/carbon/C = L
 		if(C.check_shields(force,src))
-			return FALSE
+			return FALSE //That way during a harmbaton it will not check for the shield twice
+
+	if(status && . != FALSE) // This is charged : we stun
+		user.lastattacked = L
+		L.lastattacker = user
 
 		L.Stun(stunforce)
 		L.apply_effect(10, STUTTER, 0)
