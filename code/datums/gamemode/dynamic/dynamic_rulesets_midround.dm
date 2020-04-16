@@ -332,6 +332,11 @@
 	logo = "nuke-logo"
 	flags = HIGHLANDER_RULESET
 
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
+	if (forced)
+		required_candidates = 1
+	return ..()
+
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population = 0,var/threat = 0)
 	if(locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
 		return 0 //Unavailable if nuke ops were already sent at roundstart
@@ -457,7 +462,7 @@
 	if (!spoider)
 		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
 	spoider.HandleRecruitedRole(newninja)
-	
+
 	return ..()
 
 //////////////////////////////////////////////
