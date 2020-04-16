@@ -1,10 +1,10 @@
-/mob/living/simple_animal/hostile/humanoid/nazi
-	name = "\improper Nazi"
+/mob/living/simple_animal/hostile/humanoid/wehrmacht
+	name = "\improper wehrmacht"
 	desc = "Sieg Heil!"
 	icon = 'icons/mob/hostile_humanoid.dmi'
-	icon_state = "nazi"
-	icon_living = "nazi"
-	icon_dead = "nazi"
+	icon_state = "wehrmacht"
+	icon_living = "wehrmacht"
+	icon_dead = "wehrmacht"
 	icon_gib = "syndicate_gib"
 
 	speak = list("Schweinhunds!","Can you feel ze Schadenfreude?","Ach, was ist los?")
@@ -21,13 +21,13 @@
 	melee_damage_lower = 5
 	melee_damage_upper = 5
 
-	corpse = /obj/effect/landmark/corpse/nazi
+	corpse = /obj/effect/landmark/corpse/wehrmacht
 
 	items_to_drop = list(
-		/obj/item/weapon/kitchen/utensil/knife/nazi,
+		/obj/item/weapon/kitchen/utensil/knife/wehrmacht,
 		)
 
-	faction = "nazi"
+	faction = "wehrmacht"
 
 	ranged = 1
 	retreat_distance = 7
@@ -42,30 +42,30 @@
 	var/reloads = 1
 	ranged_cooldown_cap = 1
 
-/mob/living/simple_animal/hostile/humanoid/nazi/Life()
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/Life()
 	..()
 	overlays.len = 0
 	if(stance != HOSTILE_STANCE_IDLE)
 		if(ranged)
 			overlays += icon('icons/mob/in-hand/right/items_righthand.dmi',"gun")
 			if(melee_damage_upper > 10)
-				overlays += icon('icons/mob/in-hand/left/swords_axes.dmi',"knifenazi")
+				overlays += icon('icons/mob/in-hand/left/swords_axes.dmi',"knifewehrmacht")
 		else
 			overlays += icon('icons/mob/belt.dmi',"gun")
 			if (melee_damage_upper > 10)
-				overlays += icon('icons/mob/in-hand/right/swords_axes.dmi',"knifenazi")
+				overlays += icon('icons/mob/in-hand/right/swords_axes.dmi',"knifewehrmacht")
 
-/mob/living/simple_animal/hostile/humanoid/nazi/death(var/gibbed = FALSE)
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/death(var/gibbed = FALSE)
 	droploot()
 	..(gibbed)
 
-/mob/living/simple_animal/hostile/humanoid/nazi/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
 	if(..())
 		afterShoot()
 		return 1
 	return 0
 
-/mob/living/simple_animal/hostile/humanoid/nazi/proc/afterShoot()
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/proc/afterShoot()
 	ammo--
 	if(ammo <= 0)
 		if(reloads > 0)
@@ -81,7 +81,7 @@
 			minimum_distance = 0
 			ranged = 0
 
-/mob/living/simple_animal/hostile/humanoid/nazi/proc/droploot()
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/proc/droploot()
 	var/obj/item/weapon/gun/projectile/luger/dropgun = new(loc)
 	if(!ammo)
 		qdel(dropgun.chambered)
@@ -100,17 +100,17 @@
 
 ///////////////////////////////////////////////////////////////////SOLDIER///////////
 
-/mob/living/simple_animal/hostile/humanoid/nazi/soldier
-	name = "\improper Nazi Soldier"
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/soldier
+	name = "\improper wehrmacht Soldier"
 
-	icon_state = "nazisoldier"
-	icon_living = "nazisoldier"
-	icon_dead = "nazisoldier"
+	icon_state = "wehrmachtsoldier"
+	icon_living = "wehrmachtsoldier"
+	icon_dead = "wehrmachtsoldier"
 
 	health = 150
 	maxHealth = 150
 
-	corpse = /obj/effect/landmark/corpse/nazi/soldier
+	corpse = /obj/effect/landmark/corpse/wehrmacht/soldier
 
 	melee_damage_lower = 5
 	melee_damage_upper = 5
@@ -134,20 +134,20 @@
 	ranged_cooldown_cap = 1
 	casingtype = null
 
-/mob/living/simple_animal/hostile/humanoid/nazi/soldier/Life()
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/soldier/Life()
 	..()
 	overlays.len = 0
 	if(stance != HOSTILE_STANCE_IDLE)
 		if(ranged)
 			overlays += icon('icons/mob/in-hand/right/guninhands_right.dmi',"PlasMP100")
 			if(melee_damage_upper > 10)
-				overlays += icon('icons/mob/in-hand/left/swords_axes.dmi',"knifenazi")
+				overlays += icon('icons/mob/in-hand/left/swords_axes.dmi',"knifewehrmacht")
 		else
 			overlays += icon('icons/mob/in-hand/left/guninhands_left.dmi',"PlasMP0")
 			if (melee_damage_upper > 10)
-				overlays += icon('icons/mob/in-hand/right/swords_axes.dmi',"knifenazi")
+				overlays += icon('icons/mob/in-hand/right/swords_axes.dmi',"knifewehrmacht")
 
-/mob/living/simple_animal/hostile/humanoid/nazi/soldier/afterShoot()
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/soldier/afterShoot()
 	ammo--
 	if(ammo <= 0)
 		melee_damage_lower = 15
@@ -168,7 +168,7 @@
 				attack_sound = "punch"
 				ranged = 1
 
-/mob/living/simple_animal/hostile/humanoid/nazi/soldier/droploot()
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/soldier/droploot()
 	var/obj/item/weapon/gun/energy/plasma/MP40k/dropgun = new(loc)
 	var/obj/item/weapon/cell/guncell = dropgun.power_supply
 	guncell.charge = min(guncell.maxcharge,25+(75 * ammo))
@@ -176,18 +176,18 @@
 
 ///////////////////////////////////////////////////////////////////OFFICER///////////
 
-/mob/living/simple_animal/hostile/humanoid/nazi/officer
-	name = "\improper Nazi Officer"
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/officer
+	name = "\improper wehrmacht Officer"
 
-	corpse = /obj/effect/landmark/corpse/nazi/officer
+	corpse = /obj/effect/landmark/corpse/wehrmacht/officer
 
-	icon_state = "naziofficer"
-	icon_living = "naziofficer"
-	icon_dead = "naziofficer"
+	icon_state = "wehrmachtofficer"
+	icon_living = "wehrmachtofficer"
+	icon_dead = "wehrmachtofficer"
 	ammo = 6
 	ranged_cooldown_cap = 2
 
-/mob/living/simple_animal/hostile/humanoid/nazi/officer/afterShoot()
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/officer/afterShoot()
 	ammo--
 	new /obj/item/ammo_casing/a357(loc,1)
 	if(ammo <= 0)
@@ -209,7 +209,7 @@
 				if(health > 0)
 					say("Come over here. I promise I will kill you!")
 
-/mob/living/simple_animal/hostile/humanoid/nazi/officer/droploot()
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/officer/droploot()
 	var/obj/item/weapon/gun/projectile/mateba/M = new(loc)
 	M.loaded = list()
 	for(var/i=1;i<=ammo;i++)
@@ -220,14 +220,14 @@
 
 ///////////////////////////////////////////////////////////////////SPACE TROOPER///////////
 
-/mob/living/simple_animal/hostile/humanoid/nazi/spacetrooper
-	name = "\improper Nazi Trooper"
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/spacetrooper
+	name = "\improper wehrmacht Trooper"
 
-	corpse = /obj/effect/landmark/corpse/nazi/spacetrooper
+	corpse = /obj/effect/landmark/corpse/wehrmacht/spacetrooper
 
-	icon_state = "nazitrooper"
-	icon_living = "nazitrooper"
-	icon_dead = "nazitrooper"
+	icon_state = "wehrmachttrooper"
+	icon_living = "wehrmachttrooper"
+	icon_dead = "wehrmachttrooper"
 
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	attacktext = "stabs"
@@ -262,16 +262,16 @@
 
 	var/datum/effect/effect/system/trail/ion_trail
 
-/mob/living/simple_animal/hostile/humanoid/nazi/spacetrooper/New()
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/spacetrooper/New()
 	. = ..()
 	ion_trail = new /datum/effect/effect/system/trail()
 	ion_trail.set_up(src)
 	ion_trail.start()
 
-/mob/living/simple_animal/hostile/humanoid/nazi/spacetrooper/Process_Spacemove(var/check_drift = 0)
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/spacetrooper/Process_Spacemove(var/check_drift = 0)
 	return 1
 
-/mob/living/simple_animal/hostile/humanoid/nazi/spacetrooper/afterShoot()
+/mob/living/simple_animal/hostile/humanoid/wehrmacht/spacetrooper/afterShoot()
 	ammo--
 	new /obj/item/ammo_casing/a357(loc,1)
 	if(ammo <= 0)
@@ -321,7 +321,7 @@
 	melee_damage_lower = 40
 	melee_damage_upper = 80
 
-	faction = "nazi"
+	faction = "wehrmacht"
 
 	ranged = 1
 	rapid = 1

@@ -195,10 +195,10 @@
 	sharpness = 0.8
 	melt_temperature = MELTPOINT_PLASTIC
 
-/obj/item/weapon/kitchen/utensil/knife/nazi
-	name = "nazi knife"
+/obj/item/weapon/kitchen/utensil/knife/wehrmacht
+	name = "wehrmacht knife"
 	desc = "There's a svastika at the base of the blade. Powerful when thrown."
-	icon_state = "knifenazi"
+	icon_state = "knifewehrmacht"
 	siemens_coefficient = 1
 	sharpness = 1.5
 	force = 10.0

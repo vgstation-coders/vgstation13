@@ -139,7 +139,7 @@
 "cI" = (/obj/machinery/door/window{dir = 1; name = "Cockpit"; req_access_txt = "150"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/syndicate_station/start)
 "cJ" = (/turf/unsimulated/floor{icon = 'icons/turf/snow.dmi'; icon_state = "snow"},/turf/simulated/shuttle/wall{dir = 4; icon_state = "diagonalWall3"},/area/syndicate_station/start)
 "cK" = (/obj/effect/decal/warning_stripes{tag = "icon-loading_area (NORTH)"; icon_state = "loading_area"; dir = 1},/turf/simulated/floor/plating,/area/mine/living_quarters)
-"cL" = (/obj/machinery/vending/nazivend,/turf/unsimulated/floor{icon_state = "bar"},/area/syndicate_mothership)
+"cL" = (/obj/machinery/vending/wehrmachtvend,/turf/unsimulated/floor{icon_state = "bar"},/area/syndicate_mothership)
 "cM" = (/obj/item/weapon/paper{info = "GET DAT FUCKEN DISK"; name = "memo"},/turf/unsimulated/floor{icon_state = "bar"},/area/syndicate_mothership)
 "cN" = (/obj/machinery/door/airlock/centcom{name = "Study"; opacity = 1; req_access_txt = "150"},/turf/unsimulated/floor{icon_state = "bar"},/area/syndicate_mothership)
 "cO" = (/turf/unsimulated/floor{icon_state = "grimy"},/area/syndicate_mothership)

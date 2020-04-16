@@ -209,7 +209,7 @@
 		if("throw")
 			if(prob(20))
 				if(prob(50))
-					new /obj/item/weapon/kitchen/utensil/knife/nazi(get_turf(src))
+					new /obj/item/weapon/kitchen/utensil/knife/wehrmacht(get_turf(src))
 				else
 					new /obj/item/weapon/gun/hookshot/whip(get_turf(src))
 			else

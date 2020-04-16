@@ -24,7 +24,7 @@
 "x" = (/obj/machinery/door/unpowered,/turf/simulated/floor/airless,/area/vault/gym)
 "y" = (/obj/item/weapon/reagent_containers/glass/bucket,/turf/simulated/floor/airless,/area/vault/gym)
 "z" = (/obj/machinery/power/treadmill,/obj/abstract/map/spawner/misc/gym,/turf/simulated/floor/airless,/area/vault/gym)
-"A" = (/obj/item/weapon/reagent_containers/food/snacks/faggot,/turf/simulated/floor/airless,/area/vault/gym)
+"A" = (/obj/item/weapon/reagent_containers/food/snacks/meatball,/turf/simulated/floor/airless,/area/vault/gym)
 "B" = (/obj/machinery/power/treadmill,/turf/simulated/floor/airless,/area/vault/gym)
 "C" = (/obj/structure/mopbucket,/obj/item/weapon/mop,/turf/simulated/floor/airless,/area/vault/gym)
 

@@ -67,8 +67,8 @@
 	rapid = 1
 	retreat_distance = 5
 	corpse = null
-	projectiletype = /obj/item/projectile/bullet/faggot
-	ranged_message = "flings a faggot"
+	projectiletype = /obj/item/projectile/bullet/meatball
+	ranged_message = "flings a meatball"
 
 
 /mob/living/simple_animal/hostile/humanoid/kitchen/meatballer/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
@@ -105,8 +105,8 @@
 							/obj/item/weapon/reagent_containers/food/snacks/copypasta)
 		new to_spawn (src.loc)
 
-	new /obj/item/weapon/reagent_containers/food/snacks/faggot(src.loc)
-	visible_message("<span class='warning'>\The [src] falls apart, revealing a solitary faggot among the remains.</span>")
+	new /obj/item/weapon/reagent_containers/food/snacks/meatball(src.loc)
+	visible_message("<span class='warning'>\The [src] falls apart, revealing a solitary meatball among the remains.</span>")
 	qdel (src)
 
 /*

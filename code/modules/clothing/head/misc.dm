@@ -357,7 +357,7 @@
 
 /obj/item/clothing/head/stalhelm
 	name = "Stalhelm"
-	desc = "Ein Helm, um die Nazi-Interesse an fremden Raumstationen zu sichern."
+	desc = "Ein Helm, um die wehrmacht-Interesse an fremden Raumstationen zu sichern."
 	icon_state = "stalhelm"
 	item_state = "stalhelm"
 	flags = FPRINT
@@ -369,9 +369,9 @@
 	item_state = "panzercap"
 	flags = FPRINT
 
-/obj/item/clothing/head/naziofficer
+/obj/item/clothing/head/wehrmachtofficer
 	name = "Officer Cap"
-	desc = "Ein Hut von Offizieren in der Nazi-Partei getragen."
+	desc = "Ein Hut von Offizieren in der wehrmacht-Partei getragen."
 	icon_state = "officercap"
 	item_state = "officercap"
 	flags = FPRINT

@@ -541,7 +541,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/clothing/head/headband,
 	/obj/item/clothing/head/libertyhat,
 	/obj/item/clothing/head/mailman,
-	/obj/item/clothing/head/naziofficer,
+	/obj/item/clothing/head/wehrmachtofficer,
 	/obj/item/clothing/head/panzer,
 	/obj/item/clothing/head/powdered_wig,
 	/obj/item/clothing/head/soft/mime,
@@ -2406,7 +2406,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Old and Forgotten stack of packs"
 	contains = list(/obj/structure/vendomatpack/sovietsoda,
 					/obj/structure/vendomatpack/sovietsoda,
-					/obj/structure/vendomatpack/nazivend,
+					/obj/structure/vendomatpack/wehrmachtvend,
 					/obj/structure/vendomatpack/sovietvend)
 	cost = 20
 	containertype = /obj/structure/stackopacks

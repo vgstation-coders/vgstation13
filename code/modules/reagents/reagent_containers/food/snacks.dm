@@ -830,13 +830,13 @@
 	reagents.add_reagent(TOXIN, 2)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/faggot
-	name = "faggot"
+/obj/item/weapon/reagent_containers/food/snacks/meatball
+	name = "meatball"
 	desc = "A great meal all round. Not a cord of wood."
-	icon_state = "faggot"
+	icon_state = "meatball"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/faggot/New()
+/obj/item/weapon/reagent_containers/food/snacks/meatball/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 2

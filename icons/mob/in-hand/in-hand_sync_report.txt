@@ -515,7 +515,7 @@
  + mousetrap
  + multitool
  + muzzle
- + nazi1
+ + wehrmacht1
  + necrohood
  + necronomicon
  + necrorobe
@@ -1122,7 +1122,7 @@
  + mousetrap
  + multitool
  + muzzle
- + nazi1
+ + wehrmacht1
  + necronomicon
  + nettle
  + newspaper

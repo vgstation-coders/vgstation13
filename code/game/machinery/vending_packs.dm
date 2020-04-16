@@ -174,10 +174,10 @@
 	targetvendomat = /obj/machinery/vending/magivend
 	icon_state = "MagiVend"
 
-/obj/structure/vendomatpack/nazivend
-	name = "Nazivend recharge pack"
-	targetvendomat = /obj/machinery/vending/nazivend
-	icon_state = "nazi"
+/obj/structure/vendomatpack/wehrmachtvend
+	name = "wehrmachtvend recharge pack"
+	targetvendomat = /obj/machinery/vending/wehrmachtvend
+	icon_state = "wehrmacht"
 
 /obj/structure/vendomatpack/sovietvend
 	name = "KomradeVendtink recharge pack"

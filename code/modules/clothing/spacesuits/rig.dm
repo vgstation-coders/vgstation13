@@ -508,30 +508,30 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/weapon/wrench/socket)
 	head_type = /obj/item/clothing/head/helmet/space/rig/atmos/gold
 
-//ADMINBUS RIGS. SOVIET + NAZI
-/obj/item/clothing/head/helmet/space/rig/nazi
-	name = "nazi hardhelmet"
+//ADMINBUS RIGS. SOVIET + wehrmacht
+/obj/item/clothing/head/helmet/space/rig/wehrmacht
+	name = "wehrmacht hardhelmet"
 	desc = "This is the face of das vaterland's top elite. Gas or energy are your only escapes."
-	item_state = "rig0-nazi"
-	icon_state = "rig0-nazi"
+	item_state = "rig0-wehrmacht"
+	icon_state = "rig0-wehrmacht"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//GAS THE VOX
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
-	_color = "nazi"
+	_color = "wehrmacht"
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	color_on = "#FF2222"
 
-/obj/item/clothing/suit/space/rig/nazi
-	name = "nazi hardsuit"
+/obj/item/clothing/suit/space/rig/wehrmacht
+	name = "wehrmacht hardsuit"
 	desc = "The attire of a true krieger. All shall fall, and only das vaterland will remain."
-	item_state = "rig-nazi"
-	icon_state = "rig-nazi"
+	item_state = "rig-wehrmacht"
+	icon_state = "rig-wehrmacht"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//GAS THE VOX
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	head_type = /obj/item/clothing/head/helmet/space/rig/nazi
+	head_type = /obj/item/clothing/head/helmet/space/rig/wehrmacht
 
 /obj/item/clothing/head/helmet/space/rig/soviet
 	name = "soviet hardhelmet"

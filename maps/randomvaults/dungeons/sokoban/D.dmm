@@ -23,7 +23,7 @@
 "w" = (/obj/machinery/vending/makeup,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "x" = (/obj/machinery/vending/medical,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "y" = (/obj/machinery/vending/mining,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
-"z" = (/obj/machinery/vending/nazivend,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"z" = (/obj/machinery/vending/wehrmachtvend,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "A" = (/obj/machinery/vending/groans,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "B" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "C" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)

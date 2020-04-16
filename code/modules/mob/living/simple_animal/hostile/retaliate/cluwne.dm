@@ -61,7 +61,7 @@
 	..()
 	// Set up wordfilter
 	speech_filter = new
-	speech_filter.addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)",
+	speech_filter.addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|philistine|security|shitcurity)",
 	list(
 		"honker",
 		"fun police",

@@ -5796,7 +5796,7 @@
 "chx" = (/obj/structure/rack,/obj/item/clothing/suit/space/syndicate,/obj/item/clothing/head/helmet/space/syndicate,/turf/unsimulated/floor{icon_state = "floor4"},/area/shuttle/nuclearops)
 "chy" = (/turf/unsimulated/floor{icon = 'icons/turf/snow.dmi'; icon_state = "snow"},/turf/unsimulated/floor{icon = 'icons/turf/snow.dmi'; icon_state = "gravsnow_corner"; dir = 10},/area/syndicate_mothership)
 "chz" = (/obj/item/device/radio/intercom{desc = "Talk through this. Evilly"; freerange = 1; frequency = 1213; name = "Syndicate Intercom"; pixel_x = -32; subspace_transmission = 1; syndie = 1},/turf/unsimulated/floor{icon_state = "floor4"},/area/shuttle/nuclearops)
-"chA" = (/obj/machinery/vending/nazivend,/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/syndicate_mothership)
+"chA" = (/obj/machinery/vending/wehrmachtvend,/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/syndicate_mothership)
 "chB" = (/obj/structure/table,/obj/item/stack/medical/bruise_pack,/obj/item/weapon/retractor{pixel_y = 6},/obj/item/weapon/scalpel,/turf/simulated/floor{icon_state = "white"},/area/shuttle/nuclearops)
 "chC" = (/obj/structure/table,/obj/item/weapon/bonegel{pixel_x = 4; pixel_y = 3},/obj/item/weapon/bonesetter,/turf/simulated/floor{icon_state = "white"},/area/shuttle/nuclearops)
 "chD" = (/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/unsimulated/floor{icon_state = "white"},/area/shuttle/nuclearops)

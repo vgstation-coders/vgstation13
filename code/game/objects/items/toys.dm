@@ -911,7 +911,7 @@
 
 /obj/item/toy/gasha/snowflake
 	name = "toy snowflake"
-	desc = "What a faggot"
+	desc = "What a bundle of sticks"
 	icon_state = "fag"
 
 /obj/item/toy/gasha/shade

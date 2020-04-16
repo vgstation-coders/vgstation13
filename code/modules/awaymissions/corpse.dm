@@ -874,31 +874,31 @@
 /obj/effect/landmark/corpse/russian/ranged
 	corpsehelmet = /obj/item/clothing/head/ushanka
 
-/obj/effect/landmark/corpse/nazi
-	name = "Nazi"
+/obj/effect/landmark/corpse/wehrmacht
+	name = "wehrmacht"
 	corpseshoes = /obj/item/clothing/shoes/jackboots
 	corpseuniform = /obj/item/clothing/under/soldieruniform
 	corpsehelmet = /obj/item/clothing/head/panzer
 
-/obj/effect/landmark/corpse/nazi/soldier
-	name = "Nazi Soldier"
+/obj/effect/landmark/corpse/wehrmacht/soldier
+	name = "wehrmacht Soldier"
 	corpsehelmet = /obj/item/clothing/head/stalhelm
 	corpsesuit = /obj/item/clothing/suit/soldiercoat
 	corpsegloves = /obj/item/clothing/gloves/black
 	corpsemask = /obj/item/clothing/mask/gas
 
-/obj/effect/landmark/corpse/nazi/officer
-	name = "Nazi Officer"
+/obj/effect/landmark/corpse/wehrmacht/officer
+	name = "wehrmacht Officer"
 	corpseuniform = /obj/item/clothing/under/officeruniform
-	corpsehelmet = /obj/item/clothing/head/naziofficer
+	corpsehelmet = /obj/item/clothing/head/wehrmachtofficer
 	corpsesuit = /obj/item/clothing/suit/officercoat
 	corpsegloves = /obj/item/clothing/gloves/black
 	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
 
-/obj/effect/landmark/corpse/nazi/spacetrooper
-	name = "Nazi Trooper"
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/nazi
-	corpsesuit = /obj/item/clothing/suit/space/rig/nazi
+/obj/effect/landmark/corpse/wehrmacht/spacetrooper
+	name = "wehrmacht Trooper"
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/wehrmacht
+	corpsesuit = /obj/item/clothing/suit/space/rig/wehrmacht
 
 //////////////////Admin Use//////////////////////////////
 

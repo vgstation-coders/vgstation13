@@ -48,9 +48,9 @@
 	icon = "foreign"
 	desc = "The only bar you will ever need, comrade!"
 
-/datum/barsign/vg/nazi
+/datum/barsign/vg/wehrmacht
 	name = "Der Fuhrer's Trinken Haus"
-	icon = "nazi"
+	icon = "wehrmacht"
 	desc = "A shining light in the dark mire of degeneracy."
 
 /datum/barsign/vg/brokenheros

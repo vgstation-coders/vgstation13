@@ -662,7 +662,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "LGBT Advocate"
 	female_adept = "LGBT Advocate"
-	keys = list("homosexuality", "faggotry", "gayness", "gay", "penis", "faggot", "cock", "cocks", "dick", "dicks")
+	keys = list("homosexuality", "faggotry", "gayness", "gay", "penis", "bundle of sticks", "cock", "cocks", "dick", "dicks")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 /datum/religion/homosexuality/equip_chaplain(var/mob/living/carbon/human/H)
@@ -675,7 +675,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Retard"
 	female_adept = "Retard"
-	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
+	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "philistine", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
 	convert_method = "standing both next to a table."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
@@ -955,18 +955,6 @@
 
 /datum/religion/america/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/libertyhat(H), slot_head)
-
-/datum/religion/nazism
-	name = "Nazism"
-	deity_name = "Adolf Hitler"
-	bible_name = "Mein Kampf"
-	male_adept = "Feldbischof" //No seriously, that's a thing, look it up
-	female_adept = "Feldbischof"
-	keys = list("fascism", "nazi", "national socialism")
-	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
-
-/datum/religion/nazism/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new /obj/item/clothing/head/naziofficer(H), slot_head)
 
 /datum/religion/security
 	name = "Security"

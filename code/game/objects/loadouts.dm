@@ -38,9 +38,9 @@
 						/obj/item/clothing/gloves/purple,
 						/obj/item/clothing/shoes/sandal)
 
-/obj/abstract/loadout/nazi_rigsuit
-	items_to_spawn = list(/obj/item/clothing/head/helmet/space/rig/nazi,
-						/obj/item/clothing/suit/space/rig/nazi)
+/obj/abstract/loadout/wehrmacht_rigsuit
+	items_to_spawn = list(/obj/item/clothing/head/helmet/space/rig/wehrmacht,
+						/obj/item/clothing/suit/space/rig/wehrmacht)
 
 /obj/abstract/loadout/soviet_rigsuit
 	items_to_spawn = list(/obj/item/clothing/head/helmet/space/rig/soviet,

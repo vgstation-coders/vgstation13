@@ -207,7 +207,7 @@
 							h.equip_to_slot(kneesock,slot_shoes)
 							h.equip_to_slot(apron,slot_wear_suit)
 							h.equip_to_slot(kitty_ears,slot_head)
-							to_chat(user, "<span class=danger><B>You have been turned into a disgusting faggot! </span></B>")
+							to_chat(user, "<span class=danger><B>You have been turned into a disgusting bundle of sticks! </span></B>")
 						if(4)
 							if(h.species.name != "Tajaran") // Catbeasts don't get to roll the dice and turn into monsters.
 								var/list/valid_species = (all_species - list("Krampus", "Horror"))
@@ -319,7 +319,7 @@
 								if(2)
 									new /obj/item/clothing/under/officeruniform(user.loc, user)
 									new /obj/item/clothing/suit/officercoat(user.loc, user)
-									new /obj/item/clothing/head/naziofficer(user.loc, user)
+									new /obj/item/clothing/head/wehrmachtofficer(user.loc, user)
 									new /obj/item/clothing/shoes/jackboots(user.loc, user)
 								if(3)
 									new /obj/item/clothing/head/helmet/richard(user.loc, user)

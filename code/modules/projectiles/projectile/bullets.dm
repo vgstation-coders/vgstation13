@@ -921,10 +921,10 @@ obj/item/projectile/bullet/suffocationbullet
 	embed_message = FALSE
 	variance_angle = 50
 
-/obj/item/projectile/bullet/faggot
-	name = "high-speed faggot"
+/obj/item/projectile/bullet/meatball
+	name = "high-speed meatball"
 	icon = 'icons/obj/food.dmi'
-	icon_state = "faggot"
+	icon_state = "meatball"
 	damage = 10
 
 /obj/item/projectile/bullet/syringe

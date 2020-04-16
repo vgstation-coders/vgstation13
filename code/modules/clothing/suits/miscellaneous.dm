@@ -278,8 +278,8 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/greatcoat
 	name = "great coat"
-	desc = "A Nazi great coat."
-	icon_state = "nazi"//broken on mob, item fine
+	desc = "A wehrmacht great coat."
+	icon_state = "wehrmacht"//broken on mob, item fine
 	flags = FPRINT
 
 

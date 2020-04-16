@@ -2695,10 +2695,10 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/shoedispenser
 
 //HEIL ADMINBUS
-/obj/machinery/vending/nazivend
-	name = "\improper Nazivend"
-	desc = "A vending machine containing Nazi German supplies. A label reads: \"Remember the gorrilions lost.\""
-	icon_state = "nazi"
+/obj/machinery/vending/wehrmachtvend
+	name = "\improper wehrmachtvend"
+	desc = "A vending machine containing WW2 German supplies. A label reads: \"Remember the gorrilions lost.\""
+	icon_state = "wehrmacht"
 	vend_reply = "SIEG HEIL!"
 	product_ads = list(
 		"BESTRAFEN die Juden.",
@@ -2719,7 +2719,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/jackboots = 20,
 		)
 	contraband = list(
-		/obj/item/clothing/head/naziofficer = 10,
+		/obj/item/clothing/head/wehrmachtofficer = 10,
 		/obj/item/clothing/suit/officercoat = 10,
 		/obj/item/clothing/under/officeruniform = 10,
 		)
@@ -2727,17 +2727,17 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/varsity = 1,
 		)
 
-	pack = /obj/structure/vendomatpack/nazivend
+	pack = /obj/structure/vendomatpack/wehrmachtvend
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
 
-/obj/machinery/vending/nazivend/emag(mob/user)
+/obj/machinery/vending/wehrmachtvend/emag(mob/user)
 	if(!emagged)
 		if(user)
 			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
-			message_admins("[key_name_admin(user)] unlocked a Nazivend's DANGERMODE!")
-		contraband[/obj/item/clothing/head/helmet/space/rig/nazi] = 3
-		contraband[/obj/item/clothing/suit/space/rig/nazi] = 3
+			message_admins("[key_name_admin(user)] unlocked a wehrmachtvend's DANGERMODE!")
+		contraband[/obj/item/clothing/head/helmet/space/rig/wehrmacht] = 3
+		contraband[/obj/item/clothing/suit/space/rig/wehrmacht] = 3
 		contraband[/obj/item/weapon/gun/energy/plasma/MP40k] = 4
 		src.build_inventory(contraband, 1)
 		emagged = 1
@@ -2748,8 +2748,8 @@ var/global/num_vending_terminals = 1
 		update_icon()
 		return 1
 
-//NaziVend++
-/obj/machinery/vending/nazivend/DANGERMODE
+//wehrmachtvend++
+/obj/machinery/vending/wehrmachtvend/DANGERMODE
 	products = list(
 		/obj/item/clothing/head/stalhelm = 20,
 		/obj/item/clothing/head/panzer = 20,
@@ -2758,20 +2758,20 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/jackboots = 20,
 		)
 	contraband = list(
-		/obj/item/clothing/head/naziofficer = 10,
+		/obj/item/clothing/head/wehrmachtofficer = 10,
 		/obj/item/clothing/suit/officercoat = 10,
 		/obj/item/clothing/under/officeruniform = 10,
-		/obj/item/clothing/head/helmet/space/rig/nazi = 3,
-		/obj/item/clothing/suit/space/rig/nazi = 3,
+		/obj/item/clothing/head/helmet/space/rig/wehrmacht = 3,
+		/obj/item/clothing/suit/space/rig/wehrmacht = 3,
 		/obj/item/weapon/gun/energy/plasma/MP40k = 4,
 		)
 	premium = list(
 		/obj/item/clothing/under/varsity = 1,
 		)
 
-	pack = /obj/structure/vendomatpack/nazivend //can be reloaded with the same packs as the regular one
+	pack = /obj/structure/vendomatpack/wehrmachtvend //can be reloaded with the same packs as the regular one
 
-/obj/machinery/vending/nazivend/DANGERMODE/New()
+/obj/machinery/vending/wehrmachtvend/DANGERMODE/New()
 	..()
 	emagged = 1
 	overlays = 0
