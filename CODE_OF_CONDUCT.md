@@ -10,6 +10,6 @@ Beyond that, we welcome absolutely anyone to learn to code with our mess of an e
 
 ##### Notes on content
 
-The game we are maintaining is a roleplaying simulation of a dystopian future. The content hosted on this repository is a work of fiction and does not engage the opinions of the people contributing to it.
+The game we are maintaining is a roleplaying simulation of a dystopian future. The content hosted on this repository is a work of fiction and does not reflect the opinions of the people contributing to it.
 
 **Welcome to the team.**
