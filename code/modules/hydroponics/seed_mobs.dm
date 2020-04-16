@@ -64,9 +64,6 @@
 				return
 			O = pick(currently_querying)
 
-		if(!check_observer(O))
-			return
-
 		transfer_personality(O.client, host)
 
 /datum/seed/proc/transfer_personality(var/client/player,var/mob/living/host)
