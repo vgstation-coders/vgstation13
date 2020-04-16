@@ -119,7 +119,7 @@
 		return
 	prisoner.Stun(10)
 	prisoner.Knockdown(10)
-	prisoner.apply_effect(STUTTER, 10)
+	prisoner.apply_effect(10, STUTTER)
 	chassis.use_power(energy_drain)
 	playsound(chassis, 'sound/weapons/Egloves.ogg', 50, 1)
 	occupant_message("[prisoner] has been subdued.")

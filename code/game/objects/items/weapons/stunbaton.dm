@@ -222,7 +222,7 @@
 
 	L.Stun(stunforce)
 	L.Knockdown(stunforce)
-	L.apply_effect(STUTTER, stunforce)
+	L.apply_effect(stunforce, STUTTER)
 
 	L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
 	playsound(loc, stunsound, 50, 1, -1)
