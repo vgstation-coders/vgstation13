@@ -838,7 +838,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/faggot/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(NUTRIMENT, 1)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sausage
@@ -1614,7 +1614,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 1)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope
@@ -1625,7 +1625,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NUTRIMENT, 1)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/butter
@@ -2382,8 +2382,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/carrotfries/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(IMIDAZOLINE, 3)
+	reagents.add_reagent(NUTRIMENT, 1)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/superbiteburger
