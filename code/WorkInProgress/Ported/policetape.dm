@@ -122,7 +122,7 @@
 				var/obj/item/tape/P = new tape_type(cur)
 				P.icon_state = "[P.icon_base]_[dir]"
 			cur = get_step_towards(cur,end)
-		
+
 		if(start != end)//Prevent wasting charges on rolls with limited charges by just spamming use on the same tile.
 			to_chat(usr, "<span class='notice'>You finish placing [src].</span>")
 			user.visible_message("<span class='warning'>[user] finishes placing [src].</span>") //Now you know who to whack with a stun baton
@@ -136,23 +136,24 @@
 
 
 /obj/item/taperoll/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	..()
-	tape_door(target, user, proximity_flag)
+	if (tape_door(target, user, proximity_flag))
+		return TRUE
+	return ..()
 
 
 /obj/item/taperoll/proc/tape_door(atom/target, mob/user, proximity_flag)
 	if(proximity_flag == 0)//Check adjacency.
 		return 0
 
-	if(istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor))	//Make sure we can tape the target.	
+	if(istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor))	//Make sure we can tape the target.
 		var/turf = get_turf(target)
-		
+
 		//Check to see if the object already has any tape of any kind on it.
 		for(var/obj/item/I in turf)
 			if(istype(I, /obj/item/tape))
 				to_chat(user, "<span class='warning'>It's already taped with [I]!</span>")
 				return 0
-		
+
 		//Success
 		to_chat(user, "<span class='notice'>You start placing [src].</span>")
 		if(do_after(user, target, 3 SECONDS))
@@ -161,7 +162,10 @@
 			tape.layer = ABOVE_DOOR_LAYER
 			to_chat(user, "<span class='notice'>You placed \the [src].</span>")
 			return 1
-	
+
+/obj/item/tape/blocks_doors()
+	return TRUE
+
 /obj/item/tape/Bumped(M as mob)
 	if(src.allowed(M))
 		var/turf/T = get_turf(src)
@@ -293,7 +297,7 @@
 		if (..())
 			charges_left--
 			check_charges(user)
-			
+
 /obj/item/taperoll/syndie/proc/check_charges(mob/user as mob)
 	if(!charges_left)
 		to_chat(user, "<span class = 'warning'>You are out of [src].</span>")
