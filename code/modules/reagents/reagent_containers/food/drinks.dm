@@ -1454,7 +1454,6 @@
 			src.reagents.reaction(get_turf(src), TOUCH) //splat the floor AND the thing we hit, otherwise fuel wouldn't ignite when hitting anything that wasn't a floor
 			if(hit_atom != get_turf(src)) //prevent spilling on the floor twice though
 				src.reagents.reaction(hit_atom, TOUCH)  //maybe this could be improved?
-			spawn(5) src.reagents.clear_reagents()  //maybe this could be improved?
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
 		if(molotov == 1) //for molotovs
