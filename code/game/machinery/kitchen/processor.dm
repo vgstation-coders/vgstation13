@@ -78,19 +78,19 @@
 
 /datum/food_processor_process/food/meat
 	input = /obj/item/weapon/reagent_containers/food/snacks/meat
-	output = /obj/item/weapon/reagent_containers/food/snacks/faggot
+	output = /obj/item/weapon/reagent_containers/food/snacks/faggot/processed
 
 /datum/food_processor_process/food/potato
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/potato
-	output = /obj/item/weapon/reagent_containers/food/snacks/fries
+	output = /obj/item/weapon/reagent_containers/food/snacks/fries/processed
 
 /datum/food_processor_process/food/carrot
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/carrot
-	output = /obj/item/weapon/reagent_containers/food/snacks/carrotfries
+	output = /obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed
 
 /datum/food_processor_process/food/soybeans
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/soybeans
-	output = /obj/item/weapon/reagent_containers/food/snacks/soydope
+	output = /obj/item/weapon/reagent_containers/food/snacks/soydope/processed
 
 
 /datum/food_processor_process/food/process(loc, var/obj/what)
