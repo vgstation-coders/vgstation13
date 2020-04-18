@@ -282,6 +282,9 @@
 				returnToPool(G)
 
 	AM.locked_to = src
+	if (ismob(AM))
+		var/mob/M = AM
+		M.canmove = 0
 
 	locked_atoms[AM] = category
 	category.lock(AM)
@@ -295,6 +298,10 @@
 	var/datum/locking_category/category = locked_atoms[AM]
 	locked_atoms    -= AM
 	AM.locked_to     = null
+	if (ismob(AM))
+		var/mob/M = AM
+		M.canmove = 1
+
 	category.unlock(AM)
 	//AM.reset_glide_size() // FIXME: Currently broken.
 
