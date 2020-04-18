@@ -27,10 +27,10 @@
 	//we're still gonna trim the obvious (mobs without clients, jobbanned players, etc)
 	living_players = trim_list(candidates[CURRENT_LIVING_PLAYERS])
 	living_antags = trim_list(candidates[CURRENT_LIVING_ANTAGS])
-	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS])
-	list_observers = trim_list(candidates[CURRENT_OBSERVERS])
+	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS], trim_prefs_set_to_no = FALSE)
+	list_observers = trim_list(candidates[CURRENT_OBSERVERS], trim_prefs_set_to_no = FALSE)
 
-/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list())
+/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list(), trim_prefs_set_to_no = TRUE)
 	var/list/trimmed_list = L.Copy()
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
@@ -38,7 +38,11 @@
 		if (!M.client)//are they connected?
 			trimmed_list.Remove(M)
 			continue
-		if (!M.client.desires_role(role_pref) || jobban_isbanned(M, role_id) || isantagbanned(M))//are they willing and not antag-banned?
+		var/preference = get_role_desire_str(M.client.prefs.roles[role_pref])
+		if(preference == "Never" || (preference == "No" && trim_prefs_set_to_no)) // are they willing or at least not unwilling?
+			trimmed_list.Remove(M)
+			continue
+		if (jobban_isbanned(M, role_id) || isantagbanned(M))//are they not antag-banned?
 			trimmed_list.Remove(M)
 			continue
 		if (M.mind)
