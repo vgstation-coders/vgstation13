@@ -51,9 +51,7 @@
 			var/tag = uppertext(O.destinations[O.currTag])
 			to_chat(user, "<span class='notice'>*[tag]*</span>")
 			sortTag = tag
-			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
-			overlays = 0
-			overlays += image(icon = icon, icon_state = "deliverytag")
+			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)			
 			desc = "It has a label reading [tag]."
 
 /obj/item/weapon/paper/envelope/AltClick(mob/user)
