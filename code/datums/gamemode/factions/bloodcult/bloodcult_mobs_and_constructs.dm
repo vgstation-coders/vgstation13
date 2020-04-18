@@ -130,7 +130,7 @@
 /mob/living/simple_animal/construct/wraith/perfect/RangedAttack(var/atom/A, var/params)
 	if(ranged_cooldown <= 0 && ammo)
 		ammo--
-		generic_projectile_fire(A, src, /obj/item/projectile/wraithnail, 'sound/weapons/hivehand.ogg')
+		generic_projectile_fire(A, src, /obj/item/projectile/wraithnail, 'sound/weapons/hivehand.ogg', src)
 	return ..()
 
 /obj/item/projectile/wraithnail
