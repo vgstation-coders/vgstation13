@@ -206,6 +206,15 @@
 					overlays += icon('icons/obj/fish.dmi', "sharkspin", FISH_LAYER)
 				if (FISH_WALL)
 					overlays += icon('icons/obj/fish.dmi', "shrk", FISH_LAYER)
+
+		else if("lobster" in fish_list) // the small sprites dont work well sharing a tank
+			switch(tank_type)
+				if (FISH_BOWL)
+					overlays += icon('icons/obj/fish.dmi', "lobster_bowl", FISH_LAYER)
+				if (FISH_TANK)
+					overlays += icon('icons/obj/fish.dmi', "lobster_tank", FISH_LAYER)
+				if (FISH_WALL)
+					overlays += icon('icons/obj/fish.dmi', "lobster_wall", FISH_LAYER)
 		else
 			switch(tank_type)
 				if (FISH_BOWL)
@@ -214,7 +223,6 @@
 					overlays += icon('icons/obj/fish.dmi', "feesh_medium", FISH_LAYER)
 				if (FISH_WALL)
 					overlays += icon('icons/obj/fish.dmi', "feesh", FISH_LAYER)
-
 	//Update water overlay
 	if(water_level == 0)
 		return							//Skip the rest of this if there is no water in the aquarium

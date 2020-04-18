@@ -2090,6 +2090,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/fish_eggs/salmon,
 					/obj/item/fish_eggs/shrimp,
 					/obj/item/fish_eggs/shrimp,
+					/obj/item/fish_eggs/lobster,
+					/obj/item/fish_eggs/lobster,
 					/obj/item/weapon/circuitboard/fishtank,
 					/obj/item/weapon/circuitboard/fishtank,
 					/obj/item/weapon/circuitboard/fishtank,

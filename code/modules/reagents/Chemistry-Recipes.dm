@@ -2121,8 +2121,22 @@
 	name = "Soy Sauce"
 	id = SOYSAUCE
 	result = SOYSAUCE
-	required_reagents = list(SOYMILK = 4, SACIDS = 1)
+	required_reagents = list(SOYMILK = 4, SACIDS = 1) //who the hell decided this, sulphirc acid to make soysauce?
 	result_amount = 5
+
+/datum/chemical_reaction/mustard
+	name = "Mustard"
+	id = MUSTARD
+	result = MUSTARD
+	required_reagents = list(MUSTARD_POWDER = 4, SODIUMCHLORIDE = 1, VINEGAR = 1)
+	result_amount = 8
+
+/datum/chemical_reaction/mayo
+	name = "Mayonnaise"
+	id = MAYO
+	result = MAYO
+	required_reagents = list(MUSTARD = 1, SODIUMCHLORIDE = 1, VINEGAR = 4, EGG_YOLK = 4, WATER = 10) //there are about fifty different variants for homemade mayo, using the one that sounds best
+	result_amount = 20 //added 10u water so its no so tedious to make large batches of it, willing to negotiate on this one
 
 
 /datum/chemical_reaction/vinegar

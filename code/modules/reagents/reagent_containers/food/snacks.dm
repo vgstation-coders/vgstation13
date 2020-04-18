@@ -6294,3 +6294,90 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 		open = FALSE
 		icon_state = "es_cargo_closed"
 		visible_message("<span class='notice'>\The [usr] closes \the [src]!</span>", drugged_message = "<span class='notice'>Enough for today !</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail
+	name = "Raw Lobster Tail"
+	desc = "The tail of a lobster, raw and uncooked."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "raw_lobster_tail"
+	bitesize = 1 //your eating a raw lobster tail, shell still attatched, you disgusting animal
+
+/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat
+	name = "Raw Lobster Meat"
+	desc = "The delicious meat of a lobster, an impossible amount of suffering was inflicted to get this."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "raw_lobster_meat"
+
+/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe
+	name = "Steamed Lobster"
+	desc = "A steamed lobster, Served with a side of melted butter and a slice of lemon, you can still feel its hatred"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_steamed_deluxe"
+	trash = /obj/item/trash/plate
+
+
+/obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 6)
+	reagents.add_reagent (LEMONJUICE, 1)
+	reagents.add_reagent (LIQUIDBUTTER, 3)
+	bitesize = 2 //lobster takes a long time to eat
+
+/obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple  // this one has no fancy butter or lemon
+	name = "Steamed Lobster"
+	desc = "A steamed lobster, Served with a side of melted butter and a slice of lemon, you can still feel its hatred"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_steamed_simple"
+	trash = /obj/item/trash/plate
+
+
+/obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 6)
+	bitesize = 2 //lobster takes a long time to eat
+
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_roll  // this one has no fancy butter or lemon
+	name = "Lobster Roll"
+	desc = "A mishmash of mayo and lobster meat shoved onto a roll to make a lobster hot dog."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_roll" //it dont need trash, its a hot dog, lobster edition
+
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_roll/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 1)
+	reagents.add_reagent (MAYO, 5)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_tail_baked
+	name = "Baked Lobster Tail"
+	desc = "A Lobster tail, drenched in butter and a bit of lemon, you monster."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_tail_baked"
+	trash = /obj/item/trash/plate
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_tail_baked/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings
+	name = "Lobster Dumplings"
+	desc = "A mass of claw meat wrapped in dough"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_sushi"
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	bitesize = 3

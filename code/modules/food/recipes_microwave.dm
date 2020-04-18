@@ -2797,3 +2797,50 @@
 		/obj/item/weapon/paper,
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/es_cargo
+
+/datum/recipe/steamed_lobster_deluxe //the deluxe comes with butter and a slice of lemon
+	reagents = list (WATER = 10)
+	items = list(
+		/obj/item/weapon/lobster,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
+		/obj/item/weapon/reagent_containers/food/snacks/butter,
+		)
+	result = /obj/item/weapon/steamed_deluxe_lobster //this is the lobster whose shell isnt cracked, break its seal and steal its soul, you vile cretin
+
+/datum/recipe/steamed_lobster_simple //the simple has no fancy butter or lemon
+	reagents = list (WATER = 10)
+	items = list(
+		/obj/item/weapon/lobster
+		)
+	result = /obj/item/weapon/steamed_simple_lobster //same as the deluxe, wirecutter it to make it edible
+
+/datum/recipe/lobster_roll //lobster hot dog
+	reagents = list (MAYO = 10) // these things are mostly mayo
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_roll
+
+/datum/recipe/lobster_tail_baked
+	reagents = list (SODIUMCHLORIDE = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail,
+		/obj/item/weapon/reagent_containers/food/snacks/butter,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_tail_baked
+
+/datum/recipe/lobster_dumplings
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat,
+		/obj/item/weapon/reagent_containers/food/snacks/doughslice
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings
+
+/datum/recipe/lobster_sushi
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat,
+		/obj/item/weapon/reagent_containers/food/snacks/boiledrice
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings
