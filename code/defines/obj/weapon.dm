@@ -580,9 +580,6 @@
 
 		var/mob/living/L = AM
 
-		if (L.pulledby)
-			return ..()// Would be too easy.
-
 		if(L.on_foot() && ishuman(L)) //Flying mobs can't get caught in beartraps! Note that this also prevents lying mobs from triggering traps
 			var/mob/living/carbon/human/H = L
 			H.visible_message("<span class='danger'>[H] steps on \the [src].</span>",\
