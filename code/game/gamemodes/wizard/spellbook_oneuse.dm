@@ -463,12 +463,6 @@
 	if(!success)
 		user.forceMove(pick(L))
 
-/obj/item/weapon/spellbook/oneuse/telekinetic_choke/recoil(mob/living/carbon/user)
-	to_chat(user, "<span class='warning'>You feel out of breath!</span>")
-	user.adjustOxyLoss(60)
-	user.Stun(5)
-	user.Knockdown(5)
-
 /obj/item/weapon/spellbook/oneuse/pie
 	spell = /spell/targeted/projectile/pie
 	spellname = "Summon Pastry"
