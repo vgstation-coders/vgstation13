@@ -30,12 +30,10 @@
 	flying = TRUE
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
-	var/given_cult_language = 1 //1 means they will gain the cult language, 0 means they won't
 
 /mob/living/simple_animal/shade/New()
 	..()
-	if(given_cult_language)
-		add_language(LANGUAGE_CULT)
+	add_language(LANGUAGE_CULT)
 
 /mob/living/simple_animal/shade/death(var/gibbed = FALSE)
 	var/turf/T = get_turf(src)
@@ -235,4 +233,7 @@
 	faction = "neutral"
 	icon_state = "ghost-narsie"
 	icon_living = "ghost-narsie"
-	given_cult_language = 0
+
+/mob/living/simple_animal/shade/noncult/New()
+	..()
+	remove_language(LANGUAGE_CULT)
