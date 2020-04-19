@@ -260,10 +260,9 @@
 	var/mob/living/silicon/ai/M = pick(candidates)
 	assigned += M
 	candidates -= M
-	var/datum/role/malfAI/AI = new
-	AI.AssignToRole(M.mind,1)
-	unction.HandleNewMind(M.mind)
-	AI.Greet()
+	var/datum/role/malfAI/malf = unction.HandleNewMind(M.mind)
+	malf.OnPostSetup()
+	malf.Greet()
 	for(var/mob/living/silicon/robot/R in M.connected_robots)
 		unction.HandleRecruitedMind(R.mind)
 	unction.forgeObjectives()
