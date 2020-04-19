@@ -16,6 +16,7 @@
 	icon = 'icons/policetape.dmi'
 	anchored = 1
 	density = 1
+	layer = ABOVE_DOOR_LAYER
 	var/icon_base
 	var/robot_compatibility
 
@@ -159,13 +160,8 @@
 		if(do_after(user, target, 3 SECONDS))
 			var/atom/tape = new tape_type(turf)
 			tape.icon_state = "[icon_base]_door"
-			tape.layer = ABOVE_DOOR_LAYER
 			to_chat(user, "<span class='notice'>You placed \the [src].</span>")
 			return 1
-
-/obj/item/tape/initialize()
-	layer = ABOVE_DOOR_LAYER
-	return ..()
 
 /obj/item/tape/blocks_doors()
 	return TRUE
