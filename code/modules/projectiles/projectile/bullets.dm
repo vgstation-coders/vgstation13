@@ -104,10 +104,10 @@
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
-	stun = 5
+	stun = 2
 	weaken = 5
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
-	projectile_speed = 1
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/midbullet/lawgiver
 	damage = 10
@@ -149,10 +149,10 @@
 
 /obj/item/projectile/bullet/fourtyfive/rubber
 	damage = 10
-	stun = 5
+	stun = 2
 	weaken = 5
 	penetration = 1
-	projectile_speed = 1
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
 	damage = 15
@@ -169,11 +169,11 @@
 
 /obj/item/projectile/bullet/auto380/rubber
 	damage = 8
-	stun = 5
+	stun = 2
 	weaken = 5
 	embed = 0
 	penetration = 0
-	projectile_speed = 1
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/stunshot
 	name = "stunshot"
