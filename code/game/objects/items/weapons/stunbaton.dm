@@ -178,6 +178,11 @@
 				self_drugged_message="<span class='warning'>\The [name] decides to spare this one.</span>")
 			return
 
+	if(iscarbon(L))
+		var/mob/living/carbon/C = L
+		if(C.check_shields(force,src))
+			return FALSE //That way during a harmbaton it will not check for the shield twice
+
 	if(status && . != FALSE) // This is charged : we stun
 		user.lastattacked = L
 		L.lastattacker = user
@@ -217,7 +222,7 @@
 
 	L.Stun(stunforce)
 	L.Knockdown(stunforce)
-	L.apply_effect(STUTTER, stunforce)
+	L.apply_effect(stunforce, STUTTER)
 
 	L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
 	playsound(loc, stunsound, 50, 1, -1)

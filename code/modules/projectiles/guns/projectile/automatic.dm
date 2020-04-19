@@ -71,6 +71,7 @@
 	return ..()
 
 /obj/item/weapon/gun/projectile/automatic/lockbox
+	max_shells = 0
 	spawn_mag = FALSE
 
 /obj/item/weapon/gun/projectile/automatic/uzi
@@ -181,6 +182,7 @@
 	return FALSE
 
 /obj/item/weapon/gun/projectile/automatic/xcom/lockbox
+	max_shells = 0
 	spawn_mag = FALSE
 
 
@@ -351,6 +353,7 @@
 	update_icon()
 
 /obj/item/weapon/gun/projectile/automatic/vector/lockbox
+	max_shells = 0
 	spawn_mag = FALSE
 
 //Vector receivers.

@@ -338,14 +338,115 @@
 	item_state = "fuckup"
 	wizard_garb = 1
 	w_class = W_CLASS_LARGE
-	step_sound = "fuckupstep"
+
+	var/active = 0
+	var/max_steps = 4
+	var/current_step = 0
+	var/spellcast_key = null
+	var/equip_cooldown = 50
+
+	var/step_cooldown = 1 SECONDS // The step delay.
+
+	var/warmup_steps = 4
+	var/current_warmup_steps = 0
+
 
 /obj/item/clothing/shoes/fuckup/step_action()
+	if (equip_cooldown)
+		equip_cooldown--
+		return ..()
+	if (!active)
+		return ..()
+	if (current_warmup_steps < warmup_steps)
+		current_warmup_steps++
+		return ..()
+	if (current_step >= max_steps)
+		deactivate()
+		return ..()
+	
 	var/mob/living/carbon/human/H = loc
-	H.delayNextMove(15)
+	H.delayNextMove(step_cooldown)
 	playsound(H, step_sound, 50, 1)
 	if(istype(H.loc,/turf/simulated))
 		var/turf/simulated/T = H.loc
 		T.ex_act(1)
 	for (var/turf/simulated/T in orange(1,get_turf(H)))
 		T.ex_act(3)
+	current_step++
+
+/obj/item/clothing/shoes/fuckup/proc/activate()
+	active = 1
+	current_step = 0
+	current_warmup_steps = 0
+	step_sound = "fuckupstep"
+
+/obj/item/clothing/shoes/fuckup/proc/deactivate()
+	active = 0
+	step_sound = initial(step_sound)
+
+/obj/item/clothing/shoes/fuckup/equipped(mob/living/carbon/human/H, equipped_slot)
+	equip_cooldown = initial(equip_cooldown)
+	var/spell/fuckup/F = new
+	H.add_spell(/spell/fuckup)
+	spellcast_key = H.on_spellcast.Add(F, "on_spellcast")
+	return ..()
+
+/obj/item/clothing/shoes/fuckup/unequipped(mob/living/carbon/human/H, equipped_slot)
+	equip_cooldown = initial(equip_cooldown)
+	for (var/spell/fuckup/F in H.spell_list)
+		H.remove_spell(F)
+		H.on_spellcast.Remove(spellcast_key)
+	return ..()
+
+// -- Fuckup boot spell
+
+/spell/fuckup
+	name = "Activate fuckup boots (toggle)"
+	desc = "Unleash the power of fuckup boots."
+	abbreviation = "FU"
+
+	user_type = USER_TYPE_ARTIFACT
+
+	charge_type = Sp_RECHARGE
+	charge_max = 30 SECONDS
+	invocation_type = SpI_SHOUT
+	invocation = "FA'R N' AL'ENC'ED"
+	range = 0
+	spell_flags = NEEDSCLOTHES | NEEDSHUMAN
+	cooldown_min = 30 SECONDS
+	var/cooldown_on_blink = 4 SECONDS // The cooldown given upon blinking. Reduce to 0 for "fun".
+
+	hud_state = "wiz_fuckup"
+
+/spell/fuckup/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.) // No need to go further.
+		return FALSE
+	var/mob/living/carbon/human/H = user // not false because NEEDSHUMAN
+	if (!istype(H.shoes, /obj/item/clothing/shoes/fuckup))
+		return FALSE
+	return TRUE
+
+/spell/fuckup/choose_targets(var/mob/user = usr)
+	return list(user) // Self-cast
+
+/spell/fuckup/cast(var/list/targets, var/mob/user)
+	var/mob/living/carbon/human/H = user
+	var/obj/item/clothing/shoes/fuckup/F = H.shoes
+	F.activate()
+	spawn (7 SECONDS)
+		if (F)
+			F.deactivate()
+
+/spell/fuckup/proc/on_spellcast(var/list/arguments)
+	var/spell/spell_casted = arguments["spell"]
+	var/mob/caster = arguments["user"]
+	if (!ishuman(caster))
+		return
+	var/mob/living/carbon/human/H = caster
+	if (istype(spell_casted, /spell/aoe_turf/blink) || istype(spell_casted, /spell/targeted/ethereal_jaunt))
+		charge_counter = min(charge_counter, cooldown_min - cooldown_on_blink)
+		if (istype(H.shoes, /obj/item/clothing/shoes/fuckup))
+			var/obj/item/clothing/shoes/fuckup/F = H.shoes
+			F.deactivate()
+

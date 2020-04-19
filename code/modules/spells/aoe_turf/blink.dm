@@ -25,7 +25,7 @@
 	if(T)
 		user.unlock_from()
 		user.teleport_to(T)
-
+		INVOKE_EVENT(user.on_blink, list("starting" = starting, "destination" = T))
 		makeAnimation(T, starting)
 	return
 

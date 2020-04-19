@@ -10,7 +10,7 @@
 	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
 	var/list/job_priority = list() //May be used by progressive_job_search for prioritizing some jobs for a role. Order matters.
 	var/list/enemy_jobs = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
-	var/required_enemies = list(1,1,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of enemy job workers needed per threat_level range (0-10,10-20,etc)
+	var/required_pop = list(10,10,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of population required for the ruleset to fire. enemy jobs count double
 	var/required_candidates = 0//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
 	var/cost = 0//threat cost for this rule.
@@ -80,7 +80,7 @@
 		return 0
 	return 1
 
-// Returns TRUE if there are sufficient enemies to execute this ruleset
+// Returns TRUE if there is enough pop to execute this ruleset
 /datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE)
 	if (!enemy_jobs.len)
 		return TRUE
@@ -97,12 +97,20 @@
 			if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
 				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
 
+	var/pop_and_enemies
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		pop_and_enemies += mode.living_players.len
+	else
+		pop_and_enemies += mode.roundstart_pop_ready
+
+	pop_and_enemies += enemies_count // Enemies count twice
+
 	var/threat = round(mode.threat_level/10)
-	if (enemies_count >= required_enemies[threat])
+	if (pop_and_enemies >= required_pop[threat])
 		return TRUE
 	if (!dead_dont_count)//roundstart check only
-		message_admins("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs ready ([enemies_count] out of [required_enemies[threat]])")
-		log_admin("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs ready ([enemies_count] out of [required_enemies[threat]])")
+		message_admins("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs and pop ready ([enemies_count] and [mode.roundstart_pop_ready] out of [required_pop[threat]])")
+		log_admin("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs and pop ready ([enemies_count] and [mode.roundstart_pop_ready] out of [required_pop[threat]])")
 	return FALSE
 
 /datum/dynamic_ruleset/proc/get_weight()

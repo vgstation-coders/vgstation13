@@ -331,6 +331,8 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	if(usr.incapacitated())
 		return
 	var/obj/machinery/computer/security/telescreen/entertainment/spesstv/tv = target
+	if (!istype(tv))
+		return
 	if(!in_range(tv, usr))
 		return
 	var/obj/machinery/camera/arena/spesstv/camera = tv.current
@@ -348,6 +350,8 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	if(usr.incapacitated())
 		return
 	var/obj/machinery/computer/security/telescreen/entertainment/spesstv/tv = target
+	if (!istype(tv))
+		return
 	if(!in_range(tv, usr))
 		return
 	var/obj/machinery/camera/arena/spesstv/camera = tv.current

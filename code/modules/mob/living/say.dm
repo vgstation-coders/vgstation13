@@ -501,11 +501,23 @@ var/list/department_radio_keys = list(
 		if(setting == 2)
 			return 1
 
+// Obsolete for any mob which uses a language.
 /mob/living/say_quote()
 	if (stuttering)
 		return "stammers, [text]"
 	if (getBrainLoss() >= 60)
 		return "gibbers, [text]"
+	return ..()
+
+// Use this when the mob speaks a given language.
+/mob/proc/get_spoken_verb(var/msg)
+	return ""
+
+/mob/living/get_spoken_verb(var/msg)
+	if (stuttering)
+		return "stammers"
+	if (getBrainLoss() >= 60)
+		return "gibbers"
 	return ..()
 
 /mob/living/proc/send_speech_bubble(var/message,var/bubble_type, var/list/hearers)

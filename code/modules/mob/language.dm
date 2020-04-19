@@ -16,7 +16,10 @@
 	var/list/syllables
 	var/list/space_chance = 55       // Likelihood of getting a space in the random scramble string.
 
-/datum/language/proc/get_spoken_verb(var/msg, var/silicon, var/mode)
+/datum/language/proc/get_spoken_verb(var/msg, var/silicon, var/mode, var/mob/speaker)
+	var/speaker_verb_override = speaker.get_spoken_verb(msg)
+	if (speaker_verb_override)
+		return speaker_verb_override
 	switch(mode)
 		if(SPEECH_MODE_WHISPER)
 			return "[whisper_verb]"
@@ -44,7 +47,7 @@
 
 /datum/language/proc/render_speech(var/datum/speech/speech, var/html_message)
 	// html_message is the message itself + <span> tags. Do NOT filter it.
-	return "[get_spoken_verb(speech.message,issilicon(speech.speaker),speech.mode)], [html_message]"
+	return "[get_spoken_verb(speech.message,issilicon(speech.speaker),speech.mode, speech.speaker)], [html_message]"
 
 /* Obsolete, here for reference
 /datum/language/proc/format_message(mob/M, message)

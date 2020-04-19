@@ -157,6 +157,9 @@ var/global/lastDecTalkUse = 0
 		return " ([speech.job])"
 	return ""
 
+// This is obsolete for any atom movable which actually uses a language whilst speaking.
+// The verb for those atoms will be given in /datum/language/get_spoken_verb()
+// An override depending on the status of the mob is possible with the proc /mob/proc/get_spoken_verb()
 /atom/movable/proc/say_quote(var/text)
 	if(!text)
 		return "says, \"...\""	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code

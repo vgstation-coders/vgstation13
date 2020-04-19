@@ -514,6 +514,12 @@
 	M.clean_blood()
 	if(ishuman(M))
 		M:update_inv_gloves()
+		var/mob/living/carbon/human/HM = M
+
+		if(!HM.gloves && HM.species && HM.species.anatomy_flags & ACID4WATER)
+			HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
+			HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
+
 	for(var/mob/V in viewers(src, null))
 		V.show_message("<span class='notice'>[M] washes their hands using \the [src].</span>")
 

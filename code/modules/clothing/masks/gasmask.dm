@@ -97,9 +97,10 @@
 	var/mode = 0// 0==Scouter | 1==Night Vision | 2==Thermal | 3==Meson
 	var/voice = "Unknown"
 	var/vchange = 1//This didn't do anything before. It now checks if the mask has special functions/N
+	var/speech_mode = VOICE_CHANGER_SAYS
 	canstage = 0
 	origin_tech = Tc_SYNDICATE + "=4"
-	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger)
+	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger,)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED,INSECT_SHAPED)
 	permeability_coefficient = 0.90
 	var/static/list/clothing_choices
@@ -121,6 +122,21 @@
 	if(!istype(T))
 		return
 	T.change()
+
+/datum/action/item_action/change_voice_mode
+	name = "Change Voice Mode"
+
+/datum/action/item_action/change_voice_mode/Trigger()
+	var/obj/item/clothing/mask/gas/voice/T = target
+	if(!istype(T))
+		return
+	switch (T.speech_mode)
+		if (VOICE_CHANGER_SAYS)
+			T.speech_mode = VOICE_CHANGER_STATES
+			to_chat(owner, "<span class='notice'>You will now <i>state</i> things like a machine would.</span>")
+		if (VOICE_CHANGER_STATES)
+			T.speech_mode = VOICE_CHANGER_SAYS
+			to_chat(owner, "<span class='notice'>You will now <i>say</i> things like a human would.</span>")
 
 /obj/item/clothing/mask/gas/voice/proc/change()
 	var/choice = input(usr, "Select Form to change it to", "BOOYEA") as null|anything in clothing_choices

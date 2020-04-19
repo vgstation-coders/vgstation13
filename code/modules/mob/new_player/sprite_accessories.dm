@@ -719,6 +719,27 @@
 	gender = NEUTER
 	do_colouration = 0
 
+/datum/sprite_accessory/hair/insect_wedge
+	name = "Wedge Head"
+	icon_state = "insect_wedge"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/insect_hiver
+	name = "Hiver Head"
+	icon_state = "insect_hiver"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/insect_soldier
+	name = "Soldier Head"
+	icon_state = "insect_soldier"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+	do_colouration = 0
+
 
 /datum/sprite_accessory/hair/una_spines_long
 	name = "Long Unathi Spines"

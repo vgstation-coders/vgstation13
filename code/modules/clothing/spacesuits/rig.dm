@@ -695,6 +695,7 @@
 	heat_conductivity = 0 //thanks, blanket
 	gas_transfer_coefficient = 0.60
 	permeability_coefficient = 0.30
+	species_fit = list(INSECT_SHAPED)
 
 //RoR survivor Rig
 /obj/item/clothing/suit/space/rig/ror

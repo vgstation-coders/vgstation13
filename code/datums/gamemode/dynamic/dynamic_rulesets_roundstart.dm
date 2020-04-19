@@ -21,7 +21,7 @@
 	high_population_requirement = 10
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
-	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels	
+	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
 	var/num_traitors = min(round(mode.roundstart_pop_ready / traitor_scaling_coeff) + 1, candidates.len)
 	for (var/i = 1 to num_traitors)
 		var/mob/M = pick(candidates)
@@ -54,7 +54,7 @@
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
-	required_enemies = list(2,2,2,1,1,1,1,0,0,0)
+	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = 3
 	cost = 18
@@ -86,7 +86,7 @@
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI", "Chaplain")
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain", "Chaplain")
-	required_enemies = list(2,2,2,1,1,1,1,0,0,0)
+	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = 2
 	cost = 15
@@ -124,7 +124,7 @@
 	role_category = /datum/role/wizard
 	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = 3
 	cost = 30
@@ -165,7 +165,7 @@
 	role_category = /datum/role/wizard
 	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("Security Officer","Detective","Warden","Head of Security", "Captain")
-	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
+	required_pop = list(25,25,20,20,20,20,15,15,15,5)
 	required_candidates = 1
 	weight = 2
 	cost = 45
@@ -219,18 +219,20 @@
 							"Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent",
 							"Chief Engineer", "Chief Medical Officer", "Research Director")
 	enemy_jobs = list("Security Officer","Warden", "Detective","Head of Security", "Captain")
-	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
-	required_candidates = 2
+	required_pop = list(25,25,20,20,20,20,20,15,15,10)
+	required_candidates = 4
 	weight = 2
 	cost = 30
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
-	var/cultist_cap = list(2,2,2,2,2,2,2,2,2,2)
+	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
 	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
 	required_candidates = cultist_cap[indice_pop]
+	if (forced)
+		required_candidates = 1
 	. = ..()
 
 /datum/dynamic_ruleset/roundstart/bloodcult/execute()
@@ -268,7 +270,7 @@
 	protected_from_jobs = list("Merchant")
 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Chaplain")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Chaplain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 4
 	weight = 3
 	cost = 25
@@ -305,7 +307,7 @@
 	role_category = /datum/role/nuclear_operative
 	restricted_from_jobs = list("Head of Security", "Captain") //Just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3, 3, 3, 3, 3, 2, 1, 1, 0, 0)
+	required_pop = list(25, 25, 25, 25, 25, 20, 15, 15, 10, 10)
 	required_candidates = 5 //This value is useless, see operative_cap
 	weight = 3
 	cost = 40
@@ -316,6 +318,8 @@
 /datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
 	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
 	required_candidates = operative_cap[indice_pop]
+	if (forced)
+		required_candidates = 1
 	. = ..()
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
@@ -360,7 +364,7 @@
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
 	job_priority = list("AI","Cyborg")
-	required_enemies = list(3,3,3,2,2,2,1,1,1,1)
+	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = 2
 	cost = 40
@@ -418,7 +422,7 @@
 	role_category = /datum/role/blob_overmind/
 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_pop = list(30,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = 3
 	cost = 45
@@ -457,7 +461,7 @@
 	role_category = null
 	restricted_from_jobs = list()
 	enemy_jobs = list()
-	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 0
 	weight = 3
 	cost = 0
@@ -480,7 +484,7 @@
 	role_category = /datum/role/revolutionary
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain", "Warden")
-	required_enemies = list(3,3,3,3,3,2,2,1,0,0)
+	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 3
 	weight = 2
 	cost = 40
@@ -533,7 +537,7 @@
 	role_category = /datum/role/grinch
 	restricted_from_jobs = list()
 	enemy_jobs = list()
-	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = 3
 	cost = 10

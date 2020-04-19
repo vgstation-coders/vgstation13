@@ -159,6 +159,22 @@
 
 	update_itemstate_on_twohand = TRUE
 
+//FROG
+
+/obj/item/weapon/holder/animal/frog
+	name = "frog holder"
+	desc = "Don't hold it too tight."
+	item_state = "frog"
+	slot_flags = SLOT_HEAD
+
+//SNAIL
+
+/obj/item/weapon/holder/animal/snail
+	name = "snail holder"
+	desc = "Eh, it's all gooey and sticky."
+	item_state = "snail"
+	slot_flags = SLOT_HEAD
+
 //SALEM
 
 /obj/item/weapon/holder/animal/salem

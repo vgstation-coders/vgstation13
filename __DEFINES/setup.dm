@@ -731,6 +731,8 @@ SEE_PIXELS	256
 #define VERM_CRABS 13
 #define VERM_DIONA 14
 #define VERM_MUSHMEN 15
+#define VERM_FROGS 14
+#define VERM_SNAILS 15
 
 
 #define MONSTER_BEAR    0
