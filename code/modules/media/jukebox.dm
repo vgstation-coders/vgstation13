@@ -807,7 +807,7 @@ var/global/list/loopModeNames=list(
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
-		"muzakjazz" = "Jazzy Muzak",
+		"muzakjazz" = "Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
 		"security" = "Security",
@@ -838,7 +838,7 @@ var/global/list/loopModeNames=list(
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
-		"muzakjazz" = "Jazzy Muzak",
+		"muzakjazz" = "Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
 		"shuttle" = "Shuttle",
@@ -1034,7 +1034,7 @@ var/global/list/loopModeNames=list(
 /obj/item/weapon/vinyl/muzakjazz
 	name = "nanovinyl - jazzy muzak"
 	unformatted = "muzakjazz"
-	formatted = "Jazzy Muzak"
+	formatted = "Muzak"
 /obj/item/weapon/vinyl/syndie_assault
 	name = "nanovinyl - syndicate assault"
 	unformatted = "nukesquad"
