@@ -229,5 +229,6 @@
 
 /mob/living/simple_animal/shade/noncult/New()
 	..()
-	add_language(LANGUAGE_GALACTIC_COMMON)
+	universal_speak = 1 //They're ghosts, ain't gonna explain stuff
+	universal_understand = 1
 	faction = "neutral"
