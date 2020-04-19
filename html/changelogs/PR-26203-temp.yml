@@ -1,5 +1,0 @@
----
-author: Allspice
-changes:
-  - rscdel: Remove ling from snaxi.
-delete-after: true

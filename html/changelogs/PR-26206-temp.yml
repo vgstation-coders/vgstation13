@@ -1,5 +1,0 @@
----
-author: boy2mantwicethefam
-changes:
-  - bugfix: Stunbatons will no longer stun if the baton is off while harm intent is on.
-delete-after: true

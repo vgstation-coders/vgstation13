@@ -1,5 +1,0 @@
----
-author: gbasood
-changes:
-  - bugfix: Suit storage disinfect cycle should once again be working as intended.
-delete-after: true
