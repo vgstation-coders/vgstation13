@@ -292,6 +292,13 @@ var/stacking_limit = 90
 				if (threat_level >= third_rule_req[indice_pop])
 					extra_rulesets_amount++
 
+	if	(extra_rulesets_amount && prob(50))
+		message_admins("Rather than extra rulesets, we'll try to draft spicier ones.")
+		for (var/datum/dynamic_ruleset/rule in subtypesof(/datum/dynamic_ruleset))
+			if (rule.flags & HIGHLANDER_RULESET)
+				rule.weight += extra_rulesets_amount
+		extra_rulesets_amount = 0
+
 	if (classic_secret)
 		message_admins("Classic secret was forced.")
 	else
