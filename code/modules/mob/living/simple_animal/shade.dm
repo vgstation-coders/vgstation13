@@ -227,8 +227,10 @@
 			return
 	..()
 
-/mob/living/simple_animal/shade/noncult/New()
-	..()
+/mob/living/simple_animal/shade/noncult
+	desc = "A bound spirit. This one appears more in tune with the realm of the dead."
 	universal_speak = 1 //They're ghosts, ain't gonna explain stuff
 	universal_understand = 1
 	faction = "neutral"
+	icon_state = "ghost-narsie"
+	icon_living = "ghost-narsie"
