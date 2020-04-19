@@ -71,7 +71,7 @@ var/list/impact_master = list()
 	var/inaccurate = 0
 
 	var/turf/target = null
-	var/datum/tracker/tracker_datum = null 
+	var/datum/tracker/tracker_datum = null
 	var/tracking = FALSE
 
 	var/dist_x = 0
@@ -372,7 +372,7 @@ var/list/impact_master = list()
 	target = get_turf(proj_target)
 
 	if (tracking)
-		if (istype(proj_target, /atom/movable))	
+		if (istype(proj_target, /atom/movable))
 			var/atom/movable/the_target = proj_target
 			var/datum/tracker/T = new
 			T.name = "[src] tracker on [proj_target]"
@@ -459,7 +459,7 @@ var/list/impact_master = list()
 
 				dist_x = abs(target.x - current.x)
 				dist_y = abs(target.y - current.y)
-				
+
 				if(dist_x > dist_y)
 					error = dist_x/2 - dist_y
 				else

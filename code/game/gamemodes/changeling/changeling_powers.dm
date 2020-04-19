@@ -1063,7 +1063,7 @@ var/list/datum/dna/hivemind_bank = list()
 		var/obj/item/projectile/puke/P = new /obj/item/projectile/puke/clear
 		P.reagents.add_reagent(S, amount)
 		M.visible_message("<span class = 'warning'>\The [M] spits a globule of chemicals!</span>")
-		generic_projectile_fire(get_ranged_target_turf(M, M.dir, 10), M, P, 'sound/weapons/pierce.ogg')
+		generic_projectile_fire(get_ranged_target_turf(M, M.dir, 10), M, P, 'sound/weapons/pierce.ogg', M)
 
 /obj/item/verbs/changeling/proc/changeling_transformation_sting()
 	set category = "Changeling"

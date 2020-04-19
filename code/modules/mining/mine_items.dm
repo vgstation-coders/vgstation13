@@ -286,7 +286,7 @@ proc/move_mining_shuttle()
 		return
 	if(current_ammo >0)
 		current_ammo--
-		generic_projectile_fire(A, src, /obj/item/projectile/kinetic/cutter/, 'sound/weapons/Taser.ogg')
+		generic_projectile_fire(A, src, /obj/item/projectile/kinetic/cutter/, 'sound/weapons/Taser.ogg', user)
 		user.delayNextAttack(4)
 	else
 		src.visible_message("*click click*")
