@@ -90,7 +90,7 @@ var/global/list/pathmakers = list()
 	var/debug = FALSE //Whether we paint our turfs as we calculate
 	var/PM_id //How we will identify PathNodes associated with this, to prevent PathNode conflict
 
-/datum/path_maker/New(var/nowner, var/nproc_to_call, var/turf/nstart, var/turf/nend, var/atom/ntarget, var/nadjacent, var/ndist, var/nmaxnodes, var/nmaxnodedepth, var/nmintargetdist, var/nid=null, var/turf/nexclude, var/ndebug = TRUE)
+/datum/path_maker/New(var/nowner, var/nproc_to_call, var/turf/nstart, var/turf/nend, var/atom/ntarget, var/nadjacent, var/ndist, var/nmaxnodes, var/nmaxnodedepth, var/nmintargetdist, var/nid=null, var/turf/nexclude, var/ndebug = FALSE)
 	ASSERT(nowner)
 	ASSERT(nstart)
 	ASSERT(nend)
