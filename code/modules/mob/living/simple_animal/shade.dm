@@ -30,10 +30,12 @@
 	flying = TRUE
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
+	var/given_cult_language = 1 //1 means they will gain the cult language, 0 means they won't
 
 /mob/living/simple_animal/shade/New()
 	..()
-	add_language(LANGUAGE_CULT)
+	if(given_cult_language)
+		add_language(LANGUAGE_CULT)
 
 /mob/living/simple_animal/shade/death(var/gibbed = FALSE)
 	var/turf/T = get_turf(src)
@@ -229,8 +231,8 @@
 
 /mob/living/simple_animal/shade/noncult
 	desc = "A bound spirit. This one appears more in tune with the realm of the dead."
-	universal_speak = 1 //They're ghosts, ain't gonna explain stuff
-	universal_understand = 1
+	universal_understand = 1 //They're closer to their observer selves, hence can understand any language
 	faction = "neutral"
 	icon_state = "ghost-narsie"
 	icon_living = "ghost-narsie"
+	given_cult_language = 0
