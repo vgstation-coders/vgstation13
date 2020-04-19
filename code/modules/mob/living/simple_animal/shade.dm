@@ -168,7 +168,7 @@
 			else
 				healths.icon_state = "shade_health7"
 
-/mob/living/simple_animal/shade/happiest/death(var/gibbed = FALSE)
+/mob/living/simple_animal/shade/noncult/happiest/death(var/gibbed = FALSE)
 	..(TRUE)
 	transmogrify()
 	if(!gcDestroyed)
@@ -226,3 +226,8 @@
 			BS.perform(src)
 			return
 	..()
+
+/mob/living/simple_animal/shade/noncult/New()
+	..()
+	add_language(LANGUAGE_GALACTIC_COMMON)
+	faction = "neutral"
