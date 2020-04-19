@@ -367,6 +367,21 @@
 	required_reagents = list(INAPROVALINE = 1, ANTI_TOXINS = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/simpolinol
+	name = "Simpolinol"
+	id = SIMPOLINOL
+	result = SIMPOLINOL
+	required_reagents = list(METHYLIN = 20, SILVER = 20)
+	result_amount = 40
+
+/datum/chemical_reaction/simpolinol2
+	name = "Simpolinol"
+	id = "simpolinol_alternate"
+	result = SIMPOLINOL
+	required_reagents = list(VAPORSALT = 1)
+	required_container = /obj/item/weapon/reagent_containers/food/drinks/soda_cans
+	result_amount = 1
+
 /datum/chemical_reaction/alkysine
 	name = "Alkysine"
 	id = ALKYSINE

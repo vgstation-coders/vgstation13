@@ -2514,6 +2514,24 @@
 	if(M.getToxLoss())
 		M.adjustToxLoss(-REM)
 
+/datum/reagent/simpolinol
+	name = "Simpolinol"
+	id = SIMPOLINOL
+	description = "A broad spectrum rejuvenant used to heal fauna with less complex cardiovascular systems. Not for human injestion."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#A5A5FF" //rgb: 165, 165, 255
+	density = 1.58
+	specheatcap = 0.44
+
+/datum/reagent/simpolinol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(isanimal(M))
+		M.health = min(M.maxHealth, M.health + REM)
+	else
+		M.adjustToxLoss(5)
+
 //An OP chemical for admins and detecting exploits
 /datum/reagent/adminordrazine
 	name = "Adminordrazine"
@@ -6777,7 +6795,7 @@
 			H.remove_spell(spell)
 		if (istype(H.wear_mask, /obj/item/clothing/mask/gas/mime/stickymagic))
 			qdel(H.wear_mask)
-			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")			
+			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")
 		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
 
 
