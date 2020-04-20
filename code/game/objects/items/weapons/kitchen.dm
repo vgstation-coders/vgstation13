@@ -45,12 +45,30 @@
 	icon_state = "spoon"
 	attack_verb = list("attacks", "pokes", "hits")
 	melt_temperature = MELTPOINT_STEEL
+	var/bendable = TRUE
+	var/bent = FALSE
+
+/obj/item/weapon/kitchen/utensil/spoon/attack_self(mob/user)
+	if(!bendable || !(M_TK in user.mutations))
+		visible_message("[user] holds up [src] and stares at it intently. What a weirdo.")
+		return
+	bend(user)
+
+/obj/item/weapon/kitchen/utensil/spoon/proc/bend(mob/user)
+	visible_message(message = "<span class='warning'>Whoa, [user] looks at [src] and it bends like clay!</span>")
+	if(!bent)
+		bent = TRUE
+		icon_state = initial(icon_state) + "_bent"
+		return
+	bent = FALSE
+	icon_state = initial(icon_state)
 
 /obj/item/weapon/kitchen/utensil/spoon/plastic
 	name = "plastic spoon"
 	desc = "Super dull action!"
 	icon_state = "pspoon"
 	melt_temperature = MELTPOINT_PLASTIC
+	bendable = FALSE
 
 /*
  * Forks
