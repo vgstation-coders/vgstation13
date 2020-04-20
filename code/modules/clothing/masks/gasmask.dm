@@ -324,7 +324,7 @@
 
 /obj/item/clothing/mask/gas/hecu
 	name = "HECU gas mask"
-	desc = "An ancient gas mask with the letters HECU stamped on the side. Comes with a built-in voice modulator that slowly recharges."
+	desc = "An ancient gas mask with the letters HECU stamped on the side. Comes with a shouting-activated voice modulator that slowly recharges."
 	icon_state = "hecu"
 	can_flip = 0
 	canstage = 0
@@ -335,7 +335,7 @@
 	var/mask_charge = 100
 	var/word_cost = 7
 	var/word_delay = 7
-	actions_types = list(/datum/action/item_action/toggle_voice)
+	var/list/punct_list = list("," , "." , "?" , "!")
 
 	//Big list of words pulled from half life's soldiers, used for both matching with spoken text and part of the sound file's path
 	var/list/hecuwords = list(
@@ -353,28 +353,6 @@
 		"yes" , "yessir" , "you" , "your" , "zero" , "zone" , "zulu" , "meters" , "seven" , "eight" , "hundred" , "to" , "too"
 		)
 
-//Toggling the mask so the user can let it recharge and not be annoying.
-/obj/item/clothing/mask/gas/hecu/verb/toggle_voice()
-	set src in usr
-	set name = "Toggle Voice Modulator"
-	set category = "Object"
-	if (!usr || loc != usr)
-		return
-	return togglevoice(usr)
-
-/obj/item/clothing/mask/gas/hecu/attack_self()
-	src.togglevoice()
-	..()
-	return
-
-/obj/item/clothing/mask/gas/hecu/proc/togglevoice(var/mob/user = usr)
-	if(usr.isUnconscious())
-		return
-	else
-		togglestate = !togglestate
-
-/datum/action/item_action/toggle_voice //blank on purpose
-
 //Recharging the mask over time
 /obj/item/clothing/mask/gas/hecu/New()
 	..()
@@ -387,10 +365,7 @@
 obj/item/clothing/mask/gas/hecu/process()
 	if(mask_charge >= max_charge)
 		return
-	else
-		mask_charge++
-		return
-
+	mask_charge++
 
 /obj/item/clothing/mask/gas/hecu/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(togglestate == 0)
@@ -398,14 +373,18 @@ obj/item/clothing/mask/gas/hecu/process()
 	if((!speech.frequency && is_holder_of(speech.speaker, src)) && speech.speaker != src)
 		var/list/words_to_say = list()
 		var/list/word_list = splittext(speech.message," ")
+
 		for(var/i=1,i<=word_list.len,i++)
+			for(var/x=1,x<=punct_list.len,x++)
+				word_list[i] = replacetext(word_list[i] , punct_list[x] , "") //Ignores punctuation.
 			for(var/j=1,j<=hecuwords.len,j++)
-				if (lowertext(hecuwords[j]) == lowertext(word_list[i]))
+				if (uppertext(hecuwords[j]) == word_list[i]) //SHOUT a known word to activate
 					words_to_say += hecuwords[j]
+
 		if(words_to_say.len > 0)
 			for(var/i=1,i<=words_to_say.len,i++)
 				if(mask_charge >= word_cost)
 					mask_charge -= word_cost
 					playsound(src, "sound/vox_hecu/[words_to_say[i]]!.wav", 30)
 					sleep word_delay
-		else return
+		..()
