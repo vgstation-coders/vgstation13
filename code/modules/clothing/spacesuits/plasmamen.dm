@@ -426,7 +426,7 @@
 //Sith
 
 /obj/item/clothing/suit/space/plasmaman/sith
-	name = "Plasmaman Sith suit"
+	name = "plasmaman Sith suit"
 	icon_state = "plasmaman_sith_suit"
 	item_state = "plasmaman_sith_suit"
 	desc = "A menacing armored suit that protects the wearer from harm, fit for a plasmaman. It appears to permanently seal itself once worn."
@@ -438,7 +438,7 @@
 
 //Unlike the suit, the helmet can be taken off
 /obj/item/clothing/head/helmet/space/plasmaman/sith
-	name = "Plasmaman Sith helmet"
+	name = "plasmaman Sith helmet"
 	icon_state = "plasmaman_sith_helmet0"
 	item_state = "plasmaman_sith_helmet0"
 	base_state = "plasmaman_sith_helmet"
