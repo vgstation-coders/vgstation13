@@ -265,7 +265,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	if(isliving(A))
 		var/mob/living/L = A
 		annoy(L)
-		..()
+	..()
 
 /obj/machinery/bot/cleanbot/proc/attack_cooldown()
 	coolingdown = TRUE
