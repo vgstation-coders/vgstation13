@@ -329,7 +329,7 @@
 /obj/item/weapon/spellbook/oneuse/lightning/sith
 	spell = /spell/lightning/sith
 	spellname = "sith lightning"
-	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
+	desc = "You can hear it crackle with malevolent electricity."
 
 /obj/item/weapon/spellbook/oneuse/timestop
 	spell = /spell/aoe_turf/fall
