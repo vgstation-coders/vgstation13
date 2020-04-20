@@ -133,7 +133,7 @@
 	name = "plasmaman botanist helmet"
 	icon_state = "plasmamanBotanist_helmet0"
 	base_state = "plasmamanBotanist_helmet"
-	
+
 /obj/item/clothing/suit/space/plasmaman/librarian
 	name = "plasmaman librarian suit"
 	icon_state = "plasmamanLibrarian_suit"
@@ -141,7 +141,7 @@
 /obj/item/clothing/head/helmet/space/plasmaman/librarian
 	name = "plasmaman librarian helmet"
 	icon_state = "plasmamanLibrarian_helmet0"
-	base_state = "plasmamanLibrarian_helmet"	
+	base_state = "plasmamanLibrarian_helmet"
 
 /obj/item/clothing/suit/space/plasmaman/chaplain
 	name = "plasmaman chaplain suit"
@@ -426,7 +426,7 @@
 //Sith
 
 /obj/item/clothing/suit/space/plasmaman/sith
-	name = "Plasmaman Sith Suit"
+	name = "Plasmaman Sith suit"
 	icon_state = "plasmaman_sith_suit"
 	item_state = "plasmaman_sith_suit"
 	desc = "A menacing armored suit that protects the wearer from harm, fit for a plasmaman. It appears to permanently seal itself once worn."
@@ -438,7 +438,7 @@
 
 //Unlike the suit, the helmet can be taken off
 /obj/item/clothing/head/helmet/space/plasmaman/sith
-	name = "Plasmaman Sith Helmet"
+	name = "Plasmaman Sith helmet"
 	icon_state = "plasmaman_sith_helmet0"
 	item_state = "plasmaman_sith_helmet0"
 	base_state = "plasmaman_sith_helmet"
