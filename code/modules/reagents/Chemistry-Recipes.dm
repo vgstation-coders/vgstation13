@@ -2135,9 +2135,8 @@
 	name = "Mayonnaise"
 	id = MAYO
 	result = MAYO
-	required_reagents = list(MUSTARD = 1, SODIUMCHLORIDE = 1, VINEGAR = 4, EGG_YOLK = 4, WATER = 10) //there are about fifty different variants for homemade mayo, using the one that sounds best
-	result_amount = 20 //added 10u water so its no so tedious to make large batches of it, willing to negotiate on this one
-
+	required_reagents = list(MUSTARD = 1, SODIUMCHLORIDE = 1, VINEGAR = 4, EGG_YOLK = 4) //there are about fifty different variants for homemade mayo, using the one that sounds best
+	result_amount = 10
 
 /datum/chemical_reaction/vinegar
 	name = "Vinegar"

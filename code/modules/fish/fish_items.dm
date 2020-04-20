@@ -234,8 +234,8 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	..()
 
 /obj/item/weapon/lobster/attackby(var/obj/item/O, var/mob/user) // extracting tail and claw meat from a sea cockroach
-	if(istype(O, /obj/item/weapon/wirecutters))
-		to_chat(user, "You crack open the shell of \the [src] and pull out the claw meat while separating the tail!")
+	if(iswirecutter(O))
+		to_chat(user, "<span class='notice'>You crack open the shell of \the [src] and pull out the claw meat while separating the tail!")
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail(get_turf(src))
@@ -244,8 +244,8 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail/attackby(var/obj/item/O, var/mob/user) // extracting the meat from the tail, just makes normal lobster meat
-	if(istype(O, /obj/item/weapon/wirecutters))
-		to_chat(user, "You crack open the remains of the shell from \the [src] and pull out the meat!")
+	if(iswirecutter(O))
+		to_chat(user, "<span class='notice'>You crack open the remains of the shell from \the [src] and pull out the meat!")
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
 		qdel(src)
 		return
@@ -253,7 +253,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/steamed_deluxe_lobster/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso
 	if(istype(O, /obj/item/weapon/wirecutters))
-		to_chat(user, "You crack open the shell of \the [src]!")
+		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
 		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe(get_turf(src))
 		qdel(src)
 		return
@@ -261,7 +261,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/steamed_simple_lobster/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso, simple version
 	if(istype(O, /obj/item/weapon/wirecutters))
-		to_chat(user, "You crack open the shell of \the [src]!")
+		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
 		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple(get_turf(src))
 		qdel(src)
 		return
