@@ -43,7 +43,9 @@
 		if(typepath == /obj/item/weapon/stamp/denied)
 			suffix = "deny"
 		else if(typepath == /obj/item/weapon/stamp/judge || typepath == /obj/item/weapon/stamp/captain)
-			suffix = "cap"			
+			suffix = "cap"
+		else if(typepath == /obj/item/weapon/stamp)		
+			suffix = "qm"
 		else
 			suffix = copytext("[typepath]", 24)			
 		var/image/overlay = image('icons/obj/bureaucracy.dmi', "paper_stamp-[suffix]")
