@@ -10,6 +10,9 @@
 	name = text
 	return src
 
+/obj/effect/statclick/time/Click()
+	to_chat(usr,"<span class='notice'>The server time is [time2text(world.timeofday, "hh:mm:ss")]. The time slot is [getTimeslot()].</span>")
+
 /obj/effect/statclick/debug
 	var/class
 

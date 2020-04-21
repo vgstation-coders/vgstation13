@@ -42,8 +42,15 @@
 #define NEW_YEARS_EVE "New Year's Eve"
 #define FRIDAY_THE_13TH "Friday the 13th"
 
-#define SLEEPTIME "timeslot_sleep" //3 to 11
-#define EUROTIME "timeslot_euro" //12 to 15
-#define DAYTIME "timeslot_day" //16 to 18
-#define PRIMETIME "timeslot_prime" //19 to 22
-#define LATETIME "timeslot_late" //23 to 2
+//timeslots as strings
+#define SLEEPTIME "the morning shift" //3 to 11
+#define EUROTIME "the European shift" //12 to 15
+#define DAYTIME "the day shift" //16 to 18
+#define PRIMETIME "primetime" //19 to 22
+#define LATETIME "the late shift" //23 to 2
+//timeslots as hour values
+#define SLEEPTIME_HOURS 3 to 11
+#define EUROTIME_HOURS 12 to 15
+#define DAYTIME_HOURS 16 to 18
+#define PRIMETIME_HOURS 19 to 22
+#define LATETIME_HOURS 23, 0 to 2
