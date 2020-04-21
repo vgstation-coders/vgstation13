@@ -187,6 +187,13 @@
 						/obj/item/clothing/shoes/black,
 						/obj/item/clothing/head/ushanka)
 
+/obj/abstract/loadout/clown_ops
+	items_to_spawn = list(/obj/item/clothing/under/clownpsyche,
+						/obj/item/clothing/shoes/clownshoespsyche,
+						/obj/item/clothing/mask/gas/clownmaskpsyche,
+						/obj/item/weapon/storage/backpack/clownpackpsyche,
+						/obj/item/weapon/gun/energy/laser/rainbow)
+
 /obj/abstract/loadout/tunnel_clown
 	items_to_spawn = list(/obj/item/clothing/under/rank/clown,
 						/obj/item/clothing/shoes/clown_shoes,
