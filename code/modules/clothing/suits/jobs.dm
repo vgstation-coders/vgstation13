@@ -192,7 +192,16 @@
 		/obj/item/weapon/tank/emergency_oxygen,
 		/obj/item/weapon/tank/emergency_nitrogen,
 		/obj/item/device/device_analyser,
-		/obj/item/device/rcd)
+		/obj/item/device/rcd,
+		/obj/item/weapon/rcs,
+		/obj/item/weapon/storage/bag/clipboard,
+		/obj/item/weapon/folder,
+		/obj/item/weapon/stamp,
+		/obj/item/device/destTagger,
+		/obj/item/weapon/hand_labeler,
+		/obj/item/device/flashlight,
+		/obj/item/stack/package_wrap,
+		/obj/item/weapon/card/debit)
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 //Lawyer
