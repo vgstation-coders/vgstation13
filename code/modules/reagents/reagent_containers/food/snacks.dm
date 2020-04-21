@@ -844,7 +844,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/faggot/processed/New()
 	..()
 	reagents.clear_reagents()
-	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sausage
 	name = "sausage"
@@ -1624,8 +1623,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
 	..()
-	reagents.clear_reagents()
-	bitesize = 2
+	reagents.clear_reagents()	
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
@@ -1640,8 +1638,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope/processed/New()
 	..()
-	reagents.clear_reagents()
-	bitesize = 2
+	reagents.clear_reagents()	
 
 /obj/item/weapon/reagent_containers/food/snacks/butter
 	name = "butter"
@@ -2405,7 +2402,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed/New()
 	..()
 	reagents.clear_reagents()
-	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/superbiteburger
 	name = "Super Bite Burger"
