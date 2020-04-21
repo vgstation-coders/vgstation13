@@ -63,7 +63,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 //add an element in the list,
 //immediatly ordering it to its position using Insertion sort
-/PriorityQueue/proc/Enqueue(var/PathNode/A)
+/PriorityQueue/proc/Enqueue(var/atom/A)
 	var/i
 	L.Add(A)
 	i = L.len -1
@@ -79,7 +79,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	return .
 
 //removes an element
-/PriorityQueue/proc/Remove(var/PathNode/A)
+/PriorityQueue/proc/Remove(var/atom/A)
 	return L.Remove(A)
 
 //returns a copy of the elements list
@@ -88,7 +88,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	return ret
 
 //return the position of an element or 0 if not found
-/PriorityQueue/proc/Seek(var/PathNode/A)
+/PriorityQueue/proc/Seek(var/atom/A)
 	return L.Find(A)
 
 //return the element at the i_th position
@@ -97,7 +97,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	return L[i]
 
 //replace the passed element at it's right position using the cmp proc
-/PriorityQueue/proc/ReSort(var/PathNode/A)
+/PriorityQueue/proc/ReSort(var/atom/A)
 	var/i = Seek(A)
 	if (i == 0)
 		CRASH("[src] was seeking [A] but could not find it.")
@@ -250,10 +250,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 					PNode.prevNode = cur
 					PNode.distance_from_start = newenddist
 					PNode.calc_f()
-					if (!(PNode in open.L))
-						stack_trace("we found a pathnode, but it wasn't in our list! quick_astar, so PMid is 'unique'.")
-						open.L.Add(PNode)
-					open.ReSort(PNode)//reorder the changed element in the list
+					open.ReSort(PNode.source)//reorder the changed element in the list
 
 	}
 
