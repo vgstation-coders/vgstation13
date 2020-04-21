@@ -18,6 +18,8 @@
 
 	var/overlay_color = "#FFFFFF"
 
+	var/total_adjust = (internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/atmospherics/miner/New()
@@ -171,8 +173,8 @@
 
 /obj/machinery/atmospherics/miner/air/AddAir()
 	air_contents.adjust_multi(
-		GAS_OXYGEN, O2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
-		GAS_NITROGEN, N2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+		GAS_OXYGEN, O2STANDARD * total_adjust,
+		GAS_NITROGEN, N2STANDARD * total_adjust)
 
 /obj/machinery/atmospherics/miner/gas_giant
 	name = "\improper Gas Miner"
@@ -193,9 +195,9 @@
 
 /obj/machinery/atmospherics/miner/mixed_nitrogen/AddAir()
 	air_contents.adjust_multi(
-		GAS_CARBON, 0.3 * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
-		GAS_NITROGEN, 0.4 * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
-		GAS_PLASMA, 0.3 * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+		GAS_CARBON, 0.3 * total_adjust,
+		GAS_NITROGEN, 0.4 * total_adjust,
+		GAS_PLASMA, 0.3 * total_adjust)
 
 
 /obj/machinery/atmospherics/miner/mixed_oxygen
@@ -205,5 +207,5 @@
 
 /obj/machinery/atmospherics/miner/mixed_oxygen/AddAir()
 	air_contents.adjust_multi(
-		GAS_OXYGEN, 0.5 * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
-		GAS_SLEEPING, 0.5 * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+		GAS_OXYGEN, 0.5 * total_adjust,
+		GAS_SLEEPING, 0.5 * total_adjust)
