@@ -213,7 +213,10 @@
 	var/spell_name = initial(abstract_spell.name)
 	var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
 	var/spell_price = get_spell_price(abstract_spell)
-	dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+	if(spell_price < 0) //Done this way to not turn a line into spaghetti
+		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "gain [-spell_price] point\s")])<br>"
+	else
+		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
 	dat += "<em>[initial(abstract_spell.desc)]</em><br>"
 	var/flags = initial(abstract_spell.spell_flags)
 	var/list/properties = get_spell_properties(flags, user)

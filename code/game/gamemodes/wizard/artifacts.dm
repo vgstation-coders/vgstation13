@@ -177,7 +177,8 @@
 //SUMMON GUNS
 /datum/spellbook_artifact/summon_guns
 	name = "Summon Guns"
-	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
+	desc = "Arm the crew with a wide variety of guns, increasing the difficulty of facing the station."
+	one_use = TRUE
 	abbreviation = "SG"
 	price = -Sp_BASE_PRICE
 
@@ -195,7 +196,8 @@
 //SUMMON MAGIC
 /datum/spellbook_artifact/summon_magic
 	name = "Summon Magic"
-	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
+	desc = "Share the power of magic with the crew, increasing the difficulty of facing the station."
+	one_use = TRUE
 	abbreviation = "SM"
 	price = -Sp_BASE_PRICE
 
@@ -212,7 +214,8 @@
 //SUMMON SWORDS
 /datum/spellbook_artifact/summon_swords
 	name = "Summon Swords"
-	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
+	desc = "Arm the crew with many melee weaponry, slightly increasing the difficulty of facing the station."
+	one_use = TRUE
 	abbreviation = "SS"
 	price = -Sp_BASE_PRICE/2
 
