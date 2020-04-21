@@ -29,9 +29,32 @@
 	else
 		icon_state = "envelope_closed"
 
+	if(sortTag)
+		var/image/tag_overlay = image('icons/obj/storage/storage.dmi', src, "deliverytag")
+		overlays += tag_overlay
+
+	reapply_stamps()
+
+/obj/item/weapon/paper/envelope/proc/reapply_stamps()
+	if(!src.stamped)
+		return
+	// var/STAMP_TYPES = list("qm", "cap", "hop", "iaa", "hos", "warden", "ce", "rd", "cmo", "deny", "clown", "mime")
+	for(var/typepath in src.stamped)
+		var/suffix = ""
+		if(typepath == /obj/item/weapon/stamp/denied)
+			suffix = "deny"
+		else if(typepath == /obj/item/weapon/stamp/judge || typepath == /obj/item/weapon/stamp/captain)
+			suffix = "cap"			
+		else
+			suffix = copytext("[typepath]", 24)			
+		var/image/overlay = image('icons/obj/bureaucracy.dmi', "paper_stamp-[suffix]")
+		overlay.pixel_x = 5 * PIXEL_MULTIPLIER
+		overlay.pixel_y = -2 * PIXEL_MULTIPLIER
+		overlays += overlay;		
+
 /obj/item/weapon/paper/envelope/attackby(obj/item/weapon/P, mob/user)
 	. = ..()
-	if(.)
+	if(.)		
 		return
 	if(open)
 		if(!is_type_in_list(P, not_allowed))
@@ -51,6 +74,7 @@
 			var/tag = uppertext(O.destinations[O.currTag])
 			to_chat(user, "<span class='notice'>*[tag]*</span>")
 			sortTag = tag
+			update_icon()
 			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)			
 			desc = "It has a label reading [tag]."
 
