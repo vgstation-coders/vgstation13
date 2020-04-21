@@ -194,7 +194,7 @@ proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth =
 // The main difference is that it'll be caculated immediately and transmitted to the bot rather than waiting for the path to be made.
 // Currently, security bots are using this method to chase suspsects.
 // You MUST have the start and end be turfs.
-proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null)
+proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/reference)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
@@ -241,28 +241,28 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 				continue
 
 			var/newenddist = call(T,dist)(end)
-			var/PathNode/PNode = T.FindPathNode("unique")
+			var/PathNode/PNode = T.FindPathNode("unique_[reference]")
 			if(!PNode) //is not already in open list, so add it
-				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1,"unique"))
+				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1,"unique_[reference]"))
 			else //is already in open list, check if it's a better way from the current turf
 				if(newenddist < PNode.distance_from_end)
 
 					PNode.prevNode = cur
 					PNode.distance_from_start = newenddist
 					PNode.calc_f()
-					open.ReSort(PNode.source)//reorder the changed element in the list
+					open.ReSort(PNode)//reorder the changed element in the list
 
 	}
 
 	//cleanup
 	for(var/PathNode/PN in open.L)
-		PN.source.PathNodes["unique"] = null
-		PN.source.PathNodes.Remove("unique")
+		PN.source.PathNodes["unique_[reference]"] = null
+		PN.source.PathNodes.Remove("unique_[reference]")
 		qdel(PN)
 	for(var/turf/T in closed)
-		var/PathNode/PN = T.FindPathNode("unique")
-		T.PathNodes["unique"] = null
-		T.PathNodes.Remove("unique")
+		var/PathNode/PN = T.FindPathNode("unique_[reference]")
+		T.PathNodes["unique_[reference]"] = null
+		T.PathNodes.Remove("unique_[reference]")
 		qdel(PN)
 
 	//if the path is longer than maxnodes, then don't return it

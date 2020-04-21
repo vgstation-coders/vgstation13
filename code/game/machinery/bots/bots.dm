@@ -379,7 +379,7 @@
 	log_astar_beacon("[new_destination]")
 	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
 		// IMPORTANT: Quick AStar only takes TURFS as arguments.
-		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
 		if (!path) // Important because if quick_Astar fails, it returns null, not an empty list.
 			path = list()
 		return TRUE
