@@ -90,7 +90,7 @@ var/global/list/pathmakers = list()
 	var/debug = FALSE //Whether we paint our turfs as we calculate
 	var/PM_id //How we will identify PathNodes associated with this, to prevent PathNode conflict
 
-/datum/path_maker/New(var/nowner, var/nproc_to_call, var/turf/nstart, var/turf/nend, var/atom/ntarget, var/nadjacent, var/ndist, var/nmaxnodes, var/nmaxnodedepth, var/nmintargetdist, var/nid=null, var/turf/nexclude, var/ndebug = FALSE)
+/datum/path_maker/New(var/nowner, var/nproc_to_call, var/turf/nstart, var/turf/nend, var/atom/ntarget, var/nadjacent, var/ndist, var/nmaxnodes, var/nmaxnodedepth, var/nmintargetdist, var/nid=null, var/turf/nexclude, var/ndebug)
 	ASSERT(nowner)
 	ASSERT(nstart)
 	ASSERT(nend)
@@ -115,9 +115,6 @@ var/global/list/pathmakers = list()
 	pathmakers.Add(src)
 
 /datum/path_maker/proc/can_process()
-	if(gcDestroyed)
-		astar_debug("we can no longer make a path as we are dying")
-		return FALSE
 	if(!owner || owner.gcDestroyed) //crit fail
 		astar_debug("owner no longer exists [owner?"owner is destroyed":"no owner"]")
 		qdel(src)
@@ -212,10 +209,7 @@ var/global/list/pathmakers = list()
 				PNode.distance_from_start = call(cur.source,dist)(T)
 				PNode.distance_from_end = newenddist
 				PNode.calc_f()
-				if (!(PNode in open.L))
-					stack_trace("we found a pathnode, but it wasn't in our list! [PM_id] for a PM belonging to [owner]")
-					open.L.Add(PNode)
-				if(!open.ReSort(PNode))//reorder the changed element in the list
+				if(!open.ReSort(PNode.source))//reorder the changed element in the list
 					astar_debug("failed to reorder, requeuing")
 					open.Enqueue(PNode)
 	astar_debug("open:[open.List().len]")
