@@ -37,8 +37,7 @@
 
 /obj/item/weapon/paper/envelope/proc/reapply_stamps()
 	if(!src.stamped)
-		return
-	// var/STAMP_TYPES = list("qm", "cap", "hop", "iaa", "hos", "warden", "ce", "rd", "cmo", "deny", "clown", "mime")
+		return	
 	for(var/typepath in src.stamped)
 		var/suffix = ""
 		if(typepath == /obj/item/weapon/stamp/denied)
@@ -54,7 +53,7 @@
 
 /obj/item/weapon/paper/envelope/attackby(obj/item/weapon/P, mob/user)
 	. = ..()
-	if(.)		
+	if(.)
 		return
 	if(open)
 		if(!is_type_in_list(P, not_allowed))
