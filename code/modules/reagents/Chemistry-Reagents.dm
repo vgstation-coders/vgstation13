@@ -4159,8 +4159,8 @@
 	description = "A disgusting liquid with a horrible smell, which is used by space carps to mark their territory and food."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6AAA96" //rgb: 106, 170, 150
-	custom_metabolism = 0.02
-	data = 1 //Used as a tally
+	custom_metabolism = 0.05
+	data = 0 //Used as a tally
 	density = 109.06
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Contains leporazine, better this than 6 digits
 
@@ -4168,6 +4168,15 @@
 
 	if(..())
 		return 1
+
+	if(!data)
+		to_chat(M,"<span class='good'><b>You feel more carplike! [pick("Do you, perhaps...?","Maybe... just maybe...")]</b></span>")
+
+	if(volume < 3)
+		if(volume <= custom_metabolism)
+			to_chat(M,"<span class='danger'>You feel not at all carplike!</span>")
+		else if(!(data%4))
+			to_chat(M,"<span class='warning'>You feel less carplike...</span>")
 
 	data++
 
