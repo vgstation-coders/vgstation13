@@ -4159,7 +4159,7 @@
 	description = "A disgusting liquid with a horrible smell, which is used by space carps to mark their territory and food."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6AAA96" //rgb: 106, 170, 150
-	custom_metabolism = 0.1
+	custom_metabolism = 0.02
 	data = 1 //Used as a tally
 	density = 109.06
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Contains leporazine, better this than 6 digits
@@ -6777,7 +6777,7 @@
 			H.remove_spell(spell)
 		if (istype(H.wear_mask, /obj/item/clothing/mask/gas/mime/stickymagic))
 			qdel(H.wear_mask)
-			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")			
+			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")
 		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
 
 
