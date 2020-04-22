@@ -80,8 +80,6 @@
 	var/calorie_burning_heat_multiplier = 1		//The heat generated from burning calories is multiplied by this value.
 	var/thermal_loss_multiplier = 1				//The heat the mob loses to the environment is multiplied by this value.
 
-	var/datum/component_container/BrainContainer
-
 	var/list/datum/disease2/disease/virus2 = list()
 	var/image/pathogen
 	var/datum/immune_system/immune_system

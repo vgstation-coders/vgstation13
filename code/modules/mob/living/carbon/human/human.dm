@@ -91,9 +91,21 @@
 	my_appearance.h_style = "Insectoid Antennae"
 	regenerate_icons()
 
+/mob/living/carbon/human/NPC
+	_initial_components = list(
+		/datum/component/controller/mob,
+		/datum/component/ai/hand_control,
+		/datum/component/controller/movement/astar,
+		/datum/component/ai/human_brain,
+		/datum/component/ai/target_finder/human,
+		/datum/component/ai/target_holder/prioritizing,
+		/datum/component/ai/melee/attack_human,
+		/datum/component/ai/melee/throw_attack,
+		/datum/component/ai/crowd_attack,
+		/datum/component/ai/targetting_handler)
+
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc)
-	initialize_basic_NPC_components()
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	var/list/valid_species = (all_species - list("Krampus", "Horror"))
@@ -1811,23 +1823,6 @@ mob/living/carbon/human/isincrit()
 	if(M_HULK in mutations)
 		return image(icon = 'icons/mob/attackanims.dmi', icon_state = "hulk")
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
-
-/mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
-	BrainContainer = new (src)
-	BrainContainer.AddComponent(/datum/component/controller/mob)
-	BrainContainer.AddComponent(/datum/component/ai/hand_control)
-	BrainContainer.AddComponent(/datum/component/controller/movement/astar)
-	BrainContainer.register_for_updates()
-
-/mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
-	initialize_barebones_NPC_components()
-	BrainContainer.AddComponent(/datum/component/ai/human_brain)
-	BrainContainer.AddComponent(/datum/component/ai/target_finder/human)
-	BrainContainer.AddComponent(/datum/component/ai/target_holder/prioritizing)
-	BrainContainer.AddComponent(/datum/component/ai/melee/attack_human)
-	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
-	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
-	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...

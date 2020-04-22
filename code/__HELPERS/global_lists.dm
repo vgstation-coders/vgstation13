@@ -13,7 +13,6 @@ var/global/list/living_mob_list = list()			//List of all alive mobs, including c
 var/global/list/dead_mob_list = list()				//List of all dead mobs, including clientless. Excludes /mob/new_player
 var/list/observers = new/list()
 var/global/list/areas = list()
-var/global/list/active_component_containers = list() 	//List of all component containers that have registered for updating
 
 var/global/list/chemical_reactions_list				//list of all /datum/chemical_reaction datums. Used during chemical reactions
 var/global/list/chemical_reagents_list				//list of all /datum/reagent datums indexed by reagent id. Used by chemistry stuff

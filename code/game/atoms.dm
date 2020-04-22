@@ -198,6 +198,7 @@ var/global/list/ghdel_profiling = list()
 	post_z_transition = new("owner"=src)
 	. = ..()
 	AddToProfiler()
+	InitializeComponents()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
 	return null

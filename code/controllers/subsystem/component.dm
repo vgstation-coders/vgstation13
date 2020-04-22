@@ -1,4 +1,6 @@
 var/datum/subsystem/component/SScomp
+var/list/active_component_owners = list()
+
 
 /datum/subsystem/component
 	name          = "Component"
@@ -15,27 +17,28 @@ var/datum/subsystem/component/SScomp
 
 
 /datum/subsystem/component/stat_entry()
-	..("P:[active_component_containers.len]")
+	..("P:[active_component_owners.len]")
 
 
 /datum/subsystem/component/fire(resumed = FALSE)
 	if (!resumed)
-		currentrun = active_component_containers.Copy()
+		currentrun = active_component_owners.Copy()
 
 	while (currentrun.len)
-		var/datum/component_container/C = currentrun[currentrun.len]
+		var/atom/current_owner = currentrun[currentrun.len]
 		currentrun.len--
 
-		if(!C || C.gcDestroyed || !C.holder || !C.components.len)
+		if(!current_owner || current_owner.gcDestroyed|| !current_owner._components)
+			active_component_owners.Remove(current_owner)
 			continue
 
-		if(isliving(C.holder))
-			var/mob/living/M = C.holder
-			if (!M || M.disposed || M.gcDestroyed || M.timestopped || M.monkeyizing || M.stat == DEAD)
+		if(isliving(current_owner))
+			var/mob/living/M = current_owner
+			if (!istype(M) || M.disposed || M.gcDestroyed || M.timestopped || M.monkeyizing || M.stat == DEAD)
 				continue
 
 
-		C.SendSignal(COMSIG_LIFE, list())
+		current_owner.SignalComponents(COMSIG_LIFE, list())
 
 		if(MC_TICK_CHECK)
 			return
