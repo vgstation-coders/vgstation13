@@ -383,7 +383,6 @@
 	charge_cost = 100
 	cell_type = "/obj/item/weapon/cell"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
-	fire_delay = 3
 	var/pumping = 0
 
 /obj/item/weapon/gun/energy/laser/rainbow/attack_self(mob/user as mob)
@@ -401,6 +400,19 @@
 	sleep(5)
 	pumping = 0
 	update_icon()
+
+/obj/item/weapon/gun/energy/bison/update_icon()
+	if(power_supply.charge >= power_supply.maxcharge)
+		icon_state = "rainbow_laser100"
+	else if (power_supply.charge >= 75 && power_supply.charge < 100)
+		icon_state = "rainbow_laser75"
+	else if (power_supply.charge >= 50 && power_supply.charge < 75)
+		icon_state = "rainbow_laser50"
+	else if (power_supply.charge > 0 && power_supply.charge < 50)
+		icon_state = "rainbow_laser25"
+	else
+		icon_state = "rainbow_laser0"
+	return
 
 /obj/item/weapon/gun/energy/laser/rainbow/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 
