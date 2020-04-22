@@ -95,6 +95,14 @@
 	if(!gcDestroyed)
 		qdel(src)
 
+/obj/item/projectile/rocket/lowyield/extreme
+	name = "extreme yield rocket"
+	damage = 200
+	exdev 	= 7
+	exheavy = 14
+	exlight = 28
+	exflash = 32
+
 /obj/item/projectile/rocket/nikita
 	name = "\improper Nikita missile"
 	desc = "One does not simply dodge a nikita missile."

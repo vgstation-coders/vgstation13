@@ -35,3 +35,8 @@
 	desc = "Stun rocket for the Nanotrasen rocket launcher. Not a flashbang."
 	projectile_type = "/obj/item/projectile/rocket/blank/stun"
 	starting_materials = list(MAT_IRON = 50000, MAT_SILVER = 1000)
+
+/obj/item/ammo_casing/rocket_rpg/extreme
+	name = "extreme rocket" //don't even map or spawn this in or you'll be very sad
+	desc = "Extreme-yield rocket. Fire from very very far away."
+	projectile_type = "/obj/item/projectile/rocket/lowyield/extreme"
