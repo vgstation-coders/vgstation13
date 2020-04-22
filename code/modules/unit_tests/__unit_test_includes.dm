@@ -6,4 +6,5 @@
 #include "reagent_recipe_collisions.dm"
 #include "slipping.dm"
 #include "names.dm"
+#include "turretid.dm"
 #endif
