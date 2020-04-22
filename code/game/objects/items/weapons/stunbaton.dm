@@ -311,17 +311,9 @@
 			throwforce = 7
 		update_icon()
 	else
-		status = 0
 		force = 10
 		throwforce = 7
-		if(!bcell)
-			user.simple_message("<span class='warning'>[src] does not have a power source!</span>",
-				"<span class='warning'>[src] has no pulse and its soul has departed...</span>")
-		else if (bcell.maxcharge < hitcost)
-			to_chat(user, "<span class='warning'>[src] clicks but nothing happens. Something must be wrong with the battery.</span>")
-		else
-			user.simple_message("<span class='warning'>[src] is out of charge.</span>",
-				"<span class='warning'>[src] refuses to obey you.</span>")
+		..()
 
 	add_fingerprint(user)
 
@@ -330,7 +322,7 @@
 		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
 			"<span class='danger'>The [name] goes mad!</span>")
 		var/mob/living/L = user
-		L.apply_effect(stunforce, AGONY)
+		L.apply_effect(stunforce, AGONY) //don't hit yourself
 		L.audible_scream()
 		deductcharge(hitcost)
 		return
@@ -344,13 +336,11 @@
 	var/mob/living/L = M
 
 	if(user.a_intent == I_HURT)
-		. = ..()
-		playsound(loc, swingsound, 50, 1, -1)
+		..()
 
 	else
 		if(!status)
-			L.visible_message("<span class='attack'>\The [L] has been prodded with \the [src] by \the [user]. Luckily it was off.</span>",
-				self_drugged_message="<span class='warning'>\The [name] decides to spare this one.</span>")
+			..()
 			return
 
 	if(status && . != FALSE)
@@ -358,7 +348,7 @@
 		L.lastattacker = user
 
 		L.apply_effect(10, STUTTER, 0)
-		L.apply_effect(stunforce, AGONY)
+		L.apply_effect(stunforce, AGONY) //apply pain
 		L.audible_scream()
 
 		L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
@@ -374,9 +364,9 @@
 		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
 		log_attack("<font color='red'>[user.name] ([user.ckey]) stunned [L.name] ([L.ckey]) with [name]</font>" )
 		if(!iscarbon(user))
-			M.LAssailant = null
+			..()
 		else
-			M.LAssailant = user
+			..()
 
 /obj/item/weapon/melee/baton/harm/throw_impact(atom/hit_atom) //why would you throw it though?
 	if(prob(50))
@@ -391,7 +381,7 @@
 		L.lastattacker = foundmob
 
 	L.apply_effect(10, STUTTER) //sanity
-	L.apply_effect(stunforce, AGONY)
+	L.apply_effect(stunforce, AGONY) //apply pain by throwing
 	L.audible_scream()
 
 	L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
@@ -405,9 +395,9 @@
 	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by thrown [src.name] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
 	log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) stunned [L.name] ([L.ckey])</font>" )
 	if(!iscarbon(foundmob))
-		L.LAssailant = null
+		..()
 	else
-		L.LAssailant = foundmob
+		..()
 
 /obj/item/weapon/melee/baton/harm/proc/turning_dial(mob/user)
 	if(status)

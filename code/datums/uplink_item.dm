@@ -599,7 +599,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/command_security/syndibaton
 	name = "Harm Baton"
-	desc = "A stun baton modified with tesla relay coils capable of discharing high amount of shock to overload human pain registers. It can also use this energy to boost the impact of baton."
+	desc = "A stun baton modified with tesla relay coils capable of discharging high amount of shock to overload human pain registers. It can also use this energy to boost the impact of the baton."
 	item = /obj/item/weapon/melee/baton/harm/loaded
 	cost = 12
 	discounted_cost = 9
