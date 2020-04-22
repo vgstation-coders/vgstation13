@@ -495,10 +495,10 @@
 				var/mob/living/silicon/ai/AI = usr
 				AI.make_announcement()
 
-		if("Call Emergency Shuttle")
+		if("(Re)Call Emergency Shuttle")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.ai_call_shuttle()
+				AI.ai_call_or_recall_shuttle()
 
 		if("State Laws")
 			if(isAI(usr))
