@@ -19,6 +19,10 @@
 		"old_durand",
 	)
 	paintable = 1
+	var/list/sprites_with_a_lockdown_state= list(
+		"durand",
+		"old_durand",
+	)
 
 /obj/mecha/combat/durand/New()
 	..()
@@ -54,7 +58,7 @@
 	Durand.defence = !Durand.defence
 	if(Durand.defence)
 		Durand.icon_state = 0
-		if(!istype(Durand,/obj/mecha/combat/durand/old))
+		if((Durand.sprites_with_a_speedmode_state.Find(Durand.initial_icon)))
 			flick("[Durand.initial_icon]-lockdown-a",Durand)
 			Durand.icon_state = Durand.initial_icon + "-lockdown"
 		Durand.deflect_chance = Durand.defence_deflect
