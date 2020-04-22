@@ -11,7 +11,7 @@
 	var/explosive = 1
 	var/picked_up_speed = 0.66 //This is basically projectile speed, so
 	fire_sound = 'sound/weapons/rocket.ogg'
-	var/exdev 	= 1 //RPGs pack a serious punch and will cause massive structural damage in your average room, 
+	var/exdev 	= 1 //RPGs pack a serious punch and will cause massive structural damage in your average room,
 	var/exheavy = 3 //but won't punch through reinforced walls
 	var/exlight = 5
 	var/exflash = 8
@@ -34,7 +34,7 @@
 
 /obj/item/projectile/rocket/to_bump(var/atom/A)
 	if(explosive == 1)
-		explosion(A, exdev, exheavy, exlight, exflash) 
+		explosion(A, exdev, exheavy, exlight, exflash)
 		if(!gcDestroyed)
 			qdel(src)
 	else
@@ -45,9 +45,6 @@
 /obj/item/projectile/rocket/lowyield
 	name = "low yield rocket"
 	icon_state = "rpground"
-	damage = 45
-	stun = 10
-	weaken = 10
 	exdev 	= -1
 	exheavy = 0
 	exlight = 3
@@ -56,12 +53,16 @@
 /obj/item/projectile/rocket/blank
 	name = "blank rocket"
 	damage = 5
+	stun = 5
 	weaken = 10
 	agony = 10
-	exdev 	= -1
-	exheavy = 0
-	exlight = 0
-	exflash = 0
+	explosive = 0
+
+/obj/item/projectile/rocket/blank/to_bump(var/atom/A)
+	explosion(A, -1, 0, 0, 0)
+	..()
+	if(!gcDestroyed)
+		qdel(src)
 
 /obj/item/projectile/rocket/blank/emp
 	name = "EMP rocket"
@@ -69,29 +70,30 @@
 	agony = 30
 	emheavy = 3
 	emlight = 5
+	explosive = 0
 
-/obj/item/projectile/rocket/emp/to_bump(var/atom/A)
+/obj/item/projectile/rocket/blank/emp/to_bump(var/atom/A)
 	empulse(A, 3, 5)
+	explosion(A, -1, 0, 0, 0)
 	..()
-	
+	if(!gcDestroyed)
+		qdel(src)
+
 /obj/item/projectile/rocket/blank/stun
 	name = "stun rocket"
 	damage = 15
 	stun = 20
 	weaken = 20
 	agony = 30
+	explosive = 0
 
-/obj/item/projectile/rocket/stun/to_bump(var/atom/A)
+
+/obj/item/projectile/rocket/blank/stun/to_bump(var/atom/A)
 	flashbangprime(TRUE, FALSE, FALSE)
+	explosion(A, -1, 0, 0, 0)
 	..()
-		
-/obj/item/projectile/rocket/lowyield/extreme
-	name = "extreme yield rocket"
-	damage = 200
-	exdev 	= 7
-	exheavy = 14
-	exlight = 28
-	exflash = 32
+	if(!gcDestroyed)
+		qdel(src)
 
 /obj/item/projectile/rocket/nikita
 	name = "\improper Nikita missile"
