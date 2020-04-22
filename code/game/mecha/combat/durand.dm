@@ -58,7 +58,7 @@
 	Durand.defence = !Durand.defence
 	if(Durand.defence)
 		Durand.icon_state = 0
-		if((Durand.sprites_with_a_speedmode_state.Find(Durand.initial_icon)))
+		if((Durand.sprites_with_a_lockdown_state.Find(Durand.initial_icon)))
 			flick("[Durand.initial_icon]-lockdown-a",Durand)
 			Durand.icon_state = Durand.initial_icon + "-lockdown"
 		Durand.deflect_chance = Durand.defence_deflect
@@ -66,7 +66,7 @@
 		playsound(src.linked_mech, 'sound/mecha/mechlockdown.ogg', 60, 1)
 	else
 		Durand.deflect_chance = initial(Durand.deflect_chance)
-		if(!istype(Durand,/obj/mecha/combat/durand/old))
+		if((Durand.sprites_with_a_lockdown_state.Find(Durand.initial_icon)))
 			Durand.icon_state = Durand.initial_icon
 		Durand.occupant_message("<span class='red'>You disable [Durand] defence mode.</span>")
 	Durand.log_message("Toggled defence mode.")
