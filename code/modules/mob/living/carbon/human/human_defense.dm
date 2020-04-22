@@ -402,6 +402,7 @@ emp_act
 
 			if (gotarmor)
 				b_loss *= (100-gotarmor)/100 //reduce damage by percent equal to bomb armor
+				f_loss *= (100-gotarmor)/100
 
 			if (!earprot())
 				ear_damage += 30
