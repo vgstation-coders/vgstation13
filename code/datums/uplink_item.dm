@@ -590,7 +590,7 @@ var/list/uplink_items = list()
 		var/datum/uplink_item/I = pick(possible_items)
 		U.uses -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
-		new_uplink_item(I, loc, user)
+		new_uplink_item(I.item, loc, user)
 
 /datum/uplink_item/jobspecific/command_security
 	category = "Command and Security Specials"
