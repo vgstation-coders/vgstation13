@@ -97,7 +97,7 @@
 		/obj/item/projectile/ion,
 	)
 
-	var/list/mech_sprites = list() //modified - realest
+	var/list/mech_sprites = list() //sprites alternatives for a given mech. Only have to enter the name of the paint scheme
 	var/paintable = 0
 
 /obj/mecha/get_cell()
@@ -2023,10 +2023,6 @@
 		src.visible_message("[src] raises [ME]")
 		send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 
-//obj/mecha/proc/update_hud_icon()
-	//for(var/spell/mech/MS in occupant.spell_list)
-
-
 ///////////////////////
 ///// Power stuff /////
 ///////////////////////
@@ -2120,18 +2116,14 @@
 		spawn(60)
 			M.initial_icon = icontype
 			M.icon_state = icontype +"-open"
-			M.refresh_spells() //I think this will refresh the spell hud icons to match the new paintjob. confirm with testing
-//			for /spell/mech/ in intrinsic_spells
-
-
-//run some kind of proc to update the mech's spell hud images to match the new paintjob.
+			M.refresh_spells() //I think this something important
 	return 1
-
 
 
 //////////////////////////////////////////
 ////////  Mecha global iterators  ////////
 //////////////////////////////////////////
+
 
 /datum/global_iterator/mecha_preserve_temp  //normalizing cabin air temperature to 20 degrees celsium
 	delay = 20

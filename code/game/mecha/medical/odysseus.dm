@@ -11,7 +11,6 @@
 	deflect_chance = 15
 	step_energy_drain = 6
 	var/obj/item/clothing/glasses/hud/health/mech/hud
-	max_equip = 3
 	paintable = 1
 	mech_sprites = list(
 		"odysseus",

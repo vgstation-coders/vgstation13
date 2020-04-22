@@ -251,7 +251,6 @@
 	name = "MURDYSSEUS wreckage"
 	icon_state = "murdysseus-broken"
 
-
 /obj/effect/decal/mecha_wreckage/odysseus/New()
 	..()
 	var/list/parts = list(

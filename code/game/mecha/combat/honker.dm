@@ -15,6 +15,7 @@
 	add_req_access = 0
 	max_equip = 3
 	var/squeak = 0
+
 /*
 /obj/mecha/combat/honker/New()
 	..()

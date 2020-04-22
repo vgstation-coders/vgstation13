@@ -77,7 +77,7 @@
 	hud_state = "gygax-gofast"
 	override_icon = 'icons/mecha/mecha.dmi'
 
-/spell/mech/gygax/overload/New()
+/spell/mech/gygax/overload/New() //not really working for the purpose of repainting //also gets complicated since the dark and old gygax doesn't have a -gofast state
 	..()
 	hud_state = linked_mech.initial_icon + "-gofast"
 

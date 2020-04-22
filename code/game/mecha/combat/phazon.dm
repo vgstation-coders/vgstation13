@@ -46,7 +46,7 @@
 			return
 		if(can_move)
 			can_move = 0
-			flick("[initial_icon]-phase", src)//modified -realest
+			flick("[initial_icon]-phase", src)
 			src.forceMove(new_turf)
 			src.use_power(phasing_energy_drain)
 			spawn(step_in*3)
@@ -59,10 +59,10 @@
 	desc = "Phase through walls."
 	charge_max = 10
 	charge_counter = 10
-	hud_state = "phazon-phase" //modified -realest
+	hud_state = "phazon-phase"
 	override_icon = 'icons/mecha/mecha.dmi'
 
-/spell/mech/phazon/phasing/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/ME)
+/spell/mech/phazon/phasing/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/ME) //same problem as the rest
 	..()
 	hud_state = "[linked_mech.initial_icon]-phase"
 
