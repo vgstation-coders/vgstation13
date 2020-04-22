@@ -28,7 +28,7 @@ var/list/active_component_owners = list()
 		var/atom/current_owner = currentrun[currentrun.len]
 		currentrun.len--
 
-		if(!current_owner || current_owner.gcDestroyed|| !current_owner._components.len)
+		if(!current_owner || current_owner.gcDestroyed|| !current_owner._components?.len)
 			active_component_owners.Remove(current_owner)
 			continue
 

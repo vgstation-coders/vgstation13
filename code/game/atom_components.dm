@@ -2,12 +2,15 @@
 //Sorry about the underscores, but it's the simplest way to make sure we avoid collisions.
 
 /atom
-    var/list/_components = list()
-    var/list/_initial_components = list() //assoc list, entries: list(/path/to/component = list([insert list of arguments here]))
+    var/list/_components
+    var/list/_initial_components //assoc list, entries: list(/path/to/component = list([insert list of arguments here]))
 
 /atom/proc/InitializeComponents()
-    if(!_initial_components.len)
+    if(!_initial_components)
         return
+
+    if(!_components)
+        _components = list()
 
     for(var/new_component_path in _initial_components)
         if(!ispath(new_component_path, /datum/component))
@@ -17,7 +20,7 @@
     for(var/datum/component/new_component in _components)
         new_component.InitializeComponent(_initial_components[new_component])
 
-    if(_components.len)
+    if(_components?.len)
         active_component_owners.Add(src)
 
 /*
