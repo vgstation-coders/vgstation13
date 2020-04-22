@@ -6,7 +6,7 @@
     var/list/_initial_components = list() //assoc list, entries: list(/path/to/component = list([insert list of arguments here]))
 
 /atom/proc/InitializeComponents()
-    if(!_initial_components)
+    if(!_initial_components.len)
         return
 
     for(var/new_component_path in _initial_components)
@@ -17,7 +17,7 @@
     for(var/datum/component/new_component in _components)
         new_component.InitializeComponent(_initial_components[new_component])
 
-    if(_components)
+    if(_components.len)
         active_component_owners.Add(src)
 
 /*

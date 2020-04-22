@@ -10,4 +10,4 @@
 		for(var/mob/living/M in oview(7, owner))
 			if(!M.isUnconscious() || !(M in B.friends)) //THEY'RE ATTACKING OUR BOY, GET HIM!
 				continue
-			SendSignal(COMSIG_ATTACKEDBY, list("assailant"=assailant,"damage"=damage_done))
+			M.SignalComponents(COMSIG_ATTACKEDBY, list("assailant"=assailant,"damage"=damage_done))
