@@ -202,6 +202,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define TIMELESS		32768 // Immune to time manipulation.
 
 #define SILENTCONTAINER	65536 //reactions inside make no noise
+#define ATOM_INITIALIZED 131072 // initialize() was called
 
 #define ALL ~0
 #define NONE 0
