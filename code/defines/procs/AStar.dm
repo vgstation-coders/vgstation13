@@ -206,7 +206,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 		return 0
 
 	//initialization
-	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,"unique"))
+	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,"unique_[reference]"))
 
 	//then run the main loop
 	while(!open.IsEmpty() && !path)
