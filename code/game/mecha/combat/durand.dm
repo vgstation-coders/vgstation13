@@ -14,11 +14,11 @@
 	var/defence = 0
 	var/defence_deflect = 35
 	wreckage = /obj/effect/decal/mecha_wreckage/durand//maybe I can figure out some way to resprite wreckage...
-	mech_sprites = (
+	mech_sprites = list(
 		"durand",
 		"old_durand",
 	)
-
+	paintable = 1
 
 /obj/mecha/combat/durand/New()
 	..()
@@ -39,10 +39,16 @@
 /spell/mech/durand/defence_mode
 	name = "Defence Mode"
 	desc = "Reduce incoming damage in exchange for preventing movement."
-	hud_state = "[initial_state]-lockdown"
+	hud_state = "durand-lockdown" ///need a solution for this
 	override_icon = 'icons/mecha/mecha.dmi'
 	charge_max = 10
 	charge_counter = 10
+
+/spell/mech/durand/defence_mode/New()
+	..()
+	hud_state = "[linked_mech.initial_icon]-lockdown"
+//	open_state = "[linked_mech.initial_icon]-open" //experimental shit, realestestate
+//	closed_state = "[linked_mech.initial_icon]"  //same here
 
 /spell/mech/durand/defence_mode/cast(list/targets, mob/user)
 	var/obj/mecha/combat/durand/Durand = linked_mech
@@ -50,7 +56,7 @@
 	if(Durand.defence)
 		Durand.icon_state = 0
 		if(!istype(Durand,/obj/mecha/combat/durand/old))
-			flick("[initial_state]-lockdown-a",Durand)//modified -realest
+			flick("[Durand.initial_icon]-lockdown-a",Durand)//modified -realest
 			Durand.icon_state = Durand.initial_icon + "-lockdown"
 		Durand.deflect_chance = Durand.defence_deflect
 		Durand.occupant_message("<span class='notice'>You enable [Durand] defence mode.</span>")

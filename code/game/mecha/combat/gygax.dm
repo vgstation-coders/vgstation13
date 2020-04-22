@@ -15,11 +15,14 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/gygax
 	internal_damage_threshold = 35
 	max_equip = 3
-	mech_sprites = (
+	paintable = 1
+	mech_sprites = list(
 		"gygax",
 		"gygax_old",
-		"recitence", //subvariant
-		"medgax",  //subvariant
+		"darkgygax_old",
+	)
+	var/list/sprites_with_a_speedmode_state = list(
+		"gygax"
 	)
 
 /obj/mecha/combat/gygax/dark
@@ -35,10 +38,10 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/gygax/dark
 	max_equip = 4
 	step_energy_drain = 5
-	mech_sprites = (
+	mech_sprites = list(
 		"darkgygax",
-		"darkgygax_old",
 	)
+	paintable = 0
 
 /obj/mecha/combat/gygax/New()
 	..()
@@ -65,13 +68,18 @@
 	cell.charge = 30000
 	cell.maxcharge = 30000
 
+
 /spell/mech/gygax/overload
 	name = "Overload"
 	desc = "Greatly enhance the mech's speed at the cost of integrity per step."
 	charge_max = 10
 	charge_counter = 10
-	hud_state = "[initial_state]-gofast"//modified - realest
+	hud_state = "gygax-gofast"
 	override_icon = 'icons/mecha/mecha.dmi'
+
+/spell/mech/gygax/overload/New()
+	..()
+	hud_state = linked_mech.initial_icon + "-gofast"
 
 /spell/mech/gygax/overload/cast(list/targets, mob/user)
 	var/obj/mecha/combat/gygax/Gygax = linked_mech
@@ -80,17 +88,20 @@
 		Gygax.step_in = initial(Gygax.step_in)
 		Gygax.step_energy_drain = initial(Gygax.step_energy_drain)
 		Gygax.occupant_message("<span class='notice'>You disable leg actuators overload.</span>")
-		if(!istype(Gygax,/obj/mecha/combat/gygax/dark))
-			flick("[initial_state]-gofast-aoff",Gygax)
-			Gygax.icon_state = Gygax.initial_icon
+		if(!(istype(Gygax,/obj/mecha/combat/gygax/dark)))
+			if((Gygax.sprites_with_a_speedmode_state.Find(Gygax.initial_icon)))
+				flick("[Gygax.initial_icon]-gofast-aoff",Gygax)
+				Gygax.icon_state = Gygax.initial_icon
 	else
 		Gygax.overload = 1
 		Gygax.step_in = min(1, round(Gygax.step_in/2))
 		Gygax.step_energy_drain = Gygax.step_energy_drain*Gygax.overload_coeff
 		Gygax.occupant_message("<span class='red'>You enable leg actuators overload.</span>")
-		if(!istype(Gygax,/obj/mecha/combat/gygax/dark))
-			flick("[initial_state]-gofast-aon",Gygax)
-			Gygax.icon_state = Gygax.initial_icon + "-gofast"
+		if(!(istype(Gygax,/obj/mecha/combat/gygax/dark)))
+			if((Gygax.sprites_with_a_speedmode_state.Find(Gygax.initial_icon)))
+				Gygax.occupant_message("<span class='notice'>after my third adderall I take a black russian ... initial_icon  = [Gygax.initial_icon], gygax: [Gygax.sprites_with_a_speedmode_state.Find(Gygax.initial_icon)].</span>")//debugging
+				flick("[Gygax.initial_icon]-gofast-aon",Gygax)
+				Gygax.icon_state = Gygax.initial_icon + "-gofast"
 	Gygax.log_message("Toggled leg actuators overload.")
 	return
 
@@ -103,7 +114,7 @@
 */
 
 /obj/mecha/combat/gygax/stopMechWalking()
-	if(overload)
+	if(overload &&(sprites_with_a_speedmode_state.Find(initial_icon)))
 		icon_state = initial_icon + "-gofast"
 	else
 		icon_state = initial_icon

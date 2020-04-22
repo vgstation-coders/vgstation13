@@ -19,11 +19,12 @@
 	var/phasing = 0
 	var/phasing_energy_drain = 200
 	max_equip = 4
-	mech_sprites = (
+	mech_sprites = list(
 		"phazon",
-		"imperion",
+		"imperion", //imperion's phase looks a little half assed.
 		"janus",
 	)
+	paintable = 1
 
 /obj/mecha/combat/phazon/New()
 	..()
@@ -58,8 +59,12 @@
 	desc = "Phase through walls."
 	charge_max = 10
 	charge_counter = 10
-	hud_state = "[initial_state]-phase" //modified -realest
+	hud_state = "phazon-phase" //modified -realest
 	override_icon = 'icons/mecha/mecha.dmi'
+
+/spell/mech/phazon/phasing/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/ME)
+	..()
+	hud_state = "[linked_mech.initial_icon]-phase"
 
 /spell/mech/phazon/phasing/cast(list/targets, mob/user)
 	var/obj/mecha/combat/phazon/Phazon = linked_mech

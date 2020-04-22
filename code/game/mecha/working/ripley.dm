@@ -7,13 +7,14 @@
 	max_temperature = 20000
 	health = 200
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley
-	mech_sprites = (
+	mech_sprites = list(
 		"ripley",
-		"proto-ripley",
+//		"proto-ripley",
 		"titan",
 		"ripley_flames_red",
 		"ripley_flames_blue"
 	)
+	paintable = 1
 
 /*
 /obj/mecha/working/ripley/New()
@@ -32,6 +33,7 @@
 	light_brightness_on = 3
 	damage_absorption = list("fire"=0.5,"bullet"=0.8,"bomb"=0.5)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/firefighter
+	paintable = 0
 
 /obj/mecha/working/ripley/deathripley
 	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE"
@@ -44,6 +46,7 @@
 	light_brightness_on = 3
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/deathripley
 	step_energy_drain = 0
+	paintable = 0
 
 /obj/mecha/working/ripley/deathripley/New()
 	..()

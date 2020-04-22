@@ -98,6 +98,7 @@
 	)
 
 	var/list/mech_sprites = list() //modified - realest
+	var/paintable = 0
 
 /obj/mecha/get_cell()
 	return cell
@@ -139,6 +140,7 @@
 		explosion(T, 0, 0, 1, 3)
 	if(wreckage)
 		var/obj/effect/decal/mecha_wreckage/WR = new wreckage(T)
+		WR.icon_state = initial_icon + "-broken"
 		for(var/obj/item/mecha_parts/mecha_equipment/E in equipment)
 			if(E.salvageable && prob(30))
 				WR.crowbar_salvage += E
@@ -2021,6 +2023,10 @@
 		src.visible_message("[src] raises [ME]")
 		send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 
+//obj/mecha/proc/update_hud_icon()
+	//for(var/spell/mech/MS in occupant.spell_list)
+
+
 ///////////////////////
 ///// Power stuff /////
 ///////////////////////
@@ -2085,25 +2091,47 @@
 			return "huddiagdead"
 	return "huddiagmax"
 
-/obj/mecha/proc/repaint_mech(mob/user) //added -realest
-	if(!mech_sprites.len)//mech paint list is empty
-		to_chat(user, "<span class='info'>You cannot repaint this mech.</span>")
-		return
 
-	var/icontype = input("Select an icon!")in mech_sprites
+/obj/item/device/mech_painter
+	name = "Mecha Painter"
+	desc = "A device used to paint floors in various colours and fashions."
+	icon = 'icons/obj/RCD.dmi'
+	icon_state = "rpd"//placeholder art, someone please sprite it
+	force = 0
 
+/obj/item/device/mech_painter/afterattack(var/obj/mecha/M, var/mob/user)
+	if (!M.paintable)
+		to_chat(user, "<span class='info'>This mech cannot be painted.</span>")
+		return 1
+	if (!M.mech_sprites.len)
+		to_chat(user, "<span class='info'>This mech has no other paint-jobs.</span>")
+		return 1
+	if (M.occupant)
+		to_chat(user, "<span class='info'>This mech has an occupant. It must be empty before you can paint it.</span>")
+		return 1
+
+	var/icontype = input("Select the paint-job!")in M.mech_sprites
+
+	if(icontype == M.initial_icon)
+		to_chat(user, "<span class='info'>This mech is already painted in that style.</span>")
+		return 1
 	if(icontype)
 		to_chat(user, "<span class='info'>You begin repainting the mech.</span>")
 		spawn(60)
-			icon_state = mech_sprites[icontype]
-			initial_icon = icon_state
+			M.initial_icon = icontype
+			M.icon_state = icontype +"-open"
+			M.refresh_spells() //I think this will refresh the spell hud icons to match the new paintjob. confirm with testing
+//			for /spell/mech/ in intrinsic_spells
+
+
+//run some kind of proc to update the mech's spell hud images to match the new paintjob.
+	return 1
 
 
 
 //////////////////////////////////////////
 ////////  Mecha global iterators  ////////
 //////////////////////////////////////////
-
 
 /datum/global_iterator/mecha_preserve_temp  //normalizing cabin air temperature to 20 degrees celsium
 	delay = 20
