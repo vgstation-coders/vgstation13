@@ -1282,6 +1282,8 @@
 		return 1
 
 	M.adjustToxLoss(REM)
+	if(prob(5) && !M.isUnconscious())
+		M.emote("stare")
 
 /datum/reagent/chloramine
 	name = "Chloramine"
@@ -6777,7 +6779,7 @@
 			H.remove_spell(spell)
 		if (istype(H.wear_mask, /obj/item/clothing/mask/gas/mime/stickymagic))
 			qdel(H.wear_mask)
-			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")			
+			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")
 		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
 
 
