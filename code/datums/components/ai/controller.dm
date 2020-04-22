@@ -11,6 +11,7 @@
 		SendSignal(COMSIG_BUMPED, list("movable"=AM))
 
 // Called when we bump another movable atom.
+// Side note: I want to strangle whoever named this proc.
 /datum/component/controller/proc/Onto_bump(var/atom/A)
 	if(istype(A, /atom/movable))
 		var/atom/movable/AM = A
@@ -22,31 +23,31 @@
 
 //* Mob calls these to send signals to components. */
 /datum/component/controller/proc/AttackTarget(var/atom/A)
-	owner.SignalComponents(/datum/component/ai, COMSIG_ATTACKING, list("target"=A))
+	owner.SignalComponents(/datum/component/ai, COMSIG_ATTACKING, list("target" = A))
 
 /datum/component/controller/proc/setBusy(var/yes)
 	_busy = yes
-	SendSignal(COMSIG_BUSY, list("state"=_busy))
+	SendSignal(COMSIG_BUSY, list("state" = _busy))
 
 /datum/component/controller/proc/getBusy()
 	return _busy
 
 /datum/component/controller/proc/setTarget(var/atom/A)
 	_target = A
-	SendSignal(COMSIG_TARGET, list("target"=_target))
+	SendSignal(COMSIG_TARGET, list("target" = _target))
 
 /datum/component/controller/proc/getTarget()
 	return _target
 
 /datum/component/controller/proc/setState(var/new_state)
 	_state = new_state
-	SendSignal(COMSIG_STATE, list("state"=_state))
+	SendSignal(COMSIG_STATE, list("state" = _state))
 
 /datum/component/controller/proc/getState()
 	return _state
 
 /datum/component/controller/proc/setBodyTemperature(var/temp)
-	SendSignal(COMSIG_SET_BODYTEMP, list("temp"=temp,"from"=src))
+	SendSignal(COMSIG_SET_BODYTEMP, list("temp" = temp, "from" = src))
 
 /datum/component/controller/proc/getBodyTemperature()
 	return -1

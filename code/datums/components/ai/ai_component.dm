@@ -8,5 +8,5 @@
 		if(COMSIG_STATE) // list("name"="statename")
 			state = args["name"]
 
-/datum/component/ai/InitializeComponent()
+/datum/component/ai/InitializeComponent(var/list/args)
 	controller = owner.TryGetComponent(/datum/component/controller)

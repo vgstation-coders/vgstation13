@@ -1,12 +1,13 @@
 /datum/component
 	var/atom/owner
 
-/datum/component/New(var/datum/O)
+/datum/component/New(var/datum/O, var/list/args)
 	owner = O
+	InitializeComponent(args)
 
 //Args should be an assoc list for the sake of consistency.
 /datum/component/proc/InitializeComponent(var/list/args)
-    return
+	return
 
 //Override this with behavior for receiving relevant signals.
 /datum/component/proc/RecieveSignal(var/sigtype, var/list/args)

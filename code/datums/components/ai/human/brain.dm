@@ -80,6 +80,7 @@
 			else
 				dir = turn(lastdir, 180)
 		if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
+			testing("[owner] is attempting to wander.")
 			SendSignal(COMSIG_STEP, list("dir" = dir))
 			lastdir = dir
 

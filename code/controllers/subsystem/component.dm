@@ -3,11 +3,11 @@ var/list/active_component_owners = list()
 
 
 /datum/subsystem/component
-	name          = "Component"
-	wait          = 0.5 SECONDS
-	flags         = SS_NO_INIT | SS_KEEP_TIMING
-	priority      = SS_PRIORITY_COMPONENT
-	display_order = SS_DISPLAY_COMPONENT
+	name				= "Component"
+	wait				= 0.5 SECONDS
+	flags				= SS_NO_INIT | SS_KEEP_TIMING
+	priority			= SS_PRIORITY_COMPONENT
+	display_order		= SS_DISPLAY_COMPONENT
 
 	var/list/currentrun
 

@@ -1,5 +1,5 @@
 /datum/component/ai/target_finder/simple_view/GetTargets()
-	ASSERT(owner!=null)
+	ASSERT(owner != null)
 	var/list/o = list()
 	for(var/atom/A in view(range, owner))
 		if(is_type_in_list(A, exclude_types))

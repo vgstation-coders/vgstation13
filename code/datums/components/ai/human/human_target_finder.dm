@@ -3,7 +3,7 @@
 	var/datum/component/ai/human_brain/B
 
 /datum/component/ai/target_finder/human/GetTargets()
-	ASSERT(owner!=null)
+	ASSERT(owner != null)
 	if(!B)
 		B = owner.TryGetComponent(/datum/component/ai/human_brain)
 	var/list/o = list()
