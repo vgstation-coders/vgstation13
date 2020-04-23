@@ -720,6 +720,7 @@ var/list/ai_list = list()
 		"343",
 		"Auto",
 		"Boy",
+		"Beach Ball",
 		"Corgi",
 		"Cortano",
 		"Floating face",
@@ -761,6 +762,8 @@ var/list/ai_list = list()
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo12"))
 				if("Mothman")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo13"))
+				if("Beach Ball")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"beachball"))
 
 	return
 
