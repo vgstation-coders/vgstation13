@@ -19,10 +19,7 @@ var/list/processing_objects = list()
 
 /datum/subsystem/obj/Initialize()
 	for(var/atom/object in world)
-		if(!(flags & ATOM_INITIALIZED))
-			object.initialize()
-		else
-			stack_trace("[object.type] initialized twice")
+		object.initialize()
 		CHECK_TICK
 	for(var/area/place in areas)
 		var/obj/machinery/power/apc/place_apc = place.areaapc
