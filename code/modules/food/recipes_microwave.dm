@@ -2776,6 +2776,28 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/peanutbutter
 
+/datum/recipe/escargot
+	reagents = list (SODIUMCHLORIDE = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/snail,
+		/obj/item/clothing/head/helmet/snail_helm,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet,
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/escargot
+
+/datum/recipe/es_cargo
+	reagents = list (SODIUMCHLORIDE = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/snail,
+		/obj/item/clothing/head/helmet/snail_helm,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet,
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/weapon/paper,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/es_cargo
+
 /datum/recipe/steamed_lobster_deluxe //the deluxe comes with butter and a slice of lemon
 	reagents = list (WATER = 10)
 	items = list(
@@ -2808,7 +2830,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_roll_butter
 
-
 /datum/recipe/lobster_tail_baked
 	reagents = list (SODIUMCHLORIDE = 1)
 	items = list(
@@ -2831,3 +2852,4 @@
 		/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_sushi
+
