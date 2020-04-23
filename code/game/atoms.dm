@@ -199,6 +199,8 @@ var/global/list/ghdel_profiling = list()
 	. = ..()
 	AddToProfiler()
 	InitializeComponents()
+	if(_components)
+		active_component_owners.Add(src)
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
 	return null

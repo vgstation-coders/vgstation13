@@ -271,7 +271,6 @@
 #include "code\datums\components\debug_component.dm"
 #include "code\datums\components\ai\ai_component.dm"
 #include "code\datums\components\ai\atmos.dm"
-#include "code\datums\components\ai\component_mob.dm"
 #include "code\datums\components\ai\controller.dm"
 #include "code\datums\components\ai\def_zone_handler.dm"
 #include "code\datums\components\ai\get_damtype.dm"

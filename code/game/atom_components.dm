@@ -3,22 +3,45 @@
 
 /atom
 	var/list/_components
-	var/list/_initial_components //assoc list, entries: list(/path/to/component = list([insert list of arguments here]))
+
+/*
+	Override with component initialization logic.
+*/
 
 /atom/proc/InitializeComponents()
-	if(!_initial_components)
-		return
+	return
 
+/*
+	Attempts to create and attach a component of the given type.
+	Fails if an instance of the component type already exists in the atom's component list.
+	comp_type: Type of component we're trying to attach.
+	args: list of arguments to be passed to the component's InitializeComponent() proc
+*/
+
+/atom/proc/TryAttachComponent(var/comp_type, var/list/args)
 	if(!_components)
 		_components = list()
+	for(var/datum/component/comp in _components)
+		if(istype(comp, comp_type))
+			CRASH("Attempted to attach duplicate component of type [comp_type] to atom [src], somebody fucked up!")
+	var/datum/component/new_comp = new comp_type(src)
+	new_comp.InitializeComponent(args)
+	_components.Add(new_comp)
 
-	for(var/new_component_path in _initial_components)
-		if(!ispath(new_component_path, /datum/component))
-			log_debug("Invalid type path [new_component_path] found in _initial_components of [src], somebody fucked up!")
-		_components.Add(new new_component_path(src, _initial_components[new_component_path]))
+/*
+	Attempts to detach a component of a given type from the atom.
+	If the component interacts with other component types then you're responsible for making sure it doesn't cause the atom to explode.
+	Returns true if successful, false if not.
+	comp_type: Type of component we're trying to detach.
+*/
 
-	if(_components?.len)
-		active_component_owners.Add(src)
+/atom/proc/TryDetachComponent(var/comp_type)
+	for(var/datum/component/comp in _components)
+		if(istype(comp, comp_type))
+			if(comp.TryDetach())
+				_components.Remove(comp)
+				return TRUE
+	return FALSE
 
 /*
 	Attempts to get a component, either returns the component or returns null if it's not found
@@ -28,7 +51,7 @@
 
 /atom/proc/TryGetComponent(var/target)
 	if(!ispath(target, /datum/component))
-		log_debug("TryGetComponent() called on [src] with invalid type [target], somebody fucked up!")
+		CRASH("TryGetComponent() called on [src] with invalid type [target], somebody fucked up!")
 		return //if you're not looking for a component then you fucked up
 
 	for(var/comp in _components)

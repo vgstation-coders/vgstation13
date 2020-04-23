@@ -4,7 +4,7 @@
 /datum/component/controller/mob/RecieveSignal(var/message_type, var/list/args)
 	if(isliving(owner))
 		var/mob/living/M = owner
-		testing("Got command: \[[message_type]\]: [json_encode(args)]")
+		//testing("Got command: \[[message_type]\]: [json_encode(args)]")
 		switch(message_type)
 			if(COMSIG_CLICKON)
 				var/atom/A = args["target"]
