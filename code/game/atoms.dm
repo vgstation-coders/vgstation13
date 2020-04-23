@@ -879,7 +879,7 @@ its easier to just keep the beam vertical.
 			return C.mob
 
 /atom/proc/initialize()
-	flags |= ATOM_INITIALIZED
+	return
 
 /atom/proc/get_cell()
 	return
