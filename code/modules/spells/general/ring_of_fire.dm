@@ -149,8 +149,9 @@
 	icon = 'icons/effects/fire.dmi'
 	icon_state = "2"
 	fire_sound = 'sound/weapons/fireball.ogg'
-	projectile_speed = 8
+	projectile_speed = 4
 	linear_movement = FALSE
+	kill_count = 15
 
 /obj/item/projectile/moving_fire/hit_apply(var/mob/living/X, var/blocked)
 	. = ..()
