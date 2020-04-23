@@ -14,13 +14,14 @@
 /datum/component/ai/melee/inject_reagent/OnAttackingTarget(var/atom/target)
 	if(..(target))
 		var/mob/living/L = target
+		var/mob/living/O = owner
 		if(L.reagents)
 			if(inject_prob == -1 || prob(inject_prob))
 				var/curamt = L.reagents.get_reagent_amount(poison_type)
 				var/newamt = max_poison - curamt
 				if(newamt >= 1)
 					// TEXT-FORMATTING FUNCTIONS WHEN BYOND?
-					owner.visible_message("<span class='warning'>\The [src] injects something into \the [target]!</span>")
+					O.visible_message("<span class='warning'>\The [src] injects something into \the [target]!</span>")
 					L.reagents.add_reagent(poison_type, poison_per_bite)
 					return 1 // Accepted signal
 	return 0 // Did not accept signal

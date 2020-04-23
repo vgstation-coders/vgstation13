@@ -1,14 +1,20 @@
 //Mostly for component system stuff.
 //Sorry about the underscores, but it's the simplest way to make sure we avoid collisions.
 
-/atom
+/datum
 	var/list/_components
+
+/datum/New()
+	..()
+	InitializeComponents()
+	if(_components)
+		active_component_owners.Add(src)
 
 /*
 	Override with component initialization logic.
 */
 
-/atom/proc/InitializeComponents()
+/datum/proc/InitializeComponents()
 	return
 
 /*
@@ -18,7 +24,7 @@
 	args: list of arguments to be passed to the component's InitializeComponent() proc
 */
 
-/atom/proc/TryAttachComponent(var/comp_type, var/list/args)
+/datum/proc/TryAttachComponent(var/comp_type, var/list/args)
 	if(!_components)
 		_components = list()
 	for(var/datum/component/comp in _components)
@@ -35,7 +41,7 @@
 	comp_type: Type of component we're trying to detach.
 */
 
-/atom/proc/TryDetachComponent(var/comp_type)
+/datum/proc/TryDetachComponent(var/comp_type)
 	for(var/datum/component/comp in _components)
 		if(istype(comp, comp_type))
 			if(comp.TryDetach())
@@ -49,7 +55,7 @@
 	target: what type of component we're looking for
 */
 
-/atom/proc/TryGetComponent(var/target)
+/datum/proc/TryGetComponent(var/target)
 	if(!ispath(target, /datum/component))
 		CRASH("TryGetComponent() called on [src] with invalid type [target], somebody fucked up!")
 		return //if you're not looking for a component then you fucked up
@@ -64,9 +70,9 @@
 	message_type: see __DEFINES/component_signals.dm for a list of valid signals
 	args: list of arguments to send with the signal
  */
-/atom/proc/SignalComponents(var/message_type, var/list/args)
+/datum/proc/SignalComponents(var/message_type, var/list/args)
 	for(var/datum/component/C in _components)
-		C.RecieveSignal(message_type, args)
+		C.ReceiveSignal(message_type, args)
 
 /*
 	Send a signal, and see if anyone replies with information.
@@ -74,7 +80,7 @@
 	message_type: The message to send
 	args: The arguments associated with this message
  */
-/atom/proc/ReturnFromSignalFirst(var/message_type, var/list/args)
+/datum/proc/ReturnFromSignalFirst(var/message_type, var/list/args)
 	for(var/datum/component/C in _components)
 		var/received_information = C.RecieveAndReturnSignal(message_type, args)
 		if(received_information)

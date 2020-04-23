@@ -1,5 +1,5 @@
 /datum/component
-	var/atom/owner
+	var/datum/owner
 
 /datum/component/New(var/datum/O)
 	owner = O
@@ -11,7 +11,7 @@
 	return
 
 /*
-	If a component is able to be safely removed from an atom, override this with the logic for doing so.
+	If a component is able to be safely removed from an datum, override this with the logic for doing so.
 	Components MUST override this if they are able to be detatched.
 */
 /datum/component/proc/TryDetach()
@@ -21,7 +21,7 @@
 	Override this with behavior when receiving relevant signals.
 */
 
-/datum/component/proc/RecieveSignal(var/sigtype, var/list/args)
+/datum/component/proc/ReceiveSignal(var/sigtype, var/list/args)
 	return
 
 /*

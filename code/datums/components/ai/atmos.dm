@@ -20,7 +20,7 @@
 
 	var/min_overheat_temp=40
 
-/datum/component/ai/atmos_checker/RecieveSignal(var/message_type, var/list/args)
+/datum/component/ai/atmos_checker/ReceiveSignal(var/message_type, var/list/args)
 	switch(message_type)
 		if("life")
 			OnLife()

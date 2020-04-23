@@ -17,7 +17,7 @@
 	var/datum/component/ai/target_holder/target_holder = null
 	var/atom/current_target
 
-/datum/component/ai/human_brain/RecieveSignal(var/message_type, var/list/args)
+/datum/component/ai/human_brain/ReceiveSignal(var/message_type, var/list/args)
 	switch(message_type)
 		if(COMSIG_LIFE) // no arguments
 			OnLife()

@@ -20,7 +20,7 @@
 				o += M
 	return o
 
-/datum/component/ai/target_finder/human/RecieveSignal(var/message_type, var/list/args)
+/datum/component/ai/target_finder/human/ReceiveSignal(var/message_type, var/list/args)
 	..()
 	if(message_type == COMSIG_ATTACKEDBY) //YOU HAVE JUST MADE AN ENEMY FOR LIFE
 		var/assailant = args["assailant"]

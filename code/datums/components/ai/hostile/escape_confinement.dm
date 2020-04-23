@@ -1,7 +1,7 @@
 /datum/component/ai/escape_confinement
 	var/life_tick=0
 
-/datum/component/ai/escape_confinement/RecieveSignal(var/message_type, var/list/args)
+/datum/component/ai/escape_confinement/ReceiveSignal(var/message_type, var/list/args)
 	switch(message_type)
 		if(COMSIG_LIFE)
 			OnLife()
@@ -35,6 +35,9 @@
 
 /datum/component/ai/escape_confinement/proc/DestroySurroundings()
 	EscapeConfinement()
+	var/mob/owner_mob = owner
+	if(!istype(owner_mob))
+		return
 	var/list/smash_dirs = list(0)
 	var/atom/target = controller.getTarget()
 	if(!target || !controller.canAttack(target))
@@ -44,8 +47,8 @@
 		smash_dirs |= widen_dir(targdir) //otherwise smash towards the target
 	for(var/dir in smash_dirs)
 		var/turf/T = get_step(src, dir)
-		if(istype(T, /turf/simulated/wall) && owner.Adjacent(T))
+		if(istype(T, /turf/simulated/wall) && owner_mob.Adjacent(T))
 			T.attack_animal(src)
 		for(var/atom/A in T)
-			if((istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack)) && owner.Adjacent(A))
+			if((istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack)) && owner_mob.Adjacent(A))
 				A.attack_animal(src)

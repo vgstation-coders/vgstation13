@@ -1,7 +1,7 @@
 /datum/component/controller/mob
 	var/walk_delay = 4
 
-/datum/component/controller/mob/RecieveSignal(var/message_type, var/list/args)
+/datum/component/controller/mob/ReceiveSignal(var/message_type, var/list/args)
 	if(isliving(owner))
 		var/mob/living/M = owner
 		//testing("Got command: \[[message_type]\]: [json_encode(args)]")

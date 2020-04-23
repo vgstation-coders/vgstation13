@@ -9,7 +9,7 @@
 	var/targetfind_delay=10
 	var/datum/component/ai/target_holder/target_holder = null
 
-/datum/component/ai/hunt/RecieveSignal(var/message_type, var/list/args)
+/datum/component/ai/hunt/ReceiveSignal(var/message_type, var/list/args)
 	switch(message_type)
 		if(COMSIG_LIFE) // no arguments
 			OnLife()

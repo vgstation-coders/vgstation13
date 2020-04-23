@@ -1,4 +1,4 @@
-/datum/component/ai/hand_control/RecieveSignal(var/message_type, var/list/args)
+/datum/component/ai/hand_control/ReceiveSignal(var/message_type, var/list/args)
 	if(iscarbon(owner))
 		var/mob/living/carbon/M = owner
 		//testing("Got command: \[[message_type]\]: [json_encode(args)]")

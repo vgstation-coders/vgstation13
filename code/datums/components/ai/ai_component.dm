@@ -3,7 +3,7 @@
 
 	var/state = 0 // AI_STATE_* of the AI.
 
-/datum/component/ai/RecieveSignal(var/message_type, var/list/args)
+/datum/component/ai/ReceiveSignal(var/message_type, var/list/args)
 	switch(message_type)
 		if(COMSIG_STATE) // list("name"="statename")
 			state = args["name"]

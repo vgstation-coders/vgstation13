@@ -1,0 +1,2 @@
+- Make sure datums' and components' Destroy() works properly
+- arglist for component initialization arguments

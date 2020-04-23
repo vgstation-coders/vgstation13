@@ -1,7 +1,7 @@
 /datum/component/ai/crowd_attack
 	var/datum/component/ai/human_brain/B
 
-/datum/component/ai/crowd_attack/RecieveSignal(var/message_type, var/list/args)
+/datum/component/ai/crowd_attack/ReceiveSignal(var/message_type, var/list/args)
 	if(!B)
 		B = owner.TryGetComponent(/datum/component/ai/human_brain)
 	if(B && message_type == COMSIG_ATTACKEDBY)

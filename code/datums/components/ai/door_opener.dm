@@ -2,7 +2,7 @@
 	var/pressure_check=TRUE
 	var/max_pressure_diff=-1
 
-/datum/component/ai/door_opener/RecieveSignal(var/message_type, var/list/args)
+/datum/component/ai/door_opener/ReceiveSignal(var/message_type, var/list/args)
 	switch(message_type)
 		if(COMSIG_ATTACKING) // list("target"=A)
 			OnAttackingTarget(args["target"])
