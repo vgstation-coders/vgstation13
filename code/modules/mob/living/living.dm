@@ -93,6 +93,7 @@
 		return 0 //under effects of time magick
 
 	..()
+
 	if (flags & INVULNERABLE)
 		bodytemperature = initial(bodytemperature)
 	if (monkeyizing)
@@ -110,6 +111,7 @@
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
 
+	SignalComponents(COMSIG_LIFE)
 	INVOKE_EVENT(on_life, list())
 
 	/*if(mind)

@@ -8,8 +8,6 @@
 /datum/New()
 	..()
 	InitializeComponents()
-	if(_components)
-		active_component_owners.Add(src)
 
 /*
 	Override with component initialization logic.
