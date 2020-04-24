@@ -1,0 +1,5 @@
+---
+author: Kurfursten
+changes:
+  - rscadd: Added 2 new mecha tools (rack and runningboard) to robotics and 1 mecha upgrade to the trader.
+delete-after: true

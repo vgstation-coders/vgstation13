@@ -1,0 +1,5 @@
+---
+author: boy2mantwicethefam
+changes:
+  - rscadd: You can now build tables adjacently too.
+delete-after: true

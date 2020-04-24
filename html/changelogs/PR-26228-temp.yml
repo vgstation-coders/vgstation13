@@ -1,0 +1,5 @@
+---
+author: ShiftyRail
+changes:
+  - rscadd: You can now craft pitchforks with blacksmithing.
+delete-after: true

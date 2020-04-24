@@ -1,0 +1,5 @@
+---
+author: otatoh
+changes:
+  - tweak: Makes minor QoL changes to Metaclub cargo.
+delete-after: true

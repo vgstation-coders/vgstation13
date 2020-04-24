@@ -1,0 +1,5 @@
+---
+author: 9percents
+changes:
+  - rscadd: "Adds a harm baton to uplink. Instead of stun, it deals pain. Its damage is increased when it's enabled.  Security jobs get a discount."
+delete-after: true

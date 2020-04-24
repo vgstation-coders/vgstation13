@@ -1,0 +1,5 @@
+---
+author: ShiftyRail
+changes:
+  - rscadd: "Added anonymous mode for newscasters' feeds"
+delete-after: true

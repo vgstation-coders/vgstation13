@@ -1,0 +1,5 @@
+---
+author: RealestEstate
+changes:
+  - rscadd: Mechs can now be reskinned using a mech painting tool.
+delete-after: true

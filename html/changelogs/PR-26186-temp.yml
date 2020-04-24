@@ -1,0 +1,6 @@
+---
+author: Kurfursten
+changes:
+  - tweak: Blob is now 2x more common on Tuesdays.
+  - tweak: "Soul Rambler Migration is now 2x more common from 3am to 11:59am server time."
+delete-after: true

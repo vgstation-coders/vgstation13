@@ -1,0 +1,5 @@
+---
+author: Kurfursten
+changes:
+  - tweak: Bomb armor is more effective at stopping bombs.
+delete-after: true

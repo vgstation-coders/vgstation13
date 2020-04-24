@@ -1,0 +1,5 @@
+---
+author: Kurfursten
+changes:
+  - bugfix: The wetdry vac now has better handling of its wet tank.
+delete-after: true
