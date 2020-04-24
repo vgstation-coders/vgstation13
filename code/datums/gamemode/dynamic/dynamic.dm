@@ -261,15 +261,6 @@ var/stacking_limit = 90
 	if (forced_extended)
 		message_admins("Starting a round of forced extended.")
 		return 1
-	var/list/drafted_rules = list()
-	var/i = 0
-	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
-		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
-			i++																			//we check whether we've got eligible players
-			rule.candidates = candidates.Copy()
-			rule.trim_candidates()
-			if (rule.ready())
-				drafted_rules[rule] = rule.weight
 
 	var/indice_pop = min(10,round(roundstart_pop_ready/5)+1)
 	var/extra_rulesets_amount = 0
@@ -291,6 +282,30 @@ var/stacking_limit = 90
 				extra_rulesets_amount++
 				if (threat_level >= third_rule_req[indice_pop])
 					extra_rulesets_amount++
+
+	if	(extra_rulesets_amount && prob(50))
+		message_admins("Rather than extra rulesets, we'll try to draft spicier ones.")
+		for (var/datum/dynamic_ruleset/rule in roundstart_rules)
+			if (rule.flags & HIGHLANDER_RULESET)
+				rule.weight += extra_rulesets_amount
+		for (var/datum/dynamic_ruleset/rule in midround_rules)
+			if (rule.flags & HIGHLANDER_RULESET)
+				rule.weight += extra_rulesets_amount
+		for (var/datum/dynamic_ruleset/rule in latejoin_rules)
+			if (rule.flags & HIGHLANDER_RULESET)
+				rule.weight += extra_rulesets_amount
+		extra_rulesets_amount = 0
+
+	var/i = 0
+	var/list/drafted_rules = list()
+	
+	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
+		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
+			i++																			//we check whether we've got eligible players
+			rule.candidates = candidates.Copy()
+			rule.trim_candidates()
+			if (rule.ready())
+				drafted_rules[rule] = rule.weight
 
 	if (classic_secret)
 		message_admins("Classic secret was forced.")

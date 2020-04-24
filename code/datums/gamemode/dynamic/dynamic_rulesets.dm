@@ -118,6 +118,8 @@
 		for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
 			if(istype(DR,src.type))
 				weight = max(weight-2,1)
+			if(DR.role_category == src.role_category) // Same kind of antag.
+				weight = max(weight-1,1)
 	message_admins("[name] had [weight] weight (-[initial(weight) - weight]).")
 	return weight
 
