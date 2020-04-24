@@ -202,6 +202,7 @@
 	new /obj/item/clothing/under/securityskirt/elite(src)
 	new /obj/item/clothing/accessory/bangerboy(src)
 	new /obj/item/weapon/autocuffer(src)
+	new /obj/item/clothing/mask/gas/hecu(src)
 
 /obj/item/clothing/accessory/bangerboy
 	name = "\improper Banger Boy Advance"
