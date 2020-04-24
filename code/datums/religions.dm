@@ -1219,7 +1219,7 @@
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
 
 /datum/religion/ancom/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new obj/item/clothing/mask/bandana/red(H), slot_l_store)
+	H.equip_or_collect(new /obj/item/clothing/mask/bandana/red(H), slot_l_store)
 
 /datum/religion/samurai
 	name = "Bushido" // The way of the warrior
