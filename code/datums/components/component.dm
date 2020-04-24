@@ -4,6 +4,9 @@
 /datum/component/New(var/datum/O)
 	owner = O
 
+/datum/component/Destroy()
+	..()
+
 /*
 	Override this (and add arguments) for component initialization logic.
 */
@@ -16,6 +19,13 @@
 */
 /datum/component/proc/TryDetach()
 	return FALSE
+
+/*
+	Called when the owner datum is Destroy()'d, in case we have to tell other components to do stuff before qdel()'ing them.
+*/
+
+/datum/component/proc/Deinitialize()
+	return
 
 /*
 	Override this with behavior when receiving relevant signals.

@@ -228,6 +228,8 @@ var/soft_dels = 0
 		SSgarbage.addTrash(D)
 
 /datum/proc/Destroy()
+	if(_components)
+		DeinitializeComponents()
 	gcDestroyed = "Bye, world!"
 	tag = null
 

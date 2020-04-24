@@ -38,7 +38,7 @@ var/list/active_component_owners = list()
 				continue
 
 
-		current_owner.SignalComponents(COMSIG_LIFE, list())
+		current_owner.SignalComponents(COMSIG_LIFE)
 
 		if(MC_TICK_CHECK)
 			return

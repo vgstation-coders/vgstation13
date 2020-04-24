@@ -4,12 +4,12 @@
 	var/inject_prob = 0 // Chance to inject, -1 = ALWAYS
 	var/max_poison = 0 // Maximum mols in target's blood. 0 = INF
 
-/datum/component/ai/melee/inject_reagent/InitializeComponent(var/list/args)
+/datum/component/ai/melee/inject_reagent/InitializeComponent(type, amount, prob, max)
 	..()
-	poison_type = args["type"]
-	poison_per_bite = args["amount"]
-	inject_prob = args["prob"]
-	max_poison = args["max"]
+	poison_type = type
+	poison_per_bite = amount
+	inject_prob = prob
+	max_poison = max
 
 /datum/component/ai/melee/inject_reagent/OnAttackingTarget(var/atom/target)
 	if(..(target))

@@ -1,5 +1,6 @@
-//Mostly for component system stuff.
-//Sorry about the underscores, but it's the simplest way to make sure we avoid collisions.
+/*
+	Datum component stuff. Underscore in list name is to avoid collisions with stuff like robot components.
+*/
 
 /datum
 	var/list/_components
@@ -12,10 +13,21 @@
 
 /*
 	Override with component initialization logic.
+	Typically this will just be a list of TryAttachComponent(/path/to/component),
+	but you could do other stuff too if needed.
 */
 
 /datum/proc/InitializeComponents()
 	return
+
+/*
+	Called when a datum with components is Destroy()'d so we can "cleanly" shut down all of its components.
+*/
+/datum/proc/DeinitializeComponents()
+	for(var/datum/component/C in _components)
+		C.Deinitialize()
+		_components.Remove(C)
+		qdel(C)
 
 /*
 	Attempts to create and attach a component of the given type.
@@ -29,10 +41,12 @@
 		_components = list()
 	for(var/datum/component/comp in _components)
 		if(istype(comp, comp_type))
+			. = FALSE
 			CRASH("Attempted to attach duplicate component of type [comp_type] to atom [src], somebody fucked up!")
 	var/datum/component/new_comp = new comp_type(src)
-	new_comp.InitializeComponent(args)
+	new_comp.InitializeComponent(arglist(args))
 	_components.Add(new_comp)
+	return TRUE
 
 /*
 	Attempts to detach a component of a given type from the atom.
@@ -50,19 +64,42 @@
 	return FALSE
 
 /*
-	Attempts to get a component, either returns the component or returns null if it's not found
+	Attempts to get a component, either returns the component or FALSE if it's not found
 	Spits out an error in debug logs if someone tries to get an invalid type (or something that's not a typepath at all).
 	target: what type of component we're looking for
 */
 
 /datum/proc/TryGetComponent(var/target)
 	if(!ispath(target, /datum/component))
+		. = FALSE
 		CRASH("TryGetComponent() called on [src] with invalid type [target], somebody fucked up!")
-		return //if you're not looking for a component then you fucked up
 
-	for(var/comp in _components)
+	for(var/datum/component/comp in _components)
 		if(istype(comp, target))
 			return comp
+
+	return FALSE
+
+/*
+	Attempts to get all components of a type and its subtypes, returns a list of them or FALSE if none are found.
+	target: what type of component we're looking for
+*/
+
+/datum/proc/TryGetComponents(var/target)
+	if(!ispath(target, /datum/component))
+		. = FALSE
+		CRASH("TryGetComponents() called on [src] with invalid type [target], somebody fucked up!")
+
+	var/list/found_components = list()
+
+	for(var/datum/component/comp in _components)
+		if(istype(comp, target))
+			found_components.Add(comp)
+
+	if(found_components.len)
+		return found_components
+
+	return FALSE
 
 /*
 	Upon receiving a signal, we need to disperse it to every component in the datum.

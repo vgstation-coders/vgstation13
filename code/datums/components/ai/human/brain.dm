@@ -1,6 +1,6 @@
 //Basic thought processes
 /datum/component/ai/human_brain
-	var/life_tick=0
+	var/life_tick = 0
 	var/wander = TRUE	//Whether the mob will walk around searching for goals, or wait for them to become visible
 	var/lastdir = null
 
@@ -23,16 +23,17 @@
 			OnLife()
 
 /datum/component/ai/human_brain/proc/OnLife()
+	var/mob/living/carbon/human/H = owner
+	if(!istype(owner))
+		return
 	life_tick++
 	if(!target_holder)
 		target_holder = owner.TryGetComponent(/datum/component/ai/target_holder)
 	if(!controller)
-		controller = owner.TryGetComponent(/datum/component/controller)
+		controller = owner.TryGetComponent(/datum/component/controller/mob)
 	if(controller.getBusy())
 		return
-	if(!ishuman(owner))
-		return
-	var/mob/living/carbon/human/H = owner
+
 
 	if(H.stat != CONSCIOUS || !H.canmove || !isturf(H.loc))
 		SendSignal(COMSIG_MOVE, list("dir" = 0))
@@ -80,7 +81,6 @@
 			else
 				dir = turn(lastdir, 180)
 		if(H.stat == CONSCIOUS && H.canmove && isturf(H.loc))
-			testing("[owner] is attempting to wander.")
 			SendSignal(COMSIG_STEP, list("dir" = dir))
 			lastdir = dir
 

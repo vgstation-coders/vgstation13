@@ -93,18 +93,18 @@
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc)
-	
+
 /mob/living/carbon/human/NPC/InitializeComponents()
-	TryAttachComponent(/datum/component/controller/mob)
 	TryAttachComponent(/datum/component/ai/hand_control)
-	TryAttachComponent(/datum/component/controller/movement/astar)
 	TryAttachComponent(/datum/component/ai/human_brain)
 	TryAttachComponent(/datum/component/ai/target_finder/human)
 	TryAttachComponent(/datum/component/ai/target_holder/prioritizing)
 	TryAttachComponent(/datum/component/ai/melee/attack_human)
 	TryAttachComponent(/datum/component/ai/melee/throw_attack)
 	TryAttachComponent(/datum/component/ai/crowd_attack)
-	TryAttachComponent(/datum/component/ai/targetting_handler)
+	TryAttachComponent(pick(typesof(/datum/component/ai/targetting_handler)))
+	TryAttachComponent(/datum/component/controller/mob)
+	TryAttachComponent(/datum/component/controller/movement/astar)
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	var/list/valid_species = (all_species - list("Krampus", "Horror"))
