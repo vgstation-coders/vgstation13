@@ -1480,7 +1480,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Degenerate"
 	female_adept = "Degenerate"
-	keys = list(degeneracy", "catgirls", "felinids")
+	keys = list("degeneracy", "catgirls", "felinids")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 /datum/religion/degenerate/equip_chaplain(var/mob/living/carbon/human/H)
@@ -1501,12 +1501,12 @@
 
 /datum/religion/anprim
 	name = "Primitivism"
-	deity_name = "Earth"
+	deity_name = "Grug"
 	bible_name = "Blank Book" //illiteracy is radical
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Primitive"
 	female_adept = "Primitive"
-	keys = list("primitivism", "anprim", "primitive", "grug")
+	keys = list("anarcho-primitivism", "primitivism", "anprim", "primitive", "grug")
 
 /datum/religion/anprim/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/under/shorts/black, slot_w_uniform)
