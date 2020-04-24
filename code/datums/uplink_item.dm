@@ -777,6 +777,14 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Cargo Technician", "Quartermaster")
 
+/datum/uplink_item/jobspecific/cargo/terrorist_envelope
+	name = "Terrorist Envelope"
+	desc = "An indistinguishable envelope rigged to release a cloud of polytrinic acid smoke upon being opened. Can be tagged and mailed via disposals."
+	item = /obj/item/weapon/paper/envelope/terrorist
+	cost = 6
+	discounted_cost = 5
+	jobs_with_discount = list("Cargo Technician", "Quartermaster")
+
 /datum/uplink_item/jobspecific/cargo/mastertrainer
 	name = "Master Trainer's Belt"
 	desc = "A trainer's belt containing 6 Lazarus capsules loaded with random but particularly hostile and lethal mobs loyal to you alone. You can inspect what the Lazarus capsules contain before throwing them."

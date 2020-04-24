@@ -130,3 +130,29 @@
 	torn = TRUE
 	sortTag = null;
 	update_icon()
+
+/obj/item/weapon/paper/envelope/terrorist
+	icon_state = "envelope_closed"
+	open = FALSE;
+
+/obj/item/weapon/paper/envelope/terrorist/New()
+	..()
+	var/obj/item/weapon/reagent_containers/glass/beaker/beaker = new /obj/item/weapon/reagent_containers/glass/beaker
+	beaker.reagents.add_reagent(PACID, 50)
+	beaker.forceMove(src)
+	contained_item = beaker;
+
+/obj/item/weapon/paper/envelope/terrorist/open()
+	..()
+	if(is_in_airtight_object(src)) //Don't pop while ventcrawling.
+		return
+	var/location = get_turf(src)	
+	var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
+	S.attach(location)
+	S.set_up(contained_item.reagents, 10, 0, location)
+	playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
+	spawn(0)
+		S.start()
+		sleep(10)
+		S.start()
+	contained_item.reagents.clear_reagents()
