@@ -90,6 +90,7 @@
 #define DEXALIN 			"dexalin"
 #define DEXALINP 			"dexalinp"
 #define TRICORDRAZINE 			"tricordrazine"
+#define SIMPOLINOL			"simpolinol"
 #define ADMINORDRAZINE 			"adminordrazine"
 #define SYNAPTIZINE 			"synaptizine"
 #define IMPEDREZENE 			"impedrezene"
