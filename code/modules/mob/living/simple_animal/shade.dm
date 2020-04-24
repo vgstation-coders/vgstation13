@@ -168,7 +168,7 @@
 			else
 				healths.icon_state = "shade_health7"
 
-/mob/living/simple_animal/shade/happiest/death(var/gibbed = FALSE)
+/mob/living/simple_animal/shade/noncult/happiest/death(var/gibbed = FALSE)
 	..(TRUE)
 	transmogrify()
 	if(!gcDestroyed)
@@ -226,3 +226,14 @@
 			BS.perform(src)
 			return
 	..()
+
+/mob/living/simple_animal/shade/noncult
+	desc = "A bound spirit. This one appears more in tune with the realm of the dead."
+	universal_understand = 1 //They're closer to their observer selves, hence can understand any language
+	faction = "neutral"
+	icon_state = "ghost-narsie"
+	icon_living = "ghost-narsie"
+
+/mob/living/simple_animal/shade/noncult/New()
+	..()
+	remove_language(LANGUAGE_CULT)
