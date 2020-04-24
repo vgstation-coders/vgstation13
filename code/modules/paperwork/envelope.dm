@@ -128,5 +128,5 @@
 /obj/item/weapon/paper/envelope/proc/open()
 	open = TRUE
 	torn = TRUE
-	sortTag = null;
+	sortTag = null
 	update_icon()
