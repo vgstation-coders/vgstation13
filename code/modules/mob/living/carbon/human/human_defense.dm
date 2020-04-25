@@ -365,19 +365,25 @@ emp_act
 	var/shielded = 0
 	var/b_loss = null
 	var/f_loss = null
-
+	var/gotarmor = clamp(getarmor(null, "bomb"),0,100)
 	switch (severity)
 		if (BLOB_ACT_STRONG)
-			b_loss += 500
-			if (!prob(getarmor(null, "bomb")))
+			b_loss += 300
+			if(!prob(gotarmor)) //Percent chance equal to their armor resist to not gib instantly.
 				gib()
 				return
 			else
 				var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
 				throw_at(target, 200, 4)
-			//return
-//				var/atom/target = get_edge_target_turf(user, get_dir(src, get_step_away(user, src)))
-				//user.throw_at(target, 200, 4)
+				b_loss *= (120-gotarmor)/100 //Reduce blast power by a function of bomb armor, but even 100 won't be enough.
+				//100 = 20%,  60  b_loss (bomb suit, advanced EOD suit)
+				//50  = 70%,  210 b_loss (captain's armor/rig, ancient space suit)
+				//45  = 65%,  225 b_loss (sec hardsuit)
+				//35  = 85%,  255 b_loss (eng hardsuit, blood red hardsuit, gem encrusted hardsuit)
+				//30  = 90%,  270 b_loss (ERT armor, red syndie suit)
+				//25  = 95%,  285 b_loss (security armor)
+				//20  = 100%, 300 b_loss (RD's labcoat)
+				//0   = 120%, 360 b_loss (most suits)
 
 		if (BLOB_ACT_MEDIUM)
 			if (stat == 2 && client)
@@ -394,9 +400,9 @@ emp_act
 
 			f_loss += 60
 
-			if (prob(getarmor(null, "bomb")))
-				b_loss = b_loss/1.5
-				f_loss = f_loss/1.5
+			if (gotarmor)
+				b_loss *= (100-gotarmor)/100 //reduce damage by percent equal to bomb armor
+				f_loss *= (100-gotarmor)/100
 
 			if (!earprot())
 				ear_damage += 30
@@ -406,10 +412,8 @@ emp_act
 
 		if(BLOB_ACT_WEAK)
 			b_loss += 30
-			var/gotarmor = min(100,max(0,getarmor(null, "bomb")))
-
-			if (prob(gotarmor))
-				b_loss = (b_loss*((gotarmor-100)*-1))/100//equipments with armor[bomb]=100 will fully negate the damage of light explosives.
+			if(gotarmor)
+				b_loss *= (100-gotarmor)/100 //reduce damage by percent equal to bomb armor
 			if (!earprot())
 				ear_damage += 15
 				ear_deaf += 60
