@@ -389,7 +389,7 @@
 
 	if(pumping || !power_supply)
 		return TRUE
-	power_supply.charge = min(power_supply.charge + 200,power_supply.maxcharge)
+	power_supply.charge = min(power_supply.charge + charge_cost * 2,power_supply.maxcharge)
 	if(power_supply.charge >= power_supply.maxcharge)
 		playsound(src, 'sound/items/AirHorn.ogg', 25, 1)
 		to_chat(user, "<span class='rose'>You squeeze the pump at the back of the gun. The gun is brimming with love!</span>")
