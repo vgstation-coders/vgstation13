@@ -1389,12 +1389,12 @@
 	if(!istype(holder.my_atom.loc, /obj/item/weapon/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to slowly vibrate!</span>")
 
-	spawn(50)
-		var/atom/location = holder.my_atom.loc
+	var/atom/location = holder.my_atom.loc
+	spawn(5 SECONDS)
 		if(isturf(location))
 			var/list/disguise_candidates = list()
 
-			for(var/obj/item/I in oview(4, holder.my_atom))
+			for(var/obj/item/I in oview(4, location))
 				disguise_candidates += I
 
 			var/atom/disguise = null
@@ -1404,15 +1404,6 @@
 
 			//If there are no nearby items to copy, become a completely random item!
 			new/mob/living/simple_animal/hostile/mimic/crate/item(location, disguise) //Create a mimic identical to a nearby item
-
-		else if(istype(location, /obj/structure/closet))
-			var/mob/living/simple_animal/hostile/mimic/crate/new_mimic = new(get_turf(location), location.type)
-			new_mimic.appearance = location.appearance //Create a crate mimic that looks exactly like the closet!
-
-			for(var/atom/movable/AM in location.contents)
-				AM.forceMove(new_mimic) //Move all items from the closet/crate to the new mimic
-
-			qdel(location) //Delete the old closet
 
 		else if(istype(location, /obj/item))
 			new /mob/living/simple_animal/hostile/mimic/crate/item(get_turf(location), location) //Copy the item we're inside of, drop it outside the item!
