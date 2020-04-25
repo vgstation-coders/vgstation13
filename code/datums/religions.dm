@@ -1450,7 +1450,7 @@
 /datum/religion/xeno
 	name = "Xenophilism"
 	deity_name = "Xenomorph Queen"
-	bible_name = "The Communist Manifesto"
+	bible_name = "The Principles of Hivemind Communication"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Xenophile"
 	female_adept = "Xenophile"
@@ -1507,6 +1507,7 @@
 	male_adept = "Primitive"
 	female_adept = "Primitive"
 	keys = list("anarcho-primitivism", "primitivism", "anprim", "primitive", "grug")
+	bookstyle = "Scrapbook"
 
 /datum/religion/anprim/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/under/shorts/black, slot_w_uniform)
