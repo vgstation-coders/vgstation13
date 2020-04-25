@@ -664,7 +664,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 					var/obj/item/weapon/gun/energy/tag/their_gun = M.held_items[taggun_index]
 					their_gun.cooldown(target_tag.my_laser_tag_game.disable_time/2)
 				M.Knockdown(target_tag.my_laser_tag_game.stun_time/2)
-				M.Stun(target_tag.my_laser_tag_game.stun_time/2)	
+				M.Stun(target_tag.my_laser_tag_game.stun_time/2)
 				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
 				if(istype(taggun))
 					taggun.score()
@@ -945,6 +945,17 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 
 /obj/item/projectile/beam/white
 	icon_state = "whitelaser"
+
+/obj/item/projectile/beam/white/to_bump(atom/A)
+	if(!A)
+		return
+	..()
+	if(istype(A, /mob))
+		A.reagents.add_reagent(SPACE_DRUGS, 1)
+		A.reagents.add_reagent(HONKSERUM, 10)
+		var/hit_verb = pick("covers","completely soaks","fills","splashes")
+		A.visible_message("<span class='warning'>\The [src] [hit_verb] [A] with love!</span>",
+			"<span class='warning'>\The [src] [hit_verb] you with love!</span>")
 
 /obj/item/projectile/beam/liquid_stream
 	name = "stream of liquid"
