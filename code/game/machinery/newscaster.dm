@@ -33,6 +33,8 @@
 	var/backup_author =""
 	var/is_admin_message = FALSE
 
+	var/author_log // Log of the person who did it.
+
 	var/icon/img = null
 	var/icon/backup_img
 	var/img_info = "" //Stuff like "You can see Honkers on the photo. Honkins looks hurt..."
@@ -45,6 +47,7 @@
 	var/backup_author = ""
 	var/censored = FALSE
 	var/is_admin_channel = FALSE
+	var/anonymous = FALSE
 
 /datum/feed_message/proc/clear()
 	author = ""
@@ -113,8 +116,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/photo = null
 	var/channel_name = ""; //the feed channel which will be receiving the feed, or being created
 	var/c_locked = FALSE; //Will our new channel be locked to public submissions?
+	var/c_anonymous = FALSE //Will our new channel be anonymous?
 	var/hitstaken = 0 //Death at 3 hits from an item with force>=15
 	var/datum/feed_channel/viewing_channel = list()
+	var/anonymous_posting = FALSE
 	luminosity = 0
 	anchored = TRUE
 
@@ -272,13 +277,27 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat += {"Creating new Feed Channel...
 					<HR><B><A href='?src=\ref[src];set_channel_name=1'>Channel Name</A>:</B> [channel_name]<BR>
 					<B>Channel Author:</B> <FONT COLOR='green'>[scanned_user]</FONT><BR>
-					<B><A href='?src=\ref[src];set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(c_locked) ? ("NO") : ("YES")]<BR><BR>
+					<B><A href='?src=\ref[src];set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(c_locked) ? ("NO") : ("YES")]<BR>
+					<B><A href='?src=\ref[src];set_channel_anonymous=1'>Anonymous feed</A>:</B> [(c_anonymous) ? ("YES") : ("NO")]<BR><BR>
 					<BR><A href='?src=\ref[src];submit_new_channel=1'>Submit</A><BR><BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A><BR>"}
+
 			if(NEWSCASTER_NEW_MESSAGE)
+
+				var/datum/feed_channel/our_channel
+				var/author_text
+				for (var/datum/feed_channel/FC in news_network.network_channels)
+					if (FC.channel_name == channel_name)
+						our_channel = FC
+						break
+
+				if (our_channel && our_channel.anonymous)
+					author_text = "<a href='?src=\ref[src];set_anon_posting=1'><FONT COLOR='green'>[anonymous_posting ? "Anonymous" : scanned_user]</FONT></a>"
+				else
+					author_text = "<FONT COLOR='green'>[scanned_user]</FONT>"
 
 				dat += {"Creating new Feed Message...
 					<HR><B><A href='?src=\ref[src];set_channel_receiving=1'>Receiving Channel</A>:</B> [channel_name]<BR>
-					<B>Message Author:</B> <FONT COLOR='green'>[scanned_user]</FONT><BR>
+					<B>Message Author:</B>[author_text]<BR>
 					<B><A href='?src=\ref[src];set_new_message=1'>Message Body</A>:</B> [msg] <BR>"}
 
 				dat += AttachPhotoButton(user)
@@ -295,11 +314,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(NEWSCASTER_NEW_MESSAGE_ERROR)
 				dat+="<B><FONT COLOR='maroon'>ERROR: Could not submit Feed story to Network.</B></FONT><HR><BR>"
 				if(channel_name=="")
-					dat+="<FONT COLOR='maroon'>�Invalid receiving channel name.</FONT><BR>"
+					dat+="<FONT COLOR='maroon'>Invalid receiving channel name.</FONT><BR>"
 				if(scanned_user=="Unknown")
-					dat+="<FONT COLOR='maroon'>�Channel author unverified.</FONT><BR>"
+					dat+="<FONT COLOR='maroon'>Channel author unverified.</FONT><BR>"
 				if(msg == "" || msg == "\[REDACTED\]")
-					dat+="<FONT COLOR='maroon'>�Invalid message body.</FONT><BR>"
+					dat+="<FONT COLOR='maroon'>Invalid message body.</FONT><BR>"
 
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_MESSAGE]'>Return</A><BR>"
 			if(NEWSCASTER_NEW_CHANNEL_ERROR)
@@ -311,18 +330,18 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					else
 						existing_authors += FC.author
 				if(scanned_user in existing_authors)
-					dat+="<FONT COLOR='maroon'>�There already exists a Feed channel under your name.</FONT><BR>"
+					dat+="<FONT COLOR='maroon'>There already exists a Feed channel under your name.</FONT><BR>"
 				if(channel_name=="" || channel_name == "\[REDACTED\]")
-					dat+="<FONT COLOR='maroon'>�Invalid channel name.</FONT><BR>"
+					dat+="<FONT COLOR='maroon'>Invalid channel name.</FONT><BR>"
 				var/check = FALSE
 				for(var/datum/feed_channel/FC in news_network.network_channels)
 					if(FC.channel_name == channel_name)
 						check = TRUE
 						break
 				if(check)
-					dat+="<FONT COLOR='maroon'>�Channel name already in use.</FONT><BR>"
-				if(scanned_user=="Unknown")
-					dat+="<FONT COLOR='maroon'>�Channel author unverified.</FONT><BR>"
+					dat+="<FONT COLOR='maroon'>Channel name already in use.</FONT><BR>"
+				if(scanned_user=="Unknown" && !c_anonymous)
+					dat+="<FONT COLOR='maroon'>Channel author unverified.</FONT><BR>"
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_CHANNEL]'>Return</A><BR>"
 			if(NEWSCASTER_PRINT_NEWSPAPER)
 				var/total_num = length(news_network.network_channels)
@@ -508,6 +527,21 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			c_locked = !c_locked
 			updateUsrDialog()
 
+		else if(href_list["set_channel_anonymous"])
+			if(isobserver(usr) && !canGhostWrite(usr,src,"set channel anonymous"))
+				to_chat(usr, "<span class='warning'>You can't do that.</span>")
+				return
+			c_anonymous = !c_anonymous
+			updateUsrDialog()
+
+
+		else if(href_list["set_anon_posting"])
+			if(isobserver(usr) && !canGhostWrite(usr,src,"made the author of the post anonymous"))
+				to_chat(usr, "<span class='warning'>You can't do that.</span>")
+				return
+			anonymous_posting = !anonymous_posting
+			updateUsrDialog()
+
 		else if(href_list["submit_new_channel"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"created a new channel"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
@@ -532,6 +566,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					newChannel.channel_name = channel_name
 					newChannel.author = scanned_user
 					newChannel.locked = c_locked
+					newChannel.anonymous = c_anonymous
 					feedback_inc("newscaster_channels",1)
 					news_network.network_channels += newChannel                        //Adding channel to the global network
 					screen = NEWSCASTER_MENU
@@ -611,9 +646,17 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(msg =="" || msg=="\[REDACTED\]" || scanned_user == "Unknown" || channel_name == "" )
 				screen=NEWSCASTER_NEW_MESSAGE_ERROR
 			else
+				var/datum/feed_channel/our_channel
+				for(var/datum/feed_channel/FC in news_network.network_channels)
+					if(FC.channel_name == channel_name)
+						our_channel = FC
 				var/datum/feed_message/newMsg = new /datum/feed_message
-				newMsg.author = scanned_user
+				if (our_channel.anonymous && anonymous_posting)
+					newMsg.author = "Anonymous"
+				else
+					newMsg.author = scanned_user
 				newMsg.body = msg
+				newMsg.author_log = key_name(usr)
 				if(photo)
 					if(istype(photo,/obj/item/weapon/photo))
 						var/obj/item/weapon/photo/P = photo
@@ -625,11 +668,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						newMsg.img_info = P.fields["info"]
 					EjectPhoto()
 				feedback_inc("newscaster_stories",1)
-				for(var/datum/feed_channel/FC in news_network.network_channels)
-					if(FC.channel_name == channel_name)
-						FC.messages += newMsg                  //Adding message to the network's appropriate feed_channel
-						break
+				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
 				screen = NEWSCASTER_MENU
+				log_game("[key_name(usr)] posted the message [newMsg.body] as [newMsg.author].")
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 					NEWSCASTER.newsAlert(channel_name)
 
