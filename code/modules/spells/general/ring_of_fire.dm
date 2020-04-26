@@ -125,14 +125,13 @@
 		if (living_fire)
 			var/list/outter_ring = view(3, get_turf(loc)) - view(3 - 1, get_turf(loc))
 			for (var/turf/T in outter_ring)
-				var/obj/item/projectile/moving_fire/MF = new(T)
 				var/list/possible_targets = list()
-				for (var/mob/living/L in (view(3, MF) - master))
+				for (var/mob/living/L in (view(3, T) - master))
 					possible_targets += L
-				MF.tracking = TRUE
 				if (!possible_targets.len)
-					qdel(MF)
 					continue
+				var/obj/item/projectile/moving_fire/MF = new(T)
+				MF.tracking = TRUE
 				generic_projectile_fire(pick(possible_targets), T, MF, 'sound/weapons/fireball.ogg', master)
 
 		qdel(src)
