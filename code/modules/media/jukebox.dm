@@ -983,10 +983,6 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - bar"
 	unformatted = "bar"
 	formatted = "Bar"
-/obj/item/weapon/vinyl/bar
-	name = "nanovinyl - jazz & swing"
-	unformatted = "jazzswing"
-	formatted = "Jazz & Swing"
 /obj/item/weapon/vinyl/bomberman
 	name = "nanovinyl - bomberman"
 	unformatted = "bomberman"
@@ -1019,6 +1015,10 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - folk"
 	unformatted = "folk"
 	formatted = "Folk"
+/obj/item/weapon/vinyl/jazz
+	name = "nanovinyl - jazz & swing"
+	unformatted = "jazzswing"
+	formatted = "Jazz & Swing"
 /obj/item/weapon/vinyl/malf
 	name = "nanovinyl - silicon assault"
 	unformatted = "malfdelta"
