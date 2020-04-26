@@ -33,6 +33,8 @@
 	var/backup_author =""
 	var/is_admin_message = FALSE
 
+	var/author_log // Log of the person who did it.
+
 	var/icon/img = null
 	var/icon/backup_img
 	var/img_info = "" //Stuff like "You can see Honkers on the photo. Honkins looks hurt..."
@@ -654,6 +656,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				else
 					newMsg.author = scanned_user
 				newMsg.body = msg
+				newMsg.author_log = key_name(usr)
 				if(photo)
 					if(istype(photo,/obj/item/weapon/photo))
 						var/obj/item/weapon/photo/P = photo
@@ -667,6 +670,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				feedback_inc("newscaster_stories",1)
 				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
 				screen = NEWSCASTER_MENU
+				log_game("[key_name(usr)] posted the message [newMsg.body] as [newMsg.author].")
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 					NEWSCASTER.newsAlert(channel_name)
 
