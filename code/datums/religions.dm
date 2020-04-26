@@ -1502,7 +1502,7 @@
 /datum/religion/anprim
 	name = "Primitivism"
 	deity_name = "Grug"
-	bible_name = "Industrial Society and It's Future" 
+	bible_name = "Industrial Society and Its Future" 
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Primitive"
 	female_adept = "Primitive"
