@@ -47,7 +47,7 @@
 /obj/item/item_head/pitchfork_head
 	name = "pitchfork head"
 	icon_state = "pitchfork_head"
-	desc = "the revolution is not going to start itself."
+	desc = "The revolution is not going to start itself."
 	result = /obj/item/weapon/pitchfork
 
 /obj/item/item_head/pickaxe_head

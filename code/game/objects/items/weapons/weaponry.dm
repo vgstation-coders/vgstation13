@@ -463,9 +463,11 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/pitchfork
 	name = "pitchfork"
-	desc = "down with the current state of things!"
+	desc = "Down with the current state of things!"
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "pitchspoon"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 8
+	sharpness = 2
+	sharpness = SHARP_TIP
 	hitsound = 'sound/weapons/bladeslice.ogg'
