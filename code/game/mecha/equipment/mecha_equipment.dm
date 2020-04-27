@@ -15,7 +15,7 @@
 	var/range = MELEE //bitflags
 	reliability = 1000
 	var/salvageable = 1
-	var/is_activateable = 1
+	var/is_activateable = FALSE
 	var/spell/mech/linked_spell //Default action is to make the make it the active equipment
 
 

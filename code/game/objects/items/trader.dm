@@ -752,3 +752,37 @@
 		name = "[t]'s ID card ([assignment])"
 	else
 		return
+
+/obj/item/weapon/mech_expansion_kit
+	name = "exosuit expansion kit"
+	desc = "All the equipment you need to replace that useless legroom with a useful bonus equipment slot on your mech."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "modkit"
+	flags = FPRINT
+	siemens_coefficient = 0
+	w_class = W_CLASS_SMALL
+	var/working = FALSE
+
+/obj/item/weapon/mech_expansion_kit/preattack(atom/target, mob/user , proximity)
+	if(!proximity)
+		return
+	if(!istype(target,/obj/mecha))
+		to_chat(user,"<span class='warning'>That isn't an exosuit!</span>")
+		return
+	if(working)
+		to_chat(user,"<span class='warning'>This is already being used to upgrade something!</span>")
+		return
+	var/obj/mecha/M = target
+	if(M.max_equip > initial(M.max_equip))
+		to_chat(user,"<span class='warning'>That exosuit cannot be modified any further. There's no more legroom to eliminate!</span>")
+		return
+	to_chat(user,"<span class='notice'>You begin modifying the exosuit.</span>")
+	working = TRUE
+	if(do_after(user,target,4 SECONDS))
+		to_chat(user,"<span class='notice'>You finish modifying the exosuit!</span>")
+		M.max_equip++
+		qdel(src)
+	else
+		to_chat(user,"<span class='notice'>You stop modifying the exosuit.</span>")
+		in_use = FALSE
+	return 1
