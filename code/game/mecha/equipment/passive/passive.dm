@@ -41,7 +41,7 @@
 /obj/item/weapon/storage/mechrack/distance_interact(mob/user)
 	var/obj/mecha/M = mech_part.chassis
 	if(istype(M) && M.operation_allowed(user))
-		if(in_range(src,M))
+		if(in_range(user,M))
 			playsound(M, 'sound/effects/rustle-metal.ogg', 50, 1, -5)
 			return TRUE
 	return FALSE

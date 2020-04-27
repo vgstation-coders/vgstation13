@@ -784,5 +784,5 @@
 		qdel(src)
 	else
 		to_chat(user,"<span class='notice'>You stop modifying the exosuit.</span>")
-		in_use = FALSE
+		working = FALSE
 	return 1
