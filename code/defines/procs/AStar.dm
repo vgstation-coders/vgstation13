@@ -175,7 +175,7 @@ proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
  * Creates a pathmaker datum to process the path if we aren't processing the path.
  * Returns nothing if this path is already being processed.
  */
-proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = FALSE)
+proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = ASTAR_DEBUG)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	if(start:z != end:z) //if you're feeling ambitious and make something that can ASTAR through z levels, feel free to remove this check
 		return ASTAR_FAIL
@@ -203,7 +203,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 	start = get_turf(start)
 
 	if(!start)
-		return 0
+		return list()
 
 	//initialization
 	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,"unique_[reference]"))
@@ -221,7 +221,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 
 		//if too many steps, abandon that path
 		if(maxnodedepth && (cur.nodecount > maxnodedepth))
-			return
+			return list()
 
 		//found the target turf (or close enough), let's create the path to it
 		if(cur.source == end || closeenough)
@@ -267,7 +267,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 
 	//if the path is longer than maxnodes, then don't return it
 	if(path && maxnodes && path.len > (maxnodes + 1))
-		return 0
+		return list()
 
 	//reverse the path to get it from start to finish
 	if(path)

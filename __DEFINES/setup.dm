@@ -1295,6 +1295,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 //	null << "[x][a]")
 #endif
 
+#define ASTAR_DEBUG 0
+#if ASTAR_DEBUG == 1
+#warn "Astar debug is on. Don't forget to turn it off after you've done :)"
+#define astar_debug(text) to_chat(world, text)
+#else
+#define astar_debug(text)
+#endif
+
 //#define JUSTFUCKMYSHITUP 1
 #ifdef JUSTFUCKMYSHITUP
 #define writepanic(a) if(ticker && ticker.current_state >= 3 && world.cpu > 100) write_panic(a)
