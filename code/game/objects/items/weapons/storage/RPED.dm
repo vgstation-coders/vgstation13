@@ -71,3 +71,57 @@
 		new /obj/item/weapon/stock_parts/capacitor/adv(src)
 	for(var/i in 1 to 8)
 		new /obj/item/weapon/stock_parts/console_screen(src)
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector
+	name = "upgrade injector"
+	desc = "A single use upgrade injector. Just stab it into the side of a machine and it will dissolve away."
+	icon = 'icons/obj/syringe.dmi'
+	icon_state = "combat_hypo"
+	item_state = "hypo"
+	bluespace = TRUE
+	w_class = W_CLASS_SMALL
+	use_to_pickup = FALSE
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/New()
+	..()
+	for(var/i in 1 to 3)
+		if(prob(10))//10% tier 3
+			new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
+		else //90% tier 2
+			new /obj/item/weapon/stock_parts/manipulator/nano(src)
+		if(prob(10))
+			new /obj/item/weapon/stock_parts/micro_laser/high/ultra(src)
+		else
+			new /obj/item/weapon/stock_parts/micro_laser/high(src)
+		if(prob(10))
+			if(prob(80)) //8% tier 3
+				new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
+			else //2%: tier 4
+				new /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace(src)
+		else
+			new /obj/item/weapon/stock_parts/matter_bin/adv(src)
+		if(prob(10))
+			new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src)
+		else
+			new /obj/item/weapon/stock_parts/scanning_module/adv(src)
+		if(prob(10))
+			new /obj/item/weapon/stock_parts/capacitor/adv/super(src)
+		else
+			new /obj/item/weapon/stock_parts/capacitor/adv(src)
+		new /obj/item/weapon/stock_parts/console_screen(src)
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/attackby(obj/O,mob/user)
+	return
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/can_be_inserted(obj/item/W as obj, stop_messages = 0)
+	return FALSE
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
+	if(force)
+		return ..()
+	else
+		return FALSE
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/play_rped_sound()
+	..()
+	qdel(src) //We've had a successful upgrade, time to die.
