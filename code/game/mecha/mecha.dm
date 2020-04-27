@@ -1143,7 +1143,7 @@
 	if(get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/runningboard))
 		moved_inside(usr)
 		refresh_spells()
-		visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the runningboard!</span>")
+		visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the running board!</span>")
 	else
 		visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 		if(do_after(usr, src, 40))

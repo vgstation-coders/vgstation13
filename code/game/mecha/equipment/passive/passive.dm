@@ -1,11 +1,11 @@
-/obj/item/mecha_parts/mecha_equipment/passive
-	is_activateable = FALSE
+//Tools that you don't need to activate
 
 /obj/item/mecha_parts/mecha_equipment/passive/rack
 	name = "\improper Exosuit-Mounted Rack"
 	desc = "A locking storage rack for the outside of an exosuit. (Can be attached to: Any exosuit)"
 	icon_state = "mecha_rack"
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=3;"
+	is_activateable = FALSE
 	var/obj/item/weapon/storage/mechrack/rack
 
 /obj/item/mecha_parts/mecha_equipment/passive/rack/New()
@@ -47,10 +47,11 @@
 	return FALSE
 
 /obj/item/mecha_parts/mecha_equipment/passive/runningboard
-	name = "\improper Powered Exosuit Runningboard"
-	desc = "A runningboard with a power lifter attachment to catapult the pilot quickly into the cockpit. (Can be attached to: Working exosuits)"
+	name = "\improper Powered Exosuit Running Board"
+	desc = "A running board with a power lifter attachment to catapult the pilot quickly into the cockpit. (Can be attached to: Working exosuits)"
 	icon_state = "mecha_runningboard"
 	origin_tech = Tc_MATERIALS + "=6;"
+	is_activateable = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/passive/runningboard/can_attach(obj/mecha/working/W)
 	if(..())
