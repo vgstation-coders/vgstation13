@@ -1140,7 +1140,7 @@
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
 
-	if(is_type_in_list(/obj/item/mecha_parts/mecha_equipment/passive/runningboard,equipment))
+	if(get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/runningboard))
 		moved_inside(usr)
 		refresh_spells()
 		visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the runningboard!</span>")
