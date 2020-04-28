@@ -34,6 +34,7 @@
 
 /obj/item/projectile/rocket/to_bump(var/atom/A)
 	if(explosive == 1)
+		..()
 		explosion(A, exdev, exheavy, exlight, exflash)
 		if(!gcDestroyed)
 			qdel(src)
@@ -45,6 +46,9 @@
 /obj/item/projectile/rocket/lowyield
 	name = "low yield rocket"
 	icon_state = "rpground"
+	damage = 45
+	stun = 10
+	weaken = 10
 	exdev 	= -1
 	exheavy = 0
 	exlight = 3
@@ -53,16 +57,12 @@
 /obj/item/projectile/rocket/blank
 	name = "blank rocket"
 	damage = 5
-	stun = 5
 	weaken = 10
 	agony = 10
-	explosive = 0
-
-/obj/item/projectile/rocket/blank/to_bump(var/atom/A)
-	explosion(A, -1, 0, 0, 0)
-	..()
-	if(!gcDestroyed)
-		qdel(src)
+	exdev 	= -1
+	exheavy = 0
+	exlight = 0
+	exflash = 0
 
 /obj/item/projectile/rocket/blank/emp
 	name = "EMP rocket"
@@ -70,14 +70,14 @@
 	agony = 30
 	emheavy = 3
 	emlight = 5
-	explosive = 0
+
 
 /obj/item/projectile/rocket/blank/emp/to_bump(var/atom/A)
 	empulse(A, 3, 5)
-	explosion(A, -1, 0, 0, 0)
 	..()
 	if(!gcDestroyed)
 		qdel(src)
+
 
 /obj/item/projectile/rocket/blank/stun
 	name = "stun rocket"
@@ -90,10 +90,10 @@
 
 /obj/item/projectile/rocket/blank/stun/to_bump(var/atom/A)
 	flashbangprime(TRUE, FALSE, FALSE)
-	explosion(A, -1, 0, 0, 0)
 	..()
 	if(!gcDestroyed)
 		qdel(src)
+
 
 /obj/item/projectile/rocket/lowyield/extreme
 	name = "extreme yield rocket"
