@@ -13,9 +13,9 @@
 
 #define BOT_OLDTARGET_FORGET_DEFAULT 100 //100*WaitMachinery
 
-#ifdef ASTAR_DEBUG
-#define log_astar_bot(text) visible_message("[src] : text")
-#define log_astar_beacon(text) to_chat(world, "[src] : text")
+#if ASTAR_DEBUG == 1
+#define log_astar_bot(text) visible_message("[src] : [text]")
+#define log_astar_beacon(text) to_chat(world, "[src] : [text]")
 #else
 #define log_astar_bot(text)
 #define log_astar_beacon(text)
@@ -379,10 +379,8 @@
 	log_astar_beacon("[new_destination]")
 	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
 		// IMPORTANT: Quick AStar only takes TURFS as arguments.
-		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
-		if (!path) // Important because if quick_Astar fails, it returns null, not an empty list.
-			path = list()
-		return TRUE
+		waiting_for_patrol = FALSE // Case we are calculating a quick path for a patrol.
+		return quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
 	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
 
 // This proc is called by the path maker once it has calculated a path.
@@ -411,6 +409,7 @@
 		return 0
 	on = 1
 	set_light(initial(luminosity))
+	waiting_for_patrol = FALSE
 	return 1
 
 /obj/machinery/bot/proc/turn_off()
