@@ -11,6 +11,7 @@
 	name = "ashes"
 	desc = "Ashes to ashes, dust to dust, and into space."
 	gender = PLURAL
+	reagent = TOXIN //ash is bad for you!
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "ash"
 	anchored = 1
@@ -34,6 +35,7 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
+	reagent = FLOUR
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "flour"
 
@@ -43,6 +45,7 @@
 	gender = PLURAL
 	density = 0
 	anchored = TRUE
+	reagent = RADIUM
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "greenglow"
 
@@ -56,6 +59,7 @@
 	gender = PLURAL
 	density = 0
 	anchored = TRUE
+	reagent = LUMINOL
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mfloor1"
 	//icon = 'icons/effects/tomatodecal.dmi'
@@ -74,6 +78,7 @@
 	desc = "Somebody should remove that."
 	density = 0
 	anchored = 1
+	reagent = SPIDERS //no way this can go wrong, right?
 	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "cobweb1"
@@ -83,6 +88,7 @@
 	desc = "It looks like a melted... something."
 	density = 0
 	anchored = 1
+	reagent = CHEMICAL_WASTE
 	layer = OBJ_LAYER
 	plane = OBJ_PLANE
 	icon = 'icons/obj/chemical.dmi'
@@ -94,6 +100,7 @@
 	desc = "Somebody should remove that."
 	density = 0
 	anchored = 1
+	reagent = SPIDERS
 	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "cobweb2"
@@ -105,6 +112,7 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
+	reagent = VOMIT
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "vomit_1"
 
@@ -161,6 +169,7 @@
 	desc = "It's red."
 	density = 0
 	anchored = 1
+	reagent = TOMATOJUICE
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("tomato_floor1", "tomato_floor2", "tomato_floor3")
 
@@ -178,6 +187,7 @@
 	desc = "Seems like this one won't hatch."
 	density = 0
 	anchored = 1
+	//reagent = EGGYOLK (not in yet)
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_egg1", "smashed_egg2", "smashed_egg3")
 
@@ -204,6 +214,7 @@
 	desc = "This burnt-out campfire reminds you of someone."
 	anchored = 1
 	density = 0
+	reagent = TOXIN //ash is bad for you!
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "campfire_burnt"
 
@@ -241,6 +252,7 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
+	reagent = TOXIN //ash is bad for you!
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "lspaceclutter"
 
@@ -249,6 +261,7 @@
 	desc = "A disgusting mess."
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "cockroach_remains1"
+	reagent = ROACHSHELL
 
 /obj/effect/decal/cleanable/cockroach_remains/New()
 	..()
@@ -265,6 +278,7 @@
 	desc = "Looks like some one has butter fingers."
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "smashed_butter"
+	reagent = LIQUIDBUTTER
 
 /obj/effect/decal/cleanable/virusdish
 	name = "broken virus containment dish"
@@ -272,6 +286,7 @@
 	icon_state = "brokendish-outline"
 	density = 0
 	anchored = 1
+	reagent = VIRUSFOOD
 	mouse_opacity = 1
 	layer = OBJ_LAYER
 	plane = OBJ_PLANE

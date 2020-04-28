@@ -753,6 +753,7 @@
 	else
 		return
 
+
 /obj/item/weapon/mech_expansion_kit
 	name = "exosuit expansion kit"
 	desc = "All the equipment you need to replace that useless legroom with a useful bonus equipment slot on your mech."
@@ -785,4 +786,176 @@
 	else
 		to_chat(user,"<span class='notice'>You stop modifying the exosuit.</span>")
 		working = FALSE
+	return 1
+
+/obj/structure/wetdryvac
+	name = "wet/dry vacuum"
+	desc = "A powerful vacuum cleaner that can collect both trash and fluids."
+	density = TRUE
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "wetdryvac1"
+	var/max_trash = 50
+	var/list/trash = list()
+	var/obj/item/vachandle/myhandle
+
+/obj/structure/wetdryvac/New()
+	..()
+	create_reagents(50)
+	myhandle = new /obj/item/vachandle(src)
+
+/obj/structure/wetdryvac/Destroy()
+	if(myhandle.loc == src)
+		qdel(myhandle)
+	else
+		myhandle.myvac = null
+	myhandle = null
+	for(var/obj/item/I in trash)
+		qdel(I)
+	trash.Cut()
+	..()
+
+/obj/structure/wetdryvac/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>The wet tank gauge reads: [reagents.total_volume]/[reagents.max_volume]</span>")
+	to_chat(user,"<span class='info'>The dry storage gauge reads: [trash.len]/[max_trash]</span>")
+
+/obj/structure/wetdryvac/attackby(obj/item/W, mob/user)
+	if(istype(W,/obj/item/vachandle))
+		if(!myhandle)
+			myhandle = W
+		if(myhandle == W)
+			to_chat(user,"<span class='notice'>You insert \the [W] into \the [src].")
+			user.drop_item(W,src)
+			update_icon()
+	else
+		..()
+
+/obj/structure/wetdryvac/attack_hand(mob/user)
+	if(myhandle.loc == src)
+		user.put_in_hands(myhandle)
+		update_icon()
+	else
+		..()
+
+/obj/structure/wetdryvac/update_icon()
+	icon_state = "wetdryvac[myhandle.loc == src]"
+
+/obj/structure/wetdryvac/MouseDropFrom(var/obj/O, src_location, var/turf/over_location, src_control, over_control, params)
+	if(!can_use(usr,O))
+		return
+	if(istype(O,/obj/structure/sink))
+		if(!reagents.total_volume)
+			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
+			return
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+		reagents.clear_reagents()
+		to_chat(usr, "<span class='notice'>You flush \the [src] wet contents down \the [O].</span>")
+	else if(istype(O,/obj/item/weapon/reagent_containers) && O.is_open_container())
+		if(!reagents.total_volume)
+			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
+			return
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+		to_chat(usr, "<span class='notice'>You pour \the [src] wet contents into \the [O].</span>")
+		reagents.trans_to(O.reagents,reagents.total_volume)
+	else if(istype(O,/obj/machinery/disposal))
+		if(!contents.len)
+			to_chat(usr,"<span class='warning'>\The [src] dry storage is already empty!</span>")
+			return
+		playsound(src, 'sound/effects/freeze.ogg', 25, 1) //this sounds like trash moving to me
+		for(var/obj/item/I in trash)
+			I.forceMove(O)
+			trash -= I
+		to_chat(usr, "<span class='notice'>You dump \the [src] dry contents into \the [O].</span>")
+
+/obj/structure/wetdryvac/MouseDropTo(atom/O, mob/user as mob)
+	if(!can_use(user,O))
+		return
+	whrr(get_turf(O))
+
+/obj/structure/wetdryvac/proc/whrr(var/turf/T)
+	if(!T)
+		return
+	playsound(src, 'sound/effects/vacuum.ogg', 25, 1)
+	for(var/obj/effect/decal/cleanable/C in T)
+		var/datum/reagent/R = C.reagent
+		if(R)
+			reagents.add_reagent(R,1)
+		qdel(C)
+	for(var/obj/effect/overlay/puddle/P in T)
+		if(reagents.is_full())
+			visible_message("<span class='warning'>\The [src] sputters, wet tank full!</span>")
+			return
+		if(P.wet == TURF_WET_LUBE)
+			reagents.add_reagent(LUBE,1)
+		else if(P.wet == TURF_WET_WATER)
+			reagents.add_reagent(WATER,1)
+		qdel(P)
+	T.clean_blood()
+	for(var/obj/item/trash/R in T)
+		if(trash.len >= max_trash)
+			visible_message("<span class='warning'>\The [src] sputters, dry storage full!</span>")
+			return
+		R.forceMove(src)
+		trash += R
+
+/obj/structure/wetdryvac/proc/can_use(mob/user, atom/target)
+	if(!ishigherbeing(user) && !isrobot(user) || user.incapacitated() || user.lying)
+		return FALSE
+	if(!Adjacent(user) || !user.Adjacent(target))
+		return FALSE
+	return TRUE
+
+/obj/item/vachandle
+	name = "vacuum handle"
+	desc = "Handy. It doesn't suck per se, it merely conveys suckage."
+	w_class = W_CLASS_MEDIUM
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "vachandle"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	item_state = "vachandle"
+	var/obj/structure/wetdryvac/myvac
+	var/event_key = null
+
+/obj/item/vachandle/New()
+	..()
+	myvac = loc
+
+/obj/item/vachandle/Destroy()
+	myvac.myhandle = null
+	myvac = null
+	..()
+
+/obj/item/vachandle/pickup(mob/user)
+	..()
+	event_key = user.on_moved.Add(src, "mob_moved")
+
+/obj/item/vachandle/dropped(mob/user)
+	user.on_moved.Remove(event_key)
+	event_key = null
+	retract()
+
+/obj/item/vachandle/proc/mob_moved(var/list/event_args, var/mob/holder)
+	if(myvac && get_dist(src,myvac) > 2) //Needs a little leeway because dragging isn't instant
+		retract()
+		myvac.update_icon()
+
+/obj/item/vachandle/proc/retract()
+	if(loc == myvac)
+		return
+	visible_message("<span class='warning'>\The [src] snaps back into \the [myvac]!</span>")
+	if(ismob(loc))
+		var/mob/M = loc
+		M.drop_item(src,myvac)
+	else
+		forceMove(myvac)
+
+/obj/item/vachandle/preattack(atom/target, mob/user , proximity)
+	if(!myvac)
+		to_chat(user, "<span class='warning'>\The [src] isn't attached to a vacuum!</span>")
+		return
+	if(!proximity || !myvac.can_use(user,target))
+		return
+	if(target == myvac)
+		return ..()
+	myvac.whrr(get_turf(target))
 	return 1
