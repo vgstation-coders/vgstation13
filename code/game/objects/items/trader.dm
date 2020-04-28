@@ -816,7 +816,7 @@
 
 /obj/structure/wetdryvac/examine(mob/user)
 	..()
-	to_chat(user,"<span class='info'>The wet tank gauge reads: [reagents.total_volume]/[reagents.max_volume]</span>")
+	to_chat(user,"<span class='info'>The wet tank gauge reads: [reagents.total_volume]/[reagents.maximum_volume]</span>")
 	to_chat(user,"<span class='info'>The dry storage gauge reads: [trash.len]/[max_trash]</span>")
 
 /obj/structure/wetdryvac/attackby(obj/item/W, mob/user)
