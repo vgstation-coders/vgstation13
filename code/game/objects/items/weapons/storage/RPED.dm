@@ -111,6 +111,7 @@
 				target_rating++
 			SP = part_subtype(path,target_rating)
 			SP.forceMove(src)
+			SP.mech_flags |= MECH_SCAN_FAIL
 		new /obj/item/weapon/stock_parts/console_screen(src)
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/injector/attackby(obj/O,mob/user)
