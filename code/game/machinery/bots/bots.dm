@@ -142,7 +142,7 @@
 	if (!isturf(src.loc))
 		return // Stay in the closet, little bot. The world isn't ready to accept you yet ;_;
 	var/turf/T = get_turf(src)
-	set_glide_size(DELAY2GLIDESIZE((SS_WAIT_BOTS/steps_per)-1))
+	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
 	for(var/i = 1 to steps_per)
 		log_astar_bot("Step [i] of [steps_per]")
 		if(!path.len) //It is assumed we gain a path through process_bot()
@@ -164,7 +164,7 @@
 			else
 				frustration++
 				on_path_step_fail(next)
-		sleep((SS_WAIT_BOTS/steps_per)-1)
+		sleep(SS_WAIT_BOTS/steps_per)
 	return T == get_turf(src)
 
 // What happens when the bot cannot go to the next turf.
@@ -173,12 +173,18 @@
 	for (var/obj/machinery/door/D in next)
 		if (istype(D, /obj/machinery/door/firedoor))
 			continue
+		if (istype(D, /obj/machinery/door/poddoor))
+			continue
 		if (D.check_access(botcard))
 			D.open()
 			frustration = 0
 			return TRUE
 	if(frustration > 5)
-		calc_path(target, .proc/get_path, next)
+		if (target && !target.gcDestroyed)
+			calc_path(target, .proc/get_path, next)
+		else
+			target = null
+			path = list()
 	return
 
 /obj/machinery/bot/to_bump(var/M) //Leave no man un-phased through!
@@ -199,7 +205,7 @@
 // It is very important to exit this proc when you don't have a path.
 /obj/machinery/bot/proc/process_patrol()
 	astar_debug("process patrol called [src] [patrol_path.len]")
-	set_glide_size(DELAY2GLIDESIZE((SS_WAIT_BOTS/steps_per)-1))
+	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
 	for(var/i = 1 to steps_per)
 		if(!patrol_path.len)
 			return find_patrol_path()
@@ -218,7 +224,7 @@
 			else
 				frustration++
 				on_patrol_step_fail(next)
-		sleep((SS_WAIT_BOTS/steps_per)-1)
+		sleep(SS_WAIT_BOTS/steps_per)
 	return TRUE
 
 // This proc is called when the bot has no patrol path, no regular path, and is on autopatrol.
@@ -289,12 +295,18 @@
 	for (var/obj/machinery/door/D in next)
 		if (istype(D, /obj/machinery/door/firedoor))
 			continue
+		if (istype(D, /obj/machinery/door/poddoor))
+			continue
 		if (D.check_access(botcard))
 			D.open()
 			frustration = 0
 			return TRUE
 	if(frustration > 5)
-		calc_path(target, .proc/get_path, next)
+		if (target && !target.gcDestroyed)
+			calc_path(target, .proc/get_path, next)
+		else
+			target = null
+			patrol_path = list()
 
 // send a radio signal with a single data key/value pair
 /obj/machinery/bot/proc/post_signal(var/freq, var/key, var/value)
@@ -367,7 +379,7 @@
 	log_astar_beacon("[new_destination]")
 	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
 		// IMPORTANT: Quick AStar only takes TURFS as arguments.
-		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
 		if (!path) // Important because if quick_Astar fails, it returns null, not an empty list.
 			path = list()
 		return TRUE

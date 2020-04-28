@@ -1681,7 +1681,8 @@ Game Mode config tags:
 	for(var/client/C in admins)
 		C.output_to_special_tab(sane_msg)
 
-/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound)
+// This is awful and probably should be thrown away at some point.
+/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound, var/mob/firer)
 	var/turf/T = get_turf(source)
 	var/turf/U = get_turf(target)
 	if (!T || !U)
@@ -1699,8 +1700,8 @@ Game Mode config tags:
 	projectile.original = target
 	projectile.target = U
 	projectile.shot_from = source
-	if(istype(source, /mob))
-		projectile.firer = source
+	projectile.firer = firer
+
 	projectile.current = T
 	projectile.starting = T
 	projectile.yo = U.y - T.y

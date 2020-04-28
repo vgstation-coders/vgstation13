@@ -243,6 +243,9 @@ var/list/all_doors = list()
 		return
 	if(!ticker)
 		return 0
+	for (var/obj/O in src.loc)
+		if (O.blocks_doors())
+			return 0
 	if(!operating)
 		operating = 1
 
@@ -281,6 +284,10 @@ var/list/all_doors = list()
 		return
 	operating = 1
 
+	for (var/obj/O in src.loc)
+		if (O.blocks_doors())
+			return 0
+	
 	layer = closed_layer
 
 	if (makes_noise)

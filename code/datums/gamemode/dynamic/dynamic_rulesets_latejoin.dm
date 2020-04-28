@@ -46,7 +46,7 @@
 							"Captain", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
-	weight = 7
+	weight = 6
 	cost = 5
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 	high_population_requirement = 10

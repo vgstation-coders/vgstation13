@@ -184,6 +184,26 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
 	display_contents_with_number = TRUE
 
+
+/obj/item/weapon/storage/bag/plants/CtrlClick()
+	if(isturf(loc))
+		return ..()
+	if(!usr.isUnconscious() && Adjacent(usr))
+		change()
+		return
+	return ..()
+
+var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "green blue stripe", "green yellow stripe", "green purple stripe", "green lime stripe", "green black stripe", "green white stripe", "cyan", "cyan red stripe", "cyan blue stripe", "cyan yellow stripe", "cyan purple stripe", "cyan lime stripe", "cyan black stripe", "cyan white stripe")
+/obj/item/weapon/storage/bag/plants/verb/change()
+	set name = "Change Bag Colour"
+	set category = "Object"
+	set src in usr
+	var/plantbag_colour
+	plantbag_colour = input("Select Colour to change it to", "Plant Bag Colour", plantbag_colour) as null|anything in plantbag_colour_choices
+	if(!plantbag_colour||(usr.stat))
+		return
+	icon_state = plantbag_colour
+
 /obj/item/weapon/storage/bag/plants/portactor
 	name = "portable seed extractor"
 	desc = "A heavy-duty, yet portable seed extractor. Less efficient than the stationary machine, this version can extract at most two seeds per sample."
@@ -215,6 +235,10 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		P.orient2hud(user)
 		if(user.s_active)
 			user.s_active.show_to(user)
+
+
+/obj/item/weapon/storage/bag/plants/portactor/CtrlClick()
+	return
 
 // -----------------------------
 //          Food bag

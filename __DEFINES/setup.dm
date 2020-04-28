@@ -202,6 +202,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define TIMELESS		32768 // Immune to time manipulation.
 
 #define SILENTCONTAINER	65536 //reactions inside make no noise
+#define ATOM_INITIALIZED 131072 // initialize() was called
 
 #define ALL ~0
 #define NONE 0
@@ -731,6 +732,8 @@ SEE_PIXELS	256
 #define VERM_CRABS 13
 #define VERM_DIONA 14
 #define VERM_MUSHMEN 15
+#define VERM_FROGS 14
+#define VERM_SNAILS 15
 
 
 #define MONSTER_BEAR    0

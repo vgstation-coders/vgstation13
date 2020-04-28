@@ -264,7 +264,7 @@
 		victim.throw_at(get_edge_target_turf(loc, loc.dir), 5, 1)
 		victim.Stun(stunforce)
 		victim.Knockdown(stunforce)
-		victim.apply_effect(STUTTER, stunforce)
+		victim.apply_effect(stunforce, STUTTER)
 
 		last_punch = world.time
 		update_icon()

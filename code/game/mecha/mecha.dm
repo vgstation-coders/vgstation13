@@ -467,7 +467,7 @@
 				L.locked_to.unlock_atom(L)
 			L.Stun(5)
 			L.Knockdown(5)
-			L.apply_effect(STUTTER, 5)
+			L.apply_effect(5, STUTTER)
 			playsound(src, pick(hit_sound), 50, 0, 0)
 			breakthrough = 1
 	else

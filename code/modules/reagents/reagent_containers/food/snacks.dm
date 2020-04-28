@@ -841,6 +841,10 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/faggot/processed/New()
+	..()
+	reagents.clear_reagents()
+
 /obj/item/weapon/reagent_containers/food/snacks/sausage
 	name = "sausage"
 	desc = "A piece of mixed, long meat."
@@ -1617,6 +1621,10 @@
 	reagents.add_reagent(NUTRIMENT, 4)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
+	..()
+	reagents.clear_reagents()	
+
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
 	desc = "Dope from a soy."
@@ -1627,6 +1635,10 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/soydope/processed/New()
+	..()
+	reagents.clear_reagents()	
 
 /obj/item/weapon/reagent_containers/food/snacks/butter
 	name = "butter"
@@ -2385,6 +2397,11 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(IMIDAZOLINE, 3)
 	bitesize = 2
+
+
+/obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed/New()
+	..()
+	reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/food/snacks/superbiteburger
 	name = "Super Bite Burger"
@@ -6241,3 +6258,56 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/attackby(obj/item/I,mob/user,params)
 	return ..() //sorry no custom pai sandwiches
+
+/obj/item/weapon/reagent_containers/food/snacks/escargot
+	icon_state = "escargot"
+	name = "cooked escargot"
+	desc = "A fine treat and an exquisite cuisine."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/escargot/New()
+	. = ..()
+	reagents.add_reagent(NUTRIMENT,10)
+	reagents.add_reagent(SODIUMCHLORIDE, 2)
+	reagents.add_reagent(HOLYWATER, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/es_cargo
+	icon_state = "es_cargo_closed"
+	name = "es-cargo"
+	desc = "Je-ne-veux-pas-travailler !"
+	bitesize = 1
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+	var/open = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/es_cargo/New()
+	. = ..()
+	reagents.add_reagent(NUTRIMENT,10)
+	reagents.add_reagent(SODIUMCHLORIDE, 2)
+	reagents.add_reagent(HOLYWATER, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/es_cargo/can_consume(mob/living/carbon/eater, mob/user)
+	if (!open)
+		visible_message("<span class='notice'>\The [eater] cannot eat from \the [src] if it's closed, imbecile!</span>","<span class='notice'>You must first open it!</span>", drugged_message = "<span class='danger'>Oh lalala, this is not it, not it at all !</span>")
+		return FALSE
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/es_cargo/attack_self(var/mob/user)
+	if (!open)
+		open = TRUE
+		icon_state = "es_cargo_opened"
+		visible_message("<span class='notice'>\The [user] opens \the [src]!</span>", drugged_message = "<span class='notice'>This smells très bon !</span>")
+		return
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/es_cargo/verb/toggle_open()
+	set name = "Toggle open"
+	set category = "Object"
+	if (!open)
+		open = TRUE
+		icon_state = "es_cargo_opened"
+		visible_message("<span class='notice'>\The [usr] opens \the [src]!</span>", drugged_message = "<span class='notice'>This smells très bon !</span>")
+	else
+		open = FALSE
+		icon_state = "es_cargo_closed"
+		visible_message("<span class='notice'>\The [usr] closes \the [src]!</span>", drugged_message = "<span class='notice'>Enough for today !</span>")

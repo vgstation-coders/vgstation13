@@ -99,7 +99,8 @@ length to avoid portals or something i guess?? Not that they're counted right no
 //replace the passed element at it's right position using the cmp proc
 /PriorityQueue/proc/ReSort(var/atom/A)
 	var/i = Seek(A)
-	ASSERT(i != 0)
+	if (i == 0)
+		CRASH("[src] was seeking [A] but could not find it.")
 	while(i < L.len && call(cmp)(L[i],L[i+1]) > 0)
 		L.Swap(i,i+1)
 		i++
@@ -193,7 +194,7 @@ proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth =
 // The main difference is that it'll be caculated immediately and transmitted to the bot rather than waiting for the path to be made.
 // Currently, security bots are using this method to chase suspsects.
 // You MUST have the start and end be turfs.
-proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null)
+proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/reference)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
@@ -205,7 +206,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 		return 0
 
 	//initialization
-	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,"unique"))
+	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,"unique_[reference]"))
 
 	//then run the main loop
 	while(!open.IsEmpty() && !path)
@@ -240,9 +241,9 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 				continue
 
 			var/newenddist = call(T,dist)(end)
-			var/PathNode/PNode = T.FindPathNode("unique")
+			var/PathNode/PNode = T.FindPathNode("unique_[reference]")
 			if(!PNode) //is not already in open list, so add it
-				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1,"unique"))
+				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1,"unique_[reference]"))
 			else //is already in open list, check if it's a better way from the current turf
 				if(newenddist < PNode.distance_from_end)
 
@@ -255,13 +256,13 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 
 	//cleanup
 	for(var/PathNode/PN in open.L)
-		PN.source.PathNodes["unique"] = null
-		PN.source.PathNodes.Remove("unique")
+		PN.source.PathNodes["unique_[reference]"] = null
+		PN.source.PathNodes.Remove("unique_[reference]")
 		qdel(PN)
 	for(var/turf/T in closed)
-		var/PathNode/PN = T.FindPathNode("unique")
-		T.PathNodes["unique"] = null
-		T.PathNodes.Remove("unique")
+		var/PathNode/PN = T.FindPathNode("unique_[reference]")
+		T.PathNodes["unique_[reference]"] = null
+		T.PathNodes.Remove("unique_[reference]")
 		qdel(PN)
 
 	//if the path is longer than maxnodes, then don't return it

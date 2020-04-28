@@ -529,7 +529,7 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/set_destination(var/new_dest)
 	request_path(new_dest)
-	to_chat(world, "new_destination [new_dest]")
+	log_astar_beacon("new_destination [new_dest]")
 	new_destination = new_dest
 	request_path(new_dest)
 
@@ -547,7 +547,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/receive_signal(datum/signal/signal)
 	var/recv = signal.data["beacon"]
 	if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
-		to_chat(world, "[src] : new destination chosen, [recv]")
+		log_astar_beacon("[src] : new destination chosen, [recv]")
 		destination = new_destination
 		new_destination = ""
 		target = signal.source.loc
@@ -730,12 +730,6 @@ var/global/mulebot_count = 0
 	if (cell)
 		cell.emp_act(severity)
 	..()
-
-/obj/machinery/bot/mulebot/post_signal_multiple(var/freq, var/list/keyval)
-	to_chat(world, "post_signal_multiple, [freq]")
-	for (var/x in keyval)
-		to_chat(world, "[x] : [keyval[x]]")
-	return ..()
 
 /obj/machinery/bot/mulebot/explode()
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)

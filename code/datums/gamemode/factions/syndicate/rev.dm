@@ -149,7 +149,7 @@
 	if(stage >= FACTION_ENDGAME)
 		var/anyone = FALSE
 		for(var/datum/role/R in members)
-			if(!R.antag.current.stat)
+			if(R.antag.current && !R.antag.current.stat)
 				anyone = TRUE //If one rev is still not incapacitated
 		if(!anyone)
 			stage(FACTION_DEFEATED)

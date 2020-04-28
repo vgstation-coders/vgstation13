@@ -679,7 +679,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 	switch(fire_extremity)
 		if(1) // Fire spout
-			generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, /obj/item/projectile/fire_breath, 'sound/weapons/flamethrower.ogg')
+			generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, /obj/item/projectile/fire_breath, 'sound/weapons/flamethrower.ogg', src)
 			if(environment)
 				environment.add_thermal_energy(350000)
 		if(2) //Fire blast

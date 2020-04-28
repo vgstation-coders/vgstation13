@@ -4091,7 +4091,9 @@
 					"greytide gremlins" = VERM_GREMTIDE,
 					"crabs" = VERM_CRABS,
 					"diona nymphs" = VERM_DIONA,
-					"mushman pinheads" = VERM_MUSHMEN
+					"mushman pinheads" = VERM_MUSHMEN,
+					"frogs" = VERM_FROGS,
+					"snails" = VERM_SNAILS
 					)
 				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
 				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
@@ -5384,7 +5386,7 @@
 
 		if (!P)
 			return
-			
+
 		P.tracking = FALSE
 		P.tracker_datum = null
 		qdel(P.tracker_datum)
@@ -5394,7 +5396,7 @@
 			var/mob/M = P.original
 			if (M.client)
 				log_data += " (M.client.ckey)"
-		
+
 		log_admin("[key_name(usr)] stopped a rod thrown at [log_data].")
 		message_admins("<span class='notice'>[key_name(usr)]  stopped a rod thrown at [log_data].</span>")
 

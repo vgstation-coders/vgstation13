@@ -116,3 +116,14 @@
 	if(iscrowbar(W))
 		new /mob/living/simple_animal/cat/Proc(loc)
 	..()
+
+/obj/structure/largecrate/snails
+	icon_state = "lisacrate"
+
+/obj/structure/largecrate/snails/attackby(obj/item/weapon/W, mob/user)
+	if(iscrowbar(W))
+		new /mob/living/simple_animal/snail(loc)
+		new /mob/living/simple_animal/snail(loc)
+		new /mob/living/simple_animal/snail(loc)
+		new /mob/living/simple_animal/snail(loc)
+	..()
