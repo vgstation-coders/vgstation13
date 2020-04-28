@@ -425,6 +425,7 @@
 	required_pop = list(30,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = 3
+	weekday_rule_boost = list("Tue")
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70

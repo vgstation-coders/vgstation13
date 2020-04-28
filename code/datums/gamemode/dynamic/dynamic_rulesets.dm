@@ -13,6 +13,8 @@
 	var/required_pop = list(10,10,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of population required for the ruleset to fire. enemy jobs count double
 	var/required_candidates = 0//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
+	var/list/weekday_rule_boost = list()
+	var/list/timeslot_rule_boost = list()
 	var/cost = 0//threat cost for this rule.
 	var/logo = ""//any state from /icons/logos.dmi
 	var/calledBy //who dunnit, for round end scoreboard
@@ -114,6 +116,7 @@
 	return FALSE
 
 /datum/dynamic_ruleset/proc/get_weight()
+	weight *= weight_time_day()
 	if(repeatable && weight > 1)
 		for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
 			if(istype(DR,src.type))
@@ -122,6 +125,15 @@
 				weight = max(weight-1,1)
 	message_admins("[name] had [weight] weight (-[initial(weight) - weight]).")
 	return weight
+
+//Return a multiplicative weight. 1 for nothing special.
+/datum/dynamic_ruleset/proc/weight_time_day()
+	var/weigh = 1
+	if(time2text(world.timeofday, "DDD") in weekday_rule_boost)
+		weigh *= 2
+	if(getTimeslot() in timeslot_rule_boost)
+		weigh *= 2
+	return weigh
 
 /datum/dynamic_ruleset/proc/trim_candidates()
 	return

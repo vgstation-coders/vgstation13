@@ -371,6 +371,7 @@
 	required_pop = list(25,20,20,15,15,15,10,10,10,10)
 	required_candidates = 1
 	weight = 2
+	weekday_rule_boost = list("Tue")
 	cost = 30
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
@@ -481,6 +482,7 @@
 	required_pop = list(0,0,10,10,15,15,20,20,20,25)
 	required_candidates = 1
 	weight = 1
+	timeslot_rule_boost = list(SLEEPTIME)
 	cost = 5
 	requirements = list(5,5,15,15,25,25,55,55,55,75)
 	logo = "rambler-logo"
