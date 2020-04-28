@@ -87,6 +87,7 @@
 	icon = 'icons/obj/syringe.dmi'
 	icon_state = "combat_hypo"
 	item_state = "hypo"
+	mech_flags = MECH_SCAN_FAIL
 	bluespace = TRUE
 	w_class = W_CLASS_SMALL
 	use_to_pickup = FALSE
