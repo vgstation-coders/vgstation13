@@ -72,6 +72,15 @@
 	for(var/i in 1 to 8)
 		new /obj/item/weapon/stock_parts/console_screen(src)
 
+//Takes a tier 1 stock part path and a target rating
+//Returns a part object
+/proc/part_subtype(var/basepath, var/target)
+	for(var/path in subtypesof(basepath))
+		var/obj/item/weapon/stock_parts/SP = new path
+		if(SP.rating == target)
+			return SP
+		qdel(SP)
+
 /obj/item/weapon/storage/bag/gadgets/part_replacer/injector
 	name = "upgrade injector"
 	desc = "A single use upgrade injector. Just stab it into the side of a machine and it will dissolve away."
@@ -81,33 +90,27 @@
 	bluespace = TRUE
 	w_class = W_CLASS_SMALL
 	use_to_pickup = FALSE
+	var/base_rating = 2
+	var/list/part_types = list(/obj/item/weapon/stock_parts/manipulator,
+								/obj/item/weapon/stock_parts/matter_bin,
+								/obj/item/weapon/stock_parts/scanning_module,
+								/obj/item/weapon/stock_parts/capacitor,
+								/obj/item/weapon/stock_parts/micro_laser)
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super
+	name = "super upgrade injector"
+	base_rating = 3
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/injector/New()
 	..()
+	var/obj/item/weapon/stock_parts/SP
 	for(var/i in 1 to 3)
-		if(prob(10))//10% tier 3
-			new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
-		else //90% tier 2
-			new /obj/item/weapon/stock_parts/manipulator/nano(src)
-		if(prob(10))
-			new /obj/item/weapon/stock_parts/micro_laser/high/ultra(src)
-		else
-			new /obj/item/weapon/stock_parts/micro_laser/high(src)
-		if(prob(10))
-			if(prob(80)) //8% tier 3
-				new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
-			else //2%: tier 4
-				new /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace(src)
-		else
-			new /obj/item/weapon/stock_parts/matter_bin/adv(src)
-		if(prob(10))
-			new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src)
-		else
-			new /obj/item/weapon/stock_parts/scanning_module/adv(src)
-		if(prob(10))
-			new /obj/item/weapon/stock_parts/capacitor/adv/super(src)
-		else
-			new /obj/item/weapon/stock_parts/capacitor/adv(src)
+		for(var/path in part_types)
+			var/target_rating = base_rating
+			if(prob(10))
+				target_rating++
+			SP = part_subtype(path,target_rating)
+			SP.forceMove(src)
 		new /obj/item/weapon/stock_parts/console_screen(src)
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/injector/attackby(obj/O,mob/user)
