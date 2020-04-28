@@ -48,10 +48,14 @@
 			if(bcell.charge < hitcost)
 				status = 0
 				update_icon()
+				if(istype(src, /obj/item/weapon/melee/baton/harm))
+					call(/obj/item/weapon/melee/baton/harm, "depower")()
 			return 1
 		else
 			status = 0
 			update_icon()
+			if(istype(src, /obj/item/weapon/melee/baton/harm))
+				call(/obj/item/weapon/melee/baton/harm, "depower")()
 			return 0
 
 /obj/item/weapon/melee/baton/proc/canbehonkified()
@@ -127,8 +131,13 @@
 	if(status && clumsy_check(user) && prob(50))
 		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
 			"<span class='danger'>The [name] blasts you with its power!</span>")
-		user.Knockdown(stunforce)
-		user.Stun(stunforce)
+		if(istype(src, /obj/item/weapon/melee/baton/harm))
+			var/mob/living/L = user
+			L.apply_effect(AGONY, stunforce)
+			L.audible_scream()
+		else
+			user.Knockdown(stunforce)
+			user.Stun(stunforce)
 		playsound(loc, "sparks", 75, 1, -1)
 		deductcharge(hitcost)
 		return
@@ -155,8 +164,13 @@
 	if(status && clumsy_check(user) && prob(50))
 		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
 			"<span class='danger'>The [name] goes mad!</span>")
-		user.Knockdown(stunforce)
-		user.Stun(stunforce)
+		if(istype(src, /obj/item/weapon/melee/baton/harm))
+			var/mob/living/L = user
+			L.apply_effect(AGONY, stunforce)
+			L.audible_scream()
+		else
+			user.Knockdown(stunforce)
+			user.Stun(stunforce)
 		deductcharge(hitcost)
 		return
 
@@ -182,9 +196,14 @@
 		user.lastattacked = L
 		L.lastattacker = user
 
-		L.Stun(stunforce)
-		L.apply_effect(10, STUTTER, 0)
-		L.Knockdown(stunforce)
+		if(istype(src, /obj/item/weapon/melee/baton/harm))
+			L.apply_effect(10, STUTTER) //sanity
+			L.apply_effect(stunforce, AGONY) //apply pain by throwing
+			L.audible_scream()
+		else
+			L.Stun(stunforce)
+			L.apply_effect(10, STUTTER, 0)
+			L.Knockdown(stunforce)
 
 		L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
 			"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
@@ -215,9 +234,14 @@
 		foundmob.lastattacked = L
 		L.lastattacker = foundmob
 
-	L.Stun(stunforce)
-	L.Knockdown(stunforce)
-	L.apply_effect(STUTTER, stunforce)
+	if(istype(src, /obj/item/weapon/melee/baton/harm))
+		L.apply_effect(10, STUTTER) //sanity
+		L.apply_effect(stunforce, AGONY) //apply pain by throwing, it doesn't damage them though
+		L.audible_scream()
+	else
+		L.Stun(stunforce)
+		L.apply_effect(10, STUTTER, 0)
+		L.Knockdown(stunforce)
 
 	L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
 	playsound(loc, stunsound, 50, 1, -1)
@@ -286,123 +310,29 @@
 	if(user.is_holding_item(src))
 		to_chat(user, "<span class='notice'>It has a small dial at the base.</span>") //if you add a feature and won't add a way to advertise it, no one is going to use it
 
-/obj/item/weapon/melee/baton/harm/attack_self(mob/user)
+/obj/item/weapon/melee/baton/harm/attack_self(mob/user) //putting this here because dial is declared in harm baton
 	if(status && clumsy_check(user) && prob(50))
-		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
-			"<span class='danger'>The [name] blasts you with its power!</span>")
-		var/mob/living/L = user
-		L.apply_effect(AGONY, stunforce)
-		L.audible_scream()
-		playsound(loc, "sparks", 75, 1, -1)
-		deductcharge(hitcost)
+		..()
 		return
 	if(bcell && bcell.charge >= hitcost)
-		status = !status
-		user.simple_message("<span class='notice'>[src] is now [status ? "on" : "off"].</span>",
-			"<span class='notice'>[src] is now [pick("drowsy","hungry","thirsty","bored","unhappy")].</span>")
-		playsound(loc, "sparks", 75, 1, -1)
+		..()
 		if(status)
 			force += 10 + 2*(dial-1) //send someone into the shadow realm with 10
 			throwforce += 10 + 2*(dial-1) //it doesn't deal damage on throw, this is just a constistency thing, I guess
 			hitcost = 100 * (dial * dial) // 100 cost on 1, 10000 cost on 10, change power cell
 			stunforce = 10 * dial //welcome to the world of pain
 		else
-			force = 10
-			throwforce = 7
+			depower()
 		update_icon()
 	else
-		force = 10
-		throwforce = 7
 		..()
+		depower()
 
 	add_fingerprint(user)
 
-/obj/item/weapon/melee/baton/harm/attack(mob/M, mob/user)
-	if(status && clumsy_check(user) && prob(50))
-		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
-			"<span class='danger'>The [name] goes mad!</span>")
-		var/mob/living/L = user
-		L.apply_effect(stunforce, AGONY) //don't hit yourself
-		L.audible_scream()
-		deductcharge(hitcost)
-		return
-
-	if(isrobot(M))
-		..()
-		return
-	if(!isliving(M))
-		return
-
-	var/mob/living/L = M
-
-	if(user.a_intent == I_HURT)
-		..()
-
-	else
-		if(!status)
-			..()
-			return
-
-	if(status && . != FALSE)
-		user.lastattacked = L
-		L.lastattacker = user
-
-		L.apply_effect(10, STUTTER, 0)
-		L.apply_effect(stunforce, AGONY) //apply pain
-		L.audible_scream()
-
-		L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
-			"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
-			self_drugged_message="<span class='userdanger'>\The [user]'s [src] sucks the life right out of you!</span>")
-		playsound(loc, stunsound, 50, 1, -1)
-
-		deductcharge(hitcost)
-
-		L.forcesay(hit_appends)
-
-		user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
-		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
-		log_attack("<font color='red'>[user.name] ([user.ckey]) stunned [L.name] ([L.ckey]) with [name]</font>" )
-		if(!iscarbon(user))
-			..()
-		else
-			..()
-
-/obj/item/weapon/melee/baton/harm/throw_impact(atom/hit_atom) //why would you throw it though?
-	if(prob(50))
-		return ..()
-	if(!isliving(hit_atom) || !status)
-		return
-	var/client/foundclient = directory[ckey(fingerprintslast)]
-	var/mob/foundmob = foundclient.mob
-	var/mob/living/L = hit_atom
-	if(foundmob && ismob(foundmob))
-		foundmob.lastattacked = L
-		L.lastattacker = foundmob
-
-	L.apply_effect(10, STUTTER) //sanity
-	L.apply_effect(stunforce, AGONY) //apply pain by throwing
-	L.audible_scream()
-
-	L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
-	playsound(loc, stunsound, 50, 1, -1)
-
-	deductcharge(hitcost)
-
-	L.forcesay(hit_appends)
-
-	foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
-	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by thrown [src.name] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
-	log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) stunned [L.name] ([L.ckey])</font>" )
-	if(!iscarbon(foundmob))
-		..()
-	else
-		..()
-
 /obj/item/weapon/melee/baton/harm/proc/turning_dial(mob/user)
 	if(status)
-		status = !status
-		user.simple_message("<span class='notice'>[src] is now [status ? "on" : "off"].</span>") //if it's enabled, it get disabled when turing dial
+		status = !status //if it's enabled, it get disabled when turing dial
 		update_icon()
 		force = 10
 		throwforce = 7
@@ -430,8 +360,14 @@
 		return
 	turning_dial(usr)
 
+/obj/item/weapon/melee/baton/harm/proc/depower()
+	force = 10
+	throwforce = 7
+	return
+
 /obj/item/weapon/melee/baton/harm/loaded/New() //starting cell, only really enough for dial 1
 	..()
 	bcell = new(src)
 	bcell.charge=bcell.maxcharge
 	update_icon()
+
