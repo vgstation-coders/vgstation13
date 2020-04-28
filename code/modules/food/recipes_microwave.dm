@@ -339,10 +339,16 @@
 /datum/recipe/poppypretzel
 	reagents = list(FLOUR = 5)
 	items = list(
-		/obj/item/seeds/poppyseed,
+		/obj/item/seeds,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/poppypretzel
+
+/datum/recipe/poppypretzel/check_items(obj/container)
+	. = ..()
+	if(. == 1)
+		var/obj/item/seeds/seed_item = locate() in container // Parent call returned 1 so this is expected to be non-null
+		return seed_item.seed_type == "poppies"
 
 /datum/recipe/rofflewaffles
 	reagents = list(PSILOCYBIN = 5, FLOUR = 10)
