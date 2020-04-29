@@ -254,11 +254,18 @@ var/list/department_radio_keys = list(
 
 	//AI alerts
 	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
+		var/mob/living/silicon/ai/AI = src		
+		var/alert = FALSE
 		if(findtext(rendered_message, "ai"))
-			src << 'sound/machines/twobeep.ogg'
 			rendered_message = replacetext(rendered_message, "ai", "<i style='color: red;'>AI</i>")
+			alert = TRUE
+		if(findtext(rendered_message, AI.real_name))
+			rendered_message = replacetext(rendered_message, AI.real_name, "<i style='color: red;'>[AI.real_name]</i>")			
+			alert = TRUE
+		if(alert)
+			AI << 'sound/machines/twobeep.ogg'
 
-	show_message(rendered_message, type, deaf_message, deaf_type, src)
+	show_message(rendered_message, type, deaf_message, deaf_type, AI)
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
