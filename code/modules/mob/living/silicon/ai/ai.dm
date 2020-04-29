@@ -37,6 +37,7 @@ var/list/ai_list = list()
 	var/obj/item/device/camera/silicon/aicamera = null
 	var/busy = FALSE //Toggle Floor Bolt busy var.
 	var/chosen_core_icon_state = "ai"
+	var/datum/intercom_settings/intercom_clipboard = null //Clipboard for copy/pasting intercom settings
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
