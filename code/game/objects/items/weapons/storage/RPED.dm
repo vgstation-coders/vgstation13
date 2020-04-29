@@ -100,6 +100,7 @@
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super
 	name = "super upgrade injector"
+	icon_state = "combat_hypo_s"
 	base_rating = 3
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/injector/New()
