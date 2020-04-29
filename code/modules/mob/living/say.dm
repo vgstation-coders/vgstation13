@@ -252,6 +252,12 @@ var/list/department_radio_keys = list(
 		for(var/T in syndicate_code_response)
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
+	//AI alerts
+	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
+		if(findtext(rendered_message, "ai"))
+			src << 'sound/machines/twobeep.ogg'
+			rendered_message = replacetext(rendered_message, "ai", "<i style='color: red;'>AI</i>")
+
 	show_message(rendered_message, type, deaf_message, deaf_type, src)
 	return rendered_message
 
