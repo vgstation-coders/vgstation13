@@ -409,9 +409,11 @@
 	else
 		..()
 
+#define AGENT_CARD_DEFAULT_ACCESS list(access_maint_tunnels, access_syndicate, access_external_airlocks)
+
 /obj/item/weapon/card/id/syndicate
 	name = "agent card"
-	access = list(access_maint_tunnels, access_syndicate, access_external_airlocks)
+	access = AGENT_CARD_DEFAULT_ACCESS
 	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/registered_user=null
@@ -560,12 +562,14 @@
 						blood_type = initial(blood_type)
 						dna_hash = initial(dna_hash)
 						fingerprint_hash = initial(fingerprint_hash)
-						access = initial(access)
+						access = AGENT_CARD_DEFAULT_ACCESS
 						registered_user = null
 
 						to_chat(user, "<span class='notice'>All information has been deleted from \the [src].</span>")
 	else
 		..()
+
+#undef AGENT_CARD_DEFAULT_ACCESS
 
 /obj/item/weapon/card/id/syndicate_command
 	name = "syndicate ID card"
