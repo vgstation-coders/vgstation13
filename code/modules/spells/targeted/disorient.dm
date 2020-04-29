@@ -39,8 +39,8 @@
 		if(spell_levels[Sp_POWER] >= 2)
 			for(var/mob/target in targets)
 				var/client/C = target.client
+				var/record_angle //Spin the view by negative record angle to return it back to normal, instead of using initial
 				for(var/i, i <= spinning_duration, i++) //Do this (spinning_duration) times
-					var/record_angle //Spin the view by negative record angle to return it back to normal, instead of using initial
 					var/angle = pick(90, 180, 270)
 					if(C)
 						if(i == spinning_duration)
