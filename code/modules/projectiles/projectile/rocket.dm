@@ -8,7 +8,6 @@
 	nodamage = 0
 	flag = "bullet"
 	var/embed = 1
-	var/explosive = 1
 	var/picked_up_speed = 0.66 //This is basically projectile speed, so
 	fire_sound = 'sound/weapons/rocket.ogg'
 	var/exdev 	= 1 //RPGs pack a serious punch and will cause massive structural damage in your average room,
@@ -33,15 +32,10 @@
 		sleep(picked_up_speed)
 
 /obj/item/projectile/rocket/to_bump(var/atom/A)
-	if(explosive == 1)
-		..()
-		explosion(A, exdev, exheavy, exlight, exflash)
-		if(!gcDestroyed)
-			qdel(src)
-	else
-		..()
-		if(!gcDestroyed)
-			qdel(src)
+	..()
+	explosion(A, exdev, exheavy, exlight, exflash)
+	if(!gcDestroyed)
+		qdel(src)
 
 /obj/item/projectile/rocket/lowyield
 	name = "low yield rocket"
@@ -85,7 +79,6 @@
 	stun = 20
 	weaken = 20
 	agony = 30
-	explosive = 0
 
 
 /obj/item/projectile/rocket/blank/stun/to_bump(var/atom/A)
