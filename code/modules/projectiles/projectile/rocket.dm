@@ -69,8 +69,6 @@
 /obj/item/projectile/rocket/blank/emp/to_bump(var/atom/A)
 	empulse(A, 3, 5)
 	..()
-	if(!gcDestroyed)
-		qdel(src)
 
 
 /obj/item/projectile/rocket/blank/stun
@@ -84,8 +82,7 @@
 /obj/item/projectile/rocket/blank/stun/to_bump(var/atom/A)
 	flashbangprime(TRUE, FALSE, FALSE)
 	..()
-	if(!gcDestroyed)
-		qdel(src)
+
 
 
 /obj/item/projectile/rocket/lowyield/extreme
