@@ -76,10 +76,9 @@
 //Returns a part object
 /proc/part_subtype(var/basepath, var/target)
 	for(var/path in subtypesof(basepath))
-		var/obj/item/weapon/stock_parts/SP = new path
-		if(SP.rating == target)
-			return SP
-		qdel(SP)
+		var/obj/item/weapon/stock_parts/SP = path
+		if(initial(SP.rating) == target)
+			return new SP
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/injector
 	name = "upgrade injector"
@@ -92,6 +91,7 @@
 	w_class = W_CLASS_SMALL
 	use_to_pickup = FALSE
 	var/base_rating = 2
+	var/parts_each = 3
 	var/list/part_types = list(/obj/item/weapon/stock_parts/manipulator,
 								/obj/item/weapon/stock_parts/matter_bin,
 								/obj/item/weapon/stock_parts/scanning_module,
@@ -106,7 +106,7 @@
 /obj/item/weapon/storage/bag/gadgets/part_replacer/injector/New()
 	..()
 	var/obj/item/weapon/stock_parts/SP
-	for(var/i in 1 to 3)
+	for(var/i in 1 to parts_each)
 		for(var/path in part_types)
 			var/target_rating = base_rating
 			if(prob(10))
@@ -119,10 +119,10 @@
 /obj/item/weapon/storage/bag/gadgets/part_replacer/injector/attackby(obj/O,mob/user)
 	return
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/can_be_inserted(obj/item/W as obj, stop_messages = 0)
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/can_be_inserted(obj/item/W, stop_messages = 0)
 	return FALSE
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
+/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
 	if(force)
 		return ..()
 	else
