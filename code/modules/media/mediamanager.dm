@@ -7,7 +7,7 @@
  ***********************/
 
 // Uncomment to test the mediaplayer
-//#define DEBUG_MEDIAPLAYER
+#define DEBUG_MEDIAPLAYER
 
 // Open up VLC and play musique.
 // Converted to VLC for cross-platform and ogg support. - N3X
@@ -135,7 +135,7 @@ function SetMusic(url, time, volume) {
 	var/obj/machinery/media/media_source = null
 
 #ifdef DEBUG_MEDIAPLAYER
-to_chat(#define MP_DEBUG(x) owner, x)
+#define MP_DEBUG(x) to_chat(owner, x)
 #warn Please comment out #define DEBUG_MEDIAPLAYER before committing.
 #else
 #define MP_DEBUG(x)
@@ -185,14 +185,16 @@ to_chat(#define MP_DEBUG(x) owner, x)
 		return
 	if(!(owner.prefs.toggles & SOUND_STREAMING) && target_url != "")
 		return // Nope.
-	MP_DEBUG("<span class='good'>Sending update to VLC ([url])...</span>")
+	MP_DEBUG("<span class='good'>Sending update to VLC ([target_url])...</span>")
 	var/window
 	switch (currently_broadcasting)
 		if (JUKEBOX_ODD_PLAYER) // We were on odd, so now we are on even, broadcasting the target url.
+			MP_DEBUG("<span class='good'>Going on the even player, as odd one is playing something.<span>")
 			currently_broadcasting = JUKEBOX_EVEN_PLAYER
 			window = window_even
 			url_even = target_url
 		if (JUKEBOX_EVEN_PLAYER) // And vice versa.
+			MP_DEBUG("<span class='good'>Going on the odd player, as odd one is playing something.<span>")
 			currently_broadcasting = JUKEBOX_ODD_PLAYER
 			window = window_odd
 			url_odd = target_url
