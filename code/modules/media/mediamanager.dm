@@ -142,7 +142,10 @@ to_chat(#define MP_DEBUG(x) owner, x)
 #endif
 
 /datum/media_manager
-	var/url = ""
+	var/url_odd = ""
+	var/url_even = ""
+	var/currently_broadcasting = JUKEBOX_ODD_PLAYER
+
 	var/start_time = 0
 	var/source_volume = 1 // volume * source_volume
 
@@ -152,7 +155,8 @@ to_chat(#define MP_DEBUG(x) owner, x)
 
 	var/forced=0
 
-	var/const/window = "rpane.hosttracker"
+	var/const/window_odd = "rpane.hosttracker"
+	var/const/window_even = "rpane.hosttracker2"
 	//var/const/window = "mediaplayer" // For debugging.
 	var/playerstyle
 
@@ -169,25 +173,42 @@ to_chat(#define MP_DEBUG(x) owner, x)
 
 // Actually pop open the player in the background.
 /datum/media_manager/proc/open()
-	owner << browse(null, "window=[window]")
-	owner << browse(playerstyle, "window=[window]")
+	owner << browse(null, "window=[window_odd]")
+	owner << browse(playerstyle, "window=[window_odd]")
+	owner << browse(null, "window=[window_even]")
+	owner << browse(playerstyle, "window=[window_even]")
 	send_update()
 
 // Tell the player to play something via JS.
-/datum/media_manager/proc/send_update()
+/datum/media_manager/proc/send_update(var/target_url)
 	if(!(owner.prefs))
 		return
-	if(!(owner.prefs.toggles & SOUND_STREAMING) && url != "")
+	if(!(owner.prefs.toggles & SOUND_STREAMING) && target_url != "")
 		return // Nope.
 	MP_DEBUG("<span class='good'>Sending update to VLC ([url])...</span>")
-	owner << output(list2params(list(url, (world.time - start_time) / 10, volume*source_volume)), "[window]:SetMusic")
+	var/window
+	switch (currently_broadcasting)
+		if (JUKEBOX_ODD_PLAYER) // We were on odd, so now we are on even, broadcasting the target url.
+			currently_broadcasting = JUKEBOX_EVEN_PLAYER
+			window = window_even
+			url_even = target_url
+		if (JUKEBOX_EVEN_PLAYER) // And vice versa.
+			currently_broadcasting = JUKEBOX_ODD_PLAYER
+			window = window_odd
+			url_odd = target_url
+	owner << output(list2params(list(target_url, (world.time - start_time) / 10, volume*source_volume)), "[window]:SetMusic")
 
 /datum/media_manager/proc/push_music(var/targetURL,var/targetStartTime,var/targetVolume)
-	if (url != targetURL || abs(targetStartTime - start_time) > 1 || abs(targetVolume - source_volume) > 0.1 /* 10% */)
-		url = targetURL
+	var/current_url
+	switch (currently_broadcasting)
+		if (JUKEBOX_ODD_PLAYER)
+			current_url = url_odd
+		if (JUKEBOX_ODD_PLAYER)
+			current_url = url_even
+	if (current_url != targetURL || abs(targetStartTime - start_time) > 1 || abs(targetVolume - source_volume) > 0.1 /* 10% */)
 		start_time = targetStartTime
 		source_volume = clamp(targetVolume, 0, 1)
-		send_update()
+		send_update(targetURL)
 
 /datum/media_manager/proc/stop_music()
 	push_music("",0,1)
