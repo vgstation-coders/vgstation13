@@ -265,3 +265,22 @@
 		qdel(stored)
 		stored = null
 	..()
+
+/obj/item/device/crank_charger/generous
+	name = "generous crank"
+	desc = "Uses reverse-engineered ninja power glove technology to transfer energy wirelessly at short range into objects that can be recharged."
+
+/obj/item/device/crank_charger/generous/afterattack(var/atom/target, var/mob/user)
+	..()
+	var/obj/item/weapon/cell/C = target.get_cell()
+	if(istype(C))
+		if(!stored.charge)
+			to_chat(user,"<span class='warning'>The loaded cell has no charge.</span>")
+			return
+		var/transfer = min(C.maxcharge - C.charge,stored.charge)
+		if(!transfer) //since we already ruled out no charge here, if min() = 0 that means the diff is 0
+			to_chat(user,"<span class='good'>That already has full charge!</span>")
+			return
+		playsound(get_turf(src), pick(lightning_sound), 25, 1, "vary" = 0)
+		stored.use(transfer)
+		C.give(transfer)
