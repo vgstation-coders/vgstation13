@@ -261,6 +261,47 @@
 	H.update_hair()
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
+/obj/item/weapon/hair_dye/skin_dye
+	name = "magic skin dye"
+	desc = "Bubble, bubble, toil and trouble!"
+	uses = 3
+
+/obj/item/weapon/hair_dye/skin_dye/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>It has [uses] uses left.</span>")
+
+/obj/item/weapon/hair_dye/skin_dye/attack(mob/M as mob, mob/user as mob)
+	if(!ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+	if(H.w_uniform && (H.w_uniform.body_parts_covered & UPPER_TORSO))
+		to_chat(user,"<span class='warning'>[H] needs to have an uncovered chest to really let the dye sink in.</span>")
+	if(H != user)
+		to_chat(user,"<span class='danger'>[user] is trying to spray down [H] with skin dye!</span>")
+		if(do_after(user,H, 10 SECONDS))
+			to_chat(user,"<span class='info'>[user] dyed [H].</span>")
+			dye(H)
+	else
+		dye(H)
+
+/obj/item/weapon/hair_dye/skin_dye/proc/dye(mob/living/carbon/human/H)
+	H.species.anatomy_flags |= MULTICOLOR
+	H.multicolor_skin_r = color_r
+	H.multicolor_skin_g = color_g
+	H.multicolor_skin_b = color_b
+	H.update_body()
+	uses--
+	if(!uses)
+		qdel(src)
+
+/obj/item/weapon/hair_dye/skin_dye/discount
+	name = "discount skin dye"
+	desc = "This is... probably no more unhealthy than a spray-on tan, right?"
+
+/obj/item/weapon/hair_dye/skin_dye/discount/dye(mob/living/carbon/human/H)
+	..()
+	H.reagents.add_reagent(TOXIN,1)
+
 /obj/item/weapon/invisible_spray
 	name = "can of invisible spray"
 	desc = "A can of... invisibility? The label reads: \"Wears off after five minutes.\""
