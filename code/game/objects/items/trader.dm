@@ -804,11 +804,12 @@
 	myhandle = new /obj/item/vachandle(src)
 
 /obj/structure/wetdryvac/Destroy()
-	if(myhandle.loc == src)
-		qdel(myhandle)
-	else
-		myhandle.myvac = null
-	myhandle = null
+	if(myhandle)
+		if(myhandle.loc == src)
+			qdel(myhandle)
+		else
+			myhandle.myvac = null
+		myhandle = null
 	for(var/obj/item/I in trash)
 		qdel(I)
 	trash.Cut()
@@ -831,14 +832,17 @@
 		..()
 
 /obj/structure/wetdryvac/attack_hand(mob/user)
-	if(myhandle.loc == src)
+	if(myhandle && myhandle.loc == src)
 		user.put_in_hands(myhandle)
 		update_icon()
 	else
 		..()
 
 /obj/structure/wetdryvac/update_icon()
-	icon_state = "wetdryvac[myhandle.loc == src]"
+	if(myhandle)
+		icon_state = "wetdryvac[myhandle.loc == src]"
+	else
+		icon_state = "wetdryvac0"
 
 /obj/structure/wetdryvac/MouseDropFrom(var/obj/O, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!can_use(usr,O))
@@ -864,7 +868,7 @@
 		playsound(src, 'sound/effects/freeze.ogg', 25, 1) //this sounds like trash moving to me
 		for(var/obj/item/I in trash)
 			I.forceMove(O)
-			trash -= I
+		trash.Cut()
 		to_chat(usr, "<span class='notice'>You dump \the [src] dry contents into \the [O].</span>")
 
 /obj/structure/wetdryvac/MouseDropTo(atom/O, mob/user)
@@ -878,12 +882,15 @@
 	playsound(src, 'sound/effects/vacuum.ogg', 25, 1)
 	for(var/obj/effect/decal/cleanable/C in T)
 		if(C.reagent)
+			if(reagents.is_full())
+				visible_message("<span class='warning'>\The [src] sputters, wet tank full!</span>")
+				break
 			reagents.add_reagent(C.reagent,1)
 		qdel(C)
 	for(var/obj/effect/overlay/puddle/P in T)
 		if(reagents.is_full())
 			visible_message("<span class='warning'>\The [src] sputters, wet tank full!</span>")
-			return
+			break
 		if(P.wet == TURF_WET_LUBE)
 			reagents.add_reagent(LUBE,1)
 		else if(P.wet == TURF_WET_WATER)
