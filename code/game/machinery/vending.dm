@@ -3078,6 +3078,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/mech_expansion_kit = 3,
 		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector = 10,
 		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super = 4,
+		/obj/structure/wetdryvac = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -3112,6 +3113,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/mech_expansion_kit = 50,
 		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector = 15,
 		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super = 50,
+		/obj/structure/wetdryvac = 50,
 		)
 
 /obj/machinery/vending/trader/New()
