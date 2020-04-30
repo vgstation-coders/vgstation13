@@ -12,7 +12,8 @@
 //		"proto-ripley",
 		"titan",
 		"ripley_flames_red",
-		"ripley_flames_blue"
+		"ripley_flames_blue",
+		"hivisripley"
 	)
 	paintable = 1
 

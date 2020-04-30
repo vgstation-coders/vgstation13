@@ -62,8 +62,7 @@
 	hud_state = "phazon-phase"
 	override_icon = 'icons/mecha/mecha.dmi'
 
-/spell/mech/phazon/phasing/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/ME) //same problem as the rest
-	..()
+/spell/mech/phazon/phasing/update_spell_icon()
 	hud_state = "[linked_mech.initial_icon]-phase"
 
 /spell/mech/phazon/phasing/cast(list/targets, mob/user)

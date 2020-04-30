@@ -48,10 +48,15 @@
 	charge_max = 10
 	charge_counter = 10
 
-/spell/mech/durand/defence_mode/New() //not really working for the purpose of repainting
+/spell/mech/durand/defence_mode/New()
 	..()
 	hud_state = "[linked_mech.initial_icon]-lockdown"
 
+/spell/mech/durand/defence_mode/update_spell_icon()
+	var/obj/mecha/combat/durand/Durand = linked_mech
+	if(Durand.sprites_with_a_lockdown_state.Find(Durand.initial_icon))
+		return
+	hud_state = "[linked_mech.initial_icon]-lockdown"
 
 /spell/mech/durand/defence_mode/cast(list/targets, mob/user)
 	var/obj/mecha/combat/durand/Durand = linked_mech

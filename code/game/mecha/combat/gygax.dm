@@ -20,9 +20,11 @@
 		"gygax",
 		"gygax_old",
 		"darkgygax_old",
+		"pobeda"
 	)
 	var/list/sprites_with_a_speedmode_state = list(
 		"gygax"
+		"gygax_old"
 	)
 
 /obj/mecha/combat/gygax/dark
@@ -77,9 +79,11 @@
 	hud_state = "gygax-gofast"
 	override_icon = 'icons/mecha/mecha.dmi'
 
-/spell/mech/gygax/overload/New() //not really working for the purpose of repainting //also gets complicated since the dark and old gygax doesn't have a -gofast state
-	..()
-	hud_state = linked_mech.initial_icon + "-gofast"
+/spell/mech/gygax/overload/update_spell_icon()
+	var/obj/mecha/combat/gygax/Gygax = linked_mech
+	if(Gygax.sprites_with_a_speedmode_state.Find(Gygax.initial_icon))
+		return
+	hud_state = Gygax.initial_icon + "-gofast"
 
 /spell/mech/gygax/overload/cast(list/targets, mob/user)
 	var/obj/mecha/combat/gygax/Gygax = linked_mech

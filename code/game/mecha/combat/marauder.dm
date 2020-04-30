@@ -201,6 +201,9 @@
 	..()
 	hud_state = linked_mech.initial_icon + "-dash"
 
+/spell/mech/marauder/dash/update_spell_icon()
+	hud_state = "[linked_mech.initial_icon]-dash"
+
 /spell/mech/marauder/dash/cast_check(skipcharge = FALSE, mob/user = usr)
 	if(linked_mech.lock_controls)
 		return FALSE

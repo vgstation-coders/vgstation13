@@ -29,6 +29,8 @@
 
 /obj/item/mecha_parts/mecha_equipment/New()
 	..()
+	if(istype(loc,/obj/mecha))
+		attach(loc)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/update_chassis_page()

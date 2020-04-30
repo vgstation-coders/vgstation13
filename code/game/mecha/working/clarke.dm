@@ -17,8 +17,10 @@
 	var/obj/machinery/atmospherics/unary/portables_connector/scrubber_port = null
 	mech_sprites = list(
 		"clarke",
-		"orangey",
 		"protoclarke",
+		"orangey",
+		"spiderclarke",
+		"veteranclarke"
 	)
 	paintable = 1
 

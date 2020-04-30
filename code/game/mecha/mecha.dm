@@ -2023,6 +2023,8 @@
 		src.visible_message("[src] raises [ME]")
 		send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 
+/spell/mech/proc/update_spell_icon() //overwritten by painting a mech
+
 ///////////////////////
 ///// Power stuff /////
 ///////////////////////
@@ -2089,8 +2091,8 @@
 
 
 /obj/item/device/mech_painter
-	name = "Mecha Painter"
-	desc = "A device used to paint floors in various colours and fashions."
+	name = "mecha painter"
+	desc = "A device used to paint mechs in various colours and fashions."
 	icon = 'icons/obj/RCD.dmi'
 	icon_state = "rpd"//placeholder art, someone please sprite it
 	force = 0
@@ -2102,7 +2104,7 @@
 	if (!M.mech_sprites.len)
 		to_chat(user, "<span class='info'>This mech has no other paint-jobs.</span>")
 		return 1
-	if (M.occupant)
+	if (M.occupant) //this check seems pointless and I would love to get rid of it, but because there's no way to figure out the current state of the mech when painting it, it's a necessary evil
 		to_chat(user, "<span class='info'>This mech has an occupant. It must be empty before you can paint it.</span>")
 		return 1
 
@@ -2113,10 +2115,12 @@
 		return 1
 	if(icontype)
 		to_chat(user, "<span class='info'>You begin repainting the mech.</span>")
-		spawn(60)
+		if (do_after(user,src,30))
 			M.initial_icon = icontype
 			M.icon_state = icontype +"-open"
-			M.refresh_spells() //I think this something important
+			for(var/spell/mech/MS in M.intrinsic_spells)
+				MS.update_spell_icon()
+			M.refresh_spells() //I think this does something important
 	return 1
 
 

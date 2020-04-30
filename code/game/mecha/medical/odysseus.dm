@@ -14,7 +14,9 @@
 	paintable = 1
 	mech_sprites = list(
 		"odysseus",
-		"medgax"
+		"medgax",
+		"paramed",
+		"urinetrouble"
 	)
 
 /obj/mecha/medical/odysseus/New()
@@ -66,12 +68,12 @@
 
 /obj/mecha/medical/odysseus/murdysseus/New()
 	..()
-	var/obj/item/mecha_parts/mecha_equipment/ME = new /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/tool/sleeper
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay
-	ME.attach(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser(src)
+//	ME.attach(src)
+	new /obj/item/mecha_parts/mecha_equipment/tool/sleeper(src)
+//	ME.attach(src)
+	new /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun(src)
+//	ME.attach(src)
+	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
+//	ME.attach(src)
 	return
