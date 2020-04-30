@@ -867,7 +867,7 @@
 			trash -= I
 		to_chat(usr, "<span class='notice'>You dump \the [src] dry contents into \the [O].</span>")
 
-/obj/structure/wetdryvac/MouseDropTo(atom/O, mob/user as mob)
+/obj/structure/wetdryvac/MouseDropTo(atom/O, mob/user)
 	if(!can_use(user,O))
 		return
 	whrr(get_turf(O))
@@ -877,9 +877,8 @@
 		return
 	playsound(src, 'sound/effects/vacuum.ogg', 25, 1)
 	for(var/obj/effect/decal/cleanable/C in T)
-		var/datum/reagent/R = C.reagent
-		if(R)
-			reagents.add_reagent(R,1)
+		if(C.reagent)
+			reagents.add_reagent(C.reagent,1)
 		qdel(C)
 	for(var/obj/effect/overlay/puddle/P in T)
 		if(reagents.is_full())
