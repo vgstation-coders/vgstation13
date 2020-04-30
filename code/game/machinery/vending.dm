@@ -3075,6 +3075,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/key/security/spare = 1,
 		/obj/item/weapon/depocket_wand = 4,
 		/obj/item/weapon/ram_kit = 1,
+		/obj/item/weapon/mech_expansion_kit = 3,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -3106,6 +3107,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/key/security/spare = 10,
 		/obj/item/weapon/depocket_wand = 50,
 		/obj/item/weapon/ram_kit = 100,
+		/obj/item/weapon/mech_expansion_kit = 50
 		)
 
 /obj/machinery/vending/trader/New()

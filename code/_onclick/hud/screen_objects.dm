@@ -158,7 +158,14 @@
 	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
-		return 1
+		if(istype(master,/obj/item/weapon/storage)) //should always be true, but sanity
+			var/obj/item/weapon/storage/S = master
+			if(!S.distance_interact(usr))
+				return 1
+			//else... continue onward to master.attackby
+		else
+			//master isn't storage, exit
+			return 1
 	if(master)
 		var/obj/item/I = usr.get_active_hand()
 		if(I)

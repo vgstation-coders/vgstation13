@@ -293,6 +293,8 @@
 	if(!get_charge())
 		return
 	if(src == target)
+		var/obj/item/mecha_parts/mecha_equipment/passive/rack/R = get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/rack)
+		R.rack.AltClick(user)
 		return
 	var/dir_to_target = get_dir(src,target)
 	if(dir_to_target && !(dir_to_target & src.dir))//wrong direction
@@ -560,6 +562,10 @@
 		src.log_message("Attack by paw. Attacker - [user].",1)
 	else
 		src.log_message("Attack by hand. Attacker - [user].",1)
+	var/obj/item/mecha_parts/mecha_equipment/passive/rack/R = get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/rack)
+	if(R && operation_allowed(user))
+		R.rack.AltClick(user)
+		return
 	user.do_attack_animation(src, user)
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
@@ -1125,33 +1131,29 @@
 		to_chat(usr, "<span class='notice'><B>Subject cannot have abiotic items on.</B></span>")
 		return
 */
-	var/passed
-	if(src.dna)
-		if(usr.dna.unique_enzymes==src.dna)
-			passed = 1
-	else if(src.operation_allowed(usr))
-		passed = 1
-	if(!passed)
+	if(!operation_allowed(usr))
 		to_chat(usr, "<span class='warning'>Access Denied.</span>")
-		src.log_append_to_last("Permission denied.")
+		log_append_to_last("Permission denied.")
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
 
-	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
-
-
-	if(do_after(usr, src, 40))
-		if(!src.occupant)
-			moved_inside(usr)
-			refresh_spells()
-		else if(src.occupant!=usr)
-			to_chat(usr, "[src.occupant] was faster. Try better next time, loser.")
+	if(get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/runningboard))
+		moved_inside(usr)
+		refresh_spells()
+		visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the running board!</span>")
 	else
-		to_chat(usr, "You stop entering the exosuit.")
-	return
+		visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
+		if(do_after(usr, src, 40))
+			if(!src.occupant)
+				moved_inside(usr)
+				refresh_spells()
+			else if(src.occupant!=usr)
+				to_chat(usr, "[src.occupant] was faster. Try better next time, loser.")
+		else
+			to_chat(usr, "You stop entering the exosuit.")
 
 /obj/mecha/proc/moved_inside(var/mob/living/carbon/human/H as mob)
 	if(!isnull(src.loc) && H && H.client && H in range(1))
@@ -1392,11 +1394,14 @@
 /////////////////////////
 
 /obj/mecha/proc/operation_allowed(mob/living/carbon/human/H)
+	if(dna)
+		if(!(usr.dna.unique_enzymes==dna))
+			return FALSE
 	if(istype(H))
 		for(var/ID in list(H.get_active_hand(), H.wear_id, H.belt))
-			if(src.check_access(ID,src.operation_req_access))
+			if(src.check_access(ID,operation_req_access))
 				return 1
-		return 0
+	return FALSE
 
 
 /obj/mecha/proc/internals_access_allowed(mob/living/carbon/human/H)
@@ -1581,6 +1586,13 @@
 	output += "</div>"
 	return output
 
+//returns an equipment object if we have one of that type, useful since is_type_in_list won't return the object
+//since is_type_in_list uses caching, this is a slower operation, so only use it if needed
+/obj/mecha/proc/get_equipment(var/equip_type)
+	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
+		if(istype(ME,equip_type))
+			return ME
+	return null
 
 /obj/mecha/proc/get_log_html()
 	var/output = "<html><head><title>[src.name] Log</title></head><body style='font: 13px 'Courier', monospace;'>"
