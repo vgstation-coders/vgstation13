@@ -727,6 +727,7 @@ var/global/list/loopModeNames=list(
 		media_url = song.url
 		last_song = current_song
 		media_start_time = world.time
+		media_finish_time = world.time + song.length
 		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>[bicon(src)] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else
@@ -887,6 +888,7 @@ var/global/list/loopModeNames=list(
 		media_url = song.url
 		last_song = current_song
 		media_start_time = world.time
+		media_finish_time = world.time + song.length
 		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>[bicon(src)] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else

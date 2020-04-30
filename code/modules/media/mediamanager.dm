@@ -7,7 +7,7 @@
  ***********************/
 
 // Uncomment to test the mediaplayer
-#define DEBUG_MEDIAPLAYER
+//#define DEBUG_MEDIAPLAYER
 
 // Open up VLC and play musique.
 // Converted to VLC for cross-platform and ogg support. - N3X
@@ -147,6 +147,7 @@ function SetMusic(url, time, volume) {
 	var/currently_broadcasting = JUKEBOX_ODD_PLAYER
 
 	var/start_time = 0
+	var/finish_time = -1
 	var/source_volume = 1 // volume * source_volume
 
 	var/volume = 50
@@ -186,19 +187,22 @@ function SetMusic(url, time, volume) {
 	if(!(owner.prefs.toggles & SOUND_STREAMING) && target_url != "")
 		return // Nope.
 	MP_DEBUG("<span class='good'>Sending update to VLC ([target_url])...</span>")
-	var/window
+	var/window_playing
 	switch (currently_broadcasting)
 		if (JUKEBOX_ODD_PLAYER) // We were on odd, so now we are on even, broadcasting the target url.
 			MP_DEBUG("<span class='good'>Going on the even player, as odd one is playing something.<span>")
 			currently_broadcasting = JUKEBOX_EVEN_PLAYER
-			window = window_even
+			window_playing = window_even
 			url_even = target_url
 		if (JUKEBOX_EVEN_PLAYER) // And vice versa.
 			MP_DEBUG("<span class='good'>Going on the odd player, as odd one is playing something.<span>")
 			currently_broadcasting = JUKEBOX_ODD_PLAYER
-			window = window_odd
+			window_playing = window_odd
 			url_odd = target_url
-	owner << output(list2params(list(target_url, (world.time - start_time) / 10, volume*source_volume)), "[window]:SetMusic")
+	// We start to broadcast the music on the second media thing
+	owner << output(list2params(list(target_url, (world.time - start_time) / 10, volume*source_volume)), "[window_playing]:SetMusic")
+
+
 
 /datum/media_manager/proc/push_music(var/targetURL,var/targetStartTime,var/targetVolume)
 	var/current_url
@@ -213,7 +217,8 @@ function SetMusic(url, time, volume) {
 		send_update(targetURL)
 
 /datum/media_manager/proc/stop_music()
-	push_music("",0,1)
+	owner << output(list2params(list("", 0, 1)), "[window_odd]:SetMusic")
+	owner << output(list2params(list("", 0, 1)), "[window_even]:SetMusic")
 
 // Scan for media sources and use them.
 /datum/media_manager/proc/update_music()
@@ -230,10 +235,14 @@ function SetMusic(url, time, volume) {
 		stop_music()
 		return
 	var/obj/machinery/media/M = A.media_source // TODO: turn into a list, then only play the first one that's playing.
+
 	if(M && M.playing)
+		if (world.time - finish_time < -10 SECONDS) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
+			stop__music()
 		targetURL = M.media_url
 		targetStartTime = M.media_start_time
 		targetVolume = M.volume
+		src.finish_time = M.media_finish_time
 //			to_chat(owner, "Found audio source: [M.media_url] @ [(world.time - start_time) / 10]s.")
 	//else
 	//	testing("M is not playing or null.")
