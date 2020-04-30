@@ -264,7 +264,7 @@
 /obj/item/weapon/hair_dye/skin_dye
 	name = "magic skin dye"
 	desc = "Bubble, bubble, toil and trouble!"
-	uses = 3
+	var/uses = 3
 
 /obj/item/weapon/hair_dye/skin_dye/examine(mob/user)
 	..()
