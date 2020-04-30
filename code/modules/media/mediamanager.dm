@@ -238,7 +238,7 @@ function SetMusic(url, time, volume) {
 
 	if(M && M.playing)
 		if (world.time - finish_time < -10 SECONDS) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
-			stop__music()
+			stop_music()
 		targetURL = M.media_url
 		targetStartTime = M.media_start_time
 		targetVolume = M.volume
