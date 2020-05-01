@@ -195,7 +195,7 @@ function SetMusic(url, time, volume) {
 			window_playing = window_even
 			url_even = target_url
 		if (JUKEBOX_EVEN_PLAYER) // And vice versa.
-			MP_DEBUG("<span class='good'>Going on the odd player, as odd one is playing something.<span>")
+			MP_DEBUG("<span class='good'>Going on the odd player, as even one is playing something.<span>")
 			currently_broadcasting = JUKEBOX_ODD_PLAYER
 			window_playing = window_odd
 			url_odd = target_url
@@ -217,8 +217,8 @@ function SetMusic(url, time, volume) {
 		send_update(targetURL)
 
 /datum/media_manager/proc/stop_music()
-	owner << output(list2params(list("", 0, 1)), "[window_odd]:SetMusic")
-	owner << output(list2params(list("", 0, 1)), "[window_even]:SetMusic")
+	owner << output(list2params(list("", world.time, 1)), "[window_odd]:SetMusic")
+	owner << output(list2params(list("", world.time, 1)), "[window_even]:SetMusic")
 
 // Scan for media sources and use them.
 /datum/media_manager/proc/update_music()
@@ -237,8 +237,11 @@ function SetMusic(url, time, volume) {
 	var/obj/machinery/media/M = A.media_source // TODO: turn into a list, then only play the first one that's playing.
 
 	if(M && M.playing)
-		if (world.time - finish_time < -10 SECONDS) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
+		MP_DEBUG("<span class='good'>[round(world.time - finish_time, 4)/10] seconds skipped...<span>")
+		if (finish_time > 0 && (world.time - finish_time < -10 SECONDS)) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
+			MP_DEBUG("<span class='good'>Should be cutting off music.<span>")
 			stop_music()
+			sleep(1 SECONDS) // Have to wait for the VLC player response.
 		targetURL = M.media_url
 		targetStartTime = M.media_start_time
 		targetVolume = M.volume

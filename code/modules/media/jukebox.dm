@@ -107,9 +107,12 @@ var/global/global_playlists = list()
 	url    = json["url"]
 
 	length = text2num(json["length"])
+	/*
 	crossfade_time = text2num(json["crossfade_time"])
 	if (isnull(crossfade_time))
-		crossfade_time = 0
+		crossfade_time = 5 SECONDS
+	*/
+	crossfade_time = 5 SECONDS
 
 /datum/song_info/proc/display()
 	var/str="\"[title]\""
