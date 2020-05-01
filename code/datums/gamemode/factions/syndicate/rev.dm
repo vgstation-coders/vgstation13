@@ -131,8 +131,11 @@
 		if(living_revs > 0 && total_valid_living > 0)
 			var/revs_percentage = round((living_revs * 100)/total_valid_living)
 			if(revs_percentage >= threshold)
-				stage(FACTION_ENDGAME)
-				command_alert(/datum/command_alert/revolution)
+				for (var/datum/role/revolutionary/leader/comrade in members)
+					to_chat(comrade.antag.current, "<span class='warning'>The time to act is upon us. Nanotrasen must have noticed us by now. Let's waste no time!</span>")
+				spawn(60 SECONDS)
+					stage(FACTION_ENDGAME)
+					command_alert(/datum/command_alert/revolution)
 
 	switch(remaining_targets)
 		if(0)
