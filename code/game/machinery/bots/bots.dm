@@ -66,7 +66,6 @@
 	var/waiting_for_patrol = FALSE
 	var/list/patrol_path = list() //Our patroling path
 
-
 /obj/machinery/bot/New()
 	. = ..()
 	for(var/datum/event/ionstorm/I in events)
@@ -138,33 +137,36 @@
 // If we have a path, we step.
 // Speed of the bot is controlled through steps_per.
 // return true to avoid calling process_patrol
-/obj/machinery/bot/proc/process_path()
+/obj/machinery/bot/proc/process_path(var/remaining_steps = steps_per)
+	if (remaining_steps == 0)
+		return
 	if (!isturf(src.loc))
 		return // Stay in the closet, little bot. The world isn't ready to accept you yet ;_;
 	var/turf/T = get_turf(src)
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
-	for(var/i = 1 to steps_per)
-		log_astar_bot("Step [i] of [steps_per]")
-		if(!path.len) //It is assumed we gain a path through process_bot()
-			if(target)
-				calc_path(target, .proc/get_path)
-				return 1
-			return  0
-		patrol_path = list() //Kill any patrols we're using
-		if(loc == get_turf(target))
-			return at_path_target()
+	log_astar_bot("Step [i] of [steps_per]")
+	if(!path.len) //It is assumed we gain a path through process_bot()
+		if(target)
+			path = calc_path(target, .proc/get_path)
+			process_path() // I love recursivity.
+			return 1
+		return  0
+	patrol_path = list() //Kill any patrols we're using
+	if(loc == get_turf(target))
+		return at_path_target()
 
-		var/turf/next = path[1]
-		if(istype(next, /turf/simulated))
-			step_to(src, next)
-			if(get_turf(src) == next)
-				path -= next
-				frustration = 0
-				on_path_step(next)
-			else
-				frustration++
-				on_path_step_fail(next)
-		sleep(SS_WAIT_BOTS/steps_per)
+	var/turf/next = path[1]
+	if(istype(next, /turf/simulated))
+		step_to(src, next)
+		if(get_turf(src) == next)
+			path -= next
+			frustration = 0
+			on_path_step(next)
+		else
+			frustration++
+			on_path_step_fail(next)
+		spawn(SS_WAIT_BOTS/steps_per)
+			process_path(remaining_steps - 1)
 	return T == get_turf(src)
 
 // What happens when the bot cannot go to the next turf.
@@ -181,7 +183,7 @@
 			return TRUE
 	if(frustration > 5)
 		if (target && !target.gcDestroyed)
-			calc_path(target, .proc/get_path, next)
+			path = calc_path(target, .proc/get_path, next)
 		else
 			target = null
 			path = list()
@@ -203,28 +205,30 @@
 // Same as process_path. If we don't have a path, we get a path.
 // If we have a path, we take a step on that path
 // It is very important to exit this proc when you don't have a path.
-/obj/machinery/bot/proc/process_patrol()
+/obj/machinery/bot/proc/process_patrol(var/remaining_steps = steps_per)
 	astar_debug("process patrol called [src] [patrol_path.len]")
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
-	for(var/i = 1 to steps_per)
-		if(!patrol_path.len)
-			return find_patrol_path()
-		log_astar_bot("Step [i] of [steps_per]")
-		if(loc == patrol_target)
-			patrol_path = list()
-			return at_patrol_target()
+	if (remaining_steps == 0)
+		return TRUE
+	if(!patrol_path.len)
+		return find_patrol_path()
+	log_astar_bot("Step [i] of [steps_per]")
+	if(loc == patrol_target)
+		patrol_path = list()
+		return at_patrol_target()
 
-		var/turf/next = patrol_path[1]
-		if(istype(next, /turf/simulated))
-			step_to(src, next)
-			if(get_turf(src) == next)
-				frustration = 0
-				patrol_path -= next
-				on_patrol_step(next)
-			else
-				frustration++
-				on_patrol_step_fail(next)
-		sleep(SS_WAIT_BOTS/steps_per)
+	var/turf/next = patrol_path[1]
+	if(istype(next, /turf/simulated))
+		step_to(src, next)
+		if(get_turf(src) == next)
+			frustration = 0
+			patrol_path -= next
+			on_patrol_step(next)
+		else
+			frustration++
+			on_patrol_step_fail(next)
+	spawn(SS_WAIT_BOTS/steps_per)
+		process_patrol(remaining_steps - 1)
 	return TRUE
 
 // This proc is called when the bot has no patrol path, no regular path, and is on autopatrol.
