@@ -340,22 +340,22 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/proc/ai_call_or_recall_shuttle()
 	if(isDead())
-		to_chat(src, "You can't call/recall the shuttle because you are dead!")
+		to_chat(src, "<span class='warning'>You can't call/recall the shuttle because you are dead!</span>")
 		return
 	if(istype(usr,/mob/living/silicon/ai))
 		var/mob/living/silicon/ai/AI = src
 		if(AI.control_disabled)
-			to_chat(usr, "Wireless control is disabled!")
+			to_chat(usr, "<span class='warning'>Wireless control is disabled!</span>")
 			return
 	switch(emergency_shuttle.direction)
 		if(EMERGENCY_SHUTTLE_RECALLED)
-			to_chat(usr, "Wait until the shuttle arrives to Centcomm and try again")
+			to_chat(usr, "<span class='warning'>Wait until the shuttle arrives at Centcomm and try again</span>")
 		if(EMERGENCY_SHUTTLE_STANDBY)
 			ai_call_shuttle()
 		if(EMERGENCY_SHUTTLE_GOING_TO_STATION)
 			ai_recall_shuttle()
 		if(EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM)
-			to_chat(usr, "Too late!")
+			to_chat(usr, "<span class='warning'>Too late!</span>")
 
 /mob/living/silicon/ai/proc/ai_call_shuttle()
 	var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination.", "Nanotrasen Anti-Comdom Systems")
@@ -373,11 +373,11 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/proc/ai_recall_shuttle()
 	if(!ismalf(src))
-		to_chat(usr, "You send the signal to recall the shuttle but nothing happens!")
+		to_chat(usr, "<span class='warning'>You send the signal to recall the shuttle but nothing happens!</span>")
 		return
 	var/datum/faction/malf/M = find_active_faction_by_member(mind.GetRole(MALF))
 	if(M?.stage != FACTION_ENDGAME)
-		to_chat(usr, "You need to initiate the takeover first")
+		to_chat(usr, "<span class='warning'>You need to initiate the takeover first</span>")
 		return
 	var/confirm = alert("Are you sure you want to recall the shuttle?", "Confirm Recall Shuttle", "Yes", "Cancel")
 	if(confirm == "Yes")
