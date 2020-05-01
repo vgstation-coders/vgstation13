@@ -986,3 +986,14 @@ var/list/uplink_items = list()
 	cost = 7
 	discounted_cost = 4
 	jobs_with_discount = list("Assistant")
+
+/datum/uplink_item/jobspecific/command
+	category = "Command Specials"
+
+/datum/uplink_item/jobspecific/command/pocketsat
+	name = "Pocket Satellite"
+	desc = "A grenade which, when detonated in space, creates a circular station with radius 7. The station is loaded with self-powered computers, useful gear, and machinery as well as a teleporter beacon. Anyone right under it when it unfolds is crushed."
+	item = /obj/item/weapon/grenade/station
+	cost = 20
+	discounted_cost = 14
+	jobs_with_discount = list("Captain", "Head of Personnel")

@@ -33,3 +33,7 @@
 		dismantle_wall(1)
 		return 1
 	return 0
+
+/turf/simulated/wall/syndicate
+	icon = 'icons/turf/shuttle.dmi'
+	walltype = "bswall"
