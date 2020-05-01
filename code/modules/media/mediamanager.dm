@@ -236,9 +236,16 @@ function SetMusic(url, time, volume) {
 		return
 	var/obj/machinery/media/M = A.media_source // TODO: turn into a list, then only play the first one that's playing.
 
+	var/current_url
+	switch (currently_broadcasting)
+		if (JUKEBOX_ODD_PLAYER)
+			current_url = url_odd
+		if (JUKEBOX_ODD_PLAYER)
+			current_url = url_even
+
 	if(M && M.playing)
 		MP_DEBUG("<span class='good'>[round(world.time - finish_time, 4)/10] seconds skipped...<span>")
-		if (finish_time > 0 && (world.time - finish_time < -10 SECONDS)) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
+		if ((targetURL =! current_url) && (finish_time > 0) && (world.time - finish_time < -10 SECONDS)) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
 			MP_DEBUG("<span class='good'>Should be cutting off music.<span>")
 			stop_music()
 			sleep(1 SECONDS) // Have to wait for the VLC player response.
