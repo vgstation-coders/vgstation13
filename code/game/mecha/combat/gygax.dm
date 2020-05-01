@@ -23,8 +23,8 @@
 		"pobeda"
 	)
 	var/list/sprites_with_a_speedmode_state = list(
-		"gygax"
-		"gygax_old"
+		"gygax",
+		"gygax_old",
 	)
 
 /obj/mecha/combat/gygax/dark
