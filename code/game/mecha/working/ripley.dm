@@ -9,7 +9,7 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley
 	mech_sprites = list(
 		"ripley",
-//		"proto-ripley",
+		"ripley_glass",
 		"titan",
 		"ripley_flames_red",
 		"ripley_flames_blue",
@@ -34,7 +34,11 @@
 	light_brightness_on = 3
 	damage_absorption = list("fire"=0.5,"bullet"=0.8,"bomb"=0.5)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/firefighter
-	paintable = 0
+	paintable = 1
+	mech_sprites = list(
+		"firefighter",
+		"aluminizer"
+		)
 
 /obj/mecha/working/ripley/deathripley
 	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE"

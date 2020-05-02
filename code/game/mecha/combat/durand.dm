@@ -17,11 +17,15 @@
 	mech_sprites = list(
 		"durand",
 		"old_durand",
+		"gator",
+		"dollhouse"
 	)
 	paintable = 1
 	var/list/sprites_with_a_lockdown_state= list(
 		"durand",
 		"old_durand",
+		"gator",
+		"dollhouse"
 	)
 
 /obj/mecha/combat/durand/New()

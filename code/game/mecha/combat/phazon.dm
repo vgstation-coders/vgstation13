@@ -21,7 +21,9 @@
 	max_equip = 4
 	mech_sprites = list(
 		"phazon",
-		"imperion", //imperion's phase looks a little half assed.
+		"phazon_blanco",
+		"plazmus",
+		"imperion",
 		"janus",
 	)
 	paintable = 1
