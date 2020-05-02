@@ -40,7 +40,7 @@
 
 		return 1 // Avoid calling the syringe's afterattack()
 
-/obj/item/weapon/gun/syringe/afterattack(obj/target, mob/user , flag)
+/obj/item/weapon/gun/syringe/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(target == user)
 		return
 	..()

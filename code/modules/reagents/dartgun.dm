@@ -160,7 +160,7 @@
 			update_icon()
 		return 1
 
-/obj/item/weapon/gun/dartgun/afterattack(atom/target as mob|obj|turf|area, mob/user , flag)
+/obj/item/weapon/gun/dartgun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(target == user)
 		return
 	..()

@@ -61,7 +61,7 @@
 		fire_sound = 'sound/items/egg_squash.ogg'
 		recoil = 0
 
-/obj/item/weapon/gun/siren/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/siren/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -135,7 +135,7 @@
 	var/last_pump = 0
 	var/pumps = 0
 
-/obj/item/weapon/gun/siren/supersoaker/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/siren/supersoaker/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)

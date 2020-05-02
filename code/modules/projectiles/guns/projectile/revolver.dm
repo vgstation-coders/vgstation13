@@ -91,8 +91,8 @@
 	icon_state = "mateba"
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	recoil = 3
-	
-	
+
+
 /obj/item/weapon/gun/projectile/nagant //revolver that simple mob russians use
 	name = "nagant revolver"
 	desc = "Just like in those neo-russian spy movies! Uses 7.62x38R ammo."
@@ -104,7 +104,7 @@
 	gun_flags = SILENCECOMP
 	fire_sound = 'sound/weapons/nagant.ogg'
 	recoil = 3
-	
+
 /obj/item/weapon/gun/projectile/nagant/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""]"
@@ -290,7 +290,7 @@
 /obj/item/weapon/gun/projectile/colt/AltClick(var/mob/user)
 	attack_self(user, callparent = TRUE)
 
-/obj/item/weapon/gun/projectile/colt/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, struggle = 0)
+/obj/item/weapon/gun/projectile/colt/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(cocked)
 		..()
 		cocked = FALSE

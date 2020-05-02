@@ -21,7 +21,7 @@
 /obj/item/weapon/gun/projectile/hecate/isHandgun()
 	return FALSE
 
-/obj/item/weapon/gun/projectile/hecate/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/projectile/hecate/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)	return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
