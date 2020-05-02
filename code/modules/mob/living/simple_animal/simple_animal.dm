@@ -237,7 +237,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/datum/gas_mixture/environment
 	if(loc)
 		environment = loc.return_air()
-		
+
 	handle_environment(environment)
 	handle_regular_hud_updates()
 
@@ -405,8 +405,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return
-	adjustBruteLoss(Proj.damage)
 	Proj.on_hit(src, 0)
+	adjustBruteLoss(Proj.damage)
 	return 0
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)

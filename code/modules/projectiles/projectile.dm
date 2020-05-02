@@ -126,6 +126,11 @@ var/list/impact_master = list()
 		return 0//Full block
 	if(!isliving(atarget))
 		return 0
+
+	if(istype(shot_from,/obj/item/weapon/gun))
+		var/obj/item/weapon/gun/G = shot_from
+		G.bullet_hitting(src,atarget)
+
 	// FUCK mice. - N3X
 	if(ismouse(atarget) && (stun+weaken+paralyze+agony)>5)
 		var/mob/living/simple_animal/mouse/M=atarget

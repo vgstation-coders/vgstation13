@@ -3081,6 +3081,7 @@ var/global/num_vending_terminals = 1
 		/obj/structure/wetdryvac = 1,
 		/obj/structure/bed/therapy = 1,
 		/obj/item/weapon/hair_dye/skin_dye/discount = 5,
+		/obj/item/weapon/gun/projectile/hecate/hunting = 2
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -3118,6 +3119,7 @@ var/global/num_vending_terminals = 1
 		/obj/structure/wetdryvac = 50,
 		/obj/structure/bed/therapy = 50,
 		/obj/item/weapon/hair_dye/skin_dye/discount = 10,
+		/obj/item/weapon/gun/projectile/hecate/hunting = 100
 		)
 
 /obj/machinery/vending/trader/New()
