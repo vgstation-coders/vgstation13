@@ -277,6 +277,9 @@
 		on = 1
 		icon_state = "[icon_initial][on]"
 
+/obj/machinery/bot/medbot/can_path()
+	return !(stunned || currently_healing)
+
 /obj/machinery/bot/medbot/process_bot()
 	if(stunned)
 		stunned--
@@ -289,6 +292,7 @@
 	decay_oldtargets()
 
 	if (get_dist(src, target) <= 1)
+		path = list() // Kill our path
 		if(!currently_healing)
 			currently_healing = TRUE
 			medicate_patient(target)

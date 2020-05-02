@@ -339,6 +339,8 @@ Auto Patrol: []"},
 
 	return threatcount
 
+/obj/machinery/bot/ed209/can_path()
+	return !cuffing
 
 /obj/machinery/bot/ed209/process_bot()
 	if (!target || target.gcDestroyed || get_dist(src, target) > 12)
@@ -353,6 +355,7 @@ Auto Patrol: []"},
 		if (Adjacent(target))		// if right next to perp
 			var/mob/living/carbon/M = target
 			target = null // Don't teabag them
+			path = list() // Kill our path
 			add_oldtarget(M.name, 12)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
 			if (beat_them)

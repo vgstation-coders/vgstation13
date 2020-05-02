@@ -247,6 +247,9 @@ Auto Patrol: []"},
 			playsound(src, pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
 			visible_message("<b>[src]</b> points at [C.name]!")
 
+/obj/machinery/bot/secbot/can_path()
+	return !cuffing
+
 /obj/machinery/bot/secbot/process_bot()
 	if (!target || target.gcDestroyed || get_dist(src, target) > 7)
 		target = null
@@ -260,6 +263,7 @@ Auto Patrol: []"},
 			return
 		if (Adjacent(target))		// if right next to perp
 			var/mob/living/carbon/M = target
+			path = list() // Kill our path
 			target = null // Don't teabag them
 			add_oldtarget(M.name, 12)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged

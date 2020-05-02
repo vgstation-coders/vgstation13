@@ -214,6 +214,9 @@
 	qdel(src)
 	return
 
+/obj/machinery/bot/farmbot/can_path()
+	return !mode
+
 /obj/machinery/bot/farmbot/process_bot()
 	//set background = 1
 
@@ -239,6 +242,7 @@
 
 	if ( mode && target )
 		if ( get_dist(target,src) <= 1 || ( emagged && mode == FARMBOT_MODE_FERTILIZE ) )
+			path = list() // Kill our path
 			// If we are in emagged fertilize mode, we throw the fertilizer, so distance doesn't matter
 			frustration = 0
 			use_farmbot_item()
