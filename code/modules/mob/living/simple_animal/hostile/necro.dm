@@ -276,7 +276,7 @@
 
 		animate(src, transform = final_transform, pixel_y = final_pixel_y, dir = final_dir, time = 2, easing = EASE_IN | EASE_OUT)
 
-/mob/living/simple_animal/hostile/necro/zombie/revive()
+/mob/living/simple_animal/hostile/necro/zombie/revive(refreshbutcher = 1)
 	..()
 	times_revived += 1
 	lying = 0
