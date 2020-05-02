@@ -39,7 +39,7 @@
 	if(Fire(A,user,params, "struggle" = struggle))
 		current_ammo--
 
-/obj/item/weapon/gun/mahoguny/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/mahoguny/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	. = ..()
 	if(.)
 		var/list/turf/possible_turfs = list()

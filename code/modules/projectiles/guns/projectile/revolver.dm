@@ -228,7 +228,7 @@
 
 	..()
 
-/obj/item/weapon/gun/projectile/russian/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/russian/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	var/obj/item/ammo_casing/AC = loaded[1]
 	if(!AC || !AC.BB)
 		user.visible_message("<span class='warning'>*click*</span>")
@@ -313,7 +313,7 @@
 	user.put_in_hands(B)
 	qdel(src)
 
-/obj/item/weapon/gun/projectile/banana/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/banana/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	. = ..()
 	make_peel(user)
 
