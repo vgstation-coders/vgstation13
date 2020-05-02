@@ -59,6 +59,8 @@
 
 	var/list/datum/tracker/trackers = list()
 
+	var/list/client/contained_clients
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -178,6 +180,7 @@
 	var/atom/oldloc = loc
 	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == NewLoc))
 		. = ..()
+		animate_glide(Dir, .)
 
 		update_dir()
 		return
@@ -186,6 +189,12 @@
 	if(Dir || (loc != NewLoc))
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			. = ..()
+			if(.)
+				if(Dir)
+					animate_glide(Dir, .)
+				else if(get_dist(oldloc, NewLoc) == 1) //This isn't technically a step, but if it's still only one tile we want to animate it
+					animate_glide(get_dir(oldloc, NewLoc), .)
+
 		else //Diagonal move, split it into cardinal moves
 			if (Dir & NORTH)
 				if (Dir & EAST) //Northeast
@@ -240,6 +249,35 @@
 	src.l_move_time = world.timeofday
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+
+/atom/movable/proc/animate_glide(Dir, dist)
+	if(!animate_movement)
+		return
+
+	var/const/FUDGE_ANIM = 0.1 //For unknown reasons, movement is all janky unless the animation is set to be slightly longer than it should have to be. This value is added to the animation duration.
+	#define GLIDE_HELPER(O, axis, val) O.axis -= val; animate(O, axis = val, world.tick_lag * WORLD_ICON_SIZE / (glide_size || 4) + FUDGE_ANIM, flags = ANIMATION_PARALLEL | ANIMATION_RELATIVE)
+	if(Dir & NORTH)
+		GLIDE_HELPER(src, pixel_y, dist)
+	else if(Dir & SOUTH)
+		GLIDE_HELPER(src, pixel_y, -dist)
+
+	if(Dir & EAST)
+		GLIDE_HELPER(src, pixel_x, dist)
+	else if(Dir & WEST)
+		GLIDE_HELPER(src, pixel_x, -dist)
+
+	if(contained_clients)
+		for(var/client/C in contained_clients)
+			if(Dir & NORTH)
+				GLIDE_HELPER(C, pixel_y, dist)
+			else if(Dir & SOUTH)
+				GLIDE_HELPER(C, pixel_y, -dist)
+
+			if(Dir & EAST)
+				GLIDE_HELPER(C, pixel_x, dist)
+			if(Dir & WEST)
+				GLIDE_HELPER(C, pixel_x, -dist)
+	#undef GLIDE_HELPER
 
 /atom/movable/search_contents_for(path,list/filter_path=null) // For vehicles
 	var/list/found = ..()
@@ -394,6 +432,34 @@
 /atom/movable/Crossed(atom/movable/AM)
 	return
 
+/atom/movable/proc/add_client(client/C)
+	if(!contained_clients)
+		contained_clients = list()
+	contained_clients += C
+
+	var/atom/movable/L = loc
+	if(istype(L))
+		L.add_client(C)
+
+/atom/movable/proc/remove_client(client/C)
+	contained_clients -= C
+	if(!contained_clients.len)
+		contained_clients = null
+
+	var/atom/movable/L = loc
+	if(istype(L))
+		L.remove_client(C)
+
+/atom/movable/Entered(atom/movable/AM)
+	if(AM.contained_clients)
+		for(var/client/C in AM.contained_clients)
+			add_client(C)
+
+/atom/movable/Exited(atom/movable/AM)
+	if(AM.contained_clients)
+		for(var/client/C in AM.contained_clients)
+			remove_client(C)
+
 /atom/movable/to_bump(atom/Obstacle)
 	if(src.throwing)
 		src.throw_impact(Obstacle)
@@ -426,6 +492,8 @@
 			for(var/atom/movable/AM in loc)
 				AM.Crossed(src,no_tp)
 
+	if(get_dist(old_loc, loc) == 1)
+		animate_glide(get_dir(old_loc, loc), WORLD_ICON_SIZE)
 
 	for(var/atom/movable/AM in locked_atoms)
 		var/datum/locking_category/category = locked_atoms[AM]
@@ -468,6 +536,9 @@
 		if(isturf(destination))
 			var/area/A = get_area(destination)
 			A.Entered(src)
+
+			if(get_dist(old_loc, destination) == 1)
+				animate_glide(get_dir(old_loc, destination), WORLD_ICON_SIZE)
 
 		for(var/atom/movable/AM in locked_atoms)
 			AM.forceMove(loc)
