@@ -388,7 +388,7 @@
 // proc_to_call is the proc which is called by the pathmaker once it's done its work and wishes to return a path.
 // avoid is a turf the path should NOT go through. (a previous obstacle.) This info is then given to the pathmaker.
 // Fast bots use quick_AStar method to direcly calculate a path and move on it.
-/obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null, var/mode = PATH)
+/obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null)
 	ASSERT(target && proc_to_call)
 	log_astar_beacon("[new_destination]")
 	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
