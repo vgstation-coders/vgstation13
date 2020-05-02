@@ -124,8 +124,14 @@
 		if(--old_targets[i] == 0)
 			remove_oldtarget(i)
 
+// Decides if we can move or if we are busy doing something.
+/obj/machinery/bot/proc/can_path()
+	return TRUE
+
 // If we get a path through process_path(), which means we have a target, and we're not set to autopatrol, we get a patrol path.
 /obj/machinery/bot/proc/process_pathing()
+	if (!can_path())
+		return
 	if(!process_path() && (bot_flags & BOT_PATROL) && auto_patrol)
 		process_patrol()
 
@@ -142,6 +148,8 @@
 		return
 	if (!isturf(src.loc))
 		return // Stay in the closet, little bot. The world isn't ready to accept you yet ;_;
+	if (!can_path()) // We're busy.
+		return
 	var/turf/T = get_turf(src)
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
 	log_astar_bot("Step [i] of [steps_per]")
@@ -208,6 +216,8 @@
 /obj/machinery/bot/proc/process_patrol(var/remaining_steps = steps_per)
 	astar_debug("process patrol called [src] [patrol_path.len]")
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
+	if (!can_path()) // We're busy.
+		return TRUE
 	if (remaining_steps == 0)
 		return TRUE
 	if(!patrol_path.len)
