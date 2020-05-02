@@ -198,7 +198,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
-	var/list/path = null //the returned path, if any
+	var/list/path = list() //the returned path, if any
 	var/PathNode/cur //current processed turf
 	start = get_turf(start)
 
