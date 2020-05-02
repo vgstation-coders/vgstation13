@@ -21,12 +21,6 @@
 		"dollhouse"
 	)
 	paintable = 1
-	var/list/sprites_with_a_lockdown_state= list(
-		"durand",
-		"old_durand",
-		"gator",
-		"dollhouse"
-	)
 
 /obj/mecha/combat/durand/New()
 	..()
@@ -57,9 +51,6 @@
 	hud_state = "[linked_mech.initial_icon]-lockdown"
 
 /spell/mech/durand/defence_mode/update_spell_icon()
-	var/obj/mecha/combat/durand/Durand = linked_mech
-	if(Durand.sprites_with_a_lockdown_state.Find(Durand.initial_icon))
-		return
 	hud_state = "[linked_mech.initial_icon]-lockdown"
 
 /spell/mech/durand/defence_mode/cast(list/targets, mob/user)
@@ -67,16 +58,14 @@
 	Durand.defence = !Durand.defence
 	if(Durand.defence)
 		Durand.icon_state = 0
-		if((Durand.sprites_with_a_lockdown_state.Find(Durand.initial_icon)))
-			flick("[Durand.initial_icon]-lockdown-a",Durand)
-			Durand.icon_state = Durand.initial_icon + "-lockdown"
+		flick("[Durand.initial_icon]-lockdown-a",Durand)
+		Durand.icon_state = Durand.initial_icon + "-lockdown"
 		Durand.deflect_chance = Durand.defence_deflect
 		Durand.occupant_message("<span class='notice'>You enable [Durand] defence mode.</span>")
 		playsound(src.linked_mech, 'sound/mecha/mechlockdown.ogg', 60, 1)
 	else
 		Durand.deflect_chance = initial(Durand.deflect_chance)
-		if((Durand.sprites_with_a_lockdown_state.Find(Durand.initial_icon)))
-			Durand.icon_state = Durand.initial_icon
+		Durand.icon_state = Durand.initial_icon
 		Durand.occupant_message("<span class='red'>You disable [Durand] defence mode.</span>")
 	Durand.log_message("Toggled defence mode.")
 	return

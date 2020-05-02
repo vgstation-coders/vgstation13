@@ -2099,19 +2099,19 @@
 
 /obj/item/device/mech_painter/afterattack(var/obj/mecha/M, var/mob/user)
 	if (!M.paintable)
-		to_chat(user, "<span class='info'>This mech cannot be painted.</span>")
+		to_chat(user, "<span class='warning'>This mech cannot be painted.</span>")
 		return 1
 	if (!M.mech_sprites.len)
-		to_chat(user, "<span class='info'>This mech has no other paint-jobs.</span>")
+		to_chat(user, "<span class='warning'>This mech has no other paint-jobs.</span>")
 		return 1
 	if (M.occupant) //this check seems pointless and I would love to get rid of it, but because there's no way to figure out the current state of the mech when painting it, it's a necessary evil
-		to_chat(user, "<span class='info'>This mech has an occupant. It must be empty before you can paint it.</span>")
+		to_chat(user, "<span class='warning'>This mech has an occupant. It must be empty before you can paint it.</span>")
 		return 1
 
 	var/icontype = input("Select the paint-job!")in M.mech_sprites
 
 	if(icontype == M.initial_icon)
-		to_chat(user, "<span class='info'>This mech is already painted in that style.</span>")
+		to_chat(user, "<span class='warning'>This mech is already painted in that style.</span>")
 		return 1
 	if(icontype)
 		to_chat(user, "<span class='info'>You begin repainting the mech.</span>")

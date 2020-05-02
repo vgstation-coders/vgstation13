@@ -1,4 +1,4 @@
-/obj/mecha/medical/odysseus
+a/obj/mecha/medical/odysseus
 	desc = "These exosuits are developed and produced by Vey-Med. (&copy; All rights reserved)."
 	name = "Odysseus"
 	icon_state = "odysseus"
@@ -69,11 +69,7 @@
 /obj/mecha/medical/odysseus/murdysseus/New()
 	..()
 	new /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser(src)
-//	ME.attach(src)
 	new /obj/item/mecha_parts/mecha_equipment/tool/sleeper(src)
-//	ME.attach(src)
 	new /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun(src)
-//	ME.attach(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
-//	ME.attach(src)
 	return

@@ -22,10 +22,6 @@
 		"darkgygax_old",
 		"pobeda"
 	)
-	var/list/sprites_with_a_speedmode_state = list(
-		"gygax",
-		"gygax_old",
-	)
 
 /obj/mecha/combat/gygax/dark
 	desc = "A lightweight exosuit used by Nanotrasen Death Squads. A significantly upgraded Gygax security mech."
@@ -51,14 +47,10 @@
 
 /obj/mecha/combat/gygax/dark/New()
 	..()
-	var/obj/item/mecha_parts/mecha_equipment/ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/teleporter
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay
-	ME.attach(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang(src)
+	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
+	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
 	return
 
 /obj/mecha/combat/gygax/dark/add_cell(var/obj/item/weapon/cell/C=null)
@@ -81,8 +73,6 @@
 
 /spell/mech/gygax/overload/update_spell_icon()
 	var/obj/mecha/combat/gygax/Gygax = linked_mech
-	if(Gygax.sprites_with_a_speedmode_state.Find(Gygax.initial_icon))
-		return
 	hud_state = Gygax.initial_icon + "-gofast"
 
 /spell/mech/gygax/overload/cast(list/targets, mob/user)
@@ -92,20 +82,15 @@
 		Gygax.step_in = initial(Gygax.step_in)
 		Gygax.step_energy_drain = initial(Gygax.step_energy_drain)
 		Gygax.occupant_message("<span class='notice'>You disable leg actuators overload.</span>")
-		if(!(istype(Gygax,/obj/mecha/combat/gygax/dark)))
-			if((Gygax.sprites_with_a_speedmode_state.Find(Gygax.initial_icon)))
-				flick("[Gygax.initial_icon]-gofast-aoff",Gygax)
-				Gygax.icon_state = Gygax.initial_icon
+		flick("[Gygax.initial_icon]-gofast-aoff",Gygax)
+		Gygax.icon_state = Gygax.initial_icon
 	else
 		Gygax.overload = 1
 		Gygax.step_in = min(1, round(Gygax.step_in/2))
 		Gygax.step_energy_drain = Gygax.step_energy_drain*Gygax.overload_coeff
 		Gygax.occupant_message("<span class='red'>You enable leg actuators overload.</span>")
-		if(!(istype(Gygax,/obj/mecha/combat/gygax/dark)))
-			if((Gygax.sprites_with_a_speedmode_state.Find(Gygax.initial_icon)))
-				Gygax.occupant_message("<span class='notice'>after my third adderall I take a black russian ... initial_icon  = [Gygax.initial_icon], gygax: [Gygax.sprites_with_a_speedmode_state.Find(Gygax.initial_icon)].</span>")//debugging
-				flick("[Gygax.initial_icon]-gofast-aon",Gygax)
-				Gygax.icon_state = Gygax.initial_icon + "-gofast"
+		flick("[Gygax.initial_icon]-gofast-aon",Gygax)
+		Gygax.icon_state = Gygax.initial_icon + "-gofast"
 	Gygax.log_message("Toggled leg actuators overload.")
 	return
 
@@ -118,10 +103,7 @@
 */
 
 /obj/mecha/combat/gygax/stopMechWalking()
-	if(overload &&(sprites_with_a_speedmode_state.Find(initial_icon)))
 		icon_state = initial_icon + "-gofast"
-	else
-		icon_state = initial_icon
 
 /obj/mecha/combat/gygax/dark/stopMechWalking()
 	icon_state = initial_icon

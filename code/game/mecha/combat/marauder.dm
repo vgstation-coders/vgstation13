@@ -49,14 +49,10 @@
 
 /obj/mecha/combat/marauder/New()
 	..()
-	var/obj/item/mecha_parts/mecha_equipment/ME = new /obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
-	ME.attach(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
+	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
+	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
 	src.smoke_system.set_up(3, 0, src)
 	src.smoke_system.attach(src)
 	rockets = image('icons/effects/160x160.dmi', icon_state= initial_icon + "_burst")
@@ -85,16 +81,11 @@
 			equipment -= ME
 			qdel(ME)
 			ME = null
-	ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot(src)
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
-	ME.attach(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
+	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
+	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
+	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
 	return
 
 /obj/mecha/combat/marauder/relaymove(mob/user,direction)
@@ -187,7 +178,6 @@
 		Marauder.log_message("Toggled thrusters.")
 		Marauder.occupant_message("<font color='[Marauder.thrusters?"blue":"red"]'>Thrusters [Marauder.thrusters?"en":"dis"]abled.")
 	return
-
 
 /spell/mech/marauder/dash
 	name = "Rocket-Dash"
