@@ -200,7 +200,6 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				stat |= BROKEN
 			update_icon()
 			return
-	return
 
 /obj/machinery/newscaster/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))

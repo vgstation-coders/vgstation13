@@ -381,7 +381,7 @@
 				in_chamber.damage *= 1.3 //Some guns don't work with damage / chambers, like dart guns!
 			src.Fire(M,user,0,0,1)
 			return
-		else if(target && M in target)
+		else if(target && (M in target))
 			process_chambered()
 			src.Fire(M,user,0,0,1) ///Otherwise, shoot!
 			return

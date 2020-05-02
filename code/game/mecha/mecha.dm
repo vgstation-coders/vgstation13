@@ -1156,7 +1156,7 @@
 			to_chat(usr, "You stop entering the exosuit.")
 
 /obj/mecha/proc/moved_inside(var/mob/living/carbon/human/H as mob)
-	if(!isnull(src.loc) && H && H.client && H in range(1))
+	if(!isnull(src.loc) && H && H.client && (H in range(1)))
 		H.reset_view(src)
 		H.stop_pulling()
 		H.unlock_from()
@@ -1210,7 +1210,7 @@
 	return 0
 
 /obj/mecha/proc/mmi_moved_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
-	if(!isnull(src.loc) && mmi_as_oc && user in range(1))
+	if(!isnull(src.loc) && mmi_as_oc && (user in range(1)))
 		if(!mmi_as_oc.brainmob || !mmi_as_oc.brainmob.client)
 			to_chat(user, "Consciousness matrix not detected.")
 			return 0

@@ -167,7 +167,6 @@
 		if (RITUALABORT_OUTPOST)
 			if (activator)
 				to_chat(activator, "<span class='sinister'>The veil here is still too dense to allow raising structures from the realm of Nar-Sie. We must raise our structure in the heart of the station.</span>")
-	..()
 
 
 	for(var/mob/living/L in contributors)
@@ -181,7 +180,7 @@
 	if (progbar)
 		progbar.loc = null
 
-	if (HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]" in holomap_markers)
+	if ((HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]") in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
 		holomarker.id = HOLOMAP_MARKER_CULT_RUNE
 		holomarker.color = null
@@ -2240,7 +2239,7 @@ var/list/blind_victims = list()
 
 	to_chat(activator, "<span class='notice'>This rune will now let you travel through the \"[network]\" Path.</span>")
 
-	if (HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]" in holomap_markers)
+	if ((HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]") in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
 		holomarker.id = HOLOMAP_MARKER_CULT_ENTRANCE
 		holomarker.color = W.color
@@ -2304,7 +2303,8 @@ var/list/bloodcult_exitportals = list()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	var/list/available_networks = global_runesets["blood_cult"].words_english.Copy()
+	var/datum/runeset/rune_set = global_runesets["blood_cult"]
+	var/list/available_networks = rune_set.words_english.Copy()
 	for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
 		if (P.network)
 			available_networks -= P.network
@@ -2319,7 +2319,7 @@ var/list/bloodcult_exitportals = list()
 		qdel(src)
 		return
 
-	var/datum/runeword/blood_cult/W = global_runesets["blood_cult"].words[network]
+	var/datum/runeword/blood_cult/W = rune_set.words[network]
 
 	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_crystals")
@@ -2352,7 +2352,7 @@ var/list/bloodcult_exitportals = list()
 
 	to_chat(activator, "<span class='notice'>This rune will now serve as a destination for the \"[network]\" Path.</span>")
 
-	if (HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]" in holomap_markers)
+	if ((HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]") in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
 		holomarker.id = HOLOMAP_MARKER_CULT_EXIT
 		holomarker.color = W.color

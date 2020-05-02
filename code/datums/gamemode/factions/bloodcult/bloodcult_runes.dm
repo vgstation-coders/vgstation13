@@ -45,7 +45,8 @@
 		if(AI.client)
 			AI.client.images += blood_image
 
-	global_runesets[runeset_identifier].rune_list.Add(src)
+	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
+	rune_set.rune_list.Add(src)
 
 	..()
 
@@ -69,7 +70,8 @@
 		active_spell.abort()
 		active_spell = null
 
-	global_runesets[runeset_identifier].rune_list.Remove(src)
+	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
+	rune_set.rune_list.Remove(src)
 
 	..()
 

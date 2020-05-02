@@ -137,11 +137,8 @@
 	else
 		return 1 // Needed, otherwise the computer UI will pop open
 
-	return
-
 /obj/machinery/computer/attackby(I as obj, user as mob)
 	if(..(I,user))
 		return
 	else
 		src.attack_hand(user)
-	return
