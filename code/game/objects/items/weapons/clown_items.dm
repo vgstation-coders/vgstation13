@@ -137,15 +137,34 @@
 		return 1
 	return 0
 
-/obj/item/weapon/bikehorn/syndicate/honk()
-	if(..())
-		for(var/mob/living/carbon/human/H in range(7))
-			H.adjustBrainLoss(10)
+/obj/item/weapon/bikehorn/syndicate
+	var/super_honk_delay = 50 //5 seconds
+	var/last_super_honk_time
+
+/obj/item/weapon/bikehorn/syndicate/attack_self(mob/user)
+	add_fingerprint(user)
+	super_honk(user)
+
+/obj/item/weapon/bikehorn/syndicate/proc/super_honk(var/mob/user)
+	if(world.time - last_super_honk_time >= super_honk_delay)
+		last_super_honk_time = world.time
+		to_chat(user, "<span class='warning'>HONK</span>")
+		playsound(user, 'sound/items/AirHorn.ogg', 100, 1)
+		for(var/mob/living/carbon/M in ohearers(4, user))
+			if(M.is_deaf() || M.earprot())
+				continue
+			to_chat(M, "<font color='red' size='5'>HONK</font>")
+			M.sleeping = 0
+			M.stuttering += 10
+			M.ear_deaf += 5
+			M.confused += 5
+			M.dizziness += 5
+			M.jitteriness += 5
 
 /obj/item/weapon/bikehorn/syndicate/examine(mob/user)
 	..()
 	if(is_holder_of(user, src))
-		to_chat(user, "<span class='warning'>This one seems to have extra circuitry attached...</span>")
+		to_chat(user, "<span class='warning'>On closer inspection, this one appears to have a tiny megaphone inside...</span>")
 
 /obj/item/weapon/bikehorn/rubberducky
 	name = "rubber ducky"

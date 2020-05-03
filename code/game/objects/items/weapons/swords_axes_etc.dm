@@ -305,7 +305,7 @@
 
 /obj/item/weapon/damocles
 	name = "Damocles"
-	desc = "An extremely powerful, futuristic sword. On top of the initial hit, it also causes an explosion at the point of contact."
+	desc = "An extremely powerful experimental sword. Generates an explosion at the site of impact."
 	icon_state = "damocles"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	siemens_coefficient = 1
