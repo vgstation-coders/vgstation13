@@ -29,7 +29,6 @@
 var/explosion_shake_message_cooldown = 0
 
 /proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1)
-	src = null	//so we don't abort once src is deleted
 	var/explosion_time = world.time
 
 	spawn()

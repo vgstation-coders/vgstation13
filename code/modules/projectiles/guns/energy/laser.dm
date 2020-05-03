@@ -379,7 +379,27 @@
 	var/static/list/color_list = list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3")
 	icon_state = "rainbow_laser"
 	item_state = null
+	slot_flags = SLOT_BELT
+	charge_cost = 100
+	cell_type = "/obj/item/weapon/cell"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
+	var/pumping = 0
+
+/obj/item/weapon/gun/energy/laser/rainbow/attack_self(mob/user as mob)
+
+	if(pumping || !power_supply)
+		return TRUE
+	power_supply.charge = min(power_supply.charge + charge_cost * 2,power_supply.maxcharge)
+	if(power_supply.charge >= power_supply.maxcharge)
+		playsound(src, 'sound/items/AirHorn.ogg', 25, 1)
+		to_chat(user, "<span class='rose'>You squeeze the pump at the back of the gun. The gun is brimming with love!</span>")
+	else
+		pumping = 1
+		playsound(src, 'sound/items/bikehorn.ogg', 25, 1)
+		to_chat(user, "<span class='rose'>You squeeze the pump at the back of the gun. The gun seems a little happier.</span>")
+	sleep(5)
+	pumping = 0
+	update_icon()
 
 /obj/item/weapon/gun/energy/laser/rainbow/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 

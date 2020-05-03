@@ -44,6 +44,12 @@
 	desc = "unlike the shark, this one lacks bite."
 	result = /obj/item/weapon/hammer
 
+/obj/item/item_head/pitchfork_head
+	name = "pitchfork head"
+	icon_state = "pitchfork_head"
+	desc = "The revolution is not going to start itself."
+	result = /obj/item/weapon/pitchfork
+
 /obj/item/item_head/pickaxe_head
 	name = "pickaxe head"
 	icon_state = "pickaxe_head"

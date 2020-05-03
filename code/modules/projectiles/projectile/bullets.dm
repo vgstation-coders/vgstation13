@@ -37,10 +37,10 @@
 	name = "weak bullet"
 	icon_state = "bbshell"
 	damage = 10
-	stun = 5
+	stun = 3
 	weaken = 5
 	embed = 0
-	projectile_speed = 1
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/booze
 	name = "booze bullet"
@@ -207,7 +207,7 @@ obj/item/projectile/bullet/suffocationbullet
 	..()
 	explosion(target, 0,1,1,5)
 	qdel(src)
-	
+
 /obj/item/projectile/bullet/boombullet
 	name = "small exploding bullet"
 	embed = 0
@@ -750,7 +750,7 @@ obj/item/projectile/bullet/suffocationbullet
 	burn_damage = 10
 	jet_pressure = 0
 	gas_jet = null
-	
+
 /obj/item/projectile/bullet/fire_plume/dragonsbreath/New()
 	..()
 	var/datum/gas_mixture/firemix = new /datum/gas_mixture
@@ -953,7 +953,8 @@ obj/item/projectile/bullet/suffocationbullet
 /obj/item/projectile/bullet/syringe/on_hit(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
-	..()
+	if(!..())
+		return FALSE
 	if(ismob(A))
 		var/mob/M = A
 		var/blocked

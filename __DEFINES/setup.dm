@@ -202,6 +202,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define TIMELESS		32768 // Immune to time manipulation.
 
 #define SILENTCONTAINER	65536 //reactions inside make no noise
+#define ATOM_INITIALIZED 131072 // initialize() was called
 
 #define ALL ~0
 #define NONE 0
@@ -731,6 +732,8 @@ SEE_PIXELS	256
 #define VERM_CRABS 13
 #define VERM_DIONA 14
 #define VERM_MUSHMEN 15
+#define VERM_FROGS 14
+#define VERM_SNAILS 15
 
 
 #define MONSTER_BEAR    0
@@ -815,7 +818,7 @@ SEE_PIXELS	256
 #define CHAT_GHOSTRADIO 8192
 #define SOUND_STREAMING 16384 // /vg/
 #define CHAT_GHOSTPDA   32768
-
+#define AUTO_DEADMIN	65536
 
 #define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC|SOUND_STREAMING)
 
@@ -1290,6 +1293,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #else
 	#define say_testing(a,x)
 //	null << "[x][a]")
+#endif
+
+#define ASTAR_DEBUG 0
+#if ASTAR_DEBUG == 1
+#warn "Astar debug is on. Don't forget to turn it off after you've done :)"
+#define astar_debug(text) to_chat(world, text)
+#else
+#define astar_debug(text)
 #endif
 
 //#define JUSTFUCKMYSHITUP 1

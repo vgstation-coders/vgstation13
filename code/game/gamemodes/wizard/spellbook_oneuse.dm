@@ -10,6 +10,7 @@
 	uses = 1
 	max_uses = 1
 	desc = "This template spellbook was never meant for the eyes of man..."
+	var/disabled_from_bundle //if 1, this will not appear in the spellbook bundle
 
 /obj/item/weapon/spellbook/oneuse/New()
 	..()
@@ -142,6 +143,7 @@
 	spellname = "charging"
 	icon_state ="bookcharge"
 	desc = "This book is made of 100% post-consumer wizard."
+	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/charge/recoil(mob/user as mob)
 	..()
@@ -258,6 +260,7 @@
 	spellname  = "highlander power"
 	icon_state = "bookhighlander"
 	desc = "You can hear the bagpipes playing already."
+	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/disorient
 	spell = /spell/targeted/disorient
@@ -329,7 +332,8 @@
 /obj/item/weapon/spellbook/oneuse/lightning/sith
 	spell = /spell/lightning/sith
 	spellname = "sith lightning"
-	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
+	desc = "You can hear it crackle with malevolent electricity."
+	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/timestop
 	spell = /spell/aoe_turf/fall

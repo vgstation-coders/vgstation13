@@ -674,7 +674,7 @@
 /obj/structure/closet/crate/secure/weapon/experimental/New()
 	..()
 	if(!chosen_set)
-		chosen_set = pick("ricochet","bison","spur","gatling","stickybomb","nikita","osipr","hecate","gravitywell")
+		chosen_set = pick("ricochet","bison","spur","gatling","stickybomb","nikita","osipr","hecate","gravitywell", "clown")
 
 	switch(chosen_set)
 		if("ricochet")
@@ -721,6 +721,13 @@
 			new/obj/item/clothing/head/radiation(src)
 			new/obj/item/clothing/shoes/magboots(src)
 			new/obj/item/weapon/gun/gravitywell(src)
+		if("clown")
+			new/obj/item/clothing/under/clownpsyche(src)
+			new/obj/item/clothing/mask/gas/clownmaskpsyche(src)
+			new/obj/item/clothing/shoes/clownshoespsyche(src)
+			new/obj/item/weapon/storage/backpack/clownpackpsyche(src)
+			new/obj/item/weapon/gun/energy/laser/rainbow(src)
+			new/obj/item/weapon/gun/energy/laser/rainbow(src)
 
 /obj/structure/closet/crate/secure/weapon/experimental/ricochet
 	chosen_set = "ricochet"

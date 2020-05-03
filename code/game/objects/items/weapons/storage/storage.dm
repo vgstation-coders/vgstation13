@@ -39,7 +39,7 @@
 	playsound(src, rustle_sound, 50, 1, -5)
 
 /obj/item/weapon/storage/MouseDropFrom(obj/over_object as obj)
-	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
+	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src) || distance_interact(usr)))
 		orient2hud()
 		show_to(usr)
 		return
@@ -54,12 +54,24 @@
 	return ..()
 
 /obj/item/weapon/storage/AltClick(mob/user)
-	if(!(in_range(src, user) || is_holder_of(user, src)))
+	if(!(in_range(src, user) || is_holder_of(user, src) || distance_interact(user)))
 		return ..()
 	orient2hud(user)
 	if(user.s_active)
 		user.s_active.close(user)
 	src.show_to(user)
+
+//override to allow certain circumstances of looking inside this item if not holding or adjacent
+//distance interact can let you use storage even inside a mecha (see screen_objects.dm L160)
+//and also pull items out of that storage; it can be quite powerful, add narrow conditions
+/obj/item/weapon/storage/proc/distance_interact(mob/user)
+	return FALSE
+
+/obj/item/weapon/storage/Adjacent(var/atom/neighbor)
+	if(ismob(neighbor) && distance_interact(neighbor))
+		return TRUE
+	else
+		return ..()
 
 /obj/item/weapon/storage/proc/empty_contents_to(var/atom/place)
 	var/turf = get_turf(place)
@@ -365,7 +377,6 @@
 		var/obj/item/weapon/storage/fancy/F = src
 		F.update_icon(1)
 
-
 	if(new_location)
 		var/mob/M
 		if(ismob(loc))
@@ -402,7 +413,7 @@
 
 //This proc is called when you want to place an item into the storage item.
 /obj/item/weapon/storage/attackby(obj/item/W as obj, mob/user as mob)
-	if(!Adjacent(user,MAX_ITEM_DEPTH))
+	if(!Adjacent(user,MAX_ITEM_DEPTH) && !distance_interact(user))
 		return
 	..()
 

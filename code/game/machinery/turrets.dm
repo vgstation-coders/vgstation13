@@ -360,14 +360,19 @@
 	..()
 	if(!control_area)
 		control_area = get_area(src)
-	else if(istext(control_area))
-		for(var/area/A in areas)
-			if(A.name && A.name == control_area)
-				control_area = A
-				break
 	else if(ispath(control_area))
 		control_area = locate(control_area)
+	else if(istext(control_area))
+		var/path = text2path(control_area)
+		if(path)
+			control_area = locate(path)
+		else
+			for(var/area/A in areas)
+				if(cmptext(A.name, control_area))
+					control_area = A
+					break
 
+	ASSERT(isarea(control_area))
 	updateTurrets() //Updates the turrets and the icon if an instance is made that is not set to stun by default
 
 /obj/machinery/turretid/emag(mob/user)

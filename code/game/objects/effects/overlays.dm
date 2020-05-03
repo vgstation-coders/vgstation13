@@ -76,6 +76,10 @@
 	lifespan = world.time + new_lifespan
 	processing_objects.Add(src)
 
+/obj/effect/overlay/puddle/Destroy()
+	processing_objects.Remove(src)
+	..()
+
 /obj/effect/overlay/puddle/process()
 	if(world.time >= lifespan)
 		qdel(src)

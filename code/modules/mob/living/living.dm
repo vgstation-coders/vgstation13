@@ -940,6 +940,14 @@ Thanks.
 
 
 	if(L.locked_to && !L.isUnconscious())
+		// unbeartrapping yourself
+		if (istype(L.locked_to, /obj/item/weapon/beartrap/))
+			if (iscarbon(L))
+				var/mob/living/carbon/C = L
+				if (C.handcuffed)
+					return
+			L.locked_to.attack_hand(L)
+			return
 		//unbuckling yourself
 		if(istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to
@@ -1271,7 +1279,7 @@ Thanks.
 	return
 
 //same as above
-/mob/living/pointed(atom/A as mob|obj|turf in view(get_turf(src)))
+/mob/living/pointed(atom/A as mob|obj|turf in tview(src))
 	if(src.incapacitated())
 		return 0
 	if(!..())

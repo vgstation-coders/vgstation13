@@ -215,6 +215,15 @@
 	add_hiddenprint(user)
 	return attack_hand(user)
 
+/obj/machinery/door/window/attack_ghost(mob/user)
+	if(isAdminGhost(user))
+		if (!density)
+			return close()
+		else
+			return open()
+	else
+		..()
+
 /obj/machinery/door/window/attack_paw(mob/living/user)
 	if(istype(user, /mob/living/carbon/alien/humanoid) || istype(user, /mob/living/carbon/slime/adult))
 		if(operating)
