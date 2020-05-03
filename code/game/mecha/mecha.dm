@@ -97,6 +97,9 @@
 		/obj/item/projectile/ion,
 	)
 
+	var/list/mech_sprites = list() //sprites alternatives for a given mech. Only have to enter the name of the paint scheme
+	var/paintable = 0
+
 /obj/mecha/get_cell()
 	return cell
 
@@ -137,6 +140,7 @@
 		explosion(T, 0, 0, 1, 3)
 	if(wreckage)
 		var/obj/effect/decal/mecha_wreckage/WR = new wreckage(T)
+		WR.icon_state = initial_icon + "-broken"
 		for(var/obj/item/mecha_parts/mecha_equipment/E in equipment)
 			if(E.salvageable && prob(30))
 				WR.crowbar_salvage += E
@@ -2031,6 +2035,8 @@
 		src.visible_message("[src] raises [ME]")
 		send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 
+/spell/mech/proc/update_spell_icon() //overwritten by painting a mech
+
 ///////////////////////
 ///// Power stuff /////
 ///////////////////////
@@ -2094,6 +2100,40 @@
 		if(0 to 0.10)
 			return "huddiagdead"
 	return "huddiagmax"
+
+
+/obj/item/device/mech_painter
+	name = "mecha painter"
+	desc = "A device used to paint mechs in various colours and fashions."
+	icon = 'icons/obj/RCD.dmi'
+	icon_state = "rpd"//placeholder art, someone please sprite it
+	force = 0
+
+/obj/item/device/mech_painter/afterattack(var/obj/mecha/M, var/mob/user)
+	if (!M.paintable)
+		to_chat(user, "<span class='warning'>This mech cannot be painted.</span>")
+		return 1
+	if (!M.mech_sprites.len)
+		to_chat(user, "<span class='warning'>This mech has no other paint-jobs.</span>")
+		return 1
+	if (M.occupant) //this check seems pointless and I would love to get rid of it, but because there's no way to figure out the current state of the mech when painting it, it's a necessary evil
+		to_chat(user, "<span class='warning'>This mech has an occupant. It must be empty before you can paint it.</span>")
+		return 1
+
+	var/icontype = input("Select the paint-job!")in M.mech_sprites
+
+	if(icontype == M.initial_icon)
+		to_chat(user, "<span class='warning'>This mech is already painted in that style.</span>")
+		return 1
+	if(icontype)
+		to_chat(user, "<span class='info'>You begin repainting the mech.</span>")
+		if (do_after(user,src,30))
+			M.initial_icon = icontype
+			M.icon_state = icontype +"-open"
+			for(var/spell/mech/MS in M.intrinsic_spells)
+				MS.update_spell_icon()
+			M.refresh_spells() //I think this does something important
+	return 1
 
 
 //////////////////////////////////////////
