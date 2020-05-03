@@ -144,7 +144,7 @@
 // Speed of the bot is controlled through steps_per.
 // return true to avoid calling process_patrol
 /obj/machinery/bot/proc/process_path(var/remaining_steps = steps_per)
-	if (remaining_steps == 0)
+	if (remaining_steps < 0)
 		return
 	if (!isturf(src.loc))
 		return // Stay in the closet, little bot. The world isn't ready to accept you yet ;_;
@@ -216,9 +216,9 @@
 /obj/machinery/bot/proc/process_patrol(var/remaining_steps = steps_per)
 	astar_debug("process patrol called [src] [patrol_path.len]")
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
-	if (!can_path()) // We're busy.
+	if (remaining_steps < 0)
 		return TRUE
-	if (remaining_steps == 0)
+	if (!can_path()) // We're busy.
 		return TRUE
 	if(!patrol_path.len)
 		return find_patrol_path()
