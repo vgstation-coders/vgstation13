@@ -59,6 +59,9 @@
 			plasma.use(1)
 			qdel(src)
 
+/obj/item/weapon/table_parts/attack_self(mob/user)
+	preattack(get_turf(user), user, 1)
+
 /obj/item/weapon/table_parts/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	. = 1
 	if(!proximity_flag)
