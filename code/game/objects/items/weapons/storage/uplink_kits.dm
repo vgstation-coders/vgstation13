@@ -345,8 +345,8 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	var/selection = pick("damocles", "bomber vest", "bike horn")
 	switch(selection)
 		if("damocles")
-			new /obj/item/weapon/damocles
+			new /obj/item/weapon/damocles(src)
 		if("bomber vest")
-			new /obj/item/clothing/suit/bomber_vest
+			new /obj/item/clothing/suit/bomber_vest(src)
 		if("bike horn")
-			new /obj/item/weapon/bikehorn/syndicate
+			new /obj/item/weapon/bikehorn/syndicate(src)
