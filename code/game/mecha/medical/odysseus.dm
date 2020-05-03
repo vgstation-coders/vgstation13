@@ -1,4 +1,4 @@
-a/obj/mecha/medical/odysseus
+/obj/mecha/medical/odysseus
 	desc = "These exosuits are developed and produced by Vey-Med. (&copy; All rights reserved)."
 	name = "Odysseus"
 	icon_state = "odysseus"
