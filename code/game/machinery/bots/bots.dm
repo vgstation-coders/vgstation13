@@ -147,11 +147,13 @@
 			calc_path(target, .proc/get_path)
 			return 1
 		return  0
+	
 	patrol_path = list() //Kill any patrols we're using
-	if(loc == get_turf(target))
-		return at_path_target()
+
 	for (var/i = 1 to steps_per)
 		log_astar_bot("Step [i] of [steps_per]")
+		if(loc == get_turf(target))
+			return at_path_target()
 		var/turf/next = path[1]
 		if(istype(next, /turf/simulated))
 			step_to(src, next)
