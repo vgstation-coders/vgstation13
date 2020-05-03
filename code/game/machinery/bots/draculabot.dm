@@ -174,9 +174,6 @@
 		locked = 0
 		visible_message("<span class='danger'>[src]'s panel clicks open.</span>", 1)
 
-/obj/machinery/bot/bloodbot/can_path()
-	return !currently_drawing_blood
-
 /obj/machinery/bot/bloodbot/process_bot()
 	// Emagged behaviour
 	if (emagged)
