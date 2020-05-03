@@ -67,7 +67,7 @@
 	if(!proximity_flag)
 		return
 	if(!isturf(target))
-		return
+		return ..()
 	var/turf/T = target
 	if(locate(/obj/structure/table) in T)
 		to_chat(user, "<span class='warning'>There is already a table here!</span>")
@@ -78,7 +78,6 @@
 	new table_type(T)
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
-	return
 
 /obj/item/weapon/table_parts/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/item/weapon/table_parts/clockwork, CLOCKWORK_GENERIC_GLOW)
