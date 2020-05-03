@@ -20,6 +20,8 @@
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
 
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES
+
 	var/faction_original
 	var/list/friends_temp = list() //a temporary list to hold the values in friends while it becomes empty during treachery
 
