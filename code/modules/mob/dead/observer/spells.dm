@@ -78,7 +78,7 @@ var/global/list/boo_phrases_silicon=list(
 	max_targets = 1
 
 	override_base = "grey"
-	override_icon = 'icons/obj/ghost2.dmi'
+	override_icon = 'icons/obj/ghost_spells.dmi'
 	overlay_icon_state = "spell"
 
 /spell/targeted/ghost/toggle_medHUD
