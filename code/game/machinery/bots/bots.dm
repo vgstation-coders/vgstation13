@@ -394,7 +394,7 @@
 	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
 		// IMPORTANT: Quick AStar only takes TURFS as arguments.
 		waiting_for_patrol = FALSE // Case we are calculating a quick path for a patrol.
-		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]", return_proc=proc_to_call)
+		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
 		return TRUE
 	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
 
