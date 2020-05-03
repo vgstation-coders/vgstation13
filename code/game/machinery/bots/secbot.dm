@@ -247,9 +247,6 @@ Auto Patrol: []"},
 			playsound(src, pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
 			visible_message("<b>[src]</b> points at [C.name]!")
 
-/obj/machinery/bot/secbot/can_path()
-	return !cuffing
-
 /obj/machinery/bot/secbot/process_bot()
 	if (!target || target.gcDestroyed || get_dist(src, target) > 7)
 		target = null

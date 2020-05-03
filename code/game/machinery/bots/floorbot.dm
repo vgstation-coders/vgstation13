@@ -186,9 +186,6 @@ var/global/list/floorbot_targets=list()
 /obj/machinery/bot/floorbot/proc/have_target()
 	return (target != null && !target.gcDestroyed)
 
-/obj/machinery/bot/floorbot/can_path()
-	return !repairing
-
 /obj/machinery/bot/floorbot/process_bot()
 	if(repairing)
 		return

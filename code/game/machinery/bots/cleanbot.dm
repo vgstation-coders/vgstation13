@@ -165,9 +165,6 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		src.oddbutton = 1
 		src.screwloose = 1
 
-/obj/machinery/bot/cleanbot/can_path()
-	return !cleaning
-
 /obj/machinery/bot/cleanbot/process_bot()
 	if(!target)
 		find_target()
