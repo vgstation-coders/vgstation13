@@ -1288,8 +1288,8 @@
 /mob/living/carbon/human/canSingulothPull(var/obj/machinery/singularity/singulo)
 	if(!..())
 		return 0
-		if((shoes.clothing_flags & MAGPULSE) && singulo.current_size <= STAGE_FOUR)
-			return 0
+	if((shoes.clothing_flags & MAGPULSE) && singulo.current_size <= STAGE_FOUR)
+		return 0
 	return 1
 // Get ALL accesses available.
 /mob/living/carbon/human/GetAccess()
@@ -1565,7 +1565,7 @@
 	return ((istype(S) && S.footprint_type) || (species && species.footprint_type) || /obj/effect/decal/cleanable/blood/tracks/footprints) //The shoes' footprint type overrides the mob's, for obvious reasons. Shoes with a falsy footprint_type will let the mob's footprint take over, though.
 
 
-/mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+/mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
 	if(..()) // we've been flashed
 		var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 		var/damage = intensity - eyecheck()

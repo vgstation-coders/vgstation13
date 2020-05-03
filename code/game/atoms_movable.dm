@@ -1057,7 +1057,8 @@
 	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
 	var/turf/startzone = locate(startx, starty, 1)
 	var/turf/endzone = locate(endx, endy, 1)
-	if(!isspace(get_area(startzone)))
+	var/area/startzone_area = get_area(startzone)
+	if(!isspace(startzone_area))
 		return FALSE
 	forceMove(startzone)
 	throw_at(endzone, null, throwspeed)

@@ -445,7 +445,7 @@
 	C.registered_name = H.real_name
 	C.assignment = "Trader"
 	C.UpdateName()
-	C.SetOwnerInfo(src)
+	C.SetOwnerInfo(H)
 	C.icon_state = "trader"
 	C.access = list(access_syndicate, access_trade)
 	var/obj/item/weapon/storage/wallet/W = new

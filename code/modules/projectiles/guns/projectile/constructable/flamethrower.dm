@@ -77,7 +77,7 @@
 		item_state = "flamethrower_0"
 	return
 
-/obj/item/weapon/gun/projectile/flamethrower/afterattack(atom/target, mob/user, flag)
+/obj/item/weapon/gun/projectile/flamethrower/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if (istype(target, /obj/item/weapon/storage/backpack ))
 		return
 

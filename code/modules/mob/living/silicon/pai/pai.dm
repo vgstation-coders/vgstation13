@@ -216,7 +216,7 @@
 /mob/living/silicon/pai/ex_act(severity)
 	if(flags & INVULNERABLE)
 		return
-	flash_eyes(visual = TRUE, affects_silicon = TRUE)
+	flash_eyes(visual = TRUE, affect_silicon = TRUE)
 	switch(severity)
 		if(1)
 			if(!isDead())

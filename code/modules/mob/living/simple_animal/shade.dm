@@ -55,7 +55,7 @@
 /mob/living/simple_animal/shade/say(var/message)
 	. = ..(message, "C")
 
-/mob/living/simple_animal/shade/gib()
+/mob/living/simple_animal/shade/gib(var/animation = 0, var/meat = 1)
 	death(TRUE)
 	monkeyizing = TRUE
 	canmove = FALSE

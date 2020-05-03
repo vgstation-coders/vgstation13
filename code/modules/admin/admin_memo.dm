@@ -36,12 +36,12 @@
 
 //show all memos
 /client/proc/admin_memo_show()
-	if(ENABLE_MEMOS)
-		var/savefile/F = new(MEMOFILE)
-		if(F)
-			for(var/ckey in F.dir)
-				to_chat(src, "<center><span class='motd'><b>Admin Memo</b><i> by [F[ckey]]</i></span></center>")
-
+#if ENABLE_MEMOS
+	var/savefile/F = new(MEMOFILE)
+	if(F)
+		for(var/ckey in F.dir)
+			to_chat(src, "<center><span class='motd'><b>Admin Memo</b><i> by [F[ckey]]</i></span></center>")
+#endif
 //delete your own or somebody else's memo
 /client/proc/admin_memo_delete()
 	var/savefile/F = new(MEMOFILE)
