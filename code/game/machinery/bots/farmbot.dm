@@ -77,7 +77,7 @@
 
 /obj/machinery/bot/farmbot/turn_off()
 	..()
-	src.path = new()
+	src.path = list()
 	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 

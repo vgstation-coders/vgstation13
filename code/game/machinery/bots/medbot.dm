@@ -122,7 +122,7 @@
 	..()
 	target = null
 	old_targets = list()
-	path = new()
+	path = list()
 	currently_healing = 0
 	icon_state = "[icon_initial][on]"
 	updateUsrDialog()

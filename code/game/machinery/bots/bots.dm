@@ -155,7 +155,7 @@
 	log_astar_bot("Step [i] of [steps_per]")
 	if(!path.len) //It is assumed we gain a path through process_bot()
 		if(target)
-			path = calc_path(target, .proc/get_path)
+			calc_path(target, .proc/get_path)
 			process_path() // I love recursivity.
 			return 1
 		return  0
@@ -191,7 +191,7 @@
 			return TRUE
 	if(frustration > 5)
 		if (target && !target.gcDestroyed)
-			path = calc_path(target, .proc/get_path, next)
+			calc_path(target, .proc/get_path, next)
 		else
 			target = null
 			path = list()
@@ -394,7 +394,8 @@
 	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
 		// IMPORTANT: Quick AStar only takes TURFS as arguments.
 		waiting_for_patrol = FALSE // Case we are calculating a quick path for a patrol.
-		return quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
+		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]", return_proc=proc_to_call)
+		return TRUE
 	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
 
 // This proc is called by the path maker once it has calculated a path.
