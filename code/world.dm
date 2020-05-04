@@ -156,6 +156,11 @@ var/savefile/panicfile
 	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.
 	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
+	//The following block serves to force the server to use pixel movement even though everything is tile-aligned. If you know of a better way to do this, please replace this with it.
+	var/obj/forcepixel = new()
+	forcepixel.step_x = 1
+	qdel(forcepixel)
+
 	spawn(2000)		//so we aren't adding to the round-start lag
 		if(config.ToRban)
 			ToRban_autoupdate()

@@ -118,3 +118,6 @@
 
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = 0
+
+	add_client(client)
+	contained_clients.Swap(1, contained_clients.len) //Put our own client at the beginning so we know which one to remove in Logout() (as client is already nulled by then)
