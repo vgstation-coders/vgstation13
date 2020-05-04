@@ -85,7 +85,7 @@
 					emote("drool")
 
 	if(species.name == "Tajaran")
-		if(prob(1)) //Was 3
+		if(prob(1) && !isloosecatbeast(src)) //Was 3
 			vomit(1) //Hairball
 
 	if(stat != DEAD)
