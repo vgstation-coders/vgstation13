@@ -48,7 +48,4 @@
 
 	INVOKE_EVENT(on_logout, list())
 
-	if(contained_clients)
-		remove_client(contained_clients[1])
-
 	..()
