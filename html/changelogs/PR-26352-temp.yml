@@ -1,5 +1,0 @@
----
-author: otatoh
-changes:
-  - bugfix: "Standardizes Metaclub's scrubbers to scrub co2 and plasma by default."
-delete-after: true

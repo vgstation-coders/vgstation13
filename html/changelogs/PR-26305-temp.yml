@@ -1,6 +1,0 @@
----
-author: Zth--
-changes:
-  - bugfix: Fixed golden extract mimics
-  - rscdel: The ability to create crate mimics was removed
-delete-after: true

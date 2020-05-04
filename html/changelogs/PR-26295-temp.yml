@@ -1,5 +1,0 @@
----
-author: Krimsonkhan
-changes:
-  - rscadd: Envelopes now lose their disposals sorting tag after being opened
-delete-after: true

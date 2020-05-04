@@ -1,5 +1,0 @@
----
-author: DamianX
-changes:
-  - bugfix: Fixed a bug that caused agent ID cards to become unable to scan other IDs for access when they were reset once.
-delete-after: true

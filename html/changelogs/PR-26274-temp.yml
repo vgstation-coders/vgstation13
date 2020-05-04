@@ -1,6 +1,0 @@
----
-author: bathosbathtime
-changes:
-  - bugfix: "EMP, stun, and blank rockets now actually work."
-  - bugfix: Low yield rockets AND nuclear ops rockets now properly apply damage and stun on direct hits.
-delete-after: true

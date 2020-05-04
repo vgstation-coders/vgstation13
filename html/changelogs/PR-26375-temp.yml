@@ -1,5 +1,0 @@
----
-author: Kharkov72
-changes:
-  - rscadd: "Adds a connection from roid's viro maint to the rest of roid's medbay/cargo maint."
-delete-after: true
