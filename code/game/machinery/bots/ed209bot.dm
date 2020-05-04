@@ -339,6 +339,9 @@ Auto Patrol: []"},
 
 	return threatcount
 
+/obj/machinery/bot/ed209/can_path()
+	return !cuffing
+
 /obj/machinery/bot/ed209/process_bot()
 	if (!target || target.gcDestroyed || get_dist(src, target) > 12)
 		target = null

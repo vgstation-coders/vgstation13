@@ -277,6 +277,9 @@
 		on = 1
 		icon_state = "[icon_initial][on]"
 
+/obj/machinery/bot/medbot/can_path()
+	return !(stunned || currently_healing)
+
 /obj/machinery/bot/medbot/process_bot()
 	if(stunned)
 		stunned--
