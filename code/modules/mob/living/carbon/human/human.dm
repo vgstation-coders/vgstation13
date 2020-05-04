@@ -1975,3 +1975,9 @@ mob/living/carbon/human/isincrit()
 		active_hand = 0
 
 	update_hands_icons()
+
+/mob/living/carbon/human/get_personal_ambience()
+	if(istype(locked_to, /obj/structure/bed/therapy))
+		return list(/datum/ambience/beach)
+	else
+		return ..()

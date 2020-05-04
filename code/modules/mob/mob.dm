@@ -2267,5 +2267,8 @@ mob/proc/on_foot()
 			return 0
 	return 1
 
+/mob/proc/get_personal_ambience()
+	return list()
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

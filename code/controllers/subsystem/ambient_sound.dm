@@ -60,6 +60,9 @@ client/proc/handle_ambience()
 			src << sound(last_ambient_noise, 0, 0, CHANNEL_AMBIENCE, prefs.ambience_volume)
 
 /client/proc/get_ambience()
+	var/list/personal = mob.get_personal_ambience()
+	if(personal.len)
+		return personal
 	var/area/A = get_area(mob)//other overrides can go in here. eg: overrides for weather. or for cult.
 	if(A)
 		return A.get_ambience_list()
