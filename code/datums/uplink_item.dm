@@ -64,8 +64,9 @@ var/list/uplink_items = list()
 
 //This will get called that is essentially a New() by default.
 //Use this to make New()s that have extra conditions, such as bundles
+//Make sure to add a return or else it will break a part of buy()
 /datum/uplink_item/proc/new_uplink_item(var/new_item, var/turf/location, mob/user)
-	new new_item(location)
+	return new new_item(location)
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	if(!available_for_job(U.job))
@@ -73,7 +74,7 @@ var/list/uplink_items = list()
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
-	new_uplink_item(item, loc, user)
+	return new_uplink_item(item, loc, user)
 
 /datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
 	if(!istype(U))
@@ -368,7 +369,7 @@ var/list/uplink_items = list()
 	cost = 6
 
 /datum/uplink_item/device_tools/emag/new_uplink_item(new_item, turf/location, mob/user)
-	new new_item(location, 1) //Uplink emags are infinite
+	return new new_item(location, 1) //Uplink emags are infinite
 
 /datum/uplink_item/device_tools/explosive_gum
 	name = "Explosive Chewing Gum"
@@ -545,7 +546,7 @@ var/list/uplink_items = list()
 	var/list/conditions = list()
 	if(isplasmaman(user))
 		conditions += "plasmaman"
-	new new_item(location, conditions)
+	return new new_item(location, conditions)
 
 /datum/uplink_item/badass/balloon
 	name = "For showing that you are The Boss"
@@ -590,7 +591,7 @@ var/list/uplink_items = list()
 		var/datum/uplink_item/I = pick(possible_items)
 		U.uses -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
-		new_uplink_item(I.item, loc, user)
+		return new_uplink_item(I.item, loc, user)
 
 /datum/uplink_item/jobspecific/command_security
 	category = "Command and Security Specials"
