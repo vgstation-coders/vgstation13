@@ -116,8 +116,7 @@ var/global/list/boo_phrases_silicon=list(
 /spell/targeted/ghost/hide_sprite
 	name = "Hide Sprite"
 	desc = "For filming shit"
-	override_icon = 'icons/obj/wizard.dmi'
-	hud_state = "magicm"
+	hud_state = "hidesprite"
 
 /spell/targeted/ghost/hide_sprite/cast()
 	var/mob/dead/observer/ghost = holder
