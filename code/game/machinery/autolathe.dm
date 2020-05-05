@@ -143,6 +143,7 @@
 		new /obj/item/ammo_casing/shotgun/dart(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
 		new /obj/item/weapon/beartrap(),\
+		new /obj/item/gun_part/scope(),\
 		)
 	)
 

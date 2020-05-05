@@ -20,3 +20,4 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "scope"
 	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_IRON = 400, MAT_GLASS = 2000)
