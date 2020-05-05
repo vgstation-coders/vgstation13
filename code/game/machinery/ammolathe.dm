@@ -1,4 +1,4 @@
-//Listen here you god damn piece of shit. Do not add magazines for strong calibers. 
+//Listen here you god damn piece of shit. Do not add magazines for strong calibers.
 //Dont fucking do it. If you do you're gonna gunk the vector to high heaven again and someone's gonna get mad that they got one hit and grudgecode
 //So dont fucking do it
 
@@ -66,6 +66,7 @@
 		"Misc_Other"=list(
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/speedloader/shotgun(), \
+		new /obj/item/gun_part/scope(), \
 		),
 		"Hidden_Items" = list(
 		new /obj/item/ammo_storage/speedloader/a357/empty(), \
