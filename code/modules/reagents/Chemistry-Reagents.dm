@@ -2209,8 +2209,8 @@
 	M.color = ""
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species.anatomy_flags & MULTICOLOR)
-			H.species.anatomy_flags = initial(H.species.anatomy_flags) //clear out any skin dye if it exists
+		if(H.species.anatomy_flags & MULTICOLOR && !(initial(H.species.anatomy_flags) & MULTICOLOR))
+			H.species.anatomy_flags &= ~MULTICOLOR
 			H.update_body()
 	M.adjustToxLoss(4 * REM)
 
