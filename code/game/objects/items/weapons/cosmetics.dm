@@ -276,10 +276,11 @@
 	var/mob/living/carbon/human/H = M
 	if(H.w_uniform && (H.w_uniform.body_parts_covered & UPPER_TORSO))
 		to_chat(user,"<span class='warning'>[H] needs to have an uncovered chest to really let the dye sink in.</span>")
+		return
 	if(H != user)
-		to_chat(user,"<span class='danger'>[user] is trying to spray down [H] with skin dye!</span>")
+		visible_message(user,"<span class='danger'>[user] is trying to spray down [H] with skin dye!</span>")
 		if(do_after(user,H, 10 SECONDS))
-			to_chat(user,"<span class='info'>[user] dyed [H].</span>")
+			visible_message(user,"<span class='info'>[user] dyed [H].</span>")
 			dye(H)
 	else
 		dye(H)
