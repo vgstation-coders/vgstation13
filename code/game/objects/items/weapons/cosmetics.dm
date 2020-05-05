@@ -270,7 +270,7 @@
 	..()
 	to_chat(user,"<span class='info'>It has [uses] uses left.</span>")
 
-/obj/item/weapon/hair_dye/skin_dye/attack(mob/M as mob, mob/user as mob)
+/obj/item/weapon/hair_dye/skin_dye/attack(mob/M, mob/user)
 	if(!ishuman(M))
 		return
 	var/mob/living/carbon/human/H = M
