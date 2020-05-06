@@ -35,7 +35,7 @@
 /datum/map_persistence_type/proc/writeSavefile()
 	var/list/finished_list = list()
 	if(tracking.len > arbitrary_max_objects)
-		log_debug("[time_stamp()] - Map persistence \"[name]\" hit the cap. [tracking.len - arbitrary_max_objects] objects did not make it.")
+		log_debug("Map persistence \"[name]\" hit the cap. [tracking.len - arbitrary_max_objects] objects did not make it.")
 		tracking.Cut(arbitrary_max_objects)
 	for(var/atom/A in tracking)
 		if(A.getPersistenceAge() >= max_age) //This used to be in canTrack() but I moved it here in case an admin varedits an atom's age or something.
