@@ -88,7 +88,8 @@
 	if (opacity && isturf(loc))
 		un_opaque = loc
 
-	loc = null
+	forceMove(null, harderforce = TRUE)
+
 	if (un_opaque)
 		un_opaque.recalc_atom_opacity()
 
