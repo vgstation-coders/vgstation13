@@ -277,6 +277,9 @@
 	var/event/on_damaged
 	var/event/on_irradiate
 	var/event/on_death
+	var/event/on_bumping //We bumped someone
+	var/event/on_bumped //We got bumped
+	var/event/on_touched // We got touched by anything
 	// Allows overiding click modifiers and such.
 	var/event/on_clickon
 
