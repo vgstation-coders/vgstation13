@@ -373,7 +373,7 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/proc/ai_recall_shuttle()
 	if(!ismalf(src))
-		to_chat(usr, "<span class='warning'>You send the signal to recall the shuttle but nothing happens!</span>")
+		to_chat(usr, "<span class='warning'>Your morality core throws an error. Recalling an emergency shuttle is a symptom of a malfunctioning artificial intelligence.</span>")
 		return
 	var/datum/faction/malf/M = find_active_faction_by_member(mind.GetRole(MALF))
 	if(M?.stage != FACTION_ENDGAME)
