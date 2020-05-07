@@ -88,11 +88,6 @@
 	if (opacity && isturf(loc))
 		un_opaque = loc
 
-	forceMove(null, harderforce = TRUE)
-
-	if (un_opaque)
-		un_opaque.recalc_atom_opacity()
-
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
 
@@ -102,10 +97,15 @@
 	for (var/datum/locking_category/category in locking_categories)
 		qdel(category)
 
+	break_all_tethers()
+
+	forceMove(null, harderforce = TRUE)
+
+	if (un_opaque)
+		un_opaque.recalc_atom_opacity()
+
 	locking_categories      = null
 	locking_categories_name = null
-
-	break_all_tethers()
 
 	if((flags & HEAR) && !ismob(src))
 		for(var/mob/virtualhearer/VH in virtualhearers)
