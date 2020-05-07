@@ -13,14 +13,14 @@
 	var/insidedoor = null
 
 /obj/item/weapon/grenade/station/prime()
-	playsound(src, soundpath, 75, 1)
 	var/turf/source = get_turf(src)
 	if(!istype(source, get_base_turf(source.z)))
+		playsound(src, soundpath, 75, 1) //you'll only ever hear this if it's not on space anyway
 		visible_message("<span class='danger'>\The [src] cancels its detonation!</span>")
 		active = FALSE
 		icon_state = initial(icon_state)
 		return
-	for(var/mob/living/M in view(source, range))
+	for(var/mob/living/M in circlerange(source, range))
 		if(get_turf(M) == source)
 			below_center(M)
 			continue
@@ -66,6 +66,7 @@
 
 			if(/obj/structure/rack) //some gear here
 				new /obj/item/clothing/under/syndicate/tacticool(T)
+				new /obj/item/clothing/under/syndicate/executive(T)
 				new /obj/item/clothing/mask/gas/syndicate(T)
 				new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(T)
 				new /obj/item/clothing/gloves/swat(T)
