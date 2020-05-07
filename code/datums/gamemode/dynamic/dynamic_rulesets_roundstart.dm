@@ -13,7 +13,7 @@
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
-	weight = 5
+	weight = 2
 	cost = 10
 	var/traitor_threshold = 3
 	var/additional_cost = 5
