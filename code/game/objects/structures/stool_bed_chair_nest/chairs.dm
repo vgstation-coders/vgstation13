@@ -58,6 +58,11 @@
 			return
 
 	if(W.is_wrench(user))
+		if (locked_atoms && locked_atoms.len)
+			for (var/mob/living/L in locked_atoms)
+				visible_message("<span class='warning>\The [L] slips from the chair!</span>'")
+				L.unlock_from(src)
+				L.Stun(2)
 		W.playtoolsound(src, 50)
 		drop_stack(sheet_type, loc, sheet_amt, user)
 		qdel(src)
