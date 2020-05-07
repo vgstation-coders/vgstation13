@@ -96,6 +96,8 @@
 
 	for (var/datum/locking_category/category in locking_categories)
 		qdel(category)
+	locking_categories      = null
+	locking_categories_name = null
 
 	break_all_tethers()
 
@@ -103,9 +105,6 @@
 
 	if (un_opaque)
 		un_opaque.recalc_atom_opacity()
-
-	locking_categories      = null
-	locking_categories_name = null
 
 	if((flags & HEAR) && !ismob(src))
 		for(var/mob/virtualhearer/VH in virtualhearers)
