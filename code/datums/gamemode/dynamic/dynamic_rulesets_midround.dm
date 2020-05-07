@@ -172,7 +172,7 @@
 							"Cyborg", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
-	weight = 6
+	weight = 1
 	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 	repeatable = TRUE
@@ -327,7 +327,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(25, 25, 25, 25, 25, 20, 15, 15, 10, 10)
 	required_candidates = 5
-	weight = 5
+	weight = 1
 	cost = 35
 	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
 	high_population_requirement = 60
@@ -370,7 +370,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Station Engineer","Chief Engineer", "Roboticist","Head of Security", "Captain")
 	required_pop = list(25,20,20,15,15,15,10,10,10,10)
 	required_candidates = 1
-	weight = 2
+	weight = 1
 	weekday_rule_boost = list("Tue")
 	cost = 30
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
@@ -407,7 +407,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(25,25,25,25,25,20,15,15,10,10)
 	required_candidates = 3
-	weight = 5
+	weight = 1
 	cost = 45
 	requirements = list(101,101,90,60,45,45,45,45,45,45)
 	high_population_requirement = 50
@@ -445,7 +445,7 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_pop = list(15,15,15,15,15,10,10,10,5,5)
 	required_candidates = 1
-	weight = 3
+	weight = 1
 	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
@@ -519,7 +519,7 @@
 	enemy_jobs = list()
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 3
+	weight = 1
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
@@ -576,7 +576,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(20,20,20,15,15,15,15,15,10,10)
 	required_candidates = 5
-	weight = 5
+	weight = 1
 	cost = 30
 	requirements = list(50,50,50,40,40,30,30,20,10,10)
 	high_population_requirement = 35
@@ -619,7 +619,7 @@
 	required_pop = list(15,15,15,15,15,15,15,15,15,15)
 	required_candidates = 1
 	max_candidates = 5
-	weight = 5
+	weight = 1
 	cost = 25
 	requirements = list(90,70,50,40,30,20,10,10,10,10)
 	high_population_requirement = 40
