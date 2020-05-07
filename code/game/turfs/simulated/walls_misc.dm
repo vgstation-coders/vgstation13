@@ -36,4 +36,4 @@
 
 /turf/simulated/wall/syndicate
 	icon = 'icons/turf/shuttle.dmi'
-	walltype = "bswall"
+	walltype = "satwall"

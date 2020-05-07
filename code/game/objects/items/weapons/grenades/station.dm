@@ -10,35 +10,44 @@
 	var/floortype = /turf/simulated/floor/dark
 	var/doortype = /obj/structure/airshield
 	var/soundpath = 'sound/effects/bumpinthenight.ogg'
+	var/insidedoor = null
 
 /obj/item/weapon/grenade/station/prime()
 	playsound(src, soundpath, 75, 1)
 	var/turf/source = get_turf(src)
+	if(!istype(source, get_base_turf(source.z)))
+		visible_message("<span class='danger'>\The [src] cancels its detonation!</span>")
+		active = FALSE
+		icon_state = initial(icon_state)
+		return
 	for(var/mob/living/M in view(source, range))
 		if(get_turf(M) == source)
 			below_center(M)
 			continue
 		under_edge(M, source)
-	decorate(generate_room(source, range, walltype, floortype, doortype))
+	decorate(generate_room(source, range, walltype, floortype, doortype, insidedoor),floortype)
 	centerpiece(source)
 	qdel(src)
 
 /proc/get_empty_cardinal(var/turf/T)
 	var/list/trydir = cardinal.Copy()
 	while(trydir.len)
-		pick_n_take(trydir)
-		var/turf/U = get_step(T,trydir)
-		if(!U.contents.len)
+		var/thisone = pick_n_take(trydir)
+		var/turf/U = get_step(T,thisone)
+		if(!U.contents.len && !U.density)
 			return U
 	return null
 
-/obj/item/weapon/grenade/station/proc/decorate(var/list/interior)
-	var/list/possible_gear = list(/obj/machinery/optable,/obj/machinery/computer/security/selfpower,/obj/machinery/computer/crew/selfpower,/obj/structure/rack,/obj/machinery/recharger, /obj/machinery/sleeper, /obj/machinery/station_map/strategic)
+//First arg should be a list of turfs that are eligible to put things in. Instant room only returns the interior turfs.
+//Second arg is the type of floor that is our freshly created floor. This should be a special floor type so that decorations
+//only get placed inside the generated room and not in maint or something if it is made close to the station.
+/obj/item/weapon/grenade/station/proc/decorate(var/list/interior,var/floortype)
+	var/list/possible_gear = list(/obj/machinery/optable,/obj/machinery/computer/security/selfpower,/obj/machinery/computer/crew/selfpower,/obj/structure/rack,/obj/machinery/recharger, /obj/machinery/sleeper, /obj/machinery/station_map/strategic,/obj/structure/bed/chair)
 	var/list/put_gear_here = interior.Copy()
 	//First, go around looking for empty spaces and throw in gear
 	while(possible_gear.len)
 		var/turf/T = pick_n_take(put_gear_here)
-		if(T.contents.len)
+		if(T.contents.len || !istype(T,floortype))
 			continue
 		var/objpath = pick_n_take(possible_gear)
 		new objpath(T)
@@ -64,6 +73,12 @@
 				new /obj/item/weapon/storage/toolbox/syndicate(T)
 				new /obj/item/clothing/accessory/storage/bandolier(T)
 
+			if(/obj/structure/bed/chair)
+				//new /obj/item/clothing/head/helmet(T) electric chairs are cool, but they need a powered area
+				new /obj/item/device/radio/electropack(T)
+				new /obj/item/device/assembly/signaler(T)
+				new /obj/item/weapon/handcuffs(T)
+
 			if(/obj/machinery/recharger) //place a table under
 				new /obj/structure/table/reinforced(T)
 	//Fill in 5% of the leftover spaces with potted plants
@@ -74,6 +89,8 @@
 
 
 /obj/item/weapon/grenade/station/proc/below_center(mob/M)
+	if(!istype(M))
+		return
 	M.gib()
 
 /obj/item/weapon/grenade/station/proc/under_edge(mob/M, turf/source)
@@ -90,11 +107,14 @@
 	walltype = /obj/structure/inflatable/wall
 	floortype = /turf/simulated/floor/inflatable/air
 	doortype = /obj/structure/inflatable/door
+	insidedoor = /obj/structure/inflatable/door
 	soundpath = 'sound/items/zip.ogg'
 
-/obj/item/weapon/grenade/station/discount/decorate(var/list/interior)
+/obj/item/weapon/grenade/station/discount/decorate(var/list/interior,var/floortype)
 	var/list/possible_trash = subtypesof(/obj/item/trash)-typesof(/obj/item/trash/mannequin)
 	for(var/turf/T in interior)
+		if(!istype(T,floortype))
+			continue
 		if(prob(30))
 			var/new_trash = pick(possible_trash)
 			new new_trash(T)
