@@ -42,7 +42,14 @@
 //Second arg is the type of floor that is our freshly created floor. This should be a special floor type so that decorations
 //only get placed inside the generated room and not in maint or something if it is made close to the station.
 /obj/item/weapon/grenade/station/proc/decorate(var/list/interior,var/floortype)
-	var/list/possible_gear = list(/obj/machinery/optable,/obj/machinery/computer/security/selfpower,/obj/machinery/computer/crew/selfpower,/obj/structure/rack,/obj/machinery/recharger, /obj/machinery/sleeper, /obj/machinery/station_map/strategic,/obj/structure/bed/chair)
+	var/list/possible_gear = list(/obj/machinery/optable,
+								/obj/machinery/computer/security/selfpower,
+								/obj/machinery/computer/crew/selfpower,
+								/obj/structure/rack,
+								/obj/machinery/recharger,
+								/obj/machinery/sleeper,
+								/obj/machinery/station_map/strategic,
+								/obj/structure/bed/chair)
 	var/list/put_gear_here = interior.Copy()
 	//First, go around looking for empty spaces and throw in gear
 	while(possible_gear.len)
