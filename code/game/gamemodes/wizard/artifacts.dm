@@ -99,7 +99,7 @@
 	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
 	abbreviation = "SB"
 	price = 4 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/storage/box/spellbook/random)
+	spawned_items = list(/obj/item/weapon/storage/box/spellbook)
 
 /datum/spellbook_artifact/potion_bundle
 	name = "Potion bundle"

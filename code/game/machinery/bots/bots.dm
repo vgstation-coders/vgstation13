@@ -5,6 +5,8 @@
 #define BOT_DENSE 8
 #define BOT_NOT_CHASING 16
 
+#define MAX_PATHING_ATTEMPTS 15
+
 #define SEC_BOT 1 // Secutritrons (Beepsky) and ED-209s
 #define MULE_BOT 2 // MULEbots
 #define FLOOR_BOT 3 // Floorbots
@@ -47,6 +49,7 @@
 	var/next_destination	// the next destination in the patrol route
 
 	var/steps_per = 1 //How many steps we take per process
+	var/initial_steps_per = 1
 
 	var/atom/target 				//The target of our path, could be a turf, could be a person, could be mess
 	var/list/old_targets = list()			//Our previous targets, so we don't get caught constantly going to the same spot. Order as pointer => int (Time to forget)
@@ -65,6 +68,8 @@
 	var/auto_patrol = 0		// set to make bot automatically patrol
 	var/waiting_for_patrol = FALSE
 	var/list/patrol_path = list() //Our patroling path
+
+	var/current_pathing = 0
 
 /obj/machinery/bot/New()
 	. = ..()
@@ -101,6 +106,7 @@
 	path.Cut()
 
 /obj/machinery/bot/process()
+	current_pathing = 0
 	if(!src.on)
 		return
 	if (src.integratedpai)
@@ -124,6 +130,10 @@
 		if(--old_targets[i] == 0)
 			remove_oldtarget(i)
 
+// Can we move to the next tile or not ?
+/obj/machinery/bot/proc/can_path()
+	return TRUE
+
 // If we get a path through process_path(), which means we have a target, and we're not set to autopatrol, we get a patrol path.
 /obj/machinery/bot/proc/process_pathing()
 	if(!process_path() && (bot_flags & BOT_PATROL) && auto_patrol)
@@ -137,34 +147,43 @@
 // If we have a path, we step.
 // Speed of the bot is controlled through steps_per.
 // return true to avoid calling process_patrol
-/obj/machinery/bot/proc/process_path()
+/obj/machinery/bot/proc/process_path(var/remaining_steps = steps_per)
+	current_pathing++
+	if (current_pathing > MAX_PATHING_ATTEMPTS)
+		CRASH("maximum pathing reached")
+	if (remaining_steps <= 0)
+		return
 	if (!isturf(src.loc))
 		return // Stay in the closet, little bot. The world isn't ready to accept you yet ;_;
+	if (!can_path()) // We're busy.
+		return
 	var/turf/T = get_turf(src)
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
-	if(!path.len) //It is assumed we gain a path through process_bot()
+	if(!length(path)) //It is assumed we gain a path through process_bot()
 		if(target)
 			calc_path(target, .proc/get_path)
+			if (path && length(path))
+				process_path()
 			return 1
 		return  0
-	
+
 	patrol_path = list() //Kill any patrols we're using
 
-	for (var/i = 1 to steps_per)
-		log_astar_bot("Step [i] of [steps_per]")
-		if(loc == get_turf(target))
-			return at_path_target()
-		var/turf/next = path[1]
-		if(istype(next, /turf/simulated))
-			step_to(src, next)
-			if(get_turf(src) == next)
-				path -= next
-				frustration = 0
-				on_path_step(next)
-			else
-				frustration++
-				on_path_step_fail(next)
-			sleep(SS_WAIT_BOTS/steps_per)
+	log_astar_bot("Step [remaining_steps] of [steps_per]")
+	if(loc == get_turf(target))
+		return at_path_target()
+	var/turf/next = path[1]
+	if(istype(next, /turf/simulated))
+		step_to(src, next)
+		if(get_turf(src) == next)
+			path -= next
+			frustration = 0
+			on_path_step(next)
+		else
+			frustration++
+			on_path_step_fail(next)
+		spawn(SS_WAIT_BOTS/steps_per)
+			process_path(remaining_steps - 1)
 	return T == get_turf(src)
 
 // What happens when the bot cannot go to the next turf.
@@ -199,32 +218,43 @@
 /obj/machinery/bot/proc/at_path_target()
 	return TRUE
 
+/obj/machinery/bot/proc/can_patrol()
+	return can_path()
+
 /*** Patrol Pathing Section ***/
 // Same as process_path. If we don't have a path, we get a path.
 // If we have a path, we take a step on that path
 // It is very important to exit this proc when you don't have a path.
-/obj/machinery/bot/proc/process_patrol()
+/obj/machinery/bot/proc/process_patrol(var/remaining_steps = steps_per)
+	if (!can_patrol())
+		return
 	astar_debug("process patrol called [src] [patrol_path.len]")
+	current_pathing++
+	if (current_pathing > MAX_PATHING_ATTEMPTS)
+		CRASH("maximum pathing reached")
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
 	if(!patrol_path.len)
 		return find_patrol_path()
-
-	for (var/i = 1 to steps_per)
-		log_astar_bot("Step [i] of [steps_per]")
-		if(loc == patrol_target)
-			patrol_path = list()
-			return at_patrol_target()
-		var/turf/next = patrol_path[1]
-		if(istype(next, /turf/simulated))
-			step_to(src, next)
-			if(get_turf(src) == next)
-				frustration = 0
-				patrol_path -= next
-				on_patrol_step(next)
-			else
-				frustration++
-				on_patrol_step_fail(next)
+	if(remaining_steps <= 0)
+		return
+	if(!can_path())
+		return
+	log_astar_bot("Step [remaining_steps] of [steps_per]")
+	if(loc == patrol_target)
+		patrol_path = list()
+		return at_patrol_target()
+	var/turf/next = patrol_path[1]
+	if(istype(next, /turf/simulated))
+		step_to(src, next)
+		if(get_turf(src) == next)
+			frustration = 0
+			patrol_path -= next
+			on_patrol_step(next)
+		else
+			frustration++
+			on_patrol_step_fail(next)
 		sleep(SS_WAIT_BOTS/steps_per)
+		process_patrol(remaining_steps - 1)
 	return TRUE
 
 // This proc is called when the bot has no patrol path, no regular path, and is on autopatrol.
@@ -247,7 +277,7 @@
 
 	if(patrol_target)
 		waiting_for_patrol = TRUE
-		calc_path(patrol_target, .proc/get_patrol_path)
+		calc_patrol_path(patrol_target, .proc/get_patrol_path)
 
 // This proc send out a singal to every beacon listening to the "beacon_freq" variable.
 // The signal says, "i'm a bot looking for a beacon to patrol to."
@@ -376,13 +406,24 @@
 // Fast bots use quick_AStar method to direcly calculate a path and move on it.
 /obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null)
 	ASSERT(target && proc_to_call)
+	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
+		// IMPORTANT: Quick AStar only takes TURFS as arguments.
+		log_astar_bot("quick astar path calculation...")
+		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
+		log_astar_bot("path is [path.len]")
+		return TRUE
+	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+
+/obj/machinery/bot/proc/calc_patrol_path(var/target, var/proc_to_call, var/turf/avoid = null)
+	ASSERT(target && proc_to_call)
 	log_astar_beacon("[new_destination]")
 	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
 		// IMPORTANT: Quick AStar only takes TURFS as arguments.
 		waiting_for_patrol = FALSE // Case we are calculating a quick path for a patrol.
-		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
+		patrol_path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
 		return TRUE
 	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+
 
 // This proc is called by the path maker once it has calculated a path.
 /obj/machinery/bot/proc/get_path(var/list/L, var/target)

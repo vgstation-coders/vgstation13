@@ -445,3 +445,6 @@
 
 /obj/item/weapon/gun/update_icon()
 	icon_state = initial(icon_state) + "[clowned == CLOWNED ? "c" : ""]"
+
+/obj/item/weapon/gun/proc/bullet_hitting(var/obj/item/projectile/P,var/atom/atarget)
+	return

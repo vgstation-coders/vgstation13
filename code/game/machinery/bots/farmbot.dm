@@ -214,6 +214,9 @@
 	qdel(src)
 	return
 
+/obj/machinery/bot/farmbot/can_path()
+	return !mode
+
 /obj/machinery/bot/farmbot/process_bot()
 	//set background = 1
 

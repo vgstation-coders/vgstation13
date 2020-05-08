@@ -8,6 +8,11 @@
 #define SHUTTLETRANSITTIME 120		// 2 minutes = 120 seconds
 #define SHUTTLEGRACEPERIOD 300      // time after roundstart until the shuttle can be called, 5 minutes = 300 seconds
 
+#define EMERGENCY_SHUTTLE_RECALLED	-1
+#define EMERGENCY_SHUTTLE_STANDBY	0
+#define EMERGENCY_SHUTTLE_GOING_TO_STATION 1
+#define EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM 2
+
 var/global/datum/emergency_shuttle/emergency_shuttle
 
 datum/emergency_shuttle
