@@ -45,9 +45,22 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 			if(active == 1)
 				//This is not the device that made the initial request. It is the device confirming the request.
 				if(event_source)
-					event_source.confirmed = 1
-					event_source.event_confirmed_by = usr
+					confirmed = 1
+
+					// All the useful information is in the source device, so copy it over. There's probably a better way to do this.
+					event_triggered_by = event_source.event_triggered_by
+					event_confirmed_by = usr
+					event = event_source.event
+					ert_reason = event_source.ert_reason
+
+					playsound(src, get_sfx("card_swipe"), 60, 1, -5)
+					to_chat(user, "You swipe your ID card to confirm the [event].")
+
+					trigger_event(event)
 			else if(screen == 2)
+				playsound(src, get_sfx("card_swipe"), 60, 1, -5)
+				to_chat(user, "You swipe your ID card to request the [event].")
+
 				event_triggered_by = usr
 				broadcast_request() //This is the device making the initial event request. It needs to broadcast to other devices
 
@@ -132,6 +145,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	event = ""
 	screen = 1
 	confirmed = 0
+	busy = 0
 	event_source = null
 	icon_state = "auth_off"
 	event_triggered_by = null
@@ -142,17 +156,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	for(var/obj/machinery/keycard_auth/KA in authenticators)
 		if(KA == src)
 			continue
-		KA.reset()
-		spawn()
-			KA.receive_request(src)
-
-	sleep(confirm_delay)
-	if(confirmed)
-		confirmed = 0
-		trigger_event(event)
-		log_game("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]")
-		message_admins("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]", 1)
-	reset()
+		KA.receive_request(src)
 
 /obj/machinery/keycard_auth/proc/receive_request(var/obj/machinery/keycard_auth/source)
 	if(stat & (BROKEN|NOPOWER))
@@ -162,12 +166,10 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	active = 1
 	icon_state = "auth_on"
 
-	sleep(confirm_delay)
-
-	event_source = null
-	icon_state = "auth_off"
-	active = 0
-	busy = 0
+	spawn(confirm_delay)
+		if(active)
+			for(var/obj/machinery/keycard_auth/KA in authenticators)
+				KA.reset()
 
 /obj/machinery/keycard_auth/proc/trigger_event()
 	switch(event)
@@ -186,8 +188,15 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		if("Emergency Response Team")
 			var/datum/striketeam/ert/response_team = new()
 			response_team.mission = ert_reason
-			response_team.trigger_strike()
+			response_team.trigger_strike() // This will show up as *null* in logs, adding requester gives them power to approve an ERT.
 			feedback_inc("alert_keycard_auth_ert",1)
+			event_source.visible_message("<span class='notice'>An ERT has been requested, please await a response.</span>")
+			playsound(event_source, 'sound/machines/notify.ogg', 60, 0)
+
+	log_game("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]")
+	message_admins("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]", 1)
+	for(var/obj/machinery/keycard_auth/KA in authenticators)
+		KA.reset()
 
 var/global/maint_all_access = 0
 
