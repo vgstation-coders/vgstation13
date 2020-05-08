@@ -381,6 +381,10 @@
 
 	. = ..()
 
+//syndie themed
+/turf/simulated/floor/dark
+	icon_state = "dark"
+
 //Server rooms, supercooled nitrogen atmosphere
 /turf/simulated/floor/server
 	icon_state = "dark"
