@@ -1,12 +1,3 @@
-//#define ASTAR_DEBUG 1
-
-#ifdef ASTAR_DEBUG
-#warn "Astar debug is on. Don't forget to turn it off after you've done :)"
-#define astar_debug(text) to_chat(world, text)
-#else
-#define astar_debug(text)
-#endif
-
 //Define your macros here if they're used in general code
 
 //Typechecking macros

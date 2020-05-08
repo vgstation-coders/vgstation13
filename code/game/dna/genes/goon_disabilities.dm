@@ -260,7 +260,7 @@
 		var/cword = pick(words)
 		words.Remove(cword)
 		var/suffix = copytext(cword,length(cword)-1,length(cword))
-		while(length(cword)>0 && suffix in list(".",",",";","!",":","?"))
+		while(length(cword)>0 && (suffix in list(".",",",";","!",":","?")))
 			cword  = copytext(cword,1              ,length(cword)-1)
 			suffix = copytext(cword,length(cword)-1,length(cword)  )
 		if(length(cword))
@@ -396,7 +396,7 @@
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()
-			
+
 			if (!no_blood)
 				gibs(H.loc, H.virus2, H.dna)
 		else

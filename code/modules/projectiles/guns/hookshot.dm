@@ -85,7 +85,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/hookshot/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
+/obj/item/weapon/gun/hookshot/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(check_tether())

@@ -166,7 +166,7 @@
 	item_state = "sawnshotgun"
 	fire_delay = 0
 
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(..())
 		..()
 		attack_self(user)

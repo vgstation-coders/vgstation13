@@ -8,7 +8,7 @@ var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("lilslugger", "bar", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
+	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		//testing("Updating playlist from [url]...")
 
@@ -767,6 +767,7 @@ var/global/list/loopModeNames=list(
 	playlists=list(
 		"lilslugger" = "Battle of Lil Slugger",
 		"bar"  = "Bar Mix",
+		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
 		"folk" = "Folk",
@@ -799,13 +800,14 @@ var/global/list/loopModeNames=list(
 	// Must be defined on your server.
 	playlists=list(
 		"bar"  = "Bar Mix",
+		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
 		"filk" = "Filk",
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
-		"muzakjazz" = "Jazzy Muzak",
+		"muzakjazz" = "Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
 		"security" = "Security",
@@ -829,13 +831,14 @@ var/global/list/loopModeNames=list(
 	playlists=list(
 		"lilslugger" = "Battle of Lil' Slugger",
 		"bar"  = "Bar Mix",
+		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
 		"filk" = "Filk",
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
-		"muzakjazz" = "Jazzy Muzak",
+		"muzakjazz" = "Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
 		"shuttle" = "Shuttle",
@@ -1012,6 +1015,10 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - folk"
 	unformatted = "folk"
 	formatted = "Folk"
+/obj/item/weapon/vinyl/jazz
+	name = "nanovinyl - jazz & swing"
+	unformatted = "jazzswing"
+	formatted = "Jazz & Swing"
 /obj/item/weapon/vinyl/malf
 	name = "nanovinyl - silicon assault"
 	unformatted = "malfdelta"
@@ -1027,7 +1034,7 @@ var/global/list/loopModeNames=list(
 /obj/item/weapon/vinyl/muzakjazz
 	name = "nanovinyl - jazzy muzak"
 	unformatted = "muzakjazz"
-	formatted = "Jazzy Muzak"
+	formatted = "Muzak"
 /obj/item/weapon/vinyl/syndie_assault
 	name = "nanovinyl - syndicate assault"
 	unformatted = "nukesquad"
@@ -1067,6 +1074,7 @@ var/global/list/loopModeNames=list(
 	formatted = "Halloween"
 /obj/item/weapon/vinyl/slugger
 	name = "nanovynil - slugger"
+	desc = "A go-to for bars all over the sector. Every time you walk in one, you can almost bet it's playing."
 	unformatted = "lilslugger"
 	formatted = "Battle of Lil Slugger"
 obj/item/weapon/vinyl/christmas

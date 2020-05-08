@@ -71,7 +71,7 @@
 
 	if(statpanel("Status") && ticker)
 		if (ticker.current_state != GAME_STATE_PREGAME)
-			stat("Station Time:", "[worldtime2text()]")
+			timeStatEntry()
 		if(ticker.hide_mode)
 			stat("Game Mode:", "Secret")
 		else
@@ -318,7 +318,7 @@
 		H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD)
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
-	
+
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0

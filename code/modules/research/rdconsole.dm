@@ -492,7 +492,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			to_chat(usr, "Unauthorized Access.")
 			return
 		var/obj/item/weapon/reagent_containers/RC = locate(href_list["beakerI"])
-		if(RC && RC in linked_imprinter.component_parts)
+		if(RC && (RC in linked_imprinter.component_parts))
 			RC.reagents.del_reagent(href_list["disposeI"])
 		linked_imprinter.update_buffer_size()
 

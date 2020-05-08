@@ -22,7 +22,7 @@
 	var/description = ""
 	var/datum/reagents/holder = null
 	var/reagent_state = REAGENT_STATE_SOLID
-	var/list/data = null
+	var/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
 	var/pain_resistance = 0
@@ -1282,6 +1282,8 @@
 		return 1
 
 	M.adjustToxLoss(REM)
+	if(prob(5) && !M.isUnconscious())
+		M.emote("stare")
 
 /datum/reagent/chloramine
 	name = "Chloramine"
@@ -1306,7 +1308,7 @@
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+		if((H.species && H.species.flags & NO_BREATHE) || (M_NO_BREATH in H.mutations))
 			return
 		for(var/datum/organ/internal/lungs/L in H.internal_organs)
 			L.take_damage(REM, 1)
@@ -2205,6 +2207,11 @@
 					H.vomit()
 	data++
 	M.color = ""
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & MULTICOLOR && !(initial(H.species.anatomy_flags) & MULTICOLOR))
+			H.species.anatomy_flags &= ~MULTICOLOR
+			H.update_body()
 	M.adjustToxLoss(4 * REM)
 
 /datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -2513,6 +2520,24 @@
 		M.heal_organ_damage(0, REM)
 	if(M.getToxLoss())
 		M.adjustToxLoss(-REM)
+
+/datum/reagent/simpolinol
+	name = "Simpolinol"
+	id = SIMPOLINOL
+	description = "A broad spectrum rejuvenant used to heal fauna with less complex cardiovascular systems. Not for human injestion."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#A5A5FF" //rgb: 165, 165, 255
+	density = 1.58
+	specheatcap = 0.44
+
+/datum/reagent/simpolinol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(isanimal(M))
+		M.health = min(M.maxHealth, M.health + REM)
+	else
+		M.adjustToxLoss(5)
 
 //An OP chemical for admins and detecting exploits
 /datum/reagent/adminordrazine
@@ -4159,8 +4184,8 @@
 	description = "A disgusting liquid with a horrible smell, which is used by space carps to mark their territory and food."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6AAA96" //rgb: 106, 170, 150
-	custom_metabolism = 0.1
-	data = 1 //Used as a tally
+	custom_metabolism = 0.05
+	data = 0 //Used as a tally
 	density = 109.06
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Contains leporazine, better this than 6 digits
 
@@ -4168,6 +4193,15 @@
 
 	if(..())
 		return 1
+
+	if(!data)
+		to_chat(M,"<span class='good'><b>You feel more carplike! [pick("Do you, perhaps...?","Maybe... just maybe...")]</b></span>")
+
+	if(volume < 3)
+		if(volume <= custom_metabolism)
+			to_chat(M,"<span class='danger'>You feel not at all carplike!</span>")
+		else if(!(data%4))
+			to_chat(M,"<span class='warning'>You feel less carplike...</span>")
 
 	data++
 
@@ -6777,7 +6811,7 @@
 			H.remove_spell(spell)
 		if (istype(H.wear_mask, /obj/item/clothing/mask/gas/mime/stickymagic))
 			qdel(H.wear_mask)
-			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")			
+			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")
 		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
 
 
@@ -7597,7 +7631,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+		if((H.species && H.species.flags & NO_BREATHE) || (M_NO_BREATH in H.mutations))
 			return
 		M.adjustFireLoss(0.5 * REM)
 		if(prob(10))

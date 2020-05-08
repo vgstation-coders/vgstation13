@@ -102,3 +102,13 @@
 	materials = list(MAT_IRON = 100, MAT_GLASS = 100)
 	category = "Robotics"
 	build_path = /obj/item/clothing/glasses/hud/diagnostic
+
+/datum/design/mech_painter
+	name = "Mecha Painter"
+	desc = "A device used to paint mechs in various colours and fashions."
+	id = "mech_painter"
+	req_tech = list(Tc_MATERIALS = 1)
+	build_type = MECHFAB
+	materials = list(MAT_IRON = 100, MAT_GLASS = 100)
+	category = "Misc"
+	build_path = /obj/item/device/mech_painter

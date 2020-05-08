@@ -406,7 +406,7 @@
 		var/obj/glacier/adj_glacier = locate(/obj/glacier) in adj_tile
 		if(adj_glacier)
 			junction |= dir_to_smoothingdir(direction)
-			if(adj_glacier.isedge && direction in cardinal)
+			if(adj_glacier.isedge && (direction in cardinal))
 				edgenum |= direction
 				edgesnum = adj_glacier.isedge
 	if(junction == SMOOTHING_ALLDIRS) // you win the not-having-to-smooth-lotterys

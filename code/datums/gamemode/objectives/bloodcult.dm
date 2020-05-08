@@ -221,7 +221,7 @@
 /datum/objective/bloodcult_feast
 	explanation_text = "The Feast: This is your victory, you may take part in the celebrations of a work well done."
 	name = "Blood Cult: Epilogue"
-	var/timer = 200 SECONDS
+	var/timer = 2 MINUTES
 
 /datum/objective/bloodcult_feast/PostAppend()
 	message_admins("Blood Cult: The cult has won.")

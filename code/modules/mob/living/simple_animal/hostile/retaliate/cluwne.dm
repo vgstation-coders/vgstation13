@@ -136,7 +136,7 @@
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
 		Paralyse(10)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/emote(var/act, var/type, var/message, var/auto)
+/mob/living/simple_animal/hostile/retaliate/cluwne/emote(act, m_type = null, message = null, ignore_status = FALSE)
 	if(timestopped)
 		return //under effects of time magick
 

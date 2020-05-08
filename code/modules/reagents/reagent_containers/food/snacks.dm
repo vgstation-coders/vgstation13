@@ -1153,6 +1153,7 @@
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/throw_impact(atom/hit_atom)
+	set waitfor = FALSE
 	..()
 	if(ismob(hit_atom))
 		var/mob/M = hit_atom
@@ -1623,7 +1624,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
 	..()
-	reagents.clear_reagents()	
+	reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
@@ -1638,7 +1639,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope/processed/New()
 	..()
-	reagents.clear_reagents()	
+	reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/food/snacks/butter
 	name = "butter"

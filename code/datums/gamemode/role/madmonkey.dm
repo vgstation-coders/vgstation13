@@ -43,7 +43,7 @@ datum/role/madmonkey/Greet(var/greeting,var/custom)
 	switch(greeting)
 		if (GREET_CUSTOM)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>[custom]</B>")
-		else if(GREET_MASTER)
+		if (GREET_MASTER)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='warning'><B>You are the Jungle Fever patient zero!</B><BR>Find somewhere safe, you will transform in one minute. At that time, start biting!</span>")
 		else //default
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='warning'><B>You are a [name]!</B><BR>Bite crewmembers to add to your ranks!</span>")

@@ -71,7 +71,7 @@
 		choose_projectile()
 		return
 
-/obj/item/weapon/gun/projectile/roulette_revolver/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/projectile/roulette_revolver/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)

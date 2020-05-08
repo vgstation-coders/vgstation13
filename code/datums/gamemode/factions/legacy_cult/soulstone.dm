@@ -315,7 +315,11 @@
 	log_admin("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
 
 	//Creating a shade inside the stone and putting the victim in control
-	var/mob/living/simple_animal/shade/shadeMob = new(src)//put shade in stone
+	var/mob/living/simple_animal/shade/shadeMob
+	if(iscultist(user))
+		shadeMob = new /mob/living/simple_animal/shade(src)//put shade in stone
+	else
+		shadeMob = new /mob/living/simple_animal/shade/noncult(src)
 	shadeMob.status_flags |= GODMODE //So they won't die inside the stone somehow
 	shadeMob.canmove = 0//Can't move out of the soul stone
 	shadeMob.name = "[true_name] the Shade"

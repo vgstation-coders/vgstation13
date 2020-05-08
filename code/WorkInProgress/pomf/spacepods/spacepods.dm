@@ -626,7 +626,7 @@
 	return 0
 
 /obj/spacepod/proc/move_into_pod(var/mob/living/L)
-	if(L && L.client && L in range(1))
+	if(L && L.client && (L in range(1)))
 		L.reset_view(src)
 		L.stop_pulling()
 		L.forceMove(src)

@@ -46,10 +46,10 @@
 			trimmed_list.Remove(M)
 			continue
 		if (M.mind)
-			if (M.mind.assigned_role in restricted_from_jobs || M.mind.role_alt_title in restricted_from_jobs)//does their job allow for it?
+			if ((M.mind.assigned_role in restricted_from_jobs) || (M.mind.role_alt_title in restricted_from_jobs))//does their job allow for it?
 				trimmed_list.Remove(M)
 				continue
-			if (M.mind.assigned_role in protected_from_jobs || M.mind.role_alt_title in protected_from_jobs)
+			if ((M.mind.assigned_role in protected_from_jobs) || (M.mind.role_alt_title in protected_from_jobs))
 				var/probability = initial(role_category.protected_traitor_prob)
 				if (prob(probability))
 					candidates.Remove(M)
@@ -172,7 +172,7 @@
 							"Cyborg", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
-	weight = 7
+	weight = 6
 	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 	repeatable = TRUE
@@ -371,6 +371,7 @@
 	required_pop = list(25,20,20,15,15,15,10,10,10,10)
 	required_candidates = 1
 	weight = 2
+	weekday_rule_boost = list("Tue")
 	cost = 30
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
@@ -481,6 +482,7 @@
 	required_pop = list(0,0,10,10,15,15,20,20,20,25)
 	required_candidates = 1
 	weight = 1
+	timeslot_rule_boost = list(SLEEPTIME)
 	cost = 5
 	requirements = list(5,5,15,15,25,25,55,55,55,75)
 	logo = "rambler-logo"

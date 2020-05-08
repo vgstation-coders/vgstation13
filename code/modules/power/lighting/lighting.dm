@@ -495,8 +495,8 @@ var/global/list/obj/machinery/light/alllights = list()
 					prot = (G.max_heat_protection_temperature > 360)
 		else
 			prot = 1
-
-		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || (user.get_active_hand_organ()).is_robotic())
+		var/datum/organ/external/active_hand_organ = user.get_active_hand_organ()
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || active_hand_organ?.is_robotic())
 			to_chat(user, "You remove the light [fitting]")
 		else
 			to_chat(user, "You try to remove the light [fitting], but it's too hot and you don't want to burn your hand.")

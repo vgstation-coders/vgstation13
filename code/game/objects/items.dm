@@ -934,7 +934,7 @@
 		return
 
 /obj/item/proc/unwield(mob/user)
-	if(flags & MUSTTWOHAND && src in user)
+	if(flags & MUSTTWOHAND && (src in user))
 		user.drop_from_inventory(src)
 	if(istype(wielded))
 		wielded.wielding = null
@@ -1369,7 +1369,7 @@ var/global/list/image/blood_overlays = list()
 			//Since contents are always ordered to the left we assume the user wants to move this item to the rightmost slot possible.
 			var/obj/abstract/screen/storage/screenobj = over_object
 			var/obj/item/weapon/storage/storageobj = screenobj.master
-			if(storageobj == loc && usr in storageobj.is_seeing)
+			if(storageobj == loc && (usr in storageobj.is_seeing))
 				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
 				storageobj.contents -= src
 				storageobj.contents += src

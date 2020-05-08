@@ -140,11 +140,11 @@
 		return
 
 	var/mob/living/carbon/human/H = mob
-	var/obj/item/clothing/glasses/sunglasses/virus/virussunglasses = new /obj/item/clothing/glasses/sunglasses/virus
-	if(H.glasses && !istype(H.glasses, /obj/item/clothing/glasses/sunglasses/virus))
-		mob.u_equip(H.glasses,1)
-		mob.equip_to_slot(virussunglasses, slot_glasses)
-	if(!slot_glasses)
+	var/obj/item/clothing/glasses/H_glasses = H.get_item_by_slot(slot_glasses)
+
+	if(!istype(H_glasses, /obj/item/clothing/glasses/sunglasses/virus))
+		var/obj/item/clothing/glasses/sunglasses/virus/virussunglasses = new
+		mob.u_equip(H_glasses,1)
 		mob.equip_to_slot(virussunglasses, slot_glasses)
 	mob.confused += 10
 

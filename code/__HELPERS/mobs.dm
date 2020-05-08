@@ -172,7 +172,6 @@ proc/RoundHealth(health)
 			return "health0"
 		else
 			return "health-100"
-	return "0"
 
 /proc/cyborg_health_to_icon_state(var/health_ratio)
 	switch(health_ratio)

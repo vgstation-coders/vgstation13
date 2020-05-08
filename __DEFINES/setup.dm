@@ -202,6 +202,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define TIMELESS		32768 // Immune to time manipulation.
 
 #define SILENTCONTAINER	65536 //reactions inside make no noise
+#define ATOM_INITIALIZED 131072 // initialize() was called
 
 #define ALL ~0
 #define NONE 0
@@ -817,7 +818,7 @@ SEE_PIXELS	256
 #define CHAT_GHOSTRADIO 8192
 #define SOUND_STREAMING 16384 // /vg/
 #define CHAT_GHOSTPDA   32768
-
+#define AUTO_DEADMIN	65536
 
 #define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC|SOUND_STREAMING)
 
@@ -1119,6 +1120,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define SILENCECOMP  1 		//Silencer-compatible
 #define AUTOMAGDROP  2		//Does the mag drop when it's empty?
 #define EMPTYCASINGS 4		//Does the gun eject empty casings?
+#define SCOPED		 8		//Attachable scope?
 
 //projectiles bouncing off and phasing through obstacles
 #define PROJREACT_WALLS		1//includes opaque doors
@@ -1292,6 +1294,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #else
 	#define say_testing(a,x)
 //	null << "[x][a]")
+#endif
+
+#define ASTAR_DEBUG 0
+#if ASTAR_DEBUG == 1
+#warn "Astar debug is on. Don't forget to turn it off after you've done :)"
+#define astar_debug(text) to_chat(world, text)
+#else
+#define astar_debug(text)
 #endif
 
 //#define JUSTFUCKMYSHITUP 1

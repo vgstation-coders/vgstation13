@@ -487,8 +487,8 @@ var/global/num_vending_terminals = 1
 		if(can_accept_voucher(W, user))
 			if(user.drop_item(W, src))
 				to_chat(user, "<span class='notice'>You insert [W] into [src].</span>")
-				return voucher_act(W, user)
 				src.updateUsrDialog()
+				return voucher_act(W, user)
 		else
 			to_chat(user, "<span class='notice'>\The [src] refuses to take [W].</span>")
 			return 1
@@ -3075,6 +3075,14 @@ var/global/num_vending_terminals = 1
 		/obj/item/key/security/spare = 1,
 		/obj/item/weapon/depocket_wand = 4,
 		/obj/item/weapon/ram_kit = 1,
+		/obj/item/weapon/mech_expansion_kit = 3,
+		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector = 10,
+		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super = 4,
+		/obj/structure/wetdryvac = 1,
+		/obj/structure/bed/therapy = 1,
+		/obj/item/weapon/hair_dye/skin_dye/discount = 5,
+		/obj/item/weapon/gun/projectile/hecate/hunting = 2,
+		/obj/item/weapon/grenade/station/discount = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -3106,6 +3114,14 @@ var/global/num_vending_terminals = 1
 		/obj/item/key/security/spare = 10,
 		/obj/item/weapon/depocket_wand = 50,
 		/obj/item/weapon/ram_kit = 100,
+		/obj/item/weapon/mech_expansion_kit = 50,
+		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector = 15,
+		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super = 50,
+		/obj/structure/wetdryvac = 50,
+		/obj/structure/bed/therapy = 50,
+		/obj/item/weapon/hair_dye/skin_dye/discount = 10,
+		/obj/item/weapon/gun/projectile/hecate/hunting = 100,
+		/obj/item/weapon/grenade/station/discount = 100,
 		)
 
 /obj/machinery/vending/trader/New()

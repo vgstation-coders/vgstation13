@@ -64,16 +64,10 @@
 		var/datum/autopsy_data/W = O.autopsy_data[V]
 
 		if(!W.pretend_weapon)
-			/*
-			// the more hits, the more likely it is that we get the right weapon type
-			if(prob(50 + W.hits * 10 + W.damage))
-			*/
-
-			// Buffing this stuff up for now!
-			if(1)
-				W.pretend_weapon = W.weapon
-			else
-				W.pretend_weapon = pick("mechanical toolbox", "wirecutters", "revolver", "crowbar", "fire extinguisher", "tomato soup", "oxygen tank", "emergency oxygen tank", "laser", "bullet")
+			// There used to be code that increased the chance of getting the right weapon here.
+			// It has been years since that was not a thing but I'm not refactoring pretend_weapon out right now.
+			// Please forgive me.
+			W.pretend_weapon = W.weapon
 
 
 		var/datum/autopsy_data_scanner/D = wdata[V]

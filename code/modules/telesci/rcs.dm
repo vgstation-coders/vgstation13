@@ -131,7 +131,7 @@
 	var/turf/teleport_target
 	if (mode == MODE_NORMAL)
 		var/list/obj/machinery/telepad_cargo/input_list = list()
-		var/list/area/area_index = list()
+		var/list/area_index = list()
 		for (var/obj/machinery/telepad_cargo/telepad in cargo_telepads)
 			var/turf/T = get_turf(telepad)
 			if (!T)

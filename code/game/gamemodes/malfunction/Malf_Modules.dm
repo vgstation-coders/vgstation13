@@ -96,7 +96,7 @@ rcd light flash thingy on matter drain
 /datum/AI_Module/small/overload_machine
 	module_name = "Machine overload"
 	mod_pick_name = "overload"
-	description = "Overloads an electrical machine, causing a small explosion. 2 uses."
+	description = "Overloads an electrical machine, causing a small explosion after a short delay. 2 uses."
 	uses = 2
 	cost = 15
 	power_type = /spell/targeted/overload_machine

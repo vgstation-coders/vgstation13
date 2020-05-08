@@ -112,8 +112,6 @@ var/paperwork_library
 		world.log << call(paperwork_library, "init_renderer")()
 		paperwork = 1
 		return 1
-	else
-		return 0
 	return 0
 
 /proc/paperwork_stop()
