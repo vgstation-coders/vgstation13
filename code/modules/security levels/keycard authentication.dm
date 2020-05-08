@@ -54,12 +54,12 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 					ert_reason = event_source.ert_reason
 
 					playsound(src, get_sfx("card_swipe"), 60, 1, -5)
-					to_chat(user, "You swipe your ID card to confirm the [event].")
+					to_chat(user, "<span class='notice'>You swipe your ID card to confirm the [event].</span>")
 
 					trigger_event(event)
 			else if(screen == 2)
 				playsound(src, get_sfx("card_swipe"), 60, 1, -5)
-				to_chat(user, "You swipe your ID card to request the [event].")
+				to_chat(user, "<span class='notice'>You swipe your ID card to request the [event].</span>")
 
 				event_triggered_by = usr
 				broadcast_request() //This is the device making the initial event request. It needs to broadcast to other devices
