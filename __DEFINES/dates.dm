@@ -41,6 +41,7 @@
 #define BOXING_DAY "Boxing Day"
 #define NEW_YEARS_EVE "New Year's Eve"
 #define FRIDAY_THE_13TH "Friday the 13th"
+#define VG_BIRTHDAY "/vg/station Anniversary"
 
 //timeslots as strings
 #define SLEEPTIME "the morning shift" //3 to 11
