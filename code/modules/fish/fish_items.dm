@@ -196,24 +196,6 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 		return
 	..()   removed because we already have babycarp */
 
-/obj/item/weapon/lobster
-	name = "lobster"
-	desc = "The cousin of the crab, genetically modified to be unable to snap at anyone, its innate anger and hatred is kept intact." //if anyones got a better desc im all ears
-	icon_state = "lobster"
-	icon = 'icons/obj/fish_items.dmi'
-
-/obj/item/weapon/steamed_deluxe_lobster // a cooked lobster without its shell cracked, deluxe edition
-	name = "Steamed Lobster"
-	desc = "A steamed lobster, Served with a side of melted butter and a slice of lemon, you can still feel its hatred. Its shell isnt cracked open yet" //if anyones got a better desc im all ears
-	icon = 'icons/obj/food.dmi'
-	icon_state = "lobster_steamed_deluxe"
-
-/obj/item/weapon/steamed_simple_lobster // a cooked lobster without its shell cracked
-	name = "Steamed Lobster"
-	desc = "A steamed lobster, you can almost hear its screams. Its shell isnt cracked open yet" //if anyones got a better desc im all ears
-	icon = 'icons/obj/food.dmi'
-	icon_state = "lobster_steamed_simple"
-
 /obj/item/weapon/bananapeel/clownfish
 	name = "clown fish"
 	desc = "Even underwater, you cannot escape HONKing."
@@ -233,6 +215,12 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 		return TRUE
 	..()
 
+/obj/item/weapon/lobster
+	name = "lobster"
+	desc = "The cousin of the crab, genetically modified to be unable to snap at anyone, its innate anger and hatred is kept intact."
+	icon_state = "lobster"
+	icon = 'icons/obj/fish_items.dmi'
+
 /obj/item/weapon/lobster/attackby(var/obj/item/O, var/mob/user) // extracting tail and claw meat from a sea cockroach
 	if(iswirecutter(O))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src] and pull out the claw meat while separating the tail!")
@@ -251,7 +239,28 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 		return
 	..()
 
-/obj/item/weapon/steamed_deluxe_lobster/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso
+
+/obj/item/weapon/steamed_lobster_simple_uncracked // a cooked lobster without its shell cracked
+	name = "Steamed Lobster"
+	desc = "A steamed lobster, you can almost hear its screams. Its shell isnt cracked open yet"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_steamed_simple"
+
+/obj/item/weapon/steamed_lobster_simple_uncracked/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso, simple version
+	if(istype(O, /obj/item/weapon/wirecutters))
+		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
+		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple(get_turf(src))
+		qdel(src)
+		return
+	..()
+
+/obj/item/weapon/steamed_lobster_deluxe_uncracked // a cooked lobster without its shell cracked, deluxe edition
+	name = "Steamed Lobster"
+	desc = "A steamed lobster, Served with a side of melted butter and a slice of lemon, you can still feel its hatred. Its shell isnt cracked open yet" //if anyones got a better desc im all ears
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_steamed_deluxe"
+
+/obj/item/weapon/steamed_lobster_deluxe_uncracked/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso
 	if(istype(O, /obj/item/weapon/wirecutters))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
 		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe(get_turf(src))
@@ -259,10 +268,3 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 		return
 	..()
 
-/obj/item/weapon/steamed_simple_lobster/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso, simple version
-	if(istype(O, /obj/item/weapon/wirecutters))
-		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
-		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple(get_turf(src))
-		qdel(src)
-		return
-	..()

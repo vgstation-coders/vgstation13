@@ -95,7 +95,7 @@ var/list/nonhatching_types = list("sea devil") //If you ever want to create anot
 /obj/item/fish_eggs/lobster
 	name = "lobster eggs"
 	desc = "A clutch of reddish-orange eggs, belonging to lobsters."
-	icon_state = "catfish_eggs"  //placeholder
+	icon_state = "catfish_eggs"
 	fish_type = "lobster"
 
 /obj/item/fish_eggs/seadevil/New()

@@ -2805,14 +2805,14 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
 		/obj/item/weapon/reagent_containers/food/snacks/butter,
 		)
-	result = /obj/item/weapon/steamed_deluxe_lobster //this is the lobster whose shell isnt cracked, break its seal and steal its soul, you vile cretin
+	result = /obj/item/weapon/steamed_lobster_deluxe_uncracked //this is the lobster whose shell isnt cracked, break its seal and steal its soul, you vile cretin
 
 /datum/recipe/steamed_lobster_simple //the simple has no fancy butter or lemon
 	reagents = list (WATER = 10)
 	items = list(
 		/obj/item/weapon/lobster
 		)
-	result = /obj/item/weapon/steamed_simple_lobster //same as the deluxe, wirecutter it to make it edible
+	result = /obj/item/weapon/steamed_lobster_simple_uncracked //same as the deluxe, wirecutter it to make it edible
 
 /datum/recipe/lobster_roll //lobster hot dog
 	reagents = list (MAYO = 10) // these things are mostly mayo

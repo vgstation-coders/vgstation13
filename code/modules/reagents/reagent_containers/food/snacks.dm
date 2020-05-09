@@ -841,6 +841,10 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/faggot/processed/New()
+	..()
+	reagents.clear_reagents()
+
 /obj/item/weapon/reagent_containers/food/snacks/sausage
 	name = "sausage"
 	desc = "A piece of mixed, long meat."
@@ -1617,6 +1621,10 @@
 	reagents.add_reagent(NUTRIMENT, 4)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
+	..()
+	reagents.clear_reagents()
+
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
 	desc = "Dope from a soy."
@@ -1627,6 +1635,10 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/soydope/processed/New()
+	..()
+	reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/food/snacks/butter
 	name = "butter"
@@ -2385,6 +2397,11 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(IMIDAZOLINE, 3)
 	bitesize = 2
+
+
+/obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed/New()
+	..()
+	reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/food/snacks/superbiteburger
 	name = "Super Bite Burger"
@@ -6334,7 +6351,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple  // this one has no fancy butter or lemon
 	name = "Steamed Lobster"
-	desc = "A steamed lobster, Served with a side of melted butter and a slice of lemon, you can still feel its hatred"
+	desc = "A steamed lobster, Served with no sides, eat up you barbarian."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_simple"
 	trash = /obj/item/trash/plate

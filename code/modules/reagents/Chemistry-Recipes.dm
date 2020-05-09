@@ -2121,7 +2121,7 @@
 	name = "Soy Sauce"
 	id = SOYSAUCE
 	result = SOYSAUCE
-	required_reagents = list(SOYMILK = 4, SACIDS = 1) //who the hell decided this, sulphirc acid to make soysauce?
+	required_reagents = list(SOYMILK = 4, SACIDS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/mustard
