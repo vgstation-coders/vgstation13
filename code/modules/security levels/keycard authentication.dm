@@ -194,7 +194,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 			playsound(event_source, 'sound/machines/notify.ogg', 60, 0)
 
 	log_game("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]")
-	message_admins("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]", 1)
+	message_admins("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]")
 	for(var/obj/machinery/keycard_auth/KA in authenticators)
 		KA.reset()
 
