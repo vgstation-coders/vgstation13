@@ -1066,7 +1066,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/ancient/New()
 	..()
-	reagents.add_reagent(KARMOTRINE, 60)
+	reagents.add_reagent(KARMOTRINE, 15)
 
 /obj/item/weapon/reagent_containers/food/drinks/britcup
 	name = "cup"

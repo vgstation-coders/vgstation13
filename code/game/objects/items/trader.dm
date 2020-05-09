@@ -36,6 +36,9 @@
 	new /obj/item/weapon/reagent_containers/glass/bottle/peridaxon(src)
 	new /obj/item/weapon/reagent_containers/glass/bottle/rezadone(src)
 	new /obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/large/supermatter(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/bluespace(src)
+	new /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer(src)
 
 /obj/item/weapon/storage/bluespace_crystal
 	name = "natural bluespace crystals box"

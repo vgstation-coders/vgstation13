@@ -228,7 +228,7 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/large/supermatter
 	name = "supermatter beaker"
-	desc = "A beaker with shielded supermatter sliver. It heats fluids inside."
+	desc = "A beaker with a supermatter sliver. It heats fluids inside, but holding it makes your hand feel strange..."
 	icon_state = "beakersupermatter"
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_MATERIALS + "=4"
 
@@ -246,7 +246,7 @@
 	if(ishuman(loc))
 		//held or in pocket of a human
 		var/mob/living/L = loc
-		L.apply_radiation(1, RAD_EXTERNAL)
+		L.apply_radiation(3, RAD_EXTERNAL)
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
