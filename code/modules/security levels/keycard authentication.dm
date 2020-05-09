@@ -17,6 +17,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	var/ert_reason
 	//1 = select event
 	//2 = authenticate
+	req_one_access = list(access_keycard_auth)
 	anchored = 1.0
 	use_power = 1
 	idle_power_usage = 2
@@ -39,9 +40,8 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	if(stat & (NOPOWER|BROKEN))
 		to_chat(user, "<span class='notice'>This device is not powered.</span>")
 		return
-	if(istype(W,/obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/ID = W
-		if(access_keycard_auth in ID.access)
+	if(isID(W) || isPDA(W))
+		if(check_access(W))
 			if(active == 1)
 				//This is not the device that made the initial request. It is the device confirming the request.
 				if(event_source)
