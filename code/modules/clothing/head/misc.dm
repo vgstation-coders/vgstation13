@@ -496,6 +496,12 @@
 	icon_state = "duncecap"
 	item_state = "duncecap"
 
+/obj/item/clothing/head/party_hat
+	name = "party hat"
+	desc = "A party cone. Not useful in disguise as a unicorn or impaling foes."
+	icno_state = "birthdayhat"
+	item_state = "birthdayhat"
+
 /obj/item/clothing/head/snake
 	name = "snake head"
 	desc = "Reenact acts of violence against reptiles, or sneak into a swamp unnoticed."
