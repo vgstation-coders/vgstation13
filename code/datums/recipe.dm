@@ -59,7 +59,7 @@
 			var/found = FALSE
 			for(var/I in L)
 				var/reagent_amount = avail_reagents.get_reagent_amount(I)
-				if(reagent_amount >= reagents[r_r])
+				if(abs(reagent_amount - reagents[r_r])<0.1)
 					found = TRUE
 					if(reagent_amount > reagents[r_r])
 						. = -1
@@ -68,7 +68,7 @@
 				return 0
 		else
 			var/reagent_amount = avail_reagents.get_reagent_amount(r_r)
-			if(reagent_amount >= reagents[r_r])
+			if(abs(reagent_amount - reagents[r_r])<0.1)
 				if(reagent_amount > reagents[r_r])
 					. = -1
 			else

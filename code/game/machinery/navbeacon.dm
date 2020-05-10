@@ -85,19 +85,15 @@ var/list/navbeacons = list()
 	// or one of the set transponder keys
 	// if found, return a signal
 /obj/machinery/navbeacon/receive_signal(datum/signal/signal)
-
 	var/request = signal.data["findbeacon"]
 	if(request && ((request in codes) || request == "any" || request == location))
 		spawn(1)
-			post_signal()
+			post_signal(request)
 
 	// return a signal giving location and transponder codes
 
-/obj/machinery/navbeacon/proc/post_signal()
-
-
+/obj/machinery/navbeacon/proc/post_signal(request)
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
-
 	if(!frequency)
 		return
 
@@ -106,11 +102,14 @@ var/list/navbeacons = list()
 	signal.transmission_method = 1
 	signal.data["beacon"] = location
 
+	if (request == "patrol")
+		signal.data["patrol"] = 1
+
 	for(var/key in codes)
 		signal.data[key] = codes[key]
 
+	astar_debug("navbeacon [location] posted signal with request [request] on freq [freq].")
 	frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
-
 
 /obj/machinery/navbeacon/attackby(var/obj/item/I, var/mob/user)
 	var/turf/T = loc

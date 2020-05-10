@@ -7,7 +7,7 @@
 	flags = FPRINT
 	clothing_flags = PLASMAGUARD
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
-	body_parts_covered = HEAD|EARS|EYES|MOUTH
+	body_parts_covered = HEAD|EARS|EYES|MOUTH|HIDEHAIR
 	siemens_coefficient = 0.9
 	sterility = 100
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)

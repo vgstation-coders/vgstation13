@@ -182,6 +182,7 @@
 	if(wizard_mob.backbag == 4)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(wizard_mob), slot_back)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(wizard_mob), slot_in_backpack)
+	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/hair_dye/skin_dye(wizard_mob), slot_in_backpack)
 //	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
 	var/scroll_type = apprentice ? /obj/item/weapon/teleportation_scroll/apprentice : /obj/item/weapon/teleportation_scroll
 	wizard_mob.equip_to_slot_or_del(new scroll_type(wizard_mob), slot_r_store)
@@ -426,29 +427,29 @@
 
 
 /proc/equip_vox_raider(var/mob/living/carbon/human/H)
-	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
+	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider
 	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
 	H.equip_to_slot_or_del(R, slot_ears)
 
-	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes(src)
-	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider(src))
+	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes
+	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider)
 	H.equip_to_slot_or_del(uni, slot_w_uniform)
 
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox(src), slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox(src), slot_gloves) // AS ABOVE.
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox, slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox, slot_gloves) // AS ABOVE.
 
-	H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox(src), slot_wear_mask)
-	H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen(src), slot_back)
-	H.equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_r_store)
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox, slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/device/flashlight, slot_r_store)
 
-	var/obj/item/weapon/card/id/syndicate/C = new(get_turf(src))
+	var/obj/item/weapon/card/id/syndicate/C = new
 	C.registered_name = H.real_name
 	C.assignment = "Trader"
 	C.UpdateName()
-	C.SetOwnerInfo(src)
+	C.SetOwnerInfo(H)
 	C.icon_state = "trader"
 	C.access = list(access_syndicate, access_trade)
-	var/obj/item/weapon/storage/wallet/W = new(get_turf(src))
+	var/obj/item/weapon/storage/wallet/W = new
 	W.handle_item_insertion(C)
 	W.handle_item_insertion(new /obj/item/weapon/coin/raider)
 	H.equip_to_slot_or_del(W, slot_wear_id)

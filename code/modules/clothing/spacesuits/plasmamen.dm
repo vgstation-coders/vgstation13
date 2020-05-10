@@ -133,7 +133,7 @@
 	name = "plasmaman botanist helmet"
 	icon_state = "plasmamanBotanist_helmet0"
 	base_state = "plasmamanBotanist_helmet"
-	
+
 /obj/item/clothing/suit/space/plasmaman/librarian
 	name = "plasmaman librarian suit"
 	icon_state = "plasmamanLibrarian_suit"
@@ -141,7 +141,7 @@
 /obj/item/clothing/head/helmet/space/plasmaman/librarian
 	name = "plasmaman librarian helmet"
 	icon_state = "plasmamanLibrarian_helmet0"
-	base_state = "plasmamanLibrarian_helmet"	
+	base_state = "plasmamanLibrarian_helmet"
 
 /obj/item/clothing/suit/space/plasmaman/chaplain
 	name = "plasmaman chaplain suit"
@@ -422,3 +422,28 @@
 	base_state = "plasmamanCult_helmet"
 	desc = "A containment suit designed by the followers of Nar-Sie. It glows menacingly with unearthly flames."
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+
+//Sith
+
+/obj/item/clothing/suit/space/plasmaman/sith
+	name = "plasmaman Sith suit"
+	icon_state = "plasmaman_sith_suit"
+	item_state = "plasmaman_sith_suit"
+	desc = "A menacing armored suit that protects the wearer from harm, fit for a plasmaman. It appears to permanently seal itself once worn."
+	armor = list(melee = 60, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
+	canremove = 0
+
+/obj/item/clothing/suit/space/plasmaman/sith/acidable()
+	return 0
+
+//Unlike the suit, the helmet can be taken off
+/obj/item/clothing/head/helmet/space/plasmaman/sith
+	name = "plasmaman Sith helmet"
+	icon_state = "plasmaman_sith_helmet0"
+	item_state = "plasmaman_sith_helmet0"
+	base_state = "plasmaman_sith_helmet"
+	desc = "A menacing helmet that protects the wearer from harm, fit for a plasmaman."
+	armor = list(melee = 60, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
+
+/obj/item/clothing/head/helmet/space/plasmaman/sith/acidable()
+	return 0

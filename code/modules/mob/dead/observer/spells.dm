@@ -45,7 +45,7 @@ var/global/list/boo_phrases_silicon=list(
 	spell_flags = STATALLOWED | GHOSTCAST
 
 	school = "transmutation"
-	charge_max = 600
+	charge_max = 60 SECONDS
 	invocation = ""
 	invocation_type = SpI_NONE
 	range = 1 // Or maybe 3?
@@ -62,6 +62,86 @@ var/global/list/boo_phrases_silicon=list(
 		for(var/atom/A in T.contents)
 			if(A.can_spook(0))
 				A.spook(holder)
+
+/spell/targeted/ghost
+	name = "Ghost Spell"
+	desc = "This is an abstract object, you shouldn't be seeing this, please report it."
+
+	spell_flags = STATALLOWED | GHOSTCAST | INCLUDEUSER
+
+	school = "transmutation"
+	charge_type = Sp_RECHARGE
+	charge_max = 0
+	invocation = ""
+	invocation_type = SpI_NONE
+	range = SELFCAST
+	max_targets = 1
+
+	override_base = "grey"
+	override_icon = 'icons/obj/ghost_spells.dmi'
+	overlay_icon_state = "spell"
+
+/spell/targeted/ghost/toggle_medHUD
+	name = "Toggle Medic HUD"
+	desc = "It also toggles the diagnostic HUD (to see the borgs health)"
+	hud_state = "medhud2"
+
+/spell/targeted/ghost/toggle_medHUD/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.toggle_medHUD()
+	ghost.toggle_diagHUD()
+
+/spell/targeted/ghost/toggle_darkness
+	name = "Toggle Darkness"
+	desc = ""
+	hud_state = "toggle_darkness"
+
+/spell/targeted/ghost/toggle_darkness/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.toggle_darkness()
+
+/spell/targeted/ghost/become_mouse
+	name = "Become a mouse"
+	desc = "Squeek!"
+	override_icon = 'icons/mob/animal.dmi'
+	hud_state = "mouse_gray_sleep"
+
+/spell/targeted/ghost/become_mouse/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.become_mouse()
+
+/spell/targeted/ghost/hide_sprite
+	name = "Hide Sprite"
+	desc = "For filming shit"
+	hud_state = "hidesprite"
+
+/spell/targeted/ghost/hide_sprite/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.hide_sprite()
+
+/spell/targeted/ghost/haunt
+	name = "Haunt"
+	desc = "Haunt that one guy that killed you"
+	hud_state = "haunt"
+
+/spell/targeted/ghost/haunt/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.follow()
+
+/spell/targeted/ghost/reenter_corpse
+	name = "Reenter Corpse"
+	desc = ""
+	hud_state = "reenter_corpse"
+
+/spell/targeted/ghost/reenter_corpse/cast()
+	var/mob/dead/observer/ghost = holder
+	ASSERT(istype(ghost))
+	ghost.reenter_corpse()
 
 /* FIXME
 /spell/ghost_show_map

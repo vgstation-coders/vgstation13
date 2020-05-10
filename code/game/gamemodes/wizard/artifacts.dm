@@ -35,14 +35,14 @@
 	abbreviation = "SW"
 	price = 20
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/swapper)
-	
+
 /datum/spellbook_artifact/staff_of_sinterklaas
 	name = "Staff of Sinterklaas"
 	desc = "An artefact that fires a glowing bolt of energy which turns the target into a jovial helper."
 	abbreviation = "SS"
 	price = 5
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/sinterklaas, /obj/item/clothing/head/wizard/sinterklaas)
-	
+
 /datum/spellbook_artifact/staff_of_sinterklaas/can_buy(var/mob/user)
 	return (Holiday == SINTERKLAAS)
 
@@ -99,7 +99,7 @@
 	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
 	abbreviation = "SB"
 	price = 4 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/storage/box/spellbook/random)
+	spawned_items = list(/obj/item/weapon/storage/box/spellbook)
 
 /datum/spellbook_artifact/potion_bundle
 	name = "Potion bundle"
@@ -322,9 +322,3 @@
 	abbreviation = "BS"
 	desc = "Makes you much faster, but blinds you while you move."
 	spawned_items = list(/obj/item/clothing/shoes/blindingspeed)
-
-/datum/spellbook_artifact/fuckup
-	name = "Fuckup Boots"
-	abbreviation = "FU"
-	desc = "Makes you much slower, but breaches as you walk."
-	spawned_items = list(/obj/item/clothing/shoes/fuckup)

@@ -64,7 +64,7 @@
 	manual_unbuckle(usr)
 
 /obj/structure/bed/proc/manual_unbuckle(var/mob/user)
-	if(user.incapacitated())
+	if(user.isStunned())
 		return FALSE
 
 	if(user.size <= SIZE_TINY)
@@ -169,16 +169,63 @@
 
 /obj/structure/bed/attackby(obj/item/weapon/W, mob/user)
 	if(W.is_wrench(user))
-		W.playtoolsound(src, 50)
-		drop_stack(sheet_type, loc, 2, user)
-		qdel(src)
-		return
+		wrench_act(W,user)
+	else
+		..()
 
-	. = ..()
-
-
+/obj/structure/bed/proc/wrench_act(obj/item/weapon/W,mob/user)
+	W.playtoolsound(src, 50)
+	drop_stack(sheet_type, loc, 2, user)
+	qdel(src)
 
 /obj/structure/bed/alien
 	name = "resting contraption"
 	desc = "This looks similar to contraptions from earth. Could aliens be stealing our technology?"
 	icon_state = "abed"
+
+
+//therapy couch
+//beach ambience found in ambience_datums.dm
+//ambience granted in human.dm L1979
+/obj/structure/bed/therapy
+	name = "therapy couch"
+	desc = "A relaxing couch that will make the troubles melt away as you tell a stranger about your father."
+	icon_state = "psychcouch"
+	anchored = FALSE
+
+/obj/structure/bed/therapy/New()
+	..()
+	processing_objects += src
+
+/obj/structure/bed/therapy/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/structure/bed/therapy/process()
+	for(var/mob/living/carbon/human/H in get_locked(mob_lock_type))
+		//Only humanoids are emotionally complex enough to benefit from this bench
+		H.AdjustDizzy(rand(-2,-4))
+		H.stuttering = max(0,H.stuttering-rand(2,4))
+		H.jitteriness = max(0,H.jitteriness-rand(2,4))
+		H.hallucination = max(0,H.hallucination-rand(2,4))
+		H.remove_confused(rand(2, 4))
+		H.drowsyness = max(0, H.drowsyness-rand(2,4))
+		H.pain_shock_stage = max(0, H.pain_shock_stage-rand(2,3))
+		H.dir = 8 //face up on couch
+
+/obj/structure/bed/therapy/wrench_act(obj/item/weapon/W,mob/user)
+	if(wrenchAnchor(user,W) && !anchored)
+		var/mob/living/locked = get_locked(mob_lock_type)[1]
+		if(locked)
+			unlock_atom(locked)
+			to_chat(locked,"<span class='warning'>You are forced off \the [src] as it is unanchored.</span>")
+
+/obj/structure/bed/therapy/buckle_mob(mob/M as mob, mob/user as mob)
+	if(!anchored)
+		//note .name is used here to avoid "the" appearing
+		to_chat(user,"<span class='warning'>You need the stability of an anchored [src.name] to really benefit from that.</span>")
+		return
+	..()
+
+/obj/structure/bed/therapy/cultify()
+	return //tell me about this "papa" you keep chanting about

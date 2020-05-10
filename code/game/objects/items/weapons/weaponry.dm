@@ -460,3 +460,14 @@ obj/item/weapon/banhammer/admin
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hammer_left.dmi', "right_hand" = 'icons/mob/in-hand/right/hammer_right.dmi')
 	force = 8
 	hitsound = 'sound/weapons/toolbox.ogg'
+
+/obj/item/weapon/pitchfork
+	name = "pitchfork"
+	desc = "Down with the current state of things!"
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "pitchspoon"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 8
+	sharpness = 2
+	sharpness = SHARP_TIP
+	hitsound = 'sound/weapons/bladeslice.ogg'

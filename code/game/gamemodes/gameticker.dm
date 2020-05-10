@@ -81,7 +81,7 @@ var/datum/controller/gameticker/ticker
 	else
 		login_music = fcopy_rsc(oursong)
 
-	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
+	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
 
 	do
 #ifdef GAMETICKER_LOBBY_DURATION

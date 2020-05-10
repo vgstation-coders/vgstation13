@@ -88,10 +88,6 @@
 	if (opacity && isturf(loc))
 		un_opaque = loc
 
-	loc = null
-	if (un_opaque)
-		un_opaque.recalc_atom_opacity()
-
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
 
@@ -100,11 +96,15 @@
 
 	for (var/datum/locking_category/category in locking_categories)
 		qdel(category)
-
 	locking_categories      = null
 	locking_categories_name = null
 
 	break_all_tethers()
+
+	forceMove(null, harderforce = TRUE)
+
+	if (un_opaque)
+		un_opaque.recalc_atom_opacity()
 
 	if((flags & HEAR) && !ismob(src))
 		for(var/mob/virtualhearer/VH in virtualhearers)
@@ -282,6 +282,9 @@
 				returnToPool(G)
 
 	AM.locked_to = src
+	if (ismob(AM))
+		var/mob/M = AM
+		M.canmove = 0
 
 	locked_atoms[AM] = category
 	category.lock(AM)
@@ -295,6 +298,10 @@
 	var/datum/locking_category/category = locked_atoms[AM]
 	locked_atoms    -= AM
 	AM.locked_to     = null
+	if (ismob(AM))
+		var/mob/M = AM
+		M.canmove = 1
+
 	category.unlock(AM)
 	//AM.reset_glide_size() // FIXME: Currently broken.
 
@@ -971,7 +978,7 @@
 /atom/proc/do_hitmarker(mob/shooter)
 	spawn()
 		var/datum/role/streamer/streamer_role = shooter?.mind?.GetRole(STREAMER)
-		if(streamer_role?.team == ESPORTS_SECURITY)
+		if(streamer_role && streamer_role.team == ESPORTS_SECURITY)
 			streamer_role.hits += IS_WEEKEND ? 2 : 1
 			streamer_role.update_antag_hud()
 			playsound(src, 'sound/effects/hitmarker.ogg', 100, FALSE)
@@ -1050,7 +1057,8 @@
 	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
 	var/turf/startzone = locate(startx, starty, 1)
 	var/turf/endzone = locate(endx, endy, 1)
-	if(!isspace(get_area(startzone)))
+	var/area/startzone_area = get_area(startzone)
+	if(!isspace(startzone_area))
 		return FALSE
 	forceMove(startzone)
 	throw_at(endzone, null, throwspeed)

@@ -230,6 +230,12 @@
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
 
+	if(holder && prefs.toggles & AUTO_DEADMIN)
+		message_admins("[src] was automatically de-admined.")
+		deadmin()
+		verbs += /client/proc/readmin
+		deadmins += ckey
+		to_chat(src, "<span class='interface'>You are now de-admined.</span>")
 	//////////////
 	//DISCONNECT//
 	//////////////

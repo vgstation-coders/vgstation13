@@ -540,6 +540,10 @@ var/global/datum/controller/occupations/job_master
 			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/byond(H))
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/byond(H), slot_in_backpack)
+
+	if(Holiday == VG_BIRTHDAY)
+		H.equip_or_collect(new /obj/item/clothing/head/party_hat(H), slot_head)
+
 	return 1
 
 

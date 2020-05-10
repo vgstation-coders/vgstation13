@@ -339,10 +339,16 @@
 /datum/recipe/poppypretzel
 	reagents = list(FLOUR = 5)
 	items = list(
-		/obj/item/seeds/poppyseed,
+		/obj/item/seeds,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/poppypretzel
+
+/datum/recipe/poppypretzel/check_items(obj/container)
+	. = ..()
+	if(. == 1)
+		var/obj/item/seeds/seed_item = locate() in container // Parent call returned 1 so this is expected to be non-null
+		return seed_item.seed_type == "poppies"
 
 /datum/recipe/rofflewaffles
 	reagents = list(PSILOCYBIN = 5, FLOUR = 10)
@@ -2738,14 +2744,14 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/winepear
-	
+
 /datum/recipe/suppermatter
 	reagents = list(PLASMA = 5, NITROGEN = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter
-	
+
 /datum/recipe/excitingsuppermatter
 	reagents = list(PLASMA = 5, OXYGEN = 5)
 	items = list(
@@ -2775,3 +2781,25 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/peanutbutter
+
+/datum/recipe/escargot
+	reagents = list (SODIUMCHLORIDE = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/snail,
+		/obj/item/clothing/head/helmet/snail_helm,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet,
+		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/escargot
+
+/datum/recipe/es_cargo
+	reagents = list (SODIUMCHLORIDE = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/snail,
+		/obj/item/clothing/head/helmet/snail_helm,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet,
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/weapon/paper,
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/es_cargo

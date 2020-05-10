@@ -50,7 +50,7 @@
 	var/max_number = 4
 
 	vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS, VERM_ROACHES, VERM_GREMLINS, VERM_BEES, VERM_HORNETS,
-	VERM_SYPHONER, VERM_GREMTIDE, VERM_CRABS, VERM_DIONA, VERM_MUSHMEN)
+	VERM_SYPHONER, VERM_GREMTIDE, VERM_CRABS, VERM_DIONA, VERM_MUSHMEN, VERM_FROGS, VERM_SNAILS)
 
 	if (override_vermin)
 		vermin = override_vermin
@@ -115,6 +115,14 @@
 		if(VERM_MUSHMEN)
 			spawn_types = /mob/living/carbon/monkey/mushroom
 			vermstring = "mushroom pinheads"
+		if(VERM_FROGS)
+			spawn_types = /mob/living/simple_animal/hostile/lizard/frog
+			vermstring = "frogs"
+			max_number = 12
+		if(VERM_SNAILS)
+			spawn_types = /mob/living/simple_animal/snail
+			vermstring = "snails"
+			max_number = 7
 
 
 	var/number = rand(2, max_number)

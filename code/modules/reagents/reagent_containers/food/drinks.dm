@@ -1058,6 +1058,16 @@
 	icon_state = "barflask"
 	volume = 60
 
+/obj/item/weapon/reagent_containers/food/drinks/flask/ancient
+	name = "ancient flask"
+	desc = "A flask recovered from the asteroid. How old is it?"
+	icon_state = "oldflask"
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/ancient/New()
+	..()
+	reagents.add_reagent(KARMOTRINE, 15)
+
 /obj/item/weapon/reagent_containers/food/drinks/britcup
 	name = "cup"
 	desc = "A cup with the British flag emblazoned on it."
@@ -1454,7 +1464,6 @@
 			src.reagents.reaction(get_turf(src), TOUCH) //splat the floor AND the thing we hit, otherwise fuel wouldn't ignite when hitting anything that wasn't a floor
 			if(hit_atom != get_turf(src)) //prevent spilling on the floor twice though
 				src.reagents.reaction(hit_atom, TOUCH)  //maybe this could be improved?
-			spawn(5) src.reagents.clear_reagents()  //maybe this could be improved?
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
 		if(molotov == 1) //for molotovs
