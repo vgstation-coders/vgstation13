@@ -172,24 +172,6 @@
 		return
 	..()
 
-var/global/list/possible_alcatraz_items = list(
-		obj/item/clothing/head/helmet/donutgiver,
-		/obj/item/clothing/under/securityskirt/elite,
-		/obj/item/clothing/under/securityskirt/elite,
-		/obj/item/clothing/accessory/bangerboy,
-		/obj/item/weapon/autocuffer,
-		/obj/item/weapon/autocuffer,
-		/obj/item/clothing/mask/gas/hecu,
-		/obj/item/weapon/implantcase/peace,
-		/obj/item/weapon/implantcase/peace,
-		/obj/item/weapon/implantcase/peace,
-		/obj/item/weapon/depocket_wand,
-		/obj/item/weapon/depocket_wand,
-		/obj/item/weapon/ram_kit,
-		/obj/item/device/vampirehead,
-		/obj/item/key/security/spare
-	)
-
 /obj/structure/closet/crate/chest/alcatraz
 	name = "Alcatraz IV security crate"
 	desc = "It came from Alcatraz IV!"

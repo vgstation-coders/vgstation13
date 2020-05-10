@@ -1,9 +1,10 @@
-#define LAW_A1 1
-#define LAW_A2 2
-#define LAW_B1 3
-#define LAW_B2 4
-#define LAW_C1 5
-#define LAW_C2 6
+#define LAW_ASSAULT 1
+#define LAW_DAMAGE 2
+#define LAW_THEFT 3
+#define LAW_CONTRABAND 4
+#define LAW_TRESPASS 5
+#define LAW_ESCAPE 6
+#define LAW_INSUB 7
 
 /obj/item/device/law_planner
 	name = "law planning frame"
@@ -14,11 +15,38 @@
 	icon_state = "aicard"
 	item_state = "electronic"
 	req_access = list(access_brig)
-	var/announce = 1 //0 = Off, 1 = On select, 2 = On upload
+	var/announce = 1 //If true, read crimes when you hit the cell timer
 	var/start_timer = FALSE //If true, automatically start the timer on upload
+	var/time_arrest = FALSE //If true, start counting time when the arrest is made, to subtract from the sentence.
+	var/timing = 0	//Time of arrest.
 	var/datum/data/record/upload_crimes = null //If has DNA, will look for an associated datacore file and upload crimes
 	var/list/rapsheet = list()
 	var/total_time = 0
+
+/obj/item/device/law_planner/attack_self(mob/user)
+	ui_interact(user)
+
+/obj/item/device/law_planner/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	if(user.stat && !isAdminGhost(user))
+		return
+
+	// this is the data which will be sent to the ui
+	var/data[0]
+	data["timer"] = total_time
+	data["announce"] = announce
+	data["starttimer"] = start_timer
+	data["timearrest"] = time_arrest
+	data["arresttime"] = timing
+	if(upload_crimes)
+		data["perp"] = upload_crimes.fields["name"]
+	data["crimes"] = english_list(rapsheet)
+
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	if (!ui)
+		ui = new(user, src, ui_key, "lawplanner.tmpl", "Law Planning Frame", 520, 500)
+		ui.set_initial_data(data)
+		ui.open()
+		ui.set_auto_update(1)
 
 /obj/item/device/law_planner/Topic(href, href_list)
 	if(..(href, href_list))
@@ -29,102 +57,311 @@
 			usr.unset_machine()
 		return 1
 
-	switch(href_list["assault"])
-		if(LAW_A1)
-			rapsheet.Add("1A-1 MINOR ASSAULT")
-			total_time += 3
-		if(LAW_A2)
-			rapsheet.Add("1A-2 ASSAULT")
-			total_time += 6
-		if(LAW_B1)
-			rapsheet.Add("1B-1 ABDUCTION")
-			total_time += 10
-		//if(LAW_B2)
+	var/datum/law/L
+	if(href_list["assault"])
+		L = findlaw(LAW_ASSAULT,text2num(href_list["assault"]))
+	else if(href_list["damage"])
+		L = findlaw(LAW_DAMAGE,text2num(href_list["damage"]))
+	else if(href_list["theft"])
+		L = findlaw(LAW_THEFT,text2num(href_list["theft"]))
+	else if(href_list["contraband"])
+		L = findlaw(LAW_CONTRABAND,text2num(href_list["contraband"]))
 
-		if(LAW_C1)
-			rapsheet.Add("1C-1 MANSLAUGHTER")
-			total_time += 10
-		if(LAW_C2)
-			rapsheet.Add("1C-2 MURDER")
-			total_time += 10
-			visible_message("[bicon(src)] \the [src] beeps, \"This inmate is eligible for execution.\"")
 
-	switch(href_list["damage"])
-		if(LAW_A1)
+	switch(href_list["toggle"])
+		if("announce")
+			announce = !announce
+		if("starttimer")
+			start_timer = !start_timer
+		if("timearrest")
+			time_arrest = !time_arrest
 
-		if(LAW_A2)
+	switch(href_list["clear"])
+		if("record")
+			upload_crimes = null
+		if("rapsheet")
+			rapsheet.Cut()
+			total_time = 0
+		if("arresttime")
+			timing = 0
 
-		if(LAW_B1)
+	if(!L)
+		updateUsrDialog()
+		return
+	rapsheet += initial(L.name)
+	total_time += initial(L.penalty)
+	if(initial(L.death))
+		visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"This inmate is eligible for execution.\"")
 
-		if(LAW_B2)
-
-		if(LAW_C1)
-
-		if(LAW_C2)
-
-	switch(href_list["theft"])
-		if(LAW_A1)
-
-		if(LAW_A2)
-
-		if(LAW_B1)
-
-		if(LAW_B2)
-
-		if(LAW_C1)
-
-		if(LAW_C2)
-
-	switch(href_list["contraband"])
-		if(LAW_A1)
-
-		if(LAW_A2)
-
-		if(LAW_B1)
-
-		if(LAW_B2)
-
-		if(LAW_C1)
-
-		if(LAW_C2)
+	if(initial(L.demotion))
+		visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"This inmate is eligible for demotion.\"")
+	updateUsrDialog()
 
 
 /obj/item/device/law_planner/proc/announce()
 	say(english_list(rapsheet))
 	say("[total_time] minutes.")
 
-/obj/item/device/law_planner/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
+/obj/item/device/law_planner/preattack(var/atom/A, var/mob/user, var/proximity_flag)
 	if(!proximity_flag)
-		to_chat(user, "<span class='warning'>You can't seem to reach \the [A].</span>")
-		return 0
-	if(!allowed)
+		return 1
+	if(!allowed(user))
 		to_chat(user, "<span class='warning'>You must wear your ID!</span>")
-		return 0
+		return 1
 	if(ishuman(A)&&!(A==user))
 		for(var/datum/data/record/E in data_core.security)
 			if(E.fields["name"] == A.name)
 				say("Verified. Found record match for [A].")
 				upload_crimes = E
+				return 1
 	if(istype(A,/obj/machinery/door_timer))
-		if(announce==2)
+		if(announce)
 			announce()
 		if(upload_crimes)
 			upload_crimes.fields["criminal"] = "Incarcerated"
 			var/counter = 1
 			while(upload_crimes.fields["com_[counter]"])
 				counter++
-			upload_crimes.fields["com_[counter]"] = text("Made by [user] (Automated) on [time2text(world.realtime, "DDD MMM DD")]<BR>[english_list(rapsheet)]")
+			upload_crimes.fields["com_[counter]"] = text("Made by [user] (Automated) at [worldtime2text()][time_arrest? "(Arrested [worldtime2text(timing)])":""]<BR>[english_list(rapsheet)]")
+		var/apply = (total_time MINUTES)
+		if(timing)
+			visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"Deducting [(world.time - timing)/(1 SECONDS)] seconds on time served.\"")
+			apply -= round((world.time - timing)/(1 SECONDS))
+			timing = 0
 		var/obj/machinery/door_timer/D = A
 		if(D.timeleft())
 			//We're adding time
-			D.releasetime += total_time*60
+			D.releasetime += apply
 		else
 			//Setting time
-			D.timeset(total_time*60)
+			D.timeset(apply)
 		if(start_timer && !D.timing)
+			D.timing = TRUE
 			D.timer_start()
 		upload_crimes = null
-		rapsheet = null
-		total_time = null
+		rapsheet.Cut()
+		total_time = 0
+
 	else
 		..()
+
+//received signal from handcuffs
+/obj/item/device/law_planner/proc/handcuff_signal()
+	if(time_arrest)
+		if(timing)
+			visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"An arrest timer is already running.\"")
+		else
+			timing = world.time
+
+/***********************************************************************
+***                       LAW DATUMS								 ***
+***********************************************************************/
+
+#define LAW_A1 1
+#define LAW_A2 2
+#define LAW_B1 3
+#define LAW_B2 4
+#define LAW_C1 5
+#define LAW_C2 6
+
+/proc/findlaw(var/mother,var/code)
+	var/list/possible_laws = subtypesof(/datum/law)
+	for(var/possible in possible_laws)
+		var/datum/law/L = possible
+		if((initial(L.mothercrime) == mother) && (initial(L.code) == code))
+			return L
+	//otherwise, returns null
+
+/datum/law
+	var/name = "law"
+	var/mothercrime = 0
+	var/penalty = 0
+	var/death = FALSE
+	var/demotion = FALSE
+	var/code = 0
+
+/datum/law/assault
+	mothercrime = LAW_ASSAULT
+
+/datum/law/assault/minor
+	name = "1A-1 MINOR ASSAULT"
+	penalty = 3
+	code = LAW_A1
+
+/datum/law/assault/full
+	name = "1A-2 ASSAULT"
+	penalty = 6
+	code = LAW_A2
+
+/datum/law/assault/abduction
+	name = "1B-1 ABDUCTION"
+	penalty = 10
+	code = LAW_B1
+
+/datum/law/assault/manslaughter
+	name = "1C-1 MANSLAUGHTER"
+	penalty = 10
+	code = LAW_C1
+
+/datum/law/assault/murder
+	name = "1C-2 MURDER"
+	penalty = 10
+	death = TRUE
+	code = LAW_C2
+
+/datum/law/damage
+	mothercrime = LAW_DAMAGE
+
+/datum/law/damage/vandalism
+	name = "2A-1 VANDALISM"
+	penalty = 3
+	code = LAW_A1
+
+/datum/law/damage/negligance
+	name = "2B-1 NEGLIGANCE"
+	penalty = 5
+	code = LAW_B1
+	demotion = TRUE
+
+/datum/law/damage/sabotage
+	name = "2B-2 SABOTAGE"
+	penalty = 8
+	code = LAW_B2
+
+/datum/law/damage/illegalupload
+	name = "2C-1 ILLEGAL UPLOAD"
+	penalty = 10
+	code = LAW_C1
+
+/datum/law/damage/grandsabotage
+	name = "2C-2 GRAND SABOTAGE"
+	penalty = 15
+	code = LAW_C2
+	death = TRUE
+
+/datum/law/theft
+	mothercrime = LAW_THEFT
+
+/datum/law/theft/petty
+	name = "3A-1 PETTY THEFT"
+	penalty = 3
+	code = LAW_A1
+
+/datum/law/theft/full
+	name = "3B-1 THEFT"
+	penalty = 5
+	code = LAW_B1
+
+/datum/law/theft/grand
+	name = "3C-1 GRAND THEFT"
+	penalty = 15
+	code = LAW_C1
+
+/datum/law/contraband
+	mothercrime = LAW_CONTRABAND
+
+/datum/law/contraband/makeshiftcons
+	name = "4A-1 MAKESHIFT/CONSOLES"
+	penalty = 5
+	code = LAW_A1
+
+/datum/law/contraband/weaponexpl
+	name = "4B-1 WEAPONS/EXPLOSIVES"
+	penalty = 8
+	code = LAW_B1
+	demotion = TRUE
+
+/datum/law/contraband/mechs
+	name = "4C-1 COMBAT GEAR/MECHS"
+	penalty = 10
+	code = LAW_C1
+	demotion = TRUE
+
+/datum/law/contraband/enemycontraband
+	name = "4C-2 ENEMY CONTRABAND"
+	penalty = 10
+	code = LAW_C2
+	demotion = TRUE
+
+/datum/law/trespass
+	mothercrime = LAW_TRESPASS
+
+/datum/law/trespass/minor
+	name = "5A-1 MINOR TRESPASS"
+	penalty = 3
+	code = LAW_A1
+
+/datum/law/trespass/bande
+	name = "5A-2 B&E"
+	penalty = 4
+	code = LAW_A2
+
+/datum/law/trespass/full
+	name = "5B-1 TRESPASS"
+	penalty = 6
+	code = LAW_B1
+
+/datum/law/trespass/major
+	name = "5C-1 MAJOR TRESPASS"
+	penalty = 10
+	code = LAW_C1
+
+/datum/law/escape
+	mothercrime = LAW_ESCAPE
+
+/datum/law/escape/resist
+	name = "6A-1 RESISTING"
+	penalty = 5
+	code = LAW_A1
+
+/datum/law/escape/full
+	name = "6B-1 ESCAPE"
+	penalty = 5
+	code = LAW_B1
+
+/datum/law/escape/interfere
+	name = "6B-2 INTERFERENCE"
+	penalty = 10
+	code = LAW_B2
+
+/datum/law/escape/grand
+	name = "6C-1 GRAND ESCAPE"
+	penalty = 15
+	code = LAW_C1
+	death = TRUE
+
+/datum/law/escape/deimplant
+	name = "6C-2 DEIMPLANTING"
+	penalty = 15
+	code = LAW_C2
+
+/datum/law/insub
+	mothercrime = LAW_INSUB
+
+/datum/law/insub/comms
+	name = "7A-1 MISUSE COMMS"
+	penalty = 0
+	code = LAW_A1
+
+/datum/law/insub/insub
+	name = "7A-2 INSUBORD"
+	penalty = 5
+	demotion = TRUE
+	code = LAW_A2
+
+/datum/law/insub/framing
+	name = "7B-1 FRAMING"
+	penalty = 0
+	code = LAW_B1
+
+/datum/law/insub/abusepower
+	name = "7C-1 ABUSE POWER"
+	penalty = 0
+	demotion = TRUE
+	code = LAW_C1
+
+/datum/law/insub/enemy
+	name = "7C-2 ENEMY OF CORP"
+	penalty = 15
+	death = TRUE
+	code = LAW_C2

@@ -148,7 +148,7 @@
 		dat += "<a href='?src=\ref[src];timing=1'>Activate Timer and close door</a><br/>"
 
 
-	dat += {"Time Left: [(minute ? text("[minute]:") : null)][second] <br/>
+	dat += {"Time Left: [timeleft() / 60 % 60]:[add_zero(num2text(timeleft() % 60), 2)] <br/>
 			<a href='?src=\ref[src];tp=-60'>-</a> <a href='?src=\ref[src];tp=-1'>-</a> <a href='?src=\ref[src];tp=1'>+</a> <A href='?src=\ref[src];tp=60'>+</a><br/>"}
 	for(var/obj/machinery/flasher/F in targets)
 		if(F.last_flash && (F.last_flash + 150) > world.timeofday)
