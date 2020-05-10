@@ -68,6 +68,7 @@
 	desc = "Use this to send crates to cargo telepads."
 	icon = 'icons/obj/telescience.dmi'
 	icon_state = "rcs"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 10

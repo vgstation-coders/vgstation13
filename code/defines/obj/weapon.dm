@@ -285,6 +285,8 @@
 	name = "cable bolas"
 	desc = "A poorly made bolas, tied together with cable."
 	icon_state = ""
+	item_state = "cbolas"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	throw_speed = 1
 	throw_range = 6
 	trip_prob = 20 //gets updated below in update_icon()
