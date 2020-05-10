@@ -1058,6 +1058,16 @@
 	icon_state = "barflask"
 	volume = 60
 
+/obj/item/weapon/reagent_containers/food/drinks/flask/ancient
+	name = "ancient flask"
+	desc = "A flask recovered from the asteroid. How old is it?"
+	icon_state = "oldflask"
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/ancient/New()
+	..()
+	reagents.add_reagent(KARMOTRINE, 15)
+
 /obj/item/weapon/reagent_containers/food/drinks/britcup
 	name = "cup"
 	desc = "A cup with the British flag emblazoned on it."

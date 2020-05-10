@@ -3056,7 +3056,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/trader_chemistry = 1,
 		/obj/structure/closet/secure_closet/wonderful = 1,
 		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 1,
-		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 1,
 		/obj/item/weapon/storage/bluespace_crystal = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 1,
 		/obj/item/clothing/shoes/clown_shoes/advanced = 1,
@@ -3083,6 +3082,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/hair_dye/skin_dye/discount = 5,
 		/obj/item/weapon/gun/projectile/hecate/hunting = 2,
 		/obj/item/weapon/grenade/station/discount = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/flask/ancient = 1,
+		/obj/item/device/crank_charger/generous = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -3095,7 +3096,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/trader_chemistry = 50,
 		/obj/structure/closet/secure_closet/wonderful = 150,
 		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 100,
-		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 50,
 		/obj/item/weapon/storage/bluespace_crystal = 150,
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 50,
 		/obj/item/clothing/shoes/clown_shoes/advanced = 50,
@@ -3122,6 +3122,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/hair_dye/skin_dye/discount = 10,
 		/obj/item/weapon/gun/projectile/hecate/hunting = 100,
 		/obj/item/weapon/grenade/station/discount = 100,
+		/obj/item/weapon/reagent_containers/food/drinks/flask/ancient = 175,
+		/obj/item/device/crank_charger/generous = 50,
 		)
 
 /obj/machinery/vending/trader/New()
