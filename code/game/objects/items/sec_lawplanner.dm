@@ -36,7 +36,7 @@
 	data["announce"] = announce
 	data["starttimer"] = start_timer
 	data["timearrest"] = time_arrest
-	data["arresttime"] = timing
+	data["arresttime"] = worldtime2text(timing)
 	if(upload_crimes)
 		data["perp"] = upload_crimes.fields["name"]
 	data["crimes"] = english_list(rapsheet)
@@ -66,7 +66,12 @@
 		L = findlaw(LAW_THEFT,text2num(href_list["theft"]))
 	else if(href_list["contraband"])
 		L = findlaw(LAW_CONTRABAND,text2num(href_list["contraband"]))
-
+	else if(href_list["trespass"]))
+		L = findlaw(LAW_TRESPASS,text2num(href_list["trespass"]))
+	else if(href_list["escape"]))
+		L = findlaw(LAW_ESCAPE,text2num(href_list["escape"]))
+	else if(href_list["insubordination"]))
+		L = findlaw(LAW_INSUB,text2num(href_list["insubordination"]))
 
 	switch(href_list["toggle"])
 		if("announce")
@@ -99,8 +104,8 @@
 
 
 /obj/item/device/law_planner/proc/announce()
-	say(english_list(rapsheet))
-	say("[total_time] minutes.")
+	visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"Charges: [english_list(rapsheet)]")
+	visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"[total_time] minutes.")
 
 /obj/item/device/law_planner/preattack(var/atom/A, var/mob/user, var/proximity_flag)
 	if(!proximity_flag)
@@ -111,9 +116,11 @@
 	if(ishuman(A)&&!(A==user))
 		for(var/datum/data/record/E in data_core.security)
 			if(E.fields["name"] == A.name)
-				say("Verified. Found record match for [A].")
+				visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"Verified. Found record match for [A].")
 				upload_crimes = E
 				return 1
+		visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"Error. No security record found.\"")
+		return 1
 	if(istype(A,/obj/machinery/door_timer))
 		if(announce)
 			announce()
@@ -125,7 +132,7 @@
 			upload_crimes.fields["com_[counter]"] = text("Made by [user] (Automated) at [worldtime2text()][time_arrest? "(Arrested [worldtime2text(timing)])":""]<BR>[english_list(rapsheet)]")
 		var/apply = (total_time MINUTES)
 		if(timing)
-			visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"Deducting [(world.time - timing)/(1 SECONDS)] seconds on time served.\"")
+			visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"Deducting [round((world.time - timing)/(1 SECONDS))] seconds on time served.\"")
 			apply -= round((world.time - timing)/(1 SECONDS))
 			timing = 0
 		var/obj/machinery/door_timer/D = A
