@@ -3084,6 +3084,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/grenade/station/discount = 1,
 		/obj/item/weapon/reagent_containers/food/drinks/flask/ancient = 1,
 		/obj/item/device/crank_charger/generous = 1,
+		/obj/item/weapon/fakeposter_kit = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -3124,6 +3125,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/grenade/station/discount = 100,
 		/obj/item/weapon/reagent_containers/food/drinks/flask/ancient = 175,
 		/obj/item/device/crank_charger/generous = 50,
+		/obj/item/weapon/fakeposter_kit = 50,
 		)
 
 /obj/machinery/vending/trader/New()
