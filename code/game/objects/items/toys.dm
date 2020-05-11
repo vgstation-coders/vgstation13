@@ -3,7 +3,7 @@
  *		Balloons
  *		Fake telebeacon
  *		Fake singularity
- *		Toy gun
+ *		Toy guns
  *		Toy crossbow
  *		Toy swords
  *		Foam armblade
@@ -217,6 +217,16 @@
 	..()
 	to_chat(user, "There [amount_left == 1 ? "is" : "are"] [amount_left] cap\s left.")
 
+/*
+ * Toy pulse rifle
+ */
+
+
+/obj/item/weapon/gun/energy/pulse_rifle/destroyer/lasertag
+	name = "pulse destroyer"
+	desc = "A heavy-duty, pulse-based lasertag weapon."
+	projectile_type = "/obj/item/projectile/beam/lasertag/blue"
+	
 
 /*
  * Toy crossbow
