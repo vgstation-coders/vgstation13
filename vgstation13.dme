@@ -2483,6 +2483,8 @@
 #include "code\modules\telesci\telepad.dm"
 #include "code\modules\telesci\telesci_computer.dm"
 #include "code\modules\tooltip\tooltip.dm"
+#include "code\modules\trade\console.dm"
+#include "code\modules\trade\rnd.dm"
 #include "code\modules\unit_tests\__unit_test_includes.dm"
 #include "code\modules\virus2\analyser.dm"
 #include "code\modules\virus2\antibodies.dm"
