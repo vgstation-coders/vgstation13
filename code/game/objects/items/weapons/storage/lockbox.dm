@@ -486,3 +486,53 @@
 	..()
 	for(var/i in 1 to 6)
 		new /obj/item/clothing/accessory/spesstv_tactical_camera(src)
+
+/obj/item/weapon/storage/lockbox/advanced
+	name = "advanced lockbox"
+	desc = "A highly advanced lockbox from Alcatraz IV, from series RE-4. It has ablative plating to repel lasers and its flat surfaces avoid the vulnerabilities of an ablative vest. Its shock-dispersing core makes it impossible to bomb or drill, it's reinforced against ballistics, and it can reactively teleport. The solid state controller on its scanner cannot be disrupted by electromagnetic pulse and uses elliptic-curve cryptography to frustrate common sequencer hacking. This lockbox is probably more valuable than whatever is inside it."
+	health = 200
+	storage_slots = 1
+	fits_max_w_class = W_CLASS_LARGE
+
+/obj/item/weapon/storage/lockbox/advanced/ex_act()
+	react()
+
+/obj/item/weapon/storage/lockbox/advanced/emp_act()
+	react()
+
+/obj/item/weapon/storage/lockbox/advanced/emag_act()
+	react()
+
+/obj/item/weapon/storage/lockbox/advanced/bullet_act(var/obj/item/projectile/P)
+	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
+		visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s ablative plating!</span>")
+		P.reflected = 1
+		P.rebound(src)
+		return -1
+	react()
+	return ..()
+
+/obj/item/weapon/storage/lockbox/advanced/proc/react()
+	var/list/turfs = new/list()
+	for(var/turf/T in orange(6, loc))
+		if(istype(T,/turf/space))
+			continue
+		if(T.density)
+			continue
+		if(T.x>world.maxx-6 || T.x<6)
+			continue
+		if(T.y>world.maxy-6 || T.y<6)
+			continue
+		turfs += T
+	if(!turfs.len)
+		turfs += pick(/turf in orange(6))
+	var/turf/picked = pick(turfs)
+	if(!isturf(picked))
+		return
+	visible_message("<span class='danger'>\The [src] displaces itself with its reactive teleport system!</span>")
+	playsound(src, 'sound/effects/teleport.ogg', 30, 1)
+	forceMove(picked)
+
+/obj/item/weapon/storage/lockbox/advanced/energyshotgun/New()
+	..()
+	new /obj/item/weapon/gun/energy/shotgun(src)
