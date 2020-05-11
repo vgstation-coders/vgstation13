@@ -261,12 +261,13 @@
 
 /obj/item/projectile/energy/electrode/scatter/OnFired(var/proj_target = original)
 	if(split)
+		var/vdirs = alldirs.Copy()
 		for(var/i = 1 to 2)
 			var/obj/item/projectile/energy/electrode/scatter/P = new(get_turf(loc),split-1)
 			P.starting = starting
 			P.shot_from = shot_from
 			P.current = current
-			var/turf/T = get_step(proj_target, pick(alldirs))
+			var/turf/T = get_step(proj_target, pick_n_take(vdirs))
 			P.OnFired(T)
 			P.process()
 	..()

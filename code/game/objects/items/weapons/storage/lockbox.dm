@@ -535,4 +535,5 @@
 
 /obj/item/weapon/storage/lockbox/advanced/energyshotgun/New()
 	..()
+	req_one_access = list(access_security)
 	new /obj/item/weapon/gun/energy/shotgun(src)
