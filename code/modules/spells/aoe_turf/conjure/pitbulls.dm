@@ -19,6 +19,9 @@
 	cast_sound = 'sound/voice/pitbullbark.ogg'
 	var/icon_index = 1
 	var/static/list/icon_suffixes = list("", "-old")
+	var/static/list/icon_change_messages = list(
+		"You alter the spell to summon a man's best friend.",
+		"You alter the spell to rouse sleeping dogs."	)
 	var/image/current_image
 
 /spell/aoe_turf/conjure/pitbull/on_added(mob/user)
@@ -55,4 +58,5 @@ var/list/pitbulls_exclude_kinlist = list() //all pitbulls go in here so pitbulls
 	icon_index = icon_index % icon_suffixes.len + 1
 	current_image = image('icons/mob/animal.dmi', "pitbull" + icon_suffixes[icon_index], layer = HUD_ITEM_LAYER)
 	connected_button.overlays += current_image
+	to_chat(user, icon_change_messages[icon_index])
 	return 1
