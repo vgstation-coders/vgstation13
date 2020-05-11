@@ -16,7 +16,7 @@
 
 	return 1
 
-/datum/trade/check_reagents(var/obj/structure/closet/crate/C)
+/datum/trade/proc/check_reagents(var/obj/structure/closet/crate/C)
 	var/list/needs = reagents.Copy()
 
 	for (var/obj/item/weapon/reagent_containers/I in get_contents_in_object(C, /obj/item/weapon/reagent_containers))

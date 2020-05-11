@@ -1,6 +1,7 @@
 /obj/machinery/trade_telepad
 	name = "trade telepad"
 	desc = "A bluespace telepad used for teleporting objects to and from the Shoal."
+	icon = 'icons/obj/telescience.dmi'
 	icon_state = "pad-idle"
 	anchored = 1
 	use_power = 1
