@@ -385,6 +385,7 @@
 	desc = "A device so ingenius there is no way the Vox invented it. Exploits volt-induced superposition to allow battering ram to fold into itself."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	flags = FPRINT
 	siemens_coefficient = 0
 	w_class = W_CLASS_SMALL
