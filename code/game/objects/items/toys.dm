@@ -222,11 +222,27 @@
  */
 
 
-/obj/item/weapon/gun/energy/pulse_rifle/destroyer/lasertag
+/obj/item/weapon/gun/energy/pulse_rifle/destroyer/lasertag //subtype because of attack_self override
 	name = "pulse destroyer"
 	desc = "A heavy-duty, pulse-based lasertag weapon."
 	projectile_type = "/obj/item/projectile/beam/lasertag/blue"
+
+/*
+ * Fireworks launcher
+ */
+
+
+/obj/item/weapon/gun/energy/fireworkslauncher
+	name = "fireworks launcher"
+	desc = "Celebrate in style!"
+	icon_state = "fireworkslauncher"
+	item_state = "riotgun"
+	fire_sound = "sound/weapons/railgun_lowpower.ogg"
+	projectile_type = "/obj/item/projectile/meteor/firework"	
+	charge_cost = 0 //infinite ammo!
 	
+/obj/item/weapon/gun/energy/fireworkslauncher/update_icon()
+	return
 
 /*
  * Toy crossbow
