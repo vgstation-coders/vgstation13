@@ -122,8 +122,9 @@
 		loc.assume_air(removed)
 
 
-/obj/machinery/atmospherics/miner/proc/AirRate(datum/gas)
-	air_contents.adjust_gas(gas, internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+//Controls how fast gas comes out (in total)
+/obj/machinery/atmospherics/miner/proc/AirRate()
+  return internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
 
 
 /obj/machinery/atmospherics/miner/sleeping_agent
@@ -131,7 +132,8 @@
 	overlay_color = "#FFCCCC"
 
 /obj/machinery/atmospherics/miner/sleeping_agent/AddAir()
-	AirRate(GAS_SLEEPING)
+	var/rate = AirRate()
+	air_contents.adjust_multi(GAS_SLEEPING, rate)
 
 
 /obj/machinery/atmospherics/miner/nitrogen
@@ -139,7 +141,8 @@
 	overlay_color = "#CCFFCC"
 
 /obj/machinery/atmospherics/miner/nitrogen/AddAir()
-	AirRate(GAS_NITROGEN)
+	var/rate = AirRate()
+	air_contents.adjust_multi(GAS_NITROGEN, rate)
 
 
 /obj/machinery/atmospherics/miner/oxygen
@@ -147,7 +150,8 @@
 	overlay_color = "#007FFF"
 
 /obj/machinery/atmospherics/miner/oxygen/AddAir()
-	AirRate(GAS_OXYGEN)
+	var/rate = AirRate()
+	air_contents.adjust_multi(GAS_OXYGEN, rate)
 
 
 /obj/machinery/atmospherics/miner/toxins
@@ -155,7 +159,8 @@
 	overlay_color = "#FF0000"
 
 /obj/machinery/atmospherics/miner/toxins/AddAir()
-	AirRate(GAS_PLASMA)
+	var/rate = AirRate()
+	air_contents.adjust_multi(GAS_PLASMA, rate)
 
 
 /obj/machinery/atmospherics/miner/carbon_dioxide
@@ -163,7 +168,8 @@
 	overlay_color = "#CDCDCD"
 
 /obj/machinery/atmospherics/miner/carbon_dioxide/AddAir()
-	AirRate(GAS_CARBON)
+	var/rate = AirRate()
+	air_contents.adjust_multi(GAS_CARBON, rate)
 
 
 /obj/machinery/atmospherics/miner/air
@@ -174,8 +180,9 @@
 	on = 0
 
 /obj/machinery/atmospherics/miner/air/AddAir()
-	AirRate(GAS_OXYGEN)
-	AirRate(GAS_NITROGEN)
+	var/rate = AirRate()
+	air_contents.adjust_multi(GAS_OXYGEN, 0.2*rate,
+	GAS_NITROGEN, 0.8*rate)
 
 
 /obj/machinery/atmospherics/miner/gas_giant
@@ -196,9 +203,10 @@
 	overlay_color = "#FF80BD"
 
 /obj/machinery/atmospherics/miner/mixed_nitrogen/AddAir()
-	AirRate(GAS_CARBON)
-	AirRate(GAS_NITROGEN)
-	AirRate(GAS_PLASMA)
+  var/rate = AirRate()
+  air_contents.adjust_multi(GAS_CARBON, 0.3*rate,
+  GAS_NITROGEN, 0.4*rate,
+  GAS_PLASMA, 0.3*rate)
 
 /obj/machinery/atmospherics/miner/mixed_oxygen
 	name = "\improper Mixed Gas Miner"
@@ -206,6 +214,6 @@
 	overlay_color = "#7EA7E0"
 
 /obj/machinery/atmospherics/miner/mixed_oxygen/AddAir()
-	AirRate(GAS_OXYGEN)
-	AirRate(GAS_SLEEPING)
-
+  var/rate = AirRate()
+  air_contents.adjust_multi(GAS_OXYGEN, 0.5*rate,
+  GAS_SLEEPING, 0.5*rate)
