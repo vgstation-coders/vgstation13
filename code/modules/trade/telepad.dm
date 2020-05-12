@@ -9,7 +9,6 @@
 	active_power_usage = 5000
 	machine_flags = MULTITOOL_MENU
 	var/id_tag = "trade_telepad"
-
 	var/obj/machinery/computer/trade/linked
 
 /obj/machinery/trade_telepad/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)

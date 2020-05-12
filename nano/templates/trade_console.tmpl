@@ -1,1 +1,57 @@
-<span class='warning'><i>TEST</i></span><br>
+<!--
+Title: Trade Console UI
+Used In File(s): /code/game/modules/trade/console.dm
+ -->
+ <style type='text/css'>
+	.trade {
+		border-collapse: collapse;
+		margin-bottom: 8px;
+		border: 1px gainsboro solid;		
+	}
+
+	.trade th {
+		height: 2em;
+		text-align: left;	
+	}
+
+	.trade td, th {
+		padding: 4px;		
+		color: white;
+	}
+
+	.trade th {		
+		font-weight: 600;
+		text-decoration: underline;
+	}
+
+	.header {
+		display: block;
+		text-align: center;
+		border-bottom: 1px gainsboro solid;
+	}
+
+</style>
+<table class="trade" width="100%"><tbody>
+	<tr>
+		<th width="65%">Objective</th>
+		<th width="15%">Reward</th>
+		<th width="20%"></th>
+	</tr>
+	<tr>
+		<td>1 large beaker<br/>100 Nutriment</td>
+		<td>$200</td>
+		<td>{{:helper.link('Trade', 'refresh')}}</td>
+	</tr>
+</tbody></table>
+<table class="trade" width="100%"><tbody>
+	<tr>
+		<th width="65%">Objective</th>
+		<th width="15%">Reward</th>
+		<th width="20%"></th>
+	</tr>
+	<tr>
+		<td>1 donut<br/>1 donut<br/>1 donut<br/></td>
+		<td>$10</td>
+		<td>{{:helper.link('Trade', 'refresh')}}</td>
+	</tr>
+</tbody></table>

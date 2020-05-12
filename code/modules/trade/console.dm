@@ -4,7 +4,8 @@
 	icon_state = "trade"
 	circuit = "/obj/item/weapon/circuitboard/trade"
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU
-	var/obj/machinery/trade_telepad/telepad
+	var/id_tag = "trade_console"
+	var/obj/machinery/trade_telepad/telepad	
 
 /obj/machinery/computer/trade/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return ""
@@ -43,7 +44,6 @@
 		telepad = null
 	..()
 
-
 /obj/machinery/computer/trade/attack_ai(var/mob/user)
 	return attack_hand(user)
 
@@ -63,7 +63,7 @@
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "trade_console.tmpl", src.name, 800, 700)
+		ui = new(user, src, ui_key, "trade_console.tmpl", src.name, 400, 500)
 		ui.set_initial_data(data)
 		ui.open()
 
