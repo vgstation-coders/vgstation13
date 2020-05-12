@@ -2,7 +2,6 @@
 //functions pretty much the same as a regular stack, but it can't be added to (to avoid having to store paper details)
 //mainly used for the blueprinter, but planning to nanopaper and paper bin functionality
 //TODO - Sprite this and add to paper bins
-//TODO - Add a ribbon to hair
 
 /obj/item/weapon/paper_pack
 	name = "paper pack"
