@@ -1,5 +1,5 @@
 language: generic
-dist: xenial
+dist: bionic
 sudo: false
 
 env:
@@ -21,6 +21,7 @@ matrix:
             - python3
             - python3-pip
             - python3-setuptools
+            - python3-pil
       cache:
         directories:
           - $HOME/SpacemanDMM
@@ -30,6 +31,7 @@ matrix:
       - tools/travis/install_spaceman_dmm.sh dreamchecker
       script:
       - python tools/travis/check_map_files.py maps/
+      - python3 tools/dmi-validhunt/dmi-validhunt.py icons/ || true
       - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
       - ~/dreamchecker || true
     - name: "Compile all maps"
