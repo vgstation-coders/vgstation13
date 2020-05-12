@@ -37,6 +37,8 @@ var/list/ai_list = list()
 	var/obj/item/device/camera/silicon/aicamera = null
 	var/busy = FALSE //Toggle Floor Bolt busy var.
 	var/chosen_core_icon_state = "ai"
+	var/datum/intercom_settings/intercom_clipboard = null //Clipboard for copy/pasting intercom settings
+	var/mentions_on = FALSE
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
@@ -819,6 +821,21 @@ var/list/ai_list = list()
 
 	to_chat(src, "Camera lights activated.")
 	return
+
+/mob/living/silicon/ai/verb/toggle_ai_mentions()
+	set name = "Toggle AI Mentions"
+	set desc = "Toggles highlighting and beeping on AI mentions"
+	set category = "AI Commands"
+	if(isUnconscious())
+		return
+
+	mentions_on = !mentions_on
+	
+	if(!mentions_on)		
+		to_chat(src, "AI mentions deactivated.")
+	else
+		to_chat(src, "AI mentions activated.")
+	
 
 /mob/living/silicon/ai/verb/toggle_station_map()
 	set name = "Toggle Station Holomap"

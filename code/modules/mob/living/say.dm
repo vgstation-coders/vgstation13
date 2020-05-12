@@ -252,7 +252,16 @@ var/list/department_radio_keys = list(
 		for(var/T in syndicate_code_response)
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
-	show_message(rendered_message, type, deaf_message, deaf_type, src)
+	//AI mentions
+	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
+		var/mob/living/silicon/ai/AI = src
+		if(AI.mentions_on)			
+			if(findtext(rendered_message, "ai ") || findtext(rendered_message, AI.real_name))
+				AI << 'sound/machines/twobeep.ogg'
+				rendered_message = replacetext(rendered_message, "ai ", "<i style='color: blue;'>AI </i>")
+				rendered_message = replacetext(rendered_message, AI.real_name, "<i style='color: blue;'>[AI.real_name]</i>")
+
+	show_message(rendered_message, type, deaf_message, deaf_type, AI)
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
