@@ -753,6 +753,7 @@
 	name = "Gunka-Cola Family Sized"
 	desc = "An unnaturally-sized can for unnaturally-sized men. Taste the Consumerism!"
 	icon_state = "gunka_cola"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	volume = 100
 	possible_transfer_amounts = list(5,10,15,25,30,50,100)
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola/New()
