@@ -40,7 +40,7 @@
 		//Tier 1 and above
 		//Nothing
 		//Tier 2 and above
-		/obj/item/clothing/head/helmet = 2,
+		/obj/item/clothing/head/helmet/space = 2,
 		/obj/item/clothing/head/bomb_hood = 2,
 		//Tier 3 and above
 		/obj/item/clothing/suit/space = 3,
