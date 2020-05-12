@@ -3885,6 +3885,23 @@
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#33cc33" //rgb: 51, 204, 51
 
+/datum/reagent/mayo
+	name = "Mayonnaise"
+	id = MAYO
+	description = "A substance of unspeakable suffering."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#FAF0E6" //rgb: 51, 102, 0
+
+
+/datum/reagent/egg_yolk
+	name = "Egg Yolk"
+	id = EGG_YOLK
+	description = "A chicken before it could become a chicken."
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFACD" //LEMONCHIFFON
+
 /datum/reagent/capsaicin
 	name = "Capsaicin Oil"
 	id = CAPSAICIN
@@ -3895,6 +3912,15 @@
 	custom_metabolism = FOOD_METABOLISM
 	density = 0.53
 	specheatcap = 3.49
+
+/datum/reagent/mustard_powder
+	name = "Mustard Powder"
+	id = MUSTARD_POWDER
+	description = "A deep yellow powder, unrelated the gas variant"
+	nutriment_factor = 3 * REAGENTS_METABOLISM
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "##c8d07d" // dark dirty yellow
+
 
 /datum/reagent/capsaicin/on_mob_life(var/mob/living/M)
 
@@ -7819,6 +7845,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			M.adjustFireLoss(5*REM)
 			M.adjustBruteLoss(5*REM)
 
+
+
 //////////////////////
 //					//
 //      INCENSE		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7873,6 +7901,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Incense"
 	id = INCENSE_SUNFLOWERS
 	description = "While it smells really nice, incense is known to increase the risk of lung cancer."
+
+/datum/reagent/incense/mustardplant //same as sunflower, no connection to mustard gas
+	name = "Mustardplant Incense"
+	id = INCENSE_MUSTARDPLANT
+	description = "A sweet scent with a tinge of clover." //i have no idea what these smell like, im going off of forum posts, if anyone does know please edit the desc
 
 /datum/reagent/incense/moonflowers//Basically mindbreaker
 	name = "Hallucinogenic Incense"
