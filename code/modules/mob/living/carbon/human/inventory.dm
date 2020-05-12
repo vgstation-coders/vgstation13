@@ -146,6 +146,8 @@
 		if(slot_glasses)
 			return glasses
 		if(slot_gloves)
+			if (!gloves)
+				return hidden_ring
 			return gloves
 		if(slot_head)
 			return head

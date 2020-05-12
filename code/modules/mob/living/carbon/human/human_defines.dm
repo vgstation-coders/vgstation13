@@ -36,6 +36,8 @@
 	var/obj/item/l_ear	 = null
 	var/obj/item/r_ear	 = null
 
+	var/obj/item/clothing/accessory/ring/hidden_ring = null
+
 	//Special attacks (bite, kicks, ...)
 	var/attack_type = NORMAL_ATTACK
 

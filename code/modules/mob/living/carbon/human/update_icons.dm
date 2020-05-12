@@ -623,7 +623,7 @@ var/global/list/damage_icon_parts = list()
 			if((gender == FEMALE) && (ID_worn.clothing_flags & GENDERFIT)) //genderfit
 				if(has_icon(O.icon,"[ID_worn.icon_state]_f"))
 					O.icon_state = "[ID_worn.icon_state]_f"
-	
+
 			O.overlays.len = 0
 			if(wear_id.dynamic_overlay)
 				if(wear_id.dynamic_overlay["[ID_LAYER]"])
@@ -706,6 +706,15 @@ var/global/list/damage_icon_parts = list()
 			obj_to_plane_overlay(O,GLOVES_LAYER)
 		//else
 			//overlays_standing[GLOVES_LAYER]	= null
+
+	if(hidden_ring && !gloves) // No gloves + hidden ring = draw a ring
+		var/suffix = "r"
+		if (!has_organ("r_hand"))
+			suffix = "l"
+		var/icon_name = hidden_ring.icon_state + "_[suffix]"
+		O.icon = hidden_ring.worn_overlay
+		O.icon_state = icon_name
+
 	if(update_icons)
 		update_icons()
 
@@ -1004,7 +1013,7 @@ var/global/list/damage_icon_parts = list()
 		else
 			if(SP.name in wear_suit.species_fit) //Allows clothes to display differently for multiple species
 				if(SP.wear_suit_icons && has_icon(SP.wear_suit_icons, wear_suit.icon_state))
-					standing.icon = SP.wear_suit_icons					
+					standing.icon = SP.wear_suit_icons
 			if((gender == FEMALE) && (wear_suit.clothing_flags & GENDERFIT)) //genderfit
 				if(has_icon(standing.icon,"[wear_suit.icon_state]_f"))
 					standing.icon_state = "[wear_suit.icon_state]_f"

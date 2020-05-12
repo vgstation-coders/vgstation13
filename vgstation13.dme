@@ -1335,6 +1335,7 @@
 #include "code\modules\clothing\accessories\armor_shards.dm"
 #include "code\modules\clothing\accessories\holomap.dm"
 #include "code\modules\clothing\accessories\holster.dm"
+#include "code\modules\clothing\accessories\rings.dm"
 #include "code\modules\clothing\accessories\spesstv.dm"
 #include "code\modules\clothing\accessories\storage.dm"
 #include "code\modules\clothing\accessories\tactical_light.dm"

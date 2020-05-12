@@ -271,11 +271,33 @@
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to set [src.name]'s ([src.ckey]) suit sensors.</font>")
 			log_attack("[user.name] ([user.ckey]) has failed to set [src.name]'s ([src.ckey]) suit sensors.")
 
+/mob/living/carbon/proc/handle_strip_accesory(var/mob/living/user, var/obj/item/clothing/accessory/A)
+	var/pickpocket = user.isGoodPickpocket()
+	if(!istype(A))
+		return
+
+	if(!A.canremove)
+		to_chat(user, "<span class='warning'>You can't seem to be able to take that off!</span>")
+		return
+
+	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Attempted accessory stripping ([A] in slot [A.attached_to]) by [key_name(user)].</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='orange'>>Attempted to strip accessory ([A] in slot [A.attached_to]) from [key_name(src)].</font>")
+	log_attack("[key_name(user)] attempted to strip accessory ([A] in slot [A.attached_to]) from [key_name(src)].")
+
+	if(!pickpocket)
+		visible_message("<span class='danger'>\The [user] is trying to remove \a [A] from \the [src]'s [A.attached_to]!</span>")
+
+	if(do_mob(user, src, HUMAN_STRIP_DELAY))
+		A.on_removed(user)
+		src.attack_log += text("\[[time_stamp()]\] <font color='red'>Successful accessory stripping ([A] in slot [A.attached_to]) by [key_name(user)].</font>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Stripped accessory ([A] in slot [A.attached_to]) from [key_name(src)].</font>")
+		log_attack("[key_name(user)] stripped accessory ([A] in slot [A.attached_to]) from [key_name(src)].")
+
 // Set internals on or off.
 /mob/living/carbon/proc/set_internals(var/mob/living/user)
 	if(user.incapacitated())
 		return
-	
+
 	if(!has_breathing_mask())
 		to_chat(user, "<span class='warning'>\The [src] is not wearing a breathing mask.</span>")
 		return

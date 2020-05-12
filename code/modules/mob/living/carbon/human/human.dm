@@ -417,11 +417,12 @@
 		return 0
 	return is_on_ears(/obj/item/device/radio/headset/headset_earmuffs)
 
+// Awful.
 /mob/living/carbon/human/show_inv(mob/user)
 	user.set_machine(src)
-	var/pickpocket = usr.isGoodPickpocket()
+	var/pickpocket = user.isGoodPickpocket()
 	var/list/obscured = check_obscured_slots()
-	var/dat
+	var/dat = list()
 
 	for(var/i = 1 to held_items.len) //Hands
 		var/obj/item/I = held_items[i]
@@ -430,37 +431,48 @@
 	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
 	dat += "<BR>"
 	dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[slot_head]'>[makeStrippingButton(head)]</A>"
+	dat += accessories_striping_button(head)
 	if(slot_wear_mask in obscured)
 		dat += "<BR><font color=grey><B>Mask:</B> Obscured by [head]</font>"
 	else
 		dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
+		dat += accessories_striping_button(wear_mask)
 	if(has_breathing_mask())
 		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
 	if(slot_glasses in obscured)
 		dat += "<BR><font color=grey><B>Eyes:</B> Obscured by [head]</font>"
 	else
 		dat += "<BR><B>Eyes:</B> <A href='?src=\ref[src];item=[slot_glasses]'>[makeStrippingButton(glasses)]</A>"
+		dat += accessories_striping_button(glasses)
 	if(slot_ears in obscured)
 		dat += "<BR><font color=grey><B>Ears:</B> Obscured by [head]</font>"
 	else
 		dat += "<BR><B>Ears:</B> <A href='?src=\ref[src];item=[slot_ears]'>[makeStrippingButton(ears)]</A>"
 	dat += "<BR>"
 	dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[slot_wear_suit]'>[makeStrippingButton(wear_suit)]</A>"
+	dat += accessories_striping_button(wear_suit)
 	if(wear_suit)
 		dat += "<BR>[HTMLTAB]&#8627;<B>Suit Storage:</B> <A href='?src=\ref[src];item=[slot_s_store]'>[makeStrippingButton(s_store)]</A>"
+		dat += accessories_striping_button(s_store)
 	if(slot_shoes in obscured)
 		dat += "<BR><font color=grey><B>Shoes:</B> Obscured by [wear_suit]</font>"
 	else
 		dat += "<BR><B>Shoes:</B> <A href='?src=\ref[src];item=[slot_shoes]'>[makeStrippingButton(shoes)]</A>"
+		dat += accessories_striping_button(shoes)
 	if(slot_gloves in obscured)
 		dat += "<BR><font color=grey><B>Gloves:</B> Obscured by [wear_suit]</font>"
 	else
 		dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(gloves)]</A>"
+		if (!gloves)
+			dat += "<BR><B>Ring:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(hidden_ring)]</A>"
+		dat += accessories_striping_button(gloves)
 	if(slot_w_uniform in obscured)
 		dat += "<BR><font color=grey><B>Uniform:</B> Obscured by [wear_suit]</font>"
 	else
 		dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
+		dat += accessories_striping_button(belt)
 		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(w_uniform)]</A>"
+		dat += accessories_striping_button(w_uniform)
 		if(w_uniform)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Suit Sensors:</B> <A href='?src=\ref[src];sensors=1'>Set</A>"
 		if(pickpocket)
@@ -480,8 +492,18 @@
 	<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A>
 	"}
 	var/datum/browser/popup = new(user, "mob\ref[src]", "[src]", 340, 500)
-	popup.set_content(dat)
+	popup.set_content(jointext(dat, ""))
 	popup.open()
+
+/mob/living/carbon/human/proc/accessories_striping_button(var/obj/item/clothing/C)
+	var/dat = list()
+	if (!(C in src.contents))
+		return ""
+	for (var/obj/item/clothing/accessory/A in C.accessories)
+		if (istype(A, /obj/item/clothing/accessory/holster)) // Stealth holsters.
+			continue
+		dat += "<BR><<A href='?src=\ref[src];accesory_strip=\ref[A]'>[makeStrippingButton(A)]</A>"
+	return jointext(dat, "")
 
 /mob/living/carbon/human/Topic(href, href_list)
 	..() //Slot stripping, hand stripping, and internals setting in /mob/living/carbon/Topic()
@@ -499,6 +521,14 @@
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
 		toggle_sensors(usr)
+
+	else if(href_list["accesory_strip"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+			return
+		var/obj/item/clothing/accessory/A = locate(href_list["accesory_strip"])
+		if (!A || A.gcDestroyed)
+			return
+		handle_strip_accesory(usr, A)
 
 	else if (href_list["refresh"])
 		if((machine)&&(in_range(src, usr)))
