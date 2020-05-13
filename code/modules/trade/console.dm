@@ -55,11 +55,32 @@
 		return
 	ui_interact(user)
 
+/obj/machinery/computer/trade/proc/format_trades(list/trades)
+	var/list/formatted = list()
+	for(var/datum/trade/T in trades)
+		formatted.Add(list(list(
+			"display" = format_display(T.display),
+			"reward" = T.reward)))
+
+	return formatted
+
+/obj/machinery/computer/trade/proc/format_display(list/display)
+	var/formatted = ""
+	var/index = 1
+	for(var/line in display)
+		formatted += line
+		if(index != 1)
+			formatted += "<br/>"
+		index++
+
+	return formatted
+
 /obj/machinery/computer/trade/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null, var/force_open=NANOUI_FOCUS)
 	user.set_machine(src)
 
 	var/data[0]
 	data["src"] = "\ref[src]"
+	data["trades"] = format_trades(trades)
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -70,3 +91,5 @@
 /obj/machinery/computer/trade/Topic(href, href_list)
 	if(..())
 		return 1
+
+	

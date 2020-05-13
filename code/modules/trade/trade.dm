@@ -1,7 +1,17 @@
 /datum/trade
-	var/list/items
-	var/list/reagents
-	var/reward
+	var/list/items = list()
+	var/list/reagents = list()
+	var/reward = 0
+	var/display = list()
+
+/datum/trade/proc/check(var/obj/structure/closet/crate/C)
+	var/have_items = 0
+	var/have_reagents = 0
+	if(items)
+		have_items = check_items(C)
+	if(reagents)
+		have_reagents = check_reagents(C)
+	return (have_items && have_reagents)
 
 /datum/trade/proc/check_items(var/obj/structure/closet/crate/C)
 	var/list/needs = items.Copy()
