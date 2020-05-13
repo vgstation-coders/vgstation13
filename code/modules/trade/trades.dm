@@ -3,6 +3,7 @@ var/global/list/trades = list()
 proc/trade_setup()
 	add_trade(new /datum/trade/scanner)
 	add_trade(new /datum/trade/donut)
+	add_trade(new /datum/trade/nutriment)
 
 proc/add_trade(var/datum/trade/T)
 	trades.Add(T)
@@ -33,4 +34,13 @@ proc/remove_trade(var/trade_id)
 	reward = 200
 	display = list(
 		"1 advanced reagent scanner"
+	)
+
+/datum/trade/nutriment
+	items = list(/obj/item/weapon/reagent_containers/glass/beaker/large = 1)
+	reagents = list(NUTRIMENT = 100)
+	reward = 300
+	display = list(
+		"1 large beaker",
+		"100 units of Nutriment"
 	)

@@ -1,3 +1,9 @@
+#define TRADE_VALID 1
+#define TRADE_DNE 2
+#define TRADE_NO_TELEPAD 3
+#define TRADE_NO_CRATE 4
+#define TRADE_NO_OBJECTIVES 5
+
 /obj/machinery/computer/trade
 	name = "Trade Console"
 	desc = "Console used for long-range communication with Shoal traders."
@@ -12,7 +18,7 @@
 	return objective_crate
 
 /obj/machinery/computer/trade/proc/trade(var/trade_id)
-	if(!can_trade(trade_id))
+	if(can_trade(trade_id) != TRADE_VALID)
 		return 0
 
 	spark(telepad, 5)
@@ -25,6 +31,7 @@
 	for(var/obj/O in objective_crate.contents)
 		qdel(O)
 	qdel(objective_crate)
+	objective_crate = null
 	remove_trade(trade_id)
 	nanomanager.update_uis(src)
 	
@@ -33,14 +40,17 @@
 /obj/machinery/computer/trade/proc/can_trade(var/trade_id)
 	objective_crate = find_crate()
 	var/datum/trade/T = trades[trade_id]
-	if(!objective_crate || !T || !telepad)
-		return 0
-
+	if(!T)
+		return TRADE_DNE
+	if(!telepad)
+		return TRADE_NO_TELEPAD
+	if(!find_crate())
+		return TRADE_NO_CRATE
 	var/crate_has_objectives = T.check(objective_crate)
 	if(!crate_has_objectives)
-		return 0
+		return TRADE_NO_OBJECTIVES
 
-	return 1
+	return TRADE_VALID
 
 /obj/machinery/computer/trade/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return ""
@@ -115,7 +125,7 @@
 	user.set_machine(src)
 
 	var/data[0]
-	data["src"] = "\ref[src]"
+	data["user"] = "\ref[user]"
 	data["trades"] = format_trades(trades)
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -130,9 +140,20 @@
 
 	if(href_list["trade"])
 		var/trade_id = text2num(href_list["trade"])
-		if(can_trade(trade_id))
+		var/trade_result = can_trade(trade_id)
+		if(trade_result == TRADE_VALID)
 			trade(trade_id)
-		else
-			to_chat(usr, "<span class='warning'>Cannot execute trade</span>")
+		else			
+			switch(can_trade(trade_id))
+				if(TRADE_NO_TELEPAD)
+					to_chat(usr, "<span class='warning'>You need to link the [src] to a trade telepad!</span>")
+					return 1
+				if(TRADE_NO_CRATE)
+					to_chat(usr, "<span class='warning'>You need to place a crate on the linked telepad!</span>")
+					return 1
+				if(TRADE_NO_OBJECTIVES)
+					to_chat(usr, "<span class='warning'>You need to fill the crate with all objectives!</span>")
+					return 1
+			
 		return 1
 
