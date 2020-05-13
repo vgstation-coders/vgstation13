@@ -48,6 +48,10 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/mauler
 
 /obj/mecha/combat/marauder/New()
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
+
+/obj/mecha/combat/marauder/initialize()
 	..()
 	new /obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse(src)
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
