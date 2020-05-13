@@ -449,7 +449,7 @@
 
 /datum/religion/slam/equip_chaplain(var/mob/living/carbon/human/H)
 	H.put_in_hands(new/obj/item/weapon/beach_ball/holoball)
-	H.equip_or_collect(new /obj/item/clothing/under/shorts, slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/under/shorts/black, slot_w_uniform)
 
 /datum/religion/judaism
 	name = "Judaism"

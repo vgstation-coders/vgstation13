@@ -419,7 +419,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	update_icon()
 
 // Instead of removing
-/obj/item/weapon/storage/bag/sheetsnatcher/remove_from_storage(obj/item/W as obj, atom/new_location)
+/obj/item/weapon/storage/bag/sheetsnatcher/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
 	var/obj/item/stack/sheet/S = W
 	if(!istype(S))
 		return FALSE

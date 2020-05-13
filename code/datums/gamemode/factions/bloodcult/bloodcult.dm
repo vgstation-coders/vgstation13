@@ -153,13 +153,15 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	if (veil_thickness == CULT_MENDED)
 		return//it's over, you lost
 
+	var/datum/runeset/rune_set = global_runesets["blood_cult"]
+
 	if (new_act == CULT_MENDED)
 		veil_thickness = CULT_MENDED
 		..()
 		command_alert(/datum/command_alert/bloodstones_broken)
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
-		for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)
+		for (var/obj/effect/rune/R in rune_set.rune_list)
 			R.update_icon()
 		for (var/datum/role/cultist/C in members)
 			C.update_cult_hud()
@@ -242,7 +244,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		for (var/obj/structure/cult/spire/S in cult_spires)//spires update their appearance on Act 2 and 3, signaling new available tattoos.
 			S.upgrade()
 
-		for (var/obj/effect/rune/R in global_runesets["blood_cult"].rune_list)//runes now available will start pulsing
+		for (var/obj/effect/rune/R in rune_set.rune_list)//runes now available will start pulsing
 			R.update_icon()
 
 		if (istype(new_obj,/datum/objective/bloodcult_bloodbath))

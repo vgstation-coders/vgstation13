@@ -26,7 +26,6 @@
 			return "health0"
 		else
 			return "health-100"
-	return "0"
 
 #undef SCANNER
 

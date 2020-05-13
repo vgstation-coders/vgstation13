@@ -442,11 +442,13 @@ var/list/arcane_tomes = list()
 			if (istype(active_spell,/datum/rune_spell/blood_cult/portalentrance))
 				var/datum/rune_spell/blood_cult/portalentrance/entrance = active_spell
 				if (entrance.network)
-					word_pulse(global_runesets["blood_cult"].words[entrance.network])
+					var/datum/runeset/rune_set = global_runesets["blood_cult"]
+					word_pulse(rune_set.words[entrance.network])
 			else if (istype(active_spell,/datum/rune_spell/blood_cult/portalexit))
 				var/datum/rune_spell/blood_cult/portalentrance/exit = active_spell
 				if (exit.network)
-					word_pulse(global_runesets["blood_cult"].words[exit.network])
+					var/datum/runeset/rune_set = global_runesets["blood_cult"]
+					word_pulse(rune_set.words[exit.network])
 
 		switch(talisman_interaction)
 			if (RUNE_CAN_ATTUNE)

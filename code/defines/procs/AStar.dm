@@ -196,13 +196,15 @@ proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth =
 // You MUST have the start and end be turfs.
 proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/reference)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
+	. = list() // In case of failure/runtimes, we want to return a list.
 	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
-	var/list/path = null //the returned path, if any
+	var/list/path = list() //the returned path, if any
 	var/PathNode/cur //current processed turf
 	start = get_turf(start)
 
 	if(!start)
+		astar_debug("aborted - no start.")
 		return list()
 
 	//initialization
@@ -237,7 +239,11 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 		var/list/L = call(cur.source,adjacent)(id,closed)
 
 		for(var/turf/T in L)
+			if(ASTAR_DEBUG && T.color != "#00ff00")
+				T.color = "#FFA500" //orange
 			if(T == exclude)
+				if(ASTAR_DEBUG && T.color != "#00ff00")
+					T.color = "#FF0000" //red
 				continue
 
 			var/newenddist = call(T,dist)(end)
@@ -275,9 +281,6 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 			path.Swap(i,path.len-i+1)
 
 	return path
-
-
-
 
 ///////////////////
 //A* helpers procs

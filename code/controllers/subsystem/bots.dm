@@ -19,8 +19,7 @@ var/datum/subsystem/bots/SSBots
 		return ..()
 
 	..("B:[global.bots_list.len]")
-
-
+	
 // This is to allow the near identical fast machinery process to use it.
 /datum/subsystem/bots/proc/get_currenrun()
 	return bots_list.Copy()
@@ -38,8 +37,7 @@ var/datum/subsystem/bots/SSBots
 			continue
 
 		if (M.process() == PROCESS_KILL)
-			M.inMachineList = 0
-			machines.Remove(M)
+			bots_list.Remove(M)
 			continue
 
 		if (M.use_power)

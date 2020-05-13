@@ -900,8 +900,32 @@ var/list/admin_verbs_mod = list(
 	set desc = "Regain your admin powers."
 	var/datum/admins/D = admin_datums[ckey]
 	if(config.admin_legacy_system)
-		to_chat(src, "<span class='notice'>Legacy admins is not supported yet</span>")
-		return
+		var/list/lines = file2list("config/admins.txt")
+		for(var/line in lines)
+			// if the line doesn't begin with our ckey we don't care
+			if(findtext(ckey(line), ckey) != 1)
+				continue
+			//Split the line at every "-"
+			var/list/List = splittext(line, "-")
+			if(!List.len)
+				continue
+
+			//rank follows the first "-"
+			var/rank = ""
+			if(List.len >= 2)
+				rank = ckeyEx(List[2])
+
+			//load permissions associated with this rank
+			var/rights = admin_ranks[rank]
+
+			//create the admin datum and store it for later use
+			D = new /datum/admins(rank, rights, ckey)
+
+			//associate them with the new admin datum
+			D.associate(src)
+
+			if(D.rights & (R_DEBUG|R_SERVER)) // Grant profile/reboot access
+				world.SetConfig("APP/admin", ckey, "role=admin")
 	else
 		if(!dbcon.IsConnected())
 			message_admins("Warning, mysql database is not connected.")

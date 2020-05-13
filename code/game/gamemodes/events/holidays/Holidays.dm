@@ -67,6 +67,9 @@ var/global/Holiday = null
 					current_holidays += LABOUR_DAY
 				if(4)
 					current_holidays += FIREFIGHTERS_DAY
+				if(9)
+					Holiday = VG_BIRTHDAY
+					return //go no further, this is the one
 				if(12)
 					current_holidays += OWL_AND_PUSSYCAT_DAY // what a dumb day of observence...but we -do- have costumes already :3
 

@@ -213,6 +213,7 @@
 	origin_tech = Tc_POWERSTORAGE + "=2"
 	var/obj/item/weapon/cell/stored = null
 	var/state = 0 //0 if up, 1 if down; only used for icons
+	var/removablecell = TRUE
 
 /obj/item/device/crank_charger/get_cell()
 	return stored
@@ -252,7 +253,7 @@
 		to_chat(user,"<span class='warning'>There is no cell loaded!</span>")
 
 /obj/item/device/crank_charger/attack_hand(mob/user)
-	if(stored && user.get_inactive_hand() == src)
+	if(stored && removablecell && user.get_inactive_hand() == src)
 		stored.updateicon()
 		user.put_in_hands(stored)
 		stored = null
@@ -265,3 +266,46 @@
 		qdel(stored)
 		stored = null
 	..()
+
+/obj/item/device/crank_charger/generous
+	name = "generous crank"
+	desc = "Uses reverse-engineered ninja power glove technology to transfer energy wirelessly at short range into objects that can be recharged."
+	icon_state = "crankcharger-0"
+	removablecell = FALSE
+	var/list/forbidden_targets = list(/obj/item/weapon/gun)
+	var/last_charged
+
+/obj/item/device/crank_charger/generous/New()
+	..()
+	processing_objects += src
+	stored = new /obj/item/weapon/cell/empty(src)
+
+/obj/item/device/crank_charger/generous/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/item/device/crank_charger/generous/attack_self(mob/user)
+	..()
+	last_charged = world.time
+
+/obj/item/device/crank_charger/generous/afterattack(var/atom/target, var/mob/user)
+	..()
+	if(is_type_in_list(target,forbidden_targets))
+		to_chat(user,"<span class='warning'>The generous crank isn't compatible with that.</span>")
+		return
+	var/obj/item/weapon/cell/C = target.get_cell()
+	if(istype(C))
+		if(!stored.charge)
+			to_chat(user,"<span class='warning'>The loaded cell has no charge.</span>")
+			return
+		var/transfer = min(C.maxcharge - C.charge,stored.charge)
+		if(!transfer) //since we already ruled out no charge here, if min() = 0 that means the diff is 0
+			to_chat(user,"<span class='good'>That already has full charge!</span>")
+			return
+		playsound(get_turf(src), pick(lightning_sound), 25, 1, "vary" = 0)
+		stored.use(transfer)
+		C.give(transfer)
+
+/obj/item/device/crank_charger/generous/process()
+	if(stored && world.time > last_charged + 4 SECONDS) //After 2 ticks, start draining
+		stored.use(100) //remove a single crank per tick

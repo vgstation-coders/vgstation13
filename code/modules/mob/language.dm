@@ -316,19 +316,19 @@
 	languages.Add(new_language)
 	return 1
 
-/mob/proc/remove_language(var/rem_language)
+/mob/proc/remove_language(rem_language)
 	var/datum/language/L = all_languages[rem_language]
-	. = (L in languages)
-	languages.Remove(L)
+	return languages.Remove(L)
 
 /mob/living/remove_language(rem_language)
-	var/datum/language/L = all_languages[rem_language]
-	if(default_language == L)
-		if(all_languages.len)
-			default_language = all_languages[1]
-		else
-			default_language = null
-	return ..()
+	. = ..()
+	if(.)
+		var/datum/language/L = all_languages[rem_language]
+		if(default_language == L)
+			if(languages.len)
+				default_language = languages[1]
+			else
+				default_language = null
 
 // Can we speak this language, as opposed to just understanding it?
 /mob/proc/can_speak_lang(datum/language/speaking)

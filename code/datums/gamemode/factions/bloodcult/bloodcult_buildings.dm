@@ -161,7 +161,7 @@
 	apply_beam_damage(B)
 	last_beamchecks.Remove("\ref[B]") // RIP
 	if(beams.len == 0)
-		if(!custom_process && src in processing_objects)
+		if(!custom_process)
 			processing_objects.Remove(src)
 
 /obj/structure/cult/apply_beam_damage(var/obj/effect/beam/B)
@@ -209,7 +209,7 @@
 
 	var/list/watching_mobs = list()
 	var/list/watcher_maps = list()
-	var/datum/station_holomap/holomap_datum
+	var/datum/station_holomap/cult/holomap_datum
 
 
 /obj/structure/cult/altar/New()
@@ -229,7 +229,7 @@
 	holomarker.z = src.z
 	holomap_markers[HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"] = holomarker
 
-	holomap_datum = new /datum/station_holomap/cult()
+	holomap_datum = new
 	holomap_datum.initialize_holomap(get_turf(src), cursor_icon = "altar-here")
 
 

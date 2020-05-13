@@ -105,7 +105,7 @@
 /obj/item/weapon/gun/projectile/handgun/RemoveMag(var/mob/user)
 	to_chat(user, "<span class = 'warning'>Try as you might, you can't seem to find a magazine on \the [src]!</span>")
 
-/obj/item/weapon/gun/projectile/handgun/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/handgun/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(..())
 		if(silenced)
 			user.emote("me",1,"pretends to fire a gun at [target]!")

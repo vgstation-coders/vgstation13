@@ -69,7 +69,7 @@
 				to_chat(M, "<span class='sinister'><b>[src.name]:</b> [html_encode(speech.message)]</span>")
 		return 1
 
-/mob/living/simple_animal/construct/gib()
+/mob/living/simple_animal/construct/gib(var/animation = 0, var/meat = 1)
 	death(1)
 	monkeyizing = 1
 	canmove = 0

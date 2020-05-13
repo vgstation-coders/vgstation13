@@ -20,7 +20,7 @@
 	..()
 	in_chamber = new projectile_type(src)
 
-/obj/item/weapon/gun/bulletstorm/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/bulletstorm/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -33,6 +33,6 @@
 /obj/item/weapon/gun/bulletstorm/can_discharge()
 	if(in_chamber)
 		return 1
-	
+
 /obj/item/weapon/gun/bulletstorm/process_chambered()
 	return in_chamber

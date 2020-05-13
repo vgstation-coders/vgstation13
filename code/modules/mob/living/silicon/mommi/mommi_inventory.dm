@@ -92,9 +92,9 @@
 		return drop_item()
 	return 0
 
-/mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
-	if(!Target)
-		Target = src.loc
+/mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = FALSE, dontsay = null)
+	if(!target)
+		target = src.loc
 	if(!istype(to_drop))
 		to_drop = tool_state
 	if(to_drop)
@@ -105,7 +105,7 @@
 
 		remove_from_mob(to_drop) //clean out any refs
 		to_drop.dropped(src)
-		to_drop.forceMove(Target)
+		to_drop.forceMove(target)
 		update_items()
 		return 1
 	return 0

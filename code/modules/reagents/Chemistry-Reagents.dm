@@ -22,7 +22,7 @@
 	var/description = ""
 	var/datum/reagents/holder = null
 	var/reagent_state = REAGENT_STATE_SOLID
-	var/list/data = null
+	var/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
 	var/pain_resistance = 0
@@ -1308,7 +1308,7 @@
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+		if((H.species && H.species.flags & NO_BREATHE) || (M_NO_BREATH in H.mutations))
 			return
 		for(var/datum/organ/internal/lungs/L in H.internal_organs)
 			L.take_damage(REM, 1)
@@ -2207,6 +2207,11 @@
 					H.vomit()
 	data++
 	M.color = ""
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & MULTICOLOR && !(initial(H.species.anatomy_flags) & MULTICOLOR))
+			H.species.anatomy_flags &= ~MULTICOLOR
+			H.update_body()
 	M.adjustToxLoss(4 * REM)
 
 /datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -3880,6 +3885,23 @@
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#33cc33" //rgb: 51, 204, 51
 
+/datum/reagent/mayo
+	name = "Mayonnaise"
+	id = MAYO
+	description = "A substance of unspeakable suffering."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#FAF0E6" //rgb: 51, 102, 0
+
+
+/datum/reagent/egg_yolk
+	name = "Egg Yolk"
+	id = EGG_YOLK
+	description = "A chicken before it could become a chicken."
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFACD" //LEMONCHIFFON
+
 /datum/reagent/capsaicin
 	name = "Capsaicin Oil"
 	id = CAPSAICIN
@@ -3890,6 +3912,15 @@
 	custom_metabolism = FOOD_METABOLISM
 	density = 0.53
 	specheatcap = 3.49
+
+/datum/reagent/mustard_powder
+	name = "Mustard Powder"
+	id = MUSTARD_POWDER
+	description = "A deep yellow powder, unrelated the gas variant"
+	nutriment_factor = 3 * REAGENTS_METABOLISM
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "##c8d07d" // dark dirty yellow
+
 
 /datum/reagent/capsaicin/on_mob_life(var/mob/living/M)
 
@@ -7626,7 +7657,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+		if((H.species && H.species.flags & NO_BREATHE) || (M_NO_BREATH in H.mutations))
 			return
 		M.adjustFireLoss(0.5 * REM)
 		if(prob(10))
@@ -7814,6 +7845,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			M.adjustFireLoss(5*REM)
 			M.adjustBruteLoss(5*REM)
 
+
+
 //////////////////////
 //					//
 //      INCENSE		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7868,6 +7901,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Incense"
 	id = INCENSE_SUNFLOWERS
 	description = "While it smells really nice, incense is known to increase the risk of lung cancer."
+
+/datum/reagent/incense/mustardplant //same as sunflower, no connection to mustard gas
+	name = "Mustardplant Incense"
+	id = INCENSE_MUSTARDPLANT
+	description = "A sweet scent with a tinge of clover." //i have no idea what these smell like, im going off of forum posts, if anyone does know please edit the desc
 
 /datum/reagent/incense/moonflowers//Basically mindbreaker
 	name = "Hallucinogenic Incense"

@@ -5,6 +5,8 @@
 	anchored = 1
 	amount = 1 //Basically moles.
 
+	reagent = FUEL
+
 	volatility = 0.02
 
 	basecolor = "#6D5757"
