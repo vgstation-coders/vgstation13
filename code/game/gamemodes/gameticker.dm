@@ -279,6 +279,7 @@ var/datum/controller/gameticker/ticker
 	stat_collection.round_start_time = world.realtime
 
 	wageSetup()
+	trade_setup()
 	post_roundstart()
 	return 1
 

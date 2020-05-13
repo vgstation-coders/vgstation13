@@ -3,9 +3,17 @@
 	desc = "Console used for long-range communication with Shoal traders."
 	icon_state = "trade"
 	circuit = "/obj/item/weapon/circuitboard/trade"
-	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU
 	var/id_tag = "trade_console"
-	var/obj/machinery/trade_telepad/telepad	
+	var/obj/machinery/trade_telepad/telepad
+
+/obj/machinery/computer/trade/proc/find_crate()
+	var/obj/structure/closet/crate/C = locate(/obj/structure/closet/crate, telepad.loc)
+	return C
+
+/obj/machinery/computer/trade/proc/can_trade(var/trade_id)
+	if(!find_crate())
+		return 0
+	return 1
 
 /obj/machinery/computer/trade/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return ""
@@ -92,4 +100,3 @@
 	if(..())
 		return 1
 
-	
