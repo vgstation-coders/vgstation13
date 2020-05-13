@@ -76,6 +76,7 @@
 		"Anti-Toxin" = ANTI_TOXIN,
 		"Inaprovaline" = INAPROVALINE,
 		"Coffee" = COFFEE,
+		"Tea" = TEA,
 		"Salt" = SODIUMCHLORIDE,
 		"Smoke" = PAISMOKE,
 	)
