@@ -5,8 +5,8 @@
 	var/display = list()
 
 /datum/trade/proc/check(var/obj/structure/closet/crate/C)
-	var/have_items = 0
-	var/have_reagents = 0
+	var/have_items = 1
+	var/have_reagents = 1
 	if(items)
 		have_items = check_items(C)
 	if(reagents)

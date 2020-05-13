@@ -5,7 +5,7 @@ proc/trade_setup()
 
 proc/add_trade(var/datum/trade/T)
 	trades.Add(T)
-	log_admin("Added trade #[1] of type [T.type]")	
+	log_admin("Added trade #[1] of type [T.type]")
 
 /client/proc/view_trades()
 	set name = "View Trades"

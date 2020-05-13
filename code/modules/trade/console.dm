@@ -10,8 +10,19 @@
 	var/obj/structure/closet/crate/C = locate(/obj/structure/closet/crate, telepad.loc)
 	return C
 
+/obj/machinery/computer/trade/proc/trade(var/trade_id)
+	if(!can_trade(trade_id))
+		return 0	
+	spark(telepad, 5)
+	flick("pad-beam", telepad)
+	var/obj/structure/closet/crate/C = find_crate()
+	qdel(C)
+	return 1
+
 /obj/machinery/computer/trade/proc/can_trade(var/trade_id)
-	if(!find_crate())
+	var/obj/structure/closet/crate/C = find_crate()
+	var/datum/trade/T = trades[trade_id]
+	if(!C || !T || !telepad)
 		return 0
 	return 1
 
