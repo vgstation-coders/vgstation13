@@ -27,7 +27,7 @@
 
 	for (var/R in typesof(/datum/religion))
 		var/datum/religion/rel = new R
-		for (var/key in rel.keys)
+		for (var/key in (rel.keys + rel.deity_names + rel.deity_name))
 			if (lowertext(new_religion) == lowertext(key))
 				rel.equip_chaplain(H) // We do the misc things related to the religion
 				chaplain_religion = rel
@@ -305,7 +305,7 @@
 		if("Scrapbook")
 			R.holy_book.icon_state = "scrapbook"
 			R.holy_book.item_state = "scrapbook"
-		if("Creeper")
+		if("Creeper") //aww man
 			R.holy_book.icon_state = "creeper"
 			R.holy_book.item_state = "creeper"
 		if("White Bible")
@@ -389,7 +389,7 @@
 	bible_name = "The Holy Bible"
 	male_adept = "Bishop"
 	female_adept = "Bishop"
-	keys = list("catholic", "catholicism", "roman catholicism")
+	keys = list("catholic", "jesus", "catholicism", "roman catholicism")
 	symbolstyle = 2
 	bookstyle = "Bible"
 
@@ -562,7 +562,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Militant Atheist" // Wasn't defined so the poor dude ended up being a chaplain
 	female_adept = "Militant Atheist"
-	keys = list("atheism", "none")
+	keys = list("atheism", "none", "atheist")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/sunflowers
 	bookstyle = "Atheist"
 
@@ -746,7 +746,7 @@
 	bible_name = "The 36 Lessons of Vivec"
 	male_adept = "Curate"
 	female_adept = "Curate"
-	keys = list("Justice", "Tribunal", "almsivi")
+	keys = list("Justice", "Tribunal", "almsivi", "vehk")
 
 /datum/religion/elder_scrolls
 	name = "Cult of the Divines"
@@ -1215,7 +1215,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Activist"
 	female_adept = "Activist"
-	keys = list("anarcho-communism", "communalism", "mutualism")
+	keys = list("anarcho-communism", "ancom", "communalism", "mutualism")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
 
 /datum/religion/ancom/equip_chaplain(var/mob/living/carbon/human/H)
@@ -1227,7 +1227,7 @@
 	bible_name = "Kojiki"//Japan's oldest book, the origin "muh honor" and "muh katana"
 	male_adept = "Samurai"
 	female_adept = "Samurai"
-	keys = list("samurai", "honor", "bushido", "weaboo")
+	keys = list("samurai", "honor", "bushido", "weaboo", "weeb")
 
 /datum/religion/samurai/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/rice_hat(H), slot_head)
@@ -1360,7 +1360,7 @@
 	bible_name = "Guide to Speedrunning"
 	male_adept = "Speedrunner"
 	female_adept = "Speedrunner"
-	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")
+	keys = list("speedrun", "gdq", "ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
 	bookstyle = "Creeper"
 
