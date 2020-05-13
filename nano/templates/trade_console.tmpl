@@ -30,17 +30,17 @@ Used In File(s): /code/game/modules/trade/console.dm
 	}
 
 </style>
-{{for data.trades}}
-	<table class="trade" width="100%"><tbody>
-		<tr>
-			<th width="65%">Objective</th>
-			<th width="15%">Reward</th>
-			<th width="20%"></th>
-		</tr>
+<table class="trade" width="100%"><tbody>
+	<tr>
+		<th width="65%">Objective</th>
+		<th width="15%">Reward</th>
+		<th width="20%"></th>
+	</tr>
+	{{for data.trades}}
 		<tr>
 			<td>{{:value.display}}</td>
 			<td>${{:value.reward}}</td>
-			<td>{{:helper.link('Trade', 'refresh')}}</td>
+			<td>{{:helper.link('Trade', 'refresh', {'trade': value.id})}}</td>
 		</tr>
-		</tbody></table>
-{{/for}}
+	{{/for}}
+</tbody></table>

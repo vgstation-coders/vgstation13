@@ -5,25 +5,39 @@
 	circuit = "/obj/item/weapon/circuitboard/trade"
 	var/id_tag = "trade_console"
 	var/obj/machinery/trade_telepad/telepad
+	var/obj/structure/closet/crate/objective_crate
 
 /obj/machinery/computer/trade/proc/find_crate()
-	var/obj/structure/closet/crate/C = locate(/obj/structure/closet/crate, telepad.loc)
-	return C
+	objective_crate = locate(/obj/structure/closet/crate, telepad.loc)
+	return objective_crate
 
 /obj/machinery/computer/trade/proc/trade(var/trade_id)
 	if(!can_trade(trade_id))
-		return 0	
+		return 0
+
 	spark(telepad, 5)
 	flick("pad-beam", telepad)
-	var/obj/structure/closet/crate/C = find_crate()
-	qdel(C)
+
+	var/datum/trade/T = trades[trade_id]
+	dispense_cash(T.reward, get_turf(src))
+	playsound(src, "polaroid", 50, 1)
+
+	qdel(objective_crate)
+	remove_trade(trade_id)
+	nanomanager.update_uis(src)
+	
 	return 1
 
 /obj/machinery/computer/trade/proc/can_trade(var/trade_id)
-	var/obj/structure/closet/crate/C = find_crate()
+	objective_crate = find_crate()
 	var/datum/trade/T = trades[trade_id]
-	if(!C || !T || !telepad)
+	if(!objective_crate || !T || !telepad)
 		return 0
+
+	var/crate_has_objectives = T.check(objective_crate)
+	if(!crate_has_objectives)
+		return 0
+
 	return 1
 
 /obj/machinery/computer/trade/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
@@ -75,11 +89,12 @@
 	ui_interact(user)
 
 /obj/machinery/computer/trade/proc/format_trades(list/trades)
-	var/list/formatted = list()
+	var/list/formatted = list()	
 	for(var/datum/trade/T in trades)
 		formatted.Add(list(list(
 			"display" = format_display(T.display),
-			"reward" = T.reward)))
+			"reward" = T.reward,
+			"id" = T.id)))		
 
 	return formatted
 
@@ -109,5 +124,13 @@
 
 /obj/machinery/computer/trade/Topic(href, href_list)
 	if(..())
+		return 1
+
+	if(href_list["trade"])
+		var/trade_id = href_list["trade"]
+		if(can_trade(trade_id))
+			trade(trade_id)
+		else
+			to_chat(usr, "<span class='warning'>Cannot execute trade</span>")
 		return 1
 

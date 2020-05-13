@@ -2,15 +2,21 @@ var/global/list/trades = list()
 
 proc/trade_setup()
 	add_trade(new /datum/trade/scanner)
+	add_trade(new /datum/trade/donut)
 
 proc/add_trade(var/datum/trade/T)
 	trades.Add(T)
+	T.id = trades.len
 	log_admin("Added trade #[1] of type [T.type]")
+
+proc/remove_trade(var/trade_id)
+	if(trades[trade_id])
+		trades[trade_id] = null
 
 /client/proc/view_trades()
 	set name = "View Trades"
 	set category = "Debug"
-	for(var/i=0 to trades.len)
+	for(var/i=1 to trades.len)
 		to_chat(usr, "[i] [trades[i].type]")
 	return
 

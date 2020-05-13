@@ -3,6 +3,7 @@
 	var/list/reagents = list()
 	var/reward = 0
 	var/display = list()
+	var/id
 
 /datum/trade/proc/check(var/obj/structure/closet/crate/C)
 	var/have_items = 1
@@ -19,10 +20,11 @@
 	for(var/obj/O in C.contents)
 		for(var/type in needs)
 			if(istype(O, type))
-				needs -= type
+				needs[type] -= 1
 
-	if(needs.len > 0)
-		return 0
+	for(var/type in needs)
+		if(needs[type] > 0)
+			return 0
 
 	return 1
 
