@@ -22,6 +22,8 @@
 	dispense_cash(T.reward, get_turf(src))
 	playsound(src, "polaroid", 50, 1)
 
+	for(var/obj/O in objective_crate.contents)
+		qdel(O)
 	qdel(objective_crate)
 	remove_trade(trade_id)
 	nanomanager.update_uis(src)
@@ -127,7 +129,7 @@
 		return 1
 
 	if(href_list["trade"])
-		var/trade_id = href_list["trade"]
+		var/trade_id = text2num(href_list["trade"])
 		if(can_trade(trade_id))
 			trade(trade_id)
 		else

@@ -6,8 +6,7 @@ proc/trade_setup()
 
 proc/add_trade(var/datum/trade/T)
 	trades.Add(T)
-	T.id = trades.len
-	log_admin("Added trade #[1] of type [T.type]")
+	T.id = trades.len	
 
 proc/remove_trade(var/trade_id)
 	if(trades[trade_id])

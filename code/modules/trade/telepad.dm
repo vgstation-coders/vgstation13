@@ -7,7 +7,7 @@
 	use_power = 1
 	idle_power_usage = 200
 	active_power_usage = 5000
-	machine_flags = MULTITOOL_MENU
+	machine_flags = MULTITOOL_MENU | WRENCHMOVE
 	var/id_tag = "trade_telepad"
 	var/obj/machinery/computer/trade/linked
 
