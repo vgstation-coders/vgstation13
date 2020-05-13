@@ -12,7 +12,7 @@
 	initroletype = /datum/role/revolutionary/leader
 	roletype = /datum/role/revolutionary
 	playlist = "nukesquad"
-	discovered = 0
+	var/discovered = 0
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)
