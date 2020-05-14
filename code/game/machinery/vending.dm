@@ -1635,6 +1635,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/bottle/charcoal = 4,
 		/obj/item/weapon/reagent_containers/syringe/antiviral = 4,
 		/obj/item/weapon/reagent_containers/syringe = 12,
+		/obj/item/weapon/storage/pill_bottle = 3,
 		/obj/item/weapon/reagent_containers/glass/beaker/vial = 8,
 		/obj/item/device/healthanalyzer = 5,
 		/obj/item/device/antibody_scanner = 5,
@@ -1642,7 +1643,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/dropper = 2,
 		/obj/item/stack/medical/splint = 4,
 		/obj/item/weapon/thermometer = 3,
-		/obj/item/weapon/storage/pill_bottle = 3,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/pill/tox = 3,
