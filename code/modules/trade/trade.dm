@@ -3,6 +3,7 @@
 	var/list/reagents = list()
 	var/reward = 0
 	var/display = list()
+	var/weight = 1
 	var/id
 
 /datum/trade/proc/check(var/obj/structure/closet/crate/C)

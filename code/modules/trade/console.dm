@@ -14,6 +14,8 @@
 	var/obj/structure/closet/crate/objective_crate
 
 /obj/machinery/computer/trade/proc/find_crate()
+	if(!telepad)
+		return null
 	objective_crate = locate(/obj/structure/closet/crate, telepad.loc)
 	return objective_crate
 
