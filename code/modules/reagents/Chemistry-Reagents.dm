@@ -3919,7 +3919,7 @@
 	description = "A deep yellow powder, unrelated the gas variant"
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "##c8d07d" // dark dirty yellow
+	color = "#C8D07D" // dark dirty yellow
 
 
 /datum/reagent/capsaicin/on_mob_life(var/mob/living/M)
