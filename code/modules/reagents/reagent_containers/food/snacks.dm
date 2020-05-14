@@ -701,6 +701,18 @@
 		name = "Frosted Jelly Donut"
 		reagents.add_reagent(SPRINKLES, 2)
 
+/obj/item/weapon/reagent_containers/food/snacks/donutiron //not a subtype of donuts to avoid inheritance
+	name = "ironman donut"
+	icon_state = "irondonut"
+	desc = "An ironman donut will keep you cool when things heat up."
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/donutiron/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(LEPORAZINE, 6)
+	reagents.add_reagent(IRON, 6)
+
 /obj/item/weapon/reagent_containers/food/snacks/donut/cherryjelly
 	name = "jelly donut"
 	desc = "You jelly?"
