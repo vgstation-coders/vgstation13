@@ -16,4 +16,4 @@
 /spell/targeted/watertowine/cast(var/list/targets, mob/user)
 	for(var/atom/A in targets)
 		var/datum/reagents/thereagents = A.reagents
-		thereagents.convert_some_of_type(convert_from_type,convert_to_type, TRUE)
+		thereagents.convert_some_of_type(convert_from_type,convert_to_type, 1000)

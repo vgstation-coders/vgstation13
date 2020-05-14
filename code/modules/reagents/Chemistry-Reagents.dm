@@ -3763,10 +3763,7 @@
 	M.drowsyness = 0
 	M.stuttering = 0
 	M.confused = 0
-	/*if(holder.has_reagent_type(/datum/reagent/ethanol)) //ethylred turns pure ethanol into water, slowly removes other drinks.
-		holder.remove_all_type(/datum/reagent/ethanol, 2 * REM) //booze-b-gone 
-	*/
-	holder.convert_some_of_type(/datum/reagent/ethanol, /datum/reagent/water)
+	holder.convert_some_of_type(/datum/reagent/ethanol, /datum/reagent/water) //booze-b-gone
 
 //Otherwise known as a "Mickey Finn"
 /datum/reagent/chloralhydrate
