@@ -305,7 +305,7 @@
 		if("Scrapbook")
 			R.holy_book.icon_state = "scrapbook"
 			R.holy_book.item_state = "scrapbook"
-		if("Creeper") //aww man
+		if("Creeper")
 			R.holy_book.icon_state = "creeper"
 			R.holy_book.item_state = "creeper"
 		if("White Bible")
