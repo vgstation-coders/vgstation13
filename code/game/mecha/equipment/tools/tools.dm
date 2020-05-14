@@ -990,9 +990,9 @@
 	var/list/use_channels = list(EQUIP,ENVIRON,LIGHT)
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/New()
-	..()
 	pr_energy_relay = new /datum/global_iterator/mecha_energy_relay(list(src),0)
 	pr_energy_relay.set_delay(equip_cooldown)
+	..()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/Destroy()
@@ -1050,8 +1050,6 @@
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/get_equip_info()
 	if(!chassis)
-		return
-	if(!pr_energy_relay)
 		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_relay=1'>[pr_energy_relay.active()?"Dea":"A"]ctivate</a>"
 
