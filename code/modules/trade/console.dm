@@ -6,7 +6,7 @@
 
 /obj/machinery/computer/trade
 	name = "Trade Console"
-	desc = "Console used for long-range communication with Shoal traders."
+	desc = "A console that is used for long-range communication with Shoal traders."
 	icon_state = "trade"
 	circuit = "/obj/item/weapon/circuitboard/trade"
 	var/id_tag = "trade_console"
@@ -111,13 +111,10 @@
 	return formatted
 
 /obj/machinery/computer/trade/proc/format_display(list/display)
-	var/formatted = ""
-	var/index = 1
+	var/formatted = ""	
 	for(var/line in display)
 		formatted += line
-		if(index != 1)
-			formatted += "<br/>"
-		index++
+		formatted += "<br>"
 
 	return formatted
 
@@ -144,7 +141,7 @@
 		if(trade_result == TRADE_VALID)
 			trade(trade_id)
 		else			
-			switch(can_trade(trade_id))
+			switch(trade_result)
 				if(TRADE_NO_TELEPAD)
 					to_chat(usr, "<span class='warning'>You need to link the [src] to a trade telepad!</span>")
 					return 1

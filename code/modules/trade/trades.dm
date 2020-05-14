@@ -31,16 +31,16 @@ proc/remove_trade(var/trade_id)
 /datum/trade/scanner
 	items = list(/obj/item/device/reagent_scanner/adv = 1)
 	reagents = null
-	reward = 200
+	reward = 100
 	display = list(
 		"1 advanced reagent scanner"
 	)
 
 /datum/trade/nutriment
 	items = list(/obj/item/weapon/reagent_containers/glass/beaker/large = 1)
-	reagents = list(NUTRIMENT = 100)
-	reward = 300
+	reagents = list(NUTRIMENT = 20)
+	reward = 100
 	display = list(
 		"1 large beaker",
-		"100 units of Nutriment"
+		"20 units of Nutriment"
 	)

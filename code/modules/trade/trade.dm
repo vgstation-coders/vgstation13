@@ -29,16 +29,15 @@
 	return 1
 
 /datum/trade/proc/check_reagents(var/obj/structure/closet/crate/C)
-	var/list/needs = reagents.Copy()
-	log_admin("in check_reagents")
-	for (var/obj/item/weapon/reagent_containers/I in get_contents_in_object(C, /obj/item/weapon/reagent_containers))		
-		var/datum/reagents/R = I.reagents
-		log_admin("[I.name]")
+	var/list/needs = reagents.Copy()	
+	for (var/obj/O in C.contents)
+		if(!istype(O, /obj/item/weapon/reagent_containers))
+			continue
+		var/obj/item/weapon/reagent_containers/RC = O
+		var/datum/reagents/R = RC.reagents		
 		for(var/reagent_type in needs)
-			var/reagent_amount = R.get_reagent_amount()
-			log_admin("[reagent_amount] units of [reagent_type]")
-			needs[reagent_type] = max(0, needs[reagent_type] - reagent_amount)
-			log_admin("need [needs[reagent_type]] of [reagent_type]")
+			var/reagent_amount = R.get_reagent_amount(reagent_type)			
+			needs[reagent_type] = max(0, needs[reagent_type] - reagent_amount)			
 
 	for(var/reagent_type in needs)
 		if(needs[reagent_type] > 0)
