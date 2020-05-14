@@ -952,3 +952,20 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if(my_atom)
 			var/atom/A = my_atom
 			A.reagents = src
+
+
+//written for ethylredoxrazine, but might be fun for turning water into wine or something
+/datum/reagents/proc/convert_some_of_type(var/datum/reagent/convert_from_type, var/datum/reagent/convert_to_type,var/convertall = FALSE)
+	var/total_amount_converted = 0
+
+	for(var/datum/reagent/itsareagent in reagent_list)
+		if(istype(itsareagent, convert_from_type))
+			var/amount_to_convert
+			if(!convertall)
+				amount_to_convert = min(itsareagent.volume, 2 * REM)
+			else
+				amount_to_convert = itsareagent.volume
+			total_amount_converted += amount_to_convert
+			remove_that_reagent(itsareagent, amount_to_convert)
+	return add_reagent(initial(convert_to_type.id), total_amount_converted)
+
