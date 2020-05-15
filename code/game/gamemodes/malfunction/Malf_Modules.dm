@@ -485,16 +485,20 @@ rcd light flash thingy on matter drain
 			if(istype(S,type))
 				AI_mind.current.remove_spell(S)
 
-/spell/aoe_turf/ai_win
+/spell/targeted/ai_win
 	name = "Explode"
+	desc = "Station goes boom."
 	panel = MALFUNCTION
-	desc = "Station goes boom"
+	spell_flags = INCLUDEUSER
+
 	charge_type = Sp_CHARGES
 	charge_max = 1
+	max_targets = 1
+
 	hud_state = "radiation"
 	override_base = "grey"
 
-/spell/aoe_turf/ai_win/before_target(mob/user)
+/spell/targeted/ai_win/before_target(mob/user)
 	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
 	if(!M)
 		to_chat(user, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
@@ -512,7 +516,7 @@ rcd light flash thingy on matter drain
 		return 1
 
 
-/spell/aoe_turf/ai_win/cast(var/list/targets, mob/user)
+/spell/targeted/ai_win/cast(var/list/targets, mob/user)
 	to_chat(user, "<span class='danger'>Detonation signal sent!</span>")
 	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
 	if(!M)
@@ -520,7 +524,7 @@ rcd light flash thingy on matter drain
 		return 0
 	for(var/datum/role/AI in M.members)
 		for(var/spell/S in AI.antag.current.spell_list)
-			if(istype(S,/spell/aoe_turf/ai_win))
+			if(istype(S, /spell/targeted/ai_win))
 				AI.antag.current.remove_spell(S)
 	ticker.explosion_in_progress = 1
 	for(var/mob/MM in player_list)
