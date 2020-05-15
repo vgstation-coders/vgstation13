@@ -40,6 +40,7 @@
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
+//Head of Security
 /obj/item/clothing/head/HoS
 	name = "Head of Security Hat"
 	desc = "The hat of the Head of Security. For showing the officers who's in charge."
@@ -59,6 +60,7 @@
 	item_state = "dermal"
 	siemens_coefficient = 0.6
 
+//Warden
 /obj/item/clothing/head/warden
 	name = "warden's hat"
 	desc = "It's a special helmet issued to the Warden of a security force. Protects the head from impacts."
@@ -69,6 +71,7 @@
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
 
+//Head of Personnel
 /obj/item/clothing/head/hopcap
 	name = "Head of Personnel's Cap"
 	desc = "Papers, Please."
