@@ -55,6 +55,6 @@
 			playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 			qdel(W)
 
-/obj/item/weapon/gun/banannon/can_discharge()
+/obj/item/weapon/gun/lolly_lobber/can_discharge()
 	if(current_ammo)
 		return 1

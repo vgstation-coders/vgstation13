@@ -101,3 +101,4 @@
 				new /mob/living/simple_animal/hostile/gingerbomination(get_turf(user))
 	else
 		to_chat(user, "<span class='warning'>the sugars in the egg haven't finished caramelizing</span>")
+
