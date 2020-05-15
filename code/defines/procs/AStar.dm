@@ -211,7 +211,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,"unique_[reference]"))
 
 	//then run the main loop
-	while(!open.IsEmpty() && !path)
+	while(!open.IsEmpty() && !path.len)
 	{
 		cur = open.Dequeue() //get the lowest node cost turf in the open list
 		closed.Add(cur.source) //and tell we've processed it
