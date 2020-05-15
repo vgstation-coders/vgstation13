@@ -312,3 +312,9 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 			L.Add(A)
 
 	return L
+
+/proc/is_implanted(mob/M)
+	for(var/obj/item/weapon/implant/loyalty/I in M)
+		if(I.implanted)
+			return TRUE
+	return FALSE

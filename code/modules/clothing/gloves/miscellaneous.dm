@@ -51,11 +51,11 @@
 
 /obj/item/clothing/gloves/swat/operator/Touch(var/atom/A, mob/user, proximity)
 	if(A == user && !user.incapacitated())
-		if(locate(/obj/item/weapon/implant/loyalty) in user)
+		if(is_implanted(user))
 			var/list/choices = list(
 				list("Stick together!", "radial_group"),
 				list("Split up!", "radial_split"),
-				list("Wait here!", "radial_wait"),
+				list("Wait here!", "radial_waithere"),
 				list("Busy, cover!", "radial_busy")
 			)
 
@@ -70,9 +70,11 @@
 	if(user.incapacitated())
 		return
 	for(var/mob/M in view(7, user))
-		if(!M.ckey)
+		if(!M.client)
 			continue //Don't bother, no one to show it to
-		if((locate(/obj/item/weapon/implant/loyalty) in M) || istype(M, /mob/dead/observer))
+		if(M.isUnconscious() || M.eye_blind || M.blinded)
+			continue //can't perceive this message
+		if(is_implanted(M) || istype(M, /mob/dead/observer))
 			to_chat(M,"[bicon(src)] <span class='info'>[user] signals, <B>[sign]</B></span>")
 			continue
 		else if(isrobot(M))

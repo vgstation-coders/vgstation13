@@ -244,7 +244,7 @@ var/global/list/alcatraz_stuff = list(
 	if(istype(W,/obj/item/weapon/grenade))
 		var/obj/item/weapon/grenade/G = W
 		G.det_time = 1.5 SECONDS
-		G.activate()
+		G.activate(user)
 	else
 		..()
 
@@ -1108,6 +1108,6 @@ var/global/list/alcatraz_stuff = list(
 				path = pick(regular_rewards)
 			if(path)
 				var/obj/item/I = new path(get_turf(src))
-				if(ishuman(holder))
+				if(isliving(holder))
 					holder.put_in_hands(I)
 				to_chat(holder,"<span class='good'>\The [src] dispenses a reward!</span>")
