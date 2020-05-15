@@ -7,7 +7,7 @@
  ***********************/
 
 // Uncomment to test the mediaplayer
-//#define DEBUG_MEDIAPLAYER
+#define DEBUG_MEDIAPLAYER
 
 // Open up VLC and play musique.
 // Converted to VLC for cross-platform and ogg support. - N3X
@@ -186,7 +186,7 @@ function SetMusic(url, time, volume) {
 		return
 	if(!(owner.prefs.toggles & SOUND_STREAMING) && target_url != "")
 		return // Nope.
-	MP_DEBUG("<span class='good'>Sending update to VLC ([target_url])...</span>")
+	MP_DEBUG("<span class='good'>Sending update to media player ([target_url])...</span>")
 	var/window_playing
 	switch (currently_broadcasting)
 		if (JUKEBOX_ODD_PLAYER) // We were on odd, so now we are on even, broadcasting the target url.
@@ -248,7 +248,7 @@ function SetMusic(url, time, volume) {
 		if ((targetURL =! current_url) && (finish_time > 0) && (world.time - finish_time < -10 SECONDS)) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
 			MP_DEBUG("<span class='good'>Should be cutting off music.<span>")
 			stop_music()
-			sleep(1 SECONDS) // Have to wait for the VLC player response.
+			sleep(1 SECONDS) // Have to wait for the media player response.
 		targetURL = M.media_url
 		targetStartTime = M.media_start_time
 		targetVolume = M.volume
