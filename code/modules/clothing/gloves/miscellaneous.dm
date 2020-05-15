@@ -51,7 +51,7 @@
 
 /obj/item/clothing/gloves/swat/operator/Touch(var/atom/A, mob/user, proximity)
 	if(A == user && !user.incapacitated())
-		if(is_implanted(user))
+		if(user.is_implanted(/obj/item/weapon/implant/loyalty))
 			var/list/choices = list(
 				list("Stick together!", "radial_group"),
 				list("Split up!", "radial_split"),
@@ -74,7 +74,7 @@
 			continue //Don't bother, no one to show it to
 		if(M.isUnconscious() || M.eye_blind || M.blinded)
 			continue //can't perceive this message
-		if(is_implanted(M) || istype(M, /mob/dead/observer))
+		if(M.is_implanted(/obj/item/weapon/implant/loyalty) || istype(M, /mob/dead/observer))
 			to_chat(M,"[bicon(src)] <span class='info'>[user] signals, <B>[sign]</B></span>")
 			continue
 		else if(isrobot(M))
