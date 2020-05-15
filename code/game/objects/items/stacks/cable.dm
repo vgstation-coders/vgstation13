@@ -272,7 +272,6 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 /////////////////////////////
 
 /obj/item/stack/cable_coil/cut
-	item_state = "coil_red2"
 
 /obj/item/stack/cable_coil/cut/New(loc, amount, var/param_color = null)
 	..(loc)
