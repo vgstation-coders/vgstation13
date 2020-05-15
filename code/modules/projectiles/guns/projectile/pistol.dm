@@ -143,12 +143,12 @@
 
 
 /obj/item/weapon/gun/projectile/glock
-	name = "\improper NT Glock"
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket."
+	name = "\improper Seburo M5"
+	desc = "The Seburo M5 is a small, concealable handgun chambered in .380 Auto, produced for Nanotrasen by a Sol-based arms corporation."
 	icon = 'icons/obj/biggun.dmi'
 	w_class = W_CLASS_SMALL
-	clowned = CLOWNABLE
-	icon_state = "secglockfancy"
+	clowned = UNCLOWN
+	icon_state = "seburo"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
 	mag_type_restricted = list(/obj/item/ammo_storage/magazine/m380auto/extended)
@@ -157,7 +157,7 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
-	gun_flags = SILENCECOMP | EMPTYCASINGS
+	gun_flags = EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
