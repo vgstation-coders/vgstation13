@@ -7,7 +7,7 @@
  ***********************/
 
 // Uncomment to test the mediaplayer
-#define DEBUG_MEDIAPLAYER
+//#define DEBUG_MEDIAPLAYER
 
 // Open up VLC and play musique.
 // Converted to VLC for cross-platform and ogg support. - N3X
