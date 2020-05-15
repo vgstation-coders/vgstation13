@@ -73,3 +73,31 @@
 	transfer_fingerprints_to(bag)
 	user.put_in_hands(bag)
 	qdel(src)
+
+/obj/item/gingerbread_egg
+	name = "fresh gingerbread eggsac"
+	desc = "This one's still warm"
+	icon_state = "gingerbread_egg"
+	var/candy_delay = 900
+	var/last_candy_time
+
+/obj/item/gingerbread_egg/attack_self(mob/user)
+	add_fingerprint(user)
+	candy_spawn(user)
+
+/obj/item/gingerbread_egg/proc/candy_spawn(var/mob/user)
+	if(world.time - last_candy_time >= candy_delay)
+		last_candy_time = world.time
+		playsound(user, 'sound/effects/squelch1.ogg', 25, 1)
+		switch(pick(1,2,3,4,5,6,7,8,9,10))
+			if(1,2)
+				new /obj/item/weapon/reagent_containers/food/snacks/candy_cane(get_turf(user))
+			if(3,4)
+				new /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man(get_turf(user))
+			if(5,6,7,8,9)
+				for(var/i in 1 to 10)
+					new /obj/item/stack/sheet/mineral/gingerbread(get_turf(user))
+			if(10)
+				new /mob/living/simple_animal/hostile/gingerbomination(get_turf(user))
+	else
+		to_chat(user, "<span class='warning'>the sugars in the egg haven't finished caramelizing</span>")

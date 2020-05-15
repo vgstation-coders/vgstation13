@@ -13,6 +13,7 @@ Mineral Sheets
 	Others:
 		- Adamantine
 		- Mythril
+		- Gingerbread
 */
 
 /obj/item/stack/sheet/mineral
@@ -527,3 +528,28 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
 	perunit = CC_PER_SHEET_MOLITZ
+
+obj/item/stack/sheet/mineral/gingerbread
+	name = "gingerbread"
+	icon_state = "sheet-gingerbread"
+	force = 5.0
+	throwforce = 5
+	w_class = W_CLASS_MEDIUM
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = Tc_MATERIALS + "=5"
+	perunit = CC_PER_SHEET_GINGERBREAD
+
+var/list/datum/stack_recipe/gingerbread_recipes = list ( \
+	new/datum/stack_recipe("gingerbread floor tile", /obj/item/stack/tile/mineral/gingerbread, 1, 4, 20), \
+	new/datum/stack_recipe("wall mounted peppermint red",/obj/structure/bigpeppermint_red, 5, time = 10, on_floor = 1),\
+	new/datum/stack_recipe("wall mounted peppermint green", /obj/structure/bigpeppermint_green,	5, time = 10,	on_floor = 1),\
+	new/datum/stack_recipe("gingerbread wall", /turf/simulated/wall/mineral/gingerbread, 6, time = 40, one_per_turf = 1, on_floor = 1),\
+	new/datum/stack_recipe("gingerbread door", /obj/machinery/door/mineral/gingerbread, 5, time = 30, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("gingerbread false wall", /obj/structure/falsewall/gingerbread, 6, time = 40, one_per_turf = 1, on_floor = 1),\
+		)
+
+/obj/item/stack/sheet/mineral/gingerbread/New(var/loc, var/amount=null)
+	recipes = gingerbread_recipes
+
+	..()

@@ -586,3 +586,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_MOLITZ
+
+/datum/material/gingerbread
+	name="Gingerbread"
+	id=MAT_GINGERBREAD
+	value=null
+	oretype=null
+	obj/item/stack/sheet/mineral/gingerbread
+	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_GINGERBREAD

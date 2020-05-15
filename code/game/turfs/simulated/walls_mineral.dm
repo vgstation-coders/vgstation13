@@ -204,3 +204,10 @@
 
 /turf/simulated/wall/mineral/clockwork/clockworkify()
 	return
+
+/turf/simulated/wall/mineral/gingerbread
+	name = "gingerbread wall"
+	desc = "Extremely stale and generally unappetizing"
+	icon_state = "gingerbread0"
+	walltype = "gingerbread"
+	mineral = "gingerbread"
