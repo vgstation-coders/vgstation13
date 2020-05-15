@@ -361,7 +361,7 @@
 "gW" = (/obj/effect/decal/remains/human,/turf/simulated/floor{tag = "icon-warningcorner (NORTH)"; icon_state = "warningcorner"; dir = 1},/area/awaymission/arrivalblock)
 "gX" = (/obj/machinery/computer/security,/turf/simulated/floor{icon_state = "red"; dir = 9},/area/awaymission/arrivalblock)
 "gY" = (/obj/machinery/computer/secure_data,/turf/simulated/floor{icon_state = "red"; dir = 1},/area/awaymission/arrivalblock)
-"gZ" = (/obj/structure/table,/obj/item/weapon/book/manual/security_space_law,/obj/item/weapon/melee/baton,/obj/item/clothing/head/helmet/tactical/warden,/turf/simulated/floor{icon_state = "red"; dir = 1},/area/awaymission/arrivalblock)
+"gZ" = (/obj/structure/table,/obj/item/weapon/book/manual/security_space_law,/obj/item/weapon/melee/baton,/obj/item/clothing/head/warden,/turf/simulated/floor{icon_state = "red"; dir = 1},/area/awaymission/arrivalblock)
 "ha" = (/obj/structure/closet/wardrobe/red,/obj/machinery/light{dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{icon_state = "red"; dir = 1},/area/awaymission/arrivalblock)
 "hb" = (/obj/structure/closet/secure_closet/security,/turf/simulated/floor{icon_state = "red"; dir = 1},/area/awaymission/arrivalblock)
 "hc" = (/obj/structure/closet/secure_closet/security,/turf/simulated/floor{icon_state = "red"; dir = 5},/area/awaymission/arrivalblock)
