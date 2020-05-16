@@ -5663,6 +5663,41 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 3
 
+////////	SUSHI	////////
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi
+	name = "generic sushi"
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner
+	name = "sushi spawner"
+	var/childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/forceMove(turf/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+	. = ..()
+	if(isnull(destination))
+		return
+	spawn_children()
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/proc/spawn_children()
+	var/num_of_children = reagents.total_volume / 3
+	// this is the BYOND ceil, say something nice about it
+	num_of_children = (round(num_of_children) < num_of_children) ? round(num_of_children) + 1 : round(num_of_children)
+	var/amount_to_transfer = reagents.total_volume / num_of_children
+	for(var/i in 1 to num_of_children)
+		var/obj/child = new childtype()
+		reagents.trans_to(child, amount_to_transfer)
+		child.forceMove(loc)
+		child.pixel_x = rand(-8, 8)
+		child.pixel_y = rand(-8, 8)
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ebi
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ebi/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi
 	name = "Ebi Sushi"
 	desc = "A simple sushi consisting of cooked shrimp and rice."
@@ -5672,8 +5707,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ikura
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ikura/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura
 	name = "Ikura Sushi"
@@ -5684,8 +5725,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Sake
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Sake
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Sake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Sake
 	name = "Sake Sushi"
@@ -5696,8 +5743,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Sake/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_SmokedSalmon
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_SmokedSalmon/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon
 	name = "Smoked Salmon Sushi"
@@ -5708,8 +5761,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tamago
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tamago/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago
 	name = "Tamago Sushi"
@@ -5720,8 +5779,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Inari
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Inari
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Inari/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Inari
 	name = "Inari Sushi"
@@ -5732,8 +5797,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Inari/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Masago
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Masago
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Masago/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Masago  																																			/*Every night I watch the skies from inside my bunker. They'll come back. If I watch they'll come. I can hear their voices from the sky. Calling out my name. There's the ridge. The guns in the jungle. Screaming. Smoke. The blood. All over my hands. */
 	name = "Masago Sushi"
@@ -5744,8 +5815,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Masago/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tobiko
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tobiko/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko
 	name = "Tobiko Sushi"
@@ -5756,7 +5833,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_TobikoEgg
@@ -5771,6 +5847,13 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tai
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tai
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tai/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Tai
 	name = "Tai Sushi"
 	desc = "A simple sushi consisting of catfish and rice."
@@ -5781,8 +5864,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Tai/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Unagi
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Unagi/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi // i have seen the face of god and it was weeping
 	name = "Unagi Sushi"
@@ -5794,8 +5883,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_avocado
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_avocado
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_avocado/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_avocado
 	name = "Avocado Sushi"
@@ -5806,7 +5901,9 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_avocado/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 1)
+	bitesize = 3
+
+////	END SUSHI	////
 
 /obj/item/weapon/reagent_containers/food/snacks/friedshrimp
 	name = "fried shrimp"

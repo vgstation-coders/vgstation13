@@ -2465,28 +2465,28 @@
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ebi
 
 /datum/recipe/sushi_Ikura
 	items = list(/obj/item/fish_eggs/salmon,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ikura
 
 /datum/recipe/sushi_Sake     // 100000 TIMES FOLDED SUSHI CAN CUT THROUGH DIAMONDS
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonmeat,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Sake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Sake
 
 /datum/recipe/sushi_SmokedSalmon
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonsteak,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon // this shit sounds fucking delicous IRL
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_SmokedSalmon // this shit sounds fucking delicous IRL
 
 /datum/recipe/sushi_Tamago
 	reagents = list(SAKE = 5)
@@ -2494,28 +2494,28 @@
 	/obj/item/weapon/reagent_containers/food/snacks/egg
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tamago
 
 /datum/recipe/sushi_Inari
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
 	/obj/item/weapon/reagent_containers/food/snacks/tofu
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Inari
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Inari
 
 /datum/recipe/sushi_Masago
 	items = list(/obj/item/fish_eggs/goldfish,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Masago
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Masago
 
 /datum/recipe/sushi_Tobiko
 	items = list(/obj/item/fish_eggs/shark,                                                                                                                                                                                                                                              //Every night I watch the skies from inside my bunker. They'll come back. If I watch they'll come. I can hear their voices from the sky. Calling out my name. There's the ridge. The guns in the jungle. Screaming. Smoke. The blood. All over my hands.
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tobiko
 
 /datum/recipe/sushi_TobikoEgg
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko,
@@ -2528,7 +2528,7 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/catfishmeat,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tai
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tai
 // this is a lot of fucking fish
 
 /datum/recipe/sushi_Unagi
@@ -2537,14 +2537,14 @@
 	/obj/item/weapon/fish/electric_eel
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Unagi
 
 /datum/recipe/sushi_avocado
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
 	/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_avocado
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_avocado
 
 /datum/recipe/friedshrimp
 	reagents = list(CORNOIL = 5)
