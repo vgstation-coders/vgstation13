@@ -131,6 +131,21 @@
 /obj/item/trash/plate
 	name = "plate"
 	icon_state = "plate"
+	var/clean = FALSE
+/obj/item/trash/plate/clean
+	name = "plate"
+	icon_state = "plateclean"
+	clean = TRUE
+/obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
+	if(istype(I,/obj/item/weapon/soap))
+		visible_message("<span class='notice'>[user] cleans \the [src] with \the [I]. </span>")
+		clean = TRUE
+		update_icon()
+/obj/item/trash/plate/update_icon()
+	if(clean)
+		icon_state = "plateclean"
+	else
+		icon_state = "plate"
 
 /obj/item/trash/pietin
 	name = "pie tin"
