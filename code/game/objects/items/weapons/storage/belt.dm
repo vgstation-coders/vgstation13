@@ -320,7 +320,7 @@
 /obj/item/weapon/storage/belt/silicon
 	name = "cyber trophy belt"
 	desc = "Contains intellicards, posibrains, and MMIs. Those contained within can only speak to the wearer."
-	icon_state = "securitybelt"
+	icon_state = "cyberbelt"
 	item_state = "security"
 	fits_max_w_class = 4
 	max_combined_w_class = 28
@@ -345,7 +345,7 @@
 	return mobs
 
 /proc/RenderBeltChat(var/obj/item/weapon/storage/belt/silicon/B,var/mob/living/C,var/message)
-	var/list/listeners = observers
+	var/list/listeners = observers.Copy()
 	if(istype(B.loc,/mob))
 		var/mob/M = B.loc
 		listeners += M
