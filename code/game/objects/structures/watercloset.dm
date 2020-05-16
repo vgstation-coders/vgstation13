@@ -573,7 +573,6 @@
 		return
 
 	if(istype(O,/obj/item/trash/plate))
-		visible_message("<span class='notice'>[user] washes \the [O] in \the [src]. </span>")
 		O.clean = TRUE
 		update_icon()
 
