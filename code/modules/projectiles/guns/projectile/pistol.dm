@@ -143,12 +143,12 @@
 
 
 /obj/item/weapon/gun/projectile/glock
-	name = "\improper NT Glock"
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket."
-	icon = 'icons/obj/biggun.dmi'
+	name = "\improper Seburo M5 Compact"
+	desc = "The Seburo M5 is a small, concealable handgun chambered in .380 Auto, produced for Nanotrasen by a Sol-based arms corporation."
+	icon = 'icons/obj/seburo.dmi'
 	w_class = W_CLASS_SMALL
-	clowned = CLOWNABLE
-	icon_state = "secglockfancy"
+	clowned = UNCLOWN
+	icon_state = "seburo"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
 	mag_type_restricted = list(/obj/item/ammo_storage/magazine/m380auto/extended)
@@ -157,24 +157,24 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
-	gun_flags = SILENCECOMP | EMPTYCASINGS
+	gun_flags = EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
-	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
+	icon_state = "seburo[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
 
 /obj/item/weapon/gun/projectile/glock/fancy
-	name = "\improper NT Glock Custom"
-	icon_state = "secgunfancy"
+	name = "\improper Seburo M5 Compact Custom"
+	icon_state = "seburofancy"
 	clowned = UNCLOWN
 
 /obj/item/weapon/gun/projectile/glock/fancy/New()
 	. = ..()
-	desc += "<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maintenance crawling!</span>"
+	desc += "<br><span class='notice'>This one has a custom anodized frame, and tritium night sights for maintenance crawling!</span>"
 
 /obj/item/weapon/gun/projectile/glock/fancy/update_icon()
 	..()
-	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
+	icon_state = "seburofancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 
 /obj/item/weapon/gun/projectile/glock/lockbox
 	max_shells = 0
