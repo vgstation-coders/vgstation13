@@ -573,8 +573,9 @@
 		return
 
 	if(istype(O,/obj/item/trash/plate))
-		O.clean = TRUE
-		update_icon()
+		var/obj/item/trash/plate/the_plate = O
+		the_plate.clean = TRUE
+		O.update_icon()
 
 	else if (istype(O, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = O
