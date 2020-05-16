@@ -420,6 +420,36 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
+//	multispawner: class for recipes that spawn more than one food item
+//	To use, inherit your spawner from it and adjust child_type and child_volume
+//	and set your recipe's result to your spawner.
+//	reagents.add_reagent() should take place in your spawner's New() proc, not in its children's.
+//	Consult sushi types below for examples of usage.
+/obj/item/weapon/reagent_containers/food/snacks/multispawner
+	name = "food spawner"
+	var/child_type = /obj/item/weapon/reagent_containers/food/snacks
+	var/child_volume = 3 // every spawned child will have this much or less reagent transferred to it. Small number = a lot of small items spawn
+
+// called when it leaves the microwave
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/forceMove(turf/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+	. = ..()
+	if(isnull(destination))
+		return
+	spawn_children()
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/proc/spawn_children()
+	var/num_of_children = reagents.total_volume / child_volume
+	// this is the BYOND ceil, say something nice about it
+	num_of_children = (round(num_of_children) < num_of_children) ? round(num_of_children) + 1 : round(num_of_children)
+	var/amount_to_transfer = reagents.total_volume / num_of_children
+	for(var/i in 1 to num_of_children)
+		var/obj/child = new child_type()
+		reagents.trans_to(child, amount_to_transfer)
+		child.forceMove(loc)
+		child.pixel_x = rand(-8, 8)
+		child.pixel_y = rand(-8, 8)
+
 
 //////////////////////////////////////////////////
 ////////////////////////////////////////////Snacks
@@ -5669,34 +5699,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "generic sushi"
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner
-	name = "sushi spawner"
-	var/childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ebi
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi
 
-// called when it leaves the microwave
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/forceMove(turf/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
-	. = ..()
-	if(isnull(destination))
-		return
-	spawn_children()
-	qdel(src)
-
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/proc/spawn_children()
-	var/num_of_children = reagents.total_volume / 3
-	// this is the BYOND ceil, say something nice about it
-	num_of_children = (round(num_of_children) < num_of_children) ? round(num_of_children) + 1 : round(num_of_children)
-	var/amount_to_transfer = reagents.total_volume / num_of_children
-	for(var/i in 1 to num_of_children)
-		var/obj/child = new childtype()
-		reagents.trans_to(child, amount_to_transfer)
-		child.forceMove(loc)
-		child.pixel_x = rand(-8, 8)
-		child.pixel_y = rand(-8, 8)
-
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ebi
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi
-
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ebi/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ebi/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
@@ -5707,10 +5713,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "sushi_Ebi"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ikura
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ikura
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ikura/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ikura/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 
@@ -5721,10 +5727,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "sushi_Ikura"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Sake
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Sake
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Sake/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Sake/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
@@ -5735,10 +5741,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "sushi_Sake"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_SmokedSalmon
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_SmokedSalmon
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_SmokedSalmon
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_SmokedSalmon
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_SmokedSalmon/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_SmokedSalmon/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
@@ -5749,10 +5755,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "sushi_SmokedSalmon"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tamago
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tamago
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tamago
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tamago
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tamago/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tamago/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
@@ -5763,10 +5769,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "sushi_Tamago"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Inari
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Inari
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Inari
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Inari
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Inari/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Inari/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
@@ -5777,10 +5783,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "sushi_Inari"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Masago
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Masago
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Masago/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Masago/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 
@@ -5791,10 +5797,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "sushi_Masago"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tobiko
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tobiko
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tobiko/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tobiko/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 
@@ -5818,10 +5824,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tai
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tai
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tai
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tai
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tai/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tai/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
@@ -5833,10 +5839,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Unagi
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Unagi
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Unagi
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Unagi
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Unagi/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Unagi/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
@@ -5847,10 +5853,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "sushi_Hokki"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_avocado
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_avocado
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_avocado
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_avocado
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_avocado/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_avocado/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
 
