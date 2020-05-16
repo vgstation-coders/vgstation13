@@ -91,8 +91,11 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/DBQuery/query = dbcon_old.NewQuery("DELETE FROM library WHERE id=[sqlid]")
-	query.Execute()
+	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE id=[sqlid]")
+	if(!query.Execute())
+		message_admins("Error: [query.ErrorMsg()]")
+		log_sql("Error: [query.ErrorMsg()]")
+	qdel(query)
 
 /datum/library_catalog/proc/getBookByID(var/id as text)
 	if("[id]" in cached_books)
@@ -101,8 +104,13 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/DBQuery/query = dbcon_old.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE id=[sqlid]")
-	query.Execute()
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE id=[sqlid]")
+	if(!query.Execute())
+		message_admins("Error: [query.ErrorMsg()]")
+		log_sql("Error: [query.ErrorMsg()]")
+		qdel(query)
+		return
+	qdel(query)
 
 	var/list/results=list()
 	while(query.NextRow())

@@ -73,8 +73,10 @@
 	)
 
 	var/list/synthable_default_chems = list(
-		"Tricordrazine" = TRICORDRAZINE,
+		"Anti-Toxin" = ANTI_TOXIN,
+		"Inaprovaline" = INAPROVALINE,
 		"Coffee" = COFFEE,
+		"Tea" = TEA,
 		"Salt" = SODIUMCHLORIDE,
 		"Smoke" = PAISMOKE,
 	)

@@ -1,7 +1,26 @@
+var/list/protected_global_vars = list(
+	"sqlfdbklogin",
+	"sqlfdbkpass",
+	"sqlfdbkdb",
+	"sqladdress",
+	"sqlport",
+	"sqllogin",
+	"sqlpass",
+	"sqlfdbkdb",
+
+	"forbidden_varedit_object_types",
+	"unviewable_varedit_object_types",
+	"protected_global_vars", // Hhaha!
+)
+
 /proc/writeglobal(var/which, var/what)
+	if (which in protected_global_vars)
+		return "Cannot write variable."
 	global.vars[which] = what
 
 /proc/readglobal(var/which)
+	if (which in protected_global_vars)
+		return "Cannot read variable."
 	return global.vars[which]
 
 #define DNA_SE_LENGTH 58
@@ -208,11 +227,6 @@ var/forum_authenticated_group = "10"
 	// However it'd be ok to use for accessing attack logs and such too, which are even laggier.
 var/fileaccess_timer = 0
 var/custom_event_msg = null
-
-//Database connections
-//A connection is established on world creation. Ideally, the connection dies when the server restarts (After feedback logging.).
-var/DBConnection/dbcon	//Feedback database (New database)
-var/DBConnection/dbcon_old	//Tgstation database (Old database) - See the files in the SQL folder for information what goes where.
 
 #define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
 

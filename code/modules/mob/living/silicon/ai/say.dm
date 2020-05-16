@@ -1,11 +1,11 @@
 /mob/living/silicon/ai/say(var/message)
 	if(loc.loc && istype(loc.loc,/obj/item/weapon/storage/belt/silicon)) //loc would be an aicard in this case
 		RenderBeltChat(loc.loc,src,message)
-		return
+		return 1
 	if(parent && istype(parent) && parent.stat != 2) //If there is a defined "parent" AI, it is actually an AI, and it is alive, anything the AI tries to say is said by the parent instead.
 		parent.say(message)
-		return
-	..(message)
+		return 1
+	return ..(message)
 
 
 /mob/living/silicon/ai/render_speaker_track_start(var/datum/speech/speech)

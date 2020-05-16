@@ -131,19 +131,38 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 	if(recurse==5)
 		return "\[BROKEN\]";
 	recurse++
-	var/DBQuery/query = dbcon.NewQuery("DELETE FROM admin_sessions WHERE expires < Now()")
-	query.Execute()
-
-	query = dbcon.NewQuery("SELECT sessID FROM admin_sessions WHERE ckey = '[owner.ckey]' AND expires > Now()")
-	query.Execute()
+	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM admin_sessions WHERE expires < Now()")
+	if(!query.Execute())
+		message_admins("Error: [query.ErrorMsg()]")
+		log_sql("Error: [query.ErrorMsg()]")
+		qdel(query)
+		return
+	var/datum/DBQuery/sel_query = SSdbcore.NewQuery("SELECT sessID FROM admin_sessions WHERE ckey = '[owner.ckey]' AND expires > Now()")
+	if(!sel_query.Execute())
+		message_admins("Error: [sel_query.ErrorMsg()]")
+		log_sql("Error: [sel_query.ErrorMsg()]")
+		qdel(sel_query)
+		return
+	qdel(sel_query)
 
 	sessKey=0
 	while(query.NextRow())
 		sessKey = query.item[1]
-		query=dbcon.NewQuery("UPDATE admin_sessions SET expires=DATE_ADD(NOW(), INTERVAL 24 HOUR), IP='[owner.address]' WHERE ckey = '[owner.ckey]")
-		query.Execute()
+		var/datum/DBQuery/up_query=SSdbcore.NewQuery("UPDATE admin_sessions SET expires=DATE_ADD(NOW(), INTERVAL 24 HOUR), IP='[owner.address]' WHERE ckey = '[owner.ckey]")
+		if(!up_query.Execute())
+			message_admins("Error: [up_query.ErrorMsg()]")
+			log_sql("Error: [up_query.ErrorMsg()]")
+			qdel(up_query)
+			return
+		qdel(up_query)
 		return sessKey
+	qdel(query)
 
-	query=dbcon.NewQuery("INSERT INTO admin_sessions (sessID,ckey,expires, IP) VALUES (UUID(), '[owner.ckey]', DATE_ADD(NOW(), INTERVAL 24 HOUR), '[owner.address]')")
-	query.Execute()
+	var/datum/DBQuery/insert_query=SSdbcore.NewQuery("INSERT INTO admin_sessions (sessID,ckey,expires, IP) VALUES (UUID(), '[owner.ckey]', DATE_ADD(NOW(), INTERVAL 24 HOUR), '[owner.address]')")
+	if(!insert_query.Execute())
+		qdel(insert_query)
+		message_admins("Error: [insert_query.ErrorMsg()]")
+		log_sql("Error: [insert_query.ErrorMsg()]")
+		return
+	qdel(insert_query)
 	return checkSessionKey(recurse)

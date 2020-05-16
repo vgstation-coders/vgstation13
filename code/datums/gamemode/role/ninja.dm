@@ -54,7 +54,7 @@
 		AppendObjective(/datum/objective/survive)
 	if(prob(15))
 		AppendObjective(/datum/objective/stealsake)
-		
+
 
 /datum/role/ninja/extraPanelButtons()
 	var/dat = ""
@@ -404,18 +404,18 @@
 
 /obj/item/mounted/poster/stealth
 	name = "rolled-up stealth poster"
-	desc = "The nanofilaments can mimic the color of walls and space station infastructure, but the edges remain a giveaway."
+	desc = "The nanofilaments can mimic the color of walls and space station infastructure."
 	build_time = 5
-	path = /obj/structure/sign/poster/stealth
-	serial = FALSE
-	serial_number = -2
+
+/obj/item/mounted/poster/stealth/pick_design()
+	design = new /datum/poster/special/ninja
 
 /obj/item/mounted/poster/stealth/do_build(turf/on_wall, mob/user)
 	var/turf/T = get_turf(user)
 	if(T.density)
 		to_chat(user,"<span class='warning'>Not while we're inside something dense!</span>")
 		return //Don't place a poster while we're on dense ground.
-	var/obj/structure/sign/poster/stealth/P = ..()
+	var/obj/structure/sign/poster/stealth/P = new(on_wall,design)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
@@ -426,7 +426,7 @@
 			if(istype(N.stat_datum, /datum/stat/role/ninja))
 				var/datum/stat/role/ninja/ND = N.stat_datum
 				ND.stealth_posters_posted++
-	return P
+	qdel(src)
 
 /obj/item/mounted/poster/stealth/poster_animation(obj/D,mob/user)
 	return //Silent and no animation
@@ -435,12 +435,29 @@
 	name = "machinery poster"
 	desc = "A poster depicting a wall-mounted structure."
 	var/entry_turf
-	var/list/poster_designs = list("poster-apc","poster-extinguisher","poster-firealarm","poster-oxycloset","poster-nosmoking")
-	var/poster_path = /obj/item/mounted/poster/stealth
 
-/obj/structure/sign/poster/stealth/New()
-	icon_state = pick(poster_designs)
+/obj/structure/sign/poster/stealth/New(loc, var/datum/poster/predesign)
 	..()
+	var/datum/poster/special/ninja/S = design
+	if(istype(S))
+		icon_state = pick(S.poster_designs) //unlike a normal poster, we want to shuffle our appearance
+	//Just for weeb designs
+	switch(icon_state)
+		if("animeposter1")
+			name = "Death Note poster"
+		if("animeposter2")
+			name = "Naruto poster"
+		if("animeposter3")
+			name = "NERV poster"
+		if("animeposter4")
+			name = "Akira poster"
+		if("animeposter5")
+			name = "EVA poster"
+		if("animeposter6")
+			name = "Mob Psycho poster"
+
+/obj/structure/sign/poster/stealth/design()
+	design = new /datum/poster/special/ninja
 
 /obj/structure/sign/poster/stealth/relaymove(mob/user as mob)
 	if(user.stat)
@@ -452,7 +469,7 @@
 			H.forceMove(get_turf(src))
 		else
 			H.forceMove(entry_turf)
-		H.put_in_hands(new poster_path)
+		H.put_in_hands(new /obj/item/mounted/poster/stealth(loc,design))
 		qdel(src)
 
 /obj/structure/sign/poster/stealth/proc/dropall()
@@ -470,13 +487,6 @@
 
 /obj/structure/sign/poster/stealth/rip(mob/user)
 	roll_and_drop(get_turf(user))
-
-/obj/structure/sign/poster/stealth/roll_and_drop(turf/newloc)
-	if(newloc)
-		new poster_path(newloc, serial_number)
-	else
-		new poster_path(get_turf(src), serial_number)
-	qdel(src)
 
 /*=======
 Ninja Esword
@@ -533,7 +543,7 @@ Helpers For Both Variants
 		..()
 		checkdroppable()
 	else
-		to_chat(user,"<span class='warning'>There's no buttons on it.</span>")
+		to_chat(user,"<span class='warning'>There are no buttons on \the [src].</span>")
 		return
 
 /obj/item/weapon/melee/energy/sword/update_icon()
@@ -600,7 +610,7 @@ Suit and assorted
 
 /obj/item/clothing/head/helmet/space/ninja/apprentice/New()
 	..()
-	
+
 
 /obj/item/clothing/head/helmet/space/ninja/apprentice/proc/pressurize()
 	if(ishuman(loc))
@@ -646,7 +656,7 @@ Suit and assorted
 
 /obj/item/clothing/suit/space/ninja/apprentice/New()
 	..()
-	
+
 /obj/item/clothing/suit/space/ninja/apprentice/proc/pressurize()
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
@@ -731,7 +741,7 @@ Suit and assorted
 
 /obj/item/clothing/gloves/ninja/nentendiepower
 	name = "Nen/tendie power glove"
-	desc = "Combines the power of 'Nen' (sense) with grease-resistant properties so you can still eat your tendies. Use on an APC to unleash your hacker skills from community college."
+	desc = "Combines the power of 'Nen' (sense) with grease-resistant properties so you can still eat your tendies. Use your open hand on anything containing a cell to unleash your hacker skills from community college."
 	shuriken_icon = "radial_cook"
 
 /obj/item/weapon/substitutionhologram/dakimakura
@@ -744,29 +754,9 @@ Suit and assorted
 
 /obj/item/mounted/poster/stealth/anime
 	name = "rolled-up anime poster"
-	path = /obj/structure/sign/poster/stealth/anime
 
-/obj/structure/sign/poster/stealth/anime
-	name = "anime poster"
-	desc = "It's everybody's favorite anime."
-	poster_designs = list("animeposter1","animeposter2","animeposter3","animeposter4","animeposter5","animeposter6")
-	poster_path = /obj/item/mounted/poster/stealth/anime
-
-/obj/structure/sign/poster/stealth/anime/New()
-	..()
-	switch(icon_state)
-		if("animeposter1")
-			name = "Death Note poster"
-		if("animeposter2")
-			name = "Naruto poster"
-		if("animeposter3")
-			name = "NERV poster"
-		if("animeposter4")
-			name = "Akira poster"
-		if("animeposter5")
-			name = "EVA poster"
-		if("animeposter6")
-			name = "Mob Psycho poster"
+/obj/item/mounted/poster/stealth/anime/pick_design()
+	design = new /datum/poster/special/ninja/anime
 
 //Special Katana. Main katana in weaponry.dm
 /obj/item/weapon/katana/hesfast
@@ -878,4 +868,3 @@ Suit and assorted
 	var/ninja_name = pick(ninja_names)
 	H.fully_replace_character_name(H.real_name, "[ninja_title] [ninja_name]")
 	mob_rename_self(H, "ninja")
-	

@@ -36,6 +36,9 @@
 	new /obj/item/weapon/reagent_containers/glass/bottle/peridaxon(src)
 	new /obj/item/weapon/reagent_containers/glass/bottle/rezadone(src)
 	new /obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/large/supermatter(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/bluespace(src)
+	new /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer(src)
 
 /obj/item/weapon/storage/bluespace_crystal
 	name = "natural bluespace crystals box"
@@ -386,6 +389,7 @@
 	desc = "A device so ingenius there is no way the Vox invented it. Exploits volt-induced superposition to allow battering ram to fold into itself."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	flags = FPRINT
 	siemens_coefficient = 0
 	w_class = W_CLASS_SMALL
@@ -965,3 +969,73 @@
 		return ..()
 	myvac.whrr(get_turf(target))
 	return 1
+
+/obj/item/weapon/fakeposter_kit
+	name = "cargo cache kit"
+	desc = "Used to create a hidden cache behind what appears to be a cargo poster."
+	icon = 'icons/obj/barricade.dmi'
+	icon_state = "barricade_kit"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/fakeposter_kit/preattack(atom/target, mob/user , proximity)
+	if(!proximity)
+		return
+	if(istype(target,/turf/simulated/wall))
+		playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
+		if(do_after(user,target,4 SECONDS))
+			to_chat(user,"<span class='notice'>Using the kit, you hollow out the wall and hang the poster in front.</span>")
+			new /obj/structure/fakecargoposter(target)
+			qdel(src)
+			return 1
+	else
+		return ..()
+
+/obj/structure/fakecargoposter
+	icon = 'icons/obj/posters.dmi'
+	var/obj/item/weapon/storage/cargocache/cash
+
+/obj/structure/fakecargoposter/New()
+	..()
+	var/datum/poster/type = pick(/datum/poster/special/cargoflag,/datum/poster/special/cargofull)
+	icon_state = initial(type.icon_state)
+	desc = initial(type.desc)
+	name = initial(type.name)
+	cash = new(src)
+
+/obj/structure/fakecargoposter/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>Upon closer inspection, there's a hidden cache behind it accessible with a free hand.</span>")
+
+/obj/structure/fakecargoposter/Destroy()
+	for(var/atom/movable/A in cash.contents)
+		A.forceMove(loc)
+	qdel(cash)
+	cash = null
+	..()
+
+/obj/structure/fakecargoposter/attackby(var/obj/item/weapon/W, mob/user)
+	if(iswelder(W))
+		visible_message("<span class='warning'>[user] is destroying the hidden cache disguised as a poster!</span>")
+		var/obj/item/weapon/weldingtool/WT=W
+		if(WT.do_weld(user, src, 10 SECONDS, 5))
+			visible_message("<span class='warning'>[user] destroyed the hidden cache!</span>")
+			qdel(src)
+	else
+		..()
+
+/obj/structure/fakecargoposter/attack_hand(mob/user)
+	cash.AltClick(user)
+
+/obj/item/weapon/storage/cargocache
+	name = "cargo cache"
+	desc = "A large hidey hole for all your goodies."
+	icon = 'icons/obj/posters.dmi'
+	icon_state = "cargoposter-flag"
+	fits_max_w_class = W_CLASS_LARGE
+	max_combined_w_class = 28
+	slot_flags = 0
+
+/obj/item/weapon/storage/cargocache/distance_interact(mob/user)
+	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))
+		return TRUE
+	return FALSE

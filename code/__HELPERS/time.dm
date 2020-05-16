@@ -6,6 +6,8 @@
 #define TimeOfGame (get_game_time())
 #define TimeOfTick (world.tick_usage*0.01*world.tick_lag)
 
+//#define REALTIMEOFDAY (world.timeofday + (MIDNIGHT_ROLLOVER * MIDNIGHT_ROLLOVER_CHECK))
+
 /proc/get_game_time()
 	var/global/time_offset = 0
 	var/global/last_time = 0
@@ -120,3 +122,16 @@ var/global/obj/effect/statclick/time/time_statclick
 	if(!time_statclick)
 		time_statclick = new /obj/effect/statclick/time("loading...")
 	stat("Station Time:", time_statclick.update("[worldtime2text()]"))
+
+
+var/midnight_rollovers = 0
+var/rollovercheck_last_timeofday = 0
+/proc/update_midnight_rollover()
+	if (world.timeofday < rollovercheck_last_timeofday) //TIME IS GOING BACKWARDS!
+		midnight_rollovers++
+	rollovercheck_last_timeofday = world.timeofday
+	return midnight_rollovers
+
+#define MIDNIGHT_ROLLOVER_CHECK (rollovercheck_last_timeofday != world.timeofday ? update_midnight_rollover() : midnight_rollovers)
+#define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
+#define REALTIMEOFDAY (world.timeofday + (MIDNIGHT_ROLLOVER * MIDNIGHT_ROLLOVER_CHECK))
