@@ -5667,11 +5667,13 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi
 	name = "generic sushi"
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner
 	name = "sushi spawner"
 	var/childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi
 
+// called when it leaves the microwave
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/forceMove(turf/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	. = ..()
 	if(isnull(destination))
@@ -5692,149 +5694,118 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		child.pixel_y = rand(-8, 8)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ebi
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ebi/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi
 	name = "Ebi Sushi"
 	desc = "A simple sushi consisting of cooked shrimp and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Ebi"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi/New()
-	..()
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ikura
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Ikura/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura
 	name = "Ikura Sushi"
 	desc = "A simple sushi consisting of salmon roe."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Ikura"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura/New()
-	..()
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Sake
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Sake
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Sake/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Sake
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake
 	name = "Sake Sushi"
 	desc = "A simple sushi consisting of raw salmon and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Sake"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Sake/New()
-	..()
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_SmokedSalmon
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_SmokedSalmon
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_SmokedSalmon/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_SmokedSalmon
 	name = "Smoked Salmon Sushi"
 	desc = "A simple sushi consisting of cooked salmon and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_SmokedSalmon"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon/New()
-	..()
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tamago
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tamago
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tamago/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tamago
 	name = "Tamago Sushi"
 	desc = "A simple sushi consisting of egg and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Tamago"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago/New()
-	..()
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Inari
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Inari
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Inari
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Inari/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Inari
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Inari
 	name = "Inari Sushi"
 	desc = "A piece of fried tofu stuffed with rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Inari"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Inari/New()
-	..()
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Masago
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Masago
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Masago/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Masago  																																			/*Every night I watch the skies from inside my bunker. They'll come back. If I watch they'll come. I can hear their voices from the sky. Calling out my name. There's the ridge. The guns in the jungle. Screaming. Smoke. The blood. All over my hands. */
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago  																																			/*Every night I watch the skies from inside my bunker. They'll come back. If I watch they'll come. I can hear their voices from the sky. Calling out my name. There's the ridge. The guns in the jungle. Screaming. Smoke. The blood. All over my hands. */
 	name = "Masago Sushi"
 	desc = "A simple sushi consisting of goldfish roe."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Masago"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Masago/New()
-	..()
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tobiko
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tobiko/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko
 	name = "Tobiko Sushi"
 	desc = "A simple sushi consisting of shark roe."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Masago"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko/New()
-	..()
-	bitesize = 3
-
+// this is an oddball because you make it using an existing sushi piece
 /obj/item/weapon/reagent_containers/food/snacks/sushi_TobikoEgg
 	name = "Tobiko and Egg Sushi"
 	desc = "A sushi consisting of shark roe and an egg."
@@ -5848,13 +5819,13 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tai
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tai
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tai
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tai/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Tai
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tai
 	name = "Tai Sushi"
 	desc = "A simple sushi consisting of catfish and rice."
 	icon = 'icons/obj/seafood.dmi'
@@ -5862,46 +5833,32 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Tai/New()
-	..()
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Unagi
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Unagi
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Unagi/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi // i have seen the face of god and it was weeping
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Unagi // i have seen the face of god and it was weeping
 	name = "Unagi Sushi"
 	desc = "A simple sushi consisting of eel and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Hokki"
 	food_flags = FOOD_MEAT
 
-
-/obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi/New()
-	..()
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_avocado
-	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi_avocado
+	childtype = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_avocado
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_avocado/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/sushi_avocado
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_avocado
 	name = "Avocado Sushi"
 	desc = "A simple sushi consisting of avocado and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_avocado"
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/sushi_avocado/New()
-	..()
-	bitesize = 3
 
 ////	END SUSHI	////
 

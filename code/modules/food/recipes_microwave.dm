@@ -2518,7 +2518,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_spawner/sushi_Tobiko
 
 /datum/recipe/sushi_TobikoEgg
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko,
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko,
 	/obj/item/weapon/reagent_containers/food/snacks/egg
 	)
 
