@@ -41,6 +41,8 @@
 	new_area.addSorted()
 
 
+/area/vault/mechclubhouse
+	requires_power = 1
 
 /area/vault/icetruck
 

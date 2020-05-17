@@ -64,6 +64,7 @@
 #define CATBEAST "loose catbeast"
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
+#define STREAMER "streamer"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"

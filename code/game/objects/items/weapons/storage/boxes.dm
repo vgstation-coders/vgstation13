@@ -648,7 +648,7 @@
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/buckshot(src)
-		
+
 /obj/item/weapon/storage/box/dragonsbreathshells
 	name = "12-gauge dragon's breath shells"
 	icon_state = "dragonsbreath_shells"
@@ -658,12 +658,12 @@
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/dragonsbreath(src)
-		
+
 /obj/item/weapon/storage/box/fragshells
 	name = "12-gauge high-explosive fragmentation shells"
 	icon_state = "frag_shells"
-	storage_slots = 16		
-		
+	storage_slots = 16
+
 /obj/item/weapon/storage/box/fragshells/New()
 	..()
 	for(var/i in 1 to 16)
@@ -874,17 +874,16 @@
 
 /obj/item/weapon/storage/box/spellbook/New()
 	..()
-	var/list/possible_books = typesof(/obj/item/weapon/spellbook/oneuse)
-	possible_books -= /obj/item/weapon/spellbook/oneuse
-	possible_books -= /obj/item/weapon/spellbook/oneuse/charge
+	var/list/possible_books = subtypesof(/obj/item/weapon/spellbook/oneuse)
+	for(var/S in possible_books)
+		var/obj/item/weapon/spellbook/oneuse/O = S
+		if(initial(O.disabled_from_bundle))
+			possible_books -= O
 	for(var/i =1; i <= 7; i++)
 		var/randombook = pick(possible_books)
 		var/book = new randombook(src)
 		src.contents += book
 		possible_books -= randombook
-
-/obj/item/weapon/storage/box/spellbook/random/New()
-	..()
 	var/randomsprite = pick("a","b")
 	icon_state = "wizbox-[randomsprite]"
 

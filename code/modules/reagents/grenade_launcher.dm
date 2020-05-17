@@ -37,7 +37,7 @@
 		else
 			to_chat(user, "<span class='warning'>The [src.name] cannot hold more grenades.</span>")
 
-/obj/item/weapon/gun/grenadelauncher/afterattack(obj/target, mob/user , flag)
+/obj/item/weapon/gun/grenadelauncher/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 
 	if (istype(target, /obj/item/weapon/storage/backpack ))
 		return

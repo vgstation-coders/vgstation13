@@ -97,9 +97,10 @@
 	var/mode = 0// 0==Scouter | 1==Night Vision | 2==Thermal | 3==Meson
 	var/voice = "Unknown"
 	var/vchange = 1//This didn't do anything before. It now checks if the mask has special functions/N
+	var/speech_mode = VOICE_CHANGER_SAYS
 	canstage = 0
 	origin_tech = Tc_SYNDICATE + "=4"
-	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger)
+	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger,)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED,INSECT_SHAPED)
 	permeability_coefficient = 0.90
 	var/static/list/clothing_choices
@@ -121,6 +122,21 @@
 	if(!istype(T))
 		return
 	T.change()
+
+/datum/action/item_action/change_voice_mode
+	name = "Change Voice Mode"
+
+/datum/action/item_action/change_voice_mode/Trigger()
+	var/obj/item/clothing/mask/gas/voice/T = target
+	if(!istype(T))
+		return
+	switch (T.speech_mode)
+		if (VOICE_CHANGER_SAYS)
+			T.speech_mode = VOICE_CHANGER_STATES
+			to_chat(owner, "<span class='notice'>You will now <i>state</i> things like a machine would.</span>")
+		if (VOICE_CHANGER_STATES)
+			T.speech_mode = VOICE_CHANGER_SAYS
+			to_chat(owner, "<span class='notice'>You will now <i>say</i> things like a human would.</span>")
 
 /obj/item/clothing/mask/gas/voice/proc/change()
 	var/choice = input(usr, "Select Form to change it to", "BOOYEA") as null|anything in clothing_choices
@@ -305,3 +321,70 @@
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin(get_turf(src))
 		qdel(W)
 		qdel(src)
+
+/obj/item/clothing/mask/gas/hecu
+	name = "HECU gas mask"
+	desc = "An ancient gas mask with the letters HECU stamped on the side. Comes with a shouting-activated voice modulator that slowly recharges."
+	icon_state = "hecu"
+	can_flip = 0
+	canstage = 0
+	ignore_flip = 1
+	flags = HEAR | FPRINT
+	var/togglestate = 1
+	var/max_charge = 100
+	var/mask_charge = 100
+	var/word_cost = 7
+	var/word_delay = 7
+	var/list/punct_list = list("," , "." , "?" , "!")
+
+	//Big list of words pulled from half life's soldiers, used for both matching with spoken text and part of the sound file's path
+	var/list/hecuwords = list(
+		"a", "affirmative", "alert", "alien", "all" , "am" , "anything" , "are" , "area" , "ass" , "at" , "away" ,
+		"backup" , "bag" , "bastard" , "blow" , "bogies" , "bravo" , "call" , "casualties" , "charlie" , "check" , "checking" , "clear" , "comma" ,
+		"command" , "continue" , "control" , "cover" , "creeps" , "damn" , "delta" , "down" , "east" , "echo" , "eliminate" , "everything" , "fall" ,
+		"fight" , "fire" , "five" , "force" , "formation" , "four" , "foxtrot" , "freeman" , "get" , "go" , "god" , "going" , "got" , "grenade" , "guard" ,
+		"haha" , "have" , "he" , "heavy" , "hell" , "here" , "hold" , "hole" , "hostiles" , "hot" , "i" , "in" , "is" , "kick" , "killcivvies" ,
+		"killscientists" , "lay" , "left" , "lets" , "level" , "lookout" , "maintain" , "mission" , "mister" , "mother" , "move" , "movement" , "moves" ,
+		"my" , "need" , "negative" , "neutralize" , "neutralized" , "nine" , "no" , "north" , "nothing" , "objective" , "of" , "oh" , "okay" , "one" ,
+		"orders" , "our" , "out" , "over" , "patrol" , "people" , "period" , "position" , "post" , "private" , "quiet" , "radio" , "recon" , "request" ,
+		"right" , "roger" , "sector" , "secure" , "shit" , "shot" , "sign" , "signs" , "silence" , "sir" , "six" , "some" , "something" , "south" , "squad" ,
+		"stay" , "suppressing" , "sweep" , "take" , "tango" , "target" , "team" , "that" , "thatbastard" , "the" , "there" , "these" , "this" , "those" ,
+		"three" , "tight" , "two" , "uh" , "under" , "up" , "we" , "weapons" , "weird" , "west" , "we've" , "whatbody" , "whoisfreeman" , "will" , "yeah" ,
+		"yes" , "yessir" , "you" , "your" , "zero" , "zone" , "zulu" , "meters" , "seven" , "eight" , "hundred" , "to" , "too"
+		)
+
+//Recharging the mask over time
+/obj/item/clothing/mask/gas/hecu/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/item/clothing/mask/gas/hecu/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+obj/item/clothing/mask/gas/hecu/process()
+	if(mask_charge >= max_charge)
+		return
+	mask_charge++
+
+/obj/item/clothing/mask/gas/hecu/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(togglestate == 0)
+		return
+	if((!speech.frequency && is_holder_of(speech.speaker, src)) && speech.speaker != src)
+		var/list/words_to_say = list()
+		var/list/word_list = splittext(speech.message," ")
+
+		for(var/i=1,i<=word_list.len,i++)
+			for(var/x=1,x<=punct_list.len,x++)
+				word_list[i] = replacetext(word_list[i] , punct_list[x] , "") //Ignores punctuation.
+			for(var/j=1,j<=hecuwords.len,j++)
+				if (uppertext(hecuwords[j]) == word_list[i]) //SHOUT a known word to activate
+					words_to_say += hecuwords[j]
+
+		if(words_to_say.len > 0)
+			for(var/i=1,i<=words_to_say.len,i++)
+				if(mask_charge >= word_cost)
+					mask_charge -= word_cost
+					playsound(src, "sound/vox_hecu/[words_to_say[i]]!.wav", 30)
+					sleep(word_delay)
+		..()

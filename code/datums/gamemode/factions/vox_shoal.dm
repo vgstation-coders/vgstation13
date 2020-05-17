@@ -63,6 +63,8 @@ var/list/potential_bonus_items = list(
 	var/list/dept_objective = list()
 	var/list/bonus_items_of_the_day = list()
 
+	var/complete_failure = FALSE // Set to TRUE when a non-raider uses the shuttle to return home.
+
 	var/got_personnel = 0
 	var/got_items = 0
 
@@ -151,8 +153,7 @@ var/list/potential_bonus_items = list(
 					total_points += 500
 			else
 				count_score(H)
-				to_chat(H, "<span class='warning'>You can't really remember the details, but somehow, you managed to escape. Your situation is still far from ideal, however.")
-				H.send_back_to_main_station()
+				H.send_back_to_main_station(complete_failure)
 
 		for (var/obj/structure/closet/loot/L in our_bounty_lockers)
 			for (var/obj/O in L)
@@ -191,6 +192,14 @@ var/list/potential_bonus_items = list(
 
 
 /datum/faction/vox_shoal/proc/count_human_score(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		if (H.old_assigned_role in command_positions)
+			total_points += 300
+		if (H.old_assigned_role in dept_objective)
+			total_points += 200
+			got_personnel++
+		return
+
 	if (H.mind.assigned_role in command_positions)
 		total_points += 300
 	if (H.mind.assigned_role in dept_objective)
@@ -205,7 +214,14 @@ var/list/potential_bonus_items = list(
 
 // -- Mobs procs --
 
-/mob/living/proc/send_back_to_main_station()
+/mob/living/proc/send_back_to_main_station(var/complete_failure = FALSE)
+	if (complete_failure) // Non-vox somehow used the vox shuttle.
+		to_chat(src, "<span class='danger'>After hours of aimlessly wandering through space in hostile Vox territory, the shuttle quickly ran out of fuel. You and your companions decided to abandon the ship and throw escape shelters in the general direction of the station.</span>")
+		var/obj/structure/inflatable/shelter/S = new(get_turf(src))
+		forceMove(S)
+		S.ThrowAtStation()
+		return
+	to_chat(src, "<span class='warning'>You can't really remember the details, but somehow, you managed to escape. Your situation is still far from ideal, however.</span>")
 	delete_all_equipped_items()
 	if (ishuman(src))
 		var/obj/item/clothing/under/color/grey/G = new(src)
@@ -214,7 +230,7 @@ var/list/potential_bonus_items = list(
 		equip_to_appropriate_slot(B)
 		var/obj/item/device/radio/R = new(src)
 		put_in_hands(R)
-	var/obj/structure/inflatable/shelter/S = new(src)
+	var/obj/structure/inflatable/shelter/S = new(get_turf(src))
 	forceMove(S)
 	S.ThrowAtStation()
 

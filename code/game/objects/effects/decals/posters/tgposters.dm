@@ -48,8 +48,3 @@
 	name = "Hacking Guide"
 	desc = "This poster details the internal workings of the common Nanotrasen airlock."
 	icon_state="poster10"
-
-/datum/poster/goldstar//serial_number -1
-	name = "Award of Sufficiency"
-	desc = "The mere sight of it makes you very proud."
-	icon_state = "goldstar"

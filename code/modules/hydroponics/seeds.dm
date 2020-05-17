@@ -287,6 +287,11 @@
 	seed_type = "sunflowers"
 	vending_cat = "flowers"
 
+/obj/item/seeds/mustardplantseed
+	name = "packet of mustardplant seeds"
+	seed_type = "mustardplants"
+	vending_cat = "flowers"
+
 /obj/item/seeds/moonflowerseed
 	name = "packet of moonflower seeds"
 	seed_type = "moonflowers"
@@ -1046,6 +1051,22 @@
 
 	large = 0
 
+/datum/seed/flower/mustardplant //yes this is a real plant
+	name = "mustardplants"
+	seed_name = "mustardplant"
+	display_name = "mustardplants"
+	plant_dmi = 'icons/obj/hydroponics/mustardplant.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant)
+	chems = list(MUSTARD_POWDER = list(4,10))
+
+	lifespan = 40 //real mustard plants live for like two months
+	maturation = 6
+	growth_stages = 3
+	ideal_light = 8
+	water_consumption = 6
+	nutrient_consumption = 0 //these are a bunch of flowers, not an actual food
+	large = 0
+
 //Grapes/varieties
 /datum/seed/grapes
 	name = "grapes"
@@ -1183,6 +1204,7 @@
 	plant_dmi = 'icons/obj/hydroponics/bluespacebanana.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana)
 	mutants = null
+	chems = list(BANANA = list(1,10), HONKSERUM = list(1,10))
 
 /datum/seed/corn
 	name = "corn"

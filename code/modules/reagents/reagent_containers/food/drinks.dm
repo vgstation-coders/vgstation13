@@ -753,6 +753,7 @@
 	name = "Gunka-Cola Family Sized"
 	desc = "An unnaturally-sized can for unnaturally-sized men. Taste the Consumerism!"
 	icon_state = "gunka_cola"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	volume = 100
 	possible_transfer_amounts = list(5,10,15,25,30,50,100)
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola/New()
@@ -847,6 +848,19 @@
 	..()
 	reagents.add_reagent(BEER, 25)
 	reagents.add_reagent(POTATO, 25)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer
+	name = "Geometer"
+	desc = "Summon the Beast."
+	icon_state = "geometer"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer/New()
+	..()
+	reagents.add_reagent(GEOMETER, 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer/blanco
+	name = "Geometer Blanco"
+	desc = "'member when we had to research words..."
+	icon_state = "geometer_blanco"
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka
 	name = "Greyshit Vodka"
@@ -1044,6 +1058,16 @@
 	desc = "For those who can't be bothered to hang out at the bar to drink."
 	icon_state = "barflask"
 	volume = 60
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/ancient
+	name = "ancient flask"
+	desc = "A flask recovered from the asteroid. How old is it?"
+	icon_state = "oldflask"
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/ancient/New()
+	..()
+	reagents.add_reagent(KARMOTRINE, 15)
 
 /obj/item/weapon/reagent_containers/food/drinks/britcup
 	name = "cup"
@@ -1441,7 +1465,6 @@
 			src.reagents.reaction(get_turf(src), TOUCH) //splat the floor AND the thing we hit, otherwise fuel wouldn't ignite when hitting anything that wasn't a floor
 			if(hit_atom != get_turf(src)) //prevent spilling on the floor twice though
 				src.reagents.reaction(hit_atom, TOUCH)  //maybe this could be improved?
-			spawn(5) src.reagents.clear_reagents()  //maybe this could be improved?
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
 		if(molotov == 1) //for molotovs

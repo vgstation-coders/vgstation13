@@ -115,7 +115,7 @@
 					for(var/A in jaunts)
 						target.client.images += jaunts[A]
 				var/on_moved_holder = target.on_moved
-				target.on_moved = new("owner"=src)
+				target.on_moved = new("owner"=target)
 				target.on_moved.Add(jaunts[target],"update_dir")
 				ethereal_jaunt(target, duration, enteranim, exitanim, mist)
 				qdel(target.on_moved)

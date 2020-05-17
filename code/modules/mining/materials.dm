@@ -108,7 +108,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 //Sanely removes an amount from us, of a given material ID, and transfers it to somebody else. Returns the given amount
 /datum/materials/proc/Transfer(var/mat_id, var/amount, var/datum/materials/receiver)
 	ASSERT(receiver)
-	if(!mat_id in storage)
+	if(!(mat_id in storage))
 		warning("Transfer(): Unknown material [mat_id]!")
 		return 0
 	amount = min(getAmount(mat_id), amount)

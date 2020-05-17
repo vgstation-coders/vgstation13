@@ -16,7 +16,7 @@
 			if(get_dist(src, target) > 1)
 				return // keep movin'.
 			controller.setBusy(TRUE)
-			SendSignal(COMSIG_MOVE, "dir"=0) // Stop movement?
+			SendSignal(COMSIG_MOVE, list("dir"=0)) // Stop movement?
 			D.visible_message("<span class='warning'>\The [D]'s motors whine as four arachnid claws begin trying to force it open!</span>")
 			spawn(50)
 				if(CanOpenDoor(D) && prob(25))

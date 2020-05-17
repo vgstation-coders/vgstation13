@@ -25,15 +25,16 @@
 	return try_feed(M, user)
 
 // Handles pill dissolving in containers
-/obj/item/weapon/reagent_containers/pill/afterattack(var/obj/item/weapon/reagent_containers/target, var/mob/user, var/adjacency_flag, var/click_params)
-	if(!adjacency_flag || !istype(target) || !target.is_open_container())
+/obj/item/weapon/reagent_containers/pill/afterattack(atom/target, var/mob/user, var/adjacency_flag, var/click_params)
+	var/static/list/allowed_targets = list(/obj/item/weapon/reagent_containers, /obj/structure/reagent_dispensers/cauldron)
+	if(!adjacency_flag || !is_type_in_list(target, allowed_targets) || !target.is_open_container())
 		return
 
-	if(src.is_empty())
+	if(src.reagents.is_empty())
 		to_chat(user, "<span class='notice'>\The [src] seems to be empty, somehow. It dissolves away.</span>")
 		qdel(src)
 
-	if(target.is_full())
+	if(target.reagents.is_full())
 		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
 		return
 
@@ -44,11 +45,11 @@
 
 	if(src.is_empty())
 		user.visible_message("<span class='warning'>[user] crushes a pill into \the [target].</span>", \
-			self_message = "<span class='notice'>You crush \the [src] into \the [target].[target.is_full()? " It is now full." : ""]</span>", range = 2)
+			self_message = "<span class='notice'>You crush \the [src] into \the [target].[target.reagents.is_full()? " It is now full." : ""]</span>", range = 2)
 		qdel(src)
 	else
 		user.visible_message("<span class='warning'>[user] crushes a pill into \the [target].</span>", \
-			self_message = "<span class='notice'>You partially crush \the [src] into \the [target].[target.is_full()? " It is now full." : ""]</span>", range = 2)
+			self_message = "<span class='notice'>You partially crush \the [src] into \the [target].[target.reagents.is_full()? " It is now full." : ""]</span>", range = 2)
 
 /obj/item/weapon/reagent_containers/pill/proc/try_feed(mob/target, mob/user)
 	// Feeding others needs time to succeed

@@ -191,7 +191,7 @@
 			var/anyitem = 0
 			for(var/atom/movable/AM in contents)
 				if(istype(AM,/obj/item))
-					if(AM == battery)
+					if(AM == battery || istype(AM, /obj/item/device/spacepod_equipment))
 						continue //don't eject this particular item!
 					anyitem++
 					AM.forceMove(get_turf(user))
@@ -291,7 +291,7 @@
 			if(user.put_in_any_hand_if_possible(SPE))
 				to_chat(user, "<span class='notice'>You remove \the [SPE] from the equipment system.</span>")
 				SPE.my_atom = null
-				ES.weapon_system = null
+				ES.locking_system = null
 			else
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		/*
@@ -626,7 +626,7 @@
 	return 0
 
 /obj/spacepod/proc/move_into_pod(var/mob/living/L)
-	if(L && L.client && L in range(1))
+	if(L && L.client && (L in range(1)))
 		L.reset_view(src)
 		L.stop_pulling()
 		L.forceMove(src)

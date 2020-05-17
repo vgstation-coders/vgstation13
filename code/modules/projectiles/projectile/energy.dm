@@ -85,7 +85,7 @@
 					var/obj/item/weapon/gun/energy/tag/their_gun = M.held_items[taggun_index]
 					their_gun.cooldown(target_tag.my_laser_tag_game.disable_time/2)
 				M.Knockdown(target_tag.my_laser_tag_game.stun_time/2)
-				M.Stun(target_tag.my_laser_tag_game.stun_time/2)	
+				M.Stun(target_tag.my_laser_tag_game.stun_time/2)
 				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
 				if(istype(taggun))
 					taggun.score()
@@ -239,3 +239,35 @@
 	name = "double whammy shot"
 	icon_state = "bluelaser_old"
 	damage = 30
+
+/obj/item/projectile/energy/electrode/fast
+	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
+	projectile_speed = 0.5
+
+/obj/item/projectile/energy/electrode/scatter
+	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
+	projectile_speed = 1.3
+	var/split = 1
+
+/obj/item/projectile/energy/electrode/scatter/sun
+	name = "forbidden sun"
+	desc = "What could possibly justify such excessive destructive power? In all likelihood, the madmen never even questioned the need."
+	split = 5
+
+/obj/item/projectile/energy/electrode/scatter/New(loc,inheritance=null)
+	..()
+	if(!isnull(inheritance))
+		split = inheritance
+
+/obj/item/projectile/energy/electrode/scatter/OnFired(var/proj_target = original)
+	if(split)
+		var/vdirs = alldirs.Copy()
+		for(var/i = 1 to 2)
+			var/obj/item/projectile/energy/electrode/scatter/P = new(get_turf(loc),split-1)
+			P.starting = starting
+			P.shot_from = shot_from
+			P.current = current
+			var/turf/T = get_step(proj_target, pick_n_take(vdirs))
+			P.OnFired(T)
+			P.process()
+	..()

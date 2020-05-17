@@ -841,6 +841,10 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/faggot/processed/New()
+	..()
+	reagents.clear_reagents()
+
 /obj/item/weapon/reagent_containers/food/snacks/sausage
 	name = "sausage"
 	desc = "A piece of mixed, long meat."
@@ -1149,11 +1153,25 @@
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/throw_impact(atom/hit_atom)
+	set waitfor = FALSE
 	..()
+	if(ismob(hit_atom))
+		var/mob/M = hit_atom
+		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
+
+		M.eye_blind = 2
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied")
+		sleep(55)
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		sleep(120)
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
+
 	if(isturf(hit_atom))
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
 			new trash(src.loc)
+		playsound(get_turf(src), pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 100, 1)
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment
@@ -1525,6 +1543,27 @@
 	bitesize = 2
 
 
+/obj/item/weapon/reagent_containers/food/snacks/donitos
+	name = "Donitos"
+	desc = "Ranch or cool ranch?"
+	icon_state = "donitos"
+	trash = /obj/item/trash/donitos
+
+/obj/item/weapon/reagent_containers/food/snacks/donitos/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(SPRINKLES, 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch
+	name = "Donitos Cool Ranch"
+	desc = "Cool ranch."
+	icon_state = "donitos_coolranch"
+	trash = /obj/item/trash/donitos_coolranch
+
+/obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch/New()
+	..()
+	reagents.add_reagent(SPRINKLES, 5)
+
 /obj/item/weapon/reagent_containers/food/snacks/danitos
 	name = "Danitos"
 	desc = "For only the most MLG hardcore robust spessmen."
@@ -1583,6 +1622,10 @@
 	reagents.add_reagent(NUTRIMENT, 4)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
+	..()
+	reagents.clear_reagents()
+
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
 	desc = "Dope from a soy."
@@ -1593,6 +1636,10 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/soydope/processed/New()
+	..()
+	reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/food/snacks/butter
 	name = "butter"
@@ -2351,6 +2398,11 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(IMIDAZOLINE, 3)
 	bitesize = 2
+
+
+/obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed/New()
+	..()
+	reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/food/snacks/superbiteburger
 	name = "Super Bite Burger"
@@ -6207,3 +6259,166 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/attackby(obj/item/I,mob/user,params)
 	return ..() //sorry no custom pai sandwiches
+
+/obj/item/weapon/reagent_containers/food/snacks/escargot
+	icon_state = "escargot"
+	name = "cooked escargot"
+	desc = "A fine treat and an exquisite cuisine."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/escargot/New()
+	. = ..()
+	reagents.add_reagent(NUTRIMENT,10)
+	reagents.add_reagent(SODIUMCHLORIDE, 2)
+	reagents.add_reagent(HOLYWATER, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/es_cargo
+	icon_state = "es_cargo_closed"
+	name = "es-cargo"
+	desc = "Je-ne-veux-pas-travailler !"
+	bitesize = 1
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+	var/open = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/es_cargo/New()
+	. = ..()
+	reagents.add_reagent(NUTRIMENT,10)
+	reagents.add_reagent(SODIUMCHLORIDE, 2)
+	reagents.add_reagent(HOLYWATER, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/es_cargo/can_consume(mob/living/carbon/eater, mob/user)
+	if (!open)
+		visible_message("<span class='notice'>\The [eater] cannot eat from \the [src] if it's closed, imbecile!</span>","<span class='notice'>You must first open it!</span>", drugged_message = "<span class='danger'>Oh lalala, this is not it, not it at all !</span>")
+		return FALSE
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/es_cargo/attack_self(var/mob/user)
+	if (!open)
+		open = TRUE
+		icon_state = "es_cargo_opened"
+		visible_message("<span class='notice'>\The [user] opens \the [src]!</span>", drugged_message = "<span class='notice'>This smells très bon !</span>")
+		return
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/es_cargo/verb/toggle_open()
+	set name = "Toggle open"
+	set category = "Object"
+	if (!open)
+		open = TRUE
+		icon_state = "es_cargo_opened"
+		visible_message("<span class='notice'>\The [usr] opens \the [src]!</span>", drugged_message = "<span class='notice'>This smells très bon !</span>")
+	else
+		open = FALSE
+		icon_state = "es_cargo_closed"
+		visible_message("<span class='notice'>\The [usr] closes \the [src]!</span>", drugged_message = "<span class='notice'>Enough for today !</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail
+	name = "Raw Lobster Tail"
+	desc = "The tail of a lobster, raw and uncooked."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "raw_lobster_tail"
+	bitesize = 1 //your eating a raw lobster tail, shell still attatched, you disgusting animal
+
+/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat
+	name = "Raw Lobster Meat"
+	desc = "The delicious meat of a lobster, an impossible amount of suffering was inflicted to get this."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "raw_lobster_meat"
+
+/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe
+	name = "Steamed Lobster"
+	desc = "A steamed lobster, Served with a side of melted butter and a slice of lemon, you can still feel its hatred"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_steamed_deluxe"
+	trash = /obj/item/trash/plate
+
+
+/obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 6)
+	reagents.add_reagent (LEMONJUICE, 1)
+	reagents.add_reagent (LIQUIDBUTTER, 3)
+	bitesize = 2 //lobster takes a long time to eat
+
+/obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple  // this one has no fancy butter or lemon
+	name = "Steamed Lobster"
+	desc = "A steamed lobster, Served with no sides, eat up you barbarian."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_steamed_simple"
+	trash = /obj/item/trash/plate
+
+
+/obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 6)
+	bitesize = 2 //lobster takes a long time to eat
+
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_roll
+	name = "Lobster Roll"
+	desc = "A mishmash of mayo and lobster meat shoved onto a roll to make a lobster hot dog."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_roll" //it dont need trash, its a hot dog, lobster edition
+
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_roll/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 1)
+	reagents.add_reagent (MAYO, 5)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_roll_butter  // instead of mayo it uses butter
+	name = "Lobster Roll"
+	desc = "A glob of lobster meat drenched in butter."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_roll" //it dont need trash, its a hot dog, lobster edition
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_roll_butter/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 1)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_tail_baked
+	name = "Baked Lobster Tail"
+	desc = "A Lobster tail, drenched in butter and a bit of lemon, you monster."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_tail_baked"
+	trash = /obj/item/trash/plate
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_tail_baked/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings
+	name = "Lobster Dumplings"
+	desc = "A mass of claw meat wrapped in dough"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_dumplings"
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_sushi
+	name = "Lobster Dumplings"
+	desc = "Lobster meat wrapped up with rice."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "lobster_sushi"
+
+/obj/item/weapon/reagent_containers/food/snacks/lobster_sushi/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	bitesize = 2
+

@@ -37,12 +37,14 @@
 	name = "weak bullet"
 	icon_state = "bbshell"
 	damage = 10
-	stun = 5
+	stun = 3
 	weaken = 5
 	embed = 0
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/booze
 	name = "booze bullet"
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/booze/on_hit(var/atom/target, var/blocked = 0)
 	if(..(target, blocked))
@@ -78,11 +80,16 @@
 /obj/item/projectile/bullet/shrapnel/New()
 	..()
 	kill_count = rand(6,10)
+	damage = rand(15,75)
 
 /obj/item/projectile/bullet/shrapnel/small
 
 	name = "small shrapnel"
 	damage = 25
+
+/obj/item/projectile/bullet/shrapnel/small/New()
+	..()
+	damage = rand(5,45)
 
 /obj/item/projectile/bullet/shrapnel/small/plasma
 
@@ -91,18 +98,22 @@
 	color = "#BF5FFF"
 	damage = 35
 
+/obj/item/projectile/bullet/shrapnel/small/plasma/New()
+	..()
+	damage = rand(10,60)
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
 	stun = 5
 	weaken = 5
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/midbullet/lawgiver
 	damage = 10
 	stun = 0
 	weaken = 0
-	projectile_speed = 0.66
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/midbullet/assault
 	damage = 20
@@ -141,6 +152,7 @@
 	stun = 5
 	weaken = 5
 	penetration = 1
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
 	damage = 15
@@ -161,6 +173,7 @@
 	weaken = 5
 	embed = 0
 	penetration = 0
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/stunshot
 	name = "stunshot"
@@ -194,7 +207,7 @@ obj/item/projectile/bullet/suffocationbullet
 	..()
 	explosion(target, 0,1,1,5)
 	qdel(src)
-	
+
 /obj/item/projectile/bullet/boombullet
 	name = "small exploding bullet"
 	embed = 0
@@ -361,7 +374,7 @@ obj/item/projectile/bullet/suffocationbullet
 	stutter = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
 	penetration = 20 //can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
-	projectile_speed = 0.66
+	projectile_speed = 0.5
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
 
 /obj/item/projectile/bullet/hecate/OnFired()
@@ -386,6 +399,7 @@ obj/item/projectile/bullet/suffocationbullet
 	weaken = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS
 	penetration = 10
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/beegun
 	name = "bee"
@@ -736,7 +750,7 @@ obj/item/projectile/bullet/suffocationbullet
 	burn_damage = 10
 	jet_pressure = 0
 	gas_jet = null
-	
+
 /obj/item/projectile/bullet/fire_plume/dragonsbreath/New()
 	..()
 	var/datum/gas_mixture/firemix = new /datum/gas_mixture
@@ -939,7 +953,8 @@ obj/item/projectile/bullet/suffocationbullet
 /obj/item/projectile/bullet/syringe/on_hit(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
-	..()
+	if(!..())
+		return FALSE
 	if(ismob(A))
 		var/mob/M = A
 		var/blocked

@@ -46,7 +46,7 @@
 							"Captain", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
-	weight = 7
+	weight = 1
 	cost = 5
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 	high_population_requirement = 10
@@ -73,7 +73,7 @@
 	name = "Ragin' Mages"
 	role_category = /datum/role/wizard
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
 	weight = 1
 	cost = 20
@@ -114,9 +114,9 @@
 	name = "Space Ninja Attack"
 	role_category = /datum/role/ninja
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
-	weight = 3
+	weight = 1
 	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
@@ -154,9 +154,9 @@
 	role_category = /datum/role/revolutionary
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(20,20,15,15,15,15,15,0,0,0)
 	required_candidates = 1
-	weight = 2
+	weight = 1
 	cost = 20
 	var/required_heads = 3
 	requirements = list(101,101,70,40,30,20,20,20,20,20)

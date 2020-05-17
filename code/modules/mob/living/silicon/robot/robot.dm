@@ -370,7 +370,6 @@ var/list/cyborg_list = list()
 	else
 		gib()
 		return TRUE
-	return FALSE
 
 // this function shows information about the malf_ai gameplay type in the status screen
 /mob/living/silicon/robot/show_malf_ai()
@@ -990,7 +989,7 @@ var/list/cyborg_list = list()
 	if(!istype(I, /obj/item/weapon/card/id) && istype(I, /obj/item))
 		I = I.GetID()
 	if(!I || !I.access) //not ID or no access
-		return TRUE
+		return FALSE
 	for(var/req in req_access)
 		if(!(req in I.access)) //doesn't have this access
 			return FALSE

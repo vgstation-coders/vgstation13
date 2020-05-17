@@ -191,7 +191,7 @@
 
 
 
-/mob/living/simple_animal/mouse/revive()
+/mob/living/simple_animal/mouse/revive(refreshbutcher = 1)
 	for (var/ID in virus2)
 		var/datum/disease2/disease/V = virus2[ID]
 		V.cure(src)

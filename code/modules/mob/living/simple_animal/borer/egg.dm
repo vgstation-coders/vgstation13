@@ -68,11 +68,10 @@
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruited(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	if(O)
-		var/defect = rand(1,10000)
 		var/turf/T = get_turf(src)
 		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
 		//Adds the chance for a "special" borer to be born
-		var/borer_type = (defect == 666 ? /mob/living/simple_animal/borer/defected_borer : /mob/living/simple_animal/borer)
+		var/borer_type = pick_type()
 		var/mob/living/simple_animal/borer/B = new borer_type(T, child_prefix_index)
 		B.transfer_personality(O.client)
 		// Play hatching noise here.
@@ -84,6 +83,8 @@
 		spawn (BORER_EGG_RERECRUITE_DELAY)
 			Grow() // Reset egg, check for hatchability.
 
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/pick_type()
+	return (rand(1,10000) == 666 ? /mob/living/simple_animal/borer/defected_borer : /mob/living/simple_animal/borer)
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/process()
 	var/turf/location = get_turf(src)
@@ -115,5 +116,12 @@
 	qdel(recruiter)
 	recruiter = null
 	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/defected
+	name = "special borer egg"
+	desc = "A small, gelatinous egg. This one is destined to do great things."
+
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/defected/pick_type()
+	return /mob/living/simple_animal/borer/defected_borer
 
 #undef BORER_EGG_RERECRUITE_DELAY

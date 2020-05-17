@@ -42,12 +42,15 @@
 	if(Adjacent(usr))
 		return empty_container_into()
 	return ..()
-/obj/structure/toilet/attack_hand(mob/living/user as mob)
+/obj/structure/toilet/attack_hand(mob/living/user)
+	if(user.attack_delayer.blocked())
+		return
 	if(swirlie)
+		user.delayNextAttack(1 SECONDS)
 		swirlie.visible_message("<span class='danger'>[user] slams the toilet seat onto [swirlie.name]'s head!</span>", "<span class='userdanger'>[user] slams the toilet seat onto your head!</span>", "You hear reverberating porcelain.")
 		swirlie.apply_damage(8, BRUTE, LIMB_HEAD, used_weapon = name)
 		playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-		add_attacklogs(user, swirlie, "slammed the toilet seat")
+		add_attacklogs(user, swirlie, "slammed the toilet seat", admin_warn=FALSE)
 		add_fingerprint(user)
 		add_fingerprint(swirlie)
 		return
@@ -125,15 +128,18 @@
 
 						if(!GM.internal && GM.losebreath <= 30)
 							GM.losebreath += 5
-							add_attacklogs(user, GM, "gave a swirlie to")
+							add_attacklogs(user, GM, "gave a swirlie to", admin_warn=FALSE)
 						else
-							add_attacklogs(user, GM, "gave a swirle with no effect to")
+							add_attacklogs(user, GM, "gave a swirle with no effect to", admin_warn=FALSE)
 					swirlie = null
 				else
+					if(user.attack_delayer.blocked())
+						return
+					user.delayNextAttack(1 SECONDS)
 					GM.visible_message("<span class='danger'>[user] slams [GM.name] into \the [src]!</span>", "<span class='userdanger'>[user] slams you into \the [src]!</span>")
 					GM.adjustBruteLoss(8)
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-					add_attacklogs(user, GM, "slammed into the toilet")
+					add_attacklogs(user, GM, "slammed into the toilet", admin_warn=FALSE)
 					add_fingerprint(user)
 					add_fingerprint(GM)
 					return
@@ -514,6 +520,12 @@
 	M.clean_blood()
 	if(ishuman(M))
 		M:update_inv_gloves()
+		var/mob/living/carbon/human/HM = M
+
+		if(!HM.gloves && HM.species && HM.species.anatomy_flags & ACID4WATER)
+			HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
+			HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
+
 	for(var/mob/V in viewers(src, null))
 		V.show_message("<span class='notice'>[M] washes their hands using \the [src].</span>")
 

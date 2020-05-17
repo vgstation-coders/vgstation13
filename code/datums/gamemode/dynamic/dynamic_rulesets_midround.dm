@@ -27,10 +27,10 @@
 	//we're still gonna trim the obvious (mobs without clients, jobbanned players, etc)
 	living_players = trim_list(candidates[CURRENT_LIVING_PLAYERS])
 	living_antags = trim_list(candidates[CURRENT_LIVING_ANTAGS])
-	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS])
-	list_observers = trim_list(candidates[CURRENT_OBSERVERS])
+	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS], trim_prefs_set_to_no = FALSE)
+	list_observers = trim_list(candidates[CURRENT_OBSERVERS], trim_prefs_set_to_no = FALSE)
 
-/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list())
+/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list(), trim_prefs_set_to_no = TRUE)
 	var/list/trimmed_list = L.Copy()
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
@@ -38,14 +38,18 @@
 		if (!M.client)//are they connected?
 			trimmed_list.Remove(M)
 			continue
-		if (!M.client.desires_role(role_pref) || jobban_isbanned(M, role_id) || isantagbanned(M))//are they willing and not antag-banned?
+		var/preference = get_role_desire_str(M.client.prefs.roles[role_pref])
+		if(preference == "Never" || (preference == "No" && trim_prefs_set_to_no)) // are they willing or at least not unwilling?
+			trimmed_list.Remove(M)
+			continue
+		if (jobban_isbanned(M, role_id) || isantagbanned(M))//are they not antag-banned?
 			trimmed_list.Remove(M)
 			continue
 		if (M.mind)
-			if (M.mind.assigned_role in restricted_from_jobs || M.mind.role_alt_title in restricted_from_jobs)//does their job allow for it?
+			if ((M.mind.assigned_role in restricted_from_jobs) || (M.mind.role_alt_title in restricted_from_jobs))//does their job allow for it?
 				trimmed_list.Remove(M)
 				continue
-			if (M.mind.assigned_role in protected_from_jobs || M.mind.role_alt_title in protected_from_jobs)
+			if ((M.mind.assigned_role in protected_from_jobs) || (M.mind.role_alt_title in protected_from_jobs))
 				var/probability = initial(role_category.protected_traitor_prob)
 				if (prob(probability))
 					candidates.Remove(M)
@@ -168,7 +172,7 @@
 							"Cyborg", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
-	weight = 7
+	weight = 1
 	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 	repeatable = TRUE
@@ -230,7 +234,7 @@
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	exclusive_to_jobs = list("AI")
-	required_enemies = list(3,3,3,2,2,2,1,1,1,1)
+	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = 1
 	cost = 35
@@ -260,10 +264,9 @@
 	var/mob/living/silicon/ai/M = pick(candidates)
 	assigned += M
 	candidates -= M
-	var/datum/role/malfAI/AI = new
-	AI.AssignToRole(M.mind,1)
-	unction.HandleNewMind(M.mind)
-	AI.Greet()
+	var/datum/role/malfAI/malf = unction.HandleNewMind(M.mind)
+	malf.OnPostSetup()
+	malf.Greet()
 	for(var/mob/living/silicon/robot/R in M.connected_robots)
 		unction.HandleRecruitedMind(R.mind)
 	unction.forgeObjectives()
@@ -281,7 +284,7 @@
 	role_category = /datum/role/wizard
 	my_fac = /datum/faction/wizard
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(20,20,15,15,15,15,15,10,10,0)
 	required_candidates = 1
 	weight = 1
 	cost = 20
@@ -322,15 +325,20 @@
 	role_category = /datum/role/nuclear_operative
 	my_fac = /datum/faction/syndicate/nuke_op/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3, 3, 3, 3, 3, 2, 1, 1, 0, 0)
+	required_pop = list(25, 25, 25, 25, 25, 20, 15, 15, 10, 10)
 	required_candidates = 5
-	weight = 5
+	weight = 1
 	cost = 35
 	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
 	high_population_requirement = 60
 	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 	logo = "nuke-logo"
 	flags = HIGHLANDER_RULESET
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
+	if (forced)
+		required_candidates = 1
+	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population = 0,var/threat = 0)
 	if(locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
@@ -360,9 +368,10 @@
 	role_category = /datum/role/blob_overmind/
 	my_fac = /datum/faction/blob_conglomerate/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Station Engineer","Chief Engineer", "Roboticist","Head of Security", "Captain")
-	required_enemies = list(3,2,2,1,1,1,0,0,0,0)
+	required_pop = list(25,20,20,15,15,15,10,10,10,10)
 	required_candidates = 1
-	weight = 2
+	weight = 1
+	weekday_rule_boost = list("Tue")
 	cost = 30
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
@@ -396,9 +405,9 @@
 	name = "Revolutionary Squad"
 	role_category = /datum/role/revolutionary/leader
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_pop = list(25,25,25,25,25,20,15,15,10,10)
 	required_candidates = 3
-	weight = 5
+	weight = 1
 	cost = 45
 	requirements = list(101,101,90,60,45,45,45,45,45,45)
 	high_population_requirement = 50
@@ -434,9 +443,9 @@
 	name = "Space Ninja Attack"
 	role_category = /datum/role/ninja
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(15,15,15,15,15,10,10,10,5,5)
 	required_candidates = 1
-	weight = 3
+	weight = 1
 	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
@@ -457,7 +466,7 @@
 	if (!spoider)
 		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
 	spoider.HandleRecruitedRole(newninja)
-	
+
 	return ..()
 
 //////////////////////////////////////////////
@@ -470,9 +479,10 @@
 	name = "Soul Rambler Migration"
 	role_category = /datum/role/rambler
 	enemy_jobs = list("Librarian","Detective", "Chaplain", "Internal Affairs Agent")
-	required_enemies = list(0,0,1,1,2,2,3,3,3,4)
+	required_pop = list(0,0,10,10,15,15,20,20,20,25)
 	required_candidates = 1
 	weight = 1
+	timeslot_rule_boost = list(SLEEPTIME)
 	cost = 5
 	requirements = list(5,5,15,15,25,25,55,55,55,75)
 	logo = "rambler-logo"
@@ -507,9 +517,9 @@
 	role_category = /datum/role/grinch
 	restricted_from_jobs = list()
 	enemy_jobs = list()
-	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 3
+	weight = 1
 	cost = 10
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
@@ -564,9 +574,9 @@
 	role_category = /datum/role/vox_raider
 	my_fac = /datum/faction/vox_shoal
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(2,2,2,1,1,1,1,1,0,0)
+	required_pop = list(20,20,20,15,15,15,15,15,10,10)
 	required_candidates = 5
-	weight = 5
+	weight = 1
 	cost = 30
 	requirements = list(50,50,50,40,40,30,30,20,10,10)
 	high_population_requirement = 35
@@ -606,10 +616,10 @@
 	name = "Plague Mice Invasion"
 	role_category = /datum/role/plague_mouse
 	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
-	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
+	required_pop = list(15,15,15,15,15,15,15,15,15,15)
 	required_candidates = 1
 	max_candidates = 5
-	weight = 5
+	weight = 1
 	cost = 25
 	requirements = list(90,70,50,40,30,20,10,10,10,10)
 	high_population_requirement = 40

@@ -112,6 +112,14 @@
 	name = "\improper Discount Dan's Chocolate Bar"
 	icon_state = "danbar"
 
+/obj/item/trash/donitos
+	name = "Donitos"
+	icon_state = "donitos"
+
+/obj/item/trash/donitos_coolranch
+	name = "Donitos Cool Ranch"
+	icon_state = "donitos_coolranch"
+
 /obj/item/trash/danitos
 	name = "\improper Danitos"
 	icon_state = "danitos"

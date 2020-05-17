@@ -145,7 +145,7 @@ var/bee_mobs_count = 0
 	..(gibbed)
 	returnToPool(src)
 
-/mob/living/simple_animal/bee/gib()
+/mob/living/simple_animal/bee/gib(var/animation = 0, var/meat = 1)
 	death(1)
 	monkeyizing = 1
 	canmove = 0

@@ -38,5 +38,8 @@
 		/obj/item/clothing/mask/gas,
 		/obj/item/clothing/glasses/scanner/meson,
 		/obj/item/clothing/head/soft,
+		/obj/item/mounted/poster/cargo,
+		/obj/item/mounted/poster/cargo,
+		/obj/item/mounted/poster/cargo,
 		/obj/item/weapon/card/debit/preferred/department/cargo,
 	)

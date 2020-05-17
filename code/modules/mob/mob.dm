@@ -6,6 +6,8 @@
 	var/said_last_words = 0 // All mobs can now whisper as they die
 	var/list/alerts = list()
 
+	var/event/on_blink
+
 /mob/variable_edited(var_name, old_value, new_value)
 	.=..()
 
@@ -39,6 +41,12 @@
 		on_irradiate.holder = null
 	if(on_death)
 		on_death.holder = null
+	if(on_bumping)
+		on_bumping.holder = null
+	if(on_bumped)
+		on_bumped.holder = null
+	if(on_touched)
+		on_touched.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -86,6 +94,9 @@
 	qdel(on_clickon)
 	qdel(on_irradiate)
 	qdel(on_death)
+	qdel(on_bumping)
+	qdel(on_bumped)
+	qdel(on_touched)
 
 	on_spellcast = null
 	on_uattack = null
@@ -94,6 +105,9 @@
 	on_clickon = null
 	on_irradiate = null
 	on_death = null
+	on_bumping = null
+	on_bumped = null
+	on_touched = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -283,6 +297,9 @@
 	on_clickon = new(owner = src)
 	on_irradiate = new(owner = src)
 	on_death = new(owner = src)
+	on_bumping = new(owner = src)
+	on_bumped = new(owner = src)
+	on_touched = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -1027,7 +1044,7 @@ Use this proc preferably at the end of an equipment loadout
 //note: ghosts can point, this is intended
 //visible_message will handle invisibility properly
 //overriden here and in /mob/dead/observer for different point span classes and sanity checks
-/mob/verb/pointed(atom/A as turf | obj | mob in view(get_turf(src)))
+/mob/verb/pointed(atom/A as turf | obj | mob in tview(src))
 	set name = "Point To"
 	set category = "Object"
 
@@ -1041,7 +1058,7 @@ Use this proc preferably at the end of an equipment loadout
 		I.showoff(src)
 		return 0
 
-	if(!(A in (view(get_turf(src)) + get_all_slots())) || (usr.see_invisible < A.invisibility))
+	if(!(A in (tview(src) + get_all_slots())))
 		message_admins("<span class='warning'><B>WARNING: </B><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?</span>", 1)
 		log_admin("[key_name_admin(src)] just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?")
 		return 0
@@ -2264,6 +2281,9 @@ mob/proc/on_foot()
 			to_chat(src, "Interference is disrupting the connection with the target mind.")
 			return 0
 	return 1
+
+/mob/proc/get_personal_ambience()
+	return list()
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

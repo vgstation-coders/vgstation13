@@ -202,6 +202,10 @@
 				name = "cocoa powder"
 				desc = "A vital component for making chocolate."
 				icon_state = COCO
+			if(MAYO)
+				name = "Mayonaise Jar"
+				desc = "Here be mayo" //placeholder desc
+				icon_state = MAYO
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -431,3 +435,12 @@
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()
 	reagents.add_reagent(pickweight(possible_exotic_condiments), 30)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/mayo
+	name = "mayonnaise jar"
+	desc = "we have such sights to show you."
+
+/obj/item/weapon/reagent_containers/food/condiment/mayo/New()
+	..()
+	reagents.add_reagent(MAYO, 50)

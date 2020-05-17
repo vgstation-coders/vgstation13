@@ -7,6 +7,8 @@ var/list/infected_cleanables = list()
 	w_type = NOT_RECYCLABLE
 	anchored = 1
 
+	var/reagent = null //what reagent did we come from? for wet/dry vac
+
 	// For tracking shit across the floor.
 	var/amount = 0 // 0 = don't track
 	var/counts_as_blood = 0 // Cult

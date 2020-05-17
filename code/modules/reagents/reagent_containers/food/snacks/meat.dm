@@ -319,3 +319,14 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/slime/New()
 	..()
 	reagents.add_reagent(SLIMEJELLY, 10)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/snail
+	icon_state = "snail_meat"
+	name = "snail meat"
+	desc = "How uncivilised ! You cannot be expected to eat that without cooking it, mon Dieu !"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/snail/New()
+	. = ..()
+	reagents.add_reagent(NUTRIMENT,5)

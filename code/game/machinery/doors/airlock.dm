@@ -59,6 +59,7 @@
 
 	emag_cost = 1 // in MJ
 	machine_flags = SCREWTOGGLE | WIREJACK
+	animation_delay = 5
 
 /obj/machinery/door/airlock/Destroy()
 	if(wires)
@@ -143,7 +144,7 @@
 	icon = 'icons/obj/doors/Doorhatchmaint2.dmi'
 	opacity = 1
 	assembly_type = /obj/structure/door_assembly/door_assembly_mhatch
-	animation_delay = 12
+	animation_delay = 6
 
 /obj/machinery/door/airlock/glass_command
 	name = "Maintenance Hatch"
