@@ -157,7 +157,7 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
-	gun_flags = EMPTYCASINGS
+	gun_flags = SILENCECOMP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
