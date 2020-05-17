@@ -160,7 +160,6 @@ datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
 	if(job)
 		sql += " AND job = '[job]'"
 
-	SSdbcore.Connect()
 	if(!SSdbcore.Connect())
 		return
 

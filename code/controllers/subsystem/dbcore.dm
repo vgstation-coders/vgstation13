@@ -28,15 +28,6 @@ var/datum/subsystem/dbcore/SSdbcore
 /datum/subsystem/dbcore/New()
 	NEW_SS_GLOBAL(SSdbcore)
 
-/datum/subsystem/dbcore/Del()
-	..()
-	stack_trace("WTF SSdbcore died? No...")
-	NEW_SS_GLOBAL(SSdbcore)
-	if(!SSdbcore.Connect())
-		world.log << "Your server failed to establish a connection with the [name]."
-	else
-		world.log << "[name] connection established."
-
 /datum/subsystem/dbcore/proc/get_db_ids()
 	var/list/ids = list()
 	ids["user"] = sqlfdbklogin
@@ -337,7 +328,7 @@ Delayed insert mode was removed in mysql 7 and only works with MyISAM type table
 	var/datum/BSQL_Operation/Query/query
 
 /datum/DBQuery/New(sql_query, datum/BSQL_Connection/connection)
-	log_sql("new query with SQL : {[sql_query]} \n on [SSdbcore.name]")
+	log_query_debug("new query with SQL : {[sql_query]} \n on [SSdbcore.name]")
 	SSdbcore.active_queries[src] = TRUE
 	Activity("Created")
 	item = list()
@@ -345,13 +336,13 @@ Delayed insert mode was removed in mysql 7 and only works with MyISAM type table
 	sql = sql_query
 
 /datum/DBQuery/Destroy()
-	log_sql("query with [sql] being qdeleted. Will die any second now.")
+	log_query_debug("query with [sql] being qdeleted. Will die any second now.")
 	Close()
 	SSdbcore.active_queries -= src
 	return ..()
 
 /datum/DBQuery/Del()
-	log_sql("query with [sql] died.")
+	log_query_debug("query with [sql] died.")
 	return ..()
 
 /datum/DBQuery/proc/SetQuery(new_sql)
