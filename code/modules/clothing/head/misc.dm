@@ -146,7 +146,7 @@
 	icon_state = "cardborg_h"
 	item_state = "cardborg_h"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
@@ -160,7 +160,7 @@
 	icon_state = "justicered"
 	item_state = "justicered"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 
 /obj/item/clothing/head/justice/blue
 	icon_state = "justiceblue"
@@ -567,7 +567,7 @@
 	icon_state = "pharaoh"
 	item_state = "pharaoh"
 	wizard_garb = TRUE
-	body_parts_covered = FULL_HEAD|HEAD|EARS
+	body_parts_covered = FULL_HEAD|HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/sombrero
 	name = "sombrero"
