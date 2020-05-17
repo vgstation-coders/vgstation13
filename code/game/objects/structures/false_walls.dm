@@ -388,7 +388,7 @@
 
 /obj/structure/falsewall/gingerbread
 	name = "gingerbread wall"
-	desc = "Extremely stale and generally unappetizing"
+	desc = "Extremely stale and generally unappetizing."
 	icon_state = ""
 	mineral = "gingerbread"
 	density = 1

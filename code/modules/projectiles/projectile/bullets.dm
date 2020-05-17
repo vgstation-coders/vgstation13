@@ -1002,4 +1002,3 @@ obj/item/projectile/bullet/suffocationbullet
 	..()
 	reagents.add_reagent(CARAMEL, 19)
 	reagents.add_reagent(MINTTOXIN, 1) //I feel a little bad, might make it a random thing between this and normal mint or sugar. It's fun if you make them fat with the gun not so fun if you one shot fatsec
-	return

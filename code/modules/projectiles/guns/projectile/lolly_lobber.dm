@@ -1,6 +1,6 @@
 /obj/item/weapon/gun/lolly_lobber
 	name = "Lolly Lobber"
-	desc = "A horrible combination of steel and sweets. Custom made to weaponize candy canes with questionable success"
+	desc = "A horrible combination of steel and sweets. Custom made to weaponize candy canes with questionable success."
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "lolly_lobber"
 	item_state = "lolly_lobber"

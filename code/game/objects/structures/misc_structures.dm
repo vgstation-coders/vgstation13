@@ -72,7 +72,7 @@ obj/structure/bigpeppermint_red
 	name = "mounted peppermint"
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "bigpeppermint_red"
-	desc = "Must be a culture thing"
+	desc = "Must be a culture thing."
 	density = 0
 	anchored = 1
 
@@ -80,6 +80,6 @@ obj/structure/bigpeppermint_green
 	name = "mounted peppermint"
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "bigpeppermint_green"
-	desc = "Must be a culture thing"
+	desc = "Must be a culture thing."
 	density = 0
 	anchored = 1

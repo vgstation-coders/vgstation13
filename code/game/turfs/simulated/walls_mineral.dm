@@ -207,7 +207,7 @@
 
 /turf/simulated/wall/mineral/gingerbread
 	name = "gingerbread wall"
-	desc = "Extremely stale and generally unappetizing"
+	desc = "Extremely stale and generally unappetizing."
 	icon_state = "gingerbread0"
 	walltype = "gingerbread"
 	mineral = "gingerbread"

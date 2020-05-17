@@ -334,7 +334,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother
 	name = "Royal Gingjelly"
 	icon_state = "royal_gingjelly"
-	desc = "The sickly sweet smell wafting from this sticky glob triggers some primal fear. You absolutely should not eat this"
+	desc = "The sickly sweet smell wafting from this sticky glob triggers some primal fear. You absolutely should not eat this."
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother/New()
 	..()
@@ -342,8 +342,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	reagents.add_reagent (CARAMEL, 10)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother/consume(mob/living/carbon/eater, messages = 0)
-//	if(..())
-//		return 1
+
 	if(ishuman(eater))
 
 		var/mob/living/carbon/C = eater
@@ -351,7 +350,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		if(C.monkeyizing)
 			return
 		to_chat(eater, "<span class='warning'>Your flesh hardens and your blood turns to frosting. This is agony!</span>")
-		spawn (40)
+		sleep (30)
 		C.monkeyizing = 1
 		C.canmove = 0
 		C.icon = null
@@ -359,12 +358,14 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		C.invisibility = 101
 		for(var/obj/item/W in C)
 			if(istype(W, /obj/item/weapon/implant))
-				qdel(W)
-				continue
+				var/obj/item/weapon/implant/I = W
+				if(I.imp_in == C)
+					qdel(W)
+					continue
 			W.reset_plane_and_layer()
 			W.forceMove(C.loc)
 			W.dropped(C)
-		var/mob/living/simple_animal/hostile/gingerbomination/new_mob = new /mob/living/simple_animal/hostile/gingerbomination(C.loc)
+		var/mob/living/simple_animal/hostile/ginger/gingerbomination/new_mob = new /mob/living/simple_animal/hostile/ginger/gingerbomination(C.loc)
 		new_mob.a_intent = I_HURT
 		if(C.mind)
 			C.mind.transfer_to(new_mob)

@@ -483,7 +483,7 @@
 /obj/item/weapon/gun/hookshot/whip/liquorice
 	name = "Liquoricium Whip"
 	icon_state = "liquorice"
-	desc = "Although clearly just an iron chain covered in candy, the jagged pieces of caramel look like they'd sting quite a bit"
+	desc = "Although clearly just an iron chain covered in candy, the jagged pieces of caramel look like they'd sting quite a bit."
 	fire_sound = 'sound/weapons/whip_crack.ogg'
 	fire_action = "flick"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
