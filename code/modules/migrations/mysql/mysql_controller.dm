@@ -39,9 +39,10 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 
 /datum/migration_controller/mysql/hasResult(var/sql)
 	var/datum/DBQuery/query = execute(sql)
-
 	if (query.NextRow())
+		qdel(query)
 		return TRUE
+	qdel(query)
 	return FALSE
 
 /datum/migration_controller/mysql/execute(var/sql)

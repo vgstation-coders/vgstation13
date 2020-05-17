@@ -481,6 +481,7 @@
 
 		replytext = replacetext(replytext, "%BR%", "")
 		replytext = replacetext(replytext, "\n", "%BR%")
+		replytext = replacetext(replytext, "'", "\'")
 		var/text_pass = reject_bad_text(replytext,8000)
 		replytext = replacetext(replytext, "%BR%", "<BR>")
 
