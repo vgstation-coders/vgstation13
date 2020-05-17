@@ -13,6 +13,7 @@
 	 		cuiPropAdjust TEXT NOT NULL,
 	 		cuiJobMask TEXT NOT NULL,
 	 		PRIMARY KEY(cuiCkey,cuiRealName,cuiPath)
+			)
 		"});
 	else
 		warning("customitems table exists. Skipping addition.")
