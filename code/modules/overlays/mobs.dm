@@ -27,6 +27,9 @@
 /obj/abstract/Overlays/ears_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - EARS_LAYER)
 
+/obj/abstract/Overlays/ring_layer
+	layer = FLOAT_LAYER - (TOTAL_LAYERS - RING_LAYER)
+
 /obj/abstract/Overlays/suit_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - SUIT_LAYER)
 

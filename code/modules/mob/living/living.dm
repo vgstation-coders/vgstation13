@@ -169,6 +169,7 @@
 				var/mob/living/carbon/human/H = G.mind.current
 				G.overlays += H.obj_overlays[ID_LAYER]
 				G.overlays += H.obj_overlays[EARS_LAYER]
+				G.overlays += H.obj_overlays[RING_LAYER]
 				G.overlays += H.obj_overlays[SUIT_LAYER]
 				G.overlays += H.obj_overlays[GLASSES_LAYER]
 				G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]

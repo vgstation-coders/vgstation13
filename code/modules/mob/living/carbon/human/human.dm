@@ -185,6 +185,7 @@
 	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/abstract/Overlays/shoes_layer)
 	obj_overlays[GLOVES_LAYER]		= getFromPool(/obj/abstract/Overlays/gloves_layer)
 	obj_overlays[EARS_LAYER]		= getFromPool(/obj/abstract/Overlays/ears_layer)
+	obj_overlays[RING_LAYER]		= getFromPool(/obj/abstract/Overlays/ring_layer)
 	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/abstract/Overlays/suit_layer)
 	obj_overlays[GLASSES_LAYER]		= getFromPool(/obj/abstract/Overlays/glasses_layer)
 	obj_overlays[BELT_LAYER]		= getFromPool(/obj/abstract/Overlays/belt_layer)
@@ -417,7 +418,6 @@
 		return 0
 	return is_on_ears(/obj/item/device/radio/headset/headset_earmuffs)
 
-// Awful.
 /mob/living/carbon/human/show_inv(mob/user)
 	user.set_machine(src)
 	var/pickpocket = user.isGoodPickpocket()
@@ -464,7 +464,7 @@
 	else
 		dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(gloves)]</A>"
 		if (!gloves)
-			dat += "<BR><B>Ring:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(hidden_ring)]</A>"
+			dat += "<BR><B>Ring:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(ring)]</A>"
 		dat += accessories_striping_button(gloves)
 	if(slot_w_uniform in obscured)
 		dat += "<BR><font color=grey><B>Uniform:</B> Obscured by [wear_suit]</font>"

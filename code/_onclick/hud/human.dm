@@ -244,6 +244,17 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
+	inv_box = (/obj/abstract/screen/inventory)
+	inv_box.name = "ring"
+	inv_box.icon = ui_style
+	inv_box.icon_state = "gloves"
+	inv_box.screen_loc = ui_ring
+	inv_box.slot_id = slot_ring
+	inv_box.layer = HUD_BASE_LAYER
+	inv_box.color = ui_color
+	inv_box.alpha = ui_alpha
+	src.other += inv_box
+
 	inv_box = getFromPool(/obj/abstract/screen/inventory)
 	inv_box.name = "eyes"
 	inv_box.icon = ui_style

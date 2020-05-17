@@ -511,6 +511,7 @@ var/global/list/damage_icon_parts = list()
 	update_inv_w_uniform(0)
 	update_inv_gloves(0)
 	update_inv_glasses(0)
+	update_inv_ring(0)
 	update_inv_ears(0)
 	update_inv_shoes(0)
 	update_inv_s_store(0)
@@ -706,15 +707,6 @@ var/global/list/damage_icon_parts = list()
 			obj_to_plane_overlay(O,GLOVES_LAYER)
 		//else
 			//overlays_standing[GLOVES_LAYER]	= null
-
-	if(hidden_ring && !gloves) // No gloves + hidden ring = draw a ring
-		var/suffix = "r"
-		if (!has_organ("r_hand"))
-			suffix = "l"
-		var/icon_name = hidden_ring.icon_state + "_[suffix]"
-		O.icon = hidden_ring.worn_overlay
-		O.icon_state = icon_name
-
 	if(update_icons)
 		update_icons()
 
@@ -772,6 +764,18 @@ var/global/list/damage_icon_parts = list()
 	//else
 		//overlays_standing[GLASSES_LAYER]	= null
 		//overlays_standing[GLASSES_OVER_HAIR_LAYER]	= null
+	if(update_icons)
+		update_icons()
+
+/mob/living/carbon/human/update_inv_ring(var/update_icons=1)
+	overlays -= obj_overlays[RING_LAYER]
+	if (ring && !gloves)
+		var/image/standing = image('icons/mob/rings.dmi', icon_state = "[ring.icon_state]_r")
+		var/obj/abstract/Overlays/O = obj_overlays[RING_LAYER]
+		O.icon = standing
+		O.icon_state = standing.icon_state
+		O.overlays.len = 0
+		obj_to_plane_overlay(O,RING_LAYER)
 	if(update_icons)
 		update_icons()
 

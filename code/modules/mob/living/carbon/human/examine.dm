@@ -122,8 +122,8 @@
 		msg += "<span class='warning'>[t_He] [t_has] blood-stained hands!</span>\n"
 
 	// ring
-	if (!gloves && !(slot_gloves in obscured) && hidden_ring)
-		msg += "[t_He] [t_has] [bicon(hidden_ring)] \a [hidden_ring] on [t_his] finger. [format_examine(hidden_ring, "Examine")]\n"
+	if (!gloves && !(slot_gloves in obscured) && ring)
+		msg += "[t_He] [t_has] [bicon(ring)] \a [ring] on [t_his] finger. [format_examine(ring, "Examine")]\n"
 
 	//handcuffed?
 	if((handcuffed && handcuffed.is_visible()) || (mutual_handcuffs && mutual_handcuffs.is_visible()))

@@ -189,11 +189,6 @@
 	if(!apprentice)
 		wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
 
-	if(!apprentice)
-		var/ring_type = pick(typesof(/obj/item/clothing/accessory/ring))
-		var/obj/item/clothing/accessory/ring/R = new ring_type
-		wizard_mob.equip_ring(R)
-
 	wizard_mob.make_all_robot_parts_organic()
 
 	// For Vox and plasmadudes.

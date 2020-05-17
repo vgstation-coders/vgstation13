@@ -15,7 +15,7 @@
 
 /mob/proc/update_inv_mutual_handcuffed()
 	return
-	
+
 /mob/proc/update_inv_legcuffed()
 	return
 
@@ -63,6 +63,9 @@
 	return
 
 /mob/proc/update_inv_glasses()
+	return
+
+/mob/proc/update_inv_ring()
 	return
 
 /mob/proc/update_hair()

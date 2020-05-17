@@ -161,7 +161,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define SLOT_DENYPOCKET 4096	//this is to deny items with a w_class of 2 or 1 to fit in pockets.
 #define SLOT_TWOEARS 8192
 #define SLOT_LEGS 16384
-
+#define SLOT_RING 32768
 
 //MANNEQUIN SLOT BITMASKS
 #define SLOT_MANNEQUIN_ICLOTHING	"uniform"
@@ -276,6 +276,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_in_backpack 16
 #define slot_legcuffed 17
 #define slot_legs 18
+#define slot_ring 19
 
 #define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
 
@@ -1208,24 +1209,25 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define DAMAGE_LAYER			4
 #define UNIFORM_LAYER			5
 #define SHOES_LAYER				6
-#define GLOVES_LAYER			7
-#define EARS_LAYER				8
-#define SUIT_LAYER				9
-#define GLASSES_LAYER			10
-#define BELT_LAYER				11		//Possible make this an overlay of somethign required to wear a belt?
-#define SUIT_STORE_LAYER		12
-#define HAIR_LAYER				13		//TODO: make part of head layer?
-#define GLASSES_OVER_HAIR_LAYER	14
-#define FACEMASK_LAYER			15
-#define HEAD_LAYER				16
-#define BACK_LAYER				17		//Back should be above head so that headgear doesn't hides backpack when facing north
-#define ID_LAYER				18		//IDs should be visible above suits and backpacks
-#define HANDCUFF_LAYER			19
-#define LEGCUFF_LAYER			20
-#define HAND_LAYER				21
-#define TAIL_LAYER				22		//bs12 specific. this hack is probably gonna come back to haunt me
-#define TARGETED_LAYER			23		//BS12: Layer for the target overlay from weapon targeting system
-#define TOTAL_LAYERS			23
+#define RING_LAYER				7
+#define GLOVES_LAYER			8
+#define EARS_LAYER				9
+#define SUIT_LAYER				10
+#define GLASSES_LAYER			11
+#define BELT_LAYER				12		//Possible make this an overlay of somethign required to wear a belt?
+#define SUIT_STORE_LAYER		13
+#define HAIR_LAYER				14		//TODO: make part of head layer?
+#define GLASSES_OVER_HAIR_LAYER	15
+#define FACEMASK_LAYER			16
+#define HEAD_LAYER				17
+#define BACK_LAYER				18		//Back should be above head so that headgear doesn't hides backpack when facing north
+#define ID_LAYER				19		//IDs should be visible above suits and backpacks
+#define HANDCUFF_LAYER			20
+#define LEGCUFF_LAYER			21
+#define HAND_LAYER				22
+#define TAIL_LAYER				23		//bs12 specific. this hack is probably gonna come back to haunt me
+#define TARGETED_LAYER			24		//BS12: Layer for the target overlay from weapon targeting system
+#define TOTAL_LAYERS			25
 //////////////////////////////////
 
 

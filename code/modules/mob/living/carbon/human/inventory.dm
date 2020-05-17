@@ -147,7 +147,7 @@
 			return glasses
 		if(slot_gloves)
 			if (!gloves)
-				return hidden_ring
+				return ring
 			return gloves
 		if(slot_head)
 			return head
@@ -347,6 +347,11 @@
 		success = 1
 		slot = slot_legcuffed
 		update_inv_legcuffed()
+	else if (W == ring)
+		ring = null
+		success = 1
+		slot = slot_ring
+		update_inv_ring()
 	else
 		return 0
 
@@ -489,6 +494,9 @@
 		if(slot_s_store)
 			src.s_store = W
 			update_inv_s_store(redraw_mob)
+		if(slot_ring)
+			src.ring = W
+			update_inv_ring(redraw_mob)
 		if(slot_in_backpack)
 			if(src.get_active_hand() == W)
 				src.u_equip(W,0)
