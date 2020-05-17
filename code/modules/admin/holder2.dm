@@ -160,9 +160,9 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 
 	var/datum/DBQuery/insert_query=SSdbcore.NewQuery("INSERT INTO admin_sessions (sessID,ckey,expires, IP) VALUES (UUID(), '[owner.ckey]', DATE_ADD(NOW(), INTERVAL 24 HOUR), '[owner.address]')")
 	if(!insert_query.Execute())
-		qdel(insert_query)
 		message_admins("Error: [insert_query.ErrorMsg()]")
 		log_sql("Error: [insert_query.ErrorMsg()]")
+		qdel(insert_query)
 		return
 	qdel(insert_query)
 	return checkSessionKey(recurse)

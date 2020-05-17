@@ -11,7 +11,7 @@
 	return TRUE
 
 /datum/migration/mysql/ss13/_010/down()
-	if(hasColumn("erro_player","accountjoined"))
+	if(hasColumn("erro_poll_question","hidden"))
 		return execute("ALTER TABLE erro_poll_question DROP COLUMN `hidden` BOOLEAN NULL;");
 	else
 		warning("hidden column does not exist. Skipping drop.")

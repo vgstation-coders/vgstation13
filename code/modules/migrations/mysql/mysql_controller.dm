@@ -12,7 +12,7 @@ var/global/datum/migration_controller/mysql/migration_controller_mysql = null
 	if(!Q)
 		warning("Something wrong with SSdbcore.NewQuery()")
 		return FALSE
-	Q.Close()
+	qdel(Q)
 	//testing("MySQL is okay")
 	db = SSdbcore
 	return TRUE
