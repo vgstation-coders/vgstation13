@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 	while(query.NextRow())
 		rows[++rows.len] = query.item.Copy()
 
+	qdel(query)
+
 	return rows
 
 /datum/migration_controller/mysql/hasResult(var/sql)
@@ -46,7 +48,6 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 	var/datum/DBQuery/query = db.NewQuery(sql)
 	query.Execute()
 	. = query
-	qdel(query)
 
 /datum/migration_controller/mysql/hasTable(var/tableName)
 	return hasResult("SHOW TABLES LIKE '[tableName]'")

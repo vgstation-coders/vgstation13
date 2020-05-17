@@ -1,6 +1,6 @@
 /datum/migration/mysql/ss13/_013
 	id = 13
-	name = "Admin-only polls"
+	name = "Ckey creator in polls"
 
 /datum/migration/mysql/ss13/_013/up()
 	if(!hasColumn("erro_poll_question","createdby_ckey"))
