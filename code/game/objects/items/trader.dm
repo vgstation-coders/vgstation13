@@ -923,6 +923,7 @@
 	icon_state = "vachandle"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	item_state = "vachandle"
+	w_class = W_CLASS_HUGE
 	var/obj/structure/wetdryvac/myvac
 	var/event_key = null
 
@@ -942,12 +943,15 @@
 /obj/item/vachandle/dropped(mob/user)
 	user.on_moved.Remove(event_key)
 	event_key = null
+	if(loc != myvac)
+		retract()
+
+/obj/item/vachandle/throw_at()
 	retract()
 
 /obj/item/vachandle/proc/mob_moved(var/list/event_args, var/mob/holder)
 	if(myvac && get_dist(src,myvac) > 2) //Needs a little leeway because dragging isn't instant
 		retract()
-		myvac.update_icon()
 
 /obj/item/vachandle/proc/retract()
 	if(loc == myvac)
@@ -958,6 +962,7 @@
 		M.drop_item(src,myvac)
 	else
 		forceMove(myvac)
+	myvac.update_icon()
 
 /obj/item/vachandle/preattack(atom/target, mob/user , proximity)
 	if(!myvac)
@@ -984,7 +989,8 @@
 		playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
 		if(do_after(user,target,4 SECONDS))
 			to_chat(user,"<span class='notice'>Using the kit, you hollow out the wall and hang the poster in front.</span>")
-			new /obj/structure/fakecargoposter(target)
+			var/obj/structure/fakecargoposter/FCP = new(target)
+			FCP.access_loc = get_turf(user)
 			qdel(src)
 			return 1
 	else
@@ -993,6 +999,7 @@
 /obj/structure/fakecargoposter
 	icon = 'icons/obj/posters.dmi'
 	var/obj/item/weapon/storage/cargocache/cash
+	var/turf/access_loc
 
 /obj/structure/fakecargoposter/New()
 	..()
@@ -1004,7 +1011,8 @@
 
 /obj/structure/fakecargoposter/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>Upon closer inspection, there's a hidden cache behind it accessible with a free hand.</span>")
+	if(user.loc == access_loc)
+		to_chat(user, "<span class='info'>Upon closer inspection, there's a hidden cache behind it accessible with a free hand.</span>")
 
 /obj/structure/fakecargoposter/Destroy()
 	for(var/atom/movable/A in cash.contents)
@@ -1020,11 +1028,14 @@
 		if(WT.do_weld(user, src, 10 SECONDS, 5))
 			visible_message("<span class='warning'>[user] destroyed the hidden cache!</span>")
 			qdel(src)
+	else if(user.loc == access_loc)
+		cash.attackby(W,user)
 	else
 		..()
 
 /obj/structure/fakecargoposter/attack_hand(mob/user)
-	cash.AltClick(user)
+	if(user.loc == access_loc)
+		cash.AltClick(user)
 
 /obj/item/weapon/storage/cargocache
 	name = "cargo cache"
