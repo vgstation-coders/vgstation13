@@ -4,6 +4,8 @@
 	layer = TURF_LAYER
 	luminosity = 0
 
+	vis_flags = VIS_INHERIT_PLANE|VIS_INHERIT_ID //for vis_contents, should make visible
+
 	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
 	var/intact = 1
 	var/turf_flags = 0

@@ -1064,6 +1064,7 @@ var/list/ringtones = list(
 	icon = 'icons/obj/device.dmi'
 	icon_state = "videophone"
 	w_class = W_CLASS_SMALL
+	flags = FPRINT | HEAR
 	var/number = "0000"
 	var/obj/item/device/videophone/connection
 	var/status = PHONE_READY
@@ -1234,6 +1235,10 @@ proc/block_radius(var/atom/center, var/radius)
 /obj/item/device/videophone/proc/mob_moved(var/list/event_args, var/mob/holder)
 	refresh_view()
 
+/obj/item/device/videophone/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	..()
+	refresh_view()
+
 /obj/item/device/videophone/proc/refresh_view()
 	if(video_display)
 		video_display.vis_contents.Cut()
@@ -1243,3 +1248,11 @@ proc/block_radius(var/atom/center, var/radius)
 	user.client.close_popup("phone[number]")
 	if(!istype(loc,/turf) && !istype(loc,/mob/living/carbon))
 		hangup()
+
+/obj/item/device/videophone/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(connection && connection.status == PHONE_ONCALL)
+		var/mob/listener = get_holder_of_type(connection,/mob)
+		if(listener)
+			listener.Hear(speech,rendered_speech)
+			if(!listener.is_deaf() && listener.client)
+				listener.client.handle_hear_voice(src)
