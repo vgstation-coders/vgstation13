@@ -47,7 +47,7 @@
 	icon_state = "hoscap"
 	flags = FPRINT
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
-	body_parts_covered = HEAD
+	body_parts_covered = HEAD|EARS
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list()
@@ -66,7 +66,7 @@
 	desc = "It's a special helmet issued to the Warden of a security force. Protects the head from impacts."
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	icon_state = "policehelm"
-	body_parts_covered = HEAD
+	body_parts_covered = HEAD|EARS
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
