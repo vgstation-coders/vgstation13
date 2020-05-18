@@ -51,6 +51,21 @@
 		new /obj/item/bluespace_crystal(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato(src)
 
+/obj/item/weapon/storage/ring_box
+	name = "ring box"
+	desc = "And they lived happily ever after..."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
+
+/obj/item/weapon/storage/ring_box/New()
+	..()
+	var/obj/item/clothing/ring/random_ring/R1 = new(src)
+	var/obj/item/clothing/ring/random_ring/R2 = new(src)
+	R2.name = R1.name
+	R2.icon_state = R1.icon_state
+	R2.desc = R1.desc
+
 /obj/structure/closet/secure_closet/wonderful
 	name = "wonderful wardrobe"
 	desc = "Stolen from Space Narnia."

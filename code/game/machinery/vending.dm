@@ -3083,7 +3083,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/hair_dye/skin_dye/discount = 5,
 		/obj/item/weapon/gun/projectile/hecate/hunting = 2,
 		/obj/item/weapon/grenade/station/discount = 1,
-		/obj/item/clothing/ring/random_ring = 1,
+		/obj/item/weapon/storage/ring_box = 1,
 		/obj/item/weapon/pyrograph = 1,
 		)
 	prices = list(
@@ -3124,7 +3124,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/hair_dye/skin_dye/discount = 10,
 		/obj/item/weapon/gun/projectile/hecate/hunting = 100,
 		/obj/item/weapon/grenade/station/discount = 100,
-		/obj/item/clothing/ring/random_ring = 75,
+		/obj/item/weapon/storage/ring_box = 75,
 		/obj/item/weapon/pyrograph = 50,
 		)
 
