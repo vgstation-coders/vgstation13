@@ -48,7 +48,7 @@
 
 	return "[name]_map"
 
-/client/proc/setup_popup(var/popup_name,var/width = 9,var/height = 9,var/tilesize = 2, var/background_state = "scanline") //create the popup, and get it ready for generic use by giving it a background. width/height are multiplied by 64 by degfault.
+/client/proc/setup_popup(var/popup_name,var/width = 9,var/height = 9,var/tilesize = 2, var/background_state = "scanline", var/type = /obj/abstract/screen) //create the popup, and get it ready for generic use by giving it a background. width/height are multiplied by 64 by degfault.
 	if(!popup_name)
 		return
 	clear_map("[popup_name]_map")
@@ -57,7 +57,7 @@
 	var/newmap = create_popup(popup_name,x_value,y_value)
 	if(!background_state)
 		background_state = "clear"
-	var/obj/abstract/screen/background = new
+	var/obj/abstract/screen/background = new type
 	background.name = "background"
 	background.assigned_map = newmap
 	background.screen_loc = "[newmap]:1,1 TO [width],[height]"
@@ -69,7 +69,7 @@
 	screen_maps["[popup_name]_map"] += background
 	screen += background
 
-	return newmap
+	return background
 
 /client/proc/add_objs_to_map(var/list/to_add)
 	if(!screen_maps)

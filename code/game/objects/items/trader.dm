@@ -1039,3 +1039,207 @@
 	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))
 		return TRUE
 	return FALSE
+
+var/list/all_phones = list()
+#define PHONE_VIEW 1
+#define PHONE_ATTEMPTS 4
+
+#define PHONE_READY 0
+#define PHONE_RINGING 1
+#define PHONE_ONCALL 2
+var/list/ringtones = list(
+	'sound/music/ringtones/classic.ogg'			= "Classic",
+	'sound/music/ringtones/startoffight.ogg'	= "Start of Fight",
+	'sound/music/ringtones/village.ogg'			= "Village",
+	'sound/music/ringtones/gateofsteiner.ogg'	= "Gate of Steiner",
+	'sound/music/ringtones/reunion.ogg'			= "Reunion",
+	'sound/music/ringtones/overthesky.ogg'		= "Over the Sky",
+	'sound/music/ringtones/precaution.ogg'		= "Precaution",
+	'sound/music/ringtones/easygoingness.ogg'	= "Easygoingness",
+	)
+
+/obj/item/device/videophone
+	name = "video phone"
+	desc = "It's me. The Organization has initiated an attack on this world line."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "videophone"
+	w_class = W_CLASS_SMALL
+	var/number = "0000"
+	var/obj/item/device/videophone/connection
+	var/status = PHONE_READY
+	var/counter = PHONE_ATTEMPTS
+	var/event_key
+
+	var/obj/abstract/screen/video_display //the popup we show others
+
+	var/ringtone = 'sound/music/ringtones/classic.ogg'
+	var/vibrate = FALSE
+
+/obj/item/device/videophone/New()
+	..()
+	while(number == "0000")
+		var/proposed_number = "03[rand(0,9)][rand(0,9)]"
+		for(var/obj/item/device/videophone/VP in all_phones)
+			if(VP.number == proposed_number)
+				continue
+		number = proposed_number
+	all_phones += src
+
+/obj/item/device/videophone/Destroy()
+	all_phones -= src
+	processing_objects -= src //safety
+	connection = null
+	..()
+
+/obj/item/device/videophone/process()
+	var/mob/user = get_holder_of_type(src,/mob)
+	if(user)
+		to_chat(user,"<span class='warning'>[bicon(src)] *ring ring*</span>")
+	counter--
+	if(counter<=0)
+		to_chat(user,"<span class='info'>[bicon(src)] Missed call from #[connection.number]</span>")
+		processing_objects -= src
+		if(connection)
+			connection.rejected()
+			connection = null
+		status = PHONE_READY
+
+/obj/item/device/videophone/examine(mob/user)
+	..()
+	if(is_holder_of(user, src) && !user.incapacitated())
+		to_chat(user,"<span class='info'>This one can be reached at [number].</span>")
+	if(!connection)
+		return
+	switch(status)
+		if(PHONE_RINGING)
+			to_chat(user,"<span class='danger'>It's ringing! The number displays [connection.number].</span>")
+		if(PHONE_ONCALL)
+			to_chat(user,"<span class='good'>It's connected to [connection.number].</span>")
+
+/obj/item/device/videophone/AltClick(mob/user)
+	if(is_holder_of(user, src) && !user.incapacitated())
+		vibrate = !vibrate
+		to_chat(user,"<span class='notice'>You turn vibrate mode [vibrate ? "on":"off"].</span>")
+	else
+		..()
+
+/obj/item/device/videophone/CtrlClick(mob/user)
+	if(is_holder_of(user, src) && !user.incapacitated())
+		var/newtone = input("Set a new ringtone", "Ringtone", null, null) as null|anything in get_list_of_elements(ringtones)
+		if(!newtone)
+			return
+		to_chat(user,"<span class='notice'>You set your ringtone to [newtone].</span>")
+		ringtone = get_key_by_element(ringtones, newtone)
+		if(!ringtone)
+			ringtone = initial(ringtone)
+	else
+		..()
+
+/obj/item/device/videophone/attack_self(mob/user)
+	if(!isliving(user))
+		return
+	if(status == PHONE_ONCALL)
+		connection.hangup()
+		hangup()
+		return
+	else if(status == PHONE_RINGING)
+		var/ans = alert("Call from [connection.number]. Answer?", "Ringing", "Yes", "No")
+		if(ans)
+			ring(connection,user) //status is set in answer(), first part of ring()
+		else
+			status = PHONE_READY
+			connection.rejected()
+			connection = null
+		processing_objects -= src
+		return
+
+	var/dial = input(user, "Dial 03##", "Dial", "03") as null|text
+	if(!dial)
+		user.say("It's me.")
+		return
+	for(var/obj/item/device/videophone/VP in all_phones)
+		if(VP.number == dial)
+			if(!VP.begin_ring(src))
+				to_chat(user,"<span class='warning'>The line was busy...</span>")
+				playsound(src, 'sound/items/phone/busy.ogg', 50, FALSE)
+				return
+			else
+				connection = VP
+				status = PHONE_ONCALL //we're "already on the call"
+				event_key = user.on_moved.Add(src, "mob_moved") //begin tracking our movement
+				playsound(src, 'sound/items/phone/calling.ogg', 50, FALSE)
+			return
+	to_chat(user,"<span class='warning'>The line wasn't in use...</span>")
+	playsound(src, 'sound/items/phone/busy.ogg', 50, FALSE)
+
+/obj/item/device/videophone/proc/begin_ring(var/obj/item/device/videophone/VP)
+	if(!(status == PHONE_READY))
+		return FALSE
+	status = PHONE_RINGING
+	connection = VP
+	processing_objects += src
+	counter = PHONE_ATTEMPTS
+	if(vibrate)
+		playsound(src, 'sound/music/ringtones/vibrate.ogg', 150, FALSE) //this is really quiet so it needs a volume boost
+	else
+		playsound(src, ringtone, 50, FALSE)
+	return TRUE
+
+/obj/item/device/videophone/proc/rejected()
+	hangup()
+	var/mob/user = get_holder_of_type(src,/mob)
+	if(user)
+		to_chat(user,"<span class='warning'>No one answered...</span>")
+		playsound(src, 'sound/items/phone/busy.ogg', 50, FALSE)
+
+/obj/item/device/videophone/proc/answer(var/obj/item/device/videophone/VP)
+	status = PHONE_ONCALL
+	var/mob/user = get_holder_of_type(src,/mob)
+	if(user)
+		event_key = user.on_moved.Add(src, "mob_moved")
+	var/mob/caller = get_holder_of_type(VP,/mob)
+	if(caller)
+		return caller.client
+
+/obj/item/device/videophone/proc/hangup()
+	playsound(src, 'sound/items/phone/hangup.ogg', 50, FALSE)
+	status = PHONE_READY
+	connection = null
+	var/mob/user = get_holder_of_type(src,/mob)
+	if(user)
+		user.on_moved.Remove(event_key)
+		user.client.close_popup("phone[number]")
+	event_key = null
+
+/obj/item/device/videophone/proc/ring(var/obj/item/device/videophone/VP, mob/living/user)
+	var/client/Cb = answer(VP)
+	if(!Cb)
+		to_chat(user,"<span class='warning'>No one's there... prank call?</span>")
+	else
+		//Create a view for the caller
+		video_display = Cb.setup_popup("phone[VP.number]",3,3,2,type=/obj/abstract/screen/noclick)
+		refresh_view()
+
+	var/client/Ca = user.client
+	//Create our view of the caller
+	VP.video_display = Ca.setup_popup("phone[number]",3,3,2,type=/obj/abstract/screen/noclick)
+	VP.refresh_view()
+
+proc/block_radius(var/atom/center, var/radius)
+	var/turf/T = get_turf(center)
+	if(!istype(T) || !T.z)
+		return
+	return block(locate(T.x-radius,T.y-radius,T.z),locate(T.x+radius,T.y+radius,T.z))
+
+/obj/item/device/videophone/proc/mob_moved(var/list/event_args, var/mob/holder)
+	refresh_view()
+
+/obj/item/device/videophone/proc/refresh_view()
+	if(video_display)
+		video_display.vis_contents.Cut()
+		video_display.vis_contents = block_radius(src, PHONE_VIEW)
+
+/obj/item/device/videophone/dropped(mob/user)
+	user.client.close_popup("phone[number]")
+	if(!istype(loc,/turf) && !istype(loc,/mob/living/carbon))
+		hangup()

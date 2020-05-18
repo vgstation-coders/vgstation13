@@ -25,6 +25,9 @@
 	..("icon","icon_state","name","master", "screen_loc", args)
 	animate(src)
 
+/obj/abstract/screen/noclick
+	mouse_opacity = 0
+
 /obj/abstract/screen/text
 	icon = null
 	icon_state = null
