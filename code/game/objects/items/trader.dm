@@ -989,8 +989,6 @@
 		return ..()
 	myvac.whrr(get_turf(target))
 	return 1
-<<<<<<< HEAD
-=======
 
 /obj/item/weapon/fakeposter_kit
 	name = "cargo cache kit"
@@ -1067,4 +1065,3 @@
 	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))
 		return TRUE
 	return FALSE
->>>>>>> 911d74db74ee85cd238211819d4dfb75037329a1
