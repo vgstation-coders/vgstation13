@@ -513,25 +513,9 @@
 	return ..()
 
 /obj/item/weapon/storage/lockbox/advanced/proc/react()
-	var/list/best_options = list()
-	var/list/backup_options = list()
-	var/turf/picked
-	for(var/turf/T in orange(6, loc))
-		if(T.x>world.maxx-6 || T.x<6 || T.y>world.maxy-6 || T.y<6) //Conditions we will NEVER accept: too close to edge
-			continue
-		if(istype(T,/turf/space) || T.density) //Only as a fallback: dense turf or space
-			backup_options += T
-			continue
-		best_options += T
-	if(best_options.len)
-		picked = pick(best_options)
-	else if(backup_options.len)
-		picked = pick(backup_options)
-	else
-		return
+	teleport_radius(6)
 	visible_message("<span class='danger'>\The [src] displaces itself with its reactive teleport system!</span>")
 	playsound(src, 'sound/effects/teleport.ogg', 50, 1)
-	forceMove(picked)
 
 /obj/item/weapon/storage/lockbox/advanced/energyshotgun/New()
 	..()

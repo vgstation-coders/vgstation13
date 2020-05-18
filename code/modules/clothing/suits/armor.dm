@@ -296,25 +296,10 @@
 	if(L.wear_suit != src) //Not worn
 		return 0 //Don't do anything
 
-	var/list/best_options = list()
-	var/list/backup_options = list()
-	var/turf/picked
-	for(var/turf/T in orange(6, L))
-		if(T.x>world.maxx-6 || T.x<6 || T.y>world.maxy-6 || T.y<6) //Conditions we will NEVER accept: too close to edge
-			continue
-		if(istype(T,/turf/space) || T.density) //Only as a fallback: dense turf or space
-			backup_options += T
-			continue
-		best_options += T
-	if(best_options.len)
-		picked = pick(best_options)
-	else if(backup_options.len)
-		picked = pick(backup_options)
-	else
-		return
+	L.teleport_radius(6)
 	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of \the [blocked]!</span>", "<span class='notice'>The reactive teleport system flings you clear of \the [blocked].</span>")
 	playsound(L, 'sound/effects/teleport.ogg', 50, 1)
-	L.forceMove(picked)
+
 	return 1
 
 /obj/item/clothing/suit/armor/reactive/emp_act(severity)
