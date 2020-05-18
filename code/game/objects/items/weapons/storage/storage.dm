@@ -456,7 +456,7 @@
 		playsound(src, rustle_sound, 50, 1, -5)
 
 	if (user.s_active == src) // Click on the backpack again to close it.
-		close_all()
+		close(user)
 		src.add_fingerprint(user)
 		return
 

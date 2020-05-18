@@ -91,8 +91,8 @@
 			S.show_to(src)
 			return
 
-		s_active.remove_from_storage(I, get_turf(src))
-		put_in_hands(I)
+		if(s_active.remove_from_storage(I, get_turf(src)))
+			put_in_hands(I)
 
 	else
 		if (!s_active.can_be_inserted(holding))
