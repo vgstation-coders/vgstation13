@@ -1089,6 +1089,25 @@
 				return TRUE
 	return FALSE
 
+/atom/movable/proc/teleport_radius(var/range)
+	var/list/best_options = list()
+	var/list/backup_options = list()
+	var/turf/picked
+	for(var/turf/T in orange(range, src))
+		if(T.x>world.maxx-6 || T.x<6 || T.y>world.maxy-6 || T.y<6) //Conditions we will NEVER accept: too close to edge
+			continue
+		if(istype(T,/turf/space) || T.density) //Only as a fallback: dense turf or space
+			backup_options += T
+			continue
+		best_options += T
+	if(best_options.len)
+		picked = pick(best_options)
+	else if(backup_options.len)
+		picked = pick(backup_options)
+	else
+		return
+	forceMove(picked)
+
 // -- trackers
 
 /atom/movable/proc/add_tracker(var/datum/tracker/T)
