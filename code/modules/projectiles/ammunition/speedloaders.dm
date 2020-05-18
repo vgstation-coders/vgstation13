@@ -65,3 +65,8 @@
 					pixely = -1
 			var/image/shell_image = image("icon" = S.icon, "icon_state" = S.icon_state, "pixel_x" = pixelx, "pixel_y" = pixely)
 			overlays += shell_image
+
+/obj/item/ammo_storage/speedloader/energy
+	name = "energy speedloader"
+	desc = "A speedloader designed to quick-charge an energy weapon."
+	icon_state = "energy_speedloader"
