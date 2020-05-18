@@ -226,6 +226,28 @@
 	icon_state = "beakerplasma"
 	origin_tech = Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=4"
 
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter
+	name = "supermatter beaker"
+	desc = "A beaker with a supermatter sliver. It heats fluids inside, but holding it makes your hand feel strange..."
+	icon_state = "beakersupermatter"
+	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_MATERIALS + "=4"
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/New()
+	..()
+	processing_objects += src
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/process()
+	if(reagents.total_volume)
+		reagents.heating(9000, TEMPERATURE_PLASMA)
+	if(ishuman(loc))
+		//held or in pocket of a human
+		var/mob/living/L = loc
+		L.apply_radiation(3, RAD_EXTERNAL)
+
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."

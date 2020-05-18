@@ -196,9 +196,10 @@ proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth =
 // You MUST have the start and end be turfs.
 proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/reference)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
+	. = list() // In case of failure/runtimes, we want to return a list.
 	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
-	var/list/path = null //the returned path, if any
+	var/list/path = list() //the returned path, if any
 	var/PathNode/cur //current processed turf
 	start = get_turf(start)
 
@@ -210,7 +211,7 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,"unique_[reference]"))
 
 	//then run the main loop
-	while(!open.IsEmpty() && !path)
+	while(!open.IsEmpty() && !path.len)
 	{
 		cur = open.Dequeue() //get the lowest node cost turf in the open list
 		closed.Add(cur.source) //and tell we've processed it

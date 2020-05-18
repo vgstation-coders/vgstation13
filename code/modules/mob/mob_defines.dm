@@ -294,6 +294,7 @@
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 	var/forced_density = 0 // If the mob was made non-dense by an admin.
+	var/old_assigned_role // If they ghosted, what role did they have?
 
 /mob/resetVariables()
 	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \

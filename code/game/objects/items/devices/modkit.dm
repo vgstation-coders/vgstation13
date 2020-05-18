@@ -3,6 +3,7 @@
 	name = "modification kit"
 	desc = "A kit containing all the needed tools and parts to modify an item into another one."
 	icon_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 	var/list/parts = list()		//how many times can this kit perform a given modification
 	var/list/original = list()	//the starting parts

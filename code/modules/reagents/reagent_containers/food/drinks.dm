@@ -753,6 +753,7 @@
 	name = "Gunka-Cola Family Sized"
 	desc = "An unnaturally-sized can for unnaturally-sized men. Taste the Consumerism!"
 	icon_state = "gunka_cola"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	volume = 100
 	possible_transfer_amounts = list(5,10,15,25,30,50,100)
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola/New()
@@ -1057,6 +1058,16 @@
 	desc = "For those who can't be bothered to hang out at the bar to drink."
 	icon_state = "barflask"
 	volume = 60
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/ancient
+	name = "ancient flask"
+	desc = "A flask recovered from the asteroid. How old is it?"
+	icon_state = "oldflask"
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/ancient/New()
+	..()
+	reagents.add_reagent(KARMOTRINE, 15)
 
 /obj/item/weapon/reagent_containers/food/drinks/britcup
 	name = "cup"
