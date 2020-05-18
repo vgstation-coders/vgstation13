@@ -174,7 +174,7 @@
 /obj/item/weapon/gun/energy/shotgun
 	name = "energy shotgun"
 	desc = "An experimental energy shotgun from Alcatraz IV. It has two modes that fire experimental stun electrodes codenamed HUNTER and SWEEPER."
-	icon_state = "cshotgun"
+	icon_state = "eshotgun"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
@@ -197,12 +197,9 @@
 		pumped = FALSE
 		return TRUE
 
-/obj/item/weapon/gun/energy/shotgun/update_icon()
-	return //no indicator
-
 /obj/item/weapon/gun/energy/shotgun/proc/pump(mob/M as mob)
 	if(world.time > pumped + 1 SECONDS)
-		if(power_supply.charge > charge_cost)
+		if(power_supply.charge >= charge_cost)
 			playsound(src, 'sound/weapons/shotgunpump.ogg', 60, 1)
 			pumped = world.time
 		else
