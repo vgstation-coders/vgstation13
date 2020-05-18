@@ -464,7 +464,7 @@
 	else
 		dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(gloves)]</A>"
 		if (!gloves)
-			dat += "<BR><B>Ring:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(ring)]</A>"
+			dat += "<BR><B>Ring:</B> <A href='?src=\ref[src];item=[slot_ring]'>[makeStrippingButton(ring)]</A>"
 		dat += accessories_striping_button(gloves)
 	if(slot_w_uniform in obscured)
 		dat += "<BR><font color=grey><B>Uniform:</B> Obscured by [wear_suit]</font>"

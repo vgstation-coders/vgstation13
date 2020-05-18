@@ -47,6 +47,8 @@
 		on_bumped.holder = null
 	if(on_touched)
 		on_touched.holder = null
+	if(on_renamed)
+		on_renamed.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -97,6 +99,7 @@
 	qdel(on_bumping)
 	qdel(on_bumped)
 	qdel(on_touched)
+	qdel(on_renamed)
 
 	on_spellcast = null
 	on_uattack = null
@@ -108,6 +111,7 @@
 	on_bumping = null
 	on_bumped = null
 	on_touched = null
+	on_renamed = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -300,6 +304,7 @@
 	on_bumping = new(owner = src)
 	on_bumped = new(owner = src)
 	on_touched = new(owner = src)
+	on_renamed = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -682,6 +687,7 @@ var/list/slot_equipment_priority = list( \
 		slot_ears,\
 		slot_glasses,\
 		slot_belt,\
+		slot_ring,\
 		slot_s_store,\
 		slot_l_store,\
 		slot_r_store\

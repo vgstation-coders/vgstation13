@@ -769,6 +769,8 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_ring(var/update_icons=1)
 	overlays -= obj_overlays[RING_LAYER]
+	if (ring)
+		ring.screen_loc = ui_ring
 	if (ring && !gloves)
 		var/image/standing = image('icons/mob/rings.dmi', icon_state = "[ring.icon_state]_r")
 		var/obj/abstract/Overlays/O = obj_overlays[RING_LAYER]

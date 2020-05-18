@@ -494,6 +494,28 @@
 					else
 						return CANNOT_EQUIP
 				return CAN_EQUIP
+
+			if(slot_ring)
+				if( !(slot_flags & SLOT_RING) )
+					return CANNOT_EQUIP
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+					if(!OE.species) //Organ has same species as body
+						if(H.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL)) //Use the body's base species
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
+							return CANNOT_EQUIP
+					else //Organ's species is different from body
+						if(OE.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
+							return CANNOT_EQUIP
+
+				if (H.gloves)
+					to_chat(H, "<span class='notice'>You must remove your gloves first.</span>")
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+
 			if(slot_shoes)
 				if( !(slot_flags & SLOT_FEET) )
 					return CANNOT_EQUIP

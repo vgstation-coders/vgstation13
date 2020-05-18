@@ -244,7 +244,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box = (/obj/abstract/screen/inventory)
+	inv_box = getFromPool(/obj/abstract/screen/inventory)
 	inv_box.name = "ring"
 	inv_box.icon = ui_style
 	inv_box.icon_state = "gloves"

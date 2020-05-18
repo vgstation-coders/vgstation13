@@ -232,6 +232,8 @@
 			return has_organ(LIMB_CHEST)
 		if(slot_s_store)
 			return has_organ(LIMB_CHEST)
+		if(slot_ring)
+			return has_organ(LIMB_RIGHT_HAND)
 		if(slot_in_backpack)
 			return 1
 
@@ -268,6 +270,7 @@
 		gloves = null
 		success = 1
 		slot = slot_gloves
+		update_inv_ring()
 		update_inv_gloves()
 	else if (W == glasses)
 		glasses = null

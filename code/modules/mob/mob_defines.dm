@@ -280,6 +280,7 @@
 	var/event/on_bumping //We bumped someone
 	var/event/on_bumped //We got bumped
 	var/event/on_touched // We got touched by anything
+	var/event/on_renamed
 	// Allows overiding click modifiers and such.
 	var/event/on_clickon
 
