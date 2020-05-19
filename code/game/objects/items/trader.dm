@@ -214,19 +214,36 @@
 	name = "Alcatraz IV security crate"
 	desc = "It came from Alcatraz IV!"
 
+	//6+6+6=18
+var/global/list/alcatraz_stuff = list(
+	//3 of a kind
+	/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,
+	/obj/item/pedometer,/obj/item/pedometer,/obj/item/pedometer,
+	//2 of a kind
+	/obj/item/weapon/autocuffer,/obj/item/weapon/autocuffer,
+	/obj/item/clothing/mask/gas/hecu,/obj/item/clothing/mask/gas/hecu,
+	/obj/item/clothing/gloves/swat/operator,/obj/item/clothing/gloves/swat/operator,
+	//1 of a kind
+	/obj/item/clothing/under/securityskirt/elite,
+	/obj/item/clothing/head/helmet/donutgiver,
+	/obj/item/clothing/accessory/bangerboy,
+	/obj/item/key/security/spare,
+	/obj/item/weapon/ram_kit,
+	/obj/item/device/vampirehead,)
+
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
-	new /obj/item/clothing/head/helmet/donutgiver(src)
-	new /obj/item/clothing/under/securityskirt/elite(src)
-	new /obj/item/clothing/accessory/bangerboy(src)
-	new /obj/item/weapon/autocuffer(src)
-	new /obj/item/clothing/mask/gas/hecu(src)
+	for(var/i = 1 to 6)
+		if(!alcatraz_stuff.len)
+			return
+		var/path = pick_n_take(alcatraz_stuff)
+		new path(src)
 
 /obj/item/clothing/accessory/bangerboy
 	name = "\improper Banger Boy Advance"
-	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to easily configure their onboard timers. Straps nicely onto security armor."
+	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to trigger them for early detonation. Straps nicely onto security armor."
 	icon_state = "bangerboy"
-	origin_tech = Tc_COMBAT + "=2"
+	mech_flags = MECH_SCAN_FAIL
 	var/obj/item/weapon/screwdriver/S
 
 /obj/item/clothing/accessory/bangerboy/New()
@@ -240,7 +257,9 @@
 
 /obj/item/clothing/accessory/bangerboy/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/weapon/grenade))
-		W.attackby(S,user)
+		var/obj/item/weapon/grenade/G = W
+		G.det_time = 1.5 SECONDS
+		G.activate(user)
 	else
 		..()
 
@@ -575,17 +594,24 @@
 	icon_state = "telebaton_1"
 	item_state = "telebaton_1"
 
-/obj/item/weapon/depocket_wand/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/weapon/depocket_wand/attack(mob/living/M, mob/living/user)
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.handcuffed)
-			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
-			to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
+			scan(H,user)
 		else
-			to_chat(user,"<span class='warning'>The subject must be handcuffed.</span>")
+			user.visible_message("<span class='danger'>[user] begins waving \the [src] over [M].</span>","<span class='danger'>You begin waving \the [src] over [M].</span>")
+			if(do_after(user,H, 2 SECONDS))
+				scan(H,user)
 	else
 		..()
+
+/obj/item/weapon/depocket_wand/proc/scan(mob/living/carbon/human/H, mob/living/user)
+	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+	to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
+
+
 
 #define VAMP_FLASH_CD 50
 
@@ -1065,3 +1091,49 @@
 	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))
 		return TRUE
 	return FALSE
+
+#define REWARD_FREQUENCY 1000
+/obj/item/pedometer
+	name = "patrolmens' pedometer"
+	desc = "A device which estimates steps taken. This one dispenses prizes for patrolling maintenance or major hallways. It needs to be on your belt, pockets, or in hand to register movement."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "pedometer"
+	w_class = W_CLASS_SMALL
+	slot_flags = SLOT_BELT
+	var/event_key = null
+	var/count = 0
+	var/list/approved_areas = list(/area/maintenance,/area/hallway)
+	var/list/special_rewards = list(/obj/item/weapon/pen/tactical)
+	var/list/regular_rewards = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee,
+									/obj/item/weapon/reagent_containers/food/snacks/donutiron,
+									/obj/item/ammo_storage/speedloader/energy)
+
+/obj/item/pedometer/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>The reward ticker reads [count].</span>")
+
+/obj/item/pedometer/pickup(mob/user)
+	..()
+	event_key = user.on_moved.Add(src, "mob_moved")
+
+/obj/item/pedometer/dropped(mob/user)
+	..()
+	user.on_moved.Remove(event_key)
+	event_key = null
+
+/obj/item/pedometer/proc/mob_moved(var/list/event_args, var/mob/holder)
+	var/turf/T = get_turf(src)
+	var/area/A = get_area(T)
+	if(is_type_in_list(A,approved_areas))
+		count++
+		if(!(count % REWARD_FREQUENCY))
+			var/path
+			if(special_rewards.len)
+				path = pick_n_take(special_rewards)
+			else
+				path = pick(regular_rewards)
+			if(path)
+				var/obj/item/I = new path(get_turf(src))
+				if(isliving(holder))
+					holder.put_in_hands(I)
+				to_chat(holder,"<span class='good'>\The [src] dispenses a reward!</span>")
