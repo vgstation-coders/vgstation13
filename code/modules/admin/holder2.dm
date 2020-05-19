@@ -13,7 +13,6 @@ var/list/admin_datums = list()
 	var/datum/feed_message/admincaster_feed_message = new /datum/feed_message   //These two will act as holders.
 	var/datum/feed_channel/admincaster_feed_channel = new /datum/feed_channel
 	var/admincaster_signature	//What you'll sign the newsfeeds as
-	var/sessKey		= 0
 
 /datum/admins/New(initial_rank = "Temporary Admin", initial_rights = 0, ckey)
 	if(!ckey)
@@ -24,6 +23,12 @@ var/list/admin_datums = list()
 	rank = initial_rank
 	rights = initial_rights
 	admin_datums[ckey] = src
+
+/datum/admins/Destroy()
+	marked_datum = null
+	marked_appearance = null
+	disassociate()
+	return ..()
 
 /datum/admins/proc/associate(client/C)
 	if(istype(C))
@@ -124,45 +129,5 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 	admin_datums -= ckey
 	if(holder)
 		holder.disassociate()
-		del(holder)
+		qdel(holder)
 	return 1
-
-/datum/admins/proc/checkSessionKey(var/recurse=0)
-	if(recurse==5)
-		return "\[BROKEN\]";
-	recurse++
-	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM admin_sessions WHERE expires < Now()")
-	if(!query.Execute())
-		message_admins("Error: [query.ErrorMsg()]")
-		log_sql("Error: [query.ErrorMsg()]")
-		qdel(query)
-		return
-	var/datum/DBQuery/sel_query = SSdbcore.NewQuery("SELECT sessID FROM admin_sessions WHERE ckey = '[owner.ckey]' AND expires > Now()")
-	if(!sel_query.Execute())
-		message_admins("Error: [sel_query.ErrorMsg()]")
-		log_sql("Error: [sel_query.ErrorMsg()]")
-		qdel(sel_query)
-		return
-	qdel(sel_query)
-
-	sessKey=0
-	while(query.NextRow())
-		sessKey = query.item[1]
-		var/datum/DBQuery/up_query=SSdbcore.NewQuery("UPDATE admin_sessions SET expires=DATE_ADD(NOW(), INTERVAL 24 HOUR), IP='[owner.address]' WHERE ckey = '[owner.ckey]")
-		if(!up_query.Execute())
-			message_admins("Error: [up_query.ErrorMsg()]")
-			log_sql("Error: [up_query.ErrorMsg()]")
-			qdel(up_query)
-			return
-		qdel(up_query)
-		return sessKey
-	qdel(query)
-
-	var/datum/DBQuery/insert_query=SSdbcore.NewQuery("INSERT INTO admin_sessions (sessID,ckey,expires, IP) VALUES (UUID(), '[owner.ckey]', DATE_ADD(NOW(), INTERVAL 24 HOUR), '[owner.address]')")
-	if(!insert_query.Execute())
-		message_admins("Error: [insert_query.ErrorMsg()]")
-		log_sql("Error: [insert_query.ErrorMsg()]")
-		qdel(insert_query)
-		return
-	qdel(insert_query)
-	return checkSessionKey(recurse)
