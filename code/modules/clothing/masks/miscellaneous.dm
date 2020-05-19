@@ -170,6 +170,7 @@ obj/item/clothing/mask/joy
 	desc = "For when you want people to think you're a vampire. Glows in the dark!"
 	icon_state = "fangs"
 	item_state = "fangs"
+	body_parts_covered = NONE
 	var/light_absorbed = 0
 	var/glowy_fangs
 	var/image/glow_fangs
@@ -193,6 +194,7 @@ obj/item/clothing/mask/joy
 /obj/item/clothing/mask/vamp_fangs/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	if(from_slot == slot_wear_mask)
 		user.overlays -= glow_fangs
+	update_icon(user)
 
 /obj/item/clothing/mask/vamp_fangs/OnMobLife(var/mob/living/carbon/human/wearer)
 	var/turf/T = get_turf(wearer)
