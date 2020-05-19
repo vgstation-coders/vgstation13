@@ -481,7 +481,7 @@
 	return
 
 /obj/item/weapon/gun/hookshot/whip/liquorice
-	name = "Liquoricium Whip"
+	name = "liquoricium whip"
 	icon_state = "liquorice"
 	desc = "Although clearly just an iron chain covered in candy, the jagged pieces of caramel look like they'd sting quite a bit."
 	fire_sound = 'sound/weapons/whip_crack.ogg'
