@@ -202,6 +202,15 @@
 		visible_message("<span class='warning'>[W.firer] whips it good!</span>")
 	..(atarget, blocked)
 
+/obj/item/projectile/hookshot/whip/liquorice
+	name = "Liquoricium Whip"
+	icon_state = "liquorice"
+	icon_name = "liquorice"
+	damage = 15
+	sharpness = 1.2
+	failure_message = "The coil sticks to itself and won't unwind"
+	whipitgood_bonus = null
+
 /obj/item/projectile/hookshot/whip/vampkiller
 	name = "flail"
 	icon_state = "vampkiller"
@@ -225,3 +234,4 @@
 		damage = 30
 		sharpness = 2
 	..(A)
+

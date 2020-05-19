@@ -988,3 +988,17 @@ obj/item/projectile/bullet/suffocationbullet
 
 /obj/item/projectile/bullet/syringe/dart
 	stealthy = TRUE
+
+/obj/item/projectile/bullet/syringe/candycane
+	name = "Candycane"
+	icon_state = "candycane"
+	nodamage = 0
+	damage = 25
+	capacity = 20
+	decay_type = null
+	custom_impact = null
+
+/obj/item/projectile/bullet/syringe/candycane/New()
+	..()
+	reagents.add_reagent(CARAMEL, 19)
+	reagents.add_reagent(MINTTOXIN, 1) //I feel a little bad, might make it a random thing between this and normal mint or sugar. It's fun if you make them fat with the gun not so fun if you one shot fatsec

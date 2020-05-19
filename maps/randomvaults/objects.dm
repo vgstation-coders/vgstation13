@@ -40,6 +40,7 @@
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()
 
+/area/vault/gingerbread_house
 
 /area/vault/mechclubhouse
 	requires_power = 1
