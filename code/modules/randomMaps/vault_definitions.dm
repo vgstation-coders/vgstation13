@@ -54,6 +54,9 @@ var/list/existing_vaults = list()
 		new /mob/living/simple_animal/hostile/mimic/crate/item(get_turf(S), original) //Make copies
 		qdel(S)
 
+/datum/map_element/vault/gingerbread_house
+	file_path = "maps/randomvaults/gingerbread_house.dmm"
+
 /datum/map_element/vault/tommyboyasteroid
 	file_path = "maps/randomvaults/tommyboyasteroid.dmm"
 
