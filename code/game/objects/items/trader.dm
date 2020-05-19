@@ -1085,6 +1085,10 @@ var/list/ringtones = list(
 				continue
 		number = proposed_number
 	all_phones += src
+	video_display = new()
+	video_display.plane = BELOW_TURF_PLANE
+	video_display.screen_info = list(1,1)
+	video_display.assigned_map = "phone[number]_map"
 
 /obj/item/device/videophone/Destroy()
 	all_phones -= src
@@ -1098,7 +1102,8 @@ var/list/ringtones = list(
 		to_chat(user,"<span class='warning'>[bicon(src)] *ring ring*</span>")
 	counter--
 	if(counter<=0)
-		to_chat(user,"<span class='info'>[bicon(src)] Missed call from #[connection.number]</span>")
+		if(user)
+			to_chat(user,"<span class='info'>[bicon(src)] Missed call from #[connection.number]</span>")
 		processing_objects -= src
 		if(connection)
 			connection.rejected()
@@ -1174,14 +1179,14 @@ var/list/ringtones = list(
 	playsound(src, 'sound/items/phone/busy.ogg', 50, FALSE)
 
 /obj/item/device/videophone/proc/begin_ring(var/obj/item/device/videophone/VP)
-	if(!(status == PHONE_READY))
+	if(status != PHONE_READY)
 		return FALSE
 	status = PHONE_RINGING
 	connection = VP
 	processing_objects += src
 	counter = PHONE_ATTEMPTS
 	if(vibrate)
-		playsound(src, 'sound/music/ringtones/vibrate.ogg', 150, FALSE) //this is really quiet so it needs a volume boost
+		playsound(src, 'sound/music/ringtones/vibrate.ogg', 450, FALSE) //this is really quiet so it needs a volume boost
 	else
 		playsound(src, ringtone, 50, FALSE)
 	return TRUE
@@ -1218,15 +1223,17 @@ var/list/ringtones = list(
 		to_chat(user,"<span class='warning'>No one's there... prank call?</span>")
 	else
 		//Create a view for the caller
-		video_display = Cb.setup_popup("phone[VP.number]",3,3,2,type=/obj/abstract/screen/noclick)
+		Cb.setup_popup("phone[number]",3,3,2)
 		refresh_view()
+		Cb.add_objs_to_map(list(video_display))
 
 	var/client/Ca = user.client
 	//Create our view of the caller
-	VP.video_display = Ca.setup_popup("phone[number]",3,3,2,type=/obj/abstract/screen/noclick)
+	Ca.setup_popup("phone[VP.number]",3,3,2)
 	VP.refresh_view()
+	Ca.add_objs_to_map(list(VP.video_display))
 
-proc/block_radius(var/atom/center, var/radius)
+/proc/block_radius(var/atom/center, var/radius)
 	var/turf/T = get_turf(center)
 	if(!istype(T) || !T.z)
 		return
@@ -1244,6 +1251,10 @@ proc/block_radius(var/atom/center, var/radius)
 		video_display.vis_contents.Cut()
 		video_display.vis_contents = block_radius(src, PHONE_VIEW)
 
+/obj/item/device/videophone/pickup(mob/user)
+	..()
+	event_key = user.on_moved.Add(src, "mob_moved")
+
 /obj/item/device/videophone/dropped(mob/user)
 	user.client.close_popup("phone[number]")
 	if(!istype(loc,/turf) && !istype(loc,/mob/living/carbon))
@@ -1251,6 +1262,8 @@ proc/block_radius(var/atom/center, var/radius)
 
 /obj/item/device/videophone/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(connection && connection.status == PHONE_ONCALL)
+		if(get_dist(speech.speaker,src)>1)
+			return
 		var/mob/listener = get_holder_of_type(connection,/mob)
 		if(listener)
 			listener.Hear(speech,rendered_speech)
