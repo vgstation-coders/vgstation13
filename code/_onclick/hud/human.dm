@@ -247,7 +247,7 @@
 	inv_box = getFromPool(/obj/abstract/screen/inventory)
 	inv_box.name = "ring"
 	inv_box.icon = ui_style
-	inv_box.icon_state = "gloves"
+	inv_box.icon_state = "hand1"
 	inv_box.screen_loc = ui_ring
 	inv_box.slot_id = slot_ring
 	inv_box.layer = HUD_BASE_LAYER
