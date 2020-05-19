@@ -194,7 +194,6 @@ obj/item/clothing/mask/joy
 /obj/item/clothing/mask/vamp_fangs/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	if(from_slot == slot_wear_mask)
 		user.overlays -= glow_fangs
-	update_icon(user)
 
 /obj/item/clothing/mask/vamp_fangs/OnMobLife(var/mob/living/carbon/human/wearer)
 	var/turf/T = get_turf(wearer)
