@@ -158,7 +158,7 @@
 	item_state = "hardhat0_pumpkin"
 	_color = "pumpkin"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	var/brightness_on = 2 //luminosity when on
 	var/on = 0
 

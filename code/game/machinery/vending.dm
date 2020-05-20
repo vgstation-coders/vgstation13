@@ -59,7 +59,8 @@ var/global/num_vending_terminals = 1
 	var/shut_up = 0				//Stop spouting those godawful pitches!
 	var/extended_inventory = 0	//can we access the hidden inventory?
 	var/scan_id = 1
-	var/unhackable = 0
+	var/unhackable = FALSE
+	var/dont_render_OOS = FALSE
 	var/obj/item/weapon/coin
 	var/datum/wires/vending/wires = null
 	var/list/overlays_vending[2]//1 is the panel layer, 2 is the dangermode layer
@@ -647,6 +648,8 @@ var/global/num_vending_terminals = 1
 		if (edit_mode)
 			dat += " <a href='byond://?src=\ref[src];set_price=[idx];cat=[P.category]'>(Set Price)</A>"
 	else
+		if(dont_render_OOS)
+			return //return nothing for this line
 		dat += " <span class='warning'>SOLD OUT</span>"
 		if(edit_mode)
 			var/idx=GetProductIndex(P)
@@ -3034,7 +3037,8 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/trader	// Boxes are defined in trader.dm
 	name = "\improper Trader Supply"
 	desc = "Its wiring has been modified to prevent hacking."
-	unhackable = 1
+	unhackable = TRUE
+	dont_render_OOS = TRUE
 	desc = "Make much coin."
 	req_access = list(access_trade)
 	product_slogans = list(
@@ -3063,7 +3067,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/fish_eggs/seadevil = 1,
 		/obj/machinery/power/antiquesynth = 1,
 		/obj/item/crackerbox = 1,
-		/obj/structure/closet/crate/chest/alcatraz = 1,
+		/obj/structure/closet/crate/chest/alcatraz = 3,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 1,
 		/obj/structure/largecrate/secure = 1,
 		/obj/structure/largecrate/secure/magmaw = 1,
@@ -3072,10 +3076,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/vinyl/echoes = 1,
 		/obj/item/stack/sheet/brass/bigstack = 3,
 		/obj/item/stack/sheet/ralloy/bigstack = 3,
-		/obj/item/device/vampirehead = 1,
-		/obj/item/key/security/spare = 1,
-		/obj/item/weapon/depocket_wand = 4,
-		/obj/item/weapon/ram_kit = 1,
 		/obj/item/weapon/mech_expansion_kit = 3,
 		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector = 10,
 		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super = 4,
@@ -3116,10 +3116,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/vinyl/echoes = 50,
 		/obj/item/stack/sheet/brass/bigstack = 50,
 		/obj/item/stack/sheet/ralloy/bigstack = 50,
-		/obj/item/device/vampirehead = 150,
-		/obj/item/key/security/spare = 10,
-		/obj/item/weapon/depocket_wand = 50,
-		/obj/item/weapon/ram_kit = 100,
 		/obj/item/weapon/mech_expansion_kit = 50,
 		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector = 15,
 		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super = 50,

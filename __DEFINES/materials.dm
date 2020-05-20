@@ -28,6 +28,7 @@
 #define MAT_COBRYL    "$cobryl"
 #define MAT_CERENKITE "$cerenkite"
 #define MAT_MOLITZ    "$molitz"
+#define MAT_GINGERBREAD "$gingerbread"
 
 
 #define VALUE_IRON 0.2
@@ -77,3 +78,5 @@
 #define CC_PER_SHEET_COBRYL      CC_PER_SHEET_METAL
 #define CC_PER_SHEET_CERENKITE   CC_PER_SHEET_METAL
 #define CC_PER_SHEET_MOLITZ      CC_PER_SHEET_METAL
+#define CC_PER_SHEET_GINGERBREAD CC_PER_SHEET_METAL
+

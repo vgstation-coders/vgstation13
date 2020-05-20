@@ -296,29 +296,9 @@
 	if(L.wear_suit != src) //Not worn
 		return 0 //Don't do anything
 
-	var/list/turfs = new/list()
-
-	for(var/turf/T in orange(6, loc))
-		if(istype(T,/turf/space))
-			continue
-		if(T.density)
-			continue
-		if(T.x>world.maxx-6 || T.x<6)
-			continue
-		if(T.y>world.maxy-6 || T.y<6)
-			continue
-		turfs += T
-	if(!turfs.len)
-		turfs += pick(/turf in orange(6))
-	var/turf/picked = pick(turfs)
-	if(!isturf(picked))
-		return
-
+	L.teleport_radius(6)
 	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of \the [blocked]!</span>", "<span class='notice'>The reactive teleport system flings you clear of \the [blocked].</span>")
-
-	playsound(L, 'sound/effects/teleport.ogg', 30, 1)
-
-	L.forceMove(picked)
+	playsound(L, 'sound/effects/teleport.ogg', 50, 1)
 
 	return 1
 

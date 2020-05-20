@@ -349,3 +349,9 @@
 	update_icon()
 	if(health <= 0)
 		qdel(src)
+
+/obj/machinery/door/mineral/gingerbread
+	prefix = "gingerbread"
+	icon_state = "gingerbreaddoor_closed"
+	hardness = 0.5
+	soundeffect = 'sound/effects/tooth_crack.ogg'
