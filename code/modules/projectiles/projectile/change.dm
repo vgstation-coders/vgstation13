@@ -64,7 +64,7 @@
 	flag = "energy"
 	var/changetype=null
 	fire_sound = 'sound/weapons/radgun.ogg'
-	
+
 /obj/item/projectile/zwartepiet/on_hit(var/atom/pietje)
 	var/type = changetype
 	spawn(1)
@@ -74,3 +74,23 @@
 	if(istype(M, /mob/living) && M.stat != DEAD)
 		M.zwartepietify()
 		to_chat(M, "<B>You feel jovial!</B>")
+
+/obj/item/projectile/mouse
+	name = "mouser pistol shot"
+	icon_state = "ice_1"
+	damage = 0
+	damage_type = BURN
+	nodamage = TRUE
+	flag = "energy"
+	fire_sound = 'sound/effects/stealthoff.ogg'
+
+/obj/item/projectile/mouse/on_hit(var/atom/change)
+	if(!iscarbon(change))
+		return
+	var/mob/tomouse = change
+	tomouse.audible_scream()
+	spawn(1)//fixes bugs caused by the target ceasing to exist before the projectile has died.
+		var/mob/M = tomouse.transmogrify(/mob/living/simple_animal/mouse/transmog)
+		M.SetStunned(5)
+		M.Jitter(5)
+		to_chat(M,"<span class='sinister'>You are dazed by the transformation!</span>")

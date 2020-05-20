@@ -666,6 +666,14 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/medical
 	category = "Medical Specials"
 
+/datum/uplink_item/jobspecific/medical/mouser
+	name = "Mouser Pistol"
+	desc = "A pistol that turns unfortunate victims into labrats and stuns them briefly. All of their gear becomes part of their body, and if the mouse dies, the target becomes human once again, fully armed and unharmed."
+	item = /obj/item/weapon/gun/energy/mouser
+	cost = 12
+	discounted_cost = 8
+	jobs_with_discount = list("Virologist")
+
 /datum/uplink_item/jobspecific/medical/wheelchair
 	name = "Syndicate Wheelchair"
 	desc = "This combat-modified motorized wheelchair has a forward thrust sufficient enough to knock down and run over victims, with special bladed wheels that will make short work of anyone caught under them. Provides limited protection against ballistic weaponry."

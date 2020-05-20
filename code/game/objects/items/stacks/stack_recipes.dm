@@ -368,6 +368,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("campfire",			/obj/machinery/space_heater/campfire,	4,		time = 35,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("spit",				/obj/machinery/cooking/grill/spit,		1,		time = 10,	one_per_turf = 1,	on_floor = 1),
 	null,
+	new/datum/stack_recipe("mouse labyrinth",	/obj/structure/mousemaze,				1,		time = 1 SECONDS,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("wooden block",		/obj/structure/block/wood,				10,		time = 50,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("apiary",			/obj/item/apiary,						10,		time = 25,	one_per_turf = 0,	on_floor = 0),
 	new/datum/stack_recipe("blank canvas",		/obj/item/mounted/frame/painting/blank,	2,		time = 15									),

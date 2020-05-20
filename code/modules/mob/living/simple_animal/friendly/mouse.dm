@@ -519,3 +519,22 @@
 	..(TRUE)
 	if(gibbed == FALSE)
 		src.gib()
+
+/mob/living/simple_animal/mouse/transmog
+	maxHealth = 35
+	health = 35
+
+/mob/living/simple_animal/mouse/transmog/transmog_death()
+	if(!transmogged_from)
+		return //Should never happen, but sanity is good
+	var/obj/transmog_body_container/C = transmogged_from
+	var/mob/living/L = C.contained_mob
+	if(istype(loc,/obj/machinery/atmospherics))
+		loc.visible_message("<span class='danger'>\The [loc] gets destroyed by the sudden emergence of \the [L]!</span>")
+		var/turf/T = get_turf(loc)
+		T.ex_act(3) //lightly damage turf
+		qdel(loc) //moves out
+	else
+		L.visible_message("<span class='danger'>\The [src] suddenly snaps back into the shape of \the [L]!</span>")
+	transmogrify()
+
