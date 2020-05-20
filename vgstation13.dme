@@ -2589,7 +2589,6 @@
 #include "maps\randomvaults\objects.dm"
 #include "maps\randomvaults\sokoban.dm"
 #include "maps\randomvaults\spessmart.dm"
-#include "maps\randomvaults\pretty_rad_clubhouse.dmm"
 #include "maps\RandomZLevels\Academy.dm"
 #include "maps\RandomZLevels\challenge.dm"
 #include "maps\RandomZLevels\hive.dm"
