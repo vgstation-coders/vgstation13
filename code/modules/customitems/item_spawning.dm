@@ -20,7 +20,7 @@
 
 	// Grab the info we want.
 	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT cuiPath, cuiPropAdjust, cuiJobMask FROM customitems WHERE cuiCKey='[M.ckey]' AND (cuiRealName='[M.real_name]' OR cuiRealName='*')")
-	if(!query.Execute())
+	if(!query.Execute(FALSE))
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
 		qdel(query)
