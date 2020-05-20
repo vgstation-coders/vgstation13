@@ -19,7 +19,6 @@ var/savefile/panicfile
 		// warn on missing library
 		// extools on linux does not exist and is not in the repository as of yet
 		warning("There is no extools library for this system included with this build. Performance may differ significantly than if it were present. This warning will not show if [extools_path] is added to the root of the game directory.")
-
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
@@ -74,7 +73,6 @@ var/savefile/panicfile
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
 	load_configuration()
-
 	SSdbcore.Initialize() // Get a database running, first thing
 
 	load_mode()

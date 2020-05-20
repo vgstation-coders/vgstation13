@@ -55,6 +55,7 @@
 			world.log << "Ban database connection failure. Key [ckeytext] not checked"
 			diary << "Ban database connection failure. Key [ckeytext] not checked"
 			return
+
 		var/failedcid = 1
 		var/failedip = 1
 
