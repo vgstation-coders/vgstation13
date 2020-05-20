@@ -409,6 +409,7 @@
 							world.log << response
 							log_admin("[usr.name]/[usr.key] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] characters in length")
 							message_admins("[key_name_admin(usr)] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] characters in length")
+						qdel(query)
 
 	if(href_list["id"])
 		if(href_list["id"]=="-1")
