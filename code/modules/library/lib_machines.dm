@@ -110,7 +110,6 @@
 		log_sql("Error: [query.ErrorMsg()]")
 		qdel(query)
 		return
-	qdel(query)
 
 	var/list/results=list()
 	while(query.NextRow())
@@ -124,7 +123,9 @@
 		))
 		results += CB
 		cached_books["[id]"]=CB
+		qdel(query)
 		return CB
+	qdel(query)
 	return results
 
 var/global/datum/library_catalog/library_catalog = new()
