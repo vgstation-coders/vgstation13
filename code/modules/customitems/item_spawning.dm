@@ -89,34 +89,34 @@
 		qdel(query)
 
 	// This is hacky, but since it's difficult as fuck to make a proper parser in BYOND without killing the server, here it is. - N3X
-	/proc/HackProperties(var/mob/living/carbon/human/M,var/obj/item/I,var/script)
-		/*
-		A=string:b lol {REALNAME} {ROLE} {ROLE_ALT};
-		B=icon:icons/dmi/lol.dmi:STATE;
-		B=number:29;
-		*/
-		var/list/statements=splittext(script,";")
-		if(statements.len==0)
-			return // Don't even bother.
-		for(var/statement in statements)
-			var/list/assignmentChunks = splittext(statement,"=")
-			var/varname = assignmentChunks[1]
-			//var/operator = "="
+/proc/HackProperties(var/mob/living/carbon/human/M,var/obj/item/I,var/script)
+	/*
+	A=string:b lol {REALNAME} {ROLE} {ROLE_ALT};
+	B=icon:icons/dmi/lol.dmi:STATE;
+	B=number:29;
+	*/
+	var/list/statements=splittext(script,";")
+	if(statements.len==0)
+		return // Don't even bother.
+	for(var/statement in statements)
+		var/list/assignmentChunks = splittext(statement,"=")
+		var/varname = assignmentChunks[1]
+		//var/operator = "="
 
-			var/list/typeChunks=splittext(script,":")
-			var/desiredType=typeChunks[1]
-			//var/value
-			switch(desiredType)
-				if("string")
-					var/output = typeChunks[2]
-					output = replacetext(output,"{REALNAME}", M.real_name)
-					output = replacetext(output,"{ROLE}",     M.mind.assigned_role)
-					output = replacetext(output,"{ROLE_ALT}", "[M.mind.role_alt_title ? M.mind.role_alt_title : M.mind.assigned_role]")
-					I.vars[varname]=output
-				if("number")
-					I.vars[varname]=text2num(typeChunks[2])
-				if("icon")
-					if(typeChunks.len==2)
-						I.vars[varname]=new /icon(typeChunks[2])
-					if(typeChunks.len==3)
-						I.vars[varname]=new /icon(typeChunks[2],typeChunks[3])
+		var/list/typeChunks=splittext(script,":")
+		var/desiredType=typeChunks[1]
+		//var/value
+		switch(desiredType)
+			if("string")
+				var/output = typeChunks[2]
+				output = replacetext(output,"{REALNAME}", M.real_name)
+				output = replacetext(output,"{ROLE}",     M.mind.assigned_role)
+				output = replacetext(output,"{ROLE_ALT}", "[M.mind.role_alt_title ? M.mind.role_alt_title : M.mind.assigned_role]")
+				I.vars[varname]=output
+			if("number")
+				I.vars[varname]=text2num(typeChunks[2])
+			if("icon")
+				if(typeChunks.len==2)
+					I.vars[varname]=new /icon(typeChunks[2])
+				if(typeChunks.len==3)
+					I.vars[varname]=new /icon(typeChunks[2],typeChunks[3])
