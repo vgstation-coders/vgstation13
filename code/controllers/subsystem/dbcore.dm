@@ -81,7 +81,7 @@ var/datum/subsystem/dbcore/SSdbcore
 	world.BSQL_Shutdown()
 
 /datum/subsystem/dbcore/proc/Connect()
-	if(IsConnected())
+	if(initialized && IsConnected())
 		return TRUE
 
 	if(failed_connection_timeout <= world.time) //it's been more than 5 seconds since we failed to connect, reset the counter
@@ -202,8 +202,6 @@ var/datum/subsystem/dbcore/SSdbcore
 
 /datum/subsystem/dbcore/proc/IsConnected()
 	if(!config.sql_enabled)
-		return FALSE
-	if (!initialized)
 		return FALSE
 	//block until any connect operations finish
 	var/datum/BSQL_Connection/_connection = connection
