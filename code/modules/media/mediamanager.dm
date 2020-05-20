@@ -190,7 +190,7 @@ function SetMusic(url, time, volume) {
 	var/window_playing
 	if(owner.prefs.usewmp)
 		stop_music()
-		MP_DEBUG("<span class='good'>WMP user, no switching.<span>")
+		MP_DEBUG("<span class='good'>WMP user, no switching, going to even window.<span>")
 		currently_broadcasting = JUKEBOX_EVEN_PLAYER
 		window_playing = window_even
 		url_even = target_url
@@ -213,7 +213,7 @@ function SetMusic(url, time, volume) {
 
 /datum/media_manager/proc/push_music(var/targetURL,var/targetStartTime,var/targetVolume)
 	var/current_url
-	if (user.prefs.usewmp)
+	if (owner && owner.prefs.usewmp)
 		current_url = url_even
 	else
 		switch (currently_broadcasting)
@@ -247,7 +247,7 @@ function SetMusic(url, time, volume) {
 	var/obj/machinery/media/M = A.media_source // TODO: turn into a list, then only play the first one that's playing.
 
 	var/current_url
-	if (user.prefs.usewmp)
+	if (owner.prefs.usewmp) // WMP only uses the even broadcaster
 		current_url = url_even
 	else
 		switch (currently_broadcasting)
