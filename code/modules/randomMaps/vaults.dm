@@ -101,7 +101,7 @@
 	return result
 
 /proc/stay_on_map(var/datum/map_element/E, var/turf/start_turf)
-	return start_turf && (start_turf.z < map.zDeepSpace)
+	return start_turf && (start_turf.z <= map.zDeepSpace)
 
 //Proc that populates a single area with many vaults, randomly
 //A is the area OR a list of turfs where the placement happens
