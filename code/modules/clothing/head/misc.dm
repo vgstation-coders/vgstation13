@@ -14,12 +14,14 @@
 	desc = "Smells nice."
 	item_state = "hairflower"
 	flags = FPRINT
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/powdered_wig
 	name = "powdered wig"
 	desc = "A powdered wig."
 	icon_state = "pwig"
 	item_state = "pwig"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/that
 	name = "top hat"
@@ -30,6 +32,7 @@
 	siemens_coefficient = 0.9
 	wizard_garb = 5 //Treat this as a % chance to be a magic hat to start. It becomes TRUE/FALSE later.
 	var/timer
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/that/New()
 	..()
@@ -78,6 +81,7 @@
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
 	sterility = 100
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/hasturhood
 	name = "hastur's hood"
@@ -98,6 +102,7 @@
 	icon_state = "nursehat"
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/syndicatefake
 	name = "red space-helmet replica"
@@ -183,6 +188,7 @@
 	desc = "Wearing these makes you looks useless, and only good for your sex appeal."
 	icon_state = "bunny"
 	flags = FPRINT
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/flatcap
 	name = "flat cap"
@@ -196,6 +202,7 @@
 	desc = "Yarr."
 	icon_state = "pirate"
 	item_state = "pirate"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/hgpiratecap
 	name = "pirate hat"
@@ -209,6 +216,7 @@
 	desc = "Yarr."
 	icon_state = "bandana"
 	item_state = "bandana"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/sith
 	name = "Sith Cowl"
@@ -225,7 +233,7 @@
 	item_state = "bowler_hat"
 	desc = "For that industrial age look."
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/head/beaverhat
 	name = "beaver hat"
@@ -233,6 +241,7 @@
 	item_state = "beaver_hat"
 	desc = "Like a top hat, but made of beavers."
 	flags = FPRINT
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/boaterhat
 	name = "boater hat"
@@ -240,7 +249,7 @@
 	item_state = "boater_hat"
 	desc = "Goes well with celery."
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/head/squatter_hat
 	name = "slav squatter hat"
@@ -297,7 +306,7 @@
 	item_state = "fez"
 	desc = "Put it on your monkey, make lots of cash money."
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED, AVALI_SHAPED)
 
 //end bs12 hats
 
@@ -324,6 +333,7 @@
 	item_state = "bearpelt"
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/bearpelt/real
 	name = "bear pelt hat"
@@ -375,6 +385,7 @@
 	icon_state = "officercap"
 	item_state = "officercap"
 	flags = FPRINT
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/russobluecamohat
 	name = "russian blue camo beret"

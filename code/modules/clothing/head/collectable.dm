@@ -10,6 +10,7 @@
 	name = "ultra rare Pete's hat!"
 	desc = "It smells faintly of plasma."
 	icon_state = "petehat"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/collectable/slime
 	name = "collectable slime cap!"
@@ -38,35 +39,40 @@
 	desc = "A top hat worn by only the most prestigious hat collectors."
 	icon_state = "tophat"
 	item_state = "that"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/collectable/captain
 	name = "collectable captain's hat"
 	desc = "A Collectable Hat that'll make you look just like a real comdom!"
 	icon_state = "captain"
 	item_state = "caphat"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/collectable/police
 	name = "collectable police officer's hat"
 	desc = "A Collectable Police Officer's Hat. This hat emphasizes that you are THE LAW."
 	icon_state = "policehelm"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/collectable/beret
 	name = "collectable beret"
 	desc = "A Collectable red Beret. It smells faintly of Garlic."
 	icon_state = "beret"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/collectable/welding
 	name = "collectable welding helmet"
 	desc = "A Collectable Welding Helmet. Now with 80% less lead! Not for actual welding. Any welding done while wearing this Helmet is done so at the owner's own risk!"
 	icon_state = "welding"
 	item_state = "welding"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/head/collectable/slime
 	name = "collectable slime hat"
 	desc = "Just like a real Brain Slug!"
 	icon_state = "headslime"
 	item_state = "headslime"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/collectable/flatcap
 	name = "collectable flat cap"
@@ -91,17 +97,20 @@
 	desc = "Not as lucky as the feet!"
 	icon_state = "bunny"
 	item_state = "bunny"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/collectable/wizard
 	name = "collectable wizard's hat"
 	desc = "NOTE:Any magical powers gained from wearing this hat are purely coincidental."
 	icon_state = "wizard"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/collectable/hardhat
 	name = "collectable hard hat"
 	desc = "WARNING! Offers no real protection, or luminosity, but it is damn fancy!"
 	icon_state = "hardhat0_yellow"
 	item_state = "hardhat0_yellow"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/collectable/HoS
 	name = "collectable HoS hat"

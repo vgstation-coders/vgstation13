@@ -9,6 +9,7 @@
 	attack_verb = list("whips", "lashes", "disciplines")
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/storage/belt/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)

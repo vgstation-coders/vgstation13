@@ -27,7 +27,7 @@
 	icon_state = "black"
 	item_state = "black"
 	siemens_coefficient = 1.0
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/gloves/swat
 	desc = "These tactical gloves are somewhat fire and impact-resistant."
@@ -38,7 +38,7 @@
 	permeability_coefficient = 0.05
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/gloves/combat //Combined effect of SWAT gloves and insulated gloves
 	desc = "These tactical gloves are somewhat fire and impact resistant."
@@ -49,7 +49,7 @@
 	permeability_coefficient = 0.05
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/gloves/latex
 	name = "latex gloves"
@@ -59,7 +59,7 @@
 	siemens_coefficient = 0.30
 	permeability_coefficient = 0.01
 	_color = "medical"				//matches cmo stamp
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, AVALI_SHAPED)
 	sterility = 100
 
 /obj/item/clothing/gloves/botanic_leather
@@ -69,7 +69,7 @@
 	item_state = "leather"
 	permeability_coefficient = 0.9
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/gloves/batmangloves
 	desc = "Used for handling all things bat related."

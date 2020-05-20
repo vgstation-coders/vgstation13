@@ -320,6 +320,7 @@
 	icon_state = "earmuffs"
 	item_state = "earmuffs"
 	slot_flags = SLOT_EARS
+	species_fit = list(AVALI_SHAPED)
 
 //Gloves
 /obj/item/clothing/gloves
@@ -548,7 +549,7 @@
 	eyeprot = 1
 	cold_breath_protection = 230
 	sterility = 100
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
@@ -570,7 +571,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	clothing_flags = CANEXTINGUISH
 	sterility = 100
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, AVALI_SHAPED)
 
 //Under clothing
 /obj/item/clothing/under

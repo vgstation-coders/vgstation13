@@ -4,7 +4,7 @@
 	icon_state = "wizard"
 	//Not given any special protective value since the magic robes are full-body protection --NEO
 	siemens_coefficient = 0.8
-
+	species_fit = list(AVALI_SHAPED)
 	wizard_garb = 1
 
 /obj/item/clothing/head/wizard/red
@@ -23,6 +23,7 @@
 	desc = "Strange-looking hat-wear, makes you want to cast fireballs."
 	icon_state = "marisa"
 	siemens_coefficient = 0.8
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/wizard/magus
 	name = "Magus Helm"
@@ -51,6 +52,7 @@
 	desc = "A crown-of-thorns psychic amplifier. Kind of looks like a tiara having sex with an industrial robot."
 	icon_state = "amp"
 	siemens_coefficient = 0.8
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/wizard/necro
 	name = "Hood of Necromancy"
@@ -118,7 +120,7 @@
 	allowed = list(/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
 	siemens_coefficient = 0.8
 	clothing_flags = ONESIZEFITSALL
-
+	species_fit = list(AVALI_SHAPED)
 	wizard_garb = 1
 
 /obj/item/clothing/suit/wizrobe/red

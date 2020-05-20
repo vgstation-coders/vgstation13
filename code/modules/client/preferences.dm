@@ -132,6 +132,9 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/g_facial = 0					//Face hair color
 	var/b_facial = 0					//Face hair color
 	var/s_tone = 0						//Skin color
+	var/s_tone_r = 0					//Skin color, for multicolor species
+	var/s_tone_g = 0
+	var/s_tone_b = 0
 	var/r_eyes = 0						//Eye color
 	var/g_eyes = 0						//Eye color
 	var/b_eyes = 0						//Eye color
@@ -1202,7 +1205,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						metadata = sanitize(copytext(new_metadata,1,MAX_MESSAGE_LEN))
 
 				if("hair")
-					if(species == "Human" || species == "Unathi" || species == "Diona")
+					if(species == "Human" || species == "Unathi" || species == "Diona" || species == "Avali")
 						var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 						if(new_hair)
 							r_hair = hex2num(copytext(new_hair, 2, 4))
@@ -1262,6 +1265,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						if(skin_c)
 							s_tone = clamp(skin_c,1,4)
 							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
+					else if(species == "Avali")
+						var/new_skintone = input(user, "Choose your character's feather colour:", "Character Preference", rgb(s_tone_r, s_tone_g, s_tone_b)) as color|null
+						if(new_skintone)
+							s_tone_r = hex2num(copytext(new_skintone, 2, 4))
+							s_tone_g = hex2num(copytext(new_skintone, 4, 6))
+							s_tone_b = hex2num(copytext(new_skintone, 6, 8))
+							to_chat(user,"")
 					else
 						to_chat(user,"Your species doesn't have different skin tones. Yet?")
 						return

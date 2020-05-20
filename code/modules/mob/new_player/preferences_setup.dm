@@ -235,6 +235,9 @@
 	var/icon/eyes_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = current_species ? current_species.eyes : "eyes_s")
 	eyes_s.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
 
+	if(current_species && (current_species.anatomy_flags & MULTICOLOR))
+		preview_icon.Blend(rgb(s_tone_r, s_tone_g, s_tone_b), ICON_ADD)
+
 	var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
 	if(hair_style)
 		var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")

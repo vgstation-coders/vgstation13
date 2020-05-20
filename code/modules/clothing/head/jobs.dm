@@ -16,7 +16,7 @@
 	desc = "The commander in chef's head wear."
 	flags = FPRINT
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 //Captain: This probably shouldn't be space-worthy
 /obj/item/clothing/head/caphat
@@ -27,7 +27,7 @@
 	item_state = "caphat"
 	siemens_coefficient = 0.9
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, AVALI_SHAPED)
 
 //Captain: This probably shouldn't be space-worthy
 /obj/item/clothing/head/helmet/cap
@@ -38,7 +38,7 @@
 	body_parts_covered = HEAD
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 //Chaplain
 /obj/item/clothing/head/chaplain_hood
@@ -47,6 +47,7 @@
 	icon_state = "chaplain_hood"
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 0.9
+	species_fit = list(AVALI_SHAPED)
 
 //Chaplain
 /obj/item/clothing/head/nun_hood
@@ -55,6 +56,7 @@
 	icon_state = "nun_hood"
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 0.9
+	species_fit = list(AVALI_SHAPED)
 
 //Mime
 /obj/item/clothing/head/beret
@@ -63,7 +65,7 @@
 	icon_state = "beret"
 	flags = FPRINT
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/head/beret/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -78,7 +80,7 @@
 	desc = "A beret with the security insignia emblazoned on it. For officers that are more inclined towards style than safety."
 	icon_state = "beret_badge"
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 //Medical
 /obj/item/clothing/head/surgery
@@ -86,6 +88,7 @@
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs."
 	icon_state = "surgcap_blue"
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/surgery/purple
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs. This one is deep purple."

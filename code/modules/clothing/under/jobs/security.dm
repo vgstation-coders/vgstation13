@@ -17,7 +17,7 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/rank/security
 	name = "security officer's jumpsuit"
@@ -28,7 +28,7 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/rank/security/sneaksuit
 	name = "sneaking suit"
@@ -72,7 +72,7 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/det/noir
 	desc = "This suit's stayed with you for years, like an old friend. Sure, it's seen better days, but it ain't shabby; after all, you can afford a blemish on your character, but not on your clothes."
@@ -88,7 +88,7 @@
 	allowed = list(/obj/item/weapon/reagent_containers/food/snacks/candy_corn, /obj/item/weapon/pen)
 	armor = list(melee = 50, bullet = 5, laser = 25,energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/head/det_hat/noir
 	desc = "This hat's been with you for some time now. It was a gift from your ex, and you wore it during the war. Thinking back on it, the war was prettier."
@@ -106,7 +106,7 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.8
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/suit/armor/hos
 	name = "armored coat"
@@ -116,7 +116,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	armor = list(melee = 65, bullet = 30, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	siemens_coefficient = 0.6
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, AVALI_SHAPED)
 
 //Jensen cosplay gear
 /obj/item/clothing/under/rank/head_of_security/jensen

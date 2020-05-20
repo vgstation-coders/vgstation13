@@ -15,6 +15,7 @@
 	desc = "A tank of oxygen."
 	icon_state = "oxygen"
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/tank/oxygen/New()
 	. = ..()
@@ -31,7 +32,7 @@
 /obj/item/weapon/tank/oxygen/red
 	desc = "A tank of oxygen, this one is red."
 	icon_state = "oxygen_fr"
-
+	species_fit = list(AVALI_SHAPED)
 
 /*
  * Anesthetic
@@ -41,6 +42,7 @@
 	desc = "A tank with an N2O/O2 gas mix."
 	icon_state = "anesthetic"
 	item_state = "an_tank"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/tank/anesthetic/New()
 	. = ..()
@@ -55,6 +57,7 @@
 	name = "air tank"
 	desc = "Mixed anyone?"
 	icon_state = "oxygen"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/tank/air/New()
 	. = ..()
@@ -153,6 +156,7 @@
 	desc = "A tank of nitrogen."
 	icon_state = "oxygen_fr"
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/tank/nitrogen/New()
 	. = ..()

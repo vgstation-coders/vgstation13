@@ -12,3 +12,4 @@
 	icon_state = "mantle-unathi"
 	item_state = "mantle-unathi"
 	body_parts_covered = UPPER_TORSO//Unathi clothing.
+	species_fit = list(AVALI_SHAPED)

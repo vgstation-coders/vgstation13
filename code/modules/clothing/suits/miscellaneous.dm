@@ -435,7 +435,7 @@ obj/item/clothing/suit/cassock
 	item_state = "straight_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/suit/ianshirt
 	name = "worn shirt"

@@ -10,7 +10,7 @@
 	actions_types = list(/datum/action/item_action/change_appearance_shoes)
 	siemens_coefficient = 0.8
 	permeability_coefficient = 0.90
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, UNDEAD_SHAPED, MUSHROOM_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, UNDEAD_SHAPED, MUSHROOM_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 // desc replacement block
 /obj/item/clothing/shoes/syndigaloshes/examine(mob/user)
@@ -80,6 +80,7 @@
 	name = "mime shoes"
 	icon_state = "mime"
 	_color = "mime"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/shoes/mime/biker
 	name = "Biker's shoes"
@@ -90,7 +91,7 @@
 	icon_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	clothing_flags = NOSLIP
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 	siemens_coefficient = 0.6
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
@@ -101,7 +102,7 @@
 	icon_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	clothing_flags = NOSLIP
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, AVALI_SHAPED)
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
@@ -111,23 +112,25 @@
 	desc = "A pair of rather plain, wooden sandals."
 	name = "sandals"
 	icon_state = "wizard"
-
+	species_fit = list(AVALI_SHAPED)
 	wizard_garb = 1
 
 /obj/item/clothing/shoes/sandal/slippers
 	name = "magic slippers"
 	icon_state = "slippers"
 	desc = "For the wizard that puts comfort first. Who's going to laugh?"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/shoes/sandal/marisa
 	desc = "A pair of magic, black shoes."
 	name = "magic shoes"
 	icon_state = "black"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/shoes/sandal/marisa/leather
 	icon_state = "laceups"
 	item_state = "laceups"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/shoes/galoshes
 	name = "galoshes"
@@ -136,7 +139,7 @@
 	permeability_coefficient = 0.05
 	clothing_flags = NOSLIP
 	slowdown = MISC_SHOE_SLOWDOWN
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	sterility = 100
 
@@ -153,7 +156,7 @@
 	icon_state = "clown"
 	item_state = "clown_shoes"
 	_color = "clown"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, AVALI_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 
 	step_sound = "clownstep"
@@ -312,7 +315,7 @@
 	item_state = "jackboots"
 	_color = "hosred"
 	siemens_coefficient = 0.7
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
@@ -347,7 +350,7 @@ obj/item/clothing/shoes/jackboots/cowboy
 	siemens_coefficient = 0.7
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/shoes/cult_legacy/cultify()
 	return
@@ -356,12 +359,14 @@ obj/item/clothing/shoes/jackboots/cowboy
 	name = "cyborg boots"
 	desc = "Shoes for a cyborg costume."
 	icon_state = "boots"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/shoes/slippers
 	name = "bunny slippers"
 	desc = "Fluffy!"
 	icon_state = "slippers"
 	item_state = "slippers"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/shoes/slippers_worn
 	name = "worn bunny slippers"
@@ -373,7 +378,7 @@ obj/item/clothing/shoes/jackboots/cowboy
 	name = "laceup shoes"
 	desc = "The height of fashion, and they're pre-polished!"
 	icon_state = "laceups"
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/shoes/purplepumps
 	name = "purple pumps"
@@ -455,7 +460,7 @@ obj/item/clothing/shoes/jackboots/cowboy
 	desc = "Thick-soled boots for industrial work environments."
 	icon_state = "workboots"
 	item_state = "workboots"
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
 
 /obj/item/clothing/shoes/rottenshoes
@@ -491,7 +496,7 @@ obj/item/clothing/shoes/jackboots/cowboy
 	desc = "The height of fashion, and they're pre-polished!"
 	icon_state = "laceups"
 	item_state = "laceups"
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 	actions_types = list(/datum/action/item_action/generic_toggle)
 	var/toggle = FALSE
 

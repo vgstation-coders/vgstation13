@@ -28,7 +28,7 @@
 	body_parts_covered = HEAD
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -71,6 +71,7 @@
 	var/status = 0
 	var/fire_resist = T0C+1300	//this is the max temp it can stand before you start to cook. although it might not burn away, you take damage
 	var/processing = 0 //I dont think this is used anywhere.
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/cakehat/process()
 	if(!onfire)

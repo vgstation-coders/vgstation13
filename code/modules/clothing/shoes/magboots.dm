@@ -5,7 +5,7 @@
 	var/base_state = "magboots"
 //	clothing_flags = NOSLIP //disabled by default
 	actions_types = list(/datum/action/item_action/toggle_magboots)
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
 	w_class = W_CLASS_LARGE
 

@@ -12,6 +12,7 @@
 	var/stabilization_on = 0
 	var/volume_rate = 500              //Needed for borg jetpack transfer
 	actions_types = list(/datum/action/item_action/set_internals, /datum/action/item_action/jetpack_stabilization,/datum/action/item_action/toggle_jetpack)
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/tank/jetpack/proc/toggle_rockets()
 	src.stabilization_on = !( src.stabilization_on )
@@ -118,6 +119,7 @@
 	distribute_pressure = 0
 	icon_state = "jetpack-black"
 	item_state =  "jetpack-black"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/tank/jetpack/carbondioxide/New()
 	. = ..()

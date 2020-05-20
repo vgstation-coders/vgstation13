@@ -27,6 +27,7 @@
 	icon_state = "scratch"
 	item_state = "scratch"
 	_color = "scratch"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/under/sl_suit
 	desc = "It's a very amish looking suit."
@@ -164,7 +165,7 @@
 	icon_state = "green_suit"
 	item_state = "dg_suit"
 	_color = "green_suit"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/gimmick/rank/head_of_personnel/suit
 	name = "head of personnel's suit"
@@ -172,7 +173,7 @@
 	icon_state = "teal_suit"
 	item_state = "g_suit"
 	_color = "teal_suit"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/suit_jacket
 	name = "black suit"
@@ -181,7 +182,7 @@
 	item_state = "bl_suit"
 	_color = "black_suit"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/suit_jacket/really_black
 	name = "executive suit"
@@ -189,7 +190,7 @@
 	icon_state = "really_black_suit"
 	item_state = "bl_suit"
 	_color = "black_suit"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/suit_jacket/female
 	name = "executive suit"
@@ -197,7 +198,7 @@
 	icon_state = "black_suit_fem"
 	item_state = "black_suit_fem"
 	_color = "black_suit_fem"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/suit_jacket/red
 	name = "red suit"
@@ -231,7 +232,7 @@
 	item_state = "lb_suit"
 	_color = "overalls"
 	gender = PLURAL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/pirate
 	name = "pirate outfit"
@@ -261,7 +262,7 @@
 	icon_state = "kilt"
 	item_state = "kilt"
 	_color = "kilt"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/sexymime
 	name = "sexy mime outfit"
@@ -288,24 +289,28 @@
 	desc = "A small black dress with blue flames print on it."
 	icon_state = "dress_fire"
 	_color = "dress_fire"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/under/dress/dress_green
 	name = "green dress"
 	desc = "A simple, tight fitting green dress."
 	icon_state = "dress_green"
 	_color = "dress_green"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/under/dress/dress_orange
 	name = "orange dress"
 	desc = "A fancy orange gown for those who like to show leg."
 	icon_state = "dress_orange"
 	_color = "dress_orange"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/under/dress/dress_pink
 	name = "pink dress"
 	desc = "A simple, tight fitting pink dress."
 	icon_state = "dress_pink"
 	_color = "dress_pink"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/under/dress/dress_yellow
 	name = "yellow dress"
@@ -345,27 +350,28 @@
 	desc = "Superior class for the nosy H.R. Director."
 	icon_state = "huresource"
 	_color = "huresource"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/under/dress/plaid_blue
 	name = "blue plaid skirt"
 	desc = "A preppy blue skirt with a white blouse."
 	icon_state = "plaid_blue"
 	_color = "plaid_blue"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/dress/plaid_red
 	name = "red plaid skirt"
 	desc = "A preppy red skirt with a white blouse."
 	icon_state = "plaid_red"
 	_color = "plaid_red"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/under/dress/plaid_purple
 	name = "blue purple skirt"
 	desc = "A preppy purple skirt with a white blouse."
 	icon_state = "plaid_purple"
 	_color = "plaid_purple"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, AVALI_SHAPED)
 
 //wedding stuff
 
@@ -409,6 +415,7 @@
 	item_state = "sundress"
 	_color = "sundress"
 	body_parts_covered = FULL_TORSO
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/under/roman
 	name = "roman armor"
@@ -545,6 +552,7 @@
 	icon_state = "maid"
 	item_state = "maid"
 	_color = "maid"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/under/darkholme
 	name = "\improper Darkholme"

@@ -28,7 +28,7 @@
 	desc = "An armored vest that protects against some damage."
 	icon_state = "armor"
 	item_state = "armor"
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
@@ -196,7 +196,7 @@
 	desc = "A vest that excels in protecting the wearer against high-velocity solid projectiles."
 	icon_state = "bulletproof"
 	item_state = "armor"
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 80, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
@@ -248,7 +248,7 @@
 	desc = "An armored vest with a detective's badge on it."
 	icon_state = "detective-armor"
 	item_state = "armor"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, AVALI_SHAPED)
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)

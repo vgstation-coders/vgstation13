@@ -17,6 +17,10 @@ var/list/adjectives = file2list("config/names/adjectives.txt")
 
 var/list/vox_name_syllables = list("cha","chi","ha","hi","ka","kah","ki","ta","ti","ya","ya","yi")
 var/list/insectoid_name_syllables = list("biz","cree","chak", "chiz","drik","kaa","kek","khat","kit","ree","tak","tik","than","uz","xizz","xurr","zam","zax","zez","zin")
+var/list/avali_name_syllables = list(
+			"ca", "ra", "ma", "sa", "na", "ta", "la", "sha", "scha", "a", "a",
+			"ce", "re", "me", "se", "ne", "te", "le", "she", "sche", "e", "e",
+			"ci", "ri", "mi", "si", "ni", "ti", "li", "shi", "schi", "i", "i")
 var/list/golem_names = file2list("config/names/golem.txt")
 var/list/borer_names = file2list("config/names/borer.txt")
 var/list/hologram_names = file2list("config/names/hologram.txt")

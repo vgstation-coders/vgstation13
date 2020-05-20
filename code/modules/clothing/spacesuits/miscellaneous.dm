@@ -111,12 +111,12 @@
 	name = "Prisoner Helmet"
 	icon_state = "syndicate-helm-orange"
 	item_state = "syndicate-helm-orange"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, AVALI_SHAPED)
 	desc = "A Orange Space Helmet meant to provide minimal space protection."
 
 /obj/item/clothing/suit/space/prison
 	name = "Prisoner Space Suit"
 	icon_state = "syndicate-orange"
 	item_state = "syndicate-orange"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, AVALI_SHAPED)
 	desc = "A Orange Space Suit meant to provide minimal space protection."

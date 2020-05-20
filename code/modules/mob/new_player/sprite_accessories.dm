@@ -1093,6 +1093,60 @@
 	species_allowed = list(VOX_SHAPED)
 	do_colouration = 0
 
+/datum/sprite_accessory/hair/avali/ears
+	name = "Avali Ears"
+	icon_state = "avali_ears"
+	species_allowed = list(AVALI_SHAPED)
+
+/datum/sprite_accessory/hair/avali/excited
+	name = "Avali Spiky"
+	icon_state = "avali_spiky"
+	species_allowed = list(AVALI_SHAPED)
+
+/datum/sprite_accessory/hair/avali/hedgehog
+	name = "Avali Hedgehog"
+	icon_state = "avali_hedge"
+	species_allowed = list(AVALI_SHAPED)
+
+/datum/sprite_accessory/hair/avali/long
+	name = "Avali Unpruned"
+	icon_state = "avali_long"
+	species_allowed = list(AVALI_SHAPED)
+
+/datum/sprite_accessory/hair/avali/sunburst
+	name = "Avali Sunburst"
+	icon_state = "avali_burst_short"
+	species_allowed = list(AVALI_SHAPED)
+
+/datum/sprite_accessory/hair/avali/mohawk
+	name = "Avali Mohawk"
+	icon_state = "avali_mohawk"
+	species_allowed = list(AVALI_SHAPED)
+
+/datum/sprite_accessory/hair/avali/pointy
+	name = "Avali Pointy"
+	icon_state = "avali_pointy"
+	species_allowed = list(AVALI_SHAPED)
+
+/datum/sprite_accessory/hair/avali/upright
+	name = "Avali Upright"
+	icon_state = "avali_upright"
+	species_allowed = list(AVALI_SHAPED)
+
+/datum/sprite_accessory/hair/avali/mane
+	name = "Avali Mane"
+	icon_state = "avali_mane"
+	species_allowed = list(AVALI_SHAPED)
+
+/datum/sprite_accessory/hair/avali/droopy
+	name = "Avali Droopy"
+	icon_state = "avali_droopy"
+	species_allowed = list(AVALI_SHAPED)
+
+/datum/sprite_accessory/hair/avali/mushroom
+	name = "Avali Mushroom"
+	icon_state = "avali_mushroom"
+	species_allowed = list(AVALI_SHAPED)
 
 //skin styles - WIP
 //going to have to re-integrate this with surgery

@@ -14,6 +14,7 @@
 	slot_flags = SLOT_BACK	//ERROOOOO
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 21
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/storage/backpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(!stealthy(user))
@@ -61,6 +62,7 @@
 	desc = "It's a backpack especially designed for use in a sterile environment."
 	icon_state = "medicalpack"
 	item_state = "medicalpack"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/storage/backpack/security
 	name = "security backpack"
@@ -73,12 +75,14 @@
 	desc = "It's a special backpack made exclusively for Nanotrasen officers."
 	icon_state = "captainpack"
 	item_state = "captainpack"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/storage/backpack/industrial
 	name = "industrial backpack"
 	desc = "It's a tough backpack for the daily grind of station life."
 	icon_state = "engiepack"
 	item_state = "engiepack"
+	species_fit = list(AVALI_SHAPED)
 
 /*
  * Satchel Types
@@ -104,12 +108,14 @@
 	desc = "A tough satchel with extra pockets."
 	icon_state = "satchel-eng"
 	item_state = "engiepack"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_med
 	name = "medical satchel"
 	desc = "A sterile satchel used in medical departments."
 	icon_state = "satchel-med"
 	item_state = "medicalpack"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_vir
 	name = "virologist satchel"
@@ -136,6 +142,7 @@
 	desc = "A robust satchel for security related needs."
 	icon_state = "satchel-sec"
 	item_state = "securitypack"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_hyd
 	name = "hydroponics satchel"
@@ -147,6 +154,7 @@
 	desc = "An exclusive satchel for Nanotrasen officers."
 	icon_state = "satchel-cap"
 	item_state = "captainpack"
+	species_fit = list(AVALI_SHAPED)
 
 /*
  * Messenger Bags

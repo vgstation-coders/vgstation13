@@ -9,7 +9,7 @@
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 	body_parts_covered = FACE
 	pressure_resistance = ONE_ATMOSPHERE
 	var/canstage = 1
@@ -68,7 +68,7 @@
 	desc = "A close-fitting tactical mask that can be connected to an air supply."
 	icon_state = "swat"
 	siemens_coefficient = 0.7
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, AVALI_SHAPED)
 	can_flip = 0
 	canstage = 0
 

@@ -81,6 +81,7 @@
 	icon_state = "nymph"
 	slot_flags = SLOT_HEAD
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_BIOTECH + "=5"
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/holder/diona/New(loc, mob/M)
 	..()
@@ -116,6 +117,7 @@
 	desc = "This one has icon states!"
 	slot_flags = SLOT_HEAD
 	item_state = "mouse" //Credit to Hubblenaut for sprites! https://github.com/Baystation12/Baystation12/pull/9416
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/weapon/holder/animal/mouse/New(loc, mob/M)
 	..()

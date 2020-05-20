@@ -8,7 +8,7 @@
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/head/helmet/visor
 	name = "visor helmet"
@@ -98,6 +98,7 @@
 	item_state = "thunderdome"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 1
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/helmet/gladiator
 	name = "gladiator helmet"
@@ -138,7 +139,7 @@
 	item_state = "hopcap"
 	icon_state = "hopcap"
 	body_parts_covered = HEAD
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED, AVALI_SHAPED)
 
 /obj/item/clothing/head/helmet/aviatorhelmet
 	name = "Aviator Helmet"
@@ -167,6 +168,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	icon_state = "richard"
 	body_parts_covered = FULL_HEAD|BEARD
+	species_fit = list(AVALI_SHAPED)
 
 /obj/item/clothing/head/helmet/megahelmet
 	name = "DRN-001 Helmet"

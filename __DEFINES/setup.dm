@@ -1273,6 +1273,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_SKRELLIAN "Skrellian"
 #define LANGUAGE_ROOTSPEAK "Rootspeak"
 #define LANGUAGE_TRADEBAND "Tradeband"
+#define LANGUAGE_AVALI "Schechi"
 #define LANGUAGE_GUTTER "Gutter"
 #define LANGUAGE_GREY "Grey"
 #define LANGUAGE_XENO "Xenomorph"

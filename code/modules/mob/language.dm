@@ -116,6 +116,20 @@
 	syllables = list("ch","ke","chi","tch","sk","skch","ra","kch","esk","kra","sh","tik","ech","ks")
 	space_chance = 40
 
+/datum/language/avali
+	name = LANGUAGE_AVALI
+	desc = "A trilling language spoken by the diminutive Avali."
+	speech_verb = "chirps"
+	ask_verb = "chirrups"
+	exclaim_verb = "trills"
+	colour = "alien"
+	key = ","
+	space_chance = 50
+	syllables = list(
+			"ca", "ra", "ma", "sa", "na", "ta", "la", "sha", "scha", "a", "a",
+			"ce", "re", "me", "se", "ne", "te", "le", "she", "sche", "e", "e",
+			"ci", "ri", "mi", "si", "ni", "ti", "li", "shi", "schi", "i", "i")
+
 /datum/language/diona
 	name = LANGUAGE_ROOTSPEAK
 	desc = "A creaking, subvocal language spoken instinctively by the Dionaea. Due to the unique makeup of the average Diona, a phrase of Rootspeak can be a combination of anywhere from one to twelve individual voices and notes."

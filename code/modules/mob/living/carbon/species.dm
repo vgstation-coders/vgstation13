@@ -1429,3 +1429,50 @@ var/list/has_died_as_golem = list()
 
 	H.drop_all()
 	qdel(src)
+
+/datum/species/avali
+	name = "Avali"
+	icobase = 'icons/mob/human_races/r_avali.dmi'
+	deform = 'icons/mob/human_races/r_avali.dmi'
+	eyes = "avali_eyes_s"
+
+	flags = IS_WHITELISTED
+	anatomy_flags = MULTICOLOR | HAS_TAIL | HAS_SWEAT_GLANDS
+	known_languages = list(LANGUAGE_AVALI)
+	brute_mod = 1.5
+	burn_mod = 1.5
+	blood_color = "#D514F7"
+	tail = "resomitail"
+	species_intro = "You are an Avali. You're some kind of space bird."
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //Caw
+
+	uniform_icons 	= 'icons/mob/species/avali/uniform.dmi'
+//	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
+	gloves_icons    = 'icons/mob/species/avali/hands.dmi'
+	glasses_icons   = 'icons/mob/species/avali/eyes.dmi'
+	ears_icons      = 'icons/mob/species/avali/ears.dmi'
+	shoes_icons 	= 'icons/mob/species/avali/feet.dmi'
+	head_icons      = 'icons/mob/species/avali/head.dmi'
+	belt_icons      = 'icons/mob/species/avali/belt.dmi'
+	wear_suit_icons = 'icons/mob/species/avali/suit.dmi'
+	wear_mask_icons = 'icons/mob/species/avali/mask.dmi'
+	back_icons      = 'icons/mob/species/avali/back.dmi'
+	id_icons		= 'icons/mob/species/avali/ids.dmi'
+
+	cold_level_1 = 180
+	cold_level_2 = 130
+	cold_level_3 = 70
+	heat_level_1 = 320
+	heat_level_2 = 370
+	heat_level_3 = 600
+
+/datum/species/avali/makeName(var/gender,var/mob/living/carbon/human/H=null)
+	var/sounds = rand(2,5)
+	var/newname = ""
+
+	for(var/i = 1 to sounds)
+		newname += pick(avali_name_syllables)
+	return capitalize(newname)
+
+/datum/species/avali/gib(mob/living/carbon/human/H)
+	H.default_gib()
