@@ -78,9 +78,12 @@
 	if(!_query.Execute())
 		message_admins("Error: [_query.ErrorMsg()]")
 		log_sql("Error: [_query.ErrorMsg()]")
+		qdel(_query)
 		return
 	while(_query.NextRow())
-		return text2num(_query.item[1])
+		. = text2num(_query.item[1])
+		qdel(_query)
+	qdel(_query)
 	return 0
 
 /obj/machinery/computer/library/proc/get_pagelist()
