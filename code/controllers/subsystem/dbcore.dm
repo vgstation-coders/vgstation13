@@ -110,6 +110,7 @@ var/datum/subsystem/dbcore/SSdbcore
 	else
 		SSdbcore.last_error = null
 		connectOperation = connection.BeginConnect(address, port, user, pass, db)
+		initialized = TRUE
 		if(SSdbcore.last_error)
 			CRASH(SSdbcore.last_error)
 		UNTIL(connectOperation.IsComplete())
