@@ -139,7 +139,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 			return
 
 		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin")
-		if(!query.Execute())
+		if(!query.Execute(FALSE))
 			message_admins("Error: [query.ErrorMsg()]")
 			log_sql("Error: [query.ErrorMsg()]")
 			qdel(query)
@@ -178,7 +178,6 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 		msg += "\t[ckey] - [rank]\n"
 	//testing(msg)
 	#endif
-
 
 #ifdef TESTING
 /client/verb/changerank(newrank in admin_ranks)
