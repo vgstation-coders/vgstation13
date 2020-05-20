@@ -111,7 +111,7 @@ var/datum/subsystem/dbcore/SSdbcore
 		SSdbcore.last_error = null
 		connectOperation = connection.BeginConnect(address, port, user, pass, db)
 		// This is a bit of a hack. It sets initialized to be true BEFORE 'UNTIL', which sleeps. All the code done before is done synchronously.
-		// This ensures that the server establish a connection and a connection operation before any call to IsBanned(), for instance is made.
+		// This ensures that the server establishes a connection and a connection operation before any call to IsBanned(), for instance is made.
 		// Now IsBanned() calls will patiently wait on a DB connection to exist to be resolved, preventing queries to be queued up before an actual connection is made.
 		initialized = TRUE
 		if(SSdbcore.last_error)
