@@ -187,7 +187,7 @@
 		var/count_pings = 0
 		var/list/priority_jobs = job_master.GetPrioritizedJobs()
 		if (priority_jobs.len)
-			to_chat(src, "<span class='warning'Slots for priority roles are already opened.</span>")
+			to_chat(src, "<span class='warning'>Slots for priority roles are already opened.</span>")
 			return
 		to_chat(src, "<span class='bnotice'>You have requested for heads of staff to open priority roles. Please stand by.</span>")
 		for(var/obj/item/device/pda/pingme in PDAs)
