@@ -73,7 +73,7 @@ var/savefile/panicfile
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
 	load_configuration()
-	SSdbcore.Initialize() // Get a database running, first thing
+	SSdbcore.Initialize(world.time) // Get a database running, first thing
 
 	load_mode()
 	load_motd()
