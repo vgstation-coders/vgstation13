@@ -3763,6 +3763,7 @@
 	M.drowsyness = 0
 	M.stuttering = 0
 	M.confused = 0
+	holder.convert_some_of_type(/datum/reagent/ethanol, /datum/reagent/water, 2 * REM) //booze-b-gone
 
 //Otherwise known as a "Mickey Finn"
 /datum/reagent/chloralhydrate

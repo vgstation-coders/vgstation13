@@ -2453,6 +2453,7 @@
 #include "code\modules\spells\targeted\retard.dm"
 #include "code\modules\spells\targeted\shoesnatch.dm"
 #include "code\modules\spells\targeted\targeted.dm"
+#include "code\modules\spells\targeted\watertowine.dm"
 #include "code\modules\spells\targeted\wrap.dm"
 #include "code\modules\spells\targeted\equip\cape.dm"
 #include "code\modules\spells\targeted\equip\clowncurse.dm"
