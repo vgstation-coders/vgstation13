@@ -104,7 +104,7 @@
 	knifetype = "wiz"
 
 /obj/item/weapon/butterflyknife/viscerator/bunny
-	name = "Mechanical toybox"
+	name = "mechanical toybox"
 	desc = "A small box that rapidly assembles shaudy, barely working wind-up toys."
 	icon = 'icons/obj/butterfly.dmi'
 	icon_state = "Bflyknife_toy"
@@ -114,7 +114,7 @@
 	w_class = W_CLASS_SMALL
 	force = 1
 	throwforce = 1
-	origin_tech = Tc_MATERIALS + "=3;" + Tc_ANOMALY + "=3"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_ANOMALY + "=2"
 	attack_verb = list("bops", "smacks", "whacks")
 	mech_flags = null //I see no reason not to allow the station to be filled with 200 of these little guys
 	knifetype = "toy"
