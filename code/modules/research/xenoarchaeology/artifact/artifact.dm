@@ -73,7 +73,7 @@
 	if (istype(W, /obj/item/device/measuring_tape))
 		var/obj/item/device/measuring_tape/P = W
 		user.visible_message("<span class='notice>[user] extends [P] towards [src].","<span class='notice'>You extend [P] towards [src].</span></span>")
-		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*src.excavation_level]cm.</span>")
+		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [src.excavation_level]cm.</span>")
 		return
 
 	if (istype(W, /obj/item/weapon/pickaxe))
@@ -86,7 +86,7 @@
 
 		busy = 1
 
-		if(do_after(user,src, P.digspeed))
+		if(do_after(user,src, (MINE_DURATION * P.toolspeed)))
 
 			busy = 0
 

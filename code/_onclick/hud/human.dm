@@ -326,53 +326,17 @@
 	mymob.bite_icon.alpha = ui_alpha
 	src.hotkeybuttons += mymob.bite_icon
 
-	mymob.oxygen = getFromPool(/obj/abstract/screen)
-	mymob.oxygen.icon = ui_style
-	mymob.oxygen.icon_state = "oxy0"
-	mymob.oxygen.name = "oxygen"
-	mymob.oxygen.screen_loc = ui_oxygen
-
-	mymob.pressure = getFromPool(/obj/abstract/screen)
-	mymob.pressure.icon = ui_style
-	mymob.pressure.icon_state = "pressure0"
-	mymob.pressure.name = "pressure"
-	mymob.pressure.screen_loc = ui_pressure
-
-	mymob.toxin = getFromPool(/obj/abstract/screen)
-	mymob.toxin.icon = ui_style
-	mymob.toxin.icon_state = "tox0"
-	mymob.toxin.name = "toxin"
-	mymob.toxin.screen_loc = ui_toxin
-
 	mymob.internals = getFromPool(/obj/abstract/screen)
 	mymob.internals.icon = ui_style
 	mymob.internals.icon_state = "internal0"
 	mymob.internals.name = "internal"
 	mymob.internals.screen_loc = ui_internal
 
-	mymob.fire = getFromPool(/obj/abstract/screen)
-	mymob.fire.icon = ui_style
-	mymob.fire.icon_state = "fire0"
-	mymob.fire.name = "fire"
-	mymob.fire.screen_loc = ui_fire
-
-	mymob.bodytemp = getFromPool(/obj/abstract/screen)
-	mymob.bodytemp.icon = ui_style
-	mymob.bodytemp.icon_state = "temp1"
-	mymob.bodytemp.name = "body temperature"
-	mymob.bodytemp.screen_loc = ui_temp
-
 	mymob.healths = getFromPool(/obj/abstract/screen)
 	mymob.healths.icon = ui_style
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
-
-	mymob.nutrition_icon = getFromPool(/obj/abstract/screen)
-	mymob.nutrition_icon.icon = ui_style
-	mymob.nutrition_icon.icon_state = "nutrition0"
-	mymob.nutrition_icon.name = "nutrition"
-	mymob.nutrition_icon.screen_loc = ui_nutrition
 
 	mymob.pullin = getFromPool(/obj/abstract/screen)
 	mymob.pullin.icon = ui_style
@@ -412,7 +376,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.kick_icon, mymob.bite_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.nutrition_icon, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
+	mymob.client.screen += list(mymob.throw_icon, mymob.kick_icon, mymob.bite_icon, mymob.zone_sel, mymob.internals, mymob.healths, mymob.pullin, mymob.gun_setting_icon)
 	mymob.client.screen += src.adding + src.hotkeybuttons
 	inventory_shown = 0
 
@@ -430,17 +394,3 @@
 	else
 		client.screen -= hud_used.hotkeybuttons
 		hud_used.hotkey_ui_hidden = 1
-
-//this method handles user getting attacked with an emag - the original logic was in human_defense.dm,
-//but it's better that it belongs to human.dm 
-/mob/living/carbon/human/emag_act(var/mob/attacker, var/datum/organ/external/affecting, var/obj/item/weapon/card/emag)
-	var/hit_area = affecting.display_name
-	if(!(affecting.status & ORGAN_ROBOT))
-		to_chat(attacker, "<span class='warning'>That limb isn't robotic.</span>")
-		return FALSE
-	if(affecting.sabotaged)
-		to_chat(attacker, "<span class='warning'>\The [src]'s [hit_area] is already sabotaged!</span>")
-	else
-		to_chat(attacker, "<span class='warning'>You sneakily slide [emag] into the dataport on \the [src]'s [hit_area] and short out the safeties.</span>")
-		affecting.sabotaged = TRUE
-	return FALSE

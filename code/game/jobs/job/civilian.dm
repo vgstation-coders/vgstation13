@@ -9,7 +9,7 @@
 	supervisors = "the head of personnel"
 	wage_payout = 20
 	selection_color = "#dddddd"
-	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons, access_maint_tunnels)
+	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons)
 	minimal_access = list(access_bar,access_weapons)
 
 	pdaslot=slot_belt
@@ -72,7 +72,7 @@
 	supervisors = "the head of personnel"
 	wage_payout = 20
 	selection_color = "#dddddd"
-	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_maint_tunnels)
+	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue)
 	minimal_access = list(access_kitchen, access_morgue, access_bar)
 	alt_titles = list("Cook")
 
@@ -121,8 +121,8 @@
 	supervisors = "the head of personnel"
 	wage_payout = 20
 	selection_color = "#dddddd"
-	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_maint_tunnels)
-	minimal_access = list(access_hydroponics, access_morgue)
+	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
+	minimal_access = list(access_hydroponics, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
 	alt_titles = list("Hydroponicist", "Beekeeper", "Gardener")
 
 	pdaslot=slot_belt
@@ -417,11 +417,13 @@
 	if(H.backbag == 1)
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		H.equip_or_collect(new /obj/item/toy/crayon/mime(H), slot_l_store)
+		H.equip_or_collect(new /obj/item/weapon/stamp/mime(H), slot_l_store)
 		H.put_in_hands(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/toy/crayon/mime(H), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H), slot_in_backpack)
+		H.equip_or_collect(new /obj/item/weapon/stamp/mime(H), slot_in_backpack)
 	H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 	H.add_spell(new /spell/targeted/oathbreak/)
 	H.mind.miming = MIMING_OUT_OF_CHOICE
@@ -564,6 +566,11 @@
 		if(~lang.flags & RESTRICTED && !(lang in H.languages))
 			new_languages += lang.name
 
+	if (H.mind.role_alt_title == "Game Master")
+		var/obj/item/weapon/storage/pill_bottle/dice/dice_bag = new(get_turf(H))
+		new /obj/item/weapon/dice/borg(dice_bag)
+		H.put_in_hands(dice_bag)
+
 	var/picked_lang = pick(new_languages)
 	H.add_language(picked_lang)
 	to_chat(H, "<span class = 'notice'>Due to your well read nature, you find yourself versed in the language of [picked_lang]. Check-Known-Languages under the IC tab to use it.</span>")
@@ -583,8 +590,7 @@
 	supervisors = "Nanotrasen Law, CentComm Officals, and the station's captain."
 	wage_payout = 55
 	selection_color = "#dddddd"
-	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,
-				access_medical, access_bar, access_kitchen, access_hydroponics, access_maint_tunnels)
+	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo, access_medical, access_bar, access_kitchen, access_hydroponics)
 	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,  access_bar, access_kitchen)
 	alt_titles = list("Lawyer", "Bridge Officer")
 

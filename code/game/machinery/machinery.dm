@@ -481,17 +481,17 @@ Class Procs:
 		else
 			qdel(I)
 
-/obj/machinery/proc/crowbarDestroy(mob/user)
+/obj/machinery/proc/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
 							"You begin to pry out the circuitboard from \the [src]...")
 	if(do_after(user, src, 40))
-		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+		I.playtoolsound(src, 50)
 		dropFrame()
 		spillContents()
 		user.visible_message(	"<span class='notice'>[user] successfully pries out the circuitboard from \the [src]!</span>",
 								"<span class='notice'>[bicon(src)] You successfully pry out the circuitboard from \the [src]!</span>")
 		return 1
-	return -1
+	return 0
 
 //just something silly to delete the machine while still leaving something behind
 /obj/machinery/proc/smashDestroy(var/destroy_chance = 50)
@@ -509,7 +509,7 @@ Class Procs:
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
 	if(toggleitem.is_screwdriver(user))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		toggleitem.playtoolsound(loc, 50)
 	update_icon()
 	return 1
 
@@ -585,13 +585,13 @@ Class Procs:
 			emag(user)
 			return
 
-	if(iswrench(O) && wrenchable()) //make sure this is BEFORE the fixed2work check
+	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
 			if(state == 2 && src.machine_flags & WELD_FIXED) //prevent unanchoring welded machinery
 				to_chat(user, "\The [src] has to be unwelded from the floor first.")
 				return -1 //state set to 2, can't do it
 			else
-				if(wrenchAnchor(user) && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
+				if(wrenchAnchor(user, O) && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
 					state = anchored
 					power_change() //updates us to turn on or off as necessary
 					return 1
@@ -609,7 +609,7 @@ Class Procs:
 
 	if(iscrowbar(O) && machine_flags & CROWDESTROY)
 		if(panel_open)
-			if(crowbarDestroy(user) == 1)
+			if(crowbarDestroy(user, O))
 				qdel(src)
 				return 1
 			else
@@ -623,8 +623,11 @@ Class Procs:
 		return to_chat(user, "<span class='warning'>\The [src] must be anchored first!</span>")
 
 	if(istype(O, /obj/item/device/paicard) && machine_flags & WIREJACK)
-		for(var/mob/M in O)
-			wirejack(M)
+		var/obj/item/device/paicard/P = O
+		if(!P.pai)
+			return 1
+		if(wirejack(P.pai))
+			to_chat(user, "<span class='notice'>Wirejack engaged on \the [src].</span>")
 		return 1
 
 	if(istype(O, /obj/item/weapon/storage/bag/gadgets/part_replacer))

@@ -202,6 +202,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define TIMELESS		32768 // Immune to time manipulation.
 
 #define SILENTCONTAINER	65536 //reactions inside make no noise
+#define ATOM_INITIALIZED 131072 // initialize() was called
 
 #define ALL ~0
 #define NONE 0
@@ -323,7 +324,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEEARS			EARS
 #define HIDEEYES			EYES
 #define HIDEFACE			FACE
-#define HIDEHEADHAIR 		(EARS|HEAD)
+#define HIDEHEADHAIR 		65536
+#define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
 #define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
 #define	HIDESUITSTORAGE		LOWER_TORSO
@@ -443,17 +445,18 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_SUPER_FART    205		// Duh
 #define M_SMILE         206		// :)
 #define M_ELVIS         207		// You ain't nothin' but a hound dog.
+#define M_HORNS         208
 
 // /vg/ muts
-#define M_LOUD		208		// CAUSES INTENSE YELLING
-#define M_WHISPER	209		// causes quiet whispering
-#define M_DIZZY		210		// Trippy.
-#define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
-#define M_FARSIGHT	212		// Increases mob's view range by 2
-#define M_NOIR		213		// aww yis detective noir
-#define M_VEGAN		214
-#define M_ASTHMA	215
-#define M_LACTOSE	216
+#define M_LOUD		308		// CAUSES INTENSE YELLING
+#define M_WHISPER	309		// causes quiet whispering
+#define M_DIZZY		310		// Trippy.
+#define M_SANS		311		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'I love comic sans' IN YOUR PR.
+#define M_FARSIGHT	312		// Increases mob's view range by 2
+#define M_NOIR		313		// aww yis detective noir
+#define M_VEGAN		314
+#define M_ASTHMA	315
+#define M_LACTOSE	316
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\
@@ -520,9 +523,6 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define GAS_CO2	(1 << 3)
 #define GAS_N2O	(1 << 4)
 
-#define CC_PER_SHEET_METAL 3750
-#define CC_PER_SHEET_GLASS 3750
-#define CC_PER_SHEET_MISC 2000
 
 #define INV_SLOT_SIGHT "sight_slot"
 #define INV_SLOT_TOOL "tool_slot"
@@ -730,6 +730,10 @@ SEE_PIXELS	256
 #define VERM_SYPHONER 11
 #define VERM_GREMTIDE 12
 #define VERM_CRABS 13
+#define VERM_DIONA 14
+#define VERM_MUSHMEN 15
+#define VERM_FROGS 14
+#define VERM_SNAILS 15
 
 
 #define MONSTER_BEAR    0
@@ -771,25 +775,6 @@ SEE_PIXELS	256
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
 #define ORGAN_MALFUNCTIONING 8192
 
-//////////////////MATERIAL DEFINES/////////////////
-
-#define MAT_IRON		"$iron"
-#define MAT_GLASS		"$glass"
-#define MAT_GOLD		"$gold"
-#define MAT_SILVER		"$silver"
-#define MAT_URANIUM		"$uranium"
-#define MAT_DIAMOND		"$diamond"
-#define MAT_PHAZON		"$phazon"
-#define MAT_PLASMA		"$plasma"
-#define MAT_CLOWN		"$clown"
-#define MAT_PLASTIC		"$plastic"
-#define MAT_CARDBOARD   "$cardboard"
-#define MAT_WOOD		"$wood"
-#define MAT_BRASS   	"$brass"
-#define MAT_RALLOY   	"$ralloy"
-#define MAT_ICE			"$ice"
-#define MAT_MYTHRIL		"$mythril"
-#define MAT_TELECRYSTAL	"$telecrystal"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -833,7 +818,7 @@ SEE_PIXELS	256
 #define CHAT_GHOSTRADIO 8192
 #define SOUND_STREAMING 16384 // /vg/
 #define CHAT_GHOSTPDA   32768
-
+#define AUTO_DEADMIN	65536
 
 #define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC|SOUND_STREAMING)
 
@@ -939,6 +924,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define ELECTRIC_HEAL 2048
 #define IS_SPECIES_MUTE 4096
 #define REQUIRE_DARK 8192
+#define RAD_IMMUNE 16384
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -1134,6 +1120,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define SILENCECOMP  1 		//Silencer-compatible
 #define AUTOMAGDROP  2		//Does the mag drop when it's empty?
 #define EMPTYCASINGS 4		//Does the gun eject empty casings?
+#define SCOPED		 8		//Attachable scope?
 
 //projectiles bouncing off and phasing through obstacles
 #define PROJREACT_WALLS		1//includes opaque doors
@@ -1297,6 +1284,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_GOLEM "Golem"
 #define LANGUAGE_SLIME "Slime"
 #define LANGUAGE_MARTIAN "Martian"
+#define LANGUAGE_INSECT "Insectoid"
+#define LANGUAGE_DEATHSQUAD "Deathsquad"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
@@ -1305,6 +1294,19 @@ var/default_colour_matrix = list(1,0,0,0,\
 #else
 	#define say_testing(a,x)
 //	null << "[x][a]")
+#endif
+
+#define ASTAR_DEBUG 0
+#if ASTAR_DEBUG == 1
+#warn "Astar debug is on. Don't forget to turn it off after you've done :)"
+#define astar_debug(text) to_chat(world, text)
+#else
+#define astar_debug(text)
+#endif
+
+#define BSQL_DEBUG_CONNECTION 0
+#if BSQL_DEBUG_CONNECTION == 1
+#warn "BSQL_DEBUG_CONNECTION MUST BE SET TO 0 BEFORE COMMITING."
 #endif
 
 //#define JUSTFUCKMYSHITUP 1
@@ -1344,8 +1346,10 @@ var/proccalls = 1
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
 #define INCORPOREAL_GHOST		1
+#define INCORPOREAL_ETHEREAL_IMPROVED 1.5
 #define INCORPOREAL_ETHEREAL	2
 #define GHOST_MOVEDELAY 1
+#define ETHEREAL_IMPROVED_MOVEDELAY 1.5
 #define ETHEREAL_MOVEDELAY 2
 
 
@@ -1635,3 +1639,10 @@ var/proccalls = 1
 
 // How many times to retry winset()ing window parameters before giving up
 #define WINSET_MAX_ATTEMPTS 10
+
+// E-Sports teams
+#define ESPORTS_CULTISTS "Team Geometer"
+#define ESPORTS_SECURITY "Team Security"
+
+var/list/weekend_days = list("Friday", "Saturday", "Sunday")
+#define IS_WEEKEND (weekend_days.Find(time2text(world.timeofday, "Day")))

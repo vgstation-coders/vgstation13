@@ -1,7 +1,7 @@
 
 /proc/EquipCustomItems(mob/living/carbon/human/M)
 //	testing("\[CustomItem\] Checking for custom items for [M.ckey] ([M.real_name])...")
-	if(!establish_db_connection())
+	if(!SSdbcore.Connect())
 		return
 
 	// SCHEMA
@@ -19,8 +19,12 @@
 	*/
 
 	// Grab the info we want.
-	var/DBQuery/query = dbcon.NewQuery("SELECT cuiPath, cuiPropAdjust, cuiJobMask FROM CustomUserItems WHERE cuiCKey='[M.ckey]' AND (cuiRealName='[M.real_name]' OR cuiRealName='*')")
-	query.Execute()
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT cuiPath, cuiPropAdjust, cuiJobMask FROM CustomUserItems WHERE cuiCKey='[M.ckey]' AND (cuiRealName='[M.real_name]' OR cuiRealName='*')")
+	if(!query.Execute())
+		message_admins("Error: [query.ErrorMsg()]")
+		log_sql("Error: [query.ErrorMsg()]")
+		qdel(query)
+		return
 
 	while(query.NextRow())
 		var/path = text2path(query.item[1])
@@ -81,7 +85,7 @@
 			Item.forceMove(get_turf(M.loc))
 
 		HackProperties(Item,propadjust)
-
+	qdel(query)
 
 // This is hacky, but since it's difficult as fuck to make a proper parser in BYOND without killing the server, here it is. - N3X
 /proc/HackProperties(var/mob/living/carbon/human/M,var/obj/item/I,var/script)

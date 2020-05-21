@@ -247,7 +247,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if (istype(W, /obj/item/device/measuring_tape))
 		var/obj/item/device/measuring_tape/P = W
 		user.visible_message("<span class='notice'>[user] extends [P] towards [src].</span>","<span class='notice'>You extend [P] towards [src].</span>")
-		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*excavation_level]cm.</span>")
+		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [excavation_level]cm.</span>")
 		return
 
 	if(istype(W,/obj/item/stack/sheet/metal))
@@ -283,70 +283,73 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(!(P.diggables & DIG_ROCKS))
 			return
 
-		if(last_act + P.digspeed > world.time)//prevents message spam
+		if(last_act + (MINE_DURATION * P.toolspeed) > world.time)//prevents message spam
 			return
 
 		last_act = world.time
 
-		playsound(user, P.drill_sound, 20, 1)
+		P.playtoolsound(user, 20)
 
-		var/fail_message = ""
+		var/broke_find = FALSE
 		//handle any archaeological finds we might uncover
-		if(finds && finds.len)
-			var/datum/find/F = finds[1]
+		if (finds && finds.len != 0)
+			var/datum/find/top_find = finds[1]
 
-			if(excavation_level + P.excavation_amount > F.excavation_required)
-				fail_message = "<b>[pick("There is a crunching noise","[W] collides with some different rock","Part of the rock face crumbles away","Something breaks under [W]")]</b>"
+			var/exc_diff = excavation_level + P.excavation_amount - top_find.excavation_required
+
+			if (exc_diff > 0)
+				// Digging too far, probably breaking the artifact.
+				var/fail_message = "<b>[pick("There is a crunching noise","[W] collides with some different rock","Part of the rock face crumbles away","Something breaks under [W]")]</b>"
 				to_chat(user, "<span class='rose'>[fail_message].</span>")
+				broke_find = TRUE
 
-		if(fail_message && prob(90))
-			if(prob(5))
-				excavate_find(5, finds[1])
-			else if(prob(50))
-				finds.Remove(finds[1])
-				if(prob(50))
-					artifact_debris()
+				var/destroy_prob = 50
+				if (exc_diff > 5)
+					destroy_prob = 95
+
+				if (prob(destroy_prob))
+					finds.Remove(top_find)
+					if (prob(40))
+						artifact_debris()
+
+				else
+					excavate_find(5, top_find)
 
 		busy = 1
 
-		if(do_after(user, src, max(P.digspeed,minimum_mine_time)) && user)
+		if(do_after(user, src, max((MINE_DURATION * P.toolspeed),minimum_mine_time)) && user)
 			busy = 0
 
-			if(finds && finds.len)
+			if(finds && finds.len && !broke_find)
 				var/datum/find/F = finds[1]
 				if(round(excavation_level + P.excavation_amount) == F.excavation_required)
-
-					if(excavation_level + P.excavation_amount > F.excavation_required)
-
-						excavate_find(100, F)
-					else
-						excavate_find(80, F)
+					excavate_find(100, F)
 
 				else if(excavation_level + P.excavation_amount > F.excavation_required - F.clearance_range)
-
 					excavate_find(0, F)
 
 			if( excavation_level + P.excavation_amount >= 100 )
 
 				var/obj/structure/boulder/B
+				var/artifact_destroyed = TRUE
 				if(artifact_find)
 					if(excavation_level > 0)
 
 						B = getFromPool(/obj/structure/boulder, src)
 						B.geological_data = geologic_data
-						if(artifact_find)
-							B.artifact_find = artifact_find
-							B.investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] - [artifact_find.artifact_id] found by [key_name(user)].")
+
+						B.artifact_find = artifact_find
+						B.investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] - [artifact_find.artifact_id] found by [key_name(user)].")
+						artifact_destroyed = FALSE
+
 					else
 						artifact_debris(1)
 
-				else if(prob(15))
+				else if(excavation_level > 0 && prob(15))
 					B = getFromPool(/obj/structure/boulder, src)
 					B.geological_data = geologic_data
-				if(B)
-					GetDrilled(0)
-				else
-					GetDrilled(1)
+
+				GetDrilled(artifact_destroyed)
 
 				return
 
@@ -405,7 +408,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/mineral/attack_animal(var/mob/living/simple_animal/M)
 	M.delayNextAttack(8)
 	if(M.environment_smash_flags & SMASH_ASTEROID && prob(30))
-		GetDrilled(0)
+		GetDrilled(TRUE)
 
 /turf/unsimulated/mineral/attack_construct(var/mob/user)
 	if (!Adjacent(user))
@@ -413,7 +416,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(istype(user,/mob/living/simple_animal/construct/armoured))
 		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
 		if(do_after(user, src, max(minimum_mine_time,40*mining_difficulty)))
-			GetDrilled(0)
+			GetDrilled(TRUE)
 		return 1
 	return 0
 
@@ -429,7 +432,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 *                  disabled after drilling (ie. gibtonite will be immediately disarmed).
 * driller: Whatever is doing the drilling.  Used for some messages.
 */
-/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
+/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = TRUE, var/safety_override = FALSE, var/atom/driller)
 	if (mineral && mineral.result_amount)
 		DropMineral()
 	switch(rockernaut)
@@ -488,7 +491,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	return null
 
 /turf/unsimulated/mineral/proc/excavate_find(var/prob_clean = 0, var/datum/find/F)
-	//with skill and luck, players can cleanly extract finds
+	//with skill or luck, players can cleanly extract finds
 	//otherwise, they come out inside a chunk of rock
 	var/obj/item/weapon/X
 	if(prob_clean)
@@ -500,14 +503,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		X:geologic_data = geologic_data
 
-	//many finds are ancient and thus very delicate - luckily there is a specialised energy suspension field which protects them when they're being extracted
-	if(prob(F.prob_delicate))
-		var/obj/effect/suspension_field/S = locate() in src
-		if(!S || S.field_type != F.responsive_reagent)
-			if(X)
-				visible_message("<span class='danger'>\The [X] [pick("crumbles away into dust","breaks apart")].</span>")
-				qdel(X)
-				X = null
 	finds.Remove(F)
 
 /turf/unsimulated/mineral/proc/artifact_debris(var/severity = 0)
@@ -630,7 +625,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		to_chat(user, "<span class='rose'>You start digging.<span>")
 		playsound(src, 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
-		if(do_after(user, src, used_digging.digspeed) && user) //the better the drill, the faster the digging
+		if(do_after(user, src, (MINE_DURATION * used_digging.toolspeed)) && user) //the better the drill, the faster the digging
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You dug a hole.</span>")
 			gets_dug()
@@ -730,7 +725,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			return
 		to_chat(user, "<span class='rose'>You start digging.<span>")
 		playsound(src, 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
-		if(do_after(user, src, used_digging.digspeed) && user) //the better the drill, the faster the digging
+		if(do_after(user, src, (MINE_DURATION * used_digging.toolspeed)) && user) //the better the drill, the faster the digging
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You dug a hole.</span>")
 			gets_dug()
@@ -764,23 +759,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		"Gibtonite" = 5,
 		"Diamond"   = 1,
 		"Cave"      = 1,
-		/*
-		"Pharosium"  = 5,
-		"Char"  = 5,
-		"Claretine"  = 5,
-		"Bohrum"  = 5,
-		"Syreline"  = 5,
-		"Erebite"  = 5,
-		"Uqill"  = 5,
-		"Telecrystal"  = 5,
-		"Mauxite"  = 5,
-		"Cobryl"  = 5,
-		"Cerenkite"  = 5,
-		"Molitz"  = 5,
-		"Cytine"  = 5
-		*/
 	)
-	//Currently, Adamantine won't spawn as it has no uses. -Durandan
 	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
 
 /turf/unsimulated/mineral/random/New()
@@ -806,16 +785,16 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	overlay_state = "snow_rock_overlay"
 
 	mineralSpawnChanceList = list(
-		"Iron"      = 50,
-		"Plasma"    = 25,
-		"Ice"		= 10,
-		"Uranium"   = 5,
-		"Gold"      = 5,
-		"Silver"    = 5,
-		"Gibtonite" = 5,
+		"Nanotrasite" = 24,
+		"Electrum"  = 8,
 		"Diamond"   = 1,
 		"Ice Cave"  = 1,
 	)
+
+
+/turf/unsimulated/mineral/random/snow/New()
+	base_icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
+	..()
 
 /turf/unsimulated/mineral/random/high_chance
 	icon_state = "rock(high)"
@@ -827,21 +806,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		"Gold"    = 10,
 		"Silver"  = 10,
 		"Plasma"  = 25,
-		/*
-		"Pharosium"  = 5,
-		"Char"  = 5,
-		"Claretine"  = 5,
-		"Bohrum"  = 5,
-		"Syreline"  = 5,
-		"Erebite"  = 5,
-		"Uqill"  = 5,
-		"Telecrystal"  = 5,
-		"Mauxite"  = 5,
-		"Cobryl"  = 5,
-		"Cerenkite"  = 5,
-		"Molitz"  = 5,
-		"Cytine"  = 5
-		*/
 	)
 
 /turf/unsimulated/mineral/random/high_chance/snow
@@ -856,25 +820,9 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	mineralChance = 40
 	mineralSpawnChanceList = list(
 		"Uranium" = 10,
-		//"Iron"    = 10,
 		"Diamond" = 2,
 		"Gold"    = 5,
 		"Silver"  = 5,
-		/*
-		"Pharosium"  = 1,
-		"Char"  = 1,
-		"Claretine"  = 1,
-		"Bohrum"  = 1,
-		"Syreline"  = 1,
-		"Erebite"  = 1,
-		"Uqill"  = 1,
-		"Telecrystal"  = 1,
-		"Mauxite"  = 1,
-		"Cobryl"  = 1,
-		"Cerenkite"  = 1,
-		"Molitz"  = 1,
-		"Cytine"  = 1,
-		*/
 		"Plasma"  = 25,
 		"Clown"   = 15,
 		"Phazon"  = 10
@@ -1088,7 +1036,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			det_time = 0
 		visible_message("<span class='notice'>The chain reaction was stopped! The gibtonite had [src.det_time] reactions left till the explosion!</span>")
 
-/turf/unsimulated/mineral/gibtonite/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
+/turf/unsimulated/mineral/gibtonite/GetDrilled(var/artifact_fail = TRUE, var/safety_override = FALSE, var/atom/driller)
 	if(stage == 0 && mineral.result_amount >= 1) //Gibtonite deposit is activated
 		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,1)
 		explosive_reaction()
@@ -1131,26 +1079,22 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	var/turf/floor_type = /turf/unsimulated/floor/asteroid
 
 /turf/unsimulated/floor/asteroid/cave/permafrost
+	name = "rocky cave floor"
+	desc = "Sheltered from blizzards outside, but still cold."
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/bear = 4,
+		/mob/living/simple_animal/hostile/asteroid/goliath/snow  = 3,
+		/mob/living/simple_animal/hostile/bear/polarbear = 3,
 		/mob/living/simple_animal/hostile/asteroid/pillow = 3,
-		/mob/living/simple_animal/hostile/scarybat = 5,
-		/mob/living/simple_animal/hostile/giant_spider/hunter = 4,
-		/mob/living/simple_animal/hostile/giant_spider/nurse = 3,
-		/mob/living/simple_animal/hostile/wendigo = 1)
+		/mob/living/simple_animal/hostile/scarybat/cave = 9,
+		/mob/living/simple_animal/hostile/retaliate/goat/wooly = 15)
 
-	floor_type = /turf/unsimulated/floor/snow/permafrost
+	floor_type = /turf/unsimulated/floor/snow/cave/rock
 
 	icon = 'icons/turf/new_snow.dmi'
 	icon_state = "permafrost_full"
 	temperature = T_ARCTIC
 	oxygen = MOLES_O2STANDARD_ARCTIC
 	nitrogen = MOLES_N2STANDARD_ARCTIC
-	light_color = "#e5ffff"
-	can_border_transition = 1
-	dynamic_lighting = 0
-	luminosity = 1
-	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/asteroid/cave/New(loc, var/length, var/go_backwards = 1, var/exclude_dir = -1)
 

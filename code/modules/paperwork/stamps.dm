@@ -19,9 +19,14 @@
 	P.stamps += (P.stamps=="" ? "<HR>" : "<BR>") + "<i>This [P.name] has been stamped with \the [name].</i>"
 
 	var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-	stampoverlay.pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
-	stampoverlay.pixel_y = rand(-3, 2) * PIXEL_MULTIPLIER
-	stampoverlay.icon_state = "paper_[icon_state]"
+	stampoverlay.icon_state = "paper_[icon_state]"	
+	// We have to reapply overlays on envelopes so we can't have random offsets
+	if(istype(P, /obj/item/weapon/paper/envelope))
+		stampoverlay.pixel_x = 5 * PIXEL_MULTIPLIER
+		stampoverlay.pixel_y = -2 * PIXEL_MULTIPLIER
+	else
+		stampoverlay.pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
+		stampoverlay.pixel_y = rand(-3, 2) * PIXEL_MULTIPLIER
 
 	if(!P.stamped)
 		P.stamped = new
@@ -89,9 +94,20 @@
 	icon_state = "stamp-clown"
 	_color = "clown"
 
+/obj/item/weapon/stamp/mime
+	name = "mimes's rubber stamp"
+	icon_state = "stamp-mime"
+	_color = "mime"
+
 /obj/item/weapon/stamp/clown/try_stamp(mob/user,obj/item/weapon/paper/P)
 	if(!clumsy_check(user))
 		to_chat(user, "<span class='warning'>You are totally unable to use the stamp. HONK!</span>")
+	else
+		..()
+
+/obj/item/weapon/stamp/mime/try_stamp(mob/user,obj/item/weapon/paper/P)
+	if(!user.mind.miming)
+		to_chat(user, "<span class='warning'>Only a vow of silence will activate this stamp.</span>")
 	else
 		..()
 

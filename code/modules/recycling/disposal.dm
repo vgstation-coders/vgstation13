@@ -107,12 +107,12 @@
 				return
 			if(mode==0) // It's off but still not unscrewed
 				mode=-1 // Set it to doubleoff l0l
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				I.playtoolsound(src, 50)
 				to_chat(user, "You remove the screws around the power connection.")
 				return
 			else if(mode==-1)
 				mode=0
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				I.playtoolsound(src, 50)
 				to_chat(user, "You attach the screws around the power connection.")
 				return
 		else if(iswelder(I) && mode==-1)
@@ -1596,12 +1596,12 @@
 	if(I.is_screwdriver(user))
 		if(mode==0)
 			mode=1
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
 		else if(mode==1)
 			mode=0
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && mode==1)

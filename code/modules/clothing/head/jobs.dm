@@ -16,6 +16,7 @@
 	desc = "The commander in chef's head wear."
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 //Captain: This probably shouldn't be space-worthy
 /obj/item/clothing/head/caphat
@@ -26,6 +27,7 @@
 	item_state = "caphat"
 	siemens_coefficient = 0.9
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
+	species_fit = list(INSECT_SHAPED)
 
 //Captain: This probably shouldn't be space-worthy
 /obj/item/clothing/head/helmet/cap
@@ -36,13 +38,14 @@
 	body_parts_covered = HEAD
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	siemens_coefficient = 0.9
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 //Chaplain
 /obj/item/clothing/head/chaplain_hood
 	name = "chaplain's hood"
 	desc = "It's hood that covers the head. It keeps you warm during the space winters."
 	icon_state = "chaplain_hood"
-	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 0.9
 
 //Chaplain
@@ -50,7 +53,7 @@
 	name = "nun hood"
 	desc = "Maximum piety in this star system."
 	icon_state = "nun_hood"
-	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 0.9
 
 //Mime
@@ -60,6 +63,7 @@
 	icon_state = "beret"
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/beret/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -74,13 +78,14 @@
 	desc = "A beret with the security insignia emblazoned on it. For officers that are more inclined towards style than safety."
 	icon_state = "beret_badge"
 	flags = FPRINT
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 //Medical
 /obj/item/clothing/head/surgery
 	name = "surgical cap"
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs."
 	icon_state = "surgcap_blue"
-	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 
 /obj/item/clothing/head/surgery/purple
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs. This one is deep purple."

@@ -160,7 +160,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	spark(src, 10, FALSE)
 
 
-/obj/machinery/power/antiquesynth/wrenchAnchor(var/mob/user)
+/obj/machinery/power/antiquesynth/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(!..())
 		return
 	if(anchored)

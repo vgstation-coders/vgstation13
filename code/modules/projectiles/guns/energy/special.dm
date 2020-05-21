@@ -140,6 +140,15 @@
 			changetype=selected
 	next_changetype=world.time+SOC_CHANGETYPE_COOLDOWN
 
+/obj/item/weapon/gun/energy/staff/sinterklaas
+	name = "staff of sinterklaas"
+	desc = "There's a knock on the door, a hard knock, a soft knock, there's a knock on the door, who could it be?"
+	icon_state = "staffofsinterklaas"
+	item_state = "sinterklaas"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/wiz_left.dmi', "right_hand" = 'icons/mob/in-hand/right/wiz_right.dmi')
+	projectile_type = "/obj/item/projectile/zwartepiet"
+	charge_cost = 100
+
 /obj/item/weapon/gun/energy/staff/animate
 	name = "staff of animation"
 	desc = "An artefact that spits bolts of life-force which causes objects which are hit by it to animate and come to life! This magic doesn't affect machines."
@@ -193,7 +202,7 @@
 	to_chat(user, "<span class='notice'>You will now raise [raisetype < 2 ? (raisetype ? "skeletal" : "zombified") : "unknown"] minions from corpses.</span>")
 	next_change = world.timeofday + 30
 
-/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/user, proximity)
+/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user, flag, params, struggle = 0)
 	if(!ishuman(target) || !charges || get_dist(target, user) > 7)
 		return 0
 	var/mob/living/carbon/human/H = target
@@ -290,7 +299,7 @@
 	else
 		src.Fire(target,user,0,0,0)
 
-/obj/item/weapon/gun/energy/staff/destruction_wand/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/energy/staff/destruction_wand/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(power_supply.charge == charge_cost || lifekiller)
 		if(!istype(target, /turf/simulated/wall) && !istype(target, /turf/simulated/floor))
 			if(!istype(target, /mob/living))
@@ -447,7 +456,7 @@
 			modifystate = "floraemag"
 			update_icon()
 
-/obj/item/weapon/gun/energy/floragun/afterattack(obj/target, mob/user, flag)
+/obj/item/weapon/gun/energy/floragun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
 		if(process_chambered())
@@ -531,6 +540,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	desc = "According to Nanotrasen accounting, this is mining equipment. It's been modified for extreme power output to crush rocks, but often serves as a miner's first defense against hostile alien life; it's not very powerful unless used in a low pressure environment."
 	icon_state = "kineticgun"
 	item_state = "kineticgun"
+	fire_sound = 'sound/weapons/kinetic_accelerator.ogg'
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/crap"
 	charge_cost = 50
@@ -644,7 +654,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	cell_type = "/obj/item/weapon/cell"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 
-obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+obj/item/weapon/gun/energy/ricochet/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(defective && prob(30))
 		target = get_ranged_target_turf(user, pick(diagonal), 7)
 	..()
@@ -725,7 +735,7 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 	..()
 	playsound(src, 'sound/weapons/spur_spawn.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
 
-/obj/item/weapon/gun/energy/polarstar/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/energy/polarstar/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	levelChange()
 	..()
 

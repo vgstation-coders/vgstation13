@@ -17,20 +17,14 @@
 	var/obj/abstract/screen/kick_icon = null
 	var/obj/abstract/screen/bite_icon = null
 	var/obj/abstract/screen/visible = null
-	var/obj/abstract/screen/purged = null
 	var/obj/abstract/screen/internals = null
-	var/obj/abstract/screen/oxygen = null
 	var/obj/abstract/screen/i_select = null
 	var/obj/abstract/screen/m_select = null
-	var/obj/abstract/screen/toxin = null
-	var/obj/abstract/screen/fire = null
-	var/obj/abstract/screen/bodytemp = null
 	var/obj/abstract/screen/healths = null
+	var/obj/abstract/screen/healths2 = null
 	var/obj/abstract/screen/throw_icon = null
 	var/obj/abstract/screen/camera_icon = null
 	var/obj/abstract/screen/album_icon = null
-	var/obj/abstract/screen/nutrition_icon = null
-	var/obj/abstract/screen/pressure = null
 	var/obj/abstract/screen/damageoverlay = null
 	var/obj/abstract/screen/pain = null
 	var/obj/abstract/screen/gun/item/item_use_icon = null
@@ -283,6 +277,9 @@
 	var/event/on_damaged
 	var/event/on_irradiate
 	var/event/on_death
+	var/event/on_bumping //We bumped someone
+	var/event/on_bumped //We got bumped
+	var/event/on_touched // We got touched by anything
 	// Allows overiding click modifiers and such.
 	var/event/on_clickon
 
@@ -296,6 +293,7 @@
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 	var/forced_density = 0 // If the mob was made non-dense by an admin.
+	var/old_assigned_role // If they ghosted, what role did they have?
 
 /mob/resetVariables()
 	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \

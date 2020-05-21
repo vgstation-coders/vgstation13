@@ -101,7 +101,9 @@
 				H.adjustOxyLoss(20)
 				H.adjustToxLoss(10)
 		else
-			antag.current.adjustBruteLoss(rand(20,50))
+			if(isliving(antag.current))
+				var/mob/living/L = antag.current
+				L.adjustBruteLoss(rand(20,50))
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -213,7 +215,7 @@
 				M.gui_icons.soulblade_bgLEFT,
 				M.gui_icons.soulblade_coverLEFT,
 				M.gui_icons.soulblade_bloodbar,
-				M.fire,
+				M.healths2,
 				)
 
 /mob/living/carbon/proc/muted()

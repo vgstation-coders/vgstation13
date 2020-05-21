@@ -40,19 +40,20 @@
 
 	output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
 	if(!IsGuestKey(src.key))
-		establish_db_connection()
-
-		if(dbcon.IsConnected())
+		if(SSdbcore.Connect())
 			var/isadmin = 0
 			if(src.client && src.client.holder)
 				isadmin = 1
-			var/DBQuery/query = dbcon.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \"[ckey]\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = \"[ckey]\")")
-			query.Execute()
+			var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] hidden IS NULL AND Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \"[ckey]\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = \"[ckey]\")")
+			if(!query.Execute())
+				log_sql("Error fetching poll question: [query.ErrorMsg()]")
+				qdel(query)
+				return
 			var/newpoll = 0
 			while(query.NextRow())
 				newpoll = 1
 				break
-
+			qdel(query)
 			if(newpoll)
 				output += "<p><b><a href='byond://?src=\ref[src];showpoll=1'>Show Player Polls</A> (NEW!)</b></p>"
 			else
@@ -71,7 +72,7 @@
 
 	if(statpanel("Status") && ticker)
 		if (ticker.current_state != GAME_STATE_PREGAME)
-			stat("Station Time:", "[worldtime2text()]")
+			timeStatEntry()
 		if(ticker.hide_mode)
 			stat("Game Mode:", "Secret")
 		else
@@ -319,34 +320,6 @@
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
 
-/mob/new_player/proc/DiseaseCarrierCheck(var/mob/living/carbon/human/H)
-	// 5% of players are joining the station with some minor disease
-	if(prob(5))
-		var/datum/disease2/disease/D = get_random_weighted_disease(WLATEJOIN)
-
-		var/list/anti = list(
-			ANTIGEN_BLOOD	= 1,
-			ANTIGEN_COMMON	= 1,
-			ANTIGEN_RARE	= 0,
-			ANTIGEN_ALIEN	= 0,
-			)
-		var/list/bad = list(
-			EFFECT_DANGER_HELPFUL	= 1,
-			EFFECT_DANGER_FLAVOR	= 8,
-			EFFECT_DANGER_ANNOYING	= 1,
-			EFFECT_DANGER_HINDRANCE	= 0,
-			EFFECT_DANGER_HARMFUL	= 0,
-			EFFECT_DANGER_DEADLY	= 0,
-			)
-		D.origin = "New Player"
-
-		D.makerandom(list(30,50),list(0,50),anti,bad,null)
-
-		D.log += "<br />[timestamp()] Infected [key_name(H)]"
-		H.virus2["[D.uniqueID]-[D.subID]"] = D
-
-		D.AddToGoggleView(H)
-
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0
@@ -444,7 +417,6 @@
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
 			FuckUpGenes(character)
-			DiseaseCarrierCheck(character)
 		else
 			character.Robotize()
 	qdel(src)

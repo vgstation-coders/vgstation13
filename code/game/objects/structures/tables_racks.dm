@@ -146,22 +146,22 @@
 							dir_sum += 128
 
 		var/table_type = 0 //stand_alone table
-		if(dir_sum%16 in cardinal)
+		if((dir_sum%16) in cardinal)
 			table_type = 1 //endtable
 			dir_sum %= 16
-		if(dir_sum%16 in list(3,12))
+		if((dir_sum%16) in list(3,12))
 			table_type = 2 //1 tile thick, streight table
 			if(dir_sum%16 == 3) //3 doesn't exist as a dir
 				dir_sum = 2
 			if(dir_sum%16 == 12) //12 doesn't exist as a dir.
 				dir_sum = 4
-		if(dir_sum%16 in list(5,6,9,10))
+		if((dir_sum%16) in list(5,6,9,10))
 			if(locate(/obj/structure/table,get_step(src.loc,dir_sum%16)))
 				table_type = 3 //full table (not the 1 tile thick one, but one of the 'tabledir' tables)
 			else
 				table_type = 2 //1 tile thick, corner table (treated the same as streight tables in code later on)
 			dir_sum %= 16
-		if(dir_sum%16 in list(13,14,7,11)) //Three-way intersection
+		if((dir_sum%16) in list(13,14,7,11)) //Three-way intersection
 			table_type = 5 //full table as three-way intersections are not sprited, would require 64 sprites to handle all combinations.  TOO BAD -- SkyMarshal
 			switch(dir_sum%16)	//Begin computation of the special type tables.  --SkyMarshal
 				if(7)
@@ -400,9 +400,9 @@
 			returnToPool(W)
 			return
 
-	if (iswrench(W) && can_disassemble())
+	if (W.is_wrench(user) && can_disassemble())
 		to_chat(user, "<span class='notice'>Now disassembling table...</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		if(do_after(user, src,50))
 			destroy()
 		return
@@ -765,8 +765,8 @@
 	destroy()
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W) && can_disassemble())
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user) && can_disassemble())
+		W.playtoolsound(src, 50)
 		destroy(TRUE)
 		return
 

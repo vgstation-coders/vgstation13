@@ -312,6 +312,21 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/sweets/strange
 	spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
+	
+/obj/item/weapon/storage/pill_bottle/lollipops
+	name = "bag of lollipops"
+	desc = "Ha, sucker!"
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "lollibag"
+	max_combined_w_class = 4
+	storage_slots = 4
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/lollipop","/obj/item/trash/lollipopstick")
+	
+/obj/item/weapon/storage/pill_bottle/lollipops/New()
+	..()
+	for (var/i = 1 to 4)
+		new /obj/item/weapon/reagent_containers/food/snacks/lollipop(src)
+	overlays = null
 
 /obj/item/weapon/storage/pill_bottle/nanofloxacin
 	name = "pill bottle (nanofloxacin)"

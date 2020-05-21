@@ -70,6 +70,9 @@ var/global/list/alert_overlays_global = list()
 
 	dir = 2
 
+	animation_delay_predensity_opening = 3
+	animation_delay_predensity_closing = 7
+
 	var/list/alert_overlays_local
 
 	var/blocked = 0
@@ -214,6 +217,11 @@ var/global/list/alert_overlays_global = list()
 		if (mecha.occupant)
 			var/mob/M = mecha.occupant
 			attack_hand(M)
+	if(ismob(AM))
+		var/mob/M = AM
+		var/obj/item/I = M.get_active_hand()
+		if((iscrowbar(I)||istype(I,/obj/item/weapon/fireaxe)) && M.a_intent == I_HURT)
+			attackby(I,M)
 	return 0
 
 /obj/machinery/door/firedoor/power_change()
@@ -248,7 +256,7 @@ var/global/list/alert_overlays_global = list()
 		..()
 
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
-	return attackby(null, user)
+	return do_interaction(user)
 
 /obj/machinery/door/firedoor/attack_alien(mob/living/carbon/alien/humanoid/user)
 	force_open(user)
@@ -265,10 +273,10 @@ var/global/list/alert_overlays_global = list()
 		return 1
 	return 0
 
-/obj/machinery/door/firedoor/attackby(var/obj/item/weapon/C, var/mob/user, var/no_reruns = FALSE)
-	add_fingerprint(user)
+/obj/machinery/door/firedoor/attackby(var/obj/item/weapon/C, var/mob/user)
 	if(operating)
 		return//Already doing something.
+
 	if(iswelder(C))
 		var/obj/item/weapon/weldingtool/W = C
 		if(W.remove_fuel(0, user))
@@ -279,7 +287,7 @@ var/global/list/alert_overlays_global = list()
 			update_icon()
 			return
 
-	if( iscrowbar(C) || ( istype(C,/obj/item/weapon/fireaxe) && C.wielded ) )
+	if(iscrowbar(C) || (istype(C,/obj/item/weapon/fireaxe) && C.wielded))
 		force_open(user, C)
 		return
 
@@ -299,16 +307,16 @@ var/global/list/alert_overlays_global = list()
 									"<span class='warning'>You hear slicing noises.</span>")
 				playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 				blocked = !blocked
-				open()
+				open(user)
 			return
 		else
 			user.visible_message("<span class='warning'>[user] swiftly slices \the [src] open!</span>",\
 								"You slice \the [src] open in one clean cut!",\
 								"You hear the sound of a swift, sharp slice.")
-			open()
+			open(user)
 			return
 
-	if(istype(C, /obj/item/weapon/wrench))
+	if(C.is_wrench(user))
 		if(blocked)
 			user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
 			"You begin to deconstruct \the [src] with \the [C].")
@@ -319,19 +327,21 @@ var/global/list/alert_overlays_global = list()
 		else
 			to_chat(user, "<span class = 'attack'>\The [src] is not welded or otherwise blocked.</span>")
 
-	if( isEmag(C) )
-		if ( density==1 )
+	if(isEmag(C))
+		if(density)
 			flick("door_spark", src)
-			spawn(6)
+			sleep(6)
 			force_open(user, C)
-			spawn(8)
-			blocked = TRUE
-			update_icon()
-			return
-		else
-			blocked = TRUE
-			update_icon()
-			return
+			sleep(8)
+		blocked = TRUE
+		update_icon()
+		return
+
+	do_interaction(user, C)
+
+/obj/machinery/door/firedoor/proc/do_interaction(var/mob/user, var/obj/item/weapon/C, var/no_reruns = FALSE)
+	if(operating)
+		return//Already doing something.
 
 	if(blocked)
 		to_chat(user, "<span class='warning'>\The [src] is welded solid!</span>")
@@ -341,20 +351,20 @@ var/global/list/alert_overlays_global = list()
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 
-	var/access_granted = 0
+	var/access_granted = FALSE
 	var/users_name
 
 	if(allowed(user))
-		access_granted = 1
+		access_granted = TRUE
 	if(ishuman(user))
 		users_name = FindNameFromID(user)
 	else
 		users_name = "Unknown"
 
-	if( ishuman(user) &&  !stat && ( istype(C, /obj/item/weapon/card/id) || istype(C, /obj/item/device/pda) ) )
+	if(ishuman(user) && !stat && (isID(C) || isPDA(C)))
 		var/obj/item/weapon/card/id/ID = C
 
-		if( istype(C, /obj/item/device/pda) )
+		if(isPDA(C))
 			var/obj/item/device/pda/pda = C
 			ID = pda.id
 		if(!istype(ID))
@@ -366,7 +376,7 @@ var/global/list/alert_overlays_global = list()
 		if(check_access(ID))
 			access_granted = 1
 
-	if(alarmed && density && lockdown && !access_granted/* && !( users_name in users_to_open ) */)
+	if(alarmed && density && lockdown && !access_granted)
 		if(horror_force(user))
 			return
 
@@ -381,14 +391,14 @@ var/global/list/alert_overlays_global = list()
 		if(!users_to_open)
 			users_to_open = list()
 		users_to_open += users_name
-		if (twin && !no_reruns && !alarmed) // if it's alarmed, we don't want both to open, so that firelocks can still play their role.
-			twin.attackby(C, user, TRUE)
+		if(twin && !no_reruns && !alarmed) // if it's alarmed, we don't want both to open, so that firelocks can still play their role.
+			twin.do_interaction(user, C, TRUE)
 	var/needs_to_close = 0
 	if(density)
 		if(alarmed)
 			needs_to_close = 1
 		spawn()
-			open()
+			open(user)
 	else
 		spawn()
 			close()
@@ -400,7 +410,9 @@ var/global/list/alert_overlays_global = list()
 			if(alarmed && !density)
 				close()
 
-/obj/machinery/door/firedoor/open()
+/obj/machinery/door/firedoor/open(mob/user)
+	if(user)
+		add_fingerprint(user)
 	if(!loc || blocked)
 		return
 	..()
@@ -431,7 +443,7 @@ var/global/list/alert_overlays_global = list()
 
 	if(density)
 		spawn(0)
-			open()
+			open(user)
 	else
 		spawn(0)
 			close()

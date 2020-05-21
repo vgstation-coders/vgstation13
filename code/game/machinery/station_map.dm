@@ -48,13 +48,13 @@ var/list/station_holomaps = list()
 	holomap_datum = null
 	..()
 
-/obj/machinery/station_map/crowbarDestroy(mob/user)
+/obj/machinery/station_map/crowbarDestroy(mob/user, obj/item/weapon/crowbar/C)
 	user.visible_message(	"[user] begins to pry out \the [src] from the wall.",
 							"You begin to pry out \the [src] from the wall...")
 	if(do_after(user, src, 40))
 		user.visible_message(	"[user] detaches \the [src] from the wall.",
 								"You detach \the [src] from the wall.")
-		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+		C.playtoolsound(src, 50)
 		new /obj/item/mounted/frame/station_map(src.loc)
 
 		for(var/obj/I in src)
@@ -65,13 +65,13 @@ var/list/station_holomaps = list()
 		new /obj/item/stack/sheet/glass/glass(loc,1)
 
 		return 1
-	return -1
+	return 0
 
 /obj/machinery/station_map/initialize()
 	bogus = 0
 	var/turf/T = get_turf(src)
 	original_zLevel = T.z
-	if(!(HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]" in extraMiniMaps))
+	if(!((HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]") in extraMiniMaps))
 		bogus = 1
 		holomap_datum.initialize_holomap_bogus()
 		update_icon()
@@ -271,7 +271,7 @@ var/list/station_holomaps = list()
 		watching_mob = user
 		var/turf/T = get_turf(user)
 		bogus = 0
-		if(!(HOLOMAP_EXTRA_STATIONMAP+"_[T.z]" in extraMiniMaps))
+		if(!((HOLOMAP_EXTRA_STATIONMAP+"_[T.z]") in extraMiniMaps))
 			bogus = 1
 			holomap_datum.initialize_holomap_bogus()
 		else
@@ -300,7 +300,7 @@ var/list/station_holomaps = list()
 	if (lastZ != T.z)
 		lastZ = T.z
 		bogus = 0
-		if(!(HOLOMAP_EXTRA_STATIONMAP+"_[T.z]" in extraMiniMaps))
+		if(!((HOLOMAP_EXTRA_STATIONMAP+"_[T.z]") in extraMiniMaps))
 			holomap_datum.initialize_holomap_bogus()
 			bogus = 1
 		else

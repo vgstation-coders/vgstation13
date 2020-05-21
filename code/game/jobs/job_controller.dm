@@ -197,23 +197,6 @@ var/global/datum/controller/occupations/job_master
 	unassigned = list()
 	return
 
-
-	///This proc is called before the level loop of DivideOccupations() and will try to select a head, ignoring ALL non-head preferences for every level until it locates a head or runs out of levels to check
-/datum/controller/occupations/proc/FillHeadPosition()
-	for(var/level = 1 to 3)
-		for(var/command_position in command_positions)
-			var/datum/job/job = GetJob(command_position)
-			if(!job)
-				continue
-			var/list/candidates = FindOccupationCandidates(job, level)
-			if(!candidates.len)
-				continue
-			var/mob/new_player/candidate = pick(candidates)
-			if(AssignRole(candidate, command_position))
-				return 1
-	return 0
-
-
 	///This proc is called at the start of the level loop of DivideOccupations() and will cause head jobs to be checked before any other jobs of the same level
 /datum/controller/occupations/proc/CheckHeadPositions(var/level)
 	for(var/command_position in command_positions)
@@ -294,11 +277,6 @@ var/global/datum/controller/occupations/job_master
 	unassigned = shuffle(unassigned)
 
 	HandleFeedbackGathering()
-
-	//Select one head
-	Debug("DO, Running Head Check")
-	FillHeadPosition()
-	Debug("DO, Head Check end")
 
 	//Check for an AI
 	Debug("DO, Running AI Check")
@@ -562,6 +540,10 @@ var/global/datum/controller/occupations/job_master
 			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/byond(H))
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/byond(H), slot_in_backpack)
+
+	if(Holiday == VG_BIRTHDAY)
+		H.equip_or_collect(new /obj/item/clothing/head/party_hat(H), slot_head)
+
 	return 1
 
 

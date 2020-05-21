@@ -527,7 +527,7 @@ var/list/apiaries_list = list()
 				qdel(B_mob)
 
 			//Nearby homeless bees get a free invite.
-			if (W.species && W.species == B_mob.bee_species && (B_mob.bees + W.worker_bees_inside + W.queen_bees_inside) <= MAX_BEES_PER_HIVE)
+			if (W.species && W.species == B_mob.bee_species && (B_mob.bees.len + W.worker_bees_inside + W.queen_bees_inside) <= MAX_BEES_PER_HIVE)
 				for(var/datum/bee/B in B_mob.bees)
 					W.enterHive(B)
 				qdel(B_mob)

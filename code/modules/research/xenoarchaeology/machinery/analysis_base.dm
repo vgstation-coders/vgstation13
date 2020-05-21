@@ -212,18 +212,6 @@ obj/machinery/anomaly/Topic(href, href_list)
 
 	start(user)
 
-//whether the carrier sample matches the possible finds
-//results greater than a threshold of 0.6 means a positive result
-/obj/machinery/anomaly/proc/GetResultSpecifity(var/datum/geosample/scanned_sample, var/carrier_name)
-	var/specifity = 0
-	if(scanned_sample && carrier_name)
-
-		if(scanned_sample.find_presence.Find(carrier_name))
-			specifity = 0.75 * (scanned_sample.find_presence[carrier_name] / scanned_sample.total_spread) + 0.25
-		else
-			specifity = rand(0, 0.5)
-
-	return specifity
 
 /obj/machinery/anomaly/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if (stat & NOPOWER)

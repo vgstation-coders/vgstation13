@@ -6,6 +6,8 @@
 	var/said_last_words = 0 // All mobs can now whisper as they die
 	var/list/alerts = list()
 
+	var/event/on_blink
+
 /mob/variable_edited(var_name, old_value, new_value)
 	.=..()
 
@@ -39,6 +41,12 @@
 		on_irradiate.holder = null
 	if(on_death)
 		on_death.holder = null
+	if(on_bumping)
+		on_bumping.holder = null
+	if(on_bumped)
+		on_bumped.holder = null
+	if(on_touched)
+		on_touched.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -86,6 +94,9 @@
 	qdel(on_clickon)
 	qdel(on_irradiate)
 	qdel(on_death)
+	qdel(on_bumping)
+	qdel(on_bumped)
+	qdel(on_touched)
 
 	on_spellcast = null
 	on_uattack = null
@@ -94,6 +105,9 @@
 	on_clickon = null
 	on_irradiate = null
 	on_death = null
+	on_bumping = null
+	on_bumped = null
+	on_touched = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -133,21 +147,11 @@
 		if(client)
 			client.screen -= visible
 		visible = null
-	if(purged)
-		returnToPool(purged)
-		if(client)
-			client.screen -= purged
-		purged = null
 	if(internals)
 		returnToPool(internals)
 		if(client)
 			client.screen -= internals
 		internals = null
-	if(oxygen)
-		returnToPool(oxygen)
-		if(client)
-			client.screen -= oxygen
-		oxygen = null
 	if(i_select)
 		returnToPool(i_select)
 		if(client)
@@ -158,41 +162,21 @@
 		if(client)
 			client.screen -= m_select
 		m_select = null
-	if(toxin)
-		returnToPool(toxin)
-		if(client)
-			client.screen -= toxin
-		toxin = null
-	if(fire)
-		returnToPool(fire)
-		if(client)
-			client.screen -= fire
-		fire = null
-	if(bodytemp)
-		returnToPool(bodytemp)
-		if(client)
-			client.screen -= bodytemp
-		bodytemp = null
 	if(healths)
 		returnToPool(healths)
 		if(client)
 			client.screen -= healths
 		healths = null
+	if(healths2)
+		returnToPool(healths2)
+		if(client)
+			client.screen -= healths2
+		healths2 = null
 	if(throw_icon)
 		returnToPool(throw_icon)
 		if(client)
 			client.screen -= throw_icon
 		throw_icon = null
-	if(nutrition_icon)
-		returnToPool(nutrition_icon)
-		if(client)
-			client.screen -= nutrition_icon
-		nutrition_icon = null
-	if(pressure)
-		returnToPool(pressure)
-		if(client)
-			client.screen -= pressure
-		pressure = null
 	if(damageoverlay)
 		returnToPool(damageoverlay)
 		if(client)
@@ -313,6 +297,9 @@
 	on_clickon = new(owner = src)
 	on_irradiate = new(owner = src)
 	on_death = new(owner = src)
+	on_bumping = new(owner = src)
+	on_bumped = new(owner = src)
+	on_touched = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -600,8 +587,8 @@
 
 /mob/proc/restrained()
 	if(timestopped)
-		return 1 //under effects of time magick
-	return
+		return TRUE //under effects of time magick
+	return FALSE
 
 //This proc is called whenever someone clicks an inventory ui slot.
 /mob/proc/attack_ui(slot, hand_index)
@@ -1057,7 +1044,7 @@ Use this proc preferably at the end of an equipment loadout
 //note: ghosts can point, this is intended
 //visible_message will handle invisibility properly
 //overriden here and in /mob/dead/observer for different point span classes and sanity checks
-/mob/verb/pointed(atom/A as turf | obj | mob in view(get_turf(src)))
+/mob/verb/pointed(atom/A as turf | obj | mob in tview(src))
 	set name = "Point To"
 	set category = "Object"
 
@@ -1071,7 +1058,7 @@ Use this proc preferably at the end of an equipment loadout
 		I.showoff(src)
 		return 0
 
-	if(!(A in (view(get_turf(src)) + get_all_slots())) || (usr.see_invisible < A.invisibility))
+	if(!(A in (tview(src) + get_all_slots())))
 		message_admins("<span class='warning'><B>WARNING: </B><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?</span>", 1)
 		log_admin("[key_name_admin(src)] just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?")
 		return 0
@@ -1511,7 +1498,9 @@ Use this proc preferably at the end of an equipment loadout
 
 
 /mob/proc/can_use_hands()
-	return
+	if(restrained())
+		return FALSE
+	return TRUE
 
 /mob/proc/is_active()
 	return (0 >= usr.stat)
@@ -1529,11 +1518,13 @@ Use this proc preferably at the end of an equipment loadout
 /mob/Stat()
 	..()
 
+	statpanel("Status") //Default tab
 	if(client && client.holder && client.inactivity < 1200)
 		if(statpanel("MC"))
 			stat("Location:", "([x], [y], [z])")
 			stat("CPU:", "[world.cpu]")
 			stat("Instances:", "[world.contents.len]")
+			stat("Internal tick usage:", "[internal_tick_usage]")
 
 			stat(null)
 			if(Master)
@@ -2182,6 +2173,7 @@ mob/proc/on_foot()
 
 /obj/transmog_body_container/proc/set_contained_mob(var/mob/M)
 	ASSERT(M)
+	M.unlock_from()
 	M.forceMove(src)
 	contained_mob = M
 
@@ -2234,7 +2226,7 @@ mob/proc/on_foot()
 			return TRUE
 
 	for(var/mob/living/simple_animal/hostile/asteroid/pillow/P in view(src))
-		if(P.isDead())
+		if(P.isDead() || !P.pacify_aura)
 			continue
 		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
 		return TRUE
@@ -2242,7 +2234,8 @@ mob/proc/on_foot()
 	return FALSE
 
 /mob/proc/handle_regular_hud_updates()
-	return
+	if(client)
+		return TRUE
 
 /mob/proc/update_antag_huds()
 	if (mind)
@@ -2288,6 +2281,9 @@ mob/proc/on_foot()
 			to_chat(src, "Interference is disrupting the connection with the target mind.")
 			return 0
 	return 1
+
+/mob/proc/get_personal_ambience()
+	return list()
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

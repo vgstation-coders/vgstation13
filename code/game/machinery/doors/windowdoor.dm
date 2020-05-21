@@ -215,6 +215,15 @@
 	add_hiddenprint(user)
 	return attack_hand(user)
 
+/obj/machinery/door/window/attack_ghost(mob/user)
+	if(isAdminGhost(user))
+		if (!density)
+			return close()
+		else
+			return open()
+	else
+		..()
+
 /obj/machinery/door/window/attack_paw(mob/living/user)
 	if(istype(user, /mob/living/carbon/alien/humanoid) || istype(user, /mob/living/carbon/slime/adult))
 		if(operating)
@@ -243,7 +252,7 @@
 	// Make emagged/open doors able to be deconstructed
 	if(!density && operating != 1 && iscrowbar(I))
 		user.visible_message("[user] is removing \the [electronics.name] from \the [name].", "You start to remove \the [electronics.name] from \the [name].")
-		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+		I.playtoolsound(src, 100)
 		if(do_after(user, src, 40) && src && !density && operating != 1)
 			to_chat(user, "<span class='notice'>You removed \the [electronics.name]!</span>")
 			make_assembly()

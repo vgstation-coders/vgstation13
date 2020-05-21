@@ -2,7 +2,7 @@
 	name = "Butt-Bot's Revenge"
 	desc = "This spell removes the target's ass in a firey explosion."
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 	abbreviation = "AN"
 
 	school = "evocation"

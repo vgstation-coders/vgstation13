@@ -112,6 +112,14 @@
 	name = "\improper Discount Dan's Chocolate Bar"
 	icon_state = "danbar"
 
+/obj/item/trash/donitos
+	name = "Donitos"
+	icon_state = "donitos"
+
+/obj/item/trash/donitos_coolranch
+	name = "Donitos Cool Ranch"
+	icon_state = "donitos_coolranch"
+
 /obj/item/trash/danitos
 	name = "\improper Danitos"
 	icon_state = "danitos"
@@ -240,3 +248,8 @@ var/list/crushed_cans_cache = list()
 /obj/item/trash/soda_cans/post_mapsave2atom(var/list/L)
 	name = color
 	color = null
+
+/obj/item/trash/slag
+	name = "slag"
+	desc = "Electronics burnt to a crisp"
+	icon_state = "slag"

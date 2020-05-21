@@ -2,6 +2,7 @@
 
 /obj/machinery/chem_dispenser
 	name = "\improper Chem Dispenser"
+	desc = "It dispenses chemicals."
 	density = TRUE
 	anchored = TRUE
 	icon = 'icons/obj/chemical.dmi'
@@ -18,6 +19,7 @@
 	var/custom = 0
 	var/useramount = 30 // Last used amount
 	var/required_quirk = MODULE_CAN_HANDLE_CHEMS
+	var/template_path = "chem_dispenser.tmpl"
 	var/list/dispensable_reagents = list(
 		HYDROGEN,
 		LITHIUM,
@@ -201,7 +203,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "chem_dispenser.tmpl", "[src.name] 5000", 390, 630)
+		ui = new(user, src, ui_key, template_path, "[src.name]", 390, 630)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -221,12 +223,12 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(href_list["amount"] == "0")
 			var/num = input("Enter desired output amount", "Amount", useramount) as num
 			if (num)
-				amount = round(text2num(num), 5)
+				amount = round(text2num(num), 1)
 				custom = 1
 		else
 			custom = 0
-			amount = round(text2num(href_list["amount"]), 5) // round to nearest 5
-		amount = clamp(amount, 5, 100) // Since the user can actually type the commands himself, some sanity checking
+			amount = round(text2num(href_list["amount"]), 1)
+		amount = clamp(amount, 1, container ? container.volume : 100)
 		if (custom)
 			useramount = amount
 
@@ -281,6 +283,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return
 	return ..()
 
+/obj/machinery/chem_dispenser/proc/can_insert(var/obj/item/I)
+	return istype(I, /obj/item/weapon/reagent_containers/glass) || istype(I, /obj/item/weapon/reagent_containers/food/drinks)
+
 /obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob) //to be worked on
 
 	if(..())
@@ -290,7 +295,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(!can_use(user))
 			return
 
-	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
+	if(can_insert(D))
 		if(src.container)
 			to_chat(user, "\A [src.container] is already loaded into the machine.")
 			return
@@ -468,6 +473,34 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/booze_dispenser/mapping
 	max_energy = 100
 	energy = 100
+
+/obj/machinery/chem_dispenser/condiment
+	name = "\improper Condiment Dispenser"
+	desc = "A dispenser designed to output condiments directly onto food, or into condiment bottles. These were banned for being 'unhygienic' after one too many licking incidents."
+	icon_state = "condi_dispenser"
+	pass_flags = PASSTABLE
+	max_energy = 30
+	required_quirk = MODULE_CAN_HANDLE_FOOD
+	template_path = "condi_dispenser.tmpl"
+	dispensable_reagents = list(
+		SODIUMCHLORIDE,
+		BLACKPEPPER,
+		KETCHUP,
+		MUSTARD,
+		RELISH,
+		CAPSAICIN,
+		FROSTOIL,
+		LIQUIDBUTTER,
+		SOYSAUCE,
+		SPRINKLES
+		)
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
+
+/obj/machinery/chem_dispenser/condiment/can_insert(obj/item/I)
+	return istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/reagent_containers/food/condiment)
+
+/obj/machinery/chem_dispenser/condiment/update_icon()
+	return //no overlays for this one, it takes special inputs
 
 #undef FORMAT_DISPENSER_NAME
 

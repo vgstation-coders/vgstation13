@@ -71,6 +71,9 @@ var/list/impact_master = list()
 	var/inaccurate = 0
 
 	var/turf/target = null
+	var/datum/tracker/tracker_datum = null
+	var/tracking = FALSE
+
 	var/dist_x = 0
 	var/dist_y = 0
 	var/dx = 0
@@ -115,10 +118,19 @@ var/list/impact_master = list()
 	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
+
+	qdel(tracker_datum)
+	tracker_datum = null
+
 	if(blocked >= 100)
 		return 0//Full block
 	if(!isliving(atarget))
 		return 0
+
+	if(istype(shot_from,/obj/item/weapon/gun))
+		var/obj/item/weapon/gun/G = shot_from
+		G.bullet_hitting(src,atarget)
+
 	// FUCK mice. - N3X
 	if(ismouse(atarget) && (stun+weaken+paralyze+agony)>5)
 		var/mob/living/simple_animal/mouse/M=atarget
@@ -205,7 +217,7 @@ var/list/impact_master = list()
 		var/miss_modifier = -30
 		if (istype(shot_from,/obj/item/weapon/gun))	//If you aim at someone beforehead, it'll hit more often.
 			var/obj/item/weapon/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
-			if (daddy.target && original in daddy.target) //As opposed to no-delay pew pew
+			if (daddy.target && (original in daddy.target)) //As opposed to no-delay pew pew
 				miss_modifier += -30
 		if(istype(src, /obj/item/projectile/beam/lightning)) //Lightning is quite accurate
 			miss_modifier += -200
@@ -234,6 +246,7 @@ var/list/impact_master = list()
 					visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 			admin_warn(M)
 			if(istype(firer, /mob))
+				M.do_hitmarker(firer)
 				if(!iscarbon(firer))
 					M.LAssailant = null
 				else
@@ -362,6 +375,16 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(proj_target)
+
+	if (tracking)
+		if (istype(proj_target, /atom/movable))
+			var/atom/movable/the_target = proj_target
+			var/datum/tracker/T = new
+			T.name = "[src] tracker on [proj_target]"
+			T.target = target
+			src.tracker_datum = T
+			the_target.add_tracker(T)
+
 	dist_x = abs(target.x - starting.x)
 	dist_y = abs(target.y - starting.y)
 
@@ -418,6 +441,36 @@ var/list/impact_master = list()
 			pixel_y = PixelY
 
 		bumped = 0
+
+		if (tracker_datum && tracker_datum.changed)
+			tracker_datum.changed = FALSE
+			var/dist = get_dist(tracker_datum.target, src)
+			if (tracker_datum.lost_position_distance && (dist > tracker_datum.lost_position_distance))
+				tracker_datum.active = FALSE
+			else
+				target = tracker_datum.target
+				var/turf/current = get_turf(src)
+
+				// recalculate trajectory based on new tracker data
+				if (target.x > current.x)
+					dx = EAST
+				else
+					dx = WEST
+
+				if (target.y > current.y)
+					dy = NORTH
+				else
+					dy = SOUTH
+
+				dist_x = abs(target.x - current.x)
+				dist_y = abs(target.y - current.y)
+
+				if(dist_x > dist_y)
+					error = dist_x/2 - dist_y
+				else
+					error = dist_y/2 - dist_x
+				if(rotate)
+					target_angle = round(Get_Angle(current,target))
 
 		sleep(projectile_speed)
 

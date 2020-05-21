@@ -296,7 +296,7 @@
 			else
 				to_chat(user, "<span class='notice'>You need at least three plastic sheets to complete this task.</span>")
 			return*/
-	else if(istype(W,/obj/item/weapon/screwdriver))
+	else if(W.is_screwdriver(user))
 		if(buildstate == 5)
 			to_chat(user, "<span class='notice'>You secure the crossbow's various parts.</span>")
 			new /obj/item/weapon/crossbow(get_turf(src))

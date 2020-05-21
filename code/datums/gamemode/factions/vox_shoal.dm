@@ -1,29 +1,3 @@
-/datum/faction/vox_shoal
-	name = "Vox Shoal"
-	desc = "In short supply of money, organs, experts, and rubber duckies."
-	ID = VOXSHOAL
-	required_pref = VOXRAIDER
-	initial_role = VOXRAIDER
-	late_role = VOXRAIDER
-	roletype = /datum/role/vox_raider
-	initroletype = /datum/role/vox_raider
-	logo_state = "vox-logo"
-	hud_icons = list("vox-logo")
-
-	var/time_left = (30 MINUTES)/10
-	var/completed = FALSE
-
-	var/results = "The Shoal didn't return yet."
-
-	var/list/dept_objective = list()
-	var/list/bonus_items_of_the_day = list()
-
-	var/got_personnel = 0
-	var/got_items = 0
-
-	var/total_points = 0
-	var/list/our_bounty_lockers = list()
-
 var/list/low_score_items = list(
 	/obj/item/stack,
 	/obj/item/clothing,
@@ -71,6 +45,37 @@ var/list/potential_bonus_items = list(
 	/obj/item/clothing/mask/gas/clown_hat,
 )
 
+/datum/faction/vox_shoal
+	name = "Vox Shoal"
+	desc = "In short supply of money, organs, experts, and rubber duckies."
+	ID = VOXSHOAL
+	required_pref = VOXRAIDER
+	initial_role = VOXRAIDER
+	late_role = VOXRAIDER
+	roletype = /datum/role/vox_raider
+	initroletype = /datum/role/vox_raider
+	logo_state = "vox-logo"
+	hud_icons = list("vox-logo")
+
+	var/time_left = (30 MINUTES)/10
+	var/completed = FALSE
+	var/results = "The Shoal didn't return yet."
+	var/list/dept_objective = list()
+	var/list/bonus_items_of_the_day = list()
+
+	var/complete_failure = FALSE // Set to TRUE when a non-raider uses the shuttle to return home.
+
+	var/got_personnel = 0
+	var/got_items = 0
+
+	var/total_points = 0
+	var/list/our_bounty_lockers = list()
+
+/datum/faction/vox_shoal/New()
+	..()
+	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
+	vox_shuttle.initialize() //As the area isn't loaded until the above call, its docking ports aren't populated until we call this
+
 /datum/faction/vox_shoal/forgeObjectives()
 	var/list/dept_of_choice = pick(
 		engineering_positions,
@@ -103,14 +108,15 @@ var/list/potential_bonus_items = list(
 
 	for (var/i = 1 to 4)
 		var/chosen_one = pick(potential_bonus_items_temp)
-		potential_bonus_items_temp =- chosen_one
+		potential_bonus_items_temp -= chosen_one
 		bonus_items_of_the_day += chosen_one
 
-	AppendObjective(/datum/objective/steal_priority)
+	var/datum/objective/steal_priority/SP = new(bonus_items_of_the_day)
+	AppendObjective(SP)
 
 /datum/faction/vox_shoal/GetScoreboard()
 	. = ..()
-	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
+	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b> minutes"
 	if (time_left < 0)
 		. += "<br/> <span class='danger'>The raid took too long.</span>"
 	. += "<br/> The raiders took <b>[got_personnel]</b> people to the Shoal."
@@ -121,63 +127,6 @@ var/list/potential_bonus_items = list(
 /datum/faction/vox_shoal/AdminPanelEntry()
 	. = ..()
 	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
-
-/datum/faction/vox_shoal/OnPostSetup()
-	..()
-	var/list/turf/vox_spawn = list()
-
-	for(var/obj/effect/landmark/A in landmarks_list)
-		if(A.name == "voxstart")
-			vox_spawn += get_turf(A)
-			qdel(A)
-			A = null
-			continue
-		if (A.name == "vox_locker")
-			var/obj/structure/closet/loot/L = new(get_turf(A))
-			our_bounty_lockers += L
-			qdel(A)
-			A = null
-			continue
-
-	var/spawn_count = 1
-
-	for(var/datum/role/vox_raider/V in members)
-		if(spawn_count > vox_spawn.len)
-			spawn_count = 1
-		var/datum/mind/synd_mind = V.antag
-		synd_mind.current.forceMove(vox_spawn[spawn_count])
-		spawn_count++
-		equip_raider(synd_mind.current, spawn_count)
-
-/datum/faction/vox_shoal/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
-	vox.age = rand(12,20)
-	if(vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
-		vox.overeatduration = 0 //Fat-B-Gone
-		if(vox.nutrition > 400) //We are also overeating nutriment-wise
-			vox.nutrition = 400 //Fix that
-		vox.mutations.Remove(M_FAT)
-		vox.update_mutantrace(0)
-		vox.update_mutations(0)
-		vox.update_inv_w_uniform(0)
-		vox.update_inv_wear_suit()
-
-	vox.my_appearance.s_tone = random_skin_tone("Vox")
-	vox.dna.mutantrace = "vox"
-	vox.set_species("Vox")
-	vox.fully_replace_character_name(vox.real_name, vox.generate_name())
-	vox.mind.name = vox.name
-	//vox.languages = HUMAN // Removing language from chargen.
-	vox.default_language = all_languages[LANGUAGE_VOX]
-	vox.flavor_text = ""
-	vox.species.default_language = LANGUAGE_VOX
-	vox.remove_language(LANGUAGE_GALACTIC_COMMON)
-	vox.my_appearance.h_style = "Short Vox Quills"
-	vox.my_appearance.f_style = "Shaved"
-	for(var/datum/organ/external/limb in vox.organs)
-		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
-	vox.equip_vox_raider(index)
-	vox.regenerate_icons()
-	vox.store_memory("The priority items for the day are: [english_list(bonus_items_of_the_day)]")
 
 /datum/faction/vox_shoal/process()
 	if (completed)
@@ -204,8 +153,7 @@ var/list/potential_bonus_items = list(
 					total_points += 500
 			else
 				count_score(H)
-				to_chat(H, "<span class='warning'>You can't really remember the details, but somehow, you managed to escape. Your situation is still far from ideal, however.")
-				H.send_back_to_main_station()
+				H.send_back_to_main_station(complete_failure)
 
 		for (var/obj/structure/closet/loot/L in our_bounty_lockers)
 			for (var/obj/O in L)
@@ -244,6 +192,14 @@ var/list/potential_bonus_items = list(
 
 
 /datum/faction/vox_shoal/proc/count_human_score(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		if (H.old_assigned_role in command_positions)
+			total_points += 300
+		if (H.old_assigned_role in dept_objective)
+			total_points += 200
+			got_personnel++
+		return
+
 	if (H.mind.assigned_role in command_positions)
 		total_points += 300
 	if (H.mind.assigned_role in dept_objective)
@@ -257,8 +213,15 @@ var/list/potential_bonus_items = list(
 	return english_list(our_stars)
 
 // -- Mobs procs --
-			
-/mob/living/proc/send_back_to_main_station()
+
+/mob/living/proc/send_back_to_main_station(var/complete_failure = FALSE)
+	if (complete_failure) // Non-vox somehow used the vox shuttle.
+		to_chat(src, "<span class='danger'>After hours of aimlessly wandering through space in hostile Vox territory, the shuttle quickly ran out of fuel. You and your companions decided to abandon the ship and throw escape shelters in the general direction of the station.</span>")
+		var/obj/structure/inflatable/shelter/S = new(get_turf(src))
+		forceMove(S)
+		S.ThrowAtStation()
+		return
+	to_chat(src, "<span class='warning'>You can't really remember the details, but somehow, you managed to escape. Your situation is still far from ideal, however.</span>")
 	delete_all_equipped_items()
 	if (ishuman(src))
 		var/obj/item/clothing/under/color/grey/G = new(src)
@@ -267,90 +230,9 @@ var/list/potential_bonus_items = list(
 		equip_to_appropriate_slot(B)
 		var/obj/item/device/radio/R = new(src)
 		put_in_hands(R)
-	var/obj/structure/inflatable/shelter/S = new(src)
+	var/obj/structure/inflatable/shelter/S = new(get_turf(src))
 	forceMove(S)
 	S.ThrowAtStation()
-	
-		
-/mob/living/carbon/human/proc/equip_vox_raider(var/index)
-	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
-	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
-	equip_to_slot_or_del(R, slot_ears)
-
-	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes(src)
-	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider(src))
-	equip_to_slot_or_del(uni, slot_w_uniform)
-
-	equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox(src), slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
-	equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox(src), slot_gloves) // AS ABOVE.
-
-
-	switch(index)
-		if(1) // Vox raider!
-			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/carapace(src), slot_wear_suit)
-			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/carapace(src), slot_head)
-			equip_to_slot_or_del(new /obj/item/weapon/melee/telebaton(src), slot_belt)
-			equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/monocle(src), slot_glasses) // REPLACE WITH CODED VOX ALTERNATIVE.
-			equip_to_slot_or_del(new /obj/item/device/chameleon(src), slot_l_store)
-
-			var/obj/item/weapon/crossbow/W = new(src)
-			W.cell = new /obj/item/weapon/cell/crap(W)
-			W.cell.charge = 500
-			put_in_hands(W)
-
-			var/obj/item/stack/rods/A = new(src)
-			A.amount = 20
-			put_in_hands(A)
-
-		if(2) // Vox engineer!
-			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/pressure(src), slot_wear_suit)
-			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/pressure(src), slot_head)
-			equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(src), slot_belt)
-			equip_to_slot_or_del(new /obj/item/clothing/glasses/scanner/meson(src), slot_glasses) // REPLACE WITH CODED VOX ALTERNATIVE.
-			put_in_hands(new /obj/item/weapon/storage/box/emps(src))
-			put_in_hands(new /obj/item/device/multitool(src))
-
-			var/obj/item/weapon/paper/vox_paper/VP = new(src)
-			VP.initialize()
-			put_in_hands(VP)
-
-		if(3) // Vox saboteur!
-			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/carapace(src), slot_wear_suit)
-			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/carapace(src), slot_head)
-			equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(src), slot_belt)
-			equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal/monocle(src), slot_glasses) // REPLACE WITH CODED VOX ALTERNATIVE.
-			equip_to_slot_or_del(new /obj/item/weapon/card/emag(src), slot_l_store)
-			put_in_hands(new /obj/item/weapon/gun/dartgun/vox/raider(src))
-			put_in_hands(new /obj/item/device/multitool(src))
-
-		if(4) // Vox medic!
-			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/pressure(src), slot_wear_suit)
-			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/pressure(src), slot_head)
-			equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(src), slot_belt) // Who needs actual surgical tools?
-			equip_to_slot_or_del(new /obj/item/clothing/glasses/hud/health(src), slot_glasses) // REPLACE WITH CODED VOX ALTERNATIVE.
-			equip_to_slot_or_del(new /obj/item/weapon/circular_saw(src), slot_l_store)
-			put_in_hands(new /obj/item/weapon/gun/dartgun/vox/medical)
-
-	equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox(src), slot_wear_mask)
-	equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen(src), slot_back)
-	equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_r_store)
-
-	var/obj/item/weapon/card/id/syndicate/C = new(src)
-	//C.name = "[real_name]'s Legitimate Human ID Card"
-	C.registered_name = real_name
-	C.assignment = "Trader"
-	C.UpdateName()
-	C.SetOwnerInfo(src)
-
-	C.icon_state = "trader"
-	C.access = list(access_syndicate, access_trade)
-	//C.registered_user = src
-	var/obj/item/weapon/storage/wallet/W = new(src)
-	W.handle_item_insertion(C)
-	// NO. /vg/ spawn_money(rand(50,150)*10,W)
-	equip_to_slot_or_del(W, slot_wear_id)
-
-	return 1
 
 /obj/item/weapon/paper/vox_paper
 	name = "Shoal objectives"
@@ -363,3 +245,71 @@ var/list/potential_bonus_items = list(
 	<br/>
 	Our best agents of all time were able to gather an estimate of [score_to_beat] voxcoins in assets, on [vox_raider_data["MM"]]/[vox_raider_data["DD"]]/[vox_raider_data["YY"]]. <br/>
 	Their names are as follows: [best_team]."}
+
+/obj/item/weapon/coin/raider
+	name = "raider coin"
+	icon_state = "coin_gold"
+
+/datum/map_element/dungeon/vox_shuttle
+	file_path = "maps/misc/voxshuttle.dmm"
+	unique = TRUE
+
+/obj/item/weapon/storage/box/large/vox_equipment
+	name = "Vox equipment box"
+	desc = "A Vox Box for short."
+
+/obj/item/weapon/storage/box/large/vox_equipment/raider/New()
+	..()
+	new /obj/item/clothing/suit/space/vox/carapace(src)
+	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
+	new /obj/item/weapon/melee/telebaton(src)
+	new /obj/item/clothing/glasses/thermal/monocle(src)
+	new /obj/item/device/chameleon(src)
+	var/obj/item/weapon/crossbow/W = new(src)
+	W.cell = new /obj/item/weapon/cell/crap(W)
+	W.cell.charge = 500
+	var/obj/item/stack/rods/A = new(src)
+	A.amount = 20
+
+/obj/item/weapon/storage/box/large/vox_equipment/engineer/New()
+	..()
+	new /obj/item/clothing/suit/space/vox/pressure(src)
+	new /obj/item/clothing/head/helmet/space/vox/pressure(src)
+	new /obj/item/weapon/storage/belt/utility/full(src)
+	new /obj/item/clothing/glasses/scanner/meson(src)
+	new /obj/item/weapon/storage/box/emps(src)
+	new /obj/item/device/multitool(src)
+	var/obj/item/weapon/paper/vox_paper/VP = new(src)
+	VP.initialize()
+
+/obj/item/weapon/storage/box/large/vox_equipment/saboteur/New()
+	..()
+	new /obj/item/clothing/suit/space/vox/carapace(src)
+	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
+	new /obj/item/weapon/storage/belt/utility/full(src)
+	new /obj/item/clothing/glasses/thermal/monocle(src)
+	new /obj/item/weapon/card/emag(src)
+	new /obj/item/weapon/gun/dartgun/vox/raider(src)
+	new /obj/item/device/multitool(src)
+
+/obj/item/weapon/storage/box/large/vox_equipment/medic/New()
+	..()
+	new /obj/item/clothing/suit/space/vox/pressure(src)
+	new /obj/item/clothing/head/helmet/space/vox/pressure(src)
+	new /obj/item/weapon/storage/belt/utility/full(src)
+	new /obj/item/clothing/glasses/hud/health(src)
+	new /obj/item/weapon/circular_saw(src)
+	new /obj/item/weapon/gun/dartgun/vox/medical(src)
+
+/obj/machinery/vending/raider
+	name = "\improper Raider Surplus"
+	icon_state = "voxseed"
+	vend_reply = "Happy hunting!"
+	unhackable = TRUE
+	accepted_coins = list(/obj/item/weapon/coin/raider)
+	premium = list(
+		/obj/item/weapon/storage/box/large/vox_equipment/medic = 2,
+		/obj/item/weapon/storage/box/large/vox_equipment/saboteur = 2,
+		/obj/item/weapon/storage/box/large/vox_equipment/engineer = 2,
+		/obj/item/weapon/storage/box/large/vox_equipment/raider = 2
+	)

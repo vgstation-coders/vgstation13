@@ -75,7 +75,7 @@
 			playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 			qdel(W)
 			update_icon()
-			
+
 /obj/item/weapon/gun/banannon/can_discharge()
 	if(current_ammo)
 		return 1

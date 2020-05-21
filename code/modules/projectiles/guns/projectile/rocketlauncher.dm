@@ -9,7 +9,7 @@
 	starting_materials = list(MAT_IRON = 5000)
 	w_type = RECYK_METAL
 	force = 10
-	recoil = 5
+	recoil = 1 //The backblast isn't just decorative you know
 	throw_speed = 4
 	throw_range = 3
 	fire_delay = 5
@@ -65,7 +65,7 @@
 	starting_materials = list(MAT_IRON = 50000, MAT_GLASS = 50000, MAT_GOLD = 6000)
 	w_type = RECYK_METAL
 	force = 10
-	recoil = 5
+	recoil = 1
 	throw_speed = 4
 	throw_range = 3
 	fire_delay = 5

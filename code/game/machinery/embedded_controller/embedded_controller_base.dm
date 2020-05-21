@@ -41,7 +41,7 @@
 					to_chat(usr, "You begin removing screws from \the [src] backplate...")
 					if(do_after(user, src, 50))
 						to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
-						playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+						W.playtoolsound(src, 50)
 						new /obj/item/mounted/frame/airlock_controller(get_turf(src))
 						qdel(src)
 					return 1
@@ -101,7 +101,7 @@
 					return 1
 				if(W.is_screwdriver(user))
 					to_chat(user, "You begin to complete \the [src]...")
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					if(do_after(user, src, 20))
 						if(!_circuitboard)
 							_circuitboard=new boardtype(src)

@@ -137,7 +137,7 @@
 
 /obj/item/weapon/storage/briefcase/false_bottomed/smg/New()
 	..()
-	var/obj/item/weapon/gun/projectile/automatic/SMG = new
+	var/obj/item/weapon/gun/projectile/automatic/uzi/bigmag/SMG = new
 	SMG.gun_flags &= ~AUTOMAGDROP //dont want to drop mags in null space, do we?
 	stored_item = SMG
 

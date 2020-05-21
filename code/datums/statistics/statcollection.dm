@@ -27,7 +27,7 @@
 // To ensure that if output file syntax is changed, we will still be able to process
 // new and old files
 // please increment this version whenever making changes
-#define STAT_OUTPUT_VERSION "1.3"
+#define STAT_OUTPUT_VERSION "1.4.0"
 #define STAT_OUTPUT_DIR "data/statfiles/"
 
 /datum/stat_collector
@@ -143,10 +143,10 @@
 	var/assignment = null
 
 // redo using mind list instead so we can get non-human players in its output
-/datum/stat/manifest_entry/New(/var/mob/living/carbon/human/M)
-	key = ckey(M.mind.key)
-	name = STRIP_NEWLINE(M.mind.name)
-	assignment = STRIP_NEWLINE(M.mind.assigned_job)
+/datum/stat/manifest_entry/New(var/datum/mind/M)
+	key = ckey(M.key)
+	name = STRIP_NEWLINE(M.name)
+	assignment = STRIP_NEWLINE(M.assigned_job)
 
 /datum/stat_collector/proc/get_valid_file(var/extension = "json")
 	var/filename_date = time2text(round_start_time, "YYYY-MM-DD")

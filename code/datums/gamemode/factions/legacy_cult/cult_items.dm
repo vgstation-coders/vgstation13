@@ -43,7 +43,7 @@
 	icon_state = "culthood"
 	desc = "A hood worn by the followers of Nar-Sie."
 	armor = list(melee = 30, bullet = 10, laser = 5,energy = 5, bomb = 0, bio = 0, rad = 0)
-	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 

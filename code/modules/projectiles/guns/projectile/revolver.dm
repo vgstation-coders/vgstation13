@@ -6,6 +6,7 @@
 	caliber = list(POINT38 = 1, POINT357 = 1)
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/c38"
+	recoil = 3
 	var/perfect = 0
 
 	special_check(var/mob/living/carbon/human/M) //to see if the gun fires 357 rounds safely. A non-modified revolver randomly blows up
@@ -89,8 +90,9 @@
 	desc = "When you absolutely, positively need a 10mm hole in the other guy. Uses .357 ammo."	//>10mm hole >.357
 	icon_state = "mateba"
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
-	
-	
+	recoil = 3
+
+
 /obj/item/weapon/gun/projectile/nagant //revolver that simple mob russians use
 	name = "nagant revolver"
 	desc = "Just like in those neo-russian spy movies! Uses 7.62x38R ammo."
@@ -101,7 +103,8 @@
 	ammo_type = "/obj/item/ammo_casing/c762x38r"
 	gun_flags = SILENCECOMP
 	fire_sound = 'sound/weapons/nagant.ogg'
-	
+	recoil = 3
+
 /obj/item/weapon/gun/projectile/nagant/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""]"
@@ -118,6 +121,7 @@
 	max_shells = 6
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	fire_delay = 1
+	recoil = 3
 
 /obj/item/weapon/gun/projectile/russian/New()
 	loaded = new/list(6) //imperative that this keeps 6 entries at all times
@@ -224,7 +228,7 @@
 
 	..()
 
-/obj/item/weapon/gun/projectile/russian/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/russian/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	var/obj/item/ammo_casing/AC = loaded[1]
 	if(!AC || !AC.BB)
 		user.visible_message("<span class='warning'>*click*</span>")
@@ -256,6 +260,7 @@
 	desc = "The greatest handgun ever made."
 	icon_state = "colt"
 	max_shells = 6
+	recoil = 3
 	var/cocked = FALSE
 	var/last_spin = 0
 	var/spin_delay = 1 SECONDS	//let's not get crazy
@@ -285,7 +290,7 @@
 /obj/item/weapon/gun/projectile/colt/AltClick(var/mob/user)
 	attack_self(user, callparent = TRUE)
 
-/obj/item/weapon/gun/projectile/colt/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, struggle = 0)
+/obj/item/weapon/gun/projectile/colt/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(cocked)
 		..()
 		cocked = FALSE
@@ -308,7 +313,7 @@
 	user.put_in_hands(B)
 	qdel(src)
 
-/obj/item/weapon/gun/projectile/banana/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/banana/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	. = ..()
 	make_peel(user)
 

@@ -125,6 +125,9 @@
 		if("Internal Affairs Agent")
 			suit=/obj/item/clothing/suit/space/plasmaman/lawyer
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/lawyer
+		if("Librarian")
+			suit=/obj/item/clothing/suit/space/plasmaman/librarian
+			helm=/obj/item/clothing/head/helmet/space/plasmaman/librarian
 	H.equip_or_collect(new suit(H), slot_wear_suit)
 	H.equip_or_collect(new helm(H), slot_head)
 	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.
@@ -156,3 +159,15 @@
 				PS.Extinguish(host)
 			else
 				PS.regulate_temp_of_wearer(host)
+
+/datum/species/plasmaman/gib(mob/living/carbon/human/H)
+	..()
+	var/datum/organ/external/head_organ = H.get_organ(LIMB_HEAD)
+	if(head_organ.status & ORGAN_DESTROYED)
+		new /obj/effect/decal/remains/human/noskull(H.loc)
+	else
+		new /obj/effect/decal/remains/human(H.loc)
+		head_organ.droplimb(1,1)
+
+	H.drop_all()
+	qdel(src)

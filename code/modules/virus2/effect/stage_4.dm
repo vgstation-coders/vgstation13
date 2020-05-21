@@ -126,12 +126,12 @@
 	name = "Stubborn brain syndrome"
 	desc = "UNKNOWN"
 	stage = 4
-	badness = EFFECT_DANGER_ANNOYING
+	badness = EFFECT_DANGER_DEADLY
 
 /datum/disease2/effect/zombie/activate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/h = mob
-		h.become_zombie_after_death = 1
+		h.become_zombie_after_death = 2
 
 
 /datum/disease2/effect/voxpox
@@ -908,3 +908,17 @@
 					var/iter = rand(1,3)
 					for(var/i=0,i<iter,i++)
 						step_towards(S,mob)
+
+/datum/disease2/effect/humanity
+	name = "Forced Humanity Syndrome"
+	desc = "A recent development by human supremacists. Causes non-human infected to mutate into a Human."
+	stage = 4
+	badness = EFFECT_DANGER_HINDRANCE
+	var/old_species = "Human"
+
+/datum/disease2/effect/humanity/activate(var/mob/living/mob)
+	if(istype(mob,/mob/living/carbon/human))
+		var/mob/living/carbon/human/h = mob
+		if(!istype(h.species.name, /datum/species/human))
+			h.set_species("Human")
+			h.regenerate_icons()

@@ -102,7 +102,7 @@
 			update_icon()
 			return 1
 
-	else if (iswrench(W))
+	else if (W.is_wrench(user))
 		if(connected_port)
 			disconnect()
 			to_chat(user, "<span class='notice'>You disconnect [name] from the port.</span>")

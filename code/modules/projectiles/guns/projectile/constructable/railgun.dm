@@ -166,10 +166,10 @@
 	else if(W.is_screwdriver(user))
 		if(rails_secure)
 			to_chat(user, "You loosen the rail assembly within \the [src].")
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 		else
 			to_chat(user, "You tighten the rail assembly inside \the [src].")
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 		rails_secure = !rails_secure
 
 /obj/item/weapon/gun/projectile/railgun/examine(mob/user)
@@ -187,7 +187,7 @@
 	if(!rails_secure && loadedassembly)
 		to_chat(user, "<span class='warning'>\The [loadedassembly] inside \the [src] is unsecured.</span>")
 
-/obj/item/weapon/gun/projectile/railgun/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/projectile/railgun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if (istype(A, /obj/item/weapon/storage/backpack ))
 		return
 
@@ -218,15 +218,15 @@
 /obj/item/weapon/gun/projectile/railgun/proc/calculate_strength(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(!loadedcapacitor || !loadedammo)
 		return
-	
+
 	var/shot_charge = round(loadedcapacitor.stored_charge)
 	strength = shot_charge / 5000000
-	
+
 	loadedcapacitor.stored_charge -= shot_charge
 	if(shot_charge < TEN_MEGAWATTS)
 		strength = 0
 		throw_ammo(A,user)
-	
+
 	if(strength)
 		var/obj/item/projectile/bullet/APS/B = new(null)
 		if(istype(loadedammo, /obj/item/weapon/coin))
@@ -248,7 +248,7 @@
 		else if(strength == 90)
 			B.penetration = 10
 		in_chamber = B
-		
+
 		if(Fire(A,user,params, "struggle" = struggle))
 			loadedammo = null
 			if(strength >= 200)
@@ -294,14 +294,14 @@
 /obj/item/weapon/gun/projectile/railgun/preloaded
 	var/ammotype = /obj/item/weapon/coin/iron
 	var/capacitortype = /obj/item/weapon/stock_parts/capacitor/adv/super
-	
+
 /obj/item/weapon/gun/projectile/railgun/preloaded/New()
 	..()
 	loadedassembly = new /obj/item/weapon/rail_assembly(src)
 	rails_secure = 1
 	loadedammo = new ammotype(src)
 	loadedcapacitor = new capacitortype(src)
-	loadedcapacitor.stored_charge = loadedcapacitor.maximum_charge 
+	loadedcapacitor.stored_charge = loadedcapacitor.maximum_charge
 
 /obj/item/weapon/gun/projectile/railgun/preloaded/godslayer
 	ammotype = /obj/item/weapon/nullrod

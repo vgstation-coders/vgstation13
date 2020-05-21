@@ -117,6 +117,7 @@
 	armor = list(melee = 30, bullet = 20, laser = 20,energy = 20, bomb = 20, bio = 20, rad = 20)
 	allowed = list(/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
 	siemens_coefficient = 0.8
+	clothing_flags = ONESIZEFITSALL
 
 	wizard_garb = 1
 
@@ -236,3 +237,9 @@
 	icon_state = "wizard_snow"
 	item_state = "wizard_snow"
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	
+/obj/item/clothing/head/wizard/sinterklaas
+	name = "sinterklaas mitre"
+	desc = "Strange-looking red head-wear that most certainly belongs to a real saint."
+	icon_state = "sinterklaasmitre"
+	siemens_coefficient = 0.8

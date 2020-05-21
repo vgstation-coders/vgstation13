@@ -44,7 +44,6 @@
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Diona")
-	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
 /mob/living/carbon/human/skellington/New(var/new_loc, delay_ready_dna = 0)
@@ -85,6 +84,11 @@
 /mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Slime")
 	my_appearance.h_style = "Bald"
+	regenerate_icons()
+
+/mob/living/carbon/human/insectoid/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Insectoid")
+	my_appearance.h_style = "Insectoid Antennae"
 	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
@@ -295,15 +299,11 @@
 	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/restrained()
-	if (timestopped)
-		return 1 //under effects of time magick
-	if (check_handcuffs())
-		return 1
+	if (..())
+		return TRUE
 	if (istype(wear_suit, /obj/item/clothing/suit/straight_jacket))
-		return 1
-	return 0
-
-
+		return TRUE
+	return FALSE
 
 /mob/living/carbon/human/var/co2overloadtime = null
 /mob/living/carbon/human/var/temperature_resistance = T0C+75 //but why is this here
@@ -1288,8 +1288,8 @@
 /mob/living/carbon/human/canSingulothPull(var/obj/machinery/singularity/singulo)
 	if(!..())
 		return 0
-		if((shoes.clothing_flags & MAGPULSE) && singulo.current_size <= STAGE_FOUR)
-			return 0
+	if((shoes.clothing_flags & MAGPULSE) && singulo.current_size <= STAGE_FOUR)
+		return 0
 	return 1
 // Get ALL accesses available.
 /mob/living/carbon/human/GetAccess()
@@ -1565,7 +1565,7 @@
 	return ((istype(S) && S.footprint_type) || (species && species.footprint_type) || /obj/effect/decal/cleanable/blood/tracks/footprints) //The shoes' footprint type overrides the mob's, for obvious reasons. Shoes with a falsy footprint_type will let the mob's footprint take over, though.
 
 
-/mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+/mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
 	if(..()) // we've been flashed
 		var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 		var/damage = intensity - eyecheck()
@@ -1607,7 +1607,7 @@
 		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
 
 /mob/living/carbon/human/reset_layer()
-	if(locked_to)
+	if(istype(locked_to, /obj/machinery/bot/mulebot)) //we only care about not appearing behind mulebots
 		return
 	if(lying)
 		plane = LYING_HUMAN_PLANE
@@ -1947,3 +1947,37 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/can_be_infected()
 	return 1
+
+//this method handles user getting attacked with an emag - the original logic was in human_defense.dm,
+//but it's better that it belongs to human.dm
+/mob/living/carbon/human/emag_act(var/mob/attacker, var/datum/organ/external/affecting, var/obj/item/weapon/card/emag)
+	var/hit_area = affecting.display_name
+	if(!(affecting.status & ORGAN_ROBOT))
+		to_chat(attacker, "<span class='warning'>That limb isn't robotic.</span>")
+		return FALSE
+	if(affecting.sabotaged)
+		to_chat(attacker, "<span class='warning'>\The [src]'s [hit_area] is already sabotaged!</span>")
+	else
+		to_chat(attacker, "<span class='warning'>You sneakily slide [emag] into the dataport on \the [src]'s [hit_area] and short out the safeties.</span>")
+		affecting.sabotaged = TRUE
+	return FALSE
+
+/mob/living/carbon/human/swap_hand()
+	var/valid_hand = FALSE
+	for(var/i = 0; i < held_items.len; i++)
+		if (++active_hand > held_items.len)
+			active_hand = 1
+		if (can_use_hand_or_stump(active_hand))
+			valid_hand = TRUE
+			break
+
+	if(!valid_hand)
+		active_hand = 0
+
+	update_hands_icons()
+
+/mob/living/carbon/human/get_personal_ambience()
+	if(istype(locked_to, /obj/structure/bed/therapy))
+		return list(/datum/ambience/beach)
+	else
+		return ..()

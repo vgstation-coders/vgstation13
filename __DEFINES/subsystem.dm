@@ -2,6 +2,8 @@
 // All in one file so it's easier to see what everything is relative to.
 
 #define SS_INIT_TICKER_SPAWN       999
+#define SS_INIT_DBCORE			   900
+#define SS_INIT_SSdbcore	       800
 #define SS_INIT_RUST               26
 #define SS_INIT_SUPPLY_SHUTTLE     25
 #define SS_INIT_SUN                24
@@ -30,6 +32,8 @@
 #define SS_PRIORITY_WEATHER        210
 #define SS_PRIORITY_TICKER         200
 #define SS_PRIORITY_MOB            150
+#define SS_PRIORITY_PATHING        149
+#define SS_PRIORITY_BOTS           145
 #define SS_PRIORITY_COMPONENT      125
 #define SS_PRIORITY_NANOUI         120
 #define SS_PRIORITY_VOTE           110
@@ -46,12 +50,14 @@
 #define SS_PRIORITY_UNSPECIFIED    30
 #define SS_PRIORITY_LIGHTING       20
 #define SS_PRIORITY_AMBIENCE	   19
+#define SS_PRIORITY_DBCORE		   18
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
 
 #define SS_WAIT_WEATHER         	2 SECONDS
 #define SS_WAIT_MACHINERY           2 SECONDS //TODO move the rest of these to defines
+#define SS_WAIT_BOTS           		1 SECONDS
 #define SS_WAIT_FAST_MACHINERY      0.7 SECONDS
 #define SS_WAIT_FAST_OBJECTS        0.5 SECONDS
 #define SS_WAIT_TICKER              2 SECONDS
@@ -64,14 +70,16 @@
 #define SS_DISPLAY_FAST_OBJECTS   -65
 #define SS_DISPLAY_OBJECTS        -60
 #define SS_DISPLAY_MACHINERY      -50
+#define SS_DISPLAY_BOTS           -45
 #define SS_DISPLAY_PIPENET        -40
 #define SS_DISPLAY_FAST_MACHINERY -30
 #define SS_DISPLAY_PLANT          -25
 #define SS_DISPLAY_POWER          -20
 #define SS_DISPLAY_TICKER         -10
 #define SS_DISPLAY_UNSPECIFIED     0
-#define SS_DISPLAY_SUN             10
 #define SS_DISPLAY_WEATHER         5
+#define SS_DISPLAY_SUN             10
+#define SS_DISPLAY_DBCORE		   15
 
 #define SS_TRASH                  "trash"
 #define SS_CLEANABLE              "cleanable_decals"

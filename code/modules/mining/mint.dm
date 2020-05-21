@@ -235,10 +235,10 @@
 	mover = null
 	..()
 
-/obj/machinery/mineral/mint/crowbarDestroy(mob/user)
-	if(..() == 1)
+/obj/machinery/mineral/mint/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+	if(..())
 		if(materials)
 			for(var/matID in materials.storage)
 				DropSheet(matID)
-		return 1
-	return -1
+		return TRUE
+	return FALSE

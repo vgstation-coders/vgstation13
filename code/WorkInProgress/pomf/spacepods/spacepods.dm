@@ -187,6 +187,16 @@
 	if(iscrowbar(W))
 		hatch_open = !hatch_open
 		to_chat(user, "<span class='notice'>You [hatch_open ? "open" : "close"] the maintenance hatch.</span>")
+		if(hatch_open && contents.len)
+			var/anyitem = 0
+			for(var/atom/movable/AM in contents)
+				if(istype(AM,/obj/item))
+					if(AM == battery || istype(AM, /obj/item/device/spacepod_equipment))
+						continue //don't eject this particular item!
+					anyitem++
+					AM.forceMove(get_turf(user))
+			if(anyitem)
+				visible_message("<span class='warning'>With a clatter, [anyitem > 1 ? "some items land" : "an item lands"] at the feet of [user].</span>")
 		return
 	if(health < maxHealth && iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
@@ -281,7 +291,7 @@
 			if(user.put_in_any_hand_if_possible(SPE))
 				to_chat(user, "<span class='notice'>You remove \the [SPE] from the equipment system.</span>")
 				SPE.my_atom = null
-				ES.weapon_system = null
+				ES.locking_system = null
 			else
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		/*
@@ -616,7 +626,7 @@
 	return 0
 
 /obj/spacepod/proc/move_into_pod(var/mob/living/L)
-	if(L && L.client && L in range(1))
+	if(L && L.client && (L in range(1)))
 		L.reset_view(src)
 		L.stop_pulling()
 		L.forceMove(src)

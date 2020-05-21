@@ -3,6 +3,7 @@
 	desc = "An updated, modular intercom that fits over the head. Takes encryption keys."
 	icon_state = "headset"
 	item_state = "headset"
+	species_fit = list(INSECT_SHAPED)
 	starting_materials = list(MAT_IRON = 75)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
@@ -285,8 +286,10 @@
 	keyslot2 = new /obj/item/device/encryptionkey/ert
 	..()
 
-/obj/item/device/radio/headset/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/device/radio/headset/attackby(obj/item/weapon/W, mob/user)
 //	..()
+	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, W))
+		return
 	user.set_machine(src)
 	if (!( W.is_screwdriver(user) || (istype(W, /obj/item/device/encryptionkey/ ))))
 		return

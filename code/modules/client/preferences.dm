@@ -78,7 +78,7 @@ var/list/special_popup_text2num = list(
 	"Use both chat and special" = SPECIAL_POPUP_USE_BOTH,
 )
 
-var/const/MAX_SAVE_SLOTS = 8
+var/const/MAX_SAVE_SLOTS = 16
 
 #define POLLED_LIMIT	100
 
@@ -338,6 +338,8 @@ var/const/MAX_SAVE_SLOTS = 8
 		<a href='?_src_=prefs;preference=hear_attack'><b>[toggles & CHAT_ATTACKLOGS ? "Enabled" : "Disabled"]</b></a><br>
 		<b>Toggle Debug Logs</b>
 		<a href='?_src_=prefs;preference=hear_debug'><b>[toggles & CHAT_DEBUGLOGS ? "Enabled" : "Disabled"]</b></a><br>
+		<b>De-admin on login</b>
+		<a href="?_src_=prefs;preference=auto_deadmin"><b>[toggles & AUTO_DEADMIN ? "Enabled" : "Disabled"]</b></a><br>
 	  </div>
 	</div>"}
 
@@ -1200,7 +1202,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						metadata = sanitize(copytext(new_metadata,1,MAX_MESSAGE_LEN))
 
 				if("hair")
-					if(species == "Human" || species == "Unathi")
+					if(species == "Human" || species == "Unathi" || species == "Diona")
 						var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 						if(new_hair)
 							r_hair = hex2num(copytext(new_hair, 2, 4))
@@ -1248,12 +1250,17 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(species == "Human")
 						var/new_s_tone = input(user, "Choose your character's skin-tone:\n(Light 1 - 220 Dark)", "Character Preference")  as num|null
 						if(new_s_tone)
-							s_tone = 35 - max(min(round(new_s_tone),220),1)
+							s_tone = 35 - clamp(new_s_tone,1,220)
 							to_chat(user,"You're now [skintone2racedescription(s_tone, species)].")
 					else if(species == "Vox")//Can't reference species flags here, sorry.
 						var/skin_c = input(user, "Choose your Vox's skin color:\n(1 = Green, 2 = Brown, 3 = Gray, 4 = Light Green, 5 = Azure, 6 = Emerald)", "Character Preference") as num|null
 						if(skin_c)
-							s_tone = max(min(round(skin_c),6),1)
+							s_tone = clamp(skin_c,1,6)
+							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
+					else if(species == "Grey")
+						var/skin_c = input(user, "Choose your Grey's skin color:\n(1 = Gray, 2 = Light, 3 = Green, 4 = Blue)", "Character Preference") as num|null
+						if(skin_c)
+							s_tone = clamp(skin_c,1,4)
 							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
 					else
 						to_chat(user,"Your species doesn't have different skin tones. Yet?")
@@ -1493,10 +1500,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("window_flashing")
 					window_flashing = !window_flashing
-				
+
 				if("antag_objectives")
 					antag_objectives = !antag_objectives
-				
+
 			if(user.client.holder)
 				switch(href_list["preference"])
 					if("hear_ahelp")
@@ -1513,6 +1520,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 					if("hear_debug")
 						toggles ^= CHAT_DEBUGLOGS
+
+					if("auto_deadmin")
+						toggles ^= AUTO_DEADMIN
 
 	ShowChoices(user)
 	return 1

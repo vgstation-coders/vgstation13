@@ -26,6 +26,7 @@
 	var/reloadsound = 'sound/items/Deconstruct.ogg'
 	var/casingsound = 'sound/weapons/casing_drop.ogg'
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
+	var/scoped //a reference to a scope object
 
 /obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
 	return TRUE
@@ -209,6 +210,18 @@
 	update_icon()
 	..()
 
+	if(istype(A, /obj/item/gun_part/scope) && gun_flags &SCOPED)
+		if(scoped)
+			return
+		if(user.drop_item(A, src))
+			to_chat(user, "<span class='notice'>You attach \the [A] onto \the [src].</span>")
+			scoped = A
+			//var/datum/action/item_action/toggle_scope
+			new/datum/action/item_action/toggle_scope(src)
+			actions_types += /datum/action/item_action/toggle_scope
+			update_icon()
+			return
+
 /obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
 	if (target)
 		return ..()
@@ -236,7 +249,7 @@
 	else
 		to_chat(user, "<span class='warning'>Nothing loaded in \the [src]!</span>")
 
-/obj/item/weapon/gun/projectile/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, struggle = 0)
+/obj/item/weapon/gun/projectile/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	..()
 	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
 		var/drop_me = stored_magazine // prevents dropping a fresh/different mag.
@@ -281,10 +294,15 @@
 	return ..()
 
 /obj/item/weapon/gun/projectile/proc/RemoveAttach(var/mob/user)
-	to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
-	user.put_in_hands(silenced)
-	silenced = 0
-	w_class = W_CLASS_SMALL
+	if(silenced)
+		to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
+		user.put_in_hands(silenced)
+		silenced = 0
+		w_class = W_CLASS_SMALL
+	if(scoped)
+		to_chat(user, "<span class='notice'>You release \the [scoped] from \the [src].</span>")
+		user.put_in_hands(scoped)
+		scoped = null
 	update_icon()
 
 /obj/item/weapon/gun/projectile/verb/RemoveAttachments()
@@ -297,7 +315,7 @@
 	if(usr.incapacitated())
 		to_chat(usr, "<span class='rose'>You can't do this!</span>")
 		return
-	if(silenced)
+	if(silenced || scoped)
 		RemoveAttach(usr)
 	else
 		to_chat(usr, "<span class='rose'>There are no attachments to remove!</span>")

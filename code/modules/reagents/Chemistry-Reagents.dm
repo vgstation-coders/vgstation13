@@ -22,7 +22,7 @@
 	var/description = ""
 	var/datum/reagents/holder = null
 	var/reagent_state = REAGENT_STATE_SOLID
-	var/list/data = null
+	var/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
 	var/pain_resistance = 0
@@ -40,7 +40,7 @@
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
 	var/specheatcap = 1 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
 
-/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/remove_reagents = FALSE)
+/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
 
 	if(!holder)
@@ -76,8 +76,7 @@
 			if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
-					if(remove_reagents)
-						self.holder.remove_reagent(self.id, self.volume/2)
+
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
@@ -1015,6 +1014,7 @@
 			M.stuttering = 0
 			M.confused = 0
 			M.remove_jitter()
+			M.hallucination = 0
 	data++
 
 /datum/reagent/inaprovaline
@@ -1282,6 +1282,8 @@
 		return 1
 
 	M.adjustToxLoss(REM)
+	if(prob(5) && !M.isUnconscious())
+		M.emote("stare")
 
 /datum/reagent/chloramine
 	name = "Chloramine"
@@ -1306,7 +1308,7 @@
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+		if((H.species && H.species.flags & NO_BREATHE) || (M_NO_BREATH in H.mutations))
 			return
 		for(var/datum/organ/internal/lungs/L in H.internal_organs)
 			L.take_damage(REM, 1)
@@ -1646,6 +1648,22 @@
 	color = "#808080" //rgb: 128, 128, 128
 	density = 4.33
 	specheatcap = 2.64
+
+/datum/reagent/nitroglycerin/on_mob_life(var/mob/living/M)
+	M.adjustToxLoss(2 * REM)
+	if(prob(80))
+		M.adjustOxyLoss(2 * REM)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/E = H.internal_organs_by_name["heart"]
+		if(istype(E) && !E.robotic)
+			if(E.damage > 0)
+				E.damage = max(0, E.damage - 0.2)
+		if(prob(15))
+			H.custom_pain("You feel a throbbing pain in your head", 1)
+			M.adjustBrainLoss(2 * REM)
+	if(prob(50))
+		M.drowsyness = max(M.drowsyness, 4)
 
 /datum/reagent/radium
 	name = "Radium"
@@ -2090,8 +2108,9 @@
 	O.clean_blood()
 	if(istype(O, /obj/effect/decal/cleanable))
 		qdel(O)
-	else if(O.color && istype(O, /obj/item/weapon/paper))
-		O.color = null
+	else if(O.color)
+		O.color = ""
+	..()
 
 /datum/reagent/space_cleaner/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -2109,6 +2128,8 @@
 		for(var/mob/living/carbon/human/H in T)
 			if(isslimeperson(H))
 				H.adjustToxLoss(rand(5, 10)/10)
+
+	T.color = ""
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -2139,6 +2160,7 @@
 				if(H.shoes.clean_blood())
 					H.update_inv_shoes(0)
 		M.clean_blood()
+		M.color = ""
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2184,7 +2206,12 @@
 				else if(prob(5))
 					H.vomit()
 	data++
-
+	M.color = ""
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & MULTICOLOR && !(initial(H.species.anatomy_flags) & MULTICOLOR))
+			H.species.anatomy_flags &= ~MULTICOLOR
+			H.update_body()
 	M.adjustToxLoss(4 * REM)
 
 /datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -2494,6 +2521,24 @@
 	if(M.getToxLoss())
 		M.adjustToxLoss(-REM)
 
+/datum/reagent/simpolinol
+	name = "Simpolinol"
+	id = SIMPOLINOL
+	description = "A broad spectrum rejuvenant used to heal fauna with less complex cardiovascular systems. Not for human injestion."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#A5A5FF" //rgb: 165, 165, 255
+	density = 1.58
+	specheatcap = 0.44
+
+/datum/reagent/simpolinol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(isanimal(M))
+		M.health = min(M.maxHealth, M.health + REM)
+	else
+		M.adjustToxLoss(5)
+
 //An OP chemical for admins and detecting exploits
 /datum/reagent/adminordrazine
 	name = "Adminordrazine"
@@ -2728,6 +2773,26 @@
 		if(istype(E) && !E.robotic)
 			if(E.damage > 0)
 				E.damage = max(0, E.damage - 1)
+
+/datum/reagent/imidazoline/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
+
+	if(method == TOUCH)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
+			if(eyes_covered)
+				return
+			else //eyedrops, why not
+				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+				if(istype(E) && !E.robotic)
+					M.eye_blurry = 0
+					M.eye_blind = 0
+					if(E.damage > 0)
+						E.damage = 0 //cosmic technologies
+					to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/inacusiate
 	name = "Inacusiate"
@@ -3820,6 +3885,23 @@
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#33cc33" //rgb: 51, 204, 51
 
+/datum/reagent/mayo
+	name = "Mayonnaise"
+	id = MAYO
+	description = "A substance of unspeakable suffering."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#FAF0E6" //rgb: 51, 102, 0
+
+
+/datum/reagent/egg_yolk
+	name = "Egg Yolk"
+	id = EGG_YOLK
+	description = "A chicken before it could become a chicken."
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFACD" //LEMONCHIFFON
+
 /datum/reagent/capsaicin
 	name = "Capsaicin Oil"
 	id = CAPSAICIN
@@ -3830,6 +3912,15 @@
 	custom_metabolism = FOOD_METABOLISM
 	density = 0.53
 	specheatcap = 3.49
+
+/datum/reagent/mustard_powder
+	name = "Mustard Powder"
+	id = MUSTARD_POWDER
+	description = "A deep yellow powder, unrelated the gas variant"
+	nutriment_factor = 3 * REAGENTS_METABOLISM
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8D07D" // dark dirty yellow
+
 
 /datum/reagent/capsaicin/on_mob_life(var/mob/living/M)
 
@@ -4119,8 +4210,8 @@
 	description = "A disgusting liquid with a horrible smell, which is used by space carps to mark their territory and food."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6AAA96" //rgb: 106, 170, 150
-	custom_metabolism = 0.1
-	data = 1 //Used as a tally
+	custom_metabolism = 0.05
+	data = 0 //Used as a tally
 	density = 109.06
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Contains leporazine, better this than 6 digits
 
@@ -4128,6 +4219,15 @@
 
 	if(..())
 		return 1
+
+	if(!data)
+		to_chat(M,"<span class='good'><b>You feel more carplike! [pick("Do you, perhaps...?","Maybe... just maybe...")]</b></span>")
+
+	if(volume < 3)
+		if(volume <= custom_metabolism)
+			to_chat(M,"<span class='danger'>You feel not at all carplike!</span>")
+		else if(!(data%4))
+			to_chat(M,"<span class='warning'>You feel less carplike...</span>")
 
 	data++
 
@@ -4355,6 +4455,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
 
@@ -4362,6 +4463,30 @@
 		return 1
 
 	M.nutrition += nutriment_factor
+
+//Now handle corn oil interactions
+	if(!has_had_heart_explode && ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/heart = H.internal_organs_by_name["heart"]
+		switch(volume)
+			if(1 to 15)
+				if(prob(5))
+					H.emote("me", 1, "burps.")
+					holder.remove_reagent(id, 0.1 * FOOD_METABOLISM)
+			if(15 to 100)
+				if(prob(10))
+					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
+				if(prob(5))
+					if(heart && !heart.robotic)
+						to_chat(H,"<span class='warning'>You feel a burn in your chest.</span>")
+						heart.take_damage(0.2, 1)
+			if(100 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
+				if(heart && !heart.robotic)
+					to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
+					has_had_heart_explode = 1 //That way it doesn't blow up any new transplant hearts
+					qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
+					H.adjustOxyLoss(60)
+					H.adjustBruteLoss(30)
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -4686,6 +4811,23 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
+
+/datum/reagent/caffeine
+	name = "Caffeine"
+	id = CAFFEINE
+	description = "Caffeine is a common stimulant. It works by making your metabolism faster so it also increases your appetite."
+	color = "#E8E8E8" //rgb: 232, 232, 232
+	density = 1.23
+	specheatcap = 0.89
+	custom_metabolism = 0.1
+
+/datum/reagent/caffeine/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	// you just ingested pure caffeine so you're gonna get the BIG shakes
+	M.Jitter(10)
+	// it also makes you hungry because it speeds up your metabolism
+	M.nutrition--
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
@@ -5108,6 +5250,13 @@
 	M.druggy = max(M.druggy, 30)
 	M.dizziness += 5
 	M.drowsyness = 0
+
+/datum/reagent/drink/cold/geometer
+	name = "Geometer"
+	id = GEOMETER
+	description = "Summon the Beast."
+	color = "#ffd700"
+	adj_sleepy = -2
 
 /datum/reagent/drink/cold/spacemountainwind
 	name = "Space Mountain Wind"
@@ -5931,7 +6080,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#666300" //rgb: 102, 99, 0
 
-/datum/reagent/ethanol/deadrumm/threemileisland
+/datum/reagent/ethanol/deadrum/threemileisland
 	name = "Three Mile Island Iced Tea"
 	id = THREEMILEISLAND
 	description = "Made for a woman. Strong enough for a man."
@@ -6676,6 +6825,21 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
 	custom_metabolism = 0.05
+	overdose_am = REAGENTS_OVERDOSE
+
+/datum/reagent/honkserum/on_overdose(var/mob/living/H)
+
+	if (H.mind.miming)
+		H.mind.miming = 0
+		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in H.spell_list)
+			H.remove_spell(spell)
+		for(var/spell/targeted/oathbreak/spell in H.spell_list)
+			H.remove_spell(spell)
+		if (istype(H.wear_mask, /obj/item/clothing/mask/gas/mime/stickymagic))
+			qdel(H.wear_mask)
+			H.visible_message("<span class='warning'>\The [H]'s mask melts!</span>")
+		H.visible_message("<span class='notice'>\The [H]'s face goes pale for a split second, and then regains some colour.</span>", "<span class='notice'><i>Where did Marcel go...?</i></span>'")
+
 
 /datum/reagent/honkserum/on_mob_life(var/mob/living/M)
 
@@ -7493,7 +7657,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+		if((H.species && H.species.flags & NO_BREATHE) || (M_NO_BREATH in H.mutations))
 			return
 		M.adjustFireLoss(0.5 * REM)
 		if(prob(10))
@@ -7681,6 +7845,48 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			M.adjustFireLoss(5*REM)
 			M.adjustBruteLoss(5*REM)
 
+
+/datum/reagent/diabeetusol
+	name = "diabeetusol"
+	id = DIABEETUSOL
+	description = "The mistaken byproduct of confectionery science. Targets the beta pancreatic cells, or equivalent, in carbon based life to not only cease insulin production but begin producing what medical science can only describe as 'the concept of obesity given tangible form'."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+	nutriment_factor = 25 * REAGENTS_METABOLISM //This is maybe a little much
+	sport = 0 //This will never come up but adding it made me smile
+	density = 3 //He DENSE
+	specheatcap = 0.55536
+	overdose_am = 30
+
+/datum/reagent/diabeetusol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/heart = H.internal_organs_by_name["heart"]
+		var/list/chubbysound = list('sound/instruments/trombone/Eb3.mid', 'sound/instruments/trombone/Gb2.mid', 'sound/instruments/trombone/Bb3.mid')
+		switch(volume)
+			if(5 to 10)
+				if(prob(40))
+					H.dizziness += 2
+					H.confused += 2
+				if(prob(10))
+					H.sleeping += 1
+			if(10 to 25)
+				H.overeatduration += 250
+				H.nutrition += 250
+				if(prob(20))
+					playsound(src, pick(chubbysound), 50, 1)
+
+			if(25 to INFINITY)
+				if(heart && !heart.robotic)
+					to_chat(H, "<span class='danger'>Your heart caramelizes!</span>")
+					qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
+					H.adjustOxyLoss(60)
+					H.adjustBruteLoss(30)
+
 //////////////////////
 //					//
 //      INCENSE		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7735,6 +7941,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Incense"
 	id = INCENSE_SUNFLOWERS
 	description = "While it smells really nice, incense is known to increase the risk of lung cancer."
+
+/datum/reagent/incense/mustardplant //same as sunflower, no connection to mustard gas
+	name = "Mustardplant Incense"
+	id = INCENSE_MUSTARDPLANT
+	description = "A sweet scent with a tinge of clover." //i have no idea what these smell like, im going off of forum posts, if anyone does know please edit the desc
 
 /datum/reagent/incense/moonflowers//Basically mindbreaker
 	name = "Hallucinogenic Incense"

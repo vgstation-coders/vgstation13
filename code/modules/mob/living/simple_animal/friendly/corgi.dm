@@ -123,24 +123,21 @@
 				corgi_status = IDLE
 
 /mob/living/simple_animal/corgi/regular_hud_updates()
-	if(fire)
-		if(fire_alert)
-			fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for heat and 2 for cold.
-		else
-			fire.icon_state = "fire0"
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, fire_alert == 1 ? /obj/abstract/screen/alert/carbon/burn/ice/corgi : /obj/abstract/screen/alert/carbon/burn/fire/corgi)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
 	update_pull_icon()
-	if(oxygen)
-		if(oxygen_alert)
-			oxygen.icon_state = "oxy1"
-		else
-			oxygen.icon_state = "oxy0"
-	if(toxin)
-		if(toxins_alert)
-			toxin.icon_state = "tox1"
-		else
-			toxin.icon_state = "tox0"
+	if(oxygen_alert)
+		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath/corgi)
+	else
+		clear_alert(SCREEN_ALARM_BREATH)
+	if(toxins_alert)
+		throw_alert(SCREEN_ALARM_TOXINS, /obj/abstract/screen/alert/tox/corgi)
+	else
+		clear_alert(SCREEN_ALARM_TOXINS)
 
-	if (healths)
+	if(healths)
 		switch(health)
 			if(30 to INFINITY)
 				healths.icon_state = "health0"
@@ -158,8 +155,6 @@
 				healths.icon_state = "health6"
 			else
 				healths.icon_state = "health7"
-	//regenerate_icons()
-
 
 /mob/living/simple_animal/corgi/show_inv(mob/user as mob)
 	user.set_machine(src)
@@ -246,7 +241,7 @@
 					if(!item_to_add)
 						usr.visible_message("<span class='notice'>[usr] pets [src]</span>","<span class='notice'>You rest your hand on [src]'s back for a moment.</span>")
 						return
-					if(istype(item_to_add,/obj/item/weapon/plastique)) // last thing he ever wears, I guess
+					if(istype(item_to_add,/obj/item/weapon/c4)) // last thing he ever wears, I guess
 						item_to_add.afterattack(src,usr,1)
 						return
 
@@ -289,7 +284,7 @@
 /mob/living/simple_animal/corgi/proc/place_on_head(obj/item/item_to_add)
 
 
-	if(istype(item_to_add,/obj/item/weapon/plastique)) // last thing he ever wears, I guess
+	if(istype(item_to_add,/obj/item/weapon/c4)) // last thing he ever wears, I guess
 		item_to_add.afterattack(src,usr,1)
 		return
 
@@ -573,7 +568,7 @@
 	spin_emotes = list("dances around.","chases his tail.")
 	is_pet = TRUE
 	var/creatine_had = 0
-	
+
 /mob/living/simple_animal/corgi/Ian/Life()
 	..()
 	var/creatine =  reagents.has_reagent(CREATINE)
@@ -586,7 +581,7 @@
 	else if(!creatine && creatine_had)
 		visible_message("<span class='danger'>[src]'s muscles tear themselves apart!</span>")
 		gib()
-		
+
 	if(creatine && hyperzine)
 		treadmill_speed = 30
 		time_between_directed_steps = 1
@@ -596,7 +591,7 @@
 	else if(hyperzine)
 		treadmill_speed = 3
 		src.Jitter(2 SECONDS)
-		time_between_directed_steps = 3	
+		time_between_directed_steps = 3
 	else
 		treadmill_speed = 0.5
 		time_between_directed_steps = initial(time_between_directed_steps)

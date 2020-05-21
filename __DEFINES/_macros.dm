@@ -16,6 +16,8 @@
 
 #define isvox(A) (ishuman(A) && istype(A:species, /datum/species/vox))
 
+#define isinsectoid(A) (ishuman(A) && istype(A:species, /datum/species/insectoid))
+
 #define isdiona(A) (ishuman(A) && istype(A:species, /datum/species/diona))
 
 #define isgrey(A) (ishuman(A) && istype(A:species, /datum/species/grey))
@@ -136,8 +138,6 @@
 
 #define istool(A) is_type_in_list(A, common_tools)
 
-#define iswrench(A) istype(A, /obj/item/weapon/wrench)
-
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
 #define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
@@ -186,7 +186,7 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod))
+#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
 
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
@@ -275,7 +275,7 @@
 
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
 
-#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUADIE))
 
 #define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
 

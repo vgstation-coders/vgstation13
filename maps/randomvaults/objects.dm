@@ -40,7 +40,10 @@
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()
 
+/area/vault/gingerbread_house
 
+/area/vault/mechclubhouse
+	requires_power = 1
 
 /area/vault/icetruck
 
@@ -921,3 +924,8 @@
 		/obj/item/weapon/stock_parts/console_screen\
 	)
 
+
+/obj/machinery/turret/russian
+	faction = "russian"
+	lasers = 1
+	lasertype = 2

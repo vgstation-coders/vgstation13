@@ -117,7 +117,7 @@
 		update_icon()
 	..()
 
-/obj/item/candle/holo/light(flavor_text = "<span class='notice'>\the [src] flickers on.</span>")
+/obj/item/candle/holo/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>", var/quiet = 0)
 	if(lit)
 		set_light(CANDLE_LUM,2,light_color)
 	else

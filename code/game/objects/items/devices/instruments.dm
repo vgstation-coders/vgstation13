@@ -179,7 +179,7 @@
 
 /obj/item/device/instrument/drum/drum_makeshift/attackby(obj/item/I,mob/user,params)
 	if(iswirecutter(I)) //wirecutters disassembles drums and bongos and gives you proper drops based on [decondrop] defined above
-		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
+		I.playtoolsound(loc, 50)
 		visible_message("<span class='notice'>[user] cuts the leather face off \the [src] with \the [I]. </span>")
 		for (var/i = 1 to decondrop)
 			new /obj/item/trash/bowl(get_turf(src))

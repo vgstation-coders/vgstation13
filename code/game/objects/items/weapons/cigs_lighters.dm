@@ -158,6 +158,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A roll of tobacco and nicotine. Not the best thing to have on your face in the event of a plasma flood."
 	icon_state = "cig"
 	item_state = "cig"
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	w_class = W_CLASS_TINY
 	body_parts_covered = 0
 	var/list/unlit_attack_verb = list("prods", "pokes")
@@ -355,7 +356,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		M.IgniteMob()
 	smoketime--
 	var/datum/gas_mixture/env = location.return_air()
-	if(smoketime <= 0 | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+	if(smoketime <= 0 || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+		if(smoketime > 0 && ishuman(loc))
+			var/mob/living/carbon/human/mysmoker = loc
+			if(mysmoker.internal?.air_contents.partial_pressure(GAS_OXYGEN) > 0)
+				return //if there's oxygen in the tank, let my cig live freely
 		if(!inside_item)
 			var/atom/new_butt = new type_butt(location) //Spawn the cigarette butt
 			transfer_fingerprints_to(new_butt)
@@ -374,7 +379,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
-			if(M.reagents.has_any_reagents(LEXORINS) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			if(M.reagents.has_any_reagents(LEXORINS) || (M_NO_BREATH in M.mutations) || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
@@ -432,13 +437,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "cigar"
 	smoketime = 1500
 	chem_volume = 25
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/cohiba
 	name = "Cohiba Robusto Cigar"
 	desc = "There's little more you could want from a cigar."
 	icon_state = "cigar2"
 	overlay_on = "cigar2lit"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/havana
 	name = "Premium Havanian Cigar"
@@ -447,6 +453,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "cigar2lit"
 	smoketime = 7200
 	chem_volume = 30
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/trash/cigbutt
 	name = "cigarette butt"
@@ -484,7 +491,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/bluntbutt
 	item_state = "blunt"
 	slot_flags = SLOT_MASK
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 	lit_attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420

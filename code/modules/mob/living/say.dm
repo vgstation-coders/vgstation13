@@ -252,6 +252,15 @@ var/list/department_radio_keys = list(
 		for(var/T in syndicate_code_response)
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
+	//AI mentions
+	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
+		var/mob/living/silicon/ai/ai = src
+		if(ai.mentions_on)			
+			if(findtextEx(rendered_message, "AI") || findtext(rendered_message, ai.real_name))
+				ai << 'sound/machines/twobeep.ogg'
+				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
+				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
+
 	show_message(rendered_message, type, deaf_message, deaf_type, src)
 	return rendered_message
 
@@ -422,6 +431,10 @@ var/list/department_radio_keys = list(
 	return 0
 
 /mob/living/proc/treat_speech(var/datum/speech/speech, genesay = 0)
+	if(!(copytext(speech.message, 1, 2) == "*"))
+		for(var/obj/item/I in get_all_slots() + held_items)
+			I.affect_speech(speech, src)
+
 	if(getBrainLoss() >= 60)
 		speech.message = derpspeech(speech.message, stuttering)
 
@@ -497,11 +510,23 @@ var/list/department_radio_keys = list(
 		if(setting == 2)
 			return 1
 
+// Obsolete for any mob which uses a language.
 /mob/living/say_quote()
 	if (stuttering)
 		return "stammers, [text]"
 	if (getBrainLoss() >= 60)
 		return "gibbers, [text]"
+	return ..()
+
+// Use this when the mob speaks a given language.
+/mob/proc/get_spoken_verb(var/msg)
+	return ""
+
+/mob/living/get_spoken_verb(var/msg)
+	if (stuttering)
+		return "stammers"
+	if (getBrainLoss() >= 60)
+		return "gibbers"
 	return ..()
 
 /mob/living/proc/send_speech_bubble(var/message,var/bubble_type, var/list/hearers)

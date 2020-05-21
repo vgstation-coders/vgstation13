@@ -26,6 +26,7 @@
 	ammo_type ="/obj/item/ammo_casing/a50"
 	mag_type = "/obj/item/ammo_storage/magazine/a50"
 	load_method = 2
+	recoil = 3
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -55,6 +56,7 @@
 	ammo_type = "/obj/item/ammo_casing/a75"
 	mag_type = "/obj/item/ammo_storage/magazine/a75"
 	load_method = 2
+	recoil = 4
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -103,7 +105,7 @@
 /obj/item/weapon/gun/projectile/handgun/RemoveMag(var/mob/user)
 	to_chat(user, "<span class = 'warning'>Try as you might, you can't seem to find a magazine on \the [src]!</span>")
 
-/obj/item/weapon/gun/projectile/handgun/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/handgun/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(..())
 		if(silenced)
 			user.emote("me",1,"pretends to fire a gun at [target]!")
@@ -122,6 +124,7 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
+	recoil = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/NTUSP/update_icon()
@@ -174,6 +177,7 @@
 	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 
 /obj/item/weapon/gun/projectile/glock/lockbox
+	max_shells = 0
 	spawn_mag = FALSE
 
 /obj/item/weapon/gun/projectile/luger
@@ -228,6 +232,7 @@
 	ammo_type = "/obj/item/ammo_casing/a357"
 	mag_type = "/obj/item/ammo_storage/magazine/a357"
 	load_method = 2
+	recoil = 3
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/automag/update_icon()

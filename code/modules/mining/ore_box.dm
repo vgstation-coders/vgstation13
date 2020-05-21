@@ -8,6 +8,7 @@
 	desc = "A heavy box used for storing ore."
 	density = 1
 	starting_materials = list()
+	var/list/stored_ores = list()
 
 /obj/structure/ore_box/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	// this makes it possible for supply cyborgs to interact with the box
@@ -16,28 +17,28 @@
 		return
 	if (istype(W, /obj/item/stack/ore))
 		var/obj/item/stack/ore/O = W
-		if(O.material)
-			materials.addAmount(O.material, O.amount)
+		if(try_add_ore(O))
 			user.u_equip(W,0)
 			returnToPool(W)
+
 	if (istype(W, /obj/item/weapon/storage))
 		var/turf/T=get_turf(src)
 		var/obj/item/weapon/storage/S = W
 		S.hide_from(usr)
 		for(var/obj/item/stack/ore/O in S.contents)
-			if(O.material)
+			if(try_add_ore(O))
 				S.remove_from_storage(O,T) //This will remove the item.
-				materials.addAmount(O.material, O.amount)
 				returnToPool(O)
 		to_chat(user, "<span class='notice'>You empty \the [W] into the box.</span>")
 	return
 
 /obj/structure/ore_box/attack_hand(mob/user as mob)
 	var/dat = "<b>The contents of the ore box reveal...</b><ul>"
-	for(var/ore_id in materials.storage)
-		var/datum/material/mat = materials.getMaterial(ore_id)
-		if(materials.storage[ore_id] > 0)
-			dat += "<li><b>[mat.name]:</b> [materials.storage[ore_id]]</li>"
+	for(var/ore_id in stored_ores)
+		var/amount = stored_ores[ore_id]
+		var/obj/item/stack/ore/cast_type = ore_id
+		if(amount > 0)
+			dat += "<li><b>[initial(cast_type.name)]:</b> [amount]</li>"
 
 	dat += "</ul><A href='?src=\ref[src];removeall=1'>Empty box</A>"
 	user << browse("[dat]", "window=orebox")
@@ -54,12 +55,16 @@
 	src.updateUsrDialog()
 	return
 
-/obj/structure/ore_box/proc/dump_everything()
-	for(var/ore_id in materials.storage)
-		var/datum/material/mat = materials.getMaterial(ore_id)
-		if(mat.oretype && materials.storage[ore_id])
-			drop_stack(mat.oretype, get_turf(src), materials.storage[ore_id])
-			materials.removeAmount(ore_id, materials.storage[ore_id])
+/obj/structure/ore_box/proc/dump_everything(var/atom/target)
+	if (target == null)
+		target = get_turf(src)
+
+	for(var/ore_id in stored_ores)
+		var/amount = stored_ores[ore_id]
+		if(amount > 0)
+			drop_stack(ore_id, get_turf(src), amount)
+
+	stored_ores.Cut()
 
 /obj/structure/ore_box/ex_act(severity)
 	switch(severity)
@@ -70,3 +75,10 @@
 			if (prob(50))
 				dump_everything()
 				qdel(src)
+
+/obj/structure/ore_box/proc/try_add_ore(var/obj/item/stack/ore/O)
+	if (!O.can_orebox)
+		return FALSE
+
+	stored_ores[O.type] += O.amount
+	return TRUE

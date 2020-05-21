@@ -229,6 +229,11 @@ client/proc/one_click_antag()
 	new_character.dna.ready_dna(new_character)
 	new_character.key = G_found.key
 
+	// Create a brand new mind for the dude
+	new_character.mind = new
+	new_character.mind.current = new_character
+	new_character.mind.original = new_character
+
 	return new_character
 
 /datum/admins/proc/create_syndicate_death_commando(obj/spawn_location, syndicate_leader_selected = 0)
@@ -279,6 +284,6 @@ client/proc/one_click_antag()
 	new_vox.mind.special_role = "Vox Raider"
 	new_vox.mutations |= M_NOCLONE //Stops the station crew from messing around with their DNA.
 
-	new_vox.equip_vox_raider()
+	equip_vox_raider(new_vox)
 
 	return new_vox

@@ -805,7 +805,7 @@
 "py" = (/obj/machinery/door/airlock/maintenance_hatch{locked = 1},/turf/unsimulated/floor{name = "plating"},/area/centcom/suppy)
 "pz" = (/obj/structure/window/reinforced{dir = 1},/turf/simulated/shuttle/plating/vox,/area/shuttle/vox/station)
 "pA" = (/obj/machinery/door/window/brigdoor{dir = 1; base_state = "rightsecure"; req_access = null},/turf/simulated/shuttle/plating/vox,/area/shuttle/vox/station)
-"pB" = (/obj/structure/table/reinforced,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/turf/simulated/shuttle/floor/vox{icon_state = "floor4"},/area/shuttle/vox/station)
+"pB" = (/obj/structure/table/reinforced,/obj/item/weapon/c4,/obj/item/weapon/c4,/turf/simulated/shuttle/floor/vox{icon_state = "floor4"},/area/shuttle/vox/station)
 "pC" = (/obj/structure/bed/chair{dir = 8},/turf/unsimulated/floor{icon_state = "neutral"; dir = 4},/area/centcom/suppy)
 "pD" = (/obj/item/weapon/stool/bar,/turf/unsimulated/floor{icon_state = "neutral"; dir = 4},/area/centcom/suppy)
 "pE" = (/obj/machinery/computer/arcade,/turf/unsimulated/floor{tag = "icon-dark neutral stripe (WEST)"; icon_state = "dark neutral stripe"; dir = 8},/area/centcom/suppy)

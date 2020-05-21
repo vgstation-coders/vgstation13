@@ -41,6 +41,7 @@ var/const/VENDING_WIRE_IDSCAN = 8
 	. += "The red light is [V.shoot_inventory ? "off" : "blinking"].<BR>"
 	. += "The green light is [V.extended_inventory ? "on" : "off"].<BR>"
 	. += "A [V.scan_id ? "purple" : "yellow"] light is on.<BR>"
+	. += "The return box printer is <B>[V.cardboard ? "loaded</B>. Ready for disassembly." : "unloaded</B>. Insert cardboard."]<BR>"
 
 /datum/wires/vending/UpdateCut(var/index, var/mended)
 	var/obj/machinery/vending/V = holder

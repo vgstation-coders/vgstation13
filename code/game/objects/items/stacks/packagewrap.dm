@@ -191,6 +191,11 @@
 	else if(istype(target,/obj/structure/closet))
 		icon_state = "deliverycloset" //Only IF it isn't a crate-type
 
+/obj/item/delivery/large/Destroy()
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(get_turf(src))
+	..()
+
 /obj/item/delivery/large/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
