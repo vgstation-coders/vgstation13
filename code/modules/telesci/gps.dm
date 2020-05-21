@@ -74,9 +74,8 @@ var/list/SPS_list = list()
 	else
 		return "[format_text(device_area.name)] ([device_turf.x-WORLD_X_OFFSET[device_turf.z]], [device_turf.y-WORLD_Y_OFFSET[device_turf.z]], [device_turf.z])"
 
-
-/obj/item/device/gps/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	var/data[0]
+/obj/item/device/gps/proc/get_nanoui_data()
+	var/list/data = list()
 	if(emped)
 		data["emped"] = TRUE
 	data["transmitting"] = transmitting
@@ -92,7 +91,17 @@ var/list/SPS_list = list()
 			device_data["location_text"] = G.get_location_name()
 			devices += list(device_data)
 	data["devices"] = devices
+	return data
 
+/obj/item/device/gps/secure/get_nanoui_data()
+	var/list/data = ..()
+	data["sound"] = sound
+	data["is_sps"] = TRUE
+	return data
+
+/obj/item/device/gps/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	var/list/data = get_nanoui_data()
+	
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "gps.tmpl", "[src]", 530, 600)
@@ -101,6 +110,11 @@ var/list/SPS_list = list()
 	ui.set_auto_update(autorefreshing)
 
 /obj/item/device/gps/Topic(href, href_list)
+	if(..())
+		return FALSE
+	return actually_handle_topic(href_list)
+
+/obj/item/device/gps/proc/actually_handle_topic(href_list)
 	if(href_list["turn_on"])
 		if(emped || transmitting || !Adjacent(usr) || usr.incapacitated())
 			return FALSE
@@ -132,8 +146,11 @@ var/list/SPS_list = list()
 	if(href_list["toggle_refresh"])
 		autorefreshing = !autorefreshing
 		return TRUE
-	if(..())
-		return FALSE
+/obj/item/device/gps/secure/actually_handle_topic(href_list)
+	. = ..()
+	if(href_list["toggle_sound"])
+		sound = !sound
+		return TRUE
 
 /obj/item/device/gps/science
 	icon_state = "gps-s"
@@ -171,6 +188,7 @@ var/list/SPS_list = list()
 	desc = "A secure channel SPS. If it is transmitting its signal, it will announce the position of the wearer if killed or stripped off to other SPS devices."
 	icon_state = "sps"
 	base_tag = "SEC"
+	var/sound = TRUE
 
 /obj/item/device/gps/secure/get_gps_list()
 	return SPS_list
@@ -211,6 +229,8 @@ var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'soun
 var/const/DEATHSOUND_CHANNEL = 300
 
 /obj/item/device/gps/secure/proc/deathsound(var/turf/pos,var/dead=FALSE,num,var/sound_channel)
+	if(!sound)
+		return
 	if(dead)
 		playsound(src, pick(deathsound), 100, 0,channel = sound_channel,wait = TRUE)
 	if(prob(75))
