@@ -231,6 +231,7 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/find_target()
 	anchored = 0
 	threatlevel = 0
+	look_for_target = TRUE
 	for (var/mob/living/carbon/C in view(12,src)) //Let's find us a criminal
 		if ((C.stat) || (C.handcuffed))
 			continue
@@ -253,8 +254,10 @@ Auto Patrol: []"},
 			playsound(src, pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
 			visible_message("<b>[src]</b> points at [C.name]!")
 
+	look_for_target = FALSE
+
 /obj/machinery/bot/secbot/process_bot()
-	if (!target || target.gcDestroyed || get_dist(src, target) > 7)
+	if ((!target || target.gcDestroyed || get_dist(src, target) > 7) && !look_for_target)
 		target = null
 		steps_per = initial_steps_per
 		find_target()

@@ -70,6 +70,7 @@
 	var/list/patrol_path = list() //Our patroling path
 
 	var/current_pathing = 0
+	var/look_for_target = FALSE
 
 /obj/machinery/bot/New()
 	. = ..()
