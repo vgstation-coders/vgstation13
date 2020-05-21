@@ -30,7 +30,7 @@
 	species_fit = list(INSECT_SHAPED)
 
 //Captain: This probably shouldn't be space-worthy
-/obj/item/clothing/head/helmet/cap
+/obj/item/clothing/head/cap
 	name = "captain's cap"
 	desc = "You fear to wear it for the negligence it brings."
 	icon_state = "capcap"
@@ -38,6 +38,47 @@
 	body_parts_covered = HEAD
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	siemens_coefficient = 0.9
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+
+//Head of Security
+/obj/item/clothing/head/HoS
+	name = "Head of Security Hat"
+	desc = "The hat of the Head of Security. For showing the officers who's in charge."
+	icon_state = "hoscap"
+	flags = FPRINT
+	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
+	body_parts_covered = HEAD|EARS
+	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
+	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list()
+	siemens_coefficient = 0.8
+
+/obj/item/clothing/head/HoS/dermal
+	name = "Dermal Armour Patch"
+	desc = "You're not quite sure how you manage to take it on and off, but it implants nicely in your head."
+	icon_state = "dermal"
+	item_state = "dermal"
+	siemens_coefficient = 0.6
+
+//Warden
+/obj/item/clothing/head/warden
+	name = "warden's hat"
+	desc = "It's a special helmet issued to the Warden of a security force. Protects the head from impacts."
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+	icon_state = "policehelm"
+	body_parts_covered = HEAD|EARS
+	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
+	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+
+//Head of Personnel
+/obj/item/clothing/head/hopcap
+	name = "Head of Personnel's Cap"
+	desc = "Papers, Please."
+	armor = list(melee = 25, bullet = 0, laser = 15, energy = 10, bomb = 5, bio = 0, rad = 0)
+	item_state = "hopcap"
+	icon_state = "hopcap"
+	body_parts_covered = HEAD
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 //Chaplain

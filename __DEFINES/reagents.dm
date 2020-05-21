@@ -419,6 +419,7 @@
 #define EGG_YOLK		"egg_yolk"
 #define MUSTARD_POWDER	"mustard_powder"
 #define MAYO			"mayo"
+#define DIABEETUSOL		"diabeetusol"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

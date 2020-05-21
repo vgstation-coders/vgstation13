@@ -131,15 +131,6 @@
 	item_state = "kabuto"
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 
-/obj/item/clothing/head/helmet/hopcap
-	name = "Head of Personnel's Cap"
-	desc = "Papers, Please."
-	armor = list(melee = 25, bullet = 0, laser = 15, energy = 10, bomb = 5, bio = 0, rad = 0)
-	item_state = "hopcap"
-	icon_state = "hopcap"
-	body_parts_covered = HEAD
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
-
 /obj/item/clothing/head/helmet/aviatorhelmet
 	name = "Aviator Helmet"
 	desc = "Help the Bombardier!"

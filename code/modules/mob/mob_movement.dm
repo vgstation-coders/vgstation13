@@ -123,7 +123,11 @@
 	usr.stop_pulling()
 
 /client/verb/swap_hand()
-	set hidden = 1
+
+	set name = "Swap-hands"
+	set category = "IC"
+	set desc = "Swap your current active hand."
+
 	if(istype(mob,/mob/living/silicon/robot/mommi))
 		return // MoMMIs only have one tool slot.
 	if(istype(mob,/mob/living/silicon/robot))//Oh nested logic loops, is there anything you can't do? -Sieve

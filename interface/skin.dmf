@@ -892,6 +892,14 @@ window "rpane"
 		anchor2 = none
 		is-visible = false
 		saved-params = ""
+	elem "hosttracker2"
+		type = BROWSER
+		pos = 392,25
+		size = 1x1
+		anchor1 = none
+		anchor2 = none
+		is-visible = false
+		saved-params = ""
 	elem "rulesb"
 		type = BUTTON
 		pos = 253,0

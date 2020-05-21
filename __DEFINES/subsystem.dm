@@ -2,6 +2,8 @@
 // All in one file so it's easier to see what everything is relative to.
 
 #define SS_INIT_TICKER_SPAWN       999
+#define SS_INIT_DBCORE			   900
+#define SS_INIT_SSdbcore	       800
 #define SS_INIT_RUST               26
 #define SS_INIT_SUPPLY_SHUTTLE     25
 #define SS_INIT_SUN                24
@@ -48,6 +50,7 @@
 #define SS_PRIORITY_UNSPECIFIED    30
 #define SS_PRIORITY_LIGHTING       20
 #define SS_PRIORITY_AMBIENCE	   19
+#define SS_PRIORITY_DBCORE		   18
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
@@ -74,8 +77,9 @@
 #define SS_DISPLAY_POWER          -20
 #define SS_DISPLAY_TICKER         -10
 #define SS_DISPLAY_UNSPECIFIED     0
-#define SS_DISPLAY_SUN             10
 #define SS_DISPLAY_WEATHER         5
+#define SS_DISPLAY_SUN             10
+#define SS_DISPLAY_DBCORE		   15
 
 #define SS_TRASH                  "trash"
 #define SS_CLEANABLE              "cleanable_decals"

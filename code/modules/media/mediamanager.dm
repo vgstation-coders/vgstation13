@@ -135,15 +135,19 @@ function SetMusic(url, time, volume) {
 	var/obj/machinery/media/media_source = null
 
 #ifdef DEBUG_MEDIAPLAYER
-to_chat(#define MP_DEBUG(x) owner, x)
+#define MP_DEBUG(x) to_chat(owner, x)
 #warn Please comment out #define DEBUG_MEDIAPLAYER before committing.
 #else
 #define MP_DEBUG(x)
 #endif
 
 /datum/media_manager
-	var/url = ""
+	var/url_odd = ""
+	var/url_even = ""
+	var/currently_broadcasting = JUKEBOX_ODD_PLAYER
+
 	var/start_time = 0
+	var/finish_time = -1
 	var/source_volume = 1 // volume * source_volume
 
 	var/volume = 50
@@ -152,7 +156,8 @@ to_chat(#define MP_DEBUG(x) owner, x)
 
 	var/forced=0
 
-	var/const/window = "rpane.hosttracker"
+	var/const/window_odd = "rpane.hosttracker"
+	var/const/window_even = "rpane.hosttracker2"
 	//var/const/window = "mediaplayer" // For debugging.
 	var/playerstyle
 
@@ -169,28 +174,61 @@ to_chat(#define MP_DEBUG(x) owner, x)
 
 // Actually pop open the player in the background.
 /datum/media_manager/proc/open()
-	owner << browse(null, "window=[window]")
-	owner << browse(playerstyle, "window=[window]")
+	owner << browse(null, "window=[window_odd]")
+	owner << browse(playerstyle, "window=[window_odd]")
+	owner << browse(null, "window=[window_even]")
+	owner << browse(playerstyle, "window=[window_even]")
 	send_update()
 
 // Tell the player to play something via JS.
-/datum/media_manager/proc/send_update()
+/datum/media_manager/proc/send_update(var/target_url)
 	if(!(owner.prefs))
 		return
-	if(!(owner.prefs.toggles & SOUND_STREAMING) && url != "")
+	if(!(owner.prefs.toggles & SOUND_STREAMING) && target_url != "")
 		return // Nope.
-	MP_DEBUG("<span class='good'>Sending update to VLC ([url])...</span>")
-	owner << output(list2params(list(url, (world.time - start_time) / 10, volume*source_volume)), "[window]:SetMusic")
+	MP_DEBUG("<span class='good'>Sending update to media player ([target_url])...</span>")
+	var/window_playing
+	if(owner.prefs.usewmp)
+		stop_music()
+		MP_DEBUG("<span class='good'>WMP user, no switching, going to even window.<span>")
+		currently_broadcasting = JUKEBOX_EVEN_PLAYER
+		window_playing = window_even
+		url_even = target_url
+	else
+		switch (currently_broadcasting)
+			if (JUKEBOX_ODD_PLAYER) // We were on odd, so now we are on even, broadcasting the target url.
+				MP_DEBUG("<span class='good'>Going on the even player, as odd one is playing something.<span>")
+				currently_broadcasting = JUKEBOX_EVEN_PLAYER
+				window_playing = window_even
+				url_even = target_url
+			if (JUKEBOX_EVEN_PLAYER) // And vice versa.
+				MP_DEBUG("<span class='good'>Going on the odd player, as even one is playing something.<span>")
+				currently_broadcasting = JUKEBOX_ODD_PLAYER
+				window_playing = window_odd
+				url_odd = target_url
+	// We start to broadcast the music on the second media thing
+	owner << output(list2params(list(target_url, (world.time - start_time) / 10, volume*source_volume)), "[window_playing]:SetMusic")
+
+
 
 /datum/media_manager/proc/push_music(var/targetURL,var/targetStartTime,var/targetVolume)
-	if (url != targetURL || abs(targetStartTime - start_time) > 1 || abs(targetVolume - source_volume) > 0.1 /* 10% */)
-		url = targetURL
+	var/current_url
+	if (owner && owner.prefs.usewmp)
+		current_url = url_even
+	else
+		switch (currently_broadcasting)
+			if (JUKEBOX_ODD_PLAYER)
+				current_url = url_odd
+			if (JUKEBOX_EVEN_PLAYER)
+				current_url = url_even
+	if (current_url != targetURL || abs(targetStartTime - start_time) > 1 || abs(targetVolume - source_volume) > 0.1 /* 10% */)
 		start_time = targetStartTime
 		source_volume = clamp(targetVolume, 0, 1)
-		send_update()
+		send_update(targetURL)
 
 /datum/media_manager/proc/stop_music()
-	push_music("",0,1)
+	owner << output(list2params(list("", world.time, 1)), "[window_odd]:SetMusic")
+	owner << output(list2params(list("", world.time, 1)), "[window_even]:SetMusic")
 
 // Scan for media sources and use them.
 /datum/media_manager/proc/update_music()
@@ -207,10 +245,27 @@ to_chat(#define MP_DEBUG(x) owner, x)
 		stop_music()
 		return
 	var/obj/machinery/media/M = A.media_source // TODO: turn into a list, then only play the first one that's playing.
+
+	var/current_url
+	if (owner.prefs.usewmp) // WMP only uses the even broadcaster
+		current_url = url_even
+	else
+		switch (currently_broadcasting)
+			if (JUKEBOX_ODD_PLAYER)
+				current_url = url_odd
+			if (JUKEBOX_EVEN_PLAYER)
+				current_url = url_even
+
 	if(M && M.playing)
+		MP_DEBUG("<span class='good'>[round(world.time - finish_time, 4)/10] seconds skipped...<span>")
+		if ((targetURL =! current_url) && (finish_time > 0) && (world.time - finish_time < -10 SECONDS)) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
+			MP_DEBUG("<span class='good'>Should be cutting off music.<span>")
+			stop_music()
+			sleep(1 SECONDS) // Have to wait for the media player response.
 		targetURL = M.media_url
 		targetStartTime = M.media_start_time
 		targetVolume = M.volume
+		src.finish_time = M.media_finish_time
 //			to_chat(owner, "Found audio source: [M.media_url] @ [(world.time - start_time) / 10]s.")
 	//else
 	//	testing("M is not playing or null.")

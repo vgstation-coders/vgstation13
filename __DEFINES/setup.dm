@@ -1304,6 +1304,11 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define astar_debug(text)
 #endif
 
+#define BSQL_DEBUG_CONNECTION 0
+#if BSQL_DEBUG_CONNECTION == 1
+#warn "BSQL_DEBUG_CONNECTION MUST BE SET TO 0 BEFORE COMMITING."
+#endif
+
 //#define JUSTFUCKMYSHITUP 1
 #ifdef JUSTFUCKMYSHITUP
 #define writepanic(a) if(ticker && ticker.current_state >= 3 && world.cpu > 100) write_panic(a)

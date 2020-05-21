@@ -95,6 +95,7 @@ var/global/global_playlists = list()
 
 	var/url    = ""
 	var/length = 0 // decaseconds
+	var/crossfade_time = 0 // decaseconds, if the song ends up with a decresendo/fadeout so we can crossfade into the next one.
 
 	var/emagged = 0
 
@@ -106,6 +107,9 @@ var/global/global_playlists = list()
 	url    = json["url"]
 
 	length = text2num(json["length"])
+	crossfade_time = text2num(json["crossfade_time"])
+	if (isnull(crossfade_time))
+		crossfade_time = 0
 
 /datum/song_info/proc/display()
 	var/str="\"[title]\""
@@ -664,9 +668,14 @@ var/global/list/loopModeNames=list(
 			return
 	if(playing)
 		var/datum/song_info/song
+		var/datum/song_info/next_song_datum
+		var/fadeout_time = 0
 		if(current_song && playlist.len)
 			song = playlist[current_song]
-		if(!current_song || (song && world.time >= media_start_time + song.length))
+		if(next_song && playlist.len)
+			next_song_datum = playlist[next_song]
+			fadeout_time = next_song_datum.crossfade_time
+		if(!current_song || (song && world.time >= media_start_time + song.length - fadeout_time))
 			current_song=1
 			if(next_song)
 				current_song = next_song
@@ -718,6 +727,7 @@ var/global/list/loopModeNames=list(
 		media_url = song.url
 		last_song = current_song
 		media_start_time = world.time
+		media_finish_time = world.time + song.length
 		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>[bicon(src)] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else
@@ -878,6 +888,7 @@ var/global/list/loopModeNames=list(
 		media_url = song.url
 		last_song = current_song
 		media_start_time = world.time
+		media_finish_time = world.time + song.length
 		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>[bicon(src)] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else
