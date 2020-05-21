@@ -703,7 +703,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Multimessage'><span class='pda_icon pda_mail'></span> Department Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=50'><span class='pda_icon pda_clock'></span> Current Events</a></li>"}
-				//dat += "<li><a href='byond://?src=[src];choice=chatroom'><span class='pda_icon pda_chatroom'></span> Nanotrasen Relay Chat</a></li>"
 
 				dat += "<li><a href='byond://?src=\ref[src];choice=41'><span class='pda_icon pda_notes'></span> View Crew Manifest</a></li>"
 
