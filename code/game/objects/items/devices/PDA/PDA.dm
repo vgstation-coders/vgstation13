@@ -885,16 +885,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 				dat += "<br>"
 
-			if (5)
-
-				dat += {"<h4><span class='pda_icon pda_chatroom'></span> Nanotrasen Relay Chat</h4>
-					<h4><span class='pda_icon pda_menu'></span> Detected Channels</h4>: <li>"}
-				for(var/datum/chatroom/C in chatrooms)
-					dat += "<a href='byond://?src=\ref[src];pdachannel=[C.name]'>#[html_encode(lowertext(C.name))]"
-					if(C.password != "")
-						dat += " <span class='pda_icon pda_locked'></span>"
-					dat += "</li>"
-
 			if (41) //Allows everyone to access crew
 
 				dat += {"<h4><span class='pda_icon pda_notes'></span> Crew Manifest</h4>
@@ -1429,7 +1419,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				mode = 0
 			else
 				mode = round(mode/10)//TODO: fix this shit up
-				if((mode==4) || (mode==5))//Fix for cartridges. Redirects to hub.
+				if(mode==4)//Fix for cartridges. Redirects to hub.
 					mode = 0
 				else if(mode >= 40 && mode <= 53)//Fix for cartridges. Redirects to refresh the menu.
 					cartridge.mode = mode
@@ -1466,8 +1456,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			mode = 0
 		if("41")
 			mode = 41
-		if("chatroom") // chatroom hub
-			mode = 5
 
 //APPLICATIONS FUNCTIONS===========================
 		if("alarm")
