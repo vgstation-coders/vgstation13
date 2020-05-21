@@ -287,7 +287,7 @@
 
 
 
-/obj/machinery/bot/farmbot/find_target()
+/obj/machinery/bot/farmbot/target_selection()
 	if ( emagged ) //Find a human and help them!
 		for ( var/mob/living/carbon/human/human in view(7,src) )
 			if (human.isDead())

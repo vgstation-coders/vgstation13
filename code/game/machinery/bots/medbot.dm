@@ -456,9 +456,9 @@
 	qdel(src)
 	return
 
-/obj/machinery/bot/medbot/find_target()
+/obj/machinery/bot/medbot/target_selection()
 	look_for_target = TRUE
-	for (var/mob/living/carbon/C in view(7,src)) //Time to find a patient!
+	for (var/mob/living/carbon/C in view(target_chasing_distance,src)) //Time to find a patient!
 		if ((C.isDead()) || !istype(C, /mob/living/carbon/human))
 			continue
 

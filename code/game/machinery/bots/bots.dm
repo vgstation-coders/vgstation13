@@ -71,6 +71,7 @@
 
 	var/current_pathing = 0
 	var/look_for_target = FALSE
+	var/target_chasing_distance = 7
 
 /obj/machinery/bot/New()
 	. = ..()
@@ -116,6 +117,14 @@
 	process_bot()
 
 /obj/machinery/bot/proc/find_target()
+	look_for_target = TRUE
+	target_selection()
+	look_for_target = FALSE
+
+/obj/machinery/bot/proc/target_selection()
+
+/obj/machinery/bot/proc/can_abandon_target()
+	return (!target || target.gcDestroyed || get_dist(src, target) > target_chasing_distance) && !look_for_target
 
 //Set time_to_forget to -1 to never forget it
 /obj/machinery/bot/proc/add_oldtarget(var/old_target, var/time_to_forget = BOT_OLDTARGET_FORGET_DEFAULT)
