@@ -160,20 +160,19 @@
 /mob/living/simple_animal/hostile/bunnybot/Life()
 	..()
 	if(autodie && life_tick > 12)
+		playsound(src, "sound/effects/explosion_small1.ogg", 25, 1)
+		visible_message("the <b>[src]</b> falls apart!")
 		death()
 
 /mob/living/simple_animal/hostile/bunnybot/death(var/gibbed = FALSE)
-	playsound(src, "sound/effects/explosion_small1.ogg", 25, 1)
 	icon_state = "bunnybot_dead"
-	animate(src,alpha = 0, time = 3 SECONDS)
-	spawn(3 SECONDS)
-		qdel (src)
+	animate(src,alpha = 0, time = 1 SECONDS)
+	spawn(1 SECONDS)
+		qdel(src)
 
 /mob/living/simple_animal/hostile/bunnybot/CanAttack(var/atom/the_target)
-	if(ismob(the_target))
-		var/mob/mob_target = the_target
-		if(ishuman(mob_target))
-			return 0
+	if(ishuman(the_target))
+		return 0
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/bunnybot/proc/handle_faction(var/mob/user)
