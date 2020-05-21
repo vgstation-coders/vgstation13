@@ -285,7 +285,7 @@
 		stunned--
 		return
 
-	if ((!target || target.gcDestroyed) && !look_for_target)
+	if ((!target || target.gcDestroyed || get_dist(src, target) > 7) && !look_for_target)
 		target = null
 		currently_healing = 0
 		find_target()
