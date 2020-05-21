@@ -269,7 +269,7 @@
 	corpseradio = list(/obj/item/device/radio/headset/headset_sec, /obj/item/device/radio/headset/heads/captain, /obj/item/device/radio/headset/heads/hos, /obj/item/device/radio/headset/heads/hop)
 	corpseglasses = list(/obj/item/clothing/glasses/hud/health, /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/glasses/sunglasses/sechud, /obj/item/clothing/glasses/welding)
 	corpsemask = list(/obj/item/clothing/mask/cigarette/cigar, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas/swat, /obj/item/clothing/mask/balaclava)
-	corpsehelmet = list(/obj/item/clothing/head/helmet/space/ancient, /obj/item/clothing/head/helmet/space/rig/ror, /obj/item/clothing/head/helmet/space/rig/syndi, /obj/item/clothing/head/helmet/space/rig/atmos, /obj/item/clothing/head/helmet/cap, /obj/item/clothing/head/helmet/tactical, /obj/item/clothing/head/helmet/tactical/HoS/dermal, /obj/item/clothing/head/helmet/siren, /obj/item/clothing/head/collectable/petehat, /obj/item/clothing/head/hardhat/red, /obj/item/clothing/head/welding, /obj/item/clothing/head/collectable/welding, /obj/item/clothing/head/helmet/space/rig/security, /obj/item/clothing/head/helmet/space/rig/mining)
+	corpsehelmet = list(/obj/item/clothing/head/helmet/space/ancient, /obj/item/clothing/head/helmet/space/rig/ror, /obj/item/clothing/head/helmet/space/rig/syndi, /obj/item/clothing/head/helmet/space/rig/atmos, /obj/item/clothing/head/cap, /obj/item/clothing/head/helmet/tactical, /obj/item/clothing/head/HoS/dermal, /obj/item/clothing/head/helmet/siren, /obj/item/clothing/head/collectable/petehat, /obj/item/clothing/head/hardhat/red, /obj/item/clothing/head/welding, /obj/item/clothing/head/collectable/welding, /obj/item/clothing/head/helmet/space/rig/security, /obj/item/clothing/head/helmet/space/rig/mining)
 	corpsebelt = list(/obj/item/weapon/gun/energy/laser/retro/ancient, /obj/item/weapon/storage/belt/utility/full, /obj/item/weapon/storage/belt/utility/chief/full, /obj/item/weapon/storage/belt/slim, /obj/item/weapon/storage/belt/security, /obj/item/weapon/gun/energy/gun, /obj/item/weapon/sword, /obj/item/weapon/pickaxe, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/telebaton)
 	corpsepocket1 = list(/obj/item/device/radio/off, /obj/item/weapon/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
 	corpsepocket2 = list(/obj/item/device/radio/off, /obj/item/weapon/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
@@ -928,7 +928,7 @@
 	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
 	corpseglasses = /obj/item/clothing/glasses/thermal/eyepatch
 	corpsemask = /obj/item/clothing/mask/cigarette/cigar/cohiba
-	corpsehelmet = /obj/item/clothing/head/helmet/tactical/HoS/dermal
+	corpsehelmet = /obj/item/clothing/head/HoS/dermal
 	corpsegloves = /obj/item/clothing/gloves/combat
 	corpseshoes = /obj/item/clothing/shoes/combat
 	corpsepocket1 = /obj/item/weapon/storage/fancy/matchbox
@@ -971,7 +971,7 @@
 	corpseuniform = /obj/item/clothing/under/acj
 	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
 	corpseglasses = /obj/item/clothing/glasses/hud/security/jensenshades
-	corpsehelmet = /obj/item/clothing/head/helmet/tactical/HoS/dermal
+	corpsehelmet = /obj/item/clothing/head/HoS/dermal
 	corpsegloves = /obj/item/clothing/gloves/combat
 	corpseshoes = /obj/item/clothing/shoes/combat
 	corpsebelt = /obj/item/weapon/storage/belt/security
