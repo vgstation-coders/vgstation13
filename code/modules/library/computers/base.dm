@@ -83,6 +83,7 @@
 	while(_query.NextRow())
 		. = text2num(_query.item[1])
 		qdel(_query)
+		return
 	qdel(_query)
 	return 0
 
