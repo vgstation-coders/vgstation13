@@ -166,3 +166,4 @@
 		H.update_mutations(0)
 		H.update_inv_w_uniform(0)
 		H.update_inv_wear_suit()
+	return ..()

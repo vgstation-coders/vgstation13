@@ -45,3 +45,4 @@
 		if("Salvage Broker")
 			items_to_collect[/obj/item/device/telepad_beacon] = "Survival Box"
 			items_to_collect[/obj/item/weapon/rcs/salvage] = "Survival Box"
+	return ..()

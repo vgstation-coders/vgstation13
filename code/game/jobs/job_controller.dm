@@ -508,33 +508,6 @@ var/global/datum/controller/occupations/job_master
 	if(job && job.priority)
 		job.priority_reward_equip(H)
 
-	// -- TO REMOVE AFTER OUTFIT DATUMS --
-
-	//Gives glasses to the vision impaired
-	if(H.disabilities & DISABILITY_FLAG_NEARSIGHTED)
-		var/equipped = H.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(H), slot_glasses)
-		if(equipped != 1)
-			var/obj/item/clothing/glasses/G = H.glasses
-			G.prescription = 1
-//		H.update_icons()
-
-	//If a character can't stand because of missing limbs, equip them with a wheelchair
-	if(!H.check_stand_ability())
-		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
-		W.buckle_mob(H,H)
-
-	if(H.disabilities & ASTHMA)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
-		else
-			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
-
-	if (H.client.IsByondMember())
-		to_chat(H, "Thank you for supporting BYOND!")
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/byond(H))
-		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/byond(H), slot_in_backpack)
 	return 1
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist

@@ -46,6 +46,7 @@
 		items_to_collect += /obj/item/weapon/disk/nuclear
 	else
 		items_to_collect += /obj/item/weapon/plastique
+	return ..()
 
 /datum/outfit/striketeam/death_commando/post_equip(var/mob/living/carbon/human/H)
 	// Accesories.
