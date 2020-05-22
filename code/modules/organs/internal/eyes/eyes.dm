@@ -56,6 +56,11 @@
 						 1, 1, 1)
 	removed_type = /obj/item/organ/internal/eyes/grue
 
+/datum/organ/internal/eyes/mushroom
+	name = "mushroom eyes"
+	see_in_dark = 8
+	removed_type = /obj/item/organ/internal/eyes/mushroom	
+
 ///////////////
 // BIONIC EYES
 ///////////////
