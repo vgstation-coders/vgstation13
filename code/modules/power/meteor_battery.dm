@@ -4,7 +4,7 @@
 
 /obj/item/projectile/missile
 	name = "missile"
-	icon = ' icons/obj/structures/meteor_turret.dmi'
+	icon = 'icons/obj/structures/meteor_turret.dmi'
 	icon_state = "missile"
 	var/turf/target
 	var/tracking = 0
