@@ -121,7 +121,7 @@
 		if (!obj_type)
 			continue
 		slot = text2num(slot)
-		H.equip_to_slot_or_del(new obj_type(H), slot, TRUE)
+		H.equip_to_slot_or_del(new obj_type(get_turf(H)), slot, TRUE)
 
 	equip_backbag(H, species)
 
@@ -218,7 +218,7 @@
 	H.equip_or_collect(C, slot_wear_id)
 
 	if (pda_type)
-		var/obj/item/device/pda/pda = new pda_type
+		var/obj/item/device/pda/pda = new pda_type(H)
 		pda.owner = H.real_name
 		pda.ownjob = C.assignment
 		pda.name = "PDA-[H.real_name] ([pda.ownjob])"
@@ -228,10 +228,10 @@
 /datum/outfit/proc/post_equip(var/mob/living/carbon/human/H)
 	return // Empty
 
+// Special snowflakes.
 /datum/outfit/proc/special_equip(var/title, var/slot, var/mob/living/carbon/human/H)
 	return
 
-// -- Work in progress !!
 /datum/outfit/proc/give_disabilities_equipment(var/mob/living/carbon/human/H)
 	if (!give_disabilities_equipment)
 		return

@@ -336,7 +336,7 @@ var/global/datum/controller/occupations/job_master
 	var/datum/job/officer = job_master.GetJob("Security Officer")
 	var/datum/job/warden = job_master.GetJob("Warden")
 	var/datum/job/hos = job_master.GetJob("Head of Security")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions)
+	count = (officer?.current_positions + warden?.current_positions + hos?.current_positions)
 	Debug("DO, Running Assistant Check 1")
 	var/datum/job/assist = new /datum/job/assistant()
 	var/datum/job/master_assistant = GetJob("Assistant")
