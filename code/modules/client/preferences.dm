@@ -1628,8 +1628,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	character.backbag = backbag
 
 	//Debugging report to track down a bug, which randomly assigned the plural gender to people.
-	if(character.gender in list(PLURAL, NEUTER))
-		if(isliving(character)) //Ghosts get neuter by default
+	if(character.gender in list(PLURAL, NEUTER) && chosen_species != "Mushroom")
+		if(isliving(character)) //Ghosts & shrooms get neuter by default
 			message_admins("[character] ([character.ckey]) has spawned with their gender as plural or neuter. Please notify coders.")
 			character.setGender(MALE)
 
