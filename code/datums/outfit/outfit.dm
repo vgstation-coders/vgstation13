@@ -39,7 +39,6 @@
 	var/list/items_to_spawn = list(
 		"Default" = list(),
 	)
-	var/list/disabilities_items = list()
 
 	var/list/backpack_types = list(
 		BACKPACK_STRING = null,
