@@ -1,5 +1,5 @@
 /obj/machinery/rust/gyrotron
-	icon = 'code/WorkInProgress/Cael_Aislinn/Rust/rust.dmi'
+	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "emitter-off"
 	name = "gyrotron"
 	anchored = 0

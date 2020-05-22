@@ -4,7 +4,7 @@
 
 /obj/item/projectile/missile
 	name = "missile"
-	icon = 'code/WorkInProgress/Cael_Aislinn/meteor_turret.dmi'
+	icon = ' icons/obj/structures/meteor_turret.dmi'
 	icon_state = "missile"
 	var/turf/target
 	var/tracking = 0
@@ -46,7 +46,7 @@
 
 /obj/machinery/meteor_battery
 	name = "meteor battery"
-	icon = 'code/WorkInProgress/Cael_Aislinn/meteor_turret.dmi'
+	icon = ' icons/obj/structures/meteor_turret.dmi'
 	icon_state = "turret0"
 	var/raised = 0
 	var/enabled = 1

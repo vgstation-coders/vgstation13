@@ -1,6 +1,6 @@
 
 /obj/item/weapon/fuel_assembly
-	icon = 'code/WorkInProgress/Cael_Aislinn/Rust/rust.dmi'
+	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "fuel_assembly"
 	name = "fuel rod assembly"
 	var/list/rod_quantities

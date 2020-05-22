@@ -1,7 +1,7 @@
 
 /obj/machinery/computer/rust_core_control
 	name = "R-UST Mk. 7 Core Control"
-	icon = 'code/WorkInProgress/Cael_Aislinn/Rust/rust.dmi'
+	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "core_control"
 	light_color = LIGHT_COLOR_ORANGE
 	var/list/connected_devices = list()
