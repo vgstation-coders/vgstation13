@@ -285,8 +285,9 @@
 		stunned--
 		return
 
-	if (!target || target.gcDestroyed)
+	if ((!target || target.gcDestroyed || get_dist(src, target) > 7) && !look_for_target)
 		target = null
+		currently_healing = 0
 		find_target()
 
 	decay_oldtargets()
@@ -455,8 +456,9 @@
 	qdel(src)
 	return
 
-/obj/machinery/bot/medbot/find_target()
-	for (var/mob/living/carbon/C in view(7,src)) //Time to find a patient!
+/obj/machinery/bot/medbot/target_selection()
+	look_for_target = TRUE
+	for (var/mob/living/carbon/C in view(target_chasing_distance,src)) //Time to find a patient!
 		if ((C.isDead()) || !istype(C, /mob/living/carbon/human))
 			continue
 
@@ -474,7 +476,9 @@
 					broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
 			visible_message("<b>[src]</b> points at [C.name]!")
 			process_path() // Let's waste no time
+			look_for_target = FALSE
 			break
+	look_for_target = FALSE
 
 /obj/machinery/bot/medbot/proc/assess_patient(mob/living/carbon/C)
 	//Time to see if they need medical help!

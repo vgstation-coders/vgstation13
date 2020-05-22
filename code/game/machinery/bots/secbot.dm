@@ -228,10 +228,10 @@ Auto Patrol: []"},
 		src.on = 1
 		src.icon_state = "[src.icon_initial][src.on]"
 
-/obj/machinery/bot/secbot/find_target()
+/obj/machinery/bot/secbot/target_selection()
 	anchored = 0
 	threatlevel = 0
-	for (var/mob/living/carbon/C in view(12,src)) //Let's find us a criminal
+	for (var/mob/living/carbon/C in view(target_chasing_distance,src)) //Let's find us a criminal
 		if ((C.stat) || (C.handcuffed))
 			continue
 
@@ -254,7 +254,7 @@ Auto Patrol: []"},
 			visible_message("<b>[src]</b> points at [C.name]!")
 
 /obj/machinery/bot/secbot/process_bot()
-	if (!target || target.gcDestroyed || get_dist(src, target) > 7)
+	if (can_abandon_target())
 		target = null
 		steps_per = initial_steps_per
 		find_target()
