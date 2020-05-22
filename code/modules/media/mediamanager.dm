@@ -258,14 +258,15 @@ function SetMusic(url, time, volume) {
 
 	if(M && M.playing)
 		MP_DEBUG("<span class='good'>[round(world.time - finish_time, 4)/10] seconds skipped...<span>")
-		if ((targetURL =! current_url) && (finish_time > 0) && (world.time - finish_time < -10 SECONDS)) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
-			MP_DEBUG("<span class='good'>Should be cutting off music.<span>")
-			stop_music()
-			sleep(1 SECONDS) // Have to wait for the media player response.
 		targetURL = M.media_url
 		targetStartTime = M.media_start_time
 		targetVolume = M.volume
 		src.finish_time = M.media_finish_time
+		if ((targetURL != current_url) && (finish_time > 0) && ((world.time - finish_time) < -10 SECONDS)) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
+			MP_DEBUG("<span class='good'>Should be cutting off music.<span>")
+			stop_music()
+			sleep(1 SECONDS) // Have to wait for the media player response.
+
 //			to_chat(owner, "Found audio source: [M.media_url] @ [(world.time - start_time) / 10]s.")
 	//else
 	//	testing("M is not playing or null.")
