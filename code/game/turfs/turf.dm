@@ -23,7 +23,7 @@
 
 	var/blocks_air = 0
 
-	var/list/PathNodes = list()
+	var/list/PathNodes = null
 
 	// Bot shit
 	var/targetted_by=null
@@ -90,6 +90,10 @@
 			src.Entered(AM)
 	if(opacity)
 		has_opaque_atom = TRUE
+
+	// Turfs are never, strictly speaking, deleted, they are just changed, this event has no reason to exist.
+	qdel(on_destroyed)
+	on_destroyed = null
 
 /turf/ex_act(severity)
 	return 0
@@ -744,8 +748,10 @@
 //Pathnode stuff
 
 /turf/proc/FindPathNode(var/id)
-	return PathNodes["[id]"]
+	return PathNodes ? PathNodes["[id]"] : null
 
 /turf/proc/AddPathNode(var/PathNode/PN, var/id)
-	ASSERT(!PathNodes["[id]"])
+	ASSERT(!PathNodes || !PathNodes["[id]"])
+	if (!PathNodes)
+		PathNodes = list()
 	PathNodes["[id]"] = PN
