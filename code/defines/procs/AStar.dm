@@ -252,7 +252,6 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 				open.Enqueue(new /PathNode(T,cur,call(cur.source,dist)(T),newenddist,cur.nodecount+1,"unique_[reference]"))
 			else //is already in open list, check if it's a better way from the current turf
 				if(newenddist < PNode.distance_from_end)
-
 					PNode.prevNode = cur
 					PNode.distance_from_start = newenddist
 					PNode.calc_f()

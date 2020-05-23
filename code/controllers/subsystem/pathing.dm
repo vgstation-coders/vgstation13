@@ -146,7 +146,6 @@ var/global/list/pathmakers = list()
 	for(var/turf/T in closed)
 		var/PathNode/PN = T.FindPathNode(PM_id)
 		T.PathNodes[PM_id] = null
-		T.PathNodes.Remove("[PM_id]")
 		qdel(PN)
 	owner = null
 	start = null

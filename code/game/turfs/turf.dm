@@ -23,7 +23,7 @@
 
 	var/blocks_air = 0
 
-	var/list/PathNodes = list()
+	var/list/PathNodes = null
 
 	// Bot shit
 	var/targetted_by=null
@@ -744,8 +744,10 @@
 //Pathnode stuff
 
 /turf/proc/FindPathNode(var/id)
-	return PathNodes["[id]"]
+	return PathNodes && PathNodes["[id]"]
 
 /turf/proc/AddPathNode(var/PathNode/PN, var/id)
-	ASSERT(!PathNodes["[id]"])
+	ASSERT(!PathNodes || !PathNodes["[id]"])
+	if (!PathNodes)
+		PathNodes = list()
 	PathNodes["[id]"] = PN
