@@ -744,7 +744,7 @@
 //Pathnode stuff
 
 /turf/proc/FindPathNode(var/id)
-	return PathNodes && PathNodes["[id]"]
+	return PathNodes ? PathNodes["[id]"] : null
 
 /turf/proc/AddPathNode(var/PathNode/PN, var/id)
 	ASSERT(!PathNodes || !PathNodes["[id]"])
