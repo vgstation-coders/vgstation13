@@ -56,12 +56,12 @@
 
 	var/list/implant_types = list()
 
-	var/pda_slot 
+	var/pda_slot
 	var/pda_type = null
 	var/id_type = null
 
 	// For job-slot combinations that require a bit more work than just equipping a string
-	// Formatting  : 
+	// Formatting  :
 	/*
 		special_snowflakes = list(
 			"Default" = list(
@@ -77,19 +77,33 @@
 /datum/outfit/New()
 	return
 
+
 /datum/outfit/proc/pre_equip(var/mob/living/carbon/human/H)
 	return
+
+/datum/outfit/proc/pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip)
+	if (H.client.IsByondMember())
+		to_chat(H, "Thank you for supporting BYOND!")
+		items_to_collect[/obj/item/weapon/storage/box/byond] = GRASP_LEFT_HAND
+
+	if (!give_disabilities_equipment)
+		return
+	if (H.disabilities & ASTHMA)
+		items_to_collect[/obj/item/device/inhaler] = "Survival Box"
+	if (!items_to_equip[slot_glasses_str])
+		items_to_equip[slot_glasses_str] = /obj/item/clothing/glasses/regular
 
 /datum/outfit/proc/equip(var/mob/living/carbon/human/H)
 	if (!H || !H.mind)
 		return
-	
+
 	pre_equip(H)
 	var/species = H.species.type
 	var/list/L = items_to_spawn[species]
 	if (!L) // Couldn't find the particular species
 		species = "Default"
 		L = items_to_spawn["Default"]
+	pre_equip_disabilities(H, L)
 
 	for (var/slot in L)
 
@@ -106,7 +120,7 @@
 		if (!obj_type)
 			continue
 		slot = text2num(slot)
-		H.equip_to_slot_or_del(new obj_type(H), slot, TRUE)
+		H.equip_to_slot_or_del(new obj_type(get_turf(H)), slot, TRUE)
 
 	equip_backbag(H, species)
 
@@ -152,7 +166,7 @@
 				H.equip_or_collect(new item_type(H.back), slot_in_backpack)
 
 	// -- No backbag, let's improvise
-	
+
 	else
 		var/obj/item/weapon/storage/box/survival/pack
 		if (equip_survival_gear.len)
@@ -181,7 +195,7 @@
 		if (special_items)
 			for (var/item_type in special_items)
 				var/chosen_slot = special_items[item_type]
-				H.equip_to_slot_if_possible(new item_type(get_turf(H)), chosen_slot)	
+				H.equip_to_slot_if_possible(new item_type(get_turf(H)), chosen_slot)
 
 /datum/outfit/proc/species_final_equip(var/mob/living/carbon/human/H)
 	if (H.species)
@@ -201,9 +215,9 @@
 	C.name = "[C.registered_name]'s ID Card ([C.assignment])"
 	C.associated_account_number = H.mind.initial_account.account_number
 	H.equip_or_collect(C, slot_wear_id)
-		
+
 	if (pda_type)
-		var/obj/item/device/pda/pda = new pda_type
+		var/obj/item/device/pda/pda = new pda_type(H)
 		pda.owner = H.real_name
 		pda.ownjob = C.assignment
 		pda.name = "PDA-[H.real_name] ([pda.ownjob])"
@@ -213,14 +227,23 @@
 /datum/outfit/proc/post_equip(var/mob/living/carbon/human/H)
 	return // Empty
 
+// Special snowflakes.
 /datum/outfit/proc/special_equip(var/title, var/slot, var/mob/living/carbon/human/H)
 	return
 
-// -- Work in progress !!
 /datum/outfit/proc/give_disabilities_equipment(var/mob/living/carbon/human/H)
 	if (!give_disabilities_equipment)
 		return
-	
+
+	//If a character can't stand because of missing limbs, equip them with a wheelchair
+	if(!H.check_stand_ability())
+		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
+		W.buckle_mob(H,H)
+
+	if (H.glasses)
+		var/obj/item/clothing/glasses/G = H.glasses
+		G.prescription = 1
+
 	return 1
 
 // Strike teams have 2 particularities : a leader, and several specialised roles.
