@@ -192,6 +192,14 @@ var/list/potential_bonus_items = list(
 
 
 /datum/faction/vox_shoal/proc/count_human_score(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		if (H.old_assigned_role in command_positions)
+			total_points += 300
+		if (H.old_assigned_role in dept_objective)
+			total_points += 200
+			got_personnel++
+		return
+
 	if (H.mind.assigned_role in command_positions)
 		total_points += 300
 	if (H.mind.assigned_role in dept_objective)
@@ -208,7 +216,7 @@ var/list/potential_bonus_items = list(
 
 /mob/living/proc/send_back_to_main_station(var/complete_failure = FALSE)
 	if (complete_failure) // Non-vox somehow used the vox shuttle.
-		to_chat(src, "<span class='danger'>After hours of aimlessly wandering through space in hostile Vox territory, the shuttle quickly ran out of fuel. You and your companions decided to abandon the ship and throw escape shelters in the general direction of the station.</span>")	
+		to_chat(src, "<span class='danger'>After hours of aimlessly wandering through space in hostile Vox territory, the shuttle quickly ran out of fuel. You and your companions decided to abandon the ship and throw escape shelters in the general direction of the station.</span>")
 		var/obj/structure/inflatable/shelter/S = new(get_turf(src))
 		forceMove(S)
 		S.ThrowAtStation()

@@ -703,7 +703,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Multimessage'><span class='pda_icon pda_mail'></span> Department Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=50'><span class='pda_icon pda_clock'></span> Current Events</a></li>"}
-				//dat += "<li><a href='byond://?src=[src];choice=chatroom'><span class='pda_icon pda_chatroom'></span> Nanotrasen Relay Chat</a></li>"
 
 				dat += "<li><a href='byond://?src=\ref[src];choice=41'><span class='pda_icon pda_notes'></span> View Crew Manifest</a></li>"
 
@@ -885,16 +884,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 								dat += "OTHER: [round(unknown_level)]%<br>"
 						dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 				dat += "<br>"
-
-			if (5)
-
-				dat += {"<h4><span class='pda_icon pda_chatroom'></span> Nanotrasen Relay Chat</h4>
-					<h4><span class='pda_icon pda_menu'></span> Detected Channels</h4>: <li>"}
-				for(var/datum/chatroom/C in chatrooms)
-					dat += "<a href='byond://?src=\ref[src];pdachannel=[C.name]'>#[html_encode(lowertext(C.name))]"
-					if(C.password != "")
-						dat += " <span class='pda_icon pda_locked'></span>"
-					dat += "</li>"
 
 			if (41) //Allows everyone to access crew
 
@@ -1430,7 +1419,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				mode = 0
 			else
 				mode = round(mode/10)//TODO: fix this shit up
-				if((mode==4) || (mode==5))//Fix for cartridges. Redirects to hub.
+				if(mode==4)//Fix for cartridges. Redirects to hub.
 					mode = 0
 				else if(mode >= 40 && mode <= 53)//Fix for cartridges. Redirects to refresh the menu.
 					cartridge.mode = mode
@@ -1467,8 +1456,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			mode = 0
 		if("41")
 			mode = 41
-		if("chatroom") // chatroom hub
-			mode = 5
 
 //APPLICATIONS FUNCTIONS===========================
 		if("alarm")

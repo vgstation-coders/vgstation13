@@ -125,7 +125,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			src.updateUsrDialog()
 		if("patrol")
 			src.auto_patrol =!src.auto_patrol
-			src.patrol_path = null
+			src.patrol_path = list()
 			src.updateUsrDialog()
 		if("freq")
 			var/freq = text2num(input("Select frequency for  navigation beacons", "Frequnecy", num2text(beacon_freq / 10))) * 10
@@ -164,6 +164,9 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			to_chat(user, "<span class='notice'>The [src] buzzes and beeps.</span>")
 		src.oddbutton = 1
 		src.screwloose = 1
+
+/obj/machinery/bot/cleanbot/can_path()
+	return !cleaning
 
 /obj/machinery/bot/cleanbot/process_bot()
 	if(!target)

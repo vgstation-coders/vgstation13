@@ -45,6 +45,7 @@
 		/obj/item/weapon/melee/defibrillator
 		)
 
+	target_chasing_distance = 12
 
 /obj/item/weapon/ed209_assembly
 	name = "ED-209 assembly"
@@ -240,10 +241,10 @@ Auto Patrol: []"},
 		arrest_type = 1//Don't even try to cuff
 		declare_arrests = 0
 
-/obj/machinery/bot/ed209/find_target()
+/obj/machinery/bot/ed209/target_selection()
 	anchored = 0
 	threatlevel = 0
-	for (var/mob/living/carbon/C in view(12,src)) //Let's find us a criminal
+	for (var/mob/living/carbon/C in view(target_chasing_distance,src)) //Let's find us a criminal
 		if ((C.stat) || (C.handcuffed))
 			continue
 
@@ -339,9 +340,11 @@ Auto Patrol: []"},
 
 	return threatcount
 
+/obj/machinery/bot/ed209/can_path()
+	return !cuffing
 
 /obj/machinery/bot/ed209/process_bot()
-	if (!target || target.gcDestroyed || get_dist(src, target) > 12)
+	if (can_abandon_target())
 		target = null
 		find_target()
 
@@ -353,6 +356,7 @@ Auto Patrol: []"},
 		if (Adjacent(target))		// if right next to perp
 			var/mob/living/carbon/M = target
 			target = null // Don't teabag them
+			path = list() // Kill our path
 			add_oldtarget(M.name, 12)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
 			if (beat_them)

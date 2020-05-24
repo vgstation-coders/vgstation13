@@ -40,6 +40,51 @@
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
 
+/obj/item/clothing/gloves/swat/operator
+	name = "operator gloves"
+	desc = "Once you touch down in the LZ at the FOB, locate the IEDs and don't put up with any FNGs."
+
+/obj/item/clothing/gloves/swat/operator/examine(mob/user)
+	..()
+	if(locate(/obj/item/weapon/implant/loyalty) in user)
+		to_chat(user,"<span class='info'>These gloves can be used to convey messages to other loyalty implanted crew. Use an open hand on yourself while wearing them.</span>")
+
+/obj/item/clothing/gloves/swat/operator/Touch(var/atom/A, mob/user, proximity)
+	if(A == user && !user.incapacitated())
+		if(user.is_implanted(/obj/item/weapon/implant/loyalty))
+			var/list/choices = list(
+				list("Stick together!", "radial_group"),
+				list("Split up!", "radial_split"),
+				list("Wait here!", "radial_waithere"),
+				list("Busy, cover!", "radial_busy")
+			)
+
+			var/sign = show_radial_menu(user,user,choices)
+			if(!sign)
+				return 0 //if they don't want to sign, let them check their own status
+			signal(sign,user)
+			return 1 //exit the attack_hand
+	return ..()
+
+/obj/item/clothing/gloves/swat/operator/proc/signal(var/sign, mob/user)
+	if(user.incapacitated())
+		return
+	for(var/mob/M in view(7, user))
+		if(!M.client)
+			continue //Don't bother, no one to show it to
+		if(M.isUnconscious() || M.eye_blind || M.blinded)
+			continue //can't perceive this message
+		if(M.is_implanted(/obj/item/weapon/implant/loyalty) || istype(M, /mob/dead/observer))
+			to_chat(M,"[bicon(src)] <span class='info'>[user] signals, <B>[sign]</B></span>")
+			continue
+		else if(isrobot(M))
+			var/mob/living/silicon/robot/robit = M
+			if(HAS_MODULE_QUIRK(robit, MODULE_IS_THE_LAW))
+				to_chat(M,"[bicon(src)] <span class='info'>[user] signals, <B>[sign]</B></span>")
+				continue
+
+		to_chat(M,"<span class='notice'>[user] makes strange hand symbols.</span>")
+
 /obj/item/clothing/gloves/combat //Combined effect of SWAT gloves and insulated gloves
 	desc = "These tactical gloves are somewhat fire and impact resistant."
 	name = "combat gloves"

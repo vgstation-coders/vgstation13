@@ -113,7 +113,7 @@
 	return istype(O,/obj/machinery/telecomms)
 
 /obj/machinery/telecomms/isLinkedWith(var/obj/O)
-	return O != null && O in links
+	return O != null && (O in links)
 
 /obj/machinery/telecomms/getLink(var/idx)
 	return (idx >= 1 && idx <= links.len) ? links[idx] : null
@@ -290,7 +290,7 @@
 // NOTE: A user won't be provided if unlinked by deletion!
 /obj/machinery/telecomms/unlinkFrom(var/mob/user, var/obj/O)
 	var/obj/machinery/telecomms/T=O
-	if(O && O in links)
+	if(O && (O in links))
 		if(T.links)
 			T.links.Remove(src)
 		links.Remove(O)

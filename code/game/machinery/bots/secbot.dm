@@ -91,7 +91,7 @@
 /obj/machinery/bot/secbot/turn_off()
 	..()
 	target = null
-	steps_per = initial(steps_per)
+	steps_per = initial_steps_per
 	old_targets = list()
 	anchored = 0
 	start_walk_to(0)
@@ -170,10 +170,16 @@ Auto Patrol: []"},
 			src.declare_arrests = !src.declare_arrests
 			src.updateUsrDialog()
 
+/obj/machinery/bot/secbot/can_path()
+	return !cuffing
+
 /obj/machinery/bot/secbot/proc/set_target(var/mob/M)
 	target = M
 	steps_per = 3
-	process_path()
+	//process_path()
+
+/obj/machinery/bot/secbot/can_patrol()
+	return steps_per == initial_steps_per
 
 /obj/machinery/bot/secbot/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
@@ -214,7 +220,7 @@ Auto Patrol: []"},
 		for(var/mob/O in hearers(src))
 			O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		src.target = null
-		steps_per = initial(steps_per)
+		steps_per = initial_steps_per
 		if(user)
 			add_oldtarget(user, 12)
 		src.anchored = 0
@@ -222,10 +228,10 @@ Auto Patrol: []"},
 		src.on = 1
 		src.icon_state = "[src.icon_initial][src.on]"
 
-/obj/machinery/bot/secbot/find_target()
+/obj/machinery/bot/secbot/target_selection()
 	anchored = 0
 	threatlevel = 0
-	for (var/mob/living/carbon/C in view(12,src)) //Let's find us a criminal
+	for (var/mob/living/carbon/C in view(target_chasing_distance,src)) //Let's find us a criminal
 		if ((C.stat) || (C.handcuffed))
 			continue
 
@@ -248,9 +254,9 @@ Auto Patrol: []"},
 			visible_message("<b>[src]</b> points at [C.name]!")
 
 /obj/machinery/bot/secbot/process_bot()
-	if (!target || target.gcDestroyed || get_dist(src, target) > 7)
+	if (can_abandon_target())
 		target = null
-		steps_per = initial(steps_per)
+		steps_per = initial_steps_per
 		find_target()
 
 	decay_oldtargets()
@@ -260,6 +266,7 @@ Auto Patrol: []"},
 			return
 		if (Adjacent(target))		// if right next to perp
 			var/mob/living/carbon/M = target
+			path = list() // Kill our path
 			target = null // Don't teabag them
 			add_oldtarget(M.name, 12)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
@@ -281,7 +288,6 @@ Auto Patrol: []"},
 				cuffing = 1
 				var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
 				spawn(cuff_time)
-					cuffing = 0
 					if (Adjacent(M))
 						if (!istype(M))
 							return
@@ -290,6 +296,8 @@ Auto Patrol: []"},
 						M.handcuffed = new /obj/item/weapon/handcuffs(M)
 						M.update_inv_handcuffed()	//update handcuff overlays
 						playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+						spawn (1.5 SECONDS)
+							cuffing = 0
 			if(declare_arrests)
 				var/area/location = get_area(src)
 				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)
@@ -483,7 +491,7 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/beepsky/cheapsky/process_bot()
 	if (!target || target.gcDestroyed)
 		target = null
-		steps_per = initial(steps_per)
+		steps_per = initial_steps_per
 		find_target()
 
 	decay_oldtargets()
@@ -505,7 +513,7 @@ Auto Patrol: []"},
 
 			add_oldtarget(target.name, 6)
 			target = null
-			steps_per = initial(steps_per)
+			steps_per = initial_steps_per
 
 			if(declare_arrests)
 				var/area/location = get_area(src)

@@ -88,10 +88,6 @@
 	if (opacity && isturf(loc))
 		un_opaque = loc
 
-	loc = null
-	if (un_opaque)
-		un_opaque.recalc_atom_opacity()
-
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
 
@@ -100,11 +96,15 @@
 
 	for (var/datum/locking_category/category in locking_categories)
 		qdel(category)
-
 	locking_categories      = null
 	locking_categories_name = null
 
 	break_all_tethers()
+
+	forceMove(null, harderforce = TRUE)
+
+	if (un_opaque)
+		un_opaque.recalc_atom_opacity()
 
 	if((flags & HEAR) && !ismob(src))
 		for(var/mob/virtualhearer/VH in virtualhearers)
@@ -1057,7 +1057,8 @@
 	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
 	var/turf/startzone = locate(startx, starty, 1)
 	var/turf/endzone = locate(endx, endy, 1)
-	if(!isspace(get_area(startzone)))
+	var/area/startzone_area = get_area(startzone)
+	if(!isspace(startzone_area))
 		return FALSE
 	forceMove(startzone)
 	throw_at(endzone, null, throwspeed)
@@ -1087,6 +1088,25 @@
 				forceMove(F)
 				return TRUE
 	return FALSE
+
+/atom/movable/proc/teleport_radius(var/range)
+	var/list/best_options = list()
+	var/list/backup_options = list()
+	var/turf/picked
+	for(var/turf/T in orange(range, src))
+		if(T.x>world.maxx-6 || T.x<6 || T.y>world.maxy-6 || T.y<6) //Conditions we will NEVER accept: too close to edge
+			continue
+		if(istype(T,/turf/space) || T.density) //Only as a fallback: dense turf or space
+			backup_options += T
+			continue
+		best_options += T
+	if(best_options.len)
+		picked = pick(best_options)
+	else if(backup_options.len)
+		picked = pick(backup_options)
+	else
+		return
+	forceMove(picked)
 
 // -- trackers
 

@@ -416,6 +416,10 @@
 #define PLUMPHWINE		"phwine"
 #define IRONROT			"ironrot"
 #define GEOMETER		"geometer"
+#define EGG_YOLK		"egg_yolk"
+#define MUSTARD_POWDER	"mustard_powder"
+#define MAYO			"mayo"
+#define DIABEETUSOL		"diabeetusol"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -510,3 +514,4 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_DENSE		"grasses"
 #define INCENSE_CRAVE		"vales"
 #define INCENSE_CORNOIL 	"cornoils"
+#define INCENSE_MUSTARDPLANT "mustardplant"

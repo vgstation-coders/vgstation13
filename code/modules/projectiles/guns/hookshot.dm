@@ -85,7 +85,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/hookshot/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
+/obj/item/weapon/gun/hookshot/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(check_tether())
@@ -480,6 +480,18 @@
 /obj/item/weapon/gun/hookshot/whip/update_icon()
 	return
 
+/obj/item/weapon/gun/hookshot/whip/liquorice
+	name = "liquoricium whip"
+	icon_state = "liquorice"
+	desc = "Although clearly just an iron chain covered in candy, the jagged pieces of caramel look like they'd sting quite a bit."
+	fire_sound = 'sound/weapons/whip_crack.ogg'
+	fire_action = "flick"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 8
+	maxlength = 4
+	hooktype = /obj/item/projectile/hookshot/whip/liquorice
+	empty_sound = null
+
 /obj/item/weapon/gun/hookshot/whip/vampkiller
 	name = "vampire killer"
 	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It's said to be imbued with holy powers, but this one looks like a cheap replica."
@@ -493,3 +505,4 @@
 	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It is blessed to be effective against the undead and radiates an awesome holy aura."
 	icon_state = "vampkiller_true"
 	hooktype = /obj/item/projectile/hookshot/whip/vampkiller/true
+

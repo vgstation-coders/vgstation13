@@ -42,12 +42,15 @@
 	if(Adjacent(usr))
 		return empty_container_into()
 	return ..()
-/obj/structure/toilet/attack_hand(mob/living/user as mob)
+/obj/structure/toilet/attack_hand(mob/living/user)
+	if(user.attack_delayer.blocked())
+		return
 	if(swirlie)
+		user.delayNextAttack(1 SECONDS)
 		swirlie.visible_message("<span class='danger'>[user] slams the toilet seat onto [swirlie.name]'s head!</span>", "<span class='userdanger'>[user] slams the toilet seat onto your head!</span>", "You hear reverberating porcelain.")
 		swirlie.apply_damage(8, BRUTE, LIMB_HEAD, used_weapon = name)
 		playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-		add_attacklogs(user, swirlie, "slammed the toilet seat")
+		add_attacklogs(user, swirlie, "slammed the toilet seat", admin_warn=FALSE)
 		add_fingerprint(user)
 		add_fingerprint(swirlie)
 		return
@@ -125,15 +128,18 @@
 
 						if(!GM.internal && GM.losebreath <= 30)
 							GM.losebreath += 5
-							add_attacklogs(user, GM, "gave a swirlie to")
+							add_attacklogs(user, GM, "gave a swirlie to", admin_warn=FALSE)
 						else
-							add_attacklogs(user, GM, "gave a swirle with no effect to")
+							add_attacklogs(user, GM, "gave a swirle with no effect to", admin_warn=FALSE)
 					swirlie = null
 				else
+					if(user.attack_delayer.blocked())
+						return
+					user.delayNextAttack(1 SECONDS)
 					GM.visible_message("<span class='danger'>[user] slams [GM.name] into \the [src]!</span>", "<span class='userdanger'>[user] slams you into \the [src]!</span>")
 					GM.adjustBruteLoss(8)
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-					add_attacklogs(user, GM, "slammed into the toilet")
+					add_attacklogs(user, GM, "slammed into the toilet", admin_warn=FALSE)
 					add_fingerprint(user)
 					add_fingerprint(GM)
 					return
@@ -565,6 +571,11 @@
 			RG.reagents.add_reagent(WATER, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
+
+	if(istype(O,/obj/item/trash/plate))
+		var/obj/item/trash/plate/the_plate = O
+		the_plate.clean = TRUE
+		O.update_icon()
 
 	else if (istype(O, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = O

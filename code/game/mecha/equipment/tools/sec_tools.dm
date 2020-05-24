@@ -155,7 +155,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/alt_action()
-	for(var/i = i; i <= cells.len; i++)
+	for(var/i in 1 to cells.len)
 		subdue(i)
 
 /datum/global_iterator/mech_jail/process(var/obj/item/mecha_parts/mecha_equipment/tool/jail/J)

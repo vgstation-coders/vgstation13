@@ -71,7 +71,7 @@
 	var/datum/robot_component/picked = pick(parts)
 	picked.heal_damage(brute,burn)
 
-/mob/living/silicon/robot/take_organ_damage(var/brute = 0, var/burn = 0, var/sharp = 0)
+/mob/living/silicon/robot/take_organ_damage(var/brute, var/burn, var/ignore_inorganics = FALSE)
 	var/list/components = get_damageable_components()
 	if(!components.len)
 		return
@@ -95,11 +95,11 @@
 
 	var/datum/robot_component/armour/A = get_armour()
 	if(A)
-		A.take_damage(brute,burn,sharp)
+		A.take_damage(brute,burn)
 		return
 
 	var/datum/robot_component/C = pick(components)
-	C.take_damage(brute,burn,sharp)
+	C.take_damage(brute,burn)
 
 /mob/living/silicon/robot/heal_overall_damage(var/brute, var/burn)
 	var/list/datum/robot_component/parts = get_damaged_components(brute,burn)

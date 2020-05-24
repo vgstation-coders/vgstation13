@@ -386,32 +386,32 @@ menu "menu"
 		name = "&Client"
 		command = ""
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "&Quick screenshot\tF2"
 		command = ".screenshot auto"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "&Save screenshot as...\tShift+F2"
 		command = ".screenshot"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = ""
 		command = ""
 		category = "&Client"
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "Reconnect"
 		command = ".reconnect"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "&Quit"
 		command = ".quit"
 		category = "&Client"
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "&Display"
 		command = ""
 		saved-params = "is-checked"
@@ -429,15 +429,15 @@ menu "menu"
 		is-checked = true
 		can-check = true
 		group = "scaling"
-		saved-params = "is-checked"	
+		saved-params = "is-checked"
 	elem "blur"
 		name = "&Blur"
 		command = ".winset \"mapwindow.map.zoom-mode=blur\""
 		category = "&Display"
 		group = "scaling"
 		can-check = true
-		saved-params = "is-checked"	
-	elem 
+		saved-params = "is-checked"
+	elem
 		name = ""
 		command = ""
 		category = "&Display"
@@ -449,8 +449,8 @@ menu "menu"
 		is-checked = true
 		can-check = true
 		group = "size"
-		saved-params = "is-checked" 
-	elem 
+		saved-params = "is-checked"
+	elem
 		name = ""
 		command = ""
 		category = "&Display"
@@ -490,7 +490,7 @@ menu "menu"
 		can-check = true
 		group = "size"
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = ""
 		command = ""
 		category = "&Display"
@@ -512,16 +512,16 @@ menu "menu"
 		category = "&Display"
 		can-check = true
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "&Help"
 		command = ""
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "&Admin help\tF1"
 		command = "adminhelp"
 		category = "&Help"
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "&Hotkeys"
 		command = "hotkeys-help"
 		category = "&Help"
@@ -530,12 +530,12 @@ menu "menu"
 		name = "Settings"
 		command = ""
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "General Settings"
 		command = "modifypreferences 1"
 		category = "Settings"
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "Special Roles"
 		command = "modifypreferences 2"
 		category = "Settings"
@@ -545,12 +545,12 @@ menu "menu"
 		command = ""
 		is-disabled = true
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = "Profiler"
 		command = ".profile"
 		category = "Server"
 		saved-params = "is-checked"
-	elem 
+	elem
 		name = ""
 		command = ""
 		category = "Server"
@@ -876,6 +876,14 @@ window "rpane"
 		text = "MapName"
 		command = "MapRender"
 	elem "hosttracker"
+		type = BROWSER
+		pos = 392,25
+		size = 1x1
+		anchor1 = none
+		anchor2 = none
+		is-visible = false
+		saved-params = ""
+	elem "hosttracker2"
 		type = BROWSER
 		pos = 392,25
 		size = 1x1

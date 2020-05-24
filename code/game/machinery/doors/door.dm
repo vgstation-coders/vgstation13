@@ -282,12 +282,13 @@ var/list/all_doors = list()
 /obj/machinery/door/proc/close()
 	if (density || operating || jammed)
 		return
-	operating = 1
 
 	for (var/obj/O in src.loc)
 		if (O.blocks_doors())
 			return 0
-	
+
+	operating = 1
+
 	layer = closed_layer
 
 	if (makes_noise)

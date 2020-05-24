@@ -146,7 +146,7 @@
 	icon_state = "cardborg_h"
 	item_state = "cardborg_h"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
@@ -160,7 +160,7 @@
 	icon_state = "justicered"
 	item_state = "justicered"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 
 /obj/item/clothing/head/justice/blue
 	icon_state = "justiceblue"
@@ -496,6 +496,12 @@
 	icon_state = "duncecap"
 	item_state = "duncecap"
 
+/obj/item/clothing/head/party_hat
+	name = "party hat"
+	desc = "A party cone. Not useful to disguise one's self as a unicorn or to impale one's foes."
+	icon_state = "birthdayhat"
+	item_state = "birthdayhat"
+
 /obj/item/clothing/head/snake
 	name = "snake head"
 	desc = "Reenact acts of violence against reptiles, or sneak into a swamp unnoticed."
@@ -561,7 +567,7 @@
 	icon_state = "pharaoh"
 	item_state = "pharaoh"
 	wizard_garb = TRUE
-	body_parts_covered = FULL_HEAD|HEAD|EARS
+	body_parts_covered = FULL_HEAD|HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/sombrero
 	name = "sombrero"

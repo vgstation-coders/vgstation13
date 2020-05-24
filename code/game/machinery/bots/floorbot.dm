@@ -186,6 +186,9 @@ var/global/list/floorbot_targets=list()
 /obj/machinery/bot/floorbot/proc/have_target()
 	return (target != null && !target.gcDestroyed)
 
+/obj/machinery/bot/floorbot/can_path()
+	return !repairing
+
 /obj/machinery/bot/floorbot/process_bot()
 	if(repairing)
 		return
@@ -235,7 +238,7 @@ var/global/list/floorbot_targets=list()
 /obj/machinery/bot/floorbot/proc/checkforwork()
 	if(have_target())
 		return 0
-	var/list/can_see = view(7, src)
+	var/list/can_see = view(target_chasing_distance, src)
 
 	if(amount < 50)
 		if(eattiles && hunt_for_tiles(can_see))

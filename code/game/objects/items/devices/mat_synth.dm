@@ -121,8 +121,6 @@
 					to_chat(R, "<span class='warning'>You can't make that much [initial(material_type.name)] without shutting down!</span>")
 					return
 
-				return
-
 		else if(R.cell.charge)
 			to_chat(R, "<span class='warning'>You need to select a sheet type first!</span>")
 			return

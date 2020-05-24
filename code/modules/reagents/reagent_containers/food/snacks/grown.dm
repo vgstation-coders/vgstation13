@@ -1037,3 +1037,11 @@ var/list/special_fruits = list()
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "silverpear"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant
+	name = "mustard flowers"
+	desc = "A bunch of bright yellow flowers, unrelated to mustard gas"
+	potency = 10
+	filling_color = "#DFE88B"
+	plantname = "mustardplant"
+	fragrance = INCENSE_MUSTARDPLANT

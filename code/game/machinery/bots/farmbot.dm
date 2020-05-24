@@ -77,7 +77,7 @@
 
 /obj/machinery/bot/farmbot/turn_off()
 	..()
-	src.path = new()
+	src.path = list()
 	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 
@@ -214,6 +214,9 @@
 	qdel(src)
 	return
 
+/obj/machinery/bot/farmbot/can_path()
+	return !mode
+
 /obj/machinery/bot/farmbot/process_bot()
 	//set background = 1
 
@@ -239,6 +242,7 @@
 
 	if ( mode && target )
 		if ( get_dist(target,src) <= 1 || ( emagged && mode == FARMBOT_MODE_FERTILIZE ) )
+			path = list() // Kill our path
 			// If we are in emagged fertilize mode, we throw the fertilizer, so distance doesn't matter
 			frustration = 0
 			use_farmbot_item()
@@ -283,7 +287,7 @@
 
 
 
-/obj/machinery/bot/farmbot/find_target()
+/obj/machinery/bot/farmbot/target_selection()
 	if ( emagged ) //Find a human and help them!
 		for ( var/mob/living/carbon/human/human in view(7,src) )
 			if (human.isDead())

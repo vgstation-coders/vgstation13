@@ -94,6 +94,8 @@
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
 	if(!map.disable_holominimap_generation)
+		if (zLevel > map.zDeepSpace)
+			return // No need to generate an holomap for something that didn't spawn.
 		if(zLevel != map.zCentcomm)
 			for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 				for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))

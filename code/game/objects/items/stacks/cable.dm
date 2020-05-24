@@ -57,6 +57,22 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 // General procedures
 ///////////////////////////////////
 
+/obj/item/stack/cable_coil/preattack(atom/target, mob/user, proximity_flag, params)
+	var/turf/target_turf
+
+	if(isturf(target))
+		target_turf = target
+		if(!target_turf.can_place_cables())
+			to_chat(user, "<span class='warning'>You can't place cables there.</span>")
+			return
+	else if(istype(target, /obj/structure/catwalk))
+		target_turf = get_turf(target)
+
+	if(target_turf)
+		turf_place(target_turf, user)
+	else
+		return ..()
+
 //You can use wires to heal robotics
 /obj/item/stack/cable_coil/attack(mob/M as mob, mob/user as mob)
 	if(ishuman(M))
@@ -272,7 +288,6 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 /////////////////////////////
 
 /obj/item/stack/cable_coil/cut
-	item_state = "coil_red2"
 
 /obj/item/stack/cable_coil/cut/New(loc, amount, var/param_color = null)
 	..(loc)

@@ -276,6 +276,12 @@
 //	icon_state = "eyes"
 	prosthetic_name = "grue visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/grue
+	
+/obj/item/organ/internal/eyes/mushroom
+	name = "mushroom eyeballs"
+	icon_state = "eyes-tajaran"
+	prosthetic_name = "mushroom visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/mushroom
 
 /obj/item/organ/internal/eyes/adv_1
 	name = "advanced prosthesis eyeballs"

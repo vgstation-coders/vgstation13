@@ -1,7 +1,7 @@
 // Sends to the SERVER STATUS channels.
 // This sends to the "server_status" gamenudge route.
-/proc/send2maindiscord(var/msg)
-	send2discord(msg, "server_status")
+/proc/send2maindiscord(var/msg, var/ping = FALSE)
+	send2discord(msg, "server_status", ping)
 
 // Sends to the adminbus ahelp channels.
 // This sends to the "adminhelp" gamenudge route.

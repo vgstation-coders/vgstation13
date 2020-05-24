@@ -920,6 +920,16 @@
 		var/result = pick(existing_typesof(/obj/item/toy))
 		return new result
 
+/datum/find/toybox
+	find_ID = ARCHAEO_TOYBOX
+	apply_material_decorations = FALSE
+	apply_image_decorations = FALSE
+	apply_prefix = FALSE
+	responsive_reagent = POTASSIUM
+
+/datum/find/toybox/spawn_item()
+	return new /obj/item/weapon/butterflyknife/viscerator/bunny
+
 /datum/find/largecrystal
 	find_ID = ARCHAEO_LARGE_CRYSTAL
 	apply_material_decorations = FALSE

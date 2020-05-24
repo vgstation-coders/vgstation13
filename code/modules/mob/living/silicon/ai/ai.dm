@@ -37,6 +37,8 @@ var/list/ai_list = list()
 	var/obj/item/device/camera/silicon/aicamera = null
 	var/busy = FALSE //Toggle Floor Bolt busy var.
 	var/chosen_core_icon_state = "ai"
+	var/datum/intercom_settings/intercom_clipboard = null //Clipboard for copy/pasting intercom settings
+	var/mentions_on = FALSE
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
@@ -338,16 +340,26 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/proc/ai_roster()
 	show_station_manifest()
 
-/mob/living/silicon/ai/proc/ai_call_shuttle()
+/mob/living/silicon/ai/proc/ai_call_or_recall_shuttle()
 	if(isDead())
-		to_chat(src, "You can't call the shuttle because you are dead!")
+		to_chat(src, "<span class='warning'>You can't call/recall the shuttle because you are dead!</span>")
 		return
 	if(istype(usr,/mob/living/silicon/ai))
 		var/mob/living/silicon/ai/AI = src
 		if(AI.control_disabled)
-			to_chat(usr, "Wireless control is disabled!")
+			to_chat(usr, "<span class='warning'>Wireless control is disabled!</span>")
 			return
+	switch(emergency_shuttle.direction)
+		if(EMERGENCY_SHUTTLE_RECALLED)
+			to_chat(usr, "<span class='warning'>Wait until the shuttle arrives at Centcomm and try again</span>")
+		if(EMERGENCY_SHUTTLE_STANDBY)
+			ai_call_shuttle()
+		if(EMERGENCY_SHUTTLE_GOING_TO_STATION)
+			ai_recall_shuttle()
+		if(EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM)
+			to_chat(usr, "<span class='warning'>Too late!</span>")
 
+/mob/living/silicon/ai/proc/ai_call_shuttle()
 	var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination.", "Nanotrasen Anti-Comdom Systems")
 	if(!justification)
 		return
@@ -361,20 +373,17 @@ var/list/ai_list = list()
 		if(C)
 			C.post_status("shuttle")
 
-	return
-
-/mob/living/silicon/ai/proc/ai_cancel_call()
-	set category = "AI Commands"
-
-	if(isDead())
-		to_chat(src, "You can't send the shuttle back because you are dead!")
+/mob/living/silicon/ai/proc/ai_recall_shuttle()
+	if(!ismalf(src))
+		to_chat(usr, "<span class='warning'>Your morality core throws an error. Recalling an emergency shuttle is a symptom of a malfunctioning artificial intelligence.</span>")
 		return
-	if(istype(usr,/mob/living/silicon/ai))
-		var/mob/living/silicon/ai/AI = src
-		if(AI.control_disabled)
-			to_chat(src, "Wireless control is disabled!")
-			return
-	recall_shuttle(src)
+	var/datum/faction/malf/M = find_active_faction_by_member(mind.GetRole(MALF))
+	if(M?.stage != FACTION_ENDGAME)
+		to_chat(usr, "<span class='warning'>You need to initiate the takeover first</span>")
+		return
+	var/confirm = alert("Are you sure you want to recall the shuttle?", "Confirm Recall Shuttle", "Yes", "Cancel")
+	if(confirm == "Yes")
+		recall_shuttle(src)
 
 /mob/living/silicon/ai/check_eye(var/mob/user as mob)
 	if(!current)
@@ -812,6 +821,21 @@ var/list/ai_list = list()
 
 	to_chat(src, "Camera lights activated.")
 	return
+
+/mob/living/silicon/ai/verb/toggle_ai_mentions()
+	set name = "Toggle AI Mentions"
+	set desc = "Toggles highlighting and beeping on AI mentions"
+	set category = "AI Commands"
+	if(isUnconscious())
+		return
+
+	mentions_on = !mentions_on
+	
+	if(!mentions_on)		
+		to_chat(src, "AI mentions deactivated.")
+	else
+		to_chat(src, "AI mentions activated.")
+	
 
 /mob/living/silicon/ai/verb/toggle_station_map()
 	set name = "Toggle Station Holomap"

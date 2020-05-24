@@ -280,6 +280,7 @@ emp_act
 
 				if(bloody)
 					bloody_body(src)
+
 	return TRUE
 
 /mob/living/carbon/human/proc/knock_out_teeth(var/mob/living/L)

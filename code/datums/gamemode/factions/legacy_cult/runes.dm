@@ -278,8 +278,6 @@
 			to_chat(M, "<span class='danger'>Nar-Sie has lost interest in this universe.</span>")//narsie won't appear if a supermatter cascade has started
 		return
 
-	return fizzle()
-
 /obj/effect/rune_legacy/proc/attempt_summon(var/list/active_cultists)
 	if(active_cultists.len >= NUMBER_OF_NERDS_NEEDED)
 		if(z != map.zMainStation)
@@ -548,7 +546,7 @@
 			corpse_to_raise.visible_message("<span class='warning'>A dark mass begins to form above [corpse_to_raise], Gaining mass steadily before penetrating deep into \his heart. [corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
 			"<span class='warning'>Life? I'm alive? I live, again!</span>", \
 			"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
-			my_cult.rune_controller --
+			my_cult.rune_controller.revive_counter--
 
 //	if(my_cult)
 //		my_cult.add_cultist(corpse_to_raise.mind)

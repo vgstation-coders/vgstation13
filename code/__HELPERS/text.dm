@@ -31,11 +31,9 @@ forLineInText(text)
 /proc/sanitizeSQL(var/t as text)
 	//var/sanitized_text = replacetext(t, "'", "\\'")
 	//sanitized_text = replacetext(sanitized_text, "\"", "\\\"")
-
-	var/sqltext = dbcon.Quote(t)
-	//testing("sanitizeSQL(): BEFORE copytext(): [sqltext]")
-	sqltext = copytext(sqltext, 2, length(sqltext))//Quote() adds quotes around input, we already do that
-	//testing("sanitizeSQL(): AFTER copytext(): [sqltext]")
+	var/sqltext = SSdbcore.Quote(t)
+	//to_chat(world, "sanitizeSQL(): BEFORE Quote(): [t]")
+	//to_chat(world, "sanitizeSQL(): AFTER Quote(): [sqltext]")
 	return sqltext
 
 /*

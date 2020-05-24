@@ -284,3 +284,4 @@
 		M.drop_item(M.get_active_hand(), force_drop = 1)
 		M.put_in_hands(src)
 		to_chat(M, "<span class = 'userwarning'>\The [src] has been forced onto you by \the [user]! Find somebody else to give it to before it consumes your head!</span>")
+

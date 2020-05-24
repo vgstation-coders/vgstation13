@@ -575,12 +575,6 @@ turf/simulated/floor/update_icon()
 					make_plasteel_floor(T)
 			else
 				to_chat(user, "<span class='warning'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
-	else if(istype(C, /obj/item/stack/cable_coil))
-		if(can_place_cables())
-			var/obj/item/stack/cable_coil/coil = C
-			coil.turf_place(src, user)
-		else
-			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
 	else if(isshovel(C))
 		if(is_grass_floor())
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
