@@ -91,10 +91,6 @@
 	if(opacity)
 		has_opaque_atom = TRUE
 
-	// Turfs are never, strictly speaking, deleted, they are just changed, this event has no reason to exist.
-	qdel(on_destroyed)
-	on_destroyed = null
-
 /turf/ex_act(severity)
 	return 0
 

@@ -33,8 +33,6 @@ var/global/list/ghdel_profiling = list()
 
 	// EVENTS
 	/////////////////////////////
-	// On Destroy()
-	var/event/on_destroyed
 	// When density is changed
 	var/event/on_density_change
 	var/event/on_z_transition
@@ -164,10 +162,6 @@ var/global/list/ghdel_profiling = list()
 		densityChanged()
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
-	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
-	if(on_destroyed)
-		on_destroyed.holder = null
-		on_destroyed = null
 	if (on_density_change)
 		on_density_change.holder = null
 		on_density_change = null
@@ -192,7 +186,6 @@ var/global/list/ghdel_profiling = list()
 	..()
 
 /atom/New()
-	on_destroyed = new("owner"=src)
 	on_density_change = new("owner"=src)
 	on_z_transition = new("owner"=src)
 	post_z_transition = new("owner"=src)
