@@ -237,7 +237,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical/paramedic,
-			slot_helmet_str = /obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic,
+			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic,
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
@@ -247,7 +247,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/paramedic,
-			slot_helmet_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic,
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
@@ -258,7 +258,7 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/device/healthanalyzer = "Surival Box",
+		/obj/item/device/healthanalyzer = SURVIVAL_BOX,
 	)
 
 	pda_type = /obj/item/device/pda/medical
@@ -297,7 +297,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical,
-			slot_helmet_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
+			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
 		/datum/species/vox = list(
@@ -306,7 +306,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/geneticist,
-			slot_helmet_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
 	)
@@ -347,7 +347,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical,
-			slot_helmet_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
+			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
 		/datum/species/vox = list(
@@ -356,7 +356,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/virologist,
-			slot_helmet_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/virologist,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/virologist,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
 	)
