@@ -247,6 +247,7 @@
 	icon_state = "soviet"
 	item_state = "soviet"
 	_color = "soviet"
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/redcoat
 	name = "redcoat uniform"
@@ -747,6 +748,7 @@
 	item_state = "britpolice"
 	_color = "britpolice"
 	clothing_flags = ONESIZEFITSALL
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/inquisitor
 	name = "inquisitor's suit"
