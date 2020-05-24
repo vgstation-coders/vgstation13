@@ -16,7 +16,7 @@
 			if (species != "Default")
 				var/datum/species/S = species
 				H.set_species(initial(S.name))
-			sleep(1) // set_species has spawns() in it, so we have to wait.
+				sleep(1) // set_species has spawns() in it, so we have to wait.
 			for (var/slot in L)
 				if (isnull(text2num(slot)))
 					fail("Outfit [O.type] : list [species] doesn't have a number index at slot [slot].")
