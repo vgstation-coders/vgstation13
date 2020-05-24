@@ -4,7 +4,7 @@
 /obj/machinery/shield_capacitor
 	name = "\improper Starscreen shield capacitor"
 	desc = "Charges Starscreen shield generators."
-	icon = 'code/WorkInProgress/Cael_Aislinn/ShieldGen/shielding.dmi'
+	icon = 'icons/effects/shielding.dmi'
 	icon_state = "capacitor"
 	req_one_access = list(access_security, access_engine) // For locking/unlocking controls
 	density = 1

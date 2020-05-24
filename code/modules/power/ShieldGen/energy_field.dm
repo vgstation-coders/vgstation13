@@ -4,7 +4,7 @@
 /obj/effect/energy_field
 	name = "energy wall"
 	desc = "Sparkles, tingles, and stops you in your tracks."
-	icon = 'code/WorkInProgress/Cael_Aislinn/ShieldGen/shielding.dmi'
+	icon = 'icons/effects/shielding.dmi'
 	icon_state = "shieldsparkles"
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE

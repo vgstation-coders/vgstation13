@@ -2,7 +2,7 @@
 /obj/machinery/power/rust_fuel_injector
 	name = "\improper R-UST fuel injector"
 	desc = "A bulky machine featuring a slot for the insertion of a fuel rod coupled with a small screen on the back and a huge cannon-shaped structure on the front."
-	icon = 'code/WorkInProgress/Cael_Aislinn/Rust/rust.dmi'
+	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "injector0"
 
 	density = 1

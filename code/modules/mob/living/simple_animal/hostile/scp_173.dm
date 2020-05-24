@@ -3,7 +3,7 @@
 /mob/living/simple_animal/scp_173
 	name = "SCP-173"
 	desc = "It's some kind of hastily-painted human-size stone sculpture. Just looking at it makes you feel nervous."
-	icon = 'code/WorkInProgress/Cael_Aislinn/unknown.dmi'
+	icon = 'icons/mob/scp.dmi'
 	icon_state = "sculpture"
 	icon_living = "sculpture"
 	icon_dead = "sculpture"

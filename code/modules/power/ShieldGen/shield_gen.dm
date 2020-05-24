@@ -17,7 +17,7 @@
 /obj/machinery/shield_gen
 	name = "\improper Starscreen shield generator"
 	desc = "Generates a box-shaped wall of energy when active."
-	icon = 'code/WorkInProgress/Cael_Aislinn/ShieldGen/shielding.dmi'
+	icon = 'icons/effects/shielding.dmi'
 	icon_state = "generator_regular_off"
 	req_one_access = list(access_security, access_engine) // For locking/unlocking controls
 	density = 1

@@ -139,3 +139,25 @@
 /obj/item/clothing/head/surgery/green
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs. This one is dark green."
 	icon_state = "surgcap_green"
+
+ // Reference: http://www.teuse.net/personal/harrington/hh_bible.htm
+ // http://www.trmn.org/portal/images/uniforms/rmn/rmn_officer_srv_dress_lrg.png
+
+// Original by SkyMarshall
+
+/obj/item/clothing/head/beret/centcom/officer
+	name = "officers beret"
+	desc = "A black beret adorned with the shield (a silver kite shield with an engraved sword) of the Nanotrasen security forces, announcing to the world that the wearer is a defender of Nanotrasen."
+	icon_state = "centcomofficerberet"
+	flags = FPRINT
+
+/obj/item/clothing/head/beret/centcom/captain
+	name = "captains beret"
+	desc = "A white beret adorned with the shield (a cobalt kite shield with an engraved sword) of the Nanotrasen security forces, worn only by those captaining a vessel of the Nanotrasen Navy."
+	icon_state = "centcomcaptain"
+	flags = FPRINT
+
+/obj/item/clothing/shoes/centcom
+	name = "dress shoes"
+	desc = "They appear impeccably polished."
+	icon_state = "laceups"
