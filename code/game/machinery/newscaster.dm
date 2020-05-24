@@ -81,7 +81,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "newscaster_normal"
 	var/buildstage = 1 // 1 = complete, 0 = unscrewed
-	ghost_write = 1 // Allow ghosts to send Topic()s.
+	ghost_write = 0 // Allow ghosts to send Topic()s.
 	custom_aghost_alerts = 1 // We handle our own logging.
 
 	var/screen = 0
@@ -919,7 +919,6 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		else if(href_list["refresh"])
 			updateUsrDialog()
 
-
 /obj/machinery/newscaster/attackby(obj/item/I as obj, mob/user as mob)
 	switch(buildstage)
 		if(0)
@@ -1137,7 +1136,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		to_chat(user, "The paper is full of intelligible symbols!")
 
 
-obj/item/weapon/newspaper/Topic(href, href_list)
+/obj/item/weapon/newspaper/Topic(href, href_list)
 	var/mob/U = usr
 	//..() // Allow ghosts to do pretty much everything except add shit
 	if ((src in U.contents) || ( istype(loc, /turf) && in_range(src, U) ))
