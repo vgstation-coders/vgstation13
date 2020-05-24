@@ -337,6 +337,7 @@
 	var/word_delay = 7
 	var/list/words_to_say = list()
 	var/can_say = 0
+	var/on_face = 0
 	var/list/punct_list = list("," , "." , "?" , "!")
 
 	//Big list of words pulled from half life's soldiers, used for both matching with spoken text and part of the sound file's path
@@ -387,7 +388,7 @@
 	mask_charge++
 
 /obj/item/clothing/mask/gas/hecu/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(togglestate == 0)
+	if(!on_face)
 		return
 	if((!speech.frequency && is_holder_of(speech.speaker, src)) && speech.speaker != src)
 		var/list/word_list = splittext(speech.message," ")
@@ -413,3 +414,13 @@
 				playsound(src, "sound/vox_hecu/[words_to_say[i]]!.wav", 30)
 				sleep word_delay
 		words_to_say.Cut()
+
+/obj/item/clothing/mask/gas/hecu/equipped(var/mob/user, var/slot)
+	if(slot == slot_wear_mask)
+		on_face = 1
+	..()
+
+/obj/item/clothing/mask/gas/hecu/unequipped(var/mob/user, var/slot)
+	if(slot == slot_wear_mask)
+		on_face = 0
+	..()
