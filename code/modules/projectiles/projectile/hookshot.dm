@@ -244,3 +244,99 @@
 		sharpness = 2
 	..(A)
 
+//Wind-up Boxes///////////////////////////////////////////////////////////////////
+
+/obj/item/projectile/hookshot/whip/bootbox
+	name = "boot-in-a-box"
+	icon_state = "spring"
+	icon_name = "spring"
+	nodamage = 0
+	damage = 0
+	sharpness = 0
+	kill_count = 20 //range is defined by maxlength so this prevents animation issues
+	failure_message = ""
+	can_tether = FALSE
+	var/windUp = 0
+	var/springForce = 0
+
+/obj/item/projectile/hookshot/whip/bootbox/OnFired()
+	..()
+	var/obj/item/weapon/gun/hookshot/whip/bootbox/T = shot_from
+	if(istype(T))
+		src.windUp = T.windUp
+		src.springForce = T.springForce //inherits all the oomph from the box itself
+		damage = (windUp + springForce*5)
+		T.maxlength += springForce
+		T.windUp = 0
+		T.overWind = 0
+		T.springForce = 0 //resets the box's values but keeps its own for the hit
+
+/obj/item/projectile/hookshot/whip/bootbox/on_hit(atom/target as mob|obj|turf|area)
+	var/obj/item/weapon/gun/hookshot/whip/bootbox/T = shot_from
+	if(istype(target,/mob/living))
+		var/mob/living/K = target
+		switch(windUp)
+			if(9 to 12)
+				K.Knockdown(1)
+			if(13 to 16)
+				K.Knockdown(2)
+			if(17 to INFINITY) //launches the target away with force/distance proportional to how much we cranked
+				var/turf/Q = get_turf(K)
+				var/turf/endLocation
+				var/throwdir = (usr.dir)
+				endLocation = get_ranged_target_turf(Q, throwdir, springForce)
+				K.throw_at(endLocation,springForce,windUp)
+				K.Knockdown(2+springForce) //Gotta be really tempting to blow your hands up
+				if (prob(15*springForce))
+					explosion(K.loc,-1,0,0)
+					explosion(T.loc,-1,0,1)
+					qdel(T)
+
+
+/obj/item/projectile/hookshot/whip/clownbox
+	name = "Punchline"
+	icon_state = "clown"
+	icon_name = "clown"
+	nodamage = 0
+	damage = 0
+	sharpness = 0
+	kill_count = 20
+	failure_message = ""
+	can_tether = FALSE
+	var/windUp = 0
+	var/springForce = 0
+
+/obj/item/projectile/hookshot/whip/clownbox/OnFired()
+	..()
+	var/obj/item/weapon/gun/hookshot/whip/clownbox/T = shot_from
+	if(istype(T))
+		src.windUp = T.windUp
+		src.springForce = T.springForce
+		damage = (windUp + springForce*3)
+		T.maxlength += springForce
+		T.windUp = 0
+		T.overWind = 0
+		T.springForce = 0
+
+/obj/item/projectile/hookshot/whip/clownbox/on_hit(atom/target as mob|obj|turf|area)
+	if(istype(target,/mob/living))
+		var/mob/living/K = target
+		switch(windUp)
+			if(12 to 15)
+				K.Knockdown(3)
+				K.Stun(1)
+			if(16 to INFINITY) //Like the boot-in-a-box knockback except it phases them through walls.
+				var/turf/Q = get_turf(K)
+				var/turf/endLocation
+				var/throwdir = (usr.dir)
+				endLocation = get_ranged_target_turf(Q, throwdir, 2+springForce)
+				K.Knockdown(3+springForce)
+				K.Stun(3)
+				animate(K,alpha = 0, time =3) //Best solution I could find to no smooth animation with forceMove
+				spawn(5) //Knocks/stuns them then quickly fades them out, moves them, icon fuckery to make flick work, and fades them back in as a little re-appearing animation
+					K.forceMove(endLocation, no_tp=1, harderforce=0, glide_size_override=0)
+					var/oldIcon = K.icon
+					K.icon = 'icons/obj/wind_up.dmi'//flick is dumb, it works dumb
+					animate(K,alpha = 100, time =1)
+					flick("bananaphaz_flick", K)
+					K.icon = oldIcon

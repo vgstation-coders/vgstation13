@@ -506,3 +506,140 @@
 	icon_state = "vampkiller_true"
 	hooktype = /obj/item/projectile/hookshot/whip/vampkiller/true
 
+//Windup-Boxes/////////////////////////////////////////////////////
+
+/obj/item/weapon/gun/hookshot/whip/bootbox
+	name = "boot-in-a-box"
+	icon = 'icons/obj/wind_up.dmi'
+	icon_state = "bootbox-0"
+	item_state = "bootbox"
+	desc = "A box with a spring-loaded boot inside. There is a crank attached to wind it up."
+	fire_action = "activate"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
+	clumsy_check = 0 //Just makes sense
+	force = 5
+	maxlength = 4 //whips are weird and this ends up being 2
+	hooktype = /obj/item/projectile/hookshot/whip/bootbox
+	var/windUp = 0 //amount of times cranked
+	var/maxWindUp = 16 //threshold for overwind
+	var/overWind = 0 //warning/delay system
+	var/state = 0 //Icon changes with each crank, stolen from the crank cell charger
+	var/springForce = 0 //makes the big kicks
+
+/obj/item/weapon/gun/hookshot/whip/bootbox/update_icon()
+	icon_state = "bootbox[state ? "-1" : "-0"]"
+
+/obj/item/weapon/gun/hookshot/whip/bootbox/attack_self(mob/user)
+	state = !state
+	update_icon()
+	if(prob(windUp*springForce)) //prob 0 before they start forcing it, perfectly safe
+		explosion(src.loc,-1,0,1)
+		qdel(src)
+		return
+	if(windUp >= maxWindUp && overWind <3) //give them a chance to stop winding in the safety zone. Also largely to delay on-the-run use.
+		user.delayNextAttack(20)
+		playsound(src,'sound/weapons/smash.ogg', 25, 1)
+		overWind++
+		to_chat(user, "<span class='notice'>The crank will barely move.</span>")
+		return
+	if(overWind >=3) //we are no longer in the safety zone. You get one free one before boom risk
+		to_chat(user, "<span class='notice'>With great difficulty you get the crank moving.</span>")
+		user.delayNextAttack(30)
+		playsound(src,'sound/items/crank.ogg',100,1)
+		update_icon()
+		windUp++
+		springForce++
+		return
+	if(windUp < maxWindUp)
+		user.delayNextAttack(5)
+		playsound(src, 'sound/items/crank.ogg',50,1)
+		update_icon()
+		windUp++
+		return
+
+obj/item/weapon/gun/hookshot/whip/bootbox/Fire(atom/target, mob/living/user, params, reflex =0, struggle =0) //4 winds minimum
+	maxlength = 4
+	if(windUp <4)
+		playsound(src, 'sound/items/metal_impact.ogg',25,1)
+		to_chat(user, "<span class='notice'>the spring isn't tight enough to fire</span>")
+		return
+	return..()
+
+/obj/item/weapon/gun/hookshot/whip/clownbox
+	name = "Punchline"
+	icon = 'icons/obj/wind_up.dmi'
+	icon_state = "clownbox-0"
+	item_state = "clownbox"
+	desc = "Given rich deposits of bananium and phazon beyond most spacemen's wildest dreams, they chose to make this."
+	fire_action = "slip open"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
+	clumsy_check = 0
+	force = 5
+	maxlength = 6
+	hooktype = /obj/item/projectile/hookshot/whip/clownbox
+	var/windUp = 0
+	var/maxWindUp = 16
+	var/overWind = 0
+	var/state = 0
+	var/springForce = 0
+
+/obj/item/weapon/gun/hookshot/whip/clownbox/update_icon()
+	icon_state = "clownbox[state ? "-1" : "-0"]"
+
+/obj/item/weapon/gun/hookshot/whip/clownbox/attack_self(mob/user)
+	state = !state
+	update_icon()
+	if(prob(springForce*10)) //Every crank past the threshold has 10% higher chance of teleporting you a number of times equal to those cranks.
+		var/area/A = get_area(src)
+		to_chat(user, "<span class='notice'>You overload the gears. You begin slipping through reality!.</span>")
+		if(A.flags & NO_TELEPORT)
+			return
+		flick("bananaphaz_flick", src)
+		for(var/i in 0 to springForce)
+			sleep(5)
+			do_teleport(user,get_turf(user),windUp/2, asoundin = 'sound/effects/party_horn.ogg') //Teleport accuracy also scales with total windup. This increases risk/reward in intentionally causing malfunction
+		user.Stun(springForce)
+		user.Knockdown(springForce) //Further increases risk. Makes bad luck less lethal and saving high springForce for teleports more dangerous.
+		windUp = 0
+		overWind = 0
+		springForce = 0
+
+	if(windUp >= maxWindUp && overWind <3)
+		user.delayNextAttack(10)
+		playsound(src,'sound/effects/splat_pie2.ogg', 50, 1)
+		overWind++
+		to_chat(user, "<span class='notice'>The crank will barely move.</span>")
+		return
+
+	if(overWind >=3)
+		to_chat(user, "<span class='notice'>With great difficulty you get the crank moving.</span>")
+		user.delayNextAttack(15)
+		if(clumsy_check(user))
+			if(prob(50)) //Clowns effectively reload faster
+				windUp++
+				to_chat(user, "<span class='notice'>Your clumsy hand slips and cranks twice, woops!.</span>")
+		playsound(src, 'sound/items/bikehorn.ogg',100,1)
+		update_icon()
+		windUp++
+		springForce++
+		return
+
+	if(windUp < maxWindUp)
+		user.delayNextAttack(5)
+		if(clumsy_check(user))
+			if(prob(50))
+				windUp++
+				to_chat(user, "<span class='notice'>Your clumsy hand slips and cranks twice, woops!.</span>")
+		playsound(src, 'sound/items/bikehorn.ogg',50,1)
+		update_icon()
+		windUp++
+		return
+
+obj/item/weapon/gun/hookshot/whip/clownbox/Fire(atom/target, mob/living/user, params, reflex =0, struggle =0) //4 winds minimum
+	maxlength = 6
+	if(windUp <4)
+		playsound(src, 'sound/items/metal_impact.ogg',25,1)
+		to_chat(user, "<span class='notice'>the spring isn't tight enough to fire</span>")
+		return
+	playsound(src, 'sound/effects/party_horn.ogg',100,1)
+	return..()
