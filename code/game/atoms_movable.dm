@@ -47,6 +47,8 @@
 
 	// When this object moves. (args: loc)
 	var/event/on_moved
+	// When the object is qdel'd
+	var/event/on_destroyed
 
 	var/atom/movable/tether_master
 	var/list/tether_slaves
@@ -69,6 +71,7 @@
 		for(var/matID in starting_materials)
 			materials.addAmount(matID, starting_materials[matID])
 
+	on_destroyed = new("owner"=src)
 	on_moved = new("owner"=src)
 
 /atom/movable/Destroy()
@@ -83,6 +86,10 @@
 	if(on_moved)
 		on_moved.holder = null
 		on_moved = null
+	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
+	if(on_destroyed)
+		on_destroyed.holder = null
+		on_destroyed = null
 
 	var/turf/un_opaque
 	if (opacity && isturf(loc))
