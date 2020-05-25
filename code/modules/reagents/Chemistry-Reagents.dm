@@ -3167,7 +3167,7 @@
 		"threshold" = 10,
 		)
 
-/datum/reagent/tomato_soup/on_mob_life(var/mob/living/M)
+/datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
 
 	..()
 
