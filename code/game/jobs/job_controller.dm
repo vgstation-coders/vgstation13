@@ -293,6 +293,10 @@ var/global/datum/controller/occupations/job_master
 
 	// Loop through all levels from high to low
 	var/list/shuffledoccupations = shuffle(occupations)
+	// Assistant is picked last.
+	var/datum/job/assistant/assist = locate() in shuffledoccupations
+	shuffledoccupations.Remove(assist)
+	shuffledoccupations[shuffledoccupations.len + 1] = assist
 	for(var/level = 1 to 3)
 		//Check the head jobs first each level
 		CheckHeadPositions(level)
