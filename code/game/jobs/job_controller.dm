@@ -309,29 +309,6 @@ var/global/datum/controller/occupations/job_master
 	// Hand out random jobs to the people who didn't get any in the last check
 	// Also makes sure that they got their preference correct
 
-	//People who wants to be assistants, sure, go on.
-	var/count = 0
-	var/datum/job/officer = job_master.GetJob("Security Officer")
-	var/datum/job/warden = job_master.GetJob("Warden")
-	var/datum/job/hos = job_master.GetJob("Head of Security")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions)
-	Debug("DO, Running Assistant Check 1")
-	var/datum/job/assist = new /datum/job/assistant()
-	var/datum/job/master_assistant = GetJob("Assistant")
-	var/list/assistant_candidates = FindOccupationCandidates(assist, 3)
-	assistant_candidates = shuffle(assistant_candidates)
-	Debug("AC1, Candidates: [assistant_candidates.len]")
-	for(var/mob/new_player/player in assistant_candidates)
-		Debug("AC1 pass, Player: [player]")
-		if(config.assistantlimit)
-			if(master_assistant.current_positions > (config.assistantratio * count))
-				if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
-					break
-		AssignRole(player, "Assistant")
-		assistant_candidates -= player
-	unassigned |= assistant_candidates
-	Debug("DO, AC1 end")
-
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == GET_RANDOM_JOB)
 			GiveRandomJob(player)
@@ -356,6 +333,13 @@ var/global/datum/controller/occupations/job_master
 	Debug("DO, Standard Check end")
 
 	Debug("DO, Running AC2")
+
+	var/count = 0
+	var/datum/job/officer = job_master.GetJob("Security Officer")
+	var/datum/job/warden = job_master.GetJob("Warden")
+	var/datum/job/hos = job_master.GetJob("Head of Security")
+	var/datum/job/master_assistant = GetJob("Assistant")
+	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
@@ -389,6 +373,8 @@ var/global/datum/controller/occupations/job_master
 	if(!job.player_old_enough(player.client))
 		Debug("DO player not old enough, Player: [player], Job:[job.title]")
 		return FALSE
+	if (job.title == "Assistant" && !CheckAssistantCount(player))
+		return FALSE
 	// If the player wants that job on this level, then try give it to him.
 	if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
 
@@ -397,6 +383,29 @@ var/global/datum/controller/occupations/job_master
 			Debug("DO pass, Player: [player], Level:[level], Job:[job.title]")
 			AssignRole(player, job.title)
 			return TRUE
+
+// -- Snowflaked proc which can be adjusted to more jobs than assistants if needed.
+/datum/controller/occupations/proc/CheckAssistantCount(var/mob/new_player/player)
+	//People who wants to be assistants, sure, go on.
+	var/count = 0
+	var/datum/job/officer = job_master.GetJob("Security Officer")
+	var/datum/job/warden = job_master.GetJob("Warden")
+	var/datum/job/hos = job_master.GetJob("Head of Security")
+	count = (officer.current_positions + warden.current_positions + hos.current_positions)
+	Debug("DO, Running Assistant Check 1")
+	var/datum/job/assist = new /datum/job/assistant()
+	var/datum/job/master_assistant = GetJob("Assistant")
+	var/list/assistant_candidates = FindOccupationCandidates(assist, 3) + FindOccupationCandidates(assist, 2) + FindOccupationCandidates(assist, 1)
+	var/enough_sec = (master_assistant.current_positions) > (config.assistantratio * count)
+	if(enough_sec && (count < 5))
+		Debug("AC1 failed, not enough sec.")
+		to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")
+		player.ready = 0
+		unassigned -= player
+		return FALSE
+	assistant_candidates -= player
+	Debug("DO, AC1 end")
+	return TRUE
 
 /datum/controller/occupations/proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
 	if(!H)
