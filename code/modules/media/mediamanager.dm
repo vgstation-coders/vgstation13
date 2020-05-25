@@ -96,7 +96,8 @@ function SetMusic(url, time, volume) {
 	//if(istype(M, /mob/living/carbon/human)||istype(M, /mob/dead/observer))
 	//	testing("Received OnMobAreaChange for [M.type] [M] (M.client=[M.client==null?"null":"/client"]).")
 	if(M.client && M.client.media && !M.client.media.forced)
-		M.update_music()
+		spawn()
+			M.update_music()
 
 
 /hook_handler/shuttlejukes/proc/OnEmergencyShuttleDeparture(var/list/args)
