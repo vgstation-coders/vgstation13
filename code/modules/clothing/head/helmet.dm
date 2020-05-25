@@ -282,7 +282,7 @@
 	item_state = "nr_helmet"
 	body_parts_covered = EARS|HEAD|MASKHEADHAIR
 	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY
-	species fit = list (GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/police
 	name = "police custodian helmet"
