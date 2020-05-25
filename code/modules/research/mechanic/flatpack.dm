@@ -19,6 +19,7 @@
 
 /obj/structure/closet/crate/flatpack/ancient
 	name = "ancient flatpack"
+	desc = "A ready-to-assemble machine flatpack produced in the space-Swedish style. These older ones come with an instruction manual for assembly."
 	assembling = UNASSEMBLED
 
 /obj/structure/closet/crate/flatpack/examine(mob/user)
@@ -65,7 +66,7 @@
 
 /obj/structure/closet/crate/flatpack/attackby(var/atom/A, mob/user)
 	if(assembling == ASSEMBLING)
-		if(unpacking.action(A, user))
+		if(unpacking.action(A, user) || iscrowbar(A))
 			return 1
 	if(iscrowbar(A))
 		if(stacked.len)
@@ -309,8 +310,10 @@
 
 /obj/structure/closet/crate/flatpack/ancient/condiment_dispenser/New()
 	..()
+	name = "ancient flatpack (condiment dispenser)"
 	machine = new /obj/machinery/chem_dispenser/condiment(src)
 
 /obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer/New()
 	..()
+	name = "ancient flatpack (electrolytic chemmaster)"
 	machine = new /obj/machinery/chem_master/electrolytic(src)

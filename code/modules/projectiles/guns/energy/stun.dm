@@ -175,7 +175,7 @@
 	name = "energy shotgun"
 	desc = "An experimental energy shotgun from Alcatraz IV. It has two modes that fire experimental stun electrodes codenamed HUNTER and SWEEPER."
 	icon_state = "eshotgun"
-	item_state = null
+	item_state = "shotgun"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
 	projectile_type = "/obj/item/projectile/energy/electrode/fast"
