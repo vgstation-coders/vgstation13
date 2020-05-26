@@ -86,10 +86,14 @@
 				update_icon()
 				return 0
 			return 0
-		stored_magazine.forceMove(user.loc)
+		stored_magazine.forceMove(get_turf(src.loc)) //this first drops the magazine onto the turf, it's here in case there is no applicable user
 		if(user)
-			user.put_in_hands(stored_magazine)
-			to_chat(usr, "<span class='notice'>You pull the magazine out of \the [src]!</span>")
+			if(user.put_in_any_hand_if_possible(stored_magazine)) //if you have empty hands, you'll get the mag
+				user.put_in_hands(stored_magazine)
+				to_chat(usr, "<span class='notice'>You pull the magazine out of \the [src]!</span>")
+			else
+				stored_magazine.forceMove(user.loc) //otherwise, it drops to the place you are existing
+				to_chat(usr, "<span class='notice'>You drop the magazine out of \the [src]!</span>")
 		stored_magazine.update_icon()
 		stored_magazine = null
 		update_icon()
