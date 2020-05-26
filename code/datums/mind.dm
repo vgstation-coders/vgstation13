@@ -42,6 +42,8 @@
 	var/role_alt_title
 
 	var/datum/job/assigned_job
+	var/job_priority // How much did we want the job we ended up having? Used for assistant rerolls.
+
 	var/datum/religion/faith
 
 	var/list/kills=list()
