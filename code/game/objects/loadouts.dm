@@ -132,7 +132,7 @@
 						/obj/item/clothing/glasses/thermal/monocle,
 						/obj/item/clothing/head/det_hat,
 						/obj/item/weapon/cloaking_device,
-						/obj/item/weapon/gun/projectile,
+						/obj/item/weapon/gun/projectile/revolver,
 						/obj/item/ammo_storage/box/a357)
 
 /obj/abstract/loadout/tournament_chef

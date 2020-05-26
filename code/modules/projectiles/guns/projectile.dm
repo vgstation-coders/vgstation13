@@ -27,6 +27,7 @@
 	var/casingsound = 'sound/weapons/casing_drop.ogg'
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
 	var/scoped //a reference to a scope object
+	var/list/refuse = list() //made to store spent casings in chamber
 
 /obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
 	return TRUE
@@ -141,8 +142,11 @@
 	else
 		loaded -= AC //Remove casing from loaded list.
 	if(gun_flags &EMPTYCASINGS)
-		AC.forceMove(get_turf(src)) //Eject casing onto ground.
-		playsound(AC, casingsound, 25, 0.2, 1)
+		if(gun_flags &CHAMBER)
+			refuse += AC
+		else
+			AC.forceMove(get_turf(src)) //Eject casing onto ground.
+			playsound(AC, casingsound, 25, 0.2, 1)
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
 		AC.BB.forceMove(src) //Set projectile loc to gun.
@@ -198,7 +202,7 @@
 					chambered = AC
 					num_loaded++
 					playsound(src, reloadsound, 25, 1)
-			else if(getAmmo() < max_shells && load_method != MAGAZINE)
+			else if((getAmmo() + getSpent()) < max_shells && load_method != MAGAZINE)
 				if(user.drop_item(AC, src))
 					loaded += AC
 					num_loaded++
@@ -225,13 +229,24 @@
 /obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
 	if (target)
 		return ..()
-	if (loaded.len || stored_magazine)
+	if (loaded.len || stored_magazine || refuse.len)
 		if (load_method == SPEEDLOADER)
-			var/obj/item/ammo_casing/AC = loaded[1]
-			loaded -= AC
-			AC.forceMove(get_turf(src)) //Eject casing onto ground.
-			to_chat(user, "<span class='notice'>You unload \the [AC] from \the [src]!</span>")
-			update_icon()
+			if(!gun_flags &CHAMBER)
+				var/obj/item/ammo_casing/AC = loaded[1]
+				loaded -= AC
+				AC.forceMove(get_turf(src)) //Eject casing onto ground.
+				to_chat(user, "<span class='notice'>You unload \the [AC] from \the [src]!</span>")
+				update_icon()
+			else
+				for(var/obj/item/ammo_casing/AC in loaded)
+					loaded -= AC
+					AC.forceMove(get_turf(src))
+					playsound(AC, casingsound, 25, 0.2, 1) //muh, sounds of casing falling, such finery
+				for(var/obj/item/ammo_casing/AC in refuse)
+					refuse -= AC
+					AC.forceMove(get_turf(src))
+					playsound(AC, casingsound, 25, 0.2, 1)
+				to_chat(user, "<span class='notice'>You empty the [src]!</span>")
 			return
 		if (load_method == MAGAZINE && stored_magazine)
 			RemoveMag(user)
@@ -265,6 +280,8 @@
 	..()
 	if(conventional_firearm)
 		to_chat(user, "<span class='info'>Has [getAmmo()] round\s remaining.</span>")
+	if(getSpent() > 0)
+		to_chat(user, "<span class='info'>Has [getSpent()] round\s spent.</span>")
 //		if(in_chamber && !loaded.len)
 //			to_chat(usr, "However, it has a chambered round.")
 //		if(in_chamber && loaded.len)
@@ -283,7 +300,17 @@
 		for(var/obj/item/ammo_casing/AC in loaded)
 			if(istype(AC))
 				bullets += 1
+		/*for(var/obj/item/ammo_casing/AC in refuse)
+			if(istype(AC))
+				bullets += 1*/
 	return bullets
+
+/obj/item/weapon/gun/projectile/proc/getSpent()
+	var/spent = 0
+	for(var/obj/item/ammo_casing/AC in refuse)
+		if(istype(AC))
+			spent += 1
+	return spent
 
 /obj/item/weapon/gun/projectile/failure_check(var/mob/living/carbon/human/M)
 	if(load_method == MAGAZINE && prob(3))

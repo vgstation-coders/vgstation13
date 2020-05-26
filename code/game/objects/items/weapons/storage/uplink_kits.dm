@@ -30,7 +30,7 @@
 			new /obj/item/clothing/head/helmet/space/syndicate(src)
 
 		if("guns")//13+4+6+4=27
-			new /obj/item/weapon/gun/projectile(src)
+			new /obj/item/weapon/gun/projectile/revolver(src)
 			new /obj/item/ammo_storage/box/a357(src)
 			new /obj/item/weapon/card/emag(src)
 			new /obj/item/weapon/c4(src)

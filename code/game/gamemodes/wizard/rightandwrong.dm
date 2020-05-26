@@ -73,7 +73,7 @@
 		if("plasmarifle")
 			new /obj/item/weapon/gun/energy/plasma/light(get_turf(src))
 		if("revolver")
-			new /obj/item/weapon/gun/projectile(get_turf(src))
+			new /obj/item/weapon/gun/projectile/revolver(get_turf(src))
 		if("detective")
 			new /obj/item/weapon/gun/projectile/detective(get_turf(src))
 		if("c20r")
