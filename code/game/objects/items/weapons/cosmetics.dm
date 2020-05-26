@@ -435,6 +435,9 @@
 			if(H.check_body_part_coverage(HEAD))
 				to_chat(user,"<span class='warning'>The headgear is in the way!</span>")
 				return
+			if(H.species.anatomy_flags & NO_BALD)
+				to_chat(user,"<span class='warning'>[H] does not have hair to shave!</span>")
+				return
 			if(H.my_appearance.h_style == "Bald" || H.my_appearance.h_style == "Skinhead")
 				to_chat(user,"<span class='warning'>There is not enough hair left to shave!</span>")
 				return
