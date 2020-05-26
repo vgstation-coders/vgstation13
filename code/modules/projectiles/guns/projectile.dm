@@ -146,7 +146,7 @@
 			refuse += AC
 		else
 			AC.forceMove(get_turf(src)) //Eject casing onto ground.
-			playsound(AC, casingsound, 25, 0.2, 1)
+			playsound(AC, casingsound, 25, 1)
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
 		AC.BB.forceMove(src) //Set projectile loc to gun.
@@ -241,12 +241,12 @@
 				for(var/obj/item/ammo_casing/AC in loaded)
 					loaded -= AC
 					AC.forceMove(get_turf(src))
-					playsound(AC, casingsound, 25, 0.2, 1) //muh, sounds of casing falling, such finery
+					playsound(AC, casingsound, 25, 1)
 				for(var/obj/item/ammo_casing/AC in refuse)
 					refuse -= AC
 					AC.forceMove(get_turf(src))
-					playsound(AC, casingsound, 25, 0.2, 1)
-				to_chat(user, "<span class='notice'>You empty the [src]!</span>")
+					playsound(AC, casingsound, 25, 1)
+				to_chat(user, "<span class='notice'>You empty \the [src]!</span>")
 			return
 		if (load_method == MAGAZINE && stored_magazine)
 			RemoveMag(user)
@@ -305,8 +305,7 @@
 /obj/item/weapon/gun/projectile/proc/getSpent()
 	var/spent = 0
 	for(var/obj/item/ammo_casing/AC in refuse)
-		if(istype(AC))
-			spent += 1
+		spent += 1
 	return spent
 
 /obj/item/weapon/gun/projectile/failure_check(var/mob/living/carbon/human/M)

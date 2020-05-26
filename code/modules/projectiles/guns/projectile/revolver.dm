@@ -105,7 +105,7 @@
 	gun_flags = SILENCECOMP
 	fire_sound = 'sound/weapons/nagant.ogg'
 	recoil = 3
-	gun_flags = EMPTYCASINGS | CHAMBER
+	gun_flags = EMPTYCASINGS | CHAMBER | SILENCECOMP
 
 /obj/item/weapon/gun/projectile/nagant/update_icon()
 	..()
