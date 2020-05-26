@@ -101,10 +101,10 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/ammo_casing/shotgun/beanbag = "Survival Box",
-		/obj/item/ammo_casing/shotgun/beanbag = "Survival Box",
-		/obj/item/ammo_casing/shotgun/beanbag = "Survival Box",
-		/obj/item/ammo_casing/shotgun/beanbag = "Survival Box",
+		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
+		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
+		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
+		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker = slot_l_store_str,
 	)
 
@@ -168,7 +168,7 @@
 // -- Botanist
 
 /datum/outfit/hydro // (!)
-	
+
 	outfit_name = "Botanist"
 	associated_job = /datum/job/hydro
 
@@ -242,7 +242,7 @@
 // -- Clown
 
 /datum/outfit/clown // Honk
-	
+
 	outfit_name = "Clown"
 	associated_job = /datum/job/clown
 
@@ -299,7 +299,7 @@
 	)
 
 	items_to_collect = list( // No backup slots ; backbag pref ignored
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana = null, 
+		/obj/item/weapon/reagent_containers/food/snacks/grown/banana = null,
 		/obj/item/weapon/bikehorn = null,
 		/obj/item/weapon/stamp/clown = null,
 		/obj/item/toy/crayon/rainbow = null,
@@ -321,7 +321,7 @@
 // -- Mime
 
 /datum/outfit/mime // ...
-	
+
 	outfit_name = "Mime"
 	associated_job = /datum/job/mime
 
@@ -384,7 +384,7 @@
 // -- Janitor
 
 /datum/outfit/janitor
-		
+
 	outfit_name = "Janitor"
 	associated_job = /datum/job/janitor
 
@@ -429,9 +429,9 @@
 	return 1
 
 // -- Librarian
-	
+
 /datum/outfit/librarian
-		
+
 	outfit_name = "Librarian"
 	associated_job = /datum/job/librarian
 
@@ -491,7 +491,7 @@
 // -- Lawyer, IAA, Bridge Officer
 
 /datum/outfit/iaa
-		
+
 	outfit_name = "Internal Affairs Agent"
 	associated_job = /datum/job/iaa
 
@@ -510,7 +510,7 @@
 				"Internal Affairs Agent" = /obj/item/device/radio/headset,
 			),
 			slot_w_uniform_str = list(
-				"Lawyer" = /obj/item/clothing/suit/storage/lawyer/bluejacket,
+				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
 				"Bridge Officer" = /obj/item/clothing/under/bridgeofficer,
 				"Internal Affairs Agent" = /obj/item/clothing/under/rank/internalaffairs,
 			),
@@ -520,6 +520,7 @@
 				"Internal Affairs Agent" = /obj/item/clothing/shoes/centcom,
 			),
 			slot_wear_suit_str = list(
+				"Lawyer" = /obj/item/clothing/suit/storage/lawyer/bluejacket,
 				"Bridge Officer" = /obj/item/clothing/suit/storage/lawyer/bridgeofficer,
 				"Internal Affairs Agent" = /obj/item/clothing/suit/storage/internalaffairs,
 			),
@@ -538,7 +539,7 @@
 				"Internal Affairs Agent" = /obj/item/device/radio/headset,
 			),
 			slot_w_uniform_str = list(
-				"Lawyer" = /obj/item/clothing/suit/storage/lawyer/bluejacket,
+				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
 				"Bridge Officer" = /obj/item/clothing/under/bridgeofficer,
 				"Internal Affairs Agent" = /obj/item/clothing/under/rank/internalaffairs,
 			),
@@ -562,7 +563,7 @@
 				"Internal Affairs Agent" = /obj/item/device/radio/headset,
 			),
 			slot_w_uniform_str = list(
-				"Lawyer" = /obj/item/clothing/suit/storage/lawyer/bluejacket,
+				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
 				"Bridge Officer" = /obj/item/clothing/under/bridgeofficer,
 				"Internal Affairs Agent" = /obj/item/clothing/under/rank/internalaffairs,
 			),
@@ -611,7 +612,7 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/chaplain,
 			slot_shoes_str = /obj/item/clothing/shoes/laceup,
-			slot_l_store_str = /obj/item/weapon/nullrod, 
+			slot_l_store_str = /obj/item/weapon/nullrod,
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset,

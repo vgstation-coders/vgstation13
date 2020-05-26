@@ -89,7 +89,7 @@
 	if (!give_disabilities_equipment)
 		return
 	if (H.disabilities & ASTHMA)
-		items_to_collect[/obj/item/device/inhaler] = "Survival Box"
+		items_to_collect[/obj/item/device/inhaler] = SURVIVAL_BOX
 	if (!items_to_equip[slot_glasses_str])
 		items_to_equip[slot_glasses_str] = /obj/item/clothing/glasses/regular
 
