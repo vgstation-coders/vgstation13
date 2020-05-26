@@ -455,6 +455,11 @@
 	if(!stealthy(user))
 		playsound(src, rustle_sound, 50, 1, -5)
 
+	if (user.s_active == src) // Click on the backpack again to close it.
+		close(user)
+		src.add_fingerprint(user)
+		return
+
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if((H.l_store == src || H.r_store == src || H.head == src) && !H.get_active_hand())	//Prevents opening if it's in a pocket or head slot. Terrible kludge, I'm sorry.
@@ -475,10 +480,12 @@
 	if (maxloc == user)
 		orient2hud()
 		show_to(user)
+		src.add_fingerprint(user)
+		return
 	else
 		..()
 		close_all()
-	src.add_fingerprint(user)
+		src.add_fingerprint(user)
 
 /obj/item/weapon/storage/attack_paw(mob/user as mob)
 	return attack_hand(user)
