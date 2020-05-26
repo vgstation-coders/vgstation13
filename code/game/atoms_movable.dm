@@ -689,8 +689,9 @@
 		var/atom/movable/AM = master
 		master_moved_key = AM.on_moved.Add(src, follow_proc)
 		SetInitLoc()
-
-	master_destroyed_key = master.on_destroyed.Add(src, .proc/qdel_self)
+	if (istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		master_destroyed_key = AM.on_destroyed.Add(src, .proc/qdel_self)
 	verbs.len = 0
 
 /atom/movable/overlay/proc/qdel_self()
@@ -700,7 +701,7 @@
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.on_moved.Remove(master_moved_key)
-	master.on_destroyed.Remove(master_destroyed_key)
+		AM.on_destroyed.Remove(master_destroyed_key)
 	master = null
 	return ..()
 
