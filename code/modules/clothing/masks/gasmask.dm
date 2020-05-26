@@ -335,6 +335,9 @@
 	var/mask_charge = 100
 	var/word_cost = 7
 	var/word_delay = 7
+	var/list/words_to_say = list()
+	var/can_say = 0
+	var/on_face = 0
 	var/list/punct_list = list("," , "." , "?" , "!")
 
 	//Big list of words pulled from half life's soldiers, used for both matching with spoken text and part of the sound file's path
@@ -353,6 +356,20 @@
 		"yes" , "yessir" , "you" , "your" , "zero" , "zone" , "zulu" , "meters" , "seven" , "eight" , "hundred" , "to" , "too"
 		)
 
+
+/obj/item/clothing/mask/gas/hecu/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>Alt-Click the mask to see the list of available words.</span>")
+	to_chat(user, "<span class='notice'>Charge: [mask_charge]/[max_charge] </span>")
+
+/obj/item/clothing/mask/gas/hecu/AltClick(var/mob/user)
+	var/message = "Known words: "
+	if((user.incapacitated() || !Adjacent(user)))
+		return
+	for(var/i=1,i<=hecuwords.len,i++)
+		message = addtext(message, uppertext(hecuwords[i]), ", ")
+	to_chat(user, "[message]")
+
 //Recharging the mask over time
 /obj/item/clothing/mask/gas/hecu/New()
 	..()
@@ -362,29 +379,48 @@
 	processing_objects.Remove(src)
 	..()
 
-obj/item/clothing/mask/gas/hecu/process()
+/obj/item/clothing/mask/gas/hecu/process()
+	if(can_say)
+		can_say = !can_say
+		say_words()
 	if(mask_charge >= max_charge)
 		return
 	mask_charge++
 
 /obj/item/clothing/mask/gas/hecu/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(togglestate == 0)
+	if(!on_face)
 		return
 	if((!speech.frequency && is_holder_of(speech.speaker, src)) && speech.speaker != src)
-		var/list/words_to_say = list()
 		var/list/word_list = splittext(speech.message," ")
 
 		for(var/i=1,i<=word_list.len,i++)
+			if((uppertext(word_list[i]) == "I") || (uppertext(word_list[i]) == "A")) //Stops capitilized 'I' and 'A' from triggering in normal speech
+				if(i != word_list.len)
+					if(word_list[i + 1] != uppertext(word_list[i + 1]))
+						continue
 			for(var/x=1,x<=punct_list.len,x++)
 				word_list[i] = replacetext(word_list[i] , punct_list[x] , "") //Ignores punctuation.
 			for(var/j=1,j<=hecuwords.len,j++)
-				if (uppertext(hecuwords[j]) == word_list[i]) //SHOUT a known word to activate
+				if(uppertext(hecuwords[j]) == word_list[i]) //SHOUT a known word to activate
 					words_to_say += hecuwords[j]
-
-		if(words_to_say.len > 0)
-			for(var/i=1,i<=words_to_say.len,i++)
-				if(mask_charge >= word_cost)
-					mask_charge -= word_cost
-					playsound(src, "sound/vox_hecu/[words_to_say[i]]!.wav", 30)
-					sleep(word_delay)
+					can_say = 1
 		..()
+
+/obj/item/clothing/mask/gas/hecu/proc/say_words()
+	if(words_to_say.len > 0)
+		for(var/i=1,i<=words_to_say.len,i++)
+			if(mask_charge >= word_cost)
+				mask_charge -= word_cost
+				playsound(src, "sound/vox_hecu/[words_to_say[i]]!.wav", 30)
+				sleep word_delay
+		words_to_say.Cut()
+
+/obj/item/clothing/mask/gas/hecu/equipped(var/mob/user, var/slot)
+	if(slot == slot_wear_mask)
+		on_face = 1
+	..()
+
+/obj/item/clothing/mask/gas/hecu/unequipped(var/mob/user, var/slot)
+	if(slot == slot_wear_mask)
+		on_face = 0
+	..()
