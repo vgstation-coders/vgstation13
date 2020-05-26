@@ -928,7 +928,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/glue
 	cost = 6
 	discounted_cost = 4
-	jobs_with_discount = list("Clown", "Mime")
+	jobs_with_discount = list("Clown", "Mime", "Captain")
 
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray
 	name = "Can of Invisible Spray"
