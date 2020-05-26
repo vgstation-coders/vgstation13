@@ -78,7 +78,7 @@
 				for(var/i = 1; i<=min(to_drop, stored_magazine.stored_ammo.len); i++)
 					var/obj/item/ammo_casing/AC = stored_magazine.stored_ammo[1]
 					stored_magazine.stored_ammo -= AC
-					AC.forceMove(get_turf(user))
+					AC.forceMove(user.loc)
 					dropped_bullets++
 					stored_magazine.update_icon()
 				to_chat(usr, "<span class='notice'>You unjam the [name], and spill [dropped_bullets] bullet\s in the process.</span>")
@@ -86,7 +86,7 @@
 				update_icon()
 				return 0
 			return 0
-		stored_magazine.forceMove(get_turf(src.loc))
+		stored_magazine.forceMove(user.loc)
 		if(user)
 			user.put_in_hands(stored_magazine)
 			to_chat(usr, "<span class='notice'>You pull the magazine out of \the [src]!</span>")
@@ -130,7 +130,7 @@
 		AC = loaded[1] //load next casing.
 	return AC
 
-/obj/item/weapon/gun/projectile/process_chambered()
+/obj/item/weapon/gun/projectile/process_chambered(mob/user as mob)
 	var/obj/item/ammo_casing/AC = getAC()
 	if(in_chamber)
 		return 1 //{R}
@@ -145,7 +145,7 @@
 		if(gun_flags &CHAMBER)
 			refuse += AC
 		else
-			AC.forceMove(get_turf(src)) //Eject casing onto ground.
+			AC.forceMove(user.loc) //Eject casing onto ground or closet you're inside.
 			playsound(AC, casingsound, 25, 1)
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
@@ -234,17 +234,17 @@
 			if(!gun_flags &CHAMBER)
 				var/obj/item/ammo_casing/AC = loaded[1]
 				loaded -= AC
-				AC.forceMove(get_turf(src)) //Eject casing onto ground.
+				AC.forceMove(user.loc)
 				to_chat(user, "<span class='notice'>You unload \the [AC] from \the [src]!</span>")
 				update_icon()
 			else
 				for(var/obj/item/ammo_casing/AC in loaded)
 					loaded -= AC
-					AC.forceMove(get_turf(src))
+					AC.forceMove(user.loc)
 					playsound(AC, casingsound, 25, 1)
 				for(var/obj/item/ammo_casing/AC in refuse)
 					refuse -= AC
-					AC.forceMove(get_turf(src))
+					AC.forceMove(user.loc)
 					playsound(AC, casingsound, 25, 1)
 				to_chat(user, "<span class='notice'>You empty \the [src]!</span>")
 			return
@@ -253,7 +253,7 @@
 	else if(loc == user)
 		if(chambered) // So it processing unloading of a bullet first
 			var/obj/item/ammo_casing/AC = chambered
-			AC.forceMove(get_turf(src)) //Eject casing onto ground.
+			AC.forceMove(user.loc)
 			chambered = null
 			to_chat(user, "<span class='notice'>You unload \the [AC] from \the [src]!</span>")
 			update_icon()
