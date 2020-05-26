@@ -32,7 +32,8 @@
 	var/deflect_chance = 10 //chance to deflect the incoming projectiles, hits, or lesser the effect of ex_act.
 	//the values in this list show how much damage will pass through, not how much will be absorbed.
 	var/list/damage_absorption = list("brute"=0.8,"fire"=1.2,"bullet"=0.9,"laser"=1,"energy"=1,"bomb"=1)
-	var/obj/item/weapon/cell/cell
+	var/obj/item/weapon/cell/cell = null
+	var/cell_type = /obj/item/weapon/cell/high/mecha
 	var/state = STATE_BOLTSHIDDEN
 	var/list/log = new //Holds the log of what the mecha has done (Attacked, fired at, been attacked by, gone into maintenance mode, etc.)
 	var/last_message = 0 // Used in occupant_message()
@@ -81,14 +82,15 @@
 	var/max_equip = 3 //The maximum amount of equipment this mecha an hold at one time.
 
 	var/turf/crashing = null
-	var/list/mech_parts = list(/obj/item/weapon/cell,
+	var/list/mech_parts = list(
 						/obj/machinery/portable_atmospherics/canister, //I shit you not this thing uses a literal air canister
 						/obj/item/device/radio,
 						/obj/item/mecha_parts,
 						/obj/item/device/mmi,
 						/obj/item/mecha_parts/mecha_tracking,
 						/obj/item/device/radio/electropack,
-						/obj/machinery/portable_atmospherics/scrubber/mech)
+						/obj/machinery/portable_atmospherics/scrubber/mech
+						)
 
 	var/lock_controls = 0
 	var/list/intrinsic_spells = null
@@ -122,7 +124,6 @@
 	mechas_list += src //global mech list
 	icon_state = initial_icon
 	icon_state += "-open"
-	return
 
 /obj/mecha/Destroy()
 	go_out(loc, TRUE)
@@ -218,14 +219,8 @@
 	internal_tank = new /obj/machinery/portable_atmospherics/canister/air(src)
 	return internal_tank
 
-/obj/mecha/proc/add_cell(var/obj/item/weapon/cell/C=null)
-	if(C)
-		C.forceMove(src)
-		cell = C
-		return
-	cell = new(src)
-	cell.charge = 15000
-	cell.maxcharge = 15000
+/obj/mecha/proc/add_cell()
+	cell = new cell_type(src)
 
 /obj/mecha/proc/add_cabin()
 	cabin_air = new
@@ -1320,9 +1315,8 @@
 
 /obj/mecha/proc/empty_bad_contents() //stuff that shouldn't be there, possibly caused by the driver dropping it while inside the mech
 	for(var/obj/O in src)
-		if(!is_type_in_list(O,mech_parts))
+		if((O != cell) && !is_type_in_list(O,mech_parts)) //Typechecking isn't a good idea when you can drop those types inside the mech...
 			O.forceMove(src.loc)
-	return
 
 /obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!src.occupant)
