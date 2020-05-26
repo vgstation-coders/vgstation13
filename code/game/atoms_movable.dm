@@ -45,6 +45,10 @@
 	var/throwpass = 0
 	var/level = 2
 
+	// Change of z-level.
+	var/event/on_z_transition
+	var/event/post_z_transition
+
 	// When this object moves. (args: loc)
 	var/event/on_moved
 	// When the object is qdel'd
@@ -73,6 +77,8 @@
 
 	on_destroyed = new("owner"=src)
 	on_moved = new("owner"=src)
+	on_z_transition = new("owner"=src)
+	post_z_transition = new("owner"=src)
 
 /atom/movable/Destroy()
 	var/turf/T = loc
@@ -83,6 +89,14 @@
 		returnToPool(materials)
 		materials = null
 
+	if(on_z_transition)
+		on_z_transition.holder = null
+		qdel(on_z_transition)
+		on_z_transition = null
+	if(post_z_transition)
+		post_z_transition.holder = null
+		qdel(post_z_transition)
+		post_z_transition = null
 	if(on_moved)
 		on_moved.holder = null
 		on_moved = null
