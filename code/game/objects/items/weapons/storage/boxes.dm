@@ -554,6 +554,7 @@
 	new /obj/item/weapon/reagent_containers/spray/pepper(src)
 	new /obj/item/taperoll/police(src)
 	new /obj/item/device/hailer(src)
+	new /obj/item/device/law_planner(src)
 
 /obj/item/weapon/storage/box/large/detectivegear
 	name = "detective essentials"
