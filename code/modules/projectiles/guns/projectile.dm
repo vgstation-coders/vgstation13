@@ -300,9 +300,6 @@
 		for(var/obj/item/ammo_casing/AC in loaded)
 			if(istype(AC))
 				bullets += 1
-		/*for(var/obj/item/ammo_casing/AC in refuse)
-			if(istype(AC))
-				bullets += 1*/
 	return bullets
 
 /obj/item/weapon/gun/projectile/proc/getSpent()
