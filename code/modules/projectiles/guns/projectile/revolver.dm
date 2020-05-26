@@ -266,6 +266,7 @@
 	var/cocked = FALSE
 	var/last_spin = 0
 	var/spin_delay = 1 SECONDS	//let's not get crazy
+	gun_flags = EMPTYCASINGS | CHAMBER //just alt-click to unload it, thanks to someone with foresight
 
 /obj/item/weapon/gun/projectile/colt/update_icon()
 	if(cocked)
