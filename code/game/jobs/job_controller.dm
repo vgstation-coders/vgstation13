@@ -356,7 +356,7 @@ var/global/datum/controller/occupations/job_master
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == BE_ASSISTANT)
 			if(config.assistantlimit)
-				if(master_assistant.current_positions+1 > (config.assistantratio * count))
+				if(master_assistant.current_positions-1 > (config.assistantratio * count))
 					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
 						to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")
 						player.ready = 0
@@ -371,7 +371,7 @@ var/global/datum/controller/occupations/job_master
 		if (player.ckey in assistant_second_chance)
 			var/assistant_pref = assistant_second_chance[player.ckey]
 			Debug("AC3: [player] running the second chances for priority [assistant_pref]")
-			if(master_assistant.current_positions+1 > (config.assistantratio * count))
+			if(master_assistant.current_positions-1 > (config.assistantratio * count))
 				if(count < 5)
 					Debug("AC3: [player] failed the lottery.")
 			if (assistant_pref < player.mind.job_priority)
