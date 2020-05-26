@@ -81,7 +81,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "newscaster_normal"
 	var/buildstage = 1 // 1 = complete, 0 = unscrewed
-	ghost_write = 0 // Allow ghosts to send Topic()s.
+	ghost_write = 1 // Allow ghosts to send Topic()s.
 	custom_aghost_alerts = 1 // We handle our own logging.
 
 	var/screen = 0
@@ -222,6 +222,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		return
 
 	. = ..()
+
+	if (user.lying)
+		user << browse(null, "window=newscaster_main;size=400x600")
 
 	if (.)
 		return
@@ -508,6 +511,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	if(masterController && !isobserver(masterController) && get_dist(masterController,src)<=1 && usr!=masterController)
 		to_chat(usr, "<span class='warning'>You must wait for [masterController] to finish and move away.</span>")
 		return
+	if (!isobserver(usr) && usr.stat)
+		return
+	if (ishuman(usr))
+		var/mob/living/carbon/human/H = usr
+		if (H.lying)
+			return
 	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(loc, /turf))) || (istype(usr, /mob/living/silicon) || isobserver(usr)))
 		usr.set_machine(src)
 		if(href_list["set_channel_name"])
