@@ -14,15 +14,24 @@
 	icon_state = "frame"
 	desc = "A remote control for a door."
 	req_access = list(access_brig)
-	anchored = 1.0    		// can't pick it up
-	density = 0       		// can walk through it.
-	var/id_tag = null     	// id of door it controls.
-	var/releasetime = 0		// when world.timeofday reaches it - release the prisoneer
-	var/timing = 1    		// boolean, true/1 timer is on, false/0 means it's not timing
+	anchored = TRUE
+	density = FALSE
+	var/id_tag = null     	// id of door it controls
+	var/timeleft = 0		// in seconds
+	var/timing = FALSE
 	var/picture_state		// icon_state of alert picture, if not displaying text/numbers
 	var/list/obj/machinery/targets = list()
 	var/last_call = 0
 	layer = ABOVE_WINDOW_LAYER
+
+/obj/machinery/door_timer/New()
+	..()
+	machines -= src
+	fast_objects += src //process every 0.5 instead of every 2
+
+/obj/machinery/door_timer/Destroy()
+	fast_objects -= src
+	..()
 
 /obj/machinery/door_timer/initialize()
 	..()
@@ -33,6 +42,7 @@
 	for(var/obj/machinery/door/window/brigdoor/M in all_doors)
 		if (M.id_tag == src.id_tag)
 			targets += M
+			M.open() //these start the shift open
 
 	for(var/obj/machinery/flasher/F in flashers)
 		if(F.id_tag == src.id_tag)
@@ -50,16 +60,15 @@
 // if it's less than 0, open door, reset timer
 // update the door_timer window and the icon
 /obj/machinery/door_timer/process()
-	if(stat & (NOPOWER|BROKEN))
+	if((stat & (NOPOWER|BROKEN)) || !timing)
 		return
-	if(src.timing)
-		if(timeleft() == 0)
-			src.timer_end() // open doors, reset timer, clear status screen
-			src.timing = 0
-		src.updateUsrDialog()
-		src.update_icon()
-	else
-		timer_end()
+	if(timeleft <= 0)
+		timer_end() // open doors, reset timer, clear status screen
+		timing = FALSE
+		return
+	timeleft -= (SS_WAIT_FAST_OBJECTS/(1 SECONDS)) //this is a fast object
+	updateUsrDialog()
+	update_icon()
 
 
 // has the door power sitatuation changed, if so update icon.
@@ -107,36 +116,28 @@
 		C.locked = 0
 		C.icon_state = C.icon_closed
 
+	timeleft = 0
+
+	update_icon()
+
 	return 1
 
-/obj/machinery/door_timer/proc/timeleft()
-	if(timing)
-		. = max((releasetime-world.timeofday)/10, 0)
-	else
-		. = max((releasetime-last_call)/10, 0)
-
-	if(. < 0) . = 0
-	last_call = world.timeofday
-
 /obj/machinery/door_timer/proc/timeset(var/seconds)
-	releasetime=world.timeofday+seconds*10
-	last_call = world.timeofday
+	timeleft = seconds
 
 //Allows AIs to use door_timer, see human attack_hand function below
 /obj/machinery/door_timer/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 
 //Allows humans to use door_timer
 //Opens dialog window when someone clicks on door timer
 // Allows altering timer and the timing boolean.
-// Flasher activation limited to 150 seconds
+// Flasher activation limited to 15 seconds
 /obj/machinery/door_timer/attack_hand(var/mob/user as mob)
 	if(..())
 		return
-	var/second = round(timeleft() % 60)
-	var/minute = round((timeleft() - second) / 60)
 	user.set_machine(src)
 	var/dat = "<HTML><BODY><TT>"
 
@@ -148,10 +149,10 @@
 		dat += "<a href='?src=\ref[src];timing=1'>Activate Timer and close door</a><br/>"
 
 
-	dat += {"Time Left: [(minute ? text("[minute]:") : null)][second] <br/>
+	dat += {"Time Left: [timeleft / 60 % 60]:[add_zero(num2text(timeleft % 60), 2)] <br/>
 			<a href='?src=\ref[src];tp=-60'>-</a> <a href='?src=\ref[src];tp=-1'>-</a> <a href='?src=\ref[src];tp=1'>+</a> <A href='?src=\ref[src];tp=60'>+</a><br/>"}
 	for(var/obj/machinery/flasher/F in targets)
-		if(F.last_flash && (F.last_flash + 150) > world.timeofday)
+		if(F.last_flash && (F.last_flash + 15 SECONDS) > world.timeofday)
 			dat += "<br/><A href='?src=\ref[src];fc=1'>Flash Charging</A>"
 		else
 			dat += "<br/><A href='?src=\ref[src];fc=1'>Activate Flash</A>"
@@ -177,26 +178,21 @@
 
 	usr.set_machine(src)
 	if(href_list["timing"])
-		src.timing = text2num(href_list["timing"])
+		timing = text2num(href_list["timing"])
 	else
-		if(href_list["tp"])  //adjust timer, close door if not already closed
-			var/tp = text2num(href_list["tp"])
-			var/timeleft = timeleft()
-			timeleft += tp
-			timeleft = min(max(round(timeleft), 0), 3600)
-			timeset(timeleft)
-			//src.timing = 1
-			//src.closedoor()
+		if(href_list["tp"])
+			timeleft += text2num(href_list["tp"])
+			timeleft = clamp(round(timeleft), 0, 1 HOURS)
 		if(href_list["fc"])
 			for(var/obj/machinery/flasher/F in targets)
 				F.flash()
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
-	src.update_icon()
-	if(src.timing)
-		src.timer_start()
+	add_fingerprint(usr)
+	updateUsrDialog()
+	update_icon()
+	if(timing)
+		timer_start()
 	else
-		src.timer_end()
+		timer_end()
 
 
 //icon update function
@@ -210,9 +206,8 @@
 	if(stat & (BROKEN))
 		set_picture("ai_bsod")
 		return
-	if(src.timing)
+	if(timing)
 		var/disp1 = uppertext(id_tag)
-		var/timeleft = timeleft()
 		var/disp2 = "[add_zero(num2text((timeleft / 60) % 60),2)]~[add_zero(num2text(timeleft % 60), 2)]"
 		spawn(0.5 SECONDS)
 			update_display(disp1, disp2)
@@ -303,10 +298,7 @@
 
 /obj/machinery/door_timer/npc_tamper_act(mob/living/L)
 	//Increase or decrease the release time by a random number
-	var/timeleft = timeleft()
-
 	timeleft = max(0, timeleft + rand(-60, 60)) //From -1 minute to 1 minute. Can't go below 0
-	timeset(timeleft)
 	timer_start()
 
 	if(prob(10)) //Flash the flashers

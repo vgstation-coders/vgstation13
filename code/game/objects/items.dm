@@ -1326,6 +1326,9 @@ var/global/list/image/blood_overlays = list()
 			user.drop_from_inventory(cuffs)
 		C.equip_to_slot(cuffs, slot_handcuffed)
 		cuffs.on_restraint_apply(C)
+		var/list/findcuffs = get_contents_in_object(user,/obj/item/device/law_planner)
+		for(var/obj/item/device/law_planner/LP in findcuffs)
+			LP.handcuff_signal()
 		return TRUE
 
 /obj/item/proc/on_restraint_removal(var/mob/living/carbon/C) //Needed for syndicuffs
