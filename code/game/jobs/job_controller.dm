@@ -363,6 +363,11 @@ var/global/datum/controller/occupations/job_master
 						unassigned -= player
 						continue
 
+			if(master_assistant.species_blacklist.len && master_assistant.species_blacklist.Find(player.client.prefs.species))
+				to_chat(player, "You have been returned to lobby because your species is blacklisted from assistant.")
+				player.ready = 0
+				unassigned -= player
+				continue //no, you can't evade the blacklist just by not being picked for your available jobs
 			Debug("AC2 Assistant located, Player: [player]")
 			AssignRole(player, "Assistant")
 

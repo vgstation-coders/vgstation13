@@ -341,6 +341,10 @@
 		if(!job.species_whitelist.Find(client.prefs.species))
 			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
 			return 0
+	if(job.species_blacklist.len)
+		if(job.species_blacklist.Find(client.prefs.species))
+			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+			return 0
 
 	job_master.AssignRole(src, rank, 1)
 
@@ -481,6 +485,10 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 				active++
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
+					continue
+			if(job.species_blacklist.len)
+				if(job.species_blacklist.Find(client.prefs.species))
 					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
 					continue
 
