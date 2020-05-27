@@ -32,7 +32,7 @@
 #define AUTOMAGDROP  2		//Does the mag drop when it's empty?
 #define EMPTYCASINGS 4		//Does the gun eject empty casings?
 #define SCOPED		 8		//Attachable scope?
-#define CHAMBER 	 16		//Revolvers usually don't release casing when shot, only when reloaded
+#define CHAMBERSPENT 16		//Spent casings stay in the gun untill reloaded
 
 //projectiles bouncing off and phasing through obstacles
 #define PROJREACT_WALLS		1//includes opaque doors

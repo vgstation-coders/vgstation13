@@ -134,7 +134,7 @@
 		AC = loaded[1] //load next casing.
 	return AC
 
-/obj/item/weapon/gun/projectile/process_chambered(mob/user as mob)
+/obj/item/weapon/gun/projectile/process_chambered(mob/user)
 	var/obj/item/ammo_casing/AC = getAC()
 	if(in_chamber)
 		return 1 //{R}
@@ -146,7 +146,7 @@
 	else
 		loaded -= AC //Remove casing from loaded list.
 	if(gun_flags &EMPTYCASINGS)
-		if(gun_flags &CHAMBER)
+		if(gun_flags &CHAMBERSPENT)
 			refuse += AC
 		else
 			AC.forceMove(user.loc) //Eject casing onto ground or closet you're inside.
@@ -235,7 +235,7 @@
 		return ..()
 	if (loaded.len || stored_magazine || refuse.len)
 		if (load_method == SPEEDLOADER)
-			if(!gun_flags &CHAMBER)
+			if(!gun_flags &CHAMBERSPENT)
 				var/obj/item/ammo_casing/AC = loaded[1]
 				loaded -= AC
 				AC.forceMove(user.loc)
