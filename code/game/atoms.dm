@@ -134,10 +134,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/AddToProfiler()
 	// Memory usage profiling - N3X.
-	if (type in type_instances)
-		type_instances[type] = type_instances[type] + 1
-	else
-		type_instances[type] = 1
+	++type_instances[type]
 
 /atom/proc/DeleteFromProfiler()
 	// Memory usage profiling - N3X.
