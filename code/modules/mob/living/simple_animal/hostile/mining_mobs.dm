@@ -381,7 +381,7 @@ obj/item/asteroid/basilisk_hide/New()
 		to_chat(user, "<span class='notice'>\The [target] refuses \the [src].</span>")
 		return
 
-	if (!target.hasmouth)
+	if (!target.hasmouth())
 		if (target != user)
 			to_chat(user, "<span class='warning'>You attempt to feed \the [src] to \the [target], but you realize they don't have a mouth. How dumb!</span>")
 		else

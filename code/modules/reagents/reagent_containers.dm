@@ -352,6 +352,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/proc/can_drink(mob/user)
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
+		if(H.species.flags & SPECIES_NO_MOUTH)
+			H.visible_message("<span class='warning'>[H] can't drink without a mouth!</span>","<span class='warning'>You can't drink without a mouth!</span>")
+			return 0
 		if(H.species.chem_flags & NO_DRINK)
 			reagents.reaction(get_turf(H), TOUCH)
 			H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
