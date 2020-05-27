@@ -223,7 +223,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/dangerous/revolver
 	name = "Loaded .357 Revolver"
 	desc = "A traditional repeating handgun with seven chambers which fires .357 rounds. Can incapacitate most unarmored targets in two shots."
-	item = /obj/item/weapon/gun/projectile
+	item = /obj/item/weapon/gun/projectile/revolver
 	cost = 12
 
 /datum/uplink_item/dangerous/ammo
