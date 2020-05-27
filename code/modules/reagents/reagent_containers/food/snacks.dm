@@ -203,14 +203,8 @@
 			spawn() //WHY IS THIS SPAWN() HERE
 				if(gcDestroyed)
 					return
-				if(reagentreference.total_volume > bitesize)
-					/*
-					 * I totally cannot understand what this code supposed to do.
-					 * Right now every snack consumes in 2 bites, my popcorn does not work right, so I simplify it. -- rastaf0
-					var/temp_bitesize =  max(reagents.total_volume /2, bitesize)
-					reagents.trans_to(target, temp_bitesize)
-					*/
-					reagentreference.trans_to(eater, bitesize)
+				if(reagentreference.total_volume > bitesize*bitesizemod)
+					reagentreference.trans_to(eater, bitesize*bitesizemod)
 				else
 					reagentreference.trans_to(eater, reagentreference.total_volume)
 				bitecount++

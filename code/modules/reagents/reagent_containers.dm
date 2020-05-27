@@ -333,6 +333,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return FALSE
 
 /obj/item/weapon/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
+	if(!can_drink(user))
+		return 0
 	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 
@@ -341,11 +343,10 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
-		if(can_drink(user))
-			reagents.reaction(user, INGEST)
-			spawn(5)
-				if(reagents)
-					reagents.trans_to(user, amount_per_imbibe)
+		reagents.reaction(user, INGEST)
+		spawn(5)
+			if(reagents)
+				reagents.trans_to(user, amount_per_imbibe)
 
 	return 1
 

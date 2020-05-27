@@ -39,8 +39,8 @@
 	//Code for devouring things by standing on them, for mushroom men
 	if((species.flags & SPECIES_NO_MOUTH) && (species.flags & IS_PLANT))
 		var/turf/T = get_turf(src)
-		var/list/foods = locate(/obj/item/weapon/reagent_containers/food/snacks) in T
-		if(foods.len) //don't send a message if we aren't standing on at least one food
+		var/list/foods = prune_list_to_type(T.contents,/obj/item/weapon/reagent_containers/food/snacks)
+		if(foods && foods.len) //don't send a message if we aren't standing on at least one food
 			var/fullness = nutrition + (reagents.get_reagent_amount(NUTRIMENT) * 25)
 			switch(fullness)
 				if(0 to 50)

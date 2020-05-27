@@ -82,6 +82,18 @@
 		for(var/T in typesof(type)) //Gather all possible typepaths into an associative list
 			L[T] = MAX_VALUE //Set them equal to the max value which is unlikely to collide with any other pregenerated value
 
+//Removes returns a new list which only contains elements from the original list of a certain type
+/proc/prune_list_to_type(list/L, datum/A)
+	if(!L || !L.len || !A)
+		return 0
+	if(!ispath(A))
+		A = A.type
+	var/list/nu = L.Copy()
+	for(var/element in nu)
+		if(!istype(element,A))
+			nu -= element
+	return nu
+
 //Empties the list by setting the length to 0. Hopefully the elements get garbage collected
 /proc/clearlist(list/list)
 	if(istype(list))
