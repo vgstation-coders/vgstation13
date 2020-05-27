@@ -134,7 +134,7 @@
 		AC = loaded[1] //load next casing.
 	return AC
 
-/obj/item/weapon/gun/projectile/process_chambered(mob/user)
+/obj/item/weapon/gun/projectile/process_chambered()
 	var/obj/item/ammo_casing/AC = getAC()
 	if(in_chamber)
 		return 1 //{R}
@@ -149,7 +149,7 @@
 		if(gun_flags &CHAMBERSPENT)
 			refuse += AC
 		else
-			AC.forceMove(user.loc) //Eject casing onto ground or closet you're inside.
+			AC.forceMove(usr.loc) //Eject casing onto ground or closet you're inside.
 			playsound(AC, casingsound, 25, 1)
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
