@@ -281,7 +281,8 @@
 	reagent = LIQUIDBUTTER
 
 /obj/effect/decal/cleanable/virusdish
-	name = "broken virus containment dish"
+	name = "broken growth dish"
+	desc = "Probably not safe to step on it with your feet naked. Someone should clean it up."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "brokendish-outline"
 	density = 0
@@ -290,6 +291,7 @@
 	mouse_opacity = 1
 	layer = OBJ_LAYER
 	plane = OBJ_PLANE
+	persistent_type_replacement = /obj/effect/decal/cleanable/virusdish/persistent
 	var/last_openner
 	var/datum/disease2/disease/contained_virus
 
@@ -319,3 +321,8 @@
 			perp.infect_disease2(contained_virus, notes="(Contact, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")
 		else if (bleeding && (contained_virus.spread & SPREAD_BLOOD))
 			perp.infect_disease2(contained_virus, notes="(Blood, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")
+
+/obj/effect/decal/cleanable/virusdish/persistent
+	desc = "Whatever kind of pathogenic culture was in there has long since decayed. Someone should still clean it up eventually."
+	icon_state = "brokendish-persistent"
+	persistent_type_replacement = null

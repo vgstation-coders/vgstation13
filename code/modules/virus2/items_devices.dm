@@ -156,6 +156,10 @@ var/list/virusdishes = list()
 	if (open)
 		contained_virus = null
 		growth = 0
+		if (analysed)
+			info = ""
+			analysed = FALSE
+			visible_message("<span class='danger'>The info sticker falls of \the [src].</span>")
 		update_icon()
 
 /obj/item/weapon/virusdish/update_icon()
@@ -372,6 +376,8 @@ var/list/virusdishes = list()
 
 /obj/item/weapon/virusdish/examine(var/mob/user)
 	..()
+	if(!contained_virus)
+		to_chat(user, "<span class='notice'>This one appears to have been disinfected.</span>")
 	if(open)
 		to_chat(user, "<span class='notice'>Its lid is open!</span>")
 	else
