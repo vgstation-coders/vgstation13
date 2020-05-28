@@ -55,6 +55,11 @@
 		if(!I.force)
 			return TRUE
 	var/damage = run_armor_absorb(target_zone, I.damtype, I.force)
+	if(damage)
+		if(originator)
+			add_logs(originator, src, "damaged", admin=1, object=I, addition="DMG: [damage]")
+		else
+			add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [damage]")
 	apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
 	INVOKE_EVENT(on_touched, list("user" = src, "attacked by" = I))
 	return TRUE

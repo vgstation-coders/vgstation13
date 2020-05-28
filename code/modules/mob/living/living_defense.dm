@@ -189,6 +189,8 @@
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
 
+	if(damage)
+		add_logs(M, src, "bit", admin=0, object=null, addition="DMG: [damage]")
 	adjustBruteLoss(damage)
 	return
 
@@ -241,6 +243,8 @@
 	if(M.size != size) //The bigger the kicker, the more damage
 		damage = max(damage + (rand(1,5) * (1 + M.size - size)), 0)
 
+	if(damage)
+		add_logs(M, src, "kicked", admin=0, object=null, addition="DMG: [damage]")
 	adjustBruteLoss(damage)
 
 /mob/living/proc/near_wall(var/direction,var/distance=1)
