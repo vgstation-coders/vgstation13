@@ -419,7 +419,6 @@
 	if(!subject.mind) //This human was never controlled by a player, so they can't be cloned
 		scantemp = "Error: Mental interface failure."
 		return
-
 	if(subject.suiciding) //We cannot clone this guy because he suicided. Believe it or not, some people who suicide don't know about this. Let's tell them what's wrong.
 		scantemp = "Error: Mental interface failure."
 		if(subject.client)
@@ -451,6 +450,12 @@
 			else
 				scantemp = "Error: Unable to locate valid genetic data. Additionally, mental interface failed to initialize."
 				return
+
+	if(subject.client && subject.client.prefs.do_not_clone) //this guy just doesn't want to be cloned.
+		scantemp = "Error: Subject neurologically incompatible with cloning. However, mental interface initialized successfully."
+		to_chat(subject, "<span class='interface'>Someone is trying to clone your corpse. \
+			You cannot be cloned as you have opted out of cloning. However, your brain may still be used. Your ghost has been displayed as active and inside your body.</span>")
+		return		
 
 	//There's nothing wrong with the corpse itself past this point
 	if(!subject.client) //There is not a player "in control" of this corpse, maybe they ghosted, maybe they logged out

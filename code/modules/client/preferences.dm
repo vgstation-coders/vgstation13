@@ -143,6 +143,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/window_flashing = 1
 	var/antag_objectives = 0 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
 	var/typing_indicator = 0
+	var/do_not_clone = 0
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -293,6 +294,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	<b>Character records:</b>
 	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a>"]<br>
 	<b>Bank account security preference:</b><a href ='?_src_=prefs;preference=bank_security;task=input'>[bank_security_num2text(bank_security)]</a> <br>
+	<b>Do not clone:</b><a href='?_src_=prefs;preference=do_not_clone'><b>[(do_not_clone) ? "Active" : "Inactive"]</b></a><br>
 	</td><td valign='top' width='21%'>
 	<h3>Hair Style</h3>
 	<a href='?_src_=prefs;preference=h_style;task=input'>[h_style]</a><BR>
@@ -1509,6 +1511,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("typing_indicator")
 					typing_indicator = !typing_indicator
+					
+				if("do_not_clone")
+					do_not_clone = !do_not_clone
 
 			if(user.client.holder)
 				switch(href_list["preference"])
