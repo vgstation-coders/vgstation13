@@ -184,7 +184,7 @@
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='borange'>\The [M] has attempted to bite \the [src]!</span>")
-		add_logs(M, src, "miss-bit", admin=0, object=null, addition="DMG: [damage]")
+		add_logs(M, src, "miss-bit", admin=0, object=null, addition=null)
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
@@ -226,7 +226,7 @@
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='borange'>\The [M] attempts to kick \the [src]!</span>")
-		add_logs(M, src, "miss-kicked", admin=0, object=null, addition="DMG: [damage]")
+		add_logs(M, src, "miss-kicked", admin=0, object=null, addition=null)
 		return 0
 
 	//Handle shoes
