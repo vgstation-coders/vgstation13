@@ -514,12 +514,11 @@
 	if((C.getToxLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_tox)))
 		return 1
 
-
-	for(var/datum/disease/D in C.viruses)
-		if((D.stage > 1) || (D.spread_type == AIRBORNE))
-
-			if (!C.reagents.has_reagent(treatment_virus))
-				return 1 //STOP DISEASE FOREVER
+	for(var/ID in C.virus2)
+		if (ID in virusDB)
+			var/datum/data/record/v = virusDB[ID]
+			if ((v.fields["danger"] != "Safe") && (!C.reagents.has_reagent(treatment_virus)))
+				return 1
 
 	return 0
 
