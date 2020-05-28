@@ -149,7 +149,8 @@
 		if(gun_flags &CHAMBERSPENT)
 			refuse += AC
 		else
-			AC.forceMove(usr.loc) //Eject casing onto ground or closet you're inside.
+			var/mob/M = get_holder_of_type(src, /mob/)
+			AC.forceMove(ismob(M) ? M.loc : get_turf(src.loc)) //special forceMove because this proc hate user so much it breaks if you try to use mob/user in arg
 			playsound(AC, casingsound, 25, 1)
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
