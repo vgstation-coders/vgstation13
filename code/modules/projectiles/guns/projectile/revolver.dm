@@ -268,6 +268,11 @@
 	var/spin_delay = 1 SECONDS	//let's not get crazy
 	gun_flags = EMPTYCASINGS | CHAMBERSPENT
 
+./obj/item/weapon/gun/projectile/colt/examine(mob/user)
+	..()
+	if(user.is_holding_item(src))
+		to_chat(user,"<span class='info'>Alt-click to spin the gun.</span>")
+
 /obj/item/weapon/gun/projectile/colt/update_icon()
 	if(cocked)
 		icon_state = "colt_cocked"
