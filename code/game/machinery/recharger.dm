@@ -59,16 +59,16 @@
 	..()
 
 /obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user)
-	if(issilicon(user))
-		if(isrobot(user))
-			var/mob/living/silicon/robot/R = user
-			if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW))
-				return 1
-		else
-			return 1
 	. = ..()
 	if(.)
 		return
+	if(issilicon(user))
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			if(!isMoMMI(R) && !HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW))
+				return 1
+		else
+			return 1
 	if(stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='notice'>[src] isn't connected to a power source.</span>")
 		return 1
@@ -128,7 +128,7 @@
 	if(issilicon(user))
 		if(isrobot(user))
 			var/mob/living/silicon/robot/R = user
-			if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW))
+			if(!isMoMMI(R) && !HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW))
 				return 1
 		else
 			return 1
