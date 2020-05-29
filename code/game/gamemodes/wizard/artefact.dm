@@ -199,8 +199,10 @@
 	icon_state = "phylactery_empty_noglow"
 	var/charges = 0
 	var/soulbound
+	var/mindbound
 	var/z_bound
 	var/mob/bound_soul
+	var/datum/mind/bound_mind
 
 /obj/item/phylactery/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/device/soulstone))
@@ -226,6 +228,7 @@
 		spawn(rand(5 SECONDS, 15 SECONDS))
 			bound_soul.dust()
 			bound_soul = null
+			unbind_mind()
 	..()
 
 
@@ -244,6 +247,8 @@
 		var/datum/organ/external/E = H.get_active_hand_organ()
 		if(locate(/datum/wound) in E.wounds)
 			to_chat(user, "<span class = 'warning'>You bind your life essence to \the [src].</span>")
+			if(user.mind)
+				bind_mind(user.mind)
 			bind(user)
 			charges++
 			update_icon()
@@ -252,6 +257,7 @@
 
 /obj/item/phylactery/proc/revive_soul(list/arguments)
 	if(charges <= 0)
+		unbind_mind()
 		unbind()
 		return
 	var/mob/living/original = arguments["user"]
@@ -263,9 +269,7 @@
 			original.remove_spell(S)
 			H.add_spell(S)
 		H.Paralyse(30)
-		original.mind.transfer_to(H)
-		unbind()
-		bind(H)
+		original.mind.transfer_to(H) // rebinding on transfer now handled by mind
 		if(!arguments["body_destroyed"])
 			original.dust()
 		var/release_time = rand(60 SECONDS, 120 SECONDS)/charges
@@ -290,6 +294,21 @@
 	soulbound = to_bind.on_death.Add(src, "revive_soul")
 	z_bound = to_bind.on_z_transition.Add(src, "z_block")
 	bound_soul = to_bind
+
+/obj/item/phylactery/proc/unbind_mind()
+	if(bound_mind.on_transfer_end)
+		bound_mind.on_transfer_end.Remove(mindbound)
+	mindbound = null
+	bound_mind = null
+
+/obj/item/phylactery/proc/bind_mind(var/datum/mind/to_bind)
+	mindbound = to_bind.on_transfer_end.Add(src, "follow_mind")
+	bound_mind = to_bind
+
+/obj/item/phylactery/proc/follow_mind(list/arguments)
+	unbind()
+	bind(bound_mind.current)
+	update_icon()
 
 /obj/item/phylactery/proc/z_block(list/arguments)
 	var/mob/user = arguments["user"]
