@@ -63,8 +63,6 @@
 
 	var/last_explosion_push = 0
 
-	var/list/datum/tracker/trackers = list()
-
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
