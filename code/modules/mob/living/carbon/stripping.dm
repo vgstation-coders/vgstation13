@@ -16,7 +16,8 @@
 
 	target_item.add_fingerprint(user) //We don't need to be successful in order to get our prints on the thing
 
-	if(do_mob(user, src, strip_time(), 10, 0)) //Fails if the user moves, changes held item, is incapacitated, etc.
+	var/time = strip_time() / (pickpocket ? 2 : 1) //4 seconds, or 2 if you're a pickpocket
+	if(do_mob(user, src, time, 10, 0)) //Fails if the user moves, changes held item, is incapacitated, etc.
 		if(temp_loc != target_item.loc) //This will also fail if the item to strip went anywhere, necessary because do_mob() doesn't keep track of it.
 			return
 
@@ -248,6 +249,8 @@
 
 // Modify the current target sensor level.
 /mob/living/carbon/human/proc/toggle_sensors(var/mob/living/user)
+	var/pickpocket = user.isGoodPickpocket()
+	var/delay = HUMAN_STRIP_DELAY / (pickpocket ? 2 : 1)
 	var/obj/item/clothing/under/suit = w_uniform
 	if(!suit)
 		to_chat(user, "<span class='warning'>\The [src] is not wearing a suit.</span>")
@@ -260,7 +263,7 @@
 		return
 	if(!user.isGoodPickpocket())
 		visible_message("<span class='warning'>\The [user] is trying to set [src]'s suit sensors.</span>", "<span class='danger'>\The [user] is trying to set your suit sensors!</span>")
-	if(do_mob(user, src, HUMAN_STRIP_DELAY))
+	if(do_mob(user, src, delay))
 		var/newmode = suit.set_sensors(user)
 		if(newmode)
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors set to [newmode] by [user.name] ([user.ckey])</font>")
@@ -273,9 +276,11 @@
 
 // Set internals on or off.
 /mob/living/carbon/proc/set_internals(var/mob/living/user)
+	var/pickpocket = user.isGoodPickpocket()
+	var/delay = HUMAN_STRIP_DELAY / (pickpocket ? 2 : 1)
 	if(user.incapacitated())
 		return
-	
+
 	if(!has_breathing_mask())
 		to_chat(user, "<span class='warning'>\The [src] is not wearing a breathing mask.</span>")
 		return
@@ -285,9 +290,9 @@
 		to_chat(user, "<span class='warning'>\The [src] does not have a tank to connect to.</span>")
 		return
 
-	if(!user.isGoodPickpocket())
+	if(!pickpocket)
 		visible_message("<span class='warning'>\The [user] is trying to set [src]'s internals.</span>", "<span class='danger'>\The [user] is trying to set your internals!</span>")
 
-	if(do_mob(user, src, HUMAN_STRIP_DELAY))
+	if(do_mob(user, src, delay))
 		src.toggle_internals(user, T)
 		show_inv(user)
