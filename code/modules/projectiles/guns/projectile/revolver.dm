@@ -266,7 +266,7 @@
 	var/cocked = FALSE
 	var/last_spin = 0
 	var/spin_delay = 1 SECONDS	//let's not get crazy
-	gun_flags = EMPTYCASINGS | CHAMBERSPENT //just alt-click to unload it, thanks to someone with foresight
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT
 
 /obj/item/weapon/gun/projectile/colt/update_icon()
 	if(cocked)
@@ -274,9 +274,16 @@
 	else
 		icon_state = "colt"
 
-/obj/item/weapon/gun/projectile/colt/attack_self(mob/user, params, var/callparent = FALSE)
-	if(callparent)
+/obj/item/weapon/gun/projectile/colt/attack_self(mob/user)
+	if(cocked)
 		return ..(user)
+	else
+		cocked = TRUE
+		update_icon()
+		to_chat(user, "You cock \the [src].")
+		playsound(user, 'sound/weapons/revolver_cock.ogg', 50, 1)
+
+/obj/item/weapon/gun/projectile/colt/AltClick(var/mob/user) //spin to win with alt-click
 	if(cocked)
 		if(!last_spin || (world.time - last_spin) >= spin_delay)
 			user.visible_message("\The [user] spins \the [src] around \his finger.","You spin \the [src] around your finger.")
@@ -289,9 +296,6 @@
 		update_icon()
 		to_chat(user, "You cock \the [src].")
 		playsound(user, 'sound/weapons/revolver_cock.ogg', 50, 1)
-
-/obj/item/weapon/gun/projectile/colt/AltClick(var/mob/user)
-	attack_self(user, callparent = TRUE)
 
 /obj/item/weapon/gun/projectile/colt/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(cocked)
