@@ -223,7 +223,6 @@
 		mob.drop_item_v()
 	return
 
-
 /client/Center()
 	/* No 3D movement in 2D spessman game. dir 16 is Z Up
 	if (isobj(mob.loc))

@@ -75,7 +75,7 @@
 		streamer_display = M.hud_used.streamer_display
 	streamer_display.maptext_width = (WORLD_ICON_SIZE*2)+20
 	streamer_display.maptext_height = WORLD_ICON_SIZE*2
-	var/list/text = list("<div align='left' valign='top' style='position:relative; top:0px; left:6px'>")
+	var/list/text = list("<div align='left' valign='top' style='position:relative; top:0px; left:6px'><font size='[PIXEL_MULTIPLIER_SQUARE]'>")
 	if(IS_WEEKEND)
 		text += "Double XP <font color='#33FF33'>enabled</span>!</font><br>"
 	switch(team)
@@ -85,6 +85,7 @@
 			text += "Hits: <font color='#FF1133'>[hits]</font>"
 	text += "<br>Followers: <font color='#33FF33'>[length(followers)]</font>"
 	text += "<br>Subscribers:<font color='#FFFF00'>[length(subscribers)]</font></div>"
+	text += "</font>"
 	streamer_display.maptext = jointext(text, null)
 
 /datum/role/streamer/proc/try_add_follower(datum/mind/new_follower)

@@ -833,11 +833,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		markerImage.color = holomarker.color
 		if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
 			if(map.holomap_offset_x.len >= map.zMainStation)
-				markerImage.pixel_x = holomarker.x-8+map.holomap_offset_x[map.zMainStation]
-				markerImage.pixel_y = holomarker.y-8+map.holomap_offset_y[map.zMainStation]
+				markerImage.pixel_x = PIXEL_MULTIPLIER*(holomarker.x-8+map.holomap_offset_x[map.zMainStation])
+				markerImage.pixel_y = PIXEL_MULTIPLIER*(holomarker.y-8+map.holomap_offset_y[map.zMainStation])
 			else
-				markerImage.pixel_x = holomarker.x-8
-				markerImage.pixel_y = holomarker.y-8
+				markerImage.pixel_x = PIXEL_MULTIPLIER*(holomarker.x-8)
+				markerImage.pixel_y = PIXEL_MULTIPLIER*(holomarker.y-8)
 			markerImage.appearance_flags = RESET_COLOR
 			I.overlays += markerImage
 	return I

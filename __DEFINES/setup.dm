@@ -940,6 +940,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
 #define MULTICOLOR 2048	//skin color is unique rather than tone variation
 #define ACID4WATER 4096 //Acid now acts like water, and vice versa.
+#define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1116,18 +1117,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 
-//gun shit - prepare to have various things added to this
-#define SILENCECOMP  1 		//Silencer-compatible
-#define AUTOMAGDROP  2		//Does the mag drop when it's empty?
-#define EMPTYCASINGS 4		//Does the gun eject empty casings?
-#define SCOPED		 8		//Attachable scope?
-
-//projectiles bouncing off and phasing through obstacles
-#define PROJREACT_WALLS		1//includes opaque doors
-#define PROJREACT_WINDOWS	2//includes transparent doors
-#define PROJREACT_OBJS		4//structures, machines and items
-#define PROJREACT_MOBS		8//all mobs
-#define PROJREACT_BLOB		16//blob
 
 ///////////////////////
 ///////RESEARCH////////

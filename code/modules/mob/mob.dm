@@ -1546,6 +1546,7 @@ Use this proc preferably at the end of an equipment loadout
 				listed_turf = null
 			else if(statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)
+				winset(src, listed_turf.name, "small-icons=true")
 				for(var/atom/A in listed_turf)
 					if(!A.mouse_opacity && !A.name)
 						continue

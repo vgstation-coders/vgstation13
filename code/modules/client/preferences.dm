@@ -142,6 +142,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/credits_volume = 75
 	var/window_flashing = 1
 	var/antag_objectives = 0 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
+	var/typing_indicator = 0
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -379,6 +380,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=pulltoggle'><b>[(pulltoggle) ? "Toggle Pulling" : "Always Pull"]</b></a><br>
 	<b>Solo Antag Objectives:</b>
 	<a href='?_src_=prefs;preference=antag_objectives'><b>[(antag_objectives) ? "Standard" : "Freeform"]</b></a><br>
+	<b>Say bubbles:</b>
+	<a href='?_src_=prefs;preference=typing_indicator'><b>[(typing_indicator) ? "Active" : "Inactive"]</b></a><br>
   </div>
   <div id="rightDiv" style="width:50%;height:100%;float:right;">
 	<b>Randomized Character Slot:</b>
@@ -1202,7 +1205,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						metadata = sanitize(copytext(new_metadata,1,MAX_MESSAGE_LEN))
 
 				if("hair")
-					if(species == "Human" || species == "Unathi" || species == "Diona")
+					if(species == "Human" || species == "Unathi" || species == "Diona" || species == "Mushroom")
 						var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 						if(new_hair)
 							r_hair = hex2num(copytext(new_hair, 2, 4))
@@ -1503,6 +1506,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("antag_objectives")
 					antag_objectives = !antag_objectives
+
+				if("typing_indicator")
+					typing_indicator = !typing_indicator
 
 			if(user.client.holder)
 				switch(href_list["preference"])

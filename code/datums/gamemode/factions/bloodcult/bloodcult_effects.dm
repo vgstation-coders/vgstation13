@@ -490,18 +490,18 @@ var/bloodstone_backup = 0
 /obj/effect/stun_indicator/proc/place_indicator(var/image/I,var/dot)
 	switch (dot)
 		if (2,3)
-			I.pixel_x = -8
+			I.pixel_x = -WORLD_ICON_SIZE/4
 		if (5,6)
-			I.pixel_x = 8
+			I.pixel_x = WORLD_ICON_SIZE/4
 	switch (dot)
 		if (2,6)
-			I.pixel_y = 4
+			I.pixel_y = WORLD_ICON_SIZE/4
 		if (3,5)
-			I.pixel_y = -4
+			I.pixel_y = -WORLD_ICON_SIZE/4
 		if (1)
-			I.pixel_y = 8
+			I.pixel_y = WORLD_ICON_SIZE/4
 		if (4)
-			I.pixel_y = -8
+			I.pixel_y = -WORLD_ICON_SIZE/4
 	return I
 
 

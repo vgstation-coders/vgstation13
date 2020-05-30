@@ -227,8 +227,8 @@
 		var/datum/playingcard/P = cards[1]
 		var/image/I             = new(src.icon, (concealed ? "card_back" : "[P.card_icon]") )
 
-		I.pixel_x               = I.pixel_x + (-5 + rand(10))
-		I.pixel_y               = I.pixel_y + (-5 + rand(10))
+		I.pixel_x               = I.pixel_x + 2*(-5 + rand(10))
+		I.pixel_y               = I.pixel_y + 2*(-5 + rand(10))
 
 		overlays.Add(I)
 	else

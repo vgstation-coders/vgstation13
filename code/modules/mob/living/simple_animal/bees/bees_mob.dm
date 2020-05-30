@@ -37,15 +37,15 @@
 		var/failsafe = min(color,30)
 		for (var/i = 1 to failsafe)
 			var/image/I = image(icon,icon_state)
-			I.pixel_x = rand(-10,10)
-			I.pixel_y = rand(-4,4)
+			I.pixel_x = PIXEL_MULTIPLIER*rand(-5,5)
+			I.pixel_y = PIXEL_MULTIPLIER*rand(-2,2)
 			I.dir = pick(cardinal)
 			overlays += I
 		color = null
 	else
 		var/image/I = image(src.icon,src.icon_state)
-		I.pixel_x = rand(-10,10)
-		I.pixel_y = rand(-4,4)
+		I.pixel_x = PIXEL_MULTIPLIER*rand(-5,5)
+		I.pixel_y = PIXEL_MULTIPLIER*rand(-2,2)
 		I.dir = pick(cardinal)
 
 		for (var/obj/effect/decal/cleanable/bee/corpse in get_turf(src))

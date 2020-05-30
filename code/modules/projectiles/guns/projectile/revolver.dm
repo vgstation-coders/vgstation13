@@ -8,6 +8,7 @@
 	ammo_type = "/obj/item/ammo_casing/c38"
 	recoil = 3
 	var/perfect = 0
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT
 
 	special_check(var/mob/living/carbon/human/M) //to see if the gun fires 357 rounds safely. A non-modified revolver randomly blows up
 		if(getAmmo()) //this is a good check, I like this check
@@ -91,7 +92,7 @@
 	icon_state = "mateba"
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	recoil = 3
-
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT
 
 /obj/item/weapon/gun/projectile/nagant //revolver that simple mob russians use
 	name = "nagant revolver"
@@ -104,6 +105,7 @@
 	gun_flags = SILENCECOMP
 	fire_sound = 'sound/weapons/nagant.ogg'
 	recoil = 3
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT | SILENCECOMP
 
 /obj/item/weapon/gun/projectile/nagant/update_icon()
 	..()
@@ -264,6 +266,7 @@
 	var/cocked = FALSE
 	var/last_spin = 0
 	var/spin_delay = 1 SECONDS	//let's not get crazy
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT //just alt-click to unload it, thanks to someone with foresight
 
 /obj/item/weapon/gun/projectile/colt/update_icon()
 	if(cocked)
@@ -326,3 +329,6 @@
 		in_chamber = null
 		make_peel(user)
 		user.visible_message("<span class='danger'>\The [src] explodes as \the [user] bites into it!</span>","<span class='danger'>\The [src] explodes as you bite into it!</span>")
+
+/obj/item/weapon/gun/projectile/revolver	//a copy of parent to define traitor revolver as separate, because fuck you for making a class prototype not just that
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT

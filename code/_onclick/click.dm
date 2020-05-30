@@ -383,11 +383,11 @@
 	if(!dx && !dy) // Wall items are graphically shifted but on the floor
 		if(A.pixel_y > 16)
 			change_dir(NORTH)
-		else if(A.pixel_y < -16)
+		else if(A.pixel_y < -WORLD_ICON_SIZE/2)
 			change_dir(SOUTH)
-		else if(A.pixel_x > 16)
+		else if(A.pixel_x > WORLD_ICON_SIZE/2)
 			change_dir(EAST)
-		else if(A.pixel_x < -16)
+		else if(A.pixel_x < -WORLD_ICON_SIZE/2)
 			change_dir(WEST)
 
 		Facing()

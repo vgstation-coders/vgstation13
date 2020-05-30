@@ -625,7 +625,7 @@
 		if(3) //Soul Swarm
 			visible_message("<span class = 'warning'>\The [src] starts to float above the ground!</span>")
 			animate(src, pixel_y = 8, time = 1 SECONDS, easing = ELASTIC_EASING)
-			animate(pixel_y = rand(8,19), pixel_x = rand(-8,8), time = 3 SECONDS, easing = SINE_EASING, loop = 5)
+			animate(pixel_y = rand(8*PIXEL_MULTIPLIER,19*PIXEL_MULTIPLIER), pixel_x = rand(-8*PIXEL_MULTIPLIER,8*PIXEL_MULTIPLIER), time = 3 SECONDS, easing = SINE_EASING, loop = 5)
 			for(var/i = 0 to round(diceroll,4))
 				var/mob/living/carbon/human/mtarget = pick(victims)
 				if(mtarget.isDead())

@@ -121,7 +121,7 @@
 	var/obj/abstract/screen/movable/M = new()
 	M.name = "Movable UI Object"
 	M.icon_state = "block"
-	M.maptext = "Movable"
+	M.maptext = "<font size='[PIXEL_MULTIPLIER_SQUARE]'>Movable</font>"
 	M.maptext_width = WORLD_ICON_SIZE*2
 
 	var/screen_l = input(usr,"Where on the screen? (Formatted as 'X,Y' e.g: '1,1' for bottom left)","Spawn Movable UI Object") as text
@@ -140,7 +140,7 @@
 	var/obj/abstract/screen/movable/snap/S = new()
 	S.name = "Snap UI Object"
 	S.icon_state = "block"
-	S.maptext = "Snap"
+	S.maptext = "<font size='[PIXEL_MULTIPLIER_SQUARE]''>Snap<font>"
 	S.maptext_width = WORLD_ICON_SIZE*2
 
 	var/screen_l = input(usr,"Where on the screen? (Formatted as 'X,Y' e.g: '1,1' for bottom left)","Spawn Snap UI Object") as text

@@ -43,9 +43,15 @@
 #define ui_drop_throw "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
 #define ui_pull_resist "EAST-2:[26*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
 #define ui_kick_bite "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
-#define ui_acti "EAST-2:[26*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_movi "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_zonesel "EAST-1:28,SOUTH:5" //Used as compile time value
+#define ui_acti "EAST-[1+PIXEL_MULTIPLIER]:[26*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
+#define ui_movi "EAST-[1+PIXEL_MULTIPLIER]:[24*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
+
+#if PIXEL_MULTIPLIER == 2
+	#define ui_zonesel "EAST-1:28,SOUTH:5" //Used as compile time value
+#else
+	#define ui_zonesel "EAST-1:28,SOUTH:5" //Used as compile time value
+#endif
+
 #define ui_acti_alt "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]" //alternative intent switcher for when the interface is hidden (F12)
 
 //Screen Alerts
@@ -55,11 +61,18 @@
 #define ui_alert4 "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+1.5:[21*PIXEL_MULTIPLIER]"
 #define ui_alert5 "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+0.5:[19*PIXEL_MULTIPLIER]"
 
-//Gun buttons
-#define ui_gun1 "EAST-2:26,SOUTH+2:7" //Used as compile time value
-#define ui_gun2 "EAST-1:28, SOUTH+3:7" //Used as compile time value
-#define ui_gun3 "EAST-2:26,SOUTH+3:7" //Used as compile time value
-#define ui_gun_select "EAST-1:28,SOUTH+2:7" //Used as compile time value
+//Gun
+#if PIXEL_MULTIPLIER == 2
+	#define ui_gun1 "EAST-2:52,SOUTH+2:52" //Used as compile time value
+	#define ui_gun2 "EAST-1:56, SOUTH+3:14" //Used as compile time value
+	#define ui_gun3 "EAST-2:52,SOUTH+3:14" //Used as compile time value
+	#define ui_gun_select "EAST-1:56,SOUTH+2:14" //Used as compile time value
+#else
+	#define ui_gun1 "EAST-2:26,SOUTH+2:26" //Used as compile time value
+	#define ui_gun2 "EAST-1:28, SOUTH+3:7" //Used as compile time value
+	#define ui_gun3 "EAST-2:26,SOUTH+3:7" //Used as compile time value
+	#define ui_gun_select "EAST-1:28,SOUTH+2:7" //Used as compile time value
+#endif
 
 //Middle right (status indicators)
 #define ui_internal "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-0.5:[17*PIXEL_MULTIPLIER]"
@@ -94,10 +107,18 @@
 #define ui_construct_pull "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[10*PIXEL_MULTIPLIER]" //above the zone_sel icon
 
 //spells
+#if PIXEL_MULTIPLIER == 2
+#define ui_spell_master "EAST-1:32,NORTH-1:32" //Used as compile time value
+#define ui_genetic_master "EAST-1:32,NORTH-3:32" //Used as compile time value
+#define ui_alien_master "EAST-0:-8,NORTH-0:-12" //Used as compile time value
+#define ui_racial_master "EAST-0:-8,NORTH-2:-12" //Used as compile time value
+#else
 #define ui_spell_master "EAST-1:16,NORTH-1:16" //Used as compile time value
 #define ui_genetic_master "EAST-1:16,NORTH-3:16" //Used as compile time value
 #define ui_alien_master "EAST-0:-4,NORTH-0:-6" //Used as compile time value
 #define ui_racial_master "EAST-0:-4,NORTH-2:-6" //Used as compile time value
+#endif
+
 
 //Pop-up inventory
 #define ui_shoes "WEST+1:[8*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
@@ -122,14 +143,14 @@
 
 //#define ui_headset "SOUTH,8"
 #define ui_hand "CENTER-1:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_hstore1 "CENTER-2,CENTER-2"
+#define ui_hstore1 "CENTER-[2*PIXEL_MULTIPLIER],CENTER-[2*PIXEL_MULTIPLIER]"
 //#define ui_resist "EAST+1,SOUTH-1"
-#define ui_sleep "EAST+1, NORTH-13"
-#define ui_rest "EAST+1, NORTH-14"
+#define ui_sleep "EAST+[1*PIXEL_MULTIPLIER], NORTH-[13*PIXEL_MULTIPLIER]"
+#define ui_rest "EAST+[1*PIXEL_MULTIPLIER], NORTH-[14*PIXEL_MULTIPLIER]"
 
 
-#define ui_iarrowleft "SOUTH-1,11"
-#define ui_iarrowright "SOUTH-1,13"
+#define ui_iarrowleft "SOUTH-1,[11*PIXEL_MULTIPLIER]"
+#define ui_iarrowright "SOUTH-1,[13*PIXEL_MULTIPLIER]"
 
 // AI (Ported straight from /tg/)
 

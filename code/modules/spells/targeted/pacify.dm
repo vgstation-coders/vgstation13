@@ -59,8 +59,8 @@
 	icon_state = "explosion"
 	color = "blue"
 	alpha = 127
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 	layer = DECAL_LAYER
 	plane = ABOVE_TURF_PLANE
 

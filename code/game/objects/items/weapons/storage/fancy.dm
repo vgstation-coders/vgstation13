@@ -390,10 +390,10 @@
 			filling.alpha = mix_alpha_from_reagents(vial.reagents.reagent_list)
 			vial_image.overlays += filling
 		if (i < 6)
-			vial_image.pixel_x += (i % 3) * 4
+			vial_image.pixel_x += (i % 3) * 4*PIXEL_MULTIPLIER
 			if (i > 2)
-				vial_image.pixel_x -= 2
-				vial_image.pixel_y -= 2
+				vial_image.pixel_x -= 2*PIXEL_MULTIPLIER
+				vial_image.pixel_y -= 2*PIXEL_MULTIPLIER
 		else
 			qdel(vial_image)
 			continue
@@ -441,10 +441,10 @@
 			filling.alpha = mix_alpha_from_reagents(vial.reagents.reagent_list)
 			vial_image.overlays += filling
 		if (i < 6)
-			vial_image.pixel_x += (i % 3) * 4
+			vial_image.pixel_x += (i % 3) * 4*PIXEL_MULTIPLIER
 			if (i > 2)
-				vial_image.pixel_x -= 2
-				vial_image.pixel_y -= 2
+				vial_image.pixel_x -= 2*PIXEL_MULTIPLIER
+				vial_image.pixel_y -= 2*PIXEL_MULTIPLIER
 		else
 			qdel(vial_image)
 			continue
@@ -472,7 +472,7 @@
 /obj/item/weapon/storage/lockbox/vials/toggle(var/mob/user, var/id_name)
     ..()
     update_icon()
-	
+
 //FLARE BOX
 //Useful for lots of things, this box has 6 flares in it. Only takes unused and unlight flares.
 //Great for emergency crates/closets etc.

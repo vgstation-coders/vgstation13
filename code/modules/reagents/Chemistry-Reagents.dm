@@ -3152,6 +3152,31 @@
 		return 1
 	M.immune_system.ApplyAntipathogenics(data["threshold"])
 
+
+
+/datum/reagent/antipathogenic/tomato_soup
+	name = "Tomato Soup"
+	id = TOMATO_SOUP
+	description = "Water, tomato extract, and maybe some other stuff. Great for when you're feeling under the weather."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	color = "#731008" //rgb: 115, 16, 8
+	density = 0.63
+	specheatcap = 4.21
+	data = list(
+		"threshold" = 10,
+		)
+
+/datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
+
+	..()
+
+	M.nutrition += nutriment_factor
+	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
+		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+
+
+
 //natural antipathogenic, found in garlic and kudzu
 /datum/reagent/antipathogenic/allicin
 	name = "Allicin"
@@ -4564,25 +4589,6 @@
 
 	M.nutrition += nutriment_factor
 	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
-
-/datum/reagent/tomato_soup
-	name = "Tomato Soup"
-	id = TOMATO_SOUP
-	description = "Water, tomato extract, and maybe some other stuff."
-	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 5 * REAGENTS_METABOLISM
-	color = "#731008" //rgb: 115, 16, 8
-	density = 0.63
-	specheatcap = 4.21
-
-/datum/reagent/tomato_soup/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	M.nutrition += nutriment_factor
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/flour
 	name = "flour"

@@ -1924,7 +1924,7 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	else if(istype(W,/obj/item/device/healthanalyzer))
 		to_chat(user, "<span class='notice'>You use \the [W] to induce a small electric shock into \the [src].</span>")
 		playsound(src,'sound/weapons/electriczap.ogg',50,1)
-		animate(src, pixel_x = pixel_x + rand(-2,2), pixel_y = pixel_y + rand(-2,2) , time = 0.5 SECONDS, easing = BOUNCE_EASING) //Give it a little shake
+		animate(src, pixel_x = pixel_x + rand(-4,4), pixel_y = pixel_y + rand(-4,4) , time = 0.5 SECONDS, easing = BOUNCE_EASING) //Give it a little shake
 		animate(src, pixel_x = initial(pixel_x), pixel_y = initial(pixel_y), time = 0.5 SECONDS, easing = LINEAR_EASING) //Then calm it down
 		if(!organ_data)
 			to_chat(user, "<span class='warning'>\The [src] has no brain!</span>")

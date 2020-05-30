@@ -324,8 +324,8 @@
 	plane = LYING_MOB_PLANE
 	anchored = 1
 	mouse_opacity = 0
-	pixel_x = -32
-	pixel_y = -29
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -(WORLD_ICON_SIZE - PIXEL_MULTIPLIER*3)
 	var/turf/oldloc_source = null
 	var/turf/oldloc_target = null
 

@@ -160,8 +160,8 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	materials = list()
 
 /obj/item/stack/teeth/shark/New()
-	src.pixel_x = rand(-5,5)
-	src.pixel_y = rand(-5,5)
+	src.pixel_x = rand(-10,10)
+	src.pixel_y = rand(-10,10)
 
 /obj/item/weapon/fish/catfish
 	name = "catfish"

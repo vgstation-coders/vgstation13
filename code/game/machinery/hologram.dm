@@ -211,8 +211,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	plane = LYING_MOB_PLANE
 	anchored = 1
 	mouse_opacity = 0
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 	alpha = 100
 
 /obj/machinery/hologram

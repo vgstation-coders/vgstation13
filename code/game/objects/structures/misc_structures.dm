@@ -30,8 +30,8 @@
 		S.forceMove(src)
 		if(istype(S, /obj/item/weapon/spear/wooden))
 			icon_state = "wooden_pike"
-	pixel_x = rand(-12,12)
-	pixel_y = rand(0,20)
+	pixel_x = PIXEL_MULTIPLIER*rand(-12,12)
+	pixel_y = PIXEL_MULTIPLIER*rand(0,20)
 	var/matrix/M = matrix()
 	M.Turn(rand(-20,20))
 	transform = M

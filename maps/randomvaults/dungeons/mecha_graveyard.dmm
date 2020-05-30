@@ -28,7 +28,7 @@
 "aB" = (/obj/effect/decal/cleanable/blood/gibs/robot/down,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
 "aC" = (/obj/effect/decal/cleanable/ash,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
 "aD" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
-"aE" = (/obj/machinery/status_display{pixel_y = 32},/obj/effect/decal/mecha_wreckage/durand,/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"aE" = (/obj/machinery/status_display{pixel_y = 64},/obj/effect/decal/mecha_wreckage/durand,/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
 "aF" = (/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 4},/area/vault/mecha_graveyard)
 "aG" = (/obj/item/stack/sheet/plasteel,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
 "aH" = (/obj/effect/decal/mecha_wreckage/marauder,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)

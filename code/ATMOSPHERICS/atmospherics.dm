@@ -178,24 +178,24 @@ Pipelines + Other Objects -> Pipe network
 		nodeex.layer = node_layer()
 		switch (missing_dir)
 			if (NORTH)
-				nodeex.pixel_y = ex_node_offset
+				nodeex.pixel_y = PIXEL_MULTIPLIER*ex_node_offset
 
 			if (SOUTH)
-				nodeex.pixel_y = -ex_node_offset
+				nodeex.pixel_y = -PIXEL_MULTIPLIER*ex_node_offset
 
 			if (EAST)
-				nodeex.pixel_x = ex_node_offset
+				nodeex.pixel_x = PIXEL_MULTIPLIER*ex_node_offset
 
 			if (WEST)
-				nodeex.pixel_x = -ex_node_offset
+				nodeex.pixel_x = -PIXEL_MULTIPLIER*ex_node_offset
 
 		underlays += nodeex
 
 
 /obj/machinery/atmospherics/proc/setPipingLayer(new_layer = PIPING_LAYER_DEFAULT)
 	piping_layer = new_layer
-	pixel_x = (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X
-	pixel_y = (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
+	pixel_x = PIXEL_MULTIPLIER*(piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X
+	pixel_y = PIXEL_MULTIPLIER*(piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
 	update_planes_and_layers()
 
 // Find a connecting /obj/machinery/atmospherics in specified direction.

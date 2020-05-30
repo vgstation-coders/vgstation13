@@ -90,7 +90,7 @@
 	mymob.gui_icons.soulblade_coverLEFT.name = "Blood"
 	mymob.gui_icons.soulblade_coverLEFT.layer = HUD_ABOVE_ITEM_LAYER
 	mymob.gui_icons.soulblade_coverLEFT.screen_loc = ui_blob_bgLEFT
-	mymob.gui_icons.soulblade_coverLEFT.maptext_x = 1
+	mymob.gui_icons.soulblade_coverLEFT.maptext_x = 1*PIXEL_MULTIPLIER
 	mymob.gui_icons.soulblade_coverLEFT.maptext_y = 126*PIXEL_MULTIPLIER
 
 	mymob.gui_icons.soulblade_bloodbar = getFromPool(/obj/abstract/screen)

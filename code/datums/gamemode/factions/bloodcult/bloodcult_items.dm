@@ -754,7 +754,7 @@ var/list/arcane_tomes = list()
 				var/total_offset = (60 + (100*(blood/maxblood))) * PIXEL_MULTIPLIER
 				shade.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = MAT
 				shade.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-				shade.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[blood]"
+				shade.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "<font size='4'>[blood]"
 
 
 /obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)

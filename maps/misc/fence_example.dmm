@@ -1,5 +1,5 @@
 "a" = (/turf/unsimulated/wall/other,/area/prison/solitary)
-"b" = (/obj/machinery/power/apc{dir = 8; pixel_x = -24},/obj/machinery/power/terminal{dir = 8},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor,/area/prison/solitary)
+"b" = (/obj/machinery/power/apc{dir = 8; pixel_x = -48},/obj/machinery/power/terminal{dir = 8},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor,/area/prison/solitary)
 "c" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/prison/solitary)
 "d" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/prison/solitary)
 "e" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/prison/solitary)

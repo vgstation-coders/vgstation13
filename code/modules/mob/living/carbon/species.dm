@@ -1347,10 +1347,12 @@ var/list/has_died_as_golem = list()
 	name = "Mushroom"
 	icobase = 'icons/mob/human_races/r_mushman.dmi'
 	deform = 'icons/mob/human_races/r_mushman.dmi'
+	eyes = "mushroom_eyes"
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
 
 	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | REQUIRE_DARK | IS_SPECIES_MUTE
+	anatomy_flags = NO_BALD
 
 	gender = NEUTER
 

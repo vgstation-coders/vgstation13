@@ -147,7 +147,7 @@
 		var/total_offset = (60 + (100*(SB.blood/SB.maxblood))) * PIXEL_MULTIPLIER
 		hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
 		hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-		hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[SB.blood]"
+		hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "<font size='[PIXEL_MULTIPLIER_SQUARE]'>[SB.blood]</font>"
 
 	if(client && hud_used && healths)
 		switch(health)

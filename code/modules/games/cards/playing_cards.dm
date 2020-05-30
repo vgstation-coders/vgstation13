@@ -295,7 +295,7 @@
 	var/cardname = null
 	var/obj/item/toy/cards/parentdeck = null
 	var/flipped = TRUE //Cards start flipped so that dealers can deal without having to see the card.
-	pixel_x = -5
+	pixel_x = -10
 
 /obj/item/toy/singlecard/New(NewLoc, cardsource, newcardname)
 	..(NewLoc)
@@ -313,7 +313,7 @@
 /obj/item/toy/singlecard/update_icon()
 	if(flipped)
 		icon_state = "singlecard_down"
-		pixel_x = -5
+		pixel_x = -10
 		name = "card"
 	else
 		if(cardname)
@@ -322,7 +322,7 @@
 		else
 			icon_state = "sc_Ace of Spades"
 			name = "What Card"
-		pixel_x = 5
+		pixel_x = 10
 
 /obj/item/toy/singlecard/examine(mob/user)
 	..()

@@ -83,7 +83,7 @@ var/list/datum/map_element/map_elements = list()
 //Example use:
 //  boss_enemy = track_atom(new /mob/living/simple_animal/corgi)
 
-/datum/map_element/proc/track_atom(atom/A)
+/datum/map_element/proc/track_atom(atom/movable/A)
 	if(!istype(A))
 		return
 
@@ -93,7 +93,7 @@ var/list/datum/map_element/map_elements = list()
 
 
 /datum/map_element/proc/clear_references(list/params)
-	var/atom/A = params["atom"]
+	var/atom/movable/A = params["atom"]
 	if(!A)
 		return
 

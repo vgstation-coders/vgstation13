@@ -224,6 +224,7 @@
 		"/obj/item/device/hailer",
 		"/obj/item/weapon/melee/telebaton",
 		"/obj/item/device/gps/secure",
+		"/obj/item/device/law_planner",
 		"/obj/item/clothing/accessory/holobadge",
 		"/obj/item/weapon/autocuffer",
 		"/obj/item/weapon/depocket_wand",

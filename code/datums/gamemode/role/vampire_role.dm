@@ -512,7 +512,12 @@
 			//hud_used.human_hud(hud_used.ui_style)
 		M.hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		M.hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
-		M.hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>U:<font color='#33FF33'>[blood_usable]</font><br> T:<font color='#FFFF00'>[blood_total]</font></div>"
+		var/text = list()
+		text += "<div align='left' valign='top' style='position:relative; top:0px; left:6px'><font size='[PIXEL_MULTIPLIER_SQUARE]'>"
+		text += "U:<font color='#33FF33'>[blood_usable]</font><br>"
+		text += "T:<font color='#FFFF00'>[blood_total]</font><br>"
+		text += "</font></div>"
+		M.hud_used.vampire_blood_display.maptext = jointext(text, "")
 
 /mob/living/carbon/human/proc/check_sun()
 	var/ax = x

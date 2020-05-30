@@ -170,8 +170,8 @@
 		return
 
 	// Randomize the first box
-	b1x1 = pixel_x - pick(1,1,1,1,2,2,3,3,4)
-	b1x2 = pixel_x + pick(1,1,1,1,2,2,3,3,4)
+	b1x1 = pixel_x - PIXEL_MULTIPLIER*pick(1,1,1,1,2,2,3,3,4)
+	b1x2 = pixel_x + PIXEL_MULTIPLIER*pick(1,1,1,1,2,2,3,3,4)
 	b1y = pixel_y
 	if(prob(35))
 		b1y += rand(-4,4)
@@ -180,7 +180,7 @@
 	b2x = pixel_x
 	if(prob(35))
 		b2x += rand(-4,4)
-	b2y1 = pixel_y + pick(1,1,1,1,2,2,3,3,4)
-	b2y2 = pixel_y - pick(1,1,1,1,2,2,3,3,4)
+	b2y1 = pixel_y + PIXEL_MULTIPLIER*pick(1,1,1,1,2,2,3,3,4)
+	b2y2 = pixel_y - PIXEL_MULTIPLIER*pick(1,1,1,1,2,2,3,3,4)
 
 	Target.bulletholes.Add(src)

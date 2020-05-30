@@ -443,8 +443,8 @@
 	var/image/I = new()
 	I.appearance = O.appearance
 	I.plane = FLOAT_PLANE
-	I.pixel_x = clothing_offset_x
-	I.pixel_y = clothing_offset_y
+	I.pixel_x = PIXEL_MULTIPLIER*clothing_offset_x
+	I.pixel_y = PIXEL_MULTIPLIER*clothing_offset_y
 	overlays += I
 	returnToPool(O)
 
@@ -731,8 +731,8 @@
 	livingMannequin.dir = dir
 	var/image/I = image('icons/effects/32x32.dmi',"blank")
 	I.overlays |= overlays
-	I.pixel_x = -clothing_offset_x
-	I.pixel_y = -clothing_offset_y
+	I.pixel_x = -PIXEL_MULTIPLIER*clothing_offset_x
+	I.pixel_y = -PIXEL_MULTIPLIER*clothing_offset_y
 	livingMannequin.overlays += I
 	for(var/slot in clothing)
 		if(clothing[slot])

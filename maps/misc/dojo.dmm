@@ -6,7 +6,7 @@
 "f" = (/turf/simulated/floor/engine/acoustic,/area/dojo)
 "g" = (/obj/effect/decal/ninjaporter,/turf/simulated/floor/engine/acoustic,/area/dojo)
 "h" = (/obj/item/weapon/stool/cushion,/turf/simulated/floor/engine/acoustic,/area/dojo)
-"i" = (/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake,/obj/item/weapon/reagent_containers/food/snacks/sushi_Sake{pixel_x = 8; pixel_y = -6},/obj/item/weapon/reagent_containers/food/snacks/sushi_Masago{pixel_x = -8; pixel_y = -6},/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi{pixel_x = 8; pixel_y = 8},/obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura{pixel_x = -8; pixel_y = 8},/turf/simulated/floor/engine/acoustic,/area/dojo)
+"i" = (/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake,/obj/item/weapon/reagent_containers/food/snacks/sushi_Sake{pixel_x = 16; pixel_y = -12},/obj/item/weapon/reagent_containers/food/snacks/sushi_Masago{pixel_x = -16; pixel_y = -12},/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi{pixel_x = 16; pixel_y = 16},/obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura{pixel_x = -16; pixel_y = 16},/turf/simulated/floor/engine/acoustic,/area/dojo)
 "j" = (/obj/effect/landmark{name = "ninjastart"},/turf/simulated/floor/engine/acoustic,/area/dojo)
 "k" = (/obj/structure/punching_bag/captain,/turf/simulated/floor/engine/acoustic,/area/dojo)
 "l" = (/turf/simulated/wall,/area/dojo)
@@ -18,7 +18,7 @@
 "r" = (/obj/structure/sign/ninjaglove,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/dojo)
 "s" = (/obj/item/weapon/gun/energy/tag/blue,/turf/simulated/floor/engine/acoustic,/area/dojo)
 "t" = (/obj/item/weapon/cell/crap,/turf/simulated/floor/engine/acoustic,/area/dojo)
-"u" = (/obj/item/weapon/stool/cushion{pixel_y = 16},/turf/simulated/floor/engine/acoustic,/area/dojo)
+"u" = (/obj/item/weapon/stool/cushion{pixel_y = 32},/turf/simulated/floor/engine/acoustic,/area/dojo)
 
 (1,1,1) = {"
 aaabcbaaaaadedaaa

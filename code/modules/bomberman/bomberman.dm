@@ -938,7 +938,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		pencil.x = x
 		pencil.y = y+h
 		T = pencil.loc
-		T.maptext = "name"
+		T.maptext = "<font size='[PIXEL_MULTIPLIER_SQUARE]''>name</font>"
 		T.maptext_width = 256*PIXEL_MULTIPLIER
 		//T.maptext_y = 20
 
@@ -954,7 +954,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		//now we just need to add a thunderdome jukebox to every map
 		var/area/A = new
 		A.name = name
-		A.tag = "[A.type]/[md5(name)]"
+		A.tag = "<font size='4'>[A.type]/[md5(name)]</font>"
 		A.power_equip = 0
 		A.power_light = 0
 		A.power_environ = 0

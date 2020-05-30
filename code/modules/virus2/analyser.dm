@@ -203,8 +203,8 @@
 		var/obj/item/weapon/paper/P = new(T)
 		P.name = last_scan_name
 		P.info = last_scan_info
-		P.pixel_x = 8
-		P.pixel_y = -8
+		P.pixel_x = WORLD_ICON_SIZE/4
+		P.pixel_y = -WORLD_ICON_SIZE/4
 		P.update_icon()
 
 /obj/machinery/disease2/diseaseanalyser/process()

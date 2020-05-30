@@ -26,13 +26,13 @@ mob
 	Login()
 		// Testing image underlays
 		underlays += image(icon='_flat_demoIcons.dmi',icon_state="red", dir = EAST)
-		underlays += image(icon='_flat_demoIcons.dmi',icon_state="red", pixel_x = 32)
-		underlays += image(icon='_flat_demoIcons.dmi',icon_state="red", pixel_x = -32)
+		underlays += image(icon='_flat_demoIcons.dmi',icon_state="red", pixel_x = WORLD_ICON_SIZE)
+		underlays += image(icon='_flat_demoIcons.dmi',icon_state="red", pixel_x = -WORLD_ICON_SIZE)
 
 		// Testing image overlays
-		overlays += image(icon='_flat_demoIcons.dmi',icon_state="green", pixel_x = 32, pixel_y = -32)
-		overlays += image(icon='_flat_demoIcons.dmi',icon_state="green", pixel_x = 32, pixel_y = 32)
-		overlays += image(icon='_flat_demoIcons.dmi',icon_state="green", pixel_x = -32, pixel_y = -32)
+		overlays += image(icon='_flat_demoIcons.dmi',icon_state="green", pixel_x = WORLD_ICON_SIZE, pixel_y = -WORLD_ICON_SIZE)
+		overlays += image(icon='_flat_demoIcons.dmi',icon_state="green", pixel_x = WORLD_ICON_SIZE, pixel_y = WORLD_ICON_SIZE)
+		overlays += image(icon='_flat_demoIcons.dmi',icon_state="green", pixel_x = -WORLD_ICON_SIZE, pixel_y = -WORLD_ICON_SIZE)
 
 		// Testing icon file overlays (defaults to mob's state)
 		overlays += '_flat_demoIcons2.dmi'
@@ -46,7 +46,7 @@ mob
 		overlays+=I
 
 		// Testing dynamic image overlays
-		I=image(icon=I,pixel_x = -32, pixel_y = 32)
+		I=image(icon=I,pixel_x = -WORLD_ICON_SIZE, pixel_y = WORLD_ICON_SIZE)
 		overlays+=I
 
 		// Testing object types (and layers)
@@ -133,8 +133,8 @@ mob
 obj/overlayTest
 	icon = '_flat_demoIcons.dmi'
 	icon_state = "blue"
-	pixel_x = -24
-	pixel_y = 24
+	pixel_x = -(WORLD_ICON_SIZE - (WORLD_ICON_SIZE/4))
+	pixel_y =(WORLD_ICON_SIZE - (WORLD_ICON_SIZE/4))
 	layer = TURF_LAYER // Should appear below the rest of the overlays
 
 world

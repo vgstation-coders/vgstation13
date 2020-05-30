@@ -66,7 +66,7 @@
 			letter = lowertext(letter)
 
 	var/image/text_image = new(loc = A)
-	text_image.maptext = "<font size = 8><b>[letter]</b></font>"
+	text_image.maptext = "<font size = '[8*PIXEL_MULTIPLIER_SQUARE]'><b>[letter]</b></font>"
 	text_image.color = AverageColor(atom_icon)
 	text_image.pixel_x = 6*PIXEL_MULTIPLIER
 	text_image.pixel_y = 5*PIXEL_MULTIPLIER

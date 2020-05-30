@@ -447,8 +447,8 @@
 		var/obj/child = new child_type()
 		reagents.trans_to(child, amount_to_transfer)
 		child.forceMove(loc)
-		child.pixel_x = rand(-8, 8)
-		child.pixel_y = rand(-8, 8)
+		child.pixel_x = rand(-16, 16)
+		child.pixel_y = rand(-16, 16)
 
 
 //////////////////////////////////////////////////

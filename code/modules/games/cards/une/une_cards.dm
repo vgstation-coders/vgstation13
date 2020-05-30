@@ -63,12 +63,12 @@
 		icon_state = "unecard_down"
 		overlays -= unecardimg
 		name = "une card"
-		pixel_x = -5
+		pixel_x = -10
 	else
 		icon_state = "unecard_up"
 		overlays += unecardimg
 		name = cardname
-		pixel_x = 5
+		pixel_x = 10
 
 
 #undef REDCARD

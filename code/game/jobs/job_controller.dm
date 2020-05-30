@@ -12,7 +12,7 @@ var/global/datum/controller/occupations/job_master
 
 	var/priority_jobs_remaining = 3 //Limit on how many prioritized jobs can be had at once.
 	var/list/labor_consoles = list()
-
+	var/list/assistant_second_chance = list()
 
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
 	occupations = list()
@@ -62,7 +62,7 @@ var/global/datum/controller/occupations/job_master
 /datum/controller/occupations/proc/GetPlayerAltTitle(mob/new_player/player, rank)
 	return player.client.prefs.GetPlayerAltTitle(GetJob(rank))
 
-/datum/controller/occupations/proc/AssignRole(var/mob/new_player/player, var/rank, var/latejoin = 0)
+/datum/controller/occupations/proc/AssignRole(var/mob/new_player/player, var/rank, var/latejoin = 0, var/pref_level = 5) // We assume we got the job we wanted (latejoin, etc).
 	Debug("Running AR, Player: [player], Rank: [rank], LJ: [latejoin]")
 	if(player && player.mind && rank)
 		var/datum/job/job = GetJob(rank)
@@ -78,6 +78,7 @@ var/global/datum/controller/occupations/job_master
 		if((job.current_positions < position_limit) || position_limit == -1)
 			Debug("Player: [player] is now Rank: [rank], JCP:[job.current_positions], JPL:[position_limit]")
 			player.mind.assigned_role = rank
+			player.mind.job_priority = pref_level
 			player.mind.role_alt_title = GetPlayerAltTitle(player, rank)
 
 			unassigned -= player
@@ -89,6 +90,15 @@ var/global/datum/controller/occupations/job_master
 			return 1
 	Debug("AR has failed, Player: [player], Rank: [rank]")
 	return 0
+
+/datum/controller/occupations/proc/UnassignRole(var/mob/new_player/player)
+	Debug("Unassigning role for [player]")
+	var/datum/job/job = GetJob(player.mind.assigned_role)
+	player.mind.assigned_role = ""
+	player.mind.role_alt_title = ""
+	job.current_positions--
+	for(var/obj/machinery/computer/labor/L in labor_consoles)
+		L.updateUsrDialog()
 
 /datum/controller/occupations/proc/FreeRole(var/rank, mob/user)	//making additional slot on the fly
 	var/datum/job/job = GetJob(rank)
@@ -309,29 +319,6 @@ var/global/datum/controller/occupations/job_master
 	// Hand out random jobs to the people who didn't get any in the last check
 	// Also makes sure that they got their preference correct
 
-	//People who wants to be assistants, sure, go on.
-	var/count = 0
-	var/datum/job/officer = job_master.GetJob("Security Officer")
-	var/datum/job/warden = job_master.GetJob("Warden")
-	var/datum/job/hos = job_master.GetJob("Head of Security")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions)
-	Debug("DO, Running Assistant Check 1")
-	var/datum/job/assist = new /datum/job/assistant()
-	var/datum/job/master_assistant = GetJob("Assistant")
-	var/list/assistant_candidates = FindOccupationCandidates(assist, 3)
-	assistant_candidates = shuffle(assistant_candidates)
-	Debug("AC1, Candidates: [assistant_candidates.len]")
-	for(var/mob/new_player/player in assistant_candidates)
-		Debug("AC1 pass, Player: [player]")
-		if(config.assistantlimit)
-			if(master_assistant.current_positions > (config.assistantratio * count))
-				if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
-					break
-		AssignRole(player, "Assistant")
-		assistant_candidates -= player
-	unassigned |= assistant_candidates
-	Debug("DO, AC1 end")
-
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == GET_RANDOM_JOB)
 			GiveRandomJob(player)
@@ -355,22 +342,47 @@ var/global/datum/controller/occupations/job_master
 
 	Debug("DO, Standard Check end")
 
+	// Rejoice, for you have been given a second chance to be a greytider.
 	Debug("DO, Running AC2")
+
+	var/count = 0
+	var/datum/job/officer = job_master.GetJob("Security Officer")
+	var/datum/job/warden = job_master.GetJob("Warden")
+	var/datum/job/hos = job_master.GetJob("Head of Security")
+	var/datum/job/master_assistant = GetJob("Assistant")
+	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == BE_ASSISTANT)
 			if(config.assistantlimit)
-				count = (officer.current_positions + warden.current_positions + hos.current_positions)
-				if(master_assistant.current_positions > (config.assistantratio * count))
+				if(master_assistant.current_positions-1 > (config.assistantratio * count))
 					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
 						to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")
 						player.ready = 0
 						unassigned -= player
 						continue
 
+			if(master_assistant.species_blacklist.len && master_assistant.species_blacklist.Find(player.client.prefs.species))
+				to_chat(player, "You have been returned to lobby because your species is blacklisted from assistant.")
+				player.ready = 0
+				unassigned -= player
+				continue //no, you can't evade the blacklist just by not being picked for your available jobs
 			Debug("AC2 Assistant located, Player: [player]")
 			AssignRole(player, "Assistant")
+
+	// Those that got assigned a role, but had assistant higher.
+	for (var/mob/new_player/player in shuffle(player_list))
+		if (player.ckey in assistant_second_chance)
+			var/assistant_pref = assistant_second_chance[player.ckey]
+			Debug("AC3: [player] running the second chances for priority [assistant_pref]")
+			if(master_assistant.current_positions-1 > (config.assistantratio * count))
+				if(count < 5)
+					Debug("AC3: [player] failed the lottery.")
+			if (assistant_pref < player.mind.job_priority)
+				Debug("AC3: got made an assistant as a second chance.")
+				UnassignRole(player)
+				AssignRole(player, "Assistant")
 
 	//For ones returning to lobby
 	for(var/mob/new_player/player in unassigned)
@@ -391,12 +403,38 @@ var/global/datum/controller/occupations/job_master
 		return FALSE
 	// If the player wants that job on this level, then try give it to him.
 	if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
-
+		if (job.title == "Assistant" && !CheckAssistantCount(player, level))
+			return FALSE
 		// If the job isn't filled
 		if((job.current_positions < job.spawn_positions) || job.spawn_positions == -1)
 			Debug("DO pass, Player: [player], Level:[level], Job:[job.title]")
-			AssignRole(player, job.title)
+			AssignRole(player, job.title, pref_level = level)
 			return TRUE
+
+// -- Snowflaked proc which can be adjusted to more jobs than assistants if needed.
+/datum/controller/occupations/proc/CheckAssistantCount(var/mob/new_player/player, var/level)
+	//People who wants to be assistants, sure, go on.
+	var/count = 0
+	var/datum/job/officer = job_master.GetJob("Security Officer")
+	var/datum/job/warden = job_master.GetJob("Warden")
+	var/datum/job/hos = job_master.GetJob("Head of Security")
+	count = (officer.current_positions + warden.current_positions + hos.current_positions)
+	Debug("DO, Running Assistant Check 1 for [player]")
+	var/datum/job/master_assistant = GetJob("Assistant")
+	var/enough_sec = (master_assistant.current_positions + 1) > (config.assistantratio * count)
+	if(enough_sec && (count < 5))
+		Debug("AC1 failed, not enough sec.")
+		// Does he want anything else...?
+		for (var/datum/job/J in occupations)
+			if (player.client.prefs.GetJobDepartment(J, level) & J.flag)
+				Debug("AC1 failed, but other job slots for [player]. Adding them to the list of backup assistant slots.")
+				assistant_second_chance[player.ckey] = level
+				return FALSE
+		// If this failed, then we don't want anything else, so we'll for the second assistant check.
+		return FALSE
+
+	Debug("DO, AC1 end")
+	return TRUE
 
 /datum/controller/occupations/proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
 	if(!H)

@@ -61,15 +61,15 @@ var/list/all_rods = list()
 /obj/item/projectile/immovablerod/big
 	name = "\improper Immovable Pillar"
 	icon = 'icons/obj/objects_64x64.dmi'
-	pixel_x = -16
-	pixel_y = -16
+	pixel_x = -WORLD_ICON_SIZE/2
+	pixel_y = -WORLD_ICON_SIZE/2
 	clongSound = 'sound/effects/immovablerod_clong.ogg'
 
 /obj/item/projectile/immovablerod/hyper
 	name = "\improper Immovable Monolith"
 	icon = 'icons/obj/objects_96x96.dmi'
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE/4
+	pixel_y = -WORLD_ICON_SIZE/4
 	lock_angle = 1
 	clongSound = 'sound/effects/immovablerod_clong.ogg'
 

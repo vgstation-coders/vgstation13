@@ -8,21 +8,6 @@
 	name = "trader coin"
 	icon_state = "coin_mythril"
 
-/obj/item/weapon/storage/trader_marauder
-	name = "box of Marauder circuits"
-	desc = "All in one box!"
-	icon = 'icons/obj/storage/smallboxes.dmi'
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
-	icon_state = "box_of_doom"
-	item_state = "box_of_doom"
-
-/obj/item/weapon/storage/trader_marauder/New() //Because we're good jews, they won't be able to finish the marauder. The box is missing a circuit.
-	..()
-	new /obj/item/weapon/circuitboard/mecha/marauder(src)
-	new /obj/item/weapon/circuitboard/mecha/marauder/peripherals(src)
-	//new /obj/item/weapon/circuitboard/mecha/marauder/targeting(src)
-	new /obj/item/weapon/circuitboard/mecha/marauder/main(src)
-
 /obj/item/weapon/storage/trader_chemistry
 	name = "chemist's pallet"
 	desc = "Everything you need to make art."
@@ -93,14 +78,6 @@
 				new i(src)
 		else
 			new wonder_clothing(src)
-
-/*/obj/structure/cage/with_random_slime
-	..()
-
-	add_mob
-
-/mob/living/carbon/slime/proc/randomSlime()
-*/
 
 /area/vault/mecha_graveyard
 
@@ -455,84 +432,6 @@ var/global/list/alcatraz_stuff = list(
 	req_access = list(access_surgery)
 	mob_path = null
 	bonus_path = /mob/living/carbon/human/frankenstein
-
-/*/obj/item/device/law_planner                                                      Scapped, but maybe in the future
-	name = "law planning frame"
-	desc = "A large data pad with buttons for crimes. Used for planning a brig sentence."
-	w_class = W_CLASS_SMALL
-	origin_tech = Tc_PROGRAMMING + "=6"
-	icon = 'icons/obj/pda.dmi'
-	icon_state = "aicard"
-	item_state = "electronic"
-	req_access = list(access_brig)
-	var/announce = 1 //0 = Off, 1 = On select, 2 = On upload
-	var/start_timer = FALSE //If true, automatically start the timer on upload
-	var/datum/data/record/upload_crimes = null //If has DNA, will look for an associated datacore file and upload crimes
-	var/list/rapsheet = list()
-	var/total_time = 0
-
-	var/list/minor_crimes = list(
-							"RESISTING ARREST"=2,
-							"PETTY CRIME"=3,
-							"DRUGGING"=4,
-							"POSSESSION"=5,
-							"MANHUNT"=5,
-							"ESCAPE"=5,
-							"FRAMING"=5,
-							"WORKPLACE HAZARD"=5,
-							"ASSAULT"=6,
-							"POSS. WEAPON"=7,
-							"POSS. EXPLOSIVE"=8)
-	var/list/major_crimes = list(
-							"B&E RESTRICTED"=10,
-							"INTERFERENCE"=10,
-							"UNLAWFUL UPLOAD"=10,
-							"ABUSE OF POWER"=10,
-							"ASSAULT ON SEC"=10,
-							"MAJOR TRESPASS"=10,
-							"MAJOR B&E"=15,
-							"GRAND THEFT"=15)
-
-/obj/item/device/law_planner/proc/announce()
-	say(english_list(rapsheet))
-	say("[total_time] minutes.")
-
-/obj/item/device/law_planner/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
-	if(!proximity_flag)
-		to_chat(user, "<span class='warning'>You can't seem to reach \the [A].</span>")
-		return 0
-	if(!allowed)
-		to_chat(user, "<span class='warning'>You must wear your ID!</span>")
-		return 0
-	if(ishuman(A)&&!(A==user))
-		for(var/datum/data/record/E in data_core.security)
-			if(E.fields["name"] == A.name)
-				say("Verified. Found record match for [A].")
-				upload_crimes = E
-	if(istype(A,/obj/machinery/door_timer))
-		if(announce==2)
-			announce()
-		if(upload_crimes)
-			upload_crimes.fields["criminal"] = "Incarcerated"
-			var/counter = 1
-			while(upload_crimes.fields["com_[counter]"])
-				counter++
-			upload_crimes.fields["com_[counter]"] = text("Made by [user] (Automated) on [time2text(world.realtime, "DDD MMM DD")]<BR>[english_list(rapsheet)]")
-		var/obj/machinery/door_timer/D = A
-		if(D.timeleft())
-			//We're adding time
-			D.releasetime += total_time*60
-		else
-			//Setting time
-			D.timeset(total_time*60)
-		if(start_timer && !D.timing)
-			D.timer_start()
-		upload_crimes = null
-		rapsheet = null
-		total_time = null
-	else
-		..()*/
-
 
 /obj/item/weapon/boxofsnow
 	name = "box of winter"
