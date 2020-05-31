@@ -143,6 +143,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/window_flashing = 1
 	var/antag_objectives = 0 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
 	var/typing_indicator = 0
+	var/tg_redirect = 0
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -382,6 +383,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=antag_objectives'><b>[(antag_objectives) ? "Standard" : "Freeform"]</b></a><br>
 	<b>Say bubbles:</b>
 	<a href='?_src_=prefs;preference=typing_indicator'><b>[(typing_indicator) ? "Active" : "Inactive"]</b></a><br>
+	<b>TG Redirection:</b>
+	<a href='?_src_=prefs;preference=tg_redirect'><b>[(tg_redirect) ? "Active" : "Inactive"]</b></a><br>
   </div>
   <div id="rightDiv" style="width:50%;height:100%;float:right;">
 	<b>Randomized Character Slot:</b>
@@ -1509,6 +1512,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("typing_indicator")
 					typing_indicator = !typing_indicator
+
+				if("tg_redirect")
+					tg_redirect = !tg_redirect
 
 			if(user.client.holder)
 				switch(href_list["preference"])

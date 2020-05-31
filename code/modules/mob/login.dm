@@ -118,3 +118,7 @@
 
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = 0
+
+	if (client && client.prefs && client.prefs.tg_redirect)
+		src << link("byond://bagil.tgstation13.org:2337") //BYOND address
+		del client
