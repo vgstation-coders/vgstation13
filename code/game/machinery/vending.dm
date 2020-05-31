@@ -2900,12 +2900,12 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/pill/antitox = 10
 		)
 	prices = list(
-		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate = 8,
-		/obj/item/weapon/reagent_containers/food/snacks/danitos = 10,
-		/obj/item/weapon/reagent_containers/food/snacks/discountburger = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate = 3,
+		/obj/item/weapon/reagent_containers/food/snacks/danitos = 4,
+		/obj/item/weapon/reagent_containers/food/snacks/discountburger = 3,
 		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 2,
-		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 10,
-		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 8,
+		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 4,
+		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 4,
 		/obj/item/weapon/reagent_containers/pill/antitox = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/discount_sauce = 1
 		)
