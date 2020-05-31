@@ -40,9 +40,9 @@
 
 /datum/deadchat_listener/proc/deadchat_event(var/ckey, var/message)
 	return
-		
+
 var/list/global_deadchat_listeners
-		
+
 /mob/proc/say_dead(var/message)
 	var/name = src.real_name
 	var/alt_name = ""
@@ -70,7 +70,7 @@ var/list/global_deadchat_listeners
 	message = src.say_quote("\"[html_encode(message)]\"")
 	var/location_text = loc ? "[T.x],[T.y],[T.z]" : "nullspace"
 	log_say("[name]/[key_name(src)] (@[location_text]) Deadsay: [message]")
-	
+
 	var/rendered = null
 	for(var/mob/M in player_list)
 		rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a><span class='prefix'> DEAD:</span> <span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"//edited

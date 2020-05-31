@@ -34,3 +34,5 @@
 #define SECURITY_POSITIONS list("Head of Security", "Warden", "Detective", "Security Officer")
 
 #define ALWAYSTRUE 2
+
+#define APPEARANCE_UI_IGNORE_ALPHA			(RESET_COLOR|RESET_TRANSFORM|NO_CLIENT_COLOR|RESET_ALPHA|PIXEL_SCALE)

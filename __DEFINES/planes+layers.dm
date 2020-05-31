@@ -195,6 +195,7 @@ What is the naming convention for planes or layers?
 	#define ABOVE_SINGULO_LAYER 	7
 	#define GRAVITYGRID_LAYER 		8
 	#define SNOW_OVERLAY_LAYER		9
+	#define CHAT_LAYER 12.1
 
 #define GHOST_PLANE 			19			// Ghosts show up under lighting, HUD etc.
 

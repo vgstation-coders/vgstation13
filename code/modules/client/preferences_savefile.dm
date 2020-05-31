@@ -137,6 +137,9 @@
 	window_flashing = sanitize_integer(window_flashing, 0, 1, initial(window_flashing))
 	antag_objectives =  sanitize_integer(antag_objectives, 0, 1, initial(antag_objectives))
 	typing_indicator 	 =  sanitize_integer(typing_indicator, 0, 1, initial(typing_indicator))
+	chat_on_map 	 =  sanitize_integer(chat_on_map, 0, 1, initial(chat_on_map))
+	max_chat_length 	 =  sanitize_integer(max_chat_length, 0, CHAT_MESSAGE_MAX_LENGTH, initial(typing_indicator))
+	see_chat_non_mob 	 =  sanitize_integer(see_chat_non_mob, 0, 1, initial(see_chat_non_mob))
 	initialize_preferences()
 	return 1
 
@@ -218,15 +221,15 @@
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
-			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator)
+			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator, chat_on_map, max_chat_length, see_chat_non_mob) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
+			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator, chat_on_map, max_chat_length, see_chat_non_mob)
 			if(!q.Execute(db))
 				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
-			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=?, credits_volume=?, window_flashing=?, antag_objectives=? , typing_indicator=? WHERE ckey = ?",\
-			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator, ckey)
+			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=?, credits_volume=?, window_flashing=?, antag_objectives=? , typing_indicator=? , chat_on_map=? , max_chat_length=?, see_chat_non_mob=?, WHERE ckey = ?",\
+			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator, chat_on_map, max_chat_length, see_chat_non_mob, ckey)
 			if(!q.Execute(db))
 				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
@@ -276,6 +279,9 @@
 	S["window_flashing"]<< window_flashing
 	S["antag_objectives"]<< antag_objectives
 	S["typing_indicator"]<< typing_indicator
+	S["chat_on_map"]		<< chat_on_map
+	S["max_chat_length"]	<< max_chat_length
+	S["see_chat_non_mob"] 	<< see_chat_non_mob
 	return 1
 
 //saving volume changes

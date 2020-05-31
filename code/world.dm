@@ -1,5 +1,8 @@
 #define WORLD_ICON_SIZE 32
 #define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
+
+var/world_startup_time
+
 /world
 	mob = /mob/new_player
 	turf = /turf/space
@@ -7,11 +10,13 @@
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
-#define RECOMMENDED_VERSION 512
+
+#define RECOMMENDED_VERSION 513
 
 
 var/savefile/panicfile
 /world/New()
+	world_startup_time = world.timeofday
 	var/extools_path = system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
 	if(fexists(extools_path))
 		call(extools_path, "maptick_initialize")()
@@ -68,7 +73,7 @@ var/savefile/panicfile
  */
 #ifdef BORDER_USE_TURF_EXIT
 	if(byond_version < RECOMMENDED_VERSION)
-		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 512.1426")
+		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 513.")
 #endif
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
