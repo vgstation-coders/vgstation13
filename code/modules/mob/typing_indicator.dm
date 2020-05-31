@@ -44,12 +44,12 @@ I IS TYPIN'!'
 	set name = ".Say"
 	set hidden = 1
 	create_typing_indicator()
-	spawn (1 MINUTE)
+	spawn(1 MINUTES)
 		remove_typing_indicator()
 
 /mob/verb/me_wrapper()
 	set name = ".Me"
 	set hidden = 1
 	create_typing_indicator()
-	spawn (1 MINUTE)
+	spawn(1 MINUTES)
 		remove_typing_indicator()
