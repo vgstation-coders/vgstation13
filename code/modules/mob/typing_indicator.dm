@@ -43,19 +43,13 @@ I IS TYPIN'!'
 /mob/verb/say_wrapper()
 	set name = ".Say"
 	set hidden = 1
-
 	create_typing_indicator()
-	var/message = input("","say (text)") as text|null
-	remove_typing_indicator()
-	if(message)
-		say_verb(message)
+	spawn(1 MINUTES)
+		remove_typing_indicator()
 
 /mob/verb/me_wrapper()
 	set name = ".Me"
 	set hidden = 1
-
 	create_typing_indicator()
-	var/message = input("","me (text)") as text|null
-	remove_typing_indicator()
-	if(message)
-		me_verb(message)
+	spawn(1 MINUTES)
+		remove_typing_indicator()
