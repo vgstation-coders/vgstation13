@@ -546,3 +546,9 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 /client/proc/handle_hear_voice(var/mob/origin)
 	if(prefs.hear_voicesound)
 		mob.playsound_local(get_turf(origin), get_sfx("voice"),50,1)
+
+/client/verb/toggle_runechat_outlight()
+	set category = "OOC"
+	set name = "Toggle Runechat Outlines"
+	toggle_runechat_outlines = !toggle_runechat_outlines
+	to_chat(mob, "<span class='notice'>Runechat outlines are now [toggle_runechat_outlines ? "enabled" : "disabled"].</span>")

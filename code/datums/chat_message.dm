@@ -186,6 +186,9 @@
 	if (mode == SPEECH_MODE_WHISPER)
 		extra_classes |= "small"
 
+	if (client.toggle_runechat_outlines)
+		extra_classes |= "black_outline"
+
 	var/dist = get_dist(src, speaker)
 	switch (dist)
 		if (4 to 5)
