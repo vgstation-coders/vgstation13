@@ -1488,7 +1488,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 5,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola = 20,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola = 50,
 		/obj/item/weapon/storage/box/diy_soda = 45,
 		)
 
