@@ -6,7 +6,7 @@ sudo: false
 env:
   global:
   - BYOND_MAJOR="513"
-  - BYOND_MINOR="1524"
+  - BYOND_MINOR="1511"
   - ALL_MAPS="tgstation metaclub defficiency packedstation roidstation wheelstation nrvhorizon test_box test_tiny"
   - RUST_BACKTRACE="1"
   - RUST_TEST_THREADS=1
