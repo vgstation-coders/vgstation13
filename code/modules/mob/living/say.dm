@@ -263,7 +263,7 @@ var/list/department_radio_keys = list(
 
 	show_message(rendered_message, type, deaf_message, deaf_type, src)
 	if (client?.prefs.chat_on_map && stat != UNCONSCIOUS && (client.prefs.see_chat_non_mob || ismob(speech.speaker)) && !is_deaf())
-		create_chat_message(speech.speaker, speech.language, speech.message, speech.wrapper_classes, speech.mode)
+		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode)
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()

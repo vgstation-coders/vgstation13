@@ -40,7 +40,7 @@
 	. = ..()
 	if (!istype(target))
 		CRASH("Invalid target given for chatmessage")
-	if(owner.gcDestroyed || !istype(owner) || !owner.client)
+	if(!istype(owner) || owner.gcDestroyed || !owner.client)
 		stack_trace("/datum/chatmessage created with [isnull(owner) ? "null" : "invalid"] mob owner")
 		qdel(src)
 		return
@@ -170,23 +170,27 @@
   * * spans - Additional classes to be added to the message
   * * message_mode - Bitflags relating to the mode of the message
   */
-/mob/proc/create_chat_message(atom/movable/speaker, datum/language/message_language, raw_message, list/spans, message_mode)
-	// Ensure the list we are using, if present, is a copy so we don't modify the list provided to us
-	spans = spans?.Copy()
-
+/mob/proc/create_chat_message(atom/movable/speaker, datum/language/message_language, raw_message, mode)
+	var/extra_classes = list()
 	// Check for virtual speakers (aka hearing a message through a radio)
 	var/atom/movable/originalSpeaker = speaker
 	if (istype(speaker, /atom/movable/virtualspeaker))
 		var/atom/movable/virtualspeaker/v = speaker
 		speaker = v.source
-		spans |= "virtual-speaker"
+		extra_classes |= "virtual-speaker"
 
 	// Ignore virtual speaker (most often radio messages) from ourself
 	if (originalSpeaker != src && speaker == src)
 		return
 
+	if (mode == SPEECH_MODE_WHISPER)
+		extra_classes += "small"
+
+	if (!say_understands(speaker, message_language))
+		raw_message = message_language.scramble(raw_message)
+
 	// Display visual above source
-	new /datum/chatmessage(raw_message, speaker, src, spans)
+	new /datum/chatmessage(raw_message, speaker, src, extra_classes)
 
 // Tweak these defines to change the available color ranges
 #define CM_COLOR_SAT_MIN	0.6
@@ -209,7 +213,7 @@
 	var/static/rseed = rand(1,26)
 
 	// get hsl using the selected 6 characters of the md5 hash
-	var/hash = copytext(md5(name + world_startup_time), rseed, rseed + 6)
+	var/hash = copytext(md5(name + "[world_startup_time]"), rseed, rseed + 6)
 	var/h = hex2num(copytext(hash, 1, 3)) * (360 / 255)
 	var/s = (hex2num(copytext(hash, 3, 5)) >> 2) * ((CM_COLOR_SAT_MAX - CM_COLOR_SAT_MIN) / 63) + CM_COLOR_SAT_MIN
 	var/l = (hex2num(copytext(hash, 5, 7)) >> 2) * ((CM_COLOR_LUM_MAX - CM_COLOR_LUM_MIN) / 63) + CM_COLOR_LUM_MIN

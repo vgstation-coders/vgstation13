@@ -1,7 +1,3 @@
-#define SPEECH_MODE_SAY     1
-#define SPEECH_MODE_WHISPER 2
-#define SPEECH_MODE_FINAL   3
-
 /datum/speech
 	var/name         = "" // Displayed name
 	var/as_name      = "" // (as [as_name])
