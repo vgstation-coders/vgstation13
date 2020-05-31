@@ -5,7 +5,7 @@
 #define CHAT_MESSAGE_HEIGHT_DECAY	0.9 // Increase message decay based on the height of the message
 #define CHAT_MESSAGE_APPROX_LHEIGHT	11 // Approximate height in pixels of an 'average' line, used for height decay
 #define CHAT_MESSAGE_WIDTH			96 // pixels
-#define CHAT_MESSAGE_MAX_LENGTH		110 // characters
+#define CHAT_MESSAGE_MAX_LENGTH		68 // characters
 #define WXH_TO_HEIGHT(x)			text2num(copytext((x), findtextEx((x), "x") + 1)) // thanks lummox
 
 /**
@@ -184,7 +184,14 @@
 		return
 
 	if (mode == SPEECH_MODE_WHISPER)
-		extra_classes += "small"
+		extra_classes |= "small"
+
+	var/dist = get_dist(src, speaker)
+	switch (dist)
+		if (4 to 5)
+			extra_classes |= "small"
+		if (5 to 16)
+			extra_classes |= "very_small"
 
 	if (!say_understands(speaker, message_language))
 		raw_message = message_language.scramble(raw_message)
@@ -222,7 +229,7 @@
 	s *= clamp(sat_shift, 0, 1)
 	l *= clamp(lum_shift, 0, 1)
 
-	// convert to rgb
+	// convert to rgba
 	var/h_int = round(h/60) // mapping each section of H to 60 degree sections
 	var/c = (1 - abs(2 * l - 1)) * s
 	var/x = c * (1 - abs((h / 60) % 2 - 1))
@@ -232,14 +239,14 @@
 	m *= 255
 	switch(h_int)
 		if(0)
-			return "#[num2hex(c, 2)][num2hex(x, 2)][num2hex(m, 2)]"
+			return "#[num2hex(c, 2)][num2hex(x, 2)][num2hex(m, 2)]C8"
 		if(1)
-			return "#[num2hex(x, 2)][num2hex(c, 2)][num2hex(m, 2)]"
+			return "#[num2hex(x, 2)][num2hex(c, 2)][num2hex(m, 2)]C8"
 		if(2)
-			return "#[num2hex(m, 2)][num2hex(c, 2)][num2hex(x, 2)]"
+			return "#[num2hex(m, 2)][num2hex(c, 2)][num2hex(x, 2)]C8"
 		if(3)
-			return "#[num2hex(m, 2)][num2hex(x, 2)][num2hex(c, 2)]"
+			return "#[num2hex(m, 2)][num2hex(x, 2)][num2hex(c, 2)]C8"
 		if(4)
-			return "#[num2hex(x, 2)][num2hex(m, 2)][num2hex(c, 2)]"
+			return "#[num2hex(x, 2)][num2hex(m, 2)][num2hex(c, 2)]C8"
 		if(5)
-			return "#[num2hex(c, 2)][num2hex(m, 2)][num2hex(x, 2)]"
+			return "#[num2hex(c, 2)][num2hex(m, 2)][num2hex(x, 2)]C8"
