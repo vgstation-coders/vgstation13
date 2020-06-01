@@ -923,8 +923,6 @@
 			h.set_species("Human")
 			h.regenerate_icons()
 
-//Too CPU intensive when dozens of mobs are infected
-
 /datum/disease2/effect/emitter
 	name = "Afflictus Emittus"
 	desc = "The mutations produced by this symptom cause the infected's eyes to constantly regenerate and emit a straight beam."
