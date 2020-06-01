@@ -1664,34 +1664,34 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/Facing()
 	var/datum/listener
-	for(. in src.callOnFace)
-		listener = locate(.)
+	for(var/atomToCall in src.callOnFace)
+		listener = locate(atomToCall)
 		if(listener)
-			call(listener,src.callOnFace[.])(src)
+			call(listener,src.callOnFace[atomToCall])(src)
 		else
-			src.callOnFace -= .
+			src.callOnFace -= atomToCall
 
 
 //this proc allows to set up behaviours that occur the instant BEFORE the mob starts moving from a tile to the next
 /mob/proc/StartMoving()
 	var/datum/listener
-	for(var/procToCall in src.callOnStartMove)
-		listener = src.callOnStartMove[procToCall]
+	for(var/atomToCall in src.callOnStartMove)
+		listener = locate(atomToCall)
 		if(listener)
-			call(listener,src.callOnStartMove[procToCall])(src)
+			call(listener,src.callOnStartMove[atomToCall])(src)
 		else
-			src.callOnStartMove -= procToCall
+			src.callOnStartMove -= atomToCall
 
 
 //this proc allows to set up behaviours that occur the instant AFTER the mob finishes moving from a tile to the next
 /mob/proc/EndMoving()
 	var/datum/listener
-	for(var/procToCall in src.callOnEndMove)
-		listener = src.callOnEndMove[procToCall]
+	for(var/atomToCall in src.callOnEndMove)
+		listener = locate(atomToCall)
 		if(listener)
-			call(listener,src.callOnEndMove[procToCall])(src)
+			call(listener,src.callOnEndMove[atomToCall])(src)
 		else
-			src.callOnEndMove -= procToCall
+			src.callOnEndMove -= atomToCall
 
 
 /mob/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)

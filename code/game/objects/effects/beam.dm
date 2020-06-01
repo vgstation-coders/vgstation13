@@ -118,8 +118,10 @@
 			icon_state = "emitter_double_2_startend"
 	else if (next)
 		icon_state = "emitter_double_2"
-	else
+	else if (master && master.target)
 		icon_state = "emitter_double_2_end"
+	else
+		icon_state = "emitter_double_2_endalt"
 
 /obj/effect/beam/emitter/eyes/mouse/update_icon()
 	if(!master)
@@ -281,6 +283,7 @@
 		beam_testing("\ref[BM] - Disconnecting [BM.target]: target changed.")
 		BM.disconnect(0)
 	BM.target=AM
+	BM.update_end_icon()
 	if(istype(AM))
 		if (!AM.on_moved)
 			AM.on_moved = new("owner"=AM)
@@ -293,6 +296,11 @@
 	beam_testing("\ref[BM] - Connected to [AM]")
 	AM.beam_connect(BM)
 
+/obj/effect/beam/proc/update_end_icon()
+	if (next)
+		next.update_end_icon()
+	else
+		update_icon()
 
 /obj/effect/beam/blob_act()
 	// Act like Crossed.
