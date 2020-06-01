@@ -584,9 +584,7 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/enable(var/mob/living/mob)
 	if (istype(emitter))
-		emitter.callOnStartMove |= "\ref[src]"
 		emitter.callOnStartMove["\ref[src]"] = "update_emitter_start"
-		emitter.callOnEndMove |= "\ref[src]"
 		emitter.callOnEndMove["\ref[src]"] = "update_emitter_end"
 	update_emitter()
 

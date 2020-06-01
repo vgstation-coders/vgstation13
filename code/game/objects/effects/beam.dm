@@ -92,7 +92,7 @@
 		var/old_dir = dir
 		var/old_steps = steps
 		spawn(5)
-			if (src && loc && loc == T && dir == old_dir && steps == old_steps)
+			if (!gcDestroyed && loc == T && dir == old_dir && steps == old_steps)
 				charge_up()
 
 /obj/effect/beam/emitter/eyes/proc/charge_up()
@@ -240,7 +240,6 @@
 	if(!OB)
 		OB = src
 	src._re_emit = 0
-	//returnToPool(src)
 	OB.connect_to(AM)
 	OB.update_icon()
 	returnToPool(src)
@@ -339,7 +338,7 @@
 		beam_testing(" returning (!AM || !master)")
 		return
 
-	if(istype(AM, /obj/effect/beam) || (!AM.density && !istype(AM, /obj/effect/blob)))// || (istype(AM, /obj/machinery/door) && !AM.opacity)
+	if(istype(AM, /obj/effect/beam) || (!AM.density && !istype(AM, /obj/effect/blob)))
 		beam_testing(" returning (is beam or not dense)")
 		return
 
@@ -357,7 +356,6 @@
 	src._re_emit = 0
 	returnToPool(src)
 	OB.connect_to(AM)
-	//returnToPool(src)
 
 /obj/effect/beam/proc/HasSource(var/atom/source)
 	return source in sources

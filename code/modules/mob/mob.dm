@@ -1631,73 +1631,36 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/reset_layer()
 	return
 
-/mob/verb/eastface()
-	set hidden = 1
-	if(loc && loc.relayface(src, EAST))
+/mob/proc/directionface(var/direction)
+	if(loc && loc.relayface(src, direction))
 		return 1
-	if(locked_to && locked_to.relayface(src, EAST))
+	if(locked_to && locked_to.relayface(src, direction))
 		return 1
 	if(!canface())
 		return 0
-	if (dir!=EAST)
+	if (dir!=direction)
 		StartMoving()
-	dir = EAST
+	dir = direction
 	Facing()
 	EndMoving()
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
+/mob/verb/eastface()
+	set hidden = 1
+	return directionface(EAST)
 
 /mob/verb/westface()
 	set hidden = 1
-	if(loc && loc.relayface(src, WEST))
-		return 1
-	if(locked_to && locked_to.relayface(src, WEST))
-		return 1
-	if(!canface())
-		return 0
-	if (dir!=WEST)
-		StartMoving()
-	dir = WEST
-	Facing()
-	EndMoving()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(WEST)
 
 /mob/verb/northface()
 	set hidden = 1
-	if(loc && loc.relayface(src, NORTH))
-		return 1
-	if(locked_to && locked_to.relayface(src, NORTH))
-		return 1
-	if(!canface())
-		return 0
-	if (dir!=NORTH)
-		StartMoving()
-	dir = NORTH
-	Facing()
-	EndMoving()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(NORTH)
 
 /mob/verb/southface()
 	set hidden = 1
-	if(loc && loc.relayface(src, SOUTH))
-		return 1
-	if(locked_to && locked_to.relayface(src, SOUTH))
-		return 1
-	if(!canface())
-		return 0
-	if (dir!=SOUTH)
-		StartMoving()
-	dir = SOUTH
-	Facing()
-	EndMoving()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(SOUTH)
 
 /mob/proc/Facing()
 	var/datum/listener
@@ -1709,23 +1672,26 @@ Use this proc preferably at the end of an equipment loadout
 			src.callOnFace -= .
 
 
+//this proc allows to set up behaviours that occur the instant BEFORE the mob starts moving from a tile to the next
 /mob/proc/StartMoving()
 	var/datum/listener
-	for(. in src.callOnStartMove)
-		listener = locate(.)
+	for(var/procToCall in src.callOnStartMove)
+		listener = src.callOnStartMove[procToCall]
 		if(listener)
-			call(listener,src.callOnStartMove[.])(src)
+			call(listener,src.callOnStartMove[procToCall])(src)
 		else
-			src.callOnStartMove -= .
+			src.callOnStartMove -= procToCall
 
+
+//this proc allows to set up behaviours that occur the instant AFTER the mob finishes moving from a tile to the next
 /mob/proc/EndMoving()
 	var/datum/listener
-	for(. in src.callOnEndMove)
-		listener = locate(.)
+	for(var/procToCall in src.callOnEndMove)
+		listener = src.callOnEndMove[procToCall]
 		if(listener)
-			call(listener,src.callOnEndMove[.])(src)
+			call(listener,src.callOnEndMove[procToCall])(src)
 		else
-			src.callOnEndMove -= .
+			src.callOnEndMove -= procToCall
 
 
 /mob/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)

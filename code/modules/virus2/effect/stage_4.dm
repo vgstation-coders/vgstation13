@@ -945,9 +945,7 @@
 /datum/disease2/effect/emitter/activate(var/mob/living/mob)
 	if (istype(mob) && !emitter)
 		emitter = mob
-		emitter.callOnStartMove |= "\ref[src]"
 		emitter.callOnStartMove["\ref[src]"] = "update_emitter_start"
-		emitter.callOnEndMove |= "\ref[src]"
 		emitter.callOnEndMove["\ref[src]"] = "update_emitter_end"
 
 	if(ishuman(mob))
