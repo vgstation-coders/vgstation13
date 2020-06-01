@@ -514,11 +514,16 @@
 
 		if(!AN && !open && !infected && !e_cancer & !imp)
 			AN = "None:"
-		if(!(e.status & ORGAN_DESTROYED))
-			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured][bone_strengthened]</td>"
+		if(e.status & ORGAN_DESTROYED)
+			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td><font color='red'>Not Found</font></td>"
 		else
-			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td>Not Found</td>"
+			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured][bone_strengthened]</td>"
 		dat += "</tr>"
+
+	var/list/organs_to_list = list(
+	/datum/organ/internal/lungs,/datum/organ/internal/liver,
+	/datum/organ/internal/kidney,/datum/organ/internal/brain,
+	/datum/organ/internal/appendix,/datum/organ/internal/eyes)
 
 	for(var/datum/organ/internal/i in occ["internal_organs"])
 		var/mech = ""
@@ -554,8 +559,15 @@
 				i_cancer = "Metastatic Tumor:"
 
 		dat += "<tr>"
-		dat += "<td>[i.name]</td><td>N/A</td><td>[i.damage]</td><td>[infection][i_cancer][mech]</td><td></td>"
+		if(i.status & ORGAN_CUT_AWAY)
+			dat += "<td>[i.name]</td><td>-</td><td>-</td><td><font color='red'>Surgically Detached</font></td>"
+		else
+			dat += "<td>[i.name]</td><td>N/A</td><td>[i.damage]</td><td>[infection][i_cancer][mech]</td><td></td>"
 		dat += "</tr>"
+		organs_to_list -= i.type
+	for(var/path in organs_to_list)
+		var/datum/organ/internal/i = path
+		dat += "<td>[initial(i.name)]</td><td>-</td><td>-</td><td><font color='red'>Missing</font></td>"
 	dat += "</table>"
 
 	if(occ["sdisabilities"] & BLIND)
