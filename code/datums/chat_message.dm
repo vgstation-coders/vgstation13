@@ -2,7 +2,7 @@
 #define CHAT_MESSAGE_LIFESPAN		5 SECONDS
 #define CHAT_MESSAGE_EOL_FADE		0.7 SECONDS
 #define CHAT_MESSAGE_EXP_DECAY		0.7 // Messages decay at pow(factor, idx in stack)
-#define CHAT_MESSAGE_HEIGHT_DECAY	0.9 // Increase message decay based on the height of the message
+#define CHAT_MESSAGE_HEIGHT_DECAY	0.6 // Increase message decay based on the height of the message
 #define CHAT_MESSAGE_APPROX_LHEIGHT	11 // Approximate height in pixels of an 'average' line, used for height decay
 #define CHAT_MESSAGE_WIDTH			96 // pixels
 #define CHAT_MESSAGE_MAX_LENGTH		68 // characters
@@ -117,7 +117,7 @@
 	if (owned_by.seen_messages)
 		var/idx = 1
 		var/combined_height = approx_lines
-		for(var/msg in owned_by.seen_messages[message_loc])
+		for(var/msg in owned_by.seen_messages)
 			var/datum/chatmessage/m = msg
 			animate(m.message, pixel_y = m.message.pixel_y + mheight, time = CHAT_MESSAGE_SPAWN_TIME)
 			combined_height += m.approx_lines
@@ -140,7 +140,7 @@
 	message.maptext = complete_text
 
 	// View the message
-	owned_by.seen_messages.Insert(message_loc, src)
+	owned_by.seen_messages.Add(src)
 	owned_by.images |= message
 	animate(message, alpha = 255, time = CHAT_MESSAGE_SPAWN_TIME)
 
@@ -156,6 +156,8 @@
   * Applies final animations to overlay CHAT_MESSAGE_EOL_FADE deciseconds prior to message deletion
   */
 /datum/chatmessage/proc/end_of_life(fadetime = CHAT_MESSAGE_EOL_FADE)
+	if (gcDestroyed)
+		return
 	animate(message, alpha = 0, time = fadetime, flags = ANIMATION_PARALLEL)
 	spawn(fadetime)
 		qdel(src)
@@ -172,15 +174,9 @@
   */
 /mob/proc/create_chat_message(atom/movable/speaker, datum/language/message_language, raw_message, mode)
 	var/extra_classes = list()
-	// Check for virtual speakers (aka hearing a message through a radio)
-	var/atom/movable/originalSpeaker = speaker
-	if (istype(speaker, /atom/movable/virtualspeaker))
-		var/atom/movable/virtualspeaker/v = speaker
-		speaker = v.source
-		extra_classes |= "virtual-speaker"
 
-	// Ignore virtual speaker (most often radio messages) from ourself
-	if (originalSpeaker != src && speaker == src)
+	// Check for virtual speakers (aka hearing a message through a radio)
+	if (istype(speaker, /atom/movable/virtualspeaker))
 		return
 
 	if (mode == SPEECH_MODE_WHISPER)
