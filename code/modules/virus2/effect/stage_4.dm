@@ -950,17 +950,23 @@
 
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
-		if (count == 0)
-			old_r_eyes = H.my_appearance.r_eyes
-			old_g_eyes = H.my_appearance.g_eyes
-			old_b_eyes = H.my_appearance.b_eyes
-
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+
+		if (count == 0)
+			if (E && !(E.status & ORGAN_CUT_AWAY))//if we have eyes, let's memorize their color so we can get it back once cured
+				old_r_eyes = H.my_appearance.r_eyes
+				old_g_eyes = H.my_appearance.g_eyes
+				old_b_eyes = H.my_appearance.b_eyes
+			else//otherwise you get to keep those bluish grey eyes if the laser fired at least once.
+				old_r_eyes = 183
+				old_g_eyes = 212
+				old_b_eyes = 224
+
 		if (!E)
 			//no eyes? no problem, we'll get you a new pair!
 			var/eye_type = H.species.has_organ["eyes"]
 			E = new eye_type(H)
-			E.damage = E.min_broken_damage + 1
+			E.damage = E.min_broken_damage + 5
 			H.internal_organs_by_name["eyes"] = E
 			to_chat(mob, "<span class='warning'>You feel your eyes regrow inside their sockets.</span>")
 			H.my_appearance.r_eyes = 183
@@ -974,7 +980,7 @@
 			E.remove(mob)
 		else if (E.status & ORGAN_CUT_AWAY)
 			E.status = 0
-			E.damage = E.min_broken_damage + 1
+			E.damage = E.min_broken_damage + 5
 			to_chat(mob, "<span class='warning'>You feel your eyes regrow inside their sockets.</span>")
 			H.my_appearance.r_eyes = 183
 			H.my_appearance.g_eyes = 212
@@ -1023,10 +1029,13 @@
 		var/mob/living/carbon/human/H = emitter
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 		if (!E)//no eyes
+			announced = FALSE
 			return 0
 		if (E.robotic)//we need organic eyes
+			announced = FALSE
 			return 0
 		if (E.status & ORGAN_CUT_AWAY)//eyes removed
+			announced = FALSE
 			return 0
 		if (E.damage >= E.min_broken_damage)//eyes too damaged
 			return 0
