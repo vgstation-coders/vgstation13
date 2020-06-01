@@ -362,7 +362,7 @@
 			H.my_appearance.g_eyes ? H.my_appearance.g_eyes : 0,
 			H.my_appearance.b_eyes ? H.my_appearance.b_eyes : 0
 			)
-		var/image/I = image(icon,src,"pupils")
+		var/image/I = image(icon,src,"[icon_state]-pupils")
 		I.color = "#[num2hex(eye_colour[1])][num2hex(eye_colour[2])][num2hex(eye_colour[3])]"
 		overlays += I
 		// Leave bloody red pits behind!
