@@ -987,10 +987,10 @@
 			E.damage = max(0,E.damage - multiplier * 5)
 			H.eye_blurry = max(H.eye_blurry - multiplier * 5, 0)
 			H.eye_blind = max(H.eye_blind - multiplier * 5, 0)
-			target.sdisabilities &= ~BLIND
+			H.sdisabilities &= ~BLIND
 		else
-			target.disabilities &= ~NEARSIGHTED
-			target.sdisabilities &= ~BLIND
+			H.disabilities &= ~NEARSIGHTED
+			H.sdisabilities &= ~BLIND
 
 	update_emitter()
 
