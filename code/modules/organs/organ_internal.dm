@@ -19,7 +19,7 @@
 
 
 /datum/organ/internal/Destroy()
-	if(owner && owner.internal_organs.Find(src))
+	if(owner && (src in owner.internal_organs))
 		owner.internal_organs -= src
 		owner.internal_organs_by_name -= organ_type
 		var/datum/organ/external/E = owner.organs_by_name[parent_organ] //Fuck this setup
