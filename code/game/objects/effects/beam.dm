@@ -29,8 +29,15 @@
 	anchored = 1
 	density = 0
 
+	layer = ABOVE_LIGHTING_LAYER
+	plane = LIGHTING_PLANE
+
+	animate_movement = 0
+
 	var/def_zone=""
-	var/damage=0
+	var/charged_up = FALSE
+	var/base_damage = 0//The damage dealt per step when not charged_up
+	var/full_damage = 0//The damage dealth when charged_up
 	var/damage_type=BURN
 
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
@@ -49,6 +56,7 @@
 
 	var/max_range = INFINITY
 
+
 	var/bumped=0
 	var/stepped=0
 	var/steps=0 // How many steps we've made from the emitter.  Used in infinite loop avoidance.
@@ -61,10 +69,92 @@
 	var/list/sources = list() // Whoever served in emitting this beam. Used in prisms to prevent infinite loops.
 	var/_re_emit = 1 // Re-Emit from master when deleted? Set to 0 to not re-emit.
 
-/obj/effect/beam/resetVariables()
-	..("sources", "children", args)
+/obj/effect/beam/emitter/eyes
+	icon_state = "emitter_double_1"
+	base_state = "emitter_double_1"
+	base_damage = 1
+	full_damage = 30
+	max_range = 6
+
+/obj/effect/beam/emitter/eyes/mouse
+	icon_state = "emitter_double_mouse"
+	base_state = "emitter_double_mouse"
+	base_damage = 1
+	full_damage = 1
+	max_range = 4
+
+/obj/effect/beam/emitter/eyes/emit(var/spawn_by, var/_range=-1,var/charged = FALSE)
+	..()
+	if (charged)
+		charge_up()
+	else
+		var/turf/T = loc
+		var/old_dir = dir
+		var/old_steps = steps
+		spawn(5)
+			if (src && loc && loc == T && dir == old_dir && steps == old_steps)
+				charge_up()
+
+/obj/effect/beam/emitter/eyes/proc/charge_up()
+	if (!charged_up)
+		charged_up = TRUE
+		update_icon()
+
+
+/obj/effect/beam/emitter/eyes/update_icon()
+	if(!master)
+		invisibility = 0
+	if(!charged_up)
+		if(!master)
+			icon_state = "emitter_double_1_start"
+		else if (next)
+			icon_state = "emitter_double_1"
+		else
+			icon_state = "emitter_double_1_end"
+	else if(!master)
+		if (next)
+			icon_state = "emitter_double_2_start"
+		else
+			icon_state = "emitter_double_2_startend"
+	else if (next)
+		icon_state = "emitter_double_2"
+	else
+		icon_state = "emitter_double_2_end"
+
+/obj/effect/beam/emitter/eyes/mouse/update_icon()
+	if(!master)
+		invisibility = 0
+	if(!master)
+		icon_state = "emitter_double_mouse_start"
+	else if (next)
+		icon_state = "emitter_double_mouse"
+	else
+		icon_state = "emitter_double_mouse_end"
+
+/obj/effect/beam/emitter/resetVariables()
+	..("sources", "children", "stepped", "master", "pass_flags", "next", "bumped", "steps", "am_connector", "targetMoveKey", "targetDestroyKey", "targetDensityKey", "targetContactLoc", "locDensity", args)
 	children = list()
 	sources = list()
+	next = null
+	target = null
+	master = null
+	bumped=0
+	stepped=0
+	steps=0
+	am_connector=0
+	targetMoveKey=null
+	targetDestroyKey=null
+	targetDensityKey=null
+	targetContactLoc=null
+	locDensity=null
+	icon_state = base_state
+	charged_up = FALSE
+
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
+
+/obj/effect/beam/emitter/eyes/resetVariables()
+	..("base_damage","full_damage", args)
+
 
 // Listener for /atom/movable/on_moved
 /obj/effect/beam/proc/target_moved(var/list/args)
@@ -150,8 +240,10 @@
 	if(!OB)
 		OB = src
 	src._re_emit = 0
-	qdel(src)
+	//returnToPool(src)
 	OB.connect_to(AM)
+	OB.update_icon()
+	returnToPool(src)
 	//BEAM_DEL(src)
 
 
@@ -167,7 +259,13 @@
 	return src
 
 /obj/effect/beam/proc/get_damage()
-	return damage
+	return base_damage
+
+/obj/effect/beam/emitter/eyes/get_damage()
+	if (charged_up)
+		return full_damage
+	else
+		return base_damage
 
 /obj/effect/beam/proc/get_machine_underlay(var/mdir)
 	return image(icon=icon, icon_state="[icon_state] underlay", dir=mdir)
@@ -185,8 +283,12 @@
 		BM.disconnect(0)
 	BM.target=AM
 	if(istype(AM))
+		if (!AM.on_moved)
+			AM.on_moved = new("owner"=AM)
 		BM.targetMoveKey    = AM.on_moved.Add(BM,    "target_moved")
-	BM.targetDestroyKey = AM.on_destroyed.Add(BM,"target_destroyed")
+		if (!AM.on_destroyed)
+			AM.on_destroyed = new("owner"=AM)
+		BM.targetDestroyKey = AM.on_destroyed.Add(BM,"target_destroyed")
 	BM.targetDensityKey = AM.on_density_change.Add(BM,"target_density_change")
 	BM.targetContactLoc = AM.loc
 	beam_testing("\ref[BM] - Connected to [AM]")
@@ -208,15 +310,19 @@
 			//BEAM_DEL(child)
 			children -= child
 			child._re_emit = 0
-			qdel(child)
+			returnToPool(child)
 	children.len = 0
 
 /obj/effect/beam/proc/disconnect(var/re_emit=1)
 	var/obj/effect/beam/_master=get_master()
 	if(_master.target)
-		if(ismovable(_master.target) && _master.target.on_moved)
+		if(ismovable(_master.target))
+			if (!_master.target.on_moved)
+				_master.target.on_moved = new("owner"=_master.target)
 			_master.target.on_moved.Remove(_master.targetMoveKey)
-		_master.target.on_destroyed.Remove(_master.targetDestroyKey)
+			if (!_master.target.on_destroyed)
+				_master.target.on_destroyed = new("owner"=_master.target)
+			_master.target.on_destroyed.Remove(_master.targetDestroyKey)
 		_master.target.beam_disconnect(_master)
 		_master.target=null
 		_master.targetMoveKey=null
@@ -225,6 +331,7 @@
 		//	BEAM_DEL(_master.next)
 		if(re_emit)
 			_master.emit(sources)
+		_master.update_icon()
 
 /obj/effect/beam/Crossed(atom/movable/AM as mob|obj)
 	beam_testing("Crossed by [AM]")
@@ -232,8 +339,11 @@
 		beam_testing(" returning (!AM || !master)")
 		return
 
-	if(istype(AM, /obj/effect/beam) || (!AM.density && !istype(AM, /obj/effect/blob)))
+	if(istype(AM, /obj/effect/beam) || (!AM.density && !istype(AM, /obj/effect/blob)))// || (istype(AM, /obj/machinery/door) && !AM.opacity)
 		beam_testing(" returning (is beam or not dense)")
+		return
+
+	if (!ismob(AM) && AM.Cross(src))//are we sure we're supposed to bump into that? (unless we do that beams randomly bump into transparent airlocks and windows)
 		return
 
 	if(master.target)
@@ -245,8 +355,9 @@
 	if(!OB)
 		OB = src
 	src._re_emit = 0
-	qdel(src)
+	returnToPool(src)
 	OB.connect_to(AM)
+	//returnToPool(src)
 
 /obj/effect/beam/proc/HasSource(var/atom/source)
 	return source in sources
@@ -254,7 +365,7 @@
 /**
  * Create and emit the beam in the desired direction.
  */
-/obj/effect/beam/proc/emit(var/spawn_by, var/_range=-1)
+/obj/effect/beam/proc/emit(var/spawn_by, var/_range=-1,var/charged = FALSE)
 	if(istype(spawn_by,/list))
 		sources=spawn_by
 	else
@@ -276,7 +387,7 @@
 		//BEAM_DEL(src)
 		beam_testing("\ref[src] no loc")
 		src._re_emit = 0
-		qdel(src)
+		returnToPool(src)
 		return
 
 	var/turf/T = get_turf(src)
@@ -287,7 +398,7 @@
 		//BEAM_DEL(src)
 		beam_testing("\ref[src] end of world")
 		src._re_emit = 0
-		qdel(src)
+		returnToPool(src)
 		return
 
 	// If we're master, we're actually invisible, and we're on the same tile as the machine.
@@ -297,6 +408,12 @@
 		stepped=1
 		invisibility=101
 
+	if (master && stepped)//fixes stacking beams due to pooling
+		for(var/obj/effect/beam/B in loc.contents)
+			if (B != src)
+				stepped = FALSE
+				break
+
 	if(!stepped)
 		// Reset bumped
 		setDensity(TRUE)
@@ -304,12 +421,13 @@
 
 		step(src, dir) // Move.
 
+
 		setDensity(FALSE)
 		if(bumped)
 			beam_testing("\ref[src] Bumped")
 			//BEAM_DEL(src)
 			src._re_emit = 0
-			qdel(src)
+			returnToPool(src)
 			return
 
 		stepped=1
@@ -318,19 +436,19 @@
 			beam_testing("\ref[src] ran out")
 			//BEAM_DEL(src)
 			src._re_emit = 0
-			qdel(src)
+			returnToPool(src)
 			return
-
-	update_icon()
 
 	next = spawn_child()
 	if(next)
-		next.emit(sources,_range)
+		var/child_charged = charged
+		next.emit(sources,_range,charged = child_charged)
+	update_icon()
 
 /obj/effect/beam/proc/spawn_child()
 	if(steps >= BEAM_MAX_STEPS)
 		return null // NOPE
-	var/obj/effect/beam/B = new type(src.loc)
+	var/obj/effect/beam/B = getFromPool(type,src.loc)
 	B.steps = src.steps+1
 	B.dir=dir
 	B.master = get_master()
@@ -349,7 +467,6 @@
 	return 1
 
 /obj/effect/beam/emitter/Destroy()
-	..()
 	if(sources && sources.len)
 		for(var/obj/machinery/power/emitter/E in sources)
 			if(E.beam == src)
@@ -361,6 +478,7 @@
 			for(var/thing in M.emitted_beams)
 				if(thing == src)
 					M.emitted_beams -= thing
+	..()
 
 /obj/effect/beam/Destroy()
 	var/turf/T = get_turf(src)
@@ -404,9 +522,11 @@
 		for(var/obj/effect/beam/B in master.children)
 			if(B.next == ourselves)
 				B.next = null
+				B.update_icon()
 
 		if(master.next == ourselves)
 			master.next = null
+			master.update_icon()
 
 		master.children.Remove(ourselves)
 		master = null
@@ -416,8 +536,9 @@
 	if(next)
 		//BEAM_DEL(next)
 		next._re_emit = 0
-		qdel(next)
+		returnToPool(next)
 		next=null
+	stepped = 0
 	..()
 
 	if(ourselves._re_emit && ourmaster._re_emit)

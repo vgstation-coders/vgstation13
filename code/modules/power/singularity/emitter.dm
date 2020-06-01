@@ -86,13 +86,13 @@
 
 	if(active && powered)
 		if(!beam)
-			beam = new (loc)
+			beam = getFromPool(/obj/effect/beam/emitter, loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
 	else
 		if(beam)
 			beam._re_emit = 0
-			qdel(beam)
+			returnToPool(beam)
 			beam = null
 
 /obj/machinery/power/emitter/receive_signal(datum/signal/signal)
@@ -127,7 +127,7 @@
 
 /obj/machinery/power/emitter/Destroy()
 
-	qdel(beam)
+	returnToPool(beam)
 	message_admins("Emitter deleted at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 	log_game("Emitter deleted at ([x],[y],[z])")
 	investigation_log(I_SINGULO,"<font color='red'>deleted</font> at ([x],[y],[z])")
@@ -294,9 +294,9 @@
 	icon_state = "emitter_1"
 	anchored = 1.0
 	flags = 0
-	damage = 30
+	base_damage = 30
+	full_damage = 30
 	damage_type = BURN
-	plane = EFFECTS_PLANE
 
 	var/base_state = "emitter"
 	var/power = 1
@@ -334,7 +334,7 @@
 	return image(icon = icon, icon_state = "[base_state]_[visible_power] underlay", dir = mdir)
 
 /obj/effect/beam/emitter/get_damage()
-	return damage * power
+	return base_damage * power
 
 /obj/machinery/power/emitter/canClone(var/obj/machinery/power/emitter/O)
 	return istype(O)

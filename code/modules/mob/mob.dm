@@ -1639,8 +1639,11 @@ Use this proc preferably at the end of an equipment loadout
 		return 1
 	if(!canface())
 		return 0
+	if (dir!=EAST)
+		StartMoving()
 	dir = EAST
 	Facing()
+	EndMoving()
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1653,8 +1656,11 @@ Use this proc preferably at the end of an equipment loadout
 		return 1
 	if(!canface())
 		return 0
+	if (dir!=WEST)
+		StartMoving()
 	dir = WEST
 	Facing()
+	EndMoving()
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1667,8 +1673,11 @@ Use this proc preferably at the end of an equipment loadout
 		return 1
 	if(!canface())
 		return 0
+	if (dir!=NORTH)
+		StartMoving()
 	dir = NORTH
 	Facing()
+	EndMoving()
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1681,8 +1690,11 @@ Use this proc preferably at the end of an equipment loadout
 		return 1
 	if(!canface())
 		return 0
+	if (dir!=SOUTH)
+		StartMoving()
 	dir = SOUTH
 	Facing()
+	EndMoving()
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1696,6 +1708,30 @@ Use this proc preferably at the end of an equipment loadout
 		else
 			src.callOnFace -= .
 
+
+/mob/proc/StartMoving()
+	var/datum/listener
+	for(. in src.callOnStartMove)
+		listener = locate(.)
+		if(listener)
+			call(listener,src.callOnStartMove[.])(src)
+		else
+			src.callOnStartMove -= .
+
+/mob/proc/EndMoving()
+	var/datum/listener
+	for(. in src.callOnEndMove)
+		listener = locate(.)
+		if(listener)
+			call(listener,src.callOnEndMove[.])(src)
+		else
+			src.callOnEndMove -= .
+
+
+/mob/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+	StartMoving()
+	..()
+	EndMoving()
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
 	return 0
