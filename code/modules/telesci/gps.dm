@@ -184,6 +184,7 @@ var/list/SPS_list = list()
 	send_signal(wearer, src, "SPS [gpstag]: Code Yellow")
 
 /obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code)
+	var/boop = FALSE
 	var/turf/pos = get_turf(SPS)
 	var/x0 = pos.x-WORLD_X_OFFSET[pos.z]
 	var/y0 = pos.x-WORLD_Y_OFFSET[pos.z]
@@ -197,5 +198,9 @@ var/list/SPS_list = list()
 		for(var/obj/machinery/computer/security_alerts/receiver in security_alerts_computers)
 			if(receiver && !receiver.stat)
 				receiver.receive_alert(x0, y0, z0, alerttype, alertarea, alerttime, verbose)
+				boop = TRUE
+	if (boop)
+		playsound(src,'sound/machines/radioboop.ogg',40,1)
+			
 		
 		
