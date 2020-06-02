@@ -969,7 +969,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 
 /obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range)
 	..(A)
-	create_reagents(10)
+	create_reagents(20)
 	if(t_range)
 		travel_range = t_range
 	else
@@ -983,15 +983,15 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 /obj/item/projectile/beam/liquid_stream/on_hit(var/atom/A, var/blocked = 0)
 	if(reagents.total_volume)
 		for(var/datum/reagent/R in reagents.reagent_list)
-			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))
+			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))//so here we're just doubling our quantity of reagents from 10 to 20
 		if(istype(A, /mob))
 			var/splash_verb = pick("douses","completely soaks","drenches","splashes")
 			A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
 								"<span class='warning'>\The [src] [splash_verb] you!</span>")
-			splash_sub(reagents, get_turf(A), reagents.total_volume/2)
+			splash_sub(reagents, get_turf(A), reagents.total_volume/2)//then we splash 10 of those on the turf in front (or under in case of mobs) of the hit atom
 		else
 			splash_sub(reagents, get_turf(src), reagents.total_volume/2)
-		splash_sub(reagents, A, reagents.total_volume)
+		splash_sub(reagents, A, reagents.total_volume)//and 10 more on the atom itself
 		has_splashed = TRUE
 		return 1
 
