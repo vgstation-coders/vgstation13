@@ -175,13 +175,13 @@ var/list/SPS_list = list()
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
 	if(!transmitting)
 		return
-	send_signal(wearer, src, "SPS [gpstag]: Code Red.")
+	send_signal(wearer, src, "SPS [gpstag]: Code Red")
 
 /obj/item/device/gps/secure/stripped(mob/wearer, mob/stripper)
 	if(!transmitting)
 		return
 	. = ..()
-	send_signal(wearer, src, "SPS [gpstag]: Code Yellow.")
+	send_signal(wearer, src, "SPS [gpstag]: Code Yellow")
 
 /obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code)
 	var/turf/pos = get_turf(SPS)

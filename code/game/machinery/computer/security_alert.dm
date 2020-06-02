@@ -122,4 +122,4 @@ TODO: literally every alarm but SPS alarms.
 	nanomanager.update_uis(src)
 
 /obj/machinery/computer/security_alerts/say_quote(text)
-	return "reports, [text]"
+	return "reports, [text]."
