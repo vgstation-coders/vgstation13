@@ -17,7 +17,6 @@
 	var/obj/machinery/telepad/telepad = null
 
 	// VARIABLES //
-	var/teles_left       // How many teleports left until it becomes uncalibrated
 	var/x_off            // X offset
 	var/y_off            // Y offset
 	var/x_player_off = 0 // x offset set by player
@@ -34,6 +33,7 @@
 	var/teleport_cell_usage=1000 // 100% of a standard cell
 	processing=1
 	var/id_tag = "teleconsole"
+	mech_flags = MECH_SCAN_FAIL
 
 
 	light_color = LIGHT_COLOR_BLUE
@@ -47,7 +47,6 @@
 
 /obj/machinery/computer/telescience/New()
 	..()
-	teles_left = rand(12,14)
 	x_off = rand(-10,10)
 	y_off = rand(-10,10)
 	x_player_off = 0
@@ -150,6 +149,17 @@
 	if(!isAdminGhost(user) && (user.stat || user.restrained()))
 		return
 
+	var/requires_recalibration=null
+	if(telepad)
+		if(!telepad.teles_left && !telepad.infinite_teles)
+			requires_recalibration = "REQUIRED"
+		else if(telepad.teles_left && !telepad.infinite_teles)
+			requires_recalibration = "NOT REQUIRED"
+		else
+			requires_recalibration = "NEVER REQUIRED"
+	else
+		requires_recalibration = "ERROR - TELEPAD NOT FOUND"
+
 	var/list/cell_data=null
 	if(cell)
 		cell_data = list(
@@ -162,7 +172,8 @@
 		"coordx" = x_co,
 		"coordy" = y_co,
 		"coordz" = z_co,
-		"cell" = cell_data
+		"cell" = cell_data,
+		"recalibration_status" = requires_recalibration
 	)
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -354,8 +365,9 @@ var/list/telesci_warnings = list(
 		return
 
 	cell.use(teleport_cell_usage)
-	if(teles_left > 0)
-		teles_left -= 1
+	if(telepad.teles_left > 0)
+		if(!telepad.infinite_teles)
+			telepad.teles_left -= 1
 		doteleport(user, direction)
 	else
 		telefail()
@@ -447,7 +459,7 @@ var/list/telesci_warnings = list(
 		return TRUE
 
 	if(href_list["recal"])
-		teles_left = rand(12,14)
+		telepad.RefreshParts() //It relies on the telepad's components to determine the amount of teleportations left
 		x_off = rand(-10,10)
 		y_off = rand(-10,10)
 		spark(telepad)
