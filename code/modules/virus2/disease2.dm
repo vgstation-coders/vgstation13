@@ -512,12 +512,18 @@ var/global/list/disease2_list = list()
 		ticks += speed
 		return
 
+	// Activating the disease's symptoms
+	for(var/datum/disease2/effect/e in effects)
+		if (e.count > 0)
+			e.side_effect(mob)
+
 	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
 	if(starved)
 		return
 
 	var/list/immune_data = GetImmuneData(mob)
 
+	// Activating the disease's symptoms
 	for(var/datum/disease2/effect/e in effects)
 		if (e.can_run_effect(immune_data[1]))
 			e.run_effect(mob)
