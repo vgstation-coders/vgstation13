@@ -73,6 +73,8 @@
 				warning("Skipping map [potential] due to  it being too hot outside. Ideal temp is below 40F, found [temperature].")
 				binary = null
 				continue
+//Lamprey currently has a tendency to crash for no real reason, uncomment this when it stops being broken
+/*
 		if(potential == "Lamprey Station/") //Available if the station is wrecked enough
 			var/crew_score = score["crewscore"] //So that we can use this in the chat
 			if(crew_score >= -20000)
@@ -80,6 +82,7 @@
 				warning("Skipping map [potential], station requires lower than -20000 score (is [score]).")
 				binary = null
 				continue
+*/
 		if(potential == "Castle Station/") //Available if revolutionaries won
 			if(!ticker.revolutionary_victory)
 				message_admins("Skipping map [potential], revolutionaries have not won.")
