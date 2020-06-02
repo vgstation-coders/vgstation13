@@ -157,6 +157,7 @@
 			E.forceMove(T)
 			qdel(E)
 	equipment.Cut() //Equipment is handled above, either by being deleted, or by being moved to the wreckage.
+	mech_parts.Cut() //We don't need this list anymore, too.
 	mechas_list -= src //global mech list
 	if(cell)
 		qdel(cell)
@@ -190,7 +191,6 @@
 		qdel(pr_internal_damage)
 		pr_internal_damage = null
 	selected = null
-	mech_parts = null
 	..()
 
 /obj/mecha/can_apply_inertia()
