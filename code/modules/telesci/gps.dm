@@ -175,13 +175,13 @@ var/list/SPS_list = list()
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
 	if(!transmitting)
 		return
-	send_signal(wearer, src, "SPS Code Red.")
+	send_signal(wearer, src, "SPS [gpstag]: Code Red.")
 
 /obj/item/device/gps/secure/stripped(mob/wearer, mob/stripper)
 	if(!transmitting)
 		return
 	. = ..()
-	send_signal(wearer, src, "SPS Code Yellow.")
+	send_signal(wearer, src, "SPS [gpstag]: Code Yellow.")
 
 /obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code)
 	var/turf/pos = get_turf(SPS)
@@ -190,7 +190,7 @@ var/list/SPS_list = list()
 	var/z0 = pos.z
 	var/alerttype = code
 	var/alertarea = get_area(SPS)
-	var/alerttime = get_game_time()
+	var/alerttime = worldtime2text()
 	var/verbose = TRUE
 	var/mob/living/L = get_holder_of_type(src, /mob/living/)
 	if(L || isturf(loc))
