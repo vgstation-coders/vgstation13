@@ -1327,7 +1327,6 @@
 		if(extra_stuff && (O in extra_stuff)) //Something else we need to keep? Say no more!
 			continue
 		O.forceMove(loc) //Somehow got inside, drop it.
-	return
 
 /obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!occupant)
