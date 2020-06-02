@@ -564,10 +564,13 @@
 		else
 			dat += "<td>[i.name]</td><td>N/A</td><td>[i.damage]</td><td>[infection][i_cancer][mech]</td><td></td>"
 		dat += "</tr>"
-		organs_to_list -= i.type
+		for(var/organtype in organs_to_list)
+			if(istype(i,organtype))
+				organs_to_list -= organtype
+				break
 	for(var/path in organs_to_list)
 		var/datum/organ/internal/i = path
-		dat += "<td>[initial(i.name)]</td><td>-</td><td>-</td><td><font color='red'>Missing</font></td>"
+		dat += "<td>[initial(i.name)]</td><td>-</td><td>-</td><td><font color='red'>Not Found</font></td>"
 	dat += "</table>"
 
 	if(occ["sdisabilities"] & BLIND)
