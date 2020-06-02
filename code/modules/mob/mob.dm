@@ -1696,7 +1696,7 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
 	StartMoving()
-	..()
+	. = ..()
 	EndMoving()
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
