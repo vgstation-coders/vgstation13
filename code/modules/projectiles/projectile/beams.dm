@@ -980,10 +980,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/beam/liquid_stream/to_bump(atom/A)
-	if(!A)
-		return
-	..()
+/obj/item/projectile/beam/liquid_stream/on_hit(var/atom/A, var/blocked = 0)
 	if(reagents.total_volume)
 		for(var/datum/reagent/R in reagents.reagent_list)
 			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))
@@ -999,7 +996,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 		return 1
 
 /obj/item/projectile/beam/liquid_stream/OnDeath()
-	if(!has_splashed && get_turf(src))
+	if(!has_splashed && loc)
 		splash_sub(reagents, get_turf(src), reagents.total_volume)
 
 /obj/item/projectile/beam/liquid_stream/proc/adjust_strength(var/t_range)

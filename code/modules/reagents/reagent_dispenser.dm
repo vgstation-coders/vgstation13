@@ -168,7 +168,7 @@
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && Proj.get_damage())
 			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
 			if(Proj.firer)//turrets don't have "firers"
 				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
@@ -476,7 +476,7 @@
 			enter_barrel(target)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/container_resist(mob/user)
-	if (exiting.Remove(user)) 
+	if (exiting.Remove(user))
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
 		return
 	visible_message("<span class='warning'>[user] begins to climb free of the \the [src]!</span>")
