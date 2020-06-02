@@ -237,6 +237,11 @@
 	message = "screams in fear!"
 	message_mime = "acts out a fearful scream!"
 	emote_type = EMOTE_AUDIBLE
+	
+/datum/emote/living/carbon/pee
+	key = "pee"
+	key_third_person = "pees"
+    message = "begins to pee on the floor."
 
 /datum/emote/living/carbon/sound
 	var/list/science_sounds = null
