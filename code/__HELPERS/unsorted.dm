@@ -1677,9 +1677,8 @@ Game Mode config tags:
 
 // A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
 /proc/output_to_msay(msg)
-	var/sane_msg = strict_ascii(msg)
 	for(var/client/C in admins)
-		C.output_to_special_tab(sane_msg)
+		C.output_to_special_tab(msg)
 
 // This is awful and probably should be thrown away at some point.
 /proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound, var/mob/firer)

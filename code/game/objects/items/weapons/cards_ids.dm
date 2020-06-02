@@ -355,7 +355,7 @@
 			return
 		src.registered_name = n
 
-		var/u = strict_ascii(sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
+		var/u = sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN))
 		if(!u)
 			alert("Invalid assignment.")
 			src.registered_name = null
@@ -396,7 +396,7 @@
 						to_chat(user, "Name changed to [new_name].")
 
 					if("Occupation")
-						var/new_job = strict_ascii(sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
+						var/new_job = sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN))
 						if (!Adjacent(user) || user.incapacitated())
 							return
 						if (!new_job)

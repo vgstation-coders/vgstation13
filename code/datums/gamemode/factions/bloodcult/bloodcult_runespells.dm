@@ -501,7 +501,7 @@
 	var/reminder = input("Write the reminder.", text("Cult reminder")) as null | message
 	if (!reminder)
 		return
-	reminder = utf8_sanitize(reminder) // No weird HTML
+	reminder = strip_html_simple(reminder) // No weird HTML
 	var/number = cult.cult_reminders.len
 	var/text = "[number + 1]) [reminder], by [user.real_name]."
 	cult.cult_reminders += text
