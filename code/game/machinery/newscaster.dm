@@ -223,6 +223,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 	. = ..()
 
+	if (user.lying)
+		user << browse(null, "window=newscaster_main;size=400x600")
+
 	if (.)
 		return
 
@@ -508,6 +511,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	if(masterController && !isobserver(masterController) && get_dist(masterController,src)<=1 && usr!=masterController)
 		to_chat(usr, "<span class='warning'>You must wait for [masterController] to finish and move away.</span>")
 		return
+	if (!isobserver(usr) && usr.stat)
+		return
+	if (ishuman(usr))
+		var/mob/living/carbon/human/H = usr
+		if (H.lying)
+			return
 	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(loc, /turf))) || (istype(usr, /mob/living/silicon) || isobserver(usr)))
 		usr.set_machine(src)
 		if(href_list["set_channel_name"])
@@ -919,7 +928,6 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		else if(href_list["refresh"])
 			updateUsrDialog()
 
-
 /obj/machinery/newscaster/attackby(obj/item/I as obj, mob/user as mob)
 	switch(buildstage)
 		if(0)
@@ -1137,7 +1145,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		to_chat(user, "The paper is full of intelligible symbols!")
 
 
-obj/item/weapon/newspaper/Topic(href, href_list)
+/obj/item/weapon/newspaper/Topic(href, href_list)
 	var/mob/U = usr
 	//..() // Allow ghosts to do pretty much everything except add shit
 	if ((src in U.contents) || ( istype(loc, /turf) && in_range(src, U) ))

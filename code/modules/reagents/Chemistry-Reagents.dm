@@ -3152,6 +3152,31 @@
 		return 1
 	M.immune_system.ApplyAntipathogenics(data["threshold"])
 
+
+
+/datum/reagent/antipathogenic/tomato_soup
+	name = "Tomato Soup"
+	id = TOMATO_SOUP
+	description = "Water, tomato extract, and maybe some other stuff. Great for when you're feeling under the weather."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	color = "#731008" //rgb: 115, 16, 8
+	density = 0.63
+	specheatcap = 4.21
+	data = list(
+		"threshold" = 10,
+		)
+
+/datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
+
+	..()
+
+	M.nutrition += nutriment_factor
+	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
+		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+
+
+
 //natural antipathogenic, found in garlic and kudzu
 /datum/reagent/antipathogenic/allicin
 	name = "Allicin"
@@ -3763,6 +3788,7 @@
 	M.drowsyness = 0
 	M.stuttering = 0
 	M.confused = 0
+	holder.convert_some_of_type(/datum/reagent/ethanol, /datum/reagent/water, 2 * REM) //booze-b-gone
 
 //Otherwise known as a "Mickey Finn"
 /datum/reagent/chloralhydrate
@@ -4563,25 +4589,6 @@
 
 	M.nutrition += nutriment_factor
 	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
-
-/datum/reagent/tomato_soup
-	name = "Tomato Soup"
-	id = TOMATO_SOUP
-	description = "Water, tomato extract, and maybe some other stuff."
-	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 5 * REAGENTS_METABOLISM
-	color = "#731008" //rgb: 115, 16, 8
-	density = 0.63
-	specheatcap = 4.21
-
-/datum/reagent/tomato_soup/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	M.nutrition += nutriment_factor
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/flour
 	name = "flour"
@@ -7846,6 +7853,46 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			M.adjustBruteLoss(5*REM)
 
 
+/datum/reagent/diabeetusol
+	name = "diabeetusol"
+	id = DIABEETUSOL
+	description = "The mistaken byproduct of confectionery science. Targets the beta pancreatic cells, or equivalent, in carbon based life to not only cease insulin production but begin producing what medical science can only describe as 'the concept of obesity given tangible form'."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+	nutriment_factor = 25 * REAGENTS_METABOLISM //This is maybe a little much
+	sport = 0 //This will never come up but adding it made me smile
+	density = 3 //He DENSE
+	specheatcap = 0.55536
+	overdose_am = 30
+
+/datum/reagent/diabeetusol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/heart = H.internal_organs_by_name["heart"]
+		var/list/chubbysound = list('sound/instruments/trombone/Eb3.mid', 'sound/instruments/trombone/Gb2.mid', 'sound/instruments/trombone/Bb3.mid')
+		switch(volume)
+			if(5 to 10)
+				if(prob(40))
+					H.dizziness += 2
+					H.confused += 2
+				if(prob(10))
+					H.sleeping += 1
+			if(10 to 25)
+				H.overeatduration += 250
+				H.nutrition += 250
+				if(prob(20))
+					playsound(src, pick(chubbysound), 50, 1)
+
+			if(25 to INFINITY)
+				if(heart && !heart.robotic)
+					to_chat(H, "<span class='danger'>Your heart caramelizes!</span>")
+					qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
+					H.adjustOxyLoss(60)
+					H.adjustBruteLoss(30)
 
 //////////////////////
 //					//

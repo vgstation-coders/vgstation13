@@ -1,5 +1,6 @@
 language: generic
-dist: bionic
+os: linux
+dist: xenial
 sudo: false
 
 env:
@@ -53,27 +54,36 @@ matrix:
       env:
         DM_UNIT_TESTS="1"
       addons:
+        mariadb: '10.2'
         apt:
+          sources:
+            - ubuntu-toolchain-r-test
           packages:
             - libstdc++6:i386
-            - libc6-i386
-            - libgcc1:i386
+            - gcc-multilib
+            - g++-7
+            - g++-7-multilib
             - rustc
             - cargo
             - moreutils
+            - libmariadb-client-lgpl-dev:i386
+            - libmariadbd-dev
       cache:
         directories:
           - $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}
           - $TRAVIS_BUILD_DIR/libvg/target
           - $HOME/.cargo
+          - $HOME/libmariadb
       install:
         - tools/travis/install-byond.sh
+        - tools/travis/install_libmariadb.sh
         - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
         - cd libvg
         # --jobs 1 to prevent threading problems with the BYOND crate.
         - cargo test --jobs 1 --verbose
         - cd -
         - tools/travis/build.py
+        - tools/travis/build_bsql.sh
         - cp tools/travis/config/config.txt config/
         - tools/travis/run_tests.py 2>&1 | tee /dev/stderr | sponge | awk '/UNIT TEST FAIL/ { exit 1 }'
 

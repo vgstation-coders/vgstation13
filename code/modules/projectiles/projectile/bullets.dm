@@ -988,3 +988,17 @@ obj/item/projectile/bullet/suffocationbullet
 
 /obj/item/projectile/bullet/syringe/dart
 	stealthy = TRUE
+
+/obj/item/projectile/bullet/syringe/candycane
+	name = "Candycane"
+	icon_state = "candycane"
+	nodamage = 0
+	damage = 25
+	capacity = 15
+	decay_type = null
+	custom_impact = null
+
+/obj/item/projectile/bullet/syringe/candycane/New()
+	..()
+	reagents.add_reagent(DIABEETUSOL, 10)
+	reagents.add_reagent(CARAMEL, 5)

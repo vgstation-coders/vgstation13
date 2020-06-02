@@ -29,9 +29,9 @@
 	to_chat(user, "<span class = 'notice'>You flick \the [src] [state ? "down" : "up"].</span>")
 	switch(state)
 		if(1) //FACE COVERED
-			body_parts_covered = FULL_HEAD
+			body_parts_covered = FULL_HEAD|MASKHEADHAIR
 		if(0) //VISOR UP
-			body_parts_covered = HEAD|EARS
+			body_parts_covered = HEAD|EARS|MASKHEADHAIR
 	update_icon(user)
 
 /obj/item/clothing/head/helmet/visor/update_icon(mob/user)
@@ -113,7 +113,7 @@
 	armor = list(melee = 20, bullet = 0, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "roman"
 	item_state = "roman"
-	body_parts_covered = HEAD|EARS
+	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/roman/legionaire
 	name = "roman legionaire helmet"
@@ -129,16 +129,7 @@
 	armor = list(melee = 40, bullet = 0, laser = 10, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "kabuto"
 	item_state = "kabuto"
-	body_parts_covered = HEAD|EARS
-
-/obj/item/clothing/head/helmet/hopcap
-	name = "Head of Personnel's Cap"
-	desc = "Papers, Please."
-	armor = list(melee = 25, bullet = 0, laser = 15, energy = 10, bomb = 5, bio = 0, rad = 0)
-	item_state = "hopcap"
-	icon_state = "hopcap"
-	body_parts_covered = HEAD
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/aviatorhelmet
 	name = "Aviator Helmet"
@@ -159,21 +150,21 @@
 	desc = "This helmet should protect you from russians and masked vigilantes."
 	armor = list(melee = 25, bullet = 15, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "biker_helmet"
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/richard
 	name = "Richard"
 	desc = "Do you like hurting people?"
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	icon_state = "richard"
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/megahelmet
 	name = "DRN-001 Helmet"
 	desc = "The helmet of the DRN-001 model. A simple, sturdy blue helmet."
 	icon_state = "megahelmet"
 	flags = FPRINT
-	body_parts_covered = HEAD|EARS
+	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 	item_state = "megahelmet"
 	siemens_coefficient = 1
 
@@ -190,7 +181,7 @@
 	desc = "The product of twelve years of work by an eccentric and brilliant loner. A helmet belonging to the perfect man; an unbeatable machine."
 	icon_state = "breakhelmet"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	item_state = "breakhelmet"
 	siemens_coefficient = 1
 
@@ -199,7 +190,7 @@
 	desc = "Heavily armored upgrade to the DRN-001 model's helmet, now comes with a pointless red crystal thing!"
 	icon_state = "megaxhelmet"
 	flags = FPRINT
-	body_parts_covered = HEAD|EARS
+	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 	item_state = "megaxhelmet"
 	siemens_coefficient = 1
 
@@ -218,7 +209,7 @@
 	desc = "Helmet belonging to one of the many mass produced 'Joe' type robots."
 	icon_state = "joehelmet"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	item_state = "joehelmet"
 	siemens_coefficient = 1
 
@@ -228,7 +219,7 @@
 	icon_state = "doom"
 	flags = FPRINT
 	item_state = "doom"
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	armor = list(melee = 50, bullet = 40, laser = 40,energy = 40, bomb = 5, bio = 0, rad = 0)
 	siemens_coefficient = 1
 
@@ -238,7 +229,7 @@
 	icon_state = "knight_rune"
 	item_state = "knight_rune"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	armor = list(melee = 80, bullet = 80, laser = 50, energy = 30, bomb = 80, bio = 10, rad = 10)
 
 /obj/item/clothing/head/helmet/knight
@@ -246,7 +237,7 @@
 	desc = "A classic metal helmet."
 	icon_state = "knight_green"
 	item_state = "knight_green"
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	armor = list(melee = 20, bullet = 5, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -280,8 +271,9 @@
 	desc = "This piece of equipment can double as a pillow, a bowl, an emergency toilet, and sometimes as a helmet."
 	icon_state = "nr_helmet"
 	item_state = "nr_helmet"
-	body_parts_covered = EARS|HEAD
+	body_parts_covered = EARS|HEAD|MASKHEADHAIR
 	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/police
 	name = "police custodian helmet"

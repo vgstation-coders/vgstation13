@@ -572,6 +572,11 @@
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
 
+	if(istype(O,/obj/item/trash/plate))
+		var/obj/item/trash/plate/the_plate = O
+		the_plate.clean = TRUE
+		O.update_icon()
+
 	else if (istype(O, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = O
 		if (B.bcell && B.bcell.charge > 0 && B.status == 1)

@@ -45,8 +45,14 @@
 	var/throwpass = 0
 	var/level = 2
 
+	// Change of z-level.
+	var/event/on_z_transition
+	var/event/post_z_transition
+
 	// When this object moves. (args: loc)
 	var/event/on_moved
+	// When the object is qdel'd
+	var/event/on_destroyed
 
 	var/atom/movable/tether_master
 	var/list/tether_slaves
@@ -56,8 +62,6 @@
 	var/ignore_blocking = 0
 
 	var/last_explosion_push = 0
-
-	var/list/datum/tracker/trackers = list()
 
 /atom/movable/New()
 	. = ..()
@@ -69,7 +73,10 @@
 		for(var/matID in starting_materials)
 			materials.addAmount(matID, starting_materials[matID])
 
+	on_destroyed = new("owner"=src)
 	on_moved = new("owner"=src)
+	on_z_transition = new("owner"=src)
+	post_z_transition = new("owner"=src)
 
 /atom/movable/Destroy()
 	var/turf/T = loc
@@ -80,9 +87,21 @@
 		returnToPool(materials)
 		materials = null
 
+	if(on_z_transition)
+		on_z_transition.holder = null
+		qdel(on_z_transition)
+		on_z_transition = null
+	if(post_z_transition)
+		post_z_transition.holder = null
+		qdel(post_z_transition)
+		post_z_transition = null
 	if(on_moved)
 		on_moved.holder = null
 		on_moved = null
+	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
+	if(on_destroyed)
+		on_destroyed.holder = null
+		on_destroyed = null
 
 	var/turf/un_opaque
 	if (opacity && isturf(loc))
@@ -648,11 +667,44 @@
 //Overlays
 /atom/movable/overlay
 	var/atom/master = null
+	var/follow_proc = /atom/movable/overlay/proc/move_to_turf_or_null
+	var/master_moved_key
+	var/master_destroyed_key
 	anchored = 1
 
 /atom/movable/overlay/New()
 	. = ..()
+	if(!loc)
+		CRASH("[type] created in nullspace.")
+		qdel(src)
+		return
+
+	master = loc
+	name = master.name
+	dir = master.dir
+
+	if(istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		master_moved_key = AM.on_moved.Add(src, follow_proc)
+		SetInitLoc()
+	if (istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		master_destroyed_key = AM.on_destroyed.Add(src, .proc/qdel_self)
 	verbs.len = 0
+
+/atom/movable/overlay/proc/qdel_self()
+	qdel(src) // Rest in peace
+
+/atom/movable/overlay/Destroy()
+	if(istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		AM.on_moved.Remove(master_moved_key)
+		AM.on_destroyed.Remove(master_destroyed_key)
+	master = null
+	return ..()
+
+/atom/movable/overlay/proc/SetInitLoc()
+	forceMove(master.loc)
 
 /atom/movable/overlay/blob_act()
 	return
@@ -671,6 +723,13 @@
 	if (src.master)
 		return src.master.attack_hand(a, b, c)
 	return
+
+/atom/movable/overlay/proc/move_to_turf_or_null(var/list/event_args, var/mob/holder)
+	var/new_loc = event_args["loc"]
+	var/turf/T = get_turf(new_loc)
+	var/atom/movable/AM = master // the proc is only called if the master has a "on_moved" event.
+	if(T != loc)
+		forceMove(T, glide_size_override = DELAY2GLIDESIZE(AM.move_speed))
 
 /atom/movable/proc/attempt_to_follow(var/atom/movable/A,var/turf/T)
 	if(anchored)
@@ -1088,6 +1147,25 @@
 				forceMove(F)
 				return TRUE
 	return FALSE
+
+/atom/movable/proc/teleport_radius(var/range)
+	var/list/best_options = list()
+	var/list/backup_options = list()
+	var/turf/picked
+	for(var/turf/T in orange(range, src))
+		if(T.x>world.maxx-6 || T.x<6 || T.y>world.maxy-6 || T.y<6) //Conditions we will NEVER accept: too close to edge
+			continue
+		if(istype(T,/turf/space) || T.density) //Only as a fallback: dense turf or space
+			backup_options += T
+			continue
+		best_options += T
+	if(best_options.len)
+		picked = pick(best_options)
+	else if(backup_options.len)
+		picked = pick(backup_options)
+	else
+		return
+	forceMove(picked)
 
 // -- trackers
 

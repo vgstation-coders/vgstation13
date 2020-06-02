@@ -112,7 +112,10 @@
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Mushroom")
-	my_appearance.h_style = "Bald"
+	my_appearance.h_style = "Plump Helmet"
+	my_appearance.r_hair = 60
+	my_appearance.g_hair = 40
+	my_appearance.b_hair = 80
 	regenerate_icons()
 
 /mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)

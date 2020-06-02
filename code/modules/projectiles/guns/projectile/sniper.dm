@@ -81,15 +81,17 @@
 
 /obj/item/weapon/gun/projectile/hecate/hunting/attack_self(mob/user)
 	if(wielded)
+		if(!getAmmo())
+			handing(user)
+			return
 		if(recentpump)
 			return
 		pump(user)
 		recentpump = 1
 		spawn(10)
 			recentpump = 0
-		return
 	else
-		to_chat(user, "<span class='warning'>You must dual-wield \the [src] before you can pull the bolt on it!</span>")
+		handing(user)
 
 /obj/item/weapon/gun/projectile/hecate/hunting/proc/handing(mob/user)
 	scope_toggled = 0

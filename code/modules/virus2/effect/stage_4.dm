@@ -719,7 +719,7 @@
 		affected.my_appearance.b_facial = 178
 		affected.my_appearance.f_style = "Dwarf Beard"
 		affected.my_appearance.h_style = "Shoulder-length Hair Alt"
-		affected.update_body(0)
+		affected.update_body()
 		affected.update_hair()
 
 	switch(count)
@@ -855,7 +855,7 @@
 		affected.my_appearance.b_facial = old_b_facial
 		affected.my_appearance.f_style = old_f_style
 		affected.my_appearance.h_style = old_h_style
-		affected.update_body(0)
+		affected.update_body()
 		affected.update_hair()
 
 /datum/disease2/effect/magnitis
@@ -922,3 +922,180 @@
 		if(!istype(h.species.name, /datum/species/human))
 			h.set_species("Human")
 			h.regenerate_icons()
+
+/datum/disease2/effect/emitter
+	name = "Afflictus Emittus"
+	desc = "The mutations produced by this symptom cause the infected's eyes to constantly regenerate and emit a straight beam."
+	encyclopedia = "Said beam may have applications in power technology and engineering. Note that the beam will stop if the infected falls down, or unconscious."
+	stage = 4
+	badness = EFFECT_DANGER_HARMFUL
+	max_multiplier = 3
+	restricted = 1//symptoms won't randomly mutate into this one
+	var/announced = FALSE
+	chance = 4
+	max_chance = 12
+	var/old_r_eyes = 0
+	var/old_g_eyes = 0
+	var/old_b_eyes = 0
+	var/mob/living/emitter
+	var/obj/effect/beam/emitter/eyes/beam
+	var/previous_dir
+	var/turf/previous_loc
+
+/datum/disease2/effect/emitter/activate(var/mob/living/mob)
+	if (istype(mob) && !emitter)
+		emitter = mob
+		emitter.callOnStartMove["\ref[src]"] = "update_emitter_start"
+		emitter.callOnEndMove["\ref[src]"] = "update_emitter_end"
+
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+
+		if (count == 0)
+			if (E && !(E.status & ORGAN_CUT_AWAY))//if we have eyes, let's memorize their color so we can get it back once cured
+				old_r_eyes = H.my_appearance.r_eyes
+				old_g_eyes = H.my_appearance.g_eyes
+				old_b_eyes = H.my_appearance.b_eyes
+			else//otherwise you get to keep those bluish grey eyes if the laser fired at least once.
+				old_r_eyes = 183
+				old_g_eyes = 212
+				old_b_eyes = 224
+
+		if (!E)
+			//no eyes? no problem, we'll get you a new pair!
+			var/eye_type = H.species.has_organ["eyes"]
+			E = new eye_type(H)
+			E.damage = E.min_broken_damage + 5
+			H.internal_organs_by_name["eyes"] = E
+			to_chat(mob, "<span class='warning'>You feel your eyes regrow inside their sockets.</span>")
+			H.my_appearance.r_eyes = 183
+			H.my_appearance.g_eyes = 212
+			H.my_appearance.b_eyes = 224
+			H.update_body()
+		else if (E.robotic)
+			to_chat(mob, "<span class='warning'>Your [E.name] pop right out of their sockets, rejected by your body.</span>")
+			E.Remove(mob)
+			E.status |= ORGAN_CUT_AWAY
+			E.remove(mob)
+		else if (E.status & ORGAN_CUT_AWAY)
+			E.status = 0
+			E.damage = E.min_broken_damage + 5
+			to_chat(mob, "<span class='warning'>You feel your eyes regrow inside their sockets.</span>")
+			H.my_appearance.r_eyes = 183
+			H.my_appearance.g_eyes = 212
+			H.my_appearance.b_eyes = 224
+			H.update_body()
+		else if (E.damage > 0)
+			to_chat(mob, "<span class='warning'>You feel your [(E.damage >= E.min_broken_damage) ? "mangled" : "bruised"] eyes hurt less.</span>")
+			E.damage = max(0,E.damage - multiplier * 5)
+			H.eye_blurry = max(H.eye_blurry - multiplier * 5, 0)
+			H.eye_blind = max(H.eye_blind - multiplier * 5, 0)
+			H.sdisabilities &= ~BLIND
+		else
+			H.disabilities &= ~NEARSIGHTED
+			H.sdisabilities &= ~BLIND
+
+	update_emitter()
+
+/datum/disease2/effect/emitter/deactivate(var/mob/living/mob)
+	if (announced)
+		mob.visible_message("<span class='notice'>\The [mob]'s eyes have stopped emitting beams.</span>","<span class='notice'>Your eyes no longer dispense endless beams.</span>")
+	if (ishuman(mob) && count > 0)
+		var/mob/living/carbon/human/H = mob
+		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+		if (E && !(E.status & ORGAN_CUT_AWAY))
+			H.my_appearance.r_eyes = old_r_eyes
+			H.my_appearance.g_eyes = old_g_eyes
+			H.my_appearance.b_eyes = old_b_eyes
+			H.update_body()
+	if (beam)
+		qdel(beam)
+		beam = null
+	if (emitter)
+		emitter.callOnStartMove -= "\ref[src]"
+		emitter.callOnEndMove -= "\ref[src]"
+		emitter = null
+	previous_dir = null
+	previous_loc = null
+
+/datum/disease2/effect/emitter/side_effect(var/mob/living/mob)
+	update_emitter()
+
+/datum/disease2/effect/emitter/proc/ready()
+	if (!emitter || !isturf(emitter.loc) || emitter.lying || emitter.stat != CONSCIOUS)
+		return 0
+	if(ishuman(emitter))
+		var/mob/living/carbon/human/H = emitter
+		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+		if (!E)//no eyes
+			announced = FALSE
+			return 0
+		if (E.robotic)//we need organic eyes
+			announced = FALSE
+			return 0
+		if (E.status & ORGAN_CUT_AWAY)//eyes removed
+			announced = FALSE
+			return 0
+		if (E.damage >= E.min_broken_damage)//eyes too damaged
+			return 0
+		if (E.damage >= E.min_bruised_damage)
+			if (prob(E.damage * 3))
+				return 0
+
+		//free cyan eyes
+		H.my_appearance.r_eyes = 102
+		H.my_appearance.g_eyes = 255
+		H.my_appearance.b_eyes = 255
+		H.update_body()
+
+	return 1
+
+/datum/disease2/effect/emitter/proc/update_emitter()
+	if (!ready())
+		if (beam)
+			returnToPool(beam)
+			beam = null
+		return
+	if (!beam)
+		if (!ismouse(emitter))
+			beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+			beam.full_damage = 10 * multiplier
+		else
+			beam = getFromPool(/obj/effect/beam/emitter/eyes/mouse, emitter.loc)
+		beam.dir = emitter.dir
+		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
+			beam.emit(spawn_by=emitter,charged = TRUE)
+		else
+			beam.emit(spawn_by=emitter)
+		previous_loc = emitter.loc
+		previous_dir = emitter.dir
+		if (!announced)
+			emitter.visible_message("<span class='danger'>Superheated beams begin to stream right out of \the [emitter]'s eyes!</span>","<span class='danger'>Beams are coming out of your eyes, holy shit!</span>")
+			announced = TRUE
+
+
+/datum/disease2/effect/emitter/proc/update_emitter_start()
+	if (beam)
+		returnToPool(beam)
+		beam = null
+
+/datum/disease2/effect/emitter/proc/update_emitter_end()
+	if (!ready())
+		return
+	if (!beam)
+		if (!ismouse(emitter))
+			beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+			beam.full_damage = 10 * multiplier
+		else
+			beam = getFromPool(/obj/effect/beam/emitter/eyes/mouse, emitter.loc)
+		beam.dir = emitter.dir
+		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
+			beam.emit(spawn_by=emitter,charged = TRUE)
+		else
+			beam.emit(spawn_by=emitter)
+		previous_loc = emitter.loc
+		previous_dir = emitter.dir
+		if (!announced)
+			emitter.visible_message("<span class='danger'>Superheated beams begin to stream right out of \the [emitter]'s eyes!</span>","<span class='danger'>Beams are coming out of your eyes, holy shit!</span>")
+			announced = TRUE

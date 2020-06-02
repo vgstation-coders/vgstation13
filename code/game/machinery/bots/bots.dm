@@ -38,7 +38,7 @@
 	var/brute_dam_coeff = 1.0
 	var/open = 0//Maint panel
 	var/locked = 1
-	var/bot_type
+	var/bot_type // For HuD users.
 	var/declare_message = "" //What the bot will display to the HUD user.
 	var/bot_flags
 
@@ -49,7 +49,7 @@
 	var/next_destination	// the next destination in the patrol route
 
 	var/steps_per = 1 //How many steps we take per process
-	var/initial_steps_per = 1
+	var/initial_steps_per = 1 // What should we go back to when we are done chasing a target ?
 
 	var/atom/target 				//The target of our path, could be a turf, could be a person, could be mess
 	var/list/old_targets = list()			//Our previous targets, so we don't get caught constantly going to the same spot. Order as pointer => int (Time to forget)
@@ -66,11 +66,14 @@
 	var/type_for_sig = "secbot"
 	var/turf/patrol_target	// this is turf to navigate to (location of beacon)
 	var/auto_patrol = 0		// set to make bot automatically patrol
-	var/waiting_for_patrol = FALSE
+	var/waiting_for_patrol = FALSE // Are we waiting for a beacon to give us a clear path? (in order to avoid calling for a path more than once)
 	var/list/patrol_path = list() //Our patroling path
 
-	var/current_pathing = 0
+	var/current_pathing = 0 // Safety check for recursive movement
+	var/look_for_target = FALSE // Are we currently calculating a path to a target?
+	var/target_chasing_distance = 7 // Default view
 
+// Adding the bots to global lists; initialize if not.
 /obj/machinery/bot/New()
 	. = ..()
 	for(var/datum/event/ionstorm/I in events)
@@ -81,6 +84,7 @@
 	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
+// Associate the bot with a radio controller created in world/New().
 /obj/machinery/bot/initialize()
 	if(radio_controller)
 		if(bot_flags & BOT_CONTROL)
@@ -105,6 +109,7 @@
 	patrol_path.Cut()
 	path.Cut()
 
+// Reset the safety counter, look or move along a path, and then do bot things.
 /obj/machinery/bot/process()
 	current_pathing = 0
 	if(!src.on)
@@ -114,13 +119,25 @@
 	process_pathing()
 	process_bot()
 
+// Makes the bot busy while it looks for a target.
 /obj/machinery/bot/proc/find_target()
+	look_for_target = TRUE
+	target_selection()
+	look_for_target = FALSE
+
+// Concrete logic of selecting a target, depending on each bot.
+/obj/machinery/bot/proc/target_selection()
+
+// Will we continue chasing our target or not?
+/obj/machinery/bot/proc/can_abandon_target()
+	return (!target || target.gcDestroyed || get_dist(src, target) > target_chasing_distance) && !look_for_target
 
 //Set time_to_forget to -1 to never forget it
 /obj/machinery/bot/proc/add_oldtarget(var/old_target, var/time_to_forget = BOT_OLDTARGET_FORGET_DEFAULT)
 	old_targets[old_target] = time_to_forget
 	log_astar_bot("[old_target] = [old_targets[old_target]]")
 
+// Remove an old target. Override for more complicated logic.
 /obj/machinery/bot/proc/remove_oldtarget(var/old_target)
 	old_targets.Remove(old_target)
 
@@ -147,6 +164,7 @@
 // If we have a path, we step.
 // Speed of the bot is controlled through steps_per.
 // return true to avoid calling process_patrol
+// Move "recursively" in order to respect the subsystem's waitfor = FALSE.
 /obj/machinery/bot/proc/process_path(var/remaining_steps = steps_per)
 	current_pathing++
 	if (current_pathing > MAX_PATHING_ATTEMPTS)

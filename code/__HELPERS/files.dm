@@ -90,8 +90,8 @@
 		src << browse_rsc(file)
 
 /client/proc/browse_files(root="data/logs/", max_iterations=10, list/valid_extensions=list(".txt",".log",".htm", ".csv", ".dmm"))
-	var/path = root
-
+	var/path = "data/logs"
+	root = path
 	for(var/i=0, i<max_iterations, i++)
 		var/list/choices = flist(path)
 		if(path != root)

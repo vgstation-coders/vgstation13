@@ -96,7 +96,7 @@ client/proc/one_click_antag()
 				var/datum/role/RR = FF.get_member_by_mind(M)
 				RR.OnPostSetup()
 				RR.Greet(GREET_LATEJOIN)
-				message_admins("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
+				message_admins("[key_name(H)] has been recruited as recruit of [FF.name] via create antagonist verb.")
 				recruit_count++
 
 		FF.OnPostSetup()

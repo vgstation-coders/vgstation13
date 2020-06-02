@@ -123,7 +123,11 @@
 	usr.stop_pulling()
 
 /client/verb/swap_hand()
-	set hidden = 1
+
+	set name = "Swap-hands"
+	set category = "IC"
+	set desc = "Swap your current active hand."
+
 	if(istype(mob,/mob/living/silicon/robot/mommi))
 		return // MoMMIs only have one tool slot.
 	if(istype(mob,/mob/living/silicon/robot))//Oh nested logic loops, is there anything you can't do? -Sieve
@@ -218,7 +222,6 @@
 	if(!isrobot(mob))
 		mob.drop_item_v()
 	return
-
 
 /client/Center()
 	/* No 3D movement in 2D spessman game. dir 16 is Z Up
@@ -345,6 +348,7 @@
 		mob.last_move_intent = world.time + 10
 		mob.set_glide_size(DELAY2GLIDESIZE(move_delay)) //Since we're moving OUT OF OUR OWN VOLITION AND BY OURSELVES we can update our glide_size here!
 
+		mob.StartMoving()
 		// Something with pulling things
 		var/obj/item/weapon/grab/Findgrab = locate() in mob
 		if(Findgrab)
@@ -356,6 +360,7 @@
 					if(M)
 						if ((mob.Adjacent(M) || M.loc == mob.loc))
 							var/turf/T = mob.loc
+							M.StartMoving()
 							step(mob, Dir)
 							if (isturf(M.loc))
 								var/diag = get_dir(mob, M)
@@ -363,6 +368,7 @@
 									diag = null
 								if ((get_dist(mob, M) > 1 || diag))
 									step(M, get_dir(M.loc, T))
+							M.EndMoving()
 				else
 					for(var/mob/M in L)
 						M.other_mobs = 1
@@ -370,7 +376,9 @@
 							M.animate_movement = 3
 					for(var/mob/M in L)
 						spawn( 0 )
+							M.StartMoving()
 							step(M, dir)
+							M.EndMoving()
 							return
 						spawn( 1 )
 							M.other_mobs = null
@@ -388,6 +396,7 @@
 
 		if(mob.dir != old_dir)
 			mob.Facing()
+		mob.EndMoving()
 
 /mob/proc/process_confused(var/Dir)
 	if (confused <= 0)
@@ -395,9 +404,12 @@
 	. = TRUE
 	var/old_dir = dir
 	if (confused_intensity == CONFUSED_MAGIC)
+		StartMoving()
 		step_rand(src)
+		EndMoving()
 		return
 
+	StartMoving()
 	switch(Dir)
 		if(NORTH)
 			step(src, pick(NORTHEAST, NORTHWEST))
@@ -415,7 +427,8 @@
 			step(src, pick(SOUTH, EAST))
 		if(SOUTHWEST)
 			step(src, pick(SOUTH, WEST))
-				
+	EndMoving()
+
 	last_movement=world.time
 	if(dir != old_dir)
 		Facing()
@@ -558,7 +571,9 @@
 		var/mob/mobpulled = target
 		var/atom/movable/secondarypull = mobpulled.pulling
 		mobpulled.stop_pulling()
+		mobpulled.StartMoving()
 		step(mobpulled, get_dir(mobpulled.loc, dest))
+		mobpulled.EndMoving()
 		if(mobpulled && secondarypull)
 			mobpulled.start_pulling(secondarypull)
 	else

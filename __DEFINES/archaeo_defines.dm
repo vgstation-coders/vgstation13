@@ -47,6 +47,7 @@
 #define ARCHAEO_CHAOS "chaos"
 #define ARCHAEO_GUITAR "guitar"
 #define ARCHAEO_SUPERSHARD "supermatter shard"
+#define ARCHAEO_TOYBOX "mechanical toybox"
 
 #define DIGSITE_GARDEN "garden"
 #define DIGSITE_ANIMAL "animal"
