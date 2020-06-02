@@ -152,7 +152,7 @@ function highlightTerms(el) {
 			else {
 				toInsert = document.createTextNode(chunk);
 				}
-	
+
 			// Insert back into our element
 			if (pre.length == 0) {
 				var result = parent.prepend(toInsert);
@@ -177,12 +177,6 @@ function output(message, flag) {
 
 	if (flag !== 'internal')
 		opts.lastPang = Date.now();
-
-	// Basically we url_encode twice server side so we can manually read the encoded version and actually do UTF-8.
-	// The replace for + is because FOR SOME REASON, BYOND replaces spaces with a + instead of %20, and a plus with %2b.
-	// Marvelous.
-	message = message.replace(/\+/g, "%20")
-	message = decoder(message)
 
 	//Stuff we do along with appending a message
 	var atBottom = false;

@@ -315,7 +315,6 @@ For the main html chat area
 
 		message = replacetext(message, "\n", "<br>")
 
-		// url_encode it TWICE, this way any UTF-8 characters are able to be decoded by the Javascript.
 		target << output(url_encode(message), "browseroutput:output")
 
 /datum/log	//exists purely to capture to_chat() output
