@@ -1984,3 +1984,8 @@ mob/living/carbon/human/isincrit()
 		return list(/datum/ambience/beach)
 	else
 		return ..()
+
+/mob/living/carbon/human/adjustOxyLoss(var/amount)
+	if (skintone2racedescription(my_appearance.s_tone)=="black")
+		amount = amount*1.05
+	..(amount)
