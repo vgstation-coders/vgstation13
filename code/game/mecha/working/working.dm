@@ -49,7 +49,7 @@
 	return output
 
 /obj/mecha/working/empty_bad_contents()
-	..(cargo)
+	..(cargo) //mom's spaghetti 2.0
 
 /obj/mecha/working/Destroy()
 	for(var/mob/M in src)
