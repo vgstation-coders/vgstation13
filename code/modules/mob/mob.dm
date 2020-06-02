@@ -1699,6 +1699,12 @@ Use this proc preferably at the end of an equipment loadout
 	..()
 	EndMoving()
 
+//Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
+/mob/change_dir(new_dir, var/changer)
+	StartMoving()
+	..()
+	EndMoving()
+
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
 	return 0
 
