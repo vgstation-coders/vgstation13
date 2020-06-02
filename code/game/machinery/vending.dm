@@ -1963,7 +1963,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/helmet/siren = 2,
 		/obj/item/clothing/head/helmet/police = 2,
 		/obj/item/clothing/under/police = 2,
-		/obj/item/device/modkit/fatsec_rig = 2
+		/obj/item/device/modkit/fatsec_rig = 2,
+		/obj/item/device/gps/secure = 2
 		)
 	vouched = list(
 		/obj/item/ammo_storage/magazine/m380auto = 10,
@@ -1982,6 +1983,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 24,
 		/obj/item/weapon/storage/box/evidence = 1,
 		/obj/item/weapon/legcuffs/bolas = 2,
+		/obj/item/device/gps/secure = 2
 		)
 	contraband = list(
 		/obj/item/clothing/glasses/sunglasses = 2,
