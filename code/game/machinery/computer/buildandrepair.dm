@@ -117,6 +117,10 @@
 	name = "Circuit board (Security Records)"
 	desc = "A circuit board for running a computer used for viewing security records."
 	build_path = /obj/machinery/computer/secure_data
+/obj/item/weapon/circuitboard/security_alerts
+	name = "Circuit board (Security Records)"
+	desc = "A circuit board for running a computer used for viewing security alerts."
+	build_path = /obj/machinery/computer/security_alerts
 /obj/item/weapon/circuitboard/stationalert
 	name = "Circuit board (Station Alerts)"
 	desc = "A circuit board for running a computer used for viewing station alerts."
@@ -349,7 +353,7 @@
 	desc = "A circuit board for running a computer used to operate stacking machines."
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
-
+	
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/weapon/solder/S = I
