@@ -6,6 +6,7 @@
 	var/mig1
 	var/mig2
 	var/mig3
+	var/mig4
 	if(!hasColumn("client","mob_chat_on_map"))
 		mig1 = execute("ALTER TABLE `client` ADD COLUMN mob_chat_on_map INTEGER DEFAULT 0")
 	if(!hasColumn("client","max_chat_length"))
@@ -20,6 +21,7 @@
 	var/mig1
 	var/mig2
 	var/mig3
+	var/mig4
 	if(hasColumn("client","mob_chat_on_map"))
 		mig1 = execute("ALTER TABLE `client` DROP COLUMN mob_chat_on_map")
 	if(hasColumn("client","obj_chat_on_map"))
