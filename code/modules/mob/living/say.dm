@@ -261,9 +261,16 @@ var/list/department_radio_keys = list(
 				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
 				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
 
-	show_message(rendered_message, type, deaf_message, deaf_type, src)
-	if (client?.prefs.chat_on_map && stat != UNCONSCIOUS && (client.prefs.see_chat_non_mob || ismob(speech.speaker)) && !is_deaf())
+	// Runechat messages
+	if (ismob(speech.speaker) && client?.prefs.mob_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
 		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode)
+	else if (client?.prefs.obj_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
+		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode)
+	if (ismob(speech.speaker))
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+	else if (!client.prefs.no_goonchat_for_obj || legnthtext(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
