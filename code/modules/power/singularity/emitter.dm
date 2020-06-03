@@ -19,6 +19,7 @@
 	var/last_shot = 0
 	var/shot_number = 0
 	var/locked = 0
+	var/previous_state = 0//for update_icon() purposes
 
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | WELD_FIXED | MULTITOOL_MENU
 
@@ -28,6 +29,10 @@
 
 	//Now uses a constant beam.
 	var/obj/effect/beam/emitter/beam = null
+
+/obj/machinery/power/emitter/New(var/turf/loc)
+	..()
+	previous_state = state
 
 	//Radio remote control
 /obj/machinery/power/emitter/proc/set_frequency(new_frequency)
@@ -127,6 +132,9 @@
 /obj/machinery/power/emitter/update_icon()
 	overlays.len = 0
 	icon_state = "emitter[state]"
+	if (state != previous_state)
+		flick("emitterflick-[previous_state][state]",src)
+		previous_state = state
 
 	if(powered && get_powernet() && avail(active_power_usage) && active)
 		var/image/emitterbeam = image(icon,"emitter-beam")
