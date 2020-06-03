@@ -6,7 +6,9 @@ Used In File(s): /code/game/machinery/computer/security_alert.dm
 	{{if data.show_alerts && data.show_alerts.length}}
 		{{for data.show_alerts}}
 			<tr><td><div class="statusValue">
-			{{:value.type}} - {{:value.time}} - {{:value.area}} @ ({{:value.x}},{{:value.y}},{{:value.z}})
+				{{:value.entry}} {{:value}} {{:value.data}} {{:value.value}} {{:value.name}} {{:value.NAME}}
+				{{:data.NAME}}
+				{{:helper.link(value.entry, null, null, null, null, null)}}
 			</div>
 		{{/for}}
 	{{/if}}

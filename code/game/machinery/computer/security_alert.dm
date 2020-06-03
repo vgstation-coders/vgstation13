@@ -58,12 +58,7 @@ TODO: literally every alarm but SPS alarms.
 	var/list/show_alerts = list()
 	for(var/list/saved_alerts in saved_security_alerts)
 		var/list/alert_data = list()
-		alert_data["type"] = saved_alerts["type"]
-		alert_data["time"] = saved_alerts["time"]
-		alert_data["area"] = saved_alerts["area"]
-		alert_data["x"] = saved_alerts["x"]
-		alert_data["y"] = saved_alerts["y"]
-		alert_data["z"] = saved_alerts["z"]
+		alert_data["entry"] = saved_alerts
 		show_alerts += list(alert_data)
 	data["show_alerts"] = show_alerts
 
@@ -103,25 +98,18 @@ TODO: literally every alarm but SPS alarms.
 	user << browse(listing, "window=security_alert")
 	onclose(user, "security_alert")
 	return
-/obj/machinery/computer/security_alerts/proc/receive_alert(var/x0, var/y0, var/z0, var/alert_type, var/alert_area, var/alert_time, var/verbose = 1)
+/obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1)
 	if(stat & NOPOWER)
 		return
-	if(z != z0)
-		return
-	var/list/newalert = list()	
-	newalert["type"] = alert_type
-	newalert["time"] = alert_time
-	newalert["area"] = alert_area
-	newalert["x"] = x0
-	newalert["y"] = y0
-	newalert["z"] = z0
-	if(saved_security_alerts.Find(newalert)) //this doesn't work yet. Why not?
-		to_chat(world, "Dropping entry.") //testing
+	if(saved_security_alerts.Find(newdata)) //nothing new in here?
+		to_chat(world, "Dropping entry. [newdata]") //testing
 		return //no need for duplicate entries
-	saved_security_alerts.Insert(1,list(newalert))
-	if(saved_security_alerts.len >= 100) //no need for infinite logs
-		saved_security_alerts.Remove(saved_security_alerts[100])
-	var/message = "Alert. [alert_type]"
+	saved_security_alerts.Insert(1,newdata)
+	to_chat(world, "Adding entry. [newdata]")
+	if(saved_security_alerts.len >= 50) //no need for infinite logs
+		to_chat(world, "Deleting top entry.")
+		pop(saved_security_alerts)
+	var/message = "Alert. [alerttype]"
 	if(verbose)
 		say(message)
 	playsound(src,'sound/machines/radioboop.ogg',40,1)
