@@ -2,7 +2,7 @@
 Title: Security Alert Computer UI (Main content)
 Used In File(s): /code/game/machinery/computer/security_alert.dm
  -->
-<table width="100%"><tbody>
+<table width="100%" ><tbody>
 	{{if data.show_alerts && data.show_alerts.length}}
 		{{for data.show_alerts}}
 			<tr><td><div class="statusValue">
@@ -11,7 +11,3 @@ Used In File(s): /code/game/machinery/computer/security_alert.dm
 		{{/for}}
 	{{/if}}
 </tbody></table>
-
-<!--
-{{:helper.link('#', null, null, null)}}
--->

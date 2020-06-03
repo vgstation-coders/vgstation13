@@ -71,7 +71,7 @@ TODO: literally every alarm but SPS alarms.
 		ui = nanomanager.get_open_ui(user, src, ui_key, force_open)
 
 	if(!ui)
-		ui = new(user, src, ui_key, "security_alert.tmpl", name, 400, 200)
+		ui = new(user, src, ui_key, "security_alert.tmpl", name, 450, 200)
 		ui.set_initial_data(data)
 		ui.open()
 		ui.set_auto_update(1)
@@ -108,9 +108,6 @@ TODO: literally every alarm but SPS alarms.
 		return
 	if(z != z0)
 		return
-	var/message = "Alert. [alert_type]"
-	if(verbose)
-		say(message)
 	var/list/newalert = list()	
 	newalert["type"] = alert_type
 	newalert["time"] = alert_time
@@ -118,7 +115,16 @@ TODO: literally every alarm but SPS alarms.
 	newalert["x"] = x0
 	newalert["y"] = y0
 	newalert["z"] = z0
-	saved_security_alerts += list(newalert)
+	if(saved_security_alerts.Find(newalert)) //this doesn't work yet. Why not?
+		to_chat(world, "Dropping entry.") //testing
+		return //no need for duplicate entries
+	saved_security_alerts.Insert(1,list(newalert))
+	if(saved_security_alerts.len >= 100) //no need for infinite logs
+		saved_security_alerts.Remove(saved_security_alerts[100])
+	var/message = "Alert. [alert_type]"
+	if(verbose)
+		say(message)
+	playsound(src,'sound/machines/radioboop.ogg',40,1)
 	nanomanager.update_uis(src)
 
 /obj/machinery/computer/security_alerts/say_quote(text)
