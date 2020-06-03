@@ -129,9 +129,9 @@
 	name = "Long Ponytail"
 	icon_state = "hair_longpony"
 	
-/datum/sprite_accessory/hair/gaypony
-	name = "Gay Ponytail"
-	icon_state = "hair_gaypony"
+/datum/sprite_accessory/hair/mediumpony
+	name = "Medium Ponytail"
+	icon_state = "hair_mediumpony"
 
 /datum/sprite_accessory/hair/highpony
 	name = "High Ponytail"
