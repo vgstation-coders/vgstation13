@@ -302,6 +302,14 @@
 	else
 		update_icon()
 
+/obj/effect/beam/can_shuttle_move(var/datum/shuttle/S)
+	var/obj/effect/beam/_master=get_master()
+	spawn(1)
+		if (!gcDestroyed && loc)
+			_master.killKids()
+			_master.emit(sources)
+	return 0
+
 /obj/effect/beam/blob_act()
 	// Act like Crossed.
 	// To do that, we need the blob.
