@@ -48,7 +48,7 @@
 	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
 		return FALSE
 
-	if(C.locked_to || C.is_locking() || C.anchored)
+	if(C.locked_to || C.is_locking())
 		return FALSE
 
 	if(get_dist(C, src) > 1 || is_locking(/datum/locking_category/cargocart))
