@@ -60,7 +60,7 @@
 	name = "Boombox"
 	desc = "I ask you a question: is a man not entitled to the beats of his own smooth jazz?"
 	typepath = /obj/machinery/media/receiver/boombox
-	cost = 40  //why was this ever 400 fucking credits?
+	cost = 40  
 
 /datum/storeitem/diskettebox
 	name = "Diskette Box"
@@ -87,7 +87,7 @@
 	name = "Crayons"
 	desc = "Let security know how they're doing by scrawling lovenotes all over their hallways."
 	typepath = /obj/item/weapon/storage/fancy/crayons
-	cost = 15 //150 for crayons? Almighty, what the fuck.
+	cost = 15 
 
 /datum/storeitem/beachball
 	name = "Beach Ball"
@@ -121,13 +121,13 @@
 	name = "Robotnik's Research Labcoat"
 	desc = "Join the empire and display your hatred for woodland animals."
 	typepath = /obj/item/clothing/suit/storage/labcoat/custom/N3X15/robotics
-	cost = 20  //dab on snowflakes, cheaper labcoat
+	cost = 20  
 
 /datum/storeitem/robotnik_jumpsuit
 	name = "Robotics Interface Suit"
 	desc = "A modern black and red design with reinforced seams and brass neural interface fittings."
 	typepath = /obj/item/clothing/under/custom/N3X15/robotics
-	cost = 20  //dab on snowflakes, cheaper jumpsuit
+	cost = 20  
 
 /////////////////////////////
 // Luxury
@@ -148,7 +148,7 @@
 	name = "Painting"
 	desc = "A random painting from Centcom's museum. For those with good taste in art."
 	typepath = /obj/item/mounted/frame/painting
-	cost = 50  //700 was an unnaceptable ammount of cash for paintings and decor, and don't you start trying to tell me it was
+	cost = 50 
 
 /datum/storeitem/critter_cage
 	name = "small cage"
