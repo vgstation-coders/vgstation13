@@ -304,6 +304,11 @@
 	//Notify prisms of power change.
 	var/event/power_change = new
 
+
+/obj/effect/beam/emitter/resetVariables()
+	..("base_state","power","power_change", args)
+	power_change = new
+
 /obj/effect/beam/emitter/proc/set_power(var/newpower = 1)
 	power = newpower
 	if(next)

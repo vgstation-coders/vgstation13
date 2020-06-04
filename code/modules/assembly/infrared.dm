@@ -42,7 +42,7 @@
 	else
 		on = 0
 		if(beam)
-			qdel(beam)
+			returnToPool(beam)
 		processing_objects.Remove(src)
 	update_icon()
 	return secured
@@ -64,7 +64,7 @@
 	if(1)
 		return PROCESS_KILL
 	if(!on && beam)
-		qdel(beam)
+		returnToPool(beam)
 		return
 	if(beam || !secured)
 		return
@@ -80,14 +80,14 @@
 		T = loc.loc
 	if(T)
 		if(!beam)
-			beam = new /obj/effect/beam/infrared(T)
+			beam = getFromPool(/obj/effect/beam/infrared,T)
 		beam.visible=visible
 		beam.emit(src)
 	return
 
 
 /obj/item/device/assembly/infra/attack_hand()
-	qdel(beam)
+	returnToPool(beam)
 	..()
 	return
 
@@ -96,7 +96,7 @@
 	var/t = dir
 	..()
 	dir = t
-	qdel(beam)
+	returnToPool(beam)
 	return
 
 
@@ -104,7 +104,7 @@
 	if(!holder)
 		return 0
 //		dir = holder.dir
-	qdel(beam)
+	returnToPool(beam)
 	return 1
 
 
