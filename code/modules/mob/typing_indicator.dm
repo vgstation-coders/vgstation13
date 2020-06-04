@@ -11,7 +11,7 @@ I IS TYPIN'!'
 /atom/movable/overlay/typing_indicator
 	follow_proc = /atom/movable/overlay/proc/move_to_turf_or_null
 	icon = 'icons/mob/talk.dmi'
-	icon_state = "h0"
+	icon_state = "talking"
 
 /atom/movable/overlay/typing_indicator/New()
 	. = ..()
