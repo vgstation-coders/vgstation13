@@ -193,7 +193,7 @@ var/list/SPS_list = list()
 	var/alertarea = get_area(SPS)
 	var/alerttime = worldtime2text()
 	var/verbose = TRUE
-	var/transmission_data = "[alerttype] - [alertarea] - [alerttime] @ ([x0][y0][z0])"
+	var/transmission_data = "[alerttype] - [alertarea] - [alerttime] @ ([x0],[y0],[z0])"
 	var/mob/living/L = get_holder_of_type(src, /mob/living/)
 	if(L || isturf(loc))
 		for(var/obj/machinery/computer/security_alerts/receiver in security_alerts_computers)

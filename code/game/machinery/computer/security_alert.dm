@@ -7,7 +7,7 @@ of automated alarms that security should be made aware of.
 This includes SPS alarms, lockbox cracking alarms, camera alarms, 
 door alarms, crate cracking alarms, turret engagement warnings,
 encoded proximity alarms, you name it.
-Alerts are listed as TYPE - TIME - AREA + COORDINATES.
+Alerts are listed as TYPE - TIME - AREA + CO,OR,DINATES.
 TODO: literally every alarm but SPS alarms.
 ***************/	
 	
@@ -54,24 +54,16 @@ TODO: literally every alarm but SPS alarms.
 	if(stat & (BROKEN|NOPOWER)) 
 		return
 
-	var/list/data[0]
-	var/list/show_alerts = list()
-	for(var/list/saved_alerts in saved_security_alerts)
-		var/list/alert_data = list()
-		alert_data["entry"] = saved_alerts
-		show_alerts += list(alert_data)
-	data["show_alerts"] = show_alerts
-
 	if(!ui) 
 		ui = nanomanager.get_open_ui(user, src, ui_key, force_open)
 
 	if(!ui)
 		ui = new(user, src, ui_key, "security_alert.tmpl", name, 450, 200)
-		ui.set_initial_data(data)
+		ui.set_initial_data(saved_security_alerts)
 		ui.open()
 		ui.set_auto_update(1)
 	else
-		ui.push_data(data)
+		ui.push_data(saved_security_alerts)
 		return
 
 /obj/machinery/computer/security_alerts/interact(mob/user as mob)
@@ -101,13 +93,10 @@ TODO: literally every alarm but SPS alarms.
 /obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1)
 	if(stat & NOPOWER)
 		return
-	if(saved_security_alerts.Find(newdata)) //nothing new in here?
-		to_chat(world, "Dropping entry. [newdata]") //testing
-		return //no need for duplicate entries
+	if(saved_security_alerts.Find(newdata)) //no need for duplicate entries
+		return 
 	saved_security_alerts.Insert(1,newdata)
-	to_chat(world, "Adding entry. [newdata]")
 	if(saved_security_alerts.len >= 50) //no need for infinite logs
-		to_chat(world, "Deleting top entry.")
 		pop(saved_security_alerts)
 	var/message = "Alert. [alerttype]"
 	if(verbose)
