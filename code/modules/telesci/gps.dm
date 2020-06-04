@@ -181,7 +181,6 @@ var/list/SPS_list = list()
 	if(!transmitting)
 		return
 	. = ..()
-	to_chat(world, "Sending signal! [wearer], [src], [gpstag]")
 	send_signal(wearer, src, "SPS [gpstag]: Code Yellow")
 
 /obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code)
