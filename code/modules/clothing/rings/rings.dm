@@ -8,17 +8,17 @@
 	var/engraved = FALSE
 
 /obj/item/clothing/ring/gold
-	name = "Golden ring"
+	name = "golden ring"
 	desc = "This one is rather plain, round, but it has a strange fascinating quality about it."
 	icon_state = "ringgold"
 
 /obj/item/clothing/ring/silver
-	name = "Silver ring"
+	name = "silver ring"
 	desc = "A shiny silver ring. Not a single scratch on it."
 	icon_state = "ringsilver"
 
 /obj/item/clothing/ring/shiny
-	name = "Ruby ring"
+	name = "ruby ring"
 	desc = "A gold ring with an ornate ruby gem incrusted."
 	icon_state = "ringshiny"
 
@@ -85,7 +85,7 @@
 	item_state = "pyrograph_pen"
 	origin_tech = Tc_MATERIALS + "=1"
 	sharpness = 0.5
-	sharpness_flags = SHARP_TIP
+	sharpness_flags = SHARP_TIP | HOT_EDGE
 	flags = FPRINT
 	slot_flags = SLOT_BELT | SLOT_EARS
 	throwforce = 0
