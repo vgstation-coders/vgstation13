@@ -268,7 +268,7 @@ var/list/department_radio_keys = list(
 		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode)
 	if (ismob(speech.speaker))
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
-	else if (!client.prefs.no_goonchat_for_obj || legnthtext(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
+	else if (!client.prefs.no_goonchat_for_obj || length_char(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
 
 	return rendered_message
