@@ -225,7 +225,7 @@
 			M.apply_radiation(round(rads*count_rad_wires()/2),RAD_EXTERNAL)
 
 		// Heat output
-		var/turf/simulated/L = loc
+		var/turf/simulated/L = get_turf(loc)
 		if(istype(L) && heating_power)
 			var/datum/gas_mixture/env = L.return_air()
 			if(env.temperature != MAX_TEMP + T0C)
