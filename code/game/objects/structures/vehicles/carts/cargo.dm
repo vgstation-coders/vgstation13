@@ -19,11 +19,14 @@
 
 /obj/machinery/cart/cargo/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
+	if(C.anchored)
+		to_chat(user, "\The [C] is fastened to the floor!")
+		return
 	if(user.incapacitated() || user.lying)
 		return
 	if(!Adjacent(user) || !user.Adjacent(src) || !src.Adjacent(C))
 		return
-	if (is_locking(/datum/locking_category/cargocart) || istype(C, /obj/machinery/cart/))
+	if(is_locking(/datum/locking_category/cargocart) || istype(C, /obj/machinery/cart/))
 		return
 
 	load(C)
