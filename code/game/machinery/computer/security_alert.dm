@@ -42,15 +42,16 @@ TODO: literally every alarm but SPS alarms.
 /obj/machinery/computer/security_alerts/attack_hand(mob/user as mob)
 	add_fingerprint(user)
 	ui_interact(user)
-	update_icon()
+	update_icon(showalert = FALSE)
 
-/obj/machinery/computer/security_alerts/update_icon()
+/obj/machinery/computer/security_alerts/update_icon(var/showalert = FALSE)
+	to_chat(world, "[last_alert_time] vs [world.time]")
 	..()
 	if(stat & (NOPOWER|BROKEN))
 		return
 	else
 		icon_state = "secalert"
-	if(saved_security_alerts.len && last_alert_time < world.time)
+	if(showalert)
 		overlays += image(icon = icon, icon_state = "secalert-newalerts")
 	else
 		overlays = 0
@@ -110,9 +111,7 @@ TODO: literally every alarm but SPS alarms.
 	playsound(src,'sound/machines/radioboop.ogg',40,1)
 	flick("secalert-update", src)
 	nanomanager.update_uis(src)
-	if(last_alert_time != world.time)
-		last_alert_time = world.time
-	update_icon()
+	update_icon(showalert = TRUE)
 
 /obj/machinery/computer/security_alerts/say_quote(text)
 	return "reports, [text]."
