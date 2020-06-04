@@ -1010,7 +1010,7 @@
 			H.my_appearance.b_eyes = old_b_eyes
 			H.update_body()
 	if (beam)
-		qdel(beam)
+		returnToPool(beam)
 		beam = null
 	if (emitter)
 		emitter.callOnStartMove -= "\ref[src]"
