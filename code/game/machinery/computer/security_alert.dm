@@ -96,7 +96,7 @@ TODO: literally every alarm but SPS alarms.
 	onclose(user, "security_alert")
 
 /obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1)
-	if(stat & NOPOWER)
+	if(stat & NOPOWER|BROKEN)
 		return
 	if(saved_security_alerts.Find(newdata)) //no need for duplicate entries
 		return 
