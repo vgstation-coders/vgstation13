@@ -181,8 +181,8 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/proc/disconnect_AI(var/announce = TRUE)
 	if(connected_ai)
+		to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Unlinked from [connected_ai].</span>")
 		if(announce)
-			to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Unlinked from [connected_ai].</span>")
 			to_chat(connected_ai, "<span class='alert' style=\"font-family:Courier\">Notice: Link to [src] lost.</span>")
 		connected_ai.connected_robots -= src
 		connected_ai = null
