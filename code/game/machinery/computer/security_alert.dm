@@ -32,15 +32,16 @@ TODO: literally every alarm but SPS alarms.
 	return PROCESS_KILL
 
 /obj/machinery/computer/security_alerts/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/security_alerts/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/security_alerts/attack_hand(mob/user as mob)
 	add_fingerprint(user)
 	ui_interact(user)
+	update_icon()
 
 /obj/machinery/computer/security_alerts/update_icon()
 	..()
@@ -48,7 +49,10 @@ TODO: literally every alarm but SPS alarms.
 		return
 	else
 		icon_state = "secalert"
-	return
+	if(saved_security_alerts.len && text2num(fingerprintslastTS) < text2num(time_stamp()))
+		overlays += image(icon = icon, icon_state = "secalert-newalerts")
+	else
+		overlays = 0
 
 
 /obj/machinery/computer/security_alerts/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -65,7 +69,7 @@ TODO: literally every alarm but SPS alarms.
 		ui.set_auto_update(1)
 	else
 		ui.push_data(saved_security_alerts)
-		return
+
 
 /obj/machinery/computer/security_alerts/interact(mob/user as mob)
 	var/listing = {"
@@ -90,7 +94,7 @@ TODO: literally every alarm but SPS alarms.
 </html>"}
 	user << browse(listing, "window=security_alert")
 	onclose(user, "security_alert")
-	return
+
 /obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1)
 	if(stat & NOPOWER)
 		return
@@ -103,7 +107,9 @@ TODO: literally every alarm but SPS alarms.
 	if(verbose)
 		say(message)
 	playsound(src,'sound/machines/radioboop.ogg',40,1)
+	flick("secalert-update", src)
 	nanomanager.update_uis(src)
+	update_icon()
 
 /obj/machinery/computer/security_alerts/say_quote(text)
 	return "reports, [text]."
