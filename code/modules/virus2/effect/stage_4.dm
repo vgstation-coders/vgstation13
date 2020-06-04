@@ -1022,6 +1022,11 @@
 /datum/disease2/effect/emitter/side_effect(var/mob/living/mob)
 	update_emitter()
 
+/datum/disease2/effect/emitter/on_death(var/mob/living/carbon/mob)
+	if (beam)
+		returnToPool(beam)
+		beam = null
+
 /datum/disease2/effect/emitter/proc/ready()
 	if (!emitter || !isturf(emitter.loc) || emitter.lying || emitter.stat != CONSCIOUS)
 		return 0
