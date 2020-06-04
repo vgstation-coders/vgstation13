@@ -45,7 +45,6 @@ TODO: literally every alarm but SPS alarms.
 	update_icon(showalert = FALSE)
 
 /obj/machinery/computer/security_alerts/update_icon(var/showalert = FALSE)
-	to_chat(world, "[last_alert_time] vs [world.time]")
 	..()
 	if(stat & (NOPOWER|BROKEN))
 		return
