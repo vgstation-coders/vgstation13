@@ -17,6 +17,7 @@ TODO: literally every alarm but SPS alarms.
 	circuit = "/obj/item/weapon/circuitboard/security_alerts"
 	icon_state = "secalert"
 	var/list/saved_security_alerts = list()
+	var/last_alert_time = 0
 
 	light_color = LIGHT_COLOR_RED
 
@@ -49,7 +50,7 @@ TODO: literally every alarm but SPS alarms.
 		return
 	else
 		icon_state = "secalert"
-	if(saved_security_alerts.len && text2num(fingerprintslastTS) < text2num(time_stamp()))
+	if(saved_security_alerts.len && last_alert_time < world.time)
 		overlays += image(icon = icon, icon_state = "secalert-newalerts")
 	else
 		overlays = 0
@@ -96,7 +97,7 @@ TODO: literally every alarm but SPS alarms.
 	onclose(user, "security_alert")
 
 /obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1)
-	if(stat & NOPOWER|BROKEN)
+	if(stat & (BROKEN|NOPOWER))
 		return
 	if(saved_security_alerts.Find(newdata)) //no need for duplicate entries
 		return 
@@ -109,6 +110,8 @@ TODO: literally every alarm but SPS alarms.
 	playsound(src,'sound/machines/radioboop.ogg',40,1)
 	flick("secalert-update", src)
 	nanomanager.update_uis(src)
+	if(last_alert_time != world.time)
+		last_alert_time = world.time
 	update_icon()
 
 /obj/machinery/computer/security_alerts/say_quote(text)
