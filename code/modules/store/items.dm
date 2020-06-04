@@ -30,13 +30,13 @@
 	name = "Fast-Food Menu"
 	desc = "The normal sized average american meal. Courtesy of Nanotrasen."
 	typepath = /obj/item/weapon/storage/bag/food/menu1
-	cost = 50
+	cost = 25
 
 /datum/storeitem/menu2
 	name = "Fast-Food Menu (XL)"
 	desc = "For when you're 100% starved and want to become fat in 1 easy step."
 	typepath = /obj/item/weapon/storage/bag/food/menu2
-	cost = 100
+	cost = 50
 
 /////////////////////////////
 // Tools
