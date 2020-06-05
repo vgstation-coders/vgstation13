@@ -61,7 +61,7 @@
 /obj/item/device/assembly/infra/toggle_secure()
 	secured = !secured
 	if(!secured)
-		on = 0
+		on = FALSE
 		if(beam)
 			returnToPool(beam)
 			beam = null
