@@ -555,7 +555,6 @@
 		playsound(src, 'sound/items/crank.ogg',50,1)
 		update_icon()
 		windUp++
-		return
 
 obj/item/weapon/gun/hookshot/whip/bootbox/Fire(atom/target, mob/living/user, params, reflex =0, struggle =0) //4 winds minimum
 	maxlength = 4
