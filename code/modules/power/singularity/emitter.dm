@@ -30,6 +30,17 @@
 	//Now uses a constant beam.
 	var/obj/effect/beam/emitter/beam = null
 
+/obj/machinery/power/emitter/antique
+	name = "antique emitter"
+	desc = "An old fashioned heavy duty industrial laser"
+	icon_state = "emitter"
+
+/obj/machinery/power/emitter/antique/update_icon()
+	if(powered && get_powernet() && avail(active_power_usage) && active)
+		icon_state = "emitter_+a"
+	else
+		icon_state = "emitter"
+
 /obj/machinery/power/emitter/New(var/turf/loc)
 	..()
 	previous_state = state
@@ -291,6 +302,18 @@
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 
+/obj/machinery/power/emitter/canClone(var/obj/machinery/power/emitter/O)
+	return istype(O)
+
+/obj/machinery/power/emitter/clone(var/obj/machinery/power/emitter/O)
+	id_tag = O.id_tag
+	set_frequency(O.frequency)
+	return 1
+
+/obj/machinery/power/emitter/npc_tamper_act(mob/living/L)
+	attack_hand(L)
+
+/////////////////////////////////////////////////////////////////////////////////////
 
 /obj/effect/beam/emitter
 	name = "emitter beam"
@@ -340,13 +363,15 @@
 /obj/effect/beam/emitter/get_damage()
 	return base_damage * power
 
-/obj/machinery/power/emitter/canClone(var/obj/machinery/power/emitter/O)
-	return istype(O)
+/////////////////////////////////////////////////////////////////////////////////////
 
-/obj/machinery/power/emitter/clone(var/obj/machinery/power/emitter/O)
-	id_tag = O.id_tag
-	set_frequency(O.frequency)
-	return 1
+/obj/machinery/power/emitter/antique
+	name = "antique emitter"
+	desc = "An old fashioned heavy duty industrial laser"
+	icon_state = "emitter"
 
-/obj/machinery/power/emitter/npc_tamper_act(mob/living/L)
-	attack_hand(L)
+/obj/machinery/power/emitter/antique/update_icon()
+	if(powered && get_powernet() && avail(active_power_usage) && active)
+		icon_state = "emitter_+a"
+	else
+		icon_state = "emitter"
