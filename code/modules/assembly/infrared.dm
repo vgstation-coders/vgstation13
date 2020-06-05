@@ -213,6 +213,15 @@
 	var/obj/item/device/assembly/infra/assembly
 	var/puffed = 0
 
+	var/list/smokes_n_mists = list(
+		/obj/effect/decal/chemical_puff,
+		/obj/effect/effect/smoke,
+		/obj/effect/effect/water,
+		/obj/effect/effect/foam,
+		/obj/effect/effect/steam,
+		/obj/effect/mist,
+		)
+
 /obj/effect/beam/infrared/Destroy()
 	assembly = null
 	..()
@@ -265,14 +274,6 @@
 /obj/effect/beam/infrared/Crossed(var/atom/movable/AM)
 	if(!master || !AM)
 		return
-	var/list/smokes_n_mists = list(
-		/obj/effect/decal/chemical_puff,
-		/obj/effect/effect/smoke,
-		/obj/effect/effect/water,
-		/obj/effect/effect/foam,
-		/obj/effect/effect/steam,
-		/obj/effect/mist,
-		)
 	if(is_type_in_list(AM,smokes_n_mists))
 		puffed++
 		invisibility = 0
