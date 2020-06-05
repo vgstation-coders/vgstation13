@@ -194,8 +194,9 @@ var/list/portal_cache = list()
 		exit_beams -= BE
 		returnToPool(BE)
 	if (target && istype(target,/obj/effect/portal))
-		for(var/obj/effect/beam/BE in target.exit_beams)
-			target.exit_beams -= BE
+		var/obj/effect/portal/P = target
+		for(var/obj/effect/beam/BE in P.exit_beams)
+			P.exit_beams -= BE
 			returnToPool(BE)
 
 /obj/effect/portal/proc/add_beams()
