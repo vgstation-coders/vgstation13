@@ -237,7 +237,7 @@
 /obj/effect/beam/infrared/update_icon()
 	puffed = 0
 	if (!master)
-		invisibility = 101
+		invisibility = INVISIBILITY_MAXIMUM
 	else if (visible)
 		invisibility = 0
 		alpha = OPAQUE
