@@ -565,7 +565,7 @@ obj/item/weapon/gun/hookshot/whip/bootbox/Fire(atom/target, mob/living/user, par
 	return..()
 
 /obj/item/weapon/gun/hookshot/whip/clownbox
-	name = "Punchline"
+	name = "\improper Punchline"
 	icon = 'icons/obj/wind_up.dmi'
 	icon_state = "clownbox-0"
 	item_state = "clownbox"
