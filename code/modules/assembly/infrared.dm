@@ -218,7 +218,7 @@
 	..()
 
 /obj/effect/beam/infrared/resetVariables()
-	..("sources", "children", "limit","visible", "left", "assembly", "invisibility", args)
+	..("sources", "children", "limit","visible", "left", "assembly", "invisibility", "puffed", args)
 	children = list()
 	sources = list()
 
@@ -257,16 +257,6 @@
 		var/obj/effect/beam/infrared/B=next
 		B.set_visible(v)
 
-
-/obj/effect/beam/infrared/proc/puff_update(var/atom/movable/AM,var/turf/T)
-	while (!gcDestroyed && T == loc)
-		sleep(10)
-		if (!AM || AM.loc != T)
-			puffed--
-		if (puffed <= 0)
-			update_icon()
-
-
 /obj/effect/beam/infrared/proc/hit()
 	if(assembly && stepped)//by checking for stepped we ensure the hit won't be triggered while the beam is still deploying
 		assembly.trigger_beam()
@@ -287,8 +277,11 @@
 		puffed++
 		invisibility = 0
 		var/turf/T = loc
-		spawn()
-			puff_update(AM,T)
+		spawn(10)
+			if (!gcDestroyed && T == loc)
+				puffed--
+				if (puffed <= 0)
+					update_icon()
 		return
 	if(istype(AM, /obj/effect/beam) || (!AM.density && !istype(AM, /obj/effect/blob)))
 		return
