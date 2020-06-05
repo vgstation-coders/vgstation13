@@ -377,14 +377,18 @@ This function restores all organs.
 
 	switch(damagetype)
 		if(BRUTE)
-			damageoverlaytemp = 20
 			damage = damage * brute_damage_modifier
+
+			if (damage > 0)
+				damageoverlaytemp = 20
 
 			if(organ.take_damage(damage, 0, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
 		if(BURN)
-			damageoverlaytemp = 20
 			damage = damage * burn_damage_modifier
+
+			if (damage > 0)
+				damageoverlaytemp = 20
 
 			if(organ.take_damage(0, damage, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)

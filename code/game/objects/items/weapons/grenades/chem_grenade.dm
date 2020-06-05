@@ -27,6 +27,7 @@
 //				detonator.loc=src.loc
 			detonator.detached()
 			usr.put_in_hands(detonator)
+			detonator.master = null
 			detonator=null
 			stage=0
 			icon_state = initial(icon_state)
@@ -84,6 +85,7 @@
 		W.playtoolsound(src, 25, TRUE, -3)
 		user.remove_from_mob(det)
 		det.forceMove(src)
+		det.master = src
 		detonator = det
 		icon_state = initial(icon_state) +"_ass"
 		name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
@@ -338,6 +340,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 		W.playtoolsound(src, 25, TRUE, -3)
 		user.remove_from_mob(det)
 		det.forceMove(src)
+		det.master = src
 		detonator = det
 		icon_state = initial(icon_state) +"_ass"
 		name = "unsecured EX grenade with [beakers.len] containers[detonator?" and detonator":""]"
