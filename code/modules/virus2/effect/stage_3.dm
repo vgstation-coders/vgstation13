@@ -516,10 +516,13 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/colorsmoke/activate(var/mob/living/mob)
-	if (!ismouse(mob))//people don't like infected mice ruining maint
-		to_chat(mob, "<span class='notice'>You feel colorful!</span>")
-		mob.reagents.add_reagent(COLORFUL_REAGENT, 5)
-		mob.reagents.add_reagent(PAISMOKE, 5)
+	if (ismouse(mob))//people don't like infected mice ruining maint
+		var/mob/living/simple_animal/mouse/M = mob
+		if (!initial(M.infectable))
+			return
+	to_chat(mob, "<span class='notice'>You feel colorful!</span>")
+	mob.reagents.add_reagent(COLORFUL_REAGENT, 5)
+	mob.reagents.add_reagent(PAISMOKE, 5)
 
 /datum/disease2/effect/cleansmoke
 	name = "Cleaning Syndrome"
