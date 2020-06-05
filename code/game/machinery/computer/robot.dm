@@ -1,5 +1,6 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
+#define DEFAULT_SEQUENCE_TIME	120 SECONDS
 
 /obj/machinery/computer/robotics
 	name = "robotics control"
@@ -9,33 +10,41 @@
 	req_access = list(access_robotics)
 	circuit = "/obj/item/weapon/circuitboard/robotics"
 
+	var/hacking = 0
 	var/id = 0.0
 	var/temp = null
-	var/status = 0
-	var/timeleft = 60
 	var/stop = 0.0
 	var/screen = 0 // 0 - Main Menu, 1 - Cyborg Status, 2 - Kill 'em All! -- In text
 
 	light_color = LIGHT_COLOR_PINK
 
+/obj/machinery/computer/robotics/say_quote(text)
+	return "beeps, [text]"
+
+/obj/machinery/computer/robotics/proc/speak(var/message)
+	if(stat & NOPOWER)	//sanity
+		return
+	if (!message)
+		return
+	say(message)
 
 /obj/machinery/computer/robotics/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/robotics/attack_paw(var/mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/robotics/attack_hand(var/mob/user as mob)
 	if(..())
 		return
-	if (src.z > 6)
+	if (z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 	user.set_machine(src)
 	var/dat
-	if (src.temp)
-		dat = "<TT>[src.temp]</TT><BR><BR><A href='?src=\ref[src];temp=1'>Clear Screen</A>"
+	if(temp)
+		dat += temp
 	else
 		if(screen == 0)
 
@@ -80,24 +89,24 @@
 					<A href='?src=\ref[src];lockbot=\ref[R]'>(<font color=orange><i>[R.modulelock ? "Module-unlock" : "Module-lock"]</i></font>)</A>
 					<A href='?src=\ref[src];killbot=\ref[R]'>(<font color=red><i>Destroy</i></font>)</A>
 					<BR>"}
-			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
+			dat += "<A href='?src=\ref[src];screen=0'>\[Return to Main Menu\]</A><BR>"
 		if(screen == 2)
-			if(!src.status)
-				dat += {"<BR><B>Emergency Robot Self-Destruct</B><HR>\nStatus: Off<BR>
-				\n<BR>
-				\nCountdown: [src.timeleft]/60 <A href='?src=\ref[src];reset=1'>\[Reset\]</A><BR>
+			if(cyborg_detonation_time == 0 || cyborg_detonation_time < world.time)	//if a killswitch time wasnt set or if the killswitch already activated
+				dat += {"<BR><B>Emergency Robot Self-Destruct</B><HR>\nStatus:<B>Off</B><BR>
 				\n<BR>
 				\n<A href='?src=\ref[src];eject=1'>Start Sequence</A><BR>
-				\n<BR>
-				\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
+				\n<BR>"}			
 			else
-				dat = {"<B>Emergency Robot Self-Destruct</B><HR>\nStatus: Activated<BR>
+				dat = {"<B>Emergency Robot Self-Destruct</B><HR>\nStatus:  <font color=red><B>Activated</B></font><BR>
 				\n<BR>
-				\nCountdown: [src.timeleft]/60 \[Reset\]<BR>
-				\n<BR>\n<A href='?src=\ref[src];stop=1'>Stop Sequence</A><BR>
+				\nDetonation Time: [formatTimeDuration(cyborg_detonation_time-world.time)]<BR>
 				\n<BR>
-				\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
-			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
+				\n<A href='?src=\ref[src];stop=1'>Stop Sequence</A><BR>
+				\n<BR>"}
+
+
+			dat += "<BR><A href='?src=\ref[src];screen=0'>\[Return to Main Menu\]</A><BR>"
+			dat += "<A href='?src=\ref[user];mach_close=computer'>\[Close\]</A>"
 
 	user << browse(dat, "window=computer;size=400x500")
 	onclose(user, "computer")
@@ -110,43 +119,34 @@
 		usr.set_machine(src)
 
 		if (href_list["eject"])
-			src.temp = {"Destroy Robots?<BR>
-			<BR><B><A href='?src=\ref[src];eject2=1'>\[Swipe ID to initiate destruction sequence\]</A></B><BR>
-			<A href='?src=\ref[src];temp=1'>Cancel</A>"}
+			temp = {"
+			Start Robot Destruction Sequence?<BR>
+			<BR><A href='?src=\ref[src];eject2=1'>Yes</A><BR>
+			<A href='?src=\ref[src];temp=1'>No</A>"}
 
 		else if (href_list["eject2"])
-			var/obj/item/weapon/card/id/I = usr.get_active_hand()
-			if (istype(I, /obj/item/device/pda))
-				var/obj/item/device/pda/pda = I
-				I = pda.id
-			if (istype(I))
-				if(src.check_access(I))
-					if (!status)
-						message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
-						log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
-						src.status = 1
-						src.start_sequence()
-						src.temp = null
-
-				else
-					to_chat(usr, "<span class='warning'>Access Denied.</span>")
+			if (cyborg_detonation_time == 0 || cyborg_detonation_time < world.time)
+				message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
+				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")	
+				start_sequence()
+			temp = null
+				
+				
 
 		else if (href_list["stop"])
-			src.temp = {"
+			temp = {"
 			Stop Robot Destruction Sequence?<BR>
 			<BR><A href='?src=\ref[src];stop2=1'>Yes</A><BR>
 			<A href='?src=\ref[src];temp=1'>No</A>"}
 
 		else if (href_list["stop2"])
-			src.stop = 1
-			src.temp = null
-			src.status = 0
-
-		else if (href_list["reset"])
-			src.timeleft = 60
+			message_admins("<span class='notice'>[key_name_admin(usr)] has halted the global cyborg killswitch!</span>")
+			log_game("<span class='notice'>[key_name(usr)] has halted the global cyborg killswitch!</span>")
+			stop_sequence()
+			temp = null
 
 		else if (href_list["temp"])
-			src.temp = null
+			temp = null
 		else if (href_list["screen"])
 			switch(href_list["screen"])
 				if("0")
@@ -156,7 +156,7 @@
 				if("2")
 					screen = 2
 		else if (href_list["killbot"])
-			if(src.allowed(usr))
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["killbot"])
 				if(R)
 					if(istype(usr, /mob/living/silicon/ai))
@@ -176,7 +176,7 @@
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		else if (href_list["lockbot"])
-			if(src.allowed(usr))
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["lockbot"])
 				if(R && istype(R))
 					if(istype(usr, /mob/living/silicon/ai))
@@ -201,7 +201,7 @@
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		else if (href_list["stopbot"])
-			if(src.allowed(usr))
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["stopbot"])
 				if(R && istype(R)) // Extra sancheck because of input var references
 					if(istype(usr, /mob/living/silicon/ai))
@@ -231,7 +231,7 @@
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 
 		else if (href_list["magbot"])
-			if(src.allowed(usr))
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["magbot"])
 				if(istype(usr, /mob/living/silicon/ai))
 					if (R.connected_ai != usr)
@@ -242,39 +242,71 @@
 				if(R.scrambledcodes)
 					return
 				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
-				if(istype(R) && istype(usr, /mob/living/silicon) && usr.mind.special_role && (usr.mind.original == usr) && R.emagged != 1)
+				if((ismalf(usr) || (usr == R && istraitor(usr))) && !R.emagged)
 					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
-						if(R && istype(R))
-//							message_admins("<span class='notice'>[key_name_admin(usr)] emagged [R.name] using robotic console!</span>")
-							log_game("[key_name(usr)] emagged [R.name] using robotic console!")
-							R.SetEmagged(2)
-							if(R.mind.special_role)
-								R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
+						if(R)
+							if (!hacking)
+								hacking = 1
+								to_chat(usr, "Beginning override of cyborg safeties. This will take some time, and you cannot hack other borgs during the process.")
+								sleep(600)
+//								message_admins("<span class='notice'>[key_name_admin(usr)] emagged [R.name] using robotic console!</span>")
+								log_game("[key_name(usr)] emagged [R.name] using robotic console!")
+								R.SetEmagged(TRUE)
+								to_chat(usr, "Hack successful. [R.name] now has access to illegal technology.")
+								if(R.mind.special_role)
+									R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
+								hacking = 0
+							else
+								to_chat(usr, "You are already hacking a cyborg.")
 
-		src.add_fingerprint(usr)
-	src.updateUsrDialog()
+		add_fingerprint(usr)
+	updateUsrDialog()
 	return
 
 /obj/machinery/computer/robotics/proc/start_sequence()
+	speak("Emergency self-destruct sequence initiatied.")
+	cyborg_detonation_time = world.time + DEFAULT_SEQUENCE_TIME
+	update_icon()
+
+	for(var/mob/living/silicon/ai/A in mob_list)
+		to_chat(A, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Cyborg Self-Destruct Sequence Activated. Signal traced to [get_area(src).name].</b></span>")
+		A << 'sound/machines/warning-buzzer.ogg'
+	for(var/mob/living/silicon/robot/R in cyborg_list)
+		if(!R.scrambledcodes && !isMoMMI(R))
+			to_chat(R, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Self-Destruct sequence initiated. This unit will self-destruct in [formatTimeDuration(cyborg_detonation_time-world.time)] unless a termination signal is recieved.</b></span>")
+			R << 'sound/machines/warning-buzzer.ogg'
 
 
-	do
-		if(src.stop)
-			src.stop = 0
-			return
-		src.timeleft--
-		sleep(10)
-	while(src.timeleft)
+/obj/machinery/computer/robotics/proc/stop_sequence()
+	if(cyborg_detonation_time != 0)
+		speak("Emergency self-destruct sequence halted.")
+	cyborg_detonation_time = 0
+	update_icon()
 
-	for(var/mob/living/silicon/robot/R in mob_list)
-		if(!R.scrambledcodes)
-			R.self_destruct()
-
-	return
 
 /obj/machinery/computer/robotics/emag(mob/user)
 	..()
 	req_access = list()
 	if(user)
 		to_chat(user, "You disable the console's access requirement.")
+
+/obj/machinery/computer/robotics/update_icon()
+	..()
+
+	if(stat & (BROKEN | NOPOWER))
+		return
+
+	if (cyborg_detonation_time != 0 && cyborg_detonation_time > world.time)
+		icon_state = "robot-alert"
+	else
+		icon_state = "robot"
+
+
+
+/obj/machinery/computer/robotics/process()
+	..()
+	update_icon()
+
+
+#undef DEFAULT_SEQUENCE_TIME

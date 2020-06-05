@@ -11,6 +11,8 @@
 #define CHEMFLAG_OBSCURING 2
 
 
+#define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
+
 //Reagents
 
 #define VAPORSALT			"vaporsalt"
@@ -286,6 +288,8 @@
 #define MANHATTANFIREBALL		"manhattanfireball"
 #define FIREBALLCOLA	"fireballcola"
 #define FIRERITA 		"firerita"
+#define MAGICA			"magica"
+#define MAGICADELUXE			"magicadeluxe"
 #define IRISHCOFFEE 			"irishcoffee"
 #define MARGARITA 			"margarita"
 #define BLACKRUSSIAN 			"blackrussian"
@@ -402,6 +406,7 @@
 #define WEED_EATER		"weed_eater"
 #define RAGSTORICHES	"ragstoriches"
 #define WAIFU			"waifu"
+#define HUSBANDO		"husbando"
 #define BEEPSKY_CLASSIC	"beepsky_classic"
 #define SMOKYROOM		"smokyroom"
 #define BAD_TOUCH		"bad_touch"
@@ -420,6 +425,12 @@
 #define MUSTARD_POWDER	"mustard_powder"
 #define MAYO			"mayo"
 #define DIABEETUSOL		"diabeetusol"
+#define MANNITOL		"mannitol"
+#define DIETINE			"dietine"
+#define GATORMIX		"gatormix"
+#define BLISTEROL		"blisterol"
+#define ECTOPLASM		"ectoplasm"
+#define MONSTERMASH		"monstermash"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -501,6 +512,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define IMPEDREZENES list(IMPEDREZENE, HYOSCYAMINE)
 #define LEXORINS list(LEXORIN, CORIAMYRTIN)
 #define DEXALINS list(DEXALIN, THYMOL)
+#define PETRITRICINCURES list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"

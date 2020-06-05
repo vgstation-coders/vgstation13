@@ -33,13 +33,13 @@
 
 #define VALUE_IRON 0.2
 #define VALUE_GLASS 0.2
-#define VALUE_DIAMOND 4
-#define VALUE_PLASMA 0.2
-#define VALUE_GOLD 1
-#define VALUE_SILVER 1
-#define VALUE_URANIUM 1
-#define VALUE_CLOWN 1
-#define VALUE_PHAZON 1
+#define VALUE_DIAMOND 50
+#define VALUE_PLASMA 1
+#define VALUE_GOLD 6
+#define VALUE_SILVER 6
+#define VALUE_URANIUM 6
+#define VALUE_CLOWN 20
+#define VALUE_PHAZON 50
 #define VALUE_MYTHRIL 1
 #define VALUE_TELECRYSTAL 1
 

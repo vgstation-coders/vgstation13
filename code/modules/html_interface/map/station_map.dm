@@ -93,6 +93,26 @@
 /proc/generateHoloMinimap(var/zLevel=1)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
+	//These atoms will keep their tile empty on holomaps
+	var/list/full_emptiness = list()
+
+	//These atoms will appear as obstacles on holomaps
+	var/list/full_obstacles = list(
+		/obj/structure/grille,
+		/obj/structure/fence,
+		/obj/structure/window/full,
+		)
+
+	//These atoms will appear as floors on holomaps
+	var/list/full_paths = list(
+		/obj/structure/catwalk,
+		/obj/structure/fence/door,
+		)
+
+	if (map.snow_theme)//we got a lot of turfs to check, so let's only check for those if we really need it
+		full_emptiness += /obj/glacier
+		full_obstacles += /obj/structure/flora/tree
+
 	if(!map.disable_holominimap_generation)
 		if (zLevel > map.zDeepSpace)
 			return // No need to generate an holomap for something that didn't spawn.
@@ -100,17 +120,44 @@
 			for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 				for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 					var/turf/tile = locate(i, r, zLevel)
-					if(tile && (tile.loc.holomapDrawOverride() != HOLOMAP_DRAW_EMPTY))
-						if((!istype(tile, get_base_turf(zLevel)) && istype(tile.loc, /area/mine/unexplored)) || (tile.loc.holomapDrawOverride() == HOLOMAP_DRAW_FULL) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile))
-							if(map.holomap_offset_x.len >= zLevel)
-								canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+					if (tile?.loc)
+						var/area/aera = tile.loc
+						var/override = FALSE
+						for(var/emptiness in full_emptiness)
+							var/atom/A = locate(emptiness) in tile
+							if (A && !is_type_in_list(A,full_paths))
+								override = TRUE
+								break
+						if (override)
+							continue
+						if((tile.holomap_draw_override != HOLOMAP_DRAW_EMPTY) && (aera.holomap_draw_override != HOLOMAP_DRAW_EMPTY))
+							override = FALSE
+							for(var/obstacle in full_obstacles)
+								if (locate(obstacle) in tile)
+									override = TRUE
+									break
+							if (map.snow_theme)//a few snowflake checks (pun intended) to keep some of snaxi's secrets a bit harder to find.
+								if ((istype(tile, /turf/unsimulated/floor/snow/permafrost) && istype(aera, /area/surface/mine)) ||(istype(tile, /turf/unsimulated/floor/snow/cave) && istype(aera, /area/surface/outer/ne)))
+									override = TRUE
+							var/exception = FALSE
+							if (istype(tile, get_base_turf(zLevel)) && istype(aera, /area/mine/unexplored))//we could avoid such exceptions if this area wasn't ever painted over space.
+								exception = TRUE
+							if(override || (!exception && ((tile.holomap_draw_override == HOLOMAP_DRAW_FULL) || (aera.holomap_draw_override == HOLOMAP_DRAW_FULL))))
+								if(map.holomap_offset_x.len >= zLevel)
+									canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+								else
+									canvas.DrawBox(HOLOMAP_OBSTACLE, i, r)
 							else
-								canvas.DrawBox(HOLOMAP_OBSTACLE, i, r)
-						else if (istype(tile, /turf/simulated/floor) || istype(tile, /turf/unsimulated/floor) || (locate(/obj/structure/catwalk) in tile))
-							if(map.holomap_offset_x.len >= zLevel)
-								canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
-							else
-								canvas.DrawBox(HOLOMAP_PATH, i, r)
+								override = FALSE
+								for(var/path in full_paths)
+									if (locate(path) in tile)
+										override = TRUE
+										break
+								if (override || (tile.holomap_draw_override == HOLOMAP_DRAW_PATH))
+									if(map.holomap_offset_x.len >= zLevel)
+										canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+									else
+										canvas.DrawBox(HOLOMAP_PATH, i, r)
 
 	holoMiniMaps[zLevel] = canvas
 
@@ -182,6 +229,11 @@
 							canvas.DrawBox(areaToPaint.holomap_color, min(i+map.holomap_offset_x[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 						else
 							canvas.DrawBox(areaToPaint.holomap_color, i, r)
+					else if (tile.holomap_draw_override == HOLOMAP_DRAW_HALLWAY)
+						if(map.holomap_offset_x.len >= StationZLevel)
+							canvas.DrawBox(HOLOMAP_AREACOLOR_HALLWAYS, min(i+map.holomap_offset_x[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+						else
+							canvas.DrawBox(HOLOMAP_AREACOLOR_HALLWAYS, i, r)
 
 	var/icon/big_map = icon('icons/480x480.dmi', "stationmap")
 	var/icon/small_map = icon('icons/480x480.dmi', "blank")

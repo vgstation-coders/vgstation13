@@ -70,7 +70,7 @@
 	return 1
 
 /datum/dynamic_ruleset/midround/from_ghosts/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len))
+	if (required_candidates > (dead_players.len + list_observers.len) && !forced)
 		return 0
 	return ..()
 
@@ -115,14 +115,9 @@
 		if (makeBody)
 			new_character = generate_ruleset_body(applicant)
 
-		finish_setup(new_character, i)
+		finish_setup(new_character, candidate_checks - (i-1)) // i = N, N - 1.... so that N - (i-1) = 1, 2, ...
 
 	applicants.Cut()
-
-/datum/dynamic_ruleset/midround/from_ghosts/proc/generate_ruleset_body(mob/applicant)
-	var/mob/living/carbon/human/new_character = makeBody(applicant)
-	new_character.dna.ResetSE()
-	return new_character
 
 /datum/dynamic_ruleset/midround/from_ghosts/proc/finish_setup(var/mob/new_character, var/index)
 	var/datum/role/new_role = new role_category
@@ -326,7 +321,8 @@
 	my_fac = /datum/faction/syndicate/nuke_op/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(25, 25, 25, 25, 25, 20, 15, 15, 10, 10)
-	required_candidates = 5
+	required_candidates = 5 // Placeholder, see op. cap
+	max_candidates = 5
 	weight = 1
 	cost = 35
 	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)

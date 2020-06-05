@@ -1,5 +1,6 @@
-/mob/living/silicon/robot/gib()
+/mob/living/silicon/robot/gib(animation = FALSE, meat = TRUE)
 	//robots don't die when gibbed. instead they drop their MMI'd brain
+	disconnect_AI()
 	monkeyizing = TRUE
 	canmove = FALSE
 	icon = null
@@ -17,6 +18,7 @@
 	qdel(src)
 
 /mob/living/silicon/robot/dust()
+	disconnect_AI()
 	death(1)
 	monkeyizing = TRUE
 	canmove = FALSE
@@ -36,6 +38,13 @@
 /mob/living/silicon/robot/death(gibbed)
 	if(stat == DEAD)
 		return
+	if(connected_ai)
+		if(connected_ai.explosive_cyborgs) 
+			visible_message("<span class='notice'>You hear a soft beep.</span>")
+			spawn(10)
+				explosion(src.loc, 1, 4, 5, 6)
+				gib()
+				return
 	if(!gibbed)
 		emote("deathgasp", message = TRUE)
 	stat = DEAD

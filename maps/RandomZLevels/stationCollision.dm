@@ -19,25 +19,26 @@
  * Areas
  */
  //Gateroom gets its own APC specifically for the gate
- /area/awaymission/gateroom
+/area/awaymission/gateroom
 
  //Library, medbay, storage room
- /area/awaymission/southblock
+/area/awaymission/southblock
 
  //Arrivals, security, hydroponics, shuttles (since they dont move, they dont need specific areas)
- /area/awaymission/arrivalblock
+/area/awaymission/arrivalblock
 
  //Crew quarters, cafeteria, chapel
- /area/awaymission/midblock
+/area/awaymission/midblock
 
  //engineering, bridge (not really north but it doesnt really need its own APC)
- /area/awaymission/northblock
+/area/awaymission/northblock
 
  //That massive research room
- /area/awaymission/research
+/area/awaymission/research
 
 //Syndicate shuttle
 /area/awaymission/syndishuttle
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 
 /*
@@ -163,7 +164,7 @@ var/sc_safecode5 = "[rand(0,9)]"
 	l_code = "[sc_safecode1][sc_safecode2][sc_safecode3][sc_safecode4][sc_safecode5]"
 	l_set = 1
 	new /obj/item/weapon/gun/energy/mindflayer(src)
-	new /obj/item/device/soulstone(src)
+	new /obj/item/soulstone(src)
 	new /obj/item/clothing/head/helmet/space/legacy_cult(src)
 	new /obj/item/clothing/suit/space/legacy_cult(src)
 	//new /obj/item/weapon/teleportation_scroll(src)

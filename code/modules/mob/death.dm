@@ -1,6 +1,6 @@
 //This is the proc for gibbing a mob. Cannot gib ghosts.
 //added different sort of gibs and animations. N
-/mob/proc/gib()
+/mob/proc/gib(animation = FALSE, meat = TRUE)
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -33,7 +33,7 @@
 
 /mob/proc/death(gibbed)
 	timeofdeath = world.time
-	INVOKE_EVENT(on_death, list("user" = src,"body_destroyed" = gibbed))
+	lazy_invoke_event(/lazy_event/on_death, list("user" = src, "body_destroyed" = gibbed))
 	living_mob_list -= src
 	dead_mob_list += src
 	stat_collection.add_death_stat(src)

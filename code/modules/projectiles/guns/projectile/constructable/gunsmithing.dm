@@ -1,5 +1,5 @@
 //This file will contain all the intermediary parts used in the crafting of craftable weapons, before they actually become said weapons.
-	
+
 /obj/item/weapon/aluminum_cylinder
 	name = "aluminum cylinder"
 	desc = "A soda can that has had the top and bottom cut out."
@@ -742,6 +742,81 @@
 			cannon_assembly = 1
 			update_wheelchair_assembly()
 //CANNON END///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//WIND-UP BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/obj/item/weapon/windup_assembly
+	name = "wind-up assembly"
+	desc = "A spring in a shoe and all the associated possibilities."
+	icon = 'icons/obj/weaponsmithing.dmi'
+	var/windupState = 1
+	icon_state = "windup_assembly_spring"
+	var/list/windup_adhesive = list(
+		/obj/item/gum,
+		/obj/item/taperoll/police,
+		/obj/item/taperoll/engineering,
+		/obj/item/taperoll/atmos,
+		/obj/item/taperoll/syndie,
+		/obj/item/device/label_roll,
+		/obj/item/weapon/glue,
+		/obj/item/weapon/bonegel,
+		/obj/item/stack/package_wrap,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+		)
+
+/obj/item/spring/attackby(var/obj/item/I, mob/user)
+	if((istype(I, /obj/item/clothing/shoes)) && (user.drop_item(I)))
+		playsound(src,'sound/effects/spring.ogg', 50,1)
+		var/obj/item/weapon/windup_assembly/W = new /obj/item/weapon/windup_assembly(get_turf(src))
+		user.before_take_item(src)
+		user.put_in_hands(W)
+		if(prob(10))
+			to_chat(user,"<span  class='notice'>You put some spring in your step.</span>")
+		else
+			to_chat(user,"<span  class='notice'>You stuff the [src] firmly into the [I].</span>")
+		qdel(I)
+		qdel(src)
+
+/obj/item/weapon/windup_assembly/attackby(var/obj/item/K, mob/user as mob)
+	#define WINDUP_CARDBOARD 1
+	#define WINDUP_RODS 2
+	#define WINDUP_ADHESIVE 3
+	#define WINDUP_CRAYON 4
+	switch(windupState)
+		if(WINDUP_CARDBOARD)
+			if(istype(K, /obj/item/stack/sheet/cardboard))
+				var/obj/item/stack/sheet/cardboard/C = K
+				if(C.use(6))
+					windupState = WINDUP_RODS
+					playsound(src,'sound/items/can_crushed.ogg', 50,1)
+					to_chat(user,"<span  class='notice'>You build a box around the assembly.</span>")
+					icon_state = "windup_assembly_cardboard"
+		if(WINDUP_RODS)
+			if(istype(K, /obj/item/stack/rods))
+				var/obj/item/stack/rods/C = K
+				if(C.use(3))
+					windupState = WINDUP_ADHESIVE
+					playsound(src,'sound/items/crank.ogg', 50,1)
+					to_chat(user,"<span  class='notice'>You add a crank to the box.</span>")
+					icon_state = "windup_assembly_rods"
+		if(WINDUP_ADHESIVE)
+			if(is_type_in_list(K, windup_adhesive) && user.drop_item(K, src))
+				windupState = WINDUP_CRAYON
+				playsound(src,'sound/items/poster_ripped.ogg', 50,1)
+				to_chat(user,"<span  class='notice'>You patch up and reinforce the box.</span>")
+				qdel(K)
+				icon_state = "windup_assembly_adhesive"
+		if(WINDUP_CRAYON)
+			if(istype(K, /obj/item/toy/crayon) && user.drop_item(K,src))
+				playsound(src,'sound/misc/balloon_twist_short.ogg', 25,1)
+				to_chat(user,"<span  class='notice'>You write B for boot.</span>")
+				var/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/B = new (get_turf(user))
+				qdel(src)
+				user.put_in_hands(B)
+
+
+
+//WIND-UP END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/machinery/power/secured_capacitor
 	name = "capacitor"

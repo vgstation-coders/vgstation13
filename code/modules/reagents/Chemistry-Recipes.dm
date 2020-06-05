@@ -338,6 +338,13 @@
 	required_reagents = list(SILICON = 1, CARBON = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/blisterol
+	name = "Blisterol"
+	id = BLISTEROL
+	result = BLISTEROL
+	required_reagents = list(ALUMINUM = 1, COPPER = 1, FUEL = 2)
+	result_amount = 3
+
 /datum/chemical_reaction/virus_food
 	name = "Virus Food"
 	id = VIRUSFOOD
@@ -698,6 +705,20 @@
 	required_reagents = list(SODIUMCHLORIDE = 1, ETHANOL = 1, RADIUM = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/dietine
+	name = "Dietine"
+	id = DIETINE
+	result = DIETINE
+	required_reagents = list(SODIUMCHLORIDE = 1, COFFEE = 3, LITHIUM = 1, FUEL = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/gatormix
+	name = "Gator Mix"
+	id = GATORMIX
+	result = GATORMIX
+	required_reagents = list(NUTRIMENT = 1, COFFEE = 1, COLA = 1, EGG_YOLK = 1, FUEL = 1)
+	result_amount = 5
+
 /datum/chemical_reaction/carp_pheromones
 	name = "Carp pheromones"
 	id = CARPPHEROMONES
@@ -839,6 +860,13 @@
 	required_reagents = list(HYDROGEN = 1, CHLORINE = 1, ETHANOL = 1)
 	required_catalysts = list(FLUORINE = 5)
 	result_amount = 1
+
+/datum/chemical_reaction/mannitol
+	name = "Mannitol"
+	id = MANNITOL
+	result = MANNITOL
+	required_reagents = list(DISCOUNT = 1, ICE = 1, BEFF = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/piccolyn
 	name = "Piccolyn"
@@ -1224,7 +1252,7 @@
 	required_container = /obj/item/slime_extract/metal
 
 /datum/chemical_reaction/slime_extract/slimemetal/on_reaction(var/datum/reagents/holder)
-	var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(holder.my_atom))
+	var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(holder.my_atom))
 	M.amount = 15
 	var/obj/item/stack/sheet/plasteel/P = new /obj/item/stack/sheet/plasteel
 	P.amount = 5
@@ -1549,8 +1577,10 @@
 			/obj/item/stack/sheet/mineral/silver,
 			/obj/item/stack/sheet/mineral/gold,
 			/obj/item/stack/sheet/mineral/uranium)
-	getFromPool(pick(paths), get_turf(holder.my_atom), 5)
-	getFromPool(pick(paths), get_turf(holder.my_atom), 5)
+	var/path = pick(paths)
+	new path(get_turf(holder.my_atom), 5)
+	path = pick(paths)
+	new path(get_turf(holder.my_atom), 5)
 	..()
 
 //Blue
@@ -3046,6 +3076,20 @@
 	required_reagents = list(CINNAMONWHISKY = 1, TRIPLESEC = 1, TEQUILA = 3)
 	result_amount = 5
 
+/datum/chemical_reaction/magica
+	name = "Magica"
+	id = MAGICA
+	result = MAGICA
+	required_reagents = list(CINNAMONWHISKY = 1, BITTERS = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/magicadeluxe
+	name = "Magica Deluxe"
+	id = MAGICADELUXE
+	result = MAGICADELUXE
+	required_reagents = list(MAGICA = 1, KARMOTRINE = 1)
+	result_amount = 1
+
 //Cafe stuff!
 /datum/chemical_reaction/acidtea
 	name = "Earl's Grey Tea"
@@ -3215,7 +3259,7 @@
 	result = APETRINE
 	required_reagents = list(PETRITRICIN = 2, PACID = 3)
 	result_amount = 1
-
+	
 /datum/chemical_reaction/potassiumcarbonate
 	name = "Potassium Carbonate"
 	id = POTASSIUMCARBONATE
@@ -3342,6 +3386,13 @@
 	required_reagents = list(SAKE = 1, KARMOTRINE = 4)
 	result_amount = 5
 
+/datum/chemical_reaction/husbando
+	name = "Husbando"
+	id = HUSBANDO
+	result = HUSBANDO
+	required_reagents = list(MANLYDORF = 1, KARMOTRINE = 4)
+	result_amount = 5
+
 /datum/chemical_reaction/beepskyclassic
 	name = "Beepsky Classic"
 	id = BEEPSKY_CLASSIC
@@ -3368,6 +3419,13 @@
 	id = LEMON_LIME
 	result = LEMON_LIME
 	required_reagents = list(LIMEJUICE = 1, LEMONJUICE = 1, SODAWATER = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/monstermash
+	name = "monstermash"
+	id = MONSTERMASH
+	result = MONSTERMASH
+	required_reagents = list(ECTOPLASM = 1, CARAMEL = 1, TOMATOJUICE = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/diy_soda
@@ -3503,6 +3561,69 @@
 /datum/chemical_reaction/synthparrot/on_reaction(var/datum/reagents/holder)
 	var/location = get_turf(holder.my_atom)
 	new /mob/living/simple_animal/parrot(location)
+	qdel(holder.my_atom)
+
+/datum/chemical_reaction/ectoplasm
+	name = "Ectoplasm"
+	id = ECTOPLASM
+	result = ECTOPLASM
+	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 3, FROSTOIL = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/synthskeleton
+	name = "Synthskeleton"
+	id = "synthskeleton"
+	result = null
+	required_reagents = list(ECTOPLASM = 1, DEGENERATECALCIUM = 10)
+	result_amount = 1
+	var/skelPowerLimiter = 200
+
+/datum/chemical_reaction/synthskeleton/on_reaction(var/datum/reagents/holder, var/created_volume)
+	if(ishuman(holder.my_atom))
+		var/mob/living/carbon/human/H = holder.my_atom
+		if(created_volume <= 9)
+			for(var/i = 1 to created_volume)
+				var/datum/organ/external/E = pick(H.organs)
+				E.fracture()
+		else
+			if(isskellington(H) || isskelevox(H) || islich(H))
+				bigBoned(H, created_volume)
+			if(isvox(H))						//Copy paste of the melt power, ack ack
+				H.set_species("Skeletal Vox")
+				H.regenerate_icons()
+				H.visible_message("<span class='danger'>[H.name]'s skeleton jumps right out of their skin, forcefully!</span>")
+				H.drop_all()
+			else if(H.set_species("Skellington"))
+				H.regenerate_icons()
+				H.visible_message("<span class='danger'>[H.name]'s skeleton jumps right out of their skin, forcefully!</span>")
+				H.drop_all()
+			gibs(H.loc, H.virus2, H.dna)
+	for(var/i = 1 to created_volume)
+		var/L = get_turf(holder.my_atom)
+		new /mob/living/simple_animal/hostile/humanoid/skellington(L)
+
+/datum/chemical_reaction/synthskeleton/proc/bigBoned(var/mob/living/carbon/human/theSkel, var/volume)
+	for(var/datum/organ/external/E in theSkel.organs)
+		if(!E.is_organic() || (E.min_broken_damage >= E.max_damage))
+			continue
+		if(E.max_damage < skelPowerLimiter)
+			E.max_damage++
+		E.min_broken_damage += volume
+		if(E.min_broken_damage >= E.max_damage)
+			E.min_broken_damage = E.max_damage
+		theSkel.visible_message("<span class='danger'>[theSkel] rattles and shakes!</span>")
+
+/datum/chemical_reaction/synthgingerbone
+	name = "Synthgingerbone"
+	id = "synthgingerbone"
+	result = null
+	required_reagents = list(ECTOPLASM = 1, CARAMEL = 5)
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man
+
+/datum/chemical_reaction/synthgingerbone/on_reaction(var/datum/reagents/holder)
+	var/L = get_turf(holder.my_atom)
+	new /mob/living/simple_animal/hostile/ginger/gingerboneman(L)
 	qdel(holder.my_atom)
 
 #undef ALERT_AMOUNT_ONLY

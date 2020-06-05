@@ -4,7 +4,7 @@
 	name = "emitter"
 	desc = "A heavy duty industrial laser"
 	icon = 'icons/obj/singularity.dmi'
-	icon_state = "emitter"
+	icon_state = "emitter0"
 	anchored = 0
 	density = 1
 	req_access = list(access_engine_equip)
@@ -19,25 +19,37 @@
 	var/last_shot = 0
 	var/shot_number = 0
 	var/locked = 0
+	var/previous_state = 0//for update_icon() purposes
 
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | WELD_FIXED | MULTITOOL_MENU
 
 	var/frequency = 0
-	var/id_tag = null
 	var/datum/radio_frequency/radio_connection
 
 	//Now uses a constant beam.
 	var/obj/effect/beam/emitter/beam = null
 
+/obj/machinery/power/emitter/antique
+	name = "antique emitter"
+	desc = "An old fashioned heavy duty industrial laser"
+	icon_state = "emitter"
+
+/obj/machinery/power/emitter/antique/update_icon()
+	if(powered && get_powernet() && avail(active_power_usage) && active)
+		icon_state = "emitter_+a"
+	else
+		icon_state = "emitter"
+
+/obj/machinery/power/emitter/New(var/turf/loc)
+	..()
+	previous_state = state
+
 	//Radio remote control
 /obj/machinery/power/emitter/proc/set_frequency(new_frequency)
-
-
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
-
 
 /obj/machinery/power/emitter/verb/rotate_cw()
 	set name = "Rotate (Clockwise)"
@@ -62,7 +74,6 @@
 	return 1
 
 /obj/machinery/power/emitter/initialize()
-
 	..()
 	if(state == 2 && anchored)
 		connect_to_network()
@@ -73,7 +84,6 @@
 		set_frequency(frequency)
 
 /obj/machinery/power/emitter/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
-
 	return {"
 	<ul>
 		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
@@ -82,21 +92,18 @@
 	"}
 
 /obj/machinery/power/emitter/proc/update_beam()
-
-
 	if(active && powered)
 		if(!beam)
-			beam = getFromPool(/obj/effect/beam/emitter, loc)
+			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
 	else
 		if(beam)
 			beam._re_emit = 0
-			returnToPool(beam)
+			qdel(beam)
 			beam = null
 
 /obj/machinery/power/emitter/receive_signal(datum/signal/signal)
-
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag))
 		return 0
 
@@ -126,22 +133,32 @@
 			update_beam()
 
 /obj/machinery/power/emitter/Destroy()
-
-	returnToPool(beam)
+	qdel(beam)
 	message_admins("Emitter deleted at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 	log_game("Emitter deleted at ([x],[y],[z])")
 	investigation_log(I_SINGULO,"<font color='red'>deleted</font> at ([x],[y],[z])")
 	..()
 
 /obj/machinery/power/emitter/update_icon()
+	overlays.len = 0
+	icon_state = "emitter[state]"
+	if (state != previous_state)
+		flick("emitterflick-[previous_state][state]",src)
+		previous_state = state
 
 	if(powered && get_powernet() && avail(active_power_usage) && active)
-		icon_state = "emitter_+a"
-	else
-		icon_state = "emitter"
+		var/image/emitterbeam = image(icon,"emitter-beam")
+		emitterbeam.plane = LIGHTING_PLANE
+		emitterbeam.layer = ABOVE_LIGHTING_LAYER
+		overlays += emitterbeam
+
+	if(locked)
+		var/image/emitterlock = image(icon,"emitter-lock")
+		emitterlock.plane = LIGHTING_PLANE
+		emitterlock.layer = ABOVE_LIGHTING_LAYER
+		overlays += emitterlock
 
 /obj/machinery/power/emitter/attack_hand(mob/user as mob)
-
 	//Require consciousness
 	if(user.stat && !isAdminGhost(user))
 		return
@@ -186,11 +203,9 @@
 	update_beam()
 
 /obj/machinery/power/emitter/emp_act(var/severity) //Emitters are EMP-proof for obvious reasons
-
 	return 1
 
 /obj/machinery/power/emitter/process()
-
 	if(!anchored) //If it got unanchored "inexplicably"... fucking badmins
 		active = 0
 		update_icon()
@@ -231,7 +246,7 @@
 			fire_delay = rand(20, 100)
 			shot_number = 0
 
-		//beam = getFromPool(/obj/item/projectile/beam/emitter, loc)
+		//beam = new /obj/item/projectile/beam/emitter(loc)
 		//beam.dir = dir
 		//playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
 
@@ -241,33 +256,32 @@
 		//A.dumbfire()
 
 /obj/machinery/power/emitter/emag(mob/user)
-
 	if(!emagged)
 		locked = 0
 		emagged = 1
 		if(user)
 			user.visible_message("<span class='danger'>[user] shorts out \the [src]'s lock.</span>", "<span class='warning'>You short out \the [src]'s lock.</span>")
-		return
+		update_icon()
 
 /obj/machinery/power/emitter/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(active)
 		to_chat(user, "<span class='warning'>Turn off \the [src] first.</span>")
 		return FALSE
 	. = ..()
+	update_icon()
 
 /obj/machinery/power/emitter/weldToFloor()
-
 	if(..() == 1)
 		switch(state)
 			if(1)
 				disconnect_from_network()
 			if(2)
 				connect_to_network()
+		update_icon()
 		return 1
 	return -1
 
 /obj/machinery/power/emitter/attackby(obj/item/W, mob/user)
-
 	. = ..() //Holy fucking shit
 	if(.)
 		return .
@@ -280,15 +294,27 @@
 			if(active)
 				src.locked = !src.locked
 				to_chat(user, "<span class='notice'>The controls are now [src.locked ? "locked" : "unlocked"].</span>")
+				update_icon()
 			else
 				src.locked = 0 //just in case it somehow gets locked
 				to_chat(user, "<span class='warning'>The controls can only be locked when \the [src] is online</span>")
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")
-		return
+
+/obj/machinery/power/emitter/canClone(var/obj/machinery/power/emitter/O)
+	return istype(O)
+
+/obj/machinery/power/emitter/clone(var/obj/machinery/power/emitter/O)
+	id_tag = O.id_tag
+	set_frequency(O.frequency)
+	return 1
+
+/obj/machinery/power/emitter/npc_tamper_act(mob/living/L)
+	attack_hand(L)
+
+/////////////////////////////////////////////////////////////////////////////////////
 
 /obj/effect/beam/emitter
-
 	name = "emitter beam"
 	icon = 'icons/effects/beam.dmi'
 	icon_state = "emitter_1"
@@ -303,11 +329,6 @@
 
 	//Notify prisms of power change.
 	var/event/power_change = new
-
-
-/obj/effect/beam/emitter/resetVariables()
-	..("base_state","power","power_change", args)
-	power_change = new
 
 /obj/effect/beam/emitter/proc/set_power(var/newpower = 1)
 	power = newpower
@@ -341,13 +362,15 @@
 /obj/effect/beam/emitter/get_damage()
 	return base_damage * power
 
-/obj/machinery/power/emitter/canClone(var/obj/machinery/power/emitter/O)
-	return istype(O)
+/////////////////////////////////////////////////////////////////////////////////////
 
-/obj/machinery/power/emitter/clone(var/obj/machinery/power/emitter/O)
-	id_tag = O.id_tag
-	set_frequency(O.frequency)
-	return 1
+/obj/machinery/power/emitter/antique
+	name = "antique emitter"
+	desc = "An old fashioned heavy duty industrial laser"
+	icon_state = "emitter"
 
-/obj/machinery/power/emitter/npc_tamper_act(mob/living/L)
-	attack_hand(L)
+/obj/machinery/power/emitter/antique/update_icon()
+	if(powered && get_powernet() && avail(active_power_usage) && active)
+		icon_state = "emitter_+a"
+	else
+		icon_state = "emitter"

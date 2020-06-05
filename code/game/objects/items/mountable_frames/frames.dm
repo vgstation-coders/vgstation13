@@ -11,7 +11,7 @@
 	..()
 	if (W.is_wrench(user) && sheets_refunded)
 		//new /obj/item/stack/sheet/metal( get_turf(src.loc), sheets_refunded )
-		var/obj/item/stack/sheet/S = getFromPool(frame_material, get_turf(src))
+		var/obj/item/stack/sheet/S = new frame_material(get_turf(src))
 		S.amount = sheets_refunded
 		qdel(src)
 		return TRUE

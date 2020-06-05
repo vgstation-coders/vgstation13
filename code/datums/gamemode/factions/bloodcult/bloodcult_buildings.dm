@@ -92,7 +92,7 @@
 		var/obj/item/weapon/grab/G = W
 		if(iscarbon(G.affecting))
 			MouseDropTo(G.affecting,user)
-			returnToPool(W)
+			qdel(W)
 	else if (istype(W))
 		if(user.a_intent == I_HELP || W.force == 0)
 			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
@@ -297,7 +297,7 @@
 				C.resting = 1
 				C.update_canmove()
 			C.forceMove(loc)
-			returnToPool(G)
+			qdel(G)
 			to_chat(user, "<span class='warning'>You move \the [C] on top of \the [src]</span>")
 			return 1
 	..()
@@ -353,7 +353,11 @@
 		return
 	if (!istype(O))
 		return
-	if (!O.anchored && (istype(O, /obj/item) || user.get_active_hand() == O))
+	if(user.incapacitated() || user.lying)
+		return
+	if(O.anchored || !Adjacent(user) || !user.Adjacent(O))
+		return
+	if (user.get_active_hand() == O)
 		if(!user.drop_item(O))
 			return
 	else
@@ -361,13 +365,7 @@
 			return
 		if(O.loc == user || !isturf(O.loc) || !isturf(user.loc))
 			return
-		if(user.incapacitated() || user.lying)
-			return
-		if(O.anchored || !Adjacent(user) || !user.Adjacent(src))
-			return
 		if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon))
-			return
-		if(!user.loc)
 			return
 		var/mob/living/L = O
 		if(!istype(L) || L.locked_to || L == user)
@@ -453,7 +451,7 @@
 		return
 	if(is_locking(lock_type))
 		var/choices = list(
-			list("Remove Blade", "radial_altar_remove", "Transfer some of your blood to the blade to repair it and refuel its blood level, or you could just slash someone."),
+			list("Remove Blade", "radial_altar_remove", "Pull the blade off, freeing the victim."),
 			list("Sacrifice", "radial_altar_sacrifice", "Initiate the sacrifice ritual. The ritual can only proceed if the proper victim has been nailed to the altar."),
 			)
 		var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
@@ -642,7 +640,7 @@
 					sleep (gem_delay/3)
 					altar_task = ALTARTASK_NONE
 					update_icon()
-					var/obj/item/device/soulstone/gem/gem = new (loc)
+					var/obj/item/soulstone/gem/gem = new (loc)
 					gem.pixel_y = 4
 
 /obj/structure/cult/altar/proc/replace_target(var/mob/user)
@@ -707,6 +705,7 @@
 			to_chat(usr, "<span class='warning'>Another shade was faster, and is currently possessing \the [blade].</span>")
 			return
 		var/mob/living/simple_animal/shade/shadeMob = new(blade)
+		blade.shade = shadeMob
 		shadeMob.status_flags |= GODMODE
 		shadeMob.canmove = 0
 		var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
@@ -756,6 +755,7 @@
 			blade.forceMove(loc)
 			blade.blood = blade.maxblood
 			new_shade.forceMove(blade)
+			blade.shade = new_shade
 			blade.update_icon()
 			blade = null
 

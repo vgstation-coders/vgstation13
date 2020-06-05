@@ -214,13 +214,13 @@
 	..()
 	name = "Toggle [target]"
 
-/datum/action/item_action/toggle_rig_helmet
-	name = "Toggle rig helmet"
+/datum/action/item_action/toggle_rig_suit
+	name = "Toggle rig suit"
 
-/datum/action/item_action/toggle_rig_helmet/Trigger()
-	if(IsAvailable() && owner && target && istype(target,/obj/item/clothing/suit/space/rig))
+/datum/action/item_action/toggle_rig_suit/Trigger()
+	if(IsAvailable() && owner && target && isrig(target))
 		var/obj/item/clothing/suit/space/rig/R = target
-		R.toggle_helmet(owner)
+		R.toggle_suit()
 		return TRUE
 	return FALSE
 
@@ -228,7 +228,7 @@
 	name = "Toggle rig light"
 
 /datum/action/item_action/toggle_rig_light/Trigger()
-	if(IsAvailable() && target && istype(target, /obj/item/clothing/head/helmet/space/rig))
+	if(IsAvailable() && target && isrighelmet(target))
 		var/obj/item/clothing/head/helmet/space/rig/R = target
 		R.toggle_light(owner)
 		return TRUE

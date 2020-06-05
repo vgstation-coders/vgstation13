@@ -96,7 +96,7 @@
 /obj/machinery/door/mineral/proc/Dismantle(devastated = 0)
 	var/obj/item/stack/ore
 	if(src.prefix == "metal")
-		ore = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		ore = new /obj/item/stack/sheet/metal(get_turf(src))
 	else
 		var/P = text2path("/obj/item/stack/sheet/mineral/[prefix]")
 		if(P)

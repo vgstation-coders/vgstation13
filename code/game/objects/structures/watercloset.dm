@@ -199,7 +199,7 @@
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
-			getFromPool(/obj/item/stack/sheet/metal, loc, 2)
+			new /obj/item/stack/sheet/metal(loc, 2)
 			qdel(src)
 		return
 
@@ -308,16 +308,17 @@
 				if(anchored)
 					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
 								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
+					on = 0
 					anchored = 0
+					update_icon()
 				else
 					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
 								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
 					anchored = 1
-
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
 	if(mymist)
-		returnToPool(mymist)
+		qdel(mymist)
 		mymist = null
 
 	if(on)
@@ -330,16 +331,16 @@
 			spawn(50)
 				if(src && on)
 					ismist = 1
-					mymist = getFromPool(/obj/effect/mist, get_turf(src))
+					mymist = new /obj/effect/mist(get_turf(src))
 		else
 			ismist = 1
-			mymist = getFromPool(/obj/effect/mist, get_turf(src))
+			mymist = new /obj/effect/mist(get_turf(src))
 	else if(ismist)
 		ismist = 1
-		mymist = getFromPool(/obj/effect/mist, get_turf(src))
+		mymist = new /obj/effect/mist(get_turf(src))
 		spawn(250)
 			if(src && !on)
-				returnToPool(mymist)
+				qdel(mymist)
 				mymist = null
 				ismist = 0
 
@@ -375,19 +376,19 @@
 			var/washglasses = 1
 
 			if(H.wear_suit)
-				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDEGLOVES))
-				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDESHOES))
+				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDEGLOVES, 0, H.wear_suit.body_parts_visible_override))
+				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDESHOES, 0, H.wear_suit.body_parts_visible_override))
 
 			if(H.head)
-				washmask = !(is_slot_hidden(H.head.body_parts_covered, HIDEMASK))
-				washglasses = !(is_slot_hidden(H.head.body_parts_covered, HIDEEYES))
-				washears = !(is_slot_hidden(H.head.body_parts_covered, HIDEEARS))
+				washmask = !(is_slot_hidden(H.head.body_parts_covered, HIDEMASK, 0, H.head.body_parts_visible_override))
+				washglasses = !(is_slot_hidden(H.head.body_parts_covered, HIDEEYES, 0, H.head.body_parts_visible_override))
+				washears = !(is_slot_hidden(H.head.body_parts_covered, HIDEEARS, 0, H.head.body_parts_visible_override))
 
 			if(H.wear_mask)
 				if(washears)
-					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEARS))
+					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEARS, 0, H.wear_mask.body_parts_visible_override))
 				if(washglasses)
-					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEYES))
+					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEYES, 0, H.wear_mask.body_parts_visible_override))
 
 			if(H.head)
 				if(prob(CLEAN_PROB) && H.head.clean_blood())

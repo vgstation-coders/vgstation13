@@ -23,8 +23,7 @@
 	if(!endtime)
 		to_chat(usr, "<span class='warning'>endtime is null!</span>")
 		return
-	endtime = sanitizeSQL(endtime)
-	var/datum/DBQuery/query_validate_time = SSdbcore.NewQuery("SELECT STR_TO_DATE('[endtime]','%Y-%c-%d %T')")
+	var/datum/DBQuery/query_validate_time = SSdbcore.NewQuery("SELECT STR_TO_DATE(:endtime,'%Y-%c-%d %T')", list("endtime" = endtime))
 	if(!query_validate_time.Execute())
 		var/err = query_validate_time.ErrorMsg()
 		log_sql("SQL ERROR validating endtime. Error : \[[err]\]\n")
@@ -36,7 +35,7 @@
 			to_chat(src, "Datetime entered is invalid.")
 			return
 	qdel(query_validate_time)
-	var/datum/DBQuery/query_time_later = SSdbcore.NewQuery("SELECT DATE('[endtime]') < NOW()")
+	var/datum/DBQuery/query_time_later = SSdbcore.NewQuery("SELECT DATE(:endtime) < NOW()", list("endtime" = endtime))
 	if(!query_time_later.Execute())
 		var/err = query_time_later.ErrorMsg()
 		log_sql("SQL ERROR comparing endtime to NOW(). Error : \[[err]\]\n")
@@ -56,13 +55,20 @@
 			adminonly = 0
 		else
 			return
-	var/sql_ckey = sanitizeSQL(ckey)
 	var/question = input("Write your question","Question") as message
 	if(!question)
 		return
-	question = replacetext(question, "'", "\'")
-	question = sanitizeSQL(question)
-	var/datum/DBQuery/query_polladd_question = SSdbcore.NewQuery("INSERT INTO erro_poll_question (polltype, starttime, endtime, question, adminonly, multiplechoiceoptions, createdby_ckey, createdby_ip) VALUES ('[polltype]', '[starttime]', '[endtime]', '[question]', '[adminonly]', '[choice_amount]', '[sql_ckey]', '[address]')")
+	var/datum/DBQuery/query_polladd_question = SSdbcore.NewQuery("INSERT INTO erro_poll_question (polltype, starttime, endtime, question, adminonly, multiplechoiceoptions, createdby_ckey, createdby_ip) VALUES (:polltype, :starttime, :endtime, :question, :adminonly, :choice_amount, :ckey, :address)",
+		list(
+			"polltype" = polltype,
+			"starttime" = starttime,
+			"endtime" = endtime,
+			"question" = question,
+			"adminonly" = adminonly,
+			"choice_amount" = choice_amount,
+			"ckey" = ckey,
+			"address" = address,
+	))
 	if(!query_polladd_question.Execute())
 		var/err = query_polladd_question.ErrorMsg()
 		qdel(query_polladd_question)
@@ -70,7 +76,14 @@
 		return
 	qdel(query_polladd_question)
 	var/pollid = 0
-	var/datum/DBQuery/query_get_id = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE question = '[question]' AND starttime = '[starttime]' AND endtime = '[endtime]' AND createdby_ckey = '[sql_ckey]' AND createdby_ip = '[address]'")
+	var/datum/DBQuery/query_get_id = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE question = :question AND starttime = :starttime AND endtime = :endtime AND createdby_ckey = :ckey AND createdby_ip = :address",
+		list(
+			"question" = question,
+			"starttime" = starttime,
+			"endtime" = endtime,
+			"ckey" = ckey,
+			"address" = address,
+	))
 	if(!query_get_id.Execute())
 		var/err = query_get_id.ErrorMsg()
 		qdel(query_get_id)
@@ -89,7 +102,6 @@
 		var/option = input("Write your option","Option") as message
 		if(!option)
 			return
-		option = sanitizeSQL(option)
 		var/percentagecalc
 		switch(alert("Calculate option results as percentage?",,"Yes","No","Cancel"))
 			if("Yes")
@@ -114,15 +126,19 @@
 				src << "Minimum rating value can't be more than maximum rating value"
 				return
 			descmin = input("Optional: Set description for minimum rating","Minimum rating description") as message
-			if(descmin)
-				descmin = sanitizeSQL(descmin)
 			descmid = input("Optional: Set description for median rating","Median rating description") as message
-			if(descmid)
-				descmid = sanitizeSQL(descmid)
 			descmax = input("Optional: Set description for maximum rating","Maximum rating description") as message
-			if(descmax)
-				descmax = sanitizeSQL(descmax)
-		var/datum/DBQuery/query_polladd_option = SSdbcore.NewQuery("INSERT INTO erro_poll_option (pollid, text, percentagecalc, minval, maxval, descmin, descmid, descmax) VALUES ('[pollid]', '[option]', '[percentagecalc]', '[minval]', '[maxval]', '[descmin]', '[descmid]', '[descmax]')")
+		var/datum/DBQuery/query_polladd_option = SSdbcore.NewQuery("INSERT INTO erro_poll_option (pollid, text, percentagecalc, minval, maxval, descmin, descmid, descmax) VALUES (:pollid, :option, :percentagecalc, :minval, :maxval, :descmin, :descmid, :descmax)",
+			list(
+				"pollid" = pollid,
+				"option" = option,
+				"percentagecalc" = percentagecalc,
+				"minval" = minval,
+				"maxval" = maxval,
+				"descmin" = descmin,
+				"descmid" = descmid,
+				"descmax" = descmax,
+		))
 		if(!query_polladd_option.Execute())
 			var/err = query_polladd_option.ErrorMsg()
 			log_sql("SQL ERROR adding new poll option to table. Error : \[[err]\]\n")

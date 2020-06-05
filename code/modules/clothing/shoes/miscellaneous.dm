@@ -551,3 +551,9 @@ obj/item/clothing/shoes/jackboots/cowboy
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin(get_turf(src))
 		qdel(W)
 		qdel(src)
+
+/obj/item/clothing/shoes/secshoes
+	name = "security shoes"
+	desc = "Black shoes for formal occasions."
+	icon_state = "secshoes"
+	item_state = "secshoes"

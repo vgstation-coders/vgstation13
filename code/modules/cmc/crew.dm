@@ -1,4 +1,4 @@
-var/list/cmc_holomap_cache = list()
+var/list/obj/abstract/screen/interface/tooltip/CrewIcon/cmc_holomap_cache = list()
 #define ENTRY_SEE_X 1
 #define ENTRY_SEE_Y 2
 #define ENTRY_MOB 3
@@ -35,11 +35,11 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	Holomap stuff
 	*/
 	//DONT touch, integral to the inner workings
-	var/list/holomap_images = list() //list of lists of images for the people using the console
+	var/list/list/holomap_images = list() //list of lists of images for the people using the console
 	var/list/holomap_z = list() //list of _using selected z_levels
-	var/list/holomap_tooltips = list() //list of lists of markers for the people using the console
+	var/list/list/holomap_tooltips = list() //list of lists of markers for the people using the console
 	var/list/freeze = list() //list of _using set freeze
-	var/list/entries = list() //list of all crew, which has sensors >= 1
+	var/list/list/entries = list() //list of all crew, which has sensors >= 1
 	var/list/textview_updatequeued = list() //list of _using set textviewupdate setting
 	var/list/holomap = list() //list of _using set holomap-enable setting
 	var/list/jobs = list( //needed for formatting, stolen from the old cmc
@@ -82,7 +82,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		"Medical Response Officer" = 223,
 		"Assistant" = 999 //Unknowns/custom jobs should appear after civilians, and before assistants
 	)
-	
+
 	//DO touch, for mappers to varedit
 	var/holomap_filter //can make the cmc display syndie/vox hideout
 	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
@@ -149,9 +149,11 @@ GENERAL PROCS
 		deactivate(user)
 		return
 
-	if(!(holomap_z[uid] in (holomap_z_levels_mapped | holomap_z_levels_unmapped))) //catching some more unwanted behaviours
-		if((holomap_z_levels_mapped | holomap_z_levels_unmapped).len > 0)
-			holomap_z[uid] = (holomap_z_levels_mapped | holomap_z_levels_unmapped)[1]
+	var/list/mapped_and_unmapped = holomap_z_levels_mapped | holomap_z_levels_unmapped
+
+	if(!(holomap_z[uid] in mapped_and_unmapped)) //catching some more unwanted behaviours
+		if(mapped_and_unmapped.len > 0)
+			holomap_z[uid] = mapped_and_unmapped[1]
 		else
 			deactivate(user)
 
@@ -317,7 +319,7 @@ HOLOMAP PROCS
 		background.layer = HUD_BASE_LAYER
 		holomap_cache[holomap_bgmap] = background
 		holomap_z_levels_unmapped |= CENTCOMM_Z
-	
+
 	holomap["\ref[user]"] = 1
 
 //closes the holomap
@@ -342,8 +344,7 @@ HOLOMAP PROCS
 
 //sanity for the holomap
 /obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
-	var/uid = "\ref[user]"
-	if((!user) || (!user.client) || (user.isUnconscious() && !isobserver(user)) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
+	if((!user) || (!user.client) || (user.isUnconscious() && !isobserver(user)) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || config.skip_minimap_generation || (holoMiniMaps.len < loc.z) || (holoMiniMaps[loc.z] == null) )
 		return FALSE
 	return TRUE
 
@@ -358,8 +359,8 @@ HOLOMAP PROCS
 	if(holomap[uid]) // we only repopulate user.client.images if holomap is enabled
 		user.client.images -= holomap_images[uid]
 		user.client.screen -= holomap_tooltips[uid]
-		holomap_images[uid].len = 0
-		holomap_tooltips[uid].len = 0
+		holomap_images[uid] = new()
+		holomap_tooltips[uid] = new()
 
 		var/image/bgmap
 		var/z = holomap_z[uid]
@@ -376,14 +377,14 @@ HOLOMAP PROCS
 			//can only be our z, so i'm not checking that, only if we have a pos
 			if(entry[ENTRY_POS])
 				addCrewMarker(user, entry[ENTRY_SEE_X], entry[ENTRY_SEE_Y], entry[ENTRY_MOB], entry[ENTRY_NAME], entry[ENTRY_ASSIGNMENT], entry[ENTRY_STAT], entry[ENTRY_DAMAGE], entry[ENTRY_AREA], entry[ENTRY_POS])
-        
+
 		user.client.images |= holomap_images[uid]
 		user.client.screen |= holomap_tooltips[uid]
 	else
 		user.client.images -= holomap_images[uid]
 		user.client.screen -= holomap_tooltips[uid]
-		holomap_images[uid].len = 0
-		holomap_tooltips[uid].len = 0
+		holomap_images[uid] = new()
+		holomap_tooltips[uid] = new()
 
 //create actual marker for crew
 /obj/machinery/computer/crew/proc/addCrewMarker(var/mob/user, var/see_x, var/see_y, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available", var/turf/TU)
@@ -453,15 +454,16 @@ TEXTVIEW PROCS
 		if(holomap[uid])
 			closeHolomap(usr)
 		else
-			openHolomap(usr)
-			processUser(usr)
+			if(handle_sanity(usr))
+				openHolomap(usr)
+				processUser(usr)
 	else if(href_list["setZ"])
 		var/num = href_list["setZ"]
 		if(!isnum(num))
 			num = text2num(num)
 			if(!num)
 				return 1//something fucked up
-		
+
 		holomap_z[uid] = num
 		var/datum/nanoui/ui = nanomanager.get_open_ui(usr, src, "textview")
 		if(ui)
@@ -530,7 +532,7 @@ TEXTVIEW PROCS
 		if(user.client)
 			var/datum/asset/simple/C = new/datum/asset/simple/cmc_css_icons()
 			send_asset_list(user.client, C.assets)
-		
+
 		ui = new(user, src, "textview", "cmc.tmpl", "Crew Monitoring", 900, 600)
 		ui.add_stylesheet("cmc.css")
 		var/list/i_data = list()

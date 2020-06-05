@@ -39,6 +39,7 @@ var/creating_arena = FALSE
 	var/selectedHUD = HUD_NONE // HUD_NONE, HUD_MEDICAL or HUD_SECURITY
 	var/diagHUD = FALSE
 	var/antagHUD = 0
+	var/conversionHUD = 0
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
 	var/lastchairspin
@@ -116,8 +117,6 @@ var/creating_arena = FALSE
 		T = pick(latejoin)			//Safety in case we cannot find the body's position
 	loc = T
 
-	station_holomap = new(src)
-
 	if(!name)							//To prevent nameless ghosts
 		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 	real_name = name
@@ -127,6 +126,8 @@ var/creating_arena = FALSE
 
 /mob/dead/observer/Destroy()
 	..()
+	qdel(station_holomap)
+	station_holomap = null
 	ghostMulti = null
 	observers.Remove(src)
 
@@ -231,13 +232,29 @@ Works together with spawning an observer, noted above.
 		return 0
 
 	regular_hud_updates()
+
+	//cleaning up antagHUD and conversionHUD icons
+	if(client)
+		for(var/image/hud in client.images)
+			if(findtext(hud.icon_state, "convertible") || findtext(hud.icon_state, "-logo"))
+				client.images -= hud
+
 	if(antagHUD)
 		var/list/target_list = list()
-		for(var/mob/living/target in oview(src))
+		for(var/mob/living/target in oview(client.view+DATAHUD_RANGE_OVERHEAD, src))
 			if( target.mind&&(target.mind.antag_roles.len > 0 || issilicon(target) || target.hud_list[SPECIALROLE_HUD]) )
 				target_list += target
 		if(target_list.len)
-			assess_targets(target_list, src)
+			assess_antagHUD(target_list, src)
+
+	if(conversionHUD)
+		var/list/target_list = list()
+		for(var/mob/living/carbon/target in oview(client.view+DATAHUD_RANGE_OVERHEAD, src))
+			if(target.mind && target.hud_list[CONVERSION_HUD])
+				target_list += target
+		if(target_list.len)
+			assess_conversionHUD(target_list, src)
+
 	if(selectedHUD == HUD_MEDICAL)
 		process_medHUD(src)
 	else if(selectedHUD == HUD_SECURITY)
@@ -272,13 +289,12 @@ Works together with spawning an observer, noted above.
 			return "health0"
 		else
 			return "health-100"
-	return "0"
 
 // Pretty much a direct copy of Medical HUD stuff, except will show ill if they are ill instead of also checking for known illnesses.
 /mob/dead/proc/process_medHUD(var/mob/M)
 	var/client/C = M.client
 	var/image/holder
-	for(var/mob/living/carbon/patient in oview(M))
+	for(var/mob/living/carbon/patient in oview(client.view+DATAHUD_RANGE_OVERHEAD, M))
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
@@ -323,7 +339,7 @@ Works together with spawning an observer, noted above.
 
 			C.images += holder
 
-	for(var/mob/living/simple_animal/mouse/patient in oview(M))
+	for(var/mob/living/simple_animal/mouse/patient in oview(client.view+DATAHUD_RANGE_OVERHEAD, M))
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
@@ -349,7 +365,7 @@ Works together with spawning an observer, noted above.
 						holder.icon_state = "hudhealthy"
 			C.images += holder
 
-/mob/dead/proc/assess_targets(list/target_list, mob/dead/observer/U)
+/mob/dead/proc/assess_antagHUD(list/target_list, mob/dead/observer/U)
 	for(var/mob/living/target in target_list)
 		if(target.mind)
 			var/image/I
@@ -379,7 +395,13 @@ Works together with spawning an observer, noted above.
 					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalborg")
 				else
 					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalai")
-	return 1
+
+/mob/dead/proc/assess_conversionHUD(list/target_list, mob/dead/observer/U)
+	for(var/mob/living/carbon/target in target_list)
+		if(target.mind)
+			U.client.images -= target.hud_list[CONVERSION_HUD]
+			target.update_convertibility()
+			U.client.images += target.hud_list[CONVERSION_HUD]
 
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
 	if(key && !(copytext(key,1,2)=="@"))
@@ -402,11 +424,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
 
-	if(iscultist(src) && (ishuman(src)||isconstruct(src)) && veil_thickness > CULT_PROLOGUE)
+	if(iscultist(src) && (ishuman(src)||isconstruct(src)||istype(src,/mob/living/carbon/complex/gondola)) && veil_thickness > CULT_PROLOGUE)
 		var/response = alert(src, "It doesn't have to end here, the veil is thin and the dark energies in you soul cling to this plane. You may forsake this body and materialize as a Shade.","Sacrifice Body","Shade","Ghost","Stay in body")
 		switch (response)
 			if ("Shade")
-				dust()
+				dust(TRUE)
 				return
 			if ("Stay in body")
 				return
@@ -571,7 +593,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		var/mob/target = locate(href_list["jump"])
 		var/mob/A = usr;
 		to_chat(A, "Teleporting to [target]...")
-		//var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
 		if(target && target != usr)
 			var/turf/pos = get_turf(A)
 			var/turf/T=get_turf(target)

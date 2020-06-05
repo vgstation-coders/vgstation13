@@ -70,7 +70,6 @@
 														//Set to null to prevent people from picking this mob up!
 	var/list/hud_list = list()
 
-	var/event/on_life
 	var/obj/abstract/screen/schematics_background
 	var/shown_schematics_background = 0
 

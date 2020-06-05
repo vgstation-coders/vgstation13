@@ -394,14 +394,23 @@
 
 /mob/living/simple_animal/hostile/hex/New()
 	..()
+
+	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
+
+/mob/living/simple_animal/hostile/hex/proc/setupglow(glowcolor)
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
-	var/image/glow = image(icon,"glow-[icon_state]",overlay_layer)
+	if(layer != MOB_LAYER) // ie it's hiding
+		overlay_layer = FLOAT_LAYER
+		overlay_plane = FLOAT_PLANE
+	
+	var/icon/glowicon = icon(icon,"glow-[icon_state]")
+	glowicon.Blend(glowcolor, ICON_ADD)
+	var/image/glow = image(icon = glowicon, layer = overlay_layer)
 	glow.plane = overlay_plane
 	overlays += glow
-	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
-	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
 
 /mob/living/simple_animal/hostile/hex/Destroy()
 	if (master)

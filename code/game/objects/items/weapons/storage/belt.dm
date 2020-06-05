@@ -44,7 +44,7 @@
 		"/obj/item/taperoll/atmos",
 		"/obj/item/taperoll/syndie/atmos",
 		"/obj/item/weapon/extinguisher",
-		"/obj/item/weapon/rcd_ammo",
+		"/obj/item/stack/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
@@ -108,7 +108,7 @@
 		"/obj/item/device/rcd/rpd",
 		"/obj/item/device/rcd/tile_painter",
 		"/obj/item/weapon/storage/component_exchanger",
-		"/obj/item/weapon/rcd_ammo",
+		"/obj/item/stack/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
 		"/obj/item/blueprints",
 		"/obj/item/device/lightreplacer",
@@ -148,6 +148,7 @@
 	allow_quick_empty = TRUE
 	use_to_pickup = TRUE
 	can_only_hold = list(
+		"/obj/item/weapon/reagent_containers/hypospray",
 		"/obj/item/device/healthanalyzer",
 		"/obj/item/weapon/dnainjector",
 		"/obj/item/weapon/reagent_containers/dropper",
@@ -163,14 +164,14 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
-		"/obj/item/weapon/reagent_containers/hypospray/autoinjector",
 		"/obj/item/device/mass_spectrometer",
 		"/obj/item/device/reagent_scanner",
 		"/obj/item/device/gps/paramedic",
 		"/obj/item/device/antibody_scanner",
 		"/obj/item/weapon/switchtool/surgery",
 		"/obj/item/weapon/grenade/chem_grenade",
-		"/obj/item/weapon/electrolyzer"
+		"/obj/item/weapon/electrolyzer",
+		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro"
 	)
 
 /obj/item/weapon/storage/belt/slim
@@ -193,7 +194,7 @@
 	desc = "Can hold security gear like handcuffs and flashes."
 	icon_state = "securitybelt"
 	item_state = "security"//Could likely use a better one.
-	storage_slots = 7
+	storage_slots = 14
 	fits_max_w_class = 3
 	max_combined_w_class = 21
 	can_only_hold = list(
@@ -233,6 +234,8 @@
 /obj/item/weapon/storage/belt/detective
 	name = "hard-worn belt"
 	desc = "There's a lot you can tell about a man from his clothes - sometimes it's all he can afford, or maybe he chooses to wear something as a message... this belt, then, is a statement. Classy, but not too drab. Fashionable, but still useful. People look at this belt and think, 'My god. That belt is frighteningly well placed. The shades of beige that seem to flood over themselves, splayed across every notch... I fear many things, but I fear most the man who possesses such an incredible belt.'"
+	icon_state = "detective"
+	item_state = "detective"
 	max_combined_w_class = 200 //Some of their stuff is pretty large and they have a lot of crap so lets just be safe.
 	can_only_hold = list(
 		"/obj/item/clothing/glasses",
@@ -284,17 +287,17 @@
 	item_state = "soulstonebelt"
 	storage_slots = 6
 	can_only_hold = list(
-		"/obj/item/device/soulstone"
+		"/obj/item/soulstone"
 		)
 
 /obj/item/weapon/storage/belt/soulstone/full/New()
 	..()
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
 
 
 /obj/item/weapon/storage/belt/champion

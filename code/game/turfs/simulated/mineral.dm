@@ -13,7 +13,7 @@
 	icon_state = "plasma"
 
 /turf/simulated/floor/mineral/plasma/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/plasma, null)
+	floor_tile = new /obj/item/stack/tile/mineral/plasma(null)
 	..()
 
 //GOLD
@@ -23,7 +23,7 @@
 	icon_state = "gold"
 
 /turf/simulated/floor/mineral/gold/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/gold, null)
+	floor_tile = new /obj/item/stack/tile/mineral/gold(null)
 	..()
 
 //SILVER
@@ -33,7 +33,7 @@
 	icon_state = "silver"
 
 /turf/simulated/floor/mineral/silver/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/silver, null)
+	floor_tile = new /obj/item/stack/tile/mineral/silver(null)
 	..()
 
 //BANANIUM
@@ -43,7 +43,7 @@
 	icon_state = "bananium"
 
 /turf/simulated/floor/mineral/clown/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/clown, null)
+	floor_tile = new /obj/item/stack/tile/mineral/clown(null)
 	..()
 
 //DIAMOND
@@ -53,7 +53,7 @@
 	icon_state = "diamond"
 
 /turf/simulated/floor/mineral/diamond/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/diamond, null)
+	floor_tile = new /obj/item/stack/tile/mineral/diamond(null)
 	..()
 
 //URANIUM
@@ -63,7 +63,7 @@
 	icon_state = "uranium"
 
 /turf/simulated/floor/mineral/uranium/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/uranium, null)
+	floor_tile = new /obj/item/stack/tile/mineral/uranium(null)
 	..()
 
 //PLASTIC
@@ -73,7 +73,7 @@
 	icon_state = "plastic"
 
 /turf/simulated/floor/mineral/plastic/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/plastic, null)
+	floor_tile = new /obj/item/stack/tile/mineral/plastic(null)
 	..()
 
 //PHAZON
@@ -83,7 +83,7 @@
 	icon_state = "phazon"
 
 /turf/simulated/floor/mineral/phazon/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/phazon, null)
+	floor_tile = new /obj/item/stack/tile/mineral/phazon(null)
 	..()
 
 //BRASS
@@ -93,7 +93,7 @@
 	icon_state = "brass"
 
 /turf/simulated/floor/mineral/clockwork/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/brass, null)
+	floor_tile = new /obj/item/stack/tile/mineral/brass(null)
 	..()
 
 /turf/simulated/floor/mineral/clockwork/cultify()
@@ -136,5 +136,5 @@
 	//I spent 10 hours trying to figure out how to make this use the nice randomized floors with the little peppermints I was so proud of. I give up, fuck floor tiles.
 
 /turf/simulated/floor/mineral/gingerbread/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/gingerbread, null)
+	floor_tile = new /obj/item/stack/tile/mineral/gingerbread(null)
 	..()

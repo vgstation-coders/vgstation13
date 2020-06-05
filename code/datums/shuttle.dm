@@ -333,7 +333,7 @@
 				destination_port = null
 				return 0
 			for(var/atom/movable/AA in linked_area)
-				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
+				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -689,18 +689,6 @@
 			if(!AM.can_shuttle_move(src))
 				AM.change_area(linked_area,refill_area)
 
-		//****Move all variables from the old turf over to the new turf****
-
-		for(var/key in old_turf.vars)
-			if(key in ignored_keys)
-				continue
-			//ignored_keys: code/game/area/areas.dm, 526 (above the move_contents_to proc)
-			//as of 06/08/2015: list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z","group","contents","air","light","areaMaster","underlays","lighting_overlay")
-			if(istype(old_turf.vars[key],/list))
-				var/list/L = old_turf.vars[key]
-				new_turf.vars[key] = L.Copy()
-			else if(old_turf.vars)
-				new_turf.vars[key] = old_turf.vars[key]
 		if(old_turf.transform)
 			new_turf.transform = old_turf.transform
 
@@ -721,6 +709,19 @@
 		new_turf.dir = old_turf.dir
 		new_turf.icon_state = old_turf.icon_state
 		new_turf.icon = old_turf.icon
+		new_turf.plane = old_turf.plane
+		new_turf.layer = old_turf.layer
+
+		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
+		// Floor turfs create their `floor_tile` in New() if it's null.
+		// The better solution would be to not do that at all in New(), or use
+		// something like the map loader's atom preloader to transfer the
+		// floor_tile before New().
+		if(istype(old_turf, /turf/simulated/floor))
+			var/turf/simulated/floor/ancient = old_turf
+			var/turf/simulated/floor/modern = new_turf
+			modern.floor_tile = ancient.floor_tile
+			ancient.floor_tile = null
 		if(rotate)
 			new_turf.shuttle_rotate(rotate)
 

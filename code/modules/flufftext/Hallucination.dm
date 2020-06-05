@@ -444,7 +444,7 @@ proc/check_panel(mob/M)
 		attack_loop()
 		if(my_target)
 			my_target.hallucinations -= src
-		returnToPool(src)
+		qdel(src)
 
 
 /obj/effect/fake_attacker/proc/updateimage()
@@ -507,7 +507,7 @@ proc/check_panel(mob/M)
 	updateimage()
 */
 /proc/fake_blood(var/mob/living/carbon/human/target)
-	var/obj/effect/overlay/O = getFromPool(/obj/effect/overlay,target.loc)
+	var/obj/effect/overlay/O = new /obj/effect/overlay(target.loc)
 	O.name = "blood"
 	var/image/I = image('icons/effects/blood.dmi',O,"floor[rand(1,7)]",O.dir,1)
 	var/blood_color = DEFAULT_BLOOD
@@ -516,7 +516,7 @@ proc/check_panel(mob/M)
 	I.color = blood_color
 	target << I
 	spawn(300)
-		returnToPool(O)
+		qdel(O)
 
 var/list/non_fakeattack_weapons = list(/obj/item/weapon/gun/projectile, /obj/item/ammo_storage/box/a357,\
 	/obj/item/weapon/gun/energy/crossbow, /obj/item/weapon/melee/energy/sword,\
@@ -552,7 +552,7 @@ var/list/non_fakeattack_weapons = list(/obj/item/weapon/gun/projectile, /obj/ite
 		return
 
 	//var/obj/effect/fake_attacker/F = new/obj/effect/fake_attacker(outside_range(target))
-	var/obj/effect/fake_attacker/F = getFromPool(/obj/effect/fake_attacker,target.loc)
+	var/obj/effect/fake_attacker/F = new /obj/effect/fake_attacker(target.loc)
 
 	for(var/obj/item/I in clone.held_items)
 		if(!non_fakeattack_weapons.Find(I.type))

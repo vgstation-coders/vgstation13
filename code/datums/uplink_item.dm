@@ -475,6 +475,14 @@ var/list/uplink_items = list()
 	num_in_stock = 1
 	cost = 10
 
+/datum/uplink_item/sabotage_tools/loic_remote
+	name = "Low Orbit Ion Cannon Remote"
+	desc = "This device can activate a remote syndicate satellite every 15 minutes, generating a randomized law in the station's AI. Results may vary."
+	item = /obj/item/device/loic_remote
+	cost = 8
+	discounted_cost = 6
+	jobs_with_discount = SCIENCE_POSITIONS
+
 /datum/uplink_item/sabotage_tools/reportintercom
 	name = "NT Central Command Report Falsifier"
 	desc = "A command report intercom stolen from Nanotrasen Command that allows for a single fake Command Update to be sent. Ensure tastefulness so that the crew actually falls for the message. Item is particular obvious and will have to be manually discarded after use."
@@ -625,6 +633,14 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 9
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
+	
+/datum/uplink_item/jobspecific/command_security/batlinggun
+	name = "Batling gun"
+	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
+	item = /obj/item/weapon/gun/gatling/batling
+	cost = 18
+	discounted_cost = 12
+	jobs_with_discount = list("Warden", "Head of Security")
 
 /datum/uplink_item/jobspecific/command_security/evidenceforger
 	name = "Evidence Forger"
@@ -714,10 +730,10 @@ var/list/uplink_items = list()
 	discounted_cost = 12
 	jobs_with_discount = list("Geneticist", "Chief Medical Officer")
 
-/datum/uplink_item/jobspecific/medical/zombievirus
-	name = "Zombie Virus Syndrome"
-	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a virus data disk, requires full virus splicing and growth to deploy. Avoid ingesting end results if possible, and ensure you create spare virus data disks if needed."
-	item = /obj/item/weapon/disk/disease/zombie
+/datum/uplink_item/jobspecific/medical/viruscollection
+	name = "Deadly Syndrome Collection"
+	desc = "A diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected."
+	item = /obj/item/weapon/storage/lockbox/diskettebox/syndisease
 	cost = 20
 	discounted_cost = 12
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
@@ -952,6 +968,15 @@ var/list/uplink_items = list()
 	cost = 12
 	jobs_exclusive = list("Mime")
 
+/datum/uplink_item/jobspecific/clown_mime/punchline
+	name = "Punchline"
+	desc = "A high risk high reward abomination combining experimental phazon and bananium technologies. Wind-up Punchline to charge it. Enough charge and your targets will slip through reality. Warning: Forcing wind-ups beyond the limiter may reverse the prototype phazite honkpacitors and disrupt reality around the user."
+	item = /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Clown")
+	jobs_excluded = list("Mime")
+
 /datum/uplink_item/jobspecific/assistant
 	category = "Assistant Specials"
 
@@ -997,3 +1022,28 @@ var/list/uplink_items = list()
 	cost = 20
 	discounted_cost = 14
 	jobs_with_discount = list("Captain", "Head of Personnel")
+
+/datum/uplink_item/jobspecific/trader
+	category = "Trader Specials"
+
+/datum/uplink_item/jobspecific/trader/dartgun
+	name = "Chemical Dart Gun"
+	desc = "A staple in vox weaponry. This dart gun starts loaded with darts containing sleep toxin and chloral hydrate. The beaker inside can be swapped out to create your own deadly mixes."
+	item = /obj/item/weapon/gun/dartgun/vox/raider
+	cost = 16
+	jobs_exclusive = list("Trader")
+
+/datum/uplink_item/jobspecific/trader/dart_cartridge
+	name = "Dart Cartridge"
+	desc = "A spare cartridge to refill your dart gun."
+	item = /obj/item/weapon/dart_cartridge
+	cost = 2
+	jobs_exclusive = list("Trader")
+	
+/datum/uplink_item/jobspecific/trader/cratesender
+	name = "Modified Crate Sender"
+	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."
+	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
+	cost = 6
+	jobs_exclusive = list("Trader")
+

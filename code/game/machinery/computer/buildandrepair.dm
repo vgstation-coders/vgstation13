@@ -117,6 +117,10 @@
 	name = "Circuit board (Security Records)"
 	desc = "A circuit board for running a computer used for viewing security records."
 	build_path = /obj/machinery/computer/secure_data
+/obj/item/weapon/circuitboard/security_alerts
+	name = "Circuit board (Security Alerts)"
+	desc = "A circuit board for running a computer used for viewing security alerts."
+	build_path = /obj/machinery/computer/security_alerts
 /obj/item/weapon/circuitboard/stationalert
 	name = "Circuit board (Station Alerts)"
 	desc = "A circuit board for running a computer used for viewing station alerts."
@@ -327,6 +331,7 @@
 	desc = "A circuit board for running a computer used to operate the Telescience Telepad."
 	build_path = /obj/machinery/computer/telescience
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BLUESPACE + "=2"
+	mech_flags = MECH_SCAN_FAIL
 /obj/item/weapon/circuitboard/forensic_computer
 	name = "Circuit board (Forensics Console)"
 	desc = "A circuit board for running a computer used to scan objects and view data from portable scanners."
@@ -350,6 +355,7 @@
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
+
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/weapon/solder/S = I
@@ -368,16 +374,31 @@
 			return
 	return
 
-/obj/item/weapon/circuitboard/proc/solder_improve(mob/user as mob)
+/obj/item/weapon/circuitboard/proc/solder_improve(mob/user)
 	to_chat(user, "<span class='warning'>You fiddle with a few random fuses but can't find a routing that doesn't short the board.</span>")
-	return
 
-/obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user as mob)
+
+
+/obj/item/weapon/circuitboard/fishtank/solder_improve(mob/user)
+	to_chat(user, "<span class='notice'>You modify the circuitry to support a larger tank.</span>")
+	var/obj/item/weapon/circuitboard/fishwall/A = new /obj/item/weapon/circuitboard/fishwall(src.loc)
+	user.put_in_hands(A)
+	qdel(src)
+
+
+/obj/item/weapon/circuitboard/fishwall/solder_improve(mob/user)
+	to_chat(user, "<span class='notice'>You modify the circuitry to support a smaller tank.</span>")
+	var/obj/item/weapon/circuitboard/fishtank/A = new /obj/item/weapon/circuitboard/fishtank(src.loc)
+	user.put_in_hands(A)
+	qdel(src)
+
+
+/obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user)
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
-	return
 
-/obj/item/weapon/circuitboard/security/solder_improve(mob/user as mob)
+
+/obj/item/weapon/circuitboard/security/solder_improve(mob/user)
 	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
 		return ..()
 	if(istype(src,/obj/item/weapon/circuitboard/security/engineering))
@@ -387,7 +408,6 @@
 		var/obj/item/weapon/circuitboard/security/advanced/A = new /obj/item/weapon/circuitboard/security/advanced(src.loc)
 		user.put_in_hands(A)
 		qdel(src)
-		return
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)

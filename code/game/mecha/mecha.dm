@@ -89,6 +89,7 @@
 
 	var/list/never_deflect = list(
 		/obj/item/projectile/ion,
+		/obj/item/projectile/bullet/APS,
 	)
 
 	var/list/mech_sprites = list() //sprites alternatives for a given mech. Only have to enter the name of the paint scheme
@@ -1158,6 +1159,9 @@
 		else
 			to_chat(usr, "You stop entering the exosuit.")
 
+	for (var/datum/faction/F in factions_with_hud_icons)
+		F.update_hud_icons()
+
 /obj/mecha/proc/moved_inside(var/mob/living/carbon/human/H as mob)
 	if(!isnull(src.loc) && H && H.client && (H in range(1)))
 		H.reset_view(src)
@@ -1378,6 +1382,9 @@
 		dir = dir_in
 		if(G)
 			G.hud_off()
+
+	for (var/datum/faction/F in factions_with_hud_icons)
+		F.update_hud_icons()
 
 /obj/mecha/proc/shock_n_boot(var/exit = loc)
 	spark(src, 2, FALSE)
@@ -2131,7 +2138,7 @@
 		return 1
 	if(icontype)
 		to_chat(user, "<span class='info'>You begin repainting the mech.</span>")
-		if (do_after(user,src,30))
+		if (do_after(user, M , 30))
 			M.initial_icon = icontype
 			M.icon_state = icontype +"-open"
 			for(var/spell/mech/MS in M.intrinsic_spells)

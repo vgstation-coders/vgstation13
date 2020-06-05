@@ -20,61 +20,13 @@
 
 	//Don't spawn with any of the average crew member's luxuries (only an ID)
 	no_starting_money = 1
-	no_pda = 1
 
 	spawns_from_edge = 1
 
-	idtype = /obj/item/weapon/card/id/vox
-
-	no_headset = 1
+	outfit_datum = /datum/outfit/trader
 
 	//Both Restricted: Revolution, Revsquad
 	//Merchant Restricted: Double Agent, Vampire, Cult
-
-/datum/job/trader/equip(var/mob/living/carbon/human/H)
-	if(!H)
-		return 0
-	if(ismushroom(H))
-		H.equip_or_collect(new /obj/item/clothing/under/stilsuit(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/suit/space/vox/civ/mushmen(H), slot_wear_suit)
-		H.equip_or_collect(new /obj/item/clothing/head/helmet/space/vox/civ/mushmen(H), slot_head)
-		H.equip_or_collect(new /obj/item/clothing/shoes/magboots(H), slot_shoes)
-	if(isvox(H))
-		H.equip_or_collect(new /obj/item/clothing/under/vox/vox_robes(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/magboots/vox(H), slot_shoes)
-
-	switch(H.backbag) //BS12 EDIT
-		if(2)
-			H.equip_or_collect(new/obj/item/weapon/storage/backpack(H), slot_back)
-		if(3)
-			H.equip_or_collect(new/obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-		if(4)
-			H.equip_or_collect(new/obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		if(5)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
-
-	H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-	H.equip_or_collect(new /obj/item/weapon/storage/wallet/trader(H.back), slot_in_backpack)
-	H.equip_or_collect(new /obj/item/device/radio(H), slot_belt)
-	switch(H.mind.role_alt_title)
-		if("Trader") //Traders get snacks and a coin
-			H.equip_or_collect(new /obj/item/weapon/storage/box/donkpockets/random_amount(H.back), slot_in_backpack)
-			H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/thermos/full(H.back), slot_in_backpack)
-			H.equip_or_collect(new /obj/item/weapon/coin/trader(H.back), slot_in_backpack)
-
-		if("Merchant") //Merchants get an implant
-			var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
-			L.imp_in = H
-			L.implanted = 1
-			var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
-			affected.implants += L
-			L.part = affected
-
-		if("Salvage Broker")
-			H.equip_or_collect(new /obj/item/device/telepad_beacon(H.back), slot_in_backpack)
-			H.equip_or_collect(new /obj/item/weapon/rcs/salvage(H.back), slot_in_backpack)
-
-	return 1
 
 /datum/job/trader/introduce(mob/living/carbon/human/M, job_title)
 	if(!job_title)
@@ -83,6 +35,8 @@
 	if(!trader_account)
 		trader_account = create_trader_account
 	M.mind.store_memory("<b>The joint trader account is:</b> #[trader_account.account_number]<br><b>Your shared account pin is:</b> [trader_account.remote_access_pin]<br>")
+
+	log_admin("([M.ckey]/[M]) started the game as a [job_title].")
 
 	to_chat(M, "<B>You are a [job_title].</B>")
 

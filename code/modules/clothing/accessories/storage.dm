@@ -71,7 +71,7 @@
 
 /obj/item/clothing/accessory/storage/webbing/paramed
 	name = "paramedic webbing"
-	desc = "Sturdy mess of synthcotton belts and buckles. Made to be worn by medical personnel"
+	desc = "Sturdy mess of synthcotton belts and buckles. Made to be worn by medical personnel."
 	icon_state = "vest_white"
 	_color = "vest_white"
 	storage_slots = 4
@@ -96,7 +96,7 @@
 	icon_state = "bandolier"
 	_color = "bandolier"
 	storage_slots = 8
-	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/weapon/rcd_ammo", "/obj/item/weapon/grenade")
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/stack/rcd_ammo", "/obj/item/weapon/grenade")
 
 /obj/item/clothing/accessory/storage/knifeharness
 	name = "decorated harness"

@@ -108,6 +108,11 @@
 
 	var/wikiroute
 
+	var/list/current_powers = list()
+	var/list/available_powers = list()		//holds instances of each power
+	var/datum/power_holder/power_holder
+	var/powerpoints = 0
+
 	// This datum represents all data that is exported to the statistics file at the end of the round.
 	// If you want to store faction-specific data as statistics, you'll need to define your own datum.
 	// See dynamic_stats.dm
@@ -225,6 +230,17 @@
 			job.current_positions--
 		antag.assigned_role="MODE"
 	return 1
+
+//remove all power-related spells
+/datum/role/proc/removespells()
+	for(var/datum/power/P in current_powers)
+		P.remove_spell()
+
+//Remove and re-grant role-related power spells
+/datum/role/proc/refreshpowers()
+	for(var/datum/power/P in current_powers)
+		P.remove_spell()
+		P.grant_spell()
 
 // Return 1 on success, 0 on failure.
 /datum/role/proc/OnPostSetup()
@@ -579,8 +595,8 @@
 
 	if(istype(antag.current,/mob/living/silicon/ai))
 		var/mob/living/silicon/ai/malfAI = antag.current
-		malfAI.add_spell(new /spell/aoe_turf/module_picker, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
-		malfAI.add_spell(new /spell/aoe_turf/takeover, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		malfAI.add_spell(new /spell/aoe_turf/module_picker, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		malfAI.add_spell(new /spell/aoe_turf/takeover, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 		malfAI.laws_sanity_check()
 		var/datum/ai_laws/laws = malfAI.laws
 		laws.malfunction()

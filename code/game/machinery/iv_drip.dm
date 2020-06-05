@@ -75,7 +75,7 @@
 		return
 	if(W.is_wrench(user))
 		W.playtoolsound(src, 50)
-		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
+		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 		M.amount = 2
 		if(src.beaker)
 			src.remove_container()
@@ -221,3 +221,6 @@
 			to_chat(user, "<span class='info'>Attached is \an empty [beaker].</span>")
 	else
 		to_chat(user, "<span class='info'>No chemicals are attached.</span>")
+
+/obj/machinery/iv_drip/can_overload()
+	return 0

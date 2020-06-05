@@ -200,10 +200,6 @@
 
 #define isatom(A) isloc(A)
 
-#if DM_VERSION < 513
-#define ismovable(A) (istype(A, /atom/movable))
-#endif
-
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
 #define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
@@ -230,6 +226,12 @@
 
 #define isbelt(O) (istype(O, /obj/item/weapon/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
 
+#define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
+
+#define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
+
+#define isinvisible(A) (A.invisibility || A.alpha <= 1)
+
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
 
 //Macros for roles/antags
@@ -246,6 +248,8 @@
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+
+#define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
 #define isvoxraider(H) (H.mind && H.mind.GetRole(VOXRAIDER))
 
@@ -265,9 +269,13 @@
 
 #define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
 
+#define iselitesyndie (H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
+
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
+
+#define issyndicate(H) ((H.mind && H.mind.GetRole(TRAITOR)) || (H.mind && H.mind.GetRole(SYNDIESQUADIE)) || (H.mind && H.mind.GetRole(NUKE_OP)))
 
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
@@ -298,7 +306,7 @@
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 
-
+#define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
 //Macro for AREAS!
 
@@ -334,12 +342,6 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#if DM_VERSION < 513
-#define clamp(x, y, z) 	min(max(x, y), z)
-//x is the number you want to clamp
-//y is the minimum
-//z is the maximum
-#endif
 
 //Returns 1 if the variable contains a protected list that can't be edited
 #define variable_contains_protected_list(var_name) (((var_name) == "contents") || ((var_name) == "locs") || ((var_name) == "vars"))
@@ -396,3 +398,6 @@ proc/get_space_area()
 
 // strips all newlines from a string, replacing them with null
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
+
+#define istransformable(A) (isatom(A))
+#define isapperanceeditable(A) (isatom(A))

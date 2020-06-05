@@ -202,8 +202,10 @@
 /obj/item/trash/chicken_bucket
 	name = "chicken bucket"
 	icon_state = "kfc_bucket"
+	species_fit = list(INSECT_SHAPED)
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
+	armor = list(melee = 1, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_HEAD
 
 /obj/item/trash/mannequin/cultify()

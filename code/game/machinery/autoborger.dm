@@ -3,7 +3,7 @@
 
 /obj/machinery/autoborger
 	name = "Automatic Robotic Factory 5000"
-	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, robot comes out'. Human must be lying down and alive."
+	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, robot comes out'. Human must be lying down and alive. Has to cooldown between each use."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "separator-AO1"
 	plane = ABOVE_HUMAN_PLANE
@@ -11,6 +11,9 @@
 	density = 1
 	var/transform_dead = 0 //This variable doesn't seem to do anything
 	var/transform_standing = 0
+	var/cooldown_duration = 900 // 1.5 minutes
+	var/cooldown_time = 0
+	var/cooldown_state = 0 // Just for icons.
 	var/robot_cell_charge = 5000
 	use_power = 1
 	idle_power_usage = 10
@@ -33,12 +36,15 @@
 
 /obj/machinery/autoborger/update_icon()
 	..()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER) || cooldown_time > world.time)
 		icon_state = "separator-AO0"
 	else
 		icon_state = initial(icon_state)
 
 /obj/machinery/autoborger/Bumped(var/atom/movable/AM)
+	if(cooldown_state)
+		return
+
 	// Crossed didn't like people lying down.
 	if(ishuman(AM))
 		// Only humans can enter from the west side, while lying down.
@@ -55,6 +61,8 @@
 
 /obj/machinery/autoborger/proc/do_transform(var/mob/living/carbon/human/H)
 	if(stat & (BROKEN|NOPOWER))
+		return
+	if(cooldown_state)
 		return
 
 	if(!transform_dead && H.stat == DEAD)
@@ -111,7 +119,19 @@
 		if(R)
 			R.SetKnockdown(0)
 
+	// Activate the cooldown
+	cooldown_time = world.time + cooldown_duration
+	cooldown_state = 1
 	update_icon()
+
+/obj/machinery/autoborger/process()
+	..()
+	var/old_cooldown_state=cooldown_state
+	cooldown_state = cooldown_time > world.time
+	if(cooldown_state!=old_cooldown_state)
+		update_icon()
+		if(!cooldown_state)
+			playsound(src, 'sound/machines/ping.ogg', 50, 0)
 
 /obj/machinery/autoborger/conveyor/New()
 	..()
@@ -134,7 +154,10 @@
 
 /obj/machinery/autoborger/interact(var/mob/user)
 	var/data=""
-	data += {"<p style="color:red;font-weight:bold;"><blink>ROBOTICIZER ACTIVE.</blink></p>"}
+	if(cooldown_state)
+		data += {"<b>Recalibrating.</b> Time left: [(cooldown_time - world.time)/10] seconds."}
+	else
+		data += {"<p style="color:red;font-weight:bold;"><blink>ROBOTICIZER ACTIVE.</blink></p>"}
 	data += {"
 		<h2>Settings</h2>
 		<ul>

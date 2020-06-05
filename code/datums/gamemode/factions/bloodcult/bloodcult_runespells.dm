@@ -501,7 +501,7 @@
 	var/reminder = input("Write the reminder.", text("Cult reminder")) as null | message
 	if (!reminder)
 		return
-	reminder = utf8_sanitize(reminder) // No weird HTML
+	reminder = strip_html_simple(reminder) // No weird HTML
 	var/number = cult.cult_reminders.len
 	var/text = "[number + 1]) [reminder], by [user.real_name]."
 	cult.cult_reminders += text
@@ -712,7 +712,7 @@
 	else
 		if (pay_blood())
 			R.one_pulse()
-			spell_holder.visible_message("<span class='rose'>The blood drops merge into each others, and a talisman takes form in their place</span>")
+			spell_holder.visible_message("<span class='rose'>The blood drops merge into each other, and a talisman takes form in their place.</span>")
 			var/turf/T = get_turf(spell_holder)
 			AT = new (T)
 			anim(target = AT, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_imbue")
@@ -852,14 +852,14 @@
 	var/turf/T = R.loc
 	var/list/targets = list()
 
-	//first lets check for a victim above
+	//first lets check for a victim on top of the rune
 	for (var/mob/living/silicon/S in T) // Has science gone too far????
 		if (S.cult_permitted || Holiday == APRIL_FOOLS_DAY)
 			if (!iscultist(S))
 				targets.Add(S)
 
-	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
-		if (!iscultist(C))
+	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons. (unless it's April 1st)
+		if (!iscultist(C) && !C.isDead())//no more corpse conversions!
 			targets.Add(C)
 	if (targets.len > 0)
 		victim = pick(targets)
@@ -877,6 +877,8 @@
 	victim.Silent(5)
 	victim.Knockdown(5)
 	victim.Stun(5)
+	if (isalien(victim))
+		victim.Paralyse(5)
 	victim.overlay_fullscreen("conversionborder", /obj/abstract/screen/fullscreen/conversion_border)
 	victim.overlay_fullscreen("conversionred", /obj/abstract/screen/fullscreen/conversion_red)
 	victim.update_fullscreen_alpha("conversionred", 255, 5)
@@ -936,6 +938,8 @@
 				victim.Silent(5)
 				victim.Knockdown(5)
 				victim.Stun(5)
+				if (isalien(victim))
+					victim.Paralyse(5)
 				var/progress = 10//10 seconds to reach second phase for a naked cultist
 				progress += activator.get_cult_power()//down to 1-2 seconds when wearing cult gear
 				var/delay = 0
@@ -980,6 +984,8 @@
 		victim.Silent(15)
 		victim.Knockdown(15)
 		victim.Stun(15)
+		if (isalien(victim))
+			victim.Paralyse(15)
 
 		if (victim.client && victim.mind.assigned_role != "Chaplain")//Chaplains can never be converted
 			acceptance = get_role_desire_str(victim.client.prefs.roles[CULTIST])
@@ -1052,6 +1058,8 @@
 				victim.SetKnockdown(0)
 				victim.SetStunned(0)
 				victim.SetSilent(0)
+				if (isalien(victim))
+					victim.SetParalysis(0)
 				//and their loyalty implants are removed, so they can't mislead security
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
 					I.forceMove(T)
@@ -1071,6 +1079,12 @@
 					if (isrobot(S))
 						var/mob/living/silicon/robot/robit = S
 						robit.disconnect_AI()
+				if (istype(victim, /mob/living/carbon/complex/gondola)) //fug.....
+					var/mob/living/carbon/complex/gondola/gondola = victim
+					gondola.icon_state_standing = pick("gondola_c","gondola_c_tome")
+					gondola.icon_state_lying = "[gondola.icon_state_standing]_lying"
+					gondola.icon_state_dead = "gondola_skull"
+					gondola.icon_state = gondola.icon_state_standing
 				return
 			if (CONVERSION_NOCHOICE)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
@@ -1229,6 +1243,8 @@
 			C.Silent(15)
 		C.Knockdown(15)//used to be 25
 		C.Stun(15)//used to be 25
+		if (isalien(C))
+			C.Paralyse(15)
 
 	if (!(locate(/obj/effect/stun_indicator) in M))
 		new /obj/effect/stun_indicator(M)
@@ -1274,6 +1290,8 @@
 					C.stuttering = 1
 				C.Knockdown(duration)
 				C.Stun(duration)
+				if (isalien(C))
+					C.Paralyse(duration)
 
 			else if(issilicon(L))
 				var/mob/living/silicon/S = L
@@ -1349,7 +1367,7 @@ var/list/blind_victims = list()
 	if (specific_victim)
 		potential_victims.Add(specific_victim)
 	else
-		for(var/mob/living/M in viewers(T))
+		for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			potential_victims.Add(M)
 
 	for(var/mob/living/M in potential_victims)
@@ -1375,8 +1393,10 @@ var/list/blind_victims = list()
 			spawn(5)
 				M.clear_fullscreen("blindblack", animate = 0)
 				M.flash_eyes(visual = 1)
+
+	//now to blind cameras, the effects on cameras do not time out, but they can be fixed
 	if (!specific_victim)
-		for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
+		for(var/obj/machinery/camera/C in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			shadow(C,T)
 			var/col = C.color
 			animate(C, color = col, time = 4)
@@ -1612,17 +1632,17 @@ var/list/blind_victims = list()
 		last_threshold = world.time
 		var/list/seers = list()
 		for (var/mob/living/seer in range(7, get_turf(spell_holder)))
-			if (iscultist(seer) && seer.client && seer.client.screen)
+			if (iscultist(seer) && seer.client)
 				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
 				var/delta_x = (L.x - seer.x)
 				var/delta_y = (L.y - seer.y)
 				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
 				seers += seer
-				seer << image_intruder // see the mover for a set period of time
-				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)
+				seer.client.images += image_intruder // see the mover for a set period of time
 				spawn(3)
-					del image_intruder
+					seer.client.images -= image_intruder // see the mover for a set period of time
+					qdel(image_intruder)
 		var/count = 10 SECONDS
 		do
 			for (var/mob/living/seer in seers)
@@ -1634,9 +1654,10 @@ var/list/blind_victims = list()
 				var/delta_y = (L.y - seer.y)
 				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
-				seer << image_intruder
+				seer.client.images += image_intruder // see the mover for a set period of time
 				spawn(3)
-					del image_intruder
+					seer.client.images -= image_intruder // see the mover for a set period of time
+					qdel(image_intruder)
 			count--
 		while (count && seers.len)
 
@@ -1674,11 +1695,15 @@ var/list/blind_victims = list()
 	duration = dur
 	victim.Stun(duration)
 	victim.Mute(duration/2)
+	if (isalien(victim))
+		victim.Paralyse(duration)
 	spawn (duration*10)
 		if (src && loc && victim && victim.loc == loc && !victim.knockdown)
 			to_chat(victim, "<span class='warning'>You come back to your senses.</span>")
 			victim.AdjustStunned(-duration)
 			victim.AdjustMute(-duration/2)
+			if (isalien(victim))
+				victim.AdjustParalysis(-duration)
 			victim = null
 		qdel(src)
 
@@ -1693,14 +1718,16 @@ var/list/blind_victims = list()
 				to_chat(victim, "<span class='warning'>You come back to your senses as \the [victim.pulledby] drags you away.</span>")
 			victim.AdjustStunned(-duration)
 			victim.AdjustMute(-duration/2)
+			if (isalien(victim))
+				victim.AdjustParalysis(-duration)
 			victim = null
 		qdel(src)
 
 //RUNE XI
 /datum/rune_spell/blood_cult/seer
 	name = "Seer"
-	desc = "See the invisible, the dead, the concealed. If you give them a writing sheet, they may relay a message to you."
-	desc_talisman = "For a few seconds, you may see the invisible, the dead, the concealed. If you give them a writing sheet, they may relay a message to you."
+	desc = "See the invisible, the dead, the concealed, and the propensity of the living to serve our agenda."
+	desc_talisman = "For a whole minute, you may see the invisible, the dead, the concealed, and the propensity of the living to serve our agenda."
 	Act_restriction = CULT_ACT_I
 	invocation = "Rash'tla sektath mal'zua. Zasan therium viortia."
 	rune_flags = RUNE_STAND
@@ -1708,14 +1735,14 @@ var/list/blind_victims = list()
 	word1 = /datum/runeword/blood_cult/see
 	word2 = /datum/runeword/blood_cult/hell
 	word3 = /datum/runeword/blood_cult/join
-	page = "This rune grants you the ability to see the invisible, including observers and concealed runes and structures. The talisman version has 5 uses, which grant you the ability for 8 seconds each. Remember that runes can still be activated while they are concealed! "
+	page = "This rune grants the ability to see invisible ghosts, runes, and structures. It also reveals the willingness of crew members to accept conversion. You can activate runes while they are concealed. In talisman form, it has five uses and lasts for a minute each. Activate the talisman before moving into a public area."
 	cost_invoke = 5
 	var/obj/effect/cult_ritual/seer/seer_ritual = null
-	var/talisman_duration = 80 //tenths of a second
+	var/talisman_duration = 60 SECONDS
 
 /datum/rune_spell/blood_cult/seer/Destroy()
 	destroying_self = 1
-	if (seer_ritual)
+	if (seer_ritual && !seer_ritual.talisman)
 		qdel(seer_ritual)
 	seer_ritual = null
 	..()
@@ -1731,14 +1758,18 @@ var/list/blind_victims = list()
 
 /datum/rune_spell/blood_cult/seer/cast_talisman()
 	var/mob/living/M = activator
+
+	if (locate(/obj/effect/cult_ritual/seer) in M)
+		var/obj/item/weapon/talisman/T = spell_holder
+		T.uses++
+		to_chat(M, "<span class='warning'>You are still under the effects of a Seer talisman.</span>")
+		qdel(src)
+		return
+
 	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	M.apply_vision_overrides()
-	to_chat(M, "<span class='notice'>As the talisman disappears into dust, you find yourself able to see through the gaps in the veil. You can see and interact with the other side, for a few seconds.</span>")
 	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration)
-	spawn(talisman_duration)
-		M.see_invisible_override = 0
-		M.apply_vision_overrides()
-		to_chat(M, "<span class='notice'>You can no longer discern through the veil.</span>")
+	new /obj/effect/cult_ritual/seer(activator,activator,null,TRUE, talisman_duration)
 	qdel(src)
 
 /obj/effect/cult_ritual/seer
@@ -1755,10 +1786,13 @@ var/list/blind_victims = list()
 	flags = PROXMOVE
 	var/mob/living/caster = null
 	var/datum/rune_spell/blood_cult/seer/source = null
+	var/list/propension = list()
+	var/talisman = FALSE
 
-
-/obj/effect/cult_ritual/seer/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/blood_cult/seer/runespell)
+/obj/effect/cult_ritual/seer/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/blood_cult/seer/runespell,var/talisman_ritual = FALSE,var/talisman_duration = 60 SECONDS)
 	..()
+	processing_objects.Add(src)
+	talisman = talisman_ritual
 	caster = user
 	source = runespell
 	if (!caster)
@@ -1768,10 +1802,16 @@ var/list/blind_victims = list()
 		return
 	caster.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	caster.apply_vision_overrides()
-	to_chat(caster, "<span class='notice'>You find yourself able to see through the gaps in the veil. You can see and interact with the other side.</span>")
+	to_chat(caster, "<span class='notice'>You find yourself able to see through the gaps in the veil. You can see and interact with the other side, and also find out the crew's propensity to be successfully converted, whether they are <b><font color='green'>Willing</font></b>, <b><font color='orange'>Uncertain</font></b>, or <b><font color='red'>Unconvertible</font></b>.</span>")
+	if (talisman)
+		spawn(talisman_duration)
+			qdel(src)
+
 
 /obj/effect/cult_ritual/seer/Destroy()
-	if (caster)
+	processing_objects.Remove(src)
+	if (caster && caster.client)
+		caster.client.images -= propension
 		caster.see_invisible_override = 0
 		caster.apply_vision_overrides()
 		to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
@@ -1782,8 +1822,20 @@ var/list/blind_victims = list()
 	..()
 
 /obj/effect/cult_ritual/seer/HasProximity(var/atom/movable/AM)
-	if (!caster || caster.loc != loc)
-		qdel(src)
+	if (!talisman)
+		if (!caster || caster.loc != loc)
+			qdel(src)
+
+/obj/effect/cult_ritual/seer/process()
+	if (caster && caster.client)
+		caster.client.images -= propension
+		propension.len = 0
+
+		for(var/mob/living/carbon/C in dview(caster.client.view+DATAHUD_RANGE_OVERHEAD, get_turf(src), INVISIBILITY_MAXIMUM))
+			C.update_convertibility()
+			propension += C.hud_list[CONVERSION_HUD]
+
+		caster.client.images += propension
 
 
 //RUNE XII

@@ -18,7 +18,7 @@ proc/initialize_materials()
 			continue
 		initial_materials += list(mat.id = 0) // This is for machines in r&d who have a material holder. If you can't make sheets of the material, you can't put in an r_n_d machine to begin with.
 
-var/global/list/material_list		//Stores an instance of all the datums as an assoc with their matids
+var/global/list/datum/material/material_list		//Stores an instance of all the datums as an assoc with their matids
 var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 /datum/materials
@@ -37,20 +37,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 /datum/materials/Destroy()
 	holder = null
-
-/datum/materials/resetVariables(args)
-	var/newargs
-	if(args)
-		newargs = args + "storage"
-	else
-		newargs = "storage"
-
-	..(arglist(newargs))
-
-	if(!initial_materials)
-		initialize_materials()
-
-	storage = initial_materials.Copy()
+	return ..()
 
 /datum/materials/proc/getVolume()
 	var/volume=0
@@ -372,7 +359,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 				var/atom/movable/victim = pick(target,user)
 				if(victim)
 					do_teleport(victim, get_turf(victim), 1*source.quality, asoundin = 'sound/effects/phasein.ogg')
-		if(prob(20*source.quality))
+		if(prob(20/source.quality))
 			to_chat(user, "<span class = 'warning'>\The [source] phases out of reality!</span>")
 			qdel(source)
 

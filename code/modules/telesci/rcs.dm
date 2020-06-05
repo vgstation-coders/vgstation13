@@ -37,7 +37,7 @@
 	if(iswelder(W) && stage == 1)
 		W.playtoolsound(src, 50)
 		to_chat(user, "<span class = 'caution'>You disassemble the telepad.</span>")
-		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 		M.amount = 1
 		new /obj/item/stack/sheet/glass/glass(get_turf(src))
 		qdel(src)
@@ -80,6 +80,7 @@
 	var/emagged = FALSE
 	var/send_cost = 1500
 	var/send_note = FALSE
+	var/no_station = FALSE
 	var/tmp/teleporting = FALSE
 	starting_materials	= list(MAT_IRON = 50000)
 
@@ -120,7 +121,7 @@
 	if (!istype(target) || target.opened || !proximity_flag || !cell || teleporting)
 		return
 
-	if (send_note && user.z == STATION_Z)
+	if (no_station && user.z == STATION_Z)
 		to_chat(user, "<span class='warning'>The safety prevents the sending of crates from the viscinity of Nanotrasen Station.</span>")
 		return
 
@@ -199,6 +200,12 @@
 	icon_state = "dest_tagger_p"
 	send_cost = 0
 	send_note = TRUE
+	no_station = TRUE
+
+/obj/item/weapon/rcs/salvage/syndicate
+	desc = "An old RCS model that has been modified for longterm use. Upon closer inspection, it appears that the safety features on this device are disabled."
+	no_station = FALSE
+	emagged = 1
 
 #undef MODE_NORMAL
 #undef MODE_RANDOM

@@ -61,8 +61,7 @@
 	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
 	/obj/item/clothing/under/skelesuit,
 	list(/obj/item/clothing/suit/storage/wintercoat/engineering/ce, /obj/item/clothing/suit/storage/wintercoat/medical/cmo, /obj/item/clothing/suit/storage/wintercoat/security/hos, /obj/item/clothing/suit/storage/wintercoat/hop, /obj/item/clothing/suit/storage/wintercoat/security/captain, /obj/item/clothing/suit/storage/wintercoat/clown, /obj/item/clothing/suit/storage/wintercoat/slimecoat),
-	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
-	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
+	list(/obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
 	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
 	/obj/item/clothing/mask/necklace/xeno_claw,
@@ -233,6 +232,7 @@ var/global/list/alcatraz_stuff = list(
 	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE, JELLY, CHAOS and FAVORITE etched onto its sides."
 	icon_state = "helmet_sec"
 	item_state = "helmet"
+	species_fit = list(INSECT_SHAPED)
 	flags = HEAR | FPRINT
 	var/dna_profile = null
 	var/last_donut = 0
@@ -863,18 +863,17 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/vachandle/pickup(mob/user)
 	..()
-	event_key = user.on_moved.Add(src, "mob_moved")
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 /obj/item/vachandle/dropped(mob/user)
-	user.on_moved.Remove(event_key)
-	event_key = null
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 	if(loc != myvac)
 		retract()
 
 /obj/item/vachandle/throw_at()
 	retract()
 
-/obj/item/vachandle/proc/mob_moved(var/list/event_args, var/mob/holder)
+/obj/item/vachandle/proc/mob_moved(atom/movable/mover)
 	if(myvac && get_dist(src,myvac) > 2) //Needs a little leeway because dragging isn't instant
 		retract()
 
@@ -984,7 +983,6 @@ var/global/list/alcatraz_stuff = list(
 	icon_state = "pedometer"
 	w_class = W_CLASS_SMALL
 	slot_flags = SLOT_BELT
-	var/event_key = null
 	var/count = 0
 	var/list/approved_areas = list(/area/maintenance,/area/hallway)
 	var/list/special_rewards = list(/obj/item/weapon/pen/tactical)
@@ -998,14 +996,13 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/pedometer/pickup(mob/user)
 	..()
-	event_key = user.on_moved.Add(src, "mob_moved")
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 /obj/item/pedometer/dropped(mob/user)
 	..()
-	user.on_moved.Remove(event_key)
-	event_key = null
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
-/obj/item/pedometer/proc/mob_moved(var/list/event_args, var/mob/holder)
+/obj/item/pedometer/proc/mob_moved(atom/movable/mover)
 	var/turf/T = get_turf(src)
 	var/area/A = get_area(T)
 	if(is_type_in_list(A,approved_areas))
@@ -1018,6 +1015,157 @@ var/global/list/alcatraz_stuff = list(
 				path = pick(regular_rewards)
 			if(path)
 				var/obj/item/I = new path(get_turf(src))
-				if(isliving(holder))
-					holder.put_in_hands(I)
-				to_chat(holder,"<span class='good'>\The [src] dispenses a reward!</span>")
+				if(isliving(mover))
+					var/mob/living/living_mover = mover
+					living_mover.put_in_hands(I)
+				to_chat(mover,"<span class='good'>\The [src] dispenses a reward!</span>")
+
+
+//Mystery mob cubes//////////////
+
+/obj/item/weapon/storage/box/mysterycubes
+	name = "mystery cube box"
+	desc = "Dehydrated friends!"
+	icon = 'icons/obj/pbag.dmi'
+	icon_state = "pbag"	//Supposed to look kind of shitty, cubes aren't even wrapped
+	foldable = /obj/item/weapon/paper
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube")
+
+/obj/item/weapon/storage/box/mysterycubes/New()
+	..()
+	var/friendAmount = 1
+	friendAmount = rand(1, 3)
+	for(var/i = 1 to friendAmount)
+		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube
+	name = "mystery cube"
+	desc = "A portable friend!"
+	var/static/list/potentialFriends = list()
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube/New()
+	..()
+	if(!length(potentialFriends))
+		potentialFriends = existing_typesof(/mob/living/simple_animal) - (boss_mobs + blacklisted_mobs)
+	contained_mob = pick(potentialFriends)
+
+
+//Mystery chem beakers//////////////
+
+/obj/item/weapon/storage/box/mystery_vial
+	name = "assorted chemical pack"
+	desc = "A mix of reagents from who knows where."
+	icon_state = "beaker"
+
+/obj/item/weapon/storage/box/mystery_vial/New()
+	..()
+	for(var/i = 1 to 5)
+		new /obj/item/weapon/reagent_containers/glass/beaker/vial/mystery(src)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/mystery
+	name = "recycled vial"
+	desc = "Slightly scratched and worn, it looks like this wasn't its original purpose. The label has been sloppily peeled off."
+	mech_flags = MECH_SCAN_FAIL	//Nip that in the bud
+	var/static/list/illegalChems = list(	//Just a bad idea
+		ADMINORDRAZINE,
+		BLOCKIZINE,
+		AUTISTNANITES,
+		XENOMICROBES,
+		PAISMOKE
+	)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/mystery/New()
+	..()
+	var/list/mysteryChems = chemical_reagents_list - illegalChems
+	reagents.add_reagent(pick(mysteryChems), volume)
+
+
+//Mystery circuits////////////
+
+/obj/item/weapon/storage/box/mystery_circuit
+	name = "children's circuitry circus educational toy booster pack"
+	desc = "Ages 6 and up"
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "circuit"
+
+/obj/item/weapon/storage/box/mystery_circuit/New()
+	..()
+	var/list/legalCircuits = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom	//Identical to spessmart spawner
+	for(var/i = 1 to 3)
+		var/boosterPack = pick(legalCircuits)
+		new boosterPack(src)
+	new /obj/item/weapon/solder(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/sulphuric(src)
+	new /obj/item/weapon/paper/permissionslip(src)
+
+/obj/item/weapon/paper/permissionslip
+	name = "circuitry circus education toy booster pack legally binding permission slip"
+	desc = "Very clearly hand written."
+
+/obj/item/weapon/paper/permissionslip/New()
+	..()
+	info = "The purchaser or purchasers of this or any other Circuitry Circus Education Toy Booster Pack <i>TM</i> recognizes, accepts, and is bound to the terms and conditions found within any Circuitry Circus Education Toy Starter Pack <i>TM</i>. This includes but is not limited to: <BR>the relinquishment of any state, country, nation, or planetary given rights protecting those of select ages from legal action based on misuse of the product.<BR>All: injuries, dismemberments, trauma (mental or physical), diseases, invasive species, deaths, memory loss, time loss, genetic recombination, or quantum displacement is the sole responsibility of the owner of the Circuitry Circus Education Toy Booster Pack <i>TM</i> <BR><BR>Please ask for your parent or guardian's permission before playing. Have fun."
+
+
+//Mystery material//////////////////////
+
+/obj/item/weapon/storage/box/large/mystery_material
+	name = "surplus material scrap box"
+	desc = "Caked in layers of dust, smells like a warehouse."
+	var/list/surplusMat= list(
+		/obj/item/stack/sheet/metal = 50,
+		/obj/item/stack/sheet/glass/glass = 35,
+		/obj/item/stack/sheet/plasteel = 25,
+		/obj/item/stack/sheet/mineral/uranium = 20,
+		/obj/item/stack/sheet/mineral/silver = 20,
+		/obj/item/stack/sheet/mineral/gold = 15,
+		/obj/item/stack/sheet/mineral/diamond = 5,
+		/obj/item/stack/sheet/mineral/phazon = 1,
+		/obj/item/stack/sheet/mineral/clown = 1
+	)
+
+/obj/item/weapon/storage/box/large/mystery_material/odd
+	name = "surplus odd material scrap box"
+	surplusMat = list(
+		/obj/item/stack/sheet/bone = 50,
+		/obj/item/stack/sheet/mineral/sandstone = 50,
+		/obj/item/stack/sheet/brass = 35,
+		/obj/item/stack/sheet/mineral/gingerbread = 25,
+		/obj/item/stack/sheet/animalhide/xeno = 10,
+		/obj/item/stack/sheet/animalhide/human = 20,
+		/obj/item/stack/sheet/snow = 25,
+		/obj/item/stack/sheet/cardboard = 20,
+		/obj/item/stack/telecrystal = 2,	//Emergent gameplay!
+		/obj/item/stack/teeth/gold = 10,
+		/obj/item/stack/tile/slime = 20
+	)
+
+/obj/item/weapon/storage/box/large/mystery_material/New()
+	..()
+	for(var/i = 1 to 6)
+		var/theSurplus = pickweight(surplusMat)
+		new theSurplus(src, surplusMat[theSurplus])
+
+
+//Mystery food////////////////////
+
+/obj/structure/closet/crate/freezer/bootlegpicnic
+	name = "bootleg picnic supplies"
+	desc = "Tangible proof against prohibition."
+
+/obj/structure/closet/crate/freezer/bootlegpicnic/New()
+	..()
+	for(var/i = 1 to 4)
+		var/bootlegSnack = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks))
+		new bootlegSnack(src)
+	for(var/i = 1 to 2)
+		var/bootlegDrink = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/drinks))
+		new bootlegDrink(src)
+
+
+//Restock//////////////////////
+
+/obj/structure/vendomatpack/trader
+	name = "trader supply recharge pack"
+	targetvendomat = /obj/machinery/vending/trader
+	icon_state = "sale"

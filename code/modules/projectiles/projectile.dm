@@ -61,7 +61,7 @@ var/list/impact_master = list()
 	var/reflected = 0
 
 	var/bounce_sound = 'sound/items/metal_impact.ogg'
-	var/bounce_type = null//BOUNCEOFF_WALLS, BOUNCEOFF_WINDOWS, BOUNCEOFF_OBJS, BOUNCEOFF_MOBS
+	var/bounce_type = null//PROJREACT_WALLS, PROJREACT_WINDOWS, PROJREACT_OBJS, PROJREACT_MOBS, PROJREACT_BLOB
 	var/bounces = 0	//if set to -1, will always bounce off obstacles
 
 	var/phase_type = null//PHASEHTROUGH_WALLS, PHASEHTROUGH_WINDOWS, PHASEHTROUGH_OBJS, PHASEHTROUGH_MOBS
@@ -155,7 +155,7 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
 	if(!istype(target) || !istype(user))
 		return 0
-	var/obj/item/projectile/test/in_chamber = getFromPool(/obj/item/projectile/test, get_step_to(user, target)) //Making the test....
+	var/obj/item/projectile/test/in_chamber = new /obj/item/projectile/test(get_step_to(user, target)) //Making the test...)
 	in_chamber.target = target
 	in_chamber.ttarget = target //what the fuck
 	in_chamber.flags = flags //Set the flags...
@@ -163,12 +163,9 @@ var/list/impact_master = list()
 	in_chamber.firer = user
 	var/output = in_chamber.process() //Test it!
 	//del(in_chamber) //No need for it anymore
-	returnToPool(in_chamber)
+	qdel(in_chamber)
+	in_chamber = null
 	return output //Send it back to the gun!
-
-/obj/item/projectile/resetVariables()
-	..("permutated")
-	permutated = list()
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)
 	if(istype(firer, /mob))
@@ -206,7 +203,6 @@ var/list/impact_master = list()
 	if(bumped)
 		return 0
 	var/forcedodge = 0 // force the projectile to pass
-
 	bumped = 1
 	if(firer && istype(A, /mob))
 		var/mob/M = A
@@ -269,15 +265,15 @@ var/list/impact_master = list()
 						BM.LAssailant = null
 				else
 					BM.LAssailant = firer
+
+	var/turf/A_turf = get_turf(A) //Store the location of A for later use in case it is destroyed in bullet_act()
+
 	if (!forcedodge)
 		forcedodge = A.bullet_act(src, def_zone) // searches for return value
 	if(forcedodge == -1) // the bullet passes through a dense object!
 		bumped = 0 // reset bumped variable!
 
-		if(istype(A, /turf))
-			loc = A
-		else
-			loc = A.loc
+		forceMove(get_turf(A))
 
 		if(permutated)
 			permutated.Add(A)
@@ -300,19 +296,19 @@ var/list/impact_master = list()
 		var/PixelY = 0
 		switch(get_dir(src,A))
 			if(NORTH)
-				PixelY = WORLD_ICON_SIZE/2
-			if(SOUTH)
 				PixelY = -WORLD_ICON_SIZE/2
+			if(SOUTH)
+				PixelY = WORLD_ICON_SIZE/2
 			if(EAST)
-				PixelX = WORLD_ICON_SIZE/2
-			if(WEST)
 				PixelX = -WORLD_ICON_SIZE/2
+			if(WEST)
+				PixelX = WORLD_ICON_SIZE/2
 
 		var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,impact_icon)
 		impact.pixel_x = PixelX
 		impact.pixel_y = PixelY
 
-		var/turf/T = src.loc
+		var/turf/T = get_turf(A)
 		if(T) //Trying to fix a runtime that happens when a flare hits a window, T somehow becomes null.
 			T.overlays += impact
 
@@ -343,11 +339,6 @@ var/list/impact_master = list()
 			return 1
 		if(penetration_message)
 			A.visible_message("<span class='warning'>\The [src] goes right through \the [A]!</span>")
-		src.forceMove(get_step(src.loc,dir))
-		if(linear_movement)
-			update_pixel()
-			pixel_x = PixelX
-			pixel_y = PixelY
 		if(penetration > 0)//a negative penetration value means that the projectile can keep moving through obstacles
 			penetration = max(0, penetration - A.penetration_dampening)
 		if(isturf(A))				//if the bullet goes through a wall, we leave a nice mark on it
@@ -359,6 +350,29 @@ var/list/impact_master = list()
 				trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
 				trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
 				T.overlays += trace
+
+		var/turf/target = get_step(loc, dir)
+		if(loc == A_turf) //Special case where we collided with something while exiting a turf, instead of while entering.
+			var/atom/to_hit
+			if(!target.Cross(src))
+				to_hit = target
+			else
+				for(var/atom/movable/AM in target)
+					if(!AM.Cross(src))
+						to_hit = AM
+						break
+
+			if(to_hit)
+				bumped = FALSE
+				to_bump(to_hit)
+				return 1
+
+		forceMove(target)
+		if(linear_movement)
+			update_pixel()
+			pixel_x = PixelX
+			pixel_y = PixelY
+
 		return 1
 
 	bullet_die()
@@ -540,12 +554,12 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/bullet_die()
 	OnDeath()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/projectile/beam/lightning/spell/bullet_die()
-        spawn()
-                OnDeath()
-                returnToPool(src)
+	spawn()
+		OnDeath()
+		qdel(src)
 
 /obj/item/projectile/proc/bump_original_check()
 	if(!bumped && !isturf(original))
@@ -575,11 +589,11 @@ var/list/impact_master = list()
 	if(!dir)
 		//del(src)
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 	if(kill_count < 1)
 		//del(src)
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 	kill_count--
 	var/first = 1
 	var/tS = 0
@@ -588,7 +602,8 @@ var/list/impact_master = list()
 			tS = 1
 			timestopped = 0
 		var/turf/T = get_step(src, dir)
-		step_towards(src, T)
+		if(!step_towards(src, T))
+			break
 		if(!bumped && !isturf(original))
 			if(loc == get_turf(original))
 				if(!(original in permutated))

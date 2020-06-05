@@ -438,7 +438,10 @@ var/bloodstone_backup = 0
 		return
 
 	victim = loc
-	current_dots = clamp(round(victim.knockdown/2.5),0,5)
+	if (isalien(victim))
+		current_dots = clamp(round(victim.paralysis/2.5),0,5)
+	else
+		current_dots = clamp(round(victim.knockdown/2.5),0,5)
 
 	if (!current_dots)
 		qdel(src)
@@ -455,10 +458,12 @@ var/bloodstone_backup = 0
 
 /obj/effect/stun_indicator/proc/update_indicator()
 	set waitfor = FALSE
-	while (victim && (victim.stat < DEAD) && victim.knockdown)
+	while (victim && (victim.stat < DEAD) && (victim.knockdown || (isalien(victim) && victim.paralysis)))
 		for (var/client/C in viewers)
 			C.images -= indicator
 		var/dots = clamp(1+round(victim.knockdown/2.5),1,6)
+		if (isalien(victim))
+			dots = clamp(1+round(victim.paralysis/2.5),1,6)
 		var/anim = 0
 		if (dots!=current_dots)
 			anim = 1
@@ -509,6 +514,8 @@ var/bloodstone_backup = 0
 /obj/effect/stun_indicator/Destroy()
 	for (var/client/C in viewers)
 		C.images -= indicator
+	indicator = null
+	victim = null
 	..()
 
 /obj/effect/stun_indicator/cultify()

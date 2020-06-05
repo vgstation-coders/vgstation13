@@ -86,8 +86,10 @@ obj/structure/windoor_assembly/Destroy()
 			windoor.req_one_access = electronics.conf_access
 		else
 			windoor.req_access = electronics.conf_access
+		electronics.forceMove(windoor)
+		windoor.electronics = electronics
+		electronics.installed = TRUE
 		windoor.set_electronics()
-		qdel(electronics)
 		electronics = null
 
 
@@ -100,9 +102,9 @@ obj/structure/windoor_assembly/Destroy()
 				return
 			to_chat(user, "<span class='notice'>You dissasembled [src]!</span>")
 			if(glass_type)
-				getFromPool(glass_type,loc,5)
+				new glass_type(loc, 5)
 			if(secure)
-				getFromPool(reinforce_material,loc,2)
+				new reinforce_material(loc, 2)
 			qdel(src)
 		else
 			to_chat(user, "<span class='rose'>You need more welding fuel to dissassemble [src].</span>")

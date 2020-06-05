@@ -65,7 +65,6 @@
 
 	// Monitoring shit
 	var/frequency = 1333
-	var/id_tag
 	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
@@ -102,6 +101,7 @@
 	set_frequency(frequency) //also broadcasts
 
 /obj/machinery/power/supermatter/Destroy()
+	new /datum/artifact_postmortem_data(src,TRUE)//we only archive those that were excavated
 	qdel(radio)
 	radio = null
 	radio_controller.remove_object(src, frequency)
@@ -213,7 +213,7 @@
 			speech.job = "Automated Announcement"
 			speech.as_name = "Supermatter [short_name] Monitor"
 			Broadcast_Message(speech, level = list(current_zlevel))
-			returnToPool(speech)
+			qdel(speech)
 
 			lastwarning = world.timeofday - offset
 
@@ -504,7 +504,6 @@
 	circuit = "/obj/item/weapon/circuitboard/supermatter"
 	light_color = LIGHT_COLOR_YELLOW
 	var/frequency = 1333
-	var/id_tag //mappable
 	var/datum/radio_frequency/radio_connection
 	var/obj/machinery/power/supermatter/linked = null //Gets cleared in process if the shard explodes
 	//"LIST" BUTTON

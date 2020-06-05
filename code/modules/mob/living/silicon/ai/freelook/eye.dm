@@ -159,6 +159,21 @@
 		return
 	cameraFollow = null
 	eyeobj.forceMove(T)
+	
+/mob/living/silicon/ai/proc/toggleholopadoverlays() //shows holopads above all static
+	if (!holopadoverlays.len)
+		for(var/obj/machinery/hologram/holopad/holopads in machines)
+			var/image/holopadoverlay = image('icons/obj/stationobjs.dmi',holopads,"holopad0", ABOVE_HUD_PLANE)
+			holopadoverlay.plane = ABOVE_HUD_PLANE
+			if(client)
+				client.images += holopadoverlay
+				holopadoverlays += holopadoverlay
+	else
+		if(client)
+			for(var/image/ol in holopadoverlays)
+				client.images -= ol
+			holopadoverlays.Cut()
+
 
 /mob/living/silicon/ai/verb/toggle_acceleration()
 	set category = "AI Commands"

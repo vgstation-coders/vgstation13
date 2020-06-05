@@ -275,7 +275,7 @@
 		if("pps")
 			if(!pps_device)
 				pps_device = new(src)
-			pps_device.ui_interact(src)
+			pps_device.attack_self(src)
 		if("holomap")
 			if(href_list["switch_target"])
 				if(holo_target == initial(holo_target))

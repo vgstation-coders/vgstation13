@@ -24,6 +24,7 @@
 	name = "Santa's hat"
 	desc = "Ho ho ho. Merrry X-mas!"
 	icon_state = "santahat"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/suit/space/santa
@@ -42,6 +43,7 @@
 	desc = "Yarr."
 	icon_state = "pirate"
 	item_state = "pirate"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.9
 
@@ -69,9 +71,11 @@
 	name = "ancient space helmet"
 	icon_state = "nasa"
 	item_state = "nasa"
+	species_fit = list(INSECT_SHAPED)
 	desc = "Take your protein pills and put your helmet on."
 	armor = list(melee = 10, bullet = 10, laser = 10,energy = 10, bomb = 50, bio = 100, rad = 100)
-	species_restricted =list("Human")
+	species_restricted =list("Human", "Insectoid")
+	body_parts_visible_override = 0
 
 //Clown Space Suit
 /obj/item/clothing/head/helmet/space/clown
@@ -79,7 +83,9 @@
 	desc = "The large grinning clown face on the front of the helmet is equal parts funny and creepy."
 	icon_state = "clown-eva-helmet"
 	item_state = "clown-eva-helmet"
+	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	body_parts_visible_override = 0
 
 /obj/item/clothing/suit/space/clown
 	name = "clown spacesuit"

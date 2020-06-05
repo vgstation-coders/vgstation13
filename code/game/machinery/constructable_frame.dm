@@ -67,7 +67,7 @@
 							icon_state="box_glass_circuit"
 				if (iswelder(P))
 					to_chat(user, "<span class='notice'>You use the machine frame as a vice and shape the glass with the welder into a fish bowl.</span>")
-					getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+					new /obj/item/stack/sheet/metal(get_turf(src), 5)
 					new /obj/machinery/fishtank/bowl(get_turf(src))
 					qdel(src)
 				return
@@ -184,7 +184,7 @@
 							P.playtoolsound(src, 50)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
-								returnToPool(O)
+								qdel(O)
 							new_machine.component_parts = list()
 							for(var/obj/O in src)
 								if(circuit.contain_parts) // things like disposal don't want their parts in them
@@ -235,7 +235,7 @@
 											var/obj/item/stack/CP = P
 											if(CP.amount >= req_components[I])
 												var/camt = min(CP.amount, req_components[I]) // amount of the stack to take, idealy amount required, but limited by amount provided
-												var/obj/item/stack/CC = getFromPool(I, src)
+												var/obj/item/stack/CC = new I(src)
 												CC.amount = camt
 												CC.update_icon()
 												CP.use(camt)
@@ -342,7 +342,7 @@ to destroy them and players will be able to make replacements.
 		if(WT.remove_fuel(1,user))
 			var/obj/item/stack/sheet/glass/glass/new_item = new()
 			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
-			returnToPool(src)
+			qdel(src)
 			return
 	else
 		return ..()
@@ -1441,4 +1441,58 @@ obj/item/weapon/circuitboard/rdserver
 	req_components = list(
 		/obj/item/weapon/stock_parts/console_screen = 1,
 		/obj/item/weapon/stock_parts/micro_laser = 3,
+	)
+
+/obj/item/weapon/circuitboard/mind_machine_hub
+	name = "Circuit Board (Mind Machine Hub)"
+	desc = "A circuit board used to run a mind machine hub"
+	build_path = /obj/machinery/mind_machine/mind_machine_hub
+	board_type = MACHINE
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=5"
+	req_components = list(
+		/obj/item/weapon/stock_parts/manipulator/nano = 2,
+		/obj/item/weapon/stock_parts/subspace/analyzer = 1,
+		/obj/item/weapon/stock_parts/subspace/filter = 1,
+		/obj/item/weapon/stock_parts/subspace/amplifier = 1,
+		/obj/item/weapon/stock_parts/console_screen = 1
+	)
+
+/obj/item/weapon/circuitboard/mind_machine_pod
+	name = "Circuit Board (Mind Machine Pod)"
+	desc = "A circuit board used to run a mind machine pod"
+	build_path = /obj/machinery/mind_machine/mind_machine_pod
+	board_type = MACHINE
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=5"
+	req_components = list(
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 2,
+		/obj/item/weapon/stock_parts/subspace/treatment = 1,
+		/obj/item/weapon/stock_parts/subspace/ansible = 1,
+		/obj/item/weapon/stock_parts/subspace/amplifier = 1,
+		/obj/item/weapon/stock_parts/subspace/crystal = 1,
+		/obj/item/weapon/stock_parts/subspace/transmitter = 1
+		)
+
+/obj/item/weapon/circuitboard/sci_telepad
+	name = "Circuit board (Telescience Pad)"
+	desc = "A rather unique circuit board designed for teleportation science, currently unable to be reproduced."
+	build_path = /obj/machinery/telepad
+	board_type = MACHINE
+	origin_tech = Tc_BLUESPACE + "=3;" + Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
+	mech_flags = MECH_SCAN_FAIL
+	req_components = list(
+		/obj/item/weapon/stock_parts/scanning_module = 1,
+		/obj/item/weapon/stock_parts/manipulator = 1,
+		/obj/item/weapon/stock_parts/micro_laser = 2,
+	)
+
+/obj/item/weapon/circuitboard/suspension_gen
+	name = "Circuit Board (Suspension Field Generator)"
+	desc = "A circuit board used to run a suspension field generator"
+	build_path = /obj/machinery/suspension_gen
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=3;"+ Tc_POWERSTORAGE + "=1;" + Tc_MAGNETS + "=4"
+	req_components = list(
+		/obj/item/weapon/stock_parts/micro_laser = 2,
+		/obj/item/weapon/stock_parts/manipulator = 1,
+		/obj/item/weapon/stock_parts/capacitor = 1,
 	)

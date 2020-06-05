@@ -17,24 +17,19 @@
 					holder = H
 					break
 			if(holder)
-				holder.buildmode.copycat = null
-			if(M.client.buildmode_objs && M.client.buildmode_objs.len)
-				for(var/BM in M.client.buildmode_objs)
-					returnToPool(BM)
-				M.client.buildmode_objs.Cut()
+				qdel(holder)
 		else
 			log_admin("[key_name(usr)] has entered build mode.")
 			M.client.buildmode = 1
 			M.client.show_popup_menus = 0
 
-			var/obj/effect/bmode/buildholder/hold = getFromPool(/obj/effect/bmode/buildholder)
-			hold.builddir = getFromPool(/obj/effect/bmode/builddir,hold)
-			hold.buildhelp = getFromPool(/obj/effect/bmode/buildhelp,hold)
-			hold.buildmode = getFromPool(/obj/effect/bmode/buildmode,hold)
-			hold.buildquit = getFromPool(/obj/effect/bmode/buildquit,hold)
+			var/obj/effect/bmode/buildholder/hold = new /obj/effect/bmode/buildholder
+			hold.builddir = new /obj/effect/bmode/builddir(hold)
+			hold.buildhelp = new /obj/effect/bmode/buildhelp(hold)
+			hold.buildmode = new /obj/effect/bmode/buildmode(hold)
+			hold.buildquit = new /obj/effect/bmode/buildquit(hold)
 			M.client.screen += list(hold.builddir,hold.buildhelp,hold.buildmode,hold.buildquit)
 			hold.cl = M.client
-			M.client.buildmode_objs |= list(hold,hold.builddir,hold.buildhelp,hold.buildmode,hold.buildquit)
 
 /obj/effect/bmode//Cleaning up the tree a bit
 	density = 1
@@ -50,10 +45,10 @@
 	master = loc
 
 /obj/effect/bmode/Destroy()
-	..()
 	if(master && master.cl)
-		master.cl.buildmode_objs &= ~src
 		master.cl.screen -= src
+		master = null
+	..()
 
 /obj/effect/bmode/builddir
 	icon_state = "build"
@@ -172,7 +167,6 @@ obj/effect/bmode/buildholder/New()
 /obj/effect/bmode/buildholder/Destroy()
 	..()
 	cl.screen -= list(builddir,buildhelp,buildmode,buildquit)
-	cl.buildmode_objs &= ~list(builddir,buildhelp,buildmode,buildquit,src)
 	cl.images -= buildmode.area_overlay
 	buildmodeholders -= src
 
@@ -187,8 +181,11 @@ obj/effect/bmode/buildholder/New()
 
 /obj/effect/bmode/buildmode/New()
 	..()
-
 	area_overlay = image('icons/turf/areas.dmi', "yellow")
+
+/obj/effect/bmode/buildmode/Destroy()
+	copycat = null
+	..()
 
 /obj/effect/bmode/buildmode/Click(location, control, params)
 	var/list/pa = params2list(params)

@@ -96,21 +96,21 @@
 	icon_state = "psyche"
 	_color = "psyche"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lightblue
 	name = "lightblue jumpsuit"
 	icon_state = "lightblue"
 	_color = "lightblue"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/aqua
 	name = "aqua jumpsuit"
 	icon_state = "aqua"
 	_color = "aqua"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/purple
 	name = "purple jumpsuit"
@@ -118,7 +118,7 @@
 	item_state = "p_suit"
 	_color = "purple"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lightpurple
 	name = "lightpurple jumpsuit"
@@ -146,21 +146,21 @@
 	icon_state = "brown"
 	_color = "brown"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/yellowgreen
 	name = "yellowgreen jumpsuit"
 	icon_state = "yellowgreen"
 	_color = "yellowgreen"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/darkblue
 	name = "darkblue jumpsuit"
 	icon_state = "darkblue"
 	_color = "darkblue"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lightred
 	name = "lightred jumpsuit"
@@ -174,7 +174,7 @@
 	icon_state = "darkred"
 	_color = "darkred"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/blackpants
 	name = "black pants"

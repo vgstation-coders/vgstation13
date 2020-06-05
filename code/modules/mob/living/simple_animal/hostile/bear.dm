@@ -27,6 +27,7 @@
 	melee_damage_upper = 30
 	size = SIZE_BIG
 	speak_override = TRUE
+	var/obj/item/weapon/reagent_containers/food/snacks/burger = null
 
 	//Space bears aren't affected by atmos.
 	min_oxy = 0
@@ -41,6 +42,16 @@
 	var/stance_step = 0
 
 	faction = "russian"
+
+/mob/living/simple_animal/hostile/bear/Destroy()
+	if(burger)
+		var/turf/T = get_turf(src)
+		if (T)
+			burger.forceMove(T)
+		else
+			qdel(burger)
+		burger = null
+	..()
 
 //SPACE BEARS! SQUEEEEEEEE~     OW! FUCK! IT BIT MY HAND OFF!!
 /mob/living/simple_animal/hostile/bear/Hudson
@@ -62,6 +73,17 @@
 	health = 50
 	melee_damage_lower=10
 	melee_damage_upper=35
+
+/mob/living/simple_animal/hostile/bear/brownbear
+	name = "brown bear"
+	desc = "Does it shit in the woods?"
+	icon_state = "brownbear"
+	icon_living = "brownbear"
+	icon_dead = "brownbear_dead"
+	default_icon_floor = "brownbear"
+	default_icon_space = "brownbear"
+
+	faction = "forest"
 
 /mob/living/simple_animal/hostile/bear/polarbear
 	name = "space polar bear"
@@ -122,7 +144,7 @@
 			stop_automated_movement = 1
 			stance_step++
 			if(stance_step >= 10) //rests for 10 ticks
-				if(target && target in ListTargets())
+				if(target && (target in ListTargets()))
 					stance = HOSTILE_STANCE_ATTACK //If the mob he was chasing is still nearby, resume the attack, otherwise go idle.
 				else
 					stance = HOSTILE_STANCE_IDLE
@@ -130,7 +152,7 @@
 		if(HOSTILE_STANCE_ALERT)
 			stop_automated_movement = 1
 			var/found_mob = 0
-			if(target && target in ListTargets())
+			if(target && (target in ListTargets()))
 				if(CanAttack(target))
 					stance_step = max(0, stance_step) //If we have not seen a mob in a while, the stance_step will be negative, we need to reset it to 0 as soon as we see a mob again.
 					stance_step++
@@ -193,3 +215,52 @@
 
 /mob/living/simple_animal/hostile/bear/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "bear")
+
+/mob/living/simple_animal/hostile/bear/hitby(var/atom/movable/AM)
+	. = ..()
+	if(.)
+		return
+	if(istype(AM,/obj/item/weapon/reagent_containers/food/snacks) && AM.icon_state == "hburger")
+		if (burger)
+			burger.forceMove(get_turf(src))
+		visible_message("<span class='danger'>\The [src] catches \the [AM] mid-flight, a jovial look on its face.</span>")
+		burger = AM
+		burger.forceMove(src)
+		update_icon()
+		LostTarget()
+	else if (prob(50))
+		dropBurger()
+
+/mob/living/simple_animal/hostile/bear/adjustBruteLoss(damage)
+	if (damage>0 && prob(50))
+		dropBurger()
+	..()
+
+/mob/living/simple_animal/hostile/bear/proc/dropBurger(var/alive = TRUE)
+	if (burger)
+		burger.forceMove(get_turf(src))
+		visible_message("<span class='danger'>\The [src] loses hold of \the [burger][alive ? ", a mean look on its face" : "as it breaths its last."].</span>")
+		burger = null
+		update_icon()
+
+/mob/living/simple_animal/hostile/bear/update_icon()
+	overlays.len = 0
+	if(stat == DEAD)
+		icon_state = icon_dead
+		return
+	if (burger)
+		overlays += image(icon, "bearburger")
+	if (istype(locked_to,/obj/item/weapon/beartrap))
+		overlays += image(icon, "beartrapped")
+
+/mob/living/simple_animal/hostile/bear/death()
+	dropBurger(FALSE)
+	update_icon()
+	..()
+
+/mob/living/simple_animal/hostile/bear/is_pacified()
+	if (burger)
+		return TRUE
+	if (istype(locked_to,/obj/item/weapon/beartrap))
+		return TRUE
+	return ..()

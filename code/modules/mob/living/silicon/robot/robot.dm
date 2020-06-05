@@ -1,5 +1,3 @@
-var/list/cyborg_list = list()
-
 /mob/living/silicon/robot
 	name = "Cyborg"
 	real_name = "Cyborg"
@@ -71,8 +69,6 @@ var/list/cyborg_list = list()
 	var/datum/effect/effect/system/ion_trail_follow/ion_trail = null
 	var/jeton = FALSE
 
-	var/killswitch = FALSE
-	var/killswitch_time = 60
 	var/modulelock = FALSE
 	var/modulelock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
@@ -142,7 +138,10 @@ var/list/cyborg_list = list()
 
 	..()
 
-	if (mind && !stored_freqs)
+	if(cyborg_detonation_time < world.time)	//Reset the global cyborg killswitch if it was already triggered, so an activated killswitch + missing robot consoles doesnt prevent all new borgs from instantly exploding. This probably isn't the best place for it but it should work.
+		cyborg_detonation_time = 0
+		
+	if(mind && !stored_freqs)
 		spawn(1)
 			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
 		stored_freqs = 1
@@ -172,13 +171,18 @@ var/list/cyborg_list = list()
 	if(istype(new_AI))
 		connected_ai = new_AI
 		connected_ai.connected_robots += src
+		to_chat(src, "<span class='notice' style=\"font-family:Courier\">Notice: Linked to [connected_ai].</span>")
+		to_chat(connected_ai, "<span class='notice' style=\"font-family:Courier\">Notice: Link to [src] established.</span>")
 		lawsync()
 		lawupdate = TRUE
 	else
 		lawupdate = FALSE
 
-/mob/living/silicon/robot/proc/disconnect_AI()
+/mob/living/silicon/robot/proc/disconnect_AI(var/announce = FALSE)
 	if(connected_ai)
+		to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Unlinked from [connected_ai].</span>")
+		if(announce)
+			to_chat(connected_ai, "<span class='alert' style=\"font-family:Courier\">Notice: Link to [src] lost.</span>")
 		connected_ai.connected_robots -= src
 		connected_ai = null
 
@@ -207,27 +211,27 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
 	if(inv1)
-		returnToPool(inv1)
+		qdel(inv1)
 		if(client)
 			client.screen -= inv1
 		inv1 = null
 	if(inv2)
-		returnToPool(inv2)
+		qdel(inv2)
 		if(client)
 			client.screen -= inv2
 		inv2 = null
 	if(inv3)
-		returnToPool(inv3)
+		qdel(inv3)
 		if(client)
 			client.screen -= inv3
 		inv3 = null
 	if(robot_modules_background)
-		returnToPool(robot_modules_background)
+		qdel(robot_modules_background)
 		if(client)
 			client.screen -= robot_modules_background
 		robot_modules_background = null
 	if(sensor)
-		returnToPool(sensor)
+		qdel(sensor)
 		if(client)
 			client.screen -= sensor
 		sensor = null
@@ -293,6 +297,8 @@ var/list/cyborg_list = list()
 		changed_name = custom_name
 	else
 		changed_name = "[modtype] [braintype]-[num2text(ident)]"
+	if(connected_ai)
+		to_chat(connected_ai, "<span class='notice' style=\"font-family:Courier\">Notice: unit [name] renamed to [changed_name].</span>")
 	real_name = changed_name
 	name = real_name
 
@@ -1168,9 +1174,10 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/proc/self_destruct()
 	if(istraitor(src) && emagged)
-		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
+		to_chat(src, "<span style=\"font-family:Courier\" class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE
+	to_chat(src, "<span style=\"font-family:Courier\" class='danger'>Self-Destruct signal recieved.</span>")
 	gib()
 	return TRUE
 

@@ -14,6 +14,11 @@
 				paired_to = V
 				V.mykey = src
 
+/obj/item/key/Destroy()
+	if(paired_to)
+		paired_to.mykey = null
+		paired_to = null
+	..()
 
 /obj/structure/bed/chair/vehicle
 	name = "vehicle"
@@ -22,7 +27,7 @@
 	anchored = 1
 	density = 1
 	noghostspin = 1 //You guys are no fun
-
+	buckle_range = 1
 	var/empstun = 0
 	var/health = 100
 	var/max_health = 100
@@ -82,11 +87,15 @@
 	make_offsets()
 	if(headlights)
 		new /datum/action/vehicle/toggle_headlights(src)
-	verbs -= /obj/structure/bed/verb/buckle_in //idk how to do this properly
-	verbs -= /obj/structure/bed/chair/vehicle/buckle_out
 
 /obj/structure/bed/chair/vehicle/Destroy()
 	vehicle_list.Remove(src)
+	if(mykey)
+		mykey.paired_to = null
+		mykey = null
+	if(heldkey)
+		qdel(heldkey)
+		heldkey = null
 	..()
 
 /obj/structure/bed/chair/vehicle/proc/set_keys()
@@ -101,7 +110,7 @@
 		empstun = 0
 
 /obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/living/user)
-	if(iswelder(W))
+	if(iswelder(W) && health < max_health)
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
 			add_fingerprint(user)
@@ -231,13 +240,6 @@
 			return 0
 	return 1
 
-/obj/structure/bed/chair/vehicle/buckle_in()
-	set src in range(1)
-	buckle_mob(usr, usr)
-
-/obj/structure/bed/chair/vehicle/buckle_out()
-	manual_unbuckle(usr)
-
 /obj/structure/bed/chair/vehicle/buckle_mob(mob/M, mob/user)
 	if(!can_buckle(M,user))
 		return
@@ -247,7 +249,6 @@
 		"<span class='notice'>You climb onto \the [nick]!</span>")
 
 	lock_atom(M, /datum/locking_category/buckle/chair/vehicle)
-	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
 
 	add_fingerprint(user)
 
@@ -255,16 +256,11 @@
 		if (action.owner && action.owner != user)
 			action.Remove(action.owner)
 		action.Grant(user)
-	verbs -= /obj/structure/bed/chair/vehicle/buckle_in
-	verbs += /obj/structure/bed/chair/vehicle/buckle_out
 
-/obj/structure/bed/chair/vehicle/manual_unbuckle(user)
+/obj/structure/bed/chair/vehicle/manual_unbuckle(mob/user, var/resisting = FALSE)
 	..()
 	for (var/datum/action/action in vehicle_actions)
 		action.Remove(user)
-	verbs += /obj/structure/bed/chair/vehicle/buckle_in
-	verbs -= /obj/structure/bed/verb/buckle_in //here too
-	verbs -= /obj/structure/bed/chair/vehicle/buckle_out
 
 /obj/structure/bed/chair/vehicle/handle_layer()
 	if(dir == SOUTH)

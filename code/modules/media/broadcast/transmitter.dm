@@ -12,9 +12,10 @@ var/global/media_transmitters=list()
 	..()
 	connect_frequency()
 
-/obj/machinery/media/transmitter/proc/broadcast(var/url="", var/start_time=0)
+/obj/machinery/media/transmitter/proc/broadcast(var/url="", var/start_time=0,var/finish_time=0)
 	media_url = url
 	media_start_time = start_time
+	media_finish_time = finish_time
 	update_music()
 
 /obj/machinery/media/transmitter/proc/connect_frequency()
@@ -32,11 +33,11 @@ var/global/media_transmitters=list()
 	if(freq in media_receivers)
 		for(var/obj/machinery/media/receiver/R in media_receivers[freq])
 			if(R.media_crypto == media_crypto)
-				R.receive_broadcast(media_url,media_start_time)
+				R.receive_broadcast(media_url,media_start_time,media_finish_time)
 				//testing("[src]: Sending music to [R]")
 		for(var/mob/living/carbon/complex/gondola/radio/G in media_receivers[freq])
 			if(G.media_crypto == media_crypto)
-				G.receive_broadcast(media_url,media_start_time)
+				G.receive_broadcast(media_url,media_start_time,media_finish_time)
 
 /obj/machinery/media/transmitter/proc/disconnect_frequency()
 	var/list/transmitters=list()

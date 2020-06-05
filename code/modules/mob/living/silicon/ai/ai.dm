@@ -39,10 +39,11 @@ var/list/ai_list = list()
 	var/chosen_core_icon_state = "ai"
 	var/datum/intercom_settings/intercom_clipboard = null //Clipboard for copy/pasting intercom settings
 	var/mentions_on = FALSE
+	var/list/holopadoverlays = list()
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
-
+	var/vox_corrupted = FALSE
 //Hud stuff
 
 	//MALFUNCTION
@@ -53,6 +54,8 @@ var/list/ai_list = list()
 
 	var/obj/machinery/power/apc/malfhack = null
 	var/explosive = FALSE //does the AI explode when it dies?
+	var/blackout_active = FALSE	
+	var/explosive_cyborgs = FALSE	//Will any cyborgs slaved to the AI exploe when they die?
 
 	var/mob/living/silicon/ai/parent = null
 	var/camera_light_on = FALSE
@@ -172,6 +175,15 @@ var/list/ai_list = list()
 		anchored = !anchored
 		to_chat(src, "You are now <b>[anchored ? "" : "un"]anchored</b>.")
 	busy = FALSE
+
+/mob/living/silicon/ai/verb/toggle_holopadoverlays()
+	set category = "AI Commands"
+	set name = "Toggle Holopad Overlays"
+
+	if(incapacitated() || aiRestorePowerRoutine || !isturf(loc) || busy)
+		return
+	toggleholopadoverlays()
+	to_chat(src, "<span class='notice' style=\"font-family:Courier\">Holopad overlays <b>[holopadoverlays.len ? "en" : "dis"]abled</b>.</span>")
 
 /mob/living/silicon/ai/verb/radio_interact()
 	set category = "AI Commands"
@@ -479,27 +491,15 @@ var/list/ai_list = list()
 	#endif
 
 	if(href_list["track"])
-		var/mob/target = locate(href_list["track"]) in mob_list
-		var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
-		if(A && target)
-			A.ai_actual_track(target)
-		return
-
-	else if(href_list["faketrack"])
-		var/mob/target = locate(href_list["track"]) in mob_list
-		var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
-		if(A && target)
-
-			A.cameraFollow = target
-			to_chat(A, text("Now tracking [] on camera.", target.name))
-			if(usr.machine == null)
-				usr.machine = usr
-
-			while (src.cameraFollow == target)
-				to_chat(usr, "Target is not on or near any active cameras on the station. We'll check again in 5 seconds (unless you use the cancel-camera verb).")
-				sleep(40)
+		var/name_to_track = href_list["track"]
+		for(var/mob/some_mob in mob_list)
+			if(some_mob.name != name_to_track)
 				continue
-
+			if(!can_track_atom(some_mob))
+				continue
+			ai_actual_track(some_mob)
+			return
+		to_chat(src, "<span class='warning'>Unable to track [name_to_track].</span>")
 		return
 
 	if(href_list["open"])
@@ -522,6 +522,10 @@ var/list/ai_list = list()
 		make_announcement()
 		return
 
+	if(href_list["voice_corrupted"])
+		vox_corrupted = text2num(href_list["voice_corrupted"]) // even if client hacks the value, we only care if it's true or false.
+		make_announcement()
+
 	// play_announcement=word1+word2... - Plays an announcement to the station.
 	if(href_list["play_announcement"])
 		//to_chat(usr, "Received play_announcement=[href_list["play_announcement"]]")
@@ -531,6 +535,8 @@ var/list/ai_list = list()
 	#endif
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
+	if((ai_flags & COREFORTIFY) && Proj.damage_type == BURN)
+		return 
 	..(Proj)
 	updatehealth()
 	return 2
@@ -830,12 +836,12 @@ var/list/ai_list = list()
 		return
 
 	mentions_on = !mentions_on
-	
-	if(!mentions_on)		
+
+	if(!mentions_on)
 		to_chat(src, "AI mentions deactivated.")
 	else
 		to_chat(src, "AI mentions activated.")
-	
+
 
 /mob/living/silicon/ai/verb/toggle_station_map()
 	set name = "Toggle Station Holomap"
@@ -889,6 +895,18 @@ var/list/ai_list = list()
 			return
 	else
 		return ..()
+
+/mob/living/silicon/ai/attack_hand(mob/user)
+	..()
+	var/mob/living/living_user = user
+	if(!istype(living_user))
+		return
+	if(living_user.a_intent == I_HURT)
+		living_user.unarmed_attack_mob(src)
+	else
+		living_user.visible_message(
+			"<span class='notice'>[living_user] pats [src].</span>",
+			"<span class='notice'>You pat [src].</span>")
 
 
 /mob/living/silicon/ai/get_multitool(var/active_only=0)

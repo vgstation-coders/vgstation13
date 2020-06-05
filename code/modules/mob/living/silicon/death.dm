@@ -1,4 +1,4 @@
-/mob/living/silicon/gib()
+/mob/living/silicon/gib(animation = FALSE, meat = TRUE)
 	death(1)
 	monkeyizing = 1
 	canmove = 0

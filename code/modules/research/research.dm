@@ -192,7 +192,7 @@ datum/tech/materials
 
 datum/tech/engineering
 	name = "Engineering Research"
-	desc = "Development of new and improved engineering parts and."
+	desc = "Development of new and improved engineering parts and equipment."
 	id = "engineering"
 	max_level=5
 
@@ -210,9 +210,9 @@ datum/tech/powerstorage
 
 datum/tech/bluespace
 	name = "'Blue-space' Research"
-	desc = "Research into the sub-reality known as 'blue-space'"
+	desc = "Research into the sub-reality known as 'blue-space'."
 	id = "bluespace"
-	max_level =10
+	max_level=10
 	goal_level=4 // Without phazon.
 
 datum/tech/biotech

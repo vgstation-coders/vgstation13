@@ -58,7 +58,7 @@
 
 /obj/machinery/power/terminal/attackby(obj/item/W, mob/user)
 	if(iswirecutter(W) && !master) //Sanity in the rare case something destroys a machine and leaves a terminal
-		getFromPool(/obj/item/stack/cable_coil, get_turf(src), 10)
+		new /obj/item/stack/cable_coil(get_turf(src), 10)
 		qdel(src)
 		return
 	..()

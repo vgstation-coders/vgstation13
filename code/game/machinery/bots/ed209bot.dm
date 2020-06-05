@@ -13,7 +13,6 @@
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	steps_per = 2
-	bot_flags = BOT_DENSE
 	control_filter = RADIO_SECBOT
 	var/cuffing = 0
 	var/lastfired = 0
@@ -35,7 +34,7 @@
 	var/declare_arrests = 1 //When making an arrest, should it notify everyone wearing sechuds?
 	var/idcheck = 1 //If true, arrest people with no IDs
 	var/weaponscheck = 1 //If true, arrest people for weapons if they don't have access
-	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL
+	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL|BOT_DENSE
 	//List of weapons that secbots will not arrest for, also copypasted in secbot.dm and metaldetector.dm
 	var/safe_weapons = list(
 		/obj/item/weapon/gun/energy/tag,
@@ -46,6 +45,7 @@
 		)
 
 	target_chasing_distance = 12
+	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
 
 /obj/item/weapon/ed209_assembly
 	name = "ED-209 assembly"
@@ -210,7 +210,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/ed209/kick_act(mob/living/H)
 	..()
-
+	summoned = FALSE // Anger
 	threatlevel = H.assess_threat(src)
 	threatlevel += PERP_LEVEL_ARREST_MORE
 
@@ -441,7 +441,7 @@ Auto Patrol: []"},
 
 	spark(src)
 
-	getFromPool(/obj/effect/decal/cleanable/blood/oil, loc)
+	new /obj/effect/decal/cleanable/blood/oil(loc)
 	qdel(src)
 
 
@@ -521,6 +521,14 @@ Auto Patrol: []"},
 					var/mob/toarrest = pick(targets)
 					if (toarrest)
 						target = toarrest
+
+/obj/machinery/bot/ed209/return_status()
+	if (target)
+		return "Chasing prep"
+	if (auto_patrol)
+		return "Patrolling"
+	return ..()
+
 
 #define ED209_BUILD_STEP_INITIAL 0
 #define ED209_BUILD_STEP_ONELEG 1
@@ -668,7 +676,7 @@ Auto Patrol: []"},
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/red))
 			disabled = 1
 			//del (Proj)
-			returnToPool(Proj)
+			qdel(Proj)
 			sleep(100)
 			disabled = 0
 		else
@@ -677,7 +685,7 @@ Auto Patrol: []"},
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/blue))
 			disabled = 1
 			//del (Proj)
-			returnToPool(Proj)
+			qdel(Proj)
 			sleep(100)
 			disabled = 0
 		else

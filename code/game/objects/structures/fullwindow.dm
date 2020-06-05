@@ -11,11 +11,9 @@
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
 	layer = FULL_WINDOW_LAYER
-
 	penetration_dampening = 1
-
-
 	cracked_base = "fcrack"
+	is_fulltile = TRUE
 
 /obj/structure/window/full/New(loc)
 
@@ -35,10 +33,6 @@
 /obj/structure/window/full/can_be_reached(mob/user)
 
 	return 1 //That about it Captain
-
-/obj/structure/window/full/is_fulltile()
-
-	return 1
 
 //Merges adjacent full-tile windows into one (blatant ripoff from game/smoothwall.dm)
 /obj/structure/window/full/update_icon()

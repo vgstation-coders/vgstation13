@@ -5,6 +5,7 @@
 	desc = "A heavy jacket made from 'synthetic' animal furs."
 	icon_state = "coatwinter"
 	item_state = "labcoat"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
@@ -27,6 +28,12 @@
 
 	..()
 
+/obj/item/clothing/suit/storage/wintercoat/Destroy()
+	if(hood)
+		qdel(hood)
+		hood = null
+	..()
+
 /obj/item/clothing/head/winterhood
 	name = "winter hood"
 	desc = "A hood attached to a heavy winter jacket."
@@ -42,15 +49,23 @@
 	else if(!coat)
 		qdel(src)
 
+/obj/item/clothing/head/winterhood/Destroy()
+	if(coat)
+		coat.hood = null
+		coat = null
+	..()
+
 /obj/item/clothing/suit/storage/wintercoat/security/captain
 	name = "captain's winter coat"
 	desc = "You guys gonna listen to Garry? You gonna let him give the orders? I mean, he could BE one of those things!"
 	icon_state = "coatcaptain"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 20, bullet = 15, laser = 20, energy = 10, bomb = 15, bio = 5, rad = 2)
 
 /obj/item/clothing/suit/storage/wintercoat/security
 	name = "security winter coat"
 	icon_state = "coatsecurity"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 20, laser = 30, energy = 10, bomb = 20, bio = 0, rad = 0)
 	allowed = list(
 		/obj/item/weapon/gun/energy,
@@ -72,6 +87,7 @@
 /obj/item/clothing/suit/storage/wintercoat/security/hos
 	name = "Head of Security's winter coat"
 	icon_state = "coathos"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 65, bullet = 30, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	nohood = 1
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
@@ -79,12 +95,14 @@
 /obj/item/clothing/suit/storage/wintercoat/security/warden
 	name = "Warden's winter coat"
 	icon_state = "coatwarden"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 	nohood = 1
 
 /obj/item/clothing/suit/storage/wintercoat/medical
 	name = "medical winter coat"
 	icon_state = "coatmedical"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 50, rad = 0)
 	allowed = list(
 		/obj/item/roller,
@@ -97,16 +115,19 @@
 		/obj/item/device/healthanalyzer,
 		/obj/item/device/flashlight/pen,
 		/obj/item/weapon/minihoe,
-		/obj/item/weapon/switchtool)
+		/obj/item/weapon/switchtool,
+		/obj/item/weapon/autopsy_scanner/healthanalyzerpro)
 
 /obj/item/clothing/suit/storage/wintercoat/medical/science //normal labcoats all have the same allowed item list
 	name = "science winter coat"
 	icon_state = "coatscience"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 10, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/storage/wintercoat/engineering
 	name = "engineering winter coat"
 	icon_state = "coatengineer"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 20)
 	allowed = list (
 		/obj/item/device/analyzer,
@@ -127,10 +148,12 @@
 /obj/item/clothing/suit/storage/wintercoat/engineering/atmos
 	name = "atmospherics winter coat"
 	icon_state = "coatatmos"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/wintercoat/hydro
 	name = "hydroponics winter coat"
 	icon_state = "coathydro"
+	species_fit = list(INSECT_SHAPED)
 	allowed = list (
 		/obj/item/weapon/reagent_containers/spray/plantbgone,
 		/obj/item/device/analyzer/plant_analyzer,
@@ -142,14 +165,17 @@
 /obj/item/clothing/suit/storage/wintercoat/cargo
 	name = "cargo winter coat"
 	icon_state = "coatcargo"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/wintercoat/prisoner
 	name = "prisoner winter coat"
 	icon_state = "coatprisoner"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/wintercoat/hop
 	name = "Head of Personnel's winter coat"
 	icon_state = "coathop"
+	species_fit = list(INSECT_SHAPED)
 	desc = "A slightly armoured fur-lined greatcoat. It looks like it's mostly ceremonial."
 	armor = list(melee = 30, bullet = 10, laser = 10, energy = 10, bomb = 15, bio = 0, rad = 0)
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
@@ -171,6 +197,7 @@
 /obj/item/clothing/suit/storage/wintercoat/miner
 	name = "mining winter coat"
 	icon_state = "coatminer"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 10, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	allowed = list(
 		/obj/item/weapon/pickaxe,
@@ -181,38 +208,45 @@
 /obj/item/clothing/suit/storage/wintercoat/clown
 	name = "Elfen winter coat"
 	icon_state = "coatclown"
+	species_fit = list(INSECT_SHAPED)
 	allowed = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
 		/obj/item/weapon/bananapeel,
 		/obj/item/weapon/soap,
 		/obj/item/weapon/reagent_containers/spray,
 		/obj/item/weapon/bikehorn)
-		
+
 /obj/item/clothing/suit/storage/wintercoat/mime
 	name = "mime winter coat"
 	icon_state = "coatmime"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/wintercoat/engineering/ce
 	name = "Chief Engineer's winter coat"
 	icon_state = "coatce"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 50)
 
 /obj/item/clothing/suit/storage/wintercoat/medical/cmo
 	name = "Chief Medical Officer's winter coat"
 	icon_state = "coatcmo"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 70, rad = 0)
 
 /obj/item/clothing/suit/storage/wintercoat/medical/paramedic
 	name = "paramedic winter coat"
 	icon_state = "coatpara"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/wintercoat/engineering/mechanic
 	name = "mechanics winter coat"
 	icon_state = "coatmech"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/wintercoat/bartender
 	name = "bartender winter coat"
 	icon_state = "coatbar"
+	species_fit = list(INSECT_SHAPED)
 	desc = "A heavy jacket made from 'synthetic' animal furs. Reinforced to avoid tearing when breaking up bar fights."
 	armor = list(melee = 20, bullet = 10, laser = 10, energy = 0, bomb = 10, bio = 0, rad = 0)
 	allowed = list(
@@ -223,6 +257,7 @@
 /obj/item/clothing/suit/storage/wintercoat/druid
 	name = "druid winter robes"
 	icon_state = "druid_snow"
+	species_fit = list(INSECT_SHAPED)
 	wizard_garb = 1
 
 
@@ -277,3 +312,44 @@
 		coat.hooddown(user,unequip = 0)
 		user.drop_from_inventory(src)
 		forceMove(coat)
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie
+	name = "Grey hoodie"
+	desc = "A casual hoodie to keep you warm and comfy."
+	icon_state = "hoodie"
+	item_state = "hoodie"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+	clothing_flags = COLORS_OVERLAY
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/black
+	name = "Black hoodie"
+	color = "#4A4A4B" //Grey but it looks black
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/red
+	name = "Red hoodie"
+	color = "#D91414"
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/green
+	name = "Green hoodie"
+	color = "#5C9E54" //Green
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/darkblue
+	name = "Dark blue hoodie"
+	color = "#1E85BC" //Blue
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/purple
+	name = "Purple hoodie"
+	color = "#9557C5" //purple
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow
+	name = "Yellow hoodie"
+	color = "#E0C14F" //Yellow
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/orange
+	name = "Orange hoodie"
+	color = "#C67A4B" //orange
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/cyan
+	name = "Cyan hoodie"
+	color = "#00ffff" //Cyan (Or close to it)

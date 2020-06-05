@@ -15,6 +15,7 @@
 	cooldown_min = 5 //4 deciseconds reduction per rank
 	hud_state = "wiz_blink"
 	selection_type = "range"
+	quicken_price = Sp_BASE_PRICE
 
 /spell/aoe_turf/blink/cast(var/list/targets, mob/user)
 	if(!targets.len)
@@ -25,12 +26,11 @@
 	if(T)
 		user.unlock_from()
 		user.teleport_to(T)
-		INVOKE_EVENT(user.on_blink, list("starting" = starting, "destination" = T))
 		makeAnimation(T, starting)
 	return
 
 /spell/aoe_turf/blink/proc/makeAnimation(var/turf/T, var/turf/starting)
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/effect/system/smoke_spread/transparent/smoke = new
 	smoke.set_up(1, 0, T)
 	smoke.start()
 
@@ -61,7 +61,7 @@
 /spell/aoe_turf/blink/vamp/choose_targets()
 	var/turfs = ..()
 	for (var/turf/T in turfs)
-		if (T.get_lumcount() * 10 > 2)
+		if (T.get_lumcount() * 10 > 2 || T.holy || istype(T, /turf/unsimulated/floor/asteroid))
 			turfs -= T
 	return turfs
 

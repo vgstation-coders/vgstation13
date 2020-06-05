@@ -125,7 +125,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		if(i > emitted_beams.len)
 			break
 		var/obj/effect/beam/beam = emitted_beams[i]
-		returnToPool(beam)
+		qdel(beam)
 		emitted_beams[i]=null
 		beam=null
 	emitted_beams.len = 4
@@ -205,13 +205,13 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 				// If there's a beam and it's changed, nuke the existing beam.
 				if (beam && beam.type != beamtype)
-					returnToPool(beam)
+					qdel(beam)
 					emitted_beams[i]=null
 					beam=null
 
 				// No beam?  Make one.
 				if(!beam)
-					beam = getFromPool(beamtype,loc)
+					beam = new beamtype(loc)
 					emitted_beams[i]=beam
 					beam.dir=cdir
 					newbeam=1
@@ -239,7 +239,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 		beam = emitted_beams[i] // Crashes here
 		if(delbeam && beam)
-			returnToPool(beam)
+			qdel(beam)
 			emitted_beams[i]=null
 
 	overlays += mirror_state
@@ -263,7 +263,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	for(var/i=1 to nsplits)
 		var/splitdir = deflections[i]
 		var/turf/target = get_edge_target_turf(src, splitdir)
-		var/obj/item/projectile/beam/B = getFromPool(P.type,T)
+		var/obj/item/projectile/beam/B = new P.type(T)
 		B.original = target
 		B.starting = T
 		B.current = T

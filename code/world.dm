@@ -1,5 +1,8 @@
 #define WORLD_ICON_SIZE 32
 #define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
+
+var/world_startup_time
+
 /world
 	mob = /mob/new_player
 	turf = /turf/space
@@ -7,28 +10,35 @@
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
-#define RECOMMENDED_VERSION 512
 
+#define RECOMMENDED_VERSION 513
 
 var/savefile/panicfile
-/world/New()
-	var/extools_path = system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
+
+var/datum/early_init/early_init_datum = new
+
+/datum/early_init/New()
+	..()
+	var/extools_path = world.system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
 	if(fexists(extools_path))
+		#if EXTOOLS_DEBUGGER
+		call(extools_path, "debug_initialize")()
+		#endif
 		call(extools_path, "maptick_initialize")()
+		#if EXTOOLS_REFERENCE_TRACKING
+		call(extools_path, "ref_tracking_initialize")()
+		#endif
 	else
 		// warn on missing library
 		// extools on linux does not exist and is not in the repository as of yet
 		warning("There is no extools library for this system included with this build. Performance may differ significantly than if it were present. This warning will not show if [extools_path] is added to the root of the game directory.")
+
+/world/New()
+	world_startup_time = world.timeofday
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
-
-	// Initialize world events as early as possible.
-	on_login = new ()
-	on_ban   = new ()
-	on_unban = new ()
-
 
 	/*Runtimes, not sure if i need it still so commenting out for now
 	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
@@ -68,12 +78,12 @@ var/savefile/panicfile
  */
 #ifdef BORDER_USE_TURF_EXIT
 	if(byond_version < RECOMMENDED_VERSION)
-		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 512.1426")
+		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 513.")
 #endif
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
 	load_configuration()
-	SSdbcore.Initialize(world.time) // Get a database running, first thing
+	SSdbcore.Initialize(world.timeofday) // Get a database running, first thing
 
 	load_mode()
 	load_motd()
@@ -113,7 +123,6 @@ var/savefile/panicfile
 	initialize_beespecies()
 	generate_radio_frequencies()
 	//sun = new /datum/sun()
-	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()
 	paiController = new /datum/paiController()
 
@@ -210,8 +219,6 @@ var/savefile/panicfile
 			n++
 		s["players"] = n
 
-		if(revdata)
-			s["revision"] = revdata.revision
 		s["admins"] = admins
 
 		return list2params(s)

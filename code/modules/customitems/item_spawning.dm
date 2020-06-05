@@ -20,7 +20,11 @@
 		*/
 
 		// Grab the info we want.
-		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT cuiPath, cuiPropAdjust, cuiJobMask FROM customitems WHERE cuiCKey='[M.ckey]' AND (cuiRealName='[M.real_name]' OR cuiRealName='*')")
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT cuiPath, cuiPropAdjust, cuiJobMask FROM customitems WHERE cuiCKey=:ckey AND (cuiRealName=:real_name OR cuiRealName='*')",
+			list(
+				"ckey" = "[M.ckey]",
+				"real_name" = "[M.real_name]"
+		))
 		if(!query.Execute())
 			message_admins("Error: [query.ErrorMsg()]")
 			log_sql("Error: [query.ErrorMsg()]")

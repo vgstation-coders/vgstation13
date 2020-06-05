@@ -24,10 +24,9 @@
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 
-	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
+	if((ishuman(antag.current) || ismonkey(antag.current) || isalien(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-
 	antag.store_memory("A couple of runes appear clearly in your mind:")
 	antag.store_memory("<B>Raise Structure:</B> BLOOD, TECHNOLOGY, JOIN.")
 	antag.store_memory("<B>Communication:</B> SELF, OTHER, TECHNOLOGY.")
@@ -48,7 +47,7 @@
 		antag.decult()
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
-	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
+	if((ishuman(antag.current) || ismonkey(antag.current) || isalien(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
@@ -67,7 +66,7 @@
 	if (holywarning_cooldown > 0)
 		holywarning_cooldown--
 
-	if (veil_thickness == CULT_MENDED && antag.current)
+	if (veil_thickness == CULT_MENDED && antag?.current)
 		if (ishuman(antag.current))
 			var/mob/living/carbon/human/H = antag.current
 			if(H.get_heart() && prob(10))
@@ -150,16 +149,18 @@
 	to_chat(antag.current, "<span class='sinister'>A couple of runes linger vividly in your mind.</span><span class='info'> (check your notes).</span>")
 
 
+
 	spawn(1)
 		if (faction)
 			var/datum/objective_holder/OH = faction.objective_holder
-			var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
-			to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
+			if (OH.objectives.len > 0)
+				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
+				to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()
 
 /datum/role/cultist/proc/update_cult_hud()
-	var/mob/M = antag.current
+	var/mob/M = antag?.current
 	if(M && M.client && M.hud_used)
 		if(!M.hud_used.cult_Act_display)
 			M.hud_used.cult_hud()
@@ -211,6 +212,9 @@
 		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
 
 		if (isshade(M) && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
+			if(!M.gui_icons.soulblade_bgLEFT)
+				M.hud_used.shade_hud()
+
 			M.client.screen += list(
 				M.gui_icons.soulblade_bgLEFT,
 				M.gui_icons.soulblade_coverLEFT,

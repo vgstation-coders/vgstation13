@@ -44,7 +44,7 @@
 		if(!iscarbon(M) && !issilicon(M))
 			continue
 		var/turf/T = get_turf(M)
-		if(T.z != STATION_Z)
+		if(T && T.z != STATION_Z)
 			continue
 		if(M.stat != DEAD)
 			living++
@@ -291,10 +291,6 @@
 	cooldown = world.time + 10 SECONDS
 	return TRUE
 
-/obj/item/clothing/gloves/ninja/proc/radial_check_handler(list/arguments)
-	var/event/E = arguments["event"]
-	return radial_check(E.holder)
-
 /obj/item/clothing/gloves/ninja/proc/radial_check(mob/living/user)
 	if(!istype(user))
 		return FALSE
@@ -343,10 +339,8 @@
 				list("Make Shuriken", shuriken_icon, "Fabricate a new shuriken. Cost: [MAKE_SHURIKEN_COST]."),
 				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: [CHARGE_COST_MULTIPLIER]0 per second."),
 			)
-			var/event/menu_event = new(owner = user)
-			menu_event.Add(src, "radial_check_handler")
 
-			var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+			var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
 			if(!radial_check(user))
 				return
 			switch(task)
@@ -599,7 +593,8 @@ Suit and assorted
 	species_fit = list("Human")
 	species_restricted = list("Human")
 	eyeprot = 3
-	body_parts_covered = FULL_HEAD|HIDEHAIR
+	body_parts_covered = HEAD|EARS|HIDEHAIR
+	body_parts_visible_override = 0
 
 /obj/item/clothing/head/helmet/space/ninja/apprentice
 	name = "ninja hood"
@@ -717,6 +712,7 @@ Suit and assorted
 	actions_types = list()
 	species_fit = list("Human")
 	species_restricted = list("Human")
+	body_parts_covered = FACE
 
 /*******************************************
 ****          WEEABOO VARIANTS          ****
@@ -813,10 +809,10 @@ Suit and assorted
 	disable_suit_sensors(spaceninja)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/ninja/apprentice, slot_head)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/voice/ninja, slot_wear_mask)
-	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/suit/space/ninja/apprentice, slot_wear_suit)
+	spaceninja.equip_or_collect(new /obj/item/clothing/suit/space/ninja/apprentice, slot_wear_suit)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/shoes/ninja/apprentice, slot_shoes)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/ninja(), slot_s_store)
+	spaceninja.equip_or_collect(new /obj/item/weapon/melee/energy/sword/ninja(), slot_s_store)
 	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
 	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
 	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)

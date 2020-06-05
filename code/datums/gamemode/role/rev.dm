@@ -68,22 +68,26 @@
 		equip_revsquad(mob)
 		mob.fully_replace_character_name("Cargonian",random_name(mob.gender)) //This will change the ID name, it MUST be Cargonian!
 	else
-		var/obj/item/device/flash/rev/T = new(mob)
-		if(istype(mob))
-			var/list/slots = list (
-				"backpack" = slot_in_backpack,
-				"left pocket" = slot_l_store,
-				"right pocket" = slot_r_store,
-			)
-			var/where = mob.equip_in_one_of_slots(T, slots, put_in_hand_if_fail = 1)
+		maybe_equip(new /obj/item/device/flash/rev(get_turf(mob)))
+	maybe_equip(new /obj/item/weapon/pinpointer/implant)
 
-			if (!where)
-				to_chat(mob, "\The [faction.name] were unfortunately unable to get you \a [T].")
-			else
-				to_chat(mob, "\The [T] in your [where] will help you to persuade the crew to join your cause.")
+/datum/role/revolutionary/proc/maybe_equip(obj/item/thing)
+	var/mob/living/carbon/human/mob = antag.current
+	if(ishuman(mob))
+		var/list/slots = list(
+			"backpack" = slot_in_backpack,
+			"left pocket" = slot_l_store,
+			"right pocket" = slot_r_store,
+		)
+		var/where = mob.equip_in_one_of_slots(thing, slots, put_in_hand_if_fail = 1)
+
+		if (!where)
+			to_chat(mob, "\The [faction.name] were unfortunately unable to get you \a [thing].")
 		else
-			T.forceMove(get_turf(mob))
-			to_chat(mob, "\The [faction.name] were able to get you \a [T], but could not find anywhere to slip it onto you, so it is now on the floor.")
+			to_chat(mob, "\The [thing] in your [where] will help you with your cause.")
+	else
+		thing.forceMove(get_turf(mob))
+		to_chat(mob, "\The [faction.name] were able to get you \a [thing], but could not find anywhere to slip it onto you, so it is now on the floor.")
 
 /datum/role/revolutionary/Drop(var/borged = FALSE)
 	if (!antag)

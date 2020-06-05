@@ -108,6 +108,9 @@
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/attack(mob/living/M, mob/user, def_zone, eat_override = 0)	//M is target of attack action, user is the one initiating it
+	if(restraint_resist_time > 0)
+		if(restraint_apply_check(M, user))
+			return attempt_apply_restraints(M, user)
 	if(!eatverb)
 		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
 	if(!reagents.total_volume)	//Are we done eating (determined by the amount of reagents left, here 0)
@@ -604,13 +607,15 @@
 	if(Holiday != VALENTINES_DAY)
 		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
 		qdel(src)
+		return FALSE
+	return TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
 	desc = "Bought (or made) with love!"
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate/New()
-	..()
-	reagents.add_reagent(BICARODYNE, 3)
+	if(..())
+		reagents.add_reagent(BICARODYNE, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolateegg
 	name = "chocolate egg"
@@ -753,6 +758,16 @@
 		icon_state = "jdonut2"
 		name = "Frosted Jelly Donut"
 		reagents.add_reagent(SPRINKLES, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/bagel
+	name = "bagel"
+	desc = "You can almost imagine the center is a black hole."
+	icon_state = "bagel"
+	food_flags = FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/bagel/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
 
 // Eggs
 
@@ -1117,6 +1132,18 @@
 	reagents.add_reagent(SILENCER, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/donutburger
+	name = "donut burger"
+	desc = "Illegal to have out on code green."
+	icon_state = "donutburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/donutburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SPRINKLES, 6)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
 	name = "avocado burger"
 	desc = "Blurring the line between ingredient and condiment."
@@ -1139,6 +1166,18 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(CARAMEL, 4)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/bearburger
+	name = "bear burger"
+	desc = "Fits perfectly in any pic-a-nic basket. Oh bothering to grizzle into this won't be a boo-boo. Honey, it would be beary foolish to hibernate on such a unbearably, ursa majorly good treat!"
+	icon_state = "bearburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/bearburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(HYPERZINE, 8)
+	src.bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
@@ -2307,6 +2346,7 @@
 	icon_state = "spaghettiboiled"
 	trash = /obj/item/trash/plate
 	restraint_resist_time = 1 SECONDS
+	toolsounds = list('sound/weapons/cablecuff.ogg')
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti/New()
 	..()
@@ -3246,7 +3286,7 @@
 	var/original_total_volume = reagents.total_volume
 	reagents.clear_reagents()
 
-	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
 	var/datum/disease2/disease/new_virus = new virus_choice
 
 	var/list/anti = list(
@@ -3269,7 +3309,6 @@
 	new_virus.makerandom(list(40,60),list(20,90),anti,bad,src)
 
 	var/list/blood_data = list(
-		"donor" = null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = "O-",
@@ -4430,7 +4469,7 @@
 	reagents.add_reagent(NUTRIMENT, 10)
 	reagents.add_reagent(SUGAR, 10)
 	reagents.add_reagent(ICE, 10, reagtemp = T0C)
-	reagents.add_reagent("melonjuice", 5)
+	reagents.add_reagent(WATERMELONJUICE, 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/sundae
@@ -4675,7 +4714,7 @@
 	eatverb = "crunch"
 	edible_by_utensil = FALSE
 	trash = /obj/item/trash/lollipopstick
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	var/candyness = 161 //how long this thing will last
 	volume = 15 //not a lotta room for poison
 
@@ -6312,16 +6351,19 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	icon = 'icons/obj/food2.dmi'
 
 /obj/item/weapon/reagent_containers/food/snacks/PAIcookie/New()
+	..()
 	icon_state = "paicookie[pick(1,2,3)]"
 	reagents.add_reagent(NUTRIMENT,5)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread
+	icon = 'icons/obj/food2.dmi'
 	icon_state = "paitoast"
 	trash = 0
 	desc = "A slice of bread, browned onto it is the image of a familiar friend."
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/New()
+	..()
 	reagents.add_reagent(NUTRIMENT,5)
 	bitesize = 1
 

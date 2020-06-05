@@ -192,6 +192,9 @@ var/const/POS_HEADER = {"<html>
 	line_items.len = 0
 
 /obj/machinery/pos/proc/PrintReceipt(var/order_id)
+	if(!linked_account)
+		// Should not happen, but it happens.
+		linked_account = station_account
 	var/receipt = {"[RECEIPT_HEADER]<div>POINT OF SALE #[id]<br />
 			Paying to: [linked_account.owner_name]<br />
 			Cashier: [logged_in]<br />"}
@@ -242,6 +245,9 @@ var/const/POS_HEADER = {"<html>
 	return "<center><b>Please swipe ID to log in.</b></center>"
 
 /obj/machinery/pos/proc/OrderScreen()
+	if(!linked_account)
+		// Should not happen, but it happens.
+		linked_account = station_account
 	var/receipt = {"<fieldset>
 		<legend>POS Info</legend>
 			POINT OF SALE #[id]<br />
@@ -480,7 +486,7 @@ var/const/POS_HEADER = {"<html>
 		else
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"CARD CAPTURE ERROR\" on the screen.</span>","You hear a buzz.")
 	flick(src,"pos-error")
-	
+
 
 /obj/machinery/pos/Topic(var/href, var/list/href_list)
 	if(..(href,href_list))

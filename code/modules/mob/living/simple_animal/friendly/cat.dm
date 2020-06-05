@@ -169,10 +169,10 @@ var/list/wizard_snakes = list()
 		wizard_snakes[src] = spell_holder
 
 /mob/living/simple_animal/cat/snek/wizard/death(var/gibbed = FALSE)
+	..(TRUE)
 	if(!transmogrify())
 		visible_message("<span class='notice'>\The [src] vanishes!</span>")
 		qdel(src)
-	..(TRUE)
 
 /mob/living/simple_animal/cat/snek/wizard/Destroy()
 	wizard_snakes[src] = null

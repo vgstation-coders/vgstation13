@@ -6,7 +6,7 @@
 	icon = 'icons/obj/library.dmi'
 	icon_state ="spellbook"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
-	item_state = "book"
+	item_state = "spellbook"
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_TINY

@@ -9,9 +9,6 @@
 	var/number_wounds = 0
 
 	var/mob/living/carbon/mutual_handcuffed_to = null
-	var/mutual_handcuffed_to_event_key = null
-	var/z_transition_bringalong_key = null
-	var/post_z_transition_bringalong_key = null
 	var/obj/item/handcuffed = null //Whether or not the mob is handcuffed.
 	var/obj/item/weapon/handcuffs/mutual_handcuffs = null // whether or not cuffed to somebody else
 	var/mutual_handcuff_forcemove_time = 0 //last teleport time when user moves ontop of another
@@ -23,13 +20,16 @@
 
 	var/hasmouth = 1 // Used for food, etc.
 	var/give_check = FALSE
-	var/event/on_emote = new ()
 	var/base_insulation = 0
 	var/unslippable = 0 //Whether the mob can be slipped
 	var/list/body_alphas = list()	//Alpha values applied to just the body sprite of humans/monkeys, rather than their whole icon
 	var/coughedtime = null
 	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 	var/obj/item/device/station_map/displayed_holomap = null
+
+/mob/living/carbon/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
+	..()
+	hud_list[CONVERSION_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 
 /mob/living/carbon/Destroy()
 	if (mutual_handcuffs && mutual_handcuffed_to)

@@ -73,7 +73,7 @@
 			displaylength = 320
 		if(7)
 			displaylength = 448
-		
+
 	user << browse("<html><head><title>[name]</title></head>" \
 		+ "<body style='overflow:hidden;margin:0;text-align:center'>" \
 		+ "<img src='tmp_photo.png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' />" \
@@ -203,9 +203,9 @@
 			photo_size = 7
 		if(7)
 			photo_size = 1
-			
+
 	usr.simple_message("<span class='info'>You switch the camera zoom to [photo_size]x[photo_size].</span>", "<span class='danger'>You press the... you wonder if you can photograph those rainbow guys dancing in the background.</span>")
-		
+
 	/*if(photo_size == 3)
 		photo_size = 1
 		usr.simple_message("<span class='info'>You zoom the camera in.</span>", "<span class='danger'>You drink from the mysterious bottle labeled \"DRINK ME\". Everything feels huge!</span>") //Second message is shown when hallucinating
@@ -313,7 +313,7 @@
 	var/icon/res = get_base_photo_icon()
 
 	for(var/atom/A in plane_layer_sort(atoms))
-	
+
 		CHECK_TICK
 		var/icon/img = getFlatIcon(A,A.dir,0)
 		if(istype(A, /mob/living) && A:lying)
@@ -482,8 +482,8 @@
 	var/icon/I1 = icon(P.icon, P.icon_state)
 	var/icon/I2 = icon(P.img)
 
-	I1.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(112,66,20))//sepia magic formula
-	I2.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(112,66,20))
+	I1.MapColors(rgb(100,89,69), rgb(196,175,136), rgb(48,43,33))//sepia magic formula
+	I2.MapColors(rgb(100,89,69), rgb(196,175,136), rgb(48,43,33))
 
 	P.icon = I1
 	P.img = I2

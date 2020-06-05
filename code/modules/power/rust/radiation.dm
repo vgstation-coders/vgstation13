@@ -22,7 +22,7 @@
 /obj/machinery/rust/proc/RadiateParticle(var/energy, var/ionizing, var/dir = 0)
 	if(!dir)
 		RadiateParticleRand(energy, ionizing)
-	var/obj/effect/accelerated_particle/particle = getFromPool(/obj/effect/accelerated_particle/particle, get_turf(src))
+	var/obj/effect/accelerated_particle/particle = new /obj/effect/accelerated_particle/particle(get_turf(src))
 	particle.target = target
 	particle.ionizing = ionizing
 	particle.dir = dir
@@ -58,7 +58,7 @@
 				break
 		if(!target)
 			target = pick(view(particle_range))
-	var/obj/effect/accelerated_particle/particle = getFromPool(/obj/effect/accelerated_particle/particle, get_turf(src))
+	var/obj/effect/accelerated_particle/particle = new /obj/effect/accelerated_particle/particle(get_turf(src))
 	particle.target = target
 	particle.ionizing = ionizing
 	particle.dir = dir

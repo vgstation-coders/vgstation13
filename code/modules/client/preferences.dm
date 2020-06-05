@@ -96,6 +96,9 @@ var/const/MAX_SAVE_SLOTS = 16
 
 	//non-preference stuff
 	var/warns = 0
+	var/show_warning_next_time = 0
+	var/last_warned_message = ""
+	var/warning_admin = ""
 	var/warnbans = 0
 	var/muted = 0
 	var/last_ip
@@ -148,6 +151,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/icon/preview_icon = null
 	var/icon/preview_icon_front = null
 	var/icon/preview_icon_side = null
+	var/preview_background = null
+	var/list/background_options = list("Black", "White", "Tile")
 
 		//Jobs, uses bitflags
 	var/job_civilian_high = 0
@@ -213,6 +218,15 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/credits = CREDITS_ALWAYS
 	var/jingle = JINGLE_CLASSIC
 
+	// Runscape-like chat
+	var/mob_chat_on_map = FALSE
+	var/max_chat_length = CHAT_MESSAGE_MAX_LENGTH
+	var/obj_chat_on_map = FALSE
+	var/no_goonchat_for_obj = FALSE
+
+	var/tgui_fancy = TRUE
+	var/fps = 0
+
 	var/client/client
 	var/saveloaded = 0
 
@@ -274,7 +288,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<b>Gender:</b> <a href='?_src_=prefs;preference=gender'>[gender == MALE ? "Male" : "Female"]</a><BR>
 	<b>Age:</b> <a href='?_src_=prefs;preference=age;task=input'>[age]</a>
 	</td><td valign='center'>
-	<div class='statusDisplay'><center><img src=previewicon.png class="charPreview"><img src=previewicon2.png class="charPreview"></center></div>
+	<div class='statusDisplay'style="height: 64px; width: 128px; padding:0px"><center><img src=previewicon.png class="charPreview"><img src=previewicon2.png class="charPreview"></center></div>
+	<b>Background </b><a href='?_src_=prefs;preference=previous_preview_background;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_preview_background;task=input'>&gt;</a><BR>
 	</td></tr></table>
 	<h2>Body</h2>
 	<a href='?_src_=prefs;preference=all;task=random'>Random Body</A>
@@ -348,6 +363,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<h1>General Settings</h1>
 <div id="container" style="border:1px solid #000; width:96; padding-left:2%; padding-right:2%; overflow:auto; padding-top:5px; padding-bottom:5px;">
   <div id="leftDiv" style="width:50%;height:100%;float:left;">
+	<b>FPS:</b>
+	<a href='?_src_=prefs;preference=fps'><b>[fps]</b></a><br>
 	<b>Space Parallax:</b>
 	<a href='?_src_=prefs;preference=parallax'><b>[space_parallax ? "Enabled" : "Disabled"]</b></a><br>
 	<b>Parallax Speed:</b>
@@ -414,6 +431,18 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=credits_volume'><b>[credits_volume]</b></a><br>
 	<b>Window Flashing</b>
 	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
+	<b>Fancy tgui:</b>
+	<a href='?_src_=prefs;preference=tgui_fancy'>[tgui_fancy ? "Enabled" : "Disabled"]</a><br>
+	<b>
+	<center>Runechat prefererences</center>
+	<b>Chat on map for mobs:</b>
+	<a href='?_src_=prefs;preference=mob_chat_on_map'>[mob_chat_on_map ? "Enabled" : "Disabled"]</a><br>
+	<b>Chat on map for objects:</b>
+	<a href='?_src_=prefs;preference=obj_chat_on_map'>[obj_chat_on_map ? "Enabled" : "Disabled"]</a><br>
+	<b>No goonchat messages for objects:</b>
+	<a href='?_src_=prefs;preference=no_goonchat_for_obj'>[no_goonchat_for_obj ? "Enabled" : "Disabled"]</a><br>
+	<b>Runechat message char limit:</b>
+	<a href='?_src_=prefs;preference=max_chat_length;task=input'>[max_chat_length]</a><br>
   </div>
 </div>"}
 
@@ -684,6 +713,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_VEGAN,      "Vegan")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_ASTHMA,      "Asthma")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LACTOSE,     "Lactose Intolerant")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_LISP,       "Lisp")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 
@@ -1122,6 +1152,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					f_style = next_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
 				if("previous_facehair_style")
 					f_style = previous_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
+				if("next_preview_background")
+					preview_background = next_list_item(preview_background, background_options)
+				if("previous_preview_background")
+					preview_background = previous_list_item(preview_background, background_options)
 				if("age")
 					var/new_age = input(user, "Choose your character's age:\n([AGE_MIN]-[AGE_MAX])", "Character Preference") as num|null
 					if(new_age)
@@ -1211,7 +1245,15 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							r_hair = hex2num(copytext(new_hair, 2, 4))
 							g_hair = hex2num(copytext(new_hair, 4, 6))
 							b_hair = hex2num(copytext(new_hair, 6, 8))
-
+					if(species == "Insectoid")
+						var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 35 and 80:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
+						if(carapace)
+							r_hair = hex2num(copytext(carapace, 2, 4))
+							g_hair = hex2num(copytext(carapace, 4, 6))
+							b_hair = hex2num(copytext(carapace, 6, 8))
+							r_hair = clamp(r_hair, 0, 80)
+							g_hair = clamp(g_hair, 0, 50)
+							b_hair = clamp(b_hair, 0, 35)
 				if("h_style")
 					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
 					if(new_h_style)
@@ -1265,6 +1307,15 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						if(skin_c)
 							s_tone = clamp(skin_c,1,4)
 							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
+					else if(species == "Insectoid")
+						var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 35 and 80:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
+						if(carapace)
+							r_hair = hex2num(copytext(carapace, 2, 4))
+							g_hair = hex2num(copytext(carapace, 4, 6))
+							b_hair = hex2num(copytext(carapace, 6, 8))
+							r_hair = clamp(r_hair, 0, 80)
+							g_hair = clamp(g_hair, 0, 50)
+							b_hair = clamp(b_hair, 0, 35)
 					else
 						to_chat(user,"Your species doesn't have different skin tones. Yet?")
 						return
@@ -1299,6 +1350,19 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 		else
 			switch(href_list["preference"])
+				if("fps")
+					var/desired_fps = input(user, "Choose your desired frames per second.\n\
+WARNING: BYOND versions earlier than 513.1523 might not work properly with values other than 0.\n\
+Set this to -1 to use the recommended value.\n\
+Set this to 0 to use the server's FPS (currently [world.fps])\n\
+Values up to 1000 are allowed.", "FPS", fps) as null|num
+					if(isnull(desired_fps))
+						return
+					if(desired_fps < 0)
+						desired_fps = -1
+					desired_fps = sanitize_integer(desired_fps, -1, 1000, fps)
+					fps = desired_fps
+					client.fps = (fps < 0) ? RECOMMENDED_CLIENT_FPS : fps
 				if("gender")
 					if(gender == MALE)
 						gender = FEMALE
@@ -1510,6 +1574,22 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				if("typing_indicator")
 					typing_indicator = !typing_indicator
 
+				if("tgui_fancy")
+					tgui_fancy = !tgui_fancy
+
+				if ("mob_chat_on_map")
+					mob_chat_on_map = !mob_chat_on_map
+
+				if ("obj_chat_on_map")
+					obj_chat_on_map = !obj_chat_on_map
+
+				if ("max_chat_length")
+					max_chat_length = input(user, "Choose the max character length of shown Runechat messages. Valid range is 1 to [CHAT_MESSAGE_MAX_LENGTH] (default: [initial(max_chat_length)]))", "Character Preference", max_chat_length)  as null|num
+
+				if ("no_goonchat_for_obj")
+					no_goonchat_for_obj = !no_goonchat_for_obj
+
+
 			if(user.client.holder)
 				switch(href_list["preference"])
 					if("hear_ahelp")
@@ -1580,6 +1660,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	character.my_appearance.h_style = h_style
 	character.my_appearance.f_style = f_style
 
+	character.dna.ResetUIFrom(character)
 
 	character.skills = skills
 
@@ -1611,7 +1692,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	var/datum/species/chosen_species = all_species[species]
 	if( (disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		character.mutations += M_FAT
-		character.mutations += M_OBESITY
 	if(disabilities & DISABILITY_FLAG_NEARSIGHTED)
 		character.disabilities|=NEARSIGHTED
 	if(disabilities & DISABILITY_FLAG_EPILEPTIC)

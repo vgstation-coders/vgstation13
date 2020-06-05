@@ -124,7 +124,7 @@ var/const/RADIO_MULEBOT = "8"
 var/const/RADIO_MAGNETS = "9" //for the firing range "magnet" target mover
 var/const/RADIO_CONVEYORS = "10"
 
-var/global/datum/controller/radio/radio_controller
+var/global/datum/controller/radio/radio_controller = new
 
 /datum/controller/radio
 	var/list/datum/radio_frequency/frequencies = new
@@ -167,7 +167,7 @@ var/global/datum/controller/radio/radio_controller
 	if(range)
 		start_point = get_turf(source)
 		if(!start_point)
-			returnToPool(signal)
+			qdel(signal)
 			return 0
 
 	if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
@@ -215,7 +215,7 @@ var/global/datum/controller/radio/radio_controller
 	//log_admin("DEBUG: post_signal(source=[source] ([source.x], [source.y], [source.z]),filter=[filter]) frequency=[frequency], N_f=[N_f], N_nf=[N_nf]")
 
 
-	returnToPool(signal)
+	qdel(signal)
 
 /datum/radio_frequency/proc/add_listener(const/obj/device, var/filter)
 	if(!filter) // FIXME
@@ -287,12 +287,7 @@ var/list/pointers = list()
 
 /datum/signal/Destroy()
 	pointers -= "\ref[src]"
-
-/datum/signal/resetVariables()
-	. = ..("data")
-
-	source = null
-	data = list()
+	..()
 
 /datum/signal/proc/copy_from(datum/signal/model)
 	source = model.source
@@ -317,4 +312,4 @@ var/list/pointers = list()
 	for(var/d in data)
 		var/val = data[d]
 		if(istext(val))
-			data[d] = utf8_sanitize(val)
+			data[d] = strip_html_simple(val)

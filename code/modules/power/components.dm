@@ -16,7 +16,6 @@
 	var/machine_flags = 0 // Emulate machinery flags.
 	var/inMachineList = 0
 
-	var/parentMoveKey = null
 	var/turf/turf = null // Updated in addToTurf()/removeFromTurf()
 
 /datum/power_connection/New(var/obj/parent)
@@ -24,7 +23,7 @@
 	power_machines |= src
 
 	// Used for updating turf power_connection lists when moved.
-	parentMoveKey = parent.on_moved.Add(src, "parent_moved")
+	parent.lazy_register_event(/lazy_event/on_moved, src, .proc/parent_moved)
 	addToTurf()
 
 /datum/power_connection/Destroy()
@@ -33,14 +32,13 @@
 
 	// Remember to tell our turf that we're gone.
 	removeFromTurf()
-	parent.on_moved.Remove(parentMoveKey)
-
+	parent.lazy_unregister_event(/lazy_event/on_moved, src, .proc/parent_moved)
 	..()
 
-// CALLBACK from parent.on_moved.
+// CALLBACK from /lazy_event/on_moved.
 // This should never happen, except when Singuloth is doing its shenanigans, as rebuilding
 //  powernets is extremely slow.
-/datum/power_connection/proc/parent_moved(var/list/args)
+/datum/power_connection/proc/parent_moved(atom/movable/mover)
 	removeFromTurf() // Removes old ref
 	addToTurf() // Adds new one
 
@@ -146,13 +144,6 @@
 
 	parent_area.use_power(amount, chan)
 
-// called whenever the power settings of the containing area change
-// by default, check equipment channel & set flag
-// can override if needed
-/datum/power_connection/proc/power_change()
-	//parent.power_change()
-	return
-
 // connect the machine to a powernet if a node cable is present on the turf
 /datum/power_connection/proc/connect()
 	var/turf/T = get_turf(parent)
@@ -246,14 +237,8 @@
 	var/idle_usage=1 // watts
 	var/active_usage=2
 
-	var/event/power_changed = null
-
 /datum/power_connection/consumer/New(var/loc,var/obj/parent)
 	..(loc,parent)
-	power_changed = new ("owner"=src)
-
-/datum/power_connection/consumer/power_change()
-	INVOKE_EVENT(power_changed,list("consumer"=src))
 
 /datum/power_connection/consumer/process()
 	if(use)
@@ -270,10 +255,6 @@
 			use_power(active_usage, channel)
 
 	return 1
-
-/datum/power_connection/consumer/proc/set_enabled(var/value)
-	enabled=value
-	power_change()
 
 
 //////////////////////

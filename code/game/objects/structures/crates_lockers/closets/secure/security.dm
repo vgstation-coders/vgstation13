@@ -145,6 +145,7 @@
 			),
 		/obj/item/clothing/under/rank/warden,
 		/obj/item/clothing/suit/armor/vest/warden,
+		/obj/item/clothing/suit/armor/vest/wardenshort,
 		/obj/item/clothing/head/warden,
 		/obj/item/weapon/storage/box/flashbangs,
 		/obj/item/weapon/storage/box/bolas,
@@ -208,6 +209,11 @@
 	)
 
 
+/obj/structure/closet/secure_closet/security/empty
+
+/obj/structure/closet/secure_closet/security/empty/atoms_to_spawn()
+	return list()
+
 //The detectivegear box can be found at at the same location as the securitygear box and it contains:
 //sec headset, sec hud, black gloves, sps, 2x .38 ammoboxes, speedloader, evidence bag box, scanner, binoculars, and a hand TV set.
 /obj/structure/closet/secure_closet/detective
@@ -228,6 +234,7 @@
 		/obj/item/clothing/suit/storage/det_suit/noir,
 		/obj/item/clothing/suit/storage/forensics/blue,
 		/obj/item/clothing/suit/storage/forensics/red,
+		/obj/item/clothing/suit/storage/labcoat/forensic,
 		/obj/item/clothing/head/det_hat,
 		/obj/item/clothing/head/det_hat/noir,
 		/obj/item/clothing/shoes/brown,
@@ -264,7 +271,6 @@
 	name = "Brig Locker"
 	req_access = list(access_brig)
 	anchored = 1
-	var/id_tag = null
 
 /obj/structure/closet/secure_closet/brig/atoms_to_spawn()
 	return list(

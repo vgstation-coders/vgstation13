@@ -2,6 +2,10 @@
 	name = "holodeck"
 	file_path = "maps/misc/holodeck.dmm"
 
+/datum/map_element/dungeon/holodeck_3x3
+	name = "small holodeck"
+	file_path = "maps/misc/holodeck_3x3.dmm"
+
 /obj/machinery/computer/HolodeckControl
 	name = "Holodeck Control Computer"
 	desc = "A computer used to control a nearby holodeck."
@@ -15,7 +19,6 @@
 	var/holopeople_enabled = TRUE //Set this to true to allow observers become holodudes
 	var/list/connected_holopeople = list()
 	var/maximum_holopeople = 4
-
 	light_color = LIGHT_COLOR_CYAN
 
 /obj/machinery/computer/HolodeckControl/attack_ai(var/mob/user as mob)
@@ -63,7 +66,7 @@
 	user.set_machine(src)
 	var/dat
 
-	dat += {"<B>Holodeck Control System</B><BR>"}
+	dat += list({"<B>Holodeck Control System</B><BR>"})
 	if(isobserver(user))
 		if(holopeople_enabled)
 			dat += "<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"
@@ -74,46 +77,18 @@
 		dat += "Advanced hologram spawning is: <A href='?src=\ref[src];toggle_holopeople=1'>[holopeople_enabled ? "ENABLED" : "DISABLED"]</A><BR>"
 		dat += "<A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram (Admin)\]</font></A><HR>"
 
-	dat += {"<HR>Current Loaded Programs:<BR>
-		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
-		<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>
-		<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>
-		<A href='?src=\ref[src];checkers=1'>((Checkers Board)</font>)</A><BR>
-		<A href='?src=\ref[src];chess=1'>((Chess Board)</font>)</A><BR>
-		<A href='?src=\ref[src];desert=1'>((Desert)</font>)</A><BR>
-		<A href='?src=\ref[src];dining=1'>((Dining Hall)</font>)</A><BR>
-		<A href='?src=\ref[src];emptycourt=1'>((Empty Court)</font>)</A><BR>
-		<A href='?src=\ref[src];firingrange=1'>((Firing Range)</font>)</A><BR>
-		<A href='?src=\ref[src];gym=1'>((Gym)</font>)</A><BR>
-		<A href='?src=\ref[src];lasertag=1'>((Laser Tag Arena)</font>)</A><BR>
-		<A href='?src=\ref[src];maze=1'>((Maze)</font>)</A><BR>
-		<A href='?src=\ref[src];meetinghall=1'>((Meeting Hall)</font>)</A><BR>
-		<A href='?src=\ref[src];panic=1'>((Panic Bunker)</font>)</A><BR>
-		<A href='?src=\ref[src];picnicarea=1'>((Picnic Area)</font>)</A><BR>
-		<A href='?src=\ref[src];snowfield=1'>((Snow Field)</font>)</A><BR>
-		<A href='?src=\ref[src];theatre=1'>((Theatre)</font>)</A><BR>
-		<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court)</font>)</A><BR>
-		<A href='?src=\ref[src];wildride=1'>((Wild Ride)</font>)</A><BR>
-		<A href='?src=\ref[src];zoo=1'>((Zoo)</font>)</A><BR>"}
+	dat += "<hr>Current Loaded Programs:<br>"
+	for(var/room in map.holodeck_rooms)
+		dat += "<a href='?src=\ref[src];[url_encode(room)]=1'>(([room]))</a><br>"
+
 //	dat += "<A href='?src=\ref[src];turnoff=1'>((Shutdown System)</font>)</A><BR>"
 	dat += "Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.<BR>"
 
 	if(emagged)
-		dat += {"<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>
-			Ensure the holodeck is empty before testing.<BR>
-			<BR>
-			<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>
-			Ensure the holodeck is empty before testing.<BR>
-			<BR>
-			<A href='?src=\ref[src];catnip=1'>(<font color=red>Club Catnip</font>)</A><BR>
-			Ensure the holodeck is full before testing.<BR>
-			<BR>
-			<A href='?src=\ref[src];ragecage=1'>(<font color=red>Combat Arena</font>)</A><BR>
-			Safety protocols disabled - weapons are not for recreation.<BR>
-			<BR>
-			<A href='?src=\ref[src];medieval=1'>(<font color=red>Medieval Tournament</font>)</A><BR>
-			Safety protocols disabled - weapons are not for recreation.<BR>
-			<BR>"}
+		for(var/room in map.emagged_holodeck_rooms)
+			var/description = map.emagged_holodeck_rooms[room]
+			dat += "<a href=?src=\ref[src];[url_encode(room)]=1'>(<font color=red>[room]</font>)</a><br>"
+			dat += "[description]<br><br>"
 		if(issilicon(user))
 			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
 		dat += "Safety Protocols are <font color=red> DISABLED </font><BR>"
@@ -124,7 +99,7 @@
 
 		dat += {"<BR>
 			Safety Protocols are <font color=green> ENABLED </font><BR>"}
-	user << browse(dat, "window=computer;size=400x500")
+	user << browse(jointext(dat, null), "window=computer;size=400x500")
 	onclose(user, "computer")
 	return
 
@@ -144,112 +119,112 @@
 	if(..())
 		return 1
 	else
-		if(href_list["emptycourt"])
+		if(href_list["Empty Court"])
 			target = locate(/area/holodeck/source_emptycourt)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["boxingcourt"])
+		else if(href_list["Boxing Court"])
 			target = locate(/area/holodeck/source_boxingcourt)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["panic"])
+		else if(href_list["Panic Bunker"])
 			target = locate(/area/holodeck/source_panic)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["gym"])
+		else if(href_list["Gym"])
 			target = locate(/area/holodeck/source_gym)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["medieval"])
+		else if(href_list["Medieval Tournament"])
 			target = locate(/area/holodeck/source_medieval)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["catnip"])
+		else if(href_list["Club Catnip"])
 			target = locate(/area/holodeck/source_catnip)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["checkers"])
+		else if(href_list["Checkers Court"])
 			target = locate(/area/holodeck/source_checkers)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["basketball"])
+		else if(href_list["Basketball Court"])
 			target = locate(/area/holodeck/source_basketball)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["thunderdomecourt"])
+		else if(href_list["Thunderdome Court"])
 			target = locate(/area/holodeck/source_thunderdomecourt)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["beach"])
+		else if(href_list["Beach"])
 			target = locate(/area/holodeck/source_beach)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["desert"])
+		else if(href_list["Desert"])
 			target = locate(/area/holodeck/source_desert)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["picnicarea"])
+		else if(href_list["Picnic Area"])
 			target = locate(/area/holodeck/source_picnicarea)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["snowfield"])
+		else if(href_list["Snow Field"])
 			target = locate(/area/holodeck/source_snowfield)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["theatre"])
+		else if(href_list["Theatre"])
 			target = locate(/area/holodeck/source_theatre)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["meetinghall"])
+		else if(href_list["Meeting Hall"])
 			target = locate(/area/holodeck/source_meetinghall)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["firingrange"])
+		else if(href_list["Firing Range"])
 			target = locate(/area/holodeck/source_firingrange)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["wildride"])
+		else if(href_list["Wild Ride"])
 			target = locate(/area/holodeck/source_wildride)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["chess"])
+		else if(href_list["Chess Board"])
 			target = locate(/area/holodeck/source_chess)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["maze"])
+		else if(href_list["Maze"])
 			target = locate(/area/holodeck/source_maze)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["dining"])
+		else if(href_list["Dining Hall"])
 			target = locate(/area/holodeck/source_dining)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["lasertag"])
+		else if(href_list["Laser Tag Arena"])
 			target = locate(/area/holodeck/source_lasertag)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["zoo"])
+		else if(href_list["Zoo"])
 			target = locate(/area/holodeck/source_zoo)
 			if(target)
 				loadProgram(target)
@@ -259,21 +234,21 @@
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["burntest"])
+		else if(href_list["Begin Atmospheric Burn Simulation"])
 			if(!emagged)
 				return
 			target = locate(/area/holodeck/source_burntest)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["ragecage"])
+		else if(href_list["Combat Arena"])
 			if(!emagged)
 				return
 			target = locate(/area/holodeck/source_ragecage)
 			if(target)
 				loadProgram(target)
 
-		else if(href_list["wildlifecarp"])
+		else if(href_list["Begin Wildlife Simulation"])
 			if(!emagged)
 				return
 			target = locate(/area/holodeck/source_wildlife)
@@ -427,7 +402,7 @@
 		derez(item)
 
 	for(var/obj/effect/decal/cleanable/blood/B in linkedholodeck)
-		returnToPool(B)
+		qdel(B)
 
 	for(var/mob/living/simple_animal/hostile/carp/holocarp/holocarp in linkedholodeck)
 		qdel(holocarp)
@@ -570,7 +545,6 @@
 	return 0
 
 /obj/item/weapon/holo/esword/New()
-	AddToProfiler()
 	_color = pick("red","blue","green","purple")
 
 /obj/item/weapon/holo/esword/attack_self(mob/living/user as mob)

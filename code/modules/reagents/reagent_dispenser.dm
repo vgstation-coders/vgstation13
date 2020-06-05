@@ -118,6 +118,7 @@
 			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src]</span>")
 			if(rig)
 				rig.forceMove(get_turf(usr))
+				rig.master = null
 				rig = null
 			overlays = new/list()
 
@@ -147,6 +148,7 @@
 				log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
 
 			rig = W
+			rig.master = src
 
 			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
 			overlays += test
@@ -358,6 +360,17 @@
 /obj/structure/reagent_dispensers/degreaser/New()
 	. = ..()
 	reagents.add_reagent(ETHANOL, 1000)
+
+/obj/structure/reagent_dispensers/spooktank
+	name = "spooktank"
+	desc = "A storage tank containing spook."
+	icon = 'icons/obj/halloween.dmi'
+	icon_state = "spooktank"
+	amount_per_transfer_from_this = 10
+
+/obj/structure/reagent_dispensers/spooktank/New()
+	. = ..()
+	reagents.add_reagent(MONSTERMASH, 1000)
 
 /obj/structure/reagent_dispensers/cauldron
 	name = "cauldron"

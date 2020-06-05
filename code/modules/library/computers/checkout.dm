@@ -267,7 +267,7 @@
 		var/datum/cachedbook/target = getBookByID(href_list["del"]) // Sanitized in getBookByID
 		var/ans = alert(usr, "Are you sure you wish to delete \"[target.title]\", by [target.author]? This cannot be undone.", "Library System", "Yes", "No")
 		if(ans=="Yes")
-			var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE id=[target.id]")
+			var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE id=:id", list("id" = "[target.id]"))
 			var/response = query.Execute()
 			if(!response)
 				to_chat(usr, query.ErrorMsg())
@@ -286,7 +286,7 @@
 		var/tckey = ckey(href_list["delbyckey"])
 		var/ans = alert(usr,"Are you sure you wish to delete all books by [tckey]? This cannot be undone.", "Library System", "Yes", "No")
 		if(ans=="Yes")
-			var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE ckey='[sanitizeSQL(tckey)]'")
+			var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE ckey=:tckey", list("tckey" = tckey))
 			var/datum/DBQuery/response = query.Execute()
 			if(!response)
 				to_chat(usr, query.ErrorMsg())
@@ -397,11 +397,18 @@
 					if(!SSdbcore.Connect())
 						alert("Connection to Archive has been severed. Aborting.")
 					else
-						var/sqltitle = sanitizeSQL(scanner.cache.name)
-						var/sqlauthor = sanitizeSQL(scanner.cache.author)
-						var/sqlcontent = sanitizeSQL(scanner.cache.dat)
-						var/sqlcategory = sanitizeSQL(upload_category)
-						var/datum/DBQuery/query = SSdbcore.NewQuery("INSERT INTO library (author, title, content, category, ckey) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]', '[ckey(usr.key)]')")
+						var/sqltitle = scanner.cache.name
+						var/sqlauthor = scanner.cache.author
+						var/sqlcontent = scanner.cache.dat
+						var/sqlcategory = upload_category
+						var/datum/DBQuery/query = SSdbcore.NewQuery("INSERT INTO library (author, title, content, category, ckey) VALUES (:author, :title, :content, :category, :ckey)",
+							list(
+								"author" = sqlauthor,
+								"title" =  sqltitle,
+								"content" = sqlcontent,
+								"category" = sqlcategory,
+								"ckey" = "[ckey(usr.key)]"
+							))
 						var/response = query.Execute()
 						if(!response)
 							to_chat(usr, query.ErrorMsg())

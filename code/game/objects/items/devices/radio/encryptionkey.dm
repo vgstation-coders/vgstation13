@@ -11,6 +11,7 @@
 	var/syndie = 0
 	var/raider = 0
 	var/list/channels = list()
+	channels = list("Common" = 1)
 
 /obj/item/device/encryptionkey/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -79,6 +80,12 @@
 	desc = "An encryption key for a radio headset.  Contains cypherkeys."
 	icon_state = "com_cypherkey"
 	channels = list("Command" = 1)
+	
+/obj/item/device/encryptionkey/headset_iaa
+	name = "Internal Affairs Radio Encryption Key"
+	desc = "An encryption key for a radio headset.  Contains cypherkeys."
+	icon_state = "com_cypherkey"
+	channels = list("Command" = 1, "Security" = 1)
 
 /obj/item/device/encryptionkey/heads/captain
 	name = "Captain's Encryption Key"

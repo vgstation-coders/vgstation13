@@ -25,10 +25,6 @@
 			spell_holder.client.screen -= src
 		spell_holder = null
 
-/obj/abstract/screen/movable/spell_master/resetVariables()
-	..("spell_objects", args)
-	spell_objects = list()
-
 /obj/abstract/screen/movable/spell_master/MouseDrop()
 	if(showing)
 		return
@@ -43,7 +39,7 @@
 
 /obj/abstract/screen/movable/spell_master/Click()
 	if(!spell_objects.len)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	toggle_open()
@@ -105,7 +101,7 @@
 	if(spell.spell_flags & NO_BUTTON) //no button to add if we don't get one
 		return
 
-	var/obj/abstract/screen/spell/newscreen = getFromPool(/obj/abstract/screen/spell)
+	var/obj/abstract/screen/spell/newscreen = new /obj/abstract/screen/spell
 	newscreen.spellmaster = src
 	newscreen.spell = spell
 	newscreen.icon = src.icon
@@ -134,14 +130,14 @@
 	toggle_open(2)
 
 /obj/abstract/screen/movable/spell_master/proc/remove_spell(var/spell/spell)
-	returnToPool(spell.connected_button)
+	qdel(spell.connected_button)
 
 	spell.connected_button = null
 
-	if(spell_objects.len)
+	if(spell_objects?.len)
 		toggle_open(showing + 1)
 	else
-		returnToPool(src)
+		qdel(src)
 
 /obj/abstract/screen/movable/spell_master/proc/silence_spells(var/amount)
 	for(var/obj/abstract/screen/spell/spell in spell_objects)
@@ -181,7 +177,7 @@
 
 /obj/abstract/screen/movable/spell_master/malf
 	name = "Malfunction Modules"
-	icon_state = "grey_spell_ready"
+	icon_state = "malf_spell_ready"
 
 	open_state = "malf_open"
 	closed_state = "malf_closed"
@@ -220,6 +216,15 @@
 
 	//open and close states are defined later
 	override_icon = 'icons/mecha/mecha.dmi'
+	screen_loc = ui_alien_master
+
+/obj/abstract/screen/movable/spell_master/changeling
+	name = "Changeling Abilities"
+	icon_state = "changeling_spell_ready"
+
+	open_state = "ling-open"
+	closed_state = "ling-closed"
+
 	screen_loc = ui_alien_master
 
 //////////////ACTUAL SPELLS//////////////
@@ -274,12 +279,12 @@
 			spellmaster.spell_holder.client.screen -= src
 			remove_channeling()
 	if(spellmaster && !spellmaster.spell_objects.len)
-		returnToPool(spellmaster)
+		qdel(spellmaster)
 	spellmaster = null
 
 /obj/abstract/screen/spell/proc/update_charge(var/forced_update = 0)
 	if(!spell)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	if((last_charge == spell.charge_counter || !handle_icon_updates) && !forced_update)
@@ -321,7 +326,7 @@
 
 /obj/abstract/screen/spell/Click(location, control, params)
 	if(!usr || !spell)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	if(usr.is_pacified() && (spell.spell_flags & IS_HARMFUL))

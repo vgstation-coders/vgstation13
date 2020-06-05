@@ -4,6 +4,8 @@
 /obj/item/ammo_storage/magazine
 	desc = "A magazine capable of holding bullets. Can be loaded into certain weapons."
 	exact = 1 //we only load the thing we want to load
+	materials = list(MAT_IRON = 200)
+
 
 /obj/item/ammo_storage/magazine/mc9mm
 	name = "magazine (9mm)"
@@ -227,6 +229,18 @@
 	sprite_modulo = 2
 
 /obj/item/ammo_storage/magazine/m380auto/extended/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/lr22
+	name = "magazine (22LR)"
+	icon_state = "22LR"
+	origin_tech = Tc_COMBAT + "=2"
+	ammo_type = "/obj/item/ammo_casing/lr22"
+	max_ammo = 10
+	sprite_modulo = 1
+	multiple_sprites = 1
+
+/obj/item/ammo_storage/magazine/lr22/empty
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/uzi45 //Uzi mag

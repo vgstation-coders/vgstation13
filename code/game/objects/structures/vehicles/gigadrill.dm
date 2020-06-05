@@ -14,6 +14,7 @@
 	var/obj/structure/ore_box/OB //The orebox contained within
 
 /obj/structure/bed/chair/vehicle/gigadrill/Destroy()
+	new /datum/artifact_postmortem_data(src)
 	if(OB)
 		OB.forceMove(get_turf(src))
 		OB = null
@@ -76,7 +77,7 @@
 			var/count = 0
 			for(var/obj/item/stack/ore/ore in range(src,1))
 				if(get_dir(src,ore)&dir && OB.try_add_ore(ore))
-					returnToPool(ore)
+					qdel(ore)
 					count += ore.amount
 			if(count)
 				to_chat(occupant,"<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")

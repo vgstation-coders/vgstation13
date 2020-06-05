@@ -6,10 +6,10 @@ atom/proc/add_fibers(mob/living/carbon/human/M)
 	if(M.gloves && istype(M.gloves,/obj/item/clothing/))
 		var/obj/item/clothing/gloves/G = M.gloves
 		if(G.transfer_blood) //bloodied gloves transfer blood to touched objects
-			if(add_blood(G.bloody_hands_mob)) //only reduces the bloodiness of our gloves if the item wasn't already bloody
+			if(add_blood_from_data(G.bloody_hands_data)) //only reduces the bloodiness of our gloves if the item wasn't already bloody
 				G.transfer_blood--
 	else if(M.bloody_hands)
-		if(add_blood(M.bloody_hands_mob))
+		if(add_blood_from_data(M.bloody_hands_data))
 			M.bloody_hands--
 	if(!suit_fibers)
 		suit_fibers = list()
@@ -452,7 +452,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 						var/obj/item/device/pda/the_pda = scanning
 						if(the_pda.cartridge && the_pda.cartridge.access_security)
 							is_scanner = TRUE
-					
+
 					if(is_scanner)
 						scan_data += "<br><b>Data transfered from \the [scanning] to Database.</b><br>"
 						add_data_scanner(scanning)

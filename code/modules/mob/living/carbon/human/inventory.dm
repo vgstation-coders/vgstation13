@@ -59,18 +59,18 @@
 	var/list/obscured = list()
 
 	if(wear_suit)
-		if(is_slot_hidden(wear_suit.body_parts_covered,HIDEGLOVES))
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDEGLOVES), 0))
 			obscured |= slot_gloves
-		if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDEJUMPSUIT), 0))
 			obscured |= slot_w_uniform
-		if(is_slot_hidden(wear_suit.body_parts_covered,HIDESHOES))
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDESHOES), 0))
 			obscured |= slot_shoes
 	if(head)
-		if(is_slot_hidden(head.body_parts_covered,HIDEMASK))
+		if(is_slot_hidden(head.body_parts_covered, (HIDEMASK), 0))
 			obscured |= slot_wear_mask
-		if(is_slot_hidden(head.body_parts_covered,HIDEEYES))
+		if(is_slot_hidden(head.body_parts_covered, (HIDEEYES), 0))
 			obscured |= slot_glasses
-		if(is_slot_hidden(head.body_parts_covered,HIDEEARS))
+		if(is_slot_hidden(head.body_parts_covered, (HIDEEARS), 0))
 			obscured |= slot_ears
 	if(obscured.len > 0)
 		return obscured
@@ -97,7 +97,7 @@
 		ignore_slot = (equipped == wear_mask) ? MOUTH : 0
 		if(!equipped)
 			continue
-		else if(is_slot_hidden(equipped.body_parts_covered,hidden_flags,ignore_slot))
+		else if(is_slot_hidden(equipped.body_parts_covered, hidden_flags, ignore_slot, equipped.body_parts_visible_override))
 			return 1
 	return 0
 
@@ -463,11 +463,7 @@
 			update_inv_gloves(redraw_mob)
 		if(slot_head)
 			src.head = W
-			//if((head.flags & BLOCKHAIR) || (head.flags & BLOCKHEADHAIR)) //Makes people bald when switching to one with no Blocking flags
-			//	update_hair(redraw_mob)	//rebuild hair
 			update_hair(redraw_mob)
-			if(istype(W,/obj/item/clothing/head/kitty))
-				W.update_icon(src)
 			update_inv_head(redraw_mob)
 		if(slot_shoes)
 			src.shoes = W
@@ -499,10 +495,11 @@
 	update_hidden_item_icons(W)
 
 	W.hud_layerise()
-	W.equipped(src, slot)
 	W.forceMove(src)
+	W.equipped(src, slot)
 	if(client)
 		client.screen |= W
+	lazy_invoke_event(/lazy_event/on_equipped, list(W, slot))
 
 /mob/living/carbon/human/get_multitool(var/active_only=0)
 	if(istype(get_active_hand(),/obj/item/device/multitool))

@@ -511,7 +511,7 @@
 			if(!child)
 				src.visible_message("<span class='warning'>The egg bursts apart, revealing nothing!</span>")
 				status = "GROWN"
-				getFromPool(/obj/effect/decal/cleanable/blood/xeno, src)
+				new /obj/effect/decal/cleanable/blood/xeno(src)
 				health = min(health,0)
 				return
 			child.forceMove(loc)

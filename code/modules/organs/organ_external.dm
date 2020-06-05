@@ -766,6 +766,16 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(body_part == (UPPER_TORSO || LOWER_TORSO)) //We can't lose either, those cannot be amputated and will cause extremely serious problems
 		return
 
+	if(body_part == HEAD && iscultist(owner) && veil_thickness > CULT_PROLOGUE)
+		//spawning a skull where the head would have been
+		var/obj/item/weapon/skull/sk = new (get_turf(owner))
+		var/randomdir = pick(cardinal)
+		step(sk, randomdir)
+		//turning the body into skull-less remains, the dusting will take care of the shade's creation.
+		status |= ORGAN_DESTROYED
+		owner.dust(TRUE)
+		return
+
 	var/datum/species/species = src.species || owner.species
 	var/obj/item/organ/external/organ //Dropped limb object
 
@@ -917,7 +927,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			owner.drop_from_inventory(owner.handcuffed)
 
 	if(uncuff <= UNCUFF_BOTH)
-		if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
+		if(owner.legcuffed && (body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT)))
 			owner.visible_message("\The [owner.legcuffed.name] falls off of [owner].", \
 			"\The [owner.legcuffed.name] falls off you.")
 
@@ -1918,8 +1928,10 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 					..()
 		else
 			to_chat(user, "<span class='warning'>That head has no brain to remove!</span>")
-	else if(istype(W,/obj/item/device/soulstone))
-		W.capture_soul_head(src,user)
+	else if(istype(W,/obj/item/soulstone) || istype(W,/obj/item/weapon/melee/soulblade))
+		var/datum/soul_capture/capture_datum = new()
+		capture_datum.init_datum(user, src, W)
+		qdel(capture_datum)
 		return
 	else if(istype(W,/obj/item/device/healthanalyzer))
 		to_chat(user, "<span class='notice'>You use \the [W] to induce a small electric shock into \the [src].</span>")

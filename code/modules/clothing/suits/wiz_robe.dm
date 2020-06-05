@@ -4,7 +4,7 @@
 	icon_state = "wizard"
 	//Not given any special protective value since the magic robes are full-body protection --NEO
 	siemens_coefficient = 0.8
-
+	species_fit = list(INSECT_SHAPED)
 	wizard_garb = 1
 
 /obj/item/clothing/head/wizard/red
@@ -118,44 +118,50 @@
 	allowed = list(/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
 	siemens_coefficient = 0.8
 	clothing_flags = ONESIZEFITSALL
-
 	wizard_garb = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/red
 	name = "red wizard robe"
 	desc = "A magnificant, red, gem-lined robe that seems to radiate power."
 	icon_state = "redwizard"
 	item_state = "redwizrobe"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/marisa
 	name = "Witch Robe"
 	desc = "Magic is all about the spell power, ZE!"
 	icon_state = "marisa"
 	item_state = "marisarobe"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/magusblue
 	name = "Magus Robe"
 	desc = "A set of armoured robes that seem to radiate a dark power."
 	icon_state = "magusblue"
 	item_state = "magusblue"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/magusred
 	name = "Magus Robe"
 	desc = "A set of armoured robes that seem to radiate a dark power."
 	icon_state = "magusred"
 	item_state = "magusred"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/clown
 	name = "Clown Robe"
 	desc = "A set of armoured robes that seem to radiate a dark power. That, and bad fashion decisions."
 	icon_state = "wizzclown"
 	item_state = "clownwizrobe"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/psypurple
 	name = "purple robes"
 	desc = "Heavy, royal purple robes threaded with psychic amplifiers and weird, bulbous lenses. Do not machine wash."
 	icon_state = "psyamp"
 	item_state = "psyamp"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/fake
 	name = "wizard robe"
@@ -164,12 +170,14 @@
 	item_state = "wizrobe"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 1.0
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/necro
 	name = "Robe of Necromancy"
 	desc = "An elegant robe woven with the souls of the undying."
 	icon_state = "necromancer"
 	item_state = "necrorobe"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/wizard/marisa/fake
 	name = "Witch Hat"
@@ -185,6 +193,7 @@
 	item_state = "marisarobe"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 1.0
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/wizrobe/magician
@@ -193,6 +202,7 @@
 	icon_state = "magiciansuit"
 	item_state = "magiciansuit"
 	species_restricted = list("exclude",VOX_SHAPED) //this outfit won't work very well for Vox
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/wizrobe/magician/fake
@@ -205,24 +215,28 @@
 	desc = "A set of fancy purple robes. They smell slightly of formaldehyde."
 	icon_state = "lichrobe_fancy"
 	item_state = "lichrobe_fancy"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/skelelich
 	name = "tattered Lich robe"
 	desc = "A threadbare grey robe. Even masters of the dead have laundry day."
 	icon_state = "lichrobe"
 	item_state = "lichrobe"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/hallowiz
 	name = "orange wizard robe"
 	desc = "Boys and girls of every age, wouldn't you like to see something strange?"
 	icon_state = "hallowiz"
 	item_state = "hallowiz"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/pharaoh
 	name = "pharaonic garments"
 	desc = "Ornate garments worn by the ancient rulers of Space Egypt."
 	icon_state = "pharaoh"
 	item_state = "pharaoh"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/mystic
 	name = "mystic robes"
@@ -230,6 +244,7 @@
 	icon_state = "mysticrobe"
 	item_state = "mysticrobe"
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/wizrobe/winter
 	name = "winter wizard robes"
@@ -237,7 +252,8 @@
 	icon_state = "wizard_snow"
 	item_state = "wizard_snow"
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	
+	species_fit = list(INSECT_SHAPED)
+
 /obj/item/clothing/head/wizard/sinterklaas
 	name = "sinterklaas mitre"
 	desc = "Strange-looking red head-wear that most certainly belongs to a real saint."

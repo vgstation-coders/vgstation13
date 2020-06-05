@@ -4,6 +4,7 @@
 #define ARCHAEO_STATUETTE "statuette"
 #define ARCHAEO_INSTRUMENT "instrument"
 #define ARCHAEO_KNIFE "knife"
+#define ARCHAEO_RITUALKNIFE "ritualknife"
 #define ARCHAEO_COIN "coin"
 #define ARCHAEO_HANDCUFFS "handcuffs"
 #define ARCHAEO_BEARTRAP "beartrap"
@@ -56,8 +57,31 @@
 #define DIGSITE_TEMPLE "temple"
 #define DIGSITE_WAR "war"
 
-
 #define ARTIFACT_EFFECT_TOUCH 0
 #define ARTIFACT_EFFECT_AURA 1
 #define ARTIFACT_EFFECT_PULSE 2
 
+#define ARTIFACT_STYLE_ANOMALY "ano"
+#define ARTIFACT_STYLE_ANCIENT "ancient"
+#define ARTIFACT_STYLE_MARTIAN "martian"
+#define ARTIFACT_STYLE_WIZARD "wizard"
+#define ARTIFACT_STYLE_ELDRITCH "eldritch"
+#define ARTIFACT_STYLE_PRECURSOR "precursor"
+#define ARTIFACT_STYLE_UNKNOWN "unknown"
+#define ARTIFACT_STYLE_RELIQUARY "reliquary"
+
+var/list/goon_style_effect_types = list(
+	ARTIFACT_STYLE_ANCIENT = 7,
+	ARTIFACT_STYLE_MARTIAN = 7,
+	ARTIFACT_STYLE_WIZARD = 7,
+	ARTIFACT_STYLE_ELDRITCH = 7,
+	ARTIFACT_STYLE_PRECURSOR = 7,
+	ARTIFACT_STYLE_UNKNOWN = 1,
+	ARTIFACT_STYLE_RELIQUARY = 4
+	)
+
+var/list/vg_style_effect_types = list(
+	ARTIFACT_STYLE_ANOMALY = 12
+	)
+
+var/list/all_artifact_style_effect_types = vg_style_effect_types + goon_style_effect_types

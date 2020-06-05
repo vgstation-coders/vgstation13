@@ -333,7 +333,7 @@
 		flick("[base_state]_end",src)
 	if(being_built)
 		if(!being_built.materials)
-			being_built.materials = getFromPool(/datum/materials, being_built)
+			being_built.materials = new /datum/materials(being_built)
 		for(var/matID in part.materials)
 			if(copytext(matID, 1, 2) != "$") //it's not a material, let's ignore it
 				continue
@@ -667,7 +667,7 @@
 		while(to_spawn > 0)
 			var/obj/item/stack/sheet/mats
 			if(material.sheettype == /obj/item/stack/sheet/metal)
-				mats = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+				mats = new /obj/item/stack/sheet/metal(get_turf(src))
 			else
 				mats = new material.sheettype(src)
 			if(to_spawn > mats.max_amount)

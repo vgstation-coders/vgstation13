@@ -202,6 +202,7 @@
 	var/fat=""
 	if(disabilities&DISABILITY_FLAG_FAT && current_species.anatomy_flags & CAN_BE_FAT)
 		fat="_fat"
+
 	preview_icon = new /icon(icobase, "torso_[g][fat]")
 	preview_icon.Blend(new /icon(icobase, "groin_[g]"), ICON_OVERLAY)
 	preview_icon.Blend(new /icon(icobase, "head_[g]"), ICON_OVERLAY)
@@ -231,6 +232,8 @@
 			preview_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
 		else
 			preview_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
+	if(current_species && (current_species.anatomy_flags & RGBSKINTONE))
+		preview_icon.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
 
 	var/icon/eyes_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = current_species ? current_species.eyes : "eyes_s")
 	eyes_s.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
@@ -242,7 +245,7 @@
 			hair_s.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
 		if(hair_style.additional_accessories)
 			hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
-		eyes_s.Blend(hair_s, ICON_OVERLAY)		
+		eyes_s.Blend(hair_s, ICON_OVERLAY)
 
 	var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[f_style]
 	if(facial_hair_style)
@@ -483,6 +486,8 @@
 					clothes_s = new /icon(uniform_dmi, "grey_s")
 					clothes_s.Blend(new /icon(feet_dmi, "black"), ICON_UNDERLAY)
 					clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
+
+		preview_icon.Blend(new /icon('icons/mob/previewbg.dmi',preview_background), ICON_UNDERLAY)
 
 	// Observers get tourist outfit.
 	else

@@ -39,6 +39,7 @@ var/datum/controller/gameticker/ticker
 
 	var/explosion_in_progress
 	var/station_was_nuked
+	var/revolutionary_victory //If on, Castle can be voted if the conditions are right
 
 	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1) //Seems to be totally unused?
 
@@ -207,9 +208,6 @@ var/datum/controller/gameticker/ticker
 	for(var/mob/new_player/player in player_list)
 		player.new_player_panel_proc()
 
-
-	//here to initialize the random events nicely at round start
-	setup_economy()
 
 #if UNIT_TESTS_AUTORUN
 	run_unit_tests()
@@ -386,14 +384,17 @@ var/datum/controller/gameticker/ticker
 		if(player.ready && player.mind)
 			if(player.mind.assigned_role=="AI")
 				player.close_spawn_windows()
+				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				player.AIize()
 			else if(player.mind.assigned_role=="Cyborg")
+				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				player.create_roundstart_cyborg()
 
 			else if(!player.mind.assigned_role)
 				continue
 			else
-
+				if(player.mind.assigned_role=="Mobile MMI")
+					log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				var/mob/living/carbon/human/new_character = player.create_character()
 				switch(new_character.mind.assigned_role)
 					if("MODE","Mobile MMI","Trader")
@@ -453,8 +454,6 @@ var/datum/controller/gameticker/ticker
 		spawn
 			declare_completion()
 
-			end_credits.on_round_end()
-
 			gameend_time = world.time / 10
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
@@ -482,6 +481,8 @@ var/datum/controller/gameticker/ticker
 				feedback_set_details("end_proper","\proper completion")
 				if(!delay_end && !watchdog.waiting)
 					to_chat(world, "<span class='notice'><B>Restarting in [restart_timeout/10] seconds</B></span>")
+
+			end_credits.on_round_end()
 
 			if(blackbox)
 				if(config.map_voting)

@@ -15,7 +15,7 @@
 	light_color = LIGHT_COLOR_RED
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK //| EMAGGABLE
-	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | LOCKBOXES
+	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | LOCKBOXES | FAB_RECYCLER
 
 	one_part_set_only = 0
 	part_sets = list(
@@ -96,3 +96,6 @@
 	)
 
 	RefreshParts()
+
+
+	

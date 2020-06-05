@@ -50,6 +50,7 @@
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
 	actions_types = list(/datum/action/item_action/toggle_light)
+	body_parts_visible_override = 0//I mean technically the eyes are visible on the sprite, but they're manually drawn, the helmet itself not having any transparency, so w/e
 
 /obj/item/clothing/head/helmet/space/plasmaman/attack_self(mob/user)
 	if(no_light)

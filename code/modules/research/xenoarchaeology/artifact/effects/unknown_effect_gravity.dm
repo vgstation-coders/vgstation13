@@ -1,5 +1,6 @@
 /datum/artifact_effect/gravity
 	effecttype = "gravity"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ANCIENT, ARTIFACT_STYLE_PRECURSOR, ARTIFACT_STYLE_RELIQUARY)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 1
 
@@ -21,7 +22,7 @@
 	gravitypull(effectrange)
 
 /datum/artifact_effect/gravity/proc/gravitypull(range)
-	for(var/atom/X in orange(effectrange, holder))
+	for(var/atom/X in orange(effectrange, get_turf(holder)))
 		if(X.type == /atom/movable/lighting_overlay)
 			continue
 		if(istype(X, /mob/living) && X.Adjacent(holder))

@@ -66,7 +66,7 @@
 	icon = 'icons/obj/trash.dmi'
 	icon_state = "plasticbag"
 	item_state = "plasticbag"
-
+	species_fit = list(INSECT_SHAPED)
 	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_SMALL
 	storage_slots = 21
@@ -112,7 +112,6 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	icon_state = "tech_satchel"
 	actions_types = list(/datum/action/item_action/toggle_auto_handling)
 	var/handling = FALSE
-	var/event_key = null
 
 /datum/action/item_action/toggle_auto_handling
 	name = "Toggle Ore Loader"
@@ -133,10 +132,9 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
 
 	if(T.handling == TRUE)
-		T.event_key = user.on_moved.Add(T, "mob_moved")
+		user.lazy_register_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 	else
-		user.on_moved.Remove(T, "mob_moved")
-		T.event_key = null
+		user.lazy_unregister_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
@@ -153,21 +151,24 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 				remove_from_storage(ore)
 				qdel(ore)
 
-/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(var/list/event_args, var/mob/holder)
-	if(isrobot(holder))
-		var/mob/living/silicon/robot/S = holder
+/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(atom/movable/mover)
+	if(isrobot(mover))
+		var/mob/living/silicon/robot/S = mover
 		if(locate(src) in S.get_all_slots())
 			auto_collect(get_turf(src))
-			auto_fill(holder)
-	else
-		if(holder.is_holding_item(src))
+			auto_fill(mover)
+	else if(isliving(mover))
+		var/mob/living/living_mover = mover
+		if(living_mover.is_holding_item(src))
 			auto_collect(get_turf(src))
-			auto_fill(holder)
+			auto_fill(living_mover)
+
+/obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
+	if(handling)
+		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	if(event_key)
-		user.on_moved.Remove(src, "mob_moved")
-		event_key = null
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 // -----------------------------
 //          Plant bag
@@ -464,11 +465,11 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
 	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
 	for(var/obj/item/B in contents)
-		if(B.get_rating() < lowest_rating)
-			lowest_rating = B.get_rating()
+		if(B.rped_rating() < lowest_rating)
+			lowest_rating = B.rped_rating()
 
 	for(var/obj/item/B in contents) //Now that we have the lowest rating we can dump only parts at the lowest rating.
-		if(B.get_rating() > lowest_rating)
+		if(B.rped_rating() > lowest_rating)
 			continue
 		remove_from_storage(B, A)
 
@@ -563,7 +564,28 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	name = "ammunition pouch"
 	desc = "Designed to hold stray magazines and spare bullets."
 	icon_state = "ammo_pouch"
-	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/weapon/rcd_ammo", "/obj/item/weapon/grenade")
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/stack/rcd_ammo", "/obj/item/weapon/grenade")
 	storage_slots = 3
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BELT | SLOT_POCKET
+
+
+
+// -----------------------------
+//          Xenobiology Bag
+// -----------------------------
+
+
+/obj/item/weapon/storage/bag/xenobio
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "slimebag"
+	name = "extract bag"
+	desc = "A bag designed to hold slime extract and other slime-related products."
+	item_state = "satchel"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
+	storage_slots = 50
+	fits_max_w_class = 3
+	max_combined_w_class = 200
+	w_class = W_CLASS_TINY
+	can_only_hold = list("/obj/item/slime_extract","/obj/item/weapon/slimenutrient","/obj/item/weapon/slimesteroid", "/obj/item/weapon/slimepotion", "/obj/item/weapon/slimepotion2", "/obj/item/weapon/slimesteroid2", "/obj/item/weapon/slimeres", "/obj/item/weapon/slimedupe")
+	display_contents_with_number = TRUE

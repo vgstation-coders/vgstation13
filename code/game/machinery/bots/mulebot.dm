@@ -4,8 +4,6 @@
 // Navigates via floor navbeacons
 // Remote Controlled from QM's PDA
 
-var/global/mulebot_count = 0
-
 #define MODE_IDLE 0
 #define MODE_LOADING 1
 #define MODE_MOVING 2
@@ -14,6 +12,8 @@ var/global/mulebot_count = 0
 #define MODE_COMPUTING 5
 #define MODE_WAITING 6
 #define MODE_NOROUTE 7
+
+var/global/mulebot_count = 0
 
 /datum/locking_category/mulebot
 
@@ -33,7 +33,7 @@ var/global/mulebot_count = 0
 	beacon_freq = 1400
 	control_freq = 1447
 	control_filter = RADIO_MULEBOT
-	bot_flags = BOT_DENSE|BOT_NOT_CHASING
+	bot_flags = BOT_DENSE|BOT_NOT_CHASING|BOT_CONTROL|BOT_BEACON
 	suffix = ""
 
 	var/loaddir = 0				// this the direction to unload onto/load from
@@ -72,12 +72,14 @@ var/global/mulebot_count = 0
 	var/run_over_cooldown = 3 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
 	var/coolingdown = FALSE
 
+	commanding_radio = /obj/item/radio/integrated/signal/bot/mule
+
 /obj/machinery/bot/mulebot/get_cell()
 	return cell
 
 
 /obj/machinery/bot/mulebot/New()
-	..()
+	. = ..()
 	wires = new(src)
 	botcard = new(src)
 	var/datum/job/cargo_tech/J = new/datum/job/cargo_tech
@@ -86,17 +88,12 @@ var/global/mulebot_count = 0
 	cell.charge = 2000
 	cell.maxcharge = 2000
 
-	spawn(5)	// must wait for map loading to finish
-		if(radio_controller)
-			radio_controller.add_object(src, control_freq, filter = RADIO_MULEBOT)
-			radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
-
-		mulebot_count += 1
-		if(!suffix)
-			suffix = "#[mulebot_count]"
-		name = "\improper Mulebot ([suffix])"
-
-
+/obj/machinery/bot/mulebot/initialize()
+	. = ..()
+	mulebot_count += 1
+	if(!suffix)
+		suffix = "#[mulebot_count]"
+	name = "\improper Mulebot ([suffix])"
 	can_load = list(
 		/obj/structure/closet/crate,
 		/obj/structure/vendomatpack,
@@ -111,6 +108,9 @@ var/global/mulebot_count = 0
 	if(wires)
 		qdel(wires)
 		wires = null
+	if(cell)
+		qdel(cell)
+		cell = null
 
 	..()
 
@@ -215,19 +215,19 @@ var/global/mulebot_count = 0
 
 		dat += "Status: "
 		switch(mode)
-			if(0)
+			if(MODE_IDLE)
 				dat += "Ready"
-			if(1)
+			if(MODE_LOADING)
 				dat += "Loading/Unloading"
-			if(2)
+			if(MODE_MOVING)
 				dat += "Navigating to Delivery Location"
-			if(3)
+			if(MODE_RETURNING)
 				dat += "Navigating to Home"
-			if(4)
+			if(MODE_BLOCKED)
 				dat += "Waiting for clear path"
-			if(5,6)
+			if(MODE_COMPUTING, MODE_WAITING)
 				dat += "Calculating navigation path"
-			if(7)
+			if(MODE_NOROUTE)
 				dat += "Unable to reach destination"
 
 		var/atom/movable/load = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1]
@@ -271,10 +271,36 @@ var/global/mulebot_count = 0
 	onclose(user, "mulebot")
 	return
 
+/obj/machinery/bot/mulebot/return_status()
+	switch(mode)
+		if(MODE_IDLE)
+			return "Ready"
+		if(MODE_LOADING)
+			return "Loading/Unloading"
+		if(MODE_MOVING)
+			return "Navigating to Delivery Location"
+		if(MODE_RETURNING)
+			return "Navigating to Home"
+		if(MODE_BLOCKED)
+			return "Waiting for clear path"
+		if(MODE_COMPUTING, MODE_WAITING)
+			return "Calculating navigation path"
+		if(MODE_NOROUTE)
+			return "Unable to reach destination"
+	return ..()
+
+/obj/machinery/bot/mulebot/execute_signal_command(var/datum/signal/signal, var/command)
+	if (..())
+		return
+	switch (command)
+		if ("return_home")
+			start_home()
+		else // It's a new destination !
+			set_destination(command)
+
 // returns the wire panel text
 /obj/machinery/bot/mulebot/proc/wires()
 	return wires.GetInteractWindow()
-
 
 /obj/machinery/bot/mulebot/Topic(href, href_list)
 	if(..())
@@ -404,14 +430,31 @@ var/global/mulebot_count = 0
 // can load anything if emagged
 
 /obj/machinery/bot/mulebot/MouseDropTo(var/atom/movable/C, mob/user)
-
-	if(user.stat)
+	if(!istype(C))
 		return
 
-	if (!on || !istype(C)|| C.anchored || get_dist(user, src) > 1 || get_dist(src,C) > 1 )
+	if(user.stat)
+		to_chat(user, "<span class='warning'>Not while you're unconscious.</span>")
+		return
+
+	if(!on)
+		to_chat(user, "<span class='warning'>\The [src] is off, turn it on first.</span>")
+		return
+
+	if(C.anchored)
+		to_chat(user, "<span class='warning'>\The [C] is stuck to the floor!</span>")
+		return
+
+	if(get_dist(user, src) > 1)
+		to_chat(user, "<span class='warning'>You're too far away.</span>")
+		return
+
+	if (get_dist(src, C) > 1)
+		to_chat(user, "<span class='warning'>\The [C] is too far away.</span>")
 		return
 
 	if(is_locking(/datum/locking_category/mulebot))
+		to_chat(user, "<span class='warning'>\The [src] is already full.</span>")
 		return
 
 	load(C)
@@ -493,11 +536,6 @@ var/global/mulebot_count = 0
 		AM.forceMove(src.loc)
 	mode = MODE_IDLE
 
-/obj/machinery/bot/mulebot/process_pathing()
-	if (mode == MODE_IDLE)
-		return
-	return ..()
-
 /obj/machinery/bot/mulebot/process_bot()
 	if(!has_power())
 		on = 0
@@ -528,14 +566,13 @@ var/global/mulebot_count = 0
 	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
 
 /obj/machinery/bot/mulebot/set_destination(var/new_dest)
-	request_path(new_dest)
 	log_astar_beacon("new_destination [new_dest]")
 	new_destination = new_dest
 	request_path(new_dest)
 
 /obj/machinery/bot/mulebot/proc/request_path(var/new_dest)
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(beacon_freq)
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.transmission_method = 1
 	var/list/keyval = list(
@@ -546,13 +583,19 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/receive_signal(datum/signal/signal)
 	var/recv = signal.data["beacon"]
-	if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
-		log_astar_beacon("[src] : new destination chosen, [recv]")
+	if(recv && recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
+		log_astar_beacon("new destination chosen, [recv]")
 		destination = new_destination
 		new_destination = ""
 		target = signal.source.loc
 		awaiting_beacon = 0
 		return 1
+	// -- Command signals --
+	var/target_bot = signal.data["target"]
+	if (target_bot != "\ref[src]")
+		return
+	var/command = signal.data["command"]
+	execute_signal_command(signal, command)
 
 // starts bot moving to home
 // sends a beacon query to find
@@ -616,7 +659,7 @@ var/global/mulebot_count = 0
 		start_home()
 	else
 		mode = MODE_IDLE	// otherwise go idle
-	return
+	return ..()
 
 // called when bot bumps into anything
 /obj/machinery/bot/mulebot/to_bump(var/atom/obs)
@@ -746,7 +789,6 @@ var/global/mulebot_count = 0
 
 	spark(src)
 
-	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	O.New(O.loc)
+	new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	unload(0)
 	qdel(src)

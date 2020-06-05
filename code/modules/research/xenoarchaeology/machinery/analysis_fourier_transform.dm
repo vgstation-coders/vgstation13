@@ -3,6 +3,7 @@
 
 /obj/machinery/anomaly/fourier_transform
 	name = "\improper Fourier transform spectroscope"
+	desc = "A specialised, complex analysis machine. Can measure an approximate distance from the closest source of anomalous exotic energies."
 
 /obj/machinery/anomaly/fourier_transform/New()
 	. = ..()

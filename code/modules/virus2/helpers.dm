@@ -1,6 +1,6 @@
 //Build random disease type
 proc/get_random_weighted_disease(var/operation = WDISH)
-	var/list/possibles = subtypesof(/datum/disease2/disease)
+	var/list/possibles = subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined)
 	var/list/weighted_list = list()
 	for(var/P in possibles)
 		var/datum/disease2/disease/D = new P
@@ -217,6 +217,12 @@ var/list/infected_contact_mobs = list()
 
 		return 1
 	return 0
+
+/mob/living/proc/infect_disease2_predefined(var/category, var/forced, var/notes)
+	if(!global_diseases[category])
+		return
+	infect_disease2(global_diseases[category], forced, notes)
+
 
 //ITEMS
 var/list/infected_items = list()

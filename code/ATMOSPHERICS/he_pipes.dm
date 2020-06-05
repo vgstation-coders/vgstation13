@@ -88,7 +88,7 @@
 					h_r = 64 + (h_r - 64)*scale
 					h_g = 64 + (h_g - 64)*scale
 					h_b = 64 + (h_b - 64)*scale
-				
+
 				var/heat_color = rgb(h_r, h_g, h_b)
 
 				animate(src, color = heat_color, time = 2 SECONDS, easing = SINE_EASING)
@@ -261,6 +261,30 @@
 		node3.build_network()
 	return 1
 
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		if(3)
+			return node3
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		if(3)
+			node3 = value
+		else
+			CRASH("Invalid node_id!")
+
+
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/update_icon()
 	if(!node1&&!node2&&!node3)
 		qdel(src)
@@ -309,6 +333,34 @@
 		node4.initialize()
 		node4.build_network()
 	return 1
+
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		if(3)
+			return node3
+		if(4)
+			return node4
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		if(3)
+			node3 = value
+		if(4)
+			node4 = value
+		else
+			CRASH("Invalid node_id!")
+
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/update_icon()
 	if(!node1&&!node2&&!node3&&!node4)

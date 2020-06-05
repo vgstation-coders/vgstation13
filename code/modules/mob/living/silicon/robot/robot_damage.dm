@@ -4,8 +4,23 @@
 		stat = CONSCIOUS
 		return
 
-	health = maxHealth - (getBruteLoss() + getFireLoss())
-	return
+	var/components_health = getMaxDamage()
+	var/components_damage = getBruteLoss() + getFireLoss()
+
+	if(components_health < maxHealth) //Most likely missing components or having a bad case of VV.
+		health = components_health - components_damage
+		return
+
+	health = maxHealth - components_damage //Yeah, this is what should happen normally.
+
+
+/mob/living/silicon/robot/proc/getMaxDamage()
+	var/amount = 0
+	for(var/V in components)
+		var/datum/robot_component/C = components[V]
+		if(C.installed != COMPONENT_MISSING)
+			amount += C.max_damage
+	return amount
 
 /mob/living/silicon/robot/getBruteLoss()
 	var/amount = 0
@@ -24,7 +39,7 @@
 	return amount
 
 /mob/living/silicon/robot/adjustBruteLoss(var/amount)
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = amount)))
 		return FALSE
 	if(amount > 0)
 		take_overall_damage(amount, 0)
@@ -32,7 +47,7 @@
 		heal_overall_damage(-amount, 0)
 
 /mob/living/silicon/robot/adjustFireLoss(var/amount)
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = amount)))
 		return FALSE
 	if(amount > 0)
 		take_overall_damage(0, amount)

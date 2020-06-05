@@ -281,7 +281,7 @@ obj/item/asteroid/basilisk_hide/New()
 	pass_flags = PASSTABLE
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/OpenFire(var/the_target)
-	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = getFromPool(/mob/living/simple_animal/hostile/asteroid/hivelordbrood,src.loc)
+	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = new /mob/living/simple_animal/hostile/asteroid/hivelordbrood(src.loc)
 	A.GiveTarget(target)
 	A.friends = friends
 	A.faction = faction
@@ -431,11 +431,11 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/New()
 	..()
 	spawn(100)
-		returnToPool(src)
+		qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/death(var/gibbed = FALSE)
 	..(TRUE)
-	returnToPool(src)
+	qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goliath
 	name = "goliath"
@@ -538,9 +538,6 @@ obj/item/asteroid/basilisk_hide/New()
 	if(proximity_flag && istype(target, /obj/item/clothing))
 		var/obj/item/clothing/C = target
 		var/current_armor = C.armor
-		if(!isturf(C.loc))
-			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
-			return
 		if(C.clothing_flags & GOLIATHREINFORCE)
 			C.hidecount ++
 			if(current_armor["melee"] < 90)
@@ -554,6 +551,8 @@ obj/item/asteroid/basilisk_hide/New()
 			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
 			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
 			C._color = "mining_goliath[C.hidecount]"
+		if(user.is_wearing_item(C))
+			user.regenerate_icons()
 
 /mob/living/simple_animal/hostile/asteroid/goliath/david
 	name = "david"
@@ -887,6 +886,8 @@ obj/item/asteroid/basilisk_hide/New()
 
 /mob/living/simple_animal/hostile/asteroid/pillow/no_pacify
 	pacify_aura = FALSE
+	environment_smash_flags = 0
+	response_help = "pets"
 
 /mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)
 	..()

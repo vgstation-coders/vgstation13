@@ -42,12 +42,12 @@
 
 /obj/item/weapon/holder/process()
 	if(!loc)
-		return returnToPool(src)
+		return qdel(src)
 	else if(istype(loc,/turf) || !(contents.len))
-		return returnToPool(src)
+		return qdel(src)
 
 /obj/item/weapon/holder/relaymove(mob/M, direction)
-	returnToPool(src) //This calls Destroy(), and frees the mob
+	qdel(src) //This calls Destroy(), and frees the mob
 
 /obj/item/weapon/holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	for(var/mob/M in src.contents)
@@ -200,7 +200,7 @@
 	var/mob/living/simple_animal/slime/S = stored_mob
 	S.canmove = TRUE
 	S.icon_state = "[S.colour] [istype(S,/mob/living/simple_animal/slime/adult) ? "adult" : "baby"] slime"
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/weapon/holder/animal/slime/throw_impact(atom/hit_atom)
 	..()

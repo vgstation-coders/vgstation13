@@ -33,7 +33,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 	var/show_status = 1 //in order to prevent the signaler button in signaler.dm from saying "... is ready!" when examined
 	var/secured = 1
-	var/list/attached_overlays = null
+	var/list/attached_overlays = list()
 	var/obj/item/device/assembly_holder/holder = null
 	var/cooldown = 0//To prevent spam
 	var/wires = WIRE_RECEIVE | WIRE_PULSE
@@ -51,8 +51,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	// List of variables that can be READ / WRITTEN TO by other assemblies.
 		// Format of the list:
 		//
-		// accessible_values = list("Time" = "time;number",\
-		//	"Frequency" = "freq;number",\
+		// accessible_values = list("Time" = "time;number",
+		//	"Frequency" = "freq;number",
 		//	"Code" = "code;number")
 		//
 		// "Time" - name of this value. Can be anything
@@ -179,7 +179,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 		if(!istext(new_value))  //Attempted to write a non-string to a string var - convert the non-string into a string and continue
 			new_value = "[new_value]"
 
-		new_value = utf8_sanitize(new_value, length = MAX_TEXT_VALUE_LEN)
+		new_value = strip_html(new_value, MAX_TEXT_VALUE_LEN)
 
 	//text values can accept either numbers or text, so don't check for that
 

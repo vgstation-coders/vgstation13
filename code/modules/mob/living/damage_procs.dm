@@ -8,7 +8,7 @@
 	Returns
 	standard 0 if fail
 */
-/mob/living/proc/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/used_weapon = null, ignore_events = 0)
+/mob/living/proc/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, sharp, edge, var/used_weapon = null, ignore_events = 0)
 	if(!damage)
 		return 0
 	var/damage_done = (damage/100)*(100-blocked)

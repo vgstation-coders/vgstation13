@@ -6,6 +6,10 @@
 
 /mob/living/carbon/human/internals_candidates() //Humans have a lot of slots, so let's give priority to some of them
 	var/list/priority = list(s_store, back, belt, l_store, r_store)
+	if(wear_suit && isrig(wear_suit)) //Don't forget the rigsuit!
+		var/obj/item/clothing/suit/space/rig/rig = wear_suit
+		if(rig.T)
+			priority += rig.T
 	return priority | get_all_slots() | held_items //| operator ensures there are no duplicates
 
 /mob/living/carbon/proc/get_internals_tank()

@@ -325,6 +325,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 					20, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("stove", /obj/machinery/space_heater/campfire/stove, 			5, time = 25, 	one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
+	new/datum/stack_recipe("spring", /obj/item/spring, 					1, time = 25, one_per_turf = 0, on_floor = 0),
 	null,
 	blacksmithing_recipes,
 	)
@@ -403,6 +404,7 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 	new/datum/stack_recipe("folder",                        /obj/item/weapon/folder                                 ),
 	new/datum/stack_recipe("flare box",                     /obj/item/weapon/storage/fancy/flares/empty             ),
 	new/datum/stack_recipe("donut box",                     /obj/item/weapon/storage/fancy/donut_box/empty          ),
+	new/datum/stack_recipe("beer box",						/obj/item/weapon/storage/fancy/beer_box/empty			),
 	new/datum/stack_recipe("eggbox",                        /obj/item/weapon/storage/fancy/egg_box/empty            ),
 	new/datum/stack_recipe("paper bin",                     /obj/item/weapon/paper_bin/empty                        ),
 	new/datum/stack_recipe("empty recharge pack",           /obj/structure/vendomatpack/custom,                  4  ),

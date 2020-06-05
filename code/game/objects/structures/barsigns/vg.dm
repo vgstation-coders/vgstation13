@@ -45,7 +45,7 @@
 
 /datum/barsign/vg/commie
 	name = "Prole's Preferred"
-	icon = "foreign"
+	icon = "commie"
 	desc = "The only bar you will ever need, comrade!"
 
 /datum/barsign/vg/nazi

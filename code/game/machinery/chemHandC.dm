@@ -10,6 +10,7 @@
 	density = 1
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
+	pass_flags = PASSTABLE
 	use_power = 1
 	idle_power_usage = 25
 	active_power_usage = 5000
@@ -150,6 +151,7 @@
 	density = 1
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
+	pass_flags = PASSTABLE
 	use_power = 1
 	idle_power_usage = 25
 	active_power_usage = 5000

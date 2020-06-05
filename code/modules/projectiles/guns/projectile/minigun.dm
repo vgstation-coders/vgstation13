@@ -4,6 +4,7 @@
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "minigun"
 	item_state = "minigun0"
+	var/base_icon_state = "minigun"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_COMBAT + "=6"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 1
@@ -13,8 +14,14 @@
 	w_class = W_CLASS_HUGE//we be fuckin huge maaan
 	fire_delay = 0
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
+	var/gatlingbullet = /obj/item/projectile/bullet/gatling
 	var/max_shells = 200
 	var/current_shells = 200
+	var/rounds_per_burst = 4
+	
+/obj/item/weapon/gun/gatling/New()
+	base_icon_state = icon_state
+	..()
 
 /obj/item/weapon/gun/gatling/examine(mob/user)
 	..()
@@ -38,13 +45,13 @@
 	for(var/turf/T in orange(target,1))
 		possible_turfs += T
 	spawn()
-		for(var/i = 1; i <= 3; i++)
+		for(var/i = 1; i < rounds_per_burst; i++)
 			sleep(1)
 			var/newturf = pick(possible_turfs)
 			..(newturf,user,params,reflex,struggle)
 
 /obj/item/weapon/gun/gatling/update_wield(mob/user)
-	item_state = "minigun[wielded ? 1 : 0]"
+	item_state = "[base_icon_state][wielded ? 1 : 0]"
 	if(wielded)
 		slowdown = MINIGUN_SLOWDOWN_WIELDED
 	else
@@ -56,7 +63,7 @@
 	if(current_shells)
 		current_shells--
 		update_icon()
-		in_chamber = new/obj/item/projectile/bullet/gatling()//We create bullets as we are about to fire them. No other way to remove them from the gatling.
+		in_chamber = new gatlingbullet()//We create bullets as we are about to fire them. No other way to remove them.
 		new/obj/item/ammo_casing_gatling(get_turf(src))
 		return 1
 	return 0
@@ -66,17 +73,10 @@
 		return 1
 
 /obj/item/weapon/gun/gatling/update_icon()
-	switch(current_shells)
-		if(150 to INFINITY)
-			icon_state = "minigun100"
-		if(100 to 149)
-			icon_state = "minigun75"
-		if(50 to 99)
-			icon_state = "minigun50"
-		if(1 to 49)
-			icon_state = "minigun25"
-		else
-			icon_state = "minigun0"
+	if(current_shells)
+		icon_state = "[base_icon_state][Ceiling(current_shells/max_shells*100,25)]"
+	else
+		icon_state = "[base_icon_state]0"
 
 /obj/item/weapon/gun/gatling/attack_self(mob/user)
 	if(wielded)
@@ -108,42 +108,73 @@
 	item_state = "beegun0"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_COMBAT + "=6;" + Tc_BIOTECH + "=5"
 	recoil = 0
-	var/base_icon_state = "beegun"
-	var/bug_ammo = /obj/item/projectile/bullet/beegun
-
-/obj/item/weapon/gun/gatling/beegun/update_wield(mob/user)
-	item_state = "[base_icon_state][wielded ? 1 : 0]"
-	if(wielded)
-		slowdown = MINIGUN_SLOWDOWN_WIELDED
-	else
-		slowdown = MINIGUN_SLOWDOWN_NONWIELDED
-
-/obj/item/weapon/gun/gatling/beegun/process_chambered()
-	if(in_chamber)
-		return 1
-	if(current_shells)
-		current_shells--
-		update_icon()
-		in_chamber = new bug_ammo()
-		return 1
-	return 0
-
-/obj/item/weapon/gun/gatling/beegun/update_icon()
-	switch(current_shells)
-		if(150 to INFINITY)
-			icon_state = "[base_icon_state]100"
-		if(100 to 149)
-			icon_state = "[base_icon_state]75"
-		if(50 to 99)
-			icon_state = "[base_icon_state]50"
-		if(1 to 49)
-			icon_state = "[base_icon_state]25"
-		else
-			icon_state = "[base_icon_state]0"
-
+	gatlingbullet = /obj/item/projectile/bullet/beegun
+	
 /obj/item/weapon/gun/gatling/beegun/hornetgun
 	name = "hornet gun"
 	desc = "Doesn't actually use .22 Hornet cartridges"
 	icon_state = "hornetgun"
-	base_icon_state = "hornetgun"
-	bug_ammo = /obj/item/projectile/bullet/beegun/hornet
+	gatlingbullet = /obj/item/projectile/bullet/beegun/hornet
+	
+/obj/item/weapon/gun/gatling/batling
+	name = "batling gun"
+	desc = "Batter up!"
+	icon_state = "batlinggun"
+	item_state = "batlinggun0"
+	gatlingbullet = /obj/item/projectile/bullet/baton
+	max_shells = 50
+	current_shells = 50
+	rounds_per_burst = 5
+	var/list/rigged_shells = list()
+	
+/obj/item/weapon/gun/gatling/batling/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/weapon/melee/baton))
+		var/obj/item/weapon/melee/baton/thebaton = W
+		if(user.drop_item(thebaton) && thebaton.canbehonkified())
+			if(!thebaton.bcell)
+				to_chat(user, "<span class='warning'>\The [thebaton] doesn't have a cell.</span>")
+				..()
+				return
+			if(!thebaton.bcell.maxcharge > thebaton.hitcost)	
+				to_chat(user, "<span class='warning'>\The [thebaton] doesn't have enough charge.</span>")
+				..()
+				return
+			if(current_shells >= max_shells)
+				to_chat(user, "<span class='warning'>\The [src] is already filled to capacity.</span>")
+				..()
+				return
+			to_chat(user, "<span class='notice'>You load \the [thebaton] into \the [src].</span>")
+			current_shells = min(current_shells+10,max_shells)  //Yup, 5 batons for max ammo.
+			if(thebaton.bcell.rigged)
+				rigged_shells.Add(current_shells) //this one's gonna be a blast
+			qdel(W)
+			update_icon()
+	..()
+			
+/obj/item/weapon/gun/gatling/batling/process_chambered()
+	if(in_chamber)
+		return 1
+	var/riggedshot = FALSE
+	if(current_shells)
+		if(current_shells in rigged_shells)
+			riggedshot = TRUE
+			rigged_shells.Remove(current_shells)
+		current_shells--
+		update_icon()
+		var/obj/item/projectile/bullet/baton/shootbaton = new gatlingbullet()
+		shootbaton.rigged = riggedshot
+		in_chamber = shootbaton
+		new/obj/item/ammo_casing_gatling/batling(get_turf(src))
+		return 1
+	return 0
+	
+/obj/item/weapon/gun/gatling/batling/update_icon()
+	if(current_shells)
+		icon_state = "[base_icon_state][Ceiling(current_shells/max_shells*100,20)]"
+	else
+		icon_state = "[base_icon_state]0"	
+	
+/obj/item/ammo_casing_gatling/batling
+	name = "baton casing"
+	desc = "The remains of a stun baton."
+	icon_state = "batling-casing"

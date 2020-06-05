@@ -180,6 +180,57 @@
 	broadcasting = 1
 	listening = 0
 
+/obj/item/device/radio/intercom/security
+	name = "station intercom (Security)"
+
+/obj/item/device/radio/intercom/security/initialize()
+	..()
+	set_frequency(SEC_FREQ)
+
+/obj/item/device/radio/intercom/security/broadcast_nospeaker
+	broadcasting = 1
+	listening = 0
+
+/obj/item/device/radio/intercom/engineering
+	name = "station intercom (Engineering)"
+
+/obj/item/device/radio/intercom/engineering/initialize()
+	..()
+	set_frequency(ENG_FREQ)
+
+/obj/item/device/radio/intercom/engineering/broadcast_nospeaker
+	broadcasting = 1
+	listening = 0
+
+/obj/item/device/radio/intercom/science
+	name = "station intercom (Science)"
+
+/obj/item/device/radio/intercom/science/initialize()
+	..()
+	set_frequency(SCI_FREQ)
+
+/obj/item/device/radio/intercom/science/broadcast_nospeaker
+	broadcasting = 1
+	listening = 0
+
+/obj/item/device/radio/intercom/supply
+	name = "station intercom (Supply)"
+
+/obj/item/device/radio/intercom/supply/initialize()
+	..()
+	set_frequency(SUP_FREQ)
+
+/obj/item/device/radio/intercom/aiprivate
+	name = "station intercom (AI Private)"
+
+/obj/item/device/radio/intercom/aiprivate/initialize()
+	..()
+	set_frequency(AIPRIV_FREQ)
+
+/obj/item/device/radio/intercom/supply/broadcast_nospeaker
+	broadcasting = 1
+	listening = 0
+
 /datum/intercom_settings
 	var/frequency
 	var/broadcasting

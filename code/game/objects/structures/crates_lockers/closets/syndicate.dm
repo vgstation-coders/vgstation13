@@ -60,7 +60,7 @@
 
 	//Metal (common ore)
 	if(pickednum >= 2)
-		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 		M.amount = rand(common_min, common_max)
 
 	//Glass (common ore)

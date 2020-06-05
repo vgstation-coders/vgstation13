@@ -517,5 +517,6 @@
 
 /mob/living/simple_animal/mouse/mouse_op/death(var/gibbed = FALSE)
 	..(TRUE)
-	if(gibbed == FALSE)
-		src.gib()
+	if(!gibbed && !suiciding && loc != null)
+		explosion(get_turf(loc),-1,0,2)
+		gib()

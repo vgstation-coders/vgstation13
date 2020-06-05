@@ -41,7 +41,7 @@ var/list/cable_list = list() //Index for all cables, so that powernets don't hav
 	while (currentrun_cables.len)
 		var/obj/structure/cable/PC = currentrun_cables[currentrun_cables]
 		currentrun_cables.len--
-		if (!PC || PC.gcDestroyed || PC.disposed)
+		if (!PC || PC.gcDestroyed)
 			continue
 
 		// Does a powernet need rebuild? Lets do it!
@@ -51,7 +51,7 @@ var/list/cable_list = list() //Index for all cables, so that powernets don't hav
 	while (currentrun_powerents.len)
 		var/datum/powernet/powerNetwork = currentrun_powerents[currentrun_powerents.len]
 		currentrun_powerents.len--
-		if (!powerNetwork || powerNetwork.disposed)
+		if (!powerNetwork || powerNetwork.gcDestroyed)
 			continue
 
 		powerNetwork.reset()
@@ -62,7 +62,7 @@ var/list/cable_list = list() //Index for all cables, so that powernets don't hav
 	while (currentrun_power_machines.len)
 		var/datum/X = currentrun_power_machines[currentrun_power_machines.len]
 		currentrun_power_machines.len--
-		if (!X || X.gcDestroyed || X.disposed)
+		if (!X || X.gcDestroyed)
 			continue
 
 		if (istype(X, /obj/machinery))

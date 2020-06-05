@@ -239,10 +239,11 @@
 		..()
 
 /obj/item/device/crank_charger/attack_self(mob/user)
+	var/mob/living/L = user
 	if(stored)
 		if(stored.charge<stored.maxcharge)
-			user.delayNextAttack(1)
-			stored.charge += 100
+			L.delayNextAttack(1)
+			stored.charge += 100 * L.get_strength()
 			state = !state
 			update_icon()
 			stored.updateicon()
@@ -250,7 +251,7 @@
 			if(stored.charge>stored.maxcharge)
 				stored.charge = stored.maxcharge
 	else
-		to_chat(user,"<span class='warning'>There is no cell loaded!</span>")
+		to_chat(L,"<span class='warning'>There is no cell loaded!</span>")
 
 /obj/item/device/crank_charger/attack_hand(mob/user)
 	if(stored && removablecell && user.get_inactive_hand() == src)

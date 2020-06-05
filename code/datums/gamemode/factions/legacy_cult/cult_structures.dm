@@ -128,16 +128,6 @@
 	plane = ABOVE_TURF_PLANE
 	var/spawnable = null
 
-/obj/effect/gateway/Bumped(mob/M as mob|obj)
-	spawn(0)
-		return
-	return
-
-/obj/effect/gateway/Crossed(AM as mob|obj)
-	spawn(0)
-		return
-	return
-
 /obj/effect/gateway/active
 	luminosity=5
 	light_color = LIGHT_COLOR_RED

@@ -72,7 +72,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	   /** #### - Normal Broadcast - #### **/
 
 		if(signal.data["type"] == 0)
-			var/datum/speech/speech = getFromPool(/datum/speech)
+			var/datum/speech/speech = new /datum/speech
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], 0, signal.data["compression"], signal.data["level"])
@@ -88,7 +88,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 								  signal.data["message"],null, null,
 								  signal.data["compression"], listening_level)
 			*/
-			var/datum/speech/speech = getFromPool(/datum/speech)
+			var/datum/speech/speech = new /datum/speech
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], null, signal.data["compression"], signal.data["level"])
@@ -102,7 +102,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 			/* ###### Broadcast a message using signal.data ###### */
 				// Parameter "data" as 4: AI can't track this person/mob
-			var/datum/speech/speech = getFromPool(/datum/speech)
+			var/datum/speech/speech = new /datum/speech
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], 4, signal.data["compression"], signal.data["level"])
@@ -171,13 +171,13 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 
 		if(signal.frequency == SYND_FREQ && syndi_allinone == 1) // if syndicate broadcast, just
-			var/datum/speech/speech = getFromPool(/datum/speech)
+			var/datum/speech/speech = new /datum/speech
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], 0, signal.data["compression"], list(0, z))
 
 		if(signal.frequency == RAID_FREQ && raider_allinone == 1) // if raider broadcast, just
-			var/datum/speech/speech = getFromPool(/datum/speech)
+			var/datum/speech/speech = new /datum/speech
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], 0, signal.data["compression"], list(0, z))
@@ -249,6 +249,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		var/data,                // ???
 		var/compression,         // Level of compression
 		var/list/level)          // z-levels that can hear us
+
 #ifdef SAY_DEBUG
 	if(speech.speaker)
 		say_testing(speech.speaker, "broadcast_message start - Sending \"[html_encode(speech.message)]\" to [speech.frequency]")
@@ -262,12 +263,11 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 	var/list/radios = list()
 
-	var/atom/movable/virtualspeaker/virt = getFromPool(/atom/movable/virtualspeaker, null)
+	var/atom/movable/virtualspeaker/virt = new /atom/movable/virtualspeaker(null)
 	virt.name = speech.name
 	virt.job = speech.job
 	//virt.languages = AM.languages
 	virt.source = speech.speaker
-	virt.faketrack = (data == 4) ? 1 : 0
 	virt.radio = speech.radio
 
 	if (compression > 0)
@@ -305,13 +305,15 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 	radios = null
 
+	//Scramble messages if radio blackout is enabled
+	if(malf_radio_blackout)
+		speech.message = Gibberish(speech.message, 95)
 	// TODO: Review this usage.
 	var/rendered = virt.render_speech(speech) // always call this on the virtualspeaker to advoid issues
-	//var/listeners_sent = 0
 	for (var/atom/movable/listener in listeners)
 		if (listener)
-			//listeners_sent++
 			listener.Hear(speech, rendered)
+
 
 	if (length(listeners))
 		listeners = null
@@ -353,8 +355,9 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		say_testing(speech.speaker, "Broadcast_Message finished with [listeners ? listeners.len : 0] listener\s getting our message, [speech.message] lang = [speech.language ? speech.language.name : "none"]")
 #endif
 
+
 	spawn(50)
-		returnToPool(virt)
+		qdel(virt)
 
 /* Obsolete, RIP
 /proc/Broadcast_SimpleMessage(var/source, var/frequency, var/text, var/data, var/mob/M, var/compression, var/level)
@@ -606,7 +609,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 
 	// First, we want to generate a new radio signal
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 2 // 2 would be a subspace transmission.
 	var/turf/pos = get_turf(src)
 

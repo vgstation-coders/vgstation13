@@ -59,7 +59,6 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	var/obj/effect/rust_em_field/owned_field
 	var/field_strength = 1//0.01
 	var/field_frequency = 1
-	var/id_tag
 
 	use_power = 1
 	idle_power_usage = 50

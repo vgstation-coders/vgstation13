@@ -41,6 +41,7 @@
 	var/update_muts = 1                        // Monkey gene must be set at start.
 	var/alien = 0								//Used for reagent metabolism.
 	var/canPossess = FALSE
+	var/unmonkey_anim = "monkey2h"
 
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
@@ -404,9 +405,6 @@
 		return
 
 
-/mob/living/carbon/monkey/IsAdvancedToolUser()//Unless its monkey mode monkeys cant use advanced tools
-	return dexterity_check()
-
 // Get ALL accesses available.
 /mob/living/carbon/monkey/GetAccess()
 	var/list/ACL=list()
@@ -454,12 +452,12 @@
 
 /mob/living/carbon/monkey/dexterity_check()
 	if(stat != CONSCIOUS)
-		return 0
-	if(ticker.mode.name == "monkey")
-		return 1
+		return FALSE
+	if(ticker.mode.name == "monkey")//monkey mode override
+		return TRUE
 	if(reagents.has_reagent(METHYLIN))
-		return 1
-	return 0
+		return TRUE
+	return FALSE//monkeys can't use complex things by default unless they're high on methylin
 
 /mob/living/carbon/monkey/reset_layer()
 	if(lying)

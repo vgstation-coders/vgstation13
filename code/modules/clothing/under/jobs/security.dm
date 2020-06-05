@@ -8,6 +8,93 @@
 /*
  * Security
  */
+
+ /*
+ * Formalwear first
+ */
+/obj/item/clothing/under/rank/secformal
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/secformal/headofsecurity_blue
+	name = "\improper HoS' blue dress uniform"
+	desc = "Head of Security's blue uniform. For formal occasions."
+	icon_state = "hosblueclothes"
+	item_state = "ba_suit"
+	_color = "hosblueclothes"
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/secformal/headofsecurity_navy
+	name = "\improper HoS' navy dress uniform"
+	desc = "Head of Security's navy uniform. For formal occasions."
+	icon_state = "hosdnavyclothes"
+	item_state = "jensensuit"
+	_color = "hosdnavyclothes"
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/secformal/headofsecurity_tan
+	name = "\improper HoS' tan dress uniform"
+	desc = "Head of Security's uniform. For formal occasions."
+	icon_state = "hostanclothes"
+	item_state = "ba_suit"
+	_color = "hostanclothes"
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/secformal/headofsecurity_navy/trimmed
+	_color = "hosdnavyclothestrimmed"
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/secformal/warden_blue
+	name = "warden's blue dress uniform"
+	desc = "Warden's blue dress uniform. For formal occasions."
+	icon_state = "wardenblueclothes"
+	item_state = "ba_suit"
+	_color = "wardenblueclothes"
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/secformal/warden_navy
+	name = "warden's navy dress uniform"
+	desc = "Warden's navy dress uniform. For formal occasions."
+	icon_state = "wardendnavyclothes"
+	item_state = "jensensuit"
+	_color = "wardendnavyclothes"
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/secformal/warden_tan
+	name = "warden's tan dress uniform"
+	desc = "Warden's tan dress uniform. For formal occasions."
+	icon_state = "wardentanclothes"
+	item_state = "ba_suit"
+	_color = "wardentanclothes"
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/secformal/officer_blue
+	name = "officer's blue dress uniform"
+	desc = "Security officer's blue dress uniform. For formal occasions."
+	icon_state = "officerblueclothes"
+	item_state = "ba_suit"
+	_color = "officerblueclothes"
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/secformal/officer_navy
+	name = "officer's navy dress uniform"
+	desc = "Security officer's navy dress uniform. For formal occasions."
+	icon_state = "officerdnavyclothes"
+	item_state = "jensensuit"
+	_color = "officerdnavyclothes"
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/secformal/officer_tan
+	name = "officer's tan dress uniform"
+	desc = "Security officer's tan dress uniform. For formal occasions."
+	icon_state = "officertanclothes"
+	item_state = "ba_suit"
+	_color = "officertanclothes"
+	species_fit = list(INSECT_SHAPED)
+
+ /*
+ * Normalwear
+ */
+
 /obj/item/clothing/under/rank/warden
 	desc = "A jumpsuit made of strong material, providing robust protection. It has the word \"WARDEN\" written on the shoulders."
 	name = "warden's jumpsuit"
@@ -58,7 +145,18 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/rank/collar
+	name = "security officer's uniform"
+	desc = "A jumpsuit made of strong material, with a dash of military flare."
+	icon_state = "collar"
+	item_state = "collar"
+	_color = "collar"
+	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	clothing_flags = ONESIZEFITSALL
+	siemens_coefficient = 0.9
+	species_fit = list(INSECT_SHAPED)
 
 /*
  * Detective
@@ -94,6 +192,7 @@
 	desc = "This hat's been with you for some time now. It was a gift from your ex, and you wore it during the war. Thinking back on it, the war was prettier."
 	icon_state = "detective_noir"
 	item_state = "detective_noir"
+	species_fit = list(INSECT_SHAPED)
 /*
  * Head of Security
  */
@@ -145,7 +244,7 @@
 	siemens_coefficient = 0.6
 
 // -- Centcomm, OG by SkyMarshall
-	
+
 /obj/item/clothing/under/rank/centcom/representative
 	desc = "Gold trim on space-black cloth, this uniform displays the rank of \"Ensign\" and bears \"N.C.V. Fearless CV-286\" on the left shounder."
 	name = "\improper Nanotrasen Navy Uniform"
@@ -169,3 +268,14 @@
 	item_state = "dg_suit"
 	_color = "centcom"
 	displays_id = 0
+
+/obj/item/clothing/under/rank/metrocop
+	name = "civil protection uniform"
+	desc = 	"Attention, all teams respond, code 3."
+	icon_state = "metrocop"
+	item_state = "r_suit"
+	_color = "metrocop"
+	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	siemens_coefficient = 0.9
+	species_fit = list(INSECT_SHAPED)
+

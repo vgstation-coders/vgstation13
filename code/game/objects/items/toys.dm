@@ -238,9 +238,9 @@
 	icon_state = "fireworkslauncher"
 	item_state = "riotgun"
 	fire_sound = "sound/weapons/railgun_lowpower.ogg"
-	projectile_type = "/obj/item/projectile/meteor/firework"	
+	projectile_type = "/obj/item/projectile/meteor/firework"
 	charge_cost = 0 //infinite ammo!
-	
+
 /obj/item/weapon/gun/energy/fireworkslauncher/update_icon()
 	return
 
@@ -1537,6 +1537,7 @@
 	name = "balloon hat"
 	desc = "Just like the ones made in the sweatshops of the clown planet."
 	icon_state = "hat_balloon"
+	species_fit = list(INSECT_SHAPED)
 	slot_flags = SLOT_HEAD
 	on_body_layer = HEAD_LAYER
 

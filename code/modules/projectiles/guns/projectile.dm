@@ -20,6 +20,7 @@
 	var/obj/item/ammo_casing/chambered = null
 	var/mag_type = ""
 	var/list/mag_type_restricted = list() //better magazine manipulation
+	var/list/magwellmod = list() //this holds the magtype restriction when a mod is applied
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 	var/automagdrop_delay_time = 5 // delays the automagdrop
 	var/spawn_mag = TRUE
@@ -52,7 +53,7 @@
 				return 0
 		if(user)
 			if(user.drop_item(AM, src))
-				to_chat(usr, "<span class='notice'>You load the magazine into \the [src].</span>")
+				to_chat(usr, "<span class='notice'>You load [AM] into \the [src].</span>")
 			else
 				return
 
@@ -81,7 +82,8 @@
 					AC.forceMove(user.loc)
 					dropped_bullets++
 					stored_magazine.update_icon()
-				to_chat(usr, "<span class='notice'>You unjam the [name], and spill [dropped_bullets] bullet\s in the process.</span>")
+				var/droppedwords = dropped_bullets ? "" : ", and spill [dropped_bullets] bullet\s in the process"
+				to_chat(usr, "<span class='notice'>You unjam the [name][droppedwords].</span>")
 				chamber_round()
 				update_icon()
 				return 0
@@ -90,10 +92,10 @@
 		if(user)
 			if(user.put_in_any_hand_if_possible(stored_magazine)) //if you have empty hands, you'll get the mag
 				user.put_in_hands(stored_magazine)
-				to_chat(usr, "<span class='notice'>You pull the magazine out of \the [src]!</span>")
+				to_chat(usr, "<span class='notice'>You pull [stored_magazine] out of \the [src]!</span>")
 			else
 				stored_magazine.forceMove(user.loc) //otherwise, it drops to the place you are existing
-				to_chat(usr, "<span class='notice'>You drop the magazine out of \the [src]!</span>")
+				to_chat(usr, "<span class='notice'>You drop [stored_magazine] out of \the [src]!</span>")
 		stored_magazine.update_icon()
 		stored_magazine = null
 		update_icon()
@@ -171,14 +173,27 @@
 
 
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags &SILENCECOMP)
-		if(!user.is_holding_item(src))	//if we're not in his hands
-			to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
-			return
+	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags & SILENCECOMP && !silenced)
 
 		if(user.drop_item(A, src)) //put the silencer into the gun
 			to_chat(user, "<span class='notice'>You screw [A] onto [src].</span>")
 			silenced = A	//dodgy?
+			w_class = W_CLASS_MEDIUM
+			if(silencer_offset.len)
+				var/image/silence_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "[A.icon_state]_mounted")
+				silence_overlay.pixel_x += silencer_offset[SILENCER_OFFSET_X]
+				silence_overlay.pixel_y += silencer_offset[SILENCER_OFFSET_Y]
+				overlays += silence_overlay
+				gun_part_overlays += silence_overlay
+			update_icon()
+			user.update_inv_hands()
+			return 1
+
+	if(mag_type_restricted.len && istype(A, /obj/item/gun_part/universal_magwell_expansion_kit))
+		if(user.drop_item(A, src))
+			to_chat(user, "<span class='notice'>You apply [A] to [src]. It won't be coming off in one piece.</span>")
+			magwellmod = mag_type_restricted
+			mag_type_restricted = list()
 			w_class = W_CLASS_MEDIUM
 			update_icon()
 			return 1
@@ -219,16 +234,23 @@
 	update_icon()
 	..()
 
-	if(istype(A, /obj/item/gun_part/scope) && gun_flags &SCOPED)
+	if(istype(A, /obj/item/gun_part/scope) && gun_flags & SCOPED)
 		if(scoped)
 			return
 		if(user.drop_item(A, src))
 			to_chat(user, "<span class='notice'>You attach \the [A] onto \the [src].</span>")
 			scoped = A
 			//var/datum/action/item_action/toggle_scope
-			new/datum/action/item_action/toggle_scope(src)
+			new /datum/action/item_action/toggle_scope(src)
 			actions_types += /datum/action/item_action/toggle_scope
 			update_icon()
+			return
+
+	if(A.is_screwdriver(user))
+		if(magwellmod.len)
+			mag_type_restricted = magwellmod
+			magwellmod = list()
+			to_chat(user, "<span class='notice'>You destroy the strange magwell attachment.</span>")
 			return
 
 /obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
@@ -236,7 +258,7 @@
 		return ..()
 	if (loaded.len || stored_magazine || refuse.len)
 		if (load_method == SPEEDLOADER)
-			if(!gun_flags &CHAMBERSPENT)
+			if(!gun_flags & CHAMBERSPENT)
 				var/obj/item/ammo_casing/AC = loaded[1]
 				loaded -= AC
 				AC.forceMove(user.loc)
@@ -271,7 +293,7 @@
 
 /obj/item/weapon/gun/projectile/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	..()
-	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
+	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags & AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
 		var/drop_me = stored_magazine // prevents dropping a fresh/different mag.
 		spawn(automagdrop_delay_time)
 			if((stored_magazine == drop_me) && (loc == user))	//prevent dropping the magazine if we're no longer holding the gun
@@ -292,7 +314,8 @@
 //		if(in_chamber && loaded.len)
 //			to_chat(usr, "It also has a chambered round." {R})
 	if(istype(silenced, /obj/item/gun_part/silencer))
-		to_chat(user, "<span class='warning'>It has a supressor attached to the barrel.</span>")
+		var/obj/item/gun_part/silencer/A = silenced
+		to_chat(user, "<span class='warning'>It has \a [A] attached to the barrel.</span>")
 
 /obj/item/weapon/gun/projectile/proc/getAmmo()
 	var/bullets = 0
@@ -323,6 +346,11 @@
 
 /obj/item/weapon/gun/projectile/proc/RemoveAttach(var/mob/user)
 	if(silenced)
+		var/obj/item/gun_part/silencer/A = silenced
+		for(var/image/ol in gun_part_overlays)
+			if(ol.icon_state == "[A.icon_state]_mounted")
+				overlays -= ol
+				gun_part_overlays -= ol
 		to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
 		user.put_in_hands(silenced)
 		silenced = 0
@@ -331,6 +359,10 @@
 		to_chat(user, "<span class='notice'>You release \the [scoped] from \the [src].</span>")
 		user.put_in_hands(scoped)
 		scoped = null
+		actions_types -= /datum/action/item_action/toggle_scope
+		for(var/datum/action/A in src.actions)
+			if(istype(A, /datum/action/item_action/toggle_scope))
+				qdel(A)
 	update_icon()
 
 /obj/item/weapon/gun/projectile/verb/RemoveAttachments()
@@ -343,7 +375,7 @@
 	if(usr.incapacitated())
 		to_chat(usr, "<span class='rose'>You can't do this!</span>")
 		return
-	if(silenced || scoped)
+	if(istype(silenced, /obj/item/gun_part/silencer) || scoped)
 		RemoveAttach(usr)
 	else
 		to_chat(usr, "<span class='rose'>There are no attachments to remove!</span>")

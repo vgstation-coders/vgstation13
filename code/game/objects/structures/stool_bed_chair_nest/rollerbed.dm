@@ -27,7 +27,7 @@
 	. = ..()
 	update_icon()
 
-/obj/structure/bed/roller/manual_unbuckle(var/mob/user)
+/obj/structure/bed/roller/manual_unbuckle(var/mob/user, var/resisting = FALSE)
 	if(user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return FALSE

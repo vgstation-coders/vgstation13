@@ -8,7 +8,7 @@
 	anchored = 1.0
 	power_channel = ENVIRON
 	var/frequency = 1439
-	var/id_tag
+
 	use_power = 1
 	idle_power_usage = 2
 	active_power_usage = 4
@@ -78,7 +78,7 @@
 		if(!radio_connection)
 			return
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.source = src
 		signal.transmission_method = 1
 		signal.data = list(
@@ -131,7 +131,7 @@
 		return 1
 
 	var/t = null
-	if (get_dist(usr, src) <= 3 || istype(usr, /mob/living/silicon/ai) || istype(usr, /mob/dead))
+	if (get_dist(usr, src) <= user.client.view || istype(usr, /mob/living/silicon/ai) || istype(usr, /mob/dead))
 		t += status()
 	else
 		to_chat(usr, "<span class='notice'><B>You are too far away.</B></span>")

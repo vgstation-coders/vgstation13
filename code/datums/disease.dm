@@ -191,6 +191,7 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 	active_diseases -= src
 	if(affected_mob)
 		affected_mob.viruses -= src
+	holder = null
 	..()
 
 /datum/disease/New(var/process=1, var/datum/disease/D)//process = 1 - adding the object to global list. List is processed by master controller.

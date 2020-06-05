@@ -59,7 +59,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	// Cosmetics.
 	var/plant_dmi = 'icons/obj/hydroponics/apple.dmi'// DMI  to use for the plant growing in the tray.
-	var/plant_icon                  // Icon to use for the plant growing in the tray.
+	var/plant_icon_state = "produce"                 // icon_state to use for the product
 	var/packet_icon = "seed"        // Icon to use for physical seed packet item.
 	var/biolum                      // Plant is bioluminescent.
 	var/biolum_colour               // The colour of the plant's radiance.
@@ -82,7 +82,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	mysterious = 1
 
 	seed_noun = pick("spores","nodes","cuttings","seeds")
-	products = list(pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)-/obj/item/weapon/reagent_containers/food/snacks/grown))
+	products = list(pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown)))
 	potency = rand(5,30)
 
 	randomize_icon()
@@ -241,75 +241,16 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	chems[new_chem] = list(rand(1,severity/3),rand(10-Ceiling(severity/3),15))
 	return 1
 
-//Gives the plant a new, random icon from a list, with matching growth stages number.
 /datum/seed/proc/randomize_icon()
-	var/list/plant_icons = pick(list(
-		list('icons/obj/hydroponics/chili.dmi',				6),
-		list('icons/obj/hydroponics/chiliice.dmi',			6),
-		list('icons/obj/hydroponics/berry.dmi',				6),
-		list('icons/obj/hydroponics/glowberry.dmi',			6),
-		list('icons/obj/hydroponics/poisonberry.dmi',			6),
-		list('icons/obj/hydroponics/deathberry.dmi',			6),
-		list('icons/obj/hydroponics/nettle.dmi',				6),
-		list('icons/obj/hydroponics/deathnettle.dmi',			6),
-		list('icons/obj/hydroponics/tomato.dmi',				6),
-		list('icons/obj/hydroponics/bloodtomato.dmi',			6),
-		list('icons/obj/hydroponics/killertomato.dmi',		2),
-		list('icons/obj/hydroponics/bluetomato.dmi',			6),
-		list('icons/obj/hydroponics/bluespacetomato.dmi',		6),
-		list('icons/obj/hydroponics/eggplant.dmi',			6),
-		list('icons/obj/hydroponics/eggy.dmi',				6),
-		list('icons/obj/hydroponics/apple.dmi',				6),
-		list('icons/obj/hydroponics/goldapple.dmi',			6),
-		list('icons/obj/hydroponics/ambrosiavulgaris.dmi',	6),
-		list('icons/obj/hydroponics/ambrosiadeus.dmi',		6),
-		list('icons/obj/hydroponics/chanter.dmi',				3),
-		list('icons/obj/hydroponics/plump.dmi',				3),
-		list('icons/obj/hydroponics/reishi.dmi',				4),
-		list('icons/obj/hydroponics/liberty.dmi',				3),
-		list('icons/obj/hydroponics/amanita.dmi',				3),
-		list('icons/obj/hydroponics/angel.dmi',				3),
-		list('icons/obj/hydroponics/towercap.dmi',			3),
-		list('icons/obj/hydroponics/glowshroom.dmi',			4),
-		list('icons/obj/hydroponics/walkingmushroom.dmi',		3),
-		list('icons/obj/hydroponics/plastellium.dmi',		3),
-		list('icons/obj/hydroponics/harebell.dmi',				4),
-		list('icons/obj/hydroponics/poppy.dmi',				3),
-		list('icons/obj/hydroponics/sunflower.dmi',			3),
-		list('icons/obj/hydroponics/moonflower.dmi',			3),
-		list('icons/obj/hydroponics/novaflower.dmi',			3),
-		list('icons/obj/hydroponics/grape.dmi',				2),
-		list('icons/obj/hydroponics/greengrape.dmi',			2),
-		list('icons/obj/hydroponics/peanut.dmi',				6),
-		list('icons/obj/hydroponics/cabbage.dmi',				1),
-		list('icons/obj/hydroponics/shand.dmi',				3),
-		list('icons/obj/hydroponics/mtear.dmi',				4),
-		list('icons/obj/hydroponics/banana.dmi',				6),
-		list('icons/obj/hydroponics/corn.dmi',					3),
-		list('icons/obj/hydroponics/potato.dmi',				4),
-		list('icons/obj/hydroponics/soybean.dmi',				6),
-		list('icons/obj/hydroponics/soybean.dmi',				6),
-		list('icons/obj/hydroponics/wheat.dmi',				6),
-		list('icons/obj/hydroponics/rice.dmi',					4),
-		list('icons/obj/hydroponics/carrot.dmi',				3),
-		list('icons/obj/hydroponics/weeds.dmi',				4),
-		list('icons/obj/hydroponics/whitebeet.dmi',			6),
-		list('icons/obj/hydroponics/sugarcane.dmi',			3),
-		list('icons/obj/hydroponics/watermelon.dmi',			6),
-		list('icons/obj/hydroponics/pumpkin.dmi',				2),
-		list('icons/obj/hydroponics/lime.dmi',					6),
-		list('icons/obj/hydroponics/lemon.dmi',				6),
-		list('icons/obj/hydroponics/orange.dmi',				6),
-		list('icons/obj/hydroponics/grass.dmi',				2),
-		list('icons/obj/hydroponics/cocoapod.dmi',				5),
-		list('icons/obj/hydroponics/cherry.dmi',				5),
-		list('icons/obj/hydroponics/kudzu.dmi',				4),
-		list('icons/obj/hydroponics/pear.dmi', 				6),
-		))
+	var/random = rand(1, SSplant.roundstart_seeds)
+	var/random_key = SSplant.seeds[random]
+	var/datum/seed/random_seed = SSplant.seeds[random_key]
+	set_icon(random_seed)
 
-	plant_dmi = plant_icons[1]
-	growth_stages = plant_icons[2]
-
+/datum/seed/proc/set_icon(datum/seed/seed)
+	plant_dmi = seed.plant_dmi
+	plant_icon_state = "produce"
+	growth_stages = seed.growth_stages
 
 //Random mutations moved to hydroponics_mutations.dm!
 
@@ -708,7 +649,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.ligneous =             ligneous
 	new_seed.teleporting =          teleporting
 	new_seed.juicy =        	    juicy
-	new_seed.plant_icon =           plant_icon
+	new_seed.plant_icon_state =     plant_icon_state
 	new_seed.splat_type =           splat_type
 	new_seed.packet_icon =          packet_icon
 	new_seed.biolum =               biolum

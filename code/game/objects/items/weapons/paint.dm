@@ -63,9 +63,9 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	icon_state = "paint_yellow"
 	paint_type = "yellow"
 
-/obj/item/weapon/reagent_containers/glass/paint/violet
-	icon_state = "paint_violet"
-	paint_type = "violet"
+/obj/item/weapon/reagent_containers/glass/paint/purple
+	icon_state = "paint_purple"
+	paint_type = "purple"
 
 /obj/item/weapon/reagent_containers/glass/paint/black
 	icon_state = "paint_black"
@@ -107,10 +107,10 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	color = "FFFF00"
 	icon_state = "paint_yellow"
 
-/obj/item/weapon/paint/violet
-	name = "Violet paint"
+/obj/item/weapon/paint/purple
+	name = "Purple paint"
 	color = "FF00FF"
-	icon_state = "paint_violet"
+	icon_state = "paint_purple"
 
 /obj/item/weapon/paint/black
 	name = "Black paint"
@@ -140,7 +140,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 				color = "00FF00"
 			if("yellow")
 				color = "FFFF00"
-			if("violet")
+			if("purple")
 				color = "FF00FF"
 			if("white")
 				color = "FFFFFF"
@@ -218,10 +218,10 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 		color = "#FFFF00"
 		id = "paint_yellow"
 
-	violet
-		name = "Violet Paint"
+	purple
+		name = "Purple Paint"
 		color = "#FF00FF"
-		id = "paint_violet"
+		id = "paint_purple"
 
 	black
 		name = "Black Paint"

@@ -60,7 +60,7 @@
 	pixel_y_offset = -8 * PIXEL_MULTIPLIER
 	flags = CANT_BE_MOVED_BY_LOCKED_MOBS
 
-/obj/structure/bed/guillotine/manual_unbuckle(mob/user)
+/obj/structure/bed/guillotine/manual_unbuckle(mob/user, var/resisting = FALSE)
 	if(!is_locking(mob_lock_type))
 		return
 
