@@ -121,7 +121,7 @@
 	if(health <= 0)
 		for(var/atom/movable/A in src)
 			remove_from_storage(A, get_turf(src))
-
+		send_signal("Lockbox: Code Orange")
 		qdel(src)
 	return
 
@@ -134,11 +134,13 @@
 				for(var/atom/movable/A in src)
 					remove_from_storage(A, get_turf(src))
 					A.ex_act(3)
+				send_signal("Lockbox: Code Orange")
 				qdel(src)
 		if(3)
 			if(prob(50))
 				for(var/atom/movable/A in src)
 					remove_from_storage(A, get_turf(src))
+				send_signal("Lockbox: Code Orange")
 				qdel(src)
 
 /obj/item/weapon/storage/lockbox/emp_act(severity)
@@ -173,6 +175,24 @@
 	else
 		icon_state = src.icon_closed
 	return
+
+/obj/item/weapon/storage/lockbox/proc/send_signal(var/code)
+	var/boop = FALSE
+	var/turf/pos = get_turf(src)
+	var/x0 = pos.x-WORLD_X_OFFSET[pos.z]
+	var/y0 = pos.x-WORLD_Y_OFFSET[pos.z]
+	var/z0 = pos.z
+	var/alerttype = code
+	var/alertarea = get_area(src)
+	var/alerttime = worldtime2text()
+	var/verbose = TRUE
+	var/transmission_data = "[alerttype] - [alerttime] - [alertarea] ([x0],[y0],[z0])"
+	for(var/obj/machinery/computer/security_alerts/receiver in security_alerts_computers)
+		if(receiver && !receiver.stat)
+			receiver.receive_alert(alerttype, transmission_data, verbose)
+			boop = TRUE
+	if (boop)
+		playsound(src,'sound/machines/radioboop.ogg',40,1)
 
 /obj/item/weapon/storage/lockbox/loyalty
 	name = "lockbox (loyalty implants)"
