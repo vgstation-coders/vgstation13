@@ -556,7 +556,7 @@
 		update_icon()
 		windUp++
 
-obj/item/weapon/gun/hookshot/whip/bootbox/Fire(atom/target, mob/living/user, params, reflex =0, struggle =0) //4 winds minimum
+/obj/item/weapon/gun/hookshot/whip/bootbox/Fire(atom/target, mob/living/user, params, reflex =0, struggle =0) //4 winds minimum
 	maxlength = 4
 	if(windUp <4)
 		playsound(src, 'sound/items/metal_impact.ogg',25,1)
