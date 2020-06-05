@@ -379,7 +379,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	name = "Captain PDA"
 	default_cartridge = /obj/item/weapon/cartridge/captain
 	icon_state = "pda-c"
-	detonate = 0
 	//toff = 1
 
 /obj/item/device/pda/captain/New()
@@ -1984,7 +1983,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						to_chat(U, "<span class='notice'>ERROR: Messaging server is not responding.</span>")
 					else
 						if (!P.toff && cartridge:shock_charges > 0)
-							cartridge:shock_charges--
 
 							var/difficulty = 0
 
@@ -1998,18 +1996,22 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							else
 								difficulty += 2
 
-							if(prob(difficulty * 12) || (P.hidden_uplink))
+							if(P.hidden_uplink)
 								U.show_message("<span class='warning'>An error flashes on your [src].</span>", 1)
-							else if (prob(difficulty * 3))
-								U.show_message("<span class='warning'>Energy feeds back into your [src]!</span>", 1)
+							//else if (prob(difficulty * 2))
+							else if (1 == 1) //to test
+								U.show_message("<span class='warning'>[pick("Encryption","Connection","Verification","Handshake","Detonation","Injection")] error!</span>", 1)
 								U << browse(null, "window=pda")
-								explode()
-								log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up")
-								message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up", 1)
+								var/message = "<stack.Insert{KillProcess(){;`-DROP TABLE )))kernel = null / 0;;("
+								create_message(null, P, null, message) //the jig is up
+								log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge but failed")
+								message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge but failed", 1)
+								cartridge:shock_charges--
 							else
 								U.show_message("<span class='notice'>Success!</span>", 1)
-								log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge and succeeded")
-								message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded", 1)
+								log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded")
+								message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded", 1)
+								cartridge:shock_charges--
 								P.explode()
 			else
 				U.unset_machine()
@@ -2144,11 +2146,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			id.forceMove(get_turf(src))
 		id = null
 
-/obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P,var/multicast_message = null)
+/obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P,var/multicast_message = null, var/forced_message = null)
 	if (!istype(P)||P.toff)
 		return
 	var/t = multicast_message
-	if(!t)
+	to_chat(world, "t:[t] f:[f] pass: [if(!t || !forced_message)]
+	if(!t || !forced_message)
 		t = input(U, "Please enter message", "Message to [P]", null) as text|null
 		t = copytext(parse_emoji(sanitize(t)), 1, MAX_MESSAGE_LEN)
 		if (!t || toff || (!in_range(src, U) && loc != U)) //If no message, messaging is off, and we're either out of range or not in usr
