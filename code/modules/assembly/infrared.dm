@@ -227,7 +227,7 @@
 	..()
 
 /obj/effect/beam/infrared/resetVariables()
-	..("sources", "children", "limit","visible", "left", "assembly", "invisibility", "puffed", args)
+	..("sources", "children", "limit","visible", "left", "assembly", "invisibility", "puffed", "alpha", args)
 	children = list()
 	sources = list()
 
@@ -240,10 +240,10 @@
 		invisibility = 101
 	else if (visible)
 		invisibility = 0
-		alpha = 255
+		alpha = OPAQUE
 	else
 		invisibility = INVISIBILITY_LEVEL_ONE
-		alpha = 128
+		alpha = SEMI_TRANSPARENT
 
 /obj/effect/beam/infrared/spawn_child()
 	var/obj/effect/beam/infrared/B = ..()
@@ -258,10 +258,10 @@
 	if (master)
 		if (visible)
 			invisibility = 0
-			alpha = 255
+			alpha = OPAQUE
 		else
 			invisibility = INVISIBILITY_LEVEL_ONE
-			alpha = 128
+			alpha = SEMI_TRANSPARENT
 	if(next)
 		var/obj/effect/beam/infrared/B=next
 		B.set_visible(v)
