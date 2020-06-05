@@ -527,7 +527,7 @@
 	var/springForce = 0 //makes the big kicks
 
 /obj/item/weapon/gun/hookshot/whip/bootbox/update_icon()
-	icon_state = "bootbox[state ? "-1" : "-0"]"
+	icon_state = "bootbox-[state]"
 
 /obj/item/weapon/gun/hookshot/whip/bootbox/attack_self(mob/user)
 	state = !state
