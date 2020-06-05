@@ -278,7 +278,27 @@
 		messpoints = score["mess"] //If there are any messes, let's count them
 	//if(score["airloss"] != 0)
 		//atmos = score["airloss"] * 20 //Air issues are bad, but since it's space, don't stress it too much
-	var/beneficialpoints = score["disease_good"] * 20
+	//var/beneficialpoints = score["disease_good"] * 20
+
+	score["disease_vaccine"] = ""
+
+	for (var/antigen in all_antigens)
+		if (isolated_antibodies[antigen] == 1)
+			score["disease_vaccine"] += "[antigen]"
+			if (antigen in blood_antigens)
+				score["disease_vaccine_score"] += 10
+			else if (antigen in common_antigens)
+				score["disease_vaccine_score"] += 30
+			else if (antigen in rare_antigens)
+				score["disease_vaccine_score"] += 50
+			else if (antigen in alien_antigens)
+				score["disease_vaccine_score"] += 100
+		else
+			score["disease_vaccine"] += "-"
+
+	if (score["disease_vaccine_score"] == 580)
+		score["disease_vaccine_score"] = 1000
+
 	var/plaguepoints = score["disease_bad"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
 
 	/*//Mode Specific
@@ -310,7 +330,9 @@
 	score["crewscore"] += escapoints
 	score["crewscore"] += meals
 	score["crewscore"] += time
-	score["crewscore"] += beneficialpoints
+	//score["crewscore"] += beneficialpoints
+	score["crewscore"] += score["disease_vaccine_score"]
+	score["crewscore"] += score["disease_effects"]
 
 	if(!power) //No APCs with bad power
 		score["crewscore"] += 2500 //Give the Engineers a pat on the back for bothering
@@ -476,6 +498,8 @@
 	*/
 
 //	var/totalfunds = wagesystem.station_budget + wagesystem.research_budget + wagesystem.shipping_budget
+//	<B>Beneficial diseases in living mobs:</B> [score["disease_good"]] ([score["disease_good"] * 20] Points)<BR><BR>
+
 	dat += {"<B><U>GENERAL STATS</U></B><BR>
 
 	<U>THE GOOD:</U><BR>
@@ -487,7 +511,8 @@
 	<B>Random Events Endured:</B> [score["eventsendured"]] ([score["eventsendured"] * 200] Points)<BR>
 	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
 	<B>Ultra-Clean Station:</B> [score["messbonus"] ? "Yes" : "No"] ([score["messbonus"] * 10000] Points)<BR>
-	<B>Beneficial diseases in living mobs:</B> [score["disease_good"]] ([score["disease_good"] * 20] Points)<BR><BR>
+	<B>Isolated Vaccines:</B> [score["disease_vaccine"]] ([score["disease_vaccine_score"]] Points)<BR><BR>
+	<B>Extracted Symptoms:</B> [score["disease_extracted"]] ([score["disease_effects"]] Points)<BR><BR>
 
 	<U>THE BAD:</U><BR>
 	<B>Dead Crewmen:</B> [score["deadcrew"]] (-[score["deadcrew"] * 250] Points)<BR>
