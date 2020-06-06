@@ -308,6 +308,7 @@
 #include "code\datums\diseases\advance\symptoms\voice_change.dm"
 #include "code\datums\diseases\advance\symptoms\vomit.dm"
 #include "code\datums\diseases\advance\symptoms\weight.dm"
+#include "code\datums\gamemode\antag_seed.dm"
 #include "code\datums\gamemode\changeling.dm"
 #include "code\datums\gamemode\cult.dm"
 #include "code\datums\gamemode\extended.dm"

@@ -298,7 +298,7 @@ var/stacking_limit = 90
 
 	var/i = 0
 	var/list/drafted_rules = list()
-	
+
 	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
 		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
 			i++																			//we check whether we've got eligible players
@@ -364,9 +364,13 @@ var/stacking_limit = 90
 			if (starting_rule.persistent)
 				current_rules += starting_rule
 			for(var/mob/M in starting_rule.assigned)
-				candidates -= M
+				for(var/extra_candidate in candidates)
+					if(extra_candidate == M)
+						candidates -= M
 				for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
-					rule.candidates -= M//removing the assigned players from the candidates for the other rules
+					for(var/extra_candidate in rule.candidates)
+						if(extra_candidate == M)
+							rule.candidates -= M//removing the assigned players from the candidates for the other rules
 					if (!rule.ready())
 						drafted_rules -= rule//and removing rules that are no longer eligible
 			return 1

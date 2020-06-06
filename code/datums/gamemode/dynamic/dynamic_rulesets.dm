@@ -253,6 +253,8 @@
 			candidates.Remove(P)
 			e++
 			continue
+	if(Holiday == APRIL_FOOLS_DAY)
+		candidates = roundstart_generate_antag_seed(candidates) //Run through the list and duplicate the candidates
 	message_admins("Dynamic Mode: Trimming [name]'s candidates: [candidates.len] remaining out of [cand] ([a],[b],[c] ([c1]),[d],[e])")
 	log_admin("Dynamic Mode: Trimming [name]'s candidates: [candidates.len] remaining out of [cand] ([a],[b],[c] ([c1]),[d],[e])")
 
@@ -281,6 +283,8 @@
 		if ((exclusive_to_jobs.len > 0) && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
 			candidates.Remove(P)
 			continue
+	if(Holiday == APRIL_FOOLS_DAY)
+		candidates = roundstart_generate_antag_seed(candidates)
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
 	if (!forced)

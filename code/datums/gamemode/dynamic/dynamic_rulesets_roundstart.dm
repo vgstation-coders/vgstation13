@@ -26,7 +26,9 @@
 	for (var/i = 1 to num_traitors)
 		var/mob/M = pick(candidates)
 		assigned += M
-		candidates -= M
+		for(var/extra_candidate in candidates) //In case the candidate appears multiple times
+			if(extra_candidate == M)
+				candidates -= M
 		var/datum/role/traitor/newTraitor = new
 		newTraitor.AssignToRole(M.mind,1)
 		newTraitor.Greet(GREET_ROUNDSTART)
@@ -66,7 +68,9 @@
 	for (var/i = 1 to num_changelings)
 		var/mob/M = pick(candidates)
 		assigned += M
-		candidates -= M
+		for(var/extra_candidate in candidates)
+			if(extra_candidate == M)
+				candidates -= M
 		var/datum/role/changeling/newChangeling = new
 		newChangeling.AssignToRole(M.mind,1)
 		newChangeling.Greet(GREET_ROUNDSTART)
@@ -98,7 +102,9 @@
 	for (var/i = 1 to num_vampires)
 		var/mob/M = pick(candidates)
 		assigned += M
-		candidates -= M
+		for(var/extra_candidate in candidates)
+			if(extra_candidate == M)
+				candidates -= M
 		var/datum/faction/vampire/fac = ticker.mode.CreateFaction(/datum/faction/vampire, null, 1)
 		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
 		newVampire.Greet(GREET_MASTER)
@@ -143,7 +149,9 @@
 	var/mob/M = pick(candidates)
 	if (M)
 		assigned += M
-		candidates -= M
+		for(var/extra_candidate in candidates)
+			if(extra_candidate == M)
+				candidates -= M
 		var/datum/role/wizard/newWizard = new
 		newWizard.AssignToRole(M.mind,1)
 		roundstart_wizards += newWizard
@@ -197,7 +205,9 @@
 	var/mob/M = pick(candidates)
 	if (M)
 		assigned += M
-		candidates -= M
+		for(var/extra_candidate in candidates)
+			if(extra_candidate == M)
+				candidates -= M
 		var/datum/role/wizard/newWizard = new
 		newWizard.AssignToRole(M.mind,1)
 		var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
@@ -249,7 +259,9 @@
 			break
 		var/mob/M = pick(candidates)
 		assigned += M
-		candidates -= M
+		for(var/extra_candidate in candidates)
+			if(extra_candidate == M)
+				candidates -= M
 		var/datum/role/cultist/newCultist = new
 		newCultist.AssignToRole(M.mind,1)
 		cult.HandleRecruitedRole(newCultist)
@@ -336,7 +348,9 @@
 			break
 		var/mob/M = pick(candidates)
 		assigned += M
-		candidates -= M
+		for(var/extra_candidate in candidates)
+			if(extra_candidate == M)
+				candidates -= M
 		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new
@@ -438,6 +452,9 @@
 	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
 	for (var/i = 1 to min(blob_number, candidates.len))
 		var/mob/M = pick(candidates)
+		for(var/extra_candidate in candidates)
+			if(extra_candidate == M)
+				candidates -= M
 		blob_fac.HandleNewMind(M.mind)
 		var/datum/role/blob = M.mind.GetRole(BLOBOVERMIND)
 		blob.Greet(GREET_ROUNDSTART)
@@ -518,7 +535,9 @@
 			break
 		var/mob/M = pick(candidates)
 		assigned += M
-		candidates -= M
+		for(var/extra_candidate in candidates)
+			if(extra_candidate == M)
+				candidates -= M
 		var/datum/role/revolutionary/leader/lenin = new
 		lenin.AssignToRole(M.mind, 1, 1)
 		R.HandleRecruitedRole(lenin)
@@ -562,7 +581,9 @@
 /datum/dynamic_ruleset/roundstart/grinch/execute()
 	var/mob/M = pick(candidates)
 	assigned += M
-	candidates -= M
+	for(var/extra_candidate in candidates)
+		if(extra_candidate == M)
+			candidates -= M
 	var/datum/role/grinch/G = new
 	G.AssignToRole(M.mind,1)
 	G.Greet(GREET_ROUNDSTART)
