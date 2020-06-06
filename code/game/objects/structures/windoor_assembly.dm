@@ -86,8 +86,10 @@ obj/structure/windoor_assembly/Destroy()
 			windoor.req_one_access = electronics.conf_access
 		else
 			windoor.req_access = electronics.conf_access
+		electronics.forceMove(windoor)
+		windoor.electronics = electronics
+		electronics.installed = TRUE
 		windoor.set_electronics()
-		qdel(electronics)
 		electronics = null
 
 
