@@ -107,7 +107,7 @@ TODO: literally every alarm but SPS alarms.
 	var/message = "Alert. [alerttype]"
 	if(verbose)
 		say(message)
-	playsound(src,'sound/machines/radioboop.ogg',40,1)
+		playsound(src,'sound/machines/radioboop.ogg',40,1)
 	flick("secalert-update", src)
 	nanomanager.update_uis(src)
 	update_icon(showalert = verbose)
