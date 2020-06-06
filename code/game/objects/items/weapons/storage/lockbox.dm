@@ -185,7 +185,7 @@
 	var/alerttype = code
 	var/alertarea = get_area(src)
 	var/alerttime = worldtime2text()
-	var/verbose = TRUE
+	var/verbose = FALSE
 	var/transmission_data = "[alerttype] - [alerttime] - [alertarea] ([x0],[y0],[z0])"
 	for(var/obj/machinery/computer/security_alerts/receiver in security_alerts_computers)
 		if(receiver && !receiver.stat)

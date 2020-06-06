@@ -110,7 +110,7 @@ TODO: literally every alarm but SPS alarms.
 	playsound(src,'sound/machines/radioboop.ogg',40,1)
 	flick("secalert-update", src)
 	nanomanager.update_uis(src)
-	update_icon(showalert = TRUE)
+	update_icon(showalert = verbose)
 
 /obj/machinery/computer/security_alerts/say_quote(text)
 	return "reports, [text]."
