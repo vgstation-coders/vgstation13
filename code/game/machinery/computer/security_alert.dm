@@ -17,7 +17,7 @@ TODO: literally every alarm but SPS alarms.
 	circuit = "/obj/item/weapon/circuitboard/security_alerts"
 	icon_state = "secalert"
 	var/list/saved_security_alerts = list()
-	var/last_alert_time = 0
+	var/new_alert_indicator = FALSE
 
 	light_color = LIGHT_COLOR_RED
 
@@ -42,15 +42,15 @@ TODO: literally every alarm but SPS alarms.
 /obj/machinery/computer/security_alerts/attack_hand(mob/user as mob)
 	add_fingerprint(user)
 	ui_interact(user)
-	update_icon(showalert = FALSE)
+	update_icon(new_alert_indicator = FALSE)
 
-/obj/machinery/computer/security_alerts/update_icon(var/showalert = FALSE)
+/obj/machinery/computer/security_alerts/update_icon()
 	..()
 	if(stat & (NOPOWER|BROKEN))
 		return
 	else
 		icon_state = "secalert"
-	if(showalert)
+	if(new_alert_indicator)
 		overlays += image(icon = icon, icon_state = "secalert-newalerts")
 	else
 		overlays = 0
@@ -108,9 +108,10 @@ TODO: literally every alarm but SPS alarms.
 	if(verbose)
 		say(message)
 		playsound(src,'sound/machines/radioboop.ogg',40,1)
+		new_alert_indicator = TRUE
 	flick("secalert-update", src)
 	nanomanager.update_uis(src)
-	update_icon(showalert = verbose)
+	update_icon()
 
 /obj/machinery/computer/security_alerts/say_quote(text)
 	return "reports, [text]."
