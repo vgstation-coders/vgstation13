@@ -38,25 +38,12 @@
 	var/errorMessage = "No errors"
 	var/badSwap = FALSE
 	var/malfSwap = FALSE //Triggers malfunction if true
-	var/list/illegalSwap = list( //Might break the game/remove the player from the round
-			/mob/living/simple_animal/space_worm,
-			/mob/living/simple_animal/hostile/humanoid,
-			/mob/living/simple_animal/hostile/asteroid/hivelordbrood,
-			/mob/living/simple_animal/hologram,
-			/mob/living/slime_pile,
-			/mob/living/adamantine_dust,
-			/mob/living/simple_animal/hostile/viscerator,
-			/mob/living/simple_animal/hostile/mining_drone,
-			/mob/living/simple_animal/bee,
-			/mob/living/simple_animal/hostile/hivebot/tele,
-			/mob/living/simple_animal/hostile/humanoid/surgeon/boss,
-			/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,
-			/mob/living/simple_animal/hostile/roboduck
-			)
+	var/list/illegalSwap = list() //Might break the game/remove the player from the round. If you get mechahitler in there you deserve your round, though
 
 //////Parts and connection/////////
 
 /obj/machinery/mind_machine/mind_machine_hub/New()
+	illegalSwap = boss_mobs + blacklisted_mobs - list(/mob/living/simple_animal/hostile/mechahitler, /mob/living/simple_animal/hostile/alien/queen/large, /mob/living/simple_animal/hostile/retaliate/cockatrice)
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/mind_machine_hub,
 		/obj/item/weapon/stock_parts/console_screen,
@@ -133,7 +120,7 @@
 		qdel(A)
 		return
 	if(istype(A, /obj/item/device/soulstone))
-		if(soulShardSafety != 0)
+		if(soulShardSafety != FALSE)
 			to_chat(user, "That slot is full!")
 			return
 		if(A.contents.len)
@@ -306,6 +293,12 @@
 			mindTypeOne = "Artificial" //Silicon player, obviously
 		else
 			mindTypeOne = "Higher" //Player controlled
+	if(isvampire(S) || isanycultist(S) || ischangeling(S) || ismalf(S))
+		mindTypeOne = "Shielded" //Mostly to fix spell bugs but also tinfoil
+	if((ishigherbeing(S)) || (ismonkey(S)))
+		var/mob/living/carbon/T = S
+		if(T.is_wearing_item(/obj/item/clothing/head/tinfoil))
+			mindTypeTwo = "Shielded"
 	S = occupantTwo
 	occupantNameTwo = S.name //and for pod two
 	switch(S.stat)
@@ -322,6 +315,12 @@
 			mindTypeTwo = "Artificial"
 		else
 			mindTypeTwo = "Higher"
+	if(isvampire(S) || isanycultist(S) || ischangeling(S) || ismalf(S))
+		mindTypeTwo = "Shielded"
+	if((ishigherbeing(S)) || (ismonkey(S)))
+		var/mob/living/carbon/T = S
+		if(T.is_wearing_item(/obj/item/clothing/head/tinfoil))
+			mindTypeTwo = "Shielded"
 	currentlySwapping = FALSE
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/swapOccupants(var/mob/living/M)
@@ -336,16 +335,26 @@
 	if(bluespaceConduit == 0)
 		errorMessage = "Conduit requires charge"
 		return
-	if(occupantStatOne == DEAD || occupantStatTwo == DEAD)
-		errorMessage = "Living mind required"
+	if(mindTypeOne == "Shielded" || mindTypeTwo == "Shielded")
+		errorMessage = "Critical error, aborting"
+		spark(src)
+		spark(connectOne)
+		spark(connectTwo)
+		unlockPods()
 		return
-	if(is_type_in_list(occupantOne, illegalSwap) || is_type_in_list(occupantTwo, illegalSwap))
-		malfSwap = TRUE //fun sanity check. Can't send their mind into the illegal body.
+	if(occupantStatOne == "Dead" || occupantStatTwo == "Dead")
+		if(!soulShardSafety) //Secrets
+			errorMessage = "Living mind required"
+			return
+		soulShardSafety = FALSE
+		errorMessage = "Warning: Unknown internal reaction"
 	currentlySwapping = TRUE
 	bluespaceConduit -= 1
 	icon_state = "mind_hub_active"
 	connectOne.icon_state = "mind_pod_active"
 	connectTwo.icon_state = "mind_pod_active"
+	if(is_type_in_list(occupantOne, illegalSwap) || is_type_in_list(occupantTwo, illegalSwap))
+		malfSwap = TRUE //fun sanity check. Can't send their mind into the illegal body.
 	M = occupantOne //First we check if they have any pocket-pets
 	for(var/obj/item/weapon/holder/i in get_contents_in_object(M))  //Carp in pack? Outta luck, Jack
 		theFly += i
