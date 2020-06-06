@@ -177,6 +177,9 @@ var/list/SPS_list = list()
 		return
 	send_signal(wearer, src, "SPS [gpstag]: Code Red")
 
+/obj/item/device/gps/secure/get_gps_list()
+	return SPS_list
+
 /obj/item/device/gps/secure/stripped(mob/wearer, mob/stripper)
 	if(!transmitting)
 		return
