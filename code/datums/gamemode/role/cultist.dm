@@ -11,6 +11,7 @@
 	var/holywarning_cooldown = 0
 	var/list/conversion = list()
 	var/second_chance = 1
+	var/starting_cultist = 0
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
@@ -117,7 +118,9 @@
 				so I can pull this place onto my plane of existence.<br>
 				You've managed to get a job here, and the time has come to put our plan into motion.<br>
 				However, the veil is currently so thick that I can barely bestow any power to you.<br>
-				Other cultists made their way into the crew. Talk to them. <span class='danger'>Self Other Technology</span>!<br>
+				Other cultists made their way into the crew. Talk to them.<br>
+				Starting cultists can use the <span class='danger'>.x</span> language to silently communicate<br>
+				with all cultists, or you can use <span class='danger'>Self Other Technology</span>!<br>
 				Meet up with them. Raise an altar in my name. <span class='danger'>Blood Technology Join</span>!<br>
 				</span>"})
 		if (GREET_ADMINTOGGLE)
@@ -384,3 +387,6 @@
 
 			message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
 			log_narspeak("[key_name(usr)] Voice of Nar-Sie (privately to [mob.real_name]): [message]")
+
+/datum/role/cultist/starter
+	starting_cultist = 1

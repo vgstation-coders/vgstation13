@@ -486,9 +486,10 @@ var/list/department_radio_keys = list(
 	if(setting == 0) //overridden for constructs
 		return
 
-	if (iscultist(src))
+	var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+	if (cultist)
 		if(setting == 1)
-			if (checkTattoo(TATTOO_CHAT))
+			if (checkTattoo(TATTOO_CHAT) || cultist.starting_cultist)
 				return 1
 		if(setting == 2)
 			return 1
