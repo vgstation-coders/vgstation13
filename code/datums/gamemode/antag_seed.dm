@@ -3,7 +3,7 @@
 //Currently only built for roundstart antags
 
 proc/roundstart_generate_antag_seed(var/list/candidates)
-	var/list/placeholder_list //This is where we will store all the candidates
+	var/list/placeholder_list = candidates //This is where we will store all the candidates
 	for(var/mob/new_player/user in candidates)
 		var/tally = 1
 		if(!user.client) //There is no player for it to be an antag
@@ -26,6 +26,6 @@ proc/roundstart_generate_antag_seed(var/list/candidates)
 			tally += 1
 		if(C.prefs.language == LANGUAGE_GUTTER)
 			tally += 1
-		for(var/i = 0, i < tally, i++)
+		for(var/i = 1, i < tally, i++) //Start at 1 since we already added the candidates
 			placeholder_list += user
 	return placeholder_list
