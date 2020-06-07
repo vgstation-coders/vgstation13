@@ -5,6 +5,7 @@
 	flags = FPRINT
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	body_parts_covered = HEAD|EARS|EYES|MASKHEADHAIR
+	body_parts_visible_override = FACE
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
@@ -18,6 +19,7 @@
 	armor = list(melee = 50, bullet = 25, laser = 45, energy = 15, bomb = 30, bio = 0, rad = 0)
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	body_parts_covered = FULL_HEAD|MASKHEADHAIR
+	body_parts_visible_override = EYES|BEARD
 	var/state = 1
 
 /obj/item/clothing/head/helmet/visor/New()
@@ -89,6 +91,7 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	siemens_coefficient = 0.5
 	eyeprot = 1
+	body_parts_visible_override = BEARD
 
 /obj/item/clothing/head/helmet/thunderdome
 	name = "\improper Thunderdome helmet"
@@ -167,6 +170,7 @@
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 	item_state = "megahelmet"
 	siemens_coefficient = 1
+	body_parts_visible_override = BEARD
 
 /obj/item/clothing/head/helmet/protohelmet
 	name = "Prototype Helmet"

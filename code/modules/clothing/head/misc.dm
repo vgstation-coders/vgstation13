@@ -84,6 +84,7 @@
 	desc = "It's unspeakably stylish."
 	icon_state = "hasturhood"
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
+	body_parts_visible_override = FACE
 
 /obj/item/clothing/head/vamphunter
 	name = "vampire hunter circlet"

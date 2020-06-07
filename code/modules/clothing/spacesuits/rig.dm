@@ -676,6 +676,7 @@
 	pressure_resistance = 4 * ONE_ATMOSPHERE
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
 	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_visible_override = EYES
 	heat_conductivity = 0
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
