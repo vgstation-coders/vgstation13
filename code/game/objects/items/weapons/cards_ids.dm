@@ -180,6 +180,24 @@
 		return
 	target.emag_act(user)
 
+/obj/item/weapon/card/emag/lesser
+	desc = "It's a card with a magnetic strip attached to some circuitry. This one seems flimsy"
+	name = "one use cryptographic sequencer"
+	icon_state = "emag"
+	item_state = "card-id"
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=2"
+
+/obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
+	..()
+	to_chat(world, "I HAVE BEEN MERGED")
+	sleep(3 SECONDS)
+	explosion(get_turf(user),500,500,500,500,1,0)
+	to_chat(user, "The magnetic strip tears away")
+	user.drop_item(src, force_drop=1)
+	var/obj/item/weapon/card/id/I = new (get_turf(user))
+	qdel(src)
+
+
 /obj/item/weapon/card/id
 	name = "identification card"
 	desc = "A card used to provide ID and determine access across the station. Features a virtual wallet accessible by PDA."

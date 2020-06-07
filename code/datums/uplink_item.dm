@@ -362,11 +362,17 @@ var/list/uplink_items = list()
 /datum/uplink_item/device_tools
 	category = "Infiltration and Hacking Tools"
 
+/datum/uplink_item/device_tools/lesser_emag
+	name = "One Use Cryptographic Sequencer"
+	desc = "Carries all the potential and versitility of a standard cryptographic sequencer, however after a single use the modifications break apart, leaving a standard ID card"
+	item = /obj/item/weapon/card/emag/lesser
+	cost = 2
+
 /datum/uplink_item/device_tools/emag
 	name = "Cryptographic Sequencer"
 	desc = "Colloquially referred to as an \"emag\". This modified ID card unlocks hidden Syndicate programming in most Nanotrasen electronic devices, subverting intended functions and bypassing most security mechanisms. Most machines will show signs of tampering during and after use and the emag itself is blatant when spotted."
 	item = /obj/item/weapon/card/emag
-	cost = 6
+	cost = 16
 
 /datum/uplink_item/device_tools/emag/new_uplink_item(new_item, turf/location, mob/user)
 	return new new_item(location, 1) //Uplink emags are infinite
