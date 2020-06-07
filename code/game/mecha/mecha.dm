@@ -82,15 +82,7 @@
 	var/max_equip = 3 //The maximum amount of equipment this mecha an hold at one time.
 
 	var/turf/crashing = null
-	var/list/mech_parts = list(
-						/obj/machinery/portable_atmospherics/canister, //I shit you not this thing uses a literal air canister
-						/obj/item/device/radio,
-						/obj/item/mecha_parts,
-						/obj/item/device/mmi,
-						/obj/item/mecha_parts/mecha_tracking,
-						/obj/item/device/radio/electropack,
-						/obj/machinery/portable_atmospherics/scrubber/mech
-						)
+	var/list/mech_parts = list()
 
 	var/lock_controls = 0
 	var/list/intrinsic_spells = null
@@ -165,6 +157,7 @@
 			E.forceMove(T)
 			qdel(E)
 	equipment.Cut() //Equipment is handled above, either by being deleted, or by being moved to the wreckage.
+	mech_parts.Cut() //We don't need this list anymore, too.
 	mechas_list -= src //global mech list
 	if(cell)
 		qdel(cell)
@@ -217,10 +210,12 @@
 
 /obj/mecha/proc/add_airtank()
 	internal_tank = new /obj/machinery/portable_atmospherics/canister/air(src)
+	mech_parts.Add(internal_tank)
 	return internal_tank
 
 /obj/mecha/proc/add_cell()
 	cell = new cell_type(src)
+	mech_parts.Add(cell)
 
 /obj/mecha/proc/add_cabin()
 	cabin_air = new
@@ -229,6 +224,7 @@
 	cabin_air.adjust_multi(
 		GAS_OXYGEN, O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature),
 		GAS_NITROGEN, N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
+	mech_parts.Add(cabin_air)
 	return cabin_air
 
 /obj/mecha/proc/add_radio()
@@ -237,9 +233,11 @@
 	radio.icon = icon
 	radio.icon_state = icon_state
 	radio.subspace_transmission = 1
+	mech_parts.Add(radio)
 
 /obj/mecha/proc/add_tracking_beacon()
 	tracking = new(src)
+	mech_parts.Add(tracking)
 	return tracking
 
 /obj/mecha/proc/add_iterators()
@@ -821,17 +819,20 @@
 				if ("power cell")
 					if(!cell)
 						return
-					cell.forceMove(src.loc)
+					cell.forceMove(loc)
+					mech_parts.Remove(cell)
 					cell = null
 				if ("exosuit tracking beacon")
 					if(!tracking)
 						return
-					tracking.forceMove(src.loc)
+					tracking.forceMove(loc)
+					mech_parts.Remove(tracking)
 					tracking = null
 				if ("electropack")
 					if(!electropack)
 						return
-					electropack.forceMove(src.loc)
+					electropack.forceMove(loc)
+					mech_parts.Remove(electropack)
 					electropack = null
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You pry out \the [remove] from \the [src].</span>")
@@ -854,31 +855,34 @@
 		return
 	else if(istype(W, /obj/item/weapon/cell))
 		if(state==STATE_BOLTSOPENED)
-			if(!src.cell)
+			if(!cell)
 				if(user.drop_item(W, src))
 					to_chat(user, "You install the powercell.")
-					src.cell = W
-					src.log_message("Powercell installed.")
+					cell = W
+					mech_parts.Add(cell)
+					log_message("Powercell installed.")
 			else
 				to_chat(user, "There's already a powercell installed.")
 		return
 	else if(istype(W, /obj/item/mecha_parts/mecha_tracking))
 		if(state==STATE_BOLTSOPENED)
-			if(!src.tracking)
+			if(!tracking)
 				if(user.drop_item(W, src))
 					to_chat(user, "You install the tracking beacon and safeties.")
-					src.tracking = W
-					src.log_message("Exosuit tracking beacon installed.")
+					tracking = W
+					mech_parts.Add(tracking)
+					log_message("Exosuit tracking beacon installed.")
 			else
 				to_chat(user, "There's already a tracking beacon installed.")
 		return
 	else if(istype(W, /obj/item/device/radio/electropack))
 		if(state==STATE_BOLTSOPENED)
-			if(!src.electropack)
+			if(!electropack)
 				if(user.drop_item(W, src))
 					to_chat(user, "You rig the electropack to the cockpit.")
-					src.electropack = W
-					src.log_message("Emergency ejection routines installed.") //not exactly a legitimate upgrade!
+					electropack = W
+					mech_parts.Add(electropack)
+					log_message("Emergency ejection routines installed.") //not exactly a legitimate upgrade!
 			else
 				to_chat(user, "There's already an electropack installed.")
 		return
@@ -1223,6 +1227,7 @@
 		brainmob.forceMove(src) //should allow relaymove
 		brainmob.canmove = 1
 		mmi_as_oc.forceMove(src)
+		mech_parts.Add(mmi_as_oc)
 		mmi_as_oc.mecha = src
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
@@ -1313,13 +1318,18 @@
 		go_out(over_location)
 	add_fingerprint(usr)
 
-/obj/mecha/proc/empty_bad_contents() //stuff that shouldn't be there, possibly caused by the driver dropping it while inside the mech
+/obj/mecha/proc/empty_bad_contents(var/list/extra_stuff=null) //stuff that shouldn't be there, possibly caused by the driver dropping it while inside the mech
 	for(var/obj/O in src)
-		if((O != cell) && !is_type_in_list(O,mech_parts)) //Typechecking isn't a good idea when you can drop those types inside the mech...
-			O.forceMove(src.loc)
+		if(O in mech_parts) //One of our internal components
+			continue
+		if(O in equipment) //It's our equipment
+			continue
+		if(extra_stuff && (O in extra_stuff)) //Something else we need to keep? Say no more!
+			continue
+		O.forceMove(loc) //Somehow got inside, drop it.
 
 /obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
-	if(!src.occupant)
+	if(!occupant)
 		return
 
 	if(lock_controls) //No ejecting while using the Gravpult!
@@ -1334,40 +1344,40 @@
 
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
-		mob_container = src.occupant
-	else if(istype(occupant, /mob/living/carbon/brain))
+		mob_container = occupant
+	else if(isbrain(occupant))
 		var/mob/living/carbon/brain/brain = occupant
 		mob_container = brain.container
 	else
 		return
+
 	var/obj/structure/deathsquad_gravpult/G = locate() in get_turf(src)
 	if(mob_container.forceMove(exit))//ejecting mob container
-		src.log_message("[mob_container] moved out.")
+		log_message("[mob_container] moved out.")
 		occupant.reset_view()
 		empty_bad_contents()
-		src.occupant << browse(null, "window=exosuit")
+		occupant << browse(null, "window=exosuit")
 		remove_mech_spells()
 		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
 			var/obj/item/device/mmi/mmi = mob_container
 			if(mmi.brainmob)
 				occupant.forceMove(mmi)
+				mech_parts.Remove(mmi)
+			occupant.canmove = FALSE
 			mmi.mecha = null
-			src.occupant.canmove = 0
-			src.verbs += /obj/mecha/verb/eject
+			verbs += /obj/mecha/verb/eject
 
 		//change the cursor
-		if(src.occupant && src.occupant.client)
-			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
+		if(occupant && occupant.client)
+			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
 
-		src.occupant = null
-		src.icon_state = src.initial_icon+"-open"
+		occupant = null
+		icon_state = initial_icon+"-open"
 		if(!lights) //if the lights are off, turn off the cabin lights
 			set_light(0)
-		src.dir = dir_in
-		if (G)
+		dir = dir_in
+		if(G)
 			G.hud_off()
-
-	return
 
 /obj/mecha/proc/shock_n_boot(var/exit = loc)
 	spark(src, 2, FALSE)

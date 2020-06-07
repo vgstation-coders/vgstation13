@@ -654,7 +654,7 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LIVING 25		//This what players have by default.
 
 #define SEE_INVISIBLE_LEVEL_ONE 35	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_ONE 35	//Unused.
+#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams.
 
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
 #define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
@@ -922,8 +922,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define PLASMA_IMMUNE 512
 #define RAD_GLOW 1024
 #define ELECTRIC_HEAL 2048
-#define IS_SPECIES_MUTE 4096
-#define REQUIRE_DARK 8192
+#define SPECIES_NO_MOUTH 4096
+//#define REQUIRE_DARK 8192
 #define RAD_IMMUNE 16384
 
 //Species anatomical flags.

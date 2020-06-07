@@ -75,9 +75,8 @@
 
 /obj/item/candle/Crossed(var/obj/Proj)
 	if(isbeam(Proj))
-		//Can also be an obj/effect, but they both have the damage var
-		var/obj/item/projectile/beam/P = Proj
-		if(P.damage != 0)
+		var/obj/item/projectile/beam/P = Proj//could be a laser beam or an emitter beam, both feature the get_damage() proc, for now...
+		if(P.get_damage() != 0)
 			light("", 1)
 
 

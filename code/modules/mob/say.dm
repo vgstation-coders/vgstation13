@@ -6,6 +6,7 @@
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
 	usr.say(to_utf8(message, usr))
+	remove_typing_indicator()
 
 /mob/verb/whisper(message as text)
 	set name = "Whisper"
@@ -22,10 +23,12 @@
 
 	if(say_disabled)	//This is here to try to identify lag problems
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
+		remove_typing_indicator()
 		return
 
 	if(!usr.stat && (usr.status_flags & FAKEDEATH))
 		to_chat(usr, "<span class='danger'>Doing this will give us away!</span>")
+		remove_typing_indicator()
 		return
 
 	message = utf8_sanitize(message, usr, MAX_MESSAGE_LEN)
@@ -34,6 +37,7 @@
 		usr.emote_dead(message)
 	else if(message)
 		usr.emote("me",usr.emote_type,message)
+	remove_typing_indicator()
 
 /datum/deadchat_listener //This datum allows you to read the currently funky deadchat. Simply make a child, instantiate an instance, and add functions to add/remove it from the global_deadchat_listeners.
 	var/name = "default"

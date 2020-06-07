@@ -36,6 +36,26 @@
 						M.adjustBruteLoss(5)
 					nutrition += 10
 
+	//Code for devouring things by standing on them, for mushroom men
+	if((species.flags & SPECIES_NO_MOUTH) && (species.flags & IS_PLANT))
+		var/turf/T = get_turf(src)
+		var/list/foods = prune_list_to_type(T.contents,/obj/item/weapon/reagent_containers/food/snacks)
+		if(foods && foods.len) //don't send a message if we aren't standing on at least one food
+			var/fullness = nutrition + (reagents.get_reagent_amount(NUTRIMENT) * 25)
+			switch(fullness)
+				if(0 to 50)
+					to_chat(src,"<span class='notice'>You dissolve the food with urgency.</span>")
+				if(51 to 150)
+					to_chat(src,"<span class='notice'>You dissolve the food with purpose.</span>")
+				if(151 to 350)
+					to_chat(src,"<span class='notice'>You dissolve the food.</span>")
+				if(351 to INFINITY)
+					to_chat(src,"<span class='notice'>You dissolve the food with lethargy.</span>")
+
+		for(var/obj/item/weapon/reagent_containers/food/snacks/S in foods)
+			S.consume(src,FALSE,FALSE,lying ? 1 : 0.1) //Eat at 10% speed if not laying down
+
+
 	//I put the nutriment stuff here
 
 	if(!hardcore_mode_on)

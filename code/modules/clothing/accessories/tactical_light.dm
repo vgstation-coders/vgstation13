@@ -1,6 +1,7 @@
 /obj/item/clothing/accessory/taclight
 	name = "tactical light"
 	desc = "This is attached to something."
+	icon = 'icons/obj/lighting.dmi'
 	icon_state = "taclight"
 	accessory_exclusion = ACCESSORY_LIGHT
 	var/obj/item/device/flashlight/tactical/source_light
@@ -19,13 +20,14 @@
 /obj/item/clothing/accessory/taclight/proc/generate_icon_state()
 	if(!attached_to || !icon_state)
 		return
-	icon_state = null
+	icon_state = initial(icon_state)
 	if(istype(attached_to, /obj/item/clothing/head))
 		icon_state = "[initial(icon_state)]_helmet"
 	if(istype(attached_to, /obj/item/clothing/suit/armor))
 		icon_state = "[initial(icon_state)]_armor"
 	if(source_light && source_light.on)
-		icon_state = "[icon_state]_on"
+		icon_state = "[icon_state]-on"
+	
 
 /obj/item/clothing/accessory/taclight/can_attach_to(obj/item/clothing/C)
 	return (istype(C, /obj/item/clothing/head) || istype(C, /obj/item/clothing/suit/armor))
