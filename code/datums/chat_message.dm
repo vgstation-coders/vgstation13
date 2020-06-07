@@ -238,14 +238,14 @@
 	m *= 255
 	switch(h_int)
 		if(0)
-			return "#[num2hex(c, 2)][num2hex(x, 2)][num2hex(m, 2)]C8"
+			return "[rgb(c,x,m)]C8"
 		if(1)
-			return "#[num2hex(x, 2)][num2hex(c, 2)][num2hex(m, 2)]C8"
+			return "[rgb(x,c,m)]C8"
 		if(2)
-			return "#[num2hex(m, 2)][num2hex(c, 2)][num2hex(x, 2)]C8"
+			return "[rgb(m,c,x)]C8"
 		if(3)
-			return "#[num2hex(m, 2)][num2hex(x, 2)][num2hex(c, 2)]C8"
+			return "[rgb(m,x,c)]C8"
 		if(4)
-			return "#[num2hex(x, 2)][num2hex(m, 2)][num2hex(c, 2)]C8"
+			return "[rgb(x,m,c)]C8"
 		if(5)
-			return "#[num2hex(c, 2)][num2hex(m, 2)][num2hex(x, 2)]C8"
+			return "[rgb(c,m,x)]C8"
