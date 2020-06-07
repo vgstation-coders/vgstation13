@@ -955,7 +955,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/clown_mime/punchline
 	name = "Punchline"
 	desc = "A high risk high reward abomination combining experimental phazon and bananium technologies. Wind-up Punchline to charge it. Enough charge and your targets will slip through reality. Warning: Forcing wind-ups beyond the limiter may reverse the prototype phazite honkpacitors and disrupt reality around the user."
-	item = /obj/item/weapon/gun/hookshot/whip/clownbox
+	item = /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox
 	cost = 14
 	discounted_cost = 10
 	jobs_with_discount = list("Clown")

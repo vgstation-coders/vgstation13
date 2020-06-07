@@ -245,11 +245,10 @@
 	..(A)
 
 //Wind-up Boxes///////////////////////////////////////////////////////////////////
-
-/obj/item/projectile/hookshot/whip/bootbox
-	name = "boot-in-a-box"
-	icon_state = "spring"
-	icon_name = "spring"
+/obj/item/projectile/hookshot/whip/windup_box
+	name = ""
+	icon_state = ""
+	icon_name = ""
 	nodamage = 0
 	damage = 0
 	sharpness = 0
@@ -258,21 +257,29 @@
 	can_tether = FALSE
 	var/windUp = 0
 	var/springForce = 0
+	var/damMod = 0
 
-/obj/item/projectile/hookshot/whip/bootbox/OnFired()
+/obj/item/projectile/hookshot/whip/windup_box/OnFired()
 	..()
-	var/obj/item/weapon/gun/hookshot/whip/bootbox/T = shot_from
+	var/obj/item/weapon/gun/hookshot/whip/windup_box/T = shot_from
 	if(istype(T))
-		src.windUp = T.windUp
-		src.springForce = T.springForce //inherits all the oomph from the box itself
-		damage = (windUp + springForce*5)
+		windUp = T.windUp
+		springForce = T.springForce //inherits all the oomph from the box itself
+		damage = (windUp + springForce*damMod)
 		T.maxlength += springForce
 		T.windUp = 0
 		T.overWind = 0
 		T.springForce = 0 //resets the box's values but keeps its own for the hit
 
-/obj/item/projectile/hookshot/whip/bootbox/on_hit(atom/target as mob|obj|turf|area)
-	var/obj/item/weapon/gun/hookshot/whip/bootbox/T = shot_from
+/obj/item/projectile/hookshot/whip/windup_box/bootbox
+	name = "boot-in-a-box"
+	icon_state = "spring"
+	icon_name = "spring"
+	damMod = 5
+
+
+/obj/item/projectile/hookshot/whip/windup_box/bootbox/on_hit(atom/target as mob|obj|turf|area)
+	var/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/T = shot_from
 	if(istype(target,/mob/living))
 		var/mob/living/K = target
 		switch(windUp)
@@ -283,42 +290,23 @@
 			if(17 to INFINITY) //launches the target away with force/distance proportional to how much we cranked
 				var/turf/Q = get_turf(K)
 				var/turf/endLocation
-				var/throwdir = (usr.dir)
+				var/throwdir = (dir)
 				endLocation = get_ranged_target_turf(Q, throwdir, springForce)
 				K.throw_at(endLocation,springForce,windUp)
-				K.Knockdown(2+springForce) //Gotta be really tempting to blow your hands up
-				if (prob(15*springForce))
+				K.Knockdown(2+springForce)
+				if (prob(10*springForce))
 					explosion(K.loc,-1,0,0)
 					explosion(T.loc,-1,0,1)
 					qdel(T)
 
 
-/obj/item/projectile/hookshot/whip/clownbox
+/obj/item/projectile/hookshot/whip/windup_box/clownbox
 	name = "Punchline"
 	icon_state = "clown"
 	icon_name = "clown"
-	nodamage = 0
-	damage = 0
-	sharpness = 0
-	kill_count = 20
-	failure_message = ""
-	can_tether = FALSE
-	var/windUp = 0
-	var/springForce = 0
+	damMod = 3
 
-/obj/item/projectile/hookshot/whip/clownbox/OnFired()
-	..()
-	var/obj/item/weapon/gun/hookshot/whip/clownbox/T = shot_from
-	if(istype(T))
-		src.windUp = T.windUp
-		src.springForce = T.springForce
-		damage = (windUp + springForce*3)
-		T.maxlength += springForce
-		T.windUp = 0
-		T.overWind = 0
-		T.springForce = 0
-
-/obj/item/projectile/hookshot/whip/clownbox/on_hit(atom/target as mob|obj|turf|area)
+/obj/item/projectile/hookshot/whip/windup_box/clownbox/on_hit(atom/target as mob|obj|turf|area)
 	if(istype(target,/mob/living))
 		var/mob/living/K = target
 		switch(windUp)
@@ -328,7 +316,7 @@
 			if(16 to INFINITY) //Like the boot-in-a-box knockback except it phases them through walls.
 				var/turf/Q = get_turf(K)
 				var/turf/endLocation
-				var/throwdir = (usr.dir)
+				var/throwdir = (dir)
 				endLocation = get_ranged_target_turf(Q, throwdir, 2+springForce)
 				K.Knockdown(3+springForce)
 				K.Stun(3)
@@ -337,6 +325,6 @@
 					K.forceMove(endLocation, no_tp=1, harderforce=0, glide_size_override=0)
 					var/oldIcon = K.icon
 					K.icon = 'icons/obj/wind_up.dmi'//flick is dumb, it works dumb
-					animate(K,alpha = 100, time =1)
+					K.alpha = 100
 					flick("bananaphaz_flick", K)
 					K.icon = oldIcon

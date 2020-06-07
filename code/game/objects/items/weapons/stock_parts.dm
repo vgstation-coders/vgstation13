@@ -281,12 +281,3 @@
 	desc = "A large piece of equipment used to open a window into the subspace dimension."
 	origin_tech = Tc_MAGNETS + "=5;" + Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 	starting_materials = list(MAT_IRON = 50)
-
-//Other
-
-/obj/item/weapon/stock_parts/spring
-	name = "spring"
-	icon_state = "spring_stock"
-	desc = "A piece of woven metal capable of high elasticity"
-	origin_tech = Tc_MATERIALS + "=1"
-	starting_materials = list(MAT_IRON = 50)
