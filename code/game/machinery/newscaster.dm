@@ -1070,7 +1070,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	if(ishuman(user))
 		item_state = "newspaper-open"
 		user.update_inv_hand(user.active_hand)
-		spawn (10)
+		spawn (1 SECONDS)
 			if (!gcDestroyed)
 				item_state = "newspaper"
 		var/dat
