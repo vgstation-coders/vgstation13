@@ -1253,7 +1253,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	anim(target = src, a_icon = icon, flick_anim = "newscaster_print", sleeptime = 30, offX = pixel_x, offY = pixel_y)
 	playsound(get_turf(src), "sound/effects/fax.ogg", 50, 1)
 	paper_remaining--
-	spawn(8)
+	spawn(0.8 SECONDS)
 		NEWSPAPER.forceMove(get_turf(src))
 
 /obj/machinery/newscaster/proc/newsAlert(channel)   //This isn't Agouri's work, for it is ugly and vile.
