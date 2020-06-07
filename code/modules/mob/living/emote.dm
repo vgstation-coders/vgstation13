@@ -73,6 +73,7 @@
 	if(ishuman(user))
 		if(Holiday == APRIL_FOOLS_DAY && (world.time - last_gasp >= 3 SECONDS))
 			playsound(user, 'sound/misc/memedeathgasp.ogg')
+			last_gasp = world.time
 
 /datum/emote/living/carbon/drool
 	key = "drool"
