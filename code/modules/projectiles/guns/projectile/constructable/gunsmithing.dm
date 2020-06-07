@@ -762,15 +762,12 @@
 		/obj/item/weapon/bonegel,
 		/obj/item/stack/package_wrap,
 		/obj/item/stack/medical/bruise_pack/bandaid,
-		/obj/item/weapon/reagent_containers/food/snacks/caramelburger
 		)
 
 /obj/item/spring/attackby(var/obj/item/I, mob/user)
 	if((istype(I, /obj/item/clothing/shoes)) && (user.drop_item(I)))
-		var/obj/item/clothing/shoes/G = I
 		playsound(src,'sound/effects/spring.ogg', 50,1)
 		var/obj/item/weapon/windup_assembly/W = new /obj/item/weapon/windup_assembly(get_turf(src))
-		user.before_take_item(G)
 		user.before_take_item(src)
 		user.put_in_hands(W)
 		if(prob(10))
@@ -778,7 +775,6 @@
 		else
 			to_chat(user,"<span  class='notice'>You stuff the [src] firmly into the [I].</span>")
 		qdel(I)
-		I = null
 		qdel(src)
 
 /obj/item/weapon/windup_assembly/attackby(var/obj/item/K, mob/user as mob)
@@ -804,18 +800,16 @@
 					to_chat(user,"<span  class='notice'>You add a crank to the box.</span>")
 					icon_state = "windup_assembly_rods"
 		if(WINDUP_ADHESIVE)
-			if(is_type_in_list(K, windup_adhesive) && user.drop_item(K, loc))
+			if(is_type_in_list(K, windup_adhesive) && user.drop_item(K, src))
 				windupState = WINDUP_CRAYON
 				playsound(src,'sound/items/poster_ripped.ogg', 50,1)
 				to_chat(user,"<span  class='notice'>You patch up and reinforce the box.</span>")
-				user.drop_item(K, force_drop = 1)
 				qdel(K)
 				icon_state = "windup_assembly_adhesive"
 		if(WINDUP_CRAYON)
-			if(istype(K, /obj/item/toy/crayon) && user.drop_item(K,loc))
+			if(istype(K, /obj/item/toy/crayon) && user.drop_item(K,src))
 				playsound(src,'sound/misc/balloon_twist_short.ogg', 25,1)
 				to_chat(user,"<span  class='notice'>You write B for boot.</span>")
-				user.drop_item(K, force_drop = 1)
 				var/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/B = new (get_turf(user))
 				qdel(src)
 				user.put_in_hands(B)

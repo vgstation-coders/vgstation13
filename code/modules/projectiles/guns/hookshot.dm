@@ -534,8 +534,8 @@
 	maxlength = lengthDecider
 
 /obj/item/weapon/gun/hookshot/whip/windup_box/attack_self(mob/user)
-	if(user.stat != CONSCIOUS)
-		return
+	if(user.incapacitated())
+		return 1
 	state = !state
 	update_icon()
 
@@ -564,7 +564,8 @@
 	icon_state = "bootbox-[state]"
 
 /obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/attack_self(mob/user)
-	..()
+	if(..())
+		return
 	if(prob(windUp*springForce)) //prob 0 before they start forcing it, perfectly safe
 		explosion(loc,-1,0,1)
 		qdel(src)
@@ -605,7 +606,8 @@
 	icon_state = "clownbox-[state]"
 
 /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox/attack_self(mob/user)
-	..()
+	if(..())
+		return
 	if(prob(springForce*10)) //Every crank past the threshold has 10% higher chance of teleporting you a number of times equal to those cranks.
 		var/area/A = get_area(src)
 		to_chat(user, "<span class='notice'>You overload the gears. You begin slipping through reality!</span>")
