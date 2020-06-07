@@ -323,7 +323,7 @@
 
 				var/data = list("antigen" = list(task.target_name))
 				vial_datum.vial.reagents.add_reagent(VACCINE, amount, data)
-
+				isolated_antibodies[task.target_name] = 1
 				vial_datum.current_task = null
 
 				alert_noise("ping")
