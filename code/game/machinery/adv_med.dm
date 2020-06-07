@@ -570,7 +570,7 @@
 				break
 	for(var/path in organs_to_list)
 		var/datum/organ/internal/i = path
-		dat += "<td>[initial(i.name)]</td><td>-</td><td>-</td><td><font color='red'>Not Found</font></td>"
+		dat += "<tr><td>[initial(i.name)]</td><td>-</td><td>-</td><td><font color='red'>Not Found</font></td></tr>"
 	dat += "</table>"
 
 	if(occ["sdisabilities"] & BLIND)

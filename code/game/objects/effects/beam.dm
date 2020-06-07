@@ -418,13 +418,13 @@
 	// If we're master, we're actually invisible, and we're on the same tile as the machine.
 	// TODO: underlay firing machine.
 	invisibility=0
-	if(!master && !stepped)
+	if(!master)
 		stepped=1
 		invisibility=101
 
 	if (master && stepped)//fixes stacking beams due to pooling
 		for(var/obj/effect/beam/B in loc.contents)
-			if (B != src)
+			if (B != src && (B.get_master() == get_master()))
 				stepped = FALSE
 				break
 

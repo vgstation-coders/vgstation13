@@ -60,7 +60,6 @@
 	var/question = input("Write your question","Question") as message
 	if(!question)
 		return
-	question = replacetext(question, "'", "\'")
 	question = sanitizeSQL(question)
 	var/datum/DBQuery/query_polladd_question = SSdbcore.NewQuery("INSERT INTO erro_poll_question (polltype, starttime, endtime, question, adminonly, multiplechoiceoptions, createdby_ckey, createdby_ip) VALUES ('[polltype]', '[starttime]', '[endtime]', '[question]', '[adminonly]', '[choice_amount]', '[sql_ckey]', '[address]')")
 	if(!query_polladd_question.Execute())

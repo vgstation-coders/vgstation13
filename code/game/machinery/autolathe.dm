@@ -62,7 +62,7 @@
 		"Assemblies"=list(
 		new /obj/item/device/assembly/igniter(), \
 		new /obj/item/device/assembly/signaler(), \
-		/*new /obj/item/device/assembly/infra(), \*/
+		new /obj/item/device/assembly/infra(), \
 		new /obj/item/device/assembly/timer(), \
 		new /obj/item/device/assembly/voice(), \
 		new /obj/item/device/assembly/prox_sensor(), \

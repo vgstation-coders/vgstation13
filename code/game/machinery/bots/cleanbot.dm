@@ -33,7 +33,7 @@
 	var/crayon = 0
 	var/list/blacklisted_targets = list()
 	req_access = list(access_janitor)
-	bot_flags = BOT_PATROL|BOT_BEACON|BOT_NOT_CHASING
+	bot_flags = BOT_PATROL|BOT_BEACON
 	auto_patrol = TRUE
 
 	//for attack code

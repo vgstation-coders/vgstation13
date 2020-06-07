@@ -481,9 +481,9 @@
 
 		replytext = replacetext(replytext, "%BR%", "")
 		replytext = replacetext(replytext, "\n", "%BR%")
-		replytext = replacetext(replytext, "'", "\'")
 		var/text_pass = reject_bad_text(replytext,8000)
 		replytext = replacetext(replytext, "%BR%", "<BR>")
+		replytext = sanitizeSQL(replytext)
 
 		if(!text_pass)
 			to_chat(usr, "The text you entered was blank, contained illegal characters or was too long. Please correct the text and submit again.")
