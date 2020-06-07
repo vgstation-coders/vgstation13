@@ -201,6 +201,12 @@
 
 	update_mob() //Update the rest
 
+/obj/structure/bed/chair/vehicle/wheelchair/multi_people/MouseDropTo(atom/movable/C, mob/user)
+	if(user.incapacitated() || !in_range(user, src) || !in_range(src, C))
+		return
+	var/mob/M = C
+	buckle_chair(M, user)
+
 /obj/structure/bed/chair/vehicle/wheelchair/motorized
 	name = "motorized wheelchair"
 	nick = "cripplin' revenge"
