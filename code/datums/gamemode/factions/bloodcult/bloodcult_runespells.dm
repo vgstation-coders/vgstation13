@@ -1071,6 +1071,11 @@
 					if (isrobot(S))
 						var/mob/living/silicon/robot/robit = S
 						robit.disconnect_AI()
+				if (istype(victim, /mob/living/carbon/complex/gondola)) //fug.....
+					victim.icon_state_standing = pick("gondola_c","gondola_c_tome")
+					victim.icon_state_lying = "[icon_state_standing]_lying"
+					victim.icon_state_dead = "gondola_skull"
+					victim.icon_state = victim.icon_state_standing
 				return
 			if (CONVERSION_NOCHOICE)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
