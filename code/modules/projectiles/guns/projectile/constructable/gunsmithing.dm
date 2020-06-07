@@ -804,7 +804,7 @@
 					to_chat(user,"<span  class='notice'>You add a crank to the box.</span>")
 					icon_state = "windup_assembly_rods"
 		if(WINDUP_ADHESIVE)
-			if(is_type_in_list(K, windup_adhesive))
+			if(is_type_in_list(K, windup_adhesive) && user.drop_item(K, loc))
 				windupState = WINDUP_CRAYON
 				playsound(src,'sound/items/poster_ripped.ogg', 50,1)
 				to_chat(user,"<span  class='notice'>You patch up and reinforce the box.</span>")
@@ -812,7 +812,7 @@
 				qdel(K)
 				icon_state = "windup_assembly_adhesive"
 		if(WINDUP_CRAYON)
-			if(istype(K, /obj/item/toy/crayon))
+			if(istype(K, /obj/item/toy/crayon) && user.drop_item(K,loc))
 				playsound(src,'sound/misc/balloon_twist_short.ogg', 25,1)
 				to_chat(user,"<span  class='notice'>You write B for boot.</span>")
 				user.drop_item(K, force_drop = 1)
