@@ -1,4 +1,3 @@
-
 //override procs in children as necessary
 /datum/artifact_effect
 	var/effecttype = "unknown"		//purely used for admin checks ingame, not needed any more
@@ -13,6 +12,7 @@
 	var/list/copy_for_battery  //add any effect-specific variables you need copied for anomaly batteries as a list of strings
 	var/effect_type = 0
 	var/isolated = 0
+	var/list/valid_style_types = list(ARTIFACT_STYLE_ANOMALY)
 
 //0 = Unknown / none detectable
 //1 = Concentrated energy
@@ -64,7 +64,7 @@
 		if(reveal_toggle == 1 && holder)
 			if(istype(holder, /obj/machinery/artifact))
 				var/obj/machinery/artifact/A = holder
-				A.icon_state = "ano[A.icon_num][activated]"
+				A.update_icon()
 			var/display_msg
 			if(activated)
 				display_msg = pick("momentarily glows brightly!","distorts slightly for a moment!","flickers slightly!","vibrates!","shimmers slightly for a moment!")

@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/stun
 	effecttype = "stun"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 
 /datum/artifact_effect/stun/New()
