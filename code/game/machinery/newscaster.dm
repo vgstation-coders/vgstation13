@@ -1067,7 +1067,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/scribble_page = null
 
 /obj/item/weapon/newspaper/attack_self(var/mob/user)
-	if (stat != CONSCIOUS)
+	if (user.incapacitated())
 		return
 	if(ishuman(user))
 		item_state = "newspaper-open"
