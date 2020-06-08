@@ -207,7 +207,7 @@
 /obj/item/weapon/paper/proc/openhelp(mob/user as mob)
 	user << browse({"<HTML><HEAD><TITLE>Pen Help</TITLE></HEAD>
 	<BODY>
-		<b><center>Crayon&Pen commands</center></b><br>
+		<b><center>Crayon & Pen commands</center></b><br>
 		<br>
 		\[br\] : Creates a linebreak.<br>
 		\[center\] - \[/center\] : Centers the text.<br>
@@ -215,8 +215,13 @@
 		\[i\] - \[/i\] : Makes the text <i>italic</i>.<br>
 		\[u\] - \[/u\] : Makes the text <u>underlined</u>.<br>
 		\[large\] - \[/large\] : Increases the <span style=\"font-size:25px\">size</span> of the text.<br>
+		\[table\] - \[/table\] : Creates table using \[row\] and \[cell\] tags.<br>
+		\[row\] - Creates a new table row.<br>
+		\[cell\] - Creates a new table cell.<br>
 		\[sign\] : Inserts a signature of your name in a foolproof way.<br>
 		\[field\] : Inserts an invisible field which lets you start type from there. Useful for forms.<br>
+		\[date\] : Inserts the current date in the format DAY MONTH, YEAR.<br>
+		\[time\] : Inserts the current station time.<br>
 		<br>
 		<b><center>Pen exclusive commands</center></b><br>
 		\[small\] - \[/small\] : Decreases the <span style=\"font-size:15px\">size</span> of the text.<br>
@@ -226,7 +231,7 @@
 		\[hr\] : Adds a horizontal rule.<br>
 		\[img\]http://url\[/img\] : Add an image.<br>
 		<br>
-		<center>Fonts</center><br>
+		<b><center>Fonts</center><br></b>
 		\[agency\] - \[/agency\] : <span style=\"font-family:Agency FB\">Agency FB</span><br>
 		\[algerian\] - \[/algerian\] : <span style=\"font-family:Algerian\">Algerian</span><br>
 		\[arial\] - \[/arial\] : <span style=\"font-family:Arial\">Arial</span><br>
