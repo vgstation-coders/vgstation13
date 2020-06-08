@@ -301,7 +301,7 @@
 	flags = 0
 	slot_flags = SLOT_BELT
 	storage_slots = 6
-	can_only_hold = list("=/obj/item/clothing/mask/cigarette", "/obj/item/weapon/lighter", "/obj/item/weapon/p_folded/note_small")
+	can_only_hold = list("=/obj/item/clothing/mask/cigarette","/obj/item/clothing/mask/cigarette/goldencarp","/obj/item/clothing/mask/cigarette/starlight","/obj/item/clothing/mask/cigarette/bidi","/obj/item/clothing/mask/cigarette/lucky","/obj/item/clothing/mask/cigarette/redsuit","/obj/item/clothing/mask/cigarette/ntstandard","/obj/item/clothing/mask/cigarette/spaceport", "/obj/item/weapon/lighter", "/obj/item/weapon/p_folded/note_small")
 	icon_type = "cigarette"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
@@ -313,6 +313,70 @@
 	for(var/i = 1 to storage_slots)
 		new /obj/item/clothing/mask/cigarette(src)
 	create_reagents(15 * storage_slots)//so people can inject cigarettes without opening a packet, now with being able to inject the whole one
+
+/obj/item/weapon/storage/fancy/cigarettes/goldencarp/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to storage_slots)
+		new /obj/item/clothing/mask/cigarette/goldencarp(src)
+	create_reagents(15 * storage_slots)
+
+/obj/item/weapon/storage/fancy/cigarettes/starlights/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to storage_slots)
+		new /obj/item/clothing/mask/cigarette/starlight(src)
+	create_reagents(15 * storage_slots)
+
+/obj/item/weapon/storage/fancy/cigarettes/shoalsticks/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to storage_slots)
+		new /obj/item/clothing/mask/cigarette/bidi(src)
+	create_reagents(15 * storage_slots)
+
+/obj/item/weapon/storage/fancy/cigarettes/luckystrike/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to storage_slots)
+		new /obj/item/clothing/mask/cigarette/lucky(src)
+	create_reagents(15 * storage_slots)
+
+/obj/item/weapon/storage/fancy/cigarettes/luckystrikedeluxe/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to storage_slots)
+		new /obj/item/clothing/mask/cigarette/lucky(src)
+	create_reagents(15 * storage_slots)
+
+/obj/item/weapon/storage/fancy/cigarettes/spaceports/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to storage_slots)
+		new /obj/item/clothing/mask/cigarette/spaceport(src)
+	create_reagents(15 * storage_slots)
+
+/obj/item/weapon/storage/fancy/cigarettes/ntstandard/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to storage_slots)
+		new /obj/item/clothing/mask/cigarette/ntstandard(src)
+	create_reagents(15 * storage_slots)
+
+/obj/item/weapon/storage/fancy/cigarettes/redsuits/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to storage_slots)
+		new /obj/item/clothing/mask/cigarette/redsuit(src)
+	create_reagents(15 * storage_slots)
 
 /obj/item/weapon/storage/fancy/cigarettes/Destroy()
 	qdel(reagents)
@@ -353,6 +417,53 @@
 	icon_state = "Dpacket"
 	item_state = "Dpacket"
 
+/obj/item/weapon/storage/fancy/cigarettes/goldencarp
+	name = "\improper 'Golden Carp' packet"
+	desc = "Fine imported cigarettes, claiming to be made with real gold dust. A favorite of triad bosses with expensive tastes."
+	icon_state = "GCpacket"
+	item_state = "GCpacket"
+
+/obj/item/weapon/storage/fancy/cigarettes/shoalsticks
+	name = "\improper 'Shoal Sticks' packet"
+	desc = "A flimsy paper packet covered in unintelligible script, containing six acrid roll-ups"
+	icon_state = "SSpacket"
+	item_state = "SSpacket"
+
+/obj/item/weapon/storage/fancy/cigarettes/spaceports
+	name = "\improper Spaceports packet"
+	desc = "A pack of suspiciously cheap smokes, perfect for the connoisseur on a tight budget."
+	icon_state = "SPpacket"
+	item_state = "SPpacket"
+
+/obj/item/weapon/storage/fancy/cigarettes/starlights
+	name = "\improper Starlights packet"
+	desc = "A glossy black packet of luxury cigarettes, emblazoned with the three stars of Starlight Cigarettes. The tagline reads, \"As cool as space itself.\""
+	icon_state = "SLpacket"
+	item_state = "SLpacket"
+
+/obj/item/weapon/storage/fancy/cigarettes/luckystrike
+	name = "\improper Lucky Strike packet"
+	desc = "A white foil pack of plain, unfiltered cigs. 'L.S./M.F.T.' is emblazoned across the side of the package."
+	icon_state = "LSpacket"
+	item_state = "LSpacket"
+
+/obj/item/weapon/storage/fancy/cigarettes/luckystrikedeluxe
+	name = "\improper Lucky Strike Deluxe packet"
+	desc = "A rich green-colored foil pack, containing the best unfiltered smokes this side of Andromeda. L.S./M.F.T."
+	icon_state = "DLSpacket"
+	item_state = "DLSpacket"
+
+/obj/item/weapon/storage/fancy/cigarettes/ntstandard
+	name = "\improper NT Standard packet"
+	desc = "A stark, navy packet, lacking any markings besides a bold Nanotrasen Logo. You don't even have to be told to light these up."
+	icon_state = "NTpacket"
+	item_state = "NTpacket"
+
+/obj/item/weapon/storage/fancy/cigarettes/redsuits
+	name = "\improper Red Suits packet"
+	desc = "Bold. Blood-red. The perfect cigarette for the ambitious individualist. It smells faintly metallic."
+	icon_state = "RSpacket"
+	item_state = "RSpacket"
 
 /*
  * Vial Box
@@ -472,7 +583,7 @@
 /obj/item/weapon/storage/lockbox/vials/toggle(var/mob/user, var/id_name)
     ..()
     update_icon()
-	
+
 //FLARE BOX
 //Useful for lots of things, this box has 6 flares in it. Only takes unused and unlight flares.
 //Great for emergency crates/closets etc.
