@@ -126,6 +126,7 @@ var/global/datum/credits/end_credits = new
  */
 /datum/credits/proc/on_round_end()
 	draft()
+	determine_round_end_song()
 	for(var/client/C in clients)
 		C.credits_audio(preload_only = TRUE) //Credits preference set to "No Reruns" should still preload, since we still don't know if the episode is a rerun. If audio time comes and the episode is a rerun, then we can start preloading the jingle instead.
 
@@ -261,6 +262,15 @@ var/global/datum/credits/end_credits = new
 		var/true_story_bro = "<br>[pick("BASED ON","INSPIRED BY","A RE-ENACTMENT OF")] [pick("A TRUE STORY","REAL EVENTS","THE EVENTS ABOARD [uppertext(station_name())]")]"
 		cast_string += "<h3>[true_story_bro]</h3><br>In memory of those that did not make it.<br>[english_list(corpses)].<br>"
 	cast_string += "</div><br>"
+
+//This proc will run at round-end and run various conditions to change audio_link
+//Currently only hosts one additional song
+/datum/credits/proc/determine_round_end_song()
+	var/list/candidates
+	if(ticker.station_was_nuked)
+		candidates += "http://ss13.moe/media/m2/source/roundend/credits/RA2_Blow_It_Up.mp3"
+	if(candidates)
+		audio_link = pick(candidates)
 
 /proc/gender_credits(var/mob/living/carbon/human/H)
 	if(H.mind && H.mind.key)
