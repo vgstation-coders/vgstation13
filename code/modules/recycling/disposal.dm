@@ -472,7 +472,7 @@
 		return
 
 	//We are restrained or can't move, this will compromise taking out the trash
-	if(user.restrained() || !user.canmove)
+	if(user.restrained() || !user.canmove || user.incapacitated())
 		return
 	if(!Adjacent(user) || !user.Adjacent(dropping))
 		return

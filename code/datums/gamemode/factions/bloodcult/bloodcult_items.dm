@@ -988,6 +988,7 @@ var/list/arcane_tomes = list()
 	desc = "A hood worn by the followers of Nar-Sie."
 	armor = list(melee = 30, bullet = 10, laser = 10,energy = 5, bomb = 10, bio = 25, rad = 0)
 	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_visible_override = FACE
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED)

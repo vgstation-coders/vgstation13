@@ -166,7 +166,8 @@
 /obj/item/weapon/reagent_containers/food/snacks/proc/before_consume(mob/living/carbon/eater)
 	return
 
-/obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/carbon/eater, messages = 0)
+//Bitesizemod to multiply how much of a bite should be taken out. 1 is default bitesize.
+/obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/carbon/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
 	if(!istype(eater))
 		return
 	if(!eatverb)
@@ -191,7 +192,8 @@
 
 	var/datum/reagents/reagentreference = reagents //Even when the object is qdeleted, the reagents exist until this ref gets removed
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
-		playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		if(sounds)
+			playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		if (virus2?.len)
 			for (var/ID in virus2)
 				var/datum/disease2/disease/D = virus2[ID]
@@ -201,14 +203,8 @@
 			spawn() //WHY IS THIS SPAWN() HERE
 				if(gcDestroyed)
 					return
-				if(reagentreference.total_volume > bitesize)
-					/*
-					 * I totally cannot understand what this code supposed to do.
-					 * Right now every snack consumes in 2 bites, my popcorn does not work right, so I simplify it. -- rastaf0
-					var/temp_bitesize =  max(reagents.total_volume /2, bitesize)
-					reagents.trans_to(target, temp_bitesize)
-					*/
-					reagentreference.trans_to(eater, bitesize)
+				if(reagentreference.total_volume > bitesize*bitesizemod)
+					reagentreference.trans_to(eater, bitesize*bitesizemod)
 				else
 					reagentreference.trans_to(eater, reagentreference.total_volume)
 				bitecount++
@@ -218,7 +214,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/proc/can_consume(mob/living/carbon/eater, mob/user)
 	if(!istype(eater))
 		return
-	if(!eater.hasmouth)
+	if(!eater.hasmouth())
 		return
 	if(is_empty())	//Are we done eating (determined by the amount of reagents left, here 0)
 		//This is mostly caused either by "persistent" food items or spamming

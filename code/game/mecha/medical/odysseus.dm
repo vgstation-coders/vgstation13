@@ -22,8 +22,7 @@
 /obj/mecha/medical/odysseus/New()
 	..()
 	hud = new /obj/item/clothing/glasses/hud/health/mech(src)
-	mech_parts += /obj/item/clothing/glasses/hud/health/mech
-	return
+	mech_parts.Add(hud)
 
 /obj/mecha/medical/odysseus/Destroy()
 	qdel(hud)

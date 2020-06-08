@@ -108,6 +108,8 @@
 	//SIZE_HUGE for even bigger guys
 
 	var/list/callOnFace = list()
+	var/list/callOnStartMove = list()
+	var/list/callOnEndMove = list()
 	var/list/pinned = list()            // List of things pinning this creature to walls (see living_defense.dm)
 	var/list/embedded = list()          // Embedded items, since simple mobs don't have organs.
 	var/list/abilities = list()         // For species-derived or admin-given powers.
@@ -296,11 +298,13 @@
 	var/old_assigned_role // If they ghosted, what role did they have?
 
 /mob/resetVariables()
-	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \
+	..("callOnFace", "callOnStartMove", "callOnEndMove", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \
 	"attack_log", "speak_emote", "alphas", "heard_by", "control_object", "orient_object", "actions", "held_items", "click_delayer", "attack_delayer", "throw_delayer", "special_delayer", \
 	"clong_delayer", args)
 
 	callOnFace = list()
+	callOnStartMove = list()
+	callOnEndMove = list()
 	pinned = list()
 	embedded = list()
 	abilities = list()

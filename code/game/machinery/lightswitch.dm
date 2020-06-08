@@ -119,6 +119,7 @@
 	if(buildstage != 2)
 		return
 	on = !on
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	var/area/this_area = get_area(src)
 	this_area.lightswitch = on
 	this_area.updateicon()

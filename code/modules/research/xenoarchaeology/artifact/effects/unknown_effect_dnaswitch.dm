@@ -2,6 +2,7 @@
 //todo
 /datum/artifact_effect/dnaswitch
 	effecttype = "dnaswitch"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_RELIQUARY, ARTIFACT_STYLE_WIZARD)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 5
 	var/severity

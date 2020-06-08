@@ -114,6 +114,9 @@ var/list/impact_master = list()
 	initial_pixel_x = pixel_x
 	initial_pixel_y = pixel_y
 
+/obj/item/projectile/proc/get_damage()
+	return damage
+
 /obj/item/projectile/proc/hit_apply(var/mob/living/X, var/blocked) // this is relevant because of projectile/energy/electrode
 	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
 

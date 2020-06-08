@@ -251,6 +251,10 @@ var/list/score=list(
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
 	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
+	"disease_vaccine"	= null, //Which many vaccine antibody isolated
+	"disease_vaccine_score"	= 0, //the associated score
+	"disease_extracted"	= 0, //Score based on the unique extracted effects
+	"disease_effects"	= 0, //Score based on the unique extracted effects
 	"disease_bad"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger >= 3
 	"disease_most"        = null, //Most spread disease
 	"disease_most_count"        = 0, //Most spread disease
@@ -292,6 +296,23 @@ var/list/score=list(
 	"arenafights"   = 0,
 	"arenabest"		= null,
 )
+
+var/list/isolated_antibodies = list(
+	ANTIGEN_O	= 0,
+	ANTIGEN_A	= 0,
+	ANTIGEN_B	= 0,
+	ANTIGEN_RH	= 0,
+	ANTIGEN_Q	= 0,
+	ANTIGEN_U	= 0,
+	ANTIGEN_V	= 0,
+	ANTIGEN_M	= 0,
+	ANTIGEN_N	= 0,
+	ANTIGEN_P	= 0,
+	ANTIGEN_X	= 0,
+	ANTIGEN_Y	= 0,
+	ANTIGEN_Z	= 0,
+	)
+var/list/extracted_gna = list()
 
 var/list/trash_items = list()
 var/list/decals = list()

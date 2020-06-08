@@ -359,6 +359,7 @@
 	w_class = W_CLASS_MEDIUM
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,25,30,50,100,150)
+	armor = list(melee = 8, bullet = 3, laser = 3, energy = 0, bomb = 1, bio = 1, rad = 0)
 	volume = 150
 	flags = FPRINT | OPENCONTAINER
 	slot_flags = SLOT_HEAD
