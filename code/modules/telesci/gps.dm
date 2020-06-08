@@ -202,6 +202,3 @@ var/list/SPS_list = list()
 			boop = TRUE
 	if (boop)
 		playsound(src,'sound/machines/radioboop.ogg',40,1)
-
-
-
