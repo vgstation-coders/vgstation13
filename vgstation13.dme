@@ -632,6 +632,7 @@
 #include "code\game\machinery\mass_driver.dm"
 #include "code\game\machinery\medal_printer.dm"
 #include "code\game\machinery\metaldetector.dm"
+#include "code\game\machinery\mind_machine.dm"
 #include "code\game\machinery\mommi_spawner.dm"
 #include "code\game\machinery\navbeacon.dm"
 #include "code\game\machinery\newscaster.dm"
