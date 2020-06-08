@@ -1067,6 +1067,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/scribble_page = null
 
 /obj/item/weapon/newspaper/attack_self(var/mob/user)
+	if (stat != CONSCIOUS)
+		return
 	if(ishuman(user))
 		item_state = "newspaper-open"
 		user.update_inv_hand(user.active_hand)
@@ -1251,7 +1253,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(news_network.wanted_issue)
 		printed_issue.important_message = news_network.wanted_issue
 	anim(target = src, a_icon = icon, flick_anim = "newscaster_print", sleeptime = 30, offX = pixel_x, offY = pixel_y)
-	playsound(src, "sound/effects/fax.ogg", 50, 1)
+	playsound(get_turf(src), "sound/effects/fax.ogg", 50, 1)
 	paper_remaining--
 	spawn(0.8 SECONDS)
 		printed_issue.forceMove(get_turf(src))
