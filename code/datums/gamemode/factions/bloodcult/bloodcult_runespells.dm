@@ -1211,6 +1211,8 @@
 	anim(target = M, a_icon = 'icons/effects/64x64.dmi', flick_anim = "touch_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
 
 	playsound(spell_holder, 'sound/effects/stun_talisman.ogg', 25, 0, -5)
+	for(var/obj/item/device/radio/R in recursive_type_check(M, /obj/item/device/radio))
+		R.broadcasting = 0
 	if (prob(15))//for old times' sake
 		invoke(activator,"Dream sign ''Evil sealing talisman''!",1)
 	else
