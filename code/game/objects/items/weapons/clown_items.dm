@@ -25,10 +25,12 @@
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
-/obj/item/weapon/soap/afterattack(atom/target, mob/user as mob)
+/obj/item/weapon/soap/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	..()
 	//I couldn't feasibly fix the overlay bugs caused by cleaning items we are wearing.
 	//So this is a workaround. This also makes more sense from an IC standpoint. ~Carn
 	//Overlay bugs can probably be fixed by updating the user's icon, see watercloset.dm
+	. = 1 //You try beating someone to death with a soap, dummy.
 	if(!user.Adjacent(target))
 		return
 
