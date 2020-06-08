@@ -1044,6 +1044,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	name = "newspaper"
 	desc = "An issue of The Griffon, the newspaper circulating aboard Nanotrasen Space Stations."
 	icon = 'icons/obj/bureaucracy.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
+	item_state = "newspaper"
 	icon_state = "newspaper"
 	force = 1 //Getting hit by rolled up newspapers hurts!
 	throwforce = 0
@@ -1064,8 +1066,15 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/scribble=""
 	var/scribble_page = null
 
-/obj/item/weapon/newspaper/attack_self(mob/user as mob)
+/obj/item/weapon/newspaper/attack_self(var/mob/user)
+	if (user.incapacitated())
+		return
 	if(ishuman(user))
+		item_state = "newspaper-open"
+		user.update_inv_hand(user.active_hand)
+		spawn (1 SECONDS)
+			if (!gcDestroyed)
+				item_state = "newspaper"
 		var/dat
 		pages = 0
 		switch(screen)
@@ -1238,14 +1247,16 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 /obj/machinery/newscaster/proc/print_paper()
 	feedback_inc("newscaster_newspapers_printed",1)
-	var/obj/item/weapon/newspaper/NEWSPAPER = new /obj/item/weapon/newspaper
+	var/obj/item/weapon/newspaper/printed_issue = new /obj/item/weapon/newspaper(src)
 	for(var/datum/feed_channel/FC in news_network.network_channels)
-		NEWSPAPER.news_content += FC
+		printed_issue.news_content += FC
 	if(news_network.wanted_issue)
-		NEWSPAPER.important_message = news_network.wanted_issue
-	NEWSPAPER.forceMove(get_turf(src))
+		printed_issue.important_message = news_network.wanted_issue
+	anim(target = src, a_icon = icon, flick_anim = "newscaster_print", sleeptime = 30, offX = pixel_x, offY = pixel_y)
+	playsound(get_turf(src), "sound/effects/fax.ogg", 50, 1)
 	paper_remaining--
-	return
+	spawn(0.8 SECONDS)
+		printed_issue.forceMove(get_turf(src))
 
 /obj/machinery/newscaster/proc/newsAlert(channel)   //This isn't Agouri's work, for it is ugly and vile.
 	var/turf/T = get_turf(src)                      //Who the fuck uses spawn(600) anyway, jesus christ
