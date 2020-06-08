@@ -29,6 +29,7 @@
 	//Since any item can now be a piece of clothing, this has to be put here so all items share it.
 	var/_color = null
 	var/body_parts_covered = 0 //see setup.dm for appropriate bit flags
+	var/body_parts_visible_override = 0 //for when you want specific parts to be visible while covered (and not all of them), same flags as above.
 	//var/heat_transfer_coefficient = 1 //0 prevents all transfers, 1 is invisible
 	var/gas_transfer_coefficient = 1 // for leaking gas from turf to mask and vice-versa (for masks right now, but at some point, i'd like to include space helmets)
 	var/permeability_coefficient = 1 // for chemicals/diseases

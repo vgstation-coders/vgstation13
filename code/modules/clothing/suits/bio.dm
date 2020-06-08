@@ -8,6 +8,7 @@
 	clothing_flags = PLASMAGUARD
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
 	body_parts_covered = HEAD|EARS|EYES|MOUTH|HIDEHAIR
+	body_parts_visible_override = EYES|BEARD
 	siemens_coefficient = 0.9
 	sterility = 100
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
@@ -114,6 +115,8 @@
 
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 30, rad = 0)
 	sterility = 50
+
+	body_parts_visible_override = FACE
 
 
 //Plague Dr mask can be found in clothing/masks/gasmask.dm
