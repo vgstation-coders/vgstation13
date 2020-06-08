@@ -30,3 +30,11 @@
 
 	throwforce = 5
 	force = 20
+
+/obj/item/weapon/melee/butterfly_knife
+	name = "Butterfly Knife"
+	desc = "A rather tricky weapon to use that is easy to conceal. Ideal for backstabbing."
+	icon_state = "butterflyknife"
+	item_state = "butterflyknife"
+	hitsound = 'sound/weapons/knife_hit.ogg'
+	miss_sound

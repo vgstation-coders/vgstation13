@@ -208,8 +208,7 @@ obj/item/proc/get_clamped_volume()
 						to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
 				else
 					to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
-
-	I.on_attack(M,user)
+	var/successful_attack //If positive, will be added to on_attack which handles whether a hit sound or a miss sound plays
 	if(istype(M, /mob/living/carbon))
 		var/mob/living/carbon/C = M
 		if(originator)
@@ -239,15 +238,21 @@ obj/item/proc/get_clamped_volume()
 					M.take_organ_damage(0, power)
 					to_chat(M, "Aargh it burns!")
 		. = TRUE //The attack always lands
+		successful_attack = 1
 		M.updatehealth()
+	I.on_attack(M,user, successful_attack)
 	I.add_fingerprint(user)
 
 
-/obj/item/proc/on_attack(var/atom/attacked, var/mob/user)
+/obj/item/proc/on_attack(var/atom/attacked, var/mob/user, var/successful_attack)
 	if (!user.gcDestroyed)
 		user.do_attack_animation(attacked, src)
 		user.delayNextAttack(attack_delay)
-	if(hitsound)
-		playsound(attacked.loc, hitsound, 50, 1, -1)
+	if(successful_attack)
+		if(hitsound)
+			playsound(attacked.loc, hitsound, 50, 1, -1)
+	else
+		if(miss_sound)
+			playsound(attacked.loc, miss_sound, 50, 1, -1)
 	if(material_type)
 		material_type.on_use(src,attacked, user)
