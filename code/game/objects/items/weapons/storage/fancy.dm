@@ -320,7 +320,6 @@
 		qdel(A)
 	for(var/i = 1 to storage_slots)
 		new /obj/item/clothing/mask/cigarette/goldencarp(src)
-	create_reagents(15 * storage_slots)
 
 /obj/item/weapon/storage/fancy/cigarettes/starlights/New()
 	..()
@@ -328,7 +327,6 @@
 		qdel(A)
 	for(var/i = 1 to storage_slots)
 		new /obj/item/clothing/mask/cigarette/starlight(src)
-	create_reagents(15 * storage_slots)
 
 /obj/item/weapon/storage/fancy/cigarettes/shoalsticks/New()
 	..()
@@ -336,7 +334,6 @@
 		qdel(A)
 	for(var/i = 1 to storage_slots)
 		new /obj/item/clothing/mask/cigarette/bidi(src)
-	create_reagents(15 * storage_slots)
 
 /obj/item/weapon/storage/fancy/cigarettes/luckystrike/New()
 	..()
@@ -344,7 +341,6 @@
 		qdel(A)
 	for(var/i = 1 to storage_slots)
 		new /obj/item/clothing/mask/cigarette/lucky(src)
-	create_reagents(15 * storage_slots)
 
 /obj/item/weapon/storage/fancy/cigarettes/luckystrikedeluxe/New()
 	..()
@@ -352,7 +348,6 @@
 		qdel(A)
 	for(var/i = 1 to storage_slots)
 		new /obj/item/clothing/mask/cigarette/lucky(src)
-	create_reagents(15 * storage_slots)
 
 /obj/item/weapon/storage/fancy/cigarettes/spaceports/New()
 	..()
@@ -360,7 +355,6 @@
 		qdel(A)
 	for(var/i = 1 to storage_slots)
 		new /obj/item/clothing/mask/cigarette/spaceport(src)
-	create_reagents(15 * storage_slots)
 
 /obj/item/weapon/storage/fancy/cigarettes/ntstandard/New()
 	..()
@@ -368,7 +362,6 @@
 		qdel(A)
 	for(var/i = 1 to storage_slots)
 		new /obj/item/clothing/mask/cigarette/ntstandard(src)
-	create_reagents(15 * storage_slots)
 
 /obj/item/weapon/storage/fancy/cigarettes/redsuits/New()
 	..()
@@ -376,7 +369,6 @@
 		qdel(A)
 	for(var/i = 1 to storage_slots)
 		new /obj/item/clothing/mask/cigarette/redsuit(src)
-	create_reagents(15 * storage_slots)
 
 /obj/item/weapon/storage/fancy/cigarettes/Destroy()
 	qdel(reagents)
