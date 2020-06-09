@@ -209,12 +209,14 @@ obj/item/proc/get_clamped_volume()
 				else
 					to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
 	var/successful_attack //If positive, will be added to on_attack which handles whether a hit sound or a miss sound plays
+	var/what_to_return //It's a bit uglier than using . = (state) but it was necessary for on_attack to check for attacked_by's status
 	if(istype(M, /mob/living/carbon))
 		var/mob/living/carbon/C = M
-		if(originator)
-			. = C.attacked_by(I, user, def_zone, originator)
+		if(C.attacked_by(I, user, def_zone, originator))
+			successful_attack = 1
+			what_to_return = TRUE
 		else
-			. = C.attacked_by(I, user, def_zone)
+			what_to_return = FALSE
 	else
 		switch(I.damtype)
 			if("brute")
@@ -237,12 +239,11 @@ obj/item/proc/get_clamped_volume()
 						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)
 					to_chat(M, "Aargh it burns!")
-		. = TRUE //The attack always lands
-		successful_attack = 1
+		what_to_return = TRUE //The attack always lands
 		M.updatehealth()
 	I.on_attack(M,user, successful_attack)
 	I.add_fingerprint(user)
-
+	return what_to_return
 
 /obj/item/proc/on_attack(var/atom/attacked, var/mob/user, var/successful_attack)
 	if (!user.gcDestroyed)
