@@ -50,12 +50,12 @@ BLIND     // can't see anything
 			if(!H.equip_to_slot_if_possible(stored_glasses, slot_glasses))
 				stored_glasses.forceMove(get_turf(src))
 			stored_glasses = null
-		return FALSE
+		return CANNOT_EQUIP
 
 	if(stored_glasses)
 		to_chat(H, "<span class='info'>You place \the [src] on over \the [stored_glasses].</span>")
 		prescription = stored_glasses.prescription
-	return TRUE
+	return CAN_EQUIP
 
 
 /obj/item/clothing/glasses/harm_label_update()
