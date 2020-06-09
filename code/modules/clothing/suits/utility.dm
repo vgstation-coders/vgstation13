@@ -65,6 +65,7 @@
 	flags = FPRINT
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
+	body_parts_visible_override = EYES
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED)
 
@@ -132,6 +133,7 @@
 	body_parts_covered = FULL_HEAD|HIDEHAIR
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	body_parts_visible_override = EYES|BEARD
 
 /obj/item/clothing/suit/radiation
 	name = "radiation suit"

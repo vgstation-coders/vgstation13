@@ -53,6 +53,7 @@
 /obj/item/clothing/head/legacy_culthood/alt
 	icon_state = "culthelmet_old"
 	item_state = "culthelmet_old"
+	body_parts_visible_override = EYES
 
 /obj/item/clothing/suit/legacy_cultrobes/alt
 	icon_state = "cultarmor_old"

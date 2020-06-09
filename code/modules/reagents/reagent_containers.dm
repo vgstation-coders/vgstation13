@@ -333,6 +333,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return FALSE
 
 /obj/item/weapon/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
+	if(!can_drink(user))
+		return 0
 	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 
@@ -341,17 +343,19 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
-		if(can_drink(user))
-			reagents.reaction(user, INGEST)
-			spawn(5)
-				if(reagents)
-					reagents.trans_to(user, amount_per_imbibe)
+		reagents.reaction(user, INGEST)
+		spawn(5)
+			if(reagents)
+				reagents.trans_to(user, amount_per_imbibe)
 
 	return 1
 
 /obj/item/weapon/reagent_containers/proc/can_drink(mob/user)
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
+		if(H.species.flags & SPECIES_NO_MOUTH)
+			H.visible_message("<span class='warning'>[H] can't drink without a mouth!</span>","<span class='warning'>You can't drink without a mouth!</span>")
+			return 0
 		if(H.species.chem_flags & NO_DRINK)
 			reagents.reaction(get_turf(H), TOUCH)
 			H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")

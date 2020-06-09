@@ -192,7 +192,12 @@ var/list/portal_cache = list()
 /obj/effect/portal/proc/purge_beams()
 	for(var/obj/effect/beam/BE in exit_beams)
 		exit_beams -= BE
-		qdel(BE)
+		returnToPool(BE)
+	if (target && istype(target,/obj/effect/portal))
+		var/obj/effect/portal/P = target
+		for(var/obj/effect/beam/BE in P.exit_beams)
+			P.exit_beams -= BE
+			returnToPool(BE)
 
 /obj/effect/portal/proc/add_beams()
 	if((!beams) || (!beams.len) || !target || !istype(target,/obj/effect/portal))
@@ -203,10 +208,21 @@ var/list/portal_cache = list()
 	for(var/obj/effect/beam/emitter/BE in beams)
 		var/list/spawners = list(src)
 		spawners |= BE.sources
-		var/obj/effect/beam/emitter/beam = new(PE.loc)
+		var/obj/effect/beam/emitter/beam = getFromPool(BE.type, PE.loc)
 		beam.dir = BE.dir
 		beam.power = BE.power
 		beam.steps = BE.steps+1
+		beam.emit(spawn_by=spawners)
+		PE.exit_beams += beam
+
+	for(var/obj/effect/beam/infrared/IR in beams)
+		var/list/spawners = list(src)
+		spawners |= IR.sources
+		var/obj/effect/beam/infrared/beam = getFromPool(IR.type, PE.loc)
+		beam.dir = IR.dir
+		beam.steps = IR.steps+1
+		beam.visible = IR.visible
+		beam.assembly = IR.assembly
 		beam.emit(spawn_by=spawners)
 		PE.exit_beams += beam
 

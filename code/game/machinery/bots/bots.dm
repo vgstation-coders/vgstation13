@@ -1,10 +1,3 @@
-// AI (i.e. game AI, not the AI player) controlled bots
-#define BOT_PATROL 1
-#define BOT_BEACON 2
-#define BOT_CONTROL 4
-#define BOT_DENSE 8
-#define BOT_NOT_CHASING 16
-
 #define MAX_PATHING_ATTEMPTS 15
 
 #define SEC_BOT 1 // Secutritrons (Beepsky) and ED-209s
@@ -191,7 +184,7 @@
 	if(loc == get_turf(target))
 		return at_path_target()
 	var/turf/next = path[1]
-	if(istype(next, /turf/simulated))
+	if(istype(next, /turf/simulated) || (bot_flags & BOT_SPACEWORTHY))
 		step_to(src, next)
 		if(get_turf(src) == next)
 			path -= next
@@ -262,7 +255,7 @@
 		patrol_path = list()
 		return at_patrol_target()
 	var/turf/next = patrol_path[1]
-	if(istype(next, /turf/simulated))
+	if(istype(next, /turf/simulated) || (bot_flags & BOT_SPACEWORTHY))
 		step_to(src, next)
 		if(get_turf(src) == next)
 			frustration = 0
@@ -424,30 +417,32 @@
 // Fast bots use quick_AStar method to direcly calculate a path and move on it.
 /obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null)
 	ASSERT(target && proc_to_call)
-	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
+	var/cardinal_proc = bot_flags & BOT_SPACEWORTHY ? /turf/proc/AdjacentTurfsSpace : /turf/proc/CardinalTurfsWithAccess
+	if ((get_dist(src, target) < 13) && !(bot_flags & BOT_NOT_CHASING)) // For beepers and ED209
 		// IMPORTANT: Quick AStar only takes TURFS as arguments.
 		log_astar_bot("quick astar path calculation...")
-		path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
+		path = quick_AStar(src.loc, get_turf(target), cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
 		log_astar_bot("path is [path.len]")
 		return TRUE
-	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+	return AStar(src, proc_to_call, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
 
 /obj/machinery/bot/proc/calc_patrol_path(var/target, var/proc_to_call, var/turf/avoid = null)
 	ASSERT(target && proc_to_call)
 	log_astar_beacon("[new_destination]")
-	if ((get_dist(src, target) < 13) && !(flags & BOT_NOT_CHASING)) // For beepers and ED209
+	var/cardinal_proc = bot_flags & BOT_SPACEWORTHY ? /turf/proc/AdjacentTurfsSpace : /turf/proc/CardinalTurfsWithAccess
+	if ((get_dist(src, target) < 13) && !(bot_flags & BOT_NOT_CHASING)) // For beepers and ED209
 		// IMPORTANT: Quick AStar only takes TURFS as arguments.
 		waiting_for_patrol = FALSE // Case we are calculating a quick path for a patrol.
-		patrol_path = quick_AStar(src.loc, get_turf(target), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
+		patrol_path = quick_AStar(src.loc, get_turf(target), cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
 		return TRUE
-	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+	return AStar(src, proc_to_call, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
 
 
 // This proc is called by the path maker once it has calculated a path.
 /obj/machinery/bot/proc/get_path(var/list/L, var/target)
 	if(islist(L))
 		path = L
-		if (flags & BOT_NOT_CHASING) // Chasing bots are obstinate and will not forget their target so easily.
+		if (bot_flags & BOT_NOT_CHASING) // Chasing bots are obstinate and will not forget their target so easily.
 			target = null
 			add_oldtarget(target)
 		return TRUE
@@ -460,6 +455,7 @@
 	if(islist(L))
 		patrol_path = L
 		return TRUE
+	auto_patrol = FALSE // Failed to get a patrol path
 	return FALSE
 
 // -- These other procs are self-explanatory and related to regular updates and interactions with the bots.

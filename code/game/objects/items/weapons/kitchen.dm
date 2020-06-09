@@ -101,6 +101,9 @@
 
 	if (src.loaded_food)
 		reagents.update_total()
+		if(!M.hasmouth())
+			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
+			return
 		if(M == user)
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
 			feed_to(user, user)

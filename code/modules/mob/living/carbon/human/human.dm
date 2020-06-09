@@ -1537,10 +1537,15 @@
 
 	return 1
 
+/mob/living/carbon/human/hasmouth()
+	if(species.flags & SPECIES_NO_MOUTH)
+		return 0
+	return hasmouth
+
 /mob/living/carbon/human/proc/can_bite(atom/target)
 	//Need a mouth to bite
 
-	if(!hasmouth)
+	if(!hasmouth())
 		return 0
 
 	//Need at least two teeth or a beak to bite

@@ -303,7 +303,7 @@ var/MAX_EXPLOSION_RANGE = 14
 // bitflags for clothing parts
 
 #define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
-#define FACE			(EYES|MOUTH|BEARD)
+#define FACE			(EYES|MOUTH|BEARD)	//38912
 #define BEARD			32768
 #define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
 #define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
@@ -327,7 +327,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEHEADHAIR 		65536
 #define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)//98304
 #define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
@@ -654,7 +654,7 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LIVING 25		//This what players have by default.
 
 #define SEE_INVISIBLE_LEVEL_ONE 35	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_ONE 35	//Unused.
+#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams.
 
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
 #define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
@@ -922,8 +922,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define PLASMA_IMMUNE 512
 #define RAD_GLOW 1024
 #define ELECTRIC_HEAL 2048
-#define IS_SPECIES_MUTE 4096
-#define REQUIRE_DARK 8192
+#define SPECIES_NO_MOUTH 4096
+//#define REQUIRE_DARK 8192
 #define RAD_IMMUNE 16384
 
 //Species anatomical flags.

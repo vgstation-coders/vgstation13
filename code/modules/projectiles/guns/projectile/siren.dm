@@ -122,8 +122,8 @@
 	name = "super soaker"
 	desc = "For ages 10 and up."
 	icon_state = "super_soaker"
-	item_state = "gun"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	item_state = "super_soaker"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	origin_tech = Tc_COMBAT + "=1"
 	recoil = 0
 	flags = FPRINT | OPENCONTAINER
@@ -167,6 +167,7 @@
 	name = "squirt gun"
 	desc = "Fun for all ages!"
 	icon_state = "squirt_gun"
+	item_state = "squirt_gun"
 	max_reagents = 50
 
 /obj/item/weapon/gun/siren/supersoaker/pistol/isHandgun()

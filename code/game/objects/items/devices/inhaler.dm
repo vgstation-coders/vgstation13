@@ -31,7 +31,7 @@
 	if(!puff_ready())
 		return
 	var/used_on_self = target == user
-	if(!target.hasmouth)
+	if(!target.hasmouth())
 		if(used_on_self)
 			to_chat(user, "<span class='warning'>There's nowhere to put \the [src] as you lack a mouth!</span>")
 		else

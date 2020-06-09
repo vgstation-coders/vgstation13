@@ -131,6 +131,22 @@
 			else
 				d.name = "unknown GNA disk (Stage: [memorybank.stage])"
 			d.effect = memorybank
+			if (!(memorybank.type in extracted_gna))
+				extracted_gna |= memorybank.type
+				score["disease_extracted"] += 1
+				switch (memorybank.badness)
+					if (EFFECT_DANGER_HELPFUL)
+						score["disease_effects"] += 20
+					if (EFFECT_DANGER_FLAVOR)
+						score["disease_effects"] += 2
+					if (EFFECT_DANGER_ANNOYING)
+						score["disease_effects"] += 1
+					if (EFFECT_DANGER_HINDRANCE)
+						score["disease_effects"] += 5
+					if (EFFECT_DANGER_HARMFUL)
+						score["disease_effects"] += 10
+					if (EFFECT_DANGER_DEADLY)
+						score["disease_effects"] += 30
 			alert_noise("ping")
 			spawn(10)
 				d.forceMove(loc)
