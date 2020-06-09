@@ -1056,7 +1056,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_wear_mask(var/update_icons=1)
 	overlays -= obj_overlays[FACEMASK_LAYER]
-	if( wear_mask && !check_hidden_head_flags(EYES) && !check_hidden_head_flags(MOUTH) && !check_hidden_head_flags(BEARD) && wear_mask.is_visible())
+	if( wear_mask && !check_hidden_head_flags(MOUTH) && wear_mask.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[FACEMASK_LAYER]
 		O.overlays.len = 0
 		wear_mask.screen_loc = ui_mask	//TODO
@@ -1317,7 +1317,7 @@ var/global/list/damage_icon_parts = list()
 
 	if(is_slot_hidden(W.body_parts_covered, (HIDEHEADHAIR), 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, (MASKHEADHAIR), 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, (HIDEBEARDHAIR), 0, W.body_parts_visible_override))
 		update_hair()
-	if(is_slot_hidden(W.body_parts_covered, (EYES), 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, (MOUTH), 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, (BEARD), 0, W.body_parts_visible_override))
+	if(is_slot_hidden(W.body_parts_covered, (MOUTH), 0, W.body_parts_visible_override))
 		update_inv_wear_mask()
 	if(is_slot_hidden(W.body_parts_covered, (HIDEGLOVES), 0, W.body_parts_visible_override))
 		update_inv_gloves()
