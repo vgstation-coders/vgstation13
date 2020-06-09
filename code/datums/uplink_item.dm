@@ -250,6 +250,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
 	cost = 6
 
+/datum/uplink_item/dangerous/butterfly_knife
+	name = "Butterfly Knife"
+	desc = "A butterfly knife that you can drive into someone's back. Fits in your pocket when folded, but conspicuous when you backstab."
+	item = /obj/item/weapon/melee/butterfly_knife
+	cost = 6
+
 // STEALTHY WEAPONS
 // Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
 
