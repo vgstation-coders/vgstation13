@@ -1594,24 +1594,36 @@ var/global/num_vending_terminals = 1
 	icon_vend = "cigs-vend"
 	vend_delay = 21
 	products = list(
+		/obj/item/weapon/storage/fancy/cigarettes/goldencarp = 10,
+		/obj/item/weapon/storage/fancy/cigarettes/starlights = 10,
+		/obj/item/weapon/storage/fancy/cigarettes/ntstandard = 10,
+		/obj/item/weapon/storage/fancy/cigarettes/luckystrike = 10,
 		/obj/item/weapon/storage/fancy/cigarettes = 10,
+		/obj/item/weapon/storage/fancy/cigarettes/spaceports = 10,
 		/obj/item/weapon/storage/fancy/matchbox = 10,
 		/obj/item/weapon/lighter/random = 4,
 		)
 	contraband = list(
 		/obj/item/weapon/lighter/zippo = 4,
+		/obj/item/weapon/storage/fancy/cigarettes/shoalsticks = 10,
+		/obj/item/weapon/storage/fancy/cigarettes/redsuits = 10,
 		)
 	premium = list(
 		/obj/item/weapon/storage/fancy/matchbox/strike_anywhere = 10,
 		/obj/item/clothing/mask/cigarette/cigar/havana = 2,
 		/obj/item/clothing/mask/holopipe = 1,
+		/obj/item/weapon/storage/fancy/cigarettes/luckystrikedeluxe = 5,
 		)
 	prices = list(
+		/obj/item/weapon/storage/fancy/cigarettes/goldencarp = 50,
+		/obj/item/weapon/storage/fancy/cigarettes/starlights = 40,
+		/obj/item/weapon/storage/fancy/cigarettes/ntstandard = 30,
+		/obj/item/weapon/storage/fancy/cigarettes/luckystrike = 20,
 		/obj/item/weapon/storage/fancy/cigarettes = 10,
+		/obj/item/weapon/storage/fancy/cigarettes/spaceports = 10,
 		/obj/item/weapon/storage/fancy/matchbox = 15,
 		/obj/item/weapon/lighter/random = 10,
-		)
-
+    	)
 	pack = /obj/structure/vendomatpack/cigarette
 
 /obj/machinery/vending/medical

@@ -4675,7 +4675,7 @@
 	eatverb = "crunch"
 	edible_by_utensil = FALSE
 	trash = /obj/item/trash/lollipopstick
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	var/candyness = 161 //how long this thing will last
 	volume = 15 //not a lotta room for poison
 
