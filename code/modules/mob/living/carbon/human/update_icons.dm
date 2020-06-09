@@ -1056,7 +1056,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_wear_mask(var/update_icons=1)
 	overlays -= obj_overlays[FACEMASK_LAYER]
-	if( wear_mask && !check_hidden_head_flags(HIDEMASK) && wear_mask.is_visible())
+	if( wear_mask && !check_hidden_head_flags(EYES) && !check_hidden_head_flags(MOUTH) && !check_hidden_head_flags(BEARD) && wear_mask.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[FACEMASK_LAYER]
 		O.overlays.len = 0
 		wear_mask.screen_loc = ui_mask	//TODO
@@ -1315,19 +1315,19 @@ var/global/list/damage_icon_parts = list()
 	if(!W || gcDestroyed)
 		return
 
-	if(is_slot_hidden(W.body_parts_covered, HIDEHEADHAIR, 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, MASKHEADHAIR, 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, HIDEBEARDHAIR, 0, W.body_parts_visible_override))
+	if(is_slot_hidden(W.body_parts_covered, (HIDEHEADHAIR), 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, (MASKHEADHAIR), 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, (HIDEBEARDHAIR), 0, W.body_parts_visible_override))
 		update_hair()
-	if(is_slot_hidden(W.body_parts_covered, HIDEMASK, 0, W.body_parts_visible_override))
+	if(is_slot_hidden(W.body_parts_covered, (EYES), 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, (MOUTH), 0, W.body_parts_visible_override) || is_slot_hidden(W.body_parts_covered, (BEARD), 0, W.body_parts_visible_override))
 		update_inv_wear_mask()
-	if(is_slot_hidden(W.body_parts_covered, HIDEGLOVES, 0, W.body_parts_visible_override))
+	if(is_slot_hidden(W.body_parts_covered, (HIDEGLOVES), 0, W.body_parts_visible_override))
 		update_inv_gloves()
-	if(is_slot_hidden(W.body_parts_covered, HIDESHOES, 0, W.body_parts_visible_override))
+	if(is_slot_hidden(W.body_parts_covered, (HIDESHOES), 0, W.body_parts_visible_override))
 		update_inv_shoes()
-	if(is_slot_hidden(W.body_parts_covered, HIDEJUMPSUIT, 0, W.body_parts_visible_override))
+	if(is_slot_hidden(W.body_parts_covered, (HIDEJUMPSUIT), 0, W.body_parts_visible_override))
 		update_inv_w_uniform()
-	if(is_slot_hidden(W.body_parts_covered, HIDEEYES, 0, W.body_parts_visible_override))
+	if(is_slot_hidden(W.body_parts_covered, (HIDEEYES), 0, W.body_parts_visible_override))
 		update_inv_glasses()
-	if(is_slot_hidden(W.body_parts_covered, HIDEEARS, 0, W.body_parts_visible_override))
+	if(is_slot_hidden(W.body_parts_covered, (HIDEEARS), 0, W.body_parts_visible_override))
 		update_inv_ears()
 
 proc/is_slot_hidden(var/clothes, var/slot = -1,var/ignore_slot = 0, var/visibility_override = 0)
@@ -1340,7 +1340,7 @@ proc/is_slot_hidden(var/clothes, var/slot = -1,var/ignore_slot = 0, var/visibili
 		true_body_parts_covered = 0
 	if(visibility_override & slot)//lets you see things like glasses behind transparent helmets, while still hiding hair or other specific flags.
 		return 0
-	if(true_body_parts_covered & ignore_slot)
+	if((true_body_parts_covered) & ignore_slot)
 		true_body_parts_covered ^= ignore_slot
 	if((true_body_parts_covered & slot) == slot)
 		return 1

@@ -59,18 +59,18 @@
 	var/list/obscured = list()
 
 	if(wear_suit)
-		if(is_slot_hidden(wear_suit.body_parts_covered, HIDEGLOVES, 0, wear_suit.body_parts_visible_override))
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDEGLOVES), 0, wear_suit.body_parts_visible_override))
 			obscured |= slot_gloves
-		if(is_slot_hidden(wear_suit.body_parts_covered, HIDEJUMPSUIT, 0, wear_suit.body_parts_visible_override))
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDEJUMPSUIT), 0, wear_suit.body_parts_visible_override))
 			obscured |= slot_w_uniform
-		if(is_slot_hidden(wear_suit.body_parts_covered, HIDESHOES, 0, wear_suit.body_parts_visible_override))
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDESHOES), 0, wear_suit.body_parts_visible_override))
 			obscured |= slot_shoes
 	if(head)
-		if(is_slot_hidden(head.body_parts_covered, HIDEMASK, 0, wear_suit.body_parts_visible_override))
+		if(is_slot_hidden(head.body_parts_covered, (HIDEMASK), 0, head.body_parts_visible_override))
 			obscured |= slot_wear_mask
-		if(is_slot_hidden(head.body_parts_covered, HIDEEYES, 0, wear_suit.body_parts_visible_override))
+		if(is_slot_hidden(head.body_parts_covered, (HIDEEYES), 0, head.body_parts_visible_override))
 			obscured |= slot_glasses
-		if(is_slot_hidden(head.body_parts_covered, HIDEEARS, 0, wear_suit.body_parts_visible_override))
+		if(is_slot_hidden(head.body_parts_covered, (HIDEEARS), 0, head.body_parts_visible_override))
 			obscured |= slot_ears
 	if(obscured.len > 0)
 		return obscured
@@ -97,7 +97,7 @@
 		ignore_slot = (equipped == wear_mask) ? MOUTH : 0
 		if(!equipped)
 			continue
-		else if(is_slot_hidden(equipped.body_parts_covered,hidden_flags,ignore_slot,equipped.body_parts_visible_override))
+		else if(is_slot_hidden(equipped.body_parts_covered,(hidden_flags),ignore_slot,equipped.body_parts_visible_override))
 			return 1
 	return 0
 

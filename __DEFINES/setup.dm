@@ -303,7 +303,7 @@ var/MAX_EXPLOSION_RANGE = 14
 // bitflags for clothing parts
 
 #define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
-#define FACE			(EYES|MOUTH|BEARD)
+#define FACE			(EYES|MOUTH|BEARD)	//38912
 #define BEARD			32768
 #define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
 #define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
@@ -327,7 +327,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEHEADHAIR 		65536
 #define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)//98304
 #define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
