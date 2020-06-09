@@ -102,6 +102,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 			return
 		if(RS.head_type && istype(src, RS.head_type)) //It's my suit! It was made for me!
 			rig = user.wear_suit
+			canremove = FALSE
 
 /obj/item/clothing/suit/space/rig
 	name = "engineering hardsuit"
@@ -316,7 +317,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 				holder = use_obj.loc
 				if(istype(holder))
 					if(use_obj && check_slot == use_obj)
-						if(wearer.remove_from_mob(use_obj,))
+						if(wearer.remove_from_mob(use_obj))
 							to_chat(wearer, "<font color='blue'><b>Your [use_obj.name] retracts swiftly.</b></font>")
 						use_obj.forceMove(src)
 		else
