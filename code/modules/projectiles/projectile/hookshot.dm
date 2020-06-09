@@ -325,6 +325,6 @@
 					K.forceMove(endLocation, no_tp=1, harderforce=0, glide_size_override=0)
 					var/oldIcon = K.icon
 					K.icon = 'icons/obj/wind_up.dmi'//flick is dumb, it works dumb
-					K.alpha = 100
+					K.alpha = OPAQUE
 					flick("bananaphaz_flick", K)
 					K.icon = oldIcon
