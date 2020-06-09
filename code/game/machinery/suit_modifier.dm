@@ -76,7 +76,7 @@
 	suit_overlay.icon_state = "suitmodifier_working"
 	overlays.Add(suit_overlay)
 	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
-	R.deactivate_suit(git )
+	R.deactivate_suit()
 	var/list/modules_to_activate = list()
 	for(var/obj/item/rig_module/RM in modules_to_install)
 		if(locate(RM.type) in R.modules) //One already installed
