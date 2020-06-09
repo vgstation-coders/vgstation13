@@ -35,7 +35,7 @@
 		delete_old = TRUE //No duping baller lich outfits
 		switch(pick(valid_outfits))
 			if(ROBES_SUIT)
-				equipped_summons = list("[slot_head]" = /obj/item/clothing/head/helmet/space/rig/wizard/lich_king,
+				equipped_summons = list(
 										"[slot_wear_suit]" = /obj/item/clothing/suit/space/rig/wizard/lich_king,
 										"[slot_shoes]" = /obj/item/clothing/shoes/lich_king,
 										"[slot_wear_mask]" = /obj/item/clothing/mask/breath,
@@ -64,7 +64,7 @@
 										"[slot_shoes]" = /obj/item/clothing/shoes/sandal/marisa)
 
 			if(ROBES_SUIT)
-				equipped_summons = list("[slot_head]" = /obj/item/clothing/head/helmet/space/rig/wizard,
+				equipped_summons = list(
 										"[slot_wear_suit]" = /obj/item/clothing/suit/space/rig/wizard,
 										"[slot_shoes]" = /obj/item/clothing/shoes/sandal,
 										"[slot_wear_mask]" = /obj/item/clothing/mask/breath,
