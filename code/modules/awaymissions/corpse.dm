@@ -121,6 +121,9 @@
 		if(istype(L))
 			src.corpseshoes = pick(L)
 		M.equip_to_slot_or_del(new src.corpseshoes(M), slot_shoes)
+		if(isrig(M.wear_suit))
+			var/obj/item/clothing/suit/space/rig/R = M.wear_suit
+			R.initialize_suit()
 
 	if(src.corpsegloves)
 		var/list/L = src.corpsegloves
