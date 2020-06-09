@@ -272,6 +272,9 @@
 
 					usr.drop_item(item_to_add, src, force_drop = 1)
 					src.inventory_back = item_to_add
+					if(isrig(item_to_add)) //TIME TO HACKINTOSH
+						var/obj/item/clothing/head/helmet/space/rig/rig_helmet = new (src)
+						place_on_head(rig_helmet)
 					regenerate_icons()
 
 		show_inv(usr)
@@ -495,21 +498,27 @@
                         dir = i
                         sleep(1)
 
+/mob/living/simple_animal/corgi/proc/reset_appearance()
+	name = real_name
+	desc = initial(desc)
+	speak = list("YAP!", "Woof!", "Bark!", "Arf!")
+	speak_emote = list("barks.", "woofs.")
+	emote_hear = list("barks.", "woofs.", "yaps.")
+	emote_see = list("shakes its head.", "shivers.", "pants.")
+	emote_sound = list("sound/voice/corgibark.ogg")
+	min_oxy = initial(min_oxy)
+	minbodytemp = initial(minbodytemp)
+	maxbodytemp = initial(maxbodytemp)
+	set_light(0)
+
 /mob/living/simple_animal/corgi/proc/remove_inventory(var/remove_from = "head", mob/user)
 	switch(remove_from)
 		if("head")
 			if(inventory_head)
-				name = real_name
-				desc = initial(desc)
-				speak = list("YAP!", "Woof!", "Bark!", "Arf!")
-				speak_emote = list("barks.", "woofs.")
-				emote_hear = list("barks.", "woofs.", "yaps.")
-				emote_see = list("shakes its head.", "shivers.", "pants.")
-				emote_sound = list("sound/voice/corgibark.ogg")
-				min_oxy = initial(min_oxy)
-				minbodytemp = initial(minbodytemp)
-				maxbodytemp = initial(maxbodytemp)
-				set_light(0)
+				if(isrighelmet(inventory_head) && inventory_back && isrig(inventory_back)) //You've activated my trap card!
+					remove_inventory("back", user)
+					return
+				reset_appearance()
 				inventory_head.forceMove(src.loc)
 				inventory_head = null
 				regenerate_icons()
@@ -519,6 +528,10 @@
 				return
 		if("back")
 			if(inventory_back)
+				if(isrig(inventory_back) && inventory_head && isrighelmet(inventory_head)) //Now we undo the hack
+					qdel(inventory_head)
+					reset_appearance()
+					inventory_head = null
 				inventory_back.forceMove(src.loc)
 				inventory_back = null
 				regenerate_icons()

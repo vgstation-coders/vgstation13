@@ -285,6 +285,13 @@
 			stat("Spacepod Charge", "[istype(S.battery) ? "[S.battery.charge] / [S.battery.maxcharge]" : "No cell detected"]")
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
 
+		if(is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit))
+			var/obj/item/clothing/suit/space/rig/R = wear_suit
+			if(R.cell)
+				stat("\The [R.name]", "Charge: [R.cell.charge]")
+			if(R.activated)
+				stat("\The [R.name]", "Modules: [english_list(R.modules)]")
+
 		if (mind)
 			for (var/role in mind.antag_roles)
 				var/datum/role/R = mind.antag_roles[role]
