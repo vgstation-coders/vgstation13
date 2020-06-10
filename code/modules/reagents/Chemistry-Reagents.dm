@@ -4031,7 +4031,7 @@
 	
 	if(ishuman(M) && prob(20))
 		var/mob/living/carbon/human/H = M
-		M.Jitter(5)
+		H.Jitter(5)
 		
 /datum/reagent/gatormix/on_overdose(var/mob/living/M)
 
