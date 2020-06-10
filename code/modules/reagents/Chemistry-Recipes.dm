@@ -697,6 +697,20 @@
 	result = LIPOZINE
 	required_reagents = list(SODIUMCHLORIDE = 1, ETHANOL = 1, RADIUM = 1)
 	result_amount = 3
+	
+/datum/chemical_reaction/dietine
+	name = "Dietine"
+	id = DIETINE
+	result = DIETINE
+	required_reagents = list(LIPOZINE = 1, HYPERZINE = 1, COFFEE = 1)
+	result_amount = 1
+	
+/datum/chemical_reaction/gatormix
+	name = "Gator Mix"
+	id = GATORMIX
+	result = GATORMIX
+	required_reagents = list(NUTRIMENT = 1, COFFEE = 1, COLA = 1, EGG_YOLK = 1, FUEL = 1)
+	result_amount = 5
 
 /datum/chemical_reaction/carp_pheromones
 	name = "Carp pheromones"
@@ -839,6 +853,13 @@
 	required_reagents = list(HYDROGEN = 1, CHLORINE = 1, ETHANOL = 1)
 	required_catalysts = list(FLUORINE = 5)
 	result_amount = 1
+	
+/datum/chemical_reaction/mannitol
+	name = "Mannitol"
+	id = MANNITOL
+	result = MANNITOL
+	required_reagents = list(CHLORINE = 1, NITROGEN = 1, INAPROVALINE = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/piccolyn
 	name = "Piccolyn"
@@ -3045,6 +3066,13 @@
 	result = FIRERITA
 	required_reagents = list(CINNAMONWHISKY = 1, TRIPLESEC = 1, TEQUILA = 3)
 	result_amount = 5
+	
+/datum/chemical_reaction/magica
+	name = "Magica"
+	id = MAGICA
+	result = MAGICA
+	required_reagents = list(CINNAMONWHISKY = 1, BITTERS = 1)
+	result_amount = 2
 
 //Cafe stuff!
 /datum/chemical_reaction/acidtea

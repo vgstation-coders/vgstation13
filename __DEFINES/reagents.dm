@@ -286,6 +286,7 @@
 #define MANHATTANFIREBALL		"manhattanfireball"
 #define FIREBALLCOLA	"fireballcola"
 #define FIRERITA 		"firerita"
+#define MAGICA			"magica"
 #define IRISHCOFFEE 			"irishcoffee"
 #define MARGARITA 			"margarita"
 #define BLACKRUSSIAN 			"blackrussian"
@@ -420,6 +421,9 @@
 #define MUSTARD_POWDER	"mustard_powder"
 #define MAYO			"mayo"
 #define DIABEETUSOL		"diabeetusol"
+#define MANNITOL		"mannitol"
+#define DIETINE			"dietine"
+#define GATORMIX		"gatormix"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

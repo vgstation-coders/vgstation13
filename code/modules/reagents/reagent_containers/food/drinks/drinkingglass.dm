@@ -741,6 +741,10 @@
 				icon_state= "firerita"
 				name = "firerita"
 				desc = "Looks pretty, offends a sane person's taste buds. Then again, anyone who orders this probably lacks one of those two traits."
+			if(MAGICA)
+				icon_state= "magica"
+				name = "magica"
+				desc = "Bitter, with an annoying aftertaste of spice. Supposedly inspired by wearers of bath robes."
 
 			else
 				icon_state ="glass_colour"

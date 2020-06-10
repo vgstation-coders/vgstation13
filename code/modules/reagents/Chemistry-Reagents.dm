@@ -3412,6 +3412,33 @@
 /datum/reagent/methylin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 	M.adjustBrainLoss(1)
+	
+/datum/reagent/mannitol
+	name = "Mannitol"
+	id = MANNITOL
+	description = "Mannitol is a prescription drug used to quell headaches. Said to lessen brain damage."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8A5DC" //rgb: 200, 165, 220
+	overdose_am = REAGENTS_OVERDOSE
+	pain_resistance = 20
+	density = 1.8
+	specheatcap = 0.66
+
+/datum/reagent/mannitol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(40))
+		M.adjustBrainLoss(-1 * REM)	
+		if(prob(10))
+			to_chat(M, "Your head feels a bit better.")
+	else
+		if(M.getBrainLoss() < 1)
+			M.adjustBrainLoss(1 * REM)	
+			if(prob(10))
+				to_chat(M, "Your head hurts a bit.")
+
 
 /datum/reagent/bicarodyne
 	name = "Bicarodyne"
@@ -3869,6 +3896,45 @@
 	if(M.nutrition < 0) //Prevent from going into negatives
 		M.nutrition = 0
 
+/datum/reagent/dietine
+	name = "Dietine"
+	id = DIETINE
+	description = "A commonly sold weight loss aid. Consume in small doses."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#BBEDA4" //rgb: 187, 237, 164
+	density = 1.44
+	specheatcap = 60
+	overdose_am = 5
+	
+	var/on_a_diet
+	var/oldmetabolism
+
+/datum/reagent/dietine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!on_a_diet)
+			oldmetabolism = calorie_burn_rate
+			on_a_diet = TRUE
+			calorie_burn_rate += calorie_burn_rate * 3
+		if(prob(8))
+			M.vomit(0,1)
+			
+/datum/reagent/dietine/reagent_deleted()
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		calorie_burn_rate -= oldmetabolism / 3
+		on_a_diet = FALSE
+
+/datum/reagent/dietine/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(1)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M	
+		H.vomit(0,1)
+
 /datum/reagent/soysauce
 	name = "Soysauce"
 	id = SOYSAUCE
@@ -3927,6 +3993,35 @@
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFACD" //LEMONCHIFFON
+	
+/datum/reagent/gatormix
+	name = "Gator Mix"
+	id = GATORMIX
+	description = "A vile sludge of mixed carbohydrates. Makes people more alert. May cause kidney damage in large doses."
+	nutriment_factor = 8 * REAGENTS_METABOLISM //get fat, son
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#A41D77"
+	adj_dizzy = -5
+	adj_drowsy = -5
+	adj_sleepy = -5
+	adj_temp = 10
+	overdose_am = 50
+	
+/datum/reagent/gatormix/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	
+	if(ishuman(M) && prob(20))
+		var/mob/living/carbon/human/H = M
+		M.Jitter(5)
+		
+/datum/reagent/gatormix/on_overdose(var/mob/living/M)
+
+	if(ishuman(M) && prob(5))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/killdney = H.get_kidneys()
+		killdney.damage++
+
 
 /datum/reagent/capsaicin
 	name = "Capsaicin Oil"
@@ -6439,6 +6534,13 @@
 	description = "Triple sec, Cinnamon Whisky, and Tequila, eugh. Less a cocktail more than throwing whatever's on the shelf in a glass."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#f0133c" //rgb: 240, 19, 60
+	
+/datum/reagent/ethanol/deadrum/magica
+	name = "Magica"
+	id = MAGICA
+	description = "A bitter mix with a burning aftertaste."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#774F1B"
 
 /datum/reagent/ethanol/deadrum/b52
 	name = "B-52"
