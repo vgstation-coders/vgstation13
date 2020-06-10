@@ -2895,10 +2895,10 @@
 	M.heal_organ_damage(2 * REM)
 
 
-/datum/reagent/blisterol
+/datum/reagent/drink/blisterol
 	name = "Blisterol"
 	id = BLISTEROL
-	description = "Blisterol is a deprecated drug used to treat wounds. Renamed and marked as deprecated due to its tendency to cause blisters from the heat."
+	description = "Blisterol is a deprecated drug used to treat wounds. Renamed and marked as deprecated due to its tendency to cause blisters."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC"
 	density = 1.8
@@ -2911,7 +2911,7 @@
 	if(..())
 		return 1
 	
-	M.heal_organ_damage(1 * REM) //heal 1 brute
+	M.heal_organ_damage(2 * REM) //heal 2 brute
 	M.heal_organ_damage(0, -0.5 * REM) // cause 0.5 burn
 
 /datum/reagent/hyperzine
@@ -3935,16 +3935,16 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!on_a_diet)
-			oldmetabolism = calorie_burn_rate
+			oldmetabolism = H.calorie_burn_rate
 			on_a_diet = TRUE
-			calorie_burn_rate += calorie_burn_rate * 3
+			H.calorie_burn_rate += H.calorie_burn_rate * 3
 		if(prob(8))
-			M.vomit(0,1)
+			H.vomit(0,1)
 			
 /datum/reagent/dietine/reagent_deleted()
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		calorie_burn_rate -= oldmetabolism / 3
+	if(ishuman(holder.my_atom))
+		var/mob/living/carbon/human/H = holder.my_atom
+		H.calorie_burn_rate -= oldmetabolism / 3
 		on_a_diet = FALSE
 
 /datum/reagent/dietine/on_overdose(var/mob/living/M)
@@ -4012,7 +4012,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFACD" //LEMONCHIFFON
 	
-/datum/reagent/gatormix
+/datum/reagent/drink/gatormix
 	name = "Gator Mix"
 	id = GATORMIX
 	description = "A vile sludge of mixed carbohydrates. Makes people more alert. May cause kidney damage in large doses."
