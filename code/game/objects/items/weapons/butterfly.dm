@@ -42,6 +42,45 @@
 /obj/item/weapon/butterflyknife/proc/after_fold(mob/user)
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
+//BACKSTABBING//
+//Ported from HIPPIESTATION (with their knowledge)
+/obj/item/weapon/butterflyknife/backstab
+	name = "heavy butterfly knife"
+	desc = "A folding type knife that stores the blade between its two handles when flipped. Feels extra heavy, ideal for backstabbing."
+	force = 10
+	icon_state = "Bflyknife_heavy"
+	hitsound = 'sound/weapons/knife-hit.ogg'
+	miss_sound = 'sound/weapons/miss.ogg'
+	w_class = W_CLASS_TINY
+	knifetype = "heavy"
+	var/backstab_force = 40
+	var/backstab_sound = 'sound/weapons/crit.ogg'
+
+/obj/item/weapon/butterflyknife/backstab/fold(mob/user)
+	..()
+	item_state = open ? "butterflyknife" : null
+	miss_sound = open ? 'sound/weapons/miss.ogg' : ""
+	w_class = open ? W_CLASS_MEDIUM : W_CLASS_TINY
+
+/obj/item/weapon/butterflyknife/backstab/after_fold(mob/user)
+	playsound(src, 'sound/weapons/knife_folding.ogg', 50, 1)
+
+/obj/item/weapon/butterflyknife/backstab/attack(mob/living/M, mob/living/user)
+	if(!..())
+		return
+	if(M.dir == user.dir && !M.lying && open && !(M == user))
+		if(backstab_force)
+			return backstab(user, M)
+
+/obj/item/weapon/butterflyknife/backstab/proc/backstab(var/mob/living/user, var/mob/living/target)
+	if(backstab_sound)
+		playsound(src, backstab_sound, 100)
+	if(ishuman(target)) //Only humans have chests, backstab the chest
+		var/mob/living/carbon/human/H = target
+		H.apply_damage(backstab_force, BRUTE, LIMB_CHEST)
+	else //Deal conventional backstab damage to a non-human
+		target.apply_damage(backstab_force, BRUTE)
+
 /obj/item/weapon/butterflyknife/viscerator
 	desc = "A folding type knife that stores the blade between its two handles when flipped. It hums slightly."
 	icon_state = "Bflyknife_red"
