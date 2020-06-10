@@ -357,19 +357,20 @@
 
 /obj/structure/table/MouseDropTo(atom/movable/O,mob/user,src_location,over_location,src_control,over_control,params)
 	if(O == user)
-		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
+		if(do_after(user, src, 40))
+			if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
+				return
+			var/mob/living/carbon/M = user
+			M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
+			M.adjustBrainLoss(5)
+			M.Knockdown(1)
+			M.Stun(1)
+			if (prob(50))
+				playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
+			else
+				playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
+			M.visible_message("<span class='danger'>[user] slips and bangs \his head on \the [src].</span>", "<span class='danger'>You slip and bang your head on \the [src]. Perhaps you could try again?</span>", "You hear a bang.")
 			return
-		var/mob/living/carbon/M = user
-		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
-		M.adjustBrainLoss(5)
-		M.Knockdown(1)
-		M.Stun(1)
-		if (prob(50))
-			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-		else
-			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
-		M.visible_message("<span class='danger'>[user] bangs \his head on \the [src].</span>", "<span class='danger'>You bang your head on \the [src].</span>", "You hear a bang.")
-		return
 	return ..()
 
 /obj/structure/table/attackby(obj/item/W as obj, mob/user as mob, params)
