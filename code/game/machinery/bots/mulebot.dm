@@ -4,8 +4,6 @@
 // Navigates via floor navbeacons
 // Remote Controlled from QM's PDA
 
-var/global/mulebot_count = 0
-
 #define MODE_IDLE 0
 #define MODE_LOADING 1
 #define MODE_MOVING 2
@@ -14,6 +12,8 @@ var/global/mulebot_count = 0
 #define MODE_COMPUTING 5
 #define MODE_WAITING 6
 #define MODE_NOROUTE 7
+
+var/global/mulebot_count = 0
 
 /datum/locking_category/mulebot
 
@@ -33,7 +33,7 @@ var/global/mulebot_count = 0
 	beacon_freq = 1400
 	control_freq = 1447
 	control_filter = RADIO_MULEBOT
-	bot_flags = BOT_DENSE|BOT_NOT_CHASING
+	bot_flags = BOT_DENSE|BOT_NOT_CHASING|BOT_CONTROL
 	suffix = ""
 
 	var/loaddir = 0				// this the direction to unload onto/load from
@@ -71,6 +71,8 @@ var/global/mulebot_count = 0
 	var/currentBloodColor = DEFAULT_BLOOD
 	var/run_over_cooldown = 3 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
 	var/coolingdown = FALSE
+
+	commanding_radio = /obj/item/radio/integrated/signal/bot/mule
 
 /obj/machinery/bot/mulebot/get_cell()
 	return cell
@@ -215,19 +217,19 @@ var/global/mulebot_count = 0
 
 		dat += "Status: "
 		switch(mode)
-			if(0)
+			if(MODE_IDLE)
 				dat += "Ready"
-			if(1)
+			if(MODE_LOADING)
 				dat += "Loading/Unloading"
-			if(2)
+			if(MODE_MOVING)
 				dat += "Navigating to Delivery Location"
-			if(3)
+			if(MODE_RETURNING)
 				dat += "Navigating to Home"
-			if(4)
+			if(MODE_BLOCKED)
 				dat += "Waiting for clear path"
-			if(5,6)
+			if(MODE_COMPUTING, MODE_WAITING)
 				dat += "Calculating navigation path"
-			if(7)
+			if(MODE_NOROUTE)
 				dat += "Unable to reach destination"
 
 		var/atom/movable/load = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1]
@@ -271,10 +273,36 @@ var/global/mulebot_count = 0
 	onclose(user, "mulebot")
 	return
 
+/obj/machinery/bot/mulebot/return_status()
+	switch(mode)
+		if(MODE_IDLE)
+			return "Ready"
+		if(MODE_LOADING)
+			return "Loading/Unloading"
+		if(MODE_MOVING)
+			return "Navigating to Delivery Location"
+		if(MODE_RETURNING)
+			return "Navigating to Home"
+		if(MODE_BLOCKED)
+			return "Waiting for clear path"
+		if(MODE_COMPUTING, MODE_WAITING)
+			return "Calculating navigation path"
+		if(MODE_NOROUTE)
+			return "Unable to reach destination"
+	return ..()
+
+/obj/machinery/bot/mulebot/execute_signal_command(var/datum/signal/signal, var/command)
+	if (..())
+		return
+	switch (command)
+		if ("return_home")
+			start_home()
+		else // It's a new destination !
+			set_destination(command)
+
 // returns the wire panel text
 /obj/machinery/bot/mulebot/proc/wires()
 	return wires.GetInteractWindow()
-
 
 /obj/machinery/bot/mulebot/Topic(href, href_list)
 	if(..())
@@ -493,11 +521,6 @@ var/global/mulebot_count = 0
 		AM.forceMove(src.loc)
 	mode = MODE_IDLE
 
-/obj/machinery/bot/mulebot/process_pathing()
-	if (mode == MODE_IDLE)
-		return
-	return ..()
-
 /obj/machinery/bot/mulebot/process_bot()
 	if(!has_power())
 		on = 0
@@ -528,7 +551,6 @@ var/global/mulebot_count = 0
 	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
 
 /obj/machinery/bot/mulebot/set_destination(var/new_dest)
-	request_path(new_dest)
 	log_astar_beacon("new_destination [new_dest]")
 	new_destination = new_dest
 	request_path(new_dest)
@@ -547,12 +569,18 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/receive_signal(datum/signal/signal)
 	var/recv = signal.data["beacon"]
 	if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
-		log_astar_beacon("[src] : new destination chosen, [recv]")
+		log_astar_beacon("new destination chosen, [recv]")
 		destination = new_destination
 		new_destination = ""
 		target = signal.source.loc
 		awaiting_beacon = 0
 		return 1
+	// -- Command signals --
+	var/target_bot = signal.data["target"]
+	if (target_bot != "\ref[src]")
+		return
+	var/command = signal.data["command"]
+	execute_signal_command(signal, command)
 
 // starts bot moving to home
 // sends a beacon query to find
@@ -616,7 +644,7 @@ var/global/mulebot_count = 0
 		start_home()
 	else
 		mode = MODE_IDLE	// otherwise go idle
-	return
+	return ..()
 
 // called when bot bumps into anything
 /obj/machinery/bot/mulebot/to_bump(var/atom/obs)

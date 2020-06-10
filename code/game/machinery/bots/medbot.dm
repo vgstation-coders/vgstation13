@@ -27,7 +27,7 @@
 	health = 20
 	maxhealth = 20
 	req_access =list(access_medical)
-	bot_flags = BOT_NOT_CHASING
+	bot_flags = BOT_NOT_CHASING|BOT_CONTROL
 	can_take_pai = TRUE
 	var/stunned = 0 //It can be stunned by tasers. Delicate circuits.
 	var/list/botcard_access = list(access_medical)
@@ -53,6 +53,7 @@
 	var/last_spoke = 0
 
 	bot_type = MED_BOT
+	commanding_radio = /obj/item/radio/integrated/signal/bot/medbot
 
 /obj/machinery/bot/medbot/mysterious
 	name = "Mysterious Medibot"
@@ -285,7 +286,7 @@
 		stunned--
 		return
 
-	if ((!target || target.gcDestroyed || get_dist(src, target) > 7) && !look_for_target)
+	if (can_abandon_target())
 		target = null
 		currently_healing = 0
 		find_target()
@@ -297,7 +298,6 @@
 		if(!currently_healing)
 			currently_healing = TRUE
 			medicate_patient(target)
-
 
 /obj/machinery/bot/medbot/proc/medicate_patient(mob/living/carbon/C)
 	if(!on)
@@ -521,6 +521,13 @@
 				return 1
 
 	return 0
+
+/obj/machinery/bot/medbot/return_status()
+	if (currently_healing)
+		return "Healing"
+	if (auto_patrol)
+		return "Patrolling"
+	return ..()
 
 /*
  *	Medbot Assembly -- Can be made out of all three medkits.
