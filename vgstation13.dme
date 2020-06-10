@@ -1390,6 +1390,7 @@
 #include "code\modules\clothing\spacesuits\time.dm"
 #include "code\modules\clothing\spacesuits\void.dm"
 #include "code\modules\clothing\spacesuits\rig_modules\rig_modules.dm"
+#include "code\modules\clothing\spacesuits\rig_subtypes\rig_subtypes.dm"
 #include "code\modules\clothing\suits\alien.dm"
 #include "code\modules\clothing\suits\armor.dm"
 #include "code\modules\clothing\suits\bio.dm"

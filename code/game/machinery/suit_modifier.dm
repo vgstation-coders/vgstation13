@@ -49,6 +49,8 @@
 	.=..()
 
 /obj/machinery/suit_modifier/attack_hand(mob/user)
+	if(!isliving(user))
+		return
 	if(is_locking(/mob/living/carbon/human))
 		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 		say("Unit Occupied.", class = "binaryradio")
@@ -74,8 +76,7 @@
 	suit_overlay.icon_state = "suitmodifier_working"
 	overlays.Add(suit_overlay)
 	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
-	if(H.head && istype(H.head, R.head_type))
-		R.toggle_helmet(H)
+	R.deactivate_suit()
 	var/list/modules_to_activate = list()
 	for(var/obj/item/rig_module/RM in modules_to_install)
 		if(locate(RM.type) in R.modules) //One already installed
@@ -104,7 +105,7 @@
 	unlock_atom(H)
 	overlays.Remove(suit_overlay)
 	suit_overlay.icon_state = null
-	R.toggle_helmet(H)
+	R.initialize_suit()
 	use_power = 1
 
 /obj/machinery/suit_modifier/get_cell()
