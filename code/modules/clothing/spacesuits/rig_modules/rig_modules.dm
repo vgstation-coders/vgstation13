@@ -111,15 +111,15 @@
 /obj/item/rig_module/plasma_proof
 	name = "plasma-proof sealing authority"
 	desc = "Brings the suit it is installed into up to plasma environment standards."
+	active_power_usage = 5
 
 /obj/item/rig_module/plasma_proof/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
 	..()
-	if(rig.cell && rig.cell.use(250))
-		say_to_wearer("Plasma seal initialized.")
-		rig.clothing_flags |= PLASMAGUARD
-		if(rig.H)
-			rig.H.clothing_flags |= PLASMAGUARD
-		activated = TRUE
+	say_to_wearer("Plasma seal initialized.")
+	rig.clothing_flags |= PLASMAGUARD
+	if(rig.H)
+		rig.H.clothing_flags |= PLASMAGUARD
+	activated = TRUE
 
 /obj/item/rig_module/plasma_proof/deactivate()
 	say_to_wearer("Plasma seal disengaged.")
