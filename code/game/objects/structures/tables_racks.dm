@@ -357,10 +357,10 @@
 
 /obj/structure/table/MouseDropTo(atom/movable/O,mob/user,src_location,over_location,src_control,over_control,params)
 	if(O == user)
+		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
+			return
 		user.visible_message("span class='warning'>[user] tries to climb \the [src].</span>", "<span class='warning'>You try to climb \the [src].</span>")
 		if(do_after(user, src, 40))
-			if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
-				return
 			var/mob/living/carbon/M = user
 			M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
 			M.adjustBrainLoss(5)
