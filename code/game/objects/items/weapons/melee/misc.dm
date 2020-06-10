@@ -43,7 +43,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	w_class = W_CLASS_TINY
 	var/folded = 1 //Used for toggle_fold and to check if you can backstab with it
-	var/backstab_force = 70
+	var/backstab_force = 40
 	var/backstab_sound = 'sound/weapons/crit.ogg'
 
 /obj/item/weapon/melee/butterfly_knife/attack_self(mob/living/user)

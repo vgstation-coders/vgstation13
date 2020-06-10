@@ -254,7 +254,7 @@ var/list/uplink_items = list()
 	name = "Butterfly Knife"
 	desc = "A butterfly knife that you can drive into someone's back. Fits in your pocket when folded, but conspicuous when you backstab."
 	item = /obj/item/weapon/melee/butterfly_knife
-	cost = 6
+	cost = 8
 
 // STEALTHY WEAPONS
 // Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
