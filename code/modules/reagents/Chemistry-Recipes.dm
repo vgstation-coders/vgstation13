@@ -337,6 +337,13 @@
 	result = KELOTANE
 	required_reagents = list(SILICON = 1, CARBON = 1)
 	result_amount = 2
+	
+/datum/chemical_reaction/blisterol
+	name = "Blisterol"
+	id = BLISTEROL
+	result = BLISTEROL
+	required_reagents = list(ALUMINIUM = 1, CARBON = 1, FUEL = 1)
+	result_amount = 3
 
 /datum/chemical_reaction/virus_food
 	name = "Virus Food"

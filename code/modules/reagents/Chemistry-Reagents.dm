@@ -2443,7 +2443,7 @@
 		return 1
 
 	M.heal_organ_damage(0, 2 * REM)
-
+	
 /datum/reagent/dermaline
 	name = "Dermaline"
 	id = DERMALINE
@@ -2860,8 +2860,6 @@
 	density = 1.96
 	specheatcap = 0.57
 
-
-
 /datum/reagent/bicaridine/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
@@ -2895,6 +2893,26 @@
 		return 1
 
 	M.heal_organ_damage(2 * REM)
+
+
+/datum/reagent/blisterol
+	name = "Blisterol"
+	id = BLISTEROL
+	description = "Blisterol is a deprecated drug used to treat wounds. Renamed and marked as deprecated due to its tendency to cause blisters from the heat."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8A5DC"
+	density = 1.8
+	specheatcap = 3
+	adj_temp = 40
+	custom_metabolism = 1 //goes through you fast
+
+/datum/reagent/blisterol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	
+	M.heal_organ_damage(1 * REM) //heal 1 brute
+	M.heal_organ_damage(0, -0.5 * REM) // cause 0.5 burn
 
 /datum/reagent/hyperzine
 	name = "Hyperzine"

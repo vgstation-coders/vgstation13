@@ -424,6 +424,7 @@
 #define MANNITOL		"mannitol"
 #define DIETINE			"dietine"
 #define GATORMIX		"gatormix"
+#define BLISTEROL		"blisterol"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
