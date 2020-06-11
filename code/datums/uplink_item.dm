@@ -251,7 +251,7 @@ var/list/uplink_items = list()
 	cost = 6
 
 /datum/uplink_item/dangerous/butterfly_knife
-	name = "Butterfly Knife"
+	name = "Heavy Butterfly Knife"
 	desc = "A butterfly knife that you can drive into someone's back. Fits in your pocket when folded, but conspicuous when you backstab."
 	item = /obj/item/weapon/butterflyknife/backstab
 	cost = 8
