@@ -796,7 +796,7 @@
 
 	species_fit = list(VOX_SHAPED)
 
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = HEAD
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_HEAD
 
