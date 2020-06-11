@@ -542,9 +542,9 @@ log transactions
 			if(ID.add_to_virtual_wallet(arbitrary_sum, user, src))
 				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
 				return
-
-	var/turf/destination_turf = get_turf(src)
-	var/list/cash = dispense_cash(arbitrary_sum,destination_turf)
+		var/list/cash = dispense_cash(arbitrary_sum, H.loc)
+		for(var/obj/item/weapon/spacecash/dosh in cash)
+			H.put_in_hands(dosh)
 
 //stolen wholesale and then edited a bit from newscasters, which are awesome and by Agouri
 /obj/machinery/atm/proc/scan_user(mob/living/carbon/human/human_user as mob)
