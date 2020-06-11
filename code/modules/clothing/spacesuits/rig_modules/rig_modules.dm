@@ -3,41 +3,40 @@
 	desc = "A module to be installed onto a rigsuit."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "std_mod"
-	var/mob/living/wearer
 	var/obj/item/clothing/suit/space/rig/rig
 	var/requires_component = TRUE //This module needs a removable component(helmet,gloves,boot,tank) and should be activated before they're deployed from the suit.
 	var/activated = FALSE
 	var/active_power_usage = 0 //Energy consumption per tick
 
+/obj/item/rig_module/Destroy()
+	rig = null
+	..()
+
 /obj/item/rig_module/proc/examine_addition(mob/user)
 	return
 
-/obj/item/rig_module/proc/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)//We do not set activated to TRUE in the default activate() proc.
-	wearer = user
-	rig = R
+/obj/item/rig_module/proc/activate(var/mob/user)//We do not set activated to TRUE in the default activate() proc.
+	activated = TRUE
 
 /obj/item/rig_module/proc/deactivate()
-	wearer = null
-	rig = null
 	activated = FALSE
 
 /obj/item/rig_module/proc/do_process()
 	return
 
 /obj/item/rig_module/proc/say_to_wearer(var/string)
-	ASSERT(wearer)
-	to_chat(wearer, "\The [src] reports: <span class = 'binaryradio'>[string]</span>")
+	ASSERT(rig.wearer)
+	to_chat(rig.wearer, "\The [src] reports: <span class = 'binaryradio'>[string]</span>")
 
 /obj/item/rig_module/speed_boost
 	name = "rig speed module"
 	desc = "Self-lubricating joints allow for ease of movement when walking in a rigsuit."
 	active_power_usage = 10
 
-/obj/item/rig_module/speed_boost/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
-	..()
+/obj/item/rig_module/speed_boost/activate()
 	say_to_wearer("Speed module engaged.")
 	rig.slowdown = max(1, slowdown/1.25)
-	activated = TRUE
+	..()
 
 /obj/item/rig_module/speed_boost/deactivate()
 	rig.slowdown = initial(rig.slowdown)
@@ -48,8 +47,10 @@
 	desc = "Lets passers by read your health from a distance"
 
 /obj/item/rig_module/health_readout/examine_addition(mob/user)
-	if(wearer)
-		to_chat(user, "<span class = 'notice'>The embedded health readout reads: [wearer.isDead()?"0%":"[(wearer.health/wearer.maxHealth)*100]%"]</span>")
+	if(!ishuman(rig.wearer))
+		return
+	var/mob/living/carbon/human/H = rig.wearer
+	to_chat(user, "<span class = 'notice'>The embedded health readout reads: [H.isDead()?"0%":"[(H.health/H.maxHealth)*100]%"]</span>")
 
 /obj/item/rig_module/tank_refiller
 	name = "tank pressurizer"
@@ -58,11 +59,10 @@
 	var/amount = 50
 	active_power_usage = 50
 
-/obj/item/rig_module/tank_refiller/activate(var/mob/user, var/obj/item/clothing/suit/space/rig/R)
-	..()
-	if(!ishuman(user))
+/obj/item/rig_module/tank_refiller/activate()
+	if(!ishuman(rig.wearer))
 		return
-	var/mob/living/carbon/human/H = user
+	var/mob/living/carbon/human/H = rig.wearer
 	if(H.internal)
 		var/datum/organ/internal/lungs/L = H.internal_organs_by_name["lungs"]
 		if(L)
@@ -75,11 +75,11 @@
 		deactivate()
 
 /obj/item/rig_module/tank_refiller/do_process()
-	if(!wearer || !ishuman(wearer))
+	if(!ishuman(rig.wearer))
 		deactivate()
 		return
 
-	var/mob/living/carbon/human/H = wearer
+	var/mob/living/carbon/human/H = rig.wearer
 	if(!H.internal)
 		say_to_wearer("Internals pressurizer failed to find internals. Aborting.")
 		deactivate()
@@ -113,13 +113,12 @@
 	desc = "Brings the suit it is installed into up to plasma environment standards."
 	active_power_usage = 5
 
-/obj/item/rig_module/plasma_proof/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
-	..()
+/obj/item/rig_module/plasma_proof/activate()
 	say_to_wearer("Plasma seal initialized.")
 	rig.clothing_flags |= PLASMAGUARD
 	if(rig.H)
 		rig.H.clothing_flags |= PLASMAGUARD
-	activated = TRUE
+	..()
 
 /obj/item/rig_module/plasma_proof/deactivate()
 	say_to_wearer("Plasma seal disengaged.")
@@ -133,19 +132,24 @@
 	desc = "A flexible tissue with a number of sensors stretched between its surface and interior of the suit. When these sensors detected an impact, the artificial muscle reacts instantaneously, contracting and diffusing the damage."
 	active_power_usage = 100
 
-/obj/item/rig_module/muscle_tissue/activate(var/mob/user,var/obj/item/clothing/suit/space/rig/R)
-	..()
-	wearer.mutations.Add(M_HULK) //I'M FUCKING INVINCIBLE!
-	wearer.update_mutations()
+/obj/item/rig_module/muscle_tissue/activate()
+	if(!ishuman(rig.wearer))
+		return
+	var/mob/living/carbon/human/H = rig.wearer
+	H.mutations.Add(M_HULK) //I'M FUCKING INVINCIBLE!
+	H.update_mutations()
 	say_to_wearer("Reactive sensors online.")
 	rig.canremove = FALSE
 	say_to_wearer("Safety lock enabled.")
-	activated = TRUE
+	..()
 	
 
 /obj/item/rig_module/muscle_tissue/deactivate()
-	wearer.mutations.Remove(M_HULK)
-	wearer.update_mutations()
+	if(!ishuman(rig.wearer))
+		return
+	var/mob/living/carbon/human/H = rig.wearer
+	H.mutations.Remove(M_HULK)
+	H.update_mutations()
 	say_to_wearer("Reactive sensors offline.")
 	rig.canremove = TRUE
 	say_to_wearer("Safety lock disabled.")
