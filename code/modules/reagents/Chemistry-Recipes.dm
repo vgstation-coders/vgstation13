@@ -342,7 +342,7 @@
 	name = "Blisterol"
 	id = BLISTEROL
 	result = BLISTEROL
-	required_reagents = list(ALUMINIUM = 1, CARBON = 1, FUEL = 1)
+	required_reagents = list(ALUMINIUM = 1, CARBON = 1, FUEL = 2)
 	result_amount = 3
 
 /datum/chemical_reaction/virus_food
@@ -709,7 +709,7 @@
 	name = "Dietine"
 	id = DIETINE
 	result = DIETINE
-	required_reagents = list(LIPOZINE = 1, HYPERZINE = 1, COFFEE = 1)
+	required_reagents = list(SODIUMCHLORIDE = 1, COFFEE = 3, LITHIUM = 1, FUEL = 1)
 	result_amount = 1
 	
 /datum/chemical_reaction/gatormix
@@ -865,7 +865,7 @@
 	name = "Mannitol"
 	id = MANNITOL
 	result = MANNITOL
-	required_reagents = list(CHLORINE = 1, NITROGEN = 1, INAPROVALINE = 1)
+	required_reagents = list(DISCOUNT = 1, ICE = 1, HOT_COCO = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/piccolyn

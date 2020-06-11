@@ -3434,7 +3434,7 @@
 /datum/reagent/mannitol
 	name = "Mannitol"
 	id = MANNITOL
-	description = "Mannitol is a prescription drug used to quell headaches. Said to lessen brain damage."
+	description = "Mannitol is strange yet commonly requested mixture that is said to quell headaches."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
@@ -3447,12 +3447,12 @@
 	if(..())
 		return 1
 
-	if(prob(40))
+	if(M.getBrainLoss() > 10 && prob(40))
 		M.adjustBrainLoss(-1 * REM)	
 		if(prob(10))
 			to_chat(M, "Your head feels a bit better.")
 	else
-		if(M.getBrainLoss() < 1)
+		if(M.getBrainLoss() <= 10)
 			M.adjustBrainLoss(1 * REM)	
 			if(prob(10))
 				to_chat(M, "Your head hurts a bit.")
@@ -3917,7 +3917,7 @@
 /datum/reagent/dietine
 	name = "Dietine"
 	id = DIETINE
-	description = "A commonly sold weight loss aid. Consume in small doses."
+	description = "An uncommon makeshift weight loss aid. Mildly toxic, moreso in larger doses."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#BBEDA4" //rgb: 187, 237, 164
 	density = 1.44
@@ -3931,6 +3931,9 @@
 
 	if(..())
 		return 1
+	
+	if(prob(5))
+		M.adjustToxLoss(1)
 	
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
