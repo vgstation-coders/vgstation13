@@ -37,7 +37,7 @@
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		count += SP.rating
 	teles_left = rand(2, 3) * count
-	if(count >= 12) //All components are T3 or above
+	if(count >= 16) //All components are T4
 		infinite_teles = 1
 	else
 		infinite_teles = 0
