@@ -865,7 +865,7 @@
 	name = "Mannitol"
 	id = MANNITOL
 	result = MANNITOL
-	required_reagents = list(DISCOUNT = 1, ICE = 1, HOT_COCO = 1)
+	required_reagents = list(DISCOUNT = 1, ICE = 1, BEFF = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/piccolyn
