@@ -39,6 +39,15 @@
 			color_overlay.alpha = 255 * (reagents.total_volume / chem_volume)
 			overlays += color_overlay
 
+/obj/item/gum/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	if(!..())
+		return CANNOT_EQUIP
+	var/mob/living/carbon/C = M
+	if(!istype(C) || !C.hasmouth())
+		to_chat(C, "<span class='warning'>You have no mouth.</span>")
+		return CANNOT_EQUIP
+	return CAN_EQUIP
+
 /obj/item/gum/equipped(mob/M, slot)
 	var/mob/living/carbon/C = M
 	if(!istype(C))

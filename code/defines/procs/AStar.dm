@@ -179,7 +179,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
  * Creates a pathmaker datum to process the path if we aren't processing the path.
  * Returns nothing if this path is already being processed.
  */
-proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = ASTAR_DEBUG)
+/proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = ASTAR_DEBUG)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	if(start:z != end:z) //if you're feeling ambitious and make something that can ASTAR through z levels, feel free to remove this check
 		return ASTAR_FAIL
@@ -198,7 +198,7 @@ proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth =
 // The main difference is that it'll be caculated immediately and transmitted to the bot rather than waiting for the path to be made.
 // Currently, security bots are using this method to chase suspsects.
 // You MUST have the start and end be turfs.
-proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/reference)
+/proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/reference)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	. = list() // In case of failure/runtimes, we want to return a list.
 	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher

@@ -49,12 +49,7 @@
 	return output
 
 /obj/mecha/working/empty_bad_contents()
-	for(var/obj/O in src)
-		if(O in cargo) //mom's spaghetti
-			continue
-		if(!is_type_in_list(O,mech_parts))
-			O.forceMove(src.loc)
-	return
+	..(cargo) //mom's spaghetti 2.0
 
 /obj/mecha/working/Destroy()
 	for(var/mob/M in src)

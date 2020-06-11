@@ -236,8 +236,8 @@
 	prosthetic_icon = "eyes-prosthetic"
 	organ_tag = "eyes"
 	organ_type = /datum/organ/internal/eyes
-
 	var/eye_colour
+	var/emitter = FALSE
 
 /obj/item/organ/internal/eyes/tajaran
 	name = "tajaran eyeballs"
@@ -276,7 +276,7 @@
 //	icon_state = "eyes"
 	prosthetic_name = "grue visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/grue
-	
+
 /obj/item/organ/internal/eyes/mushroom
 	name = "mushroom eyeballs"
 	icon_state = "eyes-tajaran"
@@ -362,12 +362,20 @@
 			H.my_appearance.g_eyes ? H.my_appearance.g_eyes : 0,
 			H.my_appearance.b_eyes ? H.my_appearance.b_eyes : 0
 			)
-
+		var/image/I = image(icon,src,"[icon_state]-pupils")
+		I.color = "#[num2hex(eye_colour[1])][num2hex(eye_colour[2])][num2hex(eye_colour[3])]"
+		overlays += I
 		// Leave bloody red pits behind!
 		H.my_appearance.r_eyes = 128
 		H.my_appearance.g_eyes = 0
 		H.my_appearance.b_eyes = 0
 		H.update_body()
+
+		for (var/ID in H.virus2)
+			var/datum/disease2/disease/D = H.virus2[ID]
+			for(var/datum/disease2/effect/emitter/e in D.effects)
+				if (e.announced)
+					emitter = TRUE
 
 /obj/item/organ/internal/proc/replaced(var/mob/living/target)
 	return

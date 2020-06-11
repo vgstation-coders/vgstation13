@@ -31,6 +31,9 @@
 			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 				client.images -= C.pathogen
 
+	if(client && client.media)
+		client.media.stop_music()
+
 	if(admin_datums[src.ckey])
 		if (ticker && ticker.current_state == GAME_STATE_PLAYING) //Only report this stuff if we are currently playing.
 			var/admins_number = admins.len

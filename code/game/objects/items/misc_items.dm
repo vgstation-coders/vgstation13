@@ -101,3 +101,9 @@
 				new /mob/living/simple_animal/hostile/ginger/gingerbomination(get_turf(user))
 	else
 		to_chat(user, "<span class='warning'>The sugars in the egg haven't finished caramelizing.</span>")
+
+/obj/item/spring
+	name = "spring"
+	icon = 'icons/obj/weaponsmithing.dmi'
+	icon_state = "spring"
+	desc = "A piece of woven metal capable of high elasticity"

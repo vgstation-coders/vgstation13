@@ -543,3 +543,93 @@ var/list/science_goggles_wearers = list()
 	darkness_view = -1
 	prescription = 1
 	eyeprot = 1
+
+//////////////////
+
+
+/obj/item/clothing/glasses/emitter
+	name = "emitter goggles"
+	desc = "Become literally unable to stop firing beams."
+	icon_state = "emitter"
+	item_state = "glasses"
+	origin_tech = Tc_POWERSTORAGE + "=5;" + Tc_MATERIALS + "=3" + Tc_ANOMALY + "=4"
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	var/mob/living/emitter
+	var/obj/effect/beam/emitter/eyes/beam
+	var/previous_dir
+	var/turf/previous_loc
+
+/obj/item/clothing/glasses/emitter/equipped(var/mob/M, var/slot)
+	..()
+	if(slot == slot_glasses)
+		emitter = M
+		enable(emitter)
+		processing_objects.Add(src)
+
+/obj/item/clothing/glasses/emitter/unequipped(var/mob/M, var/from_slot)
+	..()
+	previous_dir = null
+	previous_loc = null
+	if(from_slot == slot_glasses)
+		disable(emitter)
+		processing_objects.Remove(src)
+
+
+/obj/item/clothing/glasses/emitter/Destroy()
+	disable(emitter)
+	processing_objects.Remove(src)
+	previous_dir = null
+	previous_loc = null
+	..()
+
+/obj/item/clothing/glasses/emitter/proc/enable(var/mob/living/mob)
+	if (istype(emitter))
+		emitter.callOnStartMove["\ref[src]"] = "update_emitter_start"
+		emitter.callOnEndMove["\ref[src]"] = "update_emitter_end"
+	update_emitter()
+
+/obj/item/clothing/glasses/emitter/proc/disable(var/mob/living/mob)
+	if (beam)
+		returnToPool(beam)
+		beam = null
+	if (emitter)
+		emitter.callOnStartMove -= "\ref[src]"
+		emitter.callOnEndMove -= "\ref[src]"
+		emitter = null
+
+/obj/item/clothing/glasses/emitter/process()
+	update_emitter()
+
+/obj/item/clothing/glasses/emitter/proc/update_emitter()
+	if (!emitter || !isturf(emitter.loc) || emitter.lying)
+		if (beam)
+			returnToPool(beam)
+			beam = null
+		return
+	if (!beam)
+		beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+		beam.dir = emitter.dir
+		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
+			beam.emit(spawn_by=emitter,charged = TRUE)
+		else
+			beam.emit(spawn_by=emitter)
+		previous_loc = emitter.loc
+		previous_dir = emitter.dir
+
+/obj/item/clothing/glasses/emitter/proc/update_emitter_start()
+	if (beam)
+		returnToPool(beam)
+		beam = null
+
+/obj/item/clothing/glasses/emitter/proc/update_emitter_end()
+	if (!emitter || !isturf(emitter.loc) || emitter.lying)
+		return
+	if (!beam)
+		beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+		beam.dir = emitter.dir
+		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
+			beam.emit(spawn_by=emitter,charged = TRUE)
+		else
+			beam.emit(spawn_by=emitter)
+		previous_loc = emitter.loc
+		previous_dir = emitter.dir

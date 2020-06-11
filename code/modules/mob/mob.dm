@@ -1631,71 +1631,79 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/reset_layer()
 	return
 
-/mob/verb/eastface()
-	set hidden = 1
-	if(loc && loc.relayface(src, EAST))
+/mob/proc/directionface(var/direction)
+	if(loc && loc.relayface(src, direction))
 		return 1
-	if(locked_to && locked_to.relayface(src, EAST))
+	if(locked_to && locked_to.relayface(src, direction))
 		return 1
 	if(!canface())
 		return 0
-	dir = EAST
+	if (dir!=direction)
+		StartMoving()
+	dir = direction
 	Facing()
+	EndMoving()
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
+/mob/verb/eastface()
+	set hidden = 1
+	return directionface(EAST)
 
 /mob/verb/westface()
 	set hidden = 1
-	if(loc && loc.relayface(src, WEST))
-		return 1
-	if(locked_to && locked_to.relayface(src, WEST))
-		return 1
-	if(!canface())
-		return 0
-	dir = WEST
-	Facing()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(WEST)
 
 /mob/verb/northface()
 	set hidden = 1
-	if(loc && loc.relayface(src, NORTH))
-		return 1
-	if(locked_to && locked_to.relayface(src, NORTH))
-		return 1
-	if(!canface())
-		return 0
-	dir = NORTH
-	Facing()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(NORTH)
 
 /mob/verb/southface()
 	set hidden = 1
-	if(loc && loc.relayface(src, SOUTH))
-		return 1
-	if(locked_to && locked_to.relayface(src, SOUTH))
-		return 1
-	if(!canface())
-		return 0
-	dir = SOUTH
-	Facing()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(SOUTH)
 
 /mob/proc/Facing()
 	var/datum/listener
-	for(. in src.callOnFace)
-		listener = locate(.)
+	for(var/atomToCall in src.callOnFace)
+		listener = locate(atomToCall)
 		if(listener)
-			call(listener,src.callOnFace[.])(src)
+			call(listener,src.callOnFace[atomToCall])(src)
 		else
-			src.callOnFace -= .
+			src.callOnFace -= atomToCall
 
+
+//this proc allows to set up behaviours that occur the instant BEFORE the mob starts moving from a tile to the next
+/mob/proc/StartMoving()
+	var/datum/listener
+	for(var/atomToCall in src.callOnStartMove)
+		listener = locate(atomToCall)
+		if(listener)
+			call(listener,src.callOnStartMove[atomToCall])(src)
+		else
+			src.callOnStartMove -= atomToCall
+
+
+//this proc allows to set up behaviours that occur the instant AFTER the mob finishes moving from a tile to the next
+/mob/proc/EndMoving()
+	var/datum/listener
+	for(var/atomToCall in src.callOnEndMove)
+		listener = locate(atomToCall)
+		if(listener)
+			call(listener,src.callOnEndMove[atomToCall])(src)
+		else
+			src.callOnEndMove -= atomToCall
+
+
+/mob/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+	StartMoving()
+	. = ..()
+	EndMoving()
+
+//Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
+/mob/change_dir(new_dir, var/changer)
+	StartMoving()
+	..()
+	EndMoving()
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
 	return 0

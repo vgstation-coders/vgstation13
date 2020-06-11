@@ -337,7 +337,7 @@
 
 	var/mob/living/carbon/CA = target
 
-	if(!sterile && !(istype(CA) && !CA.hasmouth))
+	if(!sterile && !(istype(CA) && !CA.hasmouth()))
 		var/obj/item/alien_embryo/E = new (target)
 		target.status_flags |= XENO_HOST
 		if(istype(target, /mob/living/carbon/human))

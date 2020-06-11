@@ -146,6 +146,15 @@ var/paperwork_library
 					sleep(1) //too much for us.
 		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
 		t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
+		t = replacetext(t, "\[date\]", "[current_date_string]")
+		t = replacetext(t, "\[time\]", "[worldtime2text()]")
+
+		// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+		
+		t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+		t = replacetext(t, "\[/table\]", "</td></tr></table>")
+		t = replacetext(t, "\[row\]", "</td><tr>")
+		t = replacetext(t, "\[cell\]", "<td>")
 
 	var/text_color
 	if(istype(P, /obj/item/weapon/pen))
