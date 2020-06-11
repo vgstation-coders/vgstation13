@@ -14,7 +14,7 @@
 	health = maxHealth - components_damage //Yeah, this is what should happen normally.
 
 
-/mob/living/silicon/robot/getMaxDamage()
+/mob/living/silicon/robot/proc/getMaxDamage()
 	var/amount = 0
 	for(var/V in components)
 		var/datum/robot_component/C = components[V]
