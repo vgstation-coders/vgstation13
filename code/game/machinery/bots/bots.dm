@@ -316,9 +316,9 @@
 	log_astar_beacon("find_nearest_beacon called")
 	if(awaiting_beacon)
 		return
-	nearest_beacon = null
-	new_destination = "__nearest__"
 	if (post_signal)
+		nearest_beacon = null
+		new_destination = "__nearest__"
 		post_signal(beacon_freq, "findbeacon", "patrol")
 	awaiting_beacon = 1
 	spawn(10)
