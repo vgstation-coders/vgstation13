@@ -82,5 +82,5 @@ You should now be able to use your Explode spell to interface with the nuclear f
 
 /datum/faction/malf/get_statpanel_addition()
 	if(stage >= FACTION_ENDGAME)
-		return "Station integrity: [round(100-(AI_win_timeleft/MALF_INITIAL_TIMER)*100)]%"
+		return "Station integrity: [round((AI_win_timeleft/MALF_INITIAL_TIMER)*100)]%"
 	return null
