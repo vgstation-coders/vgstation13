@@ -271,7 +271,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 				wearer.toggle_internals(wearer, T)
 		for(var/obj/item/rig_module/module in modules)
 			if(!module.activated) //Skip what is already activated.
-				module.activate(wearer,src)
+				module.activate()
 		activated = TRUE
 
 /obj/item/clothing/suit/space/rig/proc/deactivate_suit(var/unequip_all = TRUE, var/unequip_single_piece = null)
