@@ -202,7 +202,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	clean(target)
 	remove_oldtarget(target)
 	target = null
-	return TRUE
+	return ..()
 
 /obj/machinery/bot/cleanbot/proc/get_targets() //This seems slightly wasteful, but it will only be called approximately once every six rounds so whatever
 	blacklisted_targets = list()

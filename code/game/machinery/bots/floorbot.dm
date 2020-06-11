@@ -235,6 +235,7 @@ var/global/list/floorbot_targets=list()
 	path = list()
 	floorbot_targets -= target
 	target = null
+	return ..()
 
 /obj/machinery/bot/floorbot/proc/checkforwork()
 	if(have_target())

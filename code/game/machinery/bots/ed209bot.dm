@@ -210,7 +210,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/ed209/kick_act(mob/living/H)
 	..()
-
+	summoned = FALSE // Anger
 	threatlevel = H.assess_threat(src)
 	threatlevel += PERP_LEVEL_ARREST_MORE
 

@@ -89,10 +89,6 @@ var/global/mulebot_count = 0
 	cell.maxcharge = 2000
 
 	spawn(5)	// must wait for map loading to finish
-		if(radio_controller)
-			radio_controller.add_object(src, control_freq, filter = RADIO_MULEBOT)
-			radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
-
 		mulebot_count += 1
 		if(!suffix)
 			suffix = "#[mulebot_count]"
@@ -568,7 +564,7 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/receive_signal(datum/signal/signal)
 	var/recv = signal.data["beacon"]
-	if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
+	if(recv && recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
 		log_astar_beacon("new destination chosen, [recv]")
 		destination = new_destination
 		new_destination = ""

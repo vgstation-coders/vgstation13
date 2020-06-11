@@ -121,6 +121,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	var/distance_from_end		//A* movement cost variable, how far it is from the end
 	var/distance_from_start		//A* heuristic variable, how far it is from the start
 	var/nodecount		//count the number of Nodes traversed
+	var/id
 
 /PathNode/New(s,p,ndistance_from_start,ndistance_from_end,pnt,id)
 	source = s
@@ -130,11 +131,14 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	calc_f()
 	nodecount = pnt
 	source.AddPathNode(src, id)
+	src.id = id
 
 /PathNode/proc/calc_f()
 	total_node_cost = distance_from_start + distance_from_end
 
 /PathNode/Destroy()
+	source.PathNodes[id] = null
+	source.PathNodes.Remove(id)
 	source = null
 	prevNode = null
 	..()
@@ -144,11 +148,11 @@ length to avoid portals or something i guess?? Not that they're counted right no
 //////////////////////
 
 //the weighting function, used in the A* algorithm
-proc/PathWeightCompare(PathNode/a, PathNode/b)
+/proc/PathWeightCompare(PathNode/a, PathNode/b)
 	return a.total_node_cost - b.total_node_cost
 
 //search if there's a PathNode that points to turf T in the Priority Queue
-proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
+/proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
 	var/i = 1
 	var/PathNode/PN
 	while(i < Queue.L.len + 1)
@@ -223,6 +227,12 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 
 		//if too many steps, abandon that path
 		if(maxnodedepth && (cur.nodecount > maxnodedepth))
+			//cleanup
+			for(var/PathNode/PN in open.L)
+				qdel(PN)
+			for(var/turf/T in closed)
+				var/PathNode/PN = T.FindPathNode("unique_[reference]")
+				qdel(PN)
 			return list()
 
 		//found the target turf (or close enough), let's create the path to it
@@ -256,19 +266,20 @@ proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdis
 					PNode.distance_from_start = newenddist
 					PNode.calc_f()
 					open.ReSort(PNode)//reorder the changed element in the list
-
 	}
 
 	//cleanup
 	for(var/PathNode/PN in open.L)
-		PN.source.PathNodes["unique_[reference]"] = null
-		PN.source.PathNodes.Remove("unique_[reference]")
 		qdel(PN)
 	for(var/turf/T in closed)
 		var/PathNode/PN = T.FindPathNode("unique_[reference]")
-		T.PathNodes["unique_[reference]"] = null
-		T.PathNodes.Remove("unique_[reference]")
 		qdel(PN)
+	for(var/turf/T in path)
+		var/PathNode/PN = T.FindPathNode("unique_[reference]")
+		qdel(PN)
+
+	open.L = null
+	closed = null
 
 	//if the path is longer than maxnodes, then don't return it
 	if(path && maxnodes && path.len > (maxnodes + 1))

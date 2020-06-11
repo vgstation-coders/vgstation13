@@ -1047,7 +1047,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=switch_power;user=\ref[usr]'>Turn [mule.on ? "off" : "on"] <br/>
 							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=return_home;user=\ref[usr]'>Send home</a> <br/>
 							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=[cartridge.saved_destination];user=\ref[usr]'>Send to:</a> <a href='?src=\ref[cartridge];change_destination=1'>[cartridge.saved_destination] - EDIT</a> <br/>
-							</li>>"}
+							</li>"}
 				dat += "</ul>"
 			if (PDA_MODE_BEEPSKY)
 				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/beepsky))

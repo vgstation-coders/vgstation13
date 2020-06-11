@@ -16,8 +16,8 @@
 #define BOT_OLDTARGET_FORGET_DEFAULT 100 //100*WaitMachinery
 
 #if ASTAR_DEBUG == 1
-#define log_astar_bot(text) //visible_message("[src] : [text]")
-#define log_astar_beacon(text) //to_chat(world, "[src] : [text]")
+#define log_astar_bot(text) visible_message("[src] : [text]")
+#define log_astar_beacon(text) to_chat(world, "[src] : [text]")
 #define log_astar_command(text) to_chat(world, "[src] : [text]")
 #else
 #define log_astar_bot(text)
@@ -104,7 +104,7 @@
 	if(botcard)
 		qdel(botcard)
 		botcard = null
-	if (waiting_for_patrol)
+	if (waiting_for_patrol || waiting_for_path)
 		for (var/datum/path_maker/PM in pathmakers)
 			if (PM.owner == src)
 				qdel(PM)
@@ -296,6 +296,8 @@
 // After that, we signal the beacon where we are and they transmit a location.
 // The closet location is picked, and a path is calculated.
 /obj/machinery/bot/proc/find_patrol_path()
+	if (summoned)
+		return
 	if(waiting_for_patrol)
 		return
 	if(awaiting_beacon++)
@@ -465,8 +467,8 @@
 				target = null
 			else
 				summoned = TRUE
-				destination = signal.source.loc
-				target = signal.source.loc
+				destination = get_turf(signal.source)
+				target = get_turf(signal.source)
 			path = list()
 			patrol_path = list()
 			return 1
@@ -494,7 +496,9 @@
 		log_astar_bot("path is [path.len]")
 		return TRUE
 	waiting_for_path = 1
-	return AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+	. = AStar(src, proc_to_call, src.loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+	if (!.)
+		waiting_for_path = 0
 
 /obj/machinery/bot/proc/calc_patrol_path(var/target, var/proc_to_call, var/turf/avoid = null)
 	ASSERT(target && proc_to_call)

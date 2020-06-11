@@ -175,6 +175,7 @@ Auto Patrol: []"},
 	return !cuffing
 
 /obj/machinery/bot/secbot/proc/set_target(var/mob/M)
+	summoned = FALSE
 	target = M
 	steps_per = 3
 	//process_path()
@@ -309,7 +310,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/return_status()
 	if (target)
-		return "Chasing prep"
+		return "On the move"
 	if (auto_patrol)
 		return "Patrolling"
 	return ..()
