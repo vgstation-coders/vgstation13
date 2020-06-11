@@ -60,7 +60,7 @@
 /obj/item/rig_module/tank_refiller/activate()
 	if(!ishuman(rig.wearer))
 		return
-	var/mob/living/carbon/human/H = rig.weared
+	var/mob/living/carbon/human/H = rig.wearer
 	if(H.internal)
 		var/datum/organ/internal/lungs/L = H.internal_organs_by_name["lungs"]
 		if(L)
