@@ -20,6 +20,7 @@
 	var/list/modules_to_install = list()
 	var/obj/item/weapon/cell/cell = null
 	var/image/suit_overlay
+	var/activated = FALSE
 	idle_power_usage = 50
 	active_power_usage = 300
 
@@ -68,6 +69,9 @@
 			process_module_installation(H)
 
 /obj/machinery/suit_modifier/proc/process_module_installation(var/mob/living/carbon/human/H)
+	if(activated)
+		return
+	activated = TRUE
 	suit_overlay.icon_state = "suitmodifier_activate"
 	overlays.Add(suit_overlay)
 	use_power = 2
@@ -107,6 +111,7 @@
 	suit_overlay.icon_state = null
 	R.initialize_suit()
 	use_power = 1
+	activated = FALSE
 
 /obj/machinery/suit_modifier/get_cell()
 	return cell
