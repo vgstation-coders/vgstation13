@@ -1086,6 +1086,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += {"<li>
 							<i>[clean]</i>: [clean.return_status()] in [get_area_name(clean)] <br/>
 							<a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=summon;user=\ref[usr]'>[clean.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=switch_power;user=\ref[usr]'>Turn [clean.on ? "off" : "on"]</a> <br/>
 							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=auto_patrol;user=\ref[usr]'>[clean.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
 							</li>"}
 				dat += "</ul>"
@@ -1101,6 +1102,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += {"<li>
 							<i>[floor]</i>: [floor.return_status()] in [get_area_name(floor)] <br/>
 							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=summon;user=\ref[usr]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=switch_power;user=\ref[usr]'>Turn [floor.on ? "off" : "on"]</a> <br/>
 							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=auto_patrol;user=\ref[usr]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
 							</li>"}
 				dat += "</ul>"
@@ -1116,6 +1118,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += {"<li>
 							<i>[med]</i>: [med.return_status()] in [get_area_name(med)] <br/>
 							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=summon;user=\ref[usr]'>[med.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=switch_power;user=\ref[usr]'>Turn [med.on ? "off" : "on"]</a> <br/>
 							</li>"}
 				dat += "</ul>"
 			if (PDA_APP_SNAKEII)

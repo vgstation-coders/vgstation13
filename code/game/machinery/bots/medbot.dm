@@ -106,13 +106,6 @@
 			botcard.access = J.get_access()
 		else
 			botcard.access = botcard_access
-	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
-		initialize()
-
-/obj/machinery/bot/medbot/initialize()
-	. = ..()
-	if(radio_controller)
-		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 
 /obj/machinery/bot/medbot/turn_on()
 	. = ..()
@@ -294,6 +287,8 @@
 	decay_oldtargets()
 
 	if (get_dist(src, target) <= 1)
+		if (summoned)
+			summoned = FALSE
 		path = list() // Kill our path
 		if(!currently_healing)
 			currently_healing = TRUE

@@ -33,7 +33,7 @@ var/global/mulebot_count = 0
 	beacon_freq = 1400
 	control_freq = 1447
 	control_filter = RADIO_MULEBOT
-	bot_flags = BOT_DENSE|BOT_NOT_CHASING|BOT_CONTROL
+	bot_flags = BOT_DENSE|BOT_NOT_CHASING|BOT_CONTROL|BOT_BEACON
 	suffix = ""
 
 	var/loaddir = 0				// this the direction to unload onto/load from
