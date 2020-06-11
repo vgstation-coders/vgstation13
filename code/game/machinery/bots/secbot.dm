@@ -24,7 +24,6 @@
 	var/declare_arrests = 0 //When making an arrest, should it notify everyone wearing sechuds?
 	var/next_harm_time = 0
 
-	var/blockcount = 0		//number of times retried a blocked path
 	var/arrest_message = null //unique arrest message for beepsky variants
 	var/cuffing = 0 // Are we currently cuffing
 	var/threatlevel = 0
@@ -53,6 +52,8 @@
 	var/obj/item/weapon/melee/baton/baton = null
 	var/baton_type = /obj/item/weapon/melee/baton/
 	var/secbot_assembly_type = /obj/item/weapon/secbot_assembly/
+
+	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
 
 /obj/machinery/bot/secbot/power_change()
 	..()
@@ -174,6 +175,7 @@ Auto Patrol: []"},
 	return !cuffing
 
 /obj/machinery/bot/secbot/proc/set_target(var/mob/M)
+	summoned = FALSE
 	target = M
 	steps_per = 3
 	//process_path()
@@ -305,6 +307,20 @@ Auto Patrol: []"},
 
 			anchored = 1
 			return
+
+/obj/machinery/bot/secbot/return_status()
+	if (target)
+		return "On the move"
+	if (auto_patrol)
+		return "Patrolling"
+	return ..()
+
+/obj/machinery/bot/secbot/execute_signal_command(var/datum/signal/signal, var/command)
+	if (..())
+		return
+	switch (command)
+		if ("arrest_for_ids")
+			idcheck = !idcheck
 
 //If the security records say to arrest them, arrest them
 //Or if they have weapons and aren't security, arrest them.
@@ -489,7 +505,7 @@ Auto Patrol: []"},
 		broadcast_security_hud_message("[src.name] has spotted level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
 
 /obj/machinery/bot/secbot/beepsky/cheapsky/process_bot()
-	if (!target || target.gcDestroyed)
+	if (!summoned && (!target || target.gcDestroyed))
 		target = null
 		steps_per = initial_steps_per
 		find_target()
