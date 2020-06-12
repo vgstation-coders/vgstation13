@@ -61,24 +61,27 @@
 		if(T.z == illegalZ)
 			var/warpZ = pick(zlevels)
 			var/warpTo = locate(rand(5,world.maxx - 10), rand(5, world.maxy - 10), warpZ)
+			var/W = get_turf(warpTo)
+			if(istype(W, /turf/simulated/wall))
+				to_chat(theExile, "<span class='notice'>Your [part] buzzes. The tingling stops.</span>")
+				sleep(3 SECONDS)
+				beingDeported = FALSE
+				return
 			do_teleport(theExile, warpTo, 1)
-			beingDeported = FALSE
 			theExile.Knockdown(3)
 			theExile.Stun(3)
 			if(prob(50))
 				theExile.adjustBruteLoss(5)
 				theExile.adjustCloneLoss(5) //Uh oh it missed a few chromosomes
-			return
 		else
-			to_chat(theExile, "<span class='notice'>The tingling stops.</span>")
-			beingDeported = FALSE
+			to_chat(theExile, "<span class='notice'>Your [part] emits a feint chime. The tingling stops.</span>")
+		beingDeported = FALSE
 
 /obj/item/weapon/implant/exile/emp_act()
 	if(malfunction)
 		return
 	malfunction = 1
 	var/mob/living/M = imp_in
-	var/empLoc = locate(rand(5,world.maxx - 10), rand(5, world.maxy - 10), pick(zlevels))
 	#define FREEDOM 1
 	#define RANDOM_TELEPORT 2
 	#define IMPLANTED_SITE_PORT 3
@@ -86,6 +89,10 @@
 		if(FREEDOM)
 			freeFromExile()
 		if(RANDOM_TELEPORT)
+			var/empLoc = locate(rand(5,world.maxx - 10), rand(5, world.maxy - 10), pick(zlevels))
+			var/W = get_turf(empLoc)
+			if(istype(W, /turf/simulated/wall))
+				empLoc = siteOfImplant
 			do_teleport(M, empLoc, 20)
 			M.Knockdown(3)
 			M.Stun(3)
