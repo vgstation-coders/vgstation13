@@ -826,7 +826,7 @@
 	if(user.stat)
 		return
 	if(connectedHub.currentlySwapping)
-		to_chat(user, "<span class='warning'>Your head is fuzzy and your body is limp. You can't properly focus on getting out.</span>")
+		to_chat(user, "<span class='warning'>Your head feels fuzzy and your body is limp. You can't properly focus on getting out.</span>")
 		if(do_after(user, src, 90 SECONDS)) //More of a safety than a feature
 			connectedHub.currentlySwapping = FALSE
 			connectedHub.badSwap = FALSE
