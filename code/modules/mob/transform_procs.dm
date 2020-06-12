@@ -275,8 +275,7 @@
 		new_human.setGender(gender) //The new human will inherit its gender
 	else //If its gender is NEUTRAL or PLURAL,
 		new_human.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
-	var/datum/preferences/A = new()	//Randomize appearance for the human
-	A.randomize_appearance_for(new_human)
+	new_human.randomise_appearance_for(new_human.gender)
 	if(!new_species || !(new_species in all_species))
 		var/list/restricted = list("Krampus", "Horror", "Manifested")
 		new_species = pick(all_species - restricted)
