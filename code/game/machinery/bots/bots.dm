@@ -1,4 +1,5 @@
 #define MAX_PATHING_ATTEMPTS 15
+#define BEACON_TIMEOUT 15 // Process calls
 
 #define SEC_BOT 1 // Secutritrons (Beepsky) and ED-209s
 #define MULE_BOT 2 // MULEbots
@@ -116,6 +117,13 @@
 		return
 	if (src.integratedpai)
 		return
+	if (awaiting_beacon)
+		total_awaiting_beacon++
+		if (total_awaiting_beacon > BEACON_TIMEOUT)
+			auto_patrol = 0
+			awaiting_beacon = 0
+	else
+		total_awaiting_beacon = 0
 	process_pathing()
 	process_bot()
 
@@ -321,19 +329,6 @@
 		new_destination = "__nearest__"
 		post_signal(beacon_freq, "findbeacon", "patrol")
 	awaiting_beacon = 1
-	spawn(10)
-		awaiting_beacon = 0
-		if(nearest_beacon)
-			total_awaiting_beacon = 0
-			log_astar_beacon("nearest_beacon was found and is [nearest_beacon]")
-			set_destination(nearest_beacon)
-		else
-			total_awaiting_beacon++
-			if (total_awaiting_beacon >= MAX_PATHING_ATTEMPTS)
-				total_awaiting_beacon = 0
-				auto_patrol = 0
-			else
-				find_nearest_beacon(FALSE) // Let's try again...
 
 // This proc is different from the other one.
 // It still transmits for every beacon listening to the frequency.
@@ -428,6 +423,9 @@
 					log_astar_beacon("replacing nearest_beacon [nearest_beacon] with [recv] as it is closer. [get_dist(src, nearest_beacon_loc)] [dist]")
 					nearest_beacon = recv
 					nearest_beacon_loc = signal.source.loc
+					if (auto_patrol)
+						set_destination(nearest_beacon)
+						awaiting_beacon = 0
 				return
 			else if(dist > 1) //We don't have a nearest beacon to compare to, so we're going to accept the first one we find that isn't on the same turf as us
 				log_astar_beacon("new nearest_beacon is [recv]")
