@@ -33,6 +33,8 @@ var/list/navbeacons = list()
 	hide(T.intact)
 
 	navbeacons.Add(src)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
 /obj/machinery/navbeacon/initialize()
 	if(radio_controller)
