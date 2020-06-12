@@ -142,6 +142,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/list/inventory_offsets
 
 	var/species_intro //What intro you're given when you become this species.
+	var/monkey_anim = "h2monkey" // Animation from monkeyisation.
 
 /datum/species/New()
 	..()
