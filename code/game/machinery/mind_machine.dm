@@ -823,9 +823,24 @@
 			connectedHub.occupantTwo = null
 
 /obj/machinery/mind_machine/mind_machine_pod/relaymove(mob/user as mob)
-	if(connectedHub.lockedPods)
-		return 0
 	if(user.stat)
 		return
+	if(connectedHub.currentlySwapping)
+		to_chat(user, "<span class='warning'>Your head is fuzzy and your body is limp. You can't properly focus on getting out.</span>")
+		if(do_after(user, src, 90 SECONDS)) //More of a safety than a feature
+			connectedHub.currentlySwapping = FALSE
+			connectedHub.badSwap = FALSE
+			connectedHub.malfSwap = FALSE
+			connectedHub.swapProgress = 0
+			connectedHub.theFly.len = 0
+			connectedHub.unlockPods()
+			connectedHub.errorMessage = "Emergency reset activated"
+			return
+	if(connectedHub.lockedPods)
+		to_chat(user, "<span class='info'>You begin pushing and prying at the door.</span>")
+		if(do_after(user, src, 10 SECONDS))
+			connectedHub.unlockPods()
+			connectedHub.errorMessage = "Emergency unlock activated"
+			return
 	src.go_out(ejector = user)
 	return
