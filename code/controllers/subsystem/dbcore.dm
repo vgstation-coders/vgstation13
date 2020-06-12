@@ -123,8 +123,8 @@ var/datum/subsystem/dbcore/SSdbcore
 		last_error = error
 		log_sql("Connect() failed | [error]")
 		++failed_connections
-		qdel(connection)
-		qdel(connectOperation)
+		BSQL_DEL_CALL(connection)
+		BSQL_DEL_CALL(connectOperation)
 		connection = null
 		connectOperation = null
 
@@ -199,8 +199,8 @@ var/datum/subsystem/dbcore/SSdbcore
 
 /datum/subsystem/dbcore/proc/Disconnect()
 	failed_connections = 0
-	qdel(connectOperation)
-	qdel(connection)
+	BSQL_DEL_CALL(connectOperation)
+	BSQL_DEL_CALL(connection)
 	connectOperation = null
 	connection = null
 
