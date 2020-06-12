@@ -40,7 +40,7 @@
 		var/atom/movable/overlay/animation = new( M.loc )
 		animation.icon_state = "blank"
 		animation.icon = 'icons/mob/mob.dmi'
-		animation.master = src
+		animation.master = M
 		var/anim_name = M.get_unmonkey_anim()
 		flick(anim_name, animation)
 		sleep(48)
