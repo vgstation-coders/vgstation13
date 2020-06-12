@@ -34,9 +34,9 @@ var/list/navbeacons = list()
 
 	navbeacons.Add(src)
 
-	spawn(5)	// must wait for map loading to finish
-		if(radio_controller)
-			radio_controller.add_object(src, freq, RADIO_NAVBEACONS)
+/obj/machinery/navbeacon/initialize()
+	if(radio_controller)
+		radio_controller.add_object(src, freq, RADIO_NAVBEACONS)
 
 /obj/machinery/navbeacon/Destroy()
 	navbeacons.Remove(src)
