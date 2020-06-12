@@ -101,7 +101,7 @@ var/list/department_radio_keys = list(
 	say_testing(src, "/mob/living/say(\"[message]\", [bubble_type]")
 	if(timestopped)
 		return //under the effects of time magick
-	message = trim(copytext(message, 1, MAX_MESSAGE_LEN))
+	message = sanitize_speech(message)
 	message = capitalize(message)
 
 	say_testing(src, "Say start, message=[message]")
@@ -255,7 +255,7 @@ var/list/department_radio_keys = list(
 	//AI mentions
 	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
 		var/mob/living/silicon/ai/ai = src
-		if(ai.mentions_on)			
+		if(ai.mentions_on)
 			if(findtextEx(rendered_message, "AI") || findtext(rendered_message, ai.real_name))
 				ai << 'sound/machines/twobeep.ogg'
 				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")

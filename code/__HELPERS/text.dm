@@ -92,6 +92,10 @@ forLineInText(text)
 /proc/sanitize(var/t,var/list/repl_chars = null)
 	return html_encode(sanitize_simple(t,repl_chars))
 
+/proc/sanitize_speech(var/t, var/limit = MAX_MESSAGE_LEN)
+	var/static/regex/speech_regex = regex(@"[^ -;=?-~¡-ÿ]", "g") //Matches all characters not in the printable ASCII range except < and > or (most of) the Latin-1 supplement. In BYOND, \w doesn't work outside the ASCII range, so it's no help here.
+	return trim(copytext(speech_regex.Replace(t, "*"), 1, limit))
+
 //Runs sanitize and strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' after sanitize() calls byond's html_encode()
 /proc/strip_html(var/t,var/limit=MAX_MESSAGE_LEN)
@@ -103,10 +107,10 @@ forLineInText(text)
 	return copytext((html_encode(strip_html_simple(t))),1,limit)
 
 /proc/reverse_text(txt)
-  var/i = length(txt)+1
-  . = ""
-  while(--i)
-    . += copytext(txt,i,i+1)
+	var/i = length(txt)+1
+	. = ""
+	while(--i)
+		. += copytext(txt,i,i+1)
 
 /*
  * returns null if there is any bad text in the string

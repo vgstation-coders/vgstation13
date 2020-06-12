@@ -31,7 +31,7 @@
 		remove_typing_indicator()
 		return
 
-	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
+	message = sanitize_speech(message)
 
 	if(usr.stat == DEAD)
 		usr.emote_dead(message)
