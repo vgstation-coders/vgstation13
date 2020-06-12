@@ -56,7 +56,6 @@
 	message_simple =  "stops moving..."
 	stat_allowed = UNCONSCIOUS
 	mob_type_blacklist_typelist = list(/mob/living/carbon/brain) // Everyone can deathgasp
-	var/last_gasp
 
 /datum/emote/living/deathgasp/run_emote(mob/living/user, params)
 	if(/datum/dna/gene/disability/elvis in user.active_genes)
@@ -71,9 +70,12 @@
 		user.succumb_proc(0, 1)
 	message = initial(message)
 	if(ishuman(user))
-		if(Holiday == APRIL_FOOLS_DAY && (world.time - last_gasp >= 3 SECONDS))
+		var/mob/living/carbon/human/H = user
+		var/will_play_sound
+		if((Holiday == APRIL_FOOLS_DAY) || H.is_wearing_item(/obj/item/clothing/suit/unathi/robe, slot_wear_suit))
+			will_play_sound = 1
+		if(params && will_play_sound)
 			playsound(user, 'sound/misc/memedeathgasp.ogg')
-			last_gasp = world.time
 
 /datum/emote/living/carbon/drool
 	key = "drool"
