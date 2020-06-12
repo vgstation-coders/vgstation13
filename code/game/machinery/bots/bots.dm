@@ -55,6 +55,7 @@
 	var/control_filter = null
 
 	var/awaiting_beacon //If we've sent out a signal to get a beacon
+	var/total_awaiting_beacon // How long have we been waiting for?
 	var/nearest_beacon //What our nearest beacon is
 	var/turf/nearest_beacon_loc //The turf of our nearest beacon
 
@@ -311,21 +312,28 @@
 // The signal says, "i'm a bot looking for a beacon to patrol to."
 // Every beacon with the flag "patrol" responds by trasmitting its location.
 // The bot calculates the nearest one and then calculates a path.
-/obj/machinery/bot/proc/find_nearest_beacon()
+/obj/machinery/bot/proc/find_nearest_beacon(var/post_signal = TRUE)
 	log_astar_beacon("find_nearest_beacon called")
 	if(awaiting_beacon)
 		return
-	nearest_beacon = null
-	new_destination = "__nearest__"
-	post_signal(beacon_freq, "findbeacon", "patrol")
+	if (post_signal)
+		nearest_beacon = null
+		new_destination = "__nearest__"
+		post_signal(beacon_freq, "findbeacon", "patrol")
 	awaiting_beacon = 1
 	spawn(10)
 		awaiting_beacon = 0
 		if(nearest_beacon)
+			total_awaiting_beacon = 0
 			log_astar_beacon("nearest_beacon was found and is [nearest_beacon]")
 			set_destination(nearest_beacon)
 		else
-			auto_patrol = 0
+			total_awaiting_beacon++
+			if (total_awaiting_beacon >= MAX_PATHING_ATTEMPTS)
+				total_awaiting_beacon = 0
+				auto_patrol = 0
+			else
+				find_nearest_beacon(FALSE) // Let's try again...
 
 // This proc is different from the other one.
 // It still transmits for every beacon listening to the frequency.
