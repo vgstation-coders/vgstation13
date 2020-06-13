@@ -47,6 +47,7 @@ TODO: literally every alarm but SPS alarms.
 /obj/machinery/computer/security_alerts/update_icon(var/showalert = FALSE)
 	..()
 	if(stat & (NOPOWER|BROKEN))
+		overlays = 0
 		return
 	else
 		icon_state = "secalert"
