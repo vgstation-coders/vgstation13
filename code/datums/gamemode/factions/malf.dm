@@ -1,3 +1,5 @@
+#define MALF_INITIAL_TIMER 1800
+
 /datum/faction/malf
 	name = "Malfunctioning AI"
 	desc = "ERROR"
@@ -80,5 +82,5 @@ You should now be able to use your Explode spell to interface with the nuclear f
 
 /datum/faction/malf/get_statpanel_addition()
 	if(stage >= FACTION_ENDGAME)
-		return "Time left: [max(AI_win_timeleft/(apcs/3), 0)]"
+		return "Station integrity: [round((AI_win_timeleft/MALF_INITIAL_TIMER)*100)]%"
 	return null
