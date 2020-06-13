@@ -3431,33 +3431,6 @@
 	M.adjustToxLoss(1)
 	M.adjustBrainLoss(1)
 	
-/datum/reagent/mannitol
-	name = "Mannitol"
-	id = MANNITOL
-	description = "Mannitol is strange yet commonly requested mixture that is said to quell headaches."
-	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
-	overdose_am = REAGENTS_OVERDOSE
-	pain_resistance = 20
-	density = 1.8
-	specheatcap = 0.66
-
-/datum/reagent/mannitol/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	if(M.getBrainLoss() > 10 && prob(40))
-		M.adjustBrainLoss(-1 * REM)	
-		if(prob(10))
-			to_chat(M, "Your head feels a bit better.")
-	else
-		if(M.getBrainLoss() <= 10)
-			M.adjustBrainLoss(1 * REM)	
-			if(prob(10))
-				to_chat(M, "Your head hurts a bit.")
-
-
 /datum/reagent/bicarodyne
 	name = "Bicarodyne"
 	id = BICARODYNE
@@ -4811,6 +4784,11 @@
 						L.take_damage(0.1, 1)
 					H.adjustToxLoss(0.13)
 					holder.remove_reagent(src.id, 0.5 * FOOD_METABOLISM)
+
+/datum/reagent/discount/mannitol
+	name = "Mannitol"
+	id = MANNITOL
+	description = "The only medicine a <B>REAL MAN</B> needs."
 
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"
