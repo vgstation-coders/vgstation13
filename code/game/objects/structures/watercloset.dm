@@ -375,19 +375,19 @@
 			var/washglasses = 1
 
 			if(H.wear_suit)
-				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDEGLOVES))
-				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDESHOES))
+				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDEGLOVES, 0, H.wear_suit.body_parts_visible_override))
+				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDESHOES, 0, H.wear_suit.body_parts_visible_override))
 
 			if(H.head)
-				washmask = !(is_slot_hidden(H.head.body_parts_covered, HIDEMASK))
-				washglasses = !(is_slot_hidden(H.head.body_parts_covered, HIDEEYES))
-				washears = !(is_slot_hidden(H.head.body_parts_covered, HIDEEARS))
+				washmask = !(is_slot_hidden(H.head.body_parts_covered, HIDEMASK, 0, H.head.body_parts_visible_override))
+				washglasses = !(is_slot_hidden(H.head.body_parts_covered, HIDEEYES, 0, H.head.body_parts_visible_override))
+				washears = !(is_slot_hidden(H.head.body_parts_covered, HIDEEARS, 0, H.head.body_parts_visible_override))
 
 			if(H.wear_mask)
 				if(washears)
-					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEARS))
+					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEARS, 0, H.wear_mask.body_parts_visible_override))
 				if(washglasses)
-					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEYES))
+					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEYES, 0, H.wear_mask.body_parts_visible_override))
 
 			if(H.head)
 				if(prob(CLEAN_PROB) && H.head.clean_blood())

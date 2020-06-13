@@ -179,21 +179,17 @@
 	usr.set_machine(src)
 	if(href_list["timing"])
 		timing = text2num(href_list["timing"])
-	else
-		if(href_list["tp"])
-			timeleft += text2num(href_list["tp"])
-			timeleft = clamp(round(timeleft), 0, 1 HOURS)
-		if(href_list["fc"])
-			for(var/obj/machinery/flasher/F in targets)
-				F.flash()
+	else if(href_list["tp"])
+		timeleft += text2num(href_list["tp"])
+		timeleft = clamp(round(timeleft), 0, 3600)
+	else if(href_list["fc"])
+		for(var/obj/machinery/flasher/F in targets)
+			F.flash()
 	add_fingerprint(usr)
 	updateUsrDialog()
 	update_icon()
 	if(timing)
 		timer_start()
-	else
-		timer_end()
-
 
 //icon update function
 // if NOPOWER, display blank

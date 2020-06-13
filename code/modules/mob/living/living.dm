@@ -183,7 +183,6 @@
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
-
 	// Figure out how much damage to deal.
 	// Formula: (deciseconds_since_connect/10 deciseconds)*B.get_damage()
 	var/damage = ((world.time - lastcheck)/10)  * B.get_damage()
@@ -743,7 +742,9 @@ Thanks.
 						if (ok)
 							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
+							M.StartMoving()
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
+							M.EndMoving()
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
 					else
@@ -1407,7 +1408,13 @@ Thanks.
 							now_pushing = 0
 							return
 					AM.set_glide_size(src.glide_size)
-					step(AM, t)
+					if (ismob(AM))
+						var/mob/M = AM
+						M.StartMoving()
+						step(M, t)
+						M.EndMoving()
+					else
+						step(AM, t)
 				now_pushing = 0
 			return
 	return

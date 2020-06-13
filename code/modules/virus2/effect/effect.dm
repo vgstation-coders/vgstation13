@@ -57,6 +57,8 @@
 	// Called when the sufferer of the symptom bumps, is bumped, or is touched by hand.
 /datum/disease2/effect/proc/on_death(var/mob/living/carbon/mob)
 	// Called when the sufferer of the symptom dies
+/datum/disease2/effect/proc/side_effect(var/mob/living/mob)
+	// Called on every Life() while the body is alive
 
 // Most of the stuff below shouldn't be changed when you make a new effect.
 /datum/disease2/effect/New(var/datum/disease2/disease/D)
@@ -67,11 +69,11 @@
 		return 1
 	return 0
 
-/datum/disease2/effect/proc/run_effect(var/mob/living/carbon/human/mob)
+/datum/disease2/effect/proc/run_effect(var/mob/living/mob)
 	activate(mob)
 	count += 1
 
-/datum/disease2/effect/proc/disable_effect(var/mob/living/carbon/human/mob)
+/datum/disease2/effect/proc/disable_effect(var/mob/living/mob)
 	if (count > 0)
 		deactivate(mob)
 

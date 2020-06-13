@@ -128,6 +128,10 @@
 /datum/sprite_accessory/hair/longpony
 	name = "Long Ponytail"
 	icon_state = "hair_longpony"
+	
+/datum/sprite_accessory/hair/mediumpony
+	name = "Medium Ponytail"
+	icon_state = "hair_mediumpony"
 
 /datum/sprite_accessory/hair/highpony
 	name = "High Ponytail"
@@ -489,6 +493,10 @@
 	name = "Nia"
 	icon_state = "hair_nia"
 	gender = FEMALE
+	
+/datum/sprite_accessory/hair/nia_short
+	name = "Nia (Short)"
+	icon_state = "hair_nia_short"
 
 /datum/sprite_accessory/hair/shinobu
 	name = "Shinobu"

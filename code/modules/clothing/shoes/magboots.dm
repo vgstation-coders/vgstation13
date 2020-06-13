@@ -38,11 +38,11 @@
 			if(!H.equip_to_slot_if_possible(stored_shoes, slot_shoes))
 				stored_shoes.forceMove(get_turf(src))
 			stored_shoes = null
-		return FALSE
+		return CANNOT_EQUIP
 
 	if(stored_shoes)
 		to_chat(H, "<span class='info'>You slip \the [src] on over \the [stored_shoes].</span>")
-	return TRUE
+	return CAN_EQUIP
 
 /obj/item/clothing/shoes/magboots/unequipped(mob/living/carbon/human/H, var/from_slot = null)
 	..()

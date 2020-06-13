@@ -100,8 +100,8 @@
 
 
 /obj/item/device/law_planner/proc/announce()
-	visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"Charges: [english_list(rapsheet)]")
-	visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"[total_time] minutes.")
+	visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"Charges: [english_list(rapsheet)].\"")
+	visible_message("[bicon(src)] <B>\The [src]</B> beeps, \"[total_time] minutes.\"")
 
 /obj/item/device/law_planner/preattack(var/atom/A, var/mob/user, var/proximity_flag)
 	if(!proximity_flag)
@@ -143,6 +143,7 @@
 			timing = 0
 		var/obj/machinery/door_timer/D = A
 		D.timeleft += apply
+		D.timeleft = clamp(round(D.timeleft), 0, 3600)
 		if(start_timer && !D.timing)
 			D.timing = TRUE
 			D.timer_start()

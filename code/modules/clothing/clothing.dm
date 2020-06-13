@@ -542,6 +542,7 @@
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
 	body_parts_covered = FULL_HEAD|HIDEHAIR
+	body_parts_visible_override = EYES
 	siemens_coefficient = 0.9
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_restricted = list("exclude","Diona","Muton")

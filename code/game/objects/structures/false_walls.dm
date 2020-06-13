@@ -392,6 +392,8 @@
 	icon_state = ""
 	mineral = "gingerbread"
 	density = 1
+	opacity = 1
+	anchored = 1
 
 //-----------wtf?-----------start
 /obj/structure/falsewall/clown

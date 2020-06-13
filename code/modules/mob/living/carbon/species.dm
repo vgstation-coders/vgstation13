@@ -142,6 +142,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/list/inventory_offsets
 
 	var/species_intro //What intro you're given when you become this species.
+	var/monkey_anim = "h2monkey" // Animation from monkeyisation.
 
 /datum/species/New()
 	..()
@@ -1351,7 +1352,7 @@ var/list/has_died_as_golem = list()
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
 
-	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | REQUIRE_DARK | IS_SPECIES_MUTE
+	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
 	anatomy_flags = NO_BALD
 
 	gender = NEUTER
@@ -1387,9 +1388,9 @@ var/list/has_died_as_golem = list()
 		)
 
 	species_intro = "You are a Mushroom Person.<br>\
-					You are an odd creature, light harms you and makes you hunger, but the darkness heals you and feeds you.<br>\
+					You are an odd creature. Your lack of a mouth prevents you from eating, but you can stand or lay on food to absorb it.<br>\
 					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
-					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
+					Additionally, you cannot speak. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
 
 /datum/species/mushroom/gib(mob/living/carbon/human/H)

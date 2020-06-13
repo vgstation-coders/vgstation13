@@ -7,6 +7,7 @@
  ***********************/
 
 // Uncomment to test the mediaplayer
+
 //#define DEBUG_MEDIAPLAYER
 
 // Open up VLC and play musique.
@@ -262,13 +263,16 @@ function SetMusic(url, time, volume) {
 		targetURL = M.media_url
 		targetStartTime = M.media_start_time
 		targetVolume = M.volume
-		src.finish_time = M.media_finish_time
-		if ((targetURL != current_url) && (finish_time > 0) && ((world.time - finish_time) < -10 SECONDS)) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
+		var/check_samesong = ((targetURL == current_url) && (finish_time != M.media_finish_time))
+		var/check_harsh_skip = ((targetURL != current_url) && (finish_time > 0) && ((world.time - finish_time) < - 10 SECONDS))
+		if (check_samesong || check_harsh_skip) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.
 			MP_DEBUG("<span class='good'>Should be cutting off music.<span>")
 			stop_music()
-			sleep(1 SECONDS) // Have to wait for the media player response.
-
-//			to_chat(owner, "Found audio source: [M.media_url] @ [(world.time - start_time) / 10]s.")
+			sleep(0.1 SECONDS) // Have to wait for the media player response.
+		src.finish_time = M.media_finish_time
+	else
+		MP_DEBUG("<span class='good'>Nothing playing, cutting off music.<span>")
+		stop_music()
 	//else
 	//	testing("M is not playing or null.")
 	push_music(targetURL,targetStartTime,targetVolume)

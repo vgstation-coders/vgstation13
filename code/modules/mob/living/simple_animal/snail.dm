@@ -98,6 +98,8 @@ var/max_snails = 40
 	if (snail_count >= max_snails)
 		return
 	for(var/mob/living/simple_animal/snail/partner in loc)
+		if (partner == src) // no
+			continue
 		if (partner.being_romantic)
 			return // the other snail is busy
 

@@ -928,7 +928,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/glue
 	cost = 6
 	discounted_cost = 4
-	jobs_with_discount = list("Clown", "Mime")
+	jobs_with_discount = list("Clown", "Mime", "Captain")
 
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray
 	name = "Can of Invisible Spray"
@@ -951,6 +951,15 @@ var/list/uplink_items = list()
 	item = /obj/item/clothing/gloves/white/advanced
 	cost = 12
 	jobs_exclusive = list("Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/punchline
+	name = "Punchline"
+	desc = "A high risk high reward abomination combining experimental phazon and bananium technologies. Wind-up Punchline to charge it. Enough charge and your targets will slip through reality. Warning: Forcing wind-ups beyond the limiter may reverse the prototype phazite honkpacitors and disrupt reality around the user."
+	item = /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Clown")
+	jobs_excluded = list("Mime")
 
 /datum/uplink_item/jobspecific/assistant
 	category = "Assistant Specials"

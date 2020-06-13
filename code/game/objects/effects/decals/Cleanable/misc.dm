@@ -326,3 +326,6 @@
 	desc = "Whatever kind of pathogenic culture was in there has long since decayed. Someone should still clean it up eventually."
 	icon_state = "brokendish-persistent"
 	persistent_type_replacement = null
+
+/obj/effect/decal/cleanable/virusdish/persistent/post_mapsave2atom(var/list/L)
+	icon_state = "brokendish-persistent"

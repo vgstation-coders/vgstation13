@@ -59,7 +59,8 @@ var/global/list/ghdel_profiling = list()
 	return 1
 
 /atom/proc/beam_disconnect(var/obj/effect/beam/B)
-	beams.Remove(B)
+	if (beams)
+		beams.Remove(B)
 
 /atom/proc/apply_beam_damage(var/obj/effect/beam/B)
 	return 1

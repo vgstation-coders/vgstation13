@@ -32,7 +32,7 @@
 	// Broadcasting shit
 	for(var/obj/machinery/media/transmitter/T in hooked)
 //		testing("[src] Writing media to [T].")
-		T.broadcast(media_url,media_start_time)
+		T.broadcast(media_url,media_start_time, media_finish_time)
 
 	if(exclusive_hook)
 		disconnect_media_source() // Just to be sure.
