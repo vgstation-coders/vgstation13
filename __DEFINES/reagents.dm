@@ -287,6 +287,7 @@
 #define FIREBALLCOLA	"fireballcola"
 #define FIRERITA 		"firerita"
 #define MAGICA			"magica"
+#define MAGICADELUXE			"magicadeluxe"
 #define IRISHCOFFEE 			"irishcoffee"
 #define MARGARITA 			"margarita"
 #define BLACKRUSSIAN 			"blackrussian"

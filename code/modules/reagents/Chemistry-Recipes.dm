@@ -3080,6 +3080,13 @@
 	result = MAGICA
 	required_reagents = list(CINNAMONWHISKY = 1, BITTERS = 1)
 	result_amount = 2
+	
+/datum/chemical_reaction/magicadeluxe
+	name = "Magica Deluxe"
+	id = MAGICADELUXE
+	result = MAGICADELUXE
+	required_reagents = list(MAGICA = 1, KARMOTRINE = 1)
+	result_amount = 1
 
 //Cafe stuff!
 /datum/chemical_reaction/acidtea

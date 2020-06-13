@@ -6016,6 +6016,52 @@
 		to_chat(M, "<span class='notice'>You feel hungry like the diona.</span>")
 		M.add_spell(spell)
 
+/datum/reagent/ethanol/magicadeluxe
+	name = "Magica Deluxe"
+	id = MAGICADELUXE
+	description = "Makes you feel enchanted until the aftertaste hits you."
+	color = "#009933" //rgb(0, 153, 51)
+	
+/datum/reagent/ethanol/magicadeluxe/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(M.spell_list.len)
+		return //one per customer, magicians need not apply
+	var/list/fake_spells = list()
+	var/list/choices = getAllWizSpells()
+	for(var/i=5; i > 0; i--)
+		var/spell/passive/fakespell = new /spell/passive
+		var/name_modifier = pick("Efficient ","Efficient ","Free ", "Instant ")
+		fakespell.spell_flags = STATALLOWED
+		var/spell/readyup = pick_n_take(choices)
+		var/spell/fromwhichwetake = new readyup
+		fakespell.name = fromwhichwetake.name
+		fakespell.desc = fromwhichwetake.desc
+		fakespell.hud_state = fromwhichwetake.hud_state
+		fakespell.invocation = "MAH'JIK"
+		fakespell.invocation_type = SpI_SHOUT
+		fakespell.charge_type = Sp_CHARGES
+		fakespell.charge_counter = 0
+		fakespell.charge_max = 1
+		if(prob(20))
+			fakespell.name = name_modifier + fakespell.name
+		fake_spells += fakespell
+	if(!M.spell_list.len) //just to be sure
+		to_chat(M, "<span class='notice'>You feel magical!</span>")
+		playsound(M,'sound/effects/summon_guns.ogg', 50, 1)
+		for (var/spell/majik in fake_spells)
+			M.add_spell(majik)
+		
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/spell/thisisdumb = new /spell/targeted/equip_item/robesummon
+			H.add_spell(thisisdumb)
+			thisisdumb.charge_type = Sp_CHARGES
+			thisisdumb.charge_counter = 1
+			thisisdumb.charge_max = 1		
+			H.cast_spell(thisisdumb,list(H))
+		holder.remove_reagent(MAGICADELUXE,5)
+
 /datum/reagent/ethanol/deadrum
 	name = "Deadrum"
 	id = RUM
