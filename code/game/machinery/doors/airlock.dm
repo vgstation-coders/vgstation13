@@ -1318,6 +1318,9 @@ About the new airlock wires panel:
 	if(!forced)
 		if( !arePowerSystemsOn() || (stat & NOPOWER) || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )
 			return 0
+	for(var/obj/O in loc) //A redundant check that exists in the parent
+		if (O.blocks_doors()) //But it exists in the parent because it also affects firelocks.
+			return 0
 	use_power(50)
 	playsound(src, soundeffect, pitch, 1)
 	if(src.closeOther != null && istype(src.closeOther, /obj/machinery/door/airlock/) && !src.closeOther.density)
