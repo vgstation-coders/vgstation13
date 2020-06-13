@@ -160,7 +160,6 @@
 	preview_icon_front = null
 	preview_icon_side = null
 	preview_icon = null
-	preview_background = "White"
 
 	var/g = "m"
 	if(gender == FEMALE)
