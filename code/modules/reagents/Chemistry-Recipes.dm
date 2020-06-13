@@ -342,7 +342,7 @@
 	name = "Blisterol"
 	id = BLISTEROL
 	result = BLISTEROL
-	required_reagents = list(ALUMINIUM = 1, CARBON = 1, FUEL = 2)
+	required_reagents = list(ALUMINIUM = 1, COPPER = 1, FUEL = 2)
 	result_amount = 3
 
 /datum/chemical_reaction/virus_food
