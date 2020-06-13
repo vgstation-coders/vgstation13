@@ -2911,8 +2911,8 @@
 	if(..())
 		return 1
 	
-	M.heal_organ_damage(2 * REM) //heal 2 brute
-	M.heal_organ_damage(0, -0.5 * REM) // cause 0.5 burn
+	M.heal_organ_damage(2 * REM) //heal 1 brute
+	M.heal_organ_damage(0, -0.5 * REM) // cause 0.25 burn
 
 /datum/reagent/hyperzine
 	name = "Hyperzine"
