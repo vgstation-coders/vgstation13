@@ -274,7 +274,8 @@ var/global/datum/credits/end_credits = new
 	if(ticker.station_was_nuked)
 		candidates += pick("http://ss13.moe/media/m2/source/roundend/credits/RA2_Blow_It_Up.mp3",
 						"http://ss13.moe/media/m2/source/roundend/credits/Castanets_You_Are_The_Blood.mp3",
-						"http://ss13.moe/media/m2/source/roundend/credits/Twin_Peaks_Theme_Instrumental.mp3",
+						"http://ss13.moe/media/m2/source/roundend/credits/Julee_Cruise_Falling_Intrumental.mp3",
+						"http://ss13.moe/media/m2/source/roundend/credits/Julee_Cruise_The_World_Spins.mp3",
 						"http://ss13.moe/media/m2/source/roundend/credits/Mike_Oldfield_Nuclear.mp3")
 
 	if(candidates)
