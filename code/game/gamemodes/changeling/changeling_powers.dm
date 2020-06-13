@@ -527,7 +527,8 @@
 	animation.icon_state = "blank"
 	animation.icon = 'icons/mob/mob.dmi'
 	animation.master = src
-	flick("monkey2h", animation)
+	var/anim_name = C.get_unmonkey_anim()
+	flick(anim_name, animation)
 	sleep(48)
 	qdel(animation)
 	animation = null

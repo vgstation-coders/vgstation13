@@ -40,7 +40,7 @@
 	qdel(src)
 
 
-/mob/proc/monkeyize(var/ignore_primitive = TRUE, var/choose_name = FALSE)
+/mob/proc/monkeyize(var/ignore_primitive = FALSE, var/choose_name = FALSE)
 	if(ismonkey(src)) //What's the point
 		return
 	if(!Premorph())
@@ -50,7 +50,8 @@
 		animation.icon_state = "blank"
 		animation.icon = 'icons/mob/mob.dmi'
 		animation.master = src
-		flick("h2monkey", animation)
+		var/moneky_anim = get_monkey_anim()
+		flick(moneky_anim, animation)
 		sleep(MONKEY_ANIM_TIME)
 		animation.master = null
 		qdel(animation)
@@ -85,8 +86,13 @@
 	Postmorph(Mo, choose_name, "You have been turned into a monkey! Pick a monkey name for your new monkey self.")
 	return Mo
 
-/mob/living/carbon/human/monkeyize(ignore_primitive = FALSE, choose_name = FALSE)
-	.=..()
+/mob/proc/get_monkey_anim()
+	return "h2monkey"
+
+/mob/living/carbon/human/get_monkey_anim()
+	if (species)
+		return species.monkey_anim
+	return ..()
 
 /mob/proc/Cluwneize()
 	if(!Premorph())
