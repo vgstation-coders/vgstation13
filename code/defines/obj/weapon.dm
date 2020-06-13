@@ -82,6 +82,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "soap"
 	w_class = W_CLASS_TINY
+	siemens_coefficient = 0 //no conduct
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
