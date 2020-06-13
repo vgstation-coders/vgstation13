@@ -184,7 +184,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/can_buckle(mob/M, mob/user)
 	//Same as parent's, but no occupant check!
-	if(M != user || !Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to)
+	if(!Adjacent(user) && !user.Adjacent(M) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || M.locked_to)
 		return 0
 	return 1
 
@@ -200,46 +200,6 @@
 	..()
 
 	update_mob() //Update the rest
-
-//Allows people to buckle others to the chair
-//Mostly copypasted buckle_mob code with a few changes
-/obj/structure/bed/chair/vehicle/wheelchair/multi_people/buckle_mob(mob/M, mob/user)
-	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
-		return
-	if(!ismob(M) || !M.Adjacent(src)  || M.locked_to) //Person has to be close to the wheelchair, not on it
-		return
-	if(!user.Adjacent(M))
-		return
-	if(user.size <= SIZE_TINY)
-		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
-		return
-	if(isanimal(M))
-		if(M.size <= SIZE_TINY)
-			to_chat(user, "<span class='warning'>The [M] is too small to buckle in.</span>")
-			return
-	if(istype(M, /mob/living/carbon/slime))
-		to_chat(user, "<span class='warning'>The [M] is too squishy to buckle in.</span>")
-		return
-	if(M == user)
-		M.visible_message(\
-			"<span class='notice'>[M.name] buckles in!</span>",\
-			"You buckle yourself to [src].",\
-			"You hear metal clanking.")
-	else
-		M.visible_message(\
-			"<span class='notice'>[M.name] is buckled in to [src] by [user.name]!</span>",\
-			"You are buckled in to [src] by [user.name].",\
-			"You hear metal clanking.")
-	playsound(src, 'sound/misc/buckle_click.ogg', 50, 1)
-	add_fingerprint(user)
-	lock_atom(M, mob_lock_type)
-	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
-	verbs -= /obj/structure/bed/verb/buckle_in
-	verbs += /obj/structure/bed/verb/buckle_out
-	if(M.pulledby)
-		M.pulledby.start_pulling(src)
-
-
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized
 	name = "motorized wheelchair"
