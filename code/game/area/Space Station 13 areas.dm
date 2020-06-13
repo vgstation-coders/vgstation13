@@ -2153,6 +2153,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "eva"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
+	holomap_marker = "eva"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/ai_monitored/storage/secure
 	name = "Secure Storage"
