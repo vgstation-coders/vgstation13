@@ -600,6 +600,8 @@ var/global/list/damage_icon_parts = list()
 
 		O.icon = standing
 		O.icon_state = standing.icon_state
+		if(w_uniform.clothing_flags & COLORS_OVERLAY)
+			O.color = w_uniform.color
 		O.pixel_x = species.inventory_offsets["[slot_w_uniform]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_w_uniform]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,UNIFORM_LAYER)
@@ -691,6 +693,8 @@ var/global/list/damage_icon_parts = list()
 
 		O.icon = standing
 		O.icon_state = standing.icon_state
+		if(gloves.clothing_flags & COLORS_OVERLAY)
+			O.color = gloves.color
 		O.pixel_x = species.inventory_offsets["[slot_gloves]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_gloves]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,GLOVES_LAYER)
@@ -749,6 +753,8 @@ var/global/list/damage_icon_parts = list()
 			var/obj/abstract/Overlays/O = obj_overlays[GLASSES_LAYER]
 			O.icon = standing
 			O.icon_state = standing.icon_state
+			if(glasses.clothing_flags & COLORS_OVERLAY)
+				O.color = glasses.color
 			O.overlays.len = 0
 			if(glasses.dynamic_overlay)
 				if(glasses.dynamic_overlay["[GLASSES_LAYER]"])
@@ -800,6 +806,8 @@ var/global/list/damage_icon_parts = list()
 			if(ears.dynamic_overlay["[EARS_LAYER]"])
 				var/image/dyn_overlay = ears.dynamic_overlay["[EARS_LAYER]"]
 				O.overlays += dyn_overlay
+		if(I.clothing_flags & COLORS_OVERLAY)
+			O.color = I.color
 		O.pixel_x = species.inventory_offsets["[slot_ears]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_ears]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,EARS_LAYER)
@@ -835,6 +843,8 @@ var/global/list/damage_icon_parts = list()
 			if(has_icon(O.icon,"[shoes.icon_state]_f"))
 				O.icon_state = "[shoes.icon_state]_f"
 
+		if(shoes.clothing_flags & COLORS_OVERLAY)
+			O.color = shoes.color
 		O.overlays.len = 0
 		if(shoes.dynamic_overlay)
 			if(shoes.dynamic_overlay["[SHOES_LAYER]"])
@@ -924,6 +934,8 @@ var/global/list/damage_icon_parts = list()
 
 		O.icon = standing
 		O.icon_state = standing.icon_state
+		if(I.clothing_flags & COLORS_OVERLAY)
+			O.color = I.color
 		O.pixel_x = species.inventory_offsets["[slot_head]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_head]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,HEAD_LAYER)
@@ -962,6 +974,8 @@ var/global/list/damage_icon_parts = list()
 		var/obj/abstract/Overlays/O = obj_overlays[BELT_LAYER]
 		O.icon = standing
 		O.icon_state = standing.icon_state
+		if(I.clothing_flags & COLORS_OVERLAY)
+			O.color = I.color
 		O.overlays.len = 0
 		if(belt.dynamic_overlay)
 			if(belt.dynamic_overlay["[BELT_LAYER]"])
@@ -1032,6 +1046,8 @@ var/global/list/damage_icon_parts = list()
 
 		O.icon = standing
 		O.icon_state = standing.icon_state
+		if(wear_suit.clothing_flags & COLORS_OVERLAY)
+			O.color = wear_suit.color
 		O.pixel_x = species.inventory_offsets["[slot_wear_suit]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_wear_suit]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SUIT_LAYER)
@@ -1093,6 +1109,8 @@ var/global/list/damage_icon_parts = list()
 
 		O.icon = standing
 		O.icon_state = standing.icon_state
+		if(I.clothing_flags & COLORS_OVERLAY)
+			O.color = I.color
 		O.pixel_x = species.inventory_offsets["[slot_wear_mask]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_wear_mask]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,FACEMASK_LAYER)
@@ -1128,6 +1146,8 @@ var/global/list/damage_icon_parts = list()
 		var/obj/abstract/Overlays/O = obj_overlays[BACK_LAYER]
 		O.icon = standing
 		O.icon_state = standing.icon_state
+		if(I.clothing_flags & COLORS_OVERLAY)
+			O.color = I.color
 		O.overlays.len = 0
 		if(back.dynamic_overlay)
 			if(back.dynamic_overlay["[BACK_LAYER]"])
