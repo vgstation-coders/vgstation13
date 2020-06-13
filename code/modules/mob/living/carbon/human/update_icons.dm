@@ -75,9 +75,9 @@ reducing processing costs. So please bear with me while I iron out the kinks. It
 If I can eventually free var/lying stuff from the life() process altogether, stuns/death/status stuff
 will become less affected by lag-spikes and will be instantaneous! :3
 If you have any questions/constructive-comments/bugs-to-report/or have a massivly devestated butt...
-Please contact me on #coderbus IRC. ~Carn x
+Please contact me on #coderbus IRC. ~Carn x //FUCK YOU CARN
 */
-
+//THIS ENTIRE FILE NEEDS TO BE PURIFIED WITH FLAME
 /mob/living/carbon/human
 	var/list/overlays_standing[TOTAL_LAYERS]
 	var/previous_damage_appearance // store what the body last looked like, so we only have to update it if something changed
@@ -555,6 +555,7 @@ var/global/list/damage_icon_parts = list()
 	else if(w_uniform && !check_hidden_body_flags(HIDEJUMPSUIT) && w_uniform.is_visible())
 		w_uniform.screen_loc = ui_iclothing
 		var/obj/abstract/Overlays/O = obj_overlays[UNIFORM_LAYER]
+		O.color = null
 		O.overlays.len = 0
 		var/image/standing
 		var/t_color = w_uniform._color
@@ -740,8 +741,11 @@ var/global/list/damage_icon_parts = list()
 
 		if(glasses.cover_hair)
 			var/obj/abstract/Overlays/O = obj_overlays[GLASSES_OVER_HAIR_LAYER]
+			O.color = null
 			O.icon = standing
 			O.icon_state = standing.icon_state
+			if(glasses.clothing_flags & COLORS_OVERLAY)
+				O.color = glasses.color
 			O.overlays.len = 0
 			if(glasses.dynamic_overlay)
 				if(glasses.dynamic_overlay["[GLASSES_OVER_HAIR_LAYER]"])
@@ -751,6 +755,7 @@ var/global/list/damage_icon_parts = list()
 			//overlays_standing[GLASSES_OVER_HAIR_LAYER]	= standing
 		else
 			var/obj/abstract/Overlays/O = obj_overlays[GLASSES_LAYER]
+			O.color = null
 			O.icon = standing
 			O.icon_state = standing.icon_state
 			if(glasses.clothing_flags & COLORS_OVERLAY)
@@ -799,6 +804,7 @@ var/global/list/damage_icon_parts = list()
 				standing.icon_state = "[ears.icon_state]_f"
 
 		var/obj/abstract/Overlays/O = obj_overlays[EARS_LAYER]
+		O.color = null
 		O.icon = standing
 		O.icon_state = standing.icon_state
 		O.overlays.len = 0
@@ -822,6 +828,7 @@ var/global/list/damage_icon_parts = list()
 	overlays -= obj_overlays[SHOES_LAYER]
 	if(shoes && !check_hidden_body_flags(HIDESHOES) && shoes.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[SHOES_LAYER]
+		O.color = null
 		if(shoes.wear_override)
 			O.icon = icon("icon" = shoes.wear_override)
 		else
@@ -895,6 +902,7 @@ var/global/list/damage_icon_parts = list()
 	overlays -= obj_overlays[HEAD_LAYER]
 	if(head && head.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[HEAD_LAYER]
+		O.color = null
 		O.overlays.len = 0
 		head.screen_loc = ui_head		//TODO
 		var/image/standing
@@ -972,6 +980,7 @@ var/global/list/damage_icon_parts = list()
 				standing.icon_state = "[belt.icon_state]_f"
 
 		var/obj/abstract/Overlays/O = obj_overlays[BELT_LAYER]
+		O.color = null
 		O.icon = standing
 		O.icon_state = standing.icon_state
 		if(I.clothing_flags & COLORS_OVERLAY)
@@ -996,6 +1005,7 @@ var/global/list/damage_icon_parts = list()
 	if( wear_suit && wear_suit.is_visible())	//TODO check this
 		wear_suit.screen_loc = ui_oclothing	//TODO
 		var/obj/abstract/Overlays/O = obj_overlays[SUIT_LAYER]
+		O.color = null
 		O.overlays.len = 0
 		var/image/standing	= image("icon" = ((wear_suit.icon_override) ? wear_suit.icon_override : 'icons/mob/suit.dmi'), "icon_state" = "[wear_suit.icon_state]")
 		var/datum/species/SP = species
@@ -1074,6 +1084,7 @@ var/global/list/damage_icon_parts = list()
 	overlays -= obj_overlays[FACEMASK_LAYER]
 	if( wear_mask && !check_hidden_head_flags(MOUTH) && wear_mask.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[FACEMASK_LAYER]
+		O.color = null
 		O.overlays.len = 0
 		wear_mask.screen_loc = ui_mask	//TODO
 		var/image/standing	= image("icon" = ((wear_mask.icon_override) ? wear_mask.icon_override : 'icons/mob/mask.dmi'), "icon_state" = "[wear_mask.icon_state]")
@@ -1144,6 +1155,7 @@ var/global/list/damage_icon_parts = list()
 				standing.icon_state = "[back.icon_state]_f"
 
 		var/obj/abstract/Overlays/O = obj_overlays[BACK_LAYER]
+		O.color = null
 		O.icon = standing
 		O.icon_state = standing.icon_state
 		if(I.clothing_flags & COLORS_OVERLAY)
