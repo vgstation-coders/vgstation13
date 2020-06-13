@@ -199,8 +199,8 @@ var/datum/subsystem/dbcore/SSdbcore
 
 /datum/subsystem/dbcore/proc/Disconnect()
 	failed_connections = 0
-	qdel(connectOperation)
-	qdel(connection)
+	BSQL_DEL_CALL(connectOperation)
+	BSQL_DEL_CALL(connection)
 	connectOperation = null
 	connection = null
 
