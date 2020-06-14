@@ -62,7 +62,7 @@
 			var/warpZ = pick(zlevels)
 			var/warpTo = locate(rand(5,world.maxx - 10), rand(5, world.maxy - 10), warpZ)
 			var/W = get_turf(warpTo)
-			if(istype(W, /turf/simulated/wall))
+			if(!istype(W, /turf/space))
 				to_chat(theExile, "<span class='notice'>Your [part] buzzes. The tingling stops.</span>")
 				sleep(3 SECONDS)
 				beingDeported = FALSE
@@ -70,9 +70,8 @@
 			do_teleport(theExile, warpTo, 1)
 			theExile.Knockdown(3)
 			theExile.Stun(3)
-			if(prob(50))
-				theExile.adjustBruteLoss(5)
-				theExile.adjustCloneLoss(5) //Uh oh it missed a few chromosomes
+			theExile.adjustBruteLoss(rand(0,5))
+			theExile.adjustCloneLoss(rand(0,5)) //Uh oh it missed a few chromosomes
 		else
 			to_chat(theExile, "<span class='notice'>Your [part] emits a feint chime. The tingling stops.</span>")
 		beingDeported = FALSE
@@ -91,7 +90,7 @@
 		if(RANDOM_TELEPORT)
 			var/empLoc = locate(rand(5,world.maxx - 10), rand(5, world.maxy - 10), pick(zlevels))
 			var/W = get_turf(empLoc)
-			if(istype(W, /turf/simulated/wall))
+			if(!istype(W, /turf/space))
 				empLoc = siteOfImplant
 			do_teleport(M, empLoc, 20)
 			M.Knockdown(3)
@@ -135,10 +134,9 @@
 
 /obj/structure/closet/secure_closet/exile
 	name = "Exile Implants"
-	req_access = list(access_hos)
+	req_access = list(access_armory)
 
 /obj/structure/closet/secure_closet/exile/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/implanter/exile,
-		/obj/item/weapon/implantcase/exile = 5
+		/obj/item/weapon/storage/lockbox/exile = 2
 	)
