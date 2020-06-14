@@ -93,7 +93,7 @@ forLineInText(text)
 	return html_encode(sanitize_simple(t,repl_chars))
 
 /proc/sanitize_speech(var/t, var/limit = MAX_MESSAGE_LEN)
-	var/static/regex/speech_regex = regex(@"[^ -;=?-~¡-ÿ]", "g") //Matches all characters not in the printable ASCII range except < and > or (most of) the Latin-1 supplement. In BYOND, \w doesn't work outside the ASCII range, so it's no help here.
+	var/static/regex/speech_regex = regex(@"[^ -;=?-~¡-ÿ]", "g") //Matches all characters not in the printable ASCII range or (most of) the Latin-1 supplement. Also matches < and > to scrub HTML. In BYOND, \w doesn't work outside the ASCII range, so it's no help here.
 	return trim(copytext(speech_regex.Replace(t, "*"), 1, limit))
 
 //Runs sanitize and strip_html_simple
