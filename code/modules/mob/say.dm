@@ -31,7 +31,7 @@
 		remove_typing_indicator()
 		return
 
-	message = sanitize_speech(message)
+	message = html_encode(sanitize_speech(message))
 
 	if(usr.stat == DEAD)
 		usr.emote_dead(message)

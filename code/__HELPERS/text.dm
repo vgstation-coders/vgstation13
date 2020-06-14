@@ -93,8 +93,8 @@ forLineInText(text)
 	return html_encode(sanitize_simple(t,repl_chars))
 
 /proc/sanitize_speech(var/t, var/limit = MAX_MESSAGE_LEN)
-	var/static/regex/speech_regex = regex(@"[^ -;=?-~¡-ÿ]", "g") //Matches all characters not in the printable ASCII range or (most of) the Latin-1 supplement. Also matches < and > to scrub HTML. In BYOND, \w doesn't work outside the ASCII range, so it's no help here.
-	return trim(copytext(speech_regex.Replace(t, "*"), 1, limit))
+	var/static/regex/speech_regex = regex(@"[^ -~¡-ÿ]", "g") //Matches all characters not in the printable ASCII range or (most of) the Latin-1 supplement. In BYOND, \w doesn't work outside the ASCII range, so it's no help here.
+	return trim(copytext(speech_regex.Replace(t, "*"), 1, limit)) //Note that this does NOT scrub HTML, because this is done in different places in me and say messages.
 
 //Runs sanitize and strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' after sanitize() calls byond's html_encode()
