@@ -162,7 +162,17 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		for(var/path in initial_modules)
 			var/obj/item/rig_module/new_module = new path(src)
 			modules += new_module
+			new_module.rig = src
 	processing_objects |= src
+
+/obj/item/clothing/suit/space/rig/emp_act(severity)
+	if(activated)
+		deactivate_suit(FALSE)
+	if(cell)
+		cell.emp_act(severity)
+	for(var/obj/item/I in all_hardsuit_parts)
+		I.emp_act(severity)
+	..(severity)
 
 /obj/item/clothing/suit/space/rig/Destroy()
 	processing_objects -= src
