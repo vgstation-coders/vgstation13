@@ -95,8 +95,8 @@
 	if (!ismob(target))
 		extra_classes |= "small"
 
-	// Append radio icon if from a virtual speaker
-	if (extra_classes.Find("virtual-speaker"))
+	// Append radio icon if comes from a radio
+	if (extra_classes.Find("spoken_into_radio"))
 		var/image/r_icon = image('icons/chat_icons.dmi', icon_state = "radio")
 		text =  "\icon[r_icon]&nbsp;" + text
 
@@ -172,12 +172,13 @@
   * * spans - Additional classes to be added to the message
   * * message_mode - Bitflags relating to the mode of the message
   */
-/mob/proc/create_chat_message(atom/movable/speaker, datum/language/message_language, raw_message, mode)
-	var/extra_classes = list()
-
+/mob/proc/create_chat_message(atom/movable/speaker, datum/language/message_language, raw_message, mode, list/existing_extra_classes)
 	// Check for virtual speakers (aka hearing a message through a radio)
-	if (istype(speaker, /atom/movable/virtualspeaker))
+	if (existing_extra_classes.Find("radio"))
 		return
+
+	var/list/extra_classes = list()
+	extra_classes += existing_extra_classes
 
 	if (mode == SPEECH_MODE_WHISPER)
 		extra_classes |= "small"
@@ -249,3 +250,9 @@
 			return "[rgb(x,m,c)]C8"
 		if(5)
 			return "[rgb(c,m,x)]C8"
+
+/client/verb/toggle_runechat_outline()
+	set category = "OOC"
+	set name = "Toggle Runechat Outlines"
+	toggle_runechat_outlines = !toggle_runechat_outlines
+	to_chat(mob, "<span class='notice'>Runechat outlines are now [toggle_runechat_outlines ? "enabled" : "disabled"].</span>")

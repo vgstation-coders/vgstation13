@@ -164,5 +164,7 @@
 	if(data)
 		wrapper_classes=data.Copy()
 
+	wrapper_classes.Add("radio")
+
 /datum/speech/proc/set_language(var/lang_id)
 	language = all_languages[lang_id]
