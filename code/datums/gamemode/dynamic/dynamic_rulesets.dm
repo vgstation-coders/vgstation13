@@ -287,3 +287,13 @@
 		if(!check_enemy_jobs(FALSE))
 			return 0
 	return ..()
+
+/datum/dynamic_ruleset/proc/latejoinprompt(var/mob/user = usr, var/ruleset = null)
+	if(alert(user,"The gamemode is trying to select you for [ruleset], do you want this?",,"Yes","No") == "Yes")
+		return 1
+	return 0
+
+/datum/dynamic_ruleset/proc/generate_ruleset_body(mob/applicant)
+	var/mob/living/carbon/human/new_character = makeBody(applicant)
+	new_character.dna.ResetSE()
+	return new_character

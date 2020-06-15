@@ -86,6 +86,9 @@
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
+	/*for(var/mob/M in candidates)
+		if(!latejoinprompt(M,src))
+			return 0*/
 
 	return ..()
 
@@ -110,7 +113,7 @@
 //////////////////////////////////////////////
 
 
-/*/datum/dynamic_ruleset/latejoin/ninja
+/datum/dynamic_ruleset/latejoin/ninja
 	name = "Space Ninja Attack"
 	role_category = /datum/role/ninja
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
@@ -124,23 +127,30 @@
 
 	repeatable = TRUE
 
+/datum/dynamic_ruleset/latejoin/ninja/ready(var/forced = 0)
+	for(var/mob/M in candidates)
+		if(!latejoinprompt(M,src))
+			return 0
+	
+	return ..()
+
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(candidates)
+	M.loc = null
+	M.forceMove(null)
 	assigned += M
 	candidates -= M
 	var/datum/role/ninja/newninja = new
 	newninja.AssignToRole(M.mind,1)
-	newninja.Greet(GREET_DEFAULT)
+	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
+	if (!spoider)
+		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
+	spoider.HandleRecruitedRole(newninja)
 	newninja.OnPostSetup()
+	newninja.Greet(GREET_DEFAULT)
 	newninja.AnnounceObjectives()
-	spawn(1) //TODO - FIX THE NEED FOR THIS. CHECK PR, CHECK THE REVERTED COMMIT
-		if(!newninja.antag.current.ThrowAtStation())
-			newninja.antag.current.spawn_rand_maintenance()
 	return 1
-*/
-//TODO: ADD A "DO YOU WANT TO BE A [ROLE]?" PROMPT TO LATE-JOINERS BECAUSE PEOPLE HATE BEING A NINJA
-//TODO: ADD AN EQUIVALENT OF generate_ruleset_body() FOR LATEJOINS SO NINJAS DON'T SPAWN AS NAKED DYING VOX
-//DON'T RE-ENABLE TILL THAT'S DONE
+
 
 
 //////////////////////////////////////////////

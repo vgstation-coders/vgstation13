@@ -17,7 +17,8 @@
 	. =..()
 	if(!.)
 		return
-	antag.current.forceMove(pick(ninjastart))
+	spawn(3)
+		antag.current.forceMove(pick(ninjastart))
 	if(ishuman(antag.current))
 		antag.current << sound('sound/effects/yooooooooooo.ogg')
 		equip_ninja(antag.current)
@@ -44,7 +45,7 @@
 		if(!iscarbon(M) && !issilicon(M))
 			continue
 		var/turf/T = get_turf(M)
-		if(T.z != STATION_Z)
+		if(T && T.z != STATION_Z)
 			continue
 		if(M.stat != DEAD)
 			living++
