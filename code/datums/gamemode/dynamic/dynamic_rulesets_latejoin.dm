@@ -136,8 +136,8 @@
 
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(candidates)
-	M.loc = null
-	M.forceMove(null)
+	M.loc = null //this is to prevent the latejoin player spawn system
+	M.forceMove(null) //from spawning the ninja in the arrivals shuttle
 	assigned += M
 	candidates -= M
 	var/datum/role/ninja/newninja = new
