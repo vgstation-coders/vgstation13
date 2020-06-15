@@ -400,3 +400,6 @@ proc/get_space_area()
 
 // strips all newlines from a string, replacing them with null
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
+
+#define istransformable(A) istype(A, /atom)
+#define isapperanceeditable(A) istype(A, /atom)

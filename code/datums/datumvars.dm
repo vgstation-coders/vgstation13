@@ -138,9 +138,9 @@
 	if(istype(D,/atom))
 		body += "<option value='?_src_=vars;teleport_to=\ref[D]'>Teleport To</option>"
 
-	if(hasvar(D, "transform"))
+	if(istransformable(D))
 		body += "<option value='?_src_=vars;edit_transform=\ref[D]'>Edit Transform Matrix</option>"
-	if(hasvar(D, "appearance_flags"))
+	if(isapperanceeditable(D))
 		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
 
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
@@ -859,7 +859,7 @@ function loadPage(list) {
 			if ("Monolith")
 				rod_type = /obj/item/projectile/immovablerod/hyper
 
-		if(alert("Are you sure you want to do this?","Confirm","Yes","No") != "Yes")	
+		if(alert("Are you sure you want to do this?","Confirm","Yes","No") != "Yes")
 			return
 
 		var/obj/item/projectile/immovablerod/rod = new rod_type(random_start_turf(A.z))
@@ -1163,7 +1163,7 @@ function loadPage(list) {
 			return
 
 		var/datum/DAT = locate(href_list["edit_transform"])
-		if (!hasvar(DAT, "transform"))
+		if (!istransformable(DAT))
 			to_chat(src, "This object does not have a transform variable to edit!")
 			return
 
@@ -1180,7 +1180,7 @@ function loadPage(list) {
 			return
 
 		var/datum/DAT = locate(href_list["toggle_aliasing"])
-		if(!hasvar(DAT, "appearance_flags"))
+		if(!isapperanceeditable(DAT))
 			to_chat(src, "This object does not support appearance flags!")
 			return
 

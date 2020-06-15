@@ -8,7 +8,7 @@
 
 	level = 1
 	var/area_uid
-	var/id_tag = null
+	 
 
 	var/hibernate = 0 //Optimization
 	var/on = 0

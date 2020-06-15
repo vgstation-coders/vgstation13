@@ -652,7 +652,7 @@
 	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
 		Emag(user)
 	else
-		if(hasvar(W,"force") && hasvar(W,"damtype"))
+		if(isobj(W))
 			W.on_attack(src, user)
 			visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 			switch(W.damtype)

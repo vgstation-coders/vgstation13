@@ -5,7 +5,7 @@
 
 	anchored = 1
 
-	var/id_tag
+
 	var/frequency = 1439
 
 	var/on = 1

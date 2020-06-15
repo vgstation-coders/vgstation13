@@ -92,13 +92,8 @@
 	if(istype(loc, /mob))
 		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
-	if(hasvar(src, "holder"))
-		src:holder = null
 	for(var/x in actions)
 		qdel(x)
-	/*  BROKEN, FUCK BYOND
-	if(hasvar(src, "my_atom"))
-		src:my_atom = null*/
 	..()
 
 

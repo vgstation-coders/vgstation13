@@ -24,7 +24,7 @@
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | WELD_FIXED | MULTITOOL_MENU
 
 	var/frequency = 0
-	var/id_tag = null
+	 
 	var/datum/radio_frequency/radio_connection
 
 	//Now uses a constant beam.

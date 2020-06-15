@@ -15,6 +15,7 @@
 	var/icon_off = "secureoff"
 	wall_mounted = 0 //never solid (You can always pass over it)
 	health = 200
+	var/id_tag = null
 
 /obj/structure/closet/secure_closet/basic
 	has_lockless_type = /obj/structure/closet/basic
@@ -22,7 +23,7 @@
 /obj/structure/closet/secure_closet/can_open()
 	if(!..())
 		return 0
-	if(src.locked)	
+	if(src.locked)
 		return 0
 	return 1
 

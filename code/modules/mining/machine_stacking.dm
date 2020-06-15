@@ -141,7 +141,7 @@
 	var/stack_amt = 50 //amount to stack before releassing.
 	var/max_moved = 100
 
-	var/id_tag//The ID of the stacker this console should control
+	 //The ID of the stacker this console should control
 	var/frequency = FREQ_DISPOSAL
 	var/datum/radio_frequency/radio_connection
 
@@ -338,7 +338,7 @@
 	return ..()
 
 /obj/machinery/mineral/stacking_machine/Destroy()
-	id_tag = null
+
 
 	qdel(mover)
 	mover = null
