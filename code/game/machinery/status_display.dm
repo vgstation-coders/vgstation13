@@ -63,6 +63,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 		initialize()
 
 /obj/machinery/status_display/initialize()
+	..()
 	if(radio_controller)
 		radio_controller.add_object(src, frequency)
 

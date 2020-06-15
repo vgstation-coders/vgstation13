@@ -21,10 +21,11 @@
 
 /obj/item/radio/integrated/signal/New()
 	..()
-	if(radio_controller)
+	if(ticker && ticker.mode == GAME_STATE_PLAYING)
 		initialize()
 
 /obj/item/radio/integrated/signal/initialize()
+	if ()
 	if (src.frequency < 1441 || src.frequency > 1489)
 		src.frequency = sanitize_frequency(src.frequency)
 
