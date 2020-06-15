@@ -86,6 +86,7 @@
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
+	flags = FPRINT | NO_ATTACK_MSG
 
 /obj/item/weapon/soap/nanotrasen
 	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
