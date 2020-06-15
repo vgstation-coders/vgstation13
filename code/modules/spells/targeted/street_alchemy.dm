@@ -5,16 +5,23 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSUTILITY
 	school = "transmutation"
-	charge_max = 150
-	cooldown_min = 15
-	invocation_type = SpI_NONE
+	charge_max = 250
+	cooldown_min = 30
+	invocation_type = SpI_SHOUT
 	range = 10 //If you can see it, you can steal it
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK | NEEDSHUMAN | INCLUDEUSER
 	hud_state = "wiz_stAlch"
 	price = 0.5 * Sp_BASE_PRICE
-	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_RANGE = 0)
-	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 3, Sp_POWER = 1, Sp_RANGE = 1)
+	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_RANGE = 0, Sp_AMOUNT = 0)
+	level_max = list(Sp_TOTAL = 30, Sp_SPEED = 3, Sp_POWER = 1, Sp_RANGE = 20, Sp_AMOUNT = 2)
+	var/list/existingElixirs = list()
+	var/elixirAmount = 1
+	var/reagToSteal = 1
+
+/spell/targeted/alchemy/invocation()
+	invocation = pick("TH'X DAU KU", "DO'Z DAI LEE", "GIB'MI DAA'T")
+	..()
 
 /spell/targeted/alchemy/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
@@ -26,89 +33,119 @@
 			return "Thrown elixirs now transfer reagents."
 		if(Sp_RANGE)
 			spell_levels[Sp_RANGE]++
-			return "You now pilfer in an area around the target."
+			reagToSteal++
+			return "You can pilfer from one more container per cast. Spell affects an area at max level"
+		if(Sp_AMOUNT)
+			spell_levels[Sp_AMOUNT]++
+			elixirAmount++
+			return "An additonal elixir can now exist."
+
+/spell/targeted/alchemy/get_upgrade_price(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return 10
+		if(Sp_POWER)
+			return 10
+		if(Sp_RANGE)
+			return 1
+		if(Sp_AMOUNT)
+			return 5
 
 /spell/targeted/alchemy/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
 		if(Sp_SPEED)
-			return "Reduce this spell's cooldown."
+			return
 		if(Sp_POWER)
 			return "Thrown elixirs transfer their contents into living targets."
 		if(Sp_RANGE)
-			return "Pilfers reagents in an area around the target."
+			if(spell_levels[Sp_RANGE] >= 21)
+				return "You will now steal all reagents in an area."
+			return "Pilfers from one more target per cast."
+		if(Sp_AMOUNT)
+			return "The amount of alchemic elixirs that can exist at a time."
 
 /spell/targeted/alchemy/cast(list/targets, mob/user)
 	for(var/target in targets)
-		if(spell_levels[Sp_RANGE])
+		if(reagToSteal >= 21)
 			aoeAlchemy(target, user)
 			return
 		singleAlchemy(target, user)
 
 /spell/targeted/alchemy/proc/singleAlchemy(target, mob/user)
-	var/obj/item/weapon/reagent_containers/pill/streetAlchElixir/A = null
+	var/obj/item/weapon/reagent_containers/pill/streetAlchElixir/elixir = null
 	if(spell_levels[Sp_POWER])
-		A = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir(src)
+		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir(src)
 	else
-		A = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir(src)
+		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir(src)
 	if(user.find_empty_hand_index())
-		user.put_in_hands(A)
+		user.put_in_hands(elixir)
 	if(iscarbon(target))
-		mobAlchemy(target, user, A)
+		mobAlchemy(target, user, elixir)
 	if((istype(target, /obj/structure)) || (istype(target, /obj/item/weapon/storage)) || (istype(target, /obj/item/weapon/reagent_containers)) || (istype(target, /obj/machinery)))
-		itemAlchemy(target, user, A)
-	if(A.is_empty())
+		itemAlchemy(target, user, elixir)
+	if(elixir.is_empty())
 		to_chat(user, "You fail to perform alchemy.")
-		user.drop_item(A, force_drop = 1)
-		qdel(A)
+		user.drop_item(elixir, force_drop = 1)
+		qdel(elixir)
 		return
-	to_chat(user, "You perform alchemy.")
+	existingElixirs += elixir
+	if(existingElixirs.len > elixirAmount)
+		var/tooMany = existingElixirs[1]
+		existingElixirs -= tooMany
+		qdel(tooMany)
 	playsound(user, "sound/effects/bubbles.ogg", 75, 1)
 
 /spell/targeted/alchemy/proc/aoeAlchemy(target, mob/user)
-	var/obj/item/weapon/reagent_containers/pill/streetAlchElixir/A = null
+	var/obj/item/weapon/reagent_containers/pill/streetAlchElixir/elixir = null
 	if(spell_levels[Sp_POWER])
-		A = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir(src)
+		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir(src)
 	else
-		A = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir(src)
+		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir(src)
 	if(user.find_empty_hand_index())
-		user.put_in_hands(A)
-	for(var/T in range(2, target))
+		user.put_in_hands(elixir)
+	for(var/T in range(1, target))
 		if(iscarbon(T))
-			mobAlchemy(T, user, A)
-		if((istype(T, /obj/structure)) || (istype(T, /obj/item/weapon/storage)) || (istype(T, /obj/item/weapon/reagent_containers)) || (istype(T, /obj/machinery)))
-			itemAlchemy(T, user, A)
-	if(A.is_empty())
+			mobAlchemy(T, user, elixir)
+		if((istype(T, /obj/structure)) || (istype(T, /obj/item/weapon)) || (istype(T, /obj/machinery)))
+			itemAlchemy(T, user, elixir)
+	if(elixir.is_empty())
 		to_chat(user, "You fail to perform alchemy.")
-		user.drop_item(A, force_drop = 1)
-		qdel(A)
+		user.drop_item(elixir, force_drop = 1)
+		qdel(elixir)
 		return
-	to_chat(user, "You perform alchemy.")
+	existingElixirs += elixir
+	if(existingElixirs.len > elixirAmount)
+		var/tooMany = existingElixirs[1]
+		existingElixirs -= tooMany
+		qdel(tooMany)
 	playsound(user, "sound/effects/bubbles.ogg", 75, 1)
 
-/spell/targeted/alchemy/proc/mobAlchemy(var/mob/living/carbon/C, mob/user, var/A)
-	for(var/S in get_contents_in_object(C))
-		if(istype(S, /obj/item/weapon/reagent_containers))
-			var/obj/item/weapon/reagent_containers/F = S
-			F.reagents.trans_to(A, F.reagents.total_volume)
-	C.reagents.trans_to(A, C.reagents.total_volume)
+/spell/targeted/alchemy/proc/mobAlchemy(var/mob/living/carbon/C, mob/user, var/obj/item/weapon/reagent_containers/pill/elixir)
+	var/numThefts = 0
+	C.reagents.trans_to(elixir, C.reagents.total_volume)
+	numThefts++
+		for(var/S in get_contents_in_object(C))
+			if((numThefts >= reagToSteal) || (elixir.reagents.is_full()))
+				break
+			var/obj/R = S
+			if((R.reagents) && (R.reagents.total_volume > 0))
+				numThefts++
+				R.reagents.trans_to(elixir, R.reagents.total_volume)
 	playsound(C, "sound/effects/bubbles.ogg", 75, 1)
 
-/spell/targeted/alchemy/proc/itemAlchemy(var/obj/C, mob/user, var/A)
-//	if(istype(C, /obj/machinery/vending))
-//		var/obj/machinery/vending/V = C
-//		for(var/obj/item/weapon/reagent_containers/product in V.products)
-//			var/P = initial(product)
-//			A.reagents += P.reagent_list
-	if(C.contents)
-		for(var/obj/item/i in C.contents)
-			if(i.contents)
-				for(var/obj/item/weapon/reagent_containers/ii in i.contents)
-					if(ii.reagents)
-						ii.reagents.trans_to(A, ii.reagents.total_volume)
-				if(i.reagents)
-					i.reagents.trans_to(A,i.reagents.total_volume)
+/spell/targeted/alchemy/proc/itemAlchemy(var/obj/C, mob/user, var/obj/item/weapon/reagent_containers/pill/elixir)
+	var/numThefts = 0
 	if(C.reagents)
-		C.reagents.trans_to(A,C.reagents.total_volume)
+		C.reagents.trans_to(elixir,C.reagents.total_volume)
+		numThefts++
+	if(C.contents)
+		for(var/S in get_contents_in_object(C))
+			if((numThefts >= reagToSteal) || (elixir.reagents.is_full()))
+				break
+			var/obj/R = S
+			if((R.reagents) && (R.reagents.total_volume > 0))
+				numThefts++
+				R.reagents.trans_to(elixir, R.reagents.total_volume)
 
 /obj/item/weapon/reagent_containers/pill/streetAlchElixir
 	name = "alchemic elixir"
