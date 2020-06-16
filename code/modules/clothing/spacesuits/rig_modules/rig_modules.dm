@@ -27,8 +27,7 @@
 /obj/item/rig_module/proc/say_to_wearer(var/string)
 	if(!ishuman(rig.wearer))
 		return
-	var/mob/living/carbon/human/H = rig.wearer
-	to_chat(H, "\The [src] reports: <span class = 'binaryradio'>[string]</span>")
+	to_chat(rig.wearer, "\The [src] reports: <span class = 'binaryradio'>[string]</span>")
 
 /obj/item/rig_module/speed_boost
 	name = "rig speed module"
