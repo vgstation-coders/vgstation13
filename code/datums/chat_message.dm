@@ -261,6 +261,6 @@
 
 /client/verb/toggle_runechat_backgrounddiv()
 	set category = "OOC"
-	set name = "Toggle Runechat Outlines"
+	set name = "Toggle Runechat Backgrounddiv"
 	toggle_runechat_backgrounddiv = !toggle_runechat_backgrounddiv
 	to_chat(mob, "<span class='notice'>Runechat background colour is now [toggle_runechat_backgrounddiv ? "enabled" : "disabled"].</span>")
