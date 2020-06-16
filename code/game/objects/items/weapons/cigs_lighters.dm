@@ -158,7 +158,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A roll of tobacco and nicotine. Not the best thing to have on your face in the event of a plasma flood."
 	icon_state = "cig"
 	item_state = "cig"
-	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 	w_class = W_CLASS_TINY
 	body_parts_covered = 0
 	var/list/unlit_attack_verb = list("prods", "pokes")
