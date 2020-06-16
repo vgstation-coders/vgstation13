@@ -50,6 +50,7 @@
 		held_container.forceMove(get_turf(src))
 		held_container = null
 	processing_objects.Remove(src)
+	set_light(0)
 	..()
 
 /obj/machinery/bunsen_burner/examine(mob/user)
@@ -139,6 +140,7 @@
 
 	if(!heating || heating == BUNSEN_OPEN)
 		processing_objects.Remove(src)
+		set_light(0)
 
 /obj/machinery/bunsen_burner/update_icon()
 	icon_state = "bunsen[heating]"
@@ -174,6 +176,7 @@
 		return
 	heating = !heating
 	update_icon()
+	set_light(heating)
 	if(heating == BUNSEN_ON)
 		processing_objects.Add(src)
 	else
