@@ -179,7 +179,7 @@ var/list/cyborg_list = list()
 	else
 		lawupdate = FALSE
 
-/mob/living/silicon/robot/proc/disconnect_AI(var/announce = TRUE)
+/mob/living/silicon/robot/proc/disconnect_AI(var/announce = FALSE)
 	if(connected_ai)
 		to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Unlinked from [connected_ai].</span>")
 		if(announce)
@@ -559,7 +559,7 @@ var/list/cyborg_list = list()
 					SetEmagged(TRUE)
 					SetLockdown(TRUE)
 					lawupdate = FALSE
-					disconnect_AI(announce = FALSE)
+					disconnect_AI()
 					to_chat(user, "You emag [src]'s interface")
 					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)]. Laws overidden.")
 					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
