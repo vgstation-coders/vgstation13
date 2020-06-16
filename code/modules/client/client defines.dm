@@ -94,6 +94,7 @@
 	// Runechat messages
 	var/list/seen_messages = list()
 	var/toggle_runechat_outlines = TRUE
+	var/toggle_runechat_backgrounddiv = FALSE
 
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()
