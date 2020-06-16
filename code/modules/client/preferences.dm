@@ -215,6 +215,12 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/credits = CREDITS_ALWAYS
 	var/jingle = JINGLE_CLASSIC
 
+	// Runscape-like chat
+	var/mob_chat_on_map = FALSE
+	var/max_chat_length = CHAT_MESSAGE_MAX_LENGTH
+	var/obj_chat_on_map = FALSE
+	var/no_goonchat_for_obj = FALSE
+
 	var/client/client
 	var/saveloaded = 0
 
@@ -417,6 +423,15 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=credits_volume'><b>[credits_volume]</b></a><br>
 	<b>Window Flashing</b>
 	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
+	<center>Runechat prefererences</center>
+	<b>Chat on map for mobs:</b>
+	<a href='?_src_=prefs;preference=mob_chat_on_map'>[mob_chat_on_map ? "Enabled" : "Disabled"]</a><br>
+	<b>Chat on map for objects:</b>
+	<a href='?_src_=prefs;preference=obj_chat_on_map'>[obj_chat_on_map ? "Enabled" : "Disabled"]</a><br>
+	<b>No goonchat messages for objects:</b>
+	<a href='?_src_=prefs;preference=no_goonchat_for_obj'>[no_goonchat_for_obj ? "Enabled" : "Disabled"]</a><br>
+	<b>Runechat message char limit:</b>
+	<a href='?_src_=prefs;preference=max_chat_length;task=input'>[max_chat_length]</a><br>
   </div>
 </div>"}
 
@@ -1516,6 +1531,19 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("typing_indicator")
 					typing_indicator = !typing_indicator
+
+				if ("mob_chat_on_map")
+					mob_chat_on_map = !mob_chat_on_map
+
+				if ("obj_chat_on_map")
+					obj_chat_on_map = !obj_chat_on_map
+
+				if ("max_chat_length")
+					max_chat_length = input(user, "Choose the max character length of shown Runechat messages. Valid range is 1 to [CHAT_MESSAGE_MAX_LENGTH] (default: [initial(max_chat_length)]))", "Character Preference", max_chat_length)  as null|num
+
+				if ("no_goonchat_for_obj")
+					no_goonchat_for_obj = !no_goonchat_for_obj
+
 
 			if(user.client.holder)
 				switch(href_list["preference"])
