@@ -239,12 +239,16 @@ Pipelines + Other Objects -> Pipe network
 					return
 			if(!found)
 				continue
-			var/node_var="node[node_id]"
-			if(!(node_var in vars))
-				//testing("[node_var] not in vars.")
-				return
-			if(!vars[node_var])
-				vars[node_var] = found
+			if(!get_node(node_id))
+				set_node(node_id, found)
+
+//These two procs are a shitty compromise to speed up pipe initialization without completely rewriting pipecode.
+//get_node(<n>) should return the var node<n> and set_node(<n>, <v>) should set node<n> to <v>.
+/obj/machinery/atmospherics/proc/get_node(node_id)
+	CRASH("Uh oh! Somebody didn't override get_node()!")
+
+/obj/machinery/atmospherics/proc/set_node(node_id, value)
+	CRASH("Uh oh! Somebody didn't override set_node()!")
 
 // Wait..  What the fuck?
 // I asked /tg/ and bay and they have no idea why this is here, so into the trash it goes. - N3X
