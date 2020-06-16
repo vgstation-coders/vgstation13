@@ -25,7 +25,8 @@
 	return
 
 /obj/item/rig_module/proc/say_to_wearer(var/string)
-	ASSERT(rig.wearer)
+	if(!ishuman(rig.wearer))
+		return
 	to_chat(rig.wearer, "\The [src] reports: <span class = 'binaryradio'>[string]</span>")
 
 /obj/item/rig_module/speed_boost
