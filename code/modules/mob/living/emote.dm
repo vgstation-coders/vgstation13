@@ -20,7 +20,7 @@
 /datum/emote/living/sneed
 	key = "sneed"
 	key_third_person = "sneeds"
-	messages = "feeds and seeds."
+	message = "feeds and seeds."
 	restraint_check = FALSE // dab on them
 
 /datum/emote/living/collapse
