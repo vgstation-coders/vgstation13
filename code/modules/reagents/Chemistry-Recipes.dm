@@ -404,7 +404,15 @@
 	required_reagents = list(OXYGEN = 2)
 	required_catalysts = list(PLASMA = 5)
 	result_amount = 1
-
+	
+/datum/chemical_reaction/voxalin
+	name = "Voxalin"
+	id = VOXALIN
+	result = VOXALIN
+	required_reagents = list(NITROGEN = 2)
+	required_catalysts = list(PLASMA = 5)
+	result_amount = 1
+	
 /datum/chemical_reaction/dermaline
 	name = "Dermaline"
 	id = DERMALINE
@@ -418,7 +426,14 @@
 	result = DEXALINP
 	required_reagents = list(DEXALIN = 1, CARBON = 1, IRON = 1)
 	result_amount = 3
-
+	
+/datum/chemical_reaction/voxalinp
+	name = "Voxalin Plus"
+	id = VOXALINP
+	result = VOXALINP
+	required_reagents = list(VOXALIN = 1, CARBON = 1, IRON = 1)
+	result_amount = 3
+	
 /datum/chemical_reaction/bicaridine
 	name = "Bicaridine"
 	id = BICARIDINE
