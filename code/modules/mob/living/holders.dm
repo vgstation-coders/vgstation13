@@ -33,6 +33,9 @@
 	processing_objects.Remove(src)
 	..()
 
+/datum/pipeline/resetVariables()
+	..("itemstate_twohand_suffix")
+
 /obj/item/weapon/holder/supermatter_act(atom/source)
 	if(stored_mob)
 		stored_mob.supermatter_act(source, SUPERMATTER_DUST)

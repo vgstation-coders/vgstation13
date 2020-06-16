@@ -23,7 +23,7 @@
 		M.parent = null
 
 /datum/pipeline/resetVariables()
-	..("members", "edges", PRESSURE_CHECK_DELAY)
+	..("members", "edges", "PRESSURE_CHECK_DELAY")
 	members = list()
 	edges = list()
 
