@@ -112,7 +112,10 @@
 	for(var/key in vars)
 		if(key in exclude)
 			continue
-		pooledvariables[type][key] = initial(vars[key])
+		try
+			vars[key] = vars[key]
+			pooledvariables[type][key] = initial(vars[key])
+		catch
 
 //RETURNS NULL WHEN INITIALIZED AS A LIST() AND POSSIBLY OTHER DISCRIMINATORS
 //IF YOU ARE USING SPECIAL VARIABLES SUCH A LIST() INITIALIZE THEM USING RESET VARIABLES
