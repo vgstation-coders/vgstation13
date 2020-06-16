@@ -2473,6 +2473,7 @@
 
 	if(..())
 		return 1
+		
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.species.name == "Vox")
@@ -2496,6 +2497,7 @@
 
 	if(..())
 		return 1
+		
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.species.name == "Vox")
