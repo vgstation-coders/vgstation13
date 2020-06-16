@@ -2463,7 +2463,7 @@
 /datum/reagent/dexalin
 	name = "Dexalin"
 	id = DEXALIN
-	description = "Dexalin is used in the treatment of oxygen deprivation."
+	description = "Dexalin is used in the treatment of oxygen deprivation in most carbons. Toxic to Vox."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 2.28
@@ -2473,8 +2473,12 @@
 
 	if(..())
 		return 1
-
-	M.adjustOxyLoss(-2 * REM)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.name == "Vox")
+			M.adjustToxLoss(2 * REM)
+	else
+		M.adjustOxyLoss(-2 * REM)
 
 	if(holder.has_any_reagents(LEXORINS))
 		holder.remove_reagents(LEXORINS, 2 * REM)
@@ -2482,7 +2486,7 @@
 /datum/reagent/dexalinp
 	name = "Dexalin Plus"
 	id = DEXALINP
-	description = "Dexalin Plus is used in the treatment of oxygen deprivation. Its highly effective."
+	description = "Dexalin Plus is used in the treatment of oxygen deprivation in most carbons. Its highly effective. Toxic to Vox."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 4.14
@@ -2492,8 +2496,58 @@
 
 	if(..())
 		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.name == "Vox")
+			M.adjustToxLoss(4 * REM)
+	else
+		M.adjustOxyLoss(-M.getOxyLoss())
 
-	M.adjustOxyLoss(-M.getOxyLoss())
+	if(holder.has_any_reagents(LEXORINS))
+		holder.remove_reagents(LEXORINS, 2 * REM)
+		
+/datum/reagent/voxalin
+	name = "Voxalin"
+	id = VOXALIN
+	description = "Voxalin is used in the treatment of nitrogen deprivation in Vox. Toxic to most carbons."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 2.25
+	specheatcap = 1.04
+
+/datum/reagent/voxalin/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.name == "Vox")
+			M.adjustOxyLoss(-2 * REM)
+	else
+		M.adjustToxLoss(1 * REM)
+
+	if(holder.has_any_reagents(LEXORINS))
+		holder.remove_reagents(LEXORINS, 2 * REM)
+
+/datum/reagent/voxalinp
+	name = "Voxalin Plus"
+	id = VOXALINP
+	description = "Voxalin Plus is used in the treatment of nitrogen deprivation in Vox. Its highly effective. Toxic to most carbons."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 4.80
+	specheatcap = 1.06
+
+/datum/reagent/voxalinp/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.name == "Vox")
+			M.adjustOxyLoss(-M.getOxyLoss())
+	else
+		M.adjustToxLoss(2 * REM)	
 
 	if(holder.has_any_reagents(LEXORINS))
 		holder.remove_reagents(LEXORINS, 2 * REM)
