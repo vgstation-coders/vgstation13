@@ -166,6 +166,25 @@
 	return 1
 
 
+/obj/machinery/atmospherics/pipe/simple/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/simple/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		else
+			CRASH("Invalid node_id!")
+
+
 /obj/machinery/atmospherics/pipe/simple/hide(var/i)
 	update_icon()
 
@@ -501,6 +520,29 @@
 	..()
 
 
+/obj/machinery/atmospherics/pipe/manifold/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		if(3)
+			return node3
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/manifold/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		if(3)
+			node3 = value
+		else
+			CRASH("Invalid node_id!")
+
+
 /obj/machinery/atmospherics/pipe/manifold/hide(var/i)
 	update_icon()
 
@@ -715,6 +757,34 @@
 	centre_overlay = manifold4w_centre
 	centre_overlay.color = color
 	overlays += centre_overlay
+
+
+/obj/machinery/atmospherics/pipe/manifold4w/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		if(3)
+			return node3
+		if(4)
+			return node4
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/manifold4w/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		if(3)
+			node3 = value
+		if(4)
+			node4 = value
+		else
+			CRASH("Invalid node_id!")
+
 
 /obj/machinery/atmospherics/pipe/manifold4w/hide(var/i)
 	update_icon()
