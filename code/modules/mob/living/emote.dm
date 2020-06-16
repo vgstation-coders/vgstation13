@@ -17,6 +17,12 @@
 	message_mommi = "crosses their utility arms."
 	restraint_check = TRUE
 
+/datum/emote/living/sneed
+	key = "sneed"
+	key_third_person = "sneeds"
+	messages = "feeds and seeds."
+	restraint_check = FALSE // dab on them
+
 /datum/emote/living/collapse
 	key = "collapse"
 	key_third_person = "collapses"
