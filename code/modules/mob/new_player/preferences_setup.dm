@@ -202,7 +202,8 @@
 	var/fat=""
 	if(disabilities&DISABILITY_FLAG_FAT && current_species.anatomy_flags & CAN_BE_FAT)
 		fat="_fat"
-	preview_icon = new /icon(icobase, "torso_[g][fat]")
+	preview_icon = new /icon('icons/mob/previewbg.dmi',preview_background)
+	preview_icon.Blend(new /icon(icobase, "torso_[g][fat]"), ICON_OVERLAY)
 	preview_icon.Blend(new /icon(icobase, "groin_[g]"), ICON_OVERLAY)
 	preview_icon.Blend(new /icon(icobase, "head_[g]"), ICON_OVERLAY)
 
@@ -242,7 +243,7 @@
 			hair_s.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
 		if(hair_style.additional_accessories)
 			hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
-		eyes_s.Blend(hair_s, ICON_OVERLAY)		
+		eyes_s.Blend(hair_s, ICON_OVERLAY)
 
 	var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[f_style]
 	if(facial_hair_style)
