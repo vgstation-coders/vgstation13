@@ -87,14 +87,14 @@ var/global/mulebot_count = 0
 	cell = new(src)
 	cell.charge = 2000
 	cell.maxcharge = 2000
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
-	spawn(5)	// must wait for map loading to finish
-		mulebot_count += 1
-		if(!suffix)
-			suffix = "#[mulebot_count]"
-		name = "\improper Mulebot ([suffix])"
-
-
+/obj/machinery/bot/mulebot/initialize()
+	mulebot_count += 1
+	if(!suffix)
+		suffix = "#[mulebot_count]"
+	name = "\improper Mulebot ([suffix])"
 	can_load = list(
 		/obj/structure/closet/crate,
 		/obj/structure/vendomatpack,
