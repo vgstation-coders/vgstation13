@@ -138,7 +138,7 @@
 	antag_objectives =  sanitize_integer(antag_objectives, 0, 1, initial(antag_objectives))
 	typing_indicator 	 =  sanitize_integer(typing_indicator, 0, 1, initial(typing_indicator))
 	mob_chat_on_map 	 =  sanitize_integer(mob_chat_on_map, 0, 1, initial(mob_chat_on_map))
-	max_chat_length 	 =  sanitize_integer(max_chat_length, 0, CHAT_MESSAGE_MAX_LENGTH, initial(typing_indicator))
+	max_chat_length 	 =  sanitize_integer(max_chat_length, 0, CHAT_MESSAGE_MAX_LENGTH, initial(max_chat_length))
 	obj_chat_on_map 	 =  sanitize_integer(obj_chat_on_map, 0, 1, initial(obj_chat_on_map))
 	no_goonchat_for_obj  =  sanitize_integer(no_goonchat_for_obj, 0, 1, initial(no_goonchat_for_obj))
 	initialize_preferences()
