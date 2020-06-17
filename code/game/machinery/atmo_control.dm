@@ -104,15 +104,13 @@
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
 /obj/machinery/air_sensor/initialize()
-	if (!radio_controller)
-		return
 	set_frequency(frequency)
 
 /obj/machinery/air_sensor/New()
 	..()
 
-	if(ticker && ticker.mode == GAME_STATE_PLAYING)
-		initialize()
+	if(radio_controller)
+		set_frequency(frequency)
 
 /obj/machinery/computer/general_air_control
 	icon = 'icons/obj/computer.dmi'
