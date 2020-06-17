@@ -51,7 +51,7 @@
 
 	secure_radio_connections = new
 	..(loc)
-	if(ticker && ticker.mode == GAME_STATE_PLAYING)
+	if(radio_controller)
 		initialize()
 
 /obj/item/device/radio/Destroy()
@@ -61,8 +61,6 @@
 
 
 /obj/item/device/radio/initialize()
-	if (!radio_controller)
-		return
 	frequency = COMMON_FREQ //common chat
 	if(freerange)
 		if(frequency < 1200 || frequency > 1600)
