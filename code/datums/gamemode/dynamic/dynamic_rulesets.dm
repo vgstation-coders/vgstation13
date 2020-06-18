@@ -283,6 +283,7 @@
 			continue
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
+	message_admins("[name]: [length(candidates)] candidates")
 	if (!forced)
 		if(!check_enemy_jobs(FALSE))
 			return 0
