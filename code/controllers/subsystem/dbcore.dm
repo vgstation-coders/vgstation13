@@ -216,7 +216,7 @@ var/datum/subsystem/dbcore/SSdbcore
 	while ( (!_connection || _connection.gcDestroyed) || !op.IsComplete() ) // Waiting we have a real connection and that it's complete
 		stoplag()
 		ticker++
-		if (ticker > 30 && (!connection || !connectOperation || connection.gcDestroyed))
+		if (ticker > 100 && (!connection || !connectOperation || connection.gcDestroyed))
 			message_admins("Error getting connection status. Attempting to reconnect.")
 			Disconnect()
 			Connect()
