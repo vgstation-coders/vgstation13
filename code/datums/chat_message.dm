@@ -42,7 +42,7 @@
 		CRASH("Invalid target given for chatmessage")
 	if(!istype(owner) || owner.gcDestroyed || !owner.client)
 		stack_trace("/datum/chatmessage created with [isnull(owner) ? "null" : "invalid"] mob owner")
-		qdel(src)
+		returnToPool(src)
 		return
 	generate_image(text, target, owner, extra_classes, lifespan)
 
@@ -88,7 +88,7 @@
 	// Reject whitespace
 	var/static/regex/whitespace = new(@"^\s*$")
 	if (whitespace.Find(text))
-		qdel(src)
+		returnToPool(src)
 		return
 
 	// Non mobs speakers can be small
@@ -149,17 +149,17 @@
 		end_of_life()
 
 /datum/chatmessage/proc/qdel_self()
-	qdel(src)
+	returnToPool(src)
 
 /**
   * Applies final animations to overlay CHAT_MESSAGE_EOL_FADE deciseconds prior to message deletion
   */
 /datum/chatmessage/proc/end_of_life(fadetime = CHAT_MESSAGE_EOL_FADE)
-	if (gcDestroyed)
+	if (gcDestroyed || disposed)
 		return
 	animate(message, alpha = 0, time = fadetime, flags = ANIMATION_PARALLEL)
 	spawn(fadetime)
-		qdel(src)
+		returnToPool(src)
 
 /**
   * Creates a message overlay at a defined location for a given speaker
@@ -196,7 +196,7 @@
 		raw_message = message_language.scramble(raw_message)
 
 	// Display visual above source
-	new /datum/chatmessage(raw_message, speaker, src, extra_classes)
+	getFromPool(/datum/chatmessage, raw_message, speaker, src, extra_classes)
 
 // Tweak these defines to change the available color ranges
 #define CM_COLOR_SAT_MIN	0.6
