@@ -463,7 +463,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "lucky"
 
 /obj/item/clothing/mask/cigarette/redsuit
-	name = "Lucky Strike cigarette"
+	name = "Redsuit cigarette"
 	desc = "Slim and refined. A mild smoke for a serious smoker."
 	icon_state = "redsuit"
 	overlay_on = "redsuitlit"
