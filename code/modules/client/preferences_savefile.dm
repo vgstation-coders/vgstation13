@@ -107,6 +107,10 @@
 	window_flashing  =	text2num(preference_list_client["window_flashing"])
 	antag_objectives =  text2num(preference_list_client["antag_objectives"])
 	typing_indicator 	 =  text2num(preference_list_client["typing_indicator"])
+	mob_chat_on_map 	 =  text2num(preference_list_client["mob_chat_on_map"])
+	max_chat_length 	 =  text2num(preference_list_client["max_chat_length"])
+	obj_chat_on_map 	 =  text2num(preference_list_client["obj_chat_on_map"])
+	no_goonchat_for_obj  =  text2num(preference_list_client["no_goonchat_for_obj"])
 
 	ooccolor		= 	sanitize_hexcolor(ooccolor, initial(ooccolor))
 	lastchangelog	= 	sanitize_text(lastchangelog, initial(lastchangelog))
