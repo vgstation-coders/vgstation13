@@ -52,7 +52,7 @@
 		owned_by.images.Remove(message)
 	owned_by = null
 	message_loc = null
-	message = null
+	del message // Images must be del'd by byond internally. It does not lag as much as a datum hard-del.
 	return ..()
 
 /**
