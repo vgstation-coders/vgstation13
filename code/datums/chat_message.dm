@@ -239,17 +239,17 @@
 	m *= 255
 	switch(h_int)
 		if(0)
-			return "[rgb(c,x,m)]"
+			return rgb(c,x,m)
 		if(1)
-			return "[rgb(x,c,m)]"
+			return rgb(x,c,m)
 		if(2)
-			return "[rgb(m,c,x)]"
+			return rgb(m,c,x)
 		if(3)
-			return "[rgb(m,x,c)]"
+			return rgb(m,x,c)
 		if(4)
-			return "[rgb(x,m,c)]"
+			return rgb(x,m,c)
 		if(5)
-			return "[rgb(c,m,x)]"
+			return rgb(c,m,x)
 
 /client/verb/toggle_runechat_outline()
 	set category = "OOC"
