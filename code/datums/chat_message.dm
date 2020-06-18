@@ -200,9 +200,9 @@
 
 // Tweak these defines to change the available color ranges
 #define CM_COLOR_SAT_MIN	0.6
-#define CM_COLOR_SAT_MAX	0.7
-#define CM_COLOR_LUM_MIN	0.65
-#define CM_COLOR_LUM_MAX	0.75
+#define CM_COLOR_SAT_MAX	0.95
+#define CM_COLOR_LUM_MIN	0.70
+#define CM_COLOR_LUM_MAX	0.90
 
 /**
   * Gets a color for a name, will return the same color for a given string consistently within a round.atom
@@ -238,17 +238,17 @@
 	m *= 255
 	switch(h_int)
 		if(0)
-			return "[rgb(c,x,m)]C8"
+			return rgb(c,x,m)
 		if(1)
-			return "[rgb(x,c,m)]C8"
+			return rgb(x,c,m)
 		if(2)
-			return "[rgb(m,c,x)]C8"
+			return rgb(m,c,x)
 		if(3)
-			return "[rgb(m,x,c)]C8"
+			return rgb(m,x,c)
 		if(4)
-			return "[rgb(x,m,c)]C8"
+			return rgb(x,m,c)
 		if(5)
-			return "[rgb(c,m,x)]C8"
+			return rgb(c,m,x)
 
 /client/verb/toggle_runechat_outline()
 	set category = "OOC"
