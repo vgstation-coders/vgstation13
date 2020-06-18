@@ -143,6 +143,7 @@
 	icon_state = "medicalbelt"
 	item_state = "medical"
 	can_only_hold = list(
+		"/obj/item/weapon/reagent_containers/hypospray",
 		"/obj/item/device/healthanalyzer",
 		"/obj/item/weapon/dnainjector",
 		"/obj/item/weapon/reagent_containers/dropper",
