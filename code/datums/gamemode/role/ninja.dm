@@ -17,8 +17,7 @@
 	. =..()
 	if(!.)
 		return
-	spawn(3) //to ensure other running processes don't throw them somewhere else
-		antag.current.forceMove(pick(ninjastart))
+	antag.current.forceMove(pick(ninjastart))
 	if(ishuman(antag.current))
 		antag.current << sound('sound/effects/yooooooooooo.ogg')
 		equip_ninja(antag.current)

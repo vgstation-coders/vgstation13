@@ -86,9 +86,6 @@
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
-	/*for(var/mob/M in candidates)
-		if(!latejoinprompt(M,src))
-			return 0*/
 
 	return ..()
 
@@ -127,17 +124,11 @@
 
 	repeatable = TRUE
 
-/datum/dynamic_ruleset/latejoin/ninja/ready(var/forced = 0)
-	for(var/mob/M in candidates)
-		if(!latejoinprompt(M,src))
-			return 0
-	
-	return ..()
-
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(candidates)
-	M.loc = null //this is to prevent the latejoin player spawn system
-	M.forceMove(null) //from spawning the ninja in the arrivals shuttle
+	if(!latejoinprompt(M,src))
+		message_admins("[M.key] has opted out of becoming a ninja.")
+		return 0
 	assigned += M
 	candidates -= M
 	var/datum/role/ninja/newninja = new
@@ -146,9 +137,7 @@
 	if (!spoider)
 		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
 	spoider.HandleRecruitedRole(newninja)
-	newninja.OnPostSetup()
 	newninja.Greet(GREET_DEFAULT)
-	newninja.AnnounceObjectives()
 	return 1
 
 
