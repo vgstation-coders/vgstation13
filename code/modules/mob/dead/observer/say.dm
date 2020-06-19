@@ -35,6 +35,8 @@
 
 	if (get_dist(source_turf, src) <= get_view_range())
 		rendered_speech = "<B>[rendered_speech]</B>"
+		if (client?.prefs.mob_chat_on_map && (client.prefs.obj_chat_on_map || ismob(speech.speaker)))
+			create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
 	else
 		if(client && client.prefs)
 			if (!speech.frequency)
@@ -45,7 +47,5 @@
 				if ((client.prefs.toggles & CHAT_GHOSTRADIO) != CHAT_GHOSTRADIO)
 					say_testing(src, "/mob/dead/observer/Hear(): CHAT_GHOSTRADIO is disabled, blocking. ([client.prefs.toggles] & [CHAT_GHOSTRADIO]) = [client.prefs.toggles & CHAT_GHOSTRADIO]")
 					return
-		if (client?.prefs.mob_chat_on_map && (client.prefs.obj_chat_on_map || ismob(speech.speaker)))
-			create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
 
 	to_chat(src, "<a href='?src=\ref[src];follow=\ref[source]'>(Follow)</a> [rendered_speech]")
