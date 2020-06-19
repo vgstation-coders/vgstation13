@@ -288,7 +288,7 @@
 			return 0
 	return ..()
 
-/datum/dynamic_ruleset/proc/latejoinprompt(var/mob/user = usr, var/ruleset = null)
+/datum/dynamic_ruleset/proc/latejoinprompt(var/mob/user, var/ruleset)
 	if(alert(user,"The gamemode is trying to select you for [ruleset], do you want this?",,"Yes","No") == "Yes")
 		return 1
 	return 0
