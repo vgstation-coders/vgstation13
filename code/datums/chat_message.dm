@@ -138,6 +138,9 @@
 	message.maptext_x = (CHAT_MESSAGE_WIDTH - owner.bound_width) * -0.5
 	message.maptext = complete_text
 
+	if (target.loc == owner) // Special case, holding an atom speaking (pAI, recorder...)
+		message.plane = ABOVE_HUD_PLANE
+
 	// View the message
 	owned_by.seen_messages.Add(src)
 	owned_by.images |= message
