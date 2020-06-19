@@ -42,7 +42,7 @@
 		CRASH("Invalid target given for chatmessage")
 	if(!istype(owner) || owner.gcDestroyed || !owner.client)
 		stack_trace("/datum/chatmessage created with [isnull(owner) ? "null" : "invalid"] mob owner")
-		qdel(src)
+		returnToPool(src)
 		return
 	generate_image(text, target, owner, extra_classes, lifespan)
 
@@ -52,7 +52,7 @@
 		owned_by.images.Remove(message)
 	owned_by = null
 	message_loc = null
-	message = null
+	del message // Images must be del'd by byond internally. It does not lag as much as a datum hard-del.
 	return ..()
 
 /**
@@ -88,7 +88,7 @@
 	// Reject whitespace
 	var/static/regex/whitespace = new(@"^\s*$")
 	if (whitespace.Find(text))
-		qdel(src)
+		returnToPool(src)
 		return
 
 	// Non mobs speakers can be small
@@ -102,13 +102,12 @@
 
 	// We dim italicized text to make it more distinguishable from regular text
 	var/tgt_color = extra_classes.Find("italics") ? target.chat_color_darkened : target.chat_color
-
 	// Approximate text height
 	// Note we have to replace HTML encoded metacharacters otherwise MeasureText will return a zero height
 	// BYOND Bug #2563917
 	// Construct text
 	var/static/regex/html_metachars = new(@"&[A-Za-z]{1,7};", "g")
-	var/complete_text = "<div class='runechatdiv'><span class='center maptext [extra_classes != null ? extra_classes.Join(" ") : ""]' style='color: [tgt_color];'>[text]</span></div>"
+	var/complete_text = "<span class='center maptext [extra_classes != null ? extra_classes.Join(" ") : ""]' style='color: [tgt_color];'>[text]</span>"
 	var/mheight = WXH_TO_HEIGHT(owned_by.MeasureText(replacetext(complete_text, html_metachars, "m"), null, CHAT_MESSAGE_WIDTH))
 	approx_lines = max(1, mheight / CHAT_MESSAGE_APPROX_LHEIGHT)
 
@@ -150,17 +149,17 @@
 		end_of_life()
 
 /datum/chatmessage/proc/qdel_self()
-	qdel(src)
+	returnToPool(src)
 
 /**
   * Applies final animations to overlay CHAT_MESSAGE_EOL_FADE deciseconds prior to message deletion
   */
 /datum/chatmessage/proc/end_of_life(fadetime = CHAT_MESSAGE_EOL_FADE)
-	if (gcDestroyed)
+	if (gcDestroyed || disposed)
 		return
 	animate(message, alpha = 0, time = fadetime, flags = ANIMATION_PARALLEL)
 	spawn(fadetime)
-		qdel(src)
+		returnToPool(src)
 
 /**
   * Creates a message overlay at a defined location for a given speaker
@@ -184,7 +183,7 @@
 		extra_classes |= "small"
 
 	if (client.toggle_runechat_outlines)
-		extra_classes |= "black_outline"
+		extra_classes += "black_outline"
 
 	var/dist = get_dist(src, speaker)
 	switch (dist)
@@ -197,13 +196,13 @@
 		raw_message = message_language.scramble(raw_message)
 
 	// Display visual above source
-	new /datum/chatmessage(raw_message, speaker, src, extra_classes)
+	getFromPool(/datum/chatmessage, raw_message, speaker, src, extra_classes)
 
 // Tweak these defines to change the available color ranges
 #define CM_COLOR_SAT_MIN	0.6
-#define CM_COLOR_SAT_MAX	0.7
-#define CM_COLOR_LUM_MIN	0.65
-#define CM_COLOR_LUM_MAX	0.75
+#define CM_COLOR_SAT_MAX	0.95
+#define CM_COLOR_LUM_MIN	0.70
+#define CM_COLOR_LUM_MAX	0.90
 
 /**
   * Gets a color for a name, will return the same color for a given string consistently within a round.atom
@@ -239,17 +238,17 @@
 	m *= 255
 	switch(h_int)
 		if(0)
-			return "[rgb(c,x,m)]C8"
+			return rgb(c,x,m)
 		if(1)
-			return "[rgb(x,c,m)]C8"
+			return rgb(x,c,m)
 		if(2)
-			return "[rgb(m,c,x)]C8"
+			return rgb(m,c,x)
 		if(3)
-			return "[rgb(m,x,c)]C8"
+			return rgb(m,x,c)
 		if(4)
-			return "[rgb(x,m,c)]C8"
+			return rgb(x,m,c)
 		if(5)
-			return "[rgb(c,m,x)]C8"
+			return rgb(c,m,x)
 
 /client/verb/toggle_runechat_outline()
 	set category = "OOC"

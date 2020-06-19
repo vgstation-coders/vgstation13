@@ -123,8 +123,9 @@ var/datum/subsystem/dbcore/SSdbcore
 		last_error = error
 		log_sql("Connect() failed | [error]")
 		++failed_connections
-		qdel(connection)
-		qdel(connectOperation)
+		BSQL_DEL_CALL(connection)
+		BSQL_DEL_CALL(connectOperation)
+		initialized = 0
 		connection = null
 		connectOperation = null
 
@@ -198,6 +199,7 @@ var/datum/subsystem/dbcore/SSdbcore
 */
 
 /datum/subsystem/dbcore/proc/Disconnect()
+	initialized = 0
 	failed_connections = 0
 	BSQL_DEL_CALL(connectOperation)
 	BSQL_DEL_CALL(connection)
@@ -210,8 +212,15 @@ var/datum/subsystem/dbcore/SSdbcore
 	//block until any connect operations finish
 	var/datum/BSQL_Connection/_connection = connection
 	var/datum/BSQL_Operation/op = connectOperation
+	var/ticker = 0
 	while ( (!_connection || _connection.gcDestroyed) || !op.IsComplete() ) // Waiting we have a real connection and that it's complete
 		stoplag()
+		ticker++
+		if (ticker > 100 && (!connection || !connectOperation || connection.gcDestroyed))
+			message_admins("Error getting connection status. Attempting to reconnect.")
+			Disconnect()
+			Connect()
+			return
 	return connection && !(connection.gcDestroyed && !op.GetError()) // Connect
 
 /datum/subsystem/dbcore/proc/Quote(str)

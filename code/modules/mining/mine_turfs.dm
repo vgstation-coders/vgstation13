@@ -222,7 +222,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	name = "\improper [mineral.display_name] deposit"
 	update_icon()
 
-/turf/unsimulated/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/unsimulated/mineral/attackby(obj/item/weapon/W, mob/user)
 
 	if(busy)
 		return
@@ -584,11 +584,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	icon_state = pick("cavefl_1","cavefl_2","cavefl_3","cavefl_4")
 
 /turf/unsimulated/floor/asteroid/New()
-	var/proper_name = name
 	..()
-
-	name = proper_name
-
 	if(prob(20) && icon_state == "asteroid")
 		icon_state = "asteroid[rand(0,12)]"
 
@@ -604,7 +600,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			gets_dug()
 	return
 
-/turf/unsimulated/floor/asteroid/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/unsimulated/floor/asteroid/attackby(obj/item/weapon/W, mob/user)
 
 	if(!W || !user)
 		return 0
@@ -667,7 +663,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	..()
 	qdel(floor_tile)
 	floor_tile = null
-	name = initial(name)
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
 	icon_regular_floor = initial(icon_state)
@@ -708,7 +703,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(1.0)
 			gets_dug()
 
-/turf/simulated/floor/asteroid/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/floor/asteroid/attackby(obj/item/weapon/W, mob/user)
 	if(!W || !user)
 		return 0
 	if (istype(W, /obj/item/weapon/pickaxe))

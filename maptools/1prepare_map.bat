@@ -4,7 +4,6 @@ set MAPFILE_MS=metaclub.dmm
 set MAPFILE_PCK=packedstation.dmm
 set MAPFILE_ROID=RoidStation.dmm
 set MAPFILE_SNAXI=snaxi.dmm
-set MAPFILE_WHEEL=wheelstation.dmm
 
 cd ../maps
 copy %MAPFILE_TG% %MAPFILE_TG%.backup
@@ -13,6 +12,5 @@ copy %MAPFILE_MS% %MAPFILE_MS%.backup
 copy %MAPFILE_PCK% %MAPFILE_PCK%.backup
 copy %MAPFILE_ROID% %MAPFILE_ROID%.backup
 copy %MAPFILE_SNAXI% %MAPFILE_SNAXI%.backup
-copy %MAPFILE_WHEEL% %MAPFILE_WHEEL%.backup
 
 pause

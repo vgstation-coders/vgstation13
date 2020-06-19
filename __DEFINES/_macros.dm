@@ -200,10 +200,6 @@
 
 #define isatom(A) isloc(A)
 
-#if DM_VERSION < 513
-#define ismovable(A) (istype(A, /atom/movable))
-#endif
-
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
 #define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
@@ -338,12 +334,6 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#if DM_VERSION < 513
-#define clamp(x, y, z) 	min(max(x, y), z)
-//x is the number you want to clamp
-//y is the minimum
-//z is the maximum
-#endif
 
 //Returns 1 if the variable contains a protected list that can't be edited
 #define variable_contains_protected_list(var_name) (((var_name) == "contents") || ((var_name) == "locs") || ((var_name) == "vars"))
