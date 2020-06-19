@@ -70,7 +70,7 @@
 										"[slot_wear_mask]" = /obj/item/clothing/mask/breath,
 										"[slot_s_store]" = /obj/item/weapon/tank/oxygen/yellow)
 
-	usr.visible_message("<span class='danger'>[user] puts on \his robe and wizard hat!</span>", \
+	user.visible_message("<span class='danger'>[user] puts on \his robe and wizard hat!</span>", \
 						"<span class='danger'>You put on your robe and wizard hat!</span>")
 
 	..()

@@ -511,7 +511,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink/New()
 	..()
 	reagents.add_reagent(DISCOUNT, 30)
-	reagents.add_reagent(WATER, 20)
+	reagents.add_reagent(MANNITOL, 20)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 

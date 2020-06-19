@@ -13,7 +13,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/specialization //Used for what list they belong to in the spellbook. SSOFFENSIVE, SSDEFENSIVE, SSUTILITY
 
 	var/charge_type = Sp_RECHARGE //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with Sp_GRADUAL
-	//The following are allowed: Sp_RECHARGE (Recharges), Sp_CHARGE (Limited uses), Sp_GRADUAL (Gradually lose charges), Sp_PASSIVE (Does not cast)
+	//The following are allowed: Sp_RECHARGE (Recharges), Sp_CHARGES (Limited uses), Sp_GRADUAL (Gradually lose charges), Sp_PASSIVE (Does not cast)
 
 	var/initial_charge_max = 100 //Used to calculate cooldown reduction
 	var/charge_max = 100 //recharge time in deciseconds if charge_type = Sp_RECHARGE or starting charges if charge_type = Sp_CHARGES
