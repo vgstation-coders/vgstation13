@@ -285,7 +285,7 @@
 	..()
 	appearance_flags |= PIXEL_SCALE
 	var/matrix/boss = matrix()
-	gisy.Scale(1.5,1.5)
+	boss.Scale(1.5,1.5)
 	transform = boss
 	
 /obj/item/projectile/meteor/boss/to_bump(atom/A)
