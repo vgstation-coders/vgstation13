@@ -204,7 +204,7 @@
 	body += "</ul>"
 	body = jointext(body,"")
 
-	var/html = "<html><head>"
+	var/html = "<html><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><head>"
 	if (title)
 		html += "<title>[title]</title>"
 	html += {"<style>
@@ -859,7 +859,7 @@ function loadPage(list) {
 			if ("Monolith")
 				rod_type = /obj/item/projectile/immovablerod/hyper
 
-		if(alert("Are you sure you want to do this?","Confirm","Yes","No") != "Yes")	
+		if(alert("Are you sure you want to do this?","Confirm","Yes","No") != "Yes")
 			return
 
 		var/obj/item/projectile/immovablerod/rod = new rod_type(random_start_turf(A.z))
