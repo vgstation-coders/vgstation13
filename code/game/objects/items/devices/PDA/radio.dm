@@ -21,7 +21,7 @@
 
 /obj/item/radio/integrated/signal/New()
 	..()
-	if(ticker && ticker.mode == GAME_STATE_PLAYING)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
 /obj/item/radio/integrated/signal/initialize()

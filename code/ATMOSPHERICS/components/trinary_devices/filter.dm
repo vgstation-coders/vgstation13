@@ -33,7 +33,7 @@ Filter types:
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/trinary/filter/New()
-	if(ticker && ticker.mode == GAME_STATE_PLAYING)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 	..()
 

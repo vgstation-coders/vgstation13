@@ -160,7 +160,7 @@ obj/machinery/door/airlock/proc/set_frequency(new_frequency)
 /obj/machinery/door/airlock/New()
 	..()
 
-	if(ticker && ticker.mode == GAME_STATE_PLAYING)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
 /obj/machinery/airlock_sensor
@@ -238,7 +238,7 @@ obj/machinery/door/airlock/proc/set_frequency(new_frequency)
 /obj/machinery/airlock_sensor/New()
 	..()
 
-	if (ticker && ticker.mode == GAME_STATE_PLAYING)
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
 /obj/machinery/airlock_sensor/airlock_interior
@@ -401,7 +401,7 @@ obj/machinery/door/airlock/proc/set_frequency(new_frequency)
 /obj/machinery/access_button/New()
 	..()
 
-	if(ticker && ticker.mode == GAME_STATE_PLAYING)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
 /obj/machinery/access_button/airlock_interior

@@ -111,7 +111,7 @@
 /obj/machinery/air_sensor/New()
 	..()
 
-	if(ticker && ticker.mode == GAME_STATE_PLAYING)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
 /obj/machinery/computer/general_air_control
