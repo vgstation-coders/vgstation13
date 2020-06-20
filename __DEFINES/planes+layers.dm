@@ -163,7 +163,6 @@ What is the naming convention for planes or layers?
 
 //	#define MOB_LAYER				4
 	#define SLIME_LAYER				5
-	#define CHAT_LAYER				6
 
 #define ABOVE_HUMAN_PLANE 		16			// For things that should appear above humans.
 
@@ -176,6 +175,7 @@ What is the naming convention for planes or layers?
 	// OBJ_LAYER 	 				3
 	// ABOVE_OBJ_LAYER				4
 	#define CLOSED_CURTAIN_LAYER	5
+	#define CHAT_LAYER				6
 
 #define BLOB_PLANE 				17			// For Blobs, which are above humans.
 
