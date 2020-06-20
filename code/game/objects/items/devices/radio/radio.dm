@@ -50,8 +50,8 @@
 		wires.CutWireIndex(WIRE_TRANSMIT)
 
 	secure_radio_connections = new
-	..(loc)
-	if(ticker && ticker.mode == GAME_STATE_PLAYING)
+	..()
+	if(ticker && ticker.current_state != GAME_STATE_PREGAME) // So that equipped headset during set up are correctly initialized.
 		initialize()
 
 /obj/item/device/radio/Destroy()
@@ -59,10 +59,8 @@
 	remove_radio_all(src) //Just to be sure
 	..()
 
-
 /obj/item/device/radio/initialize()
-	if (!radio_controller)
-		return
+	. = ..()
 	frequency = COMMON_FREQ //common chat
 	if(freerange)
 		if(frequency < 1200 || frequency > 1600)
