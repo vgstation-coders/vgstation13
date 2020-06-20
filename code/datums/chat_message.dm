@@ -14,6 +14,10 @@
   * Datum for generating a message overlay on the map
   * Ported from TGStation; https://github.com/tgstation/tgstation/pull/50608/, author:  bobbahbrown
   */
+
+// Cached runechat icon
+var/runechat_icon = null
+
 /datum/chatmessage
 	/// The visual element of the chat messsage
 	var/image/message
@@ -97,8 +101,10 @@
 
 	// Append radio icon if comes from a radio
 	if (extra_classes.Find("spoken_into_radio"))
-		var/image/r_icon = image('icons/chat_icons.dmi', icon_state = "radio")
-		text =  "\icon[r_icon]&nbsp;" + text
+		if (!runechat_icon)
+			var/image/r_icon = image('icons/chat_icons.dmi', icon_state = "radio")
+			runechat_icon =  "\icon[r_icon]&nbsp;"
+		text = runechat_icon + text
 
 	// We dim italicized text to make it more distinguishable from regular text
 	var/tgt_color = extra_classes.Find("italics") ? target.chat_color_darkened : target.chat_color
@@ -138,7 +144,7 @@
 	message.maptext_x = (CHAT_MESSAGE_WIDTH - owner.bound_width) * -0.5
 	message.maptext = complete_text
 
-	if (target.loc == owner) // Special case, holding an atom speaking (pAI, recorder...)
+	if (is_holder_of(owner, target)) // Special case, holding an atom speaking (pAI, recorder...)
 		message.plane = ABOVE_HUD_PLANE
 
 	// View the message
@@ -183,7 +189,7 @@
 	extra_classes += existing_extra_classes
 
 	if (mode == SPEECH_MODE_WHISPER)
-		extra_classes |= "small"
+		extra_classes += "small"
 
 	if (client.toggle_runechat_outlines)
 		extra_classes += "black_outline"
@@ -193,7 +199,7 @@
 		if (4 to 5)
 			extra_classes |= "small"
 		if (5 to 16)
-			extra_classes |= "very_small"
+			extra_classes += "very_small"
 
 	if (!say_understands(speaker, message_language))
 		raw_message = message_language.scramble(raw_message)
