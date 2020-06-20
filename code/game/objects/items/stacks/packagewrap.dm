@@ -21,6 +21,7 @@
 		/obj/item/weapon/gift,
 		/obj/item/weapon/winter_gift,
 		/obj/item/weapon/storage/evidencebag,
+		/obj/item/weapon/storage/backpack/holding,
 		/obj/item/weapon/legcuffs/bolas
 		)
 
