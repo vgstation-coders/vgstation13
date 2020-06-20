@@ -3,8 +3,6 @@
 	icon_state = "engine"
 	circuit = /obj/item/weapon/circuitboard/rust_gyrotron_control
 	light_color = LIGHT_COLOR_BLUE
-
-	  // Required for multitool buffering
 	var/list/linked_gyrotrons[0] //List of linked gyrotrons.
 
 /obj/machinery/computer/rust_gyrotron_controller/initialize()

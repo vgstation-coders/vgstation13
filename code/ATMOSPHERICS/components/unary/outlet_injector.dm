@@ -13,7 +13,6 @@
 	var/max_rate=50
 
 	var/frequency = 0
-	 
 	var/datum/radio_frequency/radio_connection
 
 	level = 1

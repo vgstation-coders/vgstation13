@@ -60,7 +60,6 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	var/field_strength = 1//0.01
 	var/field_frequency = 1
 
-
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 500	//multiplied by field strength

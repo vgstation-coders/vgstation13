@@ -4,7 +4,6 @@ var/global/list/igniters = list()
 	desc = "It's useful for igniting plasma."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "igniter1"
-	 
 	var/on = 1.0
 	var/obj/item/device/assembly_holder/assembly=null
 	anchored = 1.0
@@ -86,7 +85,6 @@ var/global/list/igniters = list()
 	desc = "A wall-mounted ignition device."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "migniter"
-	 
 	var/disable = 0
 	var/last_spark = 0
 	var/base_state = "migniter"
