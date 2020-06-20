@@ -21,8 +21,7 @@
 		/obj/item/weapon/gift,
 		/obj/item/weapon/winter_gift,
 		/obj/item/weapon/storage/evidencebag,
-		/obj/item/weapon/legcuffs/bolas,
-		/obj/item/weapon/storage
+		/obj/item/weapon/legcuffs/bolas
 		)
 
 	var/list/wrappable_big_stuff = list(
@@ -36,12 +35,16 @@
 	if(!istype(target))
 		return
 	if(is_type_in_list(target, cannot_wrap))
+		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
 		return
 	if(target.anchored)
+		to_chat(user, "<span class='notice'>You can't get the wrapping around \the [target].</span>")
 		return
 	if(target in user)
+		to_chat(user, "<span class='notice'>That's not gonna work.</span>")
 		return
 	if(!proximity_flag)
+		to_chat(user, "<span class='notice'>You're not close enough.</span>")
 		return
 	if(ishuman(attacked))
 		return try_wrap_human(attacked,user)
@@ -62,6 +65,7 @@
 			target.forceMove(P)
 			P.add_fingerprint(user)
 			use(1)
+			to_chat(user, "<span class='notice'>You wrap \the [target] with \the [src].</span>")
 		else
 			to_chat(user, "<span class='warning'>You need more paper!</span>")
 	else if(is_type_in_list(target,wrappable_big_stuff) && bigpath)
@@ -74,6 +78,7 @@
 			target.forceMove(P)
 			P.add_fingerprint(user)
 			use(3)
+			to_chat(user, "<span class='notice'>You wrap \the [target] with \the [src].</span>")
 		else
 			to_chat(user, "<span class='warning'>You need more paper!</span>")
 	else

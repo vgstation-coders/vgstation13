@@ -417,6 +417,14 @@
 		return
 	..()
 
+	if(istype(W,/obj/item/stack/package_wrap))
+		if(!is_type_in_list(src, W.cannot_wrap))
+			to_chat(user, "<span class='notice'>You start wrapping \the [src] with \the [W].</span>")
+			if(do_after(user, src, 10 * W.w_class))
+				return//this item is now wrapped!
+		else
+			to_chat(user, "<span class='notice'>You can't wrap that.</span>")
+
 	// /vg/ #11: Recursion.
 	/*if(istype(W,/obj/item/weapon/implanter/compressed))
 		return*/
