@@ -321,7 +321,7 @@
 	my_fac = /datum/faction/syndicate/nuke_op/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(25, 25, 25, 25, 25, 20, 15, 15, 10, 10)
-	required_candidates = 5
+	required_candidates = 1
 	max_candidates = 5
 	weight = 1
 	cost = 35
