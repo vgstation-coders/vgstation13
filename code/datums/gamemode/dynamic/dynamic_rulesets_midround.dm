@@ -119,11 +119,6 @@
 
 	applicants.Cut()
 
-/datum/dynamic_ruleset/midround/from_ghosts/proc/generate_ruleset_body(mob/applicant)
-	var/mob/living/carbon/human/new_character = makeBody(applicant)
-	new_character.dna.ResetSE()
-	return new_character
-
 /datum/dynamic_ruleset/midround/from_ghosts/proc/finish_setup(var/mob/new_character, var/index)
 	var/datum/role/new_role = new role_category
 	new_role.AssignToRole(new_character.mind,1)
