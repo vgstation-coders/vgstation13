@@ -149,7 +149,7 @@ var/runechat_icon = null
 
 	// View the message
 	owned_by.seen_messages.Add(src)
-	owned_by.images |= message
+	owned_by.images += message
 	animate(message, alpha = 255, time = CHAT_MESSAGE_SPAWN_TIME)
 
 	// Prepare for destruction
