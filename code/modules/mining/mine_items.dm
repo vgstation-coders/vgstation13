@@ -286,7 +286,7 @@ proc/move_mining_shuttle()
 		return
 	if(current_ammo >0)
 		current_ammo--
-		generic_projectile_fire(A, src, /obj/item/projectile/kinetic/cutter/, 'sound/weapons/Taser.ogg')
+		generic_projectile_fire(A, src, /obj/item/projectile/kinetic/cutter/, 'sound/weapons/Taser.ogg', user)
 		user.delayNextAttack(4)
 	else
 		src.visible_message("*click click*")
@@ -849,6 +849,8 @@ proc/move_mining_shuttle()
 	desc = "It allows you to store and deploy lazarus-injected creatures easier."
 	icon = 'icons/obj/mobcap.dmi'
 	icon_state = "mobcap0"
+	item_state = "capsule"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	throwforce = 00
 	throw_speed = 4
 	throw_range = 20

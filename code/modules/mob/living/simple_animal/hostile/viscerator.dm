@@ -114,3 +114,68 @@
 		var/mob/living/carbon/M = target
 		M.adjustCloneLoss(rand(5,10)) //scp-553 LORE.
 	..()
+
+/mob/living/simple_animal/hostile/bunnybot
+	name = "Bunnybot"
+	desc = "A sloppily assembled wind-up toy with a rabbit face."
+	icon = 'icons/obj/butterfly.dmi'
+	icon_state = "bunnybot"
+	icon_living = "bunnybot"
+	icon_dead = "bunnybot_dead"
+	pass_flags = PASSMOB
+	health = 45
+	maxHealth = 45
+	melee_damage_lower = 0
+	melee_damage_upper = 1 //Aaahhh my toe
+	attack_sound = "sound/items/trayhit2.ogg"
+	speak_emote = list("whirrs")
+	emote_hear = list("whirrs")
+	emote_see = list("whirrs")
+	attacktext = "bumps into"
+	speak_chance = 1
+	turns_per_move = 15
+	response_help  = "pets"
+	response_disarm = "gently pushes aside"
+	response_harm   = "stomps"
+	stop_automated_movement = 1
+	friendly = "bumps into"
+	can_butcher = 0
+	var/autodie = TRUE
+
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+
+	size = SIZE_SMALL
+	meat_type = null
+	held_items = list()
+	mob_property_flags = MOB_ROBOTIC
+
+/mob/living/simple_animal/hostile/bunnybot/Life()
+	..()
+	if(autodie && life_tick > 12)
+		playsound(src, "sound/effects/explosion_small1.ogg", 25, 1)
+		visible_message("the <b>[src]</b> falls apart!")
+		death()
+
+/mob/living/simple_animal/hostile/bunnybot/death(var/gibbed = FALSE)
+	icon_state = "bunnybot_dead"
+	animate(src,alpha = 0, time = 1 SECONDS)
+	spawn(1 SECONDS)
+		qdel(src)
+
+/mob/living/simple_animal/hostile/bunnybot/CanAttack(var/atom/the_target)
+	if(ishuman(the_target))
+		return 0
+	return ..(the_target)
+
+/mob/living/simple_animal/hostile/bunnybot/proc/handle_faction(var/mob/user)
+	faction = "\ref[user]"
+
+

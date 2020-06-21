@@ -42,6 +42,8 @@
 	var/role_alt_title
 
 	var/datum/job/assigned_job
+	var/job_priority // How much did we want the job we ended up having? Used for assistant rerolls.
+
 	var/datum/religion/faith
 
 	var/list/kills=list()
@@ -63,6 +65,7 @@
 	//fix scrying raging mages issue.
 	var/isScrying = 0
 	var/list/heard_before = list()
+	var/event/on_transfer_end
 
 	var/nospells = 0 //Can't cast spells.
 	var/hasbeensacrificed = FALSE
@@ -71,6 +74,7 @@
 
 /datum/mind/New(var/key)
 	src.key = key
+	on_transfer_end = new(owner = src)
 
 /datum/mind/proc/transfer_to(mob/new_character)
 	if (!current)
@@ -85,6 +89,7 @@
 		R.PreMindTransfer(current)
 
 	if(current)					//remove ourself from our old body's mind variable
+		current.old_assigned_role = assigned_role
 		current.mind = null
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
@@ -104,6 +109,7 @@
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
+	INVOKE_EVENT(on_transfer_end, list("mind" = src))
 
 /datum/mind/proc/transfer_to_without_current(var/mob/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"

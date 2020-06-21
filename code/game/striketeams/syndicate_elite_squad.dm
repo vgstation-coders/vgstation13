@@ -85,14 +85,14 @@
 	equip_to_slot_or_del(new /obj/item/weapon/storage/box(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/ammo_storage/box/c45(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/regular(src), slot_in_backpack)
-	equip_to_slot_or_del(new /obj/item/weapon/plastique(src), slot_in_backpack)
+	equip_to_slot_or_del(new /obj/item/weapon/c4(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/osipr_core(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/weapon/gun/osipr(src), slot_in_backpack)
 	if (leader)
 		equip_to_slot_or_del(new /obj/item/weapon/pinpointer(src), slot_in_backpack)
 		equip_to_slot_or_del(new /obj/item/weapon/disk/nuclear(src), slot_in_backpack)
 	else
-		equip_to_slot_or_del(new /obj/item/weapon/plastique(src), slot_in_backpack)
+		equip_to_slot_or_del(new /obj/item/weapon/c4(src), slot_in_backpack)
 		equip_to_slot_or_del(new /obj/item/energy_magazine/osipr(src), slot_in_backpack)
 
 	var/obj/item/weapon/card/id/syndicate/W = new(src) //Untrackable by AI

@@ -237,7 +237,7 @@
 	new /obj/item/weapon/gun/energy/crossbow(src)
 	new /obj/item/weapon/gun/projectile/mateba(src)
 	new /obj/item/ammo_storage/box/a357(src)
-	new /obj/item/weapon/plastique(src)
+	new /obj/item/weapon/c4(src)
 
 // -----------------------------
 //        Secure Safe

@@ -130,11 +130,9 @@
 		if(!suiciding) //Cowards don't count
 			score["deadcrew"]++ //Someone died at this point, and that's terrible
 	if(ticker && ticker.mode)
-//		world.log << "k"
 		sql_report_death(src)
-		//ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
-	if(become_zombie_after_death && isjusthuman(src)) //2 if they retain their mind, 1 if they don't
+	if(become_zombie_after_death && isjusthuman(src))
 		spawn(30 SECONDS)
 			if(!gcDestroyed)
 				make_zombie(retain_mind = become_zombie_after_death-1)

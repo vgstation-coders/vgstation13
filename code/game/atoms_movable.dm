@@ -45,8 +45,14 @@
 	var/throwpass = 0
 	var/level = 2
 
+	// Change of z-level.
+	var/event/on_z_transition
+	var/event/post_z_transition
+
 	// When this object moves. (args: loc)
 	var/event/on_moved
+	// When the object is qdel'd
+	var/event/on_destroyed
 
 	var/atom/movable/tether_master
 	var/list/tether_slaves
@@ -67,7 +73,10 @@
 		for(var/matID in starting_materials)
 			materials.addAmount(matID, starting_materials[matID])
 
+	on_destroyed = new("owner"=src)
 	on_moved = new("owner"=src)
+	on_z_transition = new("owner"=src)
+	post_z_transition = new("owner"=src)
 
 /atom/movable/Destroy()
 	var/turf/T = loc
@@ -78,17 +87,25 @@
 		returnToPool(materials)
 		materials = null
 
+	if(on_z_transition)
+		on_z_transition.holder = null
+		qdel(on_z_transition)
+		on_z_transition = null
+	if(post_z_transition)
+		post_z_transition.holder = null
+		qdel(post_z_transition)
+		post_z_transition = null
 	if(on_moved)
 		on_moved.holder = null
 		on_moved = null
+	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
+	if(on_destroyed)
+		on_destroyed.holder = null
+		on_destroyed = null
 
 	var/turf/un_opaque
 	if (opacity && isturf(loc))
 		un_opaque = loc
-
-	loc = null
-	if (un_opaque)
-		un_opaque.recalc_atom_opacity()
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
@@ -98,11 +115,15 @@
 
 	for (var/datum/locking_category/category in locking_categories)
 		qdel(category)
-
 	locking_categories      = null
 	locking_categories_name = null
 
 	break_all_tethers()
+
+	forceMove(null, harderforce = TRUE)
+
+	if (un_opaque)
+		un_opaque.recalc_atom_opacity()
 
 	if((flags & HEAR) && !ismob(src))
 		for(var/mob/virtualhearer/VH in virtualhearers)
@@ -280,6 +301,9 @@
 				returnToPool(G)
 
 	AM.locked_to = src
+	if (ismob(AM))
+		var/mob/M = AM
+		M.canmove = 0
 
 	locked_atoms[AM] = category
 	category.lock(AM)
@@ -293,6 +317,10 @@
 	var/datum/locking_category/category = locked_atoms[AM]
 	locked_atoms    -= AM
 	AM.locked_to     = null
+	if (ismob(AM))
+		var/mob/M = AM
+		M.canmove = 1
+
 	category.unlock(AM)
 	//AM.reset_glide_size() // FIXME: Currently broken.
 
@@ -639,11 +667,44 @@
 //Overlays
 /atom/movable/overlay
 	var/atom/master = null
+	var/follow_proc = /atom/movable/overlay/proc/move_to_turf_or_null
+	var/master_moved_key
+	var/master_destroyed_key
 	anchored = 1
 
 /atom/movable/overlay/New()
 	. = ..()
+	if(!loc)
+		CRASH("[type] created in nullspace.")
+		qdel(src)
+		return
+
+	master = loc
+	name = master.name
+	dir = master.dir
+
+	if(istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		master_moved_key = AM.on_moved.Add(src, follow_proc)
+		SetInitLoc()
+	if (istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		master_destroyed_key = AM.on_destroyed.Add(src, .proc/qdel_self)
 	verbs.len = 0
+
+/atom/movable/overlay/proc/qdel_self()
+	qdel(src) // Rest in peace
+
+/atom/movable/overlay/Destroy()
+	if(istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		AM.on_moved.Remove(master_moved_key)
+		AM.on_destroyed.Remove(master_destroyed_key)
+	master = null
+	return ..()
+
+/atom/movable/overlay/proc/SetInitLoc()
+	forceMove(master.loc)
 
 /atom/movable/overlay/blob_act()
 	return
@@ -662,6 +723,13 @@
 	if (src.master)
 		return src.master.attack_hand(a, b, c)
 	return
+
+/atom/movable/overlay/proc/move_to_turf_or_null(var/list/event_args, var/mob/holder)
+	var/new_loc = event_args["loc"]
+	var/turf/T = get_turf(new_loc)
+	var/atom/movable/AM = master // the proc is only called if the master has a "on_moved" event.
+	if(T != loc)
+		forceMove(T, glide_size_override = DELAY2GLIDESIZE(AM.move_speed))
 
 /atom/movable/proc/attempt_to_follow(var/atom/movable/A,var/turf/T)
 	if(anchored)
@@ -944,23 +1012,41 @@
 		for(var/client/C in viewers)
 			C.images -= override_image
 
-//Attack Animation for ghost object being pixel shifted onto person
-	var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
-	item.appearance = tool.attack_icon()
-	item.alpha = 128
-	item.loc = target
-	item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
-	item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
-	item.mouse_opacity = 0
+	spawn()
+		//Attack Animation for ghost object being pixel shifted onto person
+		var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
+		item.appearance = tool.attack_icon()
+		item.alpha = 128
+		item.loc = target
+		item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
+		item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
+		item.mouse_opacity = 0
 
-	var/viewers = item_animation_viewers.Copy()
-	for(var/client/C in viewers)
-		C.images += item
+		var/viewers = item_animation_viewers.Copy()
+		for(var/client/C in viewers)
+			C.images += item
 
-	animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
-	sleep(3)
-	for(var/client/C in viewers)
-		C.images -= item
+		animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
+		sleep(3)
+		for(var/client/C in viewers)
+			C.images -= item
+
+	spawn()
+		target.do_hitmarker(usr)
+
+/atom/proc/do_hitmarker(mob/shooter)
+	spawn()
+		var/datum/role/streamer/streamer_role = shooter?.mind?.GetRole(STREAMER)
+		if(streamer_role && streamer_role.team == ESPORTS_SECURITY)
+			streamer_role.hits += IS_WEEKEND ? 2 : 1
+			streamer_role.update_antag_hud()
+			playsound(src, 'sound/effects/hitmarker.ogg', 100, FALSE)
+			var/image/hitmarker = image(icon='icons/effects/effects.dmi', loc=src, icon_state="hitmarker")
+			for(var/client/C in clients)
+				C.images += hitmarker
+			sleep(3)
+			for(var/client/C in clients)
+				C.images -= hitmarker
 
 /atom/movable/proc/make_invisible(var/source_define, var/time, var/include_clothing)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
 	return invisibility || alpha <= 1	//already invisible
@@ -1030,7 +1116,8 @@
 	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
 	var/turf/startzone = locate(startx, starty, 1)
 	var/turf/endzone = locate(endx, endy, 1)
-	if(!isspace(get_area(startzone)))
+	var/area/startzone_area = get_area(startzone)
+	if(!isspace(startzone_area))
 		return FALSE
 	forceMove(startzone)
 	throw_at(endzone, null, throwspeed)
@@ -1060,3 +1147,62 @@
 				forceMove(F)
 				return TRUE
 	return FALSE
+
+/atom/movable/proc/teleport_radius(var/range)
+	var/list/best_options = list()
+	var/list/backup_options = list()
+	var/turf/picked
+	for(var/turf/T in orange(range, src))
+		if(T.x>world.maxx-6 || T.x<6 || T.y>world.maxy-6 || T.y<6) //Conditions we will NEVER accept: too close to edge
+			continue
+		if(istype(T,/turf/space) || T.density) //Only as a fallback: dense turf or space
+			backup_options += T
+			continue
+		best_options += T
+	if(best_options.len)
+		picked = pick(best_options)
+	else if(backup_options.len)
+		picked = pick(backup_options)
+	else
+		return
+	forceMove(picked)
+
+// -- trackers
+
+/atom/movable/proc/add_tracker(var/datum/tracker/T)
+	on_moved.Add(T, "recieve_position")
+
+/datum/tracker
+	var/name = "Tracker"
+	var/active = TRUE
+	var/changed = FALSE
+
+	var/turf/target
+
+	var/tick_refresh = 5 // The number of moved events before we update the position.
+	var/current_tick = 1
+
+	var/lost_position_probability = 0 // Probability of losing the target
+	var/lost_position_distance = 0 // Distance at which the tracker loses the target
+
+/datum/tracker/proc/recieve_position(var/list/loc)
+
+	ASSERT(loc)
+
+	if (!active)
+		return
+	if (current_tick < tick_refresh)
+		current_tick++
+		return
+
+	if (prob(lost_position_probability))
+		active = FALSE
+		return
+
+	var/target_loc = loc["loc"]
+	if (target != target_loc)
+		changed = TRUE
+
+	target = get_turf(target_loc)
+
+	current_tick = 1

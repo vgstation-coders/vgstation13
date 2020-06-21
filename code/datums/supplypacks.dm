@@ -1982,6 +1982,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/assembly/prox_sensor,
 					/obj/item/device/assembly/prox_sensor,
 					/obj/item/device/assembly/prox_sensor,
+					/obj/item/device/assembly/infra,
+					/obj/item/device/assembly/infra,
+					/obj/item/device/assembly/infra,
 					/obj/item/device/assembly/timer,
 					/obj/item/device/assembly/timer,
 					/obj/item/device/assembly/timer)
@@ -2090,6 +2093,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/fish_eggs/salmon,
 					/obj/item/fish_eggs/shrimp,
 					/obj/item/fish_eggs/shrimp,
+					/obj/item/fish_eggs/lobster,
+					/obj/item/fish_eggs/lobster,
 					/obj/item/weapon/circuitboard/fishtank,
 					/obj/item/weapon/circuitboard/fishtank,
 					/obj/item/weapon/circuitboard/fishtank,
@@ -2163,6 +2168,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 30
 	containertype = /obj/structure/largecrate/cat
 	containername = "cat crate"
+	group = "Hydroponics"
+
+/datum/supply_packs/snails
+	name = "Snails"
+	contains = list()
+	cost = 25
+	containertype = /obj/structure/largecrate/snails
+	containername = "snail crate"
 	group = "Hydroponics"
 
 /datum/supply_packs/weedcontrol
@@ -2431,3 +2444,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "Al's Fun And Games stack of packs"
 	group = "Vending Machine Packs"
+
+/datum/supply_packs/teamsecurity
+	name = "Team Security stack of packs"
+	contains = list(/obj/structure/vendomatpack/team_security, /obj/structure/vendomatpack/team_security)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "Team Security stack of packs"
+	group = "Vending Machine packs"

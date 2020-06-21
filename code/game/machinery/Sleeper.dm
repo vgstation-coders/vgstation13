@@ -10,7 +10,7 @@
 	anchored = TRUE
 	var/base_icon = "sleeper"
 	var/mob/living/occupant = null
-	var/available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
+	var/available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
 	var/amounts = list(5, 10)
 	var/sedativeblock = FALSE //To prevent people from being surprisesoporific'd
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
@@ -61,11 +61,11 @@
 		works_in_crit = FALSE
 	switch(T)
 		if(0 to 5)
-			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", KELOTANE = "Kelotane", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
+			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", KELOTANE = "Kelotane", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
 		if(6 to 8)
-			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine")
+			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine")
 		else
-			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
+			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
 
 /obj/machinery/sleeper/interact(var/mob/user)
 	var/dat = list()
@@ -124,7 +124,7 @@
 			if(occupant)
 				if(occupant.stat == DEAD)
 					to_chat(usr, "<span class='danger'>This person has no life for to preserve anymore. Take them to a department capable of reanimating them.</span>")
-				else if(href_list["chemical"] == STOXIN && sedativeblock)
+				else if(href_list["chemical"] == STOXIN2 && sedativeblock)
 					if(sedativeblock < 3)
 						to_chat(usr, "<span class='warning'>Sedative injections not yet ready. Please try again in a few seconds.</span>")
 					else //if this guy is seriously just mashing the soporific button...
@@ -378,22 +378,27 @@
 			go_out(ejector = user)
 		process()
 
+/obj/machinery/sleeper/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
+	if (O == occupant)
+		occupant = null
+		update_icon()
+
 /obj/machinery/sleeper/proc/go_out(var/exit = loc, var/mob/ejector)
+	var/mob/old_occupant = occupant
 	if(!occupant)
 		return FALSE
 	for(var/atom/movable/x in contents)
 		if(x in component_parts)
 			continue
 		x.forceMove(loc)
-	if(!occupant.gcDestroyed)
-		occupant.forceMove(exit)
-		occupant.reset_view()
-		if(istype(ejector) && ejector != occupant)
+	if(!old_occupant.gcDestroyed)
+		old_occupant.forceMove(exit)
+		old_occupant.reset_view()
+		if(istype(ejector) && ejector != old_occupant)
 			var/obj/structure/bed/roller/B = locate() in exit
 			if(B)
-				B.buckle_mob(occupant, ejector)
+				B.buckle_mob(old_occupant, ejector)
 				ejector.start_pulling(B)
-	occupant = null
 	update_icon()
 	return TRUE
 

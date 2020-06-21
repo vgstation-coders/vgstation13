@@ -164,7 +164,7 @@
 	affected.implants += E
 	E.part = affected
 	synd_mob.update_icons()
-	
+
 	if(synd_mob.mind.GetRole(NUKE_OP_LEADER))
 		synd_mob.equip_to_slot_or_del(new /obj/item/device/modkit/syndi_commander(src), slot_in_backpack)
 	return 1
@@ -214,13 +214,13 @@
 			synd_mob.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/roller/surgery(synd_mob))
 		if("Engineering") //Mister deconstruction, C4 and efficient. Engineers have shotguns because stereotype, and eswords for utility
 			synd_mob.equip_to_slot_or_drop(new /obj/item/clothing/glasses/scanner/meson/prescription(synd_mob), slot_glasses)
-			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/gun/projectile/shotgun/pump/combat(synd_mob), slot_s_store) //Only place we can store it, it will drop on the ground for plasmamen
+			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty(synd_mob), slot_in_backpack) 
 			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/storage/belt/utility/complete(synd_mob), slot_belt)
 			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/storage/box/lethalshells(synd_mob), slot_in_backpack)
 			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/melee/energy/sword(synd_mob), slot_in_backpack)
-			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/plastique(synd_mob), slot_in_backpack)
-			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/plastique(synd_mob), slot_in_backpack)
-			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/plastique(synd_mob), slot_in_backpack)
+			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/c4(synd_mob), slot_in_backpack)
+			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/c4(synd_mob), slot_in_backpack)
+			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/c4(synd_mob), slot_in_backpack)
 			synd_mob.equip_to_slot_or_drop(new /obj/item/clothing/glasses/welding/superior(synd_mob), slot_l_store)
 			synd_mob.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/clothing/shoes/magboots/syndie/elite(synd_mob))
 		if("Stealth") //WE STELT. Has an energy crossbow primary and a silenced pistol with magazines, along with a basic kit of infiltration items you could need to not nuke the Ops' credits

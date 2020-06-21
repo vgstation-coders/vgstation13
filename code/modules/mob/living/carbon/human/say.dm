@@ -1,6 +1,9 @@
 ///mob/living/carbon/human/say(var/message)
 //	..(message)
 
+// This is obsolete if the human is using a language.
+// Verbs in such a situation are given in /datum/language/get_spoken_verb().
+// The proc get_spoken_verb(var/msg) allows you to override the spoken verb depending on the mob.
 /mob/living/carbon/human/say_quote(text)
 	if(!text)
 		return "says, \"...\"";	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code
@@ -20,6 +23,22 @@
 //		return "[dna.species.say_mod], \"[text]\"";
 
 	return "says, [text]";
+
+// Use this for an override of the spoken verb.
+/mob/living/carbon/human/get_spoken_verb(var/msg)
+	if(istype(wear_mask, /obj/item/clothing/mask/gas/voice) || istype(wear_mask, /obj/item/clothing/head/cardborg))
+		if (istype(wear_mask, /obj/item/clothing/mask/gas/voice))
+			var/obj/item/clothing/mask/gas/voice/V = wear_mask
+			if (!(V.vchange) || V.speech_mode == VOICE_CHANGER_SAYS)
+				return ..()
+		var/ending = copytext(msg, length(msg))
+		if (ending == "?")
+			return "queries"
+		if (ending == "!")
+			return "declares"
+		return "states"
+
+	return ..()
 
 /mob/living/carbon/human/treat_speech(var/datum/speech/speech, var/genesay=0)
 	if ((M_HULK in mutations) && health >= 25 && length(speech.message))

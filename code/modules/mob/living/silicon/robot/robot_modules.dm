@@ -272,6 +272,7 @@
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/robot_rack/bed(src)
+	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
 	B.max_amount = MEDICAL_MAX_KIT
 	B.amount = MEDICAL_MAX_KIT
@@ -524,7 +525,6 @@
 /obj/item/weapon/robot_module/syndicate/New()
 	..()
 
-	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/crowbar(src)
 	fix_modules()
 
@@ -558,6 +558,7 @@
 
 	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
 
+	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/inflatable_dispenser(src)
 	modules += new /obj/item/device/chameleon(src)
@@ -567,8 +568,9 @@
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
 	modules += new /obj/item/weapon/revivalprod(src)
-	modules += new /obj/item/weapon/switchtool/surgery(src)
+	modules += new /obj/item/weapon/switchtool/surgery/maxed(src)
 	modules += new /obj/item/robot_rack/bed/syndie(src)
+	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
 
 	sensor_augs = list("Thermal", "Medical", "Disable")
 

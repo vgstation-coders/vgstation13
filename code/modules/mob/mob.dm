@@ -6,6 +6,8 @@
 	var/said_last_words = 0 // All mobs can now whisper as they die
 	var/list/alerts = list()
 
+	var/event/on_blink
+
 /mob/variable_edited(var_name, old_value, new_value)
 	.=..()
 
@@ -39,6 +41,12 @@
 		on_irradiate.holder = null
 	if(on_death)
 		on_death.holder = null
+	if(on_bumping)
+		on_bumping.holder = null
+	if(on_bumped)
+		on_bumped.holder = null
+	if(on_touched)
+		on_touched.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -86,6 +94,9 @@
 	qdel(on_clickon)
 	qdel(on_irradiate)
 	qdel(on_death)
+	qdel(on_bumping)
+	qdel(on_bumped)
+	qdel(on_touched)
 
 	on_spellcast = null
 	on_uattack = null
@@ -94,6 +105,9 @@
 	on_clickon = null
 	on_irradiate = null
 	on_death = null
+	on_bumping = null
+	on_bumped = null
+	on_touched = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -283,6 +297,9 @@
 	on_clickon = new(owner = src)
 	on_irradiate = new(owner = src)
 	on_death = new(owner = src)
+	on_bumping = new(owner = src)
+	on_bumped = new(owner = src)
+	on_touched = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -1027,7 +1044,7 @@ Use this proc preferably at the end of an equipment loadout
 //note: ghosts can point, this is intended
 //visible_message will handle invisibility properly
 //overriden here and in /mob/dead/observer for different point span classes and sanity checks
-/mob/verb/pointed(atom/A as turf | obj | mob in view(get_turf(src)))
+/mob/verb/pointed(atom/A as turf | obj | mob in tview(src))
 	set name = "Point To"
 	set category = "Object"
 
@@ -1041,7 +1058,7 @@ Use this proc preferably at the end of an equipment loadout
 		I.showoff(src)
 		return 0
 
-	if(!(A in (view(get_turf(src)) + get_all_slots())) || (usr.see_invisible < A.invisibility))
+	if(!(A in (tview(src) + get_all_slots())))
 		message_admins("<span class='warning'><B>WARNING: </B><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?</span>", 1)
 		log_admin("[key_name_admin(src)] just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?")
 		return 0
@@ -1507,6 +1524,7 @@ Use this proc preferably at the end of an equipment loadout
 			stat("Location:", "([x], [y], [z])")
 			stat("CPU:", "[world.cpu]")
 			stat("Instances:", "[world.contents.len]")
+			stat("Internal tick usage:", "[internal_tick_usage]")
 
 			stat(null)
 			if(Master)
@@ -1613,71 +1631,79 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/reset_layer()
 	return
 
-/mob/verb/eastface()
-	set hidden = 1
-	if(loc && loc.relayface(src, EAST))
+/mob/proc/directionface(var/direction)
+	if(loc && loc.relayface(src, direction))
 		return 1
-	if(locked_to && locked_to.relayface(src, EAST))
+	if(locked_to && locked_to.relayface(src, direction))
 		return 1
 	if(!canface())
 		return 0
-	dir = EAST
+	if (dir!=direction)
+		StartMoving()
+	dir = direction
 	Facing()
+	EndMoving()
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
+/mob/verb/eastface()
+	set hidden = 1
+	return directionface(EAST)
 
 /mob/verb/westface()
 	set hidden = 1
-	if(loc && loc.relayface(src, WEST))
-		return 1
-	if(locked_to && locked_to.relayface(src, WEST))
-		return 1
-	if(!canface())
-		return 0
-	dir = WEST
-	Facing()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(WEST)
 
 /mob/verb/northface()
 	set hidden = 1
-	if(loc && loc.relayface(src, NORTH))
-		return 1
-	if(locked_to && locked_to.relayface(src, NORTH))
-		return 1
-	if(!canface())
-		return 0
-	dir = NORTH
-	Facing()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(NORTH)
 
 /mob/verb/southface()
 	set hidden = 1
-	if(loc && loc.relayface(src, SOUTH))
-		return 1
-	if(locked_to && locked_to.relayface(src, SOUTH))
-		return 1
-	if(!canface())
-		return 0
-	dir = SOUTH
-	Facing()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(SOUTH)
 
 /mob/proc/Facing()
 	var/datum/listener
-	for(. in src.callOnFace)
-		listener = locate(.)
+	for(var/atomToCall in src.callOnFace)
+		listener = locate(atomToCall)
 		if(listener)
-			call(listener,src.callOnFace[.])(src)
+			call(listener,src.callOnFace[atomToCall])(src)
 		else
-			src.callOnFace -= .
+			src.callOnFace -= atomToCall
 
+
+//this proc allows to set up behaviours that occur the instant BEFORE the mob starts moving from a tile to the next
+/mob/proc/StartMoving()
+	var/datum/listener
+	for(var/atomToCall in src.callOnStartMove)
+		listener = locate(atomToCall)
+		if(listener)
+			call(listener,src.callOnStartMove[atomToCall])(src)
+		else
+			src.callOnStartMove -= atomToCall
+
+
+//this proc allows to set up behaviours that occur the instant AFTER the mob finishes moving from a tile to the next
+/mob/proc/EndMoving()
+	var/datum/listener
+	for(var/atomToCall in src.callOnEndMove)
+		listener = locate(atomToCall)
+		if(listener)
+			call(listener,src.callOnEndMove[atomToCall])(src)
+		else
+			src.callOnEndMove -= atomToCall
+
+
+/mob/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+	StartMoving()
+	. = ..()
+	EndMoving()
+
+//Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
+/mob/change_dir(new_dir, var/changer)
+	StartMoving()
+	..()
+	EndMoving()
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
 	return 0
@@ -2263,6 +2289,9 @@ mob/proc/on_foot()
 			to_chat(src, "Interference is disrupting the connection with the target mind.")
 			return 0
 	return 1
+
+/mob/proc/get_personal_ambience()
+	return list()
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

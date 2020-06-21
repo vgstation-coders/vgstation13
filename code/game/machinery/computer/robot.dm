@@ -24,9 +24,7 @@
 	return src.attack_hand(user)
 
 /obj/machinery/computer/robotics/attack_paw(var/mob/user as mob)
-
 	return src.attack_hand(user)
-	return
 
 /obj/machinery/computer/robotics/attack_hand(var/mob/user as mob)
 	if(..())

@@ -36,6 +36,26 @@
 	air1.volume = 200
 	air2.volume = 200
 
+
+/obj/machinery/atmospherics/binary/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/binary/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		else
+			CRASH("Invalid node_id!")
+
+
 /obj/machinery/atmospherics/binary/update_planes_and_layers()
 	if (level == LEVEL_BELOW_FLOOR)
 		layer = BINARY_PIPE_LAYER

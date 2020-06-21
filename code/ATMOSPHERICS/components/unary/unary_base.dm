@@ -15,6 +15,22 @@
 	air_contents.temperature = T0C
 	air_contents.volume = starting_volume
 
+
+/obj/machinery/atmospherics/unary/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/unary/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		else
+			CRASH("Invalid node_id!")
+
+
 /obj/machinery/atmospherics/unary/update_planes_and_layers()
 	if (level == LEVEL_BELOW_FLOOR)
 		layer = UNARY_PIPE_LAYER

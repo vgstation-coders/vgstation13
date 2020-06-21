@@ -17,7 +17,6 @@
 
 /obj/item/device/radio/intercom/universe/GhostsAlwaysHear()
 	return TRUE
-
 /obj/item/device/radio/intercom/initialize()
 	..()
 	add_self_to_holomap()
@@ -180,3 +179,29 @@
 /obj/item/device/radio/intercom/medbay/broadcast_nospeaker
 	broadcasting = 1
 	listening = 0
+
+/datum/intercom_settings
+	var/frequency
+	var/broadcasting
+	var/listening
+
+/datum/intercom_settings/New(var/obj/item/device/radio/intercom/copy)
+	src.frequency = copy.frequency
+	src.broadcasting = copy.broadcasting
+	src.listening = copy.listening
+	
+/obj/item/device/radio/intercom/AIShiftClick(var/mob/living/silicon/ai/clicker)
+	if(clicker.intercom_clipboard)
+		src.frequency = clicker.intercom_clipboard.frequency
+		src.broadcasting = clicker.intercom_clipboard.broadcasting
+		src.listening = clicker.intercom_clipboard.listening		
+
+		src.updateDialog()
+
+		to_chat(clicker, "<span class='confirm'>Pasted settings to \the [src].</span>")
+	else
+		to_chat(clicker, "<span class='warn'>You don't have any intercom settings copied to clipboard!</span>")
+
+/obj/item/device/radio/intercom/AICtrlClick(var/mob/living/silicon/ai/clicker)
+	clicker.intercom_clipboard = new /datum/intercom_settings(src)
+	to_chat(clicker, "<span class='confirm'>Copied settings from \the [src].</span>")

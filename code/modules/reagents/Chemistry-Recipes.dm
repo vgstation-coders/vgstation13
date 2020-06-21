@@ -337,6 +337,13 @@
 	result = KELOTANE
 	required_reagents = list(SILICON = 1, CARBON = 1)
 	result_amount = 2
+	
+/datum/chemical_reaction/blisterol
+	name = "Blisterol"
+	id = BLISTEROL
+	result = BLISTEROL
+	required_reagents = list(ALUMINIUM = 1, COPPER = 1, FUEL = 2)
+	result_amount = 3
 
 /datum/chemical_reaction/virus_food
 	name = "Virus Food"
@@ -366,6 +373,21 @@
 	result = TRICORDRAZINE
 	required_reagents = list(INAPROVALINE = 1, ANTI_TOXINS = 1)
 	result_amount = 2
+
+/datum/chemical_reaction/simpolinol
+	name = "Simpolinol"
+	id = SIMPOLINOL
+	result = SIMPOLINOL
+	required_reagents = list(METHYLIN = 20, SILVER = 20)
+	result_amount = 40
+
+/datum/chemical_reaction/simpolinol2
+	name = "Simpolinol"
+	id = "simpolinol_alternate"
+	result = SIMPOLINOL
+	required_reagents = list(VAPORSALT = 1)
+	required_container = /obj/item/weapon/reagent_containers/food/drinks/soda_cans
+	result_amount = 1
 
 /datum/chemical_reaction/alkysine
 	name = "Alkysine"
@@ -682,6 +704,20 @@
 	result = LIPOZINE
 	required_reagents = list(SODIUMCHLORIDE = 1, ETHANOL = 1, RADIUM = 1)
 	result_amount = 3
+	
+/datum/chemical_reaction/dietine
+	name = "Dietine"
+	id = DIETINE
+	result = DIETINE
+	required_reagents = list(SODIUMCHLORIDE = 1, COFFEE = 3, LITHIUM = 1, FUEL = 1)
+	result_amount = 1
+	
+/datum/chemical_reaction/gatormix
+	name = "Gator Mix"
+	id = GATORMIX
+	result = GATORMIX
+	required_reagents = list(NUTRIMENT = 1, COFFEE = 1, COLA = 1, EGG_YOLK = 1, FUEL = 1)
+	result_amount = 5
 
 /datum/chemical_reaction/carp_pheromones
 	name = "Carp pheromones"
@@ -824,6 +860,13 @@
 	required_reagents = list(HYDROGEN = 1, CHLORINE = 1, ETHANOL = 1)
 	required_catalysts = list(FLUORINE = 5)
 	result_amount = 1
+	
+/datum/chemical_reaction/mannitol
+	name = "Mannitol"
+	id = MANNITOL
+	result = MANNITOL
+	required_reagents = list(DISCOUNT = 1, ICE = 1, BEFF = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/piccolyn
 	name = "Piccolyn"
@@ -1374,12 +1417,12 @@
 	if(!istype(holder.my_atom.loc, /obj/item/weapon/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to slowly vibrate!</span>")
 
-	spawn(50)
-		var/atom/location = holder.my_atom.loc
+	var/atom/location = holder.my_atom.loc
+	spawn(5 SECONDS)
 		if(isturf(location))
 			var/list/disguise_candidates = list()
 
-			for(var/obj/item/I in oview(4, holder.my_atom))
+			for(var/obj/item/I in oview(4, location))
 				disguise_candidates += I
 
 			var/atom/disguise = null
@@ -1389,15 +1432,6 @@
 
 			//If there are no nearby items to copy, become a completely random item!
 			new/mob/living/simple_animal/hostile/mimic/crate/item(location, disguise) //Create a mimic identical to a nearby item
-
-		else if(istype(location, /obj/structure/closet))
-			var/mob/living/simple_animal/hostile/mimic/crate/new_mimic = new(get_turf(location), location.type)
-			new_mimic.appearance = location.appearance //Create a crate mimic that looks exactly like the closet!
-
-			for(var/atom/movable/AM in location.contents)
-				AM.forceMove(new_mimic) //Move all items from the closet/crate to the new mimic
-
-			qdel(location) //Delete the old closet
 
 		else if(istype(location, /obj/item))
 			new /mob/living/simple_animal/hostile/mimic/crate/item(get_turf(location), location) //Copy the item we're inside of, drop it outside the item!
@@ -2124,6 +2158,19 @@
 	required_reagents = list(SOYMILK = 4, SACIDS = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/mustard
+	name = "Mustard"
+	id = MUSTARD
+	result = MUSTARD
+	required_reagents = list(MUSTARD_POWDER = 4, SODIUMCHLORIDE = 1, VINEGAR = 1)
+	result_amount = 8
+
+/datum/chemical_reaction/mayo
+	name = "Mayonnaise"
+	id = MAYO
+	result = MAYO
+	required_reagents = list(MUSTARD = 1, SODIUMCHLORIDE = 1, VINEGAR = 4, EGG_YOLK = 4) //there are about fifty different variants for homemade mayo, using the one that sounds best
+	result_amount = 10
 
 /datum/chemical_reaction/vinegar
 	name = "Vinegar"
@@ -3026,6 +3073,20 @@
 	result = FIRERITA
 	required_reagents = list(CINNAMONWHISKY = 1, TRIPLESEC = 1, TEQUILA = 3)
 	result_amount = 5
+	
+/datum/chemical_reaction/magica
+	name = "Magica"
+	id = MAGICA
+	result = MAGICA
+	required_reagents = list(CINNAMONWHISKY = 1, BITTERS = 1)
+	result_amount = 2
+	
+/datum/chemical_reaction/magicadeluxe
+	name = "Magica Deluxe"
+	id = MAGICADELUXE
+	result = MAGICADELUXE
+	required_reagents = list(MAGICA = 1, KARMOTRINE = 1)
+	result_amount = 1
 
 //Cafe stuff!
 /datum/chemical_reaction/acidtea

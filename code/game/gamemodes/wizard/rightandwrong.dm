@@ -73,7 +73,7 @@
 		if("plasmarifle")
 			new /obj/item/weapon/gun/energy/plasma/light(get_turf(src))
 		if("revolver")
-			new /obj/item/weapon/gun/projectile(get_turf(src))
+			new /obj/item/weapon/gun/projectile/revolver(get_turf(src))
 		if("detective")
 			new /obj/item/weapon/gun/projectile/detective(get_turf(src))
 		if("c20r")
@@ -211,7 +211,7 @@
 				if(prob(50))
 					new /obj/item/weapon/kitchen/utensil/knife/nazi(get_turf(src))
 				else
-					new /obj/item/weapon/bullwhip(get_turf(src))
+					new /obj/item/weapon/gun/hookshot/whip(get_turf(src))
 			else
 				new /obj/item/weapon/hatchet(get_turf(src))
 		if("armblade") // good luck getting it off. Maybe cut your own arm off :^)

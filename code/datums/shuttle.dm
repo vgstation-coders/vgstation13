@@ -332,7 +332,7 @@
 				moving = 0
 				destination_port = null
 				return 0
-			for(var/atom/AA in linked_area)
+			for(var/atom/movable/AA in linked_area)
 				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())

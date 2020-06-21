@@ -19,11 +19,14 @@
 
 /obj/machinery/cart/cargo/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
+	if(C.anchored)
+		to_chat(user, "\The [C] is fastened to the floor!")
+		return
 	if(user.incapacitated() || user.lying)
 		return
 	if(!Adjacent(user) || !user.Adjacent(src) || !src.Adjacent(C))
 		return
-	if (is_locking(/datum/locking_category/cargocart) || istype(C, /obj/machinery/cart/))
+	if(is_locking(/datum/locking_category/cargocart) || istype(C, /obj/machinery/cart/))
 		return
 
 	load(C)
@@ -45,7 +48,7 @@
 	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
 		return FALSE
 
-	if(C.locked_to || C.is_locking() || C.anchored)
+	if(C.locked_to || C.is_locking())
 		return FALSE
 
 	if(get_dist(C, src) > 1 || is_locking(/datum/locking_category/cargocart))

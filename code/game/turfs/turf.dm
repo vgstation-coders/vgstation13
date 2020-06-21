@@ -23,8 +23,7 @@
 
 	var/blocks_air = 0
 
-	//associated PathNode in the A* algorithm
-	var/PathNode/PNode = null
+	var/list/PathNodes = null
 
 	// Bot shit
 	var/targetted_by=null
@@ -241,7 +240,7 @@
 				return
 
 			INVOKE_EVENT(A.on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
-			for(var/atom/AA in contents_brought)
+			for(var/atom/movable/AA in contents_brought)
 				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 			A.z = move_to_z
 
@@ -273,7 +272,7 @@
 					P.reset()//fixing linear projectile movement
 
 			INVOKE_EVENT(A.post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
-			for(var/atom/AA in contents_brought)
+			for(var/atom/movable/AA in contents_brought)
 				INVOKE_EVENT(AA.post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 
 	if(A && A.opacity)
@@ -741,3 +740,14 @@
 
 /turf/proc/remove_rot()
 	return
+
+//Pathnode stuff
+
+/turf/proc/FindPathNode(var/id)
+	return PathNodes ? PathNodes["[id]"] : null
+
+/turf/proc/AddPathNode(var/PathNode/PN, var/id)
+	ASSERT(!PathNodes || !PathNodes["[id]"])
+	if (!PathNodes)
+		PathNodes = list()
+	PathNodes["[id]"] = PN

@@ -132,7 +132,7 @@
 						/obj/item/clothing/glasses/thermal/monocle,
 						/obj/item/clothing/head/det_hat,
 						/obj/item/weapon/cloaking_device,
-						/obj/item/weapon/gun/projectile,
+						/obj/item/weapon/gun/projectile/revolver,
 						/obj/item/ammo_storage/box/a357)
 
 /obj/abstract/loadout/tournament_chef
@@ -186,6 +186,13 @@
 	items_to_spawn = list(/obj/item/clothing/under/soviet,
 						/obj/item/clothing/shoes/black,
 						/obj/item/clothing/head/ushanka)
+
+/obj/abstract/loadout/clown_ops
+	items_to_spawn = list(/obj/item/clothing/under/clownpsyche,
+						/obj/item/clothing/shoes/clownshoespsyche,
+						/obj/item/clothing/mask/gas/clownmaskpsyche,
+						/obj/item/weapon/storage/backpack/clownpackpsyche,
+						/obj/item/weapon/gun/energy/laser/rainbow)
 
 /obj/abstract/loadout/tunnel_clown
 	items_to_spawn = list(/obj/item/clothing/under/rank/clown,
@@ -262,7 +269,7 @@
 						/obj/item/weapon/storage/firstaid/regular,
 						/obj/item/weapon/pinpointer,
 						/obj/item/weapon/shield/energy,
-						/obj/item/weapon/plastique,
+						/obj/item/weapon/c4,
 						/obj/item/weapon/gun/energy/pulse_rifle,
 						/obj/item/weapon/card/id/death_commando)
 
@@ -298,9 +305,9 @@
 						/obj/item/weapon/storage/box,
 						/obj/item/ammo_storage/box/c45,
 						/obj/item/weapon/storage/firstaid/regular,
-						/obj/item/weapon/plastique,
+						/obj/item/weapon/c4,
 						/obj/item/osipr_core,
-						/obj/item/weapon/plastique,
+						/obj/item/weapon/c4,
 						/obj/item/energy_magazine/osipr,
 						/obj/item/weapon/gun/osipr,
 						/obj/item/weapon/card/id/syndicate/commando)

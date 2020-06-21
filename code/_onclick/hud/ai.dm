@@ -58,7 +58,7 @@
 
 //Shuttle
 	using = getFromPool(/obj/abstract/screen)
-	using.name = "Call Emergency Shuttle"
+	using.name = "(Re)Call Emergency Shuttle"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "call_shuttle"
 	using.screen_loc = ui_ai_shuttle

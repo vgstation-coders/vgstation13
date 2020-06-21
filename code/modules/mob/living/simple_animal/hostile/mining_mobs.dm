@@ -381,7 +381,7 @@ obj/item/asteroid/basilisk_hide/New()
 		to_chat(user, "<span class='notice'>\The [target] refuses \the [src].</span>")
 		return
 
-	if (!target.hasmouth)
+	if (!target.hasmouth())
 		if (target != user)
 			to_chat(user, "<span class='warning'>You attempt to feed \the [src] to \the [target], but you realize they don't have a mouth. How dumb!</span>")
 		else
@@ -538,9 +538,6 @@ obj/item/asteroid/basilisk_hide/New()
 	if(proximity_flag && istype(target, /obj/item/clothing))
 		var/obj/item/clothing/C = target
 		var/current_armor = C.armor
-		if(!isturf(C.loc))
-			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
-			return
 		if(C.clothing_flags & GOLIATHREINFORCE)
 			C.hidecount ++
 			if(current_armor["melee"] < 90)
@@ -554,6 +551,8 @@ obj/item/asteroid/basilisk_hide/New()
 			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
 			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
 			C._color = "mining_goliath[C.hidecount]"
+		if(user.is_wearing_item(C))
+			user.regenerate_icons()
 
 /mob/living/simple_animal/hostile/asteroid/goliath/david
 	name = "david"
@@ -679,7 +678,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 	switch(fire_extremity)
 		if(1) // Fire spout
-			generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, /obj/item/projectile/fire_breath, 'sound/weapons/flamethrower.ogg')
+			generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, /obj/item/projectile/fire_breath, 'sound/weapons/flamethrower.ogg', src)
 			if(environment)
 				environment.add_thermal_energy(350000)
 		if(2) //Fire blast

@@ -289,10 +289,9 @@
 							icon_state = "flashburnt"
 
 						// log the recruitment
-						var/datum/role/revolutionary/R = user.mind.GetRoleByType(/datum/role/revolutionary/leader)
-						if(istype(R.stat_datum, /datum/stat/role/revolutionary/leader))
-							var/datum/stat/role/revolutionary/leader/SD = R.stat_datum
-							SD.recruits_converted++
+						var/datum/stat/role/revolutionary/leader/SD = rev.stat_datum
+						SD.recruits_converted++
+
 					else if(result == ADD_REVOLUTIONARY_FAIL_IS_COMMAND)
 						to_chat(user, "<span class='warning'>This mind seems resistant to the flash!</span>")
 					else if(result == ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED) // rev jobbanned

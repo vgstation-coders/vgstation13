@@ -112,8 +112,6 @@ var/paperwork_library
 		world.log << call(paperwork_library, "init_renderer")()
 		paperwork = 1
 		return 1
-	else
-		return 0
 	return 0
 
 /proc/paperwork_stop()
@@ -148,6 +146,15 @@ var/paperwork_library
 					sleep(1) //too much for us.
 		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
 		t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
+		t = replacetext(t, "\[date\]", "[current_date_string]")
+		t = replacetext(t, "\[time\]", "[worldtime2text()]")
+
+		// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+		
+		t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+		t = replacetext(t, "\[/table\]", "</td></tr></table>")
+		t = replacetext(t, "\[row\]", "</td><tr>")
+		t = replacetext(t, "\[cell\]", "<td>")
 
 	var/text_color
 	if(istype(P, /obj/item/weapon/pen))
@@ -266,6 +273,19 @@ var/paperwork_library
 	name = "promotional Nanotrasen pen"
 	desc = "Just a cheap plastic pen. It reads: \"For our most valued customers\". They probably meant 'employees'."
 
+/obj/item/weapon/pen/tactical
+	name = "tacpen"
+	desc = "Tactical pen. The tip is self heating and can light things, the reverse can be used as a screwdriver. It contains a one-time reservoir of biofoam that cannot be refilled."
+	sharpness_flags = SHARP_TIP | HOT_EDGE
+
+/obj/item/weapon/pen/tactical/New()
+	..()
+	create_reagents(9)
+	reagents.add_reagent(BIOFOAM, 9) //90 ticks, about 3 minutes
+
+/obj/item/weapon/pen/tactical/is_screwdriver(mob/user)
+	return TRUE
+
 /obj/item/weapon/pen/attack(mob/M as mob, mob/user as mob)
 	if(!ismob(M))
 		return
@@ -278,7 +298,8 @@ var/paperwork_library
 		M.LAssailant = null
 	else
 		M.LAssailant = user
-	return
+	if(reagents && reagents.total_volume)
+		reagents.trans_to(M,50)
 
 
 /*
@@ -296,16 +317,6 @@ var/paperwork_library
 	create_reagents(30) // Used to be 300
 	reagents.add_reagent(CHLORALHYDRATE, 22) // Used to be 100 sleep toxin // 30 Chloral seems to be fatal, reducing it to 22. /N
 
-/obj/item/weapon/pen/sleepypen/attack(mob/M as mob, mob/user as mob)
-	if(!(istype(M,/mob)))
-		return
-	..()
-	if(reagents.total_volume)
-		if(M.reagents)
-			reagents.trans_to(M, 50) //used to be 150
-	return
-
-
 /*
  * Parapens
  */
@@ -314,17 +325,6 @@ var/paperwork_library
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=5"
 
-
-/obj/item/weapon/pen/paralysis/attack(mob/M as mob, mob/user as mob)
-	if(!(istype(M,/mob)))
-		return
-	..()
-	if(reagents.total_volume)
-		if(M.reagents)
-			reagents.trans_to(M, 50)
-	return
-
-
 /obj/item/weapon/pen/paralysis/New()
 	var/datum/reagents/R = new/datum/reagents(25)
 	reagents = R
@@ -332,4 +332,3 @@ var/paperwork_library
 	R.add_reagent(ZOMBIEPOWDER, 10)
 	R.add_reagent(CRYPTOBIOLIN, 15)
 	..()
-	return

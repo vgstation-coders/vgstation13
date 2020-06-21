@@ -365,7 +365,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 250)
 	build_path = /obj/item/ammo_casing/shotgun/blank
-	
+
 /datum/design/shotgun_shell/dragonsbreath
 	name = "12ga. dragon's breath shell"
 	desc = "A 12 gauge shell filled with an incendiary mixture, for lighting up dark areas or setting things on fire."
@@ -373,7 +373,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 500, MAT_PLASMA = 2000)
 	build_path = /obj/item/ammo_casing/shotgun/dragonsbreath
-	
+
 /datum/design/shotgun_shell/frag
 	name = "12ga. frag shell"
 	desc = "A 12 gauge shell filled with a high-explosive mixture, for heavy anti-personnel usage."
@@ -478,7 +478,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000)
 	build_path = /obj/item/ammo_storage/box/flare
-	
+
 /datum/design/ammo_shotgun/dragonsbreath
 	name = "Ammunition box (12ga. dragon's breath)"
 	desc = "A box of 12-gauge dragon's breath shells."
@@ -486,7 +486,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000, MAT_PLASMA = 32000)
 	build_path = /obj/item/weapon/storage/box/dragonsbreathshells
-	
+
 /datum/design/ammo_shotgun/frag
 	name = "Ammunition box (12ga. frag)"
 	desc = "A box of 12-gauge explosive shells."
@@ -634,6 +634,13 @@
 	materials = list(MAT_IRON = 400)
 	build_path = /obj/item/ammo_storage/speedloader/shotgun
 
+/datum/design/scope
+	name = "Telescopic sight"
+	desc = "A sight for some long range rifles."
+	id = "telescopicsight"
+	build_type = AMMOLATHE | AUTOLATHE
+	materials = list(MAT_IRON = 400, MAT_GLASS = 2000)
+	build_path = /obj/item/gun_part/scope
 
 //Hidden
 

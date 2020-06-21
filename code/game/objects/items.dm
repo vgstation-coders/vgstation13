@@ -20,7 +20,7 @@
 	pass_flags = PASSTABLE
 	pressure_resistance = 5
 //	causeerrorheresoifixthis
-	var/obj/item/master = null
+	var/obj/item/master = null//apparently used by device assemblies to track the object they are attached to.
 
 	var/max_heat_protection_temperature //Set this variable to determine up to which temperature (IN KELVIN) the item protects against heat damage. Keep at null to disable protection. Only protects areas set by heat_protection flags
 	var/heat_conductivity = 0.5 // how conductive an item is to heat a player (ie how quickly someone will lose heat) on a scale of 0 - 1. - 1 is fully conductive, 0 is fully insulative, this is a range, not binary.
@@ -29,6 +29,7 @@
 	//Since any item can now be a piece of clothing, this has to be put here so all items share it.
 	var/_color = null
 	var/body_parts_covered = 0 //see setup.dm for appropriate bit flags
+	var/body_parts_visible_override = 0 //for when you want specific parts to be visible while covered (and not all of them), same flags as above.
 	//var/heat_transfer_coefficient = 1 //0 prevents all transfers, 1 is invisible
 	var/gas_transfer_coefficient = 1 // for leaking gas from turf to mask and vice-versa (for masks right now, but at some point, i'd like to include space helmets)
 	var/permeability_coefficient = 1 // for chemicals/diseases
@@ -168,20 +169,6 @@
 //Output a creative message and then return the damagetype done
 /obj/item/proc/suicide_act(mob/user)
 	return
-
-/obj/item/verb/move_to_top()
-	set name = "Move To Top"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!istype(loc, /turf) || usr.isUnconscious() || usr.restrained())
-		return
-
-	var/turf/T = loc
-
-	forceMove(null)
-
-	forceMove(T)
 
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
 	if(!size)
@@ -934,7 +921,7 @@
 		return
 
 /obj/item/proc/unwield(mob/user)
-	if(flags & MUSTTWOHAND && src in user)
+	if(flags & MUSTTWOHAND && (src in user))
 		user.drop_from_inventory(src)
 	if(istype(wielded))
 		wielded.wielding = null
@@ -1326,6 +1313,9 @@ var/global/list/image/blood_overlays = list()
 			user.drop_from_inventory(cuffs)
 		C.equip_to_slot(cuffs, slot_handcuffed)
 		cuffs.on_restraint_apply(C)
+		var/list/findcuffs = get_contents_in_object(user,/obj/item/device/law_planner)
+		for(var/obj/item/device/law_planner/LP in findcuffs)
+			LP.handcuff_signal()
 		return TRUE
 
 /obj/item/proc/on_restraint_removal(var/mob/living/carbon/C) //Needed for syndicuffs
@@ -1369,7 +1359,7 @@ var/global/list/image/blood_overlays = list()
 			//Since contents are always ordered to the left we assume the user wants to move this item to the rightmost slot possible.
 			var/obj/abstract/screen/storage/screenobj = over_object
 			var/obj/item/weapon/storage/storageobj = screenobj.master
-			if(storageobj == loc && usr in storageobj.is_seeing)
+			if(storageobj == loc && (usr in storageobj.is_seeing))
 				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
 				storageobj.contents -= src
 				storageobj.contents += src

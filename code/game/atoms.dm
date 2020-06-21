@@ -33,12 +33,8 @@ var/global/list/ghdel_profiling = list()
 
 	// EVENTS
 	/////////////////////////////
-	// On Destroy()
-	var/event/on_destroyed
 	// When density is changed
 	var/event/on_density_change
-	var/event/on_z_transition
-	var/event/post_z_transition
 
 	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
 	var/min_harm_label = 0 //Minimum langth of harm-label to be effective. 0 means it cannot be harm-labeled. If any label should work, set this to 1 or 2.
@@ -52,6 +48,14 @@ var/global/list/ghdel_profiling = list()
 	appearance_flags = TILE_BOUND|LONG_GLIDE
 
 	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
+	/// Last name used to calculate a color for the chatmessage overlays
+	var/chat_color_name
+	/// Last color calculated for the the chatmessage overlays
+	var/chat_color
+	/// A luminescence-shifted value of the last color calculated for chatmessage overlays
+	var/chat_color_darkened
+	/// The chat color var, without alpha.
+	var/chat_color_hover
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -63,7 +67,8 @@ var/global/list/ghdel_profiling = list()
 	return 1
 
 /atom/proc/beam_disconnect(var/obj/effect/beam/B)
-	beams.Remove(B)
+	if (beams)
+		beams.Remove(B)
 
 /atom/proc/apply_beam_damage(var/obj/effect/beam/B)
 	return 1
@@ -138,10 +143,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/AddToProfiler()
 	// Memory usage profiling - N3X.
-	if (type in type_instances)
-		type_instances[type] = type_instances[type] + 1
-	else
-		type_instances[type] = 1
+	++type_instances[type]
 
 /atom/proc/DeleteFromProfiler()
 	// Memory usage profiling - N3X.
@@ -164,21 +166,9 @@ var/global/list/ghdel_profiling = list()
 		densityChanged()
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
-	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
-	if(on_destroyed)
-		on_destroyed.holder = null
-		on_destroyed = null
 	if (on_density_change)
 		on_density_change.holder = null
 		on_density_change = null
-	if(on_z_transition)
-		on_z_transition.holder = null
-		qdel(on_z_transition)
-		on_z_transition = null
-	if(post_z_transition)
-		post_z_transition.holder = null
-		qdel(post_z_transition)
-		post_z_transition = null
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
 	/*if(istype(beams) && beams.len)
@@ -192,10 +182,7 @@ var/global/list/ghdel_profiling = list()
 	..()
 
 /atom/New()
-	on_destroyed = new("owner"=src)
 	on_density_change = new("owner"=src)
-	on_z_transition = new("owner"=src)
-	post_z_transition = new("owner"=src)
 	. = ..()
 	AddToProfiler()
 
@@ -879,7 +866,7 @@ its easier to just keep the beam vertical.
 			return C.mob
 
 /atom/proc/initialize()
-	return
+	flags |= ATOM_INITIALIZED
 
 /atom/proc/get_cell()
 	return

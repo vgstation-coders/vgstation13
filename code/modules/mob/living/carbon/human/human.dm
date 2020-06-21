@@ -112,7 +112,10 @@
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Mushroom")
-	my_appearance.h_style = "Bald"
+	my_appearance.h_style = "Plump Helmet"
+	my_appearance.r_hair = 60
+	my_appearance.g_hair = 40
+	my_appearance.b_hair = 80
 	regenerate_icons()
 
 /mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)
@@ -281,6 +284,13 @@
 			var/obj/spacepod/S = loc
 			stat("Spacepod Charge", "[istype(S.battery) ? "[S.battery.charge] / [S.battery.maxcharge]" : "No cell detected"]")
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
+
+		if(is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit))
+			var/obj/item/clothing/suit/space/rig/R = wear_suit
+			if(R.cell)
+				stat("\The [R.name]", "Charge: [R.cell.charge]")
+			if(R.activated)
+				stat("\The [R.name]", "Modules: [english_list(R.modules)]")
 
 		if (mind)
 			for (var/role in mind.antag_roles)
@@ -1288,8 +1298,8 @@
 /mob/living/carbon/human/canSingulothPull(var/obj/machinery/singularity/singulo)
 	if(!..())
 		return 0
-		if((shoes.clothing_flags & MAGPULSE) && singulo.current_size <= STAGE_FOUR)
-			return 0
+	if((shoes.clothing_flags & MAGPULSE) && singulo.current_size <= STAGE_FOUR)
+		return 0
 	return 1
 // Get ALL accesses available.
 /mob/living/carbon/human/GetAccess()
@@ -1534,10 +1544,15 @@
 
 	return 1
 
+/mob/living/carbon/human/hasmouth()
+	if(species.flags & SPECIES_NO_MOUTH)
+		return 0
+	return hasmouth
+
 /mob/living/carbon/human/proc/can_bite(atom/target)
 	//Need a mouth to bite
 
-	if(!hasmouth)
+	if(!hasmouth())
 		return 0
 
 	//Need at least two teeth or a beak to bite
@@ -1565,7 +1580,7 @@
 	return ((istype(S) && S.footprint_type) || (species && species.footprint_type) || /obj/effect/decal/cleanable/blood/tracks/footprints) //The shoes' footprint type overrides the mob's, for obvious reasons. Shoes with a falsy footprint_type will let the mob's footprint take over, though.
 
 
-/mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+/mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
 	if(..()) // we've been flashed
 		var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 		var/damage = intensity - eyecheck()
@@ -1607,7 +1622,7 @@
 		to_chat(src, "<span class='notice'>Something bright flashes in the corner of your vision!</span>")
 
 /mob/living/carbon/human/reset_layer()
-	if(locked_to)
+	if(istype(locked_to, /obj/machinery/bot/mulebot)) //we only care about not appearing behind mulebots
 		return
 	if(lying)
 		plane = LYING_HUMAN_PLANE
@@ -1975,3 +1990,9 @@ mob/living/carbon/human/isincrit()
 		active_hand = 0
 
 	update_hands_icons()
+
+/mob/living/carbon/human/get_personal_ambience()
+	if(istype(locked_to, /obj/structure/bed/therapy))
+		return list(/datum/ambience/beach)
+	else
+		return ..()

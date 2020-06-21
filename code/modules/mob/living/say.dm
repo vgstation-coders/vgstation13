@@ -74,6 +74,19 @@ var/list/department_radio_keys = list(
 	  ":&" = "borerchat", "#&" = "borerchat", ".&" = "borerchat",
 )
 
+var/list/headset_modes = list(
+	"Response Team",
+	"Command",
+	"Service",
+	"Engineering",
+	"Security",
+	"Syndicate",
+	"Supply",
+	"Medical",
+	"Science",
+	"department",
+)
+
 /mob/living/proc/get_default_language()
 	if(!default_language)
 		if(languages && languages.len)
@@ -181,6 +194,8 @@ var/list/department_radio_keys = list(
 	treat_speech(speech)
 
 	var/radio_return = get_speech_flags(message_mode)
+	if (speech_was_spoken_into_radio(message_mode))
+		speech.wrapper_classes.Add("spoken_into_radio")
 	if(radio_return & NOPASS) //There's a whisper() message_mode, no need to continue the proc if that is called
 		whisper(speech.message, speech.language)
 		returnToPool(speech)
@@ -252,7 +267,25 @@ var/list/department_radio_keys = list(
 		for(var/T in syndicate_code_response)
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
-	show_message(rendered_message, type, deaf_message, deaf_type, src)
+	//AI mentions
+	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
+		var/mob/living/silicon/ai/ai = src
+		if(ai.mentions_on)
+			if(findtextEx(rendered_message, "AI") || findtext(rendered_message, ai.real_name))
+				ai << 'sound/machines/twobeep.ogg'
+				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
+				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
+
+	// Runechat messages
+	if (ismob(speech.speaker) && client?.prefs.mob_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
+		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
+	else if (client?.prefs.obj_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
+		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
+	if (ismob(speech.speaker))
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+	else if (!client.prefs.no_goonchat_for_obj || length_char(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
@@ -445,6 +478,14 @@ var/list/department_radio_keys = list(
 
 	return 0
 
+/mob/living/proc/speech_was_spoken_into_radio(var/message_mode)
+	if (message_mode in headset_modes)
+		return TRUE
+	switch (message_mode)
+		if(MODE_HEADSET, MODE_SECURE_HEADSET, MODE_R_HAND, MODE_L_HAND, MODE_INTERCOM, MODE_BINARY)
+			return TRUE
+	return FALSE
+
 /mob/living/proc/radio(var/datum/speech/speech, var/message_mode)
 	switch(message_mode)
 		if(MODE_R_HAND)
@@ -501,11 +542,23 @@ var/list/department_radio_keys = list(
 		if(setting == 2)
 			return 1
 
+// Obsolete for any mob which uses a language.
 /mob/living/say_quote()
 	if (stuttering)
 		return "stammers, [text]"
 	if (getBrainLoss() >= 60)
 		return "gibbers, [text]"
+	return ..()
+
+// Use this when the mob speaks a given language.
+/mob/proc/get_spoken_verb(var/msg)
+	return ""
+
+/mob/living/get_spoken_verb(var/msg)
+	if (stuttering)
+		return "stammers"
+	if (getBrainLoss() >= 60)
+		return "gibbers"
 	return ..()
 
 /mob/living/proc/send_speech_bubble(var/message,var/bubble_type, var/list/hearers)

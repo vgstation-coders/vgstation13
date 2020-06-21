@@ -62,13 +62,19 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/available_for_job(var/user_job)
 	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
 
+//This will get called that is essentially a New() by default.
+//Use this to make New()s that have extra conditions, such as bundles
+//Make sure to add a return or else it will break a part of buy()
+/datum/uplink_item/proc/new_uplink_item(var/new_item, var/turf/location, mob/user)
+	return new new_item(location)
+
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	if(!available_for_job(U.job))
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
-	return new item(loc,user)
+	return new_uplink_item(item, loc, user)
 
 /datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
 	if(!istype(U))
@@ -217,7 +223,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/dangerous/revolver
 	name = "Loaded .357 Revolver"
 	desc = "A traditional repeating handgun with seven chambers which fires .357 rounds. Can incapacitate most unarmored targets in two shots."
-	item = /obj/item/weapon/gun/projectile
+	item = /obj/item/weapon/gun/projectile/revolver
 	cost = 12
 
 /datum/uplink_item/dangerous/ammo
@@ -362,6 +368,9 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/card/emag
 	cost = 6
 
+/datum/uplink_item/device_tools/emag/new_uplink_item(new_item, turf/location, mob/user)
+	return new new_item(location, 1) //Uplink emags are infinite
+
 /datum/uplink_item/device_tools/explosive_gum
 	name = "Explosive Chewing Gum"
 	desc = "A single stick of explosive chewing gum that detonates five seconds after you start chewing, perfectly disguised as regular gum. Make sure to pull it out of your mouth if you don't intend to explode with it. Gum can be stuck to objects and walls, but not other people."
@@ -477,7 +486,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/sabotage_tools/plastic_explosives
 	name = "Composition C-4"
 	desc = "C-4 is plastic explosive of the common variety Composition C. Can be attached to any item or organic to reliably destroy it. Connect a signaler to its wiring to make it remotely detonable even when unplanted. Timer starts at 10 seconds but can be set to any length. Takes a few seconds to apply."
-	item = /obj/item/weapon/plastique
+	item = /obj/item/weapon/c4
 	cost = 4
 
 /datum/uplink_item/sabotage_tools/megaphone
@@ -533,6 +542,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 14
 
+/datum/uplink_item/badass/bundle/new_uplink_item(new_item, location, user)
+	var/list/conditions = list()
+	if(isplasmaman(user))
+		conditions += "plasmaman"
+	return new new_item(location, conditions)
+
 /datum/uplink_item/badass/balloon
 	name = "For showing that you are The Boss"
 	desc = "A useless red balloon with the syndicate logo printed on it which can blow even the deepest of covers. Otherwise looks similar to the Synidicate HUD pip that Nuclear Operatives would see."
@@ -551,13 +566,19 @@ var/list/uplink_items = list()
  	item = /obj/item/clothing/suit/raincoat
  	cost = 1
 
+/datum/uplink_item/badass/experimental_gear
+	name = "Syndicate Experimental Gear Bundle"
+	desc = "A box that contains a randomly-selected experimental Syndicate gear, an unique state-of-the-art object. Satisfaction not guaranteed."
+	item = /obj/item/weapon/storage/box/syndicate_experimental
+	cost = 20
+
 /datum/uplink_item/badass/random
 	name = "Random Item"
 	desc = "Picking this choice will send you a random item from anywhere in the list for half the normal cost. Useful for when you cannot think of a strategy to finish your objectives with, or cannot think of anything to begin with."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
-/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/obj/item/device/uplink/U)
+/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, user)
 
 	var/list/buyable_items = get_uplink_items()
 	var/list/possible_items = list()
@@ -576,7 +597,7 @@ var/list/uplink_items = list()
 		var/datum/uplink_item/I = pick(possible_items)
 		U.uses -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
-		return new I.item(loc)
+		return new_uplink_item(I.item, loc, user)
 
 /datum/uplink_item/jobspecific/command_security
 	category = "Command and Security Specials"
@@ -595,6 +616,14 @@ var/list/uplink_items = list()
 	item = /obj/item/taperoll/syndie/police
 	cost = 10
 	discounted_cost = 8
+	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
+
+/datum/uplink_item/jobspecific/command_security/syndibaton
+	name = "Harm Baton"
+	desc = "A stun baton modified with tesla relay coils capable of discharging high amount of shock to overload human pain registers. It can also use this energy to boost the impact of the baton."
+	item = /obj/item/weapon/melee/baton/harm/loaded
+	cost = 12
+	discounted_cost = 9
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
 
 /datum/uplink_item/jobspecific/command_security/evidenceforger
@@ -763,11 +792,6 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Cargo Technician", "Quartermaster")
 
-/datum/uplink_item/jobspecific/cargo/syndiepaper/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
-	U.uses -= max(cost, 0)
-	feedback_add_details("traitor_uplink_items_bought", name)
-	return new item(loc) //Fix for amount ref
-
 /datum/uplink_item/jobspecific/cargo/mastertrainer
 	name = "Master Trainer's Belt"
 	desc = "A trainer's belt containing 6 Lazarus capsules loaded with random but particularly hostile and lethal mobs loyal to you alone. You can inspect what the Lazarus capsules contain before throwing them."
@@ -904,7 +928,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/glue
 	cost = 6
 	discounted_cost = 4
-	jobs_with_discount = list("Clown", "Mime")
+	jobs_with_discount = list("Clown", "Mime", "Captain")
 
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray
 	name = "Can of Invisible Spray"
@@ -927,6 +951,15 @@ var/list/uplink_items = list()
 	item = /obj/item/clothing/gloves/white/advanced
 	cost = 12
 	jobs_exclusive = list("Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/punchline
+	name = "Punchline"
+	desc = "A high risk high reward abomination combining experimental phazon and bananium technologies. Wind-up Punchline to charge it. Enough charge and your targets will slip through reality. Warning: Forcing wind-ups beyond the limiter may reverse the prototype phazite honkpacitors and disrupt reality around the user."
+	item = /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Clown")
+	jobs_excluded = list("Mime")
 
 /datum/uplink_item/jobspecific/assistant
 	category = "Assistant Specials"
@@ -962,3 +995,14 @@ var/list/uplink_items = list()
 	cost = 7
 	discounted_cost = 4
 	jobs_with_discount = list("Assistant")
+
+/datum/uplink_item/jobspecific/command
+	category = "Command Specials"
+
+/datum/uplink_item/jobspecific/command/pocketsat
+	name = "Pocket Satellite"
+	desc = "A grenade which, when detonated in space, creates a circular station with radius 7. The station is loaded with self-powered computers, useful gear, and machinery as well as a teleporter beacon. Anyone right under it when it unfolds is crushed."
+	item = /obj/item/weapon/grenade/station
+	cost = 20
+	discounted_cost = 14
+	jobs_with_discount = list("Captain", "Head of Personnel")

@@ -108,6 +108,8 @@
 	//SIZE_HUGE for even bigger guys
 
 	var/list/callOnFace = list()
+	var/list/callOnStartMove = list()
+	var/list/callOnEndMove = list()
 	var/list/pinned = list()            // List of things pinning this creature to walls (see living_defense.dm)
 	var/list/embedded = list()          // Embedded items, since simple mobs don't have organs.
 	var/list/abilities = list()         // For species-derived or admin-given powers.
@@ -277,6 +279,9 @@
 	var/event/on_damaged
 	var/event/on_irradiate
 	var/event/on_death
+	var/event/on_bumping //We bumped someone
+	var/event/on_bumped //We got bumped
+	var/event/on_touched // We got touched by anything
 	// Allows overiding click modifiers and such.
 	var/event/on_clickon
 
@@ -290,13 +295,16 @@
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 	var/forced_density = 0 // If the mob was made non-dense by an admin.
+	var/old_assigned_role // If they ghosted, what role did they have?
 
 /mob/resetVariables()
-	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \
+	..("callOnFace", "callOnStartMove", "callOnEndMove", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \
 	"attack_log", "speak_emote", "alphas", "heard_by", "control_object", "orient_object", "actions", "held_items", "click_delayer", "attack_delayer", "throw_delayer", "special_delayer", \
 	"clong_delayer", args)
 
 	callOnFace = list()
+	callOnStartMove = list()
+	callOnEndMove = list()
 	pinned = list()
 	embedded = list()
 	abilities = list()

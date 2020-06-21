@@ -77,6 +77,30 @@ obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 		node3.build_network()
 	return 1
 
+
+/obj/machinery/atmospherics/trinary/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		if(3)
+			return node3
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/trinary/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		if(3)
+			node3 = value
+		else
+			CRASH("Invalid node_id!")
+
+
 // Housekeeping and pipe network stuff below
 obj/machinery/atmospherics/trinary/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
 	if(reference == node1)

@@ -269,7 +269,6 @@
 				else
 					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
 					return
-			return
 
 	if(iscarbon(L))
 		var/mob/living/carbon/target = L
@@ -312,15 +311,12 @@
 				C.visible_message("<span class='danger'>\The [src] smashes against [C]'s \the [headwear], and rips it off in the process!</span>")
 				C.drop_from_inventory(headwear)
 				GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
-				return
 			else
 				C.visible_message("<span class='danger'>\The [src] bounces off of \the [headwear]!</span>")
 				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && !sterile)
 					death()
-					return
 				else
 					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
-					return
 			return
 
 		forceMove(C)
@@ -341,7 +337,7 @@
 
 	var/mob/living/carbon/CA = target
 
-	if(!sterile && !(istype(CA) && !CA.hasmouth))
+	if(!sterile && !(istype(CA) && !CA.hasmouth()))
 		var/obj/item/alien_embryo/E = new (target)
 		target.status_flags |= XENO_HOST
 		if(istype(target, /mob/living/carbon/human))

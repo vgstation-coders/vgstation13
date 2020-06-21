@@ -81,3 +81,7 @@
 	..()
 	reagents.add_reagent(DETCOFFEE, 20)
 
+/obj/item/weapon/cookiesynth/lollipop
+	name = "medipop synthesizer"
+	desc = "A self-recharging device used to rapidly deploy medicinal lollipops. Tell your patient they were very brave today."
+	food_type = /obj/item/weapon/reagent_containers/food/snacks/medipop

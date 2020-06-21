@@ -177,7 +177,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
-	flags = NO_PERSISTENCE 
+	flags = NO_PERSISTENCE
 
 //These are shuttle areas, they must contain two areas in a subgroup if you want to move a shuttle from one
 //place to another. Look at escape shuttle for example.
@@ -348,7 +348,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "shuttlered"
 
 /area/shuttle/nuclearops
-	name = "\improper Nuclear Opeartive Shuttle"
+	name = "\improper Nuclear Operative Shuttle"
 	icon_state = "yellow"
 	requires_power = 0
 	dynamic_lighting = 1
@@ -2153,6 +2153,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "eva"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
+	holomap_marker = "eva"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/ai_monitored/storage/secure
 	name = "Secure Storage"

@@ -18,8 +18,36 @@
 	name = "Nuclear Device Informational"
 	desc = "This poster depicts an image of an old style nuclear explosive device, as well as some helpful information on what to do if one has been set. It suggests lying on the floor and crying."
 	icon_state="vgposter4"
-	
+
 /datum/poster/vg_5//44
 	name = "High Effect Engineering"
 	desc = "There are 3 shards and a singularity.  The shards are singing.  The engineers are crying."
 	icon_state="vgposter5"
+
+//Special poster designs will not appear randomly
+/datum/poster/special/cargoflag
+	name = "Cargonian flag"
+	desc = "All hail Cargonia."
+	icon_state = "cargoposter-flag"
+
+/datum/poster/special/cargofull
+	name = "Cargonian seal"
+	desc = "The majestic seal of the Cargonian people. The crossed guns represent honor, loyalty, and emittered crates."
+	icon_state = "cargoposter-full"
+
+/datum/poster/special/goldstar
+	name = "Award of Sufficiency"
+	desc = "The mere sight of it makes you very proud."
+	icon_state = "goldstar"
+
+/datum/poster/special/ninja
+	name = "machinery poster"
+	desc = "A poster depicting a wall-mounted structure."
+	icon_state = "poster-apc"
+	var/list/poster_designs = list("poster-apc","poster-extinguisher","poster-firealarm","poster-oxycloset","poster-nosmoking")
+
+/datum/poster/special/ninja/anime
+	name = "anime poster"
+	desc = "It's everybody's favorite anime"
+	icon_state = "animeposter1"
+	poster_designs = list("animeposter1","animeposter2","animeposter3","animeposter4","animeposter5","animeposter6")

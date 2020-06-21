@@ -1,0 +1,267 @@
+"am" = (/obj/structure/bed/chair{dir = 8},/mob/living/simple_animal/hostile/ginger/gingerknightman,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"aq" = (/obj/structure/flora/pottedplant,/obj/item/weapon/shield/energy,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"as" = (/obj/effect/decal/cleanable/flour,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"au" = (/obj/effect/overlay/puddle,/obj/effect/liquid,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"aG" = (/obj/structure/bed/chair/comfy,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"bn" = (/obj/item/weapon/mop,/mob/living/simple_animal/hostile/ginger/gingerfatman{desc = "He's going to make Columbine look like a fucking joke"; name = "gingerjanitor man"},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"bA" = (/obj/structure/flora/pottedplant,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"bE" = (/obj/effect/landmark/corpse/syndicatesoldier,/obj/structure/cage/autoclose,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"bF" = (/mob/living/simple_animal/hostile/gingerbread,/obj/machinery/light/he,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"bG" = (/obj/structure/table/glass,/obj/item/weapon/eyeshadow{pixel_y = 4; pixel_x = -7},/obj/item/weapon/spacecash/c100{pixel_x = 5},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"bM" = (/obj/machinery/door/window{dir = 8},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"bV" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"bW" = (/obj/structure/bed,/obj/effect/decal/cleanable/vomit/pre_dry,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"cc" = (/obj/structure/closet/crate/bin,/obj/item/weapon/storage/pill_bottle{name = "Methylin"},/obj/item/weapon/gun/projectile/russian,/obj/item/weapon/storage/pill_bottle{name = "Oxycodone"},/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"cl" = (/obj/structure/table,/obj/machinery/recharger{pixel_y = 4},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"ct" = (/obj/structure/closet/crate/freezer,/obj/item/slime_extract/adamantine,/obj/item/slime_extract/black,/obj/item/slime_extract/pyrite,/obj/item/slime_extract/sepia,/obj/item/clothing/suit/storage/wintercoat/slimecoat,/obj/item/organ/internal/brain/slime_core,/obj/item/weapon/extinguisher,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"cK" = (/obj/machinery/cooking/deepfryer/confectionator{emagged = 1},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"cM" = (/obj/structure/closet/cabinet,/obj/abstract/map/spawner/safe/clothing,/obj/abstract/map/spawner/theater/costumes,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"cP" = (/obj/structure/table/woodentable,/obj/item/weapon/switchtool/swiss_army_knife{pixel_x = 8; pixel_y = 2},/obj/abstract/map/spawner/floorpill{pixel_x = 7; pixel_y = 8},/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"dc" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 8},/turf/simulated/floor/beach/water,/area/vault/gingerbread_house)
+"di" = (/obj/effect/decal/cleanable/crayon/fuckyou,/turf/simulated/wall/mineral/gingerbread,/area/vault/gingerbread_house)
+"dz" = (/obj/structure/table/glass{pixel_y = -1},/obj/item/weapon/reagent_containers/food/drinks/h_chocolate{pixel_y = -3; pixel_x = -5},/obj/item/weapon/reagent_containers/food/snacks/braincakeslice{pixel_x = 6; pixel_y = 10},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"eB" = (/obj/machinery/light/he,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"eG" = (/obj/structure/coatrack/full,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"eH" = (/obj/structure/bed/chair{dir = 4},/mob/living/simple_animal/hostile/ginger/gingerfatman,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"eN" = (/obj/structure/flora/pottedplant,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"eY" = (/obj/item/device/flashlight/lantern/on/dim,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"fk" = (/obj/abstract/map/spawner/theater,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"fB" = (/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"fQ" = (/mob/living/simple_animal/hostile/gingerbread{wander = 0},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"fR" = (/obj/effect/landmark/corpse/miner/rig,/obj/item/stack/sheet/mineral/diamond,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"fX" = (/obj/structure/sign/greencross,/turf/simulated/wall/mineral/gingerbread,/area/vault/gingerbread_house)
+"gr" = (/obj/structure/bed/chair{dir = 8},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"gD" = (/obj/structure/cage,/obj/effect/landmark/corpse/doctor,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"gM" = (/obj/structure/closet/crate/secure/engisec,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"gZ" = (/mob/living/simple_animal/hostile/ginger/gingerclownman,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"ha" = (/obj/structure/piano/xylophone,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"hl" = (/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"ht" = (/mob/living/simple_animal/hostile/ginger/gingerfatman,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"hW" = (/obj/machinery/microwave,/obj/structure/table/reinforced,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"ib" = (/obj/structure/table/reinforced,/obj/item/weapon/kitchen/rollingpin,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"ik" = (/obj/machinery/light/small,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"it" = (/obj/machinery/door/mineral/gingerbread,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"iv" = (/obj/structure/table/reinforced,/obj/item/weapon/tray{pixel_x = 2; pixel_y = 5},/obj/item/weapon/reagent_containers/food/snacks/fries{pixel_y = 7; pixel_x = 5},/obj/item/weapon/reagent_containers/food/snacks/human,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"ix" = (/mob/living/simple_animal/hostile/ginger/gingerfatman,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"jn" = (/obj/structure/closet,/obj/effect/landmark/corpse/waifu,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/toy/katana,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"jF" = (/obj/effect/decal/cleanable/campfire,/obj/item/weapon/spacecash/c10{pixel_y = -4},/obj/item/weapon/spacecash/c10{pixel_x = -4; pixel_y = -1},/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100{pixel_x = 5},/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"jM" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/milk{pixel_y = -4; pixel_x = -2},/obj/item/weapon/reagent_containers/food/drinks/milk{pixel_y = 1; pixel_x = 4},/obj/item/weapon/reagent_containers/food/drinks/milk{pixel_y = 3},/obj/item/weapon/reagent_containers/food/drinks/milk,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"kj" = (/mob/living/simple_animal/hostile/ginger/gingerbomination,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"kB" = (/obj/structure/urinal{pixel_y = 27},/obj/effect/decal/cleanable/flour,/obj/machinery/light/small,/obj/item/weapon/storage/belt/janitor,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"kG" = (/mob/living/simple_animal/cockroach,/obj/structure/table/woodentable,/obj/item/weapon/barricade_kit,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"kJ" = (/obj/structure/reagent_dispensers/cauldron/barrel/wood,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"kU" = (/obj/structure/table/reinforced,/obj/item/weapon/tray{pixel_x = -3; pixel_y = 6},/obj/item/weapon/reagent_containers/food/snacks/validsalad{pixel_x = -6; pixel_y = 4},/obj/item/weapon/reagent_containers/food/snacks/human/kabob,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"lk" = (/obj/machinery/door/mineral/gingerbread,/obj/structure/window/barricade/full/block,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"ll" = (/obj/structure/bed/roller/surgery,/obj/effect/landmark/corpse/skellington,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"lo" = (/obj/structure/sink,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"lz" = (/obj/structure/bigpeppermint_red,/turf/simulated/wall/mineral/gingerbread,/area/vault/gingerbread_house)
+"lO" = (/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"mc" = (/obj/structure/window/full/reinforced/plasma,/obj/machinery/door_timer,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"mv" = (/obj/effect/landmark/corpse/doctor,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"mw" = (/obj/item/weapon/caution,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"mB" = (/obj/structure/table/holotable/wood,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"ne" = (/turf/simulated/wall/mineral/gingerbread,/area/vault/gingerbread_house)
+"nh" = (/obj/effect/landmark/corpse/pirate/ranged,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"nK" = (/obj/structure/bed/chair/comfy{dir = 8},/mob/living/simple_animal/hostile/ginger/gingerfatman,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"nR" = (/obj/structure/table/reinforced,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"nT" = (/obj/structure/punching_bag/clown,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"oc" = (/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"ol" = (/obj/structure/bed/chair{dir = 4},/mob/living/simple_animal/hostile/ginger/gingerknightman,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"ow" = (/obj/machinery/atmospherics/unary/cold_sink/freezer,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"oG" = (/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/food/snacks/meat/human,/obj/item/weapon/reagent_containers/food/snacks/meat/human{pixel_y = 5; pixel_x = -2},/obj/item/weapon/reagent_containers/food/snacks/meat/human{pixel_x = 3; pixel_y = 9},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"oR" = (/obj/structure/coatrack,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"oT" = (/obj/structure/cage/autoclose,/mob/living/simple_animal/hostile/ginger/gingerbomination,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"oU" = (/obj/item/weapon/storage/fancy/donut_box,/obj/item/weapon/reagent_containers/food/snacks/donut/chaos{pixel_y = 2; pixel_x = -1},/obj/item/weapon/reagent_containers/food/snacks/donut/chaos{pixel_x = 5},/obj/item/weapon/reagent_containers/food/snacks/donut{pixel_y = 6; pixel_x = 2},/obj/structure/table,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"pe" = (/obj/structure/bed,/obj/item/weapon/bedsheet/red,/obj/item/weapon/gun/hookshot/whip/liquorice,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"pr" = (/obj/structure/bed/chair/holowood/normal{dir = 8},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"pv" = (/obj/structure/closet/crate/freezer/surgery{anchored = 1},/obj/item/stack/sheet/bone,/obj/item/stack/sheet/bone,/obj/item/stack/sheet/animalhide/human,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"pS" = (/obj/structure/sign/securearea,/turf/simulated/wall/mineral/gingerbread,/area/vault/gingerbread_house)
+"qf" = (/obj/item/key/janicart,/obj/structure/table,/obj/item/weapon/grenade/chem_grenade/cleaner,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"qt" = (/obj/effect/landmark/corpse/cargotechnician,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"qI" = (/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"qU" = (/mob/living/simple_animal/hostile/ginger/gingerstripperman,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"qW" = (/obj/effect/decal/cleanable/flour,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"rk" = (/obj/item/toy/singlecard/une{pixel_x = -8},/obj/item/toy/singlecard/une{pixel_x = 8},/obj/item/toy/cards/une{pixel_y = 12},/obj/item/weapon/spacecash/c1000,/obj/structure/table/woodentable/poker,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"rv" = (/obj/structure/bed,/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man{pixel_x = 10},/obj/item/weapon/bedsheet/green,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"rx" = (/obj/structure/closet/crate/chest,/obj/item/clothing/head/collectable/hardhat,/obj/item/stack/sheet/mineral/gingerbread{amount = 15},/obj/item/stack/tile/mineral/gingerbread{amount = 15},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"sk" = (/obj/machinery/xmas_light,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"sv" = (/obj/effect/landmark/corpse/russian,/turf/simulated/floor/beach/water,/area/vault/gingerbread_house)
+"sI" = (/mob/living/simple_animal/hostile/gingerbread{aggro_vision_range = 3; desc = "He's after a different kind of dough"; idle_vision_range = 5; name = "gingertrader man"},/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"sU" = (/obj/effect/decal/cleanable/flour,/mob/living/simple_animal/hostile/ginger/gingerbomination,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"ti" = (/obj/structure/piano{dir = 4},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"tI" = (/turf/simulated/floor/beach/water,/area/vault/gingerbread_house)
+"tK" = (/obj/item/clothing/suit/space/rig/security/fat,/obj/effect/landmark/corpse/skellington,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"tN" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"tP" = (/obj/structure/curtain/closed/left,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"tS" = (/mob/living/simple_animal/hostile/ginger/gingerchefman,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"ub" = (/turf/space,/area)
+"uh" = (/obj/item/gingerbread_egg,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"uj" = (/obj/item/toy/gasha/beartoy,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"vr" = (/obj/item/weapon/reagent_containers/glass/bottle/bleach,/obj/item/weapon/soap,/obj/structure/table,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"vE" = (/mob/living/simple_animal/hostile/ginger/gingerchefman,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"vF" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/spellburger{pixel_y = 5; pixel_x = 7},/obj/item/weapon/reagent_containers/food/snacks/mimeburger{pixel_x = -7},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"vH" = (/obj/structure/table,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"vO" = (/obj/structure/bed,/obj/item/weapon/bedsheet/clown,/obj/item/weapon/glue,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"wh" = (/obj/machinery/door/window{dir = 2},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"wL" = (/obj/structure/falsewall/gingerbread,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"wN" = (/obj/structure/bed/chair/comfy{dir = 1},/mob/living/simple_animal/hostile/ginger/gingerknightman{canmove = 0; name = "gingerwarden man"},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"wR" = (/mob/living/simple_animal/hostile/ginger/gingerprostituteman,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"wZ" = (/obj/structure/gingerbread_egg_cluster1,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"xw" = (/obj/structure/cage,/obj/effect/landmark/corpse/pilot,/obj/item/weapon/gun/energy/laser/retro,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"yB" = (/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"zb" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/hypospray/autoinjector{pixel_y = -4; pixel_x = 1},/obj/item/weapon/reagent_containers/hypospray/autoinjector{pixel_y = 7; pixel_x = -3},/obj/item/weapon/reagent_containers/glass/bottle/rezadone{pixel_y = 5},/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"zg" = (/obj/structure/closet,/obj/item/clothing/head/det_hat{blood_overlay = 1},/obj/item/clothing/suit/storage/det_suit{blood_overlay = 1},/obj/item/device/detective_scanner,/obj/item/device/camera,/obj/item/weapon/gun/projectile/detective,/mob/living/simple_animal/hostile/ginger/gingerfatman{canmove = 0; desc = "Asked too many questions"; health = 0; icon_state = "gingerfatman_dead"; iscorpse = 1; name = "gingerdetective man"},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"zM" = (/obj/item/ammo_storage/magazine/m380auto,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"zQ" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 5},/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"zR" = (/obj/structure/table/glass,/obj/item/gum{pixel_x = 8},/obj/item/weapon/lipstick/jade{pixel_x = -4},/obj/item/weapon/pocket_mirror/comb{pixel_x = 5; pixel_y = 6},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"AR" = (/obj/structure/table/woodentable,/obj/item/weapon/newspaper,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"AU" = (/obj/item/stack/sheet/mineral/gingerbread{amount = 15},/obj/item/stack/tile/mineral/gingerbread{amount = 15},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"AW" = (/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"Bs" = (/mob/living/simple_animal/hostile/gingerbread,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"BL" = (/obj/effect/landmark/corpse/wizard,/obj/item/potion/random,/obj/item/weapon/spellbook/oneuse/forcewall,/turf/simulated/floor/beach/water,/area/vault/gingerbread_house)
+"Cp" = (/obj/structure/table,/obj/item/weapon/gun/projectile/shotgun/doublebarrel,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"CC" = (/obj/structure/curtain/closed/right,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Df" = (/obj/machinery/media/jukebox/bar,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"DI" = (/mob/living/simple_animal/hostile/ginger/gingerknightman,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"DM" = (/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"EP" = (/obj/structure/table/flipped,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"EY" = (/mob/living/simple_animal/hostile/ginger/gingerknightman,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"Fj" = (/obj/item/device/wormhole_jaunter{pixel_x = 3; pixel_y = 5},/obj/item/device/wormhole_jaunter{pixel_x = 7; pixel_y = -1},/obj/item/device/wormhole_jaunter{pixel_x = -8},/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"Fk" = (/obj/item/weapon/scalpel,/obj/item/weapon/reagent_containers/syringe/broken,/obj/item/weapon/wirecutters,/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/bonegel,/obj/item/weapon/kitchen/utensil/knife/skinning,/obj/item/weapon/reagent_containers/food/snacks/egg,/obj/item/slime_extract/grey,/obj/structure/table/reinforced,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"Fr" = (/obj/structure/bed,/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man{pixel_x = 10},/obj/item/weapon/bedsheet/red,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"FM" = (/obj/structure/bed,/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man{pixel_x = 10},/obj/item/weapon/bedsheet/blue,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"FW" = (/obj/structure/sink{pixel_y = 10},/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"GE" = (/obj/machinery/xmas_light,/mob/living/simple_animal/hostile/ginger/gingerstripperman,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"GK" = (/obj/item/weapon/beartrap/armed,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"GZ" = (/obj/structure/bed/chair/holowood/normal{dir = 4},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"HS" = (/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"Iq" = (/obj/structure/table/woodentable,/obj/abstract/map/spawner/space/drinks,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"IB" = (/mob/living/simple_animal/hostile/gingerbread{aggro_vision_range = 5; wander = 0},/obj/structure/bed/chair/comfy{dir = 4},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"IC" = (/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"IM" = (/obj/structure/table/reinforced,/obj/effect/landmark/corpse/pirate,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Jd" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/clownburger,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Ji" = (/obj/item/weapon/reagent_containers/food/snacks/jellyburger/slime,/obj/structure/table/reinforced,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"Jj" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/snacks/candy_cane{pixel_y = -2},/obj/item/weapon/reagent_containers/food/snacks/candy_cane{pixel_x = -5},/obj/item/weapon/reagent_containers/food/snacks/candy_cane{pixel_y = 4},/obj/item/weapon/reagent_containers/food/snacks/candy_cane{pixel_x = 3},/obj/item/weapon/reagent_containers/food/snacks/candy_cane,/obj/item/weapon/gun/lolly_lobber,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"Jx" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"Jy" = (/obj/machinery/light/he,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"JE" = (/obj/structure/closet/basic,/obj/item/weapon/storage/box/handcuffs,/obj/item/weapon/storage/box/evidence,/obj/structure/closet,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"JO" = (/obj/structure/bed{dir = 1},/obj/item/weapon/bedsheet/purple,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"JP" = (/obj/item/weapon/book/manual/security_space_law,/obj/item/clothing/accessory/medal/silver/security{pixel_y = 8},/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/donut,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"Ka" = (/obj/structure/bed{dir = 4},/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man{pixel_x = -10},/obj/item/weapon/bedsheet/blue{dir = 3},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"Kc" = (/obj/structure/table/woodentable,/obj/abstract/map/spawner/space/supply{pixel_x = -7; pixel_y = 8},/obj/abstract/map/spawner/floorpill{pixel_x = 7; pixel_y = 8},/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"Ko" = (/obj/structure/bed/chair/comfy{dir = 1},/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"Kv" = (/obj/structure/mopbucket,/obj/item/weapon/mop,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"Ky" = (/obj/machinery/door/mineral/gingerbread,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Kz" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass{pixel_x = -4; pixel_y = 3},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"KA" = (/obj/structure/table/glass,/obj/item/weapon/storage/fancy/cigarettes,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"KE" = (/obj/structure/bed{dir = 4},/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man{pixel_x = -10},/obj/item/weapon/bedsheet/red{dir = 3},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"KQ" = (/obj/structure/rack,/obj/item/weapon/gun/energy/laser/smart,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"KV" = (/obj/structure/window,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Le" = (/obj/machinery/cooking/still,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Lj" = (/obj/effect/landmark/corpse/mime,/obj/item/toy/crayon/mime,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"MA" = (/obj/structure/falsewall/gingerbread,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"MG" = (/obj/structure/closet/secure_closet/freezer/meat,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Ne" = (/mob/living/simple_animal/hostile/ginger/gingerboneman,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"NJ" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"NN" = (/mob/living/simple_animal/cockroach,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"NQ" = (/obj/structure/gingerbread_egg_cluster2,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"NY" = (/mob/living/simple_animal/hostile/ginger/gingerboneman,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"Oz" = (/obj/machinery/light/he{dir = 1},/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"OM" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 10},/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"Pg" = (/obj/effect/decal/cleanable/flour,/mob/living/simple_animal/hostile/ginger/gingerboneman,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"Pr" = (/obj/item/clothing/suit/storage/wintercoat/security/warden,/obj/item/clothing/head/helmet/tactical/warden,/obj/structure/coatrack,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"PE" = (/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man{name = "Bun Bun"},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"PP" = (/obj/item/weapon/bananapeel,/obj/machinery/door/mineral/gingerbread,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"PY" = (/obj/structure/closet/crate/bin,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100,/obj/item/clothing/head/collectable/pirate,/obj/item/ammo_storage/magazine/m380auto,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"QD" = (/obj/effect/landmark/corpse/clown,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"QQ" = (/obj/structure/bed{dir = 1},/obj/item/weapon/bedsheet/green,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"QY" = (/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/food/snacks/meat/human,/obj/item/weapon/reagent_containers/food/snacks/meat/diona{pixel_y = 10; pixel_x = -5},/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox{pixel_x = 3; pixel_y = 6},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Ra" = (/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Rb" = (/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"RL" = (/obj/machinery/cooking/grill,/obj/item/weapon/reagent_containers/food/snacks/meat/slime,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"RT" = (/mob/living/simple_animal/hostile/ginger/gingerbroodmother,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"RX" = (/obj/item/weapon/reagent_containers/food/drinks/discount_shaker{pixel_y = 10; pixel_x = 6},/obj/item/weapon/reagent_containers/food/drinks/flask/barflask,/obj/structure/table/reinforced,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"Su" = (/obj/machinery/oven,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"SF" = (/obj/machinery/door/window{dir = 1},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"SH" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/beer{pixel_y = 5; pixel_x = 6},/obj/item/weapon/reagent_containers/food/drinks/beer,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"ST" = (/obj/structure/rack,/obj/item/weapon/gun/siren/supersoaker,/obj/item/weapon/gun/siren/supersoaker/pistol{pixel_y = -4; pixel_x = 5},/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"Tb" = (/obj/machinery/light/he{dir = 1},/obj/structure/gingerbread_egg_cluster2,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"Tj" = (/obj/structure/bookcase,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"TZ" = (/obj/structure/falsewall/gingerbread,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"UA" = (/mob/living/simple_animal/hostile/ginger/gingerbarman,/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"UD" = (/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"US" = (/obj/structure/table/reinforced,/obj/item/weapon/kitchen/utensil/knife/large/butch,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"UW" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 8},/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"VD" = (/obj/machinery/light/small,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"VW" = (/obj/structure/bed{dir = 3},/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man{pixel_x = -10},/obj/item/weapon/bedsheet/green,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"Wl" = (/obj/structure/kitchenspike,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Wn" = (/obj/structure/curtain/open/shower/security,/obj/structure/toilet{dir = 4},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"WB" = (/obj/machinery/computer/fluff/security,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"WT" = (/obj/item/weapon/dnainjector/nofail/mattereater,/obj/item/weapon/storage/fancy/donut_box/empty,/obj/item/weapon/reagent_containers/food/snacks/donut{pixel_x = 7},/obj/item/weapon/reagent_containers/food/snacks/donut{pixel_y = 5},/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"Xf" = (/obj/structure/closet,/obj/item/weapon/gun/projectile/glock,/obj/item/clothing/suit/armor/hos/jensen,/obj/item/weapon/storage/belt/skull,/obj/item/clothing/shoes/jackboots,/obj/item/clothing/head/fedora,/obj/item/toy/singlecard/wizard/tator,/obj/item/ammo_storage/magazine/m380auto,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"Xh" = (/obj/structure/table/reinforced,/obj/item/weapon/tray{pixel_y = 6},/obj/item/weapon/reagent_containers/food/snacks/braincakeslice{pixel_y = 8},/obj/item/weapon/reagent_containers/food/snacks/human/kabob,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Xw" = (/mob/living/simple_animal/hostile/ginger/gingerknightman,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"XH" = (/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"XO" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/whiskey{pixel_y = 4; pixel_x = 3},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Ya" = (/obj/structure/bigpeppermint_green,/turf/simulated/wall/mineral/gingerbread,/area/vault/gingerbread_house)
+"Yf" = (/obj/machinery/light/he,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"Yg" = (/obj/effect/decal/cleanable/flour,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"Yl" = (/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
+"YT" = (/obj/structure/table/woodentable,/obj/item/weapon/coin/silver{pixel_x = -3; pixel_y = 3},/obj/item/weapon/coin/clown{pixel_x = 1; pixel_y = 5},/obj/item/weapon/coin/gold,/obj/item/weapon/coin/silver{pixel_x = 5; pixel_y = -3},/obj/machinery/pos{dir = 4; pixel_x = -6},/turf/simulated/floor/mineral/gingerbread_tile,/area/vault/gingerbread_house)
+"Zf" = (/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)
+"Zm" = (/mob/living/simple_animal/hostile/ginger/gingerbomination,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
+"ZL" = (/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"ZU" = (/mob/living/simple_animal/hostile/gingerbread{aggro_vision_range = 4; idle_vision_range = 5; wander = 0},/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+
+(1,1,1) = {"
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububububububububububububububububububububububububububububububububububububububub
+ubububububububububububububneneneneneneneneneubububneneneneneneneneneneneubububububububububububububub
+ubububububububububububnenenewZNQNQwZNQwZNQneneneneneskskGEskKyDMDMqUzRneubububububububububububububub
+ubububububububububnenenelOTbNQwZlOuhlONQwZZfNQnenenewhKVKVKVneDMDMDMRaneubububububububububububububub
+ubububububububububnelOwZlOlOyBlOlORTlOlOlOlOlOlOlOnefQhtfQtSnecMDMqUbGneubububububububububububububub
+ubububububububububneNYlOlOkjlOlOlOlOlOlONYlOyBkjlOneDMDMDMDMneneneneneneubububububububububububububub
+ubububububububububnelOyBlOlODMDMDMDMDMDMDMlOlOlOwZneDMikDMDMDMDMKyDMDMneubububububububububububububub
+ubububububububububnelOlOlOlOJyDMDMDMDMqIJylONYlOlOneneneDMDMDMtNnetPCCneubububububububububububububub
+ubububububububububnewZlOlOlOneEYDMDMDMEYnelOlOlOyBnekBKyDMDMDMoRnewRhtneubububububububububububububub
+ubububububububububnelOlOlONQneHSDMDMDMHSneNQlOlOlOneneneYaneMAneneikpeneubububububububububububububub
+ubububububububububnemvlONQneneneneKyneneneneQDlOfRneneDMDMPEYgDfnelzneneneneubububububububububububub
+ubububububububububnewZnhwZneHSRbDIDMDIRbHSnewZNQNQneneGZmBprDMDMDMDMbMRbFWneneneneneubububububububub
+ubububububububububneneneneneHSDMDMDMDMDMHSneneneneneneYlDMDMDMDMDMDMKzHSHSKyDMDMkJneubububububububub
+ububububububububububneAUDMMAHSDMDMDMDMDMHSnezbococccneGZmBprDMDMDMDMSHUAHSneDMDMLeneubububububububub
+ubububneneneneneneneneneneneHSHSHSDMHSHSHSnekGNNZmbWneDMDMDMDMDMDMDMXOHSRXneDMDMtNneubububububububub
+ubububnePrAWWBJPfBoUclUDJEneneneYaKylzneneneocEPococneDMeNDMDMDMDMtineneneneCpvHzgneubububububububub
+ubububneAWAWwNAWfBDMDIDMDMneAWZLAWAWAWqWbndineTZnenenenenelzKyYanenenelzneneYaneneYaneneneneneububub
+ubububneAWYfAWAWneDMDMDMDMneAWAWAWAWAWAWmwAWAWbAbAneIBrknKAWAWAWneDMDMHSRbHSJiRLRLRbctnecKLjneububub
+ubububnehlneKyneneDIDMDMDMKyAWAWAWAWAWauAWAWAWAWAWitAWAWAWAWAWbAneDMDMHSHSvEHSvEHSHSDMKyDMtNneububub
+ubububneDMDMDMDIDMDMDMDMDMneAWAWAWAWAWYfAWAWAWbAbAneAWAWAWAWAWXHnenRSFnRXhnRivnRkUnRnRneDMDMneububub
+ubububneneKynenenefBmcPPfBneXwAWXwneneneneitneneneneIqKcAWAWAWAWneDMDMDMDMDMDMDMDMDMDMneDMDMneububub
+ubububnejMHSHSJjneAWAWAWAWnenePPneneKaujAWAWTjAWFMnesIYTAWAWAWAWitDMDMDMDMDMDMDMDMDMRanetSDMneububub
+ubububneSTeBHSKQneWnYfgZvOpSAWAWbVneKEAWZUAWixAWFrneHScPAWAWAWAWneeGDMDMNJvHgrDMNJvHgrneDMtNneububub
+ubububnenenenewLnenenenenefXAWAWAWneVWAWhaYfnTfkrvneaqHSAWAWAWAWneYlDMDMNJvHgrDMolvFamneDMDMneububub
+ubububnejFneococneoToTbEoTnelknelzneneneneneneneYaneneneAWAWAWbAneDMDMDMeHJdgrJyNJvHgrneDMDMneububub
+ubububneqtwLococneasocNeZmococnedzJOixAWZLneKAQQAWrxOzneICAWAWneneneneneneneneneneneneneDMDMneububub
+ubububnegMneococneeYNesUasNeasneYfAWAWAWbAnebFAWAWAWbAneAWAWAWlzgDxwMGDMWlloDMneDMDMDMDMDMDMneububub
+ubububneFjneocJxnePgasocNeocpvneneneitneYanelzneitneneneAWAWAWneYlDMDMtSDMtSDMKyDMDMDMikDMDMneububub
+ubububneneneococneBLtItIZmasNeneaGAWAWAWAWAWAWAWAWAWAWAWAWAWAWneDMDMibUSoGDMSuneneneMAneneneneububub
+ubububububneococnesvtIdcOMllFkneARAWAWBsAWAWAWAWAWAWAWAWAWAWAWKyDMDMDMDMtSDMSuneWTtKocneubububububub
+ubububububneococneneneneneneneneKoAWAWYfAWAWAWYfAWAWAWAWAWAWAWneDMhWDMDMDMDMSuneneneneneubububububub
+ubububububneococococococzQUWUWneneneneneneneneneneitneneneitneneneneneKyneneneneubububububububububub
+ubububububneococococococVDococococococzMocJxneXfjnGKocneAWAWAWneowDMPYDMneububububububububububububub
+ubububububneneneneneneneneneococococococococwLococVDKvneICAWXHneDMikDMDMneububububububububububububub
+ubububububububububububububneneneneneneneneneneqfvrnenelzXwAWXwYaneneQYIMneububububububububububububub
+ububububububububububububububububububububububneneneneHSHSAWAWAWHSHSneneneneububububububububububububub
+ubububububububububububububububububububububububububneHSAWAWAWAWAWHSneubububububububububububububububub
+ubububububububububububububububububububububububububneHSAWAWAWAWAWHSneubububububububububububububububub
+ubububububububububububububububububububububububububneHSHSAWAWAWHSHSneubububububububububububububububub
+ubububububububububububububububububububububububububneneneAWAWAWneneneubububububububububububububububub
+"}

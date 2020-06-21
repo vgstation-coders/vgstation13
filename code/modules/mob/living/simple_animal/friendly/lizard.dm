@@ -28,7 +28,7 @@
 	idle_vision_range = 6
 	search_objects = 1
 
-	var/static/list/edibles = list(/mob/living/simple_animal/cockroach, /obj/item/weapon/reagent_containers/food/snacks/roach_eggs, /mob/living/simple_animal/bee) //Add bugs to this as they get added in
+	var/static/list/edibles = list(/mob/living/simple_animal/cockroach, /obj/item/weapon/reagent_containers/food/snacks/roach_eggs, /obj/item/weapon/reagent_containers/food/snacks/egg/snail, /mob/living/simple_animal/bee, /mob/living/simple_animal/snail) //Add bugs to this as they get added in
 
 /mob/living/simple_animal/hostile/lizard/UnarmedAttack(var/atom/A)
 	if(is_type_in_list(A, edibles))
@@ -83,3 +83,15 @@
 	else
 		plane = MOB_PLANE
 		to_chat(src, "<span class='notice'>You have stopped hiding.</span>")
+
+//freg
+/mob/living/simple_animal/hostile/lizard/frog
+	species_type = /mob/living/simple_animal/hostile/lizard/frog
+	name = "frog"
+	desc = "Ribbit."
+	icon_state = "smallfrog"
+	icon_living = "smallfrog"
+	icon_dead = "smallfrog_dead"
+	speak_emote = list("ribbits")
+	holder_type = /obj/item/weapon/holder/animal/frog
+

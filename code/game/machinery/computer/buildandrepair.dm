@@ -51,6 +51,9 @@
 /obj/item/weapon/circuitboard/security/wooden_tv
 	name = "Circuit board (Security Cameras TV)"
 	build_path = /obj/machinery/computer/security/wooden_tv
+/obj/item/weapon/circuitboard/security/spesstv
+	name = "Circuit board (high-definition Spess.TV telescreen)"
+	build_path = /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen
 /obj/item/weapon/circuitboard/security/engineering
 	name = "Circuit board (Engineering Cameras)"
 	desc = "A circuit board for running a computer used for viewing engineering cameras."
@@ -114,6 +117,10 @@
 	name = "Circuit board (Security Records)"
 	desc = "A circuit board for running a computer used for viewing security records."
 	build_path = /obj/machinery/computer/secure_data
+/obj/item/weapon/circuitboard/security_alerts
+	name = "Circuit board (Security Records)"
+	desc = "A circuit board for running a computer used for viewing security alerts."
+	build_path = /obj/machinery/computer/security_alerts
 /obj/item/weapon/circuitboard/stationalert
 	name = "Circuit board (Station Alerts)"
 	desc = "A circuit board for running a computer used for viewing station alerts."
@@ -346,7 +353,7 @@
 	desc = "A circuit board for running a computer used to operate stacking machines."
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
-
+	
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/weapon/solder/S = I

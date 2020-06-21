@@ -42,12 +42,15 @@
 	if(Adjacent(usr))
 		return empty_container_into()
 	return ..()
-/obj/structure/toilet/attack_hand(mob/living/user as mob)
+/obj/structure/toilet/attack_hand(mob/living/user)
+	if(user.attack_delayer.blocked())
+		return
 	if(swirlie)
+		user.delayNextAttack(1 SECONDS)
 		swirlie.visible_message("<span class='danger'>[user] slams the toilet seat onto [swirlie.name]'s head!</span>", "<span class='userdanger'>[user] slams the toilet seat onto your head!</span>", "You hear reverberating porcelain.")
 		swirlie.apply_damage(8, BRUTE, LIMB_HEAD, used_weapon = name)
 		playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-		add_attacklogs(user, swirlie, "slammed the toilet seat")
+		add_attacklogs(user, swirlie, "slammed the toilet seat", admin_warn=FALSE)
 		add_fingerprint(user)
 		add_fingerprint(swirlie)
 		return
@@ -125,15 +128,18 @@
 
 						if(!GM.internal && GM.losebreath <= 30)
 							GM.losebreath += 5
-							add_attacklogs(user, GM, "gave a swirlie to")
+							add_attacklogs(user, GM, "gave a swirlie to", admin_warn=FALSE)
 						else
-							add_attacklogs(user, GM, "gave a swirle with no effect to")
+							add_attacklogs(user, GM, "gave a swirle with no effect to", admin_warn=FALSE)
 					swirlie = null
 				else
+					if(user.attack_delayer.blocked())
+						return
+					user.delayNextAttack(1 SECONDS)
 					GM.visible_message("<span class='danger'>[user] slams [GM.name] into \the [src]!</span>", "<span class='userdanger'>[user] slams you into \the [src]!</span>")
 					GM.adjustBruteLoss(8)
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-					add_attacklogs(user, GM, "slammed into the toilet")
+					add_attacklogs(user, GM, "slammed into the toilet", admin_warn=FALSE)
 					add_fingerprint(user)
 					add_fingerprint(GM)
 					return
@@ -369,19 +375,19 @@
 			var/washglasses = 1
 
 			if(H.wear_suit)
-				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDEGLOVES))
-				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDESHOES))
+				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDEGLOVES, 0, H.wear_suit.body_parts_visible_override))
+				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDESHOES, 0, H.wear_suit.body_parts_visible_override))
 
 			if(H.head)
-				washmask = !(is_slot_hidden(H.head.body_parts_covered, HIDEMASK))
-				washglasses = !(is_slot_hidden(H.head.body_parts_covered, HIDEEYES))
-				washears = !(is_slot_hidden(H.head.body_parts_covered, HIDEEARS))
+				washmask = !(is_slot_hidden(H.head.body_parts_covered, HIDEMASK, 0, H.head.body_parts_visible_override))
+				washglasses = !(is_slot_hidden(H.head.body_parts_covered, HIDEEYES, 0, H.head.body_parts_visible_override))
+				washears = !(is_slot_hidden(H.head.body_parts_covered, HIDEEARS, 0, H.head.body_parts_visible_override))
 
 			if(H.wear_mask)
 				if(washears)
-					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEARS))
+					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEARS, 0, H.wear_mask.body_parts_visible_override))
 				if(washglasses)
-					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEYES))
+					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEYES, 0, H.wear_mask.body_parts_visible_override))
 
 			if(H.head)
 				if(prob(CLEAN_PROB) && H.head.clean_blood())
@@ -514,6 +520,12 @@
 	M.clean_blood()
 	if(ishuman(M))
 		M:update_inv_gloves()
+		var/mob/living/carbon/human/HM = M
+
+		if(!HM.gloves && HM.species && HM.species.anatomy_flags & ACID4WATER)
+			HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
+			HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
+
 	for(var/mob/V in viewers(src, null))
 		V.show_message("<span class='notice'>[M] washes their hands using \the [src].</span>")
 
@@ -559,6 +571,11 @@
 			RG.reagents.add_reagent(WATER, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
+
+	if(istype(O,/obj/item/trash/plate))
+		var/obj/item/trash/plate/the_plate = O
+		the_plate.clean = TRUE
+		O.update_icon()
 
 	else if (istype(O, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = O

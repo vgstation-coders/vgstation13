@@ -58,12 +58,24 @@
 			to_chat(user, "<span class='notice'>You add plasma glass panes to \the [name].</span>")
 			plasma.use(1)
 			qdel(src)
+
 /obj/item/weapon/table_parts/attack_self(mob/user)
-	if(locate(/obj/structure/table) in get_turf(user))
+	preattack(get_turf(user), user, 1)
+
+/obj/item/weapon/table_parts/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = 1
+	if(!proximity_flag)
+		return
+	if(!isturf(target))
+		return ..()
+	var/turf/T = target
+	if(locate(/obj/structure/table) in T)
 		to_chat(user, "<span class='warning'>There is already a table here!</span>")
 		return
-
-	new table_type(user.loc)
+	if(T.density)
+		to_chat(user, "<span class='warning'>You can't build there!</span>")
+		return
+	new table_type(T)
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
 
