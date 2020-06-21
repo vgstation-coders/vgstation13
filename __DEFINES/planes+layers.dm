@@ -175,6 +175,7 @@ What is the naming convention for planes or layers?
 	// OBJ_LAYER 	 				3
 	// ABOVE_OBJ_LAYER				4
 	#define CLOSED_CURTAIN_LAYER	5
+	#define CHAT_LAYER				6
 
 #define BLOB_PLANE 				17			// For Blobs, which are above humans.
 
@@ -195,7 +196,6 @@ What is the naming convention for planes or layers?
 	#define ABOVE_SINGULO_LAYER 	7
 	#define GRAVITYGRID_LAYER 		8
 	#define SNOW_OVERLAY_LAYER		9
-	#define CHAT_LAYER 12.1
 
 #define GHOST_PLANE 			19			// Ghosts show up under lighting, HUD etc.
 
