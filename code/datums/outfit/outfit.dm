@@ -164,7 +164,8 @@
 			H.equip_or_collect(new item_type(H.back), slot_in_backpack)
 		if (equip_survival_gear.len)
 			if (ispath(equip_survival_gear[species]))
-				H.equip_or_collect(new equip_survival_gear[species](H.back), slot_in_backpack)
+				var/path = equip_survival_gear[species]
+				H.equip_or_collect(new path(H.back), slot_in_backpack)
 		else if (equip_survival_gear) //
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 
