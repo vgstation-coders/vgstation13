@@ -38,9 +38,7 @@
 		to_chat(user, "<span class='notice'>You start wrapping \the [target] with \the [src].</span>")
 		if(do_after(user, target, 10))
 			afterattack(target, user, proximity_flag)//this item is now wrapped!
-			return 1
-		else
-			return 1
+		return 1
 	else
 		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
 	
