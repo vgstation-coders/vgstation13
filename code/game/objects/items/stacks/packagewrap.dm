@@ -31,6 +31,20 @@
 		/obj/structure/stackopacks
 		)
 
+/obj/item/stack/package_wrap/preattack(var/obj/target, var/mob/user, var/proximity_flag)
+	if(!istype(target, /atom/movable) || !proximity_flag)
+		return
+	if(!is_type_in_list(target, cannot_wrap))
+		to_chat(user, "<span class='notice'>You start wrapping \the [target] with \the [src].</span>")
+		if(do_after(user, target, 10))
+			afterattack(target, user, proximity_flag)//this item is now wrapped!
+			return 1
+		else
+			return 1
+	else
+		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
+	
+
 /obj/item/stack/package_wrap/afterattack(var/attacked, mob/user as mob, var/proximity_flag)
 	var/atom/movable/target = attacked
 	if(!istype(target))
