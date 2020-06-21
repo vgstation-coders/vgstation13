@@ -84,7 +84,7 @@
 	return
 
 /datum/outfit/proc/pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip)
-	if (H.client.IsByondMember())
+	if (H.client && H.client.IsByondMember())
 		to_chat(H, "Thank you for supporting BYOND!")
 		items_to_collect[/obj/item/weapon/storage/box/byond] = GRASP_LEFT_HAND
 
@@ -155,10 +155,8 @@
 
 	// -- The (wo)man has a backpack, let's put stuff in them
 	var/special_items
-	if (H.mind && H.mind.role_alt_title in special_items)
+	if (H.mind)
 		special_items = alt_title_items_to_collect[H.mind.role_alt_title]
-	else
-		special_items = alt_title_items_to_collect[1]
 
 	if (chosen_backpack)
 		H.equip_to_slot_or_del(new chosen_backpack(H), slot_back, 1)
@@ -166,7 +164,7 @@
 			H.equip_or_collect(new item_type(H.back), slot_in_backpack)
 		if (equip_survival_gear.len)
 			if (ispath(equip_survival_gear[species]))
-				H.equip_or_collect(new equip_survival_gear(H.back), slot_in_backpack)
+				H.equip_or_collect(new equip_survival_gear[species](H.back), slot_in_backpack)
 		else if (equip_survival_gear) //
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 
