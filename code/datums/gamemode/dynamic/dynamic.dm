@@ -337,6 +337,7 @@ var/stacking_limit = 90
 	var/datum/dynamic_ruleset/roundstart/starting_rule
 
 	while(!starting_rule && drafted_rules.len > 0)
+		message_admins("Drafted rules: [json_encode(drafted_rules)]")
 		starting_rule = pickweight(drafted_rules)
 		if (threat < stacking_limit && no_stacking)
 			for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
