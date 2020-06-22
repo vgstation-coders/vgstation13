@@ -11,7 +11,7 @@
 
 /obj/item/weapon/implant/exile
 	name = "exile"
-	desc = "Prevents returning to where you were implanted"
+	desc = "Prevents returning to where you were implanted."
 	var/illegalZ = null
 	var/mob/living/theExile = null
 	var/siteOfImplant = null
