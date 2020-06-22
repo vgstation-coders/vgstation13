@@ -1,6 +1,4 @@
 
-//There now it's fun
-
 /obj/item/weapon/implanter/exile
 	name = "implanter-exile"
 
@@ -12,7 +10,7 @@
 
 /obj/item/weapon/implant/exile
 	name = "exile"
-	desc = "Prevents returning to where you were implanted"
+	desc = "Prevents returning to where you were implanted."
 	var/illegalZ = null
 	var/mob/living/theExile = null
 	var/siteOfImplant = null
@@ -30,9 +28,9 @@
 <b>For non-permanent use a disable phrase may be assigned on application.<BR>"}
 	return dat
 
-/obj/item/weapon/implant/exile/implanted(mob/source as mob)
+/obj/item/weapon/implant/exile/implanted(mob/source, mob/user)
 	theExile = source
-	disablePhrase = input("Choose phrase to disable:") as text
+	disablePhrase = stripped_input(user, "Choose a phrase that disables the implant:")
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
 	disablePhrase = sanitize_simple(disablePhrase, replacechars)
 	addHear()
@@ -45,25 +43,23 @@
 
 /obj/item/weapon/implant/exile/proc/zBan()
 	var/turf/T = get_turf(src)
-	switch(beenSpaced)
-		if(FALSE)
-			if(T.z != illegalZ)
-				beenSpaced = TRUE
-		if(TRUE)
-			if((T.z == illegalZ) && (!beingDeported))
-				beingDeported = TRUE
-				teleDeport()
+	if(!beenSpaced)
+		if(T.z != illegalZ)
+			beenSpaced = TRUE
+	else if((T.z == illegalZ) && (!beingDeported))
+		beingDeported = TRUE
+		teleDeport()
 
 /obj/item/weapon/implant/exile/proc/teleDeport()
-	to_chat(theExile, "<span class='notice'>Your insides churn and your skin tingles. Your [part] is emitting a low hum.</span>")
+	to_chat(theExile, "<span class='notice'>Your insides churn and your skin tingles. Something in your body is emitting a low hum.</span>")
 	spawn(10 SECONDS)
 		var/turf/T = get_turf(src)
 		if(T.z == illegalZ)
 			var/warpZ = pick(zlevels)
-			var/warpTo = locate(rand(5,world.maxx - 10), rand(5, world.maxy - 10), warpZ)
+			var/warpTo = locate(rand(TRANSITIONEDGE,world.maxx - TRANSITIONEDGE), rand(TRANSITIONEDGE, world.maxy - TRANSITIONEDGE), warpZ)
 			var/W = get_turf(warpTo)
 			if(!istype(W, /turf/space))
-				to_chat(theExile, "<span class='notice'>Your [part] buzzes. The tingling stops.</span>")
+				to_chat(theExile, "<span class='notice'>Something inside your body buzzes. The tingling stops.</span>")
 				sleep(3 SECONDS)
 				beingDeported = FALSE
 				return
@@ -73,7 +69,7 @@
 			theExile.adjustBruteLoss(rand(0,5))
 			theExile.adjustCloneLoss(rand(0,5)) //Uh oh it missed a few chromosomes
 		else
-			to_chat(theExile, "<span class='notice'>Your [part] emits a feint chime. The tingling stops.</span>")
+			to_chat(imp_in, "<span class='notice'>Something inside your body emits a feint chime. The tingling stops.</span>")
 		beingDeported = FALSE
 
 /obj/item/weapon/implant/exile/emp_act()
@@ -84,7 +80,7 @@
 	#define FREEDOM 1
 	#define RANDOM_TELEPORT 2
 	#define IMPLANTED_SITE_PORT 3
-	switch(pick(1,2,3))
+	switch(pick(FREEDOM,RANDOM_TELEPORT,IMPLANTED_SITE_PORT))
 		if(FREEDOM)
 			freeFromExile()
 		if(RANDOM_TELEPORT)
@@ -100,7 +96,11 @@
 			M.Knockdown(3)
 			M.Stun(3)
 	spawn(20)
-		malfunction--
+		malfunction = 0
+	#undef FREEDOM
+	#undef RANDOM_TELEPORT
+	#undef IMPLANTED_SITE_PORT
+
 
 /obj/item/weapon/implant/exile/Hear(var/datum/speech/speech, var/rendered_speech="")
 	hear(speech.message)
@@ -109,6 +109,8 @@
 /obj/item/weapon/implant/exile/hear(var/msg)
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
 	msg = sanitize_simple(msg, replacechars)
+	if(!disablePhrase)
+		return 0
 	if(findtext(msg, disablePhrase))
 		freeFromExile()
 
@@ -119,6 +121,7 @@
 	imp_in = null
 	theExile.on_moved.Remove(zBanishment_key)
 	src.forceMove(siteOfImplant)
+	theExile = null
 
 /obj/item/weapon/implantcase/exile
 	name = "Glass Case- 'Exile'"
