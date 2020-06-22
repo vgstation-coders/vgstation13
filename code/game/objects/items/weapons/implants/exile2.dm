@@ -69,14 +69,13 @@
 			theExile.adjustBruteLoss(rand(0,5))
 			theExile.adjustCloneLoss(rand(0,5)) //Uh oh it missed a few chromosomes
 		else
-			to_chat(imp_in, "<span class='notice'>Something inside your body emits a feint chime. The tingling stops.</span>")
+			to_chat(theExile, "<span class='notice'>Something inside your body emits a feint chime. The tingling stops.</span>")
 		beingDeported = FALSE
 
 /obj/item/weapon/implant/exile/emp_act()
 	if(malfunction)
 		return
 	malfunction = 1
-	var/mob/living/M = imp_in
 	#define FREEDOM 1
 	#define RANDOM_TELEPORT 2
 	#define IMPLANTED_SITE_PORT 3
@@ -84,17 +83,17 @@
 		if(FREEDOM)
 			freeFromExile()
 		if(RANDOM_TELEPORT)
-			var/empLoc = locate(rand(5,world.maxx - 10), rand(5, world.maxy - 10), pick(zlevels))
+			var/empLoc = locate(rand(TRANSITIONEDGE,world.maxx - TRANSITIONEDGE), rand(TRANSITIONEDGE, world.maxy - TRANSITIONEDGE), pick(zlevels))
 			var/W = get_turf(empLoc)
 			if(!istype(W, /turf/space))
 				empLoc = siteOfImplant
-			do_teleport(M, empLoc, 20)
-			M.Knockdown(3)
-			M.Stun(3)
+			do_teleport(theExile, empLoc, 20)
+			theExile.Knockdown(3)
+			theExile.Stun(3)
 		if(IMPLANTED_SITE_PORT)
-			do_teleport(M, siteOfImplant, 20)
-			M.Knockdown(3)
-			M.Stun(3)
+			do_teleport(theExile, siteOfImplant, 20)
+			theExile.Knockdown(3)
+			theExile.Stun(3)
 	spawn(20)
 		malfunction = 0
 	#undef FREEDOM
@@ -114,10 +113,9 @@
 	if(findtext(msg, disablePhrase))
 		freeFromExile()
 
-/obj/item/weapon/implant/exile/proc/freeFromExile(var/mob/living/M)
-	M = imp_in
-	playsound(M, "sound/machines/notify.ogg", 100, 1)
-	to_chat(M, "<span class='notice'>You feel a sudden shooting pain. The film-like sensation fades. Your implant has jaunted out of your body.</span>" )
+/obj/item/weapon/implant/exile/proc/freeFromExile()
+	playsound(theExile, "sound/machines/notify.ogg", 100, 1)
+	to_chat(theExile, "<span class='notice'>You feel a sudden shooting pain. The film-like sensation fades. Your implant has jaunted out of your body.</span>" )
 	imp_in = null
 	theExile.on_moved.Remove(zBanishment_key)
 	src.forceMove(siteOfImplant)
