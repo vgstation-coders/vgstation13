@@ -83,7 +83,7 @@
 	#define FREEDOM 1
 	#define RANDOM_TELEPORT 2
 	#define IMPLANTED_SITE_PORT 3
-	switch(pick(1,2,3))
+	switch(pick(FREEDOM,RANDOM_TELEPORT,IMPLANTED_SITE_PORT))
 		if(FREEDOM)
 			freeFromExile()
 		if(RANDOM_TELEPORT)
