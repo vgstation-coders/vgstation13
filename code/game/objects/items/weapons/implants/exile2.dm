@@ -51,7 +51,7 @@
 		teleDeport()
 
 /obj/item/weapon/implant/exile/proc/teleDeport()
-	to_chat(theExile, "<span class='notice'>Your insides churn and your skin tingles. Something in your body is emitting a low hum.</span>")
+	to_chat(theExile, "<span class='notice'>Your insides churn and your skin tingles. Something inside your body is emitting a low hum.</span>")
 	spawn(10 SECONDS)
 		var/turf/T = get_turf(src)
 		if(T.z == illegalZ)
