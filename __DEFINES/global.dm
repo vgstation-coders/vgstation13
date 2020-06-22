@@ -436,7 +436,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/mining_drone,					// This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
 		/mob/living/simple_animal/bee,									// Aren't set up to be playable
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
-		/mob/living/simple_animal/hostile/bunnybot						// See viscerator
+		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
 		)
 
 //Boss monster list
