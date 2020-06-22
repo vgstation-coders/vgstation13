@@ -29,7 +29,7 @@
 <b>For non-permanent use a disable phrase may be assigned on application.<BR>"}
 	return dat
 
-/obj/item/weapon/implant/exile/implanted(mob/source as mob)
+/obj/item/weapon/implant/exile/implanted(mob/source, mob/user)
 	theExile = source
 	disablePhrase = stripped_input(user, "Choose phrase to disable:")
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
