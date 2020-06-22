@@ -1,5 +1,4 @@
 
-//There now it's fun
 
 /obj/item/weapon/implanter/exile
 	name = "implanter-exile"
