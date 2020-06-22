@@ -35,10 +35,12 @@
 	if(!istype(target, /atom/movable) || !proximity_flag)
 		return
 	if(!is_type_in_list(target, cannot_wrap))
-		to_chat(user, "<span class='notice'>You start wrapping \the [target] with \the [src].</span>")
-		if(do_after(user, target, 10))
-			afterattack(target, user, proximity_flag)//this item is now wrapped!
-		return 1
+		if(istype(target, /obj/item/weapon/storage))
+			to_chat(user, "<span class='notice'>You start wrapping \the [target] with \the [src].</span>")
+			if(do_after(user, target, 10))
+				afterattack(target, user, proximity_flag)//this item is now wrapped!
+				return 1 //don't put wrap in box after you wrap it
+		return 0//proceed as normally (put wrap in box)
 	else
 		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
 	
