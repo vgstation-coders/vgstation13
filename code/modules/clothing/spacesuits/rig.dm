@@ -35,7 +35,11 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	update_brightness()
 
 /obj/item/clothing/head/helmet/space/rig/Destroy()
-	rig = null
+	if(rig)
+		if(rig.H == src) //Two-timing suits!?
+			rig.deactivate_suit()
+			rig.H = null
+		rig = null
 	..()
 
 /obj/item/clothing/head/helmet/space/rig/examine(mob/user)
@@ -103,6 +107,8 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		if(RS.head_type && istype(src, RS.head_type)) //It's my suit! It was made for me!
 			rig = user.wear_suit
 			canremove = FALSE
+			RS.H = src
+			RS.all_hardsuit_parts.Add(src)
 
 /obj/item/clothing/suit/space/rig
 	name = "engineering hardsuit"
@@ -128,7 +134,6 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	var/obj/item/weapon/tank/T = null
 	var/obj/item/weapon/cell/cell = null
 	var/list/all_hardsuit_parts = list()
-	var/list/external_hardsuit_parts = list()
 
 	var/head_type = /obj/item/clothing/head/helmet/space/rig
 	var/boots_type =  null
@@ -156,8 +161,6 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		T = new tank_type(src)
 	for(var/part in list(H,G,T,MB))
 		all_hardsuit_parts += part
-	for(var/part in list(H,G,MB))
-		external_hardsuit_parts += part
 	if(initial_modules && initial_modules.len)
 		for(var/path in initial_modules)
 			var/obj/item/rig_module/new_module = new path(src)
@@ -218,7 +221,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	wearer = null
 
 /obj/item/clothing/suit/space/rig/proc/is_fully_equipped()
-	if(!istype(wearer) || loc != wearer || wearer.wear_suit != src)
+	if(wearer?.wear_suit != src || loc != wearer)
 		return FALSE
 	if(head_type && !(H && wearer.head == H))
 		return FALSE
@@ -241,7 +244,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		process_rig_modules()
 
 /obj/item/clothing/suit/space/rig/proc/process_rig_modules()
-	if(istype(wearer) && wearer.timestopped)
+	if(wearer?.timestopped)
 		return
 
 	for(var/obj/item/rig_module/R in modules)
@@ -253,17 +256,18 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 			R.do_process()
 
 /obj/item/clothing/suit/space/rig/proc/check_builtin_pieces()
-	var/mob/living/M = null
-
-	for(var/obj/item/piece in external_hardsuit_parts)
-		if(piece && piece.loc != src && !(wearer && wearer.is_wearing_item(piece)))
+	for(var/obj/item/piece in all_hardsuit_parts)
+		if(isnull(piece))
+			all_hardsuit_parts.Remove(piece)
+			continue
+		if(piece?.loc != src && !(wearer?.is_wearing_item(piece)))
 			if(istype(piece.loc, /mob/living))
-				M = piece.loc
+				var/mob/living/M = piece.loc
 				M.drop_from_inventory(piece)
 			piece.forceMove(src)
 
 /obj/item/clothing/suit/space/rig/proc/toggle_suit()
-	if(!wearer.is_wearing_item(src, slot_wear_suit))
+	if(!wearer?.is_wearing_item(src, slot_wear_suit))
 		return
 	if(!activated)
 		initialize_suit()
@@ -275,7 +279,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		for(var/piece in all_hardsuit_pieces)
 			toggle_piece(piece, wearer, ONLY_DEPLOY)
 	if(is_fully_equipped()) //Fully equipped? GOOD!
-		if(H && wearer.is_wearing_item(H, slot_head)) //I know we JUST ran a check, but still...
+		if(H && wearer?.is_wearing_item(H, slot_head)) //I know we JUST ran a check, but still...
 			H.toggle_light(wearer) //Lights on
 			if(T && (wearer.wear_mask?.clothing_flags & MASKINTERNALS)) //We have a built-in tank, mask and our built-in helmet is equipped.
 				wearer.toggle_internals(wearer, T)
@@ -295,9 +299,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	activated = FALSE
 
 /obj/item/clothing/suit/space/rig/proc/toggle_piece(var/piece, var/mob/living/initiator, var/deploy_mode)
-	if(!cell || !cell.charge)
-		return
-	if(!wearer)
+	if(!cell?.charge || !wearer || !piece)
 		return
 	if(initiator == wearer && wearer.incapacitated()) // If the initiator isn't wearing the suit it's probably something like an AI/Bus.
 		return
@@ -328,7 +330,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 				if(istype(holder))
 					if(use_obj && check_slot == use_obj)
 						if(wearer.remove_from_mob(use_obj))
-							to_chat(wearer, "<font color='blue'><b>Your [use_obj.name] retracts swiftly.</b></font>")
+							to_chat(wearer, "\The [src] reports: <span class = 'binaryradio'>[use_obj.name] retracted successfully.</span>")
 						use_obj.forceMove(src)
 		else
 			if(deploy_mode != ONLY_RETRACT)
@@ -339,10 +341,10 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 					use_obj.forceMove(src)
 					if(check_slot)
 						if(initiator)
-							to_chat(initiator, "<span class='danger'>You are unable to deploy \the [use_obj.name] as \the [check_slot] [check_slot.gender == PLURAL ? "are" : "is"] in the way.</span>")
+							to_chat(initiator, "\The [src] reports: <span class = 'binaryradio'>ERROR: Unable to deploy \the [use_obj.name] as \the [check_slot] [check_slot.gender == PLURAL ? "are" : "is"] in the way.</span>")
 						return
 				else
-					to_chat(wearer, "<span class='notice'>\The [use_obj.name] deploys swiftly.</span>")
+					to_chat(wearer, "\The [src] reports: <span class = 'binaryradio'>[use_obj.name] deployed successfully.</span>")
 
 /obj/item/clothing/suit/space/rig/verb/toggle_helmet()
 

@@ -2443,7 +2443,7 @@
 		return 1
 
 	M.heal_organ_damage(0, 2 * REM)
-
+	
 /datum/reagent/dermaline
 	name = "Dermaline"
 	id = DERMALINE
@@ -2860,8 +2860,6 @@
 	density = 1.96
 	specheatcap = 0.57
 
-
-
 /datum/reagent/bicaridine/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
@@ -2895,6 +2893,25 @@
 		return 1
 
 	M.heal_organ_damage(2 * REM)
+
+
+/datum/reagent/drink/blisterol
+	name = "Blisterol"
+	id = BLISTEROL
+	description = "Blisterol is a deprecated drug used to treat wounds. Renamed and marked as deprecated due to its tendency to cause blisters."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8A5DC"
+	density = 1.8
+	specheatcap = 3
+	adj_temp = 40
+	custom_metabolism = 1 //goes through you fast
+
+/datum/reagent/blisterol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	
+	 M.heal_organ_damage(4 * REM, -1 * REM) //heal 2 brute, cause 0.5 burn
 
 /datum/reagent/hyperzine
 	name = "Hyperzine"
@@ -3412,7 +3429,7 @@
 /datum/reagent/methylin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 	M.adjustBrainLoss(1)
-
+	
 /datum/reagent/bicarodyne
 	name = "Bicarodyne"
 	id = BICARODYNE
@@ -3869,6 +3886,48 @@
 	if(M.nutrition < 0) //Prevent from going into negatives
 		M.nutrition = 0
 
+/datum/reagent/dietine
+	name = "Dietine"
+	id = DIETINE
+	description = "An uncommon makeshift weight loss aid. Mildly toxic, moreso in larger doses."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#BBEDA4" //rgb: 187, 237, 164
+	density = 1.44
+	specheatcap = 60
+	overdose_am = 5
+	
+	var/on_a_diet
+	var/oldmetabolism
+
+/datum/reagent/dietine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	
+	if(prob(5))
+		M.adjustToxLoss(1)
+	
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!on_a_diet)
+			oldmetabolism = H.calorie_burn_rate
+			on_a_diet = TRUE
+			H.calorie_burn_rate += H.calorie_burn_rate * 3
+		if(prob(8))
+			H.vomit(0,1)
+			
+/datum/reagent/dietine/reagent_deleted()
+	if(ishuman(holder.my_atom))
+		var/mob/living/carbon/human/H = holder.my_atom
+		H.calorie_burn_rate -= oldmetabolism / 3
+		on_a_diet = FALSE
+
+/datum/reagent/dietine/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(1)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M	
+		H.vomit(0,1)
+
 /datum/reagent/soysauce
 	name = "Soysauce"
 	id = SOYSAUCE
@@ -3927,6 +3986,35 @@
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFACD" //LEMONCHIFFON
+	
+/datum/reagent/drink/gatormix
+	name = "Gator Mix"
+	id = GATORMIX
+	description = "A vile sludge of mixed carbohydrates. Makes people more alert. May cause kidney damage in large doses."
+	nutriment_factor = 8 * REAGENTS_METABOLISM //get fat, son
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#A41D77"
+	adj_dizzy = -5
+	adj_drowsy = -5
+	adj_sleepy = -5
+	adj_temp = 10
+	overdose_am = 50
+	
+/datum/reagent/gatormix/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	
+	if(ishuman(M) && prob(20))
+		var/mob/living/carbon/human/H = M
+		H.Jitter(5)
+		
+/datum/reagent/gatormix/on_overdose(var/mob/living/M)
+
+	if(ishuman(M) && prob(5))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/killdney = H.get_kidneys()
+		killdney.damage++
+
 
 /datum/reagent/capsaicin
 	name = "Capsaicin Oil"
@@ -4695,6 +4783,11 @@
 						L.take_damage(0.1, 1)
 					H.adjustToxLoss(0.13)
 					holder.remove_reagent(src.id, 0.5 * FOOD_METABOLISM)
+
+/datum/reagent/discount/mannitol
+	name = "Mannitol"
+	id = MANNITOL
+	description = "The only medicine a <B>REAL MAN</B> needs."
 
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"
@@ -5922,6 +6015,52 @@
 		to_chat(M, "<span class='notice'>You feel hungry like the diona.</span>")
 		M.add_spell(spell)
 
+/datum/reagent/ethanol/magicadeluxe
+	name = "Magica Deluxe"
+	id = MAGICADELUXE
+	description = "Makes you feel enchanted until the aftertaste hits you."
+	color = "#009933" //rgb(0, 153, 51)
+	
+/datum/reagent/ethanol/magicadeluxe/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(M.spell_list.len)
+		return //one per customer, magicians need not apply
+	var/list/fake_spells = list()
+	var/list/choices = getAllWizSpells()
+	for(var/i=5; i > 0; i--)
+		var/spell/passive/fakespell = new /spell/passive
+		var/name_modifier = pick("Efficient ","Efficient ","Free ", "Instant ")
+		fakespell.spell_flags = STATALLOWED
+		var/spell/readyup = pick_n_take(choices)
+		var/spell/fromwhichwetake = new readyup
+		fakespell.name = fromwhichwetake.name
+		fakespell.desc = fromwhichwetake.desc
+		fakespell.hud_state = fromwhichwetake.hud_state
+		fakespell.invocation = "MAH'JIK"
+		fakespell.invocation_type = SpI_SHOUT
+		fakespell.charge_type = Sp_CHARGES
+		fakespell.charge_counter = 0
+		fakespell.charge_max = 1
+		if(prob(20))
+			fakespell.name = name_modifier + fakespell.name
+		fake_spells += fakespell
+	if(!M.spell_list.len) //just to be sure
+		to_chat(M, "<span class='notice'>You feel magical!</span>")
+		playsound(M,'sound/effects/summon_guns.ogg', 50, 1)
+		for (var/spell/majik in fake_spells)
+			M.add_spell(majik)
+		
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/spell/thisisdumb = new /spell/targeted/equip_item/robesummon
+			H.add_spell(thisisdumb)
+			thisisdumb.charge_type = Sp_CHARGES
+			thisisdumb.charge_counter = 1
+			thisisdumb.charge_max = 1		
+			H.cast_spell(thisisdumb,list(H))
+		holder.remove_reagent(MAGICADELUXE,5)
+
 /datum/reagent/ethanol/deadrum
 	name = "Deadrum"
 	id = RUM
@@ -6439,6 +6578,13 @@
 	description = "Triple sec, Cinnamon Whisky, and Tequila, eugh. Less a cocktail more than throwing whatever's on the shelf in a glass."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#f0133c" //rgb: 240, 19, 60
+	
+/datum/reagent/ethanol/deadrum/magica
+	name = "Magica"
+	id = MAGICA
+	description = "A bitter mix with a burning aftertaste."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#774F1B"
 
 /datum/reagent/ethanol/deadrum/b52
 	name = "B-52"

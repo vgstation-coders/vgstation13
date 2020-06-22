@@ -250,6 +250,7 @@ var/stacking_limit = 90
 		rule.mode = src
 		rule.candidates = candidates.Copy()
 		rule.trim_candidates()
+
 		if (rule.ready(1))//ignoring enemy job requirements
 			picking_roundstart_rule(list(rule))
 			forced_rules++
@@ -298,7 +299,7 @@ var/stacking_limit = 90
 
 	var/i = 0
 	var/list/drafted_rules = list()
-	
+
 	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
 		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
 			i++																			//we check whether we've got eligible players

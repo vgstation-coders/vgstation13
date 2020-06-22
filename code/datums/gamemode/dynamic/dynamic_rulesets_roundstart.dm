@@ -330,6 +330,7 @@
 
 	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
 	var/operatives = operative_cap[indice_pop]
+	message_admins("[name]: indice_pop = [indice_pop], operatives = [operatives]")
 	var/leader = 1
 	for(var/operatives_number = 1 to operatives)
 		if(candidates.len <= 0)

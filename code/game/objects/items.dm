@@ -170,20 +170,6 @@
 /obj/item/proc/suicide_act(mob/user)
 	return
 
-/obj/item/verb/move_to_top()
-	set name = "Move To Top"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!istype(loc, /turf) || usr.isUnconscious() || usr.restrained())
-		return
-
-	var/turf/T = loc
-
-	forceMove(null)
-
-	forceMove(T)
-
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
 	if(!size)
 		switch(w_class)

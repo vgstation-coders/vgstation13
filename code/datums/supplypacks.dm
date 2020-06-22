@@ -1011,6 +1011,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_armory)
 	group = "Security"
 
+/datum/supply_packs/exile
+	name = "Exile implants"
+	contains = list (/obj/item/weapon/storage/lockbox/exile)
+	cost = 150
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "exile implant crate"
+	access = list(access_armory)
+	group = "Security"
+
 /datum/supply_packs/tracking
 	name = "Tracking implants"
 	contains = list (/obj/item/weapon/storage/lockbox/tracking)

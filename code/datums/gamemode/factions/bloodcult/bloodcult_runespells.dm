@@ -852,14 +852,14 @@
 	var/turf/T = R.loc
 	var/list/targets = list()
 
-	//first lets check for a victim above
+	//first lets check for a victim on top of the rune
 	for (var/mob/living/silicon/S in T) // Has science gone too far????
 		if (S.cult_permitted || Holiday == APRIL_FOOLS_DAY)
 			if (!iscultist(S))
 				targets.Add(S)
 
-	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
-		if (!iscultist(C))
+	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons. (unless it's April 1st)
+		if (!iscultist(C) && !C.isDead())//no more corpse conversions!
 			targets.Add(C)
 	if (targets.len > 0)
 		victim = pick(targets)

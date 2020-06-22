@@ -453,7 +453,7 @@
 		return
 	if(is_locking(lock_type))
 		var/choices = list(
-			list("Remove Blade", "radial_altar_remove", "Transfer some of your blood to the blade to repair it and refuel its blood level, or you could just slash someone."),
+			list("Remove Blade", "radial_altar_remove", "Pull the blade off, freeing the victim."),
 			list("Sacrifice", "radial_altar_sacrifice", "Initiate the sacrifice ritual. The ritual can only proceed if the proper victim has been nailed to the altar."),
 			)
 		var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
