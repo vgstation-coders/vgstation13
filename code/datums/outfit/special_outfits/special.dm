@@ -16,7 +16,6 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/wizard,
-			slot_head_str = /obj/item/clothing/head/helmet/space/rig/wizard,
 			slot_gloves_str = /obj/item/clothing/gloves/purple,
 			slot_shoes_str = /obj/item/clothing/shoes/sandal,
 		),
@@ -27,7 +26,6 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/nazi,
-			slot_head_str = /obj/item/clothing/head/helmet/space/rig/nazi,
 		),
 	)
 
@@ -36,12 +34,11 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/soviet,
-			slot_head_str = /obj/item/clothing/head/helmet/space/rig/soviet,
 		),
 	)
 
-/datum/outfit/special/dread_gear
-	outfit_name = "Judge Dread"
+/datum/outfit/special/dreed_gear
+	outfit_name = "Judge Dreed"
 	items_to_spawn = list(
 		"Default" = list(
 			slot_w_uniform_str = /obj/item/clothing/under/darkred,
@@ -74,7 +71,6 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig,
-			slot_head_str = /obj/item/clothing/head/helmet/space/rig,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
@@ -85,7 +81,6 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/elite,
-			slot_head_str = /obj/item/clothing/head/helmet/space/rig/elite,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
@@ -96,7 +91,6 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/mining,
-			slot_head_str = /obj/item/clothing/head/helmet/space/rig/mining,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
@@ -107,7 +101,6 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/syndi,
-			slot_head_str = /obj/item/clothing/head/helmet/space/rig/syndi,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
@@ -118,7 +111,6 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/medical,
-			slot_head_str = /obj/item/clothing/head/helmet/space/rig/medical,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
@@ -129,7 +121,6 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/atmos,
-			slot_head_str = /obj/item/clothing/head/helmet/space/rig/atmos,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
@@ -297,13 +288,13 @@
 			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/apron,
 			slot_wear_mask_str = /obj/item/clothing/mask/surgical,
-			slot_r_store_str = /obj/item/weapon/kitchen/utensil/knife/large,
 			slot_l_store_str = /obj/item/weapon/scalpel,
 		),
 	)
 
 /datum/outfit/special/masked_killer/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/fireaxe(H))
+	H.put_in_hands(new /obj/item/weapon/kitchen/utensil/knife/large(H))
 	for (var/obj/item/I in H) // Everything is bloody
 		I.add_blood(M)
 
@@ -336,13 +327,13 @@
 			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/chaplain_hoodie,
 			slot_r_store_str = /obj/item/weapon/bikehorn,
-			slot_l_store_str = /obj/item/weapon/reagent_containers/food/snacks/grown/banana,
 		),
 	)
 	id_type = /obj/item/weapon/card/id/tunnel_clown
 
 /datum/outfit/special/with_id/tunnel_clown/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/fireaxe(H))
+	H.put_in_hands(new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(H))
 
 /datum/outfit/special/with_id/assassin
 	outfit_name = "Assassin"
@@ -544,6 +535,9 @@
 		),
 	)
 
+/datum/outfit/special/blue_wizard/post_equip(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/weapon/staff(H))
+
 /datum/outfit/special/red_wizard
 	equip_survival_gear = list() // Default survival gear
 	outfit_name = "Red wizard"
@@ -557,11 +551,13 @@
 			slot_head_str = /obj/item/clothing/head/wizard/red,
 			slot_wear_suit_str = /obj/item/clothing/suit/wizrobe/red,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_s_store_str = /obj/item/weapon/staff,
 			slot_r_store_str = /obj/item/weapon/teleportation_scroll,
 			slot_l_store_str = /obj/item/weapon/spellbook,
 		),
 	)
+
+/datum/outfit/special/red_wizard/post_equip(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/weapon/staff(H))
 
 /datum/outfit/special/marisa_wizard
 	equip_survival_gear = list() // Default survival gear
@@ -576,8 +572,10 @@
 			slot_head_str = /obj/item/clothing/head/wizard/marisa,
 			slot_wear_suit_str = /obj/item/clothing/suit/wizrobe/marisa,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_s_store_str = /obj/item/weapon/staff,
 			slot_r_store_str = /obj/item/weapon/teleportation_scroll,
 			slot_l_store_str = /obj/item/weapon/spellbook,
 		),
 	)
+
+/datum/outfit/special/marisa_wizard/post_equip(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/weapon/staff(H))

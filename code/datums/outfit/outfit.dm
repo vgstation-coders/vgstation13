@@ -84,7 +84,7 @@
 	return
 
 /datum/outfit/proc/pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip)
-	if (H.client && H.client.IsByondMember())
+	if (H.client?.IsByondMember())
 		to_chat(H, "Thank you for supporting BYOND!")
 		items_to_collect[/obj/item/weapon/storage/box/byond] = GRASP_LEFT_HAND
 

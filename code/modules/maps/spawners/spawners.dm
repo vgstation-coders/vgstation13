@@ -1422,13 +1422,11 @@
 /obj/abstract/spawn_all/soviet_rigsuit
 	to_spawn = list(
 		/obj/item/clothing/suit/space/rig/soviet,
-		/obj/item/clothing/head/helmet/space/rig/soviet,
 	)
 
 /obj/abstract/spawn_all/nazi_rigsuit
 	to_spawn = list(
 		/obj/item/clothing/suit/space/rig/nazi,
-		/obj/item/clothing/head/helmet/space/rig/nazi,
 	)
 
 /obj/abstract/spawn_all/dredd_gear

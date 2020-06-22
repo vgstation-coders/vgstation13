@@ -849,5 +849,3 @@
 	..()
 	access = get_all_accesses()
 	access += get_all_centcom_access()
-
-/obj/item/weapon/card/id/death_commando_
