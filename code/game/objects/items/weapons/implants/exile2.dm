@@ -31,7 +31,7 @@
 
 /obj/item/weapon/implant/exile/implanted(mob/source as mob)
 	theExile = source
-	disablePhrase = input("Choose phrase to disable:") as text
+	disablePhrase = stripped_input(user, "Choose phrase to disable:")
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
 	disablePhrase = sanitize_simple(disablePhrase, replacechars)
 	addHear()
