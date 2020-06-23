@@ -8,6 +8,74 @@
 /*
  * Security
  */
+ 
+ /*
+ * Formalwear first
+ */
+/obj/item/clothing/under/rank/secformal
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)	
+	
+/obj/item/clothing/under/rank/secformal/headofsecurity_blue
+	name = "\improper HoS' blue dress uniform"
+	desc = "Head of Security's blue uniform. For formal occasions."
+	icon_state = "hosblueclothes"
+	item_state = "ba_suit"
+	_color = "hosblueclothes"
+/obj/item/clothing/under/rank/secformal/headofsecurity_navy
+	name = "\improper HoS' navy dress uniform"
+	desc = "Head of Security's navy uniform. For formal occasions."
+	icon_state = "hosdnavyclothes"
+	item_state = "jensensuit"
+	_color = "hosdnavyclothes"
+/obj/item/clothing/under/rank/secformal/headofsecurity_tan
+	name = "\improper HoS' tan dress uniform"
+	desc = "Head of Security's uniform. For formal occasions."
+	icon_state = "hostanclothes"
+	item_state = "ba_suit"
+	_color = "hostanclothes"
+	
+/obj/item/clothing/under/rank/secformal/warden_blue
+	name = "warden's blue dress uniform"
+	desc = "Warden's blue dress uniform. For formal occasions."
+	icon_state = "wardenblueclothes"
+	item_state = "ba_suit"
+	_color = "wardenblueclothes"
+/obj/item/clothing/under/rank/secformal/warden_navy
+	name = "warden's navy dress uniform"
+	desc = "Warden's navy dress uniform. For formal occasions."
+	icon_state = "wardendnavyclothes"
+	item_state = "jensensuit"
+	_color = "wardendnavyclothes"
+/obj/item/clothing/under/rank/secformal/warden_tan
+	name = "warden's tan dress uniform"
+	desc = "Warden's tan dress uniform. For formal occasions."
+	icon_state = "wardentanclothes"
+	item_state = "ba_suit"
+	_color = "wardentanclothes"
+	
+/obj/item/clothing/under/rank/secformal/officer_blue
+	name = "officer's blue dress uniform"
+	desc = "Security officer's blue dress uniform. For formal occasions."	
+	icon_state = "officerblueclothes"
+	item_state = "ba_suit"
+	_color = "officerblueclothes"
+/obj/item/clothing/under/rank/secformal/officer_navy
+	name = "officer's navy dress uniform"
+	desc = "Security officer's navy dress uniform. For formal occasions."
+	icon_state = "officerdnavyclothes"
+	item_state = "jensensuit"
+	_color = "officerdnavyclothes"
+/obj/item/clothing/under/rank/secformal/officer_tan
+	name = "officer's tan dress uniform"
+	desc = "Security officer's tan dress uniform. For formal occasions."
+	icon_state = "officertanclothes"
+	item_state = "ba_suit"
+	_color = "officertanclothes"
+ 
+ /*
+ * Normalwear
+ */
+ 
 /obj/item/clothing/under/rank/warden
 	desc = "A jumpsuit made of strong material, providing robust protection. It has the word \"WARDEN\" written on the shoulders."
 	name = "warden's jumpsuit"

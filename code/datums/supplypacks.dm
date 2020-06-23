@@ -729,6 +729,26 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "contacts crate"
 	group = "Clothing"
+	
+/datum/supply_packs/security_formal_wear
+	contains = list(/obj/item/clothing/head/beret/headofsecurity,
+					/obj/item/clothing/head/beret/warden,
+					/obj/item/clothing/head/beret/officer,
+					/obj/item/clothing/suit/secdressjacket/hos_navy,
+					/obj/item/clothing/suit/secdressjacket/warden_navy,
+					/obj/item/clothing/suit/secdressjacket/officer_navy,
+					/obj/item/clothing/under/rank/secformal/headofsecurity_navy,
+					/obj/item/clothing/under/rank/secformal/warden_navy,
+					/obj/item/clothing/under/rank/secformal/officer_navy,
+					/obj/item/clothing/shoes/secshoes,
+					/obj/item/clothing/shoes/secshoes,
+					/obj/item/clothing/shoes/secshoes)
+	name = "security formalwear closet"
+	cost = 30
+	containertype = /obj/structure/closet/secure_closet/security/empty
+	containername = "security formalwear crate"
+	access = list(access_security)
+	group = "Clothing"
 
 //Winter Coats//
 

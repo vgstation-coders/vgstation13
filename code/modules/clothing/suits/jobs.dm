@@ -122,51 +122,54 @@
 
 /obj/item/clothing/suit/secdressjacket
 	body_parts_covered = FULL_TORSO|ARMS
+	name = ""
+	desc = ""
+	icon_state = ""
 
 //Head of Security
-/obj/item/clothing/suit/secdressjacket/hosblue
+/obj/item/clothing/suit/secdressjacket/hos_blue
 	name = "\improper HoS' blue dress jacket"
 	desc = "A blue dress jacket for the Head of Security."
 	icon_state = "hosbluejacket"
 
-/obj/item/clothing/suit/secdressjacket/hosnavy
+/obj/item/clothing/suit/secdressjacket/hos_navy
 	name = "\improper HoS' navy dress jacket"
 	desc = "A navy dress jacket for the Head of Security."
 	icon_state = "hosdnavyjacket"
 
-/obj/item/clothing/suit/secdressjacket/hostan
+/obj/item/clothing/suit/secdressjacket/hos_tan
 	name = "\improper HoS' tan dress jacket"
 	desc = "A tan dress jacket for the Head of Security."
 	icon_state = "hostanjacket"
 
 //Warden
-/obj/item/clothing/suit/secdressjacket/wardenblue
+/obj/item/clothing/suit/secdressjacket/warden_blue
 	name = "warden's blue dress jacket"
 	desc = "A blue dress jacket for the warden."
 	icon_state = "wardenbluejacket"
 
-/obj/item/clothing/suit/secdressjacket/wardennavy
+/obj/item/clothing/suit/secdressjacket/warden_navy
 	name = "warden's navy dress jacket"
 	desc = "A navy dress jacket for the warden."
 	icon_state = "wardendnavyjacket"
 
-/obj/item/clothing/suit/secdressjacket/wardentan
+/obj/item/clothing/suit/secdressjacket/warden_tan
 	name = "warden's tan dress jacket"
 	desc = "A tan dress jacket for the warden."
 	icon_state = "wardentanjacket"
 
 //Security officer
-/obj/item/clothing/suit/secdressjacket/officerblue
+/obj/item/clothing/suit/secdressjacket/officer_blue
 	name = "officer's blue dress jacket"
 	desc = "A blue dress jacket for a security officer."
 	icon_state = "officerbluejacket"
 
-/obj/item/clothing/suit/secdressjacket/officernavy
+/obj/item/clothing/suit/secdressjacket/officer_navy
 	name = "officer's navy dress jacket"
 	desc = "A navy dress jacket for a security officer."
 	icon_state = "officerdnavyjacket"
 
-/obj/item/clothing/suit/secdressjacket/officertan
+/obj/item/clothing/suit/secdressjacket/officer_tan
 	name = "officer's tan dress jacket"
 	desc = "A tan dress jacket for a security officer."
 	icon_state = "officertanjacket"

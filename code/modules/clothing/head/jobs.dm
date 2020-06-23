@@ -59,6 +59,11 @@
 	icon_state = "dermal"
 	item_state = "dermal"
 	siemens_coefficient = 0.6
+	
+/obj/item/clothing/head/beret/headofsecurity
+	name = "formal Head of Security beret"
+	desc = "A navy beret with a Head of Security rank insignia on it. For formal occasions."
+	icon_state = "hosberet"
 
 //Warden
 /obj/item/clothing/head/warden
@@ -70,6 +75,13 @@
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+	
+/obj/item/clothing/head/beret/warden
+	name = "formal warden beret"
+	desc = "A navy beret with a Warden rank insignia on it. For formal occasions."
+	icon_state = "wardenberet"
+	flags = FPRINT
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 //Head of Personnel
 /obj/item/clothing/head/hopcap
@@ -120,6 +132,13 @@
 	icon_state = "beret_badge"
 	flags = FPRINT
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	
+/obj/item/clothing/head/beret/officer
+	name = "formal security officer beret"
+	desc = "A navy beret with a Security Officer rank insignia on it. For formal occasions."
+	icon_state = "officerberet"
+	flags = FPRINT
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 //Medical
 /obj/item/clothing/head/surgery
@@ -161,3 +180,9 @@
 	name = "dress shoes"
 	desc = "They appear impeccably polished."
 	icon_state = "laceups"
+
+/obj/item/clothing/head/beret/engineering
+	name = "engineering beret"
+	desc = "A yellow-orange beret with a white insignia."
+	icon_state = "e_beret_badge"
+	flags = FPRINT
