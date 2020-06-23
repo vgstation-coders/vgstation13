@@ -33,6 +33,8 @@
 	icon_state = "hostanclothes"
 	item_state = "ba_suit"
 	_color = "hostanclothes"
+/obj/item/clothing/under/rank/secformal/headofsecurity_navy/trimmed
+	_color = "hosdnavyclothestrimmed"
 	
 /obj/item/clothing/under/rank/secformal/warden_blue
 	name = "warden's blue dress uniform"
