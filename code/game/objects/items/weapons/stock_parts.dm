@@ -21,13 +21,12 @@
 	desc = "Used in the construction of computers and other devices with a interactive console."
 	icon_state = "screen"
 	origin_tech = Tc_MATERIALS + "=1"
-	rating = 4 //technically no tier, but given 4 so it does not drop with lower tier parts
 	starting_materials = list(MAT_GLASS = 200)
 	w_type = RECYK_GLASS
 
 /obj/item/weapon/stock_parts/console_screen/rped_rating()
-	// Same as T3 parts so that you don't dump them along with T1 ones.
-	return 3
+	// Same as T4 parts so that you don't dump them along with T1 ones.
+	return 4
 
 /obj/item/weapon/stock_parts/capacitor
 	name = "capacitor"
