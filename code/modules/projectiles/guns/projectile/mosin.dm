@@ -2,7 +2,7 @@
 	name = "mosin nagant"
 	desc = "JOY OF HAVING MOSIN NAGANT RIFLE IS JOY THAT MONEY CANNOT AFFORD. "
 	fire_sound = 'sound/weapons/mosin.ogg'
-	icon = 'icons/obj/mosinbig.dmi' //36x32 file to fit.
+	icon = 'icons/obj/biggun.dmi' 
 	icon_state = "mosinlarge"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
@@ -82,7 +82,7 @@
 	name = "obrez"
 	desc = "WHEN YOU SHOW OBREZ TO ENEMY, HE THINKS YOU ARE CRAZED LUNATIC, LIKE KRUSCHEV POUNDING SHOE ON DESK AND SHOUTING ANGRY PLAN TO BURY NATO IN DEEP GRAVE. YOU FIRE WITH FLAME BURSTING LIKE FIRE OF DRAGON, TWISTING BOLT LIKE MANIAC BETWEEN FIRINGS AND EJECTING EMPTY CASE AS BIG AS BEER CAN FROM ACTION."
 	fire_sound = 'sound/weapons/obrez.ogg'
-	icon = 'icons/obj/mosinbig.dmi'
+	icon = 'icons/obj/biggun.dmi'
 	icon_state = "obrezlarge"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
