@@ -171,7 +171,7 @@
 
 
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags &SILENCECOMP)
+	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags & SILENCECOMP)
 		if(!user.is_holding_item(src))	//if we're not in his hands
 			to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 			return
@@ -219,14 +219,14 @@
 	update_icon()
 	..()
 
-	if(istype(A, /obj/item/gun_part/scope) && gun_flags &SCOPED)
+	if(istype(A, /obj/item/gun_part/scope) && gun_flags & SCOPED)
 		if(scoped)
 			return
 		if(user.drop_item(A, src))
 			to_chat(user, "<span class='notice'>You attach \the [A] onto \the [src].</span>")
 			scoped = A
 			//var/datum/action/item_action/toggle_scope
-			new/datum/action/item_action/toggle_scope(src)
+			new /datum/action/item_action/toggle_scope(src)
 			actions_types += /datum/action/item_action/toggle_scope
 			update_icon()
 			return
@@ -236,7 +236,7 @@
 		return ..()
 	if (loaded.len || stored_magazine || refuse.len)
 		if (load_method == SPEEDLOADER)
-			if(!gun_flags &CHAMBERSPENT)
+			if(!gun_flags & CHAMBERSPENT)
 				var/obj/item/ammo_casing/AC = loaded[1]
 				loaded -= AC
 				AC.forceMove(user.loc)
@@ -271,7 +271,7 @@
 
 /obj/item/weapon/gun/projectile/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	..()
-	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
+	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags & AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
 		var/drop_me = stored_magazine // prevents dropping a fresh/different mag.
 		spawn(automagdrop_delay_time)
 			if((stored_magazine == drop_me) && (loc == user))	//prevent dropping the magazine if we're no longer holding the gun
@@ -292,7 +292,7 @@
 //		if(in_chamber && loaded.len)
 //			to_chat(usr, "It also has a chambered round." {R})
 	if(istype(silenced, /obj/item/gun_part/silencer))
-		to_chat(user, "<span class='warning'>It has a supressor attached to the barrel.</span>")
+		to_chat(user, "<span class='warning'>It has a suppressor attached to the barrel.</span>")
 
 /obj/item/weapon/gun/projectile/proc/getAmmo()
 	var/bullets = 0
@@ -331,6 +331,10 @@
 		to_chat(user, "<span class='notice'>You release \the [scoped] from \the [src].</span>")
 		user.put_in_hands(scoped)
 		scoped = null
+		actions_types -= /datum/action/item_action/toggle_scope
+		for(var/datum/action/A in src.actions)
+			if(istype(A, /datum/action/item_action/toggle_scope))
+				qdel(A)
 	update_icon()
 
 /obj/item/weapon/gun/projectile/verb/RemoveAttachments()
