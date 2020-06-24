@@ -144,7 +144,9 @@
 		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
 
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
-
+	#if EXTOOLS_REFERENCE_TRACKING
+	body += "<option value='?_src_=vars;view_references=\ref[D]'>View references</option>"
+	#endif
 	body += "<option value>---</option>"
 
 	if(ismob(D))
@@ -859,7 +861,7 @@ function loadPage(list) {
 			if ("Monolith")
 				rod_type = /obj/item/projectile/immovablerod/hyper
 
-		if(alert("Are you sure you want to do this?","Confirm","Yes","No") != "Yes")	
+		if(alert("Are you sure you want to do this?","Confirm","Yes","No") != "Yes")
 			return
 
 		var/obj/item/projectile/immovablerod/rod = new rod_type(random_start_turf(A.z))
@@ -1157,7 +1159,17 @@ function loadPage(list) {
 			return
 
 		callatomproc(DAT)	//Yes it could be a datum, technically but eh
+	#if EXTOOLS_REFERENCE_TRACKING
+	else if(href_list["view_references"])
+		if(!check_rights(R_DEBUG))
+			return
 
+		var/datum/target = locate(href_list["view_references"])
+		if(!target)
+			return
+
+		usr.client.view_refs(target)
+	#endif
 	else if (href_list["edit_transform"])
 		if (!check_rights(R_DEBUG))
 			return
