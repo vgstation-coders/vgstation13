@@ -70,7 +70,7 @@
 	slowdown = 0
 	var/scope_toggled = 0
 	gun_flags = SCOPED
-	var recentpump = 0
+	var/recentpump = 0
 	var/obj/item/ammo_casing/current_shell = null
 	var/list/gun_overlay = list()
 	actions_types = list(/datum/action/item_action/toggle_wielding)
