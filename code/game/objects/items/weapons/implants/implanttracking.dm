@@ -100,6 +100,7 @@ var/list/locator_holomap_cache = list()
 			return
 		else
 			stopWatching()
+			processing_objects.Add(src)
 
 	if(user.hud_used && user.hud_used.holomap_obj)
 		watching_mob = user
