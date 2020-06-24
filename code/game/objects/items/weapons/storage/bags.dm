@@ -464,11 +464,11 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
 	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
 	for(var/obj/item/B in contents)
-		if(B.get_rating() < lowest_rating)
-			lowest_rating = B.get_rating()
+		if(B.rped_rating() < lowest_rating)
+			lowest_rating = B.rped_rating()
 
 	for(var/obj/item/B in contents) //Now that we have the lowest rating we can dump only parts at the lowest rating.
-		if(B.get_rating() > lowest_rating)
+		if(B.rped_rating() > lowest_rating)
 			continue
 		remove_from_storage(B, A)
 
