@@ -123,9 +123,20 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	master = A//AI is the master.
 	use_power = 2//Active power usage.
 	move_hologram()
+	if(A && A.holopadoverlays.len)
+		for(var/image/ol in A.holopadoverlays)
+			if(ol.loc == src)
+				ol.icon_state = "holopad1"
+				break
+		
 	return 1
 
 /obj/machinery/hologram/holopad/proc/clear_holo()
+	if(master && master.holopadoverlays.len)
+		for(var/image/ol in master.holopadoverlays)
+			if(ol.loc == src)
+				ol.icon_state = "holopad0"
+				break
 	qdel(holo)//Get rid of hologram.
 	qdel(ray)
 	holo = null
