@@ -94,6 +94,7 @@
 */
 
 /obj/mecha/combat/gygax/stopMechWalking()
+	return // ok
 
 /obj/mecha/combat/gygax/dyndomove(direction)
 	if(!..())
