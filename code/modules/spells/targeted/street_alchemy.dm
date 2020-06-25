@@ -153,13 +153,11 @@
 	if(reagents)
 		reagents.get_examine(user)
 
-/obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir
-
 /obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir/throw_impact(atom/hit_atom)
 	if(ishuman(hit_atom))
 		var/mob/living/carbon/human/H = hit_atom
 		src.reagents.trans_to(H,src.reagents.total_volume)
 		to_chat(H, "You feel something infuse into your body.")
 		playsound(H, "sound/effects/bubbles.ogg", 75, 1)
-	qdel(src)
+		qdel(src)
 
