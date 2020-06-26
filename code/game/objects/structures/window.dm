@@ -753,7 +753,7 @@ var/list/one_way_windows
 // Smartglass for mappers, smartglassified on roundstart.
 //the id_tag of the actual pane itself is passed to the smartglass electronics on initialization, it's not used for anything else
 /obj/structure/window/smart
-	var/id_tag = null
+	var/id_tag
 	var/frequency = 1449
 
 /obj/structure/window/smart/initialize()
@@ -762,7 +762,7 @@ var/list/one_way_windows
 	smartwindow.frequency = frequency
 
 /obj/structure/window/full/smart
-	var/id_tag = null
+	var/id_tag
 	var/frequency = 1449
 
 /obj/structure/window/full/smart/initialize()
@@ -771,7 +771,7 @@ var/list/one_way_windows
 	smartwindow.frequency = frequency
 
 /obj/structure/window/reinforced/smart
-	var/id_tag = null
+	var/id_tag
 	var/frequency = 1449
 
 /obj/structure/window/reinforced/smart/initialize()
@@ -780,7 +780,7 @@ var/list/one_way_windows
 	smartwindow.frequency = frequency
 
 /obj/structure/window/full/reinforced/smart
-	var/id_tag = null
+	var/id_tag
 	var/frequency = 1449
 
 /obj/structure/window/full/reinforced/smart/initialize()
@@ -789,7 +789,7 @@ var/list/one_way_windows
 	smartwindow.frequency = frequency
 
 /obj/structure/window/plasma/smart
-	var/id_tag = null
+	var/id_tag
 	var/frequency = 1449
 
 /obj/structure/window/plasma/smart/initialize()
@@ -798,7 +798,7 @@ var/list/one_way_windows
 	smartwindow.frequency = frequency
 
 /obj/structure/window/full/plasma/smart
-	var/id_tag = null
+	var/id_tag
 	var/frequency = 1449
 
 /obj/structure/window/full/plasma/smart/initialize()
@@ -807,7 +807,7 @@ var/list/one_way_windows
 	smartwindow.frequency = frequency
 
 /obj/structure/window/reinforced/plasma/smart
-	var/id_tag = null
+	var/id_tag
 	var/frequency = 1449
 
 /obj/structure/window/reinforced/plasma/smart/initialize()
@@ -816,7 +816,7 @@ var/list/one_way_windows
 	smartwindow.frequency = frequency
 
 /obj/structure/window/full/reinforced/plasma/smart
-	var/id_tag = null
+	var/id_tag
 	var/frequency = 1449
 
 /obj/structure/window/full/reinforced/plasma/smart/initialize()

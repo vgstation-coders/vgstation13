@@ -13,7 +13,7 @@
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 300
-	var/id_tag = 0
+	id_tag = 0
 	var/cdir = 0
 	var/gen = 0
 	var/lastgen = 0

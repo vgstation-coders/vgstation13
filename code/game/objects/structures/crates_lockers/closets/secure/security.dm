@@ -264,7 +264,6 @@
 	name = "Brig Locker"
 	req_access = list(access_brig)
 	anchored = 1
-	var/id_tag = null
 
 /obj/structure/closet/secure_closet/brig/atoms_to_spawn()
 	return list(

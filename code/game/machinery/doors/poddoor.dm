@@ -12,7 +12,7 @@ var/list/poddoors = list()
 	explosion_block = 3
 	penetration_dampening = 20
 
-	var/id_tag = 1.0
+	id_tag = 1.0
 
 	prefix = "r_"
 	animation_delay = 5

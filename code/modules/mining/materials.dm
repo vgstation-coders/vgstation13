@@ -37,6 +37,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 /datum/materials/Destroy()
 	holder = null
+	return ..()
 
 /datum/materials/resetVariables(args)
 	var/newargs

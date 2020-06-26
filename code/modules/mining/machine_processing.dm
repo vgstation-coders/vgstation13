@@ -277,7 +277,6 @@
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 
 	var/frequency = FREQ_DISPOSAL //Same as conveyors
-	var/id_tag = null
 	var/datum/radio_frequency/radio_connection
 
 	var/datum/materials/ore
@@ -293,15 +292,11 @@
 
 /obj/machinery/mineral/processing_unit/Destroy()
 	. = ..()
-
-	id_tag = null
-
 	qdel(mover)
 	mover = null
 
 /obj/machinery/mineral/processing_unit/power_change()
 	. = ..()
-
 	update_icon()
 
 /obj/machinery/mineral/processing_unit/update_icon()

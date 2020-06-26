@@ -866,14 +866,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	sleep(time)
 	return 1
 
-//Takes: Anything that could possibly have variables and a varname to check.
-//Returns: 1 if found, 0 if not.
-/proc/hasvar(var/datum/A, var/varname)
-	if(A.vars.Find(lowertext(varname)))
-		return 1
-	else
-		return 0
-
 //Returns sortedAreas list if populated
 //else populates the list first before returning it
 /proc/SortAreas()

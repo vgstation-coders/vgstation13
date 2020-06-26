@@ -21,7 +21,7 @@
 	var/movedir			// the actual direction to move stuff in
 
 	var/list/affecting	// the list of all items that will be moved this ptick
-	var/id_tag = ""			// the control ID	- must match controller ID
+	id_tag = ""			// the control ID	- must match controller ID
 
 	var/frequency = 1367
 	var/datum/radio_frequency/radio_connection
@@ -403,7 +403,7 @@
 	var/convdir = 0 			// lock to one direction. -1 = reverse, 0 = not locked, 1 = forward
 	var/operated = 1			// true if just operated
 
-	var/id_tag = "" 			// must match conveyor IDs to control them
+	id_tag = "" 			// must match conveyor IDs to control them
 
 	var/frequency = 1367
 	var/datum/radio_frequency/radio_connection
