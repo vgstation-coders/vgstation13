@@ -210,7 +210,7 @@
 
 /obj/structure/closet/secure_closet/security/empty
 
-/obj/structure/closet/secure_closet/security/atoms_to_spawn()
+/obj/structure/closet/secure_closet/security/empty/atoms_to_spawn()
 	return list()
 
 //The detectivegear box can be found at at the same location as the securitygear box and it contains:
