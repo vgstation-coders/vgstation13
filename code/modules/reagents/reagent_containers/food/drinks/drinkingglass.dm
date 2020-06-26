@@ -620,6 +620,10 @@
 				icon_state = "waifu"
 				name = "\improper Waifu"
 				desc = "Don't drink more than one waifu if you value your laifu."
+			if(HUSBANDO)
+				icon_state = "husbando"
+				name = "\improper Husbando"
+				desc = "Don't talk shit about my husbando."
 			if(BEEPSKY_CLASSIC)
 				icon_state = "beepsky_classic"
 				name = "\improper Beepsky Classic"

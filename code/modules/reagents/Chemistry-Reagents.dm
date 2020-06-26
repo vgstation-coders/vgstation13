@@ -5937,7 +5937,7 @@
 	name = "Waifu"
 	id = WAIFU
 	description = "Don't drink more than one waifu if you value your laifu."
-	color = "#664300"
+	color = "#D0206F"
 
 /datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
 	if(..())
@@ -5955,6 +5955,30 @@
 				H.u_equip(H.w_uniform, 1)
 			H.equip_to_slot(S, slot_w_uniform)
 			holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
+	M.regenerate_icons()
+	
+/datum/reagent/ethanol/husbando
+	name = "Husbando"
+	id = HUSBANDO
+	description = "You talkin' shit about my husbando?"
+	color = "#2043D0"
+
+/datum/reagent/ethanol/husbando/on_mob_life(var/mob/living/M) //it's copypasted from waifu
+	if(..()) 
+		return 1
+	if(M.gender == FEMALE)
+		M.setGender(MALE)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M 
+		if(!M.is_wearing_item(/obj/item/clothing/under/callum))
+			var/turf/T = get_turf(H)
+			T.turf_animation('icons/effects/96x96.dmi',"manexplode",-32,0,MOB_LAYER+1,'sound/items/poster_ripped.ogg',anim_plane = MOB_PLANE)
+			H.visible_message("<span class='warning'>[H] reveals his true outfit in a vortex of ripped clothes!</span>")
+			var/obj/item/clothing/under/callum/C = new /obj/item/clothing/under/callum(get_turf(H))
+			if(H.w_uniform)
+				H.u_equip(H.w_uniform, 1)
+			H.equip_to_slot(C, slot_w_uniform)
+			holder.remove_reagent(HUSBANDO,4) 
 	M.regenerate_icons()
 
 /datum/reagent/ethanol/scientists_serendipity

@@ -404,6 +404,7 @@
 #define WEED_EATER		"weed_eater"
 #define RAGSTORICHES	"ragstoriches"
 #define WAIFU			"waifu"
+#define HUSBANDO		"husbando"
 #define BEEPSKY_CLASSIC	"beepsky_classic"
 #define SMOKYROOM		"smokyroom"
 #define BAD_TOUCH		"bad_touch"

@@ -786,6 +786,13 @@
 	item_state = "galo"
 	_color = "galo"
 
+/obj/item/clothing/under/callum
+	name = "gaelic suit"
+	desc = "Smells faintly of alcohol."
+	icon_state = "callum_suit"
+	item_state = "callum_suit"
+	_color = "callum_suit"
+
 /obj/item/clothing/under/clownsuit
 	name = "formal clown outfit"
 	desc = "for clowns living in a society"

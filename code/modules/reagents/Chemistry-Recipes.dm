@@ -3383,6 +3383,13 @@
 	result = WAIFU
 	required_reagents = list(SAKE = 1, KARMOTRINE = 4)
 	result_amount = 5
+	
+/datum/chemical_reaction/husbando
+	name = "Husbando"
+	id = HUSBANDO
+	result = HUSBANDO
+	required_reagents = list(MANLYDORF = 1, KARMOTRINE = 4)
+	result_amount = 5
 
 /datum/chemical_reaction/beepskyclassic
 	name = "Beepsky Classic"
