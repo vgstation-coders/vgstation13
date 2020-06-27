@@ -38,10 +38,8 @@ BLIND     // can't see anything
 	if(H.glasses)
 		stored_glasses = H.glasses
 		if(stored_glasses.w_class >= w_class)
-			if(!disable_warning)
-				to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.glasses] are in the way.</span>")
 			stored_glasses = null
-			return CANNOT_EQUIP
+			return CAN_EQUIP_BUT_SLOT_TAKEN
 		H.remove_from_mob(stored_glasses)
 		stored_glasses.forceMove(src)
 
