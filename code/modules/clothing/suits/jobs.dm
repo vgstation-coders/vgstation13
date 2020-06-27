@@ -122,9 +122,6 @@
 
 /obj/item/clothing/suit/secdressjacket
 	body_parts_covered = FULL_TORSO|ARMS
-	name = ""
-	desc = ""
-	icon_state = ""
 
 //Head of Security
 /obj/item/clothing/suit/secdressjacket/hos_blue
