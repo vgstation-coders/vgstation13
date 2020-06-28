@@ -270,7 +270,7 @@ function output(message, flag) {
 
 function internalOutput(message, flag)
 {
-	output(escaper(message), flag)
+	output(message, flag)
 }
 
 //Runs a route within byond, client or server side. Consider this "ehjax" for byond.
