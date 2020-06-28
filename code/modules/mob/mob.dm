@@ -1264,7 +1264,7 @@ Use this proc preferably at the end of an equipment loadout
 		return
 	if(!can_show_flavor_text())
 		return
-	var/msg = utf8_sanitize(flavor_text)
+	var/msg = strip_html(flavor_text)
 	if(findtext(msg, "http:") || findtext(msg, "https:") || findtext(msg, "www."))
 		return "<font color='#ffa000'><b><a href='?src=\ref[src];show_flavor_text=1'>Show flavor text</a></b></font>"
 	if(length(msg) <= 32)

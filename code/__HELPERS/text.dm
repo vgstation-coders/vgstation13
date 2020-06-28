@@ -92,6 +92,10 @@ forLineInText(text)
 /proc/sanitize(var/t,var/list/repl_chars = null)
 	return html_encode(sanitize_simple(t,repl_chars))
 
+/proc/sanitize_speech(var/t, var/limit = MAX_MESSAGE_LEN)
+	var/static/regex/speech_regex = regex(@"[^ -~¡-ÿ]", "g") //Matches all characters not in the printable ASCII range or (most of) the Latin-1 supplement. In BYOND, \w doesn't work outside the ASCII range, so it's no help here.
+	return trim(copytext(speech_regex.Replace(t, "*"), 1, limit)) //Note that this does NOT scrub HTML, because this is done in different places in me and say messages.
+
 //Runs sanitize and strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' after sanitize() calls byond's html_encode()
 /proc/strip_html(var/t,var/limit=MAX_MESSAGE_LEN)
@@ -103,10 +107,10 @@ forLineInText(text)
 	return copytext((html_encode(strip_html_simple(t))),1,limit)
 
 /proc/reverse_text(txt)
-  var/i = length(txt)+1
-  . = ""
-  while(--i)
-    . += copytext(txt,i,i+1)
+	var/i = length(txt)+1
+	. = ""
+	while(--i)
+		. += copytext(txt,i,i+1)
 
 /*
  * returns null if there is any bad text in the string
@@ -138,7 +142,7 @@ forLineInText(text)
 // Used to get a sanitized input.
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
 	var/name = input(user, message, title, default) as null|text
-	return utf8_sanitize(name, user, max_length)
+	return strip_html_simple(name, max_length)
 
 //Filters out undesirable characters from names
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
@@ -320,7 +324,7 @@ proc/checkhtml(var/t)
 
 //Returns a string with the first element of the string capitalized.
 /proc/capitalize(var/t as text)
-	return uppertext(copytext(t, 1, 2)) + copytext(t, 2)
+	return uppertext(copytext_char(t, 1, 2)) + copytext_char(t, 2)
 
 //Centers text by adding spaces to either side of the string.
 /proc/dd_centertext(message, length)
