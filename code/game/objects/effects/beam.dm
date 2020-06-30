@@ -133,31 +133,6 @@
 	else
 		icon_state = "emitter_double_mouse_end"
 
-/obj/effect/beam/emitter/resetVariables()
-	..("sources", "children", "stepped", "master", "pass_flags", "next", "bumped", "steps", "am_connector", "targetMoveKey", "targetDestroyKey", "targetDensityKey", "targetContactLoc", "locDensity", args)
-	children = list()
-	sources = list()
-	next = null
-	target = null
-	master = null
-	bumped=0
-	stepped=0
-	steps=0
-	am_connector=0
-	targetMoveKey=null
-	targetDestroyKey=null
-	targetDensityKey=null
-	targetContactLoc=null
-	locDensity=null
-	icon_state = base_state
-	charged_up = FALSE
-
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
-
-/obj/effect/beam/emitter/eyes/resetVariables()
-	..("base_damage","full_damage", args)
-
-
 // Listener for /atom/movable/on_moved
 /obj/effect/beam/proc/target_moved(var/list/args)
 	if(master)

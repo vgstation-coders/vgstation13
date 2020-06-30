@@ -26,9 +26,6 @@
 	mat_type = MAT_IRON
 	perunit = CC_PER_SHEET_METAL
 
-/obj/item/stack/sheet/metal/resetVariables()
-	return ..("recipes", "pixel_x", "pixel_y")
-
 /obj/item/stack/sheet/metal/ex_act(severity)
 	switch(severity)
 		if(1.0)

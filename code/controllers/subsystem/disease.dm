@@ -28,7 +28,7 @@ var/list/active_diseases = list()
 		var/datum/disease/D = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!D || D.gcDestroyed || D.disposed)
+		if (!D || D.gcDestroyed)
 			continue
 
 		D.process()

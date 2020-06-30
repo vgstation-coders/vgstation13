@@ -288,12 +288,6 @@ var/list/pointers = list()
 /datum/signal/Destroy()
 	pointers -= "\ref[src]"
 
-/datum/signal/resetVariables()
-	. = ..("data")
-
-	source = null
-	data = list()
-
 /datum/signal/proc/copy_from(datum/signal/model)
 	source = model.source
 	transmission_method = model.transmission_method

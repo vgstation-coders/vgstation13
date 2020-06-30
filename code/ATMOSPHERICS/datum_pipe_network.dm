@@ -24,12 +24,6 @@
 	pipe_networks -= src
 	..()
 
-/datum/pipe_network/resetVariables()
-	..("gases", "normal_members", "line_members")
-	gases = list()
-	normal_members = list()
-	line_members = list()
-
 /datum/pipe_network/proc/process()
 	set waitfor = FALSE
 	//Equalize gases amongst pipe if called for

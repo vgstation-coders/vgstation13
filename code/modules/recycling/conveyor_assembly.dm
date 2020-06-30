@@ -62,7 +62,7 @@
 
 	if(user.Adjacent(placeloc) && direction && use(1))
 		new /obj/structure/conveyor_assembly(placelocation, direction)
-	if(amount && !disposed)
+	if(amount && !gcDestroyed)
 		spawn()
 			active = getFromPool(/obj/abstract/screen/draggable, src, user)
 

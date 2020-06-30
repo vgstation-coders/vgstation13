@@ -34,12 +34,6 @@
 	nodes = null
 	components = null
 
-/datum/powernet/resetVariables()
-	..("cables","nodes")
-	cables = list()
-	nodes = list()
-	components = list()
-
 /datum/powernet/proc/is_empty()
 	return !cables.len && !nodes.len && !components.len
 

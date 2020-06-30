@@ -93,16 +93,6 @@
 		return " (as [as_name])"
 	return ""
 
-/datum/speech/resetVariables()
-	..("wrapper_classes","message_classes")
-
-	message_classes=list()
-	wrapper_classes=list()
-
-	language = null
-	speaker = null
-	radio = null
-
 /datum/speech/proc/get_real_name()
 	if(ismob(speaker))
 		var/mob/M = speaker

@@ -22,11 +22,6 @@
 	for(var/obj/machinery/atmospherics/pipe/M in members) //Edges are a subset of members
 		M.parent = null
 
-/datum/pipeline/resetVariables()
-	..("members", "edges")
-	members = list()
-	edges = list()
-
 /datum/pipeline/proc/process()//This use to be called called from the pipe networks
 	if((world.timeofday - last_pressure_check) / 10 >= PRESSURE_CHECK_DELAY)
 		//Check to see if pressure is within acceptable limits

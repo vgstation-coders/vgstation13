@@ -813,7 +813,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	..()
 
 /obj/item/projectile/beam/bison/proc/draw_ray(var/turf/lastloc)
-	if (gcDestroyed || disposed)
+	if (gcDestroyed)
 		return
 	if(drawn)
 		return

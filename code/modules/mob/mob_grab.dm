@@ -154,7 +154,7 @@
 		assailant.delayNextAttack(10)
 		hud.icon_state = "!reinforce"
 		spawn(10)
-			if(!disposed)
+			if(!gcDestroyed)
 				hud.icon_state = "reinforce"
 		icon_state = "grabbed1"
 	else
@@ -175,7 +175,7 @@
 			assailant.delayNextAttack(10)
 			hud.icon_state = "!reinforce"
 			spawn(10)
-				if(!disposed)
+				if(!gcDestroyed)
 					hud.icon_state = "disarm/kill"
 					hud.name = "disarm/kill"
 		else

@@ -310,15 +310,7 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 /atom/movable/virtualspeaker/GetDefaultRadio()
 	return radio
 
-/atom/movable/virtualspeaker/resetVariables()
-	job = null
-	faketrack = null
-	source = null
-	radio = null
-
-	..("job", "faketrack", "source", "radio")
-
-proc/handle_render(var/mob,var/message,var/speaker)
+/proc/handle_render(var/mob,var/message,var/speaker)
 	if(istype(mob, /mob/new_player))
 		return //One extra layer of sanity
 	if(istype(mob,/mob/dead/observer))

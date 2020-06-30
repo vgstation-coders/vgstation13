@@ -25,10 +25,6 @@
 			spell_holder.client.screen -= src
 		spell_holder = null
 
-/obj/abstract/screen/movable/spell_master/resetVariables()
-	..("spell_objects", args)
-	spell_objects = list()
-
 /obj/abstract/screen/movable/spell_master/MouseDrop()
 	if(showing)
 		return

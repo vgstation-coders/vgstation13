@@ -195,7 +195,8 @@
 					R.module_state_3 = null
 					R.inv3.icon_state = "inv3"
 			usr.before_take_item(src)
-		spawn returnToPool(src)
+		spawn()
+			returnToPool(src)
 
 /obj/item/stack/proc/add(var/amount)
 	src.amount += amount

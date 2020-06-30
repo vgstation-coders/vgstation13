@@ -226,11 +226,6 @@
 	assembly = null
 	..()
 
-/obj/effect/beam/infrared/resetVariables()
-	..("sources", "children", "limit","visible", "left", "assembly", "invisibility", "puffed", "alpha", args)
-	children = list()
-	sources = list()
-
 /obj/effect/beam/infrared/get_damage()
 	return 0
 

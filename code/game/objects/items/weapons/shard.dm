@@ -81,9 +81,6 @@
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	return ..()
 
-/obj/item/weapon/shard/resetVariables()
-	..("icon_state", "pixel_y", "pixel_x")
-
 /obj/item/weapon/shard/to_bump()
 
 	spawn( 0 )

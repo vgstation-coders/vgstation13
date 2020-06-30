@@ -198,7 +198,7 @@ var/soft_dels = 0
  * NEVER USE THIS FOR /atom OTHER THAN /atom/movable
  * BASE ATOMS CANNOT BE QDEL'D BECAUSE THEIR LOC IS LOCKED.
  */
-/proc/qdel(const/datum/D, ignore_pooling = 0)
+/proc/qdel(const/datum/D)
 	if(isnull(D))
 		return
 
@@ -214,11 +214,6 @@ var/soft_dels = 0
 		del(D)
 		SSgarbage.hard_dels++
 		SSgarbage.dels_count++
-		return
-
-	//This is broken. The correct index to use is D.type, not "[D.type]"
-	if(("[D.type]" in masterdatumPool) && !ignore_pooling)
-		returnToPool(D)
 		return
 
 	if(isnull(D.gcDestroyed))

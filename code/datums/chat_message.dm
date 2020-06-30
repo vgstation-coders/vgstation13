@@ -164,7 +164,7 @@ var/runechat_icon = null
   * Applies final animations to overlay CHAT_MESSAGE_EOL_FADE deciseconds prior to message deletion
   */
 /datum/chatmessage/proc/end_of_life(fadetime = CHAT_MESSAGE_EOL_FADE)
-	if (gcDestroyed || disposed)
+	if (gcDestroyed)
 		return
 	animate(message, alpha = 0, time = fadetime, flags = ANIMATION_PARALLEL)
 	spawn(fadetime)
