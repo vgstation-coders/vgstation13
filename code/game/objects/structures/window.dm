@@ -312,7 +312,7 @@ var/list/one_way_windows
 		if(istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
 			var/gstate = G.state
-			returnToPool(W)	//Gotta delete it here because if window breaks, it won't get deleted
+			qdel(W)	//Gotta delete it here because if window breaks, it won't get deleted
 			user.do_attack_animation(src, W)
 			switch(gstate)
 				if(GRAB_PASSIVE)

@@ -632,7 +632,7 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/disable(var/mob/living/mob)
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 	if (emitter)
 		emitter.callOnStartMove -= "\ref[src]"
@@ -645,7 +645,7 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/emitter/proc/update_emitter()
 	if (!emitter || !isturf(emitter.loc) || emitter.lying)
 		if (beam)
-			returnToPool(beam)
+			qdel(beam)
 			beam = null
 		return
 	if (!beam)
@@ -660,7 +660,7 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_start()
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_end()

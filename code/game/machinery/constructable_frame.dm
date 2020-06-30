@@ -184,7 +184,7 @@
 							P.playtoolsound(src, 50)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
-								returnToPool(O)
+								qdel(O)
 							new_machine.component_parts = list()
 							for(var/obj/O in src)
 								if(circuit.contain_parts) // things like disposal don't want their parts in them
@@ -342,7 +342,7 @@ to destroy them and players will be able to make replacements.
 		if(WT.remove_fuel(1,user))
 			var/obj/item/stack/sheet/glass/glass/new_item = new()
 			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
-			returnToPool(src)
+			qdel(src)
 			return
 	else
 		return ..()

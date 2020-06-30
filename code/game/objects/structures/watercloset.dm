@@ -317,7 +317,7 @@
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
 	if(mymist)
-		returnToPool(mymist)
+		qdel(mymist)
 		mymist = null
 
 	if(on)
@@ -339,7 +339,7 @@
 		mymist = getFromPool(/obj/effect/mist, get_turf(src))
 		spawn(250)
 			if(src && !on)
-				returnToPool(mymist)
+				qdel(mymist)
 				mymist = null
 				ismist = 0
 

@@ -140,7 +140,7 @@
 	else
 		OnDeath()
 		loc = null
-		returnToPool(src)
+		qdel(src)
 		return
 
 	var/turf/newspawn = locate(T1.x + X_spawn, T1.y + Y_spawn, z)
@@ -221,7 +221,7 @@
 	spawn()
 		setDensity(FALSE)
 		invisibility = 101
-		returnToPool(src)
+		qdel(src)
 		OnDeath()
 
 /obj/item/projectile/ricochet/to_bump(atom/A as mob|obj|turf|area)

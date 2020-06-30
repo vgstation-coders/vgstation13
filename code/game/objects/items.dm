@@ -922,7 +922,7 @@
 		wielded.wielding = null
 		user.u_equip(wielded,1)
 		if(wielded)
-			returnToPool(wielded)
+			qdel(wielded)
 			wielded = null
 	update_wield(user)
 

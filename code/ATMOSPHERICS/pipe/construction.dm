@@ -100,13 +100,13 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 /obj/item/pipe/ex_act(severity)
 	switch(severity)
 		if(1)
-			returnToPool(src)
+			qdel(src)
 		if(2)
 			if(prob(40))
-				returnToPool(src)
+				qdel(src)
 		if(3)
 			if(prob(10))
-				returnToPool(src)
+				qdel(src)
 
 /obj/item/pipe/dropped()
 	..()
@@ -114,10 +114,10 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 		setPipingLayer(piping_layer) //realign us, captain!
 
 /obj/item/pipe/blob_act()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/pipe/singularity_act()
-	returnToPool(src)
+	qdel(src)
 	return 2
 var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 /obj/item/pipe/New(var/loc, var/pipe_type as num, var/dir as num, var/obj/machinery/atmospherics/make_from = null)
@@ -546,7 +546,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			"[user] fastens \the [src].", \
 			"<span class='notice'>You have fastened \the [src].</span>", \
 			"You hear a ratchet.")
-		returnToPool(src)	// remove the pipe item
+		qdel(src)	// remove the pipe item
 		return 0
 	else
 		// If the pipe's still around, nuke it.

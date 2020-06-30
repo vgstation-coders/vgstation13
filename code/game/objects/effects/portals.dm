@@ -192,12 +192,12 @@ var/list/portal_cache = list()
 /obj/effect/portal/proc/purge_beams()
 	for(var/obj/effect/beam/BE in exit_beams)
 		exit_beams -= BE
-		returnToPool(BE)
+		qdel(BE)
 	if (target && istype(target,/obj/effect/portal))
 		var/obj/effect/portal/P = target
 		for(var/obj/effect/beam/BE in P.exit_beams)
 			P.exit_beams -= BE
-			returnToPool(BE)
+			qdel(BE)
 
 /obj/effect/portal/proc/add_beams()
 	if((!beams) || (!beams.len) || !target || !istype(target,/obj/effect/portal))

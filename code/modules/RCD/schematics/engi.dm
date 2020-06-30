@@ -384,7 +384,7 @@
 /datum/selection_schematic/Destroy()
 	for(var/client/C in clients)
 		C.screen.Remove(ourobj)
-	returnToPool(ourobj)
+	qdel(ourobj)
 	ourobj = null
 	..()
 

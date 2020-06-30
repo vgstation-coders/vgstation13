@@ -32,7 +32,7 @@
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	if(istype(AM, /obj/item/pipe))
-		returnToPool(A)
+		qdel(A)
 	else
 		qdel(AM)
 

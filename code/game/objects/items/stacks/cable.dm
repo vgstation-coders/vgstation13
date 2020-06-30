@@ -198,7 +198,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	if(C.shock(user, 50))
 		if(prob(50)) //Fail
 			getFromPool(/obj/item/stack/cable_coil, C.loc, 1)
-			returnToPool(C)
+			qdel(C)
 			return // let's not return the reference to a pooled cable
 
 	return C //What was our last known position?
@@ -278,7 +278,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 		if(C.shock(user, 50))
 			if(prob(50)) //Fail
 				getFromPool(/obj/item/stack/cable_coil, C.loc, 1, C.light_color)
-				returnToPool(C)
+				qdel(C)
 				return
 
 		C.denode() //This call may have disconnected some cables that terminated on the centre of the turf, if so split the powernets.

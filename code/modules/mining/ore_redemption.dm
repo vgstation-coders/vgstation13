@@ -70,7 +70,7 @@
 	if(O.materials)
 		credits += O.materials.getValue()
 		materials.addFrom(O.materials, TRUE)
-		returnToPool(O)
+		qdel(O)
 
 /obj/machinery/mineral/ore_redemption/proc/SmeltOreType(var/type, var/amount)
 	var/obj/item/stack/ore/O = getFromPool(type)

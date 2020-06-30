@@ -446,7 +446,7 @@
 	I.pixel_x = clothing_offset_x
 	I.pixel_y = clothing_offset_y
 	overlays += I
-	returnToPool(O)
+	qdel(O)
 
 /obj/structure/mannequin/proc/update_icon_slot(var/obj/abstract/Overlays/O, var/slot)
 	var/obj/item/clothing/clothToUpdate = clothing[slot]

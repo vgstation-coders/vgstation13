@@ -279,15 +279,15 @@ client/proc/remove_gun_icons()
 	if(!usr)
 		return
 	if(usr.gun_move_icon)
-		returnToPool(usr.gun_move_icon)
+		qdel(usr.gun_move_icon)
 		screen -= usr.gun_move_icon
 		usr.gun_move_icon = null
 	if(usr.item_use_icon)
-		returnToPool(usr.item_use_icon)
+		qdel(usr.item_use_icon)
 		screen -= usr.item_use_icon
 		usr.item_use_icon = null
 	if(usr.gun_run_icon)
-		returnToPool(usr.gun_run_icon)
+		qdel(usr.gun_run_icon)
 		screen -= usr.gun_run_icon
 		usr.gun_run_icon = null
 

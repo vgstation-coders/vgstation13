@@ -357,7 +357,7 @@ proc/getb(col)
 /mob/proc/clearmap()
 	src.client.screen -= src.mapobjs
 	for(var/obj/abstract/screen/O in mapobjs)
-		returnToPool(O)
+		qdel(O)
 
 	mapobjs = null
 	src.unset_machine()

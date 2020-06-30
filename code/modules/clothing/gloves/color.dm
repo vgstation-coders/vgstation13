@@ -42,7 +42,7 @@
 				to_chat(user, "<span class='warning'>[src] overload\s from the massive current, shocking you in the process!")
 			spark(user, 5)
 		if(L.damage <= 0)
-			returnToPool(L)
+			qdel(L)
 		else
 			playsound(src, 'sound/effects/eleczap.ogg', 75, 1)
 			L.tang = adjustAngle(get_angle(U,T))

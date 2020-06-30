@@ -167,7 +167,7 @@ var/global/datum/controller/radio/radio_controller
 	if(range)
 		start_point = get_turf(source)
 		if(!start_point)
-			returnToPool(signal)
+			qdel(signal)
 			return 0
 
 	if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
@@ -215,7 +215,7 @@ var/global/datum/controller/radio/radio_controller
 	//log_admin("DEBUG: post_signal(source=[source] ([source.x], [source.y], [source.z]),filter=[filter]) frequency=[frequency], N_f=[N_f], N_nf=[N_nf]")
 
 
-	returnToPool(signal)
+	qdel(signal)
 
 /datum/radio_frequency/proc/add_listener(const/obj/device, var/filter)
 	if(!filter) // FIXME

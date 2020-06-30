@@ -43,7 +43,7 @@
 	cables -= C
 	C.powernet = null
 	if(is_empty())
-		returnToPool(src)
+		qdel(src)
 
 // helper proc for removing a power machine from the current powernet
 // warning : this proc doesn't check if the machine exists, but don't worry a runtime should tell you if it doesn't
@@ -51,7 +51,7 @@
 	nodes -= M
 	M.powernet = null
 	if(is_empty())
-		returnToPool(src)
+		qdel(src)
 
 // helper proc for removing a power machine from the current powernet
 // warning : this proc doesn't check if the machine exists, but don't worry a runtime should tell you if it doesn't
@@ -59,7 +59,7 @@
 	components -= C
 	C.powernet = null
 	if(is_empty())
-		returnToPool(src)
+		qdel(src)
 
 // add a cable to the current powernet
 /datum/powernet/proc/add_cable(obj/structure/cable/C)
@@ -135,7 +135,7 @@
 		P.build_status = 1
 	for(var/datum/power_connection/C in components)
 		C.build_status = 1
-	returnToPool(src)
+	qdel(src)
 
 //Hopefully this will never ever have to be used
 var/global/powernets_broke = 0

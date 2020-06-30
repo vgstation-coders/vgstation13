@@ -75,7 +75,7 @@
 
 				occupant.meat_amount++
 
-				returnToPool(G)
+				qdel(G)
 				return
 
 /obj/structure/kitchenspike/attack_hand(mob/user)

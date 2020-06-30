@@ -33,7 +33,7 @@ var/global/lastDecTalkUse = 0
 	if(class)
 		speech.message_classes.Add(class)
 	send_speech(speech, world.view)
-	returnToPool(speech)
+	qdel(speech)
 
 /atom/movable/proc/Hear(var/datum/speech/speech, var/rendered_speech="")
 	return
@@ -140,7 +140,7 @@ var/global/lastDecTalkUse = 0
 	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
 	say_testing(src, html_encode(.))
 	if(pooled)
-		returnToPool(filtered_speech)
+		qdel(filtered_speech)
 
 
 /atom/movable/proc/render_speaker_track_start(var/datum/speech/speech)

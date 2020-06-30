@@ -923,19 +923,19 @@ Thanks.
 		for(var/obj/item/weapon/grab/G in usr.grabbed_by)
 			resisting++
 			if (G.state == GRAB_PASSIVE)
-				returnToPool(G)
+				qdel(G)
 			else
 				if (G.state == GRAB_AGGRESSIVE)
 					if (prob(25))
 						L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s grip!</span>", \
 							drugged_message="<span class='danger'>[L] has broken free of [G.assailant]'s hug!</span>")
-						returnToPool(G)
+						qdel(G)
 				else
 					if (G.state == GRAB_NECK)
 						if (prob(5))
 							L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s headlock!</span>", \
 								drugged_message="<span class='danger'>[L] has broken free of [G.assailant]'s passionate hug!</span>")
-							returnToPool(G)
+							qdel(G)
 		if(resisting)
 			L.visible_message("<span class='danger'>[L] resists!</span>")
 
@@ -1598,7 +1598,7 @@ Thanks.
 		src.forceMove(D) //Only move the mob into the holder after we're sure he has been picked up!
 		return 1
 	else
-		returnToPool(D)
+		qdel(D)
 
 	return 0
 
@@ -1747,7 +1747,7 @@ Thanks.
 					M.LAssailant = null
 				else
 					M.LAssailant = usr
-				returnToPool(G)
+				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
 	if(isitem(item))

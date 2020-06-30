@@ -212,27 +212,27 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
 	if(inv1)
-		returnToPool(inv1)
+		qdel(inv1)
 		if(client)
 			client.screen -= inv1
 		inv1 = null
 	if(inv2)
-		returnToPool(inv2)
+		qdel(inv2)
 		if(client)
 			client.screen -= inv2
 		inv2 = null
 	if(inv3)
-		returnToPool(inv3)
+		qdel(inv3)
 		if(client)
 			client.screen -= inv3
 		inv3 = null
 	if(robot_modules_background)
-		returnToPool(robot_modules_background)
+		qdel(robot_modules_background)
 		if(client)
 			client.screen -= robot_modules_background
 		robot_modules_background = null
 	if(sensor)
-		returnToPool(sensor)
+		qdel(sensor)
 		if(client)
 			client.screen -= sensor
 		sensor = null

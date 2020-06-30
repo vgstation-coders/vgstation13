@@ -182,7 +182,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 			mymob.client.screen -= IN
 
 		hand_hud_objects -= IN
-		returnToPool(IN)
+		qdel(IN)
 
 	if(mymob.client)
 		adding = list()

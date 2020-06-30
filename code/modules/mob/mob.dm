@@ -58,14 +58,14 @@
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
-			returnToPool(spell_master)
+			qdel(spell_master)
 		spell_masters = null
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
 			var/obj/abstract/screen/screenobj = AM
 			if(istype(screenobj))
 				if(!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
-					returnToPool(AM)
+					qdel(AM)
 			else
 				qdel(AM)
 		client.screen = list()
@@ -133,140 +133,140 @@
 
 /mob/proc/remove_screen_objs()
 	if(hands)
-		returnToPool(hands)
+		qdel(hands)
 		if(client)
 			client.screen -= hands
 		hands = null
 	if(pullin)
-		returnToPool(pullin)
+		qdel(pullin)
 		if(client)
 			client.screen -= pullin
 		pullin = null
 	if(visible)
-		returnToPool(visible)
+		qdel(visible)
 		if(client)
 			client.screen -= visible
 		visible = null
 	if(internals)
-		returnToPool(internals)
+		qdel(internals)
 		if(client)
 			client.screen -= internals
 		internals = null
 	if(i_select)
-		returnToPool(i_select)
+		qdel(i_select)
 		if(client)
 			client.screen -= i_select
 		i_select = null
 	if(m_select)
-		returnToPool(m_select)
+		qdel(m_select)
 		if(client)
 			client.screen -= m_select
 		m_select = null
 	if(healths)
-		returnToPool(healths)
+		qdel(healths)
 		if(client)
 			client.screen -= healths
 		healths = null
 	if(healths2)
-		returnToPool(healths2)
+		qdel(healths2)
 		if(client)
 			client.screen -= healths2
 		healths2 = null
 	if(throw_icon)
-		returnToPool(throw_icon)
+		qdel(throw_icon)
 		if(client)
 			client.screen -= throw_icon
 		throw_icon = null
 	if(damageoverlay)
-		returnToPool(damageoverlay)
+		qdel(damageoverlay)
 		if(client)
 			client.screen -= damageoverlay
 		damageoverlay = null
 	if(pain)
-		returnToPool(pain)
+		qdel(pain)
 		if(client)
 			client.screen -= pain
 		pain = null
 	if(item_use_icon)
-		returnToPool(item_use_icon)
+		qdel(item_use_icon)
 		if(client)
 			client.screen -= item_use_icon
 		item_use_icon = null
 	if(gun_move_icon)
-		returnToPool(gun_move_icon)
+		qdel(gun_move_icon)
 		if(client)
 			client.screen -= gun_move_icon
 		gun_move_icon = null
 	if(gun_run_icon)
-		returnToPool(gun_run_icon)
+		qdel(gun_run_icon)
 		if(client)
 			client.screen -= gun_run_icon
 		gun_run_icon = null
 	if(gun_setting_icon)
-		returnToPool(gun_setting_icon)
+		qdel(gun_setting_icon)
 		if(client)
 			client.screen -= gun_setting_icon
 		gun_setting_icon = null
 	if(m_suitclothes)
-		returnToPool(m_suitclothes)
+		qdel(m_suitclothes)
 		if(client)
 			client.screen -= m_suitclothes
 		m_suitclothes = null
 	if(m_suitclothesbg)
-		returnToPool(m_suitclothesbg)
+		qdel(m_suitclothesbg)
 		if(client)
 			client.screen -= m_suitclothesbg
 		m_suitclothesbg = null
 	if(m_hat)
-		returnToPool(m_hat)
+		qdel(m_hat)
 		if(client)
 			client.screen -= m_hat
 		m_hat = null
 	if(m_hatbg)
-		returnToPool(m_hatbg)
+		qdel(m_hatbg)
 		if(client)
 			client.screen -= m_hatbg
 		m_hatbg = null
 	if(m_glasses)
-		returnToPool(m_glasses)
+		qdel(m_glasses)
 		if(client)
 			client.screen -= m_glasses
 		m_glasses = null
 	if(m_glassesbg)
-		returnToPool(m_glassesbg)
+		qdel(m_glassesbg)
 		if(client)
 			client.screen -= m_glassesbg
 		m_glasses = null
 	if(zone_sel)
-		returnToPool(zone_sel)
+		qdel(zone_sel)
 		if(client)
 			client.screen -= zone_sel
 		zone_sel = null
 
 	if(iscultist(src) && hud_used)
 		if(hud_used.cult_Act_display)
-			returnToPool(hud_used.cult_Act_display)
+			qdel(hud_used.cult_Act_display)
 			if(client)
 				client.screen -= hud_used.cult_Act_display
 			hud_used.cult_Act_display = null
 		if(hud_used.cult_tattoo_display)
-			returnToPool(hud_used.cult_tattoo_display)
+			qdel(hud_used.cult_tattoo_display)
 			if(client)
 				client.screen -= hud_used.cult_tattoo_display
 			hud_used.cult_tattoo_display = null
 		if (isshade(src) && gui_icons)
 			if(gui_icons.soulblade_bgLEFT)
-				returnToPool(gui_icons.soulblade_bgLEFT)
+				qdel(gui_icons.soulblade_bgLEFT)
 				if(client)
 					client.screen -= gui_icons.soulblade_bgLEFT
 				gui_icons.soulblade_bgLEFT = null
 			if(gui_icons.soulblade_bloodbar)
-				returnToPool(gui_icons.soulblade_bloodbar)
+				qdel(gui_icons.soulblade_bloodbar)
 				if(client)
 					client.screen -= gui_icons.soulblade_bloodbar
 				gui_icons.soulblade_bloodbar = null
 			if(gui_icons.soulblade_coverLEFT)
-				returnToPool(gui_icons.soulblade_coverLEFT)
+				qdel(gui_icons.soulblade_coverLEFT)
 				if(client)
 					client.screen -= gui_icons.soulblade_coverLEFT
 				gui_icons.soulblade_coverLEFT = null
@@ -312,7 +312,7 @@
 	if(flags & HEAR_ALWAYS)
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
-				returnToPool(VH)
+				qdel(VH)
 	..()
 
 /mob/proc/is_muzzled()

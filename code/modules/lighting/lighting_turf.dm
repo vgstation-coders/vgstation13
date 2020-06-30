@@ -16,7 +16,7 @@
 
 /turf/proc/lighting_clear_overlay()
 	if (lighting_overlay)
-		returnToPool(lighting_overlay)
+		qdel(lighting_overlay)
 
 	for (var/datum/lighting_corner/C in corners)
 		C.update_active()

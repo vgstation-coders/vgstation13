@@ -95,7 +95,7 @@
 
 /obj/item/weapon/disk/data/Destroy()
 	for(var/datum/block_label/label in labels)
-		returnToPool(label)
+		qdel(label)
 	labels.Cut()
 	..()
 

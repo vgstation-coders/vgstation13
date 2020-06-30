@@ -356,4 +356,4 @@
 		S.relay_information(newsign, "/obj/machinery/telecomms/broadcaster") // send this simple message to broadcasters
 
 	spawn(50)
-		returnToPool(virt)
+		qdel(virt)

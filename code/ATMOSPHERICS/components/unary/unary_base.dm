@@ -85,7 +85,7 @@
 	if(node1)
 		node1.disconnect(src)
 		if(network)
-			returnToPool(network)
+			qdel(network)
 	node1 = null
 	..()
 
@@ -123,7 +123,7 @@
 /obj/machinery/atmospherics/unary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
 		if(network)
-			returnToPool(network)
+			qdel(network)
 		node1 = null
 	return ..()
 

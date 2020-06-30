@@ -2,7 +2,7 @@
 	if(species)
 		species.gib(src)
 		return
-	
+
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -26,7 +26,7 @@
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
 	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
-	qdel(src)	
+	qdel(src)
 
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
@@ -88,7 +88,7 @@
 	..()
 
 	for(var/obj/abstract/Overlays/O in obj_overlays)
-		returnToPool(O)
+		qdel(O)
 
 	obj_overlays = null
 

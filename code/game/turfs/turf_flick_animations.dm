@@ -18,7 +18,7 @@
 			animation.color = anim_color
 		flick("turf_animation",animation)
 		spawn(10)
-			returnToPool(animation)
+			qdel(animation)
 			if(c_animation == animation) //Turf may have changed into another form by this time
 				c_animation = null
 
@@ -77,7 +77,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		flick(flick_anim, animation)
 
 	spawn(max(sleeptime, 15))
-		returnToPool(animation)
+		qdel(animation)
 
 	return animation
 

@@ -444,7 +444,7 @@ proc/check_panel(mob/M)
 		attack_loop()
 		if(my_target)
 			my_target.hallucinations -= src
-		returnToPool(src)
+		qdel(src)
 
 
 /obj/effect/fake_attacker/proc/updateimage()
@@ -516,7 +516,7 @@ proc/check_panel(mob/M)
 	I.color = blood_color
 	target << I
 	spawn(300)
-		returnToPool(O)
+		qdel(O)
 
 var/list/non_fakeattack_weapons = list(/obj/item/weapon/gun/projectile, /obj/item/ammo_storage/box/a357,\
 	/obj/item/weapon/gun/energy/crossbow, /obj/item/weapon/melee/energy/sword,\

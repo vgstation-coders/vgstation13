@@ -125,7 +125,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		if(i > emitted_beams.len)
 			break
 		var/obj/effect/beam/beam = emitted_beams[i]
-		returnToPool(beam)
+		qdel(beam)
 		emitted_beams[i]=null
 		beam=null
 	emitted_beams.len = 4
@@ -205,7 +205,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 				// If there's a beam and it's changed, nuke the existing beam.
 				if (beam && beam.type != beamtype)
-					returnToPool(beam)
+					qdel(beam)
 					emitted_beams[i]=null
 					beam=null
 
@@ -239,7 +239,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 		beam = emitted_beams[i] // Crashes here
 		if(delbeam && beam)
-			returnToPool(beam)
+			qdel(beam)
 			emitted_beams[i]=null
 
 	overlays += mirror_state

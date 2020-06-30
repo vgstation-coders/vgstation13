@@ -88,7 +88,7 @@
 	update_icon()
 	if(loaded && !loaded.amount)
 		to_chat(user, "<span class='notice'>The last of the cables unreel from \the [src].</span>")
-		returnToPool(loaded)
+		qdel(loaded)
 		loaded = null
 		active = 0
 		return 1

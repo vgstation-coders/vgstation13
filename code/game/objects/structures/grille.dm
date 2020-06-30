@@ -24,7 +24,7 @@
 
 /obj/structure/grille/cultify()
 	new /obj/structure/grille/cult(get_turf(src))
-	returnToPool(src)
+	qdel(src)
 
 /obj/structure/grille/proc/healthcheck(var/hitsound = 0) //Note : Doubles as the destruction proc()
 	if(hitsound)

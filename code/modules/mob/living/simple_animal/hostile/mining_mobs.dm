@@ -431,11 +431,11 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/New()
 	..()
 	spawn(100)
-		returnToPool(src)
+		qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/death(var/gibbed = FALSE)
 	..(TRUE)
-	returnToPool(src)
+	qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goliath
 	name = "goliath"

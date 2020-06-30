@@ -1010,7 +1010,7 @@
 			H.my_appearance.b_eyes = old_b_eyes
 			H.update_body()
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 	if (emitter)
 		emitter.callOnStartMove -= "\ref[src]"
@@ -1024,7 +1024,7 @@
 
 /datum/disease2/effect/emitter/on_death(var/mob/living/carbon/mob)
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 
 /datum/disease2/effect/emitter/proc/ready()
@@ -1059,7 +1059,7 @@
 /datum/disease2/effect/emitter/proc/update_emitter()
 	if (!ready())
 		if (beam)
-			returnToPool(beam)
+			qdel(beam)
 			beam = null
 		return
 	if (!beam)
@@ -1082,7 +1082,7 @@
 
 /datum/disease2/effect/emitter/proc/update_emitter_start()
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 
 /datum/disease2/effect/emitter/proc/update_emitter_end()

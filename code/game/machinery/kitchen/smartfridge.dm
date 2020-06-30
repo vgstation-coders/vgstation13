@@ -40,7 +40,7 @@
 			stat |= NOPOWER
 			if(!(stat & BROKEN))
 				set_light(0)
-			
+
 
 /datum/fridge_pile
 	var/name = ""
@@ -65,7 +65,7 @@
 /datum/fridge_pile/proc/removeAmount(var/amt)
 	amount -= amt
 	if(amount <= 0)
-		returnToPool(src)
+		qdel(src)
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -92,7 +92,7 @@
 
 /obj/machinery/smartfridge/Destroy()
 	for(var/key in piles)
-		returnToPool(piles[key])
+		qdel(piles[key])
 	piles.Cut()
 
 	update_nearby_tiles()

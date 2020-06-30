@@ -198,7 +198,7 @@
 	spawn(1 SECONDS)
 		if(!trace_signal.data["done"])
 			tracert_report += "The operation timed out.<BR><font color = #D70B00>Last Known Machine:</font color> <a href='?src=\ref[src];viewmachine=[last_machine.id]'>\ref[last_machine] [last_machine.id]</a>"
-		returnToPool(trace_signal)
+		qdel(trace_signal)
 		trace_signal = null
 		updateUsrDialog()
 

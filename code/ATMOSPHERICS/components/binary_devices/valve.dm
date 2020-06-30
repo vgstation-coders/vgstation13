@@ -63,10 +63,10 @@
 
 	if(network1)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 	if(network2)
 		if(network1)
-			returnToPool(network2)
+			qdel(network2)
 
 	build_network()
 

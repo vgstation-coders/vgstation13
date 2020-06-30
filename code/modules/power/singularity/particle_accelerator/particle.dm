@@ -101,7 +101,7 @@
 	return
 
 /obj/effect/accelerated_particle/ex_act(severity)
-	returnToPool(src)
+	qdel(src)
 	return
 
 /obj/effect/accelerated_particle/proc/toxmob(var/mob/living/M)
@@ -135,7 +135,7 @@
 			src.forceMove(get_step(src,dir))
 	movement_range--
 	if(movement_range <= 0)
-		returnToPool(src)
+		qdel(src)
 		loc = null
 		return 0
 	else
@@ -144,7 +144,7 @@
 
 /obj/effect/accelerated_particle/singularity_act()
 	. = energy
-	returnToPool(src)
+	qdel(src)
 
 #undef PARTICLE_ENERGY
 #undef WEAK_PARTICLE_ENERGY

@@ -20,7 +20,7 @@
 	if(ourobj)
 		for(var/client/C in clients)
 			C.screen.Remove(ourobj)
-		returnToPool(ourobj)
+		qdel(ourobj)
 		ourobj = null
 
 /datum/rcd_schematic/proc/show()

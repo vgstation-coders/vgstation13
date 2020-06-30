@@ -38,7 +38,7 @@ var/list/pathogen_clouds = list()
 	source = sourcemob
 	viruses = virus
 	spawn (lifetime)
-		returnToPool(src)
+		qdel(src)
 
 /obj/effect/effect/pathogen_cloud/Destroy()
 	if (pathogen)

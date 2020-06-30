@@ -107,7 +107,7 @@
 			D.react()
 			sleep(3)
 
-		returnToPool(D)
+		qdel(D)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
@@ -217,7 +217,7 @@
 				D.react(iteration_delay = 0)
 				sleep(2)
 
-			returnToPool(D)
+			qdel(D)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
@@ -251,6 +251,6 @@
 			D.react()
 			sleep(3)
 
-		returnToPool(D)
+		qdel(D)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)

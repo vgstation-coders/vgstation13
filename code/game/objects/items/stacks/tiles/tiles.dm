@@ -26,7 +26,7 @@
 /obj/item/stack/tile/plasteel/Destroy()
 	..()
 	if(active)
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/tile/plasteel/attack_self(mob/user)
@@ -35,7 +35,7 @@
 		to_chat(user, "Beginning plating construction mode, click and hold to use.")
 		return
 	else //End click drag construction, create grille
-		returnToPool(active)
+		qdel(active)
 
 /obj/item/stack/tile/plasteel/can_drag_use(mob/user, turf/T)
 	if(user.Adjacent(T)) //can we place here
@@ -44,7 +44,7 @@
 			if(use(1)) //place and use rod
 				return 1
 			else
-				returnToPool(active) //otherwise remove the draggable screen
+				qdel(active) //otherwise remove the draggable screen
 				active = null
 
 /obj/item/stack/tile/plasteel/drag_use(mob/user, turf/T)
@@ -62,7 +62,7 @@
 /obj/item/stack/tile/plasteel/dropped()
 	..()
 	if(active)
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/tile/plasteel/proc/build(turf/S as turf)

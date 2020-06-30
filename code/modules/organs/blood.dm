@@ -414,7 +414,7 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 		// If we have too many drips, remove them and spawn a proper blood splatter.
 		if(drips.len >= 5)
 			for(var/obj/effect/decal/cleanable/blood/drip/drop in drips)
-				returnToPool(drop)
+				qdel(drop)
 		else
 			decal_type = /obj/effect/decal/cleanable/blood/drip
 

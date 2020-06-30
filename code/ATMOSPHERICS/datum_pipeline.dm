@@ -13,7 +13,7 @@
 
 /datum/pipeline/Destroy()
 	if(network) //For the pipenet rebuild
-		returnToPool(network)
+		qdel(network)
 	if(air && air.volume) //For the pipeline rebuild next tick
 		temporarily_store_air()
 		qdel(air)

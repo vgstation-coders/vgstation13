@@ -601,10 +601,10 @@
 /obj/item/weapon/storage/Destroy()
 	close_all()
 	if(boxes)
-		returnToPool(boxes)
+		qdel(boxes)
 		boxes = null
 	if(closer)
-		returnToPool(closer)
+		qdel(closer)
 		closer = null
 	for(var/atom/movable/AM in contents)
 		qdel(AM)

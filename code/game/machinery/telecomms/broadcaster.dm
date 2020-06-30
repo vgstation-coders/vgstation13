@@ -354,7 +354,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 #endif
 
 	spawn(50)
-		returnToPool(virt)
+		qdel(virt)
 
 /* Obsolete, RIP
 /proc/Broadcast_SimpleMessage(var/source, var/frequency, var/text, var/data, var/mob/M, var/compression, var/level)

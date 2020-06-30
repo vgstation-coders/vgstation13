@@ -20,7 +20,7 @@
 /obj/item/stack/rods/Destroy()
 	..()
 	if(active)
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/rods/can_drag_use(mob/user, turf/T)
@@ -29,7 +29,7 @@
 		if(use(1)) //place and use rod
 			return 1
 		else
-			returnToPool(active) //otherwise remove the draggable screen
+			qdel(active) //otherwise remove the draggable screen
 			active = null
 
 /obj/item/stack/rods/drag_use(mob/user, turf/T)
@@ -42,7 +42,7 @@
 /obj/item/stack/rods/dropped()
 	..()
 	if(active)
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/rods/afterattack(atom/Target, mob/user, adjacent, params)
@@ -114,7 +114,7 @@
 		to_chat(user, "Beginning lattice construction mode, click and hold to use. Use rods again to create grille.")
 		return
 	else //End click drag construction, create grille
-		returnToPool(active)
+		qdel(active)
 
 	if(!istype(user.loc, /turf))
 		return 0

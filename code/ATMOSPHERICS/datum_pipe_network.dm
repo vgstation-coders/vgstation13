@@ -43,7 +43,7 @@
 	//Notes: Assuming that members will add themselves to appropriate roster in network_expandz()
 
 	if(!start_normal)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	start_normal.network_expand(src, reference)
@@ -53,7 +53,7 @@
 	if((normal_members.len>0)||(line_members.len>0))
 		pipe_networks |= src
 	else
-		returnToPool(src)
+		qdel(src)
 		return
 	return 1
 

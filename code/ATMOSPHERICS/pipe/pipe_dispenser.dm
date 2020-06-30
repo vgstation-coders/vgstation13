@@ -140,7 +140,7 @@
 		if(user.drop_item(W, src))
 			to_chat(usr, "<span class='notice'>You put [W] back to [src].</span>")
 			if(istype(W, /obj/item/pipe))
-				returnToPool(W)
+				qdel(W)
 			else
 				qdel(W)
 			return

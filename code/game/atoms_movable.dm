@@ -84,7 +84,7 @@
 		T.reconsider_lights()
 
 	if(materials)
-		returnToPool(materials)
+		qdel(materials)
 		materials = null
 
 	if(on_z_transition)
@@ -128,7 +128,7 @@
 	if((flags & HEAR) && !ismob(src))
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
-				returnToPool(VH)
+				qdel(VH)
 
 	for(var/atom/movable/AM in src)
 		qdel(AM)
@@ -298,7 +298,7 @@
 		var/mob/living/M = AM
 		for(var/obj/item/weapon/grab/G in M.grabbed_by)
 			if (istype(G, /obj/item/weapon/grab))
-				returnToPool(G)
+				qdel(G)
 
 	AM.locked_to = src
 	if (ismob(AM))
@@ -762,7 +762,7 @@
 	flags &= ~HEAR
 	for(var/mob/virtualhearer/VH in virtualhearers)
 		if(VH.attached == src)
-			returnToPool(VH)
+			qdel(VH)
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)

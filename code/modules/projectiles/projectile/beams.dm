@@ -210,7 +210,7 @@ var/list/beam_master = list()
 		var/tS = 0
 		while(loc) // Move until we hit something.
 			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
-				returnToPool(src)
+				qdel(src)
 				break
 			if(first && timestopped)
 				tS = 1
@@ -223,7 +223,7 @@ var/list/beam_master = list()
 				break
 
 			if(kill_count-- < 1)
-				returnToPool(src)
+				qdel(src)
 				break
 
 			// Add the overlay as we pass over tiles.
@@ -447,7 +447,7 @@ var/list/beam_master = list()
 		for(var/atom/thing in ouroverlays)
 			if(!thing.timestopped && thing.loc && !thing.loc.timestopped)
 				ouroverlays -= thing
-				returnToPool(thing)
+				qdel(thing)
 	spawn
 		var/tS = 0
 		while(loc) //Move until we hit something
@@ -512,10 +512,10 @@ var/list/beam_master = list()
 			sleep(10)
 			for(var/atom/thing in ouroverlays)
 				ouroverlays -= thing
-				returnToPool(thing)
+				qdel(thing)
 
 		//del(src)
-		returnToPool(src)
+		qdel(src)
 
 /*cleanup(reference) //Waits .3 seconds then removes the overlay.
 //	to_chat(world, "setting invisibility")
@@ -761,7 +761,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 			if(kill_count < 1)
 				//del(src)
 				draw_ray(lastposition)
-				returnToPool(src)
+				qdel(src)
 				return
 			kill_count--
 
@@ -798,7 +798,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 			if(kill_count < 1)
 				//del(src)
 				draw_ray(lastposition)
-				returnToPool(src)
+				qdel(src)
 				return
 			kill_count--
 

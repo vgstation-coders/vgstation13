@@ -29,7 +29,7 @@
 			trail.icon_state = proj_trail_icon_state
 			trail.setDensity(FALSE)
 			spawn(proj_trail_lifespan)
-				returnToPool(trail)
+				qdel(trail)
 	return
 
 /obj/item/projectile/spell_projectile/proc/prox_cast(var/list/targets)

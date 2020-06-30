@@ -29,24 +29,24 @@
 /obj/item/stack/sheet/metal/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			returnToPool(src)
+			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
-				returnToPool(src)
+				qdel(src)
 				return
 		if(3.0)
 			if (prob(5))
-				returnToPool(src)
+				qdel(src)
 				return
 		else
 	return
 
 /obj/item/stack/sheet/metal/blob_act()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/stack/sheet/metal/singularity_act()
-	returnToPool(src)
+	qdel(src)
 	return 2
 
 // Diet metal.

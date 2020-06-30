@@ -180,7 +180,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/sparks/process()
 	if(energy==0)
 		processing_objects.Remove(src)
-		returnToPool(src)
+		qdel(src)
 		return
 	else
 		step(src,move_dir)
@@ -558,7 +558,7 @@ steam.start() -- spawns the effect
 	icon_state = "blank"
 	spawn( 20 )
 		if(src)
-			returnToPool(src)
+			qdel(src)
 
 /obj/effect/effect/trails/ion
 	base_name = "ion"
@@ -638,9 +638,9 @@ steam.start() -- spawns the effect
 					II.icon_state = "blank"
 					spawn( 20 )
 						if(I)
-							returnToPool(I)
+							qdel(I)
 						if(II)
-							returnToPool(II)
+							qdel(II)
 
 			spawn(2)
 				if(src.on)
@@ -932,7 +932,7 @@ steam.start() -- spawns the effect
 		var/obj/item/weapon/grab/G = I
 		G.affecting.forceMove(src.loc)
 		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
-		returnToPool(I)
+		qdel(I)
 		qdel(src)
 		return
 
@@ -998,7 +998,7 @@ steam.start() -- spawns the effect
 		var/obj/item/weapon/grab/G = C
 		G.affecting.forceMove(src.loc)
 		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
-		returnToPool(C)
+		qdel(C)
 		src.ChangeTurf(get_base_turf(src.z))
 		return
 

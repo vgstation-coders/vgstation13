@@ -163,7 +163,7 @@ var/list/impact_master = list()
 	in_chamber.firer = user
 	var/output = in_chamber.process() //Test it!
 	//del(in_chamber) //No need for it anymore
-	returnToPool(in_chamber)
+	qdel(in_chamber)
 	return output //Send it back to the gun!
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)
@@ -536,12 +536,12 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/bullet_die()
 	OnDeath()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/projectile/beam/lightning/spell/bullet_die()
         spawn()
                 OnDeath()
-                returnToPool(src)
+                qdel(src)
 
 /obj/item/projectile/proc/bump_original_check()
 	if(!bumped && !isturf(original))
@@ -571,11 +571,11 @@ var/list/impact_master = list()
 	if(!dir)
 		//del(src)
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 	if(kill_count < 1)
 		//del(src)
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 	kill_count--
 	var/first = 1
 	var/tS = 0

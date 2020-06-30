@@ -20,7 +20,7 @@
 				holder.buildmode.copycat = null
 			if(M.client.buildmode_objs && M.client.buildmode_objs.len)
 				for(var/BM in M.client.buildmode_objs)
-					returnToPool(BM)
+					qdel(BM)
 				M.client.buildmode_objs.Cut()
 		else
 			log_admin("[key_name(usr)] has entered build mode.")

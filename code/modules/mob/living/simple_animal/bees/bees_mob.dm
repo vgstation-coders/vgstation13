@@ -143,7 +143,7 @@ var/bee_mobs_count = 0
 
 /mob/living/simple_animal/bee/death(var/gibbed = FALSE)
 	..(gibbed)
-	returnToPool(src)
+	qdel(src)
 
 /mob/living/simple_animal/bee/gib(var/animation = 0, var/meat = 1)
 	death(1)

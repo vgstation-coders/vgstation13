@@ -39,7 +39,7 @@
 
 /obj/abstract/screen/movable/spell_master/Click()
 	if(!spell_objects.len)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	toggle_open()
@@ -130,14 +130,14 @@
 	toggle_open(2)
 
 /obj/abstract/screen/movable/spell_master/proc/remove_spell(var/spell/spell)
-	returnToPool(spell.connected_button)
+	qdel(spell.connected_button)
 
 	spell.connected_button = null
 
 	if(spell_objects.len)
 		toggle_open(showing + 1)
 	else
-		returnToPool(src)
+		qdel(src)
 
 /obj/abstract/screen/movable/spell_master/proc/silence_spells(var/amount)
 	for(var/obj/abstract/screen/spell/spell in spell_objects)
@@ -270,12 +270,12 @@
 			spellmaster.spell_holder.client.screen -= src
 			remove_channeling()
 	if(spellmaster && !spellmaster.spell_objects.len)
-		returnToPool(spellmaster)
+		qdel(spellmaster)
 	spellmaster = null
 
 /obj/abstract/screen/spell/proc/update_charge(var/forced_update = 0)
 	if(!spell)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	if((last_charge == spell.charge_counter || !handle_icon_updates) && !forced_update)
@@ -317,7 +317,7 @@
 
 /obj/abstract/screen/spell/Click(location, control, params)
 	if(!usr || !spell)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	if(usr.is_pacified() && (spell.spell_flags & IS_HARMFUL))

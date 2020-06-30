@@ -167,7 +167,7 @@
 		B.our_spell = src
 		B.damage = basedamage
 		target.bullet_act(B)
-		returnToPool(B)
+		qdel(B)
 	if(chained)
 		//DO IT AGAIN
 		var/mob/next_target

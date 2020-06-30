@@ -219,7 +219,7 @@
 	src._re_emit = 0
 	OB.connect_to(AM)
 	OB.update_icon()
-	returnToPool(src)
+	qdel(src)
 	//BEAM_DEL(src)
 
 
@@ -300,7 +300,7 @@
 			//BEAM_DEL(child)
 			children -= child
 			child._re_emit = 0
-			returnToPool(child)
+			qdel(child)
 	children.len = 0
 
 /obj/effect/beam/proc/disconnect(var/re_emit=1)
@@ -345,7 +345,7 @@
 	if(!OB)
 		OB = src
 	src._re_emit = 0
-	returnToPool(src)
+	qdel(src)
 	OB.connect_to(AM)
 
 /obj/effect/beam/proc/HasSource(var/atom/source)
@@ -376,7 +376,7 @@
 		//BEAM_DEL(src)
 		beam_testing("\ref[src] no loc")
 		src._re_emit = 0
-		returnToPool(src)
+		qdel(src)
 		return
 
 	var/turf/T = get_turf(src)
@@ -387,7 +387,7 @@
 		//BEAM_DEL(src)
 		beam_testing("\ref[src] end of world")
 		src._re_emit = 0
-		returnToPool(src)
+		qdel(src)
 		return
 
 	// If we're master, we're actually invisible, and we're on the same tile as the machine.
@@ -416,7 +416,7 @@
 			beam_testing("\ref[src] Bumped")
 			//BEAM_DEL(src)
 			src._re_emit = 0
-			returnToPool(src)
+			qdel(src)
 			return
 
 		stepped=1
@@ -425,7 +425,7 @@
 			beam_testing("\ref[src] ran out")
 			//BEAM_DEL(src)
 			src._re_emit = 0
-			returnToPool(src)
+			qdel(src)
 			return
 
 	next = spawn_child()
@@ -525,7 +525,7 @@
 	if(next)
 		//BEAM_DEL(next)
 		next._re_emit = 0
-		returnToPool(next)
+		qdel(next)
 		next=null
 	stepped = 0
 	..()

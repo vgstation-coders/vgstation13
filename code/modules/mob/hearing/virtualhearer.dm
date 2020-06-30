@@ -51,7 +51,7 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	if(attached)
 		attached.Hear(arglist(args))
 	else
-		returnToPool(src)
+		qdel(src)
 
 /mob/virtualhearer/ex_act()
 	return

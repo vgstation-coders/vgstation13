@@ -21,7 +21,7 @@
 		if(other != src)
 			other.amount += src.amount
 			spawn other.Spread()
-			returnToPool(src)
+			qdel(src)
 			return
 
 	Spread()
@@ -33,7 +33,7 @@
 /obj/effect/decal/cleanable/liquid_fuel/burnFireFuel(var/used_fuel_ratio, var/used_reactants_ratio)
 	amount -= (amount * used_fuel_ratio * used_reactants_ratio) * 5 // liquid fuel burns 5 times as quick
 	if(amount < 0.1)
-		returnToPool(src)
+		qdel(src)
 
 /obj/effect/decal/cleanable/liquid_fuel/proc/Spread()
 	//Allows liquid fuels to sometimes flow into other tiles.
@@ -89,7 +89,7 @@
 					amount = balanced
 					FF.amount = balanced
 			else
-				returnToPool(FF) //otherwise, we can't actually make a new patch and we bin the idea completely
+				qdel(FF) //otherwise, we can't actually make a new patch and we bin the idea completely
 				return
 
 			spawn(1)
@@ -100,4 +100,4 @@
 				transferred_amount += FF.amount
 	amount = max(amount - transferred_amount, 0)
 	if(amount == 0)
-		returnToPool(src)
+		qdel(src)

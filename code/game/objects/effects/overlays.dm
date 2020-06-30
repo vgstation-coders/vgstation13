@@ -29,7 +29,7 @@
 	spawn if(fade)
 		animate(src, alpha=0, time=lifetime)
 	spawn(lifetime)
-		returnToPool(src)
+		qdel(src)
 
 /obj/effect/overlay/beam/persist/New()
 	return

@@ -16,7 +16,7 @@
 /obj/item/stack/conveyor_assembly/dropped()
 	..()
 	if(active)
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/conveyor_assembly/attack_self(mob/user)
@@ -25,7 +25,7 @@
 		to_chat(user, "Beginning conveyor construction mode, click and drag screen in direction you wish conveyor to go.")
 		return
 	else
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/conveyor_assembly/drag_mousedown(mob/user, turf/origin)
@@ -35,7 +35,7 @@
 		user.client.images += placeimage
 		placeloc = origin
 	else
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/conveyor_assembly/can_drag_use(mob/user, turf/T)

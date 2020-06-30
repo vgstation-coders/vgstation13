@@ -123,7 +123,7 @@ obj/machinery/gibber/New()
 			M.client.eye = src
 		M.forceMove(src)
 		src.occupant = M
-		returnToPool(G)
+		qdel(G)
 		update_icon()
 
 /obj/machinery/gibber/MouseDropTo(mob/target, mob/user)

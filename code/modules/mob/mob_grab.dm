@@ -29,10 +29,10 @@
 	affecting = victim
 
 	if(!victim.can_be_grabbed(assailant))
-		returnToPool(src)
+		qdel(src)
 		return
 	if(affecting && affecting.anchored)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	hud = getFromPool(/obj/abstract/screen/grab)
@@ -70,7 +70,7 @@
 
 	if(!assailant)
 		affecting = null
-		returnToPool(src)
+		qdel(src)
 		return
 
 	if(assailant.client)
@@ -140,7 +140,7 @@
 		return
 	*/
 	if(!assailant.canmove || assailant.lying)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	last_upgrade = world.time
@@ -188,10 +188,10 @@
 					if(state == GRAB_KILL)
 						return
 					if(!assailant || !affecting)
-						returnToPool(src)
+						qdel(src)
 						return
 					if(!assailant.canmove || assailant.lying)
-						returnToPool(src)
+						qdel(src)
 						return
 					state = GRAB_KILL
 					assailant.visible_message("<span class='danger'>[assailant] has tightened \his grip on [affecting]'s neck!</span>", \
@@ -206,7 +206,7 @@
 					affecting.losebreath += 1
 				else
 					if(!assailant || !affecting)
-						returnToPool(src)
+						qdel(src)
 						return
 					assailant.visible_message("<span class='warning'>[assailant] was unable to tighten \his grip on [affecting]'s neck!</span>", \
 						drugged_message = "<span class='warning'>[affecting] refused [assailant]'s hug!</span>")
@@ -217,12 +217,12 @@
 //This is used to make sure the victim hasn't managed to yackety sax away before using the grab.
 /obj/item/weapon/grab/proc/confirm()
 	if(!assailant || !affecting)
-		returnToPool(src)
+		qdel(src)
 		return 0
 
 	if(affecting)
 		if(!isturf(assailant.loc) || ( !isturf(affecting.loc) || assailant.loc != affecting.loc && get_dist(assailant, affecting) > 1) )
-			returnToPool(src)
+			qdel(src)
 			return 0
 
 	return 1
@@ -259,11 +259,11 @@
 				drugged_message="<span class='danger'>[affecting] vanishes in disgust.</span>")
 			affecting.forceMove(user)
 			attacker.stomach_contents.Add(affecting)
-			returnToPool(src)
+			qdel(src)
 
 
 /obj/item/weapon/grab/dropped()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/weapon/grab/Destroy()
 	if(affecting)
@@ -274,7 +274,7 @@
 			assailant.client.screen -= hud
 		assailant = null
 	if(hud)
-		returnToPool(hud)
+		qdel(hud)
 		hud = null
 	..()
 

@@ -265,7 +265,7 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	message_admins(message, 0, 1)
 
-	returnToPool(src)
+	qdel(src)
 
 // shock the user with probability prb
 /obj/structure/cable/proc/shock(mob/user, prb, siemens_coeff = 1.0)
@@ -283,16 +283,16 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			returnToPool(src)
+			qdel(src)
 		if(2.0)
 			if(prob(50))
 				getFromPool(/obj/item/stack/cable_coil,  src.loc, src.d1 ? 2 : 1, light_color)
-				returnToPool(src)
+				qdel(src)
 
 		if(3.0)
 			if(prob(25))
 				getFromPool(/obj/item/stack/cable_coil, src.loc, src.d1 ? 2 : 1, light_color)
-				returnToPool(src)
+				qdel(src)
 	return
 
 /obj/structure/cable/proc/cableColor(var/colorC = "red")
@@ -504,7 +504,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		propagate_network(powerlist[1], PN) // propagates the new powernet beginning at the source cable
 
 		if(PN.is_empty()) // can happen with machines made nodeless when smoothing cables
-			returnToPool(PN) //powernets do not get qdelled
+			qdel(PN) //powernets do not get qdelled
 
 /obj/structure/cable/spawned_by_map_element(datum/map_element/ME, list/objects)
 	.=..()

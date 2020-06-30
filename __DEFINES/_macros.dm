@@ -2,7 +2,7 @@
 
 #define getFromPool(Type, Arguments...) (new Type(Arguments))
 
-#define returnToPool(Thing) (qdel(Thing))
+#define qdel(Thing) (qdel(Thing))
 
 //Typechecking macros
 // fun if you want to typecast humans/monkeys/etc without writing long path-filled lines.

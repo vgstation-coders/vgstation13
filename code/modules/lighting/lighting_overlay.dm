@@ -51,7 +51,7 @@
 		else
 			warning("A lighting overlay realised it was in nullspace in update_overlay() and got pooled!")
 
-		returnToPool(src)
+		qdel(src)
 		return
 
 	// To the future coder who sees this and thinks

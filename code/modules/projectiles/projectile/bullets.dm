@@ -321,7 +321,7 @@ obj/item/projectile/bullet/suffocationbullet
 		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
 			M.GetDrilled()
 	if(istype(A, /obj/structure/boulder))
-		returnToPool(A)
+		qdel(A)
 
 	return ..()
 

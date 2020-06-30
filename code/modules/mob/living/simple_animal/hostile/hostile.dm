@@ -71,7 +71,7 @@
 		if(size > SIZE_TINY && istype(loc, /obj/item/weapon/holder)) //If somebody picked us up and we're big enough to fight!
 			var/mob/living/L = loc.loc
 			if(!istype(L) || (L.faction != src.faction && CanAttack(L))) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction AND we're being held by a mob whom we consider a valid target!
-				returnToPool(loc)
+				qdel(loc)
 			else
 				return 0
 		if(is_pacified())
@@ -348,9 +348,9 @@
 
 		var/atom/potentialImpact = fC.process()
 		if(potentialImpact && !CanAttack(potentialImpact))
-			returnToPool(fC)
+			qdel(fC)
 			return 0
-		returnToPool(fC)
+		qdel(fC)
 	//Friendly Fire check - End
 
 	var/obj/item/projectile/A = create_projectile(user)

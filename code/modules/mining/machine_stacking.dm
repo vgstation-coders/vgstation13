@@ -208,9 +208,9 @@
 				stack.amount += stackA.amount
 
 			stacks["[stackA.type]"] = stack
-			returnToPool(stackA)
+			qdel(stackA)
 		//else if (istype(O, /obj/item/stack/ore/slag))
-		//	returnToPool(O)
+		//	qdel(O)
 		else
 			A.forceMove(out_T)
 
@@ -245,7 +245,7 @@
 
 	if(stack.amount == 0)
 		stacks.Remove(typepath)
-		returnToPool(stack)
+		qdel(stack)
 
 /obj/machinery/mineral/stacking_machine/proc/send_signal(list/data)
 	if(!radio_connection)

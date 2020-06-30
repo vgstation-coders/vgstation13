@@ -100,7 +100,7 @@
 	else
 		if(beam)
 			beam._re_emit = 0
-			returnToPool(beam)
+			qdel(beam)
 			beam = null
 
 /obj/machinery/power/emitter/receive_signal(datum/signal/signal)
@@ -133,7 +133,7 @@
 			update_beam()
 
 /obj/machinery/power/emitter/Destroy()
-	returnToPool(beam)
+	qdel(beam)
 	message_admins("Emitter deleted at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 	log_game("Emitter deleted at ([x],[y],[z])")
 	investigation_log(I_SINGULO,"<font color='red'>deleted</font> at ([x],[y],[z])")

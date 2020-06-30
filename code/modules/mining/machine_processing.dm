@@ -403,7 +403,7 @@
 
 		credits += A.materials.getValue()
 		ore.addFrom(A.materials, FALSE)
-		returnToPool(A)
+		qdel(A)
 
 /obj/machinery/mineral/processing_unit/process()
 	if(stat & (NOPOWER | BROKEN))

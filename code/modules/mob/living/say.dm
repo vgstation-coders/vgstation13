@@ -181,10 +181,10 @@ var/list/headset_modes = list(
 	speech.message = trim_left(speech.message)
 	if(handle_inherent_channels(speech, message_mode))
 		say_testing(src, "Handled by inherent channel")
-		returnToPool(speech)
+		qdel(speech)
 		return
 	if(!can_speak_vocal(speech.message))
-		returnToPool(speech)
+		qdel(speech)
 		return
 
 	//parse the language code and consume it
@@ -198,7 +198,7 @@ var/list/headset_modes = list(
 		speech.wrapper_classes.Add("spoken_into_radio")
 	if(radio_return & NOPASS) //There's a whisper() message_mode, no need to continue the proc if that is called
 		whisper(speech.message, speech.language)
-		returnToPool(speech)
+		qdel(speech)
 		return
 
 	if(radio_return & REDUCE_RANGE)
@@ -215,7 +215,7 @@ var/list/headset_modes = list(
 	radio(speech, message_mode) //Sends the radio signal
 	var/turf/T = get_turf(src)
 	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message]")
-	returnToPool(speech)
+	qdel(speech)
 	return 1
 
 /mob/living/proc/resist_memes(var/datum/speech/speech)
@@ -672,7 +672,7 @@ var/list/headset_modes = list(
 	if (said_last_words) // dying words
 		succumb_proc(0)
 
-	returnToPool(speech)
+	qdel(speech)
 
 /obj/effect/speech_bubble
 	var/mob/parent
