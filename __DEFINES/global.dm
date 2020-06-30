@@ -228,8 +228,6 @@ var/forum_authenticated_group = "10"
 var/fileaccess_timer = 0
 var/custom_event_msg = null
 
-#define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
-
 //Recall time limit:  2 hours
 var/recall_time_limit = 72000
 
