@@ -353,7 +353,7 @@
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	var/obj/machinery/door/airlock/D = new selected.build_type(A)
-	if(capitalize(selected_name) == selected_name)	//The name inputted is capitalized, so we add \improper.
+	if(selected_name && (capitalize(selected_name) == selected_name))	//The name inputted is capitalized, so we add \improper.
 		D.name	= "\improper [selected_name]"
 	else
 		D.name		= selected_name
@@ -404,8 +404,8 @@
 /datum/selection_schematic/airlock_schematic/clicked(var/mob/user)
 	if(master:selected == src)
 		master:selected_name = copytext(sanitize(input(usr,"What would you like to name this airlock?","Input a name",name) as text|null),1,MAX_NAME_LEN)
-		if(capitalize(master:selected_name) == master:selected_name)
-			master:selected_name = "\improper[master:selected_name]"
+		if(master:selected_name && (capitalize(master:selected_name) == master:selected_name))
+			master:selected_name = "\improper [master:selected_name]"
 	else
 		master.selected = src
 // Schematics for schematics, I know, but it's OOP!
