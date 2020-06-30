@@ -496,13 +496,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 ////////////
 
 /obj/item/clothing/mask/cigarette/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
-	if(!..())
-		return CANNOT_EQUIP
 	var/mob/living/carbon/C = M
 	if(!istype(C) || !C.hasmouth())
 		to_chat(C, "<span class='warning'>You have no mouth.</span>")
 		return CANNOT_EQUIP
-	return CAN_EQUIP
+	. = ..()
 
 /obj/item/clothing/mask/cigarette/cigar
 	name = "Premium Cigar"
