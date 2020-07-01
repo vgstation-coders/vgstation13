@@ -52,7 +52,6 @@ BSQL_DEL_PROC(/datum/BSQL_Connection)
 	var/op_id = world._BSQL_Internal_Call("GetOperation")
 	if(!op_id)
 		BSQL_ERROR("Library failed to provide query operation for connection id [id]([connection_type])!")
-		return
 
 	return new /datum/BSQL_Operation/Query(src, op_id)
 
