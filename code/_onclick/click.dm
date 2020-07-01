@@ -147,7 +147,7 @@
 					var/mob/M = A
 					var/def_zone
 					def_zone = modifiers["def_zone"]
-					resolved = M.attackby(held_item,src,def_zone = def_zone, params)
+					resolved = M.attackby(held_item, src, params)
 				else
 					resolved = A.attackby(held_item, src, params)
 				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
