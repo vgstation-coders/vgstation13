@@ -49,7 +49,7 @@ var/global/datum/controller/occupations/job_master
 	return 1
 
 /datum/controller/occupations/proc/GetJob(var/rank)
-	set SpacemanDMM_return_type = /datum/job
+	RETURN_TYPE(/datum/job)
 	if(!rank)
 		return null
 	for(var/datum/job/J in occupations)
