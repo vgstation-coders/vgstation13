@@ -136,18 +136,17 @@
 	return 1
 
 /obj/item/weapon/gun/projectile/hecate/hunting/proc/scoping()
-	if(is_holder_of(usr, src))
-		if(wielded && scoped)
-			if(scope_toggled)
-				scope_toggled = 0
-			else
-				scope_toggled = 1
-			update_wield(usr)
+	if(!is_holder_of(usr, src))
+		return
+	if(wielded && scoped)
+		if(scope_toggled)
+			scope_toggled = 0
 		else
-			if(scoped)
-				to_chat(usr, "<span class='warning'>You must dual-wield \the [src] before you can use scope on it!</span>")
+			scope_toggled = 1
+		update_wield(usr)
 	else
-		return ..()
+		if(scoped)
+			to_chat(usr, "<span class='warning'>You must dual-wield \the [src] before you can use scope on it!</span>")
 
 /obj/item/weapon/gun/projectile/hecate/hunting/AltClick()
 	scoping()
