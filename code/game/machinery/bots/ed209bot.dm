@@ -441,7 +441,7 @@ Auto Patrol: []"},
 
 	spark(src)
 
-	getFromPool(/obj/effect/decal/cleanable/blood/oil, loc)
+	new /obj/effect/decal/cleanable/blood/oil(loc)
 	qdel(src)
 
 

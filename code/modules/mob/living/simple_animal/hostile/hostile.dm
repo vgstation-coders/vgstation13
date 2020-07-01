@@ -335,7 +335,7 @@
 
 	//Friendly Fire check (don't bother if the mob is controlled by a player)
 	if(!friendly_fire && !ckey)
-		var/obj/item/projectile/friendlyCheck/fC = getFromPool(/obj/item/projectile/friendlyCheck,user.loc)
+		var/obj/item/projectile/friendlyCheck/fC = new /obj/item/projectile/friendlyCheck(user.loc)
 		fC.current = target
 		var/turf/T = get_turf(user)
 		var/turf/U = get_turf(target)

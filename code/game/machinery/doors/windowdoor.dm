@@ -187,8 +187,8 @@
 	health = max(0, health - damage)
 	if(health <= 0)
 		playsound(src, "shatter", 70, 1)
-		getFromPool(shard_type, loc)
-		getFromPool(/obj/item/stack/cable_coil,loc,2)
+		new shard_type(loc)
+		new /obj/item/stack/cable_coil(loc, 2)
 		eject_electronics()
 		qdel(src)
 

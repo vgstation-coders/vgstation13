@@ -68,7 +68,7 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 
 /obj/item/pipe_spawner/New()
 	..()
-	var/obj/item/pipe/P = getFromPool(/obj/item/pipe,loc)
+	var/obj/item/pipe/P = new /obj/item/pipe(loc)
 	P.New(src.loc, pipe_type=src.pipe_type, dir=src.dir)
 	P.update()
 	qdel(src)

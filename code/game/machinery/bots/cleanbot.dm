@@ -185,7 +185,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 
 	if(oddbutton && prob(5))
 		visible_message("<span class='warning'>Something flies out of \the [src]! He seems to be acting oddly.</span>")
-		add_oldtarget(get_turf(getFromPool(/obj/effect/decal/cleanable/blood/gibs, loc)), -1) //So we don't target our own gibs
+		add_oldtarget(get_turf(new /obj/effect/decal/cleanable/blood/gibs(loc)), -1) //So we don't target our own gib)
 
 /obj/machinery/bot/cleanbot/target_selection()
 	for(var/turf/T in view(7, src))

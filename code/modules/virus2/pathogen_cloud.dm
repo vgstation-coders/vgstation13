@@ -71,7 +71,7 @@ var/list/pathogen_clouds = list()
 		sleep (1 SECONDS)
 		while (src && src.loc)
 			if (src.loc != target)
-				getFromPool(/obj/effect/effect/pathogen_cloud,src.loc,source,viruses,sourceIsCarrier)
+				new /obj/effect/effect/pathogen_cloud(src.loc, source, viruses, sourceIsCarrier)
 			if (prob(75))
 				step_towards(src,target)
 			else

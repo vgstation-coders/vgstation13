@@ -1252,7 +1252,7 @@
 	required_container = /obj/item/slime_extract/metal
 
 /datum/chemical_reaction/slime_extract/slimemetal/on_reaction(var/datum/reagents/holder)
-	var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(holder.my_atom))
+	var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(holder.my_atom))
 	M.amount = 15
 	var/obj/item/stack/sheet/plasteel/P = new /obj/item/stack/sheet/plasteel
 	P.amount = 5
@@ -1578,9 +1578,9 @@
 			/obj/item/stack/sheet/mineral/gold,
 			/obj/item/stack/sheet/mineral/uranium)
 	var/path = pick(paths)
-	getFromPool(path, get_turf(holder.my_atom), 5)
+	new path(get_turf(holder.my_atom), 5)
 	path = pick(paths)
-	getFromPool(path, get_turf(holder.my_atom), 5)
+	new path(get_turf(holder.my_atom), 5)
 	..()
 
 //Blue

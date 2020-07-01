@@ -208,7 +208,7 @@ var/list/portal_cache = list()
 	for(var/obj/effect/beam/emitter/BE in beams)
 		var/list/spawners = list(src)
 		spawners |= BE.sources
-		var/obj/effect/beam/emitter/beam = getFromPool(BE.type, PE.loc)
+		var/obj/effect/beam/emitter/beam = new BE.type(PE.loc)
 		beam.dir = BE.dir
 		beam.power = BE.power
 		beam.steps = BE.steps+1
@@ -218,7 +218,7 @@ var/list/portal_cache = list()
 	for(var/obj/effect/beam/infrared/IR in beams)
 		var/list/spawners = list(src)
 		spawners |= IR.sources
-		var/obj/effect/beam/infrared/beam = getFromPool(IR.type, PE.loc)
+		var/obj/effect/beam/infrared/beam = new IR.type(PE.loc)
 		beam.dir = IR.dir
 		beam.steps = IR.steps+1
 		beam.visible = IR.visible

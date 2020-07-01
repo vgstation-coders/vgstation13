@@ -553,7 +553,7 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/proc/request_path(var/new_dest)
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(beacon_freq)
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.transmission_method = 1
 	var/list/keyval = list(
@@ -770,7 +770,7 @@ var/global/mulebot_count = 0
 
 	spark(src)
 
-	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+	var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	O.New(O.loc)
 	unload(0)
 	qdel(src)

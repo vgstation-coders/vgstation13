@@ -357,7 +357,7 @@ var/list/beam_master = list()
 		if(count >= kill_count)
 			break
 		count++
-		var/obj/effect/overlay/beam/persist/X=getFromPool(/obj/effect/overlay/beam/persist,T)
+		var/obj/effect/overlay/beam/persist/X=new /obj/effect/overlay/beam/persist(T)
 		X.BeamSource=src
 		ouroverlays += X
 		if((N+WORLD_ICON_SIZE*2>length) && (N+WORLD_ICON_SIZE<=length))
@@ -842,7 +842,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 		if(count >= kill_count)
 			break
 		count++
-		var/obj/effect/overlay/beam/X=getFromPool(/obj/effect/overlay/beam,T,current_timer,1)
+		var/obj/effect/overlay/beam/X=new /obj/effect/overlay/beam(T, current_timer, 1)
 		X.BeamSource=src
 		current_timer += increment
 		if((N+64>(length+16)) && (N+WORLD_ICON_SIZE<=(length+16)))

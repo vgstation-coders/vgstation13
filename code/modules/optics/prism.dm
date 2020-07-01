@@ -105,7 +105,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	if(beams.len>0 && anchored)
 		var/newbeam=0
 		if(!beam)
-			beam = getFromPool(/obj/effect/beam/emitter,loc)
+			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir=dir
 			newbeam=1
 		beam.power=0

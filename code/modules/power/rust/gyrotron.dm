@@ -52,7 +52,7 @@
 			sleep(rate)
 
 /obj/machinery/rust/gyrotron/proc/emit()
-	var/obj/item/projectile/beam/emitter/A = getFromPool(/obj/item/projectile/beam/emitter, loc)
+	var/obj/item/projectile/beam/emitter/A = new /obj/item/projectile/beam/emitter(loc)
 	A.frequency = frequency
 	A.damage = mega_energy * 1500
 

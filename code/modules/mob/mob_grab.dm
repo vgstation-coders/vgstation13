@@ -35,7 +35,7 @@
 		qdel(src)
 		return
 
-	hud = getFromPool(/obj/abstract/screen/grab)
+	hud = new /obj/abstract/screen/grab
 	hud.icon_state = "reinforce"
 	hud.name = "reinforce grab"
 	hud.master = src

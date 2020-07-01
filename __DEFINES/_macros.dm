@@ -1,9 +1,5 @@
 //Define your macros here if they're used in general code
 
-#define getFromPool(Type, Arguments...) (new Type(Arguments))
-
-#define qdel(Thing) (qdel(Thing))
-
 //Typechecking macros
 // fun if you want to typecast humans/monkeys/etc without writing long path-filled lines.
 #define ishuman(A) istype(A, /mob/living/carbon/human)

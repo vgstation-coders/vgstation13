@@ -101,7 +101,7 @@
 				else
 					possible_icons.Add("[custom_icon_state][i]")
 		for(var/i = 0;i < tr_number;i++)
-			var/obj/effect/tracker/Tr = getFromPool(tr_type, tr_source)
+			var/obj/effect/tracker/Tr = new tr_type(tr_source)
 			Tr.target = tr_destination
 			if(custom_icon_state)
 				Tr.icon_state = pick(possible_icons)

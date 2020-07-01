@@ -373,7 +373,7 @@ var/bee_mobs_count = 0
 					mood_change(BEE_HEADING_HOME)
 
 				else
-					var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,T)
+					var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T)
 					for (var/datum/bee/B in home_goers)
 						B_mob.addBee(B)
 						bees.Remove(B)
@@ -385,7 +385,7 @@ var/bee_mobs_count = 0
 					mood_change(BEE_OUT_FOR_PLANTS)
 
 				else
-					var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,T)
+					var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T)
 					for (var/datum/bee/B in pollinaters)
 						B_mob.addBee(B)
 						bees.Remove(B)
@@ -426,7 +426,7 @@ var/bee_mobs_count = 0
 				target = null
 			if(bees.len > 5)
 				//calm down and spread out a little
-				var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
+				var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src))
 				for (var/i = 1 to rand(1,5))
 					var/datum/bee/B = pick(bees)
 					B_mob.addBee(B)
@@ -522,7 +522,7 @@ var/bee_mobs_count = 0
 					queen = 1
 					break
 			if (state != BEE_ROAMING || !queen)//homeless bees spread out if there's no queen among them
-				var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
+				var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src))
 				var/datum/bee/B = pick(bees)
 				B_mob.addBee(B)
 				bees.Remove(B)

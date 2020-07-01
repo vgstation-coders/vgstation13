@@ -1437,7 +1437,7 @@
 		B.icon_state = "glass_empty"
 
 	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(M || src)) // Create a glass shard at the target's location! Or
+		new /obj/item/weapon/shard(get_turf(M || src)) // Create a glass shard at the target's location! O)
 
 	var/icon/I = new('icons/obj/drinks.dmi', B.icon_state)
 	I.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
@@ -1489,7 +1489,7 @@
 		B.icon_state = "glass_empty"
 
 	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(src)) // Create a glass shard at the hit location!
+		new /obj/item/weapon/shard(get_turf(src)) // Create a glass shard at the hit location)
 
 	var/icon/Q = new('icons/obj/drinks.dmi', B.icon_state)
 	Q.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)

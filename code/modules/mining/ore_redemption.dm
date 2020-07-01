@@ -73,7 +73,7 @@
 		qdel(O)
 
 /obj/machinery/mineral/ore_redemption/proc/SmeltOreType(var/type, var/amount)
-	var/obj/item/stack/ore/O = getFromPool(type)
+	var/obj/item/stack/ore/O = new type
 	O.max_amount = INFINITY
 	O.set_amount(amount)
 	SmeltMineral(O)

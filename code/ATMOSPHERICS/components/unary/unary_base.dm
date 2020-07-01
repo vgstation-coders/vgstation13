@@ -98,7 +98,7 @@
 
 /obj/machinery/atmospherics/unary/build_network()
 	if(!network && node1)
-		network = getFromPool(/datum/pipe_network)
+		network = new /datum/pipe_network
 		network.normal_members += src
 		network.build_network(node1, src)
 

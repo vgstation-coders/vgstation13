@@ -52,7 +52,7 @@
 
 			if(origin.Cross(null, target, 0, 0) && target.Cross(null, origin, 0, 0))
 				if(!locate(/obj/effect/decal/cleanable/liquid_fuel) in target)
-					getFromPool(/obj/effect/decal/cleanable/liquid_fuel, target, amount*0.25)
+					new /obj/effect/decal/cleanable/liquid_fuel(target, amount*0.25)
 					amount *= 0.75
 
 /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel
@@ -81,7 +81,7 @@
 		if(locate(/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel) in O)
 			continue
 		if(O.Cross(null, S, 0, 0) && S.Cross(null, O, 0, 0))
-			var/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/FF = getFromPool(/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel, O, amount*0.25, d)
+			var/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/FF = new /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel(O, amount*0.25, d)
 
 			if(amount + FF.amount > 0.4) //if we make a patch with not enough fuel, we balance it out properly to ensure even burn
 				if(amount < 0.2 || FF.amount < 0.2) //one of these is too small, so let's average

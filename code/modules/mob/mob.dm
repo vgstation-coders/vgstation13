@@ -304,7 +304,7 @@
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
 	if(flags & HEAR_ALWAYS)
-		getFromPool(/mob/virtualhearer, src)
+		new /mob/virtualhearer(src)
 
 	update_colour(0)
 

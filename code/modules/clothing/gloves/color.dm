@@ -27,7 +27,7 @@
 			"<span class='warning'>You fire an arc of electricity!</span>", \
 			"You hear the loud crackle of electricity!")
 		var/datum/powernet/PN = cable.get_powernet()
-		var/obj/item/projectile/beam/lightning/L = getFromPool(/obj/item/projectile/beam/lightning, T)
+		var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning(T)
 		if(PN)
 			L.damage = PN.get_electrocute_damage()
 			var/datum/organ/external/OE = user.get_active_hand_organ()

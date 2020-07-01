@@ -211,7 +211,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 				// No beam?  Make one.
 				if(!beam)
-					beam = getFromPool(beamtype,loc)
+					beam = new beamtype(loc)
 					emitted_beams[i]=beam
 					beam.dir=cdir
 					newbeam=1
@@ -263,7 +263,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	for(var/i=1 to nsplits)
 		var/splitdir = deflections[i]
 		var/turf/target = get_edge_target_turf(src, splitdir)
-		var/obj/item/projectile/beam/B = getFromPool(P.type,T)
+		var/obj/item/projectile/beam/B = new P.type(T)
 		B.original = target
 		B.starting = T
 		B.current = T

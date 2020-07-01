@@ -94,7 +94,7 @@
 /obj/machinery/power/emitter/proc/update_beam()
 	if(active && powered)
 		if(!beam)
-			beam = getFromPool(/obj/effect/beam/emitter, loc)
+			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
 	else
@@ -246,7 +246,7 @@
 			fire_delay = rand(20, 100)
 			shot_number = 0
 
-		//beam = getFromPool(/obj/item/projectile/beam/emitter, loc)
+		//beam = new /obj/item/projectile/beam/emitter(loc)
 		//beam.dir = dir
 		//playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
 

@@ -76,8 +76,8 @@
 			var/shard = initial(G.shard_type)
 			solar_assembly.glass_type = null //The glass you're looking for is below pal
 			solar_assembly.forceMove(get_turf(src))
-			getFromPool(shard, loc)
-			getFromPool(shard, loc)
+			new shard(loc)
+			new shard(loc)
 			qdel(src)
 
 /obj/machinery/power/solar/panel/update_icon()
@@ -143,12 +143,12 @@
 		if(1.0)
 			solar_assembly.glass_type = null //The glass you're looking for is below pal
 			if(prob(15))
-				getFromPool(/obj/item/weapon/shard, loc)
+				new /obj/item/weapon/shard(loc)
 			kill()
 		if(2.0)
 			if(prob(25))
 				solar_assembly.glass_type = null //The glass you're looking for is below pal
-				getFromPool(/obj/item/weapon/shard, loc)
+				new /obj/item/weapon/shard(loc)
 				kill()
 			else
 				broken()

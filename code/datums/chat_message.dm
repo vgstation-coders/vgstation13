@@ -205,7 +205,7 @@ var/runechat_icon = null
 		raw_message = message_language.scramble(raw_message)
 
 	// Display visual above source
-	getFromPool(/datum/chatmessage, raw_message, speaker, src, extra_classes)
+	new /datum/chatmessage(raw_message, speaker, src, extra_classes)
 
 // Tweak these defines to change the available color ranges
 #define CM_COLOR_SAT_MIN	0.6

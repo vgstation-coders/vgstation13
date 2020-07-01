@@ -329,7 +329,7 @@
 					meatslab.throw_at(Tx, i, 3)
 
 					if(!Tx.density)
-						var/obj/effect/decal/cleanable/blood/gibs/D = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
+						var/obj/effect/decal/cleanable/blood/gibs/D = new /obj/effect/decal/cleanable/blood/gibs(Tx)
 						D.New(Tx,i)
 
 			if(2) // Losing a limb
@@ -1064,10 +1064,10 @@
 		return
 	if (!beam)
 		if (!ismouse(emitter))
-			beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+			beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 			beam.full_damage = 10 * multiplier
 		else
-			beam = getFromPool(/obj/effect/beam/emitter/eyes/mouse, emitter.loc)
+			beam = new /obj/effect/beam/emitter/eyes/mouse(emitter.loc)
 		beam.dir = emitter.dir
 		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
 			beam.emit(spawn_by=emitter,charged = TRUE)
@@ -1090,10 +1090,10 @@
 		return
 	if (!beam)
 		if (!ismouse(emitter))
-			beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+			beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 			beam.full_damage = 10 * multiplier
 		else
-			beam = getFromPool(/obj/effect/beam/emitter/eyes/mouse, emitter.loc)
+			beam = new /obj/effect/beam/emitter/eyes/mouse(emitter.loc)
 		beam.dir = emitter.dir
 		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
 			beam.emit(spawn_by=emitter,charged = TRUE)

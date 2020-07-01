@@ -2,7 +2,7 @@
 	if(!c_animation)//spamming turf animations can have unintended effects, such as the overlays never disapearing. hence this check.
 		if(anim_sound)
 			playsound(src, anim_sound, 50, 1)
-		var/atom/movable/overlay/animation = getFromPool(/atom/movable/overlay, src)
+		var/atom/movable/overlay/animation = new /atom/movable/overlay(src)
 		animation.name = "turf_animation"
 		animation.setDensity(FALSE)
 		animation.anchored = 1
@@ -37,7 +37,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		target = location
 	if(!location && !target)
 		return
-	var/atom/movable/overlay/animation = getFromPool(/atom/movable/overlay, location)
+	var/atom/movable/overlay/animation = new /atom/movable/overlay(location)
 	if(name)
 		animation.name = name
 	if(direction)

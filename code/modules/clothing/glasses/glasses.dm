@@ -649,7 +649,7 @@ var/list/science_goggles_wearers = list()
 			beam = null
 		return
 	if (!beam)
-		beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 		beam.dir = emitter.dir
 		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
 			beam.emit(spawn_by=emitter,charged = TRUE)
@@ -667,7 +667,7 @@ var/list/science_goggles_wearers = list()
 	if (!emitter || !isturf(emitter.loc) || emitter.lying)
 		return
 	if (!beam)
-		beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 		beam.dir = emitter.dir
 		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
 			beam.emit(spawn_by=emitter,charged = TRUE)

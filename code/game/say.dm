@@ -83,7 +83,7 @@ var/global/lastDecTalkUse = 0
 /atom/movable/proc/create_speech(var/message, var/frequency=0, var/atom/movable/transmitter=null)
 	if(!transmitter)
 		transmitter=GetDefaultRadio()
-	var/datum/speech/speech = getFromPool(/datum/speech)
+	var/datum/speech/speech = new /datum/speech
 	speech.message = message
 	speech.frequency = frequency
 	speech.job = get_job(speech)

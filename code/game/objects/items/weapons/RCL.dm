@@ -40,10 +40,10 @@
 			var/diff = loaded.amount % 30
 			if(diff)
 				loaded.use(diff)
-				getFromPool(/obj/item/stack/cable_coil,user.loc,diff)
+				new /obj/item/stack/cable_coil(user.loc, diff)
 			else
 				loaded.use(30)
-				getFromPool(/obj/item/stack/cable_coil,user.loc,30)
+				new /obj/item/stack/cable_coil(user.loc, 30)
 		loaded.max_amount = initial(loaded.max_amount)
 		loaded.forceMove(user.loc)
 		user.put_in_hands(loaded)

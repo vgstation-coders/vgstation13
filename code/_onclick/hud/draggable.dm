@@ -38,7 +38,7 @@
 /obj/abstract/screen/draggable/New(loc, mob/user)
 	..()
 //But no seriously, fuck byond
-	fuckbyond = getFromPool(/obj/abstract/screen/fuckbyond, src)
+	fuckbyond = new /obj/abstract/screen/fuckbyond(src)
 
 //References to the object/user
 	attachedobject = loc

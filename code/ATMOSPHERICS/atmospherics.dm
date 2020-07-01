@@ -339,7 +339,7 @@ Pipelines + Other Objects -> Pipe network
 			"[user] unfastens \the [src].", \
 			"<span class='notice'>You have unfastened \the [src].</span>", \
 			"You hear a ratchet.")
-		getFromPool(/obj/item/pipe, loc, null, null, src)
+		new /obj/item/pipe(loc, null, null, src)
 		investigation_log(I_ATMOS,"was removed by [user]/([user.ckey]) at [formatJumpTo(loc)].")
 		//P.New(loc, make_from=src) //new /obj/item/pipe(loc, make_from=src)
 		qdel(src)

@@ -122,7 +122,7 @@ var/global/list/falltempoverlays = list()
 	sleepfor = world.time + sleeptime
 	for(var/turf/T in targets)
 
-		oureffects += getFromPool(/obj/effect/stop/sleeping, T, sleepfor, user.mind, src, invocation == "ZA WARUDO", ignore_path)
+		oureffects += new /obj/effect/stop/sleeping(T, sleepfor, user.mind, src, invocation == "ZA WARUDO", ignore_path)
 		for(var/atom/movable/everything in T)
 			if(isliving(everything))
 				var/mob/living/L = everything

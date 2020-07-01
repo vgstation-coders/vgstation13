@@ -353,7 +353,7 @@ its easier to just keep the beam vertical.
 	//Maxdistance is the longest range the beam will persist before it gives up.
 	var/EndTime=world.time+time
 	var/broken = 0
-	var/obj/item/projectile/beam/lightning/light = getFromPool(/obj/item/projectile/beam/lightning)
+	var/obj/item/projectile/beam/lightning/light = new /obj/item/projectile/beam/lightning
 	while(BeamTarget&&world.time<EndTime&&get_dist(src,BeamTarget)<maxdistance&&z==BeamTarget.z)
 
 	//If the BeamTarget gets deleted, the time expires, or the BeamTarget gets out
@@ -373,7 +373,7 @@ its easier to just keep the beam vertical.
 		var/N=0
 		var/length=round(sqrt((DX)**2+(DY)**2))
 		for(N,N<length,N+=WORLD_ICON_SIZE)
-			var/obj/effect/overlay/beam/X=getFromPool(/obj/effect/overlay/beam,loc)
+			var/obj/effect/overlay/beam/X=new /obj/effect/overlay/beam(loc)
 			X.BeamSource=src
 			if(N+WORLD_ICON_SIZE>length)
 				var/icon/II=new(icon,icon_state)

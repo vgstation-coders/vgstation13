@@ -464,7 +464,7 @@
 //	if(!self.data["donor"] || ishuman(self.data["donor"]))
 //		var/obj/effect/decal/cleanable/blood/blood_prop = locate() in T //Find some blood here
 //		if(!blood_prop) //First blood
-//			blood_prop = getFromPool(/obj/effect/decal/cleanable/blood, T)
+//			blood_prop = new /obj/effect/decal/cleanable/blood(T)
 //			blood_prop.New(T)
 //			blood_prop.blood_DNA[self.data["blood_DNA"]] = self.data["blood_type"]
 //
@@ -2059,7 +2059,7 @@
 		return 1
 
 	if(!(locate(/obj/effect/decal/cleanable/liquid_fuel) in T))
-		getFromPool(/obj/effect/decal/cleanable/liquid_fuel, T, volume)
+		new /obj/effect/decal/cleanable/liquid_fuel(T, volume)
 
 /datum/reagent/fuel/on_mob_life(var/mob/living/M)
 
@@ -2089,7 +2089,7 @@
 
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/vomit) in T))
-			getFromPool(/obj/effect/decal/cleanable/vomit, T)
+			new /obj/effect/decal/cleanable/vomit(T)
 
 /datum/reagent/space_cleaner
 	name = "Space Cleaner"

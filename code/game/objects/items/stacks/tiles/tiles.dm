@@ -31,7 +31,7 @@
 
 /obj/item/stack/tile/plasteel/attack_self(mob/user)
 	if(!active) //Start click drag construction
-		active = getFromPool(/obj/abstract/screen/draggable, src, user)
+		active = new /obj/abstract/screen/draggable(src, user)
 		to_chat(user, "Beginning plating construction mode, click and hold to use.")
 		return
 	else //End click drag construction, create grille
@@ -81,7 +81,7 @@
 			return
 
 		if(WT.remove_fuel(0,user))
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal)
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
 			M.amount = 1
 			M.forceMove(get_turf(usr)) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
 			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \

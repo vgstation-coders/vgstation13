@@ -1590,7 +1590,7 @@ Thanks.
 	if(!holder_type)
 		return 0
 
-	var/obj/item/weapon/holder/D = getFromPool(holder_type, loc, src)
+	var/obj/item/weapon/holder/D = new holder_type(loc, src)
 
 	if(M.put_in_active_hand(D))
 		to_chat(M, "You scoop up [src].")
@@ -2017,7 +2017,7 @@ Thanks.
 					strength += V.infectionchance
 				strength = round(strength/airborne_viruses.len)
 				while (strength > 0)//stronger viruses create more clouds at once
-					getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), src, virus_copylist(airborne_viruses))
+					new /obj/effect/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
 					strength -= 40
 
 /mob/living/proc/handle_virus_updates()

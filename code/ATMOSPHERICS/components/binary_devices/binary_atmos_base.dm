@@ -165,12 +165,12 @@
 
 /obj/machinery/atmospherics/binary/build_network()
 	if(!network1 && node1)
-		network1 = getFromPool(/datum/pipe_network)
+		network1 = new /datum/pipe_network
 		network1.normal_members += src
 		network1.build_network(node1, src)
 
 	if(!network2 && node2)
-		network2 = getFromPool(/datum/pipe_network)
+		network2 = new /datum/pipe_network
 		network2.normal_members += src
 		network2.build_network(node2, src)
 

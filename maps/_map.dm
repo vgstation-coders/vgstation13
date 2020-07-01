@@ -155,7 +155,7 @@ var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/give_AI_jumps(var/list/L)
 	var/obj/abstract/screen/using
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "AI Core"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "ai_core"

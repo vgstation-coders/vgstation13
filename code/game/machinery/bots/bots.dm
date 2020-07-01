@@ -390,7 +390,7 @@
 	if(!frequency)
 		return
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.transmission_method = 1
 	signal.data = keyval
@@ -592,7 +592,7 @@
 	playsound(src, 'sound/weapons/slice.ogg', 25, 1, -1)
 	if(prob(10))
 		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
-		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+		var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(src.loc)
 		O.New(O.loc)
 	healthcheck()
 
@@ -608,7 +608,7 @@
 	add_logs(M, src, "attacked", admin=0)
 	if(prob(10))
 		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
-		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+		var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(src.loc)
 		O.New(O.loc)
 	healthcheck()
 

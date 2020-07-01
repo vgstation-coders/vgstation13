@@ -143,7 +143,7 @@ var/global/powernets_broke = 0
 //This will rebuild a powernet properly during the new tick cycle
 /obj/structure/cable/proc/rebuild_from()
 	if(!powernet)
-		var/datum/powernet/NewPN = getFromPool(/datum/powernet)
+		var/datum/powernet/NewPN = new /datum/powernet
 		NewPN.add_cable(src)
 		propagate_network(src, src.powernet)
 		NewPN.load = oldload

@@ -101,7 +101,7 @@
 	if(spell.spell_flags & NO_BUTTON) //no button to add if we don't get one
 		return
 
-	var/obj/abstract/screen/spell/newscreen = getFromPool(/obj/abstract/screen/spell)
+	var/obj/abstract/screen/spell/newscreen = new /obj/abstract/screen/spell
 	newscreen.spellmaster = src
 	newscreen.spell = spell
 	newscreen.icon = src.icon

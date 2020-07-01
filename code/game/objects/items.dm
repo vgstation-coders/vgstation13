@@ -890,7 +890,7 @@
 		return
 
 	if(!wielded)
-		wielded = getFromPool(/obj/item/offhand)
+		wielded = new /obj/item/offhand
 
 		//Long line ahead, let's break that up!
 		//

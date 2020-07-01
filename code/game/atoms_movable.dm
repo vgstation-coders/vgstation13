@@ -66,10 +66,10 @@
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
-		getFromPool(/mob/virtualhearer, src)
+		new /mob/virtualhearer(src)
 
 	if(starting_materials)
-		materials = getFromPool(/datum/materials, src)
+		materials = new /datum/materials(src)
 		for(var/matID in starting_materials)
 			materials.addAmount(matID, starting_materials[matID])
 
@@ -338,7 +338,7 @@
 	if(locking_categories_name.Find(id))
 		return locking_categories_name[id]
 
-	var/datum/locking_category/C = getFromPool(type, src)
+	var/datum/locking_category/C = new type(src)
 	C.name = id
 	locking_categories_name[id] = C
 	locking_categories += C
@@ -352,7 +352,7 @@
 		if (istext(category))
 			return
 
-		. = getFromPool(category, src)
+		. = new category(src)
 		locking_categories_name[category] = .
 		locking_categories += .
 
@@ -756,7 +756,7 @@
 ////////////
 /atom/movable/proc/addHear()
 	flags |= HEAR
-	getFromPool(/mob/virtualhearer, src)
+	new /mob/virtualhearer(src)
 
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR

@@ -210,7 +210,7 @@ steam.start() -- spawns the effect
 	for (var/i = 1 to number)
 		var/nextdir=pick_n_take(directions)
 		if(nextdir)
-			var/obj/effect/effect/sparks/sparks = getFromPool(/obj/effect/effect/sparks, location)
+			var/obj/effect/effect/sparks/sparks = new /obj/effect/effect/sparks(location)
 			sparks.start(nextdir)
 
 // This sparks.
@@ -584,7 +584,7 @@ steam.start() -- spawns the effect
 			var/turf/T = get_turf(src.holder)
 			if(T != src.oldposition)
 				if(istype(T, /turf/space))
-					var/obj/effect/effect/trails/I = getFromPool(trail_type,src.oldposition)
+					var/obj/effect/effect/trails/I = new trail_type(src.oldposition)
 					src.oldposition = T
 					I.dir = src.holder.dir
 					I.Play()
@@ -628,8 +628,8 @@ steam.start() -- spawns the effect
 						src.oldposition = get_step(oldposition,EAST)
 						src.oldloc = get_step(oldposition,NORTH)
 				if(istype(T, /turf/space))
-					var/obj/effect/effect/trails/ion/I = getFromPool(/obj/effect/effect/trails/ion,src.oldposition)
-					var/obj/effect/effect/trails/ion/II = getFromPool(/obj/effect/effect/trails/ion,src.oldloc)
+					var/obj/effect/effect/trails/ion/I = new /obj/effect/effect/trails/ion(src.oldposition)
+					var/obj/effect/effect/trails/ion/II = new /obj/effect/effect/trails/ion(src.oldloc)
 					I.dir = src.holder.dir
 					II.dir = src.holder.dir
 					flick("ion_fade", I)

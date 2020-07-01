@@ -80,8 +80,8 @@
 	ChangeTurf(/turf/space)
 
 /turf/simulated/floor/glass/proc/spawnBrokenPieces(var/turf/T)
-	getFromPool(shardtype, T, sheetamount)
-	getFromPool(/obj/item/stack/rods, T, sheetamount+1) // Includes lattice
+	new shardtype(T, sheetamount)
+	new /obj/item/stack/rods(T, sheetamount+1) // Includes lattic)
 
 /turf/simulated/floor/glass/proc/healthcheck(var/mob/M, var/sound = 1, var/method="unknown", var/no_teleport=TRUE)
 	if(health <= 0)
@@ -258,7 +258,7 @@
 						message_admins("Glass floor with pressure [pressure]kPa deconstructed by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(src)]!")
 						log_admin("Window with pressure [pressure]kPa deconstructed by [user.real_name] ([user.ckey]) at [src]!")
 
-					getFromPool(sheettype, src, sheetamount)
+					new sheettype(src, sheetamount)
 					src.ReplaceWithLattice()
 	if(ishuman(user) && user.a_intent != I_HURT)
 		return

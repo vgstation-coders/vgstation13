@@ -437,7 +437,7 @@
 /obj/effect/beam/proc/spawn_child()
 	if(steps >= BEAM_MAX_STEPS)
 		return null // NOPE
-	var/obj/effect/beam/B = getFromPool(type,src.loc)
+	var/obj/effect/beam/B = new type(src.loc)
 	B.steps = src.steps+1
 	B.dir=dir
 	B.master = get_master()

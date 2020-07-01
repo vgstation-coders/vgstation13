@@ -204,7 +204,7 @@
 			pos_from = WEST
 
 /obj/item/projectile/ricochet/proc/bulletdies(var/atom/A = null)
-	var/obj/effect/overlay/beam/impact = getFromPool(/obj/effect/overlay/beam,get_turf(src),10,0,'icons/obj/projectiles_impacts.dmi')
+	var/obj/effect/overlay/beam/impact = new /obj/effect/overlay/beam(get_turf(src), 10, 0, 'icons/obj/projectiles_impacts.dmi')
 	if(A)
 		switch(get_dir(src,A))
 			if(NORTH)

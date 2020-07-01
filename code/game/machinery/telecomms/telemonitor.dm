@@ -176,7 +176,7 @@
 
 /obj/machinery/computer/telecomms/monitor/proc/traceroute(var/freq)
 	//First, generate a signal
-	trace_signal = getFromPool(/datum/signal)
+	trace_signal = new /datum/signal
 	trace_signal.data = list(
 		"name" = "Telecommunications Network",
 		"job" = "Machine",

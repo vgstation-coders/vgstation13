@@ -109,7 +109,7 @@
 
 /datum/pipeline/proc/return_network(obj/machinery/atmospherics/reference)
 	if(!network)
-		network = getFromPool(/datum/pipe_network)
+		network = new /datum/pipe_network
 		network.build_network(src, null)
 			//technically passing these parameters should not be allowed
 			//however pipe_network.build_network(..) and pipeline.network_extend(...)

@@ -105,7 +105,7 @@
 		T = loc.loc
 	if(T)
 		if(!beam)
-			beam = getFromPool(/obj/effect/beam/infrared,T)
+			beam = new /obj/effect/beam/infrared(T)
 		beam.visible=visible
 		beam.dir = dir
 		beam.assembly = src
