@@ -26,8 +26,9 @@
 		hand.update_icon()
 		if(hand.currenthand.len == 1)
 			var/obj/item/toy/singlecard/C = hand.currenthand[1]
-			qdel(hand)
+			user.u_equip(hand, FALSE)
 			user.put_in_inactive_hand(C)
+			qdel(hand)
 	else if(istype(used_item, /obj/item/toy/singlecard))
 		var/index = clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
 		hand.currenthand.Insert(index, used_item) //We put it where we specified
