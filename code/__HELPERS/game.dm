@@ -8,6 +8,7 @@
 	return null
 
 /proc/get_area(const/atom/O)
+	RETURN_TYPE(/area)
 	if(isarea(O))
 		return O
 	var/turf/T = get_turf(O)

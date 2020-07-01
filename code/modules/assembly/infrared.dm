@@ -131,8 +131,8 @@
 /obj/item/device/assembly/infra/holder_movement()
 	if(!holder)
 		return 0
-		dir = holder.dir
-		holder.update_icon()
+	dir = holder.dir
+	holder.update_icon()
 	if (beam)
 		returnToPool(beam)
 		beam = null
