@@ -445,7 +445,7 @@
 		return L
 
 /mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
-	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)
+	if(status_flags & GODMODE || (M_NO_SHOCK in src.mutations))
 		return 0
 
 	var/damage = shock_damage * siemens_coeff
