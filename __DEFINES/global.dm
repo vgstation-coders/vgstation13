@@ -46,7 +46,7 @@ var/global/list/deadmins = list()
 var/list/lockedvars = list("vars", "client", "holder", "step_x", "step_y", "step_size")
 
 // List of types and how many instances of each type there are.
-var/list/type_instances
+var/list/type_instances = list()
 
 /var/global/datum/map/active/map = new() //Current loaded map
 //Defined in its .dm, see maps/_map.dm for more info.
