@@ -442,7 +442,7 @@ var/bee_mobs_count = 0
 				step_rand(B_mob)
 
 		//ATTACKING TARGET
-		else if(state == BEE_OUT_FOR_ENEMIES && M in view(src,1))
+		else if(state == BEE_OUT_FOR_ENEMIES && (M in view(src,1)))
 			var/sting_prob = 100
 			if(istype(M))
 				var/obj/item/clothing/worn_suit = M.wear_suit
@@ -600,7 +600,7 @@ var/bee_mobs_count = 0
 		//REACHING FOR FLOWERS
 		if(state == BEE_OUT_FOR_PLANTS && pollinating <= 0)
 			var/turf/target_turf = null
-			if(target_plant && target_plant in view(src,7))
+			if(target_plant && (target_plant in view(src,7)))
 				target_turf = get_turf(target_plant)
 				wander = 0
 			else
