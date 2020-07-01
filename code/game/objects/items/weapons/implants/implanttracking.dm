@@ -1,6 +1,3 @@
-#define MALFUNCTION_TEMPORARY 1
-#define MALFUNCTION_PERMANENT 2
-
 /obj/item/weapon/implant/tracking
 	name = "tracking implant"
 	desc = "Track with this."
@@ -34,7 +31,7 @@ Implant Specifics:<BR>"}
 /obj/item/weapon/implant/tracking/emp_act(severity)
 	if (malfunction)	//no, dawg, you can't malfunction while you are malfunctioning
 		return
-	malfunction = MALFUNCTION_TEMPORARY
+	malfunction = IMPLANT_MALFUNCTION_TEMPORARY
 
 	var/delay = 20
 	switch(severity)
@@ -174,11 +171,11 @@ var/list/locator_holomap_cache = list()
 				continue
 			if(TU.z != T.z)
 				continue
-			if (implant.malfunction == MALFUNCTION_PERMANENT)
+			if (implant.malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 				continue
 			var/mob/M
 			var/marker_state = "tracker"
-			if (implant.malfunction == MALFUNCTION_TEMPORARY)
+			if (implant.malfunction == IMPLANT_MALFUNCTION_TEMPORARY)
 				marker_state = "tracker-malfunction"
 			if (implant.loc != implant.imp_in)
 				marker_state = "tracker-dead"
@@ -290,6 +287,3 @@ var/list/locator_holomap_cache = list()
 	legend.pixel_x = 7*WORLD_ICON_SIZE
 	legend.pixel_y = 7*WORLD_ICON_SIZE
 	station_map.overlays += legend
-
-#undef MALFUNCTION_TEMPORARY
-#undef MALFUNCTION_PERMANENT
