@@ -56,7 +56,7 @@ var/list/department_radio_keys = list(
 	  ":l" = "left hand",	"#l" = "left hand",		".l" = "left hand",  "!l" = "fake left hand",
 	  ":m" = "Medical",		"#m" = "Medical",		".m" = "Medical",
 	  ":n" = "Science",		"#n" = "Science",		".n" = "Science",
-	  //o Used by LANGUAGE_UNATHI
+	  ":o" = "Common",		"#o" = "Common",		".o" = "Common",
 	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
 	  //q Used by LANGUAGE_ROOTSPEAK
 	  ":r" = "right hand",	"#r" = "right hand",	".r" = "right hand", "!r" = "fake right hand",
@@ -85,6 +85,7 @@ var/list/headset_modes = list(
 	"Medical",
 	"Science",
 	"department",
+	"Common",
 )
 
 /mob/living/proc/get_default_language()
